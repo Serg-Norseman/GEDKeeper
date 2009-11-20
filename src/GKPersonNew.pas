@@ -47,6 +47,7 @@ procedure TfmPersonNew.SetTarget(const Value: TGEDCOMIndividualRecord);
 var
   iFamily, iName, iPatronymic: string;
   names: TNamesTable;
+  sx: TGEDCOMSex;
 begin
   FTarget := Value;
 
@@ -57,12 +58,27 @@ begin
 
     EditFamily.Text := iFamily;
 
-    if (FTargetMode = tmAncestor) then begin
-      if (TGEDCOMSex(EditSex.ItemIndex) = svMale)
-      then EditName.Text := names.GetNameByPatronymic(iPatronymic, svMale);
-    end else begin
-      EditPatronymic.Items.Add(names.GetPatronymicByName(iName, svMale));
-      EditPatronymic.Items.Add(names.GetPatronymicByName(iName, svFemale));
+    case FTargetMode of
+      tmNone: ;
+
+      tmAncestor: begin
+        EditPatronymic.Items.Add(names.GetPatronymicByName(iName, svMale));
+        EditPatronymic.Items.Add(names.GetPatronymicByName(iName, svFemale));
+      end;
+
+      tmDescendant: begin
+        sx := TGEDCOMSex(EditSex.ItemIndex);
+
+        case sx of
+          svMale: begin
+            EditName.Text := names.GetNameByPatronymic(iPatronymic, svMale);
+          end;
+
+          svFemale: begin
+            EditFamily.Text := '(' + EditFamily.Text + ')';
+          end;
+        end;
+      end;
     end;
   end;
 end;

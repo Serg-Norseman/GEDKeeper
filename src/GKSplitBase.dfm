@@ -26,7 +26,7 @@ object fmSplitBase: TfmSplitBase
     TabOrder = 0
     OnClick = btnSelectAllClick
   end
-  object ListBox1: TListBox
+  object ListSelected: TListBox
     Left = 8
     Top = 8
     Width = 345
@@ -34,7 +34,7 @@ object fmSplitBase: TfmSplitBase
     ItemHeight = 13
     TabOrder = 1
   end
-  object ListBox2: TListBox
+  object ListSkipped: TListBox
     Left = 360
     Top = 8
     Width = 345
@@ -57,8 +57,8 @@ object fmSplitBase: TfmSplitBase
     Width = 105
     Height = 25
     Caption = #1042#1099#1073#1088#1072#1090#1100' '#1089#1077#1084#1100#1102
-    Enabled = False
     TabOrder = 4
+    OnClick = btnSelectFamilyClick
   end
   object btnSelectAncestors: TBitBtn
     Left = 232
@@ -66,8 +66,8 @@ object fmSplitBase: TfmSplitBase
     Width = 105
     Height = 25
     Caption = #1042#1099#1073#1088#1072#1090#1100' '#1087#1088#1077#1076#1082#1086#1074
-    Enabled = False
     TabOrder = 5
+    OnClick = btnSelectAncestorsClick
   end
   object btnSelectDescendants: TBitBtn
     Left = 344
@@ -75,8 +75,8 @@ object fmSplitBase: TfmSplitBase
     Width = 105
     Height = 25
     Caption = #1042#1099#1073#1088#1072#1090#1100' '#1087#1086#1090#1086#1084#1082#1086#1074
-    Enabled = False
     TabOrder = 6
+    OnClick = btnSelectDescendantsClick
   end
   object btnDelete: TBitBtn
     Left = 8
@@ -86,5 +86,20 @@ object fmSplitBase: TfmSplitBase
     Caption = #1059#1076#1072#1083#1080#1090#1100
     TabOrder = 7
     OnClick = btnDeleteClick
+  end
+  object btnSave: TBitBtn
+    Left = 344
+    Top = 336
+    Width = 105
+    Height = 25
+    Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100'...'
+    TabOrder = 8
+    OnClick = btnSaveClick
+  end
+  object SaveDialog1: TSaveDialog
+    DefaultExt = 'ged'
+    Filter = 'GEDCOM|*.ged'
+    Left = 400
+    Top = 168
   end
 end

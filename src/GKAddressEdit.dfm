@@ -1,10 +1,10 @@
-object fmEventEdit: TfmEventEdit
+object fmAddressEdit: TfmAddressEdit
   Left = 327
-  Top = 178
+  Top = 137
   BorderStyle = bsDialog
-  Caption = #1057#1086#1073#1099#1090#1080#1077
-  ClientHeight = 465
-  ClientWidth = 410
+  Caption = #1040#1076#1088#1077#1089
+  ClientHeight = 361
+  ClientWidth = 394
   Color = clBtnFace
   Font.Charset = RUSSIAN_CHARSET
   Font.Color = clWindowText
@@ -13,148 +13,112 @@ object fmEventEdit: TfmEventEdit
   Font.Style = []
   OldCreateOrder = False
   Position = poScreenCenter
-  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
     Left = 8
-    Top = 16
-    Width = 45
+    Top = 8
+    Width = 37
     Height = 13
-    Caption = #1057#1086#1073#1099#1090#1080#1077
+    Caption = #1057#1090#1088#1072#1085#1072
   end
   object Label2: TLabel
-    Left = 8
-    Top = 40
-    Width = 31
+    Left = 136
+    Top = 8
+    Width = 75
     Height = 13
-    Caption = #1052#1077#1089#1090#1086
+    Caption = #1064#1090#1072#1090'/'#1054#1073#1083#1072#1089#1090#1100
   end
   object Label3: TLabel
-    Left = 8
-    Top = 64
-    Width = 26
+    Left = 264
+    Top = 8
+    Width = 31
     Height = 13
-    Caption = #1044#1072#1090#1072
+    Caption = #1043#1086#1088#1086#1076
   end
   object Label4: TLabel
     Left = 8
-    Top = 112
-    Width = 43
+    Top = 56
+    Width = 73
     Height = 13
-    Caption = #1055#1088#1080#1095#1080#1085#1072
+    Caption = #1055#1086#1095#1090#1086#1074#1099#1081' '#1082#1086#1076
   end
   object Label5: TLabel
-    Left = 8
-    Top = 136
-    Width = 159
+    Left = 136
+    Top = 56
+    Width = 31
     Height = 13
-    Caption = #1047#1072#1089#1074#1080#1076#1077#1090#1077#1083#1100#1089#1090#1074#1086#1074#1072#1074#1096#1080#1081' '#1086#1088#1075#1072#1085
+    Caption = #1040#1076#1088#1077#1089
   end
-  object Label6: TLabel
+  object edCountry: TEdit
     Left = 8
-    Top = 176
-    Width = 43
-    Height = 13
-    Caption = #1040#1090#1088#1080#1073#1091#1090
+    Top = 24
+    Width = 121
+    Height = 21
+    TabOrder = 0
+    Text = 'edCountry'
+  end
+  object edState: TEdit
+    Left = 136
+    Top = 24
+    Width = 121
+    Height = 21
+    TabOrder = 1
+    Text = 'edState'
+  end
+  object edCity: TEdit
+    Left = 264
+    Top = 24
+    Width = 121
+    Height = 21
+    TabOrder = 2
+    Text = 'edCity'
+  end
+  object edPostalCode: TEdit
+    Left = 8
+    Top = 72
+    Width = 121
+    Height = 21
+    TabOrder = 3
+    Text = 'edPostalCode'
   end
   object btnAccept: TBitBtn
-    Left = 232
-    Top = 432
+    Left = 216
+    Top = 328
     Width = 81
     Height = 25
     Caption = #1055#1088#1080#1085#1103#1090#1100
-    TabOrder = 9
+    TabOrder = 6
     OnClick = btnAcceptClick
     Kind = bkOK
   end
   object btnCancel: TBitBtn
-    Left = 320
-    Top = 432
+    Left = 304
+    Top = 328
     Width = 81
     Height = 25
     Caption = #1054#1090#1084#1077#1085#1080#1090#1100
-    TabOrder = 10
+    TabOrder = 7
     Kind = bkCancel
   end
-  object EditEventType: TComboBox
-    Left = 56
-    Top = 8
-    Width = 185
+  object edAddress: TEdit
+    Left = 136
+    Top = 72
+    Width = 249
     Height = 21
-    Style = csDropDownList
-    ItemHeight = 13
-    TabOrder = 0
-    OnChange = EditEventTypeChange
-  end
-  object EditEventName: TEdit
-    Left = 248
-    Top = 8
-    Width = 153
-    Height = 21
-    TabOrder = 1
-  end
-  object EditEventPlace: TEdit
-    Left = 56
-    Top = 32
-    Width = 345
-    Height = 21
-    TabOrder = 2
-  end
-  object EditEventDateType: TComboBox
-    Left = 56
-    Top = 56
-    Width = 185
-    Height = 21
-    Style = csDropDownList
-    ItemHeight = 13
-    TabOrder = 3
-    OnChange = EditEventDateTypeChange
-  end
-  object EditEventDate1: TMaskEdit
-    Left = 248
-    Top = 56
-    Width = 153
-    Height = 21
-    EditMask = '!99/99/9999;1;_'
-    MaxLength = 10
     TabOrder = 4
-    Text = '  .  .    '
-  end
-  object EditEventDate2: TMaskEdit
-    Left = 248
-    Top = 80
-    Width = 153
-    Height = 21
-    EditMask = '!99/99/9999;1;_'
-    MaxLength = 10
-    TabOrder = 5
-    Text = '  .  .    '
-  end
-  object EditEventCause: TEdit
-    Left = 56
-    Top = 104
-    Width = 345
-    Height = 21
-    TabOrder = 6
-  end
-  object EditEventOrg: TEdit
-    Left = 184
-    Top = 128
-    Width = 217
-    Height = 21
-    TabOrder = 7
+    Text = 'edAddress'
   end
   object Panel1: TPanel
     Left = 8
-    Top = 200
-    Width = 393
+    Top = 104
+    Width = 377
     Height = 218
     BorderStyle = bsSingle
     Caption = 'Panel1'
-    TabOrder = 8
+    TabOrder = 5
     object Panel2: TPanel
-      Left = 347
+      Left = 331
       Top = 1
       Width = 41
       Height = 212
@@ -336,107 +300,53 @@ object fmEventEdit: TfmEventEdit
         OnClick = btnDataEditClick
       end
     end
-    object PageEventData: TPageControl
+    object PageAddrData: TPageControl
       Left = 1
       Top = 1
-      Width = 346
+      Width = 330
       Height = 212
-      ActivePage = SheetNotes
+      ActivePage = SheetPhones
       Align = alClient
       TabOrder = 1
-      object SheetNotes: TTabSheet
-        Caption = #1047#1072#1084#1077#1090#1082#1080
+      object SheetPhones: TTabSheet
+        Caption = #1058#1077#1083#1077#1092#1086#1085#1099
         ImageIndex = 1
-        object ListEventNotes: TListBox
+        object ListPhones: TListBox
           Left = 0
           Top = 0
-          Width = 338
+          Width = 322
           Height = 184
           Align = alClient
           ItemHeight = 13
           TabOrder = 0
-          OnDblClick = ListDblClick
         end
       end
-      object SheetMultimedia: TTabSheet
-        Caption = #1052#1091#1083#1100#1090#1080#1084#1077#1076#1080#1072
+      object SheetEmails: TTabSheet
+        Caption = #1069#1083'. '#1087#1086#1095#1090#1072
         ImageIndex = 2
-        object ListEventMedia: TListBox
+        object ListEmails: TListBox
           Left = 0
           Top = 0
-          Width = 338
+          Width = 322
           Height = 184
           Align = alClient
           ItemHeight = 13
           TabOrder = 0
-          OnDblClick = ListDblClick
         end
       end
-      object SheetSources: TTabSheet
-        Caption = #1048#1089#1090#1086#1095#1085#1080#1082#1080
+      object SheetWebPages: TTabSheet
+        Caption = #1042#1077#1073'-'#1089#1090#1088#1072#1085#1080#1094#1099
         ImageIndex = 3
-        object ListEventSources: TBSListView
+        object ListWebPages: TListBox
           Left = 0
           Top = 0
-          Width = 338
+          Width = 322
           Height = 184
           Align = alClient
-          Columns = <
-            item
-              Caption = #1040#1074#1090#1086#1088
-              Width = 120
-            end
-            item
-              Caption = #1053#1072#1079#1074#1072#1085#1080#1077
-              Width = 180
-            end>
-          HideSelection = False
-          ReadOnly = True
-          RowSelect = True
-          SortType = stText
+          ItemHeight = 13
           TabOrder = 0
-          ViewStyle = vsReport
-          OnDblClick = ListDblClick
-          SortColumn = 0
-          SortDirection = sdAscending
         end
       end
-    end
-  end
-  object EditAttribute: TEdit
-    Left = 56
-    Top = 168
-    Width = 345
-    Height = 21
-    TabOrder = 11
-  end
-  object btnAddress: TBitBtn
-    Left = 8
-    Top = 432
-    Width = 81
-    Height = 25
-    Caption = #1040#1076#1088#1077#1089'...'
-    TabOrder = 12
-    OnClick = btnAddressClick
-    NumGlyphs = 2
-  end
-  object ActionList1: TActionList
-    Left = 185
-    Top = 270
-    object actRecordAdd: TAction
-      Caption = 'actRecordAdd'
-      ShortCut = 16429
-      OnExecute = actRecordAddExecute
-    end
-    object actRecordEdit: TAction
-      Caption = 'actRecordEdit'
-      ShortCut = 16397
-      OnExecute = actRecordEditExecute
-    end
-    object actRecordDelete: TAction
-      Caption = 'actRecordDelete'
-      ShortCut = 16430
-      OnExecute = actRecordDeleteExecute
     end
   end
 end

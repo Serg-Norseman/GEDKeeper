@@ -65,6 +65,12 @@ type
     actRecordAdd: TAction;
     actRecordDelete: TAction;
     actRecordEdit: TAction;
+    btnItemUp: TSpeedButton;
+    btnItemDown: TSpeedButton;
+    SheetExt: TTabSheet;
+    CheckPatriarch: TCheckBox;
+    Label5: TLabel;
+    cbRestriction: TComboBox;
     procedure FormCreate(Sender: TObject);
     procedure btnFatherAddClick(Sender: TObject);
     procedure btnFatherDeleteClick(Sender: TObject);
@@ -81,14 +87,12 @@ type
     procedure btnNamePieceAddClick(Sender: TObject);
     procedure btnNamePieceDeleteClick(Sender: TObject);
     procedure btnAcceptClick(Sender: TObject);
-    procedure EditFamilyChange(Sender: TObject);
-    procedure EditNameChange(Sender: TObject);
-    procedure EditPatronymicChange(Sender: TObject);
-    procedure EditSexChange(Sender: TObject);
     procedure ListDblClick(Sender: TObject);
     procedure actRecordAddExecute(Sender: TObject);
     procedure actRecordEditExecute(Sender: TObject);
     procedure actRecordDeleteExecute(Sender: TObject);
+    procedure btnItemUpClick(Sender: TObject);
+    procedure btnItemDownClick(Sender: TObject);
   private
     FPerson: TGEDCOMIndividualRecord;
     FTree: TGEDCOMTree;
@@ -97,6 +101,7 @@ type
     procedure SetPerson(const Value: TGEDCOMIndividualRecord);
     procedure NamePiecesRefresh();
     procedure ControlsRefresh();
+    procedure UpdatePerson();
   public
     property Person: TGEDCOMIndividualRecord read FPerson write SetPerson;
     property Tree: TGEDCOMTree read FTree write FTree;
@@ -229,6 +234,12 @@ begin
     EditPatronymic.Text := pat;
     EditSex.ItemIndex := Ord(FPerson.Sex);
 
+    // extended begin
+    CheckPatriarch.Checked := (FPerson.FindTag('_PATRIARCH') <> nil);
+    // extended end
+
+    cbRestriction.ItemIndex := Ord(FPerson.Restriction);
+
     ControlsRefresh();
   except
     on E: Exception do LogWrite('PersonRefresh().Families(): ' + E.Message);
@@ -248,6 +259,8 @@ var
 begin
   for sx := Low(TGEDCOMSex) to High(TGEDCOMSex) do
     EditSex.Items.Add(Sex[sx]);
+
+  PagesPersonDataChange(nil);
 end;
 
 procedure TfmPersonEdit.btnFatherAddClick(Sender: TObject);
@@ -255,7 +268,7 @@ var
   father: TGEDCOMIndividualRecord;
   family: TGEDCOMFamilyRecord;
 begin
-  father := SelectPerson(FPerson, svMale);
+  father := SelectPerson(FPerson, tmDescendant, svMale);
   if (father <> nil) then begin
     family := fmGEDKeeper.GetChildFamily(FPerson, True, father);
 
@@ -305,7 +318,7 @@ var
   mother: TGEDCOMIndividualRecord;
   family: TGEDCOMFamilyRecord;
 begin
-  mother := SelectPerson(FPerson, svFemale);
+  mother := SelectPerson(FPerson, tmDescendant, svFemale);
   if (mother <> nil) then begin
     family := fmGEDKeeper.GetChildFamily(FPerson, True, mother);
 
@@ -523,6 +536,8 @@ begin
   btnPersonDataEdit.Enabled := True;
   btnPersonDataDelete.Enabled := True;
   btnSpouseSel.Enabled := False;
+  btnItemUp.Enabled := False;
+  btnItemDown.Enabled := False;
 
   case PagesPersonData.TabIndex of
     0: ;
@@ -532,6 +547,8 @@ begin
     4: ;
     5: begin
       btnSpouseSel.Enabled := True;
+      btnItemUp.Enabled := True;
+      btnItemDown.Enabled := True;
     end;
     6: begin
       btnSpouseSel.Enabled := True;
@@ -551,6 +568,8 @@ var
 begin
   case PagesPersonData.TabIndex of
     5: begin
+      UpdatePerson();
+
       family := GetSelectedPersonFamily();
       if (family = nil) then Exit;
 
@@ -633,37 +652,36 @@ begin
   NamePiecesRefresh();
 end;
 
-procedure TfmPersonEdit.btnAcceptClick(Sender: TObject);
+procedure TfmPersonEdit.UpdatePerson();
 var
   np: TGEDCOMPersonalName;
 begin
   np := FPerson.PersonalNames[0];
-  np.SetNameParts(EditName.Text + ' ' + EditPatronymic.Text, EditFamily.Text, np.LastPart);
+  np.SetNameParts(
+    Trim(EditName.Text) + ' ' + Trim(EditPatronymic.Text),
+    Trim(EditFamily.Text), np.LastPart);
 
   FPerson.Sex := TGEDCOMSex(EditSex.ItemIndex);
 
   FPerson.ChangeDate.ChangeDateTime := Now();
+
+  // extended begin
+  if (CheckPatriarch.Checked) then begin
+    if (FPerson.FindTag('_PATRIARCH') = nil)
+    then FPerson.AddTag('_PATRIARCH');
+  end else FPerson.DeleteTag('_PATRIARCH');
+  // extended end
+
+  FPerson.Restriction := TGEDCOMRestriction(cbRestriction.ItemIndex);
+
+  fmGEDKeeper.ChangeRecord(FPerson);
+
   fmGEDKeeper.Modified := True;
 end;
 
-procedure TfmPersonEdit.EditFamilyChange(Sender: TObject);
+procedure TfmPersonEdit.btnAcceptClick(Sender: TObject);
 begin
-  //
-end;
-
-procedure TfmPersonEdit.EditNameChange(Sender: TObject);
-begin
-  //
-end;
-
-procedure TfmPersonEdit.EditPatronymicChange(Sender: TObject);
-begin
-  //
-end;
-
-procedure TfmPersonEdit.EditSexChange(Sender: TObject);
-begin
-  //
+  UpdatePerson();
 end;
 
 procedure TfmPersonEdit.ListDblClick(Sender: TObject);
@@ -684,6 +702,46 @@ end;
 procedure TfmPersonEdit.actRecordEditExecute(Sender: TObject);
 begin
   btnPersonDataEditClick(nil);
+end;
+
+procedure TfmPersonEdit.btnItemUpClick(Sender: TObject);
+var
+  idx1, idx2: Integer;
+begin
+  case PagesPersonData.TabIndex of
+    0: begin // События
+    end;
+
+    1: begin // Атрибуты
+    end;
+
+    2: begin // Заметки
+    end;
+
+    3: begin // Мультимедиа
+    end;
+
+    4: begin // Источники
+    end;
+
+    5: begin // Супруги
+      idx1 := ListPersonFamilies.ItemIndex - 1;
+      idx2 := ListPersonFamilies.ItemIndex;
+      FPerson.ExchangeSpouses(idx1, idx2);
+      ControlsRefresh();
+    end;
+
+    6: begin // Ассоциации
+    end;
+
+    7: begin // Группы
+    end;
+  end;
+end;
+
+procedure TfmPersonEdit.btnItemDownClick(Sender: TObject);
+begin
+  //
 end;
 
 end.

@@ -94,7 +94,7 @@ OutputDir=
 UnitOutputDir=
 PackageDLLOutputDir=
 PackageDCPOutputDir=
-SearchPath=.\ext
+SearchPath=.\ext;.\ext\synapse
 Packages=vcl;rtl;indy;inet;xmlrtl;vclie;inetdbbde;inetdbxpress;vclx;dbrtl;dsnap;dsnapcon;vcldb;soaprtl;dbexpress;dbxcds;inetdb;bdertl;vcldbx;webdsnap;websnap;adortl;ibxpress;teeui;teedb;tee;dss;visualclx;visualdbclx;vclactnband;GKPack
 Conditionals=
 DebugSourceDirs=
@@ -111,7 +111,7 @@ AutoIncBuild=1
 MajorVer=0
 MinorVer=9
 Release=0
-Build=112
+Build=120
 Debug=0
 PreRelease=0
 Special=0
@@ -122,7 +122,7 @@ CodePage=1251
 [Version Info Keys]
 CompanyName=
 FileDescription=
-FileVersion=0.9.0.112
+FileVersion=0.9.0.120
 InternalName=GEDKeeper
 LegalCopyright=Copyright © Serg V. Zhdanovskih
 LegalTrademarks=
@@ -130,3 +130,9 @@ OriginalFilename=GEDKeeper.exe
 ProductName=GEDKeeper
 ProductVersion=1.0.0.0
 Comments=
+[HistoryLists\hlUnitAliases]
+Count=1
+Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
+[HistoryLists\hlSearchPath]
+Count=1
+Item0=.\ext;.\ext\synapse

@@ -141,7 +141,7 @@ begin
     end;
 
     2: begin // „лены
-      member := SelectPerson(nil, svNone);
+      member := SelectPerson(nil, tmNone, svNone);
       if (member <> nil) then begin
         FGroup.AddMember(TGEDCOMPointer.CreateTag(FTree, FGroup, '_MEMBER', '@'+member.XRef+'@'));
         member.AddGroup(TGEDCOMPointer.CreateTag(FTree, member, '_GROUP', '@'+FGroup.XRef+'@'));

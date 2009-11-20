@@ -226,7 +226,7 @@ begin
     end;
 
     4: begin // Дети
-      child := SelectPerson(GetHusband(), svNone);
+      child := SelectPerson(GetHusband(), tmAncestor, svNone);
       if (child <> nil) then begin
         FFamily.AddChild(TGEDCOMPointer.CreateTag(FTree, FFamily, 'CHIL', '@'+child.XRef+'@'));
         fam_link := TGEDCOMChildToFamilyLink.CreateTag(FTree, child, 'FAMC', FFamily.XRef);
@@ -325,7 +325,7 @@ procedure TfmFamilyEdit.btnHusbandAddClick(Sender: TObject);
 var
   husband: TGEDCOMIndividualRecord;
 begin
-  husband := SelectPerson(nil, svMale);
+  husband := SelectPerson(nil, tmNone, svMale);
   if (husband <> nil) then begin
     if (FFamily.Husband.StringValue = '') then begin
       FFamily.SetTagStringValue('HUSB', '@'+husband.XRef+'@');
@@ -370,7 +370,7 @@ procedure TfmFamilyEdit.btnWifeAddClick(Sender: TObject);
 var
   wife: TGEDCOMIndividualRecord;
 begin
-  wife := SelectPerson(nil, svFemale);
+  wife := SelectPerson(nil, tmNone, svFemale);
   if (wife <> nil) then begin
     if (FFamily.Wife.StringValue = '') then begin
       FFamily.SetTagStringValue('WIFE', '@'+wife.XRef+'@');

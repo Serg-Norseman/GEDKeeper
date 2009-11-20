@@ -2,12 +2,15 @@ unit GKMaps;
 
 // Partial Copyright by "Static Google Maps API & Geocoding Demo © Maxim Mazitov"
 
+{$DEFINE SYNAPSE}
+
 interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Buttons, ExtCtrls, WinInet, Jpeg, AxCtrls, 
-  ComCtrls, XMLDoc, XMLIntf, xmldom, msxmldom, Contnrs, GedCom551;
+  Dialogs, StdCtrls, Buttons, ExtCtrls, WinInet, AxCtrls, 
+  ComCtrls, XMLDoc, XMLIntf, xmldom, msxmldom, Contnrs, GedCom551,
+  BaseMapFrames, GoogleMapFrames;
 
 type
   TPlace = class
@@ -28,11 +31,7 @@ type
   end;
 
   TfmMaps = class(TForm)
-    PageControl: TPageControl;
     StatusBar1: TStatusBar;
-    tsMap: TTabSheet;
-    ScrollBoxGeocoding: TScrollBox;
-    ImageGeocoding: TImage;
     Splitter1: TSplitter;
     PageControl1: TPageControl;
     tsPlaces: TTabSheet;
@@ -43,35 +42,56 @@ type
     lbLongitude: TLabel;
     edLongitude: TEdit;
     TabSheet1: TTabSheet;
-    btRefersh: TButton;
+    btnSearch: TButton;
     TreeView1: TTreeView;
-    Button1: TButton;
-    ProgressBar1: TProgressBar;
-    GroupBox2: TGroupBox;
-    edSearch: TEdit;
-    btSearch: TButton;
     ListView: TListView;
-    CheckBirth: TCheckBox;
-    CheckDeath: TCheckBox;
+    Label1: TLabel;
+    edSearch: TEdit;
+    RadioGroup1: TRadioGroup;
+    SaveDialog1: TSaveDialog;
+    btnSaveImage: TButton;
+    Panel1: TPanel;
+    GroupBox2: TGroupBox;
+    ComboPersons: TComboBox;
     CheckResidence: TCheckBox;
-    Button2: TButton;
-    ComboBox1: TComboBox;
+    CheckDeath: TCheckBox;
+    CheckBirth: TCheckBox;
+    btnSelectPlaces: TButton;
+    Label2: TLabel;
+    Label3: TLabel;
+    cbMapType: TComboBox;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure btRefershClick(Sender: TObject);
-    procedure btSearchClick(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
-    procedure Button2Click(Sender: TObject);
+    procedure btnSearchClick(Sender: TObject);
+    procedure btnSelectPlacesClick(Sender: TObject);
+    procedure ListViewSelectItem(Sender: TObject; Item: TListItem;
+      Selected: Boolean);
+    procedure btnSaveImageClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure cbMapTypeChange(Sender: TObject);
   private
-    XMLDocument: TXMLDocument;
+    FXMLDocument: TXMLDocument;
     FTree: TGEDCOMTree;
     FMapPoints: TObjectList;
     FPlaces: TObjectList;
+    FMapFrame: TBaseMapFrame;
+    FMapFile: string;
+
+    procedure PlacesLoad();
+
+    procedure SetMapFile();
 
     procedure DoGeocodingRequest(SearchString: String; aPoints: TObjectList);
     function DoReverseGeocodingRequest(Latitude: Double; Longitude: Double): string;
     procedure FillGeocodingListView(Points: TObjectList);
     procedure PreparePointsList(aPoints: TObjectList);
+
+    procedure PointsChangingEvent(Sender: TBaseMapFrame;
+      PointsChangingType: TPointsChangingType; Index: Integer);
+    function GetPointsFrame(): TCoordsRect;
   public
     property Tree: TGEDCOMTree read FTree write FTree;
   end;
@@ -81,40 +101,35 @@ var
 
 implementation
 
-uses GKCommon;
+uses
+  GKCommon {$IFDEF SYNAPSE}, HTTPSend{$ENDIF}, GKUtils, GKProgress, GKMain;
+
+const
+  GoogleKey = 'ABQIAAAAIcIQgkzLQ27NamNDh2wULxTh9o9-e_HqfKVqUrQPniGEP9J6uhSJmXGEipvip6lxpu_ZXrXaeHwWgQ';
 
 {$R *.dfm}
-
-procedure TfmMaps.FormCreate(Sender: TObject);
-begin
-  FMapPoints := TObjectList.Create(True);
-  FPlaces := TObjectList.Create(True);
-
-  DecimalSeparator := '.';
-  XMLDocument := TXMLDocument.Create(Self);
-  btRefersh.Click;
-end;
-
-procedure TfmMaps.FormDestroy(Sender: TObject);
-begin
-  FPlaces.Destroy;
-  FMapPoints.Destroy;
-end;
 
 // отправка запроса и получение ответа
 function GetInetFile(const FileURL: String; Stream: TMemoryStream): Boolean;
 const
   BufferSize = 1024;
 var
+  Utf8FileUrl: UTF8String; // Гугл принимает и отдает UTF8 кодировку!!!
+{$IFNDEF SYNAPSE}
   hSession, hURL: HInternet;
   Buffer: array [1..BufferSize] of Byte;
   BufferLen: DWORD;
   sAppName: string;
-  Utf8FileUrl: UTF8String; // Гугл принимает и отдает UTF8 кодировку!!!
   Headers: String;
+{$ELSE}
+  HTTP: THTTPSend;
+  proxy: TProxy;
+{$ENDIF}
 begin
   // переводим в принимаемую Гуглем кодировку
   Utf8FileUrl := AnsiToUtf8(FileURL);
+
+  {$IFNDEF SYNAPSE}
   sAppName := ExtractFileName(Application.ExeName);
   hSession := InternetOpen(PChar(sAppName), INTERNET_OPEN_TYPE_PRECONFIG, nil, nil, 0);
   try
@@ -132,21 +147,29 @@ begin
       InternetCloseHandle(hURL);
     end;
   finally
-    InternetCloseHandle(hSession)
+    InternetCloseHandle(hSession);
   end;
-end;
+  {$ELSE}
+  HTTP := THTTPSend.Create;
+  try
+    proxy := fmGEDKeeper.Options.Proxy;
+    if (proxy.UseProxy) then begin
+      HTTP.ProxyUser := proxy.Login;
+      HTTP.ProxyPass := proxy.Password;
+      HTTP.ProxyHost := proxy.Server;
+      HTTP.ProxyPort := proxy.Port;
+    end;
 
-// замена данных в потоке с кодировки 1251 на UTF-8
-function StreamToUtf8Stream(Stream: TStream): UTF8String;
-var
-  s: String;
-begin
-  SetLength(s, Stream.Size);
-  Stream.Seek(0, 0);
-  Stream.Read(s[1], Stream.Size);
-  Result := AnsiToUtf8(s);
-  Stream.Size := 0;
-  Stream.Write(Result[1], Length(Result));
+    HTTP.MimeType := 'application/x-www-form-urlencoded';
+    HTTP.HTTPMethod('GET', Utf8FileUrl);
+
+    Stream.LoadFromStream(HTTP.Document);
+
+    Result := True;
+  finally
+    HTTP.Free;
+  end;
+  {$ENDIF}
 end;
 
 // получение карты с заданным центром, масштабом и с маркером в центре
@@ -159,12 +182,12 @@ begin
   Stream := TMemoryStream.Create;
   try
     // формируем url для запроса
-    FileOnNet := 'http://maps.google.com/staticmap?center=%.6f,%.6f&zoom=%d&size=640x640'
+    FileOnNet := 'http://maps.google.ru/staticmap?center=%.6f,%.6f&zoom=%d&size=640x640'
       +'&markers=%.6f,%.6f,blues'
-      +'&maptype=mobile&key=ABQIAAAAIcIQgkzLQ27NamNDh2wULxTh9o9-e_HqfKVqUrQPniGEP9J6uhSJmXGEipvip6lxpu_ZXrXaeHwWgQ';
-    FileOnNet := Format(FileOnNet, [Latitude, Longitude, Scale, Latitude, Longitude]);
+      +'&maptype=mobile&key=%s';
+    FileOnNet := Format(FileOnNet, [Latitude, Longitude, Scale, Latitude, Longitude, GoogleKey]);
     // получение потока с данными ответа
-    if GetInetFile(FileOnNet, Stream) = True then begin
+    if GetInetFile(FileOnNet, Stream) then begin
       // создаем графический объект
       Stream.Position := 0;
       Result := TOleGraphic.Create;
@@ -202,12 +225,12 @@ begin
   Stream := TMemoryStream.Create;
   try
     // формируем url для запроса
-    FileOnNet := 'http://maps.google.com/staticmap?size=640x640'
+    FileOnNet := 'http://maps.google.ru/staticmap?size=640x640'
       +'&markers=%s'
-      +'&maptype=mobile&key=ABQIAAAAIcIQgkzLQ27NamNDh2wULxTh9o9-e_HqfKVqUrQPniGEP9J6uhSJmXGEipvip6lxpu_ZXrXaeHwWgQ';
-    FileOnNet := Format(FileOnNet, [Markers]);
+      +'&maptype=mobile&key=%s';
+    FileOnNet := Format(FileOnNet, [Markers, GoogleKey]);
     // получение потока с данными ответа
-    if GetInetFile(FileOnNet, Stream) = True then begin
+    if GetInetFile(FileOnNet, Stream) then begin
       // создаем графический объект
       Stream.Position := 0;
       Result := TOleGraphic.Create;
@@ -218,6 +241,144 @@ begin
   end;
 end;
 
+{ TPlace }
+
+constructor TPlace.Create;
+begin
+  Points := TObjectList.Create(True);
+  Refs := TObjectList.Create(False);
+end;
+
+destructor TPlace.Destroy;
+begin
+  Refs.Destroy;
+  Points.Destroy;
+
+  inherited Destroy;
+end;
+
+const
+  MapContent: string =
+    '<html>'#13#10+
+    '  <head>'#13#10+
+    '    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>'#13#10+
+    '    <title>Map</title>'#13#10+
+    '    <script src="http://maps.google.ru/maps?file=api&amp;v=2&amp;key='+GoogleKey+'" type="text/javascript"></script>'#13#10+
+    '    <script type="text/javascript">'#13#10+
+    '    var map;'#13#10+
+    '    function addMarker(latitude, longitude, hint)'#13#10+
+    '    {'#13#10+
+    '        var blueIcon = new GIcon(G_DEFAULT_ICON);'#13#10+
+    '        markerOptions = { icon : blueIcon, title : hint };'#13#10+
+    '        var latlng = new GLatLng(latitude,longitude);'#13#10+
+    '        map.addOverlay(new GMarker(latlng, markerOptions));'#13#10+
+    '    }'#13#10+
+    '    function initialize() {'#13#10+
+    '      if (GBrowserIsCompatible()) {'#13#10+
+    '        map = new GMap2(document.getElementById("map"));'#13#10+
+    '        map.setCenter(new GLatLng(55.755786, 37.617633), 11, %s);'#13#10+
+    '        map.addControl(new GLargeMapControl());'#13#10+
+    '        map.addControl(new GMapTypeControl());'#13#10+
+    '        map.addControl(new GOverviewMapControl());'#13#10+
+    '        //addMarker(59.944265, 30.319948, "This be standard marker without letter");'#13#10+
+    '      }'#13#10+
+    '    }'#13#10+
+    '    </script>'#13#10+
+    '  </head>'#13#10+
+    '  <body onload="initialize()" onunload="GUnload()">'#13#10+
+    '    <div id="map" style="position:absolute; width: 100%; height: 100%; left: 0px; top: 0px;"></div>'#13#10+
+    '    <noscript><b style="font-family:Tahoma;">JavaScript must be switched on for use Google Maps.</b></noscript>'#13#10+
+    '  </body>'#13#10+
+    '</html>';
+
+{ TfmMaps }
+
+procedure TfmMaps.FormCreate(Sender: TObject);
+begin
+  FMapFrame := TGoogleMapFrame.Create(Self);
+  FMapFrame.PointsChangingEvent := PointsChangingEvent;
+  FMapFrame.Parent := Panel1;
+  FMapFrame.Align := alClient;
+
+  SetMapFile();
+
+  FMapPoints := TObjectList.Create(True);
+  FPlaces := TObjectList.Create(True);
+
+  DecimalSeparator := '.';
+  FXMLDocument := TXMLDocument.Create(Self);
+end;
+
+procedure TfmMaps.FormDestroy(Sender: TObject);
+begin
+  FPlaces.Destroy;
+  FMapPoints.Destroy;
+
+  if (FMapFrame <> nil) then begin
+    FMapFrame.Parent := nil;
+    FMapFrame.Free;
+  end;
+
+  DeleteFile(FMapFile);
+end;
+
+procedure TfmMaps.SetMapFile();
+const
+  MapTypes: array [0..3] of string = (
+    'G_NORMAL_MAP', 'G_SATELLITE_MAP', 'G_HYBRID_MAP', 'G_PHYSICAL_MAP'
+  );
+var
+  tf: TextFile;
+  idx: Integer;
+  ts: string;
+begin
+  idx := cbMapType.ItemIndex;
+  if (idx < 0) then idx := 3;
+  ts := StringReplace(MapContent, '%s', MapTypes[idx], []);
+
+  FMapFile := GetTempDir() + 'GEDKeeperMap.html';
+  AssignFile(tf, FMapFile); Rewrite(tf);
+  Writeln(tf, ts);
+  CloseFile(tf);
+
+  FMapFrame.SetLocation(FMapFile);
+end;
+
+procedure TfmMaps.PointsChangingEvent(Sender: TBaseMapFrame;
+  PointsChangingType: TPointsChangingType; Index: Integer);
+{var
+  Item: TListItem;
+  Point: TMapPoint;}
+begin
+  {case PointsChangingType of
+    // после вызова EndUpdate
+    pctContiniousUpdate:begin
+      FillPointsList(Sender);
+    end;
+    // после вызова сброса маршрута
+    pctCleared:begin
+      FillPointsList(Sender);
+    end;
+    // после добавления точки
+    pctAdded:begin
+      Point:=FMapFrame.Points[Index];
+      Item:=lvPoints.Items.Insert(Index);
+      Item.Caption:=IntToStr(Index+1);
+      Item.SubItems.Text:=Format('%.7f x %.7f',[Point.Latitude,Point.Longitude]);
+    end;
+    // после изменения точки
+    pctModified:begin
+      Point:=FMapFrame.Points[Index];
+      Item:=lvPoints.Items[Index];
+      Item.Caption:=IntToStr(Index+1);
+      Item.SubItems.Text:=Format('%.7f x %.7f',[Point.Latitude,Point.Longitude]);
+    end;
+    // после удаления точки
+    pctDeleted:begin
+      lvPoints.Items.Delete(Index);
+    end;
+  end;}
+end;
 
 // запрос обратного геокодирования
 function TfmMaps.DoReverseGeocodingRequest(Latitude: Double; Longitude: Double): string;
@@ -253,15 +414,15 @@ begin
   Stream := TMemoryStream.Create;
   try
     // формируем url для запроса
-    FileOnNet := 'http://maps.google.com/maps/geo?ll=%.6f,%.6f&output=xml&key=abcdefg&gl=ru';
-    FileOnNet := Format(FileOnNet, [Latitude, Longitude]);
+    FileOnNet := 'http://maps.google.ru/maps/geo?ll=%.6f,%.6f&output=xml&key=%s&gl=ru';
+    FileOnNet := Format(FileOnNet, [Latitude, Longitude, GoogleKey]);
     // получение потока с данными ответа
-    if GetInetFile(FileOnNet, Stream) = True then begin
+    if GetInetFile(FileOnNet, Stream) then begin
       StreamToUtf8Stream(Stream);
       // заполняем XMLDocument
-      XMLDocument.LoadFromStream(Stream);
+      FXMLDocument.LoadFromStream(Stream);
 
-      Node := XMLDocument.DocumentElement;
+      Node := FXMLDocument.DocumentElement;
       FillNode(Node);
     end;
   finally
@@ -270,45 +431,101 @@ begin
 end;
 
 // обработка нажатия кнопки "Обновить"
-procedure TfmMaps.btRefershClick(Sender: TObject);
+procedure TfmMaps.btnSearchClick(Sender: TObject);
 var
   pt: TMapPoint;
+  pt_name: String;
 begin
-  pt := TMapPoint.Create;
-  pt.Lat := StrToFloat(edLatitude.Text);
-  pt.Lon := StrToFloat(edLongitude.Text);
-  pt.Address := DoReverseGeocodingRequest(pt.Lat, pt.Lon);
-  FMapPoints.Add(pt);
+  case RadioGroup1.ItemIndex of
+    0: begin
+      pt := TMapPoint.Create;
+      pt.Lat := StrToFloat(edLatitude.Text);
+      pt.Lon := StrToFloat(edLongitude.Text);
+      pt.Address := DoReverseGeocodingRequest(pt.Lat, pt.Lon);
+      FMapPoints.Add(pt);
+    end;
+    1: begin
+      pt_name := StringReplace(Trim(edSearch.Text), ' ', '+', [rfReplaceAll]);
+      DoGeocodingRequest(pt_name, FMapPoints);
+    end;
+  end;
 
   PreparePointsList(FMapPoints);
 end;
 
 procedure TfmMaps.PreparePointsList(aPoints: TObjectList);
 var
-  OleGraphic: TOleGraphic;
+  //OleGraphic: TOleGraphic;
+  i: Integer;
+  pt: TMapPoint;
+  rt: TCoordsRect;
 begin
   try
     // заполнение списка точек
     FillGeocodingListView(aPoints);
     // запрос карты
-    OleGraphic := GetMap(aPoints);
+    {OleGraphic := GetMap(aPoints);
     if (OleGraphic <> nil) then begin
       // рисуем карту
       ImageGeocoding.Picture.Assign(OleGraphic);
       OleGraphic.Free;
+    end;}
+
+    //FMapFrame.BeginUpdate;
+    //FMapFrame.ClearPoints();
+    for i := 0 to aPoints.Count - 1 do begin
+      pt := TMapPoint(aPoints[i]);
+      TGoogleMapFrame(FMapFrame).AddMarker(pt.Lat, pt.Lon, pt.Address);
     end;
+
+    if (aPoints.Count > 1)
+    then rt := GetPointsFrame()
+    else begin
+      //pt := TMapPoint(aPoints[0]);
+
+      rt.MinLon := pt.Lon - 20;
+      rt.MaxLon := pt.Lon + 20;
+      rt.MinLat := pt.Lat - 20;
+      rt.MaxLat := pt.Lat + 20;
+    end;
+
+    TGoogleMapFrame(FMapFrame).ZoomToBounds(rt);
+    //FMapFrame.EndUpdate;
   finally
   end;
 end;
 
-// нажатие кнопки поиска геокодинга
-procedure TfmMaps.btSearchClick(Sender: TObject);
+// получение "прямоугольника", в который вписан маршрут
+function TfmMaps.GetPointsFrame(): TCoordsRect;
 var
-  SearchString: String;
+  i: Integer;
+  Point: TMapPoint;
 begin
-  SearchString := StringReplace(Trim(edSearch.Text), ' ', '+', [rfReplaceAll]);
-  DoGeocodingRequest(SearchString, FMapPoints);
-  PreparePointsList(FMapPoints);
+  FillChar(Result, SizeOf(Result), 0);
+
+  if (FMapPoints.Count) > 0 then begin
+    Point := TMapPoint(FMapPoints[0]);
+    Result.MinLon := Point.Lon;
+    Result.MinLat := Point.Lat;
+    Result.MaxLon := Point.Lon;
+    Result.MaxLat := Point.Lat;
+
+    for i := 0 to FMapPoints.Count - 1 do begin
+      Point := TMapPoint(FMapPoints[i]);
+
+      if Result.MinLon > Point.Lon
+      then Result.MinLon := Point.Lon
+      else
+      if Result.MaxLon < Point.Lon
+      then Result.MaxLon := Point.Lon;
+
+      if Result.MinLat > Point.Lat
+      then Result.MinLat := Point.Lat
+      else
+      if Result.MaxLat < Point.Lat
+      then Result.MaxLat := Point.Lat;
+    end;
+  end;
 end;
 
 // получение списка точек по запросу
@@ -330,18 +547,15 @@ begin
   StringList := TStringList.Create;
   try
     // формируем url для запроса
-    FileOnNet := 'http://maps.google.com/maps/geo?q=%s&output=xml&key=abcdefg&gl=ru';
-    FileOnNet := Format(FileOnNet,[SearchString]);
+    FileOnNet := 'http://maps.google.ru/maps/geo?q=%s&output=xml&key=%s&gl=ru';
+    FileOnNet := Format(FileOnNet, [SearchString, GoogleKey]);
     // получение потока с данными ответа
-    if GetInetFile(FileOnNet,Stream) = True then begin
-      // кому надо - расскоментировать и смотреть содержимое при отладке
-      //Stream.SaveToFile('c: \geo.xml');
-
+    if GetInetFile(FileOnNet, Stream) then begin
       StreamToUtf8Stream(Stream);
       // заполняем XMLDocument
-      XMLDocument.LoadFromStream(Stream);
+      FXMLDocument.LoadFromStream(Stream);
       // формируем содержимое списка точек
-      Node := XMLDocument.DocumentElement;
+      Node := FXMLDocument.DocumentElement;
       Node := Node.ChildNodes.FindNode('Response');
       if (Node<>nil) and (Node.ChildNodes.Count>0) then
         for i := 0 to Node.ChildNodes.Count-1 do
@@ -353,21 +567,21 @@ begin
             //получаем узел координат
             PointNode := PlacemarkNode.ChildNodes.FindNode('Point');
             PointNode := PointNode.ChildNodes.FindNode('coordinates');
-            if (AddressNode<>nil) and (PointNode<>nil) then begin
+            if (AddressNode <> nil) and (PointNode <> nil) then begin
               Point := TMapPoint.Create;
               // получаем адрес
               Point.Address := AddressNode.Text;
               // получаем координаты
               sCoordinates := PointNode.Text;
               // разбираем координаты
-              ExtractStrings([','],[],PChar(sCoordinates),StringList);
-              if StringList.Count>1 then begin
+              ExtractStrings([','], [], PChar(sCoordinates), StringList);
+              if (StringList.Count > 1) then begin
                 // Формируем точку
-                Point.Lon := StrToFloatDef(StringList[0],-1);
-                Point.Lat := StrToFloatDef(StringList[1],-1);
-                // добавляем точку в список 
-                if (Point.Lat<>-1) and (Point.Lon<>-1) then
-                  aPoints.Add(Point);
+                Point.Lon := StrToFloatDef(StringList[0], -1);
+                Point.Lat := StrToFloatDef(StringList[1], -1);
+                // добавляем точку в список
+                if (Point.Lat <> -1) and (Point.Lon <> -1)
+                then aPoints.Add(Point);
                 StringList.Clear;
               end else
                 Point.Free;
@@ -403,7 +617,7 @@ begin
   end;
 end;
 
-procedure TfmMaps.Button1Click(Sender: TObject);
+procedure TfmMaps.PlacesLoad();
 var
   root: TTreeNode;
 
@@ -470,64 +684,63 @@ var
   ind: TGEDCOMIndividualRecord;
   i_ev: TGEDCOMIndividualEvent;
   i_att: TGEDCOMIndividualAttribute;
-  //fam: TGEDCOMFamilyRecord;
-  //f_ev: TGEDCOMFamilyEvent;
+  has_places: Boolean;
 begin
+  ComboPersons.Items.BeginUpdate;
   TreeView1.Items.BeginUpdate;
-  TreeView1.Items.Clear;
+  ProgressInit(FTree.Count, 'Загрузка и поиск мест');
+  try
+    FPlaces.Clear;
+    TreeView1.Items.Clear;
+    root := TreeView1.Items.AddChild(nil, 'Места');
 
-  FPlaces.Clear;
+    ComboPersons.Clear;
+    ComboPersons.Sorted := False;
+    ComboPersons.Items.AddObject('( не выбран )', nil);
 
-  root := TreeView1.Items.AddChild(nil, 'Места');
+    for i := 0 to FTree.Count - 1 do begin
+      rec := FTree.Records[i];
 
-  ProgressBar1.Min := 0;
-  ProgressBar1.Max := FTree.Count;
+      if (rec is TGEDCOMIndividualRecord) then begin
+        ind := rec as TGEDCOMIndividualRecord;
+        has_places := False;
 
-  for i := 0 to FTree.Count - 1 do begin
-    rec := FTree.Records[i];
+        for k := 0 to ind.IndividualEventsCount - 1 do begin
+          i_ev := ind.IndividualEvents[k];
+          if (i_ev.Detail.Place <> '') then begin
+            AddPlace(i_ev.Detail.Place, i_ev);
+            has_places := True;
+          end;
+        end;
 
-    if (rec is TGEDCOMIndividualRecord) then begin
-      ind := rec as TGEDCOMIndividualRecord;
+        for k := 0 to ind.IndividualAttributesCount - 1 do begin
+          i_att := ind.IndividualAttributes[k];
 
-      for k := 0 to ind.IndividualEventsCount - 1 do begin
-        i_ev := ind.IndividualEvents[k];
-        if (i_ev.Detail.Place <> '')
-        then AddPlace(i_ev.Detail.Place, i_ev);
+          if (i_att.Name = 'RESI') and (i_att.StringValue <> '') then begin
+            AddPlace(i_att.StringValue, i_att);
+            has_places := True;
+          end;
+        end;
+
+        if has_places
+        then ComboPersons.Items.AddObject(GetNameStr(ind), ind);
       end;
 
-      for k := 0 to ind.IndividualAttributesCount - 1 do begin
-        i_att := ind.IndividualAttributes[k];
-
-        if (i_att.Name = 'RESI') and (i_att.StringValue <> '')
-        then AddPlace(i_att.StringValue, i_att);
-      end;
+      ProgressStep();
     end;
 
-    ProgressBar1.Position := i + 1;
+    TreeView1.AlphaSort(True);
+    TreeView1.Items[0].Expand(True);
+
+    ComboPersons.Sorted := True;
+  finally
+    ProgressDone();
+    TreeView1.Items.EndUpdate;
+    ComboPersons.Items.EndUpdate;
   end;
-
-  TreeView1.AlphaSort(True);
-  TreeView1.Items[0].Expand(True);
-  TreeView1.Items.EndUpdate;
 end;
 
-{ TPlace }
-
-constructor TPlace.Create;
-begin
-  Points := TObjectList.Create(True);
-  Refs := TObjectList.Create(False);
-end;
-
-destructor TPlace.Destroy;
-begin
-  Refs.Destroy;
-  Points.Destroy;
-
-  inherited Destroy;
-end;
-
-procedure TfmMaps.Button2Click(Sender: TObject);
+procedure TfmMaps.btnSelectPlacesClick(Sender: TObject);
 
   procedure CopyPoint(aPt: TMapPoint);
   var
@@ -552,13 +765,19 @@ var
   place: TPlace;
   ref: TGEDCOMObject;
   cond: set of (pcBirth, pcDeath, pcResidence);
+  ind: TGEDCOMIndividualRecord;
 begin
   cond := [];
   if CheckBirth.Checked then Include(cond, pcBirth);
   if CheckDeath.Checked then Include(cond, pcDeath);
   if CheckResidence.Checked then Include(cond, pcResidence);
 
+  ind := nil;
+  if (ComboPersons.ItemIndex >= 0)
+  then ind := TGEDCOMIndividualRecord(ComboPersons.Items.Objects[ComboPersons.ItemIndex]);
+
   FMapPoints.Clear;
+  FMapFrame.ClearPoints();
 
   for i := 0 to FPlaces.Count - 1 do begin
     place := TPlace(FPlaces[i]);
@@ -568,21 +787,89 @@ begin
       ref := TGEDCOMObject(place.Refs[k]);
 
       if (ref is TGEDCOMIndividualEvent) then begin
-        if (pcBirth in cond) and (TGEDCOMIndividualEvent(ref).Name = 'BIRT')
-        then CopyPoint(TMapPoint(place.Points[0]))
-        else
-        if (pcDeath in cond) and (TGEDCOMIndividualEvent(ref).Name = 'DEAT')
+        if ((ind <> nil) and (TGEDCOMIndividualEvent(ref).Parent = ind))
+        or ((pcBirth in cond) and (TGEDCOMIndividualEvent(ref).Name = 'BIRT'))
+        or ((pcDeath in cond) and (TGEDCOMIndividualEvent(ref).Name = 'DEAT'))
         then CopyPoint(TMapPoint(place.Points[0]));
       end
       else
       if (ref is TGEDCOMIndividualAttribute) then begin
-        if (pcResidence in cond) and (TGEDCOMIndividualAttribute(ref).Name = 'RESI')
+        if ((ind <> nil) and (TGEDCOMIndividualAttribute(ref).Parent = ind))
+        or ((pcResidence in cond) and (TGEDCOMIndividualAttribute(ref).Name = 'RESI'))
         then CopyPoint(TMapPoint(place.Points[0]));
       end;
     end;
   end;
 
-  PreparePointsList(FMapPoints); 
+  PreparePointsList(FMapPoints);
+end;
+
+procedure TfmMaps.ListViewSelectItem(Sender: TObject; Item: TListItem;
+  Selected: Boolean);
+var
+  Index: Integer;
+  Point: TMapPoint;
+begin
+  if Selected and (Item <> nil) then begin
+    Index := Item.Index;
+    Point := TMapPoint(FMapPoints[Index]); //FMapFrame[Index];
+    FMapFrame.SetCenter(Point.Lat, Point.Lon);
+  end;
+end;
+
+procedure TfmMaps.btnSaveImageClick(Sender: TObject);
+var
+  img: TBitmap;
+  OleGraphic: TOleGraphic;
+begin
+  if not(SaveDialog1.Execute) then Exit;
+
+  img := TBitmap.Create();
+  try
+    OleGraphic := GetMap(FMapPoints);
+    if (OleGraphic <> nil) then begin
+      //img.Picture.Assign(OleGraphic);
+      //OleGraphic.SaveToFile(SaveDialog1.FileName);
+
+      img.Width := OleGraphic.Width;
+      img.Height := OleGraphic.Height;
+      img.Canvas.Draw(0, 0, OleGraphic);
+      img.SaveToFile(SaveDialog1.FileName);
+
+      OleGraphic.Free;
+    end;
+
+    //img.Canvas.Draw(0, 0, OleGraphic);
+
+    {img.Width := FMapFrame.Width;
+    img.Height := FMapFrame.Height;
+    BitBlt(img.Canvas.Handle, 0, 0, img.Width, img.Height, GetDC(FMapFrame.Handle), 0, 0, SRCCOPY);
+    img.SaveToFile(SaveDialog1.FileName);}
+  finally
+    img.Destroy;
+  end;
+end;
+
+procedure TfmMaps.FormShow(Sender: TObject);
+begin
+  PlacesLoad();
+  btnSelectPlaces.Enabled := True;
+end;
+
+procedure TfmMaps.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = VK_ESCAPE) then Close;
+end;
+
+procedure TfmMaps.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TfmMaps.cbMapTypeChange(Sender: TObject);
+begin
+  SetMapFile();
 end;
 
 end.

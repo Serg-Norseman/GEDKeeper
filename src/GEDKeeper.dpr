@@ -32,7 +32,11 @@ uses
   GKUtils in 'GKUtils.pas',
   GKLifeSettings in 'GKLifeSettings.pas' {fmLifeSettings},
   GKLifeMain in 'GKLifeMain.pas' {fmLife},
-  GKMaps in 'GKMaps.pas' {fmMaps};
+  GKMaps in 'GKMaps.pas' {fmMaps},
+  GoogleMapFrames in 'ext\GoogleMapFrames.pas' {GoogleMapFrame: TFrame},
+  BaseMapFrames in 'ext\BaseMapFrames.pas' {BaseMapFrame: TFrame},
+  GKProgress in 'GKProgress.pas' {fmProgress},
+  GKAddressEdit in 'GKAddressEdit.pas' {fmAddressEdit};
 
 {$R *.res}
 
@@ -41,5 +45,6 @@ begin
   Application.Title := 'GEDKeeper';
   Application.CreateForm(TfmGEDKeeper, fmGEDKeeper);
   Application.CreateForm(TfmStats, fmStats);
+  Application.CreateForm(TfmAddressEdit, fmAddressEdit);
   Application.Run;
 end.

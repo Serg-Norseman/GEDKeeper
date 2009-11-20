@@ -237,6 +237,123 @@ object fmOptions: TfmOptions
         TabOrder = 0
       end
     end
+    object SheetGeoData: TTabSheet
+      Caption = #1043#1077#1086#1076#1072#1085#1085#1099#1077
+      ImageIndex = 3
+      object GroupBox4: TGroupBox
+        Left = 8
+        Top = 8
+        Width = 217
+        Height = 161
+        Caption = #1047#1072#1075#1088#1091#1079#1082#1072' '#1080#1079' '#1048#1085#1090#1077#1088#1085#1077#1090#1072
+        TabOrder = 0
+        object Label1: TLabel
+          Left = 16
+          Top = 56
+          Width = 37
+          Height = 13
+          Caption = #1057#1077#1088#1074#1077#1088
+        end
+        object Label2: TLabel
+          Left = 16
+          Top = 80
+          Width = 25
+          Height = 13
+          Caption = #1055#1086#1088#1090
+        end
+        object Label3: TLabel
+          Left = 16
+          Top = 104
+          Width = 30
+          Height = 13
+          Caption = #1051#1086#1075#1080#1085
+        end
+        object Label4: TLabel
+          Left = 16
+          Top = 128
+          Width = 37
+          Height = 13
+          Caption = #1055#1072#1088#1086#1083#1100
+        end
+        object chkProxy: TCheckBox
+          Left = 16
+          Top = 24
+          Width = 185
+          Height = 17
+          Caption = #1048#1089#1087#1086#1083#1100#1079#1086#1074#1072#1090#1100' '#1087#1088#1086#1082#1089#1080'-'#1089#1077#1088#1074#1077#1088
+          TabOrder = 0
+        end
+        object edProxyServer: TEdit
+          Left = 80
+          Top = 48
+          Width = 121
+          Height = 21
+          TabOrder = 1
+        end
+        object edProxyPort: TEdit
+          Left = 80
+          Top = 72
+          Width = 121
+          Height = 21
+          TabOrder = 2
+        end
+        object edProxyLogin: TEdit
+          Left = 80
+          Top = 96
+          Width = 121
+          Height = 21
+          TabOrder = 3
+        end
+        object edProxyPass: TEdit
+          Left = 80
+          Top = 120
+          Width = 121
+          Height = 21
+          PasswordChar = '*'
+          TabOrder = 4
+          Text = 'edProxyPass'
+        end
+      end
+    end
+    object SheetPedigree: TTabSheet
+      Caption = #1056#1086#1089#1087#1080#1089#1100
+      ImageIndex = 4
+      object GroupBox5: TGroupBox
+        Left = 8
+        Top = 8
+        Width = 241
+        Height = 201
+        Caption = #1043#1077#1085#1077#1088#1072#1094#1080#1103' '#1088#1086#1089#1087#1080#1089#1077#1081
+        TabOrder = 0
+        object CheckAttributes: TCheckBox
+          Left = 16
+          Top = 24
+          Width = 209
+          Height = 17
+          Alignment = taLeftJustify
+          Caption = #1042#1082#1083#1102#1095#1072#1103' '#1072#1090#1088#1080#1073#1091#1090#1099' '#1087#1077#1088#1089#1086#1085
+          TabOrder = 0
+        end
+        object CheckNotes: TCheckBox
+          Left = 16
+          Top = 48
+          Width = 209
+          Height = 17
+          Alignment = taLeftJustify
+          Caption = #1042#1082#1083#1102#1095#1072#1103' '#1079#1072#1084#1077#1090#1082#1080
+          TabOrder = 1
+        end
+        object CheckSources: TCheckBox
+          Left = 16
+          Top = 72
+          Width = 209
+          Height = 17
+          Alignment = taLeftJustify
+          Caption = #1042#1082#1083#1102#1095#1072#1103' '#1080#1089#1090#1086#1095#1085#1080#1082#1080
+          TabOrder = 2
+        end
+      end
+    end
   end
   object btnAccept: TBitBtn
     Left = 336
@@ -258,7 +375,7 @@ object fmOptions: TfmOptions
     Kind = bkCancel
   end
   object ColorDialog1: TColorDialog
-    Left = 240
-    Top = 200
+    Left = 232
+    Top = 240
   end
 end

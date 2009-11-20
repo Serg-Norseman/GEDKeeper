@@ -38,6 +38,22 @@ type
     CheckExtRegister: TCheckBox;
     SheetTools: TTabSheet;
     CheckCleanEmptyFamilies: TCheckBox;
+    SheetGeoData: TTabSheet;
+    GroupBox4: TGroupBox;
+    chkProxy: TCheckBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    edProxyServer: TEdit;
+    edProxyPort: TEdit;
+    edProxyLogin: TEdit;
+    edProxyPass: TEdit;
+    SheetPedigree: TTabSheet;
+    GroupBox5: TGroupBox;
+    CheckAttributes: TCheckBox;
+    CheckNotes: TCheckBox;
+    CheckSources: TCheckBox;
     procedure FormShow(Sender: TObject);
     procedure btnAcceptClick(Sender: TObject);
     procedure PanMaleColorClick(Sender: TObject);
@@ -77,6 +93,16 @@ begin
   CheckExtRegister.Checked := ExtIsRegistered('.ged', 'GEDCOM.File');
 
   CheckCleanEmptyFamilies.Checked := FOptions.CleanEmptyFamilies;
+
+  chkProxy.Checked := FOptions.Proxy.UseProxy;
+  edProxyServer.Text := FOptions.Proxy.Server;
+  edProxyPort.Text := FOptions.Proxy.Port;
+  edProxyLogin.Text := FOptions.Proxy.Login;
+  edProxyPass.Text := FOptions.Proxy.Password;
+
+  CheckAttributes.Checked := FOptions.PedigreeOptions.IncludeAttributes;
+  CheckNotes.Checked := FOptions.PedigreeOptions.IncludeNotes;
+  CheckSources.Checked := FOptions.PedigreeOptions.IncludeSources;
 end;
 
 procedure TfmOptions.btnAcceptClick(Sender: TObject);
@@ -103,6 +129,16 @@ begin
   RegisterExt('.ged', 'GEDCOM.File', 'GEDCOM File', 0, CheckExtRegister.Checked);
 
   FOptions.CleanEmptyFamilies := CheckCleanEmptyFamilies.Checked;
+
+  FOptions.Proxy.UseProxy := chkProxy.Checked;
+  FOptions.Proxy.Server := edProxyServer.Text;
+  FOptions.Proxy.Port := edProxyPort.Text;
+  FOptions.Proxy.Login := edProxyLogin.Text;
+  FOptions.Proxy.Password := edProxyPass.Text;
+
+  FOptions.PedigreeOptions.IncludeAttributes := CheckAttributes.Checked;
+  FOptions.PedigreeOptions.IncludeNotes := CheckNotes.Checked;
+  FOptions.PedigreeOptions.IncludeSources := CheckSources.Checked;
 end;
 
 procedure TfmOptions.PanMaleColorClick(Sender: TObject);

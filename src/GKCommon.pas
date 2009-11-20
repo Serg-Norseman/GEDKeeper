@@ -17,8 +17,8 @@ const
 type
   TRecAction = (raAdd, raEdit, raDelete);
   TSelectMode = (smPerson, smNote, smMultimedia, smSource, smGroup);
-  TTargetMode = (tmAncestor, tmDescendant);
-  TLifeMode = (lmAll, lmOnlyAlive, lmOnlyDead);
+  TTargetMode = (tmNone, tmAncestor, tmDescendant);
+  TLifeMode = (lmAll, lmOnlyAlive, lmOnlyDead, lmAliveBefore);
 
   TName = class
   private
@@ -88,17 +88,49 @@ type
 
   TDateFormat = (dfDD_MM_YYYY, dfYYYY_MM_DD);
 
+  TProxy = class(TObject)
+  private
+    FServer: string;
+    FPort: string;
+    FLogin: string;
+    FPassword: string;
+    FUseProxy: Boolean;
+  public
+    property Server: string read FServer write FServer;
+    property Port: string read FPort write FPort;
+    property Login: string read FLogin write FLogin;
+    property Password: string read FPassword write FPassword;
+    property UseProxy: Boolean read FUseProxy write FUseProxy;
+  end;
+
+  TPedigreeOptions = class(TObject)
+  private
+    FIncludeNotes: Boolean;
+    FIncludeAttributes: Boolean;
+    FIncludeSources: Boolean;
+  public
+    constructor Create;
+    destructor Destroy; override;
+
+    property IncludeAttributes: Boolean read FIncludeAttributes write FIncludeAttributes;
+    property IncludeNotes: Boolean read FIncludeNotes write FIncludeNotes;
+    property IncludeSources: Boolean read FIncludeSources write FIncludeSources;
+  end;
+
   TGlobalOptions = class(TObject)
   private
     FChartOptions: TChartOptions;
     FCleanEmptyFamilies: Boolean;
+    FPedigreeOptions: TPedigreeOptions;
+    FProxy: TProxy;
   public
     constructor Create;
     destructor Destroy; override;
 
     property ChartOptions: TChartOptions read FChartOptions;
-
     property CleanEmptyFamilies: Boolean read FCleanEmptyFamilies write FCleanEmptyFamilies;
+    property PedigreeOptions: TPedigreeOptions read FPedigreeOptions;
+    property Proxy: TProxy read FProxy;
   end;
 
 type
@@ -228,6 +260,9 @@ function GetAppPath(): string;
 // Дополнить число нулями
 function NumUpdate(val, up: Integer): string;
 
+// Получить число римскими цифрами
+function GetRome(N: Integer): string;
+
 // извлечение токена
 function GetToken(aString, SepChar: string; TokenNum: Byte): string;
 // количество токенов
@@ -249,7 +284,8 @@ function GetId(aRecord: TGEDCOMRecord): Integer;
 
 function GEDCOMDateToStr(aDate: TGEDCOMDate; aFormat: TDateFormat = dfDD_MM_YYYY): string;
 function StrToGEDCOMDate(aDate: string): string;
-function GEDCOMCustomDateToStr(aDate: TGEDCOMCustomDate; aFormat: TDateFormat): string;
+function GEDCOMCustomDateToStr(aDate: TGEDCOMCustomDate; aFormat: TDateFormat;
+  aSign: Boolean = False): string;
 function GEDCOMDateToDate(aDate: TGEDCOMCustomDate): TDateTime;
 
 function GetIndividualEvent(iRec: TGEDCOMIndividualRecord; evName: string): TGEDCOMIndividualEvent;
@@ -263,6 +299,7 @@ function GetBirthPlace(iRec: TGEDCOMIndividualRecord): string;
 function GetDeathPlace(iRec: TGEDCOMIndividualRecord): string;
 
 function GetAttributeValue(iRec: TGEDCOMIndividualRecord; attrName: string): string;
+function GetAttributeStr(iAttr: TGEDCOMIndividualAttribute): string;
 
 function GetMarriageDate(fRec: TGEDCOMFamilyRecord; aFormat: TDateFormat): string;
 function GetEventDesc(evDetail: TGEDCOMEventDetail): string;
@@ -276,7 +313,9 @@ function GetDaysForBirth(iRec: TGEDCOMIndividualRecord): string;
 
 function HyperLink(XRef: string; Text: string): string;
 
-function IndistinctMatching(StrA, StrB: string): Integer;
+function IndistinctMatching(MaxMatching: Integer; strInputMatching, strInputStandart: String): Integer;
+function IndistinctMatching2(A, B: String): Single;
+function IndistinctMatching3(StrA, StrB: string): Integer;
 
 function ClearFamily(aFamily: string): string;
 
@@ -309,6 +348,8 @@ function GetChangeDate(aRec: TGEDCOMRecordWithLists): string;
 
 function CheckGEDCOMFormat(aTree: TGEDCOMTree): Boolean;
 
+procedure LoadExtFile(const aFileName: string);
+
 type
   TGEDCOMTagWithListsEx = class(TGEDCOMTagWithLists)
   public
@@ -323,7 +364,7 @@ type
 implementation
 
 uses
-  SysUtils, StrUtils, Math, DateUtils;
+  Windows, SysUtils, StrUtils, Math, DateUtils, ShellAPI, Controls, GKProgress;
 
 function Hole(var A): Integer;
 asm
@@ -395,6 +436,29 @@ function NumUpdate(val, up: Integer): string;
 begin
   Result := IntToStr(val);
   while Length(Result) < up do Result := '0' + Result;
+end;
+
+// Получить число римскими цифрами
+function GetRome(N: Integer): string;
+const
+  Rn_N: array [1..13] of Integer = (
+    1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000);
+  Rn_S: array [1..13] of string = (
+    'I', 'IV', 'V', 'IX', 'X', 'XL', 'L', 'XC', 'C', 'CD', 'D', 'CM', 'M');
+var
+  S: string;
+  T: Byte;
+begin
+  S := '';
+  T := 13;
+  while (N > 0) do begin
+    while (N < Rn_N[T]) do Dec(T);
+    while (N >= Rn_N[T]) do begin
+      Dec(N, Rn_N[T]);
+      S := S + Rn_S[T];
+    end;
+  end;
+  Result := S;
 end;
 
 // извлечение токена
@@ -578,7 +642,7 @@ begin
   Delete(xref, 1, Length(sign));
 
   try
-    Result := StrToInt(xref);
+    Result := StrToIntDef(xref, 0);
   except
     Result := 0;
   end;
@@ -643,23 +707,33 @@ begin
   if (py <> '') then Result := Result + py;
 end;
 
-function GEDCOMCustomDateToStr(aDate: TGEDCOMCustomDate; aFormat: TDateFormat): string;
+function GEDCOMCustomDateToStr(aDate: TGEDCOMCustomDate; aFormat: TDateFormat;
+  aSign: Boolean = False): string;
 var
   dt_range: TGEDCOMDateRange;
   dt_period: TGEDCOMDatePeriod;
 begin
   if (aDate is TGEDCOMDateApproximated) then begin
     Result := GEDCOMDateToStr(TGEDCOMDate(aDate), aFormat);
+
+    if (aSign) and (TGEDCOMDateApproximated(aDate).Approximated <> daExact)
+    then Result := '~ ' + Result;
   end
   else
   if (aDate is TGEDCOMDateRange) then begin
     dt_range := TGEDCOMDateRange(aDate);
 
     if (dt_range.After.StringValue = '') and (dt_range.Before.StringValue <> '')
-    then Result := GEDCOMDateToStr(dt_range.Before, aFormat)
+    then begin
+      Result := GEDCOMDateToStr(dt_range.Before, aFormat);
+      if (aSign) then Result := '< ' + Result;
+    end
     else
     if (dt_range.After.StringValue <> '') and (dt_range.Before.StringValue = '')
-    then Result := GEDCOMDateToStr(dt_range.After, aFormat)
+    then begin
+      Result := GEDCOMDateToStr(dt_range.After, aFormat);
+      if (aSign) then Result := Result + ' >';
+    end
     else
     if (dt_range.After.StringValue <> '') and (dt_range.Before.StringValue <> '')
     then Result := GEDCOMDateToStr(dt_range.After, aFormat) + '-' + GEDCOMDateToStr(dt_range.Before, aFormat);
@@ -669,10 +743,16 @@ begin
     dt_period := TGEDCOMDatePeriod(aDate);
 
     if (dt_period.DateFrom.StringValue <> '') and (dt_period.DateTo.StringValue = '')
-    then Result := GEDCOMDateToStr(dt_period.DateFrom, aFormat)
+    then begin
+      Result := GEDCOMDateToStr(dt_period.DateFrom, aFormat);
+      if (aSign) then Result := Result + ' >';
+    end
     else
     if (dt_period.DateFrom.StringValue = '') and (dt_period.DateTo.StringValue <> '')
-    then Result := GEDCOMDateToStr(dt_period.DateTo, aFormat)
+    then begin
+      Result := GEDCOMDateToStr(dt_period.DateTo, aFormat);
+      if (aSign) then Result := '< ' + Result;
+    end
     else
     if (dt_period.DateFrom.StringValue <> '') and (dt_period.DateTo.StringValue <> '')
     then Result := GEDCOMDateToStr(dt_period.DateFrom, aFormat) + '-' + GEDCOMDateToStr(dt_period.DateTo, aFormat);
@@ -833,6 +913,20 @@ begin
   end;
 end;
 
+function GetAttributeStr(iAttr: TGEDCOMIndividualAttribute): string;
+var
+  idx: Integer;
+  st: string;
+begin
+  idx := GetPersonAttributeIndex(iAttr.Name);
+  if (idx = 0) then st := iAttr.Detail.Classification
+  else
+  if (idx > 0) then st := PersonAttributes[idx].Name
+  else st := iAttr.Name;
+
+  Result := st + ': ' + iAttr.StringValue;
+end;
+
 function GetMarriageDate(fRec: TGEDCOMFamilyRecord; aFormat: TDateFormat): string;
 var
   event: TGEDCOMFamilyEvent;
@@ -848,7 +942,7 @@ function GetEventDesc(evDetail: TGEDCOMEventDetail): string;
 var
   dt: string;
 begin
-  dt := GEDCOMCustomDateToStr(evDetail.Date.Value, dfDD_MM_YYYY);
+  dt := GEDCOMCustomDateToStr(evDetail.Date.Value, dfDD_MM_YYYY, False);
 
   if (dt = '') and (evDetail.Place = '')
   then Result := '?'
@@ -1084,7 +1178,122 @@ begin
   Result := '~^' + XRef + ':' + Text + '~';
 end;
 
-function IndistinctMatching(StrA, StrB: string): Integer;
+type
+  TRetCount = packed record
+    lngSubRows: Word;
+    lngCountLike: Word;
+  end;
+
+function Matching(StrA, StrB: String; lngLen: Integer): TRetCount;
+var
+  TempRet: TRetCount;
+  PosStrA, PosStrB: Integer;
+  StrTempA, StrTempB: String;
+begin
+  TempRet.lngSubRows := 0;
+  TempRet.lngCountLike := 0;
+
+  for PosStrA := 1 to Length(strA) - lngLen + 1 do begin
+    StrTempA := Copy(strA, PosStrA, lngLen);
+
+    PosStrB := 1;
+    for PosStrB := 1 to Length(strB) - lngLen + 1 do begin
+      StrTempB := Copy(strB, PosStrB, lngLen);
+      if AnsiCompareText(StrTempA, StrTempB) = 0 then begin
+        Inc(TempRet.lngCountLike);
+        Break;
+      end;
+    end;
+
+    Inc(TempRet.lngSubRows);
+  end;
+
+  Matching.lngCountLike := TempRet.lngCountLike;
+  Matching.lngSubRows   := TempRet.lngSubRows;
+end;
+
+//------------------------------------------------------------------------------
+// Функция нечеткого сравнения строк БЕЗ УЧЕТА РЕГИСТРА
+//------------------------------------------------------------------------------
+// MaxMatching - максимальная длина подстроки (достаточно 3-4)
+// strInputMatching - сравниваемая строка
+// strInputStandart - строка-образец
+// Сравнивание без учета регистра
+// if IndistinctMatching(4, "поисковая строка", "оригинальная строка  - эталон") > 40 then ...
+function IndistinctMatching(MaxMatching: Integer; strInputMatching, strInputStandart: String): Integer;
+var
+  gret: TRetCount;
+  tret: TRetCount;
+  lngCurLen: Integer; //текущая длина подстроки
+begin
+  //если не передан какой-либо параметр, то выход
+  if (MaxMatching = 0) or (Length(strInputMatching) = 0) or (Length(strInputStandart) = 0)
+  then begin
+    Result := 0;
+    Exit;
+  end;
+
+  gret.lngCountLike:= 0;
+  gret.lngSubRows  := 0;
+  // Цикл прохода по длине сравниваемой фразы
+  for lngCurLen := 1 to MaxMatching do begin
+    // Сравниваем строку A со строкой B
+    tret := Matching(strInputMatching, strInputStandart, lngCurLen);
+    gret.lngCountLike := gret.lngCountLike + tret.lngCountLike;
+    gret.lngSubRows   := gret.lngSubRows + tret.lngSubRows;
+    // Сравниваем строку B со строкой A
+    tret := Matching(strInputStandart, strInputMatching, lngCurLen);
+    gret.lngCountLike := gret.lngCountLike + tret.lngCountLike;
+    gret.lngSubRows   := gret.lngSubRows + tret.lngSubRows;
+  end;
+
+  if (gret.lngSubRows = 0) then begin
+    Result := 0;
+    Exit;
+  end;
+
+  Result := Trunc((gret.lngCountLike / gret.lngSubRows) * 100);
+end;
+
+//------------------------------------------------------------------------------
+function IndistinctMatching2(A, B: String): Single;
+
+  function Match(i, j: Byte): Integer;
+  label _Loop;
+  var
+    GlobalSumm, Summ, Max: Integer;
+  begin
+    GlobalSumm := 0;
+    Max := 0;
+    _Loop:
+       if (A[i] = B[j]) then begin
+         Inc(GlobalSumm);
+         if (i < Byte(Length(A))) and (j < Byte(Length(B))) then begin
+           Inc(i);
+           Inc(j);
+           goto _Loop;
+         end;
+       end;
+    if (i < Byte(Length(A))) and (j < Byte(Length(B))) then begin
+       Summ := Match(i+1, j+1);
+       if (Max < Summ) then Max := Summ;
+    end;
+    if (i < Byte(Length(A))) then begin
+       Summ := Match(i+1, j);
+       if (Max < Summ) then Max := Summ;
+    end;
+    if (j < Byte(Length(B))) then begin
+      Summ := Match(i, j+1);
+      if (Max < Summ) then Max := Summ;
+    end;
+    Result := GlobalSumm + Max;
+  end;
+
+begin
+  Result := Match(1, 1) * 2.0 / (Byte(Length(A)) + Byte(Length(B)));
+end;
+
+function IndistinctMatching3(StrA, StrB: string): Integer;
 var
   i, k, m: Integer;
   mtx: array of array of Char;
@@ -1568,6 +1777,8 @@ begin
     if (rwl is TGEDCOMFamilyRecord) then begin
       fam := rwl as TGEDCOMFamilyRecord;
 
+      fam.SortChilds();
+
       for i := 0 to fam.FamilyEventCount - 1 do PrepareTag(fam.FamilyEvents[i].Detail);
       for i := 0 to fam.SpouseSealingCount - 1 do PrepareTag(fam.SpouseSealing[i]);
     end
@@ -1615,17 +1826,79 @@ begin
 end;
 
 function CheckGEDCOMFormat(aTree: TGEDCOMTree): Boolean;
+
+  procedure CorrectIds();
+  var
+    repMap: TXRefReplaceMap;
+    i: Integer;
+    rec: TGEDCOMRecord;
+    newXRef: string;
+  begin
+    ProgressInit(aTree.Count, 'Коррекция идентификаторов');
+
+    repMap := TXRefReplaceMap.Create;
+    try
+      for i := 0 to aTree.Count - 1 do begin
+        rec := aTree.Records[i];
+
+        if (GetId(rec) = 0) then begin
+          newXRef := aTree.XRefIndex_NewXRef(rec);
+          repMap.AddXRef(rec, rec.XRef, newXRef);
+          rec.XRef := newXRef;
+        end;
+
+        ProgressStep();
+      end;
+
+      aTree.Header.ReplaceXRefs(repMap);
+
+      ProgressInit(repMap.Count, 'Коррекция идентификаторов');
+      for i := 0 to repMap.Count - 1 do begin
+        rec := repMap.Records[i].Rec;
+        rec.ReplaceXRefs(repMap);
+
+        ProgressStep();
+      end;
+    finally
+      repMap.Destroy;
+
+      ProgressDone();
+    end;
+  end;
+
 var
   i: Integer;
   rec: TGEDCOMRecord;
+  idCheck: Boolean;
 begin
-  i := 0;
-  while (i < aTree.Count) do begin
-    rec := aTree.Records[i];
-    CheckRecord(aTree, rec);
+  ProgressInit(aTree.Count, 'Проверка формата');
+  try
+    idCheck := True;
+    i := 0;
+    while (i < aTree.Count) do begin
+      rec := aTree.Records[i];
+      CheckRecord(aTree, rec);
 
-    Inc(i);
+      if (idCheck) and (GetId(rec) = 0)
+      then idCheck := False;
+
+      ProgressStep();
+
+      Inc(i);
+    end;
+  finally
+    ProgressDone();
   end;
+
+  if not(idCheck) then begin
+    if (MessageDlg('Требуется коррекция идентификаторов записей, продолжить?', mtWarning, [mbYes, mbNo], 0) = mrYes)
+    then CorrectIds();
+  end;
+end;
+
+procedure LoadExtFile(const aFileName: string);
+begin
+  ShellExecute(0, 'open', PChar(aFileName), nil, nil, SW_SHOW);
 end;
 
 { TNamesTable }
@@ -1822,15 +2095,32 @@ begin
   inherited Destroy;
 end;
 
+{ TPedigreeOptions }
+
+constructor TPedigreeOptions.Create;
+begin
+
+end;
+
+destructor TPedigreeOptions.Destroy;
+begin
+
+  inherited Destroy;
+end;
+
 { TGlobalOptions }
 
 constructor TGlobalOptions.Create;
 begin
   FChartOptions := TChartOptions.Create;
+  FPedigreeOptions := TPedigreeOptions.Create;
+  FProxy := TProxy.Create;
 end;
 
 destructor TGlobalOptions.Destroy;
 begin
+  FProxy.Destroy;
+  FPedigreeOptions.Destroy;
   FChartOptions.Destroy;
 
   inherited Destroy;

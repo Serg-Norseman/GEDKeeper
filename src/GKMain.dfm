@@ -1,6 +1,6 @@
 object fmGEDKeeper: TfmGEDKeeper
-  Left = 7
-  Top = 62
+  Left = 302
+  Top = 105
   Width = 1014
   Height = 676
   Caption = 'GEDKeeper'
@@ -2000,6 +2000,12 @@ object fmGEDKeeper: TfmGEDKeeper
     end
     object miHelp: TMenuItem
       Caption = #1057#1087#1088#1072#1074#1082#1072
+      object miGenResources: TMenuItem
+        Action = actGenResources
+      end
+      object miKinshipTerms: TMenuItem
+        Action = actKinshipTerms
+      end
       object miContext: TMenuItem
         Action = actContextHelp
       end
@@ -2164,6 +2170,14 @@ object fmGEDKeeper: TfmGEDKeeper
     object actMaps: TAction
       Caption = #1050#1072#1088#1090#1099'...'
       OnExecute = actMapsExecute
+    end
+    object actGenResources: TAction
+      Caption = #1056#1077#1089#1091#1088#1089#1099' '#1074' '#1048#1085#1090#1077#1088#1085#1077#1090#1077'...'
+      OnExecute = actGenResourcesExecute
+    end
+    object actKinshipTerms: TAction
+      Caption = #1058#1077#1088#1084#1080#1085#1086#1083#1086#1075#1080#1103' '#1088#1086#1076#1089#1090#1074#1072'...'
+      OnExecute = actKinshipTermsExecute
     end
   end
   object PopupMenu1: TPopupMenu

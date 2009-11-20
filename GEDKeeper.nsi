@@ -1,8 +1,5 @@
 
-; The name of the installer
 Name "GEDKeeper"
-
-; The file to write
 OutFile "GEDKeeper-Installer.exe"
 
 ; The default installation directory
@@ -26,14 +23,10 @@ LoadLanguageFile "${NSISDIR}\Contrib\Language files\Russian.nlf"
 UninstPage uninstConfirm
 UninstPage instfiles
 
-; The stuff to install
 Section "GEDKeeper (необходимо)"
   SectionIn RO
 
-  ; Set output path to the installation directory.
   SetOutPath $INSTDIR
-
-  ; Put file there
   File "GEDKeeper.exe"
 
   ; Write the installation path into the registry
@@ -51,29 +44,29 @@ Section "GEDKeeper (необходимо)"
   CreateShortCut "$SMPROGRAMS\GEDKeeper\GEDKeeper.lnk" "$INSTDIR\GEDKeeper.exe" "" "$INSTDIR\GEDKeeper.exe" 0
 SectionEnd
 
-; Optional section (can be disabled by the user)
 Section "Справка"
   CreateDirectory "$INSTDIR\help"
   SetOutPath "$INSTDIR\help"
+
+  File ".\help\genres.htm"
+  CreateShortCut "$SMPROGRAMS\GEDKeeper\Ресурсы в Интернете.lnk" "$INSTDIR\help\genres.htm" "" "$INSTDIR\help\genres.htm" 0
+
+  File ".\help\relations.htm"
+  File ".\help\ris-6.gif"
 SectionEnd
 
-; Optional section (can be disabled by the user)
 Section "Примеры"
   CreateDirectory "$INSTDIR\samples"
   SetOutPath "$INSTDIR\samples"
 
-  ; Put file there
   File ".\samples\rus-nobles.ged"
-
   CreateShortCut "$SMPROGRAMS\GEDKeeper\Благородные фамилии России.lnk" "$INSTDIR\samples\rus-nobles.ged" "" "$INSTDIR\samples\rus-nobles.ged" 0
 SectionEnd
 
-; Optional section (can be disabled by the user)
 Section "Ярлык на рабочем столе"
   CreateShortCut "$DESKTOP\GEDKeeper.lnk" "$INSTDIR\GEDKeeper.exe" "" "$INSTDIR\GEDKeeper.exe" 0
 SectionEnd
 
-; Optional section (can be disabled by the user)
 Section "Регистрация в системе"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\App Paths\GEDKeeper.exe" "" "$INSTDIR\GEDKeeper.exe"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\App Paths\GEDKeeper.exe" "Path" "$INSTDIR"
@@ -86,7 +79,6 @@ Section "Регистрация в системе"
   WriteRegStr HKCR "GEDCOM.File\shell\open\command" "" '$INSTDIR\GEDKeeper.exe "%1"'
 SectionEnd
 
-; Uninstaller
 Section "Uninstall"
   ; Remove registry keys
   DeleteRegKey HKCR ".ged"

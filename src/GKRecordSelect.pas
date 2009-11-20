@@ -29,7 +29,9 @@ type
   end;
 
 function SelectRecord(aMode: TSelectMode): TGEDCOMRecordWithLists;
-function SelectPerson(aTarget: TGEDCOMIndividualRecord; aNeedSex: TGEDCOMSex): TGEDCOMIndividualRecord;
+
+function SelectPerson(aTarget: TGEDCOMIndividualRecord; aTargetMode: TTargetMode;
+  aNeedSex: TGEDCOMSex): TGEDCOMIndividualRecord;
 
 implementation
 
@@ -37,7 +39,8 @@ uses GKMain;
 
 {$R *.dfm}
 
-function SelectPerson(aTarget: TGEDCOMIndividualRecord; aNeedSex: TGEDCOMSex): TGEDCOMIndividualRecord;
+function SelectPerson(aTarget: TGEDCOMIndividualRecord; aTargetMode: TTargetMode;
+  aNeedSex: TGEDCOMSex): TGEDCOMIndividualRecord;
 var
   fmRecordSelect: TfmRecordSelect;
 begin
@@ -49,9 +52,7 @@ begin
     fmRecordSelect.FMode := smPerson;
     fmRecordSelect.FTarget := aTarget;
     fmRecordSelect.FNeedSex := aNeedSex;
-
-    if (aTarget <> nil) and (aTarget.Sex = svMale)
-    then fmRecordSelect.FTargetMode := tmDescendant;
+    fmRecordSelect.FTargetMode := aTargetMode;
 
     fmGEDKeeper.ComListPersonsRefresh(fmRecordSelect.FNeedSex, fmRecordSelect.ListRecords, True);
 

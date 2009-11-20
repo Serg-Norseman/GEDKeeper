@@ -29,6 +29,17 @@ type
     btnMergeToRight: TBitBtn;
     rgMode: TRadioGroup;
     btnSkip: TBitBtn;
+    GroupBox1: TGroupBox;
+    rbDirectMatching: TRadioButton;
+    rbIndistinctMatching: TRadioButton;
+    Label3: TLabel;
+    edNameAccuracy: TEdit;
+    udNameAccuracy: TUpDown;
+    edYearInaccuracy: TEdit;
+    udYearInaccuracy: TUpDown;
+    Label4: TLabel;
+    chkBirthYear: TCheckBox;
+    ProgressBar1: TProgressBar;
     procedure btnSearchClick(Sender: TObject);
     procedure btnRec1SelectClick(Sender: TObject);
     procedure btnRec2SelectClick(Sender: TObject);
@@ -64,24 +75,62 @@ procedure TfmMerge.btnSearchClick(Sender: TObject);
 var
   i, k: Integer;
   iRec, kRec: TGEDCOMIndividualRecord;
-  iName, kName: string;
+  iName, kName, f, n, p: string;
   iNote, kNote: TGEDCOMNoteRecord;
   iFam, kFam: TGEDCOMFamilyRecord;
+  res: Boolean;
+  year1, year2, nameAccuracy, yearInaccuracy: Integer;
+  ev: TGEDCOMIndividualEvent;
 begin
+  nameAccuracy := udNameAccuracy.Position;
+  yearInaccuracy := udYearInaccuracy.Position;
+
+  res := False;
+
   try
+    ProgressBar1.Min := 0;
+    ProgressBar1.Max := FTree.Count;
+    ProgressBar1.Position := 0;
+
     for i := 0 to FTree.Count - 1 do begin
       case FMode of
         mmPerson: if (FTree.Records[i] is TGEDCOMIndividualRecord) then begin
           iRec := FTree.Records[i] as TGEDCOMIndividualRecord;
+
+          GetNameParts(iRec, f, n, p);
+          if (Length(n) < 3) then Continue;
           iName := GetNameStr(iRec);
 
           for k := i + 1 to FTree.Count - 1 do
             if (FTree.Records[k] is TGEDCOMIndividualRecord) then begin
               kRec := FTree.Records[k] as TGEDCOMIndividualRecord;
+
+              GetNameParts(kRec, f, n, p);
+              if (Length(n) < 3) then Continue;
               kName := GetNameStr(kRec);
 
-              if (iRec.Sex = kRec.Sex) and (iName = kName)
-              and (FSkip.IndexOf(iRec.XRef + '-' + kRec.XRef) < 0) then begin
+              if (FSkip.IndexOf(iRec.XRef + '-' + kRec.XRef) >= 0)
+              or (iRec.Sex <> kRec.Sex)
+              then Continue;
+
+              if (rbDirectMatching.Checked)
+              then res := (iName = kName)
+              else
+              if (rbIndistinctMatching.Checked)
+              then res := (IndistinctMatching(4, iName, kName) > nameAccuracy);
+
+              if (chkBirthYear.Checked) then begin
+                ev := GetIndividualEvent(iRec, 'BIRT');
+                year1 := TGEDCOMDate(ev.Detail.Date.Value).Year;
+
+                ev := GetIndividualEvent(kRec, 'BIRT');
+                year2 := TGEDCOMDate(ev.Detail.Date.Value).Year;
+
+                if (year1 > 0) and (year2 > 0)
+                then res := res and (Abs(year1 - year2) <= yearInaccuracy);
+              end;
+
+              if (res) then begin
                 Rec1 := iRec;
                 Rec2 := kRec;
                 Break;
@@ -98,8 +147,10 @@ begin
               kNote := FTree.Records[k] as TGEDCOMNoteRecord;
               kName := kNote.Notes.Text;
 
-              if (iName = kName)
-              and (FSkip.IndexOf(iNote.XRef + '-' + kNote.XRef) < 0)  then begin
+              res := (iName = kName)
+                and (FSkip.IndexOf(iNote.XRef + '-' + kNote.XRef) < 0);
+
+              if (res) then begin
                 Rec1 := iNote;
                 Rec2 := kNote;
                 Break;
@@ -116,8 +167,10 @@ begin
               kFam := FTree.Records[k] as TGEDCOMFamilyRecord;
               kName := GetFamilyStr(kFam);
 
-              if (iName = kName)
-              and (FSkip.IndexOf(iFam.XRef + '-' + kFam.XRef) < 0)  then begin
+              res := (iName = kName)
+                and (FSkip.IndexOf(iFam.XRef + '-' + kFam.XRef) < 0);
+
+              if (res) then begin
                 Rec1 := iFam;
                 Rec2 := kFam;
                 Break;
@@ -125,7 +178,14 @@ begin
             end;
         end;
       end;
+
+      if (res) then Break;
+
+      ProgressBar1.StepIt();
+      //Application.ProcessMessages();
     end;
+
+    //ProgressBar1.Position := 0;
   finally
   end;
 end;

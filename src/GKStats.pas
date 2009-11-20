@@ -5,8 +5,8 @@ unit GKStats;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ComCtrls, GKCtrls, GedCom551, StdCtrls, ToolWin, ExtCtrls;
+  Windows, SysUtils, Classes, Controls, Forms, ComCtrls,
+  GedCom551, GKCtrls, StdCtrls, ToolWin, ExtCtrls;
 
 type
   TStatMode = (
@@ -19,6 +19,39 @@ type
     smReligious, smNational, smEducation,
     smFirstbornAge, smMarriages, smMarriageAge, smSpousesDiff);
 
+const
+  Titles: array [TStatMode] of record
+    Title, Cap, Val: string;
+  end = (
+    (Title: 'Количество предков'; Cap: 'Человек'; Val: 'Предков'),
+    (Title: 'Количество потомков'; Cap: 'Человек'; Val: 'Потомков'),
+    (Title: 'Фамилии'; Cap: 'Фамилия'; Val: 'Количество'),
+    (Title: 'Имена'; Cap: 'Имя'; Val: 'Количество'),
+    (Title: 'Отчества'; Cap: 'Отчество'; Val: 'Количество'),
+    (Title: 'Возраст'; Cap: 'Возраст'; Val: 'Количество'),
+    (Title: 'Продолжительность жизни'; Cap: 'Возраст'; Val: 'Количество'),
+    (Title: 'Годы рождения'; Cap: 'Год рождения'; Val: 'Количество'),
+    (Title: 'Годы рождения (десятилетиями)'; Cap: 'Годы рождения'; Val: 'Количество'),
+    (Title: 'Годы смерти'; Cap: 'Год смерти'; Val: 'Количество'),
+    (Title: 'Годы смерти (десятилетиями)'; Cap: 'Годы смерти'; Val: 'Количество'),
+    (Title: 'Количество детей'; Cap: 'Имя'; Val: 'Количество'),
+    (Title: 'Распределение количества детей'; Cap: 'Количество детей'; Val: 'Количество'),
+    (Title: 'Место рождения'; Cap: 'Место рождения'; Val: 'Количество'),
+    (Title: 'Место смерти'; Cap: 'Место смерти'; Val: 'Количество'),
+    (Title: 'Местожительство'; Cap: 'Местожительство'; Val: 'Количество'),
+    (Title: 'Занятия'; Cap: 'Занятие'; Val: 'Количество'),
+
+    (Title: 'Вероисповедание'; Cap: 'Вероисповедание'; Val: 'Количество'),
+    (Title: 'Национальность'; Cap: 'Национальность'; Val: 'Количество'),
+    (Title: 'Образование'; Cap: 'Образование'; Val: 'Количество'),
+
+    (Title: 'Возраст рождения первенца'; Cap: 'Имя'; Val: 'Возраст'),
+    (Title: 'Количество браков'; Cap: 'Имя'; Val: 'Браков'),
+    (Title: 'Возраст вступления в брак'; Cap: 'Имя'; Val: 'Возраст'),
+    (Title: 'Разница возрастов супругов'; Cap: 'Семья'; Val: 'Разница')
+  );
+
+type
   TfmStats = class(TForm)
     GroupBox1: TGroupBox;
     Panel1: TPanel;
@@ -73,38 +106,6 @@ begin
   item.SubItems.Add(aVal);
 end;
 
-const
-  Titles: array [TStatMode] of record
-    Title, Cap, Val: string;
-  end = (
-    (Title: 'Количество предков'; Cap: 'Человек'; Val: 'Предков'),
-    (Title: 'Количество потомков'; Cap: 'Человек'; Val: 'Потомков'),
-    (Title: 'Фамилии'; Cap: 'Фамилия'; Val: 'Количество'),
-    (Title: 'Имена'; Cap: 'Имя'; Val: 'Количество'),
-    (Title: 'Отчества'; Cap: 'Отчество'; Val: 'Количество'),
-    (Title: 'Возраст'; Cap: 'Возраст'; Val: 'Количество'),
-    (Title: 'Продолжительность жизни'; Cap: 'Возраст'; Val: 'Количество'),
-    (Title: 'Годы рождения'; Cap: 'Год рождения'; Val: 'Количество'),
-    (Title: 'Годы рождения (десятилетиями)'; Cap: 'Годы рождения'; Val: 'Количество'),
-    (Title: 'Годы смерти'; Cap: 'Год смерти'; Val: 'Количество'),
-    (Title: 'Годы смерти (десятилетиями)'; Cap: 'Годы смерти'; Val: 'Количество'),
-    (Title: 'Количество детей'; Cap: 'Имя'; Val: 'Количество'),
-    (Title: 'Распределение количества детей'; Cap: 'Количество детей'; Val: 'Количество'),
-    (Title: 'Место рождения'; Cap: 'Место рождения'; Val: 'Количество'),
-    (Title: 'Место смерти'; Cap: 'Место смерти'; Val: 'Количество'),
-    (Title: 'Местожительство'; Cap: 'Местожительство'; Val: 'Количество'),
-    (Title: 'Занятия'; Cap: 'Занятие'; Val: 'Количество'),
-
-    (Title: 'Вероисповедание'; Cap: 'Вероисповедание'; Val: 'Количество'),
-    (Title: 'Национальность'; Cap: 'Национальность'; Val: 'Количество'),
-    (Title: 'Образование'; Cap: 'Образование'; Val: 'Количество'),
-
-    (Title: 'Возраст рождения первенца'; Cap: 'Имя'; Val: 'Возраст'),
-    (Title: 'Количество браков'; Cap: 'Имя'; Val: 'Браков'),
-    (Title: 'Возраст вступления в брак'; Cap: 'Имя'; Val: 'Возраст'),
-    (Title: 'Разница возрастов супругов'; Cap: 'Семья'; Val: 'Разница')
-  );
-
 procedure TfmStats.FormCreate(Sender: TObject);
 var
   i: TStatMode;
@@ -118,60 +119,69 @@ end;
 
 procedure TfmStats.CalcStats(aTree: TGEDCOMTree; aMode: TStatMode);
 var
-  ancestors, descendants: Integer;
-  vals: TStringList;
+  vals, buffer: TStringList;
 
-  function GetItemVal(aIndex: Integer): Integer;
-  begin
-    Result := Integer(vals.Objects[aIndex]);
-  end;
-
-  procedure SetItemVal(aIndex, aValue: Integer);
-  begin
-    vals.Objects[aIndex] := TObject(aValue);
-  end;
-
-  procedure AddItemVal(aName: string; aValue: Integer);
-  begin
-    vals.AddObject(aName, TObject(aValue));
-  end;
-
-  procedure StepAncestors(aPerson: TGEDCOMIndividualRecord);
+  function GetAncestorsCount(aPerson: TGEDCOMIndividualRecord): Integer;
   var
     family: TGEDCOMFamilyRecord;
-    iFather, iMother: TGEDCOMIndividualRecord;
+    anc: TGEDCOMIndividualRecord;
+    xref: string;
+    idx: Integer;
   begin
+    Result := 0;
     if (aPerson = nil) then Exit;
 
-    Inc(ancestors);
+    xref := aPerson.XRef;
 
-    if (aPerson.ChildToFamilyLinksCount > 0) then begin
-      family := aPerson.ChildToFamilyLinks[0].Family;
-      iFather := TGEDCOMIndividualRecord(family.Husband.Value);
-      iMother := TGEDCOMIndividualRecord(family.Wife.Value);
+    idx := buffer.IndexOf(xref);
+    if (idx >= 0) then begin
+      Result := Integer(buffer.Objects[idx]);
+    end else begin
+      Result := 1;
 
-      StepAncestors(iFather);
-      StepAncestors(iMother);
+      if (aPerson.ChildToFamilyLinksCount > 0) then begin
+        family := aPerson.ChildToFamilyLinks[0].Family;
+
+        anc := TGEDCOMIndividualRecord(family.Husband.Value);
+        Result := Result + GetAncestorsCount(anc);
+
+        anc := TGEDCOMIndividualRecord(family.Wife.Value);
+        Result := Result + GetAncestorsCount(anc);
+      end;
+
+      buffer.AddObject(xref, TObject(Result));
     end;
   end;
 
-  procedure StepDescendants(aPerson: TGEDCOMIndividualRecord);
+  function GetDescendantsCount(aPerson: TGEDCOMIndividualRecord): Integer;
   var
     family: TGEDCOMFamilyRecord;
     iChild: TGEDCOMIndividualRecord;
     i, k: Integer;
+    xref: string;
+    idx: Integer;
   begin
+    Result := 0;
     if (aPerson = nil) then Exit;
 
-    Inc(descendants);
+    xref := aPerson.XRef;
 
-    for i := 0 to aPerson.SpouseToFamilyLinksCount - 1 do begin
-      family := aPerson.SpouseToFamilyLinks[i].Family;
+    idx := buffer.IndexOf(xref);
+    if (idx >= 0) then begin
+      Result := Integer(buffer.Objects[idx]);
+    end else begin
+      Result := 1;
 
-      for k := 0 to family.ChildrenCount - 1 do begin
-        iChild := TGEDCOMIndividualRecord(family.Children[k].Value);
-        StepDescendants(iChild);
+      for i := 0 to aPerson.SpouseToFamilyLinksCount - 1 do begin
+        family := aPerson.SpouseToFamilyLinks[i].Family;
+
+        for k := 0 to family.ChildrenCount - 1 do begin
+          iChild := TGEDCOMIndividualRecord(family.Children[k].Value);
+          Result := Result + GetDescendantsCount(iChild);
+        end;
       end;
+
+      buffer.AddObject(xref, TObject(Result));
     end;
   end;
 
@@ -184,6 +194,7 @@ var
 begin
   InitTable(Titles[aMode].Cap, Titles[aMode].Val);
 
+  buffer := TStringList.Create;
   vals := TStringList.Create;
   try
     for i := 0 to aTree.Count - 1 do begin
@@ -192,15 +203,11 @@ begin
 
         case aMode of
           smAncestors: begin
-            ancestors := 0;
-            StepAncestors(iRec);
-            AddItem(GetNameStr(iRec), IntToStr(ancestors - 1));
+            AddItem(GetNameStr(iRec), IntToStr(GetAncestorsCount(iRec) - 1));
           end;
 
           smDescendants: begin
-            descendants := 0;
-            StepDescendants(iRec);
-            AddItem(GetNameStr(iRec), IntToStr(descendants - 1));
+            AddItem(GetNameStr(iRec), IntToStr(GetDescendantsCount(iRec) - 1));
           end;
 
           smChildsCount: begin
@@ -231,44 +238,21 @@ begin
                 end;
               end;
 
-              smAge: begin
-                V := GetAge(iRec);
-                if (V = '') then V := '?';
-              end;
+              smAge: V := GetAge(iRec);
 
-              smLifeExpectancy: begin
-                V := GetLifeExpectancy(iRec);
-                if (V = '') then V := '?';
-              end;
+              smLifeExpectancy: V := GetLifeExpectancy(iRec);
 
-              smResidences: begin
-                V := GetAttributeValue(iRec, 'RESI');
-                if (V = '') then V := '?';
-              end;
+              smResidences: V := GetAttributeValue(iRec, 'RESI');
 
-              smOccupation: begin
-                V := GetAttributeValue(iRec, 'OCCU');
-                if (V = '') then V := '?';
-              end;
+              smOccupation: V := GetAttributeValue(iRec, 'OCCU');
 
-              smReligious: begin
-                V := GetAttributeValue(iRec, 'RELI');
-                if (V = '') then V := '?';
-              end;
+              smReligious: V := GetAttributeValue(iRec, 'RELI');
 
-              smNational: begin
-                V := GetAttributeValue(iRec, 'NATI');
-                if (V = '') then V := '?';
-              end;
+              smNational: V := GetAttributeValue(iRec, 'NATI');
 
-              smEducation: begin
-                V := GetAttributeValue(iRec, 'EDUC');
-                if (V = '') then V := '?';
-              end;
+              smEducation: V := GetAttributeValue(iRec, 'EDUC');
 
-              smChildsDistribution: begin
-                V := IntToStr(GetChildsCount(iRec));
-              end;
+              smChildsDistribution: V := IntToStr(GetChildsCount(iRec));
 
               smBirthYears..smDeathTenYears, smBirthPlaces, smDeathPlaces: begin
                 V := '?';
@@ -298,9 +282,10 @@ begin
                     then V := event.Detail.Place;
                   end;
                 end;
-                if (V = '-1') or (V = '') or (V = '0') then V := '?';
               end;
             end;
+
+            if (V = '-1') or (V = '') or (V = '0') then V := '?';
 
             idx := vals.IndexOf(V);
             if (idx < 0)
@@ -317,10 +302,11 @@ begin
     end;
 
     for i := 0 to vals.Count - 1 do begin
-      AddItem(vals[i], IntToStr(GetItemVal(i)));
+      AddItem(vals[i], IntToStr(Integer(vals.Objects[i])));
     end;
   finally
     vals.Destroy;
+    buffer.Destroy;
   end;
 end;
 

@@ -45,7 +45,7 @@ end;
 
 procedure TfmAssociationEdit.btnPersonAddClick(Sender: TObject);
 begin
-  FTempInd := SelectPerson(nil, svNone);
+  FTempInd := SelectPerson(nil, tmNone, svNone);
   EditPerson.Text := GetNameStr(FTempInd);
 end;
 

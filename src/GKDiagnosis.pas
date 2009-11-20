@@ -142,7 +142,9 @@ procedure TfmDiagnosis.Check(aTree: TGEDCOMTree; aCorrection: Boolean = False);
             end;
           end;
 
+          AddDiag(famRec.XRef, 'Удалена семья без родителей');
           aTree.Delete(i);
+
           Continue;
         end;
       end;

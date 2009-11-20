@@ -43,6 +43,7 @@ type
     actRecordAdd: TAction;
     actRecordEdit: TAction;
     actRecordDelete: TAction;
+    btnAddress: TBitBtn;
     procedure FormCreate(Sender: TObject);
     procedure EditEventDateTypeChange(Sender: TObject);
     procedure btnAcceptClick(Sender: TObject);
@@ -54,6 +55,7 @@ type
     procedure actRecordEditExecute(Sender: TObject);
     procedure actRecordDeleteExecute(Sender: TObject);
     procedure ListDblClick(Sender: TObject);
+    procedure btnAddressClick(Sender: TObject);
   private
     FEvent: TGEDCOMCustomEvent;
 
@@ -68,7 +70,7 @@ type
 
 implementation
 
-uses GKMain, GKNoteEdit, GKSourceEdit;
+uses GKMain, GKNoteEdit, GKSourceEdit, GKAddressEdit;
 
 {$R *.dfm}
 
@@ -162,13 +164,13 @@ begin
     dt_range := TGEDCOMDateRange(date);
 
     if (dt_range.After.StringValue = '') and (dt_range.Before.StringValue <> '')
-    then EditEventDateType.ItemIndex := 1
+    then EditEventDateType.ItemIndex := 1 // Ранее
     else
     if (dt_range.After.StringValue <> '') and (dt_range.Before.StringValue = '')
-    then EditEventDateType.ItemIndex := 2
+    then EditEventDateType.ItemIndex := 2 // Позднее
     else
     if (dt_range.After.StringValue <> '') and (dt_range.Before.StringValue <> '')
-    then EditEventDateType.ItemIndex := 3;
+    then EditEventDateType.ItemIndex := 3; // Между
 
     EditEventDate1.Text := GEDCOMDateToStr(dt_range.After);
     EditEventDate2.Text := GEDCOMDateToStr(dt_range.Before);
@@ -178,13 +180,13 @@ begin
     dt_period := TGEDCOMDatePeriod(date);
 
     if (dt_period.DateFrom.StringValue <> '') and (dt_period.DateTo.StringValue = '')
-    then EditEventDateType.ItemIndex := 4
+    then EditEventDateType.ItemIndex := 4 // Период до
     else
     if (dt_period.DateFrom.StringValue = '') and (dt_period.DateTo.StringValue <> '')
-    then EditEventDateType.ItemIndex := 5
+    then EditEventDateType.ItemIndex := 5 // Период после
     else
     if (dt_period.DateFrom.StringValue <> '') and (dt_period.DateTo.StringValue <> '')
-    then EditEventDateType.ItemIndex := 6;
+    then EditEventDateType.ItemIndex := 6; // Период между
 
     EditEventDate1.Text := GEDCOMDateToStr(dt_period.DateFrom);
     EditEventDate2.Text := GEDCOMDateToStr(dt_period.DateTo);
@@ -490,6 +492,19 @@ end;
 procedure TfmEventEdit.ListDblClick(Sender: TObject);
 begin
   btnDataEditClick(nil);
+end;
+
+procedure TfmEventEdit.btnAddressClick(Sender: TObject);
+var
+  fmAddressEdit: TfmAddressEdit;
+begin
+  fmAddressEdit := TfmAddressEdit.Create(Application);
+  try
+    fmAddressEdit.Address := FEvent.Detail.Address;
+    fmAddressEdit.ShowModal;
+  finally
+    fmAddressEdit.Destroy;
+  end;
 end;
 
 end.

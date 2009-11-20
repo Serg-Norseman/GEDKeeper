@@ -3,7 +3,7 @@ unit GKExport;
 interface
 
 uses
-  SysUtils, Classes, Contnrs, GedCom551;
+  SysUtils, Classes, Contnrs, GedCom551, GKCommon;
 
 procedure WriteStr(aStream: TFileStream; aStr: string);
 procedure WriteHeader(aStream: TFileStream; aTitle: string);
@@ -44,6 +44,7 @@ type
     Id: string;
     iRec: TGEDCOMIndividualRecord;
     Level: Integer;
+    Sources: string;
 
     ChildIdx: Integer;
   end;
@@ -51,19 +52,23 @@ type
   TPedigree = class
   private
     FPersonList: TObjectList;
+    FSourceList: TStringList;
+    FOptions: TPedigreeOptions;
 
     function FindPerson(iRec: TGEDCOMIndividualRecord): TPersonObj;
     procedure WritePerson(aStream: TFileStream; aTree: TGEDCOMTree;
-      aId: string; aPerson: TGEDCOMIndividualRecord);
+      aPerson: TPersonObj);
   public
     procedure Generate(aDir: string; aTree: TGEDCOMTree;
       iRec: TGEDCOMIndividualRecord; aKind: TPedigreeKind);
+
+    property Options: TPedigreeOptions read FOptions write FOptions;
   end;
 
 implementation
 
 uses
-  Windows, ShellAPI, GKCommon, XLSFile, StrUtils, Dialogs;
+  Windows, ShellAPI, XLSFile, StrUtils, Dialogs, GKUtils;
 
 procedure WriteStr(aStream: TFileStream; aStr: string);
 begin
@@ -711,7 +716,7 @@ begin
   else Result := 0;
 end;
 
-procedure TPedigree.WritePerson(aStream: TFileStream; aTree: TGEDCOMTree; aId: string; aPerson: TGEDCOMIndividualRecord);
+procedure TPedigree.WritePerson(aStream: TFileStream; aTree: TGEDCOMTree; aPerson: TPersonObj);
 var
   ev_list: TObjectList;
 
@@ -756,7 +761,7 @@ var
     for i := 0 to ev_list.Count - 1 do begin
       event := TEventObj(ev_list[i]).Event;
 
-      if (event <> nil) and (TEventObj(ev_list[i]).iRec = aPerson) then begin
+      if (event <> nil) and (TEventObj(ev_list[i]).iRec = aPerson.iRec) then begin
         if (event.Name = 'BIRT') then ev_list.Exchange(i, 0)
         else
         if (event.Name = 'DEAT') then ev_list.Exchange(i, ev_list.Count - 1);
@@ -768,7 +773,7 @@ var
       evObj := TEventObj(ev_list[i]);
       event := evObj.Event;
 
-      if (evObj.iRec = aPerson) then begin
+      if (evObj.iRec = aPerson.iRec) then begin
         ev := GetPersonEventIndex(event.Name);
         if (ev = 0) then st := event.Detail.Classification
         else
@@ -800,22 +805,35 @@ var
 var
   i, k: Integer;
   event: TGEDCOMIndividualEvent;
+  attr: TGEDCOMIndividualAttribute;
   family: TGEDCOMFamilyRecord;
   irec: TGEDCOMIndividualRecord;
   st, unk: string;
   sp: TGEDCOMPointer;
+  note: TGEDCOMNotes;
 begin
   WriteStr(aStream, '<li>');
 
-  WriteStr(aStream, '<b>' + idAnchor(aId) + '. ' + GetNameStr(aPerson) + '</b>' + GetLifeStr(aPerson));
-  WriteStr(aStream, '<br>Пол: ' + Sex[aPerson.Sex]);
+  WriteStr(aStream, '<b>' + idAnchor(aPerson.Id) + '. ' + GetNameStr(aPerson.iRec) + '</b>' + GetLifeStr(aPerson.iRec));
 
-  st := GetLifeExpectancy(aPerson);
-  if (st <> '?')
+  if (FOptions.IncludeSources)
+  then WriteStr(aStream, '&nbsp;<sup>' + aPerson.Sources + '</sup>');
+
+  WriteStr(aStream, '<br>Пол: ' + Sex[aPerson.iRec.Sex]);
+
+  st := GetLifeExpectancy(aPerson.iRec);
+  if (st <> '?') and (st <> '')
   then WriteStr(aStream, '<br>Продолжительность жизни: ' + st);
 
-  if (aPerson.ChildToFamilyLinksCount <> 0) then begin
-    family := aPerson.ChildToFamilyLinks[0].Family;
+  if (FOptions.IncludeAttributes) then begin
+    for i := 0 to aPerson.iRec.IndividualAttributesCount - 1 do begin
+      attr := aPerson.iRec.IndividualAttributes[i];
+      WriteStr(aStream, '<br>' + GetAttributeStr(attr));
+    end;
+  end;
+
+  if (aPerson.iRec.ChildToFamilyLinksCount <> 0) then begin
+    family := aPerson.iRec.ChildToFamilyLinks[0].Family;
 
     irec := TGEDCOMIndividualRecord(family.Husband.Value);
     if (irec <> nil)
@@ -830,20 +848,20 @@ begin
   ev_list := TObjectList.Create(True);
   try
     // загрузка событий
-    if (aPerson.IndividualEventsCount > 0) then begin
-      WriteStr(aStream, '<br>События: <ul>');
-      for i := 0 to aPerson.IndividualEventsCount - 1 do begin
-        event := aPerson.IndividualEvents[i];
-        AddEvent(event, aPerson);
+    if (aPerson.iRec.IndividualEventsCount > 0) then begin
+      WriteStr(aStream, '<p>События: <ul>');
+      for i := 0 to aPerson.iRec.IndividualEventsCount - 1 do begin
+        event := aPerson.iRec.IndividualEvents[i];
+        AddEvent(event, aPerson.iRec);
       end;
       WriteEventList();
-      WriteStr(aStream, '</ul>');
+      WriteStr(aStream, '</ul></p>');
     end;
 
-    for i := 0 to aPerson.SpouseToFamilyLinksCount - 1 do begin
-      family := aPerson.SpouseToFamilyLinks[i].Family;
+    for i := 0 to aPerson.iRec.SpouseToFamilyLinksCount - 1 do begin
+      family := aPerson.iRec.SpouseToFamilyLinks[i].Family;
 
-      if (aPerson.Sex = svMale) then begin
+      if (aPerson.iRec.Sex = svMale) then begin
         sp := family.Wife;
         st := 'Жена: ';
         unk := 'неизвестна';
@@ -855,20 +873,31 @@ begin
 
       irec := TGEDCOMIndividualRecord(sp.Value);
       if (irec <> nil)
-      then WriteStr(aStream, '<br>' + st + GetNameStr(irec) + GetLifeStr(irec) + idLink(FindPerson(irec)))
-      else WriteStr(aStream, '<br>' + st + unk);
+      then WriteStr(aStream, '<p>' + st + GetNameStr(irec) + GetLifeStr(irec) + idLink(FindPerson(irec)))
+      else WriteStr(aStream, '<p>' + st + unk);
 
-      WriteStr(aStream, '<br><ul>');
+      WriteStr(aStream, '<ul>');
       ev_list.Clear;
       for k := 0 to family.ChildrenCount - 1 do begin
         irec := TGEDCOMIndividualRecord(family.Children[k].Value);
         AddEvent(GetIndividualEvent(irec, 'BIRT'), irec);
       end;
       WriteEventList();
-      WriteStr(aStream, '</ul>');
+      WriteStr(aStream, '</ul></p>');
     end;
   finally
     ev_list.Destroy;
+  end;
+
+  if (FOptions.IncludeNotes) and (aPerson.iRec.NotesCount <> 0) then begin
+    WriteStr(aStream, '<p>Заметки:<ul>');
+    for i := 0 to aPerson.iRec.NotesCount - 1 do begin
+      note := aPerson.iRec.Notes[i];
+      st := ConStrings(note.Notes);
+
+      WriteStr(aStream, '<li>' + st + '</li>');
+    end;
+    WriteStr(aStream, '</ul></p>');
   end;
 
   WriteStr(aStream, '</li><br>');
@@ -886,6 +915,9 @@ var
     child: TGEDCOMIndividualRecord;
     i, k: Integer;
     res: TPersonObj;
+    sn, src_name: string;
+    cit: TGEDCOMSourceCitation;
+    sourceRec: TGEDCOMSourceRecord;
   begin
     if (iRec = nil) then Exit;
 
@@ -895,6 +927,27 @@ var
     res.Level := aLevel;
     res.ChildIdx := 0;
     FPersonList.Add(res);
+
+    if (FOptions.IncludeSources) then begin
+      for i := 0 to iRec.SourceCitationsCount - 1 do begin
+        cit := iRec.SourceCitations[i];
+        sourceRec := TGEDCOMSourceRecord(cit.Value);
+        if (sourceRec <> nil) then begin
+          src_name := ConStrings(sourceRec.Title);
+          if (src_name = '')
+          then src_name := sourceRec.FiledByEntry;
+
+          k := FSourceList.IndexOf(src_name);
+          if (k < 0)
+          then k := FSourceList.Add(src_name);
+
+          if (res.Sources <> '') then res.Sources := res.Sources + ',';
+
+          sn := IntToStr(k + 1);
+          res.Sources := res.Sources + '<a href="#src' + sn + '">' + sn + '</a>';
+        end;
+      end;
+    end;
 
     if (levCount < aLevel)
     then levCount := aLevel;
@@ -965,7 +1018,7 @@ var
   end;
 
 var
-  title: string;
+  title, sn: string;
   i, k: Integer;
   pObj: TPersonObj;
 begin
@@ -984,24 +1037,33 @@ begin
   WriteStr(fs_index, '<h2>' + title + '</h2>');
 
   FPersonList := TObjectList.Create(True);
+  FSourceList := TStringList.Create;
   try
     levCount := 0;
     Step(nil, iRec, 1);
     ReIndex();
 
     for i := 1 to levCount do begin
-      WriteStr(fs_index, '<h3>Поколение ' + IntToStr(i) + '</h3>');
+      WriteStr(fs_index, '<h3>Поколение ' + GetRome(i) + '</h3>');
 
       WriteStr(fs_index, '<ul>');
       for k := 0 to FPersonList.Count - 1 do begin
         pObj := TPersonObj(FPersonList[k]);
 
         if (pObj.Level = i)
-        then WritePerson(fs_index, aTree, pObj.Id, pObj.iRec);
+        then WritePerson(fs_index, aTree, pObj);
       end;
       WriteStr(fs_index, '</ul>');
     end;
+
+    WriteStr(fs_index, '<h3>Источники</h3>');
+    for i := 0 to FSourceList.Count - 1 do begin
+      sn := IntToStr(i + 1);
+      WriteStr(fs_index, '<p><sup><a name="src' + sn + '">' + sn + '</a></sup>&nbsp;');
+      WriteStr(fs_index, FSourceList[i] + '</p>');
+    end;
   finally
+    FSourceList.Destroy;
     FPersonList.Destroy;
   end;
 
