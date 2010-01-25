@@ -3,7 +3,7 @@ object fmFilter: TfmFilter
   Top = 250
   BorderStyle = bsDialog
   Caption = #1060#1080#1083#1100#1090#1088
-  ClientHeight = 361
+  ClientHeight = 345
   ClientWidth = 297
   Color = clBtnFace
   Font.Charset = RUSSIAN_CHARSET
@@ -30,9 +30,16 @@ object fmFilter: TfmFilter
     Height = 13
     Caption = #1042' '#1078#1080#1074#1099#1093' '#1076#1086':'
   end
+  object Label3: TLabel
+    Left = 8
+    Top = 208
+    Width = 124
+    Height = 13
+    Caption = #1052#1072#1089#1082#1072' '#1084#1077#1089#1090#1086#1078#1080#1090#1077#1083#1100#1089#1090#1074#1072
+  end
   object btnAccept: TBitBtn
     Left = 120
-    Top = 328
+    Top = 312
     Width = 81
     Height = 25
     Caption = #1055#1088#1080#1085#1103#1090#1100
@@ -42,7 +49,7 @@ object fmFilter: TfmFilter
   end
   object btnCancel: TBitBtn
     Left = 208
-    Top = 328
+    Top = 312
     Width = 81
     Height = 25
     Caption = #1054#1090#1084#1077#1085#1080#1090#1100
@@ -63,11 +70,13 @@ object fmFilter: TfmFilter
     TabOrder = 0
     OnClick = rgLifeClick
   end
-  object EditName: TEdit
+  object EditName: TComboBox
     Left = 8
     Top = 176
     Width = 281
     Height = 21
+    ItemHeight = 13
+    Sorted = True
     TabOrder = 1
     Text = '*'
   end
@@ -95,9 +104,9 @@ object fmFilter: TfmFilter
   end
   object GroupBox1: TGroupBox
     Left = 8
-    Top = 208
+    Top = 256
     Width = 281
-    Height = 105
+    Height = 41
     Caption = #1056#1072#1089#1096#1080#1088#1077#1085#1085#1099#1077
     TabOrder = 6
     object CheckPatriarch: TCheckBox
@@ -108,5 +117,15 @@ object fmFilter: TfmFilter
       Caption = #1058#1086#1083#1100#1082#1086' '#1075#1083#1072#1074#1099' '#1089#1077#1084#1077#1081
       TabOrder = 0
     end
+  end
+  object cbResidence: TComboBox
+    Left = 8
+    Top = 224
+    Width = 281
+    Height = 21
+    ItemHeight = 13
+    Sorted = True
+    TabOrder = 7
+    Text = '*'
   end
 end

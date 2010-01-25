@@ -1,5 +1,5 @@
 object fmChart: TfmChart
-  Left = 263
+  Left = 283
   Top = 107
   Width = 757
   Height = 590
@@ -81,6 +81,44 @@ object fmChart: TfmChart
         '7'
         '8'
         '9')
+    end
+    object ToolButton2: TToolButton
+      Left = 271
+      Top = 0
+      Width = 8
+      Caption = 'ToolButton2'
+      ImageIndex = 8
+      Style = tbsSeparator
+    end
+    object tbGotoPerson: TToolButton
+      Left = 279
+      Top = 0
+      Caption = 'tbGotoPerson'
+      ImageIndex = 24
+      OnClick = tbGotoPersonClick
+    end
+    object ToolButton4: TToolButton
+      Left = 306
+      Top = 0
+      Width = 8
+      Caption = 'ToolButton4'
+      ImageIndex = 9
+      Style = tbsSeparator
+    end
+    object tbPrev: TToolButton
+      Left = 314
+      Top = 0
+      Caption = 'tbPrev'
+      ImageIndex = 22
+      OnClick = tbPrevClick
+    end
+    object tbNext: TToolButton
+      Left = 341
+      Top = 0
+      Caption = 'tbNext'
+      Enabled = False
+      ImageIndex = 23
+      OnClick = tbNextClick
     end
   end
   object ScrollBox1: TScrollBox

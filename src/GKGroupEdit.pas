@@ -6,8 +6,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Buttons, GedCom551, ComCtrls, GKCtrls, ExtCtrls,
-  ActnList;
+  Dialogs, StdCtrls, Buttons, GedCom551, ComCtrls, ExtCtrls, ActnList, bsCtrls;
 
 type
   TfmGroupEdit = class(TForm)
@@ -57,7 +56,8 @@ type
 
 implementation
 
-uses GKMain, GKCommon, GKRecordSelect, GKPersonEdit;
+uses
+  bsComUtils, GKMain, GKCommon, GKRecordSelect, GKPersonEdit;
 
 {$R *.dfm}
 
@@ -207,7 +207,7 @@ begin
   if (member <> nil) then begin
     if (fmPersonEdit <> nil)
     then fmPersonEdit.Person := member
-    else fmGEDKeeper.SelectPersonByIRec(member);
+    else fmGEDKeeper.SelectRecordByXRef(member.XRef);
 
     Close;
   end;

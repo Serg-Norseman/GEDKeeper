@@ -25,35 +25,35 @@ object fmEventEdit: TfmEventEdit
   end
   object Label2: TLabel
     Left = 8
-    Top = 40
+    Top = 80
     Width = 31
     Height = 13
     Caption = #1052#1077#1089#1090#1086
   end
   object Label3: TLabel
     Left = 8
-    Top = 64
+    Top = 104
     Width = 26
     Height = 13
     Caption = #1044#1072#1090#1072
   end
   object Label4: TLabel
     Left = 8
-    Top = 112
+    Top = 152
     Width = 43
     Height = 13
     Caption = #1055#1088#1080#1095#1080#1085#1072
   end
   object Label5: TLabel
     Left = 8
-    Top = 136
+    Top = 176
     Width = 159
     Height = 13
     Caption = #1047#1072#1089#1074#1080#1076#1077#1090#1077#1083#1100#1089#1090#1074#1086#1074#1072#1074#1096#1080#1081' '#1086#1088#1075#1072#1085
   end
   object Label6: TLabel
     Left = 8
-    Top = 176
+    Top = 48
     Width = 43
     Height = 13
     Caption = #1040#1090#1088#1080#1073#1091#1090
@@ -64,7 +64,7 @@ object fmEventEdit: TfmEventEdit
     Width = 81
     Height = 25
     Caption = #1055#1088#1080#1085#1103#1090#1100
-    TabOrder = 9
+    TabOrder = 11
     OnClick = btnAcceptClick
     Kind = bkOK
   end
@@ -74,7 +74,7 @@ object fmEventEdit: TfmEventEdit
     Width = 81
     Height = 25
     Caption = #1054#1090#1084#1077#1085#1080#1090#1100
-    TabOrder = 10
+    TabOrder = 12
     Kind = bkCancel
   end
   object EditEventType: TComboBox
@@ -96,34 +96,24 @@ object fmEventEdit: TfmEventEdit
   end
   object EditEventPlace: TEdit
     Left = 56
-    Top = 32
+    Top = 72
     Width = 345
     Height = 21
-    TabOrder = 2
+    TabOrder = 3
   end
   object EditEventDateType: TComboBox
     Left = 56
-    Top = 56
+    Top = 96
     Width = 185
     Height = 21
     Style = csDropDownList
     ItemHeight = 13
-    TabOrder = 3
+    TabOrder = 4
     OnChange = EditEventDateTypeChange
   end
   object EditEventDate1: TMaskEdit
     Left = 248
-    Top = 56
-    Width = 153
-    Height = 21
-    EditMask = '!99/99/9999;1;_'
-    MaxLength = 10
-    TabOrder = 4
-    Text = '  .  .    '
-  end
-  object EditEventDate2: TMaskEdit
-    Left = 248
-    Top = 80
+    Top = 96
     Width = 153
     Height = 21
     EditMask = '!99/99/9999;1;_'
@@ -131,19 +121,29 @@ object fmEventEdit: TfmEventEdit
     TabOrder = 5
     Text = '  .  .    '
   end
+  object EditEventDate2: TMaskEdit
+    Left = 248
+    Top = 120
+    Width = 153
+    Height = 21
+    EditMask = '!99/99/9999;1;_'
+    MaxLength = 10
+    TabOrder = 6
+    Text = '  .  .    '
+  end
   object EditEventCause: TEdit
     Left = 56
-    Top = 104
+    Top = 144
     Width = 345
     Height = 21
-    TabOrder = 6
+    TabOrder = 7
   end
   object EditEventOrg: TEdit
     Left = 184
-    Top = 128
+    Top = 168
     Width = 217
     Height = 21
-    TabOrder = 7
+    TabOrder = 8
   end
   object Panel1: TPanel
     Left = 8
@@ -152,7 +152,7 @@ object fmEventEdit: TfmEventEdit
     Height = 218
     BorderStyle = bsSingle
     Caption = 'Panel1'
-    TabOrder = 8
+    TabOrder = 9
     object Panel2: TPanel
       Left = 347
       Top = 1
@@ -405,10 +405,10 @@ object fmEventEdit: TfmEventEdit
   end
   object EditAttribute: TEdit
     Left = 56
-    Top = 168
+    Top = 40
     Width = 345
     Height = 21
-    TabOrder = 11
+    TabOrder = 2
   end
   object btnAddress: TBitBtn
     Left = 8
@@ -416,7 +416,7 @@ object fmEventEdit: TfmEventEdit
     Width = 81
     Height = 25
     Caption = #1040#1076#1088#1077#1089'...'
-    TabOrder = 12
+    TabOrder = 10
     OnClick = btnAddressClick
     NumGlyphs = 2
   end

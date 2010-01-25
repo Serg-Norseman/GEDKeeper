@@ -19,6 +19,11 @@ type
     ToolButton1: TToolButton;
     ListDepthLimit: TComboBox;
     Label1: TLabel;
+    ToolButton2: TToolButton;
+    tbGotoPerson: TToolButton;
+    ToolButton4: TToolButton;
+    tbPrev: TToolButton;
+    tbNext: TToolButton;
     procedure Image1MouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
@@ -30,10 +35,13 @@ type
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
     procedure ListDepthLimitChange(Sender: TObject);
     procedure ScrollBox1Resize(Sender: TObject);
-    procedure FormDestroy(Sender: TObject);
     procedure Image1DblClick(Sender: TObject);
+    procedure tbGotoPersonClick(Sender: TObject);
+    procedure tbPrevClick(Sender: TObject);
+    procedure tbNextClick(Sender: TObject);
   private
     FDown: Boolean;
     FX, FY: Integer;
@@ -43,7 +51,14 @@ type
     FChartKind: TChartKind;
     FDepthLimit: Integer;
     FChart: TAncestryChart;
+
+    FNavBusy: Boolean;
+    FNavHistory: TList;
+    FNavPos: Integer;
+
     procedure SetTreeBounds(const Value: TRect);
+    procedure NavRefresh();
+    procedure NavAdd(aRec: TGEDCOMIndividualRecord);
   public
     property ChartKind: TChartKind read FChartKind write FChartKind;
     property DepthLimit: Integer read FDepthLimit write FDepthLimit;
@@ -69,6 +84,8 @@ begin
 
   try
     try
+      NavAdd(FPerson);
+
       FChart.Bitmap := Image1.Picture.Bitmap;
       FChart.DepthLimit := FDepthLimit;
       FChart.Options := fmGEDKeeper.Options.ChartOptions;
@@ -166,8 +183,20 @@ end;
 
 procedure TfmChart.FormCreate(Sender: TObject);
 begin
+  FNavHistory := TList.Create;
+  FNavPos := -1;
+  FNavBusy := False;
+
   FDepthLimit := -1;
   FChart := TAncestryChart.Create;
+
+  NavRefresh();
+end;
+
+procedure TfmChart.FormDestroy(Sender: TObject);
+begin
+  FChart.Destroy;
+  FNavHistory.Destroy;
 end;
 
 procedure TfmChart.ListDepthLimitChange(Sender: TObject);
@@ -190,17 +219,12 @@ begin
   else Image1.Left := 0;
 end;
 
-procedure TfmChart.FormDestroy(Sender: TObject);
-begin
-  FChart.Destroy;
-end;
-
 procedure TfmChart.Image1DblClick(Sender: TObject);
 var
   p: TPerson;
 begin
   p := FChart.Selected;
-  if (p <> nil) then begin
+  if (p <> nil) and (p.Rec <> nil) then begin
     fmPersonEdit := TfmPersonEdit.Create(Application);
     try
       fmPersonEdit.Tree := FTree;
@@ -214,6 +238,60 @@ begin
       fmPersonEdit := nil;
     end;
   end;
+end;
+
+procedure TfmChart.tbGotoPersonClick(Sender: TObject);
+var
+  p: TPerson;
+begin
+  p := FChart.Selected;
+  if (p <> nil) and (p.Rec <> nil) then begin
+    FPerson := p.Rec;
+    GenChart();
+    NavRefresh();
+  end;
+end;
+
+procedure TfmChart.tbPrevClick(Sender: TObject);
+begin
+  FNavBusy := True;
+  try
+    Dec(FNavPos);
+    FPerson := TGEDCOMIndividualRecord(FNavHistory[FNavPos]);
+
+    GenChart();
+    NavRefresh();
+  finally
+    FNavBusy := False;
+  end;
+end;
+
+procedure TfmChart.tbNextClick(Sender: TObject);
+begin
+  FNavBusy := True;
+  try
+    Inc(FNavPos);
+    FPerson := TGEDCOMIndividualRecord(FNavHistory[FNavPos]);
+
+    GenChart();
+    NavRefresh();
+  finally
+    FNavBusy := False;
+  end;
+end;
+
+procedure TfmChart.NavAdd(aRec: TGEDCOMIndividualRecord);
+begin
+  if (aRec <> nil) and not(FNavBusy) then begin
+    FNavPos := FNavHistory.Add(aRec);
+    NavRefresh();
+  end;
+end;
+
+procedure TfmChart.NavRefresh();
+begin
+  tbPrev.Enabled := (FNavPos > 0);
+  tbNext.Enabled := (FNavPos < FNavHistory.Count - 1);
 end;
 
 end.

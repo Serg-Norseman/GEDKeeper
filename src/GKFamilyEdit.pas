@@ -6,8 +6,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Buttons, GedCom551, ComCtrls, GKCtrls, ExtCtrls,
-  ActnList;
+  Dialogs, StdCtrls, Buttons, GedCom551, ComCtrls, ExtCtrls, ActnList, bsCtrls;
 
 type
   TfmFamilyEdit = class(TForm)
@@ -80,7 +79,7 @@ type
 
 implementation
 
-uses GKMain, GKCommon, GKRecordSelect, GKPersonEdit;
+uses bsComUtils, GKMain, GKCommon, GKRecordSelect, GKPersonEdit;
 
 {$R *.dfm}
 
@@ -130,7 +129,7 @@ begin
 
     item := ListPersonFamilyChilds.Items.Add();
     item.Caption := GetNameStr(child);
-    item.SubItems.Add(GetBirthDate(child, fmGEDKeeper.DefDateFormat));
+    item.SubItems.Add(GetBirthDate(child, fmGEDKeeper.Options.DefDateFormat));
     item.Data := child;
   end;
   ListPersonFamilyChilds.Items.EndUpdate();
@@ -206,7 +205,7 @@ var
 begin
   case PagesFamilyData.TabIndex of
     0: begin // События
-      if fmGEDKeeper.ModifyRecEvent(FFamily, -1, raAdd)
+      if fmGEDKeeper.ModifyRecEvent(FFamily, nil, raAdd)
       then ControlsRefresh();
     end;
 
@@ -243,7 +242,7 @@ procedure TfmFamilyEdit.btnFamilyDataEditClick(Sender: TObject);
 begin
   case PagesFamilyData.TabIndex of
     0: begin // События
-      if fmGEDKeeper.ModifyRecEvent(FFamily, GetSelIndex(ListFamilyEvents), raEdit)
+      if fmGEDKeeper.ModifyRecEvent(FFamily, TGEDCOMCustomEvent(GetSelObject(ListFamilyEvents)), raEdit)
       then ControlsRefresh();
     end;
 
@@ -273,7 +272,7 @@ var
 begin
   case PagesFamilyData.TabIndex of
     0: begin // События
-      if fmGEDKeeper.ModifyRecEvent(FFamily, GetSelIndex(ListFamilyEvents), raDelete)
+      if fmGEDKeeper.ModifyRecEvent(FFamily, TGEDCOMCustomEvent(GetSelObject(ListFamilyEvents)), raDelete)
       then ControlsRefresh();
     end;
 
@@ -315,7 +314,7 @@ begin
   if (child <> nil) then begin
     if (fmPersonEdit <> nil)
     then fmPersonEdit.Person := child
-    else fmGEDKeeper.SelectPersonByIRec(child);
+    else fmGEDKeeper.SelectRecordByXRef(child.XRef);
 
     Close;
   end;
@@ -347,7 +346,7 @@ begin
   then Exit;
 
   husband := TGEDCOMIndividualRecord(FFamily.Husband.Value);
-  fmGEDKeeper.RemoveFamilySpouse(FFamily, husband);
+  RemoveFamilySpouse(fmGEDKeeper.FTree, FFamily, husband);
 
   ControlsRefresh();
 end;
@@ -360,7 +359,7 @@ begin
   if (spouse <> nil) then begin
     if (fmPersonEdit <> nil)
     then fmPersonEdit.Person := spouse
-    else fmGEDKeeper.SelectPersonByIRec(spouse);
+    else fmGEDKeeper.SelectRecordByXRef(spouse.XRef);
 
     Close;
   end;
@@ -392,7 +391,7 @@ begin
   then Exit;
 
   wife := TGEDCOMIndividualRecord(FFamily.Wife.Value);
-  fmGEDKeeper.RemoveFamilySpouse(FFamily, wife);
+  RemoveFamilySpouse(fmGEDKeeper.FTree, FFamily, wife);
 
   ControlsRefresh();
 end;
@@ -405,7 +404,7 @@ begin
   if (spouse <> nil) then begin
     if (fmPersonEdit <> nil)
     then fmPersonEdit.Person := spouse
-    else fmGEDKeeper.SelectPersonByIRec(spouse);
+    else fmGEDKeeper.SelectRecordByXRef(spouse.XRef);
 
     Close;
   end;

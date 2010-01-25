@@ -1,10 +1,12 @@
 unit GKAddressEdit;
 
+{$I GEDKeeper.inc}
+
 interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, GedCom551, StdCtrls, Buttons, ComCtrls, GKCtrls, ExtCtrls;
+  Dialogs, GedCom551, StdCtrls, Buttons, ComCtrls, ExtCtrls;
 
 type
   TfmAddressEdit = class(TForm)

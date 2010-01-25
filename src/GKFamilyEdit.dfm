@@ -683,6 +683,10 @@ object fmFamilyEdit: TfmFamilyEdit
             item
               Caption = #1052#1077#1089#1090#1086
               Width = 200
+            end
+            item
+              Caption = #1055#1088#1080#1095#1080#1085#1072
+              Width = 130
             end>
           HideSelection = False
           ReadOnly = True

@@ -1015,7 +1015,7 @@ object fmPersonEdit: TfmPersonEdit
           TabOrder = 1
           OnChange = PagesPersonDataChange
           object SheetPersonEvents: TTabSheet
-            Caption = #1057#1086#1073#1099#1090#1080#1103
+            Caption = #1060#1072#1082#1090#1099
             object ListPersonEvents: TBSListView
               Left = 0
               Top = 0
@@ -1032,41 +1032,12 @@ object fmPersonEdit: TfmPersonEdit
                   Width = 80
                 end
                 item
-                  Caption = #1052#1077#1089#1090#1086
+                  Caption = #1052#1077#1089#1090#1086'/'#1040#1090#1088#1080#1073#1091#1090
                   Width = 200
-                end>
-              HideSelection = False
-              ReadOnly = True
-              RowSelect = True
-              SortType = stText
-              TabOrder = 0
-              ViewStyle = vsReport
-              OnDblClick = ListDblClick
-              SortColumn = 0
-              SortDirection = sdAscending
-            end
-          end
-          object SheetAttributes: TTabSheet
-            Caption = #1040#1090#1088#1080#1073#1091#1090#1099
-            ImageIndex = 7
-            object ListAttributes: TBSListView
-              Left = 0
-              Top = 0
-              Width = 550
-              Height = 230
-              Align = alClient
-              Columns = <
-                item
-                  Caption = #1040#1090#1088#1080#1073#1091#1090
-                  Width = 75
                 end
                 item
-                  Caption = #1044#1072#1090#1072
-                  Width = 80
-                end
-                item
-                  Caption = #1047#1085#1072#1095#1077#1085#1080#1077
-                  Width = 200
+                  Caption = #1055#1088#1080#1095#1080#1085#1072
+                  Width = 150
                 end>
               HideSelection = False
               ReadOnly = True
@@ -1247,6 +1218,7 @@ object fmPersonEdit: TfmPersonEdit
         Enabled = False
         ItemHeight = 13
         TabOrder = 1
+        OnChange = cbRestrictionChange
         Items.Strings = (
           #1085#1077#1090
           #1082#1086#1085#1092#1080#1076#1077#1085#1094#1080#1072#1083#1100#1085#1086

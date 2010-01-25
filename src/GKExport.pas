@@ -12,10 +12,30 @@ procedure WriteFooter(aStream: TFileStream);
 {==============================================================================}
 
 type
-  TWebExporter = class(TObject)
+  TExporter = class(TObject)
   private
-    FDir: string;
+    FPath: string;
     FTree: TGEDCOMTree;
+  public
+    constructor Create(aTree: TGEDCOMTree; aPath: string);
+    destructor Destroy; override;
+
+    procedure Generate(); virtual; abstract;
+  end;
+
+{==============================================================================}
+
+type
+  THTMLExporter = class(TExporter)
+  private
+  public
+  end;
+
+{==============================================================================}
+
+type
+  TWebExporter = class(THTMLExporter)
+  private
     FSurnamesCount: Integer;
 
     procedure WritePersons();
@@ -27,12 +47,17 @@ type
     procedure WriteIndexFile(aFileName: string; aIndex: TStringList);
     procedure GenTree(aStream: TFileStream; iRec: TGEDCOMIndividualRecord);
   public
-    procedure Generate(aDir: string; aTree: TGEDCOMTree);
+    procedure Generate(); override;
   end;
 
 {==============================================================================}
 
-procedure ExportToExcel(aDir: string; aTree: TGEDCOMTree);
+type
+  TExcelExporter = class(TExporter)
+  private
+  public
+    procedure Generate(); override;
+  end;
 
 {==============================================================================}
 
@@ -68,12 +93,11 @@ type
 implementation
 
 uses
-  Windows, ShellAPI, XLSFile, StrUtils, Dialogs, GKUtils;
+  Windows, ShellAPI, XLSFile, Dialogs, bsComUtils, GKProgress;
 
 procedure WriteStr(aStream: TFileStream; aStr: string);
 begin
   aStream.WriteBuffer(aStr[1], Length(aStr));
-  //aStream.WriteBuffer(sLineBreak[1], 2);
 end;
 
 procedure WriteHeader(aStream: TFileStream; aTitle: string);
@@ -94,6 +118,21 @@ end;
 
 {==============================================================================}
 
+{ TExporter }
+
+constructor TExporter.Create(aTree: TGEDCOMTree; aPath: string);
+begin
+  FTree := aTree;
+  FPath := aPath;
+end;
+
+destructor TExporter.Destroy;
+begin
+  inherited Destroy;
+end;
+
+{==============================================================================}
+
 procedure TWebExporter.WriteIndexFile(aFileName: string; aIndex: TStringList);
 var
   fs_index: TFileStream;
@@ -101,22 +140,25 @@ var
   i: Integer;
 begin
   fs_index := TFileStream.Create(aFileName, fmCreate);
-  WriteHeader(fs_index, 'Генеалогическая база данных');
+  try
+    WriteHeader(fs_index, 'Генеалогическая база данных');
 
-  WriteStr(fs_index, '<b>Индекс:</b><ul>');
-  for i := 0 to aIndex.Count - 1 do begin
-    i_rec := TGEDCOMIndividualRecord(aIndex.Objects[i]);
-    WriteStr(fs_index, '<li><a href="persons.htm#' + i_rec.XRef + '">' + aIndex[i] + '</a></li>');
+    WriteStr(fs_index, '<b>Индекс:</b><ul>');
+    for i := 0 to aIndex.Count - 1 do begin
+      i_rec := TGEDCOMIndividualRecord(aIndex.Objects[i]);
+      WriteStr(fs_index, '<li><a href="persons.htm#' + i_rec.XRef + '">' + aIndex[i] + '</a></li>');
+    end;
+    WriteStr(fs_index, '</ul><hr>');
+
+    WriteFooter(fs_index);
+  finally
+    fs_index.Destroy;
   end;
-  WriteStr(fs_index, '</ul><hr>');
-
-  WriteFooter(fs_index);
-  fs_index.Destroy;
 end;
 
 procedure TWebExporter.WriteSurnamesIndex(aStream: TFileStream; aSym: Char; aNames: TStringList);
 var
-  index, nList: TStringList;
+  index, nList{, surnames}: TStringList;
   f, n, p: string;
   i, idx: Integer;
   i_rec: TGEDCOMIndividualRecord;
@@ -174,7 +216,7 @@ begin
   for c := Low(TRusSyms) to High(TRusSyms) do rus[c] := nil;
   unk := nil;
 
-  fs_surnames := TFileStream.Create(FDir + 'index_surnames.htm', fmCreate);
+  fs_surnames := TFileStream.Create(FPath + 'index_surnames.htm', fmCreate);
   WriteHeader(fs_surnames, 'Генеалогическая база данных');
   WriteStr(fs_surnames, '<ul>');
 
@@ -227,18 +269,19 @@ begin
         fn := 'index_fam_' + NumUpdate(Ord(c), 3) + '.htm';
         link := '<a href="' + fn + '">' + c + '</a>';
         index_str := index_str + link + '&nbsp;';
-        WriteIndexFile(FDir + fn, lat[c]);
+        WriteIndexFile(FPath + fn, lat[c]);
         WriteSurnamesIndex(fs_surnames, c, lat[c]);
       end else begin
         index_str := index_str + c + '&nbsp;';
       end;
     end;
+
     for c := Low(TRusSyms) to High(TRusSyms) do begin
       if (rus[c] <> nil) then begin
         fn := 'index_fam_' + NumUpdate(Ord(c), 3) + '.htm';
         link := '<a href="' + fn + '">' + c + '</a>';
         index_str := index_str + link + '&nbsp;';
-        WriteIndexFile(FDir + fn, rus[c]);
+        WriteIndexFile(FPath + fn, rus[c]);
         WriteSurnamesIndex(fs_surnames, c, rus[c]);
       end else begin
         index_str := index_str + c + '&nbsp;';
@@ -249,7 +292,7 @@ begin
       fn := 'index_fam_other.htm';
       link := '<a href="' + fn + '">Другое</a>';
       index_str := index_str + link + '&nbsp;';
-      WriteIndexFile(FDir + fn, unk);
+      WriteIndexFile(FPath + fn, unk);
       WriteSurnamesIndex(fs_surnames, '?', unk);
     end;
 
@@ -337,7 +380,7 @@ begin
         fn := 'index_nam_' + NumUpdate(Ord(c), 3) + '.htm';
         link := '<a href="' + fn + '">' + c + '</a>';
         index_str := index_str + link + '&nbsp;';
-        WriteIndexFile(FDir + fn, lat[c]);
+        WriteIndexFile(FPath + fn, lat[c]);
       end else begin
         index_str := index_str + c + '&nbsp;';
       end;
@@ -347,7 +390,7 @@ begin
         fn := 'index_nam_' + NumUpdate(Ord(c), 3) + '.htm';
         link := '<a href="' + fn + '">' + c + '</a>';
         index_str := index_str + link + '&nbsp;';
-        WriteIndexFile(FDir + fn, rus[c]);
+        WriteIndexFile(FPath + fn, rus[c]);
       end else begin
         index_str := index_str + c + '&nbsp;';
       end;
@@ -357,7 +400,7 @@ begin
       fn := 'index_nam_other.htm';
       link := '<a href="' + fn + '">Другое</a>';
       index_str := index_str + link + '&nbsp;';
-      WriteIndexFile(FDir + fn, unk);
+      WriteIndexFile(FPath + fn, unk);
     end;
 
     WriteStr(aStream, '<li>' + index_str + '</li>');
@@ -406,7 +449,7 @@ begin
       end;
     end;
 
-    fs_timeline := TFileStream.Create(FDir + tlFileName, fmCreate);
+    fs_timeline := TFileStream.Create(FPath + tlFileName, fmCreate);
     WriteHeader(fs_timeline, 'Генеалогическая база данных');
     WriteStr(fs_timeline, '<b>Индекс:</b><ul>');
 
@@ -439,117 +482,112 @@ begin
 end;
 
 type
-  TTreePerson = class(TObject)
-  private
-  public
-    iRec: TGEDCOMIndividualRecord;
+  TCellKind = (ckSpace, ckLine, ckPerson);
 
-    FGeneration: Integer;
-    FFather: TTreePerson;
-    FMother: TTreePerson;
-    FName: string;
+  TTreeCell = class(TObject)
+  public
+    Name: string;
+    Kind: TCellKind;
   end;
 
 procedure TWebExporter.GenTree(aStream: TFileStream; iRec: TGEDCOMIndividualRecord);
 var
-  gen: Integer;
+  table_rows: TObjectList;
 
-  function Step(aChild: TTreePerson; aPerson: TGEDCOMIndividualRecord; aGeneration: Integer): TTreePerson;
+  procedure AddCell(aRow: TObjectList; iRec: TGEDCOMIndividualRecord; aKind: TCellKind);
   var
+    cell: TTreeCell;
+  begin
+    cell := TTreeCell.Create;
+    aRow.Add(cell);
+
+    if (iRec <> nil)
+    then cell.Name := GetNameStr(iRec);
+
+    cell.Kind := aKind;
+  end;
+
+  procedure Step(row_index, col_index: Integer; prev, cur: TGEDCOMIndividualRecord);
+  var
+    row: TObjectList;
+    i: Integer;
     family: TGEDCOMFamilyRecord;
     iFather, iMother: TGEDCOMIndividualRecord;
   begin
-    if (aPerson = nil) then begin
-      Result := nil;
-      Exit;
+    if (row_index < 0) then row_index := 0;
+    if (row_index > table_rows.Count) then row_index := table_rows.Count;
+
+    row := TObjectList.Create;
+    table_rows.Insert(row_index, row);
+
+    for i := 0 to col_index - 1 do begin
+      AddCell(row, nil, ckSpace);
+      if (i < col_index - 1) then AddCell(row, nil, ckSpace);
     end;
+    if (prev <> nil) then AddCell(row, nil, ckLine);
+    AddCell(row, cur, ckPerson);
 
-    Result := TTreePerson.Create();
-    Result.FName := GetNameStr(aPerson);
-    {Result.BirthDate := GetBirthDate(iRec);
-    Result.DeathDate := GetDeathDate(iRec);
-    Result.IsDead := not(IsLive(iRec));
-    Result.Sex := iRec.Sex;
-    Result.Spouse := nil;}
-    Result.FGeneration := aGeneration;
+    if (cur = nil) then Exit;
 
-    if (gen < aGeneration) then gen := aGeneration;
-
-    if (aPerson.ChildToFamilyLinksCount > 0) then begin
-      family := aPerson.ChildToFamilyLinks[0].Family;
+    if (cur.ChildToFamilyLinksCount > 0) then begin
+      family := cur.ChildToFamilyLinks[0].Family;
       iFather := TGEDCOMIndividualRecord(family.Husband.Value);
       iMother := TGEDCOMIndividualRecord(family.Wife.Value);
 
-      Result.FFather := Step(Result, iFather, aGeneration + 1);
-      Result.FMother := Step(Result, iMother, aGeneration + 1);
+      if (iFather <> nil) or (iMother <> nil) then begin
+        AddCell(row, nil, ckLine);
+
+        row_index := table_rows.IndexOf(row);
+        Step(row_index - 1, col_index + 1, cur, iFather);
+
+        row_index := table_rows.IndexOf(row);
+        Step(row_index + 1, col_index + 1, cur, iMother);
+      end;
     end;
   end;
 
 var
-  mtx: array of array of string;
-  m_rows, m_cols, i, k: Integer;
-
-  function RowsByGens(gens: Integer): Integer;
-  var
-    rows, i: Integer;
-  begin
-    rows := 1;
-    Result := 1;
-    for i := 1 to gens - 1 do begin
-      rows := rows * 2;
-      Result := Result + rows;
-    end;
-  end;
-
-  procedure SetMatrix(p: TTreePerson; rb, re: Integer);
-  var
-    col, row, sz: Integer;
-  begin
-    if (p = nil) then Exit;
-    try
-      col := p.FGeneration;
-
-      row := rb + (re - rb + 1) div 2;
-
-      if (col < m_cols) and (row < m_rows) and (col >= 0) and (row >= 0)
-      then mtx[row, col] := p.FName;
-
-      sz := RowsByGens(gen - (col + 1));
-      SetMatrix(p.FFather, row - sz, row - 1);
-      SetMatrix(p.FMother, row + 1, row + sz);
-    except
-      Hole(col);
-      Hole(row);
-    end;
-  end;
-
-var
-  root: TTreePerson;
+  r, c: Integer;
+  row: TObjectList;
+  cell: TTreeCell;
+  nm, st: string;
 begin
   try
-    gen := 0;
-    root := Step(nil, iRec, 0);
+    table_rows := TObjectList.Create(True);
+    try
+      Step(0, 0, nil, iRec);
 
-    gen := gen + 1;
-    m_cols := gen;
-    m_rows := RowsByGens(gen);
+      // write table to stream
+      WriteStr(aStream, '<table border="0" cellspacing="0">');
+      for r := 0 to table_rows.Count - 1 do begin
+        row := TObjectList(table_rows[r]);
 
-    SetLength(mtx, m_rows, m_cols);
-    for i := 0 to m_rows - 1 do
-      for k := 0 to m_cols - 1 do
-        mtx[i, k] := '*';
+        WriteStr(aStream, '<tr>');
+        for c := 0 to row.Count - 1 do begin
+          cell := TTreeCell(row[c]);
 
-    SetMatrix(root, 0, m_rows - 1);
+          if (cell.Kind = ckSpace) then begin
+            nm := '.';//'&nbsp;';
+            st := '';
+          end else begin
+            if (cell.Kind = ckLine)
+            then nm := '+'
+            else
+              if (cell.Name = '')
+              then nm := '&nbsp;'
+              else nm := cell.Name;
 
-    WriteStr(aStream, '<table border=1>');
-    for i := 0 to m_rows - 1 do begin
-      WriteStr(aStream, '<tr>');
-      for k := 0 to m_cols - 1 do begin
-        WriteStr(aStream, '<td>' + mtx[i, k] + '</td>');
+            st := ' bgcolor="silver"';
+          end;
+
+          WriteStr(aStream, '<td' + st + '>' + nm + '</td>');
+        end;
+        WriteStr(aStream, '</tr>');
       end;
-      WriteStr(aStream, '</tr>');
+      WriteStr(aStream, '</tr></table>');
+    finally
+      table_rows.Destroy;
     end;
-    WriteStr(aStream, '</tr></table>');
   except
     on E: Exception do WriteStr(aStream, E.Message);
   end;
@@ -563,7 +601,7 @@ var
   names: TStringList;
   fs_persons: TFileStream;
 begin
-  fs_persons := TFileStream.Create(FDir + 'persons.htm', fmCreate);
+  fs_persons := TFileStream.Create(FPath + 'persons.htm', fmCreate);
   WriteHeader(fs_persons, 'Генеалогическая база данных');
   WriteStr(fs_persons, '<b>Индекс:</b><ul>');
 
@@ -581,8 +619,8 @@ begin
     names.Sort;
     for i := 0 to names.Count - 1 do begin
       ind := TGEDCOMIndividualRecord(names.Objects[i]);
-      WriteStr(fs_persons, '<li><a name="' + ind.XRef + '">' + GetNameStr(ind) + '</a><p>');
-      //GenTree(fs_persons, ind);
+      WriteStr(fs_persons, '<li><a name="' + ind.XRef + '">' + names[i] + '</a><p>');
+      GenTree(fs_persons, ind);
       WriteStr(fs_persons, '</p></li>');
     end;
   finally
@@ -594,57 +632,58 @@ begin
   end;
 end;
 
-procedure TWebExporter.Generate(aDir: string; aTree: TGEDCOMTree);
+procedure TWebExporter.Generate();
 var
-  fs_index: TFileStream;
+  main_index: TFileStream;
   stats: TCommonStats;
 begin
-  FDir := aDir;
-  FTree := aTree;
+  CreateDir(FPath);
 
-  CreateDir(FDir);
+  main_index := TFileStream.Create(FPath + 'index.htm', fmCreate);
+  try
+    WriteHeader(main_index, 'Генеалогическая база данных');
 
-  fs_index := TFileStream.Create(FDir + 'index.htm', fmCreate);
-  WriteHeader(fs_index, 'Генеалогическая база данных');
+    FSurnamesCount := 0;
 
-  FSurnamesCount := 0;
+    WriteStr(main_index, '<b>Индекс фамилий:</b><ul>');
+    WriteFamilyIndex(main_index);
+    WriteStr(main_index, '</ul><hr>');
 
-  WriteStr(fs_index, '<b>Индекс фамилий:</b><ul>');
-  WriteFamilyIndex(fs_index);
-  WriteStr(fs_index, '</ul><hr>');
+    WriteStr(main_index, '<b>Индекс имен:</b><ul>');
+    WriteNameIndex(main_index);
+    WriteStr(main_index, '</ul><hr>');
 
-  WriteStr(fs_index, '<b>Индекс имен:</b><ul>');
-  WriteNameIndex(fs_index);
-  WriteStr(fs_index, '</ul><hr>');
+    WriteStr(main_index, '<b>Индекс годов рождения:</b><ul>');
+    WriteTimeLineIndex(main_index, 'BIRT', 'timeline_birth.htm');
+    WriteStr(main_index, '</ul><hr>');
 
-  WriteStr(fs_index, '<b>Индекс годов рождения:</b><ul>');
-  WriteTimeLineIndex(fs_index, 'BIRT', 'timeline_birth.htm');
-  WriteStr(fs_index, '</ul><hr>');
+    WriteStr(main_index, '<b>Индекс годов смерти:</b><ul>');
+    WriteTimeLineIndex(main_index, 'DEAT', 'timeline_death.htm');
+    WriteStr(main_index, '</ul><hr>');
 
-  WriteStr(fs_index, '<b>Индекс годов смерти:</b><ul>');
-  WriteTimeLineIndex(fs_index, 'DEAT', 'timeline_death.htm');
-  WriteStr(fs_index, '</ul><hr>');
+    WritePersons();
 
-  WritePersons();
+    GetCommonStats(FTree, stats);
+    WriteStr(main_index, '<b>Общая статистика:</b><ul>');
+    WriteStr(main_index, '<li>Персон: ' + IntToStr(stats.persons) + '</li>');
+    WriteStr(main_index, '<li>Фамилий: ' + IntToStr(FSurnamesCount) + '</li>');
+    WriteStr(main_index, '</ul><hr>');
 
-  GetCommonStats(aTree, stats);
-  WriteStr(fs_index, '<b>Общая статистика:</b><ul>');
-  WriteStr(fs_index, '<li>Персон: ' + IntToStr(stats.persons) + '</li>');
-  WriteStr(fs_index, '<li>Фамилий: ' + IntToStr(FSurnamesCount) + '</li>');
-  WriteStr(fs_index, '</ul><hr>');
+    WriteFooter(main_index);
+  finally
+    main_index.Destroy;
+  end;
 
-  WriteFooter(fs_index);
-  fs_index.Destroy;
-
-  ShellExecute(0, 'open', PChar(FDir + 'index.htm'), nil, nil, SW_SHOW);
+  ShellExecute(0, 'open', PChar(FPath + 'index.htm'), nil, nil, SW_SHOW);
 end;
 
 {==============================================================================}
 
-procedure ExportToExcel(aDir: string; aTree: TGEDCOMTree);
+{ TExcelExporter }
+
+procedure TExcelExporter.Generate();
 const
-  AllBorders: TSetOfAtribut = [acBottomBorder, acTopBorder,
-    acRightBorder, acLeftBorder];
+  AllBorders: TSetOfAtribut = [acBottomBorder, acTopBorder, acRightBorder, acLeftBorder];
 var
   xls: TXLSFile;
   i, row: Integer;
@@ -653,6 +692,7 @@ var
   fam, nam, pat: string;
 begin
   xls := TXLSFile.Create(nil);
+  ProgressInit(FTree.Count, 'Экспорт...');
   try
     xls.AddStrCell( 1, 1, AllBorders, '№');
     xls.AddStrCell( 2, 1, AllBorders, 'Фамилия');
@@ -667,8 +707,8 @@ begin
     xls.AddStrCell(11, 1, AllBorders, 'Продолжительность жизни');
 
     row := 1;
-    for i := 0 to aTree.Count - 1 do begin
-      rec := aTree.Records[i];
+    for i := 0 to FTree.Count - 1 do begin
+      rec := FTree.Records[i];
 
       if (rec is TGEDCOMIndividualRecord) then begin
         ind := rec as TGEDCOMIndividualRecord;
@@ -688,13 +728,16 @@ begin
         xls.AddStrCell(10, row, AllBorders, GetAge(ind));
         xls.AddStrCell(11, row, AllBorders, GetLifeExpectancy(ind));
       end;
+
+      ProgressStep();
     end;
 
-    xls.FileName := aDir + 'export.xls';
+    xls.FileName := FPath + 'export.xls';
     xls.Write;
 
     ShellExecute(0, 'open', PChar(xls.FileName), nil, nil, SW_SHOW);
   finally
+    ProgressDone();
     xls.Destroy;
   end;
 end;
@@ -1079,7 +1122,7 @@ var
 begin
   Result := nil;
 
-  for i := 0 to FPersonList.Count - 1 do 
+  for i := 0 to FPersonList.Count - 1 do
     if (TPersonObj(FPersonList[i]).iRec = iRec) then begin
       Result := TPersonObj(FPersonList[i]);
       Break;

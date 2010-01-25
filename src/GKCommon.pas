@@ -5,7 +5,7 @@ unit GKCommon;
 interface
 
 uses
-  Classes, Contnrs, GedCom551, Graphics, Dialogs, GKCtrls;
+  Classes, Contnrs, GedCom551, Graphics, Dialogs, bsCtrls, IniFiles;
 
 resourcestring
   AppName = 'GEDKeeper';
@@ -69,6 +69,9 @@ type
     constructor Create;
     destructor Destroy; override;
 
+    procedure LoadFromFile(const aIniFile: TIniFile);
+    procedure SaveToFile(const aIniFile: TIniFile);
+
     property FamilyVisible: Boolean read FFamilyVisible write FFamilyVisible;
     property NameVisible: Boolean read FNameVisible write FNameVisible;
     property PatronymicVisible: Boolean read FPatronymicVisible write FPatronymicVisible;
@@ -96,6 +99,9 @@ type
     FPassword: string;
     FUseProxy: Boolean;
   public
+    procedure LoadFromFile(const aIniFile: TIniFile);
+    procedure SaveToFile(const aIniFile: TIniFile);
+
     property Server: string read FServer write FServer;
     property Port: string read FPort write FPort;
     property Login: string read FLogin write FLogin;
@@ -110,7 +116,9 @@ type
     FIncludeSources: Boolean;
   public
     constructor Create;
-    destructor Destroy; override;
+
+    procedure LoadFromFile(const aIniFile: TIniFile);
+    procedure SaveToFile(const aIniFile: TIniFile); 
 
     property IncludeAttributes: Boolean read FIncludeAttributes write FIncludeAttributes;
     property IncludeNotes: Boolean read FIncludeNotes write FIncludeNotes;
@@ -121,14 +129,35 @@ type
   private
     FChartOptions: TChartOptions;
     FCleanEmptyFamilies: Boolean;
+    FDefCharacterSet: TGEDCOMCharacterSet;
+    FDefDateFormat: TDateFormat;
+    FDefNameFormat: TNameFormat;
+    FLastDir: string;
+    FMRUFiles: TStringList;
+    FNameFilters: TStringList;
     FPedigreeOptions: TPedigreeOptions;
+    FPlacesWithAddress: Boolean;
     FProxy: TProxy;
+    FResidenceFilters: TStringList;
   public
     constructor Create;
     destructor Destroy; override;
 
+    procedure LoadFromFile(const FileName: string);
+    procedure SaveToFile(const FileName: string);
+
     property ChartOptions: TChartOptions read FChartOptions;
     property CleanEmptyFamilies: Boolean read FCleanEmptyFamilies write FCleanEmptyFamilies;
+
+    property DefCharacterSet: TGEDCOMCharacterSet read FDefCharacterSet write FDefCharacterSet;
+    property DefDateFormat: TDateFormat read FDefDateFormat write FDefDateFormat;
+    property DefNameFormat: TNameFormat read FDefNameFormat write FDefNameFormat;
+    property LastDir: string read FLastDir write FLastDir;
+    property MRUFiles: TStringList read FMRUFiles;
+    property NameFilters: TStringList read FNameFilters;
+    property PlacesWithAddress: Boolean read FPlacesWithAddress write FPlacesWithAddress;
+    property ResidenceFilters: TStringList read FResidenceFilters;
+
     property PedigreeOptions: TPedigreeOptions read FPedigreeOptions;
     property Proxy: TProxy read FProxy;
   end;
@@ -151,47 +180,50 @@ const
     (Name: 'Разведены'; StatSign: 'NOTMARR')
   );
 
-  PersonEventsSize = 15;
+  PersonEventsSize = 35;
   PersonEvents: array [0..PersonEventsSize-1] of record
     Name: string;
     Sign: string;
+    Kind: (ekEvent, ekFact);
   end = (
-    (Name: 'Новое событие'; Sign: 'EVEN'), {std:check}
-    (Name: 'Рождение'; Sign: 'BIRT'), {std:check}
-    (Name: 'Усыновление'; Sign: 'ADOP'), {std:check}
-    (Name: 'Крещение'; Sign: 'CHR'), {std:check}
-    (Name: 'Получение ученой степени'; Sign: 'GRAD'),   {std:check}
-    (Name: 'Уход на пенсию'; Sign: 'RETI'), {std:check}
-    (Name: 'Натурализация'; Sign: 'NATU'), {std:check}
-    (Name: 'Эмиграция'; Sign: 'EMIG'), {std:check}
-    (Name: 'Иммиграция'; Sign: 'IMMI'), {std:check}
-    (Name: 'Перепись'; Sign: 'CENS'), {std:check}
-    (Name: 'Завещание'; Sign: 'WILL'), {std:check}
-    (Name: 'Утверждение завещания'; Sign: 'PROB'), {std:check}
-    (Name: 'Смерть'; Sign: 'DEAT'), {std:check}
-    (Name: 'Похороны'; Sign: 'BURI'), {std:check}
-    (Name: 'Кремация'; Sign: 'CREM') {std:check}
-  );
+    (Name: 'Новое событие'; Sign: 'EVEN'; Kind: ekEvent),              {std:check, EV}
+    (Name: 'Рождение'; Sign: 'BIRT'; Kind: ekEvent),                   {std:check, EV}
+    (Name: 'Усыновление'; Sign: 'ADOP'; Kind: ekEvent),                {std:check, EV}
+    (Name: 'Крещение'; Sign: 'CHR'; Kind: ekEvent),                    {std:check, EV}
+    (Name: 'Получение ученой степени'; Sign: 'GRAD'; Kind: ekEvent),   {std:check, EV}
+    (Name: 'Уход на пенсию'; Sign: 'RETI'; Kind: ekEvent),             {std:check, EV}
+    (Name: 'Натурализация'; Sign: 'NATU'; Kind: ekEvent),              {std:check, EV}
+    (Name: 'Эмиграция'; Sign: 'EMIG'; Kind: ekEvent),                  {std:check, EV}
+    (Name: 'Иммиграция'; Sign: 'IMMI'; Kind: ekEvent),                 {std:check, EV}
+    (Name: 'Перепись'; Sign: 'CENS'; Kind: ekEvent),                   {std:check, EV}
+    (Name: 'Завещание'; Sign: 'WILL'; Kind: ekEvent),                  {std:check, EV}
+    (Name: 'Утверждение завещания'; Sign: 'PROB'; Kind: ekEvent),      {std:check, EV}
+    (Name: 'Смерть'; Sign: 'DEAT'; Kind: ekEvent),                     {std:check, EV}
+    (Name: 'Похороны'; Sign: 'BURI'; Kind: ekEvent),                   {std:check, EV}
+    (Name: 'Кремация'; Sign: 'CREM'; Kind: ekEvent),                   {std:check, EV}
 
-  PersonAttributesSize = 14;
-  PersonAttributes: array [0..PersonAttributesSize-1] of record
-    Name: string;
-    Sign: string;
-  end = (
-    (Name: 'Атрибут'; Sign: 'FACT'),                    {std:check, AT}
-    (Name: 'Вероисповедание'; Sign: 'RELI'),            {std:check, AT}
-    (Name: 'Национальность'; Sign: 'NATI'),             {std:check, AT}
-    (Name: 'Местожительство'; Sign: 'RESI'),            {std:check, AT}
-    (Name: 'Физическое описание'; Sign: 'DSCR'),        {std:check, AT}
-    (Name: 'Идентификационный номер'; Sign: 'IDNO'),    {std:check, AT}
-    (Name: 'Код социального страхования'; Sign: 'SSN'), {std:check, AT}
-    (Name: 'Кол-во детей'; Sign: 'NCHI'),               {std:check, AT}
-    (Name: 'Кол-во браков'; Sign: 'NMR'),               {std:check, AT}
-    (Name: 'Образование'; Sign: 'EDUC'),                {std:check, AT}
-    (Name: 'Профессия'; Sign: 'OCCU'),                  {std:check, AT}
-    (Name: 'Социальное положение'; Sign: 'CAST'),       {std:check, AT}
-    (Name: 'Собственность'; Sign: 'PROP'),              {std:check, AT}
-    (Name: 'Титул'; Sign: 'TITL')                       {std:check, AT}
+    (Name: 'Факт'; Sign: 'FACT'; Kind: ekFact),                        {std:check, AT}
+    (Name: 'Вероисповедание'; Sign: 'RELI'; Kind: ekFact),             {std:check, AT}
+    (Name: 'Национальность'; Sign: 'NATI'; Kind: ekFact),              {std:check, AT}
+    (Name: 'Местожительство'; Sign: 'RESI'; Kind: ekFact),             {std:check, AT}
+    (Name: 'Физическое описание'; Sign: 'DSCR'; Kind: ekFact),         {std:check, AT}
+    (Name: 'Идентификационный номер'; Sign: 'IDNO'; Kind: ekFact),     {std:check, AT}
+    (Name: 'Код социального страхования'; Sign: 'SSN'; Kind: ekFact),  {std:check, AT}
+    (Name: 'Кол-во детей'; Sign: 'NCHI'; Kind: ekFact),                {std:check, AT}
+    (Name: 'Кол-во браков'; Sign: 'NMR'; Kind: ekFact),                {std:check, AT}
+    (Name: 'Образование'; Sign: 'EDUC'; Kind: ekFact),                 {std:check, AT}
+    (Name: 'Профессия'; Sign: 'OCCU'; Kind: ekFact),                   {std:check, AT}
+    (Name: 'Социальное положение'; Sign: 'CAST'; Kind: ekFact),        {std:check, AT}
+    (Name: 'Собственность'; Sign: 'PROP'; Kind: ekFact),               {std:check, AT}
+    (Name: 'Титул'; Sign: 'TITL'; Kind: ekFact),                       {std:check, AT}
+
+    (Name: 'Хобби'; Sign: '_HOBBY'; Kind: ekFact),                     {non-std, AT}
+    (Name: 'Награда'; Sign: '_AWARD'; Kind: ekFact),                   {non-std, AT}
+
+    (Name: 'Военная служба'; Sign: '_MILI'; Kind: ekFact),             {non-std, AT}
+    (Name: 'Призван в ВС'; Sign: '_MILI_IND'; Kind: ekFact),           {non-std, AT}
+    (Name: 'Уволен из ВС'; Sign: '_MILI_DIS'; Kind: ekFact),           {non-std, AT}
+    (Name: 'Звание в ВС'; Sign: '_MILI_RANK'; Kind: ekFact)            {non-std, AT}
   );
 
   DateKindsSize = 10;
@@ -242,34 +274,7 @@ const
   );
   // Духовное имя ?
 
-function Hole(var A): Integer;
-
-// Конвертировать путь (Linux/Windows)
-function ConvertPath(aPath: string): string;
-
-// Начать протоколирование
-procedure LogInit(const aFileName: string);
-// Записать в протокол
-procedure LogWrite(const aMsg: string);
-// Завершить протоколирование
-procedure LogDone;
-
-// Путь приложения
-function GetAppPath(): string;
-
-// Дополнить число нулями
-function NumUpdate(val, up: Integer): string;
-
-// Получить число римскими цифрами
-function GetRome(N: Integer): string;
-
-// извлечение токена
-function GetToken(aString, SepChar: string; TokenNum: Byte): string;
-// количество токенов
-function GetTokensCount(aString, SepChar: string): Byte;
-
 function GetPersonEventIndex(aSign: string): Integer;
-function GetPersonAttributeIndex(aSign: string): Integer;
 function GetFamilyEventIndex(aSign: string): Integer;
 function GetNamePieceIndex(aSign: string): Integer;
 
@@ -297,7 +302,9 @@ function GetLifeStr(iRec: TGEDCOMIndividualRecord): string;
 
 function GetBirthPlace(iRec: TGEDCOMIndividualRecord): string;
 function GetDeathPlace(iRec: TGEDCOMIndividualRecord): string;
+function GetResidencePlace(iRec: TGEDCOMIndividualRecord; IncludeAddress: Boolean): string;
 
+function GetAttribute(iRec: TGEDCOMIndividualRecord; attrName: string): TGEDCOMIndividualAttribute;
 function GetAttributeValue(iRec: TGEDCOMIndividualRecord; attrName: string): string;
 function GetAttributeStr(iAttr: TGEDCOMIndividualAttribute): string;
 
@@ -305,11 +312,23 @@ function GetMarriageDate(fRec: TGEDCOMFamilyRecord; aFormat: TDateFormat): strin
 function GetEventDesc(evDetail: TGEDCOMEventDetail): string;
 
 function IsLive(iRec: TGEDCOMIndividualRecord): Boolean;
+function GetEventsYearsDiff(ev1, ev2: TGEDCOMIndividualEvent; aCurEnd: Boolean = False): string;
 function GetLifeExpectancy(iRec: TGEDCOMIndividualRecord): string;
 function GetAge(iRec: TGEDCOMIndividualRecord): string;
 function GetFirstbornAge(iRec: TGEDCOMIndividualRecord): string;
 function GetMarriageAge(iRec: TGEDCOMIndividualRecord): string;
 function GetDaysForBirth(iRec: TGEDCOMIndividualRecord): string;
+
+function CreateEventEx(aTree: TGEDCOMTree; iRec: TGEDCOMIndividualRecord;
+  evName: string): TGEDCOMCustomEvent;
+function CreatePersonEx(aTree: TGEDCOMTree;
+  aName, aPatronymic, aFamily: string;
+  aSex: TGEDCOMSex; aBirthEvent: Boolean = False): TGEDCOMIndividualRecord;
+
+procedure AddSpouseToFamily(aTree: TGEDCOMTree; aFamily: TGEDCOMFamilyRecord;
+  aSpouse: TGEDCOMIndividualRecord);
+procedure RemoveFamilySpouse(aTree: TGEDCOMTree; aFamily: TGEDCOMFamilyRecord;
+  aSpouse: TGEDCOMIndividualRecord);
 
 function HyperLink(XRef: string; Text: string): string;
 
@@ -320,6 +339,7 @@ function IndistinctMatching3(StrA, StrB: string): Integer;
 function ClearFamily(aFamily: string): string;
 
 function GetSelIndex(aList: TBSListView): Integer;
+function GetSelObject(aList: TBSListView): TObject;
 
 function PrepareRusFamily(f: string; aFemale: Boolean): string;
 
@@ -342,8 +362,6 @@ type
 
 procedure GetCommonStats(aTree: TGEDCOMTree; var aStats: TCommonStats);
 
-procedure MergeFiles(aMainTree: TGEDCOMTree; aFileName: string);
-
 function GetChangeDate(aRec: TGEDCOMRecordWithLists): string;
 
 function CheckGEDCOMFormat(aTree: TGEDCOMTree): Boolean;
@@ -361,149 +379,24 @@ type
     property MultimediaLinksCount;
   end;
 
+function ProgramIsRegistered(): Boolean;
+procedure RegisterProgram(Registering: Boolean);
+function ExtIsRegistered(fExt, fName: string): Boolean;
+procedure RegisterExt(fExt, fName, fDesc: string; iIndex: Integer; Registering: Boolean);
+
+// замена данных в потоке с кодировки 1251 на UTF-8
+function StreamToUtf8Stream(Stream: TStream): UTF8String;
+
+function Encrypt(const s: string; Key: Word): string;
+function Decrypt(const s: string; Key: Word): string;
+
+function ConStrings(aStrings: TStrings): string;
+
 implementation
 
 uses
-  Windows, SysUtils, StrUtils, Math, DateUtils, ShellAPI, Controls, GKProgress;
-
-function Hole(var A): Integer;
-asm
-end;
-
-// Конвертировать путь (Linux/Windows)
-function ConvertPath(aPath: string): string;
-var
-  i: Integer;
-begin
-  Result := aPath;
-  {$IFDEF OS_LINUX}
-  for i := 1 to Length(aPath) do
-    if (aPath[i] = '\') then Result[i] := '/';
-  {$ELSE}
-  for i := 1 to Length(aPath) do
-    if (aPath[i] = '/') then Result[i] := '\';
-  {$ENDIF}
-end;
-
-var
-  Log: {$IFNDEF FREEPASCAL}TextFile{$ELSE}Text{$ENDIF};
-  LogRunned: Boolean = False;
-
-// Начать протоколирование
-procedure LogInit(const aFileName: string);
-var
-  ex: Boolean;
-  fn: string;
-begin
-  fn := ConvertPath(aFileName);
-  ex := FileExists(fn);
-
-  AssignFile(Log, fn);
-  if ex
-  then Append(Log)
-  else Rewrite(Log);
-
-  LogRunned := True;
-
-  Writeln(Log, DateTimeToStr(Now) + ' log begin');
-end;
-
-// Записать в протокол
-procedure LogWrite(const aMsg: string);
-begin
-  if LogRunned
-  then Writeln(Log, '  -> ' + aMsg);
-end;
-
-// Завершить протоколирование
-procedure LogDone;
-begin
-  Writeln(Log, DateTimeToStr(Now) + ' log end');
-
-  LogRunned := False;
-
-  CloseFile(Log);
-end;
-
-// Путь приложения
-function GetAppPath(): string;
-begin
-  Result := ExtractFilePath(ParamStr(0));
-end;
-
-// Дополнить число нулями
-function NumUpdate(val, up: Integer): string;
-begin
-  Result := IntToStr(val);
-  while Length(Result) < up do Result := '0' + Result;
-end;
-
-// Получить число римскими цифрами
-function GetRome(N: Integer): string;
-const
-  Rn_N: array [1..13] of Integer = (
-    1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000);
-  Rn_S: array [1..13] of string = (
-    'I', 'IV', 'V', 'IX', 'X', 'XL', 'L', 'XC', 'C', 'CD', 'D', 'CM', 'M');
-var
-  S: string;
-  T: Byte;
-begin
-  S := '';
-  T := 13;
-  while (N > 0) do begin
-    while (N < Rn_N[T]) do Dec(T);
-    while (N >= Rn_N[T]) do begin
-      Dec(N, Rn_N[T]);
-      S := S + Rn_S[T];
-    end;
-  end;
-  Result := S;
-end;
-
-// извлечение токена
-function GetToken(aString, SepChar: string; TokenNum: Byte): string;
-var
-  tok: string;
-  i, tok_num: Integer;
-begin
-  Result := '';
-  if (aString = '') then Exit;
-
-  if (Pos(aString[Length(aString)], SepChar) <= 0)
-  then aString := aString + SepChar[1];
-
-  tok_num := 0;
-  tok := '';
-  for i := 1 to Length(aString) do begin
-    if (Pos(aString[i], SepChar) > 0) then begin
-      Inc(tok_num);
-
-      if (tok_num = TokenNum) then begin
-        Result := tok;
-        Break;
-      end else tok := '';
-    end else begin
-      tok := tok + aString[i];
-    end;
-  end;
-end;
-
-// количество токенов
-function GetTokensCount(aString, SepChar: string): Byte;
-var
-  i: Integer;
-begin
-  Result := 0;
-  if (aString = '') then Exit;
-
-  if (Pos(aString[Length(aString)], SepChar) <= 0)
-  then aString := aString + SepChar[1];
-
-  for i := 1 to Length(aString) do
-    if (Pos(aString[i], SepChar) > 0)
-    then Inc(Result);
-end;
+  Windows, SysUtils, StrUtils, Math, DateUtils, ShellAPI, Controls,
+  GKProgress, Registry, bsComUtils;
 
 function GetPersonEventIndex(aSign: string): Integer;
 var
@@ -513,19 +406,6 @@ begin
 
   for i := 0 to PersonEventsSize - 1 do
     if (PersonEvents[i].Sign = aSign) then begin
-      Result := i;
-      Break;
-    end;
-end;
-
-function GetPersonAttributeIndex(aSign: string): Integer;
-var
-  i: Integer;
-begin
-  Result := -1;
-
-  for i := 0 to PersonAttributesSize - 1 do
-    if (PersonAttributes[i].Sign = aSign) then begin
       Result := i;
       Break;
     end;
@@ -825,7 +705,7 @@ begin
       Result := event;
       Exit;
     end;
-  end; 
+  end;
 end;
 
 function GetBirthDate(iRec: TGEDCOMIndividualRecord; aFormat: TDateFormat): string;
@@ -896,21 +776,51 @@ begin
   else Result := event.Detail.Place;
 end;
 
-function GetAttributeValue(iRec: TGEDCOMIndividualRecord; attrName: string): string;
+function GetResidencePlace(iRec: TGEDCOMIndividualRecord; IncludeAddress: Boolean): string;
+var
+  attr: TGEDCOMIndividualAttribute;
+  addr: string;
+begin
+  attr := GetAttribute(iRec, 'RESI');
+  if (attr = nil)
+  then Result := ''
+  else begin
+    Result := attr.StringValue;
+
+    if (IncludeAddress) then begin
+      addr := Trim(attr.Detail.Address.Address.Text);
+
+      if (addr <> '')
+      then Result := Result + ', ' + addr;
+    end;
+  end;
+end;
+
+function GetAttribute(iRec: TGEDCOMIndividualRecord; attrName: string): TGEDCOMIndividualAttribute;
 var
   i: Integer;
   attr: TGEDCOMIndividualAttribute;
 begin
-  Result := '';
+  Result := nil;
 
   for i := 0 to iRec.IndividualAttributesCount - 1 do begin
     attr := iRec.IndividualAttributes[i];
 
     if (attr.Name = attrName) then begin
-      Result := attr.StringValue;
+      Result := attr;
       Exit;
     end;
   end;
+end;
+
+function GetAttributeValue(iRec: TGEDCOMIndividualRecord; attrName: string): string;
+var
+  attr: TGEDCOMIndividualAttribute;
+begin
+  attr := GetAttribute(iRec, attrName);
+  if (attr = nil)
+  then Result := ''
+  else Result := attr.StringValue;
 end;
 
 function GetAttributeStr(iAttr: TGEDCOMIndividualAttribute): string;
@@ -918,10 +828,10 @@ var
   idx: Integer;
   st: string;
 begin
-  idx := GetPersonAttributeIndex(iAttr.Name);
+  idx := GetPersonEventIndex(iAttr.Name);
   if (idx = 0) then st := iAttr.Detail.Classification
   else
-  if (idx > 0) then st := PersonAttributes[idx].Name
+  if (idx > 0) then st := PersonEvents[idx].Name
   else st := iAttr.Name;
 
   Result := st + ': ' + iAttr.StringValue;
@@ -984,28 +894,23 @@ begin
   end;
 end;
 
-function GetLifeExpectancy(iRec: TGEDCOMIndividualRecord): string;
+function GetEventsYearsDiff(ev1, ev2: TGEDCOMIndividualEvent; aCurEnd: Boolean = False): string;
 var
   y1, y2: Double;
-  i: Integer;
-  event: TGEDCOMIndividualEvent;
 begin
   Result := '?';
   try
-    y1 := -1.0;
-    y2 := -1.0;
+    if (ev1 = nil)
+    then y1 := -1.0
+    else y1 := GetAbstractDate(ev1.Detail);
 
-    // -1 - события нет вовсе
-    // 0.0 - нет года
-          
-    for i := 0 to iRec.IndividualEventsCount - 1 do begin
-      event := iRec.IndividualEvents[i];
+    if (ev2 = nil)
+    then y2 := -1.0
+    else y2 := GetAbstractDate(ev2.Detail);
 
-      if (event.Name = 'BIRT')
-      then y1 := GetAbstractDate(event.Detail)
-      else
-      if (event.Name = 'DEAT')
-      then y2 := GetAbstractDate(event.Detail);
+    if (aCurEnd) then begin
+      if (y2 <= 1.0)
+      then y2 := YearOf(Now()) + MonthOf(Now()) / 12;
     end;
 
     if (y1 = -1.0) or (y2 = -1.0)
@@ -1019,37 +924,46 @@ begin
   end;
 end;
 
-function GetAge(iRec: TGEDCOMIndividualRecord): string;
+function GetLifeExpectancy(iRec: TGEDCOMIndividualRecord): string;
 var
-  y1, y2: Double;
   i: Integer;
-  event: TGEDCOMIndividualEvent;
+  event, ev1, ev2: TGEDCOMIndividualEvent;
 begin
-  Result := '?';
   try
-    y1 := -1.0;
-    y2 := -1.0;
+    ev1 := nil;
+    ev2 := nil;
 
     for i := 0 to iRec.IndividualEventsCount - 1 do begin
       event := iRec.IndividualEvents[i];
 
-      if (event.Name = 'BIRT')
-      then y1 := GetAbstractDate(event.Detail)
+      if (event.Name = 'BIRT') then ev1 := event
       else
-      if (event.Name = 'DEAT')
-      then y2 := GetAbstractDate(event.Detail);
+      if (event.Name = 'DEAT') then ev2 := event;
     end;
 
-    if (y2 <= 1.0)
-    then y2 := YearOf(Now()) + MonthOf(Now()) / 12;
+    Result := GetEventsYearsDiff(ev1, ev2, False);
+  except
+  end;
+end;
 
-    if (y1 = -1.0) or (y2 = -1.0)
-    then Result := ''
-    else
-    if (y1 = 0.0) or (y2 = 0.0)
-    then Result := '?'
-    else
-      Result := IntToStr(Trunc(y2 - y1));
+function GetAge(iRec: TGEDCOMIndividualRecord): string;
+var
+  i: Integer;
+  event, ev1, ev2: TGEDCOMIndividualEvent;
+begin
+  try
+    ev1 := nil;
+    ev2 := nil;
+
+    for i := 0 to iRec.IndividualEventsCount - 1 do begin
+      event := iRec.IndividualEvents[i];
+
+      if (event.Name = 'BIRT') then ev1 := event
+      else
+      if (event.Name = 'DEAT') then ev2 := event;
+    end;
+
+    Result := GetEventsYearsDiff(ev1, ev2, True);
   except
   end;
 end;
@@ -1170,6 +1084,66 @@ begin
       Result := IntToStr(DaysBetween(EncodeDate(cur_y, cur_m, cur_d), EncodeDate(bd_y, bd_m, bd_d)));
     end;
   except
+  end;
+end;
+
+function CreateEventEx(aTree: TGEDCOMTree; iRec: TGEDCOMIndividualRecord;
+  evName: string): TGEDCOMCustomEvent;
+begin
+  Result := TGEDCOMIndividualEvent.Create(aTree, iRec);
+  Result.Name := evName;
+  iRec.AddIndividualEvent(TGEDCOMIndividualEvent(Result));
+end;
+
+function CreatePersonEx(aTree: TGEDCOMTree;
+  aName, aPatronymic, aFamily: string;
+  aSex: TGEDCOMSex; aBirthEvent: Boolean = False): TGEDCOMIndividualRecord;
+begin
+  Result := TGEDCOMIndividualRecord.Create(aTree, aTree);
+  Result.NewXRef;
+  Result.AddPersonalName(
+    TGEDCOMPersonalName.CreateTag(aTree, Result,
+      'NAME', Trim(aName) + ' ' + Trim(aPatronymic) + ' /' + Trim(aFamily) + '/'));
+  Result.Sex := aSex;
+  Result.ChangeDate.ChangeDateTime := Now();
+
+  aTree.AddRecord(Result);
+
+  if (aBirthEvent)
+  then CreateEventEx(aTree, Result, 'BIRT');
+end;
+
+procedure AddSpouseToFamily(aTree: TGEDCOMTree; aFamily: TGEDCOMFamilyRecord;
+  aSpouse: TGEDCOMIndividualRecord);
+begin
+  case aSpouse.Sex of
+    svNone: ;
+    svMale: begin
+      aFamily.SetTagStringValue('HUSB', '@'+aSpouse.XRef+'@');
+    end;
+    svFemale: begin
+      aFamily.SetTagStringValue('WIFE', '@'+aSpouse.XRef+'@');
+    end;
+    svUndetermined: ;
+  end;
+
+  aSpouse.AddSpouseToFamilyLink(
+    TGEDCOMSpouseToFamilyLink.CreateTag(
+      aTree, aSpouse, 'FAMS', '@'+aFamily.XRef+'@'));
+end;
+
+procedure RemoveFamilySpouse(aTree: TGEDCOMTree; aFamily: TGEDCOMFamilyRecord;
+  aSpouse: TGEDCOMIndividualRecord);
+begin
+  if (aSpouse <> nil) then begin
+    aSpouse.DeleteSpouseToFamilyLink(aFamily);
+
+    case aSpouse.Sex of
+      svNone: ;
+      svMale: aFamily.SetTagStringValue('HUSB', '');
+      svFemale: aFamily.SetTagStringValue('WIFE', '');
+      svUndetermined: ;
+    end;
   end;
 end;
 
@@ -1351,6 +1325,13 @@ begin
   if (aList.Selected = nil)
   then Result := -1
   else Result := Integer(aList.Selected.Data);
+end;
+
+function GetSelObject(aList: TBSListView): TObject;
+begin
+  if (aList.Selected = nil)
+  then Result := nil
+  else Result := TObject(aList.Selected.Data);
 end;
 
 function PrepareRusFamily(f: string; aFemale: Boolean): string;
@@ -1604,37 +1585,6 @@ begin
         end;
       end;
     end;
-  end;
-end;
-
-procedure MergeFiles(aMainTree: TGEDCOMTree; aFileName: string);
-var
-  repMap: TXRefReplaceMap;
-  i: Integer;
-  extTree: TGEDCOMTree;
-  rec: TGEDCOMRecord;
-  newXRef: string;
-begin
-  extTree := TGEDCOMTree.Create;
-  repMap := TXRefReplaceMap.Create;
-  try
-    extTree.LoadFromFile(aFileName);
-    while (extTree.Count > 0) do begin
-      rec := extTree.Extract(0);
-      newXRef := aMainTree.XRefIndex_NewXRef(rec);
-      repMap.AddXRef(rec, rec.XRef, newXRef);
-      rec.XRef := newXRef;
-      rec.ResetOwner(aMainTree);
-      aMainTree.AddRecord(rec);
-    end;
-
-    for i := 0 to repMap.Count - 1 do begin
-      rec := repMap.Records[i].Rec;
-      rec.ReplaceXRefs(repMap);
-    end;
-  finally
-    repMap.Destroy;
-    extTree.Destroy;
   end;
 end;
 
@@ -1901,6 +1851,168 @@ begin
   ShellExecute(0, 'open', PChar(aFileName), nil, nil, SW_SHOW);
 end;
 
+function ProgramIsRegistered(): Boolean;
+var
+  reg: TRegistry;
+begin
+  Result := False;
+
+  try
+    reg := TRegistry.Create;
+    try
+      reg.RootKey := HKEY_LOCAL_MACHINE;
+      reg.OpenKey('Software\Microsoft\Windows\CurrentVersion\App Paths', True);
+
+      Result := reg.KeyExists(ExtractFileName(ParamStr(0)));
+    finally
+      reg.Free;
+    end;
+  except
+  end;
+end;
+
+procedure RegisterProgram(Registering: Boolean);
+var
+  reg: TRegistry;
+begin
+  try
+    reg := TRegistry.Create;
+    try
+      reg.RootKey := HKEY_LOCAL_MACHINE;
+      reg.OpenKey('Software\Microsoft\Windows\CurrentVersion\App Paths', True);
+
+      if Registering then begin
+        reg.OpenKey(ExtractFileName(ParamStr(0)), True);
+        reg.WriteString('', ParamStr(0));
+        reg.WriteString('Path', ExtractFilePath(ParamStr(0)));
+      end else begin
+        reg.DeleteKey(ExtractFileName(ParamStr(0)));
+      end;
+    finally
+      reg.Free;
+    end;
+  except
+  end;
+end;
+
+function ExtIsRegistered(fExt, fName: string): Boolean;
+var
+  reg: TRegistry;
+begin
+  Result := False;
+
+  try
+    reg := TRegistry.Create;
+    try
+      reg.RootKey := HKEY_CLASSES_ROOT;
+      Result := reg.KeyExists(fExt) and reg.KeyExists(fName);
+    finally
+      reg.Free;
+    end;
+  except
+  end;
+end;
+
+procedure RegisterExt(fExt, fName, fDesc: string; iIndex: Integer; Registering: Boolean);
+var
+  reg: TRegistry;
+  ef: Longword;
+begin
+  ef := 0;
+  try
+    reg := TRegistry.Create;
+    try
+      reg.RootKey := HKEY_CLASSES_ROOT;
+      if Registering then begin
+        reg.OpenKey(fExt, True);
+        reg.WriteString('', fName);
+        reg.CloseKey;
+
+        reg.OpenKey(fName, True);
+        reg.WriteString('', fDesc);
+        reg.WriteBinaryData('EditFlags', ef, 4);
+
+        reg.OpenKey('DefaultIcon', True);
+        reg.WriteString('', ParamStr(0)+','+IntToStr(iIndex));
+        reg.CloseKey;
+
+        reg.OpenKey(fName, True);
+        reg.OpenKey('ShellNew', True);
+        reg.WriteString('NullFile', '');
+        reg.CloseKey;
+
+        reg.OpenKey(fName, True);
+        reg.OpenKey('shell', True);
+        reg.WriteString('', 'open');
+        reg.OpenKey('open', True);
+        reg.WriteString('', '&Открыть');
+        reg.OpenKey('command', True);
+        reg.WriteString('', ParamStr(0) + ' "%1"');
+        reg.CloseKey;
+      end else begin
+        reg.DeleteKey(fExt);
+        reg.DeleteKey(fName);
+      end;
+    finally
+      reg.Free;
+    end;
+  except
+  end;
+end;
+
+// замена данных в потоке с кодировки 1251 на UTF-8
+function StreamToUtf8Stream(Stream: TStream): UTF8String;
+var
+  s: String;
+begin
+  SetLength(s, Stream.Size);
+  Stream.Seek(0, 0);
+  Stream.Read(s[1], Stream.Size);
+  Result := AnsiToUtf8(s);
+  Stream.Size := 0;
+  Stream.Write(Result[1], Length(Result));
+end;
+
+const
+  c1 = 52845;
+  c2 = 22719;
+
+function Encrypt(const s: string; Key: Word): string;
+var
+  i: Byte;
+begin
+  Result := s;
+  for i := 1 to Length(s) do begin
+    Result[i] := Char(Byte(s[i]) xor (Key shr 8));
+    Key := (Byte(Result[i]) + Key) * c1 + c2;
+  end;
+end;
+
+function Decrypt(const s: string; Key: Word): string;
+var
+  i: Byte;
+begin
+  Result := s;
+  for i := 1 to Length(s) do begin
+    Result[i] := Char(Byte(s[i]) xor (Key shr 8));
+    Key := (Byte(s[i]) + Key) * c1 + c2;
+  end;
+end;
+
+function ConStrings(aStrings: TStrings): string;
+var
+  i: Integer;
+begin
+  Result := '';
+
+  for i := 0 to aStrings.Count - 1 do begin
+    if (Result <> '') then Result := Result + ' ';
+    Result := Result + Trim(aStrings[i]);
+  end;
+end;
+
+{==============================================================================}
+
 { TNamesTable }
 
 constructor TNamesTable.Create;
@@ -2095,17 +2207,79 @@ begin
   inherited Destroy;
 end;
 
+procedure TChartOptions.LoadFromFile(const aIniFile: TIniFile);
+begin
+  FFamilyVisible := aIniFile.ReadBool('Chart', 'FamilyVisible', True);
+  FNameVisible := aIniFile.ReadBool('Chart', 'NameVisible', True);
+  FPatronymicVisible := aIniFile.ReadBool('Chart', 'PatronymicVisible', True);
+  FDiffLines := aIniFile.ReadBool('Chart', 'DiffLines', False);
+  FBirthDateVisible := aIniFile.ReadBool('Chart', 'BirthDateVisible', False);
+  FDeathDateVisible := aIniFile.ReadBool('Chart', 'DeathDateVisible', False);
+  FKinship := aIniFile.ReadBool('Chart', 'Kinship', False);
+  FMaleColor := aIniFile.ReadInteger('Chart', 'MaleColor', $00FFC6C6);
+  FFemaleColor := aIniFile.ReadInteger('Chart', 'FemaleColor', $00C6C6FF);
+  FUnkSexColor := aIniFile.ReadInteger('Chart', 'UnkSexColor', $00FFC6FF);
+  FUnHusbandColor := aIniFile.ReadInteger('Chart', 'UnHusbandColor', $00FFD7D7);
+  FUnWifeColor := aIniFile.ReadInteger('Chart', 'UnWifeColor', $00D7D7FF);
+end;
+
+procedure TChartOptions.SaveToFile(const aIniFile: TIniFile);
+begin
+  aIniFile.WriteBool('Chart', 'FamilyVisible', FFamilyVisible);
+  aIniFile.WriteBool('Chart', 'NameVisible', FNameVisible);
+  aIniFile.WriteBool('Chart', 'PatronymicVisible', FPatronymicVisible);
+  aIniFile.WriteBool('Chart', 'DiffLines', FDiffLines);
+  aIniFile.WriteBool('Chart', 'BirthDateVisible', FBirthDateVisible);
+  aIniFile.WriteBool('Chart', 'DeathDateVisible', FDeathDateVisible);
+  aIniFile.WriteBool('Chart', 'Kinship', FKinship);
+  aIniFile.WriteInteger('Chart', 'MaleColor', FMaleColor);
+  aIniFile.WriteInteger('Chart', 'FemaleColor', FFemaleColor);
+  aIniFile.WriteInteger('Chart', 'UnkSexColor', FUnkSexColor);
+  aIniFile.WriteInteger('Chart', 'UnHusbandColor', FUnHusbandColor);
+  aIniFile.WriteInteger('Chart', 'UnWifeColor', FUnWifeColor);
+end;
+
+{ TProxy }
+
+procedure TProxy.LoadFromFile(const aIniFile: TIniFile);
+begin
+  FUseProxy := aIniFile.ReadBool('Proxy', 'UseProxy', False);
+  FServer := aIniFile.ReadString('Proxy', 'Server', '');
+  FPort := aIniFile.ReadString('Proxy', 'Port', '');
+  FLogin := aIniFile.ReadString('Proxy', 'Login', '');
+  FPassword := Decrypt(aIniFile.ReadString('Proxy', 'Password', ''), 777);
+end;
+
+procedure TProxy.SaveToFile(const aIniFile: TIniFile);
+begin
+  aIniFile.WriteBool('Proxy', 'UseProxy', FUseProxy);
+  aIniFile.WriteString('Proxy', 'Server', FServer);
+  aIniFile.WriteString('Proxy', 'Port', FPort);
+  aIniFile.WriteString('Proxy', 'Login', FLogin);
+  aIniFile.WriteString('Proxy', 'Password', Encrypt(FPassword, 777));
+end;
+
 { TPedigreeOptions }
 
 constructor TPedigreeOptions.Create;
 begin
-
+  FIncludeAttributes := True;
+  FIncludeNotes := True;
+  FIncludeSources := True;
 end;
 
-destructor TPedigreeOptions.Destroy;
+procedure TPedigreeOptions.LoadFromFile(const aIniFile: TIniFile);
 begin
+  FIncludeAttributes := aIniFile.ReadBool('Pedigree', 'IncludeAttributes', True);
+  FIncludeNotes := aIniFile.ReadBool('Pedigree', 'IncludeNotes', True);
+  FIncludeSources := aIniFile.ReadBool('Pedigree', 'IncludeSources', True);
+end;
 
-  inherited Destroy;
+procedure TPedigreeOptions.SaveToFile(const aIniFile: TIniFile);
+begin
+  aIniFile.WriteBool('Pedigree', 'IncludeAttributes', FIncludeAttributes);
+  aIniFile.WriteBool('Pedigree', 'IncludeNotes', FIncludeNotes);
+  aIniFile.WriteBool('Pedigree', 'IncludeSources', FIncludeSources);
 end;
 
 { TGlobalOptions }
@@ -2113,6 +2287,9 @@ end;
 constructor TGlobalOptions.Create;
 begin
   FChartOptions := TChartOptions.Create;
+  FMRUFiles := TStringList.Create;
+  FNameFilters := TStringList.Create;
+  FResidenceFilters := TStringList.Create;
   FPedigreeOptions := TPedigreeOptions.Create;
   FProxy := TProxy.Create;
 end;
@@ -2121,9 +2298,84 @@ destructor TGlobalOptions.Destroy;
 begin
   FProxy.Destroy;
   FPedigreeOptions.Destroy;
+  FResidenceFilters.Destroy;
+  FNameFilters.Destroy;
+  FMRUFiles.Destroy;
   FChartOptions.Destroy;
 
   inherited Destroy;
+end;
+
+procedure TGlobalOptions.LoadFromFile(const FileName: string);
+var
+  ini: TIniFile;
+  i, cnt: Integer;
+  fn: string;
+begin
+  ini := TIniFile.Create(FileName);
+  try
+    FDefCharacterSet := TGEDCOMCharacterSet(ini.ReadInteger('Common', 'DefCharacterSet', Ord(csUTF8)));
+    FDefNameFormat := TNameFormat(ini.ReadInteger('Common', 'DefNameFormat', Ord(nfFNP)));
+    FDefDateFormat := TDateFormat(ini.ReadInteger('Common', 'DefDateFormat', Ord(dfDD_MM_YYYY)));
+    FLastDir := ini.ReadString('Common', 'LastDir', '');
+    FPlacesWithAddress := ini.ReadBool('Common', 'PlacesWithAddress', False);
+
+    FChartOptions.LoadFromFile(ini);
+    FPedigreeOptions.LoadFromFile(ini);
+    FProxy.LoadFromFile(ini);
+
+    cnt := ini.ReadInteger('NameFilters', 'Count', 0);
+    for i := 0 to cnt - 1 do
+      FNameFilters.Add(ini.ReadString('NameFilters', 'Filter_' + IntToStr(i), ''));
+
+    cnt := ini.ReadInteger('ResidenceFilters', 'Count', 0);
+    for i := 0 to cnt - 1 do
+      FResidenceFilters.Add(ini.ReadString('ResidenceFilters', 'Filter_' + IntToStr(i), ''));
+
+    cnt := ini.ReadInteger('MRUFiles', 'Count', 0);
+    for i := 0 to cnt - 1 do begin
+      fn := ini.ReadString('MRUFiles', 'File_' + IntToStr(i), '');
+      if FileExists(fn)
+      then FMRUFiles.Add(fn)
+      else ini.DeleteKey('MRUFiles', 'File_' + IntToStr(i));
+    end;
+  finally
+    ini.Destroy;
+  end;
+end;
+
+procedure TGlobalOptions.SaveToFile(const FileName: string);
+var
+  ini: TIniFile;
+  i: Integer;
+begin
+  ini := TIniFile.Create(FileName);
+  try
+    ini.WriteInteger('Common', 'DefCharacterSet', Ord(FDefCharacterSet));
+    ini.WriteInteger('Common', 'DefNameFormat', Ord(FDefNameFormat));
+    ini.WriteInteger('Common', 'DefDateFormat', Ord(FDefDateFormat));
+    ini.WriteString('Common', 'LastDir', FLastDir);
+    ini.WriteBool('Common', 'PlacesWithAddress', FPlacesWithAddress);
+
+    FChartOptions.SaveToFile(ini);
+    FPedigreeOptions.SaveToFile(ini);
+    FProxy.SaveToFile(ini);
+
+    ini.WriteInteger('NameFilters', 'Count', FNameFilters.Count);
+    for i := 0 to FNameFilters.Count - 1 do
+      ini.WriteString('NameFilters', 'Filter_' + IntToStr(i), FNameFilters[i]);
+
+    ini.WriteInteger('ResidenceFilters', 'Count', FResidenceFilters.Count);
+    for i := 0 to FResidenceFilters.Count - 1 do
+      ini.WriteString('ResidenceFilters', 'Filter_' + IntToStr(i), FResidenceFilters[i]);
+
+    ini.WriteInteger('MRUFiles', 'Count', FMRUFiles.Count);
+    for i := 0 to FMRUFiles.Count - 1 do 
+      ini.WriteString('MRUFiles', 'File_' + IntToStr(i), FMRUFiles[i]);
+    FMRUFiles.Sort();
+  finally
+    ini.Destroy;
+  end;
 end;
 
 end.

@@ -16,27 +16,26 @@ uses
   GKAbout in 'GKAbout.pas' {fmAbout},
   GKChartCore in 'GKChartCore.pas',
   GKFileProperties in 'GKFileProperties.pas' {fmFileProperties},
-  GKDiagnosis in 'GKDiagnosis.pas' {fmDiagnosis},
+  GKTreeTools in 'GKTreeTools.pas' {fmTreeTools},
   GKStats in 'GKStats.pas' {fmStats},
   GKNameEdit in 'GKNameEdit.pas' {fmNameEdit},
-  GKMerge in 'GKMerge.pas' {fmMerge},
   GKPersonEdit in 'GKPersonEdit.pas' {fmPersonEdit},
   GKExport in 'GKExport.pas',
   GKOptions in 'GKOptions.pas' {fmOptions},
   GKFamilyEdit in 'GKFamilyEdit.pas' {fmFamilyEdit},
   GKAssociationEdit in 'GKAssociationEdit.pas' {fmAssociationEdit},
-  GKSplitBase in 'GKSplitBase.pas' {fmSplitBase},
   GKFilter in 'GKFilter.pas' {fmFilter},
   GKGroupEdit in 'GKGroupEdit.pas' {fmGroupEdit},
   GKPersonScan in 'GKPersonScan.pas' {fmPersonScan},
-  GKUtils in 'GKUtils.pas',
   GKLifeSettings in 'GKLifeSettings.pas' {fmLifeSettings},
   GKLifeMain in 'GKLifeMain.pas' {fmLife},
   GKMaps in 'GKMaps.pas' {fmMaps},
   GoogleMapFrames in 'ext\GoogleMapFrames.pas' {GoogleMapFrame: TFrame},
   BaseMapFrames in 'ext\BaseMapFrames.pas' {BaseMapFrame: TFrame},
   GKProgress in 'GKProgress.pas' {fmProgress},
-  GKAddressEdit in 'GKAddressEdit.pas' {fmAddressEdit};
+  GKAddressEdit in 'GKAddressEdit.pas' {fmAddressEdit},
+  GKImport in 'GKImport.pas',
+  GKSourceCitEdit in 'GKSourceCitEdit.pas' {fmSourceCitEdit};
 
 {$R *.res}
 
@@ -45,6 +44,5 @@ begin
   Application.Title := 'GEDKeeper';
   Application.CreateForm(TfmGEDKeeper, fmGEDKeeper);
   Application.CreateForm(TfmStats, fmStats);
-  Application.CreateForm(TfmAddressEdit, fmAddressEdit);
   Application.Run;
 end.

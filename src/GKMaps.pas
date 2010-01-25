@@ -1,8 +1,6 @@
 unit GKMaps;
 
-// Partial Copyright by "Static Google Maps API & Geocoding Demo © Maxim Mazitov"
-
-{$DEFINE SYNAPSE}
+{$I GEDKeeper.inc}
 
 interface
 
@@ -102,7 +100,7 @@ var
 implementation
 
 uses
-  GKCommon {$IFDEF SYNAPSE}, HTTPSend{$ENDIF}, GKUtils, GKProgress, GKMain;
+  bsWinUtils, GKCommon {$IFDEF SYNAPSE}, HTTPSend{$ENDIF}, GKProgress, GKMain;
 
 const
   GoogleKey = 'ABQIAAAAIcIQgkzLQ27NamNDh2wULxTh9o9-e_HqfKVqUrQPniGEP9J6uhSJmXGEipvip6lxpu_ZXrXaeHwWgQ';
@@ -570,7 +568,7 @@ begin
             if (AddressNode <> nil) and (PointNode <> nil) then begin
               Point := TMapPoint.Create;
               // получаем адрес
-              Point.Address := AddressNode.Text;
+              Point.Address := Utf8ToAnsi(AddressNode.Text);
               // получаем координаты
               sCoordinates := PointNode.Text;
               // разбираем координаты

@@ -1,5 +1,7 @@
 unit GKPersonScan;
 
+{$I GEDKeeper.inc}
+
 interface
 
 uses
@@ -35,7 +37,7 @@ type
 
 implementation
 
-uses GKMain, GedCom551, GKCommon;
+uses bsComUtils, GKMain, GedCom551, GKCommon;
 
 {$R *.dfm}
 

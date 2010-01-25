@@ -6,7 +6,7 @@ interface
 
 uses
   Windows, SysUtils, Classes, Controls, Forms, ComCtrls,
-  GedCom551, GKCtrls, StdCtrls, ToolWin, ExtCtrls;
+  GedCom551, StdCtrls, ToolWin, ExtCtrls, bsCtrls;
 
 type
   TStatMode = (
@@ -17,7 +17,9 @@ type
     smChildsCount, smChildsDistribution,
     smBirthPlaces, smDeathPlaces, smResidences, smOccupation,
     smReligious, smNational, smEducation,
-    smFirstbornAge, smMarriages, smMarriageAge, smSpousesDiff);
+    smFirstbornAge, smMarriages, smMarriageAge, smSpousesDiff,
+
+    smHobby, smAward, smMili, smMiliInd, smMiliDis, smMiliRank);
 
 const
   Titles: array [TStatMode] of record
@@ -48,7 +50,15 @@ const
     (Title: 'Возраст рождения первенца'; Cap: 'Имя'; Val: 'Возраст'),
     (Title: 'Количество браков'; Cap: 'Имя'; Val: 'Браков'),
     (Title: 'Возраст вступления в брак'; Cap: 'Имя'; Val: 'Возраст'),
-    (Title: 'Разница возрастов супругов'; Cap: 'Семья'; Val: 'Разница')
+    (Title: 'Разница возрастов супругов'; Cap: 'Семья'; Val: 'Разница'),
+
+    (Title: 'Хобби'; Cap: 'Хобби'; Val: 'Количество'),
+    (Title: 'Награда'; Cap: 'Награда'; Val: 'Количество'),
+
+    (Title: 'Военная служба'; Cap: 'Военная служба'; Val: 'Количество'),
+    (Title: 'Призван в ВС'; Cap: 'Призван в ВС'; Val: 'Количество'),
+    (Title: 'Уволен из ВС'; Cap: 'Уволен из ВС'; Val: 'Количество'),
+    (Title: 'Звание в ВС'; Cap: 'Звание в ВС'; Val: 'Количество')
   );
 
 type
@@ -282,6 +292,30 @@ begin
                     then V := event.Detail.Place;
                   end;
                 end;
+              end;
+
+              smHobby: begin
+                V := GetAttributeValue(iRec, '_HOBBY');
+              end;
+
+              smAward: begin
+                V := GetAttributeValue(iRec, '_AWARD');
+              end;
+
+              smMili: begin
+                V := GetAttributeValue(iRec, '_MILI');
+              end;
+
+              smMiliInd: begin
+                V := GetAttributeValue(iRec, '_MILI_IND');
+              end;
+
+              smMiliDis: begin
+                V := GetAttributeValue(iRec, '_MILI_DIS');
+              end;
+
+              smMiliRank: begin
+                V := GetAttributeValue(iRec, '_MILI_RANK');
               end;
             end;
 

@@ -134,6 +134,9 @@ type
     FTree: TGEDCOMTree;
     FTreeBounds: TRect;
 
+    FGenEdge: TPerson;
+    FHMax, FWMax: Integer;
+
     procedure Clear();
     procedure Draw(aPerson: TPerson);
     function FindRelationship(p1, p2: TPerson; aKind: TChartKind): string;
@@ -213,16 +216,27 @@ var
 begin
   FRec := iRec;
 
-  GetNameParts(iRec, fam, nam, pat);
+  if (iRec <> nil) then begin
+    GetNameParts(iRec, fam, nam, pat);
 
-  FFamily := fam;
-  FName := nam;
-  FPatronymic := pat;
-  FFullName := nam + ' ' + pat;
-  FBirthDate := GetBirthDate(iRec, dfDD_MM_YYYY);
-  FDeathDate := GetDeathDate(iRec, dfDD_MM_YYYY);
-  FIsDead := not(IsLive(iRec));
-  FSex := iRec.Sex;
+    FFamily := fam;
+    FName := nam;
+    FPatronymic := pat;
+    FFullName := nam + ' ' + pat;
+    FBirthDate := GetBirthDate(iRec, dfDD_MM_YYYY);
+    FDeathDate := GetDeathDate(iRec, dfDD_MM_YYYY);
+    FIsDead := not(IsLive(iRec));
+    FSex := iRec.Sex;
+  end else begin
+    FFamily := '';
+    FName := '< ? >';
+    FPatronymic := '';
+    FFullName := FName;
+    FBirthDate := '';
+    FDeathDate := '';
+    FIsDead := False;
+    FSex := svNone;
+  end;
 
   Calc();
 end;
@@ -587,11 +601,8 @@ begin
 end;
 
 procedure TAncestryChart.GenAncestorsChart(aPerson: TGEDCOMIndividualRecord);
-var
-  edge: TPerson;
-  max_h, max_w: Integer;
 
-  function Step(aChild: TPerson; aPerson: TGEDCOMIndividualRecord; aGeneration: Integer): TPerson;
+  function Anc_Step(aChild: TPerson; aPerson: TGEDCOMIndividualRecord; aGeneration: Integer): TPerson;
   var
     family: TGEDCOMFamilyRecord;
     iFather, iMother: TGEDCOMIndividualRecord;
@@ -616,11 +627,11 @@ var
 
       divorced := (family.TagStringValue('_STAT') = 'NOTMARR');
 
-      Result.Father := Step(Result, iFather, aGeneration + 1);
+      Result.Father := Anc_Step(Result, iFather, aGeneration + 1);
       if (Result.Father <> nil)
       then Result.Father.Divorced := divorced;
 
-      Result.Mother := Step(Result, iMother, aGeneration + 1);
+      Result.Mother := Anc_Step(Result, iMother, aGeneration + 1);
       if (Result.Mother <> nil)
       then Result.Mother.Divorced := divorced;
     end;
@@ -634,7 +645,7 @@ var
 
     p := aPerson;
     while (p <> nil) do begin
-      if (p = edge) then begin
+      if (p = FGenEdge) then begin
         Result := True;
         Exit;
       end;
@@ -659,11 +670,11 @@ var
       has := True;
     end
     else
-    if (edge <> nil) then begin
-      has := (aPerson.Rect.Left <= edge.Rect.Right + FBranchDistance) and not(EdgeIsChild(aPerson));
+    if (FGenEdge <> nil) then begin
+      has := (aPerson.Rect.Left <= FGenEdge.Rect.Right + FBranchDistance) and not(EdgeIsChild(aPerson));
 
       if has
-      then offset := ((edge.Rect.Right + FBranchDistance) - aPerson.Rect.Left);
+      then offset := ((FGenEdge.Rect.Right + FBranchDistance) - aPerson.Rect.Left);
     end;
 
     if has then begin
@@ -731,36 +742,27 @@ var
       aPerson.Pt := xpt;
     end;
 
-    if (edge = nil) then begin
+    if (FGenEdge = nil) then begin
       if (aPerson <> FRoot)
-      then edge := aPerson;
+      then FGenEdge := aPerson;
     end else begin
-      if (aPerson.Rect.Right > edge.Rect.Right)
-      then edge := aPerson;
+      if (aPerson.Rect.Right > FGenEdge.Rect.Right)
+      then FGenEdge := aPerson;
     end;
 
-    if (max_w < aPerson.Rect.Right) then max_w := aPerson.Rect.Right;
-    if (max_h < aPerson.Rect.Bottom) then max_h := aPerson.Rect.Bottom;
+    if (FWMax < aPerson.Rect.Right) then FWMax := aPerson.Rect.Right;
+    if (FHMax < aPerson.Rect.Bottom) then FHMax := aPerson.Rect.Bottom;
   end;
 
 begin
-  max_w := 0;
-  max_h := 0;
-  edge := nil;
-
-  FRoot := Step(nil, aPerson, 1);
+  FRoot := Anc_Step(nil, aPerson, 1);
 
   if (FOptions.Kinship) then KinStep(FRoot);
 
   Recalc(FRoot, Point(FMargin, FMargin));
-
-  FTreeBounds := Rect(0, 0, max_w + FMargin - 1, max_h + FMargin - 1);
 end;
 
 procedure TAncestryChart.GenDescendantsChart(aPerson: TGEDCOMIndividualRecord);
-var
-  edge: TPerson;
-  max_h, max_w: Integer;
 
   function AddPerson(aParent: TPerson; iRec: TGEDCOMIndividualRecord;
     aKind: TPersonKind; aGeneration: Integer): TPerson;
@@ -779,17 +781,14 @@ var
     end else aParent.Childs.Add(Result);
   end;
 
-  procedure StepDesc(aParent: TPerson; aPerson: TGEDCOMIndividualRecord; aLevel: Integer);
+  procedure Desc_Step(aParent: TPerson; aPerson: TGEDCOMIndividualRecord; aLevel: Integer);
   var
     res, res_parent: TPerson;
     family: TGEDCOMFamilyRecord;
     child, sp: TGEDCOMIndividualRecord;
     i, k: Integer;
   begin
-    if (aPerson = nil) then begin
-      res := nil;
-      Exit;
-    end;
+    if (aPerson = nil) then Exit;
 
     res := AddPerson(aParent, aPerson, pkDefault, aLevel);
 
@@ -800,14 +799,13 @@ var
       case aPerson.Sex of
         svMale: begin
           sp := TGEDCOMIndividualRecord(family.Wife.Value);
-          if (sp <> nil)
-          then res_parent := AddPerson(aParent, sp, pkSpouse, aLevel);
+          res_parent := AddPerson(nil, sp, pkSpouse, aLevel);
+          res_parent.FSex := svFemale;
         end;
-
         svFemale: begin
           sp := TGEDCOMIndividualRecord(family.Husband.Value);
-          if (sp <> nil)
-          then res_parent := AddPerson(aParent, sp, pkSpouse, aLevel);
+          res_parent := AddPerson(nil, sp, pkSpouse, aLevel);
+          res_parent.FSex := svMale;
         end;
       end;
 
@@ -820,7 +818,7 @@ var
 
       for i := 0 to family.ChildrenCount - 1 do begin
         child := TGEDCOMIndividualRecord(family.Children[i].Value);
-        StepDesc(res_parent, child, aLevel + 1);
+        Desc_Step(res_parent, child, aLevel + 1);
       end;
     end;
   end;
@@ -833,7 +831,7 @@ var
 
     p := aPerson;
     while (p <> nil) do begin
-      if (p = edge) then begin
+      if (p = FGenEdge) then begin
         Result := True;
         Exit;
       end;
@@ -851,16 +849,16 @@ var
   begin
     has := False;
 
-    if (aPerson.Rect.Left < 0 + FMargin) then begin
-      offset := (0 - aPerson.Rect.Left) + FMargin;
-      has := True;
-    end
-    else
-    if (edge <> nil) then begin
-      has := (aPerson.Rect.Left <= edge.Rect.Right + FBranchDistance) and not(EdgeIsParent(aPerson));
+    if (FGenEdge <> nil) then begin
+      has := (aPerson.Rect.Left <= FGenEdge.Rect.Right + FBranchDistance) and not(EdgeIsParent(aPerson));
 
       if has
-      then offset := ((edge.Rect.Right + FBranchDistance) - aPerson.Rect.Left);
+      then offset := ((FGenEdge.Rect.Right + FBranchDistance) - aPerson.Rect.Left);
+    end else begin
+      if (aPerson.Rect.Left < 0 + FMargin) then begin
+        offset := (0 - aPerson.Rect.Left) + FMargin;
+        has := True;
+      end;
     end;
 
     if has then begin
@@ -871,116 +869,157 @@ var
         p.Pt := xpt;
 
         if (p.BaseSpouse <> nil)
-        and ((p.BaseSpouse.Sex = svFemale) or (p.BaseSpouse.SpousesCount = 1))
+        and ((p.BaseSpouse.Sex = svFemale) or ({(p.BaseSpouse.Sex = svMale) and }(p.BaseSpouse.SpousesCount = 1)))
         then p := p.BaseSpouse
         else p := p.Parent;
       end;
     end;
   end;
 
-  procedure Recalc(aPerson: TPerson; aPt: TPoint);
+  procedure Desc_Recalc(aPerson: TPerson; aPt: TPoint);
 
-    procedure RecalcChilds(const cx: Integer);
+    procedure RecalcChilds();
     var
-      childs_width, i, st: Integer;
-      xpt: TPoint;
+      childs_width, i, cur_x, cur_y: Integer;
       child: TPerson;
     begin
-      if (aPerson.Childs.Count <> 0) then begin
-        if (aPerson.Childs.Count > 1) then begin
-          childs_width := (aPerson.Childs.Count - 1) * FBranchDistance;
-          for i := 0 to aPerson.Childs.Count - 1 do begin
-            childs_width := childs_width + aPerson.Childs[i].Width;
-          end;
+      if (aPerson.Childs.Count = 0) then Exit;
 
-          st := cx - (childs_width div 2);
-
-          for i := 0 to aPerson.Childs.Count - 1 do begin
-            child := aPerson.Childs[i];
-
-            xpt.X := st + (child.Width div 2);
-            xpt.Y := aPerson.Pt.Y + FLevelDistance + aPerson.Height;
-            Recalc(child, xpt);
-            st := child.Rect.Right + FBranchDistance;
-          end;
-        end else begin
-          xpt.X := cx;
-          xpt.Y := aPerson.Pt.Y + FLevelDistance + aPerson.Height;
-          Recalc(aPerson.Childs[0], xpt);
+      if (aPerson.BaseSpouse = nil)
+      or ((aPerson.BaseSpouse <> nil) and (aPerson.BaseSpouse.SpousesCount > 1))
+      then cur_x := aPerson.Pt.X
+      else begin
+        case aPerson.Sex of
+          svMale: cur_x := (aPerson.Rect.Right + aPerson.BaseSpouse.Rect.Left) div 2;
+          svFemale: cur_x := (aPerson.BaseSpouse.Rect.Right + aPerson.Rect.Left) div 2;
         end;
+      end;
+
+      cur_y := aPerson.Pt.Y + FLevelDistance + aPerson.Height;
+
+      if (aPerson.Childs.Count = 1) then begin
+        Desc_Recalc(aPerson.Childs[0], Point(cur_x, cur_y));
+      end else begin
+        childs_width := (aPerson.Childs.Count - 1) * FBranchDistance;
+        for i := 0 to aPerson.Childs.Count - 1 do begin
+          childs_width := childs_width + aPerson.Childs[i].Width;
+        end;
+
+        cur_x := cur_x - (childs_width div 2);
+
+        for i := 0 to aPerson.Childs.Count - 1 do begin
+          child := aPerson.Childs[i];
+
+          Desc_Recalc(child, Point(cur_x + (child.Width div 2), cur_y));
+          cur_x := child.Rect.Right + FBranchDistance;
+        end;
+      end;
+
+      // adjusting
+      cur_x := aPerson.Childs[0].Pt.X;
+
+      if (aPerson.Childs.Count > 1)
+      then cur_x := cur_x + ((aPerson.Childs[aPerson.Childs.Count - 1].Pt.X - cur_x) div 2);
+
+      if ((aPerson.SpousesCount = 1) or ((aPerson.BaseSpouse <> nil) and (aPerson.BaseSpouse.SpousesCount = 1)))
+      then begin
+        case aPerson.Sex of
+          svMale: begin
+            with aPerson.Pt do X := cur_x - BranchDistance div 2 - aPerson.Width div 2 + 1;
+            with aPerson.BaseSpouse.Pt do X := cur_x + BranchDistance div 2 + aPerson.BaseSpouse.Width div 2;
+          end;
+          svFemale: begin
+            with aPerson.Pt do X := cur_x + BranchDistance div 2 + aPerson.Width div 2;
+            with aPerson.BaseSpouse.Pt do X := cur_x - BranchDistance div 2 - aPerson.BaseSpouse.Width div 2 + 1;
+          end;
+        end;
+      end else begin
+        with aPerson.Pt do X := cur_x;
       end;
     end;
 
-  var
-    i, cx: Integer;
-    sp: TPerson;
-    sp_pt: TPoint;
-    prev: TPerson;
+    procedure RecalcSpouses();
+    var
+      i: Integer;
+      sp: TPerson;
+      sp_pt: TPoint;
+      prev: TPerson;
+    begin
+      if (aPerson.SpousesCount = 0) then Exit;
+
+      prev := aPerson;
+      for i := 0 to aPerson.SpousesCount - 1 do begin
+        sp := aPerson.Spouses[i];
+
+        case aPerson.Sex of
+          svMale: sp_pt := Point(prev.Rect.Right + (FBranchDistance + (sp.Width div 2)), aPerson.Pt.Y);
+          svFemale: sp_pt := Point(prev.Rect.Left - (FBranchDistance + (sp.Width div 2)), aPerson.Pt.Y);
+        end;
+
+        Desc_Recalc(sp, sp_pt);
+
+        if (sp.Sex <> svMale)
+        then prev := sp;
+      end;
+    end;
+
   begin
     if (aPerson = nil) then Exit;
 
     aPerson.Pt := aPt;
-
     PrepareIntersect(aPerson);
 
-    if (aPerson.BaseSpouse = nil)
-    or ((aPerson.BaseSpouse <> nil) and (aPerson.BaseSpouse.SpousesCount > 1))
-    then cx := aPerson.Pt.X
-    else begin
-      case aPerson.Sex of
-        svMale: cx := (aPerson.Rect.Right + aPerson.BaseSpouse.Rect.Left) div 2;
-        svFemale: cx := (aPerson.BaseSpouse.Rect.Right + aPerson.Rect.Left) div 2;
+    case aPerson.Sex of
+      svMale: begin
+        RecalcChilds();
+        RecalcSpouses();
+      end;
+
+      svFemale: begin
+        RecalcSpouses();
+        RecalcChilds();
       end;
     end;
 
-    if (aPerson.Sex = svMale) then RecalcChilds(cx);
-
-    prev := aPerson;
-    for i := 0 to aPerson.SpousesCount - 1 do begin
-      sp := aPerson.Spouses[i];
-
-      case aPerson.Sex of
-        svMale: begin
-          sp_pt := Point(prev.Rect.Right + (FBranchDistance + (sp.Width div 2)), aPerson.Pt.Y);
-        end;
-        svFemale: begin
-          sp_pt := Point(prev.Rect.Left - (FBranchDistance + (sp.Width div 2)), aPerson.Pt.Y);
-        end;
-      end;
-
-      Recalc(sp, sp_pt);
-
-      if (sp.Sex <> svMale)
-      then prev := sp;
-    end;
-
-    if (aPerson.Sex = svFemale) then RecalcChilds(cx);
-
-    if (edge = nil) then begin
+    if (FGenEdge = nil) then begin
       if (aPerson <> FRoot)
-      then edge := aPerson;
+      then FGenEdge := aPerson;
     end else begin
-      if (aPerson.Rect.Right > edge.Rect.Right)
-      then edge := aPerson;
+      if (aPerson.Rect.Right > FGenEdge.Rect.Right)
+      then FGenEdge := aPerson;
     end;
 
-    if (max_w < aPerson.Rect.Right) then max_w := aPerson.Rect.Right;
-    if (max_h < aPerson.Rect.Bottom) then max_h := aPerson.Rect.Bottom;
+    if (FWMax < aPerson.Rect.Right) then FWMax := aPerson.Rect.Right;
+    if (FHMax < aPerson.Rect.Bottom) then FHMax := aPerson.Rect.Bottom;
   end;
 
 begin
-  max_h := 0;
-  max_w := 0;
-  edge := nil;
   FRoot := nil;
-
-  StepDesc(nil, aPerson, 1);
+  Desc_Step(nil, aPerson, 1);
 
   if (FOptions.Kinship) then KinStep(FRoot);
 
-  Recalc(FRoot, Point(FMargin, FMargin));
+  Desc_Recalc(FRoot, Point(FMargin, FMargin));
+end;
 
-  FTreeBounds := Rect(0, 0, max_w + FMargin - 1, max_h + FMargin - 1);
+procedure TAncestryChart.GenChart(aPerson: TGEDCOMIndividualRecord; aKind: TChartKind);
+begin
+  FKind := aKind;
+
+  Clear();
+
+  FHMax := 0;
+  FWMax := 0;
+  FGenEdge := nil;
+
+  case FKind of
+    ckAncestors: GenAncestorsChart(aPerson);
+    ckDescendants: GenDescendantsChart(aPerson);
+  end;
+
+  FTreeBounds := Rect(0, 0, FWMax + FMargin - 1, FHMax + FMargin - 1);
+
+  Redraw();
 end;
 
 procedure TAncestryChart.Redraw();
@@ -1020,19 +1059,6 @@ begin
   if (FSelected <> nil) then FSelected.Selected := False;
   FSelected := Value;
   if (FSelected <> nil) then FSelected.Selected := True;
-
-  Redraw();
-end;
-
-procedure TAncestryChart.GenChart(aPerson: TGEDCOMIndividualRecord; aKind: TChartKind);
-begin
-  FKind := aKind;
-
-  Clear();
-  case FKind of
-    ckAncestors: GenAncestorsChart(aPerson);
-    ckDescendants: GenDescendantsChart(aPerson);
-  end;
 
   Redraw();
 end;

@@ -14,12 +14,14 @@ type
     btnCancel: TBitBtn;
     rgLife: TRadioGroup;
     Label1: TLabel;
-    EditName: TEdit;
+    EditName: TComboBox;
     rgSex: TRadioGroup;
     Label2: TLabel;
     edAliveBeforeDate: TMaskEdit;
     GroupBox1: TGroupBox;
     CheckPatriarch: TCheckBox;
+    Label3: TLabel;
+    cbResidence: TComboBox;
     procedure btnCancelClick(Sender: TObject);
     procedure btnAcceptClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -36,19 +38,28 @@ uses GKMain, GKCommon, GedCom551;
 
 procedure TfmFilter.btnCancelClick(Sender: TObject);
 begin
-  fmGEDKeeper.Filter.LifeMode := lmAll;
-  fmGEDKeeper.Filter.Name := '*';
-  fmGEDKeeper.Filter.AliveBeforeDate := '';
-  fmGEDKeeper.Filter.PatriarchOnly := False;
-  fmGEDKeeper.Filter.Sex := svNone;
-
+  fmGEDKeeper.Filter.Clear();
   fmGEDKeeper.ApplyFilter();
 end;
 
 procedure TfmFilter.btnAcceptClick(Sender: TObject);
 var
   dt: TDateTime;
+  fs: string;
 begin
+  fs := Trim(EditName.Text);
+  if (fs <> '') and (fs <> '*') then begin
+    if (fmGEDKeeper.Options.NameFilters.IndexOf(fs) < 0)
+    then fmGEDKeeper.Options.NameFilters.Add(fs);
+  end;
+
+  fs := Trim(cbResidence.Text);
+  if (fs <> '') and (fs <> '*') then begin
+    if (fmGEDKeeper.Options.ResidenceFilters.IndexOf(fs) < 0)
+    then fmGEDKeeper.Options.ResidenceFilters.Add(fs);
+  end;
+  //
+
   fmGEDKeeper.Filter.AliveBeforeDate := edAliveBeforeDate.Text;
   fmGEDKeeper.Filter.PatriarchOnly := CheckPatriarch.Checked;
 
@@ -67,14 +78,21 @@ begin
   if (EditName.Text = '') then EditName.Text := '*';
   fmGEDKeeper.Filter.Name := EditName.Text;
 
+  if (cbResidence.Text = '') then cbResidence.Text := '*';
+  fmGEDKeeper.Filter.Residence := cbResidence.Text;
+
   fmGEDKeeper.ApplyFilter();
 end;
 
 procedure TfmFilter.FormShow(Sender: TObject);
 begin
+  EditName.Items.Assign(fmGEDKeeper.Options.NameFilters);
+  cbResidence.Items.Assign(fmGEDKeeper.Options.ResidenceFilters);
+
   rgLife.ItemIndex := Ord(fmGEDKeeper.Filter.LifeMode);
   rgSex.ItemIndex := Ord(fmGEDKeeper.Filter.Sex);
   EditName.Text := fmGEDKeeper.Filter.Name;
+  cbResidence.Text := fmGEDKeeper.Filter.Residence;
   edAliveBeforeDate.Text := fmGEDKeeper.Filter.AliveBeforeDate;
   CheckPatriarch.Checked := fmGEDKeeper.Filter.PatriarchOnly;
 end;

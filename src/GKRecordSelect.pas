@@ -6,7 +6,7 @@ interface
 
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms, ComCtrls, StdCtrls,
-  GedCom551, GKCommon, GKCtrls, Buttons;
+  GedCom551, GKCommon, Buttons, bsCtrls;
 
 type
   TfmRecordSelect = class(TForm)
@@ -54,7 +54,13 @@ begin
     fmRecordSelect.FNeedSex := aNeedSex;
     fmRecordSelect.FTargetMode := aTargetMode;
 
-    fmGEDKeeper.ComListPersonsRefresh(fmRecordSelect.FNeedSex, fmRecordSelect.ListRecords, True);
+    fmGEDKeeper.Filter.Backup();
+    fmGEDKeeper.Filter.Clear();
+    fmGEDKeeper.Filter.Sex := fmRecordSelect.FNeedSex;
+
+    fmGEDKeeper.ComListPersonsRefresh(fmRecordSelect.ListRecords, True);
+
+    fmGEDKeeper.Filter.Restore();
 
     case fmRecordSelect.ShowModal() of
       mrOk: Result := TGEDCOMIndividualRecord(fmRecordSelect.ResultRecord);
@@ -76,7 +82,14 @@ begin
 
     fmRecordSelect.FMode := aMode;
     case aMode of
-      smPerson: fmGEDKeeper.ComListPersonsRefresh(svNone, fmRecordSelect.ListRecords, True);
+      smPerson: begin
+        fmGEDKeeper.Filter.Backup();
+        fmGEDKeeper.Filter.Clear();
+
+        fmGEDKeeper.ComListPersonsRefresh(fmRecordSelect.ListRecords, True);
+
+        fmGEDKeeper.Filter.Restore();
+      end;
       smNote: fmGEDKeeper.ComListNotesRefresh(fmRecordSelect.ListRecords, True);
       smMultimedia: fmGEDKeeper.ComListMultimediaRefresh(fmRecordSelect.ListRecords);
       smSource: fmGEDKeeper.ComListSourcesRefresh(fmRecordSelect.ListRecords, True);

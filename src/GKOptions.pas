@@ -16,7 +16,7 @@ type
     btnAccept: TBitBtn;
     btnCancel: TBitBtn;
     rgFNPFormat: TRadioGroup;
-    SheetChart: TTabSheet;
+    SheetPedigree: TTabSheet;
     GroupBox1: TGroupBox;
     CheckFamily: TCheckBox;
     CheckName: TCheckBox;
@@ -38,22 +38,21 @@ type
     CheckExtRegister: TCheckBox;
     SheetTools: TTabSheet;
     CheckCleanEmptyFamilies: TCheckBox;
-    SheetGeoData: TTabSheet;
     GroupBox4: TGroupBox;
-    chkProxy: TCheckBox;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
+    chkProxy: TCheckBox;
     edProxyServer: TEdit;
     edProxyPort: TEdit;
     edProxyLogin: TEdit;
     edProxyPass: TEdit;
-    SheetPedigree: TTabSheet;
     GroupBox5: TGroupBox;
     CheckAttributes: TCheckBox;
     CheckNotes: TCheckBox;
     CheckSources: TCheckBox;
+    CheckPlacesWithAddress: TCheckBox;
     procedure FormShow(Sender: TObject);
     procedure btnAcceptClick(Sender: TObject);
     procedure PanMaleColorClick(Sender: TObject);
@@ -65,15 +64,20 @@ type
 
 implementation
 
-uses GedCom551, GKUtils, GKMain;
+uses GedCom551, GKMain;
 
 {$R *.dfm}
 
 procedure TfmOptions.FormShow(Sender: TObject);
 begin
-  rgCode.ItemIndex := Ord(fmGEDKeeper.FDefCharacterSet);
-  rgFNPFormat.ItemIndex := Ord(fmGEDKeeper.DefNameFormat);
-  rgDateFormat.ItemIndex := Ord(fmGEDKeeper.DefDateFormat);
+  case FOptions.DefCharacterSet of
+    csASCII: rgCode.ItemIndex := 0;
+    csUTF8: rgCode.ItemIndex := 1;
+  end;
+  
+  rgFNPFormat.ItemIndex := Ord(FOptions.DefNameFormat);
+  rgDateFormat.ItemIndex := Ord(FOptions.DefDateFormat);
+  CheckPlacesWithAddress.Checked := FOptions.PlacesWithAddress;
 
   CheckFamily.Checked := FOptions.ChartOptions.FamilyVisible;
   CheckName.Checked := FOptions.ChartOptions.NameVisible;
@@ -107,9 +111,14 @@ end;
 
 procedure TfmOptions.btnAcceptClick(Sender: TObject);
 begin
-  fmGEDKeeper.FDefCharacterSet := TGEDCOMCharacterSet(rgCode.ItemIndex);
-  fmGEDKeeper.DefNameFormat := TNameFormat(rgFNPFormat.ItemIndex);
-  fmGEDKeeper.DefDateFormat := TDateFormat(rgDateFormat.ItemIndex);
+  case rgCode.ItemIndex of
+    0: FOptions.DefCharacterSet := csASCII;
+    1: FOptions.DefCharacterSet := csUTF8;
+  end;
+
+  FOptions.DefNameFormat := TNameFormat(rgFNPFormat.ItemIndex);
+  FOptions.DefDateFormat := TDateFormat(rgDateFormat.ItemIndex);
+  FOptions.PlacesWithAddress := CheckPlacesWithAddress.Checked;
 
   FOptions.ChartOptions.FamilyVisible := CheckFamily.Checked;
   FOptions.ChartOptions.NameVisible := CheckName.Checked;

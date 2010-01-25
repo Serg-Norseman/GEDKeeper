@@ -48,19 +48,19 @@ Section "Справка"
   CreateDirectory "$INSTDIR\help"
   SetOutPath "$INSTDIR\help"
 
+  File ".\help\GEDKeeper.htm"
+  File ".\help\relations.htm"
+  File ".\help\*.gif"
+  CreateShortCut "$SMPROGRAMS\GEDKeeper\Справка.lnk" "$INSTDIR\help\GEDKeeper.htm" "" "$INSTDIR\help\GEDKeeper.htm" 0
+
   File ".\help\genres.htm"
   CreateShortCut "$SMPROGRAMS\GEDKeeper\Ресурсы в Интернете.lnk" "$INSTDIR\help\genres.htm" "" "$INSTDIR\help\genres.htm" 0
 
-  File ".\help\relations.htm"
-  File ".\help\ris-6.gif"
-SectionEnd
+  File ".\help\ged551-5.pdf"
+  CreateShortCut "$SMPROGRAMS\GEDKeeper\Формат GEDCOM.lnk" "$INSTDIR\help\ged551-5.pdf" "" "$INSTDIR\help\ged551-5.pdf" 0
 
-Section "Примеры"
-  CreateDirectory "$INSTDIR\samples"
-  SetOutPath "$INSTDIR\samples"
-
-  File ".\samples\rus-nobles.ged"
-  CreateShortCut "$SMPROGRAMS\GEDKeeper\Благородные фамилии России.lnk" "$INSTDIR\samples\rus-nobles.ged" "" "$INSTDIR\samples\rus-nobles.ged" 0
+  File ".\help\rus-nobles.ged"
+  CreateShortCut "$SMPROGRAMS\GEDKeeper\Благородные фамилии России.lnk" "$INSTDIR\help\rus-nobles.ged" "" "$INSTDIR\help\rus-nobles.ged" 0
 SectionEnd
 
 Section "Ярлык на рабочем столе"

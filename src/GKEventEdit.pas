@@ -6,7 +6,7 @@ interface
 
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls,
-  Buttons, ComCtrls, ExtCtrls, Mask, GedCom551, GKCtrls, GKCommon, ActnList;
+  Buttons, ComCtrls, ExtCtrls, Mask, GedCom551, GKCommon, ActnList, bsCtrls;
 
 type
   TfmEventEdit = class(TForm)
@@ -70,7 +70,7 @@ type
 
 implementation
 
-uses GKMain, GKNoteEdit, GKSourceEdit, GKAddressEdit;
+uses GKMain, GKNoteEdit, GKSourceEdit, GKAddressEdit, GKSourceCitEdit;
 
 {$R *.dfm}
 
@@ -102,14 +102,18 @@ begin
 end;
 
 procedure TfmEventEdit.EditEventTypeChange(Sender: TObject);
+var
+  idx: Integer;
 begin
   if (FEvent is TGEDCOMFamilyEvent) then begin
     EditAttribute.Enabled := False;
     EditAttribute.Color := clBtnFace;
   end else begin
-    if (FEvent is TGEDCOMIndividualEvent) then begin
+    idx := EditEventType.ItemIndex;
+    if (PersonEvents[idx].Kind = ekEvent) then begin
       EditAttribute.Enabled := False;
       EditAttribute.Color := clBtnFace;
+      EditAttribute.Text := '';
     end else begin
       EditAttribute.Enabled := True;
       EditAttribute.Color := clWindow;
@@ -132,19 +136,14 @@ begin
 
     EditEventType.ItemIndex := GetFamilyEventIndex(FEvent.Name);
   end else begin
-    if (FEvent is TGEDCOMIndividualEvent) then begin
-      for i := 0 to PersonEventsSize - 1 do
-        EditEventType.Items.Add(PersonEvents[i].Name);
+    for i := 0 to PersonEventsSize - 1 do
+      EditEventType.Items.Add(PersonEvents[i].Name);
 
-      EditEventType.ItemIndex := GetPersonEventIndex(FEvent.Name);
-    end else begin
-      for i := 0 to PersonAttributesSize - 1 do
-        EditEventType.Items.Add(PersonAttributes[i].Name);
+    i := GetPersonEventIndex(FEvent.Name);
+    EditEventType.ItemIndex := i;
 
-      EditEventType.ItemIndex := GetPersonAttributeIndex(FEvent.Name);
-
-      EditAttribute.Text := FEvent.StringValue;
-    end;
+    if (PersonEvents[i].Kind = ekFact)
+    then EditAttribute.Text := FEvent.StringValue;
   end;
   EditEventTypeChange(nil);
 
@@ -210,6 +209,8 @@ end;
 procedure TfmEventEdit.btnAcceptClick(Sender: TObject);
 var
   gcd1, gcd2, dt: string;
+  id: Integer;
+  attr: TGEDCOMIndividualAttribute;
 begin
   FEvent.Detail.Classification := EditEventName.Text;
   FEvent.Detail.Place := EditEventPlace.Text;
@@ -237,11 +238,25 @@ begin
   if (FEvent is TGEDCOMFamilyEvent) then begin
     FEvent.Name := FamilyEvents[EditEventType.ItemIndex].Sign;
   end else begin
-    if (FEvent is TGEDCOMIndividualEvent) then begin
-      FEvent.Name := PersonEvents[EditEventType.ItemIndex].Sign;
-    end else begin
-      FEvent.Name := PersonAttributes[EditEventType.ItemIndex].Sign;
-      FEvent.StringValue := EditAttribute.Text;
+    id := EditEventType.ItemIndex;
+
+    FEvent.Name := PersonEvents[id].Sign;
+    if (PersonEvents[id].Kind = ekFact)
+    then FEvent.StringValue := EditAttribute.Text
+    else FEvent.StringValue := '';
+  end;
+
+  if (FEvent is TGEDCOMIndividualEvent) then begin
+    id := EditEventType.ItemIndex;
+
+    if (PersonEvents[id].Kind = ekFact) then begin
+      attr := TGEDCOMIndividualAttribute.Create(FEvent.Owner, FEvent.Parent);
+      attr.Name := FEvent.Name;
+      attr.Assign(FEvent);
+
+      FEvent.Destroy;
+
+      FEvent := attr;
     end;
   end;
 end;
@@ -346,10 +361,13 @@ begin
     cit := FEvent.Detail.SourceCitations[idx];
     sourceRec := TGEDCOMSourceRecord(cit.Value);
 
+    st := '"'+sourceRec.FiledByEntry+'"';
+    if (cit.Page <> '') then st := st + ', ' + cit.Page;
+
     if (sourceRec <> nil) then begin
       item := ListEventSources.Items.Add();
       item.Caption := Trim(sourceRec.Originator.Text);
-      item.SubItems.Add(Trim(sourceRec.Title.Text));
+      item.SubItems.Add(st);
     end;
   end;
 end;
@@ -434,9 +452,9 @@ end;
 
 procedure TfmEventEdit.ModifySource(aIndex: Integer; anAction: TRecAction);
 var
-  fmSrcEdit: TfmSourceEdit;
-  sourceRec: TGEDCOMSourceRecord;
   cit: TGEDCOMSourceCitation;
+  fmSrcCitEdit: TfmSourceCitEdit;
+  res: Integer;
 begin
   if (anAction = raDelete) then begin
     if (MessageDlg('Удалить ссылку на источник?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
@@ -448,29 +466,27 @@ begin
     Exit;
   end;
 
-  fmSrcEdit := TfmSourceEdit.Create(nil);
+  fmSrcCitEdit := TfmSourceCitEdit.Create(Application);
   try
-    if (aIndex > -1) then begin
-      cit := FEvent.Detail.SourceCitations[aIndex];
-      sourceRec := TGEDCOMSourceRecord(cit.Value);
-    end else begin
-      sourceRec := TGEDCOMSourceRecord.Create(fmGEDKeeper.FTree, fmGEDKeeper.FTree);
-      sourceRec.NewXRef;
-    end;
+    if (anAction = raEdit) and (aIndex > -1)
+    then cit := FEvent.Detail.SourceCitations[aIndex]
+    else cit := TGEDCOMSourceCitation.Create(fmGEDKeeper.FTree, FEvent.Detail);
 
-    fmSrcEdit.SourceRecord := sourceRec;
+    fmSrcCitEdit.SourceCitation := cit;
+    res := fmSrcCitEdit.ShowModal;
 
-    if (fmSrcEdit.ShowModal = mrOk) then begin
-      if (aIndex = -1) then begin
-        fmGEDKeeper.FTree.AddRecord(sourceRec);
-
-        cit := TGEDCOMSourceCitation.Create(fmGEDKeeper.FTree, FEvent.Detail);
-        cit.Value := sourceRec;
-        FEvent.Detail.AddSourceCitation(cit);
+    case anAction of
+      raAdd: begin
+        if (res = mrOk)
+        then FEvent.Detail.AddSourceCitation(cit)
+        else cit.Destroy;
       end;
+      raEdit: {dummy};
     end;
+
+    //Result := (res = mrOk);
   finally
-    fmSrcEdit.Destroy;
+    fmSrcCitEdit.Destroy;
   end;
 end;
 

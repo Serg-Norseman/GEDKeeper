@@ -29,7 +29,6 @@ requires
   vcl;
 
 contains
-  GKCtrls in 'GKCtrls.pas',
   Htmemo in 'ext\htmemo.pas',
   ULife in 'ext\ULife.pas';
 

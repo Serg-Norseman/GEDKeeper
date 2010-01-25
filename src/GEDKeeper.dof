@@ -90,7 +90,7 @@ MaxStackSize=1048576
 ImageBase=4194304
 ExeDescription=
 [Directories]
-OutputDir=
+OutputDir=..\
 UnitOutputDir=
 PackageDLLOutputDir=
 PackageDCPOutputDir=
@@ -111,7 +111,7 @@ AutoIncBuild=1
 MajorVer=0
 MinorVer=9
 Release=0
-Build=120
+Build=141
 Debug=0
 PreRelease=0
 Special=0
@@ -122,7 +122,7 @@ CodePage=1251
 [Version Info Keys]
 CompanyName=
 FileDescription=
-FileVersion=0.9.0.120
+FileVersion=0.9.0.141
 InternalName=GEDKeeper
 LegalCopyright=Copyright © Serg V. Zhdanovskih
 LegalTrademarks=
@@ -136,3 +136,6 @@ Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
 [HistoryLists\hlSearchPath]
 Count=1
 Item0=.\ext;.\ext\synapse
+[HistoryLists\hlOutputDirectorry]
+Count=1
+Item0=..\

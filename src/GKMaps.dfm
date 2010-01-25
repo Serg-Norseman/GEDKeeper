@@ -40,7 +40,7 @@ object fmMaps: TfmMaps
     Top = 0
     Width = 289
     Height = 593
-    ActivePage = tsPlaces
+    ActivePage = tsSearch
     Align = alLeft
     TabOrder = 1
     object tsPlaces: TTabSheet
@@ -76,7 +76,7 @@ object fmMaps: TfmMaps
           Width = 265
           Height = 21
           Style = csDropDownList
-          ItemHeight = 13
+          ItemHeight = 0
           TabOrder = 0
         end
         object CheckResidence: TCheckBox
