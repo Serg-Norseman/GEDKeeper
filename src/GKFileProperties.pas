@@ -6,7 +6,7 @@ interface
 
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms, StdCtrls, Buttons,
-  GedCom551, ComCtrls, bsCtrls;
+  GedCom551, ComCtrls, bsCtrls, GKBase;
 
 type
   TfmFileProperties = class(TForm)
@@ -22,19 +22,25 @@ type
     MemoAddress: TMemo;
     SheetDiagnostics: TTabSheet;
     ListDiags: TBSListView;
+    SheetAdvanced: TTabSheet;
+    CheckAdvanced: TCheckBox;
+    Label4: TLabel;
+    edExtName: TEdit;
     procedure btnAcceptClick(Sender: TObject);
   private
     FTree: TGEDCOMTree;
     procedure SetTree(const Value: TGEDCOMTree);
 
     procedure Check(aTree: TGEDCOMTree; aCorrection: Boolean = False);
+    function GetBase(): TfmBase;
   public
+    property Base: TfmBase read GetBase;
     property Tree: TGEDCOMTree read FTree write SetTree;
   end;
 
 implementation
 
-uses GKMain;
+uses GKMain, GKCommon;
 
 {$R *.dfm}
 
@@ -56,12 +62,18 @@ begin
   MemoAddress.Text := submitter.Address.Address.Text;
   EditTel.Text := submitter.Address.PhoneNumbers[0];
 
+  //
+  CheckAdvanced.Checked := (FTree.Header.FindTag(AdvTag) <> nil);
+  edExtName.Text := Base.GetExtName();
+  //
+
   Check(FTree);
 end;
 
 procedure TfmFileProperties.btnAcceptClick(Sender: TObject);
 var
   submitter: TGEDCOMSubmitterRecord;
+  tag: TGEDCOMTag;
 begin
   submitter := TGEDCOMSubmitterRecord(FTree.Header.Submitter.Value);
   submitter.Name.StringValue := EditName.Text;
@@ -69,7 +81,19 @@ begin
   submitter.Address.PhoneNumbers[0] := EditTel.Text;
   submitter.ChangeDate.ChangeDateTime := Now();
 
-  fmGEDKeeper.Modified := True;
+  if (CheckAdvanced.Checked) then begin
+    tag := FTree.Header.FindTag(AdvTag);
+    if (tag = nil) then FTree.Header.AddTag(AdvTag);
+
+    tag := FTree.Header.FindTag(ExtTag);
+    if (tag = nil) then tag := FTree.Header.AddTag(ExtTag);
+    tag.StringValue := edExtName.Text;
+  end else begin
+    FTree.Header.DeleteTag(AdvTag);
+    FTree.Header.DeleteTag(ExtTag);
+  end;
+
+  Base.Modified := True;
 end;
 
 procedure TfmFileProperties.Check(aTree: TGEDCOMTree; aCorrection: Boolean = False);
@@ -219,7 +243,7 @@ procedure TfmFileProperties.Check(aTree: TGEDCOMTree; aCorrection: Boolean = Fal
 
           AddDiag(famRec.XRef, 'Удалена семья без родителей');
           aTree.Delete(i);
-          fmGEDKeeper.Modified := True;
+          Base.Modified := True;
 
           Continue;
         end;
@@ -252,6 +276,11 @@ begin
 
   if (aCorrection) and (fmGEDKeeper.Options.CleanEmptyFamilies)
   then CleanEmptyFamilies();
+end;
+
+function TfmFileProperties.GetBase(): TfmBase;
+begin
+  Result := TfmBase(Owner);
 end;
 
 end.

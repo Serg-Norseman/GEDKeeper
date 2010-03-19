@@ -14,9 +14,18 @@ const
   UnkFemale = 'неизвестная';
   UnkMale = 'неизвестный';
 
+const
+  AdvTag = '_ADVANCED';
+  ExtTag = '_EXT_NAME';
+  PatriarchTag = '_PATRIARCH';
+
 type
-  TRecAction = (raAdd, raEdit, raDelete);
-  TSelectMode = (smPerson, smNote, smMultimedia, smSource, smGroup);
+  TGEDCOMRecordType = (
+    rtNone, rtIndividual, rtFamily, rtNote, rtMultimedia, rtSource,
+    rtRepository, rtGroup, rtSubmission, rtSubmitter);
+
+  TRecAction = (raAdd, raEdit, raDelete, raJump, raMoveUp, raMoveDown);
+  TSelectMode = (smPerson, smNote, smMultimedia, smSource, smRepository, smGroup);
   TTargetMode = (tmNone, tmAncestor, tmDescendant);
   TLifeMode = (lmAll, lmOnlyAlive, lmOnlyDead, lmAliveBefore);
 
@@ -274,9 +283,42 @@ const
   );
   // Духовное имя ?
 
+type
+  TGKStoreType = (gstReference, gstArchive, gstStorage);
+
+const
+  GKStoreType: array [TGKStoreType] of record
+    Name: string;
+    Sign: string;
+  end = (
+    (Name: 'Ссылка на файл'; Sign: ''), {for compatibility}
+    (Name: 'Размещение в архиве'; Sign: 'arc:'),
+    (Name: 'Размещение в хранилище'; Sign: 'stg:')
+  );
+
+const
+  MediaTypes: array [TGEDCOMMediaType] of record
+    Name: string;
+  end = (
+    (Name: '-'),
+    (Name: 'Звукозапись'),
+    (Name: 'Книга'),
+    (Name: 'Карточка'), 
+    (Name: 'Электронный'),
+    (Name: 'Микрофиша'),
+    (Name: 'Фильм'),
+    (Name: 'Журнал'),
+    (Name: 'Рукопись'),
+    (Name: 'Карта'),
+    (Name: 'Газета'),
+    (Name: 'Фотография'),
+    (Name: 'Надгробие'),
+    (Name: 'Видео'),
+    (Name: '- Другой -')
+  );
+
 function GetPersonEventIndex(aSign: string): Integer;
 function GetFamilyEventIndex(aSign: string): Integer;
-function GetNamePieceIndex(aSign: string): Integer;
 
 function GetMarriageStatusIndex(aSign: string): Integer;
 procedure GetNameParts(iRec: TGEDCOMIndividualRecord; var aFamily, aName, aPatronymic: string);
@@ -321,8 +363,11 @@ function GetDaysForBirth(iRec: TGEDCOMIndividualRecord): string;
 
 function CreateEventEx(aTree: TGEDCOMTree; iRec: TGEDCOMIndividualRecord;
   evName: string): TGEDCOMCustomEvent;
-function CreatePersonEx(aTree: TGEDCOMTree;
-  aName, aPatronymic, aFamily: string;
+
+procedure CreateIEvent(aTree: TGEDCOMTree; iRec: TGEDCOMIndividualRecord;
+  evSign, evDate, evPlace: string);
+  
+function CreatePersonEx(aTree: TGEDCOMTree; aName, aPatronymic, aFamily: string;
   aSex: TGEDCOMSex; aBirthEvent: Boolean = False): TGEDCOMIndividualRecord;
 
 procedure AddSpouseToFamily(aTree: TGEDCOMTree; aFamily: TGEDCOMFamilyRecord;
@@ -333,8 +378,6 @@ procedure RemoveFamilySpouse(aTree: TGEDCOMTree; aFamily: TGEDCOMFamilyRecord;
 function HyperLink(XRef: string; Text: string): string;
 
 function IndistinctMatching(MaxMatching: Integer; strInputMatching, strInputStandart: String): Integer;
-function IndistinctMatching2(A, B: String): Single;
-function IndistinctMatching3(StrA, StrB: string): Integer;
 
 function ClearFamily(aFamily: string): string;
 
@@ -362,27 +405,9 @@ type
 
 procedure GetCommonStats(aTree: TGEDCOMTree; var aStats: TCommonStats);
 
-function GetChangeDate(aRec: TGEDCOMRecordWithLists): string;
-
 function CheckGEDCOMFormat(aTree: TGEDCOMTree): Boolean;
 
 procedure LoadExtFile(const aFileName: string);
-
-type
-  TGEDCOMTagWithListsEx = class(TGEDCOMTagWithLists)
-  public
-    property Notes;
-    property NotesCount;
-    property SourceCitations;
-    property SourceCitationsCount;
-    property MultimediaLinks;
-    property MultimediaLinksCount;
-  end;
-
-function ProgramIsRegistered(): Boolean;
-procedure RegisterProgram(Registering: Boolean);
-function ExtIsRegistered(fExt, fName: string): Boolean;
-procedure RegisterExt(fExt, fName, fDesc: string; iIndex: Integer; Registering: Boolean);
 
 // замена данных в потоке с кодировки 1251 на UTF-8
 function StreamToUtf8Stream(Stream: TStream): UTF8String;
@@ -395,8 +420,8 @@ function ConStrings(aStrings: TStrings): string;
 implementation
 
 uses
-  Windows, SysUtils, StrUtils, Math, DateUtils, ShellAPI, Controls,
-  GKProgress, Registry, bsComUtils;
+  Windows, SysUtils, Math, DateUtils, ShellAPI, Controls, GKProgress,
+  bsComUtils, bsMiscUtils;
 
 function GetPersonEventIndex(aSign: string): Integer;
 var
@@ -419,19 +444,6 @@ begin
 
   for i := 0 to FamilyEventsSize - 1 do
     if (FamilyEvents[i].Sign = aSign) then begin
-      Result := i;
-      Break;
-    end;
-end;
-
-function GetNamePieceIndex(aSign: string): Integer;
-var
-  i: Integer;
-begin
-  Result := -1;
-
-  for i := 0 to NamePiecesSize - 1 do
-    if (NamePieces[i].Sign = aSign) then begin
       Result := i;
       Break;
     end;
@@ -880,6 +892,8 @@ begin
   Result := 0.0;
 
   dt := TGEDCOMDate(aEventDetail.Date.Value);
+  if not((dt is TGEDCOMDate)) then Exit;
+
   dt.GetDate(y, m, d);
   if (y > 0) then begin
     Result := y;
@@ -1095,8 +1109,21 @@ begin
   iRec.AddIndividualEvent(TGEDCOMIndividualEvent(Result));
 end;
 
-function CreatePersonEx(aTree: TGEDCOMTree;
-  aName, aPatronymic, aFamily: string;
+procedure CreateIEvent(aTree: TGEDCOMTree; iRec: TGEDCOMIndividualRecord;
+  evSign, evDate, evPlace: string);
+var
+  event: TGEDCOMIndividualEvent;
+begin
+  event := TGEDCOMIndividualEvent.Create(aTree, iRec);
+  event.Name := evSign;
+
+  event.Detail.Date.ParseString(evDate);
+  event.Detail.Place := evPlace;
+
+  iRec.AddIndividualEvent(event);
+end;
+
+function CreatePersonEx(aTree: TGEDCOMTree; aName, aPatronymic, aFamily: string;
   aSex: TGEDCOMSex; aBirthEvent: Boolean = False): TGEDCOMIndividualRecord;
 begin
   Result := TGEDCOMIndividualRecord.Create(aTree, aTree);
@@ -1117,14 +1144,13 @@ procedure AddSpouseToFamily(aTree: TGEDCOMTree; aFamily: TGEDCOMFamilyRecord;
   aSpouse: TGEDCOMIndividualRecord);
 begin
   case aSpouse.Sex of
-    svNone: ;
-    svMale: begin
+    svNone, svUndetermined: ;
+
+    svMale: 
       aFamily.SetTagStringValue('HUSB', '@'+aSpouse.XRef+'@');
-    end;
-    svFemale: begin
+
+    svFemale:
       aFamily.SetTagStringValue('WIFE', '@'+aSpouse.XRef+'@');
-    end;
-    svUndetermined: ;
   end;
 
   aSpouse.AddSpouseToFamilyLink(
@@ -1139,10 +1165,11 @@ begin
     aSpouse.DeleteSpouseToFamilyLink(aFamily);
 
     case aSpouse.Sex of
-      svNone: ;
+      svNone, svUndetermined: ;
+
       svMale: aFamily.SetTagStringValue('HUSB', '');
+
       svFemale: aFamily.SetTagStringValue('WIFE', '');
-      svUndetermined: ;
     end;
   end;
 end;
@@ -1170,7 +1197,6 @@ begin
   for PosStrA := 1 to Length(strA) - lngLen + 1 do begin
     StrTempA := Copy(strA, PosStrA, lngLen);
 
-    PosStrB := 1;
     for PosStrB := 1 to Length(strB) - lngLen + 1 do begin
       StrTempB := Copy(strB, PosStrB, lngLen);
       if AnsiCompareText(StrTempA, StrTempB) = 0 then begin
@@ -1182,8 +1208,7 @@ begin
     Inc(TempRet.lngSubRows);
   end;
 
-  Matching.lngCountLike := TempRet.lngCountLike;
-  Matching.lngSubRows   := TempRet.lngSubRows;
+  Result := TempRet;
 end;
 
 //------------------------------------------------------------------------------
@@ -1227,87 +1252,6 @@ begin
   end;
 
   Result := Trunc((gret.lngCountLike / gret.lngSubRows) * 100);
-end;
-
-//------------------------------------------------------------------------------
-function IndistinctMatching2(A, B: String): Single;
-
-  function Match(i, j: Byte): Integer;
-  label _Loop;
-  var
-    GlobalSumm, Summ, Max: Integer;
-  begin
-    GlobalSumm := 0;
-    Max := 0;
-    _Loop:
-       if (A[i] = B[j]) then begin
-         Inc(GlobalSumm);
-         if (i < Byte(Length(A))) and (j < Byte(Length(B))) then begin
-           Inc(i);
-           Inc(j);
-           goto _Loop;
-         end;
-       end;
-    if (i < Byte(Length(A))) and (j < Byte(Length(B))) then begin
-       Summ := Match(i+1, j+1);
-       if (Max < Summ) then Max := Summ;
-    end;
-    if (i < Byte(Length(A))) then begin
-       Summ := Match(i+1, j);
-       if (Max < Summ) then Max := Summ;
-    end;
-    if (j < Byte(Length(B))) then begin
-      Summ := Match(i, j+1);
-      if (Max < Summ) then Max := Summ;
-    end;
-    Result := GlobalSumm + Max;
-  end;
-
-begin
-  Result := Match(1, 1) * 2.0 / (Byte(Length(A)) + Byte(Length(B)));
-end;
-
-function IndistinctMatching3(StrA, StrB: string): Integer;
-var
-  i, k, m: Integer;
-  mtx: array of array of Char;
-begin
-  if (Length(StrA) = 0) or (Length(StrB) = 0)
-  then begin
-    Result := 0;
-    Exit;
-  end;
-
-  SetLength(mtx, Length(StrA), Length(StrB));
-
-  for i := 1 to Length(StrA) do begin
-    for k := 1 to Length(StrB) do begin
-      if (StrA[i] = StrB[k])
-      then mtx[i - 1, k - 1] := '*'
-      else mtx[i - 1, k - 1] := ' ';
-    end;
-  end;
-
-  m := 0;
-  i := 1;
-  while (i <= Length(StrA)) do begin
-    k := 1;
-    while (k <= Length(StrB)) do begin
-      if (i <= Length(StrA)) and (k <= Length(StrB)) and (mtx[i - 1, k - 1] = '*') then begin
-        while (i <= Length(StrA)) and (k <= Length(StrB)) and (mtx[i - 1, k - 1] = '*') do begin
-          Inc(m);
-          Inc(i);
-          Inc(k);
-        end;
-      end;
-
-      Inc(k);
-    end;
-
-    Inc(i);
-  end;
-
-  Result := Round((m / Max(Length(StrA), Length(StrB))) * 100);
 end;
 
 function ClearFamily(aFamily: string): string;
@@ -1588,17 +1532,6 @@ begin
   end;
 end;
 
-function GetChangeDate(aRec: TGEDCOMRecordWithLists): string;
-begin
-  try
-    if (aRec.ChangeDate.ChangeDateTime <> 0)
-    then Result := DateTimeToStr(aRec.ChangeDate.ChangeDateTime)
-    else Result := '';
-  except
-    Result := '';
-  end;
-end;
-
 procedure CheckRecord(aTree: TGEDCOMTree; aRec: TGEDCOMRecord);
 
   procedure ReformNote(note: TGEDCOMNotes);
@@ -1618,7 +1551,7 @@ procedure CheckRecord(aTree: TGEDCOMTree; aRec: TGEDCOMRecord);
       note.Clear;
       note.Value := noteRec;
     finally
-      strData.Destroy;
+      strData.Free;
     end;
   end;
 
@@ -1665,22 +1598,19 @@ procedure CheckRecord(aTree: TGEDCOMTree; aRec: TGEDCOMRecord);
     mmLink: TGEDCOMMultimediaLink;
     note: TGEDCOMNotes;
     sourCit: TGEDCOMSourceCitation;
-    exTag: TGEDCOMTagWithListsEx;
   begin
-    exTag := TGEDCOMTagWithListsEx(tag);
-
-    for i := 0 to exTag.MultimediaLinksCount - 1 do begin
-      mmLink := exTag.MultimediaLinks[i];
+    for i := 0 to tag.MultimediaLinksCount - 1 do begin
+      mmLink := tag.MultimediaLinks[i];
       if not(mmLink.IsPointer) then ReformMultimediaLink(mmLink);
     end;
 
-    for i := 0 to exTag.NotesCount - 1 do begin
-      note := exTag.Notes[i];
+    for i := 0 to tag.NotesCount - 1 do begin
+      note := tag.Notes[i];
       if not(note.IsPointer) then ReformNote(note);
     end;
 
-    for i := 0 to exTag.SourceCitationsCount - 1 do begin
-      sourCit := exTag.SourceCitations[i];
+    for i := 0 to tag.SourceCitationsCount - 1 do begin
+      sourCit := tag.SourceCitations[i];
       if not(sourCit.IsPointer) then ReformSourceCitation(sourCit);
     end;
   end;
@@ -1697,7 +1627,7 @@ procedure CheckRecord(aTree: TGEDCOMTree; aRec: TGEDCOMRecord);
   end;
 
 var
-  rwl: TGEDCOMRecordWithLists;
+  rwl: TGEDCOMRecord;
   i: Integer;
   mmLink: TGEDCOMMultimediaLink;
   note: TGEDCOMNotes;
@@ -1705,8 +1635,8 @@ var
   fam: TGEDCOMFamilyRecord;
   ind: TGEDCOMIndividualRecord;
 begin
-  if (aRec is TGEDCOMRecordWithLists) then begin
-    rwl := aRec as TGEDCOMRecordWithLists;
+  if (aRec is TGEDCOMRecord) then begin
+    rwl := aRec as TGEDCOMRecord;
 
     for i := 0 to rwl.MultimediaLinksCount - 1 do begin
       mmLink := rwl.MultimediaLinks[i];
@@ -1730,7 +1660,6 @@ begin
       fam.SortChilds();
 
       for i := 0 to fam.FamilyEventCount - 1 do PrepareTag(fam.FamilyEvents[i].Detail);
-      for i := 0 to fam.SpouseSealingCount - 1 do PrepareTag(fam.SpouseSealing[i]);
     end
     else
     if (rwl is TGEDCOMIndividualRecord) then begin
@@ -1738,7 +1667,6 @@ begin
 
       for i := 0 to ind.IndividualAttributesCount - 1 do PrepareTag(ind.IndividualAttributes[i].Detail);
       for i := 0 to ind.IndividualEventsCount - 1 do PrepareTag(ind.IndividualEvents[i].Detail);
-      for i := 0 to ind.IndividualOrdinancesCount - 1 do PrepareTag(ind.IndividualOrdinances[i]);
 
       for i := 0 to ind.ChildToFamilyLinksCount - 1 do PreparePtr(ind.ChildToFamilyLinks[i]);
       for i := 0 to ind.SpouseToFamilyLinksCount - 1 do PreparePtr(ind.SpouseToFamilyLinks[i]);
@@ -1810,7 +1738,7 @@ function CheckGEDCOMFormat(aTree: TGEDCOMTree): Boolean;
         ProgressStep();
       end;
     finally
-      repMap.Destroy;
+      repMap.Free;
 
       ProgressDone();
     end;
@@ -1848,129 +1776,35 @@ end;
 
 procedure LoadExtFile(const aFileName: string);
 begin
+  {$IFNDEF DELPHI_NET}
   ShellExecute(0, 'open', PChar(aFileName), nil, nil, SW_SHOW);
-end;
-
-function ProgramIsRegistered(): Boolean;
-var
-  reg: TRegistry;
-begin
-  Result := False;
-
-  try
-    reg := TRegistry.Create;
-    try
-      reg.RootKey := HKEY_LOCAL_MACHINE;
-      reg.OpenKey('Software\Microsoft\Windows\CurrentVersion\App Paths', True);
-
-      Result := reg.KeyExists(ExtractFileName(ParamStr(0)));
-    finally
-      reg.Free;
-    end;
-  except
-  end;
-end;
-
-procedure RegisterProgram(Registering: Boolean);
-var
-  reg: TRegistry;
-begin
-  try
-    reg := TRegistry.Create;
-    try
-      reg.RootKey := HKEY_LOCAL_MACHINE;
-      reg.OpenKey('Software\Microsoft\Windows\CurrentVersion\App Paths', True);
-
-      if Registering then begin
-        reg.OpenKey(ExtractFileName(ParamStr(0)), True);
-        reg.WriteString('', ParamStr(0));
-        reg.WriteString('Path', ExtractFilePath(ParamStr(0)));
-      end else begin
-        reg.DeleteKey(ExtractFileName(ParamStr(0)));
-      end;
-    finally
-      reg.Free;
-    end;
-  except
-  end;
-end;
-
-function ExtIsRegistered(fExt, fName: string): Boolean;
-var
-  reg: TRegistry;
-begin
-  Result := False;
-
-  try
-    reg := TRegistry.Create;
-    try
-      reg.RootKey := HKEY_CLASSES_ROOT;
-      Result := reg.KeyExists(fExt) and reg.KeyExists(fName);
-    finally
-      reg.Free;
-    end;
-  except
-  end;
-end;
-
-procedure RegisterExt(fExt, fName, fDesc: string; iIndex: Integer; Registering: Boolean);
-var
-  reg: TRegistry;
-  ef: Longword;
-begin
-  ef := 0;
-  try
-    reg := TRegistry.Create;
-    try
-      reg.RootKey := HKEY_CLASSES_ROOT;
-      if Registering then begin
-        reg.OpenKey(fExt, True);
-        reg.WriteString('', fName);
-        reg.CloseKey;
-
-        reg.OpenKey(fName, True);
-        reg.WriteString('', fDesc);
-        reg.WriteBinaryData('EditFlags', ef, 4);
-
-        reg.OpenKey('DefaultIcon', True);
-        reg.WriteString('', ParamStr(0)+','+IntToStr(iIndex));
-        reg.CloseKey;
-
-        reg.OpenKey(fName, True);
-        reg.OpenKey('ShellNew', True);
-        reg.WriteString('NullFile', '');
-        reg.CloseKey;
-
-        reg.OpenKey(fName, True);
-        reg.OpenKey('shell', True);
-        reg.WriteString('', 'open');
-        reg.OpenKey('open', True);
-        reg.WriteString('', '&Открыть');
-        reg.OpenKey('command', True);
-        reg.WriteString('', ParamStr(0) + ' "%1"');
-        reg.CloseKey;
-      end else begin
-        reg.DeleteKey(fExt);
-        reg.DeleteKey(fName);
-      end;
-    finally
-      reg.Free;
-    end;
-  except
-  end;
+  {$ELSE}
+  ShellExecute(0, 'open', (aFileName), '', '', SW_SHOW);
+  {$ENDIF}
 end;
 
 // замена данных в потоке с кодировки 1251 на UTF-8
 function StreamToUtf8Stream(Stream: TStream): UTF8String;
 var
-  s: String;
+  s: string;
 begin
   SetLength(s, Stream.Size);
-  Stream.Seek(0, 0);
+  Stream.Seek(0, soFromBeginning);
+
+  {$IFNDEF DELPHI_NET}
   Stream.Read(s[1], Stream.Size);
+  {$ELSE}
+  s := SReadString(Stream);
+  {$ENDIF}
+
   Result := AnsiToUtf8(s);
   Stream.Size := 0;
+
+  {$IFNDEF DELPHI_NET}
   Stream.Write(Result[1], Length(Result));
+  {$ELSE}
+  SWriteString(Stream, Result);
+  {$ENDIF}
 end;
 
 const
@@ -2023,7 +1857,7 @@ end;
 
 destructor TNamesTable.Destroy;
 begin
-  FNames.Destroy;
+  FNames.Free;
   inherited Destroy;
 end;
 
@@ -2263,6 +2097,7 @@ end;
 
 constructor TPedigreeOptions.Create;
 begin
+  inherited Create;
   FIncludeAttributes := True;
   FIncludeNotes := True;
   FIncludeSources := True;
@@ -2286,6 +2121,7 @@ end;
 
 constructor TGlobalOptions.Create;
 begin
+  inherited Create;
   FChartOptions := TChartOptions.Create;
   FMRUFiles := TStringList.Create;
   FNameFilters := TStringList.Create;
@@ -2296,11 +2132,11 @@ end;
 
 destructor TGlobalOptions.Destroy;
 begin
-  FProxy.Destroy;
-  FPedigreeOptions.Destroy;
-  FResidenceFilters.Destroy;
-  FNameFilters.Destroy;
-  FMRUFiles.Destroy;
+  FProxy.Free;
+  FPedigreeOptions.Free;
+  FResidenceFilters.Free;
+  FNameFilters.Free;
+  FMRUFiles.Free;
   FChartOptions.Destroy;
 
   inherited Destroy;

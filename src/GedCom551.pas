@@ -1,12 +1,23 @@
 unit GedCom551;
 
+{$I compiler.inc}
+
 (*
+ * 2010-03-02
+ *   (-) Removed support (SOUR.DATA).
+ * 2010-02-10
+ *   (-) Removed support (ALIA).
+ * 2010-02-04
+ *   (-) Removed support (BAPL, CONL, ENDL, SLGC, SLGS, STAT).
+ * 2010-01-26
+ *   (-) Removed interfaces support.
+ *   (-) TGEDCOMIndividualRecord: removed support of "ANCI" and "DESI".
  * 2009-08-19 (zsv)
- *   (-) TGEDCOMFamilyRecord: removed support of "NCHI" (CountOfChildren);
+ *   (-) TGEDCOMFamilyRecord: removed support of "NCHI" (CountOfChildren).
  * 2009-08-17 (zsv)
- *   (-) Removed: TGEDCOMFamilyEventDetail & TGEDCOMIndividualEventDetail;
- *   (-) TGEDCOMFamilyEventDetail: removed support of "HUSB\AGE" & "WIFE\AGE";
- *   (-) TGEDCOMIndividualEventDetail: removed support of "AGE";
+ *   (-) Removed: TGEDCOMFamilyEventDetail & TGEDCOMIndividualEventDetail.
+ *   (-) TGEDCOMFamilyEventDetail: removed support of "HUSB\AGE" & "WIFE\AGE".
+ *   (-) TGEDCOMIndividualEventDetail: removed support of "AGE".
  *)
 
 interface
@@ -24,14 +35,9 @@ const
   GEDCOMMaxFaxNumbers = 3;
   GEDCOMMaxWebPages = 3;
   GEDCOMMaxLanguages = 3;
-  GEDCOMNewLine: PChar = #13#10;
-  GEDCOMNewLineLength = 2;
+  GEDCOMNewLine = #13#10;
 
 type
-  TGEDCOMRecordType = (
-    rtFamily, rtIndividual, rtMultimedia, rtNote,
-    rtRepository, rtSource, rtSubmission, rtSubmitter, rtGroup);
-
   TGEDCOMCalendar =
     (dcGregorian, dcJulian, dcHebrew, dcFrench, dcRoman, dcUnknown);
 
@@ -51,7 +57,9 @@ type
     (rnNone, rnConfidential, rnLocked, rnPrivacy);
 
   TGEDCOMMultimediaFormat =
-    (mfNone, mfBMP, mfGIF, mfJPG, mfOLE, mfPCX, mfTIF, mfWAV, mfUnknown);
+    (mfNone, mfBMP, mfGIF, mfJPG, mfOLE, mfPCX, mfTIF, mfWAV,
+     mfTXT, mfRTF, mfAVI, mfTGA, mfPNG, mfMPG, mfHTM,
+     mfUnknown);
 
   TGEDCOMMediaType =
     (mtNone, mtAudio, mtBook, mtCard, mtElectronic, mtFiche, mtFilm, mtMagazine,
@@ -60,9 +68,9 @@ type
   TGEDCOMNameType =
     (ntAka, ntBirth, ntImmigrant, ntMaiden, ntMarried, ntUserDefined);
 
-  TGEDCOMNamePiece = (
-    npPrefix, npGiven, npNickname,
-    npSurnamePrefix, npSurname, npSuffix
+  TGEDCOMNamePieceType = (
+    nptPrefix, nptGiven, nptNickname,
+    nptSurnamePrefix, nptSurname, nptSuffix
   );
 
   TGEDCOMSex =
@@ -76,22 +84,6 @@ type
 
   TGEDCOMChildLinkageStatus =
     (clNone, clChallenged, clDisproven, clProven);
-
-  TGEDCOMBaptismDateStatus =
-    (bdsNone, bdsChild, bdsCompleted, bdsExcluded, bdsPre1970, bdsStillborn,
-     bdsSubmitted, bdsUncleared);
-
-  TGEDCOMEndowmentDateStatus =
-    (edsNone, edsChild, edsCompleted, edsExcluded, edsInfant, edsPre1970,
-     edsStillborn, edsSubmitted, edsUncleared);
-
-  TGEDCOMChildSealingDateStatus =
-    (cdsNone, cdsBIC, cdsExcluded, cdsPre1970, cdsStillborn, cdsSubmitted,
-     cdsUncleared);
-
-  TGEDCOMSpouseSealingDateStatus =
-    (sdsNone, sdsCanceled, sdsCompleted, sdsExcluded, sdsDNS, sdsDNSCAN,
-     sdsPre1970, sdsSubmitted, sdsUncleared);
 
   TGEDCOMDateFormat =
     (dfGEDCOMStd, dfSystem);
@@ -127,20 +119,15 @@ const
 type
   EGEDCOMException = class(Exception);
 
-  TGEDCOMCustomTag = class;
   TGEDCOMTag = class;
-  TGEDCOMCustomDate = class;
   TGEDCOMDateValue = class;
-  TGEDCOMDate = class;
   TGEDCOMDateExact = class;
   TGEDCOMDatePeriod = class;
   TGEDCOMTime = class;
-  TGEDCOMPointer = class;
   TGEDCOMRecord = class;
   TGEDCOMCustomRecord = class;
   TGEDCOMList = class;
   TGEDCOMHeader = class;
-  TGEDCOMXRefIndex = class;
   TGEDCOMAddress = class;
   TGEDCOMNotes = class;
   TGEDCOMSourceCitation = class;
@@ -157,40 +144,29 @@ type
   TGEDCOMObject = class(TObject)
   end;
 
-  IGEDCOMContainer = interface
-    ['{ED13BFB1-1F6D-11D5-82A9-0050040CEB5A}']
-    procedure DeleteRecord(Sender: TGEDCOMRecord);
-    procedure SetXRef(Sender: TGEDCOMRecord; const XRef: WideString);
-    procedure GetXRef(ARecord: TGEDCOMRecord; out XRef: WideString);
-    procedure FindRecord(Sender: TGEDCOMCustomTag; const XRef: WideString; out ARecord: TGEDCOMRecord);
-    procedure NewXRef(Sender: TGEDCOMRecord; out XRef: WideString);
-  end;
-
-  TGEDCOMTree = class(TGEDCOMObject, IUnknown, IGEDCOMContainer)
+  TGEDCOMTree = class(TGEDCOMObject)
   private
     FRecords: TGEDCOMList;
     FHeader: TGEDCOMHeader;
-    FXRefIndex: TGEDCOMXRefIndex;
+    FXRefIndex: TStringList;
     FState: TGEDCOMState;
-    function GetRecords(Index: Integer): TGEDCOMRecord;
+
     function GetCount: Integer;
+    function GetRecords(Index: Integer): TGEDCOMRecord;
+
+    procedure XRefIndex_Clear();
+    procedure XRefIndex_Add(const XRef: string; ARecord: TGEDCOMRecord);
+    procedure XRefIndex_AddRecord(ARecord: TGEDCOMRecord);
+    procedure XRefIndex_DeleteRecord(ARecord: TGEDCOMRecord);
   protected
-    { IGEDCOMContainer }
     procedure DeleteRecord(Sender: TGEDCOMRecord);
-    procedure SetXRef(Sender: TGEDCOMRecord; const XRef: WideString);
-    procedure GetXRef(ARecord: TGEDCOMRecord; out XRef: WideString);
-    procedure FindRecord(Sender: TGEDCOMCustomTag; const XRef: WideString; out ARecord: TGEDCOMRecord);
-    procedure NewXRef(Sender: TGEDCOMRecord; out XRef: WideString);
+    procedure SetXRef(Sender: TGEDCOMRecord; const XRef: string);
   public
     constructor Create; virtual;
     destructor Destroy; override;
 
-    function _AddRef: Integer; virtual; stdcall;
-    function QueryInterface(const IID: TGUID; out Obj): HResult; virtual; stdcall;
-    function _Release: Integer; virtual; stdcall;
-
     function AddRecord(ARecord: TGEDCOMRecord): TGEDCOMRecord;
-    procedure Clear; virtual;
+    procedure Clear(); virtual;
     procedure Delete(Index: Integer);
     function Extract(Index: Integer): TGEDCOMRecord;
     function IndexOfRecord(ARecord: TGEDCOMRecord): Integer;
@@ -216,7 +192,7 @@ type
     OldXRef, NewXRef: string;
   end;
 
-  TXRefReplaceMap = class
+  TXRefReplaceMap = class(TObject)
   private
     FList: array of TXRefRec;
     function GetCount: Integer;
@@ -229,39 +205,18 @@ type
     property Records[Index: Integer]: TXRefRec read GetRecord;
   end;
 
-  TGEDCOMXRefIndex = class
-  private
-    FList: TStringList;
-    FOwner: TGEDCOMObject;
-    function GetItems(Index: Integer): TGEDCOMRecord;
-  public
-    constructor Create(AOwner: TGEDCOMObject);
-    destructor Destroy; override;
-
-    procedure Clear;
-    procedure Add(const XRef: string; ARecord: TGEDCOMRecord);
-    procedure AddRecord(ARecord: TGEDCOMRecord);
-    procedure DeleteRecord(ARecord: TGEDCOMRecord);
-    function IndexOf(const XRef: string): Integer;
-    function IndexOfRecord(ARecord: TGEDCOMRecord): Integer;
-    function Find(const XRef: string): TGEDCOMRecord;
-    function NewXRef(Sender: TGEDCOMRecord): string;
-    procedure SetXRefs(Index: Integer; const Value: string);
-  end;
-
-  TGEDCOMList = class
+  TGEDCOMList = class(TObject)
   private
     FList: TList;
     FOwner: TGEDCOMObject;
     function GetCount: Integer;
     function GetItems(Index: Integer): TGEDCOMObject;
-    procedure SetItems(Index: Integer; AObject: TGEDCOMObject);
   public
     constructor Create(AOwner: TGEDCOMObject);
     destructor Destroy; override;
 
     function Add(AObject: TGEDCOMObject): TGEDCOMObject;
-    procedure Clear;
+    procedure Clear();
     procedure Delete(Index: Integer);
     procedure DeleteObject(AObject: TGEDCOMObject);
     procedure Exchange(Index1, Index2: Integer);
@@ -270,9 +225,10 @@ type
     procedure SaveToStream(AStream: TStream); virtual;
 
     procedure ReplaceXRefs(aMap: TXRefReplaceMap);
+    procedure ResetOwner(AOwner: TGEDCOMObject); 
 
     property Count: Integer read GetCount;
-    property Items[Index: Integer]: TGEDCOMObject read GetItems write SetItems; default;
+    property Items[Index: Integer]: TGEDCOMObject read GetItems; default;
   end;
 
   TGEDCOMCustomTag = class(TGEDCOMObject)
@@ -283,10 +239,9 @@ type
     FName: string;
     FStringValue: string;
     FLevel: Integer;
-    function GetParentRecord: TGEDCOMCustomRecord;
+    function GetParentRecord(): TGEDCOMCustomRecord;
     function GetTags(Index: Integer): TGEDCOMTag;
     function GetCount: Integer;
-    procedure SetTags(Index: Integer; const Value: TGEDCOMTag);
   protected
     function FindRecord(const XRef: string): TGEDCOMRecord;
     function GetLevel: Integer;
@@ -307,6 +262,7 @@ type
     constructor CreateTag(AOwner, AParent: TGEDCOMObject; const AName: string = ''; const AValue: string = ''); virtual;
     constructor CreateCopy(Source: TGEDCOMCustomTag;
       AOwner: TGEDCOMObject = nil; AParent: TGEDCOMObject = nil); virtual;
+    destructor Destroy; override;
 
     function  AddTag(const ATag: string; const AValue: string = ''; AClass: TGEDCOMTagClass = nil): TGEDCOMTag; virtual;
     procedure Assign(Source: TGEDCOMCustomTag); virtual;
@@ -315,7 +271,7 @@ type
     procedure DeleteTag(const ATag: string);
     function  FindTag(const ATag: string; StartIndex: Integer = 0): TGEDCOMTag;
     function  IndexOfTag(ATag: TGEDCOMTag): Integer;
-    function  IsEmpty: Boolean; virtual;
+    function  IsEmpty(): Boolean; virtual;
     function  ParseString(const AString: string): string; virtual;
     procedure SaveToStream(AStream: TStream); virtual;
     procedure SetTagIntegerValue(const ATag: string; AValue: Integer);
@@ -335,7 +291,7 @@ type
     property Owner: TGEDCOMObject read FOwner;
     property Parent: TGEDCOMObject read FParent;
     property StringValue: string read GetStringValue write SetStringValue;
-    property Tags[Index: Integer]: TGEDCOMTag read GetTags write SetTags;
+    property Tags[Index: Integer]: TGEDCOMTag read GetTags;
   end;
 
   TGEDCOMTag = class(TGEDCOMCustomTag)
@@ -343,8 +299,7 @@ type
     property ParentRecord;
   end;
 
-  TGEDCOMListObject = (stNotes, stSource, stMultimedia);
-  TGEDCOMLists = set of TGEDCOMListObject;
+  TGEDCOMLists = set of (stNotes, stSource, stMultimedia);
 
   TGEDCOMTagWithLists = class(TGEDCOMTag)
   private
@@ -359,14 +314,6 @@ type
     function GetMultimediaLinks(Index: Integer): TGEDCOMMultimediaLink;
     function GetMultimediaLinksCount: Integer;
   protected
-    property Notes[Index: Integer]: TGEDCOMNotes read GetNotes;
-    property NotesCount: Integer read GetNotesCount;
-    property SourceCitations[Index: Integer]: TGEDCOMSourceCitation
-      read GetSourceCitations;
-    property SourceCitationsCount: Integer read GetSourceCitationsCount;
-    property MultimediaLinks[Index: Integer]: TGEDCOMMultimediaLink
-      read GetMultimediaLinks;
-    property MultimediaLinksCount: Integer read GetMultimediaLinksCount;
   public
     constructor Create(AOwner, AParent: TGEDCOMObject; ALists: TGEDCOMLists); reintroduce; virtual;
     destructor Destroy; override;
@@ -383,10 +330,19 @@ type
     procedure ResetOwner(AOwner: TGEDCOMObject); override;
     procedure SaveToStream(AStream: TStream); override;
 
-    function IsEmpty: Boolean; override;
-    procedure Clear; override;
     function AddTag(const ATag: string; const AValue: string = '';
       AClass: TGEDCOMTagClass = nil): TGEDCOMTag; override;
+    procedure Clear(); override;
+    function IsEmpty(): Boolean; override;
+
+    property Notes[Index: Integer]: TGEDCOMNotes read GetNotes;
+    property NotesCount: Integer read GetNotesCount;
+    property SourceCitations[Index: Integer]: TGEDCOMSourceCitation
+      read GetSourceCitations;
+    property SourceCitationsCount: Integer read GetSourceCitationsCount;
+    property MultimediaLinks[Index: Integer]: TGEDCOMMultimediaLink
+      read GetMultimediaLinks;
+    property MultimediaLinksCount: Integer read GetMultimediaLinksCount;
   end;
 
   TGEDCOMCustomRecord = class(TGEDCOMCustomTag)
@@ -402,6 +358,27 @@ type
   public
     function AddTag(const ATag: string; const AValue: string = '';
       AClass: TGEDCOMTagClass = nil): TGEDCOMTag; override;
+  end;
+
+  TGEDCOMPointer = class(TGEDCOMTag)
+  private
+    FXRef: string;
+    function GetValue: TGEDCOMRecord;
+    procedure SetValue(AValue: TGEDCOMRecord);
+    function GetXRef: string;
+    procedure SetXRef(const Value: string);
+  protected
+    function GetStringValue: string; override;
+  public
+    constructor Create(AOwner, AParent: TGEDCOMObject); override;
+
+    procedure Clear(); override;
+    function IsEmpty(): Boolean; override;
+    function ParseString(const AString: string): string; override;
+    procedure ReplaceXRefs(aMap: TXRefReplaceMap); override;
+
+    property Value: TGEDCOMRecord read GetValue write SetValue;
+    property XRef: string read GetXRef write SetXRef;
   end;
 
   TGEDCOMHeader = class(TGEDCOMCustomRecord)
@@ -454,13 +431,6 @@ type
   end;
 
   TGEDCOMRecord = class(TGEDCOMCustomRecord)
-  public
-    function NewXRef: string;
-
-    property XRef;
-  end;
-
-  TGEDCOMRecordWithLists = class(TGEDCOMRecord)
   private
     FLists: TGEDCOMLists;
     FMultimediaLinks: TGEDCOMList;
@@ -487,16 +457,16 @@ type
     procedure DeleteNotes(aIndex: Integer);
     procedure DeleteSourceCitation(aIndex: Integer);
 
-    procedure MoveTo(aToRecord: TGEDCOMRecordWithLists); virtual;
-
+    procedure MoveTo(aToRecord: TGEDCOMRecord); virtual;
     procedure ReplaceXRefs(aMap: TXRefReplaceMap); override;
     procedure ResetOwner(AOwner: TGEDCOMObject); override;
     procedure SaveToStream(AStream: TStream); override;
 
     function AddTag(const ATag: string; const AValue: string = '';
       AClass: TGEDCOMTagClass = nil): TGEDCOMTag; override;
-    procedure Clear; override;
-    function IsEmpty: Boolean; override;
+    procedure Clear(); override;
+    function IsEmpty(): Boolean; override;
+    function NewXRef(): string;
 
     property ChangeDate: TGEDCOMChangeDate read GetChangeDate;
     property MultimediaLinks[Index: Integer]: TGEDCOMMultimediaLink read GetMultimediaLinks;
@@ -505,21 +475,7 @@ type
     property NotesCount: Integer read GetNotesCount;
     property SourceCitations[Index: Integer]: TGEDCOMSourceCitation read GetSourceCitations;
     property SourceCitationsCount: Integer read GetSourceCitationsCount;
-  end;
-
-  TGEDCOMEvent = class(TGEDCOMTag)
-  private
-    function GetDate: TGEDCOMDatePeriod;
-    function GetPlace: string;
-    procedure SetPlace(const Value: string);
-  public
-    constructor Create(AOwner, AParent: TGEDCOMObject); override;
-
-    function AddTag(const ATag: string; const AValue: string = '';
-      AClass: TGEDCOMTagClass = nil): TGEDCOMTag; override;
-
-    property Date: TGEDCOMDatePeriod read GetDate;
-    property Place: string read GetPlace write SetPlace;
+    property XRef;
   end;
 
   TGEDCOMPlace = class(TGEDCOMTagWithLists)
@@ -622,94 +578,6 @@ type
   end;
 
   { }
-  TGEDCOMDateStatus = class(TGEDCOMTag)
-  private
-    function GetChangeDate: TGEDCOMDateExact;
-  public
-    constructor Create(AOwner, AParent: TGEDCOMObject); override;
-
-    function AddTag(const ATag: string; const AValue: string = '';
-      AClass: TGEDCOMTagClass = nil): TGEDCOMTag; override;
-
-    property ChangeDate: TGEDCOMDateExact read GetChangeDate;
-  end;
-
-  { }
-  TGEDCOMIndividualOrdinance = class(TGEDCOMTagWithLists)
-  private
-    function GetDate: TGEDCOMDateValue;
-    function GetStringTag(Index: Integer): string;
-    procedure SetStringTag(Index: Integer; const Value: string);
-    function GetBaptismDateStatus: TGEDCOMBaptismDateStatus;
-    procedure SetBaptismDateStatus(Value: TGEDCOMBaptismDateStatus);
-    function GetEndowmentDateStatus: TGEDCOMEndowmentDateStatus;
-    procedure SetEndowmentDateStatus(Value: TGEDCOMEndowmentDateStatus);
-    function GetChildSealingDateStatus: TGEDCOMChildSealingDateStatus;
-    procedure SetChildSealingDateStatus(Value: TGEDCOMChildSealingDateStatus);
-    function GetChangeDate: TGEDCOMDateExact;
-    function GetFamily: TGEDCOMPointer;
-  public
-    constructor Create(AOwner, AParent: TGEDCOMObject); reintroduce; virtual;
-
-    function AddTag(const ATag: string; const AValue: string = '';
-      AClass: TGEDCOMTagClass = nil): TGEDCOMTag; override;
-
-    property Date: TGEDCOMDateValue read GetDate;
-    property TempleCode: string index 1 read GetStringTag write SetStringTag;
-    property Place: string index 2 read GetStringTag write SetStringTag;
-
-    // ONLY when this is a BAPL or CONL ordinance, the BaptismDateStatus may
-    // be used.
-    property BaptismDateStatus: TGEDCOMBaptismDateStatus
-      read GetBaptismDateStatus write SetBaptismDateStatus;
-    property BaptismChangeDate: TGEDCOMDateExact read GetChangeDate;
-
-    // ONLY when this is a ENDL ordinance, the EndowmentDateStatus may be used.
-    property EndowmentDateStatus: TGEDCOMEndowmentDateStatus
-      read GetEndowmentDateStatus write SetEndowmentDateStatus;
-    property EndowmentChangeDate: TGEDCOMDateExact read GetChangeDate;
-
-    // ONLY when this is a SLGC ordinance, the Family property MUST be used and
-    // the ChildSealingDateStatus may be used.
-    property Family: TGEDCOMPointer read GetFamily;
-    property ChildSealingDateStatus: TGEDCOMChildSealingDateStatus
-      read GetChildSealingDateStatus write SetChildSealingDateStatus;
-    property ChildSealingChangeDate: TGEDCOMDateExact read GetChangeDate;
-
-    property Notes;
-    property NotesCount;
-    property SourceCitations;
-    property SourceCitationsCount;
-  end;
-
-  { }
-  TGEDCOMSpouseSealing = class(TGEDCOMTagWithLists)
-  private
-    function GetDate: TGEDCOMDateValue;
-    function GetStringTag(Index: Integer): string;
-    procedure SetStringTag(Index: Integer; const Value: string);
-    function GetSpouseSealingDateStatus: TGEDCOMSpouseSealingDateStatus;
-    procedure SetSpouseSealingDateStatus(Value: TGEDCOMSpouseSealingDateStatus);
-    function GetChangeDate: TGEDCOMDateExact;
-  public
-    constructor Create(AOwner, AParent: TGEDCOMObject); reintroduce; virtual;
-
-    function AddTag(const ATag: string; const AValue: string = '';
-      AClass: TGEDCOMTagClass = nil): TGEDCOMTag; override;
-
-    property Date: TGEDCOMDateValue read GetDate;
-    property TempleCode: string index 1 read GetStringTag write SetStringTag;
-    property Place: string index 2 read GetStringTag write SetStringTag;
-    property SpouseSealingDateStatus: TGEDCOMSpouseSealingDateStatus
-      read GetSpouseSealingDateStatus write SetSpouseSealingDateStatus;
-    property SpouseSealingChangeDate: TGEDCOMDateExact read GetChangeDate;
-
-    property Notes;
-    property NotesCount;
-    property SourceCitations;
-    property SourceCitationsCount;
-  end;
-
   TGEDCOMFileReference = class(TGEDCOMTag)
   private
     function GetMultimediaFormat: TGEDCOMMultimediaFormat;
@@ -724,6 +592,7 @@ type
     procedure LinkFile(const AFile: string;
       AMediaType: TGEDCOMMediaType = mtUnknown;
       AMultimediaFormat: TGEDCOMMultimediaFormat = mfUnknown);
+    class function RecognizeFormat(const AFile: string): TGEDCOMMultimediaFormat;
 
     property MultimediaFormat: TGEDCOMMultimediaFormat
       read GetMultimediaFormat write SetMultimediaFormat;
@@ -765,39 +634,12 @@ type
     constructor Create(AOwner, AParent: TGEDCOMObject); override;
 
     function AddTag(const ATag: string; const AValue: string = ''; AClass: TGEDCOMTagClass = nil): TGEDCOMTag; override;
+    function IsEmpty(): Boolean; override;
 
     property ChangeDate: TGEDCOMDateExact read GetDate;
     property ChangeTime: TGEDCOMTime read GetTime;
     property ChangeDateTime: TDateTime read GetChangeDateTime write SetChangeDateTime;
     property Notes: TGEDCOMNotes read GetNotes;
-  end;
-
-  { The data substructure is used in source records to record events in the
-    source. }
-  TGEDCOMData = class(TGEDCOMTagWithLists)
-  private
-    FEvents: TGEDCOMList;
-    function GetEvents(Index: Integer): TGEDCOMEvent;
-    function GetEventsCount: Integer;
-    function GetAgency: string;
-    procedure SetAgency(const Value: string);
-  protected
-    function AddEvent(Value: TGEDCOMEvent): TGEDCOMEvent;
-  public
-    constructor Create(AOwner, AParent: TGEDCOMObject); reintroduce; virtual;
-    destructor Destroy; override;
-
-    function AddTag(const ATag: string; const AValue: string = '';
-      AClass: TGEDCOMTagClass = nil): TGEDCOMTag; override;
-    procedure Clear; override;
-    function IsEmpty: Boolean; override;
-    procedure ResetOwner(AOwner: TGEDCOMObject); override;
-
-    property Events[Index: Integer]: TGEDCOMEvent read GetEvents;
-    property EventsCount: Integer read GetEventsCount;
-    property Agency: string read GetAgency write SetAgency;
-    property Notes;
-    property NotesCount;
   end;
 
   TGEDCOMPersonalNamePieces = class(TGEDCOMTagWithLists)
@@ -806,6 +648,8 @@ type
     procedure SetStringTag(Index: Integer; const Value: string);
   public
     constructor Create(AOwner, AParent: TGEDCOMObject); reintroduce; virtual;
+
+    procedure SaveToStream(AStream: TStream); override;
 
     property Prefix: string index 1 read GetStringTag write SetStringTag;
     property Given: string index 2 read GetStringTag write SetStringTag;
@@ -822,6 +666,8 @@ type
 
   TGEDCOMPersonalName = class(TGEDCOMTag)
   private
+    FPieces: TGEDCOMPersonalNamePieces;
+
     function GetFirstPart: string;
     function GetFullName: string;
     function GetLastPart: string;
@@ -829,10 +675,16 @@ type
     procedure SetSurname(const Value: string);
   public
     constructor Create(AOwner, AParent: TGEDCOMObject); override;
+    destructor Destroy; override;
 
     function AddTag(const ATag: string; const AValue: string = '';
       AClass: TGEDCOMTagClass = nil): TGEDCOMTag; override;
-
+    procedure Assign(Source: TGEDCOMCustomTag); override;
+    procedure Clear(); override;
+    function IsEmpty(): Boolean; override;
+    procedure ReplaceXRefs(aMap: TXRefReplaceMap); override;
+    procedure ResetOwner(AOwner: TGEDCOMObject); override;
+    procedure SaveToStream(AStream: TStream); override;
     procedure SetNameParts(const FirstPart, Surname, LastPart: string);
 
     property FullName: string read GetFullName;
@@ -840,14 +692,15 @@ type
     property Surname: string read GetSurname write SetSurname;
     property LastPart: string read GetLastPart;
 
+    property Pieces: TGEDCOMPersonalNamePieces read FPieces;
+
     //property NameType: TGEDCOMNameType read Get write Set;
   end;
 
-  TGEDCOMFamilyRecord = class(TGEDCOMRecordWithLists)
+  TGEDCOMFamilyRecord = class(TGEDCOMRecord)
   private
     FFamilyEvents: TGEDCOMList;
     FChildren: TGEDCOMList;
-    FSpouseSealings: TGEDCOMList;
     FUserReferences: TGEDCOMList;
     function GetStringTag(Index: Integer): string;
     procedure SetStringTag(Index: Integer; const Value: string);
@@ -860,8 +713,6 @@ type
     function GetHusband: TGEDCOMPointer;
     function GetWife: TGEDCOMPointer;
     function GetSubmittor: TGEDCOMPointer;
-    function GetSpouseSealing(Index: Integer): TGEDCOMSpouseSealing;
-    function GetSpouseSealingCount: Integer;
     function GetUserReferences(Index: Integer): TGEDCOMUserReference;
     function GetUserReferencesCount: Integer;
   public
@@ -870,22 +721,20 @@ type
 
     function AddChild(APointer: TGEDCOMPointer): TGEDCOMPointer;
     function AddFamilyEvent(AFamilyEvent: TGEDCOMFamilyEvent): TGEDCOMFamilyEvent;
-    function AddSpouseSealing(ASpouseSealing: TGEDCOMSpouseSealing): TGEDCOMSpouseSealing;
     function AddUserReference(AUserReference: TGEDCOMUserReference): TGEDCOMUserReference;
 
     function AddTag(const ATag: string; const AValue: string = '';
       AClass: TGEDCOMTagClass = nil): TGEDCOMTag; override;
-    function IsEmpty: Boolean; override;
-    procedure Clear; override;
+    procedure Clear(); override;
+    function IsEmpty(): Boolean; override;
 
     procedure DeleteFamilyEvent(aEvent: TGEDCOMFamilyEvent);
     procedure RemoveChild(XRef: string);
 
-    procedure MoveTo(aToRecord: TGEDCOMRecordWithLists); override;
+    procedure MoveTo(aToRecord: TGEDCOMRecord); override;
     procedure ReplaceXRefs(aMap: TXRefReplaceMap); override;
     procedure ResetOwner(AOwner: TGEDCOMObject); override;
     procedure SaveToStream(AStream: TStream); override;
-
     procedure SortChilds();
 
     property AutomatedRecordID: string index 1 read GetStringTag write SetStringTag;
@@ -895,8 +744,7 @@ type
     property FamilyEventCount: Integer read GetFamilyEventCount;
     property Husband: TGEDCOMPointer read GetHusband;
     property Restriction: TGEDCOMRestriction read GetRestriction write SetRestriction;
-    property SpouseSealing[Index: Integer]: TGEDCOMSpouseSealing read GetSpouseSealing;
-    property SpouseSealingCount: Integer read GetSpouseSealingCount;
+
     property Submitter: TGEDCOMPointer read GetSubmittor;
     property UserReferences[Index: Integer]: TGEDCOMUserReference read GetUserReferences;
     property UserReferencesCount: Integer read GetUserReferencesCount;
@@ -910,21 +758,18 @@ type
     property MultimediaLinksCount;
   end;
 
-  TGEDCOMIndividualRecord = class(TGEDCOMRecordWithLists)
+  TGEDCOMIndividualRecord = class(TGEDCOMRecord)
   private
     FPersonalNames: TGEDCOMList;
     FIndividualEvents: TGEDCOMList;
     FIndividualAttributes: TGEDCOMList;
-    FIndividualOrdinances: TGEDCOMList;
     FChildToFamilyLinks: TGEDCOMList;
     FSpouseToFamilyLinks: TGEDCOMList;
     FSubmittors: TGEDCOMList;
     FAssociations: TGEDCOMList;
-    FAliasses: TGEDCOMList;
-    FAncestorsInterest: TGEDCOMList;
-    FDescendantsInterest: TGEDCOMList;
     FUserReferences: TGEDCOMList;
     FGroups: TGEDCOMList;
+
     function GetRestriction: TGEDCOMRestriction;
     procedure SetRestriction(const Value: TGEDCOMRestriction);
     function GetPersonalNames(Index: Integer): TGEDCOMPersonalName;
@@ -935,8 +780,6 @@ type
     function GetIndividualEventsCount: Integer;
     function GetIndividualAttributes(Index: Integer): TGEDCOMIndividualAttribute;
     function GetIndividualAttributesCount: Integer;
-    function GetIndividualOrdinances(Index: Integer): TGEDCOMIndividualOrdinance;
-    function GetIndividualOrdinancesCount: Integer;
     function GetChildToFamilyLinks(Index: Integer): TGEDCOMChildToFamilyLink;
     function GetChildToFamilyLinksCount: Integer;
     function GetSpouseToFamilyLinks(Index: Integer): TGEDCOMSpouseToFamilyLink;
@@ -945,12 +788,6 @@ type
     function GetSubmittorsCount: Integer;
     function GetAssociations(Index: Integer): TGEDCOMAssociation;
     function GetAssociationsCount: Integer;
-    function GetAliasses(Index: Integer): TGEDCOMPointer;
-    function GetAliassesCount: Integer;
-    function GetAncestorsInterest(Index: Integer): TGEDCOMPointer;
-    function GetAncestorsInterestCount: Integer;
-    function GetDescendantsInterest(Index: Integer): TGEDCOMPointer;
-    function GetDescendantsInterestCount: Integer;
     function GetStringTag(Index: Integer): string;
     procedure SetStringTag(Index: Integer; const Value: string);
     function GetUserReferences(Index: Integer): TGEDCOMUserReference;
@@ -961,22 +798,18 @@ type
     constructor Create(AOwner, AParent: TGEDCOMObject); reintroduce; virtual;
     destructor Destroy; override;
 
-    function IsEmpty: Boolean; override;
-    procedure Clear; override;
     function AddTag(const ATag: string; const AValue: string = '';
       AClass: TGEDCOMTagClass = nil): TGEDCOMTag; override;
+    procedure Clear(); override;
+    function IsEmpty(): Boolean; override;
 
-    function AddPersonalName(Value: TGEDCOMPersonalName): TGEDCOMPersonalName;
-    function AddIndividualEvent(Value: TGEDCOMIndividualEvent): TGEDCOMIndividualEvent;
-    function AddIndividualAttribute(Value: TGEDCOMIndividualAttribute): TGEDCOMIndividualAttribute;
-    function AddIndividualOrdinance(Value: TGEDCOMIndividualOrdinance): TGEDCOMIndividualOrdinance;
+    function AddAssociation(Value: TGEDCOMAssociation): TGEDCOMAssociation;
     function AddChildToFamilyLink(Value: TGEDCOMChildToFamilyLink): TGEDCOMChildToFamilyLink;
+    function AddIndividualAttribute(Value: TGEDCOMIndividualAttribute): TGEDCOMIndividualAttribute;
+    function AddIndividualEvent(Value: TGEDCOMIndividualEvent): TGEDCOMIndividualEvent;
+    function AddPersonalName(Value: TGEDCOMPersonalName): TGEDCOMPersonalName;
     function AddSpouseToFamilyLink(Value: TGEDCOMSpouseToFamilyLink): TGEDCOMSpouseToFamilyLink;
     function AddSubmittor(Value: TGEDCOMPointer): TGEDCOMPointer;
-    function AddAssociation(Value: TGEDCOMAssociation): TGEDCOMAssociation;
-    function AddAlias(Value: TGEDCOMPointer): TGEDCOMPointer;
-    function AddAncestorsInterest(Value: TGEDCOMPointer): TGEDCOMPointer;
-    function AddDescendantsInterest(Value: TGEDCOMPointer): TGEDCOMPointer;
     function AddUserReference(AUserReference: TGEDCOMUserReference): TGEDCOMUserReference;
 
     function AddGroup(Value: TGEDCOMPointer): TGEDCOMPointer;
@@ -991,7 +824,7 @@ type
 
     procedure ExchangeSpouses(Index1, Index2: Integer);
 
-    procedure MoveTo(aToRecord: TGEDCOMRecordWithLists); override;
+    procedure MoveTo(aToRecord: TGEDCOMRecord); override;
     procedure ReplaceXRefs(aMap: TXRefReplaceMap); override;
     procedure ResetOwner(AOwner: TGEDCOMObject); override;
     procedure SaveToStream(AStream: TStream); override;
@@ -1002,8 +835,6 @@ type
     property IndividualAttributesCount: Integer read GetIndividualAttributesCount;
     property IndividualEvents[Index: Integer]: TGEDCOMIndividualEvent read GetIndividualEvents;
     property IndividualEventsCount: Integer read GetIndividualEventsCount;
-    property IndividualOrdinances[Index: Integer]: TGEDCOMIndividualOrdinance read GetIndividualOrdinances;
-    property IndividualOrdinancesCount: Integer read GetIndividualOrdinancesCount;
     property PermanentRecordFileNumber: string index 1 read GetStringTag write SetStringTag;
     property PersonalNames[Index: Integer]: TGEDCOMPersonalName read GetPersonalNames;
     property PersonalNamesCount: Integer read GetPersonalNamesCount;
@@ -1021,12 +852,6 @@ type
     property SubmittorsCount: Integer read GetSubmittorsCount;
     property Associations[Index: Integer]: TGEDCOMAssociation read GetAssociations;
     property AssociationsCount: Integer read GetAssociationsCount;
-    property Aliasses[Index: Integer]: TGEDCOMPointer read GetAliasses;
-    property AliassesCount: Integer read GetAliassesCount;
-    property AncestorsInterest[Index: Integer]: TGEDCOMPointer read GetAncestorsInterest;
-    property AncestorsInterestCount: Integer read GetAncestorsInterestCount;
-    property DescendantsInterest[Index: Integer]: TGEDCOMPointer read GetDescendantsInterest;
-    property DescendantsInterestCount: Integer read GetDescendantsInterestCount;
 
     property Groups[Index: Integer]: TGEDCOMPointer read GetGroups;
     property GroupsCount: Integer read GetGroupsCount;
@@ -1046,7 +871,7 @@ type
     wanted to associate a sound clip and a photo, you would reference each
     multimedia file and indicate the format using the FORM tag subordinate to
     each file reference. }
-  TGEDCOMMultimediaRecord = class(TGEDCOMRecordWithLists)
+  TGEDCOMMultimediaRecord = class(TGEDCOMRecord)
   private
     FFileReferences: TGEDCOMList;
     FUserReferences: TGEDCOMList;
@@ -1064,8 +889,8 @@ type
       AClass: TGEDCOMTagClass = nil): TGEDCOMTag; override;
     function AddFileReference(Value: TGEDCOMFileReferenceWithTitle): TGEDCOMFileReferenceWithTitle;
     function AddUserReference(AUserReference: TGEDCOMUserReference): TGEDCOMUserReference;
-    procedure Clear; override;
-    function IsEmpty: Boolean; override;
+    procedure Clear(); override;
+    function IsEmpty(): Boolean; override;
 
     procedure ReplaceXRefs(aMap: TXRefReplaceMap); override;
     procedure ResetOwner(AOwner: TGEDCOMObject); override;
@@ -1085,7 +910,7 @@ type
 
   { Note records are used to provide notes that can be pointed to by multiple
     tags. }
-  TGEDCOMNoteRecord = class(TGEDCOMRecordWithLists)
+  TGEDCOMNoteRecord = class(TGEDCOMRecord)
   private
     FNotes: TStrings;
     FUserReferences: TGEDCOMList;
@@ -1103,10 +928,10 @@ type
 
     function AddTag(const ATag: string; const AValue: string = '';
       AClass: TGEDCOMTagClass = nil): TGEDCOMTag; override;
-    procedure Clear; override;
-    function IsEmpty: Boolean; override;
+    procedure Clear(); override;
+    function IsEmpty(): Boolean; override;
 
-    procedure MoveTo(aToRecord: TGEDCOMRecordWithLists); override;
+    procedure MoveTo(aToRecord: TGEDCOMRecord); override;
     procedure ReplaceXRefs(aMap: TXRefReplaceMap); override;
     procedure ResetOwner(AOwner: TGEDCOMObject); override;
 
@@ -1120,7 +945,7 @@ type
   end;
 
   { }
-  TGEDCOMRepositoryRecord = class(TGEDCOMRecordWithLists)
+  TGEDCOMRepositoryRecord = class(TGEDCOMRecord)
   private
     FUserReferences: TGEDCOMList;
     function GetStringTag(Index: Integer): string;
@@ -1136,8 +961,8 @@ type
 
     function AddTag(const ATag: string; const AValue: string = '';
       AClass: TGEDCOMTagClass = nil): TGEDCOMTag; override;
-    procedure Clear; override;
-    function IsEmpty: Boolean; override;
+    procedure Clear(); override;
+    function IsEmpty(): Boolean; override;
     procedure ReplaceXRefs(aMap: TXRefReplaceMap); override;
     procedure ResetOwner(AOwner: TGEDCOMObject); override;
 
@@ -1153,7 +978,7 @@ type
 
   { Source records are used to provide a bibliographic description of the
     source cited. }
-  TGEDCOMSourceRecord = class(TGEDCOMRecordWithLists)
+  TGEDCOMSourceRecord = class(TGEDCOMRecord)
   private
     FTitle: TStrings;
     FOriginator: TStrings;
@@ -1169,28 +994,31 @@ type
     function GetText: TStrings;
     procedure SetPublication(const Value: TStrings);
     procedure SetText(const Value: TStrings);
-    function GetData: TGEDCOMData;
     function GetStringTag(Index: Integer): string;
     procedure SetStringTag(Index: Integer; const Value: string);
-    function GetRepositoryCitations(
-      Index: Integer): TGEDCOMRepositoryCitation;
+    function GetRepositoryCitations(Index: Integer): TGEDCOMRepositoryCitation;
     function GetRepositoryCitationsCount: Integer;
     function GetUserReferences(Index: Integer): TGEDCOMUserReference;
     function GetUserReferencesCount: Integer;
   protected
-    function AddRepositoryCitation(Value: TGEDCOMRepositoryCitation): TGEDCOMRepositoryCitation;
-    function AddUserReference(AUserReference: TGEDCOMUserReference): TGEDCOMUserReference;
   public
     constructor Create(AOwner, AParent: TGEDCOMObject); reintroduce; virtual;
     destructor Destroy; override;
 
-    function IsEmpty: Boolean; override;
-    procedure Clear; override;
+    function AddRepositoryCitation(Value: TGEDCOMRepositoryCitation): TGEDCOMRepositoryCitation;
+    function AddUserReference(AUserReference: TGEDCOMUserReference): TGEDCOMUserReference;
+
     function AddTag(const ATag: string; const AValue: string = '';
       AClass: TGEDCOMTagClass = nil): TGEDCOMTag; override;
+    procedure Clear(); override;
+    function IsEmpty(): Boolean; override;
 
+    procedure RemoveRepositoryCitation(Value: TGEDCOMRepositoryCitation);
+
+    procedure MoveTo(aToRecord: TGEDCOMRecord); override;
     procedure ReplaceXRefs(aMap: TXRefReplaceMap); override;
     procedure ResetOwner(AOwner: TGEDCOMObject); override;
+    procedure SaveToStream(AStream: TStream); override;
 
     property AutomatedRecordID: string index 2 read GetStringTag write SetStringTag;
     property RepositoryCitations[Index: Integer]: TGEDCOMRepositoryCitation read GetRepositoryCitations;
@@ -1198,7 +1026,6 @@ type
     property UserReferences[Index: Integer]: TGEDCOMUserReference read GetUserReferences;
     property UserReferencesCount: Integer read GetUserReferencesCount;
 
-    property Data: TGEDCOMData read GetData;
     property Originator: TStrings read GetOriginator write SetOriginator;
     property Title: TStrings read GetTitle write SetTitle;
     property FiledByEntry: string index 1 read GetStringTag write SetStringTag;
@@ -1218,7 +1045,7 @@ type
     Ancestral File download requests and TempleReady. Each GEDCOM transmission
     file should have only one submission record. Multiple submissions are
     handled by creating separate GEDCOM transmissionfiles. }
-  TGEDCOMSubmissionRecord = class(TGEDCOMRecordWithLists)
+  TGEDCOMSubmissionRecord = class(TGEDCOMRecord)
   private
     function GetSubmitter: TGEDCOMPointer;
     function GetStringTag(Index: Integer): string;
@@ -1251,7 +1078,7 @@ type
     in the transmission are assumed to be submitted by the SUBMITTER referenced
     in the HEADer, unless a SUBMitter reference inside a specific record points
     at a different SUBMITTER record. }
-  TGEDCOMSubmitterRecord = class(TGEDCOMRecordWithLists)
+  TGEDCOMSubmitterRecord = class(TGEDCOMRecord)
   private
     FLanguages: TGEDCOMList;
     function GetStringTag(Index: Integer): string;
@@ -1268,8 +1095,8 @@ type
     function AddLanguage(Value: TGEDCOMTag): TGEDCOMTag;
     function AddTag(const ATag: string; const AValue: string = '';
       AClass: TGEDCOMTagClass = nil): TGEDCOMTag; override;
-    procedure Clear; override;
-    function IsEmpty: Boolean; override;
+    procedure Clear(); override;
+    function IsEmpty(): Boolean; override;
     procedure ReplaceXRefs(aMap: TXRefReplaceMap); override;
     procedure ResetOwner(AOwner: TGEDCOMObject); override;
 
@@ -1286,27 +1113,6 @@ type
     property NotesCount;
   end;
 
-  TGEDCOMPointer = class(TGEDCOMTag)
-  private
-    FXRef: string;
-    function GetValue: TGEDCOMRecord;
-    procedure SetValue(AValue: TGEDCOMRecord);
-    function GetXRef: string;
-    procedure SetXRef(const Value: string);
-  protected
-    function GetStringValue: string; override;
-  public
-    constructor Create(AOwner, AParent: TGEDCOMObject); override;
-
-    procedure Clear; override;
-    function IsEmpty: Boolean; override;
-    function ParseString(const AString: string): string; override;
-    procedure ReplaceXRefs(aMap: TXRefReplaceMap); override;
-
-    property Value: TGEDCOMRecord read GetValue write SetValue;
-    property XRef: string read GetXRef write SetXRef;
-  end;
-
   TGEDCOMNotes = class(TGEDCOMPointer)
   private
     FNotes: TStrings;
@@ -1319,8 +1125,8 @@ type
     constructor Create(AOwner, AParent: TGEDCOMObject); override;
     destructor Destroy; override;
 
-    procedure Clear; override;
-    function IsEmpty: Boolean; override;
+    procedure Clear(); override;
+    function IsEmpty(): Boolean; override;
     function ParseString(const AString: string): string; override;
 
     property IsPointer: Boolean read GetIsPointer;
@@ -1341,8 +1147,8 @@ type
     constructor Create(AOwner, AParent: TGEDCOMObject); override;
     destructor Destroy; override;
 
-    procedure Clear; override;
-    function IsEmpty: Boolean; override;
+    procedure Clear(); override;
+    function IsEmpty(): Boolean; override;
     function ParseString(const AString: string): string; override;
 
     property IsPointer: Boolean read GetIsPointer;
@@ -1372,8 +1178,8 @@ type
     function AddFileReference(AFileReference: TGEDCOMFileReference): TGEDCOMFileReference;
     function AddTag(const ATag: string; const AValue: string = '';
       AClass: TGEDCOMTagClass = nil): TGEDCOMTag; override;
-    procedure Clear; override;
-    function IsEmpty: Boolean; override;
+    procedure Clear(); override;
+    function IsEmpty(): Boolean; override;
     function ParseString(const AString: string): string; override;
     procedure ResetOwner(AOwner: TGEDCOMObject); override;
     procedure SaveToStream(AStream: TStream); override;
@@ -1396,8 +1202,8 @@ type
     function AddNotes(ANotes: TGEDCOMNotes): TGEDCOMNotes;
     function AddTag(const ATag: string; const AValue: string = '';
       AClass: TGEDCOMTagClass = nil): TGEDCOMTag; override;
-    procedure Clear; override;
-    function IsEmpty: Boolean; override;
+    procedure Clear(); override;
+    function IsEmpty(): Boolean; override;
     procedure ReplaceXRefs(aMap: TXRefReplaceMap); override;
     procedure ResetOwner(AOwner: TGEDCOMObject); override;
 
@@ -1455,7 +1261,7 @@ type
     function AddTag(const ATag: string; const AValue: string = '';
       AClass: TGEDCOMTagClass = nil): TGEDCOMTag; override;
     procedure Clear; override;
-    function IsEmpty: Boolean; override;
+    function IsEmpty(): Boolean; override;
     procedure ReplaceXRefs(aMap: TXRefReplaceMap); override;
     procedure ResetOwner(AOwner: TGEDCOMObject); override;
 
@@ -1503,54 +1309,31 @@ type
     procedure SetDateTime(ADateTime: TDateTime); override;
   public
     constructor Create(AOwner, AParent: TGEDCOMObject); reintroduce; overload; override;
-    constructor Create(AOwner, AParent: TGEDCOMObject; ADateCalendar: TGEDCOMCalendar); reintroduce; overload; virtual;
 
     procedure Assign(Source: TGEDCOMCustomTag); override;
 
     // Exact date (Gregorian date)
     constructor Create(AOwner, AParent: TGEDCOMObject; ADateTime: TDateTime); reintroduce; overload; virtual;
-    constructor Create(AOwner, AParent: TGEDCOMObject; ADay, AMonth, AYear: Word); reintroduce; overload; virtual;
+
     procedure SetDate(ADay, AMonth, AYear: Word);
     procedure GetDate(var AYear: Integer; var AMonth, ADay: Word);
 
-    // Gregorian date
-    constructor CreateGregorian(AOwner, AParent: TGEDCOMObject; ADay: Word; const AMonth: string;
-      AYear: Integer; const AYearModifier: string = ''; BC: Boolean = False); overload;
-    procedure SetGregorian(ADay: Word; const AMonth: string; AYear: Integer;
-      const AYearModifier: string = ''; BC: Boolean = False);
-
-    // Julian date
-    constructor CreateJulian(AOwner, AParent: TGEDCOMObject; const ADay: Word;
-      const AMonth: string; AYear: Word; BC: Boolean = False); overload;
+    // Misc dates
+    procedure SetGregorian(const ADay: Word; const AMonth: string;
+      AYear: Integer; const AYearModifier: string = ''; BC: Boolean = False);
     procedure SetJulian(const ADay: Word; const AMonth: string;
       AYear: Word; BC: Boolean = False);
-
-    // Hebrew date
-    constructor CreateHebrew(AOwner, AParent: TGEDCOMObject; ADay: Word;
-      const AMonth: string; AYear: Integer; BC: Boolean = False); overload;
-    procedure SetHebrew(AOwner: TGEDCOMObject; ADay: Word; const AMonth: string;
+    procedure SetHebrew(const ADay: Word; const AMonth: string;
       AYear: Integer; BC: Boolean = False);
-
-    // French date
-    constructor CreateFrench(AOwner, AParent: TGEDCOMObject; ADay: Word;
-      const AMonth: string; AYear: Word; BC: Boolean = False); overload;
-    procedure SetFrench(ADay: Word; const AMonth: string; AYear: Word;
-      BC: Boolean = False);
-
-    // Roman date
-    constructor CreateRoman(AOwner, AParent: TGEDCOMObject; ADay: Word;
-      const AMonth: string; AYear: Word; BC: Boolean = False); overload;
-    procedure SetRoman(ADay: Word; const AMonth: string;
+    procedure SetFrench(const ADay: Word; const AMonth: string;
+      AYear: Word; BC: Boolean = False);
+    procedure SetRoman(const ADay: Word; const AMonth: string;
+      AYear: Word; BC: Boolean = False);
+    procedure SetUnknown(const ADay: Word; const AMonth: string;
       AYear: Word; BC: Boolean = False);
 
-    // Unknown date
-    constructor CreateUnknown(AOwner, AParent: TGEDCOMObject; ADay: Word;
-      const AMonth: string; AYear: Word; BC: Boolean = False); overload;
-    procedure SetUnknown(ADay: Word; const AMonth: string; AYear: Word;
-      BC: Boolean = False);
-
-    procedure Clear; override;
-    function IsEmpty: Boolean; override;
+    procedure Clear(); override;
+    function IsEmpty(): Boolean; override;
     function ParseString(const AString: string): string; override;
 
     property Date: TDateTime read GetDateTime write SetDateTime;
@@ -1580,8 +1363,8 @@ type
     constructor Create(AOwner, AParent: TGEDCOMObject); override;
     destructor Destroy; override;
 
-    procedure Clear; override;
-    function IsEmpty: Boolean; override;
+    procedure Clear(); override;
+    function IsEmpty(): Boolean; override;
     function ParseString(const S: string): string; override;
     procedure ResetOwner(AOwner: TGEDCOMObject); override;
 
@@ -1747,8 +1530,8 @@ type
 
     function AddTag(const ATag: string; const AValue: string = '';
       AClass: TGEDCOMTagClass = nil): TGEDCOMTag; override;
-    procedure Clear; override;
-    function IsEmpty: Boolean; override;
+    procedure Clear(); override;
+    function IsEmpty(): Boolean; override;
     procedure ResetOwner(AOwner: TGEDCOMObject); override;
 
     procedure DeletePhoneNumber(Index: Integer);
@@ -1775,8 +1558,8 @@ type
     property WebPagesCount: Integer read GetWebPagesCount;
   end;
 
-  { ZSV code }
-  TGEDCOMGroupRecord = class(TGEDCOMRecordWithLists)
+  { }
+  TGEDCOMGroupRecord = class(TGEDCOMRecord)
   private
     FMembers: TGEDCOMList;
     function GetName(): string;
@@ -1840,13 +1623,13 @@ function CreateGEDCOMTag(AOwner, AParent: TGEDCOMObject; const ATag: string;
   const AValue: string = ''): TGEDCOMTag;
 
 function GetSignByRecord(aRecord: TGEDCOMRecord): string;
-  
+
 {==============================================================================}
 
 implementation
 
 uses
-  Windows, GKCommon;
+  Windows, bsMiscUtils, GKCommon;
 
 resourcestring
   ATagHasInvalidType = 'The tag %s is of type %s, but type %s was expected';
@@ -1862,6 +1645,11 @@ resourcestring
   SNotAValidNumber = 'The string %s doesn''t start with a valid number';
   SXRefNotTerminated = 'The string %s contains an unterminated XRef pointer';
   SXRefExpected = 'The string %s is expected to start with an XRef pointer';
+
+procedure StrDelete(var Dest: string; Index, Count: Integer);
+begin
+  {$IFDEF DELPHI_NET}Borland.Delphi.{$ENDIF}System.Delete(Dest, Index, Count);
+end;
 
 {==============================================================================}
 
@@ -2088,10 +1876,10 @@ begin
   if (XRef = '') then Exit;
 
   if (Result[1] = GEDCOMPointerDelimiter)
-  then System.Delete(Result, 1, 1);
+  then StrDelete(Result, 1, 1);
 
   if (Length(Result) > 0) and (Result[Length(Result)] = GEDCOMPointerDelimiter)
-  then System.Delete(Result, Length(Result), 1);
+  then StrDelete(Result, Length(Result), 1);
 end;
 
 function EncloseXRef(XRef: string): string;
@@ -2192,62 +1980,88 @@ begin
   inherited Create;
   FRecords := TGEDCOMList.Create(Self);
   FHeader := TGEDCOMHeader.Create(Self, Self);
-  FXRefIndex := TGEDCOMXRefIndex.Create(Self);
+
+  FXRefIndex := TStringList.Create;
+  FXRefIndex.Sorted := True;
 end;
 
 destructor TGEDCOMTree.Destroy;
 begin
   FXRefIndex.Free;
+
   FHeader.Free;
   FRecords.Free;
   inherited Destroy;
 end;
 
-procedure TGEDCOMTree.Clear;
+procedure TGEDCOMTree.Clear();
 begin
   FRecords.Clear;
   FHeader.Clear;
+  XRefIndex_Clear();
+end;
+
+procedure TGEDCOMTree.XRefIndex_Add(const XRef: string; ARecord: TGEDCOMRecord);
+begin
+  if (XRef <> '') and (ARecord <> nil)
+  then FXRefIndex.AddObject(XRef, ARecord);
+end;
+
+procedure TGEDCOMTree.XRefIndex_AddRecord(ARecord: TGEDCOMRecord);
+var
+  Index: Integer;
+begin
+  Index := FXRefIndex.IndexOfObject(ARecord);
+  if (Index = -1) and (ARecord.XRef <> '')
+  then XRefIndex_Add(ARecord.XRef, ARecord);
+end;
+
+procedure TGEDCOMTree.XRefIndex_Clear();
+begin
   FXRefIndex.Clear;
 end;
 
-function TGEDCOMTree._AddRef: Integer;
-begin
-  Result := 1;
-end;
-
-function TGEDCOMTree._Release: Integer;
-begin
-  Result := 1;
-end;
-
-function TGEDCOMTree.QueryInterface(const IID: TGUID; out Obj): HResult;
-begin
-  if GetInterface(IID, Obj) then Result := S_OK else Result := E_NOINTERFACE;
-end;
-
-procedure TGEDCOMTree.SetXRef(Sender: TGEDCOMRecord; const XRef: WideString);
+procedure TGEDCOMTree.XRefIndex_DeleteRecord(ARecord: TGEDCOMRecord);
 var
   Index: Integer;
 begin
-  Index := FXRefIndex.IndexOfRecord(Sender);
+  Index := FXRefIndex.IndexOfObject(ARecord);
   if (Index >= 0)
-  then FXRefIndex.SetXRefs(Index, XRef)
-  else FXRefIndex.Add(XRef, Sender);
+  then FXRefIndex.Delete(Index);
 end;
 
-procedure TGEDCOMTree.GetXRef(ARecord: TGEDCOMRecord; out XRef: WideString);
+function TGEDCOMTree.XRefIndex_Find(const XRef: string): TGEDCOMRecord;
 var
   Index: Integer;
 begin
-  Index := IndexOfRecord(ARecord);
+  Index := FXRefIndex.IndexOf(XRef);
   if (Index >= 0)
-  then XRef := WideString(Records[Index].XRef)
-  else XRef := '';
+  then Result := TGEDCOMRecord(FXRefIndex.Objects[Index])
+  else Result := nil;
 end;
 
-procedure TGEDCOMTree.NewXRef(Sender: TGEDCOMRecord; out XRef: WideString);
+function TGEDCOMTree.XRefIndex_NewXRef(Sender: TGEDCOMRecord): string;
+var
+  I: Integer;
+  sign: string;
 begin
-  XRef := WideString(FXRefIndex.NewXRef(Sender));
+  sign := GetSignByRecord(Sender);
+
+  I := 1;
+  while FXRefIndex.IndexOf(sign + IntToStr(I)) >= 0 do Inc(I);
+  Result := sign + IntToStr(I);
+end;
+
+procedure TGEDCOMTree.SetXRef(Sender: TGEDCOMRecord; const XRef: string);
+var
+  Index: Integer;
+begin
+  Index := FXRefIndex.IndexOfObject(Sender);
+  if (Index >= 0) then begin
+    FXRefIndex.Sorted := False;
+    FXRefIndex[Index] := XRef;
+    FXRefIndex.Sorted := True;
+  end else XRefIndex_Add(XRef, Sender);
 end;
 
 function TGEDCOMTree.AddRecord(ARecord: TGEDCOMRecord): TGEDCOMRecord;
@@ -2256,24 +2070,24 @@ begin
   FRecords.Add(ARecord);
 
   if (ARecord.XRef <> '')
-  then FXRefIndex.AddRecord(ARecord);
+  then XRefIndex_AddRecord(ARecord);
 end;
 
 procedure TGEDCOMTree.Delete(Index: Integer);
 begin
-  FXRefIndex.DeleteRecord(Records[Index]);
+  XRefIndex_DeleteRecord(Records[Index]);
   FRecords.Delete(Index);
 end;
 
 procedure TGEDCOMTree.DeleteRecord(Sender: TGEDCOMRecord);
 begin
-  FXRefIndex.DeleteRecord(Sender);
+  XRefIndex_DeleteRecord(Sender);
   FRecords.DeleteObject(Sender);
 end;
 
 function TGEDCOMTree.Extract(Index: Integer): TGEDCOMRecord;
 begin
-  FXRefIndex.DeleteRecord(GetRecords(Index));
+  XRefIndex_DeleteRecord(GetRecords(Index));
   Result := TGEDCOMRecord(FRecords.Extract(Index));
 end;
 
@@ -2323,7 +2137,7 @@ begin
       // result of formatting the gedcom file, so every line has been indented
       // according to the level.
       while (Length(S) > 0) and ((S[1] = #32) or (S[1] = #9)) do
-        System.Delete(S, 1, 1);
+        StrDelete(S, 1, 1);
 
       // Skip empty rows.
       if (S = '') then
@@ -2410,17 +2224,6 @@ begin
   end;
 end;
 
-procedure TGEDCOMTree.FindRecord(Sender: TGEDCOMCustomTag;
-  const XRef: WideString; out ARecord: TGEDCOMRecord);
-var
-  Index: Integer;
-begin
-  Index := FXRefIndex.IndexOf(XRef);
-  if (Index >= 0)
-  then ARecord := FXRefIndex.GetItems(Index)
-  else ARecord := nil;
-end;
-
 function TGEDCOMTree.IndexOfRecord(ARecord: TGEDCOMRecord): Integer;
 begin
   Result := FRecords.IndexOfObject(ARecord);
@@ -2453,108 +2256,14 @@ var
   S: string;
 begin
   S := '0 TRLR';
+
+  {$IFNDEF DELPHI_NET}
   AStream.Write(S[1], Length(S));
-  AStream.Write(GEDCOMNewLine[0], GEDCOMNewLineLength);
-end;
-
-function TGEDCOMTree.XRefIndex_Find(const XRef: string): TGEDCOMRecord;
-begin
-  Result := FXRefIndex.Find(XRef);
-end;
-
-function TGEDCOMTree.XRefIndex_NewXRef(Sender: TGEDCOMRecord): string;
-begin
-  Result := FXRefIndex.NewXRef(Sender);
-end;
-
-{ TGEDCOMXRefIndex }
-
-procedure TGEDCOMXRefIndex.Add(const XRef: string; ARecord: TGEDCOMRecord);
-begin
-  if (XRef <> '') and (ARecord <> nil)
-  then FList.AddObject(XRef, ARecord);
-end;
-
-procedure TGEDCOMXRefIndex.AddRecord(ARecord: TGEDCOMRecord);
-var
-  Index: Integer;
-begin
-  Index := FList.IndexOfObject(ARecord);
-  if (Index = -1) and (ARecord.XRef <> '')
-  then Add(ARecord.XRef, ARecord);
-end;
-
-procedure TGEDCOMXRefIndex.Clear;
-begin
-  FList.Clear;
-end;
-
-constructor TGEDCOMXRefIndex.Create(AOwner: TGEDCOMObject);
-begin
-  inherited Create;
-  FOwner := AOwner;
-  FList := TStringList.Create;
-  FList.Sorted := True;
-end;
-
-procedure TGEDCOMXRefIndex.DeleteRecord(ARecord: TGEDCOMRecord);
-var
-  Index: Integer;
-begin
-  Index := FList.IndexOfObject(ARecord);
-  if (Index >= 0)
-  then FList.Delete(Index);
-end;
-
-destructor TGEDCOMXRefIndex.Destroy;
-begin
-  FList.Free;
-  inherited Destroy;
-end;
-
-function TGEDCOMXRefIndex.Find(const XRef: string): TGEDCOMRecord;
-var
-  Index: Integer;
-begin
-  Index := IndexOf(XRef);
-  if (Index >= 0)
-  then Result := GetItems(Index)
-  else Result := nil;
-end;
-
-function TGEDCOMXRefIndex.GetItems(Index: Integer): TGEDCOMRecord;
-begin
-  Result := TGEDCOMRecord(FList.Objects[Index]);
-end;
-
-function TGEDCOMXRefIndex.IndexOf(const XRef: string): Integer;
-begin
-  Result := FList.IndexOf(XRef);
-end;
-
-function TGEDCOMXRefIndex.IndexOfRecord(ARecord: TGEDCOMRecord): Integer;
-begin
-  Result := FList.IndexOfObject(ARecord);
-end;
-
-function TGEDCOMXRefIndex.NewXRef(Sender: TGEDCOMRecord): string;
-var
-  I: Integer;
-  sign: string;
-begin
-  sign := GetSignByRecord(Sender);
-
-  I := 1;
-  while FList.IndexOf(sign + IntToStr(I)) >= 0 do
-    Inc(I);
-  Result := sign + IntToStr(I);
-end;
-
-procedure TGEDCOMXRefIndex.SetXRefs(Index: Integer; const Value: string);
-begin
-  FList.Sorted := False;
-  FList[Index] := Value;
-  FList.Sorted := True;
+  AStream.Write(GEDCOMNewLine[1], Length(GEDCOMNewLine));
+  {$ELSE}
+  SWriteString(AStream, S);
+  SWriteString(AStream, GEDCOMNewLine);
+  {$ENDIF}
 end;
 
 { TGEDCOMList }
@@ -2579,7 +2288,7 @@ begin
   FList.Add(AObject);
 end;
 
-procedure TGEDCOMList.Clear;
+procedure TGEDCOMList.Clear();
 var
   I: Integer;
 begin
@@ -2633,9 +2342,9 @@ begin
     then TGEDCOMCustomTag(FList[I]).SaveToStream(AStream);
 end;
 
-procedure TGEDCOMList.SetItems(Index: Integer; AObject: TGEDCOMObject);
+procedure TGEDCOMList.Exchange(Index1, Index2: Integer);
 begin
-  FList[Index] := AObject;
+  FList.Exchange(Index1, Index2);
 end;
 
 procedure TGEDCOMList.ReplaceXRefs(aMap: TXRefReplaceMap);
@@ -2647,9 +2356,12 @@ begin
     then TGEDCOMCustomTag(FList[k]).ReplaceXRefs(aMap);
 end;
 
-procedure TGEDCOMList.Exchange(Index1, Index2: Integer);
+procedure TGEDCOMList.ResetOwner(AOwner: TGEDCOMObject);
+var
+  i: Integer;
 begin
-  FList.Exchange(Index1, Index2);
+  for i := 0 to FList.Count - 1 do
+    TGEDCOMCustomTag(FList[i]).ResetOwner(AOwner);
 end;
 
 { TGEDCOMCustomDate }
@@ -2686,8 +2398,7 @@ begin
     FMonth := TGEDCOMDate(Source).FMonth;
     FDay := TGEDCOMDate(Source).FDay;
   end
-  else
-    inherited Assign(Source);
+  else inherited Assign(Source);
 end;
 
 function TGEDCOMDate.GetStringValue: string;
@@ -2713,13 +2424,6 @@ begin
   then FDateFormat := dfSystem;
 end;
 
-constructor TGEDCOMDate.Create(AOwner, AParent: TGEDCOMObject;
-  ADateCalendar: TGEDCOMCalendar);
-begin
-  Create(AOwner, AParent);
-  FDateCalendar := ADateCalendar;
-end;
-
 constructor TGEDCOMDate.Create(AOwner, AParent: TGEDCOMObject; ADateTime: TDateTime);
 var
   Y, M, D: Word;
@@ -2727,7 +2431,7 @@ begin
   Create(AOwner, AParent);
   SetDateTime(ADateTime);
   DecodeDate(ADateTime, Y, M, D);
-  CreateGregorian(AOwner, AParent, D, GEDCOMMonthArray[M], Y);
+  SetGregorian(D, GEDCOMMonthArray[M], Y, '', False);
 end;
 
 procedure TGEDCOMDate.Clear;
@@ -2738,87 +2442,6 @@ begin
   FYearModifier := '';
   FMonth := '';
   FDay := 0;
-end;
-
-constructor TGEDCOMDate.Create(AOwner, AParent: TGEDCOMObject; ADay, AMonth,
-  AYear: Word);
-var
-  D: Word;
-  M: string;
-  Y: Integer;
-begin
-  D := ADay;
-  if D < 1 then
-    D := 0;
-  if AMonth in [1..12] then
-    M := GEDCOMMonthArray[AMonth]
-  else
-    M := '';
-  Y := AYear;
-  if Y < 0 then
-    Y := -1;
-  CreateGregorian(AOwner, AParent, D, M, Y);
-end;
-
-constructor TGEDCOMDate.CreateFrench(AOwner, AParent: TGEDCOMObject;
-  ADay: Word; const AMonth: string; AYear: Word; BC: Boolean);
-begin
-  Create(AOwner, AParent, dcFrench);
-  FDay := ADay;
-  FMonth := StrToGEDCOMMonthFrench(AMonth);
-  FYear := AYear;
-  FYearBC := BC;
-end;
-
-constructor TGEDCOMDate.CreateGregorian(AOwner, AParent: TGEDCOMObject; ADay: Word;
-  const AMonth: string; AYear: Integer; const AYearModifier: string; BC: Boolean);
-begin
-  Create(AOwner, AParent, dcGregorian);
-  FDay := ADay;
-  FMonth := StrToGEDCOMMonth(AMonth);
-  FYear := AYear;
-  FYearModifier := AYearModifier;
-  FYearBC := BC;
-end;
-
-constructor TGEDCOMDate.CreateHebrew(AOwner, AParent: TGEDCOMObject; ADay: Word;
-  const AMonth: string; AYear: Integer; BC: Boolean);
-begin
-  Create(AOwner, AParent, dcHebrew);
-  FDay := ADay;
-  FMonth := StrToGEDCOMMonthHebrew(AMonth);
-  FYear := AYear;
-  FYearBC := BC;
-end;
-
-constructor TGEDCOMDate.CreateJulian(AOwner, AParent: TGEDCOMObject;
-  const ADay: Word; const AMonth: string; AYear: Word; BC: Boolean);
-begin
-  Create(AOwner, AParent, dcJulian);
-  FDay := ADay;
-  FMonth := StrToGEDCOMMonth(AMonth);
-  FYear := AYear;
-  FYearBC := BC;
-end;
-
-constructor TGEDCOMDate.CreateRoman(AOwner, AParent: TGEDCOMObject;
-  ADay: Word; const AMonth: string; AYear: Word; BC: Boolean);
-begin
-  Create(AOwner, AParent, dcRoman);
-  FDay := ADay;
-  FMonth := StrToGEDCOMMonth(AMonth);
-  FYear := AYear;
-  FYearBC := BC;
-end;
-
-constructor TGEDCOMDate.CreateUnknown(AOwner, AParent: TGEDCOMObject;
-  ADay: Word; const AMonth: string; AYear: Word; BC: Boolean);
-begin
-  Create(AOwner, AParent, dcUnknown);
-  FDay := ADay;
-  FMonth := StrToGEDCOMMonth(AMonth);
-  FYear := AYear;
-  FYearBC := BC;
 end;
 
 function TGEDCOMDate.DayString(NoDelimiter: Boolean): string;
@@ -2855,7 +2478,7 @@ begin
   if (I >= 1) and (I <= 2) then
   begin
     FDay := StrToInt(Copy(Result,1,I));
-    System.Delete(Result, 1, I);
+    StrDelete(Result, 1, I);
   end;
 end;
 
@@ -2876,7 +2499,7 @@ begin
         if GEDCOMDateEscapeArray[I] = SU then
         begin
           FDateCalendar := I;
-          System.Delete(Result, 1, Length(SU));
+          StrDelete(Result, 1, Length(SU));
           Break;
         end;
     end;
@@ -2895,7 +2518,7 @@ begin
       for I := 1 to 13 do
         if (GEDCOMMonthFrenchArray[I] = SU) then begin
           FMonth := SU;
-          System.Delete(Result, 1, 4);
+          StrDelete(Result, 1, 4);
           Break;
         end;
     end;
@@ -2905,7 +2528,7 @@ begin
       for I := 1 to 13 do
         if (GEDCOMMonthHebrewArray[I] = SU) then begin
           FMonth := SU;
-          System.Delete(Result, 1, 3);
+          StrDelete(Result, 1, 3);
           Break;
         end;
     end;
@@ -2918,7 +2541,7 @@ begin
         for I := 1 to 12 do
           if (GEDCOMMonthArray[I] = SU) or (AnsiUpperCase(ShortMonthNames[I]) = SU) then begin
             FMonth := GEDCOMMonthArray[I];
-            System.Delete(Result, 1, 3);
+            StrDelete(Result, 1, 3);
             Break;
           end;
       end else begin
@@ -2928,7 +2551,7 @@ begin
         for I := 1 to 12 do
           if (GEDCOMMonthSysArray[I] = SU) then begin
             FMonth := GEDCOMMonthArray[I];
-            System.Delete(Result, 1, 2);
+            StrDelete(Result, 1, 2);
             Break;
           end;
       end;
@@ -2942,31 +2565,31 @@ var
 begin
   Result := S;
   I := 0;
-  while (I < Length(Result)) and IsDigit(Result[I+1]) do
+  while (I < Length(Result)) and IsDigit(Result[I + 1]) do
     Inc(I);
 
   if (I > 0) then begin
-    FYear := StrToInt(Copy(Result,1,I));
-    System.Delete(Result,1,I);
+    FYear := StrToInt(Copy(Result, 1, I));
+    StrDelete(Result, 1, I);
 
-    if (Copy(Result,1,1) = GEDCOMYearModifierSeparator) and IsDigits(Copy(Result,2,2)) then begin
-      FYearModifier := Copy(Result,2,2);
-      System.Delete(Result,1,3);
+    if (Copy(Result, 1, 1) = GEDCOMYearModifierSeparator) and IsDigits(Copy(Result,2,2)) then begin
+      FYearModifier := Copy(Result, 2, 2);
+      StrDelete(Result, 1, 3);
     end;
 
-    if UpperCase(Copy(Result,1,Length(GEDCOMYearBC))) = GEDCOMYearBC then begin
+    if UpperCase(Copy(Result, 1, Length(GEDCOMYearBC))) = GEDCOMYearBC then begin
       FYearBC := True;
-      System.Delete(Result,1,Length(GEDCOMYearBC));
+      StrDelete(Result, 1, Length(GEDCOMYearBC));
     end;
   end;
 end;
 
-function TGEDCOMDate.GetMonth: string;
+function TGEDCOMDate.GetMonth(): string;
 begin
   Result := FMonth;
 end;
 
-function TGEDCOMDate.IsEmpty: Boolean;
+function TGEDCOMDate.IsEmpty(): Boolean;
 begin
   Result := inherited IsEmpty and (FYear <= -1) and (FMonth = '') and (FDay <= 0);
 end;
@@ -3069,7 +2692,7 @@ begin
   SetGregorian(D, GEDCOMMonthArray[M], Y);
 end;
 
-procedure TGEDCOMDate.SetFrench(ADay: Word; const AMonth: string; AYear: Word;
+procedure TGEDCOMDate.SetFrench(const ADay: Word; const AMonth: string; AYear: Word;
   BC: Boolean);
 begin
   FDateCalendar := dcFrench;
@@ -3080,7 +2703,7 @@ begin
   FDay := ADay;
 end;
 
-procedure TGEDCOMDate.SetGregorian(ADay: Word; const AMonth: string;
+procedure TGEDCOMDate.SetGregorian(const ADay: Word; const AMonth: string;
   AYear: Integer; const AYearModifier: string; BC: Boolean);
 begin
   FDateCalendar := dcGregorian;
@@ -3091,7 +2714,7 @@ begin
   FYearBC := BC;
 end;
 
-procedure TGEDCOMDate.SetHebrew(AOwner: TGEDCOMObject; ADay: Word;
+procedure TGEDCOMDate.SetHebrew(const ADay: Word;
   const AMonth: string; AYear: Integer; BC: Boolean);
 begin
   FDateCalendar := dcHebrew;
@@ -3113,7 +2736,7 @@ begin
   FMonth := StrToGEDCOMMonth(AMonth);
 end;
 
-procedure TGEDCOMDate.SetRoman(ADay: Word; const AMonth: string; AYear: Word;
+procedure TGEDCOMDate.SetRoman(const ADay: Word; const AMonth: string; AYear: Word;
   BC: Boolean);
 begin
   FDateCalendar := dcRoman;
@@ -3124,7 +2747,7 @@ begin
   FMonth := StrToGEDCOMMonth(AMonth);
 end;
 
-procedure TGEDCOMDate.SetUnknown(ADay: Word; const AMonth: string; AYear: Word;
+procedure TGEDCOMDate.SetUnknown(const ADay: Word; const AMonth: string; AYear: Word;
   BC: Boolean);
 begin
   FDateCalendar := dcUnknown;
@@ -3179,7 +2802,7 @@ begin
   for I := daAbout to daEstimated do
     if (SU = GEDCOMDateApproximatedArray[I]) then begin
       FDateApproximated := I;
-      System.Delete(Result, 1, 3);
+      StrDelete(Result, 1, 3);
       Break;
     end;
 end;
@@ -3221,7 +2844,8 @@ var
 begin
   Result := S;
   if (Length(FDatePhrase) >= 2) and (FDatePhrase[1] = '(') then begin
-    System.Delete(Result,1,1);
+    StrDelete(Result, 1, 1);
+
     C := 0;
     for I := 1 to Length(Result) do
       if Result[I] = '(' then
@@ -3234,7 +2858,9 @@ begin
             FDatePhrase := Copy(Result,1,I-1)
           else
             FDatePhrase := Copy(Result,1,I);
-          System.Delete(Result, 1, I);
+
+          StrDelete(Result, 1, I);
+
           Break;
         end;
       end;
@@ -3245,8 +2871,10 @@ function TGEDCOMDateInterpreted.ParseString(const S: string): string;
 begin
   Result := S;
   Result := ExtractDelimiter(Result);
-  if UpperCase(Copy(Result,1,3)) = GEDCOMDateInterpretedIdent then
-    System.Delete(Result, 1, 3);
+
+  if (UpperCase(Copy(Result, 1, 3)) = GEDCOMDateInterpretedIdent)
+  then StrDelete(Result, 1, 3);
+
   Result := ExtractDelimiter(Result);
   Result := inherited ParseString(Result);
   Result := ExtractDelimiter(Result);
@@ -3258,9 +2886,10 @@ begin
   FDatePhrase := Value;
   if Length(FDatePhrase) > 0 then begin
     if FDatePhrase[1] = '(' then
-      System.Delete(FDatePhrase,1,1);
+      StrDelete(FDatePhrase, 1, 1);
+
     if (Length(FDatePhrase) > 0) and (FDatePhrase[Length(FDatePhrase)] = ')') then
-      System.Delete(FDatePhrase,Length(FDatePhrase),1);
+      StrDelete(FDatePhrase, Length(FDatePhrase), 1);
   end;
 end;
 
@@ -3311,15 +2940,17 @@ function TGEDCOMDatePeriod.ParseString(const S: string): string;
 begin
   Result := S;
 
-  if UpperCase(Copy(Result,1,4)) = GEDCOMDatePeriodFromIdent then begin
-    System.Delete(Result, 1, 4);
+  if UpperCase(Copy(Result, 1, 4)) = GEDCOMDatePeriodFromIdent then begin
+    StrDelete(Result, 1, 4);
+
     Result := ExtractDelimiter(Result);
     Result := FDateFrom.ParseString(Result);
     Result := ExtractDelimiter(Result);
   end;
 
-  if UpperCase(Copy(Result,1,2)) = GEDCOMDatePeriodToIdent then begin
-    System.Delete(Result, 1, 2);
+  if UpperCase(Copy(Result, 1, 2)) = GEDCOMDatePeriodToIdent then begin
+    StrDelete(Result, 1, 2);
+
     Result := ExtractDelimiter(Result);
     Result := FDateTo.ParseString(Result);
   end;
@@ -3437,28 +3068,30 @@ begin
   FDateBefore.Clear;
   Result := S;
   SU := UpperCase(Copy(Result, 1, 3));
-  if SU = GEDCOMDateRangeArray[drAfter] then
-  begin
-    System.Delete(Result,1,3);
+  if (SU = GEDCOMDateRangeArray[drAfter]) then begin
+    StrDelete(Result, 1, 3);
+
     Result := ExtractDelimiter(Result);
     Result := FDateAfter.ParseString(Result);
   end
-  else if SU = GEDCOMDateRangeArray[drBefore] then
-  begin
-    System.Delete(Result,1,3);
+  else
+  if (SU = GEDCOMDateRangeArray[drBefore]) then begin
+    StrDelete(Result, 1, 3);
+
     Result := ExtractDelimiter(Result);
     Result := FDateBefore.ParseString(Result);
   end
-  else if SU = GEDCOMDateRangeArray[drBetween] then
-  begin
-    System.Delete(Result,1,3);
+  else
+  if (SU = GEDCOMDateRangeArray[drBetween]) then begin
+    StrDelete(Result, 1, 3);
+
     Result := ExtractDelimiter(Result);
     Result := FDateAfter.ParseString(Result);
     Result := ExtractDelimiter(Result);
     SU := UpperCase(Copy(Result, 1, 3));
-    if SU = GEDCOMDateRangeArray[drAnd] then
-    begin
-      System.Delete(Result,1,3);
+    if (SU = GEDCOMDateRangeArray[drAnd]) then begin
+      StrDelete(Result, 1, 3);
+
       Result := ExtractDelimiter(Result);
       Result := FDateBefore.ParseString(Result);
     end;
@@ -3525,7 +3158,8 @@ begin
   Result := S;
   if (Length(FStringValue) >= 2) and (FStringValue[1] = '(') then
   begin
-    System.Delete(Result,1,1);
+    StrDelete(Result, 1, 1);
+
     C := 0;
     for I := 1 to Length(Result) do
       if Result[I] = '(' then
@@ -3539,7 +3173,8 @@ begin
             FStringValue := Copy(Result,1,I-1)
           else
             FStringValue := Copy(Result,1,I);
-          System.Delete(Result, 1, I);
+
+          StrDelete(Result, 1, I);
           Break;
         end;
       end;
@@ -3564,9 +3199,10 @@ begin
   if Length(FStringValue) > 0 then
   begin
     if FStringValue[1] = '(' then
-      System.Delete(FStringValue,1,1);
+      StrDelete(FStringValue,1,1);
+
     if (Length(FStringValue) > 0) and (FStringValue[Length(FStringValue)] = ')') then
-      System.Delete(FStringValue,Length(FStringValue),1);
+      StrDelete(FStringValue,Length(FStringValue),1);
   end;
 end;
 
@@ -3688,23 +3324,25 @@ var
   S: string;
 begin
   S := UpperCase(TagStringValue('CHAR'));
-  if S = 'ASCII' then
-    Result := csASCII
-  else if S = 'ANSEL' then
-    Result := csANSEL
-  else if S = 'UNICODE' then
-    Result := csUNICODE
-  else if (S = 'UTF8') or (S = 'UTF-8') then
-    Result := csUTF8
+  if (S = 'ASCII') or (S = 'ANSI') or (S = 'IBMPC')
+  then Result := csASCII
   else
-    Result := csANSEL;  // default character set
+  if (S = 'ANSEL')
+  then Result := csANSEL
+  else
+  if (S = 'UNICODE')
+  then Result := csUNICODE
+  else
+  if (S = 'UTF8') or (S = 'UTF-8')
+  then Result := csUTF8
+  else Result := csANSEL;
 end;
 
 procedure TGEDCOMHeader.SetCharacterSet(const Value: TGEDCOMCharacterSet);
 var
   S: string;
 begin
-  case Value of
+  case Value of {std values}
     csASCII: S := 'ASCII';
     csANSEL: S := 'ANSEL';
     csUNICODE: S := 'UNICODE';
@@ -3735,15 +3373,20 @@ begin
 end;
 
 function TGEDCOMHeader.AddTag(const ATag, AValue: string; AClass: TGEDCOMTagClass): TGEDCOMTag;
+var
+  SU: string;
 begin
-  if UpperCase(ATag) = 'DATE' then
-    Result := inherited AddTag(ATag, AValue, TGEDCOMDateExact)
-  else if UpperCase(ATag) = 'SUBM' then
-    Result := inherited AddTag(ATag, AValue, TGEDCOMPointer)
-  else if UpperCase(ATag) = 'SUBN' then
-    Result := inherited AddTag(ATag, AValue, TGEDCOMPointer)
+  SU := UpperCase(ATag);
+
+  if (SU = 'DATE')
+  then Result := inherited AddTag(ATag, AValue, TGEDCOMDateExact)
   else
-    Result := inherited AddTag(ATag, AValue, AClass);
+  if (SU = 'SUBM')
+  then Result := inherited AddTag(ATag, AValue, TGEDCOMPointer)
+  else
+  if (SU = 'SUBN')
+  then Result := inherited AddTag(ATag, AValue, TGEDCOMPointer)
+  else Result := inherited AddTag(ATag, AValue, AClass);
 end;
 
 function TGEDCOMHeader.AddSubTag(AParent: TGEDCOMCustomTag; const ATag,
@@ -3755,14 +3398,15 @@ begin
   if (AParent = FindTag('SOUR\CORP')) and
      ((SU = 'PHON') or (SU = 'EMAIL') or (SU = 'FAX') or (SU = 'WWW')) then
   begin
-    if FindTag('SOUR\CORP\ADDR') = nil then
-      SetTagStringValue('SOUR\CORP\ADDR', '');
-    Result := FindTag('SOUR\CORP\ADDR').AddTag(ATag, AValue, AClass)
+    if (FindTag('SOUR\CORP\ADDR') = nil)
+    then SetTagStringValue('SOUR\CORP\ADDR', '');
+
+    Result := FindTag('SOUR\CORP\ADDR').AddTag(ATag, AValue, AClass);
   end
-  else if SU = 'ADDR' then
-    Result := inherited AddSubTag(AParent, ATag, AValue, TGEDCOMAddress)
   else
-    Result := inherited AddSubTag(AParent, ATag, AValue, AClass);
+  if (SU = 'ADDR')
+  then Result := inherited AddSubTag(AParent, ATag, AValue, TGEDCOMAddress)
+  else Result := inherited AddSubTag(AParent, ATag, AValue, AClass);
 end;
 
 { TGEDCOMPointer }
@@ -3807,10 +3451,10 @@ begin
      (Copy(Result,2,1) <> '#') and
      (Pos(GEDCOMPointerDelimiter, Copy(Result,3,MaxInt)) > 0) then
   begin
-    System.Delete(Result,1,1);
+    StrDelete(Result,1,1);
     FXRef := GEDCOMPointerDelimiter +
       Copy(Result, 1, Pos(GEDCOMPointerDelimiter, Result));
-    System.Delete(Result,1,Pos(GEDCOMPointerDelimiter,Result));
+    StrDelete(Result,1,Pos(GEDCOMPointerDelimiter,Result));
   end;
 end;
 
@@ -3847,10 +3491,9 @@ end;
 function TGEDCOMCustomRecord.AddSubTag(AParent: TGEDCOMCustomTag;
   const ATag, AValue: string; AClass: TGEDCOMTagClass): TGEDCOMTag;
 begin
-  if AClass = nil then
-    Result := AParent.InsertTag(CreateGEDCOMTag(Owner, AParent, ATag, AValue))
-  else
-    Result := AParent.InsertTag(AClass.CreateTag(Owner, AParent, ATag, AValue))
+  if (AClass = nil)
+  then Result := AParent.InsertTag(CreateGEDCOMTag(Owner, AParent, ATag, AValue))
+  else Result := AParent.InsertTag(AClass.CreateTag(Owner, AParent, ATag, AValue))
 end;
 
 function TGEDCOMCustomRecord.AddTag(const ATag, AValue: string; AClass: TGEDCOMTagClass): TGEDCOMTag;
@@ -3865,26 +3508,25 @@ var
   S: string;
 begin
   S := IntToStr(Level);
-  if XRef <> '' then
-    S := S + GEDCOMDelimiter + GEDCOMPointerDelimiter + XRef + GEDCOMPointerDelimiter;
+
+  if (XRef <> '')
+  then S := S + GEDCOMDelimiter + GEDCOMPointerDelimiter + XRef + GEDCOMPointerDelimiter;
+
   S := S + GEDCOMDelimiter + Name;
-  if StringValue <> '' then
-    S := S + GEDCOMDelimiter + StringValue;
+
+  if (StringValue <> '')
+  then S := S + GEDCOMDelimiter + StringValue;
+
   AStream.Write(S[1], Length(S));
   StreamWriteNewLine(AStream);
 end;
 
 procedure TGEDCOMCustomRecord.SetXRef(const AXRef: string);
-var
-  Unknown: IUnknown;
-  Container: IGEDCOMContainer;
 begin
   FXRef := AXRef;
 
   if (Self is TGEDCOMRecord) and (FOwner <> nil)
-  and FOwner.GetInterface(IUnknown, Unknown)
-  and (Unknown.QueryInterface(IGEDCOMContainer, Container) = S_OK)
-  then Container.SetXRef(TGEDCOMRecord(Self), WideString(XRef));
+  then TGEDCOMTree(FOwner).SetXRef(TGEDCOMRecord(Self), XRef);
 end;
 
 { TGEDCOMDateValue }
@@ -3979,7 +3621,7 @@ type
   TTagProps = set of (tpEmptySkip);
 
 const
-  TagBaseSize = 10;
+  TagBaseSize = 21;
   TagBase: array [0..TagBaseSize-1] of record
     Name: string;
     Props: TTagProps;
@@ -3994,7 +3636,20 @@ const
     (Name: 'PUBL'; Props: [tpEmptySkip]),
     (Name: 'RESN'; Props: [tpEmptySkip]),
     (Name: 'TIME'; Props: [tpEmptySkip]),
-    (Name: 'TYPE'; Props: [tpEmptySkip])
+    (Name: 'TYPE'; Props: [tpEmptySkip]),
+    (Name: 'CTRY'; Props: [tpEmptySkip]),
+    (Name: 'STAE'; Props: [tpEmptySkip]),
+    (Name: 'CITY'; Props: [tpEmptySkip]),
+    (Name: 'POST'; Props: [tpEmptySkip]),
+
+    (Name: 'TEXT'; Props: [tpEmptySkip]),
+
+    (Name: 'NPFX'; Props: [tpEmptySkip]),
+    (Name: 'GIVN'; Props: [tpEmptySkip]),
+    (Name: 'NICK'; Props: [tpEmptySkip]),
+    (Name: 'SPFX'; Props: [tpEmptySkip]),
+    (Name: 'SURN'; Props: [tpEmptySkip]),
+    (Name: 'NSFX'; Props: [tpEmptySkip])
   );
 
 function GetTagProps(const aName: string): TTagProps;
@@ -4011,7 +3666,7 @@ end;
 
 function IsWriteSkip(const aName: string): Boolean;
 begin
-  Result := False;//(tpEmptySkip in GetTagProps(aName));
+  Result := {False;//}(tpEmptySkip in GetTagProps(aName));
 end;
 
 constructor TGEDCOMCustomTag.Create(AOwner, AParent: TGEDCOMObject);
@@ -4051,6 +3706,11 @@ begin
   Assign(Source);
 end;
 
+destructor TGEDCOMCustomTag.Destroy;
+begin
+  inherited Destroy;
+end;
+
 procedure TGEDCOMCustomTag.Assign(Source: TGEDCOMCustomTag);
 var
   i: Integer;
@@ -4070,7 +3730,7 @@ end;
 function TGEDCOMCustomTag.AddTag(const ATag, AValue: string; AClass: TGEDCOMTagClass): TGEDCOMTag;
 begin
   if (ParentRecord <> nil)
-  then Result := ParentRecord.AddSubTag(Self, ATag, AValue, AClass {zsv addon})
+  then Result := ParentRecord.AddSubTag(Self, ATag, AValue, AClass)
   else
   if (AClass <> nil)
   then Result := InsertTag(AClass.CreateTag(Owner, Self, ATag, AValue))
@@ -4104,65 +3764,56 @@ begin
 end;
 
 function TGEDCOMCustomTag.FindRecord(const XRef: string): TGEDCOMRecord;
-var
-  Unknown: IUnknown;
-  Container: IGEDCOMContainer;
 begin
-  if (FOwner <> nil) and FOwner.GetInterface(IUnknown, Unknown)
-  and (Unknown.QueryInterface(IGEDCOMContainer, Container) = S_OK)
-  then Container.FindRecord(Self, WideString(XRef), Result)
+  if (FOwner <> nil)
+  then Result := TGEDCOMTree(FOwner).XRefIndex_Find(XRef)
   else Result := nil;
 end;
 
 function TGEDCOMCustomTag.FindTag(const ATag: string; StartIndex: Integer): TGEDCOMTag;
 var
   Index: Integer;
-  SU: string;
-  S1: string;
+  SU, S1: string;
   O: TGEDCOMCustomTag;
 begin
   SU := UpperCase(ATag);
-  if Pos('\', SU) > 0 then
-    S1 := Copy(SU,1,Pos('\', SU)-1)
-  else
-    S1 := SU;
+
+  if (Pos('\', SU) > 0)
+  then S1 := Copy(SU, 1, Pos('\', SU) - 1)
+  else S1 := SU;
+
   O := Self;
   repeat
-    if S1 = SU then
-      Index := StartIndex
-    else
-      Index := 0;
+    if (S1 = SU)
+    then Index := StartIndex
+    else Index := 0;
+
     while (Index < O.Count) and (TGEDCOMCustomTag(O.Tags[Index]).Name <> S1) do
       Inc(Index);
-    if Index < O.Count then
-    begin
+
+    if (Index < O.Count) then begin
       Result := TGEDCOMTag(O.Tags[Index]);
       O := Result;
-    end
-    else
-    begin
+    end else begin
       Result := nil;
       Break;
     end;
-    if Pos('\', SU) > 0 then
-    begin
-      SU := Copy(SU,Pos('\', SU)+1,MaxInt);
-      if Pos('\', SU) > 0 then
-        S1 := Copy(SU,1,Pos('\', SU)-1)
-      else
-        S1 := Su;
-    end
-    else
-      SU := '';
-  until SU = '';
+
+    if (Pos('\', SU) > 0) then begin
+      SU := Copy(SU, Pos('\', SU) + 1, MaxInt);
+
+      if (Pos('\', SU) > 0)
+      then S1 := Copy(SU, 1, Pos('\', SU) - 1)
+      else S1 := Su;
+    end else SU := '';
+  until (SU = '');
 end;
 
 function TGEDCOMCustomTag.GetCount: Integer;
 begin
-  if FTags = nil then
-    Result := 0
-  else
-    Result := FTags.Count;
+  if (FTags = nil)
+  then Result := 0
+  else Result := FTags.Count;
 end;
 
 function TGEDCOMCustomTag.GetLevel: Integer;
@@ -4272,15 +3923,13 @@ begin
   end;
 end;
 
-procedure TGEDCOMCustomTag.SaveTagToStream(AStream: TStream;
-  ATag: TGEDCOMTag);
+procedure TGEDCOMCustomTag.SaveTagToStream(AStream: TStream; ATag: TGEDCOMTag);
 begin
-  if (ATag <> nil) then
-    ATag.SaveToStream(AStream);
+  if (ATag <> nil)
+  then ATag.SaveToStream(AStream);
 end;
 
-procedure TGEDCOMCustomTag.SaveTagToStream(AStream: TStream;
-  const ATag: string);
+procedure TGEDCOMCustomTag.SaveTagToStream(AStream: TStream; const ATag: string);
 var
   Tag: TGEDCOMTag;
   Index: Integer;
@@ -4324,87 +3973,10 @@ begin
   FLevel := Value;
 end;
 
-procedure TGEDCOMCustomTag.SetStringValue(const S: string);
-var
-  temp: string;
-begin
-  temp := S;
-
-  if (TGEDCOMTree(FOwner).Header.CharacterSet = csUTF8)
-  then temp := Utf8ToAnsi(S);
-
-  ParseString(temp);
-end;
-
 procedure TGEDCOMCustomTag.SetTagIntegerValue(const ATag: string;
   AValue: Integer);
 begin
   SetTagStringValue(ATag, IntToStr(AValue));
-end;
-
-procedure TGEDCOMCustomTag.SetTags(Index: Integer; const Value: TGEDCOMTag);
-begin
-  if FTags <> nil then
-    FTags[Index] := Value;
-end;
-
-procedure TGEDCOMCustomTag.SetTagStringValue(const ATag, AValue: string);
-var
-  SU, S1: string;
-  Index: Integer;
-  O, P: TGEDCOMCustomTag;
-begin
-  SU := UpperCase(ATag);
-  P := FindTag(SU);
-  if P <> nil then
-    P.StringValue := AValue
-  else
-  begin
-    O := Self;
-    while SU <> '' do
-    begin
-      Index := Pos('\', SU);
-      if Index > 0 then
-      begin
-        S1 := Copy(SU, 1, Index-1);
-        SU := Copy(SU, Index+1, MaxInt);
-      end
-      else
-      begin
-        S1 := SU;
-        SU := '';
-      end;
-      P := O.FindTag(S1);
-      if P = nil then
-        if SU = '' then
-          P := O.AddTag(S1, AValue)
-        else
-          P := O.AddTag(S1, '')
-      else if SU = '' then
-        TGEDCOMTag(P).StringValue := AValue;
-      O := P;
-    end;
-  end;
-end;
-
-procedure TGEDCOMCustomTag.StreamWriteNewLine(AStream: TStream);
-begin
-  AStream.Write(GEDCOMNewLine[0], GEDCOMNewLineLength);
-end;
-
-function TGEDCOMCustomTag.TagClass(const ATag: string;
-  AClass: TGEDCOMTagClass): TGEDCOMTag;
-var
-  Tag: TGEDCOMTag;
-begin
-  Tag := FindTag(ATag);
-
-  if (Tag = nil)
-  then Result := AddTag(ATag, '', AClass)
-  else
-    if (Tag is AClass)
-    then Result := Tag
-    else raise EGEDCOMException.CreateFmt(ATagHasInvalidType, [ATag, Tag.ClassName, AClass.ClassName]);
 end;
 
 function TGEDCOMCustomTag.TagIntegerValue(const ATag: string; ADefault: Integer): Integer;
@@ -4418,8 +3990,88 @@ begin
   else Result := StrToIntDef(S, ADefault);
 end;
 
-procedure TGEDCOMCustomTag.SetTagStrings(ATag: TGEDCOMCustomTag;
-  Value: TStrings);
+procedure TGEDCOMCustomTag.SetStringValue(const S: string);
+var
+  temp: string;
+begin
+  temp := S;
+
+  if (TGEDCOMTree(FOwner).Header.CharacterSet = csUTF8)
+  then temp := Utf8ToAnsi(S);
+
+  ParseString(temp);
+end;
+
+function TGEDCOMCustomTag.TagStringValue(const ATag: string): string;
+var
+  Tag: TGEDCOMTag;
+begin
+  Tag := FindTag(ATag);
+
+  if (Tag <> nil)
+  then Result := Tag.StringValue
+  else Result := '';
+end;
+
+procedure TGEDCOMCustomTag.SetTagStringValue(const ATag, AValue: string);
+var
+  SU, S1: string;
+  Index: Integer;
+  O, P: TGEDCOMCustomTag;
+begin
+  SU := UpperCase(ATag);
+  P := FindTag(SU);
+
+  if (P <> nil)
+  then P.StringValue := AValue
+  else begin
+    O := Self;
+    while (SU <> '') do begin
+      Index := Pos('\', SU);
+      if (Index > 0) then begin
+        S1 := Copy(SU, 1, Index-1);
+        SU := Copy(SU, Index+1, MaxInt);
+      end else begin
+        S1 := SU;
+        SU := '';
+      end;
+
+      P := O.FindTag(S1);
+
+      if (P = nil)
+      then
+        if (SU = '')
+        then P := O.AddTag(S1, AValue)
+        else P := O.AddTag(S1, '')
+      else
+        if (SU = '')
+        then TGEDCOMTag(P).StringValue := AValue;
+
+      O := P;
+    end;
+  end;
+end;
+
+procedure TGEDCOMCustomTag.StreamWriteNewLine(AStream: TStream);
+begin
+  AStream.Write(GEDCOMNewLine[1], Length(GEDCOMNewLine));
+end;
+
+function TGEDCOMCustomTag.TagClass(const ATag: string; AClass: TGEDCOMTagClass): TGEDCOMTag;
+var
+  Tag: TGEDCOMTag;
+begin
+  Tag := FindTag(ATag);
+
+  if (Tag = nil)
+  then Result := AddTag(ATag, '', AClass)
+  else
+    if (Tag is AClass)
+    then Result := Tag
+    else raise EGEDCOMException.CreateFmt(ATagHasInvalidType, [ATag, Tag.ClassName, AClass.ClassName]);
+end;
+
+procedure TGEDCOMCustomTag.SetTagStrings(ATag: TGEDCOMCustomTag; Value: TStrings);
 var
   I: Integer;
   S: string;
@@ -4437,12 +4089,12 @@ begin
         if (I = 0) and not(ATag is TGEDCOMRecord) {zsv-hack}
         then ATag.StringValue := Copy(S, 1, 248)
         else ATag.AddTag('CONT', Copy(S, 1, 248));
-        
-        System.Delete(S, 1, 248);
+
+        StrDelete(S, 1, 248);
 
         while Length(S) > 0 do begin
           ATag.AddTag('CONC', Copy(S, 1, 248));
-          System.Delete(S, 1, 248);
+          StrDelete(S, 1, 248);
         end;
       end;
   end;
@@ -4476,34 +4128,15 @@ begin
   Result := AStrings;
 end;
 
-function TGEDCOMCustomTag.TagStringValue(const ATag: string): string;
-var
-  Tag: TGEDCOMTag;
-begin
-  Tag := FindTag(ATag);
-
-  if (Tag <> nil)
-  then Result := Tag.StringValue
-  else Result := '';
-end;
-
 procedure TGEDCOMCustomTag.ResetOwner(AOwner: TGEDCOMObject);
-var
-  i: Integer;
 begin
   FOwner := AOwner;
-
-  if (FTags <> nil) then begin
-    for i := 0 to FTags.Count - 1 do
-      TGEDCOMCustomTag(FTags[i]).ResetOwner(AOwner);
-  end;
+  if (FTags <> nil) then FTags.ResetOwner(AOwner);
 end;
 
 procedure TGEDCOMCustomTag.ReplaceXRefs(aMap: TXRefReplaceMap);
 begin
-  if (FTags <> nil) then begin
-    FTags.ReplaceXRefs(aMap);
-  end;
+  if (FTags <> nil) then FTags.ReplaceXRefs(aMap);
 end;
 
 { TGEDCOMTagWithLists }
@@ -4654,25 +4287,12 @@ begin
 end;
 
 procedure TGEDCOMTagWithLists.ResetOwner(AOwner: TGEDCOMObject);
-var
-  i: Integer;
 begin
   inherited ResetOwner(AOwner);
 
-  if (FNotes <> nil) then begin
-    for i := 0 to FNotes.Count - 1 do
-      TGEDCOMCustomTag(FNotes[i]).ResetOwner(AOwner);
-  end;
-
-  if (FSourceCitations <> nil) then begin
-    for i := 0 to FSourceCitations.Count - 1 do
-      TGEDCOMCustomTag(FSourceCitations[i]).ResetOwner(AOwner);
-  end;
-
-  if (FMultimediaLinks <> nil) then begin
-    for i := 0 to FMultimediaLinks.Count - 1 do
-      TGEDCOMCustomTag(FMultimediaLinks[i]).ResetOwner(AOwner);
-  end;
+  if (FNotes <> nil) then FNotes.ResetOwner(AOwner);
+  if (FSourceCitations <> nil) then FSourceCitations.ResetOwner(AOwner);
+  if (FMultimediaLinks <> nil) then FMultimediaLinks.ResetOwner(AOwner);
 end;
 
 procedure TGEDCOMTagWithLists.ReplaceXRefs(aMap: TXRefReplaceMap);
@@ -4693,9 +4313,9 @@ begin
   if Assigned(FMultimediaLinks) then FMultimediaLinks.SaveToStream(AStream);
 end;
 
-{ TGEDCOMRecordWithLists }
+{ TGEDCOMRecord }
 
-constructor TGEDCOMRecordWithLists.Create(AOwner, AParent: TGEDCOMObject; ALists: TGEDCOMLists);
+constructor TGEDCOMRecord.Create(AOwner, AParent: TGEDCOMObject; ALists: TGEDCOMLists);
 begin
   inherited Create(AOwner, AParent);
   FLists := ALists;
@@ -4704,7 +4324,7 @@ begin
   FMultimediaLinks := nil;
 end;
 
-destructor TGEDCOMRecordWithLists.Destroy;
+destructor TGEDCOMRecord.Destroy;
 begin
   if (FNotes <> nil) then FNotes.Free;
   if (FSourceCitations <> nil) then FSourceCitations.Free;
@@ -4712,7 +4332,15 @@ begin
   inherited Destroy;
 end;
 
-function TGEDCOMRecordWithLists.AddMultimediaLink(
+function TGEDCOMRecord.NewXRef(): string;
+begin
+  if (FOwner <> nil) then begin
+    FXRef := TGEDCOMTree(FOwner).XRefIndex_NewXRef(Self);
+    XRef := FXRef;
+  end;
+end;
+
+function TGEDCOMRecord.AddMultimediaLink(
   AMultimediaLink: TGEDCOMMultimediaLink): TGEDCOMMultimediaLink;
 begin
   Result := AMultimediaLink;
@@ -4724,25 +4352,25 @@ begin
   then FMultimediaLinks.Add(AMultimediaLink);
 end;
 
-procedure TGEDCOMRecordWithLists.DeleteNotes(aIndex: Integer);
+procedure TGEDCOMRecord.DeleteNotes(aIndex: Integer);
 begin
   if (FNotes <> nil)
   then FNotes.Delete(aIndex);
 end;
 
-procedure TGEDCOMRecordWithLists.DeleteSourceCitation(aIndex: Integer);
+procedure TGEDCOMRecord.DeleteSourceCitation(aIndex: Integer);
 begin
   if (FSourceCitations <> nil)
   then FSourceCitations.Delete(aIndex);
 end;
 
-procedure TGEDCOMRecordWithLists.DeleteMultimediaLink(aIndex: Integer);
+procedure TGEDCOMRecord.DeleteMultimediaLink(aIndex: Integer);
 begin
   if (FMultimediaLinks <> nil)
   then FMultimediaLinks.Delete(aIndex);
 end;
 
-function TGEDCOMRecordWithLists.AddNotes(ANotes: TGEDCOMNotes): TGEDCOMNotes;
+function TGEDCOMRecord.AddNotes(ANotes: TGEDCOMNotes): TGEDCOMNotes;
 begin
   Result := ANotes;
 
@@ -4753,7 +4381,7 @@ begin
   then FNotes.Add(ANotes);
 end;
 
-function TGEDCOMRecordWithLists.AddSourceCitation(
+function TGEDCOMRecord.AddSourceCitation(
   ASourceCitation: TGEDCOMSourceCitation): TGEDCOMSourceCitation;
 begin
   Result := ASourceCitation;
@@ -4765,7 +4393,7 @@ begin
   then FSourceCitations.Add(ASourceCitation);
 end;
 
-function TGEDCOMRecordWithLists.AddTag(const ATag, AValue: string;
+function TGEDCOMRecord.AddTag(const ATag, AValue: string;
   AClass: TGEDCOMTagClass): TGEDCOMTag;
 var
   SU: string;
@@ -4787,7 +4415,7 @@ begin
     Result := inherited AddTag(ATag, AValue, AClass);
 end;
 
-procedure TGEDCOMRecordWithLists.Clear;
+procedure TGEDCOMRecord.Clear;
 begin
   inherited Clear;
 
@@ -4796,60 +4424,60 @@ begin
   if (FMultimediaLinks <> nil) then FMultimediaLinks.Clear;
 end;
 
-function TGEDCOMRecordWithLists.GetMultimediaLinks(Index: Integer): TGEDCOMMultimediaLink;
+function TGEDCOMRecord.GetMultimediaLinks(Index: Integer): TGEDCOMMultimediaLink;
 begin
   if (FMultimediaLinks = nil)
   then Result := nil
   else Result := TGEDCOMMultimediaLink(FMultimediaLinks[Index]);
 end;
 
-function TGEDCOMRecordWithLists.GetMultimediaLinksCount: Integer;
+function TGEDCOMRecord.GetMultimediaLinksCount: Integer;
 begin
   if (FMultimediaLinks = nil)
   then Result := 0
   else Result := FMultimediaLinks.Count;
 end;
 
-function TGEDCOMRecordWithLists.GetNotes(Index: Integer): TGEDCOMNotes;
+function TGEDCOMRecord.GetNotes(Index: Integer): TGEDCOMNotes;
 begin
   if (FNotes = nil)
   then Result := nil
   else Result := TGEDCOMNotes(FNotes[Index]);
 end;
 
-function TGEDCOMRecordWithLists.GetNotesCount: Integer;
+function TGEDCOMRecord.GetNotesCount: Integer;
 begin
   if (FNotes = nil)
   then Result := 0
   else Result := FNotes.Count;
 end;
 
-function TGEDCOMRecordWithLists.GetSourceCitations(Index: Integer): TGEDCOMSourceCitation;
+function TGEDCOMRecord.GetSourceCitations(Index: Integer): TGEDCOMSourceCitation;
 begin
   if (FSourceCitations = nil)
   then Result := nil
   else Result := TGEDCOMSourceCitation(FSourceCitations[Index]);
 end;
 
-function TGEDCOMRecordWithLists.GetSourceCitationsCount: Integer;
+function TGEDCOMRecord.GetSourceCitationsCount: Integer;
 begin
   if (FSourceCitations = nil)
   then Result := 0
   else Result := FSourceCitations.Count;
 end;
 
-function TGEDCOMRecordWithLists.IsEmpty: Boolean;
+function TGEDCOMRecord.IsEmpty: Boolean;
 begin
   Result := inherited IsEmpty and (GetNotesCount = 0) and
     (GetSourceCitationsCount = 0) and (GetMultimediaLinksCount = 0);
 end;
 
-function TGEDCOMRecordWithLists.GetChangeDate: TGEDCOMChangeDate;
+function TGEDCOMRecord.GetChangeDate: TGEDCOMChangeDate;
 begin
   Result := TGEDCOMChangeDate(TagClass('CHAN', TGEDCOMChangeDate));
 end;
 
-procedure TGEDCOMRecordWithLists.SaveToStream(AStream: TStream);
+procedure TGEDCOMRecord.SaveToStream(AStream: TStream);
 begin
   inherited SaveToStream(AStream);
 
@@ -4858,41 +4486,23 @@ begin
   if Assigned(FMultimediaLinks) then FMultimediaLinks.SaveToStream(AStream);
 end;
 
-procedure TGEDCOMRecordWithLists.ResetOwner(AOwner: TGEDCOMObject);
-var
-  i: Integer;
+procedure TGEDCOMRecord.ResetOwner(AOwner: TGEDCOMObject);
 begin
   inherited ResetOwner(AOwner);
 
-  if (FNotes <> nil) then begin
-    for i := 0 to FNotes.Count - 1 do
-      TGEDCOMCustomTag(FNotes[i]).ResetOwner(AOwner);
-  end;
-
-  if (FSourceCitations <> nil) then begin
-    for i := 0 to FSourceCitations.Count - 1 do
-      TGEDCOMCustomTag(FSourceCitations[i]).ResetOwner(AOwner);
-  end;
-
-  if (FMultimediaLinks <> nil) then begin
-    for i := 0 to FMultimediaLinks.Count - 1 do
-      TGEDCOMCustomTag(FMultimediaLinks[i]).ResetOwner(AOwner);
-  end;
+  if (FNotes <> nil) then FNotes.ResetOwner(AOwner);
+  if (FSourceCitations <> nil) then FSourceCitations.ResetOwner(AOwner);
+  if (FMultimediaLinks <> nil) then FMultimediaLinks.ResetOwner(AOwner);
 end;
 
-procedure TGEDCOMRecordWithLists.ReplaceXRefs(aMap: TXRefReplaceMap);
+procedure TGEDCOMRecord.ReplaceXRefs(aMap: TXRefReplaceMap);
 begin
-  if (FNotes <> nil)
-  then FNotes.ReplaceXRefs(aMap);
-
-  if (FSourceCitations <> nil)
-  then FSourceCitations.ReplaceXRefs(aMap);
-
-  if (FMultimediaLinks <> nil)
-  then FMultimediaLinks.ReplaceXRefs(aMap);
+  if (FNotes <> nil) then FNotes.ReplaceXRefs(aMap);
+  if (FSourceCitations <> nil) then FSourceCitations.ReplaceXRefs(aMap);
+  if (FMultimediaLinks <> nil) then FMultimediaLinks.ReplaceXRefs(aMap);
 end;
 
-procedure TGEDCOMRecordWithLists.MoveTo(aToRecord: TGEDCOMRecordWithLists);
+procedure TGEDCOMRecord.MoveTo(aToRecord: TGEDCOMRecord);
 var
   i: Integer;
   tag: TGEDCOMCustomTag;
@@ -4996,18 +4606,18 @@ begin
     FHour := H;
 
     if Copy(Result,1,1) = ':' then
-      System.Delete(Result,1,1);
+      StrDelete(Result,1,1);
 
     Result := ExtractNumber(Result, M);
     FMinutes := M;
 
     if Copy(Result,1,1) = ':' then begin
-      System.Delete(Result,1,1);
+      StrDelete(Result,1,1);
       Result := ExtractNumber(Result, S);
       FSeconds := S;
 
       if Copy(Result,1,1) = '.' then begin
-        System.Delete(Result,1,1);
+        StrDelete(Result,1,1);
         Result := ExtractNumber(Result, F);
         FFraction := F;
       end;
@@ -5031,7 +4641,6 @@ begin
   FName := 'FAM';
   FFamilyEvents := nil;
   FChildren := nil;
-  FSpouseSealings := nil;
   FUserReferences := nil;
 end;
 
@@ -5039,7 +4648,6 @@ destructor TGEDCOMFamilyRecord.Destroy;
 begin
   if (FFamilyEvents <> nil) then FFamilyEvents.Free;
   if (FChildren <> nil) then FChildren.Free;
-  if (FSpouseSealings <> nil) then FSpouseSealings.Free;
   if (FUserReferences <> nil) then FUserReferences.Free;
   inherited Destroy;
 end;
@@ -5049,7 +4657,6 @@ begin
   inherited Clear;
   if (FFamilyEvents <> nil) then FFamilyEvents.Clear;
   if (FChildren <> nil) then FChildren.Clear;
-  if (FSpouseSealings <> nil) then FSpouseSealings.Clear;
   if (FUserReferences <> nil) then FUserReferences.Clear;
 end;
 
@@ -5059,37 +4666,18 @@ var
   SU: string;
 begin
   SU := UpperCase(ATag);
-  if SU = 'CHIL'
+  if (SU = 'CHIL')
   then Result := AddChild(TGEDCOMPointer.CreateTag(Owner, Self, SU, AValue))
   else
   if (SU = 'ANUL') or (SU = 'CENS') or (SU = 'DIV') or (SU = 'DIVF')
+  or (SU = 'ENGA') or (SU = 'MARB') or (SU = 'MARC') or (SU = 'MARR')
+  or (SU = 'MARL') or (SU = 'MARS') or (SU = 'RESI') or (SU = 'EVEN')
   then Result := AddFamilyEvent(TGEDCOMFamilyEvent.CreateTag(Owner, Self, SU, AValue))
   else
-  if (SU = 'ENGA') or (SU = 'MARB') or (SU = 'MARC')
-  then Result := AddFamilyEvent(TGEDCOMFamilyEvent.CreateTag(Owner, Self, SU, AValue))
-  else
-  if SU = 'MARR'
-  then Result := AddFamilyEvent(TGEDCOMFamilyEvent.CreateTag(Owner, Self, SU, AValue))
-  else
-  if (SU = 'MARL') or (SU = 'MARS')
-  then Result := AddFamilyEvent(TGEDCOMFamilyEvent.CreateTag(Owner, Self, SU, AValue))
-  else
-  if SU = 'RESI'
-  then Result := AddFamilyEvent(TGEDCOMFamilyEvent.CreateTag(Owner, Self, SU, AValue))
-  else
-  if SU = 'EVEN'
-  then Result := AddFamilyEvent(TGEDCOMFamilyEvent.CreateTag(Owner, Self, SU, AValue))
-  else
-  if SU = 'SLGS'
-  then Result := AddSpouseSealing(TGEDCOMSpouseSealing.CreateTag(Owner, Self, SU, AValue))
-  else
-  if SU = 'REFN'
+  if (SU = 'REFN')
   then Result := AddUserReference(TGEDCOMUserReference.CreateTag(Owner, Self, SU, AValue))
   else
-  if SU = 'HUSB'
-  then Result := inherited AddTag(ATag, AValue, TGEDCOMPointer)
-  else
-  if SU = 'WIFE'
+  if (SU = 'HUSB') or (SU = 'WIFE')
   then Result := inherited AddTag(ATag, AValue, TGEDCOMPointer)
   else
     Result := inherited AddTag(ATag, AValue, AClass);
@@ -5108,10 +4696,12 @@ end;
 function TGEDCOMFamilyRecord.AddChild(APointer: TGEDCOMPointer): TGEDCOMPointer;
 begin
   Result := APointer;
-  if FChildren = nil then
-    FChildren := TGEDCOMList.Create(Self);
-  if APointer <> nil then
-    FChildren.Add(APointer);
+
+  if (FChildren = nil)
+  then FChildren := TGEDCOMList.Create(Self);
+
+  if (APointer <> nil)
+  then FChildren.Add(APointer);
 end;
 
 procedure TGEDCOMFamilyRecord.RemoveChild(XRef: string);
@@ -5145,56 +4735,44 @@ begin
   then FFamilyEvents.DeleteObject(aEvent);
 end;
 
-function TGEDCOMFamilyRecord.AddSpouseSealing(
-  ASpouseSealing: TGEDCOMSpouseSealing): TGEDCOMSpouseSealing;
-begin
-  Result := ASpouseSealing;
-  if FSpouseSealings = nil then
-    FSpouseSealings := TGEDCOMList.Create(Self);
-  if ASpouseSealing <> nil then
-    FSpouseSealings.Add(ASpouseSealing);
-end;
-
 function TGEDCOMFamilyRecord.AddUserReference(
   AUserReference: TGEDCOMUserReference): TGEDCOMUserReference;
 begin
   Result := AUserReference;
-  if FUserReferences = nil then
-    FUserReferences := TGEDCOMList.Create(Self);
-  if FUserReferences <> nil then
-    FUserReferences.Add(AUserReference);
+
+  if (FUserReferences = nil)
+  then FUserReferences := TGEDCOMList.Create(Self);
+
+  if (FUserReferences <> nil)
+  then FUserReferences.Add(AUserReference);
 end;
 
 function TGEDCOMFamilyRecord.GetChildren(Index: Integer): TGEDCOMPointer;
 begin
-  if FChildren = nil then
-    Result := nil
-  else
-    Result := TGEDCOMPointer(FChildren[Index]);
+  if (FChildren = nil)
+  then Result := nil
+  else Result := TGEDCOMPointer(FChildren[Index]);
 end;
 
 function TGEDCOMFamilyRecord.GetChildrenCount: Integer;
 begin
-  if FChildren = nil then
-    Result := 0
-  else
-    Result := FChildren.Count;
+  if (FChildren = nil)
+  then Result := 0
+  else Result := FChildren.Count;
 end;
 
 function TGEDCOMFamilyRecord.GetFamilyEventCount: Integer;
 begin
-  if FFamilyEvents = nil then
-    Result := 0
-  else
-    Result := FFamilyEvents.Count;
+  if (FFamilyEvents = nil)
+  then Result := 0
+  else Result := FFamilyEvents.Count;
 end;
 
 function TGEDCOMFamilyRecord.GetFamilyEvents(Index: Integer): TGEDCOMFamilyEvent;
 begin
-  if FFamilyEvents = nil then
-    Result := nil
-  else
-    Result := TGEDCOMFamilyEvent(FFamilyEvents[Index]);
+  if (FFamilyEvents = nil)
+  then Result := nil
+  else Result := TGEDCOMFamilyEvent(FFamilyEvents[Index]);
 end;
 
 function TGEDCOMFamilyRecord.GetRestriction: TGEDCOMRestriction;
@@ -5202,31 +4780,15 @@ var
   S: string;
 begin
   S := UpperCase(Trim(TagStringValue('RESN')));
-  if S = 'CONFIDENTIAL' then
-    Result := rnConfidential
-  else if S = 'LOCKED' then
-    Result := rnLocked
-  else if S = 'PRIVACY' then
-    Result := rnPrivacy
+  if (S = 'CONFIDENTIAL')
+  then Result := rnConfidential
   else
-    Result := rnNone;   // default no restriction
-end;
-
-function TGEDCOMFamilyRecord.GetSpouseSealing(
-  Index: Integer): TGEDCOMSpouseSealing;
-begin
-  if FSpouseSealings = nil then
-    Result := nil
+  if (S = 'LOCKED')
+  then Result := rnLocked
   else
-    Result := TGEDCOMSpouseSealing(FSpouseSealings[Index]);
-end;
-
-function TGEDCOMFamilyRecord.GetSpouseSealingCount: Integer;
-begin
-  if FSpouseSealings = nil then
-    Result := 0
-  else
-    Result := FSpouseSealings.Count;
+  if (S = 'PRIVACY')
+  then Result := rnPrivacy
+  else Result := rnNone;   // default no restriction
 end;
 
 function TGEDCOMFamilyRecord.GetStringTag(Index: Integer): string;
@@ -5244,25 +4806,22 @@ end;
 function TGEDCOMFamilyRecord.GetUserReferences(
   Index: Integer): TGEDCOMUserReference;
 begin
-  if FUserReferences = nil then
-    Result := nil
-  else
-    Result := TGEDCOMUserReference(FUserReferences[Index]);
+  if (FUserReferences = nil)
+  then Result := nil
+  else Result := TGEDCOMUserReference(FUserReferences[Index]);
 end;
 
 function TGEDCOMFamilyRecord.GetUserReferencesCount: Integer;
 begin
-  if FUserReferences = nil then
-    Result := 0
-  else
-    Result := FUserReferences.Count;
+  if (FUserReferences = nil)
+  then Result := 0
+  else Result := FUserReferences.Count;
 end;
 
 function TGEDCOMFamilyRecord.IsEmpty: Boolean;
 begin
   Result := inherited IsEmpty and (GetFamilyEventCount = 0) and
-    (GetChildrenCount = 0) and (GetSpouseSealingCount = 0) and
-    (GetUserReferencesCount = 0);
+    (GetChildrenCount = 0) and (GetUserReferencesCount = 0);
 end;
 
 procedure TGEDCOMFamilyRecord.SaveToStream(AStream: TStream);
@@ -5271,7 +4830,6 @@ begin
 
   if Assigned(FChildren) then FChildren.SaveToStream(AStream);
   if Assigned(FFamilyEvents) then FFamilyEvents.SaveToStream(AStream);
-  if Assigned(FSpouseSealings) then FSpouseSealings.SaveToStream(AStream);
   if Assigned(FUserReferences) then FUserReferences.SaveToStream(AStream);
 end;
 
@@ -5296,30 +4854,12 @@ begin
 end;
 
 procedure TGEDCOMFamilyRecord.ResetOwner(AOwner: TGEDCOMObject);
-var
-  i: Integer;
 begin
   inherited ResetOwner(AOwner);
 
-  if (FChildren <> nil) then begin
-    for i := 0 to FChildren.Count - 1 do
-      TGEDCOMCustomTag(FChildren[i]).ResetOwner(AOwner);
-  end;
-
-  if (FFamilyEvents <> nil) then begin
-    for i := 0 to FFamilyEvents.Count - 1 do
-      TGEDCOMCustomTag(FFamilyEvents[i]).ResetOwner(AOwner);
-  end;
-
-  if (FSpouseSealings <> nil) then begin
-    for i := 0 to FSpouseSealings.Count - 1 do
-      TGEDCOMCustomTag(FSpouseSealings[i]).ResetOwner(AOwner);
-  end;
-
-  if (FUserReferences <> nil) then begin
-    for i := 0 to FUserReferences.Count - 1 do
-      TGEDCOMCustomTag(FUserReferences[i]).ResetOwner(AOwner);
-  end;
+  if (FChildren <> nil) then FChildren.ResetOwner(AOwner);
+  if (FFamilyEvents <> nil) then FFamilyEvents.ResetOwner(AOwner);
+  if (FUserReferences <> nil) then FUserReferences.ResetOwner(AOwner);
 end;
 
 procedure TGEDCOMFamilyRecord.ReplaceXRefs(aMap: TXRefReplaceMap);
@@ -5334,11 +4874,10 @@ begin
 
   if (FChildren <> nil) then FChildren.ReplaceXRefs(aMap);
   if (FFamilyEvents <> nil) then FFamilyEvents.ReplaceXRefs(aMap);
-  if (FSpouseSealings <> nil) then FSpouseSealings.ReplaceXRefs(aMap);
   if (FUserReferences <> nil) then FUserReferences.ReplaceXRefs(aMap);
 end;
 
-procedure TGEDCOMFamilyRecord.MoveTo(aToRecord: TGEDCOMRecordWithLists);
+procedure TGEDCOMFamilyRecord.MoveTo(aToRecord: TGEDCOMRecord);
 var
   i: Integer;
   toRec: TGEDCOMFamilyRecord;
@@ -5356,12 +4895,6 @@ begin
   if (FChildren <> nil) then begin
     for i := FChildren.Count - 1 downto 0 do begin
       toRec.AddChild(TGEDCOMPointer(FChildren.Extract(i)));
-    end;
-  end;
-
-  if (FSpouseSealings <> nil) then begin
-    for i := FSpouseSealings.Count - 1 downto 0 do begin
-      toRec.AddSpouseSealing(TGEDCOMSpouseSealing(FSpouseSealings.Extract(i)));
     end;
   end;
 
@@ -5411,14 +4944,10 @@ begin
   FPersonalNames := nil;
   FIndividualEvents := nil;
   FIndividualAttributes := nil;
-  FIndividualOrdinances := nil;
   FChildToFamilyLinks := nil;
   FSpouseToFamilyLinks := nil;
   FSubmittors := nil;
   FAssociations := nil;
-  FAliasses := nil;
-  FAncestorsInterest := nil;
-  FDescendantsInterest := nil;
   FUserReferences := nil;
   FNotes := nil;
   FSourceCitations := nil;
@@ -5431,48 +4960,29 @@ begin
   if (FPersonalNames <> nil) then FPersonalNames.Free;
   if (FIndividualEvents <> nil) then FIndividualEvents.Free;
   if (FIndividualAttributes <> nil) then FIndividualAttributes.Free;
-  if (FIndividualOrdinances <> nil) then FIndividualOrdinances.Free;
   if (FChildToFamilyLinks <> nil) then FChildToFamilyLinks.Free;
   if (FSpouseToFamilyLinks <> nil) then FSpouseToFamilyLinks.Free;
   if (FSubmittors <> nil) then FSubmittors.Free;
   if (FAssociations <> nil) then FAssociations.Free;
-  if (FAliasses <> nil) then FAliasses.Free;
-  if (FAncestorsInterest <> nil) then FAncestorsInterest.Free;
-  if (FDescendantsInterest <> nil) then FDescendantsInterest.Free;
   if (FUserReferences <> nil) then FUserReferences.Free;
   if (FGroups <> nil) then FGroups.Free;
 
   inherited Destroy;
 end;
 
-procedure TGEDCOMIndividualRecord.Clear;
+procedure TGEDCOMIndividualRecord.Clear();
 begin
-  inherited Clear;
+  inherited Clear();
 
   if (FPersonalNames <> nil) then FPersonalNames.Clear;
   if (FIndividualEvents <> nil) then FIndividualEvents.Clear;
   if (FIndividualAttributes <> nil) then FIndividualAttributes.Clear;
-  if (FIndividualOrdinances <> nil) then FIndividualOrdinances.Clear;
   if (FChildToFamilyLinks <> nil) then FChildToFamilyLinks.Clear;
   if (FSpouseToFamilyLinks <> nil) then FSpouseToFamilyLinks.Clear;
   if (FSubmittors <> nil) then FSubmittors.Clear;
   if (FAssociations <> nil) then FAssociations.Clear;
-  if (FAliasses <> nil) then FAliasses.Clear;
-  if (FAncestorsInterest <> nil) then FAncestorsInterest.Clear;
-  if (FDescendantsInterest <> nil) then FDescendantsInterest.Clear;
   if (FUserReferences <> nil) then FUserReferences.Clear;
   if (FGroups <> nil) then FGroups.Clear;
-end;
-
-function TGEDCOMIndividualRecord.AddAlias(Value: TGEDCOMPointer): TGEDCOMPointer;
-begin
-  Result := Value;
-
-  if (FAliasses = nil)
-  then FAliasses := TGEDCOMList.Create(Self);
-
-  if (Value <> nil)
-  then FAliasses.Add(Value);
 end;
 
 function TGEDCOMIndividualRecord.AddGroup(Value: TGEDCOMPointer): TGEDCOMPointer;
@@ -5497,23 +5007,13 @@ var
   i: Integer;
 begin
   Result := -1;
+  if (FGroups = nil) then Exit;
 
   for i := 0 to FGroups.Count - 1 do
     if (CleanXRef(TGEDCOMPointer(FGroups[i]).XRef) = CleanXRef(aGroup.XRef)) then begin
       Result := i;
       Break;
     end;
-end;
-
-function TGEDCOMIndividualRecord.AddAncestorsInterest(Value: TGEDCOMPointer): TGEDCOMPointer;
-begin
-  Result := Value;
-
-  if (FAncestorsInterest = nil)
-  then FAncestorsInterest := TGEDCOMList.Create(Self);
-
-  if (Value <> nil)
-  then FAncestorsInterest.Add(Value);
 end;
 
 function TGEDCOMIndividualRecord.AddAssociation(Value: TGEDCOMAssociation): TGEDCOMAssociation;
@@ -5525,17 +5025,6 @@ begin
 
   if (Value <> nil)
   then FAssociations.Add(Value);
-end;
-
-function TGEDCOMIndividualRecord.AddDescendantsInterest(Value: TGEDCOMPointer): TGEDCOMPointer;
-begin
-  Result := Value;
-
-  if (FDescendantsInterest = nil)
-  then FDescendantsInterest := TGEDCOMList.Create(Self);
-
-  if (Value <> nil)
-  then FDescendantsInterest.Add(Value);
 end;
 
 //
@@ -5581,17 +5070,6 @@ begin
 end;
 
 //
-
-function TGEDCOMIndividualRecord.AddIndividualOrdinance(Value: TGEDCOMIndividualOrdinance): TGEDCOMIndividualOrdinance;
-begin
-  Result := Value;
-
-  if (FIndividualOrdinances = nil)
-  then FIndividualOrdinances := TGEDCOMList.Create(Self);
-
-  if (Value <> nil)
-  then FIndividualOrdinances.Add(Value);
-end;
 
 function TGEDCOMIndividualRecord.AddPersonalName(Value: TGEDCOMPersonalName): TGEDCOMPersonalName;
 begin
@@ -5708,9 +5186,6 @@ begin
   if (SU = 'SUBM')
   then Result := AddSubmittor(TGEDCOMPointer.CreateTag(Owner, Self, SU, AValue))
   else
-  if (SU = 'BAPL') or (SU = 'CONL') or (SU = 'ENDL') or (SU = 'SLGC')
-  then Result := AddIndividualOrdinance(TGEDCOmIndividualOrdinance.CreateTag(Owner, Self, SU, AValue))
-  else
   if (SU = 'FAMC')
   then Result := AddChildToFamilyLink(TGEDCOMChildToFamilyLink.CreateTag(Owner, Self, SU, AValue))
   else
@@ -5719,15 +5194,6 @@ begin
   else
   if (SU = 'ASSO')
   then Result := AddAssociation(TGEDCOMAssociation.CreateTag(Owner, Self, SU, AValue))
-  else
-  if (SU = 'ALIA')
-  then Result := AddAlias(TGEDCOMPointer.CreateTag(Owner, Self, SU, AValue))
-  else
-  if (SU = 'ANCI')
-  then Result := AddAncestorsInterest(TGEDCOMPointer.CreateTag(Owner, Self, SU, AValue))
-  else
-  if (SU = 'DESI')
-  then Result := AddDescendantsInterest(TGEDCOMPointer.CreateTag(Owner, Self, SU, AValue))
   else
   if (SU = 'REFN')
   then Result := AddUserReference(TGEDCOMUserReference.CreateTag(Owner, Self, SU, AValue))
@@ -5750,20 +5216,6 @@ begin
   then FUserReferences.Add(AUserReference);
 end;
 
-function TGEDCOMIndividualRecord.GetAliasses(Index: Integer): TGEDCOMPointer;
-begin
-  if (FAliasses = nil)
-  then Result := nil
-  else Result := TGEDCOMPointer(FAliasses[Index]);
-end;
-
-function TGEDCOMIndividualRecord.GetAliassesCount: Integer;
-begin
-  if (FAliasses = nil)
-  then Result := 0
-  else Result := FAliasses.Count;
-end;
-
 function TGEDCOMIndividualRecord.GetGroups(Index: Integer): TGEDCOMPointer;
 begin
   if (FGroups = nil)
@@ -5776,20 +5228,6 @@ begin
   if (FGroups = nil)
   then Result := 0
   else Result := FGroups.Count;
-end;
-
-function TGEDCOMIndividualRecord.GetAncestorsInterest(Index: Integer): TGEDCOMPointer;
-begin
-  if (FAncestorsInterest = nil)
-  then Result := nil
-  else Result := TGEDCOMPointer(FAncestorsInterest[Index]);
-end;
-
-function TGEDCOMIndividualRecord.GetAncestorsInterestCount: Integer;
-begin
-  if (FAncestorsInterest = nil)
-  then Result := 0
-  else Result := FAncestorsInterest.Count;
 end;
 
 function TGEDCOMIndividualRecord.GetAssociations(Index: Integer): TGEDCOMAssociation;
@@ -5818,20 +5256,6 @@ begin
   if (FChildToFamilyLinks = nil)
   then Result := 0
   else Result := FChildToFamilyLinks.Count;
-end;
-
-function TGEDCOMIndividualRecord.GetDescendantsInterest(Index: Integer): TGEDCOMPointer;
-begin
-  if (FDescendantsInterest = nil)
-  then Result := nil
-  else Result := TGEDCOMPointer(FDescendantsInterest[Index]);
-end;
-
-function TGEDCOMIndividualRecord.GetDescendantsInterestCount: Integer;
-begin
-  if (FDescendantsInterest = nil)
-  then Result := 0
-  else Result := FDescendantsInterest.Count;
 end;
 
 function TGEDCOMIndividualRecord.GetIndividualAttributes(
@@ -5864,21 +5288,6 @@ begin
   else Result := FIndividualEvents.Count;
 end;
 
-function TGEDCOMIndividualRecord.GetIndividualOrdinances(
-  Index: Integer): TGEDCOMIndividualOrdinance;
-begin
-  if (FIndividualOrdinances = nil)
-  then Result := nil
-  else Result := TGEDCOMIndividualOrdinance(FIndividualOrdinances[Index]);
-end;
-
-function TGEDCOMIndividualRecord.GetIndividualOrdinancesCount: Integer;
-begin
-  if (FIndividualOrdinances = nil)
-  then Result := 0
-  else Result := FIndividualOrdinances.Count;
-end;
-
 function TGEDCOMIndividualRecord.GetPersonalNames(Index: Integer): TGEDCOMPersonalName;
 begin
   if (FPersonalNames = nil)
@@ -5898,14 +5307,16 @@ var
   S: string;
 begin
   S := UpperCase(Trim(TagStringValue('RESN')));
-  if S = 'CONFIDENTIAL' then
-    Result := rnConfidential
-  else if S = 'LOCKED' then
-    Result := rnLocked
-  else if S = 'PRIVACY' then
-    Result := rnPrivacy
+
+  if (S = 'CONFIDENTIAL')
+  then Result := rnConfidential
   else
-    Result := rnNone;   // default no restriction
+  if (S = 'LOCKED')
+  then Result := rnLocked
+  else
+  if (S = 'PRIVACY')
+  then Result := rnPrivacy
+  else Result := rnNone;   // default no restriction
 end;
 
 function TGEDCOMIndividualRecord.GetSex: TGEDCOMSex;
@@ -5913,33 +5324,34 @@ var
   S: string;
 begin
   S := UpperCase(Trim(TagStringValue('SEX')));
-  if S = '' then
-    Result := svNone
-  else if S = 'M' then
-    Result := svMale
-  else if S = 'F' then
-    Result := svFemale
-  else if S = 'U' then
-    Result := svUndetermined
+
+  if (S = '')
+  then Result := svNone
   else
-    Result := svNone;
+  if (S = 'M')
+  then Result := svMale
+  else
+  if (S = 'F')
+  then Result := svFemale
+  else
+  if (S = 'U')
+  then Result := svUndetermined
+  else Result := svNone;
 end;
 
 function TGEDCOMIndividualRecord.GetSpouseToFamilyLinks(
   Index: Integer): TGEDCOMSpouseToFamilyLink;
 begin
-  if FSpouseToFamilyLinks = nil then
-    Result := nil
-  else
-    Result := TGEDCOMSpouseToFamilyLink(FSpouseToFamilyLinks[Index]);
+  if (FSpouseToFamilyLinks = nil)
+  then Result := nil
+  else Result := TGEDCOMSpouseToFamilyLink(FSpouseToFamilyLinks[Index]);
 end;
 
 function TGEDCOMIndividualRecord.GetSpouseToFamilyLinksCount: Integer;
 begin
-  if FSpouseToFamilyLinks = nil then
-    Result := 0
-  else
-    Result := FSpouseToFamilyLinks.Count;
+  if (FSpouseToFamilyLinks = nil)
+  then Result := 0
+  else Result := FSpouseToFamilyLinks.Count;
 end;
 
 function TGEDCOMIndividualRecord.GetStringTag(Index: Integer): string;
@@ -5953,45 +5365,39 @@ end;
 
 function TGEDCOMIndividualRecord.GetSubmittors(Index: Integer): TGEDCOMPointer;
 begin
-  if FSubmittors = nil then
-    Result := nil
-  else
-    Result := TGEDCOMPointer(FSubmittors[Index]);
+  if (FSubmittors = nil)
+  then Result := nil
+  else Result := TGEDCOMPointer(FSubmittors[Index]);
 end;
 
 function TGEDCOMIndividualRecord.GetSubmittorsCount: Integer;
 begin
-  if FSubmittors = nil then
-    Result := 0
-  else
-    Result := FSubmittors.Count;
+  if (FSubmittors = nil)
+  then Result := 0
+  else Result := FSubmittors.Count;
 end;
 
 function TGEDCOMIndividualRecord.GetUserReferences(Index: Integer): TGEDCOMUserReference;
 begin
-  if FUserReferences = nil then
-    Result := nil
-  else
-    Result := TGEDCOMUserReference(FUserReferences[Index]);
+  if (FUserReferences = nil)
+  then Result := nil
+  else Result := TGEDCOMUserReference(FUserReferences[Index]);
 end;
 
 function TGEDCOMIndividualRecord.GetUserReferencesCount: Integer;
 begin
-  if FUserReferences = nil then
-    Result := 0
-  else
-    Result := FUserReferences.Count;
+  if (FUserReferences = nil)
+  then Result := 0
+  else Result := FUserReferences.Count;
 end;
 
 function TGEDCOMIndividualRecord.IsEmpty: Boolean;
 begin
   Result := inherited IsEmpty and (GetPersonalNamesCount = 0) and
     (GetIndividualEventsCount = 0) and (GetIndividualAttributesCount = 0) and
-    (GetIndividualOrdinancesCount = 0) and (GetChildToFamilyLinksCount = 0) and
-    (GetSpouseToFamilyLinksCount = 0) and (GetSubmittorsCount = 0) and
-    (GetAssociationsCount = 0) and (GetAliassesCount = 0) and
-    (GetAncestorsInterestCount = 0) and (GetDescendantsInterestCount = 0) and
-    (GetUserReferencesCount = 0);
+    (GetChildToFamilyLinksCount = 0) and (GetSpouseToFamilyLinksCount = 0) and
+    (GetSubmittorsCount = 0) and (GetAssociationsCount = 0) and
+    (GetUserReferencesCount = 0) and (GetGroupsCount = 0);
 end;
 
 procedure TGEDCOMIndividualRecord.SetRestriction(const Value: TGEDCOMRestriction);
@@ -6041,93 +5447,27 @@ begin
 
   if Assigned(FIndividualEvents) then FIndividualEvents.SaveToStream(AStream);
   if Assigned(FIndividualAttributes) then FIndividualAttributes.SaveToStream(AStream);
-  if Assigned(FIndividualOrdinances) then FIndividualOrdinances.SaveToStream(AStream);
 
   if Assigned(FSubmittors) then FSubmittors.SaveToStream(AStream);
   if Assigned(FAssociations) then FAssociations.SaveToStream(AStream);
-  if Assigned(FAliasses) then FAliasses.SaveToStream(AStream);
-
-  if Assigned(FAncestorsInterest) then FAncestorsInterest.SaveToStream(AStream);
-  if Assigned(FDescendantsInterest) then FDescendantsInterest.SaveToStream(AStream);
   if Assigned(FUserReferences) then FUserReferences.SaveToStream(AStream);
 
   if Assigned(FGroups) then FGroups.SaveToStream(AStream);
 end;
 
 procedure TGEDCOMIndividualRecord.ResetOwner(AOwner: TGEDCOMObject);
-var
-  i: Integer;
 begin
   inherited ResetOwner(AOwner);
 
-  if (FPersonalNames <> nil) then begin
-    for i := 0 to FPersonalNames.Count - 1 do
-      TGEDCOMCustomTag(FPersonalNames[i]).ResetOwner(AOwner);
-  end;
-
-  if (FChildToFamilyLinks <> nil) then begin
-    for i := 0 to FChildToFamilyLinks.Count - 1 do
-      TGEDCOMCustomTag(FChildToFamilyLinks[i]).ResetOwner(AOwner);
-  end;
-
-  if (FSpouseToFamilyLinks <> nil) then begin
-    for i := 0 to FSpouseToFamilyLinks.Count - 1 do
-      TGEDCOMCustomTag(FSpouseToFamilyLinks[i]).ResetOwner(AOwner);
-  end;
-
-
-  if (FIndividualEvents <> nil) then begin
-    for i := 0 to FIndividualEvents.Count - 1 do
-      TGEDCOMCustomTag(FIndividualEvents[i]).ResetOwner(AOwner);
-  end;
-
-  if (FIndividualAttributes <> nil) then begin
-    for i := 0 to FIndividualAttributes.Count - 1 do
-      TGEDCOMCustomTag(FIndividualAttributes[i]).ResetOwner(AOwner);
-  end;
-
-  if (FIndividualOrdinances <> nil) then begin
-    for i := 0 to FIndividualOrdinances.Count - 1 do
-      TGEDCOMCustomTag(FIndividualOrdinances[i]).ResetOwner(AOwner);
-  end;
-
-
-  if (FSubmittors <> nil) then begin
-    for i := 0 to FSubmittors.Count - 1 do
-      TGEDCOMCustomTag(FSubmittors[i]).ResetOwner(AOwner);
-  end;
-
-  if (FAssociations <> nil) then begin
-    for i := 0 to FAssociations.Count - 1 do
-      TGEDCOMCustomTag(FAssociations[i]).ResetOwner(AOwner);
-  end;
-
-  if (FAliasses <> nil) then begin
-    for i := 0 to FAliasses.Count - 1 do
-      TGEDCOMCustomTag(FAliasses[i]).ResetOwner(AOwner);
-  end;
-
-
-  if (FAncestorsInterest <> nil) then begin
-    for i := 0 to FAncestorsInterest.Count - 1 do
-      TGEDCOMCustomTag(FAncestorsInterest[i]).ResetOwner(AOwner);
-  end;
-
-  if (FDescendantsInterest <> nil) then begin
-    for i := 0 to FDescendantsInterest.Count - 1 do
-      TGEDCOMCustomTag(FDescendantsInterest[i]).ResetOwner(AOwner);
-  end;
-
-  if (FUserReferences <> nil) then begin
-    for i := 0 to FUserReferences.Count - 1 do
-      TGEDCOMCustomTag(FUserReferences[i]).ResetOwner(AOwner);
-  end;
-
-
-  if (FGroups <> nil) then begin
-    for i := 0 to FGroups.Count - 1 do
-      TGEDCOMCustomTag(FGroups[i]).ResetOwner(AOwner);
-  end;
+  if (FPersonalNames <> nil) then FPersonalNames.ResetOwner(AOwner);
+  if (FChildToFamilyLinks <> nil) then FChildToFamilyLinks.ResetOwner(AOwner);
+  if (FSpouseToFamilyLinks <> nil) then FSpouseToFamilyLinks.ResetOwner(AOwner);
+  if (FIndividualEvents <> nil) then FIndividualEvents.ResetOwner(AOwner);
+  if (FIndividualAttributes <> nil) then FIndividualAttributes.ResetOwner(AOwner);
+  if (FSubmittors <> nil) then FSubmittors.ResetOwner(AOwner);
+  if (FAssociations <> nil) then FAssociations.ResetOwner(AOwner);
+  if (FUserReferences <> nil) then FUserReferences.ResetOwner(AOwner);
+  if (FGroups <> nil) then FGroups.ResetOwner(AOwner);
 end;
 
 procedure TGEDCOMIndividualRecord.ReplaceXRefs(aMap: TXRefReplaceMap);
@@ -6140,20 +5480,15 @@ begin
 
   if (FIndividualEvents <> nil) then FIndividualEvents.ReplaceXRefs(aMap);
   if (FIndividualAttributes <> nil) then FIndividualAttributes.ReplaceXRefs(aMap);
-  if (FIndividualOrdinances <> nil) then FIndividualOrdinances.ReplaceXRefs(aMap);
 
   if (FSubmittors <> nil) then FSubmittors.ReplaceXRefs(aMap);
   if (FAssociations <> nil) then FAssociations.ReplaceXRefs(aMap);
-  if (FAliasses <> nil) then FAliasses.ReplaceXRefs(aMap);
-
-  if (FAncestorsInterest <> nil) then FAncestorsInterest.ReplaceXRefs(aMap);
-  if (FDescendantsInterest <> nil) then FDescendantsInterest.ReplaceXRefs(aMap);
   if (FUserReferences <> nil) then FUserReferences.ReplaceXRefs(aMap);
 
   if (FGroups <> nil) then FGroups.ReplaceXRefs(aMap);
 end;
 
-procedure TGEDCOMIndividualRecord.MoveTo(aToRecord: TGEDCOMRecordWithLists);
+procedure TGEDCOMIndividualRecord.MoveTo(aToRecord: TGEDCOMRecord);
 var
   stf_link: TGEDCOMSpouseToFamilyLink;
   ctf_link: TGEDCOMChildToFamilyLink;
@@ -6217,12 +5552,6 @@ begin
     end;
   end;
 
-  if (FIndividualOrdinances <> nil) then begin
-    for i := FIndividualOrdinances.Count - 1 downto 0 do begin
-      toRec.AddIndividualOrdinance(TGEDCOMIndividualOrdinance(FIndividualOrdinances.Extract(i)));
-    end;
-  end;
-
   //
 
   if (FSubmittors <> nil) then begin
@@ -6237,25 +5566,7 @@ begin
     end;
   end;
 
-  if (FAliasses <> nil) then begin
-    for i := FAliasses.Count - 1 downto 0 do begin
-      toRec.AddAlias(TGEDCOMPointer(FAliasses.Extract(i)));
-    end;
-  end;
-
   //
-
-  if (FAncestorsInterest <> nil) then begin
-    for i := FAncestorsInterest.Count - 1 downto 0 do begin
-      toRec.AddAncestorsInterest(TGEDCOMPointer(FAncestorsInterest.Extract(i)));
-    end;
-  end;
-
-  if (FDescendantsInterest <> nil) then begin
-    for i := FDescendantsInterest.Count - 1 downto 0 do begin
-      toRec.AddDescendantsInterest(TGEDCOMPointer(FDescendantsInterest.Extract(i)));
-    end;
-  end;
 
   if (FUserReferences <> nil) then begin
     for i := FUserReferences.Count - 1 downto 0 do begin
@@ -6287,7 +5598,7 @@ var
   SU: string;
 begin
   SU := UpperCase(ATag);
-  if SU = 'SUBM'
+  if (SU = 'SUBM')
   then Result := inherited AddTag(ATag, AValue, TGEDCOMPointer)
   else Result := inherited AddTag(ATag, AValue, AClass);
 end;
@@ -6312,12 +5623,12 @@ var
   S: string;
 begin
   S := UpperCase(Trim(TagStringValue('ORDI')));
-  if S = 'YES' then
-    Result := opYes
-  else if S = 'NO' then
-    Result := opNo
+  if (S = 'YES')
+  then Result := opYes
   else
-    Result := opNone;
+  if S = 'NO'
+  then Result := opNo
+  else Result := opNone;
 end;
 
 function TGEDCOMSubmissionRecord.GetStringTag(Index: Integer): string;
@@ -6376,21 +5687,21 @@ var
   AddrTag: TGEDCOMTag;
 begin
   SU := UpperCase(ATag);
-  if SU = 'NAME'
+  if (SU = 'NAME')
   then Result := inherited AddTag(ATag, AValue, TGEDCOMPersonalName)
   else
-  if SU = 'ADDR'
+  if (SU = 'ADDR')
   then Result := inherited AddTag(ATag, AValue, TGEDCOMAddress)
   else
   if (SU = 'PHON') or (SU = 'EMAIL') or (SU = 'FAX') or (SU = 'WWW')
   then begin
     AddrTag := FindTag('ADDR');
-    if AddrTag = nil then
+    if (AddrTag = nil) then
       AddrTag := AddTag('ADDR');
     Result := AddrTag.AddTag(ATag, AValue, AClass)
   end
   else
-  if SU = 'LANG'
+  if (SU = 'LANG')
   then Result := TGEDCOMTag(AddLanguage(TGEDCOMTag.CreateTag(Owner, Self, SU, AValue)))
   else Result := inherited AddTag(ATag, AValue, AClass);
 end;
@@ -6409,8 +5720,7 @@ end;
 procedure TGEDCOMSubmitterRecord.Clear;
 begin
   inherited Clear;
-  if FLanguages <> nil then
-    FLanguages.Clear;
+  if (FLanguages <> nil) then FLanguages.Clear;
 end;
 
 constructor TGEDCOMSubmitterRecord.Create(AOwner, AParent: TGEDCOMObject);
@@ -6433,18 +5743,16 @@ end;
 
 function TGEDCOMSubmitterRecord.GetLanguages(Index: Integer): string;
 begin
-  if (FLanguages = nil) or (Index < 0) or (Index >= FLanguages.Count) then
-    Result := ''
-  else
-    Result := TGEDCOMTag(FLanguages[Index]).StringValue;
+  if (FLanguages = nil) or (Index < 0) or (Index >= FLanguages.Count)
+  then Result := ''
+  else Result := TGEDCOMTag(FLanguages[Index]).StringValue;
 end;
 
 function TGEDCOMSubmitterRecord.GetLanguagesCount: Integer;
 begin
-  if FLanguages = nil then
-    Result := 0
-  else
-    Result := FLanguages.Count;
+  if (FLanguages = nil)
+  then Result := 0
+  else Result := FLanguages.Count;
 end;
 
 function TGEDCOMSubmitterRecord.GetName: TGEDCOMPersonalName;
@@ -6473,15 +5781,10 @@ begin
 end;
 
 procedure TGEDCOMSubmitterRecord.ResetOwner(AOwner: TGEDCOMObject);
-var
-  i: Integer;
 begin
   inherited ResetOwner(AOwner);
 
-  if (FLanguages <> nil) then begin
-    for i := 0 to FLanguages.Count - 1 do
-      TGEDCOMCustomTag(FLanguages[i]).ResetOwner(AOwner);
-  end;
+  if (FLanguages <> nil) then FLanguages.ResetOwner(AOwner);
 end;
 
 procedure TGEDCOMSubmitterRecord.SetLanguages(Index: Integer;
@@ -6516,10 +5819,12 @@ function TGEDCOMMultimediaRecord.AddFileReference(
   Value: TGEDCOMFileReferenceWithTitle): TGEDCOMFileReferenceWithTitle;
 begin
   Result := Value;
-  if FFileReferences = nil then
-    FFileReferences := TGEDCOMList.Create(Self);
-  if Value <> nil then
-    FFileReferences.Add(Value);
+
+  if (FFileReferences = nil)
+  then FFileReferences := TGEDCOMList.Create(Self);
+
+  if (Value <> nil)
+  then FFileReferences.Add(Value);
 end;
 
 function TGEDCOMMultimediaRecord.AddTag(const ATag, AValue: string;
@@ -6528,10 +5833,10 @@ var
   SU: string;
 begin
   SU := UpperCase(ATag);
-  if SU = 'FILE'
+  if (SU = 'FILE')
   then Result := AddFileReference(TGEDCOMFileReferenceWithTitle.CreateTag(Owner, Self, SU, AValue))
   else
-  if SU = 'REFN'
+  if (SU = 'REFN')
   then Result := AddUserReference(TGEDCOMUserReference.CreateTag(Owner, Self, SU, AValue))
   else Result := inherited AddTag(ATag, AValue, AClass);
 end;
@@ -6540,23 +5845,21 @@ function TGEDCOMMultimediaRecord.AddUserReference(
   AUserReference: TGEDCOMUserReference): TGEDCOMUserReference;
 begin
   Result := AUserReference;
-  if FUserReferences = nil then
-    FUserReferences := TGEDCOMList.Create(Self);
-  if FUserReferences <> nil then
-    FUserReferences.Add(AUserReference);
+
+  if (FUserReferences = nil)
+  then FUserReferences := TGEDCOMList.Create(Self);
+
+  if (FUserReferences <> nil)
+  then FUserReferences.Add(AUserReference);
 end;
 
 procedure TGEDCOMMultimediaRecord.Clear;
 begin
   inherited Clear;
-  if FFileReferences <> nil then
-    FFileReferences.Clear;
-  if FUserReferences <> nil then
-    FUserReferences.Clear;
-  if FNotes <> nil then
-    FNotes.Clear;
-  if FSourceCitations <> nil then
-    FSourceCitations.Clear;
+  if (FFileReferences <> nil) then FFileReferences.Clear;
+  if (FUserReferences <> nil) then FUserReferences.Clear;
+  if (FNotes <> nil) then FNotes.Clear;
+  if (FSourceCitations <> nil) then FSourceCitations.Clear;
 end;
 
 constructor TGEDCOMMultimediaRecord.Create(AOwner, AParent: TGEDCOMObject);
@@ -6569,28 +5872,24 @@ end;
 
 destructor TGEDCOMMultimediaRecord.Destroy;
 begin
-  if FFileReferences <> nil then
-    FFileReferences.Free;
-  if FUserReferences <> nil then
-    FUserReferences.Free;
+  if (FFileReferences <> nil) then FFileReferences.Free;
+  if (FUserReferences <> nil) then FUserReferences.Free;
   inherited Destroy;
 end;
 
 function TGEDCOMMultimediaRecord.GetFileReferences(
   Index: Integer): TGEDCOMFileReferenceWithTitle;
 begin
-  if FFileReferences = nil then
-    Result := nil
-  else
-    Result := TGEDCOMFileReferenceWithTitle(FFileReferences[Index]);
+  if (FFileReferences = nil)
+  then Result := nil
+  else Result := TGEDCOMFileReferenceWithTitle(FFileReferences[Index]);
 end;
 
 function TGEDCOMMultimediaRecord.GetFileReferencesCount: Integer;
 begin
-  if FFileReferences = nil then
-    Result := 0
-  else
-    Result := FFileReferences.Count;
+  if (FFileReferences = nil)
+  then Result := 0
+  else Result := FFileReferences.Count;
 end;
 
 function TGEDCOMMultimediaRecord.GetStringTag(Index: Integer): string;
@@ -6603,23 +5902,21 @@ end;
 function TGEDCOMMultimediaRecord.GetUserReferences(
   Index: Integer): TGEDCOMUserReference;
 begin
-  if FUserReferences = nil then
-    Result := nil
-  else
-    Result := TGEDCOMUserReference(FUserReferences[Index]);
+  if (FUserReferences = nil)
+  then Result := nil
+  else Result := TGEDCOMUserReference(FUserReferences[Index]);
 end;
 
 function TGEDCOMMultimediaRecord.GetUserReferencesCount: Integer;
 begin
-  if FUserReferences = nil then
-    Result := 0
-  else
-    Result := FUserReferences.Count;
+  if (FUserReferences = nil)
+  then Result := 0
+  else Result := FUserReferences.Count;
 end;
 
-function TGEDCOMMultimediaRecord.IsEmpty: Boolean;
+function TGEDCOMMultimediaRecord.IsEmpty(): Boolean;
 begin
-  Result := IsEmpty and (GetFileReferencesCount = 0) and
+  Result := inherited IsEmpty and (GetFileReferencesCount = 0) and
     (GetUserReferencesCount = 0) and (GetNotesCount = 0) and
     (GetSourceCitationsCount = 0);
 end;
@@ -6636,20 +5933,11 @@ begin
 end;
 
 procedure TGEDCOMMultimediaRecord.ResetOwner(AOwner: TGEDCOMObject);
-var
-  i: Integer;
 begin
   inherited ResetOwner(AOwner);
 
-  if (FFileReferences <> nil) then begin
-    for i := 0 to FFileReferences.Count - 1 do
-      TGEDCOMCustomTag(FFileReferences[i]).ResetOwner(AOwner);
-  end;
-
-  if (FUserReferences <> nil) then begin
-    for i := 0 to FUserReferences.Count - 1 do
-      TGEDCOMCustomTag(FUserReferences[i]).ResetOwner(AOwner);
-  end;
+  if (FFileReferences <> nil) then FFileReferences.ResetOwner(AOwner);
+  if (FUserReferences <> nil) then FUserReferences.ResetOwner(AOwner);
 end;
 
 procedure TGEDCOMMultimediaRecord.SaveToStream(AStream: TStream);
@@ -6676,7 +5964,7 @@ var
   SU: string;
 begin
   SU := UpperCase(ATag);
-  if SU = 'REFN'
+  if (SU = 'REFN')
   then Result := AddUserReference(TGEDCOMUserReference.CreateTag(Owner, Self, SU, AValue))
   else Result := inherited AddTag(ATag, AValue, AClass);
 end;
@@ -6685,17 +5973,18 @@ function TGEDCOMNoteRecord.AddUserReference(
   AUserReference: TGEDCOMUserReference): TGEDCOMUserReference;
 begin
   Result := AUserReference;
-  if FUserReferences = nil then
-    FUserReferences := TGEDCOMList.Create(Self);
-  if AUserReference <> nil then
-    FUserReferences.Add(AUserReference);
+
+  if (FUserReferences = nil)
+  then FUserReferences := TGEDCOMList.Create(Self);
+
+  if (AUserReference <> nil)
+  then FUserReferences.Add(AUserReference);
 end;
 
 procedure TGEDCOMNoteRecord.Clear;
 begin
   inherited Clear;
-  if FUserReferences <> nil then
-    FUserReferences.Clear;
+  if (FUserReferences <> nil) then FUserReferences.Clear;
 end;
 
 constructor TGEDCOMNoteRecord.Create(AOwner, AParent: TGEDCOMObject);
@@ -6708,10 +5997,8 @@ end;
 
 destructor TGEDCOMNoteRecord.Destroy;
 begin
-  if FUserReferences <> nil then
-    FUserReferences.Free;
-  if FNotes <> nil then
-    FNotes.Free;
+  if (FUserReferences <> nil) then FUserReferences.Free;
+  if (FNotes <> nil) then FNotes.Free;
   inherited Destroy;
 end;
 
@@ -6730,18 +6017,16 @@ end;
 function TGEDCOMNoteRecord.GetUserReferences(
   Index: Integer): TGEDCOMUserReference;
 begin
-  if FUserReferences = nil then
-    Result := nil
-  else
-    Result := TGEDCOMUserReference(FUserReferences[Index]);
+  if (FUserReferences = nil)
+  then Result := nil
+  else Result := TGEDCOMUserReference(FUserReferences[Index]);
 end;
 
 function TGEDCOMNoteRecord.GetUserReferencesCount: Integer;
 begin
-  if FUserReferences = nil then
-    Result := 0
-  else
-    Result := FUserReferences.Count;
+  if (FUserReferences = nil)
+  then Result := 0
+  else Result := FUserReferences.Count;
 end;
 
 function TGEDCOMNoteRecord.IsEmpty: Boolean;
@@ -6749,7 +6034,7 @@ begin
   Result := inherited IsEmpty and (GetUserReferencesCount = 0);
 end;
 
-procedure TGEDCOMNoteRecord.MoveTo(aToRecord: TGEDCOMRecordWithLists);
+procedure TGEDCOMNoteRecord.MoveTo(aToRecord: TGEDCOMRecord);
 var
   cont: TStringList;
 begin
@@ -6759,7 +6044,7 @@ begin
     inherited MoveTo(aToRecord);
     TGEDCOMNoteRecord(aToRecord).Notes := cont;
   finally
-    cont.Destroy;
+    cont.Free;
   end;
 end;
 
@@ -6772,15 +6057,10 @@ begin
 end;
 
 procedure TGEDCOMNoteRecord.ResetOwner(AOwner: TGEDCOMObject);
-var
-  i: Integer;
 begin
   inherited ResetOwner(AOwner);
 
-  if (FUserReferences <> nil) then begin
-    for i := 0 to FUserReferences.Count - 1 do
-      TGEDCOMCustomTag(FUserReferences[i]).ResetOwner(AOwner);
-  end;
+  if (FUserReferences <> nil) then FUserReferences.ResetOwner(AOwner);
 end;
 
 procedure TGEDCOMNoteRecord.SetNotes(Value: TStrings);
@@ -6803,29 +6083,30 @@ var
   SU: string;
 begin
   SU := UpperCase(ATag);
-  if SU = 'ADDR' then
-    Result := inherited AddTag(ATag, AValue, TGEDCOMAddress)
-  else if (SU = 'PHON') or (SU = 'EMAIL') or (SU = 'FAX') or (SU = 'WWW') then
-    Result := TGEDCOMAddress(TagClass('ADDR', TGEDCOMAddress)).AddTag(ATag, AValue, AClass)
+  if (SU = 'ADDR')
+  then Result := inherited AddTag(ATag, AValue, TGEDCOMAddress)
   else
-    Result := inherited AddTag(ATag, AValue, AClass);
+  if (SU = 'PHON') or (SU = 'EMAIL') or (SU = 'FAX') or (SU = 'WWW')
+  then Result := TGEDCOMAddress(TagClass('ADDR', TGEDCOMAddress)).AddTag(ATag, AValue, AClass)
+  else Result := inherited AddTag(ATag, AValue, AClass);
 end;
 
 function TGEDCOMRepositoryRecord.AddUserReference(
   AUserReference: TGEDCOMUserReference): TGEDCOMUserReference;
 begin
   Result := AUserReference;
-  if FUserReferences = nil then
-    FUserReferences := TGEDCOMList.Create(Self);
-  if FUserReferences <> nil then
-    FUserReferences.Add(AUserReference);
+
+  if (FUserReferences = nil)
+  then FUserReferences := TGEDCOMList.Create(Self);
+
+  if (FUserReferences <> nil)
+  then FUserReferences.Add(AUserReference);
 end;
 
 procedure TGEDCOMRepositoryRecord.Clear;
 begin
   inherited Clear;
-  if FUserReferences <> nil then
-    FUserReferences.Clear;
+  if (FUserReferences <> nil) then FUserReferences.Clear;
 end;
 
 constructor TGEDCOMRepositoryRecord.Create(AOwner, AParent: TGEDCOMObject);
@@ -6857,18 +6138,16 @@ end;
 function TGEDCOMRepositoryRecord.GetUserReferences(
   Index: Integer): TGEDCOMUserReference;
 begin
-  if FUserReferences = nil then
-    Result := nil
-  else
-    Result := TGEDCOMUserReference(FUserReferences[Index]);
+  if (FUserReferences = nil)
+  then Result := nil
+  else Result := TGEDCOMUserReference(FUserReferences[Index]);
 end;
 
 function TGEDCOMRepositoryRecord.GetUserReferencesCount: Integer;
 begin
-  if FUserReferences = nil then
-    Result := 0
-  else
-    Result := FUserReferences.Count;
+  if (FUserReferences = nil)
+  then Result := 0
+  else Result := FUserReferences.Count;
 end;
 
 function TGEDCOMRepositoryRecord.IsEmpty: Boolean;
@@ -6885,15 +6164,10 @@ begin
 end;
 
 procedure TGEDCOMRepositoryRecord.ResetOwner(AOwner: TGEDCOMObject);
-var
-  i: Integer;
 begin
   inherited ResetOwner(AOwner);
 
-  if (FUserReferences <> nil) then begin
-    for i := 0 to FUserReferences.Count - 1 do
-      TGEDCOMCustomTag(FUserReferences[i]).ResetOwner(AOwner);
-  end;
+  if (FUserReferences <> nil) then FUserReferences.ResetOwner(AOwner);
 end;
 
 procedure TGEDCOMRepositoryRecord.SetStringTag(Index: Integer;
@@ -6919,15 +6193,20 @@ begin
   then FRepositoryCitations.Add(Value);
 end;
 
+procedure TGEDCOMSourceRecord.RemoveRepositoryCitation(
+  Value: TGEDCOMRepositoryCitation);
+begin
+  if (FRepositoryCitations = nil) then Exit;
+
+  FRepositoryCitations.DeleteObject(Value);
+end;
+
 function TGEDCOMSourceRecord.AddTag(const ATag, AValue: string;
   AClass: TGEDCOMTagClass): TGEDCOMTag;
 var
   SU: string;
 begin
   SU := UpperCase(ATag);
-  if (SU = 'DATA')
-  then Result := inherited AddTag(ATag, AValue, TGEDCOMData)
-  else
   if (SU = 'REPO')
   then Result := AddRepositoryCitation(TGEDCOMRepositoryCitation.CreateTag(Owner, Self, SU, AValue))
   else
@@ -6976,11 +6255,6 @@ begin
   if (FRepositoryCitations <> nil) then FRepositoryCitations.Free;
   if (FUserReferences <> nil) then FUserReferences.Free;
   inherited Destroy;
-end;
-
-function TGEDCOMSourceRecord.GetData: TGEDCOMData;
-begin
-  Result := TGEDCOMData(TagClass('DATA', TGEDCOMData));
 end;
 
 function TGEDCOMSourceRecord.GetOriginator: TStrings;
@@ -7057,20 +6331,11 @@ begin
 end;
 
 procedure TGEDCOMSourceRecord.ResetOwner(AOwner: TGEDCOMObject);
-var
-  i: Integer;
 begin
   inherited ResetOwner(AOwner);
 
-  if (FRepositoryCitations <> nil) then begin
-    for i := 0 to FRepositoryCitations.Count - 1 do
-      TGEDCOMCustomTag(FRepositoryCitations[i]).ResetOwner(AOwner);
-  end;
-
-  if (FUserReferences <> nil) then begin
-    for i := 0 to FUserReferences.Count - 1 do
-      TGEDCOMCustomTag(FUserReferences[i]).ResetOwner(AOwner);
-  end;
+  if (FRepositoryCitations <> nil) then FRepositoryCitations.ResetOwner(AOwner);
+  if (FUserReferences <> nil) then FUserReferences.ResetOwner(AOwner);
 end;
 
 procedure TGEDCOMSourceRecord.SetOriginator(const Value: TStrings);
@@ -7102,21 +6367,64 @@ begin
   SetTagStrings(TagClass('TITL', TGEDCOMTag), Value);
 end;
 
-{ TGEDCOMRecord }
-
-function TGEDCOMRecord.NewXRef: string;
-var
-  Unknown: IUnknown;
-  Container: IGEDCOMContainer;
-  WXRef: WideString;
+procedure TGEDCOMSourceRecord.SaveToStream(AStream: TStream);
 begin
-  if (FOwner <> nil) and FOwner.GetInterface(IUnknown, Unknown)
-  and (Unknown.QueryInterface(IGEDCOMContainer, Container) = S_OK)
-  then begin
-    Container.NewXRef(Self, WXRef);
-    FXRef := WXRef;
+  inherited SaveToStream(AStream);
+
+  if Assigned(FRepositoryCitations) then FRepositoryCitations.SaveToStream(AStream);
+  if Assigned(FUserReferences) then FUserReferences.SaveToStream(AStream);
+end;
+
+procedure TGEDCOMSourceRecord.MoveTo(aToRecord: TGEDCOMRecord);
+var
+  titl, orig, publ, text: TStringList;
+  toSource: TGEDCOMSourceRecord;
+  i: Integer;
+begin
+  toSource := TGEDCOMSourceRecord(aToRecord);
+
+  titl := TStringList.Create;
+  orig := TStringList.Create;
+  publ := TStringList.Create;
+  text := TStringList.Create;
+  try
+    titl.Text := Trim(toSource.Title.Text + #10 + Self.Title.Text);
+    orig.Text := Trim(toSource.Originator.Text + #10 + Self.Originator.Text);
+    publ.Text := Trim(toSource.Publication.Text + #10 + Self.Publication.Text);
+    text.Text := Trim(toSource.Text.Text + #10 + Self.Text.Text);
+
+    DeleteTag('TITL');
+    DeleteTag('TEXT');
+    DeleteTag('ABBR');
+    DeleteTag('PUBL');
+    DeleteTag('AUTH');
+
+    inherited MoveTo(aToRecord);
+
+    toSource.Title := titl;
+    toSource.Originator := orig;
+    toSource.Publication := publ;
+    toSource.Text := text;
+
+    //
+
+    if (FRepositoryCitations <> nil) then begin
+      for i := FRepositoryCitations.Count - 1 downto 0 do begin
+        toSource.AddRepositoryCitation(TGEDCOMRepositoryCitation(FRepositoryCitations.Extract(i)));
+      end;
+    end;
+
+    if (FUserReferences <> nil) then begin
+      for i := FUserReferences.Count - 1 downto 0 do begin
+        toSource.AddUserReference(TGEDCOMUserReference(FUserReferences.Extract(i)));
+      end;
+    end;
+  finally
+    titl.Free;
+    orig.Free;
+    publ.Free;
+    text.Free;
   end;
-  XRef := FXRef;
 end;
 
 { TGEDCOMUserReference }
@@ -7147,11 +6455,15 @@ end;
 
 function TGEDCOMChangeDate.AddTag(const ATag, AValue: string;
   AClass: TGEDCOMTagClass): TGEDCOMTag;
+var
+  SU: string;
 begin
-  if UpperCase(ATag) = 'DATE'
+  SU := UpperCase(ATag);
+
+  if (SU = 'DATE')
   then Result := inherited AddTag(ATag, AValue, TGEDCOMDateExact)
   else
-  if UpperCase(ATag) = 'NOTE'
+  if (SU = 'NOTE')
   then Result := inherited AddTag(ATag, AValue, TGEDCOMNotes)
   else Result := inherited AddTag(ATag, AValue, AClass);
 end;
@@ -7186,8 +6498,12 @@ end;
 procedure TGEDCOMChangeDate.SetChangeDateTime(const Value: TDateTime);
 begin
   GetDate.Date := Value;
-  if Frac(Value) <> 0 then
-    GetTime.Time := Value;
+  if Frac(Value) <> 0 then GetTime.Time := Value;
+end;
+
+function TGEDCOMChangeDate.IsEmpty(): Boolean;
+begin
+  Result := inherited IsEmpty();
 end;
 
 { TGEDCOMNotes }
@@ -7440,24 +6756,17 @@ begin
 end;
 
 procedure TGEDCOMMultimediaLink.ResetOwner(AOwner: TGEDCOMObject);
-var
-  i: Integer;
 begin
   inherited ResetOwner(AOwner);
 
-  if (FFileReferences <> nil) then begin
-    for i := 0 to FFileReferences.Count - 1 do
-      TGEDCOMCustomTag(FFileReferences[i]).ResetOwner(AOwner);
-  end;
+  if (FFileReferences <> nil) then FFileReferences.ResetOwner(AOwner);
 end;
 
 procedure TGEDCOMMultimediaLink.SaveToStream(AStream: TStream);
 begin
   inherited SaveToStream(AStream);
 
-  if (FFileReferences <> nil) then begin
-    FFileReferences.SaveToStream(AStream);
-  end;
+  if (FFileReferences <> nil) then FFileReferences.SaveToStream(AStream);
 end;
 
 procedure TGEDCOMMultimediaLink.SetStringTag(Index: Integer;
@@ -7481,36 +6790,49 @@ var
   S: string;
 begin
   S := UpperCase(Trim(TagStringValue(MediaTypeTagName)));
-  if S = '' then
-    Result := mtNone
-  else if S = 'AUDIO' then
-    Result := mtAudio
-  else if S = 'BOOK' then
-    Result := mtBook
-  else if S = 'CARD' then
-    Result := mtCard
-  else if S = 'ELECTRONIC' then
-    Result := mtElectronic
-  else if S = 'FICHE' then
-    Result := mtFiche
-  else if S = 'FILM' then
-    Result := mtFilm
-  else if S = 'MAGAZINE' then
-    Result := mtMagazine
-  else if S = 'MANUSCRIPT' then
-    Result := mtManuscript
-  else if S = 'MAP' then
-    Result := mtMap
-  else if S = 'NEWSPAPER' then
-    Result := mtNewspaper
-  else if S = 'PHOTO' then
-    Result := mtPhoto
-  else if S = 'TOMBSTONE' then
-    Result := mtTombstone
-  else if S = 'VIDEO' then
-    Result := mtVideo
+
+  if (S = '')
+  then Result := mtNone
   else
-    Result := mtUnknown;
+  if (S = 'AUDIO')
+  then Result := mtAudio
+  else
+  if (S = 'BOOK')
+  then Result := mtBook
+  else
+  if (S = 'CARD')
+  then Result := mtCard
+  else
+  if (S = 'ELECTRONIC')
+  then Result := mtElectronic
+  else
+  if (S = 'FICHE')
+  then Result := mtFiche
+  else
+  if (S = 'FILM')
+  then Result := mtFilm
+  else
+  if (S = 'MAGAZINE')
+  then Result := mtMagazine
+  else
+  if (S = 'MANUSCRIPT')
+  then Result := mtManuscript
+  else
+  if (S = 'MAP')
+  then Result := mtMap
+  else
+  if (S = 'NEWSPAPER')
+  then Result := mtNewspaper
+  else
+  if (S = 'PHOTO')
+  then Result := mtPhoto
+  else
+  if (S = 'TOMBSTONE')
+  then Result := mtTombstone
+  else
+  if (S = 'VIDEO')
+  then Result := mtVideo
+  else Result := mtUnknown;
 end;
 
 function TGEDCOMFileReference.GetMultimediaFormat: TGEDCOMMultimediaFormat;
@@ -7518,56 +6840,110 @@ var
   S: string;
 begin
   S := UpperCase(Trim(TagStringValue('FORM')));
-  if S = '' then
-    Result := mfNone
-  else if S = 'BMP' then
-    Result := mfBMP
-  else if S = 'GIF' then
-    Result := mfGIF
-  else if S = 'JPG' then
-    Result := mfJPG
-  else if S = 'OLE' then
-    Result := mfOLE
-  else if S = 'PCX' then
-    Result := mfPCX
-  else if S = 'TIF' then
-    Result := mfTIF
-  else if S = 'WAV' then
-    Result := mfWav
+
+  if (S = '')
+  then Result := mfNone
   else
-    Result := mfUnknown;
+  if (S = 'BMP')
+  then Result := mfBMP
+  else
+  if (S = 'GIF')
+  then Result := mfGIF
+  else
+  if (S = 'JPG')
+  then Result := mfJPG
+  else
+  if (S = 'OLE')
+  then Result := mfOLE
+  else
+  if (S = 'PCX')
+  then Result := mfPCX
+  else
+  if (S = 'TIF')
+  then Result := mfTIF
+  else
+  if (S = 'WAV')
+  then Result := mfWAV
+  else
+  if (S = 'TXT')
+  then Result := mfTXT
+  else
+  if (S = 'RTF')
+  then Result := mfRTF
+  else
+  if (S = 'AVI')
+  then Result := mfAVI
+  else
+  if (S = 'TGA')
+  then Result := mfTGA
+  else
+  if (S = 'PNG')
+  then Result := mfPNG
+  else
+  if (S = 'MPG')
+  then Result := mfMPG
+  else
+  if (S = 'HTM')
+  then Result := mfHTM
+  else Result := mfUnknown;
+end;
+
+class function TGEDCOMFileReference.RecognizeFormat(const AFile: string): TGEDCOMMultimediaFormat;
+var
+  E: string;
+begin
+  E := LowerCase(ExtractFileExt(AFile));
+
+  if (E = '.bmp')
+  then Result := mfBMP
+  else
+  if (E = '.gif')
+  then Result := mfGIF
+  else
+  if (E = '.jpg') or (E = '.jpeg')
+  then Result := mfJPG
+  else
+  if (E = '.ole')
+  then Result := mfOLE {TODO: Does this exists? What is an OLE file actually?}
+  else
+  if (E = '.pcx')
+  then Result := mfPCX
+  else
+  if (E = '.tif') or (E = '.tiff')
+  then Result := mfTIF
+  else
+  if (E = '.wav')
+  then Result := mfWAV
+  else
+  if (E = '.txt')
+  then Result := mfTXT
+  else
+  if (E = '.rtf')
+  then Result := mfRTF
+  else
+  if (E = '.avi')
+  then Result := mfAVI
+  else
+  if (E = '.tga')
+  then Result := mfTGA
+  else
+  if (E = '.png')
+  then Result := mfPNG
+  else
+  if (E = '.mpg') or (E = '.mpeg')
+  then Result := mfMPG
+  else
+  if (E = '.htm') or (E = '.html')
+  then Result := mfHTM
+  else Result := mfUnknown;
 end;
 
 procedure TGEDCOMFileReference.LinkFile(const AFile: string;
   AMediaType: TGEDCOMMediaType; AMultimediaFormat: TGEDCOMMultimediaFormat);
-var
-  E: string;
 begin
   FStringValue := AFile;
-  E := LowerCase(ExtractFileExt(AFile));
-  if E = 'bmp' then
-    SetMultimediaFormat(mfBMP)
-  else if E = 'gif' then
-    SetMultimediaFormat(mfGIF)
-  else if (E = 'jpg') or (E = 'jpeg') then
-    SetMultimediaFormat(mfJPG)
-  {TODO: Does this exists? What is an OLE file actually?}
-  else if E = 'ole' then
-    SetMultimediaFormat(mfOLE)
-  else if E = 'pcx' then
-    SetMultimediaFormat(mfPCX)
-  else if (E = 'tif') or (E = 'tiff') then
-    SetMultimediaFormat(mfTIF)
-  else if E = 'wav' then
-    SetMultimediaFormat(mfWAV)
-  else
-    SetMultimediaFormat(AMultimediaFormat);
+  SetMultimediaFormat(RecognizeFormat(AFile));
   SetMediaType(AMediaType);
-end;
-
-function TGEDCOMFileReference.MediaTypeTagName: string;
-begin
-  Result := 'FORM\MEDI';
 end;
 
 procedure TGEDCOMFileReference.SetMediaType(const Value: TGEDCOMMediaType);
@@ -7604,8 +6980,37 @@ begin
     mfPCX: SetTagStringValue('FORM', 'pcx');
     mfTIF: SetTagStringValue('FORM', 'tif');
     mfWAV: SetTagStringValue('FORM', 'wav');
+    mfTXT: SetTagStringValue('FORM', 'txt');
+    mfRTF: SetTagStringValue('FORM', 'rtf');
+    mfAVI: SetTagStringValue('FORM', 'avi');
+    mfTGA: SetTagStringValue('FORM', 'tga');
+    mfPNG: SetTagStringValue('FORM', 'png');
+    mfMPG: SetTagStringValue('FORM', 'mpg');
+    mfHTM: SetTagStringValue('FORM', 'htm');
     else SetTagStringValue('FORM', '');
   end;
+end;
+
+function TGEDCOMFileReference.MediaTypeTagName: string;
+begin
+  Result := 'FORM\MEDI';
+end;
+
+{ TGEDCOMFileReferenceWithTitle }
+
+function TGEDCOMFileReferenceWithTitle.GetTitle: string;
+begin
+  Result := TagStringValue('TITL');
+end;
+
+function TGEDCOMFileReferenceWithTitle.MediaTypeTagName: string;
+begin
+  Result := 'FORM\TYPE';
+end;
+
+procedure TGEDCOMFileReferenceWithTitle.SetTitle(const Value: string);
+begin
+  SetTagStringValue('TITL', Value);
 end;
 
 { TGEDCOMAddress }
@@ -7616,45 +7021,43 @@ var
   SU: string;
 begin
   SU := UpperCase(ATag);
-  if SU = 'PHON' then
-  begin
+  if (SU = 'PHON') then begin
     if FPhoneList = nil then
       FPhoneList := TGEDCOMList.Create(Self);
     Result := TGEDCOMTag(FPhoneList.Add(TGEDCOMTag.CreateTag(Owner, Self, SU, AValue)));
     // The phone numbers have the same level as the ADDR tag.
     Result.SetLevel(Level);
   end
-  else if SU = 'EMAIL' then
-  begin
+  else
+  if (SU = 'EMAIL') then begin
     if FEmailList = nil then
       FEmailList := TGEDCOMList.Create(Self);
     Result := TGEDCOMTag(FEmailList.Add(TGEDCOMTag.CreateTag(Owner, Self, SU, AValue)));
     // The email addresses have the same level as the ADDR tag.
     Result.SetLevel(Level);
   end
-  else if SU = 'FAX' then
-  begin
+  else
+  if (SU = 'FAX') then begin
     if FFaxList = nil then
       FFaxList := TGEDCOMList.Create(Self);
     Result := TGEDCOMTag(FFaxList.Add(TGEDCOMTag.CreateTag(Owner, Self, SU, AValue)));
     // The fax numbers have the same level as the ADDR tag.
     Result.SetLevel(Level);
   end
-  else if SU = 'WWW' then
-  begin
+  else
+  if (SU = 'WWW') then begin
     if FWWWList = nil then
       FWWWList := TGEDCOMList.Create(Self);
     Result := TGEDCOMTag(FWWWList.Add(TGEDCOMTag.CreateTag(Owner, Self, SU, AValue)));
     // The website names have the same level as the ADDR tag.
     Result.SetLevel(Level);
   end
-  else
-    Result := inherited AddTag(ATag, AValue, AClass);
+  else Result := inherited AddTag(ATag, AValue, AClass);
 end;
 
-procedure TGEDCOMAddress.Clear;
+procedure TGEDCOMAddress.Clear();
 begin
-  inherited Clear;
+  inherited Clear();
   if (FPhoneList <> nil) then FPhoneList.Clear;
   if (FEmailList <> nil) then FEmailList.Clear;
   if (FFaxList <> nil) then FFaxList.Clear;
@@ -7784,6 +7187,11 @@ end;
 procedure TGEDCOMAddress.ResetOwner(AOwner: TGEDCOMObject);
 begin
   inherited ResetOwner(AOwner);
+
+  if (FPhoneList <> nil) then FPhoneList.ResetOwner(AOwner);
+  if (FEmailList <> nil) then FEmailList.ResetOwner(AOwner);
+  if (FFaxList <> nil) then FFaxList.ResetOwner(AOwner);
+  if (FWWWList <> nil) then FWWWList.ResetOwner(AOwner);
 end;
 
 procedure TGEDCOMAddress.SaveTagsToStream(AStream: TStream;
@@ -7883,90 +7291,6 @@ begin
   end
 end;
 
-{ TGEDCOMData }
-
-function TGEDCOMData.AddEvent(Value: TGEDCOMEvent): TGEDCOMEvent;
-begin
-  Result := Value;
-
-  if (FEvents = nil)
-  then FEvents := TGEDCOMList.Create(Self);
-
-  if (Value <> nil)
-  then FEvents.Add(Value);
-end;
-
-function TGEDCOMData.AddTag(const ATag, AValue: string;
-  AClass: TGEDCOMTagClass): TGEDCOMTag;
-var
-  SU: string;
-begin
-  SU := UpperCase(ATag);
-  if (SU = 'EVEN')
-  then Result := AddEvent(TGEDCOMEvent.CreateTag(Owner, Self, SU, AValue))
-  else Result := inherited AddTag(ATag, AValue, AClass);
-end;
-
-procedure TGEDCOMData.Clear;
-begin
-  inherited Clear;
-  if (FEvents <> nil) then FEvents.Clear;
-end;
-
-constructor TGEDCOMData.Create(AOwner, AParent: TGEDCOMObject);
-begin
-  inherited Create(AOwner, AParent, [stNotes]);
-  FName := 'DATA';
-  FEvents := nil;
-end;
-
-destructor TGEDCOMData.Destroy;
-begin
-  if (FEvents <> nil) then FEvents.Free;
-  inherited Destroy;
-end;
-
-function TGEDCOMData.GetAgency: string;
-begin
-  Result := TagStringValue('AGNC');
-end;
-
-function TGEDCOMData.GetEvents(Index: Integer): TGEDCOMEvent;
-begin
-  if (FEvents = nil)
-  then Result := nil
-  else Result := TGEDCOMEvent(FEvents[Index]);
-end;
-
-function TGEDCOMData.GetEventsCount: Integer;
-begin
-  if (FEvents = nil)
-  then Result := 0
-  else Result := FEvents.Count;
-end;
-
-function TGEDCOMData.IsEmpty: Boolean;
-begin
-  Result := inherited IsEmpty and (GetEventsCount = 0);
-end;
-
-procedure TGEDCOMData.ResetOwner(AOwner: TGEDCOMObject);
-var
-  i: Integer;
-begin
-  inherited ResetOwner(AOwner);
-
-  if (FEvents <> nil) then begin
-    for i := 0 to FEvents.Count - 1 do
-      TGEDCOMCustomTag(FEvents[i]).ResetOwner(AOwner);
-  end;
-end;
-
-procedure TGEDCOMData.SetAgency(const Value: string);
-begin
-  SetTagStringValue('AGNC', Value);
-end;
-
 { TGEDCOMRepositoryCitation }
 
 constructor TGEDCOMRepositoryCitation.Create(AOwner, AParent: TGEDCOMObject);
@@ -7975,45 +7299,25 @@ begin
   FName := 'REPO';
 end;
 
-{ TGEDCOMEvent }
-
-function TGEDCOMEvent.AddTag(const ATag, AValue: string;
-  AClass: TGEDCOMTagClass): TGEDCOMTag;
-var
-  SU: string;
-begin
-  SU := UpperCase(ATag);
-  if (SU = 'DATE')
-  then Result := inherited AddTag(ATag, AValue, TGEDCOMDatePeriod)
-  else Result := inherited AddTag(ATag, AValue, AClass);
-end;
-
-constructor TGEDCOMEvent.Create(AOwner, AParent: TGEDCOMObject);
-begin
-  inherited Create(AOwner, AParent);
-  FName := 'EVEN';
-end;
-
-function TGEDCOMEvent.GetDate: TGEDCOMDatePeriod;
-begin
-  Result := TGEDCOMDatePeriod(TagClass('DATE', TGEDCOMDatePeriod));
-end;
-
-function TGEDCOMEvent.GetPlace: string;
-begin
-  Result := TagStringValue('PLAC');
-end;
-
-procedure TGEDCOMEvent.SetPlace(const Value: string);
-begin
-  SetTagStringValue('PLAC', Value);
-end;
-
 { TGEDCOMPersonalNamePieces }
 
 constructor TGEDCOMPersonalNamePieces.Create(AOwner, AParent: TGEDCOMObject);
 begin
   inherited Create(AOwner, AParent, [stNotes, stSource]);
+end;
+
+procedure TGEDCOMPersonalNamePieces.SaveToStream(AStream: TStream);
+begin
+  //inherited SaveToStream(AStream);
+  //SaveValueToStream(AStream);
+  SaveTagsToStream(AStream, []);
+
+  // hack: по причине вложенности объектов TGEDCOMPersonalNamePieces -
+  // для них нельзя выполнять SaveValueToStream(), поэтому
+  // нельзя вызывать унаследованный SaveToStream().
+  if Assigned(FNotes) then FNotes.SaveToStream(AStream);
+  if Assigned(FSourceCitations) then FSourceCitations.SaveToStream(AStream);
+  //if Assigned(FMultimediaLinks) then FMultimediaLinks.SaveToStream(AStream);
 end;
 
 function TGEDCOMPersonalNamePieces.GetStringTag(Index: Integer): string;
@@ -8046,6 +7350,63 @@ constructor TGEDCOMPersonalName.Create(AOwner, AParent: TGEDCOMObject);
 begin
   inherited Create(AOwner, AParent);
   FName := 'NAME';
+  FPieces := TGEDCOMPersonalNamePieces.Create(AOwner, Self);
+  FPieces.SetLevel(Level);
+end;
+
+destructor TGEDCOMPersonalName.Destroy;
+begin
+  FPieces.Destroy;
+  inherited Destroy;
+end;
+
+procedure TGEDCOMPersonalName.Assign(Source: TGEDCOMCustomTag);
+begin
+  inherited Assign(Source);
+
+  if (Source is TGEDCOMPersonalName)
+  then FPieces.Assign((Source as TGEDCOMPersonalName).Pieces);
+end;
+
+function TGEDCOMPersonalName.AddTag(const ATag, AValue: string;
+  AClass: TGEDCOMTagClass): TGEDCOMTag;
+var
+  SU: string;
+begin
+  SU := UpperCase(ATag);
+
+  if (SU = 'TYPE') or (SU = 'FONE') or (SU = 'ROMN')
+  then Result := inherited AddTag(ATag, AValue, AClass)
+  else Result := FPieces.AddTag(ATag, AValue, AClass);
+end;
+
+procedure TGEDCOMPersonalName.Clear();
+begin
+  inherited Clear();
+  //if (FPiecesList <> nil) then FPiecesList.Clear;
+end;
+
+procedure TGEDCOMPersonalName.ResetOwner(AOwner: TGEDCOMObject);
+begin
+  inherited ResetOwner(AOwner);
+  FPieces.ResetOwner(AOwner);
+end;
+
+procedure TGEDCOMPersonalName.ReplaceXRefs(aMap: TXRefReplaceMap);
+begin
+  inherited ReplaceXRefs(aMap);
+  FPieces.ReplaceXRefs(aMap);
+end;
+
+procedure TGEDCOMPersonalName.SaveToStream(AStream: TStream);
+begin
+  inherited SaveToStream(AStream);
+  FPieces.SaveToStream(AStream);
+end;
+
+function TGEDCOMPersonalName.IsEmpty(): Boolean;
+begin
+  Result := inherited IsEmpty() and FPieces.IsEmpty();
 end;
 
 function TGEDCOMPersonalName.GetFirstPart: string;
@@ -8059,7 +7420,7 @@ function TGEDCOMPersonalName.GetFullName: string;
 begin
   Result := StringValue;
   while Pos('/', Result) > 0 do
-    System.Delete(Result, Pos('/', Result), 1);
+    StrDelete(Result, Pos('/', Result), 1);
 end;
 
 function TGEDCOMPersonalName.GetLastPart: string;
@@ -8091,19 +7452,6 @@ begin
   StringValue := TrimLeft(FirstPart + ' ') + '/' + Value + '/' + TrimRight(' ' + LastPart);
 end;
 
-function TGEDCOMPersonalName.AddTag(const ATag, AValue: string;
-  AClass: TGEDCOMTagClass): TGEDCOMTag;
-var
-  SU: string;
-begin
-  SU := UpperCase(ATag);
-
-  {if (SU = 'NPFX') or (SU = 'GIVN') or (SU = 'NICK')
-  or (SU = 'SPFX') or (SU = 'SURN') or (SU = 'NSFX')
-  then Result := inherited AddTag(ATag, AValue, TGEDCOMPersonalNamePieces)
-  else }Result := inherited AddTag(ATag, AValue, AClass);
-end;
-
 { TGEDCOMChildToFamilyLink }
 
 constructor TGEDCOMChildToFamilyLink.Create(AOwner, AParent: TGEDCOMObject);
@@ -8117,14 +7465,15 @@ var
   S: string;
 begin
   S := LowerCase(Trim(TagStringValue('STAT')));
-  if S = 'challenged' then
-    Result := clChallenged
-  else if S = 'disproven' then
-    Result := clDisproven
-  else if S = 'proven' then
-    Result := clProven
+  if (S = 'challenged')
+  then Result := clChallenged
   else
-    Result := clNone;
+  if (S = 'disproven')
+  then Result := clDisproven
+  else
+  if (S = 'proven')
+  then Result := clProven
+  else Result := clNone;
 end;
 
 function TGEDCOMChildToFamilyLink.GetFamily: TGEDCOMFamilyRecord;
@@ -8165,8 +7514,7 @@ begin
   SetTagStringValue('STAT', S);
 end;
 
-procedure TGEDCOMChildToFamilyLink.SetFamily(
-  const Value: TGEDCOMFamilyRecord);
+procedure TGEDCOMChildToFamilyLink.SetFamily(const Value: TGEDCOMFamilyRecord);
 begin
   SetValue(Value);
 end;
@@ -8249,15 +7597,10 @@ begin
 end;
 
 procedure TGEDCOMPointerWithNotes.ResetOwner(AOwner: TGEDCOMObject);
-var
-  i: Integer;
 begin
   inherited ResetOwner(AOwner);
 
-  if (FNotes <> nil) then begin
-    for i := 0 to FNotes.Count - 1 do
-      TGEDCOMCustomTag(FNotes[i]).ResetOwner(AOwner);
-  end;
+  if (FNotes <> nil) then FNotes.ResetOwner(AOwner);
 end;
 
 procedure TGEDCOMPointerWithNotes.ReplaceXRefs(aMap: TXRefReplaceMap);
@@ -8368,38 +7711,16 @@ begin
 end;
 
 procedure TGEDCOMAssociation.ResetOwner(AOwner: TGEDCOMObject);
-var
-  i: Integer;
 begin
   inherited ResetOwner(AOwner);
 
-  if (FSourceCitations <> nil) then begin
-    for i := 0 to FSourceCitations.Count - 1 do
-      TGEDCOMCustomTag(FSourceCitations[i]).ResetOwner(AOwner);
-  end;
+  if (FSourceCitations <> nil) then FSourceCitations.ResetOwner(AOwner);
 end;
 
 procedure TGEDCOMAssociation.ReplaceXRefs(aMap: TXRefReplaceMap);
 begin
   inherited ReplaceXRefs(aMap);
   if (FSourceCitations <> nil) then FSourceCitations.ReplaceXRefs(aMap);
-end;
-
-{ TGEDCOMFileReferenceWithTitle }
-
-function TGEDCOMFileReferenceWithTitle.GetTitle: string;
-begin
-  Result := TagStringValue('TITL');
-end;
-
-function TGEDCOMFileReferenceWithTitle.MediaTypeTagName: string;
-begin
-  Result := 'FORM\TYPE';
-end;
-
-procedure TGEDCOMFileReferenceWithTitle.SetTitle(const Value: string);
-begin
-  SetTagStringValue('TITL', Value);
 end;
 
 { TGEDCOMPlace }
@@ -8628,328 +7949,6 @@ begin
   SetTagStrings(Self, Value);
 end;
 
-{ TGEDCOMIndividualOrdinance }
-
-constructor TGEDCOMIndividualOrdinance.Create(AOwner, AParent: TGEDCOMObject);
-begin
-  inherited Create(AOwner, AParent, [stNotes, stSource]);
-end;
-
-function TGEDCOMIndividualOrdinance.AddTag(const ATag, AValue: string;
-  AClass: TGEDCOMTagClass): TGEDCOMTag;
-var
-  SU: string;
-begin
-  SU := UpperCase(ATag);
-  if (SU = 'DATE')
-  then Result := inherited AddTag(ATag, AValue, TGEDCOMDateValue)
-  else
-  if (SU = 'STAT')
-  then Result := inherited AddTag(ATag, AValue, TGEDCOMDateStatus)
-  else
-  if (SU = 'FAMC')
-  then Result := inherited AddTag(ATag, AValue, TGEDCOMPointer)
-  else Result := inherited AddTag(ATag, AValue, AClass);
-end;
-
-function TGEDCOMIndividualOrdinance.GetBaptismDateStatus: TGEDCOMBaptismDateStatus;
-var
-  S: string;
-begin
-  S := UpperCase(Trim(TagStringValue('STAT')));
-  if (S = 'CHILD')
-  then Result := bdsChild
-  else
-  if (S = 'COMPLETED')
-  then Result := bdsCompleted
-  else
-  if (S = 'EXCLUDED')
-  then Result := bdsExcluded
-  else
-  if (S = 'PRE-1970')
-  then Result := bdsPre1970
-  else
-  if (S = 'STILLBORN')
-  then Result := bdsStillborn
-  else
-  if (S = 'SUBMITTED')
-  then Result := bdsSubmitted
-  else
-  if (S = 'UNCLEARED')
-  then Result := bdsUncleared
-  else Result := bdsNone;
-end;
-
-function TGEDCOMIndividualOrdinance.GetChangeDate: TGEDCOMDateExact;
-var
-  StatTag: TGEDCOMTag;
-begin
-  StatTag := FindTag('STAT');
-  if (StatTag = nil)
-  then AddTag('STAT');
-  Result := TGEDCOMDateExact(StatTag.TagClass('CHAN', TGEDCOMDateExact));
-end;
-
-function TGEDCOMIndividualOrdinance.GetChildSealingDateStatus: TGEDCOMChildSealingDateStatus;
-var
-  S: string;
-begin
-  S := UpperCase(Trim(TagStringValue('STAT')));
-  if (S = 'BIC')
-  then Result := cdsBIC
-  else
-  if (S = 'EXCLUDED')
-  then Result := cdsExcluded
-  else
-  if (S = 'PRE-1970')
-  then Result := cdsPre1970
-  else
-  if (S = 'STILLBORN')
-  then Result := cdsStillborn
-  else
-  if (S = 'SUBMITTED')
-  then Result := cdsSubmitted
-  else
-  if (S = 'UNCLEARED')
-  then Result := cdsUncleared
-  else Result := cdsNone;
-end;
-
-function TGEDCOMIndividualOrdinance.GetDate: TGEDCOMDateValue;
-begin
-  Result := TGEDCOMDateValue(TagClass('DATE', TGEDCOMDateValue));
-end;
-
-function TGEDCOMIndividualOrdinance.GetEndowmentDateStatus: TGEDCOMEndowmentDateStatus;
-var
-  S: string;
-begin
-  S := UpperCase(Trim(TagStringValue('STAT')));
-  if (S = 'CHILD')
-  then Result := edsChild
-  else
-  if (S = 'COMPLETED')
-  then Result := edsCompleted
-  else
-  if (S = 'EXCLUDED')
-  then Result := edsExcluded
-  else
-  if (S = 'INFANT')
-  then Result := edsInfant
-  else
-  if (S = 'PRE-1970')
-  then Result := edsPre1970
-  else
-  if (S = 'STILLBORN')
-  then Result := edsStillborn
-  else
-  if (S = 'SUBMITTED')
-  then Result := edsSubmitted
-  else
-  if (S = 'UNCLEARED')
-  then Result := edsUncleared
-  else Result := edsNone;
-end;
-
-function TGEDCOMIndividualOrdinance.GetFamily: TGEDCOMPointer;
-begin
-  Result := TGEDCOMPointer(TagClass('FAMC', TGEDCOMPointer));
-end;
-
-function TGEDCOMIndividualOrdinance.GetStringTag(Index: Integer): string;
-begin
-  case Index of
-    1: Result := TagStringValue('TEMP');
-    2: Result := TagStringValue('PLAC');
-  end;
-end;
-
-procedure TGEDCOMIndividualOrdinance.SetBaptismDateStatus(
-  Value: TGEDCOMBaptismDateStatus);
-var
-  S: string;
-begin
-  case Value of
-    bdsChild: S := 'CHILD';
-    bdsCompleted: S := 'COMPLETED';
-    bdsExcluded: S := 'EXCLUDED';
-    bdsPre1970: S := 'PRE-1970';
-    bdsStillborn: S := 'STILLBORN';
-    bdsSubmitted: S := 'SUBMITTED';
-    bdsUncleared: S := 'UNCLEARED';
-    else S := '';
-  end;
-  SetTagStringValue('STAT', S);
-end;
-
-procedure TGEDCOMIndividualOrdinance.SetChildSealingDateStatus(
-  Value: TGEDCOMChildSealingDateStatus);
-var
-  S: string;
-begin
-  case Value of
-    cdsBIC: S := 'BIC';
-    cdsExcluded: S := 'EXCLUDED';
-    cdsPre1970: S := 'PRE-1970';
-    cdsStillborn: S := 'STILLBORN';
-    cdsSubmitted: S := 'SUBMITTED';
-    cdsUncleared: S := 'UNCLEARED';
-    else S := '';
-  end;
-  SetTagStringValue('STAT', S);
-end;
-
-procedure TGEDCOMIndividualOrdinance.SetEndowmentDateStatus(
-  Value: TGEDCOMEndowmentDateStatus);
-var
-  S: string;
-begin
-  case Value of
-    edsChild: S := 'CHILD';
-    edsCompleted: S := 'COMPLETED';
-    edsExcluded: S := 'EXCLUDED';
-    edsInfant: S := 'INFANT';
-    edsPre1970: S := 'PRE-1970';
-    edsStillborn: S := 'STILLBORN';
-    edsSubmitted: S := 'SUBMITTED';
-    edsUncleared: S := 'UNCLEARED';
-    else S := '';
-  end;
-  SetTagStringValue('STAT', S);
-end;
-
-procedure TGEDCOMIndividualOrdinance.SetStringTag(Index: Integer;
-  const Value: string);
-begin
-  case Index of
-    1: SetTagStringValue('TEMP', Value);
-    2: SetTagStringValue('PLAC', Value);
-  end;
-end;
-
-{ TGEDCOMDateStatus }
-
-function TGEDCOMDateStatus.AddTag(const ATag, AValue: string;
-  AClass: TGEDCOMTagClass): TGEDCOMTag;
-begin
-  if (UpperCase(ATag) = 'DATE')
-  then Result := inherited AddTag(ATag, AValue, TGEDCOMDateExact)
-  else Result := inherited AddTag(ATag, AValue, AClass);
-end;
-
-constructor TGEDCOMDateStatus.Create(AOwner, AParent: TGEDCOMObject);
-begin
-  inherited Create(AOwner, AParent);
-  FName := 'STAT';
-end;
-
-function TGEDCOMDateStatus.GetChangeDate: TGEDCOMDateExact;
-begin
-  Result := TGEDCOMDateExact(TagClass('DATE', TGEDCOMDateExact));
-end;
-
-{ TGEDCOMSpouseSealing }
-
-function TGEDCOMSpouseSealing.AddTag(const ATag, AValue: string;
-  AClass: TGEDCOMTagClass): TGEDCOMTag;
-var
-  SU: string;
-begin
-  SU := UpperCase(ATag);
-  if (SU = 'DATE')
-  then Result := inherited AddTag(ATag, AValue, TGEDCOMDateValue)
-  else
-  if (SU = 'STAT')
-  then Result := inherited AddTag(ATag, AValue, TGEDCOMDateStatus)
-  else Result := inherited AddTag(ATag, AValue, AClass);
-end;
-
-constructor TGEDCOMSpouseSealing.Create(AOwner, AParent: TGEDCOMObject);
-begin
-  inherited Create(AOwner, AParent, [stNotes, stSource]);
-end;
-
-function TGEDCOMSpouseSealing.GetChangeDate: TGEDCOMDateExact;
-var
-  StatTag: TGEDCOMTag;
-begin
-  StatTag := FindTag('STAT');
-  if (StatTag = nil) then AddTag('STAT');
-  Result := TGEDCOMDateExact(StatTag.TagClass('CHAN', TGEDCOMDateExact));
-end;
-
-function TGEDCOMSpouseSealing.GetDate: TGEDCOMDateValue;
-begin
-  Result := TGEDCOMDateValue(TagClass('DATE', TGEDCOMDateValue));
-end;
-
-function TGEDCOMSpouseSealing.GetSpouseSealingDateStatus: TGEDCOMSpouseSealingDateStatus;
-var
-  S: string;
-begin
-  S := UpperCase(Trim(TagStringValue('STAT')));
-
-  if (S = 'CANCELED')
-  then Result := sdsCanceled
-  else
-  if (S = 'COMPLETED')
-  then Result := sdsCompleted
-  else
-  if (S = 'EXCLUDED')
-  then Result := sdsExcluded
-  else
-  if (S = 'DNS')
-  then Result := sdsDNS
-  else
-  if (S = 'DNS/CAN')
-  then Result := sdsDNSCAN
-  else
-  if (S = 'PRE-1970')
-  then Result := sdsPre1970
-  else
-  if (S = 'SUBMITTED')
-  then Result := sdsSubmitted
-  else
-  if (S = 'UNCLEARED')
-  then Result := sdsUncleared
-  else Result := sdsNone;
-end;
-
-function TGEDCOMSpouseSealing.GetStringTag(Index: Integer): string;
-begin
-  case Index of
-    1: Result := TagStringValue('TEMP');
-    2: Result := TagStringValue('PLAC');
-  end;
-end;
-
-procedure TGEDCOMSpouseSealing.SetSpouseSealingDateStatus(
-  Value: TGEDCOMSpouseSealingDateStatus);
-var
-  S: string;
-begin
-  case Value of
-    sdsCanceled: S := 'CANCELED';
-    sdsCompleted: S := 'COMPLETED';
-    sdsExcluded: S := 'EXCLUDED';
-    sdsDNS: S := 'DNS';
-    sdsDNSCAN: S := 'DNS/CAN';
-    sdsPre1970: S := 'PRE-1970';
-    sdsSubmitted: S := 'SUBMITTED';
-    sdsUncleared: S := 'UNCLEARED';
-    else S := '';
-  end;
-  SetTagStringValue('STAT', S);
-end;
-
-procedure TGEDCOMSpouseSealing.SetStringTag(Index: Integer; const Value: string);
-begin
-  case Index of
-    1: SetTagStringValue('TEMP', Value);
-    2: SetTagStringValue('PLAC', Value);
-  end;
-end;
-
 {==============================================================================}
 
 { TGEDCOMGroupRecord }
@@ -9026,15 +8025,10 @@ begin
 end;
 
 procedure TGEDCOMGroupRecord.ResetOwner(AOwner: TGEDCOMObject);
-var
-  i: Integer;
 begin
   inherited ResetOwner(AOwner);
 
-  if (FMembers <> nil) then begin
-    for i := 0 to FMembers.Count - 1 do
-      TGEDCOMCustomTag(FMembers[i]).ResetOwner(AOwner);
-  end;
+  if (FMembers <> nil) then FMembers.ResetOwner(AOwner);
 end;
 
 function TGEDCOMGroupRecord.GetName(): string;

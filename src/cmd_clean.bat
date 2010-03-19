@@ -1,6 +1,6 @@
 @echo off
 
-rem del *.exe
+del *.exe
 del *.
 del *.log
 del *.pdb

@@ -12,8 +12,9 @@ object fmStats: TfmStats
   Font.Name = 'Tahoma'
   Font.Style = []
   KeyPreview = True
-  OldCreateOrder = False
+  OldCreateOrder = True
   Position = poScreenCenter
+  OnClose = FormClose
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
   OnShow = FormShow
@@ -56,6 +57,7 @@ object fmStats: TfmStats
       ViewStyle = vsReport
       SortColumn = 0
       SortDirection = sdAscending
+      ShowSortSign = False
     end
   end
   object Panel1: TPanel
@@ -71,11 +73,10 @@ object fmStats: TfmStats
       Left = 2
       Top = 2
       Width = 637
-      Height = 23
+      Height = 25
       AutoSize = True
       ButtonHeight = 21
       Caption = 'ToolBar1'
-      EdgeBorders = []
       TabOrder = 0
       object ToolButton1: TToolButton
         Left = 0
@@ -98,9 +99,9 @@ object fmStats: TfmStats
     end
     object ListStats: TBSListView
       Left = 2
-      Top = 25
+      Top = 27
       Width = 637
-      Height = 307
+      Height = 305
       Align = alClient
       Columns = <
         item
@@ -118,6 +119,7 @@ object fmStats: TfmStats
       ViewStyle = vsReport
       SortColumn = 0
       SortDirection = sdAscending
+      ShowSortSign = False
     end
   end
 end

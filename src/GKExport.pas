@@ -1,5 +1,7 @@
 unit GKExport;
 
+{$I GEDKeeper.inc}
+
 interface
 
 uses
@@ -64,7 +66,8 @@ type
 type
   TPedigreeKind = (pk_dAboville, pk_Konovalov);
 
-  TPersonObj = class
+  TPersonObj = class(TObject)
+  public
     Parent: TPersonObj;
     Id: string;
     iRec: TGEDCOMIndividualRecord;
@@ -122,6 +125,7 @@ end;
 
 constructor TExporter.Create(aTree: TGEDCOMTree; aPath: string);
 begin
+  inherited Create;
   FTree := aTree;
   FPath := aPath;
 end;
@@ -188,7 +192,7 @@ begin
     end;
   finally
     for i := 0 to index.Count - 1 do index.Objects[i].Free;
-    index.Destroy;
+    index.Free;
   end;
 
   WriteStr(aStream, '</ul></li>');
@@ -586,7 +590,7 @@ begin
       end;
       WriteStr(aStream, '</tr></table>');
     finally
-      table_rows.Destroy;
+      table_rows.Free;
     end;
   except
     on E: Exception do WriteStr(aStream, E.Message);
@@ -674,7 +678,7 @@ begin
     main_index.Destroy;
   end;
 
-  ShellExecute(0, 'open', PChar(FPath + 'index.htm'), nil, nil, SW_SHOW);
+  LoadExtFile(FPath + 'index.htm');
 end;
 
 {==============================================================================}
@@ -682,6 +686,7 @@ end;
 { TExcelExporter }
 
 procedure TExcelExporter.Generate();
+{$IFNDEF DELPHI_NET}
 const
   AllBorders: TSetOfAtribut = [acBottomBorder, acTopBorder, acRightBorder, acLeftBorder];
 var
@@ -690,7 +695,9 @@ var
   rec: TGEDCOMRecord;
   ind: TGEDCOMIndividualRecord;
   fam, nam, pat: string;
+{$ENDIF}
 begin
+  {$IFNDEF DELPHI_NET}
   xls := TXLSFile.Create(nil);
   ProgressInit(FTree.Count, 'Ёкспорт...');
   try
@@ -735,11 +742,12 @@ begin
     xls.FileName := FPath + 'export.xls';
     xls.Write;
 
-    ShellExecute(0, 'open', PChar(xls.FileName), nil, nil, SW_SHOW);
+    LoadExtFile(xls.FileName);
   finally
     ProgressDone();
     xls.Destroy;
   end;
+  {$ENDIF}
 end;
 
 {==============================================================================}
@@ -929,7 +937,7 @@ begin
       WriteStr(aStream, '</ul></p>');
     end;
   finally
-    ev_list.Destroy;
+    ev_list.Free;
   end;
 
   if (FOptions.IncludeNotes) and (aPerson.iRec.NotesCount <> 0) then begin
@@ -1106,14 +1114,14 @@ begin
       WriteStr(fs_index, FSourceList[i] + '</p>');
     end;
   finally
-    FSourceList.Destroy;
-    FPersonList.Destroy;
+    FSourceList.Free;
+    FPersonList.Free;
   end;
 
   WriteFooter(fs_index);
   fs_index.Destroy;
 
-  ShellExecute(0, 'open', PChar(aDir + 'pedigree.htm'), nil, nil, SW_SHOW);
+  LoadExtFile(aDir + 'pedigree.htm');
 end;
 
 function TPedigree.FindPerson(iRec: TGEDCOMIndividualRecord): TPersonObj;

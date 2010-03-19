@@ -1,9 +1,9 @@
 object fmFilter: TfmFilter
   Left = 529
-  Top = 250
+  Top = 146
   BorderStyle = bsDialog
   Caption = #1060#1080#1083#1100#1090#1088
-  ClientHeight = 345
+  ClientHeight = 393
   ClientWidth = 297
   Color = clBtnFace
   Font.Charset = RUSSIAN_CHARSET
@@ -37,9 +37,16 @@ object fmFilter: TfmFilter
     Height = 13
     Caption = #1052#1072#1089#1082#1072' '#1084#1077#1089#1090#1086#1078#1080#1090#1077#1083#1100#1089#1090#1074#1072
   end
+  object Label4: TLabel
+    Left = 8
+    Top = 256
+    Width = 38
+    Height = 13
+    Caption = #1043#1088#1091#1087#1087#1099
+  end
   object btnAccept: TBitBtn
     Left = 120
-    Top = 312
+    Top = 360
     Width = 81
     Height = 25
     Caption = #1055#1088#1080#1085#1103#1090#1100
@@ -49,7 +56,7 @@ object fmFilter: TfmFilter
   end
   object btnCancel: TBitBtn
     Left = 208
-    Top = 312
+    Top = 360
     Width = 81
     Height = 25
     Caption = #1054#1090#1084#1077#1085#1080#1090#1100
@@ -104,7 +111,7 @@ object fmFilter: TfmFilter
   end
   object GroupBox1: TGroupBox
     Left = 8
-    Top = 256
+    Top = 304
     Width = 281
     Height = 41
     Caption = #1056#1072#1089#1096#1080#1088#1077#1085#1085#1099#1077
@@ -127,5 +134,14 @@ object fmFilter: TfmFilter
     Sorted = True
     TabOrder = 7
     Text = '*'
+  end
+  object cbGroup: TComboBox
+    Left = 8
+    Top = 272
+    Width = 281
+    Height = 21
+    Style = csDropDownList
+    ItemHeight = 13
+    TabOrder = 8
   end
 end

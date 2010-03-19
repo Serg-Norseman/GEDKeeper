@@ -6,40 +6,37 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, GedCom551, StdCtrls, Buttons, ComCtrls, ExtCtrls;
+  Dialogs, GedCom551, StdCtrls, Buttons, ComCtrls, ExtCtrls, GKBase, GKCommon;
 
 type
   TfmAddressEdit = class(TForm)
+    btnAccept: TBitBtn;
+    btnCancel: TBitBtn;
+    PageAddrData: TPageControl;
+    SheetPhones: TTabSheet;
+    SheetEmails: TTabSheet;
+    SheetCommon: TTabSheet;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
+    Label5: TLabel;
     edCountry: TEdit;
     edState: TEdit;
     edCity: TEdit;
     edPostalCode: TEdit;
-    btnAccept: TBitBtn;
-    btnCancel: TBitBtn;
-    Label5: TLabel;
     edAddress: TEdit;
-    Panel1: TPanel;
-    Panel2: TPanel;
-    btnDataAdd: TSpeedButton;
-    btnDataDelete: TSpeedButton;
-    btnDataEdit: TSpeedButton;
-    PageAddrData: TPageControl;
-    SheetPhones: TTabSheet;
-    ListPhones: TListBox;
-    SheetEmails: TTabSheet;
     SheetWebPages: TTabSheet;
-    ListEmails: TListBox;
-    ListWebPages: TListBox;
     procedure btnAcceptClick(Sender: TObject);
-    procedure btnDataAddClick(Sender: TObject);
-    procedure btnDataEditClick(Sender: TObject);
-    procedure btnDataDeleteClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     FAddress: TGEDCOMAddress;
+
+    FPhonesList: TSheetList;
+    FMailsList: TSheetList;
+    FWebsList: TSheetList;
+
+    procedure ListModify(Sender: TObject; Index: Integer; Action: TRecAction);
     procedure SetAddress(const Value: TGEDCOMAddress);
     procedure UpdateLists();
   public
@@ -53,7 +50,45 @@ implementation
 
 {$R *.dfm}
 
+type
+  TAddressTab = (atPhones, atMails, atWebs);
+
+const
+  Titles: array [TAddressTab] of string = ('Телефон', 'Эл. почта', 'Веб-страница');
+
 { TfmAddressEdit }
+
+procedure TfmAddressEdit.FormCreate(Sender: TObject);
+begin
+  FPhonesList := TSheetList.Create(SheetPhones);
+  FPhonesList.OnModify := ListModify;
+  AddColumn(FPhonesList.List, Titles[atPhones], 350, False);
+
+  FMailsList := TSheetList.Create(SheetEmails);
+  FMailsList.OnModify := ListModify;
+  AddColumn(FMailsList.List, Titles[atMails], 350, False);
+
+  FWebsList := TSheetList.Create(SheetWebPages);
+  FWebsList.OnModify := ListModify;
+  AddColumn(FWebsList.List, Titles[atWebs], 350, False);
+end;
+
+procedure TfmAddressEdit.UpdateLists();
+var
+  i: Integer;
+begin
+  FPhonesList.List.Clear;
+  for i := 0 to FAddress.PhoneNumbersCount - 1 do
+    FPhonesList.List.AddItem(FAddress.PhoneNumbers[i], TObject(i));
+
+  FMailsList.List.Clear;
+  for i := 0 to FAddress.EmailAddressesCount - 1 do
+    FMailsList.List.AddItem(FAddress.EmailAddresses[i], TObject(i));
+
+  FWebsList.List.Clear;
+  for i := 0 to FAddress.WebPagesCount - 1 do
+    FWebsList.List.AddItem(FAddress.WebPages[i], TObject(i));
+end;
 
 procedure TfmAddressEdit.SetAddress(const Value: TGEDCOMAddress);
 begin
@@ -82,98 +117,71 @@ begin
     sl.Text := edAddress.Text;
     FAddress.Address := sl;
   finally
-    sl.Destroy;
+    sl.Free;
   end;
 end;
 
-procedure TfmAddressEdit.UpdateLists();
-var
-  i: Integer;
-begin
-  ListPhones.Clear;
-  ListEmails.Clear;
-  ListWebPages.Clear;
-
-  for i := 0 to FAddress.PhoneNumbersCount - 1 do
-    ListPhones.Items.Add(FAddress.PhoneNumbers[i]);
-
-  for i := 0 to FAddress.EmailAddressesCount - 1 do
-    ListEmails.Items.Add(FAddress.EmailAddresses[i]);
-
-  for i := 0 to FAddress.WebPagesCount - 1 do
-    ListWebPages.Items.Add(FAddress.WebPages[i]);
-end;
-
-const
-  Titles: array [0..2] of string = ('Телефон', 'Эл. почта', 'Веб-страница');
-
-procedure TfmAddressEdit.btnDataAddClick(Sender: TObject);
+procedure TfmAddressEdit.ListModify(Sender: TObject; Index: Integer; Action: TRecAction);
 var
   val: string;
 begin
-  if InputQuery(Titles[PageAddrData.TabIndex], 'Значение', val) then begin
-    case PageAddrData.TabIndex of
-      0: FAddress.PhoneNumbers[FAddress.PhoneNumbersCount] := val;
-      1: FAddress.EmailAddresses[FAddress.EmailAddressesCount] := val;
-      2: FAddress.WebPages[FAddress.WebPagesCount] := val;
+  if (Sender = FPhonesList) then begin
+    case Action of
+      raAdd: begin
+        val := '';
+        if InputQuery(Titles[atPhones], 'Значение', val)
+        then FAddress.PhoneNumbers[FAddress.PhoneNumbersCount] := val;
+      end;
+      raEdit: begin
+        if (Index < 0) then Exit;
+        val := FAddress.PhoneNumbers[Index];
+        if InputQuery(Titles[atPhones], 'Значение', val)
+        then FAddress.PhoneNumbers[Index] := val;
+      end;
+      raDelete: begin
+        if (Index < 0) then Exit;
+        FAddress.DeletePhoneNumber(Index);
+      end;
     end;
-  end;
-
-  UpdateLists();
-end;
-
-procedure TfmAddressEdit.btnDataEditClick(Sender: TObject);
-var
-  idx: Integer;
-  val: string;
-begin
-  case PageAddrData.TabIndex of
-    0: begin
-      idx := ListPhones.ItemIndex;
-      val := FAddress.PhoneNumbers[idx];
+  end
+  else
+  if (Sender = FMailsList) then begin
+    case Action of
+      raAdd: begin
+        val := '';
+        if InputQuery(Titles[atMails], 'Значение', val)
+        then FAddress.EmailAddresses[FAddress.EmailAddressesCount] := val;
+      end;
+      raEdit: begin
+        val := FAddress.EmailAddresses[Index];
+        if (Index < 0) then Exit;
+        if InputQuery(Titles[atMails], 'Значение', val)
+        then FAddress.EmailAddresses[Index] := val;
+      end;
+      raDelete: begin
+        if (Index < 0) then Exit;
+        FAddress.DeleteEmail(Index);
+      end;
     end;
-    1: begin
-      idx := ListEmails.ItemIndex;
-      val := FAddress.EmailAddresses[idx];
-    end;
-    2: begin
-      idx := ListWebPages.ItemIndex;
-      val := FAddress.WebPages[idx];
-    end;
-  end;
-
-  if (idx < 0) then Exit;
-
-  if InputQuery(Titles[PageAddrData.TabIndex], 'Значение', val) then begin
-    case PageAddrData.TabIndex of
-      0: FAddress.PhoneNumbers[idx] := val;
-      1: FAddress.EmailAddresses[idx] := val;
-      2: FAddress.WebPages[idx] := val;
-    end;
-  end;
-
-  UpdateLists();
-end;
-
-procedure TfmAddressEdit.btnDataDeleteClick(Sender: TObject);
-var
-  idx: Integer;
-begin
-  case PageAddrData.TabIndex of
-    0: begin
-      idx := ListPhones.ItemIndex;
-      if (idx < 0) then Exit;
-      FAddress.DeletePhoneNumber(idx);
-    end;
-    1: begin
-      idx := ListEmails.ItemIndex;
-      if (idx < 0) then Exit;
-      FAddress.DeleteEmail(idx);
-    end;
-    2: begin
-      idx := ListWebPages.ItemIndex;
-      if (idx < 0) then Exit;
-      FAddress.DeleteWebPage(idx);
+  end
+  else
+  if (Sender = FWebsList) then begin
+    case Action of
+      raAdd: begin
+        val := '';
+        if InputQuery(Titles[atWebs], 'Значение', val)
+        then FAddress.WebPages[FAddress.WebPagesCount] := val;
+      end;
+      raEdit: begin
+        val := FAddress.WebPages[Index];
+        if (Index < 0) then Exit;
+        if InputQuery(Titles[atWebs], 'Значение', val)
+        then FAddress.WebPages[Index] := val;
+      end;
+      raDelete: begin
+        if (Index < 0) then Exit;
+        FAddress.DeleteWebPage(Index);
+      end;
     end;
   end;
 

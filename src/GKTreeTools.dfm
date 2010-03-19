@@ -12,7 +12,7 @@ object fmTreeTools: TfmTreeTools
   Font.Name = 'Tahoma'
   Font.Style = []
   KeyPreview = True
-  OldCreateOrder = False
+  OldCreateOrder = True
   Position = poScreenCenter
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -25,7 +25,7 @@ object fmTreeTools: TfmTreeTools
     Top = 8
     Width = 721
     Height = 425
-    ActivePage = SheetFamilyGroups
+    ActivePage = SheetRecMerge
     TabOrder = 0
     object SheetChoice: TTabSheet
       Caption = 'SheetChoice'
@@ -34,7 +34,7 @@ object fmTreeTools: TfmTreeTools
         Left = 8
         Top = 8
         Width = 273
-        Height = 193
+        Height = 209
         Caption = #1054#1087#1077#1088#1072#1094#1080#1103
         ItemIndex = 0
         Items.Strings = (
@@ -43,7 +43,8 @@ object fmTreeTools: TfmTreeTools
           #1056#1072#1079#1076#1077#1083#1080#1090#1100' '#1073#1072#1079#1091' '#1076#1072#1085#1085#1099#1093
           #1054#1073#1098#1077#1076#1080#1085#1080#1090#1100' '#1076#1091#1073#1083#1080#1082#1072#1090#1099' '#1079#1072#1087#1080#1089#1077#1081
           #1048#1084#1087#1086#1088#1090' '#1080#1079' '#1074#1085#1077#1096#1085#1077#1075#1086' '#1092#1086#1088#1084#1072#1090#1072
-          #1043#1088#1091#1087#1087#1080#1088#1086#1074#1072#1085#1080#1077' '#1089#1077#1084#1077#1081' ('#1090#1077#1089#1090')')
+          #1055#1088#1086#1074#1077#1088#1082#1072' '#1089#1074#1103#1079#1085#1086#1089#1090#1080' '#1089#1077#1084#1077#1081
+          #1055#1088#1086#1074#1077#1088#1082#1072' '#1091#1084#1077#1088#1096#1080#1093' '#1083#1102#1076#1077#1081)
         TabOrder = 0
       end
     end
@@ -80,6 +81,7 @@ object fmTreeTools: TfmTreeTools
         ViewStyle = vsReport
         SortColumn = 0
         SortDirection = sdAscending
+        ShowSortSign = False
       end
       object edCompareFile: TEdit
         Left = 40
@@ -345,18 +347,19 @@ object fmTreeTools: TfmTreeTools
             Left = 8
             Top = 8
             Width = 225
-            Height = 73
+            Height = 97
             Caption = #1056#1077#1078#1080#1084
             Items.Strings = (
               #1055#1077#1088#1089#1086#1085#1099
               #1047#1072#1084#1077#1090#1082#1080
-              #1057#1077#1084#1100#1080)
+              #1057#1077#1084#1100#1080
+              #1048#1089#1090#1086#1095#1085#1080#1082#1080)
             TabOrder = 0
             OnClick = rgModeClick
           end
           object GroupBox1: TGroupBox
             Left = 8
-            Top = 88
+            Top = 112
             Width = 297
             Height = 161
             Caption = #1055#1086#1080#1089#1082' '#1087#1077#1088#1089#1086#1085
@@ -527,27 +530,49 @@ object fmTreeTools: TfmTreeTools
         Left = 8
         Top = 8
         Width = 697
-        Height = 361
+        Height = 401
         Indent = 19
         TabOrder = 0
         OnDblClick = TreeView1DblClick
       end
-      object btnGroup: TBitBtn
-        Left = 608
-        Top = 376
-        Width = 97
-        Height = 25
-        Caption = #1054#1073#1088#1072#1073#1086#1090#1082#1072
-        TabOrder = 1
-        OnClick = btnGroupClick
-        NumGlyphs = 2
-      end
-      object ProgressBar2: TProgressBar
+    end
+    object SheetDeads: TTabSheet
+      Caption = 'SheetDeads'
+      ImageIndex = 7
+      TabVisible = False
+      object ListDeads: TBSListView
         Left = 8
-        Top = 384
-        Width = 593
-        Height = 16
-        TabOrder = 2
+        Top = 8
+        Width = 697
+        Height = 329
+        Checkboxes = True
+        Columns = <
+          item
+            Caption = #1055#1077#1088#1089#1086#1085#1072
+            Width = 400
+          end
+          item
+            Caption = #1042#1086#1079#1084#1086#1078#1085#1072#1103' '#1087#1088#1080#1095#1080#1085#1072' '#1089#1084#1077#1088#1090#1080
+            Width = 200
+          end>
+        ReadOnly = True
+        RowSelect = True
+        SortType = stText
+        TabOrder = 0
+        ViewStyle = vsReport
+        SortColumn = 0
+        SortDirection = sdAscending
+        ShowSortSign = False
+      end
+      object btnPrepare: TBitBtn
+        Left = 560
+        Top = 382
+        Width = 145
+        Height = 25
+        Caption = #1057#1076#1077#1083#1072#1090#1100' '#1086#1090#1084#1077#1090#1082#1091' '#1086' '#1089#1084#1077#1088#1090#1080
+        TabOrder = 1
+        OnClick = btnPrepareClick
+        NumGlyphs = 2
       end
     end
   end

@@ -1,6 +1,5 @@
 
+{$I compiler.inc}
+
 {.$DEFINE PROFILER}
-
-{$DEFINE SYNAPSE}
-
 

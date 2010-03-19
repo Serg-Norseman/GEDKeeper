@@ -13,6 +13,8 @@ uses
 type
   TGenealogyChart = class;
 
+  TPersonSign = (psNone, psSoldier, psSoldierFall);
+
   TCustomPerson = class(TObject)
   private
     FBirthDate: string;
@@ -29,6 +31,7 @@ type
     FRec: TGEDCOMIndividualRecord;
     FSelected: Boolean;
     FSex: TGEDCOMSex;
+    FSign: TPersonSign;
     FHeight: Integer;
     FWidth: Integer;
 
@@ -38,6 +41,10 @@ type
   protected
     procedure SetPt(const Value: TPoint); virtual;
   public
+    function GetPtX: Longint;
+    function GetPtY: Longint;
+    procedure SetPtX(const Value: Longint);
+    procedure SetPtY(const Value: Longint);
     constructor Create(aChart: TGenealogyChart); virtual;
     destructor Destroy; override;
 
@@ -57,10 +64,13 @@ type
     property Name: string read FName;
     property Patronymic: string read FPatronymic;
     property Pt: TPoint read FPt write SetPt;
+    property PtX: Longint read GetPtX write SetPtX;
+    property PtY: Longint read GetPtY write SetPtY;
     property Rec: TGEDCOMIndividualRecord read FRec;
     property Rect: TRect read GetRect;
     property Selected: Boolean read FSelected write FSelected;
     property Sex: TGEDCOMSex read FSex;
+    property Sign: TPersonSign read FSign;
   end;
 
   TGenealogyChart = class(TObject)
@@ -197,6 +207,41 @@ implementation
 
 uses SysUtils, Math, GKMain;
 
+{$R gk.res}
+
+var
+  Signs: array [TPersonSign] of record
+    Name: string;
+    Pic: TBitmap;
+  end = (
+    (Name: ''),
+    (Name: 'SOLDIER'),
+    (Name: 'SOLDIER_FALL')
+  );
+
+function GetPersonSign(iRec: TGEDCOMIndividualRecord): TPersonSign;
+var
+  attr: TGEDCOMIndividualAttribute;
+  cause: string;
+begin
+  Result := psNone;
+
+  attr := GetAttribute(iRec, '_MILI');
+  if (attr <> nil) then begin
+    cause := AnsiLowerCase(attr.Detail.Classification);
+
+    if (Pos('+', cause) > 0) then begin
+      Result := psSoldierFall;
+      Exit;
+    end
+    else
+    if (Pos('á/ä', cause) > 0) then begin
+      Result := psSoldier;
+      Exit;
+    end;
+  end;
+end;
+
 { TCustomPerson }
 
 constructor TCustomPerson.Create(aChart: TGenealogyChart);
@@ -227,6 +272,7 @@ begin
     FDeathDate := GetDeathDate(iRec, dfDD_MM_YYYY);
     FIsDead := not(IsLive(iRec));
     FSex := iRec.Sex;
+    FSign := GetPersonSign(iRec);
   end else begin
     FFamily := '';
     FName := '< ? >';
@@ -236,6 +282,7 @@ begin
     FDeathDate := '';
     FIsDead := False;
     FSex := svNone;
+    FSign := psNone;
   end;
 
   Calc();
@@ -333,6 +380,9 @@ begin
     Inc(line);
     canv.TextOut(rt.Left + (FWidth - canv.TextWidth(FKinship)) div 2, rt.Top + 10 + (h * line), FKinship);
   end;
+
+  if (FSign <> psNone)
+  then canv.Draw(rt.Right, rt.Top - 16, Signs[FSign].Pic);
 end;
 
 procedure TCustomPerson.SetPt(const Value: TPoint);
@@ -340,10 +390,30 @@ begin
   FPt := Value;
 end;
 
+procedure TCustomPerson.SetPtX(const Value: Longint);
+begin
+  FPt.X := Value;
+end;
+
+procedure TCustomPerson.SetPtY(const Value: Longint);
+begin
+  FPt.Y := Value;
+end;
+
 procedure TCustomPerson.SetKinship(const Value: string);
 begin
   FKinship := Value;
   Calc();
+end;
+
+function TCustomPerson.GetPtX: Longint;
+begin
+  Result := FPt.X;
+end;
+
+function TCustomPerson.GetPtY: Longint;
+begin
+  Result := FPt.Y;
 end;
 
 function TCustomPerson.GetRect(): TRect;
@@ -405,8 +475,8 @@ end;
 
 destructor TPerson.Destroy;
 begin
-  FChilds.Destroy;
-  FSpouses.Destroy;
+  FChilds.Free;
+  FSpouses.Free;
   inherited Destroy;
 end;
 
@@ -429,12 +499,20 @@ end;
 
 function TPersonList.GetItem(Index: Integer): TPerson;
 begin
+  {$IFNDEF DELPHI_NET}
   Result := TPerson(inherited GetItem(Index));
+  {$ELSE}
+  Result := TPerson(inherited Get(Index));
+  {$ENDIF}
 end;
 
 procedure TPersonList.SetItem(Index: Integer; const Value: TPerson);
 begin
+  {$IFNDEF DELPHI_NET}
   inherited SetItem(Index, Value);
+  {$ELSE}
+  inherited Put(Index, Value);
+  {$ENDIF}
 end;
 
 { TAncestryChart }
@@ -445,7 +523,7 @@ begin
   FPersons := TPersonList.Create(True);
   FSpouseDistance := 10;
   FBranchDistance := 20;
-  FLevelDistance := 40;
+  FLevelDistance := 50;
   FMargin := 50;
   FDepthLimit := -1;
   FSelected := nil;
@@ -453,7 +531,7 @@ end;
 
 destructor TAncestryChart.Destroy;
 begin
-  FPersons.Destroy;
+  FPersons.Free;
   inherited Destroy;
 end;
 
@@ -925,16 +1003,16 @@ procedure TAncestryChart.GenDescendantsChart(aPerson: TGEDCOMIndividualRecord);
       then begin
         case aPerson.Sex of
           svMale: begin
-            with aPerson.Pt do X := cur_x - BranchDistance div 2 - aPerson.Width div 2 + 1;
-            with aPerson.BaseSpouse.Pt do X := cur_x + BranchDistance div 2 + aPerson.BaseSpouse.Width div 2;
+            aPerson.PtX := cur_x - BranchDistance div 2 - aPerson.Width div 2 + 1;
+            aPerson.BaseSpouse.PtX := cur_x + BranchDistance div 2 + aPerson.BaseSpouse.Width div 2;
           end;
           svFemale: begin
-            with aPerson.Pt do X := cur_x + BranchDistance div 2 + aPerson.Width div 2;
-            with aPerson.BaseSpouse.Pt do X := cur_x - BranchDistance div 2 - aPerson.BaseSpouse.Width div 2 + 1;
+            aPerson.PtX := cur_x + BranchDistance div 2 + aPerson.Width div 2;
+            aPerson.BaseSpouse.PtX := cur_x - BranchDistance div 2 - aPerson.BaseSpouse.Width div 2 + 1;
           end;
         end;
       end else begin
-        with aPerson.Pt do X := cur_x;
+        aPerson.PtX := cur_x;
       end;
     end;
 
@@ -1240,7 +1318,7 @@ begin
 
     Result := '[' + rel + ']';
   finally
-    H.Destroy;
+    H.Free;
   end;
 end;
 
@@ -1292,5 +1370,19 @@ procedure TVisualBuilderCtl.ChartMouseUp(Sender: TObject;
 begin
   //
 end;
+
+var
+  ps: TPersonSign;
+
+initialization
+  Signs[psNone].Pic := nil; 
+  for ps := Succ(Low(TPersonSign)) to High(TPersonSign) do begin
+    Signs[ps].Pic := TBitmap.Create;
+    Signs[ps].Pic.LoadFromResourceName(HInstance, Signs[ps].Name);
+  end;
+
+finalization
+  for ps := Succ(Low(TPersonSign)) to High(TPersonSign) do
+    Signs[ps].Pic.Free;
 
 end.

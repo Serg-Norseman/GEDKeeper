@@ -64,7 +64,7 @@ type
 
 implementation
 
-uses GedCom551, GKMain;
+uses GedCom551, GKMain, bsWinUtils;
 
 {$R *.dfm}
 
@@ -93,8 +93,13 @@ begin
   PanUnHusbandColor.Color := FOptions.ChartOptions.UnHusbandColor;
   PanUnWifeColor.Color := FOptions.ChartOptions.UnWifeColor;
 
+  {$IFNDEF DELPHI_NET}
   CheckAppRegister.Checked := ProgramIsRegistered();
   CheckExtRegister.Checked := ExtIsRegistered('.ged', 'GEDCOM.File');
+  {$ELSE}
+  CheckAppRegister.Enabled := False;
+  CheckExtRegister.Enabled := False;
+  {$ENDIF}
 
   CheckCleanEmptyFamilies.Checked := FOptions.CleanEmptyFamilies;
 
@@ -134,8 +139,10 @@ begin
   FOptions.ChartOptions.UnHusbandColor := PanUnHusbandColor.Color;
   FOptions.ChartOptions.UnWifeColor := PanUnWifeColor.Color;
 
+  {$IFNDEF DELPHI_NET}
   RegisterProgram(CheckAppRegister.Checked);
   RegisterExt('.ged', 'GEDCOM.File', 'GEDCOM File', 0, CheckExtRegister.Checked);
+  {$ENDIF}
 
   FOptions.CleanEmptyFamilies := CheckCleanEmptyFamilies.Checked;
 

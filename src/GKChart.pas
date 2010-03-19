@@ -6,8 +6,9 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, Menus, Jpeg, ToolWin, ComCtrls, GedCom551, GKChartCore,
-  StdCtrls;
+  Dialogs, ExtCtrls, Menus, ToolWin, ComCtrls, GedCom551, GKChartCore,
+  StdCtrls, GKBase
+  {$IFNDEF DELPHI_NET}, Jpeg{$ENDIF};
 
 type
   TfmChart = class(TForm)
@@ -51,6 +52,8 @@ type
     FChartKind: TChartKind;
     FDepthLimit: Integer;
     FChart: TAncestryChart;
+    FFileName: string;
+    FBase: TfmBase;
 
     FNavBusy: Boolean;
     FNavHistory: TList;
@@ -60,8 +63,10 @@ type
     procedure NavRefresh();
     procedure NavAdd(aRec: TGEDCOMIndividualRecord);
   public
+    property Base: TfmBase read FBase write FBase;
     property ChartKind: TChartKind read FChartKind write FChartKind;
     property DepthLimit: Integer read FDepthLimit write FDepthLimit;
+    property FileName: string read FFileName write FFileName;
     property Person: TGEDCOMIndividualRecord read FPerson write FPerson;
     property Tree: TGEDCOMTree read FTree write FTree;
     property TreeBounds: TRect read FTreeBounds write SetTreeBounds;
@@ -96,6 +101,8 @@ begin
         ckAncestors: Caption := 'Древо предков';
         ckDescendants: Caption := 'Древо потомков';
       end;
+
+      Caption := Caption + ' "' + FFileName + '"';
 
       TreeBounds := FChart.TreeBounds;
       Show();
@@ -158,9 +165,12 @@ begin
 end;
 
 procedure TfmChart.tbImageSaveClick(Sender: TObject);
+{$IFNDEF DELPHI_NET}
 var
   bmp: TJPEGImage;
+{$ENDIF}
 begin
+  {$IFNDEF DELPHI_NET}
   if SaveDialog1.Execute then begin
     bmp := TJPEGImage.Create;
     try
@@ -173,6 +183,7 @@ begin
       bmp.Destroy;
     end;
   end;
+  {$ENDIF}
 end;
 
 procedure TfmChart.FormKeyDown(Sender: TObject; var Key: Word;
@@ -196,7 +207,7 @@ end;
 procedure TfmChart.FormDestroy(Sender: TObject);
 begin
   FChart.Destroy;
-  FNavHistory.Destroy;
+  FNavHistory.Free;
 end;
 
 procedure TfmChart.ListDepthLimitChange(Sender: TObject);
@@ -222,20 +233,14 @@ end;
 procedure TfmChart.Image1DblClick(Sender: TObject);
 var
   p: TPerson;
+  i_rec: TGEDCOMIndividualRecord;
 begin
   p := FChart.Selected;
   if (p <> nil) and (p.Rec <> nil) then begin
-    fmPersonEdit := TfmPersonEdit.Create(Application);
-    try
-      fmPersonEdit.Tree := FTree;
-      fmPersonEdit.Person := p.Rec;
-      fmPersonEdit.ShowModal;
-
-      fmGEDKeeper.ListsRefresh();
+    i_rec := p.Rec;
+    if FBase.ModifyPerson(i_rec) then begin
+      if (FBase <> nil) then FBase.ListsRefresh();
       GenChart();
-    finally
-      fmPersonEdit.Destroy;
-      fmPersonEdit := nil;
     end;
   end;
 end;

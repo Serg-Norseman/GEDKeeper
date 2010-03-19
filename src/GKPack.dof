@@ -130,3 +130,15 @@ OriginalFilename=
 ProductName=
 ProductVersion=1.0.0.0
 Comments=
+[HistoryLists\hlUnitAliases]
+Count=1
+Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
+[HistoryLists\hlSearchPath]
+Count=4
+Item0=$(DELPHI)\Lib\Debug;.\ext;.\GraphicEx;.\Abbrevia\source
+Item1=.\ext;.\GraphicEx;.\Abbrevia\source
+Item2=.\ext;.\GraphicEx
+Item3=.\ext;.\ext\synapse
+[HistoryLists\hlOutputDirectorry]
+Count=1
+Item0=..\

@@ -5,17 +5,25 @@ unit GKFamilyEdit;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Buttons, GedCom551, ComCtrls, ExtCtrls, ActnList, bsCtrls;
+  SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons, ComCtrls,
+  ExtCtrls, GedCom551, GKBase, GKCommon;
 
 type
   TfmFamilyEdit = class(TForm)
-    GroupBox1: TGroupBox;
+    PagesFamilyData: TPageControl;
+    SheetEvents: TTabSheet;
+    SheetNotes: TTabSheet;
+    SheetMultimedia: TTabSheet;
+    SheetSources: TTabSheet;
+    SheetChilds: TTabSheet;
+    btnAccept: TBitBtn;
+    btnCancel: TBitBtn;
+    SheetCommon: TTabSheet;
+    Label1: TLabel;
     EditHusband: TEdit;
     btnHusbandAdd: TSpeedButton;
     btnHusbandDelete: TSpeedButton;
     btnHusbandSel: TSpeedButton;
-    Label1: TLabel;
     Label2: TLabel;
     EditWife: TEdit;
     btnWifeAdd: TSpeedButton;
@@ -23,35 +31,7 @@ type
     btnWifeSel: TSpeedButton;
     Label6: TLabel;
     EditMarriageStatus: TComboBox;
-    PanelFamilyData: TPanel;
-    Panel3: TPanel;
-    btnFamilyDataAdd: TSpeedButton;
-    btnFamilyDataDelete: TSpeedButton;
-    btnFamilyDataEdit: TSpeedButton;
-    btnFamilyChildSel: TSpeedButton;
-    PagesFamilyData: TPageControl;
-    SheetFamilyEvents: TTabSheet;
-    ListFamilyEvents: TBSListView;
-    SheetFamilyNotes: TTabSheet;
-    ListFamilyNotes: TListBox;
-    SheetFamilyMedia: TTabSheet;
-    ListFamilyMedia: TListBox;
-    SheetFamilySources: TTabSheet;
-    ListFamilySources: TBSListView;
-    SheetFamilyChilds: TTabSheet;
-    ListPersonFamilyChilds: TBSListView;
-    btnAccept: TBitBtn;
-    btnCancel: TBitBtn;
-    ActionList1: TActionList;
-    actRecordAdd: TAction;
-    actRecordEdit: TAction;
-    actRecordDelete: TAction;
     procedure FormCreate(Sender: TObject);
-    procedure PagesFamilyDataChange(Sender: TObject);
-    procedure btnFamilyDataAddClick(Sender: TObject);
-    procedure btnFamilyDataEditClick(Sender: TObject);
-    procedure btnFamilyDataDeleteClick(Sender: TObject);
-    procedure btnFamilyChildSelClick(Sender: TObject);
     procedure btnHusbandAddClick(Sender: TObject);
     procedure btnHusbandDeleteClick(Sender: TObject);
     procedure btnHusbandSelClick(Sender: TObject);
@@ -59,27 +39,35 @@ type
     procedure btnWifeDeleteClick(Sender: TObject);
     procedure btnWifeSelClick(Sender: TObject);
     procedure btnAcceptClick(Sender: TObject);
-    procedure actRecordAddExecute(Sender: TObject);
-    procedure actRecordEditExecute(Sender: TObject);
-    procedure actRecordDeleteExecute(Sender: TObject);
-    procedure ListDblClick(Sender: TObject);
+    procedure EditHusbandChange(Sender: TObject);
+    procedure EditWifeChange(Sender: TObject);
   private
     FFamily: TGEDCOMFamilyRecord;
     FTree: TGEDCOMTree;
 
+    FChildsList: TSheetList;
+    FEventsList: TSheetList;
+
+    FNotesList: TSheetList;
+    FMediaList: TSheetList;
+    FSourcesList: TSheetList;
+
     function  GetHusband(): TGEDCOMIndividualRecord;
     function  GetWife(): TGEDCOMIndividualRecord;
-    function  GetSelectedPersonFamilyChild(): TGEDCOMIndividualRecord;
     procedure SetFamily(const Value: TGEDCOMFamilyRecord);
     procedure ControlsRefresh();
+    function GetBase: TfmBase;
+    procedure SetTitle();
+    procedure ListModify(Sender: TObject; Index: Integer; Action: TRecAction);
   public
+    property Base: TfmBase read GetBase;
     property Family: TGEDCOMFamilyRecord read FFamily write SetFamily;
     property Tree: TGEDCOMTree read FTree write FTree;
   end;
 
 implementation
 
-uses bsComUtils, GKMain, GKCommon, GKRecordSelect, GKPersonEdit;
+uses bsComUtils, GKRecordSelect, GKPersonEdit, GKMain;
 
 {$R *.dfm}
 
@@ -91,6 +79,29 @@ var
 begin
   for i := 0 to MarriageStatusSize - 1 do
     EditMarriageStatus.Items.Add(MarriageStatus[i].Name);
+
+  //
+
+  FChildsList := TSheetList.Create(SheetChilds);
+  FChildsList.OnModify := ListModify;
+  FChildsList.Buttons := [lbAdd..lbJump];
+  Base.SetupRecChildsList(FChildsList.List);
+
+  FEventsList := TSheetList.Create(SheetEvents);
+  FEventsList.OnModify := ListModify;
+  Base.SetupRecEventsList(FEventsList.List, False);
+
+  FNotesList := TSheetList.Create(SheetNotes);
+  FNotesList.OnModify := ListModify;
+  Base.SetupRecNotesList(FNotesList.List);
+
+  FMediaList := TSheetList.Create(SheetMultimedia);
+  FMediaList.OnModify := ListModify;
+  Base.SetupRecMediaList(FMediaList.List);
+
+  FSourcesList := TSheetList.Create(SheetSources);
+  FSourcesList.OnModify := ListModify;
+  Base.SetupRecSourcesList(FSourcesList.List);
 end;
 
 procedure TfmFamilyEdit.ControlsRefresh();
@@ -117,22 +128,22 @@ begin
   btnWifeDelete.Enabled := (spouse <> nil);
   btnWifeSel.Enabled := (spouse <> nil);
 
-  fmGEDKeeper.RecListFamilyEventsRefresh(FFamily, ListFamilyEvents, nil);
-  fmGEDKeeper.RecListNotesRefresh(FFamily, ListFamilyNotes, nil);
-  fmGEDKeeper.RecListMediaRefresh(FFamily, ListFamilyMedia, nil);
-  fmGEDKeeper.RecListSourcesRefresh(FFamily, ListFamilySources, nil);
+  Base.RecListFamilyEventsRefresh(FFamily, FEventsList.List, nil);
+  Base.RecListNotesRefresh(FFamily, FNotesList.List, nil);
+  Base.RecListMediaRefresh(FFamily, FMediaList.List, nil);
+  Base.RecListSourcesRefresh(FFamily, FSourcesList.List, nil);
 
-  ListPersonFamilyChilds.Items.BeginUpdate();
-  ListPersonFamilyChilds.Clear();
+  FChildsList.List.Items.BeginUpdate();
+  FChildsList.List.Clear();
   for k := 0 to FFamily.ChildrenCount - 1 do begin
     child := TGEDCOMIndividualRecord(FFamily.Children[k].Value);
 
-    item := ListPersonFamilyChilds.Items.Add();
+    item := FChildsList.List.Items.Add();
     item.Caption := GetNameStr(child);
     item.SubItems.Add(GetBirthDate(child, fmGEDKeeper.Options.DefDateFormat));
-    item.Data := child;
+    item.Data := TObject(k);
   end;
-  ListPersonFamilyChilds.Items.EndUpdate();
+  FChildsList.List.Items.EndUpdate();
 end;
 
 procedure TfmFamilyEdit.SetFamily(const Value: TGEDCOMFamilyRecord);
@@ -172,159 +183,11 @@ begin
   Result := TGEDCOMIndividualRecord(FFamily.Wife.Value);
 end;
 
-function TfmFamilyEdit.GetSelectedPersonFamilyChild(): TGEDCOMIndividualRecord;
-begin
-  Result := nil;
-  if (ListPersonFamilyChilds.Selected = nil) then Exit;
-  Result := TGEDCOMIndividualRecord(ListPersonFamilyChilds.Selected.Data);
-end;
-
-procedure TfmFamilyEdit.PagesFamilyDataChange(Sender: TObject);
-begin
-  btnFamilyDataAdd.Enabled := True;
-  btnFamilyDataEdit.Enabled := True;
-  btnFamilyDataDelete.Enabled := True;
-  btnFamilyChildSel.Enabled := False;
-
-  case PagesFamilyData.TabIndex of
-    0: ;
-    1: ;
-    2: ;
-    3: ;
-    4: begin
-      btnFamilyDataEdit.Enabled := False;
-      btnFamilyChildSel.Enabled := True;
-    end;
-  end;
-end;
-
-procedure TfmFamilyEdit.btnFamilyDataAddClick(Sender: TObject);
-var
-  child: TGEDCOMIndividualRecord;
-  fam_link: TGEDCOMChildToFamilyLink;
-begin
-  case PagesFamilyData.TabIndex of
-    0: begin // События
-      if fmGEDKeeper.ModifyRecEvent(FFamily, nil, raAdd)
-      then ControlsRefresh();
-    end;
-
-    1: begin // Заметки
-      if fmGEDKeeper.ModifyRecNote(FFamily, -1, raAdd)
-      then ControlsRefresh();
-    end;
-
-    2: begin // Мультимедиа
-      if fmGEDKeeper.ModifyRecMultimedia(FFamily, -1, raAdd)
-      then ControlsRefresh();
-    end;
-
-    3: begin // Источники
-      if fmGEDKeeper.ModifyRecSource(FFamily, -1, raAdd)
-      then ControlsRefresh();
-    end;
-
-    4: begin // Дети
-      child := SelectPerson(GetHusband(), tmAncestor, svNone);
-      if (child <> nil) then begin
-        FFamily.AddChild(TGEDCOMPointer.CreateTag(FTree, FFamily, 'CHIL', '@'+child.XRef+'@'));
-        fam_link := TGEDCOMChildToFamilyLink.CreateTag(FTree, child, 'FAMC', FFamily.XRef);
-        fam_link.Family := FFamily;
-        child.AddChildToFamilyLink(fam_link);
-
-        ControlsRefresh();
-      end;
-    end;
-  end;
-end;
-
-procedure TfmFamilyEdit.btnFamilyDataEditClick(Sender: TObject);
-begin
-  case PagesFamilyData.TabIndex of
-    0: begin // События
-      if fmGEDKeeper.ModifyRecEvent(FFamily, TGEDCOMCustomEvent(GetSelObject(ListFamilyEvents)), raEdit)
-      then ControlsRefresh();
-    end;
-
-    1: begin // Заметки
-      if fmGEDKeeper.ModifyRecNote(FFamily, ListFamilyNotes.ItemIndex, raEdit)
-      then ControlsRefresh();
-    end;
-
-    2: begin // Мультимедиа
-      if fmGEDKeeper.ModifyRecMultimedia(FFamily, ListFamilyMedia.ItemIndex, raEdit)
-      then ControlsRefresh();
-    end;
-
-    3: begin // Источники
-      if fmGEDKeeper.ModifyRecSource(FFamily, GetSelIndex(ListFamilySources), raEdit)
-      then ControlsRefresh();
-    end;
-
-    4: begin // Дети
-    end;
-  end;
-end;
-
-procedure TfmFamilyEdit.btnFamilyDataDeleteClick(Sender: TObject);
-var
-  child: TGEDCOMIndividualRecord;
-begin
-  case PagesFamilyData.TabIndex of
-    0: begin // События
-      if fmGEDKeeper.ModifyRecEvent(FFamily, TGEDCOMCustomEvent(GetSelObject(ListFamilyEvents)), raDelete)
-      then ControlsRefresh();
-    end;
-
-    1: begin // Заметки
-      if fmGEDKeeper.ModifyRecNote(FFamily, ListFamilyNotes.ItemIndex, raDelete)
-      then ControlsRefresh();
-    end;
-
-    2: begin // Мультимедиа
-      if fmGEDKeeper.ModifyRecMultimedia(FFamily, ListFamilyMedia.ItemIndex, raDelete)
-      then ControlsRefresh();
-    end;
-
-    3: begin // Источники
-      if fmGEDKeeper.ModifyRecSource(FFamily, GetSelIndex(ListFamilySources), raDelete)
-      then ControlsRefresh();
-    end;
-
-    4: begin // Дети
-      child := GetSelectedPersonFamilyChild();
-      if (child = nil) then Exit;
-
-      if (MessageDlg('Удалить ссылку на ребенка?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
-      then Exit;
-
-      FFamily.RemoveChild(child.XRef);
-      child.DeleteChildToFamilyLink(FFamily);
-
-      ControlsRefresh();
-    end;
-  end;
-end;
-
-procedure TfmFamilyEdit.btnFamilyChildSelClick(Sender: TObject);
-var
-  child: TGEDCOMIndividualRecord;
-begin
-  child := GetSelectedPersonFamilyChild();
-  if (child <> nil) then begin
-    if (fmPersonEdit <> nil)
-    then fmPersonEdit.Person := child
-    else fmGEDKeeper.SelectRecordByXRef(child.XRef);
-
-    Close;
-  end;
-end;
-
 procedure TfmFamilyEdit.btnHusbandAddClick(Sender: TObject);
 var
   husband: TGEDCOMIndividualRecord;
 begin
-  husband := SelectPerson(nil, tmNone, svMale);
+  husband := Base.SelectPerson(nil, tmNone, svMale);
   if (husband <> nil) then begin
     if (FFamily.Husband.StringValue = '') then begin
       FFamily.SetTagStringValue('HUSB', '@'+husband.XRef+'@');
@@ -346,7 +209,7 @@ begin
   then Exit;
 
   husband := TGEDCOMIndividualRecord(FFamily.Husband.Value);
-  RemoveFamilySpouse(fmGEDKeeper.FTree, FFamily, husband);
+  RemoveFamilySpouse(Base.Tree, FFamily, husband);
 
   ControlsRefresh();
 end;
@@ -359,7 +222,7 @@ begin
   if (spouse <> nil) then begin
     if (fmPersonEdit <> nil)
     then fmPersonEdit.Person := spouse
-    else fmGEDKeeper.SelectRecordByXRef(spouse.XRef);
+    else Base.SelectRecordByXRef(spouse.XRef);
 
     Close;
   end;
@@ -369,7 +232,7 @@ procedure TfmFamilyEdit.btnWifeAddClick(Sender: TObject);
 var
   wife: TGEDCOMIndividualRecord;
 begin
-  wife := SelectPerson(nil, tmNone, svFemale);
+  wife := Base.SelectPerson(nil, tmNone, svFemale);
   if (wife <> nil) then begin
     if (FFamily.Wife.StringValue = '') then begin
       FFamily.SetTagStringValue('WIFE', '@'+wife.XRef+'@');
@@ -391,7 +254,7 @@ begin
   then Exit;
 
   wife := TGEDCOMIndividualRecord(FFamily.Wife.Value);
-  RemoveFamilySpouse(fmGEDKeeper.FTree, FFamily, wife);
+  RemoveFamilySpouse(Base.Tree, FFamily, wife);
 
   ControlsRefresh();
 end;
@@ -404,7 +267,7 @@ begin
   if (spouse <> nil) then begin
     if (fmPersonEdit <> nil)
     then fmPersonEdit.Person := spouse
-    else fmGEDKeeper.SelectRecordByXRef(spouse.XRef);
+    else Base.SelectRecordByXRef(spouse.XRef);
 
     Close;
   end;
@@ -418,27 +281,98 @@ begin
   FFamily.SetTagStringValue('_STAT', stat);
 
   FFamily.ChangeDate.ChangeDateTime := Now();
-  fmGEDKeeper.Modified := True;
+  Base.Modified := True;
 end;
 
-procedure TfmFamilyEdit.actRecordAddExecute(Sender: TObject);
+function TfmFamilyEdit.GetBase: TfmBase;
 begin
-  btnFamilyDataAddClick(nil);
+  Result := TfmBase(Owner);
 end;
 
-procedure TfmFamilyEdit.actRecordDeleteExecute(Sender: TObject);
+procedure TfmFamilyEdit.SetTitle();
 begin
-  btnFamilyDataDeleteClick(nil);
+  Caption := 'Семья "'+EditHusband.Text+' - '+EditWife.Text+'"';
 end;
 
-procedure TfmFamilyEdit.actRecordEditExecute(Sender: TObject);
+procedure TfmFamilyEdit.EditHusbandChange(Sender: TObject);
 begin
-  btnFamilyDataEditClick(nil);
+  SetTitle();
 end;
 
-procedure TfmFamilyEdit.ListDblClick(Sender: TObject);
+procedure TfmFamilyEdit.EditWifeChange(Sender: TObject);
 begin
-  btnFamilyDataEditClick(nil);
+  SetTitle();
+end;
+
+procedure TfmFamilyEdit.ListModify(Sender: TObject; Index: Integer; Action: TRecAction);
+var
+  child: TGEDCOMIndividualRecord;
+  fam_link: TGEDCOMChildToFamilyLink;
+begin
+  if (Sender = FChildsList) then begin
+    case Action of
+      raAdd: begin
+        child := Base.SelectPerson(GetHusband(), tmAncestor, svNone);
+        if (child <> nil) then begin
+          FFamily.AddChild(TGEDCOMPointer.CreateTag(FTree, FFamily, 'CHIL', '@'+child.XRef+'@'));
+          fam_link := TGEDCOMChildToFamilyLink.CreateTag(FTree, child, 'FAMC', FFamily.XRef);
+          fam_link.Family := FFamily;
+          child.AddChildToFamilyLink(fam_link);
+
+          ControlsRefresh();
+        end;
+      end;
+
+      raEdit: ;
+
+      raDelete: begin
+        child := TGEDCOMIndividualRecord(FFamily.Children[Index].Value);
+        if (child = nil) then Exit;
+
+        if (MessageDlg('Удалить ссылку на ребенка?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+        then Exit;
+
+        FFamily.RemoveChild(child.XRef);
+        child.DeleteChildToFamilyLink(FFamily);
+
+        ControlsRefresh();
+      end;
+
+      raJump: begin
+        child := TGEDCOMIndividualRecord(FFamily.Children[Index].Value);
+        if (child <> nil) then begin
+          if (fmPersonEdit <> nil)
+          then fmPersonEdit.Person := child
+          else Base.SelectRecordByXRef(child.XRef);
+
+          Close;
+        end;
+      end;
+    end;
+  end
+  else
+  if (Sender = FEventsList) then begin
+    if (Action = raAdd) then Index := Integer(nil);
+
+    if Base.ModifyRecEvent(FFamily, TGEDCOMCustomEvent(Index), Action)
+    then ControlsRefresh();
+  end
+  else
+  //
+  if (Sender = FNotesList) then begin
+    if Base.ModifyRecNote(FFamily, Index, Action)
+    then ControlsRefresh();
+  end
+  else
+  if (Sender = FMediaList) then begin
+    if Base.ModifyRecMultimedia(FFamily, Index, Action)
+    then ControlsRefresh();
+  end
+  else
+  if (Sender = FSourcesList) then begin
+    if Base.ModifyRecSource(FFamily, Index, Action)
+    then ControlsRefresh();
+  end;
 end;
 
 end.

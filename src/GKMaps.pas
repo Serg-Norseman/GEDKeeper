@@ -5,15 +5,39 @@ unit GKMaps;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Buttons, ExtCtrls, WinInet, AxCtrls, 
-  ComCtrls, XMLDoc, XMLIntf, xmldom, msxmldom, Contnrs, GedCom551,
-  BaseMapFrames, GoogleMapFrames;
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, ExtCtrls, ComCtrls, WinInet, XMLDoc, XMLIntf, Contnrs,
+  AxCtrls, GedCom551, OleCtrls, SHDocVw;
+
+type
+  // класс точки на карте
+  TGMapPoint = class(TObject)
+  private
+    FLatitude: Double;
+    FLongitude: Double;
+    FHint: string;
+  public
+    constructor Create(aLatitude, aLongitude: Double; aHint: string = '');
+
+    property Latitude: Double read FLatitude write FLatitude;    // широта
+    property Longitude: Double read FLongitude write FLongitude; // долгота
+    property Hint: string read FHint write FHint;                // подсказка
+  end;
+
+  // координаты
+  TCoordinate = record
+    Latitude, Longtude: Double;
+  end;
+
+  // "прямоугольник" координат
+  TCoordsRect = record
+    MinLon, MinLat, MaxLon, MaxLat: Double;
+  end;
 
 type
   TPlace = class
   public
-    Name: String;
+    Name: string;
     Points: TObjectList;
     Refs: TObjectList;
 
@@ -25,7 +49,7 @@ type
   public
     Lat: Double;
     Lon: Double;
-    Address: String;
+    Address: string;
   end;
 
   TfmMaps = class(TForm)
@@ -33,21 +57,8 @@ type
     Splitter1: TSplitter;
     PageControl1: TPageControl;
     tsPlaces: TTabSheet;
-    tsSearch: TTabSheet;
-    GroupBox1: TGroupBox;
-    lbLatitude: TLabel;
-    edLatitude: TEdit;
-    lbLongitude: TLabel;
-    edLongitude: TEdit;
-    TabSheet1: TTabSheet;
-    btnSearch: TButton;
-    TreeView1: TTreeView;
-    ListView: TListView;
-    Label1: TLabel;
-    edSearch: TEdit;
-    RadioGroup1: TRadioGroup;
+    TreePlaces: TTreeView;
     SaveDialog1: TSaveDialog;
-    btnSaveImage: TButton;
     Panel1: TPanel;
     GroupBox2: TGroupBox;
     ComboPersons: TComboBox;
@@ -56,40 +67,68 @@ type
     CheckBirth: TCheckBox;
     btnSelectPlaces: TButton;
     Label2: TLabel;
-    Label3: TLabel;
-    cbMapType: TComboBox;
+    btnSaveImage: TButton;
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    btnSearch: TButton;
+    edSearch: TEdit;
+    WebBrowser: TWebBrowser;
+    procedure WebBrowserStatusTextChange(Sender: TObject; const Text: Widestring);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure btnSearchClick(Sender: TObject);
     procedure btnSelectPlacesClick(Sender: TObject);
-    procedure ListViewSelectItem(Sender: TObject; Item: TListItem;
-      Selected: Boolean);
     procedure btnSaveImageClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure FormKeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure cbMapTypeChange(Sender: TObject);
+    procedure TreePlacesDblClick(Sender: TObject);
   private
-    FXMLDocument: TXMLDocument;
-    FTree: TGEDCOMTree;
+    FMapFile: string;
     FMapPoints: TObjectList;
     FPlaces: TObjectList;
-    FMapFrame: TBaseMapFrame;
-    FMapFile: string;
+    FTree: TGEDCOMTree;
+    FXMLDocument: TXMLDocument;
+    FBaseRoot, FSearchRoot: TTreeNode;
 
+    FGMapPoints: TObjectList;
+    FGMapInitialized: Boolean;
+    FGMapUpdateCount: Integer;
+    FShowPoints: Boolean;
+    FShowLines: Boolean;
+
+    procedure gm_ClearPoints();
+    procedure gm_ExecScript(Script: string);
+    function GetGMapPoint(Index: Integer): TGMapPoint;
+    function GetGMapPointsCount: Integer;
+    procedure SetVisibleElementes(Index: Integer; Value: Boolean);
+
+    function  GetInetFile(const FileURL: string; Stream: TMemoryStream): Boolean;
     procedure PlacesLoad();
-
-    procedure SetMapFile();
-
-    procedure DoGeocodingRequest(SearchString: String; aPoints: TObjectList);
-    function DoReverseGeocodingRequest(Latitude: Double; Longitude: Double): string;
-    procedure FillGeocodingListView(Points: TObjectList);
     procedure PreparePointsList(aPoints: TObjectList);
+    function  RequestGeoAddress(aLatitude, aLongitude: Double): string;
+    procedure RequestGeoCoords(SearchString: string; aPoints: TObjectList);
+    procedure SetMapFile();
+  protected
+    function  map_AddPoint(aLatitude, aLongitude: Double; aHint: string = ''): Integer;
+    procedure map_BeginUpdate();
+    procedure map_ClearPoints();
+    procedure map_DeletePoint(aIndex: Integer);
+    procedure map_EndUpdate();
+    function  map_GetPointsFrame(): TCoordsRect;
+    procedure map_RefreshPoints();
+    procedure map_SetCenter(aLatitude, aLongitude: Double; aScale: Integer = -1);
+    procedure map_SetLocation(aLocation: string);
+    procedure map_ZoomToBounds();
 
-    procedure PointsChangingEvent(Sender: TBaseMapFrame;
-      PointsChangingType: TPointsChangingType; Index: Integer);
-    function GetPointsFrame(): TCoordsRect;
+    procedure map_GenSnapshot(browser: iWebBrowser2; jpegFQFilename: string;
+      srcHeight, srcWidth, tarHeight, tarWidth: Integer);
+    procedure map_SaveSnapshot(const aFileName: string);
+
+    property GMapPointsCount: Integer read GetGMapPointsCount;
+    property GMapPoints[Index: Integer]: TGMapPoint read GetGMapPoint; default;
+    property ShowPoints: Boolean index 0 read FShowPoints write SetVisibleElementes default True;
+    property ShowLines: Boolean index 1 read FShowLines write SetVisibleElementes default False;
   public
     property Tree: TGEDCOMTree read FTree write FTree;
   end;
@@ -100,143 +139,21 @@ var
 implementation
 
 uses
-  bsWinUtils, GKCommon {$IFDEF SYNAPSE}, HTTPSend{$ENDIF}, GKProgress, GKMain;
+  bsWinUtils, GKCommon, HTTPSend, Types, Jpeg, ActiveX, ComObj,
+  MSHTML, GKProgress, GKMain;
 
 const
   GoogleKey = 'ABQIAAAAIcIQgkzLQ27NamNDh2wULxTh9o9-e_HqfKVqUrQPniGEP9J6uhSJmXGEipvip6lxpu_ZXrXaeHwWgQ';
 
 {$R *.dfm}
 
-// отправка запроса и получение ответа
-function GetInetFile(const FileURL: String; Stream: TMemoryStream): Boolean;
-const
-  BufferSize = 1024;
-var
-  Utf8FileUrl: UTF8String; // Гугл принимает и отдает UTF8 кодировку!!!
-{$IFNDEF SYNAPSE}
-  hSession, hURL: HInternet;
-  Buffer: array [1..BufferSize] of Byte;
-  BufferLen: DWORD;
-  sAppName: string;
-  Headers: String;
-{$ELSE}
-  HTTP: THTTPSend;
-  proxy: TProxy;
-{$ENDIF}
+{ TGMapPoint }
+
+constructor TGMapPoint.Create(aLatitude, aLongitude: Double; aHint: string = '');
 begin
-  // переводим в принимаемую Гуглем кодировку
-  Utf8FileUrl := AnsiToUtf8(FileURL);
-
-  {$IFNDEF SYNAPSE}
-  sAppName := ExtractFileName(Application.ExeName);
-  hSession := InternetOpen(PChar(sAppName), INTERNET_OPEN_TYPE_PRECONFIG, nil, nil, 0);
-  try
-    // рассказывем Гуглю, что русские мы
-    Headers := 'Accept-Language: ru';
-    hURL := InternetOpenURL(hSession, PChar(Utf8FileUrl), PChar(Headers), Length(Headers), 0, 0);
-    try
-      Stream.Clear;
-      repeat
-        InternetReadFile(hURL, @Buffer, SizeOf(Buffer), BufferLen);
-        Stream.Write(Buffer, BufferLen);
-      until BufferLen = 0;
-      Result := True;
-    finally
-      InternetCloseHandle(hURL);
-    end;
-  finally
-    InternetCloseHandle(hSession);
-  end;
-  {$ELSE}
-  HTTP := THTTPSend.Create;
-  try
-    proxy := fmGEDKeeper.Options.Proxy;
-    if (proxy.UseProxy) then begin
-      HTTP.ProxyUser := proxy.Login;
-      HTTP.ProxyPass := proxy.Password;
-      HTTP.ProxyHost := proxy.Server;
-      HTTP.ProxyPort := proxy.Port;
-    end;
-
-    HTTP.MimeType := 'application/x-www-form-urlencoded';
-    HTTP.HTTPMethod('GET', Utf8FileUrl);
-
-    Stream.LoadFromStream(HTTP.Document);
-
-    Result := True;
-  finally
-    HTTP.Free;
-  end;
-  {$ENDIF}
-end;
-
-// получение карты с заданным центром, масштабом и с маркером в центре
-function GetMap(Latitude: Double; Longitude: Double; Scale: Integer): TOleGraphic; overload;
-var
-  FileOnNet: String;
-  Stream: TMemoryStream;
-begin
-  // создаем поток
-  Stream := TMemoryStream.Create;
-  try
-    // формируем url для запроса
-    FileOnNet := 'http://maps.google.ru/staticmap?center=%.6f,%.6f&zoom=%d&size=640x640'
-      +'&markers=%.6f,%.6f,blues'
-      +'&maptype=mobile&key=%s';
-    FileOnNet := Format(FileOnNet, [Latitude, Longitude, Scale, Latitude, Longitude, GoogleKey]);
-    // получение потока с данными ответа
-    if GetInetFile(FileOnNet, Stream) then begin
-      // создаем графический объект
-      Stream.Position := 0;
-      Result := TOleGraphic.Create;
-      Result.LoadFromStream(Stream);
-    end else Result := nil;
-  finally
-    Stream.Free;
-  end;
-end;
-
-// получение карты со списком точек
-function GetMap(Points: TObjectList): TOleGraphic; overload;
-var
-  FileOnNet: String;
-  Stream: TMemoryStream;
-  Markers: String;
-  i: Integer;
-  Point: TMapPoint;
-begin
-  // проверяем наличие точек
-  if (Points.Count < 1) then begin
-    Result := nil;
-    Exit;
-  end;
-
-  // формируем список маркеров
-  Markers := '';
-  for i := 0 to Points.Count - 1 do
-    if (Points[i] is TMapPoint) then begin
-      Point := TMapPoint(Points[i]);
-      Markers := Markers + Format('%.6f,%.6f|', [Point.Lat, Point.Lon]);
-    end;
-
-  // создаем поток
-  Stream := TMemoryStream.Create;
-  try
-    // формируем url для запроса
-    FileOnNet := 'http://maps.google.ru/staticmap?size=640x640'
-      +'&markers=%s'
-      +'&maptype=mobile&key=%s';
-    FileOnNet := Format(FileOnNet, [Markers, GoogleKey]);
-    // получение потока с данными ответа
-    if GetInetFile(FileOnNet, Stream) then begin
-      // создаем графический объект
-      Stream.Position := 0;
-      Result := TOleGraphic.Create;
-      Result.LoadFromStream(Stream);
-    end else Result := nil;
-  finally
-    Stream.Free;
-  end;
+  FLatitude := aLatitude;
+  FLongitude := aLongitude;
+  FHint := aHint;
 end;
 
 { TPlace }
@@ -274,7 +191,8 @@ const
     '    function initialize() {'#13#10+
     '      if (GBrowserIsCompatible()) {'#13#10+
     '        map = new GMap2(document.getElementById("map"));'#13#10+
-    '        map.setCenter(new GLatLng(55.755786, 37.617633), 11, %s);'#13#10+
+    '        map.addMapType(G_PHYSICAL_MAP);'#13#10+
+    '        map.setCenter(new GLatLng(55.755786, 37.617633), 11, G_PHYSICAL_MAP);'#13#10+
     '        map.addControl(new GLargeMapControl());'#13#10+
     '        map.addControl(new GMapTypeControl());'#13#10+
     '        map.addControl(new GOverviewMapControl());'#13#10+
@@ -293,10 +211,11 @@ const
 
 procedure TfmMaps.FormCreate(Sender: TObject);
 begin
-  FMapFrame := TGoogleMapFrame.Create(Self);
-  FMapFrame.PointsChangingEvent := PointsChangingEvent;
-  FMapFrame.Parent := Panel1;
-  FMapFrame.Align := alClient;
+  FGMapPoints := TObjectList.Create(True);
+  FGMapUpdateCount := 0;
+  FShowPoints := True;
+  FShowLines := True;
+  FGMapInitialized := False;
 
   SetMapFile();
 
@@ -305,6 +224,9 @@ begin
 
   DecimalSeparator := '.';
   FXMLDocument := TXMLDocument.Create(Self);
+
+  FBaseRoot := TreePlaces.Items.AddChild(nil, 'Места');
+  FSearchRoot := TreePlaces.Items.AddChild(nil, 'Поиск');
 end;
 
 procedure TfmMaps.FormDestroy(Sender: TObject);
@@ -312,79 +234,323 @@ begin
   FPlaces.Destroy;
   FMapPoints.Destroy;
 
-  if (FMapFrame <> nil) then begin
-    FMapFrame.Parent := nil;
-    FMapFrame.Free;
-  end;
+  map_ClearPoints();
+  FGMapPoints.Free;
 
   DeleteFile(FMapFile);
 end;
 
 procedure TfmMaps.SetMapFile();
-const
-  MapTypes: array [0..3] of string = (
-    'G_NORMAL_MAP', 'G_SATELLITE_MAP', 'G_HYBRID_MAP', 'G_PHYSICAL_MAP'
-  );
 var
   tf: TextFile;
-  idx: Integer;
-  ts: string;
 begin
-  idx := cbMapType.ItemIndex;
-  if (idx < 0) then idx := 3;
-  ts := StringReplace(MapContent, '%s', MapTypes[idx], []);
-
   FMapFile := GetTempDir() + 'GEDKeeperMap.html';
   AssignFile(tf, FMapFile); Rewrite(tf);
-  Writeln(tf, ts);
+  Writeln(tf, MapContent);
   CloseFile(tf);
 
-  FMapFrame.SetLocation(FMapFile);
+  map_SetLocation(FMapFile);
 end;
 
-procedure TfmMaps.PointsChangingEvent(Sender: TBaseMapFrame;
-  PointsChangingType: TPointsChangingType; Index: Integer);
-{var
-  Item: TListItem;
-  Point: TMapPoint;}
+function TfmMaps.GetGMapPointsCount(): Integer;
 begin
-  {case PointsChangingType of
-    // после вызова EndUpdate
-    pctContiniousUpdate:begin
-      FillPointsList(Sender);
+  Result := FGMapPoints.Count;
+end;
+
+function TfmMaps.GetGMapPoint(Index: Integer): TGMapPoint;
+begin
+  Result := nil;
+  if (Index >= 0) and (Index < FGMapPoints.Count)
+  then Result := TGMapPoint(FGMapPoints[Index]);
+end;
+
+procedure TfmMaps.SetVisibleElementes(Index: Integer; Value: Boolean);
+begin
+  case Index of
+    0: FShowPoints := Value;
+    1: FShowLines := Value;
+  end;
+  map_RefreshPoints();
+end;
+
+procedure TfmMaps.gm_ExecScript(Script: string);
+begin
+  if (Trim(Script) = '') then Exit;
+
+  try
+    if WebBrowser.Document <> nil then
+      IHTMLDocument2(WebBrowser.Document).parentWindow.execScript(Script, 'JavaScript');
+  except
+    on E: Exception do MessageDlg(E.Message, mtError, [mbOK], 0);
+  end;
+end;
+
+procedure TfmMaps.gm_ClearPoints();
+begin
+  gm_ExecScript('map.clearOverlays();');
+end;
+
+procedure TfmMaps.WebBrowserStatusTextChange(Sender: TObject;
+  const Text: Widestring);
+begin
+  if not FGMapInitialized and (WebBrowser.ReadyState = READYSTATE_COMPLETE) then begin
+    FGMapInitialized := True;
+  end;
+end;
+
+function TfmMaps.map_AddPoint(aLatitude, aLongitude: Double; aHint: string = ''): Integer;
+var
+  pt: TGMapPoint;
+begin
+  pt := TGMapPoint.Create(aLatitude, aLongitude, aHint);
+  Result := FGMapPoints.Add(pt);
+end;
+
+procedure TfmMaps.map_DeletePoint(aIndex: Integer);
+begin
+  FGMapPoints.Delete(aIndex);
+  map_RefreshPoints();
+end;
+
+procedure TfmMaps.map_BeginUpdate();
+begin
+  Inc(FGMapUpdateCount);
+end;
+
+procedure TfmMaps.map_EndUpdate();
+begin
+  Dec(FGMapUpdateCount);
+  if (FGMapUpdateCount <= 0) then begin
+    map_RefreshPoints();
+    FGMapUpdateCount := 0;
+  end;
+end;
+
+procedure TfmMaps.map_SetLocation(aLocation: string);
+begin
+  WebBrowser.Navigate(aLocation);
+end;
+
+procedure TfmMaps.map_RefreshPoints();
+var
+  PointsScript, PolylineScript: string;
+  i: Integer;
+  pt: TGMapPoint;
+begin
+  // очистка точек только на карте, из списка не убиваются
+  gm_ClearPoints();
+
+  if GMapPointsCount > 0 then begin
+    for i := 0 to GMapPointsCount - 1 do begin
+      pt := GMapPoints[i];
+      // формируем скрипт создания точек
+      PointsScript := PointsScript +
+        Format('addMarker(%.6f, %.6f, "%s");', [pt.Latitude, pt.Longitude, pt.Hint]);
+      // формируем скрипт создания линий маршрута
+      PolylineScript := PolylineScript + 'new GLatLng(' +
+        FloatToStr(pt.Latitude) + ',' + FloatToStr(pt.Longitude) + '),';
     end;
-    // после вызова сброса маршрута
-    pctCleared:begin
-      FillPointsList(Sender);
+
+    // если поднят флаг рисовать точки, то рисуем
+    if ShowPoints
+    then gm_ExecScript(PointsScript);
+
+    // если поднят флаг рисовать линии
+    if ShowLines then begin
+      // добиваем скрипт
+      Delete(PolylineScript, Length(PolylineScript), 1);
+      PolylineScript := 'var polyline = new GPolyline([' +
+        PolylineScript + '],"#FF0000",3);map.addOverlay(polyline);';
+      // выполняем
+      gm_ExecScript(PolylineScript);
     end;
-    // после добавления точки
-    pctAdded:begin
-      Point:=FMapFrame.Points[Index];
-      Item:=lvPoints.Items.Insert(Index);
-      Item.Caption:=IntToStr(Index+1);
-      Item.SubItems.Text:=Format('%.7f x %.7f',[Point.Latitude,Point.Longitude]);
+  end;
+end;
+
+procedure TfmMaps.map_SetCenter(aLatitude, aLongitude: Double; aScale: Integer = -1);
+var
+  Script: string;
+begin
+  if (aScale >= 0) then begin
+    // если при вызове указан масштаб
+    Script := 'var point = new GLatLng(' + FloatToStr(aLatitude) + ',' + FloatToStr(aLongitude) + '); ' +
+      'map.setCenter(point, ' + IntToStr(aScale) + ')';
+  end else begin
+    // если не указан, то масштаб сохраняется
+    Script := 'var point = new GLatLng(' + FloatToStr(aLatitude) + ',' + FloatToStr(aLongitude) + '); ' +
+      'map.setCenter(point)';
+  end;
+  gm_ExecScript(Script);
+end;
+
+procedure TfmMaps.map_ClearPoints();
+begin
+  gm_ClearPoints();
+  FGMapPoints.Clear;
+end;
+
+procedure TfmMaps.map_ZoomToBounds();
+var
+  Script: string;
+  Center: TCoordinate;
+  rt: TCoordsRect;
+begin
+  rt := map_GetPointsFrame();
+
+  if (rt.MinLon <> rt.MaxLon) and (rt.MinLat <> rt.MaxLat) then begin
+    Center.Longtude := (rt.MaxLon + rt.MinLon) / 2;
+    Center.Latitude := (rt.MaxLat + rt.MinLat) / 2;
+
+    Script := 'var point1 = new GLatLng(%.7f, %.7f);'+
+              'var point2 = new GLatLng(%.7f, %.7f);'+
+              'var bounds = new GLatLngBounds(point1, point2);'+
+              'var zoom = map.getBoundsZoomLevel(bounds);'+
+              'map.setCenter(new GLatLng(%.7f, %.7f), zoom);';
+    Script := Format(Script, [rt.MinLat, rt.MinLon,
+       rt.MaxLat, rt.MaxLon, Center.Latitude, Center.Longtude]);
+    gm_ExecScript(Script);
+  end;
+end;
+
+function TfmMaps.map_GetPointsFrame(): TCoordsRect;
+var
+  i: Integer;
+  Point: TGMapPoint;
+begin
+  FillChar(Result, SizeOf(Result), 0);
+
+  if (FGMapPoints.Count) > 0 then begin
+    Point := TGMapPoint(FGMapPoints[0]);
+
+    Result.MinLon := Point.Longitude;
+    Result.MaxLon := Point.Longitude;
+
+    Result.MinLat := Point.Latitude;
+    Result.MaxLat := Point.Latitude;
+
+    if (FGMapPoints.Count = 1) then begin
+      Result.MinLon := Result.MinLon - 20;
+      Result.MaxLon := Result.MaxLon + 20;
+
+      Result.MinLat := Result.MinLat - 20;
+      Result.MaxLat := Result.MaxLat + 20;
+
+      Exit;
     end;
-    // после изменения точки
-    pctModified:begin
-      Point:=FMapFrame.Points[Index];
-      Item:=lvPoints.Items[Index];
-      Item.Caption:=IntToStr(Index+1);
-      Item.SubItems.Text:=Format('%.7f x %.7f',[Point.Latitude,Point.Longitude]);
+
+    for i := 0 to FGMapPoints.Count - 1 do begin
+      Point := TGMapPoint(FGMapPoints[i]);
+
+      if (Result.MinLon > Point.Longitude) then Result.MinLon := Point.Longitude
+      else
+      if (Result.MaxLon < Point.Longitude) then Result.MaxLon := Point.Longitude;
+
+      if (Result.MinLat > Point.Latitude) then Result.MinLat := Point.Latitude
+      else
+      if (Result.MaxLat < Point.Latitude) then Result.MaxLat := Point.Latitude;
     end;
-    // после удаления точки
-    pctDeleted:begin
-      lvPoints.Items.Delete(Index);
+  end;
+end;
+
+procedure TfmMaps.map_GenSnapshot(browser: iWebBrowser2; jpegFQFilename: string;
+   srcHeight: Integer; srcWidth: Integer; tarHeight: Integer; tarWidth: Integer);
+var
+  sourceDrawRect, targetDrawRect: TRect;
+  sourceBitmap, targetBitmap: TBitmap;
+  jpeg: TJPEGImage;
+  viewObject: IViewObject;
+begin
+  sourceBitmap := TBitmap.Create;
+  targetBitmap := TBitmap.Create;
+  jpeg := TJPEGImage.Create;
+  try
+    try
+      sourceDrawRect := Rect(0, 0, srcWidth, srcHeight);
+      sourceBitmap.Width := srcWidth;
+      sourceBitmap.Height := srcHeight;
+
+      viewObject := browser as IViewObject;
+
+      if (viewObject = nil) then Exit;
+
+      OleCheck(viewObject.Draw(DVASPECT_CONTENT, 1, nil, nil, Handle,
+        sourceBitmap.Canvas.Handle, @sourceDrawRect, nil, nil, 0));
+
+      // Resize the src bitmap to the target bitmap
+      targetDrawRect := Rect(0, 0, tarWidth, tarHeight);
+      targetBitmap.Height := tarHeight;
+      targetBitmap.Width  := tarWidth;
+      targetBitmap.Canvas.StretchDraw(targetDrawRect, sourceBitmap);
+
+      // Create a JPEG from the Bitmap and save it
+      jpeg.Assign(targetBitmap);
+      jpeg.SaveToFile(jpegFQFilename);
+    finally
+      jpeg.Free;
+      sourceBitmap.Free;
+      targetBitmap.Free;
     end;
-  end;}
+  except
+    // Error Code
+  end;
+end;
+
+procedure TfmMaps.map_SaveSnapshot(const aFileName: string);
+var
+  IDoc1: IHTMLDocument2;
+  Web: IWebBrowser2;
+  tmpX, tmpY: Integer;
+begin
+  with WebBrowser do begin
+    Document.QueryInterface(IHTMLDocument2, iDoc1);
+    Web := ControlInterface;
+    tmpX := Height;
+    tmpY := Width;
+    TControl(WebBrowser).Visible := Boolean(0);
+    Height := OleObject.Document.ParentWindow.Screen.Height;
+    Width := OleObject.Document.ParentWindow.Screen.Width;
+    map_GenSnapshot(Web, aFileName, Height, Width, Height, Width);
+    Height := tmpX;
+    Width := tmpY;
+    TControl(WebBrowser).Visible := Boolean(1);
+  end;
+end;
+
+// отправка запроса и получение ответа
+function TfmMaps.GetInetFile(const FileURL: string; Stream: TMemoryStream): Boolean;
+var
+  HTTP: THTTPSend;
+  proxy: TProxy;
+begin
+  HTTP := THTTPSend.Create;
+  try
+    proxy := fmGEDKeeper.Options.Proxy;
+    if (proxy.UseProxy) then begin
+      HTTP.ProxyUser := proxy.Login;
+      HTTP.ProxyPass := proxy.Password;
+      HTTP.ProxyHost := proxy.Server;
+      HTTP.ProxyPort := proxy.Port;
+    end;
+
+    HTTP.MimeType := 'application/x-www-form-urlencoded';
+    // переводим в принимаемую Гуглем кодировку
+    HTTP.HTTPMethod('GET', AnsiToUtf8(FileURL));
+
+    Stream.LoadFromStream(HTTP.Document);
+
+    Result := True;
+  finally
+    HTTP.Free;
+  end;
 end;
 
 // запрос обратного геокодирования
-function TfmMaps.DoReverseGeocodingRequest(Latitude: Double; Longitude: Double): string;
+function TfmMaps.RequestGeoAddress(aLatitude, aLongitude: Double): string;
 
   procedure FillNode(Node: IXMLNode);
   var
     i: Integer;
-    NodeText: String;
+    NodeText: string;
   begin
     NodeText := '';
 
@@ -403,7 +569,7 @@ function TfmMaps.DoReverseGeocodingRequest(Latitude: Double; Longitude: Double):
 
 var
   Node: IXMLNode;
-  FileOnNet: String;
+  FileOnNet: string;
   Stream: TMemoryStream;
 begin
   Result := '';
@@ -413,7 +579,7 @@ begin
   try
     // формируем url для запроса
     FileOnNet := 'http://maps.google.ru/maps/geo?ll=%.6f,%.6f&output=xml&key=%s&gl=ru';
-    FileOnNet := Format(FileOnNet, [Latitude, Longitude, GoogleKey]);
+    FileOnNet := Format(FileOnNet, [aLatitude, aLongitude, GoogleKey]);
     // получение потока с данными ответа
     if GetInetFile(FileOnNet, Stream) then begin
       StreamToUtf8Stream(Stream);
@@ -428,116 +594,37 @@ begin
   end;
 end;
 
-// обработка нажатия кнопки "Обновить"
-procedure TfmMaps.btnSearchClick(Sender: TObject);
-var
-  pt: TMapPoint;
-  pt_name: String;
-begin
-  case RadioGroup1.ItemIndex of
-    0: begin
-      pt := TMapPoint.Create;
-      pt.Lat := StrToFloat(edLatitude.Text);
-      pt.Lon := StrToFloat(edLongitude.Text);
-      pt.Address := DoReverseGeocodingRequest(pt.Lat, pt.Lon);
-      FMapPoints.Add(pt);
-    end;
-    1: begin
-      pt_name := StringReplace(Trim(edSearch.Text), ' ', '+', [rfReplaceAll]);
-      DoGeocodingRequest(pt_name, FMapPoints);
-    end;
-  end;
-
-  PreparePointsList(FMapPoints);
-end;
-
 procedure TfmMaps.PreparePointsList(aPoints: TObjectList);
 var
-  //OleGraphic: TOleGraphic;
   i: Integer;
   pt: TMapPoint;
-  rt: TCoordsRect;
 begin
+  map_BeginUpdate();
   try
-    // заполнение списка точек
-    FillGeocodingListView(aPoints);
-    // запрос карты
-    {OleGraphic := GetMap(aPoints);
-    if (OleGraphic <> nil) then begin
-      // рисуем карту
-      ImageGeocoding.Picture.Assign(OleGraphic);
-      OleGraphic.Free;
-    end;}
-
-    //FMapFrame.BeginUpdate;
-    //FMapFrame.ClearPoints();
+    map_ClearPoints();
     for i := 0 to aPoints.Count - 1 do begin
       pt := TMapPoint(aPoints[i]);
-      TGoogleMapFrame(FMapFrame).AddMarker(pt.Lat, pt.Lon, pt.Address);
+      map_AddPoint(pt.Lat, pt.Lon, pt.Address);
     end;
 
-    if (aPoints.Count > 1)
-    then rt := GetPointsFrame()
-    else begin
-      //pt := TMapPoint(aPoints[0]);
-
-      rt.MinLon := pt.Lon - 20;
-      rt.MaxLon := pt.Lon + 20;
-      rt.MinLat := pt.Lat - 20;
-      rt.MaxLat := pt.Lat + 20;
-    end;
-
-    TGoogleMapFrame(FMapFrame).ZoomToBounds(rt);
-    //FMapFrame.EndUpdate;
+    map_ZoomToBounds();
   finally
-  end;
-end;
-
-// получение "прямоугольника", в который вписан маршрут
-function TfmMaps.GetPointsFrame(): TCoordsRect;
-var
-  i: Integer;
-  Point: TMapPoint;
-begin
-  FillChar(Result, SizeOf(Result), 0);
-
-  if (FMapPoints.Count) > 0 then begin
-    Point := TMapPoint(FMapPoints[0]);
-    Result.MinLon := Point.Lon;
-    Result.MinLat := Point.Lat;
-    Result.MaxLon := Point.Lon;
-    Result.MaxLat := Point.Lat;
-
-    for i := 0 to FMapPoints.Count - 1 do begin
-      Point := TMapPoint(FMapPoints[i]);
-
-      if Result.MinLon > Point.Lon
-      then Result.MinLon := Point.Lon
-      else
-      if Result.MaxLon < Point.Lon
-      then Result.MaxLon := Point.Lon;
-
-      if Result.MinLat > Point.Lat
-      then Result.MinLat := Point.Lat
-      else
-      if Result.MaxLat < Point.Lat
-      then Result.MaxLat := Point.Lat;
-    end;
+    map_EndUpdate();
   end;
 end;
 
 // получение списка точек по запросу
-procedure TfmMaps.DoGeocodingRequest(SearchString: String; aPoints: TObjectList);
+procedure TfmMaps.RequestGeoCoords(SearchString: string; aPoints: TObjectList);
 var
   Point: TMapPoint;
-  FileOnNet: String;
+  FileOnNet, sCoordinates: string;
   Stream: TMemoryStream;
-  Node: IXMLNode;
-  PlacemarkNode, PointNode, AddressNode: IXMLNode;
+  Node, PlacemarkNode, PointNode, AddressNode: IXMLNode;
   i: Integer;
-  sCoordinates: String;
   StringList: TStringList;
 begin
+  SearchString := StringReplace(Trim(SearchString), ' ', '+', [rfReplaceAll]);
+
   if (aPoints = nil) then Exit;
 
   // создаем поток
@@ -555,9 +642,9 @@ begin
       // формируем содержимое списка точек
       Node := FXMLDocument.DocumentElement;
       Node := Node.ChildNodes.FindNode('Response');
-      if (Node<>nil) and (Node.ChildNodes.Count>0) then
-        for i := 0 to Node.ChildNodes.Count-1 do
-          if Node.ChildNodes[i].NodeName='Placemark' then begin
+      if (Node <> nil) and (Node.ChildNodes.Count > 0) then
+        for i := 0 to Node.ChildNodes.Count - 1 do
+          if Node.ChildNodes[i].NodeName = 'Placemark' then begin
             // находим узел точки
             PlacemarkNode := Node.ChildNodes[i];
             // получаем узел адреса
@@ -592,32 +679,7 @@ begin
   end;
 end;
 
-// заполнение ListView со списком точек
-procedure TfmMaps.FillGeocodingListView(Points: TObjectList);
-var
-  i: Integer;
-  Item: TListItem;
-  Point: TMapPoint;
-begin
-  ListView.Items.BeginUpdate;
-  try
-    ListView.Items.Clear;
-
-    for i := 0 to Points.Count - 1 do
-      if (Points[i] is TMapPoint) then begin
-        Point := TMapPoint(Points[i]);
-        Item := ListView.Items.Add;
-        Item.Caption := Point.Address;
-        Item.SubItems.Text := Format('%.6f'#13#10'%.6f',[Point.Lat,Point.Lon]);
-      end;
-  finally
-    ListView.Items.EndUpdate;
-  end;
-end;
-
 procedure TfmMaps.PlacesLoad();
-var
-  root: TTreeNode;
 
   function FindTreeNode(aPlace: string): TTreeNode;
   var
@@ -625,29 +687,28 @@ var
   begin
     Result := nil;
 
-    for idx := 0 to TreeView1.Items.Count - 1 do
-      if (TreeView1.Items[idx].Text = aPlace) then begin
-        Result := TreeView1.Items[idx];
+    for idx := 0 to TreePlaces.Items.Count - 1 do
+      if (TreePlaces.Items[idx].Text = aPlace) then begin
+        Result := TreePlaces.Items[idx];
         Exit;
       end;
   end;
 
   procedure PreparePlace(aNode: TTreeNode; aPlace: TPlace);
   var
-    SearchString, pt_title: String;
+    pt_title: string;
     pt: TMapPoint;
     k: Integer;
   begin
     try
-      SearchString := StringReplace(Trim(aPlace.Name), ' ', '+', [rfReplaceAll]);
-      DoGeocodingRequest(SearchString, aPlace.Points);
+      RequestGeoCoords(aPlace.Name, aPlace.Points);
 
       for k := 0 to aPlace.Points.Count - 1 do
         if (aPlace.Points[k] is TMapPoint) then begin
           pt := TMapPoint(aPlace.Points[k]);
 
           pt_title := pt.Address + Format(' [%.6f, %.6f]', [pt.Lat, pt.Lon]);
-          TreeView1.Items.AddChildFirst(aNode, pt_title);
+          TreePlaces.Items.AddChildObjectFirst(aNode, pt_title, pt);
         end;
     finally
     end;
@@ -660,7 +721,7 @@ var
   begin
     node := FindTreeNode(aPlace);
     if (node = nil) then begin
-      node := TreeView1.Items.AddChild(root, aPlace);
+      node := TreePlaces.Items.AddChild(FBaseRoot, aPlace);
 
       place := TPlace.Create;
       place.Name := aPlace;
@@ -677,7 +738,7 @@ var
   end;
 
 var
-  i, k: Integer;
+  i, k, p_cnt: Integer;
   rec: TGEDCOMRecord;
   ind: TGEDCOMIndividualRecord;
   i_ev: TGEDCOMIndividualEvent;
@@ -685,12 +746,10 @@ var
   has_places: Boolean;
 begin
   ComboPersons.Items.BeginUpdate;
-  TreeView1.Items.BeginUpdate;
+  TreePlaces.Items.BeginUpdate;
   ProgressInit(FTree.Count, 'Загрузка и поиск мест');
   try
     FPlaces.Clear;
-    TreeView1.Items.Clear;
-    root := TreeView1.Items.AddChild(nil, 'Места');
 
     ComboPersons.Clear;
     ComboPersons.Sorted := False;
@@ -702,12 +761,14 @@ begin
       if (rec is TGEDCOMIndividualRecord) then begin
         ind := rec as TGEDCOMIndividualRecord;
         has_places := False;
+        p_cnt := 0;
 
         for k := 0 to ind.IndividualEventsCount - 1 do begin
           i_ev := ind.IndividualEvents[k];
           if (i_ev.Detail.Place <> '') then begin
             AddPlace(i_ev.Detail.Place, i_ev);
             has_places := True;
+            Inc(p_cnt);
           end;
         end;
 
@@ -717,23 +778,24 @@ begin
           if (i_att.Name = 'RESI') and (i_att.StringValue <> '') then begin
             AddPlace(i_att.StringValue, i_att);
             has_places := True;
+            Inc(p_cnt);
           end;
         end;
 
         if has_places
-        then ComboPersons.Items.AddObject(GetNameStr(ind), ind);
+        then ComboPersons.Items.AddObject(GetNameStr(ind) + ' [' + IntToStr(p_cnt) + ']', ind);
       end;
 
       ProgressStep();
     end;
 
-    TreeView1.AlphaSort(True);
-    TreeView1.Items[0].Expand(True);
+    TreePlaces.AlphaSort(True);
+    TreePlaces.Items[0].Expand(True);
 
     ComboPersons.Sorted := True;
   finally
     ProgressDone();
-    TreeView1.Items.EndUpdate;
+    TreePlaces.Items.EndUpdate;
     ComboPersons.Items.EndUpdate;
   end;
 end;
@@ -774,9 +836,9 @@ begin
   if (ComboPersons.ItemIndex >= 0)
   then ind := TGEDCOMIndividualRecord(ComboPersons.Items.Objects[ComboPersons.ItemIndex]);
 
-  FMapPoints.Clear;
-  FMapFrame.ClearPoints();
+  ShowLines := (ind <> nil);
 
+  FMapPoints.Clear;
   for i := 0 to FPlaces.Count - 1 do begin
     place := TPlace(FPlaces[i]);
     if (place.Points.Count < 1) then Continue;
@@ -802,50 +864,40 @@ begin
   PreparePointsList(FMapPoints);
 end;
 
-procedure TfmMaps.ListViewSelectItem(Sender: TObject; Item: TListItem;
-  Selected: Boolean);
+// обработка нажатия кнопки "Обновить"
+procedure TfmMaps.btnSearchClick(Sender: TObject);
 var
-  Index: Integer;
-  Point: TMapPoint;
+  pt_title: string;
+  pt: TMapPoint;
+  k: Integer;
+  points: TObjectList;
 begin
-  if Selected and (Item <> nil) then begin
-    Index := Item.Index;
-    Point := TMapPoint(FMapPoints[Index]); //FMapFrame[Index];
-    FMapFrame.SetCenter(Point.Lat, Point.Lon);
+  {fixme!!! память этиъ точек не будет освобождаться}
+  points := TObjectList.Create(False);
+  try
+    RequestGeoCoords(edSearch.Text, points);
+
+    for k := 0 to points.Count - 1 do
+      if (points[k] is TMapPoint) then begin
+        pt := TMapPoint(points[k]);
+
+        pt_title := pt.Address + Format(' [%.6f, %.6f]', [pt.Lat, pt.Lon]);
+        TreePlaces.Items.AddChildObjectFirst(FSearchRoot, pt_title, pt);
+      end;
+
+    FSearchRoot.Expand(True);
+    FSearchRoot.Selected := True;
+
+    PreparePointsList(FMapPoints);
+  finally
+    points.Destroy;
   end;
 end;
 
 procedure TfmMaps.btnSaveImageClick(Sender: TObject);
-var
-  img: TBitmap;
-  OleGraphic: TOleGraphic;
 begin
-  if not(SaveDialog1.Execute) then Exit;
-
-  img := TBitmap.Create();
-  try
-    OleGraphic := GetMap(FMapPoints);
-    if (OleGraphic <> nil) then begin
-      //img.Picture.Assign(OleGraphic);
-      //OleGraphic.SaveToFile(SaveDialog1.FileName);
-
-      img.Width := OleGraphic.Width;
-      img.Height := OleGraphic.Height;
-      img.Canvas.Draw(0, 0, OleGraphic);
-      img.SaveToFile(SaveDialog1.FileName);
-
-      OleGraphic.Free;
-    end;
-
-    //img.Canvas.Draw(0, 0, OleGraphic);
-
-    {img.Width := FMapFrame.Width;
-    img.Height := FMapFrame.Height;
-    BitBlt(img.Canvas.Handle, 0, 0, img.Width, img.Height, GetDC(FMapFrame.Handle), 0, 0, SRCCOPY);
-    img.SaveToFile(SaveDialog1.FileName);}
-  finally
-    img.Destroy;
-  end;
+  if (SaveDialog1.Execute)
+  then map_SaveSnapshot(SaveDialog1.FileName);
 end;
 
 procedure TfmMaps.FormShow(Sender: TObject);
@@ -865,9 +917,17 @@ begin
   Action := caFree;
 end;
 
-procedure TfmMaps.cbMapTypeChange(Sender: TObject);
+procedure TfmMaps.TreePlacesDblClick(Sender: TObject);
+var
+  node: TTreeNode;
+  pt: TMapPoint;
 begin
-  SetMapFile();
+  node := TreePlaces.Selected;
+  if (node = nil) then Exit;
+
+  pt := TMapPoint(node.Data);
+  if (pt <> nil)
+  then map_SetCenter(pt.Lat, pt.Lon);
 end;
 
 end.

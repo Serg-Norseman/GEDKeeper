@@ -1,6 +1,6 @@
 object fmChart: TfmChart
-  Left = 283
-  Top = 107
+  Left = 266
+  Top = 103
   Width = 757
   Height = 590
   Caption = #1044#1080#1072#1075#1088#1072#1084#1084#1072
@@ -10,9 +10,11 @@ object fmChart: TfmChart
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  FormStyle = fsMDIChild
   KeyPreview = True
-  OldCreateOrder = False
+  OldCreateOrder = True
   Position = poScreenCenter
+  Visible = True
   OnClose = FormClose
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -27,7 +29,6 @@ object fmChart: TfmChart
     AutoSize = True
     ButtonHeight = 26
     ButtonWidth = 27
-    Caption = 'ToolBar1'
     EdgeBorders = [ebTop, ebBottom]
     Flat = True
     Images = fmGEDKeeper.ImageList1
@@ -60,7 +61,7 @@ object fmChart: TfmChart
     end
     object ListDepthLimit: TComboBox
       Left = 161
-      Top = 2
+      Top = 0
       Width = 110
       Height = 21
       Style = csDropDownList

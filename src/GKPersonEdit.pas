@@ -5,14 +5,34 @@ unit GKPersonEdit;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, ComCtrls, ExtCtrls, Buttons, GedCom551, Menus, ActnList,
-  bsCtrls;
+  SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ComCtrls,
+  ExtCtrls, Buttons, GedCom551, bsCtrls, GKBase, GKCommon;
 
 type
   TfmPersonEdit = class(TForm)
-    PageControl2: TPageControl;
+    PagesPersonData: TPageControl;
+    SheetEvents: TTabSheet;
+    SheetNotes: TTabSheet;
+    SheetMultimedia: TTabSheet;
+    SheetSources: TTabSheet;
+    SheetSpouses: TTabSheet;
+    SheetAssociations: TTabSheet;
+    SheetGroups: TTabSheet;
+    btnAccept: TBitBtn;
+    btnCancel: TBitBtn;
+    Label5: TLabel;
+    cbRestriction: TComboBox;
     SheetIndividual: TTabSheet;
+    GroupMother: TGroupBox;
+    btnMotherAdd: TSpeedButton;
+    btnMotherDelete: TSpeedButton;
+    btnMotherSel: TSpeedButton;
+    EditMother: TEdit;
+    GroupFather: TGroupBox;
+    btnFatherAdd: TSpeedButton;
+    btnFatherDelete: TSpeedButton;
+    btnFatherSel: TSpeedButton;
+    EditFather: TEdit;
     GroupBox1: TGroupBox;
     Label1: TLabel;
     Label2: TLabel;
@@ -22,53 +42,17 @@ type
     EditName: TEdit;
     EditPatronymic: TEdit;
     EditSex: TComboBox;
-    GroupFather: TGroupBox;
-    btnFatherAdd: TSpeedButton;
-    btnFatherDelete: TSpeedButton;
-    btnFatherSel: TSpeedButton;
-    EditFather: TEdit;
-    GroupMother: TGroupBox;
-    btnMotherAdd: TSpeedButton;
-    btnMotherDelete: TSpeedButton;
-    btnMotherSel: TSpeedButton;
-    EditMother: TEdit;
-    PanelPersonData: TPanel;
-    Panel2: TPanel;
-    btnPersonDataAdd: TSpeedButton;
-    btnPersonDataDelete: TSpeedButton;
-    btnPersonDataEdit: TSpeedButton;
-    PagesPersonData: TPageControl;
-    SheetPersonEvents: TTabSheet;
-    ListPersonEvents: TBSListView;
-    SheetPersonNotes: TTabSheet;
-    ListPersonNotes: TListBox;
-    SheetPersonMultimedia: TTabSheet;
-    ListPersonMedia: TListBox;
-    SheetPersonSources: TTabSheet;
-    ListPersonSources: TBSListView;
-    SheetSpouses: TTabSheet;
-    ListPersonFamilies: TBSListView;
-    btnSpouseSel: TSpeedButton;
-    ListNamePieces: TListBox;
-    btnNamePieceAdd: TSpeedButton;
-    btnNamePieceEdit: TSpeedButton;
-    btnNamePieceDelete: TSpeedButton;
-    SheetAssociations: TTabSheet;
-    ListAssociations: TBSListView;
-    SheetGroups: TTabSheet;
-    ListGroups: TBSListView;
-    btnAccept: TBitBtn;
-    btnCancel: TBitBtn;
-    ActionList1: TActionList;
-    actRecordAdd: TAction;
-    actRecordDelete: TAction;
-    actRecordEdit: TAction;
-    btnItemUp: TSpeedButton;
-    btnItemDown: TSpeedButton;
-    SheetExt: TTabSheet;
     CheckPatriarch: TCheckBox;
-    Label5: TLabel;
-    cbRestriction: TComboBox;
+    btnNameCopy: TSpeedButton;
+    GroupBox2: TGroupBox;
+    Label8: TLabel;
+    edPieceSurnamePrefix: TEdit;
+    Label6: TLabel;
+    edPiecePrefix: TEdit;
+    Label9: TLabel;
+    edPieceSuffix: TEdit;
+    Label7: TLabel;
+    edPieceNickname: TEdit;
     procedure FormCreate(Sender: TObject);
     procedure btnFatherAddClick(Sender: TObject);
     procedure btnFatherDeleteClick(Sender: TObject);
@@ -76,36 +60,35 @@ type
     procedure btnMotherAddClick(Sender: TObject);
     procedure btnMotherDeleteClick(Sender: TObject);
     procedure btnMotherSelClick(Sender: TObject);
-    procedure btnPersonDataAddClick(Sender: TObject);
-    procedure btnPersonDataEditClick(Sender: TObject);
-    procedure btnPersonDataDeleteClick(Sender: TObject);
-    procedure PagesPersonDataChange(Sender: TObject);
-    procedure btnSpouseSelClick(Sender: TObject);
-    procedure btnNamePieceEditClick(Sender: TObject);
-    procedure btnNamePieceAddClick(Sender: TObject);
-    procedure btnNamePieceDeleteClick(Sender: TObject);
     procedure btnAcceptClick(Sender: TObject);
-    procedure ListDblClick(Sender: TObject);
-    procedure actRecordAddExecute(Sender: TObject);
-    procedure actRecordEditExecute(Sender: TObject);
-    procedure actRecordDeleteExecute(Sender: TObject);
-    procedure btnItemUpClick(Sender: TObject);
-    procedure btnItemDownClick(Sender: TObject);
     procedure cbRestrictionChange(Sender: TObject);
+    procedure EditFamilyChange(Sender: TObject);
+    procedure EditNameChange(Sender: TObject);
+    procedure EditPatronymicChange(Sender: TObject);
+    procedure btnNameCopyClick(Sender: TObject);
   private
     FPerson: TGEDCOMIndividualRecord;
-    FTree: TGEDCOMTree;
 
-    function  GetSelectedPersonFamily(): TGEDCOMFamilyRecord;
-    procedure SetPerson(const Value: TGEDCOMIndividualRecord);
-    procedure NamePiecesRefresh();
+    FEventsList: TSheetList;
+
+    FSpousesList: TSheetList;
+    FAssociationsList: TSheetList;
+    FGroupsList: TSheetList;
+
+    FNotesList: TSheetList;
+    FMediaList: TSheetList;
+    FSourcesList: TSheetList;
+
     procedure ControlsRefresh();
-    procedure UpdatePerson();
-
+    function  GetBase: TfmBase;
     procedure LockEditor(aLocked: Boolean);
+    procedure SetPerson(const Value: TGEDCOMIndividualRecord);
+    procedure UpdatePerson();
+    procedure SetTitle();
+    procedure ListModify(Sender: TObject; Index: Integer; Action: TRecAction);
   public
+    property Base: TfmBase read GetBase;
     property Person: TGEDCOMIndividualRecord read FPerson write SetPerson;
-    property Tree: TGEDCOMTree read FTree write FTree;
   end;
 
 var
@@ -114,21 +97,56 @@ var
 implementation
 
 uses
-  bsComUtils, GKCommon, GKMain, GKRecordSelect, GKFamilyEdit, GKNameEdit;
+  bsComUtils, ClipBrd, GKMain, GKRecordSelect, GKFamilyEdit;
 
 {$R *.dfm}
 
-procedure TfmPersonEdit.NamePiecesRefresh();
+type
+  TPersonTabs = (
+    ptCommon, ptEvents, ptSpouses, ptAssociations, ptGroups,
+    ptNotes, ptMedia, ptSources);
+
+procedure TfmPersonEdit.FormCreate(Sender: TObject);
 var
-  idx: Integer;
-  np: TGEDCOMPersonalName;
+  sx: TGEDCOMSex;
 begin
-  np := FPerson.PersonalNames[0];
-  ListNamePieces.Items.BeginUpdate();
-  ListNamePieces.Clear;
-  for idx := 0 to np.Count - 1 do
-    ListNamePieces.Items.Add(np.Tags[idx].StringValue);
-  ListNamePieces.Items.EndUpdate();
+  for sx := Low(TGEDCOMSex) to High(TGEDCOMSex) do
+    EditSex.Items.Add(Sex[sx]);
+
+  FEventsList := TSheetList.Create(SheetEvents);
+  FEventsList.OnModify := ListModify;
+  Base.SetupRecEventsList(FEventsList.List, True);
+
+  //
+
+  FSpousesList := TSheetList.Create(SheetSpouses);
+  FSpousesList.OnModify := ListModify;
+  FSpousesList.Buttons := [lbAdd..lbMoveDown];
+  Base.SetupRecSpousesList(FSpousesList.List);
+
+  FAssociationsList := TSheetList.Create(SheetAssociations);
+  FAssociationsList.OnModify := ListModify;
+  FAssociationsList.Buttons := [lbAdd..lbJump];
+  Base.SetupRecAssociationsList(FAssociationsList.List);
+
+  FGroupsList := TSheetList.Create(SheetGroups);
+  FGroupsList.OnModify := ListModify;
+  FGroupsList.Buttons := [lbAdd, lbDelete];
+  Base.SetupRecGroupsList(FGroupsList.List);
+
+  //
+
+  FNotesList := TSheetList.Create(SheetNotes);
+  FNotesList.OnModify := ListModify;
+  Base.SetupRecNotesList(FNotesList.List);
+
+  FMediaList := TSheetList.Create(SheetMultimedia);
+  FMediaList.OnModify := ListModify;
+  Base.SetupRecMediaList(FMediaList.List);
+
+  FSourcesList := TSheetList.Create(SheetSources);
+  FSourcesList.OnModify := ListModify;
+  Base.SetupRecSourcesList(FSourcesList.List);
 end;
 
 procedure TfmPersonEdit.ControlsRefresh();
@@ -139,8 +157,14 @@ var
   rel_person: TGEDCOMIndividualRecord;
   idx: Integer;
   item: TListItem;
+  np: TGEDCOMPersonalName;
 begin
-  NamePiecesRefresh();
+  np := FPerson.PersonalNames[0];
+
+  edPiecePrefix.Text := np.Pieces.Prefix;
+  edPieceNickname.Text := np.Pieces.Nickname;
+  edPieceSurnamePrefix.Text := np.Pieces.SurnamePrefix;
+  edPieceSuffix.Text := np.Pieces.Suffix;
 
   if (FPerson.ChildToFamilyLinksCount <> 0) then begin
     family := FPerson.ChildToFamilyLinks[0].Family;
@@ -186,13 +210,12 @@ begin
     btnMotherSel.Enabled := False;
   end;
 
-  fmGEDKeeper.RecListIndividualEventsRefresh(FPerson, ListPersonEvents, nil);
-  fmGEDKeeper.RecListNotesRefresh(FPerson, ListPersonNotes, nil);
-  fmGEDKeeper.RecListMediaRefresh(FPerson, ListPersonMedia, nil);
-  fmGEDKeeper.RecListSourcesRefresh(FPerson, ListPersonSources, nil);
+  Base.RecListIndividualEventsRefresh(FPerson, FEventsList.List, nil);
+  Base.RecListNotesRefresh(FPerson, FNotesList.List, nil);
+  Base.RecListMediaRefresh(FPerson, FMediaList.List, nil);
+  Base.RecListSourcesRefresh(FPerson, FSourcesList.List, nil);
 
-  ListPersonFamilies.Clear();
-
+  FSpousesList.List.Clear();
   for idx := 0 to FPerson.SpouseToFamilyLinksCount - 1 do begin
     family := FPerson.SpouseToFamilyLinks[idx].Family;
     if (family = nil) then begin
@@ -209,16 +232,17 @@ begin
     end;
 
     rel_person := TGEDCOMIndividualRecord(sp.Value);
-    item := ListPersonFamilies.Items.Add();
-    item.Data := family;
+
+    item := FSpousesList.List.Items.Add();
+    item.Data := TObject(idx);
     if (rel_person <> nil)
     then item.Caption := GetNameStr(rel_person)
     else item.Caption := unk;
     item.SubItems.Add(GetMarriageDate(family, fmGEDKeeper.Options.DefDateFormat));
   end;
 
-  fmGEDKeeper.RecListAssociationsRefresh(FPerson, ListAssociations, nil);
-  fmGEDKeeper.RecListGroupsRefresh(FPerson, ListGroups, nil);
+  Base.RecListAssociationsRefresh(FPerson, FAssociationsList.List, nil);
+  Base.RecListGroupsRefresh(FPerson, FGroupsList.List, nil);
 end;
 
 procedure TfmPersonEdit.SetPerson(const Value: TGEDCOMIndividualRecord);
@@ -236,7 +260,7 @@ begin
     EditSex.ItemIndex := Ord(FPerson.Sex);
 
     // extended begin
-    CheckPatriarch.Checked := (FPerson.FindTag('_PATRIARCH') <> nil);
+    CheckPatriarch.Checked := (FPerson.FindTag(PatriarchTag) <> nil);
     // extended end
 
     cbRestriction.ItemIndex := Ord(FPerson.Restriction);
@@ -247,38 +271,21 @@ begin
   end;
 end;
 
-function TfmPersonEdit.GetSelectedPersonFamily(): TGEDCOMFamilyRecord;
-begin
-  Result := nil;
-  if (ListPersonFamilies.Selected = nil) then Exit;
-  Result := TGEDCOMFamilyRecord(ListPersonFamilies.Selected.Data);
-end;
-
-procedure TfmPersonEdit.FormCreate(Sender: TObject);
-var
-  sx: TGEDCOMSex;
-begin
-  for sx := Low(TGEDCOMSex) to High(TGEDCOMSex) do
-    EditSex.Items.Add(Sex[sx]);
-
-  PagesPersonDataChange(nil);
-end;
-
 procedure TfmPersonEdit.btnFatherAddClick(Sender: TObject);
 var
   father: TGEDCOMIndividualRecord;
   family: TGEDCOMFamilyRecord;
 begin
-  father := SelectPerson(FPerson, tmDescendant, svMale);
+  father := Base.SelectPerson(FPerson, tmDescendant, svMale);
   if (father <> nil) then begin
-    family := fmGEDKeeper.GetChildFamily(FPerson, True, father);
+    family := Base.GetChildFamily(FPerson, True, father);
 
     if (family.Husband.StringValue = '') then begin
       family.SetTagStringValue('HUSB', '@'+father.XRef+'@');
 
       father.AddSpouseToFamilyLink(
         TGEDCOMSpouseToFamilyLink.CreateTag(
-          FTree, father, 'FAMS', '@'+family.XRef+'@'));
+          Base.Tree, father, 'FAMS', '@'+family.XRef+'@'));
     end;
 
     ControlsRefresh();
@@ -293,10 +300,10 @@ begin
   if (MessageDlg('Удалить ссылку на отца?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
   then Exit;
 
-  family := fmGEDKeeper.GetChildFamily(FPerson, False, nil);
+  family := Base.GetChildFamily(FPerson, False, nil);
   if (family <> nil) then begin
     father := TGEDCOMIndividualRecord(family.Husband.Value);
-    RemoveFamilySpouse(fmGEDKeeper.FTree, family, father);
+    RemoveFamilySpouse(Base.Tree, family, father);
 
     ControlsRefresh();
   end;
@@ -307,7 +314,7 @@ var
   father: TGEDCOMIndividualRecord;
   family: TGEDCOMFamilyRecord;
 begin
-  family := fmGEDKeeper.GetChildFamily(FPerson, False, nil);
+  family := Base.GetChildFamily(FPerson, False, nil);
   if (family <> nil) then begin
     father := TGEDCOMIndividualRecord(family.Husband.Value);
     SetPerson(father);
@@ -319,16 +326,16 @@ var
   mother: TGEDCOMIndividualRecord;
   family: TGEDCOMFamilyRecord;
 begin
-  mother := SelectPerson(FPerson, tmDescendant, svFemale);
+  mother := Base.SelectPerson(FPerson, tmDescendant, svFemale);
   if (mother <> nil) then begin
-    family := fmGEDKeeper.GetChildFamily(FPerson, True, mother);
+    family := Base.GetChildFamily(FPerson, True, mother);
 
     if (family.Wife.StringValue = '') then begin
       family.SetTagStringValue('WIFE', '@'+mother.XRef+'@');
 
       mother.AddSpouseToFamilyLink(
         TGEDCOMSpouseToFamilyLink.CreateTag(
-          FTree, mother, 'FAMS', '@'+family.XRef+'@'));
+          Base.Tree, mother, 'FAMS', '@'+family.XRef+'@'));
     end;
 
     ControlsRefresh();
@@ -343,10 +350,10 @@ begin
   if (MessageDlg('Удалить ссылку на мать?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
   then Exit;
 
-  family := fmGEDKeeper.GetChildFamily(FPerson, False, nil);
+  family := Base.GetChildFamily(FPerson, False, nil);
   if (family <> nil) then begin
     mother := TGEDCOMIndividualRecord(family.Wife.Value);
-    RemoveFamilySpouse(fmGEDKeeper.FTree, family, mother);
+    RemoveFamilySpouse(Base.Tree, family, mother);
 
     ControlsRefresh();
   end;
@@ -357,294 +364,28 @@ var
   mother: TGEDCOMIndividualRecord;
   family: TGEDCOMFamilyRecord;
 begin
-  family := fmGEDKeeper.GetChildFamily(FPerson, False, nil);
+  family := Base.GetChildFamily(FPerson, False, nil);
   if (family <> nil) then begin
     mother := TGEDCOMIndividualRecord(family.Wife.Value);
     SetPerson(mother);
   end;
 end;
 
-procedure TfmPersonEdit.btnPersonDataAddClick(Sender: TObject);
-var
-  family: TGEDCOMFamilyRecord;
-  group: TGEDCOMGroupRecord;
-begin
-  case PagesPersonData.TabIndex of
-    0: begin // События
-      if fmGEDKeeper.ModifyRecEvent(FPerson, nil, raAdd)
-      then ControlsRefresh();
-    end;
-
-    1: begin // Заметки
-      if fmGEDKeeper.ModifyRecNote(FPerson, -1, raAdd)
-      then ControlsRefresh();
-    end;
-
-    2: begin // Мультимедиа
-      if fmGEDKeeper.ModifyRecMultimedia(FPerson, -1, raAdd)
-      then ControlsRefresh();
-    end;
-
-    3: begin // Источники
-      if fmGEDKeeper.ModifyRecSource(FPerson, -1, raAdd)
-      then ControlsRefresh();
-    end;
-
-    4: begin // Супруги
-      family := nil;
-      if fmGEDKeeper.ModifyFamily(family, FPerson)
-      then ControlsRefresh();
-    end;
-
-    5: begin // Ассоциации
-      if fmGEDKeeper.ModifyRecAssociation(FPerson, -1, raAdd)
-      then ControlsRefresh();
-    end;
-
-    6: begin // Группы
-      group := TGEDCOMGroupRecord(SelectRecord(smGroup));
-      if (group <> nil) then begin
-        group.AddMember(TGEDCOMPointer.CreateTag(FTree, group, '_MEMBER', '@'+FPerson.XRef+'@'));
-        FPerson.AddGroup(TGEDCOMPointer.CreateTag(FTree, FPerson, '_GROUP', '@'+group.XRef+'@'));
-
-        ControlsRefresh();
-      end;
-    end;
-  end;
-end;
-
-procedure TfmPersonEdit.btnPersonDataEditClick(Sender: TObject);
-var
-  family: TGEDCOMFamilyRecord;
-begin
-  case PagesPersonData.TabIndex of
-    0: begin // События
-      if fmGEDKeeper.ModifyRecEvent(FPerson, TGEDCOMCustomEvent(GetSelObject(ListPersonEvents)), raEdit)
-      then ControlsRefresh();
-    end;
-
-    1: begin // Заметки
-      if fmGEDKeeper.ModifyRecNote(FPerson, ListPersonNotes.ItemIndex, raEdit)
-      then ControlsRefresh();
-    end;
-
-    2: begin // Мультимедиа
-      if fmGEDKeeper.ModifyRecMultimedia(FPerson, ListPersonMedia.ItemIndex, raEdit)
-      then ControlsRefresh();
-    end;
-
-    3: begin // Источники
-      if fmGEDKeeper.ModifyRecSource(FPerson, GetSelIndex(ListPersonSources), raEdit)
-      then ControlsRefresh();
-    end;
-
-    4: begin // Супруги
-      family := GetSelectedPersonFamily();
-      if (family <> nil) then begin
-        fmGEDKeeper.ModifyFamily(family);
-        ControlsRefresh();
-      end;
-    end;
-
-    5: begin // Ассоциации
-      if fmGEDKeeper.ModifyRecAssociation(FPerson, GetSelIndex(ListAssociations), raEdit)
-      then ControlsRefresh();
-    end;
-
-    6: begin // Группы
-      // empty
-    end;
-  end;
-end;
-
-procedure TfmPersonEdit.btnPersonDataDeleteClick(Sender: TObject);
-var
-  family: TGEDCOMFamilyRecord;
-  group: TGEDCOMGroupRecord;
-  ptr: TGEDCOMPointer;
-begin
-  case PagesPersonData.TabIndex of
-    0: begin // События
-      if fmGEDKeeper.ModifyRecEvent(FPerson, TGEDCOMCustomEvent(GetSelObject(ListPersonEvents)), raDelete)
-      then ControlsRefresh();
-    end;
-
-    1: begin // Заметки
-      if fmGEDKeeper.ModifyRecNote(FPerson, ListPersonNotes.ItemIndex, raDelete)
-      then ControlsRefresh();
-    end;
-
-    2: begin // Мультимедиа
-      if fmGEDKeeper.ModifyRecMultimedia(FPerson, ListPersonMedia.ItemIndex, raDelete)
-      then ControlsRefresh();
-    end;
-
-    3: begin // Источники
-      if fmGEDKeeper.ModifyRecSource(FPerson, GetSelIndex(ListPersonSources), raDelete)
-      then ControlsRefresh();
-    end;
-
-    4: begin // Супруги
-      family := GetSelectedPersonFamily();
-      if (family = nil) then Exit;
-
-      if (MessageDlg('Удалить ссылку на супруга?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
-      then Exit;
-
-      RemoveFamilySpouse(fmGEDKeeper.FTree, family, FPerson);
-
-      ControlsRefresh();
-    end;
-
-    5: begin // Ассоциации
-      if fmGEDKeeper.ModifyRecAssociation(FPerson, GetSelIndex(ListAssociations), raDelete)
-      then ControlsRefresh();
-    end;
-
-    6: begin // Группы
-      ptr := FPerson.Groups[GetSelIndex(ListGroups)];
-      group := TGEDCOMGroupRecord(ptr.Value);
-
-      if (MessageDlg('Удалить ссылку на группу?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
-      then Exit;
-
-      group.RemoveMember(group.IndexOfMember(FPerson));
-      FPerson.DeleteGroup(FPerson.IndexOfGroup(group));
-
-      ControlsRefresh();
-    end;
-  end;
-end;
-
-procedure TfmPersonEdit.PagesPersonDataChange(Sender: TObject);
-begin
-  btnPersonDataAdd.Enabled := True;
-  btnPersonDataEdit.Enabled := True;
-  btnPersonDataDelete.Enabled := True;
-  btnSpouseSel.Enabled := False;
-  btnItemUp.Enabled := False;
-  btnItemDown.Enabled := False;
-
-  case PagesPersonData.TabIndex of
-    0: ;
-    1: ;
-    2: ;
-    3: ;
-    4: begin
-      btnSpouseSel.Enabled := True;
-      btnItemUp.Enabled := True;
-      btnItemDown.Enabled := True;
-    end;
-    5: begin
-      btnSpouseSel.Enabled := True;
-    end;
-    6: begin
-      btnPersonDataEdit.Enabled := False;
-      btnSpouseSel.Enabled := True;
-    end;
-  end;
-end;
-
-procedure TfmPersonEdit.btnSpouseSelClick(Sender: TObject);
-var
-  spouse: TGEDCOMIndividualRecord;
-  family: TGEDCOMFamilyRecord;
-  sp: TGEDCOMPointer;
-begin
-  case PagesPersonData.TabIndex of
-    4: begin
-      UpdatePerson();
-
-      family := GetSelectedPersonFamily();
-      if (family = nil) then Exit;
-
-      case person.Sex of
-        svNone: ;
-        svMale: sp := family.Wife;
-        svFemale: sp := family.Husband;
-        svUndetermined: ;
-      end;
-
-      spouse := TGEDCOMIndividualRecord(sp.Value);
-      SetPerson(spouse);
-    end;
-
-    5: begin
-    end;
-  end;
-end;
-
-procedure TfmPersonEdit.btnNamePieceEditClick(Sender: TObject);
-var
-  fmNameEdit: TfmNameEdit;
-  idx: Integer;
-  tag: string;
-  np: TGEDCOMPersonalName;
-begin
-  idx := ListNamePieces.ItemIndex;
-  if (idx < 0) then Exit;
-
-  np := FPerson.PersonalNames[0];
-  tag := np.Tags[idx].Name;
-
-  fmNameEdit := TfmNameEdit.Create(Application);
-  try
-    fmNameEdit.EditKind.ItemIndex := GetNamePieceIndex(tag);
-    fmNameEdit.EditKind.Enabled := False;
-    fmNameEdit.EditName.Text := np.Tags[idx].StringValue;
-
-    if (fmNameEdit.ShowModal = mrOk) then begin
-      np.Tags[idx].StringValue := fmNameEdit.EditName.Text;
-    end;
-
-    NamePiecesRefresh();
-
-    ControlsRefresh();
-  finally
-    fmNameEdit.Destroy;
-  end;
-end;
-
-procedure TfmPersonEdit.btnNamePieceAddClick(Sender: TObject);
-var
-  fmNameEdit: TfmNameEdit;
-  np: TGEDCOMPersonalName;
-begin
-  fmNameEdit := TfmNameEdit.Create(Application);
-  try
-    fmNameEdit.EditKind.ItemIndex := 0;
-
-    if (fmNameEdit.ShowModal = mrOk) then begin
-      np := FPerson.PersonalNames[0];
-      np.AddTag(NamePieces[fmNameEdit.EditKind.ItemIndex].Sign, fmNameEdit.EditName.Text);
-    end;
-
-    NamePiecesRefresh();
-  finally
-    fmNameEdit.Destroy;
-  end;
-end;
-
-procedure TfmPersonEdit.btnNamePieceDeleteClick(Sender: TObject);
-var
-  idx: Integer;
-begin
-  idx := ListNamePieces.ItemIndex;
-  if (idx < 0) then Exit;
-
-  FPerson.PersonalNames[0].Delete(idx);
-
-  NamePiecesRefresh();
-end;
-
 procedure TfmPersonEdit.UpdatePerson();
 var
   np: TGEDCOMPersonalName;
+  pieces: TGEDCOMPersonalNamePieces;
 begin
   np := FPerson.PersonalNames[0];
   np.SetNameParts(
     Trim(EditName.Text) + ' ' + Trim(EditPatronymic.Text),
     Trim(EditFamily.Text), np.LastPart);
+
+  pieces := np.Pieces;
+  if (pieces.Prefix <> edPiecePrefix.Text) then pieces.Prefix := edPiecePrefix.Text;
+  if (pieces.Nickname <> edPieceNickname.Text) then pieces.Nickname := edPieceNickname.Text;
+  if (pieces.SurnamePrefix <> edPieceSurnamePrefix.Text) then pieces.SurnamePrefix := edPieceSurnamePrefix.Text;
+  if (pieces.Suffix <> edPieceSuffix.Text) then pieces.Suffix := edPieceSuffix.Text;
 
   FPerson.Sex := TGEDCOMSex(EditSex.ItemIndex);
 
@@ -652,78 +393,20 @@ begin
 
   // extended begin
   if (CheckPatriarch.Checked) then begin
-    if (FPerson.FindTag('_PATRIARCH') = nil)
-    then FPerson.AddTag('_PATRIARCH');
-  end else FPerson.DeleteTag('_PATRIARCH');
+    if (FPerson.FindTag(PatriarchTag) = nil)
+    then FPerson.AddTag(PatriarchTag);
+  end else FPerson.DeleteTag(PatriarchTag);
   // extended end
 
   FPerson.Restriction := TGEDCOMRestriction(cbRestriction.ItemIndex);
 
-  fmGEDKeeper.ChangeRecord(FPerson);
-
-  fmGEDKeeper.Modified := True;
+  Base.ChangeRecord(FPerson);
+  Base.Modified := True;
 end;
 
 procedure TfmPersonEdit.btnAcceptClick(Sender: TObject);
 begin
   UpdatePerson();
-end;
-
-procedure TfmPersonEdit.ListDblClick(Sender: TObject);
-begin
-  btnPersonDataEditClick(nil);
-end;
-
-procedure TfmPersonEdit.actRecordAddExecute(Sender: TObject);
-begin
-  btnPersonDataAddClick(nil);
-end;
-
-procedure TfmPersonEdit.actRecordDeleteExecute(Sender: TObject);
-begin
-  btnPersonDataDeleteClick(nil);
-end;
-
-procedure TfmPersonEdit.actRecordEditExecute(Sender: TObject);
-begin
-  btnPersonDataEditClick(nil);
-end;
-
-procedure TfmPersonEdit.btnItemUpClick(Sender: TObject);
-var
-  idx1, idx2: Integer;
-begin
-  case PagesPersonData.TabIndex of
-    0: begin // События
-    end;
-
-    1: begin // Заметки
-    end;
-
-    2: begin // Мультимедиа
-    end;
-
-    3: begin // Источники
-    end;
-
-    4: begin // Супруги
-      idx1 := ListPersonFamilies.ItemIndex - 1;
-      idx2 := ListPersonFamilies.ItemIndex;
-      FPerson.ExchangeSpouses(idx1, idx2);
-      ControlsRefresh();
-    end;
-
-    5: begin // Ассоциации
-    end;
-
-    6: begin // Группы
-    end;
-  end;
-end;
-
-procedure TfmPersonEdit.btnItemDownClick(Sender: TObject);
-begin
-  //
 end;
 
 procedure TfmPersonEdit.LockEditor(aLocked: Boolean);
@@ -748,13 +431,17 @@ begin
   else EditSex.Color := clWindow;
   EditSex.Enabled := not(aLocked);
 
-  if aLocked
-  then ListNamePieces.Color := clInactiveBorder
-  else ListNamePieces.Color := clWindow;
-
-  btnNamePieceAdd.Enabled := not(aLocked);
-  btnNamePieceEdit.Enabled := not(aLocked);
-  btnNamePieceDelete.Enabled := not(aLocked);
+  if aLocked then begin
+    edPieceSurnamePrefix.Color := clInactiveBorder;
+    edPiecePrefix.Color := clInactiveBorder;
+    edPieceSuffix.Color := clInactiveBorder;
+    edPieceNickname.Color := clInactiveBorder;
+  end else begin
+    edPieceSurnamePrefix.Color := clWindow;
+    edPiecePrefix.Color := clWindow;
+    edPieceSuffix.Color := clWindow;
+    edPieceNickname.Color := clWindow;
+  end;
 
   btnFatherAdd.Enabled := not(aLocked);
   btnFatherDelete.Enabled := not(aLocked);
@@ -766,6 +453,155 @@ end;
 procedure TfmPersonEdit.cbRestrictionChange(Sender: TObject);
 begin
   //LockEditor(cbRestriction.ItemIndex = 2);
+end;
+
+function TfmPersonEdit.GetBase(): TfmBase;
+begin
+  Result := TfmBase(Owner);
+end;
+
+procedure TfmPersonEdit.SetTitle();
+begin
+  Caption := 'Персона "'+EditFamily.Text+' '+EditName.Text+' '+EditPatronymic.Text+'"';
+end;
+
+procedure TfmPersonEdit.EditFamilyChange(Sender: TObject);
+begin
+  SetTitle();
+end;
+
+procedure TfmPersonEdit.EditNameChange(Sender: TObject);
+begin
+  SetTitle();
+end;
+
+procedure TfmPersonEdit.EditPatronymicChange(Sender: TObject);
+begin
+  SetTitle();
+end;
+
+procedure TfmPersonEdit.btnNameCopyClick(Sender: TObject);
+begin
+  Clipboard.AsText := GetNameStr(FPerson);
+end;
+
+procedure TfmPersonEdit.ListModify(Sender: TObject; Index: Integer; Action: TRecAction);
+var
+  family: TGEDCOMFamilyRecord;
+  group: TGEDCOMGroupRecord;
+  spouse: TGEDCOMIndividualRecord;
+  sp: TGEDCOMPointer;
+begin
+  if (Sender = FEventsList) then begin
+    if (Action = raAdd) then Index := Integer(nil);
+
+    if Base.ModifyRecEvent(FPerson, TGEDCOMCustomEvent(Index), Action)
+    then ControlsRefresh();
+  end
+  else
+  //
+  if (Sender = FSpousesList) then begin
+    case Action of
+      raAdd: begin
+        family := nil;
+        if Base.ModifyFamily(family, FPerson)
+        then ControlsRefresh();
+      end;
+
+      raEdit: begin
+        family := FPerson.SpouseToFamilyLinks[Index].Family;
+        if (family <> nil) then begin
+          Base.ModifyFamily(family);
+          ControlsRefresh();
+        end;
+      end;
+
+      raDelete: begin
+        family := FPerson.SpouseToFamilyLinks[Index].Family;
+        if (family = nil) then Exit;
+
+        if (MessageDlg('Удалить ссылку на супруга?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+        then Exit;
+
+        RemoveFamilySpouse(Base.Tree, family, FPerson);
+        ControlsRefresh();
+      end;
+
+      raJump: begin
+        UpdatePerson();
+
+        family := FPerson.SpouseToFamilyLinks[Index].Family;
+        if (family = nil) then Exit;
+
+        case FPerson.Sex of
+          svNone, svUndetermined: Exit;
+          svMale: sp := family.Wife;
+          svFemale: sp := family.Husband;
+        end;
+
+        spouse := TGEDCOMIndividualRecord(sp.Value);
+        SetPerson(spouse);
+      end;
+
+      raMoveUp: begin
+        FPerson.ExchangeSpouses(Index - 1, Index);
+        ControlsRefresh();
+      end;
+
+      raMoveDown: begin
+        FPerson.ExchangeSpouses(Index, Index + 1);
+        ControlsRefresh();
+      end;
+    end;
+  end
+  else
+  if (Sender = FAssociationsList) then begin
+    if Base.ModifyRecAssociation(FPerson, Index, Action)
+    then ControlsRefresh();
+  end
+  else
+  if (Sender = FGroupsList) then begin
+    case Action of
+      raAdd: begin
+        group := TGEDCOMGroupRecord(Base.SelectRecord(smGroup));
+        if (group <> nil) then begin
+          group.AddMember(TGEDCOMPointer.CreateTag(Base.Tree, group, '_MEMBER', '@'+FPerson.XRef+'@'));
+          FPerson.AddGroup(TGEDCOMPointer.CreateTag(Base.Tree, FPerson, '_GROUP', '@'+group.XRef+'@'));
+
+          ControlsRefresh();
+        end;
+      end;
+      raEdit: ;
+      raDelete: begin
+        group := TGEDCOMGroupRecord(FPerson.Groups[Index].Value);
+
+        if (MessageDlg('Удалить ссылку на группу?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+        then Exit;
+
+        group.RemoveMember(group.IndexOfMember(FPerson));
+        FPerson.DeleteGroup(FPerson.IndexOfGroup(group));
+
+        ControlsRefresh();
+      end;
+      raJump: ;
+    end;
+  end
+  else
+  //
+  if (Sender = FNotesList) then begin
+    if Base.ModifyRecNote(FPerson, Index, Action)
+    then ControlsRefresh();
+  end
+  else
+  if (Sender = FMediaList) then begin
+    if Base.ModifyRecMultimedia(FPerson, Index, Action)
+    then ControlsRefresh();
+  end
+  else
+  if (Sender = FSourcesList) then begin
+    if Base.ModifyRecSource(FPerson, Index, Action)
+    then ControlsRefresh();
+  end;
 end;
 
 end.

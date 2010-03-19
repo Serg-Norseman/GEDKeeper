@@ -6,7 +6,7 @@ interface
 
 uses
   Windows, SysUtils, Classes, Controls, Forms, ComCtrls,
-  GedCom551, StdCtrls, ToolWin, ExtCtrls, bsCtrls;
+  GedCom551, StdCtrls, ToolWin, ExtCtrls, bsCtrls, GKBase;
 
 type
   TStatMode = (
@@ -75,15 +75,15 @@ type
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
+    FBase: TfmBase;
     procedure AddItem(aTitle, aVal: string);
     procedure CalcStats(aTree: TGEDCOMTree; aMode: TStatMode);
     procedure InitTable(Col1, Col2: string);
   public
+    property Base: TfmBase read FBase write FBase;
   end;
-
-var
-  fmStats: TfmStats;
 
 implementation
 
@@ -339,14 +339,14 @@ begin
       AddItem(vals[i], IntToStr(Integer(vals.Objects[i])));
     end;
   finally
-    vals.Destroy;
-    buffer.Destroy;
+    vals.Free;
+    buffer.Free;
   end;
 end;
 
 procedure TfmStats.cbTypeChange(Sender: TObject);
 begin
-  CalcStats(fmGEDKeeper.FTree, TStatMode(cbType.ItemIndex));
+  CalcStats(FBase.Tree, TStatMode(cbType.ItemIndex));
 end;
 
 procedure TfmStats.FormShow(Sender: TObject);
@@ -366,7 +366,7 @@ var
   item: TListItem;
   stats: TCommonStats;
 begin
-  GetCommonStats(fmGEDKeeper.FTree, stats);
+  GetCommonStats(FBase.Tree, stats);
 
   ListCommon.Clear;
   with stats do begin
@@ -430,6 +430,11 @@ procedure TfmStats.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   if (Key = VK_ESCAPE) then Close;
+end;
+
+procedure TfmStats.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
 end;
 
 end.

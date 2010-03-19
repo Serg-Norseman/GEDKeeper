@@ -1,6 +1,7 @@
 package GKPack;
 
 {$R *.res}
+{$R 'ext\WMPLib_TLB.dcr'}
 {$ALIGN 8}
 {$ASSERTIONS ON}
 {$BOOLEVAL OFF}
@@ -30,6 +31,6 @@ requires
 
 contains
   Htmemo in 'ext\htmemo.pas',
-  ULife in 'ext\ULife.pas';
+  WMPLib_TLB in 'ext\WMPLib_TLB.pas';
 
 end.

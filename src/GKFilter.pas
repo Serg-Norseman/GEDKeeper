@@ -6,7 +6,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, ExtCtrls, Buttons, Mask;
+  Dialogs, StdCtrls, ExtCtrls, Buttons, Mask, GKBase;
 
 type
   TfmFilter = class(TForm)
@@ -22,12 +22,16 @@ type
     CheckPatriarch: TCheckBox;
     Label3: TLabel;
     cbResidence: TComboBox;
+    Label4: TLabel;
+    cbGroup: TComboBox;
     procedure btnCancelClick(Sender: TObject);
     procedure btnAcceptClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure rgLifeClick(Sender: TObject);
   private
+    function GetBase: TfmBase;
   public
+    property Base: TfmBase read GetBase;
   end;
 
 implementation
@@ -38,14 +42,15 @@ uses GKMain, GKCommon, GedCom551;
 
 procedure TfmFilter.btnCancelClick(Sender: TObject);
 begin
-  fmGEDKeeper.Filter.Clear();
-  fmGEDKeeper.ApplyFilter();
+  Base.Filter.Clear();
+  Base.ApplyFilter();
 end;
 
 procedure TfmFilter.btnAcceptClick(Sender: TObject);
 var
   dt: TDateTime;
   fs: string;
+  rec: TGEDCOMRecord;
 begin
   fs := Trim(EditName.Text);
   if (fs <> '') and (fs <> '*') then begin
@@ -60,8 +65,8 @@ begin
   end;
   //
 
-  fmGEDKeeper.Filter.AliveBeforeDate := edAliveBeforeDate.Text;
-  fmGEDKeeper.Filter.PatriarchOnly := CheckPatriarch.Checked;
+  Base.Filter.AliveBeforeDate := edAliveBeforeDate.Text;
+  Base.Filter.PatriarchOnly := CheckPatriarch.Checked;
 
   if (rgLife.ItemIndex = 3) then begin
     try
@@ -72,34 +77,70 @@ begin
     end;
   end;
 
-  fmGEDKeeper.Filter.LifeMode := TLifeMode(rgLife.ItemIndex);
-  fmGEDKeeper.Filter.Sex := TGEDCOMSex(rgSex.ItemIndex);
+  Base.Filter.LifeMode := TLifeMode(rgLife.ItemIndex);
+  Base.Filter.Sex := TGEDCOMSex(rgSex.ItemIndex);
 
   if (EditName.Text = '') then EditName.Text := '*';
-  fmGEDKeeper.Filter.Name := EditName.Text;
+  Base.Filter.Name := EditName.Text;
 
   if (cbResidence.Text = '') then cbResidence.Text := '*';
-  fmGEDKeeper.Filter.Residence := cbResidence.Text;
+  Base.Filter.Residence := cbResidence.Text;
 
-  fmGEDKeeper.ApplyFilter();
+  if (cbGroup.ItemIndex in [0..2]) then begin
+    Base.Filter.GroupMode := TGroupMode(cbGroup.ItemIndex);
+    Base.Filter.GroupRef := '';
+  end else begin
+    rec := TGEDCOMRecord(cbGroup.Items.Objects[cbGroup.ItemIndex]);
+    if (rec <> nil) then begin
+      Base.Filter.GroupMode := gmSelected;
+      Base.Filter.GroupRef := rec.XRef;
+    end else begin
+      Base.Filter.GroupMode := gmAll;
+      Base.Filter.GroupRef := '';
+    end;
+  end;
+
+  Base.ApplyFilter();
 end;
 
 procedure TfmFilter.FormShow(Sender: TObject);
+var
+  i: Integer;
+  tree: TGEDCOMTree;
 begin
   EditName.Items.Assign(fmGEDKeeper.Options.NameFilters);
   cbResidence.Items.Assign(fmGEDKeeper.Options.ResidenceFilters);
 
-  rgLife.ItemIndex := Ord(fmGEDKeeper.Filter.LifeMode);
-  rgSex.ItemIndex := Ord(fmGEDKeeper.Filter.Sex);
-  EditName.Text := fmGEDKeeper.Filter.Name;
-  cbResidence.Text := fmGEDKeeper.Filter.Residence;
-  edAliveBeforeDate.Text := fmGEDKeeper.Filter.AliveBeforeDate;
-  CheckPatriarch.Checked := fmGEDKeeper.Filter.PatriarchOnly;
+  rgLife.ItemIndex := Ord(Base.Filter.LifeMode);
+  rgSex.ItemIndex := Ord(Base.Filter.Sex);
+  EditName.Text := Base.Filter.Name;
+  cbResidence.Text := Base.Filter.Residence;
+  edAliveBeforeDate.Text := Base.Filter.AliveBeforeDate;
+  CheckPatriarch.Checked := Base.Filter.PatriarchOnly;
+
+  tree := Base.Tree;
+  cbGroup.AddItem('- всё -', nil);
+  cbGroup.AddItem('- нет групп -', nil);
+  cbGroup.AddItem('- любые -', nil);
+  for i := 0 to tree.Count - 1 do
+    if (tree.Records[i] is TGEDCOMGroupRecord)
+    then cbGroup.AddItem(TGEDCOMGroupRecord(tree.Records[i]).Name, tree.Records[i]);
+
+  if (Base.Filter.GroupMode <> gmSelected) then begin
+    cbGroup.ItemIndex := Ord(Base.Filter.GroupMode);
+  end else begin
+    cbGroup.ItemIndex := cbGroup.Items.IndexOfObject(tree.XRefIndex_Find(Base.Filter.GroupRef));
+  end;
 end;
 
 procedure TfmFilter.rgLifeClick(Sender: TObject);
 begin
   edAliveBeforeDate.Enabled := (rgLife.ItemIndex = 3);
+end;
+
+function TfmFilter.GetBase: TfmBase;
+begin
+  Result := TfmBase(Owner);
 end;
 
 end.

@@ -39,7 +39,7 @@ object fmFileProperties: TfmFileProperties
     Top = 8
     Width = 433
     Height = 273
-    ActivePage = SheetAuthor
+    ActivePage = SheetAdvanced
     TabOrder = 2
     object SheetAuthor: TTabSheet
       Caption = #1040#1074#1090#1086#1088
@@ -111,6 +111,33 @@ object fmFileProperties: TfmFileProperties
         ViewStyle = vsReport
         SortColumn = 0
         SortDirection = sdAscending
+      end
+    end
+    object SheetAdvanced: TTabSheet
+      Caption = #1056#1072#1089#1096#1080#1088#1077#1085#1080#1077' '#1087#1088#1086#1077#1082#1090#1072
+      ImageIndex = 2
+      object Label4: TLabel
+        Left = 8
+        Top = 40
+        Width = 189
+        Height = 13
+        Caption = #1053#1072#1079#1074#1072#1085#1080#1077' '#1072#1088#1093#1080#1074#1072' '#1080' '#1087#1072#1087#1082#1080' '#1093#1088#1072#1085#1080#1083#1080#1097#1072
+      end
+      object CheckAdvanced: TCheckBox
+        Left = 8
+        Top = 8
+        Width = 409
+        Height = 17
+        Caption = #1055#1086#1076#1076#1077#1088#1078#1082#1072' '#1088#1072#1089#1096#1080#1088#1077#1085#1080#1103' ('#1072#1088#1093#1080#1074', '#1093#1088#1072#1085#1080#1083#1080#1097#1077' '#1092#1072#1081#1083#1086#1074')'
+        TabOrder = 0
+      end
+      object edExtName: TEdit
+        Left = 8
+        Top = 56
+        Width = 225
+        Height = 21
+        TabOrder = 1
+        Text = 'edExtName'
       end
     end
   end

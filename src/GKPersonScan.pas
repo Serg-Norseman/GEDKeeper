@@ -6,7 +6,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Mask, Buttons, ExtCtrls;
+  Dialogs, StdCtrls, Mask, Buttons, ExtCtrls, GKBase;
 
 type
   TfmPersonScan = class(TForm)
@@ -32,7 +32,9 @@ type
     procedure EditBirthDateChange(Sender: TObject);
     procedure EditDeathDateChange(Sender: TObject);
   private
+    function GetBase: TfmBase;
   public
+    property Base: TfmBase read GetBase;
   end;
 
 implementation
@@ -40,18 +42,6 @@ implementation
 uses bsComUtils, GKMain, GedCom551, GKCommon;
 
 {$R *.dfm}
-
-procedure CreateIEvent(aTree: TGEDCOMTree; iRec: TGEDCOMIndividualRecord;
-  evSign, evDate, evPlace: string);
-var
-  event: TGEDCOMIndividualEvent;
-begin
-  event := TGEDCOMIndividualEvent.Create(aTree, iRec);
-  event.Name := evSign;
-  event.Detail.Date.ParseString(evDate);
-  event.Detail.Place := evPlace;
-  iRec.AddIndividualEvent(event);
-end;
 
 procedure TfmPersonScan.btnCreateClick(Sender: TObject);
 var
@@ -76,21 +66,21 @@ begin
   nam[1] := AnsiUpperCase(nam)[1];
   pat[1] := AnsiUpperCase(pat)[1];
 
-  iRec := fmGEDKeeper.CreatePerson(nam, pat, fam, svNone);
+  iRec := Base.CreatePerson(nam, pat, fam, svNone);
 
   if (CheckBirth.Checked)
-  then CreateIEvent(fmGEDKeeper.FTree, iRec, 'BIRT', StrToGEDCOMDate(EditBirthDate.Text), EditBirthPlace.Text);
+  then CreateIEvent(Base.Tree, iRec, 'BIRT', StrToGEDCOMDate(EditBirthDate.Text), EditBirthPlace.Text);
 
   if (CheckDeath.Checked)
-  then CreateIEvent(fmGEDKeeper.FTree, iRec, 'DEAT', StrToGEDCOMDate(EditDeathDate.Text), EditDeathPlace.Text);
+  then CreateIEvent(Base.Tree, iRec, 'DEAT', StrToGEDCOMDate(EditDeathDate.Text), EditDeathPlace.Text);
 
   if (MemoNote.Text <> '') then begin
-    noteRec := TGEDCOMNoteRecord.Create(fmGEDKeeper.FTree, fmGEDKeeper.FTree);
+    noteRec := TGEDCOMNoteRecord.Create(Base.Tree, Base.Tree);
     noteRec.NewXRef;
     noteRec.Notes := MemoNote.Lines;
-    fmGEDKeeper.FTree.AddRecord(noteRec);
+    Base.Tree.AddRecord(noteRec);
 
-    note := TGEDCOMNotes.Create(fmGEDKeeper.FTree, iRec);
+    note := TGEDCOMNotes.Create(Base.Tree, iRec);
     note.Value := noteRec;
     iRec.AddNotes(note);
   end;
@@ -104,7 +94,7 @@ begin
   CheckDeath.Checked := False;
   MemoNote.Text := '';
 
-  fmGEDKeeper.ListsRefresh();
+  Base.ListsRefresh();
 end;
 
 procedure TfmPersonScan.EditBirthDateChange(Sender: TObject);
@@ -115,6 +105,11 @@ end;
 procedure TfmPersonScan.EditDeathDateChange(Sender: TObject);
 begin
   CheckDeath.Checked := True;
+end;
+
+function TfmPersonScan.GetBase: TfmBase;
+begin
+  Result := TfmBase(Owner);
 end;
 
 end.

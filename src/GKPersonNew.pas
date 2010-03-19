@@ -51,7 +51,7 @@ var
 begin
   FTarget := Value;
 
-  names := fmGEDKeeper.FNamesTable;
+  names := fmGEDKeeper.NamesTable;
 
   if (FTarget <> nil) then begin
     GetNameParts(FTarget, iFamily, iName, iPatronymic);

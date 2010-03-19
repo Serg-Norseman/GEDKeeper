@@ -1,5 +1,7 @@
 unit GKImport;
 
+{$I GEDKeeper.inc}
+
 interface
 
 uses
@@ -18,6 +20,7 @@ uses
 
 {==============================================================================}
 
+{$IFNDEF DELPHI_NET}
 const
 { TParser special tokens }
 
@@ -214,6 +217,8 @@ function TGKParser.TokenSymbolIs(const S: string): Boolean;
 begin
   Result := (Token = toSymbol) and SameText(S, TokenString);
 end;
+
+{$ENDIF}
 
 {==============================================================================}
 
@@ -529,9 +534,9 @@ begin
       end;
     end;
   finally
-    p_list.Destroy;
-    buf.Destroy;
-    content.Destroy;
+    p_list.Free;
+    buf.Free;
+    content.Free;
   end;
 end;
 
