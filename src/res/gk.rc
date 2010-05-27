@@ -1,2 +1,9 @@
 SOLDIER BITMAP soldier.bmp
 SOLDIER_FALL BITMAP soldier_fall.bmp
+VETERAN_REAR BITMAP veteran_rear.bmp
+
+;SHIELD_MAX BITMAP shield_max.bmp
+;SHIELD_MID BITMAP shield_mid.bmp
+;SHIELD_NONE BITMAP shield_none.bmp
+
+MAINICON2 ICON GEDKeeper2.ico

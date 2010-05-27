@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, StdCtrls, Buttons, ComCtrls, ExtCtrls,
-  GedCom551, GKBase, GKCommon;
+  GedCom551, GKBase, GKCommon, GKSheetList;
 
 type
   TfmRepositoryEdit = class(TForm)
@@ -28,7 +28,7 @@ type
 
     procedure ControlsRefresh();
     function GetBase: TfmBase;
-    procedure ListModify(Sender: TObject; Index: Integer; Action: TRecAction);
+    procedure ListModify(Sender: TObject; ItemData: TObject; Action: TRecAction);
     procedure SetRepositoryRecord(const Value: TGEDCOMRepositoryRecord);
   public
     property Base: TfmBase read GetBase;
@@ -44,9 +44,9 @@ uses GKAddressEdit;
 
 procedure TfmRepositoryEdit.FormCreate(Sender: TObject);
 begin
-  FNotesList := TSheetList.Create(SheetNotes);
+  FNotesList := TSheetList.Create(SheetNotes, lmBox);
   FNotesList.OnModify := ListModify;
-  Base.SetupRecNotesList(FNotesList.List);
+  Base.SetupRecNotesList(FNotesList);
 end;
 
 procedure TfmRepositoryEdit.ControlsRefresh();
@@ -67,9 +67,7 @@ procedure TfmRepositoryEdit.btnAcceptClick(Sender: TObject);
 begin
   FRepositoryRecord.RepositoryName := edName.Text;
 
-  FRepositoryRecord.ChangeDate.ChangeDateTime := Now();
-
-  Base.Modified := True;
+  Base.ChangeRecord(FRepositoryRecord);
 end;
 
 function TfmRepositoryEdit.GetBase: TfmBase;
@@ -90,11 +88,11 @@ begin
   end;
 end;
 
-procedure TfmRepositoryEdit.ListModify(Sender: TObject; Index: Integer;
+procedure TfmRepositoryEdit.ListModify(Sender: TObject; ItemData: TObject;
   Action: TRecAction);
 begin
   if (Sender = FNotesList) then begin
-    if Base.ModifyRecNote(FRepositoryRecord, Index, Action)
+    if Base.ModifyRecNote(FRepositoryRecord, TGEDCOMNotes(ItemData), Action)
     then ControlsRefresh();
   end;
 end;

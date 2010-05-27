@@ -6,14 +6,17 @@ object fmStats: TfmStats
   ClientHeight = 503
   ClientWidth = 641
   Color = clBtnFace
+  DefaultMonitor = dmMainForm
   Font.Charset = RUSSIAN_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  FormStyle = fsMDIChild
   KeyPreview = True
   OldCreateOrder = True
   Position = poScreenCenter
+  Visible = True
   OnClose = FormClose
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
@@ -28,7 +31,7 @@ object fmStats: TfmStats
     Align = alTop
     Caption = #1057#1074#1086#1076#1082#1072
     TabOrder = 0
-    object ListCommon: TBSListView
+    object ListCommon: TListView
       Left = 2
       Top = 15
       Width = 637
@@ -55,9 +58,6 @@ object fmStats: TfmStats
       RowSelect = True
       TabOrder = 0
       ViewStyle = vsReport
-      SortColumn = 0
-      SortDirection = sdAscending
-      ShowSortSign = False
     end
   end
   object Panel1: TPanel
@@ -96,30 +96,6 @@ object fmStats: TfmStats
         TabOrder = 0
         OnChange = cbTypeChange
       end
-    end
-    object ListStats: TBSListView
-      Left = 2
-      Top = 27
-      Width = 637
-      Height = 305
-      Align = alClient
-      Columns = <
-        item
-          Caption = 'X'
-          Width = 300
-        end
-        item
-          Caption = #1047#1085#1072#1095#1077#1085#1080#1077
-          Width = 100
-        end>
-      ReadOnly = True
-      RowSelect = True
-      SortType = stText
-      TabOrder = 1
-      ViewStyle = vsReport
-      SortColumn = 0
-      SortDirection = sdAscending
-      ShowSortSign = False
     end
   end
 end

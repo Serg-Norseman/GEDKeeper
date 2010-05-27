@@ -5,8 +5,8 @@ unit GKEventEdit;
 interface
 
 uses
-  SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls,
-  Buttons, ComCtrls, ExtCtrls, Mask, GedCom551, GKCommon, GKBase;
+  SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Buttons,
+  ComCtrls, ExtCtrls, Mask, GedCom551, GKCommon, GKBase, GKSheetList, bsCtrls;
 
 type
   TfmEventEdit = class(TForm)
@@ -23,7 +23,7 @@ type
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
-    Label6: TLabel;
+    LabelAttr: TLabel;
     EditEventType: TComboBox;
     EditEventName: TEdit;
     EditEventPlace: TEdit;
@@ -33,11 +33,17 @@ type
     EditEventCause: TEdit;
     EditEventOrg: TEdit;
     EditAttribute: TEdit;
+    btnPlaceAdd: TSpeedButton;
+    btnPlaceDelete: TSpeedButton;
+    btnPlaceSel: TSpeedButton;
     procedure FormCreate(Sender: TObject);
     procedure EditEventDateTypeChange(Sender: TObject);
     procedure btnAcceptClick(Sender: TObject);
     procedure EditEventTypeChange(Sender: TObject);
     procedure btnAddressClick(Sender: TObject);
+    procedure btnPlaceAddClick(Sender: TObject);
+    procedure btnPlaceDeleteClick(Sender: TObject);
+    procedure btnPlaceSelClick(Sender: TObject);
   private
     FEvent: TGEDCOMCustomEvent;
 
@@ -45,11 +51,10 @@ type
     FMediaList: TSheetList;
     FSourcesList: TSheetList;
 
-    procedure EventRefresh();
-    procedure ListModify(Sender: TObject; Index: Integer; Action: TRecAction);
-    function ModifyMultimedia(aIndex: Integer; anAction: TRecAction): Boolean;
-    function ModifyNote(aIndex: Integer; anAction: TRecAction): Boolean;
-    function ModifySource(aIndex: Integer; anAction: TRecAction): Boolean;
+    FLocation: TGEDCOMLocationRecord;
+
+    procedure ControlsRefresh();
+    procedure ListModify(Sender: TObject; ItemData: TObject; Action: TRecAction);
     procedure SetEvent(const Value: TGEDCOMCustomEvent);
     function GetBase: TfmBase;
   public
@@ -72,17 +77,19 @@ begin
   for i := 0 to DateKindsSize - 1 do
     EditEventDateType.Items.Add(DateKinds[i].Name);
 
-  FNotesList := TSheetList.Create(SheetNotes);
+  FLocation := nil;
+
+  FNotesList := TSheetList.Create(SheetNotes, lmBox);
   FNotesList.OnModify := ListModify;
-  Base.SetupRecNotesList(FNotesList.List);
+  Base.SetupRecNotesList(FNotesList);
 
   FMediaList := TSheetList.Create(SheetMultimedia);
   FMediaList.OnModify := ListModify;
-  Base.SetupRecMediaList(FMediaList.List);
+  Base.SetupRecMediaList(FMediaList);
 
   FSourcesList := TSheetList.Create(SheetSources);
   FSourcesList.OnModify := ListModify;
-  Base.SetupRecSourcesList(FSourcesList.List);
+  Base.SetupRecSourcesList(FSourcesList);
 end;
 
 procedure TfmEventEdit.EditEventDateTypeChange(Sender: TObject);
@@ -117,9 +124,81 @@ begin
       EditAttribute.Enabled := False;
       EditAttribute.Color := clBtnFace;
       EditAttribute.Text := '';
+
+      LabelAttr.Caption := 'Значение атрибута';
     end else begin
       EditAttribute.Enabled := True;
       EditAttribute.Color := clWindow;
+
+      LabelAttr.Caption := 'Значение атрибута (' + EditEventType.Text + ')';
+    end;
+  end;
+end;
+
+procedure TfmEventEdit.ControlsRefresh();
+var
+  idx: Integer;
+  note: TGEDCOMNotes;
+  st: string;
+  mmLink: TGEDCOMMultimediaLink;
+  mmRec: TGEDCOMMultimediaRecord;
+  cit: TGEDCOMSourceCitation;
+  sourceRec: TGEDCOMSourceRecord;
+  item: TListItem;
+begin
+  if (FLocation <> nil) then begin
+    EditEventPlace.Text := FLocation.Name;
+    EditEventPlace.ReadOnly := True;
+    EditEventPlace.Color := clBtnFace;
+
+    btnPlaceAdd.Enabled := False;
+    btnPlaceDelete.Enabled := True;
+  end else begin
+    EditEventPlace.Text := FEvent.Detail.Place.StringValue;
+    EditEventPlace.ReadOnly := False;
+    EditEventPlace.Color := clWindow;
+
+    btnPlaceAdd.Enabled := True;
+    btnPlaceDelete.Enabled := False;
+  end;
+
+  FNotesList.List.Clear();
+  for idx := 0 to FEvent.Detail.NotesCount - 1 do begin
+    note := FEvent.Detail.Notes[idx];
+
+    if (note.Notes.Count > 0) then begin
+      st := Trim(note.Notes[0]);
+      if (st = '') and (note.Notes.Count > 1)
+      then st := Trim(note.Notes[1]);
+    end else st := '';
+
+    FNotesList.List.AddItem(st, note);
+  end;
+
+  FMediaList.List.Clear();
+  for idx := 0 to FEvent.Detail.MultimediaLinksCount - 1 do begin
+    mmLink := FEvent.Detail.MultimediaLinks[idx];
+    mmRec := TGEDCOMMultimediaRecord(mmLink.Value);
+
+    if (mmRec <> nil) and (mmRec.FileReferencesCount <> 0) then begin
+      st := mmRec.FileReferences[0].Title;
+      FMediaList.List.AddItem(st, mmLink);
+    end;
+  end;
+
+  FSourcesList.List.Clear();
+  for idx := 0 to FEvent.Detail.SourceCitationsCount - 1 do begin
+    cit := FEvent.Detail.SourceCitations[idx];
+    sourceRec := TGEDCOMSourceRecord(cit.Value);
+
+    st := '"'+sourceRec.FiledByEntry+'"';
+    if (cit.Page <> '') then st := st + ', ' + cit.Page;
+
+    if (sourceRec <> nil) then begin
+      item := TListView(FSourcesList.List).Items.Add();
+      item.Caption := Trim(sourceRec.Originator.Text);
+      item.SubItems.Add(st);
+      item.Data := cit;
     end;
   end;
 end;
@@ -202,11 +281,12 @@ begin
   EditEventDateTypeChange(nil);
 
   EditEventName.Text := FEvent.Detail.Classification;
-  EditEventPlace.Text := FEvent.Detail.Place;
   EditEventCause.Text := FEvent.Detail.Cause;
   EditEventOrg.Text := FEvent.Detail.Agency;
 
-  EventRefresh();
+  FLocation := TGEDCOMLocationRecord(FEvent.Detail.Place.Location.Value);
+
+  ControlsRefresh();
 end;
 
 procedure TfmEventEdit.btnAcceptClick(Sender: TObject);
@@ -215,8 +295,10 @@ var
   id: Integer;
   attr: TGEDCOMIndividualAttribute;
 begin
+  FEvent.Detail.Place.StringValue := EditEventPlace.Text;
+  FEvent.Detail.Place.Location.Value := FLocation;
+
   FEvent.Detail.Classification := EditEventName.Text;
-  FEvent.Detail.Place := EditEventPlace.Text;
   FEvent.Detail.Cause := EditEventCause.Text;
   FEvent.Detail.Agency := EditEventOrg.Text;
 
@@ -257,179 +339,28 @@ begin
       attr.Name := FEvent.Name;
       attr.Assign(FEvent);
 
-      FEvent.Destroy;
+      //FEvent.Destroy; // hack in caller
 
       FEvent := attr;
     end;
   end;
 end;
 
-function TfmEventEdit.ModifyNote(aIndex: Integer; anAction: TRecAction): Boolean;
-var
-  noteRec: TGEDCOMNoteRecord;
-  note: TGEDCOMNotes;
+procedure TfmEventEdit.btnPlaceAddClick(Sender: TObject);
 begin
-  Result := False;
-
-  if (anAction = raDelete) then begin
-    if (MessageDlg('Удалить ссылку на заметку?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
-    then Exit;
-
-    FEvent.Detail.DeleteNotes(aIndex);
-    Base.Modified := True;
-
-    Result := True;
-    Exit;
-  end;
-
-  if (anAction = raEdit) then begin
-    if (aIndex > -1) then begin
-      note := FEvent.Detail.Notes[aIndex];
-      noteRec := TGEDCOMNoteRecord(note.Value);
-      Result := Base.ModifyNote(noteRec);
-    end;
-  end else begin
-    noteRec := TGEDCOMNoteRecord(Base.SelectRecord(smNote));
-    if (noteRec <> nil) then begin
-      note := TGEDCOMNotes.Create(Base.Tree, FEvent.Detail);
-      note.Value := noteRec;
-      FEvent.Detail.AddNotes(note);
-
-      Result := True;
-    end;
-  end;
+  FLocation := TGEDCOMLocationRecord(Base.SelectRecord(smLocation));
+  ControlsRefresh();
 end;
 
-function TfmEventEdit.ModifyMultimedia(aIndex: Integer; anAction: TRecAction): Boolean;
-var
-  mmRec: TGEDCOMMultimediaRecord;
-  mmLink: TGEDCOMMultimediaLink;
+procedure TfmEventEdit.btnPlaceDeleteClick(Sender: TObject);
 begin
-  Result := False;
-
-  if (anAction = raDelete) then begin
-    if (MessageDlg('Удалить ссылку на мультимедиа?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
-    then Exit;
-
-    FEvent.Detail.DeleteMultimediaLink(aIndex);
-    Base.Modified := True;
-
-    Result := True;
-    Exit;
-  end;
-
-  if (anAction = raEdit) then begin
-    if (aIndex > -1) then begin
-      mmLink := FEvent.Detail.MultimediaLinks[aIndex];
-      mmRec := TGEDCOMMultimediaRecord(mmLink.Value);
-      Result := Base.ModifyMedia(mmRec);
-      Base.Modified := Base.Modified or Result;
-    end;
-  end else begin
-    mmRec := TGEDCOMMultimediaRecord(Base.SelectRecord(smMultimedia));
-    if (mmRec <> nil) then begin
-      mmLink := TGEDCOMMultimediaLink.Create(Base.Tree, FEvent.Detail);
-      mmLink.Value := mmRec;
-      FEvent.Detail.AddMultimediaLink(mmLink);
-      Base.Modified := True;
-      Result := True;
-    end;
-  end;
+  FLocation := nil;
+  ControlsRefresh();
 end;
 
-function TfmEventEdit.ModifySource(aIndex: Integer; anAction: TRecAction): Boolean;
-var
-  cit: TGEDCOMSourceCitation;
-  fmSrcCitEdit: TfmSourceCitEdit;
-  res: Integer;
+procedure TfmEventEdit.btnPlaceSelClick(Sender: TObject);
 begin
-  Result := False;
-
-  if (anAction = raDelete) then begin
-    if (MessageDlg('Удалить ссылку на источник?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
-    then Exit;
-
-    FEvent.Detail.DeleteSourceCitation(aIndex);
-    Base.Modified := True;
-    Result := True;
-
-    Exit;
-  end;
-
-  fmSrcCitEdit := TfmSourceCitEdit.Create(Base);
-  try
-    if (anAction = raEdit) and (aIndex > -1)
-    then cit := FEvent.Detail.SourceCitations[aIndex]
-    else cit := TGEDCOMSourceCitation.Create(Base.Tree, FEvent.Detail);
-
-    fmSrcCitEdit.SourceCitation := cit;
-    res := fmSrcCitEdit.ShowModal;
-
-    case anAction of
-      raAdd: begin
-        if (res = mrOk)
-        then FEvent.Detail.AddSourceCitation(cit)
-        else cit.Destroy;
-      end;
-      raEdit: {dummy};
-    end;
-
-    Result := (res = mrOk);
-  finally
-    fmSrcCitEdit.Destroy;
-  end;
-end;
-
-procedure TfmEventEdit.EventRefresh();
-var
-  idx: Integer;
-  note: TGEDCOMNotes;
-  st: string;
-  mmLink: TGEDCOMMultimediaLink;
-  mmRec: TGEDCOMMultimediaRecord;
-  cit: TGEDCOMSourceCitation;
-  sourceRec: TGEDCOMSourceRecord;
-  item: TListItem;
-begin
-  FNotesList.List.Clear();
-  for idx := 0 to FEvent.Detail.NotesCount - 1 do begin
-    note := FEvent.Detail.Notes[idx];
-
-    if (note.Notes.Count > 0) then begin
-      st := Trim(note.Notes[0]);
-      if (st = '') and (note.Notes.Count > 1)
-      then st := Trim(note.Notes[1]);
-    end else st := '';
-
-    FNotesList.List.AddItem(st, TObject(idx));
-  end;
-
-  FMediaList.List.Clear();
-  for idx := 0 to FEvent.Detail.MultimediaLinksCount - 1 do begin
-    mmLink := FEvent.Detail.MultimediaLinks[idx];
-    mmRec := TGEDCOMMultimediaRecord(mmLink.Value);
-
-    if (mmRec <> nil) and (mmRec.FileReferencesCount <> 0) then begin
-      st := mmRec.FileReferences[0].StringValue;
-      FMediaList.List.AddItem(st, TObject(idx));
-    end;
-  end;
-
-  FSourcesList.List.Clear();
-  for idx := 0 to FEvent.Detail.SourceCitationsCount - 1 do begin
-    cit := FEvent.Detail.SourceCitations[idx];
-    sourceRec := TGEDCOMSourceRecord(cit.Value);
-
-    st := '"'+sourceRec.FiledByEntry+'"';
-    if (cit.Page <> '') then st := st + ', ' + cit.Page;
-
-    if (sourceRec <> nil) then begin
-      item := FSourcesList.List.Items.Add();
-      item.Caption := Trim(sourceRec.Originator.Text);
-      item.SubItems.Add(st);
-      item.Data := TObject(idx);
-    end;
-  end;
+  //
 end;
 
 procedure TfmEventEdit.btnAddressClick(Sender: TObject);
@@ -450,21 +381,21 @@ begin
   Result := TfmBase(Owner);
 end;
 
-procedure TfmEventEdit.ListModify(Sender: TObject; Index: Integer; Action: TRecAction);
+procedure TfmEventEdit.ListModify(Sender: TObject; ItemData: TObject; Action: TRecAction);
 begin
   if (Sender = FNotesList) then begin
-    if ModifyNote(Index, Action)
-    then EventRefresh();
+    if Base.ModifyTagNote(FEvent.Detail, TGEDCOMNotes(ItemData), Action)
+    then ControlsRefresh();
   end
   else
   if (Sender = FMediaList) then begin
-    if ModifyMultimedia(Index, Action)
-    then EventRefresh();
+    if Base.ModifyTagMultimedia(FEvent.Detail, TGEDCOMMultimediaLink(ItemData), Action)
+    then ControlsRefresh();
   end
   else
   if (Sender = FSourcesList) then begin
-    if ModifySource(Index, Action)
-    then EventRefresh();
+    if Base.ModifyTagSource(FEvent.Detail, TGEDCOMSourceCitation(ItemData), Action)
+    then ControlsRefresh();
   end;
 end;
 

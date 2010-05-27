@@ -13,7 +13,7 @@ uses
 type
   TGenealogyChart = class;
 
-  TPersonSign = (psNone, psSoldier, psSoldierFall);
+  TPersonSign = (psNone, psSoldier, psSoldierFall, psVeteranRear);
 
   TCustomPerson = class(TObject)
   private
@@ -139,7 +139,9 @@ type
     FMargin: Integer;
     FPersons: TPersonList;
     FRoot: TPerson;
+    FScale: Integer;
     FSelected: TPerson;
+    FShieldState: TShieldState;
     FSpouseDistance: Integer;
     FTree: TGEDCOMTree;
     FTreeBounds: TRect;
@@ -156,6 +158,8 @@ type
     procedure SetSelected(const Value: TPerson);
     procedure Line(aCanvas: TCanvas; X1, Y1, X2, Y2: Integer);
     procedure KinStep(aPerson: TPerson);
+    procedure SetScale(const Value: Integer);
+    procedure Predef();
   public
     constructor Create;
     destructor Destroy; override;
@@ -169,38 +173,11 @@ type
     property DepthLimit: Integer read FDepthLimit write FDepthLimit;
     property Margin: Integer read FMargin write FMargin;
     property Root: TPerson read FRoot;
+    property Scale: Integer read FScale write SetScale;
     property Selected: TPerson read FSelected write SetSelected;
+    property ShieldState: TShieldState read FShieldState write FShieldState;
     property Tree: TGEDCOMTree read FTree write FTree;
     property TreeBounds: TRect read FTreeBounds;
-  end;
-
-type
-  TVisualBuilderCtl = class(TCustomControl)
-  private
-    FOnPaint: TNotifyEvent;
-
-    procedure WMEraseBkgnd(var Message: TWMEraseBkgnd); message WM_ERASEBKGND;
-
-    procedure ChartMouseDown(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
-    procedure ChartMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
-    procedure ChartMouseUp(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
-  protected
-    procedure Paint; override;
-  public
-    constructor Create(AOwner: TComponent); override;
-
-    property Canvas;
-  published
-    property Align;
-    property Font;
-    property OnDblClick;
-    property OnMouseDown;
-    property OnMouseMove;
-    property OnMouseUp;
-    property OnPaint: TNotifyEvent read FOnPaint write FOnPaint;
-    property ParentFont;
   end;
 
 implementation
@@ -216,8 +193,35 @@ var
   end = (
     (Name: ''),
     (Name: 'SOLDIER'),
-    (Name: 'SOLDIER_FALL')
+    (Name: 'SOLDIER_FALL'),
+    (Name: 'VETERAN_REAR')
   );
+
+procedure InitSigns();
+var
+  ps: TPersonSign;
+begin
+  Signs[psNone].Pic := nil;
+  for ps := Succ(Low(TPersonSign)) to High(TPersonSign) do begin
+    {$IFNDEF DELPHI_NET}
+    Signs[ps].Pic := TBitmap.Create;
+    Signs[ps].Pic.LoadFromResourceName(HInstance, Signs[ps].Name);
+    Signs[ps].Pic.Transparent := True;
+    Signs[ps].Pic.TransparentMode := tmFixed;
+    //Signs[ps].Pic.TransparentColor := Signs[ps].Pic.Canvas.Pixels[0, 0];
+    {$ELSE}
+    Signs[ps].Pic := nil;
+    {$ENDIF}
+  end;
+end;
+
+procedure DoneSigns();
+var
+  ps: TPersonSign;
+begin
+  for ps := Succ(Low(TPersonSign)) to High(TPersonSign) do
+    Signs[ps].Pic.Free;
+end;
 
 function GetPersonSign(iRec: TGEDCOMIndividualRecord): TPersonSign;
 var
@@ -230,13 +234,16 @@ begin
   if (attr <> nil) then begin
     cause := AnsiLowerCase(attr.Detail.Classification);
 
-    if (Pos('+', cause) > 0) then begin
-      Result := psSoldierFall;
+    if (Pos('á/ä', cause) > 0) then begin
+      if (Pos('+', cause) > 0)
+      then Result := psSoldierFall
+      else Result := psSoldier;
+
       Exit;
     end
     else
-    if (Pos('á/ä', cause) > 0) then begin
-      Result := psSoldier;
+    if (Pos('ò/ò', cause) > 0) then begin
+      Result := psVeteranRear;
       Exit;
     end;
   end;
@@ -382,7 +389,7 @@ begin
   end;
 
   if (FSign <> psNone)
-  then canv.Draw(rt.Right, rt.Top - 16, Signs[FSign].Pic);
+  then canv.Draw(rt.Right, rt.Top - 21, Signs[FSign].Pic);
 end;
 
 procedure TCustomPerson.SetPt(const Value: TPoint);
@@ -522,9 +529,9 @@ begin
   inherited Create;
   FPersons := TPersonList.Create(True);
   FSpouseDistance := 10;
-  FBranchDistance := 20;
-  FLevelDistance := 50;
-  FMargin := 50;
+  FBranchDistance := 40;
+  FLevelDistance := 46;
+  FMargin := 40;
   FDepthLimit := -1;
   FSelected := nil;
 end;
@@ -533,6 +540,32 @@ destructor TAncestryChart.Destroy;
 begin
   FPersons.Free;
   inherited Destroy;
+end;
+
+const
+  ACFontSize = 8;
+  ACSpouseDistance = 10;
+  ACBranchDistance = 40;
+  ACLevelDistance = 46;
+  ACMargin = 40;
+
+procedure TAncestryChart.Predef();
+var
+  sc: Single;
+  fsz: Integer;
+begin
+  sc := (FScale / 100);
+
+  fsz := Round(ACFontSize * sc);
+  if (fsz <= 7)
+  then FCanvas.Font.Name := 'Small Fonts'
+  else FCanvas.Font.Name := 'Tahoma';
+  FCanvas.Font.Size := fsz;
+
+  FSpouseDistance := Round(ACSpouseDistance * sc);
+  FBranchDistance := Round(ACBranchDistance * sc);
+  FLevelDistance := Round(ACLevelDistance * sc);
+  FMargin := Round(ACMargin * sc);
 end;
 
 procedure TAncestryChart.SetBitmap(const Value: TBitmap);
@@ -583,7 +616,7 @@ end;
 
 procedure TAncestryChart.Draw(aPerson: TPerson);
 var
-  cr_y, cr_y1, i, bpx, epx, cx, spb_beg, spb_ofs, spb_v: Integer;
+  cr_y, i, bpx, epx, cx, spb_beg, spb_ofs, spb_v: Integer;
   child_pt: TPoint;
 begin
   if (aPerson = nil) then Exit;
@@ -608,9 +641,8 @@ begin
       Line(FCanvas, aPerson.Mother.Pt.X, aPerson.Mother.Pt.Y + aPerson.Mother.Height - 1, aPerson.Mother.Pt.X, cr_y);
     end;
   end else begin
-    for i := 0 to aPerson.Childs.Count - 1 do begin
+    for i := 0 to aPerson.Childs.Count - 1 do
       Draw(aPerson.Childs[i]);
-    end;
 
     spb_ofs := FLevelDistance div 3;
     spb_beg := aPerson.Pt.Y + (aPerson.Height - spb_ofs * (aPerson.SpousesCount - 1)) div 2;
@@ -631,12 +663,10 @@ begin
       end;
     end;
 
-    for i := 0 to aPerson.SpousesCount - 1 do begin
+    for i := 0 to aPerson.SpousesCount - 1 do
       Draw(aPerson.Spouses[i]);
-    end;
 
-    cr_y := aPerson.Pt.Y + aPerson.Height + FLevelDistance div 3;
-    cr_y1 := aPerson.Pt.Y + aPerson.Height + (FLevelDistance div 3) * 2;
+    cr_y := aPerson.Pt.Y + aPerson.Height + FLevelDistance div 2;
 
     if (aPerson.BaseSpouse = nil)
     or ((aPerson.BaseSpouse <> nil) and (aPerson.BaseSpouse.SpousesCount > 1))
@@ -652,24 +682,21 @@ begin
       spb_beg := spb_beg - spb_ofs div 2;
     end;
 
-    if (aPerson.Childs.Count <> 0)
-    then Line(FCanvas, cx, spb_beg, cx, cr_y);
-
     if (aPerson.Childs.Count <> 0) then begin
-      Line(FCanvas, cx, cr_y, cx, cr_y1);
+      Line(FCanvas, cx, spb_beg, cx, cr_y); // vert, from fam to childs
 
       if (aPerson.Childs.Count = 1) then begin
         child_pt := aPerson.Childs[0].Pt;
-        Line(FCanvas, child_pt.X, cr_y1, child_pt.X, child_pt.Y);
+        Line(FCanvas, child_pt.X, cr_y, child_pt.X, child_pt.Y); // vert, connect from ? to child
       end else begin
         bpx := aPerson.Childs[0].Pt.X;
         epx := aPerson.Childs[aPerson.Childs.Count-1].Pt.X;
 
-        Line(FCanvas, bpx, cr_y1, epx, cr_y1);
+        Line(FCanvas, bpx, cr_y, epx, cr_y); // horiz, merge childs
 
         for i := 0 to aPerson.Childs.Count - 1 do begin
           child_pt := aPerson.Childs[i].Pt;
-          Line(FCanvas, child_pt.X, cr_y1, child_pt.X, child_pt.Y);
+          Line(FCanvas, child_pt.X, cr_y, child_pt.X, child_pt.Y); // vert
         end;
       end;
     end;
@@ -700,18 +727,21 @@ procedure TAncestryChart.GenAncestorsChart(aPerson: TGEDCOMIndividualRecord);
 
     if (aPerson.ChildToFamilyLinksCount > 0) then begin
       family := aPerson.ChildToFamilyLinks[0].Family;
-      iFather := TGEDCOMIndividualRecord(family.Husband.Value);
-      iMother := TGEDCOMIndividualRecord(family.Wife.Value);
 
-      divorced := (family.TagStringValue('_STAT') = 'NOTMARR');
+      if (IsRecordAccess(family.Restriction, FShieldState)) then begin
+        iFather := TGEDCOMIndividualRecord(family.Husband.Value);
+        iMother := TGEDCOMIndividualRecord(family.Wife.Value);
 
-      Result.Father := Anc_Step(Result, iFather, aGeneration + 1);
-      if (Result.Father <> nil)
-      then Result.Father.Divorced := divorced;
+        divorced := (family.TagStringValue('_STAT') = 'NOTMARR');
 
-      Result.Mother := Anc_Step(Result, iMother, aGeneration + 1);
-      if (Result.Mother <> nil)
-      then Result.Mother.Divorced := divorced;
+        Result.Father := Anc_Step(Result, iFather, aGeneration + 1);
+        if (Result.Father <> nil)
+        then Result.Father.Divorced := divorced;
+
+        Result.Mother := Anc_Step(Result, iMother, aGeneration + 1);
+        if (Result.Mother <> nil)
+        then Result.Mother.Divorced := divorced;
+      end;
     end;
   end;
 
@@ -872,6 +902,7 @@ procedure TAncestryChart.GenDescendantsChart(aPerson: TGEDCOMIndividualRecord);
 
     for k := 0 to aPerson.SpouseToFamilyLinksCount - 1 do begin
       family := aPerson.SpouseToFamilyLinks[k].Family;
+      if not(IsRecordAccess(family.Restriction, FShieldState)) then Continue;
 
       res_parent := nil;
       case aPerson.Sex of
@@ -1089,6 +1120,8 @@ begin
   FHMax := 0;
   FWMax := 0;
   FGenEdge := nil;
+
+  Predef();
 
   case FKind of
     ckAncestors: GenAncestorsChart(aPerson);
@@ -1322,67 +1355,15 @@ begin
   end;
 end;
 
-{ TVisualBuilderCtl }
-
-constructor TVisualBuilderCtl.Create(AOwner: TComponent);
+procedure TAncestryChart.SetScale(const Value: Integer);
 begin
-  inherited Create(AOwner);
-  DoubleBuffered := True;
-  ControlStyle := ControlStyle + [csReplicatable];
-  Width := 105;
-  Height := 105;
-
-  OnMouseDown := ChartMouseDown;
-  OnMouseMove := ChartMouseMove;
-  OnMouseUp := ChartMouseUp;
+  FScale := Value;
 end;
-
-procedure TVisualBuilderCtl.Paint;
-begin
-  Canvas.Font := Font;
-  Canvas.Pen.Style := psSolid;
-  Canvas.Brush.Color := clBtnFace;
-  Canvas.Brush.Style := bsSolid;
-  Canvas.Rectangle(0, 0, Width, Height);
-
-  //
-end;
-
-procedure TVisualBuilderCtl.WMEraseBkgnd(var Message: TWMEraseBkgnd);
-begin
-  Message.Result := -1;
-end;
-
-procedure TVisualBuilderCtl.ChartMouseDown(Sender: TObject;
-  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-begin
-  //
-end;
-
-procedure TVisualBuilderCtl.ChartMouseMove(Sender: TObject;
-  Shift: TShiftState; X, Y: Integer);
-begin
-  //
-end;
-
-procedure TVisualBuilderCtl.ChartMouseUp(Sender: TObject;
-  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-begin
-  //
-end;
-
-var
-  ps: TPersonSign;
 
 initialization
-  Signs[psNone].Pic := nil; 
-  for ps := Succ(Low(TPersonSign)) to High(TPersonSign) do begin
-    Signs[ps].Pic := TBitmap.Create;
-    Signs[ps].Pic.LoadFromResourceName(HInstance, Signs[ps].Name);
-  end;
+  InitSigns();
 
 finalization
-  for ps := Succ(Low(TPersonSign)) to High(TPersonSign) do
-    Signs[ps].Pic.Free;
+  DoneSigns();
 
 end.

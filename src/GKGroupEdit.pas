@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons, ComCtrls,
-  ExtCtrls, GedCom551, GKBase, GKCommon;
+  ExtCtrls, GedCom551, GKBase, GKCommon, GKSheetList, bsCtrls;
 
 type
   TfmGroupEdit = class(TForm)
@@ -23,14 +23,14 @@ type
     procedure FormCreate(Sender: TObject);
   private
     FGroup: TGEDCOMGroupRecord;
-    FTree: TGEDCOMTree;
 
     FMembersList: TSheetList;
     FNotesList: TSheetList;
     FMediaList: TSheetList;
 
+    procedure AcceptChanges();
     procedure SetGroup(const Value: TGEDCOMGroupRecord);
-    procedure ListModify(Sender: TObject; Index: Integer; Action: TRecAction);
+    procedure ListModify(Sender: TObject; ItemData: TObject; Action: TRecAction);
     procedure ListsRefresh();
     function GetBase: TfmBase;
   public
@@ -52,15 +52,15 @@ begin
   FMembersList := TSheetList.Create(SheetMembers);
   FMembersList.OnModify := ListModify;
   FMembersList.Buttons := [lbAdd..lbJump];
-  Base.SetupRecMembersList(FMembersList.List);
+  AddListColumn(FMembersList.List, 'Имя участника группы', 300);
 
-  FNotesList := TSheetList.Create(SheetNotes);
+  FNotesList := TSheetList.Create(SheetNotes, lmBox);
   FNotesList.OnModify := ListModify;
-  Base.SetupRecNotesList(FNotesList.List);
+  Base.SetupRecNotesList(FNotesList);
 
   FMediaList := TSheetList.Create(SheetMultimedia);
   FMediaList.OnModify := ListModify;
-  Base.SetupRecMediaList(FMediaList.List);
+  Base.SetupRecMediaList(FMediaList);
 end;
 
 procedure TfmGroupEdit.ListsRefresh();
@@ -70,15 +70,19 @@ var
   item: TListItem;
 begin
   Base.RecListNotesRefresh(FGroup, FNotesList.List, nil);
-  Base.RecListMediaRefresh(FGroup, FMediaList.List, nil);
+  Base.RecListMediaRefresh(FGroup, TBSListView(FMediaList.List), nil);
 
-  FMembersList.List.Clear();
-  for k := 0 to FGroup.MembersCount - 1 do begin
-    member := TGEDCOMIndividualRecord(FGroup.Members[k].Value);
+  with TListView(FMembersList.List) do begin
+    Items.BeginUpdate();
+    Items.Clear();
+    for k := 0 to FGroup.MembersCount - 1 do begin
+      member := TGEDCOMIndividualRecord(FGroup.Members[k].Value);
 
-    item := FMembersList.List.Items.Add();
-    item.Caption := GetNameStr(member);
-    item.Data := TObject(k);
+      item := Items.Add();
+      item.Caption := GetNameStr(member);
+      item.Data := member;
+    end;
+    Items.EndUpdate;
   end;
 end;
 
@@ -93,15 +97,19 @@ begin
 
     ListsRefresh();
   except
-    on E: Exception do LogWrite('GroupRefresh(): ' + E.Message);
+    on E: Exception do LogWrite('GroupEdit.SetGroup(): ' + E.Message);
   end;
+end;
+
+procedure TfmGroupEdit.AcceptChanges();
+begin
+  FGroup.Name := EditName.Text;
+  Base.ChangeRecord(FGroup);
 end;
 
 procedure TfmGroupEdit.btnAcceptClick(Sender: TObject);
 begin
-  FGroup.Name := EditName.Text;
-  FGroup.ChangeDate.ChangeDateTime := Now();
-  Base.Modified := True;
+  AcceptChanges();
 end;
 
 function TfmGroupEdit.GetBase: TfmBase;
@@ -109,17 +117,17 @@ begin
   Result := TfmBase(Owner);
 end;
 
-procedure TfmGroupEdit.ListModify(Sender: TObject; Index: Integer; Action: TRecAction);
+procedure TfmGroupEdit.ListModify(Sender: TObject; ItemData: TObject; Action: TRecAction);
 var
   member: TGEDCOMIndividualRecord;
 begin
   if (Sender = FNotesList) then begin
-    if Base.ModifyRecNote(FGroup, Index, Action)
+    if Base.ModifyRecNote(FGroup, TGEDCOMNotes(ItemData), Action)
     then ListsRefresh();
   end
   else
   if (Sender = FMediaList) then begin
-    if Base.ModifyRecMultimedia(FGroup, Index, Action)
+    if Base.ModifyRecMultimedia(FGroup, TGEDCOMMultimediaLink(ItemData), Action)
     then ListsRefresh();
   end
   else
@@ -127,32 +135,24 @@ begin
     case Action of
       raAdd: begin
         member := Base.SelectPerson(nil, tmNone, svNone);
-        if (member <> nil) then begin
-          FGroup.AddMember(TGEDCOMPointer.CreateTag(FTree, FGroup, '_MEMBER', '@'+member.XRef+'@'));
-          member.AddGroup(TGEDCOMPointer.CreateTag(FTree, member, '_GROUP', '@'+FGroup.XRef+'@'));
-          ListsRefresh();
-        end;
+        if (member <> nil) and Base.GroupMemberAdd(FGroup, member)
+        then ListsRefresh();
       end;
       raEdit: ;
       raDelete: begin
-        member := TGEDCOMIndividualRecord(FGroup.Members[Index].Value);
-        if (member = nil) then Exit;
+        member := TGEDCOMIndividualRecord(ItemData);
 
-        if (MessageDlg('Удалить ссылку на участника группы?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+        if (member = nil) or (MessageDlg('Удалить ссылку на участника группы?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
         then Exit;
 
-        FGroup.RemoveMember(FGroup.IndexOfMember(member));
-        member.DeleteGroup(member.IndexOfGroup(FGroup));
-
-        ListsRefresh();
+        if Base.GroupMemberRemove(FGroup, member)
+        then ListsRefresh();
       end;
       raJump: begin
-        member := TGEDCOMIndividualRecord(FGroup.Members[Index].Value);
+        member := TGEDCOMIndividualRecord(ItemData);
         if (member <> nil) then begin
-          if (fmPersonEdit <> nil)
-          then fmPersonEdit.Person := member
-          else Base.SelectRecordByXRef(member.XRef);
-
+          AcceptChanges();
+          Base.SelectRecordByXRef(member.XRef);
           Close;
         end;
       end;

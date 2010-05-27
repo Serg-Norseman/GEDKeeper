@@ -40,8 +40,7 @@ end;
 procedure TfmNoteEdit.btnAcceptClick(Sender: TObject);
 begin
   FNoteRecord.Notes := MemoNote.Lines;
-  FNoteRecord.ChangeDate.ChangeDateTime := Now();
-  Base.Modified := True;
+  Base.ChangeRecord(FNoteRecord);
 end;
 
 function TfmNoteEdit.GetBase: TfmBase;

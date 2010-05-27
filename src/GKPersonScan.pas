@@ -48,8 +48,6 @@ var
   iRec: TGEDCOMIndividualRecord;
   tokCount: Integer;
   nam, pat, fam, tmp: string;
-  noteRec: TGEDCOMNoteRecord;
-  note: TGEDCOMNotes;
 begin
   tmp := AnsiLowerCase(EditName.Text);
   tokCount := GetTokensCount(tmp, ' ');
@@ -66,7 +64,8 @@ begin
   nam[1] := AnsiUpperCase(nam)[1];
   pat[1] := AnsiUpperCase(pat)[1];
 
-  iRec := Base.CreatePerson(nam, pat, fam, svNone);
+  iRec := CreatePersonEx(Base.Tree, nam, pat, fam, svNone, False);
+  Base.ChangeRecord(iRec);
 
   if (CheckBirth.Checked)
   then CreateIEvent(Base.Tree, iRec, 'BIRT', StrToGEDCOMDate(EditBirthDate.Text), EditBirthPlace.Text);
@@ -74,16 +73,8 @@ begin
   if (CheckDeath.Checked)
   then CreateIEvent(Base.Tree, iRec, 'DEAT', StrToGEDCOMDate(EditDeathDate.Text), EditDeathPlace.Text);
 
-  if (MemoNote.Text <> '') then begin
-    noteRec := TGEDCOMNoteRecord.Create(Base.Tree, Base.Tree);
-    noteRec.NewXRef;
-    noteRec.Notes := MemoNote.Lines;
-    Base.Tree.AddRecord(noteRec);
-
-    note := TGEDCOMNotes.Create(Base.Tree, iRec);
-    note.Value := noteRec;
-    iRec.AddNotes(note);
-  end;
+  if (MemoNote.Text <> '')
+  then CreateNoteEx(Base.Tree, MemoNote.Lines, iRec);
 
   EditName.Text := '';
   EditBirthDate.Text := '';

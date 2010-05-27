@@ -6,6 +6,7 @@ object fmNoteEdit: TfmNoteEdit
   ClientHeight = 249
   ClientWidth = 402
   Color = clBtnFace
+  DefaultMonitor = dmMainForm
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11

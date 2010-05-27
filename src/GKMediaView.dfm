@@ -1,12 +1,13 @@
 object fmMediaView: TfmMediaView
-  Left = 277
-  Top = 103
+  Left = 306
+  Top = 106
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = #1055#1088#1086#1089#1084#1086#1090#1088
-  ClientHeight = 536
-  ClientWidth = 833
+  ClientHeight = 573
+  ClientWidth = 792
   Color = clBtnFace
+  DefaultMonitor = dmMainForm
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -21,9 +22,9 @@ object fmMediaView: TfmMediaView
   object PageControl: TPageControl
     Left = 0
     Top = 0
-    Width = 833
-    Height = 536
-    ActivePage = SheetHTML
+    Width = 792
+    Height = 573
+    ActivePage = SheetText
     Align = alClient
     TabOrder = 0
     object SheetText: TTabSheet
@@ -32,8 +33,8 @@ object fmMediaView: TfmMediaView
       object mText: TMemo
         Left = 0
         Top = 0
-        Width = 825
-        Height = 526
+        Width = 784
+        Height = 563
         Align = alClient
         ReadOnly = True
         ScrollBars = ssBoth
@@ -47,8 +48,8 @@ object fmMediaView: TfmMediaView
       object RichEdit: TRichEdit
         Left = 0
         Top = 0
-        Width = 825
-        Height = 526
+        Width = 784
+        Height = 563
         Align = alClient
         ScrollBars = ssBoth
         TabOrder = 0
@@ -73,21 +74,6 @@ object fmMediaView: TfmMediaView
       Caption = 'SheetPlayer'
       ImageIndex = 3
       TabVisible = False
-      OnResize = SheetPlayerResize
-      object WindowsMediaPlayer1: TWindowsMediaPlayer
-        Left = 0
-        Top = 0
-        Width = 240
-        Height = 245
-        TabOrder = 0
-        ControlData = {
-          000300000800000000000500000000000000F03F030000000000050000000000
-          0000000008000200000000000300010000000B00FFFF0300000000000B00FFFF
-          08000200000000000300320000000B00000008000A000000660075006C006C00
-          00000B0000000B0000000B0000000B00FFFF0B00000008000200000000000800
-          020000000000080002000000000008000200000000000B000000CE1800005219
-          0000}
-      end
     end
     object SheetHTML: TTabSheet
       Caption = 'SheetHTML'

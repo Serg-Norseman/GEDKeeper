@@ -88,7 +88,6 @@ type
     FMapPoints: TObjectList;
     FPlaces: TObjectList;
     FTree: TGEDCOMTree;
-    FXMLDocument: TXMLDocument;
     FBaseRoot, FSearchRoot: TTreeNode;
 
     FGMapPoints: TObjectList;
@@ -103,11 +102,8 @@ type
     function GetGMapPointsCount: Integer;
     procedure SetVisibleElementes(Index: Integer; Value: Boolean);
 
-    function  GetInetFile(const FileURL: string; Stream: TMemoryStream): Boolean;
     procedure PlacesLoad();
     procedure PreparePointsList(aPoints: TObjectList);
-    function  RequestGeoAddress(aLatitude, aLongitude: Double): string;
-    procedure RequestGeoCoords(SearchString: string; aPoints: TObjectList);
     procedure SetMapFile();
   protected
     function  map_AddPoint(aLatitude, aLongitude: Double; aHint: string = ''): Integer;
@@ -136,7 +132,15 @@ type
 var
   fmMaps: TfmMaps;
 
+// получение списка точек по запросу
+procedure RequestGeoCoords(SearchString: string; aPoints: TObjectList);
+
+// запрос обратного геокодирования
+function RequestGeoAddress(aLatitude, aLongitude: Double): string;
+
 implementation
+
+{$R *.dfm}
 
 uses
   bsWinUtils, GKCommon, HTTPSend, Types, Jpeg, ActiveX, ComObj,
@@ -145,7 +149,163 @@ uses
 const
   GoogleKey = 'ABQIAAAAIcIQgkzLQ27NamNDh2wULxTh9o9-e_HqfKVqUrQPniGEP9J6uhSJmXGEipvip6lxpu_ZXrXaeHwWgQ';
 
-{$R *.dfm}
+var
+  xmlDocument: TXMLDocument;
+
+procedure GeoInit();
+begin
+  DecimalSeparator := '.';
+  xmlDocument := TXMLDocument.Create(Application);
+end;
+
+procedure GeoDone();
+begin
+  //xmlDocument.Free; // interfaced object
+end;
+
+// отправка запроса и получение ответа
+function GetInetFile(const FileURL: string; Stream: TMemoryStream): Boolean;
+var
+  HTTP: THTTPSend;
+  proxy: TProxy;
+begin
+  HTTP := THTTPSend.Create;
+  try
+    proxy := fmGEDKeeper.Options.Proxy;
+    if (proxy.UseProxy) then begin
+      HTTP.ProxyUser := proxy.Login;
+      HTTP.ProxyPass := proxy.Password;
+      HTTP.ProxyHost := proxy.Server;
+      HTTP.ProxyPort := proxy.Port;
+    end;
+
+    HTTP.MimeType := 'application/x-www-form-urlencoded';
+    // переводим в принимаемую Гуглем кодировку
+    HTTP.HTTPMethod('GET', AnsiToUtf8(FileURL));
+
+    Stream.LoadFromStream(HTTP.Document);
+
+    Result := True;
+  finally
+    HTTP.Free;
+  end;
+end;
+
+// получение списка точек по запросу
+procedure RequestGeoCoords(SearchString: string; aPoints: TObjectList);
+var
+  Point: TMapPoint;
+  FileOnNet, sCoordinates: string;
+  Stream: TMemoryStream;
+  Node, PlacemarkNode, PointNode, AddressNode: IXMLNode;
+  i: Integer;
+  StringList: TStringList;
+begin
+  SearchString := StringReplace(Trim(SearchString), ' ', '+', [rfReplaceAll]);
+
+  if (aPoints = nil) then Exit;
+
+  // создаем поток
+  Stream := TMemoryStream.Create;
+  StringList := TStringList.Create;
+  try
+    // формируем url для запроса
+    FileOnNet := 'http://maps.google.ru/maps/geo?q=%s&output=xml&key=%s&gl=ru';
+    FileOnNet := Format(FileOnNet, [SearchString, GoogleKey]);
+    // получение потока с данными ответа
+    if GetInetFile(FileOnNet, Stream) then begin
+      StreamToUtf8Stream(Stream);
+      // заполняем XMLDocument
+      xmlDocument.LoadFromStream(Stream);
+      // формируем содержимое списка точек
+      Node := xmlDocument.DocumentElement;
+      Node := Node.ChildNodes.FindNode('Response');
+      if (Node <> nil) and (Node.ChildNodes.Count > 0) then
+        for i := 0 to Node.ChildNodes.Count - 1 do
+          if Node.ChildNodes[i].NodeName = 'Placemark' then begin
+            // находим узел точки
+            PlacemarkNode := Node.ChildNodes[i];
+            // получаем узел адреса
+            AddressNode := PlacemarkNode.ChildNodes.FindNode('address');
+            //получаем узел координат
+            PointNode := PlacemarkNode.ChildNodes.FindNode('Point');
+            PointNode := PointNode.ChildNodes.FindNode('coordinates');
+            if (AddressNode <> nil) and (PointNode <> nil) then begin
+              Point := TMapPoint.Create;
+              // получаем адрес
+              Point.Address := Utf8ToAnsi(AddressNode.Text);
+              // получаем координаты
+              sCoordinates := PointNode.Text;
+              // разбираем координаты
+              ExtractStrings([','], [], PChar(sCoordinates), StringList);
+              if (StringList.Count > 1) then begin
+                // Формируем точку
+                Point.Lon := StrToFloatDef(StringList[0], -1);
+                Point.Lat := StrToFloatDef(StringList[1], -1);
+                // добавляем точку в список
+                if (Point.Lat <> -1) and (Point.Lon <> -1)
+                then aPoints.Add(Point);
+                StringList.Clear;
+              end else
+                Point.Free;
+            end;
+          end;
+    end;
+  finally
+    StringList.Free;
+    Stream.Free;
+  end;
+end;
+
+// запрос обратного геокодирования
+function RequestGeoAddress(aLatitude, aLongitude: Double): string;
+
+  procedure FillNode(Node: IXMLNode);
+  var
+    i: Integer;
+    NodeText: string;
+  begin
+    NodeText := '';
+
+    if Node.IsTextElement
+    then NodeText := Node.NodeName + '=' + Node.Text
+    else NodeText := Node.NodeName;
+
+    if (Node.ChildNodes <> nil) and (Node.ChildNodes.Count > 0) then
+      for i := 0 to Node.ChildNodes.Count - 1 do begin
+        FillNode(Node.ChildNodes.Nodes[i]);
+        // самый первый адрес наиболее подробный, берем его
+        if (Result = '') and (Node.NodeName = 'address')
+        then Result := Node.Text;
+      end;
+  end;
+
+var
+  Node: IXMLNode;
+  FileOnNet: string;
+  Stream: TMemoryStream;
+begin
+  Result := '';
+
+  // создаем поток
+  Stream := TMemoryStream.Create;
+  try
+    // формируем url для запроса
+    FileOnNet := 'http://maps.google.ru/maps/geo?ll=%.6f,%.6f&output=xml&key=%s&gl=ru';
+    FileOnNet := Format(FileOnNet, [aLatitude, aLongitude, GoogleKey]);
+    // получение потока с данными ответа
+    if GetInetFile(FileOnNet, Stream) then begin
+      StreamToUtf8Stream(Stream);
+      // заполняем XMLDocument
+      xmlDocument.LoadFromStream(Stream);
+
+      Node := xmlDocument.DocumentElement;
+      FillNode(Node);
+    end;
+  finally
+    Stream.Free;
+  end;
+end;
 
 { TGMapPoint }
 
@@ -221,9 +381,6 @@ begin
 
   FMapPoints := TObjectList.Create(True);
   FPlaces := TObjectList.Create(True);
-
-  DecimalSeparator := '.';
-  FXMLDocument := TXMLDocument.Create(Self);
 
   FBaseRoot := TreePlaces.Items.AddChild(nil, 'Места');
   FSearchRoot := TreePlaces.Items.AddChild(nil, 'Поиск');
@@ -516,84 +673,6 @@ begin
   end;
 end;
 
-// отправка запроса и получение ответа
-function TfmMaps.GetInetFile(const FileURL: string; Stream: TMemoryStream): Boolean;
-var
-  HTTP: THTTPSend;
-  proxy: TProxy;
-begin
-  HTTP := THTTPSend.Create;
-  try
-    proxy := fmGEDKeeper.Options.Proxy;
-    if (proxy.UseProxy) then begin
-      HTTP.ProxyUser := proxy.Login;
-      HTTP.ProxyPass := proxy.Password;
-      HTTP.ProxyHost := proxy.Server;
-      HTTP.ProxyPort := proxy.Port;
-    end;
-
-    HTTP.MimeType := 'application/x-www-form-urlencoded';
-    // переводим в принимаемую Гуглем кодировку
-    HTTP.HTTPMethod('GET', AnsiToUtf8(FileURL));
-
-    Stream.LoadFromStream(HTTP.Document);
-
-    Result := True;
-  finally
-    HTTP.Free;
-  end;
-end;
-
-// запрос обратного геокодирования
-function TfmMaps.RequestGeoAddress(aLatitude, aLongitude: Double): string;
-
-  procedure FillNode(Node: IXMLNode);
-  var
-    i: Integer;
-    NodeText: string;
-  begin
-    NodeText := '';
-
-    if Node.IsTextElement
-    then NodeText := Node.NodeName + '=' + Node.Text
-    else NodeText := Node.NodeName;
-
-    if (Node.ChildNodes <> nil) and (Node.ChildNodes.Count > 0) then
-      for i := 0 to Node.ChildNodes.Count - 1 do begin
-        FillNode(Node.ChildNodes.Nodes[i]);
-        // самый первый адрес наиболее подробный, берем его
-        if (Result = '') and (Node.NodeName = 'address')
-        then Result := Node.Text;
-      end;
-  end;
-
-var
-  Node: IXMLNode;
-  FileOnNet: string;
-  Stream: TMemoryStream;
-begin
-  Result := '';
-
-  // создаем поток
-  Stream := TMemoryStream.Create;
-  try
-    // формируем url для запроса
-    FileOnNet := 'http://maps.google.ru/maps/geo?ll=%.6f,%.6f&output=xml&key=%s&gl=ru';
-    FileOnNet := Format(FileOnNet, [aLatitude, aLongitude, GoogleKey]);
-    // получение потока с данными ответа
-    if GetInetFile(FileOnNet, Stream) then begin
-      StreamToUtf8Stream(Stream);
-      // заполняем XMLDocument
-      FXMLDocument.LoadFromStream(Stream);
-
-      Node := FXMLDocument.DocumentElement;
-      FillNode(Node);
-    end;
-  finally
-    Stream.Free;
-  end;
-end;
-
 procedure TfmMaps.PreparePointsList(aPoints: TObjectList);
 var
   i: Integer;
@@ -613,72 +692,6 @@ begin
   end;
 end;
 
-// получение списка точек по запросу
-procedure TfmMaps.RequestGeoCoords(SearchString: string; aPoints: TObjectList);
-var
-  Point: TMapPoint;
-  FileOnNet, sCoordinates: string;
-  Stream: TMemoryStream;
-  Node, PlacemarkNode, PointNode, AddressNode: IXMLNode;
-  i: Integer;
-  StringList: TStringList;
-begin
-  SearchString := StringReplace(Trim(SearchString), ' ', '+', [rfReplaceAll]);
-
-  if (aPoints = nil) then Exit;
-
-  // создаем поток
-  Stream := TMemoryStream.Create;
-  StringList := TStringList.Create;
-  try
-    // формируем url для запроса
-    FileOnNet := 'http://maps.google.ru/maps/geo?q=%s&output=xml&key=%s&gl=ru';
-    FileOnNet := Format(FileOnNet, [SearchString, GoogleKey]);
-    // получение потока с данными ответа
-    if GetInetFile(FileOnNet, Stream) then begin
-      StreamToUtf8Stream(Stream);
-      // заполняем XMLDocument
-      FXMLDocument.LoadFromStream(Stream);
-      // формируем содержимое списка точек
-      Node := FXMLDocument.DocumentElement;
-      Node := Node.ChildNodes.FindNode('Response');
-      if (Node <> nil) and (Node.ChildNodes.Count > 0) then
-        for i := 0 to Node.ChildNodes.Count - 1 do
-          if Node.ChildNodes[i].NodeName = 'Placemark' then begin
-            // находим узел точки
-            PlacemarkNode := Node.ChildNodes[i];
-            // получаем узел адреса
-            AddressNode := PlacemarkNode.ChildNodes.FindNode('address');
-            //получаем узел координат
-            PointNode := PlacemarkNode.ChildNodes.FindNode('Point');
-            PointNode := PointNode.ChildNodes.FindNode('coordinates');
-            if (AddressNode <> nil) and (PointNode <> nil) then begin
-              Point := TMapPoint.Create;
-              // получаем адрес
-              Point.Address := Utf8ToAnsi(AddressNode.Text);
-              // получаем координаты
-              sCoordinates := PointNode.Text;
-              // разбираем координаты
-              ExtractStrings([','], [], PChar(sCoordinates), StringList);
-              if (StringList.Count > 1) then begin
-                // Формируем точку
-                Point.Lon := StrToFloatDef(StringList[0], -1);
-                Point.Lat := StrToFloatDef(StringList[1], -1);
-                // добавляем точку в список
-                if (Point.Lat <> -1) and (Point.Lon <> -1)
-                then aPoints.Add(Point);
-                StringList.Clear;
-              end else
-                Point.Free;
-            end;
-          end;
-    end;
-  finally
-    StringList.Free;
-    Stream.Free;
-  end;
-end;
-
 procedure TfmMaps.PlacesLoad();
 
   function FindTreeNode(aPlace: string): TTreeNode;
@@ -694,42 +707,52 @@ procedure TfmMaps.PlacesLoad();
       end;
   end;
 
-  procedure PreparePlace(aNode: TTreeNode; aPlace: TPlace);
+  procedure AddPlace(aPlace: TGEDCOMPlace; aRef: TGEDCOMObject);
   var
+    locRec: TGEDCOMLocationRecord;
+    place_name: string;
+    node: TTreeNode;
+    place: TPlace;
     pt_title: string;
     pt: TMapPoint;
     k: Integer;
   begin
-    try
-      RequestGeoCoords(aPlace.Name, aPlace.Points);
+    locRec := TGEDCOMLocationRecord(aPlace.Location.Value);
+    if (locRec <> nil)
+    then place_name := locRec.Name
+    else place_name := aPlace.StringValue;
 
-      for k := 0 to aPlace.Points.Count - 1 do
-        if (aPlace.Points[k] is TMapPoint) then begin
-          pt := TMapPoint(aPlace.Points[k]);
-
-          pt_title := pt.Address + Format(' [%.6f, %.6f]', [pt.Lat, pt.Lon]);
-          TreePlaces.Items.AddChildObjectFirst(aNode, pt_title, pt);
-        end;
-    finally
-    end;
-  end;
-
-  procedure AddPlace(aPlace: string; aRef: TGEDCOMObject);
-  var
-    node: TTreeNode;
-    place: TPlace;
-  begin
-    node := FindTreeNode(aPlace);
+    node := FindTreeNode(place_name);
     if (node = nil) then begin
-      node := TreePlaces.Items.AddChild(FBaseRoot, aPlace);
+      node := TreePlaces.Items.AddChild(FBaseRoot, place_name);
 
       place := TPlace.Create;
-      place.Name := aPlace;
+      place.Name := place_name;
       FPlaces.Add(place);
 
       node.Data := place;
 
-      PreparePlace(node, place); 
+      // prepare place
+      if (locRec = nil) then begin
+        RequestGeoCoords(place_name, place.Points);
+
+        for k := 0 to place.Points.Count - 1 do
+          if (place.Points[k] is TMapPoint) then begin
+            pt := TMapPoint(place.Points[k]);
+
+            pt_title := pt.Address + Format(' [%.6f, %.6f]', [pt.Lat, pt.Lon]);
+            TreePlaces.Items.AddChildObjectFirst(node, pt_title, pt);
+          end;
+      end else begin
+        pt := TMapPoint.Create;
+        pt.Address := place_name;
+        pt.Lon := StrToFloatDef(locRec.Map.Long, -1);
+        pt.Lat := StrToFloatDef(locRec.Map.Lati, -1);
+        place.Points.Add(pt);
+
+        pt_title := pt.Address + Format(' [%.6f, %.6f]', [pt.Lat, pt.Lon]);
+        TreePlaces.Items.AddChildObjectFirst(node, pt_title, pt);
+      end;
     end else begin
       place := TPlace(node.Data);
     end;
@@ -765,7 +788,7 @@ begin
 
         for k := 0 to ind.IndividualEventsCount - 1 do begin
           i_ev := ind.IndividualEvents[k];
-          if (i_ev.Detail.Place <> '') then begin
+          if (i_ev.Detail.Place.StringValue <> '') then begin
             AddPlace(i_ev.Detail.Place, i_ev);
             has_places := True;
             Inc(p_cnt);
@@ -775,8 +798,8 @@ begin
         for k := 0 to ind.IndividualAttributesCount - 1 do begin
           i_att := ind.IndividualAttributes[k];
 
-          if (i_att.Name = 'RESI') and (i_att.StringValue <> '') then begin
-            AddPlace(i_att.StringValue, i_att);
+          if (i_att.Detail.Place.StringValue <> '') then begin
+            AddPlace(i_att.Detail.Place, i_att);
             has_places := True;
             Inc(p_cnt);
           end;
@@ -929,5 +952,8 @@ begin
   if (pt <> nil)
   then map_SetCenter(pt.Lat, pt.Lon);
 end;
+
+initialization
+  GeoInit();
 
 end.

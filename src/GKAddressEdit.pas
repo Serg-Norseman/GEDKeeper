@@ -6,7 +6,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, GedCom551, StdCtrls, Buttons, ComCtrls, ExtCtrls, GKBase, GKCommon;
+  Dialogs, GedCom551, StdCtrls, Buttons, ComCtrls, ExtCtrls, GKBase, GKCommon,
+  GKSheetList;
 
 type
   TfmAddressEdit = class(TForm)
@@ -36,7 +37,7 @@ type
     FMailsList: TSheetList;
     FWebsList: TSheetList;
 
-    procedure ListModify(Sender: TObject; Index: Integer; Action: TRecAction);
+    procedure ListModify(Sender: TObject; ItemData: TObject; Action: TRecAction);
     procedure SetAddress(const Value: TGEDCOMAddress);
     procedure UpdateLists();
   public
@@ -62,32 +63,35 @@ procedure TfmAddressEdit.FormCreate(Sender: TObject);
 begin
   FPhonesList := TSheetList.Create(SheetPhones);
   FPhonesList.OnModify := ListModify;
-  AddColumn(FPhonesList.List, Titles[atPhones], 350, False);
+  AddListColumn(FPhonesList.List, Titles[atPhones], 350, False);
 
   FMailsList := TSheetList.Create(SheetEmails);
   FMailsList.OnModify := ListModify;
-  AddColumn(FMailsList.List, Titles[atMails], 350, False);
+  AddListColumn(FMailsList.List, Titles[atMails], 350, False);
 
   FWebsList := TSheetList.Create(SheetWebPages);
   FWebsList.OnModify := ListModify;
-  AddColumn(FWebsList.List, Titles[atWebs], 350, False);
+  AddListColumn(FWebsList.List, Titles[atWebs], 350, False);
 end;
 
 procedure TfmAddressEdit.UpdateLists();
 var
   i: Integer;
 begin
+  // (+1) - hack, because 0 transforms to nil,
+  // and algorhitm of ListModify exits
+
   FPhonesList.List.Clear;
   for i := 0 to FAddress.PhoneNumbersCount - 1 do
-    FPhonesList.List.AddItem(FAddress.PhoneNumbers[i], TObject(i));
+    FPhonesList.List.AddItem(FAddress.PhoneNumbers[i], TObject(i+1));
 
   FMailsList.List.Clear;
   for i := 0 to FAddress.EmailAddressesCount - 1 do
-    FMailsList.List.AddItem(FAddress.EmailAddresses[i], TObject(i));
+    FMailsList.List.AddItem(FAddress.EmailAddresses[i], TObject(i+1));
 
   FWebsList.List.Clear;
   for i := 0 to FAddress.WebPagesCount - 1 do
-    FWebsList.List.AddItem(FAddress.WebPages[i], TObject(i));
+    FWebsList.List.AddItem(FAddress.WebPages[i], TObject(i+1));
 end;
 
 procedure TfmAddressEdit.SetAddress(const Value: TGEDCOMAddress);
@@ -121,10 +125,13 @@ begin
   end;
 end;
 
-procedure TfmAddressEdit.ListModify(Sender: TObject; Index: Integer; Action: TRecAction);
+procedure TfmAddressEdit.ListModify(Sender: TObject; ItemData: TObject; Action: TRecAction);
 var
   val: string;
+  Index: Integer;
 begin
+  Index := Integer(ItemData) - 1;
+
   if (Sender = FPhonesList) then begin
     case Action of
       raAdd: begin

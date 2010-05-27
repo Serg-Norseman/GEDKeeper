@@ -7,7 +7,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, Menus, ToolWin, ComCtrls, GedCom551, GKChartCore,
-  StdCtrls, GKBase
+  StdCtrls, GKBase, GKUIToolkit
   {$IFNDEF DELPHI_NET}, Jpeg{$ENDIF};
 
 type
@@ -25,6 +25,8 @@ type
     ToolButton4: TToolButton;
     tbPrev: TToolButton;
     tbNext: TToolButton;
+    ToolButton3: TToolButton;
+    TrackBar1: TTrackBar;
     procedure Image1MouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
@@ -43,6 +45,7 @@ type
     procedure tbGotoPersonClick(Sender: TObject);
     procedure tbPrevClick(Sender: TObject);
     procedure tbNextClick(Sender: TObject);
+    procedure TrackBar1Change(Sender: TObject);
   private
     FDown: Boolean;
     FX, FY: Integer;
@@ -55,9 +58,7 @@ type
     FFileName: string;
     FBase: TfmBase;
 
-    FNavBusy: Boolean;
-    FNavHistory: TList;
-    FNavPos: Integer;
+    FBackman: TBackManager;
 
     procedure SetTreeBounds(const Value: TRect);
     procedure NavRefresh();
@@ -88,26 +89,25 @@ begin
   end;
 
   try
-    try
-      NavAdd(FPerson);
+    NavAdd(FPerson);
 
-      FChart.Bitmap := Image1.Picture.Bitmap;
-      FChart.DepthLimit := FDepthLimit;
-      FChart.Options := fmGEDKeeper.Options.ChartOptions;
-      FChart.Tree := FTree;
-      FChart.GenChart(FPerson, FChartKind);
+    FChart.Bitmap := Image1.Picture.Bitmap;
+    FChart.DepthLimit := FDepthLimit;
+    FChart.Options := fmGEDKeeper.Options.ChartOptions;
+    FChart.Tree := FTree;
+    FChart.ShieldState := Base.ShieldState;
+    FChart.Scale := TrackBar1.Position * 10;
+    FChart.GenChart(FPerson, FChartKind);
 
-      case FChartKind of
-        ckAncestors: Caption := 'Древо предков';
-        ckDescendants: Caption := 'Древо потомков';
-      end;
-
-      Caption := Caption + ' "' + FFileName + '"';
-
-      TreeBounds := FChart.TreeBounds;
-      Show();
-    finally
+    case FChartKind of
+      ckAncestors: Caption := 'Древо предков';
+      ckDescendants: Caption := 'Древо потомков';
     end;
+
+    Caption := Caption + ' "' + FFileName + '"';
+
+    TreeBounds := FChart.TreeBounds;
+    Show();
   except
     on E: Exception do MessageDlg(E.Message, mtError, [mbOk], 0);
   end;
@@ -194,9 +194,7 @@ end;
 
 procedure TfmChart.FormCreate(Sender: TObject);
 begin
-  FNavHistory := TList.Create;
-  FNavPos := -1;
-  FNavBusy := False;
+  FBackman := TBackManager.Create;
 
   FDepthLimit := -1;
   FChart := TAncestryChart.Create;
@@ -207,7 +205,7 @@ end;
 procedure TfmChart.FormDestroy(Sender: TObject);
 begin
   FChart.Destroy;
-  FNavHistory.Free;
+  FBackman.Free;
 end;
 
 procedure TfmChart.ListDepthLimitChange(Sender: TObject);
@@ -259,44 +257,45 @@ end;
 
 procedure TfmChart.tbPrevClick(Sender: TObject);
 begin
-  FNavBusy := True;
+  FBackman.BeginNav();
   try
-    Dec(FNavPos);
-    FPerson := TGEDCOMIndividualRecord(FNavHistory[FNavPos]);
-
+    FPerson := TGEDCOMIndividualRecord(FBackman.Back());
     GenChart();
     NavRefresh();
   finally
-    FNavBusy := False;
+    FBackman.EndNav();
   end;
 end;
 
 procedure TfmChart.tbNextClick(Sender: TObject);
 begin
-  FNavBusy := True;
+  FBackman.BeginNav();
   try
-    Inc(FNavPos);
-    FPerson := TGEDCOMIndividualRecord(FNavHistory[FNavPos]);
-
+    FPerson := TGEDCOMIndividualRecord(FBackman.Next());
     GenChart();
     NavRefresh();
   finally
-    FNavBusy := False;
+    FBackman.EndNav();
   end;
 end;
 
 procedure TfmChart.NavAdd(aRec: TGEDCOMIndividualRecord);
 begin
-  if (aRec <> nil) and not(FNavBusy) then begin
-    FNavPos := FNavHistory.Add(aRec);
+  if (aRec <> nil) and not(FBackman.Busy) then begin
+    FBackman.Current := aRec;
     NavRefresh();
   end;
 end;
 
 procedure TfmChart.NavRefresh();
 begin
-  tbPrev.Enabled := (FNavPos > 0);
-  tbNext.Enabled := (FNavPos < FNavHistory.Count - 1);
+  tbPrev.Enabled := FBackman.CanBackward();
+  tbNext.Enabled := FBackman.CanForward();
+end;
+
+procedure TfmChart.TrackBar1Change(Sender: TObject);
+begin
+  GenChart();
 end;
 
 end.

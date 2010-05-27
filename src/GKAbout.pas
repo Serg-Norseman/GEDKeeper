@@ -26,7 +26,7 @@ procedure AboutDialog(ProductName, Copyright, eMail: string);
 implementation
 
 uses
-  Windows, GKCommon, bsWinUtils;
+  Windows, GKCommon, bsWinUtils, GKMain;
 
 {$R *.DFM}
 
@@ -34,13 +34,13 @@ procedure AboutDialog(ProductName, Copyright, eMail: string);
 var
   fmAbout: TfmAbout;
 begin
-  fmAbout := TfmAbout.Create(Application);
+  fmAbout := TfmAbout.Create(fmGEDKeeper);
   try
     fmAbout.LabelProduct.Caption := ProductName;
     fmAbout.LabelCopyright.Caption := 'Copyright © ' + Copyright;
 
     if (eMail = '')
-    then fmAbout.Label_eMail.Caption := 'mailto:serg.alchemist@gmail.com'
+    then fmAbout.Label_eMail.Caption := 'http://gedkeeper.ucoz.ru/'
     else fmAbout.Label_eMail.Caption := eMail;
 
     fmAbout.LabelCite.Caption :=
@@ -48,6 +48,11 @@ begin
       '«Неуважение к предкам - есть первый признак дикости и безнравственности»'+#13#10+
       '(Александр Сергеевич Пушкин)';
 
+    {$IFDEF VISTA_COMP}
+    {$IFDEF DELPHI8UP}
+    fmAbout.PopupParent := fmGEDKeeper;
+    {$ENDIF}
+    {$ENDIF}
     fmAbout.ShowModal;
   finally
     fmAbout.Destroy;

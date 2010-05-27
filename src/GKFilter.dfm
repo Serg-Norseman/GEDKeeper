@@ -6,6 +6,7 @@ object fmFilter: TfmFilter
   ClientHeight = 393
   ClientWidth = 297
   Color = clBtnFace
+  DefaultMonitor = dmMainForm
   Font.Charset = RUSSIAN_CHARSET
   Font.Color = clWindowText
   Font.Height = -11

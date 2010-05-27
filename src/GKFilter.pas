@@ -36,7 +36,7 @@ type
 
 implementation
 
-uses GKMain, GKCommon, GedCom551;
+uses GKMain, GKCommon, GedCom551, GKLists;
 
 {$R *.dfm}
 

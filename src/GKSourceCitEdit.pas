@@ -17,8 +17,11 @@ type
     Label2: TLabel;
     EditSource: TEdit;
     btnSourceAdd: TSpeedButton;
+    Label3: TLabel;
+    EditCertainty: TComboBox;
     procedure btnSourceAddClick(Sender: TObject);
     procedure btnAcceptClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     FSourceCitation: TGEDCOMSourceCitation;
     FTempSrc: TGEDCOMSourceRecord;
@@ -46,6 +49,7 @@ begin
   then EditSource.Text := FTempSrc.FiledByEntry;
 
   EditPage.Text := FSourceCitation.Page;
+  EditCertainty.ItemIndex := FSourceCitation.CertaintyAssessment;
 end;
 
 procedure TfmSourceCitEdit.btnSourceAddClick(Sender: TObject);
@@ -60,11 +64,19 @@ procedure TfmSourceCitEdit.btnAcceptClick(Sender: TObject);
 begin
   FSourceCitation.Value := FTempSrc;
   FSourceCitation.Page := EditPage.Text;
+  FSourceCitation.CertaintyAssessment := EditCertainty.ItemIndex;
 end;
 
 function TfmSourceCitEdit.GetBase: TfmBase;
 begin
   Result := TfmBase(Owner);
+end;
+
+procedure TfmSourceCitEdit.FormCreate(Sender: TObject);
+var
+  i: Integer;
+begin
+  for i := 0 to 3 do EditCertainty.AddItem(CertaintyAssessments[i], nil);
 end;
 
 end.

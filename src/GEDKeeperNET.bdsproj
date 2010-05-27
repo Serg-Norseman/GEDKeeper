@@ -189,7 +189,6 @@
       <File FileName="GKFileProperties.pas" ContainerId="" ModuleName="GKFileProperties"/>
       <File FileName="GKTreeTools.pas" ContainerId="" ModuleName="GKTreeTools"/>
       <File FileName="GKStats.pas" ContainerId="" ModuleName="GKStats"/>
-      <File FileName="GKNameEdit.pas" ContainerId="" ModuleName="GKNameEdit"/>
       <File FileName="GKPersonEdit.pas" ContainerId="" ModuleName="GKPersonEdit"/>
       <File FileName="GKExport.pas" ContainerId="" ModuleName="GKExport"/>
       <File FileName="GKOptions.pas" ContainerId="" ModuleName="GKOptions"/>

@@ -13,10 +13,11 @@ type
     btnAccept: TBitBtn;
     btnCancel: TBitBtn;
     Label1: TLabel;
-    EditRelation: TEdit;
+    EditRelation: TComboBox;
     Label2: TLabel;
     EditPerson: TEdit;
     btnPersonAdd: TSpeedButton;
+    procedure FormCreate(Sender: TObject);
     procedure btnPersonAddClick(Sender: TObject);
     procedure btnAcceptClick(Sender: TObject);
   private
@@ -31,11 +32,16 @@ type
 
 implementation
 
-uses GKCommon, GKRecordSelect;
+uses GKCommon, GKRecordSelect, GKMain;
 
 {$R *.dfm}
 
 { TfmAssociation }
+
+procedure TfmAssociationEdit.FormCreate(Sender: TObject);
+begin
+  EditRelation.Items.Assign(fmGEDKeeper.Options.Relations);
+end;
 
 procedure TfmAssociationEdit.SetAssociation(const Value: TGEDCOMAssociation);
 begin
@@ -52,7 +58,15 @@ begin
 end;
 
 procedure TfmAssociationEdit.btnAcceptClick(Sender: TObject);
+var
+  rel: string;
 begin
+  rel := Trim(EditRelation.Text);
+  if (rel <> '') then begin
+    if (fmGEDKeeper.Options.Relations.IndexOf(rel) < 0)
+    then fmGEDKeeper.Options.Relations.Add(rel);
+  end;
+
   FAssociation.Relation := EditRelation.Text;
   FAssociation.Individual := FTempInd;
 end;

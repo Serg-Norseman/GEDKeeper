@@ -2,8 +2,6 @@ program GEDKeeper;
 
 {$I GEDKeeper.inc}
 
-{%ToDo 'GEDKeeper.todo'}
-
 uses
   Windows,
   Messages,
@@ -23,7 +21,6 @@ uses
   GKChart in 'GKChart.pas' {fmChart},
   GKAbout in 'GKAbout.pas' {fmAbout},
   GKFileProperties in 'GKFileProperties.pas' {fmFileProperties},
-  GKTreeTools in 'GKTreeTools.pas' {fmTreeTools},
   GKStats in 'GKStats.pas' {fmStats},
   GKPersonEdit in 'GKPersonEdit.pas' {fmPersonEdit},
   GKOptions in 'GKOptions.pas' {fmOptions},
@@ -38,28 +35,41 @@ uses
   GKRepositoryEdit in 'GKRepositoryEdit.pas' {fmRepositoryEdit},
   GKMediaEdit in 'GKMediaEdit.pas' {fmMediaEdit},
   GKMediaView in 'GKMediaView.pas' {fmMediaView},
-  GKMaps in 'GKMaps.pas' {fmMaps};
+  GKMaps in 'GKMaps.pas' {fmMaps},
+  StorageCrypt in 'StorageCrypt.pas',
+  GKResearchEdit in 'GKResearchEdit.pas' {fmResearchEdit},
+  GKTaskEdit in 'GKTaskEdit.pas' {fmTaskEdit},
+  GKCommunicationEdit in 'GKCommunicationEdit.pas' {fmCommunicationEdit},
+  GKLocationEdit in 'GKLocationEdit.pas' {fmLocationEdit},
+  GKSheetList in 'GKSheetList.pas',
+  GKLangs in 'GKLangs.pas',
+  GKUIToolkit in 'GKUIToolkit.pas',
+  GKCommands in 'GKCommands.pas',
+  GKLists in 'GKLists.pas',
+  GKTreeTools in 'GKTreeTools.pas' {fmTreeTools},
+  GKTipsDlg in 'GKTipsDlg.pas' {fmTipsDialog},
+  GKUserRefEdit in 'GKUserRefEdit.pas' {fmUserRefEdit},
+  GKExpCalc in 'GKExpCalc.pas' {fmCalcWidget};
 
 {$R *.res}
 
 procedure RunInstance();
 var
-  i: integer;
+  i, WParam, LParam: Integer;
   hMainForm: hwnd;
   copyDataStruct: TCopyDataStruct;
   ParamString: string;
-  WParam, LParam: integer;
 begin
   // ищем главное окно приложения, вместо Caption - nil,
   // поскольку к заголовку главного окна может добавиться заголовок MDIChild
   // (нужно позаботиться об уникальности имени класса главной формы)
 
-  hMainForm := FindWindow('TfmGEDKeeper', nil);
+  hMainForm := {0;//}FindWindow('TfmGEDKeeper', nil);
   if (hMainForm = 0) then begin
     Application.Initialize;
     Application.Title := 'GEDKeeper';
     Application.CreateForm(TfmGEDKeeper, fmGEDKeeper);
-  for i := 1 to ParamCount do fmGEDKeeper.CreateBase(ParamStr(i));
+    for i := 1 to ParamCount do fmGEDKeeper.CreateBase(ParamStr(i));
     Application.Run;
   end else begin
     ParamString := '';
@@ -68,14 +78,12 @@ begin
       ParamString := ParamString + ParamStr(i) + #13;
     end;
     // создаем запись типа TCopyDataStruct
-
     CopyDataStruct.lpData := PChar(ParamString);
     CopyDataStruct.cbData := Length(ParamString);
     CopyDataStruct.dwData := 0;
     WParam := Application.Handle;
     LParam := Integer(@CopyDataStruct);
     // отсылаем сообщение WM_COPYDATA главному окну открытого приложения
-
     SendMessage(hMainForm, WM_CopyData, WParam, LParam);
     Application.Terminate;
   end;

@@ -6,6 +6,7 @@ object fmFileProperties: TfmFileProperties
   ClientHeight = 329
   ClientWidth = 449
   Color = clBtnFace
+  DefaultMonitor = dmMainForm
   Font.Charset = RUSSIAN_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -39,7 +40,7 @@ object fmFileProperties: TfmFileProperties
     Top = 8
     Width = 433
     Height = 273
-    ActivePage = SheetAdvanced
+    ActivePage = SheetAuthor
     TabOrder = 2
     object SheetAuthor: TTabSheet
       Caption = #1040#1074#1090#1086#1088
@@ -84,33 +85,6 @@ object fmFileProperties: TfmFileProperties
         Width = 353
         Height = 113
         TabOrder = 2
-      end
-    end
-    object SheetDiagnostics: TTabSheet
-      Caption = #1044#1080#1072#1075#1085#1086#1089#1090#1080#1082#1072
-      ImageIndex = 1
-      object ListDiags: TBSListView
-        Left = 0
-        Top = 0
-        Width = 425
-        Height = 245
-        Align = alClient
-        Columns = <
-          item
-            Caption = #1047#1072#1087#1080#1089#1100
-            Width = 75
-          end
-          item
-            Caption = #1044#1080#1072#1075#1085#1086#1089#1090#1080#1082#1072
-            Width = 320
-          end>
-        ReadOnly = True
-        RowSelect = True
-        SortType = stText
-        TabOrder = 0
-        ViewStyle = vsReport
-        SortColumn = 0
-        SortDirection = sdAscending
       end
     end
     object SheetAdvanced: TTabSheet

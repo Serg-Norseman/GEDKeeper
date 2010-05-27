@@ -40,6 +40,8 @@ type
   private
     FSurnamesCount: Integer;
 
+    procedure GenTree(aStream: TFileStream; iRec: TGEDCOMIndividualRecord);
+    procedure PrepareLists();
     procedure WritePersons();
     procedure WriteTimeLineIndex(aStream: TFileStream; evName, tlFileName: string);
     procedure WriteNameIndex(aStream: TFileStream);
@@ -47,7 +49,6 @@ type
     procedure WriteSurnamesIndex(aStream: TFileStream; aSym: Char;
       aNames: TStringList);
     procedure WriteIndexFile(aFileName: string; aIndex: TStringList);
-    procedure GenTree(aStream: TFileStream; iRec: TGEDCOMIndividualRecord);
   public
     procedure Generate(); override;
   end;
@@ -57,8 +58,11 @@ type
 type
   TExcelExporter = class(TExporter)
   private
+    FSelectedRecords: TList;
   public
     procedure Generate(); override;
+
+    property SelectedRecords: TList read FSelectedRecords write FSelectedRecords;
   end;
 
 {==============================================================================}
@@ -79,24 +83,28 @@ type
 
   TPedigree = class
   private
-    FPersonList: TObjectList;
-    FSourceList: TStringList;
+    FKind: TPedigreeKind;
     FOptions: TPedigreeOptions;
+    FPersonList: TObjectList;
+    FShieldState: TShieldState;
+    FSourceList: TStringList;
 
     function FindPerson(iRec: TGEDCOMIndividualRecord): TPersonObj;
     procedure WritePerson(aStream: TFileStream; aTree: TGEDCOMTree;
       aPerson: TPersonObj);
   public
     procedure Generate(aDir: string; aTree: TGEDCOMTree;
-      iRec: TGEDCOMIndividualRecord; aKind: TPedigreeKind);
+      iRec: TGEDCOMIndividualRecord);
 
+    property Kind: TPedigreeKind read FKind write FKind;
     property Options: TPedigreeOptions read FOptions write FOptions;
+    property ShieldState: TShieldState read FShieldState write FShieldState;
   end;
 
 implementation
 
 uses
-  Windows, ShellAPI, XLSFile, Dialogs, bsComUtils, GKProgress;
+  Windows, ShellAPI, XLSFile, Dialogs, bsComUtils, GKProgress, Math;
 
 procedure WriteStr(aStream: TFileStream; aStr: string);
 begin
@@ -128,6 +136,9 @@ begin
   inherited Create;
   FTree := aTree;
   FPath := aPath;
+
+  if not(DirectoryExists(FPath))
+  then CreateDir(FPath);
 end;
 
 destructor TExporter.Destroy;
@@ -136,6 +147,8 @@ begin
 end;
 
 {==============================================================================}
+
+{ TWebExporter }
 
 procedure TWebExporter.WriteIndexFile(aFileName: string; aIndex: TStringList);
 var
@@ -418,6 +431,7 @@ end;
 procedure TWebExporter.WriteTimeLineIndex(aStream: TFileStream; evName, tlFileName: string);
 var
   i, year, k: Integer;
+  m, d: Word;
   rec: TGEDCOMRecord;
   ind: TGEDCOMIndividualRecord;
   ev: TGEDCOMIndividualEvent;
@@ -437,7 +451,7 @@ begin
         if (ev = nil)
         then year := -1
         else begin
-          year := TGEDCOMDate(ev.Detail.Date.Value).Year;
+          GetIndependentDate(ev.Detail.Date.Value, year, m, d);
           if (year = 0) then year := -1;
         end;
 
@@ -492,46 +506,88 @@ type
   public
     Name: string;
     Kind: TCellKind;
+
+    ColIndex: Integer;
+    Row: TObjectList;
+    
+    Rec: TGEDCOMIndividualRecord;
   end;
 
 procedure TWebExporter.GenTree(aStream: TFileStream; iRec: TGEDCOMIndividualRecord);
 var
   table_rows: TObjectList;
 
-  procedure AddCell(aRow: TObjectList; iRec: TGEDCOMIndividualRecord; aKind: TCellKind);
-  var
-    cell: TTreeCell;
+  function AddCell(aRow: TObjectList; iRec: TGEDCOMIndividualRecord; aKind: TCellKind): TTreeCell;
   begin
-    cell := TTreeCell.Create;
-    aRow.Add(cell);
+    Result := TTreeCell.Create;
+    Result.ColIndex := aRow.Add(Result);
+    Result.Kind := aKind;
+    Result.Rec := iRec;
+    Result.Row := aRow;
 
     if (iRec <> nil)
-    then cell.Name := GetNameStr(iRec);
-
-    cell.Kind := aKind;
+    then Result.Name := GetNameStr(iRec);
   end;
 
-  procedure Step(row_index, col_index: Integer; prev, cur: TGEDCOMIndividualRecord);
+  function AddRow(aRowIndex: Integer; aSpaces: Integer = 0): TObjectList;
+  begin
+    Result := TObjectList.Create;
+    table_rows.Insert(aRowIndex, Result);
+  end;
+
+  procedure WideTable(cols: Integer);
+  var
+    i: Integer;
+    row: TObjectList;
+  begin
+    for i := 0 to table_rows.Count - 1 do begin
+      row := TObjectList(table_rows[i]);
+      while (row.Count < cols) do
+        AddCell(row, nil, ckSpace);
+    end;
+  end;
+
+  procedure DrawLine(cell_ancestor, cell_descendant: TTreeCell);
+  var
+    x, y, r1, r2: Integer;
+    row: TObjectList;
+  begin
+    r1 := table_rows.IndexOf(cell_descendant.Row);
+    r2 := table_rows.IndexOf(cell_ancestor.Row);
+
+    if (r1 > r2) then begin
+      y := r2;
+      r2 := r1;
+      r1 := y;
+    end;
+
+    x := (cell_descendant.ColIndex - 1);
+
+    for y := r1 to r2 do begin
+      row := TObjectList(table_rows[y]);
+      TTreeCell(row[x]).Kind := ckLine;
+    end;
+  end;
+
+  procedure Step(row_index, col_index: Integer; prev: TTreeCell; cur: TGEDCOMIndividualRecord);
   var
     row: TObjectList;
     i: Integer;
     family: TGEDCOMFamilyRecord;
     iFather, iMother: TGEDCOMIndividualRecord;
+    cur_cell: TTreeCell;
   begin
+    if (cur = nil) then Exit;
+
     if (row_index < 0) then row_index := 0;
     if (row_index > table_rows.Count) then row_index := table_rows.Count;
 
-    row := TObjectList.Create;
-    table_rows.Insert(row_index, row);
+    row := AddRow(row_index);
 
-    for i := 0 to col_index - 1 do begin
-      AddCell(row, nil, ckSpace);
-      if (i < col_index - 1) then AddCell(row, nil, ckSpace);
-    end;
+    for i := 0 to (col_index - 1) * 2 do AddCell(row, nil, ckSpace);
     if (prev <> nil) then AddCell(row, nil, ckLine);
-    AddCell(row, cur, ckPerson);
 
-    if (cur = nil) then Exit;
+    cur_cell := AddCell(row, cur, ckPerson);
 
     if (cur.ChildToFamilyLinksCount > 0) then begin
       family := cur.ChildToFamilyLinks[0].Family;
@@ -540,14 +596,22 @@ var
 
       if (iFather <> nil) or (iMother <> nil) then begin
         AddCell(row, nil, ckLine);
+        AddCell(row, nil, ckSpace);
 
         row_index := table_rows.IndexOf(row);
-        Step(row_index - 1, col_index + 1, cur, iFather);
+        if (iFather <> nil) then AddRow(row_index, col_index + 1);
+        Step(row_index, col_index + 1, cur_cell, iFather);
 
         row_index := table_rows.IndexOf(row);
-        Step(row_index + 1, col_index + 1, cur, iMother);
+        if (iMother <> nil) then AddRow(row_index + 1, col_index + 1);
+        Step(row_index + 2, col_index + 1, cur_cell, iMother);
       end;
     end;
+
+    WideTable(cur_cell.ColIndex + 1);
+    
+    if (prev <> nil)
+    then DrawLine(prev, cur_cell);
   end;
 
 var
@@ -570,16 +634,15 @@ begin
         for c := 0 to row.Count - 1 do begin
           cell := TTreeCell(row[c]);
 
-          if (cell.Kind = ckSpace) then begin
-            nm := '.';//'&nbsp;';
-            st := '';
-          end else begin
-            if (cell.Kind = ckLine)
-            then nm := '+'
-            else
-              if (cell.Name = '')
-              then nm := '&nbsp;'
-              else nm := cell.Name;
+          nm := '&nbsp;';
+          st := '';
+
+          if (cell.Kind <> ckSpace) then begin
+            if (cell.Kind = ckPerson)
+            then begin
+              if (cell.Name <> '')
+              then nm := '<a href="#' + cell.Rec.XRef + '">' + cell.Name + '</a>';
+            end;
 
             st := ' bgcolor="silver"';
           end;
@@ -634,6 +697,11 @@ begin
     WriteFooter(fs_persons);
     fs_persons.Destroy;
   end;
+end;
+
+procedure TWebExporter.PrepareLists();
+begin
+
 end;
 
 procedure TWebExporter.Generate();
@@ -720,6 +788,10 @@ begin
       if (rec is TGEDCOMIndividualRecord) then begin
         ind := rec as TGEDCOMIndividualRecord;
 
+        if (FSelectedRecords <> nil) then begin
+          if (FSelectedRecords.IndexOf(rec) < 0) then Continue;
+        end;
+
         GetNameParts(ind, fam, nam, pat);
 
         Inc(row);
@@ -751,6 +823,8 @@ begin
 end;
 
 {==============================================================================}
+
+{ TPedigree }
 
 type
   TEventObj = class
@@ -835,8 +909,8 @@ var
 
         WriteStr(aStream, '<li>' + dt + ': ' + st + '.');
 
-        if (event.Detail.Place <> '')
-        then WriteStr(aStream, ' Место: ' + event.Detail.Place + '</li>');
+        if (event.Detail.Place.StringValue <> '')
+        then WriteStr(aStream, ' Место: ' + event.Detail.Place.StringValue + '</li>');
       end else begin
         if (event = nil)
         then dt := '?'
@@ -853,6 +927,26 @@ var
     end;
   end;
 
+  function GetIdStr(): string;
+  var
+    family: TGEDCOMFamilyRecord;
+    idx: Integer;
+    sp_str: string;
+  begin
+    Result := idAnchor(aPerson.Id);
+
+    if (FKind = pk_Konovalov) and (aPerson.Parent <> nil) then begin
+      family := aPerson.iRec.ChildToFamilyLinks[0].Family;
+
+      sp_str := '';
+      idx := aPerson.Parent.iRec.IndexOfSpouse(family);
+      if (aPerson.Parent.iRec.SpouseToFamilyLinksCount > 1)
+      then sp_str := '/' + IntToStr(idx + 1);
+
+      Result := Result + sp_str;
+    end;
+  end;
+
 var
   i, k: Integer;
   event: TGEDCOMIndividualEvent;
@@ -865,16 +959,30 @@ var
 begin
   WriteStr(aStream, '<li>');
 
-  WriteStr(aStream, '<b>' + idAnchor(aPerson.Id) + '. ' + GetNameStr(aPerson.iRec) + '</b>' + GetLifeStr(aPerson.iRec));
+  WriteStr(aStream, '<b>' + GetIdStr() + '. ' + GetNameStr(aPerson.iRec) + '</b>' + GetLifeStr(aPerson.iRec));
 
   if (FOptions.IncludeSources)
   then WriteStr(aStream, '&nbsp;<sup>' + aPerson.Sources + '</sup>');
 
-  WriteStr(aStream, '<br>Пол: ' + Sex[aPerson.iRec.Sex]);
+  if (FOptions.Format = pfExcess) then begin
+    WriteStr(aStream, '<br>Пол: ' + Sex[aPerson.iRec.Sex]);
 
-  st := GetLifeExpectancy(aPerson.iRec);
-  if (st <> '?') and (st <> '')
-  then WriteStr(aStream, '<br>Продолжительность жизни: ' + st);
+    st := GetLifeExpectancy(aPerson.iRec);
+    if (st <> '?') and (st <> '')
+    then WriteStr(aStream, '<br>Продолжительность жизни: ' + st);
+
+    if (aPerson.iRec.ChildToFamilyLinksCount <> 0) then begin
+      family := aPerson.iRec.ChildToFamilyLinks[0].Family;
+
+      irec := TGEDCOMIndividualRecord(family.Husband.Value);
+      if (irec <> nil)
+      then WriteStr(aStream, '<br>Отец: ' + GetNameStr(irec) + idLink(FindPerson(irec)));
+
+      irec := TGEDCOMIndividualRecord(family.Wife.Value);
+      if (irec <> nil)
+      then WriteStr(aStream, '<br>Мать: ' + GetNameStr(irec) + idLink(FindPerson(irec)));
+    end;
+  end;
 
   if (FOptions.IncludeAttributes) then begin
     for i := 0 to aPerson.iRec.IndividualAttributesCount - 1 do begin
@@ -882,19 +990,6 @@ begin
       WriteStr(aStream, '<br>' + GetAttributeStr(attr));
     end;
   end;
-
-  if (aPerson.iRec.ChildToFamilyLinksCount <> 0) then begin
-    family := aPerson.iRec.ChildToFamilyLinks[0].Family;
-
-    irec := TGEDCOMIndividualRecord(family.Husband.Value);
-    if (irec <> nil)
-    then WriteStr(aStream, '<br>Отец: ' + GetNameStr(irec) + idLink(FindPerson(irec)));
-
-    irec := TGEDCOMIndividualRecord(family.Wife.Value);
-    if (irec <> nil)
-    then WriteStr(aStream, '<br>Мать: ' + GetNameStr(irec) + idLink(FindPerson(irec)));
-  end;
-
 
   ev_list := TObjectList.Create(True);
   try
@@ -911,6 +1006,7 @@ begin
 
     for i := 0 to aPerson.iRec.SpouseToFamilyLinksCount - 1 do begin
       family := aPerson.iRec.SpouseToFamilyLinks[i].Family;
+      if not(IsRecordAccess(family.Restriction, FShieldState)) then Continue;
 
       if (aPerson.iRec.Sex = svMale) then begin
         sp := family.Wife;
@@ -955,7 +1051,7 @@ begin
 end;
 
 procedure TPedigree.Generate(aDir: string; aTree: TGEDCOMTree;
-  iRec: TGEDCOMIndividualRecord; aKind: TPedigreeKind);
+  iRec: TGEDCOMIndividualRecord);
 var
   levCount: Integer;
   fs_index: TFileStream;
@@ -1006,6 +1102,7 @@ var
 
     for k := 0 to iRec.SpouseToFamilyLinksCount - 1 do begin
       family := iRec.SpouseToFamilyLinks[k].Family;
+      if not(IsRecordAccess(family.Restriction, FShieldState)) then Continue;
 
       for i := 0 to family.ChildrenCount - 1 do begin
         child := TGEDCOMIndividualRecord(family.Children[i].Value);
@@ -1043,7 +1140,7 @@ var
     for i := 0 to FPersonList.Count - 1 do begin
       obj := TPersonObj(FPersonList[i]);
 
-      case aKind of
+      case FKind of
         pk_dAboville: begin
           if (obj.Parent = nil)
           then obj.Id := '1'

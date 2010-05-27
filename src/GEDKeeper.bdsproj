@@ -2,15 +2,15 @@
 <BorlandProject>
 	<PersonalityInfo>
 		<Option>
-			<Option Name="Personality">DelphiDotNet.Personality</Option>
-			<Option Name="ProjectType">Package</Option>
-			<Option Name="Version">2.0</Option>
-			<Option Name="GUID">{1164F64F-FDA8-43AD-B9C5-0FAFB7B2C3BA}</Option>
+			<Option Name="Personality">Delphi.Personality</Option>
+			<Option Name="ProjectType">VCLApplication</Option>
+			<Option Name="Version">1.0</Option>
+			<Option Name="GUID">{A335BC5F-FEC6-4C5F-AF62-5453CF26E438}</Option>
 		</Option>
 	</PersonalityInfo>
-	<DelphiDotNet.Personality>
+	<Delphi.Personality>
 		<Source>
-			<Source Name="MainSource">GKPackNET.dpk</Source>
+			<Source Name="MainSource">GEDKeeper.dpr</Source>
 		</Source>
 		<FileVersion>
 			<FileVersion Name="Version">7.0</FileVersion>
@@ -30,7 +30,7 @@
 			<Compiler Name="L">1</Compiler>
 			<Compiler Name="M">0</Compiler>
 			<Compiler Name="N">1</Compiler>
-			<Compiler Name="O">1</Compiler>
+			<Compiler Name="O">0</Compiler>
 			<Compiler Name="P">1</Compiler>
 			<Compiler Name="Q">0</Compiler>
 			<Compiler Name="R">0</Compiler>
@@ -44,8 +44,8 @@
 			<Compiler Name="Z">1</Compiler>
 			<Compiler Name="ShowHints">True</Compiler>
 			<Compiler Name="ShowWarnings">True</Compiler>
-			<Compiler Name="UnitAliases">WinTypes=Borland.Vcl.Windows;WinProcs=Borland.Vcl.Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;</Compiler>
-			<Compiler Name="NamespacePrefix">Borland.Vcl</Compiler>
+			<Compiler Name="UnitAliases">WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;</Compiler>
+			<Compiler Name="NamespacePrefix"></Compiler>
 			<Compiler Name="GenerateDocumentation">False</Compiler>
 			<Compiler Name="DefaultNamespace"></Compiler>
 			<Compiler Name="SymbolDeprecated">True</Compiler>
@@ -94,9 +94,9 @@
 			<Compiler Name="ImagebaseMultiple">True</Compiler>
 			<Compiler Name="SuspiciousTypecast">True</Compiler>
 			<Compiler Name="PrivatePropAccessor">True</Compiler>
-			<Compiler Name="UnsafeType">True</Compiler>
-			<Compiler Name="UnsafeCode">True</Compiler>
-			<Compiler Name="UnsafeCast">True</Compiler>
+			<Compiler Name="UnsafeType">False</Compiler>
+			<Compiler Name="UnsafeCode">False</Compiler>
+			<Compiler Name="UnsafeCast">False</Compiler>
 			<Compiler Name="OptionTruncated">True</Compiler>
 			<Compiler Name="WideCharReduced">True</Compiler>
 			<Compiler Name="DuplicatesIgnored">True</Compiler>
@@ -110,21 +110,21 @@
 			<Linker Name="OutputObjs">0</Linker>
 			<Linker Name="GenerateHpps">False</Linker>
 			<Linker Name="ConsoleApp">1</Linker>
-			<Linker Name="DebugInfo">True</Linker>
+			<Linker Name="DebugInfo">False</Linker>
 			<Linker Name="RemoteSymbols">False</Linker>
 			<Linker Name="GenerateDRC">False</Linker>
-			<Linker Name="MinStackSize">4096</Linker>
+			<Linker Name="MinStackSize">16384</Linker>
 			<Linker Name="MaxStackSize">1048576</Linker>
 			<Linker Name="ImageBase">4194304</Linker>
 			<Linker Name="ExeDescription"></Linker>
 		</Linker>
 		<Directories>
-			<Directories Name="OutputDir"></Directories>
+			<Directories Name="OutputDir">..\</Directories>
 			<Directories Name="UnitOutputDir"></Directories>
 			<Directories Name="PackageDLLOutputDir"></Directories>
 			<Directories Name="PackageDCPOutputDir"></Directories>
-			<Directories Name="SearchPath">E:\WORKS\GEDKeeper\src;c:\windows\microsoft.net\framework\v1.1.4322;c:\program files\borland\bds\shared\bds\shared assemblies\4.0</Directories>
-			<Directories Name="Packages">c:\windows\microsoft.net\framework\v1.1.4322\System.Drawing.dll;Borland.Vcl</Directories>
+			<Directories Name="SearchPath">$(DELPHI)\Lib\Debug;.\GraphicEx;.\Abbrevia\source;D:\WORKS\Brainstorm;D:\WORKS\Brainstorm\ext;D:\WORKS\Brainstorm\synapse\source\lib</Directories>
+			<Directories Name="Packages">vcl;rtl;indy;inet;xmlrtl;vclie;inetdbbde;inetdbxpress;vclx;dbrtl;dsnap;dsnapcon;vcldb;soaprtl;dbexpress;dbxcds;inetdb;bdertl;vcldbx;webdsnap;websnap;adortl;ibxpress;teeui;teedb;tee;dss;visualclx;visualdbclx;vclactnband</Directories>
 			<Directories Name="Conditionals"></Directories>
 			<Directories Name="DebugSourceDirs"></Directories>
 			<Directories Name="UsePackages">False</Directories>
@@ -141,11 +141,11 @@
 		</Parameters>
 		<VersionInfo>
 			<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
-			<VersionInfo Name="AutoIncBuild">False</VersionInfo>
+			<VersionInfo Name="AutoIncBuild">True</VersionInfo>
 			<VersionInfo Name="MajorVer">1</VersionInfo>
 			<VersionInfo Name="MinorVer">0</VersionInfo>
 			<VersionInfo Name="Release">0</VersionInfo>
-			<VersionInfo Name="Build">0</VersionInfo>
+			<VersionInfo Name="Build">227</VersionInfo>
 			<VersionInfo Name="Debug">False</VersionInfo>
 			<VersionInfo Name="PreRelease">False</VersionInfo>
 			<VersionInfo Name="Special">False</VersionInfo>
@@ -157,22 +157,14 @@
 		<VersionInfoKeys>
 			<VersionInfoKeys Name="CompanyName"></VersionInfoKeys>
 			<VersionInfoKeys Name="FileDescription"></VersionInfoKeys>
-			<VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
-			<VersionInfoKeys Name="InternalName"></VersionInfoKeys>
-			<VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
+			<VersionInfoKeys Name="FileVersion">1.0.0.227</VersionInfoKeys>
+			<VersionInfoKeys Name="InternalName">GEDKeeper</VersionInfoKeys>
+			<VersionInfoKeys Name="LegalCopyright">Copyright © Serg V. Zhdanovskih</VersionInfoKeys>
 			<VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>
-			<VersionInfoKeys Name="OriginalFilename"></VersionInfoKeys>
-			<VersionInfoKeys Name="ProductName"></VersionInfoKeys>
+			<VersionInfoKeys Name="OriginalFilename">GEDKeeper.exe</VersionInfoKeys>
+			<VersionInfoKeys Name="ProductName">GEDKeeper</VersionInfoKeys>
 			<VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
 			<VersionInfoKeys Name="Comments"></VersionInfoKeys>
-		</VersionInfoKeys>  
-    
-    
-    <FileList>
-      <File FileName="c:\program files\borland\bds\shared\bds\shared assemblies\4.0\Borland.Vcl.dll" ContainerId="DelphiDotNetAssemblyCompiler" ModuleName="Borland.Vcl" AssemblyName="Borland.VCL" Version="10.0.4143.0" LinkUnits="False"/>
-      <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.Drawing.dll" ContainerId="DelphiDotNetAssemblyCompiler" ModuleName="System.Drawing" AssemblyName="System.Drawing" Version="1.0.5000.0" LinkUnits="False"/>
-      <File FileName="ext\HTMemo.pas" ContainerId="" ModuleName="HTMemo"/>
-      <File FileName="..\..\Brainstorm\bsCtrls.pas" ContainerId="" ModuleName="bsCtrls"/>
-    </FileList>
-  </DelphiDotNet.Personality>
+		</VersionInfoKeys>
+	</Delphi.Personality>
 </BorlandProject>

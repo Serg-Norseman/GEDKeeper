@@ -6,6 +6,7 @@ object fmPersonScan: TfmPersonScan
   ClientHeight = 417
   ClientWidth = 425
   Color = clBtnFace
+  DefaultMonitor = dmMainForm
   Font.Charset = RUSSIAN_CHARSET
   Font.Color = clWindowText
   Font.Height = -11

@@ -7,10 +7,10 @@ interface
 uses
   Windows, SysUtils, Variants, Classes, Graphics, Forms, Controls, Menus,
   StdCtrls, Dialogs, Buttons, Messages, ExtCtrls, ComCtrls, StdActns, ActnList,
-  ToolWin, ImgList, GKCommon, GKBase;
+  ToolWin, ImgList, GKCommon, GKBase, GKLangs;
 
 type
-  TfmGEDKeeper = class(TForm)
+  TfmGEDKeeper = class(TForm, ILocalization)
     StatusBar: TStatusBar;
     actWinCascade: TWindowCascade;
     actWinHTile: TWindowTileHorizontal;
@@ -122,6 +122,16 @@ type
     OpenDialog1: TOpenDialog;
     SaveDialog1: TSaveDialog;
     actPersonScan: TAction;
+    ToolButton7: TToolButton;
+    tbUndo: TToolButton;
+    tbRedo: TToolButton;
+    actUndo: TAction;
+    actRedo: TAction;
+    miFAQ: TMenuItem;
+    actFAQ: TAction;
+    ImageList2: TImageList;
+    N12: TMenuItem;
+    miCalc: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure actFileNewExecute(Sender: TObject);
@@ -152,6 +162,14 @@ type
     procedure actNextExecute(Sender: TObject);
     procedure actPersonScanExecute(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure actUndoExecute(Sender: TObject);
+    procedure actRedoExecute(Sender: TObject);
+    procedure actFAQExecute(Sender: TObject);
+    procedure FormResize(Sender: TObject);
+    procedure StatusBarDrawPanel(StatusBar: TStatusBar;
+      Panel: TStatusPanel; const Rect: TRect);
+    procedure StatusBarDblClick(Sender: TObject);
+    procedure miCalcClick(Sender: TObject);
   private
     FNamesTable: TNamesTable;
     FOptions: TGlobalOptions;
@@ -161,6 +179,11 @@ type
 
     procedure FileDrop(var Msg: TWMDROPFILES); message WM_DROPFILES;
     procedure CopyData(var Msg: TWMCopyData); message WM_COPYDATA;
+  protected
+    {$IFDEF VISTA_COMP}
+    procedure CreateParams(var Params: TCreateParams); override;
+    procedure WMSysCommand(var  Message: TWmSysCommand); message WM_SYSCOMMAND;
+    {$ENDIF}
   public
     property NamesTable: TNamesTable read FNamesTable;
     property Options: TGlobalOptions read FOptions;
@@ -169,7 +192,9 @@ type
 
     procedure AddMRU(const aFileName: string);
     function CreateBase(const aFileName: string): TfmBase;
-    procedure UpdateControls();
+    procedure UpdateControls(ForceDeactivate: Boolean = False);
+
+    procedure SetLang(LangID: TLangID);
   end;
 
 var
@@ -178,15 +203,49 @@ var
 implementation
 
 uses
-  Types, bsComUtils, ShellAPI
-  {$IFDEF PROFILER}, ZProfiler{$ENDIF}, GKAbout, GKOptions;
+  {$IFDEF DELPHI_NET}
+  System.IO,
+  {$ENDIF}
+  Types, bsComUtils, ShellAPI, bsWinUtils
+  {$IFDEF PROFILER}, ZProfiler{$ENDIF}, GKAbout, GKOptions, GKUIToolkit,
+  GKExpCalc;
 
 {$R *.dfm}
 
 { TfmGEDKeeper }
 
+{$IFDEF VISTA_COMP}
+procedure TfmGEDKeeper.CreateParams(var Params: TCreateParams);
+begin
+  inherited CreateParams(Params);
+  Params.ExStyle := Params.ExStyle and not WS_EX_TOOLWINDOW or WS_EX_APPWINDOW;
+end;
+
+procedure TfmGEDKeeper.WMSysCommand(var Message: TWmSysCommand);
+begin
+  case (Message.CmdType and $FFF0) of
+    SC_MINIMIZE: begin
+      ShowWindow(Handle, SW_MINIMIZE);
+      Message.Result := 0;
+    end;
+    SC_RESTORE: begin
+      ShowWindow(Handle, SW_RESTORE);
+      Message.Result := 0;
+    end;
+    else inherited;
+  end;
+end;
+{$ENDIF}
+
 procedure TfmGEDKeeper.FormCreate(Sender: TObject);
 begin
+  {$IFDEF VISTA_COMP}
+  ShowWindow(Application.Handle, SW_HIDE);
+  SetWindowLong(Application.Handle, GWL_EXSTYLE,
+    GetWindowLong(Application.Handle, GWL_EXSTYLE) and not WS_EX_APPWINDOW or WS_EX_TOOLWINDOW);
+  ShowWindow(Application.Handle, SW_SHOW);
+  {$ENDIF}
+
   LongDateFormat := 'DD MMM YYYY';
 
   LogInit(GetAppPath() + 'GEDKeeper.log');
@@ -223,7 +282,7 @@ var
 begin
   numFiles := DragQueryFile(Msg.Drop, $FFFFFFFF, nil, 0);
   if (numFiles > 1) then begin
-    ShowMessage('You can drop only one image file at a time!');
+    ShowMessage('You can drop only one file at a time!');
   end else begin
     {$IFNDEF DELPHI_NET}
     DragQueryFile(Msg.Drop, 0, @buffer, SizeOf(buffer));
@@ -268,6 +327,19 @@ begin
   else Result := nil;
 end;
 
+procedure TfmGEDKeeper.miCalcClick(Sender: TObject);
+begin
+  if miCalc.Checked then begin
+    fmCalcWidget := TfmCalcWidget.Create(nil);
+    //fmCalcWidget.ParentWindow := 0;
+    fmCalcWidget.Left := Screen.WorkAreaWidth - fmCalcWidget.Width - 10;
+    fmCalcWidget.Top := Screen.WorkAreaHeight - fmCalcWidget.Height - 10;
+    fmCalcWidget.Show;
+  end else begin
+    FreeAndNil(fmCalcWidget);
+  end;
+end;
+
 function TfmGEDKeeper.CreateBase(const aFileName: string): TfmBase;
 begin
   Result := TfmBase.Create(Application);
@@ -277,13 +349,17 @@ begin
   else Result.FileNew();;
 end;
 
-procedure TfmGEDKeeper.UpdateControls();
+procedure TfmGEDKeeper.UpdateControls(ForceDeactivate: Boolean = False);
 var
   rt: TGEDCOMRecordType;
   cur_base: TfmBase;
-  base_en, indiv_en: Boolean;
+  base_en, indiv_en, test_funcs: Boolean;
+  st: string;
 begin
-  cur_base := GetCurrentFile();
+  if (ForceDeactivate)
+  then cur_base := nil
+  else cur_base := GetCurrentFile();
+
   if (cur_base = nil) then begin
     rt := rtNone;
     base_en := False;
@@ -317,11 +393,23 @@ begin
 
   actStats.Enabled := (base_en);
 
+  actPrev.Enabled := (cur_base <> nil) and (cur_base.Backman.CanBackward());
+  actNext.Enabled := (cur_base <> nil) and (cur_base.Backman.CanForward());
+
+  test_funcs := (GetComputerName() = 'asgard') or (GetUserName() = 'Zhdanovskih_SV');
+
+  actUndo.Enabled := (test_funcs) and (cur_base <> nil) and (cur_base.Undoman.CanUndo());
+  actRedo.Enabled := (test_funcs) and (cur_base <> nil) and (cur_base.Undoman.CanRedo());
+
   if (cur_base <> nil) then begin
-    StatusBar.SimpleText := 'Записей: ' + IntToStr(cur_base.FCounts[rt].Total);
+    st := 'Записей: ' + IntToStr(cur_base.FCounts[rt].Total);
     if (rt = rtIndividual)
-    then StatusBar.SimpleText := StatusBar.SimpleText + ', фильтр: ' + IntToStr(cur_base.FCounts[rt].Filtered);
+    then st := st + ', фильтр: ' + IntToStr(cur_base.FCounts[rt].Filtered);
+
+    StatusBar.Panels[0].Text := st;
   end;
+
+  StatusBar.Repaint;
 end;
 
 procedure TfmGEDKeeper.UpdateMRU();
@@ -570,7 +658,8 @@ begin
 
     if (fmOptions.ShowModal = mrOk) then begin
       for i := 0 to MDIChildCount - 1 do
-        TfmBase(MDIChildren[i]).ListsRefresh(True);
+        if (MDIChildren[i] is TfmBase)
+        then TfmBase(MDIChildren[i]).ListsRefresh(True);
     end;
   finally
     fmOptions.Destroy;
@@ -620,6 +709,107 @@ begin
         Exit;
       end else base.Free;
     end else MDIChildren[i].Free;
+  end;
+end;
+
+procedure TfmGEDKeeper.SetLang(LangID: TLangID);
+begin
+  miFile.Caption := GetLangStr(LSID_MIFile);
+  miEdit.Caption := GetLangStr(LSID_MIEdit);
+  miPedigree.Caption := GetLangStr(LSID_MIPedigree);
+  miWindow.Caption := GetLangStr(LSID_MIWindow);
+  miHelp.Caption := GetLangStr(LSID_MIHelp);
+
+  miMRUFiles.Caption := GetLangStr(LSID_MIMRUFiles);
+
+  //tbPedigree.Hint :=
+end;
+
+procedure TfmGEDKeeper.actUndoExecute(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base = nil) then Exit;
+  cur_base.DoUndo();
+end;
+
+procedure TfmGEDKeeper.actRedoExecute(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base = nil) then Exit;
+  cur_base.DoRedo();
+end;
+
+procedure TfmGEDKeeper.actFAQExecute(Sender: TObject);
+begin
+  LoadExtFile(GetAppPath() + 'help\faq.htm');
+end;
+
+procedure TfmGEDKeeper.FormResize(Sender: TObject);
+begin
+  StatusBar.Panels[0].Width := Width - 50;
+  StatusBar.Repaint;
+end;
+
+procedure TfmGEDKeeper.StatusBarDrawPanel(StatusBar: TStatusBar;
+  Panel: TStatusPanel; const Rect: TRect);
+var
+  cur_base: TfmBase;
+  ss: TShieldState;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base = nil) then Exit;
+
+  ss := cur_base.ShieldState;
+
+  with StatusBar.Canvas do begin
+    //Brush.Color := clBtnFace;
+    //FillRect(Rect);
+    //Font.Color := clBlack;
+    ImageList2.Draw(StatusBar.Canvas, Rect.Left, Rect.Top, Ord(ss));
+    //TextOut(Rect.left + 20, Rect.top + 2,Message1[0]);
+  end;
+end;
+
+procedure TfmGEDKeeper.StatusBarDblClick(Sender: TObject);
+var
+  mpt: TPoint;
+  x, j, pan_index: Integer;
+  cur_base: TfmBase;
+  ss: TShieldState;
+begin
+  if (StatusBar.SimplePanel) or (StatusBar.Panels.Count = 0)
+  then Exit;
+
+  mpt := StatusBar.ScreenToClient(Mouse.CursorPos);
+
+  pan_index := -1;
+  x := 0;
+  for j := 0 to StatusBar.Panels.Count - 1 do begin
+    x := x + StatusBar.Panels[j].Width;
+    if (mpt.X < x) then begin
+      pan_index := j;
+      Break;
+    end;
+  end;
+
+  //clicked "after" the last panel -
+  //fake it as if the last one was clicked
+  if (pan_index = -1)
+  then pan_index := -1 + StatusBar.Panels.Count;
+
+  if (pan_index = 1) then begin
+    cur_base := GetCurrentFile();
+    if (cur_base = nil) then Exit;
+
+    ss := cur_base.ShieldState;
+    if (ss = ssNone) then ss := ssMaximum else ss := TShieldState(Ord(ss) + 1);
+    cur_base.ShieldState := ss;
+
+    StatusBar.Repaint;
   end;
 end;
 

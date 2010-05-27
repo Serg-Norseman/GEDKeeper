@@ -2,9 +2,7 @@ program GEDKeeperNET;
 
 {$I GEDKeeper.inc}
 
-{%ToDo 'GEDKeeper.todo'}
 {%DelphiDotNetAssemblyCompiler '$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.Drawing.dll'}
-{%ToDo 'GEDKeeperNET.todo'}
 
 uses
   Windows,
@@ -25,7 +23,6 @@ uses
   GKFileProperties in 'GKFileProperties.pas' {fmFileProperties},
   GKTreeTools in 'GKTreeTools.pas' {fmTreeTools},
   GKStats in 'GKStats.pas' {fmStats},
-  GKNameEdit in 'GKNameEdit.pas' {fmNameEdit},
   GKPersonEdit in 'GKPersonEdit.pas' {fmPersonEdit},
   GKExport in 'GKExport.pas',
   GKOptions in 'GKOptions.pas' {fmOptions},

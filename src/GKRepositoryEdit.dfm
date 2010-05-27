@@ -6,6 +6,7 @@ object fmRepositoryEdit: TfmRepositoryEdit
   ClientHeight = 369
   ClientWidth = 417
   Color = clBtnFace
+  DefaultMonitor = dmMainForm
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11

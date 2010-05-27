@@ -5,8 +5,8 @@ unit GKOptions;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, ExtCtrls, ComCtrls, Buttons, GKCommon;
+  SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ExtCtrls,
+  ComCtrls, Buttons, GKCommon, GKLists;
 
 type
   TfmOptions = class(TForm)
@@ -15,7 +15,6 @@ type
     rgCode: TRadioGroup;
     btnAccept: TBitBtn;
     btnCancel: TBitBtn;
-    rgFNPFormat: TRadioGroup;
     SheetPedigree: TTabSheet;
     GroupBox1: TGroupBox;
     CheckFamily: TCheckBox;
@@ -32,12 +31,9 @@ type
     PanUnHusbandColor: TPanel;
     PanUnWifeColor: TPanel;
     ColorDialog1: TColorDialog;
-    rgDateFormat: TRadioGroup;
     GroupBox3: TGroupBox;
     CheckAppRegister: TCheckBox;
     CheckExtRegister: TCheckBox;
-    SheetTools: TTabSheet;
-    CheckCleanEmptyFamilies: TCheckBox;
     GroupBox4: TGroupBox;
     Label1: TLabel;
     Label2: TLabel;
@@ -52,12 +48,35 @@ type
     CheckAttributes: TCheckBox;
     CheckNotes: TCheckBox;
     CheckSources: TCheckBox;
+    SheetView: TTabSheet;
+    PageControl2: TPageControl;
+    SheetViewCommon: TTabSheet;
+    SheetViewPersons: TTabSheet;
+    ListPersonColumns: TListView;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    btnDefList: TBitBtn;
+    rgFNPFormat: TRadioGroup;
+    rgDateFormat: TRadioGroup;
     CheckPlacesWithAddress: TCheckBox;
+    GroupBox6: TGroupBox;
+    CheckGEDCOMOptimize: TCheckBox;
+    EditPedigreeFormat: TRadioGroup;
+    GroupBox7: TGroupBox;
+    CheckShowOnStart: TCheckBox;
     procedure FormShow(Sender: TObject);
     procedure btnAcceptClick(Sender: TObject);
     procedure PanMaleColorClick(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure ListPersonColumnsChange(Sender: TObject; Item: TListItem;
+      Change: TItemChange);
+    procedure btnDefListClick(Sender: TObject);
   private
     FOptions: TGlobalOptions;
+    FPersonColumns: TPersonColumnsList;
+
+    procedure UpdateColumnsList();
   public
     property Options: TGlobalOptions read FOptions write FOptions;
   end;
@@ -101,7 +120,7 @@ begin
   CheckExtRegister.Enabled := False;
   {$ENDIF}
 
-  CheckCleanEmptyFamilies.Checked := FOptions.CleanEmptyFamilies;
+  CheckGEDCOMOptimize.Checked := FOptions.GEDCOMOptimize;
 
   chkProxy.Checked := FOptions.Proxy.UseProxy;
   edProxyServer.Text := FOptions.Proxy.Server;
@@ -112,10 +131,19 @@ begin
   CheckAttributes.Checked := FOptions.PedigreeOptions.IncludeAttributes;
   CheckNotes.Checked := FOptions.PedigreeOptions.IncludeNotes;
   CheckSources.Checked := FOptions.PedigreeOptions.IncludeSources;
+
+  EditPedigreeFormat.ItemIndex := Ord(FOptions.PedigreeOptions.Format);
+
+  CheckShowOnStart.Checked := FOptions.ShowTips;
+
+  FPersonColumns := FOptions.ListPersonsColumns;
+  UpdateColumnsList();
 end;
 
 procedure TfmOptions.btnAcceptClick(Sender: TObject);
 begin
+  FOptions.ListPersonsColumns := FPersonColumns;
+
   case rgCode.ItemIndex of
     0: FOptions.DefCharacterSet := csASCII;
     1: FOptions.DefCharacterSet := csUTF8;
@@ -144,7 +172,7 @@ begin
   RegisterExt('.ged', 'GEDCOM.File', 'GEDCOM File', 0, CheckExtRegister.Checked);
   {$ENDIF}
 
-  FOptions.CleanEmptyFamilies := CheckCleanEmptyFamilies.Checked;
+  FOptions.GEDCOMOptimize := CheckGEDCOMOptimize.Checked;
 
   FOptions.Proxy.UseProxy := chkProxy.Checked;
   FOptions.Proxy.Server := edProxyServer.Text;
@@ -155,6 +183,10 @@ begin
   FOptions.PedigreeOptions.IncludeAttributes := CheckAttributes.Checked;
   FOptions.PedigreeOptions.IncludeNotes := CheckNotes.Checked;
   FOptions.PedigreeOptions.IncludeSources := CheckSources.Checked;
+
+  FOptions.PedigreeOptions.Format := TPedigreeFormat(EditPedigreeFormat.ItemIndex);
+
+  FOptions.ShowTips := CheckShowOnStart.Checked;
 end;
 
 procedure TfmOptions.PanMaleColorClick(Sender: TObject);
@@ -163,6 +195,77 @@ begin
 
   if ColorDialog1.Execute
   then TPanel(Sender).Color := ColorDialog1.Color;
+end;
+
+procedure TfmOptions.UpdateColumnsList();
+var
+  i: Integer;
+  pct: TPersonColumnType;
+  item: TListItem;
+begin
+  ListPersonColumns.OnChange := nil;
+  ListPersonColumns.Items.BeginUpdate;
+  try
+    ListPersonColumns.Items.Clear;
+
+    for i := 0 to High(FPersonColumns) do begin
+      pct := FPersonColumns[i].colType;
+
+      item := ListPersonColumns.Items.Add();
+      item.Caption := PersonColumnsName[pct].Name;
+      item.Checked := FPersonColumns[i].colActive;
+    end;
+  finally
+    ListPersonColumns.Items.EndUpdate;
+  end;
+  ListPersonColumns.OnChange := ListPersonColumnsChange;
+end;
+
+procedure TfmOptions.SpeedButton1Click(Sender: TObject);
+var
+  idx: Integer;
+  props: TPersonColumnProps;
+begin
+  idx := ListPersonColumns.ItemIndex;
+  if (idx <= 0) then Exit;
+
+  props := FPersonColumns[idx - 1];
+  FPersonColumns[idx - 1] := FPersonColumns[idx];
+  FPersonColumns[idx] := props;
+
+  UpdateColumnsList();
+
+  ListPersonColumns.ItemIndex := idx - 1;
+end;
+
+procedure TfmOptions.SpeedButton2Click(Sender: TObject);
+var
+  idx: Integer;
+  props: TPersonColumnProps;
+begin
+  idx := ListPersonColumns.ItemIndex;
+  if (idx < 0) or (idx >= High(FPersonColumns)) then Exit;
+
+  props := FPersonColumns[idx + 1];
+  FPersonColumns[idx + 1] := FPersonColumns[idx];
+  FPersonColumns[idx] := props;
+
+  UpdateColumnsList();
+
+  ListPersonColumns.ItemIndex := idx + 1;
+end;
+
+procedure TfmOptions.ListPersonColumnsChange(Sender: TObject;
+  Item: TListItem; Change: TItemChange);
+begin
+  if (Item <> nil)
+  then FPersonColumns[Item.Index].colActive := Item.Checked;
+end;
+
+procedure TfmOptions.btnDefListClick(Sender: TObject);
+begin
+  FPersonColumns := DefPersonColumns;
+  UpdateColumnsList();
 end;
 
 end.

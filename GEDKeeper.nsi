@@ -56,6 +56,9 @@ Section "Справка"
   File ".\help\genres.htm"
   CreateShortCut "$SMPROGRAMS\GEDKeeper\Ресурсы в Интернете.lnk" "$INSTDIR\help\genres.htm" "" "$INSTDIR\help\genres.htm" 0
 
+  File ".\help\faq.htm"
+  CreateShortCut "$SMPROGRAMS\GEDKeeper\Часто задаваемые вопросы.lnk" "$INSTDIR\help\faq.htm" "" "$INSTDIR\help\faq.htm" 0
+
   File ".\help\ged551-5.pdf"
   CreateShortCut "$SMPROGRAMS\GEDKeeper\Формат GEDCOM.lnk" "$INSTDIR\help\ged551-5.pdf" "" "$INSTDIR\help\ged551-5.pdf" 0
 

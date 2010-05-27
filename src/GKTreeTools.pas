@@ -5,9 +5,8 @@ unit GKTreeTools;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ComCtrls, GedCom551, StdCtrls, Buttons, ExtCtrls, GKImport, bsCtrls,
-  GKBase;
+  Windows, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, ComCtrls,
+  StdCtrls, Buttons, ExtCtrls, GedCom551, GKImport, bsCtrls, GKBase;
 
 type
   TTreeWalkMode = (twmAll, twmFamily, twmAncestors, twmDescendants, twmNone);
@@ -18,7 +17,7 @@ type
     PageControl: TPageControl;
     SheetChoice: TTabSheet;
     SheetTreeCompare: TTabSheet;
-    ListErrors: TBSListView;
+    ListCompare: TListView;
     btnClose: TBitBtn;
     rgOperation: TRadioGroup;
     btnBack: TBitBtn;
@@ -79,8 +78,8 @@ type
     SheetFamilyGroups: TTabSheet;
     TreeView1: TTreeView;
     SheetDeads: TTabSheet;
-    ListDeads: TBSListView;
     btnPrepare: TBitBtn;
+    Panel1: TPanel;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
@@ -115,6 +114,8 @@ type
     FRMMode: TMergeMode;
     FRMSkip: TStringList;
 
+    ListDeads: TBSListView;
+
     procedure RecordMerge(aRecBase, aRecCopy: TGEDCOMRecord);
     procedure SetRec1(const Value: TGEDCOMRecord);
     procedure SetRec2(const Value: TGEDCOMRecord);
@@ -131,13 +132,16 @@ type
     procedure CheckGroups();
     procedure SelectTool(aToolIndex: Integer);
     function GetBase: TfmBase;
+    procedure PrepareDeadsList();
   public
     property Base: TfmBase read GetBase;
   end;
 
 implementation
 
-uses GKCommon, GKMain, GKRecordSelect, GKProgress;
+uses
+  {$IFDEF DELPHI_NET}System.IO,{$ENDIF}
+  GKCommon, GKMain, GKRecordSelect, GKProgress, GKSheetList;
 
 {$R *.dfm}
 
@@ -155,6 +159,8 @@ begin
   SetRec2(nil);
   FRMMode := mmPerson;
   rgMode.ItemIndex := 0;
+
+  PrepareDeadsList();
 end;
 
 procedure TfmTreeTools.FormDestroy(Sender: TObject);
@@ -168,7 +174,7 @@ procedure TfmTreeTools.AddDiag(aObj, aDiag: string);
 var
   item: TListItem;
 begin
-  item := ListErrors.Items.Add();
+  item := ListCompare.Items.Add();
   item.Caption := aObj;
   item.SubItems.Add(aDiag);
 end;
@@ -182,11 +188,14 @@ end;
 procedure TfmTreeTools.TreeCompare(aMainTree: TGEDCOMTree; aFileName: string);
 var
   tempTree: TGEDCOMTree;
-  i, idx: Integer;
+  i, idx, k: Integer;
   iRec: TGEDCOMIndividualRecord;
   fams, names: TStringList;
   fam, nam, pat, tm: string;
+  lst: TList;
 begin
+  ListCompare.Clear;
+
   tempTree := TGEDCOMTree.Create;
   tempTree.LoadFromFile(aFileName);
   fams := TStringList.Create;
@@ -197,7 +206,9 @@ begin
     for i := 0 to aMainTree.Count - 1 do
       if (aMainTree.Records[i] is TGEDCOMIndividualRecord) then begin
         iRec := aMainTree.Records[i] as TGEDCOMIndividualRecord;
-        names.AddObject(GetNameStr(iRec), nil);
+
+        idx := names.AddObject(GetNameStr(iRec), TList.Create);
+        TList(names.Objects[idx]).Add(iRec);
 
         GetNameParts(iRec, fam, nam, pat);
         fams.AddObject(PrepareRusFamily(fam, (iRec.Sex = svFemale)), nil);
@@ -210,7 +221,7 @@ begin
 
         idx := names.IndexOf(tm);
         if (idx >= 0)
-        then names.Objects[idx] := TObject(1);
+        then TList(names.Objects[idx]).Add(iRec);
 
         GetNameParts(iRec, fam, nam, pat);
         tm := PrepareRusFamily(fam, (iRec.Sex = svFemale));
@@ -224,7 +235,10 @@ begin
       if (fams.Objects[i] = nil) or (fams[i] = '?') then fams.Delete(i);
 
     for i := names.Count - 1 downto 0 do
-      if (names.Objects[i] = nil) then names.Delete(i);
+      if (TList(names.Objects[i]).Count = 1) then begin
+        TList(names.Objects[i]).Free;
+        names.Delete(i);
+      end;
 
     AddDiag('', 'Схожие фамилии:');
     if (fams.Count <> 0) then begin
@@ -233,10 +247,19 @@ begin
 
     AddDiag('', 'Схожие имена:');
     if (names.Count <> 0) then begin
-      for i := 0 to names.Count - 1 do AddDiag('', '    ' + names[i]);
+      for i := 0 to names.Count - 1 do begin
+        AddDiag('', '    ' + names[i]);
+        lst := TList(names.Objects[i]);
+        for k := 0 to lst.Count - 1 do begin
+          iRec := TGEDCOMIndividualRecord(lst[k]);
+          AddDiag('', '      * ' + GetNameStr(iRec) + ' ' + GetLifeStr(iRec));
+        end;
+      end;
     end else AddDiag('', '    нет.');
   finally
+    for i := 0 to names.Count - 1 do TObject(names.Objects[i]).Free;
     names.Free;
+
     fams.Free;
     tempTree.Destroy;
   end;
@@ -463,8 +486,12 @@ procedure TfmTreeTools.CheckRelations();
     for i := 0 to iRec.SpouseToFamilyLinksCount - 1 do AddRel(iRec.SpouseToFamilyLinks[i].Family);
     for i := 0 to iRec.IndividualEventsCount - 1 do CheckTag(iRec.IndividualEvents[i].Detail);
     for i := 0 to iRec.IndividualAttributesCount - 1 do CheckTag(iRec.IndividualAttributes[i].Detail);
+    for i := 0 to iRec.IndividualOrdinancesCount - 1 do CheckTag(iRec.IndividualOrdinances[i]);
     for i := 0 to iRec.SubmittorsCount - 1 do AddRel(iRec.Submittors[i].Value);
     for i := 0 to iRec.AssociationsCount - 1 do AddRel(iRec.Associations[i].Value);
+    for i := 0 to iRec.AliassesCount - 1 do AddRel(iRec.Aliasses[i].Value);
+    for i := 0 to iRec.AncestorsInterestCount - 1 do AddRel(iRec.AncestorsInterest[i].Value);
+    for i := 0 to iRec.DescendantsInterestCount - 1 do AddRel(iRec.DescendantsInterest[i].Value);
     // UserReferencesCount
     for i := 0 to iRec.GroupsCount - 1 do AddRel(iRec.Groups[i].Value);
   end;
@@ -594,17 +621,28 @@ begin
 end;
 
 procedure TfmTreeTools.btnSearchClick(Sender: TObject);
+
+  function GetIndivName(iRec: TGEDCOMIndividualRecord; var Unk: Boolean): string;
+  var
+    np: TGEDCOMPersonalName;
+  begin
+    np := iRec.PersonalNames[0];
+    Result := np.StringValue;
+
+    Unk := (Length(np.FirstPart) <= 3);
+  end;
+
 var
   i, k: Integer;
   iRec, kRec: TGEDCOMIndividualRecord;
-  iName, kName, f, n, p: string;
+  iName, kName: string;
   iNote, kNote: TGEDCOMNoteRecord;
   iFam, kFam: TGEDCOMFamilyRecord;
   iSrc, kSrc: TGEDCOMSourceRecord;
-  res: Boolean;
+  res, unk: Boolean;
   year1, year2, nameAccuracy, yearInaccuracy: Integer;
   ev: TGEDCOMIndividualEvent;
-begin //
+begin
   nameAccuracy := udNameAccuracy.Position;
   yearInaccuracy := udYearInaccuracy.Position;
 
@@ -619,18 +657,14 @@ begin //
       case FRMMode of
         mmPerson: if (FTree.Records[i] is TGEDCOMIndividualRecord) then begin
           iRec := FTree.Records[i] as TGEDCOMIndividualRecord;
-
-          GetNameParts(iRec, f, n, p);
-          if (Length(n) < 3) then Continue;
-          iName := GetNameStr(iRec);
+          iName := GetIndivName(iRec, unk);
+          if (unk) then Continue;
 
           for k := i + 1 to FTree.Count - 1 do
             if (FTree.Records[k] is TGEDCOMIndividualRecord) then begin
               kRec := FTree.Records[k] as TGEDCOMIndividualRecord;
-
-              GetNameParts(kRec, f, n, p);
-              if (Length(n) < 3) then Continue;
-              kName := GetNameStr(kRec);
+              kName := GetIndivName(kRec, unk);
+              if (unk) then Continue;
 
               if (FRMSkip.IndexOf(iRec.XRef + '-' + kRec.XRef) >= 0)
               or (iRec.Sex <> kRec.Sex)
@@ -810,7 +844,7 @@ procedure TfmTreeTools.btnRec1SelectClick(Sender: TObject);
 var
   irec: TGEDCOMRecord;
   sm: TSelectMode;
-begin //
+begin
   case FRMMode of
     mmPerson: sm := smPerson;
     mmNote: sm := smNote;
@@ -824,7 +858,7 @@ procedure TfmTreeTools.btnRec2SelectClick(Sender: TObject);
 var
   irec: TGEDCOMRecord;
   sm: TSelectMode;
-begin //
+begin
   case FRMMode of
     mmPerson: sm := smPerson;
     mmNote: sm := smNote;
@@ -867,6 +901,7 @@ begin
       end;
     end;
 
+    Base.ChangeRecord(aRecBase);
     Base.ListsRefresh();
   finally
     repMap.Free;
@@ -874,21 +909,21 @@ begin
 end;
 
 procedure TfmTreeTools.btnMergeToLeftClick(Sender: TObject);
-begin //
+begin
   RecordMerge(FRec1, FRec2);
   SetRec1(FRec1);
   SetRec2(nil);
 end;
 
 procedure TfmTreeTools.btnMergeToRightClick(Sender: TObject);
-begin //
+begin
   RecordMerge(FRec2, FRec1);
   SetRec1(nil);
   SetRec2(FRec2);
 end;
 
 procedure TfmTreeTools.rgModeClick(Sender: TObject);
-begin //
+begin
   FRMMode := TMergeMode(rgMode.ItemIndex);
 
   btnRec1Select.Enabled := (FRMMode <> mmFamily);
@@ -896,7 +931,7 @@ begin //
 end;
 
 procedure TfmTreeTools.btnSkipClick(Sender: TObject);
-begin //
+begin 
   if (FRec1 <> nil) and (FRec2 <> nil)
   then FRMSkip.Add(FRec1.XRef + '-' + FRec2.XRef);
 
@@ -904,11 +939,18 @@ begin //
 end;
 
 procedure TfmTreeTools.btnImportFileChooseClick(Sender: TObject);
+var
+  imp: TGKImporter;
 begin
   if OpenDialog2.Execute() then begin
     edImportFile.Text := OpenDialog2.FileName;
 
-    TreeImportEx(FTree, edImportFile.Text, TFileType(OpenDialog2.FilterIndex - 1), ListBox1.Items);
+    imp := TGKImporter.Create(FTree, ListBox1.Items);
+    try
+      imp.TreeImportEx(edImportFile.Text);
+    finally
+      imp.Destroy;
+    end;
 
     Base.ListsRefresh(False);
   end;
@@ -1028,13 +1070,11 @@ begin
       if item.Checked then begin
         iRec := TGEDCOMIndividualRecord(item.Data);
         CreateIEvent(FTree, iRec, 'DEAT', '', '');
-        iRec.ChangeDate.ChangeDateTime := Now();
+        Base.ChangeRecord(iRec);
       end;
     end;
   finally
-    Base.Modified := True;
     Base.ListsRefresh();
-
     CheckDeads();
   end;
 end;
@@ -1042,6 +1082,14 @@ end;
 function TfmTreeTools.GetBase: TfmBase;
 begin
   Result := TfmBase(Owner);
+end;
+
+procedure TfmTreeTools.PrepareDeadsList();
+begin
+  Base.CreateListView(Self, Panel1, ListDeads);
+  ListDeads.Checkboxes := True;
+  AddListColumn(ListDeads, 'Персона', 400);
+  AddListColumn(ListDeads, 'Возможная причина смерти', 200);
 end;
 
 end.

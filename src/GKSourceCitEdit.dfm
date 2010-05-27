@@ -3,9 +3,10 @@ object fmSourceCitEdit: TfmSourceCitEdit
   Top = 271
   BorderStyle = bsDialog
   Caption = #1062#1080#1090#1072#1090#1072' '#1080#1089#1090#1086#1095#1085#1080#1082#1072
-  ClientHeight = 145
+  ClientHeight = 193
   ClientWidth = 353
   Color = clBtnFace
+  DefaultMonitor = dmMainForm
   Font.Charset = RUSSIAN_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -13,6 +14,7 @@ object fmSourceCitEdit: TfmSourceCitEdit
   Font.Style = []
   OldCreateOrder = False
   Position = poScreenCenter
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
@@ -87,23 +89,30 @@ object fmSourceCitEdit: TfmSourceCitEdit
     ShowHint = True
     OnClick = btnSourceAddClick
   end
+  object Label3: TLabel
+    Left = 8
+    Top = 104
+    Width = 88
+    Height = 13
+    Caption = #1054#1094#1077#1085#1082#1072' '#1082#1072#1095#1077#1089#1090#1074#1072
+  end
   object btnAccept: TBitBtn
     Left = 176
-    Top = 112
+    Top = 160
     Width = 81
     Height = 25
     Caption = #1055#1088#1080#1085#1103#1090#1100
-    TabOrder = 2
+    TabOrder = 3
     OnClick = btnAcceptClick
     Kind = bkOK
   end
   object btnCancel: TBitBtn
     Left = 264
-    Top = 112
+    Top = 160
     Width = 81
     Height = 25
     Caption = #1054#1090#1084#1077#1085#1080#1090#1100
-    TabOrder = 3
+    TabOrder = 4
     Kind = bkCancel
   end
   object EditPage: TEdit
@@ -111,7 +120,7 @@ object fmSourceCitEdit: TfmSourceCitEdit
     Top = 72
     Width = 337
     Height = 21
-    TabOrder = 0
+    TabOrder = 1
   end
   object EditSource: TEdit
     Left = 8
@@ -120,6 +129,15 @@ object fmSourceCitEdit: TfmSourceCitEdit
     Height = 21
     Color = clBtnFace
     ReadOnly = True
-    TabOrder = 1
+    TabOrder = 0
+  end
+  object EditCertainty: TComboBox
+    Left = 8
+    Top = 120
+    Width = 337
+    Height = 21
+    Style = csDropDownList
+    ItemHeight = 13
+    TabOrder = 2
   end
 end

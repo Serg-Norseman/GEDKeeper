@@ -7,6 +7,11 @@ interface
 uses
   Classes, Contnrs, GedCom551, Graphics, Dialogs, bsCtrls, IniFiles;
 
+{$IFNDEF DELPHI_NET}
+type
+  IntPtr = type Integer;
+{$ENDIF}
+
 resourcestring
   AppName = 'GEDKeeper';
 
@@ -19,16 +24,106 @@ const
   ExtTag = '_EXT_NAME';
   PatriarchTag = '_PATRIARCH';
 
+  MLinkPrefix = 'view_';
+
 type
+  TShieldState = (
+    // не показываются ни секретные, ни конфиденциальные данные
+    ssMaximum,
+    // показывается всё кроме секретного
+    ssMiddle,
+    // показывается всё
+    ssNone);
+
   TGEDCOMRecordType = (
     rtNone, rtIndividual, rtFamily, rtNote, rtMultimedia, rtSource,
-    rtRepository, rtGroup, rtSubmission, rtSubmitter);
+    rtRepository, rtGroup, rtResearch, rtTask, rtCommunication, rtLocation,
+    rtSubmission, rtSubmitter);
+
+  TSelectMode = (smPerson, smNote, smMultimedia, smSource, smRepository,
+    smGroup, smTask, smCommunication, smLocation);
 
   TRecAction = (raAdd, raEdit, raDelete, raJump, raMoveUp, raMoveDown);
-  TSelectMode = (smPerson, smNote, smMultimedia, smSource, smRepository, smGroup);
+
   TTargetMode = (tmNone, tmAncestor, tmDescendant);
   TLifeMode = (lmAll, lmOnlyAlive, lmOnlyDead, lmAliveBefore);
 
+const
+  SelectRecords: array [TSelectMode] of TGEDCOMRecordType = (
+    rtIndividual, rtNote, rtMultimedia, rtSource, rtRepository,
+    rtGroup, rtTask, rtCommunication, rtLocation
+  );
+
+type
+  TPersonColumnType = (
+    pctPatriarch, pctName, pctSex, pctBirthDate, pctDeathDate,
+    pctBirthPlace, pctDeathPlace, pctResidence,
+    pctAge, pctLifeExpectancy, pctDaysForBirth, pctGroups,
+    pctReligion, pctNationality, pctEducation, pctOccupation, pctCaste,
+    pctChangeDate
+  );
+
+  TPersonColumnProps = record
+    colType: TPersonColumnType;
+    colActive: Boolean;
+  end;
+
+  TPersonColumnsList = array [0..Ord(pctChangeDate)] of TPersonColumnProps;
+
+const
+  PersonColumnsName: array [TPersonColumnType] of record
+    Name: string;
+    DefWidth: Integer; 
+  end = (
+    (Name: 'Патриарх'; DefWidth: 25),
+    (Name: 'ФИО'; DefWidth: 25),
+
+    (Name: 'Пол'; DefWidth: 45),
+    (Name: 'Дата рождения'; DefWidth: 100),
+    (Name: 'Дата смерти'; DefWidth: 100),
+    (Name: 'Место рождения'; DefWidth: 100),
+    (Name: 'Место смерти'; DefWidth: 100),
+    (Name: 'Местожительство'; DefWidth: 100),
+
+    (Name: 'Возраст'; DefWidth: 100),
+    (Name: 'Продолжительность жизни'; DefWidth: 100),
+    (Name: 'Дней до ДР'; DefWidth: 100),
+    (Name: 'Группа'; DefWidth: 200),
+
+    (Name: 'Вероисповедание'; DefWidth: 200),
+    (Name: 'Национальность'; DefWidth: 200),
+    (Name: 'Образование'; DefWidth: 200),
+    (Name: 'Профессия'; DefWidth: 200),
+    (Name: 'Социальное положение'; DefWidth: 200),
+
+    (Name: 'Изменено'; DefWidth: 150)
+  );
+
+const
+  DefPersonColumns: TPersonColumnsList = (
+    (colType: pctPatriarch; colActive: True),
+    (colType: pctName; colActive: True),
+    (colType: pctSex; colActive: True),
+    (colType: pctBirthDate; colActive: True),
+    (colType: pctDeathDate; colActive: True),
+    (colType: pctBirthPlace; colActive: True),
+    (colType: pctDeathPlace; colActive: True),
+    (colType: pctResidence; colActive: True),
+    (colType: pctAge; colActive: True),
+    (colType: pctLifeExpectancy; colActive: True),
+    (colType: pctDaysForBirth; colActive: True),
+    (colType: pctGroups; colActive: True),
+
+    (colType: pctReligion; colActive: False),
+    (colType: pctNationality; colActive: False),
+    (colType: pctEducation; colActive: False),
+    (colType: pctOccupation; colActive: False),
+    (colType: pctCaste; colActive: False),
+
+    (colType: pctChangeDate; colActive: True)
+  );
+
+type
   TName = class
   private
   public
@@ -118,8 +213,11 @@ type
     property UseProxy: Boolean read FUseProxy write FUseProxy;
   end;
 
+  TPedigreeFormat = (pfExcess, pfCompact);
+
   TPedigreeOptions = class(TObject)
   private
+    FFormat: TPedigreeFormat;
     FIncludeNotes: Boolean;
     FIncludeAttributes: Boolean;
     FIncludeSources: Boolean;
@@ -127,8 +225,9 @@ type
     constructor Create;
 
     procedure LoadFromFile(const aIniFile: TIniFile);
-    procedure SaveToFile(const aIniFile: TIniFile); 
+    procedure SaveToFile(const aIniFile: TIniFile);
 
+    property Format: TPedigreeFormat read FFormat write FFormat;
     property IncludeAttributes: Boolean read FIncludeAttributes write FIncludeAttributes;
     property IncludeNotes: Boolean read FIncludeNotes write FIncludeNotes;
     property IncludeSources: Boolean read FIncludeSources write FIncludeSources;
@@ -137,17 +236,20 @@ type
   TGlobalOptions = class(TObject)
   private
     FChartOptions: TChartOptions;
-    FCleanEmptyFamilies: Boolean;
     FDefCharacterSet: TGEDCOMCharacterSet;
     FDefDateFormat: TDateFormat;
     FDefNameFormat: TNameFormat;
+    FGEDCOMOptimize: Boolean;
     FLastDir: string;
+    FListPersonsColumns: TPersonColumnsList;
     FMRUFiles: TStringList;
     FNameFilters: TStringList;
     FPedigreeOptions: TPedigreeOptions;
     FPlacesWithAddress: Boolean;
     FProxy: TProxy;
+    FRelations: TStringList;
     FResidenceFilters: TStringList;
+    FShowTips: Boolean;
   public
     constructor Create;
     destructor Destroy; override;
@@ -156,19 +258,24 @@ type
     procedure SaveToFile(const FileName: string);
 
     property ChartOptions: TChartOptions read FChartOptions;
-    property CleanEmptyFamilies: Boolean read FCleanEmptyFamilies write FCleanEmptyFamilies;
-
     property DefCharacterSet: TGEDCOMCharacterSet read FDefCharacterSet write FDefCharacterSet;
     property DefDateFormat: TDateFormat read FDefDateFormat write FDefDateFormat;
     property DefNameFormat: TNameFormat read FDefNameFormat write FDefNameFormat;
+    property GEDCOMOptimize: Boolean read FGEDCOMOptimize write FGEDCOMOptimize;
     property LastDir: string read FLastDir write FLastDir;
     property MRUFiles: TStringList read FMRUFiles;
     property NameFilters: TStringList read FNameFilters;
     property PlacesWithAddress: Boolean read FPlacesWithAddress write FPlacesWithAddress;
+    property Relations: TStringList read FRelations;
     property ResidenceFilters: TStringList read FResidenceFilters;
+
+    property ListPersonsColumns: TPersonColumnsList
+      read FListPersonsColumns write FListPersonsColumns;
 
     property PedigreeOptions: TPedigreeOptions read FPedigreeOptions;
     property Proxy: TProxy read FProxy;
+
+    property ShowTips: Boolean read FShowTips write FShowTips;
   end;
 
 type
@@ -317,10 +424,38 @@ const
     (Name: '- Другой -')
   );
 
+const
+  PriorityNames: array [TResearchPriority] of string = (
+    'Не задан', 'Низкий', 'Нормальный', 'Высокий', 'Срочный');
+
+  StatusNames: array [TResearchStatus] of string = (
+    'Определено', 'Выполняется', 'Задержано',
+    'Осложнения', 'Завершено', 'Отозвано');
+
+  CommunicationNames: array [TCommunicationType] of string = (
+    'Звонок', 'Эл.письмо', 'Факс', 'Письмо', 'Кассета', 'Визит');
+
+  CommunicationDirs: array [TCommunicationDir] of string = ('от', 'к');
+
+  GoalNames: array [TGoalType] of string = (
+    'персона', 'семья', 'источник', 'иная');
+
+  CertaintyAssessments: array [0..3] of string = (
+    'Ненадежное подтверждение или предполагаемые данные',
+    'Сомнительная надежность подтверждения',
+    'Косвенные доказательства',
+    'Прямые и первичные доказательства'
+  );
+
+function IsRecordAccess(aRecRestriction: TGEDCOMRestriction; aShieldState: TShieldState): Boolean;
+
 function GetPersonEventIndex(aSign: string): Integer;
 function GetFamilyEventIndex(aSign: string): Integer;
 
 function GetMarriageStatusIndex(aSign: string): Integer;
+
+function GetEventName(aEvent: TGEDCOMCustomEvent): string;
+
 procedure GetNameParts(iRec: TGEDCOMIndividualRecord; var aFamily, aName, aPatronymic: string);
 
 function GetNameStr(iRec: TGEDCOMIndividualRecord; aByFamily: Boolean = True;
@@ -352,14 +487,18 @@ function GetAttributeStr(iAttr: TGEDCOMIndividualAttribute): string;
 
 function GetMarriageDate(fRec: TGEDCOMFamilyRecord; aFormat: TDateFormat): string;
 function GetEventDesc(evDetail: TGEDCOMEventDetail): string;
+function GetEventCause(evDetail: TGEDCOMEventDetail): string;
 
 function IsLive(iRec: TGEDCOMIndividualRecord): Boolean;
+procedure GetIndependentDate(aDate: TGEDCOMCustomDate; var AYear: Integer; var AMonth, ADay: Word);
 function GetEventsYearsDiff(ev1, ev2: TGEDCOMIndividualEvent; aCurEnd: Boolean = False): string;
 function GetLifeExpectancy(iRec: TGEDCOMIndividualRecord): string;
 function GetAge(iRec: TGEDCOMIndividualRecord): string;
 function GetFirstbornAge(iRec: TGEDCOMIndividualRecord): string;
 function GetMarriageAge(iRec: TGEDCOMIndividualRecord): string;
 function GetDaysForBirth(iRec: TGEDCOMIndividualRecord): string;
+
+function GetChangeDate(aRec: TGEDCOMRecord): string;
 
 function CreateEventEx(aTree: TGEDCOMTree; iRec: TGEDCOMIndividualRecord;
   evName: string): TGEDCOMCustomEvent;
@@ -375,14 +514,25 @@ procedure AddSpouseToFamily(aTree: TGEDCOMTree; aFamily: TGEDCOMFamilyRecord;
 procedure RemoveFamilySpouse(aTree: TGEDCOMTree; aFamily: TGEDCOMFamilyRecord;
   aSpouse: TGEDCOMIndividualRecord);
 
-function HyperLink(XRef: string; Text: string): string;
+function CreateNoteEx(aTree: TGEDCOMTree; aText: TStrings;
+  aRecord: TGEDCOMRecord = nil): TGEDCOMNoteRecord;
+
+function CreateFamilyEx(aTree: TGEDCOMTree): TGEDCOMFamilyRecord;
+
+function IsMatchesMask(const aName, Mask: string): Boolean;
+
+function HyperLink(XRef: string; Text: string; Num: Integer = 0): string;
+
+function GetCorresponderStr(aTree: TGEDCOMTree; aRec: TGEDCOMCommunicationRecord;
+  aLink: Boolean): string;
+
+procedure GetTaskGoal(aTree: TGEDCOMTree; aRec: TGEDCOMTaskRecord;
+  var aType: TGoalType; var aGoalRec: TGEDCOMRecord);
+function GetTaskGoalStr(aTree: TGEDCOMTree; aRec: TGEDCOMTaskRecord): string;
 
 function IndistinctMatching(MaxMatching: Integer; strInputMatching, strInputStandart: String): Integer;
 
 function ClearFamily(aFamily: string): string;
-
-function GetSelIndex(aList: TBSListView): Integer;
-function GetSelObject(aList: TBSListView): TObject;
 
 function PrepareRusFamily(f: string; aFemale: Boolean): string;
 
@@ -403,6 +553,8 @@ type
     mage, mage_m, mage_f, mage_cnt, mage_m_cnt, mage_f_cnt: Integer;
   end;
 
+function GetRecordType(rec: TGEDCOMRecord): TGEDCOMRecordType;
+
 procedure GetCommonStats(aTree: TGEDCOMTree; var aStats: TCommonStats);
 
 function CheckGEDCOMFormat(aTree: TGEDCOMTree): Boolean;
@@ -412,16 +564,29 @@ procedure LoadExtFile(const aFileName: string);
 // замена данных в потоке с кодировки 1251 на UTF-8
 function StreamToUtf8Stream(Stream: TStream): UTF8String;
 
-function Encrypt(const s: string; Key: Word): string;
-function Decrypt(const s: string; Key: Word): string;
-
 function ConStrings(aStrings: TStrings): string;
 
 implementation
 
 uses
-  Windows, SysUtils, Math, DateUtils, ShellAPI, Controls, GKProgress,
-  bsComUtils, bsMiscUtils;
+  {$IFDEF DELPHI_NET}
+  System.IO,
+  {$ENDIF}
+  Windows, SysUtils, Math, DateUtils, ShellAPI, Controls, Masks,
+  GKProgress, bsComUtils, bsMiscUtils, StorageCrypt;
+
+function IsRecordAccess(aRecRestriction: TGEDCOMRestriction; aShieldState: TShieldState): Boolean;
+begin
+  Result := False;
+
+  case aShieldState of
+    ssMaximum: Result := not(aRecRestriction in [rnConfidential, rnPrivacy]);
+
+    ssMiddle: Result := not(aRecRestriction in [rnPrivacy]);
+
+    ssNone: Result := True;
+  end;
+end;
 
 function GetPersonEventIndex(aSign: string): Integer;
 var
@@ -460,6 +625,28 @@ begin
       Result := i;
       Break;
     end;
+end;
+
+function GetEventName(aEvent: TGEDCOMCustomEvent): string;
+var
+  ev: Integer;
+begin
+  if (aEvent is TGEDCOMIndividualEvent) or (aEvent is TGEDCOMIndividualAttribute) then begin
+    ev := GetPersonEventIndex(aEvent.Name);
+    if (ev = 0) then Result := aEvent.Detail.Classification
+    else
+    if (ev > 0) then Result := PersonEvents[ev].Name
+    else Result := aEvent.Name;
+  end
+  else
+  if (aEvent is TGEDCOMFamilyEvent) then begin
+    ev := GetFamilyEventIndex(aEvent.Name);
+    if (ev = 0) then Result := aEvent.Detail.Classification
+    else
+    if (ev > 0) then Result := FamilyEvents[ev].Name
+    else Result := aEvent.Name;
+  end
+  else Result := '';
 end;
 
 procedure GetNameParts(iRec: TGEDCOMIndividualRecord; var aFamily, aName, aPatronymic: string);
@@ -536,7 +723,7 @@ begin
   try
     Result := StrToIntDef(xref, 0);
   except
-    Result := 0;
+    Result := -1;
   end;
 end;
 
@@ -657,18 +844,13 @@ end;
 
 function GEDCOMDateToDate(aDate: TGEDCOMCustomDate): TDateTime;
 var
-  dt: TGEDCOMDate;
   year: Integer;
   month, day: Word;
 begin
   try
     Result := 0;
 
-    if (aDate is TGEDCOMDateApproximated) or (aDate is TGEDCOMDate)
-    then dt := TGEDCOMDate(aDate)
-    else Exit;
-
-    dt.GetDate(year, month, day);
+    GetIndependentDate(aDate, year, month, day);
 
     if (day = 0) then day := 1;
 
@@ -774,7 +956,7 @@ begin
 
   if (event = nil)
   then Result := ''
-  else Result := event.Detail.Place;
+  else Result := event.Detail.Place.StringValue;
 end;
 
 function GetDeathPlace(iRec: TGEDCOMIndividualRecord): string;
@@ -785,25 +967,28 @@ begin
 
   if (event = nil)
   then Result := ''
-  else Result := event.Detail.Place;
+  else Result := event.Detail.Place.StringValue;
 end;
 
 function GetResidencePlace(iRec: TGEDCOMIndividualRecord; IncludeAddress: Boolean): string;
 var
   attr: TGEDCOMIndividualAttribute;
-  addr: string;
+  resi, addr: string;
 begin
   attr := GetAttribute(iRec, 'RESI');
   if (attr = nil)
   then Result := ''
   else begin
-    Result := attr.StringValue;
+    Result := attr.Detail.Place.StringValue;
 
     if (IncludeAddress) then begin
+      resi := attr.StringValue;
       addr := Trim(attr.Detail.Address.Address.Text);
+      if (resi <> '') and (addr <> '') then resi := resi + ', ';
+      resi := resi + addr;
 
-      if (addr <> '')
-      then Result := Result + ', ' + addr;
+      if (resi <> '')
+      then Result := Result + ' [' + resi + ']';
     end;
   end;
 end;
@@ -862,25 +1047,88 @@ end;
 
 function GetEventDesc(evDetail: TGEDCOMEventDetail): string;
 var
-  dt: string;
+  dt, place: string;
+  location: TGEDCOMLocationRecord;
 begin
   dt := GEDCOMCustomDateToStr(evDetail.Date.Value, dfDD_MM_YYYY, False);
 
-  if (dt = '') and (evDetail.Place = '')
+  place := evDetail.Place.StringValue;
+  location := TGEDCOMLocationRecord(evDetail.Place.Location.Value);
+  if (place <> '') and (location <> nil)
+  then place := HyperLink(location.XRef, place);
+
+  if (dt = '') and (place = '')
   then Result := '?'
   else begin
     if (dt = '')
-    then Result := evDetail.Place
+    then Result := place
     else
-    if (evDetail.Place = '')
+    if (place = '')
     then Result := dt
-    else Result := dt + ', ' + evDetail.Place;
+    else Result := dt + ', ' + place;
+  end;
+end;
+
+function GetEventCause(evDetail: TGEDCOMEventDetail): string;
+begin
+  Result := '';
+
+  if (evDetail.Cause <> '')
+  then Result := Result + evDetail.Cause;
+
+  if (evDetail.Agency <> '') then begin
+    if (Result <> '')
+    then Result := Result + ' ';
+
+    Result := Result + '[' + evDetail.Agency + ']';
   end;
 end;
 
 function IsLive(iRec: TGEDCOMIndividualRecord): Boolean;
 begin
   Result := (GetIndividualEvent(iRec, 'DEAT') = nil);
+end;
+
+procedure GetIndependentDate(aDate: TGEDCOMCustomDate; var AYear: Integer; var AMonth, ADay: Word);
+var
+  dt_range: TGEDCOMDateRange;
+  dt_period: TGEDCOMDatePeriod;
+  dt: TGEDCOMDate;
+begin
+  if (aDate is TGEDCOMDateApproximated) then begin
+    dt := TGEDCOMDate(aDate);
+    dt.GetDate(AYear, AMonth, ADay);
+  end
+  else
+  if (aDate is TGEDCOMDateRange) then begin
+    dt_range := TGEDCOMDateRange(aDate);
+
+    if (dt_range.After.StringValue = '') and (dt_range.Before.StringValue <> '')
+    then dt_range.Before.GetDate(AYear, AMonth, ADay)
+    else
+    if (dt_range.After.StringValue <> '') and (dt_range.Before.StringValue = '')
+    then dt_range.After.GetDate(AYear, AMonth, ADay)
+    else
+    if (dt_range.After.StringValue <> '') and (dt_range.Before.StringValue <> '')
+    then dt_range.After.GetDate(AYear, AMonth, ADay) // + dt_range.Before.GetDate(AYear, AMonth, ADay)) / 2
+  end
+  else
+  if (aDate is TGEDCOMDatePeriod) then begin
+    dt_period := TGEDCOMDatePeriod(aDate);
+
+    if (dt_period.DateFrom.StringValue <> '') and (dt_period.DateTo.StringValue = '')
+    then dt_period.DateFrom.GetDate(AYear, AMonth, ADay)
+    else
+    if (dt_period.DateFrom.StringValue = '') and (dt_period.DateTo.StringValue <> '')
+    then dt_period.DateTo.GetDate(AYear, AMonth, ADay)
+    else
+    if (dt_period.DateFrom.StringValue <> '') and (dt_period.DateTo.StringValue <> '')
+    then dt_period.DateFrom.GetDate(AYear, AMonth, ADay)
+  end
+  else
+  if (aDate is TGEDCOMDate) then begin
+    TGEDCOMDate(aDate).GetDate(AYear, AMonth, ADay);
+  end;
 end;
 
 function GetAbstractDate(aEventDetail: TGEDCOMEventDetail): Double;
@@ -1101,6 +1349,17 @@ begin
   end;
 end;
 
+function GetChangeDate(aRec: TGEDCOMRecord): string;
+begin
+  try
+    if (aRec.ChangeDate.ChangeDateTime <> 0)
+    then DateTimeToString(Result, 'yyyy.mm.dd hh:nn:ss', aRec.ChangeDate.ChangeDateTime)
+    else Result := '';
+  except
+    Result := '';
+  end;
+end;
+
 function CreateEventEx(aTree: TGEDCOMTree; iRec: TGEDCOMIndividualRecord;
   evName: string): TGEDCOMCustomEvent;
 begin
@@ -1118,20 +1377,24 @@ begin
   event.Name := evSign;
 
   event.Detail.Date.ParseString(evDate);
-  event.Detail.Place := evPlace;
+  event.Detail.Place.StringValue := evPlace;
 
   iRec.AddIndividualEvent(event);
 end;
 
 function CreatePersonEx(aTree: TGEDCOMTree; aName, aPatronymic, aFamily: string;
   aSex: TGEDCOMSex; aBirthEvent: Boolean = False): TGEDCOMIndividualRecord;
+var
+  pn: TGEDCOMPersonalName;
 begin
   Result := TGEDCOMIndividualRecord.Create(aTree, aTree);
-  Result.NewXRef;
-  Result.AddPersonalName(
-    TGEDCOMPersonalName.CreateTag(aTree, Result,
-      'NAME', Trim(aName) + ' ' + Trim(aPatronymic) + ' /' + Trim(aFamily) + '/'));
+  Result.InitNew();
   Result.Sex := aSex;
+
+  pn := TGEDCOMPersonalName.Create(aTree, Result);
+  pn.StringValue := Trim(aName) + ' ' + Trim(aPatronymic) + ' /' + Trim(aFamily) + '/';
+  Result.AddPersonalName(pn);
+
   Result.ChangeDate.ChangeDateTime := Now();
 
   aTree.AddRecord(Result);
@@ -1142,20 +1405,22 @@ end;
 
 procedure AddSpouseToFamily(aTree: TGEDCOMTree; aFamily: TGEDCOMFamilyRecord;
   aSpouse: TGEDCOMIndividualRecord);
+var
+  spLink: TGEDCOMSpouseToFamilyLink;
 begin
   case aSpouse.Sex of
-    svNone, svUndetermined: ;
+    svNone, svUndetermined: Exit;
 
-    svMale: 
-      aFamily.SetTagStringValue('HUSB', '@'+aSpouse.XRef+'@');
-
-    svFemale:
-      aFamily.SetTagStringValue('WIFE', '@'+aSpouse.XRef+'@');
+    svMale: aFamily.Husband.Value := aSpouse;
+    svFemale: aFamily.Wife.Value := aSpouse;
   end;
 
-  aSpouse.AddSpouseToFamilyLink(
-    TGEDCOMSpouseToFamilyLink.CreateTag(
-      aTree, aSpouse, 'FAMS', '@'+aFamily.XRef+'@'));
+  spLink := TGEDCOMSpouseToFamilyLink.Create(aTree, aSpouse);
+  spLink.Family := aFamily;
+  aSpouse.AddSpouseToFamilyLink(spLink);
+
+  {
+  }
 end;
 
 procedure RemoveFamilySpouse(aTree: TGEDCOMTree; aFamily: TGEDCOMFamilyRecord;
@@ -1167,16 +1432,112 @@ begin
     case aSpouse.Sex of
       svNone, svUndetermined: ;
 
-      svMale: aFamily.SetTagStringValue('HUSB', '');
-
-      svFemale: aFamily.SetTagStringValue('WIFE', '');
+      svMale: aFamily.Husband.Value := nil;
+      svFemale: aFamily.Wife.Value := nil;
     end;
   end;
 end;
 
-function HyperLink(XRef: string; Text: string): string;
+function CreateNoteEx(aTree: TGEDCOMTree; aText: TStrings;
+  aRecord: TGEDCOMRecord = nil): TGEDCOMNoteRecord;
+var
+  note: TGEDCOMNotes;
+begin
+  Result := TGEDCOMNoteRecord.Create(aTree, aTree);
+  Result.InitNew();
+  Result.Notes := aText;
+  Result.ChangeDate.ChangeDateTime := Now();
+  aTree.AddRecord(Result);
+
+  if (aRecord <> nil) then begin
+    note := TGEDCOMNotes.Create(aTree, aRecord);
+    note.Value := Result;
+    aRecord.AddNotes(note);
+  end;
+end;
+
+function CreateFamilyEx(aTree: TGEDCOMTree): TGEDCOMFamilyRecord;
+begin
+  Result := TGEDCOMFamilyRecord.Create(aTree, aTree);
+  Result.InitNew();
+  Result.ChangeDate.ChangeDateTime := Now();
+  aTree.AddRecord(Result);
+end;
+
+function IsMatchesMask(const aName, Mask: string): Boolean;
+var
+  i, tok_count: Integer;
+  strx, strmask: string;
+begin
+  Result := False;
+
+  strx := AnsiLowerCase(aName);
+  strmask := AnsiLowerCase(Mask);
+
+  tok_count := GetTokensCount(strmask, '|');
+  for i := 1 to tok_count do
+    Result := Result or MatchesMask(strx, GetToken(strmask, '|', i));
+end;
+
+function HyperLink(XRef: string; Text: string; Num: Integer = 0): string;
 begin
   Result := '~^' + XRef + ':' + Text + '~';
+
+  {if (Num <> 0)
+  then Result := '№ ' + IntToStr(Num) + ' ' + Result;}
+end;
+
+function GetCorresponderStr(aTree: TGEDCOMTree; aRec: TGEDCOMCommunicationRecord;
+  aLink: Boolean): string;
+var
+  dir: TCommunicationDir;
+  corresponder: TGEDCOMIndividualRecord;
+  nm: string;
+begin
+  Result := '';
+
+  aRec.GetCorresponder(dir, corresponder);
+
+  if (corresponder <> nil) then begin
+    nm := GetNameStr(corresponder);
+    if (aLink) then nm := HyperLink(corresponder.XRef, nm);
+
+    Result := '[' + CommunicationDirs[dir] + '] ' + nm;
+  end;
+end;
+
+procedure GetTaskGoal(aTree: TGEDCOMTree; aRec: TGEDCOMTaskRecord;
+  var aType: TGoalType; var aGoalRec: TGEDCOMRecord);
+begin
+  aGoalRec := aTree.XRefIndex_Find(CleanXRef(aRec.Goal));
+
+  if (aGoalRec is TGEDCOMIndividualRecord)
+  then aType := gtIndividual
+  else
+  if (aGoalRec is TGEDCOMFamilyRecord)
+  then aType := gtFamily
+  else
+  if (aGoalRec is TGEDCOMSourceRecord)
+  then aType := gtSource
+  else aType := gtOther;
+end;
+
+function GetTaskGoalStr(aTree: TGEDCOMTree; aRec: TGEDCOMTaskRecord): string;
+var
+  gt: TGoalType;
+  tempRec: TGEDCOMRecord;
+begin
+  GetTaskGoal(aTree, aRec, gt, tempRec);
+
+  case gt of
+    gtIndividual: Result := GetNameStr((tempRec as TGEDCOMIndividualRecord));
+    gtFamily: Result := GetFamilyStr((tempRec as TGEDCOMFamilyRecord));
+    gtSource: Result := (tempRec as TGEDCOMSourceRecord).FiledByEntry;
+    gtOther: Result := aRec.Goal;
+  end;
+
+  if (gt <> gtOther)
+  then Result := '[' + GoalNames[gt] + '] ' + Result;
 end;
 
 type
@@ -1187,12 +1548,11 @@ type
 
 function Matching(StrA, StrB: String; lngLen: Integer): TRetCount;
 var
-  TempRet: TRetCount;
   PosStrA, PosStrB: Integer;
   StrTempA, StrTempB: String;
 begin
-  TempRet.lngSubRows := 0;
-  TempRet.lngCountLike := 0;
+  Result.lngSubRows := 0;
+  Result.lngCountLike := 0;
 
   for PosStrA := 1 to Length(strA) - lngLen + 1 do begin
     StrTempA := Copy(strA, PosStrA, lngLen);
@@ -1200,15 +1560,13 @@ begin
     for PosStrB := 1 to Length(strB) - lngLen + 1 do begin
       StrTempB := Copy(strB, PosStrB, lngLen);
       if AnsiCompareText(StrTempA, StrTempB) = 0 then begin
-        Inc(TempRet.lngCountLike);
+        Inc(Result.lngCountLike);
         Break;
       end;
     end;
 
-    Inc(TempRet.lngSubRows);
+    Inc(Result.lngSubRows);
   end;
-
-  Result := TempRet;
 end;
 
 //------------------------------------------------------------------------------
@@ -1225,12 +1583,11 @@ var
   tret: TRetCount;
   lngCurLen: Integer; //текущая длина подстроки
 begin
+  Result := 0;
+
   //если не передан какой-либо параметр, то выход
   if (MaxMatching = 0) or (Length(strInputMatching) = 0) or (Length(strInputStandart) = 0)
-  then begin
-    Result := 0;
-    Exit;
-  end;
+  then Exit;
 
   gret.lngCountLike:= 0;
   gret.lngSubRows  := 0;
@@ -1246,12 +1603,8 @@ begin
     gret.lngSubRows   := gret.lngSubRows + tret.lngSubRows;
   end;
 
-  if (gret.lngSubRows = 0) then begin
-    Result := 0;
-    Exit;
-  end;
-
-  Result := Trunc((gret.lngCountLike / gret.lngSubRows) * 100);
+  if (gret.lngSubRows <> 0)
+  then Result := Trunc((gret.lngCountLike / gret.lngSubRows) * 100);
 end;
 
 function ClearFamily(aFamily: string): string;
@@ -1262,20 +1615,6 @@ begin
   if (p > 0)
   then Result := Copy(aFamily, 1, p - 1)
   else Result := aFamily;
-end;
-
-function GetSelIndex(aList: TBSListView): Integer;
-begin
-  if (aList.Selected = nil)
-  then Result := -1
-  else Result := Integer(aList.Selected.Data);
-end;
-
-function GetSelObject(aList: TBSListView): TObject;
-begin
-  if (aList.Selected = nil)
-  then Result := nil
-  else Result := TObject(aList.Selected.Data);
 end;
 
 function PrepareRusFamily(f: string; aFemale: Boolean): string;
@@ -1351,6 +1690,32 @@ begin
     then Result := IntToStr(Trunc(Abs(y2 - y1)));
   except
   end;
+end;
+
+function GetRecordType(rec: TGEDCOMRecord): TGEDCOMRecordType;
+begin
+  if (rec is TGEDCOMIndividualRecord) then Result := rtIndividual
+  else
+  if (rec is TGEDCOMFamilyRecord) then Result := rtFamily
+  else
+  if (rec is TGEDCOMNoteRecord) then Result := rtNote
+  else
+  if (rec is TGEDCOMMultimediaRecord) then Result := rtMultimedia
+  else
+  if (rec is TGEDCOMSourceRecord) then Result := rtSource
+  else
+  if (rec is TGEDCOMRepositoryRecord) then Result := rtRepository
+  else
+  if (rec is TGEDCOMGroupRecord) then Result := rtGroup
+  else
+  if (rec is TGEDCOMResearchRecord) then Result := rtResearch
+  else
+  if (rec is TGEDCOMTaskRecord) then Result := rtTask
+  else
+  if (rec is TGEDCOMCommunicationRecord) then Result := rtCommunication
+  else
+  if (rec is TGEDCOMLocationRecord) then Result := rtLocation
+  else Result := rtNone;
 end;
 
 procedure GetCommonStats(aTree: TGEDCOMTree; var aStats: TCommonStats);
@@ -1543,10 +1908,7 @@ procedure CheckRecord(aTree: TGEDCOMTree; aRec: TGEDCOMRecord);
     try
       strData.Text := note.Notes.Text;
 
-      noteRec := TGEDCOMNoteRecord.Create(aTree, aTree);
-      noteRec.NewXRef;
-      noteRec.Notes := strData;
-      aTree.AddRecord(noteRec);
+      noteRec := CreateNoteEx(aTree, strData);
 
       note.Clear;
       note.Value := noteRec;
@@ -1567,7 +1929,7 @@ procedure CheckRecord(aTree: TGEDCOMTree; aRec: TGEDCOMRecord);
       title := mmLink.Title;
 
       mmRec := TGEDCOMMultimediaRecord.Create(aTree, aTree);
-      mmRec.NewXRef;
+      mmRec.InitNew();
       aTree.AddRecord(mmRec);
 
       for i := 0 to mmLink.FileReferencesCount - 1 do begin
@@ -1588,6 +1950,7 @@ procedure CheckRecord(aTree: TGEDCOMTree; aRec: TGEDCOMRecord);
     end;
   end;
 
+  {fixme}
   procedure ReformSourceCitation(sourCit: TGEDCOMSourceCitation);
   begin
   end;
@@ -1626,6 +1989,132 @@ procedure CheckRecord(aTree: TGEDCOMTree; aRec: TGEDCOMRecord);
     end;
   end;
 
+  {procedure CheckAttributes(ind: TGEDCOMIndividualRecord);
+  var
+    i: Integer;
+    attr: TGEDCOMIndividualAttribute;
+  begin
+    for i := 0 to ind.IndividualAttributesCount - 1 do begin
+      attr := ind.IndividualAttributes[i];
+
+      if (attr.StringValue = '') and (attr.Detail.Place <> '') then begin
+        attr.StringValue := attr.Detail.Place;
+        attr.Detail.Place := '';
+      end;
+    end;
+  end;}
+
+  {procedure CheckName(ind: TGEDCOMIndividualRecord);
+  var
+    fam, nam, pat, np: string;
+    tag: TGEDCOMTag;
+    pn: TGEDCOMPersonalName;
+  begin
+    GetNameParts(ind, fam, nam, pat);
+
+    pn := ind.PersonalNames[0];
+
+    if (nam = '')
+    then np := pat
+    else
+    if (pat = '')
+    then np := nam
+    else np := nam + ' ' + pat;
+
+    tag := pn.FindTag('GIVN');
+    if (tag <> nil) and (tag.StringValue = np) then pn.DeleteTag('GIVN');
+
+    tag := pn.FindTag('SURN');
+    if (tag <> nil) and (tag.StringValue = fam) then pn.DeleteTag('SURN');
+  end;}
+
+  {procedure CheckPlace(ind: TGEDCOMIndividualRecord);
+  var
+    pn: TGEDCOMPersonalName;
+    ev: TGEDCOMIndividualEvent;
+  begin
+    pn := ind.PersonalNames[0];
+
+    if (pn.Surname <> '') and (pn.Surname[1] in ['Ж']) then begin
+      ev := GetIndividualEvent(ind, 'BIRT');
+      if (ev.Detail.Place = '')
+      then ev.Detail.Place := 'Екатеринбургский уезд, пос. Верхний Тагил';
+    end;
+  end;}
+
+  procedure CheckPerson(ind: TGEDCOMIndividualRecord);
+  var
+    k: Integer;
+    evt: TGEDCOMCustomEvent;
+    loc: TGEDCOMLocationRecord;
+  begin
+    {CheckAttributes(ind);}
+    {CheckName(ind);}
+    {CheckPlace(ind);}
+
+    /// Не указаны родители и супруги - нормально
+
+    /// Пустые ссылки на семью родителей - зачищаем
+    for k := ind.ChildToFamilyLinksCount - 1 downto 0 do begin
+      if (ind.ChildToFamilyLinks[k].Family = nil)
+      then ind.DeleteChildToFamilyLink(k);
+    end;
+
+    /// Пустые ссылки на брак - зачищаем
+    for k := ind.SpouseToFamilyLinksCount - 1 downto 0 do begin
+      if (ind.SpouseToFamilyLinks[k].Family = nil)
+      then ind.DeleteSpouseToFamilyLink(k);
+    end;
+
+    for k := 0 to ind.IndividualEventsCount - 1 do begin
+      evt := ind.IndividualEvents[k];
+
+      if (evt.Detail.Place.StringValue <> '') then begin
+        loc := TGEDCOMLocationRecord(evt.Detail.Place.Location.Value);
+
+        if (loc <> nil) and (evt.Detail.Place.StringValue <> loc.Name)
+        then evt.Detail.Place.StringValue := loc.Name;
+      end;
+    end;
+  end;
+
+  procedure CheckFamily(fam: TGEDCOMFamilyRecord);
+  var
+    k: Integer;
+  begin
+    /// Пустые семьи (без супругов, детей и событий) - не трогаем
+    /// Пустые указатели супругов не трогаем
+
+    /// Пустые указатели детей - зачищаем
+    for k := fam.ChildrenCount - 1 downto 0 do begin
+      if (fam.Children[k].Value = nil)
+      then fam.DeleteChild(k);
+    end;
+
+    /// Сортируем детей по возрасту (для древ и росписей)
+    fam.SortChilds();
+  end;
+
+  procedure CheckGroup(group: TGEDCOMGroupRecord);
+  var
+    k: Integer;
+    ptr: TGEDCOMPointer;
+    irec: TGEDCOMIndividualRecord;
+  begin
+    /// Проверка на зависшие указатели на членов групп
+    for k := group.MembersCount - 1 downto 0 do begin
+      ptr := group.Members[k];
+      irec := TGEDCOMIndividualRecord(ptr.Value);
+
+      if (irec = nil)
+      then group.DeleteMember(k)
+      else begin
+        if (irec.IndexOfGroup(group) < 0)
+        then group.DeleteMember(k);
+      end;
+    end;
+  end;
+
 var
   rwl: TGEDCOMRecord;
   i: Integer;
@@ -1637,6 +2126,10 @@ var
 begin
   if (aRec is TGEDCOMRecord) then begin
     rwl := aRec as TGEDCOMRecord;
+
+    /// Общие для всех записей свойства
+
+    if (rwl.UID = '') then rwl.NewUID();
 
     for i := 0 to rwl.MultimediaLinksCount - 1 do begin
       mmLink := rwl.MultimediaLinks[i];
@@ -1653,13 +2146,14 @@ begin
       if not(sourCit.IsPointer) then ReformSourceCitation(sourCit);
     end;
 
+    /// Раздельно по подвидам записей
 
     if (rwl is TGEDCOMFamilyRecord) then begin
       fam := rwl as TGEDCOMFamilyRecord;
 
-      fam.SortChilds();
-
       for i := 0 to fam.FamilyEventCount - 1 do PrepareTag(fam.FamilyEvents[i].Detail);
+
+      CheckFamily(fam);
     end
     else
     if (rwl is TGEDCOMIndividualRecord) then begin
@@ -1671,6 +2165,8 @@ begin
       for i := 0 to ind.ChildToFamilyLinksCount - 1 do PreparePtr(ind.ChildToFamilyLinks[i]);
       for i := 0 to ind.SpouseToFamilyLinksCount - 1 do PreparePtr(ind.SpouseToFamilyLinks[i]);
       for i := 0 to ind.AssociationsCount - 1 do PreparePtr(ind.Associations[i]);
+
+      CheckPerson(ind);
     end
     else
     if (rwl is TGEDCOMMultimediaRecord) then begin
@@ -1698,7 +2194,7 @@ begin
     end
     else
     if (rwl is TGEDCOMGroupRecord) then begin
-      // dummy
+      CheckGroup(rwl as TGEDCOMGroupRecord);
     end;
   end;
 end;
@@ -1719,7 +2215,7 @@ function CheckGEDCOMFormat(aTree: TGEDCOMTree): Boolean;
       for i := 0 to aTree.Count - 1 do begin
         rec := aTree.Records[i];
 
-        if (GetId(rec) = 0) then begin
+        if (GetId(rec) < 0) then begin
           newXRef := aTree.XRefIndex_NewXRef(rec);
           repMap.AddXRef(rec, rec.XRef, newXRef);
           rec.XRef := newXRef;
@@ -1745,10 +2241,17 @@ function CheckGEDCOMFormat(aTree: TGEDCOMTree): Boolean;
   end;
 
 var
-  i: Integer;
+  i, k: Integer;
   rec: TGEDCOMRecord;
   idCheck: Boolean;
 begin
+  for i := 0 to aTree.Count - 1 do begin
+    for k := i + 1 to aTree.Count - 1 do begin
+      if (aTree.Records[i].XRef = aTree.Records[k].XRef)
+      then ; // AddDiag(aTree.Records[i].XRef, 'Объект дублирован');
+    end;
+  end;
+
   ProgressInit(aTree.Count, 'Проверка формата');
   try
     idCheck := True;
@@ -1757,7 +2260,7 @@ begin
       rec := aTree.Records[i];
       CheckRecord(aTree, rec);
 
-      if (idCheck) and (GetId(rec) = 0)
+      if (idCheck) and (GetId(rec) < 0)
       then idCheck := False;
 
       ProgressStep();
@@ -1805,32 +2308,6 @@ begin
   {$ELSE}
   SWriteString(Stream, Result);
   {$ENDIF}
-end;
-
-const
-  c1 = 52845;
-  c2 = 22719;
-
-function Encrypt(const s: string; Key: Word): string;
-var
-  i: Byte;
-begin
-  Result := s;
-  for i := 1 to Length(s) do begin
-    Result[i] := Char(Byte(s[i]) xor (Key shr 8));
-    Key := (Byte(Result[i]) + Key) * c1 + c2;
-  end;
-end;
-
-function Decrypt(const s: string; Key: Word): string;
-var
-  i: Byte;
-begin
-  Result := s;
-  for i := 1 to Length(s) do begin
-    Result[i] := Char(Byte(s[i]) xor (Key shr 8));
-    Key := (Byte(s[i]) + Key) * c1 + c2;
-  end;
 end;
 
 function ConStrings(aStrings: TStrings): string;
@@ -1957,23 +2434,23 @@ var
   i: Integer;
   iRec, iFather: TGEDCOMIndividualRecord;
   family: TGEDCOMFamilyRecord;
-  fam, nam, pat, f_fam, f_nam, f_pat: string;
+  dummy, ch_pat, fat_nam: string;
 begin
   for i := 0 to aTree.Count - 1 do
     if (aTree.Records[i] is TGEDCOMIndividualRecord) then begin
       iRec := aTree.Records[i] as TGEDCOMIndividualRecord;
 
-      GetNameParts(iRec, fam, nam, pat);
+      GetNameParts(iRec, dummy, dummy, ch_pat);
 
       if (iRec.ChildToFamilyLinksCount <> 0) then begin
         family := iRec.ChildToFamilyLinks[0].Family;
         if (family <> nil) then begin
           iFather := TGEDCOMIndividualRecord(family.Husband.Value);
           if (iFather <> nil) then begin
-            GetNameParts(iFather, f_fam, f_nam, f_pat);
+            GetNameParts(iFather, dummy, fat_nam, dummy);
 
-            if (Length(pat) > 1) and (Length(f_nam) > 1) and Comparable(f_nam, pat)
-            then SetName(f_nam, pat, iRec.Sex);
+            if (Length(ch_pat) > 1) and (Length(fat_nam) > 1) and Comparable(fat_nam, ch_pat)
+            then SetName(fat_nam, ch_pat, iRec.Sex);
           end;
         end;
       end;
@@ -2081,7 +2558,7 @@ begin
   FServer := aIniFile.ReadString('Proxy', 'Server', '');
   FPort := aIniFile.ReadString('Proxy', 'Port', '');
   FLogin := aIniFile.ReadString('Proxy', 'Login', '');
-  FPassword := Decrypt(aIniFile.ReadString('Proxy', 'Password', ''), 777);
+  FPassword := scDecrypt(aIniFile.ReadString('Proxy', 'Password', ''), CrcStr(AppName));
 end;
 
 procedure TProxy.SaveToFile(const aIniFile: TIniFile);
@@ -2090,7 +2567,7 @@ begin
   aIniFile.WriteString('Proxy', 'Server', FServer);
   aIniFile.WriteString('Proxy', 'Port', FPort);
   aIniFile.WriteString('Proxy', 'Login', FLogin);
-  aIniFile.WriteString('Proxy', 'Password', Encrypt(FPassword, 777));
+  aIniFile.WriteString('Proxy', 'Password', scEncrypt(FPassword, CrcStr(AppName)));
 end;
 
 { TPedigreeOptions }
@@ -2108,6 +2585,8 @@ begin
   FIncludeAttributes := aIniFile.ReadBool('Pedigree', 'IncludeAttributes', True);
   FIncludeNotes := aIniFile.ReadBool('Pedigree', 'IncludeNotes', True);
   FIncludeSources := aIniFile.ReadBool('Pedigree', 'IncludeSources', True);
+
+  FFormat := TPedigreeFormat(aIniFile.ReadInteger('Pedigree', 'Format', 0));
 end;
 
 procedure TPedigreeOptions.SaveToFile(const aIniFile: TIniFile);
@@ -2115,9 +2594,21 @@ begin
   aIniFile.WriteBool('Pedigree', 'IncludeAttributes', FIncludeAttributes);
   aIniFile.WriteBool('Pedigree', 'IncludeNotes', FIncludeNotes);
   aIniFile.WriteBool('Pedigree', 'IncludeSources', FIncludeSources);
+
+  aIniFile.WriteInteger('Pedigree', 'Format', Ord(FFormat));
 end;
 
 { TGlobalOptions }
+
+function GetKeyLayout(): Word;
+begin
+  Result := LOWORD(GetKeyboardLayout(0));
+end;
+
+procedure SetKeyLayout(aLayout: Word);
+begin
+  ActivateKeyboardLayout(aLayout, 0);
+end;
 
 constructor TGlobalOptions.Create;
 begin
@@ -2128,10 +2619,14 @@ begin
   FResidenceFilters := TStringList.Create;
   FPedigreeOptions := TPedigreeOptions.Create;
   FProxy := TProxy.Create;
+  FRelations := TStringList.Create;
+
+  FListPersonsColumns := DefPersonColumns;
 end;
 
 destructor TGlobalOptions.Destroy;
 begin
+  FRelations.Free;
   FProxy.Free;
   FPedigreeOptions.Free;
   FResidenceFilters.Free;
@@ -2147,6 +2642,7 @@ var
   ini: TIniFile;
   i, cnt: Integer;
   fn: string;
+  kl: Word;
 begin
   ini := TIniFile.Create(FileName);
   try
@@ -2155,6 +2651,12 @@ begin
     FDefDateFormat := TDateFormat(ini.ReadInteger('Common', 'DefDateFormat', Ord(dfDD_MM_YYYY)));
     FLastDir := ini.ReadString('Common', 'LastDir', '');
     FPlacesWithAddress := ini.ReadBool('Common', 'PlacesWithAddress', False);
+    FShowTips := ini.ReadBool('Common', 'ShowTips', True);
+
+    FGEDCOMOptimize := ini.ReadBool('Common', 'GEDCOMOptimize', False);
+
+    kl := ini.ReadInteger('Common', 'KeyLayout', GetKeyLayout());
+    SetKeyLayout(kl);
 
     FChartOptions.LoadFromFile(ini);
     FPedigreeOptions.LoadFromFile(ini);
@@ -2175,6 +2677,15 @@ begin
       then FMRUFiles.Add(fn)
       else ini.DeleteKey('MRUFiles', 'File_' + IntToStr(i));
     end;
+
+    cnt := ini.ReadInteger('Relations', 'Count', 0);
+    for i := 0 to cnt - 1 do
+      FRelations.Add(ini.ReadString('Relations', 'Relation_' + IntToStr(i), ''));
+
+    for i := 0 to High(FListPersonsColumns) do begin
+      FListPersonsColumns[i].colType := TPersonColumnType(ini.ReadInteger('PersonsColumns', 'ColType_' + IntToStr(i), Ord(DefPersonColumns[i].colType)));
+      FListPersonsColumns[i].colActive := ini.ReadBool('PersonsColumns', 'ColActive_' + IntToStr(i), DefPersonColumns[i].colActive);
+    end;
   finally
     ini.Destroy;
   end;
@@ -2192,6 +2703,11 @@ begin
     ini.WriteInteger('Common', 'DefDateFormat', Ord(FDefDateFormat));
     ini.WriteString('Common', 'LastDir', FLastDir);
     ini.WriteBool('Common', 'PlacesWithAddress', FPlacesWithAddress);
+    ini.WriteBool('Common', 'ShowTips', FShowTips);
+
+    ini.WriteBool('Common', 'GEDCOMOptimize', FGEDCOMOptimize);
+
+    ini.WriteInteger('Common', 'KeyLayout', GetKeyLayout());
 
     FChartOptions.SaveToFile(ini);
     FPedigreeOptions.SaveToFile(ini);
@@ -2206,9 +2722,18 @@ begin
       ini.WriteString('ResidenceFilters', 'Filter_' + IntToStr(i), FResidenceFilters[i]);
 
     ini.WriteInteger('MRUFiles', 'Count', FMRUFiles.Count);
-    for i := 0 to FMRUFiles.Count - 1 do 
+    for i := 0 to FMRUFiles.Count - 1 do
       ini.WriteString('MRUFiles', 'File_' + IntToStr(i), FMRUFiles[i]);
     FMRUFiles.Sort();
+
+    ini.WriteInteger('Relations', 'Count', FRelations.Count);
+    for i := 0 to FRelations.Count - 1 do
+      ini.WriteString('Relations', 'Relation_' + IntToStr(i), FRelations[i]);
+
+    for i := 0 to High(FListPersonsColumns) do begin
+      ini.WriteInteger('PersonsColumns', 'ColType_' + IntToStr(i), Ord(FListPersonsColumns[i].colType));
+      ini.WriteBool('PersonsColumns', 'ColActive_' + IntToStr(i), FListPersonsColumns[i].colActive);
+    end;
   finally
     ini.Destroy;
   end;

@@ -5,6 +5,7 @@ object fmChart: TfmChart
   Height = 590
   Caption = #1044#1080#1072#1075#1088#1072#1084#1084#1072
   Color = clBtnFace
+  DefaultMonitor = dmMainForm
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -61,7 +62,7 @@ object fmChart: TfmChart
     end
     object ListDepthLimit: TComboBox
       Left = 161
-      Top = 0
+      Top = 2
       Width = 110
       Height = 21
       Style = csDropDownList
@@ -121,6 +122,26 @@ object fmChart: TfmChart
       ImageIndex = 23
       OnClick = tbNextClick
     end
+    object ToolButton3: TToolButton
+      Left = 368
+      Top = 0
+      Width = 8
+      Caption = 'ToolButton3'
+      ImageIndex = 24
+      Style = tbsSeparator
+    end
+    object TrackBar1: TTrackBar
+      Left = 376
+      Top = 0
+      Width = 225
+      Height = 26
+      LineSize = 5
+      Min = 5
+      PageSize = 1
+      Position = 10
+      TabOrder = 1
+      OnChange = TrackBar1Change
+    end
   end
   object ScrollBox1: TScrollBox
     Left = 0
@@ -128,6 +149,12 @@ object fmChart: TfmChart
     Width = 749
     Height = 533
     Align = alClient
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 1
     OnResize = ScrollBox1Resize
     object Image1: TImage

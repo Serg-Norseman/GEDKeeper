@@ -6,6 +6,7 @@ object fmAssociationEdit: TfmAssociationEdit
   ClientHeight = 145
   ClientWidth = 353
   Color = clBtnFace
+  DefaultMonitor = dmMainForm
   Font.Charset = RUSSIAN_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -13,6 +14,7 @@ object fmAssociationEdit: TfmAssociationEdit
   Font.Style = []
   OldCreateOrder = False
   Position = poScreenCenter
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
@@ -106,11 +108,13 @@ object fmAssociationEdit: TfmAssociationEdit
     TabOrder = 3
     Kind = bkCancel
   end
-  object EditRelation: TEdit
+  object EditRelation: TComboBox
     Left = 8
     Top = 24
     Width = 337
     Height = 21
+    ItemHeight = 13
+    Sorted = True
     TabOrder = 0
   end
   object EditPerson: TEdit

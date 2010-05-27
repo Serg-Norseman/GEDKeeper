@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons, ComCtrls,
-  GedCom551, GKBase, GKCommon;
+  GedCom551, GKBase, GKCommon, GKSheetList, bsCtrls;
 
 type
   TfmSourceEdit = class(TForm)
@@ -37,9 +37,10 @@ type
     FMediaList: TSheetList;
     FRepositoriesList: TSheetList;
 
+    procedure AcceptChanges();
     procedure ControlsRefresh();
     function GetBase: TfmBase;
-    procedure ListModify(Sender: TObject; Index: Integer; Action: TRecAction);
+    procedure ListModify(Sender: TObject; ItemData: TObject; Action: TRecAction);
     procedure SetSourceRecord(const Value: TGEDCOMSourceRecord);
   public
     property Base: TfmBase read GetBase;
@@ -54,17 +55,18 @@ uses GKMain, GKRecordSelect;
 
 procedure TfmSourceEdit.FormCreate(Sender: TObject);
 begin
-  FNotesList := TSheetList.Create(SheetNotes);
+  FNotesList := TSheetList.Create(SheetNotes, lmBox);
   FNotesList.OnModify := ListModify;
-  Base.SetupRecNotesList(FNotesList.List);
+  Base.SetupRecNotesList(FNotesList);
 
   FMediaList := TSheetList.Create(SheetMultimedia);
   FMediaList.OnModify := ListModify;
-  Base.SetupRecMediaList(FMediaList.List);
+  Base.SetupRecMediaList(FMediaList);
 
   FRepositoriesList := TSheetList.Create(SheetRepositories);
   FRepositoriesList.OnModify := ListModify;
-  Base.SetupRecRepositoriesList(FRepositoriesList.List);
+  FRepositoriesList.Buttons := [lbAdd..lbJump];
+  AddListColumn(FRepositoriesList.List, 'Архив', 300);
 end;
 
 procedure TfmSourceEdit.ControlsRefresh();
@@ -73,15 +75,17 @@ var
   rep: TGEDCOMRepositoryRecord;
 begin
   Base.RecListNotesRefresh(FSourceRecord, FNotesList.List, nil);
-  Base.RecListMediaRefresh(FSourceRecord, FMediaList.List, nil);
+  Base.RecListMediaRefresh(FSourceRecord, TBSListView(FMediaList.List), nil);
 
-  FRepositoriesList.List.Items.BeginUpdate();
-  FRepositoriesList.List.Clear();
-  for k := 0 to FSourceRecord.RepositoryCitationsCount - 1 do begin
-    rep := TGEDCOMRepositoryRecord(FSourceRecord.RepositoryCitations[k].Value);
-    FRepositoriesList.List.AddItem(rep.RepositoryName, TObject(k));
+  with TListView(FRepositoriesList.List) do begin
+    Items.BeginUpdate();
+    Items.Clear();
+    for k := 0 to FSourceRecord.RepositoryCitationsCount - 1 do begin
+      rep := TGEDCOMRepositoryRecord(FSourceRecord.RepositoryCitations[k].Value);
+      AddItem(rep.RepositoryName, FSourceRecord.RepositoryCitations[k]);
+    end;
+    Items.EndUpdate();
   end;
-  FRepositoriesList.List.Items.EndUpdate();
 end;
 
 procedure TfmSourceEdit.SetSourceRecord(const Value: TGEDCOMSourceRecord);
@@ -97,7 +101,7 @@ begin
   ControlsRefresh();
 end;
 
-procedure TfmSourceEdit.btnAcceptClick(Sender: TObject);
+procedure TfmSourceEdit.AcceptChanges();
 begin
   FSourceRecord.FiledByEntry := EditShortTitle.Text;
 
@@ -113,23 +117,26 @@ begin
   FSourceRecord.Text.Clear;
   FSourceRecord.Text := EditText.Lines;
 
-  FSourceRecord.ChangeDate.ChangeDateTime := Now();
-
-  Base.Modified := True;
+  Base.ChangeRecord(FSourceRecord);
 end;
 
-procedure TfmSourceEdit.ListModify(Sender: TObject; Index: Integer; Action: TRecAction);
+procedure TfmSourceEdit.btnAcceptClick(Sender: TObject);
+begin
+  AcceptChanges();
+end;
+
+procedure TfmSourceEdit.ListModify(Sender: TObject; ItemData: TObject; Action: TRecAction);
 var
   rep: TGEDCOMRepositoryRecord;
   cit: TGEDCOMRepositoryCitation;
 begin
   if (Sender = FNotesList) then begin
-    if Base.ModifyRecNote(FSourceRecord, Index, Action)
+    if Base.ModifyRecNote(FSourceRecord, TGEDCOMNotes(ItemData), Action)
     then ControlsRefresh();
   end
   else
   if (Sender = FMediaList) then begin
-    if Base.ModifyRecMultimedia(FSourceRecord, Index, Action)
+    if Base.ModifyRecMultimedia(FSourceRecord, TGEDCOMMultimediaLink(ItemData), Action)
     then ControlsRefresh();
   end
   else
@@ -149,14 +156,23 @@ begin
       raEdit: ;
 
       raDelete: begin
-        if (Index < 0) then Exit;
-        if (MessageDlg('Удалить ссылку на архив?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+        cit := TGEDCOMRepositoryCitation(ItemData);
+
+        if (cit = nil) or (MessageDlg('Удалить ссылку на архив?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
         then Exit;
 
-        cit := FSourceRecord.RepositoryCitations[Index];
-        FSourceRecord.RemoveRepositoryCitation(cit);
+        FSourceRecord.DeleteRepositoryCitation(cit);
 
         ControlsRefresh();
+      end;
+
+      raJump: begin
+        cit := TGEDCOMRepositoryCitation(ItemData);
+        if (cit <> nil) then begin
+          AcceptChanges();
+          Base.SelectRecordByXRef(TGEDCOMRepositoryRecord(cit.Value).XRef);
+          Close;
+        end;
       end;
     end;
   end;

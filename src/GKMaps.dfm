@@ -5,6 +5,7 @@ object fmMaps: TfmMaps
   Height = 641
   Caption = #1050#1072#1088#1090#1099
   Color = clBtnFace
+  DefaultMonitor = dmMainForm
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -141,7 +142,7 @@ object fmMaps: TfmMaps
         end
         object btnSearch: TButton
           Left = 168
-          Top = 24
+          Top = 28
           Width = 105
           Height = 25
           Caption = #1055#1086#1080#1089#1082
@@ -176,7 +177,7 @@ object fmMaps: TfmMaps
       TabOrder = 0
       OnStatusTextChange = WebBrowserStatusTextChange
       ControlData = {
-        4C00000013210000CE1800000000000000000000000000000000000000000000
+        4C0000000C3F0000E03C00000000000000000000000000000000000000000000
         000000004C000000000000000000000001000000E0D057007335CF11AE690800
         2B2E126200000000000000004C0000000114020000000000C000000000000046
         8000000000000000000000000000000000000000000000000000000000000000

@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons, ComCtrls,
-  GedCom551, GKBase, GKCommon;
+  GedCom551, GKBase, GKCommon, GKSheetList, bsCtrls;
 
 type
   TfmMediaEdit = class(TForm)
@@ -28,7 +28,6 @@ type
     edFile: TEdit;
     btnFileSelect: TButton;
     procedure FormCreate(Sender: TObject);
-    procedure FormDestroy(Sender: TObject);
     procedure btnAcceptClick(Sender: TObject);
     procedure btnFileSelectClick(Sender: TObject);
     procedure btnViewClick(Sender: TObject);
@@ -43,7 +42,7 @@ type
     procedure AcceptChanges();
     procedure ControlsRefresh();
     function  GetBase(): TfmBase;
-    procedure ListModify(Sender: TObject; Index: Integer; Action: TRecAction);
+    procedure ListModify(Sender: TObject; ItemData: TObject; Action: TRecAction);
     procedure SetMediaRec(const Value: TGEDCOMMultimediaRecord);
   public
     property Base: TfmBase read GetBase;
@@ -53,8 +52,7 @@ type
 implementation
 
 uses
-  bsComUtils, GKRecordSelect
-  {$IFNDEF DELPHI_NET}, GKMediaView{$ENDIF}, GKMain;
+  bsComUtils, GKRecordSelect, GKMain;
 
 {$R *.dfm}
 
@@ -72,18 +70,13 @@ begin
     cbStoreType.Items.Add(GKStoreType[gst].Name);
   cbStoreType.ItemIndex := 0;
 
-  FNotesList := TSheetList.Create(SheetNotes);
+  FNotesList := TSheetList.Create(SheetNotes, lmBox);
   FNotesList.OnModify := ListModify;
-  Base.SetupRecNotesList(FNotesList.List);
+  Base.SetupRecNotesList(FNotesList);
 
   FSourcesList := TSheetList.Create(SheetSources);
   FSourcesList.OnModify := ListModify;
-  Base.SetupRecSourcesList(FSourcesList.List);
-end;
-
-procedure TfmMediaEdit.FormDestroy(Sender: TObject);
-begin
-  //
+  Base.SetupRecSourcesList(FSourcesList);
 end;
 
 procedure TfmMediaEdit.ControlsRefresh();
@@ -108,7 +101,7 @@ begin
   cbStoreType.Enabled := (FIsNew);
 
   Base.RecListNotesRefresh(FMediaRec, FNotesList.List, nil);
-  Base.RecListSourcesRefresh(FMediaRec, FSourcesList.List, nil);
+  Base.RecListSourcesRefresh(FMediaRec, TBSListView(FSourcesList.List), nil);
 end;
 
 procedure TfmMediaEdit.SetMediaRec(const Value: TGEDCOMMultimediaRecord);
@@ -118,7 +111,7 @@ begin
   try
     ControlsRefresh();
   except
-    on E: Exception do LogWrite('SetMediaRec(): ' + E.Message);
+    on E: Exception do LogWrite('MediaEdit.SetMediaRec(): ' + E.Message);
   end;
 end;
 
@@ -164,20 +157,19 @@ procedure TfmMediaEdit.btnAcceptClick(Sender: TObject);
 begin
   AcceptChanges();
 
-  FMediaRec.ChangeDate.ChangeDateTime := Now();
-  Base.Modified := True;
+  Base.ChangeRecord(FMediaRec);
 end;
 
-procedure TfmMediaEdit.ListModify(Sender: TObject; Index: Integer;
+procedure TfmMediaEdit.ListModify(Sender: TObject; ItemData: TObject;
   Action: TRecAction);
 begin
   if (Sender = FNotesList) then begin
-    if Base.ModifyRecNote(FMediaRec, Index, Action)
+    if Base.ModifyRecNote(FMediaRec, TGEDCOMNotes(ItemData), Action)
     then ControlsRefresh();
   end
   else
   if (Sender = FSourcesList) then begin
-    if Base.ModifyRecSource(FMediaRec, Index, Action)
+    if Base.ModifyRecSource(FMediaRec, TGEDCOMSourceCitation(ItemData), Action)
     then ControlsRefresh();
   end;
 end;
@@ -190,17 +182,8 @@ end;
 
 procedure TfmMediaEdit.btnViewClick(Sender: TObject);
 begin
-  {$IFNDEF DELPHI_NET}
   AcceptChanges();
-
-  fmMediaView := TfmMediaView.Create(Base);
-  try
-    fmMediaView.FileRef := FMediaRec.FileReferences[0];
-    fmMediaView.ShowModal;
-  finally
-    fmMediaView.Destroy;
-  end;
-  {$ENDIF}
+  Base.ShowMedia(FMediaRec);
 end;
 
 function TfmMediaEdit.GetBase(): TfmBase;

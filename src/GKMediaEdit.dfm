@@ -6,6 +6,7 @@ object fmMediaEdit: TfmMediaEdit
   ClientHeight = 298
   ClientWidth = 522
   Color = clBtnFace
+  DefaultMonitor = dmMainForm
   Font.Charset = RUSSIAN_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -14,7 +15,6 @@ object fmMediaEdit: TfmMediaEdit
   OldCreateOrder = True
   Position = poScreenCenter
   OnCreate = FormCreate
-  OnDestroy = FormDestroy
   PixelsPerInch = 96
   TextHeight = 13
   object PagesData: TPageControl
@@ -51,7 +51,7 @@ object fmMediaEdit: TfmMediaEdit
       end
       object Label3: TLabel
         Left = 8
-        Top = 112
+        Top = 104
         Width = 26
         Height = 13
         Caption = #1060#1072#1081#1083
@@ -85,14 +85,14 @@ object fmMediaEdit: TfmMediaEdit
       end
       object edFile: TEdit
         Left = 8
-        Top = 128
+        Top = 120
         Width = 449
         Height = 21
         TabOrder = 3
       end
       object btnFileSelect: TButton
         Left = 464
-        Top = 128
+        Top = 120
         Width = 43
         Height = 21
         Caption = '...'

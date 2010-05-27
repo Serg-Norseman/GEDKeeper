@@ -6,6 +6,7 @@ object fmGroupEdit: TfmGroupEdit
   ClientHeight = 457
   ClientWidth = 482
   Color = clBtnFace
+  DefaultMonitor = dmMainForm
   Font.Charset = RUSSIAN_CHARSET
   Font.Color = clWindowText
   Font.Height = -11

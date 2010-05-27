@@ -1,11 +1,13 @@
 object fmSourceEdit: TfmSourceEdit
   Left = 344
   Top = 103
+  ActiveControl = EditShortTitle
   BorderStyle = bsDialog
   Caption = #1048#1089#1090#1086#1095#1085#1080#1082
   ClientHeight = 449
   ClientWidth = 537
   Color = clBtnFace
+  DefaultMonitor = dmMainForm
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -22,7 +24,7 @@ object fmSourceEdit: TfmSourceEdit
     Width = 81
     Height = 25
     Caption = #1055#1088#1080#1085#1103#1090#1100
-    TabOrder = 2
+    TabOrder = 1
     OnClick = btnAcceptClick
     Kind = bkOK
   end
@@ -32,7 +34,7 @@ object fmSourceEdit: TfmSourceEdit
     Width = 81
     Height = 25
     Caption = #1054#1090#1084#1077#1085#1080#1090#1100
-    TabOrder = 1
+    TabOrder = 2
     Kind = bkCancel
   end
   object PagesData: TPageControl

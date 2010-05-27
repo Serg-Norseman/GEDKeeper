@@ -3,8 +3,7 @@ unit GKProgress;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ComCtrls, StdCtrls;
+  SysUtils, Classes, Graphics, Controls, Forms, ComCtrls, StdCtrls;
 
 type
   TfmProgress = class(TForm)

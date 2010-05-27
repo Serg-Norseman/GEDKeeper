@@ -16,7 +16,7 @@ type
     smBirthYears, smBirthTenYears, smDeathYears, smDeathTenYears,
     smChildsCount, smChildsDistribution,
     smBirthPlaces, smDeathPlaces, smResidences, smOccupation,
-    smReligious, smNational, smEducation,
+    smReligious, smNational, smEducation, smCaste,
     smFirstbornAge, smMarriages, smMarriageAge, smSpousesDiff,
 
     smHobby, smAward, smMili, smMiliInd, smMiliDis, smMiliRank);
@@ -46,6 +46,7 @@ const
     (Title: 'Вероисповедание'; Cap: 'Вероисповедание'; Val: 'Количество'),
     (Title: 'Национальность'; Cap: 'Национальность'; Val: 'Количество'),
     (Title: 'Образование'; Cap: 'Образование'; Val: 'Количество'),
+    (Title: 'Социальное положение'; Cap: 'Социальное положение'; Val: 'Количество'),
 
     (Title: 'Возраст рождения первенца'; Cap: 'Имя'; Val: 'Возраст'),
     (Title: 'Количество браков'; Cap: 'Имя'; Val: 'Браков'),
@@ -68,8 +69,7 @@ type
     ToolBar1: TToolBar;
     ToolButton1: TToolButton;
     cbType: TComboBox;
-    ListStats: TBSListView;
-    ListCommon: TBSListView;
+    ListCommon: TListView;
     procedure cbTypeChange(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
@@ -77,17 +77,19 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
-    FBase: TfmBase;
+    ListStats: TBSListView;
+
     procedure AddItem(aTitle, aVal: string);
     procedure CalcStats(aTree: TGEDCOMTree; aMode: TStatMode);
     procedure InitTable(Col1, Col2: string);
+    function GetBase: TfmBase;
   public
-    property Base: TfmBase read FBase write FBase;
+    property Base: TfmBase read GetBase;
   end;
 
 implementation
 
-uses GKCommon, GKMain;
+uses GKCommon, GKMain, GKSheetList, Dialogs;
 
 {$R *.dfm}
 
@@ -120,6 +122,10 @@ procedure TfmStats.FormCreate(Sender: TObject);
 var
   i: TStatMode;
 begin
+  Base.CreateListView(Self, Panel1, ListStats);
+  AddListColumn(ListStats, '-', 400);
+  AddListColumn(ListStats, '-', 150);
+
   cbType.Clear;
   for i := Low(TStatMode) to High(TStatMode) do
     cbType.Items.Add(Titles[i].Title);
@@ -197,6 +203,7 @@ var
 
 var
   i, k, idx, year: Integer;
+  m, d: Word;
   iRec: TGEDCOMIndividualRecord;
   event: TGEDCOMIndividualEvent;
   fRec: TGEDCOMFamilyRecord;
@@ -252,7 +259,7 @@ begin
 
               smLifeExpectancy: V := GetLifeExpectancy(iRec);
 
-              smResidences: V := GetAttributeValue(iRec, 'RESI');
+              smResidences: V := GetResidencePlace(iRec, False);
 
               smOccupation: V := GetAttributeValue(iRec, 'OCCU');
 
@@ -262,13 +269,18 @@ begin
 
               smEducation: V := GetAttributeValue(iRec, 'EDUC');
 
+              smCaste: V := GetAttributeValue(iRec, 'CAST');
+
               smChildsDistribution: V := IntToStr(GetChildsCount(iRec));
 
               smBirthYears..smDeathTenYears, smBirthPlaces, smDeathPlaces: begin
                 V := '?';
                 for k := 0 to iRec.IndividualEventsCount - 1 do begin
                   event := iRec.IndividualEvents[k];
-                  year := TGEDCOMDate(event.Detail.Date.Value).Year;
+                  GetIndependentDate(event.Detail.Date.Value, year, m, d);
+
+                  if (Abs(year) > 3000)
+                  then ShowMessage(event.Detail.Date.StringValue + '/' + GetNameStr(iRec));
 
                   if (event.Name = 'BIRT') then begin
                     if (aMode = smBirthYears)
@@ -278,7 +290,7 @@ begin
                     then V := IntToStr((year div 10) * 10)
                     else
                     if (aMode = smBirthPlaces)
-                    then V := event.Detail.Place;
+                    then V := event.Detail.Place.StringValue;
                   end
                   else
                   if (event.Name = 'DEAT') then begin
@@ -289,7 +301,7 @@ begin
                     then V := IntToStr((year div 10) * 10)
                     else
                     if (aMode = smDeathPlaces)
-                    then V := event.Detail.Place;
+                    then V := event.Detail.Place.StringValue;
                   end;
                 end;
               end;
@@ -346,7 +358,7 @@ end;
 
 procedure TfmStats.cbTypeChange(Sender: TObject);
 begin
-  CalcStats(FBase.Tree, TStatMode(cbType.ItemIndex));
+  CalcStats(Base.Tree, TStatMode(cbType.ItemIndex));
 end;
 
 procedure TfmStats.FormShow(Sender: TObject);
@@ -366,7 +378,7 @@ var
   item: TListItem;
   stats: TCommonStats;
 begin
-  GetCommonStats(FBase.Tree, stats);
+  GetCommonStats(Base.Tree, stats);
 
   ListCommon.Clear;
   with stats do begin
@@ -435,6 +447,11 @@ end;
 procedure TfmStats.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Action := caFree;
+end;
+
+function TfmStats.GetBase: TfmBase;
+begin
+  Result := TfmBase(Owner);
 end;
 
 end.

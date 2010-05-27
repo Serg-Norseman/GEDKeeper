@@ -6,6 +6,7 @@ object fmAddressEdit: TfmAddressEdit
   ClientHeight = 330
   ClientWidth = 409
   Color = clBtnFace
+  DefaultMonitor = dmMainForm
   Font.Charset = RUSSIAN_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -62,21 +63,21 @@ object fmAddressEdit: TfmAddressEdit
       end
       object Label3: TLabel
         Left = 8
-        Top = 64
+        Top = 56
         Width = 31
         Height = 13
         Caption = #1043#1086#1088#1086#1076
       end
       object Label4: TLabel
         Left = 216
-        Top = 64
+        Top = 56
         Width = 73
         Height = 13
         Caption = #1055#1086#1095#1090#1086#1074#1099#1081' '#1082#1086#1076
       end
       object Label5: TLabel
         Left = 8
-        Top = 120
+        Top = 104
         Width = 31
         Height = 13
         Caption = #1040#1076#1088#1077#1089
@@ -99,7 +100,7 @@ object fmAddressEdit: TfmAddressEdit
       end
       object edCity: TEdit
         Left = 8
-        Top = 80
+        Top = 72
         Width = 201
         Height = 21
         TabOrder = 2
@@ -107,7 +108,7 @@ object fmAddressEdit: TfmAddressEdit
       end
       object edPostalCode: TEdit
         Left = 216
-        Top = 80
+        Top = 72
         Width = 177
         Height = 21
         TabOrder = 3
@@ -115,7 +116,7 @@ object fmAddressEdit: TfmAddressEdit
       end
       object edAddress: TEdit
         Left = 8
-        Top = 136
+        Top = 120
         Width = 385
         Height = 21
         TabOrder = 4
