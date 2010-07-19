@@ -35,11 +35,17 @@ type
   end;
 
 type
+  TPlaceRef = class
+  public
+    DateTime: TDateTime;
+    Ref: TGEDCOMCustomEvent;
+  end;
+
   TPlace = class
   public
     Name: string;
     Points: TObjectList;
-    Refs: TObjectList;
+    PlaceRefs: TObjectList;
 
     constructor Create;
     destructor Destroy; override;
@@ -143,7 +149,7 @@ implementation
 {$R *.dfm}
 
 uses
-  bsWinUtils, GKCommon, HTTPSend, Types, Jpeg, ActiveX, ComObj,
+  bsComUtils, bsWinUtils, GKCommon, HTTPSend, Types, Jpeg, ActiveX, ComObj,
   MSHTML, GKProgress, GKMain;
 
 const
@@ -321,12 +327,12 @@ end;
 constructor TPlace.Create;
 begin
   Points := TObjectList.Create(True);
-  Refs := TObjectList.Create(False);
+  PlaceRefs := TObjectList.Create(False);
 end;
 
 destructor TPlace.Destroy;
 begin
-  Refs.Destroy;
+  PlaceRefs.Destroy;
   Points.Destroy;
 
   inherited Destroy;
@@ -707,15 +713,15 @@ procedure TfmMaps.PlacesLoad();
       end;
   end;
 
-  procedure AddPlace(aPlace: TGEDCOMPlace; aRef: TGEDCOMObject);
+  procedure AddPlace(aPlace: TGEDCOMPlace; aRef: TGEDCOMCustomEvent);
   var
     locRec: TGEDCOMLocationRecord;
-    place_name: string;
+    place_name, pt_title: string;
     node: TTreeNode;
     place: TPlace;
-    pt_title: string;
     pt: TMapPoint;
     k: Integer;
+    pRef: TPlaceRef;
   begin
     locRec := TGEDCOMLocationRecord(aPlace.Location.Value);
     if (locRec <> nil)
@@ -757,20 +763,21 @@ procedure TfmMaps.PlacesLoad();
       place := TPlace(node.Data);
     end;
 
-    place.Refs.Add(aRef);
+    pRef := TPlaceRef.Create;
+    pRef.DateTime := GEDCOMDateToDate(aRef.Detail.Date.Value);
+    pRef.Ref := aRef;
+    place.PlaceRefs.Add(pRef);
   end;
 
 var
   i, k, p_cnt: Integer;
   rec: TGEDCOMRecord;
   ind: TGEDCOMIndividualRecord;
-  i_ev: TGEDCOMIndividualEvent;
-  i_att: TGEDCOMIndividualAttribute;
-  has_places: Boolean;
+  ev: TGEDCOMCustomEvent;
 begin
   ComboPersons.Items.BeginUpdate;
   TreePlaces.Items.BeginUpdate;
-  ProgressInit(FTree.Count, 'Загрузка и поиск мест');
+  ProgressInit(FTree.RecordsCount, 'Загрузка и поиск мест');
   try
     FPlaces.Clear;
 
@@ -778,34 +785,30 @@ begin
     ComboPersons.Sorted := False;
     ComboPersons.Items.AddObject('( не выбран )', nil);
 
-    for i := 0 to FTree.Count - 1 do begin
+    for i := 0 to FTree.RecordsCount - 1 do begin
       rec := FTree.Records[i];
 
       if (rec is TGEDCOMIndividualRecord) then begin
         ind := rec as TGEDCOMIndividualRecord;
-        has_places := False;
         p_cnt := 0;
 
         for k := 0 to ind.IndividualEventsCount - 1 do begin
-          i_ev := ind.IndividualEvents[k];
-          if (i_ev.Detail.Place.StringValue <> '') then begin
-            AddPlace(i_ev.Detail.Place, i_ev);
-            has_places := True;
+          ev := ind.IndividualEvents[k];
+          if (ev.Detail.Place.StringValue <> '') then begin
+            AddPlace(ev.Detail.Place, ev);
             Inc(p_cnt);
           end;
         end;
 
         for k := 0 to ind.IndividualAttributesCount - 1 do begin
-          i_att := ind.IndividualAttributes[k];
-
-          if (i_att.Detail.Place.StringValue <> '') then begin
-            AddPlace(i_att.Detail.Place, i_att);
-            has_places := True;
+          ev := ind.IndividualAttributes[k];
+          if (ev.Detail.Place.StringValue <> '') then begin
+            AddPlace(ev.Detail.Place, ev);
             Inc(p_cnt);
           end;
         end;
 
-        if has_places
+        if (p_cnt > 0)
         then ComboPersons.Items.AddObject(GetNameStr(ind) + ' [' + IntToStr(p_cnt) + ']', ind);
       end;
 
@@ -846,9 +849,10 @@ procedure TfmMaps.btnSelectPlacesClick(Sender: TObject);
 var
   i, k: Integer;
   place: TPlace;
-  ref: TGEDCOMObject;
+  ref: TGEDCOMCustomEvent;
   cond: set of (pcBirth, pcDeath, pcResidence);
   ind: TGEDCOMIndividualRecord;
+  s: string;
 begin
   cond := [];
   if CheckBirth.Checked then Include(cond, pcBirth);
@@ -866,21 +870,16 @@ begin
     place := TPlace(FPlaces[i]);
     if (place.Points.Count < 1) then Continue;
 
-    for k := 0 to place.Refs.Count - 1 do begin
-      ref := TGEDCOMObject(place.Refs[k]);
+    for k := 0 to place.PlaceRefs.Count - 1 do begin
+      ref := TPlaceRef(place.PlaceRefs[k]).Ref;
 
-      if (ref is TGEDCOMIndividualEvent) then begin
-        if ((ind <> nil) and (TGEDCOMIndividualEvent(ref).Parent = ind))
-        or ((pcBirth in cond) and (TGEDCOMIndividualEvent(ref).Name = 'BIRT'))
-        or ((pcDeath in cond) and (TGEDCOMIndividualEvent(ref).Name = 'DEAT'))
+      //if (ref is TGEDCOMCustomEvent) then begin
+        if ((ind <> nil) and (ref.Parent = ind))
+        or ((pcBirth in cond) and (ref.Name = 'BIRT'))
+        or ((pcDeath in cond) and (ref.Name = 'DEAT'))
+        or ((pcResidence in cond) and (ref.Name = 'RESI'))
         then CopyPoint(TMapPoint(place.Points[0]));
-      end
-      else
-      if (ref is TGEDCOMIndividualAttribute) then begin
-        if ((ind <> nil) and (TGEDCOMIndividualAttribute(ref).Parent = ind))
-        or ((pcResidence in cond) and (TGEDCOMIndividualAttribute(ref).Name = 'RESI'))
-        then CopyPoint(TMapPoint(place.Points[0]));
-      end;
+      //end;
     end;
   end;
 

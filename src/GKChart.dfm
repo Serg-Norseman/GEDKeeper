@@ -1,6 +1,6 @@
 object fmChart: TfmChart
-  Left = 266
-  Top = 103
+  Left = 320
+  Top = 111
   Width = 757
   Height = 590
   Caption = #1044#1080#1072#1075#1088#1072#1084#1084#1072

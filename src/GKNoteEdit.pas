@@ -16,6 +16,7 @@ type
     procedure btnAcceptClick(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure btnCancelClick(Sender: TObject);
   private
     FNoteRecord: TGEDCOMNoteRecord;
     procedure SetNoteRecord(const Value: TGEDCOMNoteRecord);
@@ -41,11 +42,17 @@ procedure TfmNoteEdit.btnAcceptClick(Sender: TObject);
 begin
   FNoteRecord.Notes := MemoNote.Lines;
   Base.ChangeRecord(FNoteRecord);
+  ModalResult := mrOk;
 end;
 
 function TfmNoteEdit.GetBase: TfmBase;
 begin
   Result := TfmBase(Owner);
+end;
+
+procedure TfmNoteEdit.btnCancelClick(Sender: TObject);
+begin
+  ModalResult := mrCancel;
 end;
 
 procedure TfmNoteEdit.FormKeyDown(Sender: TObject; var Key: Word;

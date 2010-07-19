@@ -50,7 +50,7 @@ type
 
 implementation
 
-uses GKMain;
+uses GKMain, Math;
 
 {$R *.dfm}
 
@@ -71,6 +71,7 @@ end;
 procedure TfmRecordSelect.btnCreateClick(Sender: TObject);
 var
   iRec: TGEDCOMIndividualRecord;
+  famRec: TGEDCOMFamilyRecord;
   noteRec: TGEDCOMNoteRecord;
   sourceRec: TGEDCOMSourceRecord;
   groupRec: TGEDCOMGroupRecord;
@@ -79,12 +80,28 @@ var
   taskRec: TGEDCOMTaskRecord;
   corrRec: TGEDCOMCommunicationRecord;
   locRec: TGEDCOMLocationRecord;
+  fam_target: TFamilyTarget;
 begin
+  //Hide;
+
   case FMode of
     smPerson: begin
       iRec := Base.CreatePersonDialog(FTarget, FTargetMode, FNeedSex);
       if (iRec <> nil) then begin
         ResultRecord := iRec;
+        ModalResult := mrOk;
+      end;
+    end;
+
+    smFamily: begin
+      famRec := nil;
+
+      if (FTargetMode = tmChildToFamily)
+      then fam_target := ftChild
+      else fam_target := ftNone;
+
+      if Base.ModifyFamily(famRec, fam_target, FTarget) then begin
+        ResultRecord := famRec;
         ModalResult := mrOk;
       end;
     end;

@@ -1,5 +1,7 @@
 unit GKTipsDlg;
 
+{$I GEDKeeper.inc}
+
 interface
 
 uses

@@ -3,6 +3,9 @@ unit GedCom551;
 {$I compiler.inc}
 
 (*
+ * Author: Marco Hemmes (mhemmes)
+ * The part of "My Family Tree" project.
+ *
  * 2010-01-26
  *   (-) Removed interfaces support;
  * 2009-08-19 (zsv)
@@ -182,7 +185,7 @@ type
     FXRefIndex: TStringList;
     FState: TGEDCOMState;
 
-    function GetCount: Integer;
+    function GetRecordsCount: Integer;
     function GetRecords(Index: Integer): TGEDCOMRecord;
 
     procedure XRefIndex_Clear();
@@ -190,7 +193,6 @@ type
     procedure XRefIndex_AddRecord(ARecord: TGEDCOMRecord);
     procedure XRefIndex_DeleteRecord(ARecord: TGEDCOMRecord);
   protected
-    procedure DeleteRecord(Sender: TGEDCOMRecord);
     procedure SetXRef(Sender: TGEDCOMRecord; const XRef: string);
   public
     constructor Create; virtual;
@@ -199,6 +201,7 @@ type
     function AddRecord(ARecord: TGEDCOMRecord): TGEDCOMRecord;
     procedure Clear(); virtual;
     procedure Delete(Index: Integer);
+    procedure DeleteRecord(Sender: TGEDCOMRecord);
     function Extract(Index: Integer): TGEDCOMRecord;
     function IndexOfRecord(ARecord: TGEDCOMRecord): Integer;
 
@@ -212,7 +215,9 @@ type
     function XRefIndex_Find(const XRef: string): TGEDCOMRecord;
     function XRefIndex_NewXRef(Sender: TGEDCOMRecord): string;
 
-    property Count: Integer read GetCount;
+    function FindUID(const UID: string): TGEDCOMRecord;
+
+    property RecordsCount: Integer read GetRecordsCount;
     property Header: TGEDCOMHeader read FHeader;
     property Records[Index: Integer]: TGEDCOMRecord read GetRecords;
     property State: TGEDCOMState read FState write FState;
@@ -315,6 +320,8 @@ type
 
     procedure ReplaceXRefs(aMap: TXRefReplaceMap); virtual;
     procedure ResetOwner(AOwner: TGEDCOMObject); virtual;
+
+    procedure ResetParent(AParent: TGEDCOMObject);
 
     property Count: Integer read GetCount;
     property Level: Integer read GetLevel;
@@ -476,6 +483,8 @@ type
     property ReferenceType: string read GetReferenceType write SetReferenceType;
   end;
 
+  TMoveFlags = set of (mfClearDest);
+
   TGEDCOMRecord = class(TGEDCOMCustomRecord)
   private
     FLists: TGEDCOMLists;
@@ -514,7 +523,7 @@ type
     procedure DeleteUserReference(aIndex: Integer); overload;
     procedure DeleteUserReference(AUserReference: TGEDCOMUserReference); overload;
 
-    procedure MoveTo(aToRecord: TGEDCOMRecord); virtual;
+    procedure MoveTo(aToRecord: TGEDCOMRecord; aFlags: TMoveFlags = []); virtual;
     procedure ReplaceXRefs(aMap: TXRefReplaceMap); override;
     procedure ResetOwner(AOwner: TGEDCOMObject); override;
     procedure SaveToStream(AStream: TStream); override;
@@ -933,12 +942,12 @@ type
     procedure Clear(); override;
     function IsEmpty(): Boolean; override;
 
-    procedure DeleteFamilyEvent(aEvent: TGEDCOMFamilyEvent);
-
-    procedure DeleteChild(XRef: string); overload;
+    procedure DeleteChild(ChildRec: TGEDCOMRecord); overload;
     procedure DeleteChild(Index: Integer); overload;
+    procedure DeleteFamilyEvent(aEvent: TGEDCOMFamilyEvent);
+    function  IndexOfChild(ChildRec: TGEDCOMRecord): Integer;
 
-    procedure MoveTo(aToRecord: TGEDCOMRecord); override;
+    procedure MoveTo(aToRecord: TGEDCOMRecord; aFlags: TMoveFlags = []); override;
     procedure ReplaceXRefs(aMap: TXRefReplaceMap); override;
     procedure ResetOwner(AOwner: TGEDCOMObject); override;
     procedure SaveToStream(AStream: TStream); override;
@@ -1052,7 +1061,7 @@ type
 
     procedure ExchangeSpouses(Index1, Index2: Integer);
 
-    procedure MoveTo(aToRecord: TGEDCOMRecord); override;
+    procedure MoveTo(aToRecord: TGEDCOMRecord; aFlags: TMoveFlags = []); override;
     procedure ReplaceXRefs(aMap: TXRefReplaceMap); override;
     procedure ResetOwner(AOwner: TGEDCOMObject); override;
     procedure SaveToStream(AStream: TStream); override;
@@ -1158,7 +1167,7 @@ type
     procedure Clear(); override;
     function IsEmpty(): Boolean; override;
 
-    procedure MoveTo(aToRecord: TGEDCOMRecord); override;
+    procedure MoveTo(aToRecord: TGEDCOMRecord; aFlags: TMoveFlags = []); override;
     procedure ReplaceXRefs(aMap: TXRefReplaceMap); override;
     procedure ResetOwner(AOwner: TGEDCOMObject); override;
 
@@ -1231,7 +1240,7 @@ type
     procedure Clear(); override;
     function IsEmpty(): Boolean; override;
 
-    procedure MoveTo(aToRecord: TGEDCOMRecord); override;
+    procedure MoveTo(aToRecord: TGEDCOMRecord; aFlags: TMoveFlags = []); override;
     procedure ReplaceXRefs(aMap: TXRefReplaceMap); override;
     procedure ResetOwner(AOwner: TGEDCOMObject); override;
     procedure SaveToStream(AStream: TStream); override;
@@ -2658,7 +2667,7 @@ begin
   Result := FRecords.IndexOfObject(ARecord);
 end;
 
-function TGEDCOMTree.GetCount: Integer;
+function TGEDCOMTree.GetRecordsCount: Integer;
 begin
   Result := FRecords.Count;
 end;
@@ -2693,6 +2702,23 @@ begin
   SWriteString(AStream, S);
   SWriteString(AStream, GEDCOMNewLine);
   {$ENDIF}
+end;
+
+function TGEDCOMTree.FindUID(const UID: string): TGEDCOMRecord;
+var
+  i: Integer;
+  rec: TGEDCOMRecord;
+begin
+  Result := nil;
+
+  for i := 0 to FRecords.Count - 1 do begin
+    rec := GetRecords(i);
+
+    if (rec.UID = UID) then begin
+      Result := rec;
+      Exit;
+    end;
+  end;
 end;
 
 { TGEDCOMList }
@@ -4538,6 +4564,11 @@ begin
   if (FTags <> nil) then FTags.ReplaceXRefs(aMap);
 end;
 
+procedure TGEDCOMCustomTag.ResetParent(AParent: TGEDCOMObject);
+begin
+  FParent := AParent;
+end;
+
 { TGEDCOMTagWithLists }
 
 function TGEDCOMTagWithLists.AddMultimediaLink(
@@ -4982,43 +5013,56 @@ begin
   if (FUserReferences <> nil) then FUserReferences.ReplaceXRefs(aMap);
 end;
 
-procedure TGEDCOMRecord.MoveTo(aToRecord: TGEDCOMRecord);
+procedure TGEDCOMRecord.MoveTo(aToRecord: TGEDCOMRecord; aFlags: TMoveFlags = []);
 var
-  i: Integer;
-  tag: TGEDCOMCustomTag;
+  tag: TGEDCOMTag;
 begin
+  if (mfClearDest in aFlags)
+  then aToRecord.Clear;
+
   if (FTags <> nil) then begin
-    for i := FTags.Count - 1 downto 0 do begin
-      tag := TGEDCOMCustomTag(FTags.Extract(i));
-      if (tag.Name = 'CHAN')
+    while (FTags.Count > 0) do begin
+      tag := TGEDCOMTag(FTags.Extract(0));
+      if (tag.Name = 'CHAN') and not(mfClearDest in aFlags)
       then tag.Destroy
-      else aToRecord.FTags.Add(tag);
+      else begin
+        tag.ResetParent(aToRecord);
+        aToRecord.InsertTag(tag);
+      end;
     end;
   end;
 
   //
 
   if (FNotes <> nil) then begin
-    for i := FNotes.Count - 1 downto 0 do begin
-      aToRecord.AddNotes(TGEDCOMNotes(FNotes.Extract(i)));
+    while (FNotes.Count > 0) do begin
+      tag := TGEDCOMTag(FNotes.Extract(0));
+      tag.ResetParent(aToRecord);
+      aToRecord.AddNotes(TGEDCOMNotes(tag));
     end;
   end;
 
   if (FMultimediaLinks <> nil) then begin
-    for i := FMultimediaLinks.Count - 1 downto 0 do begin
-      aToRecord.AddMultimediaLink(TGEDCOMMultimediaLink(FMultimediaLinks.Extract(i)));
+    while (FMultimediaLinks.Count > 0) do begin
+      tag := TGEDCOMTag(FMultimediaLinks.Extract(0));
+      tag.ResetParent(aToRecord);
+      aToRecord.AddMultimediaLink(TGEDCOMMultimediaLink(tag));
     end;
   end;
 
   if (FSourceCitations <> nil) then begin
-    for i := FSourceCitations.Count - 1 downto 0 do begin
-      aToRecord.AddSourceCitation(TGEDCOMSourceCitation(FSourceCitations.Extract(i)));
+    while (FSourceCitations.Count > 0) do begin
+      tag := TGEDCOMTag(FSourceCitations.Extract(0));
+      tag.ResetParent(aToRecord);
+      aToRecord.AddSourceCitation(TGEDCOMSourceCitation(tag));
     end;
   end;
 
   if (FUserReferences <> nil) then begin
-    for i := FUserReferences.Count - 1 downto 0 do begin
-      aToRecord.AddUserReference(TGEDCOMUserReference(FUserReferences.Extract(i)));
+    while (FUserReferences.Count > 0) do begin
+      tag := TGEDCOMTag(FUserReferences.Extract(0));
+      tag.ResetParent(aToRecord);
+      aToRecord.AddUserReference(TGEDCOMUserReference(tag));
     end;
   end;
 end;
@@ -5206,14 +5250,14 @@ begin
   then FChildren.Add(APointer);
 end;
 
-procedure TGEDCOMFamilyRecord.DeleteChild(XRef: string);
+procedure TGEDCOMFamilyRecord.DeleteChild(ChildRec: TGEDCOMRecord);
 var
   i: Integer;
 begin
   if (FChildren <> nil) then begin
     for i := FChildren.Count - 1 downto 0 do
-      if (TGEDCOMPointer(FChildren[i]).XRef = XRef) then begin
-        FChildren.DeleteObject(FChildren[i]);
+      if (TGEDCOMPointer(FChildren[i]).Value = ChildRec) then begin
+        FChildren.Delete(i);
         Break;
       end;
   end;
@@ -5223,6 +5267,21 @@ procedure TGEDCOMFamilyRecord.DeleteChild(Index: Integer);
 begin
   if (FChildren <> nil)
   then FChildren.Delete(Index);
+end;
+
+function TGEDCOMFamilyRecord.IndexOfChild(ChildRec: TGEDCOMRecord): Integer;
+var
+  i: Integer;
+begin
+  Result := -1;
+
+  if (FChildren <> nil) then begin
+    for i := FChildren.Count - 1 downto 0 do
+      if (TGEDCOMPointer(FChildren[i]).Value = ChildRec) then begin
+        Result := i;
+        Break;
+      end;
+  end;
 end;
 
 function TGEDCOMFamilyRecord.AddFamilyEvent(
@@ -5384,30 +5443,36 @@ begin
   if (FSpouseSealings <> nil) then FSpouseSealings.ReplaceXRefs(aMap);
 end;
 
-procedure TGEDCOMFamilyRecord.MoveTo(aToRecord: TGEDCOMRecord);
+procedure TGEDCOMFamilyRecord.MoveTo(aToRecord: TGEDCOMRecord; aFlags: TMoveFlags = []);
 var
-  i: Integer;
   toRec: TGEDCOMFamilyRecord;
+  obj: TGEDCOMObject;
 begin
-  inherited MoveTo(aToRecord);
+  inherited MoveTo(aToRecord, aFlags);
 
   toRec := TGEDCOMFamilyRecord(aToRecord);
 
   if (FFamilyEvents <> nil) then begin
-    for i := FFamilyEvents.Count - 1 downto 0 do begin
-      toRec.AddFamilyEvent(TGEDCOMFamilyEvent(FFamilyEvents.Extract(i)));
+    while (FFamilyEvents.Count > 0) do begin
+      obj := FFamilyEvents.Extract(0);
+      TGEDCOMCustomTag(obj).ResetParent(toRec);
+      toRec.AddFamilyEvent(TGEDCOMFamilyEvent(obj));
     end;
   end;
 
   if (FChildren <> nil) then begin
-    for i := FChildren.Count - 1 downto 0 do begin
-      toRec.AddChild(TGEDCOMPointer(FChildren.Extract(i)));
+    while (FChildren.Count > 0) do begin
+      obj := FChildren.Extract(0);
+      TGEDCOMCustomTag(obj).ResetParent(toRec);
+      toRec.AddChild(TGEDCOMPointer(obj));
     end;
   end;
 
   if (FSpouseSealings <> nil) then begin
-    for i := FSpouseSealings.Count - 1 downto 0 do begin
-      toRec.AddSpouseSealing(TGEDCOMSpouseSealing(FSpouseSealings.Extract(i)));
+    while (FSpouseSealings.Count > 0) do begin
+      obj := FSpouseSealings.Extract(0);
+      TGEDCOMCustomTag(obj).ResetParent(toRec);
+      toRec.AddSpouseSealing(TGEDCOMSpouseSealing(obj));
     end;
   end;
 end;
@@ -6139,27 +6204,31 @@ begin
   if (FGroups <> nil) then FGroups.ReplaceXRefs(aMap);
 end;
 
-procedure TGEDCOMIndividualRecord.MoveTo(aToRecord: TGEDCOMRecord);
+procedure TGEDCOMIndividualRecord.MoveTo(aToRecord: TGEDCOMRecord; aFlags: TMoveFlags = []);
 var
   stf_link: TGEDCOMSpouseToFamilyLink;
   ctf_link: TGEDCOMChildToFamilyLink;
   family: TGEDCOMFamilyRecord;
-  i: Integer;
+  idx: Integer;
   toRec: TGEDCOMIndividualRecord;
+  obj: TGEDCOMObject;
 begin
-  DeleteTag('SEX'); // for duplicates eliminating
+  if not(mfClearDest in aFlags) then begin
+    DeleteTag('SEX');
+    DeleteTag('_UID');
+  end;
 
-  inherited MoveTo(aToRecord);
+  inherited MoveTo(aToRecord, aFlags);
 
   toRec := TGEDCOMIndividualRecord(aToRecord);
 
   //
 
-  if (FPersonalNames <> nil) then begin
-    { Warning: for duplicates eliminating }
-    {for i := FPersonalNames.Count - 1 downto 0 do begin
-      toRec.AddPersonalName(TGEDCOMPersonalName(FPersonalNames.Extract(i)));
-    end;}
+  if (FPersonalNames <> nil) and (mfClearDest in aFlags) then begin
+    while (FPersonalNames.Count > 0) do begin
+      obj := FPersonalNames.Extract(0);
+      toRec.AddPersonalName(TGEDCOMPersonalName(obj));
+    end;
   end;
 
   if (toRec.ChildToFamilyLinksCount = 0) and (Self.ChildToFamilyLinksCount <> 0) then begin
@@ -6167,19 +6236,20 @@ begin
       ctf_link := TGEDCOMChildToFamilyLink(FChildToFamilyLinks.Extract(0));
       family := ctf_link.Family;
 
-      for i := 0 to family.ChildrenCount - 1 do
-        if (family.Children[i].StringValue = '@' + Self.XRef + '@') then begin
-          family.Children[i].StringValue := '@' + aToRecord.XRef + '@';
+      for idx := 0 to family.ChildrenCount - 1 do
+        if (family.Children[idx].StringValue = '@' + Self.XRef + '@') then begin
+          family.Children[idx].StringValue := '@' + aToRecord.XRef + '@';
           Break;
         end;
 
+      ctf_link.ResetParent(toRec);
       toRec.AddChildToFamilyLink(ctf_link);
     end;
   end;
 
   if (FSpouseToFamilyLinks <> nil) then begin
-    for i := FSpouseToFamilyLinks.Count - 1 downto 0 do begin
-      stf_link := TGEDCOMSpouseToFamilyLink(FSpouseToFamilyLinks.Extract(i));
+    while (FSpouseToFamilyLinks.Count > 0) do begin
+      stf_link := TGEDCOMSpouseToFamilyLink(FSpouseToFamilyLinks.Extract(0));
       family := stf_link.Family;
 
       if (family.Husband.StringValue = '@' + Self.XRef + '@')
@@ -6188,6 +6258,7 @@ begin
       if (family.Wife.StringValue = '@' + Self.XRef + '@')
       then family.Wife.StringValue := '@' + aToRecord.XRef + '@';
 
+      stf_link.ResetParent(toRec);
       toRec.AddSpouseToFamilyLink(stf_link);
     end;
   end;
@@ -6195,60 +6266,78 @@ begin
   //
 
   if (FIndividualEvents <> nil) then begin
-    for i := FIndividualEvents.Count - 1 downto 0 do begin
-      toRec.AddIndividualEvent(TGEDCOMIndividualEvent(FIndividualEvents.Extract(i)));
+    while (FIndividualEvents.Count > 0) do begin
+      obj := FIndividualEvents.Extract(0);
+      TGEDCOMCustomTag(obj).ResetParent(toRec);
+      toRec.AddIndividualEvent(TGEDCOMIndividualEvent(obj));
     end;
   end;
 
   if (FIndividualAttributes <> nil) then begin
-    for i := FIndividualAttributes.Count - 1 downto 0 do begin
-      toRec.AddIndividualAttribute(TGEDCOMIndividualAttribute(FIndividualAttributes.Extract(i)));
+    while (FIndividualAttributes.Count > 0) do begin
+      obj := FIndividualAttributes.Extract(0);
+      TGEDCOMCustomTag(obj).ResetParent(toRec);
+      toRec.AddIndividualAttribute(TGEDCOMIndividualAttribute(obj));
     end;
   end;
 
   if (FIndividualOrdinances <> nil) then begin
-    for i := FIndividualOrdinances.Count - 1 downto 0 do begin
-      toRec.AddIndividualOrdinance(TGEDCOMIndividualOrdinance(FIndividualOrdinances.Extract(i)));
+    while (FIndividualOrdinances.Count > 0) do begin
+      obj := FIndividualOrdinances.Extract(0);
+      TGEDCOMCustomTag(obj).ResetParent(toRec);
+      toRec.AddIndividualOrdinance(TGEDCOMIndividualOrdinance(obj));
     end;
   end;
 
   //
 
   if (FSubmittors <> nil) then begin
-    for i := FSubmittors.Count - 1 downto 0 do begin
-      toRec.AddSubmittor(TGEDCOMPointer(FSubmittors.Extract(i)));
+    while (FSubmittors.Count > 0) do begin
+      obj := FSubmittors.Extract(0);
+      TGEDCOMCustomTag(obj).ResetParent(toRec);
+      toRec.AddSubmittor(TGEDCOMPointer(obj));
     end;
   end;
 
   if (FAssociations <> nil) then begin
-    for i := FAssociations.Count - 1 downto 0 do begin
-      toRec.AddAssociation(TGEDCOMAssociation(FAssociations.Extract(i)));
+    while (FAssociations.Count > 0) do begin
+      obj := FAssociations.Extract(0);
+      TGEDCOMCustomTag(obj).ResetParent(toRec);
+      toRec.AddAssociation(TGEDCOMAssociation(obj));
     end;
   end;
 
   if (FAliasses <> nil) then begin
-    for i := FAliasses.Count - 1 downto 0 do begin
-      toRec.AddAlias(TGEDCOMPointer(FAliasses.Extract(i)));
+    while (FAliasses.Count > 0) do begin
+      obj := FAliasses.Extract(0);
+      TGEDCOMCustomTag(obj).ResetParent(toRec);
+      toRec.AddAlias(TGEDCOMPointer(obj));
     end;
   end;
 
   //
 
   if (FAncestorsInterest <> nil) then begin
-    for i := FAncestorsInterest.Count - 1 downto 0 do begin
-      toRec.AddAncestorsInterest(TGEDCOMPointer(FAncestorsInterest.Extract(i)));
+    while (FAncestorsInterest.Count > 0) do begin
+      obj := FAncestorsInterest.Extract(0);
+      TGEDCOMCustomTag(obj).ResetParent(toRec);
+      toRec.AddAncestorsInterest(TGEDCOMPointer(obj));
     end;
   end;
 
   if (FDescendantsInterest <> nil) then begin
-    for i := FDescendantsInterest.Count - 1 downto 0 do begin
-      toRec.AddDescendantsInterest(TGEDCOMPointer(FDescendantsInterest.Extract(i)));
+    while (FDescendantsInterest.Count > 0) do begin
+      obj := FDescendantsInterest.Extract(0);
+      TGEDCOMCustomTag(obj).ResetParent(toRec);
+      toRec.AddDescendantsInterest(TGEDCOMPointer(obj));
     end;
   end;
 
   if (FGroups <> nil) then begin
-    for i := FGroups.Count - 1 downto 0 do begin
-      toRec.AddGroup(TGEDCOMPointer(FGroups.Extract(i)));
+    while (FGroups.Count > 0) do begin
+      obj := FGroups.Extract(0);
+      TGEDCOMCustomTag(obj).ResetParent(toRec);
+      toRec.AddGroup(TGEDCOMPointer(obj));
     end;
   end;
 end;
@@ -6651,14 +6740,14 @@ begin
   Result := inherited IsEmpty;
 end;
 
-procedure TGEDCOMNoteRecord.MoveTo(aToRecord: TGEDCOMRecord);
+procedure TGEDCOMNoteRecord.MoveTo(aToRecord: TGEDCOMRecord; aFlags: TMoveFlags = []);
 var
   cont: TStringList;
 begin
   cont := TStringList.Create;
   try
     cont.Text := TGEDCOMNoteRecord(aToRecord).Notes.Text;
-    inherited MoveTo(aToRecord);
+    inherited MoveTo(aToRecord, aFlags);
     TGEDCOMNoteRecord(aToRecord).Notes := cont;
   finally
     cont.Free;
@@ -6925,11 +7014,11 @@ begin
   if Assigned(FRepositoryCitations) then FRepositoryCitations.SaveToStream(AStream);
 end;
 
-procedure TGEDCOMSourceRecord.MoveTo(aToRecord: TGEDCOMRecord);
+procedure TGEDCOMSourceRecord.MoveTo(aToRecord: TGEDCOMRecord; aFlags: TMoveFlags = []);
 var
   titl, orig, publ, text: TStringList;
   toSource: TGEDCOMSourceRecord;
-  i: Integer;
+  obj: TGEDCOMObject;
 begin
   toSource := TGEDCOMSourceRecord(aToRecord);
 
@@ -6949,7 +7038,7 @@ begin
     DeleteTag('PUBL');
     DeleteTag('AUTH');
 
-    inherited MoveTo(aToRecord);
+    inherited MoveTo(aToRecord, aFlags);
 
     toSource.Title := titl;
     toSource.Originator := orig;
@@ -6959,8 +7048,10 @@ begin
     //
 
     if (FRepositoryCitations <> nil) then begin
-      for i := FRepositoryCitations.Count - 1 downto 0 do begin
-        toSource.AddRepositoryCitation(TGEDCOMRepositoryCitation(FRepositoryCitations.Extract(i)));
+      while (FRepositoryCitations.Count > 0) do begin
+        obj := FRepositoryCitations.Extract(0);
+        TGEDCOMCustomTag(obj).ResetParent(toSource);
+        toSource.AddRepositoryCitation(TGEDCOMRepositoryCitation(obj));
       end;
     end;
   finally
@@ -7764,8 +7855,9 @@ begin
   SetTagStrings(Self, Value);
 end;
 
-procedure TGEDCOMAddress.SetEmailAddresses(Index: Integer;
-  const Value: string);
+procedure TGEDCOMAddress.SetEmailAddresses(Index: Integer; const Value: string);
+var
+  tag: TGEDCOMTag;
 begin
   if (Index >= GEDCOMMaxEmailAddresses)
   then raise EGEDCOMException.CreateFmt(EMaxEmailAddresses, [GEDCOMMaxEmailAddresses])
@@ -7777,12 +7869,15 @@ begin
     while (Index >= FEmailList.Count) do
       FEmailList.Add(TGEDCOMTag.CreateTag(Owner, Self, 'EMAIL', ''));
 
-    TGEDCOMTag(FEmailList[Index]).StringValue := Value;
+    tag := TGEDCOMTag(FEmailList[Index]);
+    tag.StringValue := Value;
+    tag.SetLevel(Level);
   end
 end;
 
-procedure TGEDCOMAddress.SetFaxNumbers(Index: Integer;
-  const Value: string);
+procedure TGEDCOMAddress.SetFaxNumbers(Index: Integer; const Value: string);
+var
+  tag: TGEDCOMTag;
 begin
   if (Index >= GEDCOMMaxFaxNumbers)
   then raise EGEDCOMException.CreateFmt(EMaxFaxNumbers, [GEDCOMMaxFaxNumbers])
@@ -7794,12 +7889,15 @@ begin
     while (Index >= FFaxList.Count) do
       FFaxList.Add(TGEDCOMTag.CreateTag(Owner, Self, 'FAX', ''));
 
-    TGEDCOMTag(FFaxList[Index]).StringValue := Value;
+    tag := TGEDCOMTag(FFaxList[Index]);
+    tag.StringValue := Value;
+    tag.SetLevel(Level);
   end
 end;
 
-procedure TGEDCOMAddress.SetPhoneNumbers(Index: Integer;
-  const Value: string);
+procedure TGEDCOMAddress.SetPhoneNumbers(Index: Integer; const Value: string);
+var
+  tag: TGEDCOMTag;
 begin
   if (Index >= GEDCOMMaxPhoneNumbers)
   then raise EGEDCOMException.CreateFmt(EMaxPhoneNumbers, [GEDCOMMaxPhoneNumbers])
@@ -7811,7 +7909,30 @@ begin
     while (Index >= FPhoneList.Count) do
       FPhoneList.Add(TGEDCOMTag.CreateTag(Owner, Self, 'PHON', ''));
 
-    TGEDCOMTag(FPhoneList[Index]).StringValue := Value;
+    tag := TGEDCOMTag(FPhoneList[Index]);
+    tag.StringValue := Value;
+    tag.SetLevel(Level);
+  end
+end;
+
+procedure TGEDCOMAddress.SetWebPages(Index: Integer; const Value: string);
+var
+  tag: TGEDCOMTag;
+begin
+  if (Index >= GEDCOMMaxWebPages)
+  then raise EGEDCOMException.CreateFmt(EMaxWebPages, [GEDCOMMaxWebPages])
+  else
+  if (Index >= 0)
+  then begin
+    if (FWWWList = nil)
+    then FWWWList := TGEDCOMList.Create(Self);
+
+    while (Index >= FWWWList.Count) do
+      FWWWList.Add(TGEDCOMTag.CreateTag(Owner, Self, 'WWW', ''));
+
+    tag := TGEDCOMTag(FWWWList[Index]);
+    tag.StringValue := Value;
+    tag.SetLevel(Level);
   end
 end;
 
@@ -7826,23 +7947,6 @@ begin
     6: SetTagStringValue('POST', Value);
     7: SetTagStringValue('CTRY', Value);
   end;
-end;
-
-procedure TGEDCOMAddress.SetWebPages(Index: Integer; const Value: string);
-begin
-  if (Index >= GEDCOMMaxWebPages)
-  then raise EGEDCOMException.CreateFmt(EMaxWebPages, [GEDCOMMaxWebPages])
-  else
-  if (Index >= 0)
-  then begin
-    if (FWWWList = nil)
-    then FWWWList := TGEDCOMList.Create(Self);
-
-    while (Index >= FWWWList.Count) do
-      FWWWList.Add(TGEDCOMTag.CreateTag(Owner, Self, 'WWW', ''));
-
-    TGEDCOMTag(FWWWList[Index]).StringValue := Value;
-  end
 end;
 
 { TGEDCOMData }
@@ -8048,7 +8152,7 @@ end;
 procedure TGEDCOMPersonalName.Clear();
 begin
   inherited Clear();
-  //if (FPiecesList <> nil) then FPiecesList.Clear;
+  if (FPieces <> nil) then FPieces.Clear;
 end;
 
 procedure TGEDCOMPersonalName.ResetOwner(AOwner: TGEDCOMObject);

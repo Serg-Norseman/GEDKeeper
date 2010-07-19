@@ -28,14 +28,6 @@ type
     Label3: TLabel;
     Label4: TLabel;
     btnNameCopy: TSpeedButton;
-    Label10: TLabel;
-    Label11: TLabel;
-    btnFatherAdd: TSpeedButton;
-    btnFatherDelete: TSpeedButton;
-    btnFatherSel: TSpeedButton;
-    btnMotherAdd: TSpeedButton;
-    btnMotherDelete: TSpeedButton;
-    btnMotherSel: TSpeedButton;
     EditFamily: TEdit;
     EditName: TEdit;
     EditPatronymic: TEdit;
@@ -50,9 +42,25 @@ type
     edPiecePrefix: TEdit;
     edPieceSuffix: TEdit;
     edPieceNickname: TEdit;
-    EditFather: TEdit;
-    EditMother: TEdit;
     SheetUserRefs: TTabSheet;
+    PageCtlParents: TPageControl;
+    SheetCommonParents: TTabSheet;
+    SheetSeparateParents: TTabSheet;
+    Label12: TLabel;
+    EditParents: TEdit;
+    btnParentsAdd: TSpeedButton;
+    btnParentsEdit: TSpeedButton;
+    btnParentsDelete: TSpeedButton;
+    Label10: TLabel;
+    Label11: TLabel;
+    EditMother: TEdit;
+    EditFather: TEdit;
+    btnMotherAdd: TSpeedButton;
+    btnFatherAdd: TSpeedButton;
+    btnFatherDelete: TSpeedButton;
+    btnMotherDelete: TSpeedButton;
+    btnMotherSel: TSpeedButton;
+    btnFatherSel: TSpeedButton;
     procedure FormCreate(Sender: TObject);
     procedure btnFatherAddClick(Sender: TObject);
     procedure btnFatherDeleteClick(Sender: TObject);
@@ -66,6 +74,9 @@ type
     procedure EditNameChange(Sender: TObject);
     procedure EditPatronymicChange(Sender: TObject);
     procedure btnNameCopyClick(Sender: TObject);
+    procedure btnParentsAddClick(Sender: TObject);
+    procedure btnParentsEditClick(Sender: TObject);
+    procedure btnParentsDeleteClick(Sender: TObject);
   private
     FPerson: TGEDCOMIndividualRecord;
 
@@ -101,9 +112,17 @@ uses
 procedure TfmPersonEdit.FormCreate(Sender: TObject);
 var
   sx: TGEDCOMSex;
+  wm: Integer;
 begin
   for sx := Low(TGEDCOMSex) to High(TGEDCOMSex) do
     EditSex.Items.Add(Sex[sx]);
+
+  wm := Ord(fmGEDKeeper.Options.WorkMode);
+  PageCtlParents.ActivePageIndex := wm;
+  {case wm of
+    0:
+    1: PageCtlParents.
+  end;}
 
   FEventsList := TSheetList.Create(SheetEvents{GroupBox3});
   FEventsList.OnModify := ListModify;
@@ -222,6 +241,11 @@ begin
   if (FPerson.ChildToFamilyLinksCount <> 0) then begin
     family := FPerson.ChildToFamilyLinks[0].Family;
 
+    EditParents.Text := GetFamilyStr(family);
+    btnParentsAdd.Enabled := False;
+    btnParentsEdit.Enabled := True;
+    btnParentsDelete.Enabled := True;
+
     rel_person := TGEDCOMIndividualRecord(family.Husband.Value);
     if (rel_person <> nil) then begin
       EditFather.Text := GetNameStr(rel_person);
@@ -252,6 +276,11 @@ begin
       btnMotherSel.Enabled := False;
     end;
   end else begin
+    EditParents.Text := '';
+    btnParentsAdd.Enabled := True;
+    btnParentsEdit.Enabled := False;
+    btnParentsDelete.Enabled := False;
+
     EditFather.Text := '';
     btnFatherAdd.Enabled := True;
     btnFatherDelete.Enabled := False;
@@ -503,7 +532,7 @@ var
   idx: Integer;
 begin
   if (Sender = FEventsList) then begin
-    if Base.ModifyRecEvent(FPerson, TGEDCOMCustomEvent(ItemData), Action)
+    if Base.ModifyRecEvent(Self, FPerson, TGEDCOMCustomEvent(ItemData), Action)
     then ControlsRefresh();
   end
   else
@@ -512,7 +541,7 @@ begin
     case Action of
       raAdd: begin
         family := nil;
-        if Base.ModifyFamily(family, FPerson)
+        if Base.ModifyFamily(family, ftSpouse, FPerson)
         then ControlsRefresh();
       end;
 
@@ -611,6 +640,49 @@ begin
   if (Sender = FUserRefList) then begin
     if Base.ModifyRecUserRef(FPerson, TGEDCOMUserReference(ItemData), Action)
     then ControlsRefresh();
+  end;
+end;
+
+procedure TfmPersonEdit.btnParentsAddClick(Sender: TObject);
+var
+  family: TGEDCOMFamilyRecord;
+begin
+  family := TGEDCOMFamilyRecord(Base.SelectFamily(FPerson));
+  if (family <> nil) then begin
+    // в режиме выбора из списка добавления ребенка не происходит,
+    // поэтому дополнительная проверка;
+    // этого не делается в режиме вставки новой семьи
+    // т.к. ребенок уже должен быть в списке
+    // на момент появления диалога семьи, поэтому
+    // соответствующая вставка делается в ModifyFamily()
+    if (family.IndexOfChild(FPerson) < 0)
+    then Base.FamilyChildAdd(family, FPerson);
+
+    ControlsRefresh();
+  end;
+end;
+
+procedure TfmPersonEdit.btnParentsEditClick(Sender: TObject);
+var
+  family: TGEDCOMFamilyRecord;
+begin
+  family := Base.GetChildFamily(FPerson, False, nil);
+
+  if (family <> nil) and Base.ModifyFamily(family)
+  then ControlsRefresh();
+end;
+
+procedure TfmPersonEdit.btnParentsDeleteClick(Sender: TObject);
+var
+  family: TGEDCOMFamilyRecord;
+begin
+  if (MessageDlg('Удалить персону из семьи родителей?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+  then Exit;
+
+  family := Base.GetChildFamily(FPerson, False, nil);
+  if (family <> nil) then begin
+    Base.FamilyChildRemove(family, FPerson);
+    ControlsRefresh();
   end;
 end;
 

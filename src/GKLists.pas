@@ -64,6 +64,7 @@ type
     bi_date, de_date, bi_place, de_place, resi_place: string;
     p_tag: TGEDCOMTag;
     FGroups, FReligion, FNationality, FEducation, FOccupation, FCaste: string;
+    FMili, FMiliInd, FMiliDis, FMiliRank: string; 
   public
     procedure Fetch(aRec: TGEDCOMRecord); override;
     function CheckFilter(aFilter: TPersonsFilter; aShieldState: TShieldState): Boolean; override;
@@ -76,6 +77,7 @@ type
     FRec: TGEDCOMFamilyRecord;
 
     // runtime
+    FName: string;
   public
     procedure Fetch(aRec: TGEDCOMRecord); override;
     function CheckFilter(aFilter: TPersonsFilter; aShieldState: TShieldState): Boolean; override;
@@ -328,6 +330,11 @@ begin
   FOccupation := '';
   FCaste := '';
 
+  FMili := '';
+  FMiliInd := '';
+  FMiliDis := '';
+  FMiliRank := '';
+
   resi_place := GetResidencePlace(FRec, fmGEDKeeper.Options.PlacesWithAddress);
 
   for i := 0 to FRec.IndividualAttributesCount - 1 do begin
@@ -341,7 +348,16 @@ begin
     else
     if (ev.Name = 'OCCU') then FOccupation := ev.StringValue
     else
-    if (ev.Name = 'CAST') then FCaste := ev.StringValue;
+    if (ev.Name = 'CAST') then FCaste := ev.StringValue
+
+    else
+    if (ev.Name = '_MILI') then FMili := ev.StringValue
+    else
+    if (ev.Name = '_MILI_IND') then FMiliInd := ev.StringValue
+    else
+    if (ev.Name = '_MILI_DIS') then FMiliDis := ev.StringValue
+    else
+    if (ev.Name = '_MILI_RANK') then FMiliRank := ev.StringValue;
   end;
 
   FGroups := GetGroups();
@@ -479,6 +495,17 @@ begin
       pctCaste:
         if (isMain) then aItem.SubItems.Add(FCaste);
 
+      //
+      pctMili:
+        if (isMain) then aItem.SubItems.Add(FMili);
+      pctMiliInd:
+        if (isMain) then aItem.SubItems.Add(FMiliInd);
+      pctMiliDis:
+        if (isMain) then aItem.SubItems.Add(FMiliDis);
+      pctMiliRank:
+        if (isMain) then aItem.SubItems.Add(FMiliRank);
+      //
+
       pctChangeDate:
         if (isMain) then aItem.SubItems.Add(GetChangeDate(FRec));
     end;
@@ -527,6 +554,7 @@ begin
 
         pctAge, pctLifeExpectancy, pctDaysForBirth, pctGroups,
         pctReligion, pctNationality, pctEducation, pctOccupation, pctCaste,
+        pctMili, pctMiliInd, pctMiliDis, pctMiliRank,
         pctChangeDate:
           if isMain
           then AddListColumn(aList, PersonColumnsName[col_type].Name, PersonColumnsName[col_type].DefWidth);
@@ -545,17 +573,22 @@ begin
   priv := (FRec.Restriction = rnPrivacy) and (aShieldState <> ssNone);
   if priv then Exit;
 
+  if (aFilter.List = flSelector)
+  and ((aFilter.Name <> '*') and not(IsMatchesMask(FName, aFilter.Name)))
+  then Exit;
+
   Result := True;
 end;
 
 procedure TFamilyListMan.Fetch(aRec: TGEDCOMRecord);
 begin
   FRec := TGEDCOMFamilyRecord(aRec);
+  FName := GetFamilyStr(FRec);
 end;
 
 procedure TFamilyListMan.UpdateItem(aItem: TListItem; isMain: Boolean);
 begin
-  aItem.SubItems.Add(GetFamilyStr(FRec));
+  aItem.SubItems.Add(FName);
   aItem.SubItems.Add(GetMarriageDate(FRec, fmGEDKeeper.Options.DefDateFormat));
 
   if isMain
@@ -783,6 +816,11 @@ function TResearchListMan.CheckFilter(aFilter: TPersonsFilter;
   aShieldState: TShieldState): Boolean;
 begin
   Result := False;
+
+  if (aFilter.List = flSelector)
+  and ((aFilter.Name <> '*') and not(IsMatchesMask(FRec.Name, aFilter.Name)))
+  then Exit;
+
   Result := True;
 end;
 

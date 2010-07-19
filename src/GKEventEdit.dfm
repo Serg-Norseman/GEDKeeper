@@ -303,6 +303,8 @@ object fmEventEdit: TfmEventEdit
         MaxLength = 10
         TabOrder = 5
         Text = '  .  .    '
+        OnDragDrop = EditEventDate1DragDrop
+        OnDragOver = EditEventDate1DragOver
       end
       object EditEventDate2: TMaskEdit
         Left = 272
@@ -313,6 +315,8 @@ object fmEventEdit: TfmEventEdit
         MaxLength = 10
         TabOrder = 6
         Text = '  .  .    '
+        OnDragDrop = EditEventDate1DragDrop
+        OnDragOver = EditEventDate1DragOver
       end
       object EditEventCause: TEdit
         Left = 8

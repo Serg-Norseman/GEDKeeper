@@ -1,9 +1,9 @@
 object fmMaps: TfmMaps
   Left = 169
   Top = 104
-  Width = 917
-  Height = 641
   Caption = #1050#1072#1088#1090#1099
+  ClientHeight = 603
+  ClientWidth = 901
   Color = clBtnFace
   DefaultMonitor = dmMainForm
   Font.Charset = DEFAULT_CHARSET
@@ -25,13 +25,14 @@ object fmMaps: TfmMaps
     Left = 289
     Top = 0
     Width = 4
-    Height = 595
+    Height = 584
     Beveled = True
+    ExplicitHeight = 595
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 595
-    Width = 909
+    Top = 584
+    Width = 901
     Height = 19
     Panels = <>
     SimplePanel = True
@@ -40,7 +41,7 @@ object fmMaps: TfmMaps
     Left = 0
     Top = 0
     Width = 289
-    Height = 595
+    Height = 584
     ActivePage = tsPlaces
     Align = alLeft
     TabOrder = 1
@@ -50,7 +51,7 @@ object fmMaps: TfmMaps
         Left = 0
         Top = 238
         Width = 281
-        Height = 329
+        Height = 318
         Align = alClient
         Indent = 19
         SortType = stText
@@ -163,21 +164,23 @@ object fmMaps: TfmMaps
   object Panel1: TPanel
     Left = 293
     Top = 0
-    Width = 616
-    Height = 595
+    Width = 608
+    Height = 584
     Align = alClient
     BorderStyle = bsSingle
     TabOrder = 2
     object WebBrowser: TWebBrowser
       Left = 1
       Top = 1
-      Width = 610
-      Height = 589
+      Width = 602
+      Height = 578
       Align = alClient
       TabOrder = 0
       OnStatusTextChange = WebBrowserStatusTextChange
+      ExplicitWidth = 610
+      ExplicitHeight = 589
       ControlData = {
-        4C0000000C3F0000E03C00000000000000000000000000000000000000000000
+        4C000000383E0000BD3B00000000000000000000000000000000000000000000
         000000004C000000000000000000000001000000E0D057007335CF11AE690800
         2B2E126200000000000000004C0000000114020000000000C000000000000046
         8000000000000000000000000000000000000000000000000000000000000000

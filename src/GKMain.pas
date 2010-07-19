@@ -7,7 +7,10 @@ interface
 uses
   Windows, SysUtils, Variants, Classes, Graphics, Forms, Controls, Menus,
   StdCtrls, Dialogs, Buttons, Messages, ExtCtrls, ComCtrls, StdActns, ActnList,
-  ToolWin, ImgList, GKCommon, GKBase, GKLangs;
+  ToolWin, ImgList, GKCommon, GKBase, GKLangs, GKPluginMan;
+
+const
+  WM_KEEPMODELESS = WM_USER + 111;
 
 type
   TfmGEDKeeper = class(TForm, ILocalization)
@@ -43,8 +46,6 @@ type
     actKinshipTerms: TAction;
     actPrev: TAction;
     actNext: TAction;
-    actPersonNameCopy: TAction;
-    actTest: TAction;
     actFileClose: TAction;
     ImageList1: TImageList;
     ToolBar1: TToolBar;
@@ -130,8 +131,13 @@ type
     miFAQ: TMenuItem;
     actFAQ: TAction;
     ImageList2: TImageList;
-    N12: TMenuItem;
     miCalc: TMenuItem;
+    actDummyPlugin: TAction;
+    actExpCalc: TAction;
+    actNamesBook: TAction;
+    miNamesBook: TMenuItem;
+    miCalendar: TMenuItem;
+    actCalendar: TAction;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure actFileNewExecute(Sender: TObject);
@@ -169,26 +175,30 @@ type
     procedure StatusBarDrawPanel(StatusBar: TStatusBar;
       Panel: TStatusPanel; const Rect: TRect);
     procedure StatusBarDblClick(Sender: TObject);
-    procedure miCalcClick(Sender: TObject);
+    procedure actDummyPluginExecute(Sender: TObject);
+    procedure actExpCalcExecute(Sender: TObject);
+    procedure actNamesBookExecute(Sender: TObject);
+    procedure actCalendarExecute(Sender: TObject);
   private
     FNamesTable: TNamesTable;
     FOptions: TGlobalOptions;
+    FPluginMan: TPluginMan;
 
     procedure MRUFileClick(Sender: TObject);
     procedure UpdateMRU();
 
     procedure FileDrop(var Msg: TWMDROPFILES); message WM_DROPFILES;
     procedure CopyData(var Msg: TWMCopyData); message WM_COPYDATA;
+    procedure WMKeepModeless(var Msg: TMessage); message WM_KEEPMODELESS;
   protected
-    {$IFDEF VISTA_COMP}
     procedure CreateParams(var Params: TCreateParams); override;
     procedure WMSysCommand(var  Message: TWmSysCommand); message WM_SYSCOMMAND;
-    {$ENDIF}
   public
     property NamesTable: TNamesTable read FNamesTable;
     property Options: TGlobalOptions read FOptions;
 
     function GetCurrentFile(): TfmBase;
+    function GetCurrentFileName(): string;
 
     procedure AddMRU(const aFileName: string);
     function CreateBase(const aFileName: string): TfmBase;
@@ -200,51 +210,73 @@ type
 var
   fmGEDKeeper: TfmGEDKeeper;
 
+function ShowModalEx(aForm: TCustomForm; aPopupParent: TCustomForm = nil;
+  KeepModeless: Boolean = False): Integer;
+
 implementation
 
 uses
-  {$IFDEF DELPHI_NET}
-  System.IO,
-  {$ENDIF}
-  Types, bsComUtils, ShellAPI, bsWinUtils
-  {$IFDEF PROFILER}, ZProfiler{$ENDIF}, GKAbout, GKOptions, GKUIToolkit,
-  GKExpCalc;
+  {$IFDEF DELPHI_NET}System.IO,{$ENDIF}
+  {$IFDEF PROFILER}ZProfiler,{$ENDIF}
+  uVista, XPTheme, Types, bsComUtils, ShellAPI, bsWinUtils,
+  GKAbout, GKOptions, GKUIToolkit, GKExpCalc, GKNamesBook, GKCalendar;
 
 {$R *.dfm}
 
+function ShowModalEx(aForm: TCustomForm; aPopupParent: TCustomForm = nil;
+  KeepModeless: Boolean = False): Integer;
+begin
+  if KeepModeless
+  then PostMessage(Application.MainForm.Handle, WM_KEEPMODELESS, 0, 0);
+
+  {$IFDEF DELPHI8UP}
+  if IsWindowsVista() then begin
+    if (aPopupParent = nil)
+    then aForm.PopupParent := fmGEDKeeper
+    else aForm.PopupParent := aPopupParent;
+  end;
+  {$ENDIF}
+
+  Result := aForm.ShowModal;
+end;
+
 { TfmGEDKeeper }
 
-{$IFDEF VISTA_COMP}
 procedure TfmGEDKeeper.CreateParams(var Params: TCreateParams);
 begin
   inherited CreateParams(Params);
-  Params.ExStyle := Params.ExStyle and not WS_EX_TOOLWINDOW or WS_EX_APPWINDOW;
+
+  if IsWindowsVista()
+  then Params.ExStyle := Params.ExStyle and not WS_EX_TOOLWINDOW or WS_EX_APPWINDOW;
 end;
 
 procedure TfmGEDKeeper.WMSysCommand(var Message: TWmSysCommand);
 begin
-  case (Message.CmdType and $FFF0) of
-    SC_MINIMIZE: begin
-      ShowWindow(Handle, SW_MINIMIZE);
-      Message.Result := 0;
+  if IsWindowsVista() then begin
+    case (Message.CmdType and $FFF0) of
+      SC_MINIMIZE: begin
+        ShowWindow(Handle, SW_MINIMIZE);
+        Message.Result := 0;
+      end;
+      SC_RESTORE: begin
+        ShowWindow(Handle, SW_RESTORE);
+        Message.Result := 0;
+      end;
+      else inherited;
     end;
-    SC_RESTORE: begin
-      ShowWindow(Handle, SW_RESTORE);
-      Message.Result := 0;
-    end;
-    else inherited;
-  end;
+  end else inherited;
 end;
-{$ENDIF}
 
 procedure TfmGEDKeeper.FormCreate(Sender: TObject);
 begin
-  {$IFDEF VISTA_COMP}
-  ShowWindow(Application.Handle, SW_HIDE);
-  SetWindowLong(Application.Handle, GWL_EXSTYLE,
-    GetWindowLong(Application.Handle, GWL_EXSTYLE) and not WS_EX_APPWINDOW or WS_EX_TOOLWINDOW);
-  ShowWindow(Application.Handle, SW_SHOW);
-  {$ENDIF}
+  if IsWindowsVista() then begin
+    SetVistaFonts(Self);
+
+    ShowWindow(Application.Handle, SW_HIDE);
+    SetWindowLong(Application.Handle, GWL_EXSTYLE,
+      GetWindowLong(Application.Handle, GWL_EXSTYLE) and not WS_EX_APPWINDOW or WS_EX_TOOLWINDOW);
+    ShowWindow(Application.Handle, SW_SHOW);
+  end;
 
   LongDateFormat := 'DD MMM YYYY';
 
@@ -257,6 +289,11 @@ begin
   FNamesTable := TNamesTable.Create;
   FNamesTable.LoadFromFile(GetAppPath() + 'GEDKeeper.nms');
 
+  FPluginMan := TPluginMan.Create(Self);
+  FPluginMan.Directory := ExtractFilePath(Application.ExeName) + '\plugins\';
+  FPluginMan.ScanDirectory();
+  FPluginMan.LoadAll();
+
   DragAcceptFiles(Handle, True);
 
   UpdateMRU();
@@ -265,6 +302,9 @@ end;
 
 procedure TfmGEDKeeper.FormDestroy(Sender: TObject);
 begin
+  FPluginMan.UnloadAll();
+  FPluginMan.Destroy;
+
   FNamesTable.SaveToFile(GetAppPath() + 'GEDKeeper.nms');
   FNamesTable.Destroy;
 
@@ -327,17 +367,14 @@ begin
   else Result := nil;
 end;
 
-procedure TfmGEDKeeper.miCalcClick(Sender: TObject);
+function TfmGEDKeeper.GetCurrentFileName(): string;
+var
+  cb: TfmBase;
 begin
-  if miCalc.Checked then begin
-    fmCalcWidget := TfmCalcWidget.Create(nil);
-    //fmCalcWidget.ParentWindow := 0;
-    fmCalcWidget.Left := Screen.WorkAreaWidth - fmCalcWidget.Width - 10;
-    fmCalcWidget.Top := Screen.WorkAreaHeight - fmCalcWidget.Height - 10;
-    fmCalcWidget.Show;
-  end else begin
-    FreeAndNil(fmCalcWidget);
-  end;
+  cb := GetCurrentFile();
+  if (cb = nil)
+  then Result := ''
+  else Result := cb.FileName;  
 end;
 
 function TfmGEDKeeper.CreateBase(const aFileName: string): TfmBase;
@@ -810,6 +847,59 @@ begin
     cur_base.ShieldState := ss;
 
     StatusBar.Repaint;
+  end;
+end;
+
+procedure TfmGEDKeeper.actDummyPluginExecute(Sender: TObject);
+begin
+  //FPluginMan.RunPlugin(0);
+end;
+
+procedure TfmGEDKeeper.WMKeepModeless(var Msg: TMessage);
+begin
+  if Assigned(fmCalcWidget) and fmCalcWidget.Showing
+  then EnableWindow(fmCalcWidget.Handle, True);
+end;
+
+procedure TfmGEDKeeper.actExpCalcExecute(Sender: TObject);
+begin
+  if (actExpCalc.Checked) and not(Assigned(fmCalcWidget)) then begin
+    {FPluginMan.RunPlugin(0);}
+    fmCalcWidget := TfmCalcWidget.Create(nil);
+    fmCalcWidget.Left := Screen.WorkAreaWidth - fmCalcWidget.Width - 10;
+    fmCalcWidget.Top := Screen.WorkAreaHeight - fmCalcWidget.Height - 10;
+    fmCalcWidget.Show;
+  end else begin
+    FreeAndNil(fmCalcWidget);
+    {FPluginMan.RunPlugin(1);}
+  end;
+end;
+
+procedure TfmGEDKeeper.actNamesBookExecute(Sender: TObject);
+begin
+  if (actNamesBook.Checked) and not(Assigned(fmNamesBook)) then begin
+    {FPluginMan.RunPlugin(0);}
+    fmNamesBook := TfmNamesBook.Create(nil);
+    fmNamesBook.Left := Screen.WorkAreaWidth - fmNamesBook.Width - 10;
+    fmNamesBook.Top := (Screen.WorkAreaHeight - fmNamesBook.Height) div 2;
+    fmNamesBook.Show;
+  end else begin
+    FreeAndNil(fmNamesBook);
+    {FPluginMan.RunPlugin(1);}
+  end;
+end;
+
+procedure TfmGEDKeeper.actCalendarExecute(Sender: TObject);
+begin
+  if (actCalendar.Checked) and not(Assigned(fmCalendar)) then begin
+    {FPluginMan.RunPlugin(0);}
+    fmCalendar := TfmCalendar.Create(nil);
+    fmCalendar.Left := Screen.WorkAreaWidth - fmCalendar.Width - 10;
+    fmCalendar.Top := 50;
+    fmCalendar.Show;
+  end else begin
+    FreeAndNil(fmCalendar);
+    {FPluginMan.RunPlugin(1);}
   end;
 end;
 

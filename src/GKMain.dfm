@@ -1,8 +1,8 @@
 object fmGEDKeeper: TfmGEDKeeper
-  Left = 311
-  Top = 104
-  Width = 784
-  Height = 636
+  Left = 312
+  Top = 112
+  Width = 750
+  Height = 674
   Caption = 'GEDKeeper'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -23,8 +23,8 @@ object fmGEDKeeper: TfmGEDKeeper
   TextHeight = 13
   object StatusBar: TStatusBar
     Left = 0
-    Top = 571
-    Width = 776
+    Top = 609
+    Width = 742
     Height = 19
     AutoHint = True
     Panels = <
@@ -41,7 +41,7 @@ object fmGEDKeeper: TfmGEDKeeper
   object ToolBar1: TToolBar
     Left = 0
     Top = 0
-    Width = 776
+    Width = 742
     Height = 30
     AutoSize = True
     ButtonHeight = 26
@@ -368,15 +368,6 @@ object fmGEDKeeper: TfmGEDKeeper
       ImageIndex = 23
       OnExecute = actNextExecute
     end
-    object actPersonNameCopy: TAction
-      Category = 'Misc'
-      Caption = #1050#1086#1087#1080#1088#1086#1074#1072#1090#1100' '#1080#1084#1103
-    end
-    object actTest: TAction
-      Category = 'Misc'
-      Caption = 'Test'
-      ShortCut = 122
-    end
     object actFileClose: TAction
       Category = 'File'
       Caption = #1047#1072#1082#1088#1099#1090#1100
@@ -433,6 +424,30 @@ object fmGEDKeeper: TfmGEDKeeper
       Category = 'Help'
       Caption = #1063#1072#1089#1090#1086' '#1079#1072#1076#1072#1074#1072#1077#1084#1099#1077' '#1074#1086#1087#1088#1086#1089#1099'...'
       OnExecute = actFAQExecute
+    end
+    object actDummyPlugin: TAction
+      Category = 'Misc'
+      Caption = 'actDummyPlugin'
+      ShortCut = 16506
+      OnExecute = actDummyPluginExecute
+    end
+    object actExpCalc: TAction
+      Category = 'Edit'
+      AutoCheck = True
+      Caption = #1050#1072#1083#1100#1082#1091#1083#1103#1090#1086#1088'...'
+      OnExecute = actExpCalcExecute
+    end
+    object actNamesBook: TAction
+      Category = 'Edit'
+      AutoCheck = True
+      Caption = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082' '#1080#1084#1077#1085'...'
+      OnExecute = actNamesBookExecute
+    end
+    object actCalendar: TAction
+      Category = 'Edit'
+      AutoCheck = True
+      Caption = #1050#1072#1083#1077#1085#1076#1072#1088#1100'...'
+      OnExecute = actCalendarExecute
     end
   end
   object ImageList1: TImageList
@@ -2383,6 +2398,18 @@ object fmGEDKeeper: TfmGEDKeeper
       object miPersonScan: TMenuItem
         Action = actPersonScan
       end
+      object miCalc: TMenuItem
+        Action = actExpCalc
+        AutoCheck = True
+      end
+      object miNamesBook: TMenuItem
+        Action = actNamesBook
+        AutoCheck = True
+      end
+      object miCalendar: TMenuItem
+        Action = actCalendar
+        AutoCheck = True
+      end
       object N6: TMenuItem
         Caption = '-'
       end
@@ -2394,14 +2421,6 @@ object fmGEDKeeper: TfmGEDKeeper
       end
       object miOptions: TMenuItem
         Action = actOptions
-      end
-      object N12: TMenuItem
-        Caption = '-'
-      end
-      object miCalc: TMenuItem
-        AutoCheck = True
-        Caption = #1050#1072#1083#1100#1082#1091#1083#1103#1090#1086#1088'...'
-        OnClick = miCalcClick
       end
     end
     object miPedigree: TMenuItem

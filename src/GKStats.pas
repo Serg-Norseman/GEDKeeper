@@ -214,7 +214,7 @@ begin
   buffer := TStringList.Create;
   vals := TStringList.Create;
   try
-    for i := 0 to aTree.Count - 1 do begin
+    for i := 0 to aTree.RecordsCount - 1 do begin
       if (aTree.Records[i] is TGEDCOMIndividualRecord) and (aMode <> smSpousesDiff) then begin
         iRec := aTree.Records[i] as TGEDCOMIndividualRecord;
 

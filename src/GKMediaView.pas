@@ -1,5 +1,7 @@
 unit GKMediaView;
 
+{$I GEDKeeper.inc}
+
 interface
 
 uses

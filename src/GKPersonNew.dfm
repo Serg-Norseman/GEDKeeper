@@ -51,6 +51,7 @@ object fmPersonNew: TfmPersonNew
     Width = 185
     Height = 21
     TabOrder = 0
+    OnKeyDown = EditFamilyKeyDown
   end
   object EditName: TEdit
     Left = 64
@@ -58,6 +59,7 @@ object fmPersonNew: TfmPersonNew
     Width = 185
     Height = 21
     TabOrder = 1
+    OnKeyDown = EditFamilyKeyDown
   end
   object EditPatronymic: TComboBox
     Left = 64
@@ -66,6 +68,7 @@ object fmPersonNew: TfmPersonNew
     Height = 21
     ItemHeight = 13
     TabOrder = 2
+    OnKeyDown = EditFamilyKeyDown
   end
   object EditSex: TComboBox
     Left = 64

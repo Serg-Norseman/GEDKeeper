@@ -21,6 +21,8 @@ type
     btnAccept: TBitBtn;
     btnCancel: TBitBtn;
     procedure FormCreate(Sender: TObject);
+    procedure EditFamilyKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     FTarget: TGEDCOMIndividualRecord;
     FTargetMode: TTargetMode;
@@ -32,14 +34,29 @@ type
 
 implementation
 
-uses GKMain;
+uses GKMain, uVista;
 
 {$R *.dfm}
+
+procedure TfmPersonNew.EditFamilyKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+  ss, st: string;
+begin
+  if (Key = VK_DOWN) and (ssCtrl in Shift) then begin
+    ss := TEdit(Sender).Text;
+    st := AnsiLowerCase(ss);
+    st[1] := ss[1];
+    TEdit(Sender).Text := st;
+  end;
+end;
 
 procedure TfmPersonNew.FormCreate(Sender: TObject);
 var
   sx: TGEDCOMSex;
 begin
+  if IsWindowsVista() then SetVistaFonts(Self);
+
   for sx := Low(TGEDCOMSex) to High(TGEDCOMSex) do EditSex.Items.Add(Sex[sx]);
 end;
 

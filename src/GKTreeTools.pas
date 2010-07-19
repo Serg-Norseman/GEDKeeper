@@ -80,6 +80,17 @@ type
     SheetDeads: TTabSheet;
     btnPrepare: TBitBtn;
     Panel1: TPanel;
+    SheetSync: TTabSheet;
+    Label4: TLabel;
+    edMasterBase: TEdit;
+    Label7: TLabel;
+    edUpdateBase: TEdit;
+    btnUpdateSelect: TBitBtn;
+    GroupBox2: TGroupBox;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    Panel2: TPanel;
+    mSyncRes: TMemo;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
@@ -105,6 +116,7 @@ type
     procedure btnImportFileChooseClick(Sender: TObject);
     procedure TreeView1DblClick(Sender: TObject);
     procedure btnPrepareClick(Sender: TObject);
+    procedure btnUpdateSelectClick(Sender: TObject);
   private
     FSplitCounter: Integer;
     FSplitList: TList;
@@ -125,7 +137,6 @@ type
     procedure CheckRelations();
 
     procedure AddDiag(aObj, aDiag: string);
-    procedure TreeMerge(aMainTree: TGEDCOMTree; aFileName: string);
     procedure TreeCompare(aMainTree: TGEDCOMTree; aFileName: string);
 
     procedure CheckDeads();
@@ -203,7 +214,7 @@ begin
   try
     AddDiag('', 'Поиск совпадений...');
 
-    for i := 0 to aMainTree.Count - 1 do
+    for i := 0 to aMainTree.RecordsCount - 1 do
       if (aMainTree.Records[i] is TGEDCOMIndividualRecord) then begin
         iRec := aMainTree.Records[i] as TGEDCOMIndividualRecord;
 
@@ -214,7 +225,7 @@ begin
         fams.AddObject(PrepareRusFamily(fam, (iRec.Sex = svFemale)), nil);
       end;
 
-    for i := 0 to tempTree.Count - 1 do
+    for i := 0 to tempTree.RecordsCount - 1 do
       if (tempTree.Records[i] is TGEDCOMIndividualRecord) then begin
         iRec := tempTree.Records[i] as TGEDCOMIndividualRecord;
         tm := GetNameStr(iRec);
@@ -265,39 +276,6 @@ begin
   end;
 end;
 
-procedure TfmTreeTools.TreeMerge(aMainTree: TGEDCOMTree; aFileName: string);
-var
-  repMap: TXRefReplaceMap;
-  i: Integer;
-  extTree: TGEDCOMTree;
-  rec: TGEDCOMRecord;
-  newXRef: string;
-begin
-  extTree := TGEDCOMTree.Create;
-  repMap := TXRefReplaceMap.Create;
-  try
-    extTree.LoadFromFile(aFileName);
-    extTree.Header.Clear;
-
-    while (extTree.Count > 0) do begin
-      rec := extTree.Extract(0);
-      newXRef := aMainTree.XRefIndex_NewXRef(rec);
-      repMap.AddXRef(rec, rec.XRef, newXRef);
-      rec.XRef := newXRef;
-      rec.ResetOwner(aMainTree);
-      aMainTree.AddRecord(rec);
-    end;
-
-    for i := 0 to repMap.Count - 1 do begin
-      rec := repMap.Records[i].Rec;
-      rec.ReplaceXRefs(repMap);
-    end;
-  finally
-    repMap.Free;
-    extTree.Destroy;
-  end;
-end;
-
 procedure TfmTreeTools.SelectTool(aToolIndex: Integer);
 begin
   case aToolIndex of
@@ -340,12 +318,12 @@ begin
 
     mRes.Clear;
 
-    old_count := FTree.Count;
+    old_count := FTree.RecordsCount;
     mRes.Lines.Add('Количество объектов в основной базе: ' + IntToStr(old_count));
 
-    TreeMerge(FTree, edMergeFile.Text);
+    Base.GenBase.TreeMerge(edMergeFile.Text);
 
-    new_count := FTree.Count;
+    new_count := FTree.RecordsCount;
     mRes.Lines.Add('Новое количество объектов в основной базе: ' + IntToStr(new_count));
 
     Base.ListsRefresh();
@@ -431,7 +409,7 @@ begin
     TreeWalk(i_rec, aMode);
 
     cnt := 0;
-    for i := 0 to FTree.Count - 1 do
+    for i := 0 to FTree.RecordsCount - 1 do
       if (FTree.Records[i] is TGEDCOMIndividualRecord) then begin
         Inc(cnt);
 
@@ -496,6 +474,26 @@ procedure TfmTreeTools.CheckRelations();
     for i := 0 to iRec.GroupsCount - 1 do AddRel(iRec.Groups[i].Value);
   end;
 
+  procedure CheckFamily(fRec: TGEDCOMFamilyRecord);
+  var
+    i: Integer;
+  begin
+    CheckRecord(fRec);
+
+    for i := 0 to fRec.FamilyEventCount - 1 do CheckTag(fRec.FamilyEvents[i].Detail);
+    AddRel(fRec.Submitter.Value);
+    for i := 0 to fRec.SpouseSealingCount - 1 do CheckTag(fRec.SpouseSealing[i]);
+  end;
+
+  procedure CheckSource(sRec: TGEDCOMSourceRecord);
+  var
+    i: Integer;
+  begin
+    CheckRecord(sRec);
+
+    for i := 0 to sRec.RepositoryCitationsCount - 1 do AddRel(sRec.RepositoryCitations[i].Value);
+  end;
+
 var
   i: Integer;
   rec: TGEDCOMRecord;
@@ -506,31 +504,31 @@ begin
 
     {fixme}
     if (rec is TGEDCOMFamilyRecord)
-    then
+    then CheckFamily(rec as TGEDCOMFamilyRecord)
     else
     if (rec is TGEDCOMIndividualRecord)
     then CheckIndividual(rec as TGEDCOMIndividualRecord)
     else
     if (rec is TGEDCOMMultimediaRecord)
-    then
+    then CheckRecord(rec)
     else
     if (rec is TGEDCOMNoteRecord)
-    then
+    then CheckRecord(rec)
     else
     if (rec is TGEDCOMRepositoryRecord)
-    then
+    then CheckRecord(rec)
     else
     if (rec is TGEDCOMSourceRecord)
-    then
+    then CheckSource(rec as TGEDCOMSourceRecord)
     else
     if (rec is TGEDCOMSubmissionRecord)
     then
     else
     if (rec is TGEDCOMSubmitterRecord)
-    then
+    then CheckRecord(rec)
     else
     if (rec is TGEDCOMGroupRecord)
-    then ;
+    then {!};
 
     Inc(i);
   end;
@@ -561,9 +559,11 @@ var
   i: Integer;
   p: TGEDCOMIndividualRecord;
 begin
+  //alert
+
   for i := 0 to FSplitList.Count - 1 do begin
     p := TGEDCOMIndividualRecord(FSplitList[i]);
-    Base.DeleteIndividualRecord(p);
+    Base.DeleteIndividualRecord(p, False);
   end;
 
   Base.ListsRefresh();
@@ -599,7 +599,7 @@ begin
   try
     FTree.SaveHeaderToStream(fs);
 
-    for i := 0 to FTree.Count - 1 do begin
+    for i := 0 to FTree.RecordsCount - 1 do begin
       rec := TGEDCOMRecord(FTree.Records[i]);
 
       if (FSplitList.IndexOf(rec) >= 0)
@@ -650,17 +650,17 @@ begin
 
   try
     ProgressBar1.Min := 0;
-    ProgressBar1.Max := FTree.Count;
+    ProgressBar1.Max := FTree.RecordsCount;
     ProgressBar1.Position := 0;
 
-    for i := 0 to FTree.Count - 1 do begin
+    for i := 0 to FTree.RecordsCount - 1 do begin
       case FRMMode of
         mmPerson: if (FTree.Records[i] is TGEDCOMIndividualRecord) then begin
           iRec := FTree.Records[i] as TGEDCOMIndividualRecord;
           iName := GetIndivName(iRec, unk);
           if (unk) then Continue;
 
-          for k := i + 1 to FTree.Count - 1 do
+          for k := i + 1 to FTree.RecordsCount - 1 do
             if (FTree.Records[k] is TGEDCOMIndividualRecord) then begin
               kRec := FTree.Records[k] as TGEDCOMIndividualRecord;
               kName := GetIndivName(kRec, unk);
@@ -699,7 +699,7 @@ begin
           iNote := FTree.Records[i] as TGEDCOMNoteRecord;
           iName := iNote.Notes.Text;
 
-          for k := i + 1 to FTree.Count - 1 do
+          for k := i + 1 to FTree.RecordsCount - 1 do
             if (FTree.Records[k] is TGEDCOMNoteRecord) then begin
               kNote := FTree.Records[k] as TGEDCOMNoteRecord;
               kName := kNote.Notes.Text;
@@ -719,7 +719,7 @@ begin
           iFam := FTree.Records[i] as TGEDCOMFamilyRecord;
           iName := GetFamilyStr(iFam);
 
-          for k := i + 1 to FTree.Count - 1 do
+          for k := i + 1 to FTree.RecordsCount - 1 do
             if (FTree.Records[k] is TGEDCOMFamilyRecord) then begin
               kFam := FTree.Records[k] as TGEDCOMFamilyRecord;
               kName := GetFamilyStr(kFam);
@@ -739,7 +739,7 @@ begin
           iSrc := FTree.Records[i] as TGEDCOMSourceRecord;
           iName := iSrc.FiledByEntry;
 
-          for k := i + 1 to FTree.Count - 1 do
+          for k := i + 1 to FTree.RecordsCount - 1 do
             if (FTree.Records[k] is TGEDCOMSourceRecord) then begin
               kSrc := FTree.Records[k] as TGEDCOMSourceRecord;
               kName := kSrc.FiledByEntry;
@@ -876,28 +876,28 @@ begin
   repMap := TXRefReplaceMap.Create;
   try
     repMap.AddXRef(aRecCopy, aRecCopy.XRef, aRecBase.XRef);
-    for i := 0 to FTree.Count - 1 do
+    for i := 0 to FTree.RecordsCount - 1 do
       FTree.Records[i].ReplaceXRefs(repMap);
 
     case FRMMode of
       mmPerson: begin
         TGEDCOMIndividualRecord(aRecCopy).MoveTo(aRecBase);
-        Base.DeleteIndividualRecord(TGEDCOMIndividualRecord(aRecCopy));
+        Base.DeleteIndividualRecord(TGEDCOMIndividualRecord(aRecCopy), False);
       end;
 
       mmNote: begin
         TGEDCOMNoteRecord(aRecCopy).MoveTo(aRecBase);
-        Base.DeleteNoteRecord(TGEDCOMNoteRecord(aRecCopy));
+        Base.DeleteNoteRecord(TGEDCOMNoteRecord(aRecCopy), False);
       end;
 
       mmFamily: begin
         TGEDCOMFamilyRecord(aRecCopy).MoveTo(aRecBase);
-        Base.DeleteFamily(TGEDCOMFamilyRecord(aRecCopy));
+        Base.DeleteFamilyRecord(TGEDCOMFamilyRecord(aRecCopy), False);
       end;
 
       mmSource: begin
         TGEDCOMSourceRecord(aRecCopy).MoveTo(aRecBase);
-        Base.DeleteSourceRecord(TGEDCOMSourceRecord(aRecCopy));
+        Base.DeleteSourceRecord(TGEDCOMSourceRecord(aRecCopy), False);
       end;
     end;
 
@@ -970,9 +970,9 @@ begin
 
     TreeView1.Items.Clear();
 
-    ProgressInit(FTree.Count, 'Проверка связности семей');
+    ProgressInit(FTree.RecordsCount, 'Проверка связности семей');
 
-    for i := 0 to FTree.Count - 1 do begin
+    for i := 0 to FTree.RecordsCount - 1 do begin
       if (FTree.Records[i] is TGEDCOMIndividualRecord) then begin
         iRec := FTree.Records[i] as TGEDCOMIndividualRecord;
         if (prepared.IndexOf(iRec) >= 0) then Continue;
@@ -982,7 +982,7 @@ begin
         FSplitList.Clear();
         TreeWalk(iRec, twmAll);
 
-        root := TreeView1.Items.AddChild(nil, IntToStr(group));
+        root := TreeView1.Items.AddChild(nil, IntToStr(group) + ' группа (' + IntToStr(FSplitList.Count) + ' перс.)');
         for k := 0 to FSplitList.Count - 1 do begin
           iRec := TObject(FSplitList[k]) as TGEDCOMIndividualRecord;
           prepared.Add(iRec);
@@ -1028,10 +1028,10 @@ var
   age: string;
 begin
   try
-    ProgressInit(FTree.Count, 'Проверка умерших людей');
+    ProgressInit(FTree.RecordsCount, 'Проверка умерших людей');
 
     ListDeads.Items.Clear();
-    for i := 0 to FTree.Count - 1 do begin
+    for i := 0 to FTree.RecordsCount - 1 do begin
       ProgressStep();
 
       if (FTree.Records[i] is TGEDCOMIndividualRecord) then begin
@@ -1090,6 +1090,15 @@ begin
   ListDeads.Checkboxes := True;
   AddListColumn(ListDeads, 'Персона', 400);
   AddListColumn(ListDeads, 'Возможная причина смерти', 200);
+end;
+
+procedure TfmTreeTools.btnUpdateSelectClick(Sender: TObject);
+begin
+  if OpenDialog1.Execute() then begin
+    edUpdateBase.Text := OpenDialog1.FileName;
+    Base.GenBase.TreeSync(edUpdateBase.Text, mSyncRes.Lines);
+    Base.ListsRefresh();
+  end;
 end;
 
 end.

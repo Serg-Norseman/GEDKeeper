@@ -1,5 +1,7 @@
 unit GKProgress;
 
+{$I GEDKeeper.inc}
+
 interface
 
 uses

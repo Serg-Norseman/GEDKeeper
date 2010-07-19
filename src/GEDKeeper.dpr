@@ -36,7 +36,6 @@ uses
   GKMediaEdit in 'GKMediaEdit.pas' {fmMediaEdit},
   GKMediaView in 'GKMediaView.pas' {fmMediaView},
   GKMaps in 'GKMaps.pas' {fmMaps},
-  StorageCrypt in 'StorageCrypt.pas',
   GKResearchEdit in 'GKResearchEdit.pas' {fmResearchEdit},
   GKTaskEdit in 'GKTaskEdit.pas' {fmTaskEdit},
   GKCommunicationEdit in 'GKCommunicationEdit.pas' {fmCommunicationEdit},
@@ -49,9 +48,20 @@ uses
   GKTreeTools in 'GKTreeTools.pas' {fmTreeTools},
   GKTipsDlg in 'GKTipsDlg.pas' {fmTipsDialog},
   GKUserRefEdit in 'GKUserRefEdit.pas' {fmUserRefEdit},
-  GKExpCalc in 'GKExpCalc.pas' {fmCalcWidget};
+  GKExpCalc in 'GKExpCalc.pas' {fmCalcWidget},
+  GKNamesBook in 'GKNamesBook.pas' {fmNamesBook},
+  GKGenBase in 'GKGenBase.pas',
+  GKCalendar in 'GKCalendar.pas' {fmCalendar};
 
 {$R *.res}
+
+function GetCurrentFile(): PChar; far;
+begin
+  Result := PChar(fmGEDKeeper.GetCurrentFileName());
+end;
+
+exports
+  GetCurrentFile;
 
 procedure RunInstance();
 var
@@ -64,12 +74,12 @@ begin
   // поскольку к заголовку главного окна может добавиться заголовок MDIChild
   // (нужно позаботиться об уникальности имени класса главной формы)
 
-  hMainForm := {0;//}FindWindow('TfmGEDKeeper', nil);
+  hMainForm := 0;//FindWindow('TfmGEDKeeper', nil);
   if (hMainForm = 0) then begin
     Application.Initialize;
     Application.Title := 'GEDKeeper';
     Application.CreateForm(TfmGEDKeeper, fmGEDKeeper);
-    for i := 1 to ParamCount do fmGEDKeeper.CreateBase(ParamStr(i));
+  for i := 1 to ParamCount do fmGEDKeeper.CreateBase(ParamStr(i));
     Application.Run;
   end else begin
     ParamString := '';

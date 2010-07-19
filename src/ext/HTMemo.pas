@@ -105,6 +105,7 @@ type
     FActiveLink: Integer;
     EOnLink: TLinkEvent;
     FBorderStyle: TBorderStyle;
+    FWheelAccumulator: Integer;
 
     procedure CMCtl3DChanged(var Message: TMessage); message CM_CTL3DCHANGED;
     procedure FontChanged(Sender: TObject);
@@ -123,6 +124,8 @@ type
     procedure WMHScroll(var Msg: TWMHScroll); message WM_HSCROLL;
     procedure WMSize(var Msg: TWMSize); message WM_SIZE;
     procedure WMVScroll(var Msg: TWMVScroll); message WM_VSCROLL;
+    procedure CMMouseWheel(var Message: TCMMouseWheel); message CM_MOUSEWHEEL;
+    procedure MouseWheel(Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint); dynamic;
   protected
     procedure ArrangeText();
     procedure ClearLinks();
@@ -202,6 +205,7 @@ constructor THTMemo.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   ControlStyle := [csCaptureMouse, csClickEvents, csDoubleClicks];
+  TabStop := True;
 
   FBorderStyle := bsSingle;
   FHeightcount := 0;
@@ -237,8 +241,7 @@ begin
 
   with Params do begin
     Style := Style or BorderStyles[FBorderStyle];
-    if NewStyleControls and Ctl3D and (FBorderStyle = bsSingle) then
-    begin
+    if NewStyleControls and Ctl3D and (FBorderStyle = bsSingle) then begin
       Style := Style and not WS_BORDER;
       ExStyle := ExStyle or WS_EX_CLIENTEDGE;
     end;
@@ -326,7 +329,7 @@ end;
 
 procedure THTMemo.SetTopPos(Value: Integer);
 var
-  dummy, R: TRect;
+  {$IFDEF DELPHI_NET}dummy,{$ENDIF} R: TRect;
 begin
   if (Value < 0)
   then Value := 0
@@ -351,7 +354,7 @@ end;
 
 procedure THTMemo.SetLeftPos(Value: Integer);
 var
-  dummy, R: TRect;
+  {$IFDEF DELPHI_NET}dummy,{$ENDIF} R: TRect;
 begin
   if (Value < 0)
   then Value := 0
@@ -494,10 +497,15 @@ var
   R3d: TRect;
   BrushStyle: TBrushStyle;
 begin
-  if (csLoading in componentState) then Exit;
+  if (csLoading in ComponentState) then Exit;
 
   FAcceptFontChange := False;
   ClearLinks();
+
+  // focus debug code
+  {if Focused
+  then Font.Color := clBlack
+  else Font.Color := clGray;}
 
   with Canvas do begin
     if not FResize then begin
@@ -652,6 +660,8 @@ procedure THTMemo.MouseMove(Shift: TShiftState; X, Y: Integer);
 var
   i: Integer;
 begin
+  inherited MouseMove(Shift, X, Y);
+
   for i := 0 to FLinks.Count - 1 do
     if TLink(FLinks[i]).GotMouse(x, y) then begin
       FLink := i;
@@ -667,7 +677,10 @@ end;
 
 procedure THTMemo.MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
-  if FLink >= 0 then GotoLink(FLink);
+  inherited MouseDown(Button, Shift, X, Y);
+  if not Focused then SetFocus;
+
+  if (FLink >= 0) then GotoLink(FLink);
 end;
 
 procedure THTMemo.GotoLink(Link: Word);
@@ -743,12 +756,12 @@ begin
 
   case Key of
     VK_TAB: begin
-      if FLinks.Count = 0 then exit;
-      if FActiveLink >= FLinks.count then exit;
+      if FLinks.Count = 0 then Exit;
+      if FActiveLink >= FLinks.Count then Exit;
       if FActiveLink = -1 then begin
         FActiveLink := FLinks.Count-1;
-        while (FActiveLink>0) and (TLink(FLinks[FActiveLink-1]).Rect.Top > 0) do
-          dec(FActiveLink);
+        while (FActiveLink > 0) and (TLink(FLinks[FActiveLink-1]).Rect.Top > 0) do
+          Dec(FActiveLink);
       end else begin
         {$IFNDEF DELPHI_NET}
         InvalidateRect(Handle, @TLink(FLinks[FActiveLink]).Rect, False);
@@ -758,10 +771,10 @@ begin
 
         if (ssShift in Shift) then begin
           Dec(FActiveLink);
-          if FActiveLink<0 then FActiveLink:=FLinks.Count-1;
+          if (FActiveLink < 0) then FActiveLink := FLinks.Count - 1;
         end else begin
           Inc(FActiveLink);
-          if FActiveLink=FLinks.count then FActiveLink:=0;
+          if (FActiveLink = FLinks.Count) then FActiveLink := 0;
         end;
       end;
 
@@ -793,13 +806,65 @@ begin
       TopPos := TopPos + (ClientHeight div 2);
 
     VK_HOME:
-      if ssCtrl in Shift then TopPos := 0 else LeftPos := 0;
+      if (ssCtrl in Shift) then TopPos := 0 else LeftPos := 0;
 
     VK_END:
-      if ssCtrl in Shift
+      if (ssCtrl in Shift)
       then TopPos := FPageHeight - ClientHeight + 2 * FBorderWidth
       else LeftPos := FPageWidth - ClientWidth;
     else inherited KeyDown(Key, Shift);
+  end;
+end;
+
+procedure THTMemo.CMMouseWheel(var Message: TCMMouseWheel);
+begin
+  with Message do
+    MouseWheel(ShiftState, WheelDelta, SmallPointToPoint(Pos));
+end;
+
+procedure THTMemo.MouseWheel(Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint);
+var
+  ScrollNotify: Integer;
+  hasShift, hasCtrl: Boolean;
+begin
+  ScrollNotify := -1;
+  hasShift := (ssShift in Shift);
+  hasCtrl := (ssCtrl in Shift);
+
+  if hasCtrl then begin
+    if WheelDelta > 0 then ScrollNotify := SB_LINELEFT;
+    if WheelDelta < 0 then ScrollNotify := SB_LINERIGHT;
+    if (ScrollNotify <> -1) then begin
+      Perform(WM_HSCROLL, ScrollNotify, 0);
+      Perform(WM_HSCROLL, ScrollNotify, 0);
+    end;
+    Exit;
+  end;
+
+  if hasShift then begin
+    //DrawVisible;
+    //HideCaret := False;
+    //if WheelDelta > 0 then CaretPos.x := CaretPos.x - 1;
+    //if WheelDelta < 0 then CaretPos.x := CaretPos.x + 1;
+    //if CaretPos.x < 0 then CaretPos.x := 0;
+    //if CaretPos.x > pred(FLines.Count) then CaretPos.x := pred(FLines.Count);
+    //DrawCaret(CaretPos.x, CaretPos.y, HideCaret);
+    Exit;
+  end;
+
+  if not hasShift and not hasCtrl then begin
+    if WheelDelta > 0 then ScrollNotify := SB_LINEUP;
+    if WheelDelta < 0 then ScrollNotify := SB_LINEDOWN;
+    if (ScrollNotify <> -1) then Perform(WM_VSCROLL, ScrollNotify, 0);
+  end;
+
+  Inc(FWheelAccumulator, WheelDelta);
+
+  while (Abs(FWheelAccumulator) >= WHEEL_DELTA) do begin
+    FWheelAccumulator := Abs(FWheelAccumulator) - WHEEL_DELTA;
+    if (FWheelAccumulator < 0) then begin
+      if (FWheelAccumulator <> 0) then FWheelAccumulator := -FWheelAccumulator;
+    end;
   end;
 end;
 

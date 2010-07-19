@@ -35,6 +35,7 @@ object fmNoteEdit: TfmNoteEdit
     Height = 25
     Caption = #1054#1090#1084#1077#1085#1080#1090#1100
     TabOrder = 2
+    OnClick = btnCancelClick
     Kind = bkCancel
   end
   object MemoNote: TMemo

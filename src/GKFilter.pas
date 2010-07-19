@@ -122,7 +122,7 @@ begin
   cbGroup.AddItem('- всё -', nil);
   cbGroup.AddItem('- нет групп -', nil);
   cbGroup.AddItem('- любые -', nil);
-  for i := 0 to tree.Count - 1 do
+  for i := 0 to tree.RecordsCount - 1 do
     if (tree.Records[i] is TGEDCOMGroupRecord)
     then cbGroup.AddItem(TGEDCOMGroupRecord(tree.Records[i]).Name, tree.Records[i]);
 

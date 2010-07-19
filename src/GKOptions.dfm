@@ -168,6 +168,17 @@ object fmOptions: TfmOptions
           TabOrder = 0
         end
       end
+      object rgEditMode: TRadioGroup
+        Left = 232
+        Top = 104
+        Width = 265
+        Height = 57
+        Caption = #1056#1077#1078#1080#1084' '#1088#1072#1073#1086#1090#1099
+        Items.Strings = (
+          #1055#1088#1086#1089#1090#1086#1081
+          #1055#1088#1086#1076#1074#1080#1085#1091#1090#1099#1081)
+        TabOrder = 5
+      end
     end
     object SheetView: TTabSheet
       Caption = #1048#1085#1090#1077#1088#1092#1077#1081#1089

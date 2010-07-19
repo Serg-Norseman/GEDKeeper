@@ -10,13 +10,13 @@ uses
 type
   TfmAbout = class(TForm)
     LabelProduct: TLabel;
-    Label3: TLabel;
+    LabelVersion: TLabel;
     btnClose: TBitBtn;
     LabelCopyright: TLabel;
     Label_eMail: TLabel;
     LabelCite: TLabel;
-    procedure FormShow(Sender: TObject);
     procedure Label_eMailClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
   public
   end;
@@ -26,7 +26,7 @@ procedure AboutDialog(ProductName, Copyright, eMail: string);
 implementation
 
 uses
-  Windows, GKCommon, bsWinUtils, GKMain;
+  Windows, GKCommon, bsWinUtils, GKMain, uVista;
 
 {$R *.DFM}
 
@@ -37,6 +37,7 @@ begin
   fmAbout := TfmAbout.Create(fmGEDKeeper);
   try
     fmAbout.LabelProduct.Caption := ProductName;
+    fmAbout.LabelVersion.Caption := 'Version ' + GetFileVersion();
     fmAbout.LabelCopyright.Caption := 'Copyright © ' + Copyright;
 
     if (eMail = '')
@@ -48,20 +49,22 @@ begin
       '«Неуважение к предкам - есть первый признак дикости и безнравственности»'+#13#10+
       '(Александр Сергеевич Пушкин)';
 
-    {$IFDEF VISTA_COMP}
-    {$IFDEF DELPHI8UP}
-    fmAbout.PopupParent := fmGEDKeeper;
-    {$ENDIF}
-    {$ENDIF}
-    fmAbout.ShowModal;
+    ShowModalEx(fmAbout);
   finally
     fmAbout.Destroy;
   end;
 end;
 
-procedure TfmAbout.FormShow(Sender: TObject);
+procedure TfmAbout.FormCreate(Sender: TObject);
 begin
-  Label3.Caption := 'Version ' + GetFileVersion();
+  if IsWindowsVista() then begin
+    SetVistaFonts(Self);
+    SetVistaContentFonts(LabelProduct.Font);
+    SetVistaContentFonts(LabelVersion.Font);
+    SetVistaContentFonts(LabelCopyright.Font);
+    SetVistaContentFonts(LabelCite.Font);
+    SetVistaContentFonts(Label_eMail.Font);
+  end;
 end;
 
 procedure TfmAbout.Label_eMailClick(Sender: TObject);

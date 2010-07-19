@@ -27,6 +27,8 @@ const
   MLinkPrefix = 'view_';
 
 type
+  TWorkMode = (wmSimple, wmExpert);
+
   TShieldState = (
     // не показываются ни секретные, ни конфиденциальные данные
     ssMaximum,
@@ -40,17 +42,19 @@ type
     rtRepository, rtGroup, rtResearch, rtTask, rtCommunication, rtLocation,
     rtSubmission, rtSubmitter);
 
-  TSelectMode = (smPerson, smNote, smMultimedia, smSource, smRepository,
+  TSelectMode = (smPerson, smFamily, smNote, smMultimedia, smSource, smRepository,
     smGroup, smTask, smCommunication, smLocation);
 
   TRecAction = (raAdd, raEdit, raDelete, raJump, raMoveUp, raMoveDown);
 
-  TTargetMode = (tmNone, tmAncestor, tmDescendant);
+  TTargetMode = (tmNone, tmAncestor, tmDescendant, tmChildToFamily);
   TLifeMode = (lmAll, lmOnlyAlive, lmOnlyDead, lmAliveBefore);
+
+  TFamilyTarget = (ftNone, ftSpouse, ftChild);
 
 const
   SelectRecords: array [TSelectMode] of TGEDCOMRecordType = (
-    rtIndividual, rtNote, rtMultimedia, rtSource, rtRepository,
+    rtIndividual, rtFamily, rtNote, rtMultimedia, rtSource, rtRepository,
     rtGroup, rtTask, rtCommunication, rtLocation
   );
 
@@ -60,6 +64,7 @@ type
     pctBirthPlace, pctDeathPlace, pctResidence,
     pctAge, pctLifeExpectancy, pctDaysForBirth, pctGroups,
     pctReligion, pctNationality, pctEducation, pctOccupation, pctCaste,
+    pctMili, pctMiliInd, pctMiliDis, pctMiliRank,
     pctChangeDate
   );
 
@@ -96,6 +101,11 @@ const
     (Name: 'Профессия'; DefWidth: 200),
     (Name: 'Социальное положение'; DefWidth: 200),
 
+    (Name: 'Военная служба'; DefWidth: 200),
+    (Name: 'Призван в ВС'; DefWidth: 200),
+    (Name: 'Уволен из ВС'; DefWidth: 200),
+    (Name: 'Звание в ВС'; DefWidth: 200),
+
     (Name: 'Изменено'; DefWidth: 150)
   );
 
@@ -119,6 +129,11 @@ const
     (colType: pctEducation; colActive: False),
     (colType: pctOccupation; colActive: False),
     (colType: pctCaste; colActive: False),
+
+    (colType: pctMili; colActive: False),
+    (colType: pctMiliInd; colActive: False),
+    (colType: pctMiliDis; colActive: False),
+    (colType: pctMiliRank; colActive: False),
 
     (colType: pctChangeDate; colActive: True)
   );
@@ -250,6 +265,7 @@ type
     FRelations: TStringList;
     FResidenceFilters: TStringList;
     FShowTips: Boolean;
+    FWorkMode: TWorkMode;
   public
     constructor Create;
     destructor Destroy; override;
@@ -268,6 +284,7 @@ type
     property PlacesWithAddress: Boolean read FPlacesWithAddress write FPlacesWithAddress;
     property Relations: TStringList read FRelations;
     property ResidenceFilters: TStringList read FResidenceFilters;
+    property WorkMode: TWorkMode read FWorkMode write FWorkMode;
 
     property ListPersonsColumns: TPersonColumnsList
       read FListPersonsColumns write FListPersonsColumns;
@@ -296,7 +313,7 @@ const
     (Name: 'Разведены'; StatSign: 'NOTMARR')
   );
 
-  PersonEventsSize = 35;
+  PersonEventsSize = 36;
   PersonEvents: array [0..PersonEventsSize-1] of record
     Name: string;
     Sign: string;
@@ -333,6 +350,7 @@ const
     (Name: 'Собственность'; Sign: 'PROP'; Kind: ekFact),               {std:check, AT}
     (Name: 'Титул'; Sign: 'TITL'; Kind: ekFact),                       {std:check, AT}
 
+    (Name: 'Путешествие'; Sign: '_TRAVEL'; Kind: ekFact),              {non-std, AT}
     (Name: 'Хобби'; Sign: '_HOBBY'; Kind: ekFact),                     {non-std, AT}
     (Name: 'Награда'; Sign: '_AWARD'; Kind: ekFact),                   {non-std, AT}
 
@@ -341,6 +359,14 @@ const
     (Name: 'Уволен из ВС'; Sign: '_MILI_DIS'; Kind: ekFact),           {non-std, AT}
     (Name: 'Звание в ВС'; Sign: '_MILI_RANK'; Kind: ekFact)            {non-std, AT}
   );
+
+{
+MILA     Gen                  Military Award
+MILD     Gen                  Military Discharge   
+MILF     Reunion, Gen         Served in Military  
+MILI     Reunion              Military  
+MILT     Gen                  Military Services
+}
 
   DateKindsSize = 10;
   DateKinds: array [0..DateKindsSize-1] of record
@@ -554,6 +580,7 @@ type
   end;
 
 function GetRecordType(rec: TGEDCOMRecord): TGEDCOMRecordType;
+function RecordIsType(aRecType: TGEDCOMRecordType; aRec: TGEDCOMRecord): Boolean;
 
 procedure GetCommonStats(aTree: TGEDCOMTree; var aStats: TCommonStats);
 
@@ -565,6 +592,21 @@ procedure LoadExtFile(const aFileName: string);
 function StreamToUtf8Stream(Stream: TStream): UTF8String;
 
 function ConStrings(aStrings: TStrings): string;
+
+type
+  TTextFileEx = class(TObject)
+  private
+    FStream: TStream;
+  public
+    constructor Create(aStream: TStream);
+
+    function Eof(): Boolean;
+    function ReadLn(): string;
+    procedure WriteLn(const s: string); overload;
+  end;
+
+const
+  LineEnd = #13#10;
 
 implementation
 
@@ -1718,6 +1760,24 @@ begin
   else Result := rtNone;
 end;
 
+function RecordIsType(aRecType: TGEDCOMRecordType; aRec: TGEDCOMRecord): Boolean;
+begin
+  case aRecType of
+    rtIndividual: Result := aRec is TGEDCOMIndividualRecord;
+    rtFamily: Result := aRec is TGEDCOMFamilyRecord;
+    rtNote: Result := aRec is TGEDCOMNoteRecord;
+    rtMultimedia: Result := aRec is TGEDCOMMultimediaRecord;
+    rtSource: Result := aRec is TGEDCOMSourceRecord;
+    rtRepository: Result := aRec is TGEDCOMRepositoryRecord;
+    rtGroup: Result := aRec is TGEDCOMGroupRecord;
+    rtResearch: Result := aRec is TGEDCOMResearchRecord;
+    rtTask: Result := aRec is TGEDCOMTaskRecord;
+    rtCommunication: Result := aRec is TGEDCOMCommunicationRecord;
+    rtLocation: Result := aRec is TGEDCOMLocationRecord;
+    else Result := False;
+  end;
+end;
+
 procedure GetCommonStats(aTree: TGEDCOMTree; var aStats: TCommonStats);
 var
   i, ch_cnt, m_cnt: Integer;
@@ -1776,7 +1836,7 @@ begin
     mage_m_cnt := 0;
     mage_f_cnt := 0;
 
-    for i := 0 to aTree.Count - 1 do begin
+    for i := 0 to aTree.RecordsCount - 1 do begin
       rec := aTree.Records[i];
 
       if (rec is TGEDCOMIndividualRecord) then begin
@@ -2208,11 +2268,11 @@ function CheckGEDCOMFormat(aTree: TGEDCOMTree): Boolean;
     rec: TGEDCOMRecord;
     newXRef: string;
   begin
-    ProgressInit(aTree.Count, 'Коррекция идентификаторов');
+    ProgressInit(aTree.RecordsCount, 'Коррекция идентификаторов');
 
     repMap := TXRefReplaceMap.Create;
     try
-      for i := 0 to aTree.Count - 1 do begin
+      for i := 0 to aTree.RecordsCount - 1 do begin
         rec := aTree.Records[i];
 
         if (GetId(rec) < 0) then begin
@@ -2245,18 +2305,20 @@ var
   rec: TGEDCOMRecord;
   idCheck: Boolean;
 begin
-  for i := 0 to aTree.Count - 1 do begin
-    for k := i + 1 to aTree.Count - 1 do begin
+  Result := False;
+
+  for i := 0 to aTree.RecordsCount - 1 do begin
+    for k := i + 1 to aTree.RecordsCount - 1 do begin
       if (aTree.Records[i].XRef = aTree.Records[k].XRef)
       then ; // AddDiag(aTree.Records[i].XRef, 'Объект дублирован');
     end;
   end;
 
-  ProgressInit(aTree.Count, 'Проверка формата');
+  ProgressInit(aTree.RecordsCount, 'Проверка формата');
   try
     idCheck := True;
     i := 0;
-    while (i < aTree.Count) do begin
+    while (i < aTree.RecordsCount) do begin
       rec := aTree.Records[i];
       CheckRecord(aTree, rec);
 
@@ -2275,6 +2337,8 @@ begin
     if (MessageDlg('Требуется коррекция идентификаторов записей, продолжить?', mtWarning, [mbYes, mbNo], 0) = mrYes)
     then CorrectIds();
   end;
+
+  Result := True;
 end;
 
 procedure LoadExtFile(const aFileName: string);
@@ -2436,7 +2500,7 @@ var
   family: TGEDCOMFamilyRecord;
   dummy, ch_pat, fat_nam: string;
 begin
-  for i := 0 to aTree.Count - 1 do
+  for i := 0 to aTree.RecordsCount - 1 do
     if (aTree.Records[i] is TGEDCOMIndividualRecord) then begin
       iRec := aTree.Records[i] as TGEDCOMIndividualRecord;
 
@@ -2652,6 +2716,7 @@ begin
     FLastDir := ini.ReadString('Common', 'LastDir', '');
     FPlacesWithAddress := ini.ReadBool('Common', 'PlacesWithAddress', False);
     FShowTips := ini.ReadBool('Common', 'ShowTips', True);
+    FWorkMode := TWorkMode(ini.ReadInteger('Common', 'WorkMode', Ord(wmSimple)));
 
     FGEDCOMOptimize := ini.ReadBool('Common', 'GEDCOMOptimize', False);
 
@@ -2704,6 +2769,7 @@ begin
     ini.WriteString('Common', 'LastDir', FLastDir);
     ini.WriteBool('Common', 'PlacesWithAddress', FPlacesWithAddress);
     ini.WriteBool('Common', 'ShowTips', FShowTips);
+    ini.WriteInteger('Common', 'WorkMode', Ord(FWorkMode));
 
     ini.WriteBool('Common', 'GEDCOMOptimize', FGEDCOMOptimize);
 
@@ -2737,6 +2803,55 @@ begin
   finally
     ini.Destroy;
   end;
+end;
+
+{==============================================================================}
+
+{ TTextFileEx }
+
+constructor TTextFileEx.Create(aStream: TStream);
+begin
+  inherited Create;
+  FStream := aStream;
+end;
+
+function TTextFileEx.Eof(): Boolean;
+begin
+  Result := (FStream.Position >= FStream.Size);
+end;
+
+function TTextFileEx.ReadLn(): string;
+var
+  c: Char;
+begin
+  Result := '';
+
+  while not Eof do begin
+    FStream.Read(c, SizeOf(c));
+
+    if (c = #13) then begin
+      FStream.Read(c, SizeOf(c));
+
+      if (c <> #10)
+      then FStream.Seek(SizeOf(c), soFromCurrent);
+
+      Break;
+    end;
+
+    if (c = #10)
+    then Break;
+
+    Result := Result + c;
+  end;
+end;
+
+procedure TTextFileEx.WriteLn(const s: string);
+var
+  i: Integer;
+begin
+  for i := 1 to Length(s) do
+    Write(s[i], SizeOf(s[i]));
+  Write(LineEnd, Length(LineEnd));
 end;
 
 end.

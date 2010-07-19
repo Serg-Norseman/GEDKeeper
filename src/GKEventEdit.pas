@@ -44,6 +44,10 @@ type
     procedure btnPlaceAddClick(Sender: TObject);
     procedure btnPlaceDeleteClick(Sender: TObject);
     procedure btnPlaceSelClick(Sender: TObject);
+    procedure EditEventDate1DragOver(Sender, Source: TObject; X,
+      Y: Integer; State: TDragState; var Accept: Boolean);
+    procedure EditEventDate1DragDrop(Sender, Source: TObject; X,
+      Y: Integer);
   private
     FEvent: TGEDCOMCustomEvent;
 
@@ -64,7 +68,7 @@ type
 
 implementation
 
-uses GKMain, GKSourceEdit, GKAddressEdit, GKSourceCitEdit;
+uses GKMain, GKSourceEdit, GKAddressEdit, GKSourceCitEdit, bsComUtils;
 
 {$R *.dfm}
 
@@ -396,6 +400,25 @@ begin
   if (Sender = FSourcesList) then begin
     if Base.ModifyTagSource(FEvent.Detail, TGEDCOMSourceCitation(ItemData), Action)
     then ControlsRefresh();
+  end;
+end;
+
+procedure TfmEventEdit.EditEventDate1DragOver(Sender, Source: TObject; X,
+  Y: Integer; State: TDragState; var Accept: Boolean);
+begin
+  Accept := (Source is TCustomEdit) and (TCustomEdit(Source).Name = 'edCalcResult');
+end;
+
+procedure TfmEventEdit.EditEventDate1DragDrop(Sender, Source: TObject; X, Y: Integer);
+var
+  txt, dt, sd, sm: string;
+begin
+  if (Source is TCustomEdit) and (TCustomEdit(Source).Name = 'edCalcResult') then begin
+    txt := TCustomEdit(Source).Text;
+    dt := TMaskEdit(Sender).Text;
+    sd := GetToken(dt, '.', 1);
+    sm := GetToken(dt, '.', 2);
+    TMaskEdit(Sender).Text := sd + '.' + sm + '.' + txt;
   end;
 end;
 

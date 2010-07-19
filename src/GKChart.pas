@@ -72,7 +72,7 @@ type
     property Tree: TGEDCOMTree read FTree write FTree;
     property TreeBounds: TRect read FTreeBounds write SetTreeBounds;
 
-    procedure GenChart();
+    procedure GenChart(aShow: Boolean = True);
   end;
 
 implementation
@@ -81,7 +81,7 @@ uses GKMain, GKPersonEdit;
 
 {$R *.dfm}
 
-procedure TfmChart.GenChart();
+procedure TfmChart.GenChart(aShow: Boolean = True);
 begin
   if (FPerson = nil) then begin
     MessageDlg('Не выбрана персональная запись', mtError, [mbOk], 0);
@@ -107,7 +107,8 @@ begin
     Caption := Caption + ' "' + FFileName + '"';
 
     TreeBounds := FChart.TreeBounds;
-    Show();
+
+    if (aShow) then Show();
   except
     on E: Exception do MessageDlg(E.Message, mtError, [mbOk], 0);
   end;
@@ -232,13 +233,24 @@ procedure TfmChart.Image1DblClick(Sender: TObject);
 var
   p: TPerson;
   i_rec: TGEDCOMIndividualRecord;
+  hsp, vsp: Integer;
 begin
   p := FChart.Selected;
   if (p <> nil) and (p.Rec <> nil) then begin
     i_rec := p.Rec;
     if FBase.ModifyPerson(i_rec) then begin
       if (FBase <> nil) then FBase.ListsRefresh();
-      GenChart();
+
+      hsp := ScrollBox1.HorzScrollBar.Position;
+      vsp := ScrollBox1.VertScrollBar.Position;
+
+      ScrollBox1.HorzScrollBar.Position := 0;
+      ScrollBox1.VertScrollBar.Position := 0;
+
+      GenChart(True);
+
+      ScrollBox1.HorzScrollBar.Position := hsp;
+      ScrollBox1.VertScrollBar.Position := vsp;
     end;
   end;
 end;

@@ -347,7 +347,7 @@ begin
   end
   else
   if (Sender = FEventsList) then begin
-    if Base.ModifyRecEvent(FFamily, TGEDCOMCustomEvent(ItemData), Action)
+    if Base.ModifyRecEvent(Self, FFamily, TGEDCOMCustomEvent(ItemData), Action)
     then ControlsRefresh();
   end
   else

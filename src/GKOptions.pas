@@ -64,6 +64,7 @@ type
     EditPedigreeFormat: TRadioGroup;
     GroupBox7: TGroupBox;
     CheckShowOnStart: TCheckBox;
+    rgEditMode: TRadioGroup;
     procedure FormShow(Sender: TObject);
     procedure btnAcceptClick(Sender: TObject);
     procedure PanMaleColorClick(Sender: TObject);
@@ -135,6 +136,7 @@ begin
   EditPedigreeFormat.ItemIndex := Ord(FOptions.PedigreeOptions.Format);
 
   CheckShowOnStart.Checked := FOptions.ShowTips;
+  rgEditMode.ItemIndex := Ord(FOptions.WorkMode);
 
   FPersonColumns := FOptions.ListPersonsColumns;
   UpdateColumnsList();
@@ -187,6 +189,7 @@ begin
   FOptions.PedigreeOptions.Format := TPedigreeFormat(EditPedigreeFormat.ItemIndex);
 
   FOptions.ShowTips := CheckShowOnStart.Checked;
+  FOptions.WorkMode := TWorkMode(rgEditMode.ItemIndex);
 end;
 
 procedure TfmOptions.PanMaleColorClick(Sender: TObject);

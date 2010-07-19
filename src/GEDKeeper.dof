@@ -94,7 +94,7 @@ OutputDir=..\
 UnitOutputDir=
 PackageDLLOutputDir=
 PackageDCPOutputDir=
-SearchPath=$(DELPHI)\Lib\Debug;.\ext;.\GraphicEx;.\Abbrevia\source
+SearchPath=$(DELPHI)\Lib\Debug;.\ext;.\ext\GraphicEx;.\ext\Abbrevia\
 Packages=vcl;rtl;indy;inet;xmlrtl;vclie;inetdbbde;inetdbxpress;vclx;dbrtl;dsnap;dsnapcon;vcldb;soaprtl;dbexpress;dbxcds;inetdb;bdertl;vcldbx;webdsnap;websnap;adortl;ibxpress;teeui;teedb;tee;dss;visualclx;visualdbclx;vclactnband
 Conditionals=
 DebugSourceDirs=D:\WORKS\GEDKeeper\src\Abbrevia\source\
@@ -111,7 +111,7 @@ AutoIncBuild=1
 MajorVer=1
 MinorVer=0
 Release=0
-Build=226
+Build=241
 Debug=0
 PreRelease=0
 Special=0
@@ -122,7 +122,7 @@ CodePage=1251
 [Version Info Keys]
 CompanyName=
 FileDescription=
-FileVersion=1.0.0.226
+FileVersion=1.0.0.241
 InternalName=GEDKeeper
 LegalCopyright=Copyright © Serg V. Zhdanovskih
 LegalTrademarks=
@@ -130,15 +130,20 @@ OriginalFilename=GEDKeeper.exe
 ProductName=GEDKeeper
 ProductVersion=1.0.0.0
 Comments=
+[HistoryLists\hlDebugSourcePath]
+Count=1
+Item0=D:\WORKS\GEDKeeper\src\Abbrevia\source\
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
 [HistoryLists\hlSearchPath]
-Count=4
-Item0=$(DELPHI)\Lib\Debug;.\ext;.\GraphicEx;.\Abbrevia\source
-Item1=.\ext;.\GraphicEx;.\Abbrevia\source
-Item2=.\ext;.\GraphicEx
-Item3=.\ext;.\ext\synapse
+Count=6
+Item0=$(DELPHI)\Lib\Debug;.\ext;.\ext\GraphicEx;.\ext\Abbrevia\
+Item1=$(DELPHI)\Lib\Debug;.\ext;.\ext\GraphicEx;.\Abbrevia\source
+Item2=$(DELPHI)\Lib\Debug;.\ext;.\GraphicEx;.\Abbrevia\source
+Item3=.\ext;.\GraphicEx;.\Abbrevia\source
+Item4=.\ext;.\GraphicEx
+Item5=.\ext;.\ext\synapse
 [HistoryLists\hlOutputDirectorry]
 Count=1
 Item0=..\

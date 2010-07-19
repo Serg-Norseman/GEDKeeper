@@ -184,7 +184,7 @@ implementation
 
 uses SysUtils, Math, GKMain;
 
-{$R gk.res}
+{$R res\gk.res}
 
 var
   Signs: array [TPersonSign] of record
@@ -734,13 +734,17 @@ procedure TAncestryChart.GenAncestorsChart(aPerson: TGEDCOMIndividualRecord);
 
         divorced := (family.TagStringValue('_STAT') = 'NOTMARR');
 
-        Result.Father := Anc_Step(Result, iFather, aGeneration + 1);
-        if (Result.Father <> nil)
-        then Result.Father.Divorced := divorced;
+        if (iFather <> nil) and (IsRecordAccess(iFather.Restriction, FShieldState)) then begin
+          Result.Father := Anc_Step(Result, iFather, aGeneration + 1);
+          if (Result.Father <> nil)
+          then Result.Father.Divorced := divorced;
+        end else Result.Father := nil;
 
-        Result.Mother := Anc_Step(Result, iMother, aGeneration + 1);
-        if (Result.Mother <> nil)
-        then Result.Mother.Divorced := divorced;
+        if (iMother <> nil) and (IsRecordAccess(iMother.Restriction, FShieldState)) then begin
+          Result.Mother := Anc_Step(Result, iMother, aGeneration + 1);
+          if (Result.Mother <> nil)
+          then Result.Mother.Divorced := divorced;
+        end else Result.Mother := nil;
       end;
     end;
   end;
@@ -920,13 +924,15 @@ procedure TAncestryChart.GenDescendantsChart(aPerson: TGEDCOMIndividualRecord);
 
       if (res_parent <> nil) then begin
         res.AddSpouse(res_parent);
-        res_parent.BaseSpouse := res; 
+        res_parent.BaseSpouse := res;
       end else res_parent := res;
 
       if (FDepthLimit > -1) and (aLevel = FDepthLimit) then Continue;
 
       for i := 0 to family.ChildrenCount - 1 do begin
         child := TGEDCOMIndividualRecord(family.Children[i].Value);
+        if not(IsRecordAccess(child.Restriction, FShieldState)) then Continue;
+
         Desc_Step(res_parent, child, aLevel + 1);
       end;
     end;

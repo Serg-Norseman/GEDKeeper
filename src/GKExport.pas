@@ -238,7 +238,7 @@ begin
   WriteStr(fs_surnames, '<ul>');
 
   try
-    for i := 0 to FTree.Count - 1 do begin
+    for i := 0 to FTree.RecordsCount - 1 do begin
       rec := FTree.Records[i];
 
       if (rec is TGEDCOMIndividualRecord) then begin
@@ -348,7 +348,7 @@ begin
   unk := nil;
 
   try
-    for i := 0 to FTree.Count - 1 do begin
+    for i := 0 to FTree.RecordsCount - 1 do begin
       rec := FTree.Records[i];
 
       if (rec is TGEDCOMIndividualRecord) then begin
@@ -441,7 +441,7 @@ var
 begin
   years := TStringList.Create;
   try
-    for i := 0 to FTree.Count - 1 do begin
+    for i := 0 to FTree.RecordsCount - 1 do begin
       rec := FTree.Records[i];
 
       if (rec is TGEDCOMIndividualRecord) then begin
@@ -674,7 +674,7 @@ begin
 
   names := TStringList.Create;
   try
-    for i := 0 to FTree.Count - 1 do begin
+    for i := 0 to FTree.RecordsCount - 1 do begin
       rec := FTree.Records[i];
 
       if (rec is TGEDCOMIndividualRecord) then begin
@@ -767,7 +767,7 @@ var
 begin
   {$IFNDEF DELPHI_NET}
   xls := TXLSFile.Create(nil);
-  ProgressInit(FTree.Count, 'Ёкспорт...');
+  ProgressInit(FTree.RecordsCount, 'Ёкспорт...');
   try
     xls.AddStrCell( 1, 1, AllBorders, 'є');
     xls.AddStrCell( 2, 1, AllBorders, '‘амили€');
@@ -782,7 +782,7 @@ begin
     xls.AddStrCell(11, 1, AllBorders, 'ѕродолжительность жизни');
 
     row := 1;
-    for i := 0 to FTree.Count - 1 do begin
+    for i := 0 to FTree.RecordsCount - 1 do begin
       rec := FTree.Records[i];
 
       if (rec is TGEDCOMIndividualRecord) then begin

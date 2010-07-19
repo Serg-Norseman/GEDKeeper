@@ -1,6 +1,6 @@
 object fmTreeTools: TfmTreeTools
-  Left = 275
-  Top = 148
+  Left = 319
+  Top = 144
   BorderStyle = bsDialog
   Caption = #1048#1085#1089#1090#1088#1091#1084#1077#1085#1090#1099
   ClientHeight = 482
@@ -26,7 +26,7 @@ object fmTreeTools: TfmTreeTools
     Top = 8
     Width = 721
     Height = 425
-    ActivePage = SheetDeads
+    ActivePage = SheetSync
     TabOrder = 0
     object SheetChoice: TTabSheet
       Caption = 'SheetChoice'
@@ -35,7 +35,7 @@ object fmTreeTools: TfmTreeTools
         Left = 8
         Top = 8
         Width = 273
-        Height = 209
+        Height = 225
         Caption = #1054#1087#1077#1088#1072#1094#1080#1103
         ItemIndex = 0
         Items.Strings = (
@@ -45,7 +45,8 @@ object fmTreeTools: TfmTreeTools
           #1054#1073#1098#1077#1076#1080#1085#1080#1090#1100' '#1076#1091#1073#1083#1080#1082#1072#1090#1099' '#1079#1072#1087#1080#1089#1077#1081
           #1048#1084#1087#1086#1088#1090' '#1080#1079' '#1074#1085#1077#1096#1085#1077#1075#1086' '#1092#1086#1088#1084#1072#1090#1072
           #1055#1088#1086#1074#1077#1088#1082#1072' '#1089#1074#1103#1079#1085#1086#1089#1090#1080' '#1089#1077#1084#1077#1081
-          #1055#1088#1086#1074#1077#1088#1082#1072' '#1091#1084#1077#1088#1096#1080#1093' '#1083#1102#1076#1077#1081)
+          #1055#1088#1086#1074#1077#1088#1082#1072' '#1091#1084#1077#1088#1096#1080#1093' '#1083#1102#1076#1077#1081
+          #1057#1080#1085#1093#1088#1086#1085#1080#1079#1072#1094#1080#1103' '#1073#1072#1079' '#1076#1072#1085#1085#1099#1093)
         TabOrder = 0
       end
     end
@@ -557,6 +558,106 @@ object fmTreeTools: TfmTreeTools
         BevelOuter = bvNone
         BorderWidth = 8
         TabOrder = 1
+      end
+    end
+    object SheetSync: TTabSheet
+      Caption = 'SheetSync'
+      ImageIndex = 8
+      TabVisible = False
+      object Label4: TLabel
+        Left = 8
+        Top = 8
+        Width = 64
+        Height = 13
+        Caption = #1052#1072#1089#1090#1077#1088'-'#1073#1072#1079#1072
+      end
+      object Label7: TLabel
+        Left = 8
+        Top = 56
+        Width = 90
+        Height = 13
+        Caption = #1054#1073#1085#1086#1074#1083#1077#1085#1080#1077' '#1073#1072#1079#1099
+      end
+      object edMasterBase: TEdit
+        Left = 8
+        Top = 24
+        Width = 609
+        Height = 21
+        Color = clBtnFace
+        ReadOnly = True
+        TabOrder = 0
+        Text = '['#1090#1077#1082#1091#1097#1072#1103' '#1073#1072#1079#1072' '#1076#1072#1085#1085#1099#1093']'
+      end
+      object edUpdateBase: TEdit
+        Left = 8
+        Top = 72
+        Width = 609
+        Height = 21
+        ReadOnly = True
+        TabOrder = 1
+      end
+      object btnUpdateSelect: TBitBtn
+        Left = 624
+        Top = 70
+        Width = 81
+        Height = 25
+        Caption = #1042#1099#1073#1088#1072#1090#1100'...'
+        TabOrder = 2
+        OnClick = btnUpdateSelectClick
+        NumGlyphs = 2
+      end
+      object GroupBox2: TGroupBox
+        Left = 8
+        Top = 104
+        Width = 321
+        Height = 81
+        Caption = #1057#1080#1085#1093#1088#1086#1085#1080#1079#1072#1094#1080#1103
+        TabOrder = 3
+        object RadioButton1: TRadioButton
+          Left = 16
+          Top = 24
+          Width = 289
+          Height = 17
+          Caption = #1044#1086#1074#1077#1088#1077#1085#1085#1099#1081' '#1080#1089#1090#1086#1095#1085#1080#1082' ('#1073#1077#1079#1091#1089#1083#1086#1074#1085#1072#1103' '#1089#1080#1085#1093#1088#1086#1085#1080#1079#1072#1094#1080#1103')'
+          Checked = True
+          TabOrder = 0
+          TabStop = True
+        end
+        object RadioButton2: TRadioButton
+          Left = 16
+          Top = 48
+          Width = 289
+          Height = 17
+          Caption = #1055#1088#1086#1074#1077#1088#1082#1072' '#1074#1089#1077#1093' '#1101#1083#1077#1084#1077#1085#1090#1086#1074' '#1073#1072#1079' '#1076#1072#1085#1085#1099#1093
+          Enabled = False
+          TabOrder = 1
+        end
+      end
+      object Panel2: TPanel
+        Left = 8
+        Top = 384
+        Width = 697
+        Height = 25
+        BorderStyle = bsSingle
+        Caption = 
+          #1053#1077#1079#1072#1074#1077#1088#1096#1077#1085#1085#1072#1103' '#1088#1077#1072#1083#1080#1079#1072#1094#1080#1103', '#1087#1088#1080#1084#1077#1085#1103#1090#1100' '#1085#1072' '#1088#1077#1072#1083#1100#1085#1099#1093' '#1076#1072#1085#1085#1099#1093' '#1085#1077' '#1088#1077#1082#1086#1084#1077 +
+          #1085#1076#1091#1077#1090#1089#1103
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clMaroon
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 4
+      end
+      object mSyncRes: TMemo
+        Left = 8
+        Top = 192
+        Width = 697
+        Height = 185
+        ReadOnly = True
+        ScrollBars = ssBoth
+        TabOrder = 5
       end
     end
   end
