@@ -35,41 +35,21 @@ object fmFamilyEdit: TfmFamilyEdit
     object SheetChilds: TTabSheet
       Caption = #1044#1077#1090#1080
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
     object SheetEvents: TTabSheet
       Caption = #1057#1086#1073#1099#1090#1080#1103
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
     object SheetNotes: TTabSheet
       Caption = #1047#1072#1084#1077#1090#1082#1080
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
     object SheetMultimedia: TTabSheet
       Caption = #1052#1091#1083#1100#1090#1080#1084#1077#1076#1080#1072
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
     object SheetSources: TTabSheet
       Caption = #1048#1089#1090#1086#1095#1085#1080#1082#1080
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
   end
   object btnAccept: TBitBtn
@@ -484,7 +464,7 @@ object fmFamilyEdit: TfmFamilyEdit
       Width = 145
       Height = 21
       Style = csDropDownList
-      ItemHeight = 0
+      ItemHeight = 13
       TabOrder = 2
     end
   end

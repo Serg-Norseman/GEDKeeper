@@ -5,17 +5,16 @@ unit GKNoteEdit;
 interface
 
 uses
-  Windows, SysUtils, Classes, Graphics, Controls, Forms, StdCtrls, Buttons,
+  Windows, SysUtils, Classes, Controls, Forms, StdCtrls, Buttons,
   GedCom551, GKBase;
 
 type
   TfmNoteEdit = class(TForm)
     btnAccept: TBitBtn;
     btnCancel: TBitBtn;
-    MemoNote: TMemo;
+    mmNote: TMemo;
     procedure btnAcceptClick(Sender: TObject);
-    procedure FormKeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure btnCancelClick(Sender: TObject);
   private
     FNoteRecord: TGEDCOMNoteRecord;
@@ -35,12 +34,12 @@ uses GKMain, GKCommon;
 procedure TfmNoteEdit.SetNoteRecord(const Value: TGEDCOMNoteRecord);
 begin
   FNoteRecord := Value;
-  MemoNote.Text := Trim(FNoteRecord.Notes.Text);
+  mmNote.Text := Trim(FNoteRecord.Notes.Text);
 end;
 
 procedure TfmNoteEdit.btnAcceptClick(Sender: TObject);
 begin
-  FNoteRecord.Notes := MemoNote.Lines;
+  FNoteRecord.Notes := mmNote.Lines;
   Base.ChangeRecord(FNoteRecord);
   ModalResult := mrOk;
 end;

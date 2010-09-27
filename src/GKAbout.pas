@@ -21,28 +21,25 @@ type
   public
   end;
 
-procedure AboutDialog(ProductName, Copyright, eMail: string);
+procedure AboutDialog();
 
 implementation
 
 uses
-  Windows, GKCommon, bsWinUtils, GKMain, uVista;
+  GKCommon, bsWinUtils, GKMain, uVista;
 
 {$R *.DFM}
 
-procedure AboutDialog(ProductName, Copyright, eMail: string);
+procedure AboutDialog();
 var
   fmAbout: TfmAbout;
 begin
   fmAbout := TfmAbout.Create(fmGEDKeeper);
   try
-    fmAbout.LabelProduct.Caption := ProductName;
+    fmAbout.LabelProduct.Caption := AppName;
     fmAbout.LabelVersion.Caption := 'Version ' + GetFileVersion();
-    fmAbout.LabelCopyright.Caption := 'Copyright © ' + Copyright;
-
-    if (eMail = '')
-    then fmAbout.Label_eMail.Caption := 'http://gedkeeper.ucoz.ru/'
-    else fmAbout.Label_eMail.Caption := eMail;
+    fmAbout.LabelCopyright.Caption := 'Copyright © Serg V. Zhdanovskih';
+    fmAbout.Label_eMail.Caption := 'http://gedkeeper.ucoz.ru/';
 
     fmAbout.LabelCite.Caption :=
       '«История рода - это есть история Отечества»'+#13#10+

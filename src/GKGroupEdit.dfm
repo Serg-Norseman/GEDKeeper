@@ -32,7 +32,7 @@ object fmGroupEdit: TfmGroupEdit
       Height = 13
       Caption = #1053#1072#1079#1074#1072#1085#1080#1077
     end
-    object EditName: TEdit
+    object edName: TEdit
       Left = 72
       Top = 16
       Width = 401

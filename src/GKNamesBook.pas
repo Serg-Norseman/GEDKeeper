@@ -9,26 +9,18 @@ uses
   Dialogs, StdCtrls, Contnrs;
 
 type
-  TNameRecord = class(TObject)
-  public
-    Name: string;
-    Desc: string;
-    Sex: (nsMale, nsFemale);
-  end;
-
-type
   TfmNamesBook = class(TForm)
-    lstName: TComboBox;
-    mDesc: TMemo;
+    cbNames: TComboBox;
+    mmDesc: TMemo;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure lstNameSelect(Sender: TObject);
+    procedure cbNamesSelect(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     FNames: TObjectList;
 
     procedure Load();
-    procedure PrepareList(); 
+    procedure PrepareList();
   public
   end;
 
@@ -42,6 +34,14 @@ implementation
 
 uses
   bsComUtils, GKCommon, GKMain;
+
+type
+  TNameRecord = class(TObject)
+  public
+    Name: string;
+    Desc: string;
+    Sex: (nsMale, nsFemale);
+  end;
 
 procedure TfmNamesBook.FormCreate(Sender: TObject);
 begin
@@ -104,30 +104,30 @@ var
   i: Integer;
   rec: TNameRecord;
 begin
-  lstName.Items.BeginUpdate;
+  cbNames.Items.BeginUpdate;
   try
-    lstName.Items.Clear;
+    cbNames.Items.Clear;
 
     for i := 0 to FNames.Count - 1 do begin
       rec := TNameRecord(FNames[i]);
-      lstName.Items.AddObject(rec.Name, rec);
+      cbNames.Items.AddObject(rec.Name, rec);
     end;
   finally
-    lstName.Items.EndUpdate;
+    cbNames.Items.EndUpdate;
   end;
 end;
 
-procedure TfmNamesBook.lstNameSelect(Sender: TObject);
+procedure TfmNamesBook.cbNamesSelect(Sender: TObject);
 var
   idx: Integer;
   rec: TNameRecord;
 begin
-  idx := lstName.ItemIndex;
-  if (idx < 0) or (idx >= lstName.Items.Count) then Exit;
-  rec := TNameRecord(lstName.Items.Objects[idx]);
-  mDesc.Lines.Clear;
-  mDesc.Lines.Add(rec.Name);
-  mDesc.Lines.Add(rec.Desc);
+  idx := cbNames.ItemIndex;
+  if (idx < 0) or (idx >= cbNames.Items.Count) then Exit;
+  rec := TNameRecord(cbNames.Items.Objects[idx]);
+  mmDesc.Lines.Clear;
+  mmDesc.Lines.Add(rec.Name);
+  mmDesc.Lines.Add(rec.Desc);
 end;
 
 procedure TfmNamesBook.FormClose(Sender: TObject; var Action: TCloseAction);

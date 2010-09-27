@@ -14,7 +14,7 @@ type
     btnCancel: TBitBtn;
     rgLife: TRadioGroup;
     Label1: TLabel;
-    EditName: TComboBox;
+    edName: TComboBox;
     rgSex: TRadioGroup;
     Label2: TLabel;
     edAliveBeforeDate: TMaskEdit;
@@ -24,6 +24,8 @@ type
     cbResidence: TComboBox;
     Label4: TLabel;
     cbGroup: TComboBox;
+    Label5: TLabel;
+    cbSource: TComboBox;
     procedure btnCancelClick(Sender: TObject);
     procedure btnAcceptClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -52,7 +54,7 @@ var
   fs: string;
   rec: TGEDCOMRecord;
 begin
-  fs := Trim(EditName.Text);
+  fs := Trim(edName.Text);
   if (fs <> '') and (fs <> '*') then begin
     if (fmGEDKeeper.Options.NameFilters.IndexOf(fs) < 0)
     then fmGEDKeeper.Options.NameFilters.Add(fs);
@@ -65,23 +67,25 @@ begin
   end;
   //
 
-  Base.Filter.AliveBeforeDate := edAliveBeforeDate.Text;
   Base.Filter.PatriarchOnly := CheckPatriarch.Checked;
 
-  if (rgLife.ItemIndex = 3) then begin
-    try
-      dt := StrToDate(edAliveBeforeDate.Text);
-    except
-      MessageDlg('Дата неверна', mtError, [mbOk], 0);
-      ModalResult := mrNone;
+  if (Base.Filter.LifeMode <> lmTimeLine) then begin
+    Base.Filter.AliveBeforeDate := edAliveBeforeDate.Text;
+    if (rgLife.ItemIndex = 3) then begin
+      try
+        dt := StrToDate(edAliveBeforeDate.Text);
+      except
+        MessageDlg('Дата неверна', mtError, [mbOk], 0);
+        ModalResult := mrNone;
+      end;
     end;
+    Base.Filter.LifeMode := TLifeMode(rgLife.ItemIndex);
   end;
 
-  Base.Filter.LifeMode := TLifeMode(rgLife.ItemIndex);
   Base.Filter.Sex := TGEDCOMSex(rgSex.ItemIndex);
 
-  if (EditName.Text = '') then EditName.Text := '*';
-  Base.Filter.Name := EditName.Text;
+  if (edName.Text = '') then edName.Text := '*';
+  Base.Filter.Name := edName.Text;
 
   if (cbResidence.Text = '') then cbResidence.Text := '*';
   Base.Filter.Residence := cbResidence.Text;
@@ -100,6 +104,20 @@ begin
     end;
   end;
 
+  if (cbSource.ItemIndex in [0..2]) then begin
+    Base.Filter.SourceMode := TGroupMode(cbSource.ItemIndex);
+    Base.Filter.SourceRef := '';
+  end else begin
+    rec := TGEDCOMRecord(cbSource.Items.Objects[cbSource.ItemIndex]);
+    if (rec <> nil) then begin
+      Base.Filter.SourceMode := gmSelected;
+      Base.Filter.SourceRef := rec.XRef;
+    end else begin
+      Base.Filter.SourceMode := gmAll;
+      Base.Filter.SourceRef := '';
+    end;
+  end;
+
   Base.ApplyFilter();
 end;
 
@@ -108,28 +126,54 @@ var
   i: Integer;
   tree: TGEDCOMTree;
 begin
-  EditName.Items.Assign(fmGEDKeeper.Options.NameFilters);
+  edName.Items.Assign(fmGEDKeeper.Options.NameFilters);
   cbResidence.Items.Assign(fmGEDKeeper.Options.ResidenceFilters);
 
-  rgLife.ItemIndex := Ord(Base.Filter.LifeMode);
+  if (Base.Filter.LifeMode <> lmTimeLine) then begin
+    rgLife.ItemIndex := Ord(Base.Filter.LifeMode);
+    rgLife.Enabled := True;
+    edAliveBeforeDate.Text := Base.Filter.AliveBeforeDate;
+  end else begin
+    rgLife.ItemIndex := -1;
+    rgLife.Enabled := False;
+    edAliveBeforeDate.Text := '';
+  end;
+
   rgSex.ItemIndex := Ord(Base.Filter.Sex);
-  EditName.Text := Base.Filter.Name;
+  edName.Text := Base.Filter.Name;
   cbResidence.Text := Base.Filter.Residence;
-  edAliveBeforeDate.Text := Base.Filter.AliveBeforeDate;
   CheckPatriarch.Checked := Base.Filter.PatriarchOnly;
 
   tree := Base.Tree;
-  cbGroup.AddItem('- всё -', nil);
-  cbGroup.AddItem('- нет групп -', nil);
-  cbGroup.AddItem('- любые -', nil);
+
+  cbGroup.Sorted := True;
   for i := 0 to tree.RecordsCount - 1 do
     if (tree.Records[i] is TGEDCOMGroupRecord)
     then cbGroup.AddItem(TGEDCOMGroupRecord(tree.Records[i]).Name, tree.Records[i]);
+  cbGroup.Sorted := False;
+  cbGroup.Items.InsertObject(0, '- всё -', nil);
+  cbGroup.Items.InsertObject(1, '- нет групп -', nil);
+  cbGroup.Items.InsertObject(2, '- любые -', nil);
 
   if (Base.Filter.GroupMode <> gmSelected) then begin
     cbGroup.ItemIndex := Ord(Base.Filter.GroupMode);
   end else begin
     cbGroup.ItemIndex := cbGroup.Items.IndexOfObject(tree.XRefIndex_Find(Base.Filter.GroupRef));
+  end;
+
+  cbSource.Sorted := True;
+  for i := 0 to tree.RecordsCount - 1 do
+    if (tree.Records[i] is TGEDCOMSourceRecord)
+    then cbSource.AddItem(TGEDCOMSourceRecord(tree.Records[i]).FiledByEntry, tree.Records[i]);
+  cbSource.Sorted := False;
+  cbSource.Items.InsertObject(0, '- всё -', nil);
+  cbSource.Items.InsertObject(1, '- нет источников -', nil);
+  cbSource.Items.InsertObject(2, '- любые -', nil);
+
+  if (Base.Filter.SourceMode <> gmSelected) then begin
+    cbSource.ItemIndex := Ord(Base.Filter.SourceMode);
+  end else begin
+    cbSource.ItemIndex := cbSource.Items.IndexOfObject(tree.XRefIndex_Find(Base.Filter.SourceRef));
   end;
 end;
 

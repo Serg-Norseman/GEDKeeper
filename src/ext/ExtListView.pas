@@ -1,8 +1,5 @@
 {$I DFS.INC}  { Standard defines for all Delphi Free Stuff components }
 
-{.$DEFINE DFS_DEBUG}
-{.$DEFINE DFS_TRY_BACKGROUND_IMAGE}
-
 {------------------------------------------------------------------------------}
 { TdfsExtListView v3.72                                                        }
 {------------------------------------------------------------------------------}
@@ -64,29 +61,13 @@
 { Date last modified:  June 28, 2001                                           }
 {------------------------------------------------------------------------------}
 
-
 unit ExtListView;
 
 interface
 
-{$IFNDEF DFS_WIN32}
-  ERROR!  This unit only available for Delphi 2.0 or higher!!!
-{$ENDIF}
-
 uses
   Windows, Messages, Classes, Controls, ComCtrls, CommCtrl, SysUtils, Graphics,
-{.$IFDEF DFS_COMPILER_4_UP}
-  ImgList,
-{.$ENDIF}
-  StdCtrls, Menus, EnhListView;
-
-const
-  { This shuts up C++Builder 3 about the redefiniton being different. There
-    seems to be no equivalent in C1.  Sorry. }
-  {$IFDEF DFS_CPPB_3_UP}
-  {$EXTERNALSYM DFS_COMPONENT_VERSION}
-  {$ENDIF}
-  DFS_COMPONENT_VERSION = 'TdfsExtListView v3.72';
+  ImgList, StdCtrls, Menus, EnhListView;
 
 // Setting a subitem image (lvxSubItemImages ExtendStyle) to -1 does not
 // properly clear the image for the subitem.  The current COMCTL32.DLL
@@ -103,9 +84,11 @@ const
 // C3 and D4 CommCtrl.pas have almost everything we need
 {$IFDEF DFS_CPPB_3_UP}
   {$DEFINE DFS_C3D4COMMCTRL}
-{$ELSE} {$IFDEF DFS_DELPHI_4_UP}
-  {$DEFINE DFS_C3D4COMMCTRL}
-{$ENDIF} {$ENDIF}
+{$ELSE}
+  {$IFDEF DFS_DELPHI_4_UP}
+    {$DEFINE DFS_C3D4COMMCTRL}
+  {$ENDIF}
+{$ENDIF}
 
 {$IFNDEF DFS_C3D4COMMCTRL}
 type
@@ -117,25 +100,9 @@ const
   LVIF_INDENT             = $0010;
   LVIF_NORECOMPUTE        = $0800;
 
-{.$IFDEF DFS_DELPHI_2}
-{ These are in COMMCTRL unit
-  LVCF_FMT                = $0001;
-  LVCF_WIDTH              = $0002;
-  LVCF_TEXT               = $0004;
-  LVCF_SUBITEM            = $0008;
-}
-{.$ENDIF}
   LVCF_IMAGE              = $0010;
   LVCF_ORDER              = $0020;
 
-{.$IFDEF DFS_DELPHI_2}
-{ These are in COMMCTRL unit
-  LVCFMT_LEFT             = $0000;
-  LVCFMT_RIGHT            = $0001;
-  LVCFMT_CENTER           = $0002;
-  LVCFMT_JUSTIFYMASK      = $0003;
-}
-{.$ENDIF}
   LVCFMT_IMAGE            = $0800; // Item displays an image from an image list.
   LVCFMT_BITMAP_ON_RIGHT  = $1000; // Image appears to right of Text.
   LVCFMT_COL_HAS_IMAGES   = $8000; // Undocumented.
@@ -194,45 +161,6 @@ function ListView_GetHeader(LVWnd: HWnd): HWnd;
 {$ENDIF}
 
 
-{$IFNDEF DFS_COMPILER_3_UP}
-const
-  LVM_SETICONSPACING      = LVM_FIRST + 53;
-
-
-// -1 for cx and cy means we'll use the default (system settings)
-// 0 for cx or cy means use the current setting (allows you to change just one
-// param)
-function ListView_SetIconSpacing(LVWnd: HWnd; cx, cy: integer): DWORD;
-
-const
-  LVS_EX_GRIDLINES             = $00000001;  // Report mode only.
-  LVS_EX_SUBITEMIMAGES         = $00000002;  // Report mode only.
-  LVS_EX_CHECKBOXES            = $00000004;
-  LVS_EX_TRACKSELECT           = $00000008;
-  LVS_EX_HEADERDRAGDROP        = $00000010;  // Report mode only.
-  LVS_EX_FULLROWSELECT         = $00000020;  // Report mode only.
-  LVS_EX_ONECLICKACTIVATE      = $00000040;
-  LVS_EX_TWOCLICKACTIVATE      = $00000080;
-
-  LVM_SETEXTENDEDLISTVIEWSTYLE = LVM_FIRST + 54; // optional wParam = mask
-
-function ListView_SetExtendedListViewStyle(LVWnd: HWnd; ExStyle: LPARAM): DWORD;
-
-const
-  LVM_GETEXTENDEDLISTVIEWSTYLE = LVM_FIRST + 55;
-
-function ListView_GetExtendedListViewStyle(LVWnd: HWnd): DWORD;
-
-{$ENDIF}
-
-(* These were already defined in everything...
-const
-  LVIR_BOUNDS             = 0;
-  LVIR_ICON               = 1;
-  LVIR_LABEL              = 2;
-  LVIR_SELECTBOUNDS       = 3;
-*)
-
 {$IFDEF DFS_COMPILER_2}
 const
   LVM_GETSUBITEMRECT      = LVM_FIRST + 56;
@@ -269,12 +197,6 @@ const
   LVS_EX_LABELTIP         = $00004000; // Requires ComCtl32.DLL v5.80
 {$ENDIF}
 {$ENDIF}
-(*
-{$IFNDEF DFS_COMPILER_7_UP}
-const
-  LVS_EX_LABELTIP         = $00004000; // Requires ComCtl32.DLL v5.80
-{$ENDIF}
-*)
 
 {$IFNDEF DFS_C3D4COMMCTRL}
   // C3 & D4 users don't need this because their COMMCTRL.PAS file has it right
@@ -293,55 +215,6 @@ function ListView_SubItemHitTestEx(LVWnd: HWnd;
    var HitTestInfo: TLVHitTestInfoEx): integer;
 {$ENDIF}
 
-{$IFNDEF DFS_COMPILER_3_UP}
-const
-  LVM_SETCOLUMNORDERARRAY = LVM_FIRST + 58;
-
-function ListView_SetColumnOrderArray(LVWnd: HWnd; Count: integer;
-   IntArray: PIntArray): boolean;
-
-const
-  LVM_GETCOLUMNORDERARRAY = LVM_FIRST + 59;
-
-function ListView_GetColumnOrderArray(LVWnd: HWnd; Count: integer;
-   IntArray: PIntArray): boolean;
-
-const
-  LVM_SETHOTITEM  = LVM_FIRST + 60;
-
-function ListView_SetHotItem(LVWnd: HWnd; Item: integer): integer;
-
-const
-  LVM_GETHOTITEM  = LVM_FIRST + 61;
-
-function ListView_GetHotItem(LVWnd: HWnd): integer;
-
-const
-  LVM_SETHOTCURSOR  = LVM_FIRST + 62;
-
-function ListView_SetHotCursor(LVWnd: HWnd; Cursor: HCursor): HCursor;
-
-const
-  LVM_GETHOTCURSOR  = LVM_FIRST + 63;
-
-function ListView_GetHotCursor(LVWnd: HWnd): HCursor;
-
-const
-  LVM_APPROXIMATEVIEWRECT = LVM_FIRST + 64;
-
-function ListView_ApproximateViewRect(LVWnd: HWnd; Width, Height,
-   Count: integer): DWORD;
-
-const
-  LVM_SETWORKAREA         = LVM_FIRST + 65;
-
-function ListView_SetWorkArea(LVWnd: HWnd; const Rect: TRect): boolean;
-
-function ListView_GetCheckState(LVWnd: HWnd; Index: UINT): boolean;
-
-procedure ListView_SetCheckState(LVWnd: HWnd; Index: UINT; Checked: boolean);
-{$ENDIF}
-
 {$IFNDEF DFS_C3D4COMMCTRL}
 const
   LVSICF_NOINVALIDATEALL  = $00000001;
@@ -350,40 +223,11 @@ const
 procedure ListView_SetItemCountEx(LVWnd: HWnd; Items: integer; Flags: DWORD);
 {$ENDIF}
 
-{$IFNDEF DFS_COMPILER_3_UP}
-const
-  // New list view style flags.
-  LVS_OWNERDATA                = $1000; // Specifies a "virtual" control.
-
-  // New notification messages.
-  LVN_ODCACHEHINT              = LVN_FIRST-13;
-  LVN_ODFINDITEMA              = LVN_FIRST-52;
-  LVN_ODFINDITEMW              = LVN_FIRST-79;
-  LVN_ODFINDITEM               = LVN_ODFINDITEMA;
-{$ENDIF}
-
 {$IFNDEF DFS_C3D4COMMCTRL}
 const
   LVN_ITEMACTIVATE             = LVN_FIRST-14;
   LVN_ODSTATECHANGED           = LVN_FIRST-15;
   LVN_MARQUEEBEGIN             = LVN_FIRST-56;
-{$ENDIF}
-
-{$IFNDEF DFS_COMPILER_3_UP}
-type
-  PNMCacheHint = ^TNMCacheHint;
-  TNMCacheHint = packed record
-    hdr:       TNMHDR;
-    iFrom:     integer;
-    iTo:       integer;
-  end;
-
-  PNMFindItem = ^TNMFindItem;
-  TNMFindItem = packed record
-    hdr:       TNMHDR;
-    iStart:    integer;
-    lvif:      TLVFindInfo;
-  end;
 {$ENDIF}
 
 type
@@ -594,72 +438,8 @@ type
      var StateInfo: TNMODStateChange) of object;
   TLVVMCaptionEditedEvent = procedure (Sender: TObject; Item: integer;
     Canceled: boolean; const Text: string) of object;
-  {$IFNDEF DFS_COMPILER_4_UP}
-  TLVSubItemImageEvent = procedure(Sender: TObject; Item: TListItem; SubItem: Integer;
-    var ImageIndex: Integer) of object;
-  {$ENDIF}
-
 
   TCustomExtListView = class; { forward declaration }
-
-
-{$IFDEF DFS_TRY_BACKGROUND_IMAGE}
-  // Class for BackgroundImage property
-  TELVBackgroundImage = class(TPersistent)
-  private
-    FOwningListView: TCustomExtListView;
-    FFilename: string;
-    FBrushBmp: TBitmap;
-    FTile: boolean;
-    FXOffsetPercent: integer;
-    FYOffsetPercent: integer;
-  protected
-    procedure SetFilename(const Val: string);
-    procedure SetTile(Val: boolean);
-    procedure SetXOffsetPercent(Val: integer);
-    procedure SetYOffsetPercent(Val: integer);
-
-    procedure ApplyToListView; virtual;
-  public
-    constructor Create(AOwner: TCustomExtListView); virtual;
-    destructor Destroy; override;
-    procedure Assign(Source: TPersistent); override;
-  published
-    property Filename: string
-       read FFilename
-       write SetFilename;
-    property Tile: boolean
-       read FTile
-       write SetTile
-       default FALSE;
-    property XOffsetPercent: integer
-       read FXOffsetPercent
-       write SetXOffsetPercent
-       default 0;
-    property YOffsetPercent: integer
-       read FYOffsetPercent
-       write SetYOffsetPercent
-       default 0;
-  end;
-{$ENDIF}
-
-
-  // Class for saved settings
-  TdfsExtLVSaveSettings = class(TdfsEnhLVSaveSettings)
-  private
-    FSaveColumnOrder: boolean;
-  public
-    constructor Create; override;
-    procedure StoreColumnOrder(ColCount: integer;
-       const IntArray: array of integer);
-    procedure ReadColumnOrder(ColCount: integer;
-       var IntArray: array of integer);
-  published
-    property SaveColumnOrder: boolean
-       read FSaveColumnOrder
-       write FSaveColumnOrder
-       default TRUE;
-  end;
 
 
   TdfsExtListColumn = class(TCollectionItem)
@@ -676,17 +456,11 @@ type
     procedure Assign(Source: TPersistent); override;
   published
     property ImageIndex: integer
-       read FSmallImageIndex
-       write SetSmallImageIndex
-       default -1;
+      read FSmallImageIndex write SetSmallImageIndex default -1;
     property ImageAlignment: TColumnImageAlign
-       read FImageAlignment
-       write SetImageAlignment
-       default ciaRightOfText;
+      read FImageAlignment write SetImageAlignment default ciaRightOfText;
     property AllowResize: boolean
-       read FAllowResize
-       write FAllowResize
-       default TRUE;
+      read FAllowResize write FAllowResize default TRUE;
   end;
 
   TdfsExtListColumns = class(TCollection)
@@ -695,19 +469,19 @@ type
     function GetItem(Index: Integer): TdfsExtListColumn;
     procedure SetItem(Index: Integer; Value: TdfsExtListColumn);
   protected
-    function GetOwner: TPersistent; {$IFDEF DFS_COMPILER_3_UP} override; {$ENDIF}
+    function GetOwner: TPersistent; override;
     procedure Update(Item: TCollectionItem); override;
   public
     constructor Create(AListView: TCustomExtListView);
     procedure Assign(Source: TPersistent); override;
+
     function Add: TdfsExtListColumn;
     procedure Refresh;
+
     property ListView: TCustomExtListView
        read FListView;
     property Items[Index: Integer]: TdfsExtListColumn
-       read GetItem
-       write SetItem;
-       default;
+       read GetItem write SetItem; default;
   end;
 
   // The new class.
@@ -718,20 +492,14 @@ type
     FColumnOrderCount: integer;
     FColumnsFormat: TdfsExtListColumns;
     FVirtualMode: boolean;
-    FSaveSettings: TdfsExtLVSaveSettings;
     FColumnsFormatChangeLink: TChangeLink;
     FSelectionMark: integer;
     FHoverTime: Longint;
     FRequireComCtlUpdate: boolean;
-{$IFDEF DFS_TRY_BACKGROUND_IMAGE}
-    FBackgroundImage: TELVBackgroundImage;
-{$ENDIF}
     FItemCountEx: integer;
     FItemCountExFlags: TLVItemCountFlags;
     FRecreateStream: TMemoryStream;
-{$IFDEF DFS_COMPILER_4_UP}
     FInhibitFeedData: boolean;
-{$ENDIF}
     FChecked: boolean;
     FCheckedListItemIndex: integer;
 
@@ -756,9 +524,7 @@ type
     procedure WMNotify(var Message: TWMNotify); message WM_NOTIFY;
     function GetItemIndent(Index: integer): Integer;
     procedure SetItemIndent(Index: integer; Value: Integer);
-{$IFDEF DFS_COMPILER_4_UP}
     procedure FeedOwnerDataMode(Sender: TObject; Item: TListItem);
-{$ENDIF}
   protected
     // Property method for setting styles.
     procedure SetExtendedStyles(Val: TLVExtendedStyles);
@@ -781,28 +547,20 @@ type
     function GetHoverTime: Longint;
     procedure SetHoverTime(Val: Longint);
     procedure SetRequireComCtlUpdate(Value: boolean);
-{$IFDEF DFS_TRY_BACKGROUND_IMAGE}
-    procedure SetBackgroundImage(Value: TELVBackgroundImage);
-{$ENDIF}
-    function GetStateImages: {$IFDEF DFS_COMPILER_4_UP} TCustomImageList; {$ELSE} TImageList; {$ENDIF}
-    procedure SetStateImages(Value: {$IFDEF DFS_COMPILER_4_UP} TCustomImageList {$ELSE} TImageList {$ENDIF});
-    function GetSmallImages: {$IFDEF DFS_COMPILER_4_UP} TCustomImageList; {$ELSE} TImageList; {$ENDIF}
-    procedure SetSmallImages(Value: {$IFDEF DFS_COMPILER_4_UP} TCustomImageList {$ELSE} TImageList {$ENDIF});
+    function GetStateImages: TCustomImageList; 
+    procedure SetStateImages(Value: TCustomImageList);
+    function GetSmallImages: TCustomImageList;
+    procedure SetSmallImages(Value: TCustomImageList);
     function GetShowSortArrows: boolean;
     procedure SetShowSortArrows(Value: boolean);
-    function GetVersion: string; override;
     function GetSubItemText(Index, SubItem: integer): string; override;
     function ActualColumnIndex(Index: integer): integer; override;
     function GetActualColumn(Index: integer): TListColumn; override;
     procedure DestroyWnd; override;
     procedure RestoreChecks;
     procedure SaveChecks;
-    procedure MeasureItem(var Height: UINT); override;
     procedure DrawItem(var Canvas: TCanvas; Index: Integer; Rect: TRect;
-       State: TOwnerDrawState; var DefaultDrawing,
-       FullRowSelect: boolean); override;
-    procedure DrawSubItem(Index, SubItem: Integer; Rect: TRect;
-       State: TOwnerDrawState; var DefaultDrawing: boolean); override;
+       State: TOwnerDrawState; var DefaultDrawing, FullRowSelect: boolean); override;
     procedure DefaultDrawHeader(var Canvas: TCanvas; Index: Integer;
        var Rect: TRect; Selected: boolean); override;
     procedure CreateParams(var Params: TCreateParams); override;
@@ -878,16 +636,6 @@ type
        read FRequireComCtlUpdate
        write SetRequireComCtlUpdate
        default FALSE;
-{$IFDEF DFS_TRY_BACKGROUND_IMAGE}
-    property BackgroundImage: TELVBackgroundImage
-       read FBackgroundImage
-       write SetBackgroundImage;
-{$ENDIF}
-
-    // Autosave settings property.
-    property SaveSettings: TdfsExtLVSaveSettings
-       read FSaveSettings
-       write FSaveSettings;
 
     property ColumnsFormat: TdfsExtListColumns
        read FColumnsFormat
@@ -930,11 +678,11 @@ type
        stored TRUE
        default FALSE;
     // Redeclare so we can reset checkboxes.
-    property StateImages: {$IFDEF DFS_COMPILER_4_UP} TCustomImageList {$ELSE} TImageList {$ENDIF}
+    property StateImages: TCustomImageList
        read GetStateImages
        write SetStateImages;
     // Redeclare so we can know when it changes and hook into it.
-    property SmallImages: {$IFDEF DFS_COMPILER_4_UP} TCustomImageList {$ELSE} TImageList {$ENDIF}
+    property SmallImages: TCustomImageList
        read GetSmallImages
        write SetSmallImages;
   public
@@ -948,17 +696,11 @@ type
     procedure SetIconSpacing(X, Y: integer);
     function GetSubItemAt(X, Y: integer): string;
     procedure SetColumnOrder(Count: integer; const IntArray: array of integer);
-    function GetColumnOrder(Count: integer;
-       var IntArray: array of integer): boolean;
-    function ApproximateViewRect(Count: integer;
-       const Proposed: TPoint): TPoint;
+    function GetColumnOrder(Count: integer; var IntArray: array of integer): boolean;
+    function ApproximateViewRect(Count: integer; const Proposed: TPoint): TPoint;
     procedure SetItemCountEx(Count: integer; Flags: TLVItemCountFlags);
-    function StoreSettings: boolean; override;
-    function WriteSettings: boolean; override;
-    function LoadSettings: boolean; override;
-    function ReadSettings: boolean; override;
-    function CheckComCtlVersion(MajorHi, MajorLo,
-       MinorHi, MinorLo: word): boolean;
+
+    function CheckComCtlVersion(MajorHi, MajorLo, MinorHi, MinorLo: word): boolean;
 
     procedure ELV_EditCaption(Item: integer);
     function ELV_GetNextItem(StartItem: integer; Direction: TSearchDirection;
@@ -992,11 +734,7 @@ type
     property VirtualMode;
     property HoverTime;
     property RequireComCtlUpdate;
-{$IFDEF BACKGROUND_FIXED}
-    property BackgroundImage;
-{$ENDIF}
     property NoColumnResize;
-    property SaveSettings;
     property ColumnsFormat;
     // New Events
     property OnItemChecked;
@@ -1032,28 +770,19 @@ type
 
 
     property Align;
-{$IFDEF DFS_COMPILER_4_UP}
     property Anchors;
     property BiDiMode;
-{$ENDIF}
     property BorderStyle;
-{$IFDEF DFS_COMPILER_4_UP}
     property BorderWidth;
-{$ENDIF}
     property Color;
     property ColumnClick;
-{$IFDEF DFS_COMPILER_4_UP}
     property Constraints;
-{$ENDIF}
     property OnClick;
     property OnDblClick;
     property Ctl3D;
     property DragMode;
-{$IFDEF DFS_COMPILER_4_UP}
     property DragKind;
-{$ENDIF}
-    property ReadOnly
-       default False;
+    property ReadOnly default False;
     property Enabled;
     property Font;
     property IconOptions;
@@ -1066,9 +795,7 @@ type
     property OnDeletion;
     property OnEdited;
     property OnEditing;
-{$IFDEF DFS_COMPILER_4_UP}
     property OnEndDock;
-{$ENDIF}
     property OnEnter;
     property OnExit;
     property OnInsert;
@@ -1084,24 +811,18 @@ type
     property OnMouseDown;
     property OnMouseMove;
     property OnMouseUp;
-{$IFDEF DFS_COMPILER_4_UP}
     property OnResize;
     property OnSelectItem;
     property OnStartDock;
-{$ENDIF}
-    property ParentColor
-       default False;
+    property ParentColor default False;
     property ParentFont;
     property ParentShowHint;
-{$IFDEF DFS_COMPILER_4_UP}
     property ParentBiDiMode;
-{$ENDIF}
     property ShowHint;
     property PopupMenu;
     property ShowColumnHeaders;
     property TabOrder;
-    property TabStop
-       default True;
+    property TabStop default True;
     property ViewStyle;
     property Visible;
     property OnKeyDown;
@@ -1112,14 +833,12 @@ type
     property StateImages;
   end;
 
-
 { You may find this function useful in install programs and such.  Example of
   usage is:
      if not CheckDLLVersion('COMCTL32.DLL', 4, 70, 0, 0) then ....
   which returns TRUE if COMCTL32.DLL is version 4.70.0.0 or higher. }
 function CheckDLLVersion(const DLLName: string; MajorHi, MajorLo,
    MinorHi, MinorLo: word): boolean;
-
 
 implementation
 
@@ -1305,152 +1024,7 @@ end;
 
 
 
-{$IFDEF DFS_TRY_BACKGROUND_IMAGE}
-
-constructor TELVBackgroundImage.Create(AOwner: TCustomExtListView);
-begin
-  inherited Create;
-  FBrushBmp := TBitmap.Create;
-  FOwningListView := AOwner;
-end;
-
-destructor TELVBackgroundImage.Destroy;
-begin
-  FBrushBmp.Free;
-  inherited Destroy;
-end;
-
-procedure TELVBackgroundImage.Assign(Source: TPersistent);
-begin
-  if Source is TELVBackgroundImage then
-  begin
-    FFilename := TELVBackgroundImage(Source).Filename;
-    FTile := TELVBackgroundImage(Source).Tile;
-    FXOffsetPercent := TELVBackgroundImage(Source).XOffsetPercent;
-    FYOffsetPercent := TELVBackgroundImage(Source).YOffsetPercent;
-    ApplyToListView;
-  end;
-end;
-
-procedure TELVBackgroundImage.SetFilename(const Val: string);
-begin
-  if FFilename <> Val then
-    FFilename := Val;
-  ApplyToListView;
-end;
-
-procedure TELVBackgroundImage.SetTile(Val: boolean);
-begin
-  if FTile <> Val then
-    FTile := Val;
-  ApplyToListView;
-end;
-
-procedure TELVBackgroundImage.SetXOffsetPercent(Val: integer);
-begin
-  if FXOffsetPercent <> Val then
-    FXOffsetPercent := Val;
-  ApplyToListView;
-end;
-
-procedure TELVBackgroundImage.SetYOffsetPercent(Val: integer);
-begin
-  if FYOffsetPercent <> Val then
-    FYOffsetPercent := Val;
-  ApplyToListView;
-end;
-
-procedure TELVBackgroundImage.ApplyToListView;
-var
-  LVBkImg: TLVBkImage;
-begin
-  if assigned(FOwningListView) and FOwningListView.HandleAllocated then
-  begin
-    if FFilename <> '' then
-      LVBkImg.ulFlags := LVBKIF_SOURCE_URL
-    else
-      LVBkImg.ulFlags := LVBKIF_SOURCE_NONE;
-    if FTile then
-      LVBkImg.ulFlags := LVBkImg.ulFlags or LVBKIF_STYLE_TILE
-    else
-      LVBkImg.ulFlags := LVBkImg.ulFlags or LVBKIF_STYLE_NORMAL;
-    LVBkImg.hbm := 0;
-    LVBkImg.pszImage := PChar(FFilename);
-    LVBkImg.cchImageMax := Length(FFilename);
-    LVBkImg.xOffsetPercent := FXOffsetPercent;
-    LVBkImg.yOffsetPercent := FYOffsetPercent;
-    // Transparent
-    ListView_SettExtBkColor(FOwningListView.Handle, $FFFFFFFF);
-    ListView_SetBkImage(FOwningListView.Handle, @LVBkImg);
-  end;
-end;
-{$ENDIF}
-
-
-constructor TdfsExtLVSaveSettings.Create;
-begin
-  inherited Create;
-  FSaveColumnOrder := TRUE;
-end;
-
-procedure TdfsExtLVSaveSettings.StoreColumnOrder(ColCount: integer;
-   const IntArray: array of integer);
-var
-  Reg: TRegIniFile;
-  x: integer;
-  s: string;
-begin
-  if ColCount < 1 then exit;
-  s := '';
-  for x := 0 to ColCount-1 do
-    s := s + IntToStr(IntArray[x]) + ',';
-  SetLength(s, Length(s)-1);
-  Reg := TRegIniFile.Create(RegistryKey);
-  try
-    Reg.WriteString('Columns', 'Order', s);
-  finally
-    Reg.Free;
-  end;
-end;
-
-procedure TdfsExtLVSaveSettings.ReadColumnOrder(ColCount: integer;
-   var IntArray: array of integer);
-var
-  Reg: TRegIniFile;
-  x,y: integer;
-  s: string;
-begin
-  if ColCount < 1 then exit;
-  s := '';
-  Reg := TRegIniFile.Create(RegistryKey);
-  try
-    s := Reg.ReadString('Columns', 'Order', '');
-  finally
-    Reg.Free;
-  end;
-  if s = '' then
-  begin
-    for x := 0 to ColCount-1 do
-      IntArray[x] := x;
-    exit;
-  end;
-  y := 0;
-  for x := 0 to ColCount-1 do
-  begin
-    try
-      y := Pos(',', s);
-      if y = 0 then
-        y := Length(s)+1;
-      IntArray[x] := StrToInt(Copy(s, 1, y-1));
-    except
-      IntArray[x] := 0;
-    end;
-    s := copy(s, y+1, length(s));
-    if s = '' then break;
-  end;
-end;
-
-
+{ TCustomExtListView }
 
 // Override constructor to "zero out" our internal variable.
 constructor TCustomExtListView.Create(AOwner: TComponent);
@@ -1465,17 +1039,11 @@ begin
   FColumnOrder := NIL;
   FColumnOrderCount := 0;
   FRequireComCtlUpdate := FALSE;
-  FSaveSettings := TdfsExtLVSaveSettings.Create;
   FColumnsFormatChangeLink := TChangeLink.Create;
   FColumnsFormatChangeLink.OnChange := ColumnHeaderImagesChange;
   FVirtualMode := FALSE;
   FColumnsFormat := TdfsExtListColumns.Create(Self);
-{$IFDEF DFS_TRY_BACKGROUND_IMAGE}
-  FBackgroundImage := TELVBackgroundImage.Create(Self);
-{$ENDIF}
-{$IFDEF DFS_COMPILER_4_UP}
   OnData := FeedOwnerDataMode;
-{$ENDIF}
 end;
 
 destructor TCustomExtListView.Destroy;
@@ -1489,13 +1057,6 @@ begin
   FRecreateStream := NIL;
 
   inherited Destroy;
-
-  FSaveSettings.Free;
-{$IFDEF DFS_TRY_BACKGROUND_IMAGE}
-  { Free after inherited because inherited calls DestroyWnd and it is needed
-    until after that...}
-  FBackgroundImage.Free;
-{$ENDIF}
 end;
 
 procedure TCustomExtListView.CreateParams(var Params: TCreateParams);
@@ -1523,9 +1084,7 @@ begin
        LongInt(FColumnOrder));
     Refresh;
   end;
-{$IFDEF DFS_TRY_BACKGROUND_IMAGE}
-  FBackgroundImage.ApplyToListView;
-{$ENDIF}
+
   if not (csLoading in ComponentState) then
   begin
     if (StateImages <> NIL) then
@@ -1619,11 +1178,6 @@ begin
   end;
 end;
 
-procedure TCustomExtListView.MeasureItem(var Height: UINT);
-begin
-  inherited MeasureItem(Height);
-end;
-
 procedure TCustomExtListView.DrawItem(var Canvas: TCanvas; Index: Integer;
    Rect: TRect; State: TOwnerDrawState; var DefaultDrawing,
    FullRowSelect: boolean);
@@ -1632,12 +1186,6 @@ begin
   FullRowSelect := lvxFullRowSelect in ExtendedStyles;
   inherited DrawItem(Canvas, Index, Rect, State, DefaultDrawing,
      FullRowSelect);
-end;
-
-procedure TCustomExtListView.DrawSubItem(Index, SubItem: Integer; Rect: TRect;
-   State: TOwnerDrawState; var DefaultDrawing: boolean);
-begin
-  inherited DrawSubItem(Index, SubItem, Rect, State, DefaultDrawing);
 end;
 
 procedure TCustomExtListView.DefaultDrawHeader(var Canvas: TCanvas;
@@ -1663,14 +1211,11 @@ begin
   if Selected then
     InflateRect(Rect, -2, -2);
 
-  if (Index >= 0) and (Index < Columns.Count) then
-  begin
+  if (Index >= 0) and (Index < Columns.Count) then begin
     // Don't use ActualColumn[] here!  That's for SubItem foolery, not header.
     TheColumn := Columns[Index];
-//    TheColumn := ActualColumn[Index];
 
-    if Selected then
-    begin
+    if Selected then begin
       inc(Rect.Top);
       inc(Rect.Left);
     end;
@@ -1678,10 +1223,8 @@ begin
     R := Rect;
 
     case TheColumn.Alignment of
-      taRightJustify:
-        Dec(R.Right, 4);
-      taLeftJustify:
-        Inc(R.Left, 4);
+      taRightJustify: Dec(R.Right, 4);
+      taLeftJustify: Inc(R.Left, 4);
       // taCenter needs no modification
     end;
 
@@ -1692,23 +1235,19 @@ begin
     else
       ExtColumn := NIL;
 
-    if assigned(ExtColumn) then
-    begin
+    if assigned(ExtColumn) then begin
       case ExtColumn.ImageAlignment of
-        ciaLeftOfText:
-          Inc(R.Left, SmallImages.Width + 4);
-        ciaRightOfText:
-          Dec(R.Right, SmallImages.Width + 4);
+        ciaLeftOfText: Inc(R.Left, SmallImages.Width + 4);
+        ciaRightOfText: Dec(R.Right, SmallImages.Width + 4);
       end;
     end;
 
     if ShowSortArrows and (LastColumnClicked = Index) and
        ((AutoColumnSort <> acsNoSort) or (assigned(OnSortItems))) then
     begin
-      if CurrentSortAscending then
-        Bmp := SortUpBmp
-      else
-        Bmp := SortDownBmp;
+      if CurrentSortAscending
+      then Bmp := SortUpBmp
+      else Bmp := SortDownBmp;
 
       Dec(R.Right, Bmp.Width + 8);
       if R.Right < R.Left then
@@ -2086,15 +1625,7 @@ begin
   FVirtualMode := Val;
   if Items <> NIL then
     Items.Clear;
-  {$IFDEF DFS_COMPILER_4_UP}
   OwnerData := Val;
-  {$ELSE}
-  if HandleAllocated then
-  begin
-    RecreateWnd;
-    HandleNeeded;
-  end;
-  {$ENDIF}
 end;
 
 function TCustomExtListView.GetItemIndent(Index: integer): Integer;
@@ -2286,7 +1817,6 @@ begin
       end;
     end;
 
-{$IFDEF DFS_COMPILER_4_UP}
     // Delphi 4 re-orders column information on this notification to adjust for
     // column headers that have been moved to new locations.  That breaks this
     // component since it already adjusts for that, but in a different way.
@@ -2302,7 +1832,6 @@ begin
         // column order applied.
         Invalidate;
       end;
-{$ENDIF}
   end;
 
   if CallInherited then
@@ -2466,118 +1995,6 @@ begin
     FOnVMCaptionEdited(Self, Item, Canceled, Text);
 end;
 
-function TCustomExtListView.WriteSettings: boolean;
-var
-  x,
-  ColCount: integer;
-  ColArray: PIntArray;
-begin
-  Result := TRUE;
-  ColCount := Columns.Count;
-  if (FSaveSettings.SaveColumnOrder or FSaveSettings.SaveColumnSizes) and
-     (ColCount > 0) then
-  begin
-    GetMem(ColArray, SizeOf(Integer)*ColCount);
-    try
-      if FSaveSettings.SaveColumnOrder then
-      begin
-        GetColumnOrder(ColCount, ColArray^);
-        FSaveSettings.StoreColumnOrder(ColCount, ColArray^);
-      end;
-      if FSaveSettings.SaveColumnSizes then
-      begin
-        for x := 0 to ColCount-1 do
-          ColArray[x] := ActualColumn[x].Width;
-        FSaveSettings.StoreColumnSizes(ColCount, ColArray^);
-      end;
-    finally
-      FreeMem(ColArray);
-    end;
-  end;
-  if FSaveSettings.SaveCurrentSort then
-    FSaveSettings.StoreCurrentSort(CurrentSortAscending, LastColumnClicked);
-  if FSaveSettings.SaveViewStyle then
-    FSaveSettings.StoreViewStyle(ViewStyle);
-end;
-
-function TCustomExtListView.StoreSettings: boolean;
-begin
-  // DON'T CALL INHERITED!!!!  It has caused me no end of trouble, so I
-  // just resave the width stuff if I need to rather than call inherited.
-
-  if FSaveSettings.AutoSave and
-     ((([csDesigning, csLoading, csReading] * ComponentState) = []) or
-     (csDestroying in ComponentState)) then
-    Result := WriteSettings
-  else
-    Result := FALSE;
-end;
-
-function TCustomExtListView.ReadSettings: boolean;
-var
-  x,
-  ColCount: integer;
-  ColArray: PIntArray;
-  SortCol: integer;
-  SortAscending: boolean;
-begin
-  Result := TRUE;
-  ColCount := Columns.Count;
-  if (FSaveSettings.SaveColumnOrder or FSaveSettings.SaveColumnSizes) and
-     (ColCount > 0) then
-  begin
-    GetMem(ColArray, SizeOf(Integer)*ColCount);
-    try
-      if FSaveSettings.SaveColumnOrder then
-      begin
-        FSaveSettings.ReadColumnOrder(ColCount, ColArray^);
-        SetColumnOrder(ColCount, ColArray^);
-      end;
-
-      if FSaveSettings.SaveColumnSizes then
-      begin
-        for x := 0 to ColCount-1 do
-          ColArray[x] := ActualColumn[x].Width;
-        FSaveSettings.ReadColumnSizes(ColCount, ColArray^);
-        if ColArray[0] <> -1 then
-          for x := 0 to ColCount-1 do
-            ActualColumn[x].Width := ColArray[x];
-      end;
-    finally
-      FreeMem(ColArray);
-    end;
-  end;
-
-  if FSaveSettings.SaveCurrentSort then
-  begin
-    FSaveSettings.ReadCurrentSort(SortAscending, SortCol);
-    if SortCol >= Columns.Count then
-      SortCol := Columns.Count-1;
-    if SortCol < 0 then
-      SortCol := 0;
-    BeginUpdate;
-    try
-      CurrentSortAscending := SortAscending;
-      LastColumnClicked := SortCol;
-      Resort;
-    finally
-      EndUpdate;
-    end;
-  end;
-  
-  if FSaveSettings.SaveViewStyle then
-    ViewStyle := FSaveSettings.ReadViewStyle(ViewStyle);
-end;
-
-function TCustomExtListView.LoadSettings: boolean;
-begin
-  if FSaveSettings.AutoSave and (not(csDesigning in ComponentState)) then
-    Result := ReadSettings
-  else
-    Result := FALSE;
-end;
-
-
 function TCustomExtListView.ELV_GetNextItem(StartItem: integer;
    Direction: TSearchDirection; States: TItemStates): integer;
 var
@@ -2643,13 +2060,6 @@ begin
   FColumnsFormat.Assign(Value);
 end;
 
-{$IFDEF DFS_TRY_BACKGROUND_IMAGE}
-procedure TCustomExtListView.SetBackgroundImage(Value: TELVBackgroundImage);
-begin
-  FBackgroundImage.Assign(Value);
-end;
-{$ENDIF}
-
 function TCustomExtListView.GetSubItemImageIndex(Item, SubItem: integer): integer;
 var
   APIItem: TLVItem;
@@ -2689,13 +2099,13 @@ begin
   ListView_SetItem(Handle, APIItem);
 end;
 
-function TCustomExtListView.GetStateImages: {$IFDEF DFS_COMPILER_4_UP} TCustomImageList; {$ELSE} TImageList; {$ENDIF}
+function TCustomExtListView.GetStateImages: TCustomImageList;
 begin
   // Nothing, just get it
   Result := inherited StateImages;
 end;
 
-procedure TCustomExtListView.SetStateImages(Value: {$IFDEF DFS_COMPILER_4_UP} TCustomImageList {$ELSE} TImageList {$ENDIF});
+procedure TCustomExtListView.SetStateImages(Value: TCustomImageList);
 begin
   SaveChecks;
   inherited StateImages := Value;
@@ -2708,13 +2118,13 @@ begin
   RestoreChecks;
 end;
 
-function TCustomExtListView.GetSmallImages: {$IFDEF DFS_COMPILER_4_UP} TCustomImageList; {$ELSE} TImageList; {$ENDIF}
+function TCustomExtListView.GetSmallImages: TCustomImageList;
 begin
   // Nothing, just get it
   Result := inherited SmallImages;
 end;
 
-procedure TCustomExtListView.SetSmallImages(Value: {$IFDEF DFS_COMPILER_4_UP} TCustomImageList {$ELSE} TImageList {$ENDIF});
+procedure TCustomExtListView.SetSmallImages(Value: TCustomImageList);
 begin
   // Unlink ourself from old value
   if SmallImages <> NIL then
@@ -2872,11 +2282,6 @@ begin
   end;
 end;
 
-function TCustomExtListView.GetVersion: string;
-begin
-  Result := DFS_COMPONENT_VERSION;
-end;
-
 procedure TCustomExtListView.DefaultDrawSubItem(Index, SubItem: Integer;
    Rect: TRect; State: TOwnerDrawState);
 var
@@ -3017,7 +2422,6 @@ begin
   inherited;
 end;
 
-{$IFDEF DFS_COMPILER_4_UP}
 procedure TCustomExtListView.FeedOwnerDataMode(Sender: TObject; Item: TListItem);
 var
   ItemData: TLVItemEx;
@@ -3047,7 +2451,6 @@ begin
     end;
   end;
 end;
-{$ENDIF}
 
 
 { TdfsExtListColumn }
@@ -3215,16 +2618,5 @@ begin
   end;
 end;
 
-
-initialization
-{$IFDEF DFS_TRY_BACKGROUND_IMAGE}
-//  OleInitialize(NIL);
-  CoInitialize(NIL);
-{$ENDIF}
-finalization
-{$IFDEF DFS_TRY_BACKGROUND_IMAGE}
-//  OleUninitialize;
-  CoUninitialize;
-{$ENDIF}
 end.
 

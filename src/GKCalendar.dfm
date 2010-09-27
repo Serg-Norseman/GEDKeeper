@@ -17,7 +17,7 @@ object fmCalendar: TfmCalendar
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
-  object ListView1: TListView
+  object lvDates: TListView
     Left = 8
     Top = 184
     Width = 258
@@ -31,6 +31,8 @@ object fmCalendar: TfmCalendar
         Caption = #1044#1072#1090#1072
         Width = 120
       end>
+    ReadOnly = True
+    RowSelect = True
     TabOrder = 0
     ViewStyle = vsReport
   end

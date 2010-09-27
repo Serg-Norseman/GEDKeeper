@@ -51,7 +51,9 @@ uses
   GKExpCalc in 'GKExpCalc.pas' {fmCalcWidget},
   GKNamesBook in 'GKNamesBook.pas' {fmNamesBook},
   GKGenBase in 'GKGenBase.pas',
-  GKCalendar in 'GKCalendar.pas' {fmCalendar};
+  GKCalendar in 'GKCalendar.pas' {fmCalendar},
+  GKTimeLine in 'GKTimeLine.pas' {fmTimeLine},
+  GKStereoView in 'GKStereoView.pas' {fmStereoView};
 
 {$R *.res}
 
@@ -74,7 +76,7 @@ begin
   // поскольку к заголовку главного окна может добавиться заголовок MDIChild
   // (нужно позаботиться об уникальности имени класса главной формы)
 
-  hMainForm := 0;//FindWindow('TfmGEDKeeper', nil);
+  hMainForm := FindWindow('TfmGEDKeeper', nil);
   if (hMainForm = 0) then begin
     Application.Initialize;
     Application.Title := 'GEDKeeper';

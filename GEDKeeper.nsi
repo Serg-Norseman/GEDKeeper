@@ -28,6 +28,7 @@ Section "GEDKeeper (необходимо)"
 
   SetOutPath $INSTDIR
   File "GEDKeeper.exe"
+  File "history.txt"
 
   ; Write the installation path into the registry
   WriteRegStr HKLM SOFTWARE\GEDKeeper "Install_Dir" "$INSTDIR"
@@ -93,6 +94,7 @@ Section "Uninstall"
 
   ; Remove files and uninstaller
   Delete $INSTDIR\GEDKeeper.exe
+  Delete $INSTDIR\history.txt
   Delete $INSTDIR\uninstall.exe
 
   Delete "$INSTDIR\samples\*.*"

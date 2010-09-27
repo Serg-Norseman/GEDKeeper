@@ -27,9 +27,9 @@ type
     procedure btnAcceptClick(Sender: TObject);
   private
     FTree: TGEDCOMTree;
-    procedure SetTree(const Value: TGEDCOMTree);
 
     function GetBase(): TfmBase;
+    procedure SetTree(const Value: TGEDCOMTree);
   public
     property Base: TfmBase read GetBase;
     property Tree: TGEDCOMTree read FTree write SetTree;

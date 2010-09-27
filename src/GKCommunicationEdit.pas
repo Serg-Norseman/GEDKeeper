@@ -31,16 +31,15 @@ type
     procedure btnPersonAddClick(Sender: TObject);
   private
     FCommunication: TGEDCOMCommunicationRecord;
+    FTempInd: TGEDCOMIndividualRecord;
 
     FNotesList: TSheetList;
     FMediaList: TSheetList;
 
-    FTempInd: TGEDCOMIndividualRecord;
-
-    procedure SetCommunication(const Value: TGEDCOMCommunicationRecord);
+    function GetBase: TfmBase;
     procedure ListModify(Sender: TObject; ItemData: TObject; Action: TRecAction);
     procedure ListsRefresh();
-    function GetBase: TfmBase;
+    procedure SetCommunication(const Value: TGEDCOMCommunicationRecord);
   public
     property Base: TfmBase read GetBase;
     property Communication: TGEDCOMCommunicationRecord read FCommunication write SetCommunication;

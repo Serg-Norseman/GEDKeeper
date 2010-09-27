@@ -1,8 +1,8 @@
 object fmGEDKeeper: TfmGEDKeeper
   Left = 312
   Top = 112
-  Width = 750
-  Height = 674
+  Width = 734
+  Height = 690
   Caption = 'GEDKeeper'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -23,8 +23,8 @@ object fmGEDKeeper: TfmGEDKeeper
   TextHeight = 13
   object StatusBar: TStatusBar
     Left = 0
-    Top = 609
-    Width = 742
+    Top = 625
+    Width = 726
     Height = 19
     AutoHint = True
     Panels = <
@@ -41,7 +41,7 @@ object fmGEDKeeper: TfmGEDKeeper
   object ToolBar1: TToolBar
     Left = 0
     Top = 0
-    Width = 742
+    Width = 726
     Height = 30
     AutoSize = True
     ButtonHeight = 26
@@ -448,6 +448,18 @@ object fmGEDKeeper: TfmGEDKeeper
       AutoCheck = True
       Caption = #1050#1072#1083#1077#1085#1076#1072#1088#1100'...'
       OnExecute = actCalendarExecute
+    end
+    object actTimeLine: TAction
+      Category = 'Edit'
+      AutoCheck = True
+      Caption = #1051#1080#1085#1080#1103' '#1074#1088#1077#1084#1077#1085#1080'...'
+      OnExecute = actTimeLineExecute
+    end
+    object actStereoView: TAction
+      Category = 'Misc'
+      Caption = #1057#1090#1077#1088#1077#1086'-'#1087#1088#1086#1089#1084#1086#1090#1088
+      ShortCut = 16507
+      OnExecute = actStereoViewExecute
     end
   end
   object ImageList1: TImageList
@@ -2408,6 +2420,10 @@ object fmGEDKeeper: TfmGEDKeeper
       end
       object miCalendar: TMenuItem
         Action = actCalendar
+        AutoCheck = True
+      end
+      object miTimeLine: TMenuItem
+        Action = actTimeLine
         AutoCheck = True
       end
       object N6: TMenuItem

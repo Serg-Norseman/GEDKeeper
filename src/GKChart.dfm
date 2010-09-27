@@ -1,9 +1,9 @@
 object fmChart: TfmChart
   Left = 320
   Top = 111
-  Width = 757
-  Height = 590
   Caption = #1044#1080#1072#1075#1088#1072#1084#1084#1072
+  ClientHeight = 552
+  ClientWidth = 741
   Color = clBtnFace
   DefaultMonitor = dmMainForm
   Font.Charset = DEFAULT_CHARSET
@@ -25,13 +25,12 @@ object fmChart: TfmChart
   object ToolBar1: TToolBar
     Left = 0
     Top = 0
-    Width = 749
+    Width = 741
     Height = 30
     AutoSize = True
     ButtonHeight = 26
     ButtonWidth = 27
     EdgeBorders = [ebTop, ebBottom]
-    Flat = True
     Images = fmGEDKeeper.ImageList1
     ParentShowHint = False
     ShowHint = True
@@ -62,7 +61,7 @@ object fmChart: TfmChart
     end
     object ListDepthLimit: TComboBox
       Left = 161
-      Top = 2
+      Top = 0
       Width = 110
       Height = 21
       Style = csDropDownList
@@ -146,8 +145,8 @@ object fmChart: TfmChart
   object ScrollBox1: TScrollBox
     Left = 0
     Top = 30
-    Width = 749
-    Height = 533
+    Width = 741
+    Height = 522
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -157,15 +156,15 @@ object fmChart: TfmChart
     ParentFont = False
     TabOrder = 1
     OnResize = ScrollBox1Resize
-    object Image1: TImage
+    object ImageTree: TImage
       Left = 0
       Top = 0
       Width = 400
       Height = 300
-      OnDblClick = Image1DblClick
-      OnMouseDown = Image1MouseDown
-      OnMouseMove = Image1MouseMove
-      OnMouseUp = Image1MouseUp
+      OnDblClick = ImageTreeDblClick
+      OnMouseDown = ImageTreeMouseDown
+      OnMouseMove = ImageTreeMouseMove
+      OnMouseUp = ImageTreeMouseUp
     end
   end
   object SaveDialog1: TSaveDialog

@@ -21,8 +21,7 @@ type
     SheetPlayer: TTabSheet;
     SheetHTML: TTabSheet;
     WebBrowser1: TWebBrowser;
-    procedure FormKeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     FFileRef: TGEDCOMFileReferenceWithTitle;
     FExtern: Boolean;

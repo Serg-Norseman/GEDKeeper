@@ -5,7 +5,7 @@ unit GKOptions;
 interface
 
 uses
-  SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ExtCtrls,
+  SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, ExtCtrls,
   ComCtrls, Buttons, GKCommon, GKLists;
 
 type
@@ -59,12 +59,11 @@ type
     rgFNPFormat: TRadioGroup;
     rgDateFormat: TRadioGroup;
     CheckPlacesWithAddress: TCheckBox;
-    GroupBox6: TGroupBox;
-    CheckGEDCOMOptimize: TCheckBox;
     EditPedigreeFormat: TRadioGroup;
     GroupBox7: TGroupBox;
     CheckShowOnStart: TCheckBox;
     rgEditMode: TRadioGroup;
+    chkChildlessExclude: TCheckBox;
     procedure FormShow(Sender: TObject);
     procedure btnAcceptClick(Sender: TObject);
     procedure PanMaleColorClick(Sender: TObject);
@@ -94,7 +93,7 @@ begin
     csASCII: rgCode.ItemIndex := 0;
     csUTF8: rgCode.ItemIndex := 1;
   end;
-  
+
   rgFNPFormat.ItemIndex := Ord(FOptions.DefNameFormat);
   rgDateFormat.ItemIndex := Ord(FOptions.DefDateFormat);
   CheckPlacesWithAddress.Checked := FOptions.PlacesWithAddress;
@@ -106,6 +105,7 @@ begin
   CheckBirthDate.Checked := FOptions.ChartOptions.BirthDateVisible;
   CheckDeathDate.Checked := FOptions.ChartOptions.DeathDateVisible;
   CheckKinship.Checked := FOptions.ChartOptions.Kinship;
+  chkChildlessExclude.Checked := FOptions.ChartOptions.ChildlessExclude;
 
   PanMaleColor.Color := FOptions.ChartOptions.MaleColor;
   PanFemaleColor.Color := FOptions.ChartOptions.FemaleColor;
@@ -120,8 +120,6 @@ begin
   CheckAppRegister.Enabled := False;
   CheckExtRegister.Enabled := False;
   {$ENDIF}
-
-  CheckGEDCOMOptimize.Checked := FOptions.GEDCOMOptimize;
 
   chkProxy.Checked := FOptions.Proxy.UseProxy;
   edProxyServer.Text := FOptions.Proxy.Server;
@@ -162,6 +160,7 @@ begin
   FOptions.ChartOptions.BirthDateVisible := CheckBirthDate.Checked;
   FOptions.ChartOptions.DeathDateVisible := CheckDeathDate.Checked;
   FOptions.ChartOptions.Kinship := CheckKinship.Checked;
+  FOptions.ChartOptions.ChildlessExclude := chkChildlessExclude.Checked;
 
   FOptions.ChartOptions.MaleColor := PanMaleColor.Color;
   FOptions.ChartOptions.FemaleColor := PanFemaleColor.Color;
@@ -173,8 +172,6 @@ begin
   RegisterProgram(CheckAppRegister.Checked);
   RegisterExt('.ged', 'GEDCOM.File', 'GEDCOM File', 0, CheckExtRegister.Checked);
   {$ENDIF}
-
-  FOptions.GEDCOMOptimize := CheckGEDCOMOptimize.Checked;
 
   FOptions.Proxy.UseProxy := chkProxy.Checked;
   FOptions.Proxy.Server := edProxyServer.Text;

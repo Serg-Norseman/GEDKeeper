@@ -26,7 +26,7 @@ object fmTreeTools: TfmTreeTools
     Top = 8
     Width = 721
     Height = 425
-    ActivePage = SheetSync
+    ActivePage = SheetPatSearch
     TabOrder = 0
     object SheetChoice: TTabSheet
       Caption = 'SheetChoice'
@@ -35,7 +35,7 @@ object fmTreeTools: TfmTreeTools
         Left = 8
         Top = 8
         Width = 273
-        Height = 225
+        Height = 257
         Caption = #1054#1087#1077#1088#1072#1094#1080#1103
         ItemIndex = 0
         Items.Strings = (
@@ -46,7 +46,8 @@ object fmTreeTools: TfmTreeTools
           #1048#1084#1087#1086#1088#1090' '#1080#1079' '#1074#1085#1077#1096#1085#1077#1075#1086' '#1092#1086#1088#1084#1072#1090#1072
           #1055#1088#1086#1074#1077#1088#1082#1072' '#1089#1074#1103#1079#1085#1086#1089#1090#1080' '#1089#1077#1084#1077#1081
           #1055#1088#1086#1074#1077#1088#1082#1072' '#1091#1084#1077#1088#1096#1080#1093' '#1083#1102#1076#1077#1081
-          #1057#1080#1085#1093#1088#1086#1085#1080#1079#1072#1094#1080#1103' '#1073#1072#1079' '#1076#1072#1085#1085#1099#1093)
+          #1057#1080#1085#1093#1088#1086#1085#1080#1079#1072#1094#1080#1103' '#1073#1072#1079' '#1076#1072#1085#1085#1099#1093
+          #1055#1086#1080#1089#1082' '#1087#1072#1090#1088#1080#1072#1088#1093#1086#1074)
         TabOrder = 0
       end
     end
@@ -658,6 +659,31 @@ object fmTreeTools: TfmTreeTools
         ReadOnly = True
         ScrollBars = ssBoth
         TabOrder = 5
+      end
+    end
+    object SheetPatSearch: TTabSheet
+      Caption = 'SheetPatSearch'
+      ImageIndex = 9
+      TabVisible = False
+      object btnPatSearch: TBitBtn
+        Left = 632
+        Top = 384
+        Width = 75
+        Height = 25
+        Caption = #1055#1086#1080#1089#1082
+        TabOrder = 0
+        OnClick = btnPatSearchClick
+        NumGlyphs = 2
+      end
+      object Panel3: TPanel
+        Left = 0
+        Top = 0
+        Width = 713
+        Height = 369
+        Align = alTop
+        BevelOuter = bvNone
+        BorderWidth = 8
+        TabOrder = 1
       end
     end
   end

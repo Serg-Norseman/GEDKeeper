@@ -33,8 +33,8 @@ type
     procedure btnViewClick(Sender: TObject);
     procedure edNameChange(Sender: TObject);
   private
-    FMediaRec: TGEDCOMMultimediaRecord;
     FIsNew: Boolean;
+    FMediaRec: TGEDCOMMultimediaRecord;
 
     FNotesList: TSheetList;
     FSourcesList: TSheetList;

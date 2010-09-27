@@ -38,58 +38,30 @@ object fmPersonEdit: TfmPersonEdit
     object SheetSpouses: TTabSheet
       Caption = #1057#1091#1087#1088#1091#1075#1080
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
     object SheetAssociations: TTabSheet
       Caption = #1040#1089#1089#1086#1094#1080#1072#1094#1080#1080
       ImageIndex = 6
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
     object SheetGroups: TTabSheet
       Caption = #1043#1088#1091#1087#1087#1099
       ImageIndex = 6
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
     object SheetNotes: TTabSheet
       Caption = #1047#1072#1084#1077#1090#1082#1080
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
     object SheetMultimedia: TTabSheet
       Caption = #1052#1091#1083#1100#1090#1080#1084#1077#1076#1080#1072
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
     object SheetSources: TTabSheet
       Caption = #1048#1089#1090#1086#1095#1085#1080#1082#1080
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
     object SheetUserRefs: TTabSheet
       Caption = #1057#1085#1086#1089#1082#1080'/'#1055#1086#1084#1077#1090#1082#1080
       ImageIndex = 7
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
   end
   object btnAccept: TBitBtn
@@ -489,10 +461,6 @@ object fmPersonEdit: TfmPersonEdit
         Caption = 'SheetSeparateParents'
         ImageIndex = 1
         TabVisible = False
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object Label10: TLabel
           Left = 16
           Top = 16

@@ -2,8 +2,8 @@ object fmBase: TfmBase
   Left = 294
   Top = 114
   Caption = 'GEDKeeper'
-  ClientHeight = 516
-  ClientWidth = 938
+  ClientHeight = 483
+  ClientWidth = 914
   Color = clBtnFace
   DefaultMonitor = dmMainForm
   Font.Charset = DEFAULT_CHARSET
@@ -25,8 +25,8 @@ object fmBase: TfmBase
   object PageRecords: TPageControl
     Left = 0
     Top = 0
-    Width = 938
-    Height = 516
+    Width = 914
+    Height = 483
     ActivePage = SheetLocations
     Align = alClient
     TabOrder = 0
@@ -113,10 +113,6 @@ object fmBase: TfmBase
     object SheetLocations: TTabSheet
       Caption = #1052#1077#1089#1090#1072
       ImageIndex = 10
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
   end
   object ActionList1: TActionList

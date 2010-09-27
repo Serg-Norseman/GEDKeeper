@@ -19,7 +19,7 @@ object fmNamesBook: TfmNamesBook
   OnDestroy = FormDestroy
   PixelsPerInch = 96
   TextHeight = 13
-  object lstName: TComboBox
+  object cbNames: TComboBox
     Left = 8
     Top = 8
     Width = 257
@@ -28,9 +28,9 @@ object fmNamesBook: TfmNamesBook
     ItemHeight = 13
     Sorted = True
     TabOrder = 0
-    OnSelect = lstNameSelect
+    OnSelect = cbNamesSelect
   end
-  object mDesc: TMemo
+  object mmDesc: TMemo
     Left = 8
     Top = 184
     Width = 257

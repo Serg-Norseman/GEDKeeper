@@ -50,12 +50,11 @@ type
       Y: Integer);
   private
     FEvent: TGEDCOMCustomEvent;
+    FLocation: TGEDCOMLocationRecord;
 
     FNotesList: TSheetList;
     FMediaList: TSheetList;
     FSourcesList: TSheetList;
-
-    FLocation: TGEDCOMLocationRecord;
 
     procedure ControlsRefresh();
     procedure ListModify(Sender: TObject; ItemData: TObject; Action: TRecAction);

@@ -119,10 +119,6 @@ begin
 
   wm := Ord(fmGEDKeeper.Options.WorkMode);
   PageCtlParents.ActivePageIndex := wm;
-  {case wm of
-    0:
-    1: PageCtlParents.
-  end;}
 
   FEventsList := TSheetList.Create(SheetEvents{GroupBox3});
   FEventsList.OnModify := ListModify;

@@ -11,7 +11,7 @@ uses
 type
   TfmGroupEdit = class(TForm)
     GroupBox1: TGroupBox;
-    EditName: TEdit;
+    edName: TEdit;
     Label1: TLabel;
     PagesGroupData: TPageControl;
     SheetNotes: TTabSheet;
@@ -92,8 +92,8 @@ begin
 
   try
     if (FGroup = nil)
-    then EditName.Text := ''
-    else EditName.Text := FGroup.Name;
+    then edName.Text := ''
+    else edName.Text := FGroup.Name;
 
     ListsRefresh();
   except
@@ -103,7 +103,7 @@ end;
 
 procedure TfmGroupEdit.AcceptChanges();
 begin
-  FGroup.Name := EditName.Text;
+  FGroup.Name := edName.Text;
   Base.ChangeRecord(FGroup);
 end;
 

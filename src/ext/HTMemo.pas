@@ -63,7 +63,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 interface
 
 uses
-  SysUtils, Windows, Messages, Classes, Graphics, Controls, Forms, ExtCtrls;
+  Types, SysUtils, Windows, Messages, Classes, Graphics, Controls, Forms,
+  ExtCtrls;
 
 type
   TLink = class(TObject)

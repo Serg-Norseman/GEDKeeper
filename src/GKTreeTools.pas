@@ -91,6 +91,9 @@ type
     RadioButton2: TRadioButton;
     Panel2: TPanel;
     mSyncRes: TMemo;
+    SheetPatSearch: TTabSheet;
+    btnPatSearch: TBitBtn;
+    Panel3: TPanel;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
@@ -117,6 +120,7 @@ type
     procedure TreeView1DblClick(Sender: TObject);
     procedure btnPrepareClick(Sender: TObject);
     procedure btnUpdateSelectClick(Sender: TObject);
+    procedure btnPatSearchClick(Sender: TObject);
   private
     FSplitCounter: Integer;
     FSplitList: TList;
@@ -127,6 +131,7 @@ type
     FRMSkip: TStringList;
 
     ListDeads: TBSListView;
+    ListPatriarchs: TBSListView;
 
     procedure RecordMerge(aRecBase, aRecCopy: TGEDCOMRecord);
     procedure SetRec1(const Value: TGEDCOMRecord);
@@ -141,9 +146,14 @@ type
 
     procedure CheckDeads();
     procedure CheckGroups();
+
     procedure SelectTool(aToolIndex: Integer);
     function GetBase: TfmBase;
+
     procedure PrepareDeadsList();
+
+    procedure PreparePatriarchsList();
+    procedure ListPatriarchsDblClick(Sender: TObject);
   public
     property Base: TfmBase read GetBase;
   end;
@@ -152,7 +162,7 @@ implementation
 
 uses
   {$IFDEF DELPHI_NET}System.IO,{$ENDIF}
-  GKCommon, GKMain, GKRecordSelect, GKProgress, GKSheetList;
+  Contnrs, GKCommon, GKMain, GKRecordSelect, GKProgress, GKSheetList;
 
 {$R *.dfm}
 
@@ -172,6 +182,7 @@ begin
   rgMode.ItemIndex := 0;
 
   PrepareDeadsList();
+  PreparePatriarchsList();
 end;
 
 procedure TfmTreeTools.FormDestroy(Sender: TObject);
@@ -282,6 +293,7 @@ begin
     0..4: ;
     5: CheckGroups();
     6: CheckDeads();
+    7: ;
   end;
 end;
 
@@ -1055,6 +1067,83 @@ begin
   finally
     ProgressDone();
   end;
+end;
+
+procedure TfmTreeTools.btnPatSearchClick(Sender: TObject);
+var
+  lst: TObjectList;
+
+  function GetLinks(pObj: TPatriarchObj): string;
+  var
+    i: Integer;
+  begin
+    Result := '';
+
+    for i := 0 to lst.Count - 1 do begin
+      if (i in pObj.ILinks) then begin
+        if (Result <> '') then Result := Result + ', ';
+        Result := Result + GetNameStr(TPatriarchObj(lst[i]).IRec);
+      end;
+    end;
+  end;
+
+var
+  i: Integer;
+  p_obj: TPatriarchObj;
+  item: TListItem;
+  p_tag: TGEDCOMTag;
+  p_sign: string;
+begin
+  ListPatriarchs.Items.BeginUpdate();
+  lst := TObjectList.Create(True);
+  try
+    ListPatriarchs.Clear();
+    GetPatriarchsList(FTree, True, False, lst);
+
+    for i := 0 to lst.Count - 1 do begin
+      p_obj := TPatriarchObj(lst[i]);
+
+      p_tag := p_obj.IRec.FindTag(PatriarchTag);
+      if (p_tag = nil) then p_sign := '' else p_sign := '[*] ';      
+
+      item := ListPatriarchs.Items.Add();
+      item.Caption := p_sign + GetNameStr(p_obj.IRec);
+      item.SubItems.Add(IntToStr(p_obj.IBirthYear));
+      item.SubItems.Add(IntToStr(p_obj.IDescendantsCount));
+      item.SubItems.Add(IntToStr(p_obj.IDescGenerations));
+      item.Data := p_obj.IRec;
+      //item.SubItems.Add(GetLinks(p_obj));
+    end;
+  finally
+    lst.Destroy;
+    ListPatriarchs.Items.EndUpdate();
+  end;
+end;
+
+procedure TfmTreeTools.ListPatriarchsDblClick(Sender: TObject);
+var
+  item: TListItem;
+  i_rec: TGEDCOMIndividualRecord;
+begin
+  item := ListPatriarchs.Selected;
+  if (item = nil) then Exit;
+
+  i_rec := TGEDCOMIndividualRecord(item.Data);
+  if (i_rec = nil) then Exit;
+
+  Base.SelectRecordByXRef(i_rec.XRef);
+  Close;
+end;
+
+procedure TfmTreeTools.PreparePatriarchsList();
+begin
+  Base.CreateListView(Self, Panel3, ListPatriarchs);
+  //ListPatriarchs.Checkboxes := True;
+  ListPatriarchs.OnDblClick := ListPatriarchsDblClick;
+  AddListColumn(ListPatriarchs, 'Патриарх', 400);
+  AddListColumn(ListPatriarchs, 'Родился', 90);
+  AddListColumn(ListPatriarchs, 'Потомков', 90);
+  AddListColumn(ListPatriarchs, 'Поколений', 90);
 end;
 
 procedure TfmTreeTools.btnPrepareClick(Sender: TObject);

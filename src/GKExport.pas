@@ -41,14 +41,11 @@ type
     FSurnamesCount: Integer;
 
     procedure GenTree(aStream: TFileStream; iRec: TGEDCOMIndividualRecord);
-    procedure PrepareLists();
     procedure WritePersons();
     procedure WriteTimeLineIndex(aStream: TFileStream; evName, tlFileName: string);
     procedure WriteNameIndex(aStream: TFileStream);
     procedure WriteFamilyIndex(aStream: TFileStream);
-    procedure WriteSurnamesIndex(aStream: TFileStream; aSym: Char;
-      aNames: TStringList);
-    procedure WriteIndexFile(aFileName: string; aIndex: TStringList);
+    procedure WriteIndex(aStream: TFileStream; aIndex: TStringList);
   public
     procedure Generate(); override;
   end;
@@ -116,6 +113,7 @@ begin
   WriteStr(aStream, '<html>');
   WriteStr(aStream, '<head>');
   WriteStr(aStream, '<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1251">');
+  WriteStr(aStream, '<link rel="stylesheet" href="style.css" type="text/css"/>');
   WriteStr(aStream, '<title>'+aTitle+'</title>');
   WriteStr(aStream, '</head>');
   WriteStr(aStream, '<body>');
@@ -150,68 +148,61 @@ end;
 
 { TWebExporter }
 
-procedure TWebExporter.WriteIndexFile(aFileName: string; aIndex: TStringList);
+procedure TWebExporter.WriteIndex(aStream: TFileStream; aIndex: TStringList);
 var
-  fs_index: TFileStream;
   i_rec: TGEDCOMIndividualRecord;
   i: Integer;
 begin
-  fs_index := TFileStream.Create(aFileName, fmCreate);
-  try
-    WriteHeader(fs_index, 'Генеалогическая база данных');
-
-    WriteStr(fs_index, '<b>Индекс:</b><ul>');
-    for i := 0 to aIndex.Count - 1 do begin
-      i_rec := TGEDCOMIndividualRecord(aIndex.Objects[i]);
-      WriteStr(fs_index, '<li><a href="persons.htm#' + i_rec.XRef + '">' + aIndex[i] + '</a></li>');
-    end;
-    WriteStr(fs_index, '</ul><hr>');
-
-    WriteFooter(fs_index);
-  finally
-    fs_index.Destroy;
+  WriteStr(aStream, '<ul>');
+  for i := 0 to aIndex.Count - 1 do begin
+    i_rec := TGEDCOMIndividualRecord(aIndex.Objects[i]);
+    WriteStr(aStream, '<li><a href="persons.htm#' + i_rec.XRef + '">' + aIndex[i] + '</a></li>');
   end;
-end;
-
-procedure TWebExporter.WriteSurnamesIndex(aStream: TFileStream; aSym: Char; aNames: TStringList);
-var
-  index, nList{, surnames}: TStringList;
-  f, n, p: string;
-  i, idx: Integer;
-  i_rec: TGEDCOMIndividualRecord;
-begin
-  WriteStr(aStream, '<li><b>' + aSym + '</b><ul>');
-
-  index := TStringList.Create;
-  try
-    for i := 0 to aNames.Count - 1 do begin
-      i_rec := TGEDCOMIndividualRecord(aNames.Objects[i]);
-      GetNameParts(i_rec, f, n, p);
-
-      f := PrepareRusFamily(f, (i_rec.Sex = svFemale));
-      idx := index.IndexOf(f);
-
-      if (idx < 0)
-      then idx := index.AddObject(f, TStringList.Create());
-
-      TStringList(index.Objects[idx]).AddObject(aNames[i], i_rec);
-    end;
-
-    FSurnamesCount := FSurnamesCount + index.Count;
-
-    for i := 0 to index.Count - 1 do begin
-      nList := TStringList(index.Objects[i]);
-      WriteStr(aStream, '<li>' + index[i] + ' (' + IntToStr(nList.Count) + ')</li>');
-    end;
-  finally
-    for i := 0 to index.Count - 1 do index.Objects[i].Free;
-    index.Free;
-  end;
-
-  WriteStr(aStream, '</ul></li>');
+  WriteStr(aStream, '</ul>');
 end;
 
 procedure TWebExporter.WriteFamilyIndex(aStream: TFileStream);
+
+  procedure WriteSurnames(aStream: TFileStream; aSym: Char; aNames: TStringList);
+  var
+    index, nList: TStringList;
+    f, n, p: string;
+    i, idx: Integer;
+    i_rec: TGEDCOMIndividualRecord;
+  begin
+    WriteStr(aStream, '<li><a name="'+NumUpdate(Ord(aSym), 3)+'"><b>' + aSym + '</b></a><ul>');
+
+    index := TStringList.Create;
+    try
+      for i := 0 to aNames.Count - 1 do begin
+        i_rec := TGEDCOMIndividualRecord(aNames.Objects[i]);
+        GetNameParts(i_rec, f, n, p);
+
+        f := PrepareRusFamily(f, (i_rec.Sex = svFemale));
+        idx := index.IndexOf(f);
+
+        if (idx < 0)
+        then idx := index.AddObject(f, TStringList.Create());
+
+        TStringList(index.Objects[idx]).AddObject(aNames[i], i_rec);
+      end;
+
+      FSurnamesCount := FSurnamesCount + index.Count;
+
+      for i := 0 to index.Count - 1 do begin
+        nList := TStringList(index.Objects[i]);
+        WriteStr(aStream, '<li><u>' + index[i] + '</u> (' + IntToStr(nList.Count) + ')');
+        WriteIndex(aStream, nList);
+        WriteStr(aStream, '</li>');
+      end;
+    finally
+      for i := 0 to index.Count - 1 do index.Objects[i].Free;
+      index.Free;
+    end;
+
+    WriteStr(aStream, '</ul></li>');
+  end;
+
 const
   LatSymSet: set of Char = ['A'..'Z'];
   RusSymSet: set of Char = ['А'..'Я'];
@@ -222,7 +213,7 @@ var
   i: Integer;
   rec: TGEDCOMRecord;
   ind: TGEDCOMIndividualRecord;
-  index_str, fam, nam, pat, link, fn: string;
+  index_str, fam, nam, pat: string;
   c: Char;
   lat: array [TLatSyms] of TStringList;
   rus: array [TRusSyms] of TStringList;
@@ -283,11 +274,8 @@ begin
 
     for c := Low(TLatSyms) to High(TLatSyms) do begin
       if (lat[c] <> nil) then begin
-        fn := 'index_fam_' + NumUpdate(Ord(c), 3) + '.htm';
-        link := '<a href="' + fn + '">' + c + '</a>';
-        index_str := index_str + link + '&nbsp;';
-        WriteIndexFile(FPath + fn, lat[c]);
-        WriteSurnamesIndex(fs_surnames, c, lat[c]);
+        index_str := index_str + '<a href="index_surnames.htm#' + NumUpdate(Ord(c), 3) + '">' + c + '</a>&nbsp;';
+        WriteSurnames(fs_surnames, c, lat[c]);
       end else begin
         index_str := index_str + c + '&nbsp;';
       end;
@@ -295,26 +283,19 @@ begin
 
     for c := Low(TRusSyms) to High(TRusSyms) do begin
       if (rus[c] <> nil) then begin
-        fn := 'index_fam_' + NumUpdate(Ord(c), 3) + '.htm';
-        link := '<a href="' + fn + '">' + c + '</a>';
-        index_str := index_str + link + '&nbsp;';
-        WriteIndexFile(FPath + fn, rus[c]);
-        WriteSurnamesIndex(fs_surnames, c, rus[c]);
+        index_str := index_str + '<a href="index_surnames.htm#' + NumUpdate(Ord(c), 3) + '">' + c + '</a>&nbsp;';
+        WriteSurnames(fs_surnames, c, rus[c]);
       end else begin
         index_str := index_str + c + '&nbsp;';
       end;
     end;
 
     if (unk <> nil) then begin
-      fn := 'index_fam_other.htm';
-      link := '<a href="' + fn + '">Другое</a>';
-      index_str := index_str + link + '&nbsp;';
-      WriteIndexFile(FPath + fn, unk);
-      WriteSurnamesIndex(fs_surnames, '?', unk);
+      index_str := index_str + '<a href="index_surnames.htm#' + NumUpdate(Ord('?'), 3) + '">Другое</a>' + '&nbsp;';
+      WriteSurnames(fs_surnames, '?', unk);
     end;
 
     WriteStr(aStream, '<li>' + index_str + '</li>');
-    WriteStr(aStream, '<li><a href="index_surnames.htm">Развернутый</a></li>');
   finally
     WriteStr(fs_surnames, '</ul>');
     WriteFooter(fs_surnames);
@@ -337,15 +318,20 @@ var
   i: Integer;
   rec: TGEDCOMRecord;
   ind: TGEDCOMIndividualRecord;
-  index_str, fam, nam, pat, link, fn: string;
+  index_str, fam, nam, pat: string;
   c: Char;
   lat: array [TLatSyms] of TStringList;
   rus: array [TRusSyms] of TStringList;
   unk: TStringList;
+  fs_names: TFileStream;
 begin
   for c := Low(TLatSyms) to High(TLatSyms) do lat[c] := nil;
   for c := Low(TRusSyms) to High(TRusSyms) do rus[c] := nil;
   unk := nil;
+
+  fs_names := TFileStream.Create(FPath + 'index_names.htm', fmCreate);
+  WriteHeader(fs_names, 'Генеалогическая база данных');
+  WriteStr(fs_names, '<ul>');
 
   try
     for i := 0 to FTree.RecordsCount - 1 do begin
@@ -394,34 +380,41 @@ begin
 
     for c := Low(TLatSyms) to High(TLatSyms) do begin
       if (lat[c] <> nil) then begin
-        fn := 'index_nam_' + NumUpdate(Ord(c), 3) + '.htm';
-        link := '<a href="' + fn + '">' + c + '</a>';
-        index_str := index_str + link + '&nbsp;';
-        WriteIndexFile(FPath + fn, lat[c]);
+        index_str := index_str + '<a href="index_names.htm#' + NumUpdate(Ord(c), 3) + '">' + c + '</a>&nbsp;';
+
+        WriteStr(fs_names, '<li><a name="'+NumUpdate(Ord(c), 3)+'"><b>' + c + '</b></a>');
+        WriteIndex(fs_names, lat[c]);
+        WriteStr(fs_names, '</li>');
       end else begin
         index_str := index_str + c + '&nbsp;';
       end;
     end;
     for c := Low(TRusSyms) to High(TRusSyms) do begin
       if (rus[c] <> nil) then begin
-        fn := 'index_nam_' + NumUpdate(Ord(c), 3) + '.htm';
-        link := '<a href="' + fn + '">' + c + '</a>';
-        index_str := index_str + link + '&nbsp;';
-        WriteIndexFile(FPath + fn, rus[c]);
+        index_str := index_str + '<a href="index_names.htm#' + NumUpdate(Ord(c), 3) + '">' + c + '</a>&nbsp;';
+
+        WriteStr(fs_names, '<li><a name="'+NumUpdate(Ord(c), 3)+'"><b>' + c + '</b></a>');
+        WriteIndex(fs_names, rus[c]);
+        WriteStr(fs_names, '</li>');
       end else begin
         index_str := index_str + c + '&nbsp;';
       end;
     end;
 
     if (unk <> nil) then begin
-      fn := 'index_nam_other.htm';
-      link := '<a href="' + fn + '">Другое</a>';
-      index_str := index_str + link + '&nbsp;';
-      WriteIndexFile(FPath + fn, unk);
+      index_str := index_str + '<a href="index_names.htm#' + NumUpdate(Ord('?'), 3) + '">Другое</a>&nbsp;';
+
+      WriteStr(fs_names, '<li><a name="'+NumUpdate(Ord('?'), 3)+'"><b>' + '?' + '</b></a>');
+      WriteIndex(fs_names, unk);
+      WriteStr(fs_names, '</li>');
     end;
 
     WriteStr(aStream, '<li>' + index_str + '</li>');
   finally
+    WriteStr(fs_names, '</ul>');
+    WriteFooter(fs_names);
+    fs_names.Destroy;
+
     for c := Low(TLatSyms) to High(TLatSyms) do lat[c].Free;
     for c := Low(TRusSyms) to High(TRusSyms) do rus[c].Free;
     unk.Free;
@@ -699,11 +692,6 @@ begin
   end;
 end;
 
-procedure TWebExporter.PrepareLists();
-begin
-
-end;
-
 procedure TWebExporter.Generate();
 var
   main_index: TFileStream;
@@ -717,6 +705,8 @@ begin
 
     FSurnamesCount := 0;
 
+    //WriteStr(main_index, '<form><table><tr><td>');
+
     WriteStr(main_index, '<b>Индекс фамилий:</b><ul>');
     WriteFamilyIndex(main_index);
     WriteStr(main_index, '</ul><hr>');
@@ -726,11 +716,11 @@ begin
     WriteStr(main_index, '</ul><hr>');
 
     WriteStr(main_index, '<b>Индекс годов рождения:</b><ul>');
-    WriteTimeLineIndex(main_index, 'BIRT', 'timeline_birth.htm');
+    WriteTimeLineIndex(main_index, 'BIRT', 'index_birth.htm');
     WriteStr(main_index, '</ul><hr>');
 
     WriteStr(main_index, '<b>Индекс годов смерти:</b><ul>');
-    WriteTimeLineIndex(main_index, 'DEAT', 'timeline_death.htm');
+    WriteTimeLineIndex(main_index, 'DEAT', 'index_death.htm');
     WriteStr(main_index, '</ul><hr>');
 
     WritePersons();
@@ -740,6 +730,8 @@ begin
     WriteStr(main_index, '<li>Персон: ' + IntToStr(stats.persons) + '</li>');
     WriteStr(main_index, '<li>Фамилий: ' + IntToStr(FSurnamesCount) + '</li>');
     WriteStr(main_index, '</ul><hr>');
+
+    //WriteStr(main_index, '</td></tr></table></form>');
 
     WriteFooter(main_index);
   finally

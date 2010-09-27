@@ -5,24 +5,23 @@ unit GKPersonNew;
 interface
 
 uses
-  Windows, SysUtils, Classes, Graphics, Controls, Forms, StdCtrls, Buttons,
+  Windows, SysUtils, Classes, Controls, Forms, StdCtrls, Buttons,
   GedCom551, GKCommon;
 
 type
   TfmPersonNew = class(TForm)
     Label1: TLabel;
-    EditFamily: TEdit;
+    edFamily: TEdit;
     Label2: TLabel;
-    EditName: TEdit;
+    edName: TEdit;
     Label3: TLabel;
-    EditPatronymic: TComboBox;
+    edPatronymic: TComboBox;
     Label4: TLabel;
     EditSex: TComboBox;
     btnAccept: TBitBtn;
     btnCancel: TBitBtn;
     procedure FormCreate(Sender: TObject);
-    procedure EditFamilyKeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
+    procedure edFamilyKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     FTarget: TGEDCOMIndividualRecord;
     FTargetMode: TTargetMode;
@@ -38,7 +37,7 @@ uses GKMain, uVista;
 
 {$R *.dfm}
 
-procedure TfmPersonNew.EditFamilyKeyDown(Sender: TObject; var Key: Word;
+procedure TfmPersonNew.edFamilyKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 var
   ss, st: string;
@@ -73,14 +72,14 @@ begin
   if (FTarget <> nil) then begin
     GetNameParts(FTarget, iFamily, iName, iPatronymic);
 
-    EditFamily.Text := iFamily;
+    edFamily.Text := iFamily;
 
     case FTargetMode of
       tmNone: ;
 
       tmAncestor: begin
-        EditPatronymic.Items.Add(names.GetPatronymicByName(iName, svMale));
-        EditPatronymic.Items.Add(names.GetPatronymicByName(iName, svFemale));
+        edPatronymic.Items.Add(names.GetPatronymicByName(iName, svMale));
+        edPatronymic.Items.Add(names.GetPatronymicByName(iName, svFemale));
       end;
 
       tmDescendant: begin
@@ -88,11 +87,11 @@ begin
 
         case sx of
           svMale: begin
-            EditName.Text := names.GetNameByPatronymic(iPatronymic, svMale);
+            edName.Text := names.GetNameByPatronymic(iPatronymic, svMale);
           end;
 
           svFemale: begin
-            EditFamily.Text := '(' + EditFamily.Text + ')';
+            edFamily.Text := '(' + edFamily.Text + ')';
           end;
         end;
       end;

@@ -893,6 +893,17 @@ procedure TAncestryChart.GenDescendantsChart(aPerson: TGEDCOMIndividualRecord);
     end else aParent.Childs.Add(Result);
   end;
 
+  function IsChildless(iRec: TGEDCOMIndividualRecord): Boolean;
+  var
+    exp: string;
+    x: Integer;
+  begin
+    exp := GetLifeExpectancy(iRec);
+    if (exp = '') or (exp = '?')
+    then Result := False
+    else Result := (StrToInt(exp) < 15);
+  end;
+
   procedure Desc_Step(aParent: TPerson; aPerson: TGEDCOMIndividualRecord; aLevel: Integer);
   var
     res, res_parent: TPerson;
@@ -901,6 +912,11 @@ procedure TAncestryChart.GenDescendantsChart(aPerson: TGEDCOMIndividualRecord);
     i, k: Integer;
   begin
     if (aPerson = nil) then Exit;
+
+    if (FOptions.ChildlessExclude) and (aLevel > 1) then begin
+      if (aPerson.SpouseToFamilyLinksCount = 0) and IsChildless(aPerson)
+      then Exit;
+    end;
 
     res := AddPerson(aParent, aPerson, pkDefault, aLevel);
 

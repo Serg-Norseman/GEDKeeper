@@ -40,7 +40,7 @@ type
     FNeedSex: TGEDCOMSex;
     ResultRecord: TGEDCOMRecord;
 
-    ListRecords: TBSListView;
+    ListRecords: TRecordsView;
 
     property Base: TfmBase read GetBase;
     property Filter: string read FFilter write SetFilter;
@@ -59,8 +59,18 @@ begin
   FLocalFilter := TPersonsFilter.Create;
   FLocalFilter.List := flSelector;
 
-  Base.CreateListView(Self, panList, ListRecords);
   FFilter := '*';
+end;
+
+procedure TfmRecordSelect.DataRefresh();
+begin
+  FLocalFilter.Clear();
+  FLocalFilter.Name := FFilter;
+  FLocalFilter.Sex := FNeedSex;
+
+  if Assigned(ListRecords) then FreeAndNil(ListRecords);
+  Base.CreateRecordsView(Self, panList, SelectRecords[FMode], ListRecords);
+  ListRecords.UpdateContents(Base.ShieldState, True, FLocalFilter, 1);
 end;
 
 procedure TfmRecordSelect.FormDestroy(Sender: TObject);
@@ -173,13 +183,8 @@ begin
 end;
 
 procedure TfmRecordSelect.btnSelectClick(Sender: TObject);
-var
-  sel: TListItem;
 begin
-  sel := ListRecords.Selected;
-  if (sel = nil) then Exit;
-
-  ResultRecord := TGEDCOMRecord(sel.Data);
+  ResultRecord := GetSelectedRecord(ListRecords);
   ModalResult := mrOk;
 end;
 
@@ -203,15 +208,6 @@ procedure TfmRecordSelect.SetMode(const Value: TSelectMode);
 begin
   FMode := Value;
   DataRefresh();
-end;
-
-procedure TfmRecordSelect.DataRefresh();
-begin
-  FLocalFilter.Clear();
-  FLocalFilter.Name := FFilter;
-  FLocalFilter.Sex := FNeedSex;
-
-  Base.UpdateList(SelectRecords[FMode], ListRecords, True, FLocalFilter, 1); //+
 end;
 
 procedure TfmRecordSelect.SetFilter(const Value: string);

@@ -138,6 +138,9 @@ type
     miNamesBook: TMenuItem;
     miCalendar: TMenuItem;
     actCalendar: TAction;
+    actTimeLine: TAction;
+    miTimeLine: TMenuItem;
+    actStereoView: TAction;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure actFileNewExecute(Sender: TObject);
@@ -179,6 +182,8 @@ type
     procedure actExpCalcExecute(Sender: TObject);
     procedure actNamesBookExecute(Sender: TObject);
     procedure actCalendarExecute(Sender: TObject);
+    procedure actTimeLineExecute(Sender: TObject);
+    procedure actStereoViewExecute(Sender: TObject);
   private
     FNamesTable: TNamesTable;
     FOptions: TGlobalOptions;
@@ -219,7 +224,8 @@ uses
   {$IFDEF DELPHI_NET}System.IO,{$ENDIF}
   {$IFDEF PROFILER}ZProfiler,{$ENDIF}
   uVista, XPTheme, Types, bsComUtils, ShellAPI, bsWinUtils,
-  GKAbout, GKOptions, GKUIToolkit, GKExpCalc, GKNamesBook, GKCalendar;
+  GKAbout, GKOptions, GKUIToolkit, GKExpCalc, GKNamesBook, GKCalendar,
+  GKTimeLine;
 
 {$R *.dfm}
 
@@ -554,7 +560,7 @@ end;
 
 procedure TfmGEDKeeper.actAboutExecute(Sender: TObject);
 begin
-  AboutDialog(AppName, 'Serg V. Zhdanovskih', '');
+  AboutDialog();
 end;
 
 procedure TfmGEDKeeper.actGenResourcesExecute(Sender: TObject);
@@ -682,6 +688,15 @@ begin
   cur_base := GetCurrentFile();
   if (cur_base = nil) then Exit;
   cur_base.ShowStats();
+end;
+
+procedure TfmGEDKeeper.actStereoViewExecute(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base = nil) then Exit;
+  cur_base.ShowStereoView();
 end;
 
 procedure TfmGEDKeeper.actOptionsExecute(Sender: TObject);
@@ -899,6 +914,20 @@ begin
     fmCalendar.Show;
   end else begin
     FreeAndNil(fmCalendar);
+    {FPluginMan.RunPlugin(1);}
+  end;
+end;
+
+procedure TfmGEDKeeper.actTimeLineExecute(Sender: TObject);
+begin
+  if (actTimeLine.Checked) and not(Assigned(fmTimeLine)) then begin
+    {FPluginMan.RunPlugin(0);}
+    fmTimeLine := TfmTimeLine.Create(nil);
+    fmTimeLine.Left := 10;
+    fmTimeLine.Top := Screen.WorkAreaHeight - fmTimeLine.Height - 10;
+    fmTimeLine.Show;
+  end else begin
+    FreeAndNil(fmTimeLine);
     {FPluginMan.RunPlugin(1);}
   end;
 end;

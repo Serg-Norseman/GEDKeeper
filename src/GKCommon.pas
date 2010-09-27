@@ -48,7 +48,7 @@ type
   TRecAction = (raAdd, raEdit, raDelete, raJump, raMoveUp, raMoveDown);
 
   TTargetMode = (tmNone, tmAncestor, tmDescendant, tmChildToFamily);
-  TLifeMode = (lmAll, lmOnlyAlive, lmOnlyDead, lmAliveBefore);
+  TLifeMode = (lmAll, lmOnlyAlive, lmOnlyDead, lmAliveBefore, lmTimeLine);
 
   TFamilyTarget = (ftNone, ftSpouse, ftChild);
 
@@ -60,7 +60,7 @@ const
 
 type
   TPersonColumnType = (
-    pctPatriarch, pctName, pctSex, pctBirthDate, pctDeathDate,
+    pctPatriarch, pctName, pctNick, pctSex, pctBirthDate, pctDeathDate,
     pctBirthPlace, pctDeathPlace, pctResidence,
     pctAge, pctLifeExpectancy, pctDaysForBirth, pctGroups,
     pctReligion, pctNationality, pctEducation, pctOccupation, pctCaste,
@@ -70,6 +70,7 @@ type
 
   TPersonColumnProps = record
     colType: TPersonColumnType;
+    colSubType: Byte;
     colActive: Boolean;
   end;
 
@@ -78,41 +79,43 @@ type
 const
   PersonColumnsName: array [TPersonColumnType] of record
     Name: string;
-    DefWidth: Integer; 
+    DefWidth: Integer;
+    colOnlyMain: Boolean;
   end = (
-    (Name: 'Патриарх'; DefWidth: 25),
-    (Name: 'ФИО'; DefWidth: 25),
+    (Name: 'Патриарх';                  DefWidth:  25; colOnlyMain: False),
+    (Name: 'ФИО';                       DefWidth:  25; colOnlyMain: False),
+    (Name: 'Прозвище';                  DefWidth:  75; colOnlyMain: False),
+    (Name: 'Пол';                       DefWidth:  45; colOnlyMain: False),
+    (Name: 'Дата рождения';             DefWidth: 100; colOnlyMain: False),
+    (Name: 'Дата смерти';               DefWidth: 100; colOnlyMain: False),
+    (Name: 'Место рождения';            DefWidth: 100; colOnlyMain: False),
+    (Name: 'Место смерти';              DefWidth: 100; colOnlyMain: False),
+    (Name: 'Местожительство';           DefWidth: 100; colOnlyMain: False),
 
-    (Name: 'Пол'; DefWidth: 45),
-    (Name: 'Дата рождения'; DefWidth: 100),
-    (Name: 'Дата смерти'; DefWidth: 100),
-    (Name: 'Место рождения'; DefWidth: 100),
-    (Name: 'Место смерти'; DefWidth: 100),
-    (Name: 'Местожительство'; DefWidth: 100),
+    (Name: 'Возраст';                   DefWidth: 100; colOnlyMain: True),
+    (Name: 'Продолжительность жизни';   DefWidth: 100; colOnlyMain: True),
+    (Name: 'Дней до ДР';                DefWidth: 100; colOnlyMain: True),
+    (Name: 'Группа';                    DefWidth: 200; colOnlyMain: True),
 
-    (Name: 'Возраст'; DefWidth: 100),
-    (Name: 'Продолжительность жизни'; DefWidth: 100),
-    (Name: 'Дней до ДР'; DefWidth: 100),
-    (Name: 'Группа'; DefWidth: 200),
+    (Name: 'Вероисповедание';           DefWidth: 200; colOnlyMain: True),
+    (Name: 'Национальность';            DefWidth: 200; colOnlyMain: True),
+    (Name: 'Образование';               DefWidth: 200; colOnlyMain: True),
+    (Name: 'Профессия';                 DefWidth: 200; colOnlyMain: True),
+    (Name: 'Социальное положение';      DefWidth: 200; colOnlyMain: True),
 
-    (Name: 'Вероисповедание'; DefWidth: 200),
-    (Name: 'Национальность'; DefWidth: 200),
-    (Name: 'Образование'; DefWidth: 200),
-    (Name: 'Профессия'; DefWidth: 200),
-    (Name: 'Социальное положение'; DefWidth: 200),
+    (Name: 'Военная служба';            DefWidth: 200; colOnlyMain: True),
+    (Name: 'Призван в ВС';              DefWidth: 200; colOnlyMain: True),
+    (Name: 'Уволен из ВС';              DefWidth: 200; colOnlyMain: True),
+    (Name: 'Звание в ВС';               DefWidth: 200; colOnlyMain: True),
 
-    (Name: 'Военная служба'; DefWidth: 200),
-    (Name: 'Призван в ВС'; DefWidth: 200),
-    (Name: 'Уволен из ВС'; DefWidth: 200),
-    (Name: 'Звание в ВС'; DefWidth: 200),
-
-    (Name: 'Изменено'; DefWidth: 150)
+    (Name: 'Изменено';                  DefWidth: 150; colOnlyMain: True)
   );
 
 const
   DefPersonColumns: TPersonColumnsList = (
     (colType: pctPatriarch; colActive: True),
     (colType: pctName; colActive: True),
+    (colType: pctNick; colActive: False),
     (colType: pctSex; colActive: True),
     (colType: pctBirthDate; colActive: True),
     (colType: pctDeathDate; colActive: True),
@@ -171,6 +174,7 @@ type
 
   TChartOptions = class(TObject)
   private
+    FChildlessExclude: Boolean;
     FFamilyVisible: Boolean;
     FNameVisible: Boolean;
     FPatronymicVisible: Boolean;
@@ -190,6 +194,8 @@ type
 
     procedure LoadFromFile(const aIniFile: TIniFile);
     procedure SaveToFile(const aIniFile: TIniFile);
+
+    property ChildlessExclude: Boolean read FChildlessExclude write FChildlessExclude;
 
     property FamilyVisible: Boolean read FFamilyVisible write FFamilyVisible;
     property NameVisible: Boolean read FNameVisible write FNameVisible;
@@ -254,7 +260,6 @@ type
     FDefCharacterSet: TGEDCOMCharacterSet;
     FDefDateFormat: TDateFormat;
     FDefNameFormat: TNameFormat;
-    FGEDCOMOptimize: Boolean;
     FLastDir: string;
     FListPersonsColumns: TPersonColumnsList;
     FMRUFiles: TStringList;
@@ -277,7 +282,6 @@ type
     property DefCharacterSet: TGEDCOMCharacterSet read FDefCharacterSet write FDefCharacterSet;
     property DefDateFormat: TDateFormat read FDefDateFormat write FDefDateFormat;
     property DefNameFormat: TNameFormat read FDefNameFormat write FDefNameFormat;
-    property GEDCOMOptimize: Boolean read FGEDCOMOptimize write FGEDCOMOptimize;
     property LastDir: string read FLastDir write FLastDir;
     property MRUFiles: TStringList read FMRUFiles;
     property NameFilters: TStringList read FNameFilters;
@@ -436,7 +440,7 @@ const
     (Name: '-'),
     (Name: 'Звукозапись'),
     (Name: 'Книга'),
-    (Name: 'Карточка'), 
+    (Name: 'Карточка'),
     (Name: 'Электронный'),
     (Name: 'Микрофиша'),
     (Name: 'Фильм'),
@@ -473,6 +477,21 @@ const
     'Прямые и первичные доказательства'
   );
 
+type
+  TUserRef = (
+    urUSSR_Soldier, urUSSR_FallInBattle, urUSSR_RearVeteran,
+    urRI_StGeorgeCross,
+    urCustom);
+
+const
+  UserRefs: array [TUserRef] of string = (
+    'СССР:ВОВ:Участник боевых действий',
+    'СССР:ВОВ:Погиб в бою',
+    'СССР:ВОВ:Труженик тыла',
+    'РИ:Георгиевский кавалер',
+    ''
+  );
+
 function IsRecordAccess(aRecRestriction: TGEDCOMRestriction; aShieldState: TShieldState): Boolean;
 
 function GetPersonEventIndex(aSign: string): Integer;
@@ -486,6 +505,7 @@ procedure GetNameParts(iRec: TGEDCOMIndividualRecord; var aFamily, aName, aPatro
 
 function GetNameStr(iRec: TGEDCOMIndividualRecord; aByFamily: Boolean = True;
   aPieces: Boolean = False): string;
+function GetNickStr(iRec: TGEDCOMIndividualRecord): string;
 function GetFamilyStr(aFamily: TGEDCOMFamilyRecord): string;
 
 function GetId(aRecord: TGEDCOMRecord): Integer;
@@ -516,10 +536,11 @@ function GetEventDesc(evDetail: TGEDCOMEventDetail): string;
 function GetEventCause(evDetail: TGEDCOMEventDetail): string;
 
 function IsLive(iRec: TGEDCOMIndividualRecord): Boolean;
+procedure GetLifeDates(iRec: TGEDCOMIndividualRecord; var aBirthEvent, aDeathEvent: TGEDCOMCustomEvent);
 procedure GetIndependentDate(aDate: TGEDCOMCustomDate; var AYear: Integer; var AMonth, ADay: Word);
 function GetEventsYearsDiff(ev1, ev2: TGEDCOMIndividualEvent; aCurEnd: Boolean = False): string;
 function GetLifeExpectancy(iRec: TGEDCOMIndividualRecord): string;
-function GetAge(iRec: TGEDCOMIndividualRecord): string;
+function GetAge(iRec: TGEDCOMIndividualRecord; ToYear: Integer = -1): string;
 function GetFirstbornAge(iRec: TGEDCOMIndividualRecord): string;
 function GetMarriageAge(iRec: TGEDCOMIndividualRecord): string;
 function GetDaysForBirth(iRec: TGEDCOMIndividualRecord): string;
@@ -545,7 +566,7 @@ function CreateNoteEx(aTree: TGEDCOMTree; aText: TStrings;
 
 function CreateFamilyEx(aTree: TGEDCOMTree): TGEDCOMFamilyRecord;
 
-function IsMatchesMask(const aName, Mask: string): Boolean;
+function IsMatchesMask(const aName, aMask: string): Boolean;
 
 function HyperLink(XRef: string; Text: string; Num: Integer = 0): string;
 
@@ -563,8 +584,23 @@ function ClearFamily(aFamily: string): string;
 function PrepareRusFamily(f: string; aFemale: Boolean): string;
 
 function GetChildsCount(aPerson: TGEDCOMIndividualRecord): Integer;
+function GetAncestorsCount(aBuffer: TStringList; aPerson: TGEDCOMIndividualRecord): Integer;
+function GetDescendantsCount(aBuffer: TStringList; aPerson: TGEDCOMIndividualRecord): Integer;
+function GetDescGenerations(aPerson: TGEDCOMIndividualRecord): Integer;
 function GetMarriagesCount(aPerson: TGEDCOMIndividualRecord): Integer;
 function GetSpousesDiff(fRec: TGEDCOMFamilyRecord): string;
+
+type
+  TPatriarchObj = class(TObject)
+  public
+    IRec: TGEDCOMIndividualRecord;
+    IBirthYear,
+    IDescendantsCount,
+    IDescGenerations: Integer;
+    ILinks: set of Byte;
+  end;
+
+procedure GetPatriarchsList(aTree: TGEDCOMTree; aProgress, aLinks: Boolean; var aList: TObjectList);
 
 type
   TCommonStats = record
@@ -723,15 +759,24 @@ begin
   if (iRec <> nil) then begin
     np := iRec.PersonalNames[0];
 
-    nick := np.TagStringValue('NICK');
-
     if (aByFamily)
     then Result := np.Surname + ' ' + np.FirstPart
     else Result := np.FirstPart + ' ' + np.Surname;
 
     if (aPieces) then begin
+      nick := np.Pieces.Nickname;
       if (nick <> '') then Result := Result + ' [' + nick + ']';
     end;
+  end else Result := '';
+end;
+
+function GetNickStr(iRec: TGEDCOMIndividualRecord): string;
+var
+  np: TGEDCOMPersonalName;
+begin
+  if (iRec <> nil) then begin
+    np := iRec.PersonalNames[0];
+    Result := np.Pieces.Nickname;
   end else Result := '';
 end;
 
@@ -1131,6 +1176,23 @@ begin
   Result := (GetIndividualEvent(iRec, 'DEAT') = nil);
 end;
 
+procedure GetLifeDates(iRec: TGEDCOMIndividualRecord; var aBirthEvent, aDeathEvent: TGEDCOMCustomEvent);
+var
+  i: Integer;
+  ev: TGEDCOMCustomEvent;
+begin
+  aBirthEvent := nil;
+  aDeathEvent := nil;
+
+  for i := 0 to iRec.IndividualEventsCount - 1 do begin
+    ev := iRec.IndividualEvents[i];
+
+    if (ev.Name = 'BIRT') then aBirthEvent := ev
+    else
+    if (ev.Name = 'DEAT') then aDeathEvent := ev;
+  end;
+end;
+
 procedure GetIndependentDate(aDate: TGEDCOMCustomDate; var AYear: Integer; var AMonth, ADay: Word);
 var
   dt_range: TGEDCOMDateRange;
@@ -1250,10 +1312,11 @@ begin
   end;
 end;
 
-function GetAge(iRec: TGEDCOMIndividualRecord): string;
+function GetAge(iRec: TGEDCOMIndividualRecord; ToYear: Integer = -1): string;
 var
   i: Integer;
   event, ev1, ev2: TGEDCOMIndividualEvent;
+  dummy: Word;
 begin
   try
     ev1 := nil;
@@ -1267,7 +1330,16 @@ begin
       if (event.Name = 'DEAT') then ev2 := event;
     end;
 
-    Result := GetEventsYearsDiff(ev1, ev2, True);
+    if (ToYear = -1)
+    then Result := GetEventsYearsDiff(ev1, ev2, True)
+    else begin
+      if (ev1 = nil)
+      then Result := ''
+      else begin
+        GetIndependentDate(ev1.Detail.Date.Value, i, dummy, dummy);
+        Result := IntToStr(ToYear - i);
+      end;
+    end;
   except
   end;
 end;
@@ -1506,7 +1578,7 @@ begin
   aTree.AddRecord(Result);
 end;
 
-function IsMatchesMask(const aName, Mask: string): Boolean;
+function IsMatchesMask(const aName, aMask: string): Boolean;
 var
   i, tok_count: Integer;
   strx, strmask: string;
@@ -1514,7 +1586,7 @@ begin
   Result := False;
 
   strx := AnsiLowerCase(aName);
-  strmask := AnsiLowerCase(Mask);
+  strmask := AnsiLowerCase(aMask);
 
   tok_count := GetTokensCount(strmask, '|');
   for i := 1 to tok_count do
@@ -1669,10 +1741,13 @@ begin
   if (Length(f) > 0) then begin
     if (aFemale) then begin
       if (f[Length(f)] = 'а')
-      then f := Copy(f, 1, Length(f) - 1){
+      then f := Copy(f, 1, Length(f) - 1)
       else
-      if (Copy(f, Length(f) - 1, 2) = 'ая')
-      then f := Copy(f, 1, Length(f) - 2) + 'ий'};
+      if (Copy(f, Length(f) - 2, 3) = 'кая')
+      then f := Copy(f, 1, Length(f) - 3) + 'кий'
+      else
+      if (Copy(f, Length(f) - 2, 3) = 'ная')
+      then f := Copy(f, 1, Length(f) - 3) + 'ный'
     end;
 
     if (f[1] = '(') and (f[Length(f)] = ')')
@@ -1696,6 +1771,105 @@ begin
       Result := Result + family.ChildrenCount;
     end;
   end;
+end;
+
+function GetAncestorsCount(aBuffer: TStringList; aPerson: TGEDCOMIndividualRecord): Integer;
+var
+  family: TGEDCOMFamilyRecord;
+  anc: TGEDCOMIndividualRecord;
+  xref: string;
+  idx: Integer;
+begin
+  Result := 0;
+  if (aPerson = nil) then Exit;
+
+  xref := aPerson.XRef;
+
+  if (aBuffer <> nil)
+  then idx := aBuffer.IndexOf(xref)
+  else idx := -1;
+
+  if (idx >= 0) then begin
+    Result := Integer(aBuffer.Objects[idx]);
+  end else begin
+    Result := 1;
+
+    if (aPerson.ChildToFamilyLinksCount > 0) then begin
+      family := aPerson.ChildToFamilyLinks[0].Family;
+
+      anc := TGEDCOMIndividualRecord(family.Husband.Value);
+      Result := Result + GetAncestorsCount(aBuffer, anc);
+
+      anc := TGEDCOMIndividualRecord(family.Wife.Value);
+      Result := Result + GetAncestorsCount(aBuffer, anc);
+    end;
+
+    if (aBuffer <> nil)
+    then aBuffer.AddObject(xref, TObject(Result));
+  end;
+end;
+
+function GetDescendantsCount(aBuffer: TStringList; aPerson: TGEDCOMIndividualRecord): Integer;
+var
+  family: TGEDCOMFamilyRecord;
+  iChild: TGEDCOMIndividualRecord;
+  i, k, idx: Integer;
+  xref: string;
+begin
+  Result := 0;
+  if (aPerson = nil) then Exit;
+
+  xref := aPerson.XRef;
+
+  if (aBuffer <> nil)
+  then idx := aBuffer.IndexOf(xref)
+  else idx := -1;
+
+  if (idx >= 0) then begin
+    Result := Integer(aBuffer.Objects[idx]);
+  end else begin
+    Result := 1;
+
+    for i := 0 to aPerson.SpouseToFamilyLinksCount - 1 do begin
+      family := aPerson.SpouseToFamilyLinks[i].Family;
+
+      for k := 0 to family.ChildrenCount - 1 do begin
+        iChild := TGEDCOMIndividualRecord(family.Children[k].Value);
+        Result := Result + GetDescendantsCount(aBuffer, iChild);
+      end;
+    end;
+
+    if (aBuffer <> nil)
+    then aBuffer.AddObject(xref, TObject(Result));
+  end;
+end;
+
+function GetDescGenerations(aPerson: TGEDCOMIndividualRecord): Integer;
+
+  function GetDescGens_Recursive(aPerson: TGEDCOMIndividualRecord): Integer;
+  var
+    family: TGEDCOMFamilyRecord;
+    iChild: TGEDCOMIndividualRecord;
+    i, k, max, res: Integer;
+  begin
+    Result := 0;
+    if (aPerson = nil) then Exit;
+
+    max := 0;
+    for i := 0 to aPerson.SpouseToFamilyLinksCount - 1 do begin
+      family := aPerson.SpouseToFamilyLinks[i].Family;
+
+      for k := 0 to family.ChildrenCount - 1 do begin
+        iChild := TGEDCOMIndividualRecord(family.Children[k].Value);
+        res := GetDescGens_Recursive(iChild);
+        if (max < res) then max := res;
+      end;
+    end;
+    Result := 1 + max;
+  end;
+
+begin
+  Result := GetDescGens_Recursive(aPerson) - 1;
 end;
 
 function GetMarriagesCount(aPerson: TGEDCOMIndividualRecord): Integer;
@@ -1731,6 +1905,200 @@ begin
     if (y1 > 0.0) and (y2 > 0.0)
     then Result := IntToStr(Trunc(Abs(y2 - y1)));
   except
+  end;
+end;
+
+function PatriarchsCompare(Item1, Item2: Pointer): Integer;
+begin
+  Result := TPatriarchObj(Item1).IBirthYear - TPatriarchObj(Item2).IBirthYear;
+end;
+
+procedure GetPatriarchsList(aTree: TGEDCOMTree; aProgress, aLinks: Boolean; var aList: TObjectList);
+
+  function SearchAnc(descendantRec, searchRec: TGEDCOMIndividualRecord): Boolean;
+  var
+    family: TGEDCOMFamilyRecord;
+    ancestor: TGEDCOMIndividualRecord;
+  begin
+    Result := False;
+    if (descendantRec = nil) then Exit;
+
+    Result := (descendantRec = searchRec);
+    if (Result) then Exit;
+
+    if (descendantRec.ChildToFamilyLinksCount > 0) then begin
+      family := descendantRec.ChildToFamilyLinks[0].Family;
+
+      ancestor := TGEDCOMIndividualRecord(family.Husband.Value);
+      if (ancestor <> nil) then begin
+        Result := SearchAnc(ancestor, searchRec);
+        if (Result) then Exit;
+      end;
+
+      ancestor := TGEDCOMIndividualRecord(family.Wife.Value);
+      if (ancestor <> nil) then begin
+        Result := SearchAnc(ancestor, searchRec);
+        if (Result) then Exit;
+      end;
+    end;
+  end;
+
+  function SearchDesc(ancestorRec, searchRec: TGEDCOMIndividualRecord): Boolean;
+  var
+    i, k: Integer;
+    family: TGEDCOMFamilyRecord;
+    child: TGEDCOMIndividualRecord;
+    sp: TGEDCOMPointer;
+    spouse: TGEDCOMIndividualRecord;
+  begin
+    Result := False;
+
+    for i := 0 to ancestorRec.SpouseToFamilyLinksCount - 1 do begin
+      family := ancestorRec.SpouseToFamilyLinks[i].Family;
+
+      if (ancestorRec.Sex = svMale)
+      then sp := family.Wife
+      else sp := family.Husband;
+
+      if (sp <> nil) then begin
+        spouse := TGEDCOMIndividualRecord(sp.Value);
+
+        Result := SearchAnc(spouse, searchRec);
+        if (Result) then Exit;
+      end;
+
+      for k := 0 to family.ChildrenCount - 1 do begin
+        child := TGEDCOMIndividualRecord(family.Children[k].Value);
+        Result := SearchDesc(child, searchRec);
+        if (Result) then Exit;
+      end;
+    end;
+  end;
+
+var
+  buffer: TStringList;
+
+  function GetIndependentYear(iRec: TGEDCOMIndividualRecord): Integer;
+  var
+    ev: TGEDCOMCustomEvent;
+    year: Integer;
+    am, ad: Word;
+  begin
+    ev := GetIndividualEvent(iRec, 'BIRT');
+
+    if (ev = nil)
+    then Result := -1
+    else begin
+      GetIndependentDate(ev.Detail.Date.Value, year, am, ad);
+      Result := year;
+    end;
+  end;
+
+  function GetBirthYear(iRec: TGEDCOMIndividualRecord): Integer;
+  var
+    family: TGEDCOMFamilyRecord;
+    child: TGEDCOMIndividualRecord;
+    i, k, year: Integer;
+  begin
+    Result := -1;
+    if (iRec = nil) then Exit;
+
+    year := GetIndependentYear(iRec);
+    if (year > 0) then begin
+      Result := year;
+      Exit;
+    end;
+
+    for i := 0 to iRec.SpouseToFamilyLinksCount - 1 do begin
+      family := iRec.SpouseToFamilyLinks[i].Family;
+
+      for k := 0 to family.ChildrenCount - 1 do begin
+        child := TGEDCOMIndividualRecord(family.Children[k].Value);
+        year := GetBirthYear(child);
+        if (year > 0) then begin
+          Result := year - 20;
+          Exit;
+        end;
+      end;
+    end;
+  end;
+
+var
+  i, k, bYear, descGens: Integer;
+  rec: TGEDCOMRecord;
+  i_rec: TGEDCOMIndividualRecord;
+  res: Boolean;
+  nf, nn, np: string;
+  pObj: TPatriarchObj;
+  patr1, patr2: TPatriarchObj;
+begin
+  if (aProgress) then ProgressInit(aTree.RecordsCount, 'Поиск патриархов');
+
+  buffer := TStringList.Create;
+  try
+    for i := 0 to aTree.RecordsCount - 1 do begin
+      rec := aTree.Records[i];
+
+      if (rec is TGEDCOMIndividualRecord) then begin
+        i_rec := rec as TGEDCOMIndividualRecord;
+        GetNameParts(i_rec, nf, nn, np);
+        bYear := GetBirthYear(i_rec);
+        descGens := GetDescGenerations(i_rec);
+
+        // 1: нет родителей
+        res := (i_rec.ChildToFamilyLinksCount = 0);
+        // 2: мужской пол
+        res := res and (i_rec.Sex = svMale);
+        // 3: известна фамилия и имя
+        res := res and ((nf <> '') and (nf <> '?'))
+                   and ((nn <> '') and (nn <> '?'));
+        // 4: количество поколений потомков
+        res := res and (descGens > 1);
+        // 5: год рождения известен или можно вычислить
+        res := res and (bYear > 0);
+
+        // Поместить в список
+        if (res) then begin
+          pObj := TPatriarchObj.Create;
+          pObj.IRec := i_rec;
+          pObj.IBirthYear := bYear;
+          pObj.IDescendantsCount := GetDescendantsCount(buffer, i_rec) - 1;
+          pObj.IDescGenerations := descGens;
+          pObj.ILinks := [];
+          aList.Add(pObj);
+        end;
+      end;
+
+      if (aProgress) then ProgressStep();
+    end;
+
+    aList.Sort(PatriarchsCompare);
+  finally
+    buffer.Free;
+    if (aProgress) then ProgressDone();
+  end;
+
+  if (aLinks) then begin
+    if (aProgress) then ProgressInit(aList.Count, 'Поиск взаимосвязей');
+    try
+      for i := 0 to aList.Count - 1 do begin
+        patr1 := TPatriarchObj(aList[i]);
+
+        for k := i + 1 to aList.Count - 1 do begin
+          patr2 := TPatriarchObj(aList[k]);
+
+          res := SearchDesc(patr1.IRec, patr2.IRec);
+          if res then begin
+            patr1.ILinks := patr1.ILinks + [k];
+            patr2.ILinks := patr2.ILinks + [i];
+          end;
+        end;
+
+        if (aProgress) then ProgressStep();
+      end;
+    finally
+      if (aProgress) then ProgressDone();
+    end;
   end;
 end;
 
@@ -2562,6 +2930,8 @@ constructor TChartOptions.Create;
 begin
   inherited Create;
 
+  FChildlessExclude := False;
+
   FFamilyVisible := True;
   FNameVisible := True;
   FPatronymicVisible := True;
@@ -2584,6 +2954,7 @@ end;
 
 procedure TChartOptions.LoadFromFile(const aIniFile: TIniFile);
 begin
+  FChildlessExclude := aIniFile.ReadBool('Chart', 'ChildlessExclude', False);
   FFamilyVisible := aIniFile.ReadBool('Chart', 'FamilyVisible', True);
   FNameVisible := aIniFile.ReadBool('Chart', 'NameVisible', True);
   FPatronymicVisible := aIniFile.ReadBool('Chart', 'PatronymicVisible', True);
@@ -2600,6 +2971,7 @@ end;
 
 procedure TChartOptions.SaveToFile(const aIniFile: TIniFile);
 begin
+  aIniFile.WriteBool('Chart', 'ChildlessExclude', FChildlessExclude);
   aIniFile.WriteBool('Chart', 'FamilyVisible', FFamilyVisible);
   aIniFile.WriteBool('Chart', 'NameVisible', FNameVisible);
   aIniFile.WriteBool('Chart', 'PatronymicVisible', FPatronymicVisible);
@@ -2718,8 +3090,6 @@ begin
     FShowTips := ini.ReadBool('Common', 'ShowTips', True);
     FWorkMode := TWorkMode(ini.ReadInteger('Common', 'WorkMode', Ord(wmSimple)));
 
-    FGEDCOMOptimize := ini.ReadBool('Common', 'GEDCOMOptimize', False);
-
     kl := ini.ReadInteger('Common', 'KeyLayout', GetKeyLayout());
     SetKeyLayout(kl);
 
@@ -2770,8 +3140,6 @@ begin
     ini.WriteBool('Common', 'PlacesWithAddress', FPlacesWithAddress);
     ini.WriteBool('Common', 'ShowTips', FShowTips);
     ini.WriteInteger('Common', 'WorkMode', Ord(FWorkMode));
-
-    ini.WriteBool('Common', 'GEDCOMOptimize', FGEDCOMOptimize);
 
     ini.WriteInteger('Common', 'KeyLayout', GetKeyLayout());
 

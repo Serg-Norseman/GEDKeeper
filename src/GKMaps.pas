@@ -6,8 +6,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, Buttons, ExtCtrls, ComCtrls, WinInet, XMLDoc, XMLIntf, Contnrs,
-  AxCtrls, GedCom551, OleCtrls, SHDocVw;
+  StdCtrls, Buttons, ExtCtrls, ComCtrls, XMLDoc, XMLIntf, Contnrs,
+  OleCtrls, SHDocVw, GedCom551;
 
 type
   // класс точки на карте
@@ -17,16 +17,12 @@ type
     FLongitude: Double;
     FHint: string;
   public
-    constructor Create(aLatitude, aLongitude: Double; aHint: string = '');
+    constructor Create(); overload;
+    constructor Create(aLatitude, aLongitude: Double; aHint: string = ''); overload;
 
     property Latitude: Double read FLatitude write FLatitude;    // широта
     property Longitude: Double read FLongitude write FLongitude; // долгота
     property Hint: string read FHint write FHint;                // подсказка
-  end;
-
-  // координаты
-  TCoordinate = record
-    Latitude, Longtude: Double;
   end;
 
   // "прямоугольник" координат
@@ -49,13 +45,6 @@ type
 
     constructor Create;
     destructor Destroy; override;
-  end;
-
-  TMapPoint = class
-  public
-    Lat: Double;
-    Lon: Double;
-    Address: string;
   end;
 
   TfmMaps = class(TForm)
@@ -200,7 +189,7 @@ end;
 // получение списка точек по запросу
 procedure RequestGeoCoords(SearchString: string; aPoints: TObjectList);
 var
-  Point: TMapPoint;
+  Point: TGMapPoint;
   FileOnNet, sCoordinates: string;
   Stream: TMemoryStream;
   Node, PlacemarkNode, PointNode, AddressNode: IXMLNode;
@@ -237,19 +226,19 @@ begin
             PointNode := PlacemarkNode.ChildNodes.FindNode('Point');
             PointNode := PointNode.ChildNodes.FindNode('coordinates');
             if (AddressNode <> nil) and (PointNode <> nil) then begin
-              Point := TMapPoint.Create;
+              Point := TGMapPoint.Create;
               // получаем адрес
-              Point.Address := Utf8ToAnsi(AddressNode.Text);
+              Point.Hint := Utf8ToAnsi(AddressNode.Text);
               // получаем координаты
               sCoordinates := PointNode.Text;
               // разбираем координаты
               ExtractStrings([','], [], PChar(sCoordinates), StringList);
               if (StringList.Count > 1) then begin
                 // Формируем точку
-                Point.Lon := StrToFloatDef(StringList[0], -1);
-                Point.Lat := StrToFloatDef(StringList[1], -1);
+                Point.Longitude := StrToFloatDef(StringList[0], -1);
+                Point.Latitude := StrToFloatDef(StringList[1], -1);
                 // добавляем точку в список
-                if (Point.Lat <> -1) and (Point.Lon <> -1)
+                if (Point.Latitude <> -1) and (Point.Longitude <> -1)
                 then aPoints.Add(Point);
                 StringList.Clear;
               end else
@@ -315,8 +304,15 @@ end;
 
 { TGMapPoint }
 
+constructor TGMapPoint.Create();
+begin
+  inherited Create;
+end;
+
 constructor TGMapPoint.Create(aLatitude, aLongitude: Double; aHint: string = '');
 begin
+  inherited Create;
+
   FLatitude := aLatitude;
   FLongitude := aLongitude;
   FHint := aHint;
@@ -555,14 +551,14 @@ end;
 procedure TfmMaps.map_ZoomToBounds();
 var
   Script: string;
-  Center: TCoordinate;
+  Center_Latitude, Center_Longtude: Double;
   rt: TCoordsRect;
 begin
   rt := map_GetPointsFrame();
 
   if (rt.MinLon <> rt.MaxLon) and (rt.MinLat <> rt.MaxLat) then begin
-    Center.Longtude := (rt.MaxLon + rt.MinLon) / 2;
-    Center.Latitude := (rt.MaxLat + rt.MinLat) / 2;
+    Center_Longtude := (rt.MaxLon + rt.MinLon) / 2;
+    Center_Latitude := (rt.MaxLat + rt.MinLat) / 2;
 
     Script := 'var point1 = new GLatLng(%.7f, %.7f);'+
               'var point2 = new GLatLng(%.7f, %.7f);'+
@@ -570,7 +566,7 @@ begin
               'var zoom = map.getBoundsZoomLevel(bounds);'+
               'map.setCenter(new GLatLng(%.7f, %.7f), zoom);';
     Script := Format(Script, [rt.MinLat, rt.MinLon,
-       rt.MaxLat, rt.MaxLon, Center.Latitude, Center.Longtude]);
+       rt.MaxLat, rt.MaxLon, Center_Latitude, Center_Longtude]);
     gm_ExecScript(Script);
   end;
 end;
@@ -682,14 +678,14 @@ end;
 procedure TfmMaps.PreparePointsList(aPoints: TObjectList);
 var
   i: Integer;
-  pt: TMapPoint;
+  pt: TGMapPoint;
 begin
   map_BeginUpdate();
   try
     map_ClearPoints();
     for i := 0 to aPoints.Count - 1 do begin
-      pt := TMapPoint(aPoints[i]);
-      map_AddPoint(pt.Lat, pt.Lon, pt.Address);
+      pt := TGMapPoint(aPoints[i]);
+      map_AddPoint(pt.Latitude, pt.Longitude, pt.Hint);
     end;
 
     map_ZoomToBounds();
@@ -719,7 +715,7 @@ procedure TfmMaps.PlacesLoad();
     place_name, pt_title: string;
     node: TTreeNode;
     place: TPlace;
-    pt: TMapPoint;
+    pt: TGMapPoint;
     k: Integer;
     pRef: TPlaceRef;
   begin
@@ -743,20 +739,20 @@ procedure TfmMaps.PlacesLoad();
         RequestGeoCoords(place_name, place.Points);
 
         for k := 0 to place.Points.Count - 1 do
-          if (place.Points[k] is TMapPoint) then begin
-            pt := TMapPoint(place.Points[k]);
+          if (place.Points[k] is TGMapPoint) then begin
+            pt := TGMapPoint(place.Points[k]);
 
-            pt_title := pt.Address + Format(' [%.6f, %.6f]', [pt.Lat, pt.Lon]);
+            pt_title := pt.Hint + Format(' [%.6f, %.6f]', [pt.Latitude, pt.Longitude]);
             TreePlaces.Items.AddChildObjectFirst(node, pt_title, pt);
           end;
       end else begin
-        pt := TMapPoint.Create;
-        pt.Address := place_name;
-        pt.Lon := StrToFloatDef(locRec.Map.Long, -1);
-        pt.Lat := StrToFloatDef(locRec.Map.Lati, -1);
+        pt := TGMapPoint.Create;
+        pt.Hint := place_name;
+        pt.Longitude := StrToFloatDef(locRec.Map.Long, -1);
+        pt.Latitude := StrToFloatDef(locRec.Map.Lati, -1);
         place.Points.Add(pt);
 
-        pt_title := pt.Address + Format(' [%.6f, %.6f]', [pt.Lat, pt.Lon]);
+        pt_title := pt.Hint + Format(' [%.6f, %.6f]', [pt.Latitude, pt.Longitude]);
         TreePlaces.Items.AddChildObjectFirst(node, pt_title, pt);
       end;
     end else begin
@@ -828,21 +824,21 @@ end;
 
 procedure TfmMaps.btnSelectPlacesClick(Sender: TObject);
 
-  procedure CopyPoint(aPt: TMapPoint);
+  procedure CopyPoint(aPt: TGMapPoint);
   var
-    pt: TMapPoint;
+    pt: TGMapPoint;
     i: Integer;
   begin
     for i := 0 to FMapPoints.Count - 1 do begin
-      pt := TMapPoint(FMapPoints[i]);
-      if (pt.Address = aPt.Address)
+      pt := TGMapPoint(FMapPoints[i]);
+      if (pt.Hint = aPt.Hint)
       then Exit;
     end;
 
-    pt := TMapPoint.Create;
-    pt.Lat := aPt.Lat;
-    pt.Lon := aPt.Lon;
-    pt.Address := aPt.Address;
+    pt := TGMapPoint.Create;
+    pt.Latitude := aPt.Latitude;
+    pt.Longitude := aPt.Longitude;
+    pt.Hint := aPt.Hint;
     FMapPoints.Add(pt);
   end;
 
@@ -878,7 +874,7 @@ begin
         or ((pcBirth in cond) and (ref.Name = 'BIRT'))
         or ((pcDeath in cond) and (ref.Name = 'DEAT'))
         or ((pcResidence in cond) and (ref.Name = 'RESI'))
-        then CopyPoint(TMapPoint(place.Points[0]));
+        then CopyPoint(TGMapPoint(place.Points[0]));
       //end;
     end;
   end;
@@ -890,7 +886,7 @@ end;
 procedure TfmMaps.btnSearchClick(Sender: TObject);
 var
   pt_title: string;
-  pt: TMapPoint;
+  pt: TGMapPoint;
   k: Integer;
   points: TObjectList;
 begin
@@ -900,10 +896,10 @@ begin
     RequestGeoCoords(edSearch.Text, points);
 
     for k := 0 to points.Count - 1 do
-      if (points[k] is TMapPoint) then begin
-        pt := TMapPoint(points[k]);
+      if (points[k] is TGMapPoint) then begin
+        pt := TGMapPoint(points[k]);
 
-        pt_title := pt.Address + Format(' [%.6f, %.6f]', [pt.Lat, pt.Lon]);
+        pt_title := pt.Hint + Format(' [%.6f, %.6f]', [pt.Latitude, pt.Longitude]);
         TreePlaces.Items.AddChildObjectFirst(FSearchRoot, pt_title, pt);
       end;
 
@@ -942,14 +938,14 @@ end;
 procedure TfmMaps.TreePlacesDblClick(Sender: TObject);
 var
   node: TTreeNode;
-  pt: TMapPoint;
+  pt: TGMapPoint;
 begin
   node := TreePlaces.Selected;
   if (node = nil) then Exit;
 
-  pt := TMapPoint(node.Data);
+  pt := TGMapPoint(node.Data);
   if (pt <> nil)
-  then map_SetCenter(pt.Lat, pt.Lon);
+  then map_SetCenter(pt.Latitude, pt.Longitude);
 end;
 
 initialization

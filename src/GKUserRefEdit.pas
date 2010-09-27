@@ -38,11 +38,6 @@ uses GKCommon, GKMain;
 
 procedure TfmUserRefEdit.FormCreate(Sender: TObject);
 begin
-  {
-Участник боевых действий
-Погиб в бою
-Труженик тыла ВОВ
-  }
   //EditRelation.Items.Assign(fmGEDKeeper.Options.Relations);
 end;
 

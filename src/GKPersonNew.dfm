@@ -45,30 +45,30 @@ object fmPersonNew: TfmPersonNew
     Height = 13
     Caption = #1055#1086#1083
   end
-  object EditFamily: TEdit
+  object edFamily: TEdit
     Left = 64
     Top = 8
     Width = 185
     Height = 21
     TabOrder = 0
-    OnKeyDown = EditFamilyKeyDown
+    OnKeyDown = edFamilyKeyDown
   end
-  object EditName: TEdit
+  object edName: TEdit
     Left = 64
     Top = 32
     Width = 185
     Height = 21
     TabOrder = 1
-    OnKeyDown = EditFamilyKeyDown
+    OnKeyDown = edFamilyKeyDown
   end
-  object EditPatronymic: TComboBox
+  object edPatronymic: TComboBox
     Left = 64
     Top = 56
     Width = 185
     Height = 21
     ItemHeight = 13
     TabOrder = 2
-    OnKeyDown = EditFamilyKeyDown
+    OnKeyDown = edFamilyKeyDown
   end
   object EditSex: TComboBox
     Left = 64

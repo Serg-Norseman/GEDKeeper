@@ -5,9 +5,6 @@
   {$DEFINE DFS_FIXED_LIST_VIEW}
 {$ENDIF}
 
-{.$DEFINE DFS_DEBUG}
-
-
 {------------------------------------------------------------------------------}
 { TdfsEnhListView v3.72                                                        }
 {------------------------------------------------------------------------------}
@@ -70,32 +67,17 @@
 { Date last modified:  June 28, 2001                                           }
 {------------------------------------------------------------------------------}
 
-
 unit EnhListView;
 
 interface
 
-{$IFNDEF DFS_WIN32}
-  ERROR!  This unit only available for Delphi 2.0 or higher!!!
-{$ENDIF}
-
 uses
   Forms, Windows, Messages, Classes, Controls, ComCtrls, CommCtrl, SysUtils,
-  {$IFDEF DFS_COMPILER_4_UP} ImgList, {$ENDIF} Graphics, Menus;
-
+  ImgList, Graphics, Menus;
 
 const
-  { This shuts up C++Builder 3 about the redefiniton being different. There
-    seems to be no equivalent in C1.  Sorry. }
-  {$IFDEF DFS_CPPB_3_UP}
-  {$EXTERNALSYM DFS_COMPONENT_VERSION}
-  {$ENDIF}
-  DFS_COMPONENT_VERSION = 'TdfsEnhListView v3.72';
-
-  DRAWTEXTEX_FLAGS = DT_NOPREFIX or DT_SINGLELINE or DT_VCENTER or
-     DT_END_ELLIPSIS;
-  DRAWTEXTEX_ALIGNMENT: array[TAlignment] of UINT = (DT_LEFT, DT_RIGHT,
-     DT_CENTER);
+  DRAWTEXTEX_FLAGS = DT_NOPREFIX or DT_SINGLELINE or DT_VCENTER or DT_END_ELLIPSIS;
+  DRAWTEXTEX_ALIGNMENT: array[TAlignment] of UINT = (DT_LEFT, DT_RIGHT, DT_CENTER);
   WM_OWNERDRAWCOLUMNS = WM_USER + 143;
 
 type
@@ -125,44 +107,6 @@ type
   TLVSortStatusEvent = procedure(Sender: TObject; SortColumn: integer;
      Ascending: boolean) of object;
   TLVEditCanceled = procedure(Sender: TObject; Item: TListItem) of object;
-  {$IFNDEF DFS_COMPILER_4_UP}
-  TLVNotifyEvent = procedure(Sender: TObject; Item: TListItem) of object;
-  {$ENDIF}
-
-  // Class for saved settings
-  TdfsEnhLVSaveSettings = class(TPersistent)
-  private
-    FAutoSave: boolean;
-    FRegistryKey: string;
-    FSaveColumnSizes: boolean;
-    FSaveCurrentSort: boolean;
-    FSaveViewStyle: boolean;
-  public
-    constructor Create; virtual;
-    procedure StoreColumnSizes(ColCount: integer;
-       const IntArray: array of integer);
-    procedure ReadColumnSizes(ColCount: integer;
-       var IntArray: array of integer);
-    procedure StoreCurrentSort(Ascending: boolean; SortCol: integer);
-    procedure ReadCurrentSort(var Ascending: boolean; var SortCol: integer);
-    procedure StoreViewStyle(Style: TViewStyle);
-    function ReadViewStyle(Default: TViewStyle): TViewStyle;
-  published
-    property AutoSave: boolean read FAutoSave write FAutoSave default FALSE;
-    property RegistryKey: string read FRegistryKey write FRegistryKey;
-    property SaveColumnSizes: boolean
-       read FSaveColumnSizes
-       write FSaveColumnSizes
-       default TRUE;
-    property SaveCurrentSort: boolean
-       read FSaveCurrentSort
-       write FSaveCurrentSort
-       default TRUE;
-    property SaveViewStyle: boolean
-       read FSaveViewStyle
-       write FSaveViewStyle
-       default TRUE;
-  end;
 
   { The new class }
   TCustomEnhListView = class(TCustomListView)
@@ -176,15 +120,11 @@ type
     FAutoSortAscending: boolean;
     FTmpAutoSortAscending: boolean;
     FLastColumnClicked: Integer;
-    FSaveSettings: TdfsEnhLVSaveSettings;
     FShowSortArrows: boolean;
     FReverseSortArrows: boolean;
     FSortUpBmp,
     FSortDownBmp: TBitmap;
     FCreatingWindowHandle: boolean;
-{$IFDEF BACKGROUND_FIXED}
-    FBackgroundImage: TBitmap;
-{$ENDIF}
     FNoColumnResize: boolean;
     FOldHeaderWndProc: pointer;
     FHeaderInstance: pointer;
@@ -201,14 +141,10 @@ type
     FOnDrawHeader: TLVHDrawItemEvent;
     FOnSortItems: TLVSortItemsEvent;
     FOnEditCanceled: TLVEditCanceled;
-{$IFNDEF DFS_COMPILER_4_UP}
-    FOnGetImageIndex: TLVNotifyEvent;
-{$ENDIF}
 
     procedure HeaderWndProc(var Message: TMessage);
     { Message handlers }
-    procedure CMSysColorChange(var Message: TWMSysColorChange);
-       message CM_SYSCOLORCHANGE;
+    procedure CMSysColorChange(var Message: TWMSysColorChange); message CM_SYSCOLORCHANGE;
     procedure CMFontChanged(var Messsage: TMessage); message CM_FONTCHANGED;
     procedure CNMeasureItem(var Message: TWMMeasureItem); message CN_MEASUREITEM;
     procedure CNDrawItem(var Message: TWMDrawItem); message CN_DRAWITEM;
@@ -216,18 +152,14 @@ type
     procedure WMDestroy(var Message: TWMDestroy); message WM_DESTROY;
     procedure WMDrawHeader(var Message: TWMDrawItem); message WM_DRAWITEM;
     procedure WMNotify(var Message: TWMNotify); message WM_NOTIFY;
-    procedure WMOwnerDrawColumns(var Message: TMessage);
-       message WM_OWNERDRAWCOLUMNS;
+    procedure WMOwnerDrawColumns(var Message: TMessage); message WM_OWNERDRAWCOLUMNS;
     procedure WMParentNotify(var Message: TWMParentNotify); message WM_PARENTNOTIFY;
   protected
-    { USE WITH CARE.  This can be NIL }
+    { USE WITH CARE.  This can be nil }
     FCanvas: TCanvas;
     FHeaderHandle: HWND;
     procedure KeyUp(var Key: Word; Shift: TShiftState); override;
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
-{$IFNDEF DFS_COMPILER_4_UP}
-    function GetItem(Value: TLVItem): TListItem;
-{$ENDIF}
     procedure ResetOwnerDrawHeight;
     procedure InvalidateColumnHeader(Index: integer); virtual;
     procedure DoSort(ColumnIndex:integer; Descending: boolean); virtual;
@@ -249,9 +181,8 @@ type
     procedure DrawSubItem(Index, SubItem: Integer; Rect: TRect;
        State: TOwnerDrawState; var DefaultDrawing: boolean); virtual;
     procedure DrawItem(var Canvas: TCanvas; Index: Integer; Rect: TRect;
-       State: TOwnerDrawState; var DefaultDrawing,
-       FullRowSelect: boolean);
-       {$IFDEF DFS_COMPILER_4_UP} reintroduce; overload; {$ENDIF} virtual;
+       State: TOwnerDrawState; var DefaultDrawing, FullRowSelect: boolean);
+       reintroduce; overload; virtual;
     procedure AfterDrawItem(var Canvas: TCanvas; Index: Integer;
        Rect: TRect; State: TOwnerDrawState); virtual;
     procedure Edit(const Item: TLVItem); override;
@@ -273,12 +204,6 @@ type
     procedure SetOnDrawHeader(Value: TLVHDrawItemEvent); virtual;
     procedure SetColumnsOwnerDrawFlag(OwnerDrawn: boolean); virtual;
     procedure CreateSortBmps(var UpBmp, DownBmp: TBitmap); virtual;
-{$IFNDEF DFS_COMPILER_4_UP}
-    procedure GetImageIndex(Item: TListItem); virtual;
-{$ENDIF}
-{$IFDEF BACKGROUND_FIXED}
-    procedure BackgroundImageChanged(Sender: TObject); virtual;
-{$ENDIF}
 
     { Property methods }
     procedure SetAutoColumnSort(Value: TAutoColumnSort);
@@ -290,129 +215,75 @@ type
     procedure SetReverseSortArrows(Value: boolean);
     procedure SetLastColumnClicked(Value: integer);
     procedure SetAutoResort(Value: boolean);
-{$IFDEF BACKGROUND_FIXED}
-    procedure SetBackgroundImage(const Value: TBitmap);
-{$ENDIF}
-    function GetSmallImages: {$IFDEF DFS_COMPILER_4_UP} TCustomImageList {$ELSE}
-       TImageList {$ENDIF};
-    procedure SetSmallImages(Val: {$IFDEF DFS_COMPILER_4_UP} TCustomImageList
-       {$ELSE} TImageList {$ENDIF});
-    function GetVersion: string; virtual;
-    procedure SetVersion(const Val: string);
+
+    function GetSmallImages: TCustomImageList;
+    procedure SetSmallImages(Val: TCustomImageList);
     function GetCurrentColumnWidth(Index: integer): integer;
 
     procedure CreateParams(var Params: TCreateParams); override;
     procedure Loaded; override;
 
     { Should probably remain protected }
-    property SortUpBmp: TBitmap
-      read FSortUpBmp;
-    property SortDownBmp: TBitmap
-      read FSortDownBmp;
+    property SortUpBmp: TBitmap read FSortUpBmp;
+    property SortDownBmp: TBitmap read FSortDownBmp;
 
     { Should be made public by descendants as needed }
     property LastColumnClicked: Integer
-      read FLastColumnClicked
-      write SetLastColumnClicked;
+      read FLastColumnClicked write SetLastColumnClicked;
 
     { Should be published by descendants as needed }
     property HeaderHandle: HWnd
-       read FHeaderHandle;
+      read FHeaderHandle;
     property AutoColumnSort: TAutoColumnSort
-       read FAutoColumnSort
-       write SetAutoColumnSort
-       default acsNoSort;
+      read FAutoColumnSort write SetAutoColumnSort default acsNoSort;
     property AutoSortStyle: TAutoSortStyle
-       read FAutoSortStyle
-       write SetAutoSortStyle
-       default assSmart;
+      read FAutoSortStyle write SetAutoSortStyle default assSmart;
     property AutoResort: boolean
-       read FAutoResort
-       write SetAutoResort
-       default TRUE;
+      read FAutoResort write SetAutoResort default TRUE;
     property AutoSortAscending: boolean
-       read FAutoSortAscending
-       write SetAutoSortAscending
-       default TRUE;
+      read FAutoSortAscending write SetAutoSortAscending default TRUE;
     property ColumnSearch: boolean
-       read FColumnSearch
-       write FColumnSearch
-       default FALSE;
+      read FColumnSearch write FColumnSearch default FALSE;
     property ShowSortArrows: boolean
-       read FShowSortArrows
-       write SetShowSortArrows
-       default FALSE;
+      read FShowSortArrows write SetShowSortArrows default FALSE;
     property ReverseSortArrows: boolean
-       read FReverseSortArrows
-       write SetReverseSortArrows
-       default FALSE;
+      read FReverseSortArrows write SetReverseSortArrows default FALSE;
     property CurrentSortAscending: boolean
-       read FTmpAutoSortAscending
-       write SetCurrentSortAscending;
-    property SaveSettings: TdfsEnhLVSaveSettings
-       read FSaveSettings
-       write FSaveSettings;
+      read FTmpAutoSortAscending write SetCurrentSortAscending;
     property Style: TLVStyle
-       read FStyle
-       write SetStyle
-       default lvStandard;
+      read FStyle write SetStyle default lvStandard;
     property CurrentColumnWidth[Index: integer]: integer
-       read GetCurrentColumnWidth;
-{$IFDEF BACKGROUND_FIXED}
-    property BackgroundImage: TBitmap
-       read FBackgroundImage
-       write SetBackgroundImage;
-{$ENDIF}       
+      read GetCurrentColumnWidth;
+
     property NoColumnResize: boolean
-       read FNoColumnResize
-       write FNoColumnResize;
+      read FNoColumnResize write FNoColumnResize;
     // We have to redeclare this so we can hook into the read/write methods.
-    property SmallImages:
-       {$IFDEF DFS_COMPILER_4_UP} TCustomImageList {$ELSE} TImageList {$ENDIF}
-       read GetSmallImages
-       write SetSmallImages;
+    property SmallImages: TCustomImageList
+      read GetSmallImages write SetSmallImages;
 
     { Events }
     property OnDrawHeader: TLVHDrawItemEvent
-       read FOnDrawHeader
-       write SetOnDrawHeader;
+      read FOnDrawHeader write SetOnDrawHeader;
     property OnMeasureItem: TLVMeasureItemEvent
-       read FOnMeasureItem
-       write FOnMeasureItem;
+      read FOnMeasureItem write FOnMeasureItem;
     property OnDrawItem: TLVDrawItemEvent
-       read FOnDrawItem
-       write FOnDrawItem;
+      read FOnDrawItem write FOnDrawItem;
     property OnDrawSubItem: TLVDrawSubItemEvent
-       read FOnDrawSubItem
-       write FOnDrawSubItem;
+      read FOnDrawSubItem write FOnDrawSubItem;
     property OnAfterDefaultDrawItem: TLVAfterDrawItemEvent
-       read FOnAfterDefaultDrawItem
-       write FOnAfterDefaultDrawItem;
+      read FOnAfterDefaultDrawItem write FOnAfterDefaultDrawItem;
     property OnSortItems: TLVSortItemsEvent
-       read FOnSortItems
-       write FOnSortItems;
+      read FOnSortItems write FOnSortItems;
     property OnSortBegin: TLVSortStatusEvent
-       read FOnSortBegin
-       write FOnSortBegin;
+      read FOnSortBegin write FOnSortBegin;
     property OnSortFinished: TLVSortStatusEvent
-       read FOnSortFinished
-       write FOnSortFinished;
+      read FOnSortFinished write FOnSortFinished;
     property OnEditCanceled: TLVEditCanceled
-       read FOnEditCanceled
-       write FOnEditCanceled;
-{$IFNDEF DFS_COMPILER_4_UP}
-    property OnGetImageIndex: TLVNotifyEvent
-       read FOnGetImageIndex
-       write FOnGetImageIndex;
-{$ENDIF}
+      read FOnEditCanceled write FOnEditCanceled;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
-    function StoreSettings: boolean; virtual;
-    function WriteSettings: boolean; virtual;
-    function LoadSettings: boolean; virtual;
-    function ReadSettings: boolean; virtual;
     procedure DefaultSort(ColumnIndex:integer; Descending: boolean); virtual;
     procedure Resort; virtual;
     // Use these as replacements for Items.BeginUpdate and EndUpdate.  They
@@ -432,12 +303,8 @@ type
 
     // Accounts for re-ordered columns
     property ActualColumn[Index: integer]: TListColumn
-       read GetActualColumn;
+      read GetActualColumn;
   published
-    property Version: string
-       read GetVersion
-       write SetVersion
-       stored FALSE;
   end;
 
 
@@ -452,14 +319,11 @@ type
     property AutoSortStyle;
     property AutoResort;
     property AutoSortAscending;
-{$IFDEF BACKGROUND_FIXED}
-    property BackgroundImage;
-{$ENDIF}
+
     property ColumnSearch;
     property NoColumnResize;
     property ReverseSortArrows;
     property ShowSortArrows;
-    property SaveSettings;
     property Style;
 
     property OnMeasureItem;
@@ -474,29 +338,20 @@ type
 
     { Publish TCustomListView inherited protected properties }
     property Align;
-{$IFDEF DFS_COMPILER_4_UP}
     property Anchors;
     property BiDiMode;
-{$ENDIF}
     property BorderStyle;
-{$IFDEF DFS_COMPILER_4_UP}
     property BorderWidth;
-{$ENDIF}
     property Color;
     property ColumnClick;
     property OnClick;
     property OnDblClick;
     property Columns;
-{$IFDEF DFS_COMPILER_4_UP}
     property Constraints;
-{$ENDIF}
     property Ctl3D;
-{$IFDEF DFS_COMPILER_4_UP}
     property DragKind;
-{$ENDIF}
     property DragMode;
-    property ReadOnly
-       default False;
+    property ReadOnly default False;
     property Enabled;
     property Font;
     property HideSelection;
@@ -510,9 +365,7 @@ type
     property OnDeletion;
     property OnEdited;
     property OnEditing;
-{$IFDEF DFS_COMPILER_4_UP}
     property OnEndDock;
-{$ENDIF}
     property OnEnter;
     property OnExit;
     property OnInsert;
@@ -525,24 +378,18 @@ type
     property OnMouseDown;
     property OnMouseMove;
     property OnMouseUp;
-{$IFDEF DFS_COMPILER_4_UP}
     property OnResize;
     property OnSelectItem;
     property OnStartDock;
-{$ENDIF}
-    property ParentColor
-       default False;
+    property ParentColor default False;
     property ParentFont;
     property ParentShowHint;
-{$IFDEF DFS_COMPILER_4_UP}
     property ParentBiDiMode;
-{$ENDIF}
     property ShowHint;
     property PopupMenu;
     property ShowColumnHeaders;
     property TabOrder;
-    property TabStop
-       default True;
+    property TabStop default True;
     property ViewStyle;
     property Visible;
     property OnKeyDown;
@@ -566,47 +413,6 @@ uses
 var
   FDirection,
   FSortColNum: integer;
-
-{$IFNDEF DFS_COMPILER_4_UP}
-type
-  TReplaceFlags = set of (rfReplaceAll, rfIgnoreCase);
-
-function StringReplace(const S, OldPattern, NewPattern: string;
-  Flags: TReplaceFlags): string;
-var
-  SearchStr, Patt, NewStr: string;
-  Offset: Integer;
-begin
-  if rfIgnoreCase in Flags then
-  begin
-    SearchStr := AnsiUpperCase(S);
-    Patt := AnsiUpperCase(OldPattern);
-  end else
-  begin
-    SearchStr := S;
-    Patt := OldPattern;
-  end;
-  NewStr := S;
-  Result := '';
-  while SearchStr <> '' do
-  begin
-    Offset := {$IFDEF DFS_COMPILER_2} Pos( {$ELSE} AnsiPos( {$ENDIF} Patt, SearchStr);
-    if Offset = 0 then
-    begin
-      Result := Result + NewStr;
-      Break;
-    end;
-    Result := Result + Copy(NewStr, 1, Offset - 1) + NewPattern;
-    NewStr := Copy(NewStr, Offset + Length(OldPattern), MaxInt);
-    if not (rfReplaceAll in Flags) then
-    begin
-      Result := Result + NewStr;
-      Break;
-    end;
-    SearchStr := Copy(SearchStr, Offset + Length(Patt), MaxInt);
-  end;
-end;
-{$ENDIF}
 
 function IsValidNumber(S: string; var V: extended): boolean;
 var
@@ -672,7 +478,7 @@ var
   Date1, Date2: TDateTime;
   Diff: TDateTime;
 begin
-  if (Item1 = NIL) or (Item2 = NIL) then
+  if (Item1 = nil) or (Item2 = nil) then
   begin
     // something bad happening, I'm outta here
     Result := 0;
@@ -731,136 +537,7 @@ end;
 
 
 
-{ TdfsEnhLVSaveSettings }
-
-constructor TdfsEnhLVSaveSettings.Create;
-begin
-  inherited Create;
-
-  FAutoSave := FALSE;
-  FRegistryKey := '';
-  FSaveViewStyle := TRUE;
-  FSaveColumnSizes := TRUE;
-  SaveCurrentSort := TRUE;
-end;
-
-procedure TdfsEnhLVSaveSettings.StoreColumnSizes(ColCount: integer;
-   const IntArray: array of integer);
-var
-  Reg: TRegIniFile;
-  x: integer;
-  s: string;
-begin
-  if ColCount < 1 then exit;
-  s := '';
-  for x := 0 to ColCount-1 do
-    s := s + IntToStr(IntArray[x]) + ',';
-  SetLength(s, Length(s)-1);
-  Reg := TRegIniFile.Create(FRegistryKey);
-  try
-    Reg.WriteString('Columns', 'Sizes', s);
-  finally
-    Reg.Free;
-  end;
-end;
-
-procedure TdfsEnhLVSaveSettings.ReadColumnSizes(ColCount: integer;
-   var IntArray: array of integer);
-var
-  Reg: TRegIniFile;
-  x,y: integer;
-  s: string;
-begin
-  if ColCount < 1 then exit;
-  s := '';
-  Reg := TRegIniFile.Create(FRegistryKey);
-  try
-    s := Reg.ReadString('Columns', 'Sizes', '');
-  finally
-    Reg.Free;
-  end;
-  if s = '' then
-  begin
-    IntArray[0] := -1;
-    exit;
-  end;
-  y := 0;
-  for x := 0 to ColCount-1 do
-  begin
-    try
-      y := Pos(',', s);
-      if y = 0 then
-        y := Length(s)+1;
-      IntArray[x] := StrToInt(Copy(s, 1, y-1));
-    except
-      { Nothing, just eat the exception };
-    end;
-    s := copy(s, y+1, length(s));
-    if s = '' then break;
-  end;
-end;
-
-procedure TdfsEnhLVSaveSettings.StoreCurrentSort(Ascending: boolean;
-   SortCol: integer);
-var
-  Reg: TRegIniFile;
-begin
-  Reg := TRegIniFile.Create(FRegistryKey);
-  try
-    Reg.WriteBool('Sort', 'Ascending', Ascending);
-    Reg.WriteInteger('Sort', 'SortCol', SortCol);
-  finally
-    Reg.Free;
-  end;
-end;
-
-procedure TdfsEnhLVSaveSettings.ReadCurrentSort(var Ascending: boolean;
-   var SortCol: integer);
-var
-  Reg: TRegIniFile;
-begin
-  Reg := TRegIniFile.Create(FRegistryKey);
-  try
-    Ascending := Reg.ReadBool('Sort', 'Ascending', TRUE);
-    SortCol := Reg.ReadInteger('Sort', 'SortCol', 0);
-  finally
-    Reg.Free;
-  end;
-end;
-
-procedure TdfsEnhLVSaveSettings.StoreViewStyle(Style: TViewStyle);
-const
-  STYLE_VAL: array[TViewStyle] of integer = (0, 1, 2, 3);
-var
-  Reg: TRegIniFile;
-begin
-  Reg := TRegIniFile.Create(FRegistryKey);
-  try
-    Reg.WriteInteger('ViewStyle', 'ViewStyle', STYLE_VAL[Style]);
-  finally
-    Reg.Free;
-  end;
-end;
-
-function TdfsEnhLVSaveSettings.ReadViewStyle(Default: TViewStyle): TViewStyle;
-const
-  STYLES: array[0..3] of TViewStyle = (vsIcon, vsSmallIcon, vsList, vsReport);
-var
-  Reg: TRegIniFile;
-  i: integer;
-begin
-  Reg := TRegIniFile.Create(FRegistryKey);
-  try
-    i := Reg.ReadInteger('ViewStyle', 'ViewStyle', -1);
-    if (i >= Low(STYLES)) and (i <= High(STYLES)) then
-      Result := STYLES[i]
-    else
-      Result := Default;
-  finally
-    Reg.Free;
-  end;
-end;
-
+{ TCustomEnhListView }
 
 // Override constructor to "zero out" our internal variable.
 constructor TCustomEnhListView.Create(AOwner: TComponent);
@@ -872,30 +549,24 @@ begin
   FHeaderHandle := 0;
   FSortDirty := FALSE;
   FUpdateCount := 1; // inhibit sorting until finished creating.
-  FSaveSettings := TdfsEnhLVSaveSettings.Create;
   FAutoColumnSort := acsNoSort;
   FAutoResort := TRUE;
   FAutoSortStyle := assSmart;
   FAutoSortAscending := TRUE;
   FTmpAutoSortAscending := FAutoSortAscending;
   FLastColumnClicked := -1;
-  FCanvas := NIL;
+  FCanvas := nil;
   FStyle  := lvStandard;
-  FSortUpBmp := NIL;
-  FSortDownBmp := NIL;
+  FSortUpBmp := nil;
+  FSortDownBmp := nil;
   FShowSortArrows := FALSE;
   FReverseSortArrows := FALSE;
-{$IFDEF BACKGROUND_FIXED}
-  FBackgroundImage := TBitmap.Create;
-{$ENDIF}
+
   FHeaderInstance := MakeObjectInstance(HeaderWndProc);
 end;
 
 destructor TCustomEnhListView.Destroy;
 begin
-{$IFDEF BACKGROUND_FIXED}
-  FBackgroundImage.Free;
-{$ENDIF}
   FSortUpBmp.Free;
   FSortDownBmp.Free;
   FCanvas.Free;
@@ -904,8 +575,6 @@ begin
   FreeObjectInstance(FHeaderInstance);
 
   inherited Destroy;
-
-  FSaveSettings.Free;
 end;
 
 procedure TCustomEnhListView.CreateParams(var Params: TCreateParams);
@@ -915,13 +584,13 @@ begin
   if (FStyle = lvOwnerDrawFixed) then
   begin
     Params.Style := Params.Style or LVS_OWNERDRAWFIXED;
-    if FCanvas = NIL then
+    if FCanvas = nil then
       FCanvas := TCanvas.Create;
   end else begin
     if (not assigned(FOnDrawHeader)) and (not FShowSortArrows) then
     begin
       FCanvas.Free;
-      FCanvas := NIL;
+      FCanvas := nil;
     end;
   end;
 end;
@@ -957,21 +626,14 @@ procedure TCustomEnhListView.Loaded;
 begin
   inherited Loaded;
 
-{$IFDEF BACKGROUND_FIXED}
-  BackgroundImageChanged(Self);
-{$ENDIF}
-
   if not FCreatingWindowHandle then
     HandleNeeded;
 
   FUpdateCount := 0;
 
-  if (not LoadSettings) or (not SaveSettings.SaveCurrentSort) then
-  begin
-    if Columns.Count > 0 then
-      FLastColumnClicked := 0;
-    Resort;
-  end;
+  if Columns.Count > 0 then
+    FLastColumnClicked := 0;
+  Resort;
 
   // Something flaky going on.  Hard to explain, but this clears it up.
   PostMessage(Handle, WM_OWNERDRAWCOLUMNS, 0, 0);
@@ -979,104 +641,7 @@ end;
 
 procedure TCustomEnhListView.WMDestroy(var Message: TWMDestroy);
 begin
-  StoreSettings;
-
   inherited;
-end;
-
-
-function TCustomEnhListView.StoreSettings: boolean;
-begin
-  if FSaveSettings.AutoSave and
-     (([csDesigning, csLoading, csReading] * ComponentState) = []) then
-    Result := WriteSettings
-  else
-    Result := FALSE;
-end;
-
-function TCustomEnhListView.WriteSettings: boolean;
-var
-  ColCount: integer;
-  ColArray: PIntArray;
-  x: integer;
-begin
-  Result := TRUE;
-  ColCount := Columns.Count;
-  if ColCount > 0 then
-  begin
-    GetMem(ColArray, SizeOf(Integer)*ColCount);
-    try
-      if FSaveSettings.SaveColumnSizes then
-      begin
-        for x := 0 to ColCount-1 do
-          ColArray[x] := ActualColumn[x].Width;
-        FSaveSettings.StoreColumnSizes(ColCount, ColArray^);
-      end;
-      if FSaveSettings.SaveCurrentSort then
-        FSaveSettings.StoreCurrentSort(CurrentSortAscending, LastColumnClicked);
-      if FSaveSettings.SaveViewStyle then
-        FSaveSettings.StoreViewStyle(ViewStyle);
-    finally
-      FreeMem(ColArray);
-    end;
-  end;
-end;
-
-function TCustomEnhListView.LoadSettings: boolean;
-begin
-  if FSaveSettings.AutoSave and (not(csDesigning in ComponentState)) then
-    Result := ReadSettings
-  else
-    Result := FALSE;
-end;
-
-function TCustomEnhListView.ReadSettings: boolean;
-var
-  ColCount: integer;
-  ColArray: PIntArray;
-  x: integer;
-  SortCol: integer;
-  SortAscending: boolean;
-begin
-  Result := TRUE;
-  ColCount := Columns.Count;
-  if ColCount > 0 then
-  begin
-    GetMem(ColArray, SizeOf(Integer)*ColCount);
-    try
-      if FSaveSettings.SaveColumnSizes then
-      begin
-        for x := 0 to ColCount-1 do
-          ColArray[x] := ActualColumn[x].Width;
-        FSaveSettings.ReadColumnSizes(ColCount, ColArray^);
-        if ColArray[0] <> -1 then
-          for x := 0 to ColCount-1 do
-            ActualColumn[x].Width := ColArray[x];
-      end;
-    finally
-      FreeMem(ColArray);
-    end;
-  end;
-
-  if FSaveSettings.SaveCurrentSort then
-  begin
-    FSaveSettings.ReadCurrentSort(SortAscending, SortCol);
-    if SortCol >= Columns.Count then
-      SortCol := Columns.Count-1;
-    if SortCol < 0 then
-      SortCol := 0;
-    BeginUpdate;
-    try
-      CurrentSortAscending := SortAscending;
-      LastColumnClicked := SortCol;
-      Resort;
-    finally
-      EndUpdate;
-    end;
-  end;
-
-  if FSaveSettings.SaveViewStyle then
-    ViewStyle := FSaveSettings.ReadViewStyle(ViewStyle);
 end;
 
 procedure TCustomEnhListView.DoSort(ColumnIndex:integer; Descending: boolean);
@@ -1119,7 +684,7 @@ var
   Date1, Date2, Diff: TDateTime;
 begin
   // The only way to get in here is if FOnSortItems is assigned, so don't bother
-  //  checking for NIL
+  //  checking for nil
   SortAs := saNone;
   FonSortItems(Self, Item1, Item2, SortColumn, SortAs, CompResult);
   // Do they want us to sort it?
@@ -1221,30 +786,12 @@ type
 
 procedure TCustomEnhListView.EditCanceled(const Item: TLVItem);
 begin
-  if assigned(FOnEditCanceled) then
+  if Assigned(FOnEditCanceled) then
     with Item do
       FOnEditCanceled(Self, THackListItems(Items).GetItem(iItem));
 end;
 
-{$IFNDEF DFS_COMPILER_4_UP}
-function TCustomEnhListView.GetItem(Value: TLVItem): TListItem;
-begin
-  with Value do
-    if (mask and LVIF_PARAM) <> 0 then Result := TListItem(lParam)
-    else Result := Items[IItem];
-end;
-{$ENDIF}
-
-
-{$IFNDEF DFS_COMPILER_4_UP}
-type
-  THackdfsExtListView = class(TdfsExtListView);
-{$ENDIF}
 procedure TCustomEnhListView.CNNotify(var Message: TWMNotify);
-{$IFNDEF DFS_COMPILER_4_UP}
-var
-  Item: TListItem;
-{$ENDIF}
 begin
   inherited;
 
@@ -1257,32 +804,8 @@ begin
 {$ENDIF}
       LVN_ENDLABELEDIT:
         with PLVDispInfo(Pointer(Message.NMHdr))^ do
-          if (item.pszText = NIL) and (item.IItem <> -1) then
+          if (item.pszText = nil) and (item.IItem <> -1) then
             EditCanceled(item);
-{$IFNDEF DFS_COMPILER_4_UP}
-      LVN_GETDISPINFO:
-        begin
-          Item := GetItem(PLVDispInfo(Message.NMHdr)^.item);
-          if Item <> NIL then
-            with PLVDispInfo(Message.NMHdr)^.item do
-            begin
-              if (mask and LVIF_IMAGE) <> 0 then
-              begin
-                if iSubItem = 0 then
-                begin
-                  GetImageIndex(Item);
-                  iImage := Item.ImageIndex;
-                  if Assigned(StateImages) then
-                  begin
-                    state := IndexToStateImageMask(Item.StateIndex + 1);
-                    stateMask := $F000;
-                    mask := mask or LVIF_STATE;
-                  end;
-                end;
-              end;
-            end;
-        end;
-{$ENDIF}
     end;
 end;
 
@@ -1440,15 +963,12 @@ var
   FullRowSelect: boolean;
   SavedDC: integer;
 begin { CNDrawItem }
-  if FCanvas = NIL then exit;
+  if FCanvas = nil then exit;
 
   with Message.DrawItemStruct^ do
   begin
-    {$IFDEF DFS_COMPILER_5_UP}
     State := TOwnerDrawState(LongRec(itemState).Lo);
-    {$ELSE}
-    State := TOwnerDrawState(WordRec(LongRec(itemState).Lo).Lo);
-    {$ENDIF}
+
     SavedDC := SaveDC(hDC);
     FCanvas.Handle := hDC;
     try
@@ -1476,7 +996,7 @@ begin
   HandleNeeded;
 
   if Index >= Columns.Count then
-    Result := NIL
+    Result := nil
   else
     Result := Columns[Index];
 end;
@@ -1518,39 +1038,31 @@ begin
         Inc(Rect.Left, DefDraw_TextOffset);
       DrawTextEx(FCanvas.Handle, PChar(GetSubItemText(Index, SubItem)), -1, Rect,
          DRAWTEXTEX_FLAGS or
-         DRAWTEXTEX_ALIGNMENT[ActualColumn[SubItem+1].Alignment], NIL);
+         DRAWTEXTEX_ALIGNMENT[ActualColumn[SubItem+1].Alignment], nil);
     end;
   finally
     RestoreDC(FCanvas.Handle, SavedDC);
   end;
 end;
 
-{$IFDEF DFS_COMPILER_4_UP}
 type
   THackImageList = class(TCustomImageList);
-{$ENDIF}
 
 procedure TCustomEnhListView.DefaultDrawItem(Index: Integer; Rect: TRect;
    State: TOwnerDrawState; FullRowSelect: boolean);
-{$IFDEF DFS_COMPILER_4_UP}
 const
   DrawingStyles: array[TDrawingStyle] of Longint = (ILD_FOCUS, ILD_SELECTED,
     ILD_NORMAL, ILD_TRANSPARENT);
   Images: array[TImageType] of Longint = (0, ILD_MASK);
-{$ENDIF}
 var
-{$IFDEF DFS_COMPILER_4_UP}
   DS: TDrawingStyle;
   x: integer;
-{$ELSE}
-  OldStyle: TDrawingStyle;
-{$ENDIF}
   OldBlend: TColor;
   Count: Integer;
   SubRect: TRect;
   ImgTop: integer;
 begin
-  if Items[Index] = NIL then
+  if Items[Index] = nil then
     // something bad happening, I'm outta here
     exit;
 
@@ -1587,7 +1099,7 @@ begin
       SmallImages.BlendColor := clHighlight;
       ImgTop := SubRect.Top + (SubRect.Bottom - SubRect.Top -
         SmallImages.Height) div 2;
-      {$IFDEF DFS_COMPILER_4_UP}
+
       { Changing DrawStyle causes an invalidate, which is very nasty since we
         are in the process of repainting here.  Continuous flickering.... }
       if Focused and ((odSelected in State) or Items[Index].Focused) then
@@ -1606,26 +1118,6 @@ begin
         THackImageList(SmallImages).DoDraw(Items[Index].ImageIndex, FCanvas,
            SubRect.Left + DefDraw_ImageOffSet, ImgTop,
            DrawingStyles[DS] or Images[SmallImages.ImageType], Enabled);
-
-
-      {$ELSE}
-      OldStyle := SmallImages.DrawingStyle;
-      if Focused and ((odSelected in State) or Items[Index].Focused) then
-        SmallImages.DrawingStyle := dsSelected
-      else
-        SmallImages.DrawingStyle := dsTransparent;
-
-      SmallImages.Draw(FCanvas, SubRect.Left + DefDraw_ImageOffSet, ImgTop,
-         Items[Index].ImageIndex);
-
-      // Draw OverlayImage
-      if (Items[Index].OverlayIndex >= 0) and
-         (Items[Index].OverlayIndex <= 3) then // vadid overlay index?
-        SmallImages.DrawOverlay(FCanvas, SubRect.Left + DefDraw_ImageOffSet,
-           ImgTop, Items[Index].ImageIndex, Items[Index].OverlayIndex);
-
-      SmallImages.DrawingStyle := OldStyle;
-      {$ENDIF}
 
       SmallImages.BlendColor := OldBlend;
       if ActualColumn[0].Alignment = taLeftJustify then
@@ -1788,8 +1280,8 @@ begin
     if not (csReading in ComponentState) then
       SetColumnsOwnerDrawFlag(TRUE);
   end else begin
-    FSortUpBmp := NIL;
-    FSortDownBmp := NIL;
+    FSortUpBmp := nil;
+    FSortDownBmp := nil;
 
     if not (csReading in ComponentState) then
       SetColumnsOwnerDrawFlag(assigned(FOnDrawHeader))
@@ -1804,9 +1296,9 @@ var
   MidPoint: integer;
   Bmp: TBitmap;
 begin
-  if UpBmp = NIL then
+  if UpBmp = nil then
     UpBmp := TBitmap.Create;
-  if DownBmp = NIL then
+  if DownBmp = nil then
     DownBmp := TBitmap.Create;
 
   UpBmp.Canvas.Font.Assign(Font);
@@ -1923,12 +1415,7 @@ begin
       begin
         with PHDNotify(Pointer(Message.NMHdr))^ do
           if Item < Columns.Count then
-            {$IFDEF DFS_COMPILER_4_UP}
-            Column[Item].Width :=
-            {$ELSE}
-            ActualColumn[Item].Width :=
-            {$ENDIF}
-              ListView_GetColumnWidth(Handle, Item);
+            Column[Item].Width := ListView_GetColumnWidth(Handle, Item);
       end;
   end;
 
@@ -1968,22 +1455,18 @@ var
   DoDefaultDrawing: boolean;
   SavedDC: integer;
 begin { CNDrawItem }
-  if FCanvas = NIL then exit;
+  if (FCanvas = nil) then exit;
 
-  with Message.DrawItemStruct^ do
-  begin
+  with Message.DrawItemStruct^ do begin
     Message.Result := 1;
-    {$IFDEF DFS_COMPILER_5_UP}
     State := TOwnerDrawState(LongRec(itemState).Lo);
-    {$ELSE}
-    State := TOwnerDrawState(WordRec(LongRec(itemState).Lo).Lo);
-    {$ENDIF}
+
     SavedDC := SaveDC(hDC);
     FCanvas.Handle := hDC;
     try
       FCanvas.Font := Font;
       FCanvas.Brush := Brush;
-      DoDefaultDrawing := FALSE;
+      DoDefaultDrawing := False;
       ProcessDrawHeaderMsg(itemID, rcItem, State, DoDefaultDrawing);
     finally
       FCanvas.Handle := 0;
@@ -2029,13 +1512,11 @@ begin
   if Selected then
     InflateRect(Rect, -2, -2);
 
-  if (Index >= 0) and (Index < Columns.Count) then
-  begin
+  if (Index >= 0) and (Index < Columns.Count) then begin
     // Don't use ActualColumn[] here!  That's for SubItem foolery, not header.
     TheColumn := Columns[Index];
 
-    if Selected then
-    begin
+    if Selected then begin
       inc(Rect.Top);
       inc(Rect.Left);
     end;
@@ -2043,54 +1524,49 @@ begin
     R := Rect;
 
     case TheColumn.Alignment of
-      taRightJustify:
-        Dec(R.Right, 4);
-      taLeftJustify:
-        Inc(R.Left, 4);
+      taRightJustify: Dec(R.Right, 4);
+      taLeftJustify: Inc(R.Left, 4);
       // taCenter needs no modification
     end;
 
     if FShowSortArrows and (LastColumnClicked = Index) and
        (AutoColumnSort <> acsNoSort) then
     begin
-      if CurrentSortAscending then
-        Bmp := FSortUpBmp
-      else
-        Bmp := FSortDownBmp;
+      if CurrentSortAscending
+      then Bmp := FSortUpBmp
+      else Bmp := FSortDownBmp;
 
-      if TheColumn.Alignment = taRightJustify then
-        Inc(R.Left, Bmp.Width + 8)
-      else
-        Dec(R.Right, Bmp.Width + 8);
+      if (TheColumn.Alignment = taRightJustify)
+      then Inc(R.Left, Bmp.Width + 8)
+      else Dec(R.Right, Bmp.Width + 8);
 
       { How big of a rectangle do we have to work with for the text? }
       CR := R;
       DrawTextEx(FCanvas.Handle, PChar(TheColumn.Caption), -1, CR,
          DRAWTEXTEX_FLAGS or DT_CALCRECT or
-         DRAWTEXTEX_ALIGNMENT[TheColumn.Alignment], NIL);
+         DRAWTEXTEX_ALIGNMENT[TheColumn.Alignment], nil);
       { Note that DT_CALCRECT does not adjust for alignment. We must do that }
       case TheColumn.Alignment of
         taRightJustify:
           R.Left := R.Right - (CR.Right - CR.Left);
-        taCenter:
-          begin
-            R.Left := R.Left + (((R.Right - R.Left) - (CR.Right - CR.Left)) div
-               2);
-            R.Right := R.Left + (CR.Right - CR.Left);
-          end;
-      else // taLeftJustify: doesn't matter, that is what DT_CALCRECT returns
-        R := CR;
+
+        taCenter: begin
+          R.Left := R.Left + (((R.Right - R.Left) - (CR.Right - CR.Left)) div 2);
+          R.Right := R.Left + (CR.Right - CR.Left);
+        end;
+        else // taLeftJustify: doesn't matter, that is what DT_CALCRECT returns
+          R := CR;
       end;
-      if R.Left < Rect.Left then
-        R.Left := Rect.Left;
-      if R.Right > Rect.Right then
-        R.Right := Rect.Right;
+
+      if R.Left < Rect.Left then R.Left := Rect.Left;
+      if R.Right > Rect.Right then R.Right := Rect.Right;
 
       if Selected then
         OffsetRect(R, 1, 1);
+
       // Draw the caption in the rect available
       DrawTextEx(FCanvas.Handle, PChar(TheColumn.Caption), -1, R,
-         DRAWTEXTEX_FLAGS or DRAWTEXTEX_ALIGNMENT[TheColumn.Alignment], NIL);
+         DRAWTEXTEX_FLAGS or DRAWTEXTEX_ALIGNMENT[TheColumn.Alignment], nil);
 
       // Draw the sort arrow bitmap
       Offset := (Rect.Bottom - Rect.Top - Bmp.Height) div 2;
@@ -2107,8 +1583,9 @@ begin
     end else begin
       if Selected then
         OffsetRect(R, 1, 1);
+
       DrawTextEx(FCanvas.Handle, PChar(TheColumn.Caption), -1, R,
-         DRAWTEXTEX_FLAGS or DRAWTEXTEX_ALIGNMENT[TheColumn.Alignment], NIL);
+         DRAWTEXTEX_FLAGS or DRAWTEXTEX_ALIGNMENT[TheColumn.Alignment], nil);
     end;
   end;
 end;
@@ -2141,13 +1618,13 @@ begin
 
   if OwnerDrawn then
   begin
-    if (FCanvas = NIL) then
+    if (FCanvas = nil) then
       FCanvas := TCanvas.Create;
   end else begin
-    if (Style = lvStandard) and (FCanvas <> NIL) then
+    if (Style = lvStandard) and (FCanvas <> nil) then
     begin
       FCanvas.Free;
-      FCanvas := NIL;
+      FCanvas := nil;
     end;
   end;
 end;
@@ -2175,20 +1652,16 @@ begin
 end;
 
 procedure TCustomEnhListView.InvalidateColumnHeader(Index: integer);
+
   function RealColWidth(i: integer): integer;
-  {$IFDEF DFS_COMPILER_4_UP}
   var
     Column: TLVColumn;
-  {$ENDIF}
   begin
-    {$IFDEF DFS_COMPILER_4_UP}
     Column.mask := LVCF_WIDTH;
     ListView_GetColumn(Handle, i, Column);
     Result := Column.cx;
-    {$ELSE}
-    Result := Columns[i].Width;
-    {$ENDIF}
   end;
+  
 var
   R: TRect;
   x: integer;
@@ -2219,16 +1692,6 @@ begin
   Update;
 end;
 
-function TCustomEnhListView.GetVersion: string;
-begin
-  Result := DFS_COMPONENT_VERSION;
-end;
-
-procedure TCustomEnhListView.SetVersion(const Val: string);
-begin
-  { empty write method, just needed to get it to show up in Object Inspector }
-end;
-
 procedure TCustomEnhListView.ResizeColumns(ResizeMethod: TResizeMethod);
 var
   i: integer;
@@ -2249,12 +1712,9 @@ end;
 
 
 function TCustomEnhListView.GetCurrentColumnWidth(Index: integer): integer;
-{$IFDEF DFS_COMPILER_4_UP}
 var
   Column: TLVColumn;
-{$ENDIF}
 begin
-{$IFDEF DFS_COMPILER_4_UP}
   if HandleAllocated then
   begin
     Column.mask := LVCF_WIDTH;
@@ -2262,46 +1722,15 @@ begin
     Result := Column.cx;
   end else
     Result := ActualColumn[Index].Width;
-{$ELSE}
-  Result := ActualColumn[Index].Width;
-{$ENDIF}
 end;
 
 
-{$IFDEF BACKGROUND_FIXED}
-procedure TCustomEnhListView.SetBackgroundImage(
-   const Value: TBitmap);
-begin
-  FBackgroundImage.Assign(Value);
-  BackgroundImageChanged(Self);
-end;
-{$ENDIF}
-
-{$IFDEF BACKGROUND_FIXED}
-procedure TCustomEnhListView.BackgroundImageChanged(Sender: TObject);
-begin
-  Brush.Bitmap := NIL;
-  if (FBackgroundImage <> NIL) and (not FBackgroundImage.Empty) then
-  begin
-    // Transparent text
-    ListView_SetTextBkColor(Handle, $FFFFFFFF);
-    Brush.Bitmap := FBackgroundImage;
-  end else begin
-    ListView_SetTextBkColor(Handle, ColorToRGB(Color));
-    Brush.Color := Color;
-  end;
-  Invalidate;
-end;
-{$ENDIF}
-
-function TCustomEnhListView.GetSmallImages:
-   {$IFDEF DFS_COMPILER_4_UP} TCustomImageList {$ELSE} TImageList {$ENDIF};
+function TCustomEnhListView.GetSmallImages: TCustomImageList;
 begin
   Result := inherited SmallImages;
 end;
 
-procedure TCustomEnhListView.SetSmallImages(Val:
-   {$IFDEF DFS_COMPILER_4_UP} TCustomImageList {$ELSE} TImageList {$ENDIF});
+procedure TCustomEnhListView.SetSmallImages(Val: TCustomImageList);
 begin
   inherited SmallImages := Val;
 
@@ -2550,18 +1979,10 @@ begin
   end;
 end;
 
-{$IFNDEF DFS_COMPILER_4_UP}
-procedure TCustomEnhListView.GetImageIndex(Item: TListItem);
-begin
-  if Assigned(FOnGetImageIndex) then
-    FOnGetImageIndex(Self, Item);
-end;
-{$ENDIF}
-
 procedure TCustomEnhListView.Notification(AComponent: TComponent; Operation: TOperation);
 begin
   if (Operation = opRemove) and (AComponent = SmallImages) then
-    SmallImages := NIL;
+    SmallImages := nil;
   inherited Notification(AComponent, Operation);
 end;
 

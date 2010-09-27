@@ -15,7 +15,7 @@ type
     SaveDialog1: TSaveDialog;
     ToolBar1: TToolBar;
     ScrollBox1: TScrollBox;
-    Image1: TImage;
+    ImageTree: TImage;
     tbImageSave: TToolButton;
     ToolButton1: TToolButton;
     ListDepthLimit: TComboBox;
@@ -27,11 +27,11 @@ type
     tbNext: TToolButton;
     ToolButton3: TToolButton;
     TrackBar1: TTrackBar;
-    procedure Image1MouseDown(Sender: TObject; Button: TMouseButton;
+    procedure ImageTreeMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
-    procedure Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
+    procedure ImageTreeMouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
-    procedure Image1MouseUp(Sender: TObject; Button: TMouseButton;
+    procedure ImageTreeMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure tbImageSaveClick(Sender: TObject);
@@ -41,7 +41,7 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure ListDepthLimitChange(Sender: TObject);
     procedure ScrollBox1Resize(Sender: TObject);
-    procedure Image1DblClick(Sender: TObject);
+    procedure ImageTreeDblClick(Sender: TObject);
     procedure tbGotoPersonClick(Sender: TObject);
     procedure tbPrevClick(Sender: TObject);
     procedure tbNextClick(Sender: TObject);
@@ -91,7 +91,7 @@ begin
   try
     NavAdd(FPerson);
 
-    FChart.Bitmap := Image1.Picture.Bitmap;
+    FChart.Bitmap := ImageTree.Picture.Bitmap;
     FChart.DepthLimit := FDepthLimit;
     FChart.Options := fmGEDKeeper.Options.ChartOptions;
     FChart.Tree := FTree;
@@ -114,19 +114,19 @@ begin
   end;
 end;
 
-procedure TfmChart.Image1MouseDown(Sender: TObject; Button: TMouseButton;
+procedure TfmChart.ImageTreeMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
   FX := X;
   FY := Y;
 
   if (Button = mbRight) then begin
-    Image1.Cursor := crSizeAll;
+    ImageTree.Cursor := crSizeAll;
     FDown := True;
   end;
 end;
 
-procedure TfmChart.Image1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+procedure TfmChart.ImageTreeMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
 var
   dx, dy: Integer;
 begin
@@ -139,11 +139,11 @@ begin
   end;
 end;
 
-procedure TfmChart.Image1MouseUp(Sender: TObject; Button: TMouseButton;
+procedure TfmChart.ImageTreeMouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
   if (FDown) then begin
-    Image1.Cursor := crDefault;
+    ImageTree.Cursor := crDefault;
     FDown := False;
   end;
 
@@ -159,8 +159,8 @@ procedure TfmChart.SetTreeBounds(const Value: TRect);
 begin
   FTreeBounds := Value;
 
-  Image1.Height := Value.Bottom - Value.Top + 1;
-  Image1.Width := Value.Right - Value.Left + 1;
+  ImageTree.Height := Value.Bottom - Value.Top + 1;
+  ImageTree.Width := Value.Right - Value.Left + 1;
 
   ScrollBox1Resize(nil);
 end;
@@ -175,7 +175,7 @@ begin
   if SaveDialog1.Execute then begin
     bmp := TJPEGImage.Create;
     try
-      bmp.Assign(Image1.Picture.Graphic);
+      bmp.Assign(ImageTree.Picture.Graphic);
       bmp.CompressionQuality := 100;
       bmp.Compress();
 
@@ -220,16 +220,16 @@ end;
 
 procedure TfmChart.ScrollBox1Resize(Sender: TObject);
 begin
-  if (Image1.Height < ScrollBox1.ClientHeight)
-  then Image1.Top := (ScrollBox1.ClientHeight - Image1.Height) div 2
-  else Image1.Top := 0;
+  if (ImageTree.Height < ScrollBox1.ClientHeight)
+  then ImageTree.Top := (ScrollBox1.ClientHeight - ImageTree.Height) div 2
+  else ImageTree.Top := 0;
 
-  if (Image1.Width < ScrollBox1.ClientWidth)
-  then Image1.Left := (ScrollBox1.ClientWidth - Image1.Width) div 2
-  else Image1.Left := 0;
+  if (ImageTree.Width < ScrollBox1.ClientWidth)
+  then ImageTree.Left := (ScrollBox1.ClientWidth - ImageTree.Width) div 2
+  else ImageTree.Left := 0;
 end;
 
-procedure TfmChart.Image1DblClick(Sender: TObject);
+procedure TfmChart.ImageTreeDblClick(Sender: TObject);
 var
   p: TPerson;
   i_rec: TGEDCOMIndividualRecord;

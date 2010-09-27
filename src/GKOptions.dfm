@@ -3,7 +3,7 @@ object fmOptions: TfmOptions
   Top = 118
   BorderStyle = bsDialog
   Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080
-  ClientHeight = 409
+  ClientHeight = 417
   ClientWidth = 513
   Color = clBtnFace
   DefaultMonitor = dmMainForm
@@ -21,7 +21,7 @@ object fmOptions: TfmOptions
     Left = 0
     Top = 0
     Width = 513
-    Height = 361
+    Height = 369
     ActivePage = SheetCommon
     Align = alTop
     TabOrder = 0
@@ -136,29 +136,13 @@ object fmOptions: TfmOptions
           Text = 'edProxyPass'
         end
       end
-      object GroupBox6: TGroupBox
+      object GroupBox7: TGroupBox
         Left = 232
         Top = 8
         Width = 265
         Height = 41
-        Caption = #1048#1085#1089#1090#1088#1091#1084#1077#1085#1090#1099
-        TabOrder = 3
-        object CheckGEDCOMOptimize: TCheckBox
-          Left = 8
-          Top = 16
-          Width = 249
-          Height = 17
-          Caption = #1054#1087#1090#1080#1084#1080#1079#1072#1094#1080#1103' '#1089#1086#1093#1088#1072#1085#1103#1077#1084#1099#1093' '#1092#1072#1081#1083#1086#1074
-          TabOrder = 0
-        end
-      end
-      object GroupBox7: TGroupBox
-        Left = 232
-        Top = 56
-        Width = 265
-        Height = 41
         Caption = #1055#1086#1076#1089#1082#1072#1079#1082#1080
-        TabOrder = 4
+        TabOrder = 3
         object CheckShowOnStart: TCheckBox
           Left = 8
           Top = 16
@@ -170,14 +154,14 @@ object fmOptions: TfmOptions
       end
       object rgEditMode: TRadioGroup
         Left = 232
-        Top = 104
+        Top = 56
         Width = 265
         Height = 57
         Caption = #1056#1077#1078#1080#1084' '#1088#1072#1073#1086#1090#1099
         Items.Strings = (
           #1055#1088#1086#1089#1090#1086#1081
           #1055#1088#1086#1076#1074#1080#1085#1091#1090#1099#1081)
-        TabOrder = 5
+        TabOrder = 4
       end
     end
     object SheetView: TTabSheet
@@ -187,8 +171,8 @@ object fmOptions: TfmOptions
         Left = 0
         Top = 0
         Width = 505
-        Height = 333
-        ActivePage = SheetViewCommon
+        Height = 341
+        ActivePage = SheetViewPersons
         Align = alClient
         TabOrder = 0
         object SheetViewCommon: TTabSheet
@@ -503,7 +487,7 @@ object fmOptions: TfmOptions
       end
       object GroupBox5: TGroupBox
         Left = 8
-        Top = 216
+        Top = 224
         Width = 241
         Height = 105
         Caption = #1043#1077#1085#1077#1088#1072#1094#1080#1103' '#1088#1086#1089#1087#1080#1089#1077#1081
@@ -538,7 +522,7 @@ object fmOptions: TfmOptions
       end
       object EditPedigreeFormat: TRadioGroup
         Left = 256
-        Top = 216
+        Top = 224
         Width = 241
         Height = 57
         Caption = #1060#1086#1088#1084#1072#1090
@@ -547,11 +531,20 @@ object fmOptions: TfmOptions
           #1050#1086#1084#1087#1072#1082#1090#1085#1099#1081' ('#1090#1088#1072#1076#1080#1094#1080#1086#1085#1085#1099#1081' '#1059#1048#1056#1054')')
         TabOrder = 3
       end
+      object chkChildlessExclude: TCheckBox
+        Left = 8
+        Top = 200
+        Width = 489
+        Height = 17
+        Alignment = taLeftJustify
+        Caption = #1048#1089#1082#1083#1102#1095#1080#1090#1100' '#1085#1077' '#1076#1086#1089#1090#1080#1075#1096#1080#1093' '#1076#1077#1090#1086#1088#1086#1076#1085#1086#1075#1086' '#1074#1086#1079#1088#1072#1089#1090#1072
+        TabOrder = 4
+      end
     end
   end
   object btnAccept: TBitBtn
     Left = 336
-    Top = 376
+    Top = 384
     Width = 81
     Height = 25
     Caption = #1055#1088#1080#1085#1103#1090#1100
@@ -561,7 +554,7 @@ object fmOptions: TfmOptions
   end
   object btnCancel: TBitBtn
     Left = 424
-    Top = 376
+    Top = 384
     Width = 81
     Height = 25
     Caption = #1054#1090#1084#1077#1085#1080#1090#1100

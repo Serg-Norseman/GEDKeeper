@@ -10,7 +10,7 @@ uses
 
 type
   TfmCalendar = class(TForm)
-    ListView1: TListView;
+    lvDates: TListView;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
@@ -43,10 +43,7 @@ begin
   qtc.Top := 8;
   qtc.StartOfWeek := Monday;
   qtc.OnChange := Self.DateChange;
-  qtc.Width := ListView1.Width;
-
-  ListView1.ReadOnly := True;
-  ListView1.RowSelect := True;
+  qtc.Width := lvDates.Width;
 
   DateChange(nil);
 end;
@@ -57,7 +54,7 @@ procedure TfmCalendar.DateChange(Sender: TObject);
   var
     item: TListItem;
   begin
-    item := ListView1.Items.Add;
+    item := lvDates.Items.Add;
     item.Caption := aCalendar;
     item.SubItems.Add(aDate);
   end;
@@ -71,12 +68,13 @@ var
 begin
   gdt := qtc.CalendarDate;
 
-  ListView1.Clear;
+  lvDates.Clear;
 
   edt.Era := AD;
 
   DecodeDate(gdt, edt.Year, edt.Month, edt.Day);
-  AddItem('Григорианский', gkDateToStr(edt) + ', ' + LongDayNames[DayOfWeek(gdt)]);
+  s := gkDateToStr(edt) + ', ' + LongDayNames[DayOfWeek(gdt)];
+  AddItem('Григорианский', s);
 
   jd := gregorian_to_jd(edt.Year, edt.Month, edt.Day) { + (Math.floor(sec + 60 * (min + 60 * hour) + 0.5) / 86400.0);};
   jd_to_julian(jd, year, month, day);

@@ -8,7 +8,8 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   ComCtrls, StdCtrls, ExtCtrls, Buttons, Menus, Masks, ActnList,
   GKCommon, GedCom551, HTMemo, bsCtrls, GKSheetList, GKUIToolkit, GKLists,
-  GKGenBase;
+  GKGenBase
+  {$IFNDEF EXT_LISTS}{$ELSE}, EnhListView, ExtListView{$ENDIF};
 
 type
   TFilePropertiesMode = (fpmAuthor, fpmDiags, fpmAdvanced);
@@ -48,40 +49,13 @@ type
     FGenBase: TGenBase;
     FLockedRecords: TList;
     FModified: Boolean;
+    FShieldState: TShieldState;
     FTree: TGEDCOMTree;
     FUndoman: TUndoManager;
     FXFilter: TPersonsFilter;
 
-    // GUI
-    ListPersons: TBSListView;
-    mPersonSummary: THTMemo;
-    ListFamilies: TBSListView;
-    mFamilySummary: THTMemo;
-    ListNotes: TBSListView;
-    mNoteSummary: THTMemo;
-    ListMultimedia: TBSListView;
-    mMediaSummary: THTMemo;
-    ListSources: TBSListView;
-    mSourceSummary: THTMemo;
-    ListRepositories: TBSListView;
-    mRepositorySummary: THTMemo;
-
-    ListGroups: TBSListView;
-    mGroupSummary: THTMemo;
-    ListResearches: TBSListView;
-    mResearchSummary: THTMemo;
-    ListTasks: TBSListView;
-    mTaskSummary: THTMemo;
-    ListCommunications: TBSListView;
-    mCommunicationSummary: THTMemo;
-
-    ListLocations: TBSListView;
-    mLocationSummary: THTMemo;
-    FShieldState: TShieldState;
-    //
-
     procedure CleanFamily(aFamily: TGEDCOMFamilyRecord);
-    function  IsMainList(aRecType: TGEDCOMRecordType; aList: TBSListView): Boolean;
+    function  IsMainList(aRecType: TGEDCOMRecordType; aList: TGKListView): Boolean;
     procedure ListSelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
     procedure NavAdd(aRec: TGEDCOMRecord);
     procedure SetFileName(const Value: string);
@@ -95,19 +69,45 @@ type
     function  RequestModify(aRec: TGEDCOMRecord): Boolean;
     function ModifyRecord(var aRecord: TGEDCOMRecord; anAction: TRecAction; aConfirm: Boolean): Boolean;}
   public
+    // GUI
+    ListPersons: TRecordsView;
+    mPersonSummary: THTMemo;
+    ListFamilies: TRecordsView;
+    mFamilySummary: THTMemo;
+    ListNotes: TRecordsView;
+    mNoteSummary: THTMemo;
+    ListMultimedia: TRecordsView;
+    mMediaSummary: THTMemo;
+    ListSources: TRecordsView;
+    mSourceSummary: THTMemo;
+    ListRepositories: TRecordsView;
+    mRepositorySummary: THTMemo;
+    ListGroups: TRecordsView;
+    mGroupSummary: THTMemo;
+    ListResearches: TRecordsView;
+    mResearchSummary: THTMemo;
+    ListTasks: TRecordsView;
+    mTaskSummary: THTMemo;
+    ListCommunications: TRecordsView;
+    mCommunicationSummary: THTMemo;
+    ListLocations: TRecordsView;
+    mLocationSummary: THTMemo;
+    //
+
     FCounts: array [TGEDCOMRecordType] of TRecCount;
 
     procedure ApplyFilter();
-    procedure CalcCounts();
     procedure ChangeRecord(aRecord: TGEDCOMRecord);
     procedure ChangesClear();
     function  CheckModified: Boolean;
     procedure Clear();
     procedure CreateListView(aOwner: TComponent; aParent: TWinControl; var aList: TBSListView);
     procedure CreatePage(aPage: TTabSheet; aRecType: TGEDCOMRecordType;
-      var aList: TBSListView; var aSummary: THTMemo);
+      var aList: TRecordsView; var aSummary: THTMemo);
     function  CreatePersonDialog(aTarget: TGEDCOMIndividualRecord;
       aTargetMode: TTargetMode; aNeedSex: TGEDCOMSex): TGEDCOMIndividualRecord;
+    procedure CreateRecordsView(aOwner: TComponent; aParent: TWinControl;
+      aRecordType: TGEDCOMRecordType; var aList: TRecordsView);
     procedure ExportToExcel();
     procedure ExportToWeb();
     procedure FileLoad(aFileName: string);
@@ -121,7 +121,6 @@ type
     function  GetCurFileTempPath(): string;
     function  GenRecordLink(aRecord: TGEDCOMRecord; aSigned: Boolean = True): string;
     function  GetSelectedPerson(): TGEDCOMIndividualRecord;
-    function  GetSelectedRecord(aList: TBSListView): TGEDCOMRecord;
     procedure ListsRefresh(aTitles: Boolean = False);
     procedure NavNext();
     procedure NavPrev();
@@ -139,12 +138,11 @@ type
     procedure ShowMap();
     procedure ShowMedia(aMediaRec: TGEDCOMMultimediaRecord);
     procedure ShowStats();
+    procedure ShowStereoView();
     procedure ShowTips();
     procedure ShowTreeAncestors();
     procedure ShowTreeDescendants();
     procedure TreeTools();
-    procedure UpdateList(aRecType: TGEDCOMRecordType; aList: TBSListView;
-      aTitles: Boolean; aFilter: TPersonsFilter; aAutoSizeColumn: Integer = -1);
 
     function CheckPath(): Boolean;
     function GetArcFileName(): string;
@@ -234,6 +232,11 @@ type
     procedure ShowCommunicationInfo(aCommunicationRec: TGEDCOMCommunicationRecord; aSummary: TStrings);
     procedure ShowLocationInfo(aLocationRec: TGEDCOMLocationRecord; aSummary: TStrings);
 
+    procedure TimeLine_Init();
+    procedure TimeLine_Done();
+    function  TimeLine_GetYear(): Integer;
+    procedure TimeLine_SetYear(aYear: Integer);
+
     property Backman: TBackManager read FBackman;
     property FileName: string read FFileName write SetFileName;
     property Filter: TPersonsFilter read FXFilter;
@@ -256,7 +259,7 @@ uses
   GKAssociationEdit, GKFilter, GKTreeTools, GKGroupEdit, GKPersonScan, GKMain,
   GKProgress, GKSourceCitEdit, GKRepositoryEdit, GKMediaEdit, Clipbrd,
   bsMiscUtils, GKResearchEdit, GKTaskEdit, GKCommunicationEdit, GKLocationEdit,
-  GKCommands, GKTipsDlg, GKUserRefEdit;
+  GKCommands, GKTipsDlg, GKUserRefEdit, GKStereoView, GKTimeLine;
 
 {$R *.dfm}
 
@@ -286,11 +289,9 @@ begin
   CreatePage(SheetSources, rtSource, ListSources, mSourceSummary);
   CreatePage(SheetRepositories, rtRepository, ListRepositories, mRepositorySummary);
   CreatePage(SheetGroups, rtGroup, ListGroups, mGroupSummary);
-
   CreatePage(SheetResearches, rtResearch, ListResearches, mResearchSummary);
   CreatePage(SheetTasks, rtTask, ListTasks, mTaskSummary);
   CreatePage(SheetCommunications, rtCommunication, ListCommunications, mCommunicationSummary);
-
   CreatePage(SheetLocations, rtLocation, ListLocations, mLocationSummary);
 
   PageRecords.ActivePage := SheetPersons;
@@ -335,8 +336,45 @@ begin
   end;
 end;
 
+procedure TfmBase.CreateRecordsView(aOwner: TComponent; aParent: TWinControl;
+  aRecordType: TGEDCOMRecordType; var aList: TRecordsView);
+begin
+  aList := TRecordsView.Create(Self);
+  with aList do begin
+    Parent := aParent;
+    Align := alClient;
+
+    HideSelection := False;
+    ReadOnly := True;
+    ViewStyle := vsReport;
+
+    {$IFNDEF EXT_LISTS}
+    RowSelect := True;
+
+    SortType := stText;
+    SortColumn := 0;
+    SortDirection := sdAscending;
+    ShowSortSign := True;
+    {$ELSE}
+    ExtendedStyles := [lvxFullRowSelect];
+
+    AutoResort := True;
+    ShowSortArrows := True;
+    AutoColumnSort := acsSortToggle;
+
+    {$IFDEF VIRTUAL_LISTS}
+    VirtualMode := True;
+    {$ENDIF}
+
+    {$ENDIF}
+
+    Tree := FTree;
+    RecordType := aRecordType;
+  end;
+end;
+
 procedure TfmBase.CreatePage(aPage: TTabSheet; aRecType: TGEDCOMRecordType;
-  var aList: TBSListView; var aSummary: THTMemo);
+  var aList: TRecordsView; var aSummary: THTMemo);
 begin
   aSummary := THTMemo.Create(Self);
   with aSummary do begin
@@ -356,12 +394,11 @@ begin
     Beveled := True;
   end;
 
-  CreateListView(Self, aPage, aList);
+  CreateRecordsView(Self, aPage, aRecType, aList);
+  aList.IsMainList := True;
   aList.OnDblClick := RecordEdit;
   aList.OnSelectItem := ListSelectItem;
-
-  if not(aRecType in [rtNone, rtSubmission, rtSubmitter])
-  then UpdateList(aRecType, aList, True, FXFilter);
+  aList.UpdateTitles();
 end;
 
 function TfmBase.CheckModified(): Boolean;
@@ -386,7 +423,7 @@ end;
 
 procedure TfmBase.SelectRecordByXRef(XRef: string);
 
-  procedure SelectItemByRec(aList: TBSListView; aRec: TGEDCOMRecord; aTab: Integer);
+  procedure SelectItemByRec(aList: TGKListView; aRec: TGEDCOMRecord; aTab: Integer);
   var
     i: Integer;
     item: TListItem;
@@ -860,9 +897,11 @@ procedure TfmBase.ListSelectItem(Sender: TObject; Item: TListItem; Selected: Boo
 var
   data: TObject;
 begin
-  if (Item = nil) or not(Selected)
+  {if (Item = nil) or not(Selected)
   then data := nil
-  else data := TObject(Item.Data);
+  else data := TObject(Item.Data);}
+
+  data := GetSelectedRecord(TCustomListView(Sender));
 
   NavAdd(TGEDCOMRecord(data));
 
@@ -1352,65 +1391,7 @@ begin
   end;
 end;
 
-procedure TfmBase.CalcCounts();
-var
-  i: Integer;
-  rec: TGEDCOMRecord;
-begin
-  for i := Ord(Low(TGEDCOMRecordType)) to Ord(High(TGEDCOMRecordType)) do begin
-    FCounts[TGEDCOMRecordType(i)].Total := 0;
-    FCounts[TGEDCOMRecordType(i)].Filtered := 0;
-  end;
-
-  for i := 0 to FTree.RecordsCount - 1 do begin
-    rec := FTree.Records[i];
-
-    if (rec is TGEDCOMFamilyRecord)
-    then Inc(FCounts[rtFamily].Total)
-    else
-    if (rec is TGEDCOMIndividualRecord)
-    then Inc(FCounts[rtIndividual].Total)
-    else
-    if (rec is TGEDCOMMultimediaRecord)
-    then Inc(FCounts[rtMultimedia].Total)
-    else
-    if (rec is TGEDCOMNoteRecord)
-    then Inc(FCounts[rtNote].Total)
-    else
-    if (rec is TGEDCOMRepositoryRecord)
-    then Inc(FCounts[rtRepository].Total)
-    else
-    if (rec is TGEDCOMSourceRecord)
-    then Inc(FCounts[rtSource].Total)
-    else
-    if (rec is TGEDCOMSubmissionRecord)
-    then Inc(FCounts[rtSubmission].Total)
-    else
-    if (rec is TGEDCOMSubmitterRecord)
-    then Inc(FCounts[rtSubmitter].Total)
-    else
-    if (rec is TGEDCOMGroupRecord)
-    then Inc(FCounts[rtGroup].Total)
-    else
-    if (rec is TGEDCOMResearchRecord)
-    then Inc(FCounts[rtResearch].Total)
-    else
-    if (rec is TGEDCOMTaskRecord)
-    then Inc(FCounts[rtTask].Total)
-    else
-    if (rec is TGEDCOMCommunicationRecord)
-    then Inc(FCounts[rtCommunication].Total)
-    else
-    if (rec is TGEDCOMLocationRecord)
-    then Inc(FCounts[rtLocation].Total);
-  end;
-
-  for i := Ord(Low(TGEDCOMRecordType)) to Ord(High(TGEDCOMRecordType)) do begin
-    FCounts[TGEDCOMRecordType(i)].Filtered := FCounts[TGEDCOMRecordType(i)].Total;
-  end;
-end;
-
-function TfmBase.IsMainList(aRecType: TGEDCOMRecordType; aList: TBSListView): Boolean;
+function TfmBase.IsMainList(aRecType: TGEDCOMRecordType; aList: TGKListView): Boolean;
 begin
   Result := False;
   
@@ -1433,75 +1414,51 @@ begin
 end;
 
 procedure TfmBase.ListsRefresh(aTitles: Boolean = False);
-var
-  bm: {$IFNDEF DELPHI_NET}Pointer{$ELSE}TObject{$ENDIF};
 
-  procedure SaveBookmark(aList: TBSListView);
-  begin
-    if (aList.Selected = nil)
-    then bm := nil
-    else bm := aList.Selected.Data;
-  end;
-
-  procedure RestoreBookmark(aList: TBSListView);
+  procedure IntUpdate(aRecView: TRecordsView; ASCol: Integer);
   var
+    bm: {$IFNDEF DELPHI_NET}Pointer{$ELSE}TObject{$ENDIF};
     item: TListItem;
   begin
-    item := aList.FindData(0, bm, True, False);
-    if (item <> nil) then begin
-      item.Selected := True;
-      item.MakeVisible(False);
+    if (aRecView.Selected = nil)
+    then bm := nil
+    else bm := aRecView.Selected.Data;
+
+    aRecView.UpdateContents(FShieldState, aTitles, FXFilter, ASCol);
+
+    if (bm <> nil) then begin
+      item := aRecView.FindData(0, bm, True, False);
+      if (item <> nil) then begin
+        item.Selected := True;
+        item.MakeVisible(False);
+      end;
     end;
+
+    FCounts[aRecView.RecordType].Total := aRecView.TotalCount;
+    FCounts[aRecView.RecordType].Filtered := aRecView.FilteredCount;
   end;
 
 begin
-  CalcCounts();
+  {$IFDEF PROFILER}Profiler.Mark(9, True);{$ENDIF}
 
-  SaveBookmark(ListPersons);
-  UpdateList(rtIndividual, ListPersons, aTitles, FXFilter, 2);
-  RestoreBookmark(ListPersons);
+  IntUpdate(ListFamilies, 1);
+  IntUpdate(ListNotes, -1);
+  IntUpdate(ListMultimedia, 1);
+  IntUpdate(ListSources, 1);
+  IntUpdate(ListRepositories, 1);
+  IntUpdate(ListGroups, 1);
+  IntUpdate(ListResearches, 1);
+  IntUpdate(ListTasks, 1);
+  IntUpdate(ListCommunications, 1);
+  IntUpdate(ListLocations, 1);
 
-  SaveBookmark(ListFamilies);
-  UpdateList(rtFamily, ListFamilies, aTitles, FXFilter, 1);
-  RestoreBookmark(ListFamilies);
-
-  SaveBookmark(ListNotes);
-  UpdateList(rtNote, ListNotes, aTitles, FXFilter);
-  RestoreBookmark(ListNotes);
-
-  SaveBookmark(ListMultimedia);
-  UpdateList(rtMultimedia, ListMultimedia, aTitles, FXFilter, 1);
-  RestoreBookmark(ListMultimedia);
-
-  SaveBookmark(ListSources);
-  UpdateList(rtSource, ListSources, aTitles, FXFilter, 1);
-  RestoreBookmark(ListSources);
-
-  SaveBookmark(ListRepositories);
-  UpdateList(rtRepository, ListRepositories, aTitles, FXFilter, 1);
-  RestoreBookmark(ListRepositories);
-
-  SaveBookmark(ListGroups);
-  UpdateList(rtGroup, ListGroups, aTitles, FXFilter, 1);
-  RestoreBookmark(ListGroups);
-
-  SaveBookmark(ListResearches);
-  UpdateList(rtResearch, ListResearches, aTitles, FXFilter, 1);
-  RestoreBookmark(ListResearches);
-
-  SaveBookmark(ListTasks);
-  UpdateList(rtTask, ListTasks, aTitles, FXFilter, 1);
-  RestoreBookmark(ListTasks);
-
-  SaveBookmark(ListCommunications);
-  UpdateList(rtCommunication, ListCommunications, aTitles, FXFilter, 1);
-  RestoreBookmark(ListCommunications);
-
-  SaveBookmark(ListLocations);
-  UpdateList(rtLocation, ListLocations, aTitles, FXFilter, 1);
-  RestoreBookmark(ListLocations);
+  IntUpdate(ListPersons, 2);
+  
+  {$IFDEF PROFILER}Profiler.Mark(9, False);{$ENDIF}
 
   PageRecordsChange(nil);
+
+  if Assigned(fmTimeLine) then fmTimeLine.CheckTimeWin(Self);
 end;
 
 procedure TfmBase.ShowPersonInfo(iRec: TGEDCOMIndividualRecord; aSummary: TStrings);
@@ -1634,143 +1591,6 @@ begin
     end;
   except
     on E: Exception do LogWrite('ShowPersonInfo(): ' + E.Message);
-  end;
-end;
-
-procedure TfmBase.UpdateList(aRecType: TGEDCOMRecordType; aList: TBSListView;
-  aTitles: Boolean; aFilter: TPersonsFilter; aAutoSizeColumn: Integer = -1);
-var
-  man: TListManager;
-  isMain: Boolean;
-
-  (*procedure UpdateItem(rec: TGEDCOMRecord);
-  var
-    changed: Boolean;
-    idx: Integer;
-    item: TListItem;
-  begin
-    {$IFDEF PROFILER}Profiler.Mark(4, True);{$ENDIF}
-    man.Fetch(rec);
-
-    item := aList.FindData(0, rec, True, False);
-
-    if man.CheckFilter(aFilter, FShieldState) then begin
-      FCounts[aRecType].Filtered := FCounts[aRecType].Filtered + 1;
-
-      idx := FChangedRecords[aRecType].IndexOf(rec);
-      changed := (idx >= 0);
-      if (changed) then FChangedRecords[aRecType].Delete(idx);
-
-      if (changed) or (item = nil) then begin
-        if (item = nil) then begin
-          item := aList.Items.Add();
-          item.Caption := IntToStr(GetId(rec));
-          item.Data := rec;
-        end else item.SubItems.Clear();
-
-        man.UpdateItem(item, isMain);
-      end;
-    end else begin
-      if (item <> nil)
-      then aList.Items.Delete({aList.Items.IndexOf(}item.Index{)});
-    end;
-    {$IFDEF PROFILER}Profiler.Mark(4, False);{$ENDIF}
-  end;*)
-
-  procedure UpdateItem(rec: TGEDCOMRecord; item: TListItem);
-  begin
-    if not(RecordIsType(aRecType, rec)) then Exit;
-
-    {$IFDEF PROFILER}Profiler.Mark(4, True);{$ENDIF}
-    man.Fetch(rec);
-
-    if man.CheckFilter(aFilter, FShieldState) then begin
-      FCounts[aRecType].Filtered := FCounts[aRecType].Filtered + 1;
-
-      if (item = nil) then begin
-        item := aList.Items.Add();
-        item.Caption := IntToStr(GetId(rec));
-        item.Data := rec;
-      end else item.SubItems.Clear();
-
-      man.UpdateItem(item, isMain);
-    end;
-    {$IFDEF PROFILER}Profiler.Mark(4, False);{$ENDIF}
-  end;
-
-var
-  i: Integer;
-  fullRefresh: Boolean;
-  rec: TGEDCOMRecord;
-  item: TListItem;
-begin
-  try
-    case aRecType of
-      rtNone: ;
-      rtIndividual: man := TIndividualListMan.Create(FTree);
-      rtFamily: man := TFamilyListMan.Create(FTree);
-      rtNote: man := TNoteListMan.Create(FTree);
-      rtMultimedia: man := TMultimediaListMan.Create(FTree);
-      rtSource: man := TSourceListMan.Create(FTree);
-      rtRepository: man := TRepositoryListMan.Create(FTree);
-      rtGroup: man := TGroupListMan.Create(FTree);
-      rtResearch: man := TResearchListMan.Create(FTree);
-      rtTask: man := TTaskListMan.Create(FTree);
-      rtCommunication: man := TCommunicationListMan.Create(FTree);
-      rtLocation: man := TLocationListMan.Create(FTree);
-      rtSubmission: man := nil;
-      rtSubmitter: man := nil;
-    end;
-
-    isMain := IsMainList(aRecType, aList);
-    fullRefresh := not(isMain) or (FChangedRecords[aRecType].Count = 0);
-    FCounts[aRecType].Filtered := 0;
-
-    if (aTitles) and (man <> nil)
-    then man.UpdateTitles(aList, isMain);
-
-    aList.Items.BeginUpdate();
-    try
-      {$IFDEF PROFILER}Profiler.Mark(2, True);{$ENDIF}
-
-      (*
-      {if (fullRefresh)
-      then aList.Items.Clear();}
-
-      for i := 0 to FTree.RecordsCount - 1 do begin
-        rec := FTree.Records[i];
-
-        if RecordIsType(aRecType, rec)
-        then UpdateItem(rec);
-      end;*)
-
-      if (fullRefresh) then begin
-        aList.Items.Clear();
-        for i := 0 to FTree.RecordsCount - 1 do begin
-          UpdateItem(FTree.Records[i], nil);
-        end;
-      end else begin
-        for i := FChangedRecords[aRecType].Count - 1 downto 0 do begin
-          rec := TObject(FChangedRecords[aRecType][i]) as TGEDCOMRecord;
-          FChangedRecords[aRecType].Delete(i);
-
-          item := aList.FindData(0, rec, True, False);
-          UpdateItem(rec, item);
-        end;
-      end;
-      
-      {$IFDEF PROFILER}Profiler.Mark(2, False);{$ENDIF}
-
-      {$IFDEF PROFILER}Profiler.Mark(3, True);{$ENDIF}
-      if (aAutoSizeColumn >= 0)
-      then ResizeColumn(aList, aAutoSizeColumn);
-      {$IFDEF PROFILER}Profiler.Mark(3, False);{$ENDIF}
-    finally
-      aList.Items.EndUpdate();
-      FreeAndNil(man);
-    end;
-  except
-    on E: Exception do LogWrite('UpdateList(): ' + E.Message);
   end;
 end;
 
@@ -2180,13 +2000,6 @@ begin
   end;
 end;
 
-function TfmBase.GetSelectedRecord(aList: TBSListView): TGEDCOMRecord;
-begin
-  if (aList.Selected = nil)
-  then Result := nil
-  else Result := TGEDCOMRecord(aList.Selected.Data);
-end;
-
 function TfmBase.GetSelectedPerson(): TGEDCOMIndividualRecord;
 begin
   Result := TGEDCOMIndividualRecord(GetSelectedRecord(ListPersons));
@@ -2283,8 +2096,8 @@ begin
     dlg.TargetMode := aTargetMode;
     dlg.Target := aTarget;
     if (dlg.ShowModal = mrOk) then begin
-      Result := CreatePersonEx(FTree, dlg.EditName.Text, dlg.EditPatronymic.Text,
-        dlg.EditFamily.Text, TGEDCOMSex(dlg.EditSex.ItemIndex), True);
+      Result := CreatePersonEx(FTree, dlg.edName.Text, dlg.edPatronymic.Text,
+        dlg.edFamily.Text, TGEDCOMSex(dlg.EditSex.ItemIndex), True);
       ChangeRecord(Result);
     end;
   finally
@@ -3235,8 +3048,6 @@ var
   subm, ext_name: string;
   is_advanced: Boolean;
 begin
-  GedCom551.SaveOptimize := fmGEDKeeper.Options.GEDCOMOptimize;
-
   subm := FTree.Header.TagStringValue('SUBM');
   is_advanced := IsAdvanced();
   ext_name := FTree.Header.TagStringValue(ExtTag);
@@ -3258,6 +3069,8 @@ begin
     FTree.Header.AddTag(AdvTag);
     FTree.Header.AddTag(ExtTag, ext_name);
   end;
+
+  FTree.Pack();
 
   fs := TFileStream.Create(aFileName, fmCreate);
   try
@@ -3533,6 +3346,30 @@ begin
   finally
     fmFilter.Destroy;
   end;
+end;
+
+procedure TfmBase.TimeLine_Done();
+begin
+  FXFilter.LifeMode := lmAll;
+  FXFilter.TimeLineYear := -1;
+  ApplyFilter();
+end;
+
+procedure TfmBase.TimeLine_Init();
+begin
+  FXFilter.LifeMode := lmTimeLine;
+  //FXFilter.TimeLineYear := 1;
+end;
+
+function TfmBase.TimeLine_GetYear(): Integer;
+begin
+  Result := FXFilter.TimeLineYear;
+end;
+
+procedure TfmBase.TimeLine_SetYear(aYear: Integer);
+begin
+  FXFilter.TimeLineYear := aYear;
+  ApplyFilter();
 end;
 
 procedure TfmBase.TreeTools();
@@ -3978,6 +3815,8 @@ end;
 procedure TfmBase.FormActivate(Sender: TObject);
 begin
   fmGEDKeeper.UpdateControls();
+
+  if Assigned(fmTimeLine) then fmTimeLine.CheckTimeWin(Self);
 end;
 
 procedure TfmBase.FormDeactivate(Sender: TObject);
@@ -4153,6 +3992,12 @@ begin
   finally
     birth_days.Destroy;
   end;
+end;
+
+procedure TfmBase.ShowStereoView();
+begin
+  fmStereoView := TfmStereoView.Create(Self);
+  fmStereoView.Show;
 end;
 
 end.

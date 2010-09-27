@@ -172,6 +172,7 @@ type
   TGEDCOMAssociation = class;
   TGEDCOMChangeDate = class;
   TGEDCOMGroupRecord = class;
+  TGEDCOMSourceRecord = class;
 
   TGEDCOMTagClass = class of TGEDCOMTag;
 
@@ -211,6 +212,8 @@ type
 
     procedure SaveHeaderToStream(AStream: TStream);
     procedure SaveFooterToStream(AStream: TStream);
+
+    procedure Pack();
 
     function XRefIndex_Find(const XRef: string): TGEDCOMRecord;
     function XRefIndex_NewXRef(Sender: TGEDCOMRecord): string;
@@ -261,7 +264,8 @@ type
     procedure SaveToStream(AStream: TStream); virtual;
 
     procedure ReplaceXRefs(aMap: TXRefReplaceMap);
-    procedure ResetOwner(AOwner: TGEDCOMObject); 
+    procedure ResetOwner(AOwner: TGEDCOMObject);
+    procedure Pack();
 
     property Count: Integer read GetCount;
     property Items[Index: Integer]: TGEDCOMObject read GetItems; default;
@@ -318,6 +322,7 @@ type
     function  TagStringValue(const ATag: string): string;
     function  TagStrings(ATag: TGEDCOMCustomTag; var AStrings: TStrings): TStrings;
 
+    procedure Pack(); virtual;
     procedure ReplaceXRefs(aMap: TXRefReplaceMap); virtual;
     procedure ResetOwner(AOwner: TGEDCOMObject); virtual;
 
@@ -367,6 +372,7 @@ type
     procedure DeleteMultimediaLink(aIndex: Integer); overload;
     procedure DeleteMultimediaLink(AMultimediaLink: TGEDCOMMultimediaLink); overload;
 
+    procedure Pack(); override;
     procedure ReplaceXRefs(aMap: TXRefReplaceMap); override;
     procedure ResetOwner(AOwner: TGEDCOMObject); override;
     procedure SaveToStream(AStream: TStream); override;
@@ -523,7 +529,10 @@ type
     procedure DeleteUserReference(aIndex: Integer); overload;
     procedure DeleteUserReference(AUserReference: TGEDCOMUserReference); overload;
 
+    function IndexOfSource(aSource: TGEDCOMSourceRecord): Integer;
+
     procedure MoveTo(aToRecord: TGEDCOMRecord; aFlags: TMoveFlags = []); virtual;
+    procedure Pack(); override;
     procedure ReplaceXRefs(aMap: TXRefReplaceMap); override;
     procedure ResetOwner(AOwner: TGEDCOMObject); override;
     procedure SaveToStream(AStream: TStream); override;
@@ -639,6 +648,7 @@ type
     destructor Destroy; override;
 
     procedure Assign(Source: TGEDCOMCustomTag); override;
+    procedure Pack(); override;
     procedure ReplaceXRefs(aMap: TXRefReplaceMap); override;
     procedure ResetOwner(AOwner: TGEDCOMObject); override;
     procedure SaveToStream(AStream: TStream); override;
@@ -895,6 +905,8 @@ type
     procedure Assign(Source: TGEDCOMCustomTag); override;
     procedure Clear(); override;
     function IsEmpty(): Boolean; override;
+
+    procedure Pack(); override;
     procedure ReplaceXRefs(aMap: TXRefReplaceMap); override;
     procedure ResetOwner(AOwner: TGEDCOMObject); override;
     procedure SaveToStream(AStream: TStream); override;
@@ -948,6 +960,7 @@ type
     function  IndexOfChild(ChildRec: TGEDCOMRecord): Integer;
 
     procedure MoveTo(aToRecord: TGEDCOMRecord; aFlags: TMoveFlags = []); override;
+    procedure Pack(); override;
     procedure ReplaceXRefs(aMap: TXRefReplaceMap); override;
     procedure ResetOwner(AOwner: TGEDCOMObject); override;
     procedure SaveToStream(AStream: TStream); override;
@@ -1062,6 +1075,7 @@ type
     procedure ExchangeSpouses(Index1, Index2: Integer);
 
     procedure MoveTo(aToRecord: TGEDCOMRecord; aFlags: TMoveFlags = []); override;
+    procedure Pack(); override;
     procedure ReplaceXRefs(aMap: TXRefReplaceMap); override;
     procedure ResetOwner(AOwner: TGEDCOMObject); override;
     procedure SaveToStream(AStream: TStream); override;
@@ -1133,6 +1147,7 @@ type
     procedure Clear(); override;
     function IsEmpty(): Boolean; override;
 
+    procedure Pack(); override;
     procedure ReplaceXRefs(aMap: TXRefReplaceMap); override;
     procedure ResetOwner(AOwner: TGEDCOMObject); override;
     procedure SaveToStream(AStream: TStream); override;
@@ -1241,6 +1256,7 @@ type
     function IsEmpty(): Boolean; override;
 
     procedure MoveTo(aToRecord: TGEDCOMRecord; aFlags: TMoveFlags = []); override;
+    procedure Pack(); override;
     procedure ReplaceXRefs(aMap: TXRefReplaceMap); override;
     procedure ResetOwner(AOwner: TGEDCOMObject); override;
     procedure SaveToStream(AStream: TStream); override;
@@ -2002,9 +2018,6 @@ function GEDCOMCreateUID(): string;
 
 {==============================================================================}
 
-var
-  SaveOptimize: Boolean = False;
-
 implementation
 
 uses
@@ -2012,6 +2025,65 @@ uses
   System.IO,
   {$ENDIF}
   Windows, bsMiscUtils, GKCommon;
+
+{==============================================================================}
+
+type
+  TTagProps = set of (tpEmptySkip);
+
+const
+  TagBaseSize = 24;
+  TagBase: array [0..TagBaseSize-1] of record
+    Name: string;
+    Props: TTagProps;
+  end = (
+    (Name: 'ADDR'; Props: [tpEmptySkip]),
+    (Name: 'AGNC'; Props: [tpEmptySkip]),
+    (Name: 'AUTH'; Props: [tpEmptySkip]),
+    (Name: 'CAUS'; Props: [tpEmptySkip]),
+    (Name: 'CHAN'; Props: [tpEmptySkip]),
+    (Name: 'CITY'; Props: [tpEmptySkip]),
+    (Name: 'CTRY'; Props: [tpEmptySkip]),
+    (Name: 'DATE'; Props: [tpEmptySkip]),
+    (Name: 'PAGE'; Props: [tpEmptySkip]),
+    (Name: 'PLAC'; Props: [tpEmptySkip]),
+    (Name: 'POST'; Props: [tpEmptySkip]),
+    (Name: 'PUBL'; Props: [tpEmptySkip]),
+    (Name: 'RESN'; Props: [tpEmptySkip]),
+    (Name: 'STAE'; Props: [tpEmptySkip]),
+    (Name: 'TEXT'; Props: [tpEmptySkip]),
+    (Name: 'TIME'; Props: [tpEmptySkip]),
+    (Name: 'TYPE'; Props: [tpEmptySkip]),
+
+    (Name: 'NPFX'; Props: [tpEmptySkip]),
+    (Name: 'GIVN'; Props: [tpEmptySkip]),
+    (Name: 'NICK'; Props: [tpEmptySkip]),
+    (Name: 'SPFX'; Props: [tpEmptySkip]),
+    (Name: 'SURN'; Props: [tpEmptySkip]),
+    (Name: 'NSFX'; Props: [tpEmptySkip]),
+
+    (Name: '_LOC'; Props: [tpEmptySkip])
+    //(Name: '_STAT'; Props: [tpEmptySkip])
+  );
+
+function GetTagProps(const aName: string): TTagProps;
+var
+  i: Integer;
+begin
+  Result := [];
+  for i := 0 to TagBaseSize - 1 do
+    if (TagBase[i].Name = aName) then begin
+      Result := TagBase[i].Props;
+      Break;
+    end;
+end;
+
+function IsWriteSkip(const aName: string): Boolean;
+begin
+  Result := (tpEmptySkip in GetTagProps(aName));
+end;
+
+{==============================================================================}
 
 resourcestring
   ATagHasInvalidType = 'The tag %s is of type %s, but type %s was expected';
@@ -2662,6 +2734,14 @@ begin
   end;
 end;
 
+procedure TGEDCOMTree.Pack();
+var
+  i: Integer;
+begin
+  for i := 0 to FRecords.Count - 1 do
+    GetRecords(i).Pack();
+end;
+
 function TGEDCOMTree.IndexOfRecord(ARecord: TGEDCOMRecord): Integer;
 begin
   Result := FRecords.IndexOfObject(ARecord);
@@ -2817,6 +2897,22 @@ var
 begin
   for i := 0 to FList.Count - 1 do
     TGEDCOMCustomTag(FList[i]).ResetOwner(AOwner);
+end;
+
+procedure TGEDCOMList.Pack();
+var
+  i: Integer;
+  tag: TGEDCOMCustomTag;
+begin
+  for i := FList.Count - 1 downto 0 do begin
+    if (TObject(FList[i]) is TGEDCOMCustomTag) then begin
+      tag := TGEDCOMCustomTag(FList[i]);
+      tag.Pack();
+
+      if tag.IsEmpty() and IsWriteSkip(tag.Name)
+      then Delete(i);
+    end;
+  end;
 end;
 
 { TGEDCOMCustomDate }
@@ -4046,60 +4142,6 @@ end;
 
 { TGEDCOMCustomTag }
 
-type
-  TTagProps = set of (tpEmptySkip);
-
-const
-  TagBaseSize = 22;
-  TagBase: array [0..TagBaseSize-1] of record
-    Name: string;
-    Props: TTagProps;
-  end = (
-    //(Name: ''; Props: [])
-    (Name: 'ADDR'; Props: [tpEmptySkip]),
-    (Name: 'AGNC'; Props: [tpEmptySkip]),
-    (Name: 'AUTH'; Props: [tpEmptySkip]),
-    (Name: 'CAUS'; Props: [tpEmptySkip]),
-    (Name: 'DATE'; Props: [tpEmptySkip]),
-    (Name: 'PLAC'; Props: [tpEmptySkip]),
-    (Name: 'PUBL'; Props: [tpEmptySkip]),
-    (Name: 'RESN'; Props: [tpEmptySkip]),
-    (Name: 'TIME'; Props: [tpEmptySkip]),
-    (Name: 'TYPE'; Props: [tpEmptySkip]),
-    (Name: 'CTRY'; Props: [tpEmptySkip]),
-    (Name: 'STAE'; Props: [tpEmptySkip]),
-    (Name: 'CITY'; Props: [tpEmptySkip]),
-    (Name: 'POST'; Props: [tpEmptySkip]),
-
-    (Name: 'TEXT'; Props: [tpEmptySkip]),
-
-    (Name: 'NPFX'; Props: [tpEmptySkip]),
-    (Name: 'GIVN'; Props: [tpEmptySkip]),
-    (Name: 'NICK'; Props: [tpEmptySkip]),
-    (Name: 'SPFX'; Props: [tpEmptySkip]),
-    (Name: 'SURN'; Props: [tpEmptySkip]),
-    (Name: 'NSFX'; Props: [tpEmptySkip]),
-
-    (Name: '_LOC'; Props: [tpEmptySkip])
-  );
-
-function GetTagProps(const aName: string): TTagProps;
-var
-  i: Integer;
-begin
-  Result := [];
-  for i := 0 to TagBaseSize - 1 do
-    if (TagBase[i].Name = aName) then begin
-      Result := TagBase[i].Props;
-      Break;
-    end;
-end;
-
-function IsWriteSkip(const aName: string): Boolean;
-begin
-  Result := (SaveOptimize) and (tpEmptySkip in GetTagProps(aName));
-end;
-
 constructor TGEDCOMCustomTag.Create(AOwner, AParent: TGEDCOMObject);
 begin
   inherited Create;
@@ -4300,6 +4342,11 @@ begin
   FStringValue := AString;
 end;
 
+procedure TGEDCOMCustomTag.Pack();
+begin
+  if (FTags <> nil) then FTags.Pack();
+end;
+
 procedure TGEDCOMCustomTag.SaveTagsToStream(AStream: TStream;
   const ATagSorting: array of string);
 var
@@ -4369,9 +4416,6 @@ end;
 
 procedure TGEDCOMCustomTag.SaveToStream(AStream: TStream);
 begin
-  if not(Self is TGEDCOMRecord) and IsEmpty() and IsWriteSkip(FName)
-  then Exit;
-
   SaveValueToStream(AStream);
   SaveTagsToStream(AStream, []);
 end;
@@ -4734,6 +4778,15 @@ begin
     (GetSourceCitationsCount = 0) and (GetMultimediaLinksCount = 0);
 end;
 
+procedure TGEDCOMTagWithLists.Pack();
+begin
+  inherited Pack();
+
+  if (FNotes <> nil) then FNotes.Pack();
+  if (FSourceCitations <> nil) then FSourceCitations.Pack();
+  if (FMultimediaLinks <> nil) then FMultimediaLinks.Pack();
+end;
+
 procedure TGEDCOMTagWithLists.ResetOwner(AOwner: TGEDCOMObject);
 begin
   inherited ResetOwner(AOwner);
@@ -4985,6 +5038,16 @@ begin
   Result := TGEDCOMChangeDate(TagClass('CHAN', TGEDCOMChangeDate));
 end;
 
+procedure TGEDCOMRecord.Pack();
+begin
+  inherited Pack();
+
+  if Assigned(FNotes) then FNotes.Pack();
+  if Assigned(FSourceCitations) then FSourceCitations.Pack();
+  if Assigned(FMultimediaLinks) then FMultimediaLinks.Pack();
+  if Assigned(FUserReferences) then FUserReferences.Pack();
+end;
+
 procedure TGEDCOMRecord.SaveToStream(AStream: TStream);
 begin
   inherited SaveToStream(AStream);
@@ -5086,6 +5149,20 @@ procedure TGEDCOMRecord.InitNew();
 begin
   NewXRef();
   NewUID();
+end;
+
+function TGEDCOMRecord.IndexOfSource(aSource: TGEDCOMSourceRecord): Integer;
+var
+  i: Integer;
+begin
+  Result := -1;
+  if (FSourceCitations = nil) then Exit;
+
+  for i := 0 to FSourceCitations.Count - 1 do
+    if (TGEDCOMPointer(FSourceCitations[i]).XRef = aSource.XRef) then begin
+      Result := i;
+      Break;
+    end;
 end;
 
 { TGEDCOMDateExact }
@@ -5397,6 +5474,15 @@ begin
     (GetChildrenCount = 0) and (GetSpouseSealingCount = 0);
 end;
 
+procedure TGEDCOMFamilyRecord.Pack();
+begin
+  inherited Pack();
+
+  if Assigned(FChildren) then FChildren.Pack();
+  if Assigned(FFamilyEvents) then FFamilyEvents.Pack();
+  if Assigned(FSpouseSealings) then FSpouseSealings.Pack();
+end;
+
 procedure TGEDCOMFamilyRecord.SaveToStream(AStream: TStream);
 begin
   inherited SaveToStream(AStream);
@@ -5602,7 +5688,7 @@ begin
   if (FGroups = nil) then Exit;
 
   for i := 0 to FGroups.Count - 1 do
-    if (CleanXRef(TGEDCOMPointer(FGroups[i]).XRef) = CleanXRef(aGroup.XRef)) then begin
+    if (TGEDCOMPointer(FGroups[i]).XRef = aGroup.XRef) then begin
       Result := i;
       Break;
     end;
@@ -5839,7 +5925,7 @@ begin
   or (SU = 'PROP') or (SU = 'RELI') or (SU = 'RESI') or (SU = 'SSN')
   or (SU = 'TITL') or (SU = 'FACT')
 
-  or (SU = '_HOBBY') or (SU = '_AWARD')
+  or (SU = '_TRAVEL') or (SU = '_HOBBY') or (SU = '_AWARD')
   or (SU = '_MILI') or (SU = '_MILI_IND') or (SU = '_MILI_DIS') or (SU = '_MILI_RANK')
 
   then Result := AddIndividualAttribute(TGEDCOMIndividualAttribute.CreateTag(Owner, Self, SU, AValue))
@@ -6142,6 +6228,27 @@ begin
     2: SetTagStringValue('AFN', Value);
     3: SetTagStringValue('RIN', Value);   // Automated record ID
   end;
+end;
+
+procedure TGEDCOMIndividualRecord.Pack();
+begin
+  inherited Pack();
+
+  if Assigned(FPersonalNames) then FPersonalNames.Pack();
+  if Assigned(FChildToFamilyLinks) then FChildToFamilyLinks.Pack();
+  if Assigned(FSpouseToFamilyLinks) then FSpouseToFamilyLinks.Pack();
+
+  if Assigned(FIndividualEvents) then FIndividualEvents.Pack();
+  if Assigned(FIndividualAttributes) then FIndividualAttributes.Pack();
+  if Assigned(FIndividualOrdinances) then FIndividualOrdinances.Pack();
+
+  if Assigned(FSubmittors) then FSubmittors.Pack();
+  if Assigned(FAssociations) then FAssociations.Pack();
+  if Assigned(FAliasses) then FAliasses.Pack();
+
+  if Assigned(FAncestorsInterest) then FAncestorsInterest.Pack();
+  if Assigned(FDescendantsInterest) then FDescendantsInterest.Pack();
+  if Assigned(FGroups) then FGroups.Pack();
 end;
 
 procedure TGEDCOMIndividualRecord.SaveToStream(AStream: TStream);
@@ -6662,6 +6769,13 @@ begin
     (GetNotesCount = 0) and (GetSourceCitationsCount = 0);
 end;
 
+procedure TGEDCOMMultimediaRecord.Pack();
+begin
+  inherited Pack();
+
+  if (FFileReferences <> nil) then FFileReferences.Pack();
+end;
+
 procedure TGEDCOMMultimediaRecord.ReplaceXRefs(aMap: TXRefReplaceMap);
 begin
   inherited ReplaceXRefs(aMap);
@@ -7005,6 +7119,13 @@ end;
 procedure TGEDCOMSourceRecord.SetTitle(Value: TStrings);
 begin
   SetTagStrings(TagClass('TITL', TGEDCOMTag), Value);
+end;
+
+procedure TGEDCOMSourceRecord.Pack();
+begin
+  inherited Pack();
+
+  if Assigned(FRepositoryCitations) then FRepositoryCitations.Pack();
 end;
 
 procedure TGEDCOMSourceRecord.SaveToStream(AStream: TStream);
@@ -8178,6 +8299,12 @@ begin
   Result := inherited IsEmpty() and FPieces.IsEmpty();
 end;
 
+procedure TGEDCOMPersonalName.Pack();
+begin
+  inherited Pack();
+  FPieces.Pack();
+end;
+
 function TGEDCOMPersonalName.GetFirstPart: string;
 begin
   Result := StringValue;
@@ -8728,6 +8855,12 @@ begin
   inherited Destroy;
 end;
 
+procedure TGEDCOMCustomEvent.Pack();
+begin
+  inherited Pack();
+  FDetail.Pack();
+end;
+
 procedure TGEDCOMCustomEvent.Assign(Source: TGEDCOMCustomTag);
 begin
   inherited Assign(Source);
@@ -9237,7 +9370,7 @@ begin
   Result := -1;
 
   for i := 0 to FMembers.Count - 1 do
-    if (CleanXRef(TGEDCOMPointer(FMembers[i]).XRef) = CleanXRef(aMember.XRef)) then begin
+    if (TGEDCOMPointer(FMembers[i]).XRef = aMember.XRef) then begin
       Result := i;
       Break;
     end;
@@ -9415,7 +9548,7 @@ begin
   Result := -1;
 
   for i := 0 to FTasks.Count - 1 do
-    if (CleanXRef(TGEDCOMPointer(FTasks[i]).XRef) = CleanXRef(aTask.XRef)) then begin
+    if (TGEDCOMPointer(FTasks[i]).XRef = aTask.XRef) then begin
       Result := i;
       Break;
     end;
@@ -9459,7 +9592,7 @@ begin
   Result := -1;
 
   for i := 0 to FCommunications.Count - 1 do
-    if (CleanXRef(TGEDCOMPointer(FCommunications[i]).XRef) = CleanXRef(aCommunication.XRef)) then begin
+    if (TGEDCOMPointer(FCommunications[i]).XRef = aCommunication.XRef) then begin
       Result := i;
       Break;
     end;
@@ -9598,7 +9731,7 @@ begin
   if (FGroups = nil) then Exit;
 
   for i := 0 to FGroups.Count - 1 do
-    if (CleanXRef(TGEDCOMPointer(FGroups[i]).XRef) = CleanXRef(aGroup.XRef)) then begin
+    if (TGEDCOMPointer(FGroups[i]).XRef = aGroup.XRef) then begin
       Result := i;
       Break;
     end;

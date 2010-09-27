@@ -140,7 +140,7 @@ object fmTaskEdit: TfmTaskEdit
       TabOrder = 4
       Text = '  .  .    '
     end
-    object EditGoalType: TComboBox
+    object cbGoalType: TComboBox
       Left = 72
       Top = 16
       Width = 113
@@ -148,7 +148,7 @@ object fmTaskEdit: TfmTaskEdit
       Style = csDropDownList
       ItemHeight = 13
       TabOrder = 0
-      OnChange = EditGoalTypeChange
+      OnChange = cbGoalTypeChange
     end
     object EditGoal: TEdit
       Left = 192

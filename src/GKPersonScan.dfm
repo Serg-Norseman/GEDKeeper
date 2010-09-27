@@ -100,6 +100,7 @@ object fmPersonScan: TfmPersonScan
       Width = 281
       Height = 21
       TabOrder = 1
+      OnChange = EditBirthDateChange
     end
     object CheckBirth: TCheckBox
       Left = 8
@@ -156,6 +157,7 @@ object fmPersonScan: TfmPersonScan
       Width = 281
       Height = 21
       TabOrder = 2
+      OnChange = EditDeathDateChange
     end
   end
 end

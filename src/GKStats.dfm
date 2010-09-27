@@ -4,7 +4,7 @@ object fmStats: TfmStats
   BorderStyle = bsDialog
   Caption = #1057#1090#1072#1090#1080#1089#1090#1080#1082#1072
   ClientHeight = 503
-  ClientWidth = 641
+  ClientWidth = 785
   Color = clBtnFace
   DefaultMonitor = dmMainForm
   Font.Charset = RUSSIAN_CHARSET
@@ -26,7 +26,7 @@ object fmStats: TfmStats
   object GroupBox1: TGroupBox
     Left = 0
     Top = 0
-    Width = 641
+    Width = 785
     Height = 169
     Align = alTop
     Caption = #1057#1074#1086#1076#1082#1072
@@ -34,7 +34,7 @@ object fmStats: TfmStats
     object ListCommon: TListView
       Left = 2
       Top = 15
-      Width = 637
+      Width = 781
       Height = 152
       Align = alClient
       Columns = <
@@ -63,7 +63,7 @@ object fmStats: TfmStats
   object Panel1: TPanel
     Left = 0
     Top = 169
-    Width = 641
+    Width = 785
     Height = 334
     Align = alClient
     BevelInner = bvRaised
@@ -72,7 +72,7 @@ object fmStats: TfmStats
     object ToolBar1: TToolBar
       Left = 2
       Top = 2
-      Width = 637
+      Width = 781
       Height = 25
       AutoSize = True
       ButtonHeight = 21
@@ -92,7 +92,7 @@ object fmStats: TfmStats
         Height = 21
         Style = csDropDownList
         DropDownCount = 16
-        ItemHeight = 13
+        ItemHeight = 0
         TabOrder = 0
         OnChange = cbTypeChange
       end

@@ -38,7 +38,7 @@ object fmNoteEdit: TfmNoteEdit
     OnClick = btnCancelClick
     Kind = bkCancel
   end
-  object MemoNote: TMemo
+  object mmNote: TMemo
     Left = 8
     Top = 8
     Width = 385

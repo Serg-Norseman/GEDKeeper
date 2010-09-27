@@ -120,7 +120,7 @@ procedure TfmLocationEdit.btnSearchClick(Sender: TObject);
 var
   points: TObjectList;
   k: Integer;
-  pt: TMapPoint;
+  pt: TGMapPoint;
   item: TListItem;
 begin
   ListGeoCoords.Clear;
@@ -130,13 +130,13 @@ begin
     RequestGeoCoords(EditName.Text, points);
 
     for k := 0 to points.Count - 1 do
-      if (points[k] is TMapPoint) then begin
-        pt := TMapPoint(points[k]);
+      if (points[k] is TGMapPoint) then begin
+        pt := TGMapPoint(points[k]);
 
         item := ListGeoCoords.Items.Add();
-        item.Caption := pt.Address;
-        item.SubItems.Add(Format('%.6f', [pt.Lat]));
-        item.SubItems.Add(Format('%.6f', [pt.Lon]));
+        item.Caption := pt.Hint;
+        item.SubItems.Add(Format('%.6f', [pt.Latitude]));
+        item.SubItems.Add(Format('%.6f', [pt.Longitude]));
       end;
   finally
     points.Destroy;

@@ -1,10 +1,16 @@
 unit GKSheetList;
 
+{$I GEDKeeper.inc}
+
 interface
 
 uses
   Types, Classes, Graphics, Controls, ComCtrls, ActnList, Menus, StdCtrls,
-  bsCtrls, GKCommon;
+  GKCommon, bsCtrls
+  {$IFNDEF EXT_LISTS}{$ELSE}, ExtListView{$ENDIF};
+
+type
+  TGKListView = {$IFNDEF EXT_LISTS}TBSListView{$ELSE}TdfsExtListView{$ENDIF};
 
 type
   TModifyEvent = procedure (Sender: TObject; ItemData: TObject; Action: TRecAction) of object;
@@ -83,7 +89,7 @@ type
 procedure AddListColumn(aList: TCustomListControl; aCaption: string; aWidth: Integer;
   aAutoSize: Boolean = False);
 
-procedure ResizeColumn(aList: TBSListView; aColumnIndex: Integer);
+procedure ResizeColumn(aList: TCustomListView; aColumnIndex: Integer);
   
 implementation
 
@@ -93,7 +99,7 @@ uses
 procedure AddListColumn(aList: TCustomListControl; aCaption: string; aWidth: Integer;
   aAutoSize: Boolean = False);
 begin
-  if not(aList is TBSListView) then Exit;
+  if not(aList is TCustomListView) then Exit;
 
   with TBSListView(aList).Columns.Add() do begin
     Caption := aCaption;
@@ -102,27 +108,30 @@ begin
   end;
 end;
 
-procedure ResizeColumn(aList: TBSListView; aColumnIndex: Integer);
+procedure ResizeColumn(aList: TCustomListView; aColumnIndex: Integer);
 var
   i, max_w, w: Integer;
   item: TListItem;
+  view: TBSListView;
 begin
-  if (aColumnIndex < 0) or (aColumnIndex >= aList.Columns.Count) then Exit;
+  view := TBSListView(aList);
+
+  if (aColumnIndex < 0) or (aColumnIndex >= view.Columns.Count) then Exit;
 
   max_w := 0;
 
-  for i := 0 to aList.Items.Count - 1 do begin
-    item := aList.Items[i];
+  for i := 0 to view.Items.Count - 1 do begin
+    item := view.Items[i];
 
     if (aColumnIndex = 0)
-    then w := aList.StringWidth(item.Caption)
-    else w := aList.StringWidth(item.SubItems[aColumnIndex - 1]);
+    then w := view.StringWidth(item.Caption)
+    else w := view.StringWidth(item.SubItems[aColumnIndex - 1]);
 
     if (max_w < w) then max_w := w;
   end;
 
   if (max_w <> 0)
-  then aList.Columns[aColumnIndex].Width := max_w + 16;
+  then view.Columns[aColumnIndex].Width := max_w + 16;
 end;
 
 { TSheetList }

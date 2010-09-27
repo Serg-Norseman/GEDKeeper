@@ -135,7 +135,7 @@ object fmResearchEdit: TfmResearchEdit
     Top = 97
     Width = 609
     Height = 312
-    ActivePage = SheetGroups
+    ActivePage = SheetTasks
     Align = alTop
     TabOrder = 0
     object SheetTasks: TTabSheet

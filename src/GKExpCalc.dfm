@@ -20,7 +20,7 @@ object fmCalcWidget: TfmCalcWidget
   OnDestroy = FormDestroy
   PixelsPerInch = 96
   TextHeight = 13
-  object ListOutput: TListBox
+  object lbOutput: TListBox
     Left = 8
     Top = 8
     Width = 257
@@ -37,6 +37,7 @@ object fmCalcWidget: TfmCalcWidget
     Height = 21
     TabOrder = 1
     OnKeyDown = edExpressionKeyDown
+    OnKeyPress = edExpressionKeyPress
   end
   object chkPutToClipboard: TCheckBox
     Left = 8

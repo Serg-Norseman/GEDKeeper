@@ -3,7 +3,7 @@ object fmFilter: TfmFilter
   Top = 146
   BorderStyle = bsDialog
   Caption = #1060#1080#1083#1100#1090#1088
-  ClientHeight = 393
+  ClientHeight = 448
   ClientWidth = 297
   Color = clBtnFace
   DefaultMonitor = dmMainForm
@@ -45,9 +45,16 @@ object fmFilter: TfmFilter
     Height = 13
     Caption = #1043#1088#1091#1087#1087#1099
   end
+  object Label5: TLabel
+    Left = 8
+    Top = 304
+    Width = 54
+    Height = 13
+    Caption = #1048#1089#1090#1086#1095#1085#1080#1082#1080
+  end
   object btnAccept: TBitBtn
     Left = 120
-    Top = 360
+    Top = 408
     Width = 81
     Height = 25
     Caption = #1055#1088#1080#1085#1103#1090#1100
@@ -57,7 +64,7 @@ object fmFilter: TfmFilter
   end
   object btnCancel: TBitBtn
     Left = 208
-    Top = 360
+    Top = 408
     Width = 81
     Height = 25
     Caption = #1054#1090#1084#1077#1085#1080#1090#1100
@@ -78,7 +85,7 @@ object fmFilter: TfmFilter
     TabOrder = 0
     OnClick = rgLifeClick
   end
-  object EditName: TComboBox
+  object edName: TComboBox
     Left = 8
     Top = 176
     Width = 281
@@ -112,7 +119,7 @@ object fmFilter: TfmFilter
   end
   object GroupBox1: TGroupBox
     Left = 8
-    Top = 304
+    Top = 352
     Width = 281
     Height = 41
     Caption = #1056#1072#1089#1096#1080#1088#1077#1085#1085#1099#1077
@@ -144,5 +151,14 @@ object fmFilter: TfmFilter
     Style = csDropDownList
     ItemHeight = 13
     TabOrder = 8
+  end
+  object cbSource: TComboBox
+    Left = 8
+    Top = 320
+    Width = 281
+    Height = 21
+    Style = csDropDownList
+    ItemHeight = 13
+    TabOrder = 9
   end
 end

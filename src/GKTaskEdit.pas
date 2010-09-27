@@ -22,16 +22,15 @@ type
     EditStopDate: TMaskEdit;
     Label5: TLabel;
     Label1: TLabel;
-    EditGoalType: TComboBox;
+    cbGoalType: TComboBox;
     EditGoal: TEdit;
     btnGoalSelect: TSpeedButton;
     procedure btnAcceptClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnGoalSelectClick(Sender: TObject);
-    procedure EditGoalTypeChange(Sender: TObject);
+    procedure cbGoalTypeChange(Sender: TObject);
   private
     FTask: TGEDCOMTaskRecord;
-
     FTempRec: TGEDCOMRecord;
 
     FNotesList: TSheetList;
@@ -63,7 +62,7 @@ begin
     EditPriority.Items.Add(PriorityNames[rp]);
 
   for gt := Low(TGoalType) to High(TGoalType) do
-    EditGoalType.Items.Add(GoalNames[gt]);
+    cbGoalType.Items.Add(GoalNames[gt]);
 
   FNotesList := TSheetList.Create(SheetNotes, lmBox);
   FNotesList.OnModify := ListModify;
@@ -88,7 +87,7 @@ begin
       EditPriority.ItemIndex := -1;
       EditStartDate.Text := '';
       EditStopDate.Text := '';
-      EditGoalType.ItemIndex := 0;
+      cbGoalType.ItemIndex := 0;
       EditGoal.Text := '';
     end else begin
       EditPriority.ItemIndex := Ord(FTask.Priority);
@@ -96,7 +95,7 @@ begin
       EditStopDate.Text := GEDCOMDateToStr(TGEDCOMDate(FTask.StopDate));
 
       GetTaskGoal(Base.Tree, FTask, gt, FTempRec);
-      EditGoalType.ItemIndex := Ord(gt);
+      cbGoalType.ItemIndex := Ord(gt);
       case gt of
         gtIndividual: EditGoal.Text := GetNameStr((FTempRec as TGEDCOMIndividualRecord));
         gtFamily: EditGoal.Text := GetFamilyStr((FTempRec as TGEDCOMFamilyRecord));
@@ -105,7 +104,7 @@ begin
       end;
     end;
 
-    EditGoalTypeChange(nil);
+    cbGoalTypeChange(nil);
 
     ListsRefresh();
   except
@@ -121,7 +120,7 @@ begin
   FTask.StartDate.ParseString(StrToGEDCOMDate(EditStartDate.Text));
   FTask.StopDate.ParseString(StrToGEDCOMDate(EditStopDate.Text));
 
-  gt := TGoalType(EditGoalType.ItemIndex);
+  gt := TGoalType(cbGoalType.ItemIndex);
   case gt of
     gtIndividual, gtFamily, gtSource: FTask.Goal := EncloseXRef(FTempRec.XRef);
     gtOther: FTask.Goal := EditGoal.Text;
@@ -144,18 +143,16 @@ begin
 end;
 
 procedure TfmTaskEdit.btnGoalSelectClick(Sender: TObject);
-var
-  gt: TGoalType;
 begin
-  gt := TGoalType(EditGoalType.ItemIndex);
-  case gt of
+  case TGoalType(cbGoalType.ItemIndex) of
     gtIndividual: begin
       FTempRec := Base.SelectPerson(nil, tmNone, svNone);
       EditGoal.Text := GetNameStr((FTempRec as TGEDCOMIndividualRecord));
     end;
 
     gtFamily: begin
-      //
+      FTempRec := Base.SelectRecord(smFamily);
+      EditGoal.Text := GetFamilyStr(FTempRec as TGEDCOMFamilyRecord);
     end;
 
     gtSource: begin
@@ -169,12 +166,9 @@ begin
   end;
 end;
 
-procedure TfmTaskEdit.EditGoalTypeChange(Sender: TObject);
-var
-  gt: TGoalType;
+procedure TfmTaskEdit.cbGoalTypeChange(Sender: TObject);
 begin
-  gt := TGoalType(EditGoalType.ItemIndex);
-  case gt of
+  case TGoalType(cbGoalType.ItemIndex) of
     gtIndividual: begin
       btnGoalSelect.Enabled := True;
       EditGoal.Color := clBtnFace;
