@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons, ComCtrls,
-  GedCom551, GKBase, GKCommon, GKSheetList, bsCtrls;
+  GedCom551, GKBase, GKCommon, GKLists, bsCtrls;
 
 type
   TfmMediaEdit = class(TForm)
@@ -164,12 +164,12 @@ procedure TfmMediaEdit.ListModify(Sender: TObject; ItemData: TObject;
   Action: TRecAction);
 begin
   if (Sender = FNotesList) then begin
-    if Base.ModifyRecNote(FMediaRec, TGEDCOMNotes(ItemData), Action)
+    if Base.ModifyRecNote(Self, FMediaRec, TGEDCOMNotes(ItemData), Action)
     then ControlsRefresh();
   end
   else
   if (Sender = FSourcesList) then begin
-    if Base.ModifyRecSource(FMediaRec, TGEDCOMSourceCitation(ItemData), Action)
+    if Base.ModifyRecSource(Self, FMediaRec, TGEDCOMSourceCitation(ItemData), Action)
     then ControlsRefresh();
   end;
 end;

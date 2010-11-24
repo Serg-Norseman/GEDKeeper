@@ -5,8 +5,8 @@ unit GKFilter;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, ExtCtrls, Buttons, Mask, GKBase;
+  SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, ExtCtrls,
+  Buttons, Mask, GKBase;
 
 type
   TfmFilter = class(TForm)
@@ -38,7 +38,7 @@ type
 
 implementation
 
-uses GKMain, GKCommon, GedCom551, GKLists;
+uses GKMain, GedCom551, GKCommon, GKLists;
 
 {$R *.dfm}
 
@@ -74,6 +74,7 @@ begin
     if (rgLife.ItemIndex = 3) then begin
       try
         dt := StrToDate(edAliveBeforeDate.Text);
+        //Hole(dt);
       except
         MessageDlg('Дата неверна', mtError, [mbOk], 0);
         ModalResult := mrNone;

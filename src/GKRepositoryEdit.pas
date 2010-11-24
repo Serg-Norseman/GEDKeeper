@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, StdCtrls, Buttons, ComCtrls, ExtCtrls,
-  GedCom551, GKBase, GKCommon, GKSheetList;
+  GedCom551, GKBase, GKCommon, GKLists;
 
 type
   TfmRepositoryEdit = class(TForm)
@@ -76,23 +76,15 @@ begin
 end;
 
 procedure TfmRepositoryEdit.btnAddressClick(Sender: TObject);
-var
-  fmAddressEdit: TfmAddressEdit;
 begin
-  fmAddressEdit := TfmAddressEdit.Create(Application);
-  try
-    fmAddressEdit.Address := FRepositoryRecord.Address;
-    fmAddressEdit.ShowModal;
-  finally
-    fmAddressEdit.Destroy;
-  end;
+  Base.ModifyAddress(Self, FRepositoryRecord.Address);
 end;
 
 procedure TfmRepositoryEdit.ListModify(Sender: TObject; ItemData: TObject;
   Action: TRecAction);
 begin
   if (Sender = FNotesList) then begin
-    if Base.ModifyRecNote(FRepositoryRecord, TGEDCOMNotes(ItemData), Action)
+    if Base.ModifyRecNote(Self, FRepositoryRecord, TGEDCOMNotes(ItemData), Action)
     then ControlsRefresh();
   end;
 end;

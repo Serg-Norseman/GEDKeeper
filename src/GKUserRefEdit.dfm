@@ -56,7 +56,6 @@ object fmUserRefEdit: TfmUserRefEdit
     Width = 337
     Height = 21
     ItemHeight = 13
-    Sorted = True
     TabOrder = 0
   end
   object EditType: TComboBox

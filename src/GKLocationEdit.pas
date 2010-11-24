@@ -5,8 +5,8 @@ unit GKLocationEdit;
 interface
 
 uses
-  SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons, ComCtrls,
-  GedCom551, GKBase, GKCommon, GKSheetList, bsCtrls, Contnrs;
+  Windows, SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons,
+  ComCtrls, GedCom551, GKBase, GKCommon, GKLists, bsCtrls, Contnrs;
 
 type
   TfmLocationEdit = class(TForm)
@@ -33,6 +33,8 @@ type
     procedure btnSearchClick(Sender: TObject);
     procedure btnSelectClick(Sender: TObject);
     procedure btnSelectNameClick(Sender: TObject);
+    procedure EditNameKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     FLocationRecord: TGEDCOMLocationRecord;
 
@@ -96,12 +98,12 @@ end;
 procedure TfmLocationEdit.ListModify(Sender: TObject; ItemData: TObject; Action: TRecAction);
 begin
   if (Sender = FNotesList) then begin
-    if Base.ModifyRecNote(FLocationRecord, TGEDCOMNotes(ItemData), Action)
+    if Base.ModifyRecNote(Self, FLocationRecord, TGEDCOMNotes(ItemData), Action)
     then ControlsRefresh();
   end
   else
   if (Sender = FMediaList) then begin
-    if Base.ModifyRecMultimedia(FLocationRecord, TGEDCOMMultimediaLink(ItemData), Action)
+    if Base.ModifyRecMultimedia(Self, FLocationRecord, TGEDCOMMultimediaLink(ItemData), Action)
     then ControlsRefresh();
   end;
 end;
@@ -114,6 +116,13 @@ end;
 procedure TfmLocationEdit.EditNameChange(Sender: TObject);
 begin
   Caption := 'Местоположение "'+EditName.Text+'"';
+end;
+
+procedure TfmLocationEdit.EditNameKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = VK_DOWN) and (ssCtrl in Shift)
+  then EditName.Text := AnsiLowerCase(EditName.Text);
 end;
 
 procedure TfmLocationEdit.btnSearchClick(Sender: TObject);

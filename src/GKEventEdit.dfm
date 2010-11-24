@@ -283,6 +283,7 @@ object fmEventEdit: TfmEventEdit
         Width = 297
         Height = 21
         TabOrder = 3
+        OnKeyDown = EditEventPlaceKeyDown
       end
       object EditEventDateType: TComboBox
         Left = 8

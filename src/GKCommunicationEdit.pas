@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons, ComCtrls,
-  ExtCtrls, GedCom551, GKBase, GKCommon, Mask, GKSheetList, bsCtrls;
+  ExtCtrls, GedCom551, GKBase, GKCommon, Mask, GKLists, bsCtrls;
 
 type
   TfmCommunicationEdit = class(TForm)
@@ -131,12 +131,12 @@ end;
 procedure TfmCommunicationEdit.ListModify(Sender: TObject; ItemData: TObject; Action: TRecAction);
 begin
   if (Sender = FNotesList) then begin
-    if Base.ModifyRecNote(FCommunication, TGEDCOMNotes(ItemData), Action)
+    if Base.ModifyRecNote(Self, FCommunication, TGEDCOMNotes(ItemData), Action)
     then ListsRefresh();
   end
   else
   if (Sender = FMediaList) then begin
-    if Base.ModifyRecMultimedia(FCommunication, TGEDCOMMultimediaLink(ItemData), Action)
+    if Base.ModifyRecMultimedia(Self, FCommunication, TGEDCOMMultimediaLink(ItemData), Action)
     then ListsRefresh();
   end
 end;

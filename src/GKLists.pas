@@ -5,11 +5,92 @@ unit GKLists;
 interface
 
 uses
-  Windows, Classes, GedCom551, GKCommon, ComCtrls, GKSheetList
-  {$IFNDEF EXT_LISTS}, bsCtrls{$ELSE}, ExtListView{$ENDIF};
+  Types, Windows, Classes, Graphics, Controls, ComCtrls, ActnList, Menus,
+  StdCtrls, GedCom551, GKCommon, bsCtrls;
+
+type
+  TGKListView = TBSListView;
+
+type
+  TModifyEvent = procedure (Sender: TObject; ItemData: TObject; Action: TRecAction) of object;
+
+  TListButtons = set of (lbAdd, lbEdit, lbDelete, lbJump, lbMoveUp, lbMoveDown);
+
+  TListMode = (lmView, lmBox);
+
+  TSheetList = class(TCustomControl)
+  private
+    //FActionList: TActionList;
+    FActionAdd: TAction;
+    FActionDelete: TAction;
+    FActionEdit: TAction;
+    FActionJump: TAction;
+    FActionMoveUp: TAction;
+    FActionMoveDown: TAction;
+
+    FBtnAdd: TToolButton;
+    FBtnDelete: TToolButton;
+    FBtnEdit: TToolButton;
+    FBtnLinkJump: TToolButton;
+    FBtnMoveUp: TToolButton;
+    FBtnMoveDown: TToolButton;
+
+    FList: TCustomListControl;
+    FToolBar: TToolBar;
+
+    FOnModify: TModifyEvent;
+    FButtons: TListButtons;
+
+    FListMode: TListMode;
+    FReadOnly: Boolean;
+
+    procedure ButtonClick(Sender: TObject);
+    procedure ListDblClick(Sender: TObject);
+    procedure ListKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    //procedure SetActionList(const Value: TActionList);
+    procedure SheetShow(Sender: TObject);
+    procedure SetButtons(const Value: TListButtons);
+
+    function GetSelectedData(): TObject;
+
+    procedure LBDrawItem(Control: TWinControl; Index: Integer; Rect: TRect;
+      State: TOwnerDrawState);
+    procedure LBMeasureItem(Control: TWinControl; Index: Integer;
+      var Height: Integer);
+    procedure SetReadOnly(const Value: Boolean);
+  protected
+  public
+    constructor Create(AOwner: TComponent; aListMode: TListMode = lmView);
+    destructor Destroy; override;
+
+    //property ActionList: TActionList read FActionList write SetActionList;
+    property Buttons: TListButtons read FButtons write SetButtons;
+    property List: TCustomListControl read FList;
+    property ToolBar: TToolBar read FToolBar;
+
+    procedure ItemAdd();
+    procedure ItemEdit();
+    procedure ItemDelete();
+    procedure ItemJump();
+    procedure ItemMoveUp();
+    procedure ItemMoveDown();
+
+    procedure Columns_BeginUpdate();
+    procedure Columns_Clear();
+    procedure Columns_EndUpdate();
+
+    procedure AddColumn(aCaption: string; aWidth: Integer; aAutoSize: Boolean = False);
+
+    property OnModify: TModifyEvent read FOnModify write FOnModify;
+    property ReadOnly: Boolean read FReadOnly write SetReadOnly;
+  end;
+  
+{==============================================================================}
 
 type
   TGroupMode = (gmAll, gmNone, gmAny, gmSelected);
+
+  TListFilterMode = (flCommon, flSelector);
 
   TPersonsFilter = class(TObject)
   private
@@ -35,7 +116,7 @@ type
     SourceMode: TGroupMode;
     SourceRef: string;
 
-    List: (flCommon, flSelector);
+    List: TListFilterMode;
     ChildSelector: Boolean; // special mode
     TimeLineYear: Integer;
 
@@ -57,7 +138,7 @@ type
 
     function  CheckFilter(aFilter: TPersonsFilter; aShieldState: TShieldState): Boolean; virtual; abstract;
     procedure Fetch(aRec: TGEDCOMRecord); virtual; abstract;
-    function  GetColumnValue(aList: TGKListView; aColIndex: Integer; isMain: Boolean): string; virtual;
+    function  GetColumnValue(aColIndex: Integer; isMain: Boolean): string; virtual;
     procedure InitFilter(aFilter: TPersonsFilter); virtual;
     procedure UpdateItem(aItem: TListItem; isMain: Boolean); virtual; abstract;
     procedure UpdateColumns(aList: TGKListView; isMain: Boolean); virtual; abstract;
@@ -80,19 +161,15 @@ type
     FYearMin, FYearMax: Integer;
 
     // filter runtime
-    isLive: Boolean;
-    bd, dd: TDateTime;
-    age_year, bdy, ddy: Integer;
-    nm, bi_date, de_date, bi_place, de_place, resi_place: string;
-    p_tag: TGEDCOMTag;
-    FGroups, FReligion, FNationality, FEducation, FOccupation, FCaste: string;
-    FMili, FMiliInd, FMiliDis, FMiliRank: string;
+    age_year: Integer;
+
+    function GetGroups(): string;
   protected
     FColumnsMap: TColumnsMap;
   public
     function  CheckFilter(aFilter: TPersonsFilter; aShieldState: TShieldState): Boolean; override;
     procedure Fetch(aRec: TGEDCOMRecord); override;
-    function  GetColumnValue(aList: TGKListView; aColIndex: Integer; isMain: Boolean): string; override;
+    function  GetColumnValue(aColIndex: Integer; isMain: Boolean): string; override;
     procedure InitFilter(aFilter: TPersonsFilter); override;
     procedure UpdateItem(aItem: TListItem; isMain: Boolean); override;
     procedure UpdateColumns(aList: TGKListView; isMain: Boolean); override;
@@ -104,13 +181,10 @@ type
   TFamilyListMan = class(TListManager)
   private
     FRec: TGEDCOMFamilyRecord;
-
-    // runtime
-    FName: string;
   public
     function  CheckFilter(aFilter: TPersonsFilter; aShieldState: TShieldState): Boolean; override;
     procedure Fetch(aRec: TGEDCOMRecord); override;
-    function  GetColumnValue(aList: TGKListView; aColIndex: Integer; isMain: Boolean): string; override;
+    function  GetColumnValue(aColIndex: Integer; isMain: Boolean): string; override;
     procedure UpdateItem(aItem: TListItem; isMain: Boolean); override;
     procedure UpdateColumns(aList: TGKListView; isMain: Boolean); override;
   end;
@@ -121,7 +195,7 @@ type
   public
     function  CheckFilter(aFilter: TPersonsFilter; aShieldState: TShieldState): Boolean; override;
     procedure Fetch(aRec: TGEDCOMRecord); override;
-    function  GetColumnValue(aList: TGKListView; aColIndex: Integer; isMain: Boolean): string; override;
+    function  GetColumnValue(aColIndex: Integer; isMain: Boolean): string; override;
     procedure UpdateItem(aItem: TListItem; isMain: Boolean); override;
     procedure UpdateColumns(aList: TGKListView; isMain: Boolean); override;
   end;
@@ -132,7 +206,7 @@ type
   public
     function  CheckFilter(aFilter: TPersonsFilter; aShieldState: TShieldState): Boolean; override;
     procedure Fetch(aRec: TGEDCOMRecord); override;
-    function  GetColumnValue(aList: TGKListView; aColIndex: Integer; isMain: Boolean): string; override;
+    function  GetColumnValue(aColIndex: Integer; isMain: Boolean): string; override;
     procedure UpdateItem(aItem: TListItem; isMain: Boolean); override;
     procedure UpdateColumns(aList: TGKListView; isMain: Boolean); override;
   end;
@@ -143,7 +217,7 @@ type
   public
     function  CheckFilter(aFilter: TPersonsFilter; aShieldState: TShieldState): Boolean; override;
     procedure Fetch(aRec: TGEDCOMRecord); override;
-    function  GetColumnValue(aList: TGKListView; aColIndex: Integer; isMain: Boolean): string; override;
+    function  GetColumnValue(aColIndex: Integer; isMain: Boolean): string; override;
     procedure UpdateItem(aItem: TListItem; isMain: Boolean); override;
     procedure UpdateColumns(aList: TGKListView; isMain: Boolean); override;
   end;
@@ -154,7 +228,7 @@ type
   public
     function  CheckFilter(aFilter: TPersonsFilter; aShieldState: TShieldState): Boolean; override;
     procedure Fetch(aRec: TGEDCOMRecord); override;
-    function  GetColumnValue(aList: TGKListView; aColIndex: Integer; isMain: Boolean): string; override;
+    function  GetColumnValue(aColIndex: Integer; isMain: Boolean): string; override;
     procedure UpdateItem(aItem: TListItem; isMain: Boolean); override;
     procedure UpdateColumns(aList: TGKListView; isMain: Boolean); override;
   end;
@@ -165,7 +239,7 @@ type
   public
     function  CheckFilter(aFilter: TPersonsFilter; aShieldState: TShieldState): Boolean; override;
     procedure Fetch(aRec: TGEDCOMRecord); override;
-    function  GetColumnValue(aList: TGKListView; aColIndex: Integer; isMain: Boolean): string; override;
+    function  GetColumnValue(aColIndex: Integer; isMain: Boolean): string; override;
     procedure UpdateItem(aItem: TListItem; isMain: Boolean); override;
     procedure UpdateColumns(aList: TGKListView; isMain: Boolean); override;
   end;
@@ -176,7 +250,7 @@ type
   public
     function  CheckFilter(aFilter: TPersonsFilter; aShieldState: TShieldState): Boolean; override;
     procedure Fetch(aRec: TGEDCOMRecord); override;
-    function  GetColumnValue(aList: TGKListView; aColIndex: Integer; isMain: Boolean): string; override;
+    function  GetColumnValue(aColIndex: Integer; isMain: Boolean): string; override;
     procedure UpdateItem(aItem: TListItem; isMain: Boolean); override;
     procedure UpdateColumns(aList: TGKListView; isMain: Boolean); override;
   end;
@@ -184,13 +258,10 @@ type
   TTaskListMan = class(TListManager)
   private
     FRec: TGEDCOMTaskRecord;
-
-    // runtime
-    taskName: string;
   public
     function  CheckFilter(aFilter: TPersonsFilter; aShieldState: TShieldState): Boolean; override;
     procedure Fetch(aRec: TGEDCOMRecord); override;
-    function  GetColumnValue(aList: TGKListView; aColIndex: Integer; isMain: Boolean): string; override;
+    function  GetColumnValue(aColIndex: Integer; isMain: Boolean): string; override;
     procedure UpdateItem(aItem: TListItem; isMain: Boolean); override;
     procedure UpdateColumns(aList: TGKListView; isMain: Boolean); override;
   end;
@@ -201,7 +272,7 @@ type
   public
     function  CheckFilter(aFilter: TPersonsFilter; aShieldState: TShieldState): Boolean; override;
     procedure Fetch(aRec: TGEDCOMRecord); override;
-    function  GetColumnValue(aList: TGKListView; aColIndex: Integer; isMain: Boolean): string; override;
+    function  GetColumnValue(aColIndex: Integer; isMain: Boolean): string; override;
     procedure UpdateItem(aItem: TListItem; isMain: Boolean); override;
     procedure UpdateColumns(aList: TGKListView; isMain: Boolean); override;
   end;
@@ -212,7 +283,7 @@ type
   public
     function  CheckFilter(aFilter: TPersonsFilter; aShieldState: TShieldState): Boolean; override;
     procedure Fetch(aRec: TGEDCOMRecord); override;
-    function  GetColumnValue(aList: TGKListView; aColIndex: Integer; isMain: Boolean): string; override;
+    function  GetColumnValue(aColIndex: Integer; isMain: Boolean): string; override;
     procedure UpdateItem(aItem: TListItem; isMain: Boolean); override;
     procedure UpdateColumns(aList: TGKListView; isMain: Boolean); override;
   end;
@@ -225,7 +296,6 @@ type
     FContentList: TList;
     FFilteredCount: Integer;
     FIsMainList: Boolean;
-    FLastCached: TGEDCOMRecord;
     FListMan: TListManager;
     FRecordType: TGEDCOMRecordType;
     FTotalCount: Integer;
@@ -233,12 +303,16 @@ type
 
     procedure SetRecordType(const Value: TGEDCOMRecordType);
 
-    {$IFDEF EXT_LISTS}
-    procedure ListVMGetItemInfo(Sender: TObject; Item, SubItem: Integer;
-      var Mask: TLVVMMaskItems; var Image: Integer; var OverlayImage,
-      StateImage: word; var Param: LPARAM; var State: UINT; var StateMask: UINT;
-      var Indent: Integer; var Text: string);
-    {$ENDIF}
+    procedure ListCustomDrawItem(Sender: TCustomListView;
+      Item: TListItem; State: TCustomDrawState; var DefaultDraw: Boolean);
+    procedure ListColumnClick(Sender: TObject; Column: TListColumn);
+    procedure ListGetItemData(Sender: TObject; Item: TListItem);
+    procedure ListDataFind(Sender: TObject; Find: TItemFind;
+      const FindString: String; const FindPosition: TPoint; FindData: Pointer;
+      StartIndex: Integer; Direction: TSearchDirection; Wrap: Boolean;
+      var Index: Integer);
+
+    function xCompare(Item1, Item2: Pointer): Integer;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -247,8 +321,11 @@ type
       aFilter: TPersonsFilter; aAutoSizeColumn: Integer = -1);
     procedure UpdateTitles();
 
-    function GetSelectedRecord(): TGEDCOMRecord;
+    procedure DeleteRecord(aRec: TGEDCOMRecord);
+    function  GetSelectedRecord(): TGEDCOMRecord;
+    procedure SelectItemByRec(aRec: TGEDCOMRecord);
 
+    property ContentList: TList read FContentList;
     property FilteredCount: Integer read FFilteredCount;
     property IsMainList: Boolean read FIsMainList write FIsMainList;
     property ListMan: TListManager read FListMan;
@@ -257,13 +334,58 @@ type
     property Tree: TGEDCOMTree read FTree write FTree;
   end;
 
+procedure AddListColumn(aList: TCustomListControl; aCaption: string; aWidth: Integer;
+  aAutoSize: Boolean = False);
+
+procedure ResizeColumn(aList: TCustomListControl; aColumnIndex: Integer);
+  
 function GetSelectedRecord(aList: TCustomListView): TGEDCOMRecord;
 
 implementation
 
 uses
   {$IFDEF PROFILER}ZProfiler, {$ENDIF}
-  SysUtils, GKMain, bsComUtils, Controls;
+  SysUtils, GKMain, bsComUtils, ExtCtrls;
+
+{==============================================================================}
+
+procedure AddListColumn(aList: TCustomListControl; aCaption: string; aWidth: Integer;
+  aAutoSize: Boolean = False);
+begin
+  if not(aList is TCustomListView) then Exit;
+
+  with TGKListView(aList).Columns.Add() do begin
+    Caption := aCaption;
+    Width := aWidth;
+    AutoSize := aAutoSize;
+  end;
+end;
+
+procedure ResizeColumn(aList: TCustomListControl; aColumnIndex: Integer);
+var
+  i, max_w, w: Integer;
+  item: TListItem;
+  view: TGKListView;
+begin
+  view := TGKListView(aList);
+
+  if (aColumnIndex < 0) or (aColumnIndex >= view.Columns.Count) then Exit;
+
+  max_w := 0;
+
+  for i := 0 to view.Items.Count - 1 do begin
+    item := view.Items[i];
+
+    if (aColumnIndex = 0)
+    then w := view.StringWidth(item.Caption)
+    else w := view.StringWidth(item.SubItems[aColumnIndex - 1]);
+
+    if (max_w < w) then max_w := w;
+  end;
+
+  if (max_w <> 0)
+  then view.Columns[aColumnIndex].Width := max_w + 16;
+end;
 
 function GetSelectedRecord(aList: TCustomListView): TGEDCOMRecord;
 begin
@@ -274,6 +396,395 @@ begin
     then Result := nil
     else Result := TGEDCOMRecord(aList.Selected.Data);
 end;
+
+{==============================================================================}
+
+{ TSheetList }
+
+constructor TSheetList.Create(AOwner: TComponent; aListMode: TListMode = lmView);
+begin
+  inherited Create(AOwner);
+  Parent := TWinControl(AOwner);
+
+  FListMode := aListMode;
+
+  HandleNeeded;
+  Align := alClient;
+
+  if (AOwner is TTabSheet)
+  then TTabSheet(AOwner).OnShow := SheetShow;
+
+  FActionAdd := TAction.Create(Self);
+  with FActionAdd do begin
+    Name := 'actRecAdd';
+    Category := 'Tools';
+    Caption := 'Add';
+    Hint := 'Добавить запись';
+    ImageIndex := 3;
+    ShortCut := TextToShortCut('Ctrl+I');
+    OnExecute := ButtonClick;
+  end;
+
+  FActionEdit := TAction.Create(Self);
+  with FActionEdit do begin
+    Name := 'actRecEdit';
+    Category := 'Tools';
+    Caption := 'Edit';
+    Hint := 'Изменить запись';
+    ImageIndex := 4;
+    ShortCut := TextToShortCut('Ctrl+Enter');
+    OnExecute := ButtonClick;
+  end;
+
+  FActionDelete := TAction.Create(Self);
+  with FActionDelete do begin
+    Name := 'actRecDelete';
+    Category := 'Tools';
+    Caption := 'Delete';
+    Hint := 'Удалить запись';
+    ImageIndex := 5;
+    ShortCut := TextToShortCut('Ctrl+D');
+    OnExecute := ButtonClick;
+  end;
+
+  FActionJump := TAction.Create(Self);
+  with FActionJump do begin
+    Name := 'actLinkJump';
+    Category := 'Tools';
+    Caption := 'LinkJump';
+    Hint := 'Перейти на запись';
+    ImageIndex := 28;
+    OnExecute := ButtonClick;
+  end;
+
+  FActionMoveUp := TAction.Create(Self);
+  with FActionMoveUp do begin
+    Name := 'actMoveUp';
+    Category := 'Tools';
+    Caption := 'MoveUp';
+    Hint := 'Поместить выше';
+    ImageIndex := 29;
+    OnExecute := ButtonClick;
+  end;
+
+  FActionMoveDown := TAction.Create(Self);
+  with FActionMoveDown do begin
+    Name := 'actMoveDown';
+    Category := 'Tools';
+    Caption := 'MoveDown';
+    Hint := 'Поместить ниже';
+    ImageIndex := 30;
+    OnExecute := ButtonClick;
+  end;
+
+  //
+
+  FToolBar := TToolBar.Create(Self);
+  FToolBar.Parent := Self;
+  FToolBar.BorderWidth := 1;
+  FToolBar.ButtonHeight := 28;
+  FToolBar.ButtonWidth := 30;
+  FToolBar.EdgeBorders := [];
+  FToolBar.Flat := True;
+  FToolBar.Images := fmGEDKeeper.ImageList1;
+  FToolBar.ShowHint := True;
+  FToolBar.Align := alTop;
+  FToolBar.AutoSize := True;
+
+  FBtnMoveDown := TToolButton.Create(Self);
+  FBtnMoveDown.Parent := FToolBar;
+  FBtnMoveDown.Wrap := True;
+  FBtnMoveDown.Action := FActionMoveDown;
+
+  FBtnMoveUp := TToolButton.Create(Self);
+  FBtnMoveUp.Parent := FToolBar;
+  FBtnMoveUp.Wrap := True;
+  FBtnMoveUp.Action := FActionMoveUp;
+
+  FBtnLinkJump := TToolButton.Create(Self);
+  FBtnLinkJump.Parent := FToolBar;
+  FBtnLinkJump.Wrap := True;
+  FBtnLinkJump.Action := FActionJump;
+
+  FBtnDelete := TToolButton.Create(Self);
+  FBtnDelete.Parent := FToolBar;
+  FBtnDelete.Wrap := True;
+  FBtnDelete.Action := FActionDelete;
+
+  FBtnEdit := TToolButton.Create(Self);
+  FBtnEdit.Parent := FToolBar;
+  FBtnEdit.Wrap := True;
+  FBtnEdit.Action := FActionEdit;
+
+  FBtnAdd := TToolButton.Create(Self);
+  FBtnAdd.Parent := FToolBar;
+  FBtnAdd.Wrap := True;
+  FBtnAdd.Action := FActionAdd;
+
+  case FListMode of
+    lmView: begin
+      FList := TGKListView.Create(Self);
+      with TGKListView(FList) do begin
+        Parent := Self;
+        Align := alClient;
+        HideSelection := False;
+        ReadOnly := True;
+        RowSelect := True;
+        ViewStyle := vsReport;
+
+        SortType := stText;
+        SortColumn := 0;
+        SortDirection := sdAscending;
+        ShowSortSign := True;
+
+        OnDblClick := ListDblClick;
+        OnKeyDown := ListKeyDown;
+      end;
+    end;
+
+    lmBox: begin
+      FList := TListBox.Create(Self);
+      with TListBox(FList) do begin
+        Parent := Self;
+        Align := alClient;
+        Style := lbOwnerDrawVariable;
+
+        OnDrawItem := LBDrawItem;
+        OnMeasureItem := LBMeasureItem;
+
+        OnDblClick := ListDblClick;
+        OnKeyDown := ListKeyDown;
+      end;
+    end;
+  end;
+
+  FToolBar.Align := alRight;
+  FToolBar.List := True;
+
+  SetButtons([lbAdd..lbDelete]);
+end;
+
+destructor TSheetList.Destroy;
+begin
+  FList.Free;
+
+  FBtnDelete.Free;
+  FBtnEdit.Free;
+  FBtnAdd.Free;
+
+  FToolBar.Free;
+
+  inherited Destroy;
+end;
+
+procedure TSheetList.ButtonClick(Sender: TObject);
+begin
+  if (Sender = FActionAdd) then ItemAdd()
+  else
+  if (Sender = FActionEdit) then ItemEdit()
+  else
+  if (Sender = FActionDelete) then ItemDelete()
+  else
+  if (Sender = FActionJump) then ItemJump()
+  else
+  if (Sender = FActionMoveUp) then ItemMoveUp()
+  else
+  if (Sender = FActionMoveDown) then ItemMoveDown();
+end;
+
+procedure TSheetList.ListKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  if (ssCtrl in Shift) then
+    case Key of
+      Ord('I'): ItemAdd();
+      Ord('D'): ItemDelete();
+      VK_RETURN: ItemEdit();
+    end;
+end;
+
+function TSheetList.GetSelectedData(): TObject;
+begin
+  Result := nil;
+
+  case FListMode of
+    lmView: begin
+      if (TListView(FList).Selected <> nil)
+      then Result := TListView(FList).Selected.Data;
+    end;
+    lmBox: begin
+      if (TListBox(FList).ItemIndex > -1)
+      then Result := TListBox(FList).Items.Objects[TListBox(FList).ItemIndex];
+    end;
+  end;
+end;
+
+procedure TSheetList.ItemAdd();
+begin
+  if not(FReadOnly) and Assigned(FOnModify) then FOnModify(Self, nil, raAdd);
+end;
+
+procedure TSheetList.ItemEdit();
+begin
+  if not(FReadOnly) and Assigned(FOnModify) and (GetSelectedData() <> nil)
+  then FOnModify(Self, GetSelectedData(), raEdit);
+end;
+
+procedure TSheetList.ItemDelete();
+begin
+  if not(FReadOnly) and Assigned(FOnModify) and (GetSelectedData() <> nil)
+  then FOnModify(Self, GetSelectedData(), raDelete);
+end;
+
+procedure TSheetList.ItemJump();
+begin
+  if Assigned(FOnModify) and (GetSelectedData() <> nil)
+  then FOnModify(Self, GetSelectedData(), raJump);
+end;
+
+procedure TSheetList.ItemMoveDown();
+begin
+  if not(FReadOnly) and Assigned(FOnModify) and (GetSelectedData() <> nil)
+  then FOnModify(Self, GetSelectedData(), raMoveDown);
+end;
+
+procedure TSheetList.ItemMoveUp();
+begin
+  if not(FReadOnly) and Assigned(FOnModify) and (GetSelectedData() <> nil)
+  then FOnModify(Self, GetSelectedData(), raMoveUp);
+end;
+
+procedure TSheetList.ListDblClick(Sender: TObject);
+begin
+  ItemEdit();
+end;
+
+(*procedure TSheetList.SetActionList(const Value: TActionList);
+begin
+  {if (Value = nil) then begin
+    FActionAdd.ActionList := nil;
+    FActionEdit.ActionList := nil;
+    FActionDelete.ActionList := nil;
+  end else begin
+    FActionAdd.ActionList := Value;
+    FActionEdit.ActionList := Value;
+    FActionDelete.ActionList := Value;
+  end;}
+
+  FActionList := Value;
+end;*)
+
+procedure TSheetList.SheetShow(Sender: TObject);
+begin
+  FList.SetFocus();
+end;
+
+procedure TSheetList.SetButtons(const Value: TListButtons);
+begin
+  FButtons := Value;
+
+  FActionAdd.Visible := (lbAdd in FButtons);
+  FActionDelete.Visible := (lbDelete in FButtons);
+  FActionEdit.Visible := (lbEdit in FButtons);
+  FActionJump.Visible := (lbJump in FButtons);
+  FActionMoveUp.Visible := (lbMoveUp in FButtons);
+  FActionMoveDown.Visible := (lbMoveDown in FButtons);
+end;
+
+procedure TSheetList.LBMeasureItem(Control: TWinControl; Index: Integer;
+  var Height: Integer);
+var
+  item: string;
+  rt: TRect;
+  image: TImage;
+  lst: TListBox;
+  params: TDrawTextParams;
+begin
+  // Don't waste time with this on Index = -1
+  if (Index > -1) then begin
+    lst := TListBox(Control);
+    // Create a temporary canvas to calculate the height
+    image := TImage.Create(lst);
+    try
+      rt := lst.ClientRect;
+      item := lst.Items.Strings[Index];
+      image.Canvas.Font := lst.Font;
+
+      FillChar(params, SizeOf(TDrawTextParams), #0);
+      params.cbSize := SizeOf(TDrawTextParams);
+      params.iLeftMargin := 3;
+      params.iRightMargin := 3;
+
+      Height := DrawTextEx(image.Canvas.Handle, PChar(item), -1, rt, DT_WORDBREAK or DT_CALCRECT, @params);
+    finally
+      image.Free;
+    end;
+  end;
+end;
+
+procedure TSheetList.LBDrawItem(Control: TWinControl; Index: Integer;
+  Rect: TRect; State: TOwnerDrawState);
+var
+  item: string;
+  params: TDrawTextParams;
+begin
+  TListBox(Control).Canvas.FillRect(Rect);
+  item := TListBox(Control).Items.Strings[Index];
+
+  FillChar(params, SizeOf(TDrawTextParams), #0);
+  params.cbSize := SizeOf(TDrawTextParams);
+  params.iLeftMargin := 3;
+  params.iRightMargin := 3;
+
+  DrawTextEx(TListBox(Control).Canvas.Handle, PChar(item), -1, Rect, DT_WORDBREAK, @params);
+end;
+
+procedure TSheetList.Columns_BeginUpdate();
+begin
+  if (FList is TListView)
+  then (FList as TListView).Columns.BeginUpdate();
+end;
+
+procedure TSheetList.Columns_Clear();
+begin
+  if (FList is TListView)
+  then (FList as TListView).Columns.Clear();
+end;
+
+procedure TSheetList.Columns_EndUpdate();
+begin
+  if (FList is TListView)
+  then (FList as TListView).Columns.EndUpdate();
+end;
+
+procedure TSheetList.AddColumn(aCaption: string; aWidth: Integer;
+  aAutoSize: Boolean);
+begin
+  if (FList is TGKListView)
+  then AddListColumn((FList as TGKListView), aCaption, aWidth, aAutoSize);
+end;
+
+procedure TSheetList.SetReadOnly(const Value: Boolean);
+begin
+  FReadOnly := Value;
+
+  FActionAdd.Enabled := not(FReadOnly);
+  FActionDelete.Enabled := not(FReadOnly);
+  FActionEdit.Enabled := not(FReadOnly);
+  FActionMoveUp.Enabled := not(FReadOnly);
+  FActionMoveDown.Enabled := not(FReadOnly);
+
+  if FReadOnly then begin
+    if (FList is TListView)
+    then (FList as TListView).Color := clBtnFace
+    else (FList as TListBox).Color := clBtnFace;
+  end else begin
+    if (FList is TListView)
+    then (FList as TListView).Color := clWindow
+    else (FList as TListBox).Color := clWindow;
+  end;
+end;
+
+{==============================================================================}
 
 { TPersonsFilter }
 
@@ -341,8 +852,7 @@ begin
   inherited Destroy;
 end;
 
-function TListManager.GetColumnValue(aList: TGKListView;
-  aColIndex: Integer; isMain: Boolean): string;
+function TListManager.GetColumnValue(aColIndex: Integer; isMain: Boolean): string;
 begin
   Result := '';
 end;
@@ -366,107 +876,8 @@ end;
 { TIndividualListMan }
 
 procedure TIndividualListMan.Fetch(aRec: TGEDCOMRecord);
-
-  function GetGroups(): string;
-  var
-    idx: Integer;
-    grp: TGEDCOMGroupRecord;
-  begin
-    Result := '';
-
-    for idx := 0 to FRec.GroupsCount - 1 do begin
-      grp := TGEDCOMGroupRecord(FRec.Groups[idx].Value);
-      if (grp <> nil) then begin
-        Result := Result + grp.Name;
-
-        if (idx < FRec.GroupsCount - 1)
-        then Result := Result + '; ';
-      end;
-    end;
-  end;
-
-var
-  ev: TGEDCOMCustomEvent;
-  i: Integer;
-  m, d: Word;
 begin
   FRec := TGEDCOMIndividualRecord(aRec);
-
-  nm := GetNameStr(FRec);
-  p_tag := FRec.FindTag(PatriarchTag);
-
-  bd := 0.0;
-  dd := 0.0;
-  bdy := -1;
-  ddy := -1;
-  bi_date := '';
-  de_date := '';
-  bi_place := '';
-  de_place := '';
-  resi_place := '';
-  isLive := True;
-
-  for i := 0 to FRec.IndividualEventsCount - 1 do begin
-    ev := FRec.IndividualEvents[i];
-
-    if (ev.Name = 'BIRT') then begin
-      bd := GEDCOMDateToDate(ev.Detail.Date.Value);
-      bi_date := GEDCOMCustomDateToStr(ev.Detail.Date.Value, fmGEDKeeper.Options.DefDateFormat);
-      bi_place := ev.Detail.Place.StringValue;
-      GetIndependentDate(ev.Detail.Date.Value, bdy, m, d);
-
-      // timeline begin
-      if (bdy > 0) then begin
-        if (FYearMin > bdy) then FYearMin := bdy;
-        if (FYearMax < bdy) then FYearMax := bdy;
-      end;
-      // timeline end
-    end
-    else
-    if (ev.Name = 'DEAT') then begin
-      dd := GEDCOMDateToDate(ev.Detail.Date.Value);
-      de_date := GEDCOMCustomDateToStr(ev.Detail.Date.Value, fmGEDKeeper.Options.DefDateFormat);
-      de_place := ev.Detail.Place.StringValue;
-      GetIndependentDate(ev.Detail.Date.Value, ddy, m, d);
-      isLive := False;
-    end;
-  end;
-
-  FReligion := '';
-  FNationality := '';
-  FEducation := '';
-  FOccupation := '';
-  FCaste := '';
-  FMili := '';
-  FMiliInd := '';
-  FMiliDis := '';
-  FMiliRank := '';
-
-  resi_place := GetResidencePlace(FRec, fmGEDKeeper.Options.PlacesWithAddress);
-
-  for i := 0 to FRec.IndividualAttributesCount - 1 do begin
-    ev := FRec.IndividualAttributes[i];
-
-    if (ev.Name = 'RELI') then FReligion := ev.StringValue
-    else
-    if (ev.Name = 'NATI') then FNationality := ev.StringValue
-    else
-    if (ev.Name = 'EDUC') then FEducation := ev.StringValue
-    else
-    if (ev.Name = 'OCCU') then FOccupation := ev.StringValue
-    else
-    if (ev.Name = 'CAST') then FCaste := ev.StringValue
-    else
-    if (ev.Name = '_MILI') then FMili := ev.StringValue
-    else
-    if (ev.Name = '_MILI_IND') then FMiliInd := ev.StringValue
-    else
-    if (ev.Name = '_MILI_DIS') then FMiliDis := ev.StringValue
-    else
-    if (ev.Name = '_MILI_RANK') then FMiliRank := ev.StringValue;
-  end;
-
-  FGroups := GetGroups();
 end;
 
 procedure TIndividualListMan.InitFilter(aFilter: TPersonsFilter);
@@ -494,17 +905,73 @@ begin
 end;
 
 function TIndividualListMan.CheckFilter(aFilter: TPersonsFilter; aShieldState: TShieldState): Boolean;
+
+  function HasPlace(): Boolean;
+  var
+    i: Integer;
+    place: string;
+    addr: Boolean;
+  begin
+    Result := False;
+
+    addr := fmGEDKeeper.Options.PlacesWithAddress;
+
+    for i := 0 to FRec.IndividualEventsCount - 1 do begin
+      place := GetPlaceStr(FRec.IndividualEvents[i], addr);
+      Result := IsMatchesMask(place, aFilter.Residence);
+      if (Result) then Exit;
+    end;
+
+    for i := 0 to FRec.IndividualAttributesCount - 1 do begin
+      place := GetPlaceStr(FRec.IndividualAttributes[i], addr);
+      Result := IsMatchesMask(place, aFilter.Residence);
+      if (Result) then Exit;
+    end;
+  end;
+
+var
+  bdt, ddt: TDateTime;
+  isLive: Boolean;
+  bdy, ddy: Integer;
+  m, d: Word;
+  ev: TGEDCOMCustomEvent;
+  i, y: Integer;
+  bd_ev, dd_ev: TGEDCOMCustomEvent;
 begin
   Result := False;
+
+  ///
+  bd_ev := nil;
+  dd_ev := nil;
+  for i := 0 to FRec.IndividualEventsCount - 1 do begin
+    ev := FRec.IndividualEvents[i];
+
+    if (ev.Name = 'BIRT') and (bd_ev = nil) then begin
+      bd_ev := ev;
+
+      // timeline begin
+      GetIndependentDate(ev.Detail.Date.Value, y, m, d);
+      if (y > 0) then begin
+        if (FYearMin > y) then FYearMin := y;
+        if (FYearMax < y) then FYearMax := y;
+      end;
+      // timeline end
+    end
+    else
+    if (ev.Name = 'DEAT') and (dd_ev = nil) then dd_ev := ev;
+  end;
+  ///
 
   if (FRec.Restriction = rnPrivacy) and (aShieldState <> ssNone)
   then Exit;
 
   if ((aFilter.Sex <> svNone) and (FRec.Sex <> aFilter.Sex))
-  or ((aFilter.Name <> '*') and not(IsMatchesMask(nm, aFilter.Name)))
-  or ((aFilter.Residence <> '*') and not(IsMatchesMask(resi_place, aFilter.Residence)))
-  or ((aFilter.PatriarchOnly and (p_tag = nil)))
+  or ((aFilter.Name <> '*') and not(IsMatchesMask(GetNameStr(FRec), aFilter.Name)))
+  or ((aFilter.Residence <> '*') and not(HasPlace()))
+  or ((aFilter.PatriarchOnly and not(FRec.Patriarch)))
   then Exit;
+
+  isLive := (dd_ev = nil);
 
   case aFilter.LifeMode of
     lmAll: ;
@@ -512,15 +979,23 @@ begin
       if not(isLive) then Exit;
     lmOnlyDead:
       if (isLive) then Exit;
-    lmAliveBefore:
-      if not(((bd = 0) or ((bd <> 0) and (bd < filter_abd)))
-         and ((dd = 0) or ((dd <> 0) and (dd > filter_abd))))
+    lmAliveBefore: begin
+      if (bd_ev = nil) then bdt := 0.0 else bdt := GEDCOMDateToDate(bd_ev.Detail.Date.Value);
+      if (dd_ev = nil) then ddt := 0.0 else ddt := GEDCOMDateToDate(dd_ev.Detail.Date.Value);
+
+      if not(((bdt = 0) or ((bdt <> 0) and (bdt < filter_abd)))
+         and ((ddt = 0) or ((ddt <> 0) and (ddt > filter_abd))))
       then Exit;
-    lmTimeLine:
+    end;
+    lmTimeLine: begin
+      if (bd_ev = nil) then bdy := -1 else GetIndependentDate(bd_ev.Detail.Date.Value, bdy, m, d);
+      if (dd_ev = nil) then ddy := -1 else GetIndependentDate(dd_ev.Detail.Date.Value, ddy, m, d);
+
       if (age_year > 0)
       and not(((bdy > 0) and (bdy < age_year))
           and ((ddy <= 0) or ((ddy > 0) and (ddy > age_year))))
       then Exit;
+    end;
   end;
 
   case aFilter.GroupMode of
@@ -544,14 +1019,91 @@ begin
   Result := True;
 end;
 
+function TIndividualListMan.GetGroups(): string;
+var
+  idx: Integer;
+  grp: TGEDCOMGroupRecord;
+begin
+  Result := '';
+
+  for idx := 0 to FRec.GroupsCount - 1 do begin
+    grp := TGEDCOMGroupRecord(FRec.Groups[idx].Value);
+    if (grp <> nil) then begin
+      Result := Result + grp.Name;
+
+      if (idx < FRec.GroupsCount - 1)
+      then Result := Result + '; ';
+    end;
+  end;
+end;
+
 procedure TIndividualListMan.UpdateItem(aItem: TListItem; isMain: Boolean);
 var
   i: Integer;
   pct: TPersonColumnType;
   columns: TPersonColumnsList;
   f, n, p: string;
+  ev: TGEDCOMCustomEvent;
+  bd_ev, dd_ev: TGEDCOMCustomEvent;
+  residence, religion, nationality, education, occupation,
+  caste, mili, mili_ind, mili_dis, mili_rank: string;
 begin
   columns := fmGEDKeeper.Options.ListPersonsColumns;
+
+  bd_ev := nil;
+  dd_ev := nil;
+  for i := 0 to FRec.IndividualEventsCount - 1 do begin
+    ev := FRec.IndividualEvents[i];
+
+    if (ev.Name = 'BIRT') and (bd_ev = nil) then bd_ev := ev
+    else
+    if (ev.Name = 'DEAT') and (dd_ev = nil) then dd_ev := ev;
+  end;
+
+  residence := '';
+  religion := '';
+  nationality := '';
+  education := '';
+  occupation := '';
+  caste := '';
+  mili := '';
+  mili_ind := '';
+  mili_dis := '';
+  mili_rank := '';
+
+  for i := 0 to FRec.IndividualAttributesCount - 1 do begin
+    ev := FRec.IndividualAttributes[i];
+
+    if (ev.Name = 'RESI') and (residence = '')
+    then residence := GetPlaceStr(ev, fmGEDKeeper.Options.PlacesWithAddress)
+    else
+    if (ev.Name = 'RELI') and (religion = '')
+    then religion := ev.StringValue
+    else
+    if (ev.Name = 'NATI') and (nationality = '')
+    then nationality := ev.StringValue
+    else
+    if (ev.Name = 'EDUC') and (education = '')
+    then education := ev.StringValue
+    else
+    if (ev.Name = 'OCCU') and (occupation = '')
+    then occupation := ev.StringValue
+    else
+    if (ev.Name = 'CAST') and (caste = '')
+    then caste := ev.StringValue
+    else
+    if (ev.Name = '_MILI') and (mili = '')
+    then mili := ev.StringValue
+    else
+    if (ev.Name = '_MILI_IND') and (mili_ind = '')
+    then mili_ind := ev.StringValue
+    else
+    if (ev.Name = '_MILI_DIS') and (mili_dis = '')
+    then mili_dis := ev.StringValue
+    else
+    if (ev.Name = '_MILI_RANK') and (mili_Rank = '')
+    then mili_Rank := ev.StringValue;
+  end;
 
   for i := 0 to High(columns) do begin
     pct := columns[i].colType;
@@ -559,17 +1111,18 @@ begin
 
     case pct of
       pctPatriarch: begin
-        if (p_tag = nil)
-        then aItem.SubItems.Add(' ')
-        else aItem.SubItems.Add('*');
+        if (FRec.Patriarch)
+        then aItem.SubItems.Add('*')
+        else aItem.SubItems.Add(' ');
       end;
 
       pctName: begin
-        GetNameParts(FRec, f, n, p);
+        if (fmGEDKeeper.Options.DefNameFormat in [nfF_NP, nfF_N_P])
+        then GetNameParts(FRec, f, n, p);
 
         case fmGEDKeeper.Options.DefNameFormat of
           nfFNP: begin
-            aItem.SubItems.Add(nm);
+            aItem.SubItems.Add(GetNameStr(FRec));
           end;
           nfF_NP: begin
             aItem.SubItems.Add(f);
@@ -590,19 +1143,19 @@ begin
         aItem.SubItems.Add(SexSigns[FRec.Sex]);
 
       pctBirthDate:
-        aItem.SubItems.Add(bi_date);
+        aItem.SubItems.Add(GEDCOMEventToDateStr(bd_ev, fmGEDKeeper.Options.DefDateFormat));
 
       pctDeathDate:
-        aItem.SubItems.Add(de_date);
+        aItem.SubItems.Add(GEDCOMEventToDateStr(dd_ev, fmGEDKeeper.Options.DefDateFormat));
 
       pctBirthPlace:
-        aItem.SubItems.Add(bi_place);
+        aItem.SubItems.Add(GetPlaceStr(bd_ev, False));
 
       pctDeathPlace:
-        aItem.SubItems.Add(de_place);
+        aItem.SubItems.Add(GetPlaceStr(dd_ev, False));
 
       pctResidence:
-        aItem.SubItems.Add(resi_place);
+        aItem.SubItems.Add(residence);
 
       pctAge:
         if (isMain) then aItem.SubItems.Add(GetAge(FRec, age_year));
@@ -614,32 +1167,32 @@ begin
         if (isMain) then aItem.SubItems.Add(GetDaysForBirth(FRec));
 
       pctGroups:
-        if (isMain) then aItem.SubItems.Add(FGroups);
+        if (isMain) then aItem.SubItems.Add(GetGroups());
 
       pctReligion:
-        if (isMain) then aItem.SubItems.Add(FReligion);
+        if (isMain) then aItem.SubItems.Add(religion);
 
       pctNationality:
-        if (isMain) then aItem.SubItems.Add(FNationality);
+        if (isMain) then aItem.SubItems.Add(nationality);
 
       pctEducation:
-        if (isMain) then aItem.SubItems.Add(FEducation);
+        if (isMain) then aItem.SubItems.Add(education);
 
       pctOccupation:
-        if (isMain) then aItem.SubItems.Add(FOccupation);
+        if (isMain) then aItem.SubItems.Add(occupation);
 
       pctCaste:
-        if (isMain) then aItem.SubItems.Add(FCaste);
+        if (isMain) then aItem.SubItems.Add(caste);
 
       //
       pctMili:
-        if (isMain) then aItem.SubItems.Add(FMili);
+        if (isMain) then aItem.SubItems.Add(mili);
       pctMiliInd:
-        if (isMain) then aItem.SubItems.Add(FMiliInd);
+        if (isMain) then aItem.SubItems.Add(mili_ind);
       pctMiliDis:
-        if (isMain) then aItem.SubItems.Add(FMiliDis);
+        if (isMain) then aItem.SubItems.Add(mili_dis);
       pctMiliRank:
-        if (isMain) then aItem.SubItems.Add(FMiliRank);
+        if (isMain) then aItem.SubItems.Add(mili_rank);
       //
 
       pctChangeDate:
@@ -648,29 +1201,30 @@ begin
   end;
 end;
 
-function TIndividualListMan.GetColumnValue(aList: TGKListView;
-  aColIndex: Integer; isMain: Boolean): string;
+function TIndividualListMan.GetColumnValue(aColIndex: Integer; isMain: Boolean): string;
 var
   pct: TPersonColumnType;
   sub_index: Integer;
   f, n, p: string;
+  ev: TGEDCOMCustomEvent;
 begin
   pct := TPersonColumnType(FColumnsMap[aColIndex].col_type);
   sub_index := FColumnsMap[aColIndex].col_subtype;
 
   case pct of
     pctPatriarch: begin
-      if (p_tag = nil)
-      then Result := ' '
-      else Result := '*';
+      if (FRec.Patriarch)
+      then Result := '*'
+      else Result := ' ';
     end;
 
     pctName: begin
-      GetNameParts(FRec, f, n, p);
+      if (fmGEDKeeper.Options.DefNameFormat in [nfF_NP, nfF_N_P])
+      then GetNameParts(FRec, f, n, p);
 
       case fmGEDKeeper.Options.DefNameFormat of
         nfFNP: begin
-          Result := nm;
+          Result := GetNameStr(FRec);
         end;
         nfF_NP: begin
           case sub_index of
@@ -690,25 +1244,42 @@ begin
 
     pctNick: Result := GetNickStr(FRec);
     pctSex: Result := SexSigns[FRec.Sex];
-    pctBirthDate: Result := bi_date;
-    pctDeathDate: Result := de_date;
-    pctBirthPlace: Result := bi_place;
-    pctDeathPlace: Result := de_place;
-    pctResidence: Result := resi_place;
+
+    pctBirthDate, pctBirthPlace: begin
+      ev := GetIndividualEvent(FRec, 'BIRT');
+
+      case pct of
+        pctBirthDate: Result := GEDCOMEventToDateStr(ev, fmGEDKeeper.Options.DefDateFormat);
+        pctBirthPlace: Result := GetPlaceStr(ev, False);
+      end;
+    end;
+
+    pctDeathDate, pctDeathPlace: begin
+      ev := GetIndividualEvent(FRec, 'DEAT');
+
+      case pct of
+        pctDeathDate: Result := GEDCOMEventToDateStr(ev, fmGEDKeeper.Options.DefDateFormat);
+        pctDeathPlace: Result := GetPlaceStr(ev, False);
+      end;
+    end;
+
+    pctResidence: Result := GetResidencePlace(FRec, fmGEDKeeper.Options.PlacesWithAddress);
+
     pctAge: Result := GetAge(FRec);
     pctLifeExpectancy: Result := GetLifeExpectancy(FRec);
     pctDaysForBirth: Result := GetDaysForBirth(FRec);
-    pctGroups: Result := FGroups;
-    pctReligion: Result := FReligion;
-    pctNationality: Result := FNationality;
-    pctEducation: Result := FEducation;
-    pctOccupation: Result := FOccupation;
-    pctCaste: Result := FCaste;
+    pctGroups: Result := GetGroups();
 
-    pctMili: Result := FMili;
-    pctMiliInd: Result := FMiliInd;
-    pctMiliDis: Result := FMiliDis;
-    pctMiliRank: Result := FMiliRank;
+    pctReligion: Result := GetAttributeValue(FRec, 'RELI');
+    pctNationality: Result := GetAttributeValue(FRec, 'NATI');
+    pctEducation: Result := GetAttributeValue(FRec, 'EDUC');
+    pctOccupation: Result := GetAttributeValue(FRec, 'OCCU');
+    pctCaste: Result := GetAttributeValue(FRec, 'CAST');
+
+    pctMili: Result := GetAttributeValue(FRec, '_MILI');
+    pctMiliInd: Result := GetAttributeValue(FRec, '_MILI_IND');
+    pctMiliDis: Result := GetAttributeValue(FRec, '_MILI_DIS');
+    pctMiliRank: Result := GetAttributeValue(FRec, '_MILI_RANK');
 
     pctChangeDate: Result := GetChangeDate(FRec);
   end;
@@ -731,7 +1302,9 @@ var
   col_type: TPersonColumnType;
   asz: Boolean;
 begin
-  columns := fmGEDKeeper.Options.ListPersonsColumns;
+  {if (isMain)
+  then }columns := fmGEDKeeper.Options.ListPersonsColumns{
+  else columns := DefPersonColumns};
 
   cols := 0;
 
@@ -748,7 +1321,7 @@ begin
         end;
 
         pctName: begin
-          asz := {$IFDEF EXT_LISTS}True{$ELSE}False{$ENDIF};
+          asz := False;
 
           case fmGEDKeeper.Options.DefNameFormat of
             nfFNP: begin
@@ -801,7 +1374,7 @@ begin
   then Exit;
 
   if (aFilter.List = flSelector)
-  and ((aFilter.Name <> '*') and not(IsMatchesMask(FName, aFilter.Name)))
+  and ((aFilter.Name <> '*') and not(IsMatchesMask(GetFamilyStr(FRec), aFilter.Name)))
   then Exit;
 
   Result := True;
@@ -810,23 +1383,21 @@ end;
 procedure TFamilyListMan.Fetch(aRec: TGEDCOMRecord);
 begin
   FRec := TGEDCOMFamilyRecord(aRec);
-  FName := GetFamilyStr(FRec);
 end;
 
 procedure TFamilyListMan.UpdateItem(aItem: TListItem; isMain: Boolean);
 begin
-  aItem.SubItems.Add(FName);
+  aItem.SubItems.Add(GetFamilyStr(FRec));
   aItem.SubItems.Add(GetMarriageDate(FRec, fmGEDKeeper.Options.DefDateFormat));
 
   if isMain
   then aItem.SubItems.Add(GetChangeDate(FRec));
 end;
 
-function TFamilyListMan.GetColumnValue(aList: TGKListView;
-  aColIndex: Integer; isMain: Boolean): string;
+function TFamilyListMan.GetColumnValue(aColIndex: Integer; isMain: Boolean): string;
 begin
   case aColIndex of
-    1: Result := FName;
+    1: Result := GetFamilyStr(FRec);
     2: Result := GetMarriageDate(FRec, fmGEDKeeper.Options.DefDateFormat);
     3: Result := GetChangeDate(FRec);
     else Result := '';
@@ -872,8 +1443,7 @@ begin
   then aItem.SubItems.Add(GetChangeDate(FRec));
 end;
 
-function TNoteListMan.GetColumnValue(aList: TGKListView;
-  aColIndex: Integer; isMain: Boolean): string;
+function TNoteListMan.GetColumnValue(aColIndex: Integer; isMain: Boolean): string;
 var
   st: string;
 begin
@@ -940,8 +1510,7 @@ begin
   end;
 end;
 
-function TMultimediaListMan.GetColumnValue(aList: TGKListView;
-  aColIndex: Integer; isMain: Boolean): string;
+function TMultimediaListMan.GetColumnValue(aColIndex: Integer; isMain: Boolean): string;
 var
   file_ref: TGEDCOMFileReferenceWithTitle;
 begin
@@ -998,8 +1567,7 @@ begin
   end;
 end;
 
-function TSourceListMan.GetColumnValue(aList: TGKListView;
-  aColIndex: Integer; isMain: Boolean): string;
+function TSourceListMan.GetColumnValue(aColIndex: Integer; isMain: Boolean): string;
 begin
   case aColIndex of
     1: Result := Trim(FRec.FiledByEntry);
@@ -1059,8 +1627,7 @@ begin
   then aItem.SubItems.Add(GetChangeDate(FRec));
 end;
 
-function TRepositoryListMan.GetColumnValue(aList: TGKListView;
-  aColIndex: Integer; isMain: Boolean): string;
+function TRepositoryListMan.GetColumnValue(aColIndex: Integer; isMain: Boolean): string;
 begin
   case aColIndex of
     1: Result := FRec.RepositoryName;
@@ -1106,8 +1673,7 @@ begin
   then aItem.SubItems.Add(GetChangeDate(FRec));
 end;
 
-function TGroupListMan.GetColumnValue(aList: TGKListView;
-  aColIndex: Integer; isMain: Boolean): string;
+function TGroupListMan.GetColumnValue(aColIndex: Integer; isMain: Boolean): string;
 begin
   case aColIndex of
     1: Result := FRec.Name;
@@ -1163,8 +1729,7 @@ begin
   then aItem.SubItems.Add(GetChangeDate(FRec));
 end;
 
-function TResearchListMan.GetColumnValue(aList: TGKListView;
-  aColIndex: Integer; isMain: Boolean): string;
+function TResearchListMan.GetColumnValue(aColIndex: Integer; isMain: Boolean): string;
 begin
   case aColIndex of
     1: Result := FRec.Name;
@@ -1186,7 +1751,7 @@ begin
   Result := False;
 
   if (aFilter.List = flSelector)
-  and ((aFilter.Name <> '*') and not(IsMatchesMask(taskName, aFilter.Name)))
+  and ((aFilter.Name <> '*') and not(IsMatchesMask(GetTaskGoalStr(FTree, FRec), aFilter.Name)))
   then Exit;
 
   Result := True;
@@ -1195,7 +1760,6 @@ end;
 procedure TTaskListMan.Fetch(aRec: TGEDCOMRecord);
 begin
   FRec := TGEDCOMTaskRecord(aRec);
-  taskName := GetTaskGoalStr(FTree, FRec);
 end;
 
 procedure TTaskListMan.UpdateColumns(aList: TGKListView; isMain: Boolean);
@@ -1213,7 +1777,7 @@ end;
 
 procedure TTaskListMan.UpdateItem(aItem: TListItem; isMain: Boolean);
 begin
-  aItem.SubItems.Add(taskName);
+  aItem.SubItems.Add(GetTaskGoalStr(FTree, FRec));
   aItem.SubItems.Add(PriorityNames[FRec.Priority]);
   aItem.SubItems.Add(GEDCOMDateToStr(FRec.StartDate, fmGEDKeeper.Options.DefDateFormat));
   aItem.SubItems.Add(GEDCOMDateToStr(FRec.StopDate, fmGEDKeeper.Options.DefDateFormat));
@@ -1222,11 +1786,10 @@ begin
   then aItem.SubItems.Add(GetChangeDate(FRec));
 end;
 
-function TTaskListMan.GetColumnValue(aList: TGKListView;
-  aColIndex: Integer; isMain: Boolean): string;
+function TTaskListMan.GetColumnValue(aColIndex: Integer; isMain: Boolean): string;
 begin
   case aColIndex of
-    1: Result := taskName;
+    1: Result := GetTaskGoalStr(FTree, FRec);
     2: Result := PriorityNames[FRec.Priority];
     3: Result := GEDCOMDateToStr(FRec.StartDate, fmGEDKeeper.Options.DefDateFormat);
     4: Result := GEDCOMDateToStr(FRec.StopDate, fmGEDKeeper.Options.DefDateFormat);
@@ -1278,8 +1841,7 @@ begin
   then aItem.SubItems.Add(GetChangeDate(FRec));
 end;
 
-function TCommunicationListMan.GetColumnValue(aList: TGKListView;
-  aColIndex: Integer; isMain: Boolean): string;
+function TCommunicationListMan.GetColumnValue(aColIndex: Integer; isMain: Boolean): string;
 begin
   case aColIndex of
     1: Result := FRec.Name;
@@ -1332,8 +1894,7 @@ begin
   then aItem.SubItems.Add(GetChangeDate(FRec));
 end;
 
-function TLocationListMan.GetColumnValue(aList: TGKListView;
-  aColIndex: Integer; isMain: Boolean): string;
+function TLocationListMan.GetColumnValue(aColIndex: Integer; isMain: Boolean): string;
 begin
   case aColIndex of
     1: Result := FRec.Name;
@@ -1349,17 +1910,16 @@ end;
 constructor TRecordsView.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-
-  {$IFDEF EXT_LISTS}
-  OnVMGetItemInfo := ListVMGetItemInfo;
-  {$ENDIF}
-
   FContentList := TList.Create;
+
+  OwnerData := True;
+  OnData := ListGetItemData;
+  OnDataFind := ListDataFind;
+  OnColumnClick := ListColumnClick;
+  OnCustomDrawItem := ListCustomDrawItem;
 
   FListMan := nil;
   FRecordType := rtNone;
-
-  FLastCached := nil;
 end;
 
 destructor TRecordsView.Destroy;
@@ -1367,8 +1927,110 @@ begin
   if Assigned(FListMan) then FreeAndNil(FListMan);
 
   FContentList.Destroy;
-
   inherited Destroy;
+end;
+
+function TRecordsView.xCompare(Item1, Item2: Pointer): Integer;
+var
+  val1, val2: string;
+  f: Integer;
+begin
+  if (SortColumn = 0) then begin
+    val1 := GetXRefNum(Item1);
+    val2 := GetXRefNum(Item2);
+  end else begin
+    FListMan.Fetch(Item1);
+    val1 := FListMan.GetColumnValue(SortColumn, FIsMainList);
+    FListMan.Fetch(Item2);
+    val2 := FListMan.GetColumnValue(SortColumn, FIsMainList);
+  end;
+
+  if (SortDirection = sdAscending) then f := 1 else f := -1;
+
+  Result := agCompare(val1, val2) * f;
+end;
+
+procedure TRecordsView.ListColumnClick(Sender: TObject; Column: TListColumn);
+var
+  rec: TGEDCOMRecord;
+begin
+  {$IFDEF PROFILER}Profiler.Mark(12, True);{$ENDIF}
+
+  rec := GetSelectedRecord();
+  QuickSort(FContentList, xCompare);
+  SelectItemByRec(rec);
+
+  Invalidate();
+
+  {$IFDEF PROFILER}Profiler.Mark(12, False);{$ENDIF}
+end;
+
+procedure TRecordsView.ListGetItemData(Sender: TObject; Item: TListItem);
+var
+  rec: TGEDCOMRecord;
+begin
+  if (Item = nil) then Exit;
+  if (Item.Index < 0) or (Item.Index >= FContentList.Count) then Exit;
+
+  {$IFDEF PROFILER}Profiler.Mark(11, True);{$ENDIF}
+
+  rec := TGEDCOMRecord(FContentList[Item.Index]);
+  Item.Caption := IntToStr(GetId(rec));
+  FListMan.Fetch(rec);
+  FListMan.UpdateItem(Item, FIsMainList);
+
+  {$IFDEF PROFILER}Profiler.Mark(11, False);{$ENDIF}
+end;
+
+procedure TRecordsView.ListDataFind(Sender: TObject; Find: TItemFind;
+  const FindString: String; const FindPosition: TPoint; FindData: Pointer;
+  StartIndex: Integer; Direction: TSearchDirection; Wrap: Boolean;
+  var Index: Integer);
+begin
+  //
+end;
+
+procedure TRecordsView.ListCustomDrawItem(Sender: TCustomListView;
+  Item: TListItem; State: TCustomDrawState; var DefaultDraw: Boolean);
+var
+  rec: TGEDCOMRecord;
+  i_rec: TGEDCOMIndividualRecord;
+begin
+  if (Item = nil) then Exit;
+
+  rec := TGEDCOMRecord(FContentList[Item.Index]);
+  if (rec = nil) then Exit;
+
+  if (rec is TGEDCOMIndividualRecord)
+  and not((cdsFocused in State) and (cdsSelected in State))
+  then begin
+    i_rec := TGEDCOMIndividualRecord(rec);
+
+    if (i_rec.ChildToFamilyLinksCount = 0) and (fmGEDKeeper.Options.ListPersons_HighlightUnparented)
+    then Canvas.Brush.Color := $00CACAFF
+    else
+    if (i_rec.SpouseToFamilyLinksCount = 0) and (fmGEDKeeper.Options.ListPersons_HighlightUnmarried)
+    then Canvas.Brush.Color := $00CAFFFF;
+  end;
+end;
+
+procedure TRecordsView.DeleteRecord(aRec: TGEDCOMRecord);
+// warning! need for correct work virtual lists
+begin
+  FContentList.Remove(aRec);
+end;
+
+procedure TRecordsView.SelectItemByRec(aRec: TGEDCOMRecord);
+var
+  idx: Integer;
+  item: TListItem;
+begin
+  idx := FContentList.IndexOf(aRec);
+  if (idx >= 0) then begin
+    item := Items[idx];
+    Selected := item;
+    item.MakeVisible(False);
+  end;
 end;
 
 procedure TRecordsView.SetRecordType(const Value: TGEDCOMRecordType);
@@ -1397,17 +2059,9 @@ end;
 
 function TRecordsView.GetSelectedRecord(): TGEDCOMRecord;
 begin
-  Result := nil;
-
-  {$IFDEF VIRTUAL_LISTS}
-  if (ItemIndex < 0)
+  if (ItemIndex < 0) or (ItemIndex >= FContentList.Count)
   then Result := nil
   else Result := TGEDCOMRecord(FContentList[ItemIndex]);
-  {$ELSE}
-  if (Selected = nil)
-  then Result := nil
-  else Result := TGEDCOMRecord(Selected.Data);
-  {$ENDIF}
 end;
 
 procedure TRecordsView.UpdateTitles();
@@ -1418,9 +2072,6 @@ end;
 procedure TRecordsView.UpdateContents(aShieldState: TShieldState; aTitles: Boolean;
   aFilter: TPersonsFilter; aAutoSizeColumn: Integer = -1);
 var
-  {$IFNDEF VIRTUAL_LISTS}
-  item: TListItem;
-  {$ENDIF}
   i: Integer;
   rec: TGEDCOMRecord;
 begin
@@ -1436,13 +2087,12 @@ begin
     Items.BeginUpdate();
     try
       // фильтрация
-      {$IFDEF PROFILER}Profiler.Mark(2, True);{$ENDIF}
+      {$IFDEF PROFILER}Profiler.Mark(6, True);{$ENDIF}
       FListMan.InitFilter(aFilter);
       FContentList.Clear;
       for i := 0 to FTree.RecordsCount - 1 do begin
         rec := FTree.Records[i];
 
-        {$IFDEF PROFILER}Profiler.Mark(3, True);{$ENDIF}
         if RecordIsType(FRecordType, rec) then begin
           Inc(FTotalCount);
 
@@ -1450,38 +2100,17 @@ begin
           if FListMan.CheckFilter(aFilter, aShieldState)
           then FContentList.Add(rec);
         end;
-        {$IFDEF PROFILER}Profiler.Mark(3, False);{$ENDIF}
       end;
       FFilteredCount := FContentList.Count;
-      {$IFDEF PROFILER}Profiler.Mark(2, False);{$ENDIF}
+      Items.Count := FContentList.Count;
+      {$IFDEF PROFILER}Profiler.Mark(6, False);{$ENDIF}
 
-      //
+      QuickSort(FContentList, xCompare);
 
-      {$IFDEF VIRTUAL_LISTS}
-        SetItemCountEx(FContentList.Count, [lvsicfNoScroll]);
-      {$ELSE}
-        // вывод
-        {$IFDEF PROFILER}Profiler.Mark(4, True);{$ENDIF}
-        Items.Clear();
-        for i := 0 to FContentList.Count - 1 do begin
-          rec := TGEDCOMRecord(FContentList[i]);
-
-          {$IFDEF PROFILER}Profiler.Mark(5, True);{$ENDIF}
-          item := Items.Add();
-          item.Caption := IntToStr(GetId(rec));
-          item.Data := rec;
-
-          FListMan.Fetch(rec);
-          FListMan.UpdateItem(item, FIsMainList);
-          {$IFDEF PROFILER}Profiler.Mark(5, False);{$ENDIF}
-        end;
-        {$IFDEF PROFILER}Profiler.Mark(4, False);{$ENDIF}
-
-        {$IFDEF PROFILER}Profiler.Mark(6, True);{$ENDIF}
-        if (aAutoSizeColumn >= 0)
-        then ResizeColumn(Self, aAutoSizeColumn);
-        {$IFDEF PROFILER}Profiler.Mark(6, False);{$ENDIF}
-      {$ENDIF}
+      {$IFDEF PROFILER}Profiler.Mark(7, True);{$ENDIF}
+      if (aAutoSizeColumn >= 0)
+      then ResizeColumn(Self, aAutoSizeColumn);
+      {$IFDEF PROFILER}Profiler.Mark(7, False);{$ENDIF}
     finally
       Items.EndUpdate();
     end;
@@ -1491,36 +2120,5 @@ begin
 
   {$IFDEF PROFILER}Profiler.Mark(8, False);{$ENDIF}
 end;
-
-{$IFDEF EXT_LISTS}
-procedure TRecordsView.ListVMGetItemInfo(Sender: TObject; Item, SubItem: Integer;
-  var Mask: TLVVMMaskItems; var Image: Integer; var OverlayImage,
-  StateImage: word; var Param: LPARAM; var State: UINT; var StateMask: UINT;
-  var Indent: Integer; var Text: string);
-var
-  rec: TGEDCOMRecord;
-begin
-  {if (lvifImage in Mask) then begin
-    //image := f_obj.ImgIndex;
-  end;}
-
-  if (lvifText in Mask) then begin
-    {$IFDEF PROFILER}Profiler.Mark(11, True);{$ENDIF}
-
-    rec := TGEDCOMRecord(FContentList[Item]);
-
-    if (FLastCached <> rec) then begin
-      FLastCached := rec;
-      FListMan.Fetch(rec);
-    end;
-
-    if (SubItem = 0)
-    then Text := IntToStr(GetId(rec))
-    else Text := FListMan.GetColumnValue(Self, SubItem, FIsMainList);
-
-    {$IFDEF PROFILER}Profiler.Mark(11, False);{$ENDIF}
-  end;
-end;
-{$ENDIF}
 
 end.

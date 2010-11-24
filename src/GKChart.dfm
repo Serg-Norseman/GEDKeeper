@@ -1,9 +1,9 @@
 object fmChart: TfmChart
   Left = 320
   Top = 111
+  Width = 749
+  Height = 579
   Caption = #1044#1080#1072#1075#1088#1072#1084#1084#1072
-  ClientHeight = 552
-  ClientWidth = 741
   Color = clBtnFace
   DefaultMonitor = dmMainForm
   Font.Charset = DEFAULT_CHARSET
@@ -31,6 +31,7 @@ object fmChart: TfmChart
     ButtonHeight = 26
     ButtonWidth = 27
     EdgeBorders = [ebTop, ebBottom]
+    Flat = True
     Images = fmGEDKeeper.ImageList1
     ParentShowHint = False
     ShowHint = True

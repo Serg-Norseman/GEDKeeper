@@ -101,7 +101,8 @@ type
 implementation
 
 uses
-  Windows, ShellAPI, XLSFile, Dialogs, bsComUtils, GKProgress, Math;
+  Windows, ShellAPI, XLSFile, Dialogs, bsComUtils, GKProgress, Math,
+  GKMain;
 
 procedure WriteStr(aStream: TFileStream; aStr: string);
 begin
@@ -270,7 +271,7 @@ begin
       end;
     end;
 
-    index_str := '<b>Алфавитный:</b> ';
+    index_str := '';//'<b>Алфавитный:</b> ';
 
     for c := Low(TLatSyms) to High(TLatSyms) do begin
       if (lat[c] <> nil) then begin
@@ -376,7 +377,7 @@ begin
       end;
     end;
 
-    index_str := '<b>Алфавитный:</b> ';
+    index_str := '';//'<b>Алфавитный:</b> ';
 
     for c := Low(TLatSyms) to High(TLatSyms) do begin
       if (lat[c] <> nil) then begin
@@ -429,7 +430,7 @@ var
   ind: TGEDCOMIndividualRecord;
   ev: TGEDCOMIndividualEvent;
   years, fams: TStringList;
-  yst: string;
+  yst, index_str: string;
   fs_timeline: TFileStream;
 begin
   years := TStringList.Create;
@@ -461,31 +462,34 @@ begin
     end;
 
     fs_timeline := TFileStream.Create(FPath + tlFileName, fmCreate);
-    WriteHeader(fs_timeline, 'Генеалогическая база данных');
-    WriteStr(fs_timeline, '<b>Индекс:</b><ul>');
+    try
+      WriteHeader(fs_timeline, 'Генеалогическая база данных');
+      WriteStr(fs_timeline, '<b>Индекс:</b><ul>');
 
-    years.Sort;
-    WriteStr(aStream, '<center>');
-    for i := 0 to years.Count - 1 do begin
-      WriteStr(aStream, '<a href="' + tlFileName + '#' + years[i] + '">' + years[i] + '</a>');
-      if (i < years.Count - 1) then WriteStr(aStream, ' | ');
+      years.Sort;
+      index_str := '';
+      for i := 0 to years.Count - 1 do begin
+        index_str := index_str + '<a href="' + tlFileName + '#' + years[i] + '">' + years[i] + '</a>';
+        if (i < years.Count - 1) then index_str := index_str + ' | ';
 
-      WriteStr(fs_timeline, '<li><a name="' + years[i] + '">' + years[i] + '</a><ul>');
+        ////
 
-      fams := TStringList(years.Objects[i]);
-      fams.Sort();
-      for k := 0 to fams.Count - 1 do begin
-        ind := TGEDCOMIndividualRecord(fams.Objects[k]);
-        WriteStr(fs_timeline, '<li><a href="persons.htm#'+ind.XRef+'">' + fams[k] + '</a></li>');
+        WriteStr(fs_timeline, '<li><a name="' + years[i] + '">' + years[i] + '</a><ul>');
+        fams := TStringList(years.Objects[i]);
+        fams.Sort();
+        for k := 0 to fams.Count - 1 do begin
+          ind := TGEDCOMIndividualRecord(fams.Objects[k]);
+          WriteStr(fs_timeline, '<li><a href="persons.htm#'+ind.XRef+'">' + fams[k] + '</a></li>');
+        end;
+        WriteStr(fs_timeline, '</ul></li>');
       end;
+      WriteStr(aStream, '<center>' + index_str + '</center>');
 
-      WriteStr(fs_timeline, '</ul></li>');
+      WriteStr(fs_timeline, '</ul><hr>');
+      WriteFooter(fs_timeline);
+    finally
+      fs_timeline.Destroy;
     end;
-    WriteStr(aStream, '</center>');
-
-    WriteStr(fs_timeline, '</ul><hr>');
-    WriteFooter(fs_timeline);
-    fs_timeline.Destroy;
   finally
     for i := 0 to years.Count - 1 do years.Objects[i].Free;
     years.Free;
@@ -697,8 +701,6 @@ var
   main_index: TFileStream;
   stats: TCommonStats;
 begin
-  CreateDir(FPath);
-
   main_index := TFileStream.Create(FPath + 'index.htm', fmCreate);
   try
     WriteHeader(main_index, 'Генеалогическая база данных');
@@ -770,8 +772,9 @@ begin
     xls.AddStrCell( 7, 1, AllBorders, 'Дата смерти');
     xls.AddStrCell( 8, 1, AllBorders, 'Место рождения');
     xls.AddStrCell( 9, 1, AllBorders, 'Место смерти');
-    xls.AddStrCell(10, 1, AllBorders, 'Возраст');
-    xls.AddStrCell(11, 1, AllBorders, 'Продолжительность жизни');
+    xls.AddStrCell(10, 1, AllBorders, 'Местожительство');
+    xls.AddStrCell(11, 1, AllBorders, 'Возраст');
+    xls.AddStrCell(12, 1, AllBorders, 'Продолжительность жизни');
 
     row := 1;
     for i := 0 to FTree.RecordsCount - 1 do begin
@@ -796,8 +799,9 @@ begin
         xls.AddStrCell( 7, row, AllBorders, GetDeathDate(ind, dfDD_MM_YYYY));
         xls.AddStrCell( 8, row, AllBorders, GetBirthPlace(ind));
         xls.AddStrCell( 9, row, AllBorders, GetDeathPlace(ind));
-        xls.AddStrCell(10, row, AllBorders, GetAge(ind));
-        xls.AddStrCell(11, row, AllBorders, GetLifeExpectancy(ind));
+        xls.AddStrCell(10, row, AllBorders, GetResidencePlace(ind, fmGEDKeeper.Options.PlacesWithAddress));
+        xls.AddStrCell(11, row, AllBorders, GetAge(ind));
+        xls.AddStrCell(12, row, AllBorders, GetLifeExpectancy(ind));
       end;
 
       ProgressStep();
@@ -834,6 +838,8 @@ begin
 end;
 
 procedure TPedigree.WritePerson(aStream: TFileStream; aTree: TGEDCOMTree; aPerson: TPersonObj);
+const
+  p_style = ' style="margin-top:2pt; margin-bottom:2pt"';
 var
   ev_list: TObjectList;
 
@@ -939,24 +945,68 @@ var
     end;
   end;
 
-var
-  i, k: Integer;
-  event: TGEDCOMIndividualEvent;
-  attr: TGEDCOMIndividualAttribute;
-  family: TGEDCOMFamilyRecord;
-  irec: TGEDCOMIndividualRecord;
-  st, unk: string;
-  sp: TGEDCOMPointer;
-  note: TGEDCOMNotes;
-begin
-  WriteStr(aStream, '<li>');
+  function GetPedigreeLifeStr(iRec: TGEDCOMIndividualRecord): string;
+  var
+    ds, ps, res_str: string;
+    ev: TGEDCOMIndividualEvent;
+  begin
+    res_str := '';
 
-  WriteStr(aStream, '<b>' + GetIdStr() + '. ' + GetNameStr(aPerson.iRec) + '</b>' + GetLifeStr(aPerson.iRec));
+    case FOptions.Format of
+      pfExcess: begin
+        ds := GetBirthDate(iRec, dfDD_MM_YYYY, True);
+        if (ds = '') then ds := '?';
+        res_str := res_str + ds;
 
-  if (FOptions.IncludeSources)
-  then WriteStr(aStream, '&nbsp;<sup>' + aPerson.Sources + '</sup>');
+        ds := GetDeathDate(iRec, dfDD_MM_YYYY, True);
+        if (ds = '') then begin
+          ev := GetIndividualEvent(iRec, 'DEAT');
+          if (ev <> nil) then ds := '?';
+        end;
 
-  if (FOptions.Format = pfExcess) then begin
+        if (ds <> '')
+        then res_str := res_str + ' - ' + ds;
+      end;
+
+      pfCompact: begin
+        ds := GetBirthDate(iRec, dfDD_MM_YYYY, True);
+        ps := GetBirthPlace(iRec);
+        if (ps <> '') then begin
+          if (ds <> '') then ds := ds + ', ';
+          ds := ds + ps;
+        end;
+        if (ds <> '') then ds := '*' + ds;
+        res_str := res_str + ds;
+
+        ds := GetDeathDate(iRec, dfDD_MM_YYYY, True);
+        ps := GetDeathPlace(iRec);
+        if (ps <> '') then begin
+          if (ds <> '') then ds := ds + ', ';
+          ds := ds + ps;
+        end;
+        if (ds <> '') then ds := '+' + ds;
+
+        if (ds <> '')
+        then res_str := res_str + ' ' + ds;
+      end;
+    end;
+
+    if (res_str = '') or (res_str = ' ')
+    then Result := ''
+    else Result := ' (' + res_str + ')';
+  end;
+
+  procedure WriteExcessFmt();
+  var
+    i, k: Integer;
+    event: TGEDCOMIndividualEvent;
+    attr: TGEDCOMIndividualAttribute;
+    family: TGEDCOMFamilyRecord;
+    irec: TGEDCOMIndividualRecord;
+    st, unk: string;
+    sp: TGEDCOMPointer;
+    note: TGEDCOMNotes;
+  begin
     WriteStr(aStream, '<br>Пол: ' + Sex[aPerson.iRec.Sex]);
 
     st := GetLifeExpectancy(aPerson.iRec);
@@ -974,69 +1024,127 @@ begin
       if (irec <> nil)
       then WriteStr(aStream, '<br>Мать: ' + GetNameStr(irec) + idLink(FindPerson(irec)));
     end;
-  end;
 
-  if (FOptions.IncludeAttributes) then begin
-    for i := 0 to aPerson.iRec.IndividualAttributesCount - 1 do begin
-      attr := aPerson.iRec.IndividualAttributes[i];
-      WriteStr(aStream, '<br>' + GetAttributeStr(attr));
-    end;
-  end;
-
-  ev_list := TObjectList.Create(True);
-  try
-    // загрузка событий
-    if (aPerson.iRec.IndividualEventsCount > 0) then begin
-      WriteStr(aStream, '<p>События: <ul>');
-      for i := 0 to aPerson.iRec.IndividualEventsCount - 1 do begin
-        event := aPerson.iRec.IndividualEvents[i];
-        AddEvent(event, aPerson.iRec);
+    if (FOptions.IncludeAttributes) then begin
+      for i := 0 to aPerson.iRec.IndividualAttributesCount - 1 do begin
+        attr := aPerson.iRec.IndividualAttributes[i];
+        WriteStr(aStream, '<br>' + GetAttributeStr(attr));
       end;
-      WriteEventList();
+    end;
+
+    ev_list := TObjectList.Create(True);
+    try
+      // загрузка событий
+      if (aPerson.iRec.IndividualEventsCount > 0) then begin
+        WriteStr(aStream, '<p>События: <ul>');
+        for i := 0 to aPerson.iRec.IndividualEventsCount - 1 do begin
+          event := aPerson.iRec.IndividualEvents[i];
+          AddEvent(event, aPerson.iRec);
+        end;
+        WriteEventList();
+        WriteStr(aStream, '</ul></p>');
+      end;
+
+      for i := 0 to aPerson.iRec.SpouseToFamilyLinksCount - 1 do begin
+        family := aPerson.iRec.SpouseToFamilyLinks[i].Family;
+        if not(IsRecordAccess(family.Restriction, FShieldState)) then Continue;
+
+        if (aPerson.iRec.Sex = svMale) then begin
+          sp := family.Wife;
+          st := 'Жена: ';
+          unk := 'неизвестна';
+        end else begin
+          sp := family.Husband;
+          st := 'Муж: ';
+          unk := 'неизвестен';
+        end;
+
+        irec := TGEDCOMIndividualRecord(sp.Value);
+        if (irec <> nil)
+        then WriteStr(aStream, '<p>' + st + GetNameStr(irec) + GetPedigreeLifeStr(irec) + idLink(FindPerson(irec)))
+        else WriteStr(aStream, '<p>' + st + unk);
+
+        WriteStr(aStream, '<ul>');
+        ev_list.Clear;
+        for k := 0 to family.ChildrenCount - 1 do begin
+          irec := TGEDCOMIndividualRecord(family.Children[k].Value);
+          AddEvent(GetIndividualEvent(irec, 'BIRT'), irec);
+        end;
+        WriteEventList();
+        WriteStr(aStream, '</ul></p>');
+      end;
+    finally
+      ev_list.Free;
+    end;
+
+    if (FOptions.IncludeNotes) and (aPerson.iRec.NotesCount <> 0) then begin
+      WriteStr(aStream, '<p>Заметки:<ul>');
+      for i := 0 to aPerson.iRec.NotesCount - 1 do begin
+        note := aPerson.iRec.Notes[i];
+        WriteStr(aStream, '<li>' + ConStrings(note.Notes) + '</li>');
+      end;
       WriteStr(aStream, '</ul></p>');
     end;
-
-    for i := 0 to aPerson.iRec.SpouseToFamilyLinksCount - 1 do begin
-      family := aPerson.iRec.SpouseToFamilyLinks[i].Family;
-      if not(IsRecordAccess(family.Restriction, FShieldState)) then Continue;
-
-      if (aPerson.iRec.Sex = svMale) then begin
-        sp := family.Wife;
-        st := 'Жена: ';
-        unk := 'неизвестна';
-      end else begin
-        sp := family.Husband;
-        st := 'Муж: ';
-        unk := 'неизвестен';
-      end;
-
-      irec := TGEDCOMIndividualRecord(sp.Value);
-      if (irec <> nil)
-      then WriteStr(aStream, '<p>' + st + GetNameStr(irec) + GetLifeStr(irec) + idLink(FindPerson(irec)))
-      else WriteStr(aStream, '<p>' + st + unk);
-
-      WriteStr(aStream, '<ul>');
-      ev_list.Clear;
-      for k := 0 to family.ChildrenCount - 1 do begin
-        irec := TGEDCOMIndividualRecord(family.Children[k].Value);
-        AddEvent(GetIndividualEvent(irec, 'BIRT'), irec);
-      end;
-      WriteEventList();
-      WriteStr(aStream, '</ul></p>');
-    end;
-  finally
-    ev_list.Free;
   end;
 
-  if (FOptions.IncludeNotes) and (aPerson.iRec.NotesCount <> 0) then begin
-    WriteStr(aStream, '<p>Заметки:<ul>');
-    for i := 0 to aPerson.iRec.NotesCount - 1 do begin
-      note := aPerson.iRec.Notes[i];
-      st := ConStrings(note.Notes);
-
-      WriteStr(aStream, '<li>' + st + '</li>');
+  procedure WriteCompactFmt();
+  var
+    i: Integer;
+    family: TGEDCOMFamilyRecord;
+    irec: TGEDCOMIndividualRecord;
+    st, unk: string;
+    sp: TGEDCOMPointer;
+    note: TGEDCOMNotes;
+    sp_index: Boolean;
+  begin
+    if (FOptions.IncludeNotes) and (aPerson.iRec.NotesCount <> 0) then begin
+      for i := 0 to aPerson.iRec.NotesCount - 1 do begin
+        note := aPerson.iRec.Notes[i];
+        WriteStr(aStream, '<p'+p_style+'>' + ConStrings(note.Notes) + '</p>');
+      end;
     end;
-    WriteStr(aStream, '</ul></p>');
+
+    try
+      sp_index := (aPerson.iRec.SpouseToFamilyLinksCount > 1);
+
+      for i := 0 to aPerson.iRec.SpouseToFamilyLinksCount - 1 do begin
+        family := aPerson.iRec.SpouseToFamilyLinks[i].Family;
+        if not(IsRecordAccess(family.Restriction, FShieldState)) then Continue;
+
+        if (aPerson.iRec.Sex = svMale) then begin
+          sp := family.Wife;
+          st := 'Ж';
+          unk := 'неизвестна';
+        end else begin
+          sp := family.Husband;
+          st := 'М';
+          unk := 'неизвестен';
+        end;
+
+        if (sp_index) then st := st + IntToStr(i + 1);
+        st := st + ' - ';
+
+        irec := TGEDCOMIndividualRecord(sp.Value);
+        if (irec <> nil)
+        then st := st + GetNameStr(irec) + GetPedigreeLifeStr(irec) + idLink(FindPerson(irec))
+        else st := st + unk;
+
+        WriteStr(aStream, '<p'+p_style+'>' + st + '</p>');
+      end;
+    finally
+    end;
+  end;
+
+begin
+  WriteStr(aStream, '<li>');
+  WriteStr(aStream, '<b>' + GetIdStr() + '. ' + GetNameStr(aPerson.iRec) + '</b>' + GetPedigreeLifeStr(aPerson.iRec));
+
+  if (FOptions.IncludeSources)
+  then WriteStr(aStream, '&nbsp;<sup>' + aPerson.Sources + '</sup>');
+
+  case FOptions.Format of
+    pfExcess: WriteExcessFmt();
+    pfCompact: WriteCompactFmt();
   end;
 
   WriteStr(aStream, '</li><br>');
@@ -1169,7 +1277,6 @@ begin
 
   title := 'Родословная роспись: ' + GetNameStr(iRec);
 
-  aDir := aDir + 'html\';
   CreateDir(aDir);
 
   fs_index := TFileStream.Create(aDir + 'pedigree.htm', fmCreate);

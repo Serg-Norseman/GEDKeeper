@@ -1,6 +1,7 @@
 SOLDIER BITMAP soldier.bmp
 SOLDIER_FALL BITMAP soldier_fall.bmp
 VETERAN_REAR BITMAP veteran_rear.bmp
+GEORGE_CROSS BITMAP george_cross.bmp
 
 ;SHIELD_MAX BITMAP shield_max.bmp
 ;SHIELD_MID BITMAP shield_mid.bmp

@@ -27,7 +27,7 @@ object fmStats: TfmStats
     Left = 0
     Top = 0
     Width = 785
-    Height = 169
+    Height = 201
     Align = alTop
     Caption = #1057#1074#1086#1076#1082#1072
     TabOrder = 0
@@ -35,7 +35,7 @@ object fmStats: TfmStats
       Left = 2
       Top = 15
       Width = 781
-      Height = 152
+      Height = 184
       Align = alClient
       Columns = <
         item
@@ -62,9 +62,9 @@ object fmStats: TfmStats
   end
   object Panel1: TPanel
     Left = 0
-    Top = 169
+    Top = 201
     Width = 785
-    Height = 334
+    Height = 302
     Align = alClient
     BevelInner = bvRaised
     BevelOuter = bvLowered
@@ -92,7 +92,7 @@ object fmStats: TfmStats
         Height = 21
         Style = csDropDownList
         DropDownCount = 16
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 0
         OnChange = cbTypeChange
       end

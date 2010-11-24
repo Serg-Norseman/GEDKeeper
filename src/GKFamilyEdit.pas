@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons, ComCtrls,
-  ExtCtrls, GedCom551, GKBase, GKCommon, GKSheetList, bsCtrls;
+  ExtCtrls, GedCom551, GKBase, GKCommon, GKLists, bsCtrls;
 
 type
   TfmFamilyEdit = class(TForm)
@@ -353,17 +353,17 @@ begin
   else
   //
   if (Sender = FNotesList) then begin
-    if Base.ModifyRecNote(FFamily, TGEDCOMNotes(ItemData), Action)
+    if Base.ModifyRecNote(Self, FFamily, TGEDCOMNotes(ItemData), Action)
     then ControlsRefresh();
   end
   else
   if (Sender = FMediaList) then begin
-    if Base.ModifyRecMultimedia(FFamily, TGEDCOMMultimediaLink(ItemData), Action)
+    if Base.ModifyRecMultimedia(Self, FFamily, TGEDCOMMultimediaLink(ItemData), Action)
     then ControlsRefresh();
   end
   else
   if (Sender = FSourcesList) then begin
-    if Base.ModifyRecSource(FFamily, TGEDCOMSourceCitation(ItemData), Action)
+    if Base.ModifyRecSource(Self, FFamily, TGEDCOMSourceCitation(ItemData), Action)
     then ControlsRefresh();
   end;
 end;

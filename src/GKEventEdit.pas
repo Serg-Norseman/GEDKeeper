@@ -5,8 +5,9 @@ unit GKEventEdit;
 interface
 
 uses
-  SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Buttons,
-  ComCtrls, ExtCtrls, Mask, GedCom551, GKCommon, GKBase, GKSheetList, bsCtrls;
+  Windows, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls,
+  Buttons, ComCtrls, ExtCtrls, Mask, GedCom551, GKCommon, GKBase, GKLists,
+  bsCtrls;
 
 type
   TfmEventEdit = class(TForm)
@@ -48,6 +49,8 @@ type
       Y: Integer; State: TDragState; var Accept: Boolean);
     procedure EditEventDate1DragDrop(Sender, Source: TObject; X,
       Y: Integer);
+    procedure EditEventPlaceKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     FEvent: TGEDCOMCustomEvent;
     FLocation: TGEDCOMLocationRecord;
@@ -112,6 +115,13 @@ begin
   if EditEventDate2.Enabled
   then EditEventDate2.Color := clWindow
   else EditEventDate2.Color := clBtnFace;
+end;
+
+procedure TfmEventEdit.EditEventPlaceKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = VK_DOWN) and (ssCtrl in Shift)
+  then EditEventPlace.Text := AnsiLowerCase(EditEventPlace.Text);
 end;
 
 procedure TfmEventEdit.EditEventTypeChange(Sender: TObject);
@@ -351,7 +361,7 @@ end;
 
 procedure TfmEventEdit.btnPlaceAddClick(Sender: TObject);
 begin
-  FLocation := TGEDCOMLocationRecord(Base.SelectRecord(smLocation));
+  FLocation := TGEDCOMLocationRecord(Base.SelectRecord(smLocation, []));
   ControlsRefresh();
 end;
 
@@ -367,16 +377,8 @@ begin
 end;
 
 procedure TfmEventEdit.btnAddressClick(Sender: TObject);
-var
-  fmAddressEdit: TfmAddressEdit;
 begin
-  fmAddressEdit := TfmAddressEdit.Create(Application);
-  try
-    fmAddressEdit.Address := FEvent.Detail.Address;
-    fmAddressEdit.ShowModal;
-  finally
-    fmAddressEdit.Destroy;
-  end;
+  Base.ModifyAddress(Self, FEvent.Detail.Address);
 end;
 
 function TfmEventEdit.GetBase: TfmBase;

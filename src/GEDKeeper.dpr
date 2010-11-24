@@ -40,7 +40,6 @@ uses
   GKTaskEdit in 'GKTaskEdit.pas' {fmTaskEdit},
   GKCommunicationEdit in 'GKCommunicationEdit.pas' {fmCommunicationEdit},
   GKLocationEdit in 'GKLocationEdit.pas' {fmLocationEdit},
-  GKSheetList in 'GKSheetList.pas',
   GKLangs in 'GKLangs.pas',
   GKUIToolkit in 'GKUIToolkit.pas',
   GKCommands in 'GKCommands.pas',
@@ -50,10 +49,12 @@ uses
   GKUserRefEdit in 'GKUserRefEdit.pas' {fmUserRefEdit},
   GKExpCalc in 'GKExpCalc.pas' {fmCalcWidget},
   GKNamesBook in 'GKNamesBook.pas' {fmNamesBook},
-  GKGenBase in 'GKGenBase.pas',
   GKCalendar in 'GKCalendar.pas' {fmCalendar},
   GKTimeLine in 'GKTimeLine.pas' {fmTimeLine},
-  GKStereoView in 'GKStereoView.pas' {fmStereoView};
+  GKStereoView in 'GKStereoView.pas' {fmStereoView},
+  GKOrganizer in 'GKOrganizer.pas' {fmOrganizer},
+  GKDBImport in 'GKDBImport.pas' {fmDBImport},
+  GKSexCheck in 'GKSexCheck.pas' {fmSexCheck};
 
 {$R *.res}
 

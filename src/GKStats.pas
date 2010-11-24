@@ -6,7 +6,7 @@ interface
 
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms, ComCtrls,
-  GedCom551, StdCtrls, ToolWin, ExtCtrls, bsCtrls, GKBase, xygraph;
+  GedCom551, StdCtrls, ToolWin, ExtCtrls, bsCtrls, GKBase, xygraph, GKLists;
 
 type
   TStatMode = (
@@ -78,7 +78,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
-    ListStats: TBSListView;
+    ListStats: TGKListView;
     ChartStats: TVGPaintBox;
 
     ChartData: TDataType;
@@ -90,15 +90,15 @@ type
     procedure AddItem(aTitle, aVal: string);
     procedure CalcStats(aTree: TGEDCOMTree; aMode: TStatMode);
     procedure InitTable(Col1, Col2: string);
-    function GetBase: TfmBase;
+    function  GetBase(): TfmBase;
 
     procedure PrepareChart(aMode: TStatMode);
 
     procedure ChartPaint(Sender: TObject);
     procedure ChartMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
-    procedure ChartMouseMove(Sender: TObject; Shift: TShiftState; X,
-      Y: Integer);
+    procedure ChartMouseMove(Sender: TObject; Shift: TShiftState;
+      X, Y: Integer);
     procedure ChartMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
   public
@@ -107,7 +107,7 @@ type
 
 implementation
 
-uses GKCommon, GKMain, GKSheetList, Dialogs, Math;
+uses GKCommon, GKMain, Dialogs, Math;
 
 {$R *.dfm}
 
@@ -429,8 +429,8 @@ begin
   xycleargraph(ChartStats, clWhite, clBlack, 8/8);
   if not(ChartEmpty) then begin
     xystartgraph(0, 100, 0, 100, 40, 40, 70, 40, clipon);
-    xyxaxis(clBlack, ChartXMin, ChartXMax * 1.05, 0, 0, ChartXTitle, False, False, False);
-    xyyaxis(clGreen, ChartYMin, ChartYMax * 1.05, 0, 0, ChartYTitle, 1, False, False, False);
+    xyxaxis(clBlack, ChartXMin, ChartXMax, 0, 0, ChartXTitle, False, False, False);
+    xyyaxis(clGreen, ChartYMin, ChartYMax, 0, 0, ChartYTitle, 1, False, False, False);
     xysymbol(2, 4, 2);
     xyplotarray(ChartData, 0, 2);
     xytitle(clMaroon, ChartTitle);
@@ -445,7 +445,7 @@ const
   Styles: array [TChartStyle] of array [1..7] of Integer = (
     (4, clTeal, 1, 4, 2, 2, 2),
     (1, clBlack, 2, 4, 0, 0, 0),
-    (0, clGreen, 1, 0, 1, 6, 1)
+    (0, clGreen, 1, 0, 1, 4, 1)
   );
 
   procedure PrepareArray(aStyle: TChartStyle; aExcludeUnknowns: Boolean = True);
@@ -542,20 +542,17 @@ begin
       PrepareArray(csSimplePoint);
     end;
 
-    smBirthYears: ;
+    smBirthYears, smBirthTenYears, smDeathYears, smDeathTenYears: begin
+      case aMode of
+        smBirthYears, smDeathYears: ChartXTitle := 'Годы';
+        smBirthTenYears, smDeathTenYears: ChartXTitle := 'Десятилетия';
+      end;
 
-    smBirthTenYears: begin
-      ChartXTitle := 'Десятилетия';
-      ChartYTitle := 'Родилось';
-      ChartEmpty := False;
-      PrepareArray(csCircle);
-    end;
+      case aMode of
+        smBirthYears, smBirthTenYears: ChartXTitle := 'Родилось';
+        smDeathYears, smDeathTenYears: ChartXTitle := 'Умерло';
+      end;
 
-    smDeathYears: ;
-
-    smDeathTenYears: begin
-      ChartXTitle := 'Десятилетия';
-      ChartYTitle := 'Умерло';
       ChartEmpty := False;
       PrepareArray(csCircle);
     end;

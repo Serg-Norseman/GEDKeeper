@@ -21,7 +21,6 @@ type
       f_fam, bd, dd: string);
     function DeleteBlanks(const S: string): string;
     function ExtractNumComment(const S: string; var Comment: string; NoException: Boolean): string;
-    function GetSex(f_name, f_pat: string): TGEDCOMSex;
     function IsPersonLine(const aStr: string; var p_id: string): Boolean;
     function IsRomeLine(const aStr: string): Boolean;
     procedure SetEvent(iRec: TGEDCOMIndividualRecord; evName, date: string);
@@ -171,30 +170,6 @@ begin
   chLink := TGEDCOMChildToFamilyLink.Create(FTree, child);
   chLink.Family := family;
   child.AddChildToFamilyLink(chLink);
-end;
-
-function TGKImporter.GetSex(f_name, f_pat: string): TGEDCOMSex;
-begin
-  Result := svNone;
-  case f_name[Length(f_name)] of
-    'а', 'я':
-      if (Length(f_pat) > 1) then begin
-        if (f_pat[Length(f_pat)] in ['а', 'я'])
-        then Result := svFemale
-        else
-        if (f_pat[Length(f_pat)] in ['в', 'г', 'д', 'й', 'л', 'м', 'н', 'о', 'п', 'р'])
-        then Result := svMale;
-      end;
-
-    'в', 'г', 'д', 'й', 'л', 'м', 'н', 'о', 'п', 'р':
-      Result := svMale;
-  end;
-
-  if (Result = svNone) then begin
-    if (MessageDlg('Не определяется пол человека по имени "'+f_name+' '+f_pat+'". Это мужской пол?', mtConfirmation, [mbYes, mbNo], 0) = mrYes)
-    then Result := svMale
-    else Result := svFemale;
-  end;
 end;
 
 function TGKImporter.DeleteBlanks(const S: string): string;

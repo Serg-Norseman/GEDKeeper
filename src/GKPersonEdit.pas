@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ComCtrls,
-  ExtCtrls, Buttons, GedCom551, bsCtrls, GKBase, GKCommon, GKSheetList;
+  ExtCtrls, Buttons, GedCom551, bsCtrls, GKBase, GKCommon, GKLists;
                                                   
 type
   TfmPersonEdit = class(TForm)
@@ -496,7 +496,7 @@ end;
 
 procedure TfmPersonEdit.SetTitle();
 begin
-  Caption := 'Персона "'+EditFamily.Text+' '+EditName.Text+' '+EditPatronymic.Text+'"';
+  Caption := 'Персона "'+EditFamily.Text+' '+EditName.Text+' '+EditPatronymic.Text+'" [' + IntToStr(GetId(FPerson)) + ']';
 end;
 
 procedure TfmPersonEdit.EditFamilyChange(Sender: TObject);
@@ -592,14 +592,14 @@ begin
   end
   else
   if (Sender = FAssociationsList) then begin
-    if Base.ModifyRecAssociation(FPerson, TGEDCOMAssociation(ItemData), Action)
+    if Base.ModifyRecAssociation(Self, FPerson, TGEDCOMAssociation(ItemData), Action)
     then ControlsRefresh();
   end
   else
   if (Sender = FGroupsList) then begin
     case Action of
       raAdd: begin
-        group := TGEDCOMGroupRecord(Base.SelectRecord(smGroup));
+        group := TGEDCOMGroupRecord(Base.SelectRecord(smGroup, []));
         if (group <> nil) and Base.GroupMemberAdd(group, FPerson)
         then ControlsRefresh();
       end;
@@ -619,22 +619,22 @@ begin
   else
   //
   if (Sender = FNotesList) then begin
-    if Base.ModifyRecNote(FPerson, TGEDCOMNotes(ItemData), Action)
+    if Base.ModifyRecNote(Self, FPerson, TGEDCOMNotes(ItemData), Action)
     then ControlsRefresh();
   end
   else
   if (Sender = FMediaList) then begin
-    if Base.ModifyRecMultimedia(FPerson, TGEDCOMMultimediaLink(ItemData), Action)
+    if Base.ModifyRecMultimedia(Self, FPerson, TGEDCOMMultimediaLink(ItemData), Action)
     then ControlsRefresh();
   end
   else
   if (Sender = FSourcesList) then begin
-    if Base.ModifyRecSource(FPerson, TGEDCOMSourceCitation(ItemData), Action)
+    if Base.ModifyRecSource(Self, FPerson, TGEDCOMSourceCitation(ItemData), Action)
     then ControlsRefresh();
   end
   else
   if (Sender = FUserRefList) then begin
-    if Base.ModifyRecUserRef(FPerson, TGEDCOMUserReference(ItemData), Action)
+    if Base.ModifyRecUserRef(Self, FPerson, TGEDCOMUserReference(ItemData), Action)
     then ControlsRefresh();
   end;
 end;

@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Buttons,
-  ComCtrls, ExtCtrls, GedCom551, GKBase, GKCommon, Mask, GKSheetList;
+  ComCtrls, ExtCtrls, GedCom551, GKBase, GKCommon, Mask, GKLists;
 
 type
   TfmTaskEdit = class(TForm)
@@ -137,7 +137,7 @@ end;
 procedure TfmTaskEdit.ListModify(Sender: TObject; ItemData: TObject; Action: TRecAction);
 begin
   if (Sender = FNotesList) then begin
-    if Base.ModifyRecNote(FTask, TGEDCOMNotes(ItemData), Action)
+    if Base.ModifyRecNote(Self, FTask, TGEDCOMNotes(ItemData), Action)
     then ListsRefresh();
   end;
 end;
@@ -151,12 +151,12 @@ begin
     end;
 
     gtFamily: begin
-      FTempRec := Base.SelectRecord(smFamily);
+      FTempRec := Base.SelectRecord(smFamily, []);
       EditGoal.Text := GetFamilyStr(FTempRec as TGEDCOMFamilyRecord);
     end;
 
     gtSource: begin
-      FTempRec := Base.SelectRecord(smSource);
+      FTempRec := Base.SelectRecord(smSource, []);
       EditGoal.Text := (FTempRec as TGEDCOMSourceRecord).FiledByEntry;
     end;
 

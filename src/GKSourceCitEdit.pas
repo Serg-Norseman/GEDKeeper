@@ -53,7 +53,7 @@ end;
 
 procedure TfmSourceCitEdit.btnSourceAddClick(Sender: TObject);
 begin
-  FTempSrc := TGEDCOMSourceRecord(Base.SelectRecord(smSource));
+  FTempSrc := TGEDCOMSourceRecord(Base.SelectRecord(smSource, []));
 
   if (FTempSrc <> nil)
   then EditSource.Text := FTempSrc.FiledByEntry;

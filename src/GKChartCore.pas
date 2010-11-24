@@ -13,25 +13,24 @@ uses
 type
   TGenealogyChart = class;
 
-  TPersonSign = (psNone, psSoldier, psSoldierFall, psVeteranRear);
-
   TCustomPerson = class(TObject)
   private
-    FBirthDate: string;
+    FBirthDate, FBirthYear: string;
     FChart: TGenealogyChart;
-    FDeathDate: string;
+    FDeathDate, FDeathYear: string;
     FDivorced: Boolean;
     FFamily: string;
     FFullName: string;
     FIsDead: Boolean;
     FKinship: string;
+    FLifeYears: string;
     FName: string;
     FPatronymic: string;
     FPt: TPoint;
     FRec: TGEDCOMIndividualRecord;
     FSelected: Boolean;
     FSex: TGEDCOMSex;
-    FSign: TPersonSign;
+    FSigns: TChartPersonSigns;
     FHeight: Integer;
     FWidth: Integer;
 
@@ -70,7 +69,7 @@ type
     property Rect: TRect read GetRect;
     property Selected: Boolean read FSelected write FSelected;
     property Sex: TGEDCOMSex read FSex;
-    property Sign: TPersonSign read FSign;
+    property Signs: TChartPersonSigns read FSigns;
   end;
 
   TGenealogyChart = class(TObject)
@@ -187,11 +186,11 @@ uses SysUtils, Math, GKMain;
 {$R res\gk.res}
 
 var
-  Signs: array [TPersonSign] of record
+  SignsData: array [TChartPersonSign] of record
     Name: string;
     Pic: TBitmap;
   end = (
-    (Name: ''),
+    (Name: 'GEORGE_CROSS'),
     (Name: 'SOLDIER'),
     (Name: 'SOLDIER_FALL'),
     (Name: 'VETERAN_REAR')
@@ -199,53 +198,43 @@ var
 
 procedure InitSigns();
 var
-  ps: TPersonSign;
+  ps: TChartPersonSign;
 begin
-  Signs[psNone].Pic := nil;
-  for ps := Succ(Low(TPersonSign)) to High(TPersonSign) do begin
+  for ps := Low(TChartPersonSign) to High(TChartPersonSign) do begin
     {$IFNDEF DELPHI_NET}
-    Signs[ps].Pic := TBitmap.Create;
-    Signs[ps].Pic.LoadFromResourceName(HInstance, Signs[ps].Name);
-    Signs[ps].Pic.Transparent := True;
-    Signs[ps].Pic.TransparentMode := tmFixed;
-    //Signs[ps].Pic.TransparentColor := Signs[ps].Pic.Canvas.Pixels[0, 0];
+    SignsData[ps].Pic := TBitmap.Create;
+    SignsData[ps].Pic.LoadFromResourceName(HInstance, SignsData[ps].Name);
+    SignsData[ps].Pic.Transparent := True;
+    SignsData[ps].Pic.TransparentMode := tmFixed;
+    //SignsData[ps].Pic.TransparentColor := Signs[ps].Pic.Canvas.Pixels[0, 0];
     {$ELSE}
-    Signs[ps].Pic := nil;
+    SignsData[ps].Pic := nil;
     {$ENDIF}
   end;
 end;
 
 procedure DoneSigns();
 var
-  ps: TPersonSign;
+  ps: TChartPersonSign;
 begin
-  for ps := Succ(Low(TPersonSign)) to High(TPersonSign) do
-    Signs[ps].Pic.Free;
+  for ps := Low(TChartPersonSign) to High(TChartPersonSign) do
+    SignsData[ps].Pic.Free;
 end;
 
-function GetPersonSign(iRec: TGEDCOMIndividualRecord): TPersonSign;
+function GetPersonSign(iRec: TGEDCOMIndividualRecord): TChartPersonSigns;
 var
-  attr: TGEDCOMIndividualAttribute;
-  cause: string;
+  rs: string;
+  cps: TChartPersonSign;
+  i: Integer;
 begin
-  Result := psNone;
+  Result := [];
 
-  attr := GetAttribute(iRec, '_MILI');
-  if (attr <> nil) then begin
-    cause := AnsiLowerCase(attr.Detail.Classification);
+  for i := 0 to iRec.UserReferencesCount - 1 do begin
+    rs := iRec.UserReferences[i].StringValue;
 
-    if (Pos('á/ä', cause) > 0) then begin
-      if (Pos('+', cause) > 0)
-      then Result := psSoldierFall
-      else Result := psSoldier;
-
-      Exit;
-    end
-    else
-    if (Pos('ò/ò', cause) > 0) then begin
-      Result := psVeteranRear;
-      Exit;
-    end;
+    for cps := Low(TChartPersonSign) to High(TChartPersonSign) do 
+      if (rs = UserRefs[cps].Name)
+      then Include(Result, cps);
   end;
 end;
 
@@ -279,7 +268,22 @@ begin
     FDeathDate := GetDeathDate(iRec, dfDD_MM_YYYY);
     FIsDead := not(IsLive(iRec));
     FSex := iRec.Sex;
-    FSign := GetPersonSign(iRec);
+    FSigns := GetPersonSign(iRec);
+
+    FBirthYear := GetBirthDate(iRec, dfYYYY);
+    FDeathYear := GetDeathDate(iRec, dfYYYY);
+
+    FLifeYears := '';
+    if (FBirthYear = '')
+    then FLifeYears := '[ ?'
+    else FLifeYears := '[ ' + FBirthYear;
+
+    if (FDeathYear = '') then begin
+      if FIsDead
+      then FLifeYears := FLifeYears + ' - ?';
+    end else FLifeYears := FLifeYears + ' - ' + FDeathYear;
+
+    FLifeYears := FLifeYears + ' ]';
   end else begin
     FFamily := '';
     FName := '< ? >';
@@ -289,7 +293,7 @@ begin
     FDeathDate := '';
     FIsDead := False;
     FSex := svNone;
-    FSign := psNone;
+    FSigns := [];
   end;
 
   Calc();
@@ -331,7 +335,8 @@ var
 
 var
   rt, dt: TRect;
-  h, line: Integer;
+  h, line, i: Integer;
+  cps: TChartPersonSign;
 begin
   canv := FChart.Canvas;
   rt := GetRect();
@@ -373,14 +378,19 @@ begin
     canv.TextOut(rt.Left + (FWidth - canv.TextWidth(FPatronymic)) div 2, rt.Top + 10 + (h * line), FPatronymic);
   end;
 
-  if (FChart.Options.BirthDateVisible) then begin
-    Inc(line);
-    canv.TextOut(rt.Left + (FWidth - canv.TextWidth(FBirthDate)) div 2, rt.Top + 10 + (h * line), FBirthDate);
-  end;
+  if not(FChart.Options.OnlyYears) then begin
+    if (FChart.Options.BirthDateVisible) then begin
+      Inc(line);
+      canv.TextOut(rt.Left + (FWidth - canv.TextWidth(FBirthDate)) div 2, rt.Top + 10 + (h * line), FBirthDate);
+    end;
 
-  if (FChart.Options.DeathDateVisible) then begin
+    if (FChart.Options.DeathDateVisible) then begin
+      Inc(line);
+      canv.TextOut(rt.Left + (FWidth - canv.TextWidth(FDeathDate)) div 2, rt.Top + 10 + (h * line), FDeathDate);
+    end;
+  end else begin
     Inc(line);
-    canv.TextOut(rt.Left + (FWidth - canv.TextWidth(FDeathDate)) div 2, rt.Top + 10 + (h * line), FDeathDate);
+    canv.TextOut(rt.Left + (FWidth - canv.TextWidth(FLifeYears)) div 2, rt.Top + 10 + (h * line), FLifeYears);
   end;
 
   if (FChart.Options.Kinship) then begin
@@ -388,8 +398,14 @@ begin
     canv.TextOut(rt.Left + (FWidth - canv.TextWidth(FKinship)) div 2, rt.Top + 10 + (h * line), FKinship);
   end;
 
-  if (FSign <> psNone)
-  then canv.Draw(rt.Right, rt.Top - 21, Signs[FSign].Pic);
+  if (FChart.Options.SignsVisible) and (FSigns <> []) then begin
+    i := 0;
+    for cps := Low(TChartPersonSign) to High(TChartPersonSign) do
+      if (cps in FSigns) then begin
+        canv.Draw(rt.Right, rt.Top - 21 + (i * (SignsData[cps].Pic.Height)), SignsData[cps].Pic);
+        Inc(i);
+      end;
+  end;
 end;
 
 procedure TCustomPerson.SetPt(const Value: TPoint);
@@ -449,14 +465,20 @@ begin
     Inc(lines);
   end;
 
-  if (FChart.Options.BirthDateVisible) then begin
-    wt := FChart.Canvas.TextWidth(FBirthDate);
-    if (maxwid < wt) then maxwid := wt;
-    Inc(lines);
-  end;
+  if not(FChart.Options.OnlyYears) then begin
+    if (FChart.Options.BirthDateVisible) then begin
+      wt := FChart.Canvas.TextWidth(FBirthDate);
+      if (maxwid < wt) then maxwid := wt;
+      Inc(lines);
+    end;
 
-  if (FChart.Options.DeathDateVisible) then begin
-    wt := FChart.Canvas.TextWidth(FDeathDate);
+    if (FChart.Options.DeathDateVisible) then begin
+      wt := FChart.Canvas.TextWidth(FDeathDate);
+      if (maxwid < wt) then maxwid := wt;
+      Inc(lines);
+    end;
+  end else begin
+    wt := FChart.Canvas.TextWidth(FLifeYears);
     if (maxwid < wt) then maxwid := wt;
     Inc(lines);
   end;
@@ -633,12 +655,12 @@ begin
 
     if (aPerson.Father <> nil) then begin
       Line(FCanvas, aPerson.Father.Pt.X, cr_y, aPerson.Pt.X, cr_y);
-      Line(FCanvas, aPerson.Father.Pt.X, aPerson.Father.Pt.Y + aPerson.Father.Height - 1, aPerson.Father.Pt.X, cr_y);
+      Line(FCanvas, aPerson.Father.Pt.X, aPerson.Father.Pt.Y + aPerson.Father.Height - 1, aPerson.Father.Pt.X, cr_y + 1);
     end;
 
     if (aPerson.Mother <> nil) then begin
       Line(FCanvas, aPerson.Pt.X, cr_y, aPerson.Mother.Pt.X, cr_y);
-      Line(FCanvas, aPerson.Mother.Pt.X, aPerson.Mother.Pt.Y + aPerson.Mother.Height - 1, aPerson.Mother.Pt.X, cr_y);
+      Line(FCanvas, aPerson.Mother.Pt.X, aPerson.Mother.Pt.Y + aPerson.Mother.Height - 1, aPerson.Mother.Pt.X, cr_y + 1);
     end;
   end else begin
     for i := 0 to aPerson.Childs.Count - 1 do
@@ -836,17 +858,25 @@ procedure TAncestryChart.GenAncestorsChart(aPerson: TGEDCOMIndividualRecord);
 
     both := (aPerson.Father <> nil) and (aPerson.Mother <> nil);
 
-    pw := 0;
-    if (both) then pw := aPerson.Father.Width;
-    xpt := Point(aPerson.Pt.X - (FSpouseDistance + (pw div 2)),
-                 aPerson.Pt.Y - FLevelDistance - aPerson.Height);
-    Recalc(aPerson.Father, xpt);
+    if (both) then begin
+      pw := 0;
+      if (both) then pw := aPerson.Father.Width;
+      xpt := Point(aPerson.Pt.X - (FSpouseDistance + (pw div 2)),
+                   aPerson.Pt.Y - FLevelDistance - aPerson.Height);
+      Recalc(aPerson.Father, xpt);
 
-    pw := 0;
-    if (both) then pw := aPerson.Mother.Width;
-    xpt := Point(aPerson.Pt.X + (FSpouseDistance + (pw div 2)),
-                 aPerson.Pt.Y - FLevelDistance - aPerson.Height);
-    Recalc(aPerson.Mother, xpt);
+      pw := 0;
+      if (both) then pw := aPerson.Mother.Width;
+      xpt := Point(aPerson.Pt.X + (FSpouseDistance + (pw div 2)),
+                   aPerson.Pt.Y - FLevelDistance - aPerson.Height);
+      Recalc(aPerson.Mother, xpt);
+    end else begin
+      xpt := Point(aPerson.Pt.X, aPerson.Pt.Y - FLevelDistance - aPerson.Height);
+
+      if (aPerson.Father <> nil) then Recalc(aPerson.Father, xpt)
+      else
+      if (aPerson.Mother <> nil) then Recalc(aPerson.Mother, xpt);
+    end;
 
     if (both) then begin
       xpt := aPerson.Pt;
@@ -896,7 +926,6 @@ procedure TAncestryChart.GenDescendantsChart(aPerson: TGEDCOMIndividualRecord);
   function IsChildless(iRec: TGEDCOMIndividualRecord): Boolean;
   var
     exp: string;
-    x: Integer;
   begin
     exp := GetLifeExpectancy(iRec);
     if (exp = '') or (exp = '?')

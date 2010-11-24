@@ -34,6 +34,8 @@ type
 
 implementation
 
+uses GKMain;
+
 {$R *.DFM}
 
 procedure TfmTipsDialog.FormCreate(Sender: TObject);
@@ -78,7 +80,7 @@ begin
     f.TitleLabel.Caption := ACaption;
     f.FTips.Assign(Tips);
     f.GetTips();
-    f.ShowModal;
+    ShowModalEx(f);
     Result := f.ShowCheck.Checked;
   finally
     f.Free;

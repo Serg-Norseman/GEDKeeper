@@ -137,7 +137,7 @@ object fmSourceCitEdit: TfmSourceCitEdit
     Width = 337
     Height = 21
     Style = csDropDownList
-    ItemHeight = 13
+    ItemHeight = 0
     TabOrder = 2
   end
 end

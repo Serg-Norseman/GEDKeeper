@@ -26,16 +26,16 @@ object fmTreeTools: TfmTreeTools
     Top = 8
     Width = 721
     Height = 425
-    ActivePage = SheetPatSearch
+    ActivePage = SheetBaseCheck
     TabOrder = 0
     object SheetChoice: TTabSheet
       Caption = 'SheetChoice'
       TabVisible = False
       object rgOperation: TRadioGroup
-        Left = 8
-        Top = 8
+        Left = 16
+        Top = 16
         Width = 273
-        Height = 257
+        Height = 305
         Caption = #1054#1087#1077#1088#1072#1094#1080#1103
         ItemIndex = 0
         Items.Strings = (
@@ -47,7 +47,9 @@ object fmTreeTools: TfmTreeTools
           #1055#1088#1086#1074#1077#1088#1082#1072' '#1089#1074#1103#1079#1085#1086#1089#1090#1080' '#1089#1077#1084#1077#1081
           #1055#1088#1086#1074#1077#1088#1082#1072' '#1091#1084#1077#1088#1096#1080#1093' '#1083#1102#1076#1077#1081
           #1057#1080#1085#1093#1088#1086#1085#1080#1079#1072#1094#1080#1103' '#1073#1072#1079' '#1076#1072#1085#1085#1099#1093
-          #1055#1086#1080#1089#1082' '#1087#1072#1090#1088#1080#1072#1088#1093#1086#1074)
+          #1055#1086#1080#1089#1082' '#1087#1072#1090#1088#1080#1072#1088#1093#1086#1074
+          #1059#1087#1088#1072#1074#1083#1077#1085#1080#1077' '#1084#1077#1089#1090#1072#1084#1080
+          #1055#1088#1086#1074#1077#1088#1082#1072' '#1073#1072#1079#1072' '#1076#1072#1085#1085#1099#1093)
         TabOrder = 0
       end
     end
@@ -665,6 +667,13 @@ object fmTreeTools: TfmTreeTools
       Caption = 'SheetPatSearch'
       ImageIndex = 9
       TabVisible = False
+      object Label8: TLabel
+        Left = 8
+        Top = 392
+        Width = 154
+        Height = 13
+        Caption = #1055#1086#1082#1086#1083#1077#1085#1080#1081' '#1087#1086#1090#1086#1084#1082#1086#1074' '#1085#1077' '#1084#1077#1085#1077#1077
+      end
       object btnPatSearch: TBitBtn
         Left = 632
         Top = 384
@@ -684,6 +693,79 @@ object fmTreeTools: TfmTreeTools
         BevelOuter = bvNone
         BorderWidth = 8
         TabOrder = 1
+      end
+      object edMinGens: TEdit
+        Left = 168
+        Top = 384
+        Width = 57
+        Height = 21
+        TabOrder = 2
+        Text = '2'
+      end
+      object udMinGens: TUpDown
+        Left = 225
+        Top = 384
+        Width = 16
+        Height = 21
+        Associate = edMinGens
+        Min = 1
+        Position = 2
+        TabOrder = 3
+      end
+    end
+    object SheetPlaceManage: TTabSheet
+      Caption = 'SheetPlaceManage'
+      ImageIndex = 10
+      TabVisible = False
+      object Panel4: TPanel
+        Left = 0
+        Top = 0
+        Width = 713
+        Height = 369
+        Align = alTop
+        BevelOuter = bvNone
+        BorderWidth = 8
+        TabOrder = 0
+      end
+      object btnPlacesUpdate: TBitBtn
+        Left = 632
+        Top = 384
+        Width = 75
+        Height = 25
+        Caption = #1054#1073#1085#1086#1074#1080#1090#1100
+        TabOrder = 1
+        OnClick = btnPlacesUpdateClick
+        NumGlyphs = 2
+      end
+    end
+    object SheetBaseCheck: TTabSheet
+      Caption = 'SheetBaseCheck'
+      ImageIndex = 11
+      TabVisible = False
+      object btnBaseCheck: TButton
+        Left = 16
+        Top = 16
+        Width = 75
+        Height = 25
+        Caption = #1055#1088#1086#1074#1077#1088#1080#1090#1100'...'
+        TabOrder = 0
+        OnClick = btnBaseCheckClick
+      end
+      object mCheckText: TMemo
+        Left = 16
+        Top = 47
+        Width = 681
+        Height = 338
+        ScrollBars = ssBoth
+        TabOrder = 1
+      end
+      object ProgressBar2: TProgressBar
+        Left = 16
+        Top = 391
+        Width = 681
+        Height = 16
+        Step = 1
+        TabOrder = 2
       end
     end
   end
@@ -735,6 +817,6 @@ object fmTreeTools: TfmTreeTools
       'v-'#1092#1086#1088#1084#1072#1090#1077' (*.csv)|*.csv|'#1056#1086#1089#1087#1080#1089#1100' '#1074' '#1092#1086#1088#1084#1072#1090#1077' Word (*.doc)|*.doc|'#1056#1086#1089 +
       #1087#1080#1089#1100' '#1074' '#1092#1086#1088#1084#1072#1090#1077' Excel (*.xls)|*.xls'
     Left = 440
-    Top = 240
+    Top = 216
   end
 end

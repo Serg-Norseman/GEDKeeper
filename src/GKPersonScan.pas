@@ -28,6 +28,8 @@ type
     EditDeathDate: TMaskEdit;
     Label7: TLabel;
     EditDeathPlace: TEdit;
+    btnMale: TSpeedButton;
+    btnFemale: TSpeedButton;
     procedure btnCreateClick(Sender: TObject);
     procedure EditBirthDateChange(Sender: TObject);
     procedure EditDeathDateChange(Sender: TObject);
@@ -48,6 +50,7 @@ var
   iRec: TGEDCOMIndividualRecord;
   tokCount: Integer;
   nam, pat, fam, tmp: string;
+  sx: TGEDCOMSex;
 begin
   tmp := AnsiLowerCase(EditName.Text);
   tokCount := GetTokensCount(tmp, ' ');
@@ -64,7 +67,12 @@ begin
   nam[1] := AnsiUpperCase(nam)[1];
   pat[1] := AnsiUpperCase(pat)[1];
 
-  iRec := CreatePersonEx(Base.Tree, nam, pat, fam, svNone, False);
+  sx := svNone;
+  if btnMale.Down then sx := svMale
+  else
+  if btnFemale.Down then sx := svFemale;
+
+  iRec := CreatePersonEx(Base.Tree, nam, pat, fam, sx, False);
   Base.ChangeRecord(iRec);
 
   if (CheckBirth.Checked)
@@ -84,6 +92,7 @@ begin
   EditDeathPlace.Text := '';
   CheckDeath.Checked := False;
   MemoNote.Text := '';
+  btnMale.Down := True; 
 
   Base.ListsRefresh();
 end;

@@ -4,7 +4,7 @@ object fmPersonScan: TfmPersonScan
   BorderStyle = bsDialog
   Caption = #1044#1086#1073#1072#1074#1083#1077#1085#1080#1077' '#1087#1077#1088#1089#1086#1085' '#1080#1079' '#1080#1089#1090#1086#1095#1085#1080#1082#1072
   ClientHeight = 417
-  ClientWidth = 425
+  ClientWidth = 481
   Color = clBtnFace
   DefaultMonitor = dmMainForm
   Font.Charset = RUSSIAN_CHARSET
@@ -30,6 +30,23 @@ object fmPersonScan: TfmPersonScan
     Height = 13
     Caption = #1047#1072#1084#1077#1090#1082#1072
   end
+  object btnMale: TSpeedButton
+    Left = 424
+    Top = 24
+    Width = 23
+    Height = 21
+    GroupIndex = 1
+    Down = True
+    Caption = #1052
+  end
+  object btnFemale: TSpeedButton
+    Left = 448
+    Top = 24
+    Width = 23
+    Height = 21
+    GroupIndex = 1
+    Caption = #1046
+  end
   object EditName: TEdit
     Left = 8
     Top = 24
@@ -40,12 +57,12 @@ object fmPersonScan: TfmPersonScan
   object MemoNote: TMemo
     Left = 8
     Top = 248
-    Width = 409
+    Width = 465
     Height = 121
     TabOrder = 1
   end
   object btnCreate: TBitBtn
-    Left = 240
+    Left = 296
     Top = 384
     Width = 81
     Height = 25
@@ -54,7 +71,7 @@ object fmPersonScan: TfmPersonScan
     OnClick = btnCreateClick
   end
   object btnCancel: TBitBtn
-    Left = 336
+    Left = 392
     Top = 384
     Width = 81
     Height = 25
@@ -65,7 +82,7 @@ object fmPersonScan: TfmPersonScan
   object Panel1: TPanel
     Left = 8
     Top = 56
-    Width = 409
+    Width = 465
     Height = 81
     BorderStyle = bsSingle
     TabOrder = 4
@@ -97,7 +114,7 @@ object fmPersonScan: TfmPersonScan
     object EditBirthPlace: TEdit
       Left = 112
       Top = 48
-      Width = 281
+      Width = 337
       Height = 21
       TabOrder = 1
       OnChange = EditBirthDateChange
@@ -114,7 +131,7 @@ object fmPersonScan: TfmPersonScan
   object Panel2: TPanel
     Left = 8
     Top = 144
-    Width = 409
+    Width = 465
     Height = 81
     BorderStyle = bsSingle
     TabOrder = 5
@@ -154,7 +171,7 @@ object fmPersonScan: TfmPersonScan
     object EditDeathPlace: TEdit
       Left = 112
       Top = 48
-      Width = 281
+      Width = 337
       Height = 21
       TabOrder = 2
       OnChange = EditDeathDateChange

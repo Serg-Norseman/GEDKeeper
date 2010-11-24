@@ -1,8 +1,8 @@
 object fmGEDKeeper: TfmGEDKeeper
-  Left = 312
-  Top = 112
-  Width = 734
-  Height = 690
+  Left = 335
+  Top = 109
+  Width = 726
+  Height = 698
   Caption = 'GEDKeeper'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -23,8 +23,8 @@ object fmGEDKeeper: TfmGEDKeeper
   TextHeight = 13
   object StatusBar: TStatusBar
     Left = 0
-    Top = 625
-    Width = 726
+    Top = 633
+    Width = 718
     Height = 19
     AutoHint = True
     Panels = <
@@ -41,7 +41,7 @@ object fmGEDKeeper: TfmGEDKeeper
   object ToolBar1: TToolBar
     Left = 0
     Top = 0
-    Width = 726
+    Width = 718
     Height = 30
     AutoSize = True
     ButtonHeight = 26
@@ -460,6 +460,16 @@ object fmGEDKeeper: TfmGEDKeeper
       Caption = #1057#1090#1077#1088#1077#1086'-'#1087#1088#1086#1089#1084#1086#1090#1088
       ShortCut = 16507
       OnExecute = actStereoViewExecute
+    end
+    object actOrganizer: TAction
+      Category = 'Misc'
+      Caption = #1054#1088#1075#1072#1085#1072#1081#1079#1077#1088'...'
+      OnExecute = actOrganizerExecute
+    end
+    object actDBImport: TAction
+      Category = 'File'
+      Caption = #1048#1084#1087#1086#1088#1090' '#1073#1072#1079' '#1076#1072#1085#1085#1099#1093'...'
+      OnExecute = actDBImportExecute
     end
   end
   object ImageList1: TImageList
@@ -2384,6 +2394,12 @@ object fmGEDKeeper: TfmGEDKeeper
       end
       object miTreeTools: TMenuItem
         Action = actTreeTools
+      end
+      object miOrganizer: TMenuItem
+        Action = actOrganizer
+      end
+      object miDBImport: TMenuItem
+        Action = actDBImport
       end
       object N4: TMenuItem
         Caption = '-'

@@ -76,6 +76,7 @@ object fmLocationEdit: TfmLocationEdit
         Height = 21
         TabOrder = 0
         OnChange = EditNameChange
+        OnKeyDown = EditNameKeyDown
       end
       object EditLatitude: TEdit
         Left = 80

@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons, ComCtrls,
-  ExtCtrls, GedCom551, GKBase, GKCommon, Mask, GKSheetList;
+  ExtCtrls, GedCom551, GKBase, GKCommon, Mask, GKLists;
 
 type
   TfmResearchEdit = class(TForm)
@@ -210,14 +210,14 @@ var
   group: TGEDCOMGroupRecord;
 begin
   if (Sender = FNotesList) then begin
-    if Base.ModifyRecNote(FResearch, TGEDCOMNotes(ItemData), Action)
+    if Base.ModifyRecNote(Self, FResearch, TGEDCOMNotes(ItemData), Action)
     then ListsRefresh();
   end
   else
   if (Sender = FTasksList) then begin
     case Action of
       raAdd: begin
-        task := TGEDCOMTaskRecord(Base.SelectRecord(smTask));
+        task := TGEDCOMTaskRecord(Base.SelectRecord(smTask, []));
         if (task <> nil) then begin
           ptr := TGEDCOMPointer.Create(Base.Tree, FResearch);
           ptr.SetNamedValue('_TASK', task);
@@ -256,7 +256,7 @@ begin
   if (Sender = FCommunicationsList) then begin
     case Action of
       raAdd: begin
-        comm := TGEDCOMCommunicationRecord(Base.SelectRecord(smCommunication));
+        comm := TGEDCOMCommunicationRecord(Base.SelectRecord(smCommunication, []));
         if (comm <> nil) then begin
           ptr := TGEDCOMPointer.Create(Base.Tree, FResearch);
           ptr.SetNamedValue('_COMM', comm);
@@ -295,7 +295,7 @@ begin
   if (Sender = FGroupsList) then begin
     case Action of
       raAdd: begin
-        group := TGEDCOMGroupRecord(Base.SelectRecord(smGroup));
+        group := TGEDCOMGroupRecord(Base.SelectRecord(smGroup, []));
         if (group <> nil) then begin
           ptr := TGEDCOMPointer.Create(Base.Tree, FResearch);
           ptr.SetNamedValue('_GROUP', group);

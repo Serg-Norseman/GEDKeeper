@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons, ComCtrls,
-  ExtCtrls, GedCom551, GKBase, GKCommon, GKSheetList, bsCtrls;
+  ExtCtrls, GedCom551, GKBase, GKCommon, GKLists, bsCtrls;
 
 type
   TfmGroupEdit = class(TForm)
@@ -122,12 +122,12 @@ var
   member: TGEDCOMIndividualRecord;
 begin
   if (Sender = FNotesList) then begin
-    if Base.ModifyRecNote(FGroup, TGEDCOMNotes(ItemData), Action)
+    if Base.ModifyRecNote(Self, FGroup, TGEDCOMNotes(ItemData), Action)
     then ListsRefresh();
   end
   else
   if (Sender = FMediaList) then begin
-    if Base.ModifyRecMultimedia(FGroup, TGEDCOMMultimediaLink(ItemData), Action)
+    if Base.ModifyRecMultimedia(Self, FGroup, TGEDCOMMultimediaLink(ItemData), Action)
     then ListsRefresh();
   end
   else

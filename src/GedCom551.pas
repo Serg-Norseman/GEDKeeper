@@ -2973,8 +2973,8 @@ begin
   Name := 'DATE';
 
   FDateFormat := dfGEDCOMStd;
-  if (TGEDCOMTree(FOwner).Header.Source = 'BROSKEEP')
-  then FDateFormat := dfSystem;
+  //if (TGEDCOMTree(FOwner).Header.Source = 'BROSKEEP')
+  //then FDateFormat := dfSystem;
 end;
 
 procedure TGEDCOMDate.SetDateTime(ADateTime: TDateTime);

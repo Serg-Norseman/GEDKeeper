@@ -148,6 +148,7 @@ type
     Name: string;
     F_Patronymic: string;
     M_Patronymic: string;
+    Sex: TGEDCOMSex;
   end;
 
   TNamesTable = class(TObject)
@@ -169,7 +170,11 @@ type
     function FindName(aName: string): TName;
     function GetPatronymicByName(aName: string; aSex: TGEDCOMSex): string;
     function GetNameByPatronymic(aPatronymic: string; aSex: TGEDCOMSex): string;
+
+    function GetSexByName(aName: string): TGEDCOMSex;
+
     procedure SetName(aName, aPatronymic: string; aSex: TGEDCOMSex);
+    procedure SetNameSex(aName: string; aSex: TGEDCOMSex);
   end;
 
   TChartOptions = class(TObject)
@@ -181,7 +186,9 @@ type
     FDiffLines: Boolean;
     FBirthDateVisible: Boolean;
     FDeathDateVisible: Boolean;
+    FOnlyYears: Boolean;
     FKinship: Boolean;
+    FSignsVisible: Boolean;
 
     FMaleColor: TColor;
     FFemaleColor: TColor;
@@ -203,7 +210,9 @@ type
     property DiffLines: Boolean read FDiffLines write FDiffLines;
     property BirthDateVisible: Boolean read FBirthDateVisible write FBirthDateVisible;
     property DeathDateVisible: Boolean read FDeathDateVisible write FDeathDateVisible;
+    property OnlyYears: Boolean read FOnlyYears write FOnlyYears;
     property Kinship: Boolean read FKinship write FKinship;
+    property SignsVisible: Boolean read FSignsVisible write FSignsVisible;
 
     property MaleColor: TColor read FMaleColor write FMaleColor;
     property FemaleColor: TColor read FFemaleColor write FFemaleColor;
@@ -214,7 +223,7 @@ type
 
   TNameFormat = (nfFNP, nfF_NP, nfF_N_P);
 
-  TDateFormat = (dfDD_MM_YYYY, dfYYYY_MM_DD);
+  TDateFormat = (dfDD_MM_YYYY, dfYYYY_MM_DD, dfYYYY);
 
   TProxy = class(TObject)
   private
@@ -261,7 +270,6 @@ type
     FDefDateFormat: TDateFormat;
     FDefNameFormat: TNameFormat;
     FLastDir: string;
-    FListPersonsColumns: TPersonColumnsList;
     FMRUFiles: TStringList;
     FNameFilters: TStringList;
     FPedigreeOptions: TPedigreeOptions;
@@ -271,6 +279,10 @@ type
     FResidenceFilters: TStringList;
     FShowTips: Boolean;
     FWorkMode: TWorkMode;
+
+    FListPersonsColumns: TPersonColumnsList;
+    FListPersons_HighlightUnmarried: Boolean;
+    FListPersons_HighlightUnparented: Boolean;
   public
     constructor Create;
     destructor Destroy; override;
@@ -290,6 +302,11 @@ type
     property ResidenceFilters: TStringList read FResidenceFilters;
     property WorkMode: TWorkMode read FWorkMode write FWorkMode;
 
+    property ListPersons_HighlightUnmarried: Boolean
+      read FListPersons_HighlightUnmarried write FListPersons_HighlightUnmarried;
+    property ListPersons_HighlightUnparented: Boolean
+      read FListPersons_HighlightUnparented write FListPersons_HighlightUnparented;
+
     property ListPersonsColumns: TPersonColumnsList
       read FListPersonsColumns write FListPersonsColumns;
 
@@ -305,6 +322,7 @@ type
 const
   Sex: array [TGEDCOMSex] of string = ('?', 'мужской', 'женский', 'неопределенный');
   SexSigns: array [TGEDCOMSex] of string = ('?', 'М', 'Ж', 'Н');
+  SexLatSigns: array [TGEDCOMSex] of string = ('N', 'M', 'F', 'U');
 
   MarriageStatusSize = 4;
   MarriageStatus: array [0..MarriageStatusSize-1] of record
@@ -365,11 +383,25 @@ const
   );
 
 {
-MILA     Gen                  Military Award
-MILD     Gen                  Military Discharge   
-MILF     Reunion, Gen         Served in Military  
-MILI     Reunion              Military  
-MILT     Gen                  Military Services
+_CENN       BKW6                Census name
+_CORR       FO7                 Correspondence entry
+_EMAIL      BKW6, FO9, PAF      The email address of the individual
+_MARN       BKW6                Married name
+_MILT       FTM7                Military Services
+_PRIM       FO7                 In the OBJE record to indicate if this is the primary photo for this person.
+_RELN       BKW6                Religious name
+_SCBK       AQ3, FO7, PAF5      In the OBJE record to indicate if the multimedia object should be in the scrapbook.
+_SSHOW      AQ3, PAF5           indicates if image is included in slideshow
+_TODO       FO7                 To-do item
+HOBB        Gen, Reunion        Hobbies
+INFO        FTW5                Information
+MILA        Gen                 Military Award
+MILD        Gen                 Military Discharge
+MILF        Reunion, Gen        Served in Military
+MILI        Reunion             Military
+MILT        Gen                 Military Services
+NAMR        FTW5, Gen, Reunion  Religious Name
+RACE        FTW, Gen, Reunion   Race
 }
 
   DateKindsSize = 10;
@@ -478,18 +510,28 @@ const
   );
 
 type
+  //TUserRefType = (urtCustom, urtPredef);
+
   TUserRef = (
-    urUSSR_Soldier, urUSSR_FallInBattle, urUSSR_RearVeteran,
+    urCustom,
     urRI_StGeorgeCross,
-    urCustom);
+    urUSSR_Soldier, urUSSR_FallInBattle, urUSSR_RearVeteran
+  );
+
+  TChartPersonSign = urRI_StGeorgeCross..urUSSR_RearVeteran;
+  TChartPersonSigns = set of TChartPersonSign;
 
 const
-  UserRefs: array [TUserRef] of string = (
-    'СССР:ВОВ:Участник боевых действий',
-    'СССР:ВОВ:Погиб в бою',
-    'СССР:ВОВ:Труженик тыла',
-    'РИ:Георгиевский кавалер',
-    ''
+  //UserRefTypes: array [TUserRefType] of string = ('Пользовательский', 'Предопределенный');
+
+  UserRefs: array [TUserRef] of record
+    Name: string;
+  end = (
+    (Name: ''),
+    (Name: 'РИ:Георгиевский кавалер'),
+    (Name: 'СССР:ВОВ:Участник боевых действий'),
+    (Name: 'СССР:ВОВ:Погиб в бою'),
+    (Name: 'СССР:ВОВ:Труженик тыла') 
   );
 
 function IsRecordAccess(aRecRestriction: TGEDCOMRestriction; aShieldState: TShieldState): Boolean;
@@ -508,24 +550,36 @@ function GetNameStr(iRec: TGEDCOMIndividualRecord; aByFamily: Boolean = True;
 function GetNickStr(iRec: TGEDCOMIndividualRecord): string;
 function GetFamilyStr(aFamily: TGEDCOMFamilyRecord): string;
 
+function GetSex(f_name, f_pat: string; aQuery: Boolean = True): TGEDCOMSex;
+
+function GetXRefNum(aRecord: TGEDCOMRecord): string;
 function GetId(aRecord: TGEDCOMRecord): Integer;
 
 function GEDCOMDateToStr(aDate: TGEDCOMDate; aFormat: TDateFormat = dfDD_MM_YYYY): string;
-function StrToGEDCOMDate(aDate: string): string;
+function StrToGEDCOMDate(aDate: string; aException: Boolean = True): string;
 function GEDCOMCustomDateToStr(aDate: TGEDCOMCustomDate; aFormat: TDateFormat;
   aSign: Boolean = False): string;
+
+function GEDCOMEventToDateStr(aEvent: TGEDCOMCustomEvent; aFormat: TDateFormat;
+  aSign: Boolean = False): string;
+
 function GEDCOMDateToDate(aDate: TGEDCOMCustomDate): TDateTime;
 
 function GetIndividualEvent(iRec: TGEDCOMIndividualRecord; evName: string): TGEDCOMIndividualEvent;
 function GetFamilyEvent(fRec: TGEDCOMFamilyRecord; evName: string): TGEDCOMFamilyEvent;
 
-function GetBirthDate(iRec: TGEDCOMIndividualRecord; aFormat: TDateFormat): string;
-function GetDeathDate(iRec: TGEDCOMIndividualRecord; aFormat: TDateFormat): string;
+function GetBirthDate(iRec: TGEDCOMIndividualRecord; aFormat: TDateFormat;
+  aCompact: Boolean = False): string;
+function GetDeathDate(iRec: TGEDCOMIndividualRecord; aFormat: TDateFormat;
+  aCompact: Boolean = False): string;
+  
 function GetLifeStr(iRec: TGEDCOMIndividualRecord): string;
 
 function GetBirthPlace(iRec: TGEDCOMIndividualRecord): string;
 function GetDeathPlace(iRec: TGEDCOMIndividualRecord): string;
+
 function GetResidencePlace(iRec: TGEDCOMIndividualRecord; IncludeAddress: Boolean): string;
+function GetPlaceStr(aEvent: TGEDCOMCustomEvent; IncludeAddress: Boolean): string;
 
 function GetAttribute(iRec: TGEDCOMIndividualRecord; attrName: string): TGEDCOMIndividualAttribute;
 function GetAttributeValue(iRec: TGEDCOMIndividualRecord; attrName: string): string;
@@ -552,9 +606,14 @@ function CreateEventEx(aTree: TGEDCOMTree; iRec: TGEDCOMIndividualRecord;
 
 procedure CreateIEvent(aTree: TGEDCOMTree; iRec: TGEDCOMIndividualRecord;
   evSign, evDate, evPlace: string);
-  
+
+function CreateIAttr(aTree: TGEDCOMTree; iRec: TGEDCOMIndividualRecord;
+  atSign, atDate, atPlace: string): TGEDCOMIndividualAttribute;
+
 function CreatePersonEx(aTree: TGEDCOMTree; aName, aPatronymic, aFamily: string;
   aSex: TGEDCOMSex; aBirthEvent: Boolean = False): TGEDCOMIndividualRecord;
+
+procedure SetAddressValue(anAddress: TGEDCOMAddress; aValue: string);
 
 procedure AddSpouseToFamily(aTree: TGEDCOMTree; aFamily: TGEDCOMFamilyRecord;
   aSpouse: TGEDCOMIndividualRecord);
@@ -600,7 +659,8 @@ type
     ILinks: set of Byte;
   end;
 
-procedure GetPatriarchsList(aTree: TGEDCOMTree; aProgress, aLinks: Boolean; var aList: TObjectList);
+procedure GetPatriarchsList(aTree: TGEDCOMTree; aProgress, aLinks: Boolean;
+  var aList: TObjectList; aMinGens: Integer = 2);
 
 type
   TCommonStats = record
@@ -628,6 +688,11 @@ procedure LoadExtFile(const aFileName: string);
 function StreamToUtf8Stream(Stream: TStream): UTF8String;
 
 function ConStrings(aStrings: TStrings): string;
+
+type
+  TQSortCompare = function (Item1, Item2: Pointer): Integer of object;
+
+procedure QuickSort(SortList: TList; SCompare: TQSortCompare);
 
 type
   TTextFileEx = class(TObject)
@@ -731,14 +796,16 @@ procedure GetNameParts(iRec: TGEDCOMIndividualRecord; var aFamily, aName, aPatro
 var
   np: TGEDCOMPersonalName;
 begin
-  np := iRec.PersonalNames[0];
-  aFamily := np.Surname;
-  if (GetTokensCount(np.FirstPart, ' ') > 1) then begin
-    aName := GetToken(np.FirstPart, ' ', 1);
-    aPatronymic := GetToken(np.FirstPart, ' ', 2);
-  end else begin
-    aName := np.FirstPart;
-    aPatronymic := '';
+  if (iRec <> nil) then begin
+    np := iRec.PersonalNames[0];
+    aFamily := np.Surname;
+    if (GetTokensCount(np.FirstPart, ' ') > 1) then begin
+      aName := GetToken(np.FirstPart, ' ', 1);
+      aPatronymic := GetToken(np.FirstPart, ' ', 2);
+    end else begin
+      aName := np.FirstPart;
+      aPatronymic := '';
+    end;
   end;
 end;
 
@@ -799,15 +866,50 @@ begin
   else Result := Result + GetNameStr(spouse);
 end;
 
-function GetId(aRecord: TGEDCOMRecord): Integer;
+function GetSex(f_name, f_pat: string; aQuery: Boolean = True): TGEDCOMSex;
+begin
+  Result := svNone;
+
+  case f_name[Length(f_name)] of
+    'а', 'я':
+      if (Length(f_pat) > 1) then begin
+        if (f_pat[Length(f_pat)] in ['а', 'я'])
+        then Result := svFemale
+        else
+        if (f_pat[Length(f_pat)] in ['в', 'г', 'д', 'й', 'л', 'м', 'н', 'о', 'п', 'р'])
+        then Result := svMale;
+      end;
+
+    'в', 'г', 'д', 'й', 'л', 'м', 'н', 'о', 'п', 'р':
+      Result := svMale;
+  end;
+
+  if (aQuery) and (Result = svNone) then begin
+    if (MessageDlg('Не определяется пол человека по имени "'+f_name+' '+f_pat+'". Это мужской пол?', mtConfirmation, [mbYes, mbNo], 0) = mrYes)
+    then Result := svMale
+    else Result := svFemale;
+  end;
+end;
+
+function GetXRefNum(aRecord: TGEDCOMRecord): string;
 var
   xref, sign: string;
 begin
   xref := aRecord.XRef;
   sign := GetSignByRecord(aRecord);
   Delete(xref, 1, Length(sign));
+  Result := xref;
+end;
 
+function GetId(aRecord: TGEDCOMRecord): Integer;
+var
+  xref, sign: string;
+begin
   try
+    xref := aRecord.XRef;
+    sign := GetSignByRecord(aRecord);
+    Delete(xref, 1, Length(sign));
+
     Result := StrToIntDef(xref, 0);
   except
     Result := -1;
@@ -851,18 +953,30 @@ begin
       then Result := Result + NumUpdate(day, 2)
       else Result := Result + '__';
     end;
+
+    dfYYYY: begin
+      if (year > 0)
+      then Result := IntToStr(year);
+    end;
   end;
 end;
 
-function StrToGEDCOMDate(aDate: string): string;
+function StrToGEDCOMDate(aDate: string; aException: Boolean = True): string;
 var
   cnt: Integer;
   pd, pm, py: string;
 begin
   Result := '';
 
+  if (Pos('/', aDate) > 0)
+  then aDate := StringReplace(aDate, '/', '.', [rfReplaceAll]);
+
   cnt := GetTokensCount(aDate, '.');
-  if (cnt < 3) then raise Exception.Create('date failed');
+  if (cnt < 3) then begin
+    if (aException)
+    then raise Exception.Create('date failed')
+    else Exit;
+  end;
 
   pd := Trim(GetToken(aDate, '.', 1));
   pm := Trim(GetToken(aDate, '.', 2));
@@ -879,54 +993,66 @@ var
   dt_range: TGEDCOMDateRange;
   dt_period: TGEDCOMDatePeriod;
 begin
-  if (aDate is TGEDCOMDateApproximated) then begin
-    Result := GEDCOMDateToStr(TGEDCOMDate(aDate), aFormat);
+  if (aDate = nil)
+  then Result := ''
+  else begin
+    if (aDate is TGEDCOMDateApproximated) then begin
+      Result := GEDCOMDateToStr(TGEDCOMDate(aDate), aFormat);
 
-    if (aSign) and (TGEDCOMDateApproximated(aDate).Approximated <> daExact)
-    then Result := '~ ' + Result;
-  end
-  else
-  if (aDate is TGEDCOMDateRange) then begin
-    dt_range := TGEDCOMDateRange(aDate);
+      if (aSign) and (TGEDCOMDateApproximated(aDate).Approximated <> daExact)
+      then Result := '~ ' + Result;
+    end
+    else
+    if (aDate is TGEDCOMDateRange) then begin
+      dt_range := TGEDCOMDateRange(aDate);
 
-    if (dt_range.After.StringValue = '') and (dt_range.Before.StringValue <> '')
-    then begin
-      Result := GEDCOMDateToStr(dt_range.Before, aFormat);
-      if (aSign) then Result := '< ' + Result;
+      if (dt_range.After.StringValue = '') and (dt_range.Before.StringValue <> '')
+      then begin
+        Result := GEDCOMDateToStr(dt_range.Before, aFormat);
+        if (aSign) then Result := '< ' + Result;
+      end
+      else
+      if (dt_range.After.StringValue <> '') and (dt_range.Before.StringValue = '')
+      then begin
+        Result := GEDCOMDateToStr(dt_range.After, aFormat);
+        if (aSign) then Result := Result + ' >';
+      end
+      else
+      if (dt_range.After.StringValue <> '') and (dt_range.Before.StringValue <> '')
+      then Result := GEDCOMDateToStr(dt_range.After, aFormat) + '-' + GEDCOMDateToStr(dt_range.Before, aFormat);
     end
     else
-    if (dt_range.After.StringValue <> '') and (dt_range.Before.StringValue = '')
-    then begin
-      Result := GEDCOMDateToStr(dt_range.After, aFormat);
-      if (aSign) then Result := Result + ' >';
-    end
-    else
-    if (dt_range.After.StringValue <> '') and (dt_range.Before.StringValue <> '')
-    then Result := GEDCOMDateToStr(dt_range.After, aFormat) + '-' + GEDCOMDateToStr(dt_range.Before, aFormat);
-  end
-  else
-  if (aDate is TGEDCOMDatePeriod) then begin
-    dt_period := TGEDCOMDatePeriod(aDate);
+    if (aDate is TGEDCOMDatePeriod) then begin
+      dt_period := TGEDCOMDatePeriod(aDate);
 
-    if (dt_period.DateFrom.StringValue <> '') and (dt_period.DateTo.StringValue = '')
-    then begin
-      Result := GEDCOMDateToStr(dt_period.DateFrom, aFormat);
-      if (aSign) then Result := Result + ' >';
+      if (dt_period.DateFrom.StringValue <> '') and (dt_period.DateTo.StringValue = '')
+      then begin
+        Result := GEDCOMDateToStr(dt_period.DateFrom, aFormat);
+        if (aSign) then Result := Result + ' >';
+      end
+      else
+      if (dt_period.DateFrom.StringValue = '') and (dt_period.DateTo.StringValue <> '')
+      then begin
+        Result := GEDCOMDateToStr(dt_period.DateTo, aFormat);
+        if (aSign) then Result := '< ' + Result;
+      end
+      else
+      if (dt_period.DateFrom.StringValue <> '') and (dt_period.DateTo.StringValue <> '')
+      then Result := GEDCOMDateToStr(dt_period.DateFrom, aFormat) + '-' + GEDCOMDateToStr(dt_period.DateTo, aFormat);
     end
     else
-    if (dt_period.DateFrom.StringValue = '') and (dt_period.DateTo.StringValue <> '')
-    then begin
-      Result := GEDCOMDateToStr(dt_period.DateTo, aFormat);
-      if (aSign) then Result := '< ' + Result;
-    end
-    else
-    if (dt_period.DateFrom.StringValue <> '') and (dt_period.DateTo.StringValue <> '')
-    then Result := GEDCOMDateToStr(dt_period.DateFrom, aFormat) + '-' + GEDCOMDateToStr(dt_period.DateTo, aFormat);
-  end
-  else
-  if (aDate is TGEDCOMDate) then begin
-    Result := GEDCOMDateToStr(TGEDCOMDate(aDate), aFormat);
+    if (aDate is TGEDCOMDate) then begin
+      Result := GEDCOMDateToStr(TGEDCOMDate(aDate), aFormat);
+    end;
   end;
+end;
+
+function GEDCOMEventToDateStr(aEvent: TGEDCOMCustomEvent; aFormat: TDateFormat;
+  aSign: Boolean = False): string;
+begin
+  if (aEvent = nil)
+  then Result := ''
+  else Result := GEDCOMCustomDateToStr(aEvent.Detail.Date.Value, aFormat, aSign);
 end;
 
 function GEDCOMDateToDate(aDate: TGEDCOMCustomDate): TDateTime;
@@ -935,21 +1061,16 @@ var
   month, day: Word;
 begin
   try
-    Result := 0;
-
     GetIndependentDate(aDate, year, month, day);
 
     if (day = 0) then day := 1;
-
     if (month = 0) then month := 1;
 
     if (year <= 0)
     then Result := 0
     else Result := EncodeDate(year, month, day);
   except
-    Hole(year);
-    Hole(month);
-    Hole(day);
+    Result := 0;
   end;
 end;
 
@@ -989,7 +1110,14 @@ begin
   end;
 end;
 
-function GetBirthDate(iRec: TGEDCOMIndividualRecord; aFormat: TDateFormat): string;
+function CompactDate(const aDate: string): string;
+begin
+  Result := aDate;
+  while (Pos('__.', Result) = 1) do Delete(Result, 1, 3);
+end;
+
+function GetBirthDate(iRec: TGEDCOMIndividualRecord; aFormat: TDateFormat;
+  aCompact: Boolean = False): string;
 var
   event: TGEDCOMIndividualEvent;
 begin
@@ -998,9 +1126,13 @@ begin
   if (event = nil)
   then Result := ''
   else Result := GEDCOMCustomDateToStr(event.Detail.Date.Value, aFormat);
+
+  if (aCompact)
+  then Result := CompactDate(Result);
 end;
 
-function GetDeathDate(iRec: TGEDCOMIndividualRecord; aFormat: TDateFormat): string;
+function GetDeathDate(iRec: TGEDCOMIndividualRecord; aFormat: TDateFormat;
+  aCompact: Boolean = False): string;
 var
   event: TGEDCOMIndividualEvent;
 begin
@@ -1009,6 +1141,9 @@ begin
   if (event = nil)
   then Result := ''
   else Result := GEDCOMCustomDateToStr(event.Detail.Date.Value, aFormat);
+
+  if (aCompact)
+  then Result := CompactDate(Result);
 end;
 
 function GetLifeStr(iRec: TGEDCOMIndividualRecord): string;
@@ -1058,19 +1193,22 @@ begin
 end;
 
 function GetResidencePlace(iRec: TGEDCOMIndividualRecord; IncludeAddress: Boolean): string;
+begin
+  Result := GetPlaceStr(GetAttribute(iRec, 'RESI'), IncludeAddress);
+end;
+
+function GetPlaceStr(aEvent: TGEDCOMCustomEvent; IncludeAddress: Boolean): string;
 var
-  attr: TGEDCOMIndividualAttribute;
   resi, addr: string;
 begin
-  attr := GetAttribute(iRec, 'RESI');
-  if (attr = nil)
+  if (aEvent = nil)
   then Result := ''
   else begin
-    Result := attr.Detail.Place.StringValue;
+    Result := aEvent.Detail.Place.StringValue;
 
     if (IncludeAddress) then begin
-      resi := attr.StringValue;
-      addr := Trim(attr.Detail.Address.Address.Text);
+      resi := aEvent.StringValue;
+      addr := Trim(aEvent.Detail.Address.Address.Text);
       if (resi <> '') and (addr <> '') then resi := resi + ', ';
       resi := resi + addr;
 
@@ -1110,7 +1248,7 @@ end;
 function GetAttributeStr(iAttr: TGEDCOMIndividualAttribute): string;
 var
   idx: Integer;
-  st: string;
+  st, place: string;
 begin
   idx := GetPersonEventIndex(iAttr.Name);
   if (idx = 0) then st := iAttr.Detail.Classification
@@ -1118,7 +1256,10 @@ begin
   if (idx > 0) then st := PersonEvents[idx].Name
   else st := iAttr.Name;
 
-  Result := st + ': ' + iAttr.StringValue;
+  place := iAttr.Detail.Place.StringValue;
+  if (place <> '') then place := ' [' + place + ']';
+
+  Result := st + ': ' + iAttr.StringValue + place;
 end;
 
 function GetMarriageDate(fRec: TGEDCOMFamilyRecord; aFormat: TDateFormat): string;
@@ -1197,11 +1338,9 @@ procedure GetIndependentDate(aDate: TGEDCOMCustomDate; var AYear: Integer; var A
 var
   dt_range: TGEDCOMDateRange;
   dt_period: TGEDCOMDatePeriod;
-  dt: TGEDCOMDate;
 begin
   if (aDate is TGEDCOMDateApproximated) then begin
-    dt := TGEDCOMDate(aDate);
-    dt.GetDate(AYear, AMonth, ADay);
+    TGEDCOMDate(aDate).GetDate(AYear, AMonth, ADay);
   end
   else
   if (aDate is TGEDCOMDateRange) then begin
@@ -1433,6 +1572,7 @@ var
   bd_y: Integer;
   cur_y, cur_m, cur_d, bd_m, bd_d: Word;
   event: TGEDCOMIndividualEvent;
+  xr: string;
 begin
   Result := '';
   try
@@ -1460,15 +1600,17 @@ begin
       Result := IntToStr(DaysBetween(EncodeDate(cur_y, cur_m, cur_d), EncodeDate(bd_y, bd_m, bd_d)));
     end;
   except
+    xr := iRec.XRef;
+    Hole(xr);
   end;
 end;
 
 function GetChangeDate(aRec: TGEDCOMRecord): string;
 begin
   try
-    if (aRec.ChangeDate.ChangeDateTime <> 0)
-    then DateTimeToString(Result, 'yyyy.mm.dd hh:nn:ss', aRec.ChangeDate.ChangeDateTime)
-    else Result := '';
+    if (aRec.ChangeDate.ChangeDateTime = 0)
+    then Result := ''
+    else DateTimeToString(Result, 'yyyy.mm.dd hh:nn:ss', aRec.ChangeDate.ChangeDateTime);
   except
     Result := '';
   end;
@@ -1496,6 +1638,18 @@ begin
   iRec.AddIndividualEvent(event);
 end;
 
+function CreateIAttr(aTree: TGEDCOMTree; iRec: TGEDCOMIndividualRecord;
+  atSign, atDate, atPlace: string): TGEDCOMIndividualAttribute;
+begin
+  Result := TGEDCOMIndividualAttribute.Create(aTree, iRec);
+  Result.Name := atSign;
+
+  Result.Detail.Date.ParseString(atDate);
+  Result.Detail.Place.StringValue := atPlace;
+
+  iRec.AddIndividualAttribute(Result);
+end;
+
 function CreatePersonEx(aTree: TGEDCOMTree; aName, aPatronymic, aFamily: string;
   aSex: TGEDCOMSex; aBirthEvent: Boolean = False): TGEDCOMIndividualRecord;
 var
@@ -1515,6 +1669,20 @@ begin
 
   if (aBirthEvent)
   then CreateEventEx(aTree, Result, 'BIRT');
+end;
+
+{warning: this is hack wrapper}
+procedure SetAddressValue(anAddress: TGEDCOMAddress; aValue: string);
+var
+  sl: TStringList;
+begin
+  sl := TStringList.Create;
+  try
+    sl.Text := aValue;
+    anAddress.Address := sl;
+  finally
+    sl.Free;
+  end;
 end;
 
 procedure AddSpouseToFamily(aTree: TGEDCOMTree; aFamily: TGEDCOMFamilyRecord;
@@ -1584,6 +1752,7 @@ var
   strx, strmask: string;
 begin
   Result := False;
+  if (aName = '') or (aMask = '') then Exit;
 
   strx := AnsiLowerCase(aName);
   strmask := AnsiLowerCase(aMask);
@@ -1913,7 +2082,8 @@ begin
   Result := TPatriarchObj(Item1).IBirthYear - TPatriarchObj(Item2).IBirthYear;
 end;
 
-procedure GetPatriarchsList(aTree: TGEDCOMTree; aProgress, aLinks: Boolean; var aList: TObjectList);
+procedure GetPatriarchsList(aTree: TGEDCOMTree; aProgress, aLinks: Boolean;
+  var aList: TObjectList; aMinGens: Integer = 2);
 
   function SearchAnc(descendantRec, searchRec: TGEDCOMIndividualRecord): Boolean;
   var
@@ -2053,7 +2223,7 @@ begin
         res := res and ((nf <> '') and (nf <> '?'))
                    and ((nn <> '') and (nn <> '?'));
         // 4: количество поколений потомков
-        res := res and (descGens > 1);
+        res := res and (descGens >= aMinGens);
         // 5: год рождения известен или можно вычислить
         res := res and (bYear > 0);
 
@@ -2417,69 +2587,61 @@ procedure CheckRecord(aTree: TGEDCOMTree; aRec: TGEDCOMRecord);
     end;
   end;
 
-  {procedure CheckAttributes(ind: TGEDCOMIndividualRecord);
+  procedure CheckEventPlace(aEvent: TGEDCOMCustomEvent);
   var
-    i: Integer;
-    attr: TGEDCOMIndividualAttribute;
+    loc: TGEDCOMLocationRecord;
   begin
-    for i := 0 to ind.IndividualAttributesCount - 1 do begin
-      attr := ind.IndividualAttributes[i];
+    if (aEvent.Detail.Place.StringValue <> '') then begin
+      loc := TGEDCOMLocationRecord(aEvent.Detail.Place.Location.Value);
 
-      if (attr.StringValue = '') and (attr.Detail.Place <> '') then begin
-        attr.StringValue := attr.Detail.Place;
-        attr.Detail.Place := '';
+      if (loc <> nil) and (aEvent.Detail.Place.StringValue <> loc.Name)
+      then aEvent.Detail.Place.StringValue := loc.Name;
+    end;
+  end;
+
+  procedure AddUserRef(iRec: TGEDCOMIndividualRecord; uRef: string);
+  var
+    ref: TGEDCOMUserReference;
+  begin
+    ref := TGEDCOMUserReference.Create(aTree, iRec);
+    ref.StringValue := uRef;
+    iRec.AddUserReference(ref);
+  end;
+
+  // совместимость со старыми версиями
+  procedure CheckAttrCompatible(iRec: TGEDCOMIndividualRecord; aEvent: TGEDCOMCustomEvent);
+  var
+    cause: string;
+  begin
+    if (aEvent.Name = '_MILI') then begin
+      cause := AnsiLowerCase(aEvent.Detail.Classification);
+
+      if (Pos('б/д', cause) > 0) then begin
+        if (Pos('+', cause) > 0)
+        then AddUserRef(iRec, UserRefs[urUSSR_FallInBattle].Name)
+        else AddUserRef(iRec, UserRefs[urUSSR_Soldier].Name);
+
+        aEvent.Detail.Classification := '';
+      end
+      else
+      if (Pos('т/т', cause) > 0) then begin
+        AddUserRef(iRec, UserRefs[urUSSR_RearVeteran].Name);
+
+        aEvent.Detail.Classification := '';
       end;
     end;
-  end;}
+  end;
 
-  {procedure CheckName(ind: TGEDCOMIndividualRecord);
-  var
-    fam, nam, pat, np: string;
-    tag: TGEDCOMTag;
-    pn: TGEDCOMPersonalName;
+  // совместимость со старыми версиями
+  procedure CheckURefCompatible(iRec: TGEDCOMIndividualRecord; aUserRef: TGEDCOMUserReference);
   begin
-    GetNameParts(ind, fam, nam, pat);
-
-    pn := ind.PersonalNames[0];
-
-    if (nam = '')
-    then np := pat
-    else
-    if (pat = '')
-    then np := nam
-    else np := nam + ' ' + pat;
-
-    tag := pn.FindTag('GIVN');
-    if (tag <> nil) and (tag.StringValue = np) then pn.DeleteTag('GIVN');
-
-    tag := pn.FindTag('SURN');
-    if (tag <> nil) and (tag.StringValue = fam) then pn.DeleteTag('SURN');
-  end;}
-
-  {procedure CheckPlace(ind: TGEDCOMIndividualRecord);
-  var
-    pn: TGEDCOMPersonalName;
-    ev: TGEDCOMIndividualEvent;
-  begin
-    pn := ind.PersonalNames[0];
-
-    if (pn.Surname <> '') and (pn.Surname[1] in ['Ж']) then begin
-      ev := GetIndividualEvent(ind, 'BIRT');
-      if (ev.Detail.Place = '')
-      then ev.Detail.Place := 'Екатеринбургский уезд, пос. Верхний Тагил';
-    end;
-  end;}
+    // dummy
+  end;
 
   procedure CheckPerson(ind: TGEDCOMIndividualRecord);
   var
     k: Integer;
-    evt: TGEDCOMCustomEvent;
-    loc: TGEDCOMLocationRecord;
   begin
-    {CheckAttributes(ind);}
-    {CheckName(ind);}
-    {CheckPlace(ind);}
-
     /// Не указаны родители и супруги - нормально
 
     /// Пустые ссылки на семью родителей - зачищаем
@@ -2495,14 +2657,16 @@ procedure CheckRecord(aTree: TGEDCOMTree; aRec: TGEDCOMRecord);
     end;
 
     for k := 0 to ind.IndividualEventsCount - 1 do begin
-      evt := ind.IndividualEvents[k];
+      CheckEventPlace(ind.IndividualEvents[k]);
+    end;
 
-      if (evt.Detail.Place.StringValue <> '') then begin
-        loc := TGEDCOMLocationRecord(evt.Detail.Place.Location.Value);
+    for k := 0 to ind.IndividualAttributesCount - 1 do begin
+      CheckEventPlace(ind.IndividualAttributes[k]);
+      CheckAttrCompatible(ind, ind.IndividualAttributes[k]);
+    end;
 
-        if (loc <> nil) and (evt.Detail.Place.StringValue <> loc.Name)
-        then evt.Detail.Place.StringValue := loc.Name;
-      end;
+    for k := 0 to ind.UserReferencesCount - 1 do begin
+      CheckURefCompatible(ind, ind.UserReferences[k]);
     end;
   end;
 
@@ -2675,12 +2839,12 @@ var
 begin
   Result := False;
 
-  for i := 0 to aTree.RecordsCount - 1 do begin
+  {for i := 0 to aTree.RecordsCount - 1 do begin
     for k := i + 1 to aTree.RecordsCount - 1 do begin
       if (aTree.Records[i].XRef = aTree.Records[k].XRef)
       then ; // AddDiag(aTree.Records[i].XRef, 'Объект дублирован');
     end;
-  end;
+  end;}
 
   ProgressInit(aTree.RecordsCount, 'Проверка формата');
   try
@@ -2693,9 +2857,9 @@ begin
       if (idCheck) and (GetId(rec) < 0)
       then idCheck := False;
 
-      ProgressStep();
-
       Inc(i);
+
+      ProgressStep();
     end;
   finally
     ProgressDone();
@@ -2708,6 +2872,8 @@ begin
 
   Result := True;
 end;
+
+{==============================================================================}
 
 procedure LoadExtFile(const aFileName: string);
 begin
@@ -2752,6 +2918,43 @@ begin
     if (Result <> '') then Result := Result + ' ';
     Result := Result + Trim(aStrings[i]);
   end;
+end;
+
+procedure QuickSort(SortList: TList; SCompare: TQSortCompare);
+
+  procedure IQuickSort(L, R: Integer);
+  var
+    I, J: Integer;
+    P, T: Pointer;
+  begin
+    repeat
+      I := L;
+      J := R;
+      P := SortList[(L + R) shr 1];
+      repeat
+        while SCompare(SortList[I], P) < 0 do
+          Inc(I);
+        while SCompare(SortList[J], P) > 0 do
+          Dec(J);
+        if I <= J then
+        begin
+          T := SortList[I];
+          SortList[I] := SortList[J];
+          SortList[J] := T;
+          Inc(I);
+          Dec(J);
+        end;
+      until (I > J);
+
+      if (L < J) then IQuickSort(L, J);
+
+      L := I;
+    until I >= R;
+  end;
+
+begin
+  if (SortList <> nil) and (SortList.Count > 0) then
+    IQuickSort(0, SortList.Count - 1);
 end;
 
 {==============================================================================}
@@ -2813,6 +3016,16 @@ begin
   end;
 end;
 
+function TNamesTable.GetSexByName(aName: string): TGEDCOMSex;
+var
+  n: TName;
+begin
+  n := FindName(aName);
+  if (n = nil)
+  then Result := svNone
+  else Result := n.Sex;
+end;
+
 function TNamesTable.GetNameByPatronymic(aPatronymic: string; aSex: TGEDCOMSex): string;
 var
   i: Integer;
@@ -2833,6 +3046,8 @@ procedure TNamesTable.SetName(aName, aPatronymic: string; aSex: TGEDCOMSex);
 var
   n: TName;
 begin
+  if (aName = '') then Exit;  
+
   n := FindName(aName);
   if (n = nil) then begin
     n := TName.Create;
@@ -2844,6 +3059,23 @@ begin
     svMale: if (n.M_Patronymic = '') then n.M_Patronymic := aPatronymic;
     svFemale: if (n.F_Patronymic = '') then n.F_Patronymic := aPatronymic;
   end;
+end;
+
+procedure TNamesTable.SetNameSex(aName: string; aSex: TGEDCOMSex);
+var
+  n: TName;
+begin
+  if (aName = '') then Exit;  
+
+  n := FindName(aName);
+  if (n = nil) then begin
+    n := TName.Create;
+    n.Name := aName;
+    FNames.Add(n);
+  end;
+
+  if (n.Sex = svNone) and (aSex in [svMale, svFemale])
+  then n.Sex := aSex;
 end;
 
 procedure TNamesTable.ImportNames(aTree: TGEDCOMTree);
@@ -2866,13 +3098,15 @@ var
   i: Integer;
   iRec, iFather: TGEDCOMIndividualRecord;
   family: TGEDCOMFamilyRecord;
-  dummy, ch_pat, fat_nam: string;
+  dummy, ch_name, ch_pat, fat_nam: string;
 begin
   for i := 0 to aTree.RecordsCount - 1 do
     if (aTree.Records[i] is TGEDCOMIndividualRecord) then begin
       iRec := aTree.Records[i] as TGEDCOMIndividualRecord;
 
-      GetNameParts(iRec, dummy, dummy, ch_pat);
+      GetNameParts(iRec, dummy, ch_name, ch_pat);
+
+      SetNameSex(ch_name, iRec.Sex);
 
       if (iRec.ChildToFamilyLinksCount <> 0) then begin
         family := iRec.ChildToFamilyLinks[0].Family;
@@ -2892,7 +3126,7 @@ end;
 procedure TNamesTable.LoadFromFile(const aFileName: string);
 var
   tf: TextFile;
-  st: string;
+  st, sex: string;
   nm: TName;
 begin
   if FileExists(aFileName) then begin
@@ -2904,6 +3138,18 @@ begin
       nm.Name := GetToken(st, ';', 1);
       nm.F_Patronymic := GetToken(st, ';', 2);
       nm.M_Patronymic := GetToken(st, ';', 3);
+
+      sex := GetToken(st, ';', 4);
+      if (sex <> '') then begin
+        case sex[1] of
+          'N': nm.Sex := svNone;
+          'M': nm.Sex := svMale;
+          'F': nm.Sex := svFemale;
+          'U': nm.Sex := svUndetermined;
+          else nm.Sex := svNone;
+        end;
+      end;
+
       FNames.Add(nm);
     end;
     CloseFile(tf);
@@ -2919,7 +3165,7 @@ begin
   AssignFile(tf, aFileName); Rewrite(tf);
   for i := 0 to FNames.Count - 1 do begin
     nm := GetName(i);
-    Writeln(tf, nm.Name + ';' + nm.F_Patronymic + ';' + nm.M_Patronymic);
+    Writeln(tf, nm.Name + ';' + nm.F_Patronymic + ';' + nm.M_Patronymic + ';' + SexLatSigns[nm.Sex]);
   end;
   CloseFile(tf);
 end;
@@ -2938,7 +3184,9 @@ begin
   FDiffLines := False;
   FBirthDateVisible := False;
   FDeathDateVisible := False;
+  FOnlyYears := False;
   FKinship := False;
+  FSignsVisible := False;
 
   FMaleColor := $00FFC6C6;
   FFemaleColor := $00C6C6FF;
@@ -2961,7 +3209,10 @@ begin
   FDiffLines := aIniFile.ReadBool('Chart', 'DiffLines', False);
   FBirthDateVisible := aIniFile.ReadBool('Chart', 'BirthDateVisible', False);
   FDeathDateVisible := aIniFile.ReadBool('Chart', 'DeathDateVisible', False);
+  FOnlyYears := aIniFile.ReadBool('Chart', 'OnlyYears', False);
   FKinship := aIniFile.ReadBool('Chart', 'Kinship', False);
+  FSignsVisible := aIniFile.ReadBool('Chart', 'SignsVisible', False);
+
   FMaleColor := aIniFile.ReadInteger('Chart', 'MaleColor', $00FFC6C6);
   FFemaleColor := aIniFile.ReadInteger('Chart', 'FemaleColor', $00C6C6FF);
   FUnkSexColor := aIniFile.ReadInteger('Chart', 'UnkSexColor', $00FFC6FF);
@@ -2978,7 +3229,10 @@ begin
   aIniFile.WriteBool('Chart', 'DiffLines', FDiffLines);
   aIniFile.WriteBool('Chart', 'BirthDateVisible', FBirthDateVisible);
   aIniFile.WriteBool('Chart', 'DeathDateVisible', FDeathDateVisible);
+  aIniFile.WriteBool('Chart', 'OnlyYears', FOnlyYears);
   aIniFile.WriteBool('Chart', 'Kinship', FKinship);
+  aIniFile.WriteBool('Chart', 'SignsVisible', FSignsVisible);
+
   aIniFile.WriteInteger('Chart', 'MaleColor', FMaleColor);
   aIniFile.WriteInteger('Chart', 'FemaleColor', FFemaleColor);
   aIniFile.WriteInteger('Chart', 'UnkSexColor', FUnkSexColor);
@@ -3117,10 +3371,15 @@ begin
     for i := 0 to cnt - 1 do
       FRelations.Add(ini.ReadString('Relations', 'Relation_' + IntToStr(i), ''));
 
+    ///
+
     for i := 0 to High(FListPersonsColumns) do begin
       FListPersonsColumns[i].colType := TPersonColumnType(ini.ReadInteger('PersonsColumns', 'ColType_' + IntToStr(i), Ord(DefPersonColumns[i].colType)));
       FListPersonsColumns[i].colActive := ini.ReadBool('PersonsColumns', 'ColActive_' + IntToStr(i), DefPersonColumns[i].colActive);
     end;
+
+    FListPersons_HighlightUnmarried := ini.ReadBool('ListPersons', 'HighlightUnmarried', False);
+    FListPersons_HighlightUnparented := ini.ReadBool('ListPersons', 'HighlightUnparented', False);
   finally
     ini.Destroy;
   end;
@@ -3164,10 +3423,15 @@ begin
     for i := 0 to FRelations.Count - 1 do
       ini.WriteString('Relations', 'Relation_' + IntToStr(i), FRelations[i]);
 
+    ///
+
     for i := 0 to High(FListPersonsColumns) do begin
       ini.WriteInteger('PersonsColumns', 'ColType_' + IntToStr(i), Ord(FListPersonsColumns[i].colType));
       ini.WriteBool('PersonsColumns', 'ColActive_' + IntToStr(i), FListPersonsColumns[i].colActive);
     end;
+
+    ini.WriteBool('ListPersons', 'HighlightUnmarried', FListPersons_HighlightUnmarried);
+    ini.WriteBool('ListPersons', 'HighlightUnparented', FListPersons_HighlightUnparented);
   finally
     ini.Destroy;
   end;

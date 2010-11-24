@@ -91,6 +91,8 @@ type
     FShowPoints: Boolean;
     FShowLines: Boolean;
 
+    FSelectedPersons: TList;
+
     procedure gm_ClearPoints();
     procedure gm_ExecScript(Script: string);
     function GetGMapPoint(Index: Integer): TGMapPoint;
@@ -121,6 +123,7 @@ type
     property ShowPoints: Boolean index 0 read FShowPoints write SetVisibleElementes default True;
     property ShowLines: Boolean index 1 read FShowLines write SetVisibleElementes default False;
   public
+    property SelectedPersons: TList read FSelectedPersons write FSelectedPersons;
     property Tree: TGEDCOMTree read FTree write FTree;
   end;
 
@@ -770,6 +773,7 @@ var
   rec: TGEDCOMRecord;
   ind: TGEDCOMIndividualRecord;
   ev: TGEDCOMCustomEvent;
+  res: Boolean;
 begin
   ComboPersons.Items.BeginUpdate;
   TreePlaces.Items.BeginUpdate;
@@ -784,7 +788,11 @@ begin
     for i := 0 to FTree.RecordsCount - 1 do begin
       rec := FTree.Records[i];
 
-      if (rec is TGEDCOMIndividualRecord) then begin
+      res := (rec is TGEDCOMIndividualRecord)
+         and ((FSelectedPersons = nil)
+           or ((FSelectedPersons <> nil) and (FSelectedPersons.IndexOf(rec) >= 0)));
+
+      if (res) then begin
         ind := rec as TGEDCOMIndividualRecord;
         p_cnt := 0;
 
@@ -848,7 +856,6 @@ var
   ref: TGEDCOMCustomEvent;
   cond: set of (pcBirth, pcDeath, pcResidence);
   ind: TGEDCOMIndividualRecord;
-  s: string;
 begin
   cond := [];
   if CheckBirth.Checked then Include(cond, pcBirth);

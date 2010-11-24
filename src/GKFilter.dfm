@@ -58,7 +58,7 @@ object fmFilter: TfmFilter
     Width = 81
     Height = 25
     Caption = #1055#1088#1080#1085#1103#1090#1100
-    TabOrder = 2
+    TabOrder = 8
     OnClick = btnAcceptClick
     Kind = bkOK
   end
@@ -68,7 +68,7 @@ object fmFilter: TfmFilter
     Width = 81
     Height = 25
     Caption = #1054#1090#1084#1077#1085#1080#1090#1100
-    TabOrder = 3
+    TabOrder = 9
     OnClick = btnCancelClick
     Kind = bkCancel
   end
@@ -92,7 +92,7 @@ object fmFilter: TfmFilter
     Height = 21
     ItemHeight = 13
     Sorted = True
-    TabOrder = 1
+    TabOrder = 3
     Text = '*'
   end
   object rgSex: TRadioGroup
@@ -104,7 +104,7 @@ object fmFilter: TfmFilter
       #1074#1089#1077
       #1090#1086#1083#1100#1082#1086' '#1084#1091#1078#1095#1080#1085#1099
       #1090#1086#1083#1100#1082#1086' '#1078#1077#1085#1097#1080#1085#1099)
-    TabOrder = 4
+    TabOrder = 1
   end
   object edAliveBeforeDate: TMaskEdit
     Left = 8
@@ -114,7 +114,7 @@ object fmFilter: TfmFilter
     Enabled = False
     EditMask = '!99/99/9999;1;_'
     MaxLength = 10
-    TabOrder = 5
+    TabOrder = 2
     Text = '  .  .    '
   end
   object GroupBox1: TGroupBox
@@ -123,7 +123,7 @@ object fmFilter: TfmFilter
     Width = 281
     Height = 41
     Caption = #1056#1072#1089#1096#1080#1088#1077#1085#1085#1099#1077
-    TabOrder = 6
+    TabOrder = 7
     object CheckPatriarch: TCheckBox
       Left = 8
       Top = 16
@@ -140,7 +140,7 @@ object fmFilter: TfmFilter
     Height = 21
     ItemHeight = 13
     Sorted = True
-    TabOrder = 7
+    TabOrder = 4
     Text = '*'
   end
   object cbGroup: TComboBox
@@ -150,7 +150,7 @@ object fmFilter: TfmFilter
     Height = 21
     Style = csDropDownList
     ItemHeight = 13
-    TabOrder = 8
+    TabOrder = 5
   end
   object cbSource: TComboBox
     Left = 8
@@ -159,6 +159,6 @@ object fmFilter: TfmFilter
     Height = 21
     Style = csDropDownList
     ItemHeight = 13
-    TabOrder = 9
+    TabOrder = 6
   end
 end

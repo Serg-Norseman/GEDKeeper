@@ -7,7 +7,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, GedCom551, StdCtrls, Buttons, ComCtrls, ExtCtrls, GKBase, GKCommon,
-  GKSheetList;
+  GKLists;
 
 type
   TfmAddressEdit = class(TForm)
@@ -108,21 +108,12 @@ begin
 end;
 
 procedure TfmAddressEdit.btnAcceptClick(Sender: TObject);
-var
-  sl: TStringList;
 begin
   FAddress.AddressCountry := edCountry.Text;
   FAddress.AddressState := edState.Text;
   FAddress.AddressCity := edCity.Text;
   FAddress.AddressPostalCode := edPostalCode.Text;
-
-  sl := TStringList.Create;
-  try
-    sl.Text := edAddress.Text;
-    FAddress.Address := sl;
-  finally
-    sl.Free;
-  end;
+  SetAddressValue(FAddress, edAddress.Text);
 end;
 
 procedure TfmAddressEdit.ListModify(Sender: TObject; ItemData: TObject; Action: TRecAction);

@@ -141,6 +141,10 @@ type
     actTimeLine: TAction;
     miTimeLine: TMenuItem;
     actStereoView: TAction;
+    actOrganizer: TAction;
+    miOrganizer: TMenuItem;
+    actDBImport: TAction;
+    miDBImport: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure actFileNewExecute(Sender: TObject);
@@ -184,6 +188,8 @@ type
     procedure actCalendarExecute(Sender: TObject);
     procedure actTimeLineExecute(Sender: TObject);
     procedure actStereoViewExecute(Sender: TObject);
+    procedure actOrganizerExecute(Sender: TObject);
+    procedure actDBImportExecute(Sender: TObject);
   private
     FNamesTable: TNamesTable;
     FOptions: TGlobalOptions;
@@ -435,6 +441,8 @@ begin
   actPedigree_Konovalov.Enabled := (indiv_en);
 
   actStats.Enabled := (base_en);
+  actOrganizer.Enabled := (base_en);
+  actDBImport.Enabled := (base_en);
 
   actPrev.Enabled := (cur_base <> nil) and (cur_base.Backman.CanBackward());
   actNext.Enabled := (cur_base <> nil) and (cur_base.Backman.CanForward());
@@ -708,7 +716,7 @@ begin
   try
     fmOptions.Options := fmGEDKeeper.Options;
 
-    if (fmOptions.ShowModal = mrOk) then begin
+    if (ShowModalEx(fmOptions) = mrOk) then begin
       for i := 0 to MDIChildCount - 1 do
         if (MDIChildren[i] is TfmBase)
         then TfmBase(MDIChildren[i]).ListsRefresh(True);
@@ -930,6 +938,24 @@ begin
     FreeAndNil(fmTimeLine);
     {FPluginMan.RunPlugin(1);}
   end;
+end;
+
+procedure TfmGEDKeeper.actOrganizerExecute(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base = nil) then Exit;
+  cur_base.ShowOrganizer();
+end;
+
+procedure TfmGEDKeeper.actDBImportExecute(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base = nil) then Exit;
+  cur_base.ImportDB();
 end;
 
 end.

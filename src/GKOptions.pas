@@ -17,13 +17,13 @@ type
     btnCancel: TBitBtn;
     SheetPedigree: TTabSheet;
     GroupBox1: TGroupBox;
-    CheckFamily: TCheckBox;
-    CheckName: TCheckBox;
-    CheckPatronymic: TCheckBox;
-    CheckDiffLines: TCheckBox;
-    CheckBirthDate: TCheckBox;
-    CheckDeathDate: TCheckBox;
-    CheckKinship: TCheckBox;
+    chkFamily: TCheckBox;
+    chkName: TCheckBox;
+    chkPatronymic: TCheckBox;
+    chkDiffLines: TCheckBox;
+    chkBirthDate: TCheckBox;
+    chkDeathDate: TCheckBox;
+    chkKinship: TCheckBox;
     GroupBox2: TGroupBox;
     PanMaleColor: TPanel;
     PanFemaleColor: TPanel;
@@ -32,8 +32,8 @@ type
     PanUnWifeColor: TPanel;
     ColorDialog1: TColorDialog;
     GroupBox3: TGroupBox;
-    CheckAppRegister: TCheckBox;
-    CheckExtRegister: TCheckBox;
+    chkAppRegister: TCheckBox;
+    chkExtRegister: TCheckBox;
     GroupBox4: TGroupBox;
     Label1: TLabel;
     Label2: TLabel;
@@ -45,9 +45,9 @@ type
     edProxyLogin: TEdit;
     edProxyPass: TEdit;
     GroupBox5: TGroupBox;
-    CheckAttributes: TCheckBox;
-    CheckNotes: TCheckBox;
-    CheckSources: TCheckBox;
+    chkAttributes: TCheckBox;
+    chkNotes: TCheckBox;
+    chkSources: TCheckBox;
     SheetView: TTabSheet;
     PageControl2: TPageControl;
     SheetViewCommon: TTabSheet;
@@ -58,12 +58,16 @@ type
     btnDefList: TBitBtn;
     rgFNPFormat: TRadioGroup;
     rgDateFormat: TRadioGroup;
-    CheckPlacesWithAddress: TCheckBox;
+    chkPlacesWithAddress: TCheckBox;
     EditPedigreeFormat: TRadioGroup;
     GroupBox7: TGroupBox;
-    CheckShowOnStart: TCheckBox;
+    chkShowOnStart: TCheckBox;
     rgEditMode: TRadioGroup;
     chkChildlessExclude: TCheckBox;
+    chkHighlightUnparented: TCheckBox;
+    chkHighlightUnmarried: TCheckBox;
+    chkOnlyYears: TCheckBox;
+    chkSignsVisible: TCheckBox;
     procedure FormShow(Sender: TObject);
     procedure btnAcceptClick(Sender: TObject);
     procedure PanMaleColorClick(Sender: TObject);
@@ -96,15 +100,20 @@ begin
 
   rgFNPFormat.ItemIndex := Ord(FOptions.DefNameFormat);
   rgDateFormat.ItemIndex := Ord(FOptions.DefDateFormat);
-  CheckPlacesWithAddress.Checked := FOptions.PlacesWithAddress;
+  chkPlacesWithAddress.Checked := FOptions.PlacesWithAddress;
+  chkHighlightUnparented.Checked := FOptions.ListPersons_HighlightUnparented;
+  chkHighlightUnmarried.Checked := FOptions.ListPersons_HighlightUnmarried;
 
-  CheckFamily.Checked := FOptions.ChartOptions.FamilyVisible;
-  CheckName.Checked := FOptions.ChartOptions.NameVisible;
-  CheckPatronymic.Checked := FOptions.ChartOptions.PatronymicVisible;
-  CheckDiffLines.Checked := FOptions.ChartOptions.DiffLines;
-  CheckBirthDate.Checked := FOptions.ChartOptions.BirthDateVisible;
-  CheckDeathDate.Checked := FOptions.ChartOptions.DeathDateVisible;
-  CheckKinship.Checked := FOptions.ChartOptions.Kinship;
+  chkFamily.Checked := FOptions.ChartOptions.FamilyVisible;
+  chkName.Checked := FOptions.ChartOptions.NameVisible;
+  chkPatronymic.Checked := FOptions.ChartOptions.PatronymicVisible;
+  chkDiffLines.Checked := FOptions.ChartOptions.DiffLines;
+  chkBirthDate.Checked := FOptions.ChartOptions.BirthDateVisible;
+  chkDeathDate.Checked := FOptions.ChartOptions.DeathDateVisible;
+  chkOnlyYears.Checked := FOptions.ChartOptions.OnlyYears;
+  chkKinship.Checked := FOptions.ChartOptions.Kinship;
+  chkSignsVisible.Checked := FOptions.ChartOptions.SignsVisible;
+
   chkChildlessExclude.Checked := FOptions.ChartOptions.ChildlessExclude;
 
   PanMaleColor.Color := FOptions.ChartOptions.MaleColor;
@@ -114,11 +123,11 @@ begin
   PanUnWifeColor.Color := FOptions.ChartOptions.UnWifeColor;
 
   {$IFNDEF DELPHI_NET}
-  CheckAppRegister.Checked := ProgramIsRegistered();
-  CheckExtRegister.Checked := ExtIsRegistered('.ged', 'GEDCOM.File');
+  chkAppRegister.Checked := ProgramIsRegistered();
+  chkExtRegister.Checked := ExtIsRegistered('.ged', 'GEDCOM.File');
   {$ELSE}
-  CheckAppRegister.Enabled := False;
-  CheckExtRegister.Enabled := False;
+  chkAppRegister.Enabled := False;
+  chkExtRegister.Enabled := False;
   {$ENDIF}
 
   chkProxy.Checked := FOptions.Proxy.UseProxy;
@@ -127,13 +136,13 @@ begin
   edProxyLogin.Text := FOptions.Proxy.Login;
   edProxyPass.Text := FOptions.Proxy.Password;
 
-  CheckAttributes.Checked := FOptions.PedigreeOptions.IncludeAttributes;
-  CheckNotes.Checked := FOptions.PedigreeOptions.IncludeNotes;
-  CheckSources.Checked := FOptions.PedigreeOptions.IncludeSources;
+  chkAttributes.Checked := FOptions.PedigreeOptions.IncludeAttributes;
+  chkNotes.Checked := FOptions.PedigreeOptions.IncludeNotes;
+  chkSources.Checked := FOptions.PedigreeOptions.IncludeSources;
 
   EditPedigreeFormat.ItemIndex := Ord(FOptions.PedigreeOptions.Format);
 
-  CheckShowOnStart.Checked := FOptions.ShowTips;
+  chkShowOnStart.Checked := FOptions.ShowTips;
   rgEditMode.ItemIndex := Ord(FOptions.WorkMode);
 
   FPersonColumns := FOptions.ListPersonsColumns;
@@ -151,15 +160,20 @@ begin
 
   FOptions.DefNameFormat := TNameFormat(rgFNPFormat.ItemIndex);
   FOptions.DefDateFormat := TDateFormat(rgDateFormat.ItemIndex);
-  FOptions.PlacesWithAddress := CheckPlacesWithAddress.Checked;
+  FOptions.PlacesWithAddress := chkPlacesWithAddress.Checked;
+  FOptions.ListPersons_HighlightUnparented := chkHighlightUnparented.Checked;
+  FOptions.ListPersons_HighlightUnmarried := chkHighlightUnmarried.Checked;
 
-  FOptions.ChartOptions.FamilyVisible := CheckFamily.Checked;
-  FOptions.ChartOptions.NameVisible := CheckName.Checked;
-  FOptions.ChartOptions.PatronymicVisible := CheckPatronymic.Checked;
-  FOptions.ChartOptions.DiffLines := CheckDiffLines.Checked;
-  FOptions.ChartOptions.BirthDateVisible := CheckBirthDate.Checked;
-  FOptions.ChartOptions.DeathDateVisible := CheckDeathDate.Checked;
-  FOptions.ChartOptions.Kinship := CheckKinship.Checked;
+  FOptions.ChartOptions.FamilyVisible := chkFamily.Checked;
+  FOptions.ChartOptions.NameVisible := chkName.Checked;
+  FOptions.ChartOptions.PatronymicVisible := chkPatronymic.Checked;
+  FOptions.ChartOptions.DiffLines := chkDiffLines.Checked;
+  FOptions.ChartOptions.BirthDateVisible := chkBirthDate.Checked;
+  FOptions.ChartOptions.DeathDateVisible := chkDeathDate.Checked;
+  FOptions.ChartOptions.OnlyYears := chkOnlyYears.Checked;
+  FOptions.ChartOptions.Kinship := chkKinship.Checked;
+  FOptions.ChartOptions.SignsVisible := chkSignsVisible.Checked;
+
   FOptions.ChartOptions.ChildlessExclude := chkChildlessExclude.Checked;
 
   FOptions.ChartOptions.MaleColor := PanMaleColor.Color;
@@ -169,8 +183,8 @@ begin
   FOptions.ChartOptions.UnWifeColor := PanUnWifeColor.Color;
 
   {$IFNDEF DELPHI_NET}
-  RegisterProgram(CheckAppRegister.Checked);
-  RegisterExt('.ged', 'GEDCOM.File', 'GEDCOM File', 0, CheckExtRegister.Checked);
+  RegisterProgram(chkAppRegister.Checked);
+  RegisterExt('.ged', 'GEDCOM.File', 'GEDCOM File', 0, chkExtRegister.Checked);
   {$ENDIF}
 
   FOptions.Proxy.UseProxy := chkProxy.Checked;
@@ -179,13 +193,13 @@ begin
   FOptions.Proxy.Login := edProxyLogin.Text;
   FOptions.Proxy.Password := edProxyPass.Text;
 
-  FOptions.PedigreeOptions.IncludeAttributes := CheckAttributes.Checked;
-  FOptions.PedigreeOptions.IncludeNotes := CheckNotes.Checked;
-  FOptions.PedigreeOptions.IncludeSources := CheckSources.Checked;
+  FOptions.PedigreeOptions.IncludeAttributes := chkAttributes.Checked;
+  FOptions.PedigreeOptions.IncludeNotes := chkNotes.Checked;
+  FOptions.PedigreeOptions.IncludeSources := chkSources.Checked;
 
   FOptions.PedigreeOptions.Format := TPedigreeFormat(EditPedigreeFormat.ItemIndex);
 
-  FOptions.ShowTips := CheckShowOnStart.Checked;
+  FOptions.ShowTips := chkShowOnStart.Checked;
   FOptions.WorkMode := TWorkMode(rgEditMode.ItemIndex);
 end;
 
