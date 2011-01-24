@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Classes, Graphics, Controls, Forms, ComCtrls, StdCtrls,
-  GedCom551, Buttons, GKTreeTools, GKCommon;
+  GedCom551, Buttons, GKTreeTools, GKEngine, GKCommon;
 
 type
   TfmSexCheck = class(TForm)
@@ -21,7 +21,8 @@ type
   public
   end;
 
-procedure scStep(iRec: TGEDCOMIndividualRecord; aNamesTable: TNamesTable);
+function DefineSex(iName, iPatr: string; aNamesTable: TNamesTable): TGEDCOMSex;
+procedure CheckPersonSex(iRec: TGEDCOMIndividualRecord; aNamesTable: TNamesTable);
 
 implementation
 
@@ -29,53 +30,56 @@ uses GKMain;
 
 {$R *.dfm}
 
+function DefineSex(iName, iPatr: string; aNamesTable: TNamesTable): TGEDCOMSex;
 var
-  fmSexCheck: TfmSexCheck;
-
-procedure scStep(iRec: TGEDCOMIndividualRecord; aNamesTable: TNamesTable);
-var
+  dlg: TfmSexCheck;
   sx: TGEDCOMSex;
-  f_name, f_pat, f_fam: string;
 begin
-  GetNameParts(iRec, f_fam, f_name, f_pat);
-
-  sx := aNamesTable.GetSexByName(f_name);
+  sx := aNamesTable.GetSexByName(iName);
   if (sx <> svNone) then begin
-    iRec.Sex := sx;
+    Result := sx;
     Exit;
   end;
 
-  fmSexCheck := TfmSexCheck.Create(Application);
+  dlg := TfmSexCheck.Create(Application);
   try
-    if (fmSexCheck <> nil) then begin
-      fmSexCheck.edName.Text := GetNameStr(iRec);
+    if (dlg <> nil) then begin
+      dlg.edName.Text := iName + ' ' + iPatr;
 
-      sx := GetSex(f_name, f_pat, False);
-      if (sx = svNone) then sx := iRec.Sex;
+      sx := GetSex(iName, iPatr, False);
 
       case sx of
-        svNone: fmSexCheck.sbNone.Down := True;
-        svMale: fmSexCheck.sbMale.Down := True;
-        svFemale: fmSexCheck.sbFemale.Down := True;
-        //svUndetermined: fmSexCheck.sbUndetermined.Down := True;
+        svNone, svUndetermined: dlg.sbNone.Down := True;
+        svMale: dlg.sbMale.Down := True;
+        svFemale: dlg.sbFemale.Down := True;
       end;
 
-      if (ShowModalEx(fmSexCheck) = mrOk) then begin
-        if (fmSexCheck.sbNone.Down) then sx := svNone
+      if (ShowModalEx(dlg) = mrOk) then begin
+        if (dlg.sbNone.Down) then sx := svNone
         else
-        if (fmSexCheck.sbMale.Down) then sx := svMale
+        if (dlg.sbMale.Down) then sx := svMale
         else
-        if (fmSexCheck.sbFemale.Down) then sx := svFemale{
-        else
-        if (fmSexCheck.sbUndetermined.Down) then sx := svUndetermined};
+        if (dlg.sbFemale.Down) then sx := svFemale;
 
-        iRec.Sex := sx;
-        aNamesTable.SetNameSex(f_name, sx);
+        Result := sx;
+
+        if (sx <> svNone)
+        then aNamesTable.SetNameSex(iName, sx);
       end;
     end;
   finally
-    fmSexCheck.Destroy;
-    fmSexCheck := nil;
+    dlg.Destroy;
+    dlg := nil;
+  end;
+end;
+
+procedure CheckPersonSex(iRec: TGEDCOMIndividualRecord; aNamesTable: TNamesTable);
+var
+  f_name, f_patr, f_fam: string;
+begin
+  if (iRec.Sex in [svNone, svUndetermined]) then begin
+    GetNameParts(iRec, f_fam, f_name, f_patr);
+    iRec.Sex := DefineSex(f_name, f_patr, aNamesTable);
   end;
 end;
 

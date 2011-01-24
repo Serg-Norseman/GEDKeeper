@@ -5,8 +5,8 @@ unit GKPersonEdit;
 interface
 
 uses
-  SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ComCtrls,
-  ExtCtrls, Buttons, GedCom551, bsCtrls, GKBase, GKCommon, GKLists;
+  Windows, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls,
+  ComCtrls, ExtCtrls, Buttons, bsCtrls, GedCom551, GKBase, GKEngine, GKLists;
                                                   
 type
   TfmPersonEdit = class(TForm)
@@ -61,6 +61,7 @@ type
     btnMotherDelete: TSpeedButton;
     btnMotherSel: TSpeedButton;
     btnFatherSel: TSpeedButton;
+    chkBookmark: TCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure btnFatherAddClick(Sender: TObject);
     procedure btnFatherDeleteClick(Sender: TObject);
@@ -77,6 +78,7 @@ type
     procedure btnParentsAddClick(Sender: TObject);
     procedure btnParentsEditClick(Sender: TObject);
     procedure btnParentsDeleteClick(Sender: TObject);
+    procedure EditFamilyKeyPress(Sender: TObject; var Key: Char);
   private
     FPerson: TGEDCOMIndividualRecord;
 
@@ -103,7 +105,7 @@ type
 implementation
 
 uses
-  bsComUtils, ClipBrd, GKMain, GKRecordSelect, GKFamilyEdit, StorageCrypt;
+  bsComUtils, ClipBrd, GKMain, GKRecordSelect, GKFamilyEdit, uVista;
 
 {$R *.dfm}
 
@@ -114,14 +116,17 @@ var
   sx: TGEDCOMSex;
   wm: Integer;
 begin
+  SetVistaFontsEx(Self, True);
+
   for sx := Low(TGEDCOMSex) to High(TGEDCOMSex) do
-    EditSex.Items.Add(Sex[sx]);
+    EditSex.Items.Add(SexData[sx].ViewName);
 
   wm := Ord(fmGEDKeeper.Options.WorkMode);
   PageCtlParents.ActivePageIndex := wm;
 
   FEventsList := TSheetList.Create(SheetEvents{GroupBox3});
   FEventsList.OnModify := ListModify;
+  FEventsList.Buttons := [lbAdd..lbDelete, lbMoveUp, lbMoveDown];
   Base.SetupRecEventsList(FEventsList, True);
 
   //
@@ -189,6 +194,7 @@ procedure TfmPersonEdit.ControlsRefresh();
     EditSex.Enabled := not(aLocked);
 
     CheckPatriarch.Enabled := not(aLocked);
+    chkBookmark.Enabled := not(aLocked);
 
     if aLocked then begin
       edPieceSurnamePrefix.Color := clInactiveBorder;
@@ -351,6 +357,7 @@ begin
 
     // extended begin
     CheckPatriarch.Checked := FPerson.Patriarch;
+    chkBookmark.Checked := FPerson.Bookmark;
     // extended end
 
     cbRestriction.ItemIndex := Ord(FPerson.Restriction);
@@ -473,8 +480,13 @@ begin
 
   Base.DoPersonChangePatriarch(FPerson, CheckPatriarch.Checked);
   //FPerson.Patriarch := CheckPatriarch.Checked;
+  FPerson.Bookmark := chkBookmark.Checked;
 
   FPerson.Restriction := TGEDCOMRestriction(cbRestriction.ItemIndex);
+
+  if (FPerson.ChildToFamilyLinksCount > 0) then begin
+    FPerson.ChildToFamilyLinks[0].Family.SortChilds();
+  end;
 
   Base.ChangeRecord(FPerson);
 end;
@@ -524,10 +536,24 @@ var
   family: TGEDCOMFamilyRecord;
   group: TGEDCOMGroupRecord;
   spouse: TGEDCOMIndividualRecord;
+  event: TGEDCOMCustomEvent;
   sp: TGEDCOMPointer;
   idx: Integer;
 begin
   if (Sender = FEventsList) then begin
+    if (Action in [raMoveUp, raMoveDown])
+    then begin
+      event := TGEDCOMCustomEvent(ItemData);
+      idx := FPerson.IndexOfEvent(event);
+
+      case Action of
+        raMoveUp: FPerson.ExchangeEvents(idx - 1, idx);
+        raMoveDown: FPerson.ExchangeEvents(idx, idx + 1);
+      end;
+
+      ControlsRefresh();
+    end
+    else
     if Base.ModifyRecEvent(Self, FPerson, TGEDCOMCustomEvent(ItemData), Action)
     then ControlsRefresh();
   end
@@ -599,7 +625,7 @@ begin
   if (Sender = FGroupsList) then begin
     case Action of
       raAdd: begin
-        group := TGEDCOMGroupRecord(Base.SelectRecord(smGroup, []));
+        group := TGEDCOMGroupRecord(Base.SelectRecord(rtGroup, []));
         if (group <> nil) and Base.GroupMemberAdd(group, FPerson)
         then ControlsRefresh();
       end;
@@ -652,7 +678,7 @@ begin
     // на момент появления диалога семьи, поэтому
     // соответствующая вставка делается в ModifyFamily()
     if (family.IndexOfChild(FPerson) < 0)
-    then Base.FamilyChildAdd(family, FPerson);
+    then FamilyChildAdd(Base.Tree, family, FPerson);
 
     ControlsRefresh();
   end;
@@ -677,8 +703,16 @@ begin
 
   family := Base.GetChildFamily(FPerson, False, nil);
   if (family <> nil) then begin
-    Base.FamilyChildRemove(family, FPerson);
+    FamilyChildRemove(Base.Tree, family, FPerson);
     ControlsRefresh();
+  end;
+end;
+
+procedure TfmPersonEdit.EditFamilyKeyPress(Sender: TObject; var Key: Char);
+begin
+  if (Key = '/') then begin
+    Key := #0;
+    MessageBeep(MB_ICONEXCLAMATION);
   end;
 end;
 

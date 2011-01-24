@@ -15,6 +15,7 @@ object fmSourceCitEdit: TfmSourceCitEdit
   OldCreateOrder = False
   Position = poScreenCenter
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
@@ -102,7 +103,7 @@ object fmSourceCitEdit: TfmSourceCitEdit
     Width = 81
     Height = 25
     Caption = #1055#1088#1080#1085#1103#1090#1100
-    TabOrder = 3
+    TabOrder = 4
     OnClick = btnAcceptClick
     Kind = bkOK
   end
@@ -112,7 +113,7 @@ object fmSourceCitEdit: TfmSourceCitEdit
     Width = 81
     Height = 25
     Caption = #1054#1090#1084#1077#1085#1080#1090#1100
-    TabOrder = 4
+    TabOrder = 5
     Kind = bkCancel
   end
   object EditPage: TEdit
@@ -120,9 +121,9 @@ object fmSourceCitEdit: TfmSourceCitEdit
     Top = 72
     Width = 337
     Height = 21
-    TabOrder = 1
+    TabOrder = 2
   end
-  object EditSource: TEdit
+  object edOld: TEdit
     Left = 8
     Top = 24
     Width = 306
@@ -130,6 +131,7 @@ object fmSourceCitEdit: TfmSourceCitEdit
     Color = clBtnFace
     ReadOnly = True
     TabOrder = 0
+    Visible = False
   end
   object EditCertainty: TComboBox
     Left = 8
@@ -137,7 +139,18 @@ object fmSourceCitEdit: TfmSourceCitEdit
     Width = 337
     Height = 21
     Style = csDropDownList
-    ItemHeight = 0
-    TabOrder = 2
+    ItemHeight = 13
+    TabOrder = 3
+  end
+  object cbSource: TComboBox
+    Left = 8
+    Top = 24
+    Width = 306
+    Height = 21
+    ItemHeight = 13
+    Sorted = True
+    TabOrder = 1
+    OnKeyUp = cbSourceKeyUp
+    OnSelect = cbSourceSelect
   end
 end

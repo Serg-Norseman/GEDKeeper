@@ -1,6 +1,6 @@
 object fmSexCheck: TfmSexCheck
-  Left = 465
-  Top = 286
+  Left = 468
+  Top = 288
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = #1055#1088#1086#1074#1077#1088#1082#1072' '#1087#1086#1083#1072

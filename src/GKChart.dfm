@@ -1,8 +1,8 @@
 object fmChart: TfmChart
-  Left = 320
+  Left = 362
   Top = 111
-  Width = 749
-  Height = 579
+  Width = 733
+  Height = 557
   Caption = #1044#1080#1072#1075#1088#1072#1084#1084#1072
   Color = clBtnFace
   DefaultMonitor = dmMainForm
@@ -25,7 +25,7 @@ object fmChart: TfmChart
   object ToolBar1: TToolBar
     Left = 0
     Top = 0
-    Width = 741
+    Width = 725
     Height = 30
     AutoSize = True
     ButtonHeight = 26
@@ -62,7 +62,7 @@ object fmChart: TfmChart
     end
     object ListDepthLimit: TComboBox
       Left = 161
-      Top = 0
+      Top = 2
       Width = 110
       Height = 21
       Style = csDropDownList
@@ -133,7 +133,7 @@ object fmChart: TfmChart
     object TrackBar1: TTrackBar
       Left = 376
       Top = 0
-      Width = 225
+      Width = 153
       Height = 26
       LineSize = 5
       Min = 5
@@ -142,12 +142,29 @@ object fmChart: TfmChart
       TabOrder = 1
       OnChange = TrackBar1Change
     end
+    object ToolButton5: TToolButton
+      Left = 529
+      Top = 0
+      Width = 8
+      Caption = 'ToolButton5'
+      ImageIndex = 25
+      Style = tbsSeparator
+    end
+    object chkUseFilter: TCheckBox
+      Left = 537
+      Top = 0
+      Width = 160
+      Height = 26
+      Caption = #1048#1089#1087#1086#1083#1100#1079#1086#1074#1072#1090#1100' '#1092#1080#1083#1100#1090#1088
+      TabOrder = 2
+      OnClick = chkUseFilterClick
+    end
   end
   object ScrollBox1: TScrollBox
     Left = 0
     Top = 30
-    Width = 741
-    Height = 522
+    Width = 725
+    Height = 500
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -173,5 +190,40 @@ object fmChart: TfmChart
     Filter = #1060#1072#1081#1083#1099' JPEG (*.jpg)|*.jpg'
     Left = 128
     Top = 120
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 128
+    Top = 166
+    object miEdit: TMenuItem
+      Caption = #1056#1077#1076#1072#1082#1090#1080#1088#1086#1074#1072#1090#1100
+      Default = True
+      OnClick = miEditClick
+    end
+    object N1: TMenuItem
+      Caption = '-'
+    end
+    object miFamilyAdd: TMenuItem
+      Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1089#1077#1084#1100#1102
+      OnClick = miFamilyAddClick
+    end
+    object miSpouseAdd: TMenuItem
+      Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1089#1091#1087#1088#1091#1075#1072'('#1091')'
+      OnClick = miSpouseAddClick
+    end
+    object miSonAdd: TMenuItem
+      Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1089#1099#1085#1072
+      OnClick = miSonAddClick
+    end
+    object miDaughterAdd: TMenuItem
+      Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1076#1086#1095#1100
+      OnClick = miDaughterAddClick
+    end
+    object N2: TMenuItem
+      Caption = '-'
+    end
+    object miDelete: TMenuItem
+      Caption = #1059#1076#1072#1083#1080#1090#1100
+      OnClick = miDeleteClick
+    end
   end
 end

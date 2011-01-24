@@ -6,7 +6,8 @@ interface
 
 uses
   Windows, SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons,
-  ComCtrls, GedCom551, GKBase, GKCommon, GKLists, bsCtrls, Contnrs;
+  ComCtrls, GedCom551, GKBase, GKEngine, GKLists, bsCtrls, Contnrs, ExtCtrls,
+  GKMapBrowser;
 
 type
   TfmLocationEdit = class(TForm)
@@ -27,6 +28,8 @@ type
     btnSearch: TBitBtn;
     btnSelect: TBitBtn;
     btnSelectName: TBitBtn;
+    btnShowOnMap: TButton;
+    panMap: TPanel;
     procedure btnAcceptClick(Sender: TObject);
     procedure EditNameChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -35,11 +38,15 @@ type
     procedure btnSelectNameClick(Sender: TObject);
     procedure EditNameKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure ListGeoCoordsClick(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure btnShowOnMapClick(Sender: TObject);
   private
     FLocationRecord: TGEDCOMLocationRecord;
-
-    FNotesList: TSheetList;
+    FMapBrowser: TMapBrowser;
     FMediaList: TSheetList;
+    FNotesList: TSheetList;
+    FSearchPoints: TObjectList;
 
     procedure ControlsRefresh();
     function GetBase: TfmBase;
@@ -60,6 +67,11 @@ uses
 
 procedure TfmLocationEdit.FormCreate(Sender: TObject);
 begin
+  FMapBrowser := TMapBrowser.Create(Self);
+  TWinControl(FMapBrowser).Parent := panMap;
+  FMapBrowser.Align := alClient;
+  FMapBrowser.InitMap();
+
   FNotesList := TSheetList.Create(SheetNotes, lmBox);
   FNotesList.OnModify := ListModify;
   Base.SetupRecNotesList(FNotesList);
@@ -67,6 +79,13 @@ begin
   FMediaList := TSheetList.Create(SheetMultimedia);
   FMediaList.OnModify := ListModify;
   Base.SetupRecMediaList(FMediaList);
+
+  FSearchPoints := TObjectList.Create(True);
+end;
+
+procedure TfmLocationEdit.FormDestroy(Sender: TObject);
+begin
+  FSearchPoints.Destroy;
 end;
 
 procedure TfmLocationEdit.ControlsRefresh();
@@ -127,29 +146,56 @@ end;
 
 procedure TfmLocationEdit.btnSearchClick(Sender: TObject);
 var
-  points: TObjectList;
   k: Integer;
   pt: TGMapPoint;
   item: TListItem;
 begin
-  ListGeoCoords.Clear;
-
-  points := TObjectList.Create(True);
+  ListGeoCoords.Items.BeginUpdate;
+  FMapBrowser.BeginUpdate();
   try
-    RequestGeoCoords(EditName.Text, points);
+    FSearchPoints.Clear;
+    RequestGeoCoords(EditName.Text, FSearchPoints);
 
-    for k := 0 to points.Count - 1 do
-      if (points[k] is TGMapPoint) then begin
-        pt := TGMapPoint(points[k]);
+    ListGeoCoords.Clear;
+    FMapBrowser.ClearPoints();
+
+    for k := 0 to FSearchPoints.Count - 1 do
+      if (FSearchPoints[k] is TGMapPoint) then begin
+        pt := TGMapPoint(FSearchPoints[k]);
 
         item := ListGeoCoords.Items.Add();
         item.Caption := pt.Hint;
+        item.Data := pt;
         item.SubItems.Add(Format('%.6f', [pt.Latitude]));
         item.SubItems.Add(Format('%.6f', [pt.Longitude]));
+
+        FMapBrowser.AddPoint(pt.Latitude, pt.Longitude, pt.Hint);
       end;
+
+    FMapBrowser.ZoomToBounds();
   finally
-    points.Destroy;
+    FMapBrowser.EndUpdate();
+    ListGeoCoords.Items.EndUpdate();
   end;
+end;
+
+procedure TfmLocationEdit.ListGeoCoordsClick(Sender: TObject);
+var
+  item: TListItem;
+  pt: TGMapPoint;
+begin
+  item := ListGeoCoords.Selected;
+  if (item = nil) then Exit;
+
+  pt := TGMapPoint(item.Data);
+  if (pt <> nil)
+  then FMapBrowser.SetCenter(pt.Latitude, pt.Longitude);
+end;
+
+procedure TfmLocationEdit.btnShowOnMapClick(Sender: TObject);
+begin
+  if (EditLatitude.Text <> '') and (EditLongitude.Text <> '')
+  then FMapBrowser.SetCenter(StrToFloat(EditLatitude.Text), StrToFloat(EditLongitude.Text));
 end;
 
 procedure TfmLocationEdit.btnSelectClick(Sender: TObject);

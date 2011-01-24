@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons, ComCtrls,
-  ExtCtrls, GedCom551, GKBase, GKCommon, GKLists, bsCtrls;
+  ExtCtrls, GedCom551, GKBase, GKEngine, GKLists, bsCtrls;
 
 type
   TfmFamilyEdit = class(TForm)
@@ -15,7 +15,7 @@ type
     SheetNotes: TTabSheet;
     SheetMultimedia: TTabSheet;
     SheetSources: TTabSheet;
-    SheetChilds: TTabSheet;
+    SheetChilds: TTabSheet;                         
     btnAccept: TBitBtn;
     btnCancel: TBitBtn;
     GroupBox1: TGroupBox;
@@ -277,6 +277,7 @@ begin
   FFamily.SetTagStringValue('_STAT', stat);
 
   FFamily.Restriction := TGEDCOMRestriction(cbRestriction.ItemIndex);
+  FFamily.SortChilds();
 
   Base.ChangeRecord(FFamily);
 end;
@@ -314,7 +315,7 @@ begin
     case Action of
       raAdd: begin
         child := Base.SelectPerson(GetHusband(), tmAncestor, svNone);
-        if (child <> nil) and Base.FamilyChildAdd(FFamily, child)
+        if (child <> nil) and FamilyChildAdd(Base.Tree, FFamily, child)
         then ControlsRefresh();
       end;
 
@@ -331,7 +332,7 @@ begin
         if (child = nil) or (MessageDlg('Удалить ссылку на ребенка?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
         then Exit;
 
-        if Base.FamilyChildRemove(FFamily, child)
+        if FamilyChildRemove(Base.Tree, FFamily, child)
         then ControlsRefresh();
       end;
 

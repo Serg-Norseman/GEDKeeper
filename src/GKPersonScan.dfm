@@ -53,6 +53,7 @@ object fmPersonScan: TfmPersonScan
     Width = 409
     Height = 21
     TabOrder = 0
+    OnKeyPress = EditNameKeyPress
   end
   object MemoNote: TMemo
     Left = 8

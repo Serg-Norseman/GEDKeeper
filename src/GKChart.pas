@@ -5,10 +5,8 @@ unit GKChart;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, Menus, ToolWin, ComCtrls, GedCom551, GKChartCore,
-  StdCtrls, GKBase, GKUIToolkit
-  {$IFNDEF DELPHI_NET}, Jpeg{$ENDIF};
+  Windows, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, ExtCtrls,
+  Menus, ToolWin, ComCtrls, StdCtrls, GedCom551, GKChartCore, GKBase, GKCommon;
 
 type
   TfmChart = class(TForm)
@@ -27,6 +25,17 @@ type
     tbNext: TToolButton;
     ToolButton3: TToolButton;
     TrackBar1: TTrackBar;
+    PopupMenu1: TPopupMenu;
+    miEdit: TMenuItem;
+    N1: TMenuItem;
+    miSpouseAdd: TMenuItem;
+    miSonAdd: TMenuItem;
+    miDaughterAdd: TMenuItem;
+    miFamilyAdd: TMenuItem;
+    ToolButton5: TToolButton;
+    chkUseFilter: TCheckBox;
+    N2: TMenuItem;
+    miDelete: TMenuItem;
     procedure ImageTreeMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure ImageTreeMouseMove(Sender: TObject; Shift: TShiftState; X,
@@ -46,6 +55,13 @@ type
     procedure tbPrevClick(Sender: TObject);
     procedure tbNextClick(Sender: TObject);
     procedure TrackBar1Change(Sender: TObject);
+    procedure miEditClick(Sender: TObject);
+    procedure miSpouseAddClick(Sender: TObject);
+    procedure miSonAddClick(Sender: TObject);
+    procedure miDaughterAddClick(Sender: TObject);
+    procedure miFamilyAddClick(Sender: TObject);
+    procedure chkUseFilterClick(Sender: TObject);
+    procedure miDeleteClick(Sender: TObject);
   private
     FDown: Boolean;
     FX, FY: Integer;
@@ -60,9 +76,11 @@ type
 
     FBackman: TBackManager;
 
+    procedure InternalChildAdd(aNeedSex: TGEDCOMSex);
     procedure SetTreeBounds(const Value: TRect);
     procedure NavRefresh();
     procedure NavAdd(aRec: TGEDCOMIndividualRecord);
+    procedure UpdateChart();
   public
     property Base: TfmBase read FBase write FBase;
     property ChartKind: TChartKind read FChartKind write FChartKind;
@@ -77,7 +95,9 @@ type
 
 implementation
 
-uses GKMain, GKPersonEdit;
+uses
+  {$IFNDEF DELPHI_NET}Jpeg,{$ENDIF}
+  GKEngine, GKMain, GKPersonEdit;
 
 {$R *.dfm}
 
@@ -91,12 +111,14 @@ begin
   try
     NavAdd(FPerson);
 
+    FChart.Filter := Base.Filter;
     FChart.Bitmap := ImageTree.Picture.Bitmap;
     FChart.DepthLimit := FDepthLimit;
     FChart.Options := fmGEDKeeper.Options.ChartOptions;
     FChart.Tree := FTree;
     FChart.ShieldState := Base.ShieldState;
     FChart.Scale := TrackBar1.Position * 10;
+    FChart.UseSourcesFilter := chkUseFilter.Checked;
     FChart.GenChart(FPerson, FChartKind);
 
     case FChartKind of
@@ -141,6 +163,8 @@ end;
 
 procedure TfmChart.ImageTreeMouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
+var
+  pt: TPoint;
 begin
   if (FDown) then begin
     ImageTree.Cursor := crDefault;
@@ -148,6 +172,16 @@ begin
   end;
 
   FChart.SelectBy(X, Y);
+
+  if (Button = mbRight) and (FChart.Selected <> nil) then begin
+    pt := ImageTree.ClientToScreen(Point(X, Y));
+    PopupMenu1.Popup(pt.X, pt.Y);
+  end;
+end;
+
+procedure TfmChart.chkUseFilterClick(Sender: TObject);
+begin
+  GenChart();
 end;
 
 procedure TfmChart.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -229,29 +263,145 @@ begin
   else ImageTree.Left := 0;
 end;
 
+procedure TfmChart.UpdateChart();
+var
+  hsp, vsp: Integer;
+begin
+  if (FBase <> nil) then FBase.ListsRefresh();
+
+  hsp := ScrollBox1.HorzScrollBar.Position;
+  vsp := ScrollBox1.VertScrollBar.Position;
+
+  ScrollBox1.HorzScrollBar.Position := 0;
+  ScrollBox1.VertScrollBar.Position := 0;
+
+  GenChart(True);
+
+  ScrollBox1.HorzScrollBar.Position := hsp;
+  ScrollBox1.VertScrollBar.Position := vsp;
+end;
+
 procedure TfmChart.ImageTreeDblClick(Sender: TObject);
 var
   p: TPerson;
   i_rec: TGEDCOMIndividualRecord;
-  hsp, vsp: Integer;
 begin
   p := FChart.Selected;
   if (p <> nil) and (p.Rec <> nil) then begin
     i_rec := p.Rec;
-    if FBase.ModifyPerson(i_rec) then begin
-      if (FBase <> nil) then FBase.ListsRefresh();
+    if FBase.ModifyPerson(i_rec)
+    then UpdateChart();
+  end;
+end;
 
-      hsp := ScrollBox1.HorzScrollBar.Position;
-      vsp := ScrollBox1.VertScrollBar.Position;
+procedure TfmChart.miEditClick(Sender: TObject);
+var
+  p: TPerson;
+  i_rec: TGEDCOMIndividualRecord;
+begin
+  p := FChart.Selected;
+  if (p <> nil) and (p.Rec <> nil) then begin
+    i_rec := p.Rec;
+    if FBase.ModifyPerson(i_rec)
+    then UpdateChart();
+  end;
+end;
 
-      ScrollBox1.HorzScrollBar.Position := 0;
-      ScrollBox1.VertScrollBar.Position := 0;
-
-      GenChart(True);
-
-      ScrollBox1.HorzScrollBar.Position := hsp;
-      ScrollBox1.VertScrollBar.Position := vsp;
+procedure TfmChart.miFamilyAddClick(Sender: TObject);
+var
+  p: TPerson;
+  fam: TGEDCOMFamilyRecord;
+begin
+  p := FChart.Selected;
+  if (p <> nil) and (p.Rec <> nil) then begin
+    if not(p.Rec.Sex in [svMale, svFemale]) then begin
+      MessageDlg('У данной персоны не задан пол.', mtError, [mbOk], 0);
+      Exit;
     end;
+
+    fam := CreateFamilyEx(FTree);
+    AddSpouseToFamily(FTree, fam, p.Rec);
+
+    UpdateChart();
+  end;
+end;
+
+procedure TfmChart.miSpouseAddClick(Sender: TObject);
+var
+  p: TPerson;
+  sx: TGEDCOMSex;
+  i_rec, i_spouse: TGEDCOMIndividualRecord;
+  fam: TGEDCOMFamilyRecord;
+begin
+  p := FChart.Selected;
+  if (p <> nil) and (p.Rec <> nil) then begin
+    i_rec := p.Rec;
+    case i_rec.Sex of
+      svMale: sx := svFemale;
+      svFemale: sx := svMale;
+      else begin
+        MessageDlg('У данной персоны не задан пол.', mtError, [mbOk], 0);
+        Exit;
+      end;
+    end;
+
+    i_spouse := Base.SelectPerson(nil, tmNone, sx);
+    if (i_spouse <> nil) then begin
+      fam := CreateFamilyEx(FTree);
+      AddSpouseToFamily(FTree, fam, i_rec);
+      AddSpouseToFamily(FTree, fam, i_spouse);
+
+      UpdateChart();
+    end;
+  end;
+end;
+
+procedure TfmChart.InternalChildAdd(aNeedSex: TGEDCOMSex);
+var
+  p: TPerson;
+  i_rec, i_child: TGEDCOMIndividualRecord;
+  fam: TGEDCOMFamilyRecord;
+begin
+  p := FChart.Selected;
+  if (p <> nil) and (p.Rec <> nil) then begin
+    i_rec := p.Rec;
+
+    if (i_rec.SpouseToFamilyLinksCount = 0) then begin
+      MessageDlg('У данной персоны нет семей.', mtWarning, [mbOk], 0);
+      Exit;
+    end;
+
+    if (i_rec.SpouseToFamilyLinksCount > 1) then begin
+      MessageDlg('У данной персоны несколько семей. Выбор еще не реализован.', mtWarning, [mbOk], 0);
+      Exit;
+    end;
+
+    fam := i_rec.SpouseToFamilyLinks[0].Family;
+    i_child := Base.SelectPerson(TGEDCOMIndividualRecord(fam.Husband.Value), tmAncestor, aNeedSex);
+    if (i_child <> nil) and FamilyChildAdd(FBase.Tree, fam, i_child)
+    then UpdateChart();
+  end;
+end;
+
+procedure TfmChart.miSonAddClick(Sender: TObject);
+begin
+  InternalChildAdd(svMale);
+end;
+
+procedure TfmChart.miDaughterAddClick(Sender: TObject);
+begin
+  InternalChildAdd(svFemale);
+end;
+
+procedure TfmChart.miDeleteClick(Sender: TObject);
+var
+  p: TPerson;
+begin
+  p := FChart.Selected;
+  if (p <> nil) and (p.Rec <> nil) and (p <> FChart.Root) then begin
+    FBase.DeleteIndividualRecord(p.Rec, True);
+    GenChart();
+    NavRefresh();
   end;
 end;
 

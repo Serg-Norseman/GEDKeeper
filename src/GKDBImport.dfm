@@ -24,18 +24,19 @@ object fmDBImport: TfmDBImport
     ButtonWidth = 103
     Caption = 'ToolBar1'
     EdgeBorders = [ebTop, ebBottom]
+    Flat = True
     ShowCaptions = True
     TabOrder = 0
     object btnDBLoad: TToolButton
       Left = 0
-      Top = 2
+      Top = 0
       Caption = #1054#1090#1082#1088#1099#1090#1100' '#1041#1044'...'
       ImageIndex = 0
       OnClick = btnDBLoadClick
     end
     object ToolButton1: TToolButton
       Left = 103
-      Top = 2
+      Top = 0
       Width = 8
       Caption = 'ToolButton1'
       ImageIndex = 1
@@ -43,7 +44,7 @@ object fmDBImport: TfmDBImport
     end
     object btnQueryExec: TToolButton
       Left = 111
-      Top = 2
+      Top = 0
       Caption = #1042#1099#1087#1086#1083#1085#1080#1090#1100' '#1079#1072#1087#1088#1086#1089
       Enabled = False
       ImageIndex = 1
@@ -51,7 +52,7 @@ object fmDBImport: TfmDBImport
     end
     object ToolButton2: TToolButton
       Left = 214
-      Top = 2
+      Top = 0
       Width = 8
       Caption = 'ToolButton2'
       ImageIndex = 2
@@ -59,7 +60,7 @@ object fmDBImport: TfmDBImport
     end
     object btnDataTransfer: TToolButton
       Left = 222
-      Top = 2
+      Top = 0
       Caption = #1055#1077#1088#1077#1085#1077#1089#1090#1080' '#1076#1072#1085#1085#1099#1077
       Enabled = False
       ImageIndex = 2

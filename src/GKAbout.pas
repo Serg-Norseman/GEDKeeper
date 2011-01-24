@@ -26,7 +26,7 @@ procedure AboutDialog();
 implementation
 
 uses
-  GKCommon, bsWinUtils, GKMain, uVista;
+  GKUtils, GKEngine, bsWinUtils, GKMain, uVista;
 
 {$R *.DFM}
 
@@ -54,14 +54,7 @@ end;
 
 procedure TfmAbout.FormCreate(Sender: TObject);
 begin
-  if IsWindowsVista() then begin
-    SetVistaFonts(Self);
-    SetVistaContentFonts(LabelProduct.Font);
-    SetVistaContentFonts(LabelVersion.Font);
-    SetVistaContentFonts(LabelCopyright.Font);
-    SetVistaContentFonts(LabelCite.Font);
-    SetVistaContentFonts(Label_eMail.Font);
-  end;
+  SetVistaFontsEx(Self, True);
 end;
 
 procedure TfmAbout.Label_eMailClick(Sender: TObject);

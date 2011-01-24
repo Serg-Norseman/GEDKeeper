@@ -6,6 +6,8 @@ unit GedCom551;
  * Author: Marco Hemmes (mhemmes)
  * The part of "My Family Tree" project.
  *
+ * 2010-12-22
+ *   (-) TGEDCOMIndividualRecord: Attributes list merged to Events.
  * 2010-01-26
  *   (-) Removed interfaces support;
  * 2009-08-19 (zsv)
@@ -990,7 +992,6 @@ type
   private
     FPersonalNames: TGEDCOMList;
     FIndividualEvents: TGEDCOMList;
-    FIndividualAttributes: TGEDCOMList;
     FIndividualOrdinances: TGEDCOMList;
     FChildToFamilyLinks: TGEDCOMList;
     FSpouseToFamilyLinks: TGEDCOMList;
@@ -1007,10 +1008,8 @@ type
     function GetPersonalNamesCount: Integer;
     function GetSex: TGEDCOMSex;
     procedure SetSex(const Value: TGEDCOMSex);
-    function GetIndividualEvents(Index: Integer): TGEDCOMIndividualEvent;
+    function GetIndividualEvents(Index: Integer): TGEDCOMCustomEvent;
     function GetIndividualEventsCount: Integer;
-    function GetIndividualAttributes(Index: Integer): TGEDCOMIndividualAttribute;
-    function GetIndividualAttributesCount: Integer;
     function GetIndividualOrdinances(Index: Integer): TGEDCOMIndividualOrdinance;
     function GetIndividualOrdinancesCount: Integer;
     function GetChildToFamilyLinks(Index: Integer): TGEDCOMChildToFamilyLink;
@@ -1033,6 +1032,8 @@ type
     function GetGroupsCount: Integer;
     function GetPatriarch: Boolean;
     procedure SetPatriarch(const Value: Boolean);
+    function GetBookmark: Boolean;
+    procedure SetBookmark(const Value: Boolean);
   public
     constructor Create(AOwner, AParent: TGEDCOMObject); override;
     destructor Destroy; override;
@@ -1047,8 +1048,7 @@ type
     function AddAssociation(Value: TGEDCOMAssociation): TGEDCOMAssociation;
     function AddChildToFamilyLink(Value: TGEDCOMChildToFamilyLink): TGEDCOMChildToFamilyLink;
     function AddDescendantsInterest(Value: TGEDCOMPointer): TGEDCOMPointer;
-    function AddIndividualAttribute(Value: TGEDCOMIndividualAttribute): TGEDCOMIndividualAttribute;
-    function AddIndividualEvent(Value: TGEDCOMIndividualEvent): TGEDCOMIndividualEvent;
+    function AddIndividualEvent(Value: TGEDCOMCustomEvent): TGEDCOMCustomEvent;
     function AddIndividualOrdinance(Value: TGEDCOMIndividualOrdinance): TGEDCOMIndividualOrdinance;
     function AddPersonalName(Value: TGEDCOMPersonalName): TGEDCOMPersonalName;
     function AddSpouseToFamilyLink(Value: TGEDCOMSpouseToFamilyLink): TGEDCOMSpouseToFamilyLink;
@@ -1058,13 +1058,14 @@ type
     procedure DeleteGroup(aIndex: Integer);
     function IndexOfGroup(aGroup: TGEDCOMGroupRecord): Integer;
 
+    function IndexOfEvent(Event: TGEDCOMCustomEvent): Integer;
     function IndexOfSpouse(Family: TGEDCOMFamilyRecord): Integer;
 
     procedure DeleteAssociation(aIndex: Integer); overload;
     procedure DeleteAssociation(aAssociation: TGEDCOMAssociation); overload;
 
-    procedure DeleteIndividualAttribute(anAttribute: TGEDCOMIndividualAttribute);
-    procedure DeleteIndividualEvent(aEvent: TGEDCOMIndividualEvent);
+    procedure DeleteIndividualEvent(aEvent: TGEDCOMCustomEvent); overload;
+    procedure DeleteIndividualEvent(Index: Integer); overload;
 
     procedure DeleteSpouseToFamilyLink(Family: TGEDCOMFamilyRecord); overload;
     procedure DeleteSpouseToFamilyLink(Index: Integer); overload;
@@ -1072,6 +1073,7 @@ type
     procedure DeleteChildToFamilyLink(Family: TGEDCOMFamilyRecord); overload;
     procedure DeleteChildToFamilyLink(Index: Integer); overload;
 
+    procedure ExchangeEvents(Index1, Index2: Integer);
     procedure ExchangeSpouses(Index1, Index2: Integer);
 
     procedure MoveTo(aToRecord: TGEDCOMRecord; aFlags: TMoveFlags = []); override;
@@ -1082,18 +1084,18 @@ type
 
     property AncestralFileNumber: string index 2 read GetStringTag write SetStringTag;
     property AutomatedRecordID: string index 3 read GetStringTag write SetStringTag;
-    property IndividualAttributes[Index: Integer]: TGEDCOMIndividualAttribute read GetIndividualAttributes;
-    property IndividualAttributesCount: Integer read GetIndividualAttributesCount;
-    property IndividualEvents[Index: Integer]: TGEDCOMIndividualEvent read GetIndividualEvents;
+    property IndividualEvents[Index: Integer]: TGEDCOMCustomEvent read GetIndividualEvents;
     property IndividualEventsCount: Integer read GetIndividualEventsCount;
     property IndividualOrdinances[Index: Integer]: TGEDCOMIndividualOrdinance read GetIndividualOrdinances;
     property IndividualOrdinancesCount: Integer read GetIndividualOrdinancesCount;
-    property Patriarch: Boolean read GetPatriarch write SetPatriarch;
     property PermanentRecordFileNumber: string index 1 read GetStringTag write SetStringTag;
     property PersonalNames[Index: Integer]: TGEDCOMPersonalName read GetPersonalNames;
     property PersonalNamesCount: Integer read GetPersonalNamesCount;
     property Restriction: TGEDCOMRestriction read GetRestriction write SetRestriction;
     property Sex: TGEDCOMSex read GetSex write SetSex;
+
+    property Bookmark: Boolean read GetBookmark write SetBookmark;
+    property Patriarch: Boolean read GetPatriarch write SetPatriarch;
 
     property ChildToFamilyLinks[Index: Integer]: TGEDCOMChildToFamilyLink read GetChildToFamilyLinks;
     property ChildToFamilyLinksCount: Integer read GetChildToFamilyLinksCount;
@@ -2024,7 +2026,7 @@ uses
   {$IFDEF DELPHI_NET}
   System.IO,
   {$ENDIF}
-  Windows, bsMiscUtils, GKCommon;
+  Windows, bsMiscUtils, GKEngine;
 
 {==============================================================================}
 
@@ -2032,7 +2034,7 @@ type
   TTagProps = set of (tpEmptySkip);
 
 const
-  TagBaseSize = 24;
+  TagBaseSize = 25;
   TagBase: array [0..TagBaseSize-1] of record
     Name: string;
     Props: TTagProps;
@@ -2054,6 +2056,7 @@ const
     (Name: 'TEXT'; Props: [tpEmptySkip]),
     (Name: 'TIME'; Props: [tpEmptySkip]),
     (Name: 'TYPE'; Props: [tpEmptySkip]),
+    (Name: 'SUBM'; Props: [tpEmptySkip]),
 
     (Name: 'NPFX'; Props: [tpEmptySkip]),
     (Name: 'GIVN'; Props: [tpEmptySkip]),
@@ -2879,7 +2882,9 @@ end;
 
 procedure TGEDCOMList.Exchange(Index1, Index2: Integer);
 begin
-  FList.Exchange(Index1, Index2);
+  if ((Index1 >= 0) and (Index1 < FList.Count))
+  and ((Index2 >= 0) and (Index2 < FList.Count))
+  then FList.Exchange(Index1, Index2);
 end;
 
 procedure TGEDCOMList.ReplaceXRefs(aMap: TXRefReplaceMap);
@@ -2973,8 +2978,6 @@ begin
   Name := 'DATE';
 
   FDateFormat := dfGEDCOMStd;
-  //if (TGEDCOMTree(FOwner).Header.Source = 'BROSKEEP')
-  //then FDateFormat := dfSystem;
 end;
 
 procedure TGEDCOMDate.SetDateTime(ADateTime: TDateTime);
@@ -3188,6 +3191,14 @@ begin
     Result := ExtractEscape(Result);
     Result := ExtractDelimiter(Result);
     Result := ExtractDay(Result);
+
+    {hack: parse type of date}
+    if (Length(Result) > 0) then begin
+      if (Result[1] = GEDCOMDelimiter) then FDateFormat := dfGEDCOMStd
+      else
+      if (Result[1] = '.') then FDateFormat := dfSystem;
+    end;
+
     Result := ExtractDelimiterEx(Result);
     Result := ExtractMonth(Result);
     Result := ExtractDelimiterEx(Result);
@@ -5567,7 +5578,7 @@ procedure TGEDCOMFamilyRecord.SortChilds();
 var
   i, k: Integer;
   iChild, kChild: TGEDCOMIndividualRecord;
-  iEv, kEv: TGEDCOMIndividualEvent;
+  iEv, kEv: TGEDCOMCustomEvent;
   iDate, kDate: TDateTime;
 begin
   if (FChildren = nil) then Exit;
@@ -5601,7 +5612,6 @@ begin
   FName := 'INDI';
   FPersonalNames := nil;
   FIndividualEvents := nil;
-  FIndividualAttributes := nil;
   FIndividualOrdinances := nil;
   FChildToFamilyLinks := nil;
   FSpouseToFamilyLinks := nil;
@@ -5620,7 +5630,6 @@ destructor TGEDCOMIndividualRecord.Destroy;
 begin
   if (FPersonalNames <> nil) then FPersonalNames.Free;
   if (FIndividualEvents <> nil) then FIndividualEvents.Free;
-  if (FIndividualAttributes <> nil) then FIndividualAttributes.Free;
   if (FIndividualOrdinances <> nil) then FIndividualOrdinances.Free;
   if (FChildToFamilyLinks <> nil) then FChildToFamilyLinks.Free;
   if (FSpouseToFamilyLinks <> nil) then FSpouseToFamilyLinks.Free;
@@ -5640,7 +5649,6 @@ begin
 
   if (FPersonalNames <> nil) then FPersonalNames.Clear;
   if (FIndividualEvents <> nil) then FIndividualEvents.Clear;
-  if (FIndividualAttributes <> nil) then FIndividualAttributes.Clear;
   if (FIndividualOrdinances <> nil) then FIndividualOrdinances.Clear;
   if (FChildToFamilyLinks <> nil) then FChildToFamilyLinks.Clear;
   if (FSpouseToFamilyLinks <> nil) then FSpouseToFamilyLinks.Clear;
@@ -5729,28 +5737,7 @@ end;
 
 //
 
-function TGEDCOMIndividualRecord.AddIndividualAttribute(Value: TGEDCOMIndividualAttribute): TGEDCOMIndividualAttribute;
-begin
-  Result := Value;
-
-  if (FIndividualAttributes = nil)
-  then FIndividualAttributes := TGEDCOMList.Create(Self);
-
-  if (Value <> nil) then begin
-    Value.SetLevel(Level + 1);
-    FIndividualAttributes.Add(Value);
-  end;
-end;
-
-procedure TGEDCOMIndividualRecord.DeleteIndividualAttribute(anAttribute: TGEDCOMIndividualAttribute);
-begin
-  if (FIndividualAttributes <> nil)
-  then FIndividualAttributes.DeleteObject(anAttribute);
-end;
-
-//
-
-function TGEDCOMIndividualRecord.AddIndividualEvent(Value: TGEDCOMIndividualEvent): TGEDCOMIndividualEvent;
+function TGEDCOMIndividualRecord.AddIndividualEvent(Value: TGEDCOMCustomEvent): TGEDCOMCustomEvent;
 begin
   Result := Value;
 
@@ -5763,10 +5750,35 @@ begin
   end;
 end;
 
-procedure TGEDCOMIndividualRecord.DeleteIndividualEvent(aEvent: TGEDCOMIndividualEvent);
+procedure TGEDCOMIndividualRecord.DeleteIndividualEvent(aEvent: TGEDCOMCustomEvent);
 begin
   if (FIndividualEvents <> nil)
   then FIndividualEvents.DeleteObject(aEvent);
+end;
+
+procedure TGEDCOMIndividualRecord.DeleteIndividualEvent(Index: Integer);
+begin
+  if (FIndividualEvents <> nil)
+  then FIndividualEvents.Delete(Index);
+end;
+
+function TGEDCOMIndividualRecord.IndexOfEvent(Event: TGEDCOMCustomEvent): Integer;
+var
+  i: Integer;
+begin
+  Result := -1;
+  if (FIndividualEvents = nil) then Exit;
+
+  for i := 0 to FIndividualEvents.Count - 1 do
+    if (FIndividualEvents[i] = Event) then begin
+      Result := i;
+      Break;
+    end;
+end;
+
+procedure TGEDCOMIndividualRecord.ExchangeEvents(Index1, Index2: Integer);
+begin
+  FIndividualEvents.Exchange(Index1, Index2);
 end;
 
 //
@@ -5924,11 +5936,9 @@ begin
   or (SU = 'NATI') or (SU = 'NCHI') or (SU = 'NMR') or (SU = 'OCCU')
   or (SU = 'PROP') or (SU = 'RELI') or (SU = 'RESI') or (SU = 'SSN')
   or (SU = 'TITL') or (SU = 'FACT')
-
   or (SU = '_TRAVEL') or (SU = '_HOBBY') or (SU = '_AWARD')
   or (SU = '_MILI') or (SU = '_MILI_IND') or (SU = '_MILI_DIS') or (SU = '_MILI_RANK')
-
-  then Result := AddIndividualAttribute(TGEDCOMIndividualAttribute.CreateTag(Owner, Self, SU, AValue))
+  then Result := AddIndividualEvent(TGEDCOMIndividualAttribute.CreateTag(Owner, Self, SU, AValue))
   else
   if (SU = 'SUBM')
   then Result := AddSubmittor(TGEDCOMPointer.CreateTag(Owner, Self, SU, AValue))
@@ -6048,27 +6058,12 @@ begin
   else Result := FDescendantsInterest.Count;
 end;
 
-function TGEDCOMIndividualRecord.GetIndividualAttributes(
-  Index: Integer): TGEDCOMIndividualAttribute;
-begin
-  if (FIndividualAttributes = nil)
-  then Result := nil
-  else Result := TGEDCOMIndividualAttribute(FIndividualAttributes[Index]);
-end;
-
-function TGEDCOMIndividualRecord.GetIndividualAttributesCount: Integer;
-begin
-  if (FIndividualAttributes = nil)
-  then Result := 0
-  else Result := FIndividualAttributes.Count;
-end;
-
 function TGEDCOMIndividualRecord.GetIndividualEvents(
-  Index: Integer): TGEDCOMIndividualEvent;
+  Index: Integer): TGEDCOMCustomEvent;
 begin
   if (FIndividualEvents = nil)
   then Result := nil
-  else Result := TGEDCOMIndividualEvent(FIndividualEvents[Index]);
+  else Result := TGEDCOMCustomEvent(FIndividualEvents[Index]);
 end;
 
 function TGEDCOMIndividualRecord.GetIndividualEventsCount: Integer;
@@ -6185,7 +6180,7 @@ end;
 function TGEDCOMIndividualRecord.IsEmpty: Boolean;
 begin
   Result := inherited IsEmpty and (GetPersonalNamesCount = 0) and
-    (GetIndividualEventsCount = 0) and (GetIndividualAttributesCount = 0) and
+    (GetIndividualEventsCount = 0) and
     (GetIndividualOrdinancesCount = 0) and (GetChildToFamilyLinksCount = 0) and
     (GetSpouseToFamilyLinksCount = 0) and (GetSubmittorsCount = 0) and
     (GetAssociationsCount = 0) and (GetAliassesCount = 0) and
@@ -6239,7 +6234,6 @@ begin
   if Assigned(FSpouseToFamilyLinks) then FSpouseToFamilyLinks.Pack();
 
   if Assigned(FIndividualEvents) then FIndividualEvents.Pack();
-  if Assigned(FIndividualAttributes) then FIndividualAttributes.Pack();
   if Assigned(FIndividualOrdinances) then FIndividualOrdinances.Pack();
 
   if Assigned(FSubmittors) then FSubmittors.Pack();
@@ -6260,7 +6254,6 @@ begin
   if Assigned(FSpouseToFamilyLinks) then FSpouseToFamilyLinks.SaveToStream(AStream);
 
   if Assigned(FIndividualEvents) then FIndividualEvents.SaveToStream(AStream);
-  if Assigned(FIndividualAttributes) then FIndividualAttributes.SaveToStream(AStream);
   if Assigned(FIndividualOrdinances) then FIndividualOrdinances.SaveToStream(AStream);
 
   if Assigned(FSubmittors) then FSubmittors.SaveToStream(AStream);
@@ -6280,7 +6273,6 @@ begin
   if (FChildToFamilyLinks <> nil) then FChildToFamilyLinks.ResetOwner(AOwner);
   if (FSpouseToFamilyLinks <> nil) then FSpouseToFamilyLinks.ResetOwner(AOwner);
   if (FIndividualEvents <> nil) then FIndividualEvents.ResetOwner(AOwner);
-  if (FIndividualAttributes <> nil) then FIndividualAttributes.ResetOwner(AOwner);
   if (FIndividualOrdinances <> nil) then FIndividualOrdinances.ResetOwner(AOwner);
   if (FSubmittors <> nil) then FSubmittors.ResetOwner(AOwner);
   if (FAssociations <> nil) then FAssociations.ResetOwner(AOwner);
@@ -6299,7 +6291,6 @@ begin
   if (FSpouseToFamilyLinks <> nil) then FSpouseToFamilyLinks.ReplaceXRefs(aMap);
 
   if (FIndividualEvents <> nil) then FIndividualEvents.ReplaceXRefs(aMap);
-  if (FIndividualAttributes <> nil) then FIndividualAttributes.ReplaceXRefs(aMap);
   if (FIndividualOrdinances <> nil) then FIndividualOrdinances.ReplaceXRefs(aMap);
 
   if (FSubmittors <> nil) then FSubmittors.ReplaceXRefs(aMap);
@@ -6380,14 +6371,6 @@ begin
     end;
   end;
 
-  if (FIndividualAttributes <> nil) then begin
-    while (FIndividualAttributes.Count > 0) do begin
-      obj := FIndividualAttributes.Extract(0);
-      TGEDCOMCustomTag(obj).ResetParent(toRec);
-      toRec.AddIndividualAttribute(TGEDCOMIndividualAttribute(obj));
-    end;
-  end;
-
   if (FIndividualOrdinances <> nil) then begin
     while (FIndividualOrdinances.Count > 0) do begin
       obj := FIndividualOrdinances.Extract(0);
@@ -6451,9 +6434,7 @@ end;
 
 procedure TGEDCOMIndividualRecord.ExchangeSpouses(Index1, Index2: Integer);
 begin
-  if ((Index1 >= 0) and (Index1 < FSpouseToFamilyLinks.Count))
-  and ((Index2 >= 0) and (Index2 < FSpouseToFamilyLinks.Count))
-  then FSpouseToFamilyLinks.Exchange(Index1, Index2);
+  FSpouseToFamilyLinks.Exchange(Index1, Index2);
 end;
 
 function TGEDCOMIndividualRecord.GetPatriarch: Boolean;
@@ -6467,6 +6448,19 @@ begin
     if (FindTag(PatriarchTag) = nil)
     then AddTag(PatriarchTag);
   end else DeleteTag(PatriarchTag);
+end;
+
+function TGEDCOMIndividualRecord.GetBookmark: Boolean;
+begin
+  Result := (FindTag(BookmarkTag) <> nil);
+end;
+
+procedure TGEDCOMIndividualRecord.SetBookmark(const Value: Boolean);
+begin
+  if (Value) then begin
+    if (FindTag(BookmarkTag) = nil)
+    then AddTag(BookmarkTag);
+  end else DeleteTag(BookmarkTag);
 end;
 
 { TGEDCOMSubmissionRecord }

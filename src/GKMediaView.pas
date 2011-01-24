@@ -39,7 +39,7 @@ var
 
 implementation
 
-uses GKCommon;
+uses GKUtils, GKEngine;
 
 {$R *.dfm}
 

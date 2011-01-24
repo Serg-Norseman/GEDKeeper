@@ -3,7 +3,7 @@ object fmOptions: TfmOptions
   Top = 118
   BorderStyle = bsDialog
   Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080
-  ClientHeight = 417
+  ClientHeight = 425
   ClientWidth = 513
   Color = clBtnFace
   DefaultMonitor = dmMainForm
@@ -21,7 +21,7 @@ object fmOptions: TfmOptions
     Left = 0
     Top = 0
     Width = 513
-    Height = 369
+    Height = 377
     ActivePage = SheetCommon
     Align = alTop
     TabOrder = 0
@@ -31,44 +31,20 @@ object fmOptions: TfmOptions
         Left = 8
         Top = 8
         Width = 217
-        Height = 57
+        Height = 49
         Caption = #1050#1086#1076#1080#1088#1086#1074#1082#1072' '#1089#1086#1093#1088#1072#1085#1077#1085#1080#1103' '#1092#1072#1081#1083#1086#1074
         Items.Strings = (
           'ASCII'
           'UTF-8')
         TabOrder = 0
       end
-      object GroupBox3: TGroupBox
-        Left = 8
-        Top = 72
-        Width = 217
-        Height = 81
-        Caption = #1057#1080#1089#1090#1077#1084#1072
-        TabOrder = 1
-        object chkAppRegister: TCheckBox
-          Left = 8
-          Top = 24
-          Width = 201
-          Height = 17
-          Caption = #1056#1077#1075#1080#1089#1090#1088#1072#1094#1080#1103' '#1087#1088#1086#1075#1088#1072#1084#1084#1099' '#1074' '#1089#1080#1089#1090#1077#1084#1077
-          TabOrder = 0
-        end
-        object chkExtRegister: TCheckBox
-          Left = 8
-          Top = 48
-          Width = 201
-          Height = 17
-          Caption = #1056#1077#1075#1080#1089#1090#1088#1072#1094#1080#1103' '#1092#1072#1081#1083#1086#1074' '#1074' '#1089#1080#1089#1090#1077#1084#1077
-          TabOrder = 1
-        end
-      end
       object GroupBox4: TGroupBox
         Left = 8
-        Top = 160
+        Top = 128
         Width = 217
         Height = 161
         Caption = #1047#1072#1075#1088#1091#1079#1082#1072' '#1080#1079' '#1048#1085#1090#1077#1088#1085#1077#1090#1072
-        TabOrder = 2
+        TabOrder = 1
         object Label1: TLabel
           Left = 16
           Top = 56
@@ -142,9 +118,9 @@ object fmOptions: TfmOptions
         Width = 265
         Height = 41
         Caption = #1055#1086#1076#1089#1082#1072#1079#1082#1080
-        TabOrder = 3
+        TabOrder = 2
         object chkShowOnStart: TCheckBox
-          Left = 8
+          Left = 16
           Top = 16
           Width = 225
           Height = 17
@@ -153,15 +129,15 @@ object fmOptions: TfmOptions
         end
       end
       object rgEditMode: TRadioGroup
-        Left = 232
-        Top = 56
-        Width = 265
+        Left = 8
+        Top = 64
+        Width = 217
         Height = 57
         Caption = #1056#1077#1078#1080#1084' '#1088#1072#1073#1086#1090#1099
         Items.Strings = (
           #1055#1088#1086#1089#1090#1086#1081
           #1055#1088#1086#1076#1074#1080#1085#1091#1090#1099#1081)
-        TabOrder = 4
+        TabOrder = 3
       end
     end
     object SheetView: TTabSheet
@@ -171,7 +147,7 @@ object fmOptions: TfmOptions
         Left = 0
         Top = 0
         Width = 505
-        Height = 341
+        Height = 349
         ActivePage = SheetViewCommon
         Align = alClient
         TabOrder = 0
@@ -342,7 +318,7 @@ object fmOptions: TfmOptions
             Left = 8
             Top = 8
             Width = 337
-            Height = 289
+            Height = 305
             Checkboxes = True
             Columns = <>
             ReadOnly = True
@@ -353,7 +329,7 @@ object fmOptions: TfmOptions
           end
           object btnDefList: TBitBtn
             Left = 352
-            Top = 272
+            Top = 288
             Width = 137
             Height = 25
             Caption = #1047#1085#1072#1095#1077#1085#1080#1103' '#1087#1086' '#1091#1084#1086#1083#1095#1072#1085#1080#1102
@@ -369,14 +345,14 @@ object fmOptions: TfmOptions
       object GroupBox1: TGroupBox
         Left = 8
         Top = 8
-        Width = 241
-        Height = 185
+        Width = 289
+        Height = 193
         Caption = #1054#1090#1086#1073#1088#1072#1078#1077#1085#1080#1077' '#1087#1077#1088#1089#1086#1085' '#1074' '#1076#1088#1077#1074#1077
         TabOrder = 0
         object chkFamily: TCheckBox
           Left = 16
           Top = 16
-          Width = 209
+          Width = 249
           Height = 17
           Alignment = taLeftJustify
           Caption = #1060#1072#1084#1080#1083#1080#1103
@@ -385,7 +361,7 @@ object fmOptions: TfmOptions
         object chkName: TCheckBox
           Left = 16
           Top = 32
-          Width = 209
+          Width = 249
           Height = 17
           Alignment = taLeftJustify
           Caption = #1048#1084#1103
@@ -394,7 +370,7 @@ object fmOptions: TfmOptions
         object chkPatronymic: TCheckBox
           Left = 16
           Top = 48
-          Width = 209
+          Width = 249
           Height = 17
           Alignment = taLeftJustify
           Caption = #1054#1090#1095#1077#1089#1090#1074#1086
@@ -403,7 +379,7 @@ object fmOptions: TfmOptions
         object chkDiffLines: TCheckBox
           Left = 16
           Top = 64
-          Width = 209
+          Width = 249
           Height = 17
           Alignment = taLeftJustify
           Caption = #1056#1072#1079#1085#1099#1077' '#1089#1090#1088#1086#1082#1080' ('#1080#1084#1103' '#1080' '#1086#1090#1095#1077#1089#1090#1074#1086')'
@@ -412,7 +388,7 @@ object fmOptions: TfmOptions
         object chkBirthDate: TCheckBox
           Left = 16
           Top = 80
-          Width = 209
+          Width = 249
           Height = 17
           Alignment = taLeftJustify
           Caption = #1044#1072#1090#1072' '#1088#1086#1078#1076#1077#1085#1080#1103
@@ -421,7 +397,7 @@ object fmOptions: TfmOptions
         object chkDeathDate: TCheckBox
           Left = 16
           Top = 96
-          Width = 209
+          Width = 249
           Height = 17
           Alignment = taLeftJustify
           Caption = #1044#1072#1090#1072' '#1089#1084#1077#1088#1090#1080
@@ -430,7 +406,7 @@ object fmOptions: TfmOptions
         object chkKinship: TCheckBox
           Left = 16
           Top = 128
-          Width = 209
+          Width = 249
           Height = 17
           Alignment = taLeftJustify
           Caption = #1057#1090#1077#1087#1077#1085#1100' '#1088#1086#1076#1089#1090#1074#1072
@@ -440,7 +416,7 @@ object fmOptions: TfmOptions
         object chkOnlyYears: TCheckBox
           Left = 32
           Top = 112
-          Width = 193
+          Width = 233
           Height = 17
           Alignment = taLeftJustify
           Caption = #1058#1086#1083#1100#1082#1086' '#1075#1086#1076#1099
@@ -449,24 +425,33 @@ object fmOptions: TfmOptions
         object chkSignsVisible: TCheckBox
           Left = 16
           Top = 144
-          Width = 209
+          Width = 249
           Height = 17
           Alignment = taLeftJustify
           Caption = #1044#1086#1087#1086#1083#1085#1080#1090#1077#1083#1100#1085#1099#1077' '#1089#1080#1084#1074#1086#1083#1099
           TabOrder = 8
         end
+        object chkChildlessExclude: TCheckBox
+          Left = 16
+          Top = 168
+          Width = 249
+          Height = 17
+          Alignment = taLeftJustify
+          Caption = #1048#1089#1082#1083#1102#1095#1080#1090#1100' '#1091#1084#1077#1088#1096#1080#1093' '#1074' '#1076#1077#1090#1089#1090#1074#1077
+          TabOrder = 9
+        end
       end
       object GroupBox2: TGroupBox
-        Left = 256
+        Left = 312
         Top = 8
-        Width = 241
-        Height = 185
+        Width = 185
+        Height = 193
         Caption = #1062#1074#1077#1090#1072' '#1074' '#1076#1088#1077#1074#1077
         TabOrder = 1
         object PanMaleColor: TPanel
           Left = 16
           Top = 16
-          Width = 97
+          Width = 73
           Height = 25
           Cursor = crHandPoint
           Caption = #1052#1091#1078#1095#1080#1085#1072
@@ -475,9 +460,9 @@ object fmOptions: TfmOptions
           OnClick = PanMaleColorClick
         end
         object PanFemaleColor: TPanel
-          Left = 128
+          Left = 96
           Top = 16
-          Width = 97
+          Width = 73
           Height = 25
           Cursor = crHandPoint
           Caption = #1046#1077#1085#1097#1080#1085#1072
@@ -487,8 +472,8 @@ object fmOptions: TfmOptions
         end
         object PanUnkSexColor: TPanel
           Left = 16
-          Top = 56
-          Width = 209
+          Top = 48
+          Width = 153
           Height = 25
           Cursor = crHandPoint
           Caption = #1053#1077#1080#1079#1074#1077#1089#1090#1085#1099#1081' '#1087#1086#1083
@@ -498,8 +483,8 @@ object fmOptions: TfmOptions
         end
         object PanUnHusbandColor: TPanel
           Left = 16
-          Top = 96
-          Width = 209
+          Top = 80
+          Width = 153
           Height = 25
           Cursor = crHandPoint
           Caption = #1056#1072#1079#1074#1077#1076#1077#1085#1085#1099#1081' '#1089#1091#1087#1088#1091#1075
@@ -509,8 +494,8 @@ object fmOptions: TfmOptions
         end
         object PanUnWifeColor: TPanel
           Left = 16
-          Top = 136
-          Width = 209
+          Top = 112
+          Width = 153
           Height = 25
           Cursor = crHandPoint
           Caption = #1056#1072#1079#1074#1077#1076#1077#1085#1085#1072#1103' '#1089#1091#1087#1088#1091#1075#1072
@@ -521,15 +506,15 @@ object fmOptions: TfmOptions
       end
       object GroupBox5: TGroupBox
         Left = 8
-        Top = 224
-        Width = 241
-        Height = 105
+        Top = 207
+        Width = 289
+        Height = 130
         Caption = #1043#1077#1085#1077#1088#1072#1094#1080#1103' '#1088#1086#1089#1087#1080#1089#1077#1081
         TabOrder = 2
         object chkAttributes: TCheckBox
           Left = 16
-          Top = 24
-          Width = 209
+          Top = 16
+          Width = 249
           Height = 17
           Alignment = taLeftJustify
           Caption = #1042#1082#1083#1102#1095#1072#1103' '#1072#1090#1088#1080#1073#1091#1090#1099' '#1087#1077#1088#1089#1086#1085
@@ -537,8 +522,8 @@ object fmOptions: TfmOptions
         end
         object chkNotes: TCheckBox
           Left = 16
-          Top = 48
-          Width = 209
+          Top = 32
+          Width = 249
           Height = 17
           Alignment = taLeftJustify
           Caption = #1042#1082#1083#1102#1095#1072#1103' '#1079#1072#1084#1077#1090#1082#1080
@@ -546,39 +531,30 @@ object fmOptions: TfmOptions
         end
         object chkSources: TCheckBox
           Left = 16
-          Top = 72
-          Width = 209
+          Top = 48
+          Width = 249
           Height = 17
           Alignment = taLeftJustify
           Caption = #1042#1082#1083#1102#1095#1072#1103' '#1080#1089#1090#1086#1095#1085#1080#1082#1080
           TabOrder = 2
         end
-      end
-      object EditPedigreeFormat: TRadioGroup
-        Left = 256
-        Top = 224
-        Width = 241
-        Height = 57
-        Caption = #1060#1086#1088#1084#1072#1090
-        Items.Strings = (
-          #1048#1079#1073#1099#1090#1086#1095#1085#1099#1081
-          #1050#1086#1084#1087#1072#1082#1090#1085#1099#1081' ('#1090#1088#1072#1076#1080#1094#1080#1086#1085#1085#1099#1081' '#1059#1048#1056#1054')')
-        TabOrder = 3
-      end
-      object chkChildlessExclude: TCheckBox
-        Left = 8
-        Top = 200
-        Width = 489
-        Height = 17
-        Alignment = taLeftJustify
-        Caption = #1048#1089#1082#1083#1102#1095#1080#1090#1100' '#1085#1077' '#1076#1086#1089#1090#1080#1075#1096#1080#1093' '#1076#1077#1090#1086#1088#1086#1076#1085#1086#1075#1086' '#1074#1086#1079#1088#1072#1089#1090#1072
-        TabOrder = 4
+        object EditPedigreeFormat: TRadioGroup
+          Left = 16
+          Top = 72
+          Width = 249
+          Height = 48
+          Caption = #1060#1086#1088#1084#1072#1090
+          Items.Strings = (
+            #1048#1079#1073#1099#1090#1086#1095#1085#1099#1081
+            #1050#1086#1084#1087#1072#1082#1090#1085#1099#1081' ('#1090#1088#1072#1076#1080#1094#1080#1086#1085#1085#1099#1081' '#1059#1048#1056#1054')')
+          TabOrder = 3
+        end
       end
     end
   end
   object btnAccept: TBitBtn
     Left = 336
-    Top = 384
+    Top = 392
     Width = 81
     Height = 25
     Caption = #1055#1088#1080#1085#1103#1090#1100
@@ -588,7 +564,7 @@ object fmOptions: TfmOptions
   end
   object btnCancel: TBitBtn
     Left = 424
-    Top = 384
+    Top = 392
     Width = 81
     Height = 25
     Caption = #1054#1090#1084#1077#1085#1080#1090#1100
@@ -596,7 +572,7 @@ object fmOptions: TfmOptions
     Kind = bkCancel
   end
   object ColorDialog1: TColorDialog
-    Left = 352
-    Top = 312
+    Left = 384
+    Top = 272
   end
 end

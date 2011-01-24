@@ -8,7 +8,7 @@ interface
 
 uses
   Types, Windows, Messages, Classes, Contnrs, Graphics, Controls,
-  GedCom551, GKCommon;
+  GedCom551, GKEngine, GKCommon, GKLists;
 
 type
   TGenealogyChart = class;
@@ -133,6 +133,7 @@ type
     FBitmap: TBitmap;
     FBranchDistance: Integer;
     FDepthLimit: Integer;
+    FFilter: TPersonsFilter;
     FKind: TChartKind;
     FLevelDistance: Integer;
     FMargin: Integer;
@@ -147,6 +148,8 @@ type
 
     FGenEdge: TPerson;
     FHMax, FWMax: Integer;
+
+    FUseSourcesFilter: Boolean;
 
     procedure Clear();
     procedure Draw(aPerson: TPerson);
@@ -167,9 +170,12 @@ type
     procedure Redraw();
     procedure SelectBy(aX, aY: Integer);
 
+    property UseSourcesFilter: Boolean read FUseSourcesFilter write FUseSourcesFilter;
+
     property Bitmap: TBitmap read FBitmap write SetBitmap;
     property BranchDistance: Integer read FBranchDistance write FBranchDistance;
     property DepthLimit: Integer read FDepthLimit write FDepthLimit;
+    property Filter: TPersonsFilter read FFilter write FFilter;
     property Margin: Integer read FMargin write FMargin;
     property Root: TPerson read FRoot;
     property Scale: Integer read FScale write SetScale;
@@ -666,7 +672,7 @@ begin
     for i := 0 to aPerson.Childs.Count - 1 do
       Draw(aPerson.Childs[i]);
 
-    spb_ofs := FLevelDistance div 3;
+    spb_ofs := {FLevelDistance div 3} ((aPerson.Height - 10) div (aPerson.SpousesCount + 1));
     spb_beg := aPerson.Pt.Y + (aPerson.Height - spb_ofs * (aPerson.SpousesCount - 1)) div 2;
 
     case aPerson.Sex of
@@ -939,12 +945,28 @@ procedure TAncestryChart.GenDescendantsChart(aPerson: TGEDCOMIndividualRecord);
     family: TGEDCOMFamilyRecord;
     child, sp: TGEDCOMIndividualRecord;
     i, k: Integer;
+    filter_source: TGEDCOMSourceRecord;
   begin
     if (aPerson = nil) then Exit;
 
     if (FOptions.ChildlessExclude) and (aLevel > 1) then begin
       if (aPerson.SpouseToFamilyLinksCount = 0) and IsChildless(aPerson)
       then Exit;
+    end;
+
+    if (FUseSourcesFilter) and (FFilter <> nil) then begin
+      case FFilter.SourceMode of
+        gmAll: ;
+        gmNone: if (aPerson.SourceCitationsCount <> 0) then Exit;
+        gmAny: if (aPerson.SourceCitationsCount = 0) then Exit;
+        gmSelected: begin
+          if (FFilter.SourceRef = '')
+          then filter_source := nil
+          else filter_source := FTree.XRefIndex_Find(FFilter.SourceRef) as TGEDCOMSourceRecord;
+
+          if (aPerson.IndexOfSource(filter_source) < 0) then Exit;
+        end;
+      end;
     end;
 
     res := AddPerson(aParent, aPerson, pkDefault, aLevel);

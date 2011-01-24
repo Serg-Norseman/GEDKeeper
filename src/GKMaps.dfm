@@ -1,8 +1,8 @@
 object fmMaps: TfmMaps
-  Left = 169
-  Top = 104
-  Width = 885
-  Height = 597
+  Left = 271
+  Top = 105
+  Width = 869
+  Height = 575
   Caption = #1050#1072#1088#1090#1099
   Color = clBtnFace
   DefaultMonitor = dmMainForm
@@ -25,13 +25,13 @@ object fmMaps: TfmMaps
     Left = 289
     Top = 0
     Width = 4
-    Height = 551
+    Height = 529
     Beveled = True
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 551
-    Width = 877
+    Top = 529
+    Width = 861
     Height = 19
     Panels = <>
     SimplePanel = True
@@ -40,7 +40,7 @@ object fmMaps: TfmMaps
     Left = 0
     Top = 0
     Width = 289
-    Height = 551
+    Height = 529
     ActivePage = tsPlaces
     Align = alLeft
     TabOrder = 1
@@ -48,9 +48,9 @@ object fmMaps: TfmMaps
       Caption = #1052#1077#1089#1090#1072
       object TreePlaces: TTreeView
         Left = 0
-        Top = 238
+        Top = 173
         Width = 281
-        Height = 285
+        Height = 328
         Align = alClient
         Indent = 19
         SortType = stText
@@ -59,7 +59,7 @@ object fmMaps: TfmMaps
       end
       object GroupBox2: TGroupBox
         Left = 0
-        Top = 65
+        Top = 0
         Width = 281
         Height = 173
         Align = alTop
@@ -81,28 +81,28 @@ object fmMaps: TfmMaps
           ItemHeight = 13
           TabOrder = 0
         end
-        object CheckResidence: TCheckBox
+        object chkResidence: TCheckBox
           Left = 8
           Top = 64
           Width = 129
           Height = 17
-          Caption = #1052#1077#1089#1090#1086' '#1078#1080#1090#1077#1083#1100#1089#1090#1074#1072
+          Caption = #1052#1077#1089#1090#1072' '#1087#1088#1086#1078#1080#1074#1072#1085#1080#1103
           TabOrder = 1
         end
-        object CheckDeath: TCheckBox
+        object chkDeath: TCheckBox
           Left = 8
           Top = 40
           Width = 129
           Height = 17
-          Caption = #1052#1077#1089#1090#1086' '#1089#1084#1077#1088#1090#1080
+          Caption = #1052#1077#1089#1090#1072' '#1089#1084#1077#1088#1090#1080
           TabOrder = 2
         end
-        object CheckBirth: TCheckBox
+        object chkBirth: TCheckBox
           Left = 8
           Top = 16
           Width = 129
           Height = 17
-          Caption = #1052#1077#1089#1090#1086' '#1088#1086#1078#1076#1077#1085#1080#1103
+          Caption = #1052#1077#1089#1090#1072' '#1088#1086#1078#1076#1077#1085#1080#1103
           TabOrder = 3
         end
         object btnSelectPlaces: TButton
@@ -125,64 +125,16 @@ object fmMaps: TfmMaps
           OnClick = btnSaveImageClick
         end
       end
-      object GroupBox1: TGroupBox
-        Left = 0
-        Top = 0
-        Width = 281
-        Height = 65
-        Align = alTop
-        Caption = #1055#1086#1080#1089#1082
-        TabOrder = 2
-        object Label1: TLabel
-          Left = 8
-          Top = 16
-          Width = 48
-          Height = 13
-          Caption = #1053#1072#1079#1074#1072#1085#1080#1077
-        end
-        object btnSearch: TButton
-          Left = 168
-          Top = 28
-          Width = 105
-          Height = 25
-          Caption = #1055#1086#1080#1089#1082
-          TabOrder = 0
-          OnClick = btnSearchClick
-        end
-        object edSearch: TEdit
-          Left = 8
-          Top = 32
-          Width = 153
-          Height = 21
-          TabOrder = 1
-          Text = #1052#1086#1089#1082#1074#1072
-        end
-      end
     end
   end
   object Panel1: TPanel
     Left = 293
     Top = 0
-    Width = 584
-    Height = 551
+    Width = 568
+    Height = 529
     Align = alClient
     BorderStyle = bsSingle
     TabOrder = 2
-    object WebBrowser: TWebBrowser
-      Left = 1
-      Top = 1
-      Width = 578
-      Height = 545
-      Align = alClient
-      TabOrder = 0
-      OnStatusTextChange = WebBrowserStatusTextChange
-      ControlData = {
-        4C000000BD3B0000543800000000000000000000000000000000000000000000
-        000000004C000000000000000000000001000000E0D057007335CF11AE690800
-        2B2E126200000000000000004C0000000114020000000000C000000000000046
-        8000000000000000000000000000000000000000000000000000000000000000
-        00000000000000000100000000000000000000000000000000000000}
-    end
   end
   object SaveDialog1: TSaveDialog
     DefaultExt = 'jpg'

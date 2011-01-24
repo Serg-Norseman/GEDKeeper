@@ -152,6 +152,7 @@ object fmPersonEdit: TfmPersonEdit
       Height = 21
       TabOrder = 0
       OnChange = EditFamilyChange
+      OnKeyPress = EditFamilyKeyPress
     end
     object EditName: TEdit
       Left = 72
@@ -160,6 +161,7 @@ object fmPersonEdit: TfmPersonEdit
       Height = 21
       TabOrder = 1
       OnChange = EditNameChange
+      OnKeyPress = EditFamilyKeyPress
     end
     object EditPatronymic: TEdit
       Left = 72
@@ -168,6 +170,7 @@ object fmPersonEdit: TfmPersonEdit
       Height = 21
       TabOrder = 2
       OnChange = EditPatronymicChange
+      OnKeyPress = EditFamilyKeyPress
     end
     object EditSex: TComboBox
       Left = 72
@@ -828,6 +831,15 @@ object fmPersonEdit: TfmPersonEdit
           TabOrder = 1
         end
       end
+    end
+    object chkBookmark: TCheckBox
+      Left = 216
+      Top = 129
+      Width = 81
+      Height = 17
+      Alignment = taLeftJustify
+      Caption = #1047#1072#1082#1083#1072#1076#1082#1072
+      TabOrder = 7
     end
   end
 end

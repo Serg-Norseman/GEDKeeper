@@ -7,10 +7,15 @@ uses
   Messages,
   Forms,
   GedCom551 in 'GedCom551.pas',
+  GKUtils in 'GKUtils.pas',
+  GKEngine in 'GKEngine.pas',
   GKCommon in 'GKCommon.pas',
   GKImport in 'GKImport.pas',
   GKExport in 'GKExport.pas',
   GKChartCore in 'GKChartCore.pas',
+  GKLangs in 'GKLangs.pas',
+  GKCommands in 'GKCommands.pas',
+  GKLists in 'GKLists.pas',
   GKMain in 'GKMain.pas' {fmGEDKeeper},
   GKBase in 'GKBase.pas' {fmBase},
   GKPersonNew in 'GKPersonNew.pas' {fmPersonNew},
@@ -40,10 +45,6 @@ uses
   GKTaskEdit in 'GKTaskEdit.pas' {fmTaskEdit},
   GKCommunicationEdit in 'GKCommunicationEdit.pas' {fmCommunicationEdit},
   GKLocationEdit in 'GKLocationEdit.pas' {fmLocationEdit},
-  GKLangs in 'GKLangs.pas',
-  GKUIToolkit in 'GKUIToolkit.pas',
-  GKCommands in 'GKCommands.pas',
-  GKLists in 'GKLists.pas',
   GKTreeTools in 'GKTreeTools.pas' {fmTreeTools},
   GKTipsDlg in 'GKTipsDlg.pas' {fmTipsDialog},
   GKUserRefEdit in 'GKUserRefEdit.pas' {fmUserRefEdit},
@@ -54,7 +55,11 @@ uses
   GKStereoView in 'GKStereoView.pas' {fmStereoView},
   GKOrganizer in 'GKOrganizer.pas' {fmOrganizer},
   GKDBImport in 'GKDBImport.pas' {fmDBImport},
-  GKSexCheck in 'GKSexCheck.pas' {fmSexCheck};
+  GKSexCheck in 'GKSexCheck.pas' {fmSexCheck},
+  GKMapBrowser in 'GKMapBrowser.pas',
+  GKSourceParse in 'GKSourceParse.pas' {fmSourceParse},
+  GKScriptDaemon in 'GKScriptDaemon.pas' {fmScriptDaemon},
+  GKNameEdit in 'GKNameEdit.pas' {fmNameEdit};
 
 {$R *.res}
 
@@ -77,7 +82,10 @@ begin
   // поскольку к заголовку главного окна может добавиться заголовок MDIChild
   // (нужно позаботиться об уникальности имени класса главной формы)
 
-  hMainForm := FindWindow('TfmGEDKeeper', nil);
+  if IsDevComp()
+  then hMainForm := 0
+  else hMainForm := FindWindow('TfmGEDKeeper', nil);
+  
   if (hMainForm = 0) then begin
     Application.Initialize;
     Application.Title := 'GEDKeeper';

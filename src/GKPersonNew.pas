@@ -6,7 +6,7 @@ interface
 
 uses
   Windows, SysUtils, Classes, Controls, Forms, StdCtrls, Buttons,
-  GedCom551, GKCommon;
+  GedCom551, GKEngine, GKCommon;
 
 type
   TfmPersonNew = class(TForm)
@@ -22,6 +22,7 @@ type
     btnCancel: TBitBtn;
     procedure FormCreate(Sender: TObject);
     procedure edFamilyKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure edFamilyKeyPress(Sender: TObject; var Key: Char);
   private
     FTarget: TGEDCOMIndividualRecord;
     FTargetMode: TTargetMode;
@@ -56,7 +57,7 @@ var
 begin
   if IsWindowsVista() then SetVistaFonts(Self);
 
-  for sx := Low(TGEDCOMSex) to High(TGEDCOMSex) do EditSex.Items.Add(Sex[sx]);
+  for sx := Low(TGEDCOMSex) to High(TGEDCOMSex) do EditSex.Items.Add(SexData[sx].ViewName);
 end;
 
 procedure TfmPersonNew.SetTarget(const Value: TGEDCOMIndividualRecord);
@@ -96,6 +97,14 @@ begin
         end;
       end;
     end;
+  end;
+end;
+
+procedure TfmPersonNew.edFamilyKeyPress(Sender: TObject; var Key: Char);
+begin
+  if (Key = '/') then begin
+    Key := #0;
+    MessageBeep(MB_ICONEXCLAMATION);
   end;
 end;
 

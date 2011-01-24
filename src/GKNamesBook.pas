@@ -5,8 +5,8 @@ unit GKNamesBook;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Contnrs;
+  Windows, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls,
+  Contnrs;
 
 type
   TfmNamesBook = class(TForm)
@@ -33,7 +33,7 @@ implementation
 {$R res\names.res}
 
 uses
-  bsComUtils, GKCommon, GKMain;
+  bsComUtils, GKUtils, GKEngine, GKMain;
 
 type
   TNameRecord = class(TObject)

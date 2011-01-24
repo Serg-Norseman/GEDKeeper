@@ -6,7 +6,7 @@ interface
 
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms, ComCtrls, StdCtrls,
-  GedCom551, GKCommon, Buttons, bsCtrls, GKBase, ExtCtrls, GKLists;
+  Buttons, ExtCtrls, bsCtrls, GedCom551, GKEngine, GKBase, GKLists;
 
 type
   TfmRecordSelect = class(TForm)
@@ -24,13 +24,13 @@ type
       Shift: TShiftState);
     procedure edFastFilterChange(Sender: TObject);
   private
-    FMode: TSelectMode;
+    FMode: TGEDCOMRecordType;
     FFilter: string;
     FTargetMode: TTargetMode;
     FLocalFilter: TPersonsFilter;
 
     function GetBase: TfmBase;
-    procedure SetMode(const Value: TSelectMode);
+    procedure SetMode(const Value: TGEDCOMRecordType);
     procedure DataRefresh();
     procedure SetFilter(const Value: string);
     procedure SetTargetMode(const Value: TTargetMode);
@@ -44,13 +44,13 @@ type
 
     property Base: TfmBase read GetBase;
     property Filter: string read FFilter write SetFilter;
-    property Mode: TSelectMode read FMode write SetMode;
+    property Mode: TGEDCOMRecordType read FMode write SetMode;
     property TargetMode: TTargetMode read FTargetMode write SetTargetMode;
   end;
 
 implementation
 
-uses GKMain, Math;
+uses GKMain;
 
 {$R *.dfm}
 
@@ -69,7 +69,7 @@ begin
   FLocalFilter.Sex := FNeedSex;
 
   if Assigned(ListRecords) then FreeAndNil(ListRecords);
-  Base.CreateRecordsView(Self, panList, SelectRecords[FMode], ListRecords);
+  Base.CreateRecordsView(Self, panList, FMode, ListRecords);
   ListRecords.UpdateContents(Base.ShieldState, True, FLocalFilter, 1);
 end;
 
@@ -95,7 +95,7 @@ begin
   //Hide;
 
   case FMode of
-    smPerson: begin
+    rtIndividual: begin
       iRec := Base.CreatePersonDialog(FTarget, FTargetMode, FNeedSex);
       if (iRec <> nil) then begin
         ResultRecord := iRec;
@@ -103,7 +103,7 @@ begin
       end;
     end;
 
-    smFamily: begin
+    rtFamily: begin
       famRec := nil;
 
       if (FTargetMode = tmChildToFamily)
@@ -116,7 +116,7 @@ begin
       end;
     end;
 
-    smNote: begin
+    rtNote: begin
       noteRec := nil;
       if Base.ModifyNote(noteRec) then begin
         ResultRecord := noteRec;
@@ -124,7 +124,7 @@ begin
       end;
     end;
 
-    smMultimedia: begin
+    rtMultimedia: begin
       mmRec := nil;
       if Base.ModifyMedia(mmRec) then begin
         ResultRecord := mmRec;
@@ -132,7 +132,7 @@ begin
       end;
     end;
 
-    smSource: begin
+    rtSource: begin
       sourceRec := nil;
       if Base.ModifySource(sourceRec) then begin
         ResultRecord := sourceRec;
@@ -140,7 +140,7 @@ begin
       end;
     end;
 
-    smRepository: begin
+    rtRepository: begin
       repRec := nil;
       if Base.ModifyRepository(repRec) then begin
         ResultRecord := repRec;
@@ -148,7 +148,7 @@ begin
       end;
     end;
 
-    smGroup: begin
+    rtGroup: begin
       groupRec := nil;
       if Base.ModifyGroup(groupRec) then begin
         ResultRecord := groupRec;
@@ -156,7 +156,7 @@ begin
       end;
     end;
 
-    smTask: begin
+    rtTask: begin
       taskRec := nil;
       if Base.ModifyTask(taskRec) then begin
         ResultRecord := taskRec;
@@ -164,7 +164,7 @@ begin
       end;
     end;
 
-    smCommunication: begin
+    rtCommunication: begin
       corrRec := nil;
       if Base.ModifyCommunication(corrRec) then begin
         ResultRecord := corrRec;
@@ -172,7 +172,7 @@ begin
       end;
     end;
 
-    smLocation: begin
+    rtLocation: begin
       locRec := nil;
       if Base.ModifyLocation(locRec) then begin
         ResultRecord := locRec;
@@ -204,7 +204,7 @@ begin
   SetFilter(edFastFilter.Text);
 end;
 
-procedure TfmRecordSelect.SetMode(const Value: TSelectMode);
+procedure TfmRecordSelect.SetMode(const Value: TGEDCOMRecordType);
 begin
   FMode := Value;
   DataRefresh();

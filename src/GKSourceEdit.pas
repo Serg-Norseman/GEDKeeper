@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons, ComCtrls,
-  GedCom551, GKBase, GKCommon, GKLists, bsCtrls;
+  GedCom551, GKBase, GKEngine, GKLists, bsCtrls;
 
 type
   TfmSourceEdit = class(TForm)
@@ -143,12 +143,9 @@ begin
   if (Sender = FRepositoriesList) then begin
     case Action of
       raAdd: begin
-        rep := TGEDCOMRepositoryRecord(Base.SelectRecord(smRepository, []));
+        rep := TGEDCOMRepositoryRecord(Base.SelectRecord(rtRepository, []));
         if (rep <> nil) then begin
-          cit := TGEDCOMRepositoryCitation.Create(Base.Tree, FSourceRecord);
-          cit.Value := rep;
-          FSourceRecord.AddRepositoryCitation(cit);
-
+          BindSourceRepository(Base.Tree, FSourceRecord, rep);
           ControlsRefresh();
         end;
       end;

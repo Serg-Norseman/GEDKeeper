@@ -7,7 +7,7 @@ interface
 uses
   Windows, SysUtils, Variants, Classes, Graphics, Forms, Controls, Menus,
   StdCtrls, Dialogs, Buttons, Messages, ExtCtrls, ComCtrls, StdActns, ActnList,
-  ToolWin, ImgList, GKCommon, GKBase, GKLangs, GKPluginMan;
+  ToolWin, ImgList, GKEngine, GKCommon, GKBase, GKLangs, GKPluginMan;
 
 const
   WM_KEEPMODELESS = WM_USER + 111;
@@ -132,7 +132,6 @@ type
     actFAQ: TAction;
     ImageList2: TImageList;
     miCalc: TMenuItem;
-    actDummyPlugin: TAction;
     actExpCalc: TAction;
     actNamesBook: TAction;
     miNamesBook: TMenuItem;
@@ -145,6 +144,14 @@ type
     miOrganizer: TMenuItem;
     actDBImport: TAction;
     miDBImport: TMenuItem;
+    miService: TMenuItem;
+    N12: TMenuItem;
+    miUndo: TMenuItem;
+    miRedo: TMenuItem;
+    miSourceParse: TMenuItem;
+    actSourceParse: TAction;
+    miScripts: TMenuItem;
+    actScripts: TAction;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure actFileNewExecute(Sender: TObject);
@@ -182,7 +189,6 @@ type
     procedure StatusBarDrawPanel(StatusBar: TStatusBar;
       Panel: TStatusPanel; const Rect: TRect);
     procedure StatusBarDblClick(Sender: TObject);
-    procedure actDummyPluginExecute(Sender: TObject);
     procedure actExpCalcExecute(Sender: TObject);
     procedure actNamesBookExecute(Sender: TObject);
     procedure actCalendarExecute(Sender: TObject);
@@ -190,6 +196,8 @@ type
     procedure actStereoViewExecute(Sender: TObject);
     procedure actOrganizerExecute(Sender: TObject);
     procedure actDBImportExecute(Sender: TObject);
+    procedure actSourceParseExecute(Sender: TObject);
+    procedure actScriptsExecute(Sender: TObject);
   private
     FNamesTable: TNamesTable;
     FOptions: TGlobalOptions;
@@ -198,11 +206,14 @@ type
     procedure MRUFileClick(Sender: TObject);
     procedure UpdateMRU();
 
+    procedure ExecWidget(Action: TAction; WidgetClass: TFormClass; var Widget: TForm);
+
     procedure FileDrop(var Msg: TWMDROPFILES); message WM_DROPFILES;
     procedure CopyData(var Msg: TWMCopyData); message WM_COPYDATA;
     procedure WMKeepModeless(var Msg: TMessage); message WM_KEEPMODELESS;
   protected
     procedure CreateParams(var Params: TCreateParams); override;
+    procedure WMActivate(var Message: TWMActivate); message WM_ACTIVATE;
     procedure WMSysCommand(var  Message: TWmSysCommand); message WM_SYSCOMMAND;
   public
     property NamesTable: TNamesTable read FNamesTable;
@@ -229,9 +240,8 @@ implementation
 uses
   {$IFDEF DELPHI_NET}System.IO,{$ENDIF}
   {$IFDEF PROFILER}ZProfiler,{$ENDIF}
-  uVista, XPTheme, Types, bsComUtils, ShellAPI, bsWinUtils,
-  GKAbout, GKOptions, GKUIToolkit, GKExpCalc, GKNamesBook, GKCalendar,
-  GKTimeLine;
+  uVista, ShellAPI, bsComUtils, GKUtils, 
+  GKAbout, GKOptions, GKExpCalc, GKNamesBook, GKCalendar, GKTimeLine;
 
 {$R *.dfm}
 
@@ -242,11 +252,11 @@ begin
   then PostMessage(Application.MainForm.Handle, WM_KEEPMODELESS, 0, 0);
 
   {$IFDEF DELPHI8UP}
-  if IsWindowsVista() then begin
+  {if IsWindowsVista() then begin
     if (aPopupParent = nil)
     then aForm.PopupParent := fmGEDKeeper
     else aForm.PopupParent := aPopupParent;
-  end;
+  end;}
   {$ENDIF}
 
   Result := aForm.ShowModal;
@@ -276,6 +286,14 @@ begin
       end;
       else inherited;
     end;
+  end else inherited;
+end;
+
+procedure TfmGEDKeeper.WMActivate(var Message: TWMActivate);
+begin
+  if (Message.Active = WA_ACTIVE) and not IsWindowEnabled(Handle) then begin
+    SetActiveWindow(Application.Handle);
+    Message.Result := 0;
   end else inherited;
 end;
 
@@ -405,62 +423,76 @@ var
   base_en, indiv_en, test_funcs: Boolean;
   st: string;
 begin
-  if (ForceDeactivate)
-  then cur_base := nil
-  else cur_base := GetCurrentFile();
+  try
+    if (ForceDeactivate)
+    then cur_base := nil
+    else cur_base := GetCurrentFile();
 
-  if (cur_base = nil) then begin
-    rt := rtNone;
-    base_en := False;
-  end else begin
-    rt := TGEDCOMRecordType(cur_base.PageRecords.TabIndex + 1);
-    base_en := True;
+    if (cur_base = nil) then begin
+      rt := rtNone;
+      base_en := False;
+    end else begin
+      rt := TGEDCOMRecordType(cur_base.PageRecords.TabIndex + 1);
+      base_en := True;
+    end;
+
+    actFileClose.Enabled := (base_en);
+    actFileSave.Enabled := (base_en);
+
+    actFileProperties.Enabled := (base_en);
+    actExportToWeb.Enabled := (base_en);
+    actExportToExcel.Enabled := (base_en);
+    actTreeTools.Enabled := (base_en);
+
+    actRecordAdd.Enabled := (base_en);
+    actRecordEdit.Enabled := (base_en);
+    actRecordDelete.Enabled := (base_en);
+    actPersonScan.Enabled := (base_en);
+
+    indiv_en := (base_en) and (rt = rtIndividual);
+
+    actFilter.Enabled := (indiv_en);
+    miPedigree.Enabled := (indiv_en);
+    tbPedigree.Enabled := (indiv_en);
+    actTreeAncestors.Enabled := (indiv_en);
+    actTreeDescendants.Enabled := (indiv_en);
+    actPedigree_dAboville.Enabled := (indiv_en);
+    actPedigree_Konovalov.Enabled := (indiv_en);
+
+    actStats.Enabled := (base_en);
+    actOrganizer.Enabled := (base_en);
+    actDBImport.Enabled := (base_en);
+    actScripts.Enabled := (base_en);
+
+    actPrev.Enabled := (cur_base <> nil) and (cur_base.Backman.CanBackward());
+    actNext.Enabled := (cur_base <> nil) and (cur_base.Backman.CanForward());
+
+    test_funcs := IsDevComp();
+
+    {$IFDEF FEATURES_INC}
+    actUndo.Enabled := (test_funcs) and (cur_base <> nil) and (cur_base.Undoman.CanUndo());
+    actRedo.Enabled := (test_funcs) and (cur_base <> nil) and (cur_base.Undoman.CanRedo());
+    actSourceParse.Enabled := (test_funcs) and (cur_base <> nil);
+    actStereoView.Enabled := (test_funcs) and (cur_base <> nil);
+    {$ELSE}
+    actUndo.Enabled := False;
+    actRedo.Enabled := False;
+    actSourceParse.Enabled := False;
+    actStereoView.Enabled := False;
+    {$ENDIF}
+
+    if (cur_base <> nil) then begin
+      st := 'Записей: ' + IntToStr(cur_base.FCounts[rt].Total);
+      if (rt = rtIndividual)
+      then st := st + ', фильтр: ' + IntToStr(cur_base.FCounts[rt].Filtered);
+
+      StatusBar.Panels[0].Text := st;
+    end;
+
+    StatusBar.Repaint;
+  except
+    on E: Exception do LogWrite('GKMain.UpdateControls(): ' + E.Message);
   end;
-
-  actFileClose.Enabled := (base_en);
-  actFileSave.Enabled := (base_en);
-
-  actFileProperties.Enabled := (base_en);
-  actExportToWeb.Enabled := (base_en);
-  actExportToExcel.Enabled := (base_en);
-  actTreeTools.Enabled := (base_en);
-
-  actRecordAdd.Enabled := (base_en);
-  actRecordEdit.Enabled := (base_en);
-  actRecordDelete.Enabled := (base_en);
-  actPersonScan.Enabled := (base_en);
-
-  indiv_en := (base_en) and (rt = rtIndividual);
-
-  actFilter.Enabled := (indiv_en);
-  miPedigree.Enabled := (indiv_en);
-  tbPedigree.Enabled := (indiv_en);
-  actTreeAncestors.Enabled := (indiv_en);
-  actTreeDescendants.Enabled := (indiv_en);
-  actPedigree_dAboville.Enabled := (indiv_en);
-  actPedigree_Konovalov.Enabled := (indiv_en);
-
-  actStats.Enabled := (base_en);
-  actOrganizer.Enabled := (base_en);
-  actDBImport.Enabled := (base_en);
-
-  actPrev.Enabled := (cur_base <> nil) and (cur_base.Backman.CanBackward());
-  actNext.Enabled := (cur_base <> nil) and (cur_base.Backman.CanForward());
-
-  test_funcs := (GetComputerName() = 'asgard') or (GetUserName() = 'Zhdanovskih_SV');
-
-  actUndo.Enabled := (test_funcs) and (cur_base <> nil) and (cur_base.Undoman.CanUndo());
-  actRedo.Enabled := (test_funcs) and (cur_base <> nil) and (cur_base.Undoman.CanRedo());
-
-  if (cur_base <> nil) then begin
-    st := 'Записей: ' + IntToStr(cur_base.FCounts[rt].Total);
-    if (rt = rtIndividual)
-    then st := st + ', фильтр: ' + IntToStr(cur_base.FCounts[rt].Filtered);
-
-    StatusBar.Panels[0].Text := st;
-  end;
-
-  StatusBar.Repaint;
 end;
 
 procedure TfmGEDKeeper.UpdateMRU();
@@ -548,8 +580,7 @@ var
   cur_base: TfmBase;
 begin
   cur_base := GetCurrentFile();
-  if (cur_base = nil) then Exit;
-  cur_base.FileProperties();
+  if (cur_base <> nil) then cur_base.FileProperties();
 end;
 
 procedure TfmGEDKeeper.actFileCloseExecute(Sender: TObject);
@@ -557,8 +588,7 @@ var
   cur_base: TfmBase;
 begin
   cur_base := GetCurrentFile();
-  if (cur_base = nil) then Exit;
-  cur_base.Close();
+  if (cur_base <> nil) then cur_base.Close();
 end;
 
 procedure TfmGEDKeeper.actContextHelpExecute(Sender: TObject);
@@ -586,8 +616,7 @@ var
   cur_base: TfmBase;
 begin
   cur_base := GetCurrentFile();
-  if (cur_base = nil) then Exit;
-  cur_base.ExportToWeb();
+  if (cur_base <> nil) then cur_base.ExportToWeb();
 end;
 
 procedure TfmGEDKeeper.actExportToExcelExecute(Sender: TObject);
@@ -595,8 +624,7 @@ var
   cur_base: TfmBase;
 begin
   cur_base := GetCurrentFile();
-  if (cur_base = nil) then Exit;
-  cur_base.ExportToExcel();
+  if (cur_base <> nil) then cur_base.ExportToExcel();
 end;
 
 procedure TfmGEDKeeper.actTreeToolsExecute(Sender: TObject);
@@ -604,8 +632,7 @@ var
   cur_base: TfmBase;
 begin
   cur_base := GetCurrentFile();
-  if (cur_base = nil) then Exit;
-  cur_base.TreeTools();
+  if (cur_base <> nil) then cur_base.TreeTools();
 end;
 
 procedure TfmGEDKeeper.actRecordAddExecute(Sender: TObject);
@@ -613,8 +640,7 @@ var
   cur_base: TfmBase;
 begin
   cur_base := GetCurrentFile();
-  if (cur_base = nil) then Exit;
-  cur_base.RecordAdd();
+  if (cur_base <> nil) then cur_base.RecordAdd();
 end;
 
 procedure TfmGEDKeeper.actRecordEditExecute(Sender: TObject);
@@ -622,8 +648,7 @@ var
   cur_base: TfmBase;
 begin
   cur_base := GetCurrentFile();
-  if (cur_base = nil) then Exit;
-  cur_base.RecordEdit(Sender);
+  if (cur_base <> nil) then cur_base.RecordEdit(Sender);
 end;
 
 procedure TfmGEDKeeper.actRecordDeleteExecute(Sender: TObject);
@@ -631,8 +656,7 @@ var
   cur_base: TfmBase;
 begin
   cur_base := GetCurrentFile();
-  if (cur_base = nil) then Exit;
-  cur_base.RecordDelete();
+  if (cur_base <> nil) then cur_base.RecordDelete();
 end;
 
 procedure TfmGEDKeeper.actFilterExecute(Sender: TObject);
@@ -640,8 +664,7 @@ var
   cur_base: TfmBase;
 begin
   cur_base := GetCurrentFile();
-  if (cur_base = nil) then Exit;
-  cur_base.SetFilter();
+  if (cur_base <> nil) then cur_base.SetFilter();
 end;
 
 procedure TfmGEDKeeper.actTreeAncestorsExecute(Sender: TObject);
@@ -649,8 +672,7 @@ var
   cur_base: TfmBase;
 begin
   cur_base := GetCurrentFile();
-  if (cur_base = nil) then Exit;
-  cur_base.ShowTreeAncestors();
+  if (cur_base <> nil) then cur_base.ShowTreeAncestors();
 end;
 
 procedure TfmGEDKeeper.actTreeDescendantsExecute(Sender: TObject);
@@ -658,8 +680,7 @@ var
   cur_base: TfmBase;
 begin
   cur_base := GetCurrentFile();
-  if (cur_base = nil) then Exit;
-  cur_base.ShowTreeDescendants();
+  if (cur_base <> nil) then cur_base.ShowTreeDescendants();
 end;
 
 procedure TfmGEDKeeper.actPedigree_dAbovilleExecute(Sender: TObject);
@@ -667,8 +688,7 @@ var
   cur_base: TfmBase;
 begin
   cur_base := GetCurrentFile();
-  if (cur_base = nil) then Exit;
-  cur_base.GenPedigree_dAboville();
+  if (cur_base <> nil) then cur_base.GenPedigree_dAboville();
 end;
 
 procedure TfmGEDKeeper.actPedigree_KonovalovExecute(Sender: TObject);
@@ -676,8 +696,7 @@ var
   cur_base: TfmBase;
 begin
   cur_base := GetCurrentFile();
-  if (cur_base = nil) then Exit;
-  cur_base.GenPedigree_Konovalov();
+  if (cur_base <> nil) then cur_base.GenPedigree_Konovalov();
 end;
 
 procedure TfmGEDKeeper.actMapExecute(Sender: TObject);
@@ -685,8 +704,15 @@ var
   cur_base: TfmBase;
 begin
   cur_base := GetCurrentFile();
-  if (cur_base = nil) then Exit;
-  cur_base.ShowMap();
+  if (cur_base <> nil) then cur_base.ShowMap();
+end;
+
+procedure TfmGEDKeeper.actSourceParseExecute(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base <> nil) then cur_base.SourceParse();
 end;
 
 procedure TfmGEDKeeper.actStatsExecute(Sender: TObject);
@@ -694,8 +720,7 @@ var
   cur_base: TfmBase;
 begin
   cur_base := GetCurrentFile();
-  if (cur_base = nil) then Exit;
-  cur_base.ShowStats();
+  if (cur_base <> nil) then cur_base.ShowStats();
 end;
 
 procedure TfmGEDKeeper.actStereoViewExecute(Sender: TObject);
@@ -703,8 +728,7 @@ var
   cur_base: TfmBase;
 begin
   cur_base := GetCurrentFile();
-  if (cur_base = nil) then Exit;
-  cur_base.ShowStereoView();
+  if (cur_base <> nil) then cur_base.ShowStereoView();
 end;
 
 procedure TfmGEDKeeper.actOptionsExecute(Sender: TObject);
@@ -731,8 +755,7 @@ var
   cur_base: TfmBase;
 begin
   cur_base := GetCurrentFile();
-  if (cur_base = nil) then Exit;
-  cur_base.NavPrev();
+  if (cur_base <> nil) then cur_base.NavPrev();
 end;
 
 procedure TfmGEDKeeper.actNextExecute(Sender: TObject);
@@ -740,8 +763,7 @@ var
   cur_base: TfmBase;
 begin
   cur_base := GetCurrentFile();
-  if (cur_base = nil) then Exit;
-  cur_base.NavNext();
+  if (cur_base <> nil) then cur_base.NavNext();
 end;
 
 procedure TfmGEDKeeper.actPersonScanExecute(Sender: TObject);
@@ -749,8 +771,7 @@ var
   cur_base: TfmBase;
 begin
   cur_base := GetCurrentFile();
-  if (cur_base = nil) then Exit;
-  cur_base.PersonScan();
+  if (cur_base <> nil) then cur_base.PersonScan();
 end;
 
 procedure TfmGEDKeeper.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -790,8 +811,7 @@ var
   cur_base: TfmBase;
 begin
   cur_base := GetCurrentFile();
-  if (cur_base = nil) then Exit;
-  cur_base.DoUndo();
+  if (cur_base <> nil) then cur_base.DoUndo();
 end;
 
 procedure TfmGEDKeeper.actRedoExecute(Sender: TObject);
@@ -799,8 +819,7 @@ var
   cur_base: TfmBase;
 begin
   cur_base := GetCurrentFile();
-  if (cur_base = nil) then Exit;
-  cur_base.DoRedo();
+  if (cur_base <> nil) then cur_base.DoRedo();
 end;
 
 procedure TfmGEDKeeper.actFAQExecute(Sender: TObject);
@@ -818,20 +837,10 @@ procedure TfmGEDKeeper.StatusBarDrawPanel(StatusBar: TStatusBar;
   Panel: TStatusPanel; const Rect: TRect);
 var
   cur_base: TfmBase;
-  ss: TShieldState;
 begin
   cur_base := GetCurrentFile();
-  if (cur_base = nil) then Exit;
-
-  ss := cur_base.ShieldState;
-
-  with StatusBar.Canvas do begin
-    //Brush.Color := clBtnFace;
-    //FillRect(Rect);
-    //Font.Color := clBlack;
-    ImageList2.Draw(StatusBar.Canvas, Rect.Left, Rect.Top, Ord(ss));
-    //TextOut(Rect.left + 20, Rect.top + 2,Message1[0]);
-  end;
+  if (cur_base <> nil)
+  then ImageList2.Draw(StatusBar.Canvas, Rect.Left, Rect.Top, Ord(cur_base.ShieldState));
 end;
 
 procedure TfmGEDKeeper.StatusBarDblClick(Sender: TObject);
@@ -873,15 +882,27 @@ begin
   end;
 end;
 
-procedure TfmGEDKeeper.actDummyPluginExecute(Sender: TObject);
-begin
-  //FPluginMan.RunPlugin(0);
-end;
-
 procedure TfmGEDKeeper.WMKeepModeless(var Msg: TMessage);
 begin
   if Assigned(fmCalcWidget) and fmCalcWidget.Showing
   then EnableWindow(fmCalcWidget.Handle, True);
+end;
+
+procedure TfmGEDKeeper.ExecWidget(Action: TAction; WidgetClass: TFormClass; var Widget: TForm);
+begin
+  if (Action.Checked) and not(Assigned(Widget)) then begin
+    {FPluginMan.RunPlugin(0);}
+    Widget := WidgetClass.Create(nil);
+    Widget.Left := Screen.WorkAreaWidth - Widget.Width - 10; {!!!}
+    Widget.Top := Screen.WorkAreaHeight - Widget.Height - 10; {!!!}
+    Widget.Show;
+  end else begin
+    FreeAndNil(Widget);
+    {FPluginMan.RunPlugin(1);}
+  end;
+
+  // если хранить список открытых виджетов, то можно сделать динамическую
+  // установку их один над другим по мере подключения
 end;
 
 procedure TfmGEDKeeper.actExpCalcExecute(Sender: TObject);
@@ -945,8 +966,7 @@ var
   cur_base: TfmBase;
 begin
   cur_base := GetCurrentFile();
-  if (cur_base = nil) then Exit;
-  cur_base.ShowOrganizer();
+  if (cur_base <> nil) then cur_base.ShowOrganizer();
 end;
 
 procedure TfmGEDKeeper.actDBImportExecute(Sender: TObject);
@@ -954,8 +974,15 @@ var
   cur_base: TfmBase;
 begin
   cur_base := GetCurrentFile();
-  if (cur_base = nil) then Exit;
-  cur_base.ImportDB();
+  if (cur_base <> nil) then cur_base.ImportDB();
+end;
+
+procedure TfmGEDKeeper.actScriptsExecute(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base <> nil) then cur_base.ShowScriptDaemon();
 end;
 
 end.

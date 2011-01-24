@@ -33,6 +33,7 @@ type
     procedure btnCreateClick(Sender: TObject);
     procedure EditBirthDateChange(Sender: TObject);
     procedure EditDeathDateChange(Sender: TObject);
+    procedure EditNameKeyPress(Sender: TObject; var Key: Char);
   private
     function GetBase: TfmBase;
   public
@@ -41,7 +42,7 @@ type
 
 implementation
 
-uses bsComUtils, GKMain, GedCom551, GKCommon;
+uses bsComUtils, GKMain, GedCom551, GKEngine;
 
 {$R *.dfm}
 
@@ -76,10 +77,10 @@ begin
   Base.ChangeRecord(iRec);
 
   if (CheckBirth.Checked)
-  then CreateIEvent(Base.Tree, iRec, 'BIRT', StrToGEDCOMDate(EditBirthDate.Text), EditBirthPlace.Text);
+  then CreateEventEx(Base.Tree, iRec, 'BIRT', StrToGEDCOMDate(EditBirthDate.Text), EditBirthPlace.Text);
 
   if (CheckDeath.Checked)
-  then CreateIEvent(Base.Tree, iRec, 'DEAT', StrToGEDCOMDate(EditDeathDate.Text), EditDeathPlace.Text);
+  then CreateEventEx(Base.Tree, iRec, 'DEAT', StrToGEDCOMDate(EditDeathDate.Text), EditDeathPlace.Text);
 
   if (MemoNote.Text <> '')
   then CreateNoteEx(Base.Tree, MemoNote.Lines, iRec);
@@ -110,6 +111,14 @@ end;
 function TfmPersonScan.GetBase: TfmBase;
 begin
   Result := TfmBase(Owner);
+end;
+
+procedure TfmPersonScan.EditNameKeyPress(Sender: TObject; var Key: Char);
+begin
+  if (Key = '/') then begin
+    Key := #0;
+    MessageBeep(MB_ICONEXCLAMATION);
+  end;
 end;
 
 end.

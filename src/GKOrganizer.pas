@@ -3,8 +3,7 @@ unit GKOrganizer;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, GKBase, ComCtrls, GKLists;
+  SysUtils, Classes, Controls, Forms, Dialogs, GKBase, ComCtrls, GKLists;
 
 type
   TfmOrganizer = class(TForm)
@@ -32,7 +31,7 @@ var
 
 implementation
 
-uses GedCom551, GKCommon;
+uses GedCom551, GKEngine;
 
 {$R *.dfm}
 
@@ -105,9 +104,6 @@ begin
 
       for k := 0 to i_rec.IndividualEventsCount - 1 do
         PrepareEvent(nm, i_rec.IndividualEvents[k]);
-
-      for k := 0 to i_rec.IndividualAttributesCount - 1 do
-        PrepareEvent(nm, i_rec.IndividualAttributes[k]);
     end;
   end;
 

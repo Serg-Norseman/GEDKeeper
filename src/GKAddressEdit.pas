@@ -5,9 +5,8 @@ unit GKAddressEdit;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, GedCom551, StdCtrls, Buttons, ComCtrls, ExtCtrls, GKBase, GKCommon,
-  GKLists;
+  SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons, ComCtrls,
+  ExtCtrls, GedCom551, GKBase, GKEngine, GKLists;
 
 type
   TfmAddressEdit = class(TForm)

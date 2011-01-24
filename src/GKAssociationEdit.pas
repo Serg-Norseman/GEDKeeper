@@ -32,7 +32,7 @@ type
 
 implementation
 
-uses GKCommon, GKRecordSelect, GKMain;
+uses GKEngine, GKRecordSelect, GKMain;
 
 {$R *.dfm}
 

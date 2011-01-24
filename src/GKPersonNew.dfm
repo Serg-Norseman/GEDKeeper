@@ -52,6 +52,7 @@ object fmPersonNew: TfmPersonNew
     Height = 21
     TabOrder = 0
     OnKeyDown = edFamilyKeyDown
+    OnKeyPress = edFamilyKeyPress
   end
   object edName: TEdit
     Left = 64
@@ -60,6 +61,7 @@ object fmPersonNew: TfmPersonNew
     Height = 21
     TabOrder = 1
     OnKeyDown = edFamilyKeyDown
+    OnKeyPress = edFamilyKeyPress
   end
   object edPatronymic: TComboBox
     Left = 64
@@ -69,6 +71,7 @@ object fmPersonNew: TfmPersonNew
     ItemHeight = 13
     TabOrder = 2
     OnKeyDown = edFamilyKeyDown
+    OnKeyPress = edFamilyKeyPress
   end
   object EditSex: TComboBox
     Left = 64

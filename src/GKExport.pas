@@ -5,7 +5,7 @@ unit GKExport;
 interface
 
 uses
-  SysUtils, Classes, Contnrs, GedCom551, GKCommon;
+  SysUtils, Classes, Contnrs, GedCom551, GKEngine, GKCommon;
 
 procedure WriteStr(aStream: TFileStream; aStr: string);
 procedure WriteHeader(aStream: TFileStream; aTitle: string);
@@ -73,9 +73,13 @@ type
     Id: string;
     iRec: TGEDCOMIndividualRecord;
     Level: Integer;
-    Sources: string;
+    BirthDate, Sources: string;
+    FamilyOrder: Integer;
 
+    // runtime for dAboville index
     ChildIdx: Integer;
+
+    function GetOrderStr(): string;
   end;
 
   TPedigree = class
@@ -101,8 +105,8 @@ type
 implementation
 
 uses
-  Windows, ShellAPI, XLSFile, Dialogs, bsComUtils, GKProgress, Math,
-  GKMain;
+  Windows, ShellAPI, XLSFile, Dialogs, bsComUtils, Math,
+  GKUtils, GKProgress, GKMain;
 
 procedure WriteStr(aStream: TFileStream; aStr: string);
 begin
@@ -428,7 +432,7 @@ var
   m, d: Word;
   rec: TGEDCOMRecord;
   ind: TGEDCOMIndividualRecord;
-  ev: TGEDCOMIndividualEvent;
+  ev: TGEDCOMCustomEvent;
   years, fams: TStringList;
   yst, index_str: string;
   fs_timeline: TFileStream;
@@ -794,7 +798,7 @@ begin
         xls.AddStrCell( 2, row, AllBorders, fam);
         xls.AddStrCell( 3, row, AllBorders, nam);
         xls.AddStrCell( 4, row, AllBorders, pat);
-        xls.AddStrCell( 5, row, AllBorders, SexSigns[ind.Sex]);
+        xls.AddStrCell( 5, row, AllBorders, SexData[ind.Sex].ViewSign);
         xls.AddStrCell( 6, row, AllBorders, GetBirthDate(ind, dfDD_MM_YYYY));
         xls.AddStrCell( 7, row, AllBorders, GetDeathDate(ind, dfDD_MM_YYYY));
         xls.AddStrCell( 8, row, AllBorders, GetBirthPlace(ind));
@@ -820,11 +824,22 @@ end;
 
 {==============================================================================}
 
+function TPersonObj.GetOrderStr(): string;
+var
+  order: Char;
+begin
+  order := Chr(FamilyOrder);
+
+  if (Parent = nil)
+  then Result := order
+  else Result := Parent.GetOrderStr() + order;
+end;
+
 { TPedigree }
 
 type
   TEventObj = class
-    Event: TGEDCOMIndividualEvent;
+    Event: TGEDCOMCustomEvent;
     iRec: TGEDCOMIndividualRecord;
 
     function GetDate(): TDateTime;
@@ -843,7 +858,7 @@ const
 var
   ev_list: TObjectList;
 
-  procedure AddEvent(aEvent: TGEDCOMIndividualEvent; iRec: TGEDCOMIndividualRecord);
+  procedure AddEvent(aEvent: TGEDCOMCustomEvent; iRec: TGEDCOMIndividualRecord);
   var
     evObj: TEventObj;
   begin
@@ -869,7 +884,7 @@ var
   procedure WriteEventList();
   var
     i, k, ev: Integer;
-    event: TGEDCOMIndividualEvent;
+    event: TGEDCOMCustomEvent;
     evObj: TEventObj;
     st, dt: string;
   begin
@@ -948,7 +963,7 @@ var
   function GetPedigreeLifeStr(iRec: TGEDCOMIndividualRecord): string;
   var
     ds, ps, res_str: string;
-    ev: TGEDCOMIndividualEvent;
+    ev: TGEDCOMCustomEvent;
   begin
     res_str := '';
 
@@ -999,15 +1014,14 @@ var
   procedure WriteExcessFmt();
   var
     i, k: Integer;
-    event: TGEDCOMIndividualEvent;
-    attr: TGEDCOMIndividualAttribute;
+    event: TGEDCOMCustomEvent;
     family: TGEDCOMFamilyRecord;
     irec: TGEDCOMIndividualRecord;
     st, unk: string;
     sp: TGEDCOMPointer;
     note: TGEDCOMNotes;
   begin
-    WriteStr(aStream, '<br>Пол: ' + Sex[aPerson.iRec.Sex]);
+    WriteStr(aStream, '<br>Пол: ' + SexData[aPerson.iRec.Sex].ViewName);
 
     st := GetLifeExpectancy(aPerson.iRec);
     if (st <> '?') and (st <> '')
@@ -1025,13 +1039,6 @@ var
       then WriteStr(aStream, '<br>Мать: ' + GetNameStr(irec) + idLink(FindPerson(irec)));
     end;
 
-    if (FOptions.IncludeAttributes) then begin
-      for i := 0 to aPerson.iRec.IndividualAttributesCount - 1 do begin
-        attr := aPerson.iRec.IndividualAttributes[i];
-        WriteStr(aStream, '<br>' + GetAttributeStr(attr));
-      end;
-    end;
-
     ev_list := TObjectList.Create(True);
     try
       // загрузка событий
@@ -1039,7 +1046,10 @@ var
         WriteStr(aStream, '<p>События: <ul>');
         for i := 0 to aPerson.iRec.IndividualEventsCount - 1 do begin
           event := aPerson.iRec.IndividualEvents[i];
-          AddEvent(event, aPerson.iRec);
+
+          if not(event is TGEDCOMIndividualAttribute)
+          or ((event is TGEDCOMIndividualAttribute) and (FOptions.IncludeAttributes))
+          then AddEvent(event, aPerson.iRec);
         end;
         WriteEventList();
         WriteStr(aStream, '</ul></p>');
@@ -1153,28 +1163,32 @@ end;
 procedure TPedigree.Generate(aDir: string; aTree: TGEDCOMTree;
   iRec: TGEDCOMIndividualRecord);
 var
-  levCount: Integer;
   fs_index: TFileStream;
 
-  procedure Step(aParent: TPersonObj; iRec: TGEDCOMIndividualRecord; aLevel: Integer);
+  procedure Step(aParent: TPersonObj; iRec: TGEDCOMIndividualRecord; aLevel, aFamilyOrder: Integer);
   var
     family: TGEDCOMFamilyRecord;
     child: TGEDCOMIndividualRecord;
     i, k: Integer;
     res: TPersonObj;
-    sn, src_name: string;
+    sn, src_name, i_sources: string;
     cit: TGEDCOMSourceCitation;
     sourceRec: TGEDCOMSourceRecord;
   begin
     if (iRec = nil) then Exit;
+
+    //
 
     res := TPersonObj.Create;
     res.Parent := aParent;
     res.iRec := iRec;
     res.Level := aLevel;
     res.ChildIdx := 0;
+    res.BirthDate := GetBirthDate(iRec, dfYYYY_MM_DD, True);
+    res.FamilyOrder := aFamilyOrder;
     FPersonList.Add(res);
 
+    i_sources := '';
     if (FOptions.IncludeSources) then begin
       for i := 0 to iRec.SourceCitationsCount - 1 do begin
         cit := iRec.SourceCitations[i];
@@ -1188,25 +1202,26 @@ var
           if (k < 0)
           then k := FSourceList.Add(src_name);
 
-          if (res.Sources <> '') then res.Sources := res.Sources + ',';
+          if (i_sources <> '') then i_sources := i_sources + ',';
 
           sn := IntToStr(k + 1);
-          res.Sources := res.Sources + '<a href="#src' + sn + '">' + sn + '</a>';
+          i_sources := i_sources + '<a href="#src' + sn + '">' + sn + '</a>';
         end;
       end;
     end;
+    res.Sources := i_sources;
 
-    if (levCount < aLevel)
-    then levCount := aLevel;
-    //WriteStr(fs_index, GetNameStr(iRec) + ' (' + IntToStr(aLevel) + ')<br>');
+    //
 
     for k := 0 to iRec.SpouseToFamilyLinksCount - 1 do begin
       family := iRec.SpouseToFamilyLinks[k].Family;
       if not(IsRecordAccess(family.Restriction, FShieldState)) then Continue;
 
+      family.SortChilds();
+
       for i := 0 to family.ChildrenCount - 1 do begin
         child := TGEDCOMIndividualRecord(family.Children[i].Value);
-        Step(res, child, aLevel + 1);
+        Step(res, child, aLevel + 1, i + 1);
       end;
     end;
   end;
@@ -1215,28 +1230,25 @@ var
   var
     i, k, p: Integer;
     obj, obj2: TPersonObj;
-    pid: string;
+    pid, i_str, k_str: string;
   begin
-    // сортировка
-    for i := 0 to FPersonList.Count - 1 do begin
-      for k := i + 1 to FPersonList.Count - 1 do begin
-        if (TPersonObj(FPersonList[i]).Level > TPersonObj(FPersonList[k]).Level)
-        then FPersonList.Exchange(i, k);
-      end;
-    end;
-
+    //// сортировка
+    // не самая хорошая реализация по эффективности и скорости...
+    // но зато получается индексированная сортировка по нескольким критериям
     for i := 0 to FPersonList.Count - 1 do begin
       for k := i + 1 to FPersonList.Count - 1 do begin
         obj := TPersonObj(FPersonList[i]);
         obj2 := TPersonObj(FPersonList[k]);
 
-        if (GetNameStr(obj.iRec) > GetNameStr(obj2.iRec))
-        and (obj.Level = obj2.Level)
+        i_str := Chr(obj.Level) + obj.GetOrderStr();
+        k_str := Chr(obj2.Level) + obj2.GetOrderStr();
+
+        if (i_str > k_str)
         then FPersonList.Exchange(i, k);
       end;
     end;
 
-    // реиндексация
+    //// реиндексация в общепринятых форматах
     for i := 0 to FPersonList.Count - 1 do begin
       obj := TPersonObj(FPersonList[i]);
 
@@ -1267,7 +1279,7 @@ var
 
 var
   title, sn: string;
-  i, k: Integer;
+  i, k, cur_level: Integer;
   pObj: TPersonObj;
 begin
   if (iRec = nil) then begin
@@ -1286,22 +1298,26 @@ begin
   FPersonList := TObjectList.Create(True);
   FSourceList := TStringList.Create;
   try
-    levCount := 0;
-    Step(nil, iRec, 1);
+    Step(nil, iRec, 1, 1);
     ReIndex();
 
-    for i := 1 to levCount do begin
-      WriteStr(fs_index, '<h3>Поколение ' + GetRome(i) + '</h3>');
+    // вывод по поколениям
+    cur_level := 0;
+    for k := 0 to FPersonList.Count - 1 do begin
+      pObj := TPersonObj(FPersonList[k]);
 
-      WriteStr(fs_index, '<ul>');
-      for k := 0 to FPersonList.Count - 1 do begin
-        pObj := TPersonObj(FPersonList[k]);
+      // определение момента вывода заголовка поколения
+      if (cur_level <> pObj.Level) then begin
+        if (cur_level > 0) then WriteStr(fs_index, '</ul>');
 
-        if (pObj.Level = i)
-        then WritePerson(fs_index, aTree, pObj);
+        cur_level := pObj.Level;
+
+        WriteStr(fs_index, '<h3>Поколение ' + GetRome(cur_level) + '</h3><ul>');
       end;
-      WriteStr(fs_index, '</ul>');
+
+      WritePerson(fs_index, aTree, pObj);
     end;
+    WriteStr(fs_index, '</ul>');
 
     WriteStr(fs_index, '<h3>Источники</h3>');
     for i := 0 to FSourceList.Count - 1 do begin

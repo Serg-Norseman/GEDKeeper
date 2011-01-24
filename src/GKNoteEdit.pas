@@ -27,7 +27,7 @@ type
 
 implementation
 
-uses GKMain, GKCommon;
+uses GKMain;
 
 {$R *.dfm}
 

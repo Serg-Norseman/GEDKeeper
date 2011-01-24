@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, StdCtrls, Buttons, ComCtrls, ExtCtrls,
-  GedCom551, GKBase, GKCommon, GKLists;
+  GedCom551, GKBase, GKEngine, GKLists;
 
 type
   TfmRepositoryEdit = class(TForm)

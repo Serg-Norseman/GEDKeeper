@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons, ComCtrls,
-  GedCom551, GKBase, GKCommon, GKLists, bsCtrls;
+  GedCom551, GKBase, GKEngine, GKLists, bsCtrls;
 
 type
   TfmMediaEdit = class(TForm)

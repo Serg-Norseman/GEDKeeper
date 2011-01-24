@@ -107,7 +107,7 @@ type
 
 implementation
 
-uses GKCommon, GKMain, Dialogs, Math;
+uses GKEngine, GKMain, Dialogs, Math;
 
 {$R *.dfm}
 
@@ -175,7 +175,7 @@ var
   i, k, idx, year: Integer;
   m, d: Word;
   iRec: TGEDCOMIndividualRecord;
-  event: TGEDCOMIndividualEvent;
+  event: TGEDCOMCustomEvent;
   fRec: TGEDCOMFamilyRecord;
   V, fam, nam, pat, iName: string;
   vals, buffer: TStringList;

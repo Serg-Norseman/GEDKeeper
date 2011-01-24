@@ -6,7 +6,7 @@ interface
 
 uses
   Types, Windows, Classes, Graphics, Controls, ComCtrls, ActnList, Menus,
-  StdCtrls, GedCom551, GKCommon, bsCtrls;
+  StdCtrls, GedCom551, GKEngine, GKCommon, bsCtrls;
 
 type
   TGKListView = TBSListView;
@@ -345,7 +345,7 @@ implementation
 
 uses
   {$IFDEF PROFILER}ZProfiler, {$ENDIF}
-  SysUtils, GKMain, bsComUtils, ExtCtrls;
+  SysUtils, GKUtils, GKMain, bsComUtils, ExtCtrls;
 
 {==============================================================================}
 
@@ -921,12 +921,6 @@ function TIndividualListMan.CheckFilter(aFilter: TPersonsFilter; aShieldState: T
       Result := IsMatchesMask(place, aFilter.Residence);
       if (Result) then Exit;
     end;
-
-    for i := 0 to FRec.IndividualAttributesCount - 1 do begin
-      place := GetPlaceStr(FRec.IndividualAttributes[i], addr);
-      Result := IsMatchesMask(place, aFilter.Residence);
-      if (Result) then Exit;
-    end;
   end;
 
 var
@@ -1052,13 +1046,6 @@ begin
 
   bd_ev := nil;
   dd_ev := nil;
-  for i := 0 to FRec.IndividualEventsCount - 1 do begin
-    ev := FRec.IndividualEvents[i];
-
-    if (ev.Name = 'BIRT') and (bd_ev = nil) then bd_ev := ev
-    else
-    if (ev.Name = 'DEAT') and (dd_ev = nil) then dd_ev := ev;
-  end;
 
   residence := '';
   religion := '';
@@ -1071,9 +1058,13 @@ begin
   mili_dis := '';
   mili_rank := '';
 
-  for i := 0 to FRec.IndividualAttributesCount - 1 do begin
-    ev := FRec.IndividualAttributes[i];
+  for i := 0 to FRec.IndividualEventsCount - 1 do begin
+    ev := FRec.IndividualEvents[i];
 
+    if (ev.Name = 'BIRT') and (bd_ev = nil) then bd_ev := ev
+    else
+    if (ev.Name = 'DEAT') and (dd_ev = nil) then dd_ev := ev
+    else
     if (ev.Name = 'RESI') and (residence = '')
     then residence := GetPlaceStr(ev, fmGEDKeeper.Options.PlacesWithAddress)
     else
@@ -1140,7 +1131,7 @@ begin
         aItem.SubItems.Add(GetNickStr(FRec));
 
       pctSex:
-        aItem.SubItems.Add(SexSigns[FRec.Sex]);
+        aItem.SubItems.Add(SexData[FRec.Sex].ViewSign);
 
       pctBirthDate:
         aItem.SubItems.Add(GEDCOMEventToDateStr(bd_ev, fmGEDKeeper.Options.DefDateFormat));
@@ -1197,6 +1188,12 @@ begin
 
       pctChangeDate:
         if (isMain) then aItem.SubItems.Add(GetChangeDate(FRec));
+
+      pctBookmark: if (isMain) then begin
+        if (FRec.Bookmark)
+        then aItem.SubItems.Add('*')
+        else aItem.SubItems.Add(' ');
+      end;
     end;
   end;
 end;
@@ -1243,7 +1240,7 @@ begin
     end;
 
     pctNick: Result := GetNickStr(FRec);
-    pctSex: Result := SexSigns[FRec.Sex];
+    pctSex: Result := SexData[FRec.Sex].ViewSign;
 
     pctBirthDate, pctBirthPlace: begin
       ev := GetIndividualEvent(FRec, 'BIRT');
@@ -1282,6 +1279,12 @@ begin
     pctMiliRank: Result := GetAttributeValue(FRec, '_MILI_RANK');
 
     pctChangeDate: Result := GetChangeDate(FRec);
+
+    pctBookmark: begin
+      if (FRec.Bookmark)
+      then Result := '*'
+      else Result := ' ';
+    end;
   end;
 end;
 
@@ -1356,7 +1359,7 @@ begin
         pctAge, pctLifeExpectancy, pctDaysForBirth, pctGroups,
         pctReligion, pctNationality, pctEducation, pctOccupation, pctCaste,
         pctMili, pctMiliInd, pctMiliDis, pctMiliRank,
-        pctChangeDate: if isMain then begin
+        pctChangeDate, pctBookmark: if isMain then begin
           AddListColumn(aList, PersonColumnsName[col_type].Name, PersonColumnsName[col_type].DefWidth);
           SetColMap(Ord(col_type), 0);
         end;
@@ -1967,19 +1970,26 @@ end;
 
 procedure TRecordsView.ListGetItemData(Sender: TObject; Item: TListItem);
 var
+  idx: Integer;
   rec: TGEDCOMRecord;
 begin
-  if (Item = nil) then Exit;
-  if (Item.Index < 0) or (Item.Index >= FContentList.Count) then Exit;
+  try
+    {$IFDEF PROFILER}Profiler.Mark(11, True);{$ENDIF}
 
-  {$IFDEF PROFILER}Profiler.Mark(11, True);{$ENDIF}
+    if Assigned(Item) then begin
+      idx := Item.Index;
+      if (idx >= 0) and (idx < FContentList.Count) then begin
+        rec := TGEDCOMRecord(FContentList[idx]);
+        Item.Caption := IntToStr(GetId(rec));
+        FListMan.Fetch(rec);
+        FListMan.UpdateItem(Item, FIsMainList);
+      end;
+    end;
 
-  rec := TGEDCOMRecord(FContentList[Item.Index]);
-  Item.Caption := IntToStr(GetId(rec));
-  FListMan.Fetch(rec);
-  FListMan.UpdateItem(Item, FIsMainList);
-
-  {$IFDEF PROFILER}Profiler.Mark(11, False);{$ENDIF}
+    {$IFDEF PROFILER}Profiler.Mark(11, False);{$ENDIF}
+  except
+    on E: Exception do LogWrite('ListGetItemData(): ' + E.Message);
+  end;
 end;
 
 procedure TRecordsView.ListDataFind(Sender: TObject; Find: TItemFind;

@@ -3,8 +3,8 @@ unit GKTimeLine;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ComCtrls, GedCom551, GKBase, GKLists;
+  SysUtils, Classes, Graphics, Controls, Forms, Dialogs, ComCtrls,
+  GedCom551, GKBase, GKLists;
 
 type
   TfmTimeLine = class(TForm)
@@ -30,7 +30,7 @@ implementation
 {$R *.dfm}
 
 uses
-  GKCommon, GKMain;
+  GKMain;
 
 procedure TfmTimeLine.CheckTimeWin(aBase: TfmBase);
 begin

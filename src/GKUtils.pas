@@ -1,20 +1,59 @@
-unit StorageCrypt;
+unit GKUtils;
 
 interface
 
 uses
-  SysUtils;//, System;
+  Classes;
+
+{==============================================================================}
 
 function scDecrypt(const S: AnsiString; Key: Word): AnsiString;
 function scEncrypt(const S: AnsiString; Key: Word): AnsiString; 
 function GenKey(aLength: Integer; IsNum: Boolean = False): string;
 
+{==============================================================================}
+
+procedure LoadExtFile(const aFileName: string);
+
+// замена данных в потоке с кодировки 1251 на UTF-8
+function StreamToUtf8Stream(Stream: TStream): UTF8String;
+
+function ConStrings(aStrings: TStrings): string;
+
+type
+  TQSortCompare = function (Item1, Item2: Pointer): Integer of object;
+
+procedure QuickSort(SortList: TList; SCompare: TQSortCompare);
+
+{==============================================================================}
+
+type
+  TTextFileEx = class(TObject)
+  private
+    FStream: TStream;
+  public
+    constructor Create(aStream: TStream);
+
+    function Eof(): Boolean;
+    function ReadLn(): string;
+    procedure WriteLn(const s: string); overload;
+  end;
+
+const
+  LineEnd = #13#10;
+
+{==============================================================================}
+
 implementation
 
-uses Math;
+uses
+  {$IFDEF DELPHI_NET}System.IO,{$ENDIF}
+  Windows, SysUtils, ShellAPI, Math;
 
-const 
-  C1 = 94268; //52845; 
+{==============================================================================}
+
+const
+  C1 = 94268; //52845;
   C2 = 28446; //22719;
   
 function GenKey(aLength: Integer; IsNum: Boolean = False): string;
@@ -60,7 +99,7 @@ const
     20, 21, 22, 23, 24, 25, 0, 0, 0, 0, 0, 0, 26, 27, 28, 29, 30, 
     31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 
     46, 47, 48, 49, 50, 51, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
@@ -150,7 +189,7 @@ function PostProcess(const S: AnsiString): AnsiString;
 var 
   SS: AnsiString; 
 begin 
-  SS := S; 
+  SS := S;
   Result := ''; 
   while SS <> '' do 
   begin 
@@ -178,4 +217,137 @@ begin
   Result := PostProcess(InternalEncrypt(S, Key)) 
 end; 
 
-end. 
+{==============================================================================}
+
+procedure LoadExtFile(const aFileName: string);
+begin
+  {$IFNDEF DELPHI_NET}
+  ShellExecute(0, 'open', PChar(aFileName), nil, nil, SW_SHOW);
+  {$ELSE}
+  ShellExecute(0, 'open', (aFileName), '', '', SW_SHOW);
+  {$ENDIF}
+end;
+
+// замена данных в потоке с кодировки 1251 на UTF-8
+function StreamToUtf8Stream(Stream: TStream): UTF8String;
+var
+  s: string;
+begin
+  SetLength(s, Stream.Size);
+  Stream.Seek(0, soFromBeginning);
+
+  {$IFNDEF DELPHI_NET}
+  Stream.Read(s[1], Stream.Size);
+  {$ELSE}
+  s := SReadString(Stream);
+  {$ENDIF}
+
+  Result := AnsiToUtf8(s);
+  Stream.Size := 0;
+
+  {$IFNDEF DELPHI_NET}
+  Stream.Write(Result[1], Length(Result));
+  {$ELSE}
+  SWriteString(Stream, Result);
+  {$ENDIF}
+end;
+
+function ConStrings(aStrings: TStrings): string;
+var
+  i: Integer;
+begin
+  Result := '';
+
+  for i := 0 to aStrings.Count - 1 do begin
+    if (Result <> '') then Result := Result + ' ';
+    Result := Result + Trim(aStrings[i]);
+  end;
+end;
+
+procedure QuickSort(SortList: TList; SCompare: TQSortCompare);
+
+  procedure IQuickSort(L, R: Integer);
+  var
+    I, J: Integer;
+    P, T: Pointer;
+  begin
+    repeat
+      I := L;
+      J := R;
+      P := SortList[(L + R) shr 1];
+      repeat
+        while SCompare(SortList[I], P) < 0 do
+          Inc(I);
+        while SCompare(SortList[J], P) > 0 do
+          Dec(J);
+        if I <= J then
+        begin
+          T := SortList[I];
+          SortList[I] := SortList[J];
+          SortList[J] := T;
+          Inc(I);
+          Dec(J);
+        end;
+      until (I > J);
+
+      if (L < J) then IQuickSort(L, J);
+
+      L := I;
+    until I >= R;
+  end;
+
+begin
+  if (SortList <> nil) and (SortList.Count > 0) then
+    IQuickSort(0, SortList.Count - 1);
+end;
+
+{==============================================================================}
+
+{ TTextFileEx }
+
+constructor TTextFileEx.Create(aStream: TStream);
+begin
+  inherited Create;
+  FStream := aStream;
+end;
+
+function TTextFileEx.Eof(): Boolean;
+begin
+  Result := (FStream.Position >= FStream.Size);
+end;
+
+function TTextFileEx.ReadLn(): string;
+var
+  c: Char;
+begin
+  Result := '';
+
+  while not Eof do begin
+    FStream.Read(c, SizeOf(c));
+
+    if (c = #13) then begin
+      FStream.Read(c, SizeOf(c));
+
+      if (c <> #10)
+      then FStream.Seek(SizeOf(c), soFromCurrent);
+
+      Break;
+    end;
+
+    if (c = #10)
+    then Break;
+
+    Result := Result + c;
+  end;
+end;
+
+procedure TTextFileEx.WriteLn(const s: string);
+var
+  i: Integer;
+begin
+  for i := 1 to Length(s) do
+    Write(s[i], SizeOf(s[i]));
+  Write(LineEnd, Length(LineEnd));
+end;
+
+end.

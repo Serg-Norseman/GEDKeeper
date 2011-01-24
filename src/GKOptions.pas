@@ -31,9 +31,6 @@ type
     PanUnHusbandColor: TPanel;
     PanUnWifeColor: TPanel;
     ColorDialog1: TColorDialog;
-    GroupBox3: TGroupBox;
-    chkAppRegister: TCheckBox;
-    chkExtRegister: TCheckBox;
     GroupBox4: TGroupBox;
     Label1: TLabel;
     Label2: TLabel;
@@ -59,15 +56,15 @@ type
     rgFNPFormat: TRadioGroup;
     rgDateFormat: TRadioGroup;
     chkPlacesWithAddress: TCheckBox;
-    EditPedigreeFormat: TRadioGroup;
     GroupBox7: TGroupBox;
     chkShowOnStart: TCheckBox;
     rgEditMode: TRadioGroup;
-    chkChildlessExclude: TCheckBox;
     chkHighlightUnparented: TCheckBox;
     chkHighlightUnmarried: TCheckBox;
     chkOnlyYears: TCheckBox;
     chkSignsVisible: TCheckBox;
+    chkChildlessExclude: TCheckBox;
+    EditPedigreeFormat: TRadioGroup;
     procedure FormShow(Sender: TObject);
     procedure btnAcceptClick(Sender: TObject);
     procedure PanMaleColorClick(Sender: TObject);
@@ -87,7 +84,7 @@ type
 
 implementation
 
-uses GedCom551, GKMain, bsWinUtils;
+uses GedCom551, GKEngine, GKMain, bsWinUtils;
 
 {$R *.dfm}
 
@@ -121,14 +118,6 @@ begin
   PanUnkSexColor.Color := FOptions.ChartOptions.UnkSexColor;
   PanUnHusbandColor.Color := FOptions.ChartOptions.UnHusbandColor;
   PanUnWifeColor.Color := FOptions.ChartOptions.UnWifeColor;
-
-  {$IFNDEF DELPHI_NET}
-  chkAppRegister.Checked := ProgramIsRegistered();
-  chkExtRegister.Checked := ExtIsRegistered('.ged', 'GEDCOM.File');
-  {$ELSE}
-  chkAppRegister.Enabled := False;
-  chkExtRegister.Enabled := False;
-  {$ENDIF}
 
   chkProxy.Checked := FOptions.Proxy.UseProxy;
   edProxyServer.Text := FOptions.Proxy.Server;
@@ -181,11 +170,6 @@ begin
   FOptions.ChartOptions.UnkSexColor := PanUnkSexColor.Color;
   FOptions.ChartOptions.UnHusbandColor := PanUnHusbandColor.Color;
   FOptions.ChartOptions.UnWifeColor := PanUnWifeColor.Color;
-
-  {$IFNDEF DELPHI_NET}
-  RegisterProgram(chkAppRegister.Checked);
-  RegisterExt('.ged', 'GEDCOM.File', 'GEDCOM File', 0, chkExtRegister.Checked);
-  {$ENDIF}
 
   FOptions.Proxy.UseProxy := chkProxy.Checked;
   FOptions.Proxy.Server := edProxyServer.Text;

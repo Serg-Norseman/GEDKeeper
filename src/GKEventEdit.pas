@@ -6,8 +6,8 @@ interface
 
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls,
-  Buttons, ComCtrls, ExtCtrls, Mask, GedCom551, GKCommon, GKBase, GKLists,
-  bsCtrls;
+  Buttons, ComCtrls, ExtCtrls, Mask, GedCom551, GKEngine, GKBase,
+  GKLists, bsCtrls;
 
 type
   TfmEventEdit = class(TForm)
@@ -361,7 +361,7 @@ end;
 
 procedure TfmEventEdit.btnPlaceAddClick(Sender: TObject);
 begin
-  FLocation := TGEDCOMLocationRecord(Base.SelectRecord(smLocation, []));
+  FLocation := TGEDCOMLocationRecord(Base.SelectRecord(rtLocation, []));
   ControlsRefresh();
 end;
 

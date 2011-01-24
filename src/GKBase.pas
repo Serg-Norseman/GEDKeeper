@@ -6,8 +6,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  ComCtrls, StdCtrls, ExtCtrls, Buttons, Menus, Masks, ActnList,
-  GKCommon, GedCom551, HTMemo, bsCtrls, GKUIToolkit, GKLists;
+  ComCtrls, StdCtrls, ExtCtrls, Buttons, Menus, Masks, ActnList, GKEngine,
+  GKCommon, GedCom551, HTMemo, bsCtrls, GKLists;
 
 type
   TFilePropertiesMode = (fpmAuthor, fpmDiags, fpmAdvanced);
@@ -16,6 +16,8 @@ type
     Total: Integer;
     Filtered: Integer;
   end;
+
+  TRecNotify = (rnDelete);
 
   TfmBase = class(TForm)
     PageRecords: TPageControl;
@@ -117,7 +119,6 @@ type
     function  GetChildFamily(iChild: TGEDCOMIndividualRecord; aCanCreate: Boolean;
       aNewParent: TGEDCOMIndividualRecord): TGEDCOMFamilyRecord;
     function  GetCurFileTempPath(): string;
-    function  GenRecordLink(aRecord: TGEDCOMRecord; aSigned: Boolean = True): string;
     function  GetSelectedPerson(): TGEDCOMIndividualRecord;
     procedure ListsRefresh(aTitles: Boolean = False);
     procedure NavNext();
@@ -126,21 +127,25 @@ type
     procedure RecordAdd();
     procedure RecordDelete();
     procedure RecordEdit(Sender: TObject);
+    procedure RecordNotify(aRecord: TGEDCOMRecord; aNotify: TRecNotify);
     procedure SearchSubjectLinks(aInRecord, aSubject: TGEDCOMRecord; aToList: TStrings);
     function  SelectFamily(aTarget: TGEDCOMIndividualRecord): TGEDCOMFamilyRecord;
     function  SelectPerson(aTarget: TGEDCOMIndividualRecord; aTargetMode: TTargetMode;
       aNeedSex: TGEDCOMSex): TGEDCOMIndividualRecord;
-    function  SelectRecord(aMode: TSelectMode; anArgs: array of const): TGEDCOMRecord;
+    function  SelectRecord(aMode: TGEDCOMRecordType; anArgs: array of const): TGEDCOMRecord;
     procedure SelectRecordByXRef(XRef: string);
     procedure SetFilter();
     procedure ShowMap();
     procedure ShowMedia(aMediaRec: TGEDCOMMultimediaRecord);
     procedure ShowOrganizer();
+    procedure ShowRecordInfo(aRecord: TGEDCOMRecord);
+    procedure ShowScriptDaemon(); 
     procedure ShowStats();
     procedure ShowStereoView();
     procedure ShowTips();
     procedure ShowTreeAncestors();
     procedure ShowTreeDescendants();
+    procedure SourceParse();
     procedure TreeTools();
 
     function CheckPath(): Boolean;
@@ -153,11 +158,11 @@ type
     procedure MediaLoad(aRefName: string; var aFileName: string); overload;
     procedure MediaSave(aFileName: string; aStoreType: TGKStoreType; var aRefPath: string);
 
+    function ModifyName(var aName: TName): Boolean;
+    function DefinePatronymic(aName: string; aSex: TGEDCOMSex; aConfirm: Boolean): string;
+
     function GroupMemberAdd(aGroup: TGEDCOMGroupRecord; aMember: TGEDCOMIndividualRecord): Boolean;
     function GroupMemberRemove(aGroup: TGEDCOMGroupRecord; aMember: TGEDCOMIndividualRecord): Boolean;
-
-    function FamilyChildAdd(aFamily: TGEDCOMFamilyRecord; aChild: TGEDCOMIndividualRecord): Boolean;
-    function FamilyChildRemove(aFamily: TGEDCOMFamilyRecord; aChild: TGEDCOMIndividualRecord): Boolean;
 
     function DeleteFamilyRecord(aFamily: TGEDCOMFamilyRecord; aConfirm: Boolean): Boolean;
     function DeleteGroupRecord(groupRec: TGEDCOMGroupRecord; aConfirm: Boolean): Boolean;
@@ -171,6 +176,10 @@ type
     function DeleteTaskRecord(TaskRec: TGEDCOMTaskRecord; aConfirm: Boolean): Boolean;
     function DeleteCommunicationRecord(ComRec: TGEDCOMCommunicationRecord; aConfirm: Boolean): Boolean;
     function DeleteLocationRecord(LocRec: TGEDCOMLocationRecord; aConfirm: Boolean): Boolean;
+
+    function DeleteRecord(aRecord: TGEDCOMRecord; aConfirm: Boolean): Boolean;
+
+    function RecordIsFiltered(aRecord: TGEDCOMRecord): Boolean;
 
     procedure DoUndo();
     procedure DoRedo();
@@ -260,7 +269,8 @@ uses
   GKProgress, GKSourceCitEdit, GKRepositoryEdit, GKMediaEdit, Clipbrd,
   bsMiscUtils, GKResearchEdit, GKTaskEdit, GKCommunicationEdit, GKLocationEdit,
   GKCommands, GKTipsDlg, GKUserRefEdit, GKStereoView, GKTimeLine,
-  GKOrganizer, GKDBImport, GKAddressEdit;
+  GKOrganizer, GKDBImport, GKAddressEdit, GKSourceParse, GKScriptDaemon,
+  GKNameEdit;
 
 {$R *.dfm}
 
@@ -499,44 +509,10 @@ begin
       if (fam = nil)
       then fam := CreateFamilyEx(FTree);
 
-      FamilyChildAdd(fam, iChild);
+      FamilyChildAdd(FTree, fam, iChild);
 
       Result := fam;
     end;
-  end;
-end;
-
-function TfmBase.FamilyChildAdd(aFamily: TGEDCOMFamilyRecord;
-  aChild: TGEDCOMIndividualRecord): Boolean;
-var
-  chLink: TGEDCOMChildToFamilyLink;
-  ptr: TGEDCOMPointer;
-begin
-  try
-    ptr := TGEDCOMPointer.Create(FTree, aFamily);
-    ptr.SetNamedValue('CHIL', aChild);
-    aFamily.AddChild(ptr);
-
-    chLink := TGEDCOMChildToFamilyLink.Create(FTree, aChild);
-    chLink.Family := aFamily;
-    aChild.AddChildToFamilyLink(chLink);
-
-    Result := True;
-  except
-    Result := False;
-  end;
-end;
-
-function TfmBase.FamilyChildRemove(aFamily: TGEDCOMFamilyRecord;
-  aChild: TGEDCOMIndividualRecord): Boolean;
-begin
-  try
-    aFamily.DeleteChild(aChild);
-    aChild.DeleteChildToFamilyLink(aFamily);
-
-    Result := True;
-  except
-    Result := False;
   end;
 end;
 
@@ -567,6 +543,8 @@ begin
   then Exit;
 
   CleanFamily(aFamily);
+
+  RecordNotify(aFamily, rnDelete);
   FTree.Delete(FTree.IndexOfRecord(aFamily));
   Modified := True;
 
@@ -595,6 +573,7 @@ begin
     RemoveFamilySpouse(FTree, family, iRec);
   end;
 
+  RecordNotify(iRec, rnDelete);
   FTree.Delete(FTree.IndexOfRecord(iRec));
   Modified := True;
 
@@ -627,6 +606,7 @@ begin
     end;
   end;
 
+  RecordNotify(nRec, rnDelete);
   FTree.Delete(FTree.IndexOfRecord(nRec));
   Modified := True;
 
@@ -654,6 +634,7 @@ begin
     end;
   end;
 
+  RecordNotify(srcRec, rnDelete);
   FTree.Delete(FTree.IndexOfRecord(srcRec));
   Modified := True;
 
@@ -681,6 +662,7 @@ begin
     end;
   end;
 
+  RecordNotify(mRec, rnDelete);
   FTree.Delete(FTree.IndexOfRecord(mRec));
   Modified := True;
 
@@ -711,6 +693,7 @@ begin
     end;
   end;
 
+  RecordNotify(repRec, rnDelete);
   FTree.Delete(FTree.IndexOfRecord(repRec));
   Modified := True;
 
@@ -732,6 +715,7 @@ begin
     member.DeleteGroup(member.IndexOfGroup(groupRec));
   end;
 
+  RecordNotify(groupRec, rnDelete);
   FTree.Delete(FTree.IndexOfRecord(groupRec));
   Modified := True;
 
@@ -747,6 +731,7 @@ begin
 
   // dummy, because there is not links from other records and tags
 
+  RecordNotify(resRec, rnDelete);
   FTree.Delete(FTree.IndexOfRecord(resRec));
   Modified := True;
 
@@ -777,6 +762,7 @@ begin
     end;
   end;
 
+  RecordNotify(TaskRec, rnDelete);
   FTree.Delete(FTree.IndexOfRecord(TaskRec));
   Modified := True;
 
@@ -807,6 +793,7 @@ begin
     end;
   end;
 
+  RecordNotify(ComRec, rnDelete);
   FTree.Delete(FTree.IndexOfRecord(ComRec));
   Modified := True;
 
@@ -837,12 +824,6 @@ begin
         if (ev.Detail.Place.Location.Value = LocRec)
         then ev.Detail.Place.DeleteTag('_LOC');
       end;
-
-      for k := iRec.IndividualAttributesCount - 1 downto 0 do begin
-        ev := iRec.IndividualAttributes[k];
-        if (ev.Detail.Place.Location.Value = LocRec)
-        then ev.Detail.Place.DeleteTag('_LOC');
-      end;
     end
     else
     if (rec is TGEDCOMFamilyRecord) then begin
@@ -856,6 +837,7 @@ begin
     end;
   end;
 
+  RecordNotify(LocRec, rnDelete);
   FTree.Delete(FTree.IndexOfRecord(LocRec));
   Modified := True;
 
@@ -864,48 +846,12 @@ end;
 
 procedure TfmBase.ListSelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
 var
-  data: TObject;
+  data: TGEDCOMRecord;
 begin
-  {if (Item = nil) or not(Selected)
-  then data := nil
-  else data := TObject(Item.Data);}
-
   data := GetSelectedRecord(TCustomListView(Sender));
+  if Selected then NavAdd(data);
 
-  NavAdd(TGEDCOMRecord(data));
-
-  if (Sender = ListPersons)
-  then ShowPersonInfo(TGEDCOMIndividualRecord(data), mPersonSummary.Lines)
-  else
-  if (Sender = ListFamilies)
-  then ShowFamilyInfo(TGEDCOMFamilyRecord(data), mFamilySummary.Lines)
-  else
-  if (Sender = ListNotes)
-  then ShowNoteInfo(TGEDCOMNoteRecord(data), mNoteSummary.Lines)
-  else
-  if (Sender = ListMultimedia)
-  then ShowMultimediaInfo(TGEDCOMMultimediaRecord(data), mMediaSummary.Lines)
-  else
-  if (Sender = ListSources)
-  then ShowSourceInfo(TGEDCOMSourceRecord(data), mSourceSummary.Lines)
-  else
-  if (Sender = ListRepositories)
-  then ShowRepositoryInfo(TGEDCOMRepositoryRecord(data), mRepositorySummary.Lines)
-  else
-  if (Sender = ListGroups)
-  then ShowGroupInfo(TGEDCOMGroupRecord(data), mGroupSummary.Lines)
-  else
-  if (Sender = ListResearches)
-  then ShowResearchInfo(TGEDCOMResearchRecord(data), mResearchSummary.Lines)
-  else
-  if (Sender = ListTasks)
-  then ShowTaskInfo(TGEDCOMTaskRecord(data), mTaskSummary.Lines)
-  else
-  if (Sender = ListCommunications)
-  then ShowCommunicationInfo(TGEDCOMCommunicationRecord(data), mCommunicationSummary.Lines)
-  else
-  if (Sender = ListLocations)
-  then ShowLocationInfo(TGEDCOMLocationRecord(data), mLocationSummary.Lines);
+  ShowRecordInfo(data);
 end;
 
 procedure TfmBase.ShowAddress(anAddress: TGEDCOMAddress; aSummary: TStrings);
@@ -981,8 +927,7 @@ end;
 procedure TfmBase.RecListIndividualEventsRefresh(aRecord: TGEDCOMIndividualRecord; aList: TBSListView; aSummary: TStrings);
 var
   idx, ev: Integer;
-  event: TGEDCOMIndividualEvent;
-  attr: TGEDCOMIndividualAttribute;
+  event: TGEDCOMCustomEvent;
   st: string;
   item: TListItem;
 begin
@@ -990,8 +935,7 @@ begin
     if (aList <> nil)
     then aList.Clear();
 
-    if (aRecord.IndividualEventsCount <> 0) or (aRecord.IndividualAttributesCount <> 0)
-    then begin
+    if (aRecord.IndividualEventsCount <> 0) then begin
       if (aSummary <> nil) then begin
         aSummary.Add('');
         aSummary.Add({#13#10}'Факты:');
@@ -1008,6 +952,7 @@ begin
 
         if (aSummary <> nil) then begin
           aSummary.Add(st + ': ' + GetEventDesc(event.Detail));
+          if (event.StringValue <> '') then aSummary.Add('    ' + event.StringValue);
           ShowDetailCause(event.Detail, aSummary);
           ShowAddress(event.Detail.Address, aSummary);
           ShowDetailInfo(event.Detail, aSummary);
@@ -1015,53 +960,27 @@ begin
 
         if (aList <> nil) then begin
           item := aList.Items.Add();
-          item.Caption := st;
+          item.Caption := IntToStr(idx + 1);
+          item.SubItems.Add(st);
           item.SubItems.Add(GEDCOMCustomDateToStr(event.Detail.Date.Value, fmGEDKeeper.Options.DefDateFormat));
-          item.SubItems.Add(event.Detail.Place.StringValue);
+
+          st := event.Detail.Place.StringValue;
+          if (event.StringValue <> '')
+          then st := st + ' [' + event.StringValue + ']';
+          item.SubItems.Add(st);
+
           item.SubItems.Add(GetEventCause(event.Detail));
           item.Data := event;
         end;
       end;
 
-      for idx := 0 to aRecord.IndividualAttributesCount - 1 do begin
-        attr := aRecord.IndividualAttributes[idx];
-
-        ev := GetPersonEventIndex(attr.Name);
-        if (ev = 0) then st := attr.Detail.Classification
-        else
-        if (ev > 0) then st := PersonEvents[ev].Name
-        else st := attr.Name;
-
-        if (aSummary <> nil) then begin
-          aSummary.Add(st + ': ' + GetEventDesc(attr.Detail));
-          if (attr.StringValue <> '') then aSummary.Add('    ' + attr.StringValue);
-          ShowDetailCause(attr.Detail, aSummary);
-          ShowAddress(attr.Detail.Address, aSummary);
-          ShowDetailInfo(attr.Detail, aSummary);
-        end;
-
-        if (aList <> nil) then begin
-          item := aList.Items.Add();
-          item.Caption := st;
-          item.SubItems.Add(GEDCOMCustomDateToStr(attr.Detail.Date.Value, fmGEDKeeper.Options.DefDateFormat));
-
-          st := attr.Detail.Place.StringValue;
-          if (attr.StringValue <> '')
-          then st := st + ' [' + attr.StringValue + ']';
-
-          item.SubItems.Add(st);
-          item.SubItems.Add(GetEventCause(attr.Detail));
-          item.Data := attr;
-        end;
-      end;
-
       if (aList <> nil) then begin
         //ResizeColumn(aList, 2);
-        aList.SortColumn := 1;
+        aList.SortColumn := 0;
       end;
     end;
   except
-    on E: Exception do LogWrite('RecListIndividualEventsRefresh(): ' + E.Message);
+    on E: Exception do LogWrite('GKBase.RecListIndividualEventsRefresh(): ' + E.Message);
   end;
 end;
 
@@ -1100,7 +1019,8 @@ begin
 
         if (aList <> nil) then begin
           item := aList.Items.Add();
-          item.Caption := st;
+          item.Caption := IntToStr(idx + 1);
+          item.SubItems.Add(st);
           item.SubItems.Add(GEDCOMCustomDateToStr(event.Detail.Date.Value, fmGEDKeeper.Options.DefDateFormat));
           item.SubItems.Add(event.Detail.Place.StringValue);
           item.SubItems.Add(GetEventCause(event.Detail));
@@ -1109,7 +1029,7 @@ begin
       end;
     end;
   except
-    on E: Exception do LogWrite('RecListFamilyEventsRefresh(): ' + E.Message);
+    on E: Exception do LogWrite('GKBase.RecListFamilyEventsRefresh(): ' + E.Message);
   end;
 end;
 
@@ -1148,7 +1068,7 @@ begin
       end;
     end;
   except
-    on E: Exception do LogWrite('RecListNotesRefresh(): ' + E.Message);
+    on E: Exception do LogWrite('GKBase.RecListNotesRefresh(): ' + E.Message);
   end;
 end;
 
@@ -1186,7 +1106,7 @@ begin
       end;
     end;
   except
-    on E: Exception do LogWrite('RecListMediaRefresh(): ' + E.Message);
+    on E: Exception do LogWrite('GKBase.RecListMediaRefresh(): ' + E.Message);
   end;
 end;
 
@@ -1231,7 +1151,7 @@ begin
       if (aList <> nil) then ResizeColumn(aList, 1);
     end;
   except
-    on E: Exception do LogWrite('RecListSourcesRefresh(): ' + E.Message);
+    on E: Exception do LogWrite('GKBase.RecListSourcesRefresh(): ' + E.Message);
   end;
 end;
 
@@ -1240,8 +1160,8 @@ begin
   aList.Columns_BeginUpdate;
   aList.Columns_Clear;
 
-  //aList.AddColumn('№', 25);
-  aList.AddColumn('Событие', 75);
+  aList.AddColumn('№', 25);
+  aList.AddColumn('Событие', 90);
   aList.AddColumn('Дата', 80);
 
   if not(PersonsMode)
@@ -1318,7 +1238,7 @@ begin
       end;
     end;                               
   except
-    on E: Exception do LogWrite('RecListAssociationsRefresh(): ' + E.Message);
+    on E: Exception do LogWrite('GKBase.RecListAssociationsRefresh(): ' + E.Message);
   end;
 end;
 
@@ -1356,7 +1276,7 @@ begin
       end;
     end;
   except
-    on E: Exception do LogWrite('RecListGroupsRefresh(): ' + E.Message);
+    on E: Exception do LogWrite('GKBase.RecListGroupsRefresh(): ' + E.Message);
   end;
 end;
 
@@ -1435,7 +1355,7 @@ begin
       if (iRec <> nil) then begin
         aSummary.Add('');
         aSummary.Add('~ub+1~' + GetNameStr(iRec, True, True) + '~bu-1~');
-        aSummary.Add('Пол: ' + Sex[iRec.Sex]);
+        aSummary.Add('Пол: ' + SexData[iRec.Sex].ViewName);
 
         try
           if (iRec.ChildToFamilyLinksCount <> 0) then begin
@@ -1457,7 +1377,7 @@ begin
             aSummary.Add('  Мать: ' + st + GetLifeStr(rel_person));
           end;
         except
-          on E: Exception do LogWrite('ShowPersonInfo().Parents(): ' + E.Message);
+          on E: Exception do LogWrite('GKBase.ShowPersonInfo().Parents(): ' + E.Message);
         end;
 
         try
@@ -1505,7 +1425,7 @@ begin
             end;
           end;
         except
-          on E: Exception do LogWrite('ShowPersonInfo().Families(): ' + E.Message);
+          on E: Exception do LogWrite('GKBase.ShowPersonInfo().Families(): ' + E.Message);
         end;
 
         RecListIndividualEventsRefresh(iRec, nil, aSummary);
@@ -1547,7 +1467,7 @@ begin
       aSummary.EndUpdate();
     end;
   except
-    on E: Exception do LogWrite('ShowPersonInfo(): ' + E.Message);
+    on E: Exception do LogWrite('GKBase.ShowPersonInfo(): ' + E.Message);
   end;
 end;
 
@@ -1597,7 +1517,7 @@ begin
       aSummary.EndUpdate();
     end;
   except
-    on E: Exception do LogWrite('ShowFamilyInfo(): ' + E.Message);
+    on E: Exception do LogWrite('GKBase.ShowFamilyInfo(): ' + E.Message);
   end;
 end;
 
@@ -1623,7 +1543,7 @@ begin
       aSummary.EndUpdate();
     end;
   except
-    on E: Exception do LogWrite('ShowMultimediaInfo(): ' + E.Message);
+    on E: Exception do LogWrite('GKBase.ShowMultimediaInfo(): ' + E.Message);
   end;
 end;
 
@@ -1646,7 +1566,7 @@ begin
       aSummary.EndUpdate();
     end;
   except
-    on E: Exception do LogWrite('ShowNoteInfo(): ' + E.Message);
+    on E: Exception do LogWrite('GKBase.ShowNoteInfo(): ' + E.Message);
   end;
 end;
 
@@ -1693,7 +1613,7 @@ begin
       aSummary.EndUpdate();
     end;
   except
-    on E: Exception do LogWrite('ShowSourceInfo(): ' + E.Message);
+    on E: Exception do LogWrite('GKBase.ShowSourceInfo(): ' + E.Message);
   end;
 end;
 
@@ -1721,7 +1641,7 @@ begin
 
             for k := 0 to srcRec.RepositoryCitationsCount - 1 do
               if (srcRec.RepositoryCitations[k].Value = aRepositoryRec)
-              then aSummary.Add('    '+GenRecordLink(srcRec, False));
+              then aSummary.Add('    '+GenRecordLink(FTree, srcRec, False));
           end;
         end;
 
@@ -1731,7 +1651,7 @@ begin
       aSummary.EndUpdate();
     end;
   except
-    on E: Exception do LogWrite('ShowRepositoryInfo(): ' + E.Message);
+    on E: Exception do LogWrite('GKBase.ShowRepositoryInfo(): ' + E.Message);
   end;
 end;
 
@@ -1772,7 +1692,7 @@ begin
       mbrList.Free;
     end;
   except
-    on E: Exception do LogWrite('ShowGroupInfo(): ' + E.Message);
+    on E: Exception do LogWrite('GKBase.ShowGroupInfo(): ' + E.Message);
   end;
 end;
 
@@ -1801,7 +1721,7 @@ begin
           aSummary.Add('Задачи:');
           for i := 0 to aResearchRec.TasksCount - 1 do begin
             taskRec := TGEDCOMTaskRecord(aResearchRec.Tasks[i].Value);
-            aSummary.Add('    '+GenRecordLink(taskRec, False));
+            aSummary.Add('    '+GenRecordLink(FTree, taskRec, False));
           end;
         end;
 
@@ -1810,7 +1730,7 @@ begin
           aSummary.Add('Коммуникации:');
           for i := 0 to aResearchRec.CommunicationsCount - 1 do begin
             corrRec := TGEDCOMCommunicationRecord(aResearchRec.Communications[i].Value);
-            aSummary.Add('    '+GenRecordLink(corrRec, False));
+            aSummary.Add('    '+GenRecordLink(FTree, corrRec, False));
           end;
         end;
 
@@ -1829,7 +1749,7 @@ begin
       aSummary.EndUpdate();
     end;
   except
-    on E: Exception do LogWrite('ShowResearchInfo(): ' + E.Message);
+    on E: Exception do LogWrite('GKBase.ShowResearchInfo(): ' + E.Message);
   end;
 end;
 
@@ -1853,7 +1773,7 @@ begin
       aSummary.EndUpdate();
     end;
   except
-    on E: Exception do LogWrite('ShowTaskInfo(): ' + E.Message);
+    on E: Exception do LogWrite('GKBase.ShowTaskInfo(): ' + E.Message);
   end;
 end;
 
@@ -1878,33 +1798,14 @@ begin
       aSummary.EndUpdate();
     end;
   except
-    on E: Exception do LogWrite('ShowCommunicationInfo(): ' + E.Message);
+    on E: Exception do LogWrite('GKBase.ShowCommunicationInfo(): ' + E.Message);
   end;
 end;
 
 procedure TfmBase.ShowLocationInfo(aLocationRec: TGEDCOMLocationRecord; aSummary: TStrings);
-
-  procedure PrepareEvent(aRec: TGEDCOMRecord; event: TGEDCOMCustomEvent; aList: TStringList);
-  var
-    loc: TGEDCOMLocationRecord;
-    suffix: string;
-  begin
-    loc := TGEDCOMLocationRecord(event.Detail.Place.Location.Value);
-    if (loc = aLocationRec) then begin
-      if (event <> nil) and (event is TGEDCOMCustomEvent)
-      then suffix := ', ' + AnsiLowerCase(GetEventName(TGEDCOMCustomEvent(event)))
-      else suffix := '';
-
-      aList.Add('    ' + GenRecordLink(aRec, True) + suffix);
-    end;
-  end;
-
 var
   link_list: TStringList;
-  i, k: Integer;
-  rec: TGEDCOMRecord;
-  i_rec: TGEDCOMIndividualRecord;
-  f_rec: TGEDCOMFamilyRecord;
+  i: Integer;
 begin
   try
     aSummary.BeginUpdate();
@@ -1918,32 +1819,13 @@ begin
         aSummary.Add('Широта: ' + aLocationRec.Map.Lati);
         aSummary.Add('Долгота: ' + aLocationRec.Map.Long);
 
-        // search links
-        for i := 0 to FTree.RecordsCount - 1 do begin
-          rec := FTree.Records[i];
+        GetLocationLinks(FTree, aLocationRec, link_list);
 
-          if (rec is TGEDCOMIndividualRecord) then begin
-            i_rec := (rec as TGEDCOMIndividualRecord);
-
-            for k := 0 to i_rec.IndividualEventsCount - 1 do
-              PrepareEvent(i_rec, i_rec.IndividualEvents[k], link_list);
-
-            for k := 0 to i_rec.IndividualAttributesCount - 1 do
-              PrepareEvent(i_rec, i_rec.IndividualAttributes[k], link_list);
-          end
-          else
-          if (rec is TGEDCOMFamilyRecord) then begin
-            f_rec := (rec as TGEDCOMFamilyRecord);
-
-            for k := 0 to f_rec.FamilyEventCount - 1 do
-              PrepareEvent(f_rec, f_rec.FamilyEvents[k], link_list);
-          end;
-        end;
         link_list.Sort();
         if (link_list.Count > 0) then begin
           aSummary.Add('');
           aSummary.Add('Ссылки:');
-          for i := 0 to link_list.Count - 1 do aSummary.Add(link_list[i]);
+          for i := 0 to link_list.Count - 1 do aSummary.Add('    ' + link_list[i]);
         end;
 
         RecListNotesRefresh(aLocationRec, nil, aSummary);
@@ -1954,7 +1836,47 @@ begin
       aSummary.EndUpdate();
     end;
   except
-    on E: Exception do LogWrite('ShowLocationInfo(): ' + E.Message);
+    on E: Exception do LogWrite('GKBase.ShowLocationInfo(): ' + E.Message);
+  end;
+end;
+
+procedure TfmBase.ShowRecordInfo(aRecord: TGEDCOMRecord);
+begin
+  try
+    if (aRecord is TGEDCOMIndividualRecord)
+    then ShowPersonInfo(TGEDCOMIndividualRecord(aRecord), mPersonSummary.Lines)
+    else
+    if (aRecord is TGEDCOMFamilyRecord)
+    then ShowFamilyInfo(TGEDCOMFamilyRecord(aRecord), mFamilySummary.Lines)
+    else
+    if (aRecord is TGEDCOMNoteRecord)
+    then ShowNoteInfo(TGEDCOMNoteRecord(aRecord), mNoteSummary.Lines)
+    else
+    if (aRecord is TGEDCOMMultimediaRecord)
+    then ShowMultimediaInfo(TGEDCOMMultimediaRecord(aRecord), mMediaSummary.Lines)
+    else
+    if (aRecord is TGEDCOMSourceRecord)
+    then ShowSourceInfo(TGEDCOMSourceRecord(aRecord), mSourceSummary.Lines)
+    else
+    if (aRecord is TGEDCOMRepositoryRecord)
+    then ShowRepositoryInfo(TGEDCOMRepositoryRecord(aRecord), mRepositorySummary.Lines)
+    else
+    if (aRecord is TGEDCOMGroupRecord)
+    then ShowGroupInfo(TGEDCOMGroupRecord(aRecord), mGroupSummary.Lines)
+    else
+    if (aRecord is TGEDCOMResearchRecord)
+    then ShowResearchInfo(TGEDCOMResearchRecord(aRecord), mResearchSummary.Lines)
+    else
+    if (aRecord is TGEDCOMTaskRecord)
+    then ShowTaskInfo(TGEDCOMTaskRecord(aRecord), mTaskSummary.Lines)
+    else
+    if (aRecord is TGEDCOMCommunicationRecord)
+    then ShowCommunicationInfo(TGEDCOMCommunicationRecord(aRecord), mCommunicationSummary.Lines)
+    else
+    if (aRecord is TGEDCOMLocationRecord)
+    then ShowLocationInfo(TGEDCOMLocationRecord(aRecord), mLocationSummary.Lines);
+  except
+    on E: Exception do LogWrite('GKBase.ShowRecordInfo(): ' + E.Message);
   end;
 end;
 
@@ -1975,13 +1897,9 @@ begin
     if (MessageDlg('Удалить факт?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
     then Exit;
 
-    if (aRecord is TGEDCOMIndividualRecord) then begin
-      if (aEvent is TGEDCOMIndividualEvent)
-      then TGEDCOMIndividualRecord(aRecord).DeleteIndividualEvent(TGEDCOMIndividualEvent(aEvent))
-      else TGEDCOMIndividualRecord(aRecord).DeleteIndividualAttribute(TGEDCOMIndividualAttribute(aEvent));
-    end else begin
-      TGEDCOMFamilyRecord(aRecord).DeleteFamilyEvent(TGEDCOMFamilyEvent(aEvent));
-    end;
+    if (aRecord is TGEDCOMIndividualRecord)
+    then TGEDCOMIndividualRecord(aRecord).DeleteIndividualEvent(aEvent)
+    else TGEDCOMFamilyRecord(aRecord).DeleteFamilyEvent(TGEDCOMFamilyEvent(aEvent));
 
     Result := True;
     Modified := True;
@@ -2005,25 +1923,17 @@ begin
     case ShowModalEx(fmEventEdit, aSender, True) of
       mrOk: begin
         if (aEvent = nil) then begin
-          if (aRecord is TGEDCOMIndividualRecord) then begin
-            event := fmEventEdit.Event;
+          event := fmEventEdit.Event;
 
-            if (event is TGEDCOMIndividualEvent)
-            then TGEDCOMIndividualRecord(aRecord).AddIndividualEvent(TGEDCOMIndividualEvent(event))
-            else TGEDCOMIndividualRecord(aRecord).AddIndividualAttribute(TGEDCOMIndividualAttribute(event));
-          end else TGEDCOMFamilyRecord(aRecord).AddFamilyEvent(TGEDCOMFamilyEvent(event));
+          if (aRecord is TGEDCOMIndividualRecord)
+          then TGEDCOMIndividualRecord(aRecord).AddIndividualEvent(TGEDCOMIndividualEvent(event))
+          else TGEDCOMFamilyRecord(aRecord).AddFamilyEvent(TGEDCOMFamilyEvent(event));
         end else begin
-          // hack, need refactoring
+          // hack, need refactoring (this for replacing event vs attr in his editor)
           if (aRecord is TGEDCOMIndividualRecord) and (fmEventEdit.Event <> aEvent) then begin
-            if (aEvent is TGEDCOMIndividualEvent)
-            then TGEDCOMIndividualRecord(aRecord).DeleteIndividualEvent(TGEDCOMIndividualEvent(aEvent))
-            else TGEDCOMIndividualRecord(aRecord).DeleteIndividualAttribute(TGEDCOMIndividualAttribute(aEvent));
-
+            TGEDCOMIndividualRecord(aRecord).DeleteIndividualEvent(TGEDCOMIndividualEvent(aEvent));
             event := fmEventEdit.Event;
-
-            if (event is TGEDCOMIndividualEvent)
-            then TGEDCOMIndividualRecord(aRecord).AddIndividualEvent(TGEDCOMIndividualEvent(event))
-            else TGEDCOMIndividualRecord(aRecord).AddIndividualAttribute(TGEDCOMIndividualAttribute(event));
+            TGEDCOMIndividualRecord(aRecord).AddIndividualEvent(TGEDCOMIndividualEvent(event));
           end;
         end;
 
@@ -2112,7 +2022,7 @@ begin
         then AddSpouseToFamily(FTree, aFamilyRec, aPerson);
       ftChild:
         if (aPerson <> nil)
-        then FamilyChildAdd(aFamilyRec, aPerson);
+        then FamilyChildAdd(FTree, aFamilyRec, aPerson);
     end;
 
     fmFamEdit.Family := aFamilyRec;
@@ -2468,7 +2378,7 @@ begin
     noteRec := TGEDCOMNoteRecord(note.Value);
     Result := ModifyNote(noteRec);
   end else begin
-    noteRec := TGEDCOMNoteRecord(SelectRecord(smNote, []));
+    noteRec := TGEDCOMNoteRecord(SelectRecord(rtNote, []));
     if (noteRec <> nil) then begin
       note := TGEDCOMNotes.Create(FTree, aRecord);
       note.Value := noteRec;
@@ -2504,7 +2414,7 @@ begin
     mmRec := TGEDCOMMultimediaRecord(mmLink.Value);
     Result := ModifyMedia(mmRec);
   end else begin
-    mmRec := TGEDCOMMultimediaRecord(SelectRecord(smMultimedia, []));
+    mmRec := TGEDCOMMultimediaRecord(SelectRecord(rtMultimedia, []));
     if (mmRec <> nil) then begin
       mmLink := TGEDCOMMultimediaLink.Create(FTree, aRecord);
       mmLink.Value := mmRec;
@@ -2676,7 +2586,7 @@ begin
       Result := ModifyNote(noteRec);
     end;
   end else begin
-    noteRec := TGEDCOMNoteRecord(SelectRecord(smNote, []));
+    noteRec := TGEDCOMNoteRecord(SelectRecord(rtNote, []));
     if (noteRec <> nil) then begin
       note := TGEDCOMNotes.Create(FTree, aTag);
       note.Value := noteRec;
@@ -2714,7 +2624,7 @@ begin
       Modified := Modified or Result;
     end;
   end else begin
-    mmRec := TGEDCOMMultimediaRecord(SelectRecord(smMultimedia, []));
+    mmRec := TGEDCOMMultimediaRecord(SelectRecord(rtMultimedia, []));
     if (mmRec <> nil) then begin
       mmLink := TGEDCOMMultimediaLink.Create(FTree, aTag);
       mmLink.Value := mmRec;
@@ -2792,62 +2702,6 @@ begin
   fmGEDKeeper.UpdateControls();
 end;
 
-function TfmBase.GenRecordLink(aRecord: TGEDCOMRecord; aSigned: Boolean = True): string;
-var
-  st, sign: string;
-begin
-  sign := '';
-  if (aSigned) then begin
-    if (aRecord is TGEDCOMIndividualRecord) then sign := ''
-    else
-    if (aRecord is TGEDCOMFamilyRecord) then sign := 'Семья: '
-    else
-    if (aRecord is TGEDCOMMultimediaRecord) then sign := 'Медиа-объект: '
-    else
-    if (aRecord is TGEDCOMGroupRecord) then sign := 'Группа: '
-    else
-    if (aRecord is TGEDCOMSourceRecord) then sign := 'Источник: '
-    else
-    if (aRecord is TGEDCOMRepositoryRecord) then sign := 'Архив: '
-    else
-    if (aRecord is TGEDCOMResearchRecord) then sign := 'Исследование: '
-    else
-    if (aRecord is TGEDCOMTaskRecord) then sign := 'Задача: '
-    else
-    if (aRecord is TGEDCOMCommunicationRecord) then sign := 'Корреспонденция: ';
-  end;
-
-  if (aRecord is TGEDCOMIndividualRecord)
-  then st := GetNameStr(TGEDCOMIndividualRecord(aRecord))
-  else
-  if (aRecord is TGEDCOMFamilyRecord)
-  then st := GetFamilyStr(TGEDCOMFamilyRecord(aRecord))
-  else
-  if (aRecord is TGEDCOMMultimediaRecord)
-  then st := TGEDCOMMultimediaRecord(aRecord).FileReferences[0].Title
-  else
-  if (aRecord is TGEDCOMGroupRecord)
-  then st := TGEDCOMGroupRecord(aRecord).Name
-  else
-  if (aRecord is TGEDCOMSourceRecord)
-  then st := TGEDCOMSourceRecord(aRecord).FiledByEntry
-  else
-  if (aRecord is TGEDCOMRepositoryRecord)
-  then st := TGEDCOMRepositoryRecord(aRecord).RepositoryName
-  else
-  if (aRecord is TGEDCOMResearchRecord)
-  then st := TGEDCOMResearchRecord(aRecord).Name
-  else
-  if (aRecord is TGEDCOMTaskRecord)
-  then st := GetTaskGoalStr(FTree, TGEDCOMTaskRecord(aRecord))
-  else
-  if (aRecord is TGEDCOMCommunicationRecord)
-  then st := TGEDCOMCommunicationRecord(aRecord).Name
-  else st := aRecord.XRef;
-
-  Result := HyperLink(aRecord.XRef, sign + st);
-end;
-
 procedure TfmBase.SearchSubjectLinks(aInRecord, aSubject: TGEDCOMRecord; aToList: TStrings);
 // поиск ссылок на субъект поиска в других записях и тэгах
 
@@ -2867,7 +2721,7 @@ procedure TfmBase.SearchSubjectLinks(aInRecord, aSubject: TGEDCOMRecord; aToList
     then suffix := ', ' + AnsiLowerCase(GetEventName(TGEDCOMCustomEvent(aTag)))
     else suffix := '';
 
-    aToList.Add('    ' + prefix + GenRecordLink(aRec, True) + suffix);
+    aToList.Add('    ' + prefix + GenRecordLink(FTree, aRec, True) + suffix);
   end;
 
   procedure PrepareEvent(aRec: TGEDCOMRecord; event: TGEDCOMCustomEvent);
@@ -2922,9 +2776,6 @@ begin
 
       for k := 0 to i_rec.IndividualEventsCount - 1 do
         PrepareEvent(i_rec, i_rec.IndividualEvents[k]);
-
-      for k := 0 to i_rec.IndividualAttributesCount - 1 do
-        PrepareEvent(i_rec, i_rec.IndividualAttributes[k]);
     end
     else
     if (aInRecord is TGEDCOMFamilyRecord) then begin
@@ -2934,7 +2785,7 @@ begin
         PrepareEvent(f_rec, f_rec.FamilyEvents[k]);
     end;
   except
-    on E: Exception do LogWrite('SearchSubjectLinks(): ' + E.Message);
+    on E: Exception do LogWrite('GKBase.SearchSubjectLinks(): ' + E.Message);
   end;
 end;
 
@@ -3200,72 +3051,68 @@ begin
     end;
   end;
 
-  if (res) then ListsRefresh();
+  if (res) then begin
+    ListsRefresh();
+    ShowRecordInfo(rec);
+  end;
+end;
+
+function TfmBase.DeleteRecord(aRecord: TGEDCOMRecord; aConfirm: Boolean): Boolean;
+begin
+  Result := False;
+
+  if (aRecord is TGEDCOMIndividualRecord)
+  then Result := DeleteIndividualRecord(aRecord as TGEDCOMIndividualRecord, aConfirm)
+  else
+  if (aRecord is TGEDCOMFamilyRecord)
+  then Result := DeleteFamilyRecord(aRecord as TGEDCOMFamilyRecord, aConfirm)
+  else
+  if (aRecord is TGEDCOMNoteRecord)
+  then Result := DeleteNoteRecord(aRecord as TGEDCOMNoteRecord, aConfirm)
+  else
+  if (aRecord is TGEDCOMMultimediaRecord)
+  then Result := DeleteMediaRecord(aRecord as TGEDCOMMultimediaRecord, aConfirm)
+  else
+  if (aRecord is TGEDCOMSourceRecord)
+  then Result := DeleteSourceRecord(aRecord as TGEDCOMSourceRecord, aConfirm)
+  else
+  if (aRecord is TGEDCOMRepositoryRecord)
+  then Result := DeleteRepositoryRecord(aRecord as TGEDCOMRepositoryRecord, aConfirm)
+  else
+  if (aRecord is TGEDCOMGroupRecord)
+  then Result := DeleteGroupRecord(aRecord as TGEDCOMGroupRecord, aConfirm)
+  else
+  if (aRecord is TGEDCOMResearchRecord)
+  then Result := DeleteResearchRecord(aRecord as TGEDCOMResearchRecord, aConfirm)
+  else
+  if (aRecord is TGEDCOMTaskRecord)
+  then Result := DeleteTaskRecord(aRecord as TGEDCOMTaskRecord, aConfirm)
+  else
+  if (aRecord is TGEDCOMCommunicationRecord)
+  then Result := DeleteCommunicationRecord(aRecord as TGEDCOMCommunicationRecord, aConfirm)
+  else
+  if (aRecord is TGEDCOMLocationRecord)
+  then Result := DeleteLocationRecord(aRecord as TGEDCOMLocationRecord, aConfirm);
 end;
 
 procedure TfmBase.RecordDelete();
-
-  function InternalDelete(aListView: TRecordsView): Boolean;
-  var
-    rec: TGEDCOMRecord;
-  begin
-    Result := False;
-
-    rec := GetSelectedRecord(aListView);
-
-    if (rec is TGEDCOMIndividualRecord)
-    then Result := DeleteIndividualRecord(rec as TGEDCOMIndividualRecord, True)
-    else
-    if (rec is TGEDCOMFamilyRecord)
-    then Result := DeleteFamilyRecord(rec as TGEDCOMFamilyRecord, True)
-    else
-    if (rec is TGEDCOMNoteRecord)
-    then Result := DeleteNoteRecord(rec as TGEDCOMNoteRecord, True)
-    else
-    if (rec is TGEDCOMMultimediaRecord)
-    then Result := DeleteMediaRecord(rec as TGEDCOMMultimediaRecord, True)
-    else
-    if (rec is TGEDCOMSourceRecord)
-    then Result := DeleteSourceRecord(rec as TGEDCOMSourceRecord, True)
-    else
-    if (rec is TGEDCOMRepositoryRecord)
-    then Result := DeleteRepositoryRecord(rec as TGEDCOMRepositoryRecord, True)
-    else
-    if (rec is TGEDCOMGroupRecord)
-    then Result := DeleteGroupRecord(rec as TGEDCOMGroupRecord, True)
-    else
-    if (rec is TGEDCOMResearchRecord)
-    then Result := DeleteResearchRecord(rec as TGEDCOMResearchRecord, True)
-    else
-    if (rec is TGEDCOMTaskRecord)
-    then Result := DeleteTaskRecord(rec as TGEDCOMTaskRecord, True)
-    else
-    if (rec is TGEDCOMCommunicationRecord)
-    then Result := DeleteCommunicationRecord(rec as TGEDCOMCommunicationRecord, True)
-    else
-    if (rec is TGEDCOMLocationRecord)
-    then Result := DeleteLocationRecord(rec as TGEDCOMLocationRecord, True);
-
-    if (Result) then aListView.DeleteRecord(rec);
-  end;
-
 var
   res: Boolean;
 begin
   res := False;
 
   case PageRecords.TabIndex of
-    0: res := InternalDelete(ListPersons); // персоны
-    1: res := InternalDelete(ListFamilies); // семьи
-    2: res := InternalDelete(ListNotes); // заметки
-    3: res := InternalDelete(ListMultimedia); // мультимедиа
-    4: res := InternalDelete(ListSources); // источники
-    5: res := InternalDelete(ListRepositories); // архивы
-    6: res := InternalDelete(ListGroups); // группы
-    7: res := InternalDelete(ListResearches); // исследования
-    8: res := InternalDelete(ListTasks); // задачи
-    9: res := InternalDelete(ListCommunications); // переписка
-    10: res := InternalDelete(ListLocations); // места
+    0: res := DeleteRecord(GetSelectedRecord(ListPersons), True); // персоны
+    1: res := DeleteRecord(GetSelectedRecord(ListFamilies), True); // семьи
+    2: res := DeleteRecord(GetSelectedRecord(ListNotes), True); // заметки
+    3: res := DeleteRecord(GetSelectedRecord(ListMultimedia), True); // мультимедиа
+    4: res := DeleteRecord(GetSelectedRecord(ListSources), True); // источники
+    5: res := DeleteRecord(GetSelectedRecord(ListRepositories), True); // архивы
+    6: res := DeleteRecord(GetSelectedRecord(ListGroups), True); // группы
+    7: res := DeleteRecord(GetSelectedRecord(ListResearches), True); // исследования
+    8: res := DeleteRecord(GetSelectedRecord(ListTasks), True); // задачи
+    9: res := DeleteRecord(GetSelectedRecord(ListCommunications), True); // переписка
+    10: res := DeleteRecord(GetSelectedRecord(ListLocations), True); // места
   end;
 
   if (res) then ListsRefresh();
@@ -3375,7 +3222,7 @@ procedure TfmBase.ShowTreeAncestors();
 var
   fmChart: TfmChart;
 begin
-  fmChart := TfmChart.Create(nil);
+  fmChart := TfmChart.Create(Self);
   fmChart.Base := Self;
   fmChart.Tree := FTree;
   fmChart.Person := GetSelectedPerson();
@@ -3388,7 +3235,7 @@ procedure TfmBase.ShowTreeDescendants();
 var
   fmChart: TfmChart;
 begin
-  fmChart := TfmChart.Create(nil);
+  fmChart := TfmChart.Create(Self);
   fmChart.Base := Self;
   fmChart.Tree := FTree;
   fmChart.Person := GetSelectedPerson();
@@ -3439,6 +3286,18 @@ begin
   end;
 end;
 
+procedure TfmBase.SourceParse();
+var
+  fmSourceParse: TfmSourceParse;
+begin
+  fmSourceParse := TfmSourceParse.Create(Self);
+  try
+    ShowModalEx(fmSourceParse, Self);
+  finally
+    fmSourceParse.Destroy;
+  end;
+end;
+
 procedure TfmBase.ShowMap();
 var
   {$IFNDEF DELPHI_NET}
@@ -3446,7 +3305,7 @@ var
   {$ENDIF}
 begin
   {$IFNDEF DELPHI_NET}
-  fmMaps := TfmMaps.Create(Application);
+  fmMaps := TfmMaps.Create(Self);
   try
     fmMaps.SelectedPersons := ListPersons.ContentList;
     fmMaps.Tree := FTree;
@@ -3519,65 +3378,6 @@ begin
 
     fmGEDKeeper.UpdateControls();
   end;
-end;
-
-procedure TfmBase.actTestExecute(Sender: TObject);
-(*var
-  rec, temp_src: TGEDCOMRecord;
-  cit: TGEDCOMSourceCitation;
-  i: Integer;*)
-
-  (*i: Integer;
-  rec, frec: TGEDCOMRecord;
-  ht: TBSHashTable;
-  entry: TBSHashEntry;
-  //
-  fs: TFileStream;*)
-begin
-  (*temp_src := TGEDCOMSourceRecord(SelectRecord(smSource, []));
-  if (temp_src = nil) then Exit;
-  for i := 0 to FTree.RecordsCount - 1 do begin
-    rec := FTree.Records[i];
-
-    if (rec is TGEDCOMIndividualRecord) and (ListPersons.ContentList.IndexOf(rec) >= 0)
-    then begin
-      cit := TGEDCOMSourceCitation.Create(FTree, rec);
-      cit.Value := temp_src;
-      cit.CertaintyAssessment := 3;
-      rec.AddSourceCitation(cit);
-    end;
-  end;
-  ListsRefresh();*)
-
-  (*for i := 0 to FTree.Count - 1 do begin
-    rec := FTree.Records[i];
-
-    {$IFDEF PROFILER}Profiler.Mark(17, True);{$ENDIF}
-    frec := FTree.XRefIndex_Find(rec.XRef);
-    {$IFDEF PROFILER}Profiler.Mark(17, False);{$ENDIF}
-
-    Hole(frec);
-  end;
-
-  ht := TBSHashTable.Create(nil, TBSHashEntry, hkCRC32);
-  try
-    for i := 0 to FTree.Count - 1 do begin
-      rec := FTree.Records[i];
-      entry := ht.AddEntry(rec.XRef);
-    end;
-
-    for i := 0 to FTree.Count - 1 do begin
-      rec := FTree.Records[i];
-
-      {$IFDEF PROFILER}Profiler.Mark(18, True);{$ENDIF}
-      entry := ht.FindEntry(rec.XRef);
-      {$IFDEF PROFILER}Profiler.Mark(18, False);{$ENDIF}
-
-      Hole(entry);
-    end;
-  finally
-    ht.Destroy;
-  end;*)
 end;
 
 function TfmBase.IsAdvanced(): Boolean;
@@ -3824,7 +3624,7 @@ begin
     dlg.FTarget := aTarget;
     dlg.FNeedSex := aNeedSex;
     dlg.TargetMode := aTargetMode;
-    dlg.Mode := smPerson;
+    dlg.Mode := rtIndividual;
 
     if (ShowModalEx(dlg, Self) = mrOk)
     then Result := TGEDCOMIndividualRecord(dlg.ResultRecord)
@@ -3843,7 +3643,7 @@ begin
     dlg.FTarget := aTarget;
     dlg.FNeedSex := svNone;
     dlg.TargetMode := tmChildToFamily;
-    dlg.Mode := smFamily;
+    dlg.Mode := rtFamily;
 
     if (ShowModalEx(dlg, Self) = mrOk)
     then Result := TGEDCOMFamilyRecord(dlg.ResultRecord)
@@ -3853,7 +3653,7 @@ begin
   end;
 end;
 
-function TfmBase.SelectRecord(aMode: TSelectMode; anArgs: array of const): TGEDCOMRecord;
+function TfmBase.SelectRecord(aMode: TGEDCOMRecordType; anArgs: array of const): TGEDCOMRecord;
 var
   dlg: TfmRecordSelect;
   args_cnt: Integer;
@@ -4007,6 +3807,215 @@ begin
     ShowModalEx(fmDBImport, Self);
   finally
     fmDBImport.Destroy;
+  end;
+end;
+
+procedure TfmBase.RecordNotify(aRecord: TGEDCOMRecord; aNotify: TRecNotify);
+
+  function GetOwnerList(aRecord: TGEDCOMRecord): TRecordsView;
+  begin
+    Result := nil;
+
+    if (aRecord is TGEDCOMIndividualRecord) then Result := ListPersons
+    else
+    if (aRecord is TGEDCOMFamilyRecord) then Result := ListFamilies
+    else
+    if (aRecord is TGEDCOMNoteRecord) then Result := ListNotes
+    else
+    if (aRecord is TGEDCOMMultimediaRecord) then Result := ListMultimedia
+    else
+    if (aRecord is TGEDCOMSourceRecord) then Result := ListSources
+    else
+    if (aRecord is TGEDCOMRepositoryRecord) then Result := ListRepositories
+    else
+    if (aRecord is TGEDCOMGroupRecord) then Result := ListGroups
+    else
+    if (aRecord is TGEDCOMResearchRecord) then Result := ListResearches
+    else
+    if (aRecord is TGEDCOMTaskRecord) then Result := ListTasks
+    else
+    if (aRecord is TGEDCOMCommunicationRecord) then Result := ListCommunications
+    else
+    if (aRecord is TGEDCOMLocationRecord) then Result := ListLocations;
+  end;
+
+var
+  list: TRecordsView;
+begin
+  list := GetOwnerList(aRecord);
+
+  if (list <> nil) then begin
+    if (aNotify = rnDelete) then list.DeleteRecord(aRecord);
+  end;
+end;
+
+procedure TfmBase.actTestExecute(Sender: TObject);
+(*var
+  rec{, temp_src}: TGEDCOMRecord;
+  //cit: TGEDCOMSourceCitation;
+  i_rec: TGEDCOMIndividualRecord;
+  evt: TGEDCOMCustomEvent;
+  i, k: Integer;*)
+
+  (*i: Integer;
+  rec, frec: TGEDCOMRecord;
+  ht: TBSHashTable;
+  entry: TBSHashEntry;
+  //
+  fs: TFileStream;*)
+begin
+  (*temp_src := TGEDCOMSourceRecord(SelectRecord(smSource, []));
+  if (temp_src = nil) then Exit;
+  for i := 0 to FTree.RecordsCount - 1 do begin
+    rec := FTree.Records[i];
+
+    if (rec is TGEDCOMIndividualRecord) and (ListPersons.ContentList.IndexOf(rec) >= 0)
+    and (rec.SourceCitationsCount = 0)
+    then begin
+      cit := TGEDCOMSourceCitation.Create(FTree, rec);
+      cit.Value := temp_src;
+      cit.CertaintyAssessment := 3;
+      rec.AddSourceCitation(cit);
+    end;
+  end;
+  ListsRefresh();*)
+
+  (*temp_src := TGEDCOMSourceRecord(SelectRecord(smSource, []));
+  if (temp_src = nil) then Exit;
+  for i := 0 to FTree.RecordsCount - 1 do begin
+    rec := FTree.Records[i];
+
+    if (rec is TGEDCOMIndividualRecord) and (ListPersons.ContentList.IndexOf(rec) >= 0)
+    then begin
+      cit := TGEDCOMSourceCitation.Create(FTree, rec);
+      cit.Value := temp_src;
+      cit.CertaintyAssessment := 3;
+      rec.AddSourceCitation(cit);
+    end;
+  end;
+  ListsRefresh();*)
+
+  (*for i := 0 to FTree.Count - 1 do begin
+    rec := FTree.Records[i];
+
+    {$IFDEF PROFILER}Profiler.Mark(17, True);{$ENDIF}
+    frec := FTree.XRefIndex_Find(rec.XRef);
+    {$IFDEF PROFILER}Profiler.Mark(17, False);{$ENDIF}
+
+    Hole(frec);
+  end;
+
+  ht := TBSHashTable.Create(nil, TBSHashEntry, hkCRC32);
+  try
+    for i := 0 to FTree.Count - 1 do begin
+      rec := FTree.Records[i];
+      entry := ht.AddEntry(rec.XRef);
+    end;
+
+    for i := 0 to FTree.Count - 1 do begin
+      rec := FTree.Records[i];
+
+      {$IFDEF PROFILER}Profiler.Mark(18, True);{$ENDIF}
+      entry := ht.FindEntry(rec.XRef);
+      {$IFDEF PROFILER}Profiler.Mark(18, False);{$ENDIF}
+
+      Hole(entry);
+    end;
+  finally
+    ht.Destroy;
+  end;*)
+end;
+
+procedure TfmBase.ShowScriptDaemon();
+begin
+  fmScriptDaemon := TfmScriptDaemon.Create(Self);
+  try
+    ShowModalEx(fmScriptDaemon, Self);
+  finally
+    fmScriptDaemon.Destroy;
+  end;
+end;
+
+function TfmBase.RecordIsFiltered(aRecord: TGEDCOMRecord): Boolean;
+begin
+  Result := False;
+
+  if (aRecord is TGEDCOMIndividualRecord)
+  then Result := (ListPersons.ContentList.IndexOf(aRecord) >= 0)
+  else
+  if (aRecord is TGEDCOMFamilyRecord)
+  then Result := (ListFamilies.ContentList.IndexOf(aRecord) >= 0)
+  else
+  if (aRecord is TGEDCOMNoteRecord)
+  then Result := (ListNotes.ContentList.IndexOf(aRecord) >= 0)
+  else
+  if (aRecord is TGEDCOMMultimediaRecord)
+  then Result := (ListMultimedia.ContentList.IndexOf(aRecord) >= 0)
+  else
+  if (aRecord is TGEDCOMSourceRecord)
+  then Result := (ListSources.ContentList.IndexOf(aRecord) >= 0)
+  else
+  if (aRecord is TGEDCOMRepositoryRecord)
+  then Result := (ListRepositories.ContentList.IndexOf(aRecord) >= 0)
+  else
+  if (aRecord is TGEDCOMGroupRecord)
+  then Result := (ListGroups.ContentList.IndexOf(aRecord) >= 0)
+  else
+  if (aRecord is TGEDCOMResearchRecord)
+  then Result := (ListResearches.ContentList.IndexOf(aRecord) >= 0)
+  else
+  if (aRecord is TGEDCOMTaskRecord)
+  then Result := (ListTasks.ContentList.IndexOf(aRecord) >= 0)
+  else
+  if (aRecord is TGEDCOMCommunicationRecord)
+  then Result := (ListCommunications.ContentList.IndexOf(aRecord) >= 0)
+  else
+  if (aRecord is TGEDCOMLocationRecord)
+  then Result := (ListLocations.ContentList.IndexOf(aRecord) >= 0);
+end;
+
+function TfmBase.ModifyName(var aName: TName): Boolean;
+var
+  dlg: TfmNameEdit;
+begin
+  Result := False;
+
+  dlg := TfmNameEdit.Create(Self);
+  try
+    dlg.IName := aName;
+    Result := (ShowModalEx(dlg, Self) = mrOk);
+  finally
+    dlg.Destroy;
+  end;
+end;
+
+function TfmBase.DefinePatronymic(aName: string; aSex: TGEDCOMSex; aConfirm: Boolean): string;
+var
+  n: TName;
+begin
+  Result := '';
+
+  n := fmGEDKeeper.NamesTable.FindName(aName);
+  if (n = nil) then begin
+    if (aConfirm)
+    then n := fmGEDKeeper.NamesTable.AddName(aName)
+    else Exit;
+  end;
+
+  case aSex of
+    svMale: Result := n.M_Patronymic;
+    svFemale: Result := n.F_Patronymic;
+  end;
+
+  if (Result = '') then begin
+    if (aConfirm)
+    then ModifyName(n)
+    else Exit;
+  end;
+
+  case aSex of
+    svMale: Result := n.M_Patronymic;
+    svFemale: Result := n.F_Patronymic;
   end;
 end;
 

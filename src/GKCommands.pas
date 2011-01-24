@@ -3,7 +3,7 @@ unit GKCommands;
 interface
 
 uses
-  GKUIToolkit, GedCom551, GKCommon;
+  GedCom551, GKCommon;
 
 type
   {

@@ -51,7 +51,7 @@ implementation
 
 {$R *.DFM}
 
-uses xygraph, xygraph3d, GKProgress, GKCommon, Contnrs;
+uses xygraph, xygraph3d, GKProgress, GKEngine, Contnrs;
 
 const dataA : array[1..9] of single =
          (0,0.1,0.2,0.3,0.45,0.6,0.8,1,1.25);

@@ -48,7 +48,7 @@ var
 
 implementation
 
-uses GedCom551, bsComUtils, GKCommon, GKProgress, SdfData;
+uses GedCom551, bsComUtils, GKEngine, GKProgress, SdfData;
 
 {$R *.dfm}
 
@@ -285,7 +285,7 @@ var
     tokCount: Integer;
     nam, pat, fam, tmp, bd: string;
     sx: TGEDCOMSex;
-    attr: TGEDCOMIndividualAttribute;
+    evt: TGEDCOMCustomEvent;
   begin
     tmp := AnsiLowerCase(aTransferRec[gfFullName]);
     tokCount := GetTokensCount(tmp, ' ');
@@ -310,25 +310,25 @@ var
     bd := StringReplace(aTransferRec[gfBirthDate], '_', ' ', [rfReplaceAll]);
 
     if (bd <> '') or (aTransferRec[gfBirthPlace] <> '')
-    then CreateIEvent(tree, iRec, 'BIRT', StrToGEDCOMDate(bd, False), aTransferRec[gfBirthPlace]);
+    then CreateEventEx(tree, iRec, 'BIRT', StrToGEDCOMDate(bd, False), aTransferRec[gfBirthPlace]);
 
     if (aTransferRec[gfResiPlace] <> '') or (aTransferRec[gfResiAddress] <> '') then begin
-      attr := CreateIAttr(tree, iRec, 'RESI', '', aTransferRec[gfResiPlace]);
-      SetAddressValue(attr.Detail.Address, aTransferRec[gfResiAddress]);
+      evt := CreateEventEx(tree, iRec, 'RESI', '', aTransferRec[gfResiPlace]);
+      SetAddressValue(evt.Detail.Address, aTransferRec[gfResiAddress]);
 
       if (aTransferRec[gfPostIndex] <> '')
-      then attr.Detail.Address.AddressPostalCode := aTransferRec[gfPostIndex];
+      then evt.Detail.Address.AddressPostalCode := aTransferRec[gfPostIndex];
 
       if (aTransferRec[gfTel] <> '')
-      then attr.Detail.Address.PhoneNumbers[attr.Detail.Address.PhoneNumbersCount] := aTransferRec[gfTel];
+      then evt.Detail.Address.PhoneNumbers[evt.Detail.Address.PhoneNumbersCount] := aTransferRec[gfTel];
     end;
 
     if (aTransferRec[gfResiPlace2] <> '') or (aTransferRec[gfResiAddress2] <> '') then begin
-      attr := CreateIAttr(tree, iRec, 'RESI', '', aTransferRec[gfResiPlace2]);
-      SetAddressValue(attr.Detail.Address, aTransferRec[gfResiAddress2]);
+      evt := CreateEventEx(tree, iRec, 'RESI', '', aTransferRec[gfResiPlace2]);
+      SetAddressValue(evt.Detail.Address, aTransferRec[gfResiAddress2]);
 
       if (aTransferRec[gfPostIndex2] <> '')
-      then attr.Detail.Address.AddressPostalCode := aTransferRec[gfPostIndex2];
+      then evt.Detail.Address.AddressPostalCode := aTransferRec[gfPostIndex2];
     end;
   end;
 

@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Buttons,
-  ComCtrls, ExtCtrls, GedCom551, GKBase, GKCommon, Mask, GKLists;
+  ComCtrls, ExtCtrls, GedCom551, GKBase, GKEngine, Mask, GKLists;
 
 type
   TfmTaskEdit = class(TForm)
@@ -151,12 +151,12 @@ begin
     end;
 
     gtFamily: begin
-      FTempRec := Base.SelectRecord(smFamily, []);
+      FTempRec := Base.SelectRecord(rtFamily, []);
       EditGoal.Text := GetFamilyStr(FTempRec as TGEDCOMFamilyRecord);
     end;
 
     gtSource: begin
-      FTempRec := Base.SelectRecord(smSource, []);
+      FTempRec := Base.SelectRecord(rtSource, []);
       EditGoal.Text := (FTempRec as TGEDCOMSourceRecord).FiledByEntry;
     end;
 

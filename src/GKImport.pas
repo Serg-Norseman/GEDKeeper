@@ -2,6 +2,8 @@ unit GKImport;
 
 {$I GEDKeeper.inc}
 
+{$DEFINE IMPORT_DEBUG}
+
 interface
 
 uses
@@ -32,6 +34,7 @@ type
     procedure CheckBuf(buf: TStringList; iRec: TGEDCOMIndividualRecord);
     procedure CheckSpouses(buf: TStringList;
       iRec: TGEDCOMIndividualRecord);
+    procedure Import_StringList(aContent: TStringList);
   public
     constructor Create(aTree: TGEDCOMTree; aLog: TStrings);
 
@@ -41,7 +44,7 @@ type
 implementation
 
 uses
-  bsComUtils, GKCommon, Controls, Dialogs, Variants, ComObj, bsMiscUtils;
+  Variants, ComObj, bsComUtils, bsMiscUtils, GKEngine, GKSexCheck, GKMain;
 
 { TGKImporter }
 
@@ -158,6 +161,14 @@ begin
   if (mar_id > 1)
   then Hole(mar_id);
 
+  //// Alert
+  // из-за сложностей в определении пола, у предка может оказаться
+  // не установленным пол, в этом случае - добавление семьи зациклится
+  // для этого - устанавливаем пол намеренно, пусть даже ошибочно
+  if (parent.Sex in [svNone, svUndetermined])
+  then parent.Sex := svMale;
+  ////
+
   while (parent.SpouseToFamilyLinksCount < mar_id) do AddFamily(parent);
   Dec(mar_id);
 
@@ -266,7 +277,6 @@ end;
 function TGKImporter.ParsePerson(buf: TStringList; aStr, p_id: string; var self_id: Integer): TGEDCOMIndividualRecord;
 var
   S, f_name, f_pat, f_fam, bd, dd, com: string;
-  sx: TGEDCOMSex;
   x, parent_id, mar_id: Integer;
   parent: TGEDCOMIndividualRecord;
 begin
@@ -293,9 +303,9 @@ begin
   // parse name and dates
   DefinePersonName(aStr, p_id, f_name, f_pat, f_fam, bd, dd);
 
-  sx := GetSex(f_name, f_pat);
+  Result := CreatePersonEx(FTree, f_name, f_pat, f_fam, svNone, False);
+  CheckPersonSex(Result, fmGEDKeeper.NamesTable);
 
-  Result := CreatePersonEx(FTree, f_name, f_pat, f_fam, sx, False);
   FPersonsList.AddObject(IntToStr(self_id), Result);
 
   // в основной комментарий помещается также и первая линия,
@@ -316,6 +326,14 @@ begin
   end;
 end;
 
+function SkipBlanks(const S: string; Blanks: TCharSet = [' ']): string;
+begin
+  Result := S;
+
+  while (Length(Result) > 0) and (Result[1] in Blanks) do
+    Delete(Result, 1, 1);
+end;
+
 procedure TGKImporter.CheckSpouses(buf: TStringList; iRec: TGEDCOMIndividualRecord);
 var
   i, num, p: Integer;
@@ -330,7 +348,7 @@ begin
     // warning: temp stub
     while (Length(s) > 0) and (s[1] in [' ', '.']) do Delete(s, 1, 1);
 
-    if (s[1] in ['М', 'Ж']) then begin
+    if ((s[1] in ['М', 'Ж']) and ((s[2] in [' ', '1'..'9']))) then begin
       try
         // define sex
         if (s[1] = 'М')
@@ -356,7 +374,7 @@ begin
         end;
 
         // skip interval before name
-        while (Length(s) > 0) and (s[1] in [' ', '-']) do Delete(s, 1, 1);
+        while (Length(s) > 0) and (s[1] in [' ', '-', '–']) do Delete(s, 1, 1);
 
         // extract name
         p := 0;
@@ -389,77 +407,127 @@ end;
 
 procedure TGKImporter.CheckBuf(buf: TStringList; iRec: TGEDCOMIndividualRecord);
 begin
-  CheckSpouses(buf, iRec);
+  if (buf.Text <> '') then begin
+    if (iRec <> nil) then CheckSpouses(buf, iRec);
 
-  if (buf.Text <> '') then CreateNoteEx(FTree, buf, iRec {nil});
-  buf.Clear;
+    CreateNoteEx(FTree, buf, iRec);
+
+    buf.Clear;
+  end;
 end;
 
-procedure TGKImporter.Import_PlainText(aFileName: string);
+procedure TGKImporter.Import_StringList(aContent: TStringList);
 var
-  content, buf: TStringList;
-
-  {procedure AddCommentStr(iRec: TGEDCOMIndividualRecord; aStr: string);
-  var
-    sl: TStringList;
-  begin
-    sl := TStringList.Create;
-    try
-      sl.Text := aStr;
-      AddNote(FTree, iRec, sl);
-    finally
-      sl.Destroy;
-    end;
-  end;}
-
-var
+  buf: TStringList;
   i, prev_id, self_id: Integer;
   i_rec: TGEDCOMIndividualRecord;
   s, p_id: string;
 begin
   FLog.Clear;
 
-  content := TStringList.Create;
-  buf := TStringList.Create;
-  FPersonsList := TStringList.Create;
   try
-    content.LoadFromFile(aFileName);
-    content.Add('');
+    buf := TStringList.Create;
+    FPersonsList := TStringList.Create;
+    try
+      prev_id := 0;
+      i_rec := nil;
 
-    prev_id := 0;
-    i_rec := nil;
+      for i := 0 to aContent.Count - 1 do begin
+        s := Trim(aContent[i]);
 
-    for i := 0 to content.Count - 1 do begin
-      s := Trim(content[i]);
-
-      if (s = '') then begin
-        CheckBuf(buf, i_rec);
-        i_rec := nil;
-      end else begin
-        if IsRomeLine(s) then begin
-          FLog.Add('> Поколение "'+s+'"');
+        if (s = '') then begin
+          CheckBuf(buf, i_rec);
           i_rec := nil;
         end else begin
-          if not(IsPersonLine(s, p_id))
-          then buf.Add(s)
-          else begin
-            CheckBuf(buf, i_rec);
-            i_rec := ParsePerson(buf, s, p_id, self_id);
+          if IsRomeLine(s) then begin
+            FLog.Add('> Поколение "'+s+'"');
+            i_rec := nil;
+          end else begin
+            if not(IsPersonLine(s, p_id))
+            then buf.Add(s)
+            else begin
+              CheckBuf(buf, i_rec);
+              i_rec := ParsePerson(buf, s, p_id, self_id);
 
-            FLog.Add('> Распознана персональная запись "'+p_id+'".');
+              FLog.Add('> Распознана персональная запись "'+p_id+'".');
 
-            if (self_id - prev_id > 1)
-            then FLog.Add('>>>> Ошибка разбора: номера записей содержат пропуск.');
+              if (self_id - prev_id > 1)
+              then FLog.Add('>>>> Ошибка разбора: номера записей содержат пропуск.');
 
-            prev_id := self_id;
+              prev_id := self_id;
+            end;
           end;
         end;
       end;
+    finally
+      FPersonsList.Free;
+      buf.Free;
     end;
-  finally
-    FPersonsList.Free;
-    buf.Free;
-    content.Free;
+  except
+    on E: Exception do begin
+      FLog.Add('>>>> Импорт завершен с ошибкой программы.');
+      LogWrite('Import_StringList(): ' + E.Message);
+    end;
+  end;
+end;
+
+procedure TGKImporter.Import_PlainText(aFileName: string);
+var
+  content: TStringList;
+begin
+  try
+    content := TStringList.Create;
+    try
+      content.LoadFromFile(aFileName);
+      content.Add('');
+
+      Import_StringList(content);
+    finally
+      content.Free;
+    end;
+  except
+    on E: Exception do begin
+      FLog.Add('>>>> Ошибка загрузки данных.');
+      LogWrite('Import_PlainText(): ' + E.Message);
+    end;
+  end;
+end;
+
+procedure TGKImporter.Import_Word(aFileName: string);
+var
+  msword: Variant;
+  s: string;
+  content: TStringList;
+begin
+  try
+    try
+      msword := GetActiveOleObject('Word.Application');
+    except
+      on EOLESysError do msword := CreateOleObject('Word.Application');
+    end;
+
+    content := TStringList.Create;
+    try
+      msword.Visible := {$IFDEF IMPORT_DEBUG}True{$ELSE}False{$ENDIF};
+      msword.WindowState := -4137;
+      msword.Documents.Open(aFileName);
+
+      s := msword.ActiveDocument.Range.Text;
+      ExtractStrings([#11], [], PChar(s), content);
+      content.Add('');
+
+      Import_StringList(content);
+    finally
+      content.Destroy;
+
+      msword.Quit;
+      msword := Unassigned;
+    end;
+  except
+    on E: Exception do begin
+      FLog.Add('>>>> Ошибка загрузки данных.');
+      LogWrite('Import_Word(): ' + E.Message);
+    end;
   end;
 end;
 
@@ -467,107 +535,94 @@ procedure TGKImporter.Import_Excel(aFileName: string);
 var
   excel, sheet: Variant;
   buf: TStringList;
-  row, {cols_count, }rows_count, prev_id, self_id: Integer;
-  c1, c2, c3, c4, c5, s, p_id: string;
+  row, cols_count, rows_count, prev_id, self_id: Integer;
+  c1, c2, c3, c4, c5, c6, s, p_id, rome: string;
   i_rec: TGEDCOMIndividualRecord;
 begin
   try
-    excel := GetActiveOleObject('Excel.Application');
-  except
-    on EOLESysError do excel := CreateOleObject('Excel.Application');
-  end;
+    try
+      excel := GetActiveOleObject('Excel.Application');
+    except
+      on EOLESysError do excel := CreateOleObject('Excel.Application');
+    end;
 
-  excel.Visible := True;
-  // не показывать предупреждающие сообщения
-  excel.DisplayAlerts := False;
-  // открывать Excel на полный экран
-  excel.WindowState := -4137;
-  // открываем рабочую книгу
-  excel.Workbooks.Open(aFileName);
-  // становимся на первый лист
-  excel.WorkSheets[1].Activate;
-  sheet := excel.Sheets[1];
-  //sheet := excel.Workbooks[ExtractFileName(aFileName)].WorkSheets[1];
+    excel.Visible := {$IFDEF IMPORT_DEBUG}True{$ELSE}False{$ENDIF};
+    excel.DisplayAlerts := False;
+    excel.WindowState := -4137;
+    excel.Workbooks.Open(aFileName);
+    excel.WorkSheets[1].Activate;
+    sheet := excel.Sheets[1];
 
-  // получаем используемое количество строк и столбцов
-  rows_count := sheet.UsedRange.Rows.Count;
-  //cols_count := sheet.UsedRange.Columns.Count;
+    // получаем используемое количество строк и столбцов
+    rows_count := sheet.UsedRange.Rows.Count;
+    cols_count := sheet.UsedRange.Columns.Count;
 
-  FLog.Clear;
+    FLog.Clear;
 
-  buf := TStringList.Create;
-  FPersonsList := TStringList.Create;
-  try
-    prev_id := 0;
-    i_rec := nil;
+    buf := TStringList.Create;
+    FPersonsList := TStringList.Create;
+    try
+      prev_id := 0;
+      i_rec := nil;
 
-    for row := 1 to rows_count do begin
-      c1 := Trim(sheet.Cells[row, 1].Text);
-      c2 := Trim(sheet.Cells[row, 2].Text);
-      c3 := Trim(sheet.Cells[row, 3].Text);
-      c4 := Trim(sheet.Cells[row, 4].Text);
-      c5 := Trim(sheet.Cells[row, 5].Text);
-      //sheet.Cells[y, x].Value
+      for row := 1 to rows_count do begin
+        c1 := Trim(sheet.Cells[row, 1].Text); // номер позиции
+        c2 := Trim(sheet.Cells[row, 2].Text); // номер предка
+        c3 := Trim(sheet.Cells[row, 3].Text); // имя, может начинаться с номера брака
+        c4 := Trim(sheet.Cells[row, 4].Text); // дата рождения
+        c5 := Trim(sheet.Cells[row, 5].Text); // дата смерти
+        c6 := Trim(sheet.Cells[row, 6].Text); // место рождения или проживания
 
-      if (c1 = '') and (c3 = '') then begin
-        CheckBuf(buf, i_rec);
-        i_rec := nil;
-      end else begin
-        if IsRomeLine(c3) then begin
-          FLog.Add('> Поколение "'+c3+'"');
+        if (c1 = '') and (c3 = '') then begin
+          CheckBuf(buf, i_rec);
           i_rec := nil;
         end else begin
-          if c3[1] = '/'
-          then s := c1 + c2 + c3 + ' ' + c4 + ' ' + c5
-          else s := c1 + c2 + '. ' + c3 + ' ' + c4 + ' ' + c5;
+          if IsRomeLine(c2) then rome := c2
+          else
+          if IsRomeLine(c3) then rome := c3
+          else
+            rome := '';
 
-          if not(IsPersonLine(s, p_id))
-          then buf.Add(s)
-          else begin
-            CheckBuf(buf, i_rec);
-            i_rec := ParsePerson(buf, s, p_id, self_id);
+          if (rome <> '') then begin
+            FLog.Add('> Поколение "'+rome+'"');
+            i_rec := nil;
+          end else begin
+            if (c3[1] = '/')
+            then s := c1 + c2 + c3 + ' ' + c4 + ' ' + c5
+            else s := c1 + c2 + '. ' + c3 + ' ' + c4 + ' ' + c5;
 
-            FLog.Add('> Распознана персональная запись "'+p_id+'".');
+            if (c6 <> '')
+            then s := s + '. ' + c6 + '.';
 
-            if (self_id - prev_id > 1)
-            then FLog.Add('>>>> Ошибка разбора: номера записей содержат пропуск.');
+            if not(IsPersonLine(s, p_id))
+            then buf.Add(s)
+            else begin
+              CheckBuf(buf, i_rec);
+              i_rec := ParsePerson(buf, s, p_id, self_id);
 
-            prev_id := self_id;
+              FLog.Add('> Распознана персональная запись "'+p_id+'".');
+
+              if (self_id - prev_id > 1)
+              then FLog.Add('>>>> Ошибка разбора: номера записей содержат пропуск.');
+
+              prev_id := self_id;
+            end;
           end;
         end;
       end;
+    finally
+      FPersonsList.Free;
+      buf.Free;
+
+      excel.Quit;
+      excel := Unassigned;
     end;
-  finally
-    FPersonsList.Free;
-    buf.Free;
-  end;
-
-  excel.Quit;
-  excel := Unassigned;
-end;
-
-procedure TGKImporter.Import_Word(aFileName: string);
-var
-  msword: Variant;
-  s: string;
-begin
-  FLog.Clear;
-
-  try
-    msword := GetActiveOleObject('Word.Application');
   except
-    on EOLESysError do msword := CreateOleObject('Word.Application');
+    on E: Exception do begin
+      FLog.Add('>>>> Ошибка загрузки данных.');
+      LogWrite('Import_Excel(): ' + E.Message);
+    end;
   end;
-
-  msword.Visible := True;
-  msword.WindowState := -4137;
-  msword.Documents.Open(aFileName);
-
-  s := msword.ActiveDocument.Range.Text;
-  ExtractStrings([#11], [], PChar(s), FLog);
-
-  msword.Quit;
-  msword := Unassigned;
 end;
 
 procedure TGKImporter.TreeImportEx(aFileName: string);

@@ -28,6 +28,7 @@ Section "GEDKeeper (необходимо)"
 
   SetOutPath $INSTDIR
   File "GEDKeeper.exe"
+  File "lua51.dll"
   File "history.txt"
 
   ; Write the installation path into the registry
@@ -50,6 +51,7 @@ Section "Справка"
   SetOutPath "$INSTDIR\help"
 
   File ".\help\GEDKeeper.htm"
+  File ".\help\GKScripts.htm"
   File ".\help\relations.htm"
   File ".\help\*.gif"
   CreateShortCut "$SMPROGRAMS\GEDKeeper\Справка.lnk" "$INSTDIR\help\GEDKeeper.htm" "" "$INSTDIR\help\GEDKeeper.htm" 0
@@ -67,11 +69,16 @@ Section "Справка"
   CreateShortCut "$SMPROGRAMS\GEDKeeper\Благородные фамилии России.lnk" "$INSTDIR\help\rus-nobles.ged" "" "$INSTDIR\help\rus-nobles.ged" 0
 SectionEnd
 
-Section "Ярлык на рабочем столе"
-  CreateShortCut "$DESKTOP\GEDKeeper.lnk" "$INSTDIR\GEDKeeper.exe" "" "$INSTDIR\GEDKeeper.exe" 0
+Section "Примеры скриптов"
+  CreateDirectory "$INSTDIR\scripts"
+  SetOutPath "$INSTDIR\scripts"
+
+  File ".\scripts\*.lua"
 SectionEnd
 
 Section "Регистрация в системе"
+  CreateShortCut "$DESKTOP\GEDKeeper.lnk" "$INSTDIR\GEDKeeper.exe" "" "$INSTDIR\GEDKeeper.exe" 0
+
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\App Paths\GEDKeeper.exe" "" "$INSTDIR\GEDKeeper.exe"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\App Paths\GEDKeeper.exe" "Path" "$INSTDIR"
 

@@ -5,8 +5,8 @@ unit GKUserRefEdit;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Buttons, GedCom551, GKBase;
+  SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Buttons,
+  GedCom551, GKBase;
 
 type
   TfmUserRefEdit = class(TForm)
@@ -30,7 +30,7 @@ type
 
 implementation
 
-uses GKCommon, GKMain;
+uses GKMain;
 
 {$R *.dfm}
 
