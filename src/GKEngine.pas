@@ -7,11 +7,6 @@ interface
 uses
   Classes, Contnrs, GedCom551;
 
-{$IFNDEF DELPHI_NET}
-type
-  IntPtr = type Integer;
-{$ENDIF}
-
 resourcestring
   AppName = 'GEDKeeper';
 
@@ -25,13 +20,6 @@ const
   ExtTag = '_EXT_NAME';
   PatriarchTag = '_PATRIARCH';
   BookmarkTag = '_BOOKMARK';
-
-type
-  TGEDCOMRecordType = (
-    rtNone,
-    rtIndividual, rtFamily, rtNote, rtMultimedia, rtSource,
-    rtRepository, rtGroup, rtResearch, rtTask, rtCommunication, rtLocation,
-    rtSubmission, rtSubmitter);
 
 type
   TRecAction = (raAdd, raEdit, raDelete, raJump, raMoveUp, raMoveDown);
@@ -166,6 +154,10 @@ RACE        FTW, Gen, Reunion   Race
     { 9} (Name: 'По оценке';    Dates: [1]) {+}
   );
 
+  DateCalendars: array [TGEDCOMCalendar] of string =
+    ('Григорианский', 'Юлианский', 'Еврейский',
+     'Франц. революции', 'Римский', 'Неизвестный');
+
   FamilyEventsSize = 10;
   FamilyEvents: array [0..FamilyEventsSize-1] of record
     Name: string;
@@ -283,9 +275,6 @@ function GetSexBySign(const SexSign: Char): TGEDCOMSex;
 
 function IsDevComp(): Boolean;
 
-function GetRecordType(rec: TGEDCOMRecord): TGEDCOMRecordType;
-function RecordIsType(aRecType: TGEDCOMRecordType; aRec: TGEDCOMRecord): Boolean;
-
 function IsRecordAccess(aRecRestriction: TGEDCOMRestriction; aShieldState: TShieldState): Boolean;
 
 function GetPersonEventKindBySign(aSign: string): TPersonEventKind;
@@ -344,12 +333,15 @@ function GetEventCause(evDetail: TGEDCOMEventDetail): string;
 
 function IsLive(iRec: TGEDCOMIndividualRecord): Boolean;
 procedure GetLifeDates(iRec: TGEDCOMIndividualRecord; var aBirthEvent, aDeathEvent: TGEDCOMCustomEvent);
+
 procedure GetIndependentDate(aDate: TGEDCOMCustomDate; var AYear: Integer; var AMonth, ADay: Word);
+function GetIndependentYear(iRec: TGEDCOMIndividualRecord; evSign: string): Integer;
+
 function GetEventsYearsDiff(ev1, ev2: TGEDCOMCustomEvent; aCurEnd: Boolean = False): string;
 function GetLifeExpectancy(iRec: TGEDCOMIndividualRecord): string;
 function GetAge(iRec: TGEDCOMIndividualRecord; ToYear: Integer = -1): string;
-function GetFirstbornAge(iRec: TGEDCOMIndividualRecord): string;
-function GetMarriageAge(iRec: TGEDCOMIndividualRecord): string;
+function GetFirstbornAge(iRec: TGEDCOMIndividualRecord): Integer;
+function GetMarriageAge(iRec: TGEDCOMIndividualRecord): Integer;
 function GetDaysForBirth(iRec: TGEDCOMIndividualRecord): string;
 
 function GetChangeDate(aRec: TGEDCOMRecord): string;
@@ -363,16 +355,6 @@ function CreatePersonEx(aTree: TGEDCOMTree; aName, aPatronymic, aFamily: string;
 function CreateFamilyEx(aTree: TGEDCOMTree): TGEDCOMFamilyRecord;
 
 procedure SetAddressValue(anAddress: TGEDCOMAddress; aValue: string);
-
-procedure AddSpouseToFamily(aTree: TGEDCOMTree; aFamily: TGEDCOMFamilyRecord;
-  aSpouse: TGEDCOMIndividualRecord);
-procedure RemoveFamilySpouse(aTree: TGEDCOMTree; aFamily: TGEDCOMFamilyRecord;
-  aSpouse: TGEDCOMIndividualRecord);
-
-function FamilyChildAdd(aTree: TGEDCOMTree; aFamily: TGEDCOMFamilyRecord;
-  aChild: TGEDCOMIndividualRecord): Boolean;
-function FamilyChildRemove(aTree: TGEDCOMTree; aFamily: TGEDCOMFamilyRecord;
-  aChild: TGEDCOMIndividualRecord): Boolean;
 
 function CreateNote(aTree: TGEDCOMTree): TGEDCOMNoteRecord;
 procedure BindRecordNote(aTree: TGEDCOMTree; aRecord: TGEDCOMRecord;
@@ -412,24 +394,42 @@ function ClearFamily(aFamily: string): string;
 function PrepareRusFamily(f: string; aFemale: Boolean): string;
 
 function GetChildsCount(aPerson: TGEDCOMIndividualRecord): Integer;
-function GetAncestorsCount(aBuffer: TStringList; aPerson: TGEDCOMIndividualRecord): Integer;
-function GetDescendantsCount(aBuffer: TStringList; aPerson: TGEDCOMIndividualRecord): Integer;
+
+procedure InitExtCounts(aTree: TGEDCOMTree; aValue: Integer = -1);
+function GetAncestorsCount(aPerson: TGEDCOMIndividualRecord): Integer;
+function GetDescendantsCount(aPerson: TGEDCOMIndividualRecord): Integer;
+
 function GetDescGenerations(aPerson: TGEDCOMIndividualRecord): Integer;
 function GetMarriagesCount(aPerson: TGEDCOMIndividualRecord): Integer;
-function GetSpousesDiff(fRec: TGEDCOMFamilyRecord): string;
+function GetSpousesDiff(fRec: TGEDCOMFamilyRecord): Integer;
 
 type
-  TPatriarchObj = class(TObject)
-  public
-    IRec: TGEDCOMIndividualRecord;
-    IBirthYear,
-    IDescendantsCount,
-    IDescGenerations: Integer;
-    ILinks: set of Byte;
-  end;
+  TGEDCOMFormat = (gf_Unknown, gf_Native,
+    gf_GENBOX, gf_ALTREE, gf_AGES, gf_PAF);
 
-procedure GetPatriarchsList(aTree: TGEDCOMTree; aProgress, aLinks: Boolean;
-  var aList: TObjectList; aMinGens: Integer = 2);
+const
+  GEDCOMFormats: array [TGEDCOMFormat] of record
+    Sign: string;
+    Name: string;
+  end = (
+    (Sign: ''; Name: ''),
+    (Sign: 'GEDKeeper'; Name: ''),
+    (Sign: 'GENBOX'; Name: 'Genbox Family History'),
+    (Sign: 'ALTREE'; Name: 'Agelong Tree'), // Древо Жизни 4
+    (Sign: 'AGES'; Name: 'Ages!'),
+    (Sign: 'PAF'; Name: 'Personal Ancestral File')
+  );
+
+function GetGEDCOMFormat(aTree: TGEDCOMTree): TGEDCOMFormat;
+
+function CheckGEDCOMFormat(aTree: TGEDCOMTree): Boolean;
+
+type
+  TTreeWalkMode = (twmAll, twmFamily, twmAncestors, twmDescendants, twmNone);
+
+procedure TreeWalk(iRec: TGEDCOMIndividualRecord; aMode: TTreeWalkMode; aList: TList);
+procedure TreeMerge(aMainTree: TGEDCOMTree; aFileName: string; aLog: TStrings);
+procedure TreeSync(aMainTree: TGEDCOMTree; aFileName: string; aLog: TStrings);
 
 type
   TCommonStats = record
@@ -444,16 +444,83 @@ type
     mage, mage_m, mage_f, mage_cnt, mage_m_cnt, mage_f_cnt: Integer;
   end;
 
-procedure GetCommonStats(aTree: TGEDCOMTree; var aStats: TCommonStats);
+  TStatMode = (
+    smAncestors, smDescendants, smDescGenerations,
+    smFamilies, smNames, smPatronymics,
+    smAge, smLifeExpectancy,
+    smBirthYears, smBirthTenYears, smDeathYears, smDeathTenYears,
+    smChildsCount, smChildsDistribution,
+    smBirthPlaces, smDeathPlaces, smResidences, smOccupation,
+    smReligious, smNational, smEducation, smCaste,
+    smFirstbornAge, smMarriages, smMarriageAge, smSpousesDiff,
+    smHobby, smAward, smMili, smMiliInd, smMiliDis, smMiliRank);
 
-function CheckGEDCOMFormat(aTree: TGEDCOMTree): Boolean;
+  TPatriarchObj = class(TObject)
+  public
+    IRec: TGEDCOMIndividualRecord;
+    IBirthYear,
+    IDescendantsCount,
+    IDescGenerations: Integer;
+    ILinks: set of Byte;
+  end;
+
+type
+  TGenEngine = class(TObject)
+  private
+    FTree: TGEDCOMTree;
+    function GetIsAdvanced: Boolean;
+    procedure SetIsAdvanced(const Value: Boolean);
+    function GetExtName: string;
+    procedure SetExtName(const Value: string);
+  public
+    constructor Create;
+    destructor Destroy; override;
+
+    procedure AddFamilySpouse(aFamily: TGEDCOMFamilyRecord; aSpouse: TGEDCOMIndividualRecord);
+    procedure RemoveFamilySpouse(aFamily: TGEDCOMFamilyRecord; aSpouse: TGEDCOMIndividualRecord);
+
+    function AddFamilyChild(aFamily: TGEDCOMFamilyRecord; aChild: TGEDCOMIndividualRecord): Boolean;
+    function RemoveFamilyChild(aFamily: TGEDCOMFamilyRecord; aChild: TGEDCOMIndividualRecord): Boolean;
+
+    function AddResearchTask(aResearch: TGEDCOMResearchRecord; aTask: TGEDCOMTaskRecord): Boolean;
+    procedure RemoveResearchTask(aResearch: TGEDCOMResearchRecord; aTask: TGEDCOMTaskRecord);
+
+    function AddResearchGroup(aResearch: TGEDCOMResearchRecord; aGroup: TGEDCOMGroupRecord): Boolean;
+    procedure RemoveResearchGroup(aResearch: TGEDCOMResearchRecord; aGroup: TGEDCOMGroupRecord);
+
+    function AddResearchComm(aResearch: TGEDCOMResearchRecord; aComm: TGEDCOMCommunicationRecord): Boolean;
+    procedure RemoveResearchComm(aResearch: TGEDCOMResearchRecord; aComm: TGEDCOMCommunicationRecord);
+
+    function AddGroupMember(aGroup: TGEDCOMGroupRecord; aMember: TGEDCOMIndividualRecord): Boolean;
+    function RemoveGroupMember(aGroup: TGEDCOMGroupRecord; aMember: TGEDCOMIndividualRecord): Boolean;
+
+    function AddAssociation(aRec: TGEDCOMIndividualRecord; aRel: string; aRelPerson: TGEDCOMIndividualRecord): TGEDCOMAssociation;
+
+    procedure CleanFamily(aFamily: TGEDCOMFamilyRecord);
+    function GetSubmitter(): TGEDCOMSubmitterRecord;
+
+    function FindSource(aName: string): TGEDCOMSourceRecord;
+    procedure GetSourcesList(aSources: TStringList);
+
+    procedure GetCommonStats(var aStats: TCommonStats);
+    procedure GetSpecStats(aMode: TStatMode; aVals: TStringList);
+
+    procedure GetPatriarchsList(aProgress, aLinks: Boolean;
+      var aList: TObjectList; aMinGens: Integer = 2);
+    function GetPatriarchLinks(lst: TObjectList; pObj: TPatriarchObj): string;
+
+    property ExtName: string read GetExtName write SetExtName;
+    property IsAdvanced: Boolean read GetIsAdvanced write SetIsAdvanced;
+    property Tree: TGEDCOMTree read FTree write FTree;
+  end;
 
 implementation
 
 uses
-  {$IFDEF DELPHI_NET}System.IO,{$ENDIF}
-  Windows, SysUtils, DateUtils, Controls, Masks, bsComUtils, bsWinUtils, Dialogs,
-  GKProgress;
+  {$IFDEF DELPHI_NET} System.IO, {$ENDIF}
+  {$IFDEF PROFILER} ZProfiler, {$ENDIF}
+  Windows, SysUtils, DateUtils, Controls, Masks, Dialogs,
+  GKUtils, GKProgress;
 
 function GetSexBySign(const SexSign: Char): TGEDCOMSex;
 begin
@@ -469,50 +536,6 @@ end;
 function IsDevComp(): Boolean;
 begin
   Result := (GetComputerName() = 'VALHALLA') or (GetUserName() = 'Zhdanovskih_SV');
-end;
-
-function GetRecordType(rec: TGEDCOMRecord): TGEDCOMRecordType;
-begin
-  if (rec is TGEDCOMIndividualRecord) then Result := rtIndividual
-  else
-  if (rec is TGEDCOMFamilyRecord) then Result := rtFamily
-  else
-  if (rec is TGEDCOMNoteRecord) then Result := rtNote
-  else
-  if (rec is TGEDCOMMultimediaRecord) then Result := rtMultimedia
-  else
-  if (rec is TGEDCOMSourceRecord) then Result := rtSource
-  else
-  if (rec is TGEDCOMRepositoryRecord) then Result := rtRepository
-  else
-  if (rec is TGEDCOMGroupRecord) then Result := rtGroup
-  else
-  if (rec is TGEDCOMResearchRecord) then Result := rtResearch
-  else
-  if (rec is TGEDCOMTaskRecord) then Result := rtTask
-  else
-  if (rec is TGEDCOMCommunicationRecord) then Result := rtCommunication
-  else
-  if (rec is TGEDCOMLocationRecord) then Result := rtLocation
-  else Result := rtNone;
-end;
-
-function RecordIsType(aRecType: TGEDCOMRecordType; aRec: TGEDCOMRecord): Boolean;
-begin
-  case aRecType of
-    rtIndividual: Result := aRec is TGEDCOMIndividualRecord;
-    rtFamily: Result := aRec is TGEDCOMFamilyRecord;
-    rtNote: Result := aRec is TGEDCOMNoteRecord;
-    rtMultimedia: Result := aRec is TGEDCOMMultimediaRecord;
-    rtSource: Result := aRec is TGEDCOMSourceRecord;
-    rtRepository: Result := aRec is TGEDCOMRepositoryRecord;
-    rtGroup: Result := aRec is TGEDCOMGroupRecord;
-    rtResearch: Result := aRec is TGEDCOMResearchRecord;
-    rtTask: Result := aRec is TGEDCOMTaskRecord;
-    rtCommunication: Result := aRec is TGEDCOMCommunicationRecord;
-    rtLocation: Result := aRec is TGEDCOMLocationRecord;
-    else Result := False;
-  end;
 end;
 
 function IsRecordAccess(aRecRestriction: TGEDCOMRestriction; aShieldState: TShieldState): Boolean;
@@ -606,7 +629,7 @@ procedure GetNameParts(iRec: TGEDCOMIndividualRecord; var aFamily, aName, aPatro
 var
   np: TGEDCOMPersonalName;
 begin
-  if (iRec <> nil) then begin
+  if (iRec <> nil) and (iRec.PersonalNamesCount > 0) then begin
     np := iRec.PersonalNames[0];
     aFamily := np.Surname;
     if (GetTokensCount(np.FirstPart, ' ') > 1) then begin
@@ -616,6 +639,10 @@ begin
       aName := np.FirstPart;
       aPatronymic := '';
     end;
+  end else begin
+    aFamily := '';
+    aName := '';
+    aPatronymic := '';
   end;
 end;
 
@@ -633,7 +660,7 @@ var
   np: TGEDCOMPersonalName;
   nick: string;
 begin
-  if (iRec <> nil) then begin
+  if (iRec <> nil) and (iRec.PersonalNamesCount > 0) then begin
     np := iRec.PersonalNames[0];
 
     if (aByFamily)
@@ -703,23 +730,19 @@ end;
 
 function GetXRefNum(aRecord: TGEDCOMRecord): string;
 var
-  xref, sign: string;
+  xref: string;
 begin
   xref := aRecord.XRef;
-  sign := GetSignByRecord(aRecord);
-  Delete(xref, 1, Length(sign));
+  while not(xref[1] in ['0'..'9']) do Delete(xref, 1, 1);
   Result := xref;
 end;
 
 function GetId(aRecord: TGEDCOMRecord): Integer;
 var
-  xref, sign: string;
+  xref: string;
 begin
   try
-    xref := aRecord.XRef;
-    sign := GetSignByRecord(aRecord);
-    Delete(xref, 1, Length(sign));
-
+    xref := GetXRefNum(aRecord);
     Result := StrToIntDef(xref, 0);
   except
     Result := -1;
@@ -880,7 +903,11 @@ begin
     then Result := 0
     else Result := EncodeDate(year, month, day);
   except
-    Result := 0;
+    on E: Exception do begin
+      LogWrite(Format('GEDCOMDateToDate(%d, %d, %d): ', [year, month, day]) + E.Message);
+      LogWrite('Record (' + TGEDCOMRecord(TGEDCOMTag(aDate).ParentRecord).XRef + '): invalid date');
+      Result := 0;
+    end;
   end;
 end;
 
@@ -1167,19 +1194,30 @@ begin
   end;
 end;
 
+function GetIndependentYear(iRec: TGEDCOMIndividualRecord; evSign: string): Integer;
+var
+  ev: TGEDCOMCustomEvent;
+  year: Integer;
+  am, ad: Word;
+begin
+  ev := GetIndividualEvent(iRec, evSign);
+
+  if (ev = nil)
+  then Result := -1
+  else begin
+    GetIndependentDate(ev.Detail.Date.Value, year, am, ad);
+    Result := year;
+  end;
+end;
+
 function GetAbstractDate(aEventDetail: TGEDCOMEventDetail): Double;
 var
-  //dt: TGEDCOMDate;
   y: Integer;
   m, d: Word;
 begin
   Result := 0.0;
 
   GetIndependentDate(aEventDetail.Date.Value, y, m, d);
-
-  //dt := TGEDCOMDate(aEventDetail.Date.Value);
-  //if not((dt is TGEDCOMDate)) then Exit;
-  //dt.GetDate(y, m, d);
 
   if (y > 0) then begin
     Result := y;
@@ -1265,7 +1303,7 @@ begin
     end;
 
     if (ToYear = -1)
-    then Result := GetEventsYearsDiff(ev1, ev2, True)
+    then Result := GetEventsYearsDiff(ev1, ev2, (ev2 = nil){True})
     else begin
       if (ev1 = nil)
       then Result := ''
@@ -1278,7 +1316,7 @@ begin
   end;
 end;
 
-function GetFirstbornAge(iRec: TGEDCOMIndividualRecord): string;
+function GetFirstbornAge(iRec: TGEDCOMIndividualRecord): Integer;
 var
   y1, y2, y2tmp: Double;
   i, k: Integer;
@@ -1286,7 +1324,7 @@ var
   family: TGEDCOMFamilyRecord;
   child: TGEDCOMIndividualRecord;
 begin
-  Result := '?';
+  Result := 0;
   try
     y1 := 0.0;
     y2 := 0.0;
@@ -1316,12 +1354,12 @@ begin
     end;
 
     if (y1 > 1.0) and (y2 > 1.0)
-    then Result := IntToStr(Trunc(y2 - y1));
+    then Result := Trunc(y2 - y1);
   except
   end;
 end;
 
-function GetMarriageAge(iRec: TGEDCOMIndividualRecord): string;
+function GetMarriageAge(iRec: TGEDCOMIndividualRecord): Integer;
 var
   y1, y2, y2tmp: Double;
   i: Integer;
@@ -1329,7 +1367,7 @@ var
   fEvent: TGEDCOMFamilyEvent;
   family: TGEDCOMFamilyRecord;
 begin
-  Result := '?';
+  Result := 0;
   try
     y1 := 0.0;
     y2 := 0.0;
@@ -1355,7 +1393,7 @@ begin
     end;
 
     if (y1 > 1.0) and (y2 > 1.0)
-    then Result := IntToStr(Trunc(y2 - y1));
+    then Result := Trunc(y2 - y1);
   except
   end;
 end;
@@ -1491,72 +1529,6 @@ begin
     anAddress.Address := sl;
   finally
     sl.Free;
-  end;
-end;
-
-procedure AddSpouseToFamily(aTree: TGEDCOMTree; aFamily: TGEDCOMFamilyRecord;
-  aSpouse: TGEDCOMIndividualRecord);
-var
-  spLink: TGEDCOMSpouseToFamilyLink;
-begin
-  case aSpouse.Sex of
-    svNone, svUndetermined: Exit;
-
-    svMale: aFamily.Husband.Value := aSpouse;
-    svFemale: aFamily.Wife.Value := aSpouse;
-  end;
-
-  spLink := TGEDCOMSpouseToFamilyLink.Create(aTree, aSpouse);
-  spLink.Family := aFamily;
-  aSpouse.AddSpouseToFamilyLink(spLink);
-end;
-
-procedure RemoveFamilySpouse(aTree: TGEDCOMTree; aFamily: TGEDCOMFamilyRecord;
-  aSpouse: TGEDCOMIndividualRecord);
-begin
-  if (aSpouse <> nil) then begin
-    aSpouse.DeleteSpouseToFamilyLink(aFamily);
-
-    case aSpouse.Sex of
-      svNone, svUndetermined: ;
-
-      svMale: aFamily.Husband.Value := nil;
-      svFemale: aFamily.Wife.Value := nil;
-    end;
-  end;
-end;
-
-function FamilyChildAdd(aTree: TGEDCOMTree; aFamily: TGEDCOMFamilyRecord;
-  aChild: TGEDCOMIndividualRecord): Boolean;
-var
-  chLink: TGEDCOMChildToFamilyLink;
-  ptr: TGEDCOMPointer;
-begin
-  try
-    ptr := TGEDCOMPointer.Create(aTree, aFamily);
-    ptr.SetNamedValue('CHIL', aChild);
-    aFamily.AddChild(ptr);
-
-    chLink := TGEDCOMChildToFamilyLink.Create(aTree, aChild);
-    chLink.Family := aFamily;
-    aChild.AddChildToFamilyLink(chLink);
-
-    Result := True;
-  except
-    Result := False;
-  end;
-end;
-
-function FamilyChildRemove(aTree: TGEDCOMTree; aFamily: TGEDCOMFamilyRecord;
-  aChild: TGEDCOMIndividualRecord): Boolean;
-begin
-  try
-    aFamily.DeleteChild(aChild);
-    aChild.DeleteChildToFamilyLink(aFamily);
-
-    Result := True;
-  except
-    Result := False;
   end;
 end;
 
@@ -1699,59 +1671,40 @@ function GenRecordLink(aTree: TGEDCOMTree; aRecord: TGEDCOMRecord;
 var
   st, sign: string;
 begin
-  sign := '';
-  if (aSigned) then begin
-    if (aRecord is TGEDCOMIndividualRecord) then sign := ''
-    else
-    if (aRecord is TGEDCOMFamilyRecord) then sign := 'Семья: '
-    else
-    if (aRecord is TGEDCOMMultimediaRecord) then sign := 'Медиа-объект: '
-    else
-    if (aRecord is TGEDCOMGroupRecord) then sign := 'Группа: '
-    else
-    if (aRecord is TGEDCOMSourceRecord) then sign := 'Источник: '
-    else
-    if (aRecord is TGEDCOMRepositoryRecord) then sign := 'Архив: '
-    else
-    if (aRecord is TGEDCOMResearchRecord) then sign := 'Исследование: '
-    else
-    if (aRecord is TGEDCOMTaskRecord) then sign := 'Задача: '
-    else
-    if (aRecord is TGEDCOMCommunicationRecord) then sign := 'Корреспонденция: '
-    else
-    if (aRecord is TGEDCOMLocationRecord) then sign := 'Место: ';
+  if (aRecord = nil) then begin
+    Result := '';
+    Exit;
   end;
 
-  if (aRecord is TGEDCOMIndividualRecord)
-  then st := GetNameStr(TGEDCOMIndividualRecord(aRecord))
-  else
-  if (aRecord is TGEDCOMFamilyRecord)
-  then st := GetFamilyStr(TGEDCOMFamilyRecord(aRecord))
-  else
-  if (aRecord is TGEDCOMMultimediaRecord)
-  then st := TGEDCOMMultimediaRecord(aRecord).FileReferences[0].Title
-  else
-  if (aRecord is TGEDCOMGroupRecord)
-  then st := TGEDCOMGroupRecord(aRecord).Name
-  else
-  if (aRecord is TGEDCOMSourceRecord)
-  then st := TGEDCOMSourceRecord(aRecord).FiledByEntry
-  else
-  if (aRecord is TGEDCOMRepositoryRecord)
-  then st := TGEDCOMRepositoryRecord(aRecord).RepositoryName
-  else
-  if (aRecord is TGEDCOMResearchRecord)
-  then st := TGEDCOMResearchRecord(aRecord).Name
-  else
-  if (aRecord is TGEDCOMTaskRecord)
-  then st := GetTaskGoalStr(aTree, TGEDCOMTaskRecord(aRecord))
-  else
-  if (aRecord is TGEDCOMCommunicationRecord)
-  then st := TGEDCOMCommunicationRecord(aRecord).Name
-  else
-  if (aRecord is TGEDCOMLocationRecord)
-  then st := TGEDCOMLocationRecord(aRecord).Name
-  else st := aRecord.XRef;
+  sign := '';
+  if (aSigned) then begin
+    case aRecord.RecordType of
+      rtIndividual: sign := '';
+      rtFamily: sign := 'Семья: ';
+      rtMultimedia: sign := 'Медиа-объект: ';
+      rtGroup: sign := 'Группа: ';
+      rtSource: sign := 'Источник: ';
+      rtRepository: sign := 'Архив: ';
+      rtResearch: sign := 'Исследование: ';
+      rtTask: sign := 'Задача: ';
+      rtCommunication: sign := 'Корреспонденция: ';
+      rtLocation: sign := 'Место: ';
+    end;
+  end;
+
+  case aRecord.RecordType of
+    rtIndividual: st := GetNameStr(TGEDCOMIndividualRecord(aRecord));
+    rtFamily: st := GetFamilyStr(TGEDCOMFamilyRecord(aRecord));
+    rtMultimedia: st := TGEDCOMMultimediaRecord(aRecord).FileReferences[0].Title;
+    rtGroup: st := TGEDCOMGroupRecord(aRecord).Name;
+    rtSource: st := TGEDCOMSourceRecord(aRecord).FiledByEntry;
+    rtRepository: st := TGEDCOMRepositoryRecord(aRecord).RepositoryName;
+    rtResearch: st := TGEDCOMResearchRecord(aRecord).Name;
+    rtTask: st := GetTaskGoalStr(aTree, TGEDCOMTaskRecord(aRecord));
+    rtCommunication: st := TGEDCOMCommunicationRecord(aRecord).Name;
+    rtLocation: st := TGEDCOMLocationRecord(aRecord).Name;
+    else st := aRecord.XRef;
+  end;
 
   Result := HyperLink(aRecord.XRef, sign + st);
 end;
@@ -1928,75 +1881,76 @@ begin
   end;
 end;
 
-function GetAncestorsCount(aBuffer: TStringList; aPerson: TGEDCOMIndividualRecord): Integer;
+procedure InitExtCounts(aTree: TGEDCOMTree; aValue: Integer = -1);
+var
+  i: Integer;
+  rec: TGEDCOMRecord;
+begin
+  for i := 0 to aTree.RecordsCount - 1 do begin
+    rec := aTree.Records[i];
+
+    if (rec is TGEDCOMIndividualRecord)
+    then rec.ExtData := TObject(aValue);
+  end;
+end;
+
+function GetAncestorsCount(aPerson: TGEDCOMIndividualRecord): Integer;
 var
   family: TGEDCOMFamilyRecord;
   anc: TGEDCOMIndividualRecord;
-  xref: string;
-  idx: Integer;
+  val: Integer;
 begin
   Result := 0;
   if (aPerson = nil) then Exit;
 
-  xref := aPerson.XRef;
+  val := Integer(aPerson.ExtData);
 
-  if (aBuffer <> nil)
-  then idx := aBuffer.IndexOf(xref)
-  else idx := -1;
-
-  if (idx >= 0) then begin
-    Result := Integer(aBuffer.Objects[idx]);
-  end else begin
-    Result := 1;
+  if (val < 0) then begin
+    val := 1;
 
     if (aPerson.ChildToFamilyLinksCount > 0) then begin
       family := aPerson.ChildToFamilyLinks[0].Family;
 
       anc := TGEDCOMIndividualRecord(family.Husband.Value);
-      Result := Result + GetAncestorsCount(aBuffer, anc);
+      val := val + GetAncestorsCount(anc);
 
       anc := TGEDCOMIndividualRecord(family.Wife.Value);
-      Result := Result + GetAncestorsCount(aBuffer, anc);
+      val := val + GetAncestorsCount(anc);
     end;
 
-    if (aBuffer <> nil)
-    then aBuffer.AddObject(xref, TObject(Result));
+    aPerson.ExtData := TObject(val);
   end;
+
+  Result := val;
 end;
 
-function GetDescendantsCount(aBuffer: TStringList; aPerson: TGEDCOMIndividualRecord): Integer;
+function GetDescendantsCount(aPerson: TGEDCOMIndividualRecord): Integer;
 var
   family: TGEDCOMFamilyRecord;
   iChild: TGEDCOMIndividualRecord;
-  i, k, idx: Integer;
-  xref: string;
+  i, k, val: Integer;
 begin
   Result := 0;
   if (aPerson = nil) then Exit;
 
-  xref := aPerson.XRef;
+  val := Integer(aPerson.ExtData);
 
-  if (aBuffer <> nil)
-  then idx := aBuffer.IndexOf(xref)
-  else idx := -1;
-
-  if (idx >= 0) then begin
-    Result := Integer(aBuffer.Objects[idx]);
-  end else begin
-    Result := 1;
+  if (val < 0) then begin
+    val := 1;
 
     for i := 0 to aPerson.SpouseToFamilyLinksCount - 1 do begin
       family := aPerson.SpouseToFamilyLinks[i].Family;
 
       for k := 0 to family.ChildrenCount - 1 do begin
         iChild := TGEDCOMIndividualRecord(family.Children[k].Value);
-        Result := Result + GetDescendantsCount(aBuffer, iChild);
+        val := val + GetDescendantsCount(iChild);
       end;
     end;
 
-    if (aBuffer <> nil)
-    then aBuffer.AddObject(xref, TObject(Result));
+    aPerson.ExtData := TObject(val);
   end;
+
+  Result := val;
 end;
 
 function GetDescGenerations(aPerson: TGEDCOMIndividualRecord): Integer;
@@ -2034,13 +1988,13 @@ begin
   else Result := aPerson.SpouseToFamilyLinksCount;
 end;
 
-function GetSpousesDiff(fRec: TGEDCOMFamilyRecord): string;
+function GetSpousesDiff(fRec: TGEDCOMFamilyRecord): Integer;
 var
   y1, y2: Double;
   event: TGEDCOMCustomEvent;
   h, w: TGEDCOMIndividualRecord;
 begin
-  Result := '?';
+  Result := 0;
   try
     y1 := -1.0;
     y2 := -1.0;
@@ -2058,386 +2012,12 @@ begin
     then y2 := GetAbstractDate(event.Detail);
 
     if (y1 > 0.0) and (y2 > 0.0)
-    then Result := IntToStr(Trunc(Abs(y2 - y1)));
+    then Result := Trunc(Abs(y2 - y1));
   except
   end;
 end;
 
-function PatriarchsCompare(Item1, Item2: Pointer): Integer;
-begin
-  Result := TPatriarchObj(Item1).IBirthYear - TPatriarchObj(Item2).IBirthYear;
-end;
-
-procedure GetPatriarchsList(aTree: TGEDCOMTree; aProgress, aLinks: Boolean;
-  var aList: TObjectList; aMinGens: Integer = 2);
-
-  function SearchAnc(descendantRec, searchRec: TGEDCOMIndividualRecord): Boolean;
-  var
-    family: TGEDCOMFamilyRecord;
-    ancestor: TGEDCOMIndividualRecord;
-  begin
-    Result := False;
-    if (descendantRec = nil) then Exit;
-
-    Result := (descendantRec = searchRec);
-    if (Result) then Exit;
-
-    if (descendantRec.ChildToFamilyLinksCount > 0) then begin
-      family := descendantRec.ChildToFamilyLinks[0].Family;
-
-      ancestor := TGEDCOMIndividualRecord(family.Husband.Value);
-      if (ancestor <> nil) then begin
-        Result := SearchAnc(ancestor, searchRec);
-        if (Result) then Exit;
-      end;
-
-      ancestor := TGEDCOMIndividualRecord(family.Wife.Value);
-      if (ancestor <> nil) then begin
-        Result := SearchAnc(ancestor, searchRec);
-        if (Result) then Exit;
-      end;
-    end;
-  end;
-
-  function SearchDesc(ancestorRec, searchRec: TGEDCOMIndividualRecord): Boolean;
-  var
-    i, k: Integer;
-    family: TGEDCOMFamilyRecord;
-    child: TGEDCOMIndividualRecord;
-    sp: TGEDCOMPointer;
-    spouse: TGEDCOMIndividualRecord;
-  begin
-    Result := False;
-
-    for i := 0 to ancestorRec.SpouseToFamilyLinksCount - 1 do begin
-      family := ancestorRec.SpouseToFamilyLinks[i].Family;
-
-      if (ancestorRec.Sex = svMale)
-      then sp := family.Wife
-      else sp := family.Husband;
-
-      if (sp <> nil) then begin
-        spouse := TGEDCOMIndividualRecord(sp.Value);
-
-        Result := SearchAnc(spouse, searchRec);
-        if (Result) then Exit;
-      end;
-
-      for k := 0 to family.ChildrenCount - 1 do begin
-        child := TGEDCOMIndividualRecord(family.Children[k].Value);
-        Result := SearchDesc(child, searchRec);
-        if (Result) then Exit;
-      end;
-    end;
-  end;
-
-var
-  buffer: TStringList;
-
-  function GetIndependentYear(iRec: TGEDCOMIndividualRecord): Integer;
-  var
-    ev: TGEDCOMCustomEvent;
-    year: Integer;
-    am, ad: Word;
-  begin
-    ev := GetIndividualEvent(iRec, 'BIRT');
-
-    if (ev = nil)
-    then Result := -1
-    else begin
-      GetIndependentDate(ev.Detail.Date.Value, year, am, ad);
-      Result := year;
-    end;
-  end;
-
-  function GetBirthYear(iRec: TGEDCOMIndividualRecord): Integer;
-  var
-    family: TGEDCOMFamilyRecord;
-    child: TGEDCOMIndividualRecord;
-    i, k, year: Integer;
-  begin
-    Result := -1;
-    if (iRec = nil) then Exit;
-
-    year := GetIndependentYear(iRec);
-    if (year > 0) then begin
-      Result := year;
-      Exit;
-    end;
-
-    for i := 0 to iRec.SpouseToFamilyLinksCount - 1 do begin
-      family := iRec.SpouseToFamilyLinks[i].Family;
-
-      for k := 0 to family.ChildrenCount - 1 do begin
-        child := TGEDCOMIndividualRecord(family.Children[k].Value);
-        year := GetBirthYear(child);
-        if (year > 0) then begin
-          Result := year - 20;
-          Exit;
-        end;
-      end;
-    end;
-  end;
-
-var
-  i, k, bYear, descGens: Integer;
-  rec: TGEDCOMRecord;
-  i_rec: TGEDCOMIndividualRecord;
-  res: Boolean;
-  nf, nn, np: string;
-  pObj: TPatriarchObj;
-  patr1, patr2: TPatriarchObj;
-begin
-  if (aProgress) then ProgressInit(aTree.RecordsCount, 'Поиск патриархов');
-
-  buffer := TStringList.Create;
-  try
-    for i := 0 to aTree.RecordsCount - 1 do begin
-      rec := aTree.Records[i];
-
-      if (rec is TGEDCOMIndividualRecord) then begin
-        i_rec := rec as TGEDCOMIndividualRecord;
-        GetNameParts(i_rec, nf, nn, np);
-        bYear := GetBirthYear(i_rec);
-        descGens := GetDescGenerations(i_rec);
-
-        // 1: нет родителей
-        res := (i_rec.ChildToFamilyLinksCount = 0);
-        // 2: мужской пол
-        res := res and (i_rec.Sex = svMale);
-        // 3: известна фамилия и имя
-        res := res and ((nf <> '') and (nf <> '?'))
-                   and ((nn <> '') and (nn <> '?'));
-        // 4: количество поколений потомков
-        res := res and (descGens >= aMinGens);
-        // 5: год рождения известен или можно вычислить
-        res := res and (bYear > 0);
-
-        // Поместить в список
-        if (res) then begin
-          pObj := TPatriarchObj.Create;
-          pObj.IRec := i_rec;
-          pObj.IBirthYear := bYear;
-          pObj.IDescendantsCount := GetDescendantsCount(buffer, i_rec) - 1;
-          pObj.IDescGenerations := descGens;
-          pObj.ILinks := [];
-          aList.Add(pObj);
-        end;
-      end;
-
-      if (aProgress) then ProgressStep();
-    end;
-
-    aList.Sort(PatriarchsCompare);
-  finally
-    buffer.Free;
-    if (aProgress) then ProgressDone();
-  end;
-
-  if (aLinks) then begin
-    if (aProgress) then ProgressInit(aList.Count, 'Поиск взаимосвязей');
-    try
-      for i := 0 to aList.Count - 1 do begin
-        patr1 := TPatriarchObj(aList[i]);
-
-        for k := i + 1 to aList.Count - 1 do begin
-          patr2 := TPatriarchObj(aList[k]);
-
-          res := SearchDesc(patr1.IRec, patr2.IRec);
-          if res then begin
-            patr1.ILinks := patr1.ILinks + [k];
-            patr2.ILinks := patr2.ILinks + [i];
-          end;
-        end;
-
-        if (aProgress) then ProgressStep();
-      end;
-    finally
-      if (aProgress) then ProgressDone();
-    end;
-  end;
-end;
-
-procedure GetCommonStats(aTree: TGEDCOMTree; var aStats: TCommonStats);
-var
-  i, ch_cnt, m_cnt: Integer;
-  rec: TGEDCOMRecord;
-  ind: TGEDCOMIndividualRecord;
-  v_age, v_life, v_fba, v_mage: string;
-begin
-  with aStats do begin
-    persons := 0;
-    persons_m := 0;
-    persons_f := 0;
-
-    lives := 0;
-    lives_m := 0;
-    lives_f := 0;
-
-    age := 0;
-    age_m := 0;
-    age_f := 0;
-    age_cnt := 0;
-    age_m_cnt := 0;
-    age_f_cnt := 0;
-
-    life := 0;
-    life_m := 0;
-    life_f := 0;
-    life_cnt := 0;
-    life_m_cnt := 0;
-    life_f_cnt := 0;
-
-    childs := 0;
-    childs_m := 0;
-    childs_f := 0;
-    childs_cnt := 0;
-    childs_m_cnt := 0;
-    childs_f_cnt := 0;
-
-    fba := 0;
-    fba_m := 0;
-    fba_f := 0;
-    fba_cnt := 0;
-    fba_m_cnt := 0;
-    fba_f_cnt := 0;
-
-    marr := 0;
-    marr_m := 0;
-    marr_f := 0;
-    marr_cnt := 0;
-    marr_m_cnt := 0;
-    marr_f_cnt := 0;
-
-    mage := 0;
-    mage_m := 0;
-    mage_f := 0;
-    mage_cnt := 0;
-    mage_m_cnt := 0;
-    mage_f_cnt := 0;
-
-    for i := 0 to aTree.RecordsCount - 1 do begin
-      rec := aTree.Records[i];
-
-      if (rec is TGEDCOMIndividualRecord) then begin
-        ind := rec as TGEDCOMIndividualRecord;
-
-        Inc(persons);
-        if IsLive(ind) then Inc(lives);
-
-        v_age := GetAge(ind);
-        if (v_age <> '') and (v_age <> '?') then begin
-          age := age + StrToInt(v_age);
-          Inc(age_cnt);
-        end;
-
-        v_life := GetLifeExpectancy(ind);
-        if (v_life <> '') and (v_life <> '?') then begin
-          life := life + StrToInt(v_life);
-          Inc(life_cnt);
-        end;
-
-        ch_cnt := GetChildsCount(ind);
-        if (ch_cnt <> 0) then begin
-          childs := childs + ch_cnt;
-          Inc(childs_cnt);
-        end;
-
-        v_fba := GetFirstbornAge(ind);
-        if (v_fba <> '') and (v_fba <> '?') then begin
-          fba := fba + StrToInt(v_fba);
-          Inc(fba_cnt);
-        end;
-
-        m_cnt := GetMarriagesCount(ind);
-        if (m_cnt <> 0) then begin
-          marr := marr + m_cnt;
-          Inc(marr_cnt);
-        end;
-
-        v_mage := GetMarriageAge(ind);
-        if (v_mage <> '') and (v_mage <> '?') then begin
-          mage := mage + StrToInt(v_mage);
-          Inc(mage_cnt);
-        end;
-
-        case ind.Sex of
-          svMale: begin
-            Inc(persons_m);
-            if IsLive(ind) then Inc(lives_m);
-
-            if (v_age <> '') and (v_age <> '?') then begin
-              age_m := age_m + StrToInt(v_age);
-              Inc(age_m_cnt);
-            end;
-
-            if (v_life <> '') and (v_life <> '?') then begin
-              life_m := life_m + StrToInt(v_life);
-              Inc(life_m_cnt);
-            end;
-
-            if (ch_cnt <> 0) then begin
-              childs_m := childs_m + ch_cnt;
-              Inc(childs_m_cnt);
-            end;
-
-            if (v_fba <> '') and (v_fba <> '?') then begin
-              fba_m := fba_m + StrToInt(v_fba);
-              Inc(fba_m_cnt);
-            end;
-
-            if (m_cnt <> 0) then begin
-              marr_m := marr_m + m_cnt;
-              Inc(marr_m_cnt);
-            end;
-
-            if (v_mage <> '') and (v_mage <> '?') then begin
-              mage_m := mage_m + StrToInt(v_mage);
-              Inc(mage_m_cnt);
-            end;
-          end;
-
-          svFemale: begin
-            Inc(persons_f);
-            if IsLive(ind) then Inc(lives_f);
-
-            if (v_age <> '') and (v_age <> '?') then begin
-              age_f := age_f + StrToInt(v_age);
-              Inc(age_f_cnt);
-            end;
-
-            if (v_life <> '') and (v_life <> '?') then begin
-              life_f := life_f + StrToInt(v_life);
-              Inc(life_f_cnt);
-            end;
-
-            if (ch_cnt <> 0) then begin
-              childs_f := childs_f + ch_cnt;
-              Inc(childs_f_cnt);
-            end;
-
-            if (v_fba <> '') and (v_fba <> '?') then begin
-              fba_f := fba_f + StrToInt(v_fba);
-              Inc(fba_f_cnt);
-            end;
-
-            if (m_cnt <> 0) then begin
-              marr_f := marr_f + m_cnt;
-              Inc(marr_f_cnt);
-            end;
-
-            if (v_mage <> '') and (v_mage <> '?') then begin
-              mage_f := mage_f + StrToInt(v_mage);
-              Inc(mage_f_cnt);
-            end;
-          end;
-        end;
-      end;
-    end;
-  end;
-end;
-
-procedure CheckRecord(aTree: TGEDCOMTree; aRec: TGEDCOMRecord);
+procedure CheckRecord(aTree: TGEDCOMTree; aRec: TGEDCOMRecord; aFormat: TGEDCOMFormat);
 
   procedure ReformNote(note: TGEDCOMNotes);
   var
@@ -2591,6 +2171,25 @@ procedure CheckRecord(aTree: TGEDCOMTree; aRec: TGEDCOMRecord);
     k: Integer;
     evt: TGEDCOMCustomEvent;
   begin
+    /// базовая проверка
+    if (aFormat = gf_Native) then begin
+      // проверка совместимости со старыми версиями
+      for k := 0 to ind.IndividualEventsCount - 1 do begin
+        evt := ind.IndividualEvents[k];
+        CheckEventPlace(evt);
+        CheckAttrCompatible(ind, evt);
+      end;
+
+      for k := 0 to ind.UserReferencesCount - 1 do begin
+        CheckURefCompatible(ind, ind.UserReferences[k]);
+      end;
+    end else begin
+      for k := 0 to ind.IndividualEventsCount - 1 do PrepareTag(ind.IndividualEvents[k].Detail);
+      for k := 0 to ind.ChildToFamilyLinksCount - 1 do PreparePtr(ind.ChildToFamilyLinks[k]);
+      for k := 0 to ind.SpouseToFamilyLinksCount - 1 do PreparePtr(ind.SpouseToFamilyLinks[k]);
+      for k := 0 to ind.AssociationsCount - 1 do PreparePtr(ind.Associations[k]);
+    end;
+
     /// Не указаны родители и супруги - нормально
 
     /// Пустые ссылки на семью родителей - зачищаем
@@ -2604,22 +2203,21 @@ procedure CheckRecord(aTree: TGEDCOMTree; aRec: TGEDCOMRecord);
       if (ind.SpouseToFamilyLinks[k].Family = nil)
       then ind.DeleteSpouseToFamilyLink(k);
     end;
-
-    for k := 0 to ind.IndividualEventsCount - 1 do begin
-      evt := ind.IndividualEvents[k];
-      CheckEventPlace(evt);
-      CheckAttrCompatible(ind, evt);
-    end;
-
-    for k := 0 to ind.UserReferencesCount - 1 do begin
-      CheckURefCompatible(ind, ind.UserReferences[k]);
-    end;
   end;
 
   procedure CheckFamily(fam: TGEDCOMFamilyRecord);
   var
     k: Integer;
   begin
+    /// базовая проверка
+    if (aFormat = gf_Native) then begin
+      // проверка совместимости со старыми версиями
+      for k := 0 to fam.FamilyEventCount - 1 do CheckEventPlace(fam.FamilyEvents[k]);
+    end else begin
+      // проверка совместимости с чужими данными
+      for k := 0 to fam.FamilyEventCount - 1 do PrepareTag(fam.FamilyEvents[k].Detail);
+    end;
+
     /// Пустые семьи (без супругов, детей и событий) - не трогаем
     /// Пустые указатели супругов не трогаем
 
@@ -2627,10 +2225,6 @@ procedure CheckRecord(aTree: TGEDCOMTree; aRec: TGEDCOMRecord);
     for k := fam.ChildrenCount - 1 downto 0 do begin
       if (fam.Children[k].Value = nil)
       then fam.DeleteChild(k);
-    end;
-
-    for k := 0 to fam.FamilyEventCount - 1 do begin
-      CheckEventPlace(fam.FamilyEvents[k]);
     end;
 
     /// Сортируем детей по возрасту (для древ и росписей)
@@ -2658,85 +2252,59 @@ procedure CheckRecord(aTree: TGEDCOMTree; aRec: TGEDCOMRecord);
   end;
 
 var
-  rwl: TGEDCOMRecord;
   i: Integer;
   mmLink: TGEDCOMMultimediaLink;
   note: TGEDCOMNotes;
   sourCit: TGEDCOMSourceCitation;
-  fam: TGEDCOMFamilyRecord;
-  ind: TGEDCOMIndividualRecord;
 begin
-  if (aRec is TGEDCOMRecord) then begin
-    rwl := aRec as TGEDCOMRecord;
+  /// Общие для всех записей свойства
+  if (aRec.UID = '') then aRec.NewUID();
 
-    /// Общие для всех записей свойства
-
-    if (rwl.UID = '') then rwl.NewUID();
-
-    for i := 0 to rwl.MultimediaLinksCount - 1 do begin
-      mmLink := rwl.MultimediaLinks[i];
+  if (aFormat <> gf_Native) then begin
+    for i := 0 to aRec.MultimediaLinksCount - 1 do begin
+      mmLink := aRec.MultimediaLinks[i];
       if not(mmLink.IsPointer) then ReformMultimediaLink(mmLink);
     end;
 
-    for i := 0 to rwl.NotesCount - 1 do begin
-      note := rwl.Notes[i];
+    for i := 0 to aRec.NotesCount - 1 do begin
+      note := aRec.Notes[i];
       if not(note.IsPointer) then ReformNote(note);
     end;
 
-    for i := 0 to rwl.SourceCitationsCount - 1 do begin
-      sourCit := rwl.SourceCitations[i];
+    for i := 0 to aRec.SourceCitationsCount - 1 do begin
+      sourCit := aRec.SourceCitations[i];
       if not(sourCit.IsPointer) then ReformSourceCitation(sourCit);
     end;
-
-    /// Раздельно по подвидам записей
-
-    if (rwl is TGEDCOMFamilyRecord) then begin
-      fam := rwl as TGEDCOMFamilyRecord;
-
-      for i := 0 to fam.FamilyEventCount - 1 do PrepareTag(fam.FamilyEvents[i].Detail);
-
-      CheckFamily(fam);
-    end
-    else
-    if (rwl is TGEDCOMIndividualRecord) then begin
-      ind := rwl as TGEDCOMIndividualRecord;
-
-      for i := 0 to ind.IndividualEventsCount - 1 do PrepareTag(ind.IndividualEvents[i].Detail);
-      for i := 0 to ind.ChildToFamilyLinksCount - 1 do PreparePtr(ind.ChildToFamilyLinks[i]);
-      for i := 0 to ind.SpouseToFamilyLinksCount - 1 do PreparePtr(ind.SpouseToFamilyLinks[i]);
-      for i := 0 to ind.AssociationsCount - 1 do PreparePtr(ind.Associations[i]);
-
-      CheckPerson(ind);
-    end
-    else
-    if (rwl is TGEDCOMMultimediaRecord) then begin
-      // dummy
-    end
-    else
-    if (rwl is TGEDCOMNoteRecord) then begin
-      // dummy
-    end
-    else
-    if (rwl is TGEDCOMRepositoryRecord) then begin
-      // dummy
-    end
-    else
-    if (rwl is TGEDCOMSourceRecord) then begin
-      // dummy
-    end
-    else
-    if (rwl is TGEDCOMSubmissionRecord) then begin
-      // dummy
-    end
-    else
-    if (rwl is TGEDCOMSubmitterRecord) then begin
-      // dummy
-    end
-    else
-    if (rwl is TGEDCOMGroupRecord) then begin
-      CheckGroup(rwl as TGEDCOMGroupRecord);
-    end;
   end;
+
+  /// Раздельно по подвидам записей
+  case aRec.RecordType of
+    rtFamily: CheckFamily(aRec as TGEDCOMFamilyRecord);
+    rtIndividual: CheckPerson(aRec as TGEDCOMIndividualRecord);
+    rtMultimedia: ;// dummy
+    rtNote: ;// dummy
+    rtRepository: ;// dummy
+    rtSource: ;// dummy
+    rtSubmission: ;// dummy
+    rtSubmitter: ;// dummy
+    rtGroup: CheckGroup(aRec as TGEDCOMGroupRecord);
+  end;
+end;
+
+function GetGEDCOMFormat(aTree: TGEDCOMTree): TGEDCOMFormat;
+var
+  gf: TGEDCOMFormat;
+  sour: string;
+begin
+  sour := aTree.Header.Source;
+
+  for gf := gf_Native to High(TGEDCOMFormat) do
+    if (GEDCOMFormats[gf].Sign = sour) then begin
+      Result := gf;
+      Exit;
+    end;
+
+  Result := gf_Unknown;
 end;
 
 function CheckGEDCOMFormat(aTree: TGEDCOMTree): Boolean;
@@ -2781,56 +2349,1073 @@ function CheckGEDCOMFormat(aTree: TGEDCOMTree): Boolean;
   end;
 
 var
-  i, k: Integer;
+  i{, k}: Integer;
   rec: TGEDCOMRecord;
   idCheck: Boolean;
+  format: TGEDCOMFormat;
 begin
+  {$IFDEF PROFILER}Profiler.Mark(2, True);{$ENDIF}
   Result := False;
-
-  {for i := 0 to aTree.RecordsCount - 1 do begin
-    for k := i + 1 to aTree.RecordsCount - 1 do begin
-      if (aTree.Records[i].XRef = aTree.Records[k].XRef)
-      then ; // AddDiag(aTree.Records[i].XRef, 'Объект дублирован');
-    end;
-  end;}
-
   ProgressInit(aTree.RecordsCount, 'Проверка формата');
   try
+    format := GetGEDCOMFormat(aTree);
+
+    {for i := 0 to aTree.RecordsCount - 1 do begin
+      for k := i + 1 to aTree.RecordsCount - 1 do begin
+        if (aTree.Records[i].XRef = aTree.Records[k].XRef)
+        then ; // AddDiag(aTree.Records[i].XRef, 'Объект дублирован');
+      end;
+    end;}
+
     idCheck := True;
     i := 0;
     while (i < aTree.RecordsCount) do begin
       rec := aTree.Records[i];
+      CheckRecord(aTree, rec, format);
 
-      // temp patch
-      {if (rec is TGEDCOMFamilyRecord)
-      and (TGEDCOMFamilyRecord(rec).Husband.Value = nil)
-      and (TGEDCOMFamilyRecord(rec).Wife.Value = nil)
-      and (TGEDCOMFamilyRecord(rec).ChildrenCount = 0)
-      and (TGEDCOMFamilyRecord(rec).FamilyEventCount = 0)
-      then begin
-        aTree.DeleteRecord(rec);
-        Continue;
-      end;}
-
-      CheckRecord(aTree, rec);
-
-      if (idCheck) and (GetId(rec) < 0)
-      then idCheck := False;
+      if (format <> gf_Native) then begin
+        if (idCheck) and (GetId(rec) < 0)
+        then idCheck := False;
+      end;
 
       Inc(i);
-
       ProgressStep();
     end;
+
+    if not(idCheck) then begin
+      if (MessageDlg('Требуется коррекция идентификаторов записей, продолжить?', mtWarning, [mbYes, mbNo], 0) = mrYes)
+      then CorrectIds();
+    end;
+
+    Result := True;
   finally
     ProgressDone();
   end;
+  {$IFDEF PROFILER}Profiler.Mark(2, False);{$ENDIF}
+end;
 
-  if not(idCheck) then begin
-    if (MessageDlg('Требуется коррекция идентификаторов записей, продолжить?', mtWarning, [mbYes, mbNo], 0) = mrYes)
-    then CorrectIds();
+{==============================================================================}
+
+procedure TreeWalk(iRec: TGEDCOMIndividualRecord; aMode: TTreeWalkMode; aList: TList);
+var
+  rel_person: TGEDCOMIndividualRecord;
+  sp: TGEDCOMPointer;
+  family: TGEDCOMFamilyRecord;
+  i, k: Integer;
+  int_mode: TTreeWalkMode; // twmAll, twmFamily, twmAncestors, twmDescendants, twmNone
+begin
+  if (iRec = nil) or (aList.IndexOf(iRec) >= 0) then Exit;
+
+  aList.Add(iRec);
+
+  if (aMode = twmNone) then Exit;
+
+  // родители
+  if (aMode in [twmAll, twmAncestors]) then begin
+    if (iRec.ChildToFamilyLinksCount > 0) then begin
+      family := iRec.ChildToFamilyLinks[0].Family;
+
+      rel_person := TGEDCOMIndividualRecord(family.Husband.Value);
+      TreeWalk(rel_person, aMode, aList);
+
+      rel_person := TGEDCOMIndividualRecord(family.Wife.Value);
+      TreeWalk(rel_person, aMode, aList);
+    end;
   end;
 
+  // супруги и дети
+  if (aMode in [twmAll, twmFamily, twmDescendants]) then begin
+    for i := 0 to iRec.SpouseToFamilyLinksCount - 1 do begin
+      family := iRec.SpouseToFamilyLinks[i].Family;
+
+      if (iRec.Sex = svMale)
+      then sp := family.Wife
+      else sp := family.Husband;
+
+      if (aMode = twmAll)
+      then int_mode := twmAll
+      else int_mode := twmNone;
+
+      rel_person := TGEDCOMIndividualRecord(sp.Value);
+      TreeWalk(rel_person, int_mode, aList);
+
+      case aMode of
+        twmAll: int_mode := twmAll;
+        twmFamily: int_mode := twmNone;
+        twmDescendants: int_mode := twmDescendants;
+      end;
+
+      for k := 0 to family.ChildrenCount - 1 do begin
+        rel_person := TGEDCOMIndividualRecord(family.Children[k].Value);
+        TreeWalk(rel_person, int_mode, aList);
+      end;
+    end;
+  end;
+end;
+
+procedure TreeMerge(aMainTree: TGEDCOMTree; aFileName: string; aLog: TStrings);
+var
+  repMap: TXRefReplaceMap;
+  i: Integer;
+  extTree: TGEDCOMTree;
+  rec: TGEDCOMRecord;
+  newXRef: string;
+begin
+  if (aLog <> nil) then begin
+    aLog.Clear;
+    aLog.Add('Количество объектов в основной базе: ' + IntToStr(aMainTree.RecordsCount));
+  end;
+
+  extTree := TGEDCOMTree.Create;
+  repMap := TXRefReplaceMap.Create;
+  try
+    extTree.LoadFromFile(aFileName);
+    extTree.Header.Clear;
+
+    while (extTree.RecordsCount > 0) do begin
+      rec := extTree.Extract(0);
+      newXRef := aMainTree.XRefIndex_NewXRef(rec);
+      repMap.AddXRef(rec, rec.XRef, newXRef);
+      rec.XRef := newXRef;
+      rec.ResetOwner(aMainTree);
+      aMainTree.AddRecord(rec);
+    end;
+
+    for i := 0 to repMap.Count - 1 do begin
+      rec := repMap.Records[i].Rec;
+      rec.ReplaceXRefs(repMap);
+    end;
+
+    if (aLog <> nil)
+    then aLog.Add('Новое количество объектов в основной базе: ' + IntToStr(aMainTree.RecordsCount));
+  finally
+    repMap.Free;
+    extTree.Destroy;
+  end;
+end;
+
+type
+  TSyncState = (ssUndefined, ssHasMaster, ssNoMaster);
+
+  TSyncRec = class(TObject)
+  public
+    MasterRecord, UpdateRecord: TGEDCOMRecord;
+    State: TSyncState;
+    UpdateOldXRef, UpdateNewXRef: string;
+  end;
+
+procedure TreeSync(aMainTree: TGEDCOMTree; aFileName: string; aLog: TStrings);
+// текущая реализация - доверенная синхронизация
+var
+  repMap: TXRefReplaceMap;
+  extTree: TGEDCOMTree;
+  i: Integer;
+  rec: TGEDCOMRecord;
+  sync_list: TObjectList;
+  sync_rec: TSyncRec;
+  {s, }newXRef, backUID: string;
+begin
+  aLog.Clear;
+
+  extTree := TGEDCOMTree.Create;
+  repMap := TXRefReplaceMap.Create;
+  sync_list := TObjectList.Create(True);
+  try
+    extTree.LoadFromFile(aFileName);
+    extTree.Header.Clear;
+
+    CheckGEDCOMFormat(extTree);
+
+    // создание списка объектов синхронизации
+    for i := 0 to extTree.RecordsCount - 1 do begin
+      rec := extTree.Records[i];
+
+      sync_rec := TSyncRec.Create;
+      sync_rec.MasterRecord := nil;
+      sync_rec.UpdateRecord := rec;
+      sync_rec.State := ssUndefined;
+      sync_rec.UpdateOldXRef := '';
+      sync_rec.UpdateNewXRef := '';
+      sync_list.Add(sync_rec);
+    end;
+
+    // поиск записей в мастер-базе
+    for i := 0 to sync_list.Count - 1 do begin
+      sync_rec := TSyncRec(sync_list[i]);
+      rec := aMainTree.FindUID(sync_rec.UpdateRecord.UID);
+
+      if (rec <> nil) then begin
+        sync_rec.MasterRecord := rec;
+        sync_rec.State := ssHasMaster;
+      end else begin
+        sync_rec.State := ssNoMaster;
+
+        // если не найдена - просто переносим,
+        // в них ничего менять не нужно
+        rec := extTree.Extract(extTree.IndexOfRecord(sync_rec.UpdateRecord));
+        newXRef := aMainTree.XRefIndex_NewXRef(rec);
+        repMap.AddXRef(rec, rec.XRef, newXRef);
+        rec.XRef := newXRef;
+        rec.ResetOwner(aMainTree);
+        aMainTree.AddRecord(rec);
+      end;
+    end;
+
+    // обновить ссылки в перенесенных
+    for i := 0 to repMap.Count - 1 do begin
+      rec := repMap.Records[i].Rec;
+      rec.ReplaceXRefs(repMap);
+    end;
+
+    // обновить ссылки в оставшихся
+    for i := 0 to extTree.RecordsCount - 1 do begin
+      rec := extTree.Records[i];
+      rec.ReplaceXRefs(repMap);
+    end;
+
+    // слить оставшиеся записи в их оригиналы
+    for i := 0 to sync_list.Count - 1 do begin
+      sync_rec := TSyncRec(sync_list[i]);
+
+      if (sync_rec.State = ssHasMaster) then begin
+        // подготовка
+        rec := extTree.Extract(extTree.IndexOfRecord(sync_rec.UpdateRecord));
+        rec.XRef := aMainTree.XRefIndex_NewXRef(rec);
+        rec.ResetOwner(aMainTree);
+        aMainTree.AddRecord(rec);
+
+        // в мастер-записи нужно сохранить UID
+        backUID := sync_rec.MasterRecord.UID;
+
+        // перенос
+        sync_rec.UpdateRecord.MoveTo(sync_rec.MasterRecord, [mfClearDest]);
+
+        // восстановить UID
+        sync_rec.MasterRecord.UID := backUID;
+
+        // зачистка
+        aMainTree.DeleteRecord(rec);
+      end;
+    end;
+
+    // диагностика
+    {for i := 0 to sync_list.Count - 1 do begin
+      sync_rec := TSyncRec(sync_list[i]);
+
+      s := IntToStr(i) + ': [' + sync_rec.UpdateRecord.XRef + '] -> [';
+      if (sync_rec.MasterRecord <> nil)
+      then s := s + sync_rec.MasterRecord.XRef + '] '
+      else s := s + '-] ';
+
+      aLog.Add(s);
+    end;}
+
+    aLog.Add('Синхронизация завершена.');
+  finally
+    sync_list.Free;
+    repMap.Free;
+    extTree.Destroy;
+  end;
+end;
+
+{ TGenEngine }
+
+constructor TGenEngine.Create;
+begin
+  inherited Create;
+  FTree := TGEDCOMTree.Create;
+end;
+
+destructor TGenEngine.Destroy;
+begin
+  FTree.Destroy;
+  inherited Destroy;
+end;
+
+function TGenEngine.FindSource(aName: string): TGEDCOMSourceRecord;
+var
+  i: Integer;
+  rec: TGEDCOMRecord;
+begin
+  Result := nil;
+
+  for i := 0 to FTree.RecordsCount - 1 do begin
+    rec := FTree.Records[i];
+
+    if (rec is TGEDCOMSourceRecord) and (TGEDCOMSourceRecord(rec).FiledByEntry = aName)
+    then begin
+      Result := TGEDCOMSourceRecord(rec);
+      Break;
+    end;
+  end;
+end;
+
+procedure TGenEngine.GetSourcesList(aSources: TStringList);
+var
+  i: Integer;
+  rec: TGEDCOMRecord;
+begin
+  if (aSources = nil) then Exit;
+
+  aSources.Clear();
+  for i := 0 to FTree.RecordsCount - 1 do begin
+    rec := FTree.Records[i];
+
+    if (rec is TGEDCOMSourceRecord)
+    then aSources.AddObject(TGEDCOMSourceRecord(rec).FiledByEntry, rec);
+  end;
+end;
+
+function TGenEngine.GetSubmitter(): TGEDCOMSubmitterRecord;
+var
+  submitter: TGEDCOMSubmitterRecord;
+begin
+  submitter := TGEDCOMSubmitterRecord(FTree.Header.Submitter.Value);
+
+  if (submitter = nil) then begin
+    submitter := TGEDCOMSubmitterRecord.Create(FTree, FTree);
+    submitter.InitNew();
+    FTree.AddRecord(submitter);
+    FTree.Header.SetTagStringValue('SUBM', '@'+submitter.XRef+'@');
+  end;
+
+  Result := submitter;
+end;
+
+function TGenEngine.GetIsAdvanced: Boolean;
+begin
+  Result := (FTree.Header.FindTag(AdvTag) <> nil);
+end;
+
+procedure TGenEngine.SetIsAdvanced(const Value: Boolean);
+begin
+  if (Value) then begin
+    if (FTree.Header.FindTag(AdvTag) = nil)
+    then FTree.Header.AddTag(AdvTag);
+  end else begin
+    FTree.Header.DeleteTag(AdvTag);
+  end;
+end;
+
+function TGenEngine.GetExtName: string;
+var
+  tag: TGEDCOMTag;
+begin
+  tag := FTree.Header.FindTag(ExtTag);
+  if (tag = nil)
+  then Result := ''
+  else Result := tag.StringValue;
+end;
+
+procedure TGenEngine.SetExtName(const Value: string);
+var
+  tag: TGEDCOMTag;
+begin
+  if (Value <> '') then begin
+    tag := FTree.Header.FindTag(ExtTag);
+    if (tag = nil) then tag := FTree.Header.AddTag(ExtTag);
+    tag.StringValue := Value;
+  end else begin
+    FTree.Header.DeleteTag(ExtTag);
+  end;
+end;
+
+procedure TGenEngine.AddFamilySpouse(aFamily: TGEDCOMFamilyRecord; aSpouse: TGEDCOMIndividualRecord);
+var
+  spLink: TGEDCOMSpouseToFamilyLink;
+begin
+  case aSpouse.Sex of
+    svNone, svUndetermined: Exit;
+
+    svMale: aFamily.Husband.Value := aSpouse;
+    svFemale: aFamily.Wife.Value := aSpouse;
+  end;
+
+  spLink := TGEDCOMSpouseToFamilyLink.Create(FTree, aSpouse);
+  spLink.Family := aFamily;
+  aSpouse.AddSpouseToFamilyLink(spLink);
+end;
+
+procedure TGenEngine.RemoveFamilySpouse(aFamily: TGEDCOMFamilyRecord; aSpouse: TGEDCOMIndividualRecord);
+begin
+  if (aSpouse <> nil) then begin
+    aSpouse.DeleteSpouseToFamilyLink(aFamily);
+
+    case aSpouse.Sex of
+      svNone, svUndetermined: ;
+
+      svMale: aFamily.Husband.Value := nil;
+      svFemale: aFamily.Wife.Value := nil;
+    end;
+  end;
+end;
+
+function TGenEngine.AddAssociation(aRec: TGEDCOMIndividualRecord; aRel: string;
+  aRelPerson: TGEDCOMIndividualRecord): TGEDCOMAssociation;
+begin
+  Result := TGEDCOMAssociation.Create(FTree, aRec);
+  Result.Relation := aRel;
+  Result.Individual := aRelPerson;
+  aRec.AddAssociation(Result);
+end;
+
+function TGenEngine.AddFamilyChild(aFamily: TGEDCOMFamilyRecord; aChild: TGEDCOMIndividualRecord): Boolean;
+var
+  chLink: TGEDCOMChildToFamilyLink;
+  ptr: TGEDCOMPointer;
+begin
+  try
+    ptr := TGEDCOMPointer.Create(FTree, aFamily);
+    ptr.SetNamedValue('CHIL', aChild);
+    aFamily.AddChild(ptr);
+
+    chLink := TGEDCOMChildToFamilyLink.Create(FTree, aChild);
+    chLink.Family := aFamily;
+    aChild.AddChildToFamilyLink(chLink);
+
+    Result := True;
+  except
+    Result := False;
+  end;
+end;
+
+function TGenEngine.RemoveFamilyChild(aFamily: TGEDCOMFamilyRecord; aChild: TGEDCOMIndividualRecord): Boolean;
+begin
+  try
+    aFamily.DeleteChild(aChild);
+    aChild.DeleteChildToFamilyLink(aFamily);
+
+    Result := True;
+  except
+    Result := False;
+  end;
+end;
+
+function TGenEngine.AddResearchTask(aResearch: TGEDCOMResearchRecord;
+  aTask: TGEDCOMTaskRecord): Boolean;
+var
+  ptr: TGEDCOMPointer;
+begin
+  Result := False;
+  if (aResearch = nil) or (aTask = nil) then Exit;
+
+  ptr := TGEDCOMPointer.Create(FTree, aResearch);
+  ptr.SetNamedValue('_TASK', aTask);
+  aResearch.AddTask(ptr);
+
   Result := True;
+end;
+
+procedure TGenEngine.RemoveResearchTask(aResearch: TGEDCOMResearchRecord;
+  aTask: TGEDCOMTaskRecord);
+begin
+  aResearch.DeleteTask(aResearch.IndexOfTask(aTask));
+end;
+
+function TGenEngine.AddResearchGroup(aResearch: TGEDCOMResearchRecord;
+  aGroup: TGEDCOMGroupRecord): Boolean;
+var
+  ptr: TGEDCOMPointer;
+begin
+  Result := False;
+  if (aResearch = nil) or (aGroup = nil) then Exit;
+
+  ptr := TGEDCOMPointer.Create(FTree, aResearch);
+  ptr.SetNamedValue('_GROUP', aGroup);
+  aResearch.AddGroup(ptr);
+
+  Result := True;
+end;
+
+procedure TGenEngine.RemoveResearchGroup(aResearch: TGEDCOMResearchRecord;
+  aGroup: TGEDCOMGroupRecord);
+begin
+  aResearch.DeleteGroup(aResearch.IndexOfGroup(aGroup));
+end;
+
+function TGenEngine.AddResearchComm(aResearch: TGEDCOMResearchRecord;
+  aComm: TGEDCOMCommunicationRecord): Boolean;
+var
+  ptr: TGEDCOMPointer;
+begin
+  Result := False;
+  if (aResearch = nil) or (aComm = nil) then Exit;
+
+  ptr := TGEDCOMPointer.Create(FTree, aResearch);
+  ptr.SetNamedValue('_COMM', aComm);
+  aResearch.AddCommunication(ptr);
+
+  Result := True;
+end;
+
+procedure TGenEngine.RemoveResearchComm(aResearch: TGEDCOMResearchRecord;
+  aComm: TGEDCOMCommunicationRecord);
+begin
+  aResearch.DeleteCommunication(aResearch.IndexOfCommunication(aComm));
+end;
+
+function TGenEngine.AddGroupMember(aGroup: TGEDCOMGroupRecord; aMember: TGEDCOMIndividualRecord): Boolean;
+var
+  ptr: TGEDCOMPointer;
+begin
+  try
+    ptr := TGEDCOMPointer.Create(FTree, aGroup);
+    ptr.SetNamedValue('_MEMBER', aMember);
+    aGroup.AddMember(ptr);
+
+    ptr := TGEDCOMPointer.Create(FTree, aMember);
+    ptr.SetNamedValue('_GROUP', aGroup);
+    aMember.AddGroup(ptr);
+
+    Result := True;
+  except
+    Result := False;
+  end;
+end;
+
+function TGenEngine.RemoveGroupMember(aGroup: TGEDCOMGroupRecord; aMember: TGEDCOMIndividualRecord): Boolean;
+begin
+  try
+    aGroup.DeleteMember(aGroup.IndexOfMember(aMember));
+    aMember.DeleteGroup(aMember.IndexOfGroup(aGroup));
+
+    Result := True;
+  except
+    Result := False;
+  end;
+end;
+
+procedure TGenEngine.CleanFamily(aFamily: TGEDCOMFamilyRecord);
+var
+  i: Integer;
+  child, spouse: TGEDCOMIndividualRecord;
+begin
+  if (aFamily = nil) then Exit;
+
+  for i := 0 to aFamily.ChildrenCount - 1 do begin
+    child := TGEDCOMIndividualRecord(aFamily.Children[i].Value);
+    child.DeleteChildToFamilyLink(aFamily);
+  end;
+
+  spouse := TGEDCOMIndividualRecord(aFamily.Husband.Value);
+  RemoveFamilySpouse(aFamily, spouse);
+
+  spouse := TGEDCOMIndividualRecord(aFamily.Wife.Value);
+  RemoveFamilySpouse(aFamily, spouse);
+end;
+
+procedure TGenEngine.GetCommonStats(var aStats: TCommonStats);
+
+  {procedure CalcVal(val: string; sex: TGEDCOMSex; var sum, cnt: Integer);
+  begin
+  end;}
+
+var
+  i, ch_cnt, m_cnt: Integer;
+  rec: TGEDCOMRecord;
+  ind: TGEDCOMIndividualRecord;
+  v_age, v_life, v_fba, v_mage: string;
+begin
+  with aStats do begin
+    persons := 0;
+    persons_m := 0;
+    persons_f := 0;
+
+    lives := 0;
+    lives_m := 0;
+    lives_f := 0;
+
+    age := 0;
+    age_m := 0;
+    age_f := 0;
+    age_cnt := 0;
+    age_m_cnt := 0;
+    age_f_cnt := 0;
+
+    life := 0;
+    life_m := 0;
+    life_f := 0;
+    life_cnt := 0;
+    life_m_cnt := 0;
+    life_f_cnt := 0;
+
+    childs := 0;
+    childs_m := 0;
+    childs_f := 0;
+    childs_cnt := 0;
+    childs_m_cnt := 0;
+    childs_f_cnt := 0;
+
+    fba := 0;
+    fba_m := 0;
+    fba_f := 0;
+    fba_cnt := 0;
+    fba_m_cnt := 0;
+    fba_f_cnt := 0;
+
+    marr := 0;
+    marr_m := 0;
+    marr_f := 0;
+    marr_cnt := 0;
+    marr_m_cnt := 0;
+    marr_f_cnt := 0;
+
+    mage := 0;
+    mage_m := 0;
+    mage_f := 0;
+    mage_cnt := 0;
+    mage_m_cnt := 0;
+    mage_f_cnt := 0;
+
+    for i := 0 to FTree.RecordsCount - 1 do begin
+      rec := FTree.Records[i];
+
+      if (rec is TGEDCOMIndividualRecord) then begin
+        ind := rec as TGEDCOMIndividualRecord;
+
+        Inc(persons);
+        if IsLive(ind) then Inc(lives);
+
+        v_age := GetAge(ind);
+        if (v_age <> '') and (v_age <> '?') then begin
+          age := age + StrToInt(v_age);
+          Inc(age_cnt);
+        end;
+
+        v_life := GetLifeExpectancy(ind);
+        if (v_life <> '') and (v_life <> '?') then begin
+          life := life + StrToInt(v_life);
+          Inc(life_cnt);
+        end;
+
+        ch_cnt := GetChildsCount(ind);
+        if (ch_cnt <> 0) then begin
+          childs := childs + ch_cnt;
+          Inc(childs_cnt);
+        end;
+
+        v_fba := IntToStr(GetFirstbornAge(ind));
+        if (v_fba <> '') and (v_fba <> '?') and (v_fba <> '0') then begin
+          fba := fba + StrToInt(v_fba);
+          Inc(fba_cnt);
+        end;
+
+        m_cnt := GetMarriagesCount(ind);
+        if (m_cnt <> 0) then begin
+          marr := marr + m_cnt;
+          Inc(marr_cnt);
+        end;
+
+        v_mage := IntToStr(GetMarriageAge(ind));
+        if (v_mage <> '') and (v_mage <> '?') and (v_mage <> '0') then begin
+          mage := mage + StrToInt(v_mage);
+          Inc(mage_cnt);
+        end;
+
+        case ind.Sex of
+          svMale: begin
+            Inc(persons_m);
+            if IsLive(ind) then Inc(lives_m);
+
+            if (v_age <> '') and (v_age <> '?') then begin
+              age_m := age_m + StrToInt(v_age);
+              Inc(age_m_cnt);
+            end;
+
+            if (v_life <> '') and (v_life <> '?') then begin
+              life_m := life_m + StrToInt(v_life);
+              Inc(life_m_cnt);
+            end;
+
+            if (ch_cnt <> 0) then begin
+              childs_m := childs_m + ch_cnt;
+              Inc(childs_m_cnt);
+            end;
+
+            if (v_fba <> '') and (v_fba <> '?') and (v_fba <> '0') then begin
+              fba_m := fba_m + StrToInt(v_fba);
+              Inc(fba_m_cnt);
+            end;
+
+            if (m_cnt <> 0) then begin
+              marr_m := marr_m + m_cnt;
+              Inc(marr_m_cnt);
+            end;
+
+            if (v_mage <> '') and (v_mage <> '?') and (v_mage <> '0') then begin
+              mage_m := mage_m + StrToInt(v_mage);
+              Inc(mage_m_cnt);
+            end;
+          end;
+
+          svFemale: begin
+            Inc(persons_f);
+            if IsLive(ind) then Inc(lives_f);
+
+            if (v_age <> '') and (v_age <> '?') then begin
+              age_f := age_f + StrToInt(v_age);
+              Inc(age_f_cnt);
+            end;
+
+            if (v_life <> '') and (v_life <> '?') then begin
+              life_f := life_f + StrToInt(v_life);
+              Inc(life_f_cnt);
+            end;
+
+            if (ch_cnt <> 0) then begin
+              childs_f := childs_f + ch_cnt;
+              Inc(childs_f_cnt);
+            end;
+
+            if (v_fba <> '') and (v_fba <> '?') and (v_fba <> '0') then begin
+              fba_f := fba_f + StrToInt(v_fba);
+              Inc(fba_f_cnt);
+            end;
+
+            if (m_cnt <> 0) then begin
+              marr_f := marr_f + m_cnt;
+              Inc(marr_f_cnt);
+            end;
+
+            if (v_mage <> '') and (v_mage <> '?') and (v_mage <> '0') then begin
+              mage_f := mage_f + StrToInt(v_mage);
+              Inc(mage_f_cnt);
+            end;
+          end;
+        end;
+      end;
+    end;
+  end;
+end;
+
+procedure TGenEngine.GetSpecStats(aMode: TStatMode; aVals: TStringList);
+
+  procedure AddVal(aName: string; aVal: Longint);
+  begin
+    aVals.AddObject(aName, TObject(aVal));
+  end;
+
+var
+  i, k, idx, year: Integer;
+  m, d: Word;
+  iRec: TGEDCOMIndividualRecord;
+  event: TGEDCOMCustomEvent;
+  fRec: TGEDCOMFamilyRecord;
+  V, fam, nam, pat, iName: string;
+begin
+  {$IFDEF PROFILER}Profiler.Mark(17, True);{$ENDIF}
+  if (aMode in [smAncestors, smDescendants])
+  then InitExtCounts(FTree);
+  {$IFDEF PROFILER}Profiler.Mark(17, False);{$ENDIF}
+
+  {$IFDEF PROFILER}Profiler.Mark(18, True);{$ENDIF}
+  try
+    for i := 0 to FTree.RecordsCount - 1 do begin
+      if (FTree.Records[i] is TGEDCOMIndividualRecord) and (aMode <> smSpousesDiff) then begin
+        iRec := FTree.Records[i] as TGEDCOMIndividualRecord;
+        iName := GetNameStr(iRec);
+
+        case aMode of
+          smAncestors: AddVal(iName, GetAncestorsCount(iRec) - 1);
+
+          smDescendants: AddVal(iName, GetDescendantsCount(iRec) - 1);
+
+          smDescGenerations: AddVal(iName, GetDescGenerations(iRec));
+
+          smChildsCount: AddVal(iName, GetChildsCount(iRec));
+
+          smFirstbornAge: AddVal(iName, GetFirstbornAge(iRec));
+
+          smMarriages: AddVal(iName, GetMarriagesCount(iRec));
+
+          smMarriageAge: AddVal(iName, GetMarriageAge(iRec));
+
+          else begin
+            case aMode of
+              smNames, smFamilies, smPatronymics: begin
+                GetNameParts(iRec, fam, nam, pat);
+
+                case aMode of
+                  smFamilies: V := PrepareRusFamily(fam, (iRec.Sex = svFemale));
+                  smNames: V := nam;
+                  smPatronymics: V := pat;
+                end;
+              end;
+
+              smAge: V := GetAge(iRec);
+
+              smLifeExpectancy: V := GetLifeExpectancy(iRec);
+
+              smResidences: V := GetResidencePlace(iRec, False);
+
+              smOccupation: V := GetAttributeValue(iRec, 'OCCU');
+
+              smReligious: V := GetAttributeValue(iRec, 'RELI');
+
+              smNational: V := GetAttributeValue(iRec, 'NATI');
+
+              smEducation: V := GetAttributeValue(iRec, 'EDUC');
+
+              smCaste: V := GetAttributeValue(iRec, 'CAST');
+
+              smChildsDistribution: V := IntToStr(GetChildsCount(iRec));
+
+              smBirthYears..smDeathTenYears, smBirthPlaces, smDeathPlaces: begin
+                V := '?';
+                for k := 0 to iRec.IndividualEventsCount - 1 do begin
+                  event := iRec.IndividualEvents[k];
+                  GetIndependentDate(event.Detail.Date.Value, year, m, d);
+
+                  if (Abs(year) > 3000)
+                  then ShowMessage(event.Detail.Date.StringValue + '/' + iName);
+
+                  if (event.Name = 'BIRT') then begin
+                    if (aMode = smBirthYears)
+                    then V := IntToStr(year)
+                    else
+                    if (aMode = smBirthTenYears)
+                    then V := IntToStr((year div 10) * 10)
+                    else
+                    if (aMode = smBirthPlaces)
+                    then V := event.Detail.Place.StringValue;
+                  end
+                  else
+                  if (event.Name = 'DEAT') then begin
+                    if (aMode = smDeathYears)
+                    then V := IntToStr(year)
+                    else
+                    if (aMode = smDeathTenYears)
+                    then V := IntToStr((year div 10) * 10)
+                    else
+                    if (aMode = smDeathPlaces)
+                    then V := event.Detail.Place.StringValue;
+                  end;
+                end;
+              end;
+
+              smHobby: V := GetAttributeValue(iRec, '_HOBBY');
+
+              smAward: V := GetAttributeValue(iRec, '_AWARD');
+
+              smMili: V := GetAttributeValue(iRec, '_MILI');
+
+              smMiliInd: V := GetAttributeValue(iRec, '_MILI_IND');
+
+              smMiliDis: V := GetAttributeValue(iRec, '_MILI_DIS');
+
+              smMiliRank: V := GetAttributeValue(iRec, '_MILI_RANK');
+            end;
+
+            if (V = '-1') or (V = '') or (V = '0') then V := '?';
+
+            idx := aVals.IndexOf(V);
+            if (idx < 0)
+            then aVals.AddObject(V, TObject(1))
+            else aVals.Objects[idx] := TObject(Integer(aVals.Objects[idx]) + 1);
+          end;
+        end;
+      end
+      else
+      if (FTree.Records[i] is TGEDCOMFamilyRecord) and (aMode = smSpousesDiff) then begin
+        fRec := FTree.Records[i] as TGEDCOMFamilyRecord;
+        AddVal(GetFamilyStr(fRec), GetSpousesDiff(fRec));
+      end;
+    end;
+  finally
+  end;
+  {$IFDEF PROFILER}Profiler.Mark(18, False);{$ENDIF}
+end;
+
+type
+  TCompareObj = {$IFNDEF DELPHI_NET}Pointer{$ELSE}TObject{$ENDIF};
+
+function PatriarchsCompare(Item1, Item2: TCompareObj): Integer;
+begin
+  Result := TPatriarchObj(Item1).IBirthYear - TPatriarchObj(Item2).IBirthYear;
+end;
+
+function TGenEngine.GetPatriarchLinks(lst: TObjectList; pObj: TPatriarchObj): string;
+var
+  i: Integer;
+begin
+  Result := '';
+
+  for i := 0 to lst.Count - 1 do begin
+    if (i in pObj.ILinks) then begin
+      if (Result <> '') then Result := Result + ', ';
+      Result := Result + GetNameStr(TPatriarchObj(lst[i]).IRec);
+    end;
+  end;
+end;
+
+procedure TGenEngine.GetPatriarchsList(aProgress, aLinks: Boolean;
+  var aList: TObjectList; aMinGens: Integer = 2);
+
+  function SearchAnc(descendantRec, searchRec: TGEDCOMIndividualRecord): Boolean;
+  var
+    family: TGEDCOMFamilyRecord;
+    ancestor: TGEDCOMIndividualRecord;
+  begin
+    Result := False;
+    if (descendantRec = nil) then Exit;
+
+    Result := (descendantRec = searchRec);
+    if (Result) then Exit;
+
+    if (descendantRec.ChildToFamilyLinksCount > 0) then begin
+      family := descendantRec.ChildToFamilyLinks[0].Family;
+
+      ancestor := TGEDCOMIndividualRecord(family.Husband.Value);
+      if (ancestor <> nil) then begin
+        Result := SearchAnc(ancestor, searchRec);
+        if (Result) then Exit;
+      end;
+
+      ancestor := TGEDCOMIndividualRecord(family.Wife.Value);
+      if (ancestor <> nil) then begin
+        Result := SearchAnc(ancestor, searchRec);
+        if (Result) then Exit;
+      end;
+    end;
+  end;
+
+  function SearchDesc(ancestorRec, searchRec: TGEDCOMIndividualRecord): Boolean;
+  var
+    i, k: Integer;
+    family: TGEDCOMFamilyRecord;
+    child: TGEDCOMIndividualRecord;
+    sp: TGEDCOMPointer;
+    spouse: TGEDCOMIndividualRecord;
+  begin
+    Result := False;
+
+    for i := 0 to ancestorRec.SpouseToFamilyLinksCount - 1 do begin
+      family := ancestorRec.SpouseToFamilyLinks[i].Family;
+
+      if (ancestorRec.Sex = svMale)
+      then sp := family.Wife
+      else sp := family.Husband;
+
+      if (sp <> nil) then begin
+        spouse := TGEDCOMIndividualRecord(sp.Value);
+
+        Result := SearchAnc(spouse, searchRec);
+        if (Result) then Exit;
+      end;
+
+      for k := 0 to family.ChildrenCount - 1 do begin
+        child := TGEDCOMIndividualRecord(family.Children[k].Value);
+        Result := SearchDesc(child, searchRec);
+        if (Result) then Exit;
+      end;
+    end;
+  end;
+
+  function GetBirthYear(iRec: TGEDCOMIndividualRecord): Integer;
+  var
+    family: TGEDCOMFamilyRecord;
+    child: TGEDCOMIndividualRecord;
+    i, k, year: Integer;
+  begin
+    Result := -1;
+    if (iRec = nil) then Exit;
+
+    year := GetIndependentYear(iRec, 'BIRT');
+    if (year > 0) then begin
+      Result := year;
+      Exit;
+    end;
+
+    for i := 0 to iRec.SpouseToFamilyLinksCount - 1 do begin
+      family := iRec.SpouseToFamilyLinks[i].Family;
+
+      for k := 0 to family.ChildrenCount - 1 do begin
+        child := TGEDCOMIndividualRecord(family.Children[k].Value);
+        year := GetBirthYear(child);
+        if (year > 0) then begin
+          Result := year - 20;
+          Exit;
+        end;
+      end;
+    end;
+  end;
+
+var
+  i, k, bYear, descGens: Integer;
+  rec: TGEDCOMRecord;
+  i_rec: TGEDCOMIndividualRecord;
+  res: Boolean;
+  nf, nn, np: string;
+  pObj: TPatriarchObj;
+  patr1, patr2: TPatriarchObj;
+begin
+  if (aProgress) then ProgressInit(FTree.RecordsCount, 'Поиск патриархов');
+
+  InitExtCounts(FTree);
+  try
+    for i := 0 to FTree.RecordsCount - 1 do begin
+      rec := FTree.Records[i];
+
+      if (rec is TGEDCOMIndividualRecord) then begin
+        i_rec := rec as TGEDCOMIndividualRecord;
+        GetNameParts(i_rec, nf, nn, np);
+        bYear := GetBirthYear(i_rec);
+        descGens := GetDescGenerations(i_rec);
+
+        // 1: нет родителей
+        res := (i_rec.ChildToFamilyLinksCount = 0);
+        // 2: мужской пол
+        res := res and (i_rec.Sex = svMale);
+        // 3: известна фамилия и имя
+        res := res and ((nf <> '') and (nf <> '?'))
+                   and ((nn <> '') and (nn <> '?'));
+        // 4: количество поколений потомков
+        res := res and (descGens >= aMinGens);
+        // 5: год рождения известен или можно вычислить
+        res := res and (bYear > 0);
+
+        // Поместить в список
+        if (res) then begin
+          pObj := TPatriarchObj.Create;
+          pObj.IRec := i_rec;
+          pObj.IBirthYear := bYear;
+          pObj.IDescendantsCount := GetDescendantsCount(i_rec) - 1;
+          pObj.IDescGenerations := descGens;
+          pObj.ILinks := [];
+          aList.Add(pObj);
+        end;
+      end;
+
+      if (aProgress) then ProgressStep();
+    end;
+
+    aList.Sort(PatriarchsCompare);
+  finally
+    if (aProgress) then ProgressDone();
+  end;
+
+  if (aLinks) then begin
+    if (aProgress) then ProgressInit(aList.Count, 'Поиск взаимосвязей');
+    try
+      for i := 0 to aList.Count - 1 do begin
+        patr1 := TPatriarchObj(aList[i]);
+
+        for k := i + 1 to aList.Count - 1 do begin
+          patr2 := TPatriarchObj(aList[k]);
+
+          res := SearchDesc(patr1.IRec, patr2.IRec);
+          if res then begin
+            patr1.ILinks := patr1.ILinks + [k];
+            patr2.ILinks := patr2.ILinks + [i];
+          end;
+        end;
+
+        if (aProgress) then ProgressStep();
+      end;
+    finally
+      if (aProgress) then ProgressDone();
+    end;
+  end;
 end;
 
 end.

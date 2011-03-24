@@ -1,26 +1,15 @@
-unit GKMediaView;
+unit GKMediaView; {prepare:fin}
 
 {$I GEDKeeper.inc}
 
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, GedCom551, StdCtrls, ComCtrls, ExtCtrls, GraphicEx, MPlayer,
-  ToolWin, OleCtrls, ActiveX, GKBase, SHDocVw;
+  Windows, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls,
+  ComCtrls, ToolWin, ExtCtrls, GedCom551, GKBase;
 
 type
   TfmMediaView = class(TForm)
-    PageControl: TPageControl;
-    SheetText: TTabSheet;
-    mText: TMemo;
-    SheetRTF: TTabSheet;
-    RichEdit: TRichEdit;
-    SheetImage: TTabSheet;
-    Image1: TImage;
-    SheetPlayer: TTabSheet;
-    SheetHTML: TTabSheet;
-    WebBrowser1: TWebBrowser;
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     FFileRef: TGEDCOMFileReferenceWithTitle;
@@ -34,12 +23,11 @@ type
     property FileRef: TGEDCOMFileReferenceWithTitle read FFileRef write SetFileRef;
   end;
 
-var
-  fmMediaView: TfmMediaView;
-
 implementation
 
-uses GKUtils, GKEngine;
+uses
+  GKUtils, GKEngine
+  {$IFNDEF DELPHI_NET}, GraphicEx, SHDocVw{$ENDIF};
 
 {$R *.dfm}
 
@@ -58,6 +46,9 @@ procedure TfmMediaView.SetFileRef(const Value: TGEDCOMFileReferenceWithTitle);
 var
   target_fn: string;
   fs: TStream;
+  {$IFNDEF DELPHI_NET}
+  wb: TWebBrowser;
+  {$ENDIF}
 begin
   FFileRef := Value;
   fs := nil;
@@ -68,39 +59,59 @@ begin
     mfNone, mfOLE, mfUnknown: ;
 
     mfBMP, mfGIF, mfJPG, mfPCX, mfTIF, mfTGA, mfPNG: begin
-      PageControl.ActivePage := SheetImage;
-
       Base.MediaLoad(FFileRef.StringValue, target_fn);
-      Image1.Picture.LoadFromFile(target_fn);
+
+      with TImage.Create(Self) do begin
+        Parent := Self;
+        Align := alClient;
+        Center := True;
+        Proportional := True;
+        Picture.LoadFromFile(target_fn);
+        if (Picture.Width > Width) or (Picture.Height > Height)
+        then Stretch := True;
+      end;
     end;
 
     mfWAV, mfAVI, mfMPG: begin
-      PageControl.ActivePage := SheetPlayer;
-
       FExtern := True;
       Base.MediaLoad(FFileRef.StringValue, target_fn);
+
       LoadExtFile(target_fn);
     end;
 
     mfTXT: begin
-      PageControl.ActivePage := SheetText;
-
       Base.MediaLoad(FFileRef.StringValue, fs);
-      mText.Lines.LoadFromStream(fs);
+
+      with TMemo.Create(Self) do begin
+        Parent := Self;
+        Align := alClient;
+        ReadOnly := True;
+        ScrollBars := ssBoth;
+        Lines.LoadFromStream(fs);
+      end;
     end;
 
     mfRTF: begin
-      PageControl.ActivePage := SheetRTF;
-
       Base.MediaLoad(FFileRef.StringValue, fs);
-      RichEdit.Lines.LoadFromStream(fs);
+
+      with TRichEdit.Create(Self) do begin
+        Parent := Self;
+        Align := alClient;
+        ReadOnly := True;
+        ScrollBars := ssBoth;
+        Lines.LoadFromStream(fs);
+      end;
     end;
 
     mfHTM: begin
-      PageControl.ActivePage := SheetHTML;
-
+      {$IFNDEF DELPHI_NET}
       Base.MediaLoad(FFileRef.StringValue, target_fn);
-      WebBrowser1.Navigate(target_fn);
+
+      wb := TWebBrowser.Create(Self);
+      TWinControl(wb).Parent := Self;
+      wb.Align := alClient;
+      wb.Navigate(target_fn);
+      {$ENDIF}
     end;
   end;
 

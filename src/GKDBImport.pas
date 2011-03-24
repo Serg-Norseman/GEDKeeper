@@ -1,4 +1,6 @@
-unit GKDBImport;
+unit GKDBImport; {prepare:fin}
+
+{$I GEDKeeper.inc}
 
 interface
 
@@ -48,7 +50,9 @@ var
 
 implementation
 
-uses GedCom551, bsComUtils, GKEngine, GKProgress, SdfData;
+uses
+  GedCom551, GKUtils, GKEngine, GKProgress
+  {$IFNDEF DELPHI_NET}, SdfData {$ENDIF};
 
 {$R *.dfm}
 
@@ -110,12 +114,6 @@ begin
   FCheckTransfer.Width := 129;
   FCheckTransfer.Caption := 'Импортировать как';
 
-  {FLabel := TLabel.Create(Self);
-  FLabel.Parent := Self;
-  FLabel.Left := 8;
-  FLabel.Top := 48;
-  FLabel.Caption := 'Назначение';}
-
   FGEDCOMField := TComboBox.Create(Self);
   FGEDCOMField.Parent := Self;
   FGEDCOMField.Left := 136;
@@ -176,10 +174,14 @@ begin
   FDataSet.Free;
 
   if (ExtractFileExt(aFileName) = '.csv') then begin
+    {$IFNDEF DELPHI_NET}
     FDataSet := TSdfDataSet.Create(Self);
     TSdfDataSet(FDataSet).FileName := aFileName;
     TSdfDataSet(FDataSet).FirstLineAsSchema := True;
     TSdfDataSet(FDataSet).Delimiter := ';';
+    {$ELSE}
+    FDataSet := nil;
+    {$ENDIF}
   end else begin
     ADOConnection1.ConnectionString :=
       'Provider=Microsoft.Jet.OLEDB.4.0;Data Source=' + aFileName + ';User Id=admin;Password=;';
@@ -221,14 +223,14 @@ begin
       mQuery.Color := clBtnFace;
       btnDataTransfer.Enabled := True;
 
-      TSdfDataSet(FDataSet).Open;
+      FDataSet.Open;
       DataSource1.DataSet := FDataSet;
 
       fieldsPrepare();
     end;
   finally
-    fields.Destroy;
-    tables.Destroy;
+    fields.Free;
+    tables.Free;
     mProps.Lines.EndUpdate;
   end;
 end;

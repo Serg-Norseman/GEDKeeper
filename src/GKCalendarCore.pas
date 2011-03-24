@@ -1,4 +1,4 @@
-unit Calendar;
+unit GKCalendarCore;
 
 (*
  * Partial copyright by John Walker
@@ -65,11 +65,7 @@ const
   );
 
 
-procedure DecodeGD(GD: TDateTime; var YG, MG, DG: Integer);
-{* Decodes Grigorian date. Very like to usual DecodeDate, but allows working
-   with negative dates (A.D.). }
-
-function jwday(j: Double): Longint;
+function jwday(j: Double): Longint;
 
 function gregorian_to_jd(year, month, day: Integer): Double;
 procedure jd_to_gregorian(jd: Double; var year, month, day: Longint);
@@ -93,10 +89,8 @@ function bahai_to_jd(major, cycle, year, month, day: Longint): Double;
 procedure jd_to_bahai(jd: Double; var major, cycle, year, month, day: Longint);
 
 type
-  TCalendar = (cGregorian, cJulian);
-
   TExDate = record
-    Day, Month{: Byte;}, Year: Word;
+    Day, Month, Year: Word;
     Era: (AD, BC); // (AD - Нашей эры, BC - До нашей эры)
   end;
 
@@ -108,14 +102,19 @@ uses
   SysUtils, Math;
 
 (*  MOD  --  Modulus function which works for non-integers.  *)
-function _mod(a, b: Double): Variant;
+function _modf(a, b: Double): Double;
 begin
   Result := a - (b * Floor(a / b));
 end;
 
+function _modi(a, b: Double): Longint;
+begin
+  Result := Trunc(a - (b * Floor(a / b)));
+end;
+
 function jwday(j: Double): Longint;
 begin
-  Result := _mod(Floor((j + 1.5)), 7);
+  Result := _modi(Floor((j + 1.5)), 7);
 end;
 
 function cIf(aCond: Boolean; aThen, aElse: Longint): Longint;
@@ -129,76 +128,6 @@ function gkDateToStr(aDate: TExDate): string;
 begin
   Result := IntToStr(aDate.Day) + ' ' + ShortMonthNames[aDate.Month] + ' ' + IntToStr(aDate.Year);
   if not(aDate.Era = AD) then Result := Result + ' до н.э.';
-end;
-
-procedure DecodeGD(GD: TDateTime; var YG, MG, DG: Integer);
-{* Decodes Grigorian date. Very like to usual DecodeDate, but allows working
-   with negative dates (A.D.). }
-const
-  D1 = 365;
-  D4 = D1 * 4 + 1;
-  D100 = D4 * 25 - 1;
-  D400 = D100 * 4 + 1;
-var Days: Integer;
-    Y, M, D, I: Integer;
-    DayTable: PDayTable;
-begin
-  Days := Trunc(GD);
-
-  Dec(Days);
-  Y := Sign(Days);
-  while (Days >= D400) or (Days <= -D400) do
-  begin
-    Dec(Days, Sign(Days) * D400);
-    Inc(Y, Sign(Days) * 400);
-  end;
-  I := Days div D100;
-  D := Days mod D100;
-  if I = 4 then
-  begin
-    Dec(I);
-    Inc(D, D100);
-  end;
-  Inc(Y, I * 100);
-  I := D div D4;
-  D := D mod D4;
-  Inc(Y, I * 4);
-  I := D div D1;
-  D := D mod D1;
-  if I = 4 then
-  begin
-    Dec(I);
-    Inc(D, D1);
-  end;
-  Inc(Y, I);
-  DayTable := @MonthDays[IsLeapYear(Y)];
-  M := 1;
-  while True do
-  begin
-    I := DayTable^[M];
-    if D < I then Break;
-    Dec(D, I);
-    Inc(M);
-  end;
-  while M < 1 do
-  begin
-    Inc(M, 12);
-    Dec(Y);
-  end;
-  while D < 0 do
-  begin
-    Dec(M);
-    if M < 1 then
-    begin
-      Inc(M, 12);
-      Dec(Y);
-    end;
-    DayTable := @MonthDays[IsLeapYear(Y)];
-    Inc(D, DayTable^[M]);
-  end;
-  YG := Y;
-  MG := M;
-  DG := D + 1;
 end;
 
 {================================== Julian day ================================}
@@ -224,8 +153,7 @@ begin
             (-Math.floor((year - 1) / 100)) +
             Math.floor((year - 1) / 400) +
             Math.floor((((367 * month) - 362) / 12) +
-            (cIf(month <= 2, 0, cIf(leap_gregorian(year), -1, -2))) +
-            day);
+            (cIf(month <= 2, 0, cIf(leap_gregorian(year), -1, -2))) + day);
 end;
 
 //  JD_TO_GREGORIAN  --  Calculate Gregorian calendar date from Julian day
@@ -238,11 +166,11 @@ begin
   wjd := floor(jd - 0.5) + 0.5;
   depoch := wjd - GREGORIAN_EPOCH;
   quadricent := floor(depoch / 146097);
-  dqc := _mod(depoch, 146097);
+  dqc := _modf(depoch, 146097);
   cent := floor(dqc / 36524);
-  dcent := _mod(dqc, 36524);
+  dcent := _modf(dqc, 36524);
   quad := floor(dcent / 1461);
-  dquad := _mod(dcent, 1461);
+  dquad := _modf(dcent, 1461);
   yindex := floor(dquad / 365);
   year := (quadricent * 400) + (cent * 100) + (quad * 4) + yindex;
   if (not((cent = 4) or (yindex = 4))) then Inc(year);
@@ -262,7 +190,7 @@ const
 
 function leap_julian(year: Longint): Boolean;
 begin
-  Result := _mod(year, 4) = cIf(year > 0, 0, 3);
+  Result := _modf(year, 4) = cIf(year > 0, 0, 3);
 end;
 
 function julian_to_jd(year, month, day: Longint): Double;
@@ -277,8 +205,7 @@ begin
   end;
 
   Result := ((Math.floor((365.25 * (year + 4716))) +
-            Math.floor((30.6001 * (month + 1))) +
-            day) - 1524.5);
+            Math.floor((30.6001 * (month + 1))) + day) - 1524.5);
 end;
 
 //  JD_TO_JULIAN  --  Calculate Julian calendar date from Julian day
@@ -313,7 +240,7 @@ const
 //  Is a given Hebrew year a leap year ?
 function hebrew_leap(year: Longint): Boolean;
 begin
-  Result := _mod(((year * 7) + 1), 19) < 7;
+  Result := _modf(((year * 7) + 1), 19) < 7;
 end;
 
 //  How many months are there in a Hebrew year (12 = normal, 13 = leap)
@@ -332,7 +259,7 @@ begin
   parts := 12084 + (13753 * months);
   day := (months * 29) + Math.floor(parts / 25920);
 
-  if (_mod((3 * (day + 1)), 7) < 3) then Inc(day);
+  if (_modf((3 * (day + 1)), 7) < 3) then Inc(day);
 
   Result := day;
 end;
@@ -372,13 +299,13 @@ begin
   end;
 
   //  If it's Heshvan, days depend on length of year
-  if (month = 8) and not(_mod(hebrew_year_days(year), 10) = 5) then begin
+  if (month = 8) and not(_modf(hebrew_year_days(year), 10) = 5) then begin
     Result := 29;
     Exit;
   end;
 
   //  Similarly, Kislev varies with the length of year
-  if (month = 9) and (_mod(hebrew_year_days(year), 10) = 3) then begin
+  if (month = 9) and (_modf(hebrew_year_days(year), 10) = 3) then begin
     Result := 29;
     Exit;
   end;
@@ -485,14 +412,12 @@ var
   epbase, epyear: Double;
 begin
   epbase := year - cIf((year >= 0), 474, 473);
-  epyear := 474 + _mod(epbase, 2820);
+  epyear := 474 + _modf(epbase, 2820);
 
   Result := day +
           cIf((month <= 7), ((month - 1) * 31), (((month - 1) * 30) + 6)) +
           Floor(((epyear * 682) - 110) / 2816) +
-          (epyear - 1) * 365 +
-          Floor(epbase / 2820) * 1029983 +
-          (PERSIAN_EPOCH - 1);
+          (epyear - 1) * 365 + Floor(epbase / 2820) * 1029983 + (PERSIAN_EPOCH - 1);
 end;
 
 //  JD_TO_PERSIAN  --  Calculate Persian date from Julian day
@@ -505,14 +430,13 @@ begin
   jd := Math.floor(jd) + 0.5;
   depoch := jd - persian_to_jd(475, 1, 1);
   cycle := Math.floor(depoch / 1029983);
-  cyear := _mod(depoch, 1029983);
+  cyear := _modi(depoch, 1029983);
   if (cyear = 1029982)
   then ycycle := 2820
   else begin
-      aux1 := Math.floor(cyear / 366);
-      aux2 := _mod(cyear, 366);
-      ycycle := Math.floor(((2134 * aux1) + (2816 * aux2) + 2815) / 1028522) +
-                  aux1 + 1;
+    aux1 := Math.floor(cyear / 366);
+    aux2 := _modi(cyear, 366);
+    ycycle := Math.floor(((2134 * aux1) + (2816 * aux2) + 2815) / 1028522) + aux1 + 1;
   end;
   year := ycycle + (2820 * cycle) + 474;
   if (year <= 0) then Dec(year);
@@ -611,8 +535,7 @@ begin
   gy := (361 * (major - 1)) + (19 * (cycle - 1)) + (year - 1) + by;
 
   Result := gregorian_to_jd(gy, 3, 20) + (19 * (month - 1)) +
-         cIf((month <> 20), 0, cIf(leap_gregorian(gy + 1), -14, -15)) +
-         day;
+         cIf((month <> 20), 0, cIf(leap_gregorian(gy + 1), -14, -15)) + day;
 end;
 
 //  JD_TO_BAHAI  --  Calculate Bahai date from Julian day
@@ -627,8 +550,8 @@ begin
   jd_to_gregorian(BAHAI_EPOCH, bstarty, dummy, dummy);
   bys := gy - (bstarty + cIf(((gregorian_to_jd(gy, 1, 1) <= jd) and (jd <= gregorian_to_jd(gy, 3, 20))), 1, 0));
   major := Math.floor(bys / 361) + 1;
-  cycle := Math.floor(_mod(bys, 361) / 19) + 1;
-  year := _mod(bys, 19) + 1;
+  cycle := Math.floor(_modf(bys, 361) / 19) + 1;
+  year := _modi(bys, 19) + 1;
   days := jd - bahai_to_jd(major, cycle, year, 1, 1);
   bld := bahai_to_jd(major, cycle, year, 20, 1);
   month := cIf((jd >= bld), 20, (Math.floor(days / 19) + 1));

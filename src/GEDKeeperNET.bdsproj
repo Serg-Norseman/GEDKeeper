@@ -119,11 +119,11 @@
 			<Linker Name="ExeDescription"></Linker>
 		</Linker>
 		<Directories>
-			<Directories Name="OutputDir"></Directories>
+			<Directories Name="OutputDir">..\</Directories>
 			<Directories Name="UnitOutputDir"></Directories>
 			<Directories Name="PackageDLLOutputDir"></Directories>
 			<Directories Name="PackageDCPOutputDir"></Directories>
-			<Directories Name="SearchPath">c:\windows\microsoft.net\framework\v1.1.4322;.\ext;E:\WORKS\Brainstorm\ext;E:\WORKS\GEDKeeper\src\GraphicEx;E:\WORKS\GEDKeeper\src\Abbrevia\source</Directories>
+			<Directories Name="SearchPath">$(BDS)\lib\Debug;$(BDS)\lib\Debug\Indy10;c:\windows\microsoft.net\framework\v1.1.4322;.\ext;.\ext\GraphicEx;.\ext\Abbrevia\</Directories>
 			<Directories Name="Packages">c:\windows\microsoft.net\framework\v1.1.4322\System.Drawing.dll</Directories>
 			<Directories Name="Conditionals"></Directories>
 			<Directories Name="DebugSourceDirs"></Directories>
@@ -167,15 +167,46 @@
 			<VersionInfoKeys Name="Comments"></VersionInfoKeys>
 		</VersionInfoKeys>  
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <FileList>
-      <File FileName="GEDKeeper.todo" ContainerId="ToDo" ModuleName="GEDKeeper"/>
       <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.Drawing.dll" ContainerId="DelphiDotNetAssemblyCompiler" ModuleName="System.Drawing" AssemblyName="system.drawing" Version="1.0.5000.0" LinkUnits="False"/>
-      <File FileName="GEDKeeperNET.todo" ContainerId="ToDo" ModuleName="GEDKeeperNET"/>
       <File FileName="" ContainerId="" ModuleName="Windows"/>
       <File FileName="" ContainerId="" ModuleName="Messages"/>
       <File FileName="" ContainerId="" ModuleName="Forms"/>
       <File FileName="GedCom551.pas" ContainerId="" ModuleName="GedCom551"/>
+      <File FileName="GKUtils.pas" ContainerId="" ModuleName="GKUtils"/>
+      <File FileName="GKEngine.pas" ContainerId="" ModuleName="GKEngine"/>
       <File FileName="GKCommon.pas" ContainerId="" ModuleName="GKCommon"/>
+      <File FileName="GKImport.pas" ContainerId="" ModuleName="GKImport"/>
+      <File FileName="GKExport.pas" ContainerId="" ModuleName="GKExport"/>
+      <File FileName="GKChartCore.pas" ContainerId="" ModuleName="GKChartCore"/>
+      <File FileName="GKLangs.pas" ContainerId="" ModuleName="GKLangs"/>
+      <File FileName="GKCommands.pas" ContainerId="" ModuleName="GKCommands"/>
+      <File FileName="GKLists.pas" ContainerId="" ModuleName="GKLists"/>
+      <File FileName="GKMapBrowser.pas" ContainerId="" ModuleName="GKMapBrowser"/>
       <File FileName="GKMain.pas" ContainerId="" ModuleName="GKMain"/>
       <File FileName="GKBase.pas" ContainerId="" ModuleName="GKBase"/>
       <File FileName="GKPersonNew.pas" ContainerId="" ModuleName="GKPersonNew"/>
@@ -185,12 +216,9 @@
       <File FileName="GKSourceEdit.pas" ContainerId="" ModuleName="GKSourceEdit"/>
       <File FileName="GKChart.pas" ContainerId="" ModuleName="GKChart"/>
       <File FileName="GKAbout.pas" ContainerId="" ModuleName="GKAbout"/>
-      <File FileName="GKChartCore.pas" ContainerId="" ModuleName="GKChartCore"/>
       <File FileName="GKFileProperties.pas" ContainerId="" ModuleName="GKFileProperties"/>
-      <File FileName="GKTreeTools.pas" ContainerId="" ModuleName="GKTreeTools"/>
       <File FileName="GKStats.pas" ContainerId="" ModuleName="GKStats"/>
       <File FileName="GKPersonEdit.pas" ContainerId="" ModuleName="GKPersonEdit"/>
-      <File FileName="GKExport.pas" ContainerId="" ModuleName="GKExport"/>
       <File FileName="GKOptions.pas" ContainerId="" ModuleName="GKOptions"/>
       <File FileName="GKFamilyEdit.pas" ContainerId="" ModuleName="GKFamilyEdit"/>
       <File FileName="GKAssociationEdit.pas" ContainerId="" ModuleName="GKAssociationEdit"/>
@@ -199,12 +227,27 @@
       <File FileName="GKPersonScan.pas" ContainerId="" ModuleName="GKPersonScan"/>
       <File FileName="GKProgress.pas" ContainerId="" ModuleName="GKProgress"/>
       <File FileName="GKAddressEdit.pas" ContainerId="" ModuleName="GKAddressEdit"/>
-      <File FileName="GKImport.pas" ContainerId="" ModuleName="GKImport"/>
       <File FileName="GKSourceCitEdit.pas" ContainerId="" ModuleName="GKSourceCitEdit"/>
       <File FileName="GKRepositoryEdit.pas" ContainerId="" ModuleName="GKRepositoryEdit"/>
       <File FileName="GKMediaEdit.pas" ContainerId="" ModuleName="GKMediaEdit"/>
-      <File FileName="GKMaps.pas" ContainerId="" ModuleName="GKMaps"/>
+      <File FileName="GKResearchEdit.pas" ContainerId="" ModuleName="GKResearchEdit"/>
+      <File FileName="GKTaskEdit.pas" ContainerId="" ModuleName="GKTaskEdit"/>
+      <File FileName="GKCommunicationEdit.pas" ContainerId="" ModuleName="GKCommunicationEdit"/>
+      <File FileName="GKLocationEdit.pas" ContainerId="" ModuleName="GKLocationEdit"/>
+      <File FileName="GKTreeTools.pas" ContainerId="" ModuleName="GKTreeTools"/>
+      <File FileName="GKTipsDlg.pas" ContainerId="" ModuleName="GKTipsDlg"/>
+      <File FileName="GKUserRefEdit.pas" ContainerId="" ModuleName="GKUserRefEdit"/>
+      <File FileName="GKExpCalc.pas" ContainerId="" ModuleName="GKExpCalc"/>
+      <File FileName="GKNamesBook.pas" ContainerId="" ModuleName="GKNamesBook"/>
+      <File FileName="GKTimeLine.pas" ContainerId="" ModuleName="GKTimeLine"/>
+      <File FileName="GKOrganizer.pas" ContainerId="" ModuleName="GKOrganizer"/>
+      <File FileName="GKDBImport.pas" ContainerId="" ModuleName="GKDBImport"/>
+      <File FileName="GKSexCheck.pas" ContainerId="" ModuleName="GKSexCheck"/>
+      <File FileName="GKScriptDaemon.pas" ContainerId="" ModuleName="GKScriptDaemon"/>
+      <File FileName="GKCalendar.pas" ContainerId="" ModuleName="GKCalendar"/>
+      <File FileName="GKNameEdit.pas" ContainerId="" ModuleName="GKNameEdit"/>
       <File FileName="GKMediaView.pas" ContainerId="" ModuleName="GKMediaView"/>
+      <File FileName="GKMaps.pas" ContainerId="" ModuleName="GKMaps"/>
     </FileList>
   </DelphiDotNet.Personality>
 </BorlandProject>

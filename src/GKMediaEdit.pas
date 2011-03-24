@@ -1,4 +1,4 @@
-unit GKMediaEdit;
+unit GKMediaEdit; {prepare:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons, ComCtrls,
-  GedCom551, GKBase, GKEngine, GKLists, bsCtrls;
+  GedCom551, GKBase, GKEngine, GKCtrls, GKLists;
 
 type
   TfmMediaEdit = class(TForm)
@@ -52,7 +52,7 @@ type
 implementation
 
 uses
-  bsComUtils, GKRecordSelect, GKMain;
+  GKUtils, GKRecordSelect, GKMain;
 
 {$R *.dfm}
 
@@ -101,7 +101,7 @@ begin
   cbStoreType.Enabled := (FIsNew);
 
   Base.RecListNotesRefresh(FMediaRec, FNotesList.List, nil);
-  Base.RecListSourcesRefresh(FMediaRec, TBSListView(FSourcesList.List), nil);
+  Base.RecListSourcesRefresh(FMediaRec, TGKListView(FSourcesList.List), nil);
 end;
 
 procedure TfmMediaEdit.SetMediaRec(const Value: TGEDCOMMultimediaRecord);

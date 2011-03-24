@@ -17,7 +17,6 @@ for i = 0, x - 1 do
 
       for at = 0, at_cnt - 1 do
         evt = gt_get_person_event(R, at);
-        -- val = gt_get_event_value(attr);
         gk_print("    > факт "..at..", место "..gt_get_event_place(evt));
       end
     end

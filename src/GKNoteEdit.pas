@@ -1,4 +1,4 @@
-unit GKNoteEdit;
+unit GKNoteEdit; {prepare:fin}
 
 {$I GEDKeeper.inc}
 

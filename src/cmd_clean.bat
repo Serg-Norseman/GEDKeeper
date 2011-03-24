@@ -34,3 +34,6 @@ rem del *.dof
 
 rmdir .\__history /s /q
 rmdir .\backup /s /q
+
+cd .\ext
+call .\cmd_clean.bat

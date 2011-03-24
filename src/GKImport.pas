@@ -7,11 +7,12 @@ unit GKImport;
 interface
 
 uses
-  SysUtils, Classes, GedCom551;
+  SysUtils, Classes, GedCom551, GKEngine;
 
 type
   TGKImporter = class(TObject)
   private
+    FEngine: TGenEngine;
     FTree: TGEDCOMTree;
     FLog: TStrings;
     FPersonsList: TStringList;
@@ -36,7 +37,7 @@ type
       iRec: TGEDCOMIndividualRecord);
     procedure Import_StringList(aContent: TStringList);
   public
-    constructor Create(aTree: TGEDCOMTree; aLog: TStrings);
+    constructor Create(aEngine: TGenEngine; aLog: TStrings);
 
     procedure TreeImportEx(aFileName: string);
   end;
@@ -44,14 +45,16 @@ type
 implementation
 
 uses
-  Variants, ComObj, bsComUtils, bsMiscUtils, GKEngine, GKSexCheck, GKMain;
+  {$IFDEF DELPHI_NET}System.IO, {$ENDIF}
+  Variants, ComObj, GKUtils, GKSexCheck, GKMain;
 
 { TGKImporter }
 
-constructor TGKImporter.Create(aTree: TGEDCOMTree; aLog: TStrings);
+constructor TGKImporter.Create(aEngine: TGenEngine; aLog: TStrings);
 begin
   inherited Create;
-  FTree := aTree;
+  FEngine := aEngine;
+  FTree := FEngine.Tree;
   FLog := aLog;
 end;
 
@@ -147,7 +150,7 @@ end;
 function TGKImporter.AddFamily(parent: TGEDCOMIndividualRecord): TGEDCOMFamilyRecord;
 begin
   Result := CreateFamilyEx(FTree);
-  AddSpouseToFamily(FTree, Result, parent);
+  FEngine.AddFamilySpouse(Result, parent);
 end;
 
 procedure TGKImporter.AddChild(parent, child: TGEDCOMIndividualRecord; mar_id: Integer);
@@ -326,13 +329,13 @@ begin
   end;
 end;
 
-function SkipBlanks(const S: string; Blanks: TCharSet = [' ']): string;
+{function SkipBlanks(const S: string; Blanks: TCharSet = [' ']): string;
 begin
   Result := S;
 
   while (Length(Result) > 0) and (Result[1] in Blanks) do
     Delete(Result, 1, 1);
-end;
+end;}
 
 procedure TGKImporter.CheckSpouses(buf: TStringList; iRec: TGEDCOMIndividualRecord);
 var
@@ -394,7 +397,7 @@ begin
           if (p > 2) then f_fam := CheckDot(GetToken(name, ' ', 3));
 
           sp := CreatePersonEx(FTree, f_name, f_pat, f_fam, sx, False);
-          AddSpouseToFamily(FTree, fam, sp);
+          FEngine.AddFamilySpouse(fam, sp);
         end;
       except
         es := buf[i];
@@ -499,6 +502,7 @@ var
   s: string;
   content: TStringList;
 begin
+  {$IFNDEF DELPHI_NET}
   try
     try
       msword := GetActiveOleObject('Word.Application');
@@ -529,6 +533,7 @@ begin
       LogWrite('Import_Word(): ' + E.Message);
     end;
   end;
+  {$ENDIF}
 end;
 
 procedure TGKImporter.Import_Excel(aFileName: string);
@@ -539,6 +544,7 @@ var
   c1, c2, c3, c4, c5, c6, s, p_id, rome: string;
   i_rec: TGEDCOMIndividualRecord;
 begin
+  {$IFNDEF DELPHI_NET}
   try
     try
       excel := GetActiveOleObject('Excel.Application');
@@ -623,6 +629,7 @@ begin
       LogWrite('Import_Excel(): ' + E.Message);
     end;
   end;
+  {$ENDIF}
 end;
 
 procedure TGKImporter.TreeImportEx(aFileName: string);

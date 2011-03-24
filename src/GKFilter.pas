@@ -1,4 +1,4 @@
-unit GKFilter;
+unit GKFilter; {prepare:fin}
 
 {$I GEDKeeper.inc}
 
@@ -26,6 +26,8 @@ type
     cbGroup: TComboBox;
     Label5: TLabel;
     cbSource: TComboBox;
+    Label6: TLabel;
+    cbEventVal: TComboBox;
     procedure btnCancelClick(Sender: TObject);
     procedure btnAcceptClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -65,6 +67,12 @@ begin
     if (fmGEDKeeper.Options.ResidenceFilters.IndexOf(fs) < 0)
     then fmGEDKeeper.Options.ResidenceFilters.Add(fs);
   end;
+
+  fs := Trim(cbEventVal.Text);
+  if (fs <> '') and (fs <> '*') then begin
+    if (fmGEDKeeper.Options.EventFilters.IndexOf(fs) < 0)
+    then fmGEDKeeper.Options.EventFilters.Add(fs);
+  end;
   //
 
   Base.Filter.PatriarchOnly := CheckPatriarch.Checked;
@@ -90,6 +98,9 @@ begin
 
   if (cbResidence.Text = '') then cbResidence.Text := '*';
   Base.Filter.Residence := cbResidence.Text;
+
+  if (cbEventVal.Text = '') then cbEventVal.Text := '*';
+  Base.Filter.EventVal := cbEventVal.Text;
 
   if (cbGroup.ItemIndex in [0..2]) then begin
     Base.Filter.GroupMode := TGroupMode(cbGroup.ItemIndex);
@@ -129,6 +140,7 @@ var
 begin
   edName.Items.Assign(fmGEDKeeper.Options.NameFilters);
   cbResidence.Items.Assign(fmGEDKeeper.Options.ResidenceFilters);
+  cbEventVal.Items.Assign(fmGEDKeeper.Options.EventFilters);
 
   if (Base.Filter.LifeMode <> lmTimeLine) then begin
     rgLife.ItemIndex := Ord(Base.Filter.LifeMode);
@@ -143,6 +155,7 @@ begin
   rgSex.ItemIndex := Ord(Base.Filter.Sex);
   edName.Text := Base.Filter.Name;
   cbResidence.Text := Base.Filter.Residence;
+  cbEventVal.Text := Base.Filter.EventVal;
   CheckPatriarch.Checked := Base.Filter.PatriarchOnly;
 
   tree := Base.Tree;

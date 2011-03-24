@@ -1,9 +1,11 @@
-unit GKTimeLine;
+unit GKTimeLine; {prepare:fin}
+
+{$I GEDKeeper.inc}
 
 interface
 
 uses
-  SysUtils, Classes, Graphics, Controls, Forms, Dialogs, ComCtrls,
+  SysUtils, Classes, Controls, Forms, Dialogs, ComCtrls,
   GedCom551, GKBase, GKLists;
 
 type
@@ -59,7 +61,7 @@ begin
     if (fmGEDKeeper.MDIChildren[i] is TfmBase)
     then TfmBase(fmGEDKeeper.MDIChildren[i]).TimeLine_Done();
 
-  fmGEDKeeper.actTimeLine.Checked := False;
+  fmGEDKeeper.miTimeLine.Checked := False;
   fmTimeLine := nil;
   Action := caFree;
 end;
@@ -87,5 +89,5 @@ begin
   if Assigned(FBase) then FBase.TimeLine_SetYear(tbTimeLine.Position);
   StatusUpdate();
 end;
-
+    
 end.

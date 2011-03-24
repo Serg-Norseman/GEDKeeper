@@ -123,7 +123,7 @@
 			<Directories Name="UnitOutputDir"></Directories>
 			<Directories Name="PackageDLLOutputDir"></Directories>
 			<Directories Name="PackageDCPOutputDir"></Directories>
-			<Directories Name="SearchPath">$(DELPHI)\Lib\Debug;.\ext\GraphicEx;.\ext\Abbrevia\;D:\WORKS\Brainstorm;D:\WORKS\Brainstorm\ext;D:\WORKS\Brainstorm\synapse\source\lib;.\ext</Directories>
+			<Directories Name="SearchPath">$(DELPHI)\Lib\Debug;.\ext\GraphicEx;.\ext\Abbrevia\;.\ext\synapse\;.\ext\XYGraph;.\ext</Directories>
 			<Directories Name="Packages">vcl;rtl;indy;inet;xmlrtl;vclie;inetdbbde;inetdbxpress;vclx;dbrtl;dsnap;dsnapcon;vcldb;soaprtl;dbexpress;dbxcds;inetdb;bdertl;vcldbx;webdsnap;websnap;adortl;ibxpress;teeui;teedb;tee;dss;visualclx;visualdbclx;vclactnband</Directories>
 			<Directories Name="Conditionals"></Directories>
 			<Directories Name="DebugSourceDirs"></Directories>
@@ -143,9 +143,9 @@
 			<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
 			<VersionInfo Name="AutoIncBuild">True</VersionInfo>
 			<VersionInfo Name="MajorVer">1</VersionInfo>
-			<VersionInfo Name="MinorVer">6</VersionInfo>
+			<VersionInfo Name="MinorVer">5</VersionInfo>
 			<VersionInfo Name="Release">0</VersionInfo>
-			<VersionInfo Name="Build">319</VersionInfo>
+			<VersionInfo Name="Build">349</VersionInfo>
 			<VersionInfo Name="Debug">False</VersionInfo>
 			<VersionInfo Name="PreRelease">False</VersionInfo>
 			<VersionInfo Name="Special">False</VersionInfo>
@@ -157,7 +157,7 @@
 		<VersionInfoKeys>
 			<VersionInfoKeys Name="CompanyName"></VersionInfoKeys>
 			<VersionInfoKeys Name="FileDescription"></VersionInfoKeys>
-			<VersionInfoKeys Name="FileVersion">1.6.0.319</VersionInfoKeys>
+			<VersionInfoKeys Name="FileVersion">1.5.0.349</VersionInfoKeys>
 			<VersionInfoKeys Name="InternalName">GEDKeeper</VersionInfoKeys>
 			<VersionInfoKeys Name="LegalCopyright">Copyright © Serg V. Zhdanovskih</VersionInfoKeys>
 			<VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>

@@ -1,8 +1,8 @@
 object fmScriptDaemon: TfmScriptDaemon
   Left = 447
   Top = 230
-  Width = 744
-  Height = 494
+  Width = 736
+  Height = 483
   Caption = 'ScriptDaemon'
   Color = clBtnFace
   Font.Charset = RUSSIAN_CHARSET
@@ -10,7 +10,7 @@ object fmScriptDaemon: TfmScriptDaemon
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = False
+  OldCreateOrder = True
   Position = poScreenCenter
   OnClose = FormClose
   OnCreate = FormCreate
@@ -19,8 +19,8 @@ object fmScriptDaemon: TfmScriptDaemon
   TextHeight = 13
   object Splitter1: TSplitter
     Left = 0
-    Top = 316
-    Width = 736
+    Top = 305
+    Width = 728
     Height = 3
     Cursor = crVSplit
     Align = alBottom
@@ -29,15 +29,14 @@ object fmScriptDaemon: TfmScriptDaemon
   object ToolBar1: TToolBar
     Left = 0
     Top = 0
-    Width = 736
+    Width = 728
     Height = 30
     AutoSize = True
     ButtonHeight = 26
     ButtonWidth = 27
-    Caption = 'ToolBar1'
     EdgeBorders = [ebTop, ebBottom]
     Flat = True
-    Images = fmGEDKeeper.ImageList1
+    Images = fmGEDKeeper.ImageList_Buttons
     ParentShowHint = False
     ShowHint = True
     TabOrder = 0
@@ -84,8 +83,8 @@ object fmScriptDaemon: TfmScriptDaemon
   end
   object mmDebugOutput: TMemo
     Left = 0
-    Top = 319
-    Width = 736
+    Top = 308
+    Width = 728
     Height = 148
     Align = alBottom
     Font.Charset = RUSSIAN_CHARSET
@@ -101,8 +100,8 @@ object fmScriptDaemon: TfmScriptDaemon
   object mmScriptText: TMemo
     Left = 0
     Top = 30
-    Width = 736
-    Height = 286
+    Width = 728
+    Height = 275
     Align = alClient
     Font.Charset = RUSSIAN_CHARSET
     Font.Color = clWindowText

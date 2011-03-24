@@ -1,13 +1,13 @@
-unit GKMain;
+unit GKMain; {prepare:partial}
 
 {$I GEDKeeper.inc}
 
 interface
 
 uses
-  Windows, SysUtils, Variants, Classes, Graphics, Forms, Controls, Menus,
-  StdCtrls, Dialogs, Buttons, Messages, ExtCtrls, ComCtrls, StdActns, ActnList,
-  ToolWin, ImgList, GKEngine, GKCommon, GKBase, GKLangs, GKPluginMan;
+  Windows, SysUtils, Classes, Variants, Forms, Controls, Menus, StdCtrls,
+  Dialogs, Buttons, Messages, ExtCtrls, ComCtrls, ToolWin, ImgList,
+  GKEngine, GKCommon, GKBase, GKLangs;
 
 const
   WM_KEEPMODELESS = WM_USER + 111;
@@ -15,39 +15,7 @@ const
 type
   TfmGEDKeeper = class(TForm, ILocalization)
     StatusBar: TStatusBar;
-    actWinCascade: TWindowCascade;
-    actWinHTile: TWindowTileHorizontal;
-    actWinArrange: TWindowArrange;
-    actWinMinimize: TWindowMinimizeAll;
-    actWinVTile: TWindowTileVertical;
-    ActionList1: TActionList;
-    actFileNew: TAction;
-    actFileLoad: TAction;
-    actFileSave: TAction;
-    actExit: TAction;
-    actRecordAdd: TAction;
-    actRecordEdit: TAction;
-    actRecordDelete: TAction;
-    actFileProperties: TAction;
-    actOptions: TAction;
-    actTreeAncestors: TAction;
-    actTreeDescendants: TAction;
-    actPedigree_dAboville: TAction;
-    actPedigree_Konovalov: TAction;
-    actFilter: TAction;
-    actStats: TAction;
-    actExportToWeb: TAction;
-    actExportToExcel: TAction;
-    actTreeTools: TAction;
-    actContextHelp: TAction;
-    actAbout: TAction;
-    actMap: TAction;
-    actGenResources: TAction;
-    actKinshipTerms: TAction;
-    actPrev: TAction;
-    actNext: TAction;
-    actFileClose: TAction;
-    ImageList1: TImageList;
+    ImageList_Buttons: TImageList;
     ToolBar1: TToolBar;
     tbFileNew: TToolButton;
     tbFileLoad: TToolButton;
@@ -76,10 +44,10 @@ type
     miFileSave: TMenuItem;
     miFileClose: TMenuItem;
     N1: TMenuItem;
-    miDocAuthor: TMenuItem;
+    miFileProperties: TMenuItem;
     N2: TMenuItem;
     miExportToWeb: TMenuItem;
-    miExportToExcel: TMenuItem;
+    miExportToExcelFile: TMenuItem;
     N3: TMenuItem;
     miTreeTools: TMenuItem;
     N4: TMenuItem;
@@ -89,7 +57,7 @@ type
     miRecordEdit: TMenuItem;
     miRecordDelete: TMenuItem;
     N5: TMenuItem;
-    miPersonScan: TMenuItem;
+    miStreamInput: TMenuItem;
     N6: TMenuItem;
     miFilter: TMenuItem;
     N7: TMenuItem;
@@ -122,91 +90,82 @@ type
     miPedigree_Konovalov2: TMenuItem;
     OpenDialog1: TOpenDialog;
     SaveDialog1: TSaveDialog;
-    actPersonScan: TAction;
     ToolButton7: TToolButton;
     tbUndo: TToolButton;
     tbRedo: TToolButton;
-    actUndo: TAction;
-    actRedo: TAction;
     miFAQ: TMenuItem;
-    actFAQ: TAction;
-    ImageList2: TImageList;
+    ImageList_Shields: TImageList;
     miCalc: TMenuItem;
-    actExpCalc: TAction;
-    actNamesBook: TAction;
     miNamesBook: TMenuItem;
     miCalendar: TMenuItem;
-    actCalendar: TAction;
-    actTimeLine: TAction;
     miTimeLine: TMenuItem;
-    actStereoView: TAction;
-    actOrganizer: TAction;
     miOrganizer: TMenuItem;
-    actDBImport: TAction;
     miDBImport: TMenuItem;
     miService: TMenuItem;
     N12: TMenuItem;
     miUndo: TMenuItem;
     miRedo: TMenuItem;
-    miSourceParse: TMenuItem;
-    actSourceParse: TAction;
     miScripts: TMenuItem;
-    actScripts: TAction;
+    miExport: TMenuItem;
+    miExportToExcelApp: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure actFileNewExecute(Sender: TObject);
-    procedure actFileLoadExecute(Sender: TObject);
-    procedure actFileSaveExecute(Sender: TObject);
-    procedure actExitExecute(Sender: TObject);
-    procedure actFilePropertiesExecute(Sender: TObject);
-    procedure actFileCloseExecute(Sender: TObject);
-    procedure actContextHelpExecute(Sender: TObject);
-    procedure actAboutExecute(Sender: TObject);
-    procedure actGenResourcesExecute(Sender: TObject);
-    procedure actKinshipTermsExecute(Sender: TObject);
-    procedure actExportToWebExecute(Sender: TObject);
-    procedure actExportToExcelExecute(Sender: TObject);
-    procedure actTreeToolsExecute(Sender: TObject);
-    procedure actRecordAddExecute(Sender: TObject);
-    procedure actRecordEditExecute(Sender: TObject);
-    procedure actRecordDeleteExecute(Sender: TObject);
-    procedure actFilterExecute(Sender: TObject);
-    procedure actTreeAncestorsExecute(Sender: TObject);
-    procedure actTreeDescendantsExecute(Sender: TObject);
-    procedure actPedigree_dAbovilleExecute(Sender: TObject);
-    procedure actPedigree_KonovalovExecute(Sender: TObject);
-    procedure actMapExecute(Sender: TObject);
-    procedure actStatsExecute(Sender: TObject);
-    procedure actOptionsExecute(Sender: TObject);
-    procedure actPrevExecute(Sender: TObject);
-    procedure actNextExecute(Sender: TObject);
-    procedure actPersonScanExecute(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure actUndoExecute(Sender: TObject);
-    procedure actRedoExecute(Sender: TObject);
-    procedure actFAQExecute(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure StatusBarDrawPanel(StatusBar: TStatusBar;
       Panel: TStatusPanel; const Rect: TRect);
     procedure StatusBarDblClick(Sender: TObject);
-    procedure actExpCalcExecute(Sender: TObject);
-    procedure actNamesBookExecute(Sender: TObject);
-    procedure actCalendarExecute(Sender: TObject);
-    procedure actTimeLineExecute(Sender: TObject);
-    procedure actStereoViewExecute(Sender: TObject);
-    procedure actOrganizerExecute(Sender: TObject);
-    procedure actDBImportExecute(Sender: TObject);
-    procedure actSourceParseExecute(Sender: TObject);
-    procedure actScriptsExecute(Sender: TObject);
+    procedure miExitClick(Sender: TObject);
+    procedure miExportToWebClick(Sender: TObject);
+    procedure miExportToExcelFileClick(Sender: TObject);
+    procedure miFilePropertiesClick(Sender: TObject);
+    procedure miStreamInputClick(Sender: TObject);
+    procedure miDBImportClick(Sender: TObject);
+    procedure miScriptsClick(Sender: TObject);
+    procedure miTreeToolsClick(Sender: TObject);
+    procedure miOptionsClick(Sender: TObject);
+    procedure miFileCloseClick(Sender: TObject);
+    procedure miMapClick(Sender: TObject);
+    procedure miOrganizerClick(Sender: TObject);
+    procedure miTimeLineClick(Sender: TObject);
+    procedure miCalendarClick(Sender: TObject);
+    procedure miNamesBookClick(Sender: TObject);
+    procedure miCalcClick(Sender: TObject);
+    procedure miAboutClick(Sender: TObject);
+    procedure miGenResourcesClick(Sender: TObject);
+    procedure miKinshipTermsClick(Sender: TObject);
+    procedure miFAQClick(Sender: TObject);
+    procedure miContextClick(Sender: TObject);
+    procedure miWinCascadeClick(Sender: TObject);
+    procedure miWinHTileClick(Sender: TObject);
+    procedure miWinVTileClick(Sender: TObject);
+    procedure miWinMinimizeClick(Sender: TObject);
+    procedure miWinArrangeClick(Sender: TObject);
+    procedure miFilterClick(Sender: TObject);
+    procedure tbPrevClick(Sender: TObject);
+    procedure tbNextClick(Sender: TObject);
+    procedure miStatsClick(Sender: TObject);
+    procedure miFileNewClick(Sender: TObject);
+    procedure miFileLoadClick(Sender: TObject);
+    procedure miFileSaveClick(Sender: TObject);
+    procedure miUndoClick(Sender: TObject);
+    procedure miRedoClick(Sender: TObject);
+    procedure miTreeAncestorsClick(Sender: TObject);
+    procedure miTreeDescendantsClick(Sender: TObject);
+    procedure miPedigree_dAbovilleClick(Sender: TObject);
+    procedure miPedigree_KonovalovClick(Sender: TObject);
+    procedure miRecordAddClick(Sender: TObject);
+    procedure miRecordEditClick(Sender: TObject);
+    procedure miRecordDeleteClick(Sender: TObject);
+    procedure miExportToExcelAppClick(Sender: TObject);
   private
     FNamesTable: TNamesTable;
     FOptions: TGlobalOptions;
-    FPluginMan: TPluginMan;
 
     procedure MRUFileClick(Sender: TObject);
     procedure UpdateMRU();
 
-    procedure ExecWidget(Action: TAction; WidgetClass: TFormClass; var Widget: TForm);
+    procedure ExecWidget(WidgetClass: TFormClass; var Widget: TForm);
 
     procedure FileDrop(var Msg: TWMDROPFILES); message WM_DROPFILES;
     procedure CopyData(var Msg: TWMCopyData); message WM_COPYDATA;
@@ -235,13 +194,15 @@ var
 function ShowModalEx(aForm: TCustomForm; aPopupParent: TCustomForm = nil;
   KeepModeless: Boolean = False): Integer;
 
+procedure RunInstance();
+
 implementation
 
 uses
   {$IFDEF DELPHI_NET}System.IO,{$ENDIF}
   {$IFDEF PROFILER}ZProfiler,{$ENDIF}
-  uVista, ShellAPI, bsComUtils, GKUtils, 
-  GKAbout, GKOptions, GKExpCalc, GKNamesBook, GKCalendar, GKTimeLine;
+  uVista, ShellAPI, GedCom551, GKUtils, GKAbout, GKOptions,
+  GKNamesBook, GKTimeLine, GKExpCalc, GKCalendar;
 
 {$R *.dfm}
 
@@ -260,6 +221,49 @@ begin
   {$ENDIF}
 
   Result := aForm.ShowModal;
+end;
+
+procedure RunInstance();
+var
+  i, WParam, LParam: Integer;
+  hMainForm: HWND;
+  copyDataStruct: TCopyDataStruct;
+  ParamString: string;
+begin
+  // ищем главное окно приложения, вместо Caption - nil,
+  // поскольку к заголовку главного окна может добавиться заголовок MDIChild
+  // (нужно позаботиться об уникальности имени класса главной формы)
+
+  if IsDevComp()
+  then hMainForm := 0
+  else hMainForm := FindWindow('TfmGEDKeeper', nil);
+
+  if (hMainForm = 0) then begin
+    Application.Initialize;
+    Application.Title := 'GEDKeeper';
+    Application.CreateForm(TfmGEDKeeper, fmGEDKeeper);
+    for i := 1 to ParamCount do fmGEDKeeper.CreateBase(ParamStr(i));
+    Application.Run;
+  end else begin
+    {$IFNDEF DELPHI_NET}
+    ParamString := '';
+    for i := 1 to ParamCount do begin
+      // запихиваем все параметры в одну строку с разделителями ?13
+      ParamString := ParamString + ParamStr(i) + #13;
+    end;
+    // создаем запись типа TCopyDataStruct
+
+    CopyDataStruct.lpData := PChar(ParamString);
+    CopyDataStruct.cbData := Length(ParamString);
+    CopyDataStruct.dwData := 0;
+    WParam := Application.Handle;
+    LParam := Integer(@CopyDataStruct);
+    // отсылаем сообщение WM_COPYDATA главному окну открытого приложения
+
+    SendMessage(hMainForm, WM_CopyData, WParam, LParam);
+    Application.Terminate;
+    {$ENDIF}
+  end;
 end;
 
 { TfmGEDKeeper }
@@ -319,11 +323,6 @@ begin
   FNamesTable := TNamesTable.Create;
   FNamesTable.LoadFromFile(GetAppPath() + 'GEDKeeper.nms');
 
-  FPluginMan := TPluginMan.Create(Self);
-  FPluginMan.Directory := ExtractFilePath(Application.ExeName) + '\plugins\';
-  FPluginMan.ScanDirectory();
-  FPluginMan.LoadAll();
-
   DragAcceptFiles(Handle, True);
 
   UpdateMRU();
@@ -332,9 +331,6 @@ end;
 
 procedure TfmGEDKeeper.FormDestroy(Sender: TObject);
 begin
-  FPluginMan.UnloadAll();
-  FPluginMan.Destroy;
-
   FNamesTable.SaveToFile(GetAppPath() + 'GEDKeeper.nms');
   FNamesTable.Destroy;
 
@@ -342,13 +338,12 @@ begin
   FOptions.Destroy;
 
   {$IFDEF PROFILER}DoneProfiler();{$ENDIF}
-  LogDone();
 end;
 
 procedure TfmGEDKeeper.FileDrop(var Msg: TWMDROPFILES);
 var
   numFiles: Longint;
-  buffer: array [0..MAX_PATH] of Char;
+  buffer: {$IFNDEF DELPHI_NET}array [0..MAX_PATH] of Char{$ELSE}string{$ENDIF};
 begin
   numFiles := DragQueryFile(Msg.Drop, $FFFFFFFF, nil, 0);
   if (numFiles > 1) then begin
@@ -357,6 +352,7 @@ begin
     {$IFNDEF DELPHI_NET}
     DragQueryFile(Msg.Drop, 0, @buffer, SizeOf(buffer));
     {$ELSE}
+
     {$ENDIF}
     CreateBase(buffer);
   end;
@@ -366,8 +362,7 @@ procedure TfmGEDKeeper.CopyData(var Msg: TWMCopyData);
 var
   ParamStr: string;
   CopyDataStructure: TCopyDataStruct;
-  i: integer;
-  len: integer;
+  i, len: Integer;
 begin
   {$IFNDEF DELPHI_NET}
   CopyDataStructure := Msg.CopyDataStruct^;
@@ -436,50 +431,60 @@ begin
       base_en := True;
     end;
 
-    actFileClose.Enabled := (base_en);
-    actFileSave.Enabled := (base_en);
+    miFileClose.Enabled := (base_en);
 
-    actFileProperties.Enabled := (base_en);
-    actExportToWeb.Enabled := (base_en);
-    actExportToExcel.Enabled := (base_en);
-    actTreeTools.Enabled := (base_en);
+    miFileSave.Enabled := (base_en);
+    tbFileSave.Enabled := miFileSave.Enabled;
 
-    actRecordAdd.Enabled := (base_en);
-    actRecordEdit.Enabled := (base_en);
-    actRecordDelete.Enabled := (base_en);
-    actPersonScan.Enabled := (base_en);
+    miFileProperties.Enabled := (base_en);
+    miExportToWeb.Enabled := (base_en);
+    miExportToExcelFile.Enabled := (base_en);
+    miExportToExcelApp.Enabled := (base_en);
+    miTreeTools.Enabled := (base_en);
+    miStreamInput.Enabled := (base_en);
+
+    miRecordAdd.Enabled := (base_en);
+    tbRecordAdd.Enabled := miRecordAdd.Enabled;
+
+    miRecordEdit.Enabled := (base_en);
+    tbRecordEdit.Enabled := miRecordEdit.Enabled;
+
+    miRecordDelete.Enabled := (base_en);
+    tbRecordDelete.Enabled := miRecordDelete.Enabled;
 
     indiv_en := (base_en) and (rt = rtIndividual);
 
-    actFilter.Enabled := (indiv_en);
+    miFilter.Enabled := (indiv_en);
+    tbFilter.Enabled := miFilter.Enabled;
+
+    miStats.Enabled := (base_en);
+    tbStats.Enabled := miStats.Enabled;
+
+    miTreeAncestors.Enabled := (indiv_en);
+    tbTreeAncestors.Enabled := miTreeAncestors.Enabled;
+
+    miTreeDescendants.Enabled := (indiv_en);
+    tbTreeDescendants.Enabled := miTreeDescendants.Enabled;
+
     miPedigree.Enabled := (indiv_en);
-    tbPedigree.Enabled := (indiv_en);
-    actTreeAncestors.Enabled := (indiv_en);
-    actTreeDescendants.Enabled := (indiv_en);
-    actPedigree_dAboville.Enabled := (indiv_en);
-    actPedigree_Konovalov.Enabled := (indiv_en);
+    tbPedigree.Enabled := miPedigree.Enabled;
+    miPedigree_dAboville.Enabled := (indiv_en);
+    miPedigree_Konovalov.Enabled := (indiv_en);
 
-    actStats.Enabled := (base_en);
-    actOrganizer.Enabled := (base_en);
-    actDBImport.Enabled := (base_en);
-    actScripts.Enabled := (base_en);
+    miOrganizer.Enabled := (base_en);
+    miDBImport.Enabled := (base_en);
+    miScripts.Enabled := (base_en);
 
-    actPrev.Enabled := (cur_base <> nil) and (cur_base.Backman.CanBackward());
-    actNext.Enabled := (cur_base <> nil) and (cur_base.Backman.CanForward());
+    tbPrev.Enabled := (cur_base <> nil) and (cur_base.Backman.CanBackward());
+    tbNext.Enabled := (cur_base <> nil) and (cur_base.Backman.CanForward());
 
     test_funcs := IsDevComp();
 
-    {$IFDEF FEATURES_INC}
-    actUndo.Enabled := (test_funcs) and (cur_base <> nil) and (cur_base.Undoman.CanUndo());
-    actRedo.Enabled := (test_funcs) and (cur_base <> nil) and (cur_base.Undoman.CanRedo());
-    actSourceParse.Enabled := (test_funcs) and (cur_base <> nil);
-    actStereoView.Enabled := (test_funcs) and (cur_base <> nil);
-    {$ELSE}
-    actUndo.Enabled := False;
-    actRedo.Enabled := False;
-    actSourceParse.Enabled := False;
-    actStereoView.Enabled := False;
-    {$ENDIF}
+    miUndo.Enabled := (test_funcs) and (cur_base <> nil) and (cur_base.Undoman.CanUndo());
+    tbUndo.Enabled := miUndo.Enabled;
+
+    miRedo.Enabled := (test_funcs) and (cur_base <> nil) and (cur_base.Undoman.CanRedo());
+    tbRedo.Enabled := miRedo.Enabled;
 
     if (cur_base <> nil) then begin
       st := 'Записей: ' + IntToStr(cur_base.FCounts[rt].Total);
@@ -546,234 +551,6 @@ begin
   CreateBase(FOptions.MRUFiles[idx]);
 end;
 
-procedure TfmGEDKeeper.actFileNewExecute(Sender: TObject);
-begin
-  CreateBase('');
-end;
-
-procedure TfmGEDKeeper.actFileLoadExecute(Sender: TObject);
-begin
-  OpenDialog1.InitialDir := fmGEDKeeper.Options.LastDir;
-  if OpenDialog1.Execute
-  then CreateBase(OpenDialog1.FileName);
-end;
-
-procedure TfmGEDKeeper.actFileSaveExecute(Sender: TObject);
-var
-  cur_base: TfmBase;
-begin
-  cur_base := GetCurrentFile();
-  if (cur_base = nil) then Exit;
-
-  SaveDialog1.FileName := cur_base.FileName;
-  if SaveDialog1.Execute
-  then cur_base.FileSave(SaveDialog1.FileName);
-end;
-
-procedure TfmGEDKeeper.actExitExecute(Sender: TObject);
-begin
-  Close;
-end;
-
-procedure TfmGEDKeeper.actFilePropertiesExecute(Sender: TObject);
-var
-  cur_base: TfmBase;
-begin
-  cur_base := GetCurrentFile();
-  if (cur_base <> nil) then cur_base.FileProperties();
-end;
-
-procedure TfmGEDKeeper.actFileCloseExecute(Sender: TObject);
-var
-  cur_base: TfmBase;
-begin
-  cur_base := GetCurrentFile();
-  if (cur_base <> nil) then cur_base.Close();
-end;
-
-procedure TfmGEDKeeper.actContextHelpExecute(Sender: TObject);
-begin
-  LoadExtFile(GetAppPath() + 'help\GEDKeeper.htm');
-end;
-
-procedure TfmGEDKeeper.actAboutExecute(Sender: TObject);
-begin
-  AboutDialog();
-end;
-
-procedure TfmGEDKeeper.actGenResourcesExecute(Sender: TObject);
-begin
-  LoadExtFile(GetAppPath() + 'help\genres.htm');
-end;
-
-procedure TfmGEDKeeper.actKinshipTermsExecute(Sender: TObject);
-begin
-  LoadExtFile(GetAppPath() + 'help\relations.htm');
-end;
-
-procedure TfmGEDKeeper.actExportToWebExecute(Sender: TObject);
-var
-  cur_base: TfmBase;
-begin
-  cur_base := GetCurrentFile();
-  if (cur_base <> nil) then cur_base.ExportToWeb();
-end;
-
-procedure TfmGEDKeeper.actExportToExcelExecute(Sender: TObject);
-var
-  cur_base: TfmBase;
-begin
-  cur_base := GetCurrentFile();
-  if (cur_base <> nil) then cur_base.ExportToExcel();
-end;
-
-procedure TfmGEDKeeper.actTreeToolsExecute(Sender: TObject);
-var
-  cur_base: TfmBase;
-begin
-  cur_base := GetCurrentFile();
-  if (cur_base <> nil) then cur_base.TreeTools();
-end;
-
-procedure TfmGEDKeeper.actRecordAddExecute(Sender: TObject);
-var
-  cur_base: TfmBase;
-begin
-  cur_base := GetCurrentFile();
-  if (cur_base <> nil) then cur_base.RecordAdd();
-end;
-
-procedure TfmGEDKeeper.actRecordEditExecute(Sender: TObject);
-var
-  cur_base: TfmBase;
-begin
-  cur_base := GetCurrentFile();
-  if (cur_base <> nil) then cur_base.RecordEdit(Sender);
-end;
-
-procedure TfmGEDKeeper.actRecordDeleteExecute(Sender: TObject);
-var
-  cur_base: TfmBase;
-begin
-  cur_base := GetCurrentFile();
-  if (cur_base <> nil) then cur_base.RecordDelete();
-end;
-
-procedure TfmGEDKeeper.actFilterExecute(Sender: TObject);
-var
-  cur_base: TfmBase;
-begin
-  cur_base := GetCurrentFile();
-  if (cur_base <> nil) then cur_base.SetFilter();
-end;
-
-procedure TfmGEDKeeper.actTreeAncestorsExecute(Sender: TObject);
-var
-  cur_base: TfmBase;
-begin
-  cur_base := GetCurrentFile();
-  if (cur_base <> nil) then cur_base.ShowTreeAncestors();
-end;
-
-procedure TfmGEDKeeper.actTreeDescendantsExecute(Sender: TObject);
-var
-  cur_base: TfmBase;
-begin
-  cur_base := GetCurrentFile();
-  if (cur_base <> nil) then cur_base.ShowTreeDescendants();
-end;
-
-procedure TfmGEDKeeper.actPedigree_dAbovilleExecute(Sender: TObject);
-var
-  cur_base: TfmBase;
-begin
-  cur_base := GetCurrentFile();
-  if (cur_base <> nil) then cur_base.GenPedigree_dAboville();
-end;
-
-procedure TfmGEDKeeper.actPedigree_KonovalovExecute(Sender: TObject);
-var
-  cur_base: TfmBase;
-begin
-  cur_base := GetCurrentFile();
-  if (cur_base <> nil) then cur_base.GenPedigree_Konovalov();
-end;
-
-procedure TfmGEDKeeper.actMapExecute(Sender: TObject);
-var
-  cur_base: TfmBase;
-begin
-  cur_base := GetCurrentFile();
-  if (cur_base <> nil) then cur_base.ShowMap();
-end;
-
-procedure TfmGEDKeeper.actSourceParseExecute(Sender: TObject);
-var
-  cur_base: TfmBase;
-begin
-  cur_base := GetCurrentFile();
-  if (cur_base <> nil) then cur_base.SourceParse();
-end;
-
-procedure TfmGEDKeeper.actStatsExecute(Sender: TObject);
-var
-  cur_base: TfmBase;
-begin
-  cur_base := GetCurrentFile();
-  if (cur_base <> nil) then cur_base.ShowStats();
-end;
-
-procedure TfmGEDKeeper.actStereoViewExecute(Sender: TObject);
-var
-  cur_base: TfmBase;
-begin
-  cur_base := GetCurrentFile();
-  if (cur_base <> nil) then cur_base.ShowStereoView();
-end;
-
-procedure TfmGEDKeeper.actOptionsExecute(Sender: TObject);
-var
-  fmOptions: TfmOptions;
-  i: Integer;
-begin
-  fmOptions := TfmOptions.Create(Application);
-  try
-    fmOptions.Options := fmGEDKeeper.Options;
-
-    if (ShowModalEx(fmOptions) = mrOk) then begin
-      for i := 0 to MDIChildCount - 1 do
-        if (MDIChildren[i] is TfmBase)
-        then TfmBase(MDIChildren[i]).ListsRefresh(True);
-    end;
-  finally
-    fmOptions.Destroy;
-  end;
-end;
-
-procedure TfmGEDKeeper.actPrevExecute(Sender: TObject);
-var
-  cur_base: TfmBase;
-begin
-  cur_base := GetCurrentFile();
-  if (cur_base <> nil) then cur_base.NavPrev();
-end;
-
-procedure TfmGEDKeeper.actNextExecute(Sender: TObject);
-var
-  cur_base: TfmBase;
-begin
-  cur_base := GetCurrentFile();
-  if (cur_base <> nil) then cur_base.NavNext();
-end;
-
-procedure TfmGEDKeeper.actPersonScanExecute(Sender: TObject);
-var
-  cur_base: TfmBase;
-begin
-  cur_base := GetCurrentFile();
-  if (cur_base <> nil) then cur_base.PersonScan();
-end;
-
 procedure TfmGEDKeeper.FormClose(Sender: TObject; var Action: TCloseAction);
 var
   i: Integer;
@@ -800,31 +577,7 @@ begin
   miPedigree.Caption := GetLangStr(LSID_MIPedigree);
   miWindow.Caption := GetLangStr(LSID_MIWindow);
   miHelp.Caption := GetLangStr(LSID_MIHelp);
-
   miMRUFiles.Caption := GetLangStr(LSID_MIMRUFiles);
-
-  //tbPedigree.Hint :=
-end;
-
-procedure TfmGEDKeeper.actUndoExecute(Sender: TObject);
-var
-  cur_base: TfmBase;
-begin
-  cur_base := GetCurrentFile();
-  if (cur_base <> nil) then cur_base.DoUndo();
-end;
-
-procedure TfmGEDKeeper.actRedoExecute(Sender: TObject);
-var
-  cur_base: TfmBase;
-begin
-  cur_base := GetCurrentFile();
-  if (cur_base <> nil) then cur_base.DoRedo();
-end;
-
-procedure TfmGEDKeeper.actFAQExecute(Sender: TObject);
-begin
-  LoadExtFile(GetAppPath() + 'help\faq.htm');
 end;
 
 procedure TfmGEDKeeper.FormResize(Sender: TObject);
@@ -840,7 +593,7 @@ var
 begin
   cur_base := GetCurrentFile();
   if (cur_base <> nil)
-  then ImageList2.Draw(StatusBar.Canvas, Rect.Left, Rect.Top, Ord(cur_base.ShieldState));
+  then ImageList_Shields.Draw(StatusBar.Canvas, Rect.Left, Rect.Top, Ord(cur_base.ShieldState));
 end;
 
 procedure TfmGEDKeeper.StatusBarDblClick(Sender: TObject);
@@ -888,88 +641,59 @@ begin
   then EnableWindow(fmCalcWidget.Handle, True);
 end;
 
-procedure TfmGEDKeeper.ExecWidget(Action: TAction; WidgetClass: TFormClass; var Widget: TForm);
+procedure TfmGEDKeeper.ExecWidget(WidgetClass: TFormClass; var Widget: TForm);
 begin
-  if (Action.Checked) and not(Assigned(Widget)) then begin
-    {FPluginMan.RunPlugin(0);}
+  (*if (Action.Checked) and not(Assigned(Widget)) then begin
     Widget := WidgetClass.Create(nil);
     Widget.Left := Screen.WorkAreaWidth - Widget.Width - 10; {!!!}
     Widget.Top := Screen.WorkAreaHeight - Widget.Height - 10; {!!!}
     Widget.Show;
   end else begin
     FreeAndNil(Widget);
-    {FPluginMan.RunPlugin(1);}
-  end;
+  end;*)
 
   // если хранить список открытых виджетов, то можно сделать динамическую
   // установку их один над другим по мере подключения
 end;
 
-procedure TfmGEDKeeper.actExpCalcExecute(Sender: TObject);
+procedure TfmGEDKeeper.miExitClick(Sender: TObject);
 begin
-  if (actExpCalc.Checked) and not(Assigned(fmCalcWidget)) then begin
-    {FPluginMan.RunPlugin(0);}
-    fmCalcWidget := TfmCalcWidget.Create(nil);
-    fmCalcWidget.Left := Screen.WorkAreaWidth - fmCalcWidget.Width - 10;
-    fmCalcWidget.Top := Screen.WorkAreaHeight - fmCalcWidget.Height - 10;
-    fmCalcWidget.Show;
-  end else begin
-    FreeAndNil(fmCalcWidget);
-    {FPluginMan.RunPlugin(1);}
-  end;
+  Close;
 end;
 
-procedure TfmGEDKeeper.actNamesBookExecute(Sender: TObject);
-begin
-  if (actNamesBook.Checked) and not(Assigned(fmNamesBook)) then begin
-    {FPluginMan.RunPlugin(0);}
-    fmNamesBook := TfmNamesBook.Create(nil);
-    fmNamesBook.Left := Screen.WorkAreaWidth - fmNamesBook.Width - 10;
-    fmNamesBook.Top := (Screen.WorkAreaHeight - fmNamesBook.Height) div 2;
-    fmNamesBook.Show;
-  end else begin
-    FreeAndNil(fmNamesBook);
-    {FPluginMan.RunPlugin(1);}
-  end;
-end;
-
-procedure TfmGEDKeeper.actCalendarExecute(Sender: TObject);
-begin
-  if (actCalendar.Checked) and not(Assigned(fmCalendar)) then begin
-    {FPluginMan.RunPlugin(0);}
-    fmCalendar := TfmCalendar.Create(nil);
-    fmCalendar.Left := Screen.WorkAreaWidth - fmCalendar.Width - 10;
-    fmCalendar.Top := 50;
-    fmCalendar.Show;
-  end else begin
-    FreeAndNil(fmCalendar);
-    {FPluginMan.RunPlugin(1);}
-  end;
-end;
-
-procedure TfmGEDKeeper.actTimeLineExecute(Sender: TObject);
-begin
-  if (actTimeLine.Checked) and not(Assigned(fmTimeLine)) then begin
-    {FPluginMan.RunPlugin(0);}
-    fmTimeLine := TfmTimeLine.Create(nil);
-    fmTimeLine.Left := 10;
-    fmTimeLine.Top := Screen.WorkAreaHeight - fmTimeLine.Height - 10;
-    fmTimeLine.Show;
-  end else begin
-    FreeAndNil(fmTimeLine);
-    {FPluginMan.RunPlugin(1);}
-  end;
-end;
-
-procedure TfmGEDKeeper.actOrganizerExecute(Sender: TObject);
+procedure TfmGEDKeeper.miExportToWebClick(Sender: TObject);
 var
   cur_base: TfmBase;
 begin
   cur_base := GetCurrentFile();
-  if (cur_base <> nil) then cur_base.ShowOrganizer();
+  if (cur_base <> nil) then cur_base.ExportToWeb();
 end;
 
-procedure TfmGEDKeeper.actDBImportExecute(Sender: TObject);
+procedure TfmGEDKeeper.miExportToExcelFileClick(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base <> nil) then cur_base.ExportToExcel(False);
+end;
+
+procedure TfmGEDKeeper.miFilePropertiesClick(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base <> nil) then cur_base.FileProperties();
+end;
+
+procedure TfmGEDKeeper.miStreamInputClick(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base <> nil) then cur_base.PersonScan();
+end;
+
+procedure TfmGEDKeeper.miDBImportClick(Sender: TObject);
 var
   cur_base: TfmBase;
 begin
@@ -977,12 +701,302 @@ begin
   if (cur_base <> nil) then cur_base.ImportDB();
 end;
 
-procedure TfmGEDKeeper.actScriptsExecute(Sender: TObject);
+procedure TfmGEDKeeper.miScriptsClick(Sender: TObject);
 var
   cur_base: TfmBase;
 begin
   cur_base := GetCurrentFile();
   if (cur_base <> nil) then cur_base.ShowScriptDaemon();
+end;
+
+procedure TfmGEDKeeper.miTreeToolsClick(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base <> nil) then cur_base.TreeTools();
+end;
+
+procedure TfmGEDKeeper.miOptionsClick(Sender: TObject);
+var
+  fmOptions: TfmOptions;
+  i: Integer;
+begin
+  fmOptions := TfmOptions.Create(Application);
+  try
+    fmOptions.Options := fmGEDKeeper.Options;
+
+    if (ShowModalEx(fmOptions) = mrOk) then begin
+      for i := 0 to MDIChildCount - 1 do
+        if (MDIChildren[i] is TfmBase)
+        then TfmBase(MDIChildren[i]).ListsRefresh(True);
+    end;
+  finally
+    fmOptions.Destroy;
+  end;
+end;
+
+procedure TfmGEDKeeper.miFileCloseClick(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base <> nil) then cur_base.Close();
+end;
+
+procedure TfmGEDKeeper.miMapClick(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base <> nil) then cur_base.ShowMap();
+end;
+
+procedure TfmGEDKeeper.miOrganizerClick(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base <> nil) then cur_base.ShowOrganizer();
+end;
+
+procedure TfmGEDKeeper.miTimeLineClick(Sender: TObject);
+begin
+  if (miTimeLine.Checked) and not(Assigned(fmTimeLine)) then begin
+    fmTimeLine := TfmTimeLine.Create(nil);
+    fmTimeLine.Left := 10;
+    fmTimeLine.Top := Screen.WorkAreaHeight - fmTimeLine.Height - 10;
+    fmTimeLine.Show;
+  end else begin
+    FreeAndNil(fmTimeLine);
+  end;
+end;
+
+procedure TfmGEDKeeper.miCalendarClick(Sender: TObject);
+begin
+  if (miCalendar.Checked) and not(Assigned(fmCalendar)) then begin
+    fmCalendar := TfmCalendar.Create(nil);
+    fmCalendar.Left := Screen.WorkAreaWidth - fmCalendar.Width - 10;
+    fmCalendar.Top := 50;
+    fmCalendar.Show;
+  end else begin
+    FreeAndNil(fmCalendar);
+  end;
+end;
+
+procedure TfmGEDKeeper.miNamesBookClick(Sender: TObject);
+begin
+  if (miNamesBook.Checked) and not(Assigned(fmNamesBook)) then begin
+    fmNamesBook := TfmNamesBook.Create(nil);
+    fmNamesBook.Left := Screen.WorkAreaWidth - fmNamesBook.Width - 10;
+    fmNamesBook.Top := (Screen.WorkAreaHeight - fmNamesBook.Height) div 2;
+    fmNamesBook.Show;
+  end else begin
+    FreeAndNil(fmNamesBook);
+  end;
+end;
+
+procedure TfmGEDKeeper.miCalcClick(Sender: TObject);
+begin
+  if (miCalc.Checked) and not(Assigned(fmCalcWidget)) then begin
+    fmCalcWidget := TfmCalcWidget.Create(nil);
+    fmCalcWidget.Left := Screen.WorkAreaWidth - fmCalcWidget.Width - 10;
+    fmCalcWidget.Top := Screen.WorkAreaHeight - fmCalcWidget.Height - 10;
+    fmCalcWidget.Show;
+  end else begin
+    FreeAndNil(fmCalcWidget);
+  end;
+end;
+
+procedure TfmGEDKeeper.miAboutClick(Sender: TObject);
+begin
+  ShowAbout(Self, AppName, GetFileVersion());
+end;
+
+procedure TfmGEDKeeper.miGenResourcesClick(Sender: TObject);
+begin
+  LoadExtFile(GetAppPath() + 'help\genres.htm');
+end;
+
+procedure TfmGEDKeeper.miKinshipTermsClick(Sender: TObject);
+begin
+  LoadExtFile(GetAppPath() + 'help\relations.htm');
+end;
+
+procedure TfmGEDKeeper.miFAQClick(Sender: TObject);
+begin
+  LoadExtFile(GetAppPath() + 'help\faq.htm');
+end;
+
+procedure TfmGEDKeeper.miContextClick(Sender: TObject);
+begin
+  LoadExtFile(GetAppPath() + 'help\GEDKeeper.htm');
+end;
+
+procedure TfmGEDKeeper.miWinCascadeClick(Sender: TObject);
+begin
+  Cascade;
+end;
+
+procedure TfmGEDKeeper.miWinHTileClick(Sender: TObject);
+begin
+  TileMode := tbHorizontal;
+  Tile;
+end;
+
+procedure TfmGEDKeeper.miWinVTileClick(Sender: TObject);
+begin
+  TileMode := tbVertical;
+  Tile;
+end;
+
+procedure TfmGEDKeeper.miWinMinimizeClick(Sender: TObject);
+var
+  I: Integer;
+begin
+  for I := MDIChildCount - 1 downto 0 do
+    MDIChildren[I].WindowState := wsMinimized;
+end;
+
+procedure TfmGEDKeeper.miWinArrangeClick(Sender: TObject);
+begin
+  ArrangeIcons();
+end;
+
+procedure TfmGEDKeeper.miFilterClick(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base <> nil) then cur_base.SetFilter();
+end;
+
+procedure TfmGEDKeeper.tbPrevClick(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base <> nil) then cur_base.NavPrev();
+end;
+
+procedure TfmGEDKeeper.tbNextClick(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base <> nil) then cur_base.NavNext();
+end;
+
+procedure TfmGEDKeeper.miStatsClick(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base <> nil) then cur_base.ShowStats();
+end;
+
+procedure TfmGEDKeeper.miFileNewClick(Sender: TObject);
+begin
+  CreateBase('');
+end;
+
+procedure TfmGEDKeeper.miFileLoadClick(Sender: TObject);
+begin
+  OpenDialog1.InitialDir := fmGEDKeeper.Options.LastDir;
+  if OpenDialog1.Execute
+  then CreateBase(OpenDialog1.FileName);
+end;
+
+procedure TfmGEDKeeper.miFileSaveClick(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base = nil) then Exit;
+
+  SaveDialog1.FileName := cur_base.FileName;
+  if SaveDialog1.Execute
+  then cur_base.FileSave(SaveDialog1.FileName);
+end;
+
+procedure TfmGEDKeeper.miUndoClick(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base <> nil) then cur_base.DoUndo();
+end;
+
+procedure TfmGEDKeeper.miRedoClick(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base <> nil) then cur_base.DoRedo();
+end;
+
+procedure TfmGEDKeeper.miTreeAncestorsClick(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base <> nil) then cur_base.ShowTreeAncestors();
+end;
+
+procedure TfmGEDKeeper.miTreeDescendantsClick(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base <> nil) then cur_base.ShowTreeDescendants();
+end;
+
+procedure TfmGEDKeeper.miPedigree_dAbovilleClick(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base <> nil) then cur_base.GenPedigree_dAboville();
+end;
+
+procedure TfmGEDKeeper.miPedigree_KonovalovClick(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base <> nil) then cur_base.GenPedigree_Konovalov();
+end;
+
+procedure TfmGEDKeeper.miRecordAddClick(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base <> nil) then cur_base.RecordAdd();
+end;
+
+procedure TfmGEDKeeper.miRecordEditClick(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base <> nil) then cur_base.RecordEdit(Sender);
+end;
+
+procedure TfmGEDKeeper.miRecordDeleteClick(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base <> nil) then cur_base.RecordDelete();
+end;
+
+procedure TfmGEDKeeper.miExportToExcelAppClick(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base <> nil) then cur_base.ExportToExcel(True);
 end;
 
 end.

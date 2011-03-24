@@ -216,6 +216,7 @@ type
   TChartOptions = class(TObject)
   private
     FChildlessExclude: Boolean;
+    FDecorative: Boolean;
     FFamilyVisible: Boolean;
     FNameVisible: Boolean;
     FPatronymicVisible: Boolean;
@@ -231,6 +232,8 @@ type
     FUnkSexColor: TColor;
     FUnHusbandColor: TColor;
     FUnWifeColor: TColor;
+
+    FDefFont: TFont;
   public
     constructor Create;
     destructor Destroy; override;
@@ -240,6 +243,7 @@ type
 
     property ChildlessExclude: Boolean read FChildlessExclude write FChildlessExclude;
 
+    property Decorative: Boolean read FDecorative write FDecorative;
     property FamilyVisible: Boolean read FFamilyVisible write FFamilyVisible;
     property NameVisible: Boolean read FNameVisible write FNameVisible;
     property PatronymicVisible: Boolean read FPatronymicVisible write FPatronymicVisible;
@@ -255,6 +259,8 @@ type
     property UnkSexColor: TColor read FUnkSexColor write FUnkSexColor;
     property UnHusbandColor: TColor read FUnHusbandColor write FUnHusbandColor;
     property UnWifeColor: TColor read FUnWifeColor write FUnWifeColor;
+
+    property DefFont: TFont read FDefFont;
   end;
 
   TProxy = class(TObject)
@@ -301,6 +307,7 @@ type
     FDefCharacterSet: TGEDCOMCharacterSet;
     FDefDateFormat: TDateFormat;
     FDefNameFormat: TNameFormat;
+    FEventFilters: TStringList;
     FLastDir: string;
     FMRUFiles: TStringList;
     FNameFilters: TStringList;
@@ -326,6 +333,7 @@ type
     property DefCharacterSet: TGEDCOMCharacterSet read FDefCharacterSet write FDefCharacterSet;
     property DefDateFormat: TDateFormat read FDefDateFormat write FDefDateFormat;
     property DefNameFormat: TNameFormat read FDefNameFormat write FDefNameFormat;
+    property EventFilters: TStringList read FEventFilters;
     property LastDir: string read FLastDir write FLastDir;
     property MRUFiles: TStringList read FMRUFiles;
     property NameFilters: TStringList read FNameFilters;
@@ -352,7 +360,7 @@ implementation
 
 uses
   {$IFDEF DELPHI_NET}System.IO,{$ENDIF}
-  Windows, SysUtils, Math, Forms, bsComUtils, bsMiscUtils, GKUtils;
+  Windows, SysUtils, Math, Forms, GKUtils;
 
 { TGKStack }
 
@@ -365,6 +373,8 @@ end;
 
 constructor TBackManager.Create;
 begin
+  inherited Create;
+
   FStackBackward := TGKStack.Create;
   FStackForward := TGKStack.Create;
   FCurrent := nil;
@@ -430,6 +440,7 @@ end;
 
 constructor TCustomCommand.Create(aManager: TUndoManager);
 begin
+  inherited Create;
   FManager := aManager;
 end;
 
@@ -437,6 +448,8 @@ end;
 
 constructor TUndoManager.Create(aTree: TGEDCOMTree; aType: TUndoManType);
 begin
+  inherited Create;
+
   FDepth := 1000;
   FTree := aTree;
 
@@ -702,27 +715,31 @@ var
   family: TGEDCOMFamilyRecord;
   dummy, ch_name, ch_pat, fat_nam: string;
 begin
-  for i := 0 to aTree.RecordsCount - 1 do
-    if (aTree.Records[i] is TGEDCOMIndividualRecord) then begin
-      iRec := aTree.Records[i] as TGEDCOMIndividualRecord;
+  try
+    for i := 0 to aTree.RecordsCount - 1 do
+      if (aTree.Records[i] is TGEDCOMIndividualRecord) then begin
+        iRec := aTree.Records[i] as TGEDCOMIndividualRecord;
 
-      GetNameParts(iRec, dummy, ch_name, ch_pat);
+        GetNameParts(iRec, dummy, ch_name, ch_pat);
 
-      SetNameSex(ch_name, iRec.Sex);
+        SetNameSex(ch_name, iRec.Sex);
 
-      if (iRec.ChildToFamilyLinksCount <> 0) then begin
-        family := iRec.ChildToFamilyLinks[0].Family;
-        if (family <> nil) then begin
-          iFather := TGEDCOMIndividualRecord(family.Husband.Value);
-          if (iFather <> nil) then begin
-            GetNameParts(iFather, dummy, fat_nam, dummy);
+        if (iRec.ChildToFamilyLinksCount <> 0) then begin
+          family := iRec.ChildToFamilyLinks[0].Family;
+          if (family <> nil) then begin
+            iFather := TGEDCOMIndividualRecord(family.Husband.Value);
+            if (iFather <> nil) then begin
+              GetNameParts(iFather, dummy, fat_nam, dummy);
 
-            if (Length(ch_pat) > 1) and (Length(fat_nam) > 1) and Comparable(fat_nam, ch_pat)
-            then SetName(fat_nam, ch_pat, iRec.Sex);
+              if (Length(ch_pat) > 1) and (Length(fat_nam) > 1) and Comparable(fat_nam, ch_pat)
+              then SetName(fat_nam, ch_pat, iRec.Sex);
+            end;
           end;
         end;
       end;
-    end;
+  except
+    on E: Exception do LogWrite('TNamesTable.ImportNames(): ' + E.Message);
+  end;
 end;
 
 procedure TNamesTable.LoadFromFile(const aFileName: string);
@@ -772,6 +789,7 @@ begin
 
   FChildlessExclude := False;
 
+  FDecorative := True;
   FFamilyVisible := True;
   FNameVisible := True;
   FPatronymicVisible := True;
@@ -787,16 +805,21 @@ begin
   FUnkSexColor := $00FFC6FF;
   FUnHusbandColor := $00FFD7D7;
   FUnWifeColor := $00D7D7FF;
+
+  FDefFont := TFont.Create;
 end;
 
 destructor TChartOptions.Destroy;
 begin
+  FDefFont.Free;
+
   inherited Destroy;
 end;
 
 procedure TChartOptions.LoadFromFile(const aIniFile: TIniFile);
 begin
   FChildlessExclude := aIniFile.ReadBool('Chart', 'ChildlessExclude', False);
+  FDecorative := aIniFile.ReadBool('Chart', 'Decorative', True);
   FFamilyVisible := aIniFile.ReadBool('Chart', 'FamilyVisible', True);
   FNameVisible := aIniFile.ReadBool('Chart', 'NameVisible', True);
   FPatronymicVisible := aIniFile.ReadBool('Chart', 'PatronymicVisible', True);
@@ -812,11 +835,17 @@ begin
   FUnkSexColor := aIniFile.ReadInteger('Chart', 'UnkSexColor', $00FFC6FF);
   FUnHusbandColor := aIniFile.ReadInteger('Chart', 'UnHusbandColor', $00FFD7D7);
   FUnWifeColor := aIniFile.ReadInteger('Chart', 'UnWifeColor', $00D7D7FF);
+
+  FDefFont.Name := aIniFile.ReadString('Chart', 'FontName', 'Verdana');
+  FDefFont.Size := aIniFile.ReadInteger('Chart', 'FontSize', 8);
+  FDefFont.Color := aIniFile.ReadInteger('Chart', 'FontColor', clBlack);
+  FDefFont.Style := TFontStyles(Byte(aIniFile.ReadInteger('Chart', 'FontStyle', 0)));
 end;
 
 procedure TChartOptions.SaveToFile(const aIniFile: TIniFile);
 begin
   aIniFile.WriteBool('Chart', 'ChildlessExclude', FChildlessExclude);
+  aIniFile.WriteBool('Chart', 'Decorative', FDecorative);
   aIniFile.WriteBool('Chart', 'FamilyVisible', FFamilyVisible);
   aIniFile.WriteBool('Chart', 'NameVisible', FNameVisible);
   aIniFile.WriteBool('Chart', 'PatronymicVisible', FPatronymicVisible);
@@ -832,6 +861,11 @@ begin
   aIniFile.WriteInteger('Chart', 'UnkSexColor', FUnkSexColor);
   aIniFile.WriteInteger('Chart', 'UnHusbandColor', FUnHusbandColor);
   aIniFile.WriteInteger('Chart', 'UnWifeColor', FUnWifeColor);
+
+  aIniFile.WriteString('Chart', 'FontName', FDefFont.Name);
+  aIniFile.WriteInteger('Chart', 'FontSize', FDefFont.Size);
+  aIniFile.WriteInteger('Chart', 'FontColor', FDefFont.Color);
+  aIniFile.WriteInteger('Chart', 'FontStyle', Byte(FDefFont.Style));
 end;
 
 { TProxy }
@@ -898,6 +932,7 @@ constructor TGlobalOptions.Create;
 begin
   inherited Create;
   FChartOptions := TChartOptions.Create;
+  FEventFilters := TStringList.Create;
   FMRUFiles := TStringList.Create;
   FNameFilters := TStringList.Create;
   FResidenceFilters := TStringList.Create;
@@ -916,6 +951,7 @@ begin
   FResidenceFilters.Free;
   FNameFilters.Free;
   FMRUFiles.Free;
+  FEventFilters.Free;
   FChartOptions.Destroy;
 
   inherited Destroy;
@@ -952,6 +988,10 @@ begin
     cnt := ini.ReadInteger('ResidenceFilters', 'Count', 0);
     for i := 0 to cnt - 1 do
       FResidenceFilters.Add(ini.ReadString('ResidenceFilters', 'Filter_' + IntToStr(i), ''));
+
+    cnt := ini.ReadInteger('EventFilters', 'Count', 0);
+    for i := 0 to cnt - 1 do
+      FEventFilters.Add(ini.ReadString('EventFilters', 'EventVal_' + IntToStr(i), ''));
 
     cnt := ini.ReadInteger('MRUFiles', 'Count', 0);
     for i := 0 to cnt - 1 do begin
@@ -1007,6 +1047,10 @@ begin
     ini.WriteInteger('ResidenceFilters', 'Count', FResidenceFilters.Count);
     for i := 0 to FResidenceFilters.Count - 1 do
       ini.WriteString('ResidenceFilters', 'Filter_' + IntToStr(i), FResidenceFilters[i]);
+
+    ini.WriteInteger('EventFilters', 'Count', FEventFilters.Count);
+    for i := 0 to FEventFilters.Count - 1 do
+      ini.WriteString('EventFilters', 'EventVal_' + IntToStr(i), FEventFilters[i]);
 
     ini.WriteInteger('MRUFiles', 'Count', FMRUFiles.Count);
     for i := 0 to FMRUFiles.Count - 1 do

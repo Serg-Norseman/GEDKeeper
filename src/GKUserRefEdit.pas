@@ -1,4 +1,4 @@
-unit GKUserRefEdit;
+unit GKUserRefEdit; {prepare:fin}
 
 {$I GEDKeeper.inc}
 

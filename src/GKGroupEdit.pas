@@ -1,4 +1,4 @@
-unit GKGroupEdit;
+unit GKGroupEdit; {prepare:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons, ComCtrls,
-  ExtCtrls, GedCom551, GKBase, GKEngine, GKLists, bsCtrls;
+  ExtCtrls, GedCom551, GKBase, GKEngine, GKCtrls, GKLists;
 
 type
   TfmGroupEdit = class(TForm)
@@ -41,7 +41,7 @@ type
 implementation
 
 uses
-  bsComUtils, GKMain, GKRecordSelect, GKPersonEdit;
+  GKUtils, GKMain, GKRecordSelect;
 
 {$R *.dfm}
 
@@ -70,9 +70,9 @@ var
   item: TListItem;
 begin
   Base.RecListNotesRefresh(FGroup, FNotesList.List, nil);
-  Base.RecListMediaRefresh(FGroup, TBSListView(FMediaList.List), nil);
+  Base.RecListMediaRefresh(FGroup, TGKListView(FMediaList.List), nil);
 
-  with TListView(FMembersList.List) do begin
+  with TGKListView(FMembersList.List) do begin
     Items.BeginUpdate();
     Items.Clear();
     for k := 0 to FGroup.MembersCount - 1 do begin
@@ -135,7 +135,7 @@ begin
     case Action of
       raAdd: begin
         member := Base.SelectPerson(nil, tmNone, svNone);
-        if (member <> nil) and Base.GroupMemberAdd(FGroup, member)
+        if (member <> nil) and Base.Engine.AddGroupMember(FGroup, member)
         then ListsRefresh();
       end;
       raEdit: ;
@@ -145,7 +145,7 @@ begin
         if (member = nil) or (MessageDlg('Удалить ссылку на участника группы?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
         then Exit;
 
-        if Base.GroupMemberRemove(FGroup, member)
+        if Base.Engine.RemoveGroupMember(FGroup, member)
         then ListsRefresh();
       end;
       raJump: begin

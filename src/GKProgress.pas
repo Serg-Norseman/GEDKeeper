@@ -1,4 +1,4 @@
-unit GKProgress;
+unit GKProgress; {prepare:fin}
 
 {$I GEDKeeper.inc}
 
@@ -18,6 +18,8 @@ type
     Label4: TLabel;
     Label9: TLabel;
   private
+    StartTime: TDateTime;
+    procedure Step();
   public
   end;
 
@@ -31,7 +33,6 @@ implementation
 
 var
   fmProgress: TfmProgress;
-  StartTime: TDateTime;
 
 procedure ProgressInit(aMax: Integer; aTitle: string);
 begin
@@ -42,10 +43,9 @@ begin
   fmProgress.ProgressBar1.Max := aMax;
   fmProgress.Label1.Caption := aTitle;
   fmProgress.Show;
+  fmProgress.StartTime := Now();
 
   Application.ProcessMessages;
-
-  StartTime := Now();
 end;
 
 procedure ProgressDone();
@@ -57,27 +57,32 @@ begin
 end;
 
 procedure ProgressStep();
+begin
+  if (fmProgress <> nil)
+  then fmProgress.Step();
+end;
+
+{ TfmProgress }
+
+procedure TfmProgress.Step();
 var
   PassTime, RestTime: TDateTime;
   count, pos: Integer;
 begin
-  if (fmProgress <> nil) then begin
-    PassTime := Now() - StartTime;
-    fmProgress.Label7.Caption := TimeToStr(PassTime);
+  PassTime := Now() - StartTime;
+  Label7.Caption := TimeToStr(PassTime);
 
-    count := fmProgress.ProgressBar1.Max;
-    pos := fmProgress.ProgressBar1.Position;
+  count := ProgressBar1.Max;
+  pos := ProgressBar1.Position;
 
-    if (pos = 0) then pos := 1;
+  if (pos = 0) then pos := 1;
 
-    RestTime := (PassTime / pos) * (count - pos);
-    fmProgress.Label8.Caption := TimeToStr(RestTime);
+  RestTime := (PassTime / pos) * (count - pos);
+  Label8.Caption := TimeToStr(RestTime);
+  Label9.Caption := TimeToStr(PassTime + RestTime);
 
-    fmProgress.Label9.Caption := TimeToStr(PassTime + RestTime);
-
-    fmProgress.ProgressBar1.StepBy(1);
-    fmProgress.Update();
-  end;
+  ProgressBar1.StepBy(1);
+  Update();
 end;
 
 end.

@@ -231,7 +231,6 @@ object fmPersonEdit: TfmPersonEdit
         Width = 161
         Height = 21
         TabOrder = 0
-        Text = 'edPieceSurnamePrefix'
       end
       object edPiecePrefix: TEdit
         Left = 104
@@ -239,7 +238,6 @@ object fmPersonEdit: TfmPersonEdit
         Width = 161
         Height = 21
         TabOrder = 1
-        Text = 'edPiecePrefix'
       end
       object edPieceSuffix: TEdit
         Left = 104
@@ -247,7 +245,6 @@ object fmPersonEdit: TfmPersonEdit
         Width = 161
         Height = 21
         TabOrder = 2
-        Text = 'edPieceSuffix'
       end
       object edPieceNickname: TEdit
         Left = 104
@@ -255,7 +252,6 @@ object fmPersonEdit: TfmPersonEdit
         Width = 161
         Height = 21
         TabOrder = 3
-        Text = 'edPieceNickname'
       end
     end
     object PageCtlParents: TPageControl

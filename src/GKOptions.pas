@@ -1,4 +1,4 @@
-unit GKOptions;
+unit GKOptions; {prepare:fin}
 
 {$I GEDKeeper.inc}
 
@@ -15,7 +15,7 @@ type
     rgCode: TRadioGroup;
     btnAccept: TBitBtn;
     btnCancel: TBitBtn;
-    SheetPedigree: TTabSheet;
+    SheetTree: TTabSheet;
     GroupBox1: TGroupBox;
     chkFamily: TCheckBox;
     chkName: TCheckBox;
@@ -41,17 +41,13 @@ type
     edProxyPort: TEdit;
     edProxyLogin: TEdit;
     edProxyPass: TEdit;
-    GroupBox5: TGroupBox;
-    chkAttributes: TCheckBox;
-    chkNotes: TCheckBox;
-    chkSources: TCheckBox;
     SheetView: TTabSheet;
     PageControl2: TPageControl;
     SheetViewCommon: TTabSheet;
     SheetViewPersons: TTabSheet;
     ListPersonColumns: TListView;
-    SpeedButton1: TSpeedButton;
-    SpeedButton2: TSpeedButton;
+    btnColumnUp: TSpeedButton;
+    btnColumnDown: TSpeedButton;
     btnDefList: TBitBtn;
     rgFNPFormat: TRadioGroup;
     rgDateFormat: TRadioGroup;
@@ -64,29 +60,47 @@ type
     chkOnlyYears: TCheckBox;
     chkSignsVisible: TCheckBox;
     chkChildlessExclude: TCheckBox;
+    Label5: TLabel;
+    PanDefFont: TPanel;
+    FontDialog1: TFontDialog;
+    SheetPedigree: TTabSheet;
+    GroupBox5: TGroupBox;
+    chkAttributes: TCheckBox;
+    chkNotes: TCheckBox;
+    chkSources: TCheckBox;
     EditPedigreeFormat: TRadioGroup;
+    chkTreeDecorative: TCheckBox;
     procedure FormShow(Sender: TObject);
     procedure btnAcceptClick(Sender: TObject);
     procedure PanMaleColorClick(Sender: TObject);
-    procedure SpeedButton1Click(Sender: TObject);
-    procedure SpeedButton2Click(Sender: TObject);
+    procedure btnColumnUpClick(Sender: TObject);
+    procedure btnColumnDownClick(Sender: TObject);
     procedure ListPersonColumnsChange(Sender: TObject; Item: TListItem;
       Change: TItemChange);
     procedure btnDefListClick(Sender: TObject);
+    procedure PanDefFontClick(Sender: TObject);
   private
     FOptions: TGlobalOptions;
     FPersonColumns: TPersonColumnsList;
 
     procedure UpdateColumnsList();
+    procedure UpdateControls();
   public
     property Options: TGlobalOptions read FOptions write FOptions;
   end;
 
 implementation
 
-uses GedCom551, GKEngine, GKMain, bsWinUtils;
+uses GedCom551, GKEngine, GKMain;
 
 {$R *.dfm}
+
+procedure TfmOptions.UpdateControls();
+begin
+  PanDefFont.Font.Assign(FOptions.ChartOptions.DefFont);
+  PanDefFont.Caption :=
+    FOptions.ChartOptions.DefFont.Name + ', ' + IntToStr(FOptions.ChartOptions.DefFont.Size);
+end;
 
 procedure TfmOptions.FormShow(Sender: TObject);
 begin
@@ -112,6 +126,7 @@ begin
   chkSignsVisible.Checked := FOptions.ChartOptions.SignsVisible;
 
   chkChildlessExclude.Checked := FOptions.ChartOptions.ChildlessExclude;
+  chkTreeDecorative.Checked := FOptions.ChartOptions.Decorative;
 
   PanMaleColor.Color := FOptions.ChartOptions.MaleColor;
   PanFemaleColor.Color := FOptions.ChartOptions.FemaleColor;
@@ -136,6 +151,8 @@ begin
 
   FPersonColumns := FOptions.ListPersonsColumns;
   UpdateColumnsList();
+
+  UpdateControls();
 end;
 
 procedure TfmOptions.btnAcceptClick(Sender: TObject);
@@ -164,6 +181,7 @@ begin
   FOptions.ChartOptions.SignsVisible := chkSignsVisible.Checked;
 
   FOptions.ChartOptions.ChildlessExclude := chkChildlessExclude.Checked;
+  FOptions.ChartOptions.Decorative := chkTreeDecorative.Checked;
 
   FOptions.ChartOptions.MaleColor := PanMaleColor.Color;
   FOptions.ChartOptions.FemaleColor := PanFemaleColor.Color;
@@ -195,6 +213,15 @@ begin
   then TPanel(Sender).Color := ColorDialog1.Color;
 end;
 
+procedure TfmOptions.PanDefFontClick(Sender: TObject);
+begin
+  FontDialog1.Font.Assign(FOptions.ChartOptions.DefFont);
+  if FontDialog1.Execute
+  then FOptions.ChartOptions.DefFont.Assign(FontDialog1.Font);
+
+  UpdateControls();
+end;
+
 procedure TfmOptions.UpdateColumnsList();
 var
   i: Integer;
@@ -219,7 +246,7 @@ begin
   ListPersonColumns.OnChange := ListPersonColumnsChange;
 end;
 
-procedure TfmOptions.SpeedButton1Click(Sender: TObject);
+procedure TfmOptions.btnColumnUpClick(Sender: TObject);
 var
   idx: Integer;
   props: TPersonColumnProps;
@@ -236,7 +263,7 @@ begin
   ListPersonColumns.ItemIndex := idx - 1;
 end;
 
-procedure TfmOptions.SpeedButton2Click(Sender: TObject);
+procedure TfmOptions.btnColumnDownClick(Sender: TObject);
 var
   idx: Integer;
   props: TPersonColumnProps;

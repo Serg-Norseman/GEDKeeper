@@ -1,4 +1,4 @@
-unit GKPersonNew;
+unit GKPersonNew; {prepare:fin}
 
 {$I GEDKeeper.inc}
 

@@ -1,4 +1,4 @@
-unit GKPersonEdit;
+unit GKPersonEdit; {prepare:partial}
 
 {$I GEDKeeper.inc}
 
@@ -6,7 +6,7 @@ interface
 
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls,
-  ComCtrls, ExtCtrls, Buttons, bsCtrls, GedCom551, GKBase, GKEngine, GKLists;
+  ComCtrls, ExtCtrls, Buttons, GedCom551, GKBase, GKEngine, GKCtrls, GKLists;
                                                   
 type
   TfmPersonEdit = class(TForm)
@@ -105,7 +105,7 @@ type
 implementation
 
 uses
-  bsComUtils, ClipBrd, GKMain, GKRecordSelect, GKFamilyEdit, uVista;
+  ClipBrd, GKUtils, GKMain, GKRecordSelect, GKFamilyEdit, uVista;
 
 {$R *.dfm}
 
@@ -161,6 +161,7 @@ begin
 
   FSourcesList := TSheetList.Create(SheetSources);
   FSourcesList.OnModify := ListModify;
+  FSourcesList.Buttons := FSourcesList.Buttons + [lbMoveUp, lbMoveDown];
   Base.SetupRecSourcesList(FSourcesList);
 
   FUserRefList := TSheetList.Create(SheetUserRefs);
@@ -233,12 +234,13 @@ var
   np: TGEDCOMPersonalName;
   uref: TGEDCOMUserReference;
 begin
-  np := FPerson.PersonalNames[0];
-
-  edPiecePrefix.Text := np.Pieces.Prefix;
-  edPieceNickname.Text := np.Pieces.Nickname;
-  edPieceSurnamePrefix.Text := np.Pieces.SurnamePrefix;
-  edPieceSuffix.Text := np.Pieces.Suffix;
+  if (FPerson.PersonalNamesCount > 0) then begin
+    np := FPerson.PersonalNames[0];
+    edPiecePrefix.Text := np.Pieces.Prefix;
+    edPieceNickname.Text := np.Pieces.Nickname;
+    edPieceSurnamePrefix.Text := np.Pieces.SurnamePrefix;
+    edPieceSuffix.Text := np.Pieces.Suffix;
+  end;
 
   if (FPerson.ChildToFamilyLinksCount <> 0) then begin
     family := FPerson.ChildToFamilyLinks[0].Family;
@@ -294,10 +296,10 @@ begin
     btnMotherSel.Enabled := False;
   end;
 
-  Base.RecListIndividualEventsRefresh(FPerson, TBSListView(FEventsList.List), nil);
+  Base.RecListIndividualEventsRefresh(FPerson, TGKListView(FEventsList.List), nil);
   Base.RecListNotesRefresh(FPerson, FNotesList.List, nil);
-  Base.RecListMediaRefresh(FPerson, TBSListView(FMediaList.List), nil);
-  Base.RecListSourcesRefresh(FPerson, TBSListView(FSourcesList.List), nil);
+  Base.RecListMediaRefresh(FPerson, TGKListView(FMediaList.List), nil);
+  Base.RecListSourcesRefresh(FPerson, TGKListView(FSourcesList.List), nil);
 
   FSpousesList.List.Clear();
   for idx := 0 to FPerson.SpouseToFamilyLinksCount - 1 do begin
@@ -318,21 +320,21 @@ begin
     if (rel_person <> nil)
     then rel_name := GetNameStr(rel_person);
 
-    item := TBSListView(FSpousesList.List).Items.Add();
+    item := TGKListView(FSpousesList.List).Items.Add();
     item.Data := family;
     item.Caption := IntToStr(idx + 1);
     item.SubItems.Add(rel_name);
     item.SubItems.Add(GetMarriageDate(family, fmGEDKeeper.Options.DefDateFormat));
   end;
 
-  Base.RecListAssociationsRefresh(FPerson, TBSListView(FAssociationsList.List), nil);
-  Base.RecListGroupsRefresh(FPerson, TBSListView(FGroupsList.List), nil);
+  Base.RecListAssociationsRefresh(FPerson, TGKListView(FAssociationsList.List), nil);
+  Base.RecListGroupsRefresh(FPerson, TGKListView(FGroupsList.List), nil);
 
   FUserRefList.List.Clear();
   for idx := 0 to FPerson.UserReferencesCount - 1 do begin
     uref := FPerson.UserReferences[idx];
 
-    item := TBSListView(FUserRefList.List).Items.Add();
+    item := TGKListView(FUserRefList.List).Items.Add();
     item.Data := uref;
     item.Caption := uref.StringValue;
     item.SubItems.Add(uref.ReferenceType);
@@ -378,7 +380,7 @@ begin
     family := Base.GetChildFamily(FPerson, True, father);
 
     if (family.Husband.Value = nil)
-    then AddSpouseToFamily(Base.Tree, family, father);
+    then Base.Engine.AddFamilySpouse(family, father);
 
     ControlsRefresh();
   end;
@@ -393,7 +395,7 @@ begin
 
   family := Base.GetChildFamily(FPerson, False, nil);
   if (family <> nil) then begin
-    RemoveFamilySpouse(Base.Tree, family, TGEDCOMIndividualRecord(family.Husband.Value));
+    Base.Engine.RemoveFamilySpouse(family, TGEDCOMIndividualRecord(family.Husband.Value));
     ControlsRefresh();
   end;
 end;
@@ -422,7 +424,7 @@ begin
     family := Base.GetChildFamily(FPerson, True, mother);
 
     if (family.Wife.Value = nil)
-    then AddSpouseToFamily(Base.Tree, family, mother);
+    then Base.Engine.AddFamilySpouse(family, mother);
 
     ControlsRefresh();
   end;
@@ -439,7 +441,7 @@ begin
   family := Base.GetChildFamily(FPerson, False, nil);
   if (family <> nil) then begin
     mother := TGEDCOMIndividualRecord(family.Wife.Value);
-    RemoveFamilySpouse(Base.Tree, family, mother);
+    Base.Engine.RemoveFamilySpouse(family, mother);
 
     ControlsRefresh();
   end;
@@ -536,6 +538,7 @@ var
   family: TGEDCOMFamilyRecord;
   group: TGEDCOMGroupRecord;
   spouse: TGEDCOMIndividualRecord;
+  src_cit: TGEDCOMSourceCitation;
   event: TGEDCOMCustomEvent;
   sp: TGEDCOMPointer;
   idx: Integer;
@@ -580,7 +583,7 @@ begin
         if (MessageDlg('Удалить ссылку на супруга?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
         then Exit;
 
-        RemoveFamilySpouse(Base.Tree, family, FPerson);
+        Base.Engine.RemoveFamilySpouse(family, FPerson);
         ControlsRefresh();
       end;
 
@@ -601,17 +604,15 @@ begin
         Close;
       end;
 
-      raMoveUp: begin
+      raMoveUp, raMoveDown: begin
         family := TGEDCOMFamilyRecord(ItemData);
         idx := FPerson.IndexOfSpouse(family);
-        FPerson.ExchangeSpouses(idx - 1, idx);
-        ControlsRefresh();
-      end;
 
-      raMoveDown: begin
-        family := TGEDCOMFamilyRecord(ItemData);
-        idx := FPerson.IndexOfSpouse(family);
-        FPerson.ExchangeSpouses(idx, idx + 1);
+        case Action of
+          raMoveUp: FPerson.ExchangeSpouses(idx - 1, idx);
+          raMoveDown: FPerson.ExchangeSpouses(idx, idx + 1);
+        end;
+
         ControlsRefresh();
       end;
     end;
@@ -626,7 +627,7 @@ begin
     case Action of
       raAdd: begin
         group := TGEDCOMGroupRecord(Base.SelectRecord(rtGroup, []));
-        if (group <> nil) and Base.GroupMemberAdd(group, FPerson)
+        if (group <> nil) and Base.Engine.AddGroupMember(group, FPerson)
         then ControlsRefresh();
       end;
       raEdit: ;
@@ -636,7 +637,7 @@ begin
         if (MessageDlg('Удалить ссылку на группу?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
         then Exit;
 
-        if Base.GroupMemberRemove(group, FPerson)
+        if Base.Engine.RemoveGroupMember(group, FPerson)
         then ControlsRefresh();
       end;
       raJump: ;
@@ -655,6 +656,19 @@ begin
   end
   else
   if (Sender = FSourcesList) then begin
+    if (Action in [raMoveUp, raMoveDown])
+    then begin
+      src_cit := TGEDCOMSourceCitation(ItemData);
+      idx := FPerson.IndexOfSourceCitation(src_cit);
+
+      case Action of
+        raMoveUp: FPerson.ExchangeSources(idx - 1, idx);
+        raMoveDown: FPerson.ExchangeSources(idx, idx + 1);
+      end;
+
+      ControlsRefresh();
+    end
+    else
     if Base.ModifyRecSource(Self, FPerson, TGEDCOMSourceCitation(ItemData), Action)
     then ControlsRefresh();
   end
@@ -678,7 +692,7 @@ begin
     // на момент появления диалога семьи, поэтому
     // соответствующая вставка делается в ModifyFamily()
     if (family.IndexOfChild(FPerson) < 0)
-    then FamilyChildAdd(Base.Tree, family, FPerson);
+    then Base.Engine.AddFamilyChild(family, FPerson);
 
     ControlsRefresh();
   end;
@@ -703,7 +717,7 @@ begin
 
   family := Base.GetChildFamily(FPerson, False, nil);
   if (family <> nil) then begin
-    FamilyChildRemove(Base.Tree, family, FPerson);
+    Base.Engine.RemoveFamilyChild(family, FPerson);
     ControlsRefresh();
   end;
 end;

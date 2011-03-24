@@ -16,11 +16,15 @@ procedure WriteFooter(aStream: TFileStream);
 type
   TExporter = class(TObject)
   private
+    FEngine: TGenEngine;
+    FOptions: TGlobalOptions;
     FPath: string;
     FTree: TGEDCOMTree;
   public
-    constructor Create(aTree: TGEDCOMTree; aPath: string);
+    constructor Create(aEngine: TGenEngine; aPath: string);
     destructor Destroy; override;
+
+    property Options: TGlobalOptions read FOptions write FOptions;
 
     procedure Generate(); virtual; abstract;
   end;
@@ -55,10 +59,15 @@ type
 type
   TExcelExporter = class(TExporter)
   private
+    FAppMode: Boolean;
     FSelectedRecords: TList;
+
+    procedure ExpXLS();
+    procedure ExpApp();
   public
     procedure Generate(); override;
 
+    property AppMode: Boolean read FAppMode write FAppMode;
     property SelectedRecords: TList read FSelectedRecords write FSelectedRecords;
   end;
 
@@ -105,8 +114,9 @@ type
 implementation
 
 uses
-  Windows, ShellAPI, XLSFile, Dialogs, bsComUtils, Math,
-  GKUtils, GKProgress, GKMain;
+  {$IFDEF DELPHI_NET} System.IO, {$ENDIF}
+  Windows, ShellAPI, XLSFile, Dialogs, Math, Variants, ComObj,
+  GKUtils, GKProgress;
 
 procedure WriteStr(aStream: TFileStream; aStr: string);
 begin
@@ -134,10 +144,11 @@ end;
 
 { TExporter }
 
-constructor TExporter.Create(aTree: TGEDCOMTree; aPath: string);
+constructor TExporter.Create(aEngine: TGenEngine; aPath: string);
 begin
   inherited Create;
-  FTree := aTree;
+  FEngine := aEngine;
+  FTree := FEngine.Tree;
   FPath := aPath;
 
   if not(DirectoryExists(FPath))
@@ -209,8 +220,8 @@ procedure TWebExporter.WriteFamilyIndex(aStream: TFileStream);
   end;
 
 const
-  LatSymSet: set of Char = ['A'..'Z'];
-  RusSymSet: set of Char = ['А'..'Я'];
+  LatSymSet: set of AnsiChar = ['A'..'Z'];
+  RusSymSet: set of AnsiChar = ['А'..'Я'];
 type
   TLatSyms = 'A'..'Z';
   TRusSyms = 'А'..'Я';
@@ -610,7 +621,7 @@ var
     end;
 
     WideTable(cur_cell.ColIndex + 1);
-    
+
     if (prev <> nil)
     then DrawLine(prev, cur_cell);
   end;
@@ -731,7 +742,7 @@ begin
 
     WritePersons();
 
-    GetCommonStats(FTree, stats);
+    FEngine.GetCommonStats(stats);
     WriteStr(main_index, '<b>Общая статистика:</b><ul>');
     WriteStr(main_index, '<li>Персон: ' + IntToStr(stats.persons) + '</li>');
     WriteStr(main_index, '<li>Фамилий: ' + IntToStr(FSurnamesCount) + '</li>');
@@ -751,19 +762,17 @@ end;
 
 { TExcelExporter }
 
-procedure TExcelExporter.Generate();
-{$IFNDEF DELPHI_NET}
+procedure TExcelExporter.ExpXLS();
 const
-  AllBorders: TSetOfAtribut = [acBottomBorder, acTopBorder, acRightBorder, acLeftBorder];
+  AllBorders: TSetOfAttribute = [acBottomBorder, acTopBorder, acRightBorder, acLeftBorder];
 var
   xls: TXLSFile;
   i, row: Integer;
   rec: TGEDCOMRecord;
   ind: TGEDCOMIndividualRecord;
   fam, nam, pat: string;
-{$ENDIF}
+  fname: string;
 begin
-  {$IFNDEF DELPHI_NET}
   xls := TXLSFile.Create(nil);
   ProgressInit(FTree.RecordsCount, 'Экспорт...');
   try
@@ -803,7 +812,7 @@ begin
         xls.AddStrCell( 7, row, AllBorders, GetDeathDate(ind, dfDD_MM_YYYY));
         xls.AddStrCell( 8, row, AllBorders, GetBirthPlace(ind));
         xls.AddStrCell( 9, row, AllBorders, GetDeathPlace(ind));
-        xls.AddStrCell(10, row, AllBorders, GetResidencePlace(ind, fmGEDKeeper.Options.PlacesWithAddress));
+        xls.AddStrCell(10, row, AllBorders, GetResidencePlace(ind, FOptions.PlacesWithAddress));
         xls.AddStrCell(11, row, AllBorders, GetAge(ind));
         xls.AddStrCell(12, row, AllBorders, GetLifeExpectancy(ind));
       end;
@@ -811,15 +820,104 @@ begin
       ProgressStep();
     end;
 
-    xls.FileName := FPath + 'export.xls';
-    xls.Write;
+    fname := FPath + 'export.xls';
+    xls.SaveToFile(fname);
 
-    LoadExtFile(xls.FileName);
+    LoadExtFile(fname);
   finally
     ProgressDone();
     xls.Destroy;
   end;
+end;
+
+procedure TExcelExporter.ExpApp();
+var
+  excel, sheet, wb: Variant;
+  i, row: Integer;
+  rec: TGEDCOMRecord;
+  ind: TGEDCOMIndividualRecord;
+  fam, nam, pat: string;
+begin
+  {$IFNDEF DELPHI_NET}
+  try
+    ProgressInit(FTree.RecordsCount, 'Экспорт...');
+
+    try
+      try
+        excel := GetActiveOleObject('Excel.Application');
+      except
+        on EOLESysError do excel := CreateOleObject('Excel.Application');
+      end;
+
+      excel.Visible := True;
+      excel.DisplayAlerts := False;
+      excel.WindowState := -4137;
+      wb := excel.Workbooks.Add;
+      wb.Activate;
+      sheet := excel.Sheets[1];
+
+      sheet.Cells[1,  1] := '№';
+      sheet.Cells[1,  2] := 'Фамилия';
+      sheet.Cells[1,  3] := 'Имя';
+      sheet.Cells[1,  4] := 'Отчество';
+      sheet.Cells[1,  5] := 'Пол';
+      sheet.Cells[1,  6] := 'Дата рождения';
+      sheet.Cells[1,  7] := 'Дата смерти';
+      sheet.Cells[1,  8] := 'Место рождения';
+      sheet.Cells[1,  9] := 'Место смерти';
+      sheet.Cells[1, 10] := 'Местожительство';
+      sheet.Cells[1, 11] := 'Возраст';
+      sheet.Cells[1, 12] := 'Продолжительность жизни';
+
+      row := 1;
+      for i := 0 to FTree.RecordsCount - 1 do begin
+        rec := FTree.Records[i];
+
+        if (rec is TGEDCOMIndividualRecord) then begin
+          ind := rec as TGEDCOMIndividualRecord;
+
+          if (FSelectedRecords <> nil) then begin
+            if (FSelectedRecords.IndexOf(rec) < 0) then Continue;
+          end;
+
+          GetNameParts(ind, fam, nam, pat);
+
+          Inc(row);
+          sheet.Cells[row,  1] := IntToStr(GetId(ind));
+          sheet.Cells[row,  2] := fam;
+          sheet.Cells[row,  3] := nam;
+          sheet.Cells[row,  4] := pat;
+          sheet.Cells[row,  5] := SexData[ind.Sex].ViewSign;
+          sheet.Cells[row,  6] := GetBirthDate(ind, dfDD_MM_YYYY);
+          sheet.Cells[row,  7] := GetDeathDate(ind, dfDD_MM_YYYY);
+          sheet.Cells[row,  8] := GetBirthPlace(ind);
+          sheet.Cells[row,  9] := GetDeathPlace(ind);
+          sheet.Cells[row, 10] := GetResidencePlace(ind, FOptions.PlacesWithAddress);
+          sheet.Cells[row, 11] := GetAge(ind);
+          sheet.Cells[row, 12] := GetLifeExpectancy(ind);
+        end;
+
+        ProgressStep();
+      end;
+    finally
+      //excel.Quit;
+      //excel := Unassigned;
+
+      ProgressDone();
+    end;
+  except
+    on E: Exception do begin
+      LogWrite('TExcelExporter.ExpApp(): ' + E.Message);
+    end;
+  end;
   {$ENDIF}
+end;
+
+procedure TExcelExporter.Generate();
+begin
+  if AppMode
+  then ExpApp()
+  else ExpXLS();
 end;
 
 {==============================================================================}
@@ -1319,11 +1417,13 @@ begin
     end;
     WriteStr(fs_index, '</ul>');
 
-    WriteStr(fs_index, '<h3>Источники</h3>');
-    for i := 0 to FSourceList.Count - 1 do begin
-      sn := IntToStr(i + 1);
-      WriteStr(fs_index, '<p><sup><a name="src' + sn + '">' + sn + '</a></sup>&nbsp;');
-      WriteStr(fs_index, FSourceList[i] + '</p>');
+    if (FSourceList.Count > 0) then begin
+      WriteStr(fs_index, '<h3>Источники</h3>');
+      for i := 0 to FSourceList.Count - 1 do begin
+        sn := IntToStr(i + 1);
+        WriteStr(fs_index, '<p><sup><a name="src' + sn + '">' + sn + '</a></sup>&nbsp;');
+        WriteStr(fs_index, FSourceList[i] + '</p>');
+      end;
     end;
   finally
     FSourceList.Free;

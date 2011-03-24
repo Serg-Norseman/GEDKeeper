@@ -1,4 +1,4 @@
-unit GKCommunicationEdit;
+unit GKCommunicationEdit; {prepare:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons, ComCtrls,
-  ExtCtrls, GedCom551, GKBase, GKEngine, Mask, GKLists, bsCtrls;
+  ExtCtrls, GedCom551, GKBase, GKEngine, Mask, GKLists, GKCtrls;
 
 type
   TfmCommunicationEdit = class(TForm)
@@ -48,7 +48,7 @@ type
 implementation
 
 uses
-  bsComUtils, GKMain, GKRecordSelect, GKPersonEdit;
+  GKUtils, GKMain, GKRecordSelect, GKPersonEdit;
 
 {$R *.dfm}
 
@@ -75,7 +75,7 @@ end;
 procedure TfmCommunicationEdit.ListsRefresh();
 begin
   Base.RecListNotesRefresh(FCommunication, FNotesList.List, nil);
-  Base.RecListMediaRefresh(FCommunication, TBSListView(FMediaList.List), nil);
+  Base.RecListMediaRefresh(FCommunication, TGKListView(FMediaList.List), nil);
 end;
 
 procedure TfmCommunicationEdit.SetCommunication(const Value: TGEDCOMCommunicationRecord);

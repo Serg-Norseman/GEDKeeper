@@ -1,4 +1,4 @@
-unit GKRepositoryEdit;
+unit GKRepositoryEdit; {prepare:fin}
 
 {$I GEDKeeper.inc}
 
@@ -22,18 +22,17 @@ type
     procedure btnAcceptClick(Sender: TObject);
     procedure btnAddressClick(Sender: TObject);
   private
-    FRepositoryRecord: TGEDCOMRepositoryRecord;
+    FRepository: TGEDCOMRepositoryRecord;
 
     FNotesList: TSheetList;
 
     procedure ControlsRefresh();
     function GetBase: TfmBase;
     procedure ListModify(Sender: TObject; ItemData: TObject; Action: TRecAction);
-    procedure SetRepositoryRecord(const Value: TGEDCOMRepositoryRecord);
+    procedure SetRepository(const Value: TGEDCOMRepositoryRecord);
   public
     property Base: TfmBase read GetBase;
-    property RepositoryRecord: TGEDCOMRepositoryRecord
-      read FRepositoryRecord write SetRepositoryRecord;
+    property Repository: TGEDCOMRepositoryRecord read FRepository write SetRepository;
   end;
 
 implementation
@@ -51,23 +50,22 @@ end;
 
 procedure TfmRepositoryEdit.ControlsRefresh();
 begin
-  Base.RecListNotesRefresh(FRepositoryRecord, FNotesList.List, nil);
+  Base.RecListNotesRefresh(FRepository, FNotesList.List, nil);
 end;
 
-procedure TfmRepositoryEdit.SetRepositoryRecord(const Value: TGEDCOMRepositoryRecord);
+procedure TfmRepositoryEdit.SetRepository(const Value: TGEDCOMRepositoryRecord);
 begin
-  FRepositoryRecord := Value;
+  FRepository := Value;
 
-  edName.Text := FRepositoryRecord.RepositoryName;
+  edName.Text := FRepository.RepositoryName;
 
   ControlsRefresh();
 end;
 
 procedure TfmRepositoryEdit.btnAcceptClick(Sender: TObject);
 begin
-  FRepositoryRecord.RepositoryName := edName.Text;
-
-  Base.ChangeRecord(FRepositoryRecord);
+  FRepository.RepositoryName := edName.Text;
+  Base.ChangeRecord(FRepository);
 end;
 
 function TfmRepositoryEdit.GetBase: TfmBase;
@@ -77,14 +75,14 @@ end;
 
 procedure TfmRepositoryEdit.btnAddressClick(Sender: TObject);
 begin
-  Base.ModifyAddress(Self, FRepositoryRecord.Address);
+  Base.ModifyAddress(Self, FRepository.Address);
 end;
 
 procedure TfmRepositoryEdit.ListModify(Sender: TObject; ItemData: TObject;
   Action: TRecAction);
 begin
   if (Sender = FNotesList) then begin
-    if Base.ModifyRecNote(Self, FRepositoryRecord, TGEDCOMNotes(ItemData), Action)
+    if Base.ModifyRecNote(Self, FRepository, TGEDCOMNotes(ItemData), Action)
     then ControlsRefresh();
   end;
 end;

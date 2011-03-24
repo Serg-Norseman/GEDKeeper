@@ -1,4 +1,4 @@
-unit GKSourceCitEdit;
+unit GKSourceCitEdit; {prepare:fin}
 
 {$I GEDKeeper.inc}
 
@@ -32,7 +32,6 @@ type
 
     FSourcesList: TStringList;
 
-    procedure PrepareSources();
     procedure RefreshSourcesList(aFilter: string);
 
     procedure SetSourceCitation(const Value: TGEDCOMSourceCitation);
@@ -58,13 +57,13 @@ begin
 
   FSourcesList := TStringList.Create();
 
-  PrepareSources();
+  Base.Engine.GetSourcesList(FSourcesList);
   RefreshSourcesList('');
 end;
 
 procedure TfmSourceCitEdit.FormDestroy(Sender: TObject);
 begin
-  FSourcesList.Destroy;
+  FSourcesList.Free;
 end;
 
 procedure TfmSourceCitEdit.SetSourceCitation(const Value: TGEDCOMSourceCitation);
@@ -88,7 +87,7 @@ begin
   src := TGEDCOMSourceRecord(Base.SelectRecord(rtSource, []));
 
   if (src <> nil) then begin
-    PrepareSources();
+    Base.Engine.GetSourcesList(FSourcesList);
     RefreshSourcesList('');
 
     //EditSource.Text := FTempSrc.FiledByEntry;
@@ -131,20 +130,6 @@ end;
 function TfmSourceCitEdit.GetBase: TfmBase;
 begin
   Result := TfmBase(Owner);
-end;
-
-procedure TfmSourceCitEdit.PrepareSources();
-var
-  i: Integer;
-  rec: TGEDCOMRecord;
-begin
-  FSourcesList.Clear();
-  for i := 0 to Base.Tree.RecordsCount - 1 do begin
-    rec := Base.Tree.Records[i];
-
-    if (rec is TGEDCOMSourceRecord)
-    then FSourcesList.AddObject(TGEDCOMSourceRecord(rec).FiledByEntry, rec);
-  end;
 end;
 
 procedure TfmSourceCitEdit.RefreshSourcesList(aFilter: string);

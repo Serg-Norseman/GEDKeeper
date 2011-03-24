@@ -1,8 +1,8 @@
 object fmMaps: TfmMaps
   Left = 271
   Top = 105
-  Width = 869
-  Height = 575
+  Width = 861
+  Height = 564
   Caption = #1050#1072#1088#1090#1099
   Color = clBtnFace
   DefaultMonitor = dmMainForm
@@ -25,13 +25,13 @@ object fmMaps: TfmMaps
     Left = 289
     Top = 0
     Width = 4
-    Height = 529
+    Height = 518
     Beveled = True
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 529
-    Width = 861
+    Top = 518
+    Width = 853
     Height = 19
     Panels = <>
     SimplePanel = True
@@ -40,7 +40,7 @@ object fmMaps: TfmMaps
     Left = 0
     Top = 0
     Width = 289
-    Height = 529
+    Height = 518
     ActivePage = tsPlaces
     Align = alLeft
     TabOrder = 1
@@ -50,7 +50,7 @@ object fmMaps: TfmMaps
         Left = 0
         Top = 173
         Width = 281
-        Height = 328
+        Height = 317
         Align = alClient
         Indent = 19
         SortType = stText
@@ -65,13 +65,6 @@ object fmMaps: TfmMaps
         Align = alTop
         Caption = #1042#1099#1073#1086#1088#1082#1072
         TabOrder = 1
-        object Label2: TLabel
-          Left = 8
-          Top = 88
-          Width = 140
-          Height = 13
-          Caption = #1042#1089#1105' '#1087#1086' '#1079#1072#1076#1072#1085#1085#1086#1084#1091' '#1095#1077#1083#1086#1074#1077#1082#1091
-        end
         object ComboPersons: TComboBox
           Left = 8
           Top = 104
@@ -79,31 +72,31 @@ object fmMaps: TfmMaps
           Height = 21
           Style = csDropDownList
           ItemHeight = 13
-          TabOrder = 0
+          TabOrder = 5
         end
         object chkResidence: TCheckBox
-          Left = 8
+          Left = 19
           Top = 64
           Width = 129
           Height = 17
           Caption = #1052#1077#1089#1090#1072' '#1087#1088#1086#1078#1080#1074#1072#1085#1080#1103
-          TabOrder = 1
+          TabOrder = 3
         end
         object chkDeath: TCheckBox
-          Left = 8
-          Top = 40
+          Left = 19
+          Top = 48
           Width = 129
           Height = 17
           Caption = #1052#1077#1089#1090#1072' '#1089#1084#1077#1088#1090#1080
           TabOrder = 2
         end
         object chkBirth: TCheckBox
-          Left = 8
-          Top = 16
+          Left = 19
+          Top = 32
           Width = 129
           Height = 17
           Caption = #1052#1077#1089#1090#1072' '#1088#1086#1078#1076#1077#1085#1080#1103
-          TabOrder = 3
+          TabOrder = 1
         end
         object btnSelectPlaces: TButton
           Left = 198
@@ -112,7 +105,7 @@ object fmMaps: TfmMaps
           Height = 25
           Caption = #1055#1086#1082#1072#1079#1072#1090#1100
           Enabled = False
-          TabOrder = 4
+          TabOrder = 6
           OnClick = btnSelectPlacesClick
         end
         object btnSaveImage: TButton
@@ -121,8 +114,26 @@ object fmMaps: TfmMaps
           Width = 121
           Height = 25
           Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100' '#1089#1085#1080#1084#1086#1082'..'
-          TabOrder = 5
+          TabOrder = 7
           OnClick = btnSaveImageClick
+        end
+        object radTotal: TRadioButton
+          Left = 8
+          Top = 16
+          Width = 198
+          Height = 17
+          Caption = #1055#1086' '#1074#1089#1077#1084' '#1083#1102#1076#1103#1084
+          TabOrder = 0
+          OnClick = radTotalClick
+        end
+        object radSelected: TRadioButton
+          Left = 8
+          Top = 87
+          Width = 198
+          Height = 17
+          Caption = #1058#1086#1083#1100#1082#1086' '#1087#1086' '#1074#1099#1073#1088#1072#1085#1085#1086#1084#1091
+          TabOrder = 4
+          OnClick = radTotalClick
         end
       end
     end
@@ -130,8 +141,8 @@ object fmMaps: TfmMaps
   object Panel1: TPanel
     Left = 293
     Top = 0
-    Width = 568
-    Height = 529
+    Width = 560
+    Height = 518
     Align = alClient
     BorderStyle = bsSingle
     TabOrder = 2

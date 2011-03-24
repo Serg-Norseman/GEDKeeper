@@ -1,12 +1,12 @@
-unit GKFileProperties;
+unit GKFileProperties; {prepare:fin}
 
 {$I GEDKeeper.inc}
 
 interface
 
 uses
-  Windows, SysUtils, Classes, Graphics, Controls, Forms, StdCtrls, Buttons,
-  GedCom551, ComCtrls, bsCtrls, GKBase;
+  SysUtils, Classes, Controls, Forms, StdCtrls, Buttons, ComCtrls, 
+  GKBase;
 
 type
   TfmFileProperties = class(TForm)
@@ -25,68 +25,46 @@ type
     Label4: TLabel;
     edExtName: TEdit;
     procedure btnAcceptClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
-    FTree: TGEDCOMTree;
-
     function GetBase(): TfmBase;
-    procedure SetTree(const Value: TGEDCOMTree);
+    procedure UpdateControls();
   public
     property Base: TfmBase read GetBase;
-    property Tree: TGEDCOMTree read FTree write SetTree;
   end;
 
 implementation
 
-uses GKMain, GKEngine;
+uses GedCom551, GKMain, GKEngine;
 
 {$R *.dfm}
 
-procedure TfmFileProperties.SetTree(const Value: TGEDCOMTree);
+procedure TfmFileProperties.UpdateControls();
 var
   submitter: TGEDCOMSubmitterRecord;
 begin
-  FTree := Value;
-
-  submitter := TGEDCOMSubmitterRecord(FTree.Header.Submitter.Value);
-  if (submitter = nil) then begin
-    submitter := TGEDCOMSubmitterRecord.Create(FTree, FTree);
-    submitter.InitNew();
-    FTree.AddRecord(submitter);
-    FTree.Header.SetTagStringValue('SUBM', '@'+submitter.XRef+'@');
-  end;
+  submitter := Base.Engine.GetSubmitter();
 
   EditName.Text := submitter.Name.FullName;
   MemoAddress.Text := submitter.Address.Address.Text;
   EditTel.Text := submitter.Address.PhoneNumbers[0];
 
-  //
-  CheckAdvanced.Checked := (FTree.Header.FindTag(AdvTag) <> nil);
-  edExtName.Text := Base.GetExtName();
-  //
+  CheckAdvanced.Checked := Base.Engine.IsAdvanced;
+  edExtName.Text := Base.GetSpecExtName();
 end;
 
 procedure TfmFileProperties.btnAcceptClick(Sender: TObject);
 var
   submitter: TGEDCOMSubmitterRecord;
-  tag: TGEDCOMTag;
 begin
-  submitter := TGEDCOMSubmitterRecord(FTree.Header.Submitter.Value);
+  submitter := Base.Engine.GetSubmitter();
   submitter.Name.StringValue := EditName.Text;
   submitter.Address.Address := MemoAddress.Lines;
   submitter.Address.PhoneNumbers[0] := EditTel.Text;
   submitter.ChangeDate.ChangeDateTime := Now();
 
-  if (CheckAdvanced.Checked) then begin
-    tag := FTree.Header.FindTag(AdvTag);
-    if (tag = nil) then FTree.Header.AddTag(AdvTag);
-
-    tag := FTree.Header.FindTag(ExtTag);
-    if (tag = nil) then tag := FTree.Header.AddTag(ExtTag);
-    tag.StringValue := edExtName.Text;
-  end else begin
-    FTree.Header.DeleteTag(AdvTag);
-    FTree.Header.DeleteTag(ExtTag);
-  end;
+  Base.Engine.IsAdvanced := CheckAdvanced.Checked;
+  Base.Engine.ExtName := edExtName.Text;
 
   Base.Modified := True;
 end;
@@ -94,6 +72,11 @@ end;
 function TfmFileProperties.GetBase(): TfmBase;
 begin
   Result := TfmBase(Owner);
+end;
+
+procedure TfmFileProperties.FormCreate(Sender: TObject);
+begin
+  UpdateControls();
 end;
 
 end.

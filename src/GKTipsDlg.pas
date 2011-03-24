@@ -1,12 +1,12 @@
-unit GKTipsDlg;
+unit GKTipsDlg; {prepare:fin}
 
 {$I GEDKeeper.inc}
 
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, ExtCtrls, ComCtrls;
+  SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ExtCtrls,
+  ComCtrls;
 
 type
   TfmTipsDialog = class(TForm)
@@ -45,7 +45,7 @@ end;
 
 procedure TfmTipsDialog.FormDestroy(Sender: TObject);
 begin
-  FTips.Destroy;
+  FTips.Free;
 end;
 
 procedure TfmTipsDialog.CancelBtnClick(Sender: TObject);

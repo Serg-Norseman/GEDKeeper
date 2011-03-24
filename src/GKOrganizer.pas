@@ -1,9 +1,10 @@
-unit GKOrganizer;
+unit GKOrganizer; {prepare:fin}
 
 interface
 
 uses
-  SysUtils, Classes, Controls, Forms, Dialogs, GKBase, ComCtrls, GKLists;
+  SysUtils, Classes, Controls, Forms, Dialogs, ComCtrls, GKBase, GKCtrls,
+  GKLists;
 
 type
   TfmOrganizer = class(TForm)
@@ -84,7 +85,6 @@ procedure TfmOrganizer.CollectData();
 
 var
   i, k: Integer;
-  tree: TGEDCOMTree;
   rec: TGEDCOMRecord;
   i_rec: TGEDCOMIndividualRecord;
   nm: string;
@@ -94,9 +94,8 @@ begin
   FMailsList.List.Clear;
   FWebsList.List.Clear;
 
-  tree := Base.Tree;
-  for i := 0 to tree.RecordsCount - 1 do begin
-    rec := tree.Records[i];
+  for i := 0 to Base.Tree.RecordsCount - 1 do begin
+    rec := Base.Tree.Records[i];
 
     if (rec is TGEDCOMIndividualRecord) then begin
       i_rec := (rec as TGEDCOMIndividualRecord);
@@ -124,25 +123,21 @@ procedure TfmOrganizer.FormCreate(Sender: TObject);
 begin
   FAdrList := TSheetList.Create(SheetAddresses);
   FAdrList.Buttons := [];
-  //FAdrList.OnModify := ListModify;
   AddListColumn(FAdrList.List, 'Персона', 350, False);
   AddListColumn(FAdrList.List, 'Адрес', 100, False);
 
   FPhonesList := TSheetList.Create(SheetTelephones);
   FPhonesList.Buttons := [];
-  //FPhonesList.OnModify := ListModify;
   AddListColumn(FPhonesList.List, 'Персона', 350, False);
   AddListColumn(FPhonesList.List, 'Телефонный номер', 100, False);
 
   FMailsList := TSheetList.Create(SheetEMails);
   FMailsList.Buttons := [];
-  //FMailsList.OnModify := ListModify;
   AddListColumn(FMailsList.List, 'Персона', 350, False);
   AddListColumn(FMailsList.List, 'Адрес эл. почты', 100, False);
 
   FWebsList := TSheetList.Create(SheetWebs);
   FWebsList.Buttons := [];
-  //FWebsList.OnModify := ListModify;
   AddListColumn(FWebsList.List, 'Персона', 350, False);
   AddListColumn(FWebsList.List, 'Сайт', 100, False);
 end;

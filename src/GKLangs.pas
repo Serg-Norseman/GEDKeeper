@@ -14,7 +14,6 @@ type
 
 const
   // Language String IDs
-
   LSID_First            = 1;
 
   LSID_MIFile           = 1;

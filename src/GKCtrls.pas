@@ -1,6 +1,102 @@
-unit HTMemo;
+unit GKCtrls;
 
-{$I compiler.inc}
+{$I GEDKeeper.inc}
+
+interface
+
+uses
+  Types, SysUtils, Classes, Windows, Messages, Graphics, Controls, ComCtrls,
+  Forms, CommCtrl, ExtCtrls;
+
+type
+  TVGPaintBox = class(TCustomControl)
+  private
+    FOnPaint: TNotifyEvent;
+
+    procedure WMEraseBkgnd(var Message: TWMEraseBkgnd); message WM_ERASEBKGND;
+  protected
+    procedure Paint; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+
+    property Canvas;
+  published
+    property Align;
+    property Font;
+    property OnDblClick;
+    property OnMouseDown;
+    property OnMouseMove;
+    property OnMouseUp;
+    property OnMouseWheel;
+    property OnPaint: TNotifyEvent read FOnPaint write FOnPaint;
+    property ParentFont;
+  end;
+
+{=================================== Common ===================================}
+
+type
+  TSortDirection = (sdAscending, sdDescending);
+
+  TLVMeasureItemEvent = procedure(Control: TWinControl;
+     var AHeight: UINT) of object;
+
+  TGKListView = class(TCustomListView)
+  private
+    FOnMeasureItem: TLVMeasureItemEvent;
+    FSortColumn: Word;
+    FSortDirection: TSortDirection;
+    FShowSortSign: Boolean;
+
+    {$IFNDEF DELPHI_NET}
+    FNewWndProc, FPrevWndProc, FNewHeadProc, FPrevHeadProc: Pointer;
+    FHeadHandle: Integer;
+    FHeadLBDown, FHeadOnDiv: boolean;
+    FHeadLBCol: Integer;
+    procedure HookControl;
+    procedure UnhookControl;
+    procedure HookWndProc(var AMsg: TMessage);
+    procedure HeadWndProc(var AMsg: TMessage);
+    procedure CNMeasureItem(var Message: TWMMeasureItem); message CN_MEASUREITEM;
+    procedure WMParentNotify(var Message: TWMParentNotify); message WM_PARENTNOTIFY;
+    {$ENDIF}
+
+    procedure RefreshHeader;
+    function GetSortType: TSortType;
+    procedure SetSortType(Value: TSortType);
+    procedure SetSortColumn(Value: Word);
+    procedure SetSortDirection(Value: TSortDirection);
+    procedure SetShowSortSign(Value: Boolean);
+  protected
+    {$IFNDEF DELPHI_NET}
+    procedure CreateWnd; override;
+    {$ENDIF}
+    procedure ColClick(Column: TListColumn); override;
+    procedure MeasureItem(var Height: UINT); virtual;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+  published
+    property Color;
+    property Columns;
+    property HideSelection;
+    property Items;
+
+    property OnDblClick;
+    property OnMeasureItem: TLVMeasureItemEvent
+      read FOnMeasureItem write FOnMeasureItem;
+    property OnSelectItem;
+    property ReadOnly default False;
+
+    property SortColumn: Word read FSortColumn write SetSortColumn;
+    property SortDirection: TSortDirection read FSortDirection write SetSortDirection;
+    property ShowSortSign: Boolean read FShowSortSign write SetShowSortSign default true;
+    property SortType read GetSortType write SetSortType;
+    property ViewStyle;
+  end;
+
+function agCompare(Str1, Str2: string): Integer;
+
+{==============================================================================}
 
 (*
 Copyright (C) 1997 Paul Toth (TothPaul@Mygale.org)
@@ -45,26 +141,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                        (like html tag <a href="#linkname>Caption</a>)
 
  Note :
-
   There is no ~/tag~ because "ubis" are "flip-flop" tags :
    "normal text ~i~ Italic ~bu~ Italic,Bold,UnderLine ~ib~ UnderLine ~u~ normal"
 
   If you specify a colorIdent, it should be the last tag :
    ~ub+5clBlue~ : UnderLine, Bold, size+5, Color Blue.
    ~clBlueub+5~ : color "clBlueub+5" !!!
-
-  The BackGround is not a tag because this component is not a new HTML file format
-   but a way to create Delphi application that look like Browser interface.
-   You have to specify inside your app, with BackGround you want to put in.
-   This component support also only Internal Links, You have to use OnLink event to
-   build a multi-page application.
 }
-
-interface
-
-uses
-  Types, SysUtils, Windows, Messages, Classes, Graphics, Controls, Forms,
-  ExtCtrls;
 
 type
   TLink = class(TObject)
@@ -82,7 +165,7 @@ type
 
   TRuleStyle = (rsLowered, rsRaised);
 
-  THTMemo = class(TCustomControl)
+  TGKHyperView = class(TCustomControl)
   private
     FColor: TColor;
     FLines: TStringList;
@@ -168,19 +251,412 @@ type
     property Visible;
   end;
 
+{==============================================================================}
+
 procedure Register;
 
 implementation
 
+uses
+  Math
+  {$IFDEF DELPHI_NET}, WinUtils{$ENDIF};
+
 procedure Register;
 begin
-  RegisterComponents('Additional', [THTMemo]);
+  RegisterComponents('BS Components', [TVGPaintBox, TGKListView, TGKHyperView]);
 end;
 
-{$R crhand32.res}
+{ TVGPaintBox }
 
-const
-  crHand = 1;
+constructor TVGPaintBox.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  DoubleBuffered := True;
+  ControlStyle := ControlStyle + [csReplicatable];
+  Width := 105;
+  Height := 105;
+end;
+
+procedure TVGPaintBox.Paint;
+begin
+  Canvas.Font := Font;
+  Canvas.Brush.Color := Color;
+  if (csDesigning in ComponentState) then begin
+    Canvas.Pen.Style := psDash;
+    Canvas.Brush.Color := clBtnFace;
+    Canvas.Brush.Style := bsSolid;
+    Canvas.Rectangle(0, 0, Width, Height);
+  end;
+  if Assigned(FOnPaint) then FOnPaint(Self);
+end;
+
+procedure TVGPaintBox.WMEraseBkgnd(var Message: TWMEraseBkgnd);
+begin
+  Message.Result := -1;
+end;
+
+{ TGKListView }
+
+constructor TGKListView.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  {$IFNDEF DELPHI_NET}
+  FNewWndProc := MakeObjectInstance(HookWndProc);
+  FNewHeadProc := MakeObjectInstance(HeadWndProc);
+  FPrevWndProc := nil;
+  FPrevHeadProc := nil;
+  FSortColumn := 0;
+  FSortDirection := sdAscending;
+  FHeadHandle := 0;
+  FHeadLBDown := false;
+  FShowSortSign := true;
+  {$ENDIF}
+end;
+
+destructor TGKListView.Destroy;
+begin
+  {$IFNDEF DELPHI_NET}
+  if Assigned(FPrevHeadProc)
+  and (Pointer(GetWindowLong(FHeadHandle, GWL_WNDPROC)) = FNewHeadProc)
+  then begin
+    SetWindowLong(FHeadHandle, GWL_WNDPROC, LongInt(FPrevHeadProc));
+    FPrevHeadProc := nil;
+  end;
+  UnhookControl;
+  FreeObjectInstance(FNewWndProc);
+  FreeObjectInstance(FNewHeadProc);
+  {$ENDIF}
+  inherited Destroy;
+end;
+
+function agCompare(Str1, Str2: string): Integer;
+
+  function IsValidNumber(const S: string; var V: Extended): Boolean;
+  var
+    NumCode: Integer;
+  begin
+    Val(S, V, NumCode);
+    Result := (NumCode = 0);
+  end;
+
+var
+  Val1, Val2: Extended;
+begin
+  if IsValidNumber(Str1, Val1) and IsValidNumber(Str2, Val2) then
+    if (Val1 < Val2)
+    then Result := -1
+    else
+      if (Val1 > Val2)
+      then Result := 1
+      else Result := 0
+  else begin
+    Result := AnsiCompareStr(Str1, Str2);
+    if (Str1 <> '') and (Str2 = '') then Result := -1;
+    if (Str1 = '') and (Str2 <> '') then Result := 1;
+  end;
+end;
+
+{$IFNDEF DELPHI_NET}
+
+function agDefaultListViewSort(Item1, Item2: TListItem; lParam: Integer): Integer; stdcall;
+var
+  Str1, Str2: string;
+  Column: Integer;
+begin
+  with Item1 do
+    if Assigned(TListView(ListView).OnCompare)
+    then TListView(ListView).OnCompare(ListView, Item1, Item2, lParam, Result)
+    else begin
+      Column := LoWord(lParam);
+      if Column = 0 then begin
+        Str1 := Item1.Caption;
+        Str2 := Item2.Caption;
+      end else begin
+        if Item1.SubItems.Count > Column - 1 then Str1 := Item1.SubItems[Column - 1] else Str1 := '';
+        if Item2.SubItems.Count > Column - 1 then Str2 := Item2.SubItems[Column - 1] else Str2 := '';
+      end;
+
+      Result := agCompare(Str1, Str2) * ShortInt(HiWord(lParam));
+    end;
+end;
+
+procedure TGKListView.CreateWnd;
+var
+  r: TRect;
+  wp: TWindowPos;
+begin
+  inherited;
+  HookControl;
+
+  if (OwnerDraw) then begin // need for measure
+    //ResetOwnerDrawHeight;
+	GetWindowRect(Handle, r);
+	wp.hwnd := Handle;
+	wp.cx := Width;
+	wp.cy := Height;
+	wp.flags := SWP_NOACTIVATE or SWP_NOMOVE or SWP_NOOWNERZORDER or SWP_NOZORDER;
+	SendMessage(Handle, WM_WINDOWPOSCHANGED, 0, LPARAM(@wp));
+  end;
+end;
+
+procedure TGKListView.HookControl;
+var
+  P: Pointer;
+begin
+  if not(csDestroying in ComponentState) then begin
+    HandleNeeded;
+    P := Pointer(GetWindowLong(Handle, GWL_WNDPROC));
+    if (P <> FNewWndProc) then begin
+      FPrevWndProc := P;
+      SetWindowLong(Handle, GWL_WNDPROC, LongInt(FNewWndProc));
+    end;
+  end;
+end;
+
+procedure TGKListView.UnhookControl;
+begin
+  if Assigned(FPrevWndProc) and HandleAllocated and
+  (Pointer(GetWindowLong(Handle, GWL_WNDPROC)) = FNewWndProc) then
+    SetWindowLong(Handle, GWL_WNDPROC, LongInt(FPrevWndProc));
+  FPrevWndProc := nil;
+end;
+
+procedure TGKListView.HookWndProc(var AMsg: TMessage);
+begin
+  with AMsg do begin
+    if (Msg = LVM_SORTITEMS) then begin
+      if (ViewStyle = vsReport) then WParamLo := FSortColumn else WParamLo := 0;
+      if (FSortDirection = sdAscending) then WParamHi := 1 else WParamHi := Word(-1);
+      LParam := Integer(@agDefaultListViewSort);
+    end;
+    Result := CallWindowProc(FPrevWndProc, Handle, Msg, WParam, LParam);
+  end;
+end;
+
+procedure TGKListView.WMParentNotify(var Message: TWMParentNotify);
+begin
+  inherited;
+  with Message do
+    if (Event = WM_CREATE) and (FHeadHandle = 0) then begin
+      FHeadHandle := ChildWnd;
+      FPrevHeadProc := Pointer(GetWindowLong(FHeadHandle, GWL_WNDPROC));
+      SetWindowLong(FHeadHandle, GWL_WNDPROC, LongInt(FNewHeadProc));
+    end;
+end;
+
+procedure TGKListView.HeadWndProc(var AMsg: TMessage);
+
+  procedure PaintSortSign;
+  const
+    SignWidth  = 8;
+    SignHeight = 7;
+    SignMargin = 15;
+  var
+    C: TCanvas;
+    i, x1, y1, csx: Integer;
+    Item: THDItem;
+  begin
+    if (ViewStyle <> vsReport) or (Columns.Count = 0) or (SortType = stNone) or
+      not FShowSortSign then exit;
+
+    if (FSortColumn >= Columns.Count) then Exit;
+
+    C:=TCanvas.Create;
+    C.Handle:=GetDC(FHeadHandle);
+    try
+      C.Font.Assign(Font);
+
+      // calculate csx
+      csx:=0;
+      for i:=0 to FSortColumn-1 do begin
+        FillChar(Item,SizeOf(Item),0);
+        Item.mask:=HDI_WIDTH;
+        Header_GetItem(FHeadHandle,i,Item);
+        inc(csx,Item.cxy);
+      end;
+      // calculate x1
+      FillChar(Item,SizeOf(Item),0);
+      Item.mask:=HDI_WIDTH;
+      Header_GetItem(FHeadHandle,FSortColumn,Item);
+      if Columns[FSortColumn].Alignment = taRightJustify then
+        x1:=csx+Item.cxy-C.TextWidth(Columns[FSortColumn].Caption)-SignWidth-SignMargin
+      else
+        x1:=csx+C.TextWidth(Columns[FSortColumn].Caption)+SignMargin;
+      // check x1 limits
+      if x1 < csx+3 then exit;
+      if x1+SignWidth > csx+Item.cxy-3 then exit;
+      // calculate y1
+      y1:=((C.TextHeight(Columns[FSortColumn].Caption)-SignHeight) div 2)+1;
+
+      if FHeadLBDown and not(FHeadOnDiv) then begin
+        if FHeadLBCol <> FSortColumn then exit;
+        inc(x1); inc(y1);
+      end;
+
+      if FSortDirection = sdAscending then begin
+        // Highlight
+        C.Pen.Color:=clBtnHighlight;
+        C.MoveTo(x1+1,y1+SignHeight);
+        C.LineTo(x1+SignWidth,y1+SignHeight);
+        C.MoveTo(x1+(SignWidth div 2),y1);
+        C.LineTo(x1+SignWidth,y1+SignHeight);
+        // Shadow
+        C.Pen.Color:=clBtnShadow;
+        C.MoveTo(x1,y1+SignHeight-1);
+        C.LineTo(x1+(SignWidth div 2),y1-1);
+      end else begin
+        inc(y1);
+        // Shadow
+        C.Pen.Color:=clBtnShadow;
+        C.MoveTo(x1+1,y1);
+        C.LineTo(x1+SignWidth-1,y1);
+        C.MoveTo(x1+1,y1);
+        C.LineTo(x1+(SignWidth div 2),y1+SignHeight);
+        // Highlight
+        C.Pen.Color:=clBtnHighlight;
+        C.MoveTo(x1+SignWidth,y1);
+        C.LineTo(x1+(SignWidth div 2),y1+SignHeight);
+      end;
+    finally
+      ReleaseDC(FHeadHandle,C.Handle);
+      C.Free;
+    end;
+  end;
+
+var
+  Info: THDHitTestInfo;
+begin
+  with AMsg do begin
+    Result := CallWindowProc(FPrevHeadProc, FHeadHandle, Msg, WParam, LParam);
+    case Msg of
+      WM_PAINT:
+        PaintSortSign();
+      WM_LBUTTONDOWN:
+        begin
+          FHeadLBDown := true;
+          Info.Point.X := TWMLButtonDown(AMsg).Pos.X;
+          Info.Point.Y := TWMLButtonDown(AMsg).Pos.Y;
+          FHeadLBCol := SendMessage(FHeadHandle,HDM_HITTEST,0,Integer(@Info));
+          if (Info.Flags and HHT_ONDIVIDER) = 0 then
+            FHeadOnDiv:=false
+          else
+            FHeadOnDiv:=true;
+        end;
+      WM_LBUTTONUP:
+        begin
+          FHeadLBDown:=false;
+          FHeadOnDiv:=false;
+        end;
+      WM_MOUSEMOVE:
+        if FHeadOnDiv then PaintSortSign;
+    end;
+  end;
+end;
+
+procedure TGKListView.CNMeasureItem(var Message: TWMMeasureItem);
+var
+  DC: HDC;
+  OldFont: HFONT;
+  Size: TSize;
+begin
+  inherited;
+
+  DC := CreateCompatibleDC(0);
+  OldFont := SelectObject(DC, Font.Handle);
+  try
+    GetTextExtentPoint32(DC, 'Wy', 2, Size);
+    // Owner drawing only happens in vsReport mode, so no need to check anything
+    // besides that.
+    // I'm checking SmallImages.Height here, but I don't think it'll do any
+    // good.  From what I can tell, if you have SmallImages assigned, this
+    // handler will get called but the value you give it is ignored and the
+    // list uses it's normal item height.  Strange....
+    if assigned(SmallImages) and (SmallImages.Height > Size.cy) then
+      Message.MeasureItemStruct.itemHeight := SmallImages.Height
+    else
+      Message.MeasureItemStruct.itemHeight := Size.cy + 1;
+  finally
+    SelectObject(DC, OldFont);
+    DeleteDC(DC);
+  end;
+  MeasureItem(Message.MeasureItemStruct.itemHeight);
+  Message.Result := 1;
+end;
+
+{$ENDIF DELPHI_NET}
+
+procedure TGKListView.MeasureItem(var Height: UINT);
+begin
+  if assigned(FOnMeasureItem) then
+    FOnMeasureItem(Self, Height);
+end;
+
+procedure TGKListView.ColClick(Column: TListColumn);
+begin
+  if FSortColumn <> Column.Index
+  then SortColumn := Column.Index
+  else
+    if (FSortDirection = sdAscending)
+    then SortDirection := sdDescending
+    else SortDirection := sdAscending;
+
+  inherited;
+end;
+
+procedure TGKListView.RefreshHeader();
+begin
+  {$IFNDEF DELPHI_NET}
+  if IsWindowVisible(FHeadHandle)
+  then InvalidateRect(FHeadHandle, nil, True);
+  {$ENDIF}
+end;
+
+procedure TGKListView.SetSortColumn(Value: word);
+begin
+  if Columns.Count = 0
+  then Value := 0
+  else
+    if Value >= Columns.Count
+    then Value := Columns.Count - 1;
+
+  if FSortColumn <> Value then begin
+    FSortColumn := Value;
+    RefreshHeader;
+    if SortType <> stNone then AlphaSort;
+  end;
+end;
+
+procedure TGKListView.SetSortDirection(Value: TSortDirection);
+begin
+  if FSortDirection <> Value then begin
+    FSortDirection := Value;
+    RefreshHeader;
+    if SortType <> stNone then AlphaSort;
+  end;
+end;
+
+procedure TGKListView.SetShowSortSign(Value: boolean);
+begin
+  if FShowSortSign <> Value then begin
+    FShowSortSign := Value;
+    RefreshHeader;
+  end;
+end;
+
+function TGKListView.GetSortType: TSortType;
+begin
+  Result := inherited SortType;
+end;
+
+procedure TGKListView.SetSortType(Value: TSortType);
+begin
+  if GetSortType <> Value then begin
+    inherited SortType := Value;
+    RefreshHeader;
+  end;
+end;
+
+{==============================================================================}
 
 { TLink }
 
@@ -200,15 +676,16 @@ begin
         and (y >= Rect.Top) and (y <= Rect.Bottom);
 end;
 
-{ THTMemo }
+{ TGKHyperView }
 
-constructor THTMemo.Create(AOwner: TComponent);
+constructor TGKHyperView.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   ControlStyle := [csCaptureMouse, csClickEvents, csDoubleClicks];
   TabStop := True;
 
   FBorderStyle := bsSingle;
+
   FHeightcount := 0;
   FBackGround := TPicture.Create;
   FAcceptFontChange := False;
@@ -233,7 +710,7 @@ begin
   FActiveLink := -1;
 end;
 
-procedure THTMemo.CreateParams(var Params: TCreateParams);
+procedure TGKHyperView.CreateParams(var Params: TCreateParams);
 const
   BorderStyles: array[TBorderStyle] of DWORD = (0, WS_BORDER);
 begin
@@ -249,7 +726,7 @@ begin
   end;
 end;
 
-procedure THTMemo.SetBorderStyle(Value: TBorderStyle);
+procedure TGKHyperView.SetBorderStyle(Value: TBorderStyle);
 begin
   if (Value <> FBorderStyle) then begin
     FBorderStyle := Value;
@@ -257,13 +734,13 @@ begin
   end;
 end;
 
-procedure THTMemo.CMCtl3DChanged(var Message: TMessage);
+procedure TGKHyperView.CMCtl3DChanged(var Message: TMessage);
 begin
   if NewStyleControls and (FBorderStyle = bsSingle) then RecreateWnd;
   inherited;
 end;
 
-procedure THTMemo.Loaded();
+procedure TGKHyperView.Loaded();
 begin
   inherited Loaded;
   ArrangeText();
@@ -271,7 +748,7 @@ begin
   FAcceptFontChange := True;
 end;
 
-destructor THTMemo.Destroy;
+destructor TGKHyperView.Destroy;
 begin
   FBackground.Free;
   ClearLinks();
@@ -288,7 +765,7 @@ begin
   inherited Destroy;
 end;
 
-procedure THTMemo.SetColor(Value: TColor);
+procedure TGKHyperView.SetColor(Value: TColor);
 begin
   if FColor <> Value then begin
     FColor := Value;
@@ -296,12 +773,12 @@ begin
   end;
 end;
 
-procedure THTMemo.SetLines(Value: TStringList);
+procedure TGKHyperView.SetLines(Value: TStringList);
 begin
   FLines.Assign(Value);
 end;
 
-procedure THTMemo.LinesChanged(Sender: TObject);
+procedure TGKHyperView.LinesChanged(Sender: TObject);
 begin
   FActiveLink := -1;
   if (FHeightCount <> FLines.Count) then begin
@@ -313,14 +790,14 @@ begin
   Paint();
 end;
 
-procedure THTMemo.SetFont(Value: TFont);
+procedure TGKHyperView.SetFont(Value: TFont);
 begin
   FFont.Assign(Value);
   ArrangeText();
   Paint();
 end;
 
-procedure THTMemo.SetLinkColor(Value: TColor);
+procedure TGKHyperView.SetLinkColor(Value: TColor);
 begin
   if (FLinkColor <> Value) then begin
     FLinkColor := Value;
@@ -328,7 +805,7 @@ begin
   end;
 end;
 
-procedure THTMemo.SetTopPos(Value: Integer);
+procedure TGKHyperView.SetTopPos(Value: Integer);
 var
   {$IFDEF DELPHI_NET}dummy,{$ENDIF} R: TRect;
 begin
@@ -353,7 +830,7 @@ begin
   end;
 end;
 
-procedure THTMemo.SetLeftPos(Value: Integer);
+procedure TGKHyperView.SetLeftPos(Value: Integer);
 var
   {$IFDEF DELPHI_NET}dummy,{$ENDIF} R: TRect;
 begin
@@ -378,7 +855,7 @@ begin
   end;
 end;
 
-procedure THTMemo.SetBorderWidth(Value: Integer);
+procedure TGKHyperView.SetBorderWidth(Value: Integer);
 begin
   if (FBorderWidth <> Value) then begin
     FBorderWidth := Value;
@@ -387,13 +864,13 @@ begin
   end;
 end;
 
-procedure THTMemo.SetBackGround(Value: TPicture);
+procedure TGKHyperView.SetBackGround(Value: TPicture);
 begin
   FBackGround.Assign(Value);
   Paint();
 end;
 
-procedure THTMemo.SetRuleStyle(Value: TRuleStyle);
+procedure TGKHyperView.SetRuleStyle(Value: TRuleStyle);
 begin
   if (FRuleStyle <> Value) then begin
     FRuleStyle := Value;
@@ -408,7 +885,7 @@ begin
   end;
 end;
 
-procedure THTMemo.FontChanged(Sender: TObject);
+procedure TGKHyperView.FontChanged(Sender: TObject);
 begin
   if FAcceptFontChange then begin
     ArrangeText();
@@ -416,7 +893,7 @@ begin
   end;
 end;
 
-procedure THTMemo.FontStyle(AStyle: TFontStyles);
+procedure TGKHyperView.FontStyle(AStyle: TFontStyles);
 begin
   with Canvas.Font do
     if (Style * AStyle = [])
@@ -424,7 +901,7 @@ begin
     else Style := Style - AStyle;
 end;
 
-procedure THTMemo.ScrollRange();
+procedure TGKHyperView.ScrollRange();
 begin
   if (FPageWidth < ClientWidth) then begin
     FRange.x := 0;
@@ -438,7 +915,7 @@ begin
   SetScrollRange(Handle, sb_Vert, 0, FRange.y, False);
 end;
 
-procedure THTMemo.ArrangeText();
+procedure TGKHyperView.ArrangeText();
 begin
   FResize := True;
   Paint();
@@ -448,11 +925,11 @@ begin
   ScrollRange();
 end;
 
-procedure THTMemo.Prepare();
+procedure TGKHyperView.Prepare();
 begin
 end;
 
-procedure THTMemo.Paint();
+procedure TGKHyperView.Paint();
 var
   Line, x, y, i, hMax, xMax: Integer;
   s, ss, sn: string;
@@ -649,7 +1126,7 @@ begin
   FAcceptFontChange := True;
 end;
 
-procedure THTMemo.ClearLinks();
+procedure TGKHyperView.ClearLinks();
 var
   i: Integer;
 begin
@@ -657,7 +1134,7 @@ begin
   FLinks.Clear;
 end;
 
-procedure THTMemo.MouseMove(Shift: TShiftState; X, Y: Integer);
+procedure TGKHyperView.MouseMove(Shift: TShiftState; X, Y: Integer);
 var
   i: Integer;
 begin
@@ -666,7 +1143,7 @@ begin
   for i := 0 to FLinks.Count - 1 do
     if TLink(FLinks[i]).GotMouse(x, y) then begin
       FLink := i;
-      Cursor := crHand;
+      Cursor := crHandPoint;
       Exit;
     end;
 
@@ -676,7 +1153,7 @@ begin
   end;
 end;
 
-procedure THTMemo.MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+procedure TGKHyperView.MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
   inherited MouseDown(Button, Shift, X, Y);
   if not Focused then SetFocus;
@@ -684,7 +1161,7 @@ begin
   if (FLink >= 0) then GotoLink(FLink);
 end;
 
-procedure THTMemo.GotoLink(Link: Word);
+procedure TGKHyperView.GotoLink(Link: Word);
 var
   l: string;
   i, h: Integer;
@@ -703,7 +1180,7 @@ begin
   then EOnLink(Self, TLink(FLinks[Link]).Name)
 end;
 
-procedure THTMemo.WMVScroll(var Msg: TWMVScroll);
+procedure TGKHyperView.WMVScroll(var Msg: TWMVScroll);
 begin
   case Msg.ScrollCode of
     sb_LineUp        : TopPos := TopPos - (ClientHeight div 20);
@@ -717,7 +1194,7 @@ begin
   end;
 end;
 
-procedure THTMemo.WMHScroll(var Msg:TWMHScroll);
+procedure TGKHyperView.WMHScroll(var Msg:TWMHScroll);
 begin
   case msg.ScrollCode of
     sb_LineUp        : LeftPos := LeftPos - (Clientwidth div 20);
@@ -731,18 +1208,18 @@ begin
   end;
 end;
 
-procedure THTMemo.WMSize(var Msg: TWMSize);
+procedure TGKHyperView.WMSize(var Msg: TWMSize);
 begin
   ScrollRange();
 end;
 
-procedure THTMemo.WMGetDlgCode(var Msg: TWMGetDlgCode);
+procedure TGKHyperView.WMGetDlgCode(var Msg: TWMGetDlgCode);
 begin
   inherited;
   Msg.Result := Msg.Result or DLGC_WANTARROWS or DLGC_WANTTAB or DLGC_WANTCHARS;
 end;
 
-procedure THTMemo.KeyDown(var Key: Word; Shift: TShiftState);
+procedure TGKHyperView.KeyDown(var Key: Word; Shift: TShiftState);
 begin
   if (Key <> vk_tab) and (Key <> vk_return) and (Key <> vk_shift) then
     if FActiveLink >= 0 then begin
@@ -817,13 +1294,13 @@ begin
   end;
 end;
 
-procedure THTMemo.CMMouseWheel(var Message: TCMMouseWheel);
+procedure TGKHyperView.CMMouseWheel(var Message: TCMMouseWheel);
 begin
   with Message do
     MouseWheel(ShiftState, WheelDelta, SmallPointToPoint(Pos));
 end;
 
-procedure THTMemo.MouseWheel(Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint);
+procedure TGKHyperView.MouseWheel(Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint);
 var
   ScrollNotify: Integer;
   hasShift, hasCtrl: Boolean;
@@ -869,8 +1346,4 @@ begin
   end;
 end;
 
-begin
-  {$IFNDEF DELPHI_NET}
-  Screen.Cursors[crHand] := LoadCursor(hInstance, 'CRHAND');
-  {$ENDIF}
 end.

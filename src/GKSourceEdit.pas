@@ -1,4 +1,4 @@
-unit GKSourceEdit;
+unit GKSourceEdit; {prepare:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons, ComCtrls,
-  GedCom551, GKBase, GKEngine, GKLists, bsCtrls;
+  GedCom551, GKBase, GKEngine, GKCtrls, GKLists;
 
 type
   TfmSourceEdit = class(TForm)
@@ -75,9 +75,9 @@ var
   rep: TGEDCOMRepositoryRecord;
 begin
   Base.RecListNotesRefresh(FSourceRecord, FNotesList.List, nil);
-  Base.RecListMediaRefresh(FSourceRecord, TBSListView(FMediaList.List), nil);
+  Base.RecListMediaRefresh(FSourceRecord, TGKListView(FMediaList.List), nil);
 
-  with TListView(FRepositoriesList.List) do begin
+  with TGKListView(FRepositoriesList.List) do begin
     Items.BeginUpdate();
     Items.Clear();
     for k := 0 to FSourceRecord.RepositoryCitationsCount - 1 do begin

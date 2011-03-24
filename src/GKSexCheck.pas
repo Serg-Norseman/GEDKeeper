@@ -1,4 +1,4 @@
-unit GKSexCheck;
+unit GKSexCheck; {prepare:fin}
 
 {$I GEDKeeper.inc}
 
@@ -36,10 +36,8 @@ var
   sx: TGEDCOMSex;
 begin
   sx := aNamesTable.GetSexByName(iName);
-  if (sx <> svNone) then begin
-    Result := sx;
-    Exit;
-  end;
+  Result := sx;
+  if (sx <> svNone) then Exit;
 
   dlg := TfmSexCheck.Create(Application);
   try
@@ -69,7 +67,6 @@ begin
     end;
   finally
     dlg.Destroy;
-    dlg := nil;
   end;
 end;
 

@@ -1,4 +1,4 @@
-unit GKMaps;
+unit GKMaps; {prepare:fin}
 
 {$I GEDKeeper.inc}
 
@@ -39,8 +39,9 @@ type
     chkDeath: TCheckBox;
     chkBirth: TCheckBox;
     btnSelectPlaces: TButton;
-    Label2: TLabel;
     btnSaveImage: TButton;
+    radTotal: TRadioButton;
+    radSelected: TRadioButton;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure btnSelectPlacesClick(Sender: TObject);
@@ -49,6 +50,7 @@ type
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure TreePlacesDblClick(Sender: TObject);
+    procedure radTotalClick(Sender: TObject);
   private
     FBaseRoot: TTreeNode;
     FMapBrowser: TMapBrowser;
@@ -58,7 +60,7 @@ type
     FTree: TGEDCOMTree;
 
     procedure PlacesLoad();
-    procedure PreparePointsList(aPoints: TObjectList);
+    procedure PreparePointsList(aPoints: TObjectList; ByPerson: Boolean = False);
   public
     property SelectedPersons: TList read FSelectedPersons write FSelectedPersons;
     property Tree: TGEDCOMTree read FTree write FTree;
@@ -78,14 +80,16 @@ uses
 
 constructor TPlace.Create;
 begin
+  inherited Create;
+
   Points := TObjectList.Create(True);
   PlaceRefs := TObjectList.Create(False);
 end;
 
 destructor TPlace.Destroy;
 begin
-  PlaceRefs.Destroy;
-  Points.Destroy;
+  PlaceRefs.Free;
+  Points.Free;
 
   inherited Destroy;
 end;
@@ -103,31 +107,46 @@ begin
   FPlaces := TObjectList.Create(True);
 
   FBaseRoot := TreePlaces.Items.AddChild(nil, 'Места');
+
+  radTotal.Checked := True;
 end;
 
 procedure TfmMaps.FormDestroy(Sender: TObject);
 begin
-  FPlaces.Destroy;
-  FMapPoints.Destroy;
+  FPlaces.Free;
+  FMapPoints.Free;
 end;
 
-procedure TfmMaps.PreparePointsList(aPoints: TObjectList);
+procedure TfmMaps.PreparePointsList(aPoints: TObjectList; ByPerson: Boolean = False);
 var
   i: Integer;
   pt: TGMapPoint;
+  stHint: string;
 begin
   FMapBrowser.BeginUpdate();
   try
     FMapBrowser.ClearPoints();
     for i := 0 to aPoints.Count - 1 do begin
       pt := TGMapPoint(aPoints[i]);
-      FMapBrowser.AddPoint(pt.Latitude, pt.Longitude, pt.Hint);
+
+      stHint := pt.Hint;
+      if ByPerson then stHint := stHint + ' [' + DateToStr(pt.Date) + ']';      
+
+      FMapBrowser.AddPoint(pt.Latitude, pt.Longitude, stHint);
     end;
 
     FMapBrowser.ZoomToBounds();
   finally
     FMapBrowser.EndUpdate();
   end;
+end;
+
+procedure TfmMaps.radTotalClick(Sender: TObject);
+begin
+  chkBirth.Enabled := radTotal.Checked;
+  chkDeath.Enabled := radTotal.Checked;
+  chkResidence.Enabled := radTotal.Checked;
+  ComboPersons.Enabled := radSelected.Checked;
 end;
 
 procedure TfmMaps.PlacesLoad();
@@ -257,7 +276,7 @@ end;
 
 procedure TfmMaps.btnSelectPlacesClick(Sender: TObject);
 
-  procedure CopyPoint(aPt: TGMapPoint);
+  procedure CopyPoint(aPt: TGMapPoint; aRef: TPlaceRef);
   var
     pt: TGMapPoint;
     i: Integer;
@@ -272,7 +291,24 @@ procedure TfmMaps.btnSelectPlacesClick(Sender: TObject);
     pt.Latitude := aPt.Latitude;
     pt.Longitude := aPt.Longitude;
     pt.Hint := aPt.Hint;
+    pt.Date := aRef.DateTime;
     FMapPoints.Add(pt);
+  end;
+
+  procedure SortPointsByDate();
+  var
+    i, k: Integer;
+    pt1, pt2: TGMapPoint;
+  begin
+    for i := 0 to FMapPoints.Count - 1 do begin
+      for k := i + 1 to FMapPoints.Count - 1 do begin
+        pt1 := TGMapPoint(FMapPoints[i]);
+        pt2 := TGMapPoint(FMapPoints[k]);
+
+        if (pt1.Date > pt2.Date)
+        then FMapPoints.Exchange(i, k);
+      end;
+    end;
   end;
 
 var
@@ -283,13 +319,16 @@ var
   ind: TGEDCOMIndividualRecord;
 begin
   cond := [];
-  if chkBirth.Checked then Include(cond, pcBirth);
-  if chkDeath.Checked then Include(cond, pcDeath);
-  if chkResidence.Checked then Include(cond, pcResidence);
-
   ind := nil;
-  if (ComboPersons.ItemIndex >= 0)
-  then ind := TGEDCOMIndividualRecord(ComboPersons.Items.Objects[ComboPersons.ItemIndex]);
+
+  if (radTotal.Checked) then begin
+    if chkBirth.Checked then Include(cond, pcBirth);
+    if chkDeath.Checked then Include(cond, pcDeath);
+    if chkResidence.Checked then Include(cond, pcResidence);
+  end else if (radSelected.Checked) then begin
+    if (ComboPersons.ItemIndex >= 0)
+    then ind := TGEDCOMIndividualRecord(ComboPersons.Items.Objects[ComboPersons.ItemIndex]);
+  end;
 
   FMapBrowser.ShowLines := (ind <> nil);
 
@@ -306,12 +345,14 @@ begin
         or ((pcBirth in cond) and (ref.Name = 'BIRT'))
         or ((pcDeath in cond) and (ref.Name = 'DEAT'))
         or ((pcResidence in cond) and (ref.Name = 'RESI'))
-        then CopyPoint(TGMapPoint(place.Points[0]));
+        then CopyPoint(TGMapPoint(place.Points[0]), TPlaceRef(place.PlaceRefs[k]));
       //end;
     end;
   end;
 
-  PreparePointsList(FMapPoints);
+  if (ind <> nil) then SortPointsByDate();
+
+  PreparePointsList(FMapPoints, (ind <> nil));
 end;
 
 // обработка нажатия кнопки "Обновить"

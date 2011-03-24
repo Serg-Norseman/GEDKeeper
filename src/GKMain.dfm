@@ -1,8 +1,8 @@
 object fmGEDKeeper: TfmGEDKeeper
   Left = 336
   Top = 110
-  Width = 718
-  Height = 706
+  Width = 710
+  Height = 714
   Caption = 'GEDKeeper'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -23,8 +23,8 @@ object fmGEDKeeper: TfmGEDKeeper
   TextHeight = 13
   object StatusBar: TStatusBar
     Left = 0
-    Top = 641
-    Width = 710
+    Top = 649
+    Width = 702
     Height = 19
     AutoHint = True
     Panels = <
@@ -41,33 +41,42 @@ object fmGEDKeeper: TfmGEDKeeper
   object ToolBar1: TToolBar
     Left = 0
     Top = 0
-    Width = 710
+    Width = 702
     Height = 30
     AutoSize = True
     ButtonHeight = 26
     ButtonWidth = 27
     EdgeBorders = [ebTop, ebBottom]
     Flat = True
-    Images = ImageList1
+    Images = ImageList_Buttons
     ParentShowHint = False
     ShowHint = True
     TabOrder = 1
     object tbFileNew: TToolButton
       Left = 0
       Top = 0
-      Action = actFileNew
+      Hint = #1057#1086#1079#1076#1072#1090#1100' '#1085#1086#1074#1099#1081' '#1092#1072#1081#1083' '#1076#1088#1077#1074#1072
+      Caption = #1053#1086#1074#1099#1081
+      ImageIndex = 0
+      OnClick = miFileNewClick
     end
     object tbFileLoad: TToolButton
       Left = 27
       Top = 0
-      Action = actFileLoad
+      Hint = #1054#1090#1082#1088#1099#1090#1100' '#1092#1072#1081#1083' '#1076#1088#1077#1074#1072
+      Caption = #1054#1090#1082#1088#1099#1090#1100'...'
       DropdownMenu = MenuMRU
+      ImageIndex = 1
       Style = tbsDropDown
+      OnClick = miFileLoadClick
     end
     object tbFileSave: TToolButton
       Left = 67
       Top = 0
-      Action = actFileSave
+      Hint = #1057#1086#1093#1088#1072#1085#1080#1090#1100' '#1092#1072#1081#1083' '#1076#1088#1077#1074#1072
+      Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100'...'
+      ImageIndex = 2
+      OnClick = miFileSaveClick
     end
     object ToolButton1: TToolButton
       Left = 94
@@ -80,17 +89,26 @@ object fmGEDKeeper: TfmGEDKeeper
     object tbRecordAdd: TToolButton
       Left = 102
       Top = 0
-      Action = actRecordAdd
+      Hint = #1044#1086#1073#1072#1074#1080#1090#1100' '#1079#1072#1087#1080#1089#1100
+      Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1079#1072#1087#1080#1089#1100
+      ImageIndex = 3
+      OnClick = miRecordAddClick
     end
     object tbRecordEdit: TToolButton
       Left = 129
       Top = 0
-      Action = actRecordEdit
+      Hint = #1048#1079#1084#1077#1085#1080#1090#1100' '#1079#1072#1087#1080#1089#1100
+      Caption = #1048#1079#1084#1077#1085#1080#1090#1100' '#1079#1072#1087#1080#1089#1100
+      ImageIndex = 4
+      OnClick = miRecordEditClick
     end
     object tbRecordDelete: TToolButton
       Left = 156
       Top = 0
-      Action = actRecordDelete
+      Hint = #1059#1076#1072#1083#1080#1090#1100' '#1079#1072#1087#1080#1089#1100
+      Caption = #1059#1076#1072#1083#1080#1090#1100' '#1079#1072#1087#1080#1089#1100
+      ImageIndex = 5
+      OnClick = miRecordDeleteClick
     end
     object ToolButton7: TToolButton
       Left = 183
@@ -103,12 +121,16 @@ object fmGEDKeeper: TfmGEDKeeper
     object tbUndo: TToolButton
       Left = 191
       Top = 0
-      Action = actUndo
+      Caption = #1054#1090#1084#1077#1085#1080#1090#1100
+      ImageIndex = 31
+      OnClick = miUndoClick
     end
     object tbRedo: TToolButton
       Left = 218
       Top = 0
-      Action = actRedo
+      Caption = #1042#1077#1088#1085#1091#1090#1100
+      ImageIndex = 32
+      OnClick = miRedoClick
     end
     object ToolButton2: TToolButton
       Left = 245
@@ -121,7 +143,10 @@ object fmGEDKeeper: TfmGEDKeeper
     object tbFilter: TToolButton
       Left = 253
       Top = 0
-      Action = actFilter
+      Hint = #1060#1080#1083#1100#1090#1088#1072#1094#1080#1103' '#1089#1087#1080#1089#1082#1072' '#1087#1077#1088#1089#1086#1085
+      Caption = #1060#1080#1083#1100#1090#1088'...'
+      ImageIndex = 16
+      OnClick = miFilterClick
     end
     object ToolButton3: TToolButton
       Left = 280
@@ -134,12 +159,18 @@ object fmGEDKeeper: TfmGEDKeeper
     object tbTreeAncestors: TToolButton
       Left = 288
       Top = 0
-      Action = actTreeAncestors
+      Hint = #1057#1092#1086#1088#1084#1080#1088#1086#1074#1072#1090#1100' '#1076#1088#1077#1074#1086' '#1087#1088#1077#1076#1082#1086#1074
+      Caption = #1044#1088#1077#1074#1086' '#1087#1088#1077#1076#1082#1086#1074
+      ImageIndex = 18
+      OnClick = miTreeAncestorsClick
     end
     object tbTreeDescendants: TToolButton
       Left = 315
       Top = 0
-      Action = actTreeDescendants
+      Hint = #1057#1092#1086#1088#1084#1080#1088#1086#1074#1072#1090#1100' '#1076#1088#1077#1074#1086' '#1087#1086#1090#1086#1084#1082#1086#1074
+      Caption = #1044#1088#1077#1074#1086' '#1087#1086#1090#1086#1084#1082#1086#1074
+      ImageIndex = 19
+      OnClick = miTreeDescendantsClick
     end
     object ToolButton4: TToolButton
       Left = 342
@@ -169,7 +200,10 @@ object fmGEDKeeper: TfmGEDKeeper
     object tbStats: TToolButton
       Left = 398
       Top = 0
-      Action = actStats
+      Hint = #1057#1090#1072#1090#1080#1089#1090#1080#1095#1077#1089#1082#1080#1081' '#1072#1085#1072#1083#1080#1079' '#1076#1072#1085#1085#1099#1093
+      Caption = #1057#1090#1072#1090#1080#1089#1090#1080#1082#1072'...'
+      ImageIndex = 11
+      OnClick = miStatsClick
     end
     object ToolButton5: TToolButton
       Left = 425
@@ -182,306 +216,27 @@ object fmGEDKeeper: TfmGEDKeeper
     object tbPrev: TToolButton
       Left = 433
       Top = 0
-      Action = actPrev
+      Hint = #1055#1088#1077#1076#1099#1076#1091#1097#1072#1103' '#1079#1072#1087#1080#1089#1100
+      Caption = 'actPrev'
+      Enabled = False
+      ImageIndex = 22
+      OnClick = tbPrevClick
     end
     object tbNext: TToolButton
       Left = 460
       Top = 0
-      Action = actNext
-    end
-  end
-  object ActionList1: TActionList
-    Images = ImageList1
-    Left = 200
-    Top = 144
-    object actRecordAdd: TAction
-      Category = 'Edit'
-      Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1079#1072#1087#1080#1089#1100
-      Hint = #1044#1086#1073#1072#1074#1080#1090#1100' '#1079#1072#1087#1080#1089#1100
-      ImageIndex = 3
-      ShortCut = 16457
-      OnExecute = actRecordAddExecute
-    end
-    object actRecordEdit: TAction
-      Category = 'Edit'
-      Caption = #1048#1079#1084#1077#1085#1080#1090#1100' '#1079#1072#1087#1080#1089#1100
-      Hint = #1048#1079#1084#1077#1085#1080#1090#1100' '#1079#1072#1087#1080#1089#1100
-      ImageIndex = 4
-      ShortCut = 16397
-      OnExecute = actRecordEditExecute
-    end
-    object actRecordDelete: TAction
-      Category = 'Edit'
-      Caption = #1059#1076#1072#1083#1080#1090#1100' '#1079#1072#1087#1080#1089#1100
-      Hint = #1059#1076#1072#1083#1080#1090#1100' '#1079#1072#1087#1080#1089#1100
-      ImageIndex = 5
-      ShortCut = 16460
-      OnExecute = actRecordDeleteExecute
-    end
-    object actFileNew: TAction
-      Category = 'File'
-      Caption = #1053#1086#1074#1099#1081
-      Hint = #1057#1086#1079#1076#1072#1090#1100' '#1085#1086#1074#1099#1081' '#1092#1072#1081#1083' '#1076#1088#1077#1074#1072
-      ImageIndex = 0
-      ShortCut = 16462
-      OnExecute = actFileNewExecute
-    end
-    object actFileLoad: TAction
-      Category = 'File'
-      Caption = #1054#1090#1082#1088#1099#1090#1100'...'
-      Hint = #1054#1090#1082#1088#1099#1090#1100' '#1092#1072#1081#1083' '#1076#1088#1077#1074#1072
-      ImageIndex = 1
-      ShortCut = 16463
-      OnExecute = actFileLoadExecute
-    end
-    object actFileSave: TAction
-      Category = 'File'
-      Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100'...'
-      Hint = #1057#1086#1093#1088#1072#1085#1080#1090#1100' '#1092#1072#1081#1083' '#1076#1088#1077#1074#1072
-      ImageIndex = 2
-      ShortCut = 16467
-      OnExecute = actFileSaveExecute
-    end
-    object actExit: TAction
-      Category = 'File'
-      Caption = #1042#1099#1093#1086#1076
-      ShortCut = 32856
-      OnExecute = actExitExecute
-    end
-    object actPersonScan: TAction
-      Category = 'Edit'
-      Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1087#1077#1088#1089#1086#1085#1091' '#1080#1079' '#1080#1089#1090#1086#1095#1085#1080#1082#1072'...'
-      OnExecute = actPersonScanExecute
-    end
-    object actFileProperties: TAction
-      Category = 'File'
-      Caption = #1057#1074#1086#1081#1089#1090#1074#1072' '#1092#1072#1081#1083#1072'...'
-      ImageIndex = 10
-      OnExecute = actFilePropertiesExecute
-    end
-    object actOptions: TAction
-      Category = 'Tools'
-      Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080'...'
-      OnExecute = actOptionsExecute
-    end
-    object actTreeAncestors: TAction
-      Category = 'Pedigree'
-      Caption = #1044#1088#1077#1074#1086' '#1087#1088#1077#1076#1082#1086#1074
-      Hint = #1057#1092#1086#1088#1084#1080#1088#1086#1074#1072#1090#1100' '#1076#1088#1077#1074#1086' '#1087#1088#1077#1076#1082#1086#1074
-      ImageIndex = 18
-      ShortCut = 16449
-      OnExecute = actTreeAncestorsExecute
-    end
-    object actTreeDescendants: TAction
-      Category = 'Pedigree'
-      Caption = #1044#1088#1077#1074#1086' '#1087#1086#1090#1086#1084#1082#1086#1074
-      Hint = #1057#1092#1086#1088#1084#1080#1088#1086#1074#1072#1090#1100' '#1076#1088#1077#1074#1086' '#1087#1086#1090#1086#1084#1082#1086#1074
-      ImageIndex = 19
-      ShortCut = 16452
-      OnExecute = actTreeDescendantsExecute
-    end
-    object actPedigree_dAboville: TAction
-      Category = 'Pedigree'
-      Caption = #1056#1086#1089#1087#1080#1089#1100' '#1087#1086' '#1076#39#1040#1073#1086#1074#1080#1083#1083#1102
-      ImageIndex = 20
-      ShortCut = 16464
-      OnExecute = actPedigree_dAbovilleExecute
-    end
-    object actPedigree_Konovalov: TAction
-      Category = 'Pedigree'
-      Caption = #1056#1086#1089#1087#1080#1089#1100' '#1087#1086' '#1050#1086#1085#1086#1074#1072#1083#1086#1074#1091
-      ImageIndex = 20
-      ShortCut = 16459
-      OnExecute = actPedigree_KonovalovExecute
-    end
-    object actFilter: TAction
-      Category = 'Tools'
-      Caption = #1060#1080#1083#1100#1090#1088'...'
-      Hint = #1060#1080#1083#1100#1090#1088#1072#1094#1080#1103' '#1089#1087#1080#1089#1082#1072' '#1087#1077#1088#1089#1086#1085
-      ImageIndex = 16
-      ShortCut = 16454
-      OnExecute = actFilterExecute
-    end
-    object actStats: TAction
-      Category = 'Pedigree'
-      Caption = #1057#1090#1072#1090#1080#1089#1090#1080#1082#1072'...'
-      Hint = #1057#1090#1072#1090#1080#1089#1090#1080#1095#1077#1089#1082#1080#1081' '#1072#1085#1072#1083#1080#1079' '#1076#1072#1085#1085#1099#1093
-      ImageIndex = 11
-      ShortCut = 16468
-      OnExecute = actStatsExecute
-    end
-    object actExportToWeb: TAction
-      Category = 'File'
-      Caption = #1069#1082#1089#1087#1086#1088#1090' '#1074' Web...'
-      ShortCut = 16471
-      OnExecute = actExportToWebExecute
-    end
-    object actExportToExcel: TAction
-      Category = 'File'
-      Caption = #1069#1082#1089#1087#1086#1088#1090' '#1074' Excel...'
-      ImageIndex = 9
-      ShortCut = 16453
-      OnExecute = actExportToExcelExecute
-    end
-    object actTreeTools: TAction
-      Category = 'File'
-      Caption = #1048#1085#1089#1090#1088#1091#1084#1077#1085#1090#1099'...'
-      ImageIndex = 21
-      OnExecute = actTreeToolsExecute
-    end
-    object actContextHelp: TAction
-      Category = 'Help'
-      Caption = #1057#1086#1076#1077#1088#1078#1072#1085#1080#1077
-      ImageIndex = 8
-      ShortCut = 112
-      OnExecute = actContextHelpExecute
-    end
-    object actAbout: TAction
-      Category = 'Help'
-      Caption = #1054' '#1087#1088#1086#1075#1088#1072#1084#1084#1077'...'
-      OnExecute = actAboutExecute
-    end
-    object actMap: TAction
-      Category = 'Pedigree'
-      Caption = #1050#1072#1088#1090#1099'...'
-      ShortCut = 16461
-      OnExecute = actMapExecute
-    end
-    object actGenResources: TAction
-      Category = 'Help'
-      Caption = #1056#1077#1089#1091#1088#1089#1099' '#1074' '#1048#1085#1090#1077#1088#1085#1077#1090#1077'...'
-      OnExecute = actGenResourcesExecute
-    end
-    object actKinshipTerms: TAction
-      Category = 'Help'
-      Caption = #1058#1077#1088#1084#1080#1085#1086#1083#1086#1075#1080#1103' '#1088#1086#1076#1089#1090#1074#1072'...'
-      OnExecute = actKinshipTermsExecute
-    end
-    object actPrev: TAction
-      Category = 'Misc'
-      Caption = 'actPrev'
-      Enabled = False
-      Hint = #1055#1088#1077#1076#1099#1076#1091#1097#1072#1103' '#1079#1072#1087#1080#1089#1100
-      ImageIndex = 22
-      OnExecute = actPrevExecute
-    end
-    object actNext: TAction
-      Category = 'Misc'
+      Hint = #1057#1083#1077#1076#1091#1102#1097#1072#1103' '#1079#1072#1087#1080#1089#1100
       Caption = 'actNext'
       Enabled = False
-      Hint = #1057#1083#1077#1076#1091#1102#1097#1072#1103' '#1079#1072#1087#1080#1089#1100
       ImageIndex = 23
-      OnExecute = actNextExecute
-    end
-    object actFileClose: TAction
-      Category = 'File'
-      Caption = #1047#1072#1082#1088#1099#1090#1100
-      OnExecute = actFileCloseExecute
-    end
-    object actWinCascade: TWindowCascade
-      Category = 'Window'
-      Caption = '&'#1050#1072#1089#1082#1072#1076
-      Hint = 'Cascade'
-      ImageIndex = 27
-    end
-    object actWinHTile: TWindowTileHorizontal
-      Category = 'Window'
-      Caption = '&'#1043#1086#1088#1080#1079#1086#1085#1090#1072#1083#1100#1085#1072#1103' '#1084#1086#1079#1072#1080#1082#1072
-      Hint = 'Tile Horizontally'
-      ImageIndex = 26
-    end
-    object actWinVTile: TWindowTileVertical
-      Category = 'Window'
-      Caption = '&'#1042#1077#1088#1090#1080#1082#1072#1083#1100#1085#1072#1103' '#1084#1086#1079#1072#1080#1082#1072
-      Hint = 'Tile Vertically'
-      ImageIndex = 25
-    end
-    object actWinMinimize: TWindowMinimizeAll
-      Category = 'Window'
-      Caption = '&'#1057#1074#1077#1088#1085#1091#1090#1100' '#1074#1089#1077
-      Hint = 'Minimize All'
-    end
-    object actWinArrange: TWindowArrange
-      Category = 'Window'
-      Caption = '&'#1056#1072#1079#1084#1077#1089#1090#1080#1090#1100' '#1074#1089#1077
-      Hint = 'Arrange All'
-    end
-    object actUndo: TAction
-      Category = 'Edit'
-      Caption = #1054#1090#1084#1077#1085#1080#1090#1100
-      ImageIndex = 31
-      ShortCut = 16474
-      OnExecute = actUndoExecute
-    end
-    object actRedo: TAction
-      Category = 'Edit'
-      Caption = #1042#1077#1088#1085#1091#1090#1100
-      ImageIndex = 32
-      ShortCut = 16473
-      OnExecute = actRedoExecute
-    end
-    object actFAQ: TAction
-      Category = 'Help'
-      Caption = #1063#1072#1089#1090#1086' '#1079#1072#1076#1072#1074#1072#1077#1084#1099#1077' '#1074#1086#1087#1088#1086#1089#1099'...'
-      OnExecute = actFAQExecute
-    end
-    object actExpCalc: TAction
-      Category = 'Tools'
-      AutoCheck = True
-      Caption = #1050#1072#1083#1100#1082#1091#1083#1103#1090#1086#1088'...'
-      OnExecute = actExpCalcExecute
-    end
-    object actNamesBook: TAction
-      Category = 'Tools'
-      AutoCheck = True
-      Caption = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082' '#1080#1084#1077#1085'...'
-      OnExecute = actNamesBookExecute
-    end
-    object actCalendar: TAction
-      Category = 'Tools'
-      AutoCheck = True
-      Caption = #1050#1072#1083#1077#1085#1076#1072#1088#1100'...'
-      OnExecute = actCalendarExecute
-    end
-    object actTimeLine: TAction
-      Category = 'Tools'
-      AutoCheck = True
-      Caption = #1051#1080#1085#1080#1103' '#1074#1088#1077#1084#1077#1085#1080'...'
-      OnExecute = actTimeLineExecute
-    end
-    object actStereoView: TAction
-      Category = 'Misc'
-      Caption = #1057#1090#1077#1088#1077#1086'-'#1087#1088#1086#1089#1084#1086#1090#1088
-      ShortCut = 16507
-      OnExecute = actStereoViewExecute
-    end
-    object actOrganizer: TAction
-      Category = 'Tools'
-      Caption = #1054#1088#1075#1072#1085#1072#1081#1079#1077#1088'...'
-      OnExecute = actOrganizerExecute
-    end
-    object actDBImport: TAction
-      Category = 'File'
-      Caption = #1048#1084#1087#1086#1088#1090' '#1073#1072#1079' '#1076#1072#1085#1085#1099#1093'...'
-      OnExecute = actDBImportExecute
-    end
-    object actSourceParse: TAction
-      Category = 'Edit'
-      Caption = #1056#1072#1079#1073#1086#1088' '#1080#1089#1090#1086#1095#1085#1080#1082#1072'...'
-      OnExecute = actSourceParseExecute
-    end
-    object actScripts: TAction
-      Category = 'Tools'
-      Caption = #1057#1082#1088#1080#1087#1090#1099'...'
-      ShortCut = 16506
-      OnExecute = actScriptsExecute
+      OnClick = tbNextClick
     end
   end
-  object ImageList1: TImageList
+  object ImageList_Buttons: TImageList
     Height = 20
     Width = 20
-    Left = 200
-    Top = 192
+    Left = 296
+    Top = 128
     Bitmap = {
       494C010122002700040014001400FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       000000000000360000002800000050000000C8000000010020000000000000FA
@@ -2566,156 +2321,236 @@ object fmGEDKeeper: TfmGEDKeeper
       000000000000}
   end
   object MainMenu1: TMainMenu
-    Images = ImageList1
+    Images = ImageList_Buttons
     Left = 200
-    Top = 96
+    Top = 128
     object miFile: TMenuItem
       Caption = #1060#1072#1081#1083
       object miFileNew: TMenuItem
-        Action = actFileNew
+        Caption = #1053#1086#1074#1099#1081
+        Hint = #1057#1086#1079#1076#1072#1090#1100' '#1085#1086#1074#1099#1081' '#1092#1072#1081#1083' '#1076#1088#1077#1074#1072
+        ImageIndex = 0
+        ShortCut = 16462
+        OnClick = miFileNewClick
       end
       object miFileLoad: TMenuItem
-        Action = actFileLoad
+        Caption = #1054#1090#1082#1088#1099#1090#1100'...'
+        Hint = #1054#1090#1082#1088#1099#1090#1100' '#1092#1072#1081#1083' '#1076#1088#1077#1074#1072
+        ImageIndex = 1
+        ShortCut = 16463
+        OnClick = miFileLoadClick
       end
       object miMRUFiles: TMenuItem
         Caption = #1054#1090#1082#1088#1099#1090#1100' '#1087#1086#1089#1083#1077#1076#1085#1080#1081
         Enabled = False
       end
       object miFileSave: TMenuItem
-        Action = actFileSave
+        Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100'...'
+        Hint = #1057#1086#1093#1088#1072#1085#1080#1090#1100' '#1092#1072#1081#1083' '#1076#1088#1077#1074#1072
+        ImageIndex = 2
+        ShortCut = 16467
+        OnClick = miFileSaveClick
       end
       object miFileClose: TMenuItem
-        Action = actFileClose
+        Caption = #1047#1072#1082#1088#1099#1090#1100
+        OnClick = miFileCloseClick
       end
       object N1: TMenuItem
         Caption = '-'
       end
-      object miDocAuthor: TMenuItem
-        Action = actFileProperties
+      object miFileProperties: TMenuItem
+        Caption = #1057#1074#1086#1081#1089#1090#1074#1072' '#1092#1072#1081#1083#1072'...'
+        ImageIndex = 10
+        OnClick = miFilePropertiesClick
       end
       object N2: TMenuItem
         Caption = '-'
       end
-      object miExportToWeb: TMenuItem
-        Action = actExportToWeb
-      end
-      object miExportToExcel: TMenuItem
-        Action = actExportToExcel
+      object miExport: TMenuItem
+        Caption = #1069#1082#1089#1087#1086#1088#1090
+        object miExportToWeb: TMenuItem
+          Caption = #1069#1082#1089#1087#1086#1088#1090' '#1074' Web...'
+          ShortCut = 16471
+          OnClick = miExportToWebClick
+        end
+        object miExportToExcelApp: TMenuItem
+          Caption = #1069#1082#1089#1087#1086#1088#1090' '#1074' Excel...'
+          ShortCut = 16453
+          OnClick = miExportToExcelAppClick
+        end
+        object miExportToExcelFile: TMenuItem
+          Caption = #1069#1082#1089#1087#1086#1088#1090' '#1074' Excel-'#1092#1072#1081#1083'...'
+          ImageIndex = 9
+          OnClick = miExportToExcelFileClick
+        end
       end
       object N3: TMenuItem
         Caption = '-'
       end
       object miExit: TMenuItem
-        Action = actExit
+        Caption = #1042#1099#1093#1086#1076
+        ShortCut = 32856
+        OnClick = miExitClick
       end
     end
     object miEdit: TMenuItem
       Caption = #1055#1088#1072#1074#1082#1072
       GroupIndex = 50
       object miUndo: TMenuItem
-        Action = actUndo
+        Caption = #1054#1090#1084#1077#1085#1080#1090#1100
+        ImageIndex = 31
+        ShortCut = 16474
+        OnClick = miUndoClick
       end
       object miRedo: TMenuItem
-        Action = actRedo
+        Caption = #1042#1077#1088#1085#1091#1090#1100
+        ImageIndex = 32
+        ShortCut = 16473
+        OnClick = miRedoClick
       end
       object N4: TMenuItem
         Caption = '-'
       end
       object miRecordAdd: TMenuItem
-        Action = actRecordAdd
+        Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1079#1072#1087#1080#1089#1100
+        Hint = #1044#1086#1073#1072#1074#1080#1090#1100' '#1079#1072#1087#1080#1089#1100
+        ImageIndex = 3
+        ShortCut = 16457
+        OnClick = miRecordAddClick
       end
       object miRecordEdit: TMenuItem
-        Action = actRecordEdit
+        Caption = #1048#1079#1084#1077#1085#1080#1090#1100' '#1079#1072#1087#1080#1089#1100
+        Hint = #1048#1079#1084#1077#1085#1080#1090#1100' '#1079#1072#1087#1080#1089#1100
+        ImageIndex = 4
+        ShortCut = 16397
+        OnClick = miRecordEditClick
       end
       object miRecordDelete: TMenuItem
-        Action = actRecordDelete
+        Caption = #1059#1076#1072#1083#1080#1090#1100' '#1079#1072#1087#1080#1089#1100
+        Hint = #1059#1076#1072#1083#1080#1090#1100' '#1079#1072#1087#1080#1089#1100
+        ImageIndex = 5
+        ShortCut = 16460
+        OnClick = miRecordDeleteClick
       end
       object N5: TMenuItem
         Caption = '-'
       end
-      object miPersonScan: TMenuItem
-        Action = actPersonScan
-      end
-      object miSourceParse: TMenuItem
-        Action = actSourceParse
+      object miStreamInput: TMenuItem
+        Caption = #1055#1086#1090#1086#1095#1085#1099#1081' '#1074#1074#1086#1076'...'
+        OnClick = miStreamInputClick
       end
     end
     object miPedigree: TMenuItem
       Caption = #1056#1086#1076#1086#1089#1083#1086#1074#1085#1072#1103
       GroupIndex = 100
       object miTreeAncestors: TMenuItem
-        Action = actTreeAncestors
+        Caption = #1044#1088#1077#1074#1086' '#1087#1088#1077#1076#1082#1086#1074
+        Hint = #1057#1092#1086#1088#1084#1080#1088#1086#1074#1072#1090#1100' '#1076#1088#1077#1074#1086' '#1087#1088#1077#1076#1082#1086#1074
+        ImageIndex = 18
+        ShortCut = 16449
+        OnClick = miTreeAncestorsClick
       end
       object miTreeDescendants: TMenuItem
-        Action = actTreeDescendants
+        Caption = #1044#1088#1077#1074#1086' '#1087#1086#1090#1086#1084#1082#1086#1074
+        Hint = #1057#1092#1086#1088#1084#1080#1088#1086#1074#1072#1090#1100' '#1076#1088#1077#1074#1086' '#1087#1086#1090#1086#1084#1082#1086#1074
+        ImageIndex = 19
+        ShortCut = 16452
+        OnClick = miTreeDescendantsClick
       end
       object N6: TMenuItem
         Caption = '-'
       end
       object miPedigree_dAboville: TMenuItem
-        Action = actPedigree_dAboville
+        Caption = #1056#1086#1089#1087#1080#1089#1100' '#1087#1086' '#1076#39#1040#1073#1086#1074#1080#1083#1083#1102
+        ImageIndex = 20
+        ShortCut = 16464
+        OnClick = miPedigree_dAbovilleClick
       end
       object miPedigree_Konovalov: TMenuItem
-        Action = actPedigree_Konovalov
+        Caption = #1056#1086#1089#1087#1080#1089#1100' '#1087#1086' '#1050#1086#1085#1086#1074#1072#1083#1086#1074#1091
+        ImageIndex = 20
+        ShortCut = 16459
+        OnClick = miPedigree_KonovalovClick
       end
       object N7: TMenuItem
         Caption = '-'
       end
       object miMap: TMenuItem
-        Action = actMap
+        Caption = #1050#1072#1088#1090#1099'...'
+        ShortCut = 16461
+        OnClick = miMapClick
       end
       object N8: TMenuItem
         Caption = '-'
       end
       object miStats: TMenuItem
-        Action = actStats
+        Caption = #1057#1090#1072#1090#1080#1089#1090#1080#1082#1072'...'
+        Hint = #1057#1090#1072#1090#1080#1089#1090#1080#1095#1077#1089#1082#1080#1081' '#1072#1085#1072#1083#1080#1079' '#1076#1072#1085#1085#1099#1093
+        ImageIndex = 11
+        ShortCut = 16468
+        OnClick = miStatsClick
       end
     end
     object miService: TMenuItem
       Caption = #1057#1077#1088#1074#1080#1089
       GroupIndex = 100
       object miCalc: TMenuItem
-        Action = actExpCalc
         AutoCheck = True
+        Caption = #1050#1072#1083#1100#1082#1091#1083#1103#1090#1086#1088'...'
+        OnClick = miCalcClick
       end
       object miNamesBook: TMenuItem
-        Action = actNamesBook
         AutoCheck = True
+        Caption = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082' '#1080#1084#1077#1085'...'
+        OnClick = miNamesBookClick
       end
       object miCalendar: TMenuItem
-        Action = actCalendar
         AutoCheck = True
+        Caption = #1050#1072#1083#1077#1085#1076#1072#1088#1100'...'
+        OnClick = miCalendarClick
       end
       object miTimeLine: TMenuItem
-        Action = actTimeLine
         AutoCheck = True
+        Caption = #1051#1080#1085#1080#1103' '#1074#1088#1077#1084#1077#1085#1080'...'
+        OnClick = miTimeLineClick
       end
       object miOrganizer: TMenuItem
-        Action = actOrganizer
+        Caption = #1054#1088#1075#1072#1085#1072#1081#1079#1077#1088'...'
+        OnClick = miOrganizerClick
       end
       object N9: TMenuItem
         Caption = '-'
       end
       object miScripts: TMenuItem
-        Action = actScripts
+        Caption = #1057#1082#1088#1080#1087#1090#1099'...'
+        ShortCut = 16506
+        OnClick = miScriptsClick
       end
       object miDBImport: TMenuItem
-        Action = actDBImport
+        Caption = #1048#1084#1087#1086#1088#1090' '#1073#1072#1079' '#1076#1072#1085#1085#1099#1093'...'
+        OnClick = miDBImportClick
       end
       object miTreeTools: TMenuItem
-        Action = actTreeTools
+        Caption = #1048#1085#1089#1090#1088#1091#1084#1077#1085#1090#1099'...'
+        ImageIndex = 21
+        OnClick = miTreeToolsClick
       end
       object N10: TMenuItem
         Caption = '-'
       end
       object miFilter: TMenuItem
-        Action = actFilter
+        Caption = #1060#1080#1083#1100#1090#1088'...'
+        Hint = #1060#1080#1083#1100#1090#1088#1072#1094#1080#1103' '#1089#1087#1080#1089#1082#1072' '#1087#1077#1088#1089#1086#1085
+        ImageIndex = 16
+        ShortCut = 16454
+        OnClick = miFilterClick
       end
       object N11: TMenuItem
         Caption = '-'
       end
       object miOptions: TMenuItem
-        Action = actOptions
+        Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080'...'
+        OnClick = miOptionsClick
       end
     end
     object miWindow: TMenuItem
@@ -2723,72 +2558,98 @@ object fmGEDKeeper: TfmGEDKeeper
       GroupIndex = 200
       Hint = 'Window related commands'
       object miWinCascade: TMenuItem
-        Action = actWinCascade
+        Caption = '&'#1050#1072#1089#1082#1072#1076
+        Hint = 'Cascade'
+        ImageIndex = 27
+        OnClick = miWinCascadeClick
       end
       object miWinHTile: TMenuItem
-        Action = actWinHTile
+        Caption = '&'#1043#1086#1088#1080#1079#1086#1085#1090#1072#1083#1100#1085#1072#1103' '#1084#1086#1079#1072#1080#1082#1072
+        Hint = 'Tile Horizontally'
+        ImageIndex = 26
+        OnClick = miWinHTileClick
       end
       object miWinVTile: TMenuItem
-        Action = actWinVTile
+        Caption = '&'#1042#1077#1088#1090#1080#1082#1072#1083#1100#1085#1072#1103' '#1084#1086#1079#1072#1080#1082#1072
+        Hint = 'Tile Vertically'
+        ImageIndex = 25
+        OnClick = miWinVTileClick
       end
       object miWinMinimize: TMenuItem
-        Action = actWinMinimize
+        Caption = '&'#1057#1074#1077#1088#1085#1091#1090#1100' '#1074#1089#1077
+        Hint = 'Minimize All'
+        OnClick = miWinMinimizeClick
       end
       object miWinArrange: TMenuItem
-        Action = actWinArrange
+        Caption = '&'#1056#1072#1079#1084#1077#1089#1090#1080#1090#1100' '#1074#1089#1077
+        Hint = 'Arrange All'
+        OnClick = miWinArrangeClick
       end
     end
     object miHelp: TMenuItem
       Caption = #1057#1087#1088#1072#1074#1082#1072
       GroupIndex = 200
       object miGenResources: TMenuItem
-        Action = actGenResources
+        Caption = #1056#1077#1089#1091#1088#1089#1099' '#1074' '#1048#1085#1090#1077#1088#1085#1077#1090#1077'...'
+        OnClick = miGenResourcesClick
       end
       object miKinshipTerms: TMenuItem
-        Action = actKinshipTerms
+        Caption = #1058#1077#1088#1084#1080#1085#1086#1083#1086#1075#1080#1103' '#1088#1086#1076#1089#1090#1074#1072'...'
+        OnClick = miKinshipTermsClick
       end
       object miFAQ: TMenuItem
-        Action = actFAQ
+        Caption = #1063#1072#1089#1090#1086' '#1079#1072#1076#1072#1074#1072#1077#1084#1099#1077' '#1074#1086#1087#1088#1086#1089#1099'...'
+        OnClick = miFAQClick
       end
       object miContext: TMenuItem
-        Action = actContextHelp
+        Caption = #1057#1086#1076#1077#1088#1078#1072#1085#1080#1077
+        ImageIndex = 8
+        ShortCut = 112
+        OnClick = miContextClick
       end
       object N12: TMenuItem
         Caption = '-'
       end
       object miAbout: TMenuItem
-        Action = actAbout
+        Caption = #1054' '#1087#1088#1086#1075#1088#1072#1084#1084#1077'...'
+        OnClick = miAboutClick
       end
     end
   end
   object MenuMRU: TPopupMenu
     Left = 200
-    Top = 288
+    Top = 224
   end
   object MenuPedigree: TPopupMenu
     Left = 200
-    Top = 240
+    Top = 176
     object miPedigree_dAboville2: TMenuItem
-      Action = actPedigree_dAboville
+      Caption = #1056#1086#1089#1087#1080#1089#1100' '#1087#1086' '#1076#39#1040#1073#1086#1074#1080#1083#1083#1102
+      ImageIndex = 20
+      ShortCut = 16464
+      OnClick = miPedigree_dAbovilleClick
     end
     object miPedigree_Konovalov2: TMenuItem
-      Action = actPedigree_Konovalov
+      Caption = #1056#1086#1089#1087#1080#1089#1100' '#1087#1086' '#1050#1086#1085#1086#1074#1072#1083#1086#1074#1091
+      ImageIndex = 20
+      ShortCut = 16459
+      OnClick = miPedigree_KonovalovClick
     end
   end
   object OpenDialog1: TOpenDialog
     Filter = 'GEDCOM|*.ged|'#1042#1089#1077' '#1092#1072#1081#1083#1099' (*.*)|*.*'
     Left = 200
-    Top = 336
+    Top = 272
   end
   object SaveDialog1: TSaveDialog
     DefaultExt = 'ged'
     Filter = 'GEDCOM|*.ged'
-    Left = 200
-    Top = 384
+    Left = 296
+    Top = 272
   end
-  object ImageList2: TImageList
-    Left = 272
-    Top = 192
+  object ImageList_Shields: TImageList
+    Left = 296
+    Top = 176
     Bitmap = {
       494C010103000400040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010

@@ -22,7 +22,7 @@ object fmOptions: TfmOptions
     Top = 0
     Width = 513
     Height = 377
-    ActivePage = SheetCommon
+    ActivePage = SheetTree
     Align = alTop
     TabOrder = 0
     object SheetCommon: TTabSheet
@@ -204,7 +204,7 @@ object fmOptions: TfmOptions
         object SheetViewPersons: TTabSheet
           Caption = #1057#1087#1080#1089#1086#1082' '#1087#1077#1088#1089#1086#1085
           ImageIndex = 1
-          object SpeedButton1: TSpeedButton
+          object btnColumnUp: TSpeedButton
             Left = 352
             Top = 8
             Width = 24
@@ -257,9 +257,9 @@ object fmOptions: TfmOptions
               FDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFD
               FDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFD
               FDFDFDFDFDFDFDFDFDFD}
-            OnClick = SpeedButton1Click
+            OnClick = btnColumnUpClick
           end
-          object SpeedButton2: TSpeedButton
+          object btnColumnDown: TSpeedButton
             Left = 352
             Top = 40
             Width = 24
@@ -312,7 +312,7 @@ object fmOptions: TfmOptions
               FDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFD
               FDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFD
               FDFDFDFDFDFDFDFDFDFD}
-            OnClick = SpeedButton2Click
+            OnClick = btnColumnDownClick
           end
           object ListPersonColumns: TListView
             Left = 8
@@ -339,8 +339,8 @@ object fmOptions: TfmOptions
         end
       end
     end
-    object SheetPedigree: TTabSheet
-      Caption = #1056#1086#1076#1086#1089#1083#1086#1074#1085#1099#1077' '#1076#1088#1077#1074#1072' '#1080' '#1088#1086#1089#1087#1080#1089#1080
+    object SheetTree: TTabSheet
+      Caption = #1056#1086#1076#1086#1089#1083#1086#1074#1085#1099#1077' '#1076#1088#1077#1074#1072
       ImageIndex = 1
       object GroupBox1: TGroupBox
         Left = 8
@@ -410,7 +410,6 @@ object fmOptions: TfmOptions
           Height = 17
           Alignment = taLeftJustify
           Caption = #1057#1090#1077#1087#1077#1085#1100' '#1088#1086#1076#1089#1090#1074#1072
-          Enabled = False
           TabOrder = 6
         end
         object chkOnlyYears: TCheckBox
@@ -446,8 +445,15 @@ object fmOptions: TfmOptions
         Top = 8
         Width = 185
         Height = 193
-        Caption = #1062#1074#1077#1090#1072' '#1074' '#1076#1088#1077#1074#1077
+        Caption = #1054#1092#1086#1088#1084#1083#1077#1085#1080#1077
         TabOrder = 1
+        object Label5: TLabel
+          Left = 16
+          Top = 144
+          Width = 36
+          Height = 13
+          Caption = #1064#1088#1080#1092#1090
+        end
         object PanMaleColor: TPanel
           Left = 16
           Top = 16
@@ -503,14 +509,37 @@ object fmOptions: TfmOptions
           TabOrder = 4
           OnClick = PanMaleColorClick
         end
+        object PanDefFont: TPanel
+          Left = 16
+          Top = 162
+          Width = 153
+          Height = 25
+          Cursor = crHandPoint
+          BorderStyle = bsSingle
+          TabOrder = 5
+          OnClick = PanDefFontClick
+        end
       end
+      object chkTreeDecorative: TCheckBox
+        Left = 24
+        Top = 208
+        Width = 249
+        Height = 17
+        Alignment = taLeftJustify
+        Caption = #1044#1077#1082#1086#1088#1072#1090#1080#1074#1085#1086#1077' '#1086#1092#1086#1088#1084#1083#1077#1085#1080#1077
+        TabOrder = 2
+      end
+    end
+    object SheetPedigree: TTabSheet
+      Caption = #1056#1086#1089#1087#1080#1089#1080
+      ImageIndex = 3
       object GroupBox5: TGroupBox
         Left = 8
-        Top = 207
+        Top = 8
         Width = 289
         Height = 130
         Caption = #1043#1077#1085#1077#1088#1072#1094#1080#1103' '#1088#1086#1089#1087#1080#1089#1077#1081
-        TabOrder = 2
+        TabOrder = 0
         object chkAttributes: TCheckBox
           Left = 16
           Top = 16
@@ -546,7 +575,7 @@ object fmOptions: TfmOptions
           Caption = #1060#1086#1088#1084#1072#1090
           Items.Strings = (
             #1048#1079#1073#1099#1090#1086#1095#1085#1099#1081
-            #1050#1086#1084#1087#1072#1082#1090#1085#1099#1081' ('#1090#1088#1072#1076#1080#1094#1080#1086#1085#1085#1099#1081' '#1059#1048#1056#1054')')
+            #1058#1088#1072#1076#1080#1094#1080#1086#1085#1085#1099#1081)
           TabOrder = 3
         end
       end
@@ -574,5 +603,14 @@ object fmOptions: TfmOptions
   object ColorDialog1: TColorDialog
     Left = 384
     Top = 272
+  end
+  object FontDialog1: TFontDialog
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    Left = 384
+    Top = 224
   end
 end

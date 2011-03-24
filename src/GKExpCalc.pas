@@ -1,12 +1,12 @@
-unit GKExpCalc;
+unit GKExpCalc; {prepare:fin}
 
 {$I GEDKeeper.inc}
 
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, ExpCalc;
+  Windows, SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls
+  {$IFNDEF DELPHI_NET}, ExpCalc {$ENDIF};
 
 type
   TfmCalcWidget = class(TForm)
@@ -22,7 +22,9 @@ type
       State: TDragState; var Accept: Boolean);
     procedure edExpressionKeyPress(Sender: TObject; var Key: Char);
   private
+    {$IFNDEF DELPHI_NET}
     calc: TCalculator;
+    {$ENDIF}
     last_key: Char;
     procedure OnModalBegin(Sender: TObject);
   public
@@ -33,7 +35,7 @@ var
 
 implementation
 
-uses Clipbrd, GKMain, bsComUtils;
+uses Clipbrd, GKMain;
 
 {$R *.dfm}
 
@@ -46,8 +48,10 @@ begin
 
   if (Key = VK_RETURN) then begin
     try
+      {$IFNDEF DELPHI_NET}
       calc.Expression := edExpression.Text;
       res := FloatToStr(calc.Result);
+      {$ENDIF}
 
       if (chkPutToClipboard.Checked)
       then Clipboard.AsText := res;
@@ -72,14 +76,16 @@ end;
 
 procedure TfmCalcWidget.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  fmGEDKeeper.actExpCalc.Checked := False;
+  fmGEDKeeper.miCalc.Checked := False;
   fmCalcWidget := nil;
   Action := caFree;
 end;
 
 procedure TfmCalcWidget.FormCreate(Sender: TObject);
 begin
+  {$IFNDEF DELPHI_NET}
   calc := TCalculator.Create;
+  {$ENDIF}
 
   (*
       OnModalBegin only occurs for the first modal form. That is,
@@ -93,7 +99,9 @@ procedure TfmCalcWidget.FormDestroy(Sender: TObject);
 begin
   Application.OnModalBegin := nil;
 
+  {$IFNDEF DELPHI_NET}
   calc.Destroy;
+  {$ENDIF}
 end;
 
 procedure TfmCalcWidget.OnModalBegin(Sender: TObject);

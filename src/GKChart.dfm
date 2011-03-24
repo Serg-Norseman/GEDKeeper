@@ -1,8 +1,8 @@
 object fmChart: TfmChart
   Left = 362
   Top = 111
-  Width = 733
-  Height = 557
+  Width = 870
+  Height = 535
   Caption = #1044#1080#1072#1075#1088#1072#1084#1084#1072
   Color = clBtnFace
   DefaultMonitor = dmMainForm
@@ -25,14 +25,14 @@ object fmChart: TfmChart
   object ToolBar1: TToolBar
     Left = 0
     Top = 0
-    Width = 725
+    Width = 862
     Height = 30
     AutoSize = True
     ButtonHeight = 26
     ButtonWidth = 27
     EdgeBorders = [ebTop, ebBottom]
     Flat = True
-    Images = fmGEDKeeper.ImageList1
+    Images = fmGEDKeeper.ImageList_Buttons
     ParentShowHint = False
     ShowHint = True
     TabOrder = 0
@@ -95,6 +95,7 @@ object fmChart: TfmChart
     object tbGotoPerson: TToolButton
       Left = 279
       Top = 0
+      Hint = #1062#1077#1085#1090#1088#1080#1088#1086#1074#1072#1090#1100' '#1076#1088#1077#1074#1086' '#1085#1072' '#1074#1099#1073#1088#1072#1085#1085#1091#1102' '#1087#1077#1088#1089#1086#1085#1091
       Caption = 'tbGotoPerson'
       ImageIndex = 24
       OnClick = tbGotoPersonClick
@@ -135,6 +136,7 @@ object fmChart: TfmChart
       Top = 0
       Width = 153
       Height = 26
+      Hint = #1052#1072#1089#1096#1090#1072#1073
       LineSize = 5
       Min = 5
       PageSize = 1
@@ -150,44 +152,21 @@ object fmChart: TfmChart
       ImageIndex = 25
       Style = tbsSeparator
     end
-    object chkUseFilter: TCheckBox
+    object tbFilter: TToolButton
       Left = 537
       Top = 0
-      Width = 160
-      Height = 26
-      Caption = #1048#1089#1087#1086#1083#1100#1079#1086#1074#1072#1090#1100' '#1092#1080#1083#1100#1090#1088
-      TabOrder = 2
-      OnClick = chkUseFilterClick
-    end
-  end
-  object ScrollBox1: TScrollBox
-    Left = 0
-    Top = 30
-    Width = 725
-    Height = 500
-    Align = alClient
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 1
-    OnResize = ScrollBox1Resize
-    object ImageTree: TImage
-      Left = 0
-      Top = 0
-      Width = 400
-      Height = 300
-      OnDblClick = ImageTreeDblClick
-      OnMouseDown = ImageTreeMouseDown
-      OnMouseMove = ImageTreeMouseMove
-      OnMouseUp = ImageTreeMouseUp
+      Hint = #1060#1080#1083#1100#1090#1088#1072#1094#1080#1103' '#1076#1088#1077#1074#1072
+      Caption = 'tbFilter'
+      ImageIndex = 16
+      OnClick = tbFilterClick
     end
   end
   object SaveDialog1: TSaveDialog
-    DefaultExt = 'jpg'
-    Filter = #1060#1072#1081#1083#1099' JPEG (*.jpg)|*.jpg'
+    DefaultExt = 'tga'
+    Filter = 
+      #1060#1072#1081#1083#1099' BMP (*.bmp)|*.bmp|'#1060#1072#1081#1083#1099' JPEG (*.jpg)|*.jpg|'#1060#1072#1081#1083#1099' EMF (*.em' +
+      'f)|*.emf'
+    FilterIndex = 2
     Left = 128
     Top = 120
   end
@@ -224,6 +203,14 @@ object fmChart: TfmChart
     object miDelete: TMenuItem
       Caption = #1059#1076#1072#1083#1080#1090#1100
       OnClick = miDeleteClick
+    end
+    object N3: TMenuItem
+      Caption = '-'
+    end
+    object miRebuildKinships: TMenuItem
+      Caption = #1055#1077#1088#1077#1089#1090#1088#1086#1080#1090#1100' '#1086#1090#1085#1086#1096#1077#1085#1080#1103
+      ShortCut = 118
+      OnClick = miRebuildKinshipsClick
     end
   end
 end

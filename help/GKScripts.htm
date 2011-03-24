@@ -104,47 +104,41 @@ repeat   return   then   true   until   while
 должен содержать ровно три цифры). Строки в Lua могут содержать любые 8-битные
 значения, включая ноль, который записывается как '\0'. <o:p></o:p></p>
 
-<p class="contpara">To put a double (single)
-quote, a newline, a backslash, or an embedded zero inside a literal string
-enclosed by double (single) quotes you must use an escape sequence. Any other
-character may be directly inserted into the literal. (Some control characters
-may cause problems for the file system, but Lua has no problem with them.) <o:p></o:p></p>
+<p class="contpara">Чтобы поместить одни двойные кавычки, символы новой строки, 
+обратный слэш, или нулевой символ в строку, ограниченную двойными кавычками вы 
+должны использовать escape-последовательности. Любой другой символ
+может быть напрямую включен в строку.</p>
 
-<p class="contpara">Literal strings can also be
-defined using a long format enclosed by <em>long brackets</em>. We define an <em>opening
-long bracket of level n</em> as an opening square bracket followed by <em>n</em>
-equal signs followed by another opening square bracket. So, an opening long
-bracket of level&nbsp;0 is written as [[, an opening long bracket of
-level&nbsp;1 is written as [=[, and so on. A <em>closing long bracket</em> is defined similarly; for
-instance, a closing long bracket of level&nbsp;4 is written as ]====]. A long string starts with an
-opening long bracket of any level and ends at the first closing long bracket of
-the same level. Literals in this bracketed form may run for several lines, do
-not interpret any escape sequences, and ignore long brackets of any other
-level. They may contain anything except a closing bracket of the proper level. <o:p></o:p></p>
+<p class="contpara">Символьные строки могут также определяться используя длинный формат, ограниченный <em>длинными скобками</em>. 
+Мы определяем <em>открывающую длинную скобку уровня n</em> как открывающую квадратную скобку следующую за <em>n</em>
+знаками равенства следующими за другой открывающей квадратной скобкой. Так, открывающая длинная скобка уровня &nbsp;0 
+записывается как [[, открывающая длинная скобка уровня &nbsp;1 записывается как [=[, и так далее. 
+<em>Закрывающая длинная скобка</em> отпределяется также; для примера, закрывающая скобка уровня &nbsp;4 
+записывается как ]====]. Длинные строки начинаются с
+открывающей длинной скобки любого уровня и заканчиваются первой закрывающей длинной скобкой 
+соответствующего уровня. Литералы в такой форме могут находится в разных строках, escape-последовательности
+не интерпретируются, и игнорируются длинные скобки любого другого уровня. 
+Они могут содержать что угодно, исключая закрывающую скобку соответствующего уровня. <o:p></o:p></p>
 
-<p class="contpara">For convenience, when the
-opening long bracket is immediately followed by a newline, the newline is not
-included in the string. As an example, in a system using ASCII (in which 'a' is coded as&nbsp;97, newline is
-coded as&nbsp;10, and '1' is coded as&nbsp;49), the five literals below denote the same string: <o:p></o:p></p>
+<p class="contpara">Для удобства, когда открывающая длинная скобка следует непосредственно в новой линии, 
+эта линия не включается в строку. Для примера, в системе использующей ASCII (в которой 'a' кодируется как &nbsp;97, 
+новая строка как &nbsp;10, и '1' как &nbsp;49), пять литералов ниже обозначают одну строку: <o:p></o:p></p>
 
 <div class="contdiv">
 <pre>     a <span class="S10">= '</span> alo<span class="S10">\</span>n123&quot;<span class="S10">'</span></pre><pre>     a <span class="S10">=</span> &quot;alo<span class="S10">\</span>n123<span class="S10">\</span>&quot;&quot;</pre><pre>     a <span class="S10">=</span> '<span class="S10">\</span>97lo<span class="S10">\</span>10<span class="S10">\</span>04923&quot;'</pre><pre>     a <span class="S10">= [[</span>alo</pre><pre>     123&quot;<span class="S10">]]</span></pre><pre>     a <span class="S10">= [==[</span></pre><pre>     alo</span></pre><pre>     123&quot;<span class="S10">]==]</span></pre>
-
 </div>
 
-<p class="contpara">A <em>numerical constant</em>
-may be written with an optional decimal part and an optional decimal exponent.
-Lua also accepts integer hexadecimal constants, by prefixing them with 0x. Examples of valid numerical
-constants are <o:p></o:p></p>
+<p class="contpara"><em>Числовая константа</em> может быть записана с опциональной деятичной частью 
+и опциональной десятичной экспонентой. Lua также принимает целый шестадцатиричные константы, с префиксом 0x. 
+Примеры правильных числовых констант <o:p></o:p></p>
 
 <pre><o:p>&nbsp;</o:p></pre><pre>     3   3.0   3.1416   314.16e-2   0.31416E1   0xff   0x56<o:p></o:p></pre>
 
 <p class="contpara"><em>Комментарий</em> начинается с двойного дефиса (--) везде за пределами строки. 
-If the text immediately after -- is not an opening long bracket, the
-comment is a <em>short comment</em>, which runs until the end of the line.
-Otherwise, it is a <em>long comment</em>, which runs until the corresponding
-closing long bracket. Long comments are frequently used to disable code
-temporarily. <o:p></o:p></p>
+Если текст непосредственно после -- не содержит длинную открывющую скобку [, 
+комментарий является <em>коротким</em>, который продолжается до конца строки.
+Иначе, это <em>длинный комментарий</em>, который продолжается пока не встретится
+закрывающая длинная скобка ]. Длинный комментарий часто встречается для временной деактивации кода. <o:p></o:p></p>
 
 
 <h2>2.2 – Значения и типы</h2>

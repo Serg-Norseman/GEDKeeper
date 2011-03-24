@@ -102,6 +102,7 @@ Section "Uninstall"
   ; Remove files and uninstaller
   Delete $INSTDIR\GEDKeeper.exe
   Delete $INSTDIR\history.txt
+  Delete $INSTDIR\lua51.dll
   Delete $INSTDIR\uninstall.exe
 
   Delete "$INSTDIR\samples\*.*"
@@ -109,6 +110,9 @@ Section "Uninstall"
 
   Delete "$INSTDIR\help\*.*"
   RMDir "$INSTDIR\help"
+
+  Delete "$INSTDIR\scripts\*.lua"
+  RMDir "$INSTDIR\scripts"
 
   ; Remove shortcuts, if any
   Delete "$SMPROGRAMS\GEDKeeper\*.*"

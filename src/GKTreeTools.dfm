@@ -4,7 +4,7 @@ object fmTreeTools: TfmTreeTools
   BorderIcons = [biSystemMenu, biMinimize, biMaximize, biHelp]
   BorderStyle = bsDialog
   Caption = #1048#1085#1089#1090#1088#1091#1084#1077#1085#1090#1099
-  ClientHeight = 482
+  ClientHeight = 481
   ClientWidth = 737
   Color = clBtnFace
   DefaultMonitor = dmMainForm
@@ -27,7 +27,7 @@ object fmTreeTools: TfmTreeTools
     Top = 8
     Width = 721
     Height = 425
-    ActivePage = SheetPatSearch
+    ActivePage = SheetChoice
     TabOrder = 0
     object SheetChoice: TTabSheet
       Caption = 'SheetChoice'
@@ -63,26 +63,15 @@ object fmTreeTools: TfmTreeTools
         Height = 13
         Caption = #1060#1072#1081#1083
       end
-      object ListCompare: TListView
+      object ListCompare: TMemo
         Left = 8
         Top = 40
         Width = 697
         Height = 369
         Align = alCustom
-        Columns = <
-          item
-            Caption = #1047#1072#1087#1080#1089#1100
-            Width = 100
-          end
-          item
-            Caption = #1044#1080#1072#1075#1085#1086#1089#1090#1080#1082#1072
-            Width = 500
-          end>
         ReadOnly = True
-        RowSelect = True
-        SortType = stText
+        ScrollBars = ssBoth
         TabOrder = 0
-        ViewStyle = vsReport
       end
       object edCompareFile: TEdit
         Left = 40
@@ -425,14 +414,14 @@ object fmTreeTools: TfmTreeTools
             TabOrder = 1
             object Label5: TLabel
               Left = 8
-              Top = 96
+              Top = 104
               Width = 98
               Height = 13
               Caption = #1058#1086#1095#1085#1086#1089#1090#1100' '#1080#1084#1077#1085#1080', %'
             end
             object Label6: TLabel
               Left = 120
-              Top = 96
+              Top = 104
               Width = 88
               Height = 13
               Caption = #1055#1086#1075#1088#1077#1096#1085#1086#1089#1090#1100' '#1083#1077#1090
@@ -457,7 +446,7 @@ object fmTreeTools: TfmTreeTools
             end
             object edNameAccuracy: TEdit
               Left = 8
-              Top = 112
+              Top = 120
               Width = 89
               Height = 21
               TabOrder = 2
@@ -465,7 +454,7 @@ object fmTreeTools: TfmTreeTools
             end
             object udNameAccuracy: TUpDown
               Left = 97
-              Top = 112
+              Top = 120
               Width = 15
               Height = 21
               Associate = edNameAccuracy
@@ -475,7 +464,7 @@ object fmTreeTools: TfmTreeTools
             end
             object edYearInaccuracy: TEdit
               Left = 120
-              Top = 112
+              Top = 120
               Width = 89
               Height = 21
               TabOrder = 4
@@ -483,7 +472,7 @@ object fmTreeTools: TfmTreeTools
             end
             object udYearInaccuracy: TUpDown
               Left = 209
-              Top = 112
+              Top = 120
               Width = 15
               Height = 21
               Associate = edYearInaccuracy
@@ -493,11 +482,19 @@ object fmTreeTools: TfmTreeTools
             end
             object chkBirthYear: TCheckBox
               Left = 8
-              Top = 56
-              Width = 201
+              Top = 80
+              Width = 265
               Height = 17
               Caption = #1059#1095#1080#1090#1099#1074#1072#1090#1100' '#1075#1086#1076' '#1088#1086#1078#1076#1077#1085#1080#1103
               TabOrder = 6
+            end
+            object chkOnlyNP: TCheckBox
+              Left = 8
+              Top = 56
+              Width = 265
+              Height = 17
+              Caption = #1058#1086#1083#1100#1082#1086' '#1087#1086' '#1080#1084#1077#1085#1080'/'#1086#1090#1095#1077#1089#1090#1074#1091' ('#1090#1086#1083#1100#1082#1086' '#1078#1077#1085#1097#1080#1085#1099')'
+              TabOrder = 7
             end
           end
         end
@@ -654,14 +651,14 @@ object fmTreeTools: TfmTreeTools
         BorderWidth = 8
         TabOrder = 0
       end
-      object btnPlacesUpdate: TBitBtn
-        Left = 632
+      object btnIntoList: TBitBtn
+        Left = 8
         Top = 384
-        Width = 75
+        Width = 121
         Height = 25
-        Caption = #1054#1073#1085#1086#1074#1080#1090#1100
+        Caption = #1042#1085#1077#1089#1090#1080' '#1074' '#1089#1087#1088#1072#1074#1086#1095#1085#1080#1082
         TabOrder = 1
-        OnClick = btnPlacesUpdateClick
+        OnClick = btnIntoListClick
         NumGlyphs = 2
       end
     end

@@ -12,7 +12,7 @@ object fmCalendar: TfmCalendar
   Font.Name = 'Tahoma'
   Font.Style = []
   FormStyle = fsStayOnTop
-  OldCreateOrder = False
+  OldCreateOrder = True
   OnClose = FormClose
   OnCreate = FormCreate
   PixelsPerInch = 96
@@ -33,7 +33,16 @@ object fmCalendar: TfmCalendar
       end>
     ReadOnly = True
     RowSelect = True
-    TabOrder = 0
+    TabOrder = 1
     ViewStyle = vsReport
+  end
+  object qtc: TMonthCalendar
+    Left = 8
+    Top = 8
+    Width = 257
+    Height = 169
+    Date = 40589.483075625000000000
+    TabOrder = 0
+    WeekNumbers = True
   end
 end

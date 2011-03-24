@@ -1,4 +1,4 @@
-unit GKFamilyEdit;
+unit GKFamilyEdit; {prepare:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons, ComCtrls,
-  ExtCtrls, GedCom551, GKBase, GKEngine, GKLists, bsCtrls;
+  ExtCtrls, GedCom551, GKBase, GKEngine, GKCtrls, GKLists;
 
 type
   TfmFamilyEdit = class(TForm)
@@ -68,7 +68,7 @@ type
 
 implementation
 
-uses bsComUtils, GKRecordSelect, GKPersonEdit, GKMain;
+uses GKUtils, GKRecordSelect, GKPersonEdit, GKMain;
 
 {$R *.dfm}
 
@@ -131,12 +131,12 @@ begin
   btnWifeDelete.Enabled := (spouse <> nil);
   btnWifeSel.Enabled := (spouse <> nil);
 
-  Base.RecListFamilyEventsRefresh(FFamily, TBSListView(FEventsList.List), nil);
+  Base.RecListFamilyEventsRefresh(FFamily, TGKListView(FEventsList.List), nil);
   Base.RecListNotesRefresh(FFamily, FNotesList.List, nil);
-  Base.RecListMediaRefresh(FFamily, TBSListView(FMediaList.List), nil);
-  Base.RecListSourcesRefresh(FFamily, TBSListView(FSourcesList.List), nil);
+  Base.RecListMediaRefresh(FFamily, TGKListView(FMediaList.List), nil);
+  Base.RecListSourcesRefresh(FFamily, TGKListView(FSourcesList.List), nil);
 
-  with TListView(FChildsList.List) do begin
+  with TGKListView(FChildsList.List) do begin
     Items.BeginUpdate();
     Items.Clear();
     for k := 0 to FFamily.ChildrenCount - 1 do begin
@@ -181,7 +181,7 @@ begin
 
       cbRestriction.ItemIndex := 0;
     end else begin
-      stat := FFamily.TagStringValue('_STAT');
+      stat := FFamily.GetTagStringValue('_STAT');
       stat_idx := GetMarriageStatusIndex(stat);
       EditMarriageStatus.Enabled := True;
       EditMarriageStatus.ItemIndex := stat_idx;
@@ -211,7 +211,7 @@ var
 begin
   husband := Base.SelectPerson(nil, tmNone, svMale);
   if (husband <> nil) and (FFamily.Husband.StringValue = '') then begin
-    AddSpouseToFamily(Base.Tree, FFamily, husband);
+    Base.Engine.AddFamilySpouse(FFamily, husband);
     ControlsRefresh();
   end;
 end;
@@ -221,7 +221,7 @@ begin
   if (MessageDlg('Удалить ссылку на мужа?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
   then Exit;
 
-  RemoveFamilySpouse(Base.Tree, FFamily, GetHusband());
+  Base.Engine.RemoveFamilySpouse(FFamily, GetHusband());
   ControlsRefresh();
 end;
 
@@ -243,7 +243,7 @@ var
 begin
   wife := Base.SelectPerson(nil, tmNone, svFemale);
   if (wife <> nil) and (FFamily.Wife.StringValue = '') then begin
-    AddSpouseToFamily(Base.Tree, FFamily, wife);
+    Base.Engine.AddFamilySpouse(FFamily, wife);
     ControlsRefresh();
   end;
 end;
@@ -253,7 +253,7 @@ begin
   if (MessageDlg('Удалить ссылку на жену?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
   then Exit;
 
-  RemoveFamilySpouse(Base.Tree, FFamily, GetWife());
+  Base.Engine.RemoveFamilySpouse(FFamily, GetWife());
   ControlsRefresh();
 end;
 
@@ -315,7 +315,7 @@ begin
     case Action of
       raAdd: begin
         child := Base.SelectPerson(GetHusband(), tmAncestor, svNone);
-        if (child <> nil) and FamilyChildAdd(Base.Tree, FFamily, child)
+        if (child <> nil) and Base.Engine.AddFamilyChild(FFamily, child)
         then ControlsRefresh();
       end;
 
@@ -332,7 +332,7 @@ begin
         if (child = nil) or (MessageDlg('Удалить ссылку на ребенка?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
         then Exit;
 
-        if FamilyChildRemove(Base.Tree, FFamily, child)
+        if Base.Engine.RemoveFamilyChild(FFamily, child)
         then ControlsRefresh();
       end;
 
@@ -371,7 +371,6 @@ end;
 
 procedure TfmFamilyEdit.cbRestrictionChange(Sender: TObject);
 begin
-  //FFamily.Restriction := TGEDCOMRestriction(cbRestriction.ItemIndex);
   ControlsRefresh();
 end;
 

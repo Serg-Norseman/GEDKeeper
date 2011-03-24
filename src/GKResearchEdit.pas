@@ -1,4 +1,4 @@
-unit GKResearchEdit;
+unit GKResearchEdit; {prepare:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons, ComCtrls,
-  ExtCtrls, GedCom551, GKBase, GKEngine, Mask, GKLists;
+  ExtCtrls, GedCom551, GKBase, GKEngine, Mask, GKCtrls, GKLists;
 
 type
   TfmResearchEdit = class(TForm)
@@ -54,7 +54,7 @@ type
 implementation
 
 uses
-  bsComUtils, GKMain, GKRecordSelect, GKPersonEdit;
+  GKUtils, GKMain, GKRecordSelect, GKPersonEdit;
 
 {$R *.dfm}
 
@@ -107,7 +107,7 @@ var
 begin
   Base.RecListNotesRefresh(FResearch, FNotesList.List, nil);
 
-  with TListView(FTasksList.List) do begin
+  with TGKListView(FTasksList.List) do begin
     Items.BeginUpdate;
     Items.Clear();
     for k := 0 to FResearch.TasksCount - 1 do begin
@@ -123,7 +123,7 @@ begin
     Items.EndUpdate;
   end;
 
-  with TListView(FCommunicationsList.List) do begin
+  with TGKListView(FCommunicationsList.List) do begin
     Items.BeginUpdate;
     Items.Clear();
     for k := 0 to FResearch.CommunicationsCount - 1 do begin
@@ -139,7 +139,7 @@ begin
     Items.EndUpdate;
   end;
 
-  with TListView(FGroupsList.List) do begin
+  with TGKListView(FGroupsList.List) do begin
     Items.BeginUpdate;
     Items.Clear();
     for k := 0 to FResearch.GroupsCount - 1 do begin
@@ -205,7 +205,6 @@ end;
 procedure TfmResearchEdit.ListModify(Sender: TObject; ItemData: TObject; Action: TRecAction);
 var
   task: TGEDCOMTaskRecord;
-  ptr: TGEDCOMPointer;
   comm: TGEDCOMCommunicationRecord;
   group: TGEDCOMGroupRecord;
 begin
@@ -218,19 +217,11 @@ begin
     case Action of
       raAdd: begin
         task := TGEDCOMTaskRecord(Base.SelectRecord(rtTask, []));
-        if (task <> nil) then begin
-          ptr := TGEDCOMPointer.Create(Base.Tree, FResearch);
-          ptr.SetNamedValue('_TASK', task);
-          FResearch.AddTask(ptr);
-
-          ListsRefresh();
-        end;
+        if Base.Engine.AddResearchTask(FResearch, task) then ListsRefresh();
       end;
       raEdit: begin
         task := TGEDCOMTaskRecord(ItemData);
-
-        if (task <> nil) and Base.ModifyTask(task)
-        then ListsRefresh();
+        if (task <> nil) and Base.ModifyTask(task) then ListsRefresh();
       end;
       raDelete: begin
         task := TGEDCOMTaskRecord(ItemData);
@@ -238,7 +229,7 @@ begin
         if (task = nil) or (MessageDlg('Удалить ссылку на задачу?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
         then Exit;
 
-        FResearch.DeleteTask(FResearch.IndexOfTask(task));
+        Base.Engine.RemoveResearchTask(FResearch, task);
 
         ListsRefresh();
       end;
@@ -257,13 +248,8 @@ begin
     case Action of
       raAdd: begin
         comm := TGEDCOMCommunicationRecord(Base.SelectRecord(rtCommunication, []));
-        if (comm <> nil) then begin
-          ptr := TGEDCOMPointer.Create(Base.Tree, FResearch);
-          ptr.SetNamedValue('_COMM', comm);
-          FResearch.AddCommunication(ptr);
-
-          ListsRefresh();
-        end;
+        if Base.Engine.AddResearchComm(FResearch, comm)
+        then ListsRefresh();
       end;
       raEdit: begin
         comm := TGEDCOMCommunicationRecord(ItemData);
@@ -277,7 +263,7 @@ begin
         if (comm = nil) or (MessageDlg('Удалить ссылку на корреспонденцию?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
         then Exit;
 
-        FResearch.DeleteCommunication(FResearch.IndexOfCommunication(comm));
+        Base.Engine.RemoveResearchComm(FResearch, comm);
 
         ListsRefresh();
       end;
@@ -296,13 +282,8 @@ begin
     case Action of
       raAdd: begin
         group := TGEDCOMGroupRecord(Base.SelectRecord(rtGroup, []));
-        if (group <> nil) then begin
-          ptr := TGEDCOMPointer.Create(Base.Tree, FResearch);
-          ptr.SetNamedValue('_GROUP', group);
-          FResearch.AddGroup(ptr);
-
-          ListsRefresh();
-        end;
+        if Base.Engine.AddResearchGroup(FResearch, group)
+        then ListsRefresh();
       end;
       raEdit: ;
       raDelete: begin
@@ -311,7 +292,7 @@ begin
         if (MessageDlg('Удалить ссылку на группу?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
         then Exit;
 
-        FResearch.DeleteGroup(FResearch.IndexOfGroup(group));
+        Base.Engine.RemoveResearchGroup(FResearch, group);
 
         ListsRefresh();
       end;

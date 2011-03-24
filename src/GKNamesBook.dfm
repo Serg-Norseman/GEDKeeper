@@ -12,7 +12,7 @@ object fmNamesBook: TfmNamesBook
   Font.Name = 'Tahoma'
   Font.Style = []
   FormStyle = fsStayOnTop
-  OldCreateOrder = False
+  OldCreateOrder = True
   Position = poDefault
   OnClose = FormClose
   OnCreate = FormCreate

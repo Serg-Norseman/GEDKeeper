@@ -3,7 +3,7 @@ object fmFilter: TfmFilter
   Top = 146
   BorderStyle = bsDialog
   Caption = #1060#1080#1083#1100#1090#1088
-  ClientHeight = 448
+  ClientHeight = 489
   ClientWidth = 297
   Color = clBtnFace
   DefaultMonitor = dmMainForm
@@ -12,7 +12,7 @@ object fmFilter: TfmFilter
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = False
+  OldCreateOrder = True
   Position = poScreenCenter
   OnShow = FormShow
   PixelsPerInch = 96
@@ -40,21 +40,28 @@ object fmFilter: TfmFilter
   end
   object Label4: TLabel
     Left = 8
-    Top = 256
+    Top = 304
     Width = 38
     Height = 13
     Caption = #1043#1088#1091#1087#1087#1099
   end
   object Label5: TLabel
     Left = 8
-    Top = 304
+    Top = 352
     Width = 54
     Height = 13
     Caption = #1048#1089#1090#1086#1095#1085#1080#1082#1080
   end
+  object Label6: TLabel
+    Left = 8
+    Top = 256
+    Width = 72
+    Height = 13
+    Caption = #1052#1072#1089#1082#1072' '#1092#1072#1082#1090#1086#1074
+  end
   object btnAccept: TBitBtn
     Left = 120
-    Top = 408
+    Top = 456
     Width = 81
     Height = 25
     Caption = #1055#1088#1080#1085#1103#1090#1100
@@ -64,7 +71,7 @@ object fmFilter: TfmFilter
   end
   object btnCancel: TBitBtn
     Left = 208
-    Top = 408
+    Top = 456
     Width = 81
     Height = 25
     Caption = #1054#1090#1084#1077#1085#1080#1090#1100
@@ -119,7 +126,7 @@ object fmFilter: TfmFilter
   end
   object GroupBox1: TGroupBox
     Left = 8
-    Top = 352
+    Top = 400
     Width = 281
     Height = 41
     Caption = #1056#1072#1089#1096#1080#1088#1077#1085#1085#1099#1077
@@ -145,7 +152,7 @@ object fmFilter: TfmFilter
   end
   object cbGroup: TComboBox
     Left = 8
-    Top = 272
+    Top = 320
     Width = 281
     Height = 21
     Style = csDropDownList
@@ -154,11 +161,21 @@ object fmFilter: TfmFilter
   end
   object cbSource: TComboBox
     Left = 8
-    Top = 320
+    Top = 368
     Width = 281
     Height = 21
     Style = csDropDownList
     ItemHeight = 13
     TabOrder = 6
+  end
+  object cbEventVal: TComboBox
+    Left = 8
+    Top = 272
+    Width = 281
+    Height = 21
+    ItemHeight = 13
+    Sorted = True
+    TabOrder = 10
+    Text = '*'
   end
 end

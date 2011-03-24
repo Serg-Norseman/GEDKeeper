@@ -1,4 +1,4 @@
-unit GKEventEdit;
+unit GKEventEdit; {prepare:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,8 +6,8 @@ interface
 
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls,
-  Buttons, ComCtrls, ExtCtrls, Mask, GedCom551, GKEngine, GKBase,
-  GKLists, bsCtrls;
+  Buttons, ComCtrls, ExtCtrls, Mask, GedCom551, GKEngine, GKBase, GKCtrls,
+  GKLists;
 
 type
   TfmEventEdit = class(TForm)
@@ -37,6 +37,8 @@ type
     btnPlaceAdd: TSpeedButton;
     btnPlaceDelete: TSpeedButton;
     btnPlaceSel: TSpeedButton;
+    cbDate1Calendar: TComboBox;
+    cbDate2Calendar: TComboBox;
     procedure FormCreate(Sender: TObject);
     procedure EditEventDateTypeChange(Sender: TObject);
     procedure btnAcceptClick(Sender: TObject);
@@ -70,7 +72,7 @@ type
 
 implementation
 
-uses GKMain, GKSourceEdit, GKAddressEdit, GKSourceCitEdit, bsComUtils;
+uses GKMain, GKUtils;
 
 {$R *.dfm}
 
@@ -79,9 +81,15 @@ uses GKMain, GKSourceEdit, GKAddressEdit, GKSourceCitEdit, bsComUtils;
 procedure TfmEventEdit.FormCreate(Sender: TObject);
 var
   i: Integer;
+  gc: TGEDCOMCalendar;
 begin
   for i := 0 to DateKindsSize - 1 do
     EditEventDateType.Items.Add(DateKinds[i].Name);
+
+  for gc := Low(TGEDCOMCalendar) to High(TGEDCOMCalendar) do begin
+    cbDate1Calendar.Items.Add(DateCalendars[gc]);
+    cbDate2Calendar.Items.Add(DateCalendars[gc]);
+  end;
 
   FLocation := nil;
 
@@ -115,6 +123,16 @@ begin
   if EditEventDate2.Enabled
   then EditEventDate2.Color := clWindow
   else EditEventDate2.Color := clBtnFace;
+
+  cbDate1Calendar.Enabled := (1 in dates);
+  if cbDate1Calendar.Enabled
+  then cbDate1Calendar.Color := clWindow
+  else cbDate1Calendar.Color := clBtnFace;
+
+  cbDate2Calendar.Enabled := (2 in dates);
+  if cbDate2Calendar.Enabled
+  then cbDate2Calendar.Color := clWindow
+  else cbDate2Calendar.Color := clBtnFace;
 end;
 
 procedure TfmEventEdit.EditEventPlaceKeyDown(Sender: TObject; var Key: Word;
@@ -208,7 +226,7 @@ begin
     if (cit.Page <> '') then st := st + ', ' + cit.Page;
 
     if (sourceRec <> nil) then begin
-      item := TListView(FSourcesList.List).Items.Add();
+      item := TGKListView(FSourcesList.List).Items.Add();
       item.Caption := Trim(sourceRec.Originator.Text);
       item.SubItems.Add(st);
       item.Data := cit;
@@ -252,6 +270,7 @@ begin
       daEstimated: EditEventDateType.ItemIndex := 9;
     end;
     EditEventDate1.Text := GEDCOMDateToStr(TGEDCOMDate(date));
+    cbDate1Calendar.ItemIndex := Ord(TGEDCOMDate(date).DateCalendar);
   end
   else
   if (date is TGEDCOMDateRange) then begin
@@ -268,6 +287,8 @@ begin
 
     EditEventDate1.Text := GEDCOMDateToStr(dt_range.After);
     EditEventDate2.Text := GEDCOMDateToStr(dt_range.Before);
+    cbDate1Calendar.ItemIndex := Ord(dt_range.After.DateCalendar);
+    cbDate2Calendar.ItemIndex := Ord(dt_range.Before.DateCalendar);
   end
   else
   if (date is TGEDCOMDatePeriod) then begin
@@ -284,11 +305,14 @@ begin
 
     EditEventDate1.Text := GEDCOMDateToStr(dt_period.DateFrom);
     EditEventDate2.Text := GEDCOMDateToStr(dt_period.DateTo);
+    cbDate1Calendar.ItemIndex := Ord(dt_period.DateFrom.DateCalendar);
+    cbDate2Calendar.ItemIndex := Ord(dt_period.DateTo.DateCalendar);
   end
   else
   if (date is TGEDCOMDate) then begin
     EditEventDateType.ItemIndex := 0;
     EditEventDate1.Text := GEDCOMDateToStr(TGEDCOMDate(date));
+    cbDate1Calendar.ItemIndex := Ord(TGEDCOMDate(date).DateCalendar);
   end;
 
   EditEventDateTypeChange(nil);
@@ -307,6 +331,7 @@ var
   gcd1, gcd2, dt: string;
   id: Integer;
   attr: TGEDCOMIndividualAttribute;
+  cal1, cal2: TGEDCOMCalendar;
 begin
   FEvent.Detail.Place.StringValue := EditEventPlace.Text;
   FEvent.Detail.Place.Location.Value := FLocation;
@@ -315,8 +340,14 @@ begin
   FEvent.Detail.Cause := EditEventCause.Text;
   FEvent.Detail.Agency := EditEventOrg.Text;
 
+  cal1 := TGEDCOMCalendar(cbDate1Calendar.ItemIndex);
+  cal2 := TGEDCOMCalendar(cbDate2Calendar.ItemIndex);
+
   gcd1 := StrToGEDCOMDate(EditEventDate1.Text);
   gcd2 := StrToGEDCOMDate(EditEventDate2.Text);
+
+  if (cal1 <> dcGregorian) then gcd1 := GEDCOMDateEscapeArray[cal1] + ' ' + gcd1;
+  if (cal2 <> dcGregorian) then gcd2 := GEDCOMDateEscapeArray[cal2] + ' ' + gcd2;
 
   case EditEventDateType.ItemIndex of
     0: dt := gcd1;

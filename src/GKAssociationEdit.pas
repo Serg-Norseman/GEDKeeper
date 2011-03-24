@@ -1,4 +1,4 @@
-unit GKAssociationEdit;
+unit GKAssociationEdit; {prepare:fin}
 
 {$I GEDKeeper.inc}
 

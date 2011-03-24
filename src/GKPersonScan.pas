@@ -1,52 +1,161 @@
-unit GKPersonScan;
+unit GKPersonScan; {prepare:fin}
 
 {$I GEDKeeper.inc}
 
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Mask, Buttons, ExtCtrls, GKBase;
+  Windows, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls,
+  Mask, Buttons, ExtCtrls, GKBase, ComCtrls, Grids;
 
 type
   TfmPersonScan = class(TForm)
-    Label1: TLabel;
-    EditName: TEdit;
-    Label2: TLabel;
-    MemoNote: TMemo;
-    btnCreate: TBitBtn;
+    btnParse: TBitBtn;
     btnCancel: TBitBtn;
-    Panel1: TPanel;
-    Panel2: TPanel;
-    Label3: TLabel;
-    EditBirthDate: TMaskEdit;
-    EditBirthPlace: TEdit;
-    Label5: TLabel;
-    CheckBirth: TCheckBox;
-    CheckDeath: TCheckBox;
-    Label6: TLabel;
-    EditDeathDate: TMaskEdit;
-    Label7: TLabel;
-    EditDeathPlace: TEdit;
+    PageControl1: TPageControl;
+    tsSimpleInput: TTabSheet;
+    tsSourceInput: TTabSheet;
+    Label1: TLabel;
+    Label2: TLabel;
     btnMale: TSpeedButton;
     btnFemale: TSpeedButton;
-    procedure btnCreateClick(Sender: TObject);
+    EditName: TEdit;
+    MemoNote: TMemo;
+    Panel1: TPanel;
+    Label3: TLabel;
+    Label5: TLabel;
+    EditBirthDate: TMaskEdit;
+    EditBirthPlace: TEdit;
+    CheckBirth: TCheckBox;
+    Panel2: TPanel;
+    Label6: TLabel;
+    Label7: TLabel;
+    CheckDeath: TCheckBox;
+    EditDeathDate: TMaskEdit;
+    EditDeathPlace: TEdit;
+    Label4: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    cbSource: TComboBox;
+    edPage: TEdit;
+    edSourceYear: TMaskEdit;
+    edPlace: TEdit;
+    sgData: TStringGrid;
+    cbPersonLink: TComboBox;
+    rgSourceKind: TRadioGroup;
+    gbMetrics: TGroupBox;
+    Label11: TLabel;
+    Label12: TLabel;
+    edEventDate: TMaskEdit;
+    cbEventType: TComboBox;
+    procedure btnParseClick(Sender: TObject);
     procedure EditBirthDateChange(Sender: TObject);
     procedure EditDeathDateChange(Sender: TObject);
     procedure EditNameKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure sgDataSelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
+    procedure cbPersonLinkKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure sgDataKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormDestroy(Sender: TObject);
+    procedure cbPersonLinkChange(Sender: TObject);
+    procedure rgSourceKindClick(Sender: TObject);
   private
+    FSourcesList: TStringList;
+
+    function CheckCell(ACol, ARow: Integer): Boolean;
     function GetBase: TfmBase;
+    procedure InitGrid();
+    procedure InitSimpleControls();
+    procedure InitSourceControls();
+    procedure ParseSimple();
+    procedure ParseSource();
   public
     property Base: TfmBase read GetBase;
   end;
 
 implementation
 
-uses bsComUtils, GKMain, GedCom551, GKEngine;
+uses GKUtils, GKMain, GedCom551, GKEngine, GKSexCheck;
 
 {$R *.dfm}
 
-procedure TfmPersonScan.btnCreateClick(Sender: TObject);
+type
+  TPersonLink = (
+    plNone, plPerson, plFather, plMother, plGodparent, plSpouse, plChild);
+
+const
+  PersonLinks: array [TPersonLink] of string = (
+    '', 'Лицо', 'Отец', 'Мать', 'Крестный', 'Супруг(-а)', 'Дочь/Сын'
+  );
+
+function GetLinkByName(const aName: string): TPersonLink;
+var
+  pl: TPersonLink;
+begin
+  for pl := plPerson to High(TPersonLink) do
+    if (PersonLinks[pl] = aName) then begin
+      Result := pl;
+      Exit;
+    end;
+
+  Result := plNone;
+end;
+
+{ TfmPersonScan }
+
+procedure TfmPersonScan.InitSimpleControls();
+begin
+  EditName.Text := '';
+  EditBirthDate.Text := '';
+  EditBirthPlace.Text := '';
+  CheckBirth.Checked := False;
+  EditDeathDate.Text := '';
+  EditDeathPlace.Text := '';
+  CheckDeath.Checked := False;
+  MemoNote.Text := '';
+  btnMale.Down := True;
+end;
+
+procedure TfmPersonScan.InitSourceControls();
+var
+  col, row: Integer;
+begin
+  Base.Engine.GetSourcesList(FSourcesList);
+  cbSource.Items.Assign(FSourcesList);
+  cbSource.Text := '';
+  cbSource.ItemIndex := -1;
+
+  edPage.Text := '';
+  edSourceYear.Text := '';
+  edPlace.Text := '';
+
+  edEventDate.Text := '';
+  cbEventType.ItemIndex := -1;
+
+  for row := 1 to sgData.RowCount - 1 do
+    for col := 0 to sgData.ColCount - 1 do
+      sgData.Cells[col, row] := '';
+end;
+
+procedure TfmPersonScan.InitGrid();
+begin
+  sgData.Cells[0, 0] := 'Связь';
+  sgData.Cells[1, 0] := 'Имя';
+  sgData.Cells[2, 0] := 'Отчество';
+  sgData.Cells[3, 0] := 'Фамилия';
+  sgData.Cells[4, 0] := 'Возраст';
+  sgData.Cells[5, 0] := 'Примечание';
+
+  sgData.DefaultRowHeight := sgData.Canvas.TextHeight('A') + 7;
+  sgData.ColWidths[4] := 60;
+  sgData.ColWidths[5] := 150;
+end;
+
+procedure TfmPersonScan.ParseSimple();
 var
   iRec: TGEDCOMIndividualRecord;
   tokCount: Integer;
@@ -85,15 +194,168 @@ begin
   if (MemoNote.Text <> '')
   then CreateNoteEx(Base.Tree, MemoNote.Lines, iRec);
 
-  EditName.Text := '';
-  EditBirthDate.Text := '';
-  EditBirthPlace.Text := '';
-  CheckBirth.Checked := False;
-  EditDeathDate.Text := '';
-  EditDeathPlace.Text := '';
-  CheckDeath.Checked := False;
-  MemoNote.Text := '';
-  btnMale.Down := True; 
+  InitSimpleControls();
+end;
+
+procedure TfmPersonScan.ParseSource();
+
+  function GetParentsFamily(iRec: TGEDCOMIndividualRecord): TGEDCOMFamilyRecord;
+  begin
+    if (iRec.ChildToFamilyLinksCount > 0)
+    then Result := iRec.ChildToFamilyLinks[0].Family
+    else begin
+      Result := CreateFamilyEx(Base.Tree);
+      Base.Engine.AddFamilyChild(Result, iRec);
+    end;
+  end;
+
+  function GetMarriageFamily(iRec: TGEDCOMIndividualRecord): TGEDCOMFamilyRecord;
+  begin
+    if (iRec.SpouseToFamilyLinksCount > 0)
+    then Result := iRec.SpouseToFamilyLinks[0].Family
+    else begin
+      Result := CreateFamilyEx(Base.Tree);
+      Base.Engine.AddFamilySpouse(Result, iRec);
+    end;
+  end;
+
+  function CheckMain(aMain: TGEDCOMIndividualRecord): Boolean;
+  begin
+    Result := (aMain <> nil);
+    if not(Result) then raise Exception.Create('Базовая персона ("Лицо") не определена первой');
+  end;
+
+var
+  row, birth_year, src_year: Integer;
+  lnk, nm, pt, fm, age, comment, place, src_name, src_page, ev_name: string;
+  link: TPersonLink;
+  iRec, iMain: TGEDCOMIndividualRecord;
+  sx: TGEDCOMSex;
+  note: TGEDCOMNoteRecord;
+  family: TGEDCOMFamilyRecord;
+  evt: TGEDCOMCustomEvent;
+  src_rec: TGEDCOMSourceRecord;
+begin
+  src_name := cbSource.Text;
+  src_page := edPage.Text;
+  if not(IsDigits(edSourceYear.Text)) then begin
+    MessageDlg('Год источника задан неверно', mtError, [mbOk], 0);
+    Exit;
+  end else src_year := StrToInt(edSourceYear.Text);
+  place := edPlace.Text;
+  iMain := nil;
+
+  try
+    for row := 1 to sgData.RowCount - 1 do begin
+      lnk := sgData.Cells[0, row];
+      nm := sgData.Cells[1, row];
+      pt := sgData.Cells[2, row];
+      fm := sgData.Cells[3, row];
+      age := sgData.Cells[4, row];
+      comment := sgData.Cells[5, row];
+
+      if (lnk <> '') then begin
+        link := GetLinkByName(lnk);
+
+        sx := DefineSex(nm, pt, fmGEDKeeper.NamesTable);
+        iRec := CreatePersonEx(Base.Tree, nm, pt, fm, sx, False);
+        Base.ChangeRecord(iRec);
+
+        if (age <> '') and (IsDigits(age)) then begin
+          birth_year := src_year - StrToInt(age);
+          CreateEventEx(Base.Tree, iRec, 'BIRT', 'ABT '+IntToStr(birth_year), '');
+        end;
+
+        if (place <> '') then begin
+          evt := CreateEventEx(Base.Tree, iRec, 'RESI', '', '');
+          evt.Detail.Place.StringValue := place;
+        end;
+
+        if (comment <> '') then begin
+          note := CreateNoteEx(Base.Tree, nil, iRec);
+          AddNoteText(note, comment);
+        end;
+
+        if (src_name <> '') then begin
+          src_rec := Base.Engine.FindSource(src_name);
+          if (src_rec = nil) then begin
+            src_rec := CreateSource(Base.Tree);
+            src_rec.FiledByEntry := src_name;
+          end;
+          BindRecordSource(Base.Tree, iRec, src_rec, src_page, 0);
+        end;
+
+        case link of
+          plNone: ;
+
+          plPerson: begin
+            iMain := iRec;
+
+            if (rgSourceKind.ItemIndex = 1) then begin // метрика
+              { Рождение, Смерть, Брак }
+              case cbEventType.ItemIndex of
+                -1: ev_name := '';
+                 0: ev_name := 'BIRT';
+                 1: ev_name := 'DEAT';
+                 2: ev_name := 'MARR';
+              end;
+            end;
+
+            if (ev_name = 'BIRT') or (ev_name = 'DEAT') then begin
+              evt := CreateEventEx(Base.Tree, iRec, ev_name, StrToGEDCOMDate(edEventDate.Text), '');
+              evt.Detail.Place.StringValue := place;
+            end
+            else
+            if (ev_name = 'MARR') then begin
+              family := GetMarriageFamily(iRec);
+              evt := CreateEventEx(Base.Tree, family, ev_name, StrToGEDCOMDate(edEventDate.Text), '');
+              evt.Detail.Place.StringValue := place;
+            end;
+          end;
+
+          plFather, plMother: begin
+            CheckMain(iMain);
+            family := GetParentsFamily(iMain);
+            Base.Engine.AddFamilySpouse(family, iRec);
+          end;
+
+          plGodparent: begin
+            CheckMain(iMain);
+            Base.Engine.AddAssociation(iMain, 'крестный', iRec);
+          end;
+
+          plSpouse: begin
+            CheckMain(iMain);
+            family := GetMarriageFamily(iMain);
+            Base.Engine.AddFamilySpouse(family, iRec);
+          end;
+
+          plChild: begin
+            CheckMain(iMain);
+            family := GetMarriageFamily(iMain);
+            Base.Engine.AddFamilyChild(family, iRec);
+          end;
+        end;
+      end;
+    end;
+  finally
+
+  end;
+
+  InitSourceControls();
+end;
+
+procedure TfmPersonScan.rgSourceKindClick(Sender: TObject);
+begin
+  gbMetrics.Enabled := (rgSourceKind.ItemIndex = 1);
+end;
+
+procedure TfmPersonScan.btnParseClick(Sender: TObject);
+begin
+  case PageControl1.TabIndex of
+    0: ParseSimple();
+    1: ParseSource(); 
+  end;
 
   Base.ListsRefresh();
 end;
@@ -118,6 +380,101 @@ begin
   if (Key = '/') then begin
     Key := #0;
     MessageBeep(MB_ICONEXCLAMATION);
+  end;
+end;
+
+procedure TfmPersonScan.FormCreate(Sender: TObject);
+var
+  pl: TPersonLink;
+begin
+  FSourcesList := TStringList.Create();
+
+  // simpleparse init
+  InitSimpleControls();
+
+  // sourceparse init
+  InitGrid();
+  InitSourceControls();
+
+  for pl := plPerson to High(TPersonLink) do cbPersonLink.Items.Add(PersonLinks[pl]);
+end;
+
+procedure TfmPersonScan.FormDestroy(Sender: TObject);
+begin
+  FSourcesList.Free;
+end;
+
+procedure TfmPersonScan.sgDataSelectCell(Sender: TObject; ACol,
+  ARow: Integer; var CanSelect: Boolean);
+var
+  R: TRect;
+  idx: Integer;
+begin
+  if (ACol = 0) then begin
+    idx := cbPersonLink.Items.IndexOf(sgData.Cells[0, ARow]);
+    if (idx < 0) then idx := 0;
+    cbPersonLink.ItemIndex := idx;
+
+    R := sgData.CellRect(ACol, ARow);
+    R.Left  := R.Left + sgData.Left;
+    R.Right := R.Right + sgData.Left;
+    R.Top := R.Top + sgData.Top;
+    R.Bottom := R.Bottom + sgData.Top;
+    cbPersonLink.Top := R.Top + 2;
+    cbPersonLink.Left := R.Left + 2;
+    cbPersonLink.Width := (R.Right - R.Left);
+    cbPersonLink.Height := (R.Bottom - R.Top);
+    cbPersonLink.Visible := True;
+    cbPersonLink.SetFocus;
+  end else begin
+    cbPersonLink.Visible := False;
+  end;
+
+  CanSelect := True;
+end;
+
+procedure TfmPersonScan.cbPersonLinkChange(Sender: TObject);
+begin
+  sgData.Cells[0, sgData.Row] := cbPersonLink.Text;
+end;
+
+function TfmPersonScan.CheckCell(ACol, ARow: Integer): Boolean;
+var
+  val: string;
+begin
+  Result := True;
+  val := sgData.Cells[ACol, ARow];
+
+  if (ACol = 0) then begin // связь
+    Result := (GetLinkByName(val) <> plNone);
+  end;
+  if (ACol = 4) then begin // возраст
+    Result := (val = '') or ((val <> '') and IsDigits(val));
+  end;
+
+  if not(Result)
+  then MessageDlg('Значение неверно', mtError, [mbOk], 0);
+end;
+
+procedure TfmPersonScan.cbPersonLinkKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  sgData.Cells[0, sgData.Row] := cbPersonLink.Text;
+
+  if (Key = VK_RETURN) and CheckCell(sgData.Col, sgData.Row) then begin
+    sgData.SetFocus;
+    sgData.Col := sgData.Col + 1;
+  end;
+end;
+
+procedure TfmPersonScan.sgDataKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = VK_RETURN) and CheckCell(sgData.Col, sgData.Row) then begin
+    if (sgData.Col = 5) then begin
+      sgData.Col := 0;
+      sgData.Row := sgData.Row + 1;
+    end else sgData.Col := sgData.Col + 1;
   end;
 end;
 

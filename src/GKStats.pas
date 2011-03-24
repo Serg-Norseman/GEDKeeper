@@ -1,4 +1,4 @@
-unit GKStats;
+unit GKStats; {prepare:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,20 +6,8 @@ interface
 
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms, ComCtrls,
-  GedCom551, StdCtrls, ToolWin, ExtCtrls, bsCtrls, GKBase, xygraph, GKLists;
-
-type
-  TStatMode = (
-    smAncestors, smDescendants, smDescGenerations,
-    smFamilies, smNames, smPatronymics,
-    smAge, smLifeExpectancy,
-    smBirthYears, smBirthTenYears, smDeathYears, smDeathTenYears,
-    smChildsCount, smChildsDistribution,
-    smBirthPlaces, smDeathPlaces, smResidences, smOccupation,
-    smReligious, smNational, smEducation, smCaste,
-    smFirstbornAge, smMarriages, smMarriageAge, smSpousesDiff,
-
-    smHobby, smAward, smMili, smMiliInd, smMiliDis, smMiliRank);
+  GedCom551, StdCtrls, ToolWin, ExtCtrls, GKCtrls, GKBase, GKLists, GKEngine
+  {$IFNDEF DELPHI_NET}, xygraph {$ENDIF};
 
 const
   Titles: array [TStatMode] of record
@@ -81,15 +69,15 @@ type
     ListStats: TGKListView;
     ChartStats: TVGPaintBox;
 
+    {$IFNDEF DELPHI_NET}
     ChartData: TDataType;
     ChartXMax, ChartYMax: Single;
     ChartXMin, ChartYMin: Single;
     ChartTitle, ChartXTitle, ChartYTitle: string;
     ChartEmpty: Boolean;
+    {$ENDIF}
 
-    procedure AddItem(aTitle, aVal: string);
     procedure CalcStats(aTree: TGEDCOMTree; aMode: TStatMode);
-    procedure InitTable(Col1, Col2: string);
     function  GetBase(): TfmBase;
 
     procedure PrepareChart(aMode: TStatMode);
@@ -107,34 +95,11 @@ type
 
 implementation
 
-uses GKEngine, GKMain, Dialogs, Math;
+uses Dialogs, GKMain, GKUtils;
 
 {$R *.dfm}
 
-function SafeDiv(aDividend, aDivisor: Double): Double;
-begin
-  if (aDivisor = 0.0)
-  then Result := 0.0
-  else Result := aDividend / aDivisor;
-end;
-
 { TfmStats }
-
-procedure TfmStats.InitTable(Col1, Col2: string);
-begin
-  ListStats.Columns.Items[0].Caption := Col1;
-  ListStats.Columns.Items[1].Caption := Col2;
-  ListStats.Clear;
-end;
-
-procedure TfmStats.AddItem(aTitle, aVal: string);
-var
-  item: TListItem;
-begin
-  item := ListStats.Items.Add();
-  item.Caption := aTitle;
-  item.SubItems.Add(aVal);
-end;
 
 procedure TfmStats.FormCreate(Sender: TObject);
 var
@@ -172,137 +137,27 @@ end;
 
 procedure TfmStats.CalcStats(aTree: TGEDCOMTree; aMode: TStatMode);
 var
-  i, k, idx, year: Integer;
-  m, d: Word;
-  iRec: TGEDCOMIndividualRecord;
-  event: TGEDCOMCustomEvent;
-  fRec: TGEDCOMFamilyRecord;
-  V, fam, nam, pat, iName: string;
-  vals, buffer: TStringList;
+  i: Integer;
+  vals: TStringList;
+  item: TListItem;
 begin
-  InitTable(Titles[aMode].Cap, Titles[aMode].Val);
+  ListStats.Columns.Items[0].Caption := Titles[aMode].Cap;
+  ListStats.Columns.Items[1].Caption := Titles[aMode].Val;
 
-  buffer := TStringList.Create;
+  ListStats.Items.BeginUpdate;
+  ListStats.Clear;
   vals := TStringList.Create;
   try
-    for i := 0 to aTree.RecordsCount - 1 do begin
-      if (aTree.Records[i] is TGEDCOMIndividualRecord) and (aMode <> smSpousesDiff) then begin
-        iRec := aTree.Records[i] as TGEDCOMIndividualRecord;
-        iName := GetNameStr(iRec);
-
-        case aMode of
-          smAncestors: AddItem(iName, IntToStr(GetAncestorsCount(buffer, iRec) - 1));
-
-          smDescendants: AddItem(iName, IntToStr(GetDescendantsCount(buffer, iRec) - 1));
-
-          smDescGenerations: AddItem(iName, IntToStr(GetDescGenerations(iRec)));
-
-          smChildsCount: AddItem(iName, IntToStr(GetChildsCount(iRec)));
-
-          smFirstbornAge: AddItem(iName, GetFirstbornAge(iRec));
-
-          smMarriages: AddItem(iName, IntToStr(GetMarriagesCount(iRec)));
-
-          smMarriageAge: AddItem(iName, GetMarriageAge(iRec));
-
-          else begin
-            case aMode of
-              smNames, smFamilies, smPatronymics: begin
-                GetNameParts(iRec, fam, nam, pat);
-
-                case aMode of
-                  smFamilies: V := PrepareRusFamily(fam, (iRec.Sex = svFemale));
-                  smNames: V := nam;
-                  smPatronymics: V := pat;
-                end;
-              end;
-
-              smAge: V := GetAge(iRec);
-
-              smLifeExpectancy: V := GetLifeExpectancy(iRec);
-
-              smResidences: V := GetResidencePlace(iRec, False);
-
-              smOccupation: V := GetAttributeValue(iRec, 'OCCU');
-
-              smReligious: V := GetAttributeValue(iRec, 'RELI');
-
-              smNational: V := GetAttributeValue(iRec, 'NATI');
-
-              smEducation: V := GetAttributeValue(iRec, 'EDUC');
-
-              smCaste: V := GetAttributeValue(iRec, 'CAST');
-
-              smChildsDistribution: V := IntToStr(GetChildsCount(iRec));
-
-              smBirthYears..smDeathTenYears, smBirthPlaces, smDeathPlaces: begin
-                V := '?';
-                for k := 0 to iRec.IndividualEventsCount - 1 do begin
-                  event := iRec.IndividualEvents[k];
-                  GetIndependentDate(event.Detail.Date.Value, year, m, d);
-
-                  if (Abs(year) > 3000)
-                  then ShowMessage(event.Detail.Date.StringValue + '/' + iName);
-
-                  if (event.Name = 'BIRT') then begin
-                    if (aMode = smBirthYears)
-                    then V := IntToStr(year)
-                    else
-                    if (aMode = smBirthTenYears)
-                    then V := IntToStr((year div 10) * 10)
-                    else
-                    if (aMode = smBirthPlaces)
-                    then V := event.Detail.Place.StringValue;
-                  end
-                  else
-                  if (event.Name = 'DEAT') then begin
-                    if (aMode = smDeathYears)
-                    then V := IntToStr(year)
-                    else
-                    if (aMode = smDeathTenYears)
-                    then V := IntToStr((year div 10) * 10)
-                    else
-                    if (aMode = smDeathPlaces)
-                    then V := event.Detail.Place.StringValue;
-                  end;
-                end;
-              end;
-
-              smHobby: V := GetAttributeValue(iRec, '_HOBBY');
-
-              smAward: V := GetAttributeValue(iRec, '_AWARD');
-
-              smMili: V := GetAttributeValue(iRec, '_MILI');
-
-              smMiliInd: V := GetAttributeValue(iRec, '_MILI_IND');
-
-              smMiliDis: V := GetAttributeValue(iRec, '_MILI_DIS');
-
-              smMiliRank: V := GetAttributeValue(iRec, '_MILI_RANK');
-            end;
-
-            if (V = '-1') or (V = '') or (V = '0') then V := '?';
-
-            idx := vals.IndexOf(V);
-            if (idx < 0)
-            then vals.AddObject(V, TObject(1))
-            else vals.Objects[idx] := TObject(Integer(vals.Objects[idx]) + 1);
-          end;
-        end;
-      end
-      else
-      if (aTree.Records[i] is TGEDCOMFamilyRecord) and (aMode = smSpousesDiff) then begin
-        fRec := aTree.Records[i] as TGEDCOMFamilyRecord;
-        AddItem(GetFamilyStr(fRec), GetSpousesDiff(fRec));
-      end;
-    end;
+    Base.Engine.GetSpecStats(aMode, vals);
 
     for i := 0 to vals.Count - 1 do begin
-      AddItem(vals[i], IntToStr(Integer(vals.Objects[i])));
+      item := ListStats.Items.Add();
+      item.Caption := vals[i];
+      item.SubItems.Add(IntToStr(Integer(vals.Objects[i])));
     end;
   finally
     vals.Free;
-    buffer.Free;
+    ListStats.Items.EndUpdate;
   end;
 
   PrepareChart(aMode);
@@ -330,7 +185,7 @@ var
   item: TListItem;
   stats: TCommonStats;
 begin
-  GetCommonStats(Base.Tree, stats);
+  Base.Engine.GetCommonStats(stats);
 
   ListCommon.Clear;
   with stats do begin
@@ -409,23 +264,30 @@ end;
 procedure TfmStats.ChartMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
+  {$IFNDEF DELPHI_NET}
   xymousedown(Button, Shift, X, Y);
+  {$ENDIF}
 end;
 
 procedure TfmStats.ChartMouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 begin
+  {$IFNDEF DELPHI_NET}
   xymousemove(Shift, X, Y);
+  {$ENDIF}
 end;
 
 procedure TfmStats.ChartMouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
+  {$IFNDEF DELPHI_NET}
   xymouseup(Button, Shift, X, Y);
+  {$ENDIF}
 end;
 
 procedure TfmStats.ChartPaint(Sender: TObject);
 begin
+  {$IFNDEF DELPHI_NET}
   xycleargraph(ChartStats, clWhite, clBlack, 8/8);
   if not(ChartEmpty) then begin
     xystartgraph(0, 100, 0, 100, 40, 40, 70, 40, clipon);
@@ -436,9 +298,11 @@ begin
     xytitle(clMaroon, ChartTitle);
     xyinitruler(clMaroon, 8, 60 - xycharheight * 2, 1, 0);
   end;
+  {$ENDIF}
 end;
 
 procedure TfmStats.PrepareChart(aMode: TStatMode);
+{$IFNDEF DELPHI_NET}
 type
   TChartStyle = (csBar, csSimplePoint, csCircle);
 const
@@ -516,8 +380,9 @@ const
     ChartYMin := ChartYMin - delta;
     ChartYMax := ChartYMax + delta;
   end;
-
+{$ENDIF}
 begin
+  {$IFNDEF DELPHI_NET}
   ChartEmpty := True;
   ChartTitle := Titles[aMode].Title;
 
@@ -587,6 +452,7 @@ begin
   end;
 
   ChartStats.Repaint;
+  {$ENDIF}
 end;
 
 end.

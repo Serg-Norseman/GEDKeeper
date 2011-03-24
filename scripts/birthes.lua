@@ -21,7 +21,7 @@ for i = 0, gt_get_records_count() - 1 do
     if (b_count > 1) then
       -- вывод на экран
       gk_print("Персона "..gt_get_record_xref(R)..", имя: "..gt_get_person_name(R)..", событий рождения "..b_count);
-      --gk_print("    > факт "..at..", место "..gt_get_event_place(evt));
+
       for k = 1, #birthes do
         gk_print("    > факт "..birthes[k]);
       end

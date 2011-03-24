@@ -76,7 +76,6 @@ object fmStats: TfmStats
       Height = 25
       AutoSize = True
       ButtonHeight = 21
-      Caption = 'ToolBar1'
       TabOrder = 0
       object ToolButton1: TToolButton
         Left = 0

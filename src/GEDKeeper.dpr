@@ -3,9 +3,6 @@ program GEDKeeper;
 {$I GEDKeeper.inc}
 
 uses
-  Windows,
-  Messages,
-  Forms,
   GedCom551 in 'GedCom551.pas',
   GKUtils in 'GKUtils.pas',
   GKEngine in 'GKEngine.pas',
@@ -16,6 +13,8 @@ uses
   GKLangs in 'GKLangs.pas',
   GKCommands in 'GKCommands.pas',
   GKLists in 'GKLists.pas',
+  GKEngineAPI in 'GKEngineAPI.pas',
+  GKMapBrowser in 'GKMapBrowser.pas',
   GKMain in 'GKMain.pas' {fmGEDKeeper},
   GKBase in 'GKBase.pas' {fmBase},
   GKPersonNew in 'GKPersonNew.pas' {fmPersonNew},
@@ -52,63 +51,14 @@ uses
   GKNamesBook in 'GKNamesBook.pas' {fmNamesBook},
   GKCalendar in 'GKCalendar.pas' {fmCalendar},
   GKTimeLine in 'GKTimeLine.pas' {fmTimeLine},
-  GKStereoView in 'GKStereoView.pas' {fmStereoView},
   GKOrganizer in 'GKOrganizer.pas' {fmOrganizer},
   GKDBImport in 'GKDBImport.pas' {fmDBImport},
   GKSexCheck in 'GKSexCheck.pas' {fmSexCheck},
-  GKMapBrowser in 'GKMapBrowser.pas',
-  GKSourceParse in 'GKSourceParse.pas' {fmSourceParse},
   GKScriptDaemon in 'GKScriptDaemon.pas' {fmScriptDaemon},
-  GKNameEdit in 'GKNameEdit.pas' {fmNameEdit};
+  GKNameEdit in 'GKNameEdit.pas' {fmNameEdit},
+  GKTreeFilter in 'GKTreeFilter.pas' {fmTreeFilter};
 
 {$R *.res}
-
-function GetCurrentFile(): PChar; far;
-begin
-  Result := PChar(fmGEDKeeper.GetCurrentFileName());
-end;
-
-exports
-  GetCurrentFile;
-
-procedure RunInstance();
-var
-  i, WParam, LParam: Integer;
-  hMainForm: hwnd;
-  copyDataStruct: TCopyDataStruct;
-  ParamString: string;
-begin
-  // ищем главное окно приложения, вместо Caption - nil,
-  // поскольку к заголовку главного окна может добавиться заголовок MDIChild
-  // (нужно позаботиться об уникальности имени класса главной формы)
-
-  if IsDevComp()
-  then hMainForm := 0
-  else hMainForm := FindWindow('TfmGEDKeeper', nil);
-  
-  if (hMainForm = 0) then begin
-    Application.Initialize;
-    Application.Title := 'GEDKeeper';
-    Application.CreateForm(TfmGEDKeeper, fmGEDKeeper);
-  for i := 1 to ParamCount do fmGEDKeeper.CreateBase(ParamStr(i));
-    Application.Run;
-  end else begin
-    ParamString := '';
-    for i := 1 to ParamCount do begin
-      // запихиваем все параметры в одну строку с разделителями ?13
-      ParamString := ParamString + ParamStr(i) + #13;
-    end;
-    // создаем запись типа TCopyDataStruct
-    CopyDataStruct.lpData := PChar(ParamString);
-    CopyDataStruct.cbData := Length(ParamString);
-    CopyDataStruct.dwData := 0;
-    WParam := Application.Handle;
-    LParam := Integer(@CopyDataStruct);
-    // отсылаем сообщение WM_COPYDATA главному окну открытого приложения
-    SendMessage(hMainForm, WM_CopyData, WParam, LParam);
-    Application.Terminate;
-  end;
-end;
 
 begin
   RunInstance();

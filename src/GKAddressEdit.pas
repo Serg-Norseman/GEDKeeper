@@ -1,4 +1,4 @@
-unit GKAddressEdit;
+unit GKAddressEdit; {prepare:fin}
 
 {$I GEDKeeper.inc}
 
@@ -116,6 +116,12 @@ begin
 end;
 
 procedure TfmAddressEdit.ListModify(Sender: TObject; ItemData: TObject; Action: TRecAction);
+
+  function GetInput(aTitle: string; var aValue: string): Boolean;
+  begin
+    Result := InputQuery(aTitle, 'Значение', aValue) and (Trim(aValue) <> '');
+  end;
+
 var
   val: string;
   Index: Integer;
@@ -126,13 +132,13 @@ begin
     case Action of
       raAdd: begin
         val := '';
-        if InputQuery(Titles[atPhones], 'Значение', val)
+        if GetInput(Titles[atPhones], val)
         then FAddress.PhoneNumbers[FAddress.PhoneNumbersCount] := val;
       end;
       raEdit: begin
         if (Index < 0) then Exit;
         val := FAddress.PhoneNumbers[Index];
-        if InputQuery(Titles[atPhones], 'Значение', val)
+        if GetInput(Titles[atPhones], val)
         then FAddress.PhoneNumbers[Index] := val;
       end;
       raDelete: begin
@@ -146,13 +152,13 @@ begin
     case Action of
       raAdd: begin
         val := '';
-        if InputQuery(Titles[atMails], 'Значение', val)
+        if GetInput(Titles[atMails], val)
         then FAddress.EmailAddresses[FAddress.EmailAddressesCount] := val;
       end;
       raEdit: begin
-        val := FAddress.EmailAddresses[Index];
         if (Index < 0) then Exit;
-        if InputQuery(Titles[atMails], 'Значение', val)
+        val := FAddress.EmailAddresses[Index];
+        if GetInput(Titles[atMails], val)
         then FAddress.EmailAddresses[Index] := val;
       end;
       raDelete: begin
@@ -166,13 +172,13 @@ begin
     case Action of
       raAdd: begin
         val := '';
-        if InputQuery(Titles[atWebs], 'Значение', val)
+        if GetInput(Titles[atWebs], val)
         then FAddress.WebPages[FAddress.WebPagesCount] := val;
       end;
       raEdit: begin
-        val := FAddress.WebPages[Index];
         if (Index < 0) then Exit;
-        if InputQuery(Titles[atWebs], 'Значение', val)
+        val := FAddress.WebPages[Index];
+        if GetInput(Titles[atWebs], val)
         then FAddress.WebPages[Index] := val;
       end;
       raDelete: begin

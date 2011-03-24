@@ -1,4 +1,4 @@
-unit GKLocationEdit;
+unit GKLocationEdit; {prepare:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,7 +6,7 @@ interface
 
 uses
   Windows, SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons,
-  ComCtrls, GedCom551, GKBase, GKEngine, GKLists, bsCtrls, Contnrs, ExtCtrls,
+  ComCtrls, Contnrs, ExtCtrls, GedCom551, GKBase, GKEngine, GKCtrls, GKLists,
   GKMapBrowser;
 
 type
@@ -59,10 +59,6 @@ type
 
 implementation
 
-uses
-  {$IFNDEF DELPHI_NET}GKMaps, {$ENDIF}
-  GKMain, GKRecordSelect;
-
 {$R *.dfm}
 
 procedure TfmLocationEdit.FormCreate(Sender: TObject);
@@ -85,13 +81,13 @@ end;
 
 procedure TfmLocationEdit.FormDestroy(Sender: TObject);
 begin
-  FSearchPoints.Destroy;
+  FSearchPoints.Free;
 end;
 
 procedure TfmLocationEdit.ControlsRefresh();
 begin
   Base.RecListNotesRefresh(FLocationRecord, FNotesList.List, nil);
-  Base.RecListMediaRefresh(FLocationRecord, TBSListView(FMediaList.List), nil);
+  Base.RecListMediaRefresh(FLocationRecord, TGKListView(FMediaList.List), nil);
 end;
 
 procedure TfmLocationEdit.SetLocationRecord(const Value: TGEDCOMLocationRecord);
@@ -203,10 +199,10 @@ var
   item: TListItem;
 begin
   item := ListGeoCoords.Selected;
-  if (item = nil) then Exit;
-
-  EditLatitude.Text := item.SubItems[0];
-  EditLongitude.Text := item.SubItems[1];
+  if (item <> nil) then begin
+    EditLatitude.Text := item.SubItems[0];
+    EditLongitude.Text := item.SubItems[1];
+  end;
 end;
 
 procedure TfmLocationEdit.btnSelectNameClick(Sender: TObject);
@@ -214,9 +210,9 @@ var
   item: TListItem;
 begin
   item := ListGeoCoords.Selected;
-  if (item = nil) then Exit;
-
-  EditName.Text := item.Caption;
+  if (item <> nil) then begin
+    EditName.Text := item.Caption;
+  end;
 end;
 
 end.

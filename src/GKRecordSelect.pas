@@ -1,4 +1,4 @@
-unit GKRecordSelect;
+unit GKRecordSelect; {prepare:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,7 +6,7 @@ interface
 
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms, ComCtrls, StdCtrls,
-  Buttons, ExtCtrls, bsCtrls, GedCom551, GKEngine, GKBase, GKLists;
+  Buttons, ExtCtrls, GedCom551, GKEngine, GKBase, GKLists;
 
 type
   TfmRecordSelect = class(TForm)
@@ -75,7 +75,7 @@ end;
 
 procedure TfmRecordSelect.FormDestroy(Sender: TObject);
 begin
-  FLocalFilter.Destroy;
+  FLocalFilter.Free;
 end;
 
 procedure TfmRecordSelect.btnCreateClick(Sender: TObject);
@@ -226,7 +226,6 @@ end;
 procedure TfmRecordSelect.SetTargetMode(const Value: TTargetMode);
 begin
   FTargetMode := Value;
-
   FLocalFilter.ChildSelector := (FTargetMode = tmAncestor);
 end;
 

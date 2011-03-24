@@ -1,4 +1,4 @@
-unit GKNamesBook;
+unit GKNamesBook; {prepare:fin}
 
 {$I GEDKeeper.inc}
 
@@ -18,8 +18,6 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     FNames: TObjectList;
-
-    procedure Load();
     procedure PrepareList();
   public
   end;
@@ -33,7 +31,8 @@ implementation
 {$R res\names.res}
 
 uses
-  bsComUtils, GKUtils, GKEngine, GKMain;
+  {$IFDEF DELPHI_NET}Borland.Vcl.WinUtils, {$ENDIF}
+  GKUtils, GKEngine, GKMain;
 
 type
   TNameRecord = class(TObject)
@@ -46,16 +45,15 @@ type
 procedure TfmNamesBook.FormCreate(Sender: TObject);
 begin
   FNames := TObjectList.Create(True);
-  Load();
   PrepareList();
 end;
 
 procedure TfmNamesBook.FormDestroy(Sender: TObject);
 begin
-  FNames.Destroy;
+  FNames.Free;
 end;
 
-procedure TfmNamesBook.Load();
+procedure TfmNamesBook.PrepareList();
 
   function ExtractFlags(var st: string): Boolean;
   begin
@@ -69,7 +67,9 @@ var
   tf: TTextFileEx;
   ns, st: string;
   rec: TNameRecord;
+  i: Integer;
 begin
+  // loading
   fs := TResourceStream.Create(HInstance, 'NAMES_DATA', RT_RCDATA);
   tf := TTextFileEx.Create(fs);
   try
@@ -94,16 +94,11 @@ begin
       end;
     end;
   finally
-    tf.Destroy;
-    fs.Destroy;
+    tf.Free;
+    fs.Free;
   end;
-end;
 
-procedure TfmNamesBook.PrepareList();
-var
-  i: Integer;
-  rec: TNameRecord;
-begin
+  // fill list
   cbNames.Items.BeginUpdate;
   try
     cbNames.Items.Clear;
@@ -132,7 +127,7 @@ end;
 
 procedure TfmNamesBook.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  fmGEDKeeper.actNamesBook.Checked := False;
+  fmGEDKeeper.miNamesBook.Checked := False;
   fmNamesBook := nil;
   Action := caFree;
 end;

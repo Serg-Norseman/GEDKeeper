@@ -1,14 +1,18 @@
 unit GKMapBrowser;
 
+{$I GEDKeeper.inc}
+
 interface
 
 uses
-  Types, Classes, Contnrs, Graphics, Controls, Forms, SHDocVw;
+  Types, Classes, Contnrs, Graphics, Controls, Forms
+  {$IFNDEF DELPHI_NET}, SHDocVw{$ENDIF};
 
 type
   // класс точки на карте
   TGMapPoint = class(TObject)
   private
+    FDate: TDateTime;
     FLatitude: Double;
     FLongitude: Double;
     FHint: string;
@@ -16,6 +20,7 @@ type
     constructor Create(); overload;
     constructor Create(aLatitude, aLongitude: Double; aHint: string = ''); overload;
 
+    property Date: TDateTime read FDate write FDate; 
     property Latitude: Double read FLatitude write FLatitude;    // широта
     property Longitude: Double read FLongitude write FLongitude; // долгота
     property Hint: string read FHint write FHint;                // подсказка
@@ -26,7 +31,7 @@ type
     MinLon, MinLat, MaxLon, MaxLat: Double;
   end;
 
-  TMapBrowser = class(TWebBrowser)
+  TMapBrowser = class({$IFNDEF DELPHI_NET}TWebBrowser{$ELSE}TCustomControl{$ENDIF})
   private
     FMapFile: string;
     FMapInitialized: Boolean;
@@ -39,8 +44,10 @@ type
     procedure gm_ExecScript(Script: string);
 
     procedure BrowserStatusTextChange(Sender: TObject; const Text: Widestring);
+    {$IFNDEF DELPHI_NET}
     procedure GenSnapshot(browser: iWebBrowser2; jpegFQFilename: string;
       srcHeight, srcWidth, tarHeight, tarWidth: Integer);
+    {$ENDIF}
     function GetMapPoint(Index: Integer): TGMapPoint;
     function GetMapPointsCount: Integer;
     function GetPointsFrame(): TCoordsRect;
@@ -78,18 +85,25 @@ function RequestGeoAddress(aLatitude, aLongitude: Double): string;
 implementation
 
 uses
-  SysUtils, bsComUtils, bsWinUtils, Dialogs, Jpeg, MSHTML, ActiveX, ComObj,
-  XMLDoc, XMLIntf, HTTPSend, GKUtils, GKEngine, GKCommon, GKMain;
+  SysUtils, Dialogs,
+  {$IFNDEF DELPHI_NET}
+  Jpeg, MSHTML, ActiveX, ComObj, XMLDoc, XMLIntf, HTTPSend,
+  {$ENDIF}
+  GKUtils, GKEngine, GKCommon, GKMain;
 
 {==============================================================================}
 
+{$IFNDEF DELPHI_NET}
 var
   xmlDocument: TXMLDocument;
+{$ENDIF}
 
 procedure GeoInit();
 begin
   DecimalSeparator := '.';
+  {$IFNDEF DELPHI_NET}
   xmlDocument := TXMLDocument.Create(Application);
+  {$ENDIF}
 end;
 
 procedure GeoDone();
@@ -99,10 +113,13 @@ end;
 
 // отправка запроса и получение ответа
 function GetInetFile(const FileURL: string; Stream: TMemoryStream): Boolean;
+{$IFNDEF DELPHI_NET}
 var
   HTTP: THTTPSend;
   proxy: TProxy;
+{$ENDIF}
 begin
+  {$IFNDEF DELPHI_NET}
   try
     HTTP := THTTPSend.Create;
     try
@@ -131,10 +148,14 @@ begin
       Result := False;
     end;
   end;
+  {$ELSE}
+  Result := False;
+  {$ENDIF}
 end;
 
 // получение списка точек по запросу
 procedure RequestGeoCoords(SearchString: string; aPoints: TObjectList);
+{$IFNDEF DELPHI_NET}
 var
   Point: TGMapPoint;
   FileOnNet, sCoordinates: string;
@@ -142,7 +163,9 @@ var
   Node, PlacemarkNode, PointNode, AddressNode: IXMLNode;
   i: Integer;
   StringList: TStringList;
+{$ENDIF}
 begin
+  {$IFNDEF DELPHI_NET}
   if (aPoints = nil) then Exit;
 
   SearchString := StringReplace(Trim(SearchString), ' ', '+', [rfReplaceAll]);
@@ -197,10 +220,12 @@ begin
     StringList.Free;
     Stream.Free;
   end;
+  {$ENDIF}
 end;
 
 // запрос обратного геокодирования
 function RequestGeoAddress(aLatitude, aLongitude: Double): string;
+{$IFNDEF DELPHI_NET}
 
   procedure FillNode(Node: IXMLNode);
   var
@@ -226,7 +251,9 @@ var
   Node: IXMLNode;
   FileOnNet: string;
   Stream: TMemoryStream;
+{$ENDIF}
 begin
+  {$IFNDEF DELPHI_NET}
   Result := '';
 
   // создаем поток
@@ -247,6 +274,7 @@ begin
   finally
     Stream.Free;
   end;
+  {$ENDIF}
 end;
 
 {==============================================================================}
@@ -310,7 +338,10 @@ begin
   inherited Create(AOwner);
 
   FMapInitialized := False;
+
+  {$IFNDEF DELPHI_NET}
   OnStatusTextChange := BrowserStatusTextChange;
+  {$ENDIF}
 
   FMapPoints := TObjectList.Create(True);
   FUpdateCount := 0;
@@ -337,14 +368,18 @@ begin
   Writeln(tf, MapContent);
   CloseFile(tf);
 
+  {$IFNDEF DELPHI_NET}
   Navigate(FMapFile);
+  {$ENDIF}
 end;
 
 procedure TMapBrowser.BrowserStatusTextChange(Sender: TObject; const Text: Widestring);
 begin
+  {$IFNDEF DELPHI_NET}
   if not FMapInitialized and (ReadyState = READYSTATE_COMPLETE) then begin
     FMapInitialized := True;
   end;
+  {$ENDIF}
 end;
 
 function TMapBrowser.GetMapPointsCount(): Integer;
@@ -373,8 +408,10 @@ begin
   if (Trim(Script) = '') then Exit;
 
   try
-    if (Document <> nil) then
-      IHTMLDocument2(Document).parentWindow.execScript(Script, 'JavaScript');
+    {$IFNDEF DELPHI_NET}
+    if (Document <> nil)
+    then IHTMLDocument2(Document).parentWindow.execScript(Script, 'JavaScript');
+    {$ENDIF}
   except
     on E: Exception do LogWrite('TMapBrowser.gm_ExecScript(): '+E.Message);
   end;
@@ -499,7 +536,9 @@ var
   i: Integer;
   pt: TGMapPoint;
 begin
+  {$IFNDEF DELPHI_NET}
   FillChar(Result, SizeOf(Result), 0);
+  {$ENDIF}
 
   if (FMapPoints.Count) > 0 then begin
     pt := TGMapPoint(FMapPoints[0]);
@@ -534,6 +573,7 @@ begin
   end;
 end;
 
+{$IFNDEF DELPHI_NET}
 procedure TMapBrowser.GenSnapshot(browser: iWebBrowser2; jpegFQFilename: string;
    srcHeight: Integer; srcWidth: Integer; tarHeight: Integer; tarWidth: Integer);
 var
@@ -576,13 +616,17 @@ begin
     // Error Code
   end;
 end;
+{$ENDIF}
 
 procedure TMapBrowser.SaveSnapshot(const aFileName: string);
+{$IFNDEF DELPHI_NET}
 var
   IDoc1: IHTMLDocument2;
   Web: IWebBrowser2;
   tmpX, tmpY: Integer;
+{$ENDIF}
 begin
+  {$IFNDEF DELPHI_NET}
   Document.QueryInterface(IHTMLDocument2, iDoc1);
   Web := ControlInterface;
   tmpX := Height;
@@ -596,6 +640,7 @@ begin
   Height := tmpX;
   Width := tmpY;
   TControl(Self).Visible := Boolean(1);
+  {$ENDIF}
 end;
 
 initialization

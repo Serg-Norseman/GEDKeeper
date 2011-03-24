@@ -1,4 +1,4 @@
-unit GKChart;
+unit GKChart; {prepare:fin}
 
 {$I GEDKeeper.inc}
 
@@ -12,8 +12,6 @@ type
   TfmChart = class(TForm)
     SaveDialog1: TSaveDialog;
     ToolBar1: TToolBar;
-    ScrollBox1: TScrollBox;
-    ImageTree: TImage;
     tbImageSave: TToolButton;
     ToolButton1: TToolButton;
     ListDepthLimit: TComboBox;
@@ -33,9 +31,11 @@ type
     miDaughterAdd: TMenuItem;
     miFamilyAdd: TMenuItem;
     ToolButton5: TToolButton;
-    chkUseFilter: TCheckBox;
     N2: TMenuItem;
     miDelete: TMenuItem;
+    N3: TMenuItem;
+    miRebuildKinships: TMenuItem;
+    tbFilter: TToolButton;
     procedure ImageTreeMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure ImageTreeMouseMove(Sender: TObject; Shift: TShiftState; X,
@@ -49,7 +49,6 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure ListDepthLimitChange(Sender: TObject);
-    procedure ScrollBox1Resize(Sender: TObject);
     procedure ImageTreeDblClick(Sender: TObject);
     procedure tbGotoPersonClick(Sender: TObject);
     procedure tbPrevClick(Sender: TObject);
@@ -62,33 +61,32 @@ type
     procedure miFamilyAddClick(Sender: TObject);
     procedure chkUseFilterClick(Sender: TObject);
     procedure miDeleteClick(Sender: TObject);
+    procedure miRebuildKinshipsClick(Sender: TObject);
+    procedure tbFilterClick(Sender: TObject);
   private
     FDown: Boolean;
     FX, FY: Integer;
-    FTreeBounds: TRect;
     FTree: TGEDCOMTree;
     FPerson: TGEDCOMIndividualRecord;
     FChartKind: TChartKind;
-    FDepthLimit: Integer;
-    FChart: TAncestryChart;
     FFileName: string;
     FBase: TfmBase;
 
     FBackman: TBackManager;
 
+    TreeBox: TAncestryChartBox;
+
+    procedure CreateControls();
     procedure InternalChildAdd(aNeedSex: TGEDCOMSex);
-    procedure SetTreeBounds(const Value: TRect);
     procedure NavRefresh();
     procedure NavAdd(aRec: TGEDCOMIndividualRecord);
     procedure UpdateChart();
   public
     property Base: TfmBase read FBase write FBase;
     property ChartKind: TChartKind read FChartKind write FChartKind;
-    property DepthLimit: Integer read FDepthLimit write FDepthLimit;
     property FileName: string read FFileName write FFileName;
     property Person: TGEDCOMIndividualRecord read FPerson write FPerson;
     property Tree: TGEDCOMTree read FTree write FTree;
-    property TreeBounds: TRect read FTreeBounds write SetTreeBounds;
 
     procedure GenChart(aShow: Boolean = True);
   end;
@@ -96,10 +94,41 @@ type
 implementation
 
 uses
-  {$IFNDEF DELPHI_NET}Jpeg,{$ENDIF}
-  GKEngine, GKMain, GKPersonEdit;
+  Types, GKEngine, GKMain, GKPersonEdit, GKTreeFilter;
 
 {$R *.dfm}
+
+procedure TfmChart.FormCreate(Sender: TObject);
+begin
+  CreateControls();
+
+  FBackman := TBackManager.Create;
+
+  NavRefresh();
+end;
+
+procedure TfmChart.FormDestroy(Sender: TObject);
+begin
+  FBackman.Free;
+end;
+
+procedure TfmChart.CreateControls();
+begin
+  TreeBox := TAncestryChartBox.Create(Self);
+  with TreeBox do begin
+    Parent := Self;
+    Left := 0;
+    Top := 32;
+    Width := 717;
+    Height := 487;
+    Align := alClient;
+
+    OnDblClick := ImageTreeDblClick;
+    OnMouseDown := ImageTreeMouseDown;
+    OnMouseMove := ImageTreeMouseMove;
+    OnMouseUp := ImageTreeMouseUp;
+  end;
+end;
 
 procedure TfmChart.GenChart(aShow: Boolean = True);
 begin
@@ -111,15 +140,16 @@ begin
   try
     NavAdd(FPerson);
 
-    FChart.Filter := Base.Filter;
-    FChart.Bitmap := ImageTree.Picture.Bitmap;
-    FChart.DepthLimit := FDepthLimit;
-    FChart.Options := fmGEDKeeper.Options.ChartOptions;
-    FChart.Tree := FTree;
-    FChart.ShieldState := Base.ShieldState;
-    FChart.Scale := TrackBar1.Position * 10;
-    FChart.UseSourcesFilter := chkUseFilter.Checked;
-    FChart.GenChart(FPerson, FChartKind);
+    if (ListDepthLimit.ItemIndex = 0)
+    then TreeBox.DepthLimit := -1
+    else TreeBox.DepthLimit := ListDepthLimit.ItemIndex;
+
+    TreeBox.Options := fmGEDKeeper.Options.ChartOptions;
+    TreeBox.Tree := FTree;
+    TreeBox.ShieldState := Base.ShieldState;
+    TreeBox.Scale := TrackBar1.Position * 10;
+
+    TreeBox.GenChart(FPerson, FChartKind);
 
     case FChartKind of
       ckAncestors: Caption := 'Древо предков';
@@ -127,8 +157,6 @@ begin
     end;
 
     Caption := Caption + ' "' + FFileName + '"';
-
-    TreeBounds := FChart.TreeBounds;
 
     if (aShow) then Show();
   except
@@ -143,21 +171,19 @@ begin
   FY := Y;
 
   if (Button = mbRight) then begin
-    ImageTree.Cursor := crSizeAll;
+    TreeBox.Cursor := crSizeAll;
     FDown := True;
   end;
 end;
 
 procedure TfmChart.ImageTreeMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
-var
-  dx, dy: Integer;
 begin
   if (FDown) then begin
-    dx := X - FX;
-    dy := Y - FY;
+    TreeBox.LeftPos := TreeBox.LeftPos - (X - FX);
+    TreeBox.TopPos := TreeBox.TopPos - (Y - FY);
 
-    ScrollBox1.HorzScrollBar.Position := ScrollBox1.HorzScrollBar.Position - dx;
-    ScrollBox1.VertScrollBar.Position := ScrollBox1.VertScrollBar.Position - dy;
+    FX := X;
+    FY := Y;
   end;
 end;
 
@@ -167,14 +193,14 @@ var
   pt: TPoint;
 begin
   if (FDown) then begin
-    ImageTree.Cursor := crDefault;
+    TreeBox.Cursor := crDefault;
     FDown := False;
   end;
 
-  FChart.SelectBy(X, Y);
+  TreeBox.SelectBy(X, Y);
 
-  if (Button = mbRight) and (FChart.Selected <> nil) then begin
-    pt := ImageTree.ClientToScreen(Point(X, Y));
+  if (Button = mbRight) and (TreeBox.Selected <> nil) and (TreeBox.Selected.Rec <> nil) then begin
+    pt := TreeBox.ClientToScreen(Point(X, Y));
     PopupMenu1.Popup(pt.X, pt.Y);
   end;
 end;
@@ -189,96 +215,21 @@ begin
   Action := caFree;
 end;
 
-procedure TfmChart.SetTreeBounds(const Value: TRect);
-begin
-  FTreeBounds := Value;
-
-  ImageTree.Height := Value.Bottom - Value.Top + 1;
-  ImageTree.Width := Value.Right - Value.Left + 1;
-
-  ScrollBox1Resize(nil);
-end;
-
 procedure TfmChart.tbImageSaveClick(Sender: TObject);
-{$IFNDEF DELPHI_NET}
-var
-  bmp: TJPEGImage;
-{$ENDIF}
 begin
-  {$IFNDEF DELPHI_NET}
-  if SaveDialog1.Execute then begin
-    bmp := TJPEGImage.Create;
-    try
-      bmp.Assign(ImageTree.Picture.Graphic);
-      bmp.CompressionQuality := 100;
-      bmp.Compress();
-
-      bmp.SaveToFile(SaveDialog1.FileName);
-    finally
-      bmp.Destroy;
-    end;
-  end;
-  {$ENDIF}
-end;
-
-procedure TfmChart.FormKeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
-begin
-  if (Key = VK_ESCAPE) then Close;
-end;
-
-procedure TfmChart.FormCreate(Sender: TObject);
-begin
-  FBackman := TBackManager.Create;
-
-  FDepthLimit := -1;
-  FChart := TAncestryChart.Create;
-
-  NavRefresh();
-end;
-
-procedure TfmChart.FormDestroy(Sender: TObject);
-begin
-  FChart.Destroy;
-  FBackman.Free;
+  if SaveDialog1.Execute
+  then TreeBox.SaveSnapshot(SaveDialog1.FileName);
 end;
 
 procedure TfmChart.ListDepthLimitChange(Sender: TObject);
 begin
-  if (ListDepthLimit.ItemIndex = 0)
-  then DepthLimit := -1
-  else DepthLimit := ListDepthLimit.ItemIndex;
-
   GenChart();
 end;
 
-procedure TfmChart.ScrollBox1Resize(Sender: TObject);
-begin
-  if (ImageTree.Height < ScrollBox1.ClientHeight)
-  then ImageTree.Top := (ScrollBox1.ClientHeight - ImageTree.Height) div 2
-  else ImageTree.Top := 0;
-
-  if (ImageTree.Width < ScrollBox1.ClientWidth)
-  then ImageTree.Left := (ScrollBox1.ClientWidth - ImageTree.Width) div 2
-  else ImageTree.Left := 0;
-end;
-
 procedure TfmChart.UpdateChart();
-var
-  hsp, vsp: Integer;
 begin
   if (FBase <> nil) then FBase.ListsRefresh();
-
-  hsp := ScrollBox1.HorzScrollBar.Position;
-  vsp := ScrollBox1.VertScrollBar.Position;
-
-  ScrollBox1.HorzScrollBar.Position := 0;
-  ScrollBox1.VertScrollBar.Position := 0;
-
   GenChart(True);
-
-  ScrollBox1.HorzScrollBar.Position := hsp;
-  ScrollBox1.VertScrollBar.Position := vsp;
 end;
 
 procedure TfmChart.ImageTreeDblClick(Sender: TObject);
@@ -286,7 +237,7 @@ var
   p: TPerson;
   i_rec: TGEDCOMIndividualRecord;
 begin
-  p := FChart.Selected;
+  p := TreeBox.Selected;
   if (p <> nil) and (p.Rec <> nil) then begin
     i_rec := p.Rec;
     if FBase.ModifyPerson(i_rec)
@@ -299,7 +250,7 @@ var
   p: TPerson;
   i_rec: TGEDCOMIndividualRecord;
 begin
-  p := FChart.Selected;
+  p := TreeBox.Selected;
   if (p <> nil) and (p.Rec <> nil) then begin
     i_rec := p.Rec;
     if FBase.ModifyPerson(i_rec)
@@ -312,7 +263,7 @@ var
   p: TPerson;
   fam: TGEDCOMFamilyRecord;
 begin
-  p := FChart.Selected;
+  p := TreeBox.Selected;
   if (p <> nil) and (p.Rec <> nil) then begin
     if not(p.Rec.Sex in [svMale, svFemale]) then begin
       MessageDlg('У данной персоны не задан пол.', mtError, [mbOk], 0);
@@ -320,7 +271,7 @@ begin
     end;
 
     fam := CreateFamilyEx(FTree);
-    AddSpouseToFamily(FTree, fam, p.Rec);
+    Base.Engine.AddFamilySpouse(fam, p.Rec);
 
     UpdateChart();
   end;
@@ -333,7 +284,7 @@ var
   i_rec, i_spouse: TGEDCOMIndividualRecord;
   fam: TGEDCOMFamilyRecord;
 begin
-  p := FChart.Selected;
+  p := TreeBox.Selected;
   if (p <> nil) and (p.Rec <> nil) then begin
     i_rec := p.Rec;
     case i_rec.Sex of
@@ -348,8 +299,8 @@ begin
     i_spouse := Base.SelectPerson(nil, tmNone, sx);
     if (i_spouse <> nil) then begin
       fam := CreateFamilyEx(FTree);
-      AddSpouseToFamily(FTree, fam, i_rec);
-      AddSpouseToFamily(FTree, fam, i_spouse);
+      Base.Engine.AddFamilySpouse(fam, i_rec);
+      Base.Engine.AddFamilySpouse(fam, i_spouse);
 
       UpdateChart();
     end;
@@ -362,7 +313,7 @@ var
   i_rec, i_child: TGEDCOMIndividualRecord;
   fam: TGEDCOMFamilyRecord;
 begin
-  p := FChart.Selected;
+  p := TreeBox.Selected;
   if (p <> nil) and (p.Rec <> nil) then begin
     i_rec := p.Rec;
 
@@ -378,7 +329,7 @@ begin
 
     fam := i_rec.SpouseToFamilyLinks[0].Family;
     i_child := Base.SelectPerson(TGEDCOMIndividualRecord(fam.Husband.Value), tmAncestor, aNeedSex);
-    if (i_child <> nil) and FamilyChildAdd(FBase.Tree, fam, i_child)
+    if (i_child <> nil) and Base.Engine.AddFamilyChild(fam, i_child)
     then UpdateChart();
   end;
 end;
@@ -397,8 +348,8 @@ procedure TfmChart.miDeleteClick(Sender: TObject);
 var
   p: TPerson;
 begin
-  p := FChart.Selected;
-  if (p <> nil) and (p.Rec <> nil) and (p <> FChart.Root) then begin
+  p := TreeBox.Selected;
+  if (p <> nil) and (p.Rec <> nil) and (p <> TreeBox.Root) then begin
     FBase.DeleteIndividualRecord(p.Rec, True);
     GenChart();
     NavRefresh();
@@ -409,7 +360,7 @@ procedure TfmChart.tbGotoPersonClick(Sender: TObject);
 var
   p: TPerson;
 begin
-  p := FChart.Selected;
+  p := TreeBox.Selected;
   if (p <> nil) and (p.Rec <> nil) then begin
     FPerson := p.Rec;
     GenChart();
@@ -458,6 +409,35 @@ end;
 procedure TfmChart.TrackBar1Change(Sender: TObject);
 begin
   GenChart();
+end;
+
+procedure TfmChart.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  case Key of
+    VK_ESCAPE: Close;
+    VK_F7: TreeBox.RebuildKinships();
+  end;
+end;
+
+procedure TfmChart.miRebuildKinshipsClick(Sender: TObject);
+begin
+  TreeBox.RebuildKinships();
+end;
+
+procedure TfmChart.tbFilterClick(Sender: TObject);
+var
+  fmTreeFilter: TfmTreeFilter;
+begin
+  fmTreeFilter := TfmTreeFilter.Create(Base);
+  try
+    fmTreeFilter.Filter := TreeBox.Filter;
+    //if (ShowModalEx(fmTreeFilter, Self) = mrOk) then GenChart();
+    ShowModalEx(fmTreeFilter, Self);
+    GenChart();
+  finally
+    fmTreeFilter.Destroy;
+  end;
 end;
 
 end.

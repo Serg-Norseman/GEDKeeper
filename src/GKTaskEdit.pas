@@ -1,4 +1,4 @@
-unit GKTaskEdit;
+unit GKTaskEdit; {prepare:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Buttons,
-  ComCtrls, ExtCtrls, GedCom551, GKBase, GKEngine, Mask, GKLists;
+  ComCtrls, ExtCtrls, Mask, GedCom551, GKBase, GKEngine, GKLists;
 
 type
   TfmTaskEdit = class(TForm)
@@ -47,7 +47,7 @@ type
 implementation
 
 uses
-  bsComUtils, GKMain, GKRecordSelect, GKPersonEdit;
+  GKUtils, GKMain;
 
 {$R *.dfm}
 

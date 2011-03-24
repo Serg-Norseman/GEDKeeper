@@ -4,7 +4,7 @@ object fmEventEdit: TfmEventEdit
   ActiveControl = EditEventType
   BorderStyle = bsDialog
   Caption = #1057#1086#1073#1099#1090#1080#1077
-  ClientHeight = 369
+  ClientHeight = 401
   ClientWidth = 418
   Color = clBtnFace
   DefaultMonitor = dmMainForm
@@ -20,7 +20,7 @@ object fmEventEdit: TfmEventEdit
   TextHeight = 13
   object btnAccept: TBitBtn
     Left = 240
-    Top = 336
+    Top = 368
     Width = 81
     Height = 25
     Caption = #1055#1088#1080#1085#1103#1090#1100
@@ -30,7 +30,7 @@ object fmEventEdit: TfmEventEdit
   end
   object btnCancel: TBitBtn
     Left = 328
-    Top = 336
+    Top = 368
     Width = 81
     Height = 25
     Caption = #1054#1090#1084#1077#1085#1080#1090#1100
@@ -41,7 +41,7 @@ object fmEventEdit: TfmEventEdit
     Left = 0
     Top = 0
     Width = 418
-    Height = 323
+    Height = 353
     ActivePage = SheetCommon
     Align = alTop
     TabOrder = 0
@@ -71,14 +71,14 @@ object fmEventEdit: TfmEventEdit
       end
       object Label4: TLabel
         Left = 8
-        Top = 200
+        Top = 232
         Width = 43
         Height = 13
         Caption = #1055#1088#1080#1095#1080#1085#1072
       end
       object Label5: TLabel
         Left = 8
-        Top = 248
+        Top = 280
         Width = 159
         Height = 13
         Caption = #1047#1072#1089#1074#1080#1076#1077#1090#1077#1083#1100#1089#1090#1074#1086#1074#1072#1074#1096#1080#1081' '#1086#1088#1075#1072#1085
@@ -321,17 +321,17 @@ object fmEventEdit: TfmEventEdit
       end
       object EditEventCause: TEdit
         Left = 8
-        Top = 216
+        Top = 248
         Width = 393
         Height = 21
-        TabOrder = 7
+        TabOrder = 9
       end
       object EditEventOrg: TEdit
         Left = 8
-        Top = 264
+        Top = 296
         Width = 393
         Height = 21
-        TabOrder = 8
+        TabOrder = 10
       end
       object EditAttribute: TEdit
         Left = 8
@@ -339,6 +339,24 @@ object fmEventEdit: TfmEventEdit
         Width = 393
         Height = 21
         TabOrder = 2
+      end
+      object cbDate1Calendar: TComboBox
+        Left = 136
+        Top = 200
+        Width = 129
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
+        TabOrder = 7
+      end
+      object cbDate2Calendar: TComboBox
+        Left = 272
+        Top = 200
+        Width = 129
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
+        TabOrder = 8
       end
     end
     object SheetNotes: TTabSheet
@@ -356,7 +374,7 @@ object fmEventEdit: TfmEventEdit
   end
   object btnAddress: TBitBtn
     Left = 8
-    Top = 336
+    Top = 368
     Width = 81
     Height = 25
     Caption = #1040#1076#1088#1077#1089'...'

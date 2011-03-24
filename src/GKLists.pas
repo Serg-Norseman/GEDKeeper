@@ -6,10 +6,7 @@ interface
 
 uses
   Types, Windows, Classes, Graphics, Controls, ComCtrls, ActnList, Menus,
-  StdCtrls, GedCom551, GKEngine, GKCommon, bsCtrls;
-
-type
-  TGKListView = TBSListView;
+  StdCtrls, GedCom551, GKEngine, GKCommon, GKCtrls;
 
 type
   TModifyEvent = procedure (Sender: TObject; ItemData: TObject; Action: TRecAction) of object;
@@ -104,6 +101,7 @@ type
     Back_Sex: TGEDCOMSex;
     Back_SourceMode: TGroupMode;
     Back_SourceRef: string;
+    Back_EventVal: string;
   public
     AliveBeforeDate: string;
     GroupMode: TGroupMode;
@@ -115,6 +113,7 @@ type
     Sex: TGEDCOMSex;
     SourceMode: TGroupMode;
     SourceRef: string;
+    EventVal: string;
 
     List: TListFilterMode;
     ChildSelector: Boolean; // special mode
@@ -301,18 +300,14 @@ type
     FTotalCount: Integer;
     FTree: TGEDCOMTree;
 
-    procedure SetRecordType(const Value: TGEDCOMRecordType);
+    procedure ListMeasureItem(Control: TWinControl; var AHeight: UINT);
 
     procedure ListCustomDrawItem(Sender: TCustomListView;
       Item: TListItem; State: TCustomDrawState; var DefaultDraw: Boolean);
     procedure ListColumnClick(Sender: TObject; Column: TListColumn);
     procedure ListGetItemData(Sender: TObject; Item: TListItem);
-    procedure ListDataFind(Sender: TObject; Find: TItemFind;
-      const FindString: String; const FindPosition: TPoint; FindData: Pointer;
-      StartIndex: Integer; Direction: TSearchDirection; Wrap: Boolean;
-      var Index: Integer);
-
-    function xCompare(Item1, Item2: Pointer): Integer;
+    procedure SetRecordType(const Value: TGEDCOMRecordType);
+    function xCompare(Item1, Item2: TObject): Integer;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -345,7 +340,7 @@ implementation
 
 uses
   {$IFDEF PROFILER}ZProfiler, {$ENDIF}
-  SysUtils, GKUtils, GKMain, bsComUtils, ExtCtrls;
+  SysUtils, ExtCtrls, GKUtils, GKMain;
 
 {==============================================================================}
 
@@ -486,7 +481,7 @@ begin
   FToolBar.ButtonWidth := 30;
   FToolBar.EdgeBorders := [];
   FToolBar.Flat := True;
-  FToolBar.Images := fmGEDKeeper.ImageList1;
+  FToolBar.Images := fmGEDKeeper.ImageList_Buttons;
   FToolBar.ShowHint := True;
   FToolBar.Align := alTop;
   FToolBar.AutoSize := True;
@@ -608,8 +603,8 @@ begin
 
   case FListMode of
     lmView: begin
-      if (TListView(FList).Selected <> nil)
-      then Result := TListView(FList).Selected.Data;
+      if (TGKListView(FList).Selected <> nil)
+      then Result := TGKListView(FList).Selected.Data;
     end;
     lmBox: begin
       if (TListBox(FList).ItemIndex > -1)
@@ -709,12 +704,17 @@ begin
       item := lst.Items.Strings[Index];
       image.Canvas.Font := lst.Font;
 
+      {$IFNDEF DELPHI_NET}
       FillChar(params, SizeOf(TDrawTextParams), #0);
+      {$ENDIF}
+
       params.cbSize := SizeOf(TDrawTextParams);
       params.iLeftMargin := 3;
       params.iRightMargin := 3;
 
-      Height := DrawTextEx(image.Canvas.Handle, PChar(item), -1, rt, DT_WORDBREAK or DT_CALCRECT, @params);
+      Height := DrawTextEx(image.Canvas.Handle,
+        {$IFNDEF DELPHI_NET}PChar{$ENDIF}(item), -1, rt, DT_WORDBREAK or DT_CALCRECT,
+        {$IFNDEF DELPHI_NET}@{$ENDIF}params);
     finally
       image.Free;
     end;
@@ -730,30 +730,34 @@ begin
   TListBox(Control).Canvas.FillRect(Rect);
   item := TListBox(Control).Items.Strings[Index];
 
+  {$IFNDEF DELPHI_NET}
   FillChar(params, SizeOf(TDrawTextParams), #0);
+  {$ENDIF}
   params.cbSize := SizeOf(TDrawTextParams);
   params.iLeftMargin := 3;
   params.iRightMargin := 3;
 
-  DrawTextEx(TListBox(Control).Canvas.Handle, PChar(item), -1, Rect, DT_WORDBREAK, @params);
+  DrawTextEx(TListBox(Control).Canvas.Handle,
+    {$IFNDEF DELPHI_NET}PChar{$ENDIF}(item), -1, Rect, DT_WORDBREAK,
+    {$IFNDEF DELPHI_NET}@{$ENDIF}params);
 end;
 
 procedure TSheetList.Columns_BeginUpdate();
 begin
-  if (FList is TListView)
-  then (FList as TListView).Columns.BeginUpdate();
+  if (FList is TGKListView)
+  then (FList as TGKListView).Columns.BeginUpdate();
 end;
 
 procedure TSheetList.Columns_Clear();
 begin
-  if (FList is TListView)
-  then (FList as TListView).Columns.Clear();
+  if (FList is TGKListView)
+  then (FList as TGKListView).Columns.Clear();
 end;
 
 procedure TSheetList.Columns_EndUpdate();
 begin
-  if (FList is TListView)
-  then (FList as TListView).Columns.EndUpdate();
+  if (FList is TGKListView)
+  then (FList as TGKListView).Columns.EndUpdate();
 end;
 
 procedure TSheetList.AddColumn(aCaption: string; aWidth: Integer;
@@ -774,12 +778,12 @@ begin
   FActionMoveDown.Enabled := not(FReadOnly);
 
   if FReadOnly then begin
-    if (FList is TListView)
-    then (FList as TListView).Color := clBtnFace
+    if (FList is TGKListView)
+    then (FList as TGKListView).Color := clBtnFace
     else (FList as TListBox).Color := clBtnFace;
   end else begin
-    if (FList is TListView)
-    then (FList as TListView).Color := clWindow
+    if (FList is TGKListView)
+    then (FList as TGKListView).Color := clWindow
     else (FList as TListBox).Color := clWindow;
   end;
 end;
@@ -806,6 +810,7 @@ begin
   Back_Sex := Sex;
   Back_SourceMode := SourceMode;
   Back_SourceRef := SourceRef;
+  Back_EventVal := EventVal;
 end;
 
 procedure TPersonsFilter.Restore();
@@ -820,6 +825,7 @@ begin
   Sex := Back_Sex;
   SourceMode := Back_SourceMode;
   SourceRef := Back_SourceRef;
+  EventVal := Back_EventVal;
 end;
 
 procedure TPersonsFilter.Clear();
@@ -837,6 +843,7 @@ begin
   Sex := svNone;
   SourceMode := gmAll;
   SourceRef := '';
+  EventVal := '*';
 end;
 
 { TListManager }
@@ -923,6 +930,18 @@ function TIndividualListMan.CheckFilter(aFilter: TPersonsFilter; aShieldState: T
     end;
   end;
 
+  function HasEventVal(): Boolean;
+  var
+    i: Integer;
+  begin
+    Result := False;
+
+    for i := 0 to FRec.IndividualEventsCount - 1 do begin
+      Result := IsMatchesMask(FRec.IndividualEvents[i].StringValue, aFilter.EventVal);
+      if (Result) then Exit;
+    end;
+  end;
+
 var
   bdt, ddt: TDateTime;
   isLive: Boolean;
@@ -962,6 +981,7 @@ begin
   if ((aFilter.Sex <> svNone) and (FRec.Sex <> aFilter.Sex))
   or ((aFilter.Name <> '*') and not(IsMatchesMask(GetNameStr(FRec), aFilter.Name)))
   or ((aFilter.Residence <> '*') and not(HasPlace()))
+  or ((aFilter.EventVal <> '*') and not(HasEventVal()))
   or ((aFilter.PatriarchOnly and not(FRec.Patriarch)))
   then Exit;
 
@@ -1504,6 +1524,11 @@ var
 begin
   file_ref := FRec.FileReferences[0];
 
+  if (file_ref = nil) then begin
+    aItem.SubItems.Add('error ' + FRec.XRef);
+    Exit;
+  end;
+
   aItem.SubItems.Add(file_ref.Title);
   aItem.SubItems.Add(MediaTypes[file_ref.MediaType].Name);
 
@@ -1917,9 +1942,11 @@ begin
 
   OwnerData := True;
   OnData := ListGetItemData;
-  OnDataFind := ListDataFind;
   OnColumnClick := ListColumnClick;
   OnCustomDrawItem := ListCustomDrawItem;
+
+  //OwnerDraw := True;
+  //OnMeasureItem := ListMeasureItem;
 
   FListMan := nil;
   FRecordType := rtNone;
@@ -1929,22 +1956,22 @@ destructor TRecordsView.Destroy;
 begin
   if Assigned(FListMan) then FreeAndNil(FListMan);
 
-  FContentList.Destroy;
+  FContentList.Free;
   inherited Destroy;
 end;
 
-function TRecordsView.xCompare(Item1, Item2: Pointer): Integer;
+function TRecordsView.xCompare(Item1, Item2: TObject): Integer;
 var
   val1, val2: string;
   f: Integer;
 begin
   if (SortColumn = 0) then begin
-    val1 := GetXRefNum(Item1);
-    val2 := GetXRefNum(Item2);
+    val1 := GetXRefNum(TGEDCOMRecord(Item1));
+    val2 := GetXRefNum(TGEDCOMRecord(Item2));
   end else begin
-    FListMan.Fetch(Item1);
+    FListMan.Fetch(TGEDCOMRecord(Item1));
     val1 := FListMan.GetColumnValue(SortColumn, FIsMainList);
-    FListMan.Fetch(Item2);
+    FListMan.Fetch(TGEDCOMRecord(Item2));
     val2 := FListMan.GetColumnValue(SortColumn, FIsMainList);
   end;
 
@@ -1960,7 +1987,11 @@ begin
   {$IFDEF PROFILER}Profiler.Mark(12, True);{$ENDIF}
 
   rec := GetSelectedRecord();
-  QuickSort(FContentList, xCompare);
+  {$IFNDEF DELPHI_NET}
+  MergeSort(FContentList, xCompare); // 16.5ms
+  {$ELSE}
+  QuickSort(FContentList, xCompare); // 32ms
+  {$ENDIF}
   SelectItemByRec(rec);
 
   Invalidate();
@@ -1990,14 +2021,6 @@ begin
   except
     on E: Exception do LogWrite('ListGetItemData(): ' + E.Message);
   end;
-end;
-
-procedure TRecordsView.ListDataFind(Sender: TObject; Find: TItemFind;
-  const FindString: String; const FindPosition: TPoint; FindData: Pointer;
-  StartIndex: Integer; Direction: TSearchDirection; Wrap: Boolean;
-  var Index: Integer);
-begin
-  //
 end;
 
 procedure TRecordsView.ListCustomDrawItem(Sender: TCustomListView;
@@ -2103,7 +2126,7 @@ begin
       for i := 0 to FTree.RecordsCount - 1 do begin
         rec := FTree.Records[i];
 
-        if RecordIsType(FRecordType, rec) then begin
+        if (rec.RecordType = FRecordType) then begin
           Inc(FTotalCount);
 
           FListMan.Fetch(rec);
@@ -2115,7 +2138,11 @@ begin
       Items.Count := FContentList.Count;
       {$IFDEF PROFILER}Profiler.Mark(6, False);{$ENDIF}
 
+      {$IFNDEF DELPHI_NET}
+      MergeSort(FContentList, xCompare);
+      {$ELSE}
       QuickSort(FContentList, xCompare);
+      {$ENDIF}
 
       {$IFDEF PROFILER}Profiler.Mark(7, True);{$ENDIF}
       if (aAutoSizeColumn >= 0)
@@ -2129,6 +2156,11 @@ begin
   end;
 
   {$IFDEF PROFILER}Profiler.Mark(8, False);{$ENDIF}
+end;
+
+procedure TRecordsView.ListMeasureItem(Control: TWinControl; var AHeight: UINT);
+begin
+  AHeight := 50;
 end;
 
 end.

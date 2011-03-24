@@ -1,4 +1,4 @@
-unit GKAbout;
+unit GKAbout; {prepare:fin}
 
 {$I GEDKeeper.inc}
 
@@ -21,32 +21,24 @@ type
   public
   end;
 
-procedure AboutDialog();
+procedure ShowAbout(Owner: TForm; AppName, AppVersion: string);
 
 implementation
 
 uses
-  GKUtils, GKEngine, bsWinUtils, GKMain, uVista;
+  GKUtils, uVista;
 
 {$R *.DFM}
 
-procedure AboutDialog();
+procedure ShowAbout(Owner: TForm; AppName, AppVersion: string);
 var
   fmAbout: TfmAbout;
 begin
-  fmAbout := TfmAbout.Create(fmGEDKeeper);
+  fmAbout := TfmAbout.Create(Owner);
   try
     fmAbout.LabelProduct.Caption := AppName;
-    fmAbout.LabelVersion.Caption := 'Version ' + GetFileVersion();
-    fmAbout.LabelCopyright.Caption := 'Copyright © Serg V. Zhdanovskih';
-    fmAbout.Label_eMail.Caption := 'http://gedkeeper.ucoz.ru/';
-
-    fmAbout.LabelCite.Caption :=
-      '«История рода - это есть история Отечества»'+#13#10+
-      '«Неуважение к предкам - есть первый признак дикости и безнравственности»'+#13#10+
-      '(Александр Сергеевич Пушкин)';
-
-    ShowModalEx(fmAbout);
+    fmAbout.LabelVersion.Caption := 'Version ' + AppVersion;
+    fmAbout.ShowModal;
   finally
     fmAbout.Destroy;
   end;
@@ -55,6 +47,14 @@ end;
 procedure TfmAbout.FormCreate(Sender: TObject);
 begin
   SetVistaFontsEx(Self, True);
+
+  LabelCopyright.Caption := 'Copyright © Serg V. Zhdanovskih';
+  Label_eMail.Caption := 'http://gedkeeper.ucoz.ru/';
+
+  LabelCite.Caption :=
+    '«История рода - это есть история Отечества»'+#13#10+
+    '«Неуважение к предкам - есть первый признак дикости и безнравственности»'+#13#10+
+    '(Александр Сергеевич Пушкин)';
 end;
 
 procedure TfmAbout.Label_eMailClick(Sender: TObject);
