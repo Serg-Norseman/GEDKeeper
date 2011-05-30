@@ -1,4 +1,4 @@
-unit GKCommunicationEdit; {prepare:fin}
+unit GKCommunicationEdit; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,10 +6,10 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons, ComCtrls,
-  ExtCtrls, GedCom551, GKBase, GKEngine, Mask, GKLists, GKCtrls;
+  ExtCtrls, GedCom551, GKBase, GKEngine, Mask, GKLists, GKCtrls, GKLangs;
 
 type
-  TfmCommunicationEdit = class(TForm)
+  TfmCommunicationEdit = class(TForm, ILocalization)
     GroupBox1: TGroupBox;
     PagesGroupData: TPageControl;
     SheetNotes: TTabSheet;
@@ -43,6 +43,8 @@ type
   public
     property Base: TfmBase read GetBase;
     property Communication: TGEDCOMCommunicationRecord read FCommunication write SetCommunication;
+
+    procedure SetLang();
   end;
 
 implementation
@@ -52,14 +54,12 @@ uses
 
 {$R *.dfm}
 
-{ TfmCommunicationEdit }
-
 procedure TfmCommunicationEdit.FormCreate(Sender: TObject);
 var
   ct: TCommunicationType;
 begin
   for ct := Low(TCommunicationType) to High(TCommunicationType) do
-    EditCorrType.Items.Add(CommunicationNames[ct]);
+    EditCorrType.Items.Add(LSList[CommunicationNames[ct]]);
 
   FNotesList := TSheetList.Create(SheetNotes, lmBox);
   FNotesList.OnModify := ListModify;
@@ -70,6 +70,24 @@ begin
   Base.SetupRecMediaList(FMediaList);
 
   FTempInd := nil;
+
+  SetLang();
+end;
+
+procedure TfmCommunicationEdit.SetLang();
+begin
+  btnAccept.Caption := LSList[LSID_DlgAccept];
+  btnCancel.Caption := LSList[LSID_DlgCancel];
+
+  Caption := LSList[LSID_WinCommunicationEdit];
+
+  SheetNotes.Caption := LSList[LSID_RPNotes];
+  SheetMultimedia.Caption := LSList[LSID_RPMultimedia];
+
+  Label1.Caption := LSList[LSID_Theme];
+  Label5.Caption := LSList[LSID_Corresponder];
+  Label2.Caption := LSList[LSID_Type];
+  Label4.Caption := LSList[LSID_Date];
 end;
 
 procedure TfmCommunicationEdit.ListsRefresh();

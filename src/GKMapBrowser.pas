@@ -1,4 +1,4 @@
-unit GKMapBrowser;
+unit GKMapBrowser; {trans:fin}
 
 {$I GEDKeeper.inc}
 

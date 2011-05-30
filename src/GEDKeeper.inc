@@ -7,3 +7,5 @@
 
 {.$DEFINE BUFSTM}
 
+{.$DEFINE FAST_LISTS} // вызывает глюки с сортировкой 
+

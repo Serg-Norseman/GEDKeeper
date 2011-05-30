@@ -1,0 +1,593 @@
+;1033,English
+File
+Edit
+Pedigree
+Service
+&Windows
+Help
+New
+Open...
+Reopen
+Save...
+Close
+Properties...
+Export
+Export to Web...
+Export to Excel...
+Export to Excel-file...
+Exit
+Undo
+Redo
+Add record
+Edit record
+Delete record
+Stream input...
+Ancestors tree
+Descendants tree
+Both tree
+d'Aboville pedigree
+Konovalov pedigree
+Maps...
+Statistics
+Calc
+Names book
+Calendar
+Time line
+Organizer
+Scripts...
+DB import...
+Tools...
+Filter...
+Options
+&Cascade
+&Horizontal tile
+&Vertical tile
+&Minimize all
+&Arrange all
+Internet resources...
+Kinship terms...
+FAQ...
+Content
+About
+Records
+filtered
+Individuals
+Families
+Notes
+Multimedia
+Sources
+Repositories
+Groups
+Researches
+Tasks
+Communications
+Locations
+unknown
+unknown
+?
+Male
+Female
+Undetermined
+The file is modified. Save?
+Found the specified parent family "%s". Attach to it a child?
+Remove personal record "%s"?
+Remove family record "%s"?
+Remove note record "%s"?
+Remove source record "%s"?
+Remove multimedia record "%s"?
+Remove repository record "%s"?
+Remove group record "%s"?
+Remove research record "%s"?
+Remove task record "%s"?
+Remove communication record "%s"?
+Remove location record "%s"?
+Address
+Events
+Surname
+Name
+Patronymic
+Sex
+Nickname
+Surname prefix
+Name prefix
+Name suffix
+Patriarch
+Bookmark
+Association
+Relation
+Person
+Accept
+Cancel
+Close
+Select
+Append
+New personal record
+Edit personal record
+Check the sex
+Select record
+Source citation
+User reference
+Note
+Source
+Page
+Certainty
+Reference
+Type
+Family
+Husband
+Wife
+Status
+Childs
+Detach link on husband?
+Detach link on wife?
+Detach link on child?
+Birth date
+Death date
+Restriction
+Title
+Members
+Group edit
+Detach link on member?
+Time scale
+Current year
+Telephone number
+eMail
+Web site
+Repository
+Progress
+Time passed
+Time remain
+Time total
+Date
+Text
+Short title
+Author
+Publication
+Common
+Detach link on repository?
+Store type
+File
+View
+For selected type of store is not enabled extension
+Father
+Mother
+Parents
+Spouses
+Associations
+User references
+Gregorian
+Julian
+Hebrew
+Islamic
+Persian
+Indian
+Bahai
+French
+Roman
+Unknown
+Copy result to clipboard
+Advanced project
+Enable extension (archive and store)
+Extension name (archive and store folder)
+Location
+Latitude
+Longitude
+Show
+Search coords
+Search
+Select coords
+Select name
+Priority
+Percent
+Started
+Stopped
+Goal
+Theme
+Corresponder
+Group
+Detach link on task?
+Detach link on communication?
+Detach link on group?
+Research edit
+Task edit
+Communication edit
+Error
+Lua start failed!
+Date format invalid
+Country
+State
+City
+Postal code
+Telephones
+EMails
+Web sites
+Value
+Event
+Place
+Cause
+Agency
+Female
+Male
+Not selected a personal record
+For this person is not defined the sex.
+For this person is not families.
+Estimated number of ancestors %s more than permissible limits.
+Estimated number of descendants %s more than permissible limits.
+Generations visible:
+unlimited
+Spouse
+Marriage date
+Detach link on father?
+Detach link on mother?
+Detach link on spouse?
+Detach link on parents?
+All
+Only ancestors
+Only descendants
+Trace root
+Edit
+Add family
+Add spouse
+Add son
+Add daughter
+Delete
+Rebuild tree
+Rebuild kinships
+Links
+Place and attribute
+marriage
+family
+Namesakes
+Remove the event?
+Detach link on note?
+Detach link on multimedia?
+Detach link on source?
+Remove the association?
+Remove the user reference?
+Loading of gedcom failed.
+Check gedcom format failed.
+Birth days
+Before the day of birth "%s" remained %s day(s)
+Interface
+Trees
+Pedigrees
+Coding of save
+Work mode
+Simple
+Expert
+Internet
+Use proxy
+Server
+Port
+Login
+Password
+Tips
+Show on startup
+Language
+All lists
+List of persons
+Names format
+Surname_Name_Patronymic
+Surname; Name_Patronymic
+Surname; Name; Patronymic
+Date format
+Places with address
+Highlight unparented
+Highlight unmarried
+Default values
+View of tree
+Different lines
+Only years
+Kinship
+Signs visible
+Tree decorative
+Portraits visible
+Childless exclude
+Decor
+Man
+Woman
+Unknown sex
+Divorcee husband
+Divorcee wife
+Font
+Pedigree generation
+Include attributes
+Include notes
+Include sources
+Pedigree format
+Excess
+Compact
+Record jump
+Record move up
+Record move down
+Full name
+Birth place
+Death place
+Residence
+Age
+Life expectancy
+Days for birth
+Religion
+Nationality
+Education
+Occupation
+Caste
+Mili
+Mili ind
+Mili dis
+Mili rank
+Changed
+Marriage registered
+Marriage is not registered
+Divorced
+Birth
+Adoption
+Christening
+Graduation
+Retirement
+Naturalization
+Emigration
+Immigration
+Census
+Will
+Probate
+Death
+Burial
+Cremation
+Fact
+Physical description
+National ID Number
+Social security number
+Number of children
+Number of marriages
+Property
+Title
+Travel
+Hobby
+Award
+?
+father
+mother
+husband
+wife
+son
+daughter
+grandfather
+grandmother
+grandson
+granddaughter
+brother
+sister
+son-in-law
+daughter-in-law
+father-in-law
+mother-in-law
+father-in-law
+mother-in-law
+uncle
+aunt
+nephew
+niece
+cousin
+cousin
+<reserved>
+<reserved>
+<reserved>
+<reserved>
+<reserved>
+<reserved>
+<reserved>
+<reserved>
+<reserved>
+The width of the image more than 65 thousand points. Save impossible
+Back
+Next
+<reserved>
+Next
+You know what ...
+Load and search for places
+(not selected)
+Sample
+For all people
+Places of birth
+Places of death
+Places of residence
+Only the chosen
+Save image...
+The format is not supported
+Error loading data.
+Parse error: number of records contain the gap.
+Recognized personal record
+Generation
+Parsing error: not found in the list of ancestors with a number
+Parse Error: date
+Exact
+Before
+After
+Between
+Period to
+Period from
+Period between
+About
+Calculated
+Estimated
+Engagement
+Marriage
+Public announcement of the marriage
+Marriage contract
+Obtaining permission to marry
+Conclusion of the marriage agreement
+Annulment of marriage
+Filing of divorce
+Divorce
+Link to file
+Saving to the archive
+Saving to the store
+-
+Audio
+Book
+Card
+Electronic
+Fiche
+Film
+Magazine
+Manuscript
+Map
+Newspaper
+Photo
+Tombstone
+Video
+- Unknown -
+None
+Low
+Normal
+High
+Top
+Defined
+In progress
+On hold
+Problems
+Completed
+Withdrawn
+Call
+EMail
+Fax
+Letter
+Tape
+Visit
+from
+to
+person
+family
+source
+other
+Unreliable evidence
+Questionable reliability of evidence
+Circumstantial evidence
+Direct and primary evidence
+Research
+Task
+Correspondence
+Correction IDs
+Check format
+Requires correction of identity records, continue?
+Number of objects in the master database: %s
+Synchronization is complete.
+Search the patriarchs
+Search links
+Archive not found, the data is not loaded
+Genealogical database
+Index
+Index of surnames
+Index of names
+Index of years of birth
+Index of years of death
+General statistics
+Pedigree
+Simple input
+Source input
+Source type
+Revision book
+Parish register
+Year
+Settlement
+Event date
+Event type
+Link
+Comment
+Cutting off the branches
+not
+on years
+in selected persons
+- all -
+- not -
+- any -
+Person
+Godparent
+Child
+Number of name components is less than three.
+Basic person ("Person") is not defined by the first
+Year of the source is incorrect
+Invalid value
+Operation
+Compare databases
+Merge databases
+Split database
+Merge records
+Import pedigrees
+Check the connection of families
+Check database
+Search the patriarchs
+Manage places
+Matching...
+Check the connection of families
+all
+only living
+only dead
+In living up to
+only men
+only women
+Mask of name
+Mask of residence
+Mask of the facts
+Only the patriarchs
+Date is invalid
+People
+Years
+Decade
+Born
+Died
+Living
+Dead
+Average age
+Average life expectancy
+Average number of children
+Average age of first child birth
+Average number of marriages
+Average age of marriage
+Number of ancestors
+Number of descendants
+Number of generations of descendants
+Birth years
+Birth years (decades)
+Death years
+Death years (decades)
+Distribution of the number of children
+Age of first child birth
+Age at marriage
+Age difference of spouses
+Select all links
+Select family
+Select ancestors
+Select descendants
+Merge
+Search
+Skip
+Records
+Search persons
+Direct matching
+Indistinct matching
+Only by name / middle name (women only)
+Check the year of birth
+The accuracy of the name, %
+Years inaccuracy
+Repair
+Generations of not less than
+Set a sign
+Register in list of locations
+Similar surnames:
+Similar names:
+Selected personal records removed
+Record
+Problem
+Solve
+Perhaps died (age %s)
+Not determine the sex
+Year of birth more than a year of death
+The first marriage at the age of %s years?
+The first child was born at the age of %s years?
+Descendants
+Generations
+Number of links
+Preparing places
+The place is already in the locations list

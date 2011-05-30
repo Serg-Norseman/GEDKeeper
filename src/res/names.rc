@@ -1,1 +1,4 @@
 NAMES_DATA RCDATA names.txt
+
+CHURCH_FNAMES_DATA RCDATA church_fnames.txt
+CHURCH_MNAMES_DATA RCDATA church_mnames.txt

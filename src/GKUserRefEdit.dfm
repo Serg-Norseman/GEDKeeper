@@ -1,6 +1,6 @@
 object fmUserRefEdit: TfmUserRefEdit
-  Left = 347
-  Top = 271
+  Left = 461
+  Top = 230
   BorderStyle = bsDialog
   Caption = #1055#1086#1083#1100#1079#1086#1074#1072#1090#1077#1083#1100#1089#1082#1072#1103' '#1089#1085#1086#1089#1082#1072
   ClientHeight = 145

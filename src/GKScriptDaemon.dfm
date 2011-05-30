@@ -1,8 +1,8 @@
 object fmScriptDaemon: TfmScriptDaemon
   Left = 447
   Top = 230
-  Width = 736
-  Height = 483
+  Width = 728
+  Height = 472
   Caption = 'ScriptDaemon'
   Color = clBtnFace
   Font.Charset = RUSSIAN_CHARSET
@@ -19,8 +19,8 @@ object fmScriptDaemon: TfmScriptDaemon
   TextHeight = 13
   object Splitter1: TSplitter
     Left = 0
-    Top = 305
-    Width = 728
+    Top = 294
+    Width = 720
     Height = 3
     Cursor = crVSplit
     Align = alBottom
@@ -29,7 +29,7 @@ object fmScriptDaemon: TfmScriptDaemon
   object ToolBar1: TToolBar
     Left = 0
     Top = 0
-    Width = 728
+    Width = 720
     Height = 30
     AutoSize = True
     ButtonHeight = 26
@@ -83,8 +83,8 @@ object fmScriptDaemon: TfmScriptDaemon
   end
   object mmDebugOutput: TMemo
     Left = 0
-    Top = 308
-    Width = 728
+    Top = 297
+    Width = 720
     Height = 148
     Align = alBottom
     Font.Charset = RUSSIAN_CHARSET
@@ -100,8 +100,8 @@ object fmScriptDaemon: TfmScriptDaemon
   object mmScriptText: TMemo
     Left = 0
     Top = 30
-    Width = 728
-    Height = 275
+    Width = 720
+    Height = 264
     Align = alClient
     Font.Charset = RUSSIAN_CHARSET
     Font.Color = clWindowText

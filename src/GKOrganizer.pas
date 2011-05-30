@@ -1,13 +1,13 @@
-unit GKOrganizer; {prepare:fin}
+unit GKOrganizer; {prepare:fin; trans:fin}
 
 interface
 
 uses
-  SysUtils, Classes, Controls, Forms, Dialogs, ComCtrls, GKBase, GKCtrls,
-  GKLists;
+  SysUtils, Classes, Controls, Forms, Dialogs, ComCtrls,
+  GKBase, GKCtrls, GKLists, GKLangs;
 
 type
-  TfmOrganizer = class(TForm)
+  TfmOrganizer = class(TForm, ILocalization)
     PageControl1: TPageControl;
     SheetAddresses: TTabSheet;
     SheetTelephones: TTabSheet;
@@ -25,6 +25,8 @@ type
     function GetBase(): TfmBase;
   public
     property Base: TfmBase read GetBase;
+
+    procedure SetLang();
   end;
 
 var
@@ -41,6 +43,11 @@ uses GedCom551, GKEngine;
 function TfmOrganizer.GetBase(): TfmBase;
 begin
   Result := TfmBase(Owner);
+end;
+
+procedure TfmOrganizer.SetLang();
+begin
+  Caption := LSList[LSID_MIOrganizer];
 end;
 
 procedure TfmOrganizer.FormShow(Sender: TObject);
@@ -123,23 +130,25 @@ procedure TfmOrganizer.FormCreate(Sender: TObject);
 begin
   FAdrList := TSheetList.Create(SheetAddresses);
   FAdrList.Buttons := [];
-  AddListColumn(FAdrList.List, 'Персона', 350, False);
-  AddListColumn(FAdrList.List, 'Адрес', 100, False);
+  AddListColumn(FAdrList.List, LSList[LSID_Person], 350, False);
+  AddListColumn(FAdrList.List, LSList[LSID_Address], 100, False);
 
   FPhonesList := TSheetList.Create(SheetTelephones);
   FPhonesList.Buttons := [];
-  AddListColumn(FPhonesList.List, 'Персона', 350, False);
-  AddListColumn(FPhonesList.List, 'Телефонный номер', 100, False);
+  AddListColumn(FPhonesList.List, LSList[LSID_Person], 350, False);
+  AddListColumn(FPhonesList.List, LSList[LSID_Telephone], 100, False);
 
   FMailsList := TSheetList.Create(SheetEMails);
   FMailsList.Buttons := [];
-  AddListColumn(FMailsList.List, 'Персона', 350, False);
-  AddListColumn(FMailsList.List, 'Адрес эл. почты', 100, False);
+  AddListColumn(FMailsList.List, LSList[LSID_Person], 350, False);
+  AddListColumn(FMailsList.List, LSList[LSID_Mail], 100, False);
 
   FWebsList := TSheetList.Create(SheetWebs);
   FWebsList.Buttons := [];
-  AddListColumn(FWebsList.List, 'Персона', 350, False);
-  AddListColumn(FWebsList.List, 'Сайт', 100, False);
+  AddListColumn(FWebsList.List, LSList[LSID_Person], 350, False);
+  AddListColumn(FWebsList.List, LSList[LSID_WebSite], 100, False);
+
+  SetLang();
 end;
 
 end.

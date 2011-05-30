@@ -1,4 +1,4 @@
-unit GKTaskEdit; {prepare:fin}
+unit GKTaskEdit; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,10 +6,10 @@ interface
 
 uses
   SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Buttons,
-  ComCtrls, ExtCtrls, Mask, GedCom551, GKBase, GKEngine, GKLists;
+  ComCtrls, ExtCtrls, Mask, GedCom551, GKBase, GKEngine, GKLists, GKLangs;
 
 type
-  TfmTaskEdit = class(TForm)
+  TfmTaskEdit = class(TForm, ILocalization)
     GroupBox1: TGroupBox;
     PagesGroupData: TPageControl;
     SheetNotes: TTabSheet;
@@ -42,6 +42,8 @@ type
   public
     property Base: TfmBase read GetBase;
     property Task: TGEDCOMTaskRecord read FTask write SetTask;
+
+    procedure SetLang();
   end;
 
 implementation
@@ -51,24 +53,39 @@ uses
 
 {$R *.dfm}
 
-{ TfmTaskEdit }
-
 procedure TfmTaskEdit.FormCreate(Sender: TObject);
 var
   rp: TResearchPriority;
   gt: TGoalType;
 begin
   for rp := Low(TResearchPriority) to High(TResearchPriority) do
-    EditPriority.Items.Add(PriorityNames[rp]);
+    EditPriority.Items.Add(LSList[PriorityNames[rp]]);
 
   for gt := Low(TGoalType) to High(TGoalType) do
-    cbGoalType.Items.Add(GoalNames[gt]);
+    cbGoalType.Items.Add(LSList[GoalNames[gt]]);
 
   FNotesList := TSheetList.Create(SheetNotes, lmBox);
   FNotesList.OnModify := ListModify;
   Base.SetupRecNotesList(FNotesList);
 
   FTempRec := nil;
+
+  SetLang();
+end;
+
+procedure TfmTaskEdit.SetLang();
+begin
+  btnAccept.Caption := LSList[LSID_DlgAccept];
+  btnCancel.Caption := LSList[LSID_DlgCancel];
+
+  Caption := LSList[LSID_WinTaskEdit];
+
+  SheetNotes.Caption := LSList[LSID_RPNotes];
+
+  Label1.Caption := LSList[LSID_Goal];
+  Label2.Caption := LSList[LSID_Priority];
+  Label4.Caption := LSList[LSID_StartDate];
+  Label5.Caption := LSList[LSID_StopDate];
 end;
 
 procedure TfmTaskEdit.ListsRefresh();

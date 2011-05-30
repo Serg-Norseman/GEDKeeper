@@ -1,4 +1,4 @@
-unit GKTimeLine; {prepare:fin}
+unit GKTimeLine; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,15 +6,16 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, ComCtrls,
-  GedCom551, GKBase, GKLists;
+  GedCom551, GKBase, GKLists, GKLangs;
 
 type
-  TfmTimeLine = class(TForm)
+  TfmTimeLine = class(TForm, ILocalization)
     tbTimeLine: TTrackBar;
     StatusBar1: TStatusBar;
     procedure FormShow(Sender: TObject);
     procedure tbTimeLineChange(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
   private
     FBase: TfmBase;
 
@@ -22,6 +23,8 @@ type
     function GetIListMan(): TIndividualListMan;
   public
     procedure CheckTimeWin(aBase: TfmBase);
+
+    procedure SetLang();
   end;
 
 var
@@ -33,6 +36,18 @@ implementation
 
 uses
   GKMain;
+
+{ TfmTimeLine }
+
+procedure TfmTimeLine.FormCreate(Sender: TObject);
+begin
+  SetLang();
+end;
+
+procedure TfmTimeLine.SetLang();
+begin
+  Caption := LSList[LSID_MITimeLine];
+end;
 
 procedure TfmTimeLine.CheckTimeWin(aBase: TfmBase);
 begin
@@ -79,8 +94,8 @@ end;
 procedure TfmTimeLine.StatusUpdate();
 begin
   if Assigned(FBase) then begin
-    StatusBar1.Panels[0].Text := 'Шкала времени с ' + IntToStr(GetIListMan().YearMin) + ' по ' + IntToStr(GetIListMan().YearMax);
-    StatusBar1.Panels[1].Text := 'Текущий год: ' + IntToStr(FBase.TimeLine_GetYear());
+    StatusBar1.Panels[0].Text := LSList[LSID_TimeScale] + ': ' + IntToStr(GetIListMan().YearMin) + ' - ' + IntToStr(GetIListMan().YearMax);
+    StatusBar1.Panels[1].Text := LSList[LSID_CurrentYear] + ': ' + IntToStr(FBase.TimeLine_GetYear());
   end;
 end;
 

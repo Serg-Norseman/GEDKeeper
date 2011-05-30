@@ -15,6 +15,7 @@ object fmMediaView: TfmMediaView
   KeyPreview = True
   OldCreateOrder = True
   Position = poScreenCenter
+  OnCreate = FormCreate
   OnKeyDown = FormKeyDown
   PixelsPerInch = 96
   TextHeight = 13

@@ -1,4 +1,4 @@
-unit GKGroupEdit; {prepare:fin}
+unit GKGroupEdit; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,10 +6,10 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons, ComCtrls,
-  ExtCtrls, GedCom551, GKBase, GKEngine, GKCtrls, GKLists;
+  ExtCtrls, GedCom551, GKBase, GKEngine, GKCtrls, GKLists, GKLangs;
 
 type
-  TfmGroupEdit = class(TForm)
+  TfmGroupEdit = class(TForm, ILocalization)
     GroupBox1: TGroupBox;
     edName: TEdit;
     Label1: TLabel;
@@ -36,6 +36,8 @@ type
   public
     property Base: TfmBase read GetBase;
     property Group: TGEDCOMGroupRecord read FGroup write SetGroup;
+
+    procedure SetLang();
   end;
 
 implementation
@@ -52,7 +54,7 @@ begin
   FMembersList := TSheetList.Create(SheetMembers);
   FMembersList.OnModify := ListModify;
   FMembersList.Buttons := [lbAdd..lbJump];
-  AddListColumn(FMembersList.List, 'Имя участника группы', 300);
+  AddListColumn(FMembersList.List, LSList[LSID_Name], 300);
 
   FNotesList := TSheetList.Create(SheetNotes, lmBox);
   FNotesList.OnModify := ListModify;
@@ -61,6 +63,8 @@ begin
   FMediaList := TSheetList.Create(SheetMultimedia);
   FMediaList.OnModify := ListModify;
   Base.SetupRecMediaList(FMediaList);
+
+  SetLang();
 end;
 
 procedure TfmGroupEdit.ListsRefresh();
@@ -99,6 +103,19 @@ begin
   except
     on E: Exception do LogWrite('GroupEdit.SetGroup(): ' + E.Message);
   end;
+end;
+
+procedure TfmGroupEdit.SetLang();
+begin
+  btnAccept.Caption := LSList[LSID_DlgAccept];
+  btnCancel.Caption := LSList[LSID_DlgCancel];
+
+  Caption := LSList[LSID_WinGroupEdit];
+
+  Label1.Caption := LSList[LSID_Title];
+  SheetMembers.Caption := LSList[LSID_Members];
+  SheetNotes.Caption := LSList[LSID_RPNotes];
+  SheetMultimedia.Caption := LSList[LSID_RPMultimedia];
 end;
 
 procedure TfmGroupEdit.AcceptChanges();
@@ -142,7 +159,7 @@ begin
       raDelete: begin
         member := TGEDCOMIndividualRecord(ItemData);
 
-        if (member = nil) or (MessageDlg('Удалить ссылку на участника группы?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+        if (member = nil) or (MessageDlg(LSList[LSID_DetachMemberQuery], mtConfirmation, [mbNo, mbYes], 0) = mrNo)
         then Exit;
 
         if Base.Engine.RemoveGroupMember(FGroup, member)

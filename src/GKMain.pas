@@ -1,4 +1,4 @@
-unit GKMain; {prepare:partial}
+unit GKMain; {prepare:partial; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -7,7 +7,7 @@ interface
 uses
   Windows, SysUtils, Classes, Variants, Forms, Controls, Menus, StdCtrls,
   Dialogs, Buttons, Messages, ExtCtrls, ComCtrls, ToolWin, ImgList,
-  GKEngine, GKCommon, GKBase, GKLangs;
+  GKEngine, GKCommon, GKBase, GKLangs, Contnrs;
 
 const
   WM_KEEPMODELESS = WM_USER + 111;
@@ -108,6 +108,8 @@ type
     miScripts: TMenuItem;
     miExport: TMenuItem;
     miExportToExcelApp: TMenuItem;
+    miTreeBoth: TMenuItem;
+    tbTreeBoth: TToolButton;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -158,6 +160,8 @@ type
     procedure miRecordEditClick(Sender: TObject);
     procedure miRecordDeleteClick(Sender: TObject);
     procedure miExportToExcelAppClick(Sender: TObject);
+    procedure miTreeBothClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     FNamesTable: TNamesTable;
     FOptions: TGlobalOptions;
@@ -185,7 +189,10 @@ type
     function CreateBase(const aFileName: string): TfmBase;
     procedure UpdateControls(ForceDeactivate: Boolean = False);
 
-    procedure SetLang(LangID: TLangID);
+    procedure ShowHelpTopic(aTopic: string = '');
+
+    procedure SetLang();
+    procedure LoadLanguage(LangCode: Integer);
   end;
 
 var
@@ -202,9 +209,34 @@ uses
   {$IFDEF DELPHI_NET}System.IO,{$ENDIF}
   {$IFDEF PROFILER}ZProfiler,{$ENDIF}
   uVista, ShellAPI, GedCom551, GKUtils, GKAbout, GKOptions,
-  GKNamesBook, GKTimeLine, GKExpCalc, GKCalendar;
+  GKNamesBook, GKTimeLine, GKExpCalc, GKCalendar, Types;
 
 {$R *.dfm}
+
+function CheckFormRect(aForm: TForm; aScreen: TScreen): TRect;
+var
+  x, y, w, h, mw, mh: Integer;
+begin
+  x := aForm.Left;
+  y := aForm.Top;
+  w := aForm.Width;
+  h := aForm.Height;
+
+  {$IFDEF DELPHI8UP}
+  mw := aScreen.PrimaryMonitor.WorkareaRect.Right - aScreen.PrimaryMonitor.WorkareaRect.Left;
+  mh := aScreen.PrimaryMonitor.WorkareaRect.Bottom - aScreen.PrimaryMonitor.WorkareaRect.Top;
+  {$ELSE}
+  mw := aScreen.WorkareaRect.Right - aScreen.WorkareaRect.Left;
+  mh := aScreen.WorkareaRect.Bottom - aScreen.WorkareaRect.Top;
+  {$ENDIF}
+
+  if (x < 0) then x := 0;
+  if (y < 0) then y := 0;
+  if (w > mw) then w := mw;
+  if (h > mh) then h := mh;
+
+  Result := Rect(x, y, w, h);
+end;
 
 function ShowModalEx(aForm: TCustomForm; aPopupParent: TCustomForm = nil;
   KeepModeless: Boolean = False): Integer;
@@ -266,7 +298,7 @@ begin
   end;
 end;
 
-{ TfmGEDKeeper }
+{==============================================================================}
 
 procedure TfmGEDKeeper.CreateParams(var Params: TCreateParams);
 begin
@@ -319,9 +351,29 @@ begin
 
   FOptions := TGlobalOptions.Create;
   FOptions.LoadFromFile(GetAppPath() + 'GEDKeeper.ini');
+  FOptions.FindLanguages();
+
+  ///
+  if (FOptions.MWinRect.Left <> -1) and (FOptions.MWinRect.Top <> -1)
+  and (FOptions.MWinRect.Right <> -1) and (FOptions.MWinRect.Bottom <> -1)
+  then begin
+    Self.Left := FOptions.MWinRect.Left;
+    Self.Top := FOptions.MWinRect.Top;
+    Self.Width := FOptions.MWinRect.Right;
+    Self.Height := FOptions.MWinRect.Bottom;
+  end else begin
+    Self.Left := (Screen.Width - 800) div 2;
+    Self.Top := (Screen.Height - 600) div 2;
+    Self.Width := 800;
+    Self.Height := 600;
+  end;
+  Self.WindowState := FOptions.MWinState;
+  ///
 
   FNamesTable := TNamesTable.Create;
   FNamesTable.LoadFromFile(GetAppPath() + 'GEDKeeper.nms');
+
+  LoadLanguage(FOptions.InterfaceLang);
 
   DragAcceptFiles(Handle, True);
 
@@ -329,8 +381,35 @@ begin
   UpdateControls();
 end;
 
+procedure TfmGEDKeeper.FormShow(Sender: TObject);
+var
+  i: Integer;
+  lb: TBaseWin;
+  base: TfmBase;
+begin
+  for i := 0 to FOptions.LastBasesCount - 1 do begin
+    lb := FOptions.LastBases[i];
+
+    if FileExists(lb.FileName) then begin
+      base := CreateBase(lb.FileName);
+      base.Left := lb.WinRect.Left;
+      base.Top := lb.WinRect.Top;
+      base.Width := lb.WinRect.Right;
+      base.Height := lb.WinRect.Bottom;
+      base.WindowState := lb.WinState;
+    end;
+  end;
+end;
+
 procedure TfmGEDKeeper.FormDestroy(Sender: TObject);
 begin
+  FOptions.MWinRect := CheckFormRect(Self, Screen);
+  FOptions.MWinState := Self.WindowState;
+
+  ///
+
+  HtmlHelp(0, nil, HH_CLOSE_ALL, 0);
+
   FNamesTable.SaveToFile(GetAppPath() + 'GEDKeeper.nms');
   FNamesTable.Destroy;
 
@@ -338,6 +417,41 @@ begin
   FOptions.Destroy;
 
   {$IFDEF PROFILER}DoneProfiler();{$ENDIF}
+end;
+
+procedure TfmGEDKeeper.FormClose(Sender: TObject; var Action: TCloseAction);
+var
+  i: Integer;
+  base: TfmBase;
+  lb: TBaseWin;
+begin
+  Action := caFree;
+
+  for i := MDIChildCount - 1 downto 0 do begin
+    if (MDIChildren[i] is TfmBase) then begin
+      base := TfmBase(MDIChildren[i]);
+
+      if not(base.CheckModified()) then begin
+        Action := caNone;
+        Exit;
+      end;
+    end;
+  end;
+
+  FOptions.ClearLastBases();
+
+  for i := MDIChildCount - 1 downto 0 do begin
+    if (MDIChildren[i] is TfmBase) then begin
+      base := TfmBase(MDIChildren[i]);
+
+      lb := FOptions.AddLastBase();
+      lb.FileName := base.FileName;
+      lb.WinRect := CheckFormRect(base, Screen);
+      lb.WinState := base.WindowState;
+
+      base.Free;
+    end else MDIChildren[i].Free;
+  end;
 end;
 
 procedure TfmGEDKeeper.FileDrop(var Msg: TWMDROPFILES);
@@ -399,7 +513,7 @@ begin
   cb := GetCurrentFile();
   if (cb = nil)
   then Result := ''
-  else Result := cb.FileName;  
+  else Result := cb.FileName;
 end;
 
 function TfmGEDKeeper.CreateBase(const aFileName: string): TfmBase;
@@ -466,6 +580,9 @@ begin
     miTreeDescendants.Enabled := (indiv_en);
     tbTreeDescendants.Enabled := miTreeDescendants.Enabled;
 
+    miTreeBoth.Enabled := (indiv_en);
+    tbTreeBoth.Enabled := miTreeBoth.Enabled;
+
     miPedigree.Enabled := (indiv_en);
     tbPedigree.Enabled := miPedigree.Enabled;
     miPedigree_dAboville.Enabled := (indiv_en);
@@ -487,9 +604,9 @@ begin
     tbRedo.Enabled := miRedo.Enabled;
 
     if (cur_base <> nil) then begin
-      st := 'Записей: ' + IntToStr(cur_base.FCounts[rt].Total);
+      st := LSList[LSID_SBRecords] + ': ' + IntToStr(cur_base.FCounts[rt].Total);
       if (rt = rtIndividual)
-      then st := st + ', фильтр: ' + IntToStr(cur_base.FCounts[rt].Filtered);
+      then st := st + ', ' + LSList[LSID_SBFiltered] + ': ' + IntToStr(cur_base.FCounts[rt].Filtered);
 
       StatusBar.Panels[0].Text := st;
     end;
@@ -549,35 +666,6 @@ var
 begin
   idx := (Sender as TMenuItem).Tag;
   CreateBase(FOptions.MRUFiles[idx]);
-end;
-
-procedure TfmGEDKeeper.FormClose(Sender: TObject; var Action: TCloseAction);
-var
-  i: Integer;
-  base: TfmBase;
-begin
-  Action := caFree;
-
-  for i := MDIChildCount - 1 downto 0 do begin
-    if (MDIChildren[i] is TfmBase) then begin
-      base := TfmBase(MDIChildren[i]);
-
-      if not(base.CheckModified()) then begin
-        Action := caNone;
-        Exit;
-      end else base.Free;
-    end else MDIChildren[i].Free;
-  end;
-end;
-
-procedure TfmGEDKeeper.SetLang(LangID: TLangID);
-begin
-  miFile.Caption := GetLangStr(LSID_MIFile);
-  miEdit.Caption := GetLangStr(LSID_MIEdit);
-  miPedigree.Caption := GetLangStr(LSID_MIPedigree);
-  miWindow.Caption := GetLangStr(LSID_MIWindow);
-  miHelp.Caption := GetLangStr(LSID_MIHelp);
-  miMRUFiles.Caption := GetLangStr(LSID_MIMRUFiles);
 end;
 
 procedure TfmGEDKeeper.FormResize(Sender: TObject);
@@ -815,22 +903,27 @@ end;
 
 procedure TfmGEDKeeper.miGenResourcesClick(Sender: TObject);
 begin
-  LoadExtFile(GetAppPath() + 'help\genres.htm');
+  ShowHelpTopic('::/gkhGenRes.htm');
 end;
 
 procedure TfmGEDKeeper.miKinshipTermsClick(Sender: TObject);
 begin
-  LoadExtFile(GetAppPath() + 'help\relations.htm');
+  ShowHelpTopic('::/gkhRelations.htm');
 end;
 
 procedure TfmGEDKeeper.miFAQClick(Sender: TObject);
 begin
-  LoadExtFile(GetAppPath() + 'help\faq.htm');
+  ShowHelpTopic('::/gkhFAQ.htm');
+end;
+
+procedure TfmGEDKeeper.ShowHelpTopic(aTopic: string = '');
+begin
+  HtmlHelp(Handle, PChar(GetAppPath() + '/GEDKeeper.chm' + aTopic), HH_DISPLAY_TOPIC, 0);
 end;
 
 procedure TfmGEDKeeper.miContextClick(Sender: TObject);
 begin
-  LoadExtFile(GetAppPath() + 'help\GEDKeeper.htm');
+  ShowHelpTopic();
 end;
 
 procedure TfmGEDKeeper.miWinCascadeClick(Sender: TObject);
@@ -997,6 +1090,120 @@ var
 begin
   cur_base := GetCurrentFile();
   if (cur_base <> nil) then cur_base.ExportToExcel(True);
+end;
+
+procedure TfmGEDKeeper.miTreeBothClick(Sender: TObject);
+var
+  cur_base: TfmBase;
+begin
+  cur_base := GetCurrentFile();
+  if (cur_base <> nil) then cur_base.ShowTreeBoth();
+end;
+
+procedure TfmGEDKeeper.LoadLanguage(LangCode: Integer);
+var
+  st, lfn: string;
+  lng_file: TextFile;
+  i: Integer;
+  intf: ILocalization;
+begin
+  if (LangCode <> LSDefCode) then begin
+    lfn := '';
+    for i := 0 to FOptions.LangsCount - 1 do begin
+      if (FOptions.Langs[i].Code = LangCode) then begin
+        lfn := FOptions.Langs[i].FileName;
+        Break;
+      end;
+    end;
+
+    if (lfn <> '') and (FileExists(lfn)) then begin
+      AssignFile(lng_file, lfn);
+      try
+        Reset(lng_file);
+        Readln(lng_file); // skip first line
+        i := 0;
+        while not Eof(lng_file) do begin
+          Readln(lng_file, st);
+          Inc(i);
+          LSList[i] := Utf8ToAnsi(Trim(st));
+        end;
+      finally
+        CloseFile(lng_file);
+      end;
+    end else begin
+      LangCode := LSDefCode;
+    end;
+  end;
+
+  if (LangCode = LSDefCode) then begin
+    for i := LSID_First to LSID_Last do LSList[i] := LSDefList[i];
+  end;
+
+  for i := 0 to Screen.FormCount - 1 do
+    if Supports(Screen.Forms[i], ILocalization, intf)
+    then intf.SetLang();
+
+  FOptions.InterfaceLang := LangCode;
+end;
+
+procedure TfmGEDKeeper.SetLang();
+begin
+  miFile.Caption := LSList[LSID_MIFile];
+  miEdit.Caption := LSList[LSID_MIEdit];
+  miPedigree.Caption := LSList[LSID_MIPedigree];
+  miService.Caption := LSList[LSID_MIService];
+  miWindow.Caption := LSList[LSID_MIWindow];
+  miHelp.Caption := LSList[LSID_MIHelp];
+
+  miFileNew.Caption := LSList[LSID_MIFileNew];
+  miFileLoad.Caption := LSList[LSID_MIFileLoad];
+  miMRUFiles.Caption := LSList[LSID_MIMRUFiles];
+  miFileSave.Caption := LSList[LSID_MIFileSave];
+  miFileClose.Caption := LSList[LSID_MIFileClose];
+  miFileProperties.Caption := LSList[LSID_MIFileProperties];
+  miExport.Caption := LSList[LSID_MIExport];
+  miExportToWeb.Caption := LSList[LSID_MIExportToWeb];
+  miExportToExcelApp.Caption := LSList[LSID_MIExportToExcelApp];
+  miExportToExcelFile.Caption := LSList[LSID_MIExportToExcelFile];
+  miExit.Caption := LSList[LSID_MIExit];
+
+  miUndo.Caption := LSList[LSID_MIUndo];
+  miRedo.Caption := LSList[LSID_MIRedo];
+  miRecordAdd.Caption := LSList[LSID_MIRecordAdd];
+  miRecordEdit.Caption := LSList[LSID_MIRecordEdit];
+  miRecordDelete.Caption := LSList[LSID_MIRecordDelete];
+  miStreamInput.Caption := LSList[LSID_MIStreamInput] + '...';
+
+  miTreeAncestors.Caption := LSList[LSID_MITreeAncestors];
+  miTreeDescendants.Caption := LSList[LSID_MITreeDescendants];
+  miTreeBoth.Caption := LSList[LSID_MITreeBoth];
+  miPedigree_dAboville.Caption := LSList[LSID_MIPedigree_dAboville];
+  miPedigree_Konovalov.Caption := LSList[LSID_MIPedigree_Konovalov];
+  miMap.Caption := LSList[LSID_MIMap] + '...';
+  miStats.Caption := LSList[LSID_MIStats] + '...';
+
+  miCalc.Caption := LSList[LSID_MICalc] + '...';
+  miNamesBook.Caption := LSList[LSID_MINamesBook] + '...';
+  miCalendar.Caption := LSList[LSID_MICalendar] + '...';
+  miTimeLine.Caption := LSList[LSID_MITimeLine] + '...';
+  miOrganizer.Caption := LSList[LSID_MIOrganizer] + '...';
+  miScripts.Caption := LSList[LSID_MIScripts];
+  miDBImport.Caption := LSList[LSID_MIDBImport];
+  miTreeTools.Caption := LSList[LSID_MITreeTools];
+  miFilter.Caption := LSList[LSID_MIFilter] + '...';
+  miOptions.Caption := LSList[LSID_MIOptions] + '...';
+
+  miWinCascade.Caption := LSList[LSID_MIWinCascade];
+  miWinHTile.Caption := LSList[LSID_MIWinHTile];
+  miWinVTile.Caption := LSList[LSID_MIWinVTile];
+  miWinMinimize.Caption := LSList[LSID_MIWinMinimize];
+  miWinArrange.Caption := LSList[LSID_MIWinArrange];
+
+  miGenResources.Caption := LSList[LSID_MIGenResources];
+  miKinshipTerms.Caption := LSList[LSID_MIKinshipTerms];
+  miFAQ.Caption := LSList[LSID_MIFAQ];
+  miContext.Caption := LSList[LSID_MIContext];
+  miAbout.Caption := LSList[LSID_MIAbout] + '...';
 end;
 
 end.

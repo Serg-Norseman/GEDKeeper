@@ -1,6 +1,6 @@
 object fmFileProperties: TfmFileProperties
-  Left = 396
-  Top = 197
+  Left = 475
+  Top = 149
   BorderStyle = bsDialog
   Caption = #1057#1074#1086#1081#1089#1090#1074#1072' '#1092#1072#1081#1083#1072
   ClientHeight = 329
@@ -41,7 +41,7 @@ object fmFileProperties: TfmFileProperties
     Top = 8
     Width = 433
     Height = 273
-    ActivePage = SheetAuthor
+    ActivePage = SheetAdvanced
     TabOrder = 2
     object SheetAuthor: TTabSheet
       Caption = #1040#1074#1090#1086#1088

@@ -396,7 +396,7 @@ object fmTreeTools: TfmTreeTools
             Top = 8
             Width = 225
             Height = 97
-            Caption = #1056#1077#1078#1080#1084
+            Caption = #1047#1072#1087#1080#1089#1080
             Items.Strings = (
               #1055#1077#1088#1089#1086#1085#1099
               #1047#1072#1084#1077#1090#1082#1080

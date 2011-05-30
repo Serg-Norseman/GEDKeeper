@@ -1,4 +1,4 @@
-unit GKTreeTools; {prepare:partial}
+unit GKTreeTools; {prepare:partial; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -7,7 +7,7 @@ interface
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, ComCtrls,
   StdCtrls, Buttons, ExtCtrls, Contnrs, GedCom551, GKImport, GKLists, GKBase,
-  GKEngine, GKCtrls;
+  GKEngine, GKCtrls, GKLangs;
 
 type
   TMergeMode = (mmPerson, mmNote, mmFamily, mmSource);
@@ -33,7 +33,7 @@ type
     property Solve: TCheckSolve read FSolve write FSolve;
   end;
 
-  TfmTreeTools = class(TForm)
+  TfmTreeTools = class(TForm, ILocalization)
     PageControl: TPageControl;
     SheetChoice: TTabSheet;
     SheetTreeCompare: TTabSheet;
@@ -194,6 +194,8 @@ type
     procedure ListPlacesDblClick(Sender: TObject);
   public
     property Base: TfmBase read GetBase;
+
+    procedure SetLang();
   end;
 
 implementation
@@ -203,6 +205,19 @@ uses
   GKUtils, GKMain, GKRecordSelect, GKProgress, GKSexCheck;
 
 {$R *.dfm}
+
+const
+  HelpTopics: array [0..8] of string = (
+    '::/gkhTools_TreeCompare.htm',
+    '::/gkhTools_TreeMerge.htm',
+    '::/gkhTools_TreeSplit.htm',
+    '::/gkhTools_DubsMerge.htm',
+    '::/gkhTools_TreeImport.htm',
+    '::/gkhTools_FamiliesConnectivity.htm',
+    '::/gkhTools_TreeCheck.htm',
+    '::/gkhTools_PatSearch.htm',
+    '::/gkhTools_PlacesManage.htm'
+  );
 
 {==============================================================================}
 
@@ -217,8 +232,6 @@ begin
 end;
 
 {==============================================================================}
-
-{ TfmTreeWizard }
 
 procedure TfmTreeTools.FormCreate(Sender: TObject);
 begin
@@ -241,6 +254,8 @@ begin
   PrepareChecksList();
   PreparePatriarchsList();
   PreparePlacesList();
+
+  SetLang();
 end;
 
 procedure TfmTreeTools.FormDestroy(Sender: TObject);
@@ -253,6 +268,74 @@ begin
   FRMSkip.Free;
 
   FSplitList.Free;
+end;
+
+procedure TfmTreeTools.SetLang();
+begin
+  btnClose.Caption := LSList[LSID_DlgClose];
+  btnHelp.Caption := LSList[LSID_MIHelp];
+  btnBack.Caption := '< ' + LSList[LSID_Backward];
+  btnNext.Caption := LSList[LSID_Forward] + ' >';
+
+  rgOperation.Caption := LSList[LSID_Operation];
+  rgOperation.Items[0] := LSList[LSID_ToolOp_1];
+  rgOperation.Items[1] := LSList[LSID_ToolOp_2];
+  rgOperation.Items[2] := LSList[LSID_ToolOp_3];
+  rgOperation.Items[3] := LSList[LSID_ToolOp_4];
+  rgOperation.Items[4] := LSList[LSID_ToolOp_5];
+  rgOperation.Items[5] := LSList[LSID_ToolOp_6];
+  rgOperation.Items[6] := LSList[LSID_ToolOp_7];
+  rgOperation.Items[7] := LSList[LSID_ToolOp_8];
+  rgOperation.Items[8] := LSList[LSID_ToolOp_9];
+
+  Label1.Caption := LSList[LSID_MIFile];
+  btnFileChoose.Caption := LSList[LSID_DlgSelect] + '...';
+
+  {fixme!}
+  //Label4
+  //edMasterBase
+  //Label7
+  btnUpdateSelect.Caption := LSList[LSID_DlgSelect] + '...';
+  //rgTreeMergeType
+  //gbSyncType
+
+  btnSelectAll.Caption := LSList[LSID_SelAll];
+  btnSelectFamily.Caption := LSList[LSID_SelFamily];
+  btnSelectAncestors.Caption := LSList[LSID_SelAncestors];
+  btnSelectDescendants.Caption := LSList[LSID_SelDescendants];
+  btnDelete.Caption := LSList[LSID_DoDelete];
+  btnSave.Caption := LSList[LSID_MIFileSave];
+
+  SheetMerge.Caption := LSList[LSID_RecMerge];
+  SheetOptions.Caption := LSList[LSID_MIOptions];
+  btnRec1Select.Caption := LSList[LSID_DlgSelect] + '...';
+  btnRec2Select.Caption := LSList[LSID_DlgSelect] + '...';
+  btnSearch.Caption := LSList[LSID_RM_Search];
+  btnSkip.Caption := LSList[LSID_RM_Skip];
+  rgMode.Caption := LSList[LSID_RM_Records];
+  rgMode.Items[0] := LSList[LSID_RPIndividuals];
+  rgMode.Items[1] := LSList[LSID_RPNotes];
+  rgMode.Items[2] := LSList[LSID_RPFamilies];
+  rgMode.Items[3] := LSList[LSID_RPSources];
+
+  GroupBox1.Caption := LSList[LSID_RM_SearchPersons];
+  rbDirectMatching.Caption := LSList[LSID_RM_DirectMatching];
+  rbIndistinctMatching.Caption := LSList[LSID_RM_IndistinctMatching];
+  chkOnlyNP.Caption := LSList[LSID_RM_OnlyNP];
+  chkBirthYear.Caption := LSList[LSID_RM_BirthYear];
+  Label5.Caption := LSList[LSID_RM_NameAccuracy];
+  Label6.Caption := LSList[LSID_RM_YearInaccuracy];
+
+  Label3.Caption := LSList[LSID_MIFile];
+  btnImportFileChoose.Caption := LSList[LSID_DlgSelect] + '...';
+
+  btnBaseRepair.Caption := LSList[LSID_Repair];
+
+  Label8.Caption := LSList[LSID_MinGenerations];
+  btnSetPatriarch.Caption := LSList[LSID_SetPatFlag];
+  btnPatSearch.Caption := LSList[LSID_Search];
+
+  btnIntoList.Caption := LSList[LSID_InsertIntoBook];
 end;
 
 procedure TfmTreeTools.FormKeyDown(Sender: TObject; var Key: Word;
@@ -284,7 +367,7 @@ begin
   fams := TStringList.Create;
   names := TStringList.Create;
   try
-    AddDiag('Поиск совпадений...');
+    AddDiag(LSList[LSID_SearchMatches]);
 
     for i := 0 to aMainTree.RecordsCount - 1 do
       if (aMainTree.Records[i] is TGEDCOMIndividualRecord) then begin
@@ -323,13 +406,13 @@ begin
         names.Delete(i);
       end;
 
-    AddDiag('Схожие фамилии:');
     if (fams.Count <> 0) then begin
+      AddDiag(LSList[LSID_SimilarSurnames]);
       for i := 0 to fams.Count - 1 do AddDiag('    ' + fams[i]);
-    end else AddDiag('    нет.');
+    end;
 
-    AddDiag('Схожие имена:');
     if (names.Count <> 0) then begin
+      AddDiag(LSList[LSID_SimilarNames]);
       for i := 0 to names.Count - 1 do begin
         AddDiag('    ' + names[i]);
         lst := TList(names.Objects[i]);
@@ -338,7 +421,7 @@ begin
           AddDiag('      * ' + GetNameStr(iRec) + ' ' + GetLifeStr(iRec));
         end;
       end;
-    end else AddDiag('    нет.');
+    end;
   finally
     for i := 0 to names.Count - 1 do TObject(names.Objects[i]).Free;
     names.Free;
@@ -545,7 +628,7 @@ begin
     then Base.DeleteIndividualRecord(TGEDCOMIndividualRecord(obj), False);
   end;
 
-  MessageDlg('Выбранные персональные записи удалены', mtInformation, [mbOk], 0);
+  MessageDlg(LSList[LSID_RecsDeleted], mtInformation, [mbOk], 0);
 
   FSplitList.Clear;
   UpdateSplitLists();
@@ -1003,7 +1086,7 @@ var
   root: TTreeNode;
   pn: string;
 begin
-  ProgressInit(FTree.RecordsCount, 'Проверка связности семей');
+  ProgressInit(FTree.RecordsCount, LSList[LSID_CheckFamiliesConnection]);
   prepared := TList.Create;
   //TreeView1.Items.BeginUpdate();
   try
@@ -1018,7 +1101,7 @@ begin
         FSplitList.Clear();
         TreeWalk(iRec, twmAll, FSplitList);
 
-        root := TreeView1.Items.AddChild(nil, IntToStr(group) + ' группа (' + IntToStr(FSplitList.Count) + ' перс.)');
+        root := TreeView1.Items.AddChild(nil, IntToStr(group) + ' '+AnsiLowerCase(LSList[LSID_Group])+' (' + IntToStr(FSplitList.Count) + ')');
         for k := 0 to FSplitList.Count - 1 do begin
           iRec := TObject(FSplitList[k]) as TGEDCOMIndividualRecord;
           prepared.Add(iRec);
@@ -1062,9 +1145,9 @@ begin
   Base.CreateListView(Self, Panel1, ListChecks);
   ListChecks.Checkboxes := True;
   ListChecks.OnDblClick := ListChecksDblClick;
-  AddListColumn(ListChecks, 'Запись', 400);
-  AddListColumn(ListChecks, 'Проблема', 200);
-  AddListColumn(ListChecks, 'Решение', 200);
+  AddListColumn(ListChecks, LSList[LSID_Record], 400);
+  AddListColumn(ListChecks, LSList[LSID_Problem], 200);
+  AddListColumn(ListChecks, LSList[LSID_Solve], 200);
 end;
 
 procedure TfmTreeTools.CheckBase();
@@ -1078,7 +1161,7 @@ var
   y_birth, y_death: Integer;
 begin
   try
-    ProgressInit(FTree.RecordsCount, 'Проверка базы данных');
+    ProgressInit(FTree.RecordsCount, LSList[LSID_ToolOp_7]);
 
     FChecksList.Clear;
     for i := 0 to FTree.RecordsCount - 1 do begin
@@ -1098,7 +1181,7 @@ begin
               checkObj.Rec := iRec;
               checkObj.Diag := cdPersonLonglived;
               checkObj.Solve := csSetIsDead;
-              checkObj.Comment := 'Возможно умерший (возраст ' + age + ')';
+              checkObj.Comment := Format(LSList[LSID_PersonLonglived], [age]);
               FChecksList.Add(checkObj);
             end;
           end;
@@ -1110,7 +1193,7 @@ begin
           checkObj.Rec := iRec;
           checkObj.Diag := cdPersonSexless;
           checkObj.Solve := csDefineSex;
-          checkObj.Comment := 'Не задан пол';
+          checkObj.Comment := LSList[LSID_PersonSexless];
           FChecksList.Add(checkObj);
         end;
 
@@ -1123,7 +1206,7 @@ begin
           checkObj.Rec := iRec;
           checkObj.Diag := cdLiveYearsInvalid;
           checkObj.Solve := csSkip;
-          checkObj.Comment := 'Год рождения больше года смерти';
+          checkObj.Comment := LSList[LSID_LiveYearsInvalid];
           FChecksList.Add(checkObj);
         end;
 
@@ -1134,7 +1217,7 @@ begin
           checkObj.Rec := iRec;
           checkObj.Diag := cdStrangeSpouse;
           checkObj.Solve := csSkip;
-          checkObj.Comment := 'Первый брак в возрасте '+IntToStr(iAge)+' лет?';
+          checkObj.Comment := Format(LSList[LSID_StrangeSpouse], [IntToStr(iAge)]);
           FChecksList.Add(checkObj);
         end;
 
@@ -1145,7 +1228,7 @@ begin
           checkObj.Rec := iRec;
           checkObj.Diag := cdStrangeParent;
           checkObj.Solve := csSkip;
-          checkObj.Comment := 'Первый ребенок родился в возрасте '+IntToStr(iAge)+' лет?';
+          checkObj.Comment := Format(LSList[LSID_StrangeParent], [IntToStr(iAge)]);
           FChecksList.Add(checkObj);
         end;
       end;
@@ -1297,14 +1380,18 @@ var
   item: TListItem;
   i_rec: TGEDCOMIndividualRecord;
 begin
-  item := ListPatriarchs.Selected;
-  if (item = nil) then Exit;
+  try
+    item := ListPatriarchs.Selected;
+    if (item = nil) then Exit;
 
-  i_rec := TGEDCOMIndividualRecord(item.Data);
-  if (i_rec = nil) then Exit;
+    i_rec := TGEDCOMIndividualRecord(item.Data);
+    if (i_rec = nil) then Exit;
 
-  i_rec.Patriarch := True;
-  Base.ListsRefresh();
+    i_rec.Patriarch := True;
+  finally
+    btnPatSearchClick(nil);
+    Base.ListsRefresh();
+  end;
 end;
 
 procedure TfmTreeTools.PreparePatriarchsList();
@@ -1312,10 +1399,10 @@ begin
   Base.CreateListView(Self, Panel3, ListPatriarchs);
   //ListPatriarchs.Checkboxes := True;
   ListPatriarchs.OnDblClick := ListPatriarchsDblClick;
-  AddListColumn(ListPatriarchs, 'Патриарх', 400);
-  AddListColumn(ListPatriarchs, 'Родился', 90);
-  AddListColumn(ListPatriarchs, 'Потомков', 90);
-  AddListColumn(ListPatriarchs, 'Поколений', 90);
+  AddListColumn(ListPatriarchs, LSList[LSID_Patriarch], 400);
+  AddListColumn(ListPatriarchs, LSList[LSID_Birth], 90);
+  AddListColumn(ListPatriarchs, LSList[LSID_Descendants], 90);
+  AddListColumn(ListPatriarchs, LSList[LSID_Generations], 90);
 end;
 
 function TfmTreeTools.GetBase: TfmBase;
@@ -1352,8 +1439,8 @@ begin
   Base.CreateListView(Self, Panel4, ListPlaces);
   //ListPlaces.Checkboxes := True;
   ListPlaces.OnDblClick := ListPlacesDblClick;
-  AddListColumn(ListPlaces, 'Место', 400);
-  AddListColumn(ListPlaces, 'Количество ссылок', 100);
+  AddListColumn(ListPlaces, LSList[LSID_Place], 400);
+  AddListColumn(ListPlaces, LSList[LSID_LinksCount], 100);
 end;
 
 type
@@ -1424,7 +1511,7 @@ var
   item: TListItem;
   place_obj: TPlaceObj;
 begin
-  ProgressInit(FTree.RecordsCount, 'Обработка мест');
+  ProgressInit(FTree.RecordsCount, LSList[LSID_PlacesPrepare]);
   ListPlaces.Items.BeginUpdate();
   try
     PlacesClear();
@@ -1473,7 +1560,7 @@ begin
   if (p_obj = nil) then Exit;
 
   if (Pos('[*]', p_obj.Name) = 1) then begin
-    MessageDlg('Место уже внесено в справочник', mtWarning, [mbOk], 0);
+    MessageDlg(LSList[LSID_PlaceAlreadyInBook], mtWarning, [mbOk], 0);
     Exit;
   end;
 
@@ -1496,13 +1583,8 @@ begin
 end;
 
 procedure TfmTreeTools.btnHelpClick(Sender: TObject);
-//var
-  //ref: string;
 begin
-  //ref := '';
-  //if (PageControl.ActivePage = SheetTreeImport) then ref := '$tree_import';
-
-  LoadExtFile({'"' + }GetAppPath() + 'help\GEDKeeper.htm'{ + ref + '"'});
+  fmGEDKeeper.ShowHelpTopic(HelpTopics[rgOperation.ItemIndex]);
 end;
 
 end.

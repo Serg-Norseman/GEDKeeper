@@ -1,4 +1,4 @@
-unit GKCalendarCore;
+unit GKCalendarCore; {trans:partial}
 
 (*
  * Partial copyright by John Walker

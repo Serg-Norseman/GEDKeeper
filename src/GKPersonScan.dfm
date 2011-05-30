@@ -27,12 +27,12 @@ object fmPersonScan: TfmPersonScan
     TabOrder = 0
     OnClick = btnParseClick
   end
-  object btnCancel: TBitBtn
+  object btnClose: TBitBtn
     Left = 560
     Top = 424
     Width = 81
     Height = 25
-    Caption = #1054#1090#1084#1077#1085#1080#1090#1100
+    Caption = #1047#1072#1082#1088#1099#1090#1100
     TabOrder = 1
     Kind = bkCancel
   end

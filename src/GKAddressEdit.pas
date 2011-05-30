@@ -1,4 +1,4 @@
-unit GKAddressEdit; {prepare:fin}
+unit GKAddressEdit; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,10 +6,10 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons, ComCtrls,
-  ExtCtrls, GedCom551, GKBase, GKEngine, GKLists;
+  ExtCtrls, GedCom551, GKBase, GKEngine, GKLists, GKLangs;
 
 type
-  TfmAddressEdit = class(TForm)
+  TfmAddressEdit = class(TForm, ILocalization)
     btnAccept: TBitBtn;
     btnCancel: TBitBtn;
     PageAddrData: TPageControl;
@@ -41,6 +41,8 @@ type
     procedure UpdateLists();
   public
     property Address: TGEDCOMAddress read FAddress write SetAddress;
+
+    procedure SetLang();
   end;
 
 var
@@ -50,27 +52,40 @@ implementation
 
 {$R *.dfm}
 
-type
-  TAddressTab = (atPhones, atMails, atWebs);
-
-const
-  Titles: array [TAddressTab] of string = ('Телефон', 'Эл. почта', 'Веб-страница');
-
-{ TfmAddressEdit }
-
 procedure TfmAddressEdit.FormCreate(Sender: TObject);
 begin
   FPhonesList := TSheetList.Create(SheetPhones);
   FPhonesList.OnModify := ListModify;
-  AddListColumn(FPhonesList.List, Titles[atPhones], 350, False);
+  AddListColumn(FPhonesList.List, LSList[LSID_Telephone], 350, False);
 
   FMailsList := TSheetList.Create(SheetEmails);
   FMailsList.OnModify := ListModify;
-  AddListColumn(FMailsList.List, Titles[atMails], 350, False);
+  AddListColumn(FMailsList.List, LSList[LSID_Mail], 350, False);
 
   FWebsList := TSheetList.Create(SheetWebPages);
   FWebsList.OnModify := ListModify;
-  AddListColumn(FWebsList.List, Titles[atWebs], 350, False);
+  AddListColumn(FWebsList.List, LSList[LSID_WebSite], 350, False);
+
+  SetLang();
+end;
+
+procedure TfmAddressEdit.SetLang();
+begin
+  btnAccept.Caption := LSList[LSID_DlgAccept];
+  btnCancel.Caption := LSList[LSID_DlgCancel];
+
+  Caption := LSList[LSID_Address];
+  SheetCommon.Caption := LSList[LSID_Address];
+
+  Label1.Caption := LSList[LSID_AdCountry];
+  Label2.Caption := LSList[LSID_AdState];
+  Label3.Caption := LSList[LSID_AdCity];
+  Label4.Caption := LSList[LSID_AdPostalCode];
+  Label5.Caption := LSList[LSID_Address];
+
+  SheetPhones.Caption := LSList[LSID_Telephones];
+  SheetEmails.Caption := LSList[LSID_EMails];
+  SheetWebPages.Caption := LSList[LSID_WebSites];
 end;
 
 procedure TfmAddressEdit.UpdateLists();
@@ -119,7 +134,7 @@ procedure TfmAddressEdit.ListModify(Sender: TObject; ItemData: TObject; Action: 
 
   function GetInput(aTitle: string; var aValue: string): Boolean;
   begin
-    Result := InputQuery(aTitle, 'Значение', aValue) and (Trim(aValue) <> '');
+    Result := InputQuery(aTitle, LSList[LSID_Value], aValue) and (Trim(aValue) <> '');
   end;
 
 var
@@ -132,13 +147,13 @@ begin
     case Action of
       raAdd: begin
         val := '';
-        if GetInput(Titles[atPhones], val)
+        if GetInput(LSList[LSID_Telephone], val)
         then FAddress.PhoneNumbers[FAddress.PhoneNumbersCount] := val;
       end;
       raEdit: begin
         if (Index < 0) then Exit;
         val := FAddress.PhoneNumbers[Index];
-        if GetInput(Titles[atPhones], val)
+        if GetInput(LSList[LSID_Telephone], val)
         then FAddress.PhoneNumbers[Index] := val;
       end;
       raDelete: begin
@@ -152,13 +167,13 @@ begin
     case Action of
       raAdd: begin
         val := '';
-        if GetInput(Titles[atMails], val)
+        if GetInput(LSList[LSID_Mail], val)
         then FAddress.EmailAddresses[FAddress.EmailAddressesCount] := val;
       end;
       raEdit: begin
         if (Index < 0) then Exit;
         val := FAddress.EmailAddresses[Index];
-        if GetInput(Titles[atMails], val)
+        if GetInput(LSList[LSID_Mail], val)
         then FAddress.EmailAddresses[Index] := val;
       end;
       raDelete: begin
@@ -172,13 +187,13 @@ begin
     case Action of
       raAdd: begin
         val := '';
-        if GetInput(Titles[atWebs], val)
+        if GetInput(LSList[LSID_WebSite], val)
         then FAddress.WebPages[FAddress.WebPagesCount] := val;
       end;
       raEdit: begin
         if (Index < 0) then Exit;
         val := FAddress.WebPages[Index];
-        if GetInput(Titles[atWebs], val)
+        if GetInput(LSList[LSID_WebSite], val)
         then FAddress.WebPages[Index] := val;
       end;
       raDelete: begin

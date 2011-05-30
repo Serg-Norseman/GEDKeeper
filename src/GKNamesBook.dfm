@@ -3,7 +3,7 @@ object fmNamesBook: TfmNamesBook
   Top = 112
   BorderStyle = bsToolWindow
   Caption = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082' '#1080#1084#1077#1085
-  ClientHeight = 257
+  ClientHeight = 353
   ClientWidth = 274
   Color = clBtnFace
   Font.Charset = RUSSIAN_CHARSET
@@ -34,9 +34,10 @@ object fmNamesBook: TfmNamesBook
     Left = 8
     Top = 184
     Width = 257
-    Height = 65
+    Height = 161
     Color = clBtnFace
     ReadOnly = True
+    ScrollBars = ssVertical
     TabOrder = 1
   end
 end

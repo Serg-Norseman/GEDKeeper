@@ -1,4 +1,4 @@
-unit GKNamesBook; {prepare:fin}
+unit GKNamesBook; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,10 +6,10 @@ interface
 
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls,
-  Contnrs;
+  Contnrs, GKLangs;
 
 type
-  TfmNamesBook = class(TForm)
+  TfmNamesBook = class(TForm, ILocalization)
     cbNames: TComboBox;
     mmDesc: TMemo;
     procedure FormCreate(Sender: TObject);
@@ -18,8 +18,10 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     FNames: TObjectList;
+    FChurchFNames, FChurchMNames: TStringList;
     procedure PrepareList();
   public
+    procedure SetLang();
   end;
 
 var
@@ -40,17 +42,29 @@ type
     Name: string;
     Desc: string;
     Sex: (nsMale, nsFemale);
+    ChIndex: Integer;
   end;
 
 procedure TfmNamesBook.FormCreate(Sender: TObject);
 begin
   FNames := TObjectList.Create(True);
+  FChurchFNames := TStringList.Create;
+  FChurchMNames := TStringList.Create;
   PrepareList();
+
+  SetLang();
 end;
 
 procedure TfmNamesBook.FormDestroy(Sender: TObject);
 begin
+  FChurchFNames.Destroy;
+  FChurchMNames.Destroy;
   FNames.Free;
+end;
+
+procedure TfmNamesBook.SetLang();
+begin
+  Caption := LSList[LSID_MINamesBook];
 end;
 
 procedure TfmNamesBook.PrepareList();
@@ -64,18 +78,18 @@ procedure TfmNamesBook.PrepareList();
 
 var
   fs: TResourceStream;
-  tf: TTextFileEx;
+  tf: TStAnsiTextStream;
   ns, st: string;
   rec: TNameRecord;
-  i: Integer;
+  i, k: Integer;
+  lst: TStringList;
 begin
   // loading
   fs := TResourceStream.Create(HInstance, 'NAMES_DATA', RT_RCDATA);
-  tf := TTextFileEx.Create(fs);
+  tf := TStAnsiTextStream.Create(fs);
   try
-    while not(tf.Eof) do begin
-      ns := tf.ReadLn();
-      ns := Trim(ns);
+    while not(tf.AtEndOfStream) do begin
+      ns := Trim(tf.ReadLine());
 
       if (ns <> '') and (GetTokensCount(ns, '/') >= 3) then begin
         rec := TNameRecord.Create;
@@ -98,6 +112,22 @@ begin
     fs.Free;
   end;
 
+  ///
+  fs := TResourceStream.Create(HInstance, 'CHURCH_FNAMES_DATA', RT_RCDATA);
+  try
+    FChurchFNames.LoadFromStream(fs);
+  finally
+    fs.Free;
+  end;
+  //
+  fs := TResourceStream.Create(HInstance, 'CHURCH_MNAMES_DATA', RT_RCDATA);
+  try
+    FChurchMNames.LoadFromStream(fs);
+  finally
+    fs.Free;
+  end;
+  ///
+
   // fill list
   cbNames.Items.BeginUpdate;
   try
@@ -105,7 +135,22 @@ begin
 
     for i := 0 to FNames.Count - 1 do begin
       rec := TNameRecord(FNames[i]);
-      cbNames.Items.AddObject(rec.Name, rec);
+      ns := rec.Name;
+      cbNames.Items.AddObject(ns, rec);
+
+      rec.ChIndex := -1;
+      ns := AnsiUpperCase(ns);
+      if (rec.Sex = nsMale) then lst := FChurchMNames
+      else
+      if (rec.Sex = nsFemale) then lst := FChurchFNames;
+
+      for k := 0 to lst.Count - 1 do begin
+        st := lst[k];
+        if (st[1] = '-') and (Pos(ns, st) > 0) then begin
+          rec.ChIndex := k;
+          Break;
+        end;
+      end;
     end;
   finally
     cbNames.Items.EndUpdate;
@@ -114,15 +159,38 @@ end;
 
 procedure TfmNamesBook.cbNamesSelect(Sender: TObject);
 var
-  idx: Integer;
+  idx, k: Integer;
   rec: TNameRecord;
+  lst: TStringList;
+  st: string;
 begin
   idx := cbNames.ItemIndex;
   if (idx < 0) or (idx >= cbNames.Items.Count) then Exit;
   rec := TNameRecord(cbNames.Items.Objects[idx]);
+
   mmDesc.Lines.Clear;
   mmDesc.Lines.Add(rec.Name);
   mmDesc.Lines.Add(rec.Desc);
+
+  if (rec.ChIndex >= 0) then begin
+    mmDesc.Lines.Add('');
+    mmDesc.Lines.Add('Ñâÿòöû:');
+
+    if (rec.Sex = nsMale) then lst := FChurchMNames
+    else
+    if (rec.Sex = nsFemale) then lst := FChurchFNames;
+
+    for k := rec.ChIndex + 1 to lst.Count - 1 do begin
+      st := Trim(lst[k]);
+
+      if (st[1] = '-')
+      then Break
+      else begin
+        Delete(st, 1, 1);
+        mmDesc.Lines.Add(st);
+      end;
+    end;
+  end;
 end;
 
 procedure TfmNamesBook.FormClose(Sender: TObject; var Action: TCloseAction);

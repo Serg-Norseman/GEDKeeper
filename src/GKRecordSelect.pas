@@ -1,4 +1,4 @@
-unit GKRecordSelect; {prepare:fin}
+unit GKRecordSelect; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,10 +6,10 @@ interface
 
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms, ComCtrls, StdCtrls,
-  Buttons, ExtCtrls, GedCom551, GKEngine, GKBase, GKLists;
+  Buttons, ExtCtrls, GedCom551, GKEngine, GKBase, GKLists, GKLangs;
 
 type
-  TfmRecordSelect = class(TForm)
+  TfmRecordSelect = class(TForm, ILocalization)
     btnSelect: TBitBtn;
     btnCreate: TBitBtn;
     btnCancel: TBitBtn;
@@ -46,6 +46,8 @@ type
     property Filter: string read FFilter write SetFilter;
     property Mode: TGEDCOMRecordType read FMode write SetMode;
     property TargetMode: TTargetMode read FTargetMode write SetTargetMode;
+
+    procedure SetLang();
   end;
 
 implementation
@@ -60,6 +62,8 @@ begin
   FLocalFilter.List := flSelector;
 
   FFilter := '*';
+
+  SetLang();
 end;
 
 procedure TfmRecordSelect.DataRefresh();
@@ -221,6 +225,15 @@ begin
     then FFilter := '*' + FFilter + '*';
 
   DataRefresh();
+end;
+
+procedure TfmRecordSelect.SetLang();
+begin
+  btnCreate.Caption := LSList[LSID_DlgAppend];
+  btnSelect.Caption := LSList[LSID_DlgSelect];
+  btnCancel.Caption := LSList[LSID_DlgCancel];
+
+  Caption := LSList[LSID_WinRecordSelect];
 end;
 
 procedure TfmRecordSelect.SetTargetMode(const Value: TTargetMode);

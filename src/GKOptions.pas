@@ -1,4 +1,4 @@
-unit GKOptions; {prepare:fin}
+unit GKOptions; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,10 +6,10 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, ExtCtrls,
-  ComCtrls, Buttons, GKCommon, GKLists;
+  ComCtrls, Buttons, GKCommon, GKLists, GKLangs;
 
 type
-  TfmOptions = class(TForm)
+  TfmOptions = class(TForm, ILocalization)
     PageControl1: TPageControl;
     SheetCommon: TTabSheet;
     rgCode: TRadioGroup;
@@ -69,7 +69,10 @@ type
     chkNotes: TCheckBox;
     chkSources: TCheckBox;
     EditPedigreeFormat: TRadioGroup;
+    Label6: TLabel;
+    cbLanguages: TComboBox;
     chkTreeDecorative: TCheckBox;
+    chkPortraitsVisible: TCheckBox;
     procedure FormShow(Sender: TObject);
     procedure btnAcceptClick(Sender: TObject);
     procedure PanMaleColorClick(Sender: TObject);
@@ -79,6 +82,7 @@ type
       Change: TItemChange);
     procedure btnDefListClick(Sender: TObject);
     procedure PanDefFontClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     FOptions: TGlobalOptions;
     FPersonColumns: TPersonColumnsList;
@@ -87,13 +91,94 @@ type
     procedure UpdateControls();
   public
     property Options: TGlobalOptions read FOptions write FOptions;
+
+    procedure SetLang();
   end;
 
 implementation
 
-uses GedCom551, GKEngine, GKMain;
+uses GedCom551, GKEngine, GKMain, GKUtils;
 
 {$R *.dfm}
+
+procedure TfmOptions.FormCreate(Sender: TObject);
+begin
+  SetLang();
+end;
+
+procedure TfmOptions.SetLang();
+begin
+  btnAccept.Caption := LSList[LSID_DlgAccept];
+  btnCancel.Caption := LSList[LSID_DlgCancel];
+
+  Caption := LSList[LSID_MIOptions];
+
+  SheetCommon.Caption := LSList[LSID_Common];
+  SheetView.Caption := LSList[LSID_Interface];
+  SheetTree.Caption := LSList[LSID_Trees];
+  SheetPedigree.Caption := LSList[LSID_Pedigrees];
+
+  ///
+
+  rgCode.Caption := LSList[LSID_SaveCoding];
+  rgEditMode.Caption := LSList[LSID_WorkMode];
+    rgEditMode.Items[0] := LSList[LSID_Simple];
+    rgEditMode.Items[1] := LSList[LSID_Expert];
+
+  GroupBox4.Caption := LSList[LSID_Internet];
+  chkProxy.Caption := LSList[LSID_ProxyUse];
+  Label1.Caption := LSList[LSID_ProxyServer];
+  Label2.Caption := LSList[LSID_ProxyPort];
+  Label3.Caption := LSList[LSID_ProxyLogin];
+  Label4.Caption := LSList[LSID_ProxyPassword];
+
+  GroupBox7.Caption := LSList[LSID_Tips];
+  chkShowOnStart.Caption := LSList[LSID_StartupTips];
+
+  Label6.Caption := LSList[LSID_Language];
+
+  SheetViewCommon.Caption := LSList[LSID_ListsAll];
+  SheetViewPersons.Caption := LSList[LSID_ListPersons];
+    rgFNPFormat.Caption := LSList[LSID_NamesFormat];
+    rgFNPFormat.Items[0] := LSList[LSID_NF1];
+    rgFNPFormat.Items[1] := LSList[LSID_NF2];
+    rgFNPFormat.Items[2] := LSList[LSID_NF3];
+    rgDateFormat.Caption := LSList[LSID_DateFormat];
+    chkPlacesWithAddress.Caption := LSList[LSID_PlacesWithAddress];
+    chkHighlightUnparented.Caption := LSList[LSID_HighlightUnparented];
+    chkHighlightUnmarried.Caption := LSList[LSID_HighlightUnmarried];
+    btnDefList.Caption := LSList[LSID_DefList];
+
+  GroupBox1.Caption := LSList[LSID_ViewTree];
+    chkFamily.Caption := LSList[LSID_Surname];
+    chkName.Caption := LSList[LSID_Name];
+    chkPatronymic.Caption := LSList[LSID_Patronymic];
+    chkDiffLines.Caption := LSList[LSID_DiffLines];          
+    chkBirthDate.Caption := LSList[LSID_BirthDate];
+    chkDeathDate.Caption := LSList[LSID_DeathDate];
+    chkOnlyYears.Caption := LSList[LSID_OnlyYears];
+    chkKinship.Caption := LSList[LSID_Kinship];
+    chkSignsVisible.Caption := LSList[LSID_SignsVisible];
+    chkTreeDecorative.Caption := LSList[LSID_TreeDecorative];
+    chkPortraitsVisible.Caption := LSList[LSID_PortraitsVisible];
+    chkChildlessExclude.Caption := LSList[LSID_ChildlessExclude];
+
+  GroupBox2.Caption := LSList[LSID_Decor];
+    PanMaleColor.Caption := LSList[LSID_Man];
+    PanFemaleColor.Caption := LSList[LSID_Woman];
+    PanUnkSexColor.Caption := LSList[LSID_UnkSex];      
+    PanUnHusbandColor.Caption := LSList[LSID_UnHusband];
+    PanUnWifeColor.Caption := LSList[LSID_UnWife];
+    Label5.Caption := LSList[LSID_Font];
+
+  GroupBox5.Caption := LSList[LSID_PedigreeGen];
+    chkAttributes.Caption := LSList[LSID_IncludeAttributes];
+    chkNotes.Caption := LSList[LSID_IncludeNotes];
+    chkSources.Caption := LSList[LSID_IncludeSources];
+    EditPedigreeFormat.Caption := LSList[LSID_PedigreeFormat];
+    EditPedigreeFormat.Items[0] := LSList[LSID_PF1];
+    EditPedigreeFormat.Items[1] := LSList[LSID_PF2];
+end;
 
 procedure TfmOptions.UpdateControls();
 begin
@@ -103,6 +188,9 @@ begin
 end;
 
 procedure TfmOptions.FormShow(Sender: TObject);
+var
+  i, idx: Integer;
+  lng_rec: TLangRecord;
 begin
   case FOptions.DefCharacterSet of
     csASCII: rgCode.ItemIndex := 0;
@@ -127,6 +215,7 @@ begin
 
   chkChildlessExclude.Checked := FOptions.ChartOptions.ChildlessExclude;
   chkTreeDecorative.Checked := FOptions.ChartOptions.Decorative;
+  chkPortraitsVisible.Checked := FOptions.ChartOptions.PortraitsVisible;
 
   PanMaleColor.Color := FOptions.ChartOptions.MaleColor;
   PanFemaleColor.Color := FOptions.ChartOptions.FemaleColor;
@@ -153,9 +242,21 @@ begin
   UpdateColumnsList();
 
   UpdateControls();
+
+  cbLanguages.Clear;
+  cbLanguages.Items.AddObject(LSDefName, TObject(LSDefCode));
+  idx := 0;
+  for i := 0 to FOptions.LangsCount - 1 do begin
+    lng_rec := FOptions.Langs[i];
+    if (FOptions.InterfaceLang = lng_rec.Code) then idx := i + 1;
+    cbLanguages.Items.AddObject(lng_rec.Name, TObject(lng_rec.Code));
+  end;
+  cbLanguages.ItemIndex := idx;
 end;
 
 procedure TfmOptions.btnAcceptClick(Sender: TObject);
+var
+  code: Integer;
 begin
   FOptions.ListPersonsColumns := FPersonColumns;
 
@@ -182,6 +283,7 @@ begin
 
   FOptions.ChartOptions.ChildlessExclude := chkChildlessExclude.Checked;
   FOptions.ChartOptions.Decorative := chkTreeDecorative.Checked;
+  FOptions.ChartOptions.PortraitsVisible := chkPortraitsVisible.Checked;
 
   FOptions.ChartOptions.MaleColor := PanMaleColor.Color;
   FOptions.ChartOptions.FemaleColor := PanFemaleColor.Color;
@@ -203,6 +305,9 @@ begin
 
   FOptions.ShowTips := chkShowOnStart.Checked;
   FOptions.WorkMode := TWorkMode(rgEditMode.ItemIndex);
+
+  code := Integer(cbLanguages.Items.Objects[cbLanguages.ItemIndex]);
+  fmGEDKeeper.LoadLanguage(code);
 end;
 
 procedure TfmOptions.PanMaleColorClick(Sender: TObject);
@@ -237,7 +342,7 @@ begin
       pct := FPersonColumns[i].colType;
 
       item := ListPersonColumns.Items.Add();
-      item.Caption := PersonColumnsName[pct].Name;
+      item.Caption := LSList[PersonColumnsName[pct].Name];
       item.Checked := FPersonColumns[i].colActive;
     end;
   finally

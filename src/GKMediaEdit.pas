@@ -1,4 +1,4 @@
-unit GKMediaEdit; {prepare:fin}
+unit GKMediaEdit; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,10 +6,10 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons, ComCtrls,
-  GedCom551, GKBase, GKEngine, GKCtrls, GKLists;
+  GedCom551, GKBase, GKEngine, GKCtrls, GKLists, GKLangs;
 
 type
-  TfmMediaEdit = class(TForm)
+  TfmMediaEdit = class(TForm, ILocalization)
     PagesData: TPageControl;
     SheetNotes: TTabSheet;
     SheetSources: TTabSheet;
@@ -47,6 +47,8 @@ type
   public
     property Base: TfmBase read GetBase;
     property MediaRec: TGEDCOMMultimediaRecord read FMediaRec write SetMediaRec;
+
+    procedure SetLang();
   end;
 
 implementation
@@ -56,18 +58,16 @@ uses
 
 {$R *.dfm}
 
-{ TfmFamilyEdit }
-
 procedure TfmMediaEdit.FormCreate(Sender: TObject);
 var
   mt: TGEDCOMMediaType;
   gst: TGKStoreType;
 begin
   for mt := Low(TGEDCOMMediaType) to High(TGEDCOMMediaType) do
-    cbMediaType.Items.Add(MediaTypes[mt].Name);
+    cbMediaType.Items.Add(LSList[MediaTypes[mt]]);
 
   for gst := Low(TGKStoreType) to High(TGKStoreType) do
-    cbStoreType.Items.Add(GKStoreType[gst].Name);
+    cbStoreType.Items.Add(LSList[GKStoreType[gst].Name]);
   cbStoreType.ItemIndex := 0;
 
   FNotesList := TSheetList.Create(SheetNotes, lmBox);
@@ -77,6 +77,29 @@ begin
   FSourcesList := TSheetList.Create(SheetSources);
   FSourcesList.OnModify := ListModify;
   Base.SetupRecSourcesList(FSourcesList);
+
+  SetLang();
+end;
+
+procedure TfmMediaEdit.SetLang();
+begin
+  btnAccept.Caption := LSList[LSID_DlgAccept];
+  btnCancel.Caption := LSList[LSID_DlgCancel];
+
+  SheetCommon.Caption := LSList[LSID_Common];
+  SheetNotes.Caption := LSList[LSID_RPNotes];
+  SheetSources.Caption := LSList[LSID_RPSources];
+
+  Label1.Caption := LSList[LSID_Title];
+  Label2.Caption := LSList[LSID_Type];
+  Label4.Caption := LSList[LSID_StoreType];
+  Label3.Caption := LSList[LSID_File];
+  btnView.Caption := LSList[LSID_View] + '...';
+end;
+
+procedure TfmMediaEdit.edNameChange(Sender: TObject);
+begin
+  Caption := LSList[LSID_RPMultimedia] + ' "' + edName.Text + '"';
 end;
 
 procedure TfmMediaEdit.ControlsRefresh();
@@ -93,7 +116,7 @@ begin
   cbMediaType.ItemIndex := Ord(file_ref.MediaType);
   edFile.Text := file_ref.StringValue;
 
-  gst := Base.GetStoreType(file_ref.StringValue, dummy);
+  gst := Base.Engine.GetStoreType(file_ref.StringValue, dummy);
   cbStoreType.ItemIndex := Ord(gst);
 
   edFile.Enabled := (FIsNew);
@@ -129,7 +152,7 @@ begin
 
     if (gst in [gstArchive, gstStorage]) then begin
       if not(Base.IsAdvanced) then begin
-        MessageDlg('Для выбранного режима хранения не включено расширение', mtError, [mbOk], 0);
+        MessageDlg(LSList[LSID_AdvancedWarning], mtError, [mbOk], 0);
         if (Base.FileProperties(fpmAdvanced) = mrCancel) or not(Base.IsAdvanced)
         then begin
           ModalResult := mrNone;
@@ -137,14 +160,14 @@ begin
         end;
       end;
 
-      if not(Base.CheckPath()) then begin
+      if not(Base.Engine.CheckPath()) then begin
         ModalResult := mrNone;
         Exit;
       end;
     end;
 
     source_fn := edFile.Text;
-    Base.MediaSave(source_fn, gst, ref_fn);
+    Base.Engine.MediaSave(source_fn, gst, ref_fn);
     file_ref.LinkFile(ref_fn, TGEDCOMMediaType(cbMediaType.ItemIndex));
   end else begin
     file_ref.MediaType := TGEDCOMMediaType(cbMediaType.ItemIndex);
@@ -189,11 +212,6 @@ end;
 function TfmMediaEdit.GetBase(): TfmBase;
 begin
   Result := TfmBase(Owner);
-end;
-
-procedure TfmMediaEdit.edNameChange(Sender: TObject);
-begin
-  Caption := 'Мультимедиа объект "'+edName.Text+'"';
 end;
 
 end.

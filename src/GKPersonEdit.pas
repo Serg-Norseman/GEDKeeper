@@ -1,4 +1,4 @@
-unit GKPersonEdit; {prepare:partial}
+unit GKPersonEdit; {prepare:partial; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,10 +6,11 @@ interface
 
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls,
-  ComCtrls, ExtCtrls, Buttons, GedCom551, GKBase, GKEngine, GKCtrls, GKLists;
+  ComCtrls, ExtCtrls, Buttons, GedCom551, GKBase, GKEngine, GKCtrls, GKLists,
+  GKLangs;
                                                   
 type
-  TfmPersonEdit = class(TForm)
+  TfmPersonEdit = class(TForm, ILocalization)
     PagesPersonData: TPageControl;
     SheetEvents: TTabSheet;
     SheetNotes: TTabSheet;
@@ -27,21 +28,11 @@ type
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
-    btnNameCopy: TSpeedButton;
     EditFamily: TEdit;
     EditName: TEdit;
     EditPatronymic: TEdit;
     EditSex: TComboBox;
     CheckPatriarch: TCheckBox;
-    GroupBox2: TGroupBox;
-    Label8: TLabel;
-    Label6: TLabel;
-    Label9: TLabel;
-    Label7: TLabel;
-    edPieceSurnamePrefix: TEdit;
-    edPiecePrefix: TEdit;
-    edPieceSuffix: TEdit;
-    edPieceNickname: TEdit;
     SheetUserRefs: TTabSheet;
     PageCtlParents: TPageControl;
     SheetCommonParents: TTabSheet;
@@ -62,6 +53,19 @@ type
     btnMotherSel: TSpeedButton;
     btnFatherSel: TSpeedButton;
     chkBookmark: TCheckBox;
+    Label8: TLabel;
+    edPieceSurnamePrefix: TEdit;
+    Label6: TLabel;
+    edPiecePrefix: TEdit;
+    Label9: TLabel;
+    edPieceSuffix: TEdit;
+    Label7: TLabel;
+    edPieceNickname: TEdit;
+    panPortrait: TPanel;
+    imgPortrait: TImage;
+    btnNameCopy: TSpeedButton;
+    btnPortraitAdd: TSpeedButton;
+    btnPortraitDelete: TSpeedButton;
     procedure FormCreate(Sender: TObject);
     procedure btnFatherAddClick(Sender: TObject);
     procedure btnFatherDeleteClick(Sender: TObject);
@@ -74,11 +78,13 @@ type
     procedure EditFamilyChange(Sender: TObject);
     procedure EditNameChange(Sender: TObject);
     procedure EditPatronymicChange(Sender: TObject);
-    procedure btnNameCopyClick(Sender: TObject);
     procedure btnParentsAddClick(Sender: TObject);
     procedure btnParentsEditClick(Sender: TObject);
     procedure btnParentsDeleteClick(Sender: TObject);
     procedure EditFamilyKeyPress(Sender: TObject; var Key: Char);
+    procedure btnNameCopy1Click(Sender: TObject);
+    procedure btnPortraitAddClick(Sender: TObject);
+    procedure btnPortraitDeleteClick(Sender: TObject);
   private
     FPerson: TGEDCOMIndividualRecord;
 
@@ -91,6 +97,7 @@ type
     FSourcesList: TSheetList;
     FUserRefList: TSheetList;
 
+    procedure PortraitRefresh();
     procedure ControlsRefresh();
     function  GetBase: TfmBase;
     procedure SetPerson(const Value: TGEDCOMIndividualRecord);
@@ -100,6 +107,8 @@ type
   public
     property Base: TfmBase read GetBase;
     property Person: TGEDCOMIndividualRecord read FPerson write SetPerson;
+
+    procedure SetLang();
   end;
 
 implementation
@@ -109,8 +118,6 @@ uses
 
 {$R *.dfm}
 
-{ TfmPersonEdit }
-
 procedure TfmPersonEdit.FormCreate(Sender: TObject);
 var
   sx: TGEDCOMSex;
@@ -118,13 +125,12 @@ var
 begin
   SetVistaFontsEx(Self, True);
 
-  for sx := Low(TGEDCOMSex) to High(TGEDCOMSex) do
-    EditSex.Items.Add(SexData[sx].ViewName);
+  for sx := Low(TGEDCOMSex) to High(TGEDCOMSex) do EditSex.Items.Add(SexStr(sx));
 
   wm := Ord(fmGEDKeeper.Options.WorkMode);
   PageCtlParents.ActivePageIndex := wm;
 
-  FEventsList := TSheetList.Create(SheetEvents{GroupBox3});
+  FEventsList := TSheetList.Create(SheetEvents);
   FEventsList.OnModify := ListModify;
   FEventsList.Buttons := [lbAdd..lbDelete, lbMoveUp, lbMoveDown];
   Base.SetupRecEventsList(FEventsList, True);
@@ -135,19 +141,19 @@ begin
   FSpousesList.OnModify := ListModify;
   FSpousesList.Buttons := [lbAdd..lbMoveDown];
   AddListColumn(FSpousesList.List, '№', 25);
-  AddListColumn(FSpousesList.List, 'Имя супруга', 300);
-  AddListColumn(FSpousesList.List, 'Дата брака', 100);
+  AddListColumn(FSpousesList.List, LSList[LSID_Spouse], 300);
+  AddListColumn(FSpousesList.List, LSList[LSID_MarriageDate], 100);
 
   FAssociationsList := TSheetList.Create(SheetAssociations);
   FAssociationsList.OnModify := ListModify;
   FAssociationsList.Buttons := [lbAdd..lbJump];
-  AddListColumn(FAssociationsList.List, 'Отношение', 300);
-  AddListColumn(FAssociationsList.List, 'Персона', 200);
+  AddListColumn(FAssociationsList.List, LSList[LSID_Relation], 300);
+  AddListColumn(FAssociationsList.List, LSList[LSID_Person], 200);
 
   FGroupsList := TSheetList.Create(SheetGroups);
   FGroupsList.OnModify := ListModify;
   FGroupsList.Buttons := [lbAdd, lbDelete];
-  AddListColumn(FGroupsList.List, 'Группа', 350);
+  AddListColumn(FGroupsList.List, LSList[LSID_Group], 350);
 
   //
 
@@ -157,6 +163,7 @@ begin
 
   FMediaList := TSheetList.Create(SheetMultimedia);
   FMediaList.OnModify := ListModify;
+  FMediaList.Buttons := [lbAdd, lbEdit, lbDelete, lbMoveUp, lbMoveDown];
   Base.SetupRecMediaList(FMediaList);
 
   FSourcesList := TSheetList.Create(SheetSources);
@@ -166,8 +173,51 @@ begin
 
   FUserRefList := TSheetList.Create(SheetUserRefs);
   FUserRefList.OnModify := ListModify;
-  AddListColumn(FUserRefList.List, 'Сноска', 300);
-  AddListColumn(FUserRefList.List, 'Тип', 200);
+  AddListColumn(FUserRefList.List, LSList[LSID_Reference], 300);
+  AddListColumn(FUserRefList.List, LSList[LSID_Type], 200);
+
+  SetLang();
+end;
+
+procedure TfmPersonEdit.SetLang();
+begin
+  btnAccept.Caption := LSList[LSID_DlgAccept];
+  btnCancel.Caption := LSList[LSID_DlgCancel];
+
+  Caption := LSList[LSID_WinPersonEdit];
+
+  Label1.Caption := LSList[LSID_Surname];
+  Label2.Caption := LSList[LSID_Name];
+  Label3.Caption := LSList[LSID_Patronymic];
+  Label4.Caption := LSList[LSID_Sex];
+
+  Label7.Caption := LSList[LSID_Nickname];
+  Label8.Caption := LSList[LSID_SurnamePrefix];
+  Label6.Caption := LSList[LSID_NamePrefix];
+  Label9.Caption := LSList[LSID_NameSuffix];
+
+  CheckPatriarch.Caption := LSList[LSID_Patriarch];
+  chkBookmark.Caption := LSList[LSID_Bookmark];
+
+  Label10.Caption := LSList[LSID_Father];
+  Label11.Caption := LSList[LSID_Mother];
+  Label12.Caption := LSList[LSID_Parents];
+
+  SheetEvents.Caption := LSList[LSID_Events];
+  SheetSpouses.Caption := LSList[LSID_Spouses];
+  SheetAssociations.Caption := LSList[LSID_Associations];
+  SheetGroups.Caption := LSList[LSID_RPGroups];
+  SheetNotes.Caption := LSList[LSID_RPNotes];
+  SheetMultimedia.Caption := LSList[LSID_RPMultimedia];
+  SheetSources.Caption := LSList[LSID_RPSources];
+  SheetUserRefs.Caption := LSList[LSID_UserRefs];
+
+  Label5.Caption := LSList[LSID_Restriction];
+end;
+
+procedure TfmPersonEdit.SetTitle();
+begin
+  Caption := LSList[LSID_Person] + ' "'+EditFamily.Text+' '+EditName.Text+' '+EditPatronymic.Text+'" [' + IntToStr(GetId(FPerson)) + ']';
 end;
 
 procedure TfmPersonEdit.ControlsRefresh();
@@ -311,10 +361,10 @@ begin
 
     if (FPerson.Sex = svMale) then begin
       rel_person := TGEDCOMIndividualRecord(family.Wife.Value);
-      rel_name := UnkFemale;
+      rel_name := LSList[LSID_UnkFemale];
     end else begin
       rel_person := TGEDCOMIndividualRecord(family.Husband.Value);
-      rel_name := UnkMale;
+      rel_name := LSList[LSID_UnkMale];
     end;
 
     if (rel_person <> nil)
@@ -341,6 +391,8 @@ begin
   end;
 
   LockEditor((FPerson.Restriction = rnLocked));
+
+  PortraitRefresh();
 end;
 
 procedure TfmPersonEdit.SetPerson(const Value: TGEDCOMIndividualRecord);
@@ -390,7 +442,7 @@ procedure TfmPersonEdit.btnFatherDeleteClick(Sender: TObject);
 var
   family: TGEDCOMFamilyRecord;
 begin
-  if (MessageDlg('Удалить ссылку на отца?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+  if (MessageDlg(LSList[LSID_DetachFatherQuery], mtConfirmation, [mbNo, mbYes], 0) = mrNo)
   then Exit;
 
   family := Base.GetChildFamily(FPerson, False, nil);
@@ -435,7 +487,7 @@ var
   mother: TGEDCOMIndividualRecord;
   family: TGEDCOMFamilyRecord;
 begin
-  if (MessageDlg('Удалить ссылку на мать?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+  if (MessageDlg(LSList[LSID_DetachMotherQuery], mtConfirmation, [mbNo, mbYes], 0) = mrNo)
   then Exit;
 
   family := Base.GetChildFamily(FPerson, False, nil);
@@ -508,11 +560,6 @@ begin
   Result := TfmBase(Owner);
 end;
 
-procedure TfmPersonEdit.SetTitle();
-begin
-  Caption := 'Персона "'+EditFamily.Text+' '+EditName.Text+' '+EditPatronymic.Text+'" [' + IntToStr(GetId(FPerson)) + ']';
-end;
-
 procedure TfmPersonEdit.EditFamilyChange(Sender: TObject);
 begin
   SetTitle();
@@ -528,17 +575,13 @@ begin
   SetTitle();
 end;
 
-procedure TfmPersonEdit.btnNameCopyClick(Sender: TObject);
-begin
-  Clipboard.AsText := GetNameStr(FPerson);
-end;
-
 procedure TfmPersonEdit.ListModify(Sender: TObject; ItemData: TObject; Action: TRecAction);
 var
   family: TGEDCOMFamilyRecord;
   group: TGEDCOMGroupRecord;
   spouse: TGEDCOMIndividualRecord;
   src_cit: TGEDCOMSourceCitation;
+  mmLink: TGEDCOMMultimediaLink;
   event: TGEDCOMCustomEvent;
   sp: TGEDCOMPointer;
   idx: Integer;
@@ -580,7 +623,7 @@ begin
         family := TGEDCOMFamilyRecord(ItemData);
         if (family = nil) then Exit;
 
-        if (MessageDlg('Удалить ссылку на супруга?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+        if (MessageDlg(LSList[LSID_DetachSpouseQuery], mtConfirmation, [mbNo, mbYes], 0) = mrNo)
         then Exit;
 
         Base.Engine.RemoveFamilySpouse(family, FPerson);
@@ -634,7 +677,7 @@ begin
       raDelete: begin
         group := TGEDCOMGroupRecord(ItemData);
 
-        if (MessageDlg('Удалить ссылку на группу?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+        if (MessageDlg(LSList[LSID_DetachGroupQuery], mtConfirmation, [mbNo, mbYes], 0) = mrNo)
         then Exit;
 
         if Base.Engine.RemoveGroupMember(group, FPerson)
@@ -651,6 +694,19 @@ begin
   end
   else
   if (Sender = FMediaList) then begin
+    if (Action in [raMoveUp, raMoveDown])
+    then begin
+      mmLink := TGEDCOMMultimediaLink(ItemData);
+      idx := FPerson.IndexOfMultimediaLink(mmLink);
+
+      case Action of
+        raMoveUp: FPerson.ExchangeMedia(idx - 1, idx);
+        raMoveDown: FPerson.ExchangeMedia(idx, idx + 1);
+      end;
+
+      ControlsRefresh();
+    end
+    else
     if Base.ModifyRecMultimedia(Self, FPerson, TGEDCOMMultimediaLink(ItemData), Action)
     then ControlsRefresh();
   end
@@ -712,7 +768,7 @@ procedure TfmPersonEdit.btnParentsDeleteClick(Sender: TObject);
 var
   family: TGEDCOMFamilyRecord;
 begin
-  if (MessageDlg('Удалить персону из семьи родителей?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+  if (MessageDlg(LSList[LSID_DetachParentsQuery], mtConfirmation, [mbNo, mbYes], 0) = mrNo)
   then Exit;
 
   family := Base.GetChildFamily(FPerson, False, nil);
@@ -727,6 +783,57 @@ begin
   if (Key = '/') then begin
     Key := #0;
     MessageBeep(MB_ICONEXCLAMATION);
+  end;
+end;
+
+procedure TfmPersonEdit.btnNameCopy1Click(Sender: TObject);
+begin
+  Clipboard.AsText := GetNameStr(FPerson);
+end;
+
+procedure TfmPersonEdit.btnPortraitAddClick(Sender: TObject);
+var
+  mmLink: TGEDCOMMultimediaLink;
+  mmRec: TGEDCOMMultimediaRecord;
+begin
+  mmRec := TGEDCOMMultimediaRecord(Base.SelectRecord(rtMultimedia, []));
+
+  if (mmRec <> nil) then begin
+    mmLink := Base.Engine.GetPrimaryMultimediaLink(FPerson);
+    if (mmLink <> nil) then mmLink.IsPrimary := False;
+    Base.Engine.SetPrimaryMultimediaRecord(FPerson, mmRec);
+    PortraitRefresh();
+  end;
+end;
+
+procedure TfmPersonEdit.btnPortraitDeleteClick(Sender: TObject);
+var
+  mmLink: TGEDCOMMultimediaLink;
+begin
+  mmLink := Base.Engine.GetPrimaryMultimediaLink(FPerson);
+  if (mmLink <> nil) then begin
+    mmLink.IsPrimary := False;
+    PortraitRefresh();
+  end;
+end;
+
+procedure TfmPersonEdit.PortraitRefresh();
+var
+  bmp: TGraphic;
+begin
+  bmp := Base.Engine.GetPrimaryBitmap(FPerson);
+
+  if (bmp <> nil) then begin
+    with imgPortrait do begin
+      Center := True;
+      Proportional := True;
+      Picture.Assign(bmp);
+      Stretch := (Picture.Width > Width) or (Picture.Height > Height);
+    end;
+    bmp.Destroy;
+    imgPortrait.Visible := True;
+  end else begin
+    imgPortrait.Visible := False;
   end;
 end;
 

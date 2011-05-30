@@ -1,11 +1,11 @@
-unit GKUtils;
+unit GKUtils; {trans:fin}
 
 {$I GEDKeeper.inc}
 
 interface
 
 uses
-  Classes;
+  Windows, SysUtils, Classes;
 
 function GetComputerName(): string;
 function GetTempDir(): string;
@@ -56,35 +56,16 @@ function CrcStr(const Str: string): Longword;
 function SafeDiv(aDividend, aDivisor: Double): Double;
 
 // извлечение токена
-function GetToken(aString, SepChar: string; TokenNum: Byte): string;
+function GetToken(aString: string; SepChar: Char; TokenNum: Integer): string;
 
 // количество токенов
-function GetTokensCount(aString, SepChar: string): Byte;
+function GetTokensCount(aString: string; SepChar: Char): Integer;
 
 // Получить число римскими цифрами
 function GetRome(N: Integer): string;
 
 // Дополнить число нулями
 function NumUpdate(val, up: Integer): string;
-
-{==============================================================================}
-
-type
-  TTextFileEx = class(TObject)
-  private
-    FStream: TStream;
-  public
-    constructor Create(aStream: TStream);
-
-    function Eof(): Boolean;
-    function ReadLn(): string;
-    procedure WriteLn(const s: string); overload;
-  end;
-
-const
-  LineEnd = #13#10;
-
-{==============================================================================}
 
 // Hole функция предотвращает распределение переменной
 // в регистрах CPU подлежащих оптимизации
@@ -98,11 +79,75 @@ procedure LogInit(const aFileName: string);
 // Записать в протокол
 procedure LogWrite(const aMsg: string);
 
+// Сканирование папки
+type
+  TFilePrepareProc = procedure (const FileName: string) of object;
+
+procedure ScanDir(const aPath: string; aPrepareProc: TFilePrepareProc;
+  aIncludeFolders: Boolean; FileAttrs: Integer; aMask: string = '*.*');
+
+{==============================================================================}
+
+type
+  EStException = class(Exception);
+  EStBufStreamError = class(EStException);
+
+  TStMemSize = Integer;
+
+  TStBufferedStream = class(TStream)
+  private
+    FBufCount: TStMemSize;   {count of valid bytes in buffer}
+    FBuffer: PAnsiChar;    {buffer into underlying stream}
+    FBufOfs: Longint;      {offset of buffer in underlying stream}
+    FBufPos: TStMemSize;   {current position in buffer}
+    FBufSize: TStMemSize;   {size of buffer}
+    FDirty: Boolean;      {has data in buffer been changed?}
+    FSize: Int64;      {size of underlying stream}
+    FStream: TStream;      {underlying stream}
+  protected
+    function bsReadChar(var aCh: AnsiChar): Boolean;
+    procedure bsReadFromStream();
+    procedure bsWriteToStream();
+  public
+    constructor Create(aStream: TStream);
+    destructor Destroy; override;
+
+    function Read(var Buffer; Count: Longint): Longint; override;
+    function Seek(Offset: Longint; Origin: Word): Longint; override;
+    function Write(const Buffer; Count: Longint): Longint; override;
+  end;
+
+type
+  TStLineTerminator = (ltLF {#10}, ltCRLF {#13#10});
+
+  TStAnsiTextStream = class(TStBufferedStream)
+  private
+    FLineTerm: TStLineTerminator;
+  public
+    constructor Create(aStream: TStream);
+
+    function AtEndOfStream(): Boolean;
+    function ReadLine(): string;
+    procedure WriteLine(const aSt: string);
+  end;
+
+{==============================================================================}
+
+const
+  hhctrlLib = 'hhctrl.ocx';
+  HH_DISPLAY_TOPIC = $0000;
+  HH_HELP_CONTEXT = $000F;
+  HH_CLOSE_ALL = $0012;
+
+function HtmlHelpA(hwndCaller: HWND; pszFile: PAnsiChar; uCommand: UInt; dwData: DWORD): HWND; stdcall; external hhctrlLib name 'HtmlHelpA';
+function HtmlHelpW(hwndCaller: HWND; pszFile: PWideChar; uCommand: UInt; dwData: DWORD): HWND; stdcall; external hhctrlLib name 'HtmlHelpW';
+function HtmlHelp(hwndCaller: HWND; pszFile: PChar; uCommand: UInt; dwData: DWORD): HWND; stdcall; external hhctrlLib name 'HtmlHelpA';
+
 implementation
 
 uses
   {$IFDEF DELPHI_NET}System.IO, System.Reflection, {$ENDIF}
-  Windows, SysUtils, ShellAPI, Math;
+  ShellAPI, Math;
 
 function GetComputerName(): string;
 {$IFNDEF DELPHI_NET}
@@ -189,8 +234,13 @@ begin
 end;
 
 function FileMove(OldName, NewName: string): Boolean;
+var
+  path: string;
 begin
   {$IFNDEF DELPHI_NET}
+  path := ExtractFilePath(NewName);
+  if not(DirectoryExists(path)) then CreateDir(path);
+
   Result := MoveFile(PChar(OldName), PChar(NewName));
   {$ELSE}
   Result := System.IO.File.Move(OldName, NewName);
@@ -710,46 +760,40 @@ begin
 end;
 
 // извлечение токена
-function GetToken(aString, SepChar: string; TokenNum: Byte): string;
+function GetToken(aString: string; SepChar: Char; TokenNum: Integer): string;
 var
-  Token: string;
-  StrLen, TNum, TEnd: Integer;
+  cur_tok, p, sp: Integer;
 begin
-  StrLen := Length(aString);
-  TNum := 1;
-  TEnd := StrLen;
+  Result := '';
+  if (aString[Length(aString)] <> SepChar)
+  then aString := aString + SepChar;
 
-  while ((TNum <= TokenNum) and (TEnd <> 0)) do begin
-    TEnd := Pos(SepChar, aString);
-    if (TEnd <> 0) then begin
-      Token := Copy(aString, 1, TEnd-1);
-      Delete(aString, 1, TEnd);
-      Inc(TNum);
-    end else Token := aString;
-  end;
+  sp := 1;
+  cur_tok := 0;
+  for p := 1 to Length(aString) do
+    if (aString[p] = SepChar) then begin
+      Inc(cur_tok);
 
-  if (TNum >= TokenNum)
-  then Result := Token
-  else Result := '';
+      if (cur_tok = TokenNum) then begin
+        Result := Copy(aString, sp, p - sp);
+        Exit;
+      end;
+
+      sp := p + 1;
+    end;
 end;
 
 // количество токенов
-function GetTokensCount(aString, SepChar: string): Byte;
+function GetTokensCount(aString: string; SepChar: Char): Integer;
 var
-  RChar: Char;
-  TNum, TEnd: Integer;
+  p: Integer;
 begin
-  RChar := #01;
-  TNum := 0;
-  TEnd := Length(aString);
+  Result := 0;
 
-  while (TEnd <> 0) do begin
-    Inc(TNum);
-    TEnd := Pos(SepChar, aString);
-    if (TEnd <> 0) then aString[TEnd] := RChar;
-  end;
+  for p := 1 to Length(aString) do
+    if (aString[p] = SepChar) then Inc(Result);
 
-  Result := TNum;
+  Inc(Result);
 end;
 
 // Получить число римскими цифрами
@@ -781,57 +825,6 @@ begin
   Result := IntToStr(val);
   while (Length(Result) < up) do Result := '0' + Result;
 end;
-
-{==============================================================================}
-
-{ TTextFileEx }
-
-constructor TTextFileEx.Create(aStream: TStream);
-begin
-  inherited Create;
-  FStream := aStream;
-end;
-
-function TTextFileEx.Eof(): Boolean;
-begin
-  Result := (FStream.Position >= FStream.Size);
-end;
-
-function TTextFileEx.ReadLn(): string;
-var
-  c: Char;
-begin
-  Result := '';
-
-  while not Eof do begin
-    FStream.Read(c, SizeOf(c));
-
-    if (c = #13) then begin
-      FStream.Read(c, SizeOf(c));
-
-      if (c <> #10)
-      then FStream.Seek(-SizeOf(c), soFromCurrent); // Attention
-
-      Break;
-    end;
-
-    if (c = #10)
-    then Break;
-
-    Result := Result + c;
-  end;
-end;
-
-procedure TTextFileEx.WriteLn(const s: string);
-var
-  i: Integer;
-begin
-  for i := 1 to Length(s) do
-    Write(s[i], SizeOf(s[i]));
-  Write(LineEnd, Length(LineEnd));
-end;
-
-{==============================================================================}
 
 function Hole(var A): Integer;
 {$IFNDEF DELPHI_NET}
@@ -884,7 +877,352 @@ begin
   CloseFile(Log);
 end;
 
+// сканирование папки
+procedure ScanDir(const aPath: string; aPrepareProc: TFilePrepareProc;
+  aIncludeFolders: Boolean; FileAttrs: Integer; aMask: string = '*.*');
+var
+  sr: TSearchRec;
+  res: Integer;
+  newf: string;
+begin
+  res := FindFirst(aPath + PathDelim + aMask, FileAttrs, sr);
+  while res = 0 do begin
+    if (sr.Name <> '.') and (sr.Name <> '..') then begin
+      newf := aPath + PathDelim + sr.Name;
+
+      if ((sr.Attr and faDirectory) = faDirectory)
+      then begin
+        if aIncludeFolders
+        then ScanDir(newf, aPrepareProc, aIncludeFolders, FileAttrs)
+      end else aPrepareProc(newf);
+    end;
+
+    res := FindNext(sr);
+  end;
+  FindClose(sr);
+end;
+
+{==============================================================================}
+
+const
+  LineTerm: array [TStLineTerminator] of array [0..1] of AnsiChar = (#10, #13#10);
+
+const
+  stscBadOrigin       = 'Bad origin parameter for call to Seek';
+  stscNilStream       = 'Buffered/text stream: Attempted to read, write, or seek and underlying stream is nil';
+  stscNoSeekForRead   = 'Buffered/text stream: Could not seek to the correct position in the underlying stream (for read request)';
+  stscNoSeekForWrite  = 'Buffered/text stream: Could not seek to the correct position in the underlying stream (for write request)';
+  stscCannotWrite     = 'Buffered/text stream: Could not write the entire buffer to the underlying stream';
+
+function MinLong(A, B: Longint): Longint;
+begin
+  if (A < B)
+  then Result := A
+  else Result := B;
+end;
+
+{ TStBufferedStream }
+
+constructor TStBufferedStream.Create(aStream: TStream);
+begin
+  inherited Create;
+
+  {save the stream}
+  if (aStream = nil) then raise EStBufStreamError.Create(stscNilStream);
+  FStream := aStream;
+
+  {allocate the buffer}
+  FBufSize := {4096} 1024 * 16;
+  GetMem(FBuffer, FBufSize);
+
+  FSize := FStream.Size;
+  FBufCount := 0;
+  FBufOfs := 0;
+  FBufPos := 0;
+  FDirty := false;
+end;
+
+destructor TStBufferedStream.Destroy;
+begin
+  if (FBuffer <> nil) then begin
+    if FDirty then bsWriteToStream;
+    FreeMem(FBuffer, FBufSize);
+  end;
+
+  inherited Destroy;
+end;
+
+function TStBufferedStream.bsReadChar(var aCh: AnsiChar): Boolean;
+begin
+  {is there anything to read?}
+  if (FSize = (FBufOfs + FBufPos)) then begin
+    Result := False;
+    Exit;
+  end;
+
+  {if we get here, we'll definitely read a character}
+  Result := True;
+
+  {make sure that the buffer has some data in it}
+  if (FBufCount = 0)
+  then bsReadFromStream()
+  else
+  if (FBufPos = FBufCount) then begin
+    if FDirty
+    then bsWriteToStream();
+
+    FBufPos := 0;
+    Inc(FBufOfs, FBufSize);
+    bsReadFromStream();
+  end;
+
+  {get the next character}
+  aCh := AnsiChar(FBuffer[FBufPos]);
+  Inc(FBufPos);
+end;
+
+procedure TStBufferedStream.bsReadFromStream();
+var
+  NewPos: Longint;
+begin
+  {assumptions: FBufOfs is where to read the buffer
+                FBufSize is the number of bytes to read
+                FBufCount will be the number of bytes read}
+  NewPos := FStream.Seek(FBufOfs, soFromBeginning);
+
+  if (NewPos <> FBufOfs)
+  then raise EStBufStreamError.Create(stscNoSeekForRead);
+
+  FBufCount := FStream.Read(FBuffer^, FBufSize);
+end;
+
+procedure TStBufferedStream.bsWriteToStream();
+var
+  NewPos, BytesWritten: Longint;
+begin
+  {assumptions: FDirty is true
+                FBufOfs is where to write the buffer
+                FBufCount is the number of bytes to write
+                FDirty will be set false afterwards}
+  NewPos := FStream.Seek(FBufOfs, soFromBeginning);
+
+  if (NewPos <> FBufOfs)
+  then raise EStBufStreamError.Create(stscNoSeekForWrite);
+
+  BytesWritten := FStream.Write(FBuffer^, FBufCount);
+
+  if (BytesWritten <> FBufCount)
+  then raise EStBufStreamError.Create(stscCannotWrite);
+
+  FDirty := false;
+end;
+
+function TStBufferedStream.Read(var Buffer; Count: Longint): Longint;
+var
+  BytesToGo, BytesToRead, DestPos: Longint;
+  BufAsBytes: TByteArray absolute Buffer;
+begin
+  {calculate the number of bytes we could read if possible}
+  BytesToGo := MinLong(Count, FSize - (FBufOfs + FBufPos));
+  {we will return this number of bytes or raise an exception}
+  Result := BytesToGo;
+  {are we going to read some data after all?}
+  if (BytesToGo > 0) then begin
+    {make sure that the buffer has some data in it}
+    if (FBufCount = 0) then bsReadFromStream;
+    {read as much as we can from the current buffer}
+    BytesToRead := MinLong(BytesToGo, FBufCount - FBufPos);
+    {transfer that number of bytes}
+    Move(FBuffer[FBufPos], BufAsBytes[0], BytesToRead);
+    {update our counters}
+    Inc(FBufPos, BytesToRead);
+    Dec(BytesToGo, BytesToRead);
+    {if we have more bytes to read then we've reached the end of the
+     buffer and so we need to read another, and another, etc}
+    DestPos := 0;
+    while (BytesToGo > 0) do begin
+      {if the current buffer is dirty, write it out}
+      if FDirty then bsWriteToStream();
+      {position and read the next buffer}
+      FBufPos := 0;
+      Inc(FBufOfs, FBufSize);
+      bsReadFromStream();
+      {calculate the new destination position, and the number of bytes
+       to read from this buffer}
+      Inc(DestPos, BytesToRead);
+      BytesToRead := MinLong(BytesToGo, FBufCount - FBufPos);
+      {transfer that number of bytes}
+      Move(FBuffer[FBufPos], BufAsBytes[DestPos], BytesToRead);
+      {update our counters}
+      Inc(FBufPos, BytesToRead);
+      Dec(BytesToGo, BytesToRead);
+    end;
+  end;
+end;
+
+function TStBufferedStream.Seek(Offset: Longint; Origin: Word): Longint;
+var
+  NewPos, NewOfs: Longint;
+begin
+  {optimization: to help code that just wants the current stream
+   position (ie, reading the Position property), check for this as a
+   special case}
+  if (Offset = 0) and (Origin = soFromCurrent) then begin
+    Result := FBufOfs + FBufPos;
+    Exit;
+  end;
+  {calculate the desired position}
+  case Origin of
+    soFromBeginning: NewPos := Offset;
+    soFromCurrent: NewPos := (FBufOfs + FBufPos) + Offset;
+    soFromEnd: NewPos := FSize + Offset;
+    else
+      raise EStBufStreamError.Create(stscBadOrigin);
+      NewPos := 0; {to fool the compiler's warning--we never get here}
+  end;
+  {force the new position to be valid}
+  if (NewPos < 0)
+  then NewPos := 0
+  else
+  if (NewPos > FSize)
+  then NewPos := FSize;
+  {calculate the offset for the buffer}
+  NewOfs := (NewPos div FBufSize) * FBufSize;
+  {if the offset differs, we have to move the buffer window}
+  if (NewOfs <> FBufOfs) then begin
+    {check to see whether we have to write the current buffer to the
+     original stream first}
+    if FDirty then bsWriteToStream();
+    {mark the buffer as empty}
+    FBufOfs := NewOfs;
+    FBufCount := 0;
+  end;
+  {set the position within the buffer}
+  FBufPos := NewPos - FBufOfs;
+  Result := NewPos;
+end;
+
+function TStBufferedStream.Write(const Buffer; Count: Longint): Longint;
+var
+  BytesToGo: Longint;
+  BytesToWrite: Longint;
+  BufAsBytes: TByteArray absolute Buffer;
+  DestPos: Longint;
+begin
+  {calculate the number of bytes we should be able to write}
+  BytesToGo := Count;
+  {we will return this number of bytes or raise an exception}
+  Result := BytesToGo;
+  {are we going to write some data?}
+  if (BytesToGo > 0) then begin
+    {try and make sure that the buffer has some data in it}
+    if (FBufCount = 0) and ((FBufOfs + FBufPos) < FSize) then
+      bsReadFromStream;
+    {write as much as we can to the current buffer}
+    BytesToWrite := MinLong(BytesToGo, FBufSize - FBufPos);
+    {transfer that number of bytes}
+    Move(BufAsBytes[0], FBuffer[FBufPos], BytesToWrite);
+    FDirty := true;
+    {update our counters}
+    inc(FBufPos, BytesToWrite);
+    if (FBufCount < FBufPos) then begin
+      FBufCount := FBufPos;
+      FSize := FBufOfs + FBufPos;
+    end;
+    dec(BytesToGo, BytesToWrite);
+    {if we have more bytes to write then we've reached the end of the
+     buffer and so we need to write another, and another, etc}
+    DestPos := 0;
+    while BytesToGo > 0 do begin
+      {as the current buffer is dirty, write it out}
+      bsWriteToStream;
+      {position and read the next buffer, if required}
+      FBufPos := 0;
+      inc(FBufOfs, FBufSize);
+      if (FBufOfs < FSize) then
+        bsReadFromStream
+      else
+        FBufCount := 0;
+      {calculate the new destination position, and the number of bytes
+       to write to this buffer}
+      inc(DestPos, BytesToWrite);
+      BytesToWrite := MinLong(BytesToGo, FBufSize - FBufPos);
+      {transfer that number of bytes}
+      Move(BufAsBytes[DestPos], FBuffer[0], BytesToWrite);
+      FDirty := true;
+      {update our counters}
+      inc(FBufPos, BytesToWrite);
+      if (FBufCount < FBufPos) then begin
+        FBufCount := FBufPos;
+        FSize := FBufOfs + FBufPos;
+      end;
+      dec(BytesToGo, BytesToWrite);
+    end;
+  end;
+end;
+
+{ TStAnsiTextStream }
+
+constructor TStAnsiTextStream.Create(aStream: TStream);
+begin
+  inherited Create(aStream);
+  FLineTerm := ltCRLF;
+end;
+
+function TStAnsiTextStream.AtEndOfStream(): Boolean;
+begin
+  Result := FSize = (FBufOfs + FBufPos);
+end;
+
+function TStAnsiTextStream.ReadLine(): string;
+var
+  CurPos, EndPos, Len: Longint;
+  PrevCh, Ch: AnsiChar;
+begin
+  // reading into direct string impossible, since concatenations is slow ops
+  CurPos := FBufOfs + FBufPos;
+  Ch := #0;
+  while True do begin
+    PrevCh := Ch;
+    if not bsReadChar(Ch) then begin
+      EndPos := FBufOfs + FBufPos;
+      Len := EndPos - CurPos;
+      Break;
+    end else begin
+      if (Ch = #10) then begin
+        EndPos := FBufOfs + FBufPos;
+        if (PrevCh = #13)
+        then Len := EndPos - CurPos - 2
+        else Len := EndPos - CurPos - 1;
+        Break;
+      end;
+    end;
+  end;
+
+  SetLength(Result, Len);
+  Seek(CurPos, soFromBeginning);
+  Read(Result[1], Len);
+  Seek(EndPos, soFromBeginning);
+end;
+
+procedure TStAnsiTextStream.WriteLine(const aSt: string);
+var
+  aLen: TStMemSize;
+begin
+  aLen := Length(aSt);
+
+  if (aLen > 0)
+  then Write(aSt[1], aLen);
+
+  case FLineTerm of
+      ltLF: Write(LineTerm[ltLF], 1);
+    ltCRLF: Write(LineTerm[ltCRLF], 2);
+  end;
+end;
+
+{==============================================================================}
+
 initialization
   BuildCRCTable;
-  
+
 end.

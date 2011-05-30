@@ -1,4 +1,4 @@
-unit GKEngineAPI;
+unit GKEngineAPI; {trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -13,7 +13,7 @@ implementation
 
 uses
   TypInfo, SysUtils, Dialogs,
-  GedCom551, GKUtils, GKEngine, GKProgress, GKSexCheck, GKMain
+  GedCom551, GKUtils, GKEngine, GKProgress, GKSexCheck, GKMain, GKLangs
   {$IFNDEF DELPHI_NET}, lua, lualib, lauxlib, SdfData, ADODB {$ENDIF};
 
 var
@@ -72,7 +72,7 @@ var
 begin
   argc := lua_gettop(LVM);
   if (argc <> Expected)
-  then lua_DoError(LVM, Format(ErrorMsg + ', неверное количество аргументов: необходимо %d, задано %d', [Expected, argc]));
+  then lua_DoError(LVM, Format(ErrorMsg + ', wrong number of arguments: expected %d, found %d', [Expected, argc]));
 end;
 
 procedure lua_ExpectFloatArg(LVM: Plua_State; idx: Integer; ErrorMsg: string; var Arg: Double);
@@ -512,7 +512,7 @@ begin
       evt.Detail.Date.ParseString(date);
     end;
   except
-    lua_DoError(LVM, 'Некорректный формат даты: ' + date);
+    lua_DoError(LVM, LSList[LSID_DateFormatInvalid] + ': ' + date);
   end;
 
   Result := 0;
@@ -592,7 +592,7 @@ begin
   lua_ExpectPtrArg(LVM, 1, func_name, rec_ptr);
 
   rec := TGEDCOMIndividualRecord(rec_ptr);
-  lua_pushstring(LVM, PChar(SexData[rec.Sex].LatSign));
+  lua_pushstring(LVM, PChar(SexData[rec.Sex].Sign));
   Result := 1;
 end;
 
@@ -800,7 +800,7 @@ begin
 
   sx := DefineSex(name, patr, fmGEDKeeper.NamesTable);
 
-  lua_pushstring(LVM, PChar(SexData[sx].LatSign));
+  lua_pushstring(LVM, PChar(SexData[sx].Sign));
   Result := 1;
 end;
 
@@ -1469,7 +1469,7 @@ begin
 
   L := lua_open();
   if (L = nil) then begin
-    lua_Output('Ошибка запуска Lua!');
+    lua_Output(LSList[LSID_LuaStartFailed]);
     Exit;
   end;
 
@@ -1486,7 +1486,7 @@ begin
       if (res <> 0)
       then lua_Print(L);
     except
-      on E: Exception do lua_Output('> Ошибка: ' + E.Message);
+      on E: Exception do lua_Output('> '+LSList[LSID_Error]+': ' + E.Message);
     end;
 
     {

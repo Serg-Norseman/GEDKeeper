@@ -1,4 +1,4 @@
-unit GKSourceEdit; {prepare:fin}
+unit GKSourceEdit; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,10 +6,10 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons, ComCtrls,
-  GedCom551, GKBase, GKEngine, GKCtrls, GKLists;
+  GedCom551, GKBase, GKEngine, GKCtrls, GKLists, GKLangs;
 
 type
-  TfmSourceEdit = class(TForm)
+  TfmSourceEdit = class(TForm, ILocalization)
     btnAccept: TBitBtn;
     btnCancel: TBitBtn;
     PagesData: TPageControl;
@@ -45,6 +45,8 @@ type
   public
     property Base: TfmBase read GetBase;
     property SourceRecord: TGEDCOMSourceRecord read FSourceRecord write SetSourceRecord;
+
+    procedure SetLang();
   end;
 
 implementation
@@ -66,7 +68,31 @@ begin
   FRepositoriesList := TSheetList.Create(SheetRepositories);
   FRepositoriesList.OnModify := ListModify;
   FRepositoriesList.Buttons := [lbAdd..lbJump];
-  AddListColumn(FRepositoriesList.List, 'Архив', 300);
+  AddListColumn(FRepositoriesList.List, LSList[LSID_Repository], 300);
+
+  SetLang();
+end;
+
+procedure TfmSourceEdit.SetLang();
+begin
+  btnAccept.Caption := LSList[LSID_DlgAccept];
+  btnCancel.Caption := LSList[LSID_DlgCancel];
+
+  Label1.Caption := LSList[LSID_ShortTitle];
+  Label3.Caption := LSList[LSID_Author];
+  Label2.Caption := LSList[LSID_Title];
+  Label4.Caption := LSList[LSID_Publication];
+
+  SheetCommon.Caption := LSList[LSID_Common];
+  SheetText.Caption := LSList[LSID_Text];
+  SheetRepositories.Caption := LSList[LSID_RPRepositories];
+  SheetNotes.Caption := LSList[LSID_RPNotes];
+  SheetMultimedia.Caption := LSList[LSID_RPMultimedia];
+end;
+
+procedure TfmSourceEdit.EditShortTitleChange(Sender: TObject);
+begin
+  Caption := LSList[LSID_Source] + ' "' + EditShortTitle.Text + '"';
 end;
 
 procedure TfmSourceEdit.ControlsRefresh();
@@ -155,7 +181,7 @@ begin
       raDelete: begin
         cit := TGEDCOMRepositoryCitation(ItemData);
 
-        if (cit = nil) or (MessageDlg('Удалить ссылку на архив?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+        if (cit = nil) or (MessageDlg(LSList[LSID_DetachRepositoryQuery], mtConfirmation, [mbNo, mbYes], 0) = mrNo)
         then Exit;
 
         FSourceRecord.DeleteRepositoryCitation(cit);
@@ -178,11 +204,6 @@ end;
 function TfmSourceEdit.GetBase: TfmBase;
 begin
   Result := TfmBase(Owner);
-end;
-
-procedure TfmSourceEdit.EditShortTitleChange(Sender: TObject);
-begin
-  Caption := 'Источник "'+EditShortTitle.Text+'"';
 end;
 
 end.

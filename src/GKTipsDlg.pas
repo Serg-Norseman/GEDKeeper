@@ -1,4 +1,4 @@
-unit GKTipsDlg; {prepare:fin}
+unit GKTipsDlg; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,14 +6,14 @@ interface
 
 uses
   SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ExtCtrls,
-  ComCtrls;
+  ComCtrls, GKLangs;
 
 type
-  TfmTipsDialog = class(TForm)
+  TfmTipsDialog = class(TForm, ILocalization)
     Shape1: TShape;
     ShowCheck: TCheckBox;
     NextTipBtn: TButton;
-    CancelBtn: TButton;
+    btnClose: TButton;
     Shape2: TShape;
     Shape3: TShape;
     TitleLabel: TLabel;
@@ -21,7 +21,7 @@ type
     TipWindow: TMemo;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure CancelBtnClick(Sender: TObject);
+    procedure btnCloseClick(Sender: TObject);
     procedure NextTipBtnClick(Sender: TObject);
   private
     FTips: TStringList;
@@ -30,6 +30,8 @@ type
   public
     class function ShowTipsEx(const ACaption: string;
       ShowTipsChecked: Boolean; Tips: TStrings): Boolean;
+
+    procedure SetLang();
   end;
 
 implementation
@@ -41,6 +43,8 @@ uses GKMain;
 procedure TfmTipsDialog.FormCreate(Sender: TObject);
 begin
   FTips := TStringList.Create;
+
+  SetLang();
 end;
 
 procedure TfmTipsDialog.FormDestroy(Sender: TObject);
@@ -48,7 +52,15 @@ begin
   FTips.Free;
 end;
 
-procedure TfmTipsDialog.CancelBtnClick(Sender: TObject);
+procedure TfmTipsDialog.SetLang();
+begin
+  btnClose.Caption := LSList[LSID_DlgClose];
+  ShowCheck.Caption := LSList[LSID_StartupTips];
+  NextTipBtn.Caption := LSList[LSID_Next];
+  TitleLabel.Caption := LSList[LSID_YouKnowWhat];
+end;
+
+procedure TfmTipsDialog.btnCloseClick(Sender: TObject);
 begin
   Close;
 end;

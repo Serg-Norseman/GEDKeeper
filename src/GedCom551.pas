@@ -1,4 +1,4 @@
-unit GedCom551;
+unit GedCom551; {trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -21,7 +21,7 @@ unit GedCom551;
 interface
 
 uses
-  Classes, SysUtils, StStrms;
+  Classes, SysUtils;
 
 const
   GEDCOMDelimiter = ' ';
@@ -553,6 +553,10 @@ type
     procedure DeleteUserReference(AUserReference: TGEDCOMUserReference); overload;
 
     function IndexOfSource(aSource: TGEDCOMSourceRecord): Integer;
+    function IndexOfMultimediaLink(aMultimediaLink: TGEDCOMMultimediaLink): Integer;
+    function IndexOfSourceCitation(SourceCit: TGEDCOMSourceCitation): Integer;
+    procedure ExchangeSources(Index1, Index2: Integer);
+    procedure ExchangeMedia(Index1, Index2: Integer);
 
     procedure MoveTo(aToRecord: TGEDCOMRecord; aFlags: TMoveFlags = []); virtual;
     procedure Pack(); override;
@@ -1090,7 +1094,6 @@ type
 
     function IndexOfEvent(Event: TGEDCOMCustomEvent): Integer;
     function IndexOfSpouse(Family: TGEDCOMFamilyRecord): Integer;
-    function IndexOfSourceCitation(SourceCit: TGEDCOMSourceCitation): Integer;
 
     procedure DeleteAssociation(aIndex: Integer); overload;
     procedure DeleteAssociation(aAssociation: TGEDCOMAssociation); overload;
@@ -1106,7 +1109,6 @@ type
 
     procedure ExchangeEvents(Index1, Index2: Integer);
     procedure ExchangeSpouses(Index1, Index2: Integer);
-    procedure ExchangeSources(Index1, Index2: Integer);
 
     procedure MoveTo(aToRecord: TGEDCOMRecord; aFlags: TMoveFlags = []); override;
     procedure Pack(); override;
@@ -1446,6 +1448,9 @@ type
     procedure SetStringTag(Index: Integer; const Value: string);
     function GetFileReferences(Index: Integer): TGEDCOMFileReference;
     function GetFileReferencesCount: Integer;
+
+    function GetIsPrimary(): Boolean;
+    procedure SetIsPrimary(const Value: Boolean);
   protected
     procedure CreateObj(AOwner, AParent: TGEDCOMObject); override;
     function GetStringValue: string; override;
@@ -1465,6 +1470,8 @@ type
     property FileReferencesCount: Integer read GetFileReferencesCount;
     property IsPointer: Boolean read GetIsPointer;
     property Title: string index 1 read GetStringTag write SetStringTag;
+
+    property IsPrimary: Boolean read GetIsPrimary write SetIsPrimary;
   end;
 
   TGEDCOMPointerWithNotes = class(TGEDCOMPointer)
@@ -2042,6 +2049,7 @@ uses
   Windows, GKUtils, GKEngine;
 
 {==============================================================================}
+{==============================================================================}
 
 type
   TTagProps = set of (tpEmptySkip);
@@ -2417,10 +2425,8 @@ end;
 function TGEDCOMObject.CreateGEDCOMTag(AOwner, AParent: TGEDCOMObject;
   const ATag, AValue: string): TGEDCOMTag;
 begin
-  if (ATag = 'DATE') then begin
-    Result := TGEDCOMDateValue.Create(AOwner, AParent);
-    Result.ParseString(AValue);
-  end
+  if (ATag = 'DATE')
+  then Result := TGEDCOMDateValue.Create(AOwner, AParent, 'DATE', AValue)
   else
   if (ATag = 'TIME')
   then Result := TGEDCOMTime.Create(AOwner, AParent, 'TIME', AValue)
@@ -2662,7 +2668,7 @@ procedure TGEDCOMTree.LoadFromStream(AStream: TStream);
     end;
   end;
 
-var  // 279, 655 ms
+var  // 145.7 (SL), 150.8 (BS)
   I, ALevel: Integer;
   S, AXRef, ATag, AValue: string;
   CurRecord: TGEDCOMCustomRecord;
@@ -5241,6 +5247,46 @@ begin
     end;
 end;
 
+function TGEDCOMRecord.IndexOfMultimediaLink(aMultimediaLink: TGEDCOMMultimediaLink): Integer;
+var
+  i: Integer;
+begin
+  Result := -1;
+  if (FMultimediaLinks = nil) then Exit;
+
+  for i := 0 to FMultimediaLinks.Count - 1 do
+    if (FMultimediaLinks[i] = aMultimediaLink) then begin
+      Result := i;
+      Break;
+    end;
+end;
+
+function TGEDCOMRecord.IndexOfSourceCitation(SourceCit: TGEDCOMSourceCitation): Integer;
+var
+  i: Integer;
+begin
+  Result := -1;
+  if (FSourceCitations = nil) then Exit;
+
+  for i := 0 to FSourceCitations.Count - 1 do
+    if (FSourceCitations[i] = SourceCit) then begin
+      Result := i;
+      Break;
+    end;
+end;
+
+procedure TGEDCOMRecord.ExchangeSources(Index1, Index2: Integer);
+begin
+  if (FSourceCitations <> nil)
+  then FSourceCitations.Exchange(Index1, Index2);
+end;
+
+procedure TGEDCOMRecord.ExchangeMedia(Index1, Index2: Integer);
+begin
+  if (FMultimediaLinks <> nil)
+  then FMultimediaLinks.Exchange(Index1, Index2);
+end;
+
 { TGEDCOMTime }
 
 procedure TGEDCOMTime.Clear;
@@ -5355,6 +5401,9 @@ end;
 function TGEDCOMFamilyRecord.AddTag(const ATag, AValue: string;
   AClass: TGEDCOMTagClass): TGEDCOMTag;
 begin
+  if (ATag = 'HUSB') or (ATag = 'WIFE')
+  then Result := inherited AddTag(ATag, AValue, TGEDCOMPointer)
+  else
   if (ATag = 'CHIL')
   then Result := AddChild(TGEDCOMPointer.Create(Owner, Self, ATag, AValue))
   else
@@ -5368,9 +5417,6 @@ begin
   else
   if (ATag = 'REFN')
   then Result := AddUserReference(TGEDCOMUserReference.Create(Owner, Self, ATag, AValue))
-  else
-  if (ATag = 'HUSB') or (ATag = 'WIFE')
-  then Result := inherited AddTag(ATag, AValue, TGEDCOMPointer)
   else
     Result := inherited AddTag(ATag, AValue, AClass);
 end;
@@ -5967,28 +6013,6 @@ end;
 
 //
 
-function TGEDCOMIndividualRecord.IndexOfSourceCitation(SourceCit: TGEDCOMSourceCitation): Integer;
-var
-  i: Integer;
-begin
-  Result := -1;
-  if (FSourceCitations = nil) then Exit;
-
-  for i := 0 to FSourceCitations.Count - 1 do
-    if (FSourceCitations[i] = SourceCit) then begin
-      Result := i;
-      Break;
-    end;
-end;
-
-procedure TGEDCOMIndividualRecord.ExchangeSources(Index1, Index2: Integer);
-begin
-  if (FSourceCitations <> nil)
-  then FSourceCitations.Exchange(Index1, Index2);
-end;
-
-//
-
 function TGEDCOMIndividualRecord.AddSubmittor(Value: TGEDCOMPointer): TGEDCOMPointer;
 begin
   Result := Value;
@@ -6005,6 +6029,12 @@ function TGEDCOMIndividualRecord.AddTag(const ATag, AValue: string;
 begin
   if (ATag = 'NAME')
   then Result := AddPersonalName(TGEDCOMPersonalName.Create(Owner, Self, ATag, AValue))
+  else
+  if (ATag = 'FAMC')
+  then Result := AddChildToFamilyLink(TGEDCOMChildToFamilyLink.Create(Owner, Self, ATag, AValue))
+  else
+  if (ATag = 'FAMS')
+  then Result := AddSpouseToFamilyLink(TGEDCOMSpouseToFamilyLink.Create(Owner, Self, ATag, AValue))
   else
   if (ATag = 'BIRT') or (ATag = 'CHR') or (ATag = 'DEAT') or (ATag = 'BURI')
   or (ATag = 'CREM') or (ATag = 'ADOP') or (ATag = 'BAPM') or (ATag = 'BARM')
@@ -6027,12 +6057,6 @@ begin
   else
   if (ATag = 'BAPL') or (ATag = 'CONL') or (ATag = 'ENDL') or (ATag = 'SLGC')
   then Result := AddIndividualOrdinance(TGEDCOmIndividualOrdinance.Create(Owner, Self, ATag, AValue))
-  else
-  if (ATag = 'FAMC')
-  then Result := AddChildToFamilyLink(TGEDCOMChildToFamilyLink.Create(Owner, Self, ATag, AValue))
-  else
-  if (ATag = 'FAMS')
-  then Result := AddSpouseToFamilyLink(TGEDCOMSpouseToFamilyLink.Create(Owner, Self, ATag, AValue))
   else
   if (ATag = 'ASSO')
   then Result := AddAssociation(TGEDCOMAssociation.Create(Owner, Self, ATag, AValue))
@@ -6963,7 +6987,7 @@ begin
   then Result := inherited AddTag(ATag, AValue, TGEDCOMAddress)
   else
   if (ATag = 'PHON') or (ATag = 'EMAIL') or (ATag = 'FAX') or (ATag = 'WWW')
-  then Result := TGEDCOMAddress(TagClass('ADDR', TGEDCOMAddress)).AddTag(ATag, AValue, AClass)
+  then Result := GetAddress().AddTag(ATag, AValue, AClass)
   else Result := inherited AddTag(ATag, AValue, AClass);
 end;
 
@@ -6976,7 +7000,7 @@ begin
   FName := 'REPO';
 end;
 
-function TGEDCOMRepositoryRecord.GetAddress: TGEDCOMAddress;
+function TGEDCOMRepositoryRecord.GetAddress(): TGEDCOMAddress;
 begin
   Result := TGEDCOMAddress(TagClass('ADDR', TGEDCOMAddress));
 end;
@@ -7036,11 +7060,11 @@ end;
 function TGEDCOMSourceRecord.AddTag(const ATag, AValue: string;
   AClass: TGEDCOMTagClass): TGEDCOMTag;
 begin
-  if (ATag = 'DATA')
-  then Result := inherited AddTag(ATag, AValue, TGEDCOMData)
-  else
   if (ATag = 'REPO')
   then Result := AddRepositoryCitation(TGEDCOMRepositoryCitation.Create(Owner, Self, ATag, AValue))
+  else
+  if (ATag = 'DATA')
+  then Result := inherited AddTag(ATag, AValue, TGEDCOMData)
   else
   if (ATag = 'REFN')
   then Result := AddUserReference(TGEDCOMUserReference.Create(Owner, Self, ATag, AValue))
@@ -7582,6 +7606,28 @@ begin
   case Index of
     1: SetTagStringValue('TITL', Value);
   end;
+end;
+
+function TGEDCOMMultimediaLink.GetIsPrimary(): Boolean;
+var
+  tag: TGEDCOMTag;
+begin
+  // _PRIM
+  // FO7, myHeritage, PAF, Legacy, AncestQuest
+  // In the OBJE record to indicate if this is the primary photo for this person.
+  tag := FindTag('_PRIM');
+  Result := (tag <> nil) and (tag.StringValue = 'Y');
+end;
+
+procedure TGEDCOMMultimediaLink.SetIsPrimary(const Value: Boolean);
+var
+  tag: TGEDCOMTag;
+begin
+  if (Value) then begin
+    tag := FindTag('_PRIM');           
+    if (tag = nil) then tag := AddTag('_PRIM');
+    tag.StringValue := 'Y';
+  end else DeleteTag('_PRIM');
 end;
 
 { TGEDCOMFileReference }
@@ -8727,9 +8773,6 @@ end;
 function TGEDCOMPlace.AddTag(const ATag, AValue: string;
   AClass: TGEDCOMTagClass): TGEDCOMTag;
 begin
-  {if (ATag = 'FORM')
-  then //Result := inherited AddTag(ATag, AValue, TGEDCOMDateValue)
-  else}
   if (ATag = '_LOC')
   then Result := inherited AddTag(ATag, AValue, TGEDCOMPointer)
   else
@@ -8774,18 +8817,18 @@ begin
   if (ATag = 'DATE')
   then Result := inherited AddTag(ATag, AValue, TGEDCOMDateValue)
   else
-  if (ATag = 'ADDR')
-  then Result := inherited AddTag(ATag, AValue, TGEDCOMAddress)
-  else
   if (ATag = 'PLAC')
   then Result := inherited AddTag(ATag, AValue, TGEDCOMPlace)
   else
+  if (ATag = 'ADDR')
+  then Result := inherited AddTag(ATag, AValue, TGEDCOMAddress)
+  else
   if (ATag = 'PHON') or (ATag = 'EMAIL') or (ATag = 'FAX') or (ATag = 'WWW')
-  then Result := TGEDCOMAddress(TagClass('ADDR', TGEDCOMAddress)).AddTag(ATag, AValue, AClass)
+  then Result := GetAddress().AddTag(ATag, AValue, AClass)
   else Result := inherited AddTag(ATag, AValue, AClass);
 end;
 
-function TGEDCOMEventDetail.GetAddress: TGEDCOMAddress;
+function TGEDCOMEventDetail.GetAddress(): TGEDCOMAddress;
 begin
   Result := TGEDCOMAddress(TagClass('ADDR', TGEDCOMAddress));
 end;
@@ -9923,5 +9966,7 @@ begin
   if (aCorresponder <> nil)
   then AddTag(CommunicationTags[aDir], EncloseXRef(aCorresponder.XRef));
 end;
+
+{==============================================================================}
 
 end.

@@ -1,4 +1,4 @@
-unit GKUserRefEdit; {prepare:fin}
+unit GKUserRefEdit; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,10 +6,10 @@ interface
 
 uses
   SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Buttons,
-  GedCom551, GKBase;
+  GedCom551, GKBase, GKLangs;
 
 type
-  TfmUserRefEdit = class(TForm)
+  TfmUserRefEdit = class(TForm, ILocalization)
     btnAccept: TBitBtn;
     btnCancel: TBitBtn;
     Label1: TLabel;
@@ -26,6 +26,8 @@ type
   public
     property UserRef: TGEDCOMUserReference read FUserRef write SetUserRef;
     property Base: TfmBase read GetBase;
+
+    procedure SetLang();
   end;
 
 implementation
@@ -39,6 +41,19 @@ uses GKMain;
 procedure TfmUserRefEdit.FormCreate(Sender: TObject);
 begin
   //EditRelation.Items.Assign(fmGEDKeeper.Options.Relations);
+
+  SetLang();
+end;
+
+procedure TfmUserRefEdit.SetLang();
+begin
+  btnAccept.Caption := LSList[LSID_DlgAccept];
+  btnCancel.Caption := LSList[LSID_DlgCancel];
+
+  Caption := LSList[LSID_WinUserRefEdit];
+
+  Label1.Caption := LSList[LSID_Reference];
+  Label2.Caption := LSList[LSID_Type];
 end;
 
 procedure TfmUserRefEdit.SetUserRef(const Value: TGEDCOMUserReference);

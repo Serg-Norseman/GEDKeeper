@@ -1,4 +1,4 @@
-unit GKChartCore;
+unit GKChartCore; {trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -7,108 +7,6 @@ interface
 uses
   Types, Windows, Messages, Classes, Contnrs, Graphics, Controls, Forms,
   GedCom551, GKEngine, GKCommon, GKLists, GraphCore;
-
-type
-  TRelationKind = (
-    rkNone,
-
-    // runtime
-    rkParent, rkSpouse, rkChild,
-
-    // base
-    rkFather, rkMother, rkHusband, rkWife, rkSon, rkDaughter,
-    rkGrandfather, rkGrandmother, rkGrandson, rkGranddaughter,
-    rkBrother, rkSister,
-
-    //
-    rkSonInLaw, rkDaughterInLaw,
-    rkHusbandFather, rkHusbandMother, rkWifeFather, rkWifeMother,
-    rkUncle, rkAunt, rkNephew, rkNiece, rkCousinM, rkCousinF,
-
-    // runtime
-    rkSame, rkUndefined
-  );
-
-const
-  RelationKinds: array [TRelationKind] of string = (
-    '?',
-    'родитель', 'супруг(а)', 'ребенок',
-
-    'отец', 'мать', 'муж', 'жена', 'сын', 'дочь',
-    'дед', 'бабушка', 'внук', 'внучка',
-    'брат', 'сестра',
-
-    'зять', 'невестка',
-    'свекор', 'свекровь', 'тесть', 'теща',
-    'дядя', 'тетя', 'племянник', 'племянница', 'кузен', 'кузина',
-
-    // Деверь - брат мужа, золовка - сестра мужа, Шурин - брат жены, Свояченица — сестра жены.
-
-    '-', '-'
-  );
-
-  RelationSigns: array [TRelationKind] of string = (
-    '?',
-    'P', 'S', 'C',
-
-    'F', 'M', 'H', 'W', 'Sn', 'Dg',
-    'Gf', 'Gm', 'Gs', 'Gd',
-    'Br', 'St',
-
-    '-', '-',
-    '-', '-', '-', '-',
-    '-', '-', '-', '-', '-', '-',
-
-    '-', '-'
-  );
-
-  KinshipsCount = 24;
-  Kinships: array [0..KinshipsCount-1] of record
-    PrevRels: set of TRelationKind;
-    CurrRels: set of TRelationKind;
-    FinRel: TRelationKind;
-    Great, Level: Shortint;
-  end = (
-    (PrevRels: [rkNone]; CurrRels: [rkFather..rkDaughter]; FinRel: rkSame; Great: 0; Level: 0),
-
-    (PrevRels: [rkHusband, rkWife]; CurrRels: [rkSon, rkDaughter]; FinRel: rkSame; Great: 0; Level: +1),
-
-    (PrevRels: [rkMother]; CurrRels: [rkHusband]; FinRel: rkFather; Great: 0; Level: 0),
-    (PrevRels: [rkFather]; CurrRels: [rkWife]; FinRel: rkMother; Great: 0; Level: 0),
-
-    (PrevRels: [rkGrandfather, rkGrandmother]; CurrRels: [rkSon]; FinRel: rkUncle; Great: 0; Level: +1),
-    (PrevRels: [rkGrandfather, rkGrandmother]; CurrRels: [rkDaughter]; FinRel: rkAunt; Great: 0; Level: +1),
-
-//    (PrevRels: [rkUncle, rkAunt]; CurrRels: [rkSon]; FinRel: rkCousinM; Great: 0; Level: +1),
-//    (PrevRels: [rkUncle, rkAunt]; CurrRels: [rkDaughter]; FinRel: rkCousinF; Great: 0; Level: +1),
-
-    (PrevRels: [rkBrother, rkSister]; CurrRels: [rkSon]; FinRel: rkNephew; Great: 0; Level: +1),
-    (PrevRels: [rkBrother, rkSister]; CurrRels: [rkDaughter]; FinRel: rkNiece; Great: 0; Level: +1),
-
-    (PrevRels: [rkSon]; CurrRels: [rkWife]; FinRel: rkDaughterInLaw; Great: 0; Level: 0),
-    (PrevRels: [rkDaughter]; CurrRels: [rkHusband]; FinRel: rkSonInLaw; Great: 0; Level: 0),
-
-    (PrevRels: [rkWife]; CurrRels: [rkFather]; FinRel: rkWifeFather; Great: 0; Level: -1),
-    (PrevRels: [rkWife]; CurrRels: [rkMother]; FinRel: rkWifeMother; Great: 0; Level: -1),
-
-    (PrevRels: [rkHusband]; CurrRels: [rkFather]; FinRel: rkHusbandFather; Great: 0; Level: -1),
-    (PrevRels: [rkHusband]; CurrRels: [rkMother]; FinRel: rkHusbandMother; Great: 0; Level: -1),
-
-    (PrevRels: [rkFather, rkMother]; CurrRels: [rkFather]; FinRel: rkGrandfather; Great: 0; Level: -1),
-    (PrevRels: [rkFather, rkMother]; CurrRels: [rkMother]; FinRel: rkGrandmother; Great: 0; Level: -1),
-
-    (PrevRels: [rkFather, rkMother]; CurrRels: [rkSon]; FinRel: rkBrother; Great: 0; Level: +1),
-    (PrevRels: [rkFather, rkMother]; CurrRels: [rkDaughter]; FinRel: rkSister; Great: 0; Level: +1),
-
-    (PrevRels: [rkGrandfather, rkGrandmother]; CurrRels: [rkFather]; FinRel: rkGrandfather; Great: +1; Level: -1),
-    (PrevRels: [rkGrandfather, rkGrandmother]; CurrRels: [rkMother]; FinRel: rkGrandmother; Great: +1; Level: -1),
-
-    (PrevRels: [rkSon, rkDaughter, rkSonInLaw, rkDaughterInLaw]; CurrRels: [rkSon]; FinRel: rkGrandson; Great: 0; Level: +1),
-    (PrevRels: [rkSon, rkDaughter, rkSonInLaw, rkDaughterInLaw]; CurrRels: [rkDaughter]; FinRel: rkGranddaughter; Great: 0; Level: +1),
-
-    (PrevRels: [rkGrandson, rkGranddaughter]; CurrRels: [rkSon]; FinRel: rkGrandson; Great: +1; Level: +1),
-    (PrevRels: [rkGrandson, rkGranddaughter]; CurrRels: [rkDaughter]; FinRel: rkGranddaughter; Great: +1; Level: +1)
-  );
 
 type
   TBranchCut = (bcNone, bcYears, bcPersons);
@@ -144,7 +42,8 @@ type
     // control fields
     FBorderStyle: TBorderStyle;
     FBorderWidth: Integer;
-    FImageSize: TPoint;
+    FImageHeight: Integer;
+    FImageWidth: Integer;
     FKind: TChartKind;
     FLeftPos: Integer;
     FTopPos: Integer;
@@ -152,11 +51,10 @@ type
     FSPX, FSPY: Integer;
 
     // chart fields
-    FDepthLimit: Integer;
+    FEngine: TGenEngine;
     FFilter: TPersonsFilter;
     FOptions: TChartOptions;
     FRoot: TPerson;
-    FScale: Integer;
     FSelected: TPerson;
     FShieldState: TShieldState;
     FTree: TGEDCOMTree;
@@ -188,12 +86,10 @@ type
     procedure SelectBy(aX, aY: Integer); virtual; abstract;
     procedure TreeDraw(aCanvas: TCanvas; Default: Boolean); virtual;
 
-    property DepthLimit: Integer read FDepthLimit write FDepthLimit;
+    property Engine: TGenEngine read FEngine write FEngine;
     property Filter: TPersonsFilter read FFilter write FFilter;
-    property ImageSize: TPoint read FImageSize;
     property Options: TChartOptions read FOptions write FOptions;
     property Root: TPerson read FRoot;
-    property Scale: Integer read FScale write FScale;
     property Selected: TPerson read FSelected write SetSelected;
     property ShieldState: TShieldState read FShieldState write FShieldState;
     property Tree: TGEDCOMTree read FTree write FTree;
@@ -209,7 +105,10 @@ type
     property OnMouseUp;
   end;
 
-  TPersonFlags = set of (pfDivorced, pfIsDead, pfSelected);
+  TPersonFlag = (pfDivorced, pfIsDead, pfSelected, pfDescByFather, pfDescByMother);
+  TPersonFlags = set of TPersonFlag;
+  TPersonList = class;
+  TPersonKind = (pkDefault, pkSpouse);
 
   TCustomPerson = class(TObject)
   private
@@ -222,6 +121,8 @@ type
     FKinship: string;
     FName: string;
     FPatronymic: string;
+    FPortrait: TGraphic;
+    FPortraitWidth: Longint;
     FPtX, FPtY: Longint;
     FRec: TGEDCOMIndividualRecord;
     FSex: TGEDCOMSex;
@@ -233,6 +134,7 @@ type
     {$ENDIF}
 
     procedure Calc();
+    function GetDestRect(rt: TRect; Portrait: TGraphic): TRect;
     function GetDivorced: Boolean;
     function GetIsDead: Boolean;
     function GetPt: TPoint;
@@ -273,10 +175,6 @@ type
     property Width: Integer read FWidth;
   end;
 
-  TPersonList = class;
-
-  TPersonKind = (pkDefault, pkSpouse);
-
   TPerson = class(TCustomPerson)
   private
     FBaseSpouse: TPerson;
@@ -285,14 +183,13 @@ type
     FGeneration: Integer;
     FKind: TPersonKind;
     FMother: TPerson;
+    FNode: TGraphNode;
     FSpouses: TPersonList;
 
     function GetChild(Index: Integer): TPerson;
     function GetChildsCount: Integer;
     function GetSpouse(Index: Integer): TPerson;
     function GetSpousesCount: Integer;
-  protected
-    FNode: PNode;
   public
     Parent: TPerson;
 
@@ -326,6 +223,7 @@ type
   TAncestryChartBox = class(TCustomChartBox)
   private
     FBranchDistance: Integer;
+    FDepthLimit: Integer;
     FHMax, FWMax: Integer;
     FFilter: TChartFilter;
     FGraph: TGraph;
@@ -333,6 +231,7 @@ type
     FLevelDistance: Integer;
     FMargin: Integer;
     FPersons: TPersonList;
+    FScale: Integer;
     FSpouseDistance: Integer;
 
     function DoAncestorsStep(aChild: TPerson; aPerson: TGEDCOMIndividualRecord; aGeneration: Integer): TPerson;
@@ -356,10 +255,13 @@ type
     procedure RebuildKinships();
     procedure SaveSnapshot(const aFileName: string);
     procedure SelectBy(aX, aY: Integer); override;
+    procedure SelectByRec(iRec: TGEDCOMIndividualRecord);
 
     property BranchDistance: Integer read FBranchDistance write FBranchDistance;
+    property DepthLimit: Integer read FDepthLimit write FDepthLimit;
     property Filter: TChartFilter read FFilter;
     property Margin: Integer read FMargin write FMargin;
+    property Scale: Integer read FScale write FScale;
   end;
 
 implementation
@@ -367,7 +269,7 @@ implementation
 uses
   {$IFDEF DELPHI_NET}Borland.Vcl.WinUtils, {$ENDIF}
   {$IFNDEF DELPHI_NET}Jpeg,{$ENDIF}
-  SysUtils, Math, Dialogs, GKMain, StdCtrls, GKUtils;
+  SysUtils, Math, Dialogs, GKMain, StdCtrls, GKUtils, GKLangs;
 
 function FindKinship(prev, cur: TRelationKind; var great, level: Integer): TRelationKind;
 var
@@ -428,11 +330,11 @@ begin
     FSPX := FBorderWidth - FLeftPos;
     FSPY := FBorderWidth - FTopPos;
 
-    if (FImageSize.X < ClientWidth)
-    then FSPX := FSPX + (ClientWidth - FImageSize.X) div 2;
+    if (FImageWidth < ClientWidth)
+    then FSPX := FSPX + (ClientWidth - FImageWidth) div 2;
 
-    if (FImageSize.Y < ClientHeight)
-    then FSPY := FSPY + (ClientHeight - FImageSize.Y) div 2;
+    if (FImageHeight < ClientHeight)
+    then FSPY := FSPY + (ClientHeight - FImageHeight) div 2;
   end else begin
     FSPX := 0;
     FSPY := 0;
@@ -504,15 +406,15 @@ end;
 
 procedure TCustomChartBox.ScrollRange();
 begin
-  if (FImageSize.X < ClientWidth) then begin
+  if (FImageWidth < ClientWidth) then begin
     FRange.X := 0;
-    LeftPos := (ClientWidth - FImageSize.X) div 2;
-  end else FRange.X := FImageSize.X - ClientWidth;
+    LeftPos := (ClientWidth - FImageWidth) div 2;
+  end else FRange.X := FImageWidth - ClientWidth;
 
-  if (FImageSize.Y < ClientHeight) then begin
+  if (FImageHeight < ClientHeight) then begin
     FRange.Y := 0;
-    TopPos := (ClientHeight - FImageSize.Y) div 2;
-  end else FRange.Y := FImageSize.Y - ClientHeight;
+    TopPos := (ClientHeight - FImageHeight) div 2;
+  end else FRange.Y := FImageHeight - ClientHeight;
 
   SetScrollRange(Handle, SB_HORZ, 0, FRange.X, False);
   SetScrollRange(Handle, SB_VERT, 0, FRange.Y, False);
@@ -679,10 +581,13 @@ constructor TCustomPerson.Create(aChart: TCustomChartBox);
 begin
   inherited Create();
   FChart := aChart;
+  FPortrait := nil;
 end;
 
 destructor TCustomPerson.Destroy;
 begin
+  if (FPortrait <> nil) then FPortrait.Free;
+
   inherited Destroy;
 end;
 
@@ -706,6 +611,9 @@ begin
 
     FBirthYear := GetBirthDate(iRec, dfYYYY);
     FDeathYear := GetDeathDate(iRec, dfYYYY);
+
+    if (FChart.Options.PortraitsVisible)
+    then FPortrait := FChart.FEngine.GetPrimaryBitmap(iRec);
   end else begin
     FFamily := '';
     FName := '< ? >';
@@ -752,6 +660,42 @@ begin
   Result := FName + ' ' + FPatronymic;
 end;
 
+function TCustomPerson.GetDestRect(rt: TRect; Portrait: TGraphic): TRect;
+var
+  w, h, cw, ch: Integer;
+  xyaspect: Double;
+begin
+  w := Portrait.Width;
+  h := Portrait.Height;
+  cw := (rt.Right - rt.Left) + 1;
+  ch := (rt.Bottom - rt.Top) + 1;
+
+  // always stretch and proportional
+  xyaspect := w / h;
+  if (w > h) then begin
+    w := cw;
+    h := Trunc(cw / xyaspect);
+    if (h > ch) then begin // woops, too big
+      h := ch;
+      w := Trunc(ch * xyaspect);
+    end;
+  end else begin
+    h := ch;
+    w := Trunc(ch * xyaspect);
+    if (w > cw) then begin // woops, too big
+      w := cw;
+      h := Trunc(cw / xyaspect);
+    end;
+  end;
+
+  Result.Left := rt.Left;
+  Result.Top := rt.Top;
+  Result.Right := rt.Left + w;
+  Result.Bottom := rt.Top + h;
+
+  OffsetRect(Result, (cw - w) div 2, (ch - h) div 2);
+end;
+
 procedure TCustomPerson.Draw(aCanvas: TCanvas; SPX, SPY: Integer);
 
   procedure DrawBorder(rt: TRect; dead: Boolean);
@@ -784,15 +728,39 @@ procedure TCustomPerson.Draw(aCanvas: TCanvas; SPX, SPY: Integer);
     end;
   end;
 
+  procedure xOffsetRect(var Rect: TRect; DX: Integer; DY: Integer);
+  begin
+    Inc(Rect.Left, DX);
+    Dec(Rect.Right, DX);
+
+    Inc(Rect.Top, DY);
+    Dec(Rect.Bottom, DY);
+  end;
+
+  procedure TextOut(rt: TRect; s: string; h: Integer; var line: Integer);
+  var
+    rx, ry, rw: Integer;
+  begin
+    rw := rt.Right - rt.Left + 1;
+
+    rx := rt.Left + (rw - aCanvas.TextWidth(s)) div 2;
+    ry := rt.Top + 10 + (h * line);
+
+    aCanvas.TextOut(rx, ry, s);
+
+    Inc(line);
+  end;
+
 var
-  rt, dt: TRect;
+  rt, dt, port_rt: TRect;
   h, line, i: Integer;
   cps: TChartPersonSign;
-  full_name, life_years: string;
+  has_port: Boolean;
 begin
   rt := GetRect();
   OffsetRect(rt, SPX, SPY);
   h := aCanvas.TextHeight('A');
+  has_port := (FChart.Options.PortraitsVisible) and (FPortrait <> nil);
 
   aCanvas.Pen.Color := clBlack;
   aCanvas.Pen.Width := 1;
@@ -817,42 +785,37 @@ begin
   aCanvas.Pen.Color := clBlack;
   aCanvas.Pen.Width := 1;
 
+  if (has_port) then begin
+    port_rt := rt;
+    port_rt.Right := port_rt.Left + FPortraitWidth;
+    xOffsetRect(port_rt, 3, 3);
+    aCanvas.StretchDraw(GetDestRect(port_rt, FPortrait), FPortrait);
+    rt.Left := rt.Left + FPortraitWidth;
+  end;
+
   line := 0;
-  aCanvas.TextOut(rt.Left + (FWidth - aCanvas.TextWidth(FFamily)) div 2, rt.Top + 10 + (h * line), FFamily);
+
+  TextOut(rt, FFamily, h, line);
 
   if not(FChart.Options.DiffLines) then begin
-    full_name := GetFullName();
-
-    Inc(line);
-    aCanvas.TextOut(rt.Left + (FWidth - aCanvas.TextWidth(full_name)) div 2, rt.Top + 10 + (h * line), full_name);
+    TextOut(rt, GetFullName(), h, line);
   end else begin
-    Inc(line);
-    aCanvas.TextOut(rt.Left + (FWidth - aCanvas.TextWidth(FName)) div 2, rt.Top + 10 + (h * line), FName);
-    Inc(line);
-    aCanvas.TextOut(rt.Left + (FWidth - aCanvas.TextWidth(FPatronymic)) div 2, rt.Top + 10 + (h * line), FPatronymic);
+    TextOut(rt, FName, h, line);
+    TextOut(rt, FPatronymic, h, line);
   end;
 
   if not(FChart.Options.OnlyYears) then begin
-    if (FChart.Options.BirthDateVisible) then begin
-      Inc(line);
-      aCanvas.TextOut(rt.Left + (FWidth - aCanvas.TextWidth(FBirthDate)) div 2, rt.Top + 10 + (h * line), FBirthDate);
-    end;
+    if (FChart.Options.BirthDateVisible)
+    then TextOut(rt, FBirthDate, h, line);
 
-    if (FChart.Options.DeathDateVisible) then begin
-      Inc(line);
-      aCanvas.TextOut(rt.Left + (FWidth - aCanvas.TextWidth(FDeathDate)) div 2, rt.Top + 10 + (h * line), FDeathDate);
-    end;
+    if (FChart.Options.DeathDateVisible)
+    then TextOut(rt, FDeathDate, h, line);
   end else begin
-    life_years := GetLifeYears();
-
-    Inc(line);
-    aCanvas.TextOut(rt.Left + (FWidth - aCanvas.TextWidth(life_years)) div 2, rt.Top + 10 + (h * line), life_years);
+    TextOut(rt, GetLifeYears(), h, line);
   end;
 
-  if (FChart.Options.Kinship) then begin
-    Inc(line);
-    aCanvas.TextOut(rt.Left + (FWidth - aCanvas.TextWidth(FKinship)) div 2, rt.Top + 10 + (h * line), FKinship);
-  end;
+  if (FChart.Options.Kinship)
+  then TextOut(rt, FKinship, h, line);
 
   if (FChart.Options.SignsVisible) and (FSigns <> []) then begin
     i := 0;
@@ -864,8 +827,7 @@ begin
   end;
 
   {$IFDEF GEN_DEBUG}
-  Inc(line);
-  aCanvas.TextOut(rt.Left + (FWidth - aCanvas.TextWidth(FPath)) div 2, rt.Top + 10 + (h * line), FPath);
+  TextOut(rt, FPath, h, line);
   {$ENDIF}
 end;
 
@@ -887,6 +849,7 @@ end;
 procedure TCustomPerson.Calc();
 var
   wt, maxwid, lines: Integer;
+  prt: TRect;
 begin
   lines := 2;
   maxwid := FChart.Canvas.TextWidth(FFamily);
@@ -933,6 +896,12 @@ begin
 
   FWidth := maxwid + 20;
   FHeight := FChart.Canvas.TextHeight('A') * lines + 20;
+
+  if (FChart.Options.PortraitsVisible) and (FPortrait <> nil) then begin
+    prt := GetDestRect(Types.Rect(0, 0, FHeight, FHeight), FPortrait);
+    FPortraitWidth := (prt.Right - prt.Left) + 1;
+    FWidth := FWidth + FPortraitWidth;
+  end;
 end;
 
 function TCustomPerson.GetDivorced: Boolean;
@@ -1258,7 +1227,7 @@ begin
   then Result.AddChild(aChild);
 
   if (FOptions.Kinship)
-  then Result.FNode := FGraph.CreateNode(Integer(Result), 0, 0);
+  then Result.FNode := FGraph.CreateNode(TGraphNode, Result);
 
   if (FDepthLimit > -1) and (aGeneration = FDepthLimit) then Exit;
 
@@ -1319,7 +1288,7 @@ function TAncestryChartBox.DoDescendantsStep(aParent: TPerson; aPerson: TGEDCOMI
     FPersons.Add(Result);
 
     if (FOptions.Kinship)
-    then Result.FNode := FGraph.CreateNode(Integer(Result), 0, 0);
+    then Result.FNode := FGraph.CreateNode(TGraphNode, Result);
 
     if (aKind <> pkSpouse) and (aParent <> nil)
     then aParent.AddChild(Result);
@@ -1336,11 +1305,12 @@ function TAncestryChartBox.DoDescendantsStep(aParent: TPerson; aPerson: TGEDCOMI
   end;
 
 var
-  res, res_parent, ft, mt, tmp: TPerson;
+  res, res_parent, ft, mt, child: TPerson;
   family: TGEDCOMFamilyRecord;
-  child, sp: TGEDCOMIndividualRecord;
+  child_rec, sp: TGEDCOMIndividualRecord;
   i, k: Integer;
   filter_source: TGEDCOMSourceRecord;
+  desc_flag: TPersonFlag;
 begin
   Result := nil;
   if (aPerson = nil) then Exit;
@@ -1384,6 +1354,7 @@ begin
 
         ft := res;
         mt := res_parent;
+        desc_flag := pfDescByMother;
       end;
       svFemale: begin
         sp := TGEDCOMIndividualRecord(family.Husband.Value);
@@ -1392,6 +1363,7 @@ begin
 
         ft := res_parent;
         mt := res;
+        desc_flag := pfDescByFather;
       end;
     end;
 
@@ -1406,17 +1378,18 @@ begin
     if (FDepthLimit > -1) and (aLevel = FDepthLimit) then Continue;
 
     for i := 0 to family.ChildrenCount - 1 do begin
-      child := TGEDCOMIndividualRecord(family.Children[i].Value);
-      if not(IsRecordAccess(child.Restriction, FShieldState)) then Continue;
+      child_rec := TGEDCOMIndividualRecord(family.Children[i].Value);
+      if not(IsRecordAccess(child_rec.Restriction, FShieldState)) then Continue;
 
-      tmp := DoDescendantsStep(res_parent, child, aLevel + 1);
-      if (tmp <> nil) then begin
-        tmp.Father := ft;
-        tmp.Mother := mt;
+      child := DoDescendantsStep(res_parent, child_rec, aLevel + 1);
+      if (child <> nil) then begin
+        child.Father := ft;
+        child.Mother := mt;
+        child.FFlags := child.FFlags + [desc_flag];
 
         if (FOptions.Kinship) then begin
-          FGraph.CreateLink(tmp.FNode, ft.FNode, 1, Ord(rkParent), Ord(rkChild));
-          FGraph.CreateLink(tmp.FNode, mt.FNode, 1, Ord(rkParent), Ord(rkChild));
+          FGraph.CreateLink(child.FNode, ft.FNode, 1, Ord(rkParent), Ord(rkChild));
+          FGraph.CreateLink(child.FNode, mt.FNode, 1, Ord(rkParent), Ord(rkChild));
         end;
       end;
     end;
@@ -1430,7 +1403,7 @@ procedure TAncestryChartBox.DoFilter(aRoot: TGEDCOMIndividualRecord);
     family: TGEDCOMFamilyRecord;
     child: TGEDCOMIndividualRecord;
     i, k, year: Integer;
-    res, res_child: Boolean;
+    res_child: Boolean;
   begin
     Result := False;
     if (aPerson = nil) then Exit;
@@ -1477,50 +1450,41 @@ procedure TAncestryChartBox.RecalcAncestorsChart();
 var
   prev: TList;
   edges: TEdges;
-  //ed_p: array [Byte] of TPerson; // debug
 
-  procedure PrepareIntersect(aPerson: TPerson);
+  procedure ShiftAnc(aPerson: TPerson; aOffset: Integer);
   var
-    has: Boolean;
+    pp: TPerson;
+  begin
+    pp := aPerson;
+    while (pp <> nil) do begin
+      pp.PtX := pp.PtX + aOffset;
+      edges[pp.Generation] := pp.Rect.Right;
+
+      if (pp.ChildsCount < 1)
+      then pp := nil
+      else pp := pp.Childs[0];
+    end;
+  end;
+
+  procedure RecalcAnc(aPerson: TPerson; aPt: TPoint);
+  var
     offset, i, gen: Integer;
     pp: TPerson;
     xpt: TPoint;
   begin
+    if (aPerson = nil) then Exit;
+
+    aPerson.Pt := aPt;
     gen := aPerson.Generation;
 
-    /// horizontal adjustment
+    /// prepare intersects
 
-    //if (ed_p[gen] <> nil)
-    //then edges[gen] := ed_p[gen].Rect.Right;
-
-    has := False;
-    if (aPerson.Rect.Left < 0 + Margin) then begin
-      has := True;
-      offset := (0 - aPerson.Rect.Left) + Margin;
-    end else begin
-      has := (edges[gen] > 0) and (aPerson.Rect.Left <= edges[gen] + FBranchDistance);
-
-      if has
-      then offset := ((edges[gen] + FBranchDistance) - aPerson.Rect.Left);
-    end;
-
-    if has then begin
-      pp := aPerson;
-      while (pp <> nil) do begin
-        xpt := pp.Pt;
-        xpt.X := xpt.X + offset;
-        pp.Pt := xpt;
-
-        edges[pp.Generation] := pp.Rect.Right;
-
-        if (pp.ChildsCount < 1)
-        then pp := nil
-        else pp := pp.Childs[0];
-      end;
-    end;
+    // horizontal adjustment
+    if (edges[gen] > 0) then offset := FBranchDistance else offset := FMargin;
+    if (aPerson.Rect.Left <= edges[gen] + offset)
+    then ShiftAnc(aPerson, ((edges[gen] + offset) - aPerson.Rect.Left));
 
     edges[gen] := aPerson.Rect.Right;
-    //ed_p[gen] := aPerson;
 
     // vertical adjustment
     prev.Add(aPerson);
@@ -1529,67 +1493,44 @@ var
 
       for i := 0 to prev.Count - 1 do begin
         pp := TPerson(prev[i]);
-
-        xpt := pp.Pt;
-        xpt.Y := xpt.Y + offset;
-        pp.Pt := xpt;
+        pp.PtY := pp.PtY + offset;
       end;
     end;
-  end;
 
-  procedure Recalc(aPerson: TPerson; aPt: TPoint);
-  var
-    pw: Integer;
-    xpt: TPoint;
-  begin
-    if (aPerson = nil) then Exit;
-
-    aPerson.Pt := aPt;
-    PrepareIntersect(aPerson);
+    /// adjust parents
 
     if (aPerson.Father <> nil) and (aPerson.Mother <> nil) then begin
-      if (aPerson.Father.Width > aPerson.Mother.Width)
-      then pw := aPerson.Father.Width
-      else pw := aPerson.Mother.Width;
-
       // calc father
-      //pw := aPerson.Father.Width;
-      xpt := Point(aPerson.PtX - (FSpouseDistance + (pw div 2)),
+      xpt := Point(aPerson.PtX - (FSpouseDistance + (aPerson.Father.Width div 2)),
                    aPerson.PtY - FLevelDistance - aPerson.Height);
-      Recalc(aPerson.Father, xpt);
+      RecalcAnc(aPerson.Father, xpt);
 
       // calc mother
-      //pw := aPerson.Mother.Width;
-      xpt := Point(aPerson.PtX + (FSpouseDistance + (pw div 2)),
+      xpt := Point(aPerson.PtX + (FSpouseDistance + (aPerson.Mother.Width div 2)),
                    aPerson.PtY - FLevelDistance - aPerson.Height);
-      Recalc(aPerson.Mother, xpt);
+      RecalcAnc(aPerson.Mother, xpt);
 
       // align child
-      xpt := aPerson.Pt;
-      xpt.X := aPerson.Father.PtX + (aPerson.Mother.PtX - aPerson.Father.PtX) div 2;
-      aPerson.Pt := xpt;
+      aPerson.PtX := (aPerson.Father.PtX + aPerson.Mother.PtX) div 2;
       edges[aPerson.Generation] := aPerson.Rect.Right;
     end else begin
       xpt := Point(aPerson.PtX, aPerson.PtY - FLevelDistance - aPerson.Height);
 
-      if (aPerson.Father <> nil) then Recalc(aPerson.Father, xpt)
+      if (aPerson.Father <> nil) then RecalcAnc(aPerson.Father, xpt)
       else
-      if (aPerson.Mother <> nil) then Recalc(aPerson.Mother, xpt);
+      if (aPerson.Mother <> nil) then RecalcAnc(aPerson.Mother, xpt);
     end;
 
     if (FWMax < aPerson.Rect.Right) then FWMax := aPerson.Rect.Right;
     if (FHMax < aPerson.Rect.Bottom) then FHMax := aPerson.Rect.Bottom;
   end;
 
-//var
-//  i: Byte;
 begin
   InitEdges(edges);
-  //for i := Low(Byte) to High(Byte) do ed_p[i] := nil;
 
   prev := TList.Create;
   try
-    Recalc(FRoot, Point(FMargin, FMargin));
+    RecalcAnc(FRoot, Point(FMargin, FMargin));
   finally
     prev.Destroy;
   end;
@@ -1599,44 +1540,45 @@ procedure TAncestryChartBox.RecalcDescendantsChart(aPreDef: Boolean);
 var
   edges: TEdges;
 
-  procedure PrepareIntersect(aPerson: TPerson);
+  procedure ShiftDesc(aPerson: TPerson; aOffset: Integer; aSingle: Boolean);
   var
-    has: Boolean;
-    offset, gen: Integer;
     p: TPerson;
-    xpt: TPoint;
   begin
-    has := False;
-    gen := aPerson.Generation;
+    {p := aPerson;
+    while (p <> nil) do begin
+      p.PtX := p.PtX + aOffset;
 
-    if (edges[gen] > 0) then begin
-      has := (aPerson.Rect.Left <= edges[gen] + FBranchDistance);
+      if (p.BaseSpouse <> nil)
+      and ((p.BaseSpouse.Sex = svFemale) or (p.BaseSpouse.SpousesCount = 1))
+      then p := p.BaseSpouse
+      else p := p.Parent;
+    end;}
 
-      if has
-      then offset := ((edges[gen] + FBranchDistance) - aPerson.Rect.Left);
+    p := aPerson;
+    if (p = nil) then Exit;
+    if (p = FRoot) then aSingle := False;
+
+    p.PtX := p.PtX + aOffset;
+
+    if (p.BaseSpouse <> nil)
+    and ((p.BaseSpouse.Sex = svFemale) or (p.BaseSpouse.SpousesCount = 1))
+    then begin
+      ShiftDesc(p.BaseSpouse, aOffset, aSingle);
     end else begin
-      if (aPerson.Rect.Left < 0 + FMargin) then begin
-        offset := (0 - aPerson.Rect.Left) + FMargin;
-        has := True;
-      end;
-    end;
-
-    if has then begin
-      p := aPerson;
-      while (p <> nil) do begin
-        xpt := p.Pt;
-        xpt.X := xpt.X + offset;
-        p.Pt := xpt;
-
-        if (p.BaseSpouse <> nil)
-        and ((p.BaseSpouse.Sex = svFemale) or (p.BaseSpouse.SpousesCount = 1))
-        then p := p.BaseSpouse
-        else p := p.Parent;
+      if not(aSingle) then begin
+        ShiftDesc(p.Father, aOffset, aSingle);
+        ShiftDesc(p.Mother, aOffset, aSingle);
+      end else begin
+        if (pfDescByFather in p.FFlags)
+        then ShiftDesc(p.Father, aOffset, aSingle)
+        else
+        if (pfDescByMother in p.FFlags)
+        then ShiftDesc(p.Mother, aOffset, aSingle);
       end;
     end;
   end;
 
-  procedure Desc_Recalc(aPerson: TPerson; aPt: TPoint; aPreDef: Boolean = True);
+  procedure RecalcDesc(aPerson: TPerson; aPt: TPoint; aPreDef: Boolean = True);
 
     procedure RecalcChilds();
     var
@@ -1665,7 +1607,7 @@ var
 
       for i := 0 to aPerson.ChildsCount - 1 do begin
         child := aPerson.Childs[i];
-        Desc_Recalc(child, Point(cur_x + (child.Width div 2), cur_y));
+        RecalcDesc(child, Point(cur_x + (child.Width div 2), cur_y));
         cur_x := child.Rect.Right + FBranchDistance;
       end;
 
@@ -1677,33 +1619,47 @@ var
       if (fix_pair) then begin
         case aPerson.Sex of
           svMale: begin
-            aPerson.PtX := cur_x - ((BranchDistance + aPerson.Width) div 2) + 1;
-            aPerson.BaseSpouse.PtX := cur_x + ((BranchDistance + aPerson.BaseSpouse.Width) div 2);
+            //aPerson.PtX := cur_x - ((BranchDistance + aPerson.Width) div 2) + 1;
+            //aPerson.BaseSpouse.PtX := cur_x + ((BranchDistance + aPerson.BaseSpouse.Width) div 2);
+
+            ShiftDesc(aPerson, (cur_x - ((BranchDistance + aPerson.Width) div 2) + 1) - aPerson.PtX, True);
+            ShiftDesc(aPerson.BaseSpouse, (cur_x + ((BranchDistance + aPerson.BaseSpouse.Width) div 2)) - aPerson.BaseSpouse.PtX, True);
           end;
           svFemale: begin
-            aPerson.PtX := cur_x + ((BranchDistance + aPerson.Width) div 2);
-            aPerson.BaseSpouse.PtX := cur_x - ((BranchDistance + aPerson.BaseSpouse.Width) div 2) + 1;
+            //aPerson.PtX := cur_x + ((BranchDistance + aPerson.Width) div 2);
+            //aPerson.BaseSpouse.PtX := cur_x - ((BranchDistance + aPerson.BaseSpouse.Width) div 2) + 1;
+
+            ShiftDesc(aPerson, (cur_x + ((BranchDistance + aPerson.Width) div 2)) - aPerson.PtX, True);
+            ShiftDesc(aPerson.BaseSpouse, (cur_x - ((BranchDistance + aPerson.BaseSpouse.Width) div 2) + 1) - aPerson.BaseSpouse.PtX, True);
           end;
         end;
-      end else aPerson.PtX := cur_x;
+      end else begin
+        //aPerson.PtX := cur_x;
+        ShiftDesc(aPerson, cur_x - aPerson.PtX, True);
+      end;
     end;
-
+    
   var
-    i: Integer;
+    i, offset, gen: Integer;
     sp, prev: TPerson;
     sp_pt: TPoint;
   begin
     if (aPerson = nil) then Exit;
 
+    gen := aPerson.Generation;
+
     if (aPreDef)
     then aPerson.Pt := aPt;
 
-    PrepareIntersect(aPerson);
+    /// prepare intersects
+    if (edges[gen] > 0) then offset := FBranchDistance else offset := FMargin;
+    if (aPerson.Rect.Left <= edges[gen] + offset)
+    then ShiftDesc(aPerson, ((edges[gen] + offset) - aPerson.Rect.Left), True);
 
     ///
     if (aPerson.Sex = svMale) then begin
       RecalcChilds();
-      edges[aPerson.Generation] := aPerson.Rect.Right;
+      edges[gen] := aPerson.Rect.Right;
     end;
 
     if (aPerson.SpousesCount > 0) then begin
@@ -1716,7 +1672,7 @@ var
           svFemale: sp_pt := Point(prev.Rect.Left - (FBranchDistance + (sp.Width div 2)), aPerson.PtY);
         end;
 
-        Desc_Recalc(sp, sp_pt);
+        RecalcDesc(sp, sp_pt);
 
         if (sp.Sex <> svMale)
         then prev := sp;
@@ -1725,7 +1681,7 @@ var
 
     if (aPerson.Sex = svFemale) then begin
       RecalcChilds();
-      edges[aPerson.Generation] := aPerson.Rect.Right;
+      edges[gen] := aPerson.Rect.Right;
     end;
     ///
 
@@ -1736,7 +1692,7 @@ var
 begin
   InitEdges(edges);
 
-  Desc_Recalc(FRoot, Point(FMargin, FMargin), aPreDef);
+  RecalcDesc(FRoot, Point(FMargin, FMargin), aPreDef);
 end;
 
 procedure TAncestryChartBox.InternalGenChart(aPerson: TGEDCOMIndividualRecord; aKind: TChartKind);
@@ -1773,7 +1729,7 @@ var
   p: TPerson;
 begin
   if (FOptions.Kinship) then begin
-    FGraph.FindPathTree(FKinRoot.FNode, nil);
+    FGraph.FindPathTree(FKinRoot.FNode);
 
     for i := 0 to FPersons.Count - 1 do begin
       p := FPersons[i];
@@ -1795,7 +1751,9 @@ begin
 
   FHMax := FHMax + FMargin - 1;
   FWMax := FWMax + FMargin - 1;
-  FImageSize := Point(FWMax, FHMax);
+
+  FImageHeight := FHMax;
+  FImageWidth := FWMax;
 end;
 
 procedure TAncestryChartBox.SaveSnapshot(const aFileName: string);
@@ -1810,22 +1768,22 @@ begin
   ext := AnsiLowerCase(ExtractFileExt(aFileName));
 
   if (ext = '.bmp') or (ext = '.jpg') then begin
-    if (FImageSize.X >= High(Word)) then begin
-      MessageDlg('Ширина изображения более 65 тыс. точек. Сохранить невозможно', mtError, [mbOk], 0);
+    if (FImageWidth >= High(Word)) then begin
+      MessageDlg(LSList[LSID_TooMuchWidth], mtError, [mbOk], 0);
       Exit;
     end;
 
     pic := TBitmap.Create;
-    pic.Width := FImageSize.X;
-    pic.Height := FImageSize.Y;
+    pic.Width := FImageWidth;
+    pic.Height := FImageHeight;
     TBitmap(pic).PixelFormat := pf8bit;
     canv := TBitmap(pic).Canvas;
   end
   else
   if (ext = '.emf') then begin
     pic := TMetafile.Create;
-    pic.Width := FImageSize.X;
-    pic.Height := FImageSize.Y;
+    pic.Width := FImageWidth;
+    pic.Height := FImageHeight;
     TMetafile(pic).Enhanced := True;
     canv := TMetafileCanvas.Create(TMetafile(pic), 0);
   end;
@@ -1880,6 +1838,23 @@ begin
   SetSelected(nil);
 end;
 
+procedure TAncestryChartBox.SelectByRec(iRec: TGEDCOMIndividualRecord);
+var
+  i: Integer;
+  p: TPerson;
+begin
+  for i := 0 to FPersons.Count - 1 do begin
+    p := FPersons[i];
+
+    if (p.Rec = iRec) then begin
+      SetSelected(p);
+      Exit;
+    end;
+  end;
+
+  SetSelected(nil);
+end;
+
 procedure TAncestryChartBox.RebuildKinships();
 var
   p: TPerson;
@@ -1902,20 +1877,11 @@ begin
 end;
 
 type
-  TLink = class(TObject)
+  TRelLink = class(TObject)
   public
     xFrom, xTo: TPerson;
-    BaseRel: TRelationKind; // кто есть xTo по отношению к xFrom
+    xRel: TRelationKind; // кто есть xTo по отношению к xFrom
   end;
-
-const
-  Numerals: array [1..9] of string = (
-    '-', 'дво', 'тро', 'четверо', 'пяти', 'шести', 'семи', 'восьми', 'девяти'
-  );
-
-  NumKinship: array [TGEDCOMSex] of string = (
-    '-', 'юродный', 'юродная', ''
-  );
 
 function TAncestryChartBox.FindRelationship(aTarget: TPerson): string;
 var
@@ -1923,29 +1889,29 @@ var
 
   procedure FixLink(f, t: TPerson; rel: TRelationKind);
   var
-    L: TLink;
+    L: TRelLink;
   begin
-    L := TLink.Create;
+    L := TRelLink.Create;
     L.xFrom := f;
     L.xTo := t;
 
     case rel of
       rkParent:
         case L.xTo.Sex of
-          svMale: L.BaseRel := rkFather;
-          svFemale: L.BaseRel := rkMother;
+          svMale: L.xRel := rkFather;
+          svFemale: L.xRel := rkMother;
         end;
       rkSpouse:
         case L.xTo.Sex of
-          svMale: L.BaseRel := rkHusband;
-          svFemale: L.BaseRel := rkWife;
+          svMale: L.xRel := rkHusband;
+          svFemale: L.xRel := rkWife;
         end;
       rkChild:
         case L.xTo.Sex of
-          svMale: L.BaseRel := rkSon;
-          svFemale: L.BaseRel := rkDaughter;
+          svMale: L.xRel := rkSon;
+          svFemale: L.xRel := rkDaughter;
         end;
-      else L.BaseRel := rel;
+      else L.xRel := rel;
     end;
 
     path.Add(L);
@@ -1978,14 +1944,14 @@ var
       end;
     end else tmp := '';
 
-    Result := tmp + RelationKinds[Rel];
+    Result := tmp + LSList[RelationKinds[Rel]];
   end;
 
 var
   i, great, g, lev: Integer;
-  L: TLink;
+  L: TRelLink;
   prev_rel, cur_rel, fin_rel: TRelationKind;
-  link: PLink;
+  link: TGraphLink;
   {$IFDEF GEN_DEBUG}
   tmp: string;
   {$ENDIF}
@@ -1994,10 +1960,10 @@ begin
 
   path := TObjectList.Create(True);
   try
-    link := aTarget.FNode.InLink;
+    link := aTarget.FNode.LinkIn;
     while (link <> nil) do begin
-      FixLink(TPerson(link.Node1.Id), TPerson(link.Node2.Id), TRelationKind(link.ExtData));
-      link := link.Node1.InLink;
+      FixLink(TPerson(link.Node1.ExtObj), TPerson(link.Node2.ExtObj), TRelationKind(link.ExtData));
+      link := link.Node1.LinkIn;
     end;
 
     {$IFDEF GEN_DEBUG}
@@ -2008,8 +1974,8 @@ begin
     fin_rel := rkNone;
     great := 0;
     for i := path.Count - 1 downto 0 do begin
-      L := TLink(path[i]);
-      cur_rel := L.BaseRel;
+      L := TRelLink(path[i]);
+      cur_rel := L.xRel;
 
       {$IFDEF GEN_DEBUG}
       if (tmp <> '') then tmp := tmp + ', ';
@@ -2061,11 +2027,12 @@ end;
 procedure TChartFilter.Clear;
 begin
   SourceMode := gmAll;
-  SourceRef := '';
-
   BranchCut := bcNone;
-  BranchYear := 0;
-  BranchPersons := '';
+
+  /// remared for saving in session
+  //SourceRef := '';
+  //BranchYear := 0;
+  //BranchPersons := '';
 end;
 
 procedure TChartFilter.Restore;

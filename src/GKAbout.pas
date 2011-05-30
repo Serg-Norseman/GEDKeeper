@@ -1,14 +1,14 @@
-unit GKAbout; {prepare:fin}
+unit GKAbout; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
 interface
 
 uses
-  SysUtils, Classes, Controls, Forms, ExtCtrls, StdCtrls, Buttons;
+  SysUtils, Classes, Controls, Forms, ExtCtrls, StdCtrls, Buttons, GKLangs;
 
 type
-  TfmAbout = class(TForm)
+  TfmAbout = class(TForm, ILocalization)
     LabelProduct: TLabel;
     LabelVersion: TLabel;
     btnClose: TBitBtn;
@@ -19,6 +19,7 @@ type
     procedure FormCreate(Sender: TObject);
   private
   public
+    procedure SetLang();
   end;
 
 procedure ShowAbout(Owner: TForm; AppName, AppVersion: string);
@@ -55,11 +56,20 @@ begin
     '«История рода - это есть история Отечества»'+#13#10+
     '«Неуважение к предкам - есть первый признак дикости и безнравственности»'+#13#10+
     '(Александр Сергеевич Пушкин)';
+
+  SetLang();
 end;
 
 procedure TfmAbout.Label_eMailClick(Sender: TObject);
 begin
   LoadExtFile(Label_eMail.Caption);
+end;
+
+procedure TfmAbout.SetLang();
+begin
+  btnClose.Caption := LSList[LSID_DlgClose];
+
+  Caption := LSList[LSID_MIAbout];
 end;
 
 end.

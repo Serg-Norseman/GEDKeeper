@@ -1,4 +1,4 @@
-unit GKDBImport; {prepare:fin}
+unit GKDBImport; {prepare:fin; trans:partial}
 
 {$I GEDKeeper.inc}
 
@@ -6,10 +6,10 @@ interface
 
 uses
   SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ToolWin,
-  ComCtrls, ExtCtrls, Grids, DBGrids, DB, ADODB, GKBase;
+  ComCtrls, ExtCtrls, Grids, DBGrids, DB, ADODB, GKBase, GKLangs;
 
 type
-  TfmDBImport = class(TForm)
+  TfmDBImport = class(TForm, ILocalization)
     ADOConnection1: TADOConnection;
     OpenDialog1: TOpenDialog;
     ToolBar1: TToolBar;
@@ -43,6 +43,8 @@ type
     procedure fieldsPrepare();
   public
     property Base: TfmBase read GetBase;
+
+    procedure SetLang();
   end;
 
 var
@@ -251,6 +253,11 @@ begin
   FDataSet.Open;
 
   fieldsPrepare();
+end;
+
+procedure TfmDBImport.SetLang();
+begin
+
 end;
 
 procedure TfmDBImport.fieldsPrepare();

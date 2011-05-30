@@ -1,21 +1,16 @@
-unit GKEngine;
+unit GKEngine; {trans:fin}
 
 {$I GEDKeeper.inc}
 
 interface
 
 uses
-  Classes, Contnrs, GedCom551;
+  Windows, Classes, Contnrs, GedCom551, Graphics, GKLangs;
 
-resourcestring
+const
   AppName = 'GEDKeeper';
 
-const
-  UnkFemale = 'неизвестная';
-  UnkMale = 'неизвестный';
   MLinkPrefix = 'view_';
-
-const
   AdvTag = '_ADVANCED';
   ExtTag = '_EXT_NAME';
   PatriarchTag = '_PATRIARCH';
@@ -45,137 +40,147 @@ type
   TPersonEventKind = (ekEvent, ekFact);
 
 const
-  SexData: array [TGEDCOMSex] of record
-    ViewName: string;
-    ViewSign: string;
-    LatSign: string;
-  end = (
-    (ViewName: '?';                 ViewSign: '?'; LatSign: 'N'),
-    (ViewName: 'мужской';           ViewSign: 'М'; LatSign: 'M'),
-    (ViewName: 'женский';           ViewSign: 'Ж'; LatSign: 'F'),
-    (ViewName: 'неопределенный';    ViewSign: 'Н'; LatSign: 'U')
+  RecordTypes: array [TGEDCOMRecordType] of LSID = (
+    LSID_None,
+    LSID_Person, LSID_Family, LSID_Note, LSID_RPMultimedia, LSID_Source,
+    LSID_Repository, LSID_Group, LSID_Research, LSID_Task, LSID_Communication,
+    LSID_Location,
+    LSID_None, LSID_None
   );
+
+  SexData: array [TGEDCOMSex] of record
+    NameId: LSID;
+    Sign: string;
+  end = (
+    (NameId: LSID_SexN; Sign: 'N'),
+    (NameId: LSID_SexM; Sign: 'M'),
+    (NameId: LSID_SexF; Sign: 'F'),
+    (NameId: LSID_SexU; Sign: 'U')
+  );
+
+function SexStr(Sex: TGEDCOMSex): string;
 
 const
   MarriageStatusSize = 4;
   MarriageStatus: array [0..MarriageStatusSize-1] of record
-    Name: string;
+    Name: LSID;
     StatSign: string;
   end = (
-    (Name: 'Неизвестно'; StatSign: ''),
-    (Name: 'Брак зарегистрирован'; StatSign: 'MARRIED'),
-    (Name: 'Брак не зарегистрирован'; StatSign: 'MARRNOTREG'),
-    (Name: 'Разведены'; StatSign: 'NOTMARR')
+    (Name: LSID_Unknown; StatSign: ''),
+    (Name: LSID_MarrRegistered; StatSign: 'MARRIED'),
+    (Name: LSID_MarrNotRegistered; StatSign: 'MARRNOTREG'),
+    (Name: LSID_MarrDivorced; StatSign: 'NOTMARR')
   );
 
   PersonEventsSize = 36;
   PersonEvents: array [0..PersonEventsSize-1] of record
-    Name: string;
+    Name: LSID;
     Sign: string;
     Kind: TPersonEventKind;
   end = (
-    (Name: 'Новое событие'; Sign: 'EVEN'; Kind: ekEvent),              {std:check, EV}
-    (Name: 'Рождение'; Sign: 'BIRT'; Kind: ekEvent),                   {std:check, EV}
-    (Name: 'Усыновление'; Sign: 'ADOP'; Kind: ekEvent),                {std:check, EV}
-    (Name: 'Крещение'; Sign: 'CHR'; Kind: ekEvent),                    {std:check, EV}
-    (Name: 'Получение ученой степени'; Sign: 'GRAD'; Kind: ekEvent),   {std:check, EV}
-    (Name: 'Уход на пенсию'; Sign: 'RETI'; Kind: ekEvent),             {std:check, EV}
-    (Name: 'Натурализация'; Sign: 'NATU'; Kind: ekEvent),              {std:check, EV}
-    (Name: 'Эмиграция'; Sign: 'EMIG'; Kind: ekEvent),                  {std:check, EV}
-    (Name: 'Иммиграция'; Sign: 'IMMI'; Kind: ekEvent),                 {std:check, EV}
-    (Name: 'Перепись'; Sign: 'CENS'; Kind: ekEvent),                   {std:check, EV}
-    (Name: 'Завещание'; Sign: 'WILL'; Kind: ekEvent),                  {std:check, EV}
-    (Name: 'Утверждение завещания'; Sign: 'PROB'; Kind: ekEvent),      {std:check, EV}
-    (Name: 'Смерть'; Sign: 'DEAT'; Kind: ekEvent),                     {std:check, EV}
-    (Name: 'Похороны'; Sign: 'BURI'; Kind: ekEvent),                   {std:check, EV}
-    (Name: 'Кремация'; Sign: 'CREM'; Kind: ekEvent),                   {std:check, EV}
+    (Name: LSID_Event; Sign: 'EVEN'; Kind: ekEvent),              {std:check, EV}
+    (Name: LSID_Birth; Sign: 'BIRT'; Kind: ekEvent),              {std:check, EV}
+    (Name: LSID_Adoption; Sign: 'ADOP'; Kind: ekEvent),           {std:check, EV}
+    (Name: LSID_Christening; Sign: 'CHR'; Kind: ekEvent),         {std:check, EV}
+    (Name: LSID_Graduation; Sign: 'GRAD'; Kind: ekEvent),         {std:check, EV}
+    (Name: LSID_Retirement; Sign: 'RETI'; Kind: ekEvent),         {std:check, EV}
+    (Name: LSID_Naturalization; Sign: 'NATU'; Kind: ekEvent),     {std:check, EV}
+    (Name: LSID_Emigration; Sign: 'EMIG'; Kind: ekEvent),         {std:check, EV}
+    (Name: LSID_Immigration; Sign: 'IMMI'; Kind: ekEvent),        {std:check, EV}
+    (Name: LSID_Census; Sign: 'CENS'; Kind: ekEvent),             {std:check, EV}
+    (Name: LSID_LastWill; Sign: 'WILL'; Kind: ekEvent),           {std:check, EV}
+    (Name: LSID_ProbateOfWill; Sign: 'PROB'; Kind: ekEvent),      {std:check, EV}
+    (Name: LSID_Death; Sign: 'DEAT'; Kind: ekEvent),              {std:check, EV}
+    (Name: LSID_Burial; Sign: 'BURI'; Kind: ekEvent),             {std:check, EV}
+    (Name: LSID_Cremation; Sign: 'CREM'; Kind: ekEvent),          {std:check, EV}
 
-    (Name: 'Факт'; Sign: 'FACT'; Kind: ekFact),                        {std:check, AT}
-    (Name: 'Вероисповедание'; Sign: 'RELI'; Kind: ekFact),             {std:check, AT}
-    (Name: 'Национальность'; Sign: 'NATI'; Kind: ekFact),              {std:check, AT}
-    (Name: 'Местожительство'; Sign: 'RESI'; Kind: ekFact),             {std:check, AT}
-    (Name: 'Физическое описание'; Sign: 'DSCR'; Kind: ekFact),         {std:check, AT}
-    (Name: 'Идентификационный номер'; Sign: 'IDNO'; Kind: ekFact),     {std:check, AT}
-    (Name: 'Код социального страхования'; Sign: 'SSN'; Kind: ekFact),  {std:check, AT}
-    (Name: 'Кол-во детей'; Sign: 'NCHI'; Kind: ekFact),                {std:check, AT}
-    (Name: 'Кол-во браков'; Sign: 'NMR'; Kind: ekFact),                {std:check, AT}
-    (Name: 'Образование'; Sign: 'EDUC'; Kind: ekFact),                 {std:check, AT}
-    (Name: 'Профессия'; Sign: 'OCCU'; Kind: ekFact),                   {std:check, AT}
-    (Name: 'Социальное положение'; Sign: 'CAST'; Kind: ekFact),        {std:check, AT}
-    (Name: 'Собственность'; Sign: 'PROP'; Kind: ekFact),               {std:check, AT}
-    (Name: 'Титул'; Sign: 'TITL'; Kind: ekFact),                       {std:check, AT}
+    (Name: LSID_Fact; Sign: 'FACT'; Kind: ekFact),                {std:check, AT}
+    (Name: LSID_Religion; Sign: 'RELI'; Kind: ekFact),            {std:check, AT}
+    (Name: LSID_Nationality; Sign: 'NATI'; Kind: ekFact),         {std:check, AT}
+    (Name: LSID_Residence; Sign: 'RESI'; Kind: ekFact),           {std:check, AT}
+    (Name: LSID_PhysicalDesc; Sign: 'DSCR'; Kind: ekFact),        {std:check, AT}
+    (Name: LSID_NationalIDNumber; Sign: 'IDNO'; Kind: ekFact),    {std:check, AT}
+    (Name: LSID_SocialSecurityNumber; Sign: 'SSN'; Kind: ekFact), {std:check, AT}
+    (Name: LSID_ChildsCount; Sign: 'NCHI'; Kind: ekFact),         {std:check, AT}
+    (Name: LSID_MarriagesCount; Sign: 'NMR'; Kind: ekFact),       {std:check, AT}
+    (Name: LSID_Education; Sign: 'EDUC'; Kind: ekFact),           {std:check, AT}
+    (Name: LSID_Occupation; Sign: 'OCCU'; Kind: ekFact),          {std:check, AT}
+    (Name: LSID_Caste; Sign: 'CAST'; Kind: ekFact),               {std:check, AT}
+    (Name: LSID_Property; Sign: 'PROP'; Kind: ekFact),            {std:check, AT}
+    (Name: LSID_NobilityTitle; Sign: 'TITL'; Kind: ekFact),       {std:check, AT}
 
-    (Name: 'Путешествие'; Sign: '_TRAVEL'; Kind: ekFact),              {non-std, AT}
-    (Name: 'Хобби'; Sign: '_HOBBY'; Kind: ekFact),                     {non-std, AT}
-    (Name: 'Награда'; Sign: '_AWARD'; Kind: ekFact),                   {non-std, AT}
+    (Name: LSID_Travel; Sign: '_TRAVEL'; Kind: ekFact),           {non-std, AT}
+    (Name: LSID_Hobby; Sign: '_HOBBY'; Kind: ekFact),             {non-std, AT}
+    (Name: LSID_Award; Sign: '_AWARD'; Kind: ekFact),             {non-std, AT}
 
-    (Name: 'Военная служба'; Sign: '_MILI'; Kind: ekFact),             {non-std, AT}
-    (Name: 'Призван в ВС'; Sign: '_MILI_IND'; Kind: ekFact),           {non-std, AT}
-    (Name: 'Уволен из ВС'; Sign: '_MILI_DIS'; Kind: ekFact),           {non-std, AT}
-    (Name: 'Звание в ВС'; Sign: '_MILI_RANK'; Kind: ekFact)            {non-std, AT}
+    (Name: LSID_Mili; Sign: '_MILI'; Kind: ekFact),               {non-std, AT}
+    (Name: LSID_MiliInd; Sign: '_MILI_IND'; Kind: ekFact),        {non-std, AT}
+    (Name: LSID_MiliDis; Sign: '_MILI_DIS'; Kind: ekFact),        {non-std, AT}
+    (Name: LSID_MiliRank; Sign: '_MILI_RANK'; Kind: ekFact)       {non-std, AT}
   );
 
 {
 _CENN       BKW6                Census name
+_RELN       BKW6                Religious name
+_MARN       BKW6                Married name
+
 _CORR       FO7                 Correspondence entry
 _EMAIL      BKW6, FO9, PAF      The email address of the individual
-_MARN       BKW6                Married name
-_MILT       FTM7                Military Services
-_PRIM       FO7                 In the OBJE record to indicate if this is the primary photo for this person.
-_RELN       BKW6                Religious name
 _SCBK       AQ3, FO7, PAF5      In the OBJE record to indicate if the multimedia object should be in the scrapbook.
 _SSHOW      AQ3, PAF5           indicates if image is included in slideshow
 _TODO       FO7                 To-do item
 HOBB        Gen, Reunion        Hobbies
 INFO        FTW5                Information
+
+_MILT       FTM7                Military Services
 MILA        Gen                 Military Award
 MILD        Gen                 Military Discharge
 MILF        Reunion, Gen        Served in Military
 MILI        Reunion             Military
 MILT        Gen                 Military Services
-NAMR        FTW5, Gen, Reunion  Religious Name
+
 RACE        FTW, Gen, Reunion   Race
 }
 
   DateKindsSize = 10;
   DateKinds: array [0..DateKindsSize-1] of record
-    Name: string;
+    Name: LSID;
     Dates: TDateControlsRange;
   end = (
-    { 0} (Name: 'Точно';        Dates: [1]),{+}
-    { 1} (Name: 'Ранее';        Dates: [2]),
-    { 2} (Name: 'Позднее';      Dates: [1]),
-    { 3} (Name: 'Между';        Dates: [1, 2]),
-    { 4} (Name: 'Период до';    Dates: [1]),
-    { 5} (Name: 'Период после'; Dates: [2]),
-    { 6} (Name: 'Период между'; Dates: [1, 2]),
-    { 7} (Name: 'Около';        Dates: [1]),{+}
-    { 8} (Name: 'По расчету';   Dates: [1]),{+}
-    { 9} (Name: 'По оценке';    Dates: [1]) {+}
+    { 0} (Name: LSID_DK_0;  Dates: [1]),{+}
+    { 1} (Name: LSID_DK_1;  Dates: [2]),
+    { 2} (Name: LSID_DK_2;  Dates: [1]),
+    { 3} (Name: LSID_DK_3;  Dates: [1, 2]),
+    { 4} (Name: LSID_DK_4;  Dates: [1]),
+    { 5} (Name: LSID_DK_5;  Dates: [2]),
+    { 6} (Name: LSID_DK_6;  Dates: [1, 2]),
+    { 7} (Name: LSID_DK_7;  Dates: [1]),{+}
+    { 8} (Name: LSID_DK_8;  Dates: [1]),{+}
+    { 9} (Name: LSID_DK_9;  Dates: [1]) {+}
   );
 
-  DateCalendars: array [TGEDCOMCalendar] of string =
-    ('Григорианский', 'Юлианский', 'Еврейский',
-     'Франц. революции', 'Римский', 'Неизвестный');
+  DateCalendars: array [TGEDCOMCalendar] of LSID =
+    (LSID_Cal_Gregorian, LSID_Cal_Julian, LSID_Cal_Hebrew,
+     LSID_Cal_French, LSID_Cal_Roman, LSID_Unknown);
 
   FamilyEventsSize = 10;
   FamilyEvents: array [0..FamilyEventsSize-1] of record
-    Name: string;
+    Name: LSID;
     Sign: string;
   end = (
-    (Name: 'Новое событие'; Sign: ''), {std:check}
-    (Name: 'Помолвка'; Sign: 'ENGA'),
-    (Name: 'Бракосочетание'; Sign: 'MARR'),
-    (Name: 'Публичное объявление о бракосочетании'; Sign: 'MARB'),
-    (Name: 'Заключение брачного контракта'; Sign: 'MARC'),
-    (Name: 'Получение разрешения на брак'; Sign: 'MARL'),
-    (Name: 'Заключение брачного соглашения'; Sign: 'MARS'),
-    (Name: 'Аннулирование брака'; Sign: 'ANUL'),
-    (Name: 'Подача заявления о разводе'; Sign: 'DIVF'),
-    (Name: 'Развод'; Sign: 'DIV')
+    (Name: LSID_Event; Sign: 'EVEN'),
+    (Name: LSID_FEvt_1; Sign: 'ENGA'),
+    (Name: LSID_FEvt_2; Sign: 'MARR'),
+    (Name: LSID_FEvt_3; Sign: 'MARB'),
+    (Name: LSID_FEvt_4; Sign: 'MARC'),
+    (Name: LSID_FEvt_5; Sign: 'MARL'),
+    (Name: LSID_FEvt_6; Sign: 'MARS'),
+    (Name: LSID_FEvt_7; Sign: 'ANUL'),
+    (Name: LSID_FEvt_8; Sign: 'DIVF'),
+    (Name: LSID_FEvt_9; Sign: 'DIV')
   );
 
-  NamePiecesSize = 6;
+  {NamePiecesSize = 6;
   NamePieces: array [0..NamePiecesSize-1] of record
     Name: string;
     Sign: string;
@@ -186,65 +191,47 @@ RACE        FTW, Gen, Reunion   Race
     (Name: 'Префикс фамилии'; Sign: 'SPFX'),
     (Name: 'Фамилия'; Sign: 'SURN'),
     (Name: 'Суффикс имени'; Sign: 'NSFX')
-  );
-  // Духовное имя ?
+  );}
 
 type
   TGKStoreType = (gstReference, gstArchive, gstStorage);
 
 const
   GKStoreType: array [TGKStoreType] of record
-    Name: string;
+    Name: LSID;
     Sign: string;
   end = (
-    (Name: 'Ссылка на файл'; Sign: ''), {for compatibility}
-    (Name: 'Размещение в архиве'; Sign: 'arc:'),
-    (Name: 'Размещение в хранилище'; Sign: 'stg:')
+    (Name: LSID_STRef; Sign: ''), {for compatibility}
+    (Name: LSID_STArc; Sign: 'arc:'),
+    (Name: LSID_STStg; Sign: 'stg:')
   );
 
 const
-  MediaTypes: array [TGEDCOMMediaType] of record
-    Name: string;
-  end = (
-    (Name: '-'),
-    (Name: 'Звукозапись'),
-    (Name: 'Книга'),
-    (Name: 'Карточка'),
-    (Name: 'Электронный'),
-    (Name: 'Микрофиша'),
-    (Name: 'Фильм'),
-    (Name: 'Журнал'),
-    (Name: 'Рукопись'),
-    (Name: 'Карта'),
-    (Name: 'Газета'),
-    (Name: 'Фотография'),
-    (Name: 'Надгробие'),
-    (Name: 'Видео'),
-    (Name: '- Другой -')
+  MediaTypes: array [TGEDCOMMediaType] of LSID = (
+    LSID_MT_01, LSID_MT_02, LSID_MT_03, LSID_MT_04,
+    LSID_MT_05, LSID_MT_06, LSID_MT_07, LSID_MT_08,
+    LSID_MT_09, LSID_MT_10, LSID_MT_11, LSID_MT_12,
+    LSID_MT_13, LSID_MT_14, LSID_MT_15
   );
 
 const
-  PriorityNames: array [TResearchPriority] of string = (
-    'Не задан', 'Низкий', 'Нормальный', 'Высокий', 'Срочный');
+  PriorityNames: array [TResearchPriority] of LSID = (
+    LSID_Prt_1, LSID_Prt_2, LSID_Prt_3, LSID_Prt_4, LSID_Prt_5);
 
-  StatusNames: array [TResearchStatus] of string = (
-    'Определено', 'Выполняется', 'Задержано',
-    'Осложнения', 'Завершено', 'Отозвано');
+  StatusNames: array [TResearchStatus] of LSID = (
+    LSID_RStat_1, LSID_RStat_2, LSID_RStat_3,
+    LSID_RStat_4, LSID_RStat_5, LSID_RStat_6);
 
-  CommunicationNames: array [TCommunicationType] of string = (
-    'Звонок', 'Эл.письмо', 'Факс', 'Письмо', 'Кассета', 'Визит');
+  CommunicationNames: array [TCommunicationType] of LSID = (
+    LSID_Com_1, LSID_Com_2, LSID_Com_3, LSID_Com_4, LSID_Com_5, LSID_Com_6);
 
-  CommunicationDirs: array [TCommunicationDir] of string = ('от', 'к');
+  CommunicationDirs: array [TCommunicationDir] of LSID = (LSID_CD_1, LSID_CD_2);
 
-  GoalNames: array [TGoalType] of string = (
-    'персона', 'семья', 'источник', 'иная');
+  GoalNames: array [TGoalType] of LSID = (
+    LSID_G_1, LSID_G_2, LSID_G_3, LSID_G_4);
 
-  CertaintyAssessments: array [0..3] of string = (
-    'Ненадежное подтверждение или предполагаемые данные',
-    'Сомнительная надежность подтверждения',
-    'Косвенные доказательства',
-    'Прямые и первичные доказательства'
-  );
+  CertaintyAssessments: array [0..3] of LSID = (
+    LSID_Cert_1, LSID_Cert_2, LSID_Cert_3, LSID_Cert_4);
 
 type
   //TUserRefType = (urtCustom, urtPredef);
@@ -467,6 +454,7 @@ type
 type
   TGenEngine = class(TObject)
   private
+    FFileName: string;
     FTree: TGEDCOMTree;
     function GetIsAdvanced: Boolean;
     procedure SetIsAdvanced(const Value: Boolean);
@@ -509,18 +497,149 @@ type
       var aList: TObjectList; aMinGens: Integer = 2);
     function GetPatriarchLinks(lst: TObjectList; pObj: TPatriarchObj): string;
 
+    function CheckPath(): Boolean;
+    function GetArcFileName(): string;
+    function GetStoreFolder(): string;
+    function GetSpecExtName(): string;
+    function GetStoreType(aFileRef: string; var aFileName: string): TGKStoreType;
+    procedure MediaLoad(aRefName: string; var aStream: TStream); overload;
+    procedure MediaLoad(aRefName: string; var aFileName: string); overload;
+    procedure MediaSave(aFileName: string; aStoreType: TGKStoreType; var aRefPath: string);
+
+    function SetPrimaryMultimediaRecord(aRec: TGEDCOMIndividualRecord;
+      mmRec: TGEDCOMMultimediaRecord): TGEDCOMMultimediaLink;
+    function GetPrimaryMultimediaLink(aRec: TGEDCOMIndividualRecord): TGEDCOMMultimediaLink;
+    function GetPrimaryBitmap(aRec: TGEDCOMIndividualRecord): TGraphic;
+
     property ExtName: string read GetExtName write SetExtName;
+    property FileName: string read FFileName write FFileName;
     property IsAdvanced: Boolean read GetIsAdvanced write SetIsAdvanced;
     property Tree: TGEDCOMTree read FTree write FTree;
   end;
+
+{==============================================================================}
+
+type
+  TRelationKind = (
+    // runtime
+    rkNone, rkParent, rkSpouse, rkChild,
+
+    // base
+    rkFather, rkMother,
+    rkHusband, rkWife,
+    rkSon, rkDaughter,
+    rkGrandfather, rkGrandmother,
+    rkGrandson, rkGranddaughter,
+    rkBrother, rkSister,
+    rkSonInLaw, rkDaughterInLaw,
+    rkHusbandFather, rkHusbandMother,
+    rkWifeFather, rkWifeMother,
+    rkUncle, rkAunt,
+    rkNephew, rkNiece,
+    rkCousinM, rkCousinF,
+
+    // runtime
+    rkSame, rkUndefined
+  );
+
+const
+  RelationKinds: array [TRelationKind] of LSID = (
+    LSID_RK_Unk, LSID_None, LSID_None, LSID_None,
+
+    LSID_RK_Father, LSID_RK_Mother,
+    LSID_RK_Husband, LSID_RK_Wife,
+    LSID_RK_Son, LSID_RK_Daughter,
+    LSID_RK_Grandfather, LSID_RK_Grandmother,
+    LSID_RK_Grandson, LSID_RK_Granddaughter,
+    LSID_RK_Brother, LSID_RK_Sister,
+    LSID_RK_SonInLaw, LSID_RK_DaughterInLaw,
+    LSID_RK_HusbandFather, LSID_RK_HusbandMother,
+    LSID_RK_WifeFather, LSID_RK_WifeMother,
+    LSID_RK_Uncle, LSID_RK_Aunt,
+    LSID_RK_Nephew, LSID_RK_Niece,
+    LSID_RK_CousinM, LSID_RK_CousinF,
+
+    // Деверь - брат мужа, золовка - сестра мужа, Шурин - брат жены, Свояченица — сестра жены.
+    LSID_None, LSID_RK_Unk
+  );
+
+  RelationSigns: array [TRelationKind] of string = (
+    '?', 'P', 'S', 'C',
+    'F', 'M', 'H', 'W', 'Sn', 'Dg', 'Gf', 'Gm', 'Gs', 'Gd', 'Br', 'St',
+    '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+    '-', '-'
+  );
+
+  KinshipsCount = 24;
+  Kinships: array [0..KinshipsCount-1] of record
+    PrevRels: set of TRelationKind;
+    CurrRels: set of TRelationKind;
+    FinRel: TRelationKind;
+    Great, Level: Shortint;
+  end = (
+    (PrevRels: [rkNone]; CurrRels: [rkFather..rkDaughter]; FinRel: rkSame; Great: 0; Level: 0),
+
+    (PrevRels: [rkHusband, rkWife]; CurrRels: [rkSon, rkDaughter]; FinRel: rkSame; Great: 0; Level: +1),
+
+    (PrevRels: [rkMother]; CurrRels: [rkHusband]; FinRel: rkFather; Great: 0; Level: 0),
+    (PrevRels: [rkFather]; CurrRels: [rkWife]; FinRel: rkMother; Great: 0; Level: 0),
+
+    (PrevRels: [rkGrandfather, rkGrandmother]; CurrRels: [rkSon]; FinRel: rkUncle; Great: 0; Level: +1),
+    (PrevRels: [rkGrandfather, rkGrandmother]; CurrRels: [rkDaughter]; FinRel: rkAunt; Great: 0; Level: +1),
+
+//    (PrevRels: [rkUncle, rkAunt]; CurrRels: [rkSon]; FinRel: rkCousinM; Great: 0; Level: +1),
+//    (PrevRels: [rkUncle, rkAunt]; CurrRels: [rkDaughter]; FinRel: rkCousinF; Great: 0; Level: +1),
+
+    (PrevRels: [rkBrother, rkSister]; CurrRels: [rkSon]; FinRel: rkNephew; Great: 0; Level: +1),
+    (PrevRels: [rkBrother, rkSister]; CurrRels: [rkDaughter]; FinRel: rkNiece; Great: 0; Level: +1),
+
+    (PrevRels: [rkSon]; CurrRels: [rkWife]; FinRel: rkDaughterInLaw; Great: 0; Level: 0),
+    (PrevRels: [rkDaughter]; CurrRels: [rkHusband]; FinRel: rkSonInLaw; Great: 0; Level: 0),
+
+    (PrevRels: [rkWife]; CurrRels: [rkFather]; FinRel: rkWifeFather; Great: 0; Level: -1),
+    (PrevRels: [rkWife]; CurrRels: [rkMother]; FinRel: rkWifeMother; Great: 0; Level: -1),
+
+    (PrevRels: [rkHusband]; CurrRels: [rkFather]; FinRel: rkHusbandFather; Great: 0; Level: -1),
+    (PrevRels: [rkHusband]; CurrRels: [rkMother]; FinRel: rkHusbandMother; Great: 0; Level: -1),
+
+    (PrevRels: [rkFather, rkMother]; CurrRels: [rkFather]; FinRel: rkGrandfather; Great: 0; Level: -1),
+    (PrevRels: [rkFather, rkMother]; CurrRels: [rkMother]; FinRel: rkGrandmother; Great: 0; Level: -1),
+
+    (PrevRels: [rkFather, rkMother]; CurrRels: [rkSon]; FinRel: rkBrother; Great: 0; Level: +1),
+    (PrevRels: [rkFather, rkMother]; CurrRels: [rkDaughter]; FinRel: rkSister; Great: 0; Level: +1),
+
+    (PrevRels: [rkGrandfather, rkGrandmother]; CurrRels: [rkFather]; FinRel: rkGrandfather; Great: +1; Level: -1),
+    (PrevRels: [rkGrandfather, rkGrandmother]; CurrRels: [rkMother]; FinRel: rkGrandmother; Great: +1; Level: -1),
+
+    (PrevRels: [rkSon, rkDaughter, rkSonInLaw, rkDaughterInLaw]; CurrRels: [rkSon]; FinRel: rkGrandson; Great: 0; Level: +1),
+    (PrevRels: [rkSon, rkDaughter, rkSonInLaw, rkDaughterInLaw]; CurrRels: [rkDaughter]; FinRel: rkGranddaughter; Great: 0; Level: +1),
+
+    (PrevRels: [rkGrandson, rkGranddaughter]; CurrRels: [rkSon]; FinRel: rkGrandson; Great: +1; Level: +1),
+    (PrevRels: [rkGrandson, rkGranddaughter]; CurrRels: [rkDaughter]; FinRel: rkGranddaughter; Great: +1; Level: +1)
+  );
+
+const
+  Numerals: array [1..9] of string = (
+    '-', 'дво', 'тро', 'четверо', 'пяти', 'шести', 'семи', 'восьми', 'девяти'
+  );
+
+  NumKinship: array [TGEDCOMSex] of string = (
+    '-', 'юродный', 'юродная', ''
+  );
 
 implementation
 
 uses
   {$IFDEF DELPHI_NET} System.IO, {$ENDIF}
   {$IFDEF PROFILER} ZProfiler, {$ENDIF}
-  Windows, SysUtils, DateUtils, Controls, Masks, Dialogs,
+  {$IFNDEF DELPHI_NET}AbZipper, AbZipTyp, AbZipKit, AbArcTyp, {$ENDIF}
+  SysUtils, DateUtils, Controls, Masks, Dialogs,
   GKUtils, GKProgress;
+
+function SexStr(Sex: TGEDCOMSex): string;
+begin
+  Result := LSList[SexData[Sex].NameId]; 
+end;
 
 function GetSexBySign(const SexSign: Char): TGEDCOMSex;
 begin
@@ -611,7 +730,7 @@ begin
     ev := GetPersonEventIndex(aEvent.Name);
     if (ev = 0) then Result := aEvent.Detail.Classification
     else
-    if (ev > 0) then Result := PersonEvents[ev].Name
+    if (ev > 0) then Result := LSList[PersonEvents[ev].Name]
     else Result := aEvent.Name;
   end
   else
@@ -619,7 +738,7 @@ begin
     ev := GetFamilyEventIndex(aEvent.Name);
     if (ev = 0) then Result := aEvent.Detail.Classification
     else
-    if (ev > 0) then Result := FamilyEvents[ev].Name
+    if (ev > 0) then Result := LSList[FamilyEvents[ev].Name]
     else Result := aEvent.Name;
   end
   else Result := '';
@@ -692,17 +811,18 @@ begin
 
   spouse := TGEDCOMIndividualRecord(aFamily.Husband.Value);
   if (spouse = nil)
-  then Result := Result + 'Неизвестный'
+  then Result := Result + LSList[LSID_UnkMale]
   else Result := Result + GetNameStr(spouse);
 
   Result := Result + ' - ';
 
   spouse := TGEDCOMIndividualRecord(aFamily.Wife.Value);
   if (spouse = nil)
-  then Result := Result + 'Неизвестная'
+  then Result := Result + LSList[LSID_UnkFemale]
   else Result := Result + GetNameStr(spouse);
 end;
 
+{fixme!!!}
 function GetSex(f_name, f_pat: string; aQuery: Boolean = True): TGEDCOMSex;
 begin
   Result := svNone;
@@ -1073,7 +1193,7 @@ begin
   idx := GetPersonEventIndex(iAttr.Name);
   if (idx = 0) then st := iAttr.Detail.Classification
   else
-  if (idx > 0) then st := PersonEvents[idx].Name
+  if (idx > 0) then st := LSList[PersonEvents[idx].Name]
   else st := iAttr.Name;
 
   place := iAttr.Detail.Place.StringValue;
@@ -1660,7 +1780,9 @@ end;
 
 function HyperLink(XRef: string; Text: string; Num: Integer = 0): string;
 begin
-  Result := '~^' + XRef + ':' + Text + '~';
+  Result := '~^' + XRef;
+  if (Text <> '') then Result := Result + ':' + Text;
+  Result := Result + '~';
 
   {if (Num <> 0)
   then Result := '№ ' + IntToStr(Num) + ' ' + Result;}
@@ -1679,16 +1801,12 @@ begin
   sign := '';
   if (aSigned) then begin
     case aRecord.RecordType of
-      rtIndividual: sign := '';
-      rtFamily: sign := 'Семья: ';
-      rtMultimedia: sign := 'Медиа-объект: ';
-      rtGroup: sign := 'Группа: ';
-      rtSource: sign := 'Источник: ';
-      rtRepository: sign := 'Архив: ';
-      rtResearch: sign := 'Исследование: ';
-      rtTask: sign := 'Задача: ';
-      rtCommunication: sign := 'Корреспонденция: ';
-      rtLocation: sign := 'Место: ';
+      rtIndividual:
+        sign := '';
+
+      rtFamily, rtMultimedia, rtGroup, rtSource, rtRepository,
+      rtResearch, rtTask, rtCommunication, rtLocation:
+        sign := LSList[RecordTypes[aRecord.RecordType]]+': ';
     end;
   end;
 
@@ -1724,7 +1842,7 @@ begin
     nm := GetNameStr(corresponder);
     if (aLink) then nm := HyperLink(corresponder.XRef, nm);
 
-    Result := '[' + CommunicationDirs[dir] + '] ' + nm;
+    Result := '[' + LSList[CommunicationDirs[dir]] + '] ' + nm;
   end;
 end;
 
@@ -1759,7 +1877,7 @@ begin
   end;
 
   if (gt <> gtOther)
-  then Result := '[' + GoalNames[gt] + '] ' + Result;
+  then Result := '[' + LSList[GoalNames[gt]] + '] ' + Result;
 end;
 
 type
@@ -2316,7 +2434,7 @@ function CheckGEDCOMFormat(aTree: TGEDCOMTree): Boolean;
     rec: TGEDCOMRecord;
     newXRef: string;
   begin
-    ProgressInit(aTree.RecordsCount, 'Коррекция идентификаторов');
+    ProgressInit(aTree.RecordsCount, LSList[LSID_IDsCorrect]);
 
     repMap := TXRefReplaceMap.Create;
     try
@@ -2334,7 +2452,7 @@ function CheckGEDCOMFormat(aTree: TGEDCOMTree): Boolean;
 
       aTree.Header.ReplaceXRefs(repMap);
 
-      ProgressInit(repMap.Count, 'Коррекция идентификаторов');
+      ProgressInit(repMap.Count, LSList[LSID_IDsCorrect]);
       for i := 0 to repMap.Count - 1 do begin
         rec := repMap.Records[i].Rec;
         rec.ReplaceXRefs(repMap);
@@ -2356,7 +2474,7 @@ var
 begin
   {$IFDEF PROFILER}Profiler.Mark(2, True);{$ENDIF}
   Result := False;
-  ProgressInit(aTree.RecordsCount, 'Проверка формата');
+  ProgressInit(aTree.RecordsCount, LSList[LSID_FormatCheck]);
   try
     format := GetGEDCOMFormat(aTree);
 
@@ -2383,7 +2501,7 @@ begin
     end;
 
     if not(idCheck) then begin
-      if (MessageDlg('Требуется коррекция идентификаторов записей, продолжить?', mtWarning, [mbYes, mbNo], 0) = mrYes)
+      if (MessageDlg(LSList[LSID_IDsCorrectNeed], mtWarning, [mbYes, mbNo], 0) = mrYes)
       then CorrectIds();
     end;
 
@@ -2463,7 +2581,7 @@ var
 begin
   if (aLog <> nil) then begin
     aLog.Clear;
-    aLog.Add('Количество объектов в основной базе: ' + IntToStr(aMainTree.RecordsCount));
+    aLog.Add(Format(LSList[LSID_MainBaseSize], [IntToStr(aMainTree.RecordsCount)]));
   end;
 
   extTree := TGEDCOMTree.Create;
@@ -2487,7 +2605,7 @@ begin
     end;
 
     if (aLog <> nil)
-    then aLog.Add('Новое количество объектов в основной базе: ' + IntToStr(aMainTree.RecordsCount));
+    then aLog.Add(Format(LSList[LSID_MainBaseSize], [IntToStr(aMainTree.RecordsCount)]));
   finally
     repMap.Free;
     extTree.Destroy;
@@ -2610,7 +2728,7 @@ begin
       aLog.Add(s);
     end;}
 
-    aLog.Add('Синхронизация завершена.');
+    aLog.Add(LSList[LSID_SyncFin]);
   finally
     sync_list.Free;
     repMap.Free;
@@ -3349,7 +3467,7 @@ var
   pObj: TPatriarchObj;
   patr1, patr2: TPatriarchObj;
 begin
-  if (aProgress) then ProgressInit(FTree.RecordsCount, 'Поиск патриархов');
+  if (aProgress) then ProgressInit(FTree.RecordsCount, LSList[LSID_PatSearch]);
 
   InitExtCounts(FTree);
   try
@@ -3395,7 +3513,7 @@ begin
   end;
 
   if (aLinks) then begin
-    if (aProgress) then ProgressInit(aList.Count, 'Поиск взаимосвязей');
+    if (aProgress) then ProgressInit(aList.Count, LSList[LSID_LinksSearch]);
     try
       for i := 0 to aList.Count - 1 do begin
         patr1 := TPatriarchObj(aList[i]);
@@ -3414,6 +3532,290 @@ begin
       end;
     finally
       if (aProgress) then ProgressDone();
+    end;
+  end;
+end;
+
+function TGenEngine.GetSpecExtName(): string;
+var
+  p: Integer;
+  ext: string;
+begin
+  ext := ExtName;
+
+  if (ext = '') then begin
+    Result := ExtractFileName(FFileName);
+
+    p := Pos('.ged', Result);
+    if (p > 0) then Result := Copy(Result, 1, p - 1);
+  end else Result := ext;
+end;
+
+function TGenEngine.GetArcFileName(): string;
+begin
+  Result := ExtractFilePath(FFileName) + GetSpecExtName() + '.zip';
+end;
+
+function TGenEngine.GetStoreFolder(): string;
+begin
+  Result := ExtractFilePath(FFileName) + GetSpecExtName() + '\';
+
+  if not(DirectoryExists(Result))
+  then CreateDir(Result);
+end;
+
+{fixme!!!}
+function TGenEngine.CheckPath(): Boolean;
+var
+  path: string;
+begin
+  path := ExtractFilePath(FFileName);
+  Result := (path <> '');
+  if not(Result)
+  then MessageDlg('Для типов хранения "архив" и "хранилище" новый файл БД нужно предварительно сохранить', mtError, [mbOk], 0);
+end;
+
+function TGenEngine.GetStoreType(aFileRef: string; var aFileName: string): TGKStoreType;
+begin
+  aFileName := aFileRef;
+
+  if (Pos(GKStoreType[gstArchive].Sign, aFileRef) > 0) then begin
+    Result := gstArchive;
+    Delete(aFileName, 1, 4);
+  end
+  else
+  if (Pos(GKStoreType[gstStorage].Sign, aFileRef) > 0) then begin
+    Result := gstStorage;
+    Delete(aFileName, 1, 4);
+  end
+  else begin
+    Result := gstReference;
+  end;
+end;
+
+procedure TGenEngine.MediaLoad(aRefName: string; var aStream: TStream);
+var
+  gst: TGKStoreType;
+  target_fn: string;
+  {$IFNDEF DELPHI_NET}
+  az: TAbZipKit;
+  {$ENDIF}
+begin
+  gst := GetStoreType(aRefName, target_fn);
+
+  case gst of
+    gstReference: begin
+      aStream := TFileStream.Create(target_fn, fmOpenRead);
+    end;
+
+    gstArchive: begin
+      aStream := TMemoryStream.Create();
+
+      if not(FileExists(GetArcFileName()))
+      then MessageDlg(LSList[LSID_ArcNotFound], mtError, [mbOk], 0)
+      else begin
+        {$IFNDEF DELPHI_NET}
+        AnsiToOem(PChar(target_fn), PChar(target_fn));
+
+        az := TAbZipKit.Create(nil);
+        try
+          az.OpenArchive(GetArcFileName());
+          az.ExtractToStream(target_fn, aStream);
+          aStream.Seek(0, soFromBeginning);
+        finally
+          az.Destroy;
+        end;
+        {$ENDIF}
+      end;
+    end;
+
+    gstStorage: begin
+      target_fn := GetStoreFolder() + target_fn;
+      aStream := TFileStream.Create(target_fn, fmOpenRead);
+    end;
+  end;
+end;
+
+procedure TGenEngine.MediaLoad(aRefName: string; var aFileName: string);
+var
+  gst: TGKStoreType;
+  target_fn: string;
+  fs: TFileStream;
+  {$IFNDEF DELPHI_NET}
+  az: TAbZipKit;
+  {$ENDIF}
+begin
+  gst := GetStoreType(aRefName, target_fn);
+
+  case gst of
+    gstReference: begin
+      aFileName := target_fn;
+    end;
+
+    gstArchive: begin
+      aFileName := GetTempDir() + ExtractFileName(target_fn);
+
+      fs := TFileStream.Create(aFileName, fmCreate);
+      try
+        if not(FileExists(GetArcFileName()))
+        then MessageDlg(LSList[LSID_ArcNotFound], mtError, [mbOk], 0)
+        else begin
+          {$IFNDEF DELPHI_NET}
+          AnsiToOem(PChar(target_fn), PChar(target_fn));
+          target_fn := StringReplace(target_fn, '\', '/', [rfReplaceAll]);
+
+          az := TAbZipKit.Create(nil);
+          try
+            az.OpenArchive(GetArcFileName());
+            az.ExtractToStream(target_fn, fs);
+          finally
+            az.Destroy;
+          end;
+          {$ENDIF}
+        end;
+      finally
+        fs.Destroy;
+      end;
+    end;
+
+    gstStorage: begin
+      aFileName := GetStoreFolder() + target_fn;
+    end;
+  end;
+end;
+
+procedure TGenEngine.MediaSave(aFileName: string; aStoreType: TGKStoreType; var aRefPath: string);
+var
+  target_fn, sfn, spath: string;
+  {$IFNDEF DELPHI_NET}
+  az: TAbZipper;
+  arc_item: TAbArchiveItem;
+  {$ENDIF}
+  fs: TFileStream;
+  mmFormat: TGEDCOMMultimediaFormat;
+  idx, fdt: Longint;
+begin
+  sfn := ExtractFileName(aFileName);
+
+  mmFormat := TGEDCOMFileReference.RecognizeFormat(aFileName);
+
+  case mmFormat of
+    mfNone, mfUnknown, mfOLE: spath := 'unknown\';
+    mfBMP, mfGIF, mfJPG, mfPCX, mfTIF, mfTGA, mfPNG: spath := 'images\';
+    mfWAV: spath := 'audio\';
+    mfTXT, mfRTF, mfHTM: spath := 'texts\';
+    mfAVI, mfMPG: spath := 'video\';
+  end;
+
+  case aStoreType of
+    gstReference: begin
+      aRefPath := aFileName;
+    end;
+
+    gstArchive: begin
+      sfn := spath + sfn;
+      aRefPath := GKStoreType[aStoreType].Sign + sfn;
+
+      {$IFNDEF DELPHI_NET}
+      fs := TFileStream.Create(aFileName, fmOpenRead);
+      az := TAbZipper.Create(nil);
+      try
+        AnsiToOem(PChar(sfn), PChar(sfn));
+
+        az.FileName := GetArcFileName();
+        az.CompressionMethodToUse := smDeflated;
+        az.AddFromStream(sfn, fs);
+
+        sfn := StringReplace(sfn, '\', '/', [rfReplaceAll]);
+        idx := az.FindFile(sfn);
+        if (idx >= 0) then begin
+          arc_item := az.Items[idx];
+          fdt := FileGetDate(fs.Handle);
+          arc_item.LastModFileDate := LongRec(fdt).Hi;
+          arc_item.LastModFileTime := LongRec(fdt).Lo;
+        end;
+
+        az.Save();
+      finally
+        az.Destroy;
+        fs.Destroy;
+      end;
+      {$ENDIF}
+    end;
+
+    gstStorage: begin
+      sfn := spath + sfn;
+      aRefPath := GKStoreType[aStoreType].Sign + sfn;
+      target_fn := GetStoreFolder() + sfn;
+      FileMove(aFileName, target_fn);
+    end;
+  end;
+end;
+
+function TGenEngine.GetPrimaryMultimediaLink(aRec: TGEDCOMIndividualRecord): TGEDCOMMultimediaLink;
+var
+  mmLink: TGEDCOMMultimediaLink;
+  i: Integer;
+begin
+  for i := 0 to aRec.MultimediaLinksCount - 1 do begin
+    mmLink := aRec.MultimediaLinks[i];
+
+    if (mmLink.IsPrimary) then begin
+      Result := mmLink;
+      Exit;
+    end;
+  end;
+
+  Result := nil;
+end;
+
+function TGenEngine.SetPrimaryMultimediaRecord(aRec: TGEDCOMIndividualRecord;
+  mmRec: TGEDCOMMultimediaRecord): TGEDCOMMultimediaLink;
+var
+  mmLink: TGEDCOMMultimediaLink;
+  i: Integer;
+begin
+  mmLink := nil;
+  for i := 0 to aRec.MultimediaLinksCount - 1 do begin
+    if (aRec.MultimediaLinks[i].Value = mmRec) then begin
+      mmLink := aRec.MultimediaLinks[i];
+      Break;
+    end;
+  end;
+
+  if (mmLink = nil) then begin
+    mmLink := TGEDCOMMultimediaLink.Create(FTree, aRec);
+    mmLink.Value := mmRec;
+    aRec.AddMultimediaLink(mmLink);
+  end;
+
+  mmLink.IsPrimary := True;
+  Result := mmLink;
+end;
+
+function TGenEngine.GetPrimaryBitmap(aRec: TGEDCOMIndividualRecord): TGraphic;
+var
+  mmLink: TGEDCOMMultimediaLink;
+  mmRec: TGEDCOMMultimediaRecord;
+  target_fn: string;
+  pic: TPicture;
+begin
+  Result := nil;
+  mmLink := GetPrimaryMultimediaLink(aRec);
+
+  if (mmLink <> nil) then begin
+    mmRec := TGEDCOMMultimediaRecord(mmLink.Value);
+    MediaLoad(mmRec.FileReferences[0].StringValue, target_fn);
+
+    if FileExists(target_fn) then begin
+      pic := TPicture.Create;
+      try
+        pic.LoadFromFile(target_fn);
+        Result := TBitmap.Create;
+        Result.Assign(pic.Graphic);
+      finally
+        pic.Destroy;
+      end;
     end;
   end;
 end;

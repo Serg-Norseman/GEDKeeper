@@ -15,6 +15,7 @@ object fmSexCheck: TfmSexCheck
   Font.Style = []
   OldCreateOrder = True
   Position = poScreenCenter
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object edName: TEdit

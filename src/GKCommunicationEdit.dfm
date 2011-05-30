@@ -23,7 +23,6 @@ object fmCommunicationEdit: TfmCommunicationEdit
     Width = 481
     Height = 97
     Align = alTop
-    Caption = #1044#1072#1085#1085#1099#1077' '#1082#1086#1084#1084#1091#1085#1080#1082#1072#1094#1080#1080
     TabOrder = 1
     object Label1: TLabel
       Left = 8

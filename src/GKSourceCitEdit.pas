@@ -1,4 +1,4 @@
-unit GKSourceCitEdit; {prepare:fin}
+unit GKSourceCitEdit; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,10 +6,10 @@ interface
 
 uses
   Classes, Controls, Forms, StdCtrls, Buttons, GedCom551, GKEngine, GKBase,
-  ComCtrls;
+  ComCtrls, GKLangs;
 
 type
-  TfmSourceCitEdit = class(TForm)
+  TfmSourceCitEdit = class(TForm, ILocalization)
     btnAccept: TBitBtn;
     btnCancel: TBitBtn;
     Label1: TLabel;
@@ -39,6 +39,8 @@ type
   public
     property Base: TfmBase read GetBase;
     property SourceCitation: TGEDCOMSourceCitation read FSourceCitation write SetSourceCitation;
+
+    procedure SetLang();
   end;
 
 implementation
@@ -53,17 +55,31 @@ procedure TfmSourceCitEdit.FormCreate(Sender: TObject);
 var
   i: Integer;
 begin
-  for i := 0 to 3 do EditCertainty.AddItem(CertaintyAssessments[i], nil);
+  for i := 0 to 3 do EditCertainty.AddItem(LSList[CertaintyAssessments[i]], nil);
 
   FSourcesList := TStringList.Create();
 
   Base.Engine.GetSourcesList(FSourcesList);
   RefreshSourcesList('');
+
+  SetLang();
 end;
 
 procedure TfmSourceCitEdit.FormDestroy(Sender: TObject);
 begin
   FSourcesList.Free;
+end;
+
+procedure TfmSourceCitEdit.SetLang();
+begin
+  btnAccept.Caption := LSList[LSID_DlgAccept];
+  btnCancel.Caption := LSList[LSID_DlgCancel];
+
+  Caption := LSList[LSID_WinSourceCitEdit];
+
+  Label2.Caption := LSList[LSID_Source];
+  Label1.Caption := LSList[LSID_Page];
+  Label3.Caption := LSList[LSID_Certainty];
 end;
 
 procedure TfmSourceCitEdit.SetSourceCitation(const Value: TGEDCOMSourceCitation);

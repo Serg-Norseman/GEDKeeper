@@ -1,4 +1,4 @@
-unit GKNameEdit; {prepare:fin}
+unit GKNameEdit; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,10 +6,10 @@ interface
 
 uses
   Windows, SysUtils, Classes, Controls, Forms, StdCtrls, Buttons,
-  GedCom551, GKEngine, GKCommon;
+  GedCom551, GKEngine, GKCommon, GKLangs;
 
 type
-  TfmNameEdit = class(TForm)
+  TfmNameEdit = class(TForm, ILocalization)
     Label2: TLabel;
     edName: TEdit;
     Label4: TLabel;
@@ -29,6 +29,8 @@ type
     procedure SetIName(const Value: TName);
   public
     property IName: TName read FIName write SetIName;
+
+    procedure SetLang();
   end;
 
 implementation
@@ -43,7 +45,23 @@ var
 begin
   if IsWindowsVista() then SetVistaFonts(Self);
 
-  for sx := Low(TGEDCOMSex) to High(TGEDCOMSex) do edSex.Items.Add(SexData[sx].ViewName);
+  for sx := Low(TGEDCOMSex) to High(TGEDCOMSex) do edSex.Items.Add(SexStr(sx));
+
+  SetLang();
+end;
+
+procedure TfmNameEdit.SetLang();
+begin
+  btnAccept.Caption := LSList[LSID_DlgAccept];
+  btnCancel.Caption := LSList[LSID_DlgCancel];
+
+  Caption := LSList[LSID_Name];
+
+  Label2.Caption := LSList[LSID_Name];
+  Label4.Caption := LSList[LSID_Sex];
+  GroupBox1.Caption := LSList[LSID_Patronymic];
+  Label3.Caption := LSList[LSID_PatFemale];
+  Label1.Caption := LSList[LSID_PatMale];
 end;
 
 procedure TfmNameEdit.SetIName(const Value: TName);

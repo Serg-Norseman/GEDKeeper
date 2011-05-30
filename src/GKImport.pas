@@ -1,4 +1,4 @@
-unit GKImport;
+unit GKImport; {trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -46,7 +46,7 @@ implementation
 
 uses
   {$IFDEF DELPHI_NET}System.IO, {$ENDIF}
-  Variants, ComObj, GKUtils, GKSexCheck, GKMain;
+  Variants, ComObj, GKUtils, GKSexCheck, GKMain, GKLangs;
 
 { TGKImporter }
 
@@ -273,7 +273,7 @@ begin
 
     ev.Detail.Date.ParseString(tmp);
   except
-    on E: Exception do FLog.Add('>>>> Ошибка разбора: дата "'+date+'"');
+    on E: Exception do FLog.Add('>>>> '+LSList[LSID_ParseError_DateInvalid]+' "'+date+'"');
   end;
 end;
 
@@ -325,7 +325,7 @@ begin
     if (x >= 0) then begin
       parent := TGEDCOMIndividualRecord(FPersonsList.Objects[x]);
       AddChild(parent, Result, mar_id);
-    end else FLog.Add('>>>> Ошибка разбора: в списке не обнаружен предок с номером "'+IntToStr(parent_id)+'".');
+    end else FLog.Add('>>>> '+LSList[LSID_ParseError_AncNotFound]+' "'+IntToStr(parent_id)+'".');
   end;
 end;
 
@@ -427,50 +427,42 @@ var
   s, p_id: string;
 begin
   FLog.Clear;
-
+  buf := TStringList.Create;
+  FPersonsList := TStringList.Create;
   try
-    buf := TStringList.Create;
-    FPersonsList := TStringList.Create;
-    try
-      prev_id := 0;
-      i_rec := nil;
+    prev_id := 0;
+    i_rec := nil;
 
-      for i := 0 to aContent.Count - 1 do begin
-        s := Trim(aContent[i]);
+    for i := 0 to aContent.Count - 1 do begin
+      s := Trim(aContent[i]);
 
-        if (s = '') then begin
-          CheckBuf(buf, i_rec);
+      if (s = '') then begin
+        CheckBuf(buf, i_rec);
+        i_rec := nil;
+      end else begin
+        if IsRomeLine(s) then begin
+          FLog.Add('> '+LSList[LSID_Generation]+' "'+s+'"');
           i_rec := nil;
         end else begin
-          if IsRomeLine(s) then begin
-            FLog.Add('> Поколение "'+s+'"');
-            i_rec := nil;
-          end else begin
-            if not(IsPersonLine(s, p_id))
-            then buf.Add(s)
-            else begin
-              CheckBuf(buf, i_rec);
-              i_rec := ParsePerson(buf, s, p_id, self_id);
+          if not(IsPersonLine(s, p_id))
+          then buf.Add(s)
+          else begin
+            CheckBuf(buf, i_rec);
+            i_rec := ParsePerson(buf, s, p_id, self_id);
 
-              FLog.Add('> Распознана персональная запись "'+p_id+'".');
+            FLog.Add('> '+LSList[LSID_PersonParsed]+' "'+p_id+'".');
 
-              if (self_id - prev_id > 1)
-              then FLog.Add('>>>> Ошибка разбора: номера записей содержат пропуск.');
+            if (self_id - prev_id > 1)
+            then FLog.Add('>>>> '+LSList[LSID_ParseError_LineSeq]);
 
-              prev_id := self_id;
-            end;
+            prev_id := self_id;
           end;
         end;
       end;
-    finally
-      FPersonsList.Free;
-      buf.Free;
     end;
-  except
-    on E: Exception do begin
-      FLog.Add('>>>> Импорт завершен с ошибкой программы.');
-      LogWrite('Import_StringList(): ' + E.Message);
-    end;
+  finally
+    FPersonsList.Free;
+    buf.Free;
   end;
 end;
 
@@ -490,7 +482,7 @@ begin
     end;
   except
     on E: Exception do begin
-      FLog.Add('>>>> Ошибка загрузки данных.');
+      FLog.Add('>>>> '+LSList[LSID_DataLoadError]);
       LogWrite('Import_PlainText(): ' + E.Message);
     end;
   end;
@@ -529,7 +521,7 @@ begin
     end;
   except
     on E: Exception do begin
-      FLog.Add('>>>> Ошибка загрузки данных.');
+      FLog.Add('>>>> '+LSList[LSID_DataLoadError]);
       LogWrite('Import_Word(): ' + E.Message);
     end;
   end;
@@ -590,7 +582,7 @@ begin
             rome := '';
 
           if (rome <> '') then begin
-            FLog.Add('> Поколение "'+rome+'"');
+            FLog.Add('> '+LSList[LSID_Generation]+' "'+rome+'"');
             i_rec := nil;
           end else begin
             if (c3[1] = '/')
@@ -606,10 +598,10 @@ begin
               CheckBuf(buf, i_rec);
               i_rec := ParsePerson(buf, s, p_id, self_id);
 
-              FLog.Add('> Распознана персональная запись "'+p_id+'".');
+              FLog.Add('> '+LSList[LSID_PersonParsed]+' "'+p_id+'".');
 
               if (self_id - prev_id > 1)
-              then FLog.Add('>>>> Ошибка разбора: номера записей содержат пропуск.');
+              then FLog.Add('>>>> '+LSList[LSID_ParseError_LineSeq]);
 
               prev_id := self_id;
             end;
@@ -625,7 +617,7 @@ begin
     end;
   except
     on E: Exception do begin
-      FLog.Add('>>>> Ошибка загрузки данных.');
+      FLog.Add('>>>> '+LSList[LSID_DataLoadError]);
       LogWrite('Import_Excel(): ' + E.Message);
     end;
   end;
@@ -650,7 +642,7 @@ begin
   if (E = '.xls')
   then Import_Excel(aFileName)
   else
-    raise Exception.Create('Формат не поддерживается');
+    raise Exception.Create(LSList[LSID_FormatUnsupported]);
 end;
 
 end.

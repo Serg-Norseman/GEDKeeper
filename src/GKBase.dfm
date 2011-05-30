@@ -1,8 +1,8 @@
 object fmBase: TfmBase
-  Left = 338
-  Top = 150
-  Width = 786
-  Height = 323
+  Left = 340
+  Top = 152
+  Width = 762
+  Height = 290
   Caption = 'GEDKeeper'
   Color = clBtnFace
   DefaultMonitor = dmMainForm

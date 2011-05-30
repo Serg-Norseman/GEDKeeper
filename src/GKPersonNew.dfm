@@ -4,7 +4,7 @@ object fmPersonNew: TfmPersonNew
   BorderStyle = bsDialog
   Caption = #1053#1086#1074#1072#1103' '#1087#1077#1088#1089#1086#1085#1072#1083#1100#1085#1072#1103' '#1079#1072#1087#1080#1089#1100
   ClientHeight = 153
-  ClientWidth = 259
+  ClientWidth = 266
   Color = clBtnFace
   DefaultMonitor = dmMainForm
   Font.Charset = DEFAULT_CHARSET
@@ -46,7 +46,7 @@ object fmPersonNew: TfmPersonNew
     Caption = #1055#1086#1083
   end
   object edFamily: TEdit
-    Left = 64
+    Left = 72
     Top = 8
     Width = 185
     Height = 21
@@ -55,7 +55,7 @@ object fmPersonNew: TfmPersonNew
     OnKeyPress = edFamilyKeyPress
   end
   object edName: TEdit
-    Left = 64
+    Left = 72
     Top = 32
     Width = 185
     Height = 21
@@ -64,7 +64,7 @@ object fmPersonNew: TfmPersonNew
     OnKeyPress = edFamilyKeyPress
   end
   object edPatronymic: TComboBox
-    Left = 64
+    Left = 72
     Top = 56
     Width = 185
     Height = 21
@@ -74,7 +74,7 @@ object fmPersonNew: TfmPersonNew
     OnKeyPress = edFamilyKeyPress
   end
   object EditSex: TComboBox
-    Left = 64
+    Left = 72
     Top = 80
     Width = 121
     Height = 21

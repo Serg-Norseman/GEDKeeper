@@ -1,4 +1,4 @@
-unit GKBase; {prepare:partial}
+unit GKBase; {prepare:partial; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -7,7 +7,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   ComCtrls, StdCtrls, ExtCtrls, Buttons, Menus, Masks, ActnList, GKEngine,
-  GKCommon, GedCom551, GKCtrls, GKLists;
+  GKCommon, GedCom551, GKCtrls, GKLists, GKLangs;
 
 type
   TFilePropertiesMode = (fpmAuthor, fpmDiags, fpmAdvanced);
@@ -19,7 +19,7 @@ type
 
   TRecNotify = (rnDelete);
 
-  TfmBase = class(TForm)
+  TfmBase = class(TForm, ILocalization)
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -31,7 +31,6 @@ type
     FBackman: TBackManager;
     FChangedRecords: array [TGEDCOMRecordType] of TList;
     FEngine: TGenEngine;
-    FFileName: string;
     FLockedRecords: TList;
     FModified: Boolean;
     FShieldState: TShieldState;
@@ -49,6 +48,7 @@ type
     procedure SetModified(const Value: Boolean);
     procedure ShowAddress(anAddress: TGEDCOMAddress; aSummary: TStrings);
     procedure SetShieldState(const Value: TShieldState);
+    function GetFileName: string;
 
     {procedure ShowLockMsg();
     procedure LockRecord(aRecord: TGEDCOMRecord; aLock: Boolean);
@@ -133,17 +133,10 @@ type
     procedure ShowTips();
     procedure ShowTreeAncestors();
     procedure ShowTreeDescendants();
+    procedure ShowTreeBoth();
     procedure TreeTools();
 
-    function CheckPath(): Boolean;
-    function GetArcFileName(): string;
-    function GetStoreFolder(): string;
-    function GetSpecExtName(): string;
-    function GetStoreType(aFileRef: string; var aFileName: string): TGKStoreType;
     function IsAdvanced(): Boolean;
-    procedure MediaLoad(aRefName: string; var aStream: TStream); overload;
-    procedure MediaLoad(aRefName: string; var aFileName: string); overload;
-    procedure MediaSave(aFileName: string; aStoreType: TGKStoreType; var aRefPath: string);
 
     function ModifyName(var aName: TName): Boolean;
     function DefinePatronymic(aName: string; aSex: TGEDCOMSex; aConfirm: Boolean): string;
@@ -226,6 +219,8 @@ type
     procedure ShowCommunicationInfo(aCommunicationRec: TGEDCOMCommunicationRecord; aSummary: TStrings);
     procedure ShowLocationInfo(aLocationRec: TGEDCOMLocationRecord; aSummary: TStrings);
 
+    procedure SetLang();
+
     procedure TimeLine_Init();
     procedure TimeLine_Done();
     function  TimeLine_GetYear(): Integer;
@@ -233,7 +228,7 @@ type
 
     property Backman: TBackManager read FBackman;
     property Engine: TGenEngine read FEngine;
-    property FileName: string read FFileName write SetFileName;
+    property FileName: string read GetFileName write SetFileName;
     property Filter: TPersonsFilter read FXFilter;
     property Modified: Boolean read FModified write SetModified;
     property ShieldState: TShieldState read FShieldState write SetShieldState;
@@ -246,7 +241,6 @@ implementation
 uses
   {$IFDEF DELPHI_NET}System.IO, {$ENDIF}
   {$IFDEF PROFILER}ZProfiler, {$ENDIF}
-  {$IFNDEF DELPHI_NET}AbZipper, AbZipTyp, AbZipKit, AbArcTyp, {$ENDIF}
   GKUtils, GKPersonNew, GKRecordSelect, GKStats, GKNoteEdit, GKChart, GKTipsDlg,
   GKSourceEdit, GKEventEdit, GKAbout, GKChartCore, GKFileProperties, GKTaskEdit,
   GKPersonEdit, GKExport, GKOptions, GKFamilyEdit, GKMain, GKAssociationEdit,
@@ -257,8 +251,6 @@ uses
   {$IFNDEF DELPHI_NET}, GKMaps {$ENDIF};
 
 {$R *.dfm}
-
-{ TfmGEDKeeper }
 
 procedure TfmBase.InitializeComponent;
 begin
@@ -289,19 +281,34 @@ begin
     OnChange := PageRecordsChange;
   end;
 
-  CreatePage('Персоны', rtIndividual, ListPersons, mPersonSummary);
-  CreatePage('Семьи', rtFamily, ListFamilies, mFamilySummary);
-  CreatePage('Заметки', rtNote, ListNotes, mNoteSummary);
-  CreatePage('Мультимедиа', rtMultimedia, ListMultimedia, mMediaSummary);
-  CreatePage('Источники', rtSource, ListSources, mSourceSummary);
-  CreatePage('Архивы', rtRepository, ListRepositories, mRepositorySummary);
-  CreatePage('Группы', rtGroup, ListGroups, mGroupSummary);
-  CreatePage('Исследования', rtResearch, ListResearches, mResearchSummary);
-  CreatePage('Задачи', rtTask, ListTasks, mTaskSummary);
-  CreatePage('Коммуникации', rtCommunication, ListCommunications, mCommunicationSummary);
-  CreatePage('Места', rtLocation, ListLocations, mLocationSummary);
+  CreatePage(LSList[LSID_RPIndividuals], rtIndividual, ListPersons, mPersonSummary);
+  CreatePage(LSList[LSID_RPFamilies], rtFamily, ListFamilies, mFamilySummary);
+  CreatePage(LSList[LSID_RPNotes], rtNote, ListNotes, mNoteSummary);
+  CreatePage(LSList[LSID_RPMultimedia], rtMultimedia, ListMultimedia, mMediaSummary);
+  CreatePage(LSList[LSID_RPSources], rtSource, ListSources, mSourceSummary);
+  CreatePage(LSList[LSID_RPRepositories], rtRepository, ListRepositories, mRepositorySummary);
+  CreatePage(LSList[LSID_RPGroups], rtGroup, ListGroups, mGroupSummary);
+  CreatePage(LSList[LSID_RPResearches], rtResearch, ListResearches, mResearchSummary);
+  CreatePage(LSList[LSID_RPTasks], rtTask, ListTasks, mTaskSummary);
+  CreatePage(LSList[LSID_RPCommunications], rtCommunication, ListCommunications, mCommunicationSummary);
+  CreatePage(LSList[LSID_RPLocations], rtLocation, ListLocations, mLocationSummary);
 
   PageRecords.ActivePageIndex := 0;
+end;
+
+procedure TfmBase.SetLang();
+begin
+  PageRecords.Pages[ 0].Caption := LSList[LSID_RPIndividuals];
+  PageRecords.Pages[ 1].Caption := LSList[LSID_RPFamilies];
+  PageRecords.Pages[ 2].Caption := LSList[LSID_RPNotes];
+  PageRecords.Pages[ 3].Caption := LSList[LSID_RPMultimedia];
+  PageRecords.Pages[ 4].Caption := LSList[LSID_RPSources];
+  PageRecords.Pages[ 5].Caption := LSList[LSID_RPRepositories];
+  PageRecords.Pages[ 6].Caption := LSList[LSID_RPGroups];
+  PageRecords.Pages[ 7].Caption := LSList[LSID_RPResearches];
+  PageRecords.Pages[ 8].Caption := LSList[LSID_RPTasks];
+  PageRecords.Pages[ 9].Caption := LSList[LSID_RPCommunications];
+  PageRecords.Pages[10].Caption := LSList[LSID_RPLocations];
 end;
 
 procedure TfmBase.FormDestroy(Sender: TObject);
@@ -403,7 +410,7 @@ begin
   Result := True;
 
   if Modified then begin
-    case MessageDlg('Файл изменен. Сохранить?', mtWarning, [mbYes, mbNo, mbCancel], 0) of
+    case MessageDlg(LSList[LSID_FileSaveQuery], mtWarning, [mbYes, mbNo, mbCancel], 0) of
       mrYes: fmGEDKeeper.miFileSaveClick(nil);
       mrNo: {dummy};
       mrCancel: Result := False;
@@ -469,9 +476,7 @@ function TfmBase.GetChildFamily(iChild: TGEDCOMIndividualRecord; aCanCreate: Boo
         wife := TGEDCOMIndividualRecord(fam.Wife.Value);
 
         if (husb = aNewParent) or (wife = aNewParent) then begin
-          msg := 'У заданного родителя найдена семья "' + GetFamilyStr(fam) + '". '
-            + #13#10'Включить ребенка в эту семью?';
-
+          msg := Format(LSList[LSID_ParentsQuery], [GetFamilyStr(fam)]);
           if (MessageDlg(msg, mtWarning, [mbYes, mbNo], 0) = mrYes) then begin
             Result := fam;
             Exit;
@@ -507,7 +512,7 @@ function TfmBase.DeleteFamilyRecord(aFamily: TGEDCOMFamilyRecord; aConfirm: Bool
 begin
   Result := False;
   if (aFamily = nil) then Exit;
-  if (aConfirm) and (MessageDlg('Удалить семью "'+GetFamilyStr(aFamily)+'"?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+  if (aConfirm) and (MessageDlg(Format(LSList[LSID_FamilyDeleteQuery], [GetFamilyStr(aFamily)]), mtConfirmation, [mbNo, mbYes], 0) = mrNo)
   then Exit;
 
   FEngine.CleanFamily(aFamily);
@@ -526,7 +531,7 @@ var
 begin
   Result := False;
   if (iRec = nil) then Exit;
-  if (aConfirm) and (MessageDlg('Удалить персональную запись "'+GetNameStr(iRec)+'"?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+  if (aConfirm) and (MessageDlg(Format(LSList[LSID_PersonDeleteQuery], [GetNameStr(iRec)]), mtConfirmation, [mbNo, mbYes], 0) = mrNo)
   then Exit;
 
   // могут быть также ссылки в группах, задачах и коммуникациях
@@ -560,7 +565,7 @@ begin
 
   Result := False;
   if (nRec = nil) then Exit;
-  if (aConfirm) and (MessageDlg('Удалить заметку?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+  if (aConfirm) and (MessageDlg(LSList[LSID_NoteDeleteQuery], mtConfirmation, [mbNo, mbYes], 0) = mrNo)
   then Exit;
 
   // могут быть также ссылки в тэгах
@@ -588,7 +593,7 @@ var
 begin
   Result := False;
   if (srcRec = nil) then Exit;
-  if (aConfirm) and (MessageDlg('Удалить источник "'+srcRec.FiledByEntry+'"?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+  if (aConfirm) and (MessageDlg(Format(LSList[LSID_SourceDeleteQuery], [srcRec.FiledByEntry]), mtConfirmation, [mbNo, mbYes], 0) = mrNo)
   then Exit;
 
   // могут быть также ссылки в тэгах
@@ -616,7 +621,7 @@ var
 begin
   Result := False;
   if (mRec = nil) then Exit;
-  if (aConfirm) and (MessageDlg('Удалить мультимедиа "'+mRec.StringValue+'"?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+  if (aConfirm) and (MessageDlg(Format(LSList[LSID_MediaDeleteQuery], [mRec.StringValue]), mtConfirmation, [mbNo, mbYes], 0) = mrNo)
   then Exit;
 
   // могут быть также ссылки в тэгах
@@ -645,7 +650,7 @@ var
 begin
   Result := False;
   if (repRec = nil) then Exit;
-  if (aConfirm) and (MessageDlg('Удалить архив "'+repRec.RepositoryName+'"?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+  if (aConfirm) and (MessageDlg(Format(LSList[LSID_RepositoryDeleteQuery], [repRec.RepositoryName]), mtConfirmation, [mbNo, mbYes], 0) = mrNo)
   then Exit;
 
   for i := 0 to FTree.RecordsCount - 1 do begin
@@ -675,7 +680,7 @@ var
 begin
   Result := False;
   if (groupRec = nil) then Exit;
-  if (aConfirm) and (MessageDlg('Удалить группу "'+groupRec.Name+'"?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+  if (aConfirm) and (MessageDlg(Format(LSList[LSID_GroupDeleteQuery], [groupRec.Name]), mtConfirmation, [mbNo, mbYes], 0) = mrNo)
   then Exit;
 
   for i := 0 to groupRec.MembersCount - 1 do begin
@@ -694,7 +699,7 @@ function TfmBase.DeleteResearchRecord(resRec: TGEDCOMResearchRecord; aConfirm: B
 begin
   Result := False;
   if (resRec = nil) then Exit;
-  if (aConfirm) and (MessageDlg('Удалить исследование "'+resRec.Name+'"?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+  if (aConfirm) and (MessageDlg(Format(LSList[LSID_ResearchDeleteQuery], [resRec.Name]), mtConfirmation, [mbNo, mbYes], 0) = mrNo)
   then Exit;
 
   // dummy, because there is not links from other records and tags
@@ -714,7 +719,7 @@ var
 begin
   Result := False;
   if (TaskRec = nil) then Exit;
-  if (aConfirm) and (MessageDlg('Удалить задачу "'+GetTaskGoalStr(FTree, TaskRec)+'"?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+  if (aConfirm) and (MessageDlg(Format(LSList[LSID_TaskDeleteQuery], [GetTaskGoalStr(FTree, TaskRec)]), mtConfirmation, [mbNo, mbYes], 0) = mrNo)
   then Exit;
 
   for i := 0 to FTree.RecordsCount - 1 do begin
@@ -745,7 +750,7 @@ var
 begin
   Result := False;
   if (ComRec = nil) then Exit;
-  if (aConfirm) and (MessageDlg('Удалить коммуникацию "'+ComRec.Name+'"?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+  if (aConfirm) and (MessageDlg(Format(LSList[LSID_CommunicationDeleteQuery], [ComRec.Name]), mtConfirmation, [mbNo, mbYes], 0) = mrNo)
   then Exit;
 
   for i := 0 to FTree.RecordsCount - 1 do begin
@@ -778,7 +783,7 @@ var
 begin
   Result := False;
   if (LocRec = nil) then Exit;
-  if (aConfirm) and (MessageDlg('Удалить место "'+LocRec.Name+'"?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+  if (aConfirm) and (MessageDlg(Format(LSList[LSID_LocationDeleteQuery], [LocRec.Name]), mtConfirmation, [mbNo, mbYes], 0) = mrNo)
   then Exit;
 
   for i := 0 to FTree.RecordsCount - 1 do begin
@@ -828,7 +833,7 @@ var
   ts: string;
 begin
   if not(anAddress.IsEmpty) and (aSummary <> nil) then begin
-    aSummary.Add('    Адрес:');
+    aSummary.Add('    '+LSList[LSID_Address]+':');
 
     ts := '';
     if (anAddress.AddressCountry <> '')
@@ -869,7 +874,7 @@ var
   nm: string;
 begin
   if (aSummary <> nil) and (aDetail.SourceCitationsCount <> 0) then begin
-    aSummary.Add('    Источники (' + IntToStr(aDetail.SourceCitationsCount) + '):');
+    aSummary.Add('    '+LSList[LSID_RPSources]+' (' + IntToStr(aDetail.SourceCitationsCount) + '):');
     for idx := 0 to aDetail.SourceCitationsCount - 1 do begin
       cit := aDetail.SourceCitations[idx];
       sourceRec := TGEDCOMSourceRecord(cit.Value);
@@ -906,7 +911,7 @@ begin
     if (aRecord.IndividualEventsCount <> 0) then begin
       if (aSummary <> nil) then begin
         aSummary.Add('');
-        aSummary.Add({#13#10}'Факты:');
+        aSummary.Add(LSList[LSID_Events]+':');
       end;
 
       for idx := 0 to aRecord.IndividualEventsCount - 1 do begin
@@ -915,7 +920,7 @@ begin
         ev := GetPersonEventIndex(event.Name);
         if (ev = 0) then st := event.Detail.Classification
         else
-        if (ev > 0) then st := PersonEvents[ev].Name
+        if (ev > 0) then st := LSList[PersonEvents[ev].Name]
         else st := event.Name;
 
         if (aSummary <> nil) then begin
@@ -966,7 +971,7 @@ begin
     if (aRecord.FamilyEventCount <> 0) then begin
       if (aSummary <> nil) then begin
         aSummary.Add('');
-        aSummary.Add({#13#10}'События:');
+        aSummary.Add(LSList[LSID_Events]+':');
       end;
 
       for idx := 0 to aRecord.FamilyEventCount - 1 do begin
@@ -975,7 +980,7 @@ begin
         ev := GetFamilyEventIndex(event.Name);
         if (ev = 0) then st := event.Detail.Classification
         else
-        if (ev > 0) then st := FamilyEvents[ev].Name
+        if (ev > 0) then st := LSList[FamilyEvents[ev].Name]
         else st := event.Name;
 
         if (aSummary <> nil) then begin
@@ -1014,7 +1019,7 @@ begin
     if (aRecord.NotesCount <> 0) then begin
       if (aSummary <> nil) then begin
         aSummary.Add('');
-        aSummary.Add({#13#10}'Заметки (' + IntToStr(aRecord.NotesCount) + '):');
+        aSummary.Add(LSList[LSID_RPNotes]+' (' + IntToStr(aRecord.NotesCount) + '):');
       end;
 
       for idx := 0 to aRecord.NotesCount - 1 do begin
@@ -1055,7 +1060,7 @@ begin
       if (aList = nil) and (aSummary <> nil) 
       then begin
         aSummary.Add('');
-        aSummary.Add({#13#10}'Мультимедиа (' + IntToStr(aRecord.MultimediaLinksCount) + '):');
+        aSummary.Add(LSList[LSID_RPMultimedia]+' (' + IntToStr(aRecord.MultimediaLinksCount) + '):');
       end;
 
       for idx := 0 to aRecord.MultimediaLinksCount - 1 do begin
@@ -1094,7 +1099,7 @@ begin
       if (aList = nil) and (aSummary <> nil)
       then begin
         aSummary.Add('');
-        aSummary.Add({#13#10}'Источники (' + IntToStr(aRecord.SourceCitationsCount) + '):');
+        aSummary.Add(LSList[LSID_RPSources]+' (' + IntToStr(aRecord.SourceCitationsCount) + '):');
       end;
 
       for idx := 0 to aRecord.SourceCitationsCount - 1 do begin
@@ -1129,14 +1134,14 @@ begin
   aList.Columns_Clear;
 
   aList.AddColumn('№', 25);
-  aList.AddColumn('Событие', 90);
-  aList.AddColumn('Дата', 80);
+  aList.AddColumn(LSList[LSID_Event], 90);
+  aList.AddColumn(LSList[LSID_Date], 80);
 
   if not(PersonsMode)
-  then aList.AddColumn('Место', 200)
-  else aList.AddColumn('Место/Атрибут', 200);
+  then aList.AddColumn(LSList[LSID_Place], 200)
+  else aList.AddColumn(LSList[LSID_PlaceAndAttribute], 200);
 
-  aList.AddColumn('Причина', 130);
+  aList.AddColumn(LSList[LSID_Cause], 130);
 
   aList.Columns_EndUpdate;
 end;
@@ -1146,7 +1151,7 @@ begin
   aList.Columns_BeginUpdate();
   aList.Columns_Clear();
 
-  aList.AddColumn('Заметка', 300);
+  aList.AddColumn(LSList[LSID_Note], 300);
 
   aList.Columns_EndUpdate();
 end;
@@ -1156,7 +1161,7 @@ begin
   aList.Columns_BeginUpdate;
   aList.Columns_Clear;
 
-  aList.AddColumn('Мультимедиа', 300);
+  aList.AddColumn(LSList[LSID_RPMultimedia], 300);
 
   aList.Columns_EndUpdate;
 end;
@@ -1166,8 +1171,8 @@ begin
   aList.Columns_BeginUpdate;
   aList.Columns_Clear;
 
-  aList.AddColumn('Автор', 120);
-  aList.AddColumn('Название', 180);
+  aList.AddColumn(LSList[LSID_Author], 120);
+  aList.AddColumn(LSList[LSID_Title], 180);
 
   aList.Columns_EndUpdate;
 end;
@@ -1187,7 +1192,7 @@ begin
       if (aList = nil) and (aSummary <> nil)
       then begin
         aSummary.Add('');
-        aSummary.Add({#13#10}'Ассоциации:');
+        aSummary.Add(LSList[LSID_Associations]+':');
       end;
 
       for idx := 0 to aRecord.AssociationsCount - 1 do begin
@@ -1225,7 +1230,7 @@ begin
       if (aList = nil) and (aSummary <> nil)
       then begin
         aSummary.Add('');
-        aSummary.Add({#13#10}'Группы:');
+        aSummary.Add(LSList[LSID_RPGroups]+':');
       end;
 
       for idx := 0 to aRecord.GroupsCount - 1 do begin
@@ -1251,7 +1256,7 @@ end;
 function TfmBase.IsMainList(aRecType: TGEDCOMRecordType; aList: TGKListView): Boolean;
 begin
   Result := False;
-  
+
   case aRecType of
     rtNone: ;
     rtIndividual: Result := (aList = ListPersons);
@@ -1323,26 +1328,26 @@ begin
       if (iRec <> nil) then begin
         aSummary.Add('');
         aSummary.Add('~ub+1~' + GetNameStr(iRec, True, True) + '~bu-1~');
-        aSummary.Add('Пол: ' + SexData[iRec.Sex].ViewName);
+        aSummary.Add(LSList[LSID_Sex] + ': ' + SexStr(iRec.Sex));
 
         try
           if (iRec.ChildToFamilyLinksCount <> 0) then begin
             aSummary.Add('');
-            aSummary.Add({#13#10}'Родители:');
+            aSummary.Add(LSList[LSID_Parents]+':');
 
             family := iRec.ChildToFamilyLinks[0].Family;
 
             rel_person := TGEDCOMIndividualRecord(family.Husband.Value);
             if (rel_person <> nil)
             then st := HyperLink(rel_person.XRef, GetNameStr(rel_person))
-            else st := UnkMale;
-            aSummary.Add('  Отец: ' + st + GetLifeStr(rel_person));
+            else st := LSList[LSID_UnkMale];
+            aSummary.Add('  '+LSList[LSID_Father]+': ' + st + GetLifeStr(rel_person));
 
             rel_person := TGEDCOMIndividualRecord(family.Wife.Value);
             if (rel_person <> nil)
             then st := HyperLink(rel_person.XRef, GetNameStr(rel_person))
-            else st := UnkFemale;
-            aSummary.Add('  Мать: ' + st + GetLifeStr(rel_person));
+            else st := LSList[LSID_UnkFemale];
+            aSummary.Add('  '+LSList[LSID_Mother]+': ' + st + GetLifeStr(rel_person));
           end;
         except
           on E: Exception do LogWrite('GKBase.ShowPersonInfo().Parents(): ' + E.Message);
@@ -1352,7 +1357,7 @@ begin
           for idx := 0 to iRec.SpouseToFamilyLinksCount - 1 do begin
             family := iRec.SpouseToFamilyLinks[idx].Family;
             if (family = nil) then begin
-              LogWrite('File ('+FFileName+'), iRec ('+iRec.XRef+'): empty family entry');
+              LogWrite('File ('+FileName+'), iRec ('+iRec.XRef+'): empty family entry');
               Continue;
             end;
 
@@ -1361,18 +1366,18 @@ begin
 
             if (iRec.Sex = svMale) then begin
               sp := family.Wife;
-              st := 'Жена: ';
-              unk := UnkFemale;
+              st := LSList[LSID_Wife]+': ';
+              unk := LSList[LSID_UnkFemale];
             end else begin
               sp := family.Husband;
-              st := 'Муж: ';
-              unk := UnkMale;
+              st := LSList[LSID_Husband]+': ';
+              unk := LSList[LSID_UnkMale];
             end;
 
             marr := GetMarriageDate(family, dfDD_MM_YYYY);
             if (marr <> '')
-            then marr := 'брак ' + marr
-            else marr := 'семья';
+            then marr := LSList[LSID_LMarriage]+' ' + marr
+            else marr := LSList[LSID_LFamily];
 
             rel_person := TGEDCOMIndividualRecord(sp.Value);
 
@@ -1384,7 +1389,7 @@ begin
 
             if (family.ChildrenCount <> 0) then begin
               aSummary.Add('');
-              aSummary.Add({#13#10}'Дети:');
+              aSummary.Add(LSList[LSID_Childs]+':');
             end;
 
             for k := 0 to family.ChildrenCount - 1 do begin
@@ -1421,7 +1426,7 @@ begin
 
           if (namesakes.Count > 0) then begin
             aSummary.Add('');
-            aSummary.Add('Тёзки:');
+            aSummary.Add(LSList[LSID_Namesakes]+':');
             for k := 0 to namesakes.Count - 1 do begin
               rel_person := (namesakes.Objects[k] as TGEDCOMIndividualRecord);
               aSummary.Add('    '+HyperLink(rel_person.XRef, namesakes[k]));
@@ -1455,19 +1460,19 @@ begin
         irec := TGEDCOMIndividualRecord(aFamily.Husband.Value);
         if (irec <> nil)
         then st := HyperLink(irec.XRef, GetNameStr(irec))
-        else st := UnkMale;
-        aSummary.Add('Муж: ' + st + GetLifeStr(irec));
+        else st := LSList[LSID_UnkMale];
+        aSummary.Add(LSList[LSID_Husband]+': ' + st + GetLifeStr(irec));
 
         irec := TGEDCOMIndividualRecord(aFamily.Wife.Value);
         if (irec <> nil)
         then st := HyperLink(irec.XRef, GetNameStr(irec))
-        else st := UnkFemale;
-        aSummary.Add('Жена: ' + st + GetLifeStr(irec));
+        else st := LSList[LSID_UnkFemale];
+        aSummary.Add(LSList[LSID_Wife]+': ' + st + GetLifeStr(irec));
 
         aSummary.Add('');
 
         if (aFamily.ChildrenCount <> 0)
-        then aSummary.Add('Дети:');
+        then aSummary.Add(LSList[LSID_Childs]+':');
 
         for k := 0 to aFamily.ChildrenCount - 1 do begin
           irec := TGEDCOMIndividualRecord(aFamily.Children[k].Value);
@@ -1502,10 +1507,10 @@ begin
         aSummary.Add('~ub+1~' + aMultimediaRec.FileReferences[0].Title + '~bu-1~');
 
         aSummary.Add('');
-        aSummary.Add('[ ' + HyperLink(MLinkPrefix+aMultimediaRec.XRef, 'просмотр') + ' ]');
+        aSummary.Add('[ ' + HyperLink(MLinkPrefix+aMultimediaRec.XRef, LSList[LSID_View]) + ' ]');
         aSummary.Add('');
 
-        aSummary.Add('Ссылки:');
+        aSummary.Add(LSList[LSID_Links]+':');
         for i := 0 to FTree.RecordsCount - 1 do SearchSubjectLinks(FTree.Records[i], aMultimediaRec, aSummary);
 
         RecListNotesRefresh(aMultimediaRec, nil, aSummary);
@@ -1531,7 +1536,7 @@ begin
         aSummary.Add('');
         aSummary.AddStrings(aNoteRec.Notes);
         aSummary.Add('');
-        aSummary.Add('Ссылки:');
+        aSummary.Add(LSList[LSID_Links]+':');
         for i := 0 to FTree.RecordsCount - 1 do SearchSubjectLinks(FTree.Records[i], aNoteRec, aSummary);
       end;
     finally
@@ -1557,13 +1562,13 @@ begin
         aSummary.Add('');
         aSummary.Add('~ub+1~' + aSourceRec.FiledByEntry + '~bu-1~');
         aSummary.Add('');
-        aSummary.Add('Автор: ' + Trim(aSourceRec.Originator.Text));
-        aSummary.Add('Название: "' + Trim(aSourceRec.Title.Text) + '"');
-        aSummary.Add('Опубликовано: "' + Trim(aSourceRec.Publication.Text) + '"');
+        aSummary.Add(LSList[LSID_Author]+': ' + Trim(aSourceRec.Originator.Text));
+        aSummary.Add(LSList[LSID_Title]+': "' + Trim(aSourceRec.Title.Text) + '"');
+        aSummary.Add(LSList[LSID_Publication]+': "' + Trim(aSourceRec.Publication.Text) + '"');
 
         if (aSourceRec.RepositoryCitationsCount > 0) then begin
           aSummary.Add('');
-          aSummary.Add('Архивы:');
+          aSummary.Add(LSList[LSID_RPRepositories]+':');
 
           for k := 0 to aSourceRec.RepositoryCitationsCount - 1 do begin
             rep := TGEDCOMRepositoryRecord(aSourceRec.RepositoryCitations[k].Value);
@@ -1572,7 +1577,7 @@ begin
         end;
 
         aSummary.Add('');
-        aSummary.Add('Ссылки:');
+        aSummary.Add(LSList[LSID_Links]+':');
         for i := 0 to FTree.RecordsCount - 1 do SearchSubjectLinks(FTree.Records[i], aSourceRec, link_list);
         link_list.Sort();
         for i := 0 to link_list.Count - 1 do aSummary.Add(link_list[i]);
@@ -1607,7 +1612,7 @@ begin
         ShowAddress(aRepositoryRec.Address, aSummary);
 
         aSummary.Add('');
-        aSummary.Add('Источники:');
+        aSummary.Add(LSList[LSID_RPSources]+':');
         for i := 0 to FTree.RecordsCount - 1 do begin
           rec := FTree.Records[i];
 
@@ -1645,7 +1650,7 @@ begin
         aSummary.Add('');
         aSummary.Add('~ub+1~' + aGroup.Name + '~bu-1~');
         aSummary.Add('');
-        aSummary.Add('Участники (' + IntToStr(aGroup.MembersCount) + '):');
+        aSummary.Add(LSList[LSID_Members]+' (' + IntToStr(aGroup.MembersCount) + '):');
 
         for i := 0 to aGroup.MembersCount - 1 do begin
           member := TGEDCOMIndividualRecord(aGroup.Members[i].Value);
@@ -1684,16 +1689,16 @@ begin
       aSummary.Clear();
       if (aResearchRec <> nil) then begin
         aSummary.Add('');
-        aSummary.Add('Название: "~ub+1~' + Trim(aResearchRec.Name) + '~bu-1~"');
+        aSummary.Add(LSList[LSID_Title]+': "~ub+1~' + Trim(aResearchRec.Name) + '~bu-1~"');
         aSummary.Add('');
-        aSummary.Add('Приоритет: ' + PriorityNames[aResearchRec.Priority]);
-        aSummary.Add('Состояние: ' + StatusNames[aResearchRec.Status] + ' (' + IntToStr(aResearchRec.Percent) + '%)');
-        aSummary.Add('Запущено: ' + GEDCOMDateToStr(aResearchRec.StartDate));
-        aSummary.Add('Завершено: ' + GEDCOMDateToStr(aResearchRec.StopDate));
+        aSummary.Add(LSList[LSID_Priority]+': ' + LSList[PriorityNames[aResearchRec.Priority]]);
+        aSummary.Add(LSList[LSID_Status]+': ' + LSList[StatusNames[aResearchRec.Status]] + ' (' + IntToStr(aResearchRec.Percent) + '%)');
+        aSummary.Add(LSList[LSID_StartDate]+': ' + GEDCOMDateToStr(aResearchRec.StartDate));
+        aSummary.Add(LSList[LSID_StopDate]+': ' + GEDCOMDateToStr(aResearchRec.StopDate));
 
         if (aResearchRec.TasksCount > 0) then begin
           aSummary.Add('');
-          aSummary.Add('Задачи:');
+          aSummary.Add(LSList[LSID_RPTasks]+':');
           for i := 0 to aResearchRec.TasksCount - 1 do begin
             taskRec := TGEDCOMTaskRecord(aResearchRec.Tasks[i].Value);
             aSummary.Add('    '+GenRecordLink(FTree, taskRec, False));
@@ -1702,7 +1707,7 @@ begin
 
         if (aResearchRec.CommunicationsCount > 0) then begin
           aSummary.Add('');
-          aSummary.Add('Коммуникации:');
+          aSummary.Add(LSList[LSID_RPCommunications]+':');
           for i := 0 to aResearchRec.CommunicationsCount - 1 do begin
             corrRec := TGEDCOMCommunicationRecord(aResearchRec.Communications[i].Value);
             aSummary.Add('    '+GenRecordLink(FTree, corrRec, False));
@@ -1711,7 +1716,7 @@ begin
 
         if (aResearchRec.GroupsCount <> 0) then begin
           aSummary.Add('');
-          aSummary.Add('Группы:');
+          aSummary.Add(LSList[LSID_RPGroups]+':');
           for i := 0 to aResearchRec.GroupsCount - 1 do begin
             grp := TGEDCOMGroupRecord(aResearchRec.Groups[i].Value);
             aSummary.Add('    '+HyperLink(grp.XRef, grp.Name));
@@ -1736,11 +1741,11 @@ begin
       aSummary.Clear();
       if (aTaskRec <> nil) then begin
         aSummary.Add('');
-        aSummary.Add('Цель: ~ub+1~' + GetTaskGoalStr(FTree, aTaskRec) + '~bu-1~');
+        aSummary.Add(LSList[LSID_Goal]+': ~ub+1~' + GetTaskGoalStr(FTree, aTaskRec) + '~bu-1~');
         aSummary.Add('');
-        aSummary.Add('Приоритет: ' + PriorityNames[aTaskRec.Priority]);
-        aSummary.Add('Запущено: ' + GEDCOMDateToStr(aTaskRec.StartDate));
-        aSummary.Add('Завершено: ' + GEDCOMDateToStr(aTaskRec.StopDate));
+        aSummary.Add(LSList[LSID_Priority]+': ' + LSList[PriorityNames[aTaskRec.Priority]]);
+        aSummary.Add(LSList[LSID_StartDate]+': ' + GEDCOMDateToStr(aTaskRec.StartDate));
+        aSummary.Add(LSList[LSID_StopDate]+': ' + GEDCOMDateToStr(aTaskRec.StopDate));
 
         RecListNotesRefresh(aTaskRec, nil, aSummary);
       end;
@@ -1760,11 +1765,11 @@ begin
       aSummary.Clear();
       if (aCommunicationRec <> nil) then begin
         aSummary.Add('');
-        aSummary.Add('Тема: "~ub+1~' + Trim(aCommunicationRec.Name) + '~bu-1~"');
+        aSummary.Add(LSList[LSID_Theme]+': "~ub+1~' + Trim(aCommunicationRec.Name) + '~bu-1~"');
         aSummary.Add('');
-        aSummary.Add('Корреспондент: ' + GetCorresponderStr(FTree, aCommunicationRec, True));
-        aSummary.Add('Тип: ' + CommunicationNames[aCommunicationRec.CommunicationType]);
-        aSummary.Add('Дата: ' + GEDCOMDateToStr(aCommunicationRec.Date));
+        aSummary.Add(LSList[LSID_Corresponder]+': ' + GetCorresponderStr(FTree, aCommunicationRec, True));
+        aSummary.Add(LSList[LSID_Type]+': ' + LSList[CommunicationNames[aCommunicationRec.CommunicationType]]);
+        aSummary.Add(LSList[LSID_Date]+': ' + GEDCOMDateToStr(aCommunicationRec.Date));
 
         RecListNotesRefresh(aCommunicationRec, nil, aSummary);
         RecListMediaRefresh(aCommunicationRec, nil, aSummary);
@@ -1791,15 +1796,15 @@ begin
         aSummary.Add('');
         aSummary.Add('~ub+1~' + Trim(aLocationRec.Name) + '~bu-1~');
         aSummary.Add('');
-        aSummary.Add('Широта: ' + aLocationRec.Map.Lati);
-        aSummary.Add('Долгота: ' + aLocationRec.Map.Long);
+        aSummary.Add(LSList[LSID_Latitude]+': ' + aLocationRec.Map.Lati);
+        aSummary.Add(LSList[LSID_Longitude]+': ' + aLocationRec.Map.Long);
 
         GetLocationLinks(FTree, aLocationRec, link_list);
 
         link_list.Sort();
         if (link_list.Count > 0) then begin
           aSummary.Add('');
-          aSummary.Add('Ссылки:');
+          aSummary.Add(LSList[LSID_Links]+':');
           for i := 0 to link_list.Count - 1 do aSummary.Add('    ' + link_list[i]);
         end;
 
@@ -1852,7 +1857,7 @@ begin
   Result := False;
 
   if (anAction = raDelete) then begin
-    if (MessageDlg('Удалить факт?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+    if (MessageDlg(LSList[LSID_RemoveEventQuery], mtConfirmation, [mbNo, mbYes], 0) = mrNo)
     then Exit;
 
     if (aRecord is TGEDCOMIndividualRecord)
@@ -1960,7 +1965,7 @@ begin
 
   if (aTarget = ftSpouse) and (aPerson <> nil)
   and not(aPerson.Sex in [svMale, svFemale]) then begin
-    MessageDlg('У данного человека не задан пол.', mtError, [mbOk], 0);
+    MessageDlg(LSList[LSID_IsNotDefinedSex], mtError, [mbOk], 0);
     Exit;
   end;
 
@@ -2320,7 +2325,7 @@ begin
   Result := False;
 
   if (anAction = raDelete) then begin
-    if (MessageDlg('Удалить ссылку на заметку?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+    if (MessageDlg(LSList[LSID_DetachNoteQuery], mtConfirmation, [mbNo, mbYes], 0) = mrNo)
     then Exit;
 
     aRecord.DeleteNotes(aNote);
@@ -2356,7 +2361,7 @@ begin
   Result := False;
 
   if (anAction = raDelete) then begin
-    if (MessageDlg('Удалить ссылку на мультимедиа?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+    if (MessageDlg(LSList[LSID_DetachMultimediaQuery], mtConfirmation, [mbNo, mbYes], 0) = mrNo)
     then Exit;
 
     aRecord.DeleteMultimediaLink(aLink);
@@ -2393,7 +2398,7 @@ begin
   Result := False;
 
   if (anAction = raDelete) then begin
-    if (MessageDlg('Удалить ссылку на источник?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+    if (MessageDlg(LSList[LSID_DetachSourceQuery], mtConfirmation, [mbNo, mbYes], 0) = mrNo)
     then Exit;
 
     aRecord.DeleteSourceCitation(aCit);
@@ -2438,7 +2443,7 @@ begin
   Result := False;
 
   if (anAction = raDelete) then begin
-    if (MessageDlg('Удалить ассоциацию?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+    if (MessageDlg(LSList[LSID_RemoveUserRefQuery], mtConfirmation, [mbNo, mbYes], 0) = mrNo)
     then Exit;
 
     aRecord.DeleteUserReference(aUserRef);
@@ -2483,7 +2488,7 @@ begin
   Result := False;
 
   if (anAction = raDelete) then begin
-    if (MessageDlg('Удалить ассоциацию?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+    if (MessageDlg(LSList[LSID_RemoveAssociationQuery], mtConfirmation, [mbNo, mbYes], 0) = mrNo)
     then Exit;
 
     aRecord.DeleteAssociation(aAssociation);
@@ -2527,7 +2532,7 @@ begin
   Result := False;
 
   if (anAction = raDelete) then begin
-    if (MessageDlg('Удалить ссылку на заметку?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+    if (MessageDlg(LSList[LSID_DetachNoteQuery], mtConfirmation, [mbNo, mbYes], 0) = mrNo)
     then Exit;
 
     aTag.DeleteNotes(aNote);
@@ -2564,7 +2569,7 @@ begin
   Result := False;
 
   if (anAction = raDelete) then begin
-    if (MessageDlg('Удалить ссылку на мультимедиа?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+    if (MessageDlg(LSList[LSID_DetachMultimediaQuery], mtConfirmation, [mbNo, mbYes], 0) = mrNo)
     then Exit;
 
     aTag.DeleteMultimediaLink(aLink);
@@ -2603,7 +2608,7 @@ begin
   Result := False;
 
   if (anAction = raDelete) then begin
-    if (MessageDlg('Удалить ссылку на источник?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+    if (MessageDlg(LSList[LSID_DetachSourceQuery], mtConfirmation, [mbNo, mbYes], 0) = mrNo)
     then Exit;
 
     aTag.DeleteSourceCitation(aCit);
@@ -2637,12 +2642,18 @@ begin
   end;
 end;
 
+function TfmBase.GetFileName: string;
+begin
+  Result := FEngine.FileName;
+end;
+
 procedure TfmBase.SetFileName(const Value: string);
 begin
-  FFileName := Value;
+  FEngine.FileName := Value;
+
   SetMainTitle();
 
-  fmGEDKeeper.Options.LastDir := ExtractFilePath(FFileName);
+  fmGEDKeeper.Options.LastDir := ExtractFilePath(FEngine.FileName);
 end;
 
 procedure TfmBase.FormClose(Sender: TObject;
@@ -2782,7 +2793,7 @@ end;
 
 procedure TfmBase.SetMainTitle();
 begin
-  Caption := ExtractFileName(FFileName);
+  Caption := ExtractFileName(FileName);
 
   if FModified
   then Caption := '* ' + Caption;
@@ -2795,7 +2806,7 @@ begin
 
   ListsRefresh();
   ShowPersonInfo(nil, mPersonSummary.Lines);
-  FileName := 'Неизвестный';
+  FileName := LSList[LSID_Unknown];
   Modified := False;
 end;
 
@@ -2811,7 +2822,7 @@ begin
   except
     on E: Exception do begin
       LogWrite('GKBase.FileLoad().TreeLoad(): ' + E.Message);
-      MessageDlg('Ошибка загрузки файла', mtError, [mbOk], 0);
+      MessageDlg(LSList[LSID_LoadGedComFailed], mtError, [mbOk], 0);
     end;
   end;
 
@@ -2820,7 +2831,7 @@ begin
   except
     on E: Exception do begin
       LogWrite('GKBase.FileLoad().CheckFormat(): ' + E.Message);
-      MessageDlg('Ошибка проверки формата', mtError, [mbOk], 0);
+      MessageDlg(LSList[LSID_CheckGedComFailed], mtError, [mbOk], 0);
     end;
   end;
 
@@ -3137,7 +3148,7 @@ end;
 
 function TfmBase.GetCurFileTempPath(): string;
 begin
-  Result := ExtractFilePath(FFileName) + '~temp\';
+  Result := ExtractFilePath(FileName) + '~temp\';
 end;
 
 procedure TfmBase.ExportToWeb();
@@ -3224,46 +3235,45 @@ end;
 procedure TfmBase.ShowTreeAncestors();
 var
   fmChart: TfmChart;
-  anc_count: Integer;
 begin
-  //ShowMessage(IntToStr(TCustomPerson.InstanceSize));
-
-  InitExtCounts(FTree);
-  anc_count := GetAncestorsCount(GetSelectedPerson());
-  if (anc_count > 2048{FCounts[rtIndividual].Total}) then begin
-    ShowMessage('Расчетное количество предков ' + IntToStr(anc_count) + ' больше допустимых пределов.'+
-      #13#10'В программе пока нет отсечения многочисленных близкородственных пересечений.');
-    Exit;
-  end;
+  if not TfmChart.CheckData(FTree, GetSelectedPerson(), ckAncestors) then Exit;
 
   fmChart := TfmChart.Create(Self);
   fmChart.Base := Self;
   fmChart.Tree := FTree;
   fmChart.Person := GetSelectedPerson();
   fmChart.ChartKind := ckAncestors;
-  fmChart.FileName := ExtractFileName(FFileName);
+  fmChart.FileName := ExtractFileName(FileName);
   fmChart.GenChart();
 end;
 
 procedure TfmBase.ShowTreeDescendants();
 var
   fmChart: TfmChart;
-  desc_count: Integer;
 begin
-  InitExtCounts(FTree);
-  desc_count := GetDescendantsCount(GetSelectedPerson());
-  if (desc_count > 2048{FCounts[rtIndividual].Total}) then begin
-    ShowMessage('Расчетное количество потомков ' + IntToStr(desc_count) + ' больше допустимых пределов.'+
-      #13#10'В программе пока нет отсечения многочисленных близкородственных пересечений.');
-    Exit;
-  end;
+  if not TfmChart.CheckData(FTree, GetSelectedPerson(), ckDescendants) then Exit;
 
   fmChart := TfmChart.Create(Self);
   fmChart.Base := Self;
   fmChart.Tree := FTree;
   fmChart.Person := GetSelectedPerson();
-  fmChart.ChartKind := {$IFNDEF GEN_DEBUG}ckDescendants{$ELSE}ckBoth{$ENDIF};
-  fmChart.FileName := ExtractFileName(FFileName);
+  fmChart.ChartKind := ckDescendants;
+  fmChart.FileName := ExtractFileName(FileName);
+  fmChart.GenChart();
+end;
+
+procedure TfmBase.ShowTreeBoth();
+var
+  fmChart: TfmChart;
+begin
+  if not TfmChart.CheckData(FTree, GetSelectedPerson(), ckBoth) then Exit;
+
+  fmChart := TfmChart.Create(Self);
+  fmChart.Base := Self;
+  fmChart.Tree := FTree;
+  fmChart.Person := GetSelectedPerson();
+  fmChart.ChartKind := ckBoth;
+  fmChart.FileName := ExtractFileName(FileName);
   fmChart.GenChart();
 end;
 
@@ -3394,221 +3404,6 @@ end;
 function TfmBase.IsAdvanced(): Boolean;
 begin
   Result := (FTree.Header.FindTag(AdvTag) <> nil);
-end;
-
-function TfmBase.GetSpecExtName(): string;
-var
-  p: Integer;
-  ext: string;
-begin
-  ext := FEngine.ExtName;
-
-  if (ext = '') then begin
-    Result := ExtractFileName(FFileName);
-
-    p := Pos('.ged', Result);
-    if (p > 0) then Result := Copy(Result, 1, p - 1);
-  end else Result := ext;
-end;
-
-function TfmBase.GetArcFileName(): string;
-begin
-  Result := ExtractFilePath(FFileName) + GetSpecExtName() + '.zip';
-end;
-
-function TfmBase.GetStoreFolder(): string;
-begin
-  Result := ExtractFilePath(FFileName) + GetSpecExtName() + '\';
-
-  if not(DirectoryExists(Result))
-  then CreateDir(Result);
-end;
-
-function TfmBase.CheckPath(): Boolean;
-var
-  path: string;
-begin
-  path := ExtractFilePath(FFileName);
-  Result := (path <> '');
-  if not(Result)
-  then MessageDlg('Для типов хранения "архив" и "хранилище" новый файл БД нужно предварительно сохранить', mtError, [mbOk], 0);
-end;
-
-function TfmBase.GetStoreType(aFileRef: string; var aFileName: string): TGKStoreType;
-begin
-  aFileName := aFileRef;
-
-  if (Pos(GKStoreType[gstArchive].Sign, aFileRef) > 0) then begin
-    Result := gstArchive;
-    Delete(aFileName, 1, 4);
-  end
-  else
-  if (Pos(GKStoreType[gstStorage].Sign, aFileRef) > 0) then begin
-    Result := gstStorage;
-    Delete(aFileName, 1, 4);
-  end
-  else begin
-    Result := gstReference;
-  end;
-end;
-
-procedure TfmBase.MediaLoad(aRefName: string; var aStream: TStream);
-var
-  gst: TGKStoreType;
-  target_fn: string;
-  {$IFNDEF DELPHI_NET}
-  az: TAbZipKit;
-  {$ENDIF}
-begin
-  gst := GetStoreType(aRefName, target_fn);
-
-  case gst of
-    gstReference: begin
-      aStream := TFileStream.Create(target_fn, fmOpenRead);
-    end;
-
-    gstArchive: begin
-      aStream := TMemoryStream.Create();
-
-      if not(FileExists(GetArcFileName()))
-      then MessageDlg('Архив не найден, данные не загружены', mtError, [mbOk], 0)
-      else begin
-        {$IFNDEF DELPHI_NET}
-        AnsiToOem(PChar(target_fn), PChar(target_fn));
-
-        az := TAbZipKit.Create(nil);
-        try
-          az.OpenArchive(GetArcFileName());
-          az.ExtractToStream(target_fn, aStream);
-          aStream.Seek(0, soFromBeginning);
-        finally
-          az.Destroy;
-        end;
-        {$ENDIF}
-      end;
-    end;
-
-    gstStorage: begin
-      target_fn := GetStoreFolder() + target_fn;
-      aStream := TFileStream.Create(target_fn, fmOpenRead);
-    end;
-  end;
-end;
-
-procedure TfmBase.MediaLoad(aRefName: string; var aFileName: string);
-var
-  gst: TGKStoreType;
-  target_fn: string;
-  fs: TFileStream;
-  {$IFNDEF DELPHI_NET}
-  az: TAbZipKit;
-  {$ENDIF}
-begin
-  gst := GetStoreType(aRefName, target_fn);
-
-  case gst of
-    gstReference: begin
-      aFileName := target_fn;
-    end;
-
-    gstArchive: begin
-      aFileName := GetTempDir() + ExtractFileName(target_fn);
-
-      fs := TFileStream.Create(aFileName, fmCreate);
-      try
-        if not(FileExists(GetArcFileName()))
-        then MessageDlg('Архив не найден, данные не загружены', mtError, [mbOk], 0)
-        else begin
-          {$IFNDEF DELPHI_NET}
-          AnsiToOem(PChar(target_fn), PChar(target_fn));
-          target_fn := StringReplace(target_fn, '\', '/', [rfReplaceAll]);
-
-          az := TAbZipKit.Create(nil);
-          try
-            az.OpenArchive(GetArcFileName());
-            az.ExtractToStream(target_fn, fs);
-          finally
-            az.Destroy;
-          end;
-          {$ENDIF}
-        end;
-      finally
-        fs.Destroy;
-      end;
-    end;
-
-    gstStorage: begin
-      aFileName := GetStoreFolder() + target_fn;
-    end;
-  end;
-end;
-
-procedure TfmBase.MediaSave(aFileName: string; aStoreType: TGKStoreType; var aRefPath: string);
-var
-  target_fn, sfn, spath: string;
-  {$IFNDEF DELPHI_NET}
-  az: TAbZipper;
-  arc_item: TAbArchiveItem;
-  {$ENDIF}
-  fs: TFileStream;
-  mmFormat: TGEDCOMMultimediaFormat;
-  idx, fdt: Longint;
-begin
-  sfn := ExtractFileName(aFileName);
-
-  mmFormat := TGEDCOMFileReference.RecognizeFormat(aFileName);
-
-  case mmFormat of
-    mfNone, mfUnknown, mfOLE: spath := 'unknown\';
-    mfBMP, mfGIF, mfJPG, mfPCX, mfTIF, mfTGA, mfPNG: spath := 'images\';
-    mfWAV: spath := 'audio\';
-    mfTXT, mfRTF, mfHTM: spath := 'texts\';
-    mfAVI, mfMPG: spath := 'video\';
-  end;
-
-  case aStoreType of
-    gstReference: begin
-      aRefPath := aFileName;
-    end;
-
-    gstArchive: begin
-      sfn := spath + sfn;
-      aRefPath := GKStoreType[aStoreType].Sign + sfn;
-
-      {$IFNDEF DELPHI_NET}
-      fs := TFileStream.Create(aFileName, fmOpenRead);
-      az := TAbZipper.Create(nil);
-      try
-        AnsiToOem(PChar(sfn), PChar(sfn));
-
-        az.FileName := GetArcFileName();
-        az.CompressionMethodToUse := smDeflated;
-        az.AddFromStream(sfn, fs);
-
-        sfn := StringReplace(sfn, '\', '/', [rfReplaceAll]);
-        idx := az.FindFile(sfn);
-        if (idx >= 0) then begin
-          arc_item := az.Items[idx];
-          fdt := FileGetDate(fs.Handle);
-          arc_item.LastModFileDate := LongRec(fdt).Hi;
-          arc_item.LastModFileTime := LongRec(fdt).Lo;
-        end;
-
-        az.Save();
-      finally
-        az.Destroy;
-        fs.Destroy;
-      end;
-      {$ENDIF}
-    end;
-
-    gstStorage: begin
-      sfn := spath + sfn;
-      aRefPath := GKStoreType[aStoreType].Sign + sfn;
-      target_fn := GetStoreFolder() + '\' + sfn;
-      FileMove(aFileName, target_fn);
-    end;
-  end;
 end;
 
 procedure TfmBase.FormActivate(Sender: TObject);
@@ -3751,12 +3546,12 @@ begin
           days := GetDaysForBirth(i_rec);
 
           if (days <> '') and (StrToInt(days) < 3)
-          then birth_days.Add('До дня рождения "'+nm+'" осталось '+days+' дня(-ей)');
+          then birth_days.Add(Format(LSList[LSID_DaysRemained], [nm, days]));
         end;
       end;
 
       if (birth_days.Count > 0)
-      then fmGEDKeeper.Options.ShowTips := TfmTipsDialog.ShowTipsEx('Дни рождения', fmGEDKeeper.Options.ShowTips, birth_days);
+      then fmGEDKeeper.Options.ShowTips := TfmTipsDialog.ShowTipsEx(LSList[LSID_BirthDays], fmGEDKeeper.Options.ShowTips, birth_days);
     finally
       birth_days.Free;
     end;

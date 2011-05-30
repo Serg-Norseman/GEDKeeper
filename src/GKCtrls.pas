@@ -1033,7 +1033,7 @@ begin
       ss := '';
       while (i <= Length(s)) do begin
         if (s[i] = '~') then begin
-          if s[i+1] = '~' then ss := ss + '~';
+          if (s[i+1] = '~') then ss := ss + '~';
 
           OutText();
           Inc(i);
@@ -1050,11 +1050,11 @@ begin
               'S' : FontStyle([fsStrikeOut]);
 
               { Font Size }
-              '+' : Font.Size := Font.Size + FontSize;
-              '-' : Font.Size := Font.Size - FontSize;
+              '+' : Font.Size := Font.Size + FontSize();
+              '-' : Font.Size := Font.Size - FontSize();
 
               { Color }
-              'C' : Font.Color := FontColor;
+              'C' : Font.Color := FontColor();
 
               { Link Name:Caption }
               '^' : begin

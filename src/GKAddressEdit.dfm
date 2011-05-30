@@ -1,6 +1,6 @@
 object fmAddressEdit: TfmAddressEdit
-  Left = 425
-  Top = 197
+  Left = 426
+  Top = 198
   BorderStyle = bsDialog
   Caption = #1040#1076#1088#1077#1089
   ClientHeight = 330

@@ -1,16 +1,17 @@
-unit GKCommon;
+unit GKCommon; {trans:fin}
 
 {$I GEDKeeper.inc}
 
 interface
 
 uses
-  Classes, Contnrs, Graphics, IniFiles, GedCom551, GKEngine;
+  Types, Classes, Contnrs, Graphics, IniFiles, Forms,
+  GedCom551, GKEngine, GKLangs;
 
 type
   TGKStack = class(TStack)
   protected
-    procedure Clear; 
+    procedure Clear;
   end;
 
   TBackManager = class(TObject)
@@ -111,38 +112,38 @@ type
 
 const
   PersonColumnsName: array [TPersonColumnType] of record
-    Name: string;
+    Name: LSID;
     DefWidth: Integer;
     colOnlyMain: Boolean;
   end = (
-    (Name: 'Патриарх';                  DefWidth:  25; colOnlyMain: False),
-    (Name: 'ФИО';                       DefWidth:  25; colOnlyMain: False),
-    (Name: 'Прозвище';                  DefWidth:  75; colOnlyMain: False),
-    (Name: 'Пол';                       DefWidth:  45; colOnlyMain: False),
-    (Name: 'Дата рождения';             DefWidth: 100; colOnlyMain: False),
-    (Name: 'Дата смерти';               DefWidth: 100; colOnlyMain: False),
-    (Name: 'Место рождения';            DefWidth: 100; colOnlyMain: False),
-    (Name: 'Место смерти';              DefWidth: 100; colOnlyMain: False),
-    (Name: 'Местожительство';           DefWidth: 100; colOnlyMain: False),
+    (Name: LSID_Patriarch;          DefWidth:  25; colOnlyMain: False),
+    (Name: LSID_FullName;           DefWidth:  25; colOnlyMain: False),
+    (Name: LSID_Nickname;           DefWidth:  75; colOnlyMain: False),
+    (Name: LSID_Sex;                DefWidth:  45; colOnlyMain: False),
+    (Name: LSID_BirthDate;          DefWidth: 100; colOnlyMain: False),
+    (Name: LSID_DeathDate;          DefWidth: 100; colOnlyMain: False),
+    (Name: LSID_BirthPlace;         DefWidth: 100; colOnlyMain: False),
+    (Name: LSID_DeathPlace;         DefWidth: 100; colOnlyMain: False),
+    (Name: LSID_Residence;          DefWidth: 100; colOnlyMain: False),
 
-    (Name: 'Возраст';                   DefWidth: 100; colOnlyMain: True),
-    (Name: 'Продолжительность жизни';   DefWidth: 100; colOnlyMain: True),
-    (Name: 'Дней до ДР';                DefWidth: 100; colOnlyMain: True),
-    (Name: 'Группа';                    DefWidth: 200; colOnlyMain: True),
+    (Name: LSID_Age;                DefWidth: 100; colOnlyMain: True),
+    (Name: LSID_LifeExpectancy;     DefWidth: 100; colOnlyMain: True),
+    (Name: LSID_DaysForBirth;       DefWidth: 100; colOnlyMain: True),
+    (Name: LSID_RPGroups;           DefWidth: 200; colOnlyMain: True),
 
-    (Name: 'Вероисповедание';           DefWidth: 200; colOnlyMain: True),
-    (Name: 'Национальность';            DefWidth: 200; colOnlyMain: True),
-    (Name: 'Образование';               DefWidth: 200; colOnlyMain: True),
-    (Name: 'Профессия';                 DefWidth: 200; colOnlyMain: True),
-    (Name: 'Социальное положение';      DefWidth: 200; colOnlyMain: True),
+    (Name: LSID_Religion;           DefWidth: 200; colOnlyMain: True),
+    (Name: LSID_Nationality;        DefWidth: 200; colOnlyMain: True),
+    (Name: LSID_Education;          DefWidth: 200; colOnlyMain: True),
+    (Name: LSID_Occupation;         DefWidth: 200; colOnlyMain: True),
+    (Name: LSID_Caste;              DefWidth: 200; colOnlyMain: True),
 
-    (Name: 'Военная служба';            DefWidth: 200; colOnlyMain: True),
-    (Name: 'Призван в ВС';              DefWidth: 200; colOnlyMain: True),
-    (Name: 'Уволен из ВС';              DefWidth: 200; colOnlyMain: True),
-    (Name: 'Звание в ВС';               DefWidth: 200; colOnlyMain: True),
+    (Name: LSID_Mili;               DefWidth: 200; colOnlyMain: True),
+    (Name: LSID_MiliInd;            DefWidth: 200; colOnlyMain: True),
+    (Name: LSID_MiliDis;            DefWidth: 200; colOnlyMain: True),
+    (Name: LSID_MiliRank;           DefWidth: 200; colOnlyMain: True),
 
-    (Name: 'Изменено';                  DefWidth: 150; colOnlyMain: True),
-    (Name: 'Закладка';                  DefWidth:  25; colOnlyMain: True)
+    (Name: LSID_Changed;            DefWidth: 150; colOnlyMain: True),
+    (Name: LSID_Bookmark;           DefWidth:  25; colOnlyMain: True)
   );
 
 const
@@ -225,6 +226,7 @@ type
     FDeathDateVisible: Boolean;
     FOnlyYears: Boolean;
     FKinship: Boolean;
+    FPortraitsVisible: Boolean;
     FSignsVisible: Boolean;
 
     FMaleColor: TColor;
@@ -252,6 +254,7 @@ type
     property DeathDateVisible: Boolean read FDeathDateVisible write FDeathDateVisible;
     property OnlyYears: Boolean read FOnlyYears write FOnlyYears;
     property Kinship: Boolean read FKinship write FKinship;
+    property PortraitsVisible: Boolean read FPortraitsVisible write FPortraitsVisible;
     property SignsVisible: Boolean read FSignsVisible write FSignsVisible;
 
     property MaleColor: TColor read FMaleColor write FMaleColor;
@@ -301,6 +304,19 @@ type
     property IncludeSources: Boolean read FIncludeSources write FIncludeSources;
   end;
 
+  TLangRecord = class(TObject)
+  public
+    Code: TLangID;
+    Name, FileName: string;
+  end;
+
+  TBaseWin = class(TObject)
+  public
+    FileName: string;
+    WinRect: TRect;
+    WinState: TWindowState;
+  end;
+
   TGlobalOptions = class(TObject)
   private
     FChartOptions: TChartOptions;
@@ -308,6 +324,8 @@ type
     FDefDateFormat: TDateFormat;
     FDefNameFormat: TNameFormat;
     FEventFilters: TStringList;
+    FInterfaceLang: TLangID;
+    FLanguages: TObjectList;
     FLastDir: string;
     FMRUFiles: TStringList;
     FNameFilters: TStringList;
@@ -322,10 +340,22 @@ type
     FListPersonsColumns: TPersonColumnsList;
     FListPersons_HighlightUnmarried: Boolean;
     FListPersons_HighlightUnparented: Boolean;
+
+    FMWinRect: TRect;
+    FMWinState: TWindowState;
+
+    FLastBases: TObjectList;
+
+    procedure LngPrepareProc(const FileName: string);
+    function GetLangsCount: Integer;
+    function GetLang(Index: Integer): TLangRecord;
+    function GetLastBase(Index: Integer): TBaseWin;
+    function GetLastBasesCount: Integer;
   public
     constructor Create;
     destructor Destroy; override;
 
+    procedure FindLanguages();
     procedure LoadFromFile(const FileName: string);
     procedure SaveToFile(const FileName: string);
 
@@ -334,12 +364,20 @@ type
     property DefDateFormat: TDateFormat read FDefDateFormat write FDefDateFormat;
     property DefNameFormat: TNameFormat read FDefNameFormat write FDefNameFormat;
     property EventFilters: TStringList read FEventFilters;
+    property InterfaceLang: TLangID read FInterfaceLang write FInterfaceLang;
+    property Langs[Index: Integer]: TLangRecord read GetLang;
+    property LangsCount: Integer read GetLangsCount;
     property LastDir: string read FLastDir write FLastDir;
     property MRUFiles: TStringList read FMRUFiles;
+    property MWinRect: TRect read FMWinRect write FMWinRect;
+    property MWinState: TWindowState read FMWinState write FMWinState;
     property NameFilters: TStringList read FNameFilters;
+    property PedigreeOptions: TPedigreeOptions read FPedigreeOptions;
     property PlacesWithAddress: Boolean read FPlacesWithAddress write FPlacesWithAddress;
+    property Proxy: TProxy read FProxy;
     property Relations: TStringList read FRelations;
     property ResidenceFilters: TStringList read FResidenceFilters;
+    property ShowTips: Boolean read FShowTips write FShowTips;
     property WorkMode: TWorkMode read FWorkMode write FWorkMode;
 
     property ListPersons_HighlightUnmarried: Boolean
@@ -350,17 +388,18 @@ type
     property ListPersonsColumns: TPersonColumnsList
       read FListPersonsColumns write FListPersonsColumns;
 
-    property PedigreeOptions: TPedigreeOptions read FPedigreeOptions;
-    property Proxy: TProxy read FProxy;
+    function AddLastBase(): TBaseWin;
+    procedure ClearLastBases();
 
-    property ShowTips: Boolean read FShowTips write FShowTips;
+    property LastBases[Index: Integer]: TBaseWin read GetLastBase;
+    property LastBasesCount: Integer read GetLastBasesCount; 
   end;
 
 implementation
 
 uses
   {$IFDEF DELPHI_NET}System.IO,{$ENDIF}
-  Windows, SysUtils, Math, Forms, GKUtils;
+  Windows, SysUtils, Math, GKUtils;
 
 { TGKStack }
 
@@ -644,6 +683,7 @@ var
   n: TName;
 begin
   Result := '';
+  if (aPatronymic = '') then Exit;  
 
   for i := 0 to FNames.Count - 1 do begin
     n := TName(FNames[i]);
@@ -776,7 +816,7 @@ begin
   AssignFile(tf, aFileName); Rewrite(tf);
   for i := 0 to FNames.Count - 1 do begin
     nm := GetName(i);
-    Writeln(tf, nm.Name + ';' + nm.F_Patronymic + ';' + nm.M_Patronymic + ';' + SexData[nm.Sex].LatSign);
+    Writeln(tf, nm.Name + ';' + nm.F_Patronymic + ';' + nm.M_Patronymic + ';' + SexData[nm.Sex].Sign);
   end;
   CloseFile(tf);
 end;
@@ -798,6 +838,7 @@ begin
   FDeathDateVisible := False;
   FOnlyYears := False;
   FKinship := False;
+  FPortraitsVisible := True;
   FSignsVisible := False;
 
   FMaleColor := $00FFC6C6;
@@ -829,6 +870,7 @@ begin
   FOnlyYears := aIniFile.ReadBool('Chart', 'OnlyYears', False);
   FKinship := aIniFile.ReadBool('Chart', 'Kinship', False);
   FSignsVisible := aIniFile.ReadBool('Chart', 'SignsVisible', False);
+  FPortraitsVisible := aIniFile.ReadBool('Chart', 'PortraitsVisible', True);
 
   FMaleColor := aIniFile.ReadInteger('Chart', 'MaleColor', $00FFC6C6);
   FFemaleColor := aIniFile.ReadInteger('Chart', 'FemaleColor', $00C6C6FF);
@@ -855,6 +897,7 @@ begin
   aIniFile.WriteBool('Chart', 'OnlyYears', FOnlyYears);
   aIniFile.WriteBool('Chart', 'Kinship', FKinship);
   aIniFile.WriteBool('Chart', 'SignsVisible', FSignsVisible);
+  aIniFile.WriteBool('Chart', 'PortraitsVisible', FPortraitsVisible);
 
   aIniFile.WriteInteger('Chart', 'MaleColor', FMaleColor);
   aIniFile.WriteInteger('Chart', 'FemaleColor', FFemaleColor);
@@ -941,10 +984,16 @@ begin
   FRelations := TStringList.Create;
 
   FListPersonsColumns := DefPersonColumns;
+
+  FLanguages := TObjectList.Create(True);
+  FLastBases := TObjectList.Create(True);
 end;
 
 destructor TGlobalOptions.Destroy;
 begin
+  FLastBases.Destroy;
+  FLanguages.Destroy;
+
   FRelations.Free;
   FProxy.Free;
   FPedigreeOptions.Free;
@@ -961,8 +1010,9 @@ procedure TGlobalOptions.LoadFromFile(const FileName: string);
 var
   ini: TIniFile;
   i, cnt: Integer;
-  fn: string;
+  fn, st: string;
   kl: Word;
+  lb: TBaseWin;
 begin
   ini := TIniFile.Create(FileName);
   try
@@ -973,6 +1023,7 @@ begin
     FPlacesWithAddress := ini.ReadBool('Common', 'PlacesWithAddress', False);
     FShowTips := ini.ReadBool('Common', 'ShowTips', True);
     FWorkMode := TWorkMode(ini.ReadInteger('Common', 'WorkMode', Ord(wmSimple)));
+    FInterfaceLang := ini.ReadInteger('Common', 'InterfaceLang', LSDefCode);
 
     kl := ini.ReadInteger('Common', 'KeyLayout', GetKeyLayout());
     SetKeyLayout(kl);
@@ -1014,6 +1065,25 @@ begin
 
     FListPersons_HighlightUnmarried := ini.ReadBool('ListPersons', 'HighlightUnmarried', False);
     FListPersons_HighlightUnparented := ini.ReadBool('ListPersons', 'HighlightUnparented', False);
+
+    FMWinRect.Left := ini.ReadInteger('Common', 'MWinL', -1);
+    FMWinRect.Top := ini.ReadInteger('Common', 'MWinT', -1);
+    FMWinRect.Right := ini.ReadInteger('Common', 'MWinW', -1);
+    FMWinRect.Bottom := ini.ReadInteger('Common', 'MWinH', -1);
+    FMWinState := TWindowState(ini.ReadInteger('Common', 'MWinState', Ord(wsNormal)));
+
+    cnt := ini.ReadInteger('LastBases', 'Count', 0);
+    for i := 0 to cnt - 1 do begin
+      lb := AddLastBase();
+      st := 'B' + IntToStr(i) + '_';
+
+      lb.FileName := ini.ReadString('LastBases', st+'FileName', '');
+      lb.WinRect.Left := ini.ReadInteger('LastBases', st+'WinL', 10);
+      lb.WinRect.Top := ini.ReadInteger('LastBases', st+'WinT', 10);
+      lb.WinRect.Right := ini.ReadInteger('LastBases', st+'WinW', 778);
+      lb.WinRect.Bottom := ini.ReadInteger('LastBases', st+'WinH', 312);
+      lb.WinState := TWindowState(ini.ReadInteger('LastBases', st+'WinState', Ord(wsNormal)));
+    end;
   finally
     ini.Destroy;
   end;
@@ -1023,6 +1093,8 @@ procedure TGlobalOptions.SaveToFile(const FileName: string);
 var
   ini: TIniFile;
   i: Integer;
+  lb: TBaseWin;
+  st: string;
 begin
   ini := TIniFile.Create(FileName);
   try
@@ -1033,6 +1105,7 @@ begin
     ini.WriteBool('Common', 'PlacesWithAddress', FPlacesWithAddress);
     ini.WriteBool('Common', 'ShowTips', FShowTips);
     ini.WriteInteger('Common', 'WorkMode', Ord(FWorkMode));
+    ini.WriteInteger('Common', 'InterfaceLang', FInterfaceLang);
 
     ini.WriteInteger('Common', 'KeyLayout', GetKeyLayout());
 
@@ -1052,6 +1125,7 @@ begin
     for i := 0 to FEventFilters.Count - 1 do
       ini.WriteString('EventFilters', 'EventVal_' + IntToStr(i), FEventFilters[i]);
 
+    //ini.EraseSection('MRUFiles');
     ini.WriteInteger('MRUFiles', 'Count', FMRUFiles.Count);
     for i := 0 to FMRUFiles.Count - 1 do
       ini.WriteString('MRUFiles', 'File_' + IntToStr(i), FMRUFiles[i]);
@@ -1070,9 +1144,95 @@ begin
 
     ini.WriteBool('ListPersons', 'HighlightUnmarried', FListPersons_HighlightUnmarried);
     ini.WriteBool('ListPersons', 'HighlightUnparented', FListPersons_HighlightUnparented);
+
+    ini.WriteInteger('Common', 'MWinL', FMWinRect.Left);
+    ini.WriteInteger('Common', 'MWinT', FMWinRect.Top);
+    ini.WriteInteger('Common', 'MWinW', FMWinRect.Right);
+    ini.WriteInteger('Common', 'MWinH', FMWinRect.Bottom);
+    ini.WriteInteger('Common', 'MWinState', Ord(FMWinState));
+
+    //ini.EraseSection('LastBases');
+    ini.WriteInteger('LastBases', 'Count', FLastBases.Count);
+    for i := 0 to FLastBases.Count - 1 do begin
+      lb := GetLastBase(i);
+      st := 'B' + IntToStr(i) + '_';
+
+      ini.WriteString('LastBases', st+'FileName', lb.FileName);
+      ini.WriteInteger('LastBases', st+'WinL', lb.WinRect.Left);
+      ini.WriteInteger('LastBases', st+'WinT', lb.WinRect.Top);
+      ini.WriteInteger('LastBases', st+'WinW', lb.WinRect.Right);
+      ini.WriteInteger('LastBases', st+'WinH', lb.WinRect.Bottom);
+      ini.WriteInteger('LastBases', st+'WinState', Ord(lb.WinState));
+    end;
   finally
     ini.Destroy;
   end;
+end;
+
+function TGlobalOptions.GetLang(Index: Integer): TLangRecord;
+begin
+  Result := TLangRecord(FLanguages[Index]);
+end;
+
+function TGlobalOptions.GetLangsCount(): Integer;
+begin
+  Result := FLanguages.Count;
+end;
+
+function TGlobalOptions.GetLastBase(Index: Integer): TBaseWin;
+begin
+  Result := TBaseWin(FLastBases[Index]);
+end;
+
+function TGlobalOptions.GetLastBasesCount: Integer;
+begin
+  Result := FLastBases.Count;
+end;
+
+function TGlobalOptions.AddLastBase(): TBaseWin;
+begin
+  Result := TBaseWin.Create;
+  FLastBases.Add(Result);
+end;
+
+procedure TGlobalOptions.ClearLastBases();
+begin
+  FLastBases.Clear;
+end;
+
+procedure TGlobalOptions.LngPrepareProc(const FileName: string);
+var
+  st, lng_code, lng_name: string;
+  lng_file: TextFile;
+  lng_rec: TLangRecord;
+begin
+  AssignFile(lng_file, FileName); Reset(lng_file);
+  Readln(lng_file, st);
+  CloseFile(lng_file);
+
+  if (st[1] = ';') then begin
+    st := Utf8ToAnsi(st);
+
+    try
+      Delete(st, 1, 1);
+      lng_code := GetToken(st, ',', 1);
+      lng_name := GetToken(st, ',', 2);
+
+      lng_rec := TLangRecord.Create;
+      lng_rec.Code := StrToInt(lng_code);
+      lng_rec.Name := lng_name;
+      lng_rec.FileName := FileName;
+      FLanguages.Add(lng_rec);
+    except end;
+  end;
+end;
+
+procedure TGlobalOptions.FindLanguages();
+var
+  path: string;
+begin
+  path := GetAppPath() + 'langs\';
+  ScanDir(path, LngPrepareProc, False, faAnyFile, '*.lng');
 end;
 
 end.

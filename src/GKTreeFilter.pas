@@ -1,4 +1,4 @@
-unit GKTreeFilter; {prepare:fin}
+unit GKTreeFilter; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,10 +6,10 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, ExtCtrls,
-  Buttons, Mask, GKBase, GKChartCore, ComCtrls, GKLists, GKEngine;
+  Buttons, Mask, GKBase, GKChartCore, ComCtrls, GKLists, GKEngine, GKLangs;
 
 type
-  TfmTreeFilter = class(TForm)
+  TfmTreeFilter = class(TForm, ILocalization)
     btnAccept: TBitBtn;
     btnCancel: TBitBtn;
     Label5: TLabel;
@@ -38,6 +38,8 @@ type
   public
     property Base: TfmBase read GetBase;
     property Filter: TChartFilter read FFilter write FFilter;
+
+    procedure SetLang();
   end;
 
 implementation
@@ -51,7 +53,24 @@ begin
   FPersonsList := TSheetList.Create(Panel1);
   FPersonsList.Buttons := [lbAdd, lbDelete];
   FPersonsList.OnModify := ListModify;
-  AddListColumn(FPersonsList.List, 'Персоны', 350, False);
+  AddListColumn(FPersonsList.List, LSList[LSID_RPIndividuals], 350, False);
+
+  SetLang();
+end;
+
+procedure TfmTreeFilter.SetLang();
+begin
+  btnAccept.Caption := LSList[LSID_DlgAccept];
+  btnCancel.Caption := LSList[LSID_DlgCancel];
+
+  Caption := LSList[LSID_MIFilter];
+
+  rgBranchCut.Caption := LSList[LSID_BranchCut];
+  rbCutNone.Caption := LSList[LSID_Not];
+  rbCutYears.Caption := LSList[LSID_BCut_Years];
+  Label1.Caption := LSList[LSID_Year];
+  rbCutPersons.Caption := LSList[LSID_BCut_Persons];
+  Label5.Caption := LSList[LSID_RPSources];
 end;
 
 procedure TfmTreeFilter.UpdateControls();
@@ -159,9 +178,9 @@ begin
     if (tree.Records[i] is TGEDCOMSourceRecord)
     then cbSource.AddItem(TGEDCOMSourceRecord(tree.Records[i]).FiledByEntry, tree.Records[i]);
   cbSource.Sorted := False;
-  cbSource.Items.InsertObject(0, '- всё -', nil);
-  cbSource.Items.InsertObject(1, '- нет источников -', nil);
-  cbSource.Items.InsertObject(2, '- любые -', nil);
+  cbSource.Items.InsertObject(0, LSList[LSID_SrcAll], nil);
+  cbSource.Items.InsertObject(1, LSList[LSID_SrcNot], nil);
+  cbSource.Items.InsertObject(2, LSList[LSID_SrcAny], nil);
 
   if (FFilter.SourceMode <> gmSelected) then begin
     cbSource.ItemIndex := Ord(FFilter.SourceMode);

@@ -1,15 +1,15 @@
-unit GKAssociationEdit; {prepare:fin}
+unit GKAssociationEdit; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Buttons, GedCom551, GKBase;
+  SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons,
+  GedCom551, GKBase, GKLangs;
 
 type
-  TfmAssociationEdit = class(TForm)
+  TfmAssociationEdit = class(TForm, ILocalization)
     btnAccept: TBitBtn;
     btnCancel: TBitBtn;
     Label1: TLabel;
@@ -28,6 +28,8 @@ type
   public
     property Association: TGEDCOMAssociation read FAssociation write SetAssociation;
     property Base: TfmBase read GetBase;
+
+    procedure SetLang();
   end;
 
 implementation
@@ -41,6 +43,8 @@ uses GKEngine, GKRecordSelect, GKMain;
 procedure TfmAssociationEdit.FormCreate(Sender: TObject);
 begin
   EditRelation.Items.Assign(fmGEDKeeper.Options.Relations);
+
+  SetLang();
 end;
 
 procedure TfmAssociationEdit.SetAssociation(const Value: TGEDCOMAssociation);
@@ -49,6 +53,16 @@ begin
 
   EditRelation.Text := FAssociation.Relation;
   EditPerson.Text := GetNameStr(FAssociation.Individual);
+end;
+
+procedure TfmAssociationEdit.SetLang();
+begin
+  btnAccept.Caption := LSList[LSID_DlgAccept];
+  btnCancel.Caption := LSList[LSID_DlgCancel];
+
+  Caption := LSList[LSID_Association];
+  Label1.Caption := LSList[LSID_Relation];
+  Label2.Caption := LSList[LSID_Person];
 end;
 
 procedure TfmAssociationEdit.btnPersonAddClick(Sender: TObject);

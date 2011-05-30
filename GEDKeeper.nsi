@@ -1,16 +1,14 @@
 
 Name "GEDKeeper"
 OutFile "GEDKeeper-Installer.exe"
-
-; The default installation directory
 InstallDir $PROGRAMFILES\GEDKeeper
+XPStyle on
+;ShowInstDetails show
+RequestExecutionLevel admin
 
 ; Registry key to check for directory (so if you install again, it will 
 ; overwrite the old one automatically)
 InstallDirRegKey HKLM "Software\GEDKeeper" "Install_Dir"
-
-; Request application privileges for Windows Vista
-RequestExecutionLevel admin
 
 ; Pages
 Page components
@@ -28,8 +26,21 @@ Section "GEDKeeper (необходимо)"
 
   SetOutPath $INSTDIR
   File "GEDKeeper.exe"
+  File "GEDKeeper.chm"
   File "lua51.dll"
   File "history.txt"
+  File "rus-nobles.ged"
+
+  CreateDirectory "$SMPROGRAMS\GEDKeeper"
+  CreateShortCut "$SMPROGRAMS\GEDKeeper\GEDKeeper.lnk" "$INSTDIR\GEDKeeper.exe" "" "$INSTDIR\GEDKeeper.exe" 0
+  CreateShortCut "$SMPROGRAMS\GEDKeeper\Справка.lnk" "$INSTDIR\GEDKeeper.chm" "" "$INSTDIR\GEDKeeper.chm" 0
+  CreateShortCut "$SMPROGRAMS\GEDKeeper\Благородные фамилии России.lnk" "$INSTDIR\rus-nobles.ged" "" "$INSTDIR\rus-nobles.ged" 0
+  CreateShortCut "$SMPROGRAMS\GEDKeeper\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
+
+  CreateDirectory "$INSTDIR\langs"
+  SetOutPath "$INSTDIR\langs"
+  File ".\langs\readme.txt"
+  File ".\langs\russian.sample"
 
   ; Write the installation path into the registry
   WriteRegStr HKLM SOFTWARE\GEDKeeper "Install_Dir" "$INSTDIR"
@@ -40,33 +51,6 @@ Section "GEDKeeper (необходимо)"
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GEDKeeper" "NoModify" 1
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GEDKeeper" "NoRepair" 1
   WriteUninstaller "uninstall.exe"
-
-  CreateDirectory "$SMPROGRAMS\GEDKeeper"
-  CreateShortCut "$SMPROGRAMS\GEDKeeper\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
-  CreateShortCut "$SMPROGRAMS\GEDKeeper\GEDKeeper.lnk" "$INSTDIR\GEDKeeper.exe" "" "$INSTDIR\GEDKeeper.exe" 0
-SectionEnd
-
-Section "Справка"
-  CreateDirectory "$INSTDIR\help"
-  SetOutPath "$INSTDIR\help"
-
-  File ".\help\GEDKeeper.htm"
-  File ".\help\GKScripts.htm"
-  File ".\help\relations.htm"
-  File ".\help\*.gif"
-  CreateShortCut "$SMPROGRAMS\GEDKeeper\Справка.lnk" "$INSTDIR\help\GEDKeeper.htm" "" "$INSTDIR\help\GEDKeeper.htm" 0
-
-  File ".\help\genres.htm"
-  CreateShortCut "$SMPROGRAMS\GEDKeeper\Ресурсы в Интернете.lnk" "$INSTDIR\help\genres.htm" "" "$INSTDIR\help\genres.htm" 0
-
-  File ".\help\faq.htm"
-  CreateShortCut "$SMPROGRAMS\GEDKeeper\Часто задаваемые вопросы.lnk" "$INSTDIR\help\faq.htm" "" "$INSTDIR\help\faq.htm" 0
-
-  File ".\help\ged551-5.pdf"
-  CreateShortCut "$SMPROGRAMS\GEDKeeper\Формат GEDCOM.lnk" "$INSTDIR\help\ged551-5.pdf" "" "$INSTDIR\help\ged551-5.pdf" 0
-
-  File ".\help\rus-nobles.ged"
-  CreateShortCut "$SMPROGRAMS\GEDKeeper\Благородные фамилии России.lnk" "$INSTDIR\help\rus-nobles.ged" "" "$INSTDIR\help\rus-nobles.ged" 0
 SectionEnd
 
 Section "Примеры скриптов"
@@ -90,6 +74,20 @@ Section "Регистрация в системе"
   WriteRegStr HKCR "GEDCOM.File\shell\open\command" "" '$INSTDIR\GEDKeeper.exe "%1"'
 SectionEnd
 
+SectionGroup /e "Языки" 
+
+Section "English"
+  SetOutPath "$INSTDIR\langs"
+  File ".\langs\english.lng"
+SectionEnd
+
+Section "Украинский"
+  SetOutPath "$INSTDIR\langs"
+  File ".\langs\ukrainian.lng"
+SectionEnd
+
+SectionGroupEnd
+
 Section "Uninstall"
   ; Remove registry keys
   DeleteRegKey HKCR ".ged"
@@ -101,18 +99,21 @@ Section "Uninstall"
 
   ; Remove files and uninstaller
   Delete $INSTDIR\GEDKeeper.exe
-  Delete $INSTDIR\history.txt
+  Delete $INSTDIR\GEDKeeper.chm
   Delete $INSTDIR\lua51.dll
+  Delete $INSTDIR\history.txt
+  Delete $INSTDIR\rus-nobles.ged
+
   Delete $INSTDIR\uninstall.exe
 
   Delete "$INSTDIR\samples\*.*"
   RMDir "$INSTDIR\samples"
 
-  Delete "$INSTDIR\help\*.*"
-  RMDir "$INSTDIR\help"
-
   Delete "$INSTDIR\scripts\*.lua"
   RMDir "$INSTDIR\scripts"
+
+  Delete "$INSTDIR\langs\*.*"
+  RMDir "$INSTDIR\langs"
 
   ; Remove shortcuts, if any
   Delete "$SMPROGRAMS\GEDKeeper\*.*"

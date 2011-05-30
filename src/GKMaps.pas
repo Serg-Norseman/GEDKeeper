@@ -1,4 +1,4 @@
-unit GKMaps; {prepare:fin}
+unit GKMaps; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,7 +6,8 @@ interface
 
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms, StdCtrls, Buttons,
-  ExtCtrls, ComCtrls, Dialogs, Contnrs, GedCom551, GKEngine, GKMapBrowser;
+  ExtCtrls, ComCtrls, Dialogs, Contnrs,
+  GedCom551, GKEngine, GKMapBrowser, GKLangs;
 
 type
   TPlaceRef = class
@@ -25,7 +26,7 @@ type
     destructor Destroy; override;
   end;
 
-  TfmMaps = class(TForm)
+  TfmMaps = class(TForm, ILocalization)
     StatusBar1: TStatusBar;
     Splitter1: TSplitter;
     PageControl1: TPageControl;
@@ -42,6 +43,7 @@ type
     btnSaveImage: TButton;
     radTotal: TRadioButton;
     radSelected: TRadioButton;
+    chkLinesVisible: TCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure btnSelectPlacesClick(Sender: TObject);
@@ -64,6 +66,8 @@ type
   public
     property SelectedPersons: TList read FSelectedPersons write FSelectedPersons;
     property Tree: TGEDCOMTree read FTree write FTree;
+
+    procedure SetLang();
   end;
 
 var
@@ -106,15 +110,31 @@ begin
   FMapPoints := TObjectList.Create(True);
   FPlaces := TObjectList.Create(True);
 
-  FBaseRoot := TreePlaces.Items.AddChild(nil, 'Места');
+  FBaseRoot := TreePlaces.Items.AddChild(nil, LSList[LSID_RPLocations]);
 
   radTotal.Checked := True;
+
+  SetLang();
 end;
 
 procedure TfmMaps.FormDestroy(Sender: TObject);
 begin
   FPlaces.Free;
   FMapPoints.Free;
+end;
+
+procedure TfmMaps.SetLang();
+begin
+  Caption := LSList[LSID_MIMap];
+  tsPlaces.Caption := LSList[LSID_RPLocations];
+  GroupBox2.Caption := LSList[LSID_MapSelection];
+  radTotal.Caption := LSList[LSID_MapSelOnAll];
+  chkBirth.Caption := LSList[LSID_MSBirthPlaces];
+  chkDeath.Caption := LSList[LSID_MSDeathPlaces];
+  chkResidence.Caption := LSList[LSID_MSResiPlace];
+  radSelected.Caption := LSList[LSID_MapSelOnSelected];
+  btnSaveImage.Caption := LSList[LSID_SaveImage];
+  btnSelectPlaces.Caption := LSList[LSID_Show];
 end;
 
 procedure TfmMaps.PreparePointsList(aPoints: TObjectList; ByPerson: Boolean = False);
@@ -130,7 +150,7 @@ begin
       pt := TGMapPoint(aPoints[i]);
 
       stHint := pt.Hint;
-      if ByPerson then stHint := stHint + ' [' + DateToStr(pt.Date) + ']';      
+      if ByPerson then stHint := stHint + ' [' + DateToStr(pt.Date) + ']';
 
       FMapBrowser.AddPoint(pt.Latitude, pt.Longitude, stHint);
     end;
@@ -147,6 +167,7 @@ begin
   chkDeath.Enabled := radTotal.Checked;
   chkResidence.Enabled := radTotal.Checked;
   ComboPersons.Enabled := radSelected.Checked;
+  chkLinesVisible.Enabled := radSelected.Checked;
 end;
 
 procedure TfmMaps.PlacesLoad();
@@ -229,13 +250,13 @@ var
 begin
   ComboPersons.Items.BeginUpdate;
   TreePlaces.Items.BeginUpdate;
-  ProgressInit(FTree.RecordsCount, 'Загрузка и поиск мест');
+  ProgressInit(FTree.RecordsCount, LSList[LSID_LoadingLocations]);
   try
     FPlaces.Clear;
 
     ComboPersons.Clear;
     ComboPersons.Sorted := False;
-    ComboPersons.Items.AddObject('( не выбран )', nil);
+    ComboPersons.Items.AddObject(LSList[LSID_NotSelected], nil);
 
     for i := 0 to FTree.RecordsCount - 1 do begin
       rec := FTree.Records[i];
@@ -330,7 +351,7 @@ begin
     then ind := TGEDCOMIndividualRecord(ComboPersons.Items.Objects[ComboPersons.ItemIndex]);
   end;
 
-  FMapBrowser.ShowLines := (ind <> nil);
+  FMapBrowser.ShowLines := (ind <> nil) and (chkLinesVisible.Checked);
 
   FMapPoints.Clear;
   for i := 0 to FPlaces.Count - 1 do begin

@@ -23,7 +23,6 @@ object fmTaskEdit: TfmTaskEdit
     Width = 481
     Height = 97
     Align = alTop
-    Caption = #1044#1072#1085#1085#1099#1077' '#1079#1072#1076#1072#1095#1080
     TabOrder = 1
     object Label2: TLabel
       Left = 8

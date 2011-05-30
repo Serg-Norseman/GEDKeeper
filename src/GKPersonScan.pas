@@ -1,4 +1,4 @@
-unit GKPersonScan; {prepare:fin}
+unit GKPersonScan; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,12 +6,12 @@ interface
 
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls,
-  Mask, Buttons, ExtCtrls, GKBase, ComCtrls, Grids;
+  Mask, Buttons, ExtCtrls, GKBase, ComCtrls, Grids, GKLangs;
 
 type
-  TfmPersonScan = class(TForm)
+  TfmPersonScan = class(TForm, ILocalization)
     btnParse: TBitBtn;
-    btnCancel: TBitBtn;
+    btnClose: TBitBtn;
     PageControl1: TPageControl;
     tsSimpleInput: TTabSheet;
     tsSourceInput: TTabSheet;
@@ -75,6 +75,8 @@ type
     procedure ParseSource();
   public
     property Base: TfmBase read GetBase;
+
+    procedure SetLang();
   end;
 
 implementation
@@ -88,8 +90,9 @@ type
     plNone, plPerson, plFather, plMother, plGodparent, plSpouse, plChild);
 
 const
-  PersonLinks: array [TPersonLink] of string = (
-    '', 'Лицо', 'Отец', 'Мать', 'Крестный', 'Супруг(-а)', 'Дочь/Сын'
+  PersonLinks: array [TPersonLink] of LSID = (
+    LSID_RK_Unk, LSID_PLPerson, LSID_Father, LSID_Mother,
+    LSID_PLGodparent, LSID_Spouse, LSID_Child
   );
 
 function GetLinkByName(const aName: string): TPersonLink;
@@ -97,7 +100,7 @@ var
   pl: TPersonLink;
 begin
   for pl := plPerson to High(TPersonLink) do
-    if (PersonLinks[pl] = aName) then begin
+    if (LSList[PersonLinks[pl]] = aName) then begin
       Result := pl;
       Exit;
     end;
@@ -106,6 +109,63 @@ begin
 end;
 
 { TfmPersonScan }
+
+procedure TfmPersonScan.FormCreate(Sender: TObject);
+var
+  pl: TPersonLink;
+begin
+  FSourcesList := TStringList.Create();
+
+  // simpleparse init
+  InitSimpleControls();
+
+  // sourceparse init
+  InitGrid();
+  InitSourceControls();
+
+  for pl := plPerson to High(TPersonLink) do cbPersonLink.Items.Add(LSList[PersonLinks[pl]]);
+
+  SetLang();
+end;
+
+procedure TfmPersonScan.FormDestroy(Sender: TObject);
+begin
+  FSourcesList.Free;
+end;
+
+procedure TfmPersonScan.SetLang();
+begin
+  btnParse.Caption := LSList[LSID_DlgAppend];
+  btnClose.Caption := LSList[LSID_DlgClose];
+
+  Caption := LSList[LSID_MIStreamInput];
+
+  tsSimpleInput.Caption := LSList[LSID_InputSimple];
+
+  btnMale.Caption := LSList[LSID_SexM][1];
+  btnFemale.Caption := LSList[LSID_SexF][1];
+  Label1.Caption := LSList[LSID_FullName];
+  CheckBirth.Caption := LSList[LSID_Birth];
+  Label3.Caption := LSList[LSID_BirthDate];
+  Label5.Caption := LSList[LSID_BirthPlace];
+  CheckDeath.Caption := LSList[LSID_Death];
+  Label6.Caption := LSList[LSID_DeathDate];
+  Label7.Caption := LSList[LSID_DeathPlace];
+  Label2.Caption := LSList[LSID_Note];
+
+  tsSourceInput.Caption := LSList[LSID_InputSource];
+
+  rgSourceKind.Caption := LSList[LSID_SourceKind];
+  rgSourceKind.Items[0] := LSList[LSID_SK_Rev];
+  rgSourceKind.Items[0] := LSList[LSID_SK_Met];
+  Label4.Caption := LSList[LSID_Source];
+  Label8.Caption := LSList[LSID_Page];
+  Label9.Caption := LSList[LSID_Year];
+  Label10.Caption := LSList[LSID_Settlement];
+  gbMetrics.Caption := LSList[LSID_SK_Met];
+  Label11.Caption := LSList[LSID_EventDate];
+  Label12.Caption := LSList[LSID_EventType];
+end;
 
 procedure TfmPersonScan.InitSimpleControls();
 begin
@@ -143,12 +203,12 @@ end;
 
 procedure TfmPersonScan.InitGrid();
 begin
-  sgData.Cells[0, 0] := 'Связь';
-  sgData.Cells[1, 0] := 'Имя';
-  sgData.Cells[2, 0] := 'Отчество';
-  sgData.Cells[3, 0] := 'Фамилия';
-  sgData.Cells[4, 0] := 'Возраст';
-  sgData.Cells[5, 0] := 'Примечание';
+  sgData.Cells[0, 0] := LSList[LSID_Join];
+  sgData.Cells[1, 0] := LSList[LSID_Name];
+  sgData.Cells[2, 0] := LSList[LSID_Patronymic];
+  sgData.Cells[3, 0] := LSList[LSID_Surname];
+  sgData.Cells[4, 0] := LSList[LSID_Age];
+  sgData.Cells[5, 0] := LSList[LSID_Comment];
 
   sgData.DefaultRowHeight := sgData.Canvas.TextHeight('A') + 7;
   sgData.ColWidths[4] := 60;
@@ -165,7 +225,7 @@ begin
   tmp := AnsiLowerCase(EditName.Text);
   tokCount := GetTokensCount(tmp, ' ');
   if (tokCount < 3) then begin
-    MessageDlg('Количество компонентов имени меньше трех.', mtError, [mbOk], 0);
+    MessageDlg(LSList[LSID_NameInvalid], mtError, [mbOk], 0);
     Exit;
   end;
 
@@ -222,7 +282,7 @@ procedure TfmPersonScan.ParseSource();
   function CheckMain(aMain: TGEDCOMIndividualRecord): Boolean;
   begin
     Result := (aMain <> nil);
-    if not(Result) then raise Exception.Create('Базовая персона ("Лицо") не определена первой');
+    if not(Result) then raise Exception.Create(LSList[LSID_BasePersonInvalid]);
   end;
 
 var
@@ -239,7 +299,7 @@ begin
   src_name := cbSource.Text;
   src_page := edPage.Text;
   if not(IsDigits(edSourceYear.Text)) then begin
-    MessageDlg('Год источника задан неверно', mtError, [mbOk], 0);
+    MessageDlg(LSList[LSID_SourceYearInvalid], mtError, [mbOk], 0);
     Exit;
   end else src_year := StrToInt(edSourceYear.Text);
   place := edPlace.Text;
@@ -321,7 +381,7 @@ begin
 
           plGodparent: begin
             CheckMain(iMain);
-            Base.Engine.AddAssociation(iMain, 'крестный', iRec);
+            Base.Engine.AddAssociation(iMain, LSList[LSID_PLGodparent], iRec);
           end;
 
           plSpouse: begin
@@ -383,27 +443,6 @@ begin
   end;
 end;
 
-procedure TfmPersonScan.FormCreate(Sender: TObject);
-var
-  pl: TPersonLink;
-begin
-  FSourcesList := TStringList.Create();
-
-  // simpleparse init
-  InitSimpleControls();
-
-  // sourceparse init
-  InitGrid();
-  InitSourceControls();
-
-  for pl := plPerson to High(TPersonLink) do cbPersonLink.Items.Add(PersonLinks[pl]);
-end;
-
-procedure TfmPersonScan.FormDestroy(Sender: TObject);
-begin
-  FSourcesList.Free;
-end;
-
 procedure TfmPersonScan.sgDataSelectCell(Sender: TObject; ACol,
   ARow: Integer; var CanSelect: Boolean);
 var
@@ -453,7 +492,7 @@ begin
   end;
 
   if not(Result)
-  then MessageDlg('Значение неверно', mtError, [mbOk], 0);
+  then MessageDlg(LSList[LSID_ValueInvalid], mtError, [mbOk], 0);
 end;
 
 procedure TfmPersonScan.cbPersonLinkKeyDown(Sender: TObject;

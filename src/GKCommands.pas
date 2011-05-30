@@ -1,4 +1,4 @@
-unit GKCommands;
+unit GKCommands; {trans:fin}
 
 interface
 

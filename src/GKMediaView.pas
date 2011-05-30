@@ -1,4 +1,4 @@
-unit GKMediaView; {prepare:fin}
+unit GKMediaView; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,11 +6,12 @@ interface
 
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls,
-  ComCtrls, ToolWin, ExtCtrls, GedCom551, GKBase;
+  ComCtrls, ToolWin, ExtCtrls, GedCom551, GKBase, GKLangs;
 
 type
-  TfmMediaView = class(TForm)
+  TfmMediaView = class(TForm, ILocalization)
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormCreate(Sender: TObject);
   private
     FFileRef: TGEDCOMFileReferenceWithTitle;
     FExtern: Boolean;
@@ -21,6 +22,8 @@ type
     property Base: TfmBase read GetBase;
     property Extern: Boolean read FExtern;
     property FileRef: TGEDCOMFileReferenceWithTitle read FFileRef write SetFileRef;
+
+    procedure SetLang();
   end;
 
 implementation
@@ -30,6 +33,11 @@ uses
   {$IFNDEF DELPHI_NET}, GraphicEx, SHDocVw{$ENDIF};
 
 {$R *.dfm}
+
+procedure TfmMediaView.FormCreate(Sender: TObject);
+begin
+  SetLang();
+end;
 
 procedure TfmMediaView.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
@@ -54,12 +62,13 @@ begin
   fs := nil;
 
   FExtern := False;
+  Caption := FFileRef.Title;
 
   case FFileRef.MultimediaFormat of
     mfNone, mfOLE, mfUnknown: ;
 
     mfBMP, mfGIF, mfJPG, mfPCX, mfTIF, mfTGA, mfPNG: begin
-      Base.MediaLoad(FFileRef.StringValue, target_fn);
+      Base.Engine.MediaLoad(FFileRef.StringValue, target_fn);
 
       with TImage.Create(Self) do begin
         Parent := Self;
@@ -74,13 +83,13 @@ begin
 
     mfWAV, mfAVI, mfMPG: begin
       FExtern := True;
-      Base.MediaLoad(FFileRef.StringValue, target_fn);
+      Base.Engine.MediaLoad(FFileRef.StringValue, target_fn);
 
       LoadExtFile(target_fn);
     end;
 
     mfTXT: begin
-      Base.MediaLoad(FFileRef.StringValue, fs);
+      Base.Engine.MediaLoad(FFileRef.StringValue, fs);
 
       with TMemo.Create(Self) do begin
         Parent := Self;
@@ -92,7 +101,7 @@ begin
     end;
 
     mfRTF: begin
-      Base.MediaLoad(FFileRef.StringValue, fs);
+      Base.Engine.MediaLoad(FFileRef.StringValue, fs);
 
       with TRichEdit.Create(Self) do begin
         Parent := Self;
@@ -105,7 +114,7 @@ begin
 
     mfHTM: begin
       {$IFNDEF DELPHI_NET}
-      Base.MediaLoad(FFileRef.StringValue, target_fn);
+      Base.Engine.MediaLoad(FFileRef.StringValue, target_fn);
 
       wb := TWebBrowser.Create(Self);
       TWinControl(wb).Parent := Self;
@@ -116,6 +125,11 @@ begin
   end;
 
   if Assigned(fs) then fs.Free;
+end;
+
+procedure TfmMediaView.SetLang();
+begin
+  // dummy
 end;
 
 end.

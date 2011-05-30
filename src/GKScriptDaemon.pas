@@ -1,4 +1,4 @@
-unit GKScriptDaemon; {prepare:fin}
+unit GKScriptDaemon; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,10 +6,10 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, ExtCtrls, StdCtrls, ComCtrls,
-  ToolWin, GKBase;
+  ToolWin, GKBase, GKLangs;
 
 type
-  TfmScriptDaemon = class(TForm)
+  TfmScriptDaemon = class(TForm, ILocalization)
     ToolBar1: TToolBar;
     btnLoadScript: TToolButton;
     ToolButton2: TToolButton;
@@ -42,6 +42,8 @@ type
     property Base: TfmBase read GetBase;
     property FileName: string read FFileName write SetFileName;
     property Modified: Boolean read FModified write SetModified;
+
+    procedure SetLang();
   end;
 
 var
@@ -55,11 +57,10 @@ uses
   {$IFDEF DELPHI_NET} System.IO, {$ENDIF}
   GKUtils, GKEngineAPI, GKMain;
 
-{ TfmScriptDaemon }
-
 procedure TfmScriptDaemon.FormCreate(Sender: TObject);
 begin
   btnNewScriptClick(nil);
+  SetLang();
 end;
 
 procedure TfmScriptDaemon.FormDestroy(Sender: TObject);
@@ -90,6 +91,11 @@ procedure TfmScriptDaemon.SetFileName(const Value: string);
 begin
   FFileName := Value;
   SetTitle();
+end;
+
+procedure TfmScriptDaemon.SetLang();
+begin
+
 end;
 
 procedure TfmScriptDaemon.SetModified(const Value: Boolean);
@@ -149,7 +155,7 @@ begin
   Result := True;
 
   if Modified then begin
-    case MessageDlg('Файл изменен. Сохранить?', mtWarning, [mbYes, mbNo, mbCancel], 0) of
+    case MessageDlg(LSList[LSID_FileSaveQuery], mtWarning, [mbYes, mbNo, mbCancel], 0) of
       mrYes: btnSaveScriptClick(nil);
       mrNo: {dummy};
       mrCancel: Result := False;

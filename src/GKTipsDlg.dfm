@@ -119,7 +119,7 @@ object fmTipsDialog: TfmTipsDialog
     TabOrder = 1
     OnClick = NextTipBtnClick
   end
-  object CancelBtn: TButton
+  object btnClose: TButton
     Left = 296
     Top = 216
     Width = 75
@@ -127,7 +127,7 @@ object fmTipsDialog: TfmTipsDialog
     Cancel = True
     Caption = #1047#1072#1082#1088#1099#1090#1100
     TabOrder = 2
-    OnClick = CancelBtnClick
+    OnClick = btnCloseClick
   end
   object TipWindow: TMemo
     Left = 98

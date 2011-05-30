@@ -1,4 +1,4 @@
-unit GKResearchEdit; {prepare:fin}
+unit GKResearchEdit; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,10 +6,10 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons, ComCtrls,
-  ExtCtrls, GedCom551, GKBase, GKEngine, Mask, GKCtrls, GKLists;
+  ExtCtrls, GedCom551, GKBase, GKEngine, Mask, GKCtrls, GKLists, GKLangs;
 
 type
-  TfmResearchEdit = class(TForm)
+  TfmResearchEdit = class(TForm, ILocalization)
     GroupBox1: TGroupBox;
     EditName: TEdit;
     Label1: TLabel;
@@ -49,6 +49,8 @@ type
   public
     property Base: TfmBase read GetBase;
     property Research: TGEDCOMResearchRecord read FResearch write SetResearch;
+
+    procedure SetLang();
   end;
 
 implementation
@@ -58,43 +60,63 @@ uses
 
 {$R *.dfm}
 
-{ TfmResearchEdit }
-
 procedure TfmResearchEdit.FormCreate(Sender: TObject);
 var
   rp: TResearchPriority;
   rs: TResearchStatus;
 begin
   for rp := Low(TResearchPriority) to High(TResearchPriority) do
-    EditPriority.Items.Add(PriorityNames[rp]);
+    EditPriority.Items.Add(LSList[PriorityNames[rp]]);
 
   for rs := Low(TResearchStatus) to High(TResearchStatus) do
-    EditStatus.Items.Add(StatusNames[rs]);
+    EditStatus.Items.Add(LSList[StatusNames[rs]]);
 
   FTasksList := TSheetList.Create(SheetTasks);
   FTasksList.OnModify := ListModify;
   FTasksList.Buttons := [lbAdd..lbJump];
-  AddListColumn(FTasksList.List, 'Цель', 250);
-  AddListColumn(FTasksList.List, 'Приоритет', 90);
-  AddListColumn(FTasksList.List, 'Запущено', 90);
-  AddListColumn(FTasksList.List, 'Завершено', 90);
+  AddListColumn(FTasksList.List, LSList[LSID_Goal], 250);
+  AddListColumn(FTasksList.List, LSList[LSID_Priority], 90);
+  AddListColumn(FTasksList.List, LSList[LSID_StartDate], 90);
+  AddListColumn(FTasksList.List, LSList[LSID_StopDate], 90);
 
   FCommunicationsList := TSheetList.Create(SheetCommunications);
   FCommunicationsList.OnModify := ListModify;
   FCommunicationsList.Buttons := [lbAdd..lbJump];
-  AddListColumn(FCommunicationsList.List, 'Тема', 150);
-  AddListColumn(FCommunicationsList.List, 'Корреспондент', 150);
-  AddListColumn(FCommunicationsList.List, 'Тип', 90);
-  AddListColumn(FCommunicationsList.List, 'Дата', 90);
+  AddListColumn(FCommunicationsList.List, LSList[LSID_Theme], 150);
+  AddListColumn(FCommunicationsList.List, LSList[LSID_Corresponder], 150);
+  AddListColumn(FCommunicationsList.List, LSList[LSID_Type], 90);
+  AddListColumn(FCommunicationsList.List, LSList[LSID_Date], 90);
 
   FGroupsList := TSheetList.Create(SheetGroups);
   FGroupsList.OnModify := ListModify;
   FGroupsList.Buttons := [lbAdd..lbJump];
-  AddListColumn(FGroupsList.List, 'Группа', 350);
+  AddListColumn(FGroupsList.List, LSList[LSID_Group], 350);
 
   FNotesList := TSheetList.Create(SheetNotes, lmBox);
   FNotesList.OnModify := ListModify;
   Base.SetupRecNotesList(FNotesList);
+
+  SetLang();
+end;
+
+procedure TfmResearchEdit.SetLang();
+begin
+  btnAccept.Caption := LSList[LSID_DlgAccept];
+  btnCancel.Caption := LSList[LSID_DlgCancel];
+
+  Caption := LSList[LSID_WinResearchEdit];
+
+  SheetTasks.Caption := LSList[LSID_RPTasks];
+  SheetCommunications.Caption := LSList[LSID_RPCommunications];
+  SheetGroups.Caption := LSList[LSID_RPGroups];
+  SheetNotes.Caption := LSList[LSID_RPNotes];
+
+  Label1.Caption := LSList[LSID_Title];
+  Label2.Caption := LSList[LSID_Priority];
+  Label3.Caption := LSList[LSID_Status];
+  Label6.Caption := LSList[LSID_Percent];
+  Label4.Caption := LSList[LSID_StartDate];
+  Label5.Caption := LSList[LSID_StopDate];
 end;
 
 procedure TfmResearchEdit.ListsRefresh();
@@ -115,7 +137,7 @@ begin
 
       item := Items.Add();
       item.Caption := GetTaskGoalStr(Base.Tree, task);
-      item.SubItems.Add(PriorityNames[task.Priority]);
+      item.SubItems.Add(LSList[PriorityNames[task.Priority]]);
       item.SubItems.Add(GEDCOMDateToStr(task.StartDate, fmGEDKeeper.Options.DefDateFormat));
       item.SubItems.Add(GEDCOMDateToStr(task.StopDate, fmGEDKeeper.Options.DefDateFormat));
       item.Data := task;
@@ -132,7 +154,7 @@ begin
       item := Items.Add();
       item.Caption := corr.Name;
       item.SubItems.Add(GetCorresponderStr(Base.Tree, corr, False));
-      item.SubItems.Add(CommunicationNames[corr.CommunicationType]);
+      item.SubItems.Add(LSList[CommunicationNames[corr.CommunicationType]]);
       item.SubItems.Add(GEDCOMDateToStr(corr.Date, fmGEDKeeper.Options.DefDateFormat));
       item.Data := corr;
     end;
@@ -226,7 +248,7 @@ begin
       raDelete: begin
         task := TGEDCOMTaskRecord(ItemData);
 
-        if (task = nil) or (MessageDlg('Удалить ссылку на задачу?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+        if (task = nil) or (MessageDlg(LSList[LSID_DetachTaskQuery], mtConfirmation, [mbNo, mbYes], 0) = mrNo)
         then Exit;
 
         Base.Engine.RemoveResearchTask(FResearch, task);
@@ -260,7 +282,7 @@ begin
       raDelete: begin
         comm := TGEDCOMCommunicationRecord(ItemData);
 
-        if (comm = nil) or (MessageDlg('Удалить ссылку на корреспонденцию?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+        if (comm = nil) or (MessageDlg(LSList[LSID_DetachCommunicationQuery], mtConfirmation, [mbNo, mbYes], 0) = mrNo)
         then Exit;
 
         Base.Engine.RemoveResearchComm(FResearch, comm);
@@ -289,7 +311,7 @@ begin
       raDelete: begin
         group := TGEDCOMGroupRecord(ItemData);
 
-        if (MessageDlg('Удалить ссылку на группу?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+        if (MessageDlg(LSList[LSID_DetachGroupQuery], mtConfirmation, [mbNo, mbYes], 0) = mrNo)
         then Exit;
 
         Base.Engine.RemoveResearchGroup(FResearch, group);

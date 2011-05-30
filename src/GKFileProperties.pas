@@ -1,4 +1,4 @@
-unit GKFileProperties; {prepare:fin}
+unit GKFileProperties; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,10 +6,10 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, StdCtrls, Buttons, ComCtrls, 
-  GKBase;
+  GKBase, GKLangs;
 
 type
-  TfmFileProperties = class(TForm)
+  TfmFileProperties = class(TForm, ILocalization)
     btnAccept: TBitBtn;
     btnCancel: TBitBtn;
     PageControl1: TPageControl;
@@ -31,6 +31,8 @@ type
     procedure UpdateControls();
   public
     property Base: TfmBase read GetBase;
+
+    procedure SetLang();
   end;
 
 implementation
@@ -38,6 +40,28 @@ implementation
 uses GedCom551, GKMain, GKEngine;
 
 {$R *.dfm}
+
+procedure TfmFileProperties.FormCreate(Sender: TObject);
+begin
+  UpdateControls();
+
+  SetLang();
+end;
+
+procedure TfmFileProperties.SetLang();
+begin
+  btnAccept.Caption := LSList[LSID_DlgAccept];
+  btnCancel.Caption := LSList[LSID_DlgCancel];
+
+  SheetAuthor.Caption := LSList[LSID_Author];
+  Label1.Caption := LSList[LSID_Name];
+  Label2.Caption := LSList[LSID_Address];
+  Label3.Caption := LSList[LSID_Telephone];
+
+  SheetAdvanced.Caption := LSList[LSID_Advanced];
+  CheckAdvanced.Caption := LSList[LSID_AdvancedSupport];
+  Label4.Caption := LSList[LSID_ExtName];
+end;
 
 procedure TfmFileProperties.UpdateControls();
 var
@@ -50,7 +74,7 @@ begin
   EditTel.Text := submitter.Address.PhoneNumbers[0];
 
   CheckAdvanced.Checked := Base.Engine.IsAdvanced;
-  edExtName.Text := Base.GetSpecExtName();
+  edExtName.Text := Base.Engine.GetSpecExtName();
 end;
 
 procedure TfmFileProperties.btnAcceptClick(Sender: TObject);
@@ -72,11 +96,6 @@ end;
 function TfmFileProperties.GetBase(): TfmBase;
 begin
   Result := TfmBase(Owner);
-end;
-
-procedure TfmFileProperties.FormCreate(Sender: TObject);
-begin
-  UpdateControls();
 end;
 
 end.

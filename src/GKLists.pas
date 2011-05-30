@@ -1,12 +1,12 @@
-unit GKLists;
+unit GKLists; {trans:fin}
 
 {$I GEDKeeper.inc}
 
 interface
 
 uses
-  Types, Windows, Classes, Graphics, Controls, ComCtrls, ActnList, Menus,
-  StdCtrls, GedCom551, GKEngine, GKCommon, GKCtrls;
+  Types, Windows, Messages, Classes, Graphics, Controls, ComCtrls, ActnList,
+  Menus, StdCtrls, Contnrs, GedCom551, GKEngine, GKCommon, GKCtrls;
 
 type
   TModifyEvent = procedure (Sender: TObject; ItemData: TObject; Action: TRecAction) of object;
@@ -141,12 +141,15 @@ type
     procedure InitFilter(aFilter: TPersonsFilter); virtual;
     procedure UpdateItem(aItem: TListItem; isMain: Boolean); virtual; abstract;
     procedure UpdateColumns(aList: TGKListView; isMain: Boolean); virtual; abstract;
+    procedure GetRow(aRec: TGEDCOMRecord; isMain: Boolean; var aRow: string); virtual;
   end;
 
-  TColumnsMap = array [Byte] of record
+  TColRec = record
     col_type: Byte;
     col_subtype: Byte;
   end;
+  
+  TColumnsMap = array [Byte] of TColRec;
 
   TIndividualListMan = class(TListManager)
   private
@@ -169,6 +172,7 @@ type
     function  CheckFilter(aFilter: TPersonsFilter; aShieldState: TShieldState): Boolean; override;
     procedure Fetch(aRec: TGEDCOMRecord); override;
     function  GetColumnValue(aColIndex: Integer; isMain: Boolean): string; override;
+    procedure GetRow(aRec: TGEDCOMRecord; isMain: Boolean; var aRow: string); override;
     procedure InitFilter(aFilter: TPersonsFilter); override;
     procedure UpdateItem(aItem: TListItem; isMain: Boolean); override;
     procedure UpdateColumns(aList: TGKListView; isMain: Boolean); override;
@@ -184,6 +188,7 @@ type
     function  CheckFilter(aFilter: TPersonsFilter; aShieldState: TShieldState): Boolean; override;
     procedure Fetch(aRec: TGEDCOMRecord); override;
     function  GetColumnValue(aColIndex: Integer; isMain: Boolean): string; override;
+    procedure GetRow(aRec: TGEDCOMRecord; isMain: Boolean; var aRow: string); override;
     procedure UpdateItem(aItem: TListItem; isMain: Boolean); override;
     procedure UpdateColumns(aList: TGKListView; isMain: Boolean); override;
   end;
@@ -195,6 +200,7 @@ type
     function  CheckFilter(aFilter: TPersonsFilter; aShieldState: TShieldState): Boolean; override;
     procedure Fetch(aRec: TGEDCOMRecord); override;
     function  GetColumnValue(aColIndex: Integer; isMain: Boolean): string; override;
+    procedure GetRow(aRec: TGEDCOMRecord; isMain: Boolean; var aRow: string); override;
     procedure UpdateItem(aItem: TListItem; isMain: Boolean); override;
     procedure UpdateColumns(aList: TGKListView; isMain: Boolean); override;
   end;
@@ -206,6 +212,7 @@ type
     function  CheckFilter(aFilter: TPersonsFilter; aShieldState: TShieldState): Boolean; override;
     procedure Fetch(aRec: TGEDCOMRecord); override;
     function  GetColumnValue(aColIndex: Integer; isMain: Boolean): string; override;
+    procedure GetRow(aRec: TGEDCOMRecord; isMain: Boolean; var aRow: string); override;
     procedure UpdateItem(aItem: TListItem; isMain: Boolean); override;
     procedure UpdateColumns(aList: TGKListView; isMain: Boolean); override;
   end;
@@ -217,6 +224,7 @@ type
     function  CheckFilter(aFilter: TPersonsFilter; aShieldState: TShieldState): Boolean; override;
     procedure Fetch(aRec: TGEDCOMRecord); override;
     function  GetColumnValue(aColIndex: Integer; isMain: Boolean): string; override;
+    procedure GetRow(aRec: TGEDCOMRecord; isMain: Boolean; var aRow: string); override;
     procedure UpdateItem(aItem: TListItem; isMain: Boolean); override;
     procedure UpdateColumns(aList: TGKListView; isMain: Boolean); override;
   end;
@@ -228,6 +236,7 @@ type
     function  CheckFilter(aFilter: TPersonsFilter; aShieldState: TShieldState): Boolean; override;
     procedure Fetch(aRec: TGEDCOMRecord); override;
     function  GetColumnValue(aColIndex: Integer; isMain: Boolean): string; override;
+    procedure GetRow(aRec: TGEDCOMRecord; isMain: Boolean; var aRow: string); override;
     procedure UpdateItem(aItem: TListItem; isMain: Boolean); override;
     procedure UpdateColumns(aList: TGKListView; isMain: Boolean); override;
   end;
@@ -239,6 +248,7 @@ type
     function  CheckFilter(aFilter: TPersonsFilter; aShieldState: TShieldState): Boolean; override;
     procedure Fetch(aRec: TGEDCOMRecord); override;
     function  GetColumnValue(aColIndex: Integer; isMain: Boolean): string; override;
+    procedure GetRow(aRec: TGEDCOMRecord; isMain: Boolean; var aRow: string); override;
     procedure UpdateItem(aItem: TListItem; isMain: Boolean); override;
     procedure UpdateColumns(aList: TGKListView; isMain: Boolean); override;
   end;
@@ -250,6 +260,7 @@ type
     function  CheckFilter(aFilter: TPersonsFilter; aShieldState: TShieldState): Boolean; override;
     procedure Fetch(aRec: TGEDCOMRecord); override;
     function  GetColumnValue(aColIndex: Integer; isMain: Boolean): string; override;
+    procedure GetRow(aRec: TGEDCOMRecord; isMain: Boolean; var aRow: string); override;
     procedure UpdateItem(aItem: TListItem; isMain: Boolean); override;
     procedure UpdateColumns(aList: TGKListView; isMain: Boolean); override;
   end;
@@ -261,6 +272,7 @@ type
     function  CheckFilter(aFilter: TPersonsFilter; aShieldState: TShieldState): Boolean; override;
     procedure Fetch(aRec: TGEDCOMRecord); override;
     function  GetColumnValue(aColIndex: Integer; isMain: Boolean): string; override;
+    procedure GetRow(aRec: TGEDCOMRecord; isMain: Boolean; var aRow: string); override;
     procedure UpdateItem(aItem: TListItem; isMain: Boolean); override;
     procedure UpdateColumns(aList: TGKListView; isMain: Boolean); override;
   end;
@@ -272,6 +284,7 @@ type
     function  CheckFilter(aFilter: TPersonsFilter; aShieldState: TShieldState): Boolean; override;
     procedure Fetch(aRec: TGEDCOMRecord); override;
     function  GetColumnValue(aColIndex: Integer; isMain: Boolean): string; override;
+    procedure GetRow(aRec: TGEDCOMRecord; isMain: Boolean; var aRow: string); override;
     procedure UpdateItem(aItem: TListItem; isMain: Boolean); override;
     procedure UpdateColumns(aList: TGKListView; isMain: Boolean); override;
   end;
@@ -283,6 +296,7 @@ type
     function  CheckFilter(aFilter: TPersonsFilter; aShieldState: TShieldState): Boolean; override;
     procedure Fetch(aRec: TGEDCOMRecord); override;
     function  GetColumnValue(aColIndex: Integer; isMain: Boolean): string; override;
+    procedure GetRow(aRec: TGEDCOMRecord; isMain: Boolean; var aRow: string); override;
     procedure UpdateItem(aItem: TListItem; isMain: Boolean); override;
     procedure UpdateColumns(aList: TGKListView; isMain: Boolean); override;
   end;
@@ -290,6 +304,13 @@ type
 {==============================================================================}
 
 type
+  TRow = class
+  public
+    Index: Integer;
+    Value: string;
+    Age: Integer;
+  end;
+
   TRecordsView = class(TGKListView)
   private
     FContentList: TList;
@@ -300,6 +321,13 @@ type
     FTotalCount: Integer;
     FTree: TGEDCOMTree;
 
+    {$IFDEF FAST_LISTS}
+    FCacheList: TObjectList;
+
+    function CacheQuery(aIndex: Integer): string;
+    procedure ListDataHint(Sender: TObject; StartIndex, EndIndex: Integer);
+    {$ENDIF}
+
     procedure ListMeasureItem(Control: TWinControl; var AHeight: UINT);
 
     procedure ListCustomDrawItem(Sender: TCustomListView;
@@ -308,6 +336,10 @@ type
     procedure ListGetItemData(Sender: TObject; Item: TListItem);
     procedure SetRecordType(const Value: TGEDCOMRecordType);
     function xCompare(Item1, Item2: TObject): Integer;
+
+    {$IFDEF FAST_LISTS}
+    procedure WMEraseBkgnd(var Message: TWmEraseBkgnd); message WM_ERASEBKGND;
+    {$ENDIF}
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -340,7 +372,7 @@ implementation
 
 uses
   {$IFDEF PROFILER}ZProfiler, {$ENDIF}
-  SysUtils, ExtCtrls, GKUtils, GKMain;
+  SysUtils, ExtCtrls, GKUtils, GKMain, GKLangs;
 
 {==============================================================================}
 
@@ -373,7 +405,11 @@ begin
 
     if (aColumnIndex = 0)
     then w := view.StringWidth(item.Caption)
-    else w := view.StringWidth(item.SubItems[aColumnIndex - 1]);
+    else begin
+      if (aColumnIndex - 1 < item.SubItems.Count)
+      then w := view.StringWidth(item.SubItems[aColumnIndex - 1])
+      else w := 0;
+    end;
 
     if (max_w < w) then max_w := w;
   end;
@@ -414,7 +450,7 @@ begin
     Name := 'actRecAdd';
     Category := 'Tools';
     Caption := 'Add';
-    Hint := 'Добавить запись';
+    Hint := LSList[LSID_MIRecordAdd];
     ImageIndex := 3;
     ShortCut := TextToShortCut('Ctrl+I');
     OnExecute := ButtonClick;
@@ -425,7 +461,7 @@ begin
     Name := 'actRecEdit';
     Category := 'Tools';
     Caption := 'Edit';
-    Hint := 'Изменить запись';
+    Hint := LSList[LSID_MIRecordEdit];
     ImageIndex := 4;
     ShortCut := TextToShortCut('Ctrl+Enter');
     OnExecute := ButtonClick;
@@ -436,7 +472,7 @@ begin
     Name := 'actRecDelete';
     Category := 'Tools';
     Caption := 'Delete';
-    Hint := 'Удалить запись';
+    Hint := LSList[LSID_MIRecordDelete];
     ImageIndex := 5;
     ShortCut := TextToShortCut('Ctrl+D');
     OnExecute := ButtonClick;
@@ -447,7 +483,7 @@ begin
     Name := 'actLinkJump';
     Category := 'Tools';
     Caption := 'LinkJump';
-    Hint := 'Перейти на запись';
+    Hint := LSList[LSID_RecordGoto];
     ImageIndex := 28;
     OnExecute := ButtonClick;
   end;
@@ -457,7 +493,7 @@ begin
     Name := 'actMoveUp';
     Category := 'Tools';
     Caption := 'MoveUp';
-    Hint := 'Поместить выше';
+    Hint := LSList[LSID_RecordMoveUp];
     ImageIndex := 29;
     OnExecute := ButtonClick;
   end;
@@ -467,7 +503,7 @@ begin
     Name := 'actMoveDown';
     Category := 'Tools';
     Caption := 'MoveDown';
-    Hint := 'Поместить ниже';
+    Hint := LSList[LSID_RecordMoveDown];
     ImageIndex := 30;
     OnExecute := ButtonClick;
   end;
@@ -864,6 +900,13 @@ begin
   Result := '';
 end;
 
+procedure TListManager.GetRow(aRec: TGEDCOMRecord; isMain: Boolean; var aRow: string);
+begin
+  Fetch(aRec);
+  //aRow := GetXRefNum(aRec); // maybe preliminary zero
+  aRow := IntToStr(GetId(aRec));
+end;
+
 procedure TListManager.InitFilter(aFilter: TPersonsFilter);
 begin
   //
@@ -1151,7 +1194,7 @@ begin
         aItem.SubItems.Add(GetNickStr(FRec));
 
       pctSex:
-        aItem.SubItems.Add(SexData[FRec.Sex].ViewSign);
+        aItem.SubItems.Add(SexStr(FRec.Sex)[1]);
 
       pctBirthDate:
         aItem.SubItems.Add(GEDCOMEventToDateStr(bd_ev, fmGEDKeeper.Options.DefDateFormat));
@@ -1218,6 +1261,175 @@ begin
   end;
 end;
 
+procedure TIndividualListMan.GetRow(aRec: TGEDCOMRecord; isMain: Boolean; var aRow: string);
+var
+  i: Integer;
+  pct: TPersonColumnType;
+  columns: TPersonColumnsList;
+  f, n, p: string;
+  ev: TGEDCOMCustomEvent;
+  bd_ev, dd_ev: TGEDCOMCustomEvent;
+  residence, religion, nationality, education, occupation,
+  caste, mili, mili_ind, mili_dis, mili_rank: string;
+begin
+  inherited;
+
+  columns := fmGEDKeeper.Options.ListPersonsColumns;
+
+  bd_ev := nil;
+  dd_ev := nil;
+
+  residence := '';
+  religion := '';
+  nationality := '';
+  education := '';
+  occupation := '';
+  caste := '';
+  mili := '';
+  mili_ind := '';
+  mili_dis := '';
+  mili_rank := '';
+
+  for i := 0 to FRec.IndividualEventsCount - 1 do begin
+    ev := FRec.IndividualEvents[i];
+
+    if (ev.Name = 'BIRT') and (bd_ev = nil) then bd_ev := ev
+    else
+    if (ev.Name = 'DEAT') and (dd_ev = nil) then dd_ev := ev
+    else
+    if (ev.Name = 'RESI') and (residence = '')
+    then residence := GetPlaceStr(ev, fmGEDKeeper.Options.PlacesWithAddress)
+    else
+    if (ev.Name = 'RELI') and (religion = '')
+    then religion := ev.StringValue
+    else
+    if (ev.Name = 'NATI') and (nationality = '')
+    then nationality := ev.StringValue
+    else
+    if (ev.Name = 'EDUC') and (education = '')
+    then education := ev.StringValue
+    else
+    if (ev.Name = 'OCCU') and (occupation = '')
+    then occupation := ev.StringValue
+    else
+    if (ev.Name = 'CAST') and (caste = '')
+    then caste := ev.StringValue
+    else
+    if (ev.Name = '_MILI') and (mili = '')
+    then mili := ev.StringValue
+    else
+    if (ev.Name = '_MILI_IND') and (mili_ind = '')
+    then mili_ind := ev.StringValue
+    else
+    if (ev.Name = '_MILI_DIS') and (mili_dis = '')
+    then mili_dis := ev.StringValue
+    else
+    if (ev.Name = '_MILI_RANK') and (mili_Rank = '')
+    then mili_Rank := ev.StringValue;
+  end;
+
+  for i := 0 to High(columns) do begin
+    pct := columns[i].colType;
+    if not(columns[i].colActive) then Continue;
+
+    case pct of
+      pctPatriarch: begin
+        if (FRec.Patriarch)
+        then aRow := aRow+#0+'*'
+        else aRow := aRow+#0+' ';
+      end;
+
+      pctName: begin
+        if (fmGEDKeeper.Options.DefNameFormat in [nfF_NP, nfF_N_P])
+        then GetNameParts(FRec, f, n, p);
+
+        case fmGEDKeeper.Options.DefNameFormat of
+          nfFNP: begin
+            aRow := aRow+#0+GetNameStr(FRec);
+          end;
+          nfF_NP: begin
+            aRow := aRow+#0+f;
+            aRow := aRow+#0+n + ' ' + p;
+          end;
+          nfF_N_P: begin
+            aRow := aRow+#0+f;
+            aRow := aRow+#0+n;
+            aRow := aRow+#0+p;
+          end;
+        end;
+      end;
+
+      pctNick:
+        aRow := aRow+#0+GetNickStr(FRec);
+
+      pctSex:
+        aRow := aRow+#0+SexStr(FRec.Sex)[1];
+
+      pctBirthDate:
+        aRow := aRow+#0+GEDCOMEventToDateStr(bd_ev, fmGEDKeeper.Options.DefDateFormat);
+
+      pctDeathDate:
+        aRow := aRow+#0+GEDCOMEventToDateStr(dd_ev, fmGEDKeeper.Options.DefDateFormat);
+
+      pctBirthPlace:
+        aRow := aRow+#0+GetPlaceStr(bd_ev, False);
+
+      pctDeathPlace:
+        aRow := aRow+#0+GetPlaceStr(dd_ev, False);
+
+      pctResidence:
+        aRow := aRow+#0+residence;
+
+      pctAge:
+        if (isMain) then aRow := aRow+#0+GetAge(FRec, age_year);
+
+      pctLifeExpectancy:
+        if (isMain) then aRow := aRow+#0+GetLifeExpectancy(FRec);
+
+      pctDaysForBirth:
+        if (isMain) then aRow := aRow+#0+GetDaysForBirth(FRec);
+
+      pctGroups:
+        if (isMain) then aRow := aRow+#0+GetGroups();
+
+      pctReligion:
+        if (isMain) then aRow := aRow+#0+religion;
+
+      pctNationality:
+        if (isMain) then aRow := aRow+#0+nationality;
+
+      pctEducation:
+        if (isMain) then aRow := aRow+#0+education;
+
+      pctOccupation:
+        if (isMain) then aRow := aRow+#0+occupation;
+
+      pctCaste:
+        if (isMain) then aRow := aRow+#0+caste;
+
+      //
+      pctMili:
+        if (isMain) then aRow := aRow+#0+mili;
+      pctMiliInd:
+        if (isMain) then aRow := aRow+#0+mili_ind;
+      pctMiliDis:
+        if (isMain) then aRow := aRow+#0+mili_dis;
+      pctMiliRank:
+        if (isMain) then aRow := aRow+#0+mili_rank;
+      //
+
+      pctChangeDate:
+        if (isMain) then aRow := aRow+#0+GetChangeDate(FRec);
+
+      pctBookmark: if (isMain) then begin
+        if (FRec.Bookmark)
+        then aRow := aRow+#0+'*'
+        else aRow := aRow+#0+' ';
+      end;
+    end;
+  end;
+end;
+
 function TIndividualListMan.GetColumnValue(aColIndex: Integer; isMain: Boolean): string;
 var
   pct: TPersonColumnType;
@@ -1260,7 +1472,7 @@ begin
     end;
 
     pctNick: Result := GetNickStr(FRec);
-    pctSex: Result := SexData[FRec.Sex].ViewSign;
+    pctSex: Result := SexStr(FRec.Sex)[1];
 
     pctBirthDate, pctBirthPlace: begin
       ev := GetIndividualEvent(FRec, 'BIRT');
@@ -1339,7 +1551,7 @@ begin
 
       case col_type of
         pctPatriarch: begin
-          AddListColumn(aList, 'П', 25);
+          AddListColumn(aList, LSList[LSID_Patriarch], 25);
           SetColMap(Ord(col_type), 0);
         end;
 
@@ -1348,23 +1560,23 @@ begin
 
           case fmGEDKeeper.Options.DefNameFormat of
             nfFNP: begin
-              AddListColumn(aList, 'Фамилия,Имя,Отчество', 300, asz);
+              AddListColumn(aList, LSList[LSID_FullName], 300, asz);
               SetColMap(Ord(col_type), 0);
             end;
 
             nfF_NP: begin
-              AddListColumn(aList, 'Фамилия', 150, asz);
+              AddListColumn(aList, LSList[LSID_Surname], 150, asz);
               SetColMap(Ord(col_type), 0);
-              AddListColumn(aList, 'Имя,Отчество', 150, asz);
+              AddListColumn(aList, LSList[LSID_Name]+','+LSList[LSID_Patronymic], 150, asz);
               SetColMap(Ord(col_type), 1);
             end;
 
             nfF_N_P: begin
-              AddListColumn(aList, 'Фамилия', 150, asz);
+              AddListColumn(aList, LSList[LSID_Surname], 150, asz);
               SetColMap(Ord(col_type), 0);
-              AddListColumn(aList, 'Имя', 100, asz);
+              AddListColumn(aList, LSList[LSID_Name], 100, asz);
               SetColMap(Ord(col_type), 1);
-              AddListColumn(aList, 'Отчество', 150, asz);
+              AddListColumn(aList, LSList[LSID_Patronymic], 150, asz);
               SetColMap(Ord(col_type), 2);
             end;
           end;
@@ -1372,7 +1584,7 @@ begin
 
         pctNick, pctSex, pctBirthDate, pctDeathDate,
         pctBirthPlace, pctDeathPlace, pctResidence: begin
-          AddListColumn(aList, PersonColumnsName[col_type].Name, PersonColumnsName[col_type].DefWidth);
+          AddListColumn(aList, LSList[PersonColumnsName[col_type].Name], PersonColumnsName[col_type].DefWidth);
           SetColMap(Ord(col_type), 0);
         end;
 
@@ -1380,7 +1592,7 @@ begin
         pctReligion, pctNationality, pctEducation, pctOccupation, pctCaste,
         pctMili, pctMiliInd, pctMiliDis, pctMiliRank,
         pctChangeDate, pctBookmark: if isMain then begin
-          AddListColumn(aList, PersonColumnsName[col_type].Name, PersonColumnsName[col_type].DefWidth);
+          AddListColumn(aList, LSList[PersonColumnsName[col_type].Name], PersonColumnsName[col_type].DefWidth);
           SetColMap(Ord(col_type), 0);
         end;
       end;
@@ -1417,6 +1629,18 @@ begin
   then aItem.SubItems.Add(GetChangeDate(FRec));
 end;
 
+procedure TFamilyListMan.GetRow(aRec: TGEDCOMRecord; isMain: Boolean;
+  var aRow: string);
+begin
+  inherited;
+
+  aRow := aRow+#0+GetFamilyStr(FRec);
+  aRow := aRow+#0+GetMarriageDate(FRec, fmGEDKeeper.Options.DefDateFormat);
+
+  if isMain
+  then aRow := aRow+#0+GetChangeDate(FRec);
+end;
+
 function TFamilyListMan.GetColumnValue(aColIndex: Integer; isMain: Boolean): string;
 begin
   case aColIndex of
@@ -1430,10 +1654,10 @@ end;
 procedure TFamilyListMan.UpdateColumns(aList: TGKListView; isMain: Boolean);
 begin
   AddListColumn(aList, '№', 50);
-  AddListColumn(aList, 'Супруги', 300);
-  AddListColumn(aList, 'Дата брака', 100);
+  AddListColumn(aList, LSList[LSID_Spouses], 300);
+  AddListColumn(aList, LSList[LSID_MarriageDate], 100);
   if isMain then begin
-    AddListColumn(aList, 'Изменено', 150);
+    AddListColumn(aList, LSList[LSID_Changed], 150);
   end;
 end;
 
@@ -1466,6 +1690,25 @@ begin
   then aItem.SubItems.Add(GetChangeDate(FRec));
 end;
 
+procedure TNoteListMan.GetRow(aRec: TGEDCOMRecord; isMain: Boolean;
+  var aRow: string);
+var
+  st: string;
+begin
+  inherited;
+
+  if (FRec.Notes.Count > 0) then begin
+    st := Trim(FRec.Notes[0]);
+    if (st = '') and (FRec.Notes.Count > 1)
+    then st := Trim(FRec.Notes[1]);
+  end else st := '';
+
+  aRow := aRow+#0+st;
+
+  if isMain
+  then aRow := aRow+#0+GetChangeDate(FRec);
+end;
+
 function TNoteListMan.GetColumnValue(aColIndex: Integer; isMain: Boolean): string;
 var
   st: string;
@@ -1488,10 +1731,10 @@ end;
 procedure TNoteListMan.UpdateColumns(aList: TGKListView; isMain: Boolean);
 begin
   AddListColumn(aList, '№', 50);
-  AddListColumn(aList, 'Заметка', 400);
+  AddListColumn(aList, LSList[LSID_Note], 400);
 
   if isMain then begin
-    AddListColumn(aList, 'Изменено', 150);
+    AddListColumn(aList, LSList[LSID_Changed], 150);
   end;
 end;
 
@@ -1530,11 +1773,34 @@ begin
   end;
 
   aItem.SubItems.Add(file_ref.Title);
-  aItem.SubItems.Add(MediaTypes[file_ref.MediaType].Name);
+  aItem.SubItems.Add(LSList[MediaTypes[file_ref.MediaType]]);
 
   if isMain then begin
     aItem.SubItems.Add(file_ref.StringValue);
     aItem.SubItems.Add(GetChangeDate(FRec));
+  end;
+end;
+
+procedure TMultimediaListMan.GetRow(aRec: TGEDCOMRecord; isMain: Boolean;
+  var aRow: string);
+var
+  file_ref: TGEDCOMFileReferenceWithTitle;
+begin
+  inherited;
+
+  file_ref := FRec.FileReferences[0];
+
+  if (file_ref = nil) then begin
+    aRow := aRow+#0+'error ' + FRec.XRef;
+    Exit;
+  end;
+
+  aRow := aRow+#0+file_ref.Title;
+  aRow := aRow+#0+LSList[MediaTypes[file_ref.MediaType]];
+
+  if isMain then begin
+    aRow := aRow+#0+file_ref.StringValue;
+    aRow := aRow+#0+GetChangeDate(FRec);
   end;
 end;
 
@@ -1546,7 +1812,7 @@ begin
 
   case aColIndex of
     1: Result := file_ref.Title;
-    2: Result := MediaTypes[file_ref.MediaType].Name;
+    2: Result := LSList[MediaTypes[file_ref.MediaType]];
     3: Result := file_ref.StringValue;
     4: Result := GetChangeDate(FRec);
     else Result := '';
@@ -1556,12 +1822,12 @@ end;
 procedure TMultimediaListMan.UpdateColumns(aList: TGKListView; isMain: Boolean);
 begin
   AddListColumn(aList, '№', 50);
-  AddListColumn(aList, 'Название', 150);
-  AddListColumn(aList, 'Тип', 85);
+  AddListColumn(aList, LSList[LSID_Title], 150);
+  AddListColumn(aList, LSList[LSID_Type], 85);
 
   if isMain then begin
-    AddListColumn(aList, 'Файл', 300);
-    AddListColumn(aList, 'Изменено', 150);
+    AddListColumn(aList, LSList[LSID_File], 300);
+    AddListColumn(aList, LSList[LSID_Changed], 150);
   end;
 end;
 
@@ -1595,6 +1861,20 @@ begin
   end;
 end;
 
+procedure TSourceListMan.GetRow(aRec: TGEDCOMRecord; isMain: Boolean;
+  var aRow: string);
+begin
+  inherited;
+
+  aRow := aRow+#0+Trim(FRec.FiledByEntry);
+
+  if isMain then begin
+    aRow := aRow+#0+Trim(FRec.Originator.Text);
+    aRow := aRow+#0+Trim(FRec.Title.Text);
+    aRow := aRow+#0+GetChangeDate(FRec);
+  end;
+end;
+
 function TSourceListMan.GetColumnValue(aColIndex: Integer; isMain: Boolean): string;
 begin
   case aColIndex of
@@ -1609,12 +1889,12 @@ end;
 procedure TSourceListMan.UpdateColumns(aList: TGKListView; isMain: Boolean);
 begin
   AddListColumn(aList, '№', 50);
-  AddListColumn(aList, 'Краткое название', 120);
+  AddListColumn(aList, LSList[LSID_ShortTitle], 120);
 
   if isMain then begin
-    AddListColumn(aList, 'Автор', 200);
-    AddListColumn(aList, 'Название', 200);
-    AddListColumn(aList, 'Изменено', 150);
+    AddListColumn(aList, LSList[LSID_Author], 200);
+    AddListColumn(aList, LSList[LSID_Title], 200);
+    AddListColumn(aList, LSList[LSID_Changed], 150);
   end;
 end;
 
@@ -1640,10 +1920,10 @@ end;
 procedure TRepositoryListMan.UpdateColumns(aList: TGKListView; isMain: Boolean);
 begin
   AddListColumn(aList, '№', 50);
-  AddListColumn(aList, 'Архив', 400);
+  AddListColumn(aList, LSList[LSID_Repository], 400);
 
   if isMain then begin
-    AddListColumn(aList, 'Изменено', 150);
+    AddListColumn(aList, LSList[LSID_Changed], 150);
   end;
 end;
 
@@ -1653,6 +1933,17 @@ begin
 
   if isMain
   then aItem.SubItems.Add(GetChangeDate(FRec));
+end;
+
+procedure TRepositoryListMan.GetRow(aRec: TGEDCOMRecord; isMain: Boolean;
+  var aRow: string);
+begin
+  inherited;
+
+  aRow := aRow+#0+FRec.RepositoryName;
+
+  if isMain
+  then aRow := aRow+#0+GetChangeDate(FRec);
 end;
 
 function TRepositoryListMan.GetColumnValue(aColIndex: Integer; isMain: Boolean): string;
@@ -1686,10 +1977,10 @@ end;
 procedure TGroupListMan.UpdateColumns(aList: TGKListView; isMain: Boolean);
 begin
   AddListColumn(aList, '№', 50);
-  AddListColumn(aList, 'Группа', 400);
+  AddListColumn(aList, LSList[LSID_Group], 400);
 
   if isMain then begin
-    AddListColumn(aList, 'Изменено', 150);
+    AddListColumn(aList, LSList[LSID_Changed], 150);
   end;
 end;
 
@@ -1699,6 +1990,17 @@ begin
 
   if isMain
   then aItem.SubItems.Add(GetChangeDate(FRec));
+end;
+
+procedure TGroupListMan.GetRow(aRec: TGEDCOMRecord; isMain: Boolean;
+  var aRow: string);
+begin
+  inherited;
+
+  aRow := aRow+#0+FRec.Name;
+
+  if isMain
+  then aRow := aRow+#0+GetChangeDate(FRec);
 end;
 
 function TGroupListMan.GetColumnValue(aColIndex: Integer; isMain: Boolean): string;
@@ -1732,23 +2034,23 @@ end;
 procedure TResearchListMan.UpdateColumns(aList: TGKListView; isMain: Boolean);
 begin
   AddListColumn(aList, '№', 50);
-  AddListColumn(aList, 'Исследование', 300);
-  AddListColumn(aList, 'Приоритет', 90);
-  AddListColumn(aList, 'Состояние', 90);
-  AddListColumn(aList, 'Запущено', 90);
-  AddListColumn(aList, 'Завершено', 90);
-  AddListColumn(aList, 'Процент', 90);
+  AddListColumn(aList, LSList[LSID_Title], 300);
+  AddListColumn(aList, LSList[LSID_Priority], 90);
+  AddListColumn(aList, LSList[LSID_Status], 90);
+  AddListColumn(aList, LSList[LSID_StartDate], 90);
+  AddListColumn(aList, LSList[LSID_StopDate], 90);
+  AddListColumn(aList, LSList[LSID_Percent], 90);
 
   if isMain then begin
-    AddListColumn(aList, 'Изменено', 150);
+    AddListColumn(aList, LSList[LSID_Changed], 150);
   end;
 end;
 
 procedure TResearchListMan.UpdateItem(aItem: TListItem; isMain: Boolean);
 begin
   aItem.SubItems.Add(FRec.Name);
-  aItem.SubItems.Add(PriorityNames[FRec.Priority]);
-  aItem.SubItems.Add(StatusNames[FRec.Status]);
+  aItem.SubItems.Add(LSList[PriorityNames[FRec.Priority]]);
+  aItem.SubItems.Add(LSList[StatusNames[FRec.Status]]);
   aItem.SubItems.Add(GEDCOMDateToStr(FRec.StartDate, fmGEDKeeper.Options.DefDateFormat));
   aItem.SubItems.Add(GEDCOMDateToStr(FRec.StopDate, fmGEDKeeper.Options.DefDateFormat));
   aItem.SubItems.Add(IntToStr(FRec.Percent));
@@ -1757,12 +2059,28 @@ begin
   then aItem.SubItems.Add(GetChangeDate(FRec));
 end;
 
+procedure TResearchListMan.GetRow(aRec: TGEDCOMRecord; isMain: Boolean;
+  var aRow: string);
+begin
+  inherited;
+
+  aRow := aRow+#0+FRec.Name;
+  aRow := aRow+#0+LSList[PriorityNames[FRec.Priority]];
+  aRow := aRow+#0+LSList[StatusNames[FRec.Status]];
+  aRow := aRow+#0+GEDCOMDateToStr(FRec.StartDate, fmGEDKeeper.Options.DefDateFormat);
+  aRow := aRow+#0+GEDCOMDateToStr(FRec.StopDate, fmGEDKeeper.Options.DefDateFormat);
+  aRow := aRow+#0+IntToStr(FRec.Percent);
+
+  if isMain
+  then aRow := aRow+#0+GetChangeDate(FRec);
+end;
+
 function TResearchListMan.GetColumnValue(aColIndex: Integer; isMain: Boolean): string;
 begin
   case aColIndex of
     1: Result := FRec.Name;
-    2: Result := PriorityNames[FRec.Priority];
-    3: Result := StatusNames[FRec.Status];
+    2: Result := LSList[PriorityNames[FRec.Priority]];
+    3: Result := LSList[StatusNames[FRec.Status]];
     4: Result := GEDCOMDateToStr(FRec.StartDate, fmGEDKeeper.Options.DefDateFormat);
     5: Result := GEDCOMDateToStr(FRec.StopDate, fmGEDKeeper.Options.DefDateFormat);
     6: Result := IntToStr(FRec.Percent);
@@ -1793,20 +2111,20 @@ end;
 procedure TTaskListMan.UpdateColumns(aList: TGKListView; isMain: Boolean);
 begin
   AddListColumn(aList, '№', 50);
-  AddListColumn(aList, 'Цель', 300);
-  AddListColumn(aList, 'Приоритет', 90);
-  AddListColumn(aList, 'Запущено', 90);
-  AddListColumn(aList, 'Завершено', 90);
+  AddListColumn(aList, LSList[LSID_Goal], 300);
+  AddListColumn(aList, LSList[LSID_Priority], 90);
+  AddListColumn(aList, LSList[LSID_StartDate], 90);
+  AddListColumn(aList, LSList[LSID_StopDate], 90);
 
   if isMain then begin
-    AddListColumn(aList, 'Изменено', 150);
+    AddListColumn(aList, LSList[LSID_Changed], 150);
   end;
 end;
 
 procedure TTaskListMan.UpdateItem(aItem: TListItem; isMain: Boolean);
 begin
   aItem.SubItems.Add(GetTaskGoalStr(FTree, FRec));
-  aItem.SubItems.Add(PriorityNames[FRec.Priority]);
+  aItem.SubItems.Add(LSList[PriorityNames[FRec.Priority]]);
   aItem.SubItems.Add(GEDCOMDateToStr(FRec.StartDate, fmGEDKeeper.Options.DefDateFormat));
   aItem.SubItems.Add(GEDCOMDateToStr(FRec.StopDate, fmGEDKeeper.Options.DefDateFormat));
 
@@ -1814,11 +2132,25 @@ begin
   then aItem.SubItems.Add(GetChangeDate(FRec));
 end;
 
+procedure TTaskListMan.GetRow(aRec: TGEDCOMRecord; isMain: Boolean;
+  var aRow: string);
+begin
+  inherited;
+
+  aRow := aRow+#0+GetTaskGoalStr(FTree, FRec);
+  aRow := aRow+#0+LSList[PriorityNames[FRec.Priority]];
+  aRow := aRow+#0+GEDCOMDateToStr(FRec.StartDate, fmGEDKeeper.Options.DefDateFormat);
+  aRow := aRow+#0+GEDCOMDateToStr(FRec.StopDate, fmGEDKeeper.Options.DefDateFormat);
+
+  if isMain
+  then aRow := aRow+#0+GetChangeDate(FRec);
+end;
+
 function TTaskListMan.GetColumnValue(aColIndex: Integer; isMain: Boolean): string;
 begin
   case aColIndex of
     1: Result := GetTaskGoalStr(FTree, FRec);
-    2: Result := PriorityNames[FRec.Priority];
+    2: Result := LSList[PriorityNames[FRec.Priority]];
     3: Result := GEDCOMDateToStr(FRec.StartDate, fmGEDKeeper.Options.DefDateFormat);
     4: Result := GEDCOMDateToStr(FRec.StopDate, fmGEDKeeper.Options.DefDateFormat);
     5: Result := GetChangeDate(FRec);
@@ -1848,13 +2180,13 @@ end;
 procedure TCommunicationListMan.UpdateColumns(aList: TGKListView; isMain: Boolean);
 begin
   AddListColumn(aList, '№', 50);
-  AddListColumn(aList, 'Тема', 300);
-  AddListColumn(aList, 'Корреспондент', 200);
-  AddListColumn(aList, 'Тип', 90);
-  AddListColumn(aList, 'Дата', 90);
+  AddListColumn(aList, LSList[LSID_Theme], 300);
+  AddListColumn(aList, LSList[LSID_Corresponder], 200);
+  AddListColumn(aList, LSList[LSID_Type], 90);
+  AddListColumn(aList, LSList[LSID_Date], 90);
 
   if isMain then begin
-    AddListColumn(aList, 'Изменено', 150);
+    AddListColumn(aList, LSList[LSID_Changed], 150);
   end;
 end;
 
@@ -1862,11 +2194,25 @@ procedure TCommunicationListMan.UpdateItem(aItem: TListItem; isMain: Boolean);
 begin
   aItem.SubItems.Add(FRec.Name);
   aItem.SubItems.Add(GetCorresponderStr(FTree, FRec, False));
-  aItem.SubItems.Add(CommunicationNames[FRec.CommunicationType]);
+  aItem.SubItems.Add(LSList[CommunicationNames[FRec.CommunicationType]]);
   aItem.SubItems.Add(GEDCOMDateToStr(FRec.Date, fmGEDKeeper.Options.DefDateFormat));
 
   if isMain
   then aItem.SubItems.Add(GetChangeDate(FRec));
+end;
+
+procedure TCommunicationListMan.GetRow(aRec: TGEDCOMRecord; isMain: Boolean;
+  var aRow: string);
+begin
+  inherited;
+
+  aRow := aRow+#0+FRec.Name;
+  aRow := aRow+#0+GetCorresponderStr(FTree, FRec, False);
+  aRow := aRow+#0+LSList[CommunicationNames[FRec.CommunicationType]];
+  aRow := aRow+#0+GEDCOMDateToStr(FRec.Date, fmGEDKeeper.Options.DefDateFormat);
+
+  if isMain
+  then aRow := aRow+#0+GetChangeDate(FRec);
 end;
 
 function TCommunicationListMan.GetColumnValue(aColIndex: Integer; isMain: Boolean): string;
@@ -1874,7 +2220,7 @@ begin
   case aColIndex of
     1: Result := FRec.Name;
     2: Result := GetCorresponderStr(FTree, FRec, False);
-    3: Result := CommunicationNames[FRec.CommunicationType];
+    3: Result := LSList[CommunicationNames[FRec.CommunicationType]];
     4: Result := GEDCOMDateToStr(FRec.Date, fmGEDKeeper.Options.DefDateFormat);
     5: Result := GetChangeDate(FRec);
     else Result := '';
@@ -1903,12 +2249,12 @@ end;
 procedure TLocationListMan.UpdateColumns(aList: TGKListView; isMain: Boolean);
 begin
   AddListColumn(aList, '№', 50);
-  AddListColumn(aList, 'Название', 300);
-  AddListColumn(aList, 'Широта', 120);
-  AddListColumn(aList, 'Долгота', 120);
+  AddListColumn(aList, LSList[LSID_Title], 300);
+  AddListColumn(aList, LSList[LSID_Latitude], 120);
+  AddListColumn(aList, LSList[LSID_Longitude], 120);
 
   if isMain then begin
-    AddListColumn(aList, 'Изменено', 150);
+    AddListColumn(aList, LSList[LSID_Changed], 150);
   end;
 end;
 
@@ -1920,6 +2266,19 @@ begin
 
   if isMain
   then aItem.SubItems.Add(GetChangeDate(FRec));
+end;
+
+procedure TLocationListMan.GetRow(aRec: TGEDCOMRecord; isMain: Boolean;
+  var aRow: string);
+begin
+  inherited;
+
+  aRow := aRow+#0+FRec.Name;
+  aRow := aRow+#0+FRec.Map.Lati;
+  aRow := aRow+#0+FRec.Map.Long;
+
+  if isMain
+  then aRow := aRow+#0+GetChangeDate(FRec);
 end;
 
 function TLocationListMan.GetColumnValue(aColIndex: Integer; isMain: Boolean): string;
@@ -1940,10 +2299,18 @@ begin
   inherited Create(AOwner);
   FContentList := TList.Create;
 
+  //ControlStyle := ControlStyle - [csParentBackground];
+  //DoubleBuffered := True;
+
   OwnerData := True;
   OnData := ListGetItemData;
   OnColumnClick := ListColumnClick;
   OnCustomDrawItem := ListCustomDrawItem;
+
+  {$IFDEF FAST_LISTS}
+  OnDataHint := ListDataHint;
+  FCacheList := TObjectList.Create(True);
+  {$ENDIF}
 
   //OwnerDraw := True;
   //OnMeasureItem := ListMeasureItem;
@@ -1954,11 +2321,23 @@ end;
 
 destructor TRecordsView.Destroy;
 begin
+  {$IFDEF FAST_LISTS}
+  FCacheList.Destroy;
+  {$ENDIF}
+
   if Assigned(FListMan) then FreeAndNil(FListMan);
 
   FContentList.Free;
   inherited Destroy;
 end;
+
+{$IFDEF FAST_LISTS}
+procedure TRecordsView.WMEraseBkgnd(var Message: TWmEraseBkgnd);
+begin
+  Message.Result := 1;
+  inherited;
+end;
+{$ENDIF}
 
 function TRecordsView.xCompare(Item1, Item2: TObject): Integer;
 var
@@ -1999,22 +2378,101 @@ begin
   {$IFDEF PROFILER}Profiler.Mark(12, False);{$ENDIF}
 end;
 
-procedure TRecordsView.ListGetItemData(Sender: TObject; Item: TListItem);
+{$IFDEF FAST_LISTS}
+function TRecordsView.CacheQuery(aIndex: Integer): string;
+var
+  i, max, max_index: Integer;
+  row, founded: TRow;
+  row_value: string;
+  rec: TGEDCOMRecord;
+begin
+  founded := nil;
+  max := 0;
+  max_index := -1;
+
+  for i := 0 to FCacheList.Count - 1 do begin
+    row := TRow(FCacheList[i]);
+
+    if (row.Index = aIndex) then begin
+      founded := row;
+      row.Age := 0;
+    end else row.Age := row.Age + 1;
+
+    if (max < row.Age) then begin
+      max := row.Age;
+      max_index := i;
+    end;
+  end;
+
+  if (founded <> nil)
+  then row_value := founded.Value
+  else begin
+    if (FCacheList.Count = 100) and (max_index >= 0)
+    then FCacheList.Delete(max_index);
+
+    rec := TGEDCOMRecord(FContentList[aIndex]);
+    FListMan.GetRow(rec, FIsMainList, row_value);
+
+    row := TRow.Create;
+    row.Index := aIndex;
+    row.Value := row_value;
+    row.Age := 0;
+    FCacheList.Add(row);
+  end;
+
+  Result := row_value;
+end;
+
+procedure TRecordsView.ListDataHint(Sender: TObject; StartIndex, EndIndex: Integer);
 var
   idx: Integer;
+begin
+  try
+    {$IFDEF PROFILER}Profiler.Mark(13, True);{$ENDIF}
+
+    for idx := StartIndex to EndIndex do
+      if (idx >= 0) and (idx < FContentList.Count)
+      then CacheQuery(idx);
+
+    {$IFDEF PROFILER}Profiler.Mark(13, False);{$ENDIF}
+  except
+    on E: Exception do LogWrite('ListDataHint(): ' + E.Message);
+  end;
+end;
+{$ENDIF}
+
+procedure TRecordsView.ListGetItemData(Sender: TObject; Item: TListItem);
+var
+  i: Integer;
+  {$IFNDEF FAST_LISTS}
   rec: TGEDCOMRecord;
+  {$ELSE}
+  row, st: string;
+  {$ENDIF}
 begin
   try
     {$IFDEF PROFILER}Profiler.Mark(11, True);{$ENDIF}
 
     if Assigned(Item) then begin
-      idx := Item.Index;
-      if (idx >= 0) and (idx < FContentList.Count) then begin
-        rec := TGEDCOMRecord(FContentList[idx]);
+      {$IFNDEF FAST_LISTS}
+      i := Item.Index;
+      if (i >= 0) and (i < FContentList.Count) then begin
+        rec := TGEDCOMRecord(FContentList[i]);
         Item.Caption := IntToStr(GetId(rec));
         FListMan.Fetch(rec);
         FListMan.UpdateItem(Item, FIsMainList);
       end;
+      {$ELSE}
+      row := CacheQuery(Item.Index);
+
+      for i := 1 to GetTokensCount(row, #0) do begin
+        st := GetToken(row, #0, i);
+
+        if (i = 1)
+        then Item.Caption := st
+        else Item.SubItems.Add(st);
+      end;
+      {$ENDIF}
     end;
 
     {$IFDEF PROFILER}Profiler.Mark(11, False);{$ENDIF}

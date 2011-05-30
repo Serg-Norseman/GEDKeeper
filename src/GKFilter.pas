@@ -1,4 +1,4 @@
-unit GKFilter; {prepare:fin}
+unit GKFilter; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,10 +6,10 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, ExtCtrls,
-  Buttons, Mask, GKBase;
+  Buttons, Mask, GKBase, GKLangs;
 
 type
-  TfmFilter = class(TForm)
+  TfmFilter = class(TForm, ILocalization)
     btnAccept: TBitBtn;
     btnCancel: TBitBtn;
     rgLife: TRadioGroup;
@@ -32,10 +32,13 @@ type
     procedure btnAcceptClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure rgLifeClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     function GetBase: TfmBase;
   public
     property Base: TfmBase read GetBase;
+
+    procedure SetLang();
   end;
 
 implementation
@@ -43,6 +46,34 @@ implementation
 uses GKMain, GedCom551, GKEngine, GKLists;
 
 {$R *.dfm}
+
+procedure TfmFilter.FormCreate(Sender: TObject);
+begin
+  SetLang();
+end;
+
+procedure TfmFilter.SetLang();
+begin
+  btnAccept.Caption := LSList[LSID_DlgAccept];
+  btnCancel.Caption := LSList[LSID_DlgCancel];
+
+  rgLife.Items[0] := LSList[LSID_All];
+  rgLife.Items[1] := LSList[LSID_OnlyAlive];
+  rgLife.Items[2] := LSList[LSID_OnlyDied];
+  rgLife.Items[3] := AnsiLowerCase(LSList[LSID_AliveBefore]);
+
+  rgSex.Items[0] := LSList[LSID_All];
+  rgSex.Items[1] := LSList[LSID_OnlyMans];
+  rgSex.Items[2] := LSList[LSID_OnlyWomans];
+
+  Label2.Caption := LSList[LSID_AliveBefore] + ':';
+  Label1.Caption := LSList[LSID_NameMask];
+  Label3.Caption := LSList[LSID_PlaceMask];
+  Label6.Caption := LSList[LSID_EventMask];
+  Label4.Caption := LSList[LSID_RPGroups];
+  Label5.Caption := LSList[LSID_RPSources];
+  CheckPatriarch.Caption := LSList[LSID_OnlyPatriarchs];
+end;
 
 procedure TfmFilter.btnCancelClick(Sender: TObject);
 begin
@@ -84,7 +115,7 @@ begin
         dt := StrToDate(edAliveBeforeDate.Text);
         //Hole(dt);
       except
-        MessageDlg('Дата неверна', mtError, [mbOk], 0);
+        MessageDlg(LSList[LSID_DateInvalid], mtError, [mbOk], 0);
         ModalResult := mrNone;
       end;
     end;
@@ -165,9 +196,9 @@ begin
     if (tree.Records[i] is TGEDCOMGroupRecord)
     then cbGroup.AddItem(TGEDCOMGroupRecord(tree.Records[i]).Name, tree.Records[i]);
   cbGroup.Sorted := False;
-  cbGroup.Items.InsertObject(0, '- всё -', nil);
-  cbGroup.Items.InsertObject(1, '- нет групп -', nil);
-  cbGroup.Items.InsertObject(2, '- любые -', nil);
+  cbGroup.Items.InsertObject(0, LSList[LSID_SrcAll], nil);
+  cbGroup.Items.InsertObject(1, LSList[LSID_SrcNot], nil);
+  cbGroup.Items.InsertObject(2, LSList[LSID_SrcAny], nil);
 
   if (Base.Filter.GroupMode <> gmSelected) then begin
     cbGroup.ItemIndex := Ord(Base.Filter.GroupMode);
@@ -180,9 +211,9 @@ begin
     if (tree.Records[i] is TGEDCOMSourceRecord)
     then cbSource.AddItem(TGEDCOMSourceRecord(tree.Records[i]).FiledByEntry, tree.Records[i]);
   cbSource.Sorted := False;
-  cbSource.Items.InsertObject(0, '- всё -', nil);
-  cbSource.Items.InsertObject(1, '- нет источников -', nil);
-  cbSource.Items.InsertObject(2, '- любые -', nil);
+  cbSource.Items.InsertObject(0, LSList[LSID_SrcAll], nil);
+  cbSource.Items.InsertObject(1, LSList[LSID_SrcNot], nil);
+  cbSource.Items.InsertObject(2, LSList[LSID_SrcAny], nil);
 
   if (Base.Filter.SourceMode <> gmSelected) then begin
     cbSource.ItemIndex := Ord(Base.Filter.SourceMode);

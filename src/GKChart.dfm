@@ -1,8 +1,8 @@
 object fmChart: TfmChart
-  Left = 362
-  Top = 111
-  Width = 870
-  Height = 535
+  Left = 359
+  Top = 150
+  Width = 838
+  Height = 491
   Caption = #1044#1080#1072#1075#1088#1072#1084#1084#1072
   Color = clBtnFace
   DefaultMonitor = dmMainForm
@@ -25,7 +25,7 @@ object fmChart: TfmChart
   object ToolBar1: TToolBar
     Left = 0
     Top = 0
-    Width = 862
+    Width = 830
     Height = 30
     AutoSize = True
     ButtonHeight = 26
@@ -92,31 +92,15 @@ object fmChart: TfmChart
       ImageIndex = 8
       Style = tbsSeparator
     end
-    object tbGotoPerson: TToolButton
-      Left = 279
-      Top = 0
-      Hint = #1062#1077#1085#1090#1088#1080#1088#1086#1074#1072#1090#1100' '#1076#1088#1077#1074#1086' '#1085#1072' '#1074#1099#1073#1088#1072#1085#1085#1091#1102' '#1087#1077#1088#1089#1086#1085#1091
-      Caption = 'tbGotoPerson'
-      ImageIndex = 24
-      OnClick = tbGotoPersonClick
-    end
-    object ToolButton4: TToolButton
-      Left = 306
-      Top = 0
-      Width = 8
-      Caption = 'ToolButton4'
-      ImageIndex = 9
-      Style = tbsSeparator
-    end
     object tbPrev: TToolButton
-      Left = 314
+      Left = 279
       Top = 0
       Caption = 'tbPrev'
       ImageIndex = 22
       OnClick = tbPrevClick
     end
     object tbNext: TToolButton
-      Left = 341
+      Left = 306
       Top = 0
       Caption = 'tbNext'
       Enabled = False
@@ -124,7 +108,7 @@ object fmChart: TfmChart
       OnClick = tbNextClick
     end
     object ToolButton3: TToolButton
-      Left = 368
+      Left = 333
       Top = 0
       Width = 8
       Caption = 'ToolButton3'
@@ -132,7 +116,7 @@ object fmChart: TfmChart
       Style = tbsSeparator
     end
     object TrackBar1: TTrackBar
-      Left = 376
+      Left = 341
       Top = 0
       Width = 153
       Height = 26
@@ -145,7 +129,7 @@ object fmChart: TfmChart
       OnChange = TrackBar1Change
     end
     object ToolButton5: TToolButton
-      Left = 529
+      Left = 494
       Top = 0
       Width = 8
       Caption = 'ToolButton5'
@@ -153,12 +137,29 @@ object fmChart: TfmChart
       Style = tbsSeparator
     end
     object tbFilter: TToolButton
-      Left = 537
+      Left = 502
       Top = 0
       Hint = #1060#1080#1083#1100#1090#1088#1072#1094#1080#1103' '#1076#1088#1077#1074#1072
       Caption = 'tbFilter'
       ImageIndex = 16
       OnClick = tbFilterClick
+    end
+    object ToolButton6: TToolButton
+      Left = 529
+      Top = 0
+      Width = 8
+      Caption = 'ToolButton6'
+      ImageIndex = 17
+      Style = tbsSeparator
+    end
+    object tbMode: TToolButton
+      Left = 537
+      Top = 0
+      Hint = #1056#1077#1078#1080#1084#1099
+      Caption = 'tbMode'
+      DropdownMenu = PopupMenu2
+      ImageIndex = 21
+      Style = tbsDropDown
     end
   end
   object SaveDialog1: TSaveDialog
@@ -207,10 +208,47 @@ object fmChart: TfmChart
     object N3: TMenuItem
       Caption = '-'
     end
+    object miRebuildTree: TMenuItem
+      Caption = #1055#1077#1088#1077#1089#1090#1088#1086#1080#1090#1100' '#1076#1088#1077#1074#1086
+      ShortCut = 117
+      OnClick = miRebuildTreeClick
+    end
     object miRebuildKinships: TMenuItem
       Caption = #1055#1077#1088#1077#1089#1090#1088#1086#1080#1090#1100' '#1086#1090#1085#1086#1096#1077#1085#1080#1103
       ShortCut = 118
       OnClick = miRebuildKinshipsClick
+    end
+  end
+  object PopupMenu2: TPopupMenu
+    Left = 128
+    Top = 216
+    object miModeBoth: TMenuItem
+      Caption = #1042#1089#1105
+      Checked = True
+      GroupIndex = 1
+      RadioItem = True
+      OnClick = miModeDescendantsClick
+    end
+    object miModeAncestors: TMenuItem
+      Caption = #1058#1086#1083#1100#1082#1086' '#1087#1088#1077#1076#1082#1080
+      GroupIndex = 1
+      RadioItem = True
+      OnClick = miModeDescendantsClick
+    end
+    object miModeDescendants: TMenuItem
+      Caption = #1058#1086#1083#1100#1082#1086' '#1087#1086#1090#1086#1084#1082#1080
+      GroupIndex = 1
+      RadioItem = True
+      OnClick = miModeDescendantsClick
+    end
+    object N7: TMenuItem
+      Caption = '-'
+      GroupIndex = 1
+    end
+    object miTraceRoot: TMenuItem
+      Caption = #1040#1074#1090#1086#1089#1084#1077#1085#1072' '#1094#1077#1085#1090#1088#1072
+      GroupIndex = 2
+      OnClick = miTraceRootClick
     end
   end
 end

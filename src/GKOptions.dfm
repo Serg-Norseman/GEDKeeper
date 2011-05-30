@@ -1,6 +1,6 @@
 object fmOptions: TfmOptions
-  Left = 325
-  Top = 118
+  Left = 354
+  Top = 142
   BorderStyle = bsDialog
   Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080
   ClientHeight = 425
@@ -14,6 +14,7 @@ object fmOptions: TfmOptions
   Font.Style = []
   OldCreateOrder = True
   Position = poScreenCenter
+  OnCreate = FormCreate
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
@@ -22,11 +23,18 @@ object fmOptions: TfmOptions
     Top = 0
     Width = 513
     Height = 377
-    ActivePage = SheetTree
+    ActivePage = SheetCommon
     Align = alTop
     TabOrder = 0
     object SheetCommon: TTabSheet
       Caption = #1054#1073#1097#1080#1077
+      object Label6: TLabel
+        Left = 248
+        Top = 64
+        Width = 26
+        Height = 13
+        Caption = #1071#1079#1099#1082
+      end
       object rgCode: TRadioGroup
         Left = 8
         Top = 8
@@ -138,6 +146,15 @@ object fmOptions: TfmOptions
           #1055#1088#1086#1089#1090#1086#1081
           #1055#1088#1086#1076#1074#1080#1085#1091#1090#1099#1081)
         TabOrder = 3
+      end
+      object cbLanguages: TComboBox
+        Left = 312
+        Top = 56
+        Width = 164
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
+        TabOrder = 4
       end
     end
     object SheetView: TTabSheet
@@ -346,7 +363,7 @@ object fmOptions: TfmOptions
         Left = 8
         Top = 8
         Width = 289
-        Height = 193
+        Height = 225
         Caption = #1054#1090#1086#1073#1088#1072#1078#1077#1085#1080#1077' '#1087#1077#1088#1089#1086#1085' '#1074' '#1076#1088#1077#1074#1077
         TabOrder = 0
         object chkFamily: TCheckBox
@@ -410,7 +427,7 @@ object fmOptions: TfmOptions
           Height = 17
           Alignment = taLeftJustify
           Caption = #1057#1090#1077#1087#1077#1085#1100' '#1088#1086#1076#1089#1090#1074#1072
-          TabOrder = 6
+          TabOrder = 7
         end
         object chkOnlyYears: TCheckBox
           Left = 32
@@ -419,7 +436,7 @@ object fmOptions: TfmOptions
           Height = 17
           Alignment = taLeftJustify
           Caption = #1058#1086#1083#1100#1082#1086' '#1075#1086#1076#1099
-          TabOrder = 7
+          TabOrder = 6
         end
         object chkSignsVisible: TCheckBox
           Left = 16
@@ -432,12 +449,30 @@ object fmOptions: TfmOptions
         end
         object chkChildlessExclude: TCheckBox
           Left = 16
-          Top = 168
+          Top = 200
           Width = 249
           Height = 17
           Alignment = taLeftJustify
           Caption = #1048#1089#1082#1083#1102#1095#1080#1090#1100' '#1091#1084#1077#1088#1096#1080#1093' '#1074' '#1076#1077#1090#1089#1090#1074#1077
+          TabOrder = 11
+        end
+        object chkTreeDecorative: TCheckBox
+          Left = 16
+          Top = 160
+          Width = 249
+          Height = 17
+          Alignment = taLeftJustify
+          Caption = #1044#1077#1082#1086#1088#1072#1090#1080#1074#1085#1086#1077' '#1086#1092#1086#1088#1084#1083#1077#1085#1080#1077
           TabOrder = 9
+        end
+        object chkPortraitsVisible: TCheckBox
+          Left = 16
+          Top = 176
+          Width = 249
+          Height = 17
+          Alignment = taLeftJustify
+          Caption = #1054#1090#1086#1073#1088#1072#1078#1072#1090#1100' '#1087#1086#1088#1090#1088#1077#1090#1099
+          TabOrder = 10
         end
       end
       object GroupBox2: TGroupBox
@@ -519,15 +554,6 @@ object fmOptions: TfmOptions
           TabOrder = 5
           OnClick = PanDefFontClick
         end
-      end
-      object chkTreeDecorative: TCheckBox
-        Left = 24
-        Top = 208
-        Width = 249
-        Height = 17
-        Alignment = taLeftJustify
-        Caption = #1044#1077#1082#1086#1088#1072#1090#1080#1074#1085#1086#1077' '#1086#1092#1086#1088#1084#1083#1077#1085#1080#1077
-        TabOrder = 2
       end
     end
     object SheetPedigree: TTabSheet

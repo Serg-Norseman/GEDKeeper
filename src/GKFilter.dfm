@@ -14,6 +14,7 @@ object fmFilter: TfmFilter
   Font.Style = []
   OldCreateOrder = True
   Position = poScreenCenter
+  OnCreate = FormCreate
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
@@ -129,7 +130,6 @@ object fmFilter: TfmFilter
     Top = 400
     Width = 281
     Height = 41
-    Caption = #1056#1072#1089#1096#1080#1088#1077#1085#1085#1099#1077
     TabOrder = 7
     object CheckPatriarch: TCheckBox
       Left = 8

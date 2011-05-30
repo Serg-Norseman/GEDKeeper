@@ -1,8 +1,8 @@
 object fmMaps: TfmMaps
-  Left = 271
-  Top = 105
-  Width = 861
-  Height = 564
+  Left = 278
+  Top = 148
+  Width = 845
+  Height = 542
   Caption = #1050#1072#1088#1090#1099
   Color = clBtnFace
   DefaultMonitor = dmMainForm
@@ -25,13 +25,13 @@ object fmMaps: TfmMaps
     Left = 289
     Top = 0
     Width = 4
-    Height = 518
+    Height = 496
     Beveled = True
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 518
-    Width = 853
+    Top = 496
+    Width = 837
     Height = 19
     Panels = <>
     SimplePanel = True
@@ -40,7 +40,7 @@ object fmMaps: TfmMaps
     Left = 0
     Top = 0
     Width = 289
-    Height = 518
+    Height = 496
     ActivePage = tsPlaces
     Align = alLeft
     TabOrder = 1
@@ -48,9 +48,9 @@ object fmMaps: TfmMaps
       Caption = #1052#1077#1089#1090#1072
       object TreePlaces: TTreeView
         Left = 0
-        Top = 173
+        Top = 185
         Width = 281
-        Height = 317
+        Height = 283
         Align = alClient
         Indent = 19
         SortType = stText
@@ -61,7 +61,7 @@ object fmMaps: TfmMaps
         Left = 0
         Top = 0
         Width = 281
-        Height = 173
+        Height = 185
         Align = alTop
         Caption = #1042#1099#1073#1086#1088#1082#1072
         TabOrder = 1
@@ -100,7 +100,7 @@ object fmMaps: TfmMaps
         end
         object btnSelectPlaces: TButton
           Left = 198
-          Top = 136
+          Top = 152
           Width = 75
           Height = 25
           Caption = #1055#1086#1082#1072#1079#1072#1090#1100
@@ -110,7 +110,7 @@ object fmMaps: TfmMaps
         end
         object btnSaveImage: TButton
           Left = 8
-          Top = 136
+          Top = 152
           Width = 121
           Height = 25
           Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100' '#1089#1085#1080#1084#1086#1082'..'
@@ -135,14 +135,24 @@ object fmMaps: TfmMaps
           TabOrder = 4
           OnClick = radTotalClick
         end
+        object chkLinesVisible: TCheckBox
+          Left = 8
+          Top = 128
+          Width = 265
+          Height = 17
+          Caption = #1054#1090#1086#1073#1088#1072#1078#1072#1090#1100' '#1083#1080#1085#1080#1080
+          Checked = True
+          State = cbChecked
+          TabOrder = 8
+        end
       end
     end
   end
   object Panel1: TPanel
     Left = 293
     Top = 0
-    Width = 560
-    Height = 518
+    Width = 544
+    Height = 496
     Align = alClient
     BorderStyle = bsSingle
     TabOrder = 2

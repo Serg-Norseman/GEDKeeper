@@ -1,4 +1,4 @@
-unit GKFamilyEdit; {prepare:fin}
+unit GKFamilyEdit; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,10 +6,10 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons, ComCtrls,
-  ExtCtrls, GedCom551, GKBase, GKEngine, GKCtrls, GKLists;
+  ExtCtrls, GedCom551, GKBase, GKEngine, GKCtrls, GKLists, GKLangs;
 
 type
-  TfmFamilyEdit = class(TForm)
+  TfmFamilyEdit = class(TForm, ILocalization)
     PagesFamilyData: TPageControl;
     SheetEvents: TTabSheet;
     SheetNotes: TTabSheet;
@@ -64,6 +64,8 @@ type
   public
     property Base: TfmBase read GetBase;
     property Family: TGEDCOMFamilyRecord read FFamily write SetFamily;
+
+    procedure SetLang();
   end;
 
 implementation
@@ -79,7 +81,7 @@ var
   i: Integer;
 begin
   for i := 0 to MarriageStatusSize - 1 do
-    EditMarriageStatus.Items.Add(MarriageStatus[i].Name);
+    EditMarriageStatus.Items.Add(LSList[MarriageStatus[i].Name]);
 
   //
 
@@ -87,8 +89,8 @@ begin
   FChildsList.OnModify := ListModify;
   FChildsList.Buttons := [lbAdd..lbJump];
   AddListColumn(FChildsList.List, '№', 25);
-  AddListColumn(FChildsList.List, 'Имя ребенка', 300);
-  AddListColumn(FChildsList.List, 'Дата рождения', 100);
+  AddListColumn(FChildsList.List, LSList[LSID_Name], 300);
+  AddListColumn(FChildsList.List, LSList[LSID_BirthDate], 100);
 
   FEventsList := TSheetList.Create(SheetEvents);
   FEventsList.OnModify := ListModify;
@@ -105,6 +107,8 @@ begin
   FSourcesList := TSheetList.Create(SheetSources);
   FSourcesList.OnModify := ListModify;
   Base.SetupRecSourcesList(FSourcesList);
+
+  SetLang();
 end;
 
 procedure TfmFamilyEdit.ControlsRefresh();
@@ -116,7 +120,7 @@ begin
   spouse := GetHusband();
   if (spouse <> nil)
   then EditHusband.Text := GetNameStr(spouse)
-  else EditHusband.Text := UnkMale;
+  else EditHusband.Text := LSList[LSID_UnkMale];
 
   btnHusbandAdd.Enabled := (spouse = nil);
   btnHusbandDelete.Enabled := (spouse <> nil);
@@ -125,7 +129,7 @@ begin
   spouse := GetWife();
   if (spouse <> nil)
   then EditWife.Text := GetNameStr(spouse)
-  else EditWife.Text := UnkFemale;
+  else EditWife.Text := LSList[LSID_UnkFemale];
 
   btnWifeAdd.Enabled := (spouse = nil);
   btnWifeDelete.Enabled := (spouse <> nil);
@@ -195,6 +199,30 @@ begin
   end;
 end;
 
+procedure TfmFamilyEdit.SetLang();
+begin
+  btnAccept.Caption := LSList[LSID_DlgAccept];
+  btnCancel.Caption := LSList[LSID_DlgCancel];
+
+  //Caption := LSList[];
+
+  GroupBox1.Caption := LSList[LSID_Family];
+  Label1.Caption := LSList[LSID_Husband];
+  Label2.Caption := LSList[LSID_Wife];
+  Label6.Caption := LSList[LSID_Status];
+  SheetChilds.Caption := LSList[LSID_Childs];
+  SheetEvents.Caption := LSList[LSID_Events];
+  SheetNotes.Caption := LSList[LSID_RPNotes];
+  SheetMultimedia.Caption := LSList[LSID_RPMultimedia];
+  SheetSources.Caption := LSList[LSID_RPSources];
+  Label5.Caption := LSList[LSID_Restriction];
+end;
+
+procedure TfmFamilyEdit.SetTitle();
+begin
+  Caption := LSList[LSID_Family] + ' "'+EditHusband.Text+' - '+EditWife.Text+'"';
+end;
+
 function TfmFamilyEdit.GetHusband(): TGEDCOMIndividualRecord;
 begin
   Result := TGEDCOMIndividualRecord(FFamily.Husband.Value);
@@ -218,7 +246,7 @@ end;
 
 procedure TfmFamilyEdit.btnHusbandDeleteClick(Sender: TObject);
 begin
-  if (MessageDlg('Удалить ссылку на мужа?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+  if (MessageDlg(LSList[LSID_DetachHusbandQuery], mtConfirmation, [mbNo, mbYes], 0) = mrNo)
   then Exit;
 
   Base.Engine.RemoveFamilySpouse(FFamily, GetHusband());
@@ -250,7 +278,7 @@ end;
 
 procedure TfmFamilyEdit.btnWifeDeleteClick(Sender: TObject);
 begin
-  if (MessageDlg('Удалить ссылку на жену?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+  if (MessageDlg(LSList[LSID_DetachWifeQuery], mtConfirmation, [mbNo, mbYes], 0) = mrNo)
   then Exit;
 
   Base.Engine.RemoveFamilySpouse(FFamily, GetWife());
@@ -292,11 +320,6 @@ begin
   Result := TfmBase(Owner);
 end;
 
-procedure TfmFamilyEdit.SetTitle();
-begin
-  Caption := 'Семья "'+EditHusband.Text+' - '+EditWife.Text+'"';
-end;
-
 procedure TfmFamilyEdit.EditHusbandChange(Sender: TObject);
 begin
   SetTitle();
@@ -329,7 +352,7 @@ begin
       raDelete: begin
         child := TGEDCOMIndividualRecord(ItemData);
 
-        if (child = nil) or (MessageDlg('Удалить ссылку на ребенка?', mtConfirmation, [mbNo, mbYes], 0) = mrNo)
+        if (child = nil) or (MessageDlg(LSList[LSID_DetachChildQuery], mtConfirmation, [mbNo, mbYes], 0) = mrNo)
         then Exit;
 
         if Base.Engine.RemoveFamilyChild(FFamily, child)

@@ -1,14 +1,14 @@
-unit GKProgress; {prepare:fin}
+unit GKProgress; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
 interface
 
 uses
-  SysUtils, Classes, Graphics, Controls, Forms, ComCtrls, StdCtrls;
+  SysUtils, Classes, Graphics, Controls, Forms, ComCtrls, StdCtrls, GKLangs;
 
 type
-  TfmProgress = class(TForm)
+  TfmProgress = class(TForm, ILocalization)
     ProgressBar1: TProgressBar;
     Label1: TLabel;
     Label2: TLabel;
@@ -21,6 +21,7 @@ type
     StartTime: TDateTime;
     procedure Step();
   public
+    procedure SetLang();
   end;
 
 procedure ProgressInit(aMax: Integer; aTitle: string);
@@ -42,6 +43,7 @@ begin
   fmProgress.ProgressBar1.Min := 0;
   fmProgress.ProgressBar1.Max := aMax;
   fmProgress.Label1.Caption := aTitle;
+  fmProgress.SetLang();
   fmProgress.Show;
   fmProgress.StartTime := Now();
 
@@ -63,6 +65,14 @@ begin
 end;
 
 { TfmProgress }
+
+procedure TfmProgress.SetLang();
+begin
+  Caption := LSList[LSID_Progress];
+  Label2.Caption := LSList[LSID_TimePassed];
+  Label3.Caption := LSList[LSID_TimeRemain];
+  Label4.Caption := LSList[LSID_TimeTotal];
+end;
 
 procedure TfmProgress.Step();
 var

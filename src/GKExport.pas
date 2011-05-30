@@ -1,4 +1,4 @@
-unit GKExport;
+unit GKExport; {trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -116,7 +116,7 @@ implementation
 uses
   {$IFDEF DELPHI_NET} System.IO, {$ENDIF}
   Windows, ShellAPI, XLSFile, Dialogs, Math, Variants, ComObj,
-  GKUtils, GKProgress;
+  GKUtils, GKProgress, GKLangs;
 
 procedure WriteStr(aStream: TFileStream; aStr: string);
 begin
@@ -241,7 +241,7 @@ begin
   unk := nil;
 
   fs_surnames := TFileStream.Create(FPath + 'index_surnames.htm', fmCreate);
-  WriteHeader(fs_surnames, 'Генеалогическая база данных');
+  WriteHeader(fs_surnames, LSList[LSID_GenDB]);
   WriteStr(fs_surnames, '<ul>');
 
   try
@@ -307,7 +307,7 @@ begin
     end;
 
     if (unk <> nil) then begin
-      index_str := index_str + '<a href="index_surnames.htm#' + NumUpdate(Ord('?'), 3) + '">Другое</a>' + '&nbsp;';
+      index_str := index_str + '<a href="index_surnames.htm#' + NumUpdate(Ord('?'), 3) + '">?</a>' + '&nbsp;';
       WriteSurnames(fs_surnames, '?', unk);
     end;
 
@@ -346,7 +346,7 @@ begin
   unk := nil;
 
   fs_names := TFileStream.Create(FPath + 'index_names.htm', fmCreate);
-  WriteHeader(fs_names, 'Генеалогическая база данных');
+  WriteHeader(fs_names, LSList[LSID_GenDB]);
   WriteStr(fs_names, '<ul>');
 
   try
@@ -418,7 +418,7 @@ begin
     end;
 
     if (unk <> nil) then begin
-      index_str := index_str + '<a href="index_names.htm#' + NumUpdate(Ord('?'), 3) + '">Другое</a>&nbsp;';
+      index_str := index_str + '<a href="index_names.htm#' + NumUpdate(Ord('?'), 3) + '">?</a>&nbsp;';
 
       WriteStr(fs_names, '<li><a name="'+NumUpdate(Ord('?'), 3)+'"><b>' + '?' + '</b></a>');
       WriteIndex(fs_names, unk);
@@ -478,7 +478,7 @@ begin
 
     fs_timeline := TFileStream.Create(FPath + tlFileName, fmCreate);
     try
-      WriteHeader(fs_timeline, 'Генеалогическая база данных');
+      WriteHeader(fs_timeline, LSList[LSID_GenDB]);
       WriteStr(fs_timeline, '<b>Индекс:</b><ul>');
 
       years.Sort;
@@ -681,8 +681,8 @@ var
   fs_persons: TFileStream;
 begin
   fs_persons := TFileStream.Create(FPath + 'persons.htm', fmCreate);
-  WriteHeader(fs_persons, 'Генеалогическая база данных');
-  WriteStr(fs_persons, '<b>Индекс:</b><ul>');
+  WriteHeader(fs_persons, LSList[LSID_GenDB]);
+  WriteStr(fs_persons, '<b>'+LSList[LSID_GenIndex]+':</b><ul>');
 
   names := TStringList.Create;
   try
@@ -718,32 +718,33 @@ var
 begin
   main_index := TFileStream.Create(FPath + 'index.htm', fmCreate);
   try
-    WriteHeader(main_index, 'Генеалогическая база данных');
+    WriteHeader(main_index, LSList[LSID_GenDB]);
 
     FSurnamesCount := 0;
 
     //WriteStr(main_index, '<form><table><tr><td>');
 
-    WriteStr(main_index, '<b>Индекс фамилий:</b><ul>');
+    WriteStr(main_index, '<b>'+LSList[LSID_SurnamesIndex]+':</b><ul>');
     WriteFamilyIndex(main_index);
     WriteStr(main_index, '</ul><hr>');
 
-    WriteStr(main_index, '<b>Индекс имен:</b><ul>');
+    WriteStr(main_index, '<b>'+LSList[LSID_NamesIndex]+':</b><ul>');
     WriteNameIndex(main_index);
     WriteStr(main_index, '</ul><hr>');
 
-    WriteStr(main_index, '<b>Индекс годов рождения:</b><ul>');
+    WriteStr(main_index, '<b>'+LSList[LSID_BirthIndex]+':</b><ul>');
     WriteTimeLineIndex(main_index, 'BIRT', 'index_birth.htm');
     WriteStr(main_index, '</ul><hr>');
 
-    WriteStr(main_index, '<b>Индекс годов смерти:</b><ul>');
+    WriteStr(main_index, '<b>'+LSList[LSID_DeathIndex]+':</b><ul>');
     WriteTimeLineIndex(main_index, 'DEAT', 'index_death.htm');
     WriteStr(main_index, '</ul><hr>');
 
     WritePersons();
 
+    {fixme!!!}
     FEngine.GetCommonStats(stats);
-    WriteStr(main_index, '<b>Общая статистика:</b><ul>');
+    WriteStr(main_index, '<b>'+LSList[LSID_CommonStats]+':</b><ul>');
     WriteStr(main_index, '<li>Персон: ' + IntToStr(stats.persons) + '</li>');
     WriteStr(main_index, '<li>Фамилий: ' + IntToStr(FSurnamesCount) + '</li>');
     WriteStr(main_index, '</ul><hr>');
@@ -774,20 +775,20 @@ var
   fname: string;
 begin
   xls := TXLSFile.Create(nil);
-  ProgressInit(FTree.RecordsCount, 'Экспорт...');
+  ProgressInit(FTree.RecordsCount, LSList[LSID_MIExport]+'...');
   try
     xls.AddStrCell( 1, 1, AllBorders, '№');
-    xls.AddStrCell( 2, 1, AllBorders, 'Фамилия');
-    xls.AddStrCell( 3, 1, AllBorders, 'Имя');
-    xls.AddStrCell( 4, 1, AllBorders, 'Отчество');
-    xls.AddStrCell( 5, 1, AllBorders, 'Пол');
-    xls.AddStrCell( 6, 1, AllBorders, 'Дата рождения');
-    xls.AddStrCell( 7, 1, AllBorders, 'Дата смерти');
-    xls.AddStrCell( 8, 1, AllBorders, 'Место рождения');
-    xls.AddStrCell( 9, 1, AllBorders, 'Место смерти');
-    xls.AddStrCell(10, 1, AllBorders, 'Местожительство');
-    xls.AddStrCell(11, 1, AllBorders, 'Возраст');
-    xls.AddStrCell(12, 1, AllBorders, 'Продолжительность жизни');
+    xls.AddStrCell( 2, 1, AllBorders, LSList[LSID_Surname]);
+    xls.AddStrCell( 3, 1, AllBorders, LSList[LSID_Name]);
+    xls.AddStrCell( 4, 1, AllBorders, LSList[LSID_Patronymic]);
+    xls.AddStrCell( 5, 1, AllBorders, LSList[LSID_Sex]);
+    xls.AddStrCell( 6, 1, AllBorders, LSList[LSID_BirthDate]);
+    xls.AddStrCell( 7, 1, AllBorders, LSList[LSID_DeathDate]);
+    xls.AddStrCell( 8, 1, AllBorders, LSList[LSID_BirthPlace]);
+    xls.AddStrCell( 9, 1, AllBorders, LSList[LSID_DeathPlace]);
+    xls.AddStrCell(10, 1, AllBorders, LSList[LSID_Residence]);
+    xls.AddStrCell(11, 1, AllBorders, LSList[LSID_Age]);
+    xls.AddStrCell(12, 1, AllBorders, LSList[LSID_LifeExpectancy]);
 
     row := 1;
     for i := 0 to FTree.RecordsCount - 1 do begin
@@ -807,7 +808,7 @@ begin
         xls.AddStrCell( 2, row, AllBorders, fam);
         xls.AddStrCell( 3, row, AllBorders, nam);
         xls.AddStrCell( 4, row, AllBorders, pat);
-        xls.AddStrCell( 5, row, AllBorders, SexData[ind.Sex].ViewSign);
+        xls.AddStrCell( 5, row, AllBorders, SexStr(ind.Sex)[1]);
         xls.AddStrCell( 6, row, AllBorders, GetBirthDate(ind, dfDD_MM_YYYY));
         xls.AddStrCell( 7, row, AllBorders, GetDeathDate(ind, dfDD_MM_YYYY));
         xls.AddStrCell( 8, row, AllBorders, GetBirthPlace(ind));
@@ -840,7 +841,7 @@ var
 begin
   {$IFNDEF DELPHI_NET}
   try
-    ProgressInit(FTree.RecordsCount, 'Экспорт...');
+    ProgressInit(FTree.RecordsCount, LSList[LSID_MIExport]+'...');
 
     try
       try
@@ -857,17 +858,17 @@ begin
       sheet := excel.Sheets[1];
 
       sheet.Cells[1,  1] := '№';
-      sheet.Cells[1,  2] := 'Фамилия';
-      sheet.Cells[1,  3] := 'Имя';
-      sheet.Cells[1,  4] := 'Отчество';
-      sheet.Cells[1,  5] := 'Пол';
-      sheet.Cells[1,  6] := 'Дата рождения';
-      sheet.Cells[1,  7] := 'Дата смерти';
-      sheet.Cells[1,  8] := 'Место рождения';
-      sheet.Cells[1,  9] := 'Место смерти';
-      sheet.Cells[1, 10] := 'Местожительство';
-      sheet.Cells[1, 11] := 'Возраст';
-      sheet.Cells[1, 12] := 'Продолжительность жизни';
+      sheet.Cells[1,  2] := LSList[LSID_Surname];
+      sheet.Cells[1,  3] := LSList[LSID_Name];
+      sheet.Cells[1,  4] := LSList[LSID_Patronymic];
+      sheet.Cells[1,  5] := LSList[LSID_Sex];
+      sheet.Cells[1,  6] := LSList[LSID_BirthDate];
+      sheet.Cells[1,  7] := LSList[LSID_DeathDate];
+      sheet.Cells[1,  8] := LSList[LSID_BirthPlace];
+      sheet.Cells[1,  9] := LSList[LSID_DeathPlace];
+      sheet.Cells[1, 10] := LSList[LSID_Residence];
+      sheet.Cells[1, 11] := LSList[LSID_Age];
+      sheet.Cells[1, 12] := LSList[LSID_LifeExpectancy];
 
       row := 1;
       for i := 0 to FTree.RecordsCount - 1 do begin
@@ -887,7 +888,7 @@ begin
           sheet.Cells[row,  2] := fam;
           sheet.Cells[row,  3] := nam;
           sheet.Cells[row,  4] := pat;
-          sheet.Cells[row,  5] := SexData[ind.Sex].ViewSign;
+          sheet.Cells[row,  5] := SexStr(ind.Sex)[1];
           sheet.Cells[row,  6] := GetBirthDate(ind, dfDD_MM_YYYY);
           sheet.Cells[row,  7] := GetDeathDate(ind, dfDD_MM_YYYY);
           sheet.Cells[row,  8] := GetBirthPlace(ind);
@@ -1013,7 +1014,7 @@ var
         ev := GetPersonEventIndex(event.Name);
         if (ev = 0) then st := event.Detail.Classification
         else
-        if (ev > 0) then st := PersonEvents[ev].Name
+        if (ev > 0) then st := LSList[PersonEvents[ev].Name]
         else st := event.Name;
 
         dt := GEDCOMCustomDateToStr(event.Detail.Date.Value, dfDD_MM_YYYY);
@@ -1021,12 +1022,13 @@ var
         WriteStr(aStream, '<li>' + dt + ': ' + st + '.');
 
         if (event.Detail.Place.StringValue <> '')
-        then WriteStr(aStream, ' Место: ' + event.Detail.Place.StringValue + '</li>');
+        then WriteStr(aStream, ' '+LSList[LSID_Place]+': ' + event.Detail.Place.StringValue + '</li>');
       end else begin
         if (event = nil)
         then dt := '?'
         else dt := GEDCOMCustomDateToStr(event.Detail.Date.Value, dfDD_MM_YYYY);
 
+        {fixme!}
         if (evObj.iRec.Sex = svMale) then begin
           st := ': Родился ';
         end else begin
@@ -1119,29 +1121,29 @@ var
     sp: TGEDCOMPointer;
     note: TGEDCOMNotes;
   begin
-    WriteStr(aStream, '<br>Пол: ' + SexData[aPerson.iRec.Sex].ViewName);
+    WriteStr(aStream, '<br>'+LSList[LSID_Sex]+': ' + SexStr(aPerson.iRec.Sex));
 
     st := GetLifeExpectancy(aPerson.iRec);
     if (st <> '?') and (st <> '')
-    then WriteStr(aStream, '<br>Продолжительность жизни: ' + st);
+    then WriteStr(aStream, '<br>'+LSList[LSID_LifeExpectancy]+': ' + st);
 
     if (aPerson.iRec.ChildToFamilyLinksCount <> 0) then begin
       family := aPerson.iRec.ChildToFamilyLinks[0].Family;
 
       irec := TGEDCOMIndividualRecord(family.Husband.Value);
       if (irec <> nil)
-      then WriteStr(aStream, '<br>Отец: ' + GetNameStr(irec) + idLink(FindPerson(irec)));
+      then WriteStr(aStream, '<br>'+LSList[LSID_Father]+': ' + GetNameStr(irec) + idLink(FindPerson(irec)));
 
       irec := TGEDCOMIndividualRecord(family.Wife.Value);
       if (irec <> nil)
-      then WriteStr(aStream, '<br>Мать: ' + GetNameStr(irec) + idLink(FindPerson(irec)));
+      then WriteStr(aStream, '<br>'+LSList[LSID_Mother]+': ' + GetNameStr(irec) + idLink(FindPerson(irec)));
     end;
 
     ev_list := TObjectList.Create(True);
     try
       // загрузка событий
       if (aPerson.iRec.IndividualEventsCount > 0) then begin
-        WriteStr(aStream, '<p>События: <ul>');
+        WriteStr(aStream, '<p>'+LSList[LSID_Events]+': <ul>');
         for i := 0 to aPerson.iRec.IndividualEventsCount - 1 do begin
           event := aPerson.iRec.IndividualEvents[i];
 
@@ -1159,12 +1161,12 @@ var
 
         if (aPerson.iRec.Sex = svMale) then begin
           sp := family.Wife;
-          st := 'Жена: ';
-          unk := 'неизвестна';
+          st := LSList[LSID_Wife]+': ';
+          unk := LSList[LSID_UnkFemale];
         end else begin
           sp := family.Husband;
-          st := 'Муж: ';
-          unk := 'неизвестен';
+          st := LSList[LSID_Husband]+': ';
+          unk := LSList[LSID_UnkMale];
         end;
 
         irec := TGEDCOMIndividualRecord(sp.Value);
@@ -1186,7 +1188,7 @@ var
     end;
 
     if (FOptions.IncludeNotes) and (aPerson.iRec.NotesCount <> 0) then begin
-      WriteStr(aStream, '<p>Заметки:<ul>');
+      WriteStr(aStream, '<p>'+LSList[LSID_RPNotes]+':<ul>');
       for i := 0 to aPerson.iRec.NotesCount - 1 do begin
         note := aPerson.iRec.Notes[i];
         WriteStr(aStream, '<li>' + ConStrings(note.Notes) + '</li>');
@@ -1222,11 +1224,11 @@ var
         if (aPerson.iRec.Sex = svMale) then begin
           sp := family.Wife;
           st := 'Ж';
-          unk := 'неизвестна';
+          unk := LSList[LSID_UnkFemale];
         end else begin
           sp := family.Husband;
           st := 'М';
-          unk := 'неизвестен';
+          unk := LSList[LSID_UnkMale];
         end;
 
         if (sp_index) then st := st + IntToStr(i + 1);
@@ -1381,11 +1383,11 @@ var
   pObj: TPersonObj;
 begin
   if (iRec = nil) then begin
-    MessageDlg('Не выбрана персональная запись', mtError, [mbOk], 0);
+    MessageDlg(LSList[LSID_NotSelectedPerson], mtError, [mbOk], 0);
     Exit;
   end;
 
-  title := 'Родословная роспись: ' + GetNameStr(iRec);
+  title := LSList[LSID_ExpPedigree]+': ' + GetNameStr(iRec);
 
   CreateDir(aDir);
 
@@ -1410,7 +1412,7 @@ begin
 
         cur_level := pObj.Level;
 
-        WriteStr(fs_index, '<h3>Поколение ' + GetRome(cur_level) + '</h3><ul>');
+        WriteStr(fs_index, '<h3>'+LSList[LSID_Generation]+' ' + GetRome(cur_level) + '</h3><ul>');
       end;
 
       WritePerson(fs_index, aTree, pObj);
@@ -1418,7 +1420,7 @@ begin
     WriteStr(fs_index, '</ul>');
 
     if (FSourceList.Count > 0) then begin
-      WriteStr(fs_index, '<h3>Источники</h3>');
+      WriteStr(fs_index, '<h3>'+LSList[LSID_RPSources]+'</h3>');
       for i := 0 to FSourceList.Count - 1 do begin
         sn := IntToStr(i + 1);
         WriteStr(fs_index, '<p><sup><a name="src' + sn + '">' + sn + '</a></sup>&nbsp;');

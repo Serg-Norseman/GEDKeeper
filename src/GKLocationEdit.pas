@@ -1,4 +1,4 @@
-unit GKLocationEdit; {prepare:fin}
+unit GKLocationEdit; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,11 +6,11 @@ interface
 
 uses
   Windows, SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls, Buttons,
-  ComCtrls, Contnrs, ExtCtrls, GedCom551, GKBase, GKEngine, GKCtrls, GKLists,
-  GKMapBrowser;
+  ComCtrls, Contnrs, ExtCtrls,
+  GedCom551, GKBase, GKEngine, GKCtrls, GKLists, GKMapBrowser, GKLangs;
 
 type
-  TfmLocationEdit = class(TForm)
+  TfmLocationEdit = class(TForm, ILocalization)
     btnAccept: TBitBtn;
     btnCancel: TBitBtn;
     PagesData: TPageControl;
@@ -55,6 +55,8 @@ type
   public
     property Base: TfmBase read GetBase;
     property LocationRecord: TGEDCOMLocationRecord read FLocationRecord write SetLocationRecord;
+
+    procedure SetLang();
   end;
 
 implementation
@@ -77,11 +79,42 @@ begin
   Base.SetupRecMediaList(FMediaList);
 
   FSearchPoints := TObjectList.Create(True);
+
+  SetLang();
 end;
 
 procedure TfmLocationEdit.FormDestroy(Sender: TObject);
 begin
   FSearchPoints.Free;
+end;
+
+procedure TfmLocationEdit.SetLang();
+begin
+  btnAccept.Caption := LSList[LSID_DlgAccept];
+  btnCancel.Caption := LSList[LSID_DlgCancel];
+
+  SheetCommon.Caption := LSList[LSID_Common];
+  SheetNotes.Caption := LSList[LSID_RPNotes];
+  SheetMultimedia.Caption := LSList[LSID_RPMultimedia];
+
+  Label1.Caption := LSList[LSID_Title];
+  Label2.Caption := LSList[LSID_Latitude];
+  Label3.Caption := LSList[LSID_Longitude];
+
+  ListGeoCoords.Columns[0].Caption := LSList[LSID_Title];
+  ListGeoCoords.Columns[1].Caption := LSList[LSID_Latitude];
+  ListGeoCoords.Columns[2].Caption := LSList[LSID_Longitude];
+
+  btnShowOnMap.Caption := LSList[LSID_Show];
+  GroupBox1.Caption := LSList[LSID_SearchCoords];
+  btnSearch.Caption := LSList[LSID_Search];
+  btnSelect.Caption := LSList[LSID_SelectCoords];
+  btnSelectName.Caption := LSList[LSID_SelectName];
+end;
+
+procedure TfmLocationEdit.EditNameChange(Sender: TObject);
+begin
+  Caption := LSList[LSID_Location] + ' "' + EditName.Text + '"';
 end;
 
 procedure TfmLocationEdit.ControlsRefresh();
@@ -126,11 +159,6 @@ end;
 function TfmLocationEdit.GetBase: TfmBase;
 begin
   Result := TfmBase(Owner);
-end;
-
-procedure TfmLocationEdit.EditNameChange(Sender: TObject);
-begin
-  Caption := 'Местоположение "'+EditName.Text+'"';
 end;
 
 procedure TfmLocationEdit.EditNameKeyDown(Sender: TObject; var Key: Word;

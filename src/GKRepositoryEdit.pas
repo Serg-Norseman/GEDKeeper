@@ -1,4 +1,4 @@
-unit GKRepositoryEdit; {prepare:fin}
+unit GKRepositoryEdit; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,10 +6,10 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, StdCtrls, Buttons, ComCtrls, ExtCtrls,
-  GedCom551, GKBase, GKEngine, GKLists;
+  GedCom551, GKBase, GKEngine, GKLists, GKLangs;
 
 type
-  TfmRepositoryEdit = class(TForm)
+  TfmRepositoryEdit = class(TForm, ILocalization)
     btnAccept: TBitBtn;
     btnCancel: TBitBtn;
     GroupBox1: TGroupBox;
@@ -33,6 +33,8 @@ type
   public
     property Base: TfmBase read GetBase;
     property Repository: TGEDCOMRepositoryRecord read FRepository write SetRepository;
+
+    procedure SetLang();
   end;
 
 implementation
@@ -46,6 +48,20 @@ begin
   FNotesList := TSheetList.Create(SheetNotes, lmBox);
   FNotesList.OnModify := ListModify;
   Base.SetupRecNotesList(FNotesList);
+
+  SetLang();
+end;
+
+procedure TfmRepositoryEdit.SetLang();
+begin
+  btnAccept.Caption := LSList[LSID_DlgAccept];
+  btnCancel.Caption := LSList[LSID_DlgCancel];
+
+  Caption := LSList[LSID_Repository];
+
+  Label1.Caption := LSList[LSID_Title];
+  SheetNotes.Caption := LSList[LSID_RPNotes];
+  btnAddress.Caption := LSList[LSID_Address] + '...';
 end;
 
 procedure TfmRepositoryEdit.ControlsRefresh();

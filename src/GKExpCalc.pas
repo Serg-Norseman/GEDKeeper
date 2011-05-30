@@ -1,4 +1,4 @@
-unit GKExpCalc; {prepare:fin}
+unit GKExpCalc; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -6,10 +6,10 @@ interface
 
 uses
   Windows, SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls
-  {$IFNDEF DELPHI_NET}, ExpCalc {$ENDIF};
+  {$IFNDEF DELPHI_NET}, ExpCalc {$ENDIF}, GKLangs;
 
 type
-  TfmCalcWidget = class(TForm)
+  TfmCalcWidget = class(TForm, ILocalization)
     lbOutput: TListBox;
     edExpression: TEdit;
     chkPutToClipboard: TCheckBox;
@@ -28,6 +28,7 @@ type
     last_key: Char;
     procedure OnModalBegin(Sender: TObject);
   public
+    procedure SetLang();
   end;
 
 var
@@ -38,6 +39,37 @@ implementation
 uses Clipbrd, GKMain;
 
 {$R *.dfm}
+
+procedure TfmCalcWidget.FormCreate(Sender: TObject);
+begin
+  {$IFNDEF DELPHI_NET}
+  calc := TCalculator.Create;
+  {$ENDIF}
+
+  (*
+      OnModalBegin only occurs for the first modal form. That is,
+      if the modal form displays another modal form, there is no
+      second OnModalBegin event when the second modal form is launched.
+  *)
+  Application.OnModalBegin := OnModalBegin;
+
+  SetLang();
+end;
+
+procedure TfmCalcWidget.FormDestroy(Sender: TObject);
+begin
+  Application.OnModalBegin := nil;
+
+  {$IFNDEF DELPHI_NET}
+  calc.Destroy;
+  {$ENDIF}
+end;
+
+procedure TfmCalcWidget.SetLang();
+begin
+  Caption := LSList[LSID_MICalc];
+  chkPutToClipboard.Caption := LSList[LSID_CopyResultToClipboard];
+end;
 
 procedure TfmCalcWidget.edExpressionKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
@@ -79,29 +111,6 @@ begin
   fmGEDKeeper.miCalc.Checked := False;
   fmCalcWidget := nil;
   Action := caFree;
-end;
-
-procedure TfmCalcWidget.FormCreate(Sender: TObject);
-begin
-  {$IFNDEF DELPHI_NET}
-  calc := TCalculator.Create;
-  {$ENDIF}
-
-  (*
-      OnModalBegin only occurs for the first modal form. That is,
-      if the modal form displays another modal form, there is no
-      second OnModalBegin event when the second modal form is launched.
-  *)
-  Application.OnModalBegin := OnModalBegin;
-end;
-
-procedure TfmCalcWidget.FormDestroy(Sender: TObject);
-begin
-  Application.OnModalBegin := nil;
-
-  {$IFNDEF DELPHI_NET}
-  calc.Destroy;
-  {$ENDIF}
 end;
 
 procedure TfmCalcWidget.OnModalBegin(Sender: TObject);

@@ -1,4 +1,4 @@
-unit GKEventEdit; {prepare:fin}
+unit GKEventEdit; {prepare:fin; trans:fin}
 
 {$I GEDKeeper.inc}
 
@@ -7,10 +7,10 @@ interface
 uses
   Windows, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls,
   Buttons, ComCtrls, ExtCtrls, Mask, GedCom551, GKEngine, GKBase, GKCtrls,
-  GKLists;
+  GKLists, GKLangs;
 
 type
-  TfmEventEdit = class(TForm)
+  TfmEventEdit = class(TForm, ILocalization)
     btnAccept: TBitBtn;
     btnCancel: TBitBtn;
     PageEventData: TPageControl;
@@ -68,6 +68,8 @@ type
   public
     property Base: TfmBase read GetBase;
     property Event: TGEDCOMCustomEvent read FEvent write SetEvent;
+
+    procedure SetLang();
   end;
 
 implementation
@@ -76,19 +78,20 @@ uses GKMain, GKUtils;
 
 {$R *.dfm}
 
-{ TfmEventEdit }
-
 procedure TfmEventEdit.FormCreate(Sender: TObject);
 var
   i: Integer;
   gc: TGEDCOMCalendar;
 begin
   for i := 0 to DateKindsSize - 1 do
-    EditEventDateType.Items.Add(DateKinds[i].Name);
+    EditEventDateType.Items.Add(LSList[DateKinds[i].Name]);
 
   for gc := Low(TGEDCOMCalendar) to High(TGEDCOMCalendar) do begin
-    cbDate1Calendar.Items.Add(DateCalendars[gc]);
-    cbDate2Calendar.Items.Add(DateCalendars[gc]);
+    cbDate1Calendar.Items.Add(LSList[DateCalendars[gc]]);
+    cbDate2Calendar.Items.Add(LSList[DateCalendars[gc]]);
+
+    cbDate1Calendar.ItemIndex := 0;
+    cbDate2Calendar.ItemIndex := 0;
   end;
 
   FLocation := nil;
@@ -104,6 +107,27 @@ begin
   FSourcesList := TSheetList.Create(SheetSources);
   FSourcesList.OnModify := ListModify;
   Base.SetupRecSourcesList(FSourcesList);
+
+  SetLang();
+end;
+
+procedure TfmEventEdit.SetLang();
+begin
+  btnAccept.Caption := LSList[LSID_DlgAccept];
+  btnCancel.Caption := LSList[LSID_DlgCancel];
+  btnAddress.Caption := LSList[LSID_Address] + '...';
+
+  SheetCommon.Caption := LSList[LSID_Common];
+  SheetNotes.Caption := LSList[LSID_RPNotes];
+  SheetMultimedia.Caption := LSList[LSID_RPMultimedia];
+  SheetSources.Caption := LSList[LSID_RPSources];
+
+  Label1.Caption := LSList[LSID_Event];
+  LabelAttr.Caption := LSList[LSID_Value];
+  Label2.Caption := LSList[LSID_Place];
+  Label3.Caption := LSList[LSID_Date];
+  Label4.Caption := LSList[LSID_Cause];
+  Label5.Caption := LSList[LSID_Agency];
 end;
 
 procedure TfmEventEdit.EditEventDateTypeChange(Sender: TObject);
@@ -156,12 +180,12 @@ begin
       EditAttribute.Color := clBtnFace;
       EditAttribute.Text := '';
 
-      LabelAttr.Caption := 'Значение атрибута';
+      //LabelAttr.Caption := 'Значение атрибута';
     end else begin
       EditAttribute.Enabled := True;
       EditAttribute.Color := clWindow;
 
-      LabelAttr.Caption := 'Значение атрибута (' + EditEventType.Text + ')';
+      //LabelAttr.Caption := 'Значение атрибута (' + EditEventType.Text + ')';
     end;
   end;
 end;
@@ -245,12 +269,12 @@ begin
 
   if (FEvent is TGEDCOMFamilyEvent) then begin
     for i := 0 to FamilyEventsSize - 1 do
-      EditEventType.Items.Add(FamilyEvents[i].Name);
+      EditEventType.Items.Add(LSList[FamilyEvents[i].Name]);
 
     EditEventType.ItemIndex := GetFamilyEventIndex(FEvent.Name);
   end else begin
     for i := 0 to PersonEventsSize - 1 do
-      EditEventType.Items.Add(PersonEvents[i].Name);
+      EditEventType.Items.Add(LSList[PersonEvents[i].Name]);
 
     i := GetPersonEventIndex(FEvent.Name);
     EditEventType.ItemIndex := i;
