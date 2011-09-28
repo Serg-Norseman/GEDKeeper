@@ -1,3 +1,0 @@
-
-{$I compiler.inc}
-

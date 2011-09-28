@@ -1,0 +1,494 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>138F9A44-4C12-42BA-AE71-6EB8CF8EF90F</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>WinExe</OutputType>
+    <AssemblyName>GEDKeeper2</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <WarningLevel>4</WarningLevel>
+    <TargetFrameworkProfile />
+    <SourceAnalysisOverrideSettingsFile>C:\Documents and Settings\Zhdanovskih_SV\Application Data\ICSharpCode/SharpDevelop4.0\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
+    <SignAssembly>False</SignAssembly>
+    <DelaySign>False</DelaySign>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <NoStdLib>False</NoStdLib>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <RunCodeAnalysis>False</RunCodeAnalysis>
+    <RunSourceAnalysis>False</RunSourceAnalysis>
+    <ApplicationIcon>GEDKeeper2.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <BaseAddress>4194304</BaseAddress>
+    <FileAlignment>4096</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>..\</OutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>false</Optimize>
+    <StartAction>Project</StartAction>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>..\</OutputPath>
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>PdbOnly</DebugType>
+    <Optimize>true</Optimize>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="LuaInterface">
+      <HintPath>LuaInterface.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.mshtml" />
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="XapianCSharp">
+      <HintPath>XapianCSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="ZedGraph">
+      <HintPath>ZedGraph.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Ext\CSV\CSVReader.cs" />
+    <Compile Include="Ext\CSV\StringConverter.cs" />
+    <Compile Include="Ext\ZipStorer.cs" />
+    <Compile Include="GedCom551\GEDCOMEnums.cs" />
+    <Compile Include="GedCom551\TGEDCOMAddress.cs" />
+    <Compile Include="GedCom551\TGEDCOMAssociation.cs" />
+    <Compile Include="GedCom551\TGEDCOMChangeDate.cs" />
+    <Compile Include="GedCom551\TGEDCOMChildToFamilyLink.cs" />
+    <Compile Include="GedCom551\TGEDCOMCommunicationRecord.cs" />
+    <Compile Include="GedCom551\TGEDCOMCustomDate.cs" />
+    <Compile Include="GedCom551\TGEDCOMCustomEvent.cs" />
+    <Compile Include="GedCom551\TGEDCOMCustomRecord.cs" />
+    <Compile Include="GedCom551\TGEDCOMCustomTag.cs" />
+    <Compile Include="GedCom551\TGEDCOMData.cs" />
+    <Compile Include="GedCom551\TGEDCOMDate.cs" />
+    <Compile Include="GedCom551\TGEDCOMDateApproximated.cs" />
+    <Compile Include="GedCom551\TGEDCOMDateExact.cs" />
+    <Compile Include="GedCom551\TGEDCOMDateInterpreted.cs" />
+    <Compile Include="GedCom551\TGEDCOMDatePeriod.cs" />
+    <Compile Include="GedCom551\TGEDCOMDateRange.cs" />
+    <Compile Include="GedCom551\TGEDCOMDateStatus.cs" />
+    <Compile Include="GedCom551\TGEDCOMDateValue.cs" />
+    <Compile Include="GedCom551\TGEDCOMEvent.cs" />
+    <Compile Include="GedCom551\TGEDCOMEventDetail.cs" />
+    <Compile Include="GedCom551\TGEDCOMFamilyEvent.cs" />
+    <Compile Include="GedCom551\TGEDCOMFamilyRecord.cs" />
+    <Compile Include="GedCom551\TGEDCOMFileReference.cs" />
+    <Compile Include="GedCom551\TGEDCOMFileReferenceWithTitle.cs" />
+    <Compile Include="GedCom551\TGEDCOMGroupRecord.cs" />
+    <Compile Include="GedCom551\TGEDCOMHeader.cs" />
+    <Compile Include="GedCom551\TGEDCOMIndividualAttribute.cs" />
+    <Compile Include="GedCom551\TGEDCOMIndividualEvent.cs" />
+    <Compile Include="GedCom551\TGEDCOMIndividualOrdinance.cs" />
+    <Compile Include="GedCom551\TGEDCOMIndividualRecord.cs" />
+    <Compile Include="GedCom551\TGEDCOMList.cs" />
+    <Compile Include="GedCom551\TGEDCOMLocationRecord.cs" />
+    <Compile Include="GedCom551\TGEDCOMMap.cs" />
+    <Compile Include="GedCom551\TGEDCOMMultimediaLink.cs" />
+    <Compile Include="GedCom551\TGEDCOMMultimediaRecord.cs" />
+    <Compile Include="GedCom551\TGEDCOMNoteRecord.cs" />
+    <Compile Include="GedCom551\TGEDCOMNotes.cs" />
+    <Compile Include="GedCom551\TGEDCOMObject.cs" />
+    <Compile Include="GedCom551\TGEDCOMPersonalName.cs" />
+    <Compile Include="GedCom551\TGEDCOMPersonalNamePieces.cs" />
+    <Compile Include="GedCom551\TGEDCOMPlace.cs" />
+    <Compile Include="GedCom551\TGEDCOMPointer.cs" />
+    <Compile Include="GedCom551\TGEDCOMPointerWithNotes.cs" />
+    <Compile Include="GedCom551\TGEDCOMRecord.cs" />
+    <Compile Include="GedCom551\TGEDCOMRepositoryCitation.cs" />
+    <Compile Include="GedCom551\TGEDCOMRepositoryRecord.cs" />
+    <Compile Include="GedCom551\TGEDCOMResearchRecord.cs" />
+    <Compile Include="GedCom551\TGEDCOMSourceCitation.cs" />
+    <Compile Include="GedCom551\TGEDCOMSourceRecord.cs" />
+    <Compile Include="GedCom551\TGEDCOMSpouseSealing.cs" />
+    <Compile Include="GedCom551\TGEDCOMSpouseToFamilyLink.cs" />
+    <Compile Include="GedCom551\TGEDCOMSubmissionRecord.cs" />
+    <Compile Include="GedCom551\TGEDCOMSubmitterRecord.cs" />
+    <Compile Include="GedCom551\TGEDCOMTag.cs" />
+    <Compile Include="GedCom551\TGEDCOMTagWithLists.cs" />
+    <Compile Include="GedCom551\TGEDCOMTaskRecord.cs" />
+    <Compile Include="GedCom551\TGEDCOMTime.cs" />
+    <Compile Include="GedCom551\TGEDCOMTree.cs" />
+    <Compile Include="GedCom551\TGEDCOMUserReference.cs" />
+    <Compile Include="GedCom551\TXRefReplaceMap.cs" />
+    <Compile Include="GEDKeeper2.cs" />
+    <Compile Include="GKCore\GKLangs.cs" />
+    <Compile Include="GKCore\SearchManager.cs" />
+    <Compile Include="GKCore\Settings\TChartOptions.cs" />
+    <Compile Include="GKCore\Settings\TGlobalOptions.cs" />
+    <Compile Include="GKCore\Settings\TPedigreeOptions.cs" />
+    <Compile Include="GKCore\Settings\TProxy.cs" />
+    <Compile Include="GKCore\Sys\IniFile.cs" />
+    <Compile Include="GKCore\Sys\EnumSet.cs" />
+    <Compile Include="GKCore\Sys\Structs.cs" />
+    <Compile Include="GKCore\Sys\SysUtils.cs" />
+    <Compile Include="GKCore\Sys\TList.cs" />
+    <Compile Include="GKCore\Sys\TObjectList.cs" />
+    <Compile Include="GKCore\Sys\TRect.cs" />
+    <Compile Include="GKCore\Sys\TStack.cs" />
+    <Compile Include="GKCore\Sys\TStringList.cs" />
+    <Compile Include="GKCore\Sys\TStrings.cs" />
+    <Compile Include="GKCore\TCalculator.cs" />
+    <Compile Include="GKCore\TCalendarConv.cs" />
+    <Compile Include="GKCore\TExcelExporter.cs" />
+    <Compile Include="GKCore\TExporter.cs" />
+    <Compile Include="GKCore\TGenEngine.cs" />
+    <Compile Include="GKCore\TGKImporter.cs" />
+    <Compile Include="GKCore\TGraph.cs" />
+    <Compile Include="GKCore\THTMLExporter.cs" />
+    <Compile Include="GKCore\TLangMan.cs" />
+    <Compile Include="GKCore\TPedigree.cs" />
+    <Compile Include="GKCore\TScriptEngine.cs" />
+    <Compile Include="GKCore\TWebExporter.cs" />
+    <Compile Include="GKResources.Designer.cs">
+      <DependentUpon>GKResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Controls\InputBox.cs" />
+    <Compile Include="GKUI\Controls\TComboItem.cs" />
+    <Compile Include="GKUI\Controls\TExtListItem.cs" />
+    <Compile Include="GKUI\Controls\TGKHyperView.cs" />
+    <Compile Include="GKUI\Controls\TGKListView.cs" />
+    <Compile Include="GKUI\Controls\TGKMenuItem.cs" />
+    <Compile Include="GKUI\Controls\TGKTreeNode.cs" />
+    <Compile Include="GKUI\Controls\TMapBrowser.cs" />
+    <Compile Include="GKUI\Controls\TTaggedComboItem.cs" />
+    <Compile Include="GKUI\Dialogs\TfmAbout.cs" />
+    <Compile Include="GKUI\Dialogs\TfmAbout.Designer.cs">
+      <DependentUpon>TfmAbout.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmAddressEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmAddressEdit.Designer.cs">
+      <DependentUpon>TfmAddressEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmAssociationEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmAssociationEdit.Designer.cs">
+      <DependentUpon>TfmAssociationEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmCommunicationEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmCommunicationEdit.Designer.cs">
+      <DependentUpon>TfmCommunicationEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmEventEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmEventEdit.Designer.cs">
+      <DependentUpon>TfmEventEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmFamilyEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmFamilyEdit.Designer.cs">
+      <DependentUpon>TfmFamilyEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmFileProperties.cs" />
+    <Compile Include="GKUI\Dialogs\TfmFileProperties.Designer.cs">
+      <DependentUpon>TfmFileProperties.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmFilter.cs" />
+    <Compile Include="GKUI\Dialogs\TfmFilter.Designer.cs">
+      <DependentUpon>TfmFilter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmGroupEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmGroupEdit.Designer.cs">
+      <DependentUpon>TfmGroupEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmLocationEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmLocationEdit.Designer.cs">
+      <DependentUpon>TfmLocationEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmMediaEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmMediaEdit.Designer.cs">
+      <DependentUpon>TfmMediaEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmMediaView.cs" />
+    <Compile Include="GKUI\Dialogs\TfmMediaView.Designer.cs">
+      <DependentUpon>TfmMediaView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmNameEdit.cs">
+      <DependentUpon>TfmPersonNew.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmNameEdit.Designer.cs">
+      <DependentUpon>TfmNameEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmNoteEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmNoteEdit.Designer.cs">
+      <DependentUpon>TfmNoteEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmOptions.cs">
+      <DependentUpon>TfmPersonNew.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmOptions.Designer.cs">
+      <DependentUpon>TfmOptions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmPersonEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmPersonEdit.Designer.cs">
+      <DependentUpon>TfmPersonEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmPersonNew.cs" />
+    <Compile Include="GKUI\Dialogs\TfmPersonNew.Designer.cs">
+      <DependentUpon>TfmPersonNew.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmPersonScan.cs" />
+    <Compile Include="GKUI\Dialogs\TfmPersonScan.Designer.cs">
+      <DependentUpon>TfmPersonScan.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmRecordSelect.cs" />
+    <Compile Include="GKUI\Dialogs\TfmRecordSelect.Designer.cs">
+      <DependentUpon>TfmRecordSelect.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmRepositoryEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmRepositoryEdit.Designer.cs">
+      <DependentUpon>TfmRepositoryEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmResearchEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmResearchEdit.Designer.cs">
+      <DependentUpon>TfmResearchEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmSexCheck.cs" />
+    <Compile Include="GKUI\Dialogs\TfmSexCheck.Designer.cs">
+      <DependentUpon>TfmSexCheck.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmSourceCitEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmSourceCitEdit.Designer.cs">
+      <DependentUpon>TfmSourceCitEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmSourceEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmSourceEdit.Designer.cs">
+      <DependentUpon>TfmSourceEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmTaskEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmTaskEdit.Designer.cs">
+      <DependentUpon>TfmTaskEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmTipsDialog.cs" />
+    <Compile Include="GKUI\Dialogs\TfmTipsDialog.Designer.cs">
+      <DependentUpon>TfmTipsDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmTreeFilter.cs" />
+    <Compile Include="GKUI\Dialogs\TfmTreeFilter.Designer.cs">
+      <DependentUpon>TfmTreeFilter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmUserRefEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmUserRefEdit.Designer.cs">
+      <DependentUpon>TfmUserRefEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\TfmBase.Designer.cs">
+      <DependentUpon>TfmBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\TfmChart.Designer.cs">
+      <DependentUpon>TfmChart.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\TfmGEDKeeper.Designer.cs">
+      <DependentUpon>TfmGEDKeeper.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\TfmMaps.Designer.cs">
+      <DependentUpon>TfmMaps.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\TfmOrganizer.Designer.cs">
+      <DependentUpon>TfmOrganizer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\TfmProgress.Designer.cs">
+      <DependentUpon>TfmProgress.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\TfmScriptDaemon.Designer.cs">
+      <DependentUpon>TfmScriptDaemon.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Charts\TAncestryChartBox.cs" />
+    <Compile Include="GKUI\Charts\TChartFilter.cs" />
+    <Compile Include="GKUI\Charts\TCustomChartBox.cs" />
+    <Compile Include="GKUI\Charts\TPersonList.cs" />
+    <Compile Include="GKCore\Commands\TCmdPersonChangePatriarch.cs" />
+    <Compile Include="GKCore\Commands\TCmdPersonChangeSex.cs" />
+    <Compile Include="GKCore\TBackManager.cs" />
+    <Compile Include="GKCore\TCustomCommand.cs" />
+    <Compile Include="GKCore\TNamesTable.cs" />
+    <Compile Include="GKCore\TUndoManager.cs" />
+    <Compile Include="GKUI\Lists\TCommunicationListMan.cs" />
+    <Compile Include="GKUI\Lists\TFamilyListMan.cs" />
+    <Compile Include="GKUI\Lists\TFilter.cs" />
+    <Compile Include="GKUI\Lists\TGroupListMan.cs" />
+    <Compile Include="GKUI\Lists\TIndividualListMan.cs" />
+    <Compile Include="GKUI\Lists\TListManager.cs" />
+    <Compile Include="GKUI\Lists\TLocationListMan.cs" />
+    <Compile Include="GKUI\Lists\TMultimediaListMan.cs" />
+    <Compile Include="GKUI\Lists\TNoteListMan.cs" />
+    <Compile Include="GKUI\Lists\TPersonsFilter.cs" />
+    <Compile Include="GKUI\Lists\TRecordsView.cs" />
+    <Compile Include="GKUI\Lists\TRepositoryListMan.cs" />
+    <Compile Include="GKUI\Lists\TResearchListMan.cs" />
+    <Compile Include="GKUI\Lists\TSheetList.cs" />
+    <Compile Include="GKUI\Lists\TSourceListMan.cs" />
+    <Compile Include="GKUI\Lists\TTaskListMan.cs" />
+    <Compile Include="GKUI\TfmBase.cs" />
+    <Compile Include="GKUI\TfmChart.cs" />
+    <Compile Include="GKUI\TfmGEDKeeper.cs" />
+    <Compile Include="GKUI\TfmMaps.cs" />
+    <Compile Include="GKUI\TfmOrganizer.cs" />
+    <Compile Include="GKUI\TfmProgress.cs" />
+    <Compile Include="GKUI\TfmScriptDaemon.cs" />
+    <Compile Include="GKUI\TfmStats.cs" />
+    <Compile Include="GKUI\TfmStats.Designer.cs">
+      <DependentUpon>TfmStats.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\TfmTextSearch.cs" />
+    <Compile Include="GKUI\TfmTextSearch.Designer.cs">
+      <DependentUpon>TfmTextSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\TfmTreeTools.cs" />
+    <Compile Include="GKUI\TfmTreeTools.Designer.cs">
+      <DependentUpon>TfmTreeTools.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ext\XLSFile\TBIFFWriter.cs" />
+    <Compile Include="Ext\XLSFile\TBOF.cs" />
+    <Compile Include="Ext\XLSFile\TCell.cs" />
+    <Compile Include="Ext\XLSFile\TData.cs" />
+    <Compile Include="Ext\XLSFile\TDimension.cs" />
+    <Compile Include="Ext\XLSFile\TDoubleCell.cs" />
+    <Compile Include="Ext\XLSFile\TIntegerCell.cs" />
+    <Compile Include="Ext\XLSFile\TStrCell.cs" />
+    <Compile Include="Ext\XLSFile\TWordCell.cs" />
+    <Compile Include="Ext\XLSFile\TXLSFile.cs" />
+    <Compile Include="GKUI\Widgets\TfmCalcWidget.cs" />
+    <Compile Include="GKUI\Widgets\TfmCalcWidget.Designer.cs">
+      <DependentUpon>TfmCalcWidget.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Widgets\TfmCalendar.cs" />
+    <Compile Include="GKUI\Widgets\TfmCalendar.Designer.cs">
+      <DependentUpon>TfmCalendar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Widgets\TfmNamesBook.cs" />
+    <Compile Include="GKUI\Widgets\TfmNamesBook.Designer.cs">
+      <DependentUpon>TfmNamesBook.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Widgets\TfmTimeLine.cs" />
+    <Compile Include="GKUI\Widgets\TfmTimeLine.Designer.cs">
+      <DependentUpon>TfmTimeLine.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmAssociationEdit.resx">
+      <DependentUpon>TfmAssociationEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmCommunicationEdit.resx">
+      <DependentUpon>TfmCommunicationEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmEventEdit.resx">
+      <DependentUpon>TfmEventEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmFamilyEdit.resx">
+      <DependentUpon>TfmFamilyEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmFileProperties.resx">
+      <DependentUpon>TfmFileProperties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmFilter.resx">
+      <DependentUpon>TfmFilter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmGroupEdit.resx">
+      <DependentUpon>TfmGroupEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmLocationEdit.resx">
+      <DependentUpon>TfmLocationEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmMediaEdit.resx">
+      <DependentUpon>TfmMediaEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmNameEdit.resx">
+      <DependentUpon>TfmNameEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmNoteEdit.resx">
+      <DependentUpon>TfmNoteEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmPersonEdit.resx">
+      <DependentUpon>TfmPersonEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmPersonNew.resx">
+      <DependentUpon>TfmPersonNew.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmPersonScan.resx">
+      <DependentUpon>TfmPersonScan.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmRecordSelect.resx">
+      <DependentUpon>TfmRecordSelect.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmRepositoryEdit.resx">
+      <DependentUpon>TfmRepositoryEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmResearchEdit.resx">
+      <DependentUpon>TfmResearchEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmSexCheck.resx">
+      <DependentUpon>TfmSexCheck.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmSourceCitEdit.resx">
+      <DependentUpon>TfmSourceCitEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmSourceEdit.resx">
+      <DependentUpon>TfmSourceEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmTaskEdit.resx">
+      <DependentUpon>TfmTaskEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmTreeFilter.resx">
+      <DependentUpon>TfmTreeFilter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmUserRefEdit.resx">
+      <DependentUpon>TfmUserRefEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\TfmChart.resx">
+      <DependentUpon>TfmChart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\TfmGEDKeeper.resx">
+      <DependentUpon>TfmGEDKeeper.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\TfmTextSearch.resx">
+      <DependentUpon>TfmTextSearch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\TfmTreeTools.resx">
+      <DependentUpon>TfmTreeTools.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Ext" />
+    <Folder Include="Ext\CSV" />
+    <Folder Include="GKCore\Settings" />
+    <Folder Include="GKCore\Sys" />
+    <Folder Include="GKUI\Controls" />
+    <Folder Include="GKUI\Dialogs" />
+    <Folder Include="GKUI\Widgets" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <Content Include="zlib1.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="_XapianSharp.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lua51.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
