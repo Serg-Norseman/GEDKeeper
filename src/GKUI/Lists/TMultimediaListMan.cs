@@ -1,14 +1,12 @@
-﻿using GedCom551;
+﻿using System;
+
+using GedCom551;
 using GKCore;
-using GKCore.Sys;
 using GKUI.Controls;
-using System;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace GKUI.Lists
 {
-	public class TMultimediaListMan : TListManager
+	public sealed class TMultimediaListMan : TListManager
 	{
 		private TGEDCOMMultimediaRecord FRec;
 
@@ -31,37 +29,25 @@ namespace GKUI.Lists
 		public override string GetColumnValue(int aColIndex, bool isMain)
 		{
 			TGEDCOMFileReferenceWithTitle file_ref = this.FRec.FileReferences[0];
-			string Result;
-			if (aColIndex != 1)
-			{
-				if (aColIndex != 2)
-				{
-					if (aColIndex != 3)
-					{
-						if (aColIndex != 4)
-						{
-							Result = "";
-						}
-						else
-						{
-							Result = this.FRec.ChangeDate.ToString();
-						}
-					}
-					else
-					{
-						Result = file_ref.StringValue;
-					}
-				}
-				else
-				{
-					Result = GKL.LSList[(int)TGenEngine.MediaTypes[(int)file_ref.MediaType] - 1];
-				}
+			string result;
+			switch (aColIndex) {
+				case 1:
+					result = file_ref.Title;
+					break;
+				case 2:
+					result = GKL.LSList[(int)TGenEngine.MediaTypes[(int)file_ref.MediaType] - 1];
+					break;
+				case 3:
+					result = file_ref.StringValue;
+					break;
+				case 4:
+					result = this.FRec.ChangeDate.ToString();
+					break;
+				default:
+					result = "";
+					break;
 			}
-			else
-			{
-				Result = file_ref.Title;
-			}
-			return Result;
+			return result;
 		}
 
 		public override void UpdateItem(TExtListItem aItem, bool isMain)

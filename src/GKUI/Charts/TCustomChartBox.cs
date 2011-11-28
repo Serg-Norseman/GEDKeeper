@@ -13,19 +13,21 @@ namespace GKUI.Charts
 	public abstract class TCustomChartBox : Panel, IDisposable
 	{
 		private int FBorderWidth;
-		protected int FImageHeight;
-		protected int FImageWidth;
 		private int FLeftPos;
 		private int FTopPos;
 		private Point FRange;
+
+		protected int FImageHeight;
+		protected int FImageWidth;
 		protected int FSPX;
 		protected int FSPY;
 
-		public TGenEngine FEngine;
 		protected TPersonsFilter FFilter;
 		protected TChartOptions FOptions;
 		protected TGenEngine.TShieldState FShieldState;
 		protected TGEDCOMTree FTree;
+
+		public TGenEngine FEngine;
 		public Font FDrawFont;
 
 		public int BorderWidth

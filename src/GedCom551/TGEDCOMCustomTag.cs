@@ -637,12 +637,12 @@ namespace GedCom551
 							ATag.AddTag("CONT", SysUtils.WStrCopy(S, 1, 248), null);
 						}
 
-						S = S.Remove(0, 248);
+						S = S.Remove(0, ((S.Length > 248) ? 248 : S.Length) /*248*/);
 
 						while (((S != null) ? S.Length : 0) > 0)
 						{
 							ATag.AddTag("CONC", SysUtils.WStrCopy(S, 1, 248), null);
-							S = S.Remove(0, 248);
+							S = S.Remove(0, ((S.Length > 248) ? 248 : S.Length) /*248*/);
 						}
 					}
 				}
@@ -674,7 +674,9 @@ namespace GedCom551
 					{
 						ATag.AddTag("CONT", SysUtils.WStrCopy(S, 1, 248), null);
 					}
+
 					S = S.Remove(0, ((S.Length > 248) ? 248 : S.Length) /*248*/);
+
 					while (((S != null) ? S.Length : 0) > 0)
 					{
 						ATag.AddTag("CONC", SysUtils.WStrCopy(S, 1, 248), null);

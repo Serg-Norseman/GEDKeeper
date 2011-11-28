@@ -5,8 +5,6 @@ namespace GedCom551
 {
 	public sealed class TGEDCOMDateApproximated : TGEDCOMDate
 	{
-		public static readonly string[] GEDCOMDateApproximatedArray = new string[] { "", "ABT", "CAL", "EST" };
-
 		private TGEDCOMApproximated FDateApproximated;
 
 		public TGEDCOMApproximated Approximated
@@ -35,7 +33,7 @@ namespace GedCom551
 			}
 			else
 			{
-				Result = TGEDCOMDateApproximated.GEDCOMDateApproximatedArray[(int)this.FDateApproximated];
+				Result = TGEDCOMDate.GEDCOMDateApproximatedArray[(int)this.FDateApproximated];
 				if (!NoDelimiter)
 				{
 					Result += " ";
@@ -49,7 +47,7 @@ namespace GedCom551
 			string Result = S;
 			string SU = Result.Substring(0, 3).ToUpper();
 			TGEDCOMApproximated I = TGEDCOMApproximated.daAbout;
-			while (SU != TGEDCOMDateApproximated.GEDCOMDateApproximatedArray[(int)I])
+			while (SU != TGEDCOMDate.GEDCOMDateApproximatedArray[(int)I])
 			{
 				I++;
 				if (I == (TGEDCOMApproximated)4)

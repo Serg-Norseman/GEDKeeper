@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -89,7 +88,7 @@ namespace GKUI
 		private void MRUFileClick(object sender, EventArgs e)
 		{
 			int idx = ((TGKMenuItem)sender).Tag;
-			this.CreateBase(this.FOptions.MRUFiles[idx]);
+			this.CreateBase(this.FOptions.MRUFiles[idx].FileName);
 		}
 
 		private void UpdateMRU()
@@ -101,17 +100,19 @@ namespace GKUI
 			int num = this.FOptions.MRUFiles.Count - 1;
 			for (int i = 0; i <= num; i++)
 			{
-				MenuItem mi = new TGKMenuItem(this.FOptions.MRUFiles[i], i);
+				string fn = this.FOptions.MRUFiles[i].FileName;
+
+				MenuItem mi = new TGKMenuItem(fn, i);
 				mi.Click += new EventHandler(this.MRUFileClick);
 				this.miMRUFiles.MenuItems.Add(mi);
 
-				mi = new TGKMenuItem(this.FOptions.MRUFiles[i], i);
+				mi = new TGKMenuItem(fn, i);
 				mi.Click += new EventHandler(this.MRUFileClick);
 				this.MenuMRU.MenuItems.Add(mi);
 			}
 		}
 
-		private TRect CheckFormRect(Form aForm)
+		private TRect GetFormRect(Form aForm)
 		{
 			int x = aForm.Left;
 			int y = aForm.Top;
@@ -120,22 +121,10 @@ namespace GKUI
 			Screen scr = Screen.PrimaryScreen;
 			int mw = scr.WorkingArea.Width;
 			int mh = scr.WorkingArea.Height;
-			if (x < 0)
-			{
-				x = 0;
-			}
-			if (y < 0)
-			{
-				y = 0;
-			}
-			if (w > mw)
-			{
-				w = mw;
-			}
-			if (h > mh)
-			{
-				h = mh;
-			}
+			if (x < 0) x = 0;
+			if (y < 0) y = 0;
+			if (w > mw) w = mw;
+			if (h > mh) h = mh;
 			return TRect.Create(x, y, x + w - 1, y + h - 1);
 		}
 
@@ -552,25 +541,13 @@ namespace GKUI
 		private void FormShow(object sender, EventArgs e)
 		{
 			int num = this.FOptions.LastBasesCount - 1;
-			int i = 0;
-			if (num >= i)
+			for (int i = 0; i <= num; i++)
 			{
-				num++;
-				do
+				string lb = this.FOptions.GetLastBase(i);
+				if (File.Exists(lb))
 				{
-					TGlobalOptions.TBaseWin lb = this.FOptions.GetLastBase(i);
-					if (File.Exists(lb.FileName))
-					{
-						TfmBase @base = this.CreateBase(lb.FileName);
-						@base.Left = lb.WinRect.Left;
-						@base.Top = lb.WinRect.Top;
-						@base.Width = lb.WinRect.Right;
-						@base.Height = lb.WinRect.Bottom;
-						@base.WindowState = lb.WinState;
-					}
-					i++;
+					TfmBase base_win = this.CreateBase(lb);
 				}
-				while (i != num);
 			}
 		}
 
@@ -643,9 +620,9 @@ namespace GKUI
 			this.StatusBar.Panels[0].Width = base.Width - 50;
 		}
 
-		private void TfmGEDKeeper_Closed(object sender, EventArgs e)
+		void TfmGEDKeeperFormClosed(object sender, FormClosedEventArgs e)
 		{
-			this.FOptions.MWinRect = this.CheckFormRect(this);
+			this.FOptions.MWinRect = this.GetFormRect(this);
 			this.FOptions.MWinState = base.WindowState;
 			SysUtils.HtmlHelp(IntPtr.Zero, null, 18u, 0u);
 			this.FNamesTable.SaveToFile(SysUtils.GetAppPath() + "GEDKeeper2.nms");
@@ -654,38 +631,15 @@ namespace GKUI
 			this.FOptions.Dispose();
 		}
 
-		private void TfmGEDKeeper_Closing(object sender, CancelEventArgs e)
+		void TfmGEDKeeperFormClosing(object sender, FormClosingEventArgs e)
 		{
 			Form[] mdiChildren = base.MdiChildren;
-			for (int i = mdiChildren.Length - 1; i >= 0; i--)
-			{
-				if (mdiChildren[i] is TfmBase)
-				{
-					TfmBase @base = mdiChildren[i] as TfmBase;
-					if (!@base.CheckModified())
-					{
-						e.Cancel = true;
-						return;
-					}
-				}
-			}
-
 			this.FOptions.ClearLastBases();
-
 			for (int i = mdiChildren.Length - 1; i >= 0; i--)
 			{
 				if (mdiChildren[i] is TfmBase)
 				{
-					TfmBase @base = mdiChildren[i] as TfmBase;
-					TGlobalOptions.TBaseWin lb = this.FOptions.AddLastBase();
-					lb.FileName = @base.FileName;
-					lb.WinRect = this.CheckFormRect(@base);
-					lb.WinState = @base.WindowState;
-					TObjectHelper.Free(@base);
-				}
-				else
-				{
-					TObjectHelper.Free(mdiChildren[i]);
+					this.FOptions.AddLastBase((mdiChildren[i] as TfmBase).FileName);
 				}
 			}
 		}
@@ -737,8 +691,8 @@ namespace GKUI
 
 		public TfmBase GetCurrentFile()
 		{
-			TfmBase Result = ((base.ActiveMdiChild is TfmBase) ? (base.ActiveMdiChild as TfmBase) : null);
-			return Result;
+			TfmBase result = ((base.ActiveMdiChild is TfmBase) ? (base.ActiveMdiChild as TfmBase) : null);
+			return result;
 		}
 
 		public string GetCurrentFileName()
@@ -750,20 +704,36 @@ namespace GKUI
 
 		public void AddMRU([In] string aFileName)
 		{
-			int idx = this.FOptions.MRUFiles.IndexOf(aFileName);
-			if (idx < 0)
+			int idx = this.FOptions.MRUFiles_IndexOf(aFileName);
+			if (idx >= 0)
 			{
-				this.FOptions.MRUFiles.Insert(0, aFileName);
+				TGlobalOptions.TMRUFile tmp_mf;
+				tmp_mf = this.FOptions.MRUFiles[0];
+				this.FOptions.MRUFiles[0] = this.FOptions.MRUFiles[idx];
+				this.FOptions.MRUFiles[idx] = tmp_mf;
 			}
 			else
 			{
-				if (idx > 0)
-				{
-					this.FOptions.MRUFiles.Delete(idx);
-					this.FOptions.MRUFiles.Insert(0, aFileName);
-				}
+				TGlobalOptions.TMRUFile new_mf = new TGlobalOptions.TMRUFile();
+				new_mf.FileName = aFileName;
+				this.FOptions.MRUFiles.Insert(0, new_mf);
 			}
+
+			
+
 			this.UpdateMRU();
+		}
+
+		public void CheckMRUWin([In] string aFileName, Form frm)
+		{
+			int idx = this.FOptions.MRUFiles_IndexOf(aFileName);
+			if (idx >= 0)
+			{
+				TGlobalOptions.TMRUFile mf = this.FOptions.MRUFiles[idx];
+				
+				mf.WinRect = this.GetFormRect(frm);
+				mf.WinState = frm.WindowState;
+			}
 		}
 
 		public TfmBase CreateBase([In] string aFileName)
@@ -778,7 +748,27 @@ namespace GKUI
 				result.FileNew();
 			}
 
+			int idx = this.FOptions.MRUFiles_IndexOf(aFileName);
+			if (idx >= 0)
+			{
+				TGlobalOptions.TMRUFile mf = this.FOptions.MRUFiles[idx];
+				SetFormRect(result, mf.WinRect, mf.WinState);
+			}
+
 			return result;
+		}
+
+		private void SetFormRect(Form aForm, TRect rt, FormWindowState winState)
+		{
+			// check for new and empty struct
+			if (!rt.IsEmpty())
+			{
+				aForm.Left = rt.Left;
+				aForm.Top = rt.Top;
+				aForm.Width = rt.GetWidth();
+				aForm.Height = rt.GetHeight();
+				aForm.WindowState = winState;
+			}
 		}
 
 		public void UpdateControls(bool ForceDeactivate)
@@ -876,7 +866,7 @@ namespace GKUI
 
 		public void ShowHelpTopic(string aTopic)
 		{
-			string fns = SysUtils.GetAppPath() + "GEDKeeper.chm" + aTopic;
+			string fns = SysUtils.GetAppPath() + "GEDKeeper2.chm" + aTopic;
 			SysUtils.HtmlHelp(this.Handle, fns, 0u, 0u);
 		}
 
@@ -1001,7 +991,7 @@ namespace GKUI
 			}
 			return aForm.ShowDialog();
 		}
-		
+
 		void StatusBarDrawItem(object sender, StatusBarDrawItemEventArgs sbdevent)
 		{
 			TfmBase cur_base = this.GetCurrentFile();
@@ -1025,7 +1015,7 @@ namespace GKUI
 				}
 			}
 		}
-		
+
 		void StatusBarPanelClick(object sender, StatusBarPanelClickEventArgs e)
 		{
 			if (e.StatusBarPanel == StatusBarPanel2 && e.Clicks == 2) {

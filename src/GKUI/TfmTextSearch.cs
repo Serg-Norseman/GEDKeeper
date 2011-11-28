@@ -15,6 +15,7 @@ namespace GKUI
 	{
 		private TfmBase FBase;
 		private TGKHyperView FResultsText;
+		private SearchManager FSearchManager;
 
 		public TfmBase Base
 		{
@@ -39,6 +40,8 @@ namespace GKUI
 			this.Controls.Add(this.FResultsText);
 			this.ResumeLayout(false);
 			this.Controls.SetChildIndex(this.FResultsText, 0);
+
+			FSearchManager = new SearchManager(FBase);
 		}
 
 		private void Write(string text)
@@ -46,21 +49,23 @@ namespace GKUI
 			FResultsText.Lines.Add(text);
 		}
 
+		private void mTextLink(object sender, string LinkName)
+		{
+			FBase.SelectRecordByXRef(LinkName);
+		}
+
 		void btnReindex_Click(object sender, EventArgs e)
 		{
-			SearchManager search_man = new SearchManager();
-			search_man.ReindexBase(FBase);
+			FSearchManager.ReindexBase();
 		}
 
 		void btnSearch_Click(object sender, EventArgs e)
 		{
-			SearchManager search_man = new SearchManager();
-
 			FResultsText.Lines.BeginUpdate();
 			try
 			{
 				FResultsText.Lines.Clear();
-				List<SearchManager.SearchEntry> search_results = search_man.Search(FBase, textBox2.Text);
+				List<SearchManager.SearchEntry> search_results = FSearchManager.Search(textBox2.Text);
 
 				Write(string.Format("Найдено: {0} результат(ов).\r\n", search_results.Count));
 
@@ -84,10 +89,11 @@ namespace GKUI
 			}
 		}
 
-		private void mTextLink(object sender, string LinkName)
+		void TfmTextSearchLoad(object sender, EventArgs e)
 		{
-			FBase.SelectRecordByXRef(LinkName);
+			if (!FSearchManager.IsIndexed()) {
+				FSearchManager.ReindexBase();
+			}
 		}
-
 	}
 }

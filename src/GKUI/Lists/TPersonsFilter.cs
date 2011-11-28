@@ -1,12 +1,11 @@
+using System;
+
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
-using System;
-using System.Runtime.CompilerServices;
 
 namespace GKUI.Lists
 {
-	public class TPersonsFilter : TFilter
+	public sealed class TPersonsFilter : TFilter
 	{
 		public enum TListFilterMode : byte
 		{

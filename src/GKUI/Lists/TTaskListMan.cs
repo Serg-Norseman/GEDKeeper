@@ -2,12 +2,11 @@
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
 using GKUI.Controls;
 
 namespace GKUI.Lists
 {
-	public class TTaskListMan : TListManager
+	public sealed class TTaskListMan : TListManager
 	{
 		private TGEDCOMTaskRecord FRec;
 

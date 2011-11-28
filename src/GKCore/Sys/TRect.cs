@@ -36,14 +36,10 @@ namespace GKCore.Sys
 		{
 			return string.Concat(new string[]
 			{
-				"{X=", 
-				this.Left.ToString(), 
-				",Y=", 
-				this.Top.ToString(), 
-				",Width=", 
-				this.GetWidth().ToString(), 
-				",Height=", 
-				this.GetHeight().ToString(), 
+				"{X=", this.Left.ToString(), 
+				",Y=", this.Top.ToString(), 
+				",Width=", this.GetWidth().ToString(), 
+				",Height=", this.GetHeight().ToString(), 
 				"}"
 			});
 		}
@@ -55,12 +51,12 @@ namespace GKCore.Sys
 
 		public int GetWidth()
 		{
-			return this.Right - this.Left;
+			return this.Right - this.Left + 1;
 		}
 
 		public int GetHeight()
 		{
-			return this.Bottom - this.Top;
+			return this.Bottom - this.Top + 1;
 		}
 
 		public bool IsEmpty()

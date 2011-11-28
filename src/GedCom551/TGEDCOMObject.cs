@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -44,9 +45,14 @@ namespace GedCom551
 
 		protected TGEDCOMTag CreateGEDCOMTag(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string ATag, [In] string AValue)
 		{
-			TGEDCOMTag Result;
+			TGEDCOMTag result;
 
-			if (ATag == "DATE")
+			result = (TGEDCOMTag)GEDCOMFactory.GetInstance().Create(AOwner, AParent, ATag, AValue);
+			if (result == null) {
+				result = new TGEDCOMTag(AOwner, AParent, ATag, AValue);
+			}
+
+			/*if (ATag == "DATE")
 			{
 				Result = new TGEDCOMDateValue(AOwner, AParent, "DATE", AValue);
 			}
@@ -67,9 +73,9 @@ namespace GedCom551
 						Result = new TGEDCOMTag(AOwner, AParent, ATag, AValue);
 					}
 				}
-			}
+			}*/
 
-			return Result;
+			return result;
 		}
 
 		protected string ExtractDelimiter([In] string S, int Max)

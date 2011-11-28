@@ -2,12 +2,11 @@
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
 using GKUI.Controls;
 
 namespace GKUI.Lists
 {
-	public class TResearchListMan : TListManager
+	public sealed class TResearchListMan : TListManager
 	{
 		private TGEDCOMResearchRecord FRec;
 

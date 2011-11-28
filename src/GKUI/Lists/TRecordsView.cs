@@ -9,20 +9,8 @@ using GKUI.Controls;
 
 namespace GKUI.Lists
 {
-	public class TRecordsView : TGKListView, IDisposable
+	public sealed class TRecordsView : TGKListView, IDisposable
 	{
-		/*private class TRow
-		{
-			public int Index;
-			public string Value;
-			public int Age;
-
-			public void Free()
-			{
-				TObjectHelper.Free(this);
-			}
-		}*/
-
 		private TList FContentList;
 		private int FFilteredCount;
 		private bool FIsMainList;
@@ -105,11 +93,7 @@ namespace GKUI.Lists
 			TGEDCOMRecord rec = this.GetSelectedRecord();
 
 			if (e.Column == FXSortColumn) {
-				if (FXSortOrder == SortOrder.Ascending) {
-					FXSortOrder = SortOrder.Descending;
-				} else {
-					FXSortOrder = SortOrder.Ascending;
-				}
+				FXSortOrder = (FXSortOrder == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending);
 			} else {
 				FXSortColumn = e.Column;
 				FXSortOrder = SortOrder.Ascending;
@@ -129,22 +113,23 @@ namespace GKUI.Lists
 		private int xCompare(object Item1, object Item2)
 		{
 			string val1, val2;
-			int f;
+			TGEDCOMRecord rec1, rec2;
+
+			rec1 = (TGEDCOMRecord)Item1;
+			rec2 = (TGEDCOMRecord)Item2;
 
 			if (FXSortColumn == 0) {
-				val1 = TGenEngine.GetXRefNum((TGEDCOMRecord)Item1);
-				val2 = TGenEngine.GetXRefNum((TGEDCOMRecord)Item2);
+				val1 = TGenEngine.GetXRefNum(rec1);
+				val2 = TGenEngine.GetXRefNum(rec2);
 			} else {
-				FListMan.Fetch((Item1 as TGEDCOMRecord));
+				FListMan.Fetch(rec1);
 				val1 = FListMan.GetColumnValue(FXSortColumn, FIsMainList);
-				FListMan.Fetch((Item2 as TGEDCOMRecord));
+				FListMan.Fetch(rec2);
 				val2 = FListMan.GetColumnValue(FXSortColumn, FIsMainList);
 			}
 
-			if (FXSortOrder == SortOrder.Ascending) { f = 1; } else { f = -1; }
-			int Result = SysUtils.agCompare(val1, val2) * f;
-
-			return Result;
+			int f = (FXSortOrder == SortOrder.Ascending ? 1 : -1);
+			return SysUtils.agCompare(val1, val2) * f;
 		}
 
 		private void SetRecordType([In] TGEDCOMRecordType Value)
@@ -159,98 +144,89 @@ namespace GKUI.Lists
 
 			switch (this.FRecordType) {
 				case TGEDCOMRecordType.rtIndividual:
-				{
 					this.FListMan = new TIndividualListMan(this.FTree);
 					break;
-				}
+
 				case TGEDCOMRecordType.rtFamily:
-				{
 					this.FListMan = new TFamilyListMan(this.FTree);
 					break;
-				}
+
 				case TGEDCOMRecordType.rtNote:
-				{
 					this.FListMan = new TNoteListMan(this.FTree);
 					break;
-				}
+
 				case TGEDCOMRecordType.rtMultimedia:
-				{
 					this.FListMan = new TMultimediaListMan(this.FTree);
 					break;
-				}
+
 				case TGEDCOMRecordType.rtSource:
-				{
 					this.FListMan = new TSourceListMan(this.FTree);
 					break;
-				}
+
 				case TGEDCOMRecordType.rtRepository:
-				{
 					this.FListMan = new TRepositoryListMan(this.FTree);
 					break;
-				}
+
 				case TGEDCOMRecordType.rtGroup:
-				{
 					this.FListMan = new TGroupListMan(this.FTree);
 					break;
-				}
+
 				case TGEDCOMRecordType.rtResearch:
-				{
 					this.FListMan = new TResearchListMan(this.FTree);
 					break;
-				}
+
 				case TGEDCOMRecordType.rtTask:
-				{
 					this.FListMan = new TTaskListMan(this.FTree);
 					break;
-				}
+
 				case TGEDCOMRecordType.rtCommunication:
-				{
 					this.FListMan = new TCommunicationListMan(this.FTree);
 					break;
-				}
+
 				case TGEDCOMRecordType.rtLocation:
-				{
 					this.FListMan = new TLocationListMan(this.FTree);
 					break;
-				}
+
 				case TGEDCOMRecordType.rtSubmission:
-				{
 					this.FListMan = null;
 					break;
-				}
+
 				case TGEDCOMRecordType.rtSubmitter:
-				{
 					this.FListMan = null;
 					break;
-				}
 			}
 		}
 
 		private void List_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
 		{
 			TGEDCOMRecord rec = this.FContentList[e.ItemIndex] as TGEDCOMRecord;
-			e.Item = new TExtListItem(TGenEngine.GetId(rec).ToString());
-			((TExtListItem)e.Item).Data = rec;
+			TExtListItem newItem;
+			newItem	= new TExtListItem(TGenEngine.GetId(rec).ToString());
+			newItem.Data = rec;
 
 			this.FListMan.Fetch(rec);
-			this.FListMan.UpdateItem((TExtListItem)e.Item, this.FIsMainList);
+			this.FListMan.UpdateItem(newItem, this.FIsMainList);
 
 			if (rec is TGEDCOMIndividualRecord) {
 				//&& not((cdsFocused in State) && (cdsSelected in State))
 				TGEDCOMIndividualRecord i_rec = (rec as TGEDCOMIndividualRecord);
 
-				if ((i_rec.ChildToFamilyLinks.Count == 0) && (GKUI.TfmGEDKeeper.Instance.Options.ListPersons_HighlightUnparented))
+				TGlobalOptions gOptions = GKUI.TfmGEDKeeper.Instance.Options;
+
+				if ((i_rec.ChildToFamilyLinks.Count == 0) && (gOptions.ListPersons_HighlightUnparented))
 				{
-					e.Item.BackColor = System.Drawing.Color.FromArgb(0xFFCACA);
+					newItem.BackColor = System.Drawing.Color.FromArgb(0xFFCACA);
 				}
 				else
 				{
-					if ((i_rec.SpouseToFamilyLinks.Count == 0) && (GKUI.TfmGEDKeeper.Instance.Options.ListPersons_HighlightUnmarried))
+					if ((i_rec.SpouseToFamilyLinks.Count == 0) && (gOptions.ListPersons_HighlightUnmarried))
 					{
-						e.Item.BackColor = System.Drawing.Color.FromArgb(0xFFFFCA);
+						newItem.BackColor = System.Drawing.Color.FromArgb(0xFFFFCA);
 					}
 				}
 			}
+
+			e.Item = newItem;
 		}
 
 		public void UpdateContents(TGenEngine.TShieldState aShieldState, bool aTitles, TPersonsFilter aFilter, int aAutoSizeColumn)
@@ -259,6 +235,7 @@ namespace GKUI.Lists
 			{
 				this.FTotalCount = 0;
 				this.FFilteredCount = 0;
+
 				if (aTitles && this.FListMan != null)
 				{
 					this.FListMan.UpdateTitles(this, this.FIsMainList);
@@ -287,19 +264,7 @@ namespace GKUI.Lists
 					this.FFilteredCount = this.FContentList.Count;
 					VirtualListSize = this.FContentList.Count;
 
-					SortContents();
-
-					/*base.Items.Clear();
-					for (int i = 0; i <= this.FContentList.Count - 1; i++) {
-						TGEDCOMRecord rec = this.FContentList[i] as TGEDCOMRecord;
-						TExtListItem item = base.AddItem(TGenEngine.GetId(rec).ToString(), rec);
-						this.FListMan.Fetch(rec);
-						this.FListMan.UpdateItem(item, this.FIsMainList);
-					}
-
-					TGKSys.QuickSort(this.FContentList, new TGKSys.TSortCompareFunc(this.xCompare));
-					*/
-
+					this.SortContents();
 					base.ResizeColumn(aAutoSizeColumn);
 				}
 				finally
@@ -351,17 +316,6 @@ namespace GKUI.Lists
 				item.Selected = true;
 				item.EnsureVisible();
 			}
-
-			/*for (int idx = 0; idx <= base.Items.Count - 1; idx++) {
-				TExtListItem item = base.Items[idx] as TExtListItem;
-				if (object.Equals(item.Data, aRec))
-				{
-					base.SelectedItems.Clear();
-					item.Selected = true;
-					item.EnsureVisible();
-				}
-			}*/
 		}
-
 	}
 }

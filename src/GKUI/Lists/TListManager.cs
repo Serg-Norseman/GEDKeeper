@@ -1,12 +1,9 @@
+using System;
+
 using GedCom551;
 using GKCore;
 using GKCore.Sys;
 using GKUI.Controls;
-using System;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 namespace GKUI.Lists
 {
@@ -30,6 +27,7 @@ namespace GKUI.Lists
 
 		public void UpdateTitles(TGKListView aList, bool isMain)
 		{
+			aList.BeginUpdate();
 			try
 			{
 				aList.Columns.Clear();
@@ -37,11 +35,11 @@ namespace GKUI.Lists
 			}
 			finally
 			{
+				aList.EndUpdate();
 			}
 		}
 
 		public abstract bool CheckFilter(TPersonsFilter aFilter, TGenEngine.TShieldState aShieldState);
-
 		public abstract void Fetch(TGEDCOMRecord aRec);
 
 		public virtual string GetColumnValue(int aColIndex, bool isMain)
@@ -54,12 +52,6 @@ namespace GKUI.Lists
 		}
 
 		public abstract void UpdateItem(TExtListItem aItem, bool isMain);
-
 		public abstract void UpdateColumns(TGKListView aList, bool isMain);
-
-		public void Free()
-		{
-			TObjectHelper.Free(this);
-		}
 	}
 }

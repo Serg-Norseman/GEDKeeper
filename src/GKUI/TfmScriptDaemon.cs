@@ -34,23 +34,25 @@ namespace GKUI
 
 		private bool CheckModified()
 		{
-			bool Result = true;
+			bool result = true;
+
 			if (this.Modified)
 			{
 				DialogResult dialogResult = MessageBox.Show(GKL.LSList[69], "GEDKeeper2", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
-				if (dialogResult != DialogResult.Cancel)
-				{
-					if (dialogResult == DialogResult.Yes)
-					{
+
+				switch (dialogResult) {
+					case DialogResult.Yes:
 						this.SaveScript();
-					}
-				}
-				else
-				{
-					Result = false;
+						break;
+					case DialogResult.No:
+						break;
+					case DialogResult.Cancel:
+						result = false;
+						break;
 				}
 			}
-			return Result;
+
+			return result;
 		}
 
 		private void SetFileName([In] string Value)
@@ -130,7 +132,7 @@ namespace GKUI
 
 		private void TfmScriptDaemon_Closing(object sender, CancelEventArgs e)
 		{
-			e.Cancel = (!this.CheckModified());
+			e.Cancel = !this.CheckModified();
 		}
 
 		private void mmScriptText_TextChanged(object sender, EventArgs e)

@@ -216,7 +216,7 @@ namespace GKUI
 			// StatusBar
 			// 
 			this.StatusBar.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.StatusBar.Location = new System.Drawing.Point(0, 844);
+			this.StatusBar.Location = new System.Drawing.Point(0, 941);
 			this.StatusBar.Name = "StatusBar";
 			this.StatusBar.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
 									this.StatusBarPanel1,
@@ -346,19 +346,19 @@ namespace GKUI
 			// 
 			this.tbRecordAdd.ImageIndex = 3;
 			this.tbRecordAdd.Name = "tbRecordAdd";
-			this.tbRecordAdd.ToolTipText = "Добавить запись";
+			this.tbRecordAdd.ToolTipText = "Добавить запись (Ctrl+I)";
 			// 
 			// tbRecordEdit
 			// 
 			this.tbRecordEdit.ImageIndex = 4;
 			this.tbRecordEdit.Name = "tbRecordEdit";
-			this.tbRecordEdit.ToolTipText = "Изменить запись";
+			this.tbRecordEdit.ToolTipText = "Изменить запись (Ctrl+Enter)";
 			// 
 			// tbRecordDelete
 			// 
 			this.tbRecordDelete.ImageIndex = 5;
 			this.tbRecordDelete.Name = "tbRecordDelete";
-			this.tbRecordDelete.ToolTipText = "Удалить запись";
+			this.tbRecordDelete.ToolTipText = "Удалить запись (Ctrl+L)";
 			// 
 			// TBS2
 			// 
@@ -936,7 +936,7 @@ namespace GKUI
 			// 
 			this.AllowDrop = true;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-			this.ClientSize = new System.Drawing.Size(896, 864);
+			this.ClientSize = new System.Drawing.Size(896, 961);
 			this.Controls.Add(this.StatusBar);
 			this.Controls.Add(this.ToolBar1);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F);
@@ -947,8 +947,8 @@ namespace GKUI
 			this.Menu = this.MainMenu1;
 			this.Name = "TfmGEDKeeper";
 			this.Text = "GEDKeeper2";
-			this.Closing += new System.ComponentModel.CancelEventHandler(this.TfmGEDKeeper_Closing);
-			this.Closed += new System.EventHandler(this.TfmGEDKeeper_Closed);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TfmGEDKeeperFormClosing);
+			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.TfmGEDKeeperFormClosed);
 			this.Load += new System.EventHandler(this.FormCreate);
 			this.VisibleChanged += new System.EventHandler(this.FormShow);
 			this.DragDrop += new System.Windows.Forms.DragEventHandler(this.TfmGEDKeeper_DragDrop);

@@ -1,5 +1,5 @@
 using System;
-using System.ComponentModel;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -24,11 +24,41 @@ namespace GKCore
 			}
 		}
 
-		public class TBaseWin
+		public class TMRUFile
 		{
 			public string FileName;
 			public TRect WinRect;
 			public FormWindowState WinState;
+
+			public void Load([In] TIniFile ini, string aSection)
+			{
+				this.FileName		= ini.ReadString(aSection, "FileName", "");
+				this.WinRect.Left	= ini.ReadInteger(aSection, "WinL", 10);
+				this.WinRect.Top	= ini.ReadInteger(aSection, "WinT", 10);
+				this.WinRect.Right	= ini.ReadInteger(aSection, "WinR", 778);
+				this.WinRect.Bottom = ini.ReadInteger(aSection, "WinB", 312);
+				this.WinState		= (FormWindowState)((uint)ini.ReadInteger(aSection, "WinState", 0));
+			}
+
+			public void Save([In] TIniFile ini, string aSection)
+			{
+				ini.WriteString(aSection, "FileName", this.FileName);
+				ini.WriteInteger(aSection, "WinL", this.WinRect.Left);
+				ini.WriteInteger(aSection, "WinT", this.WinRect.Top);
+				ini.WriteInteger(aSection, "WinR", this.WinRect.Right);
+				ini.WriteInteger(aSection, "WinB", this.WinRect.Bottom);
+				ini.WriteInteger(aSection, "WinState", (int)this.WinState);
+			}
+
+			public static void DeleteKeys([In] TIniFile ini, string aSection)
+			{
+				ini.DeleteKey(aSection, "FileName");
+				ini.DeleteKey(aSection, "WinL");
+				ini.DeleteKey(aSection, "WinT");
+				ini.DeleteKey(aSection, "WinR");
+				ini.DeleteKey(aSection, "WinB");
+				ini.DeleteKey(aSection, "WinState");
+			}
 
 			public void Free()
 			{
@@ -107,7 +137,7 @@ namespace GKCore
 		private ushort FInterfaceLang;
 		private TObjectList FLanguages;
 		private string FLastDir;
-		private TStringList FMRUFiles;
+		private List<TMRUFile> FMRUFiles;
 		private TStringList FNameFilters;
 		private TPedigreeOptions FPedigreeOptions;
 		private bool FPlacesWithAddress;
@@ -121,7 +151,7 @@ namespace GKCore
 		private bool FListPersons_HighlightUnparented;
 		private TRect FMWinRect;
 		private FormWindowState FMWinState;
-		private TObjectList FLastBases;
+		private TStringList FLastBases;
 		protected bool Disposed_;
 
 
@@ -159,81 +189,47 @@ namespace GKCore
 			set { this.FInterfaceLang = value; }
 		}
 
-		/*
-		public TGlobalOptions.TLangRecord Langs
+		/*public TGlobalOptions.TLangRecord Langs
 		{
-			get
-			{
-				return this.GetLang(Index);
-			}
+			get { return this.GetLang(Index); }
 		}*/
 
 		public int LangsCount
 		{
-			get
-			{
-				return this.GetLangsCount();
-			}
+			get { return this.GetLangsCount(); }
 		}
 
 		public string LastDir
 		{
-			get
-			{
-				return this.FLastDir;
-			}
-			set
-			{
-				this.FLastDir = value;
-			}
+			get { return this.FLastDir; }
+			set { this.FLastDir = value; }
 		}
 
-		public TStringList MRUFiles
+		public List<TMRUFile> MRUFiles
 		{
-			get
-			{
-				return this.FMRUFiles;
-			}
+			get { return this.FMRUFiles; }
 		}
 
 		public TRect MWinRect
 		{
-			get
-			{
-				return this.FMWinRect;
-			}
-			set
-			{
-				this.FMWinRect = value;
-			}
+			get { return this.FMWinRect; }
+			set { this.FMWinRect = value; }
 		}
 
 		public FormWindowState MWinState
 		{
-			get
-			{
-				return this.FMWinState;
-			}
-			set
-			{
-				this.FMWinState = value;
-			}
+			get { return this.FMWinState; }
+			set { this.FMWinState = value; }
 		}
 
 		public TStringList NameFilters
 		{
-			get
-			{
-				return this.FNameFilters;
-			}
+			get { return this.FNameFilters; }
 		}
 
 		public TPedigreeOptions PedigreeOptions
 		{
-			get
-			{
-				return this.FPedigreeOptions;
-			}
+			get { return this.FPedigreeOptions; }
 		}
 
 		public bool PlacesWithAddress
@@ -244,74 +240,41 @@ namespace GKCore
 
 		public TProxy Proxy
 		{
-			get
-			{
-				return this.FProxy;
-			}
+			get { return this.FProxy; }
 		}
 
 		public TStringList Relations
 		{
-			get
-			{
-				return this.FRelations;
-			}
+			get { return this.FRelations; }
 		}
 
 		public TStringList ResidenceFilters
 		{
-			get
-			{
-				return this.FResidenceFilters;
-			}
+			get { return this.FResidenceFilters; }
 		}
 
 		public bool ShowTips
 		{
-			get
-			{
-				return this.FShowTips;
-			}
-			set
-			{
-				this.FShowTips = value;
-			}
+			get { return this.FShowTips; }
+			set { this.FShowTips = value; }
 		}
 
 		public TGlobalOptions.TWorkMode WorkMode
 		{
-			get
-			{
-				return this.FWorkMode;
-			}
-			set
-			{
-				this.FWorkMode = value;
-			}
+			get { return this.FWorkMode; }
+			set { this.FWorkMode = value; }
 		}
 
 		public bool ListPersons_HighlightUnmarried
 		{
-			get
-			{
-				return this.FListPersons_HighlightUnmarried;
-			}
-			set
-			{
-				this.FListPersons_HighlightUnmarried = value;
-			}
+			get { return this.FListPersons_HighlightUnmarried; }
+			set { this.FListPersons_HighlightUnmarried = value; }
 		}
 
 		public bool ListPersons_HighlightUnparented
 		{
-			get
-			{
-				return this.FListPersons_HighlightUnparented;
-			}
-			set
-			{
-				this.FListPersons_HighlightUnparented = value;
-			}
+			get { return this.FListPersons_HighlightUnparented; }
+			set { this.FListPersons_HighlightUnparented = value; }
 		}
 
 		public TGlobalOptions.TPersonColumnProps[] ListPersonsColumns
@@ -338,10 +301,7 @@ namespace GKCore
 
 		public int LastBasesCount
 		{
-			get
-			{
-				return this.GetLastBasesCount();
-			}
+			get { return this.GetLastBasesCount(); }
 		}
 
 		private ushort GetKeyLayout()
@@ -397,9 +357,9 @@ namespace GKCore
 			return this.FLanguages[Index] as TGlobalOptions.TLangRecord;
 		}
 
-		public TGlobalOptions.TBaseWin GetLastBase(int Index)
+		public string GetLastBase(int Index)
 		{
-			return this.FLastBases[Index] as TGlobalOptions.TBaseWin;
+			return this.FLastBases[Index];
 		}
 
 		public int GetLastBasesCount()
@@ -407,11 +367,27 @@ namespace GKCore
 			return this.FLastBases.Count;
 		}
 
+		public int MRUFiles_IndexOf(string aFileName)
+		{
+			int result = -1;
+
+			for (int i = 0; i <= FMRUFiles.Count - 1; i++)
+			{
+				if (this.FMRUFiles[i].FileName == aFileName)
+				{
+					result = i;
+					break;
+				}
+			}
+
+			return result;
+		}
+
 		public TGlobalOptions()
 		{
 			this.FChartOptions = new TChartOptions();
 			this.FEventFilters = new TStringList();
-			this.FMRUFiles = new TStringList();
+			this.FMRUFiles = new List<TMRUFile>();
 			this.FNameFilters = new TStringList();
 			this.FResidenceFilters = new TStringList();
 			this.FPedigreeOptions = new TPedigreeOptions();
@@ -419,7 +395,7 @@ namespace GKCore
 			this.FRelations = new TStringList();
 			Array.Copy(TGlobalOptions.DefPersonColumns, this.FListPersonsColumns, 24);
 			this.FLanguages = new TObjectList(true);
-			this.FLastBases = new TObjectList(true);
+			this.FLastBases = new TStringList();
 		}
 
 		public void Dispose()
@@ -433,7 +409,7 @@ namespace GKCore
 				this.FPedigreeOptions.Free();
 				this.FResidenceFilters.Free();
 				this.FNameFilters.Free();
-				this.FMRUFiles.Free();
+				//this.FMRUFiles.Dispose();
 				this.FEventFilters.Free();
 				this.FChartOptions.Dispose();
 				this.Disposed_ = true;
@@ -486,18 +462,17 @@ namespace GKCore
 					this.FEventFilters.Add(ini.ReadString("EventFilters", "EventVal_" + i.ToString(), ""));
 				}
 
-				cnt = ini.ReadInteger("MRUFiles", "Count", 0);
-				int num4 = cnt - 1;
-				for (int i = 0; i <= num4; i++)
+				cnt = ini.ReadInteger("Common", "MRUFiles_Count", 0);
+				for (int i = 0; i <= cnt - 1; i++)
 				{
-					string fn = ini.ReadString("MRUFiles", "File_" + i.ToString(), "");
-					if (File.Exists(fn))
-					{
-						this.FMRUFiles.Add(fn);
-					}
-					else
-					{
-						ini.DeleteKey("MRUFiles", "File_" + i.ToString());
+					string sect = "MRUFile_" + i.ToString();
+					string fn = ini.ReadString(sect, "FileName", "");
+					if (File.Exists(fn)) {
+						TMRUFile mf = new TMRUFile();
+						mf.Load(ini, sect);
+						this.FMRUFiles.Add(mf);
+					} else {
+						TMRUFile.DeleteKeys(ini, sect);
 					}
 				}
 
@@ -523,17 +498,10 @@ namespace GKCore
 				this.FMWinState = (FormWindowState)((uint)ini.ReadInteger("Common", "MWinState", 0));
 
 				cnt = ini.ReadInteger("LastBases", "Count", 0);
-				int num6 = cnt - 1;
-				for (int i = 0; i <= num6; i++)
+				for (int i = 0; i <= cnt - 1; i++)
 				{
-					TGlobalOptions.TBaseWin lb = this.AddLastBase();
-					string st = "B" + i.ToString() + "_";
-					lb.FileName = ini.ReadString("LastBases", st + "FileName", "");
-					lb.WinRect.Left = ini.ReadInteger("LastBases", st + "WinL", 10);
-					lb.WinRect.Top = ini.ReadInteger("LastBases", st + "WinT", 10);
-					lb.WinRect.Right = ini.ReadInteger("LastBases", st + "WinW", 778);
-					lb.WinRect.Bottom = ini.ReadInteger("LastBases", st + "WinH", 312);
-					lb.WinState = (FormWindowState)((uint)ini.ReadInteger("LastBases", st + "WinState", 0));
+					string st = ini.ReadString("LastBases", "LB" + i.ToString(), "");
+					this.AddLastBase(st);
 				}
 			}
 			finally
@@ -581,13 +549,13 @@ namespace GKCore
 					ini.WriteString("EventFilters", "EventVal_" + i.ToString(), this.FEventFilters[i]);
 				}
 
-				ini.WriteInteger("MRUFiles", "Count", this.FMRUFiles.Count);
+				ini.WriteInteger("Common", "MRUFiles_Count", this.FMRUFiles.Count);
 				int num4 = this.FMRUFiles.Count - 1;
 				for (int i = 0; i <= num4; i++)
 				{
-					ini.WriteString("MRUFiles", "File_" + i.ToString(), this.FMRUFiles[i]);
+					this.FMRUFiles[i].Save(ini, "MRUFile_" + i.ToString());
 				}
-				this.FMRUFiles.Sort();
+				//this.FMRUFiles.Sort();
 
 				ini.WriteInteger("Relations", "Count", this.FRelations.Count);
 				int num5 = this.FRelations.Count - 1;
@@ -619,14 +587,7 @@ namespace GKCore
 				int num6 = this.FLastBases.Count - 1;
 				for (int i = 0; i <= num6; i++)
 				{
-					TGlobalOptions.TBaseWin lb = this.GetLastBase(i);
-					string st = "B" + i.ToString() + "_";
-					ini.WriteString("LastBases", st + "FileName", lb.FileName);
-					ini.WriteInteger("LastBases", st + "WinL", lb.WinRect.Left);
-					ini.WriteInteger("LastBases", st + "WinT", lb.WinRect.Top);
-					ini.WriteInteger("LastBases", st + "WinW", lb.WinRect.Right);
-					ini.WriteInteger("LastBases", st + "WinH", lb.WinRect.Bottom);
-					ini.WriteInteger("LastBases", st + "WinState", (int)lb.WinState);
+					ini.WriteString("LastBases", "LB" + i.ToString(), this.GetLastBase(i));
 				}
 			}
 			finally
@@ -635,11 +596,9 @@ namespace GKCore
 			}
 		}
 
-		public TGlobalOptions.TBaseWin AddLastBase()
+		public void AddLastBase(string aFileName)
 		{
-			TGlobalOptions.TBaseWin Result = new TGlobalOptions.TBaseWin();
-			this.FLastBases.Add(Result);
-			return Result;
+			this.FLastBases.Add(aFileName);
 		}
 
 		public void ClearLastBases()

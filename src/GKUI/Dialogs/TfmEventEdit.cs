@@ -193,6 +193,8 @@ namespace GKUI
 			{
 				TGEDCOMMultimediaLink mmLink = this.FEvent.Detail.MultimediaLinks[idx];
 				TGEDCOMMultimediaRecord mmRec = mmLink.Value as TGEDCOMMultimediaRecord;
+				if (mmRec == null) continue;
+
 				if (mmRec != null && mmRec.FileReferences.Count != 0)
 				{
 					string st = mmRec.FileReferences[0].Title;
@@ -206,6 +208,8 @@ namespace GKUI
 			{
 				TGEDCOMSourceCitation cit = this.FEvent.Detail.SourceCitations[idx];
 				TGEDCOMSourceRecord sourceRec = cit.Value as TGEDCOMSourceRecord;
+				if (sourceRec == null) continue;
+
 				string st = "\"" + sourceRec.FiledByEntry + "\"";
 
 				if (cit.Page != "")

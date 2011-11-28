@@ -169,252 +169,123 @@ namespace GKUI
 			int nameAccuracy = decimal.ToInt32(this.edNameAccuracy.Value);
 			int yearInaccuracy = decimal.ToInt32(this.edYearInaccuracy.Value);
 			bool only_np = this.chkOnlyNP.Checked;
+
 			bool res = false;
 			this.btnSkip.Enabled = false;
+
 			try
 			{
 				this.ProgressBar1.Minimum = 0;
 				this.ProgressBar1.Maximum = this.FTree.RecordsCount;
 				this.ProgressBar1.Value = this.FRMIndex;
-				int arg_87_0 = this.FRMIndex;
+
 				int num = this.FTree.RecordsCount - 1;
-				int i = arg_87_0;
-				if (num >= i)
+				for (int i = this.FRMIndex; i <= num; i++)
 				{
-					num++;
-					while (true)
+					this.FRMIndex = i;
+
+					TGEDCOMRecord iRec = this.FTree.GetRecord(i);
+
+					if (this.FRMMode == TMergeMode.mmPerson && iRec is TGEDCOMIndividualRecord)
 					{
-						this.FRMIndex = i;
-						TGEDCOMRecord iRec = this.FTree.GetRecord(i);
-						TfmTreeTools.TMergeMode fRMMode = this.FRMMode;
-						if (fRMMode != TfmTreeTools.TMergeMode.mmPerson)
-						{
-							if (fRMMode != TfmTreeTools.TMergeMode.mmNote)
-							{
-								if (fRMMode != TfmTreeTools.TMergeMode.mmFamily)
-								{
-									if (fRMMode != TfmTreeTools.TMergeMode.mmSource)
+						TGEDCOMIndividualRecord iInd = (TGEDCOMIndividualRecord)iRec;
+						string iName = "";
+						if (this.GetIndivName(iInd, only_np, ref iName)) {
+							int num5 = this.FTree.RecordsCount - 1;
+							for (int j = i + 1; j <= num5; j++) {
+								TGEDCOMRecord kRec = this.FTree.GetRecord(j);
+								if (kRec is TGEDCOMIndividualRecord) {
+									TGEDCOMIndividualRecord kInd = (TGEDCOMIndividualRecord)kRec;
+									string kName = "";
+									if (this.GetIndivName(kInd, only_np, ref kName) && iInd.Sex == kInd.Sex && this.FRMSkip.IndexOf(iInd.XRef + "-" + kInd.XRef) < 0 && (!only_np || (iInd.Sex == TGEDCOMSex.svFemale && kInd.Sex == TGEDCOMSex.svFemale)))
 									{
-										goto IL_509;
-									}
-									if (!(iRec is TGEDCOMSourceRecord))
-									{
-										goto IL_509;
-									}
-									TGEDCOMSourceRecord iSrc = (TGEDCOMSourceRecord)iRec;
-									string iName = iSrc.FiledByEntry;
-									int arg_480_0 = i + 1;
-									int num2 = this.FTree.RecordsCount - 1;
-									int j = arg_480_0;
-									if (num2 >= j)
-									{
-										num2++;
-										TGEDCOMSourceRecord kSrc;
-										while (true)
-										{
-											TGEDCOMRecord kRec = this.FTree.GetRecord(j);
-											if (kRec is TGEDCOMSourceRecord)
-											{
-												kSrc = (TGEDCOMSourceRecord)kRec;
-												string kName = kSrc.FiledByEntry;
-												res = (iName == kName && this.FRMSkip.IndexOf(iSrc.XRef + "-" + kSrc.XRef) < 0);
-												if (res)
-												{
-													break;
-												}
-											}
-											j++;
-											if (j == num2)
-											{
-												goto IL_509;
-											}
+										if (this.rbDirectMatching.Checked) {
+											res = (iName == kName);
+										} else if (this.rbIndistinctMatching.Checked) {
+											res = (TGenEngine.IndistinctMatching(4, iName, kName) > nameAccuracy);
 										}
-										this.SetRec1(iSrc);
-										this.SetRec2(kSrc);
-										goto IL_509;
-									}
-									goto IL_509;
-								}
-								else
-								{
-									if (!(iRec is TGEDCOMFamilyRecord))
-									{
-										goto IL_509;
-									}
-									TGEDCOMFamilyRecord iFam = (TGEDCOMFamilyRecord)iRec;
-									string iName = TGenEngine.GetFamilyStr(iFam);
-									int arg_3B7_0 = i + 1;
-									int num3 = this.FTree.RecordsCount - 1;
-									int j = arg_3B7_0;
-									if (num3 >= j)
-									{
-										num3++;
-										TGEDCOMFamilyRecord kFam;
-										while (true)
+										if (res && this.chkBirthYear.Checked)
 										{
-											TGEDCOMRecord kRec = this.FTree.GetRecord(j);
-											if (kRec is TGEDCOMFamilyRecord)
-											{
-												kFam = (TGEDCOMFamilyRecord)kRec;
-												string kName = TGenEngine.GetFamilyStr(kFam);
-												res = (iName == kName && this.FRMSkip.IndexOf(iFam.XRef + "-" + kFam.XRef) < 0);
-												if (res)
-												{
-													break;
-												}
-											}
-											j++;
-											if (j == num3)
-											{
-												goto Block_39;
-											}
+											TGEDCOMCustomEvent ev;
+											ev = TGenEngine.GetIndividualEvent(iInd, "BIRT");
+											int year = (ev == null) ? 0 : (ev.Detail.Date.Value as TGEDCOMDate).Year;
+											ev = TGenEngine.GetIndividualEvent(kInd, "BIRT");
+											int year2 = (ev == null) ? 0 : (ev.Detail.Date.Value as TGEDCOMDate).Year;
+											res = (res && year >= 0 && year2 >= 0 && Math.Abs(year - year2) <= yearInaccuracy);
 										}
-										this.SetRec1(iFam);
-										this.SetRec2(kFam);
-										Block_39:
-										goto IL_509;
+										if (res) {
+											this.SetRec1(iInd);
+											this.SetRec2(kInd);
+											break;
+										}
 									}
-									goto IL_509;
 								}
 							}
-							else
-							{
-								if (!(iRec is TGEDCOMNoteRecord))
-								{
-									goto IL_509;
-								}
-								TGEDCOMNoteRecord iNote = (TGEDCOMNoteRecord)iRec;
-								string iName = iNote.Note.Text;
-								int arg_2E9_0 = i + 1;
-								int num4 = this.FTree.RecordsCount - 1;
-								int j = arg_2E9_0;
-								if (num4 >= j)
-								{
-									num4++;
-									TGEDCOMNoteRecord kNote;
-									while (true)
-									{
-										TGEDCOMRecord kRec = this.FTree.GetRecord(j);
-										if (kRec is TGEDCOMNoteRecord)
-										{
-											kNote = (TGEDCOMNoteRecord)kRec;
-											string kName = kNote.Note.Text;
-											res = (iName == kName && this.FRMSkip.IndexOf(iNote.XRef + "-" + kNote.XRef) < 0);
-											if (res)
-											{
-												break;
-											}
-										}
-										j++;
-										if (j == num4)
-										{
-											goto Block_33;
-										}
-									}
+						}
+					}
+					else if (this.FRMMode == TMergeMode.mmNote && iRec is TGEDCOMNoteRecord)
+					{
+						TGEDCOMNoteRecord iNote = (TGEDCOMNoteRecord)iRec;
+						string iName = iNote.Note.Text;
+
+						int num4 = this.FTree.RecordsCount - 1;
+						for (int j = i + 1; j <= num4; j++) {
+							TGEDCOMRecord kRec = this.FTree.GetRecord(j);
+							if (kRec is TGEDCOMNoteRecord) {
+								TGEDCOMNoteRecord kNote = (TGEDCOMNoteRecord)kRec;
+								string kName = kNote.Note.Text;
+								res = (iName == kName && this.FRMSkip.IndexOf(iNote.XRef + "-" + kNote.XRef) < 0);
+								if (res) {
 									this.SetRec1(iNote);
 									this.SetRec2(kNote);
-									Block_33:
-									goto IL_509;
+									break;
 								}
-								goto IL_509;
 							}
 						}
-						else
-						{
-							if (!(iRec is TGEDCOMIndividualRecord))
-							{
-								goto IL_509;
-							}
-							TGEDCOMIndividualRecord iInd = (TGEDCOMIndividualRecord)iRec;
-							string iName = "";
-							if (this.GetIndivName(iInd, only_np, ref iName))
-							{
-								int arg_10C_0 = i + 1;
-								int num5 = this.FTree.RecordsCount - 1;
-								int j = arg_10C_0;
-								if (num5 >= j)
-								{
-									num5++;
-									TGEDCOMIndividualRecord kInd;
-									while (true)
-									{
-										TGEDCOMRecord kRec = this.FTree.GetRecord(j);
-										if (kRec is TGEDCOMIndividualRecord)
-										{
-											kInd = (TGEDCOMIndividualRecord)kRec;
-											string kName = "";
-											if (this.GetIndivName(kInd, only_np, ref kName) && iInd.Sex == kInd.Sex && this.FRMSkip.IndexOf(iInd.XRef + "-" + kInd.XRef) < 0 && (!only_np || (iInd.Sex == TGEDCOMSex.svFemale && kInd.Sex == TGEDCOMSex.svFemale)))
-											{
-												if (this.rbDirectMatching.Checked)
-												{
-													res = (iName == kName);
-												}
-												else
-												{
-													if (this.rbIndistinctMatching.Checked)
-													{
-														res = (TGenEngine.IndistinctMatching(4, iName, kName) > nameAccuracy);
-													}
-												}
-												if (res && this.chkBirthYear.Checked)
-												{
-													TGEDCOMCustomEvent ev = TGenEngine.GetIndividualEvent(iInd, "BIRT");
-													int year;
-													if (ev == null)
-													{
-														year = 0;
-													}
-													else
-													{
-														year = (ev.Detail.Date.Value as TGEDCOMDate).Year;
-													}
-													ev = TGenEngine.GetIndividualEvent(kInd, "BIRT");
-													int year2;
-													if (ev == null)
-													{
-														year2 = 0;
-													}
-													else
-													{
-														year2 = (ev.Detail.Date.Value as TGEDCOMDate).Year;
-													}
-													res = (res && year >= 0 && year2 >= 0 && Math.Abs(year - year2) <= yearInaccuracy);
-												}
-												if (res)
-												{
-													break;
-												}
-											}
-										}
-										j++;
-										if (j == num5)
-										{
-											goto Block_27;
-										}
-									}
-									this.SetRec1(iInd);
-									this.SetRec2(kInd);
-									Block_27:
-									goto IL_509;
-								}
-								goto IL_509;
-							}
-						}
-						IL_518:
-						i++;
-						if (i == num)
-						{
-							break;
-						}
-						continue;
-						IL_509:
-						if (!res)
-						{
-							this.ProgressBar1.Increment(1);
-							goto IL_518;
-						}
-						break;
 					}
+					else if (this.FRMMode == TMergeMode.mmFamily && iRec is TGEDCOMFamilyRecord)
+					{
+						TGEDCOMFamilyRecord iFam = (TGEDCOMFamilyRecord)iRec;
+						string iName = TGenEngine.GetFamilyStr(iFam);
+
+						int num3 = this.FTree.RecordsCount - 1;
+						for (int j = i + 1; j <= num3; j++) {
+							TGEDCOMRecord kRec = this.FTree.GetRecord(j);
+							if (kRec is TGEDCOMFamilyRecord) {
+								TGEDCOMFamilyRecord kFam = (TGEDCOMFamilyRecord)kRec;
+								string kName = TGenEngine.GetFamilyStr(kFam);
+								res = (iName == kName && this.FRMSkip.IndexOf(iFam.XRef + "-" + kFam.XRef) < 0);
+								if (res) {
+									this.SetRec1(iFam);
+									this.SetRec2(kFam);
+									break;
+								}
+							}
+						}
+					}
+					else if (this.FRMMode == TMergeMode.mmSource && iRec is TGEDCOMSourceRecord)
+					{
+						TGEDCOMSourceRecord iSrc = (TGEDCOMSourceRecord)iRec;
+						string iName = iSrc.FiledByEntry;
+
+						int num2 = this.FTree.RecordsCount - 1;
+						for (int j = i + 1; j <= num2; j++) {
+							TGEDCOMRecord kRec = this.FTree.GetRecord(j);
+							if (kRec is TGEDCOMSourceRecord) {
+								TGEDCOMSourceRecord kSrc = (TGEDCOMSourceRecord)kRec;
+								string kName = kSrc.FiledByEntry;
+								res = (iName == kName && this.FRMSkip.IndexOf(iSrc.XRef + "-" + kSrc.XRef) < 0);
+								if (res) {
+									this.SetRec1(iSrc);
+									this.SetRec2(kSrc);
+									break;
+								}
+							}
+						}
+					}
+
+					if (res) break;
+					this.ProgressBar1.Increment(1);
 				}
 			}
 			finally
@@ -436,36 +307,33 @@ namespace GKUI
 					this.FTree.GetRecord(i).ReplaceXRefs(repMap);
 				}
 
-				TfmTreeTools.TMergeMode fRMMode = this.FRMMode;
-				if (fRMMode != TfmTreeTools.TMergeMode.mmPerson)
-				{
-					if (fRMMode != TfmTreeTools.TMergeMode.mmNote)
-					{
-						if (fRMMode != TfmTreeTools.TMergeMode.mmFamily)
+				switch (this.FRMMode) {
+					case TMergeMode.mmPerson:
 						{
-							if (fRMMode == TfmTreeTools.TMergeMode.mmSource)
-							{
-								(aRecCopy as TGEDCOMSourceRecord).MoveTo(aRecBase, false);
-								this.Base.DeleteSourceRecord(aRecCopy as TGEDCOMSourceRecord, false);
-							}
+							(aRecCopy as TGEDCOMIndividualRecord).MoveTo(aRecBase, false);
+							this.Base.DeleteIndividualRecord(aRecCopy as TGEDCOMIndividualRecord, false);
+							break;
 						}
-						else
+					case TMergeMode.mmNote:
+						{
+							(aRecCopy as TGEDCOMNoteRecord).MoveTo(aRecBase, false);
+							this.Base.DeleteNoteRecord(aRecCopy as TGEDCOMNoteRecord, false);
+							break;
+						}
+					case TMergeMode.mmFamily:
 						{
 							(aRecCopy as TGEDCOMFamilyRecord).MoveTo(aRecBase, false);
 							this.Base.DeleteFamilyRecord(aRecCopy as TGEDCOMFamilyRecord, false);
+							break;
 						}
-					}
-					else
-					{
-						(aRecCopy as TGEDCOMNoteRecord).MoveTo(aRecBase, false);
-						this.Base.DeleteNoteRecord(aRecCopy as TGEDCOMNoteRecord, false);
-					}
+					case TMergeMode.mmSource:
+						{
+							(aRecCopy as TGEDCOMSourceRecord).MoveTo(aRecBase, false);
+							this.Base.DeleteSourceRecord(aRecCopy as TGEDCOMSourceRecord, false);
+							break;
+						}
 				}
-				else
-				{
-					(aRecCopy as TGEDCOMIndividualRecord).MoveTo(aRecBase, false);
-					this.Base.DeleteIndividualRecord(aRecCopy as TGEDCOMIndividualRecord, false);
-				}
+
 				this.Base.ChangeRecord(aRecBase);
 				this.Base.ListsRefresh(false);
 			}
@@ -869,6 +737,7 @@ namespace GKUI
 					if (this.FTree.GetRecord(i) is TGEDCOMIndividualRecord)
 					{
 						TGEDCOMIndividualRecord iRec = (TGEDCOMIndividualRecord)this.FTree.GetRecord(i);
+
 						int iAge;
 						if (TGenEngine.GetIndividualEvent(iRec, "DEAT") == null)
 						{
@@ -890,6 +759,7 @@ namespace GKUI
 								}
 							}
 						}
+
 						TGEDCOMSex sex = iRec.Sex;
 						if (sex < TGEDCOMSex.svMale || sex >= TGEDCOMSex.svUndetermined)
 						{
@@ -900,6 +770,7 @@ namespace GKUI
 							checkObj.Comment = GKL.LSList[583];
 							this.FChecksList.Add(checkObj);
 						}
+
 						int y_birth = TGenEngine.GetIndependentYear(iRec, "BIRT");
 						int y_death = TGenEngine.GetIndependentYear(iRec, "DEAT");
 						if (y_birth > -1 && y_death > -1 && y_death < y_birth)
@@ -911,6 +782,7 @@ namespace GKUI
 							checkObj.Comment = GKL.LSList[584];
 							this.FChecksList.Add(checkObj);
 						}
+
 						iAge = TGenEngine.GetMarriageAge(iRec);
 						if (iAge > 0 && (iAge <= 13 || iAge >= 50))
 						{
@@ -924,7 +796,9 @@ namespace GKUI
 							});
 							this.FChecksList.Add(checkObj);
 						}
-						iAge = TGenEngine.GetFirstbornAge(iRec);
+
+						TGEDCOMIndividualRecord iDummy;
+						iAge = TGenEngine.GetFirstbornAge(iRec, out iDummy);
 						if (iAge > 0 && (iAge <= 13 || iAge >= 50))
 						{
 							TfmTreeTools.TCheckObj checkObj = new TfmTreeTools.TCheckObj();
@@ -1306,21 +1180,21 @@ namespace GKUI
 					TCheckObj checkObj = item.Data as TCheckObj;
 					if (item.Checked)
 					{
-						TCheckDiag diag = checkObj.Diag;
-						if (diag != TCheckDiag.cdPersonLonglived)
-						{
-							if (diag == TCheckDiag.cdPersonSexless)
+						switch (checkObj.Diag) {
+							case TCheckDiag.cdPersonLonglived:
+							{
+								TGEDCOMIndividualRecord iRec = checkObj.Rec as TGEDCOMIndividualRecord;
+								TGenEngine.CreateEventEx(this.FTree, iRec, "DEAT", "", "");
+								this.Base.ChangeRecord(iRec);
+								break;
+							}
+							case TCheckDiag.cdPersonSexless:
 							{
 								TGEDCOMIndividualRecord iRec = checkObj.Rec as TGEDCOMIndividualRecord;
 								TfmSexCheck.CheckPersonSex(iRec, GKUI.TfmGEDKeeper.Instance.NamesTable);
 								this.Base.ChangeRecord(iRec);
+								break;
 							}
-						}
-						else
-						{
-							TGEDCOMIndividualRecord iRec = checkObj.Rec as TGEDCOMIndividualRecord;
-							TGenEngine.CreateEventEx(this.FTree, iRec, "DEAT", "", "");
-							this.Base.ChangeRecord(iRec);
 						}
 					}
 				}
@@ -1370,16 +1244,10 @@ namespace GKUI
 			try
 			{
 				TExtListItem item = this.ListPatriarchs.SelectedItem();
-				if (item == null)
-				{
-				}
-				else
+				if (item != null)
 				{
 					TGEDCOMIndividualRecord i_rec = item.Data as TGEDCOMIndividualRecord;
-					if (i_rec == null)
-					{
-					}
-					else
+					if (i_rec != null)
 					{
 						i_rec.Patriarch = true;
 					}

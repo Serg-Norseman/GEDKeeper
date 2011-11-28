@@ -23,15 +23,19 @@ namespace GKUI
 			set { this.SetAddress(value); }
 		}
 
+		private bool GetInput(string aTitle, ref string aValue)
+		{
+			return InputBox.Query(aTitle, GKL.LSList[202], ref aValue) && aValue.Trim() != "";
+		}
+
 		private void ListModify(object Sender, object ItemData, TGenEngine.TRecAction Action)
 		{
 			int Index = -1;
-
 			if (Action >= TGenEngine.TRecAction.raEdit && Action < TGenEngine.TRecAction.raJump)
 			{
-				IntPtr ptr = (IntPtr)ItemData;
-				Index = (int)ptr - 1;
+				Index = (int)ItemData - 1;
 			}
+
 			if (object.Equals(Sender, this.FPhonesList))
 			{
 				if (Action != TGenEngine.TRecAction.raAdd)
@@ -40,30 +44,28 @@ namespace GKUI
 					{
 						if (Action == TGenEngine.TRecAction.raDelete)
 						{
-							if (Index < 0)
+							if (Index >= 0)
 							{
-								return;
+								this.FAddress.DeletePhoneNumber(Index);
 							}
-							this.FAddress.DeletePhoneNumber(Index);
 						}
 					}
 					else
 					{
-						if (Index < 0)
+						if (Index >= 0)
 						{
-							return;
-						}
-						string val = this.FAddress.GetPhoneNumber(Index);
-						if (TfmAddressEdit.GetInput(GKL.LSList[131], ref val))
-						{
-							this.FAddress.SetPhoneNumber(Index, val);
+							string val = this.FAddress.GetPhoneNumber(Index);
+							if (GetInput(GKL.LSList[131], ref val))
+							{
+								this.FAddress.SetPhoneNumber(Index, val);
+							}
 						}
 					}
 				}
 				else
 				{
 					string val = "";
-					if (TfmAddressEdit.GetInput(GKL.LSList[131], ref val))
+					if (GetInput(GKL.LSList[131], ref val))
 					{
 						this.FAddress.SetPhoneNumber(this.FAddress.GetPhoneNumbersCount(), val);
 					}
@@ -79,30 +81,28 @@ namespace GKUI
 						{
 							if (Action == TGenEngine.TRecAction.raDelete)
 							{
-								if (Index < 0)
+								if (Index >= 0)
 								{
-									return;
+									this.FAddress.DeleteEmail(Index);
 								}
-								this.FAddress.DeleteEmail(Index);
 							}
 						}
 						else
 						{
-							if (Index < 0)
+							if (Index >= 0)
 							{
-								return;
-							}
-							string val = this.FAddress.GetEmailAddress(Index);
-							if (TfmAddressEdit.GetInput(GKL.LSList[132], ref val))
-							{
-								this.FAddress.SetEmailAddress(Index, val);
+								string val = this.FAddress.GetEmailAddress(Index);
+								if (GetInput(GKL.LSList[132], ref val))
+								{
+									this.FAddress.SetEmailAddress(Index, val);
+								}
 							}
 						}
 					}
 					else
 					{
 						string val = "";
-						if (TfmAddressEdit.GetInput(GKL.LSList[132], ref val))
+						if (GetInput(GKL.LSList[132], ref val))
 						{
 							this.FAddress.SetEmailAddress(this.FAddress.GetEmailAddressesCount(), val);
 						}
@@ -112,43 +112,41 @@ namespace GKUI
 				{
 					if (object.Equals(Sender, this.FWebsList))
 					{
-						if (Action != TGenEngine.TRecAction.raAdd)
-						{
-							if (Action != TGenEngine.TRecAction.raEdit)
+						switch (Action) {
+							case TGenEngine.TRecAction.raAdd:
 							{
-								if (Action == TGenEngine.TRecAction.raDelete)
+								string val = "";
+								if (GetInput(GKL.LSList[133], ref val))
 								{
-									if (Index < 0)
+									this.FAddress.SetWebPage(this.FAddress.GetWebPagesCount(), val);
+								}
+								break;
+							}
+							case TGenEngine.TRecAction.raEdit:
+							{
+								if (Index >= 0)
+								{
+									string val = this.FAddress.GetWebPage(Index);
+									if (GetInput(GKL.LSList[133], ref val))
 									{
-										return;
+										this.FAddress.SetWebPage(Index, val);
 									}
+								}
+								break;
+							}
+							case TGenEngine.TRecAction.raDelete:
+							{
+								if (Index >= 0)
+								{
 									this.FAddress.DeleteWebPage(Index);
 								}
-							}
-							else
-							{
-								if (Index < 0)
-								{
-									return;
-								}
-								string val = this.FAddress.GetWebPage(Index);
-								if (TfmAddressEdit.GetInput(GKL.LSList[133], ref val))
-								{
-									this.FAddress.SetWebPage(Index, val);
-								}
-							}
-						}
-						else
-						{
-							string val = "";
-							if (TfmAddressEdit.GetInput(GKL.LSList[133], ref val))
-							{
-								this.FAddress.SetWebPage(this.FAddress.GetWebPagesCount(), val);
+								break;
 							}
 						}
 					}
 				}
 			}
+
 			this.UpdateLists();
 		}
 
@@ -167,44 +165,23 @@ namespace GKUI
 		{
 			this.FPhonesList.List.Items.Clear();
 			int num = this.FAddress.GetPhoneNumbersCount() - 1;
-			int i = 0;
-			if (num >= i)
+			for (int i = 0; i <= num; i++)
 			{
-				num++;
-				do
-				{
-					this.FPhonesList.List.AddItem(this.FAddress.GetPhoneNumber(i), i + 1);
-					i++;
-				}
-				while (i != num);
+				this.FPhonesList.List.AddItem(this.FAddress.GetPhoneNumber(i), i + 1);
 			}
 
 			this.FMailsList.List.Items.Clear();
 			int num2 = this.FAddress.GetEmailAddressesCount() - 1;
-			i = 0;
-			if (num2 >= i)
+			for (int i = 0; i <= num2; i++)
 			{
-				num2++;
-				do
-				{
-					this.FMailsList.List.AddItem(this.FAddress.GetEmailAddress(i), i + 1);
-					i++;
-				}
-				while (i != num2);
+				this.FMailsList.List.AddItem(this.FAddress.GetEmailAddress(i), i + 1);
 			}
 
 			this.FWebsList.List.Items.Clear();
 			int num3 = this.FAddress.GetWebPagesCount() - 1;
-			i = 0;
-			if (num3 >= i)
+			for (int i = 0; i <= num3; i++)
 			{
-				num3++;
-				do
-				{
-					this.FWebsList.List.AddItem(this.FAddress.GetWebPage(i), i + 1);
-					i++;
-				}
-				while (i != num3);
+				this.FWebsList.List.AddItem(this.FAddress.GetWebPage(i), i + 1);
 			}
 		}
 
@@ -254,11 +231,6 @@ namespace GKUI
 			this.SheetPhones.Text = GKL.LSList[199];
 			this.SheetEmails.Text = GKL.LSList[200];
 			this.SheetWebPages.Text = GKL.LSList[201];
-		}
-
-		private static bool GetInput(string aTitle, ref string aValue)
-		{
-			return InputBox.Query(aTitle, GKL.LSList[202], ref aValue) && aValue.Trim() != "";
 		}
 	}
 }

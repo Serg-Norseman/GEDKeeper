@@ -559,7 +559,7 @@ namespace GKUI
 			// 
 			this.Lab1.Location = new System.Drawing.Point(8, 8);
 			this.Lab1.Name = "Lab1";
-			this.Lab1.Size = new System.Drawing.Size(24, 13);
+			this.Lab1.Size = new System.Drawing.Size(75, 13);
 			this.Lab1.TabIndex = 0;
 			this.Lab1.Text = "XXX1";
 			// 
@@ -567,7 +567,7 @@ namespace GKUI
 			// 
 			this.Lab2.Location = new System.Drawing.Point(344, 8);
 			this.Lab2.Name = "Lab2";
-			this.Lab2.Size = new System.Drawing.Size(24, 13);
+			this.Lab2.Size = new System.Drawing.Size(75, 13);
 			this.Lab2.TabIndex = 1;
 			this.Lab2.Text = "XXX2";
 			// 
@@ -701,10 +701,12 @@ namespace GKUI
 			// 
 			// RadioButton5
 			// 
+			this.RadioButton5.Checked = true;
 			this.RadioButton5.Location = new System.Drawing.Point(16, 24);
 			this.RadioButton5.Name = "RadioButton5";
 			this.RadioButton5.Size = new System.Drawing.Size(192, 16);
 			this.RadioButton5.TabIndex = 0;
+			this.RadioButton5.TabStop = true;
 			this.RadioButton5.Text = "Персоны";
 			this.RadioButton5.Click += new System.EventHandler(this.RadioButton8_Click);
 			// 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -33,7 +34,6 @@ namespace GKUI.Charts
 		}
 
 		private TChartKind FKind;
-
 		private static readonly string[] SignsData;
 		private int FBranchDistance;
 		private int FDepthLimit;
@@ -52,6 +52,8 @@ namespace GKUI.Charts
 		private TPerson FSelected;
 
 		public Bitmap[] SignsPic = new Bitmap[4];
+
+		private List<string> FPreparedFamilies = new List<string>();
 
 		static TAncestryChartBox()
 		{
@@ -171,12 +173,12 @@ namespace GKUI.Charts
 			return Result;
 		}
 
-		private TPerson DoAncestorsStep(TPerson aChild, TGEDCOMIndividualRecord aPerson, int aGeneration)
+		private TPerson DoAncestorsStep(TPerson aChild, TGEDCOMIndividualRecord aPerson, int aGeneration, bool dup_flag)
 		{
-			TPerson Result;
-			if (aPerson == null) {
-				Result = null;
-			} else {
+			TPerson Result = null;
+
+			if (aPerson != null)
+			{
 				Result = new TPerson(this);
 				Result.BuildBy(aPerson);
 				Result.Generation = aGeneration;
@@ -192,9 +194,12 @@ namespace GKUI.Charts
 					Result.Node = this.FGraph.CreateNode(Result);
 				}
 
-				if ((this.FDepthLimit <= -1 || aGeneration != this.FDepthLimit) && aPerson.ChildToFamilyLinks.Count > 0)
+				if ((this.FDepthLimit <= -1 || aGeneration != this.FDepthLimit) && aPerson.ChildToFamilyLinks.Count > 0 && !dup_flag)
 				{
 					TGEDCOMFamilyRecord family = aPerson.ChildToFamilyLinks[0].Family;
+
+					bool is_dup = (this.FPreparedFamilies.IndexOf(family.XRef) >= 0);
+					if (!is_dup) this.FPreparedFamilies.Add(family.XRef);
 
 					if (TGenEngine.IsRecordAccess(family.Restriction, this.FShieldState))
 					{
@@ -204,10 +209,11 @@ namespace GKUI.Charts
 
 						if (iFather != null && TGenEngine.IsRecordAccess(iFather.Restriction, this.FShieldState))
 						{
-							Result.Father = this.DoAncestorsStep(Result, iFather, aGeneration + 1);
+							Result.Father = this.DoAncestorsStep(Result, iFather, aGeneration + 1, is_dup);
 							if (Result.Father != null)
 							{
 								Result.Father.Divorced = divorced;
+								Result.Father.IsDup = is_dup;
 								if (this.FOptions.Kinship)
 								{
 									this.FGraph.CreateLink(Result.Node, Result.Father.Node, 1, 1, 3);
@@ -219,10 +225,11 @@ namespace GKUI.Charts
 
 						if (iMother != null && TGenEngine.IsRecordAccess(iMother.Restriction, this.FShieldState))
 						{
-							Result.Mother = this.DoAncestorsStep(Result, iMother, aGeneration + 1);
+							Result.Mother = this.DoAncestorsStep(Result, iMother, aGeneration + 1, is_dup);
 							if (Result.Mother != null)
 							{
 								Result.Mother.Divorced = divorced;
+								Result.Mother.IsDup = is_dup;
 								if (this.FOptions.Kinship)
 								{
 									this.FGraph.CreateLink(Result.Node, Result.Mother.Node, 1, 1, 3);
@@ -239,6 +246,7 @@ namespace GKUI.Charts
 					}
 				}
 			}
+
 			return Result;
 		}
 
@@ -346,32 +354,25 @@ namespace GKUI.Charts
 							if (this.FDepthLimit <= -1 || aLevel != this.FDepthLimit)
 							{
 								int num2 = family.Childrens.Count - 1;
-								int j = 0;
-								if (num2 >= j)
+								for (int j = 0; j <= num2; j++)
 								{
-									num2++;
-									do
+									TGEDCOMIndividualRecord child_rec = family.Childrens[j].Value as TGEDCOMIndividualRecord;
+									if (TGenEngine.IsRecordAccess(child_rec.Restriction, this.FShieldState))
 									{
-										TGEDCOMIndividualRecord child_rec = family.Childrens[j].Value as TGEDCOMIndividualRecord;
-										if (TGenEngine.IsRecordAccess(child_rec.Restriction, this.FShieldState))
+										TPerson child = this.DoDescendantsStep(res_parent, child_rec, aLevel + 1);
+										if (child != null)
 										{
-											TPerson child = this.DoDescendantsStep(res_parent, child_rec, aLevel + 1);
-											if (child != null)
+											child.Father = ft;
+											child.Mother = mt;
+											//int d = (int)desc_flag;
+											child.FFlags.Include(desc_flag);
+											if (this.FOptions.Kinship)
 											{
-												child.Father = ft;
-												child.Mother = mt;
-												//int d = (int)desc_flag;
-												child.FFlags.Include(desc_flag);
-												if (this.FOptions.Kinship)
-												{
-													this.FGraph.CreateLink(child.Node, ft.Node, 1, 1, 3);
-													this.FGraph.CreateLink(child.Node, mt.Node, 1, 1, 3);
-												}
+												this.FGraph.CreateLink(child.Node, ft.Node, 1, 1, 3);
+												this.FGraph.CreateLink(child.Node, mt.Node, 1, 1, 3);
 											}
 										}
-										j++;
 									}
-									while (j != num2);
 								}
 							}
 						}
@@ -603,8 +604,8 @@ namespace GKUI.Charts
 
 		private void Predef()
 		{
-			float sc = (float)(this.FScale / 100.0);
-			int fsz = (int)checked((long)Math.Round(unchecked((double)this.FOptions.DefFont_Size * (double)sc)));
+			double sc = (double)(this.FScale / 100.0);
+			int fsz = (int)checked((long)Math.Round(unchecked((double)this.FOptions.DefFont_Size * sc)));
 			string f_name;
 
 			if (fsz <= 7) {
@@ -614,10 +615,10 @@ namespace GKUI.Charts
 			}
 
 			this.FDrawFont = new Font(f_name, ((float)fsz), FontStyle.Regular, GraphicsUnit.Point);
-			this.FSpouseDistance = (int)checked((long)Math.Round(unchecked(10.0 * (double)sc)));
-			this.FBranchDistance = (int)checked((long)Math.Round(unchecked(40.0 * (double)sc)));
-			this.FLevelDistance = (int)checked((long)Math.Round(unchecked(46.0 * (double)sc)));
-			this.FMargin = (int)checked((long)Math.Round(unchecked(40.0 * (double)sc)));
+			this.FSpouseDistance = (int)checked((long)Math.Round(10.0 * sc));
+			this.FBranchDistance = (int)checked((long)Math.Round(40.0 * sc));
+			this.FLevelDistance = (int)checked((long)Math.Round(46.0 * sc));
+			this.FMargin = (int)checked((long)Math.Round(40.0 * sc));
 		}
 
 		private void RecalcAncestorsChart()
@@ -648,17 +649,10 @@ namespace GKUI.Charts
 			{
 				this.FGraph.FindPathTree(this.FKinRoot.Node);
 				int num = this.FPersons.Count - 1;
-				int i = 0;
-				if (num >= i)
+				for (int i = 0; i <= num; i++)
 				{
-					num++;
-					do
-					{
-						TPerson p = this.FPersons[i];
-						p.Kinship = this.FindRelationship(p);
-						i++;
-					}
-					while (i != num);
+					TPerson p = this.FPersons[i];
+					p.Kinship = this.FindRelationship(p);
 				}
 			}
 			this.FHMax = 0;
@@ -833,33 +827,23 @@ namespace GKUI.Charts
 				}
 				int cur_y = aPerson.PtY + this.FLevelDistance + aPerson.Height;
 				int childs_width = (aPerson.ChildsCount - 1) * this.FBranchDistance;
+
 				int num = aPerson.ChildsCount - 1;
-				int i = 0;
-				if (num >= i)
+				for (int i = 0; i <= num; i++)
 				{
-					num++;
-					do
-					{
-						childs_width += aPerson.GetChild(i).Width;
-						i++;
-					}
-					while (i != num);
+					childs_width += aPerson.GetChild(i).Width;
 				}
+
 				int cur_x = cent_x - childs_width / 2;
+
 				int num2 = aPerson.ChildsCount - 1;
-				i = 0;
-				if (num2 >= i)
+				for (int i = 0; i <= num2; i++)
 				{
-					num2++;
-					do
-					{
-						TPerson child = aPerson.GetChild(i);
-						this.RecalcDesc(ref edges, child, new Point(cur_x + child.Width / 2, cur_y), true);
-						cur_x = child.Rect.Right + this.FBranchDistance;
-						i++;
-					}
-					while (i != num2);
+					TPerson child = aPerson.GetChild(i);
+					this.RecalcDesc(ref edges, child, new Point(cur_x + child.Width / 2, cur_y), true);
+					cur_x = child.Rect.Right + this.FBranchDistance;
 				}
+
 				cur_x = aPerson.GetChild(0).PtX;
 				if (aPerson.ChildsCount > 1)
 				{
@@ -986,67 +970,43 @@ namespace GKUI.Charts
 		private void DrawDescendants(Graphics aCanvas, TPerson aPerson)
 		{
 			int num = aPerson.ChildsCount - 1;
-			int i = 0;
-			if (num >= i)
+			for (int i = 0; i <= num; i++)
 			{
-				num++;
-				do
-				{
-					this.Draw(aCanvas, aPerson.GetChild(i), TAncestryChartBox.TChartKind.ckDescendants);
-					i++;
-				}
-				while (i != num);
+				this.Draw(aCanvas, aPerson.GetChild(i), TAncestryChartBox.TChartKind.ckDescendants);
 			}
+
 			int spb_ofs = (aPerson.Height - 10) / (aPerson.SpousesCount + 1);
 			int spb_beg = aPerson.PtY + (aPerson.Height - spb_ofs * (aPerson.SpousesCount - 1)) / 2;
+
 			TGEDCOMSex sex = aPerson.Sex;
 			if (sex != TGEDCOMSex.svMale)
 			{
 				if (sex == TGEDCOMSex.svFemale)
 				{
 					int num2 = aPerson.SpousesCount - 1;
-					i = 0;
-					if (num2 >= i)
+					for (int i = 0; i <= num2; i++)
 					{
-						num2++;
-						do
-						{
-							int spb_v = spb_beg + spb_ofs * i;
-							this.Line(aCanvas, aPerson.GetSpouse(i).Rect.Right + 1, spb_v, aPerson.Rect.Left, spb_v);
-							i++;
-						}
-						while (i != num2);
+						int spb_v = spb_beg + spb_ofs * i;
+						this.Line(aCanvas, aPerson.GetSpouse(i).Rect.Right + 1, spb_v, aPerson.Rect.Left, spb_v);
 					}
 				}
 			}
 			else
 			{
 				int num3 = aPerson.SpousesCount - 1;
-				i = 0;
-				if (num3 >= i)
+				for (int i = 0; i <= num3; i++)
 				{
-					num3++;
-					do
-					{
-						int spb_v = spb_beg + spb_ofs * i;
-						this.Line(aCanvas, aPerson.Rect.Right + 1, spb_v, aPerson.GetSpouse(i).Rect.Left, spb_v);
-						i++;
-					}
-					while (i != num3);
+					int spb_v = spb_beg + spb_ofs * i;
+					this.Line(aCanvas, aPerson.Rect.Right + 1, spb_v, aPerson.GetSpouse(i).Rect.Left, spb_v);
 				}
 			}
+
 			int num4 = aPerson.SpousesCount - 1;
-			i = 0;
-			if (num4 >= i)
+			for (int i = 0; i <= num4; i++)
 			{
-				num4++;
-				do
-				{
-					this.Draw(aCanvas, aPerson.GetSpouse(i), TAncestryChartBox.TChartKind.ckDescendants);
-					i++;
-				}
-				while (i != num4);
+				this.Draw(aCanvas, aPerson.GetSpouse(i), TAncestryChartBox.TChartKind.ckDescendants);
 			}
+
 			int cr_y = aPerson.PtY + aPerson.Height + this.FLevelDistance / 2;
 			int cx = 0;
 			if (aPerson.BaseSpouse == null || (aPerson.BaseSpouse != null && aPerson.BaseSpouse.SpousesCount > 1))
@@ -1070,6 +1030,7 @@ namespace GKUI.Charts
 				}
 				spb_beg -= spb_ofs / 2;
 			}
+
 			if (aPerson.ChildsCount != 0)
 			{
 				this.Line(aCanvas, cx, spb_beg, cx, cr_y);
@@ -1084,17 +1045,10 @@ namespace GKUI.Charts
 					int epx = aPerson.GetChild(aPerson.ChildsCount - 1).PtX;
 					this.Line(aCanvas, bpx, cr_y, epx, cr_y);
 					int num5 = aPerson.ChildsCount - 1;
-					i = 0;
-					if (num5 >= i)
+					for (int i = 0; i <= num5; i++)
 					{
-						num5++;
-						do
-						{
-							Point child_pt = aPerson.GetChild(i).Pt;
-							this.Line(aCanvas, child_pt.X, cr_y, child_pt.X, child_pt.Y);
-							i++;
-						}
-						while (i != num5);
+						Point child_pt = aPerson.GetChild(i).Pt;
+						this.Line(aCanvas, child_pt.X, cr_y, child_pt.X, child_pt.Y);
 					}
 				}
 			}
@@ -1111,32 +1065,21 @@ namespace GKUI.Charts
 		{
 			if (aPerson != null)
 			{
-				TAncestryChartBox.TChartKind fKind = this.FKind;
-				if (fKind != TAncestryChartBox.TChartKind.ckAncestors)
-				{
-					if (fKind != TAncestryChartBox.TChartKind.ckDescendants)
-					{
-						if (fKind == TAncestryChartBox.TChartKind.ckBoth)
-						{
-							if (object.Equals(aPerson, this.FRoot) || aDirKind == TAncestryChartBox.TChartKind.ckAncestors)
-							{
-								this.DrawAncestors(aCanvas, aPerson);
-							}
-							if (object.Equals(aPerson, this.FRoot) || aDirKind == TAncestryChartBox.TChartKind.ckDescendants)
-							{
-								this.DrawDescendants(aCanvas, aPerson);
-							}
-						}
-					}
-					else
-					{
+				switch (this.FKind) {
+					case TAncestryChartBox.TChartKind.ckAncestors:
+						this.DrawAncestors(aCanvas, aPerson);
+						break;
+
+					case TAncestryChartBox.TChartKind.ckDescendants:
 						this.DrawDescendants(aCanvas, aPerson);
-					}
+						break;
+
+					case TAncestryChartBox.TChartKind.ckBoth:
+						if (aPerson == this.FRoot || aDirKind == TAncestryChartBox.TChartKind.ckAncestors) this.DrawAncestors(aCanvas, aPerson);
+						if (aPerson == this.FRoot || aDirKind == TAncestryChartBox.TChartKind.ckDescendants) this.DrawDescendants(aCanvas, aPerson);
+						break;
 				}
-				else
-				{
-					this.DrawAncestors(aCanvas, aPerson);
-				}
+
 				aPerson.Draw(aCanvas, this.FSPX, this.FSPY);
 			}
 		}
@@ -1162,16 +1105,24 @@ namespace GKUI.Charts
 
 				switch (fKind) {
 					case TChartKind.ckAncestors:
-						this.FRoot = this.DoAncestorsStep(null, aPerson, 1);
+						this.FPreparedFamilies.Clear();
+						this.FRoot = this.DoAncestorsStep(null, aPerson, 1, false);
+
 						break;
 						
 					case TChartKind.ckDescendants:
+						this.FPreparedFamilies.Clear();
 						this.FRoot = this.DoDescendantsStep(null, aPerson, 1);
+
 						break;
 
 					case TChartKind.ckBoth:
-						this.FRoot = this.DoAncestorsStep(null, aPerson, 1);
+						this.FPreparedFamilies.Clear();
+						this.FRoot = this.DoAncestorsStep(null, aPerson, 1, false);
+
+						this.FPreparedFamilies.Clear();
 						this.DoDescendantsStep(null, aPerson, 1);
+
 						break;
 				}
 

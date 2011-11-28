@@ -12,7 +12,6 @@ namespace GKUI
 		private System.Windows.Forms.Label Label1;
 		private System.Windows.Forms.Label Label2;
 		private System.Windows.Forms.Button btnMale;
-		private System.Windows.Forms.Button btnFemale;
 		private System.Windows.Forms.TextBox EditName;
 		private System.Windows.Forms.TextBox MemoNote;
 		private System.Windows.Forms.Panel Panel1;
@@ -53,7 +52,6 @@ namespace GKUI
 			this.Label1 = new System.Windows.Forms.Label();
 			this.Label2 = new System.Windows.Forms.Label();
 			this.btnMale = new System.Windows.Forms.Button();
-			this.btnFemale = new System.Windows.Forms.Button();
 			this.EditName = new System.Windows.Forms.TextBox();
 			this.MemoNote = new System.Windows.Forms.TextBox();
 			this.Panel1 = new System.Windows.Forms.Panel();
@@ -78,8 +76,11 @@ namespace GKUI
 			this.edSourceYear = new System.Windows.Forms.TextBox();
 			this.edPlace = new System.Windows.Forms.TextBox();
 			this.sgData = new System.Windows.Forms.Panel();
+			this.dataGridView1 = new System.Windows.Forms.DataGridView();
 			this.cbPersonLink = new System.Windows.Forms.ComboBox();
 			this.rgSourceKind = new System.Windows.Forms.GroupBox();
+			this.radioButton2 = new System.Windows.Forms.RadioButton();
+			this.radioButton1 = new System.Windows.Forms.RadioButton();
 			this.gbMetrics = new System.Windows.Forms.GroupBox();
 			this.Label11 = new System.Windows.Forms.Label();
 			this.Label12 = new System.Windows.Forms.Label();
@@ -90,6 +91,9 @@ namespace GKUI
 			this.Panel1.SuspendLayout();
 			this.Panel2.SuspendLayout();
 			this.tsSourceInput.SuspendLayout();
+			this.sgData.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+			this.rgSourceKind.SuspendLayout();
 			this.gbMetrics.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -129,7 +133,6 @@ namespace GKUI
 			this.tsSimpleInput.Controls.Add(this.Label1);
 			this.tsSimpleInput.Controls.Add(this.Label2);
 			this.tsSimpleInput.Controls.Add(this.btnMale);
-			this.tsSimpleInput.Controls.Add(this.btnFemale);
 			this.tsSimpleInput.Controls.Add(this.EditName);
 			this.tsSimpleInput.Controls.Add(this.MemoNote);
 			this.tsSimpleInput.Controls.Add(this.Panel1);
@@ -160,17 +163,10 @@ namespace GKUI
 			// 
 			this.btnMale.Location = new System.Drawing.Point(424, 24);
 			this.btnMale.Name = "btnMale";
-			this.btnMale.Size = new System.Drawing.Size(23, 21);
+			this.btnMale.Size = new System.Drawing.Size(49, 21);
 			this.btnMale.TabIndex = 2;
 			this.btnMale.Text = "М";
-			// 
-			// btnFemale
-			// 
-			this.btnFemale.Location = new System.Drawing.Point(448, 24);
-			this.btnFemale.Name = "btnFemale";
-			this.btnFemale.Size = new System.Drawing.Size(23, 21);
-			this.btnFemale.TabIndex = 3;
-			this.btnFemale.Text = "Ж";
+			this.btnMale.Click += new System.EventHandler(this.BtnMaleClick);
 			// 
 			// EditName
 			// 
@@ -224,6 +220,7 @@ namespace GKUI
 			this.EditBirthDate.Size = new System.Drawing.Size(97, 21);
 			this.EditBirthDate.TabIndex = 2;
 			this.EditBirthDate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+			this.EditBirthDate.TextChanged += new System.EventHandler(this.EditBirthDateTextChanged);
 			// 
 			// EditBirthPlace
 			// 
@@ -231,6 +228,7 @@ namespace GKUI
 			this.EditBirthPlace.Name = "EditBirthPlace";
 			this.EditBirthPlace.Size = new System.Drawing.Size(337, 21);
 			this.EditBirthPlace.TabIndex = 4;
+			this.EditBirthPlace.TextChanged += new System.EventHandler(this.EditBirthDateTextChanged);
 			// 
 			// CheckBirth
 			// 
@@ -285,6 +283,7 @@ namespace GKUI
 			this.EditDeathDate.Size = new System.Drawing.Size(97, 21);
 			this.EditDeathDate.TabIndex = 2;
 			this.EditDeathDate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+			this.EditDeathDate.TextChanged += new System.EventHandler(this.EditDeathDateTextChanged);
 			// 
 			// EditDeathPlace
 			// 
@@ -292,6 +291,7 @@ namespace GKUI
 			this.EditDeathPlace.Name = "EditDeathPlace";
 			this.EditDeathPlace.Size = new System.Drawing.Size(337, 21);
 			this.EditDeathPlace.TabIndex = 4;
+			this.EditDeathPlace.TextChanged += new System.EventHandler(this.EditDeathDateTextChanged);
 			// 
 			// tsSourceInput
 			// 
@@ -333,7 +333,7 @@ namespace GKUI
 			// 
 			this.Label9.Location = new System.Drawing.Point(520, 56);
 			this.Label9.Name = "Label9";
-			this.Label9.Size = new System.Drawing.Size(25, 13);
+			this.Label9.Size = new System.Drawing.Size(30, 13);
 			this.Label9.TabIndex = 2;
 			this.Label9.Text = "Год";
 			// 
@@ -377,10 +377,22 @@ namespace GKUI
 			// 
 			// sgData
 			// 
+			this.sgData.Controls.Add(this.dataGridView1);
 			this.sgData.Location = new System.Drawing.Point(8, 184);
 			this.sgData.Name = "sgData";
 			this.sgData.Size = new System.Drawing.Size(609, 177);
 			this.sgData.TabIndex = 4;
+			// 
+			// dataGridView1
+			// 
+			this.dataGridView1.AllowUserToResizeRows = false;
+			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.dataGridView1.Location = new System.Drawing.Point(0, 0);
+			this.dataGridView1.MultiSelect = false;
+			this.dataGridView1.Name = "dataGridView1";
+			this.dataGridView1.Size = new System.Drawing.Size(609, 177);
+			this.dataGridView1.TabIndex = 0;
 			// 
 			// cbPersonLink
 			// 
@@ -393,12 +405,36 @@ namespace GKUI
 			// 
 			// rgSourceKind
 			// 
+			this.rgSourceKind.Controls.Add(this.radioButton2);
+			this.rgSourceKind.Controls.Add(this.radioButton1);
 			this.rgSourceKind.Location = new System.Drawing.Point(8, 0);
 			this.rgSourceKind.Name = "rgSourceKind";
 			this.rgSourceKind.Size = new System.Drawing.Size(609, 38);
 			this.rgSourceKind.TabIndex = 6;
 			this.rgSourceKind.TabStop = false;
 			this.rgSourceKind.Text = "Тип источника";
+			// 
+			// radioButton2
+			// 
+			this.radioButton2.Location = new System.Drawing.Point(296, 14);
+			this.radioButton2.Name = "radioButton2";
+			this.radioButton2.Size = new System.Drawing.Size(273, 18);
+			this.radioButton2.TabIndex = 1;
+			this.radioButton2.Text = "radioButton2";
+			this.radioButton2.UseVisualStyleBackColor = true;
+			this.radioButton2.CheckedChanged += new System.EventHandler(this.RadioButton1CheckedChanged);
+			// 
+			// radioButton1
+			// 
+			this.radioButton1.Checked = true;
+			this.radioButton1.Location = new System.Drawing.Point(8, 14);
+			this.radioButton1.Name = "radioButton1";
+			this.radioButton1.Size = new System.Drawing.Size(273, 18);
+			this.radioButton1.TabIndex = 0;
+			this.radioButton1.TabStop = true;
+			this.radioButton1.Text = "radioButton1";
+			this.radioButton1.UseVisualStyleBackColor = true;
+			this.radioButton1.CheckedChanged += new System.EventHandler(this.RadioButton1CheckedChanged);
 			// 
 			// gbMetrics
 			// 
@@ -471,9 +507,15 @@ namespace GKUI
 			this.Panel2.PerformLayout();
 			this.tsSourceInput.ResumeLayout(false);
 			this.tsSourceInput.PerformLayout();
+			this.sgData.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+			this.rgSourceKind.ResumeLayout(false);
 			this.gbMetrics.ResumeLayout(false);
 			this.gbMetrics.PerformLayout();
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.DataGridView dataGridView1;
+		private System.Windows.Forms.RadioButton radioButton1;
+		private System.Windows.Forms.RadioButton radioButton2;
 	}
 }

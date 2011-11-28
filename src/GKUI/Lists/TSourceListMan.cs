@@ -2,12 +2,11 @@
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
 using GKUI.Controls;
 
 namespace GKUI.Lists
 {
-	public class TSourceListMan : TListManager
+	public sealed class TSourceListMan : TListManager
 	{
 		private TGEDCOMSourceRecord FRec;
 
@@ -28,37 +27,25 @@ namespace GKUI.Lists
 
 		public override string GetColumnValue(int aColIndex, bool isMain)
 		{
-			string Result;
-			if (aColIndex != 1)
-			{
-				if (aColIndex != 2)
-				{
-					if (aColIndex != 3)
-					{
-						if (aColIndex != 4)
-						{
-							Result = "";
-						}
-						else
-						{
-							Result = this.FRec.ChangeDate.ToString();
-						}
-					}
-					else
-					{
-						Result = this.FRec.Title.Text.Trim();
-					}
-				}
-				else
-				{
-					Result = this.FRec.Originator.Text.Trim();
-				}
+			string result;
+			switch (aColIndex) {
+				case 1:
+					result = this.FRec.FiledByEntry.Trim();
+					break;
+				case 2:
+					result = this.FRec.Originator.Text.Trim();
+					break;
+				case 3:
+					result = this.FRec.Title.Text.Trim();
+					break;
+				case 4:
+					result = this.FRec.ChangeDate.ToString();
+					break;
+				default:
+					result = "";
+					break;
 			}
-			else
-			{
-				Result = this.FRec.FiledByEntry.Trim();
-			}
-			return Result;
+			return result;
 		}
 
 		public override void UpdateItem(TExtListItem aItem, bool isMain)

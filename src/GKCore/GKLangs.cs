@@ -598,8 +598,10 @@ namespace GKCore
 		LSID_PlacesPrepare,
 		LSID_PlaceAlreadyInBook,
 		LSID_DNAMarkers,
+		LSID_AAF_1,
+		LSID_AAF_2,
 
-		LSID_Last = LSID_DNAMarkers
+		LSID_Last = LSID_AAF_2
 	}
 
 	public static class GKL
@@ -1198,10 +1200,12 @@ namespace GKCore
 			"Количество ссылок", 
 			"Обработка мест", 
 			"Место уже есть в справочнике",
-			"Маркеры ДНК"
+			"Маркеры ДНК",
+			"Ср.возр.рождения первенца на ДР родителя",
+			"Ср.возр.рождения первенца на ДР ребенка"
 		};
 
-		public static string[] LSList = new string[593];
+		public static string[] LSList = new string[(int)LSID.LSID_Last + 1];
 
 		public static string GetLS(LSID lsid)
 		{

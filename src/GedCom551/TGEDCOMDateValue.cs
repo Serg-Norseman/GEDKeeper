@@ -1,6 +1,8 @@
 using System;
 using System.Runtime.InteropServices;
 
+using GKCore.Sys;
+
 namespace GedCom551
 {
 	public class TGEDCOMDateValue : TGEDCOMCustomDate
@@ -74,53 +76,59 @@ namespace GedCom551
 
 		public override string ParseString([In] string S)
 		{
-			if (this.FValue != null)
+			try
 			{
-				this.FValue.Free();
-				this.FValue = null;
-			}
-
-			if (string.IsNullOrEmpty(S)) {
-				return "";
-			}
-
-			string SU = S.Substring(0, 3).ToUpper();
-
-			if (SU == TGEDCOMDateApproximated.GEDCOMDateApproximatedArray[1] || 
-			    SU == TGEDCOMDateApproximated.GEDCOMDateApproximatedArray[2] || 
-			    SU == TGEDCOMDateApproximated.GEDCOMDateApproximatedArray[3])
-			{
-				this.FValue = new TGEDCOMDateApproximated(base.Owner, this, "", "");
-			}
-			else
-			{
-				if (SU == "INT")
+				if (this.FValue != null)
 				{
-					this.FValue = new TGEDCOMDateInterpreted(base.Owner, this, "", "");
+					this.FValue.Free();
+					this.FValue = null;
+				}
+
+				if (string.IsNullOrEmpty(S))
+				{
+					return "";
+				}
+
+				string SU = S.Substring(0, 3).ToUpper();
+
+				if (SU == TGEDCOMDate.GEDCOMDateApproximatedArray[1] || SU == TGEDCOMDate.GEDCOMDateApproximatedArray[2] || SU == TGEDCOMDate.GEDCOMDateApproximatedArray[3])
+				{
+					this.FValue = new TGEDCOMDateApproximated(base.Owner, this, "", "");
 				}
 				else
 				{
-					if (SU == TGEDCOMDateRange.GEDCOMDateRangeArray[0] || 
-					    SU == TGEDCOMDateRange.GEDCOMDateRangeArray[1] || 
-					    SU == TGEDCOMDateRange.GEDCOMDateRangeArray[2])
+					if (SU == "INT")
 					{
-						this.FValue = new TGEDCOMDateRange(base.Owner, this, "", "");
+						this.FValue = new TGEDCOMDateInterpreted(base.Owner, this, "", "");
 					}
 					else
 					{
-						if (S.Substring(0, 4).ToUpper() == "FROM" || 
-						    S.Substring(0, 2).ToUpper() == "TO")
+						if (SU == TGEDCOMDate.GEDCOMDateRangeArray[0] || SU == TGEDCOMDate.GEDCOMDateRangeArray[1] || SU == TGEDCOMDate.GEDCOMDateRangeArray[2])
 						{
-							this.FValue = new TGEDCOMDatePeriod(base.Owner, this, "", "");
+							this.FValue = new TGEDCOMDateRange(base.Owner, this, "", "");
 						}
 						else
 						{
-							this.FValue = new TGEDCOMDate(base.Owner, this, "", "");
+							// checkit: this safe (by indexes and length), but std validness?
+							if (S.IndexOf("FROM", 0) == 0 || S.IndexOf("TO", 0) == 0)
+							{
+								this.FValue = new TGEDCOMDatePeriod(base.Owner, this, "", "");
+							}
+							else
+							{
+								this.FValue = new TGEDCOMDate(base.Owner, this, "", "");
+							}
 						}
 					}
 				}
+
+				return this.FValue.ParseString(S);
 			}
-			return this.FValue.ParseString(S);
+			catch (Exception E)
+			{
+				SysUtils.LogWrite("TGEDCOMDateValue.ParseString(): " + E.Message);
+				return S;
+			}
 		}
 
 		public override void ResetOwner(TGEDCOMObject AOwner)

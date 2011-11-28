@@ -2,12 +2,11 @@
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
 using GKUI.Controls;
 
 namespace GKUI.Lists
 {
-	public class TFamilyListMan : TListManager
+	public sealed class TFamilyListMan : TListManager
 	{
 		private TGEDCOMFamilyRecord FRec;
 
@@ -28,30 +27,22 @@ namespace GKUI.Lists
 
 		public override string GetColumnValue(int aColIndex, bool isMain)
 		{
-			string Result;
-			if (aColIndex != 1)
-			{
-				if (aColIndex != 2)
-				{
-					if (aColIndex != 3)
-					{
-						Result = "";
-					}
-					else
-					{
-						Result = this.FRec.ChangeDate.ToString();
-					}
-				}
-				else
-				{
-					Result = TGenEngine.GetMarriageDate(this.FRec, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
-				}
+			string result;
+			switch (aColIndex) {
+				case 1:
+					result = TGenEngine.GetFamilyStr(this.FRec);
+					break;
+				case 2:
+					result = TGenEngine.GetMarriageDate(this.FRec, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
+					break;
+				case 3:
+					result = this.FRec.ChangeDate.ToString();
+					break;
+				default:
+					result = "";
+					break;
 			}
-			else
-			{
-				Result = TGenEngine.GetFamilyStr(this.FRec);
-			}
-			return Result;
+			return result;
 		}
 
 		public override void UpdateItem(TExtListItem aItem, bool isMain)

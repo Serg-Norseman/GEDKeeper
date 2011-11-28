@@ -26,6 +26,7 @@ namespace GKUI
 		}
 
 		private enum TChartStyle : byte { csBar, csPoint }
+
 		private static TTitleRec[] StTitles;
 		private TGKListView ListStats;
 		private ZedGraphControl zgc;
@@ -39,7 +40,7 @@ namespace GKUI
 			get { return this.FBase; }
 		}
 
-		private void PrepareArray(GraphPane gPane, TfmStats.TChartStyle aStyle, bool aExcludeUnknowns)
+		private void PrepareArray(GraphPane gPane, TChartStyle aStyle, bool aExcludeUnknowns)
 		{
 			gPane.Title.Text = ChartTitle;
 			gPane.XAxis.Title.Text = ChartXTitle;
@@ -72,7 +73,7 @@ namespace GKUI
 					gPane.AddBar("-", ppList, Color.Green);
 					break;
 				case TChartStyle.csPoint:
-					gPane.AddCurve("-", ppList, Color.Green, SymbolType.Diamond);
+					gPane.AddCurve("-", ppList, Color.Green, SymbolType.Diamond).Symbol.Size = 3;
 					break;
 			}
 		}
@@ -90,13 +91,19 @@ namespace GKUI
 			try
 			{
 				this.Base.Engine.GetSpecStats(aMode, vals);
-				IEnumerator Enumerator = vals.GetEnumerator();
+				foreach (TGenEngine.TListVal lv in vals)
+				{
+					ListViewItem item = this.ListStats.Items.Add(lv.Item);
+					item.SubItems.Add(lv.Count.ToString());
+				}
+
+				/*IEnumerator Enumerator = vals.GetEnumerator();
 				while (Enumerator.MoveNext())
 				{
 					TGenEngine.TListVal lv = (TGenEngine.TListVal)Enumerator.Current;
 					ListViewItem item = this.ListStats.Items.Add(lv.Item);
 					item.SubItems.Add(lv.Count.ToString());
-				}
+				}*/
 			}
 			finally
 			{
@@ -256,7 +263,7 @@ namespace GKUI
 			this.Panel1.Controls.SetChildIndex(this.ToolBar1, 4);
 			this.cbType.Items.Clear();
 
-			for (TGenEngine.TStatMode i = TGenEngine.TStatMode.smAncestors; i <= TGenEngine.TStatMode.smMiliRank; i++)
+			for (TGenEngine.TStatMode i = TGenEngine.TStatMode.smAncestors; i <= TGenEngine.TStatMode.smAAF_2; i++)
 			{
 				TTitleRec tr = StTitles[(int)i];
 				this.cbType.Items.Add(GKL.LSList[(int)tr.Title - 1]);
@@ -272,7 +279,7 @@ namespace GKUI
 
 		static TfmStats()
 		{
-			StTitles = new TTitleRec[32];
+			StTitles = new TTitleRec[34];
 			StTitles[0] = new TTitleRec(LSID.LSID_AncestorsCount, LSID.LSID_Name);
 			StTitles[1] = new TTitleRec(LSID.LSID_DescendantsCount, LSID.LSID_Name);
 			StTitles[2] = new TTitleRec(LSID.LSID_GenerationsCount, LSID.LSID_Name);
@@ -305,6 +312,9 @@ namespace GKUI
 			StTitles[29] = new TTitleRec(LSID.LSID_MiliInd, LSID.LSID_MiliInd);
 			StTitles[30] = new TTitleRec(LSID.LSID_MiliDis, LSID.LSID_MiliDis);
 			StTitles[31] = new TTitleRec(LSID.LSID_MiliRank, LSID.LSID_MiliRank);
+
+			StTitles[32] = new TTitleRec(LSID.LSID_AAF_1, LSID.LSID_AAF_1);
+			StTitles[33] = new TTitleRec(LSID.LSID_AAF_2, LSID.LSID_AAF_2);
 		}
 
 		private static string _TfmStats_Load_GetPercent(int aDividend, int aDivisor)

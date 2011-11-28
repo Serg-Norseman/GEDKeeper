@@ -400,6 +400,23 @@ namespace GedCom551
 			}
 		}
 
+		static TGEDCOMTree()
+		{
+			GEDCOMFactory f = GEDCOMFactory.GetInstance();
+
+			f.Register("DATE", new TagConstructor<TGEDCOMObject, TGEDCOMObject, string, string, TGEDCOMDateValue>(
+				(TGEDCOMObject arg1, TGEDCOMObject arg2, string arg3, string arg4) => new TGEDCOMDateValue(arg1, arg2, arg3, arg4))
+			);
+			f.Register("TIME", new TagConstructor<TGEDCOMObject, TGEDCOMObject, string, string, TGEDCOMTime>(
+				(TGEDCOMObject arg1, TGEDCOMObject arg2, string arg3, string arg4) => new TGEDCOMTime(arg1, arg2, arg3, arg4))
+			);
+			f.Register("ADDR", new TagConstructor<TGEDCOMObject, TGEDCOMObject, string, string, TGEDCOMAddress>(
+				(TGEDCOMObject arg1, TGEDCOMObject arg2, string arg3, string arg4) => new TGEDCOMAddress(arg1, arg2, arg3, arg4))
+			);
+
+			//TGEDCOMCustomTag tag = f.Create("TestTag", null, null, "test_name", "test_value");
+		}
+
 		public void SaveToStream(StreamWriter AStream)
 		{
 			this.SaveHeaderToStream(AStream);

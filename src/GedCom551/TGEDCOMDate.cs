@@ -9,6 +9,9 @@ namespace GedCom551
 {
 	public class TGEDCOMDate : TGEDCOMCustomDate
 	{
+		public static readonly string[] GEDCOMDateApproximatedArray = new string[] { "", "ABT", "CAL", "EST" };
+		public static readonly string[] GEDCOMDateRangeArray = new string[] { "AFT", "BEF", "BET", "AND" };
+
 		public static readonly string[] GEDCOMDateEscapeArray;
 		public static readonly string[] GEDCOMMonthRusArray;
 		public static readonly string[] GEDCOMMonthSysArray;

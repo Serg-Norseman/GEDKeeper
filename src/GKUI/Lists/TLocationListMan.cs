@@ -1,14 +1,12 @@
-﻿using GedCom551;
+﻿using System;
+
+using GedCom551;
 using GKCore;
-using GKCore.Sys;
 using GKUI.Controls;
-using System;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace GKUI.Lists
 {
-	public class TLocationListMan : TListManager
+	public sealed class TLocationListMan : TListManager
 	{
 		private TGEDCOMLocationRecord FRec;
 
@@ -29,37 +27,25 @@ namespace GKUI.Lists
 
 		public override string GetColumnValue(int aColIndex, bool isMain)
 		{
-			string Result;
-			if (aColIndex != 1)
-			{
-				if (aColIndex != 2)
-				{
-					if (aColIndex != 3)
-					{
-						if (aColIndex != 4)
-						{
-							Result = "";
-						}
-						else
-						{
-							Result = this.FRec.ChangeDate.ToString();
-						}
-					}
-					else
-					{
-						Result = this.FRec.Map.Long;
-					}
-				}
-				else
-				{
-					Result = this.FRec.Map.Lati;
-				}
+			string result;
+			switch (aColIndex) {
+				case 1:
+					result = this.FRec.LocationName;
+					break;
+				case 2:
+					result = this.FRec.Map.Lati;
+					break;
+				case 3:
+					result = this.FRec.Map.Long;
+					break;
+				case 4:
+					result = this.FRec.ChangeDate.ToString();
+					break;
+				default:
+					result = "";
+					break;
 			}
-			else
-			{
-				Result = this.FRec.LocationName;
-			}
-			return Result;
+			return result;
 		}
 
 		public override void UpdateItem(TExtListItem aItem, bool isMain)

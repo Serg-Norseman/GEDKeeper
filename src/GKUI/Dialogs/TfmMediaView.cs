@@ -2,8 +2,8 @@
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
-
 using GedCom551;
 using GKCore.Sys;
 
@@ -54,7 +54,7 @@ namespace GKUI
 					this.Base.Engine.MediaLoad(this.FFileRef.StringValue, ref target_fn);
 
 					ctl = new PictureBox();
-					(ctl as PictureBox).Image = Image.FromFile(target_fn);					
+					(ctl as PictureBox).Image = Image.FromFile(target_fn);
 					(ctl as PictureBox).SizeMode = PictureBoxSizeMode.CenterImage;
 					break;
 				}
@@ -73,24 +73,27 @@ namespace GKUI
 				case TGEDCOMMultimediaFormat.mfTXT:
 				{
 					this.Base.Engine.MediaLoad(this.FFileRef.StringValue, out fs);
-					StreamReader strd = new StreamReader(fs);
-
-					ctl = new TextBox();
-					(ctl as TextBox).ReadOnly = true;
-					(ctl as TextBox).ScrollBars = ScrollBars.Both;
-					(ctl as TextBox).Text = strd.ReadToEnd().ToString();
-					this.Controls.Add(ctl);
+					using (StreamReader strd = new StreamReader(fs, Encoding.GetEncoding(1251)))
+					{
+						ctl = new TextBox();
+						(ctl as TextBox).Multiline = true;
+						(ctl as TextBox).ReadOnly = true;
+						(ctl as TextBox).ScrollBars = ScrollBars.Both;
+						(ctl as TextBox).Text = strd.ReadToEnd().ToString();
+						this.Controls.Add(ctl);
+					}
 					break;
 				}
 
 				case TGEDCOMMultimediaFormat.mfRTF:
 				{
 					this.Base.Engine.MediaLoad(this.FFileRef.StringValue, out fs);
-					StreamReader strd = new StreamReader(fs);
-
-					ctl = new RichTextBox();
-					(ctl as RichTextBox).ReadOnly = true;
-					(ctl as RichTextBox).Text = strd.ReadToEnd().ToString();
+					using (StreamReader strd = new StreamReader(fs))
+					{
+						ctl = new RichTextBox();
+						(ctl as RichTextBox).ReadOnly = true;
+						(ctl as RichTextBox).Text = strd.ReadToEnd().ToString();
+					}
 					break;
 				}
 

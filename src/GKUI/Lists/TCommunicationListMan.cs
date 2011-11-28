@@ -2,12 +2,11 @@
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
 using GKUI.Controls;
 
 namespace GKUI.Lists
 {
-	public class TCommunicationListMan : TListManager
+	public sealed class TCommunicationListMan : TListManager
 	{
 		private TGEDCOMCommunicationRecord FRec;
 
@@ -28,37 +27,26 @@ namespace GKUI.Lists
 
 		public override string GetColumnValue(int aColIndex, bool isMain)
 		{
-			string Result;
-			switch (aColIndex)
-			{
+			string result;
+			switch (aColIndex) {
 				case 1:
-				{
-					Result = this.FRec.CommName;
-					return Result;
-				}
+					result = this.FRec.CommName;
+					return result;
 				case 2:
-				{
-					Result = TGenEngine.GetCorresponderStr(this.FTree, this.FRec, false);
-					return Result;
-				}
+					result = TGenEngine.GetCorresponderStr(this.FTree, this.FRec, false);
+					return result;
 				case 3:
-				{
-					Result = GKL.LSList[(int)TGenEngine.CommunicationNames[(int)this.FRec.CommunicationType] - 1];
-					return Result;
-				}
+					result = GKL.LSList[(int)TGenEngine.CommunicationNames[(int)this.FRec.CommunicationType] - 1];
+					return result;
 				case 4:
-				{
-					Result = TGenEngine.GEDCOMDateToStr(this.FRec.Date, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
-					return Result;
-				}
+					result = TGenEngine.GEDCOMDateToStr(this.FRec.Date, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
+					return result;
 				case 5:
-				{
-					Result = this.FRec.ChangeDate.ToString();
-					return Result;
-				}
+					result = this.FRec.ChangeDate.ToString();
+					return result;
 			}
-			Result = "";
-			return Result;
+			result = "";
+			return result;
 		}
 
 		public override void UpdateItem(TExtListItem aItem, bool isMain)

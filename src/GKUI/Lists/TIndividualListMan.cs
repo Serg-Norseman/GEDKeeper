@@ -2,12 +2,12 @@
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
 using GKUI.Controls;
 
+// fixme: change all ifs to switches
 namespace GKUI.Lists
 {
-	public class TIndividualListMan : TListManager
+	public sealed class TIndividualListMan : TListManager
 	{
 		private struct TColRec
 		{

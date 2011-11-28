@@ -90,16 +90,16 @@ namespace GedCom551
 		public override string ToString()
 		{
 			DateTime cdt = this.GetChangeDateTime();
-			string Result;
+			string result;
 			if (cdt.Ticks == 0)
 			{
-				Result = "";
+				result = "";
 			}
 			else
 			{
-				Result = cdt.ToString("yyyy.MM.dd HH:mm:ss", null);
+				result = cdt.ToString("yyyy.MM.dd HH:mm:ss", null);
 			}
-			return Result;
+			return result;
 		}
 
 		public TGEDCOMChangeDate(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)

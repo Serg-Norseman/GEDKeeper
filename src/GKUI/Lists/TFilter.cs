@@ -3,7 +3,7 @@ using GKCore.Sys;
 
 namespace GKUI.Lists
 {
-	public class TFilter
+	public abstract class TFilter
 	{
 		public enum TGroupMode : byte
 		{

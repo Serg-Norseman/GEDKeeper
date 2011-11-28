@@ -1,6 +1,5 @@
 using System;
 using System.Drawing;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -10,7 +9,7 @@ using GKUI.Controls;
 
 namespace GKUI.Lists
 {
-	public class TSheetList : ContainerControl, IDisposable
+	public sealed class TSheetList : ContainerControl, IDisposable
 	{
 		public delegate void TModifyEvent(object Sender, object ItemData, TGenEngine.TRecAction Action);
 
@@ -110,24 +109,16 @@ namespace GKUI.Lists
 		{
 			if (e.Control)
 			{
-				Keys keyCode = e.KeyCode;
-				if (keyCode != Keys.Return)
-				{
-					if (keyCode != Keys.D)
-					{
-						if (keyCode == Keys.I)
-						{
-							this.ItemAdd();
-						}
-					}
-					else
-					{
+				switch (e.KeyCode) {
+					case Keys.I:
+						this.ItemAdd();
+						break;
+					case Keys.D:
 						this.ItemDelete();
-					}
-				}
-				else
-				{
-					this.ItemEdit();
+						break;
+					case Keys.Return:
+						this.ItemEdit();
+						break;
 				}
 			}
 		}
@@ -151,12 +142,12 @@ namespace GKUI.Lists
 
 		public object GetSelectedData()
 		{
-			object Result = null;
+			object result = null;
 			if (this.FList.SelectedItem() != null)
 			{
-				Result = this.FList.SelectedItem().Data;
+				result = this.FList.SelectedItem().Data;
 			}
-			return Result;
+			return result;
 		}
 
 		private void SetReadOnly([In] bool Value)
@@ -204,31 +195,13 @@ namespace GKUI.Lists
 			this.FBtnAdd.ToolTipText = GKL.LSList[19];
 			this.FToolBar = new ToolBar();
 			this.FToolBar.Appearance = ToolBarAppearance.Flat;
-			ToolBar.ToolBarButtonCollection arg_1B2_0 = this.FToolBar.Buttons;
-			ToolBarButton[] array = null;
-			ToolBarButton[] array2 = array;
-			ToolBarButton[] array3;
-			ToolBarButton[] expr_160 = array3 = new ToolBarButton[6];
-			if (array2 != null)
-			{
-				int num;
-				if ((num = array2.Length) > 6)
-				{
-					num = 6;
-				}
-				if (num > 0)
-				{
-					Array.Copy(array2, array3, num);
-				}
-			}
-			array = expr_160;
-			array[0] = this.FBtnAdd;
-			array[1] = this.FBtnEdit;
-			array[2] = this.FBtnDelete;
-			array[3] = this.FBtnLinkJump;
-			array[4] = this.FBtnMoveUp;
-			array[5] = this.FBtnMoveDown;
-			arg_1B2_0.AddRange(array);
+			this.FToolBar.Buttons.AddRange(new ToolBarButton[6] {
+			                               	this.FBtnAdd,
+			                               	this.FBtnEdit,
+			                               	this.FBtnDelete,
+			                               	this.FBtnLinkJump,
+			                               	this.FBtnMoveUp,
+			                               	this.FBtnMoveDown});
 			this.FToolBar.ImageList = GKUI.TfmGEDKeeper.Instance.ImageList_Buttons;
 			this.FToolBar.ShowToolTips = true;
 			this.FToolBar.ButtonClick += new ToolBarButtonClickEventHandler(this.ButtonClick);

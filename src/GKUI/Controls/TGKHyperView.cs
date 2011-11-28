@@ -67,23 +67,13 @@ namespace GKUI.Controls
 
 		public event TGKHyperView.TLinkEvent OnLink
 		{
-			add { this.set_OnLink(value); }
+			add { this.EOnLink = value; }
 			remove {
-				if (this.get_OnLink() == value)
+				if (this.EOnLink == value)
 				{
-					this.set_OnLink(null);
+					this.EOnLink = null;
 				}
 			}
-		}
-
-		public TGKHyperView.TLinkEvent get_OnLink()
-		{
-			return this.EOnLink;
-		}
-
-		public void set_OnLink(TGKHyperView.TLinkEvent Value)
-		{
-			this.EOnLink = Value;
 		}
 
 		public int LeftPos

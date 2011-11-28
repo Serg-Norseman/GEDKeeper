@@ -13,7 +13,7 @@ namespace GKUI.Charts
 	{
 		public enum TPersonFlag : byte
 		{
-			pfDivorced, pfIsDead, pfSelected, pfDescByFather, pfDescByMother
+			pfDivorced, pfIsDead, pfSelected, pfDescByFather, pfDescByMother, pfIsDup
 		}
 
 		public enum TPersonKind : byte
@@ -149,6 +149,12 @@ namespace GKUI.Charts
 		{
 			get { return this.GetDivorced(); }
 			set { this.SetDivorced(value); }
+		}
+
+		public bool IsDup
+		{
+			get { return this.GetIsDup(); }
+			set { this.SetIsDup(value); }
 		}
 
 		public string Family
@@ -289,10 +295,14 @@ namespace GKUI.Charts
 				case TGEDCOMSex.svMale:
 				{
 					if (!dead) {
-						if (this.Divorced) {
-							b_color = this.FChart.Options.UnHusbandColor;
+						if (this.IsDup) {
+							b_color = Color.FromArgb(192, 192, 192);
 						} else {
-							b_color = this.FChart.Options.MaleColor;
+							if (this.Divorced) {
+								b_color = this.FChart.Options.UnHusbandColor;
+							} else {
+								b_color = this.FChart.Options.MaleColor;
+							}
 						}
 					} else {
 						b_color = Color.Black;
@@ -305,10 +315,14 @@ namespace GKUI.Charts
 				case TGEDCOMSex.svFemale:
 				{
 					if (!dead) {
-						if (this.Divorced) {
-							b_color = this.FChart.Options.UnWifeColor;
+						if (this.IsDup) {
+							b_color = Color.FromArgb(192, 192, 192);
 						} else {
-							b_color = this.FChart.Options.FemaleColor;
+							if (this.Divorced) {
+								b_color = this.FChart.Options.UnWifeColor;
+							} else {
+								b_color = this.FChart.Options.FemaleColor;
+							}
 						}
 					} else {
 						b_color = Color.Black;
@@ -351,78 +365,6 @@ namespace GKUI.Charts
 			line++;
 		}
 
-		private void CalcBounds()
-		{
-			Graphics g = this.FChart.CreateGraphics();
-			try
-			{
-				int lines = 2;
-				int maxwid = this.TextWidth(g, this.FFamily);
-
-				if (!this.FChart.Options.DiffLines) {
-					int wt = this.TextWidth(g, this.GetFullName());
-					if (maxwid < wt) maxwid = wt;
-				} else {
-					int wt = this.TextWidth(g, this.FName);
-					if (maxwid < wt) maxwid = wt;
-
-					wt = this.TextWidth(g, this.FPatronymic);
-					if (maxwid < wt) maxwid = wt;
-
-					lines++;
-				}
-
-				if (!this.FChart.Options.OnlyYears)
-				{
-					if (this.FChart.Options.BirthDateVisible) {
-						int wt = this.TextWidth(g, this.FBirthDate);
-						if (maxwid < wt) maxwid = wt;
-
-						lines++;
-					}
-
-					if (this.FChart.Options.DeathDateVisible) {
-						int wt = this.TextWidth(g, this.FDeathDate);
-						if (maxwid < wt) maxwid = wt;
-
-						lines++;
-					}
-				} else {
-					int wt = this.TextWidth(g, this.GetLifeYears());
-					if (maxwid < wt) maxwid = wt;
-
-					lines++;
-				}
-
-				if (this.FChart.Options.Kinship) {
-					int wt = this.TextWidth(g, this.FKinship);
-					if (maxwid < wt) maxwid = wt;
-
-					lines++;
-				}
-
-				if ((this.FChart as TAncestryChartBox).PathDebug) {
-					int wt = this.TextWidth(g, this.FPathDebug);
-					if (maxwid < wt) maxwid = wt;
-
-					lines++;
-				}
-
-				this.FWidth = maxwid + 20;
-				this.FHeight = g.MeasureString("A", this.FChart.FDrawFont).ToSize().Height * lines + 20;
-				if (this.FChart.Options.PortraitsVisible && this.FPortrait != null)
-				{
-					Rectangle prt = this.GetDestRect(TRect.Create(0, 0, this.FHeight - 1, this.FHeight - 1), this.FPortrait);
-					this.FPortraitWidth = prt.Right - prt.Left + 1;
-					this.FWidth += this.FPortraitWidth;
-				}
-			}
-			finally
-			{
-				g.Dispose();
-			}
-		}
-
 		private Rectangle GetDestRect(TRect rt, Bitmap Portrait)
 		{
 			int w = Portrait.Width;
@@ -458,6 +400,29 @@ namespace GKUI.Charts
 			return this.FFlags.InSet(TPerson.TPersonFlag.pfDivorced);
 		}
 
+		private void SetDivorced([In] bool Value)
+		{
+			if (Value) {
+				this.FFlags.Include(TPerson.TPersonFlag.pfDivorced);
+			} else {
+				this.FFlags.Exclude(TPerson.TPersonFlag.pfDivorced);
+			}
+		}
+
+		private bool GetIsDup()
+		{
+			return this.FFlags.InSet(TPerson.TPersonFlag.pfIsDup);
+		}
+
+		private void SetIsDup([In] bool Value)
+		{
+			if (Value) {
+				this.FFlags.Include(TPerson.TPersonFlag.pfIsDup);
+			} else {
+				this.FFlags.Exclude(TPerson.TPersonFlag.pfIsDup);
+			}
+		}
+
 		private bool GetIsDead()
 		{
 			return this.FFlags.InSet(TPerson.TPersonFlag.pfIsDead);
@@ -481,15 +446,6 @@ namespace GKUI.Charts
 		private bool GetSelected()
 		{
 			return this.FFlags.InSet(TPerson.TPersonFlag.pfSelected);
-		}
-
-		private void SetDivorced([In] bool Value)
-		{
-			if (Value) {
-				this.FFlags.Include(TPerson.TPersonFlag.pfDivorced);
-			} else {
-				this.FFlags.Exclude(TPerson.TPersonFlag.pfDivorced);
-			}
 		}
 
 		private void SetIsDead([In] bool Value)
@@ -624,6 +580,78 @@ namespace GKUI.Charts
 			}
 
 			this.CalcBounds();
+		}
+
+		private void CalcBounds()
+		{
+			Graphics g = this.FChart.CreateGraphics();
+			try
+			{
+				int lines = 2;
+				int maxwid = this.TextWidth(g, this.FFamily);
+
+				if (!this.FChart.Options.DiffLines) {
+					int wt = this.TextWidth(g, this.GetFullName());
+					if (maxwid < wt) maxwid = wt;
+				} else {
+					int wt = this.TextWidth(g, this.FName);
+					if (maxwid < wt) maxwid = wt;
+
+					wt = this.TextWidth(g, this.FPatronymic);
+					if (maxwid < wt) maxwid = wt;
+
+					lines++;
+				}
+
+				if (!this.FChart.Options.OnlyYears)
+				{
+					if (this.FChart.Options.BirthDateVisible) {
+						int wt = this.TextWidth(g, this.FBirthDate);
+						if (maxwid < wt) maxwid = wt;
+
+						lines++;
+					}
+
+					if (this.FChart.Options.DeathDateVisible) {
+						int wt = this.TextWidth(g, this.FDeathDate);
+						if (maxwid < wt) maxwid = wt;
+
+						lines++;
+					}
+				} else {
+					int wt = this.TextWidth(g, this.GetLifeYears());
+					if (maxwid < wt) maxwid = wt;
+
+					lines++;
+				}
+
+				if (this.FChart.Options.Kinship) {
+					int wt = this.TextWidth(g, this.FKinship);
+					if (maxwid < wt) maxwid = wt;
+
+					lines++;
+				}
+
+				if ((this.FChart as TAncestryChartBox).PathDebug) {
+					int wt = this.TextWidth(g, this.FPathDebug);
+					if (maxwid < wt) maxwid = wt;
+
+					lines++;
+				}
+
+				this.FWidth = maxwid + 20;
+				this.FHeight = g.MeasureString("A", this.FChart.FDrawFont).ToSize().Height * lines + 20;
+				if (this.FChart.Options.PortraitsVisible && this.FPortrait != null)
+				{
+					Rectangle prt = this.GetDestRect(TRect.Create(0, 0, this.FHeight - 1, this.FHeight - 1), this.FPortrait);
+					this.FPortraitWidth = prt.Right - prt.Left + 1;
+					this.FWidth += this.FPortraitWidth;
+				}
+			}
+			finally
+			{
+				g.Dispose();
+			}
 		}
 
 		public virtual void Draw(Graphics aCanvas, int SPX, int SPY)

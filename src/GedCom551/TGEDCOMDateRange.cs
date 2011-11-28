@@ -5,9 +5,6 @@ namespace GedCom551
 {
 	public sealed class TGEDCOMDateRange : TGEDCOMCustomDate
 	{
-		public static readonly string[] GEDCOMDateRangeArray = new string[]
-			{ "AFT", "BEF", "BET", "AND" };
-
 		private TGEDCOMDate FDateAfter;
 		private TGEDCOMDate FDateBefore;
 
@@ -35,11 +32,11 @@ namespace GedCom551
 			{
 				Result = string.Concat(new string[]
 				{
-					TGEDCOMDateRange.GEDCOMDateRangeArray[2], 
+					TGEDCOMDate.GEDCOMDateRangeArray[2], 
 					" ", 
 					this.FDateAfter.StringValue, 
 					" ", 
-					TGEDCOMDateRange.GEDCOMDateRangeArray[3], 
+					TGEDCOMDate.GEDCOMDateRangeArray[3], 
 					" ", 
 					this.FDateBefore.StringValue
 				});
@@ -48,13 +45,13 @@ namespace GedCom551
 			{
 				if (!this.FDateAfter.IsEmpty())
 				{
-					Result = TGEDCOMDateRange.GEDCOMDateRangeArray[0] + " " + this.FDateAfter.StringValue;
+					Result = TGEDCOMDate.GEDCOMDateRangeArray[0] + " " + this.FDateAfter.StringValue;
 				}
 				else
 				{
 					if (!this.FDateBefore.IsEmpty())
 					{
-						Result = TGEDCOMDateRange.GEDCOMDateRangeArray[1] + " " + this.FDateBefore.StringValue;
+						Result = TGEDCOMDate.GEDCOMDateRangeArray[1] + " " + this.FDateBefore.StringValue;
 					}
 					else
 					{
@@ -139,7 +136,7 @@ namespace GedCom551
 			{
 				string SU = Result.Substring(0, 3).ToUpper();
 
-				if (SU == TGEDCOMDateRange.GEDCOMDateRangeArray[0])
+				if (SU == TGEDCOMDate.GEDCOMDateRangeArray[0])
 				{
 					Result = Result.Remove(0, 3);
 					Result = base.ExtractDelimiter(Result, 0);
@@ -147,7 +144,7 @@ namespace GedCom551
 				}
 				else
 				{
-					if (SU == TGEDCOMDateRange.GEDCOMDateRangeArray[1])
+					if (SU == TGEDCOMDate.GEDCOMDateRangeArray[1])
 					{
 						Result = Result.Remove(0, 3);
 						Result = base.ExtractDelimiter(Result, 0);
@@ -155,7 +152,7 @@ namespace GedCom551
 					}
 					else
 					{
-						if (SU == TGEDCOMDateRange.GEDCOMDateRangeArray[2])
+						if (SU == TGEDCOMDate.GEDCOMDateRangeArray[2])
 						{
 							Result = Result.Remove(0, 3);
 							Result = base.ExtractDelimiter(Result, 0);
@@ -167,7 +164,7 @@ namespace GedCom551
 
 							SU = Result.Substring(0, 3).ToUpper();
 
-							if (SU == TGEDCOMDateRange.GEDCOMDateRangeArray[3])
+							if (SU == TGEDCOMDate.GEDCOMDateRangeArray[3])
 							{
 								Result = Result.Remove(0, 3);
 								Result = base.ExtractDelimiter(Result, 0);
@@ -203,11 +200,11 @@ namespace GedCom551
 			string Result = S;
 			string SU = Result.Substring(0, 3).ToUpper();
 
-			if (SU == TGEDCOMDateRange.GEDCOMDateRangeArray[0] ||
-			    SU == TGEDCOMDateRange.GEDCOMDateRangeArray[1] || 
-			    SU == TGEDCOMDateApproximated.GEDCOMDateApproximatedArray[1] || 
-			    SU == TGEDCOMDateApproximated.GEDCOMDateApproximatedArray[2] || 
-			    SU == TGEDCOMDateApproximated.GEDCOMDateApproximatedArray[3])
+			if (SU == TGEDCOMDate.GEDCOMDateRangeArray[0] ||
+			    SU == TGEDCOMDate.GEDCOMDateRangeArray[1] || 
+			    SU == TGEDCOMDate.GEDCOMDateApproximatedArray[1] || 
+			    SU == TGEDCOMDate.GEDCOMDateApproximatedArray[2] || 
+			    SU == TGEDCOMDate.GEDCOMDateApproximatedArray[3])
 			{
 				Result = Result.Remove(0, 4);
 			}

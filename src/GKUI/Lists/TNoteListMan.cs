@@ -1,14 +1,12 @@
-﻿using GedCom551;
+﻿using System;
+
+using GedCom551;
 using GKCore;
-using GKCore.Sys;
 using GKUI.Controls;
-using System;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace GKUI.Lists
 {
-	public class TNoteListMan : TListManager
+	public sealed class TNoteListMan : TListManager
 	{
 		private TGEDCOMNoteRecord FRec;
 
