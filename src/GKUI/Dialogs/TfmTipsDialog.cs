@@ -3,13 +3,17 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using GKCore;
-using GKCore.Sys;
+using GKSys;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI
 {
 	public partial class TfmTipsDialog : Form
 	{
-		private TStringList FTips;
+		private StringList FTips;
 
 		private void GetNextTip()
 		{
@@ -38,14 +42,14 @@ namespace GKUI
 		public TfmTipsDialog()
 		{
 			this.InitializeComponent();
-			this.FTips = new TStringList();
-			this.btnClose.Text = GKL.LSList[99];
-			this.ShowCheck.Text = GKL.LSList[263];
-			this.NextTipBtn.Text = GKL.LSList[384];
-			this.TitleLabel.Text = GKL.LSList[385];
+			this.FTips = new StringList();
+			this.btnClose.Text = LangMan.LSList[99];
+			this.ShowCheck.Text = LangMan.LSList[263];
+			this.NextTipBtn.Text = LangMan.LSList[384];
+			this.TitleLabel.Text = LangMan.LSList[385];
 		}
 
-		public static bool ShowTipsEx([In] string ACaption, bool ShowTipsChecked, TStrings Tips)
+		public static bool ShowTipsEx([In] string ACaption, bool ShowTipsChecked, StringList Tips)
 		{
 			TfmTipsDialog dlg = new TfmTipsDialog();
 			bool result = false;

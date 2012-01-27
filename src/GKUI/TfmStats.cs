@@ -1,14 +1,17 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKSys;
 using GKUI.Controls;
 using ZedGraph;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI
 {
@@ -81,9 +84,11 @@ namespace GKUI
 		private void CalcStats(TGEDCOMTree aTree, TGenEngine.TStatMode aMode)
 		{
 			this.ListStats.SortColumn = 0;
-			this.ListStats.Columns[0].Text = GKL.LSList[(int)StTitles[(int)aMode].Cap - 1];
-			this.ListStats.Columns[1].Text = GKL.LSList[202];
+			this.ListStats.Columns[0].Text = LangMan.LSList[(int)StTitles[(int)aMode].Cap - 1];
+			this.ListStats.Columns[1].Text = LangMan.LSList[202];
 
+			this.ListStats.Sorting = SortOrder.None;
+			this.ListStats.SortColumn = -1;
 			this.ListStats.BeginUpdate();
 			this.ListStats.Items.Clear();
 
@@ -91,11 +96,20 @@ namespace GKUI
 			try
 			{
 				this.Base.Engine.GetSpecStats(aMode, vals);
+				ListViewItem[] items = new ListViewItem[vals.Count];
+
+				int i = 0;
 				foreach (TGenEngine.TListVal lv in vals)
 				{
-					ListViewItem item = this.ListStats.Items.Add(lv.Item);
+					ListViewItem item = new ListViewItem();
+					item.Text = lv.Item;
 					item.SubItems.Add(lv.Count.ToString());
+
+					items[i] = item;
+					i++;
 				}
+
+				this.ListStats.Items.AddRange(items);
 
 				/*IEnumerator Enumerator = vals.GetEnumerator();
 				while (Enumerator.MoveNext())
@@ -107,7 +121,8 @@ namespace GKUI
 			}
 			finally
 			{
-				TObjectHelper.Free(vals);
+				//items.Dispose();
+				//vals.Dispose();
 				this.ListStats.EndUpdate();
 			}
 
@@ -115,19 +130,19 @@ namespace GKUI
 			try
 			{
 				gPane.CurveList.Clear();
-				this.ChartTitle = GKL.LSList[(int)StTitles[(int)aMode].Title - 1];
+				this.ChartTitle = LangMan.LSList[(int)StTitles[(int)aMode].Title - 1];
 
 				switch (aMode) {
 					case TGenEngine.TStatMode.smAge: {
-						this.ChartXTitle = GKL.LSList[305];
-						this.ChartYTitle = GKL.LSList[533];
+						this.ChartXTitle = LangMan.LSList[305];
+						this.ChartYTitle = LangMan.LSList[533];
 						this.PrepareArray(gPane, TfmStats.TChartStyle.csPoint, true);
 						break;
 					}
 
 					case TGenEngine.TStatMode.smLifeExpectancy: {
-						this.ChartXTitle = GKL.LSList[306];
-						this.ChartYTitle = GKL.LSList[533];
+						this.ChartXTitle = LangMan.LSList[306];
+						this.ChartYTitle = LangMan.LSList[533];
 						this.PrepareArray(gPane, TfmStats.TChartStyle.csPoint, true);
 						break;
 					}
@@ -139,22 +154,22 @@ namespace GKUI
 						switch (aMode) {
 							case TGenEngine.TStatMode.smBirthYears:
 							case TGenEngine.TStatMode.smDeathYears: 
-								this.ChartXTitle = GKL.LSList[(int)LSID.LSID_Years];
+								this.ChartXTitle = LangMan.LSList[(int)LSID.LSID_Years];
 								break;
 							case TGenEngine.TStatMode.smBirthTenYears:
 							case TGenEngine.TStatMode.smDeathTenYears: 
-								this.ChartXTitle = GKL.LSList[(int)LSID.LSID_Decennial];
+								this.ChartXTitle = LangMan.LSList[(int)LSID.LSID_Decennial];
 								break;
 						}
 
 						switch (aMode) {
 							case TGenEngine.TStatMode.smBirthYears:
           					case TGenEngine.TStatMode.smBirthTenYears:
-          						this.ChartYTitle = GKL.LSList[(int)LSID.LSID_HowBirthes];
+          						this.ChartYTitle = LangMan.LSList[(int)LSID.LSID_HowBirthes];
           						break;
           					case TGenEngine.TStatMode.smDeathYears:
           					case TGenEngine.TStatMode.smDeathTenYears:
-          						this.ChartYTitle = GKL.LSList[(int)LSID.LSID_HowDeads];
+          						this.ChartYTitle = LangMan.LSList[(int)LSID.LSID_HowDeads];
           						break;
 						}
 
@@ -163,8 +178,8 @@ namespace GKUI
 					}
 
 					case TGenEngine.TStatMode.smChildsDistribution: {
-						this.ChartXTitle = GKL.LSList[118];
-						this.ChartYTitle = GKL.LSList[152];
+						this.ChartXTitle = LangMan.LSList[118];
+						this.ChartYTitle = LangMan.LSList[152];
 						this.PrepareArray(gPane, TfmStats.TChartStyle.csBar, true);
 						break;
 					}
@@ -182,46 +197,46 @@ namespace GKUI
 			TGenEngine.TCommonStats stats;
 			this.Base.Engine.GetCommonStats(out stats);
 			this.ListCommon.Items.Clear();
-			ListViewItem item = this.ListCommon.Items.Add(GKL.LSList[533]);
+			ListViewItem item = this.ListCommon.Items.Add(LangMan.LSList[533]);
 			item.SubItems.Add(stats.persons.ToString());
 			item.SubItems.Add(stats.persons_m.ToString() + TfmStats._TfmStats_Load_GetPercent(stats.persons_m, stats.persons));
 			item.SubItems.Add(stats.persons_f.ToString() + TfmStats._TfmStats_Load_GetPercent(stats.persons_f, stats.persons));
-			item = this.ListCommon.Items.Add(GKL.LSList[538]);
+			item = this.ListCommon.Items.Add(LangMan.LSList[538]);
 			item.SubItems.Add(stats.lives.ToString());
 			item.SubItems.Add(stats.lives_m.ToString());
 			item.SubItems.Add(stats.lives_f.ToString());
-			item = this.ListCommon.Items.Add(GKL.LSList[539]);
+			item = this.ListCommon.Items.Add(LangMan.LSList[539]);
 			item.SubItems.Add((stats.persons - stats.lives).ToString());
 			item.SubItems.Add((stats.persons_m - stats.lives_m).ToString());
 			item.SubItems.Add((stats.persons_f - stats.lives_f).ToString());
 			checked
 			{
-				item = this.ListCommon.Items.Add(GKL.LSList[540]);
+				item = this.ListCommon.Items.Add(LangMan.LSList[540]);
 				item.SubItems.Add((Math.Round(SysUtils.SafeDiv(stats.age, stats.age_cnt))).ToString());
 				item.SubItems.Add((Math.Round(SysUtils.SafeDiv(stats.age_m, stats.age_m_cnt))).ToString());
 				item.SubItems.Add((Math.Round(SysUtils.SafeDiv(stats.age_f, stats.age_f_cnt))).ToString());
 
-				item = this.ListCommon.Items.Add(GKL.LSList[541]);
+				item = this.ListCommon.Items.Add(LangMan.LSList[541]);
 				item.SubItems.Add((Math.Round(SysUtils.SafeDiv(stats.life, stats.life_cnt))).ToString());
 				item.SubItems.Add((Math.Round(SysUtils.SafeDiv(stats.life_m, stats.life_m_cnt))).ToString());
 				item.SubItems.Add((Math.Round(SysUtils.SafeDiv(stats.life_f, stats.life_f_cnt))).ToString());
 
-				item = this.ListCommon.Items.Add(GKL.LSList[542]);
+				item = this.ListCommon.Items.Add(LangMan.LSList[542]);
 				item.SubItems.Add(string.Format("{0:0.00}", SysUtils.SafeDiv(stats.childs, stats.childs_cnt)));
 				item.SubItems.Add(string.Format("{0:0.00}", SysUtils.SafeDiv(stats.childs_m, stats.childs_m_cnt)));
 				item.SubItems.Add(string.Format("{0:0.00}", SysUtils.SafeDiv(stats.childs_f, stats.childs_f_cnt)));
 
-				item = this.ListCommon.Items.Add(GKL.LSList[543]);
+				item = this.ListCommon.Items.Add(LangMan.LSList[543]);
 				item.SubItems.Add(string.Format("{0:0.00}", SysUtils.SafeDiv(stats.fba, stats.fba_cnt)));
 				item.SubItems.Add(string.Format("{0:0.00}", SysUtils.SafeDiv(stats.fba_m, stats.fba_m_cnt)));
 				item.SubItems.Add(string.Format("{0:0.00}", SysUtils.SafeDiv(stats.fba_f, stats.fba_f_cnt)));
 
-				item = this.ListCommon.Items.Add(GKL.LSList[544]);
+				item = this.ListCommon.Items.Add(LangMan.LSList[544]);
 				item.SubItems.Add(string.Format("{0:0.00}", SysUtils.SafeDiv(stats.marr, stats.marr_cnt)));
 				item.SubItems.Add(string.Format("{0:0.00}", SysUtils.SafeDiv(stats.marr_m, stats.marr_m_cnt)));
 				item.SubItems.Add(string.Format("{0:0.00}", SysUtils.SafeDiv(stats.marr_f, stats.marr_f_cnt)));
 
-				item = this.ListCommon.Items.Add(GKL.LSList[545]);
+				item = this.ListCommon.Items.Add(LangMan.LSList[545]);
 				item.SubItems.Add(string.Format("{0:0.00}", SysUtils.SafeDiv(stats.mage, stats.mage_cnt)));
 				item.SubItems.Add(string.Format("{0:0.00}", SysUtils.SafeDiv(stats.mage_m, stats.mage_m_cnt)));
 				item.SubItems.Add(string.Format("{0:0.00}", SysUtils.SafeDiv(stats.mage_f, stats.mage_f_cnt)));
@@ -254,9 +269,11 @@ namespace GKUI
 			spl.MinSize = 100;
 			this.Panel1.Controls.Add(this.zgc);
 			this.Panel1.Controls.Add(spl);
+
 			this.Base.CreateListView(this.Panel1, ref this.ListStats);
 			this.ListStats.AddListColumn("-", 250, false);
 			this.ListStats.AddListColumn("-", 150, false);
+
 			this.Panel1.Controls.SetChildIndex(this.ListStats, 0);
 			this.Panel1.Controls.SetChildIndex(spl, 2);
 			this.Panel1.Controls.SetChildIndex(this.zgc, 3);
@@ -266,7 +283,7 @@ namespace GKUI
 			for (TGenEngine.TStatMode i = TGenEngine.TStatMode.smAncestors; i <= TGenEngine.TStatMode.smAAF_2; i++)
 			{
 				TTitleRec tr = StTitles[(int)i];
-				this.cbType.Items.Add(GKL.LSList[(int)tr.Title - 1]);
+				this.cbType.Items.Add(LangMan.LSList[(int)tr.Title - 1]);
 			}
 
 			(this as ILocalization).SetLang();
@@ -274,7 +291,7 @@ namespace GKUI
 
 		void ILocalization.SetLang()
 		{
-			this.Text = GKL.LSList[29];
+			this.Text = LangMan.LSList[29];
 		}
 
 		static TfmStats()

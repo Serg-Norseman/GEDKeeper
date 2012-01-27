@@ -3,9 +3,13 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
 
-namespace GKCore
+/// <summary>
+/// Localization: unknown
+/// </summary>
+
+namespace GKCore.Settings
 {
 	public class TChartOptions : IDisposable
 	{
@@ -192,7 +196,7 @@ namespace GKCore
 			}
 		}
 
-		public void LoadFromFile([In] TIniFile aIniFile)
+		public void LoadFromFile([In] IniFile aIniFile)
 		{
 			this.FChildlessExclude = aIniFile.ReadBool("Chart", "ChildlessExclude", false);
 			this.FDecorative = aIniFile.ReadBool("Chart", "Decorative", true);
@@ -214,10 +218,10 @@ namespace GKCore
 			this.FDefFont_Name = aIniFile.ReadString("Chart", "FontName", "Verdana");
 			this.FDefFont_Size = aIniFile.ReadInteger("Chart", "FontSize", 8);
 			this.FDefFont_Color = Color.FromArgb(aIniFile.ReadInteger("Chart", "FontColor", Color.Black.ToArgb()));
-			this.FDefFont_Style = (FontStyle)((uint)((byte)aIniFile.ReadInteger("Chart", "FontStyle", 0)));
+			this.FDefFont_Style = (FontStyle)((uint)aIniFile.ReadInteger("Chart", "FontStyle", 0));
 		}
 
-		public void SaveToFile([In] TIniFile aIniFile)
+		public void SaveToFile([In] IniFile aIniFile)
 		{
 			aIniFile.WriteBool("Chart", "ChildlessExclude", this.FChildlessExclude);
 			aIniFile.WriteBool("Chart", "Decorative", this.FDecorative);
@@ -244,7 +248,7 @@ namespace GKCore
 
 		public void Free()
 		{
-			TObjectHelper.Free(this);
+			SysUtils.Free(this);
 		}
 
 	}

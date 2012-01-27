@@ -1,6 +1,10 @@
 using System;
 
-namespace GKCore.Sys
+/// <summary>
+/// Localization: clean
+/// </summary>
+
+namespace GKSys
 {
 	public class TStack : IDisposable
 	{
@@ -43,7 +47,7 @@ namespace GKCore.Sys
 		{
 			if (!this.Disposed_)
 			{
-				this.List.Free();
+				this.List.Dispose();
 				this.Disposed_ = true;
 			}
 		}
@@ -76,7 +80,7 @@ namespace GKCore.Sys
 
 		public void Free()
 		{
-			TObjectHelper.Free(this);
+			SysUtils.Free(this);
 		}
 	}
 }

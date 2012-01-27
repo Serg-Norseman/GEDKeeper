@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
 
 namespace GedCom551
 {
@@ -247,10 +247,10 @@ namespace GedCom551
 			}
 		}
 
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
-			base.SetLists(TEnumSet.Create(new Enum[]
+			base.SetLists(EnumSet.Create(new Enum[]
 			{
 				TGEDCOMSubList.stNotes, 
 				TGEDCOMSubList.stSource, 
@@ -293,7 +293,7 @@ namespace GedCom551
 			}
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, Type AClass)
+		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 			if (ATag == "NAME")
@@ -370,20 +370,13 @@ namespace GedCom551
 													}
 													else
 													{
-														if (ATag == "REFN")
+														if (ATag == "_GROUP")
 														{
-															Result = base.UserReferences.Add(new TGEDCOMUserReference(base.Owner, this, ATag, AValue));
+															Result = this._Groups.Add(new TGEDCOMPointer(base.Owner, this, ATag, AValue));
 														}
 														else
 														{
-															if (ATag == "_GROUP")
-															{
-																Result = this._Groups.Add(new TGEDCOMPointer(base.Owner, this, ATag, AValue));
-															}
-															else
-															{
-																Result = base.AddTag(ATag, AValue, AClass);
-															}
+															Result = base.AddTag(ATag, AValue, ATagConstructor);
 														}
 													}
 												}
@@ -486,38 +479,26 @@ namespace GedCom551
 		public void DeleteSpouseToFamilyLink(TGEDCOMFamilyRecord Family)
 		{
 			int num = this._SpouseToFamilyLinks.Count - 1;
-			int i = 0;
-			if (num >= i)
+			for (int i = 0; i <= num; i++)
 			{
-				num++;
-				while (!object.Equals((this._SpouseToFamilyLinks[i] as TGEDCOMSpouseToFamilyLink).Family, Family))
+				if (this._SpouseToFamilyLinks[i].Family == Family)
 				{
-					i++;
-					if (i == num)
-					{
-						return;
-					}
+					this._SpouseToFamilyLinks.Delete(i);
+					break;
 				}
-				this._SpouseToFamilyLinks.Delete(i);
 			}
 		}
 
 		public void DeleteChildToFamilyLink(TGEDCOMFamilyRecord Family)
 		{
 			int num = this._ChildToFamilyLinks.Count - 1;
-			int i = 0;
-			if (num >= i)
+			for (int i = 0; i <= num; i++)
 			{
-				num++;
-				while (!object.Equals((this._ChildToFamilyLinks[i] as TGEDCOMChildToFamilyLink).Family, Family))
+				if (this._ChildToFamilyLinks[i].Family == Family)
 				{
-					i++;
-					if (i == num)
-					{
-						return;
-					}
+					this._ChildToFamilyLinks.Delete(i);
+					break;
 				}
-				this._ChildToFamilyLinks.Delete(i);
 			}
 		}
 
@@ -530,26 +511,15 @@ namespace GedCom551
 		{
 			TGEDCOMCustomEvent Result = null;
 
+			TGEDCOMCustomEvent evt;
 			int num = this._IndividualEvents.Count - 1;
-			int i = 0;
-			if (num >= i)
+			for (int i = 0; i <= num; i++)
 			{
-				num++;
-				TGEDCOMCustomEvent @event;
-				while (true)
-				{
-					@event = this._IndividualEvents[i];
-					if (@event.Name == evName)
-					{
-						break;
-					}
-					i++;
-					if (i == num)
-					{
-						return Result;
-					}
+				evt = this._IndividualEvents[i];
+				if (evt.Name == evName) {
+					Result = evt;
+					break;
 				}
-				Result = @event;
 			}
 
 			return Result;
@@ -716,7 +686,7 @@ namespace GedCom551
 			this._Groups.ReplaceXRefs(aMap);
 		}
 
-		public override void ResetOwner(TGEDCOMObject AOwner)
+		public override void ResetOwner(TGEDCOMTree AOwner)
 		{
 			base.ResetOwner(AOwner);
 
@@ -750,8 +720,62 @@ namespace GedCom551
 			this._Groups.SaveToStream(AStream);
 		}
 
-		public TGEDCOMIndividualRecord(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMIndividualRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
 		}
+
+		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+		{
+			return new TGEDCOMIndividualRecord(AOwner, AParent, AName, AValue);
+		}
+
+		public void aux_GetLifeDates(out TGEDCOMCustomEvent aBirthEvent, out TGEDCOMCustomEvent aDeathEvent)
+		{
+			aBirthEvent = null;
+			aDeathEvent = null;
+
+			int num = this.IndividualEvents.Count - 1;
+			for (int i = 0; i <= num; i++)
+			{
+				TGEDCOMCustomEvent ev = this.IndividualEvents[i];
+				if (ev.Name == "BIRT")
+				{
+					aBirthEvent = ev;
+				}
+				else
+				{
+					if (ev.Name == "DEAT")
+					{
+						aDeathEvent = ev;
+					}
+				}
+			}
+		}
+
+		public void aux_GetNameParts(out string aFamily, out string aName, out string aPatronymic)
+		{
+			if (this.PersonalNames.Count > 0)
+			{
+				TGEDCOMPersonalName np = this.PersonalNames[0];
+
+				string firstPart /*, dummy*/;
+				np.GetNameParts(out firstPart, out aFamily /*, out dummy*/);
+
+				string[] parts = firstPart.Split(' ');
+				if (parts.Length > 1)
+				{
+					aName = parts[0];
+					aPatronymic = parts[1];
+				} else {
+					aName = firstPart;
+					aPatronymic = "";
+				}
+			} else {
+				aFamily = "";
+				aName = "";
+				aPatronymic = "";
+			}
+		}
+
 	}
 }

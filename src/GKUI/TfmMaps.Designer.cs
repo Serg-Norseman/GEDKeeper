@@ -26,8 +26,8 @@ namespace GKUI
 		{
 			if (Disposing)
 			{
-				this.FPlaces.Free();
-				this.FMapPoints.Free();
+				this.FPlaces.Dispose();
+				this.FMapPoints.Dispose();
 				if (components != null) {
 					components.Dispose();
 				}

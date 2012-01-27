@@ -4,7 +4,11 @@ using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKSys;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI
 {
@@ -49,9 +53,9 @@ namespace GKUI
 		{
 			this.InitializeComponent();
 			this.FBase = aBase;
-			this.btnAccept.Text = GKL.LSList[97];
-			this.btnCancel.Text = GKL.LSList[98];
-			this.Text = GKL.LSList[108];
+			this.btnAccept.Text = LangMan.LSList[97];
+			this.btnCancel.Text = LangMan.LSList[98];
+			this.Text = LangMan.LSList[108];
 		}
 	}
 }

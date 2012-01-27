@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
 
 namespace GedCom551
 {
 	// sample: TempFactory.Register("Temp1", new Func<ITemp>(() => new Temp1()));
 	// url: http://www.gutgames.com/post/Factory-Pattern-using-Generics-in-C.aspx
 
-	public delegate TResult TagConstructor<in T1, in T2, in T3, in T4, out TResult>(T1 arg1, T2 arg2, T3 arg3, T4 arg4);
+	public delegate TGEDCOMCustomTag TagConstructor(TGEDCOMTree AOwner, TGEDCOMObject AParent, string ATagName, string AValue);
 
 	public sealed class GEDCOMFactory
 	{
 		private static GEDCOMFactory _Instance = null;
-		private Dictionary<string, TagConstructor<TGEDCOMObject, TGEDCOMObject, string, string, TGEDCOMCustomTag>> _Constructors = new Dictionary<string, TagConstructor<TGEDCOMObject, TGEDCOMObject, string, string, TGEDCOMCustomTag>>();
+		private Dictionary<string, TagConstructor> _Constructors = new Dictionary<string, TagConstructor>();
 
 		public static GEDCOMFactory GetInstance()
 		{
@@ -21,20 +19,20 @@ namespace GedCom551
 			return _Instance;
 		}
 
-		public void Register(string Key, TagConstructor<TGEDCOMObject, TGEDCOMObject, string, string, TGEDCOMCustomTag> Constructor)
+		public void Register(string Key, TagConstructor constructor)
 		{
 			if (_Constructors.ContainsKey(Key))
-				_Constructors[Key] = Constructor;
+				_Constructors[Key] = constructor;
 			else
-				_Constructors.Add(Key, Constructor);
+				_Constructors.Add(Key, constructor);
 		}
 
-		public TGEDCOMCustomTag Create(TGEDCOMObject AOwner, TGEDCOMObject AParent, string ATagName, string AValue)
+		public TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, string ATagName, string AValue)
 		{
-			TagConstructor<TGEDCOMObject, TGEDCOMObject, string, string, TGEDCOMCustomTag> constrValue;
+			TagConstructor constructor;
 
-			if (_Constructors.TryGetValue(ATagName, out constrValue)) {
-				return constrValue(AOwner, AParent, ATagName, AValue);
+			if (_Constructors.TryGetValue(ATagName, out constructor)) {
+				return constructor(AOwner, AParent, ATagName, AValue);
 			} else {
 				return null;
 			}

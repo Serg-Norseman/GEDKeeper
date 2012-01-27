@@ -4,8 +4,12 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using GKCore;
-using GKCore.Sys;
+using GKSys;
 using GKUI.Controls;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI.Lists
 {
@@ -30,7 +34,7 @@ namespace GKUI.Lists
 		private ToolBarButton FBtnMoveUp;
 		private ToolBarButton FBtnMoveDown;
 		private ToolBar FToolBar;
-		private TEnumSet FButtons;
+		private EnumSet FButtons;
 		private TGKListView FList;
 		private TSheetList.TModifyEvent FOnModify;
 		private bool FReadOnly;
@@ -50,7 +54,7 @@ namespace GKUI.Lists
 			}
 		}
 
-		public TEnumSet Buttons
+		public EnumSet Buttons
 		{
 			get { return this.FButtons; }
 			set { this.SetButtons(value); }
@@ -128,7 +132,7 @@ namespace GKUI.Lists
 			this.FList.Focus();
 		}
 
-		private void SetButtons([In] TEnumSet Value)
+		private void SetButtons([In] EnumSet Value)
 		{
 			this.FButtons = Value;
 			this.FBtnAdd.Visible = this.FButtons.InSet(TSheetList.TListButton.lbAdd);
@@ -177,22 +181,22 @@ namespace GKUI.Lists
 			base.SuspendLayout();
 			this.FBtnMoveDown = new ToolBarButton();
 			this.FBtnMoveDown.ImageIndex = 30;
-			this.FBtnMoveDown.ToolTipText = GKL.LSList[300];
+			this.FBtnMoveDown.ToolTipText = LangMan.LSList[300];
 			this.FBtnMoveUp = new ToolBarButton();
 			this.FBtnMoveUp.ImageIndex = 29;
-			this.FBtnMoveUp.ToolTipText = GKL.LSList[299];
+			this.FBtnMoveUp.ToolTipText = LangMan.LSList[299];
 			this.FBtnLinkJump = new ToolBarButton();
 			this.FBtnLinkJump.ImageIndex = 28;
-			this.FBtnLinkJump.ToolTipText = GKL.LSList[298];
+			this.FBtnLinkJump.ToolTipText = LangMan.LSList[298];
 			this.FBtnDelete = new ToolBarButton();
 			this.FBtnDelete.ImageIndex = 5;
-			this.FBtnDelete.ToolTipText = GKL.LSList[21];
+			this.FBtnDelete.ToolTipText = LangMan.LSList[21];
 			this.FBtnEdit = new ToolBarButton();
 			this.FBtnEdit.ImageIndex = 4;
-			this.FBtnEdit.ToolTipText = GKL.LSList[20];
+			this.FBtnEdit.ToolTipText = LangMan.LSList[20];
 			this.FBtnAdd = new ToolBarButton();
 			this.FBtnAdd.ImageIndex = 3;
-			this.FBtnAdd.ToolTipText = GKL.LSList[19];
+			this.FBtnAdd.ToolTipText = LangMan.LSList[19];
 			this.FToolBar = new ToolBar();
 			this.FToolBar.Appearance = ToolBarAppearance.Flat;
 			this.FToolBar.Buttons.AddRange(new ToolBarButton[6] {
@@ -221,7 +225,7 @@ namespace GKUI.Lists
 			base.Controls.SetChildIndex(this.FList, 0);
 			base.Controls.SetChildIndex(this.FToolBar, 1);
 			base.ResumeLayout(false);
-			this.SetButtons(TEnumSet.Create(new Enum[]
+			this.SetButtons(EnumSet.Create(new Enum[]
 			{
 				TSheetList.TListButton.lbAdd, 
 				TSheetList.TListButton.lbEdit, 
@@ -233,14 +237,14 @@ namespace GKUI.Lists
 		{
 			if (Disposing)
 			{
-				TObjectHelper.Free(this.FList);
-				TObjectHelper.Free(this.FBtnLinkJump);
-				TObjectHelper.Free(this.FBtnMoveUp);
-				TObjectHelper.Free(this.FBtnMoveDown);
-				TObjectHelper.Free(this.FBtnDelete);
-				TObjectHelper.Free(this.FBtnEdit);
-				TObjectHelper.Free(this.FBtnAdd);
-				TObjectHelper.Free(this.FToolBar);
+				SysUtils.Free(this.FList);
+				SysUtils.Free(this.FBtnLinkJump);
+				SysUtils.Free(this.FBtnMoveUp);
+				SysUtils.Free(this.FBtnMoveDown);
+				SysUtils.Free(this.FBtnDelete);
+				SysUtils.Free(this.FBtnEdit);
+				SysUtils.Free(this.FBtnAdd);
+				SysUtils.Free(this.FToolBar);
 			}
 			base.Dispose(Disposing);
 		}

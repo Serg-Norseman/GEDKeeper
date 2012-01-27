@@ -1,31 +1,31 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Security.Cryptography.X509Certificates;
-using GKCore.Sys;
+
+using GKSys;
 
 namespace GedCom551
 {
 	public sealed class TGEDCOMAddress : TGEDCOMTag
 	{
-		private TStrings FAddress;
+		private StringList FAddress;
 		private TGEDCOMList FPhoneList;
 		private TGEDCOMList FEmailList;
 		private TGEDCOMList FFaxList;
 		private TGEDCOMList FWWWList;
 
-		public TStrings Address
+		public StringList Address
 		{
 			get { return this.GetAddress(); }
 			set { this.SetAddress(value); }
 		}
 
-		private TStrings GetAddress()
+		private StringList GetAddress()
 		{
 			return base.GetTagStrings(this, ref this.FAddress);
 		}
 
-		public void SetAddress([In] TStrings Value)
+		public void SetAddress([In] StringList Value)
 		{
 			base.SetTagStrings(this, Value);
 		}
@@ -154,16 +154,7 @@ namespace GedCom551
 
 		public int GetEmailAddressesCount()
 		{
-			int Result;
-			if (this.FEmailList == null)
-			{
-				Result = 0;
-			}
-			else
-			{
-				Result = this.FEmailList.Count;
-			}
-			return Result;
+			return ((this.FEmailList == null) ? 0 : this.FEmailList.Count);
 		}
 
 		public string GetFaxNumber(int Index)
@@ -182,16 +173,7 @@ namespace GedCom551
 
 		public int GetFaxNumbersCount()
 		{
-			int Result;
-			if (this.FFaxList == null)
-			{
-				Result = 0;
-			}
-			else
-			{
-				Result = this.FFaxList.Count;
-			}
-			return Result;
+			return ((this.FFaxList == null) ? 0 : this.FFaxList.Count);
 		}
 
 		public string GetPhoneNumber(int Index)
@@ -210,16 +192,7 @@ namespace GedCom551
 
 		public int GetPhoneNumbersCount()
 		{
-			int Result;
-			if (this.FPhoneList == null)
-			{
-				Result = 0;
-			}
-			else
-			{
-				Result = this.FPhoneList.Count;
-			}
-			return Result;
+			return ((this.FPhoneList == null) ? 0 : this.FPhoneList.Count);
 		}
 
 		public string GetWebPage(int Index)
@@ -238,26 +211,14 @@ namespace GedCom551
 
 		public int GetWebPagesCount()
 		{
-			int Result;
-			if (this.FWWWList == null)
-			{
-				Result = 0;
-			}
-			else
-			{
-				Result = this.FWWWList.Count;
-			}
-			return Result;
+			return ((this.FWWWList == null) ? 0 : this.FWWWList.Count);
 		}
 
 		public void SetEmailAddress(int Index, [In] string Value)
 		{
 			if (Index >= 3)
 			{
-				throw new EGEDCOMException(string.Format("The maximum number of email addresses is {0}", new object[]
-				{
-					3
-				}));
+				throw new EGEDCOMException(string.Format("The maximum number of email addresses is {0}", new object[] { 3 }));
 			}
 			if (Index >= 0)
 			{
@@ -279,10 +240,7 @@ namespace GedCom551
 		{
 			if (Index >= 3)
 			{
-				throw new EGEDCOMException(string.Format("The maximum number of fax numbers is {0}", new object[]
-				{
-					3
-				}));
+				throw new EGEDCOMException(string.Format("The maximum number of fax numbers is {0}", new object[] { 3 }));
 			}
 			if (Index >= 0)
 			{
@@ -304,10 +262,7 @@ namespace GedCom551
 		{
 			if (Index >= 3)
 			{
-				throw new EGEDCOMException(string.Format("The maximum number of phone numbers is {0}", new object[]
-				{
-					3
-				}));
+				throw new EGEDCOMException(string.Format("The maximum number of phone numbers is {0}", new object[] { 3 }));
 			}
 			if (Index >= 0)
 			{
@@ -329,10 +284,7 @@ namespace GedCom551
 		{
 			if (Index >= 3)
 			{
-				throw new EGEDCOMException(string.Format("The maximum number of web page addresses is {0}", new object[]
-				{
-					3
-				}));
+				throw new EGEDCOMException(string.Format("The maximum number of web page addresses is {0}", new object[] { 3 }));
 			}
 			if (Index >= 0)
 			{
@@ -350,7 +302,7 @@ namespace GedCom551
 			}
 		}
 
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
 			this.FName = "ADDR";
@@ -365,54 +317,28 @@ namespace GedCom551
 		protected override void SaveTagsToStream(StreamWriter AStream, [In] params string[] ATagSorting)
 		{
 			base.SaveTagsToStream(AStream, ATagSorting);
-			if (this.FPhoneList != null)
-			{
-				this.FPhoneList.SaveToStream(AStream);
-			}
-			if (this.FEmailList != null)
-			{
-				this.FEmailList.SaveToStream(AStream);
-			}
-			if (this.FFaxList != null)
-			{
-				this.FFaxList.SaveToStream(AStream);
-			}
-			if (this.FWWWList != null)
-			{
-				this.FWWWList.SaveToStream(AStream);
-			}
+			if (this.FPhoneList != null) this.FPhoneList.SaveToStream(AStream);
+			if (this.FEmailList != null) this.FEmailList.SaveToStream(AStream);
+			if (this.FFaxList != null) this.FFaxList.SaveToStream(AStream);
+			if (this.FWWWList != null) this.FWWWList.SaveToStream(AStream);
 		}
 
 		public override void Dispose()
 		{
 			if (!this.Disposed_)
 			{
-				if (this.FAddress != null)
-				{
-					this.FAddress.Free();
-				}
-				if (this.FPhoneList != null)
-				{
-					this.FPhoneList.Free();
-				}
-				if (this.FEmailList != null)
-				{
-					this.FEmailList.Free();
-				}
-				if (this.FFaxList != null)
-				{
-					this.FFaxList.Free();
-				}
-				if (this.FWWWList != null)
-				{
-					this.FWWWList.Free();
-				}
+				if (this.FAddress != null) this.FAddress.Free();
+				if (this.FPhoneList != null) this.FPhoneList.Free();
+				if (this.FEmailList != null) this.FEmailList.Free();
+				if (this.FFaxList != null) this.FFaxList.Free();
+				if (this.FWWWList != null) this.FWWWList.Free();
+
 				base.Dispose();
 				this.Disposed_ = true;
 			}
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, Type AClass)
+		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 			if (ATag == "PHON")
@@ -459,7 +385,7 @@ namespace GedCom551
 						}
 						else
 						{
-							Result = base.AddTag(ATag, AValue, AClass);
+							Result = base.AddTag(ATag, AValue, ATagConstructor);
 						}
 					}
 				}
@@ -470,22 +396,10 @@ namespace GedCom551
 		public override void Clear()
 		{
 			base.Clear();
-			if (this.FPhoneList != null)
-			{
-				this.FPhoneList.Clear();
-			}
-			if (this.FEmailList != null)
-			{
-				this.FEmailList.Clear();
-			}
-			if (this.FFaxList != null)
-			{
-				this.FFaxList.Clear();
-			}
-			if (this.FWWWList != null)
-			{
-				this.FWWWList.Clear();
-			}
+			if (this.FPhoneList != null) this.FPhoneList.Clear();
+			if (this.FEmailList != null) this.FEmailList.Clear();
+			if (this.FFaxList != null) this.FFaxList.Clear();
+			if (this.FWWWList != null) this.FWWWList.Clear();
 		}
 
 		public override bool IsEmpty()
@@ -493,25 +407,13 @@ namespace GedCom551
 			return base.IsEmpty() && this.GetPhoneNumbersCount() == 0 && this.GetEmailAddressesCount() == 0 && this.GetFaxNumbersCount() == 0 && this.GetWebPagesCount() == 0;
 		}
 
-		public override void ResetOwner(TGEDCOMObject AOwner)
+		public override void ResetOwner(TGEDCOMTree AOwner)
 		{
 			base.ResetOwner(AOwner);
-			if (this.FPhoneList != null)
-			{
-				this.FPhoneList.ResetOwner(AOwner);
-			}
-			if (this.FEmailList != null)
-			{
-				this.FEmailList.ResetOwner(AOwner);
-			}
-			if (this.FFaxList != null)
-			{
-				this.FFaxList.ResetOwner(AOwner);
-			}
-			if (this.FWWWList != null)
-			{
-				this.FWWWList.ResetOwner(AOwner);
-			}
+			if (this.FPhoneList != null) this.FPhoneList.ResetOwner(AOwner);
+			if (this.FEmailList != null) this.FEmailList.ResetOwner(AOwner);
+			if (this.FFaxList != null) this.FFaxList.ResetOwner(AOwner);
+			if (this.FWWWList != null) this.FWWWList.ResetOwner(AOwner);
 		}
 
 		public void DeletePhoneNumber(int Index)
@@ -538,8 +440,13 @@ namespace GedCom551
 			}
 		}
 
-		public TGEDCOMAddress(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMAddress(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
+		}
+
+		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+		{
+			return new TGEDCOMAddress(AOwner, AParent, AName, AValue);
 		}
 	}
 }

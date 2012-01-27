@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
 
 namespace GedCom551
 {
@@ -11,7 +11,7 @@ namespace GedCom551
 
 		public TGEDCOMAddress Address
 		{
-			get { return base.TagClass("ADDR", typeof(TGEDCOMAddress)) as TGEDCOMAddress; }
+			get { return base.TagClass("ADDR", typeof(TGEDCOMAddress), TGEDCOMAddress.Create) as TGEDCOMAddress; }
 		}
 
 		/*public string Languages
@@ -27,7 +27,7 @@ namespace GedCom551
 
 		public new TGEDCOMPersonalName Name
 		{
-			get { return base.TagClass("NAME", typeof(TGEDCOMPersonalName)) as TGEDCOMPersonalName; }
+			get { return base.TagClass("NAME", typeof(TGEDCOMPersonalName), TGEDCOMPersonalName.Create) as TGEDCOMPersonalName; }
 		}
 
 		public string RegisteredReference
@@ -52,26 +52,14 @@ namespace GedCom551
 
 		public int GetLanguagesCount()
 		{
-			int Result;
-			if (this.FLanguages == null)
-			{
-				Result = 0;
-			}
-			else
-			{
-				Result = this.FLanguages.Count;
-			}
-			return Result;
+			return ((this.FLanguages == null) ? 0 : this.FLanguages.Count);
 		}
 
 		public void SetLanguages(int Index, [In] string Value)
 		{
 			if (Index >= 3)
 			{
-				throw new EGEDCOMException(string.Format("The maximum number of languages is {0}", new object[]
-				{
-					3
-				}));
+				throw new EGEDCOMException(string.Format("The maximum number of languages is {0}", new object[] { 3 }));
 			}
 			if (Index >= 0)
 			{
@@ -87,14 +75,10 @@ namespace GedCom551
 			}
 		}
 
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
-			base.SetLists(TEnumSet.Create(new Enum[]
-			{
-				TGEDCOMSubList.stNotes, 
-				TGEDCOMSubList.stMultimedia
-			}));
+			base.SetLists(EnumSet.Create(new Enum[] { TGEDCOMSubList.stNotes, TGEDCOMSubList.stMultimedia }));
 			this.FRecordType = TGEDCOMRecordType.rtSubmitter;
 			this.FName = "SUBM";
 			this.FLanguages = null;
@@ -104,10 +88,7 @@ namespace GedCom551
 		{
 			if (!this.Disposed_)
 			{
-				if (this.FLanguages != null)
-				{
-					this.FLanguages.Free();
-				}
+				if (this.FLanguages != null) this.FLanguages.Free();
 				base.Dispose();
 				this.Disposed_ = true;
 			}
@@ -115,51 +96,34 @@ namespace GedCom551
 
 		public TGEDCOMTag AddLanguage(TGEDCOMTag Value)
 		{
-			if (this.FLanguages == null)
-			{
-				this.FLanguages = new TGEDCOMList(this);
-			}
-			if (this.FLanguages != null)
-			{
-				this.FLanguages.Add(Value);
-			}
+			if (this.FLanguages == null) this.FLanguages = new TGEDCOMList(this);
+			if (this.FLanguages != null) this.FLanguages.Add(Value);
 			return Value;
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, Type AClass)
+		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 			if (ATag == "NAME")
 			{
-				Result = base.AddTag(ATag, AValue, typeof(TGEDCOMPersonalName));
+				Result = base.AddTag(ATag, AValue, TGEDCOMPersonalName.Create);
 			}
 			else
 			{
-				if (ATag == "ADDR")
+				if (ATag == "PHON" || ATag == "EMAIL" || ATag == "FAX" || ATag == "WWW")
 				{
-					Result = base.AddTag(ATag, AValue, typeof(TGEDCOMAddress));
+					Result = this.Address.AddTag(ATag, AValue, ATagConstructor);
 				}
 				else
 				{
-					if (ATag == "PHON" || ATag == "EMAIL" || ATag == "FAX" || ATag == "WWW")
+					if (ATag == "LANG")
 					{
-						TGEDCOMTag AddrTag = base.FindTag("ADDR", 0);
-						if (AddrTag == null)
-						{
-							AddrTag = this.AddTag("ADDR", "", null);
-						}
-						Result = AddrTag.AddTag(ATag, AValue, AClass);
+						Result = this.AddLanguage(new TGEDCOMTag(base.Owner, this, ATag, AValue));
 					}
 					else
 					{
-						if (ATag == "LANG")
-						{
-							Result = this.AddLanguage(new TGEDCOMTag(base.Owner, this, ATag, AValue));
-						}
-						else
-						{
-							Result = base.AddTag(ATag, AValue, AClass);
-						}
+						// "ADDR" defines by default
+						Result = base.AddTag(ATag, AValue, ATagConstructor);
 					}
 				}
 			}
@@ -169,10 +133,7 @@ namespace GedCom551
 		public override void Clear()
 		{
 			base.Clear();
-			if (this.FLanguages != null)
-			{
-				this.FLanguages.Clear();
-			}
+			if (this.FLanguages != null) this.FLanguages.Clear();
 		}
 
 		public override bool IsEmpty()
@@ -183,23 +144,22 @@ namespace GedCom551
 		public override void ReplaceXRefs(TXRefReplaceMap aMap)
 		{
 			base.ReplaceXRefs(aMap);
-			if (this.FLanguages != null)
-			{
-				this.FLanguages.ReplaceXRefs(aMap);
-			}
+			if (this.FLanguages != null) this.FLanguages.ReplaceXRefs(aMap);
 		}
 
-		public override void ResetOwner(TGEDCOMObject AOwner)
+		public override void ResetOwner(TGEDCOMTree AOwner)
 		{
 			base.ResetOwner(AOwner);
-			if (this.FLanguages != null)
-			{
-				this.FLanguages.ResetOwner(AOwner);
-			}
+			if (this.FLanguages != null) this.FLanguages.ResetOwner(AOwner);
 		}
 
-		public TGEDCOMSubmitterRecord(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMSubmitterRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
+		}
+
+		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+		{
+			return new TGEDCOMSubmitterRecord(AOwner, AParent, AName, AValue);
 		}
 	}
 }

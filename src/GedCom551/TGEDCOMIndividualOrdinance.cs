@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
 
 namespace GedCom551
 {
@@ -9,7 +9,7 @@ namespace GedCom551
 	{
 		public TGEDCOMDateValue Date
 		{
-			get { return base.TagClass("DATE", typeof(TGEDCOMDateValue)) as TGEDCOMDateValue; }
+			get { return base.TagClass("DATE", typeof(TGEDCOMDateValue), TGEDCOMDateValue.Create) as TGEDCOMDateValue; }
 		}
 
 		public string TempleCode
@@ -48,7 +48,7 @@ namespace GedCom551
 
 		public TGEDCOMPointer Family
 		{
-			get { return base.TagClass("FAMC", typeof(TGEDCOMPointer)) as TGEDCOMPointer; }
+			get { return base.TagClass("FAMC", typeof(TGEDCOMPointer), TGEDCOMPointer.Create) as TGEDCOMPointer; }
 		}
 
 		public TGEDCOMChildSealingDateStatus ChildSealingDateStatus
@@ -340,48 +340,48 @@ namespace GedCom551
 			{
 				this.AddTag("STAT", "", null);
 			}
-			return StatTag.TagClass("CHAN", typeof(TGEDCOMDateExact)) as TGEDCOMDateExact;
+			return StatTag.TagClass("CHAN", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact;
 		}
 
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
-			base.SetLists(TEnumSet.Create(new Enum[]
+			base.SetLists(EnumSet.Create(new Enum[]
 			{
 				TGEDCOMSubList.stNotes, 
 				TGEDCOMSubList.stSource
 			}));
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, Type AClass)
+		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 			if (ATag == "DATE")
 			{
-				Result = base.AddTag(ATag, AValue, typeof(TGEDCOMDateValue));
+				Result = base.AddTag(ATag, AValue, TGEDCOMDateValue.Create);
 			}
 			else
 			{
 				if (ATag == "STAT")
 				{
-					Result = base.AddTag(ATag, AValue, typeof(TGEDCOMDateStatus));
+					Result = base.AddTag(ATag, AValue, TGEDCOMDateStatus.Create);
 				}
 				else
 				{
 					if (ATag == "FAMC")
 					{
-						Result = base.AddTag(ATag, AValue, typeof(TGEDCOMPointer));
+						Result = base.AddTag(ATag, AValue, TGEDCOMPointer.Create);
 					}
 					else
 					{
-						Result = base.AddTag(ATag, AValue, AClass);
+						Result = base.AddTag(ATag, AValue, ATagConstructor);
 					}
 				}
 			}
 			return Result;
 		}
 
-		public TGEDCOMIndividualOrdinance(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMIndividualOrdinance(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
 		}
 	}

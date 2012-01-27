@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
 
 namespace GedCom551
 {
@@ -14,7 +14,7 @@ namespace GedCom551
 			get { return this.FValue; }
 		}
 
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
 			this.FValue = null;
@@ -22,16 +22,7 @@ namespace GedCom551
 
 		protected override string GetStringValue()
 		{
-			string Result;
-			if (this.FValue != null)
-			{
-				Result = this.FValue.StringValue;
-			}
-			else
-			{
-				Result = "";
-			}
-			return Result;
+			return ((this.FValue == null) ? "" : this.FValue.StringValue);
 		}
 
 		public override DateTime GetDateTime()
@@ -63,10 +54,7 @@ namespace GedCom551
 
 		public override void Clear()
 		{
-			if (this.FValue != null)
-			{
-				this.FValue.Clear();
-			}
+			if (this.FValue != null) this.FValue.Clear();
 		}
 
 		public override bool IsEmpty()
@@ -131,17 +119,19 @@ namespace GedCom551
 			}
 		}
 
-		public override void ResetOwner(TGEDCOMObject AOwner)
+		public override void ResetOwner(TGEDCOMTree AOwner)
 		{
 			base.ResetOwner(AOwner);
-			if (this.FValue != null)
-			{
-				this.FValue.ResetOwner(AOwner);
-			}
+			if (this.FValue != null) this.FValue.ResetOwner(AOwner);
 		}
 
-		public TGEDCOMDateValue(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMDateValue(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
+		}
+
+		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+		{
+			return new TGEDCOMDateValue(AOwner, AParent, AName, AValue);
 		}
 	}
 }

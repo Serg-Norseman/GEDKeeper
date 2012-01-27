@@ -4,8 +4,12 @@ using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKSys;
 using GKUI.Lists;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI
 {
@@ -122,7 +126,7 @@ namespace GKUI
 			TCommunicationType ct = TCommunicationType.ctCall;
 			do
 			{
-				this.EditCorrType.Items.Add(GKL.LSList[(int)TGenEngine.CommunicationNames[(int)ct] - 1]);
+				this.EditCorrType.Items.Add(LangMan.LSList[(int)TGenEngine.CommunicationNames[(int)ct] - 1]);
 				ct++;
 			}
 			while (ct != (TCommunicationType)6);
@@ -136,15 +140,15 @@ namespace GKUI
 			this.Base.SetupRecMediaList(this.FMediaList);
 
 			this.FTempInd = null;
-			this.btnAccept.Text = GKL.LSList[97];
-			this.btnCancel.Text = GKL.LSList[98];
-			this.Text = GKL.LSList[191];
-			this.SheetNotes.Text = GKL.LSList[54];
-			this.SheetMultimedia.Text = GKL.LSList[55];
-			this.Label1.Text = GKL.LSList[183];
-			this.Label5.Text = GKL.LSList[184];
-			this.Label2.Text = GKL.LSList[113];
-			this.Label4.Text = GKL.LSList[139];
+			this.btnAccept.Text = LangMan.LSList[97];
+			this.btnCancel.Text = LangMan.LSList[98];
+			this.Text = LangMan.LSList[191];
+			this.SheetNotes.Text = LangMan.LSList[54];
+			this.SheetMultimedia.Text = LangMan.LSList[55];
+			this.Label1.Text = LangMan.LSList[183];
+			this.Label5.Text = LangMan.LSList[184];
+			this.Label2.Text = LangMan.LSList[113];
+			this.Label4.Text = LangMan.LSList[139];
 		}
 	}
 }

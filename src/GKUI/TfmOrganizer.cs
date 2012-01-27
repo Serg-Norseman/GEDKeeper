@@ -4,9 +4,13 @@ using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKSys;
 using GKUI.Controls;
 using GKUI.Lists;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI
 {
@@ -66,22 +70,22 @@ namespace GKUI
 			this.InitializeComponent();
 			this.FBase = aBase;
 			this.FAdrList = new TSheetList(this.SheetAddresses);
-			this.FAdrList.Buttons = TEnumSet.Create();
-			this.FAdrList.List.AddListColumn(GKL.LSList[96], 350, false);
-			this.FAdrList.List.AddListColumn(GKL.LSList[82], 100, false);
+			this.FAdrList.Buttons = EnumSet.Create();
+			this.FAdrList.List.AddListColumn(LangMan.LSList[96], 350, false);
+			this.FAdrList.List.AddListColumn(LangMan.LSList[82], 100, false);
 			this.FPhonesList = new TSheetList(this.SheetTelephones);
-			this.FPhonesList.Buttons = TEnumSet.Create();
-			this.FPhonesList.List.AddListColumn(GKL.LSList[96], 350, false);
-			this.FPhonesList.List.AddListColumn(GKL.LSList[131], 100, false);
+			this.FPhonesList.Buttons = EnumSet.Create();
+			this.FPhonesList.List.AddListColumn(LangMan.LSList[96], 350, false);
+			this.FPhonesList.List.AddListColumn(LangMan.LSList[131], 100, false);
 			this.FMailsList = new TSheetList(this.SheetEMails);
-			this.FMailsList.Buttons = TEnumSet.Create();
-			this.FMailsList.List.AddListColumn(GKL.LSList[96], 350, false);
-			this.FMailsList.List.AddListColumn(GKL.LSList[132], 100, false);
+			this.FMailsList.Buttons = EnumSet.Create();
+			this.FMailsList.List.AddListColumn(LangMan.LSList[96], 350, false);
+			this.FMailsList.List.AddListColumn(LangMan.LSList[132], 100, false);
 			this.FWebsList = new TSheetList(this.SheetWebs);
-			this.FWebsList.Buttons = TEnumSet.Create();
-			this.FWebsList.List.AddListColumn(GKL.LSList[96], 350, false);
-			this.FWebsList.List.AddListColumn(GKL.LSList[133], 100, false);
-			this.Text = GKL.LSList[34];
+			this.FWebsList.Buttons = EnumSet.Create();
+			this.FWebsList.List.AddListColumn(LangMan.LSList[96], 350, false);
+			this.FWebsList.List.AddListColumn(LangMan.LSList[133], 100, false);
+			this.Text = LangMan.LSList[34];
 		}
 
 		private void _CollectData_AddItem(TGKListView aList, string aPerson, string aData)

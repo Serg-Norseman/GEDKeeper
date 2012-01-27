@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
 
 namespace GedCom551
 {
@@ -15,68 +15,49 @@ namespace GedCom551
 
 		public TResearchPriority Priority
 		{
-			get { return this.GetPriority(); }
-			set { this.SetPriority(value); }
+			get { return GetPriorityVal(base.GetTagStringValue("_PRIORITY").Trim().ToLower()); }
+			set { base.SetTagStringValue("_PRIORITY", GetPriorityStr(value)); }
 		}
 
 		public TGEDCOMDateExact StartDate
 		{
-			get { return this.GetStartDate(); }
-		}
-
-		private TGEDCOMDateExact GetStartDate()
-		{
-			return base.TagClass("_STARTDATE", typeof(TGEDCOMDateExact)) as TGEDCOMDateExact;
+			get { return base.TagClass("_STARTDATE", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact; }
 		}
 
 		public TGEDCOMDateExact StopDate
 		{
-			get { return this.GetStopDate(); }
+			get { return base.TagClass("_STOPDATE", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact; }
 		}
 
-		private TGEDCOMDateExact GetStopDate()
-		{
-			return base.TagClass("_STOPDATE", typeof(TGEDCOMDateExact)) as TGEDCOMDateExact;
-		}
-
-		private TResearchPriority GetPriority()
-		{
-			string S = base.GetTagStringValue("_PRIORITY").Trim().ToLower();
-			return StrToPriority(S);
-		}
-
-		private void SetPriority([In] TResearchPriority Value)
-		{
-			base.SetTagStringValue("_PRIORITY", PriorityToStr(Value));
-		}
-
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
-			base.SetLists(TEnumSet.Create(new Enum[]
-			{
-				TGEDCOMSubList.stNotes
-			}));
+			base.SetLists(EnumSet.Create(new Enum[] { TGEDCOMSubList.stNotes }));
 			this.FRecordType = TGEDCOMRecordType.rtTask;
 			this.FName = "_TASK";
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, Type AClass)
+		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 			if (ATag == "_STARTDATE" || ATag == "_STOPDATE")
 			{
-				Result = base.AddTag(ATag, AValue, typeof(TGEDCOMDateExact));
+				Result = base.AddTag(ATag, AValue, TGEDCOMDateExact.Create);
 			}
 			else
 			{
-				Result = base.AddTag(ATag, AValue, AClass);
+				Result = base.AddTag(ATag, AValue, ATagConstructor);
 			}
 			return Result;
 		}
 
-		public TGEDCOMTaskRecord(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMTaskRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
+		}
+
+		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+		{
+			return new TGEDCOMTaskRecord(AOwner, AParent, AName, AValue);
 		}
 	}
 }

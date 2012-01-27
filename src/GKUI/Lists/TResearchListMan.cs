@@ -4,6 +4,10 @@ using GedCom551;
 using GKCore;
 using GKUI.Controls;
 
+/// <summary>
+/// Localization: unknown
+/// </summary>
+
 namespace GKUI.Lists
 {
 	public sealed class TResearchListMan : TListManager
@@ -13,7 +17,7 @@ namespace GKUI.Lists
 		public override bool CheckFilter(TPersonsFilter aFilter, TGenEngine.TShieldState aShieldState)
 		{
 			bool Result = false;
-			if (aFilter.List != TPersonsFilter.TListFilterMode.flSelector || aFilter.Name == "*" || TGenEngine.IsMatchesMask(this.FRec.ResearchName, aFilter.Name))
+			if (aFilter.List != TPersonsFilter.TListFilterMode.flSelector || aFilter.Name == "*" || IsMatchesMask(this.FRec.ResearchName, aFilter.Name))
 			{
 				Result = true;
 			}
@@ -37,12 +41,12 @@ namespace GKUI.Lists
 				}
 				case 2:
 				{
-					Result = GKL.LSList[(int)TGenEngine.PriorityNames[(int)this.FRec.Priority] - 1];
+					Result = LangMan.LSList[(int)TGenEngine.PriorityNames[(int)this.FRec.Priority] - 1];
 					return Result;
 				}
 				case 3:
 				{
-					Result = GKL.LSList[(int)TGenEngine.StatusNames[(int)this.FRec.Status] - 1];
+					Result = LangMan.LSList[(int)TGenEngine.StatusNames[(int)this.FRec.Status] - 1];
 					return Result;
 				}
 				case 4:
@@ -73,8 +77,8 @@ namespace GKUI.Lists
 		public override void UpdateItem(TExtListItem aItem, bool isMain)
 		{
 			aItem.SubItems.Add(this.FRec.ResearchName);
-			aItem.SubItems.Add(GKL.LSList[(int)TGenEngine.PriorityNames[(int)this.FRec.Priority] - 1]);
-			aItem.SubItems.Add(GKL.LSList[(int)TGenEngine.StatusNames[(int)this.FRec.Status] - 1]);
+			aItem.SubItems.Add(LangMan.LSList[(int)TGenEngine.PriorityNames[(int)this.FRec.Priority] - 1]);
+			aItem.SubItems.Add(LangMan.LSList[(int)TGenEngine.StatusNames[(int)this.FRec.Status] - 1]);
 			aItem.SubItems.Add(TGenEngine.GEDCOMDateToStr(this.FRec.StartDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
 			aItem.SubItems.Add(TGenEngine.GEDCOMDateToStr(this.FRec.StopDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
 			aItem.SubItems.Add(this.FRec.Percent.ToString());
@@ -87,15 +91,15 @@ namespace GKUI.Lists
 		public override void UpdateColumns(TGKListView aList, bool isMain)
 		{
 			aList.AddListColumn("№", 50, false);
-			aList.AddListColumn(GKL.LSList[125], 300, false);
-			aList.AddListColumn(GKL.LSList[178], 90, false);
-			aList.AddListColumn(GKL.LSList[117], 90, false);
-			aList.AddListColumn(GKL.LSList[180], 90, false);
-			aList.AddListColumn(GKL.LSList[181], 90, false);
-			aList.AddListColumn(GKL.LSList[179], 90, false);
+			aList.AddListColumn(LangMan.LSList[125], 300, false);
+			aList.AddListColumn(LangMan.LSList[178], 90, false);
+			aList.AddListColumn(LangMan.LSList[117], 90, false);
+			aList.AddListColumn(LangMan.LSList[180], 90, false);
+			aList.AddListColumn(LangMan.LSList[181], 90, false);
+			aList.AddListColumn(LangMan.LSList[179], 90, false);
 			if (isMain)
 			{
-				aList.AddListColumn(GKL.LSList[317], 150, false);
+				aList.AddListColumn(LangMan.LSList[317], 150, false);
 			}
 		}
 

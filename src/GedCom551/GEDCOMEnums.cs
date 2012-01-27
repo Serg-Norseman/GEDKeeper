@@ -1,5 +1,9 @@
 ﻿using System;
 
+/// <summary>
+/// Localization: clean
+/// </summary>
+
 namespace GedCom551
 {
 	public enum TGEDCOMRecordType : byte
@@ -18,7 +22,7 @@ namespace GedCom551
 		rtLocation,
 		rtSubmission,
 		rtSubmitter,
-			
+
 		rtLast
 	}
 
@@ -69,7 +73,9 @@ namespace GedCom551
 		svNone,
 		svMale,
 		svFemale,
-		svUndetermined
+		svUndetermined,
+
+		svLast = svUndetermined
 	}
 
 	public enum TGEDCOMSubList : byte
@@ -177,7 +183,8 @@ namespace GedCom551
 		sdsUncleared
 	}
 
-	public enum TGEDCOMOrdinanceProcessFlag : byte {
+	public enum TGEDCOMOrdinanceProcessFlag : byte
+	{
 		opNone,
 		opYes,
 		opNo
@@ -219,7 +226,9 @@ namespace GedCom551
 		mtPhoto,
 		mtTombstone,
 		mtVideo,
-		mtUnknown
+		mtUnknown,
+
+		mtLast = mtUnknown
 	}
 
 	public enum TCommunicationType : byte

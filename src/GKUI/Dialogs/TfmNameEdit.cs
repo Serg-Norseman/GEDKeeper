@@ -4,7 +4,11 @@ using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKSys;
+
+/// <summary>
+/// Localization: clean
+/// </summary>
 
 namespace GKUI
 {
@@ -65,21 +69,20 @@ namespace GKUI
 		public TfmNameEdit()
 		{
 			this.InitializeComponent();
-			TGEDCOMSex sx = TGEDCOMSex.svNone;
-			do
+
+			for (TGEDCOMSex sx = TGEDCOMSex.svNone; sx <= TGEDCOMSex.svLast; sx++)
 			{
 				this.edSex.Items.Add(TGenEngine.SexStr(sx));
-				sx++;
 			}
-			while (sx != (TGEDCOMSex)4);
-			this.btnAccept.Text = GKL.LSList[97];
-			this.btnCancel.Text = GKL.LSList[98];
-			this.Text = GKL.LSList[85];
-			this.Label2.Text = GKL.LSList[85];
-			this.Label4.Text = GKL.LSList[87];
-			this.GroupBox1.Text = GKL.LSList[86];
-			this.Label3.Text = GKL.LSList[207];
-			this.Label1.Text = GKL.LSList[208];
+
+			this.btnAccept.Text = LangMan.LSList[97];
+			this.btnCancel.Text = LangMan.LSList[98];
+			this.Text = LangMan.LSList[85];
+			this.Label2.Text = LangMan.LSList[85];
+			this.Label4.Text = LangMan.LSList[87];
+			this.GroupBox1.Text = LangMan.LSList[86];
+			this.Label3.Text = LangMan.LSList[207];
+			this.Label1.Text = LangMan.LSList[208];
 		}
 	}
 }

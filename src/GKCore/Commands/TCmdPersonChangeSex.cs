@@ -2,6 +2,10 @@ using System;
 
 using GedCom551;
 
+/// <summary>
+/// Localization: unknown
+/// </summary>
+
 namespace GKCore.Commands
 {
 	public class TCmdPersonChangeSex : TCustomCommand
@@ -10,7 +14,7 @@ namespace GKCore.Commands
 		private TGEDCOMSex FOldSex;
 		private TGEDCOMSex FNewSex;
 
-		public TCmdPersonChangeSex(TUndoManager aManager, TGEDCOMIndividualRecord aPerson, TGEDCOMSex NewSex) : base(aManager)
+		public TCmdPersonChangeSex(UndoManager aManager, TGEDCOMIndividualRecord aPerson, TGEDCOMSex NewSex) : base(aManager)
 		{
 			this.FPersonXRef = aPerson.XRef;
 			this.FOldSex = aPerson.Sex;

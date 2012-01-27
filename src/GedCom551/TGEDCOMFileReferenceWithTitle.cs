@@ -16,7 +16,7 @@ namespace GedCom551
 			return "FORM\\TYPE";
 		}
 
-		public TGEDCOMFileReferenceWithTitle(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMFileReferenceWithTitle(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
 		}
 	}

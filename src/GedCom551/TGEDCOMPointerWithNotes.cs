@@ -12,7 +12,7 @@ namespace GedCom551
 			get { return this._Notes; }
 		}
 
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
 			this._Notes = new TGEDCOMListEx<TGEDCOMNotes>(this);
@@ -29,7 +29,7 @@ namespace GedCom551
 			}
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, Type AClass)
+		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 			if (ATag == "NOTE")
@@ -38,7 +38,7 @@ namespace GedCom551
 			}
 			else
 			{
-				Result = base.AddTag(ATag, AValue, AClass);
+				Result = base.AddTag(ATag, AValue, ATagConstructor);
 			}
 			return Result;
 		}
@@ -60,13 +60,13 @@ namespace GedCom551
 			this._Notes.ReplaceXRefs(aMap);
 		}
 
-		public override void ResetOwner(TGEDCOMObject AOwner)
+		public override void ResetOwner(TGEDCOMTree AOwner)
 		{
 			base.ResetOwner(AOwner);
 			this._Notes.ResetOwner(AOwner);
 		}
 
-		public TGEDCOMPointerWithNotes(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMPointerWithNotes(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
 		}
 	}

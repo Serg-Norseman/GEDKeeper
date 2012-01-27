@@ -5,17 +5,21 @@ using System.Text;
 using System.Windows.Forms;
 
 using GedCom551;
-using GKCore.Sys;
+using GKSys;
 using GKUI;
 
-namespace GKCore
+/// <summary>
+/// Localization: unknown
+/// </summary>
+
+namespace GKCore.IO
 {
-	public class TGKImporter
+	public class Importer
 	{
 		private TGenEngine FEngine;
 		private TGEDCOMTree FTree;
 		private ListBox.ObjectCollection FLog;
-		private TStringList FPersonsList;
+		private StringList FPersonsList;
 
 		private void AddChild(TGEDCOMIndividualRecord parent, TGEDCOMIndividualRecord child, int mar_id)
 		{
@@ -25,9 +29,7 @@ namespace GKCore
 			}
 			if (mar_id > 1)
 			{
-				object obj = mar_id;
-				int num = SysUtils.Hole(ref obj);
-				mar_id = (int)obj;
+				// ???
 			}
 			TGEDCOMSex sex = parent.Sex;
 			if (sex == TGEDCOMSex.svNone || sex == TGEDCOMSex.svUndetermined)
@@ -93,20 +95,11 @@ namespace GKCore
 				tmp = tmp.Remove(b_pos - 1, num3);
 				tmp = tmp.Trim();
 			}
-			tmp = tmp.Trim();
-			int toks = SysUtils.GetTokensCount(tmp, ' ');
-			if (toks > 0)
-			{
-				f_name = this.CheckDot(SysUtils.GetToken(tmp, ' ', 1));
-			}
-			if (toks > 1)
-			{
-				f_pat = this.CheckDot(SysUtils.GetToken(tmp, ' ', 2));
-			}
-			if (toks > 2)
-			{
-				f_fam = this.CheckDot(SysUtils.GetToken(tmp, ' ', 3));
-			}
+
+			string[] tokens = tmp.Trim().Split(' ');
+			if (tokens.Length > 0) f_name = this.CheckDot(tokens[0]);
+			if (tokens.Length > 1) f_pat = this.CheckDot(tokens[1]);
+			if (tokens.Length > 2) f_fam = this.CheckDot(tokens[2]);
 		}
 
 		private string DeleteBlanks([In] string S)
@@ -150,6 +143,7 @@ namespace GKCore
 		{
 			int i = 1;
 			p_id = "";
+
 			while (i <= ((aStr != null) ? aStr.Length : 0))
 			{
 				char c = aStr[i - 1];
@@ -157,13 +151,12 @@ namespace GKCore
 				{
 					break;
 				}
+
 				p_id += aStr[i - 1];
 				i++;
+
 				if (aStr[i - 1] == '(')
 				{
-					object obj = i;
-					int num = SysUtils.Hole(ref obj);
-					i = (int)obj;
 					while (i <= ((aStr != null) ? aStr.Length : 0) && aStr[i - 1] != ')')
 					{
 						p_id += aStr[i - 1];
@@ -171,6 +164,7 @@ namespace GKCore
 					}
 				}
 			}
+
 			return (p_id != "" && aStr[i - 1] == '.' && aStr[i] == ' ');
 		}
 
@@ -178,7 +172,7 @@ namespace GKCore
 		{
 			return (c == 'I' || c == 'V' || c == 'X' || c == 'L' || c == 'C' || c == 'D' || c == 'M');
 		}
-		
+
 		private bool IsRomeLine([In] string aStr)
 		{
 			int i = 1;
@@ -198,63 +192,49 @@ namespace GKCore
 			try
 			{
 				string prefix = "";
-				if (SysUtils.Pos("п.", date) == 1)
+				if (date.IndexOf("п.") == 0)
 				{
 					prefix = "AFT ";
-					date = date.Remove(0, 2);
-					date = date.Trim();
+					date = date.Remove(0, 2).Trim();
 				}
 				else
 				{
-					if (SysUtils.Pos("до", date) == 1)
+					if (date.IndexOf("до") == 0)
 					{
 						prefix = "BEF ";
-						date = date.Remove(0, 3);
-						date = date.Trim();
+						date = date.Remove(0, 3).Trim();
 					}
 				}
+
 				string tmp = "";
-				int toks = SysUtils.GetTokensCount(date, '.');
-				if (toks > 3)
+				string[] toks = date.Split('.');
+				if (toks.Length > 3)
 				{
 					throw new Exception("date failed");
 				}
 				string ym = "";
-				int arg_A7_0 = 1;
-				int num = toks;
-				int i = arg_A7_0;
-				if (num >= i)
+
+				int num = toks.Length;
+				for (int i = 1; i <= num; i++)
 				{
-					num++;
-					do
+					tmp = toks[i-1];
+					int x = SysUtils.Pos("/", tmp);
+					if (x > 0)
 					{
-						tmp = SysUtils.GetToken(date, '.', i);
-						int x = SysUtils.Pos("/", tmp);
-						if (x > 0)
-						{
-							ym = SysUtils.WStrCopy(tmp, x + 1, ((tmp != null) ? tmp.Length : 0) - x);
-							int num2 = ((ym != null) ? ym.Length : 0) + 1;
-							tmp = tmp.Remove(x - 1, num2);
-						}
-						val[i - 1] = int.Parse(tmp);
-						i++;
+						ym = SysUtils.WStrCopy(tmp, x + 1, ((tmp != null) ? tmp.Length : 0) - x);
+						int num2 = ((ym != null) ? ym.Length : 0) + 1;
+						tmp = tmp.Remove(x - 1, num2);
 					}
-					while (i != num);
+					val[i - 1] = int.Parse(tmp);
 				}
-				if (toks != 1)
+
+				if (toks.Length != 1)
 				{
-					if (toks != 2)
+					if (toks.Length != 2)
 					{
-						if (toks == 3)
+						if (toks.Length == 3)
 						{
-							tmp = string.Concat(new string[]
-							{
-								val[0].ToString(), 
-								" ", 
-								TGEDCOMDate.GEDCOMMonthArray[val[1] - 1], 
-								" ", 
-								val[2].ToString()
-							});
+							tmp = val[0].ToString() + " " + TGEDCOMDate.GEDCOMMonthArray[val[1] - 1] + " " + val[2].ToString();
 						}
 					}
 					else
@@ -266,6 +246,7 @@ namespace GKCore
 				{
 					tmp = val[0].ToString();
 				}
+
 				tmp = prefix + tmp;
 				if (ym != "")
 				{
@@ -275,12 +256,12 @@ namespace GKCore
 			}
 			catch (Exception E)
 			{
-				this.FLog.Add(">>>> " + GKL.LSList[401] + " \"" + date + "\"");
+				this.FLog.Add(">>>> " + LangMan.LSList[401] + " \"" + date + "\"");
 				SysUtils.LogWrite("TGKImporter.SetEvent(): " + E.Message);
 			}
 		}
 
-		private TGEDCOMIndividualRecord ParsePerson(TStringList buf, string aStr, string p_id, ref int self_id)
+		private TGEDCOMIndividualRecord ParsePerson(StringList buf, string aStr, string p_id, ref int self_id)
 		{
 			self_id = -1;
 			int parent_id = -1;
@@ -330,14 +311,7 @@ namespace GKCore
 				}
 				else
 				{
-					this.FLog.Add(string.Concat(new string[]
-					{
-						">>>> ", 
-						GKL.LSList[400], 
-						" \"", 
-						parent_id.ToString(), 
-						"\"."
-					}));
+					this.FLog.Add(">>>> " + LangMan.LSList[400] + " \"" + parent_id.ToString() + "\".");
 				}
 			}
 			return Result;
@@ -348,7 +322,7 @@ namespace GKCore
 			try
 			{
 				StreamReader strd = new StreamReader(aFileName, Encoding.GetEncoding(1251));
-				TStringList content = new TStringList();
+				StringList content = new StringList();
 				try
 				{
 					while (strd.Peek() != -1) {
@@ -366,7 +340,7 @@ namespace GKCore
 			}
 			catch (Exception E)
 			{
-				this.FLog.Add(">>>> " + GKL.LSList[396]);
+				this.FLog.Add(">>>> " + LangMan.LSList[396]);
 				SysUtils.LogWrite("Import_PlainText(): " + E.Message);
 			}
 		}
@@ -378,7 +352,7 @@ namespace GKCore
 			}
 			catch (Exception E)
 			{
-				this.FLog.Add(">>>> " + GKL.LSList[396]);
+				this.FLog.Add(">>>> " + LangMan.LSList[396]);
 				SysUtils.LogWrite("Import_Excel(): " + E.Message);
 			}
 		}
@@ -390,12 +364,12 @@ namespace GKCore
 			}
 			catch (Exception E)
 			{
-				this.FLog.Add(">>>> " + GKL.LSList[396]);
+				this.FLog.Add(">>>> " + LangMan.LSList[396]);
 				SysUtils.LogWrite("Import_Word(): " + E.Message);
 			}
 		}
 
-		private void CheckBuf(TStringList buf, TGEDCOMIndividualRecord iRec)
+		private void CheckBuf(StringList buf, TGEDCOMIndividualRecord iRec)
 		{
 			if (buf.Text != "")
 			{
@@ -408,7 +382,7 @@ namespace GKCore
 			}
 		}
 
-		private void CheckSpouses(TStringList buf, TGEDCOMIndividualRecord iRec)
+		private void CheckSpouses(StringList buf, TGEDCOMIndividualRecord iRec)
 		{
 			int num2 = buf.Count - 1;
 			int i = 0;
@@ -500,23 +474,15 @@ namespace GKCore
 							if (name != "")
 							{
 								TGEDCOMFamilyRecord fam = this.AddFamily(iRec);
-								name = name.Trim();
-								p = SysUtils.GetTokensCount(name, ' ');
+
 								string f_name = "";
-								if (p > 0)
-								{
-									f_name = this.CheckDot(SysUtils.GetToken(name, ' ', 1));
-								}
 								string f_pat = "";
-								if (p > 1)
-								{
-									f_pat = this.CheckDot(SysUtils.GetToken(name, ' ', 2));
-								}
 								string f_fam = "";
-								if (p > 2)
-								{
-									f_fam = this.CheckDot(SysUtils.GetToken(name, ' ', 3));
-								}
+								string[] nm_parts = name.Trim().Split(' ');
+								if (nm_parts.Length > 0) f_name = this.CheckDot(nm_parts[0]);
+								if (nm_parts.Length > 1) f_pat = this.CheckDot(nm_parts[1]);
+								if (nm_parts.Length > 2) f_fam = this.CheckDot(nm_parts[2]);
+
 								TGEDCOMIndividualRecord sp = TGenEngine.CreatePersonEx(this.FTree, f_name, f_pat, f_fam, sx, false);
 								this.FEngine.AddFamilySpouse(fam, sp);
 							}
@@ -533,11 +499,11 @@ namespace GKCore
 			}
 		}
 
-		private void Import_StringList(TStringList aContent)
+		private void Import_StringList(StringList aContent)
 		{
 			this.FLog.Clear();
-			TStringList buf = new TStringList();
-			this.FPersonsList = new TStringList();
+			StringList buf = new StringList();
+			this.FPersonsList = new StringList();
 			try
 			{
 				int prev_id = 0;
@@ -556,7 +522,7 @@ namespace GKCore
 					{
 						if (this.IsRomeLine(s))
 						{
-							this.FLog.Add(string.Concat(new string[] { "> ", GKL.LSList[399], " \"", s, "\"" }));
+							this.FLog.Add(string.Concat(new string[] { "> ", LangMan.LSList[399], " \"", s, "\"" }));
 							i_rec = null;
 						}
 						else
@@ -572,11 +538,11 @@ namespace GKCore
 								int self_id = 0;
 								i_rec = this.ParsePerson(buf, s, p_id, ref self_id);
 
-								this.FLog.Add(string.Concat(new string[] { "> ", GKL.LSList[398], " \"", p_id, "\"." }));
+								this.FLog.Add(string.Concat(new string[] { "> ", LangMan.LSList[398], " \"", p_id, "\"." }));
 
 								if (self_id - prev_id > 1)
 								{
-									this.FLog.Add(">>>> " + GKL.LSList[397]);
+									this.FLog.Add(">>>> " + LangMan.LSList[397]);
 								}
 
 								prev_id = self_id;
@@ -592,7 +558,7 @@ namespace GKCore
 			}
 		}
 
-		public TGKImporter(TGenEngine aEngine, ListBox.ObjectCollection aLog)
+		public Importer(TGenEngine aEngine, ListBox.ObjectCollection aLog)
 		{
 			this.FEngine = aEngine;
 			this.FTree = this.FEngine.Tree;
@@ -618,7 +584,7 @@ namespace GKCore
 					{
 						if (E != ".xls")
 						{
-							throw new Exception(GKL.LSList[395]);
+							throw new Exception(LangMan.LSList[395]);
 						}
 						this.Import_Excel(aFileName);
 					}
@@ -628,7 +594,7 @@ namespace GKCore
 
 		public void Free()
 		{
-			TObjectHelper.Free(this);
+			SysUtils.Free(this);
 		}
 
 	}

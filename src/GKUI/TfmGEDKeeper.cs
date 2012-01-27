@@ -6,8 +6,14 @@ using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKCore.Settings;
+using GKSys;
 using GKUI.Controls;
+using GKUI.Lists;
+
+/// <summary>
+/// Localization: clean
+/// </summary>
 
 namespace GKUI
 {
@@ -16,6 +22,7 @@ namespace GKUI
 		private TNamesTable FNamesTable;
 		private TGlobalOptions FOptions;
 		private string[] FCommandArgs;
+		private SearchManager FSearchMan;
 
 		public TfmTimeLine fmTimeLine;
 		public TfmCalendar fmCalendar;
@@ -39,11 +46,17 @@ namespace GKUI
 			get { return this.FOptions; }
 		}
 
+		public SearchManager SearchMan
+		{
+			get { return FSearchMan; }
+		}
+
 		public TfmGEDKeeper(string[] args)
 		{
 			this.InitializeComponent();
 			TMapBrowser.GeoInit();
 			FInstance = this;
+			FSearchMan = new SearchManager();
 
 			FCommandArgs = (string[])args.Clone();
 		}
@@ -168,7 +181,7 @@ namespace GKUI
 			TfmBase cur_base = this.GetCurrentFile();
 			if (cur_base != null)
 			{
-				cur_base.FileProperties(TfmBase.TFilePropertiesMode.fpmAuthor);
+				cur_base.FileProperties();
 			}
 		}
 
@@ -219,7 +232,7 @@ namespace GKUI
 			}
 			finally
 			{
-				TObjectHelper.Free(fmOptions);
+				SysUtils.Free(fmOptions);
 			}
 		}
 
@@ -262,9 +275,8 @@ namespace GKUI
 			else
 			{
 				this.miTimeLine.Checked = false;
-				object obj = this.fmTimeLine;
-				SysUtils.FreeAndNil(ref obj);
-				this.fmTimeLine = (obj as TfmTimeLine);
+				this.fmTimeLine.Dispose();
+				this.fmTimeLine = null;
 			}
 		}
 
@@ -280,9 +292,8 @@ namespace GKUI
 			else
 			{
 				this.miCalendar.Checked = false;
-				object obj = this.fmCalendar;
-				SysUtils.FreeAndNil(ref obj);
-				this.fmCalendar = (obj as TfmCalendar);
+				this.fmCalendar.Dispose();
+				this.fmCalendar = null;
 			}
 		}
 
@@ -299,9 +310,8 @@ namespace GKUI
 			else
 			{
 				this.miNamesBook.Checked = false;
-				object obj = this.fmNamesBook;
-				SysUtils.FreeAndNil(ref obj);
-				this.fmNamesBook = (obj as TfmNamesBook);
+				this.fmNamesBook.Dispose();
+				this.fmNamesBook = null;
 			}
 		}
 
@@ -318,15 +328,14 @@ namespace GKUI
 			else
 			{
 				this.miCalc.Checked = false;
-				object obj = this.fmCalcWidget;
-				SysUtils.FreeAndNil(ref obj);
-				this.fmCalcWidget = (obj as TfmCalcWidget);
+				this.fmCalcWidget.Dispose();
+				this.fmCalcWidget = null;
 			}
 		}
 
 		private void miAboutClick(object sender, EventArgs e)
 		{
-			TfmAbout.ShowAbout("GEDKeeper", SysUtils.GetFileVersion());
+			TfmAbout.ShowAbout("GEDKeeper");
 		}
 
 		private void miGenResourcesClick(object sender, EventArgs e)
@@ -829,10 +838,11 @@ namespace GKUI
 				this.tbPedigree.Enabled = this.miPedigree.Enabled;
 				this.miPedigree_dAboville.Enabled = indiv_en;
 				this.miPedigree_Konovalov.Enabled = indiv_en;
+				this.miTimeLine.Enabled = base_en;
 				this.miOrganizer.Enabled = base_en;
 				this.miScripts.Enabled = base_en;
-				this.tbPrev.Enabled = (cur_base != null && cur_base.Backman.CanBackward());
-				this.tbNext.Enabled = (cur_base != null && cur_base.Backman.CanForward());
+				this.tbPrev.Enabled = (cur_base != null && cur_base.Navman.CanBackward());
+				this.tbNext.Enabled = (cur_base != null && cur_base.Navman.CanForward());
 				bool test_funcs = TGenEngine.IsDevComp();
 				this.miUndo.Enabled = (test_funcs && cur_base != null && cur_base.Undoman.CanUndo());
 				this.tbUndo.Enabled = this.miUndo.Enabled;
@@ -841,20 +851,14 @@ namespace GKUI
 
 				if (cur_base != null)
 				{
-					string st = GKL.LSList[50] + ": " + cur_base.FCounts[(int)rt].Total.ToString();
+					TRecordsView rView = cur_base.GetRecordsViewByType(rt);
 
-					if (rt == TGEDCOMRecordType.rtIndividual)
+					if (rView != null)
 					{
-						st = string.Concat(new string[]
-						{
-							st, 
-							", ", 
-							GKL.LSList[51], 
-							": ", 
-							cur_base.FCounts[(int)rt].Filtered.ToString()
-						});
+						string st = LangMan.LSList[50] + ": " + rView.TotalCount.ToString();
+						st = st + ", " + LangMan.LSList[51] + ": " + rView.FilteredCount.ToString();
+						this.StatusBar.Panels[0].Text = st;
 					}
-					this.StatusBar.Panels[0].Text = st;
 				}
 				this.StatusBar.Invalidate();
 			}
@@ -872,55 +876,55 @@ namespace GKUI
 
 		void ILocalization.SetLang()
 		{
-			this.miFile.Text = GKL.LSList[0];
-			this.miEdit.Text = GKL.LSList[1];
-			this.miPedigree.Text = GKL.LSList[2];
-			this.miService.Text = GKL.LSList[3];
-			this.miWindow.Text = GKL.LSList[4];
-			this.miHelp.Text = GKL.LSList[5];
-			this.miFileNew.Text = GKL.LSList[6];
-			this.miFileLoad.Text = GKL.LSList[7];
-			this.miMRUFiles.Text = GKL.LSList[8];
-			this.miFileSave.Text = GKL.LSList[9];
-			this.miFileClose.Text = GKL.LSList[10];
-			this.miFileProperties.Text = GKL.LSList[11];
-			this.miExport.Text = GKL.LSList[12];
-			this.miExportToWeb.Text = GKL.LSList[13];
-			this.miExportToExcelApp.Text = GKL.LSList[14];
-			this.miExportToExcelFile.Text = GKL.LSList[15];
-			this.miExit.Text = GKL.LSList[16];
-			this.miUndo.Text = GKL.LSList[17];
-			this.miRedo.Text = GKL.LSList[18];
-			this.miRecordAdd.Text = GKL.LSList[19];
-			this.miRecordEdit.Text = GKL.LSList[20];
-			this.miRecordDelete.Text = GKL.LSList[21];
-			this.miStreamInput.Text = GKL.LSList[22] + "...";
-			this.miTreeAncestors.Text = GKL.LSList[23];
-			this.miTreeDescendants.Text = GKL.LSList[24];
-			this.miTreeBoth.Text = GKL.LSList[25];
-			this.miPedigree_dAboville.Text = GKL.LSList[26];
-			this.miPedigree_Konovalov.Text = GKL.LSList[27];
-			this.miMap.Text = GKL.LSList[28] + "...";
-			this.miStats.Text = GKL.LSList[29] + "...";
-			this.miCalc.Text = GKL.LSList[30] + "...";
-			this.miNamesBook.Text = GKL.LSList[31] + "...";
-			this.miCalendar.Text = GKL.LSList[32] + "...";
-			this.miTimeLine.Text = GKL.LSList[33] + "...";
-			this.miOrganizer.Text = GKL.LSList[34] + "...";
-			this.miScripts.Text = GKL.LSList[35];
-			this.miTreeTools.Text = GKL.LSList[37];
-			this.miFilter.Text = GKL.LSList[38] + "...";
-			this.miOptions.Text = GKL.LSList[39] + "...";
-			this.miWinCascade.Text = GKL.LSList[40];
-			this.miWinHTile.Text = GKL.LSList[41];
-			this.miWinVTile.Text = GKL.LSList[42];
-			this.miWinMinimize.Text = GKL.LSList[43];
-			this.miWinArrange.Text = GKL.LSList[44];
-			this.miGenResources.Text = GKL.LSList[45];
-			this.miKinshipTerms.Text = GKL.LSList[46];
-			this.miFAQ.Text = GKL.LSList[47];
-			this.miContext.Text = GKL.LSList[48];
-			this.miAbout.Text = GKL.LSList[49] + "...";
+			this.miFile.Text = LangMan.LSList[0];
+			this.miEdit.Text = LangMan.LSList[1];
+			this.miPedigree.Text = LangMan.LSList[2];
+			this.miService.Text = LangMan.LSList[3];
+			this.miWindow.Text = LangMan.LSList[4];
+			this.miHelp.Text = LangMan.LSList[5];
+			this.miFileNew.Text = LangMan.LSList[6];
+			this.miFileLoad.Text = LangMan.LSList[7];
+			this.miMRUFiles.Text = LangMan.LSList[8];
+			this.miFileSave.Text = LangMan.LSList[9];
+			this.miFileClose.Text = LangMan.LSList[10];
+			this.miFileProperties.Text = LangMan.LSList[11];
+			this.miExport.Text = LangMan.LSList[12];
+			this.miExportToWeb.Text = LangMan.LSList[13];
+			this.miExportToExcelApp.Text = LangMan.LSList[14];
+			this.miExportToExcelFile.Text = LangMan.LSList[15];
+			this.miExit.Text = LangMan.LSList[16];
+			this.miUndo.Text = LangMan.LSList[17];
+			this.miRedo.Text = LangMan.LSList[18];
+			this.miRecordAdd.Text = LangMan.LSList[19];
+			this.miRecordEdit.Text = LangMan.LSList[20];
+			this.miRecordDelete.Text = LangMan.LSList[21];
+			this.miStreamInput.Text = LangMan.LSList[22] + "...";
+			this.miTreeAncestors.Text = LangMan.LSList[23];
+			this.miTreeDescendants.Text = LangMan.LSList[24];
+			this.miTreeBoth.Text = LangMan.LSList[25];
+			this.miPedigree_dAboville.Text = LangMan.LSList[26];
+			this.miPedigree_Konovalov.Text = LangMan.LSList[27];
+			this.miMap.Text = LangMan.LSList[28] + "...";
+			this.miStats.Text = LangMan.LSList[29] + "...";
+			this.miCalc.Text = LangMan.LSList[30] + "...";
+			this.miNamesBook.Text = LangMan.LSList[31] + "...";
+			this.miCalendar.Text = LangMan.LSList[32] + "...";
+			this.miTimeLine.Text = LangMan.LSList[33] + "...";
+			this.miOrganizer.Text = LangMan.LSList[34] + "...";
+			this.miScripts.Text = LangMan.LSList[35];
+			this.miTreeTools.Text = LangMan.LSList[37];
+			this.miFilter.Text = LangMan.LSList[38] + "...";
+			this.miOptions.Text = LangMan.LSList[39] + "...";
+			this.miWinCascade.Text = LangMan.LSList[40];
+			this.miWinHTile.Text = LangMan.LSList[41];
+			this.miWinVTile.Text = LangMan.LSList[42];
+			this.miWinMinimize.Text = LangMan.LSList[43];
+			this.miWinArrange.Text = LangMan.LSList[44];
+			this.miGenResources.Text = LangMan.LSList[45];
+			this.miKinshipTerms.Text = LangMan.LSList[46];
+			this.miFAQ.Text = LangMan.LSList[47];
+			this.miContext.Text = LangMan.LSList[48];
+			this.miAbout.Text = LangMan.LSList[49] + "...";
 		}
 
 		public void LoadLanguage(int LangCode)
@@ -944,7 +948,7 @@ namespace GKUI
 							goto IL_66;
 						}
 					}
-					loaded = TLangMan.LoadFromFile(this.FOptions.GetLang(i).FileName);
+					loaded = LangMan.LoadFromFile(this.FOptions.GetLang(i).FileName);
 				}
 				IL_66:
 				if (!loaded)
@@ -952,9 +956,10 @@ namespace GKUI
 					LangCode = 1049;
 				}
 			}
+
 			if (LangCode == 1049)
 			{
-				TLangMan.DefInit();
+				LangMan.DefInit();
 			}
 
 			int num2 = base.MdiChildren.Length - 1;

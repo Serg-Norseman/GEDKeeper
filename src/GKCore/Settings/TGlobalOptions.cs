@@ -6,9 +6,14 @@ using System.Text;
 using System.Windows.Forms;
 
 using GedCom551;
-using GKCore.Sys;
+using GKSys;
+using GKUI.Lists;
 
-namespace GKCore
+/// <summary>
+/// Localization: clean
+/// </summary>
+
+namespace GKCore.Settings
 {
 	public class TGlobalOptions : IDisposable
 	{
@@ -20,7 +25,7 @@ namespace GKCore
 
 			public void Free()
 			{
-				TObjectHelper.Free(this);
+				SysUtils.Free(this);
 			}
 		}
 
@@ -30,7 +35,7 @@ namespace GKCore
 			public TRect WinRect;
 			public FormWindowState WinState;
 
-			public void Load([In] TIniFile ini, string aSection)
+			public void Load([In] IniFile ini, string aSection)
 			{
 				this.FileName		= ini.ReadString(aSection, "FileName", "");
 				this.WinRect.Left	= ini.ReadInteger(aSection, "WinL", 10);
@@ -40,7 +45,7 @@ namespace GKCore
 				this.WinState		= (FormWindowState)((uint)ini.ReadInteger(aSection, "WinState", 0));
 			}
 
-			public void Save([In] TIniFile ini, string aSection)
+			public void Save([In] IniFile ini, string aSection)
 			{
 				ini.WriteString(aSection, "FileName", this.FileName);
 				ini.WriteInteger(aSection, "WinL", this.WinRect.Left);
@@ -50,7 +55,7 @@ namespace GKCore
 				ini.WriteInteger(aSection, "WinState", (int)this.WinState);
 			}
 
-			public static void DeleteKeys([In] TIniFile ini, string aSection)
+			public static void DeleteKeys([In] IniFile ini, string aSection)
 			{
 				ini.DeleteKey(aSection, "FileName");
 				ini.DeleteKey(aSection, "WinL");
@@ -62,20 +67,7 @@ namespace GKCore
 
 			public void Free()
 			{
-				TObjectHelper.Free(this);
-			}
-		}
-
-		public struct TPersonColumnProps
-		{
-			public TPersonColumnType colType;
-			public byte colSubType;
-			public bool colActive;
-
-			public TPersonColumnProps(TPersonColumnType colType, bool colActive) {
-				this.colType = colType;
-				this.colSubType = 0;
-				this.colActive = colActive;
+				SysUtils.Free(this);
 			}
 		}
 
@@ -92,66 +84,33 @@ namespace GKCore
 			}
 		}
 
-		public enum TWorkMode : byte
-		{
-			wmSimple,
-			wmExpert
-		}
-
-		public enum TPersonColumnType : byte
-		{
-			pctPatriarch,
-			pctName,
-			pctNick,
-			pctSex,
-			pctBirthDate,
-			pctDeathDate,
-			pctBirthPlace,
-			pctDeathPlace,
-			pctResidence,
-			pctAge,
-			pctLifeExpectancy,
-			pctDaysForBirth,
-			pctGroups,
-			pctReligion,
-			pctNationality,
-			pctEducation,
-			pctOccupation,
-			pctCaste,
-			pctMili,
-			pctMiliInd,
-			pctMiliDis,
-			pctMiliRank,
-			pctChangeDate,
-			pctBookmark
-		}
 
 		public static readonly TGlobalOptions.TColumnRec[] PersonColumnsName;
-		public static readonly TGlobalOptions.TPersonColumnProps[] DefPersonColumns;
 
 		private TChartOptions FChartOptions;
 		private TGEDCOMCharacterSet FDefCharacterSet;
 		private TGenEngine.TDateFormat FDefDateFormat;
 		private TGenEngine.TNameFormat FDefNameFormat;
-		private TStringList FEventFilters;
+		private StringList FEventFilters;
 		private ushort FInterfaceLang;
 		private TObjectList FLanguages;
 		private string FLastDir;
 		private List<TMRUFile> FMRUFiles;
-		private TStringList FNameFilters;
+		private StringList FNameFilters;
 		private TPedigreeOptions FPedigreeOptions;
 		private bool FPlacesWithAddress;
 		private TProxy FProxy;
-		private TStringList FRelations;
-		private TStringList FResidenceFilters;
+		private StringList FRelations;
+		private StringList FResidenceFilters;
 		private bool FShowTips;
-		private TGlobalOptions.TWorkMode FWorkMode;
-		private TGlobalOptions.TPersonColumnProps[] FListPersonsColumns = new TGlobalOptions.TPersonColumnProps[24];
+		private TIndividualListColumns FIndividualListColumns;
 		private bool FListPersons_HighlightUnmarried;
 		private bool FListPersons_HighlightUnparented;
 		private TRect FMWinRect;
 		private FormWindowState FMWinState;
-		private TStringList FLastBases;
+		private StringList FLastBases;
+		private bool FRevisionsBackup;
+
 		protected bool Disposed_;
 
 
@@ -178,7 +137,7 @@ namespace GKCore
 			set { this.FDefNameFormat = value; }
 		}
 
-		public TStringList EventFilters
+		public StringList EventFilters
 		{
 			get { return this.FEventFilters; }
 		}
@@ -222,7 +181,7 @@ namespace GKCore
 			set { this.FMWinState = value; }
 		}
 
-		public TStringList NameFilters
+		public StringList NameFilters
 		{
 			get { return this.FNameFilters; }
 		}
@@ -243,26 +202,26 @@ namespace GKCore
 			get { return this.FProxy; }
 		}
 
-		public TStringList Relations
+		public StringList Relations
 		{
 			get { return this.FRelations; }
 		}
 
-		public TStringList ResidenceFilters
+		public StringList ResidenceFilters
 		{
 			get { return this.FResidenceFilters; }
+		}
+
+		public bool RevisionsBackup
+		{
+			get { return this.FRevisionsBackup; }
+			set { this.FRevisionsBackup = value; }
 		}
 
 		public bool ShowTips
 		{
 			get { return this.FShowTips; }
 			set { this.FShowTips = value; }
-		}
-
-		public TGlobalOptions.TWorkMode WorkMode
-		{
-			get { return this.FWorkMode; }
-			set { this.FWorkMode = value; }
 		}
 
 		public bool ListPersons_HighlightUnmarried
@@ -277,19 +236,11 @@ namespace GKCore
 			set { this.FListPersons_HighlightUnparented = value; }
 		}
 
-		public TGlobalOptions.TPersonColumnProps[] ListPersonsColumns
+		public TIndividualListColumns IndividualListColumns
 		{
-			get
-			{
-				TGlobalOptions.TPersonColumnProps[] Result = new TGlobalOptions.TPersonColumnProps[24];
-				Array.Copy(this.FListPersonsColumns, Result, 24);
-				return Result;
-			}
-			set
-			{
-				Array.Copy(value, this.FListPersonsColumns, 24);
-			}
+			get { return this.FIndividualListColumns; }
 		}
+
 		/*
 		public TGlobalOptions.TBaseWin LastBases
 		{
@@ -306,7 +257,7 @@ namespace GKCore
 
 		private ushort GetKeyLayout()
 		{
-			return (ushort)SysUtils.GetKeyboardLayout(0u);
+			return unchecked((ushort)SysUtils.GetKeyboardLayout(0u));
 		}
 
 		private void SetKeyLayout(ushort aLayout)
@@ -386,16 +337,19 @@ namespace GKCore
 		public TGlobalOptions()
 		{
 			this.FChartOptions = new TChartOptions();
-			this.FEventFilters = new TStringList();
+			this.FEventFilters = new StringList();
 			this.FMRUFiles = new List<TMRUFile>();
-			this.FNameFilters = new TStringList();
-			this.FResidenceFilters = new TStringList();
+			this.FNameFilters = new StringList();
+			this.FResidenceFilters = new StringList();
 			this.FPedigreeOptions = new TPedigreeOptions();
 			this.FProxy = new TProxy();
-			this.FRelations = new TStringList();
-			Array.Copy(TGlobalOptions.DefPersonColumns, this.FListPersonsColumns, 24);
+			this.FRelations = new StringList();
+
+			this.FIndividualListColumns = new TIndividualListColumns();
+			this.FIndividualListColumns.SetDefaults();
+
 			this.FLanguages = new TObjectList(true);
-			this.FLastBases = new TStringList();
+			this.FLastBases = new StringList();
 		}
 
 		public void Dispose()
@@ -403,7 +357,7 @@ namespace GKCore
 			if (!this.Disposed_)
 			{
 				this.FLastBases.Free();
-				this.FLanguages.Free();
+				this.FLanguages.Dispose();
 				this.FRelations.Free();
 				this.FProxy.Free();
 				this.FPedigreeOptions.Free();
@@ -419,12 +373,13 @@ namespace GKCore
 		public void FindLanguages()
 		{
 			string path = SysUtils.GetAppPath() + "langs\\";
-			SysUtils.ScanDir(path, new SysUtils.TFilePrepareProc(this.LngPrepareProc), false, 63, "*.lng");
+			string[] lang_files = Directory.GetFiles(path, "*.lng", SearchOption.TopDirectoryOnly);
+			for (int i = 0; i < lang_files.Length; i++) this.LngPrepareProc(lang_files[i]);
 		}
 
 		public void LoadFromFile([In] string FileName)
 		{
-			TIniFile ini = new TIniFile(FileName);
+			IniFile ini = new IniFile(FileName);
 			try
 			{
 				this.FDefCharacterSet = (TGEDCOMCharacterSet)ini.ReadInteger("Common", "DefCharacterSet", 3);
@@ -433,31 +388,30 @@ namespace GKCore
 				this.FLastDir = ini.ReadString("Common", "LastDir", "");
 				this.FPlacesWithAddress = ini.ReadBool("Common", "PlacesWithAddress", false);
 				this.FShowTips = ini.ReadBool("Common", "ShowTips", true);
-				this.FWorkMode = (TGlobalOptions.TWorkMode)ini.ReadInteger("Common", "WorkMode", 0);
 				this.FInterfaceLang = (ushort)ini.ReadInteger("Common", "InterfaceLang", 1049);
+				this.FRevisionsBackup = ini.ReadBool("Common", "RevisionsBackup", false);
+
 				ushort kl = (ushort)ini.ReadInteger("Common", "KeyLayout", (int)this.GetKeyLayout());
 				this.SetKeyLayout(kl);
+
 				this.FChartOptions.LoadFromFile(ini);
 				this.FPedigreeOptions.LoadFromFile(ini);
 				this.FProxy.LoadFromFile(ini);
 
 				int cnt = ini.ReadInteger("NameFilters", "Count", 0);
-				int num = cnt - 1;
-				for (int i = 0; i <= num; i++)
+				for (int i = 0; i <= cnt - 1; i++)
 				{
 					this.FNameFilters.Add(ini.ReadString("NameFilters", "Filter_" + i.ToString(), ""));
 				}
 
 				cnt = ini.ReadInteger("ResidenceFilters", "Count", 0);
-				int num2 = cnt - 1;
-				for (int i = 0; i <= num2; i++)
+				for (int i = 0; i <= cnt - 1; i++)
 				{
 					this.FResidenceFilters.Add(ini.ReadString("ResidenceFilters", "Filter_" + i.ToString(), ""));
 				}
 
 				cnt = ini.ReadInteger("EventFilters", "Count", 0);
-				int num3 = cnt - 1;
-				for (int i = 0; i <= num3; i++)
+				for (int i = 0; i <= cnt - 1; i++)
 				{
 					this.FEventFilters.Add(ini.ReadString("EventFilters", "EventVal_" + i.ToString(), ""));
 				}
@@ -477,17 +431,12 @@ namespace GKCore
 				}
 
 				cnt = ini.ReadInteger("Relations", "Count", 0);
-				int num5 = cnt - 1;
-				for (int i = 0; i <= num5; i++)
+				for (int i = 0; i <= cnt - 1; i++)
 				{
 					this.FRelations.Add(ini.ReadString("Relations", "Relation_" + i.ToString(), ""));
 				}
 
-				for (int i = 0; i < 24; i++)
-				{
-					this.FListPersonsColumns[i].colType = (TGlobalOptions.TPersonColumnType)ini.ReadInteger("PersonsColumns", "ColType_" + i.ToString(), (int)((sbyte)TGlobalOptions.DefPersonColumns[i].colType));
-					this.FListPersonsColumns[i].colActive = ini.ReadBool("PersonsColumns", "ColActive_" + i.ToString(), TGlobalOptions.DefPersonColumns[i].colActive);
-				}
+				this.FIndividualListColumns.LoadFromFile(ini);
 
 				this.FListPersons_HighlightUnmarried = ini.ReadBool("ListPersons", "HighlightUnmarried", false);
 				this.FListPersons_HighlightUnparented = ini.ReadBool("ListPersons", "HighlightUnparented", false);
@@ -512,7 +461,7 @@ namespace GKCore
 
 		public void SaveToFile([In] string FileName)
 		{
-			TIniFile ini = new TIniFile(FileName);
+			IniFile ini = new IniFile(FileName);
 			try
 			{
 				ini.WriteInteger("Common", "DefCharacterSet", (int)this.FDefCharacterSet);
@@ -521,9 +470,10 @@ namespace GKCore
 				ini.WriteString("Common", "LastDir", this.FLastDir);
 				ini.WriteBool("Common", "PlacesWithAddress", this.FPlacesWithAddress);
 				ini.WriteBool("Common", "ShowTips", this.FShowTips);
-				ini.WriteInteger("Common", "WorkMode", (int)this.FWorkMode);
 				ini.WriteInteger("Common", "InterfaceLang", (int)this.FInterfaceLang);
+				ini.WriteBool("Common", "RevisionsBackup", this.FRevisionsBackup);
 				ini.WriteInteger("Common", "KeyLayout", (int)this.GetKeyLayout());
+
 				this.FChartOptions.SaveToFile(ini);
 				this.FPedigreeOptions.SaveToFile(ini);
 				this.FProxy.SaveToFile(ini);
@@ -564,16 +514,7 @@ namespace GKCore
 					ini.WriteString("Relations", "Relation_" + i.ToString(), this.FRelations[i]);
 				}
 
-				{ // temp scope
-					int i = 0;
-					do
-					{
-						ini.WriteInteger("PersonsColumns", "ColType_" + i.ToString(), (int)((sbyte)this.FListPersonsColumns[i].colType));
-						ini.WriteBool("PersonsColumns", "ColActive_" + i.ToString(), this.FListPersonsColumns[i].colActive);
-						i++;
-					}
-					while (i != 24);
-				}
+				this.FIndividualListColumns.SaveToFile(ini);
 
 				ini.WriteBool("ListPersons", "HighlightUnmarried", this.FListPersons_HighlightUnmarried);
 				ini.WriteBool("ListPersons", "HighlightUnparented", this.FListPersons_HighlightUnparented);
@@ -608,39 +549,12 @@ namespace GKCore
 
 		public void Free()
 		{
-			TObjectHelper.Free(this);
+			SysUtils.Free(this);
 		}
 
 		static TGlobalOptions()
 		{
-			TGlobalOptions.TPersonColumnProps[] array1 = new TGlobalOptions.TPersonColumnProps[24];
-			array1[0] = new TPersonColumnProps(TPersonColumnType.pctPatriarch, true);
-			array1[1] = new TPersonColumnProps(TPersonColumnType.pctName, true);
-			array1[2] = new TPersonColumnProps(TPersonColumnType.pctNick, false);
-			array1[3] = new TPersonColumnProps(TPersonColumnType.pctSex, true);
-			array1[4] = new TPersonColumnProps(TPersonColumnType.pctBirthDate, true);
-			array1[5] = new TPersonColumnProps(TPersonColumnType.pctDeathDate, true);
-			array1[6] = new TPersonColumnProps(TPersonColumnType.pctBirthPlace, true);
-			array1[7] = new TPersonColumnProps(TPersonColumnType.pctDeathPlace, true);
-			array1[8] = new TPersonColumnProps(TPersonColumnType.pctResidence, true);
-			array1[9] = new TPersonColumnProps(TPersonColumnType.pctAge, true);
-			array1[10] = new TPersonColumnProps(TPersonColumnType.pctLifeExpectancy, true);
-			array1[11] = new TPersonColumnProps(TPersonColumnType.pctDaysForBirth, true);
-			array1[12] = new TPersonColumnProps(TPersonColumnType.pctGroups, true);
-			array1[13] = new TPersonColumnProps(TPersonColumnType.pctReligion, false);
-			array1[14] = new TPersonColumnProps(TPersonColumnType.pctNationality, false);
-			array1[15] = new TPersonColumnProps(TPersonColumnType.pctEducation, false);
-			array1[16] = new TPersonColumnProps(TPersonColumnType.pctOccupation, false);
-			array1[17] = new TPersonColumnProps(TPersonColumnType.pctCaste, false);
-			array1[18] = new TPersonColumnProps(TPersonColumnType.pctMili, false);
-			array1[19] = new TPersonColumnProps(TPersonColumnType.pctMiliInd, false);
-			array1[20] = new TPersonColumnProps(TPersonColumnType.pctMiliDis, false);
-			array1[21] = new TPersonColumnProps(TPersonColumnType.pctMiliRank, false);
-			array1[22] = new TPersonColumnProps(TPersonColumnType.pctChangeDate, true);
-			array1[23] = new TPersonColumnProps(TPersonColumnType.pctBookmark, true);
-			TGlobalOptions.DefPersonColumns = array1;
-
-			TGlobalOptions.TColumnRec[] array2 = new TGlobalOptions.TColumnRec[24];
+			TGlobalOptions.TColumnRec[] array2 = new TGlobalOptions.TColumnRec[25];
 			array2[0] = new TColumnRec(LSID.LSID_Patriarch, 25, false);
 			array2[1] = new TColumnRec(LSID.LSID_FullName, 25, false);
 			array2[2] = new TColumnRec(LSID.LSID_Nickname, 75, false);
@@ -665,6 +579,7 @@ namespace GKCore
 			array2[21] = new TColumnRec(LSID.LSID_MiliRank, 200, true);
 			array2[22] = new TColumnRec(LSID.LSID_Changed, 150, true);
 			array2[23] = new TColumnRec(LSID.LSID_Bookmark, 25, true);
+			array2[24] = new TColumnRec(LSID.LSID_NobilityTitle, 200, true);
 			TGlobalOptions.PersonColumnsName = array2;
 		}
 	}

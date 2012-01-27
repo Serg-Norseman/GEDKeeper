@@ -68,6 +68,7 @@ namespace GKUI
 			// LabelMail
 			// 
 			this.LabelMail.AutoSize = true;
+			this.LabelMail.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.LabelMail.Font = new System.Drawing.Font("Times New Roman", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.LabelMail.ForeColor = System.Drawing.Color.Blue;
 			this.LabelMail.Location = new System.Drawing.Point(8, 256);

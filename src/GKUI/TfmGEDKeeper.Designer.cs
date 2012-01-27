@@ -968,6 +968,7 @@ namespace GKUI
 				if (components != null) {
 					components.Dispose();
 				}
+				//FSearchMan.Dispose();
 				TMapBrowser.GeoDone();
 			}
 			base.Dispose(Disposing);

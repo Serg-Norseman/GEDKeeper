@@ -1,20 +1,20 @@
 using System;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
 
 namespace GedCom551
 {
 	public sealed class TGEDCOMSourceCitation : TGEDCOMPointer
 	{
-		private TStrings FDescription;
+		private StringList FDescription;
 
 		public bool IsPointer
 		{
 			get { return (!string.IsNullOrEmpty(base.XRef)); }
 		}
 
-		public TStrings Description
+		public StringList Description
 		{
 			get { return this.GetDescription(); }
 			set { this.SetDescription(value); }
@@ -32,11 +32,11 @@ namespace GedCom551
 			set { base.SetTagIntegerValue("QUAY", value); }
 		}
 
-		private TStrings GetDescription()
+		private StringList GetDescription()
 		{
 			if (this.FDescription == null)
 			{
-				this.FDescription = new TStringList();
+				this.FDescription = new StringList();
 			}
 			else
 			{
@@ -57,13 +57,13 @@ namespace GedCom551
 			return this.FDescription;
 		}
 
-		private void SetDescription([In] TStrings Value)
+		private void SetDescription([In] StringList Value)
 		{
 			this.Clear();
 			base.SetTagStrings(this, Value);
 		}
 
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
 			this.FName = "SOUR";
@@ -101,9 +101,8 @@ namespace GedCom551
 			base.Clear();
 			if (this.FDescription != null)
 			{
-				object fDescription = this.FDescription;
-				SysUtils.FreeAndNil(ref fDescription);
-				this.FDescription = (fDescription as TStrings);
+				//this.FDescription.Dispose();
+				this.FDescription = null;
 			}
 		}
 
@@ -139,7 +138,7 @@ namespace GedCom551
 			return Result;
 		}
 
-		public TGEDCOMSourceCitation(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMSourceCitation(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
 		}
 	}

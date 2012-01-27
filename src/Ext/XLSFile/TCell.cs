@@ -1,6 +1,6 @@
 using System;
 
-using GKCore.Sys;
+using GKSys;
 
 namespace XLSFile
 {
@@ -55,6 +55,7 @@ namespace XLSFile
 				i++;
 			}
 			while (i != 3);
+
 			if ((Value & TCellAttributeSet.acHiddenFormula) != (TCellAttributeSet)0)
 			{
 				this.FAttribute[0] = (byte)((uint)this.FAttribute[0] + 128u);
@@ -119,6 +120,5 @@ namespace XLSFile
 			}
 			while (i != 3);
 		}
-
 	}
 }

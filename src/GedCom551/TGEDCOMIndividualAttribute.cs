@@ -1,46 +1,36 @@
 using System;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
 
 namespace GedCom551
 {
 	public sealed class TGEDCOMIndividualAttribute : TGEDCOMCustomEvent
 	{
-		private TStrings FPhysicalDescription;
+		private StringList FPhysicalDescription;
 
 
-		public TStrings PhysicalDescription
+		public StringList PhysicalDescription
 		{
-			get { return this.GetPhysicalDescription(); }
-			set { this.SetPhysicalDescription(value); }
+			get { return base.GetTagStrings(this, ref this.FPhysicalDescription); }
+			set { base.SetTagStrings(this, value); }
 		}
 
-		private TStrings GetPhysicalDescription()
-		{
-			return base.GetTagStrings(this, ref this.FPhysicalDescription);
-		}
-
-		private void SetPhysicalDescription(TStrings Value)
-		{
-			base.SetTagStrings(this, Value);
-		}
-
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, Type AClass)
+		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 			if (ATag == "CONC" || ATag == "CONT")
 			{
-				Result = base.AddTag(ATag, AValue, AClass);
+				Result = base.AddTag(ATag, AValue, ATagConstructor);
 			}
 			else
 			{
-				Result = this.Detail.AddTag(ATag, AValue, AClass);
+				Result = this.Detail.AddTag(ATag, AValue, ATagConstructor);
 			}
 			return Result;
 		}
 
-		public TGEDCOMIndividualAttribute(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMIndividualAttribute(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
 		}
 	}

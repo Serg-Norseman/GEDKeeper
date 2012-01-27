@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
 
 namespace GedCom551
 {
@@ -9,12 +9,7 @@ namespace GedCom551
 	{
 		public TGEDCOMAddress Address
 		{
-			get { return this.GetAddress(); }
-		}
-
-		private TGEDCOMAddress GetAddress()
-		{
-			return base.TagClass("ADDR", typeof(TGEDCOMAddress)) as TGEDCOMAddress;
+			get { return base.TagClass("ADDR", typeof(TGEDCOMAddress), TGEDCOMAddress.Create) as TGEDCOMAddress; }
 		}
 
 		public string RepositoryName
@@ -23,42 +18,38 @@ namespace GedCom551
 			set { base.SetTagStringValue("NAME", value); }
 		}
 
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
-			base.SetLists(TEnumSet.Create(new Enum[]
-			{
-				TGEDCOMSubList.stNotes
-			}));
+			base.SetLists(EnumSet.Create(new Enum[] { TGEDCOMSubList.stNotes }));
 			this.FRecordType = TGEDCOMRecordType.rtRepository;
 			this.FName = "REPO";
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, Type AClass)
+		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 
-			if (ATag == "ADDR")
+			if (ATag == "PHON" || ATag == "EMAIL" || ATag == "FAX" || ATag == "WWW")
 			{
-				Result = base.AddTag(ATag, AValue, typeof(TGEDCOMAddress));
+				Result = this.Address.AddTag(ATag, AValue, ATagConstructor);
 			}
 			else
 			{
-				if (ATag == "PHON" || ATag == "EMAIL" || ATag == "FAX" || ATag == "WWW")
-				{
-					Result = this.GetAddress().AddTag(ATag, AValue, AClass);
-				}
-				else
-				{
-					Result = base.AddTag(ATag, AValue, AClass);
-				}
+				// "ADDR" defines by default
+				Result = base.AddTag(ATag, AValue, ATagConstructor);
 			}
 
 			return Result;
 		}
 
-		public TGEDCOMRepositoryRecord(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMRepositoryRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
+		}
+
+		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+		{
+			return new TGEDCOMRepositoryRecord(AOwner, AParent, AName, AValue);
 		}
 	}
 }

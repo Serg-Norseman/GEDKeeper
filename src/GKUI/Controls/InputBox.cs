@@ -1,8 +1,10 @@
 using System;
 using System.Drawing;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
+
+/// <summary>
+/// Localization: clean
+/// </summary>
 
 namespace GKUI.Controls
 {

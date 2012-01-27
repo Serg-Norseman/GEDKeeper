@@ -1,10 +1,15 @@
 using System;
+using System.Collections;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 
-using GKCore.Sys;
+using GKSys;
+
+/// <summary>
+/// Localization: clean
+/// </summary>
 
 namespace GedCom551
 {
@@ -12,7 +17,7 @@ namespace GedCom551
 	{
 		private TGEDCOMListEx<TGEDCOMRecord> FRecords;
 		private TGEDCOMHeader FHeader;
-		private TStringList FXRefIndex;
+		private Hashtable FXRefIndex;
 		private TGEDCOMState FState;
 		private bool Disposed_;
 
@@ -26,6 +31,11 @@ namespace GedCom551
 			get { return this.FRecords[Index]; }
 		}
 
+		public TGEDCOMRecord GetRecord(int Index)
+		{
+			return this.FRecords[Index];
+		}
+
 		public TGEDCOMHeader Header
 		{
 			get { return this.FHeader; }
@@ -37,147 +47,32 @@ namespace GedCom551
 			set { this.FState = value; }
 		}
 
-		private string GetSignByRecord(TGEDCOMRecord aRecord)
-		{
-			string result = "";
-			if (aRecord != null)
-			{
-				switch (aRecord.RecordType)
-				{
-					case TGEDCOMRecordType.rtIndividual:
-					{
-						result = "I";
-						break;
-					}
-					case TGEDCOMRecordType.rtFamily:
-					{
-						result = "F";
-						break;
-					}
-					case TGEDCOMRecordType.rtNote:
-					{
-						result = "N";
-						break;
-					}
-					case TGEDCOMRecordType.rtMultimedia:
-					{
-						result = "O";
-						break;
-					}
-					case TGEDCOMRecordType.rtSource:
-					{
-						result = "S";
-						break;
-					}
-					case TGEDCOMRecordType.rtRepository:
-					{
-						result = "R";
-						break;
-					}
-					case TGEDCOMRecordType.rtGroup:
-					{
-						result = "G";
-						break;
-					}
-					case TGEDCOMRecordType.rtResearch:
-					{
-						result = "RS";
-						break;
-					}
-					case TGEDCOMRecordType.rtTask:
-					{
-						result = "TK";
-						break;
-					}
-					case TGEDCOMRecordType.rtCommunication:
-					{
-						result = "CM";
-						break;
-					}
-					case TGEDCOMRecordType.rtLocation:
-					{
-						result = "L";
-						break;
-					}
-					case TGEDCOMRecordType.rtSubmission:
-					{
-						result = "????";
-						break;
-					}
-					case TGEDCOMRecordType.rtSubmitter:
-					{
-						result = "SUB";
-						break;
-					}
-				}
-			}
-			return result;
-		}
-
-		public TGEDCOMRecord GetRecord(int Index)
-		{
-			return this.FRecords[Index];
-		}
-
-		private void XRefIndex_Clear()
-		{
-			this.FXRefIndex.Clear();
-		}
-
-		private void XRefIndex_Add([In] string XRef, TGEDCOMRecord ARecord)
-		{
-			if (XRef != "" && ARecord != null)
-			{
-				this.FXRefIndex.AddObject(XRef, ARecord);
-			}
-		}
-
-		private void XRefIndex_AddRecord(TGEDCOMRecord ARecord)
-		{
-			int idx = this.FXRefIndex.IndexOfObject(ARecord);
-			if (idx == -1 && ARecord.XRef != "")
-			{
-				this.XRefIndex_Add(ARecord.XRef, ARecord);
-			}
-		}
-
-		private void XRefIndex_DeleteRecord(TGEDCOMRecord ARecord)
-		{
-			int Index = this.FXRefIndex.IndexOfObject(ARecord);
-			if (Index >= 0)
-			{
-				this.FXRefIndex.Delete(Index);
-			}
-		}
-
-		public void SetXRef(TGEDCOMRecord Sender, [In] string XRef)
-		{
-			int idx = this.FXRefIndex.IndexOfObject(Sender);
-			if (idx >= 0)
-			{
-				this.FXRefIndex.Sorted = false;
-				this.FXRefIndex[idx] = XRef;
-				this.FXRefIndex.Sorted = true;
-			}
-			else
-			{
-				this.XRefIndex_Add(XRef, Sender);
-			}
-		}
-
 		public TGEDCOMTree()
 		{
 			this.FRecords = new TGEDCOMListEx<TGEDCOMRecord>(this);
 			this.FHeader = new TGEDCOMHeader(this, this, "", "");
-			this.FXRefIndex = new TStringList();
-			this.FXRefIndex.Sorted = true;
+			this.FXRefIndex = new Hashtable();
+		}
+
+		static TGEDCOMTree()
+		{
+			GEDCOMFactory f = GEDCOMFactory.GetInstance();
+
+			f.Register("DATE", TGEDCOMDateValue.Create);
+			f.Register("TIME", TGEDCOMTime.Create);
+			f.Register("ADDR", TGEDCOMAddress.Create);
+			f.Register("PLAC", TGEDCOMPlace.Create);
+			f.Register("MAP", TGEDCOMMap.Create);
+			f.Register("_LOC", TGEDCOMPointer.Create);
+
+			//f.Register("xxxx", xxxx.Create);
 		}
 
 		public void Dispose()
 		{
 			if (!this.Disposed_)
 			{
-				this.FXRefIndex.Free();
+				//this.FXRefIndex.Dispose();
 				this.FHeader.Free();
 				this.FRecords.Dispose();
 
@@ -185,10 +80,107 @@ namespace GedCom551
 			}
 		}
 
+		private string GetSignByRecord(TGEDCOMRecord aRecord)
+		{
+			string result = "";
+			if (aRecord != null)
+			{
+				switch (aRecord.RecordType) {
+					case TGEDCOMRecordType.rtIndividual:
+						result = "I";
+						break;
+					case TGEDCOMRecordType.rtFamily:
+						result = "F";
+						break;
+					case TGEDCOMRecordType.rtNote:
+						result = "N";
+						break;
+					case TGEDCOMRecordType.rtMultimedia:
+						result = "O";
+						break;
+					case TGEDCOMRecordType.rtSource:
+						result = "S";
+						break;
+					case TGEDCOMRecordType.rtRepository:
+						result = "R";
+						break;
+					case TGEDCOMRecordType.rtGroup:
+						result = "G";
+						break;
+					case TGEDCOMRecordType.rtResearch:
+						result = "RS";
+						break;
+					case TGEDCOMRecordType.rtTask:
+						result = "TK";
+						break;
+					case TGEDCOMRecordType.rtCommunication:
+						result = "CM";
+						break;
+					case TGEDCOMRecordType.rtLocation:
+						result = "L";
+						break;
+					case TGEDCOMRecordType.rtSubmission:
+						result = "????";
+						break;
+					case TGEDCOMRecordType.rtSubmitter:
+						result = "SUB";
+						break;
+				}
+			}
+			return result;
+		}
+
+		private void XRefIndex_Clear()
+		{
+			this.FXRefIndex.Clear();
+		}
+
+		private void XRefIndex_AddRecord(TGEDCOMCustomRecord ARecord)
+		{
+			if (ARecord != null && !string.IsNullOrEmpty(ARecord.XRef))
+			{
+				bool exists = this.FXRefIndex.ContainsKey(ARecord.XRef);
+				if (!exists) this.FXRefIndex.Add(ARecord.XRef, ARecord);
+			}
+		}
+
+		public void SetXRef([In] string oldXRef, TGEDCOMCustomRecord Sender)
+		{
+			if (!string.IsNullOrEmpty(oldXRef))
+			{
+				bool exists = this.FXRefIndex.ContainsKey(oldXRef);
+				if (exists) this.FXRefIndex.Remove(oldXRef);
+			}
+
+			this.XRefIndex_AddRecord(Sender);
+		}
+
+		private void XRefIndex_DeleteRecord(TGEDCOMRecord ARecord)
+		{
+			bool exists = this.FXRefIndex.ContainsKey(ARecord.XRef);
+			if (exists) this.FXRefIndex.Remove(ARecord.XRef);
+		}
+
+		public TGEDCOMRecord XRefIndex_Find([In] string XRef)
+		{
+			return (this.FXRefIndex[XRef] as TGEDCOMRecord);
+		}
+
+		public string XRefIndex_NewXRef(TGEDCOMRecord Sender)
+		{
+			string sign = this.GetSignByRecord(Sender);
+			int I = 1;
+			while (this.FXRefIndex.ContainsKey(sign + I.ToString()))
+			{
+				I++;
+			}
+			return sign + I.ToString();
+		}
+
 		public TGEDCOMRecord AddRecord(TGEDCOMRecord ARecord)
 		{
 			this.FRecords.Add(ARecord);
-			if (ARecord.XRef != "")	this.XRefIndex_AddRecord(ARecord);
+			this.XRefIndex_AddRecord(ARecord);
 			return ARecord;
 		}
 
@@ -222,6 +214,41 @@ namespace GedCom551
 			return this.FRecords.IndexOfObject(ARecord);
 		}
 
+		public void SaveToFile([In] string aFileName, [In] TGEDCOMCharacterSet CharSet)
+		{
+			string subm = this.FHeader.GetTagStringValue("SUBM");
+			int rev = this.FHeader.FileRevision;
+
+			this.FHeader.Clear();
+			this.FHeader.Source = "GEDKeeper";
+			this.FHeader.ReceivingSystemName = "GEDKeeper";
+			this.FHeader.CharacterSet = CharSet;
+			this.FHeader.Language = "Russian";
+			this.FHeader.GEDCOMVersion = "5.5";
+			this.FHeader.GEDCOMForm = "LINEAGE-LINKED";
+			this.FHeader.FileName = Path.GetFileName(aFileName);
+			this.FHeader.TransmissionDateTime = DateTime.Now;
+			this.FHeader.FileRevision = rev + 1;
+
+			if (subm != "")
+			{
+				this.FHeader.SetTagStringValue("SUBM", subm);
+			}
+
+			this.Pack();
+
+			StreamWriter fs = new StreamWriter(aFileName, false, TGEDCOMObject.GetEncodingByCharacterSet(CharSet));
+			try
+			{
+				this.SaveToStream(fs);
+				this.FHeader.CharacterSet = TGEDCOMCharacterSet.csASCII;
+			}
+			finally
+			{
+				SysUtils.Free(fs);
+			}
+		}
+
 		public void LoadFromFile([In] string aFileName)
 		{
 			StreamReader fs = new StreamReader(aFileName, Encoding.GetEncoding(1251));
@@ -237,6 +264,9 @@ namespace GedCom551
 			}
 		}
 
+		public int Progress;
+		public event EventHandler ProgressEvent;
+
 		public void LoadFromStream(StreamReader AStream)
 		{
 			this.FState = TGEDCOMState.osLoading;
@@ -244,19 +274,23 @@ namespace GedCom551
 			{
 				TGEDCOMCustomRecord CurRecord = null;
 				TGEDCOMTag CurTag = null;
+				TGEDCOMCharacterSet CharSet = TGEDCOMCharacterSet.csASCII;
+
+				long file_pos = 0;
+				long file_size = AStream.BaseStream.Length;
+
+				Progress = 0;
 
 				int I = -1;
 				while (AStream.Peek() != -1)
 				{
-					string S = AStream.ReadLine();
 					I++;
+					string S = AStream.ReadLine();
+					file_pos += S.Length + Environment.NewLine.Length;
 
-					while (((S != null) ? S.Length : 0) > 0 && (S[0] == ' ' || S[0] == '\t'))
-					{
-						S = S.Remove(0, 1);
-					}
+					S = SysUtils.TrimLeft(S);
 
-					if (S != "")
+					if (S.Length != 0)
 					{
 						if (!SysUtils.IsDigit(S[0]))
 						{
@@ -288,12 +322,14 @@ namespace GedCom551
 								throw;
 							}
 
-							if (AValue != null && AValue != "" && FHeader.CharacterSet == TGEDCOMCharacterSet.csUTF8)
+							// temp hack
+							if (AValue != null && AValue.Length != 0 && CharSet == TGEDCOMCharacterSet.csUTF8)
 							{
 								if (AStream.CurrentEncoding != Encoding.UTF8) {
 									AValue = SysUtils.StrToUtf8(AValue);
 								}
 							}
+							// end
 
 							if (ALevel == 0)
 							{
@@ -374,6 +410,12 @@ namespace GedCom551
 							}
 							else
 							{
+								// temp hack
+								if (ATag == "CHAR") {
+									CharSet = base.GetCharacterSetVal(AValue);
+								}
+								// end
+
 								if (CurRecord != null)
 								{
 									if (CurTag == null || ALevel == 1)
@@ -392,29 +434,19 @@ namespace GedCom551
 							}
 						}
 					}
+
+					int new_progress = (int)Math.Min(100, (file_pos * 100.0F) / file_size);
+					if (Progress != new_progress)
+					{
+						Progress = new_progress;
+						if (ProgressEvent != null) ProgressEvent(this, EventArgs.Empty);
+					}
 				}
 			}
 			finally
 			{
 				this.FState = TGEDCOMState.osReady;
 			}
-		}
-
-		static TGEDCOMTree()
-		{
-			GEDCOMFactory f = GEDCOMFactory.GetInstance();
-
-			f.Register("DATE", new TagConstructor<TGEDCOMObject, TGEDCOMObject, string, string, TGEDCOMDateValue>(
-				(TGEDCOMObject arg1, TGEDCOMObject arg2, string arg3, string arg4) => new TGEDCOMDateValue(arg1, arg2, arg3, arg4))
-			);
-			f.Register("TIME", new TagConstructor<TGEDCOMObject, TGEDCOMObject, string, string, TGEDCOMTime>(
-				(TGEDCOMObject arg1, TGEDCOMObject arg2, string arg3, string arg4) => new TGEDCOMTime(arg1, arg2, arg3, arg4))
-			);
-			f.Register("ADDR", new TagConstructor<TGEDCOMObject, TGEDCOMObject, string, string, TGEDCOMAddress>(
-				(TGEDCOMObject arg1, TGEDCOMObject arg2, string arg3, string arg4) => new TGEDCOMAddress(arg1, arg2, arg3, arg4))
-			);
-
-			//TGEDCOMCustomTag tag = f.Create("TestTag", null, null, "test_name", "test_value");
 		}
 
 		public void SaveToStream(StreamWriter AStream)
@@ -448,32 +480,6 @@ namespace GedCom551
 			{
 				this.FRecords[i].Pack();
 			}
-		}
-
-		public TGEDCOMRecord XRefIndex_Find([In] string XRef)
-		{
-			int Index = this.FXRefIndex.IndexOf(XRef);
-			TGEDCOMRecord result;
-			if (Index >= 0)
-			{
-				result = (this.FXRefIndex.GetObject(Index) as TGEDCOMRecord);
-			}
-			else
-			{
-				result = null;
-			}
-			return result;
-		}
-
-		public string XRefIndex_NewXRef(TGEDCOMRecord Sender)
-		{
-			string sign = this.GetSignByRecord(Sender);
-			int I = 1;
-			while (this.FXRefIndex.IndexOf(sign + I.ToString()) >= 0)
-			{
-				I++;
-			}
-			return sign + I.ToString();
 		}
 
 		public TGEDCOMRecord FindUID([In] string UID)

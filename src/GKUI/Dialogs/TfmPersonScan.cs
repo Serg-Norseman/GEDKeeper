@@ -4,7 +4,11 @@ using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKSys;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI
 {
@@ -23,7 +27,7 @@ namespace GKUI
 
 		private static readonly LSID[] PersonLinks;
 		private TfmBase FBase;
-		private TStringList FSourcesList;
+		private StringList FSourcesList;
 		private TGEDCOMSex FSimpleTempSex = TGEDCOMSex.svMale;
 
 		public TfmBase Base
@@ -35,7 +39,7 @@ namespace GKUI
 		{
 			TPersonLink pl = TPersonLink.plPerson;
 			TPersonLink Result;
-			while (GKL.LSList[(int)PersonLinks[(int)pl] - 1] != aName)
+			while (LangMan.LSList[(int)PersonLinks[(int)pl] - 1] != aName)
 			{
 				pl++;
 				if (pl == (TPersonLink)7)
@@ -66,7 +70,7 @@ namespace GKUI
 			this.MemoNote.Text = "";
 
 			this.FSimpleTempSex = TGEDCOMSex.svMale;
-			this.btnMale.Text = new string(GKL.LSList[66][0], 1);
+			this.btnMale.Text = new string(LangMan.LSList[66][0], 1);
 		}
 
 		private void InitSourceControls()
@@ -86,16 +90,16 @@ namespace GKUI
 		private void InitGrid(DataGridView dgv)
 		{
 			object[] linksList = new object[PersonLinks.Length];
-			for (int i = 0; i <= PersonLinks.Length - 1; i++) linksList[i] = GKL.GetLS(PersonLinks[i]);
+			for (int i = 0; i <= PersonLinks.Length - 1; i++) linksList[i] = LangMan.LS(PersonLinks[i]);
 
 			((System.ComponentModel.ISupportInitialize)(dgv)).BeginInit();
 			dgv.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-			                     	AddComboColumn("FLink", GKL.GetLS(LSID.LSID_Join), linksList),
-			                     	AddTextColumn("FName", GKL.GetLS(LSID.LSID_Name)),
-			                     	AddTextColumn("FPatronymic", GKL.GetLS(LSID.LSID_Patronymic)),
-			                     	AddTextColumn("FSurname", GKL.GetLS(LSID.LSID_Surname)),
-			                     	AddTextColumn("FAge", GKL.GetLS(LSID.LSID_Age)),
-			                     	AddTextColumn("FComment", GKL.GetLS(LSID.LSID_Comment))});
+			                     	AddComboColumn("FLink", LangMan.LS(LSID.LSID_Join), linksList),
+			                     	AddTextColumn("FName", LangMan.LS(LSID.LSID_Name)),
+			                     	AddTextColumn("FPatronymic", LangMan.LS(LSID.LSID_Patronymic)),
+			                     	AddTextColumn("FSurname", LangMan.LS(LSID.LSID_Surname)),
+			                     	AddTextColumn("FAge", LangMan.LS(LSID.LSID_Age)),
+			                     	AddTextColumn("FComment", LangMan.LS(LSID.LSID_Comment))});
 			((System.ComponentModel.ISupportInitialize)(dgv)).EndInit();
 		}
 
@@ -105,7 +109,7 @@ namespace GKUI
 			string[] tokens = tmp.Split(' ');
 			if (tokens.Length < 3)
 			{
-				SysUtils.ShowError(GKL.LSList[506]);
+				TGenEngine.ShowError(LangMan.LSList[506]);
 			}
 			else
 			{
@@ -135,7 +139,7 @@ namespace GKUI
 			string src_page = this.edPage.Text;
 			if (!SysUtils.IsDigits(this.edSourceYear.Text))
 			{
-				SysUtils.ShowError(GKL.LSList[508]);
+				TGenEngine.ShowError(LangMan.LSList[508]);
 			}
 			else
 			{
@@ -228,7 +232,7 @@ namespace GKUI
 								case TPersonLink.plGodparent:
 									{
 										_ParseSource_CheckMain(iMain);
-										Base.Engine.AddAssociation(iMain, GKL.GetLS(LSID.LSID_PLGodparent), iRec);
+										Base.Engine.AddAssociation(iMain, LangMan.LS(LSID.LSID_PLGodparent), iRec);
 									}
 									break;
 
@@ -303,7 +307,7 @@ namespace GKUI
 									"Брак"});
 
 			this.FBase = aBase;
-			this.FSourcesList = new TStringList();
+			this.FSourcesList = new StringList();
 
 			this.InitGrid(dataGridView1);
 			this.InitSimpleControls();
@@ -311,7 +315,7 @@ namespace GKUI
 
 			for (TfmPersonScan.TPersonLink pl = TfmPersonScan.TPersonLink.plPerson; pl <= TfmPersonScan.TPersonLink.plChild; pl++)
 			{
-				this.cbPersonLink.Items.Add(GKL.LSList[(int)TfmPersonScan.PersonLinks[(int)pl] - 1]);
+				this.cbPersonLink.Items.Add(LangMan.LSList[(int)TfmPersonScan.PersonLinks[(int)pl] - 1]);
 			}
 
 			this.SetLang();
@@ -319,32 +323,32 @@ namespace GKUI
 
 		public void SetLang()
 		{
-			this.btnParse.Text = GKL.LSList[101];
-			this.btnClose.Text = GKL.LSList[99];
-			this.Text = GKL.LSList[22];
-			this.tsSimpleInput.Text = GKL.LSList[485];
-			this.btnMale.Text = new string(GKL.LSList[66][0], 1);
-			//this.btnFemale.Text = new string(GKL.LSList[67][0], 1);
-			this.Label1.Text = GKL.LSList[301];
-			this.CheckBirth.Text = GKL.LSList[321];
-			this.Label3.Text = GKL.LSList[122];
-			this.Label5.Text = GKL.LSList[302];
-			this.CheckDeath.Text = GKL.LSList[332];
-			this.Label6.Text = GKL.LSList[123];
-			this.Label7.Text = GKL.LSList[303];
-			this.Label2.Text = GKL.LSList[108];
-			this.tsSourceInput.Text = GKL.LSList[486];
-			this.rgSourceKind.Text = GKL.LSList[487];
-			this.Label4.Text = GKL.LSList[109];
-			this.Label8.Text = GKL.LSList[110];
-			this.Label9.Text = GKL.LSList[490];
-			this.Label10.Text = GKL.LSList[491];
-			this.gbMetrics.Text = GKL.LSList[489];
-			this.Label11.Text = GKL.LSList[492];
-			this.Label12.Text = GKL.LSList[493];
+			this.btnParse.Text = LangMan.LSList[101];
+			this.btnClose.Text = LangMan.LSList[99];
+			this.Text = LangMan.LSList[22];
+			this.tsSimpleInput.Text = LangMan.LSList[485];
+			this.btnMale.Text = new string(LangMan.LSList[66][0], 1);
+			//this.btnFemale.Text = new string(LangMan.LSList[67][0], 1);
+			this.Label1.Text = LangMan.LSList[301];
+			this.CheckBirth.Text = LangMan.LSList[321];
+			this.Label3.Text = LangMan.LSList[122];
+			this.Label5.Text = LangMan.LSList[302];
+			this.CheckDeath.Text = LangMan.LSList[332];
+			this.Label6.Text = LangMan.LSList[123];
+			this.Label7.Text = LangMan.LSList[303];
+			this.Label2.Text = LangMan.LSList[108];
+			this.tsSourceInput.Text = LangMan.LSList[486];
+			this.rgSourceKind.Text = LangMan.LSList[487];
+			this.Label4.Text = LangMan.LSList[109];
+			this.Label8.Text = LangMan.LSList[110];
+			this.Label9.Text = LangMan.LSList[490];
+			this.Label10.Text = LangMan.LSList[491];
+			this.gbMetrics.Text = LangMan.LSList[489];
+			this.Label11.Text = LangMan.LSList[492];
+			this.Label12.Text = LangMan.LSList[493];
 			
-			radioButton1.Text = GKL.GetLS(LSID.LSID_SK_Rev);
-			radioButton2.Text = GKL.GetLS(LSID.LSID_SK_Met);
+			radioButton1.Text = LangMan.LS(LSID.LSID_SK_Rev);
+			radioButton2.Text = LangMan.LS(LSID.LSID_SK_Met);
 		}
 
 		static TfmPersonScan()
@@ -396,7 +400,7 @@ namespace GKUI
 			bool Result = aMain != null;
 			if (!Result)
 			{
-				throw new Exception(GKL.LSList[507]);
+				throw new Exception(LangMan.LSList[507]);
 			}
 			return Result;
 		}
@@ -405,11 +409,11 @@ namespace GKUI
 		{
 			switch (FSimpleTempSex) {
 				case TGEDCOMSex.svMale:
-					this.btnMale.Text = new string(GKL.LSList[67][0], 1);
+					this.btnMale.Text = new string(LangMan.LSList[67][0], 1);
 					FSimpleTempSex = TGEDCOMSex.svFemale;
 					break;
 				case TGEDCOMSex.svFemale:
-					this.btnMale.Text = new string(GKL.LSList[66][0], 1);
+					this.btnMale.Text = new string(LangMan.LSList[66][0], 1);
 					FSimpleTempSex = TGEDCOMSex.svMale;
 					break;
 			}

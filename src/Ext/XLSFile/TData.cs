@@ -1,6 +1,6 @@
 using System;
 
-using GKCore.Sys;
+using GKSys;
 
 namespace XLSFile
 {
@@ -11,7 +11,7 @@ namespace XLSFile
 
 		public void Free()
 		{
-			TObjectHelper.Free(this);
+			SysUtils.Free(this);
 		}
 
 		public TData()

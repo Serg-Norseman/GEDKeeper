@@ -4,8 +4,12 @@ using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKSys;
 using GKUI.Controls;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI
 {
@@ -18,7 +22,7 @@ namespace GKUI
 
 			public void Free()
 			{
-				TObjectHelper.Free(this);
+				SysUtils.Free(this);
 			}
 		}
 
@@ -39,15 +43,15 @@ namespace GKUI
 			{
 				if (!this.Disposed_)
 				{
-					this.PlaceRefs.Free();
-					this.Points.Free();
+					this.PlaceRefs.Dispose();
+					this.Points.Dispose();
 					this.Disposed_ = true;
 				}
 			}
 
 			public void Free()
 			{
-				TObjectHelper.Free(this);
+				SysUtils.Free(this);
 			}
 		}
 
@@ -62,13 +66,13 @@ namespace GKUI
 		{
 			this.ComboPersons.BeginUpdate();
 			this.TreePlaces.BeginUpdate();
-			TfmProgress.ProgressInit(this.FTree.RecordsCount, GKL.LSList[386]);
+			TfmProgress.ProgressInit(this.FTree.RecordsCount, LangMan.LSList[386]);
 			try
 			{
 				this.FPlaces.Clear();
 				this.ComboPersons.Items.Clear();
 				this.ComboPersons.Sorted = false;
-				this.ComboPersons.Items.Add(new TComboItem(GKL.LSList[387], null));
+				this.ComboPersons.Items.Add(new TComboItem(LangMan.LSList[387], null));
 
 				int num = this.FTree.RecordsCount - 1;
 				for (int i = 0; i <= num; i++) {
@@ -182,39 +186,25 @@ namespace GKUI
 			this.FMapPoints.Clear();
 
 			int num = this.FPlaces.Count - 1;
-			int i = 0;
-			if (num >= i)
+			for (int i = 0; i <= num; i++)
 			{
-				num++;
-				do
+				TfmMaps.TPlace place = this.FPlaces[i] as TfmMaps.TPlace;
+				if (place.Points.Count >= 1)
 				{
-					TfmMaps.TPlace place = this.FPlaces[i] as TfmMaps.TPlace;
-					if (place.Points.Count >= 1)
+					int num2 = place.PlaceRefs.Count - 1;
+					for (int j = 0; j <= num2; j++)
 					{
-						int num2 = place.PlaceRefs.Count - 1;
-						int j = 0;
-						if (num2 >= j)
+						TGEDCOMCustomEvent @ref = (place.PlaceRefs[j] as TfmMaps.TPlaceRef).Ref;
+						if ((ind != null && object.Equals(@ref.Parent, ind)) || (condBirth && @ref.Name == "BIRT") || (condDeath && @ref.Name == "DEAT") || (condResidence && @ref.Name == "RESI"))
 						{
-							num2++;
-							do
-							{
-								TGEDCOMCustomEvent @ref = (place.PlaceRefs[j] as TfmMaps.TPlaceRef).Ref;
-								if ((ind != null && object.Equals(@ref.Parent, ind)) || (condBirth && @ref.Name == "BIRT") || (condDeath && @ref.Name == "DEAT") || (condResidence && @ref.Name == "RESI"))
-								{
-									TfmMaps._btnSelectPlaces_Click_CopyPoint(this, place.Points[0] as TMapBrowser.TGMapPoint, place.PlaceRefs[j] as TfmMaps.TPlaceRef);
-								}
-								j++;
-							}
-							while (j != num2);
+							this.CopyPoint(place.Points[0] as TMapBrowser.TGMapPoint, place.PlaceRefs[j] as TfmMaps.TPlaceRef);
 						}
 					}
-					i++;
 				}
-				while (i != num);
 			}
 			if (ind != null)
 			{
-				TfmMaps._btnSelectPlaces_Click_SortPointsByDate(this);
+				this.SortPointsByDate();
 			}
 			this.PreparePointsList(this.FMapPoints, ind != null);
 		}
@@ -249,23 +239,23 @@ namespace GKUI
 			this.Panel1.Controls.Add(this.FMapBrowser);
 			this.FMapPoints = new TObjectList(true);
 			this.FPlaces = new TObjectList(true);
-			this.FBaseRoot = this.TreePlaces.Nodes.Add(GKL.LSList[62]);
+			this.FBaseRoot = this.TreePlaces.Nodes.Add(LangMan.LSList[62]);
 			this.radTotal.Checked = true;
 			this.SetLang();
 		}
 
 		public void SetLang()
 		{
-			this.Text = GKL.LSList[28];
-			this.tsPlaces.Text = GKL.LSList[62];
-			this.GroupBox2.Text = GKL.LSList[388];
-			this.radTotal.Text = GKL.LSList[389];
-			this.chkBirth.Text = GKL.LSList[390];
-			this.chkDeath.Text = GKL.LSList[391];
-			this.chkResidence.Text = GKL.LSList[392];
-			this.radSelected.Text = GKL.LSList[393];
-			this.btnSaveImage.Text = GKL.LSList[394];
-			this.btnSelectPlaces.Text = GKL.LSList[173];
+			this.Text = LangMan.LSList[28];
+			this.tsPlaces.Text = LangMan.LSList[62];
+			this.GroupBox2.Text = LangMan.LSList[388];
+			this.radTotal.Text = LangMan.LSList[389];
+			this.chkBirth.Text = LangMan.LSList[390];
+			this.chkDeath.Text = LangMan.LSList[391];
+			this.chkResidence.Text = LangMan.LSList[392];
+			this.radSelected.Text = LangMan.LSList[393];
+			this.btnSaveImage.Text = LangMan.LSList[394];
+			this.btnSelectPlaces.Text = LangMan.LSList[173];
 		}
 
 		private static TreeNode _PlacesLoad_FindTreeNode([In] TfmMaps Self, string aPlace)
@@ -331,18 +321,18 @@ namespace GKUI
 			}
 
 			TfmMaps.TPlaceRef pRef = new TfmMaps.TPlaceRef();
-			pRef.DateTime = TGenEngine.GEDCOMDateToDate(aRef.Detail.Date.Value);
+			pRef.DateTime = TGenEngine.GEDCOMDateToDate(aRef.Detail.Date);
 			pRef.Ref = aRef;
 			place.PlaceRefs.Add(pRef);
 		}
 
-		private static void _btnSelectPlaces_Click_CopyPoint([In] TfmMaps Self, TMapBrowser.TGMapPoint aPt, TfmMaps.TPlaceRef aRef)
+		private void CopyPoint(TMapBrowser.TGMapPoint aPt, TfmMaps.TPlaceRef aRef)
 		{
 			TMapBrowser.TGMapPoint pt;
-			int num = Self.FMapPoints.Count - 1;
+			int num = this.FMapPoints.Count - 1;
 			for (int i = 0; i <= num; i++)
 			{
-				pt = (Self.FMapPoints[i] as TMapBrowser.TGMapPoint);
+				pt = (this.FMapPoints[i] as TMapBrowser.TGMapPoint);
 				if (pt.Hint == aPt.Hint)
 				{
 					return;
@@ -353,39 +343,24 @@ namespace GKUI
 			pt.Longitude = aPt.Longitude;
 			pt.Hint = aPt.Hint;
 			pt.Date = aRef.DateTime;
-			Self.FMapPoints.Add(pt);
+			this.FMapPoints.Add(pt);
 		}
 
-		private static void _btnSelectPlaces_Click_SortPointsByDate([In] TfmMaps Self)
+		private void SortPointsByDate()
 		{
-			int num = Self.FMapPoints.Count - 1;
-			int i = 0;
-			if (num >= i)
+			int num = this.FMapPoints.Count - 1;
+			for (int i = 0; i <= num; i++)
 			{
-				num++;
-				do
+				int num2 = this.FMapPoints.Count - 1;
+				for (int j = i + 1; j <= num2; j++)
 				{
-					int arg_2D_0 = i + 1;
-					int num2 = Self.FMapPoints.Count - 1;
-					int j = arg_2D_0;
-					if (num2 >= j)
+					TMapBrowser.TGMapPoint pt = this.FMapPoints[i] as TMapBrowser.TGMapPoint;
+					TMapBrowser.TGMapPoint pt2 = this.FMapPoints[j] as TMapBrowser.TGMapPoint;
+					if (pt.Date > pt2.Date)
 					{
-						num2++;
-						do
-						{
-							TMapBrowser.TGMapPoint pt = Self.FMapPoints[i] as TMapBrowser.TGMapPoint;
-							TMapBrowser.TGMapPoint pt2 = Self.FMapPoints[j] as TMapBrowser.TGMapPoint;
-							if (pt.Date > pt2.Date)
-							{
-								Self.FMapPoints.Exchange(i, j);
-							}
-							j++;
-						}
-						while (j != num2);
+						this.FMapPoints.Exchange(i, j);
 					}
-					i++;
 				}
-				while (i != num);
 			}
 		}
 	}

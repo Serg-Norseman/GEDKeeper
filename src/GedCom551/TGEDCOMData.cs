@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
 
 namespace GedCom551
 {
@@ -37,10 +37,10 @@ namespace GedCom551
 			}
 		}*/
 
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
-			base.SetLists(TEnumSet.Create(new Enum[]
+			base.SetLists(EnumSet.Create(new Enum[]
 			{
 				TGEDCOMSubList.stNotes
 			}));
@@ -60,7 +60,7 @@ namespace GedCom551
 			}
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, Type AClass)
+		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 			if (ATag == "EVEN")
@@ -69,7 +69,7 @@ namespace GedCom551
 			}
 			else
 			{
-				Result = base.AddTag(ATag, AValue, AClass);
+				Result = base.AddTag(ATag, AValue, ATagConstructor);
 			}
 			return Result;
 		}
@@ -85,14 +85,19 @@ namespace GedCom551
 			return base.IsEmpty() && this._Events.Count == 0;
 		}
 
-		public override void ResetOwner(TGEDCOMObject AOwner)
+		public override void ResetOwner(TGEDCOMTree AOwner)
 		{
 			base.ResetOwner(AOwner);
 			this._Events.ResetOwner(AOwner);
 		}
 
-		public TGEDCOMData(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMData(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
+		}
+
+		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+		{
+			return new TGEDCOMData(AOwner, AParent, AName, AValue);
 		}
 	}
 }

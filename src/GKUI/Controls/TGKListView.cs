@@ -2,7 +2,11 @@ using System;
 using System.Collections;
 using System.Windows.Forms;
 
-using GKCore.Sys;
+using GKSys;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI.Controls
 {
@@ -35,24 +39,26 @@ namespace GKUI.Controls
 
 			int IComparer.Compare(object x, object y)
 			{
-				ListViewItem item = x as ListViewItem;
-				ListViewItem item2 = y as ListViewItem;
-				int comp_res = SysUtils.agCompare(item.SubItems[this.FSortColumn].Text, item2.SubItems[this.FSortColumn].Text);
-				int Result;
-				if (this.FSortOrder == SortOrder.Ascending) {
-					Result = comp_res;
-				} else {
-					if (this.FSortOrder == SortOrder.Descending) {
+				int Result = 0;
+
+				if (this.FSortOrder != SortOrder.None) {
+					ListViewItem item = x as ListViewItem;
+					ListViewItem item2 = y as ListViewItem;
+
+					int comp_res = SysUtils.agCompare(item.SubItems[this.FSortColumn].Text, item2.SubItems[this.FSortColumn].Text);
+					if (this.FSortOrder == SortOrder.Ascending) {
+						Result = comp_res;
+					} else if (this.FSortOrder == SortOrder.Descending) {
 						Result = -comp_res;
-					} else {
-						Result = 0;
 					}
 				}
+
 				return Result;
 			}
 		}
 
 		private TListViewColumnSorter lvwColumnSorter;
+		private SortOrder old_SortOrder = SortOrder.None;
 
 		public int SortColumn
 		{
@@ -72,6 +78,30 @@ namespace GKUI.Controls
 		{
 			base.ColumnClick -= new ColumnClickEventHandler(this.lvColumnClick);
 		}
+
+		public void SwitchSorter()
+		{
+			if (old_SortOrder == SortOrder.None) {
+				old_SortOrder = this.lvwColumnSorter.Order;
+				this.lvwColumnSorter.Order = SortOrder.None;
+			} else {
+				this.lvwColumnSorter.Order = old_SortOrder;
+				old_SortOrder = SortOrder.None;
+				base.Sort();
+			}
+		}
+
+		/*public override void BeginUpdate()
+		{
+			base.BeginUpdate();
+			this.SwitchSorter();
+		}
+
+		public override void EndUpdate()
+		{
+			this.SwitchSorter();
+			base.EndUpdate();
+		}*/
 
 		private void lvColumnClick(object sender, ColumnClickEventArgs e)
 		{

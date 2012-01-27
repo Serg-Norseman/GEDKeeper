@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
 
 namespace GedCom551
 {
@@ -20,24 +20,24 @@ namespace GedCom551
 
 		public TResearchPriority Priority
 		{
-			get { return this.GetPriority(); }
-			set { this.SetPriority(value); }
+			get { return GetPriorityVal(base.GetTagStringValue("_PRIORITY").Trim().ToLower()); }
+			set { base.SetTagStringValue("_PRIORITY", GetPriorityStr(value)); }
 		}
 
 		public TResearchStatus Status
 		{
-			get { return this.GetStatus(); }
-			set { this.SetStatus(value); }
+			get { return GetStatusVal(base.GetTagStringValue("_STATUS").Trim().ToLower()); }
+			set { base.SetTagStringValue("_STATUS", GetStatusStr(value)); }
 		}
 
 		public TGEDCOMDateExact StartDate
 		{
-			get { return this.GetStartDate(); }
+			get { return base.TagClass("_STARTDATE", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact; }
 		}
 
 		public TGEDCOMDateExact StopDate
 		{
-			get { return this.GetStopDate(); }
+			get { return base.TagClass("_STOPDATE", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact; }
 		}
 
 		public int Percent
@@ -61,116 +61,10 @@ namespace GedCom551
 			get { return this._Groups; }
 		}
 
-		private TResearchPriority GetPriority()
-		{
-			string S = base.GetTagStringValue("_PRIORITY").Trim().ToLower();
-			return StrToPriority(S);
-		}
-
-		private void SetPriority([In] TResearchPriority Value)
-		{
-			base.SetTagStringValue("_PRIORITY", PriorityToStr(Value));
-		}
-
-		private TResearchStatus GetStatus()
-		{
-			string S = base.GetTagStringValue("_STATUS").Trim().ToLower();
-			TResearchStatus Result;
-			if (S == "inprogress")
-			{
-				Result = TResearchStatus.rsInProgress;
-			}
-			else
-			{
-				if (S == "onhold")
-				{
-					Result = TResearchStatus.rsOnHold;
-				}
-				else
-				{
-					if (S == "problems")
-					{
-						Result = TResearchStatus.rsProblems;
-					}
-					else
-					{
-						if (S == "completed")
-						{
-							Result = TResearchStatus.rsCompleted;
-						}
-						else
-						{
-							if (S == "withdrawn")
-							{
-								Result = TResearchStatus.rsWithdrawn;
-							}
-							else
-							{
-								Result = TResearchStatus.rsDefined;
-							}
-						}
-					}
-				}
-			}
-			return Result;
-		}
-
-		private void SetStatus([In] TResearchStatus Value)
-		{
-			string S = "";
-			switch (Value)
-			{
-				case TResearchStatus.rsDefined:
-				{
-					S = "defined";
-					break;
-				}
-				case TResearchStatus.rsInProgress:
-				{
-					S = "inprogress";
-					break;
-				}
-				case TResearchStatus.rsOnHold:
-				{
-					S = "onhold";
-					break;
-				}
-				case TResearchStatus.rsProblems:
-				{
-					S = "problems";
-					break;
-				}
-				case TResearchStatus.rsCompleted:
-				{
-					S = "completed";
-					break;
-				}
-				case TResearchStatus.rsWithdrawn:
-				{
-					S = "withdrawn";
-					break;
-				}
-			}
-			base.SetTagStringValue("_STATUS", S);
-		}
-
-		private TGEDCOMDateExact GetStartDate()
-		{
-			return base.TagClass("_STARTDATE", typeof(TGEDCOMDateExact)) as TGEDCOMDateExact;
-		}
-
-		private TGEDCOMDateExact GetStopDate()
-		{
-			return base.TagClass("_STOPDATE", typeof(TGEDCOMDateExact)) as TGEDCOMDateExact;
-		}
-
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
-			base.SetLists(TEnumSet.Create(new Enum[]
-			{
-				TGEDCOMSubList.stNotes
-			}));
+			base.SetLists(EnumSet.Create(new Enum[] { TGEDCOMSubList.stNotes }));
 			this.FRecordType = TGEDCOMRecordType.rtResearch;
 			this.FName = "_RESEARCH";
 
@@ -192,7 +86,7 @@ namespace GedCom551
 			}
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, Type AClass)
+		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 			if (ATag == "NAME")
@@ -203,7 +97,7 @@ namespace GedCom551
 			{
 				if (ATag == "_STARTDATE" || ATag == "_STOPDATE")
 				{
-					Result = base.AddTag(ATag, AValue, typeof(TGEDCOMDateExact));
+					Result = base.AddTag(ATag, AValue, TGEDCOMDateExact.Create);
 				}
 				else
 				{
@@ -225,7 +119,7 @@ namespace GedCom551
 							}
 							else
 							{
-								Result = base.AddTag(ATag, AValue, AClass);
+								Result = base.AddTag(ATag, AValue, ATagConstructor);
 							}
 						}
 					}
@@ -257,7 +151,7 @@ namespace GedCom551
 			this._Groups.ReplaceXRefs(aMap);
 		}
 
-		public override void ResetOwner(TGEDCOMObject AOwner)
+		public override void ResetOwner(TGEDCOMTree AOwner)
 		{
 			base.ResetOwner(AOwner);
 
@@ -320,8 +214,13 @@ namespace GedCom551
 			return Result;
 		}
 
-		public TGEDCOMResearchRecord(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMResearchRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
+		}
+
+		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+		{
+			return new TGEDCOMResearchRecord(AOwner, AParent, AName, AValue);
 		}
 	}
 }

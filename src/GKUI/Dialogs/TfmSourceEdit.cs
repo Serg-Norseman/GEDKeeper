@@ -4,9 +4,13 @@ using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKSys;
 using GKUI.Controls;
 using GKUI.Lists;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI
 {
@@ -101,7 +105,7 @@ namespace GKUI
 							else
 							{
 								TGEDCOMRepositoryCitation cit = ItemData as TGEDCOMRepositoryCitation;
-								if (cit != null && SysUtils.ShowQuestion(GKL.LSList[145]) != DialogResult.No)
+								if (cit != null && TGenEngine.ShowQuestion(LangMan.LSList[145]) != DialogResult.No)
 								{
 									this.FSourceRecord.RepositoryCitations.DeleteObject(cit);
 									this.ControlsRefresh();
@@ -151,7 +155,7 @@ namespace GKUI
 
 		private void EditShortTitle_TextChanged(object sender, EventArgs e)
 		{
-			this.Text = GKL.LSList[109] + " \"" + this.EditShortTitle.Text + "\"";
+			this.Text = LangMan.LSList[109] + " \"" + this.EditShortTitle.Text + "\"";
 		}
 
 		public TfmSourceEdit(TfmBase aBase)
@@ -169,25 +173,25 @@ namespace GKUI
 
 			this.FRepositoriesList = new TSheetList(this.SheetRepositories);
 			this.FRepositoriesList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
-			this.FRepositoriesList.Buttons = TEnumSet.Create(new Enum[]
+			this.FRepositoriesList.Buttons = EnumSet.Create(new Enum[]
 			{
 				TSheetList.TListButton.lbAdd, 
 				TSheetList.TListButton.lbEdit, 
 				TSheetList.TListButton.lbDelete, 
 				TSheetList.TListButton.lbJump
 			});
-			this.FRepositoriesList.List.AddListColumn(GKL.LSList[134], 300, false);
-			this.btnAccept.Text = GKL.LSList[97];
-			this.btnCancel.Text = GKL.LSList[98];
-			this.Label1.Text = GKL.LSList[141];
-			this.Label3.Text = GKL.LSList[142];
-			this.Label2.Text = GKL.LSList[125];
-			this.Label4.Text = GKL.LSList[143];
-			this.SheetCommon.Text = GKL.LSList[144];
-			this.SheetText.Text = GKL.LSList[140];
-			this.SheetRepositories.Text = GKL.LSList[57];
-			this.SheetNotes.Text = GKL.LSList[54];
-			this.SheetMultimedia.Text = GKL.LSList[55];
+			this.FRepositoriesList.List.AddListColumn(LangMan.LSList[134], 300, false);
+			this.btnAccept.Text = LangMan.LSList[97];
+			this.btnCancel.Text = LangMan.LSList[98];
+			this.Label1.Text = LangMan.LSList[141];
+			this.Label3.Text = LangMan.LSList[142];
+			this.Label2.Text = LangMan.LSList[125];
+			this.Label4.Text = LangMan.LSList[143];
+			this.SheetCommon.Text = LangMan.LSList[144];
+			this.SheetText.Text = LangMan.LSList[140];
+			this.SheetRepositories.Text = LangMan.LSList[57];
+			this.SheetNotes.Text = LangMan.LSList[54];
+			this.SheetMultimedia.Text = LangMan.LSList[55];
 		}
 	}
 }

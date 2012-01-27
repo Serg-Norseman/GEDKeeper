@@ -6,8 +6,13 @@ using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKCore.IO;
+using GKSys;
 using GKUI.Controls;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI
 {
@@ -19,14 +24,16 @@ namespace GKUI
 			cdPersonSexless,
 			cdLiveYearsInvalid,
 			cdStrangeSpouse,
-			cdStrangeParent
+			cdStrangeParent,
+			cdEmptyFamily
 		}
 
 		private enum TCheckSolve : byte
 		{
 			csSkip,
 			csSetIsDead,
-			csDefineSex
+			csDefineSex,
+			csRemove
 		}
 
 		private class TCheckObj
@@ -67,17 +74,21 @@ namespace GKUI
 
 			private string GetRecName()
 			{
-				string Result = "";
-				if (this.FRec is TGEDCOMIndividualRecord)
-				{
-					Result = TGenEngine.GetNameStr(this.FRec as TGEDCOMIndividualRecord, true, false);
+				string Result = "[" + this.FRec.XRef + "] ";
+				switch (this.FRec.RecordType) {
+					case TGEDCOMRecordType.rtIndividual:
+						Result = Result + TGenEngine.GetNameStr(this.FRec as TGEDCOMIndividualRecord, true, false);
+						break;
+					case TGEDCOMRecordType.rtFamily:
+						Result = Result + TGenEngine.GetFamilyStr(this.FRec as TGEDCOMFamilyRecord);
+						break;
 				}
 				return Result;
 			}
 
 			public void Free()
 			{
-				TObjectHelper.Free(this);
+				SysUtils.Free(this);
 			}
 		}
 
@@ -96,14 +107,14 @@ namespace GKUI
 			{
 				if (!this.Disposed_)
 				{
-					this.Facts.Free();
+					this.Facts.Dispose();
 					this.Disposed_ = true;
 				}
 			}
 
 			public void Free()
 			{
-				TObjectHelper.Free(this);
+				SysUtils.Free(this);
 			}
 		}
 
@@ -123,13 +134,13 @@ namespace GKUI
 		private TGEDCOMRecord FRec1;
 		private TGEDCOMRecord FRec2;
 		private TfmTreeTools.TMergeMode FRMMode;
-		private TStringList FRMSkip;
+		private StringList FRMSkip;
 		private int FRMIndex;
 
 		private TGKHyperView Memo1;
 		private TGKHyperView Memo2;
 
-		private TStringList FPlaces;
+		private StringList FPlaces;
 		private TGKListView ListPlaces;
 
 		private TObjectList FChecksList;
@@ -149,7 +160,7 @@ namespace GKUI
 			if (only_np)
 			{
 				string f, i, p;
-				TGenEngine.GetNameParts(iRec, out f, out i, out p);
+				iRec.aux_GetNameParts(out f, out i, out p);
 				aName = i + " " + p;
 				string text = aName;
 				Result = (((text != null) ? text.Length : 0) > 3);
@@ -532,11 +543,11 @@ namespace GKUI
 			this.ListCompare.Clear();
 			TGEDCOMTree tempTree = new TGEDCOMTree();
 			tempTree.LoadFromFile(aFileName);
-			TStringList fams = new TStringList();
-			TStringList names = new TStringList();
+			StringList fams = new StringList();
+			StringList names = new StringList();
 			try
 			{
-				this.ListCompare.AppendText(GKL.LSList[520] + "\r\n");
+				this.ListCompare.AppendText(LangMan.LSList[520] + "\r\n");
 
 				int i;
 				string fam, nam, pat;
@@ -548,7 +559,7 @@ namespace GKUI
 						TGEDCOMIndividualRecord iRec = (TGEDCOMIndividualRecord)aMainTree.GetRecord(i);
 						int idx = names.AddObject(TGenEngine.GetNameStr(iRec, true, false), new TList());
 						(names.GetObject(idx) as TList).Add(iRec);
-						TGenEngine.GetNameParts(iRec, out fam, out nam, out pat);
+						iRec.aux_GetNameParts(out fam, out nam, out pat);
 						fams.AddObject(TGenEngine.PrepareRusFamily(fam, iRec.Sex == TGEDCOMSex.svFemale), null);
 					}
 				}
@@ -565,7 +576,7 @@ namespace GKUI
 						{
 							(names.GetObject(idx) as TList).Add(iRec);
 						}
-						TGenEngine.GetNameParts(iRec, out fam, out nam, out pat);
+						iRec.aux_GetNameParts(out fam, out nam, out pat);
 						tm = TGenEngine.PrepareRusFamily(fam, iRec.Sex == TGEDCOMSex.svFemale);
 						idx = fams.IndexOf(tm);
 						if (idx >= 0)
@@ -585,14 +596,14 @@ namespace GKUI
 				{
 					if ((names.GetObject(i) as TList).Count == 1)
 					{
-						(names.GetObject(i) as TList).Free();
+						(names.GetObject(i) as TList).Dispose();
 						names.Delete(i);
 					}
 				}
 
 				if (fams.Count != 0)
 				{
-					this.ListCompare.AppendText(GKL.LSList[576] + "\r\n");
+					this.ListCompare.AppendText(LangMan.LSList[576] + "\r\n");
 
 					int num3 = fams.Count - 1;
 					for (i = 0; i <= num3; i++)
@@ -603,7 +614,7 @@ namespace GKUI
 
 				if (names.Count != 0)
 				{
-					this.ListCompare.AppendText(GKL.LSList[577] + "\r\n");
+					this.ListCompare.AppendText(LangMan.LSList[577] + "\r\n");
 
 					int num4 = names.Count - 1;
 					for (i = 0; i <= num4; i++)
@@ -632,7 +643,7 @@ namespace GKUI
 				int num6 = names.Count - 1;
 				for (int i = 0; i <= num6; i++)
 				{
-					TObjectHelper.Free(names.GetObject(i));
+					SysUtils.Free(names.GetObject(i));
 				}
 				names.Free();
 				fams.Free();
@@ -642,7 +653,7 @@ namespace GKUI
 
 		private void CheckGroups()
 		{
-			TfmProgress.ProgressInit(this.FTree.RecordsCount, GKL.LSList[521]);
+			TfmProgress.ProgressInit(this.FTree.RecordsCount, LangMan.LSList[521]);
 			TList prepared = new TList();
 			try
 			{
@@ -670,7 +681,7 @@ namespace GKUI
 							{
 								group.ToString(), 
 								" ", 
-								GKL.LSList[185].ToLower(), 
+								LangMan.LSList[185].ToLower(), 
 								" (", 
 								this.FSplitList.Count.ToString(), 
 								")"
@@ -708,7 +719,7 @@ namespace GKUI
 			finally
 			{
 				this.FSplitList.Clear();
-				prepared.Free();
+				prepared.Dispose();
 				TfmProgress.ProgressDone();
 			}
 		}
@@ -718,99 +729,118 @@ namespace GKUI
 			this.Base.CreateListView(this.Panel1, ref this.ListChecks);
 			this.ListChecks.CheckBoxes = true;
 			this.ListChecks.DoubleClick += new EventHandler(this.ListChecksDblClick);
-			this.ListChecks.AddListColumn(GKL.LSList[579], 400, false);
-			this.ListChecks.AddListColumn(GKL.LSList[580], 200, false);
-			this.ListChecks.AddListColumn(GKL.LSList[581], 200, false);
+			this.ListChecks.AddListColumn(LangMan.LSList[579], 400, false);
+			this.ListChecks.AddListColumn(LangMan.LSList[580], 200, false);
+			this.ListChecks.AddListColumn(LangMan.LSList[581], 200, false);
+		}
+
+		private void CheckIndividualRecord(TGEDCOMIndividualRecord iRec)
+		{
+			int iAge;
+			if (TGenEngine.GetIndividualEvent(iRec, "DEAT") == null)
+			{
+				string age = TGenEngine.GetAge(iRec, -1);
+				if (age != "" && age != "?")
+				{
+					iAge = int.Parse(age);
+					if (iAge >= 130)
+					{
+						TfmTreeTools.TCheckObj checkObj = new TfmTreeTools.TCheckObj();
+						checkObj.Rec = iRec;
+						checkObj.Diag = TfmTreeTools.TCheckDiag.cdPersonLonglived;
+						checkObj.Solve = TfmTreeTools.TCheckSolve.csSetIsDead;
+						checkObj.Comment = string.Format(LangMan.LSList[582], new object[] { age });
+						this.FChecksList.Add(checkObj);
+					}
+				}
+			}
+
+			TGEDCOMSex sex = iRec.Sex;
+			if (sex < TGEDCOMSex.svMale || sex >= TGEDCOMSex.svUndetermined)
+			{
+				TfmTreeTools.TCheckObj checkObj = new TfmTreeTools.TCheckObj();
+				checkObj.Rec = iRec;
+				checkObj.Diag = TfmTreeTools.TCheckDiag.cdPersonSexless;
+				checkObj.Solve = TfmTreeTools.TCheckSolve.csDefineSex;
+				checkObj.Comment = LangMan.LSList[583];
+				this.FChecksList.Add(checkObj);
+			}
+
+			bool yBC1, yBC2;
+			int y_birth = TGenEngine.GetIndependentYear(iRec, "BIRT", out yBC1);
+			int y_death = TGenEngine.GetIndependentYear(iRec, "DEAT", out yBC2);
+			int delta = (y_death - y_birth);
+			if (y_birth > -1 && y_death > -1 && delta < 0 && !yBC2)
+			{
+				TfmTreeTools.TCheckObj checkObj = new TfmTreeTools.TCheckObj();
+				checkObj.Rec = iRec;
+				checkObj.Diag = TfmTreeTools.TCheckDiag.cdLiveYearsInvalid;
+				checkObj.Solve = TfmTreeTools.TCheckSolve.csSkip;
+				checkObj.Comment = LangMan.LSList[584];
+				this.FChecksList.Add(checkObj);
+			}
+
+			iAge = TGenEngine.GetMarriageAge(iRec);
+			if (iAge > 0 && (iAge <= 13 || iAge >= 50))
+			{
+				TfmTreeTools.TCheckObj checkObj = new TfmTreeTools.TCheckObj();
+				checkObj.Rec = iRec;
+				checkObj.Diag = TfmTreeTools.TCheckDiag.cdStrangeSpouse;
+				checkObj.Solve = TfmTreeTools.TCheckSolve.csSkip;
+				checkObj.Comment = string.Format(LangMan.LSList[585], new object[] { iAge.ToString() });
+				this.FChecksList.Add(checkObj);
+			}
+
+			TGEDCOMIndividualRecord iDummy;
+			iAge = TGenEngine.GetFirstbornAge(iRec, out iDummy);
+			if (iAge > 0 && (iAge <= 13 || iAge >= 50))
+			{
+				TfmTreeTools.TCheckObj checkObj = new TfmTreeTools.TCheckObj();
+				checkObj.Rec = iRec;
+				checkObj.Diag = TfmTreeTools.TCheckDiag.cdStrangeParent;
+				checkObj.Solve = TfmTreeTools.TCheckSolve.csSkip;
+				checkObj.Comment = string.Format(LangMan.LSList[586], new object[] { iAge.ToString() });
+				this.FChecksList.Add(checkObj);
+			}
+		}
+
+		private void CheckFamilyRecord(TGEDCOMFamilyRecord fRec)
+		{
+			bool empty = (fRec.Notes.Count == 0 && fRec.SourceCitations.Count == 0 && fRec.MultimediaLinks.Count == 0 && fRec.UserReferences.Count == 0);
+			empty = empty && (fRec.FamilyEvents.Count == 0 && fRec.Childrens.Count == 0 && fRec.SpouseSealings.Count == 0);
+			empty = empty && (fRec.Husband.Value == null && fRec.Wife.Value == null);
+
+			if (empty)
+			{
+				TCheckObj checkObj = new TCheckObj();
+				checkObj.Rec = fRec;
+				checkObj.Diag = TfmTreeTools.TCheckDiag.cdEmptyFamily;
+				checkObj.Solve = TfmTreeTools.TCheckSolve.csRemove;
+				checkObj.Comment = LangMan.LS(LSID.LSID_EmptyFamily);
+				this.FChecksList.Add(checkObj);
+			}
 		}
 
 		private void CheckBase()
 		{
 			try
 			{
-				TfmProgress.ProgressInit(this.FTree.RecordsCount, GKL.LSList[517]);
+				TfmProgress.ProgressInit(this.FTree.RecordsCount, LangMan.LSList[517]);
 				this.FChecksList.Clear();
 
 				int num = this.FTree.RecordsCount - 1;
 				for (int i = 0; i <= num; i++)
 				{
 					TfmProgress.ProgressStep();
-					if (this.FTree.GetRecord(i) is TGEDCOMIndividualRecord)
-					{
-						TGEDCOMIndividualRecord iRec = (TGEDCOMIndividualRecord)this.FTree.GetRecord(i);
+					TGEDCOMRecord rec = this.FTree.GetRecord(i);
 
-						int iAge;
-						if (TGenEngine.GetIndividualEvent(iRec, "DEAT") == null)
-						{
-							string age = TGenEngine.GetAge(iRec, -1);
-							if (age != "" && age != "?")
-							{
-								iAge = int.Parse(age);
-								if (iAge >= 130)
-								{
-									TfmTreeTools.TCheckObj checkObj = new TfmTreeTools.TCheckObj();
-									checkObj.Rec = iRec;
-									checkObj.Diag = TfmTreeTools.TCheckDiag.cdPersonLonglived;
-									checkObj.Solve = TfmTreeTools.TCheckSolve.csSetIsDead;
-									checkObj.Comment = string.Format(GKL.LSList[582], new object[]
-									{
-										age
-									});
-									this.FChecksList.Add(checkObj);
-								}
-							}
-						}
-
-						TGEDCOMSex sex = iRec.Sex;
-						if (sex < TGEDCOMSex.svMale || sex >= TGEDCOMSex.svUndetermined)
-						{
-							TfmTreeTools.TCheckObj checkObj = new TfmTreeTools.TCheckObj();
-							checkObj.Rec = iRec;
-							checkObj.Diag = TfmTreeTools.TCheckDiag.cdPersonSexless;
-							checkObj.Solve = TfmTreeTools.TCheckSolve.csDefineSex;
-							checkObj.Comment = GKL.LSList[583];
-							this.FChecksList.Add(checkObj);
-						}
-
-						int y_birth = TGenEngine.GetIndependentYear(iRec, "BIRT");
-						int y_death = TGenEngine.GetIndependentYear(iRec, "DEAT");
-						if (y_birth > -1 && y_death > -1 && y_death < y_birth)
-						{
-							TfmTreeTools.TCheckObj checkObj = new TfmTreeTools.TCheckObj();
-							checkObj.Rec = iRec;
-							checkObj.Diag = TfmTreeTools.TCheckDiag.cdLiveYearsInvalid;
-							checkObj.Solve = TfmTreeTools.TCheckSolve.csSkip;
-							checkObj.Comment = GKL.LSList[584];
-							this.FChecksList.Add(checkObj);
-						}
-
-						iAge = TGenEngine.GetMarriageAge(iRec);
-						if (iAge > 0 && (iAge <= 13 || iAge >= 50))
-						{
-							TfmTreeTools.TCheckObj checkObj = new TfmTreeTools.TCheckObj();
-							checkObj.Rec = iRec;
-							checkObj.Diag = TfmTreeTools.TCheckDiag.cdStrangeSpouse;
-							checkObj.Solve = TfmTreeTools.TCheckSolve.csSkip;
-							checkObj.Comment = string.Format(GKL.LSList[585], new object[]
-							{
-								iAge.ToString()
-							});
-							this.FChecksList.Add(checkObj);
-						}
-
-						TGEDCOMIndividualRecord iDummy;
-						iAge = TGenEngine.GetFirstbornAge(iRec, out iDummy);
-						if (iAge > 0 && (iAge <= 13 || iAge >= 50))
-						{
-							TfmTreeTools.TCheckObj checkObj = new TfmTreeTools.TCheckObj();
-							checkObj.Rec = iRec;
-							checkObj.Diag = TfmTreeTools.TCheckDiag.cdStrangeParent;
-							checkObj.Solve = TfmTreeTools.TCheckSolve.csSkip;
-							checkObj.Comment = string.Format(GKL.LSList[586], new object[]
-							{
-								iAge.ToString()
-							});
-							this.FChecksList.Add(checkObj);
-						}
+					switch (rec.RecordType) {
+						case TGEDCOMRecordType.rtIndividual:
+							CheckIndividualRecord(rec as TGEDCOMIndividualRecord);
+							break;
+						case TGEDCOMRecordType.rtFamily:
+							CheckFamilyRecord(rec as TGEDCOMFamilyRecord);
+							break;
 					}
 				}
 				this.ListChecks.Items.Clear();
@@ -826,6 +856,48 @@ namespace GKUI
 			finally
 			{
 				TfmProgress.ProgressDone();
+			}
+		}
+
+		private void btnBaseRepair_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				int num = this.ListChecks.Items.Count - 1;
+				for (int i = 0; i <= num; i++)
+				{
+					TExtListItem item = this.ListChecks.Items[i] as TExtListItem;
+					TCheckObj checkObj = item.Data as TCheckObj;
+					if (item.Checked)
+					{
+						switch (checkObj.Diag) {
+							case TCheckDiag.cdPersonLonglived:
+							{
+								TGEDCOMIndividualRecord iRec = checkObj.Rec as TGEDCOMIndividualRecord;
+								TGenEngine.CreateEventEx(this.FTree, iRec, "DEAT", "", "");
+								this.Base.ChangeRecord(iRec);
+								break;
+							}
+							case TCheckDiag.cdPersonSexless:
+							{
+								TGEDCOMIndividualRecord iRec = checkObj.Rec as TGEDCOMIndividualRecord;
+								TfmSexCheck.CheckPersonSex(iRec, GKUI.TfmGEDKeeper.Instance.NamesTable);
+								this.Base.ChangeRecord(iRec);
+								break;
+							}
+							case TCheckDiag.cdEmptyFamily:
+							{
+								this.Base.DeleteRecord(checkObj.Rec, false);
+								break;
+							}
+						}
+					}
+				}
+			}
+			finally
+			{
+				this.Base.ListsRefresh(false);
+				this.CheckBase();
 			}
 		}
 
@@ -847,10 +919,10 @@ namespace GKUI
 		{
 			this.Base.CreateListView(this.Panel3, ref this.ListPatriarchs);
 			this.ListPatriarchs.DoubleClick += new EventHandler(this.ListPatriarchsDblClick);
-			this.ListPatriarchs.AddListColumn(GKL.LSList[92], 400, false);
-			this.ListPatriarchs.AddListColumn(GKL.LSList[321], 90, false);
-			this.ListPatriarchs.AddListColumn(GKL.LSList[587], 90, false);
-			this.ListPatriarchs.AddListColumn(GKL.LSList[588], 90, false);
+			this.ListPatriarchs.AddListColumn(LangMan.LSList[92], 400, false);
+			this.ListPatriarchs.AddListColumn(LangMan.LSList[321], 90, false);
+			this.ListPatriarchs.AddListColumn(LangMan.LSList[587], 90, false);
+			this.ListPatriarchs.AddListColumn(LangMan.LSList[588], 90, false);
 		}
 
 		private void ListPatriarchsDblClick(object sender, EventArgs e)
@@ -871,22 +943,22 @@ namespace GKUI
 		{
 			this.Base.CreateListView(this.Panel4, ref this.ListPlaces);
 			this.ListPlaces.DoubleClick += new EventHandler(this.ListPlacesDblClick);
-			this.ListPlaces.AddListColumn(GKL.LSList[204], 400, false);
-			this.ListPlaces.AddListColumn(GKL.LSList[589], 100, false);
+			this.ListPlaces.AddListColumn(LangMan.LSList[204], 400, false);
+			this.ListPlaces.AddListColumn(LangMan.LSList[589], 100, false);
 		}
 
 		private void PlacesClear()
 		{
 			for (int i = this.FPlaces.Count - 1; i >= 0; i--)
 			{
-				TObjectHelper.Free(this.FPlaces.GetObject(i));
+				SysUtils.Free(this.FPlaces.GetObject(i));
 			}
 			this.FPlaces.Clear();
 		}
 
 		private void CheckPlaces()
 		{
-			TfmProgress.ProgressInit(this.FTree.RecordsCount, GKL.LSList[590]);
+			TfmProgress.ProgressInit(this.FTree.RecordsCount, LangMan.LSList[590]);
 			this.ListPlaces.BeginUpdate();
 			try
 			{
@@ -945,9 +1017,9 @@ namespace GKUI
 				TfmTreeTools.TPlaceObj p_obj = item.Data as TfmTreeTools.TPlaceObj;
 				if (p_obj != null)
 				{
-					if (SysUtils.Pos("[*]", p_obj.Name) == 1)
+					if (p_obj.Name.IndexOf("[*]") == 0)
 					{
-						SysUtils.ShowMessage(GKL.LSList[591]);
+						TGenEngine.ShowMessage(LangMan.LSList[591]);
 					}
 					else
 					{
@@ -1007,7 +1079,7 @@ namespace GKUI
 					this.Base.DeleteIndividualRecord(obj as TGEDCOMIndividualRecord, false);
 				}
 			}
-			SysUtils.ShowMessage(GKL.LSList[578]);
+			TGenEngine.ShowMessage(LangMan.LSList[578]);
 			this.FSplitList.Clear();
 			this.UpdateSplitLists();
 			this.Base.ListsRefresh(false);
@@ -1052,7 +1124,7 @@ namespace GKUI
 				}
 				finally
 				{
-					TObjectHelper.Free(fs);
+					SysUtils.Free(fs);
 				}
 			}
 		}
@@ -1141,7 +1213,7 @@ namespace GKUI
 			if (this.OpenDialog2.ShowDialog() == DialogResult.OK)
 			{
 				this.edImportFile.Text = this.OpenDialog2.FileName;
-				TGKImporter imp = new TGKImporter(this.Base.Engine, this.ListBox1.Items);
+				Importer imp = new Importer(this.Base.Engine, this.ListBox1.Items);
 				try
 				{
 					imp.TreeImportEx(this.edImportFile.Text);
@@ -1166,43 +1238,6 @@ namespace GKUI
 					this.Base.SelectRecordByXRef(i_rec.XRef);
 					base.Close();
 				}
-			}
-		}
-
-		private void btnBaseRepair_Click(object sender, EventArgs e)
-		{
-			try
-			{
-				int num = this.ListChecks.Items.Count - 1;
-				for (int i = 0; i <= num; i++)
-				{
-					TExtListItem item = this.ListChecks.Items[i] as TExtListItem;
-					TCheckObj checkObj = item.Data as TCheckObj;
-					if (item.Checked)
-					{
-						switch (checkObj.Diag) {
-							case TCheckDiag.cdPersonLonglived:
-							{
-								TGEDCOMIndividualRecord iRec = checkObj.Rec as TGEDCOMIndividualRecord;
-								TGenEngine.CreateEventEx(this.FTree, iRec, "DEAT", "", "");
-								this.Base.ChangeRecord(iRec);
-								break;
-							}
-							case TCheckDiag.cdPersonSexless:
-							{
-								TGEDCOMIndividualRecord iRec = checkObj.Rec as TGEDCOMIndividualRecord;
-								TfmSexCheck.CheckPersonSex(iRec, GKUI.TfmGEDKeeper.Instance.NamesTable);
-								this.Base.ChangeRecord(iRec);
-								break;
-							}
-						}
-					}
-				}
-			}
-			finally
-			{
-				this.Base.ListsRefresh(false);
-				this.CheckBase();
 			}
 		}
 
@@ -1234,7 +1269,7 @@ namespace GKUI
 			}
 			finally
 			{
-				lst.Free();
+				lst.Dispose();
 				this.ListPatriarchs.EndUpdate();
 			}
 		}
@@ -1361,11 +1396,11 @@ namespace GKUI
 		{
 			if (Disposing)
 			{
-				this.FChecksList.Free();
+				this.FChecksList.Dispose();
 				this.PlacesClear();
 				this.FPlaces.Free();
 				this.FRMSkip.Free();
-				this.FSplitList.Free();
+				this.FSplitList.Dispose();
 			}
 			base.Dispose(Disposing);
 		}
@@ -1385,11 +1420,11 @@ namespace GKUI
 			this.Memo2.Location = new Point(344, 56);
 			this.Memo2.Size = new Size(329, 248);
 			this.SheetMerge.Controls.Add(this.Memo2);
-			this.FRMSkip = new TStringList();
+			this.FRMSkip = new StringList();
 			this.SetRec1(null);
 			this.SetRec2(null);
 			this.FRMMode = TfmTreeTools.TMergeMode.mmPerson;
-			this.FPlaces = new TStringList();
+			this.FPlaces = new StringList();
 			this.FPlaces.Sorted = true;
 			this.FChecksList = new TObjectList(true);
 			this.PrepareChecksList();
@@ -1400,57 +1435,57 @@ namespace GKUI
 
 		public void SetLang()
 		{
-			this.Text = GKL.GetLS(LSID.LSID_MITreeTools);
+			this.Text = LangMan.LS(LSID.LSID_MITreeTools);
 
-			this.SheetTreeCompare.Text = GKL.GetLS(LSID.LSID_ToolOp_1);
-			this.SheetTreeMerge.Text = GKL.GetLS(LSID.LSID_ToolOp_2);
-			this.SheetTreeSplit.Text = GKL.GetLS(LSID.LSID_ToolOp_3);
-			this.SheetRecMerge.Text = GKL.GetLS(LSID.LSID_ToolOp_4);
-			this.SheetTreeImport.Text = GKL.GetLS(LSID.LSID_ToolOp_5);
-			this.SheetFamilyGroups.Text = GKL.GetLS(LSID.LSID_ToolOp_6);
-			this.SheetTreeCheck.Text = GKL.GetLS(LSID.LSID_ToolOp_7);
-			this.SheetPatSearch.Text = GKL.GetLS(LSID.LSID_ToolOp_8);
-			this.SheetPlaceManage.Text = GKL.GetLS(LSID.LSID_ToolOp_9);
+			this.SheetTreeCompare.Text = LangMan.LS(LSID.LSID_ToolOp_1);
+			this.SheetTreeMerge.Text = LangMan.LS(LSID.LSID_ToolOp_2);
+			this.SheetTreeSplit.Text = LangMan.LS(LSID.LSID_ToolOp_3);
+			this.SheetRecMerge.Text = LangMan.LS(LSID.LSID_ToolOp_4);
+			this.SheetTreeImport.Text = LangMan.LS(LSID.LSID_ToolOp_5);
+			this.SheetFamilyGroups.Text = LangMan.LS(LSID.LSID_ToolOp_6);
+			this.SheetTreeCheck.Text = LangMan.LS(LSID.LSID_ToolOp_7);
+			this.SheetPatSearch.Text = LangMan.LS(LSID.LSID_ToolOp_8);
+			this.SheetPlaceManage.Text = LangMan.LS(LSID.LSID_ToolOp_9);
 			
 			//this.SheetMerge.Text
 			//this.SheetOptions.Text
 
-			this.btnClose.Text = GKL.LSList[99];
-			this.btnHelp.Text = GKL.LSList[5];
-			this.Label1.Text = GKL.LSList[0];
-			this.btnFileChoose.Text = GKL.LSList[100] + "...";
-			this.btnUpdateSelect.Text = GKL.LSList[100] + "...";
-			this.btnSelectAll.Text = GKL.LSList[557];
-			this.btnSelectFamily.Text = GKL.LSList[558];
-			this.btnSelectAncestors.Text = GKL.LSList[559];
-			this.btnSelectDescendants.Text = GKL.LSList[560];
-			this.btnDelete.Text = GKL.LSList[231];
-			this.btnSave.Text = GKL.LSList[9];
-			this.SheetMerge.Text = GKL.LSList[561];
-			this.SheetOptions.Text = GKL.LSList[39];
-			this.btnRec1Select.Text = GKL.LSList[100] + "...";
-			this.btnRec2Select.Text = GKL.LSList[100] + "...";
-			this.btnSearch.Text = GKL.LSList[562];
-			this.btnSkip.Text = GKL.LSList[563];
-			this.rgMode.Text = GKL.LSList[564];
-			this.RadioButton5.Text = GKL.LSList[52];
-			this.RadioButton6.Text = GKL.LSList[54];
-			this.RadioButton7.Text = GKL.LSList[53];
-			this.RadioButton8.Text = GKL.LSList[56];
-			this.GroupBox1.Text = GKL.LSList[565];
-			this.rbDirectMatching.Text = GKL.LSList[566];
-			this.rbIndistinctMatching.Text = GKL.LSList[567];
-			this.chkOnlyNP.Text = GKL.LSList[568];
-			this.chkBirthYear.Text = GKL.LSList[569];
-			this.Label5.Text = GKL.LSList[570];
-			this.Label6.Text = GKL.LSList[571];
-			this.Label3.Text = GKL.LSList[0];
-			this.btnImportFileChoose.Text = GKL.LSList[100] + "...";
-			this.btnBaseRepair.Text = GKL.LSList[572];
-			this.Label8.Text = GKL.LSList[573];
-			this.btnSetPatriarch.Text = GKL.LSList[574];
-			this.btnPatSearch.Text = GKL.LSList[175];
-			this.btnIntoList.Text = GKL.LSList[575];
+			this.btnClose.Text = LangMan.LSList[99];
+			this.btnHelp.Text = LangMan.LSList[5];
+			this.Label1.Text = LangMan.LSList[0];
+			this.btnFileChoose.Text = LangMan.LSList[100] + "...";
+			this.btnUpdateSelect.Text = LangMan.LSList[100] + "...";
+			this.btnSelectAll.Text = LangMan.LSList[557];
+			this.btnSelectFamily.Text = LangMan.LSList[558];
+			this.btnSelectAncestors.Text = LangMan.LSList[559];
+			this.btnSelectDescendants.Text = LangMan.LSList[560];
+			this.btnDelete.Text = LangMan.LSList[231];
+			this.btnSave.Text = LangMan.LSList[9];
+			this.SheetMerge.Text = LangMan.LSList[561];
+			this.SheetOptions.Text = LangMan.LSList[39];
+			this.btnRec1Select.Text = LangMan.LSList[100] + "...";
+			this.btnRec2Select.Text = LangMan.LSList[100] + "...";
+			this.btnSearch.Text = LangMan.LSList[562];
+			this.btnSkip.Text = LangMan.LSList[563];
+			this.rgMode.Text = LangMan.LSList[564];
+			this.RadioButton5.Text = LangMan.LSList[52];
+			this.RadioButton6.Text = LangMan.LSList[54];
+			this.RadioButton7.Text = LangMan.LSList[53];
+			this.RadioButton8.Text = LangMan.LSList[56];
+			this.GroupBox1.Text = LangMan.LSList[565];
+			this.rbDirectMatching.Text = LangMan.LSList[566];
+			this.rbIndistinctMatching.Text = LangMan.LSList[567];
+			this.chkOnlyNP.Text = LangMan.LSList[568];
+			this.chkBirthYear.Text = LangMan.LSList[569];
+			this.Label5.Text = LangMan.LSList[570];
+			this.Label6.Text = LangMan.LSList[571];
+			this.Label3.Text = LangMan.LSList[0];
+			this.btnImportFileChoose.Text = LangMan.LSList[100] + "...";
+			this.btnBaseRepair.Text = LangMan.LSList[572];
+			this.Label8.Text = LangMan.LSList[573];
+			this.btnSetPatriarch.Text = LangMan.LSList[574];
+			this.btnPatSearch.Text = LangMan.LSList[175];
+			this.btnIntoList.Text = LangMan.LSList[575];
 		}
 
 		static TfmTreeTools()

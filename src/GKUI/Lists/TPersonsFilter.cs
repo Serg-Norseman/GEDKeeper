@@ -3,6 +3,10 @@ using System;
 using GedCom551;
 using GKCore;
 
+/// <summary>
+/// Localization: clean
+/// </summary>
+
 namespace GKUI.Lists
 {
 	public sealed class TPersonsFilter : TFilter

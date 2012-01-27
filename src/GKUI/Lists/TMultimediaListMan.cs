@@ -4,6 +4,10 @@ using GedCom551;
 using GKCore;
 using GKUI.Controls;
 
+/// <summary>
+/// Localization: unknown
+/// </summary>
+
 namespace GKUI.Lists
 {
 	public sealed class TMultimediaListMan : TListManager
@@ -14,7 +18,7 @@ namespace GKUI.Lists
 		{
 			bool Result = false;
 			TGEDCOMFileReferenceWithTitle file_ref = this.FRec.FileReferences[0];
-			if (aFilter.List != TPersonsFilter.TListFilterMode.flSelector || aFilter.Name == "*" || TGenEngine.IsMatchesMask(file_ref.Title, aFilter.Name))
+			if (aFilter.List != TPersonsFilter.TListFilterMode.flSelector || aFilter.Name == "*" || IsMatchesMask(file_ref.Title, aFilter.Name))
 			{
 				Result = true;
 			}
@@ -35,7 +39,7 @@ namespace GKUI.Lists
 					result = file_ref.Title;
 					break;
 				case 2:
-					result = GKL.LSList[(int)TGenEngine.MediaTypes[(int)file_ref.MediaType] - 1];
+					result = LangMan.LSList[(int)TGenEngine.MediaTypes[(int)file_ref.MediaType] - 1];
 					break;
 				case 3:
 					result = file_ref.StringValue;
@@ -60,7 +64,7 @@ namespace GKUI.Lists
 			else
 			{
 				aItem.SubItems.Add(file_ref.Title);
-				aItem.SubItems.Add(GKL.LSList[(int)TGenEngine.MediaTypes[(int)file_ref.MediaType] - 1]);
+				aItem.SubItems.Add(LangMan.LSList[(int)TGenEngine.MediaTypes[(int)file_ref.MediaType] - 1]);
 				if (isMain)
 				{
 					aItem.SubItems.Add(file_ref.StringValue);
@@ -71,12 +75,12 @@ namespace GKUI.Lists
 		public override void UpdateColumns(TGKListView aList, bool isMain)
 		{
 			aList.AddListColumn("№", 50, false);
-			aList.AddListColumn(GKL.LSList[125], 150, false);
-			aList.AddListColumn(GKL.LSList[113], 85, false);
+			aList.AddListColumn(LangMan.LSList[125], 150, false);
+			aList.AddListColumn(LangMan.LSList[113], 85, false);
 			if (isMain)
 			{
-				aList.AddListColumn(GKL.LSList[147], 300, false);
-				aList.AddListColumn(GKL.LSList[317], 150, false);
+				aList.AddListColumn(LangMan.LSList[147], 300, false);
+				aList.AddListColumn(LangMan.LSList[317], 150, false);
 			}
 		}
 

@@ -13,7 +13,7 @@ namespace GedCom551
 			get { return this.FDetail; }
 		}
 
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
 			this.FDetail = new TGEDCOMEventDetail(base.Owner, this, "", "");
@@ -52,7 +52,7 @@ namespace GedCom551
 			this.FDetail.ReplaceXRefs(aMap);
 		}
 
-		public override void ResetOwner(TGEDCOMObject AOwner)
+		public override void ResetOwner(TGEDCOMTree AOwner)
 		{
 			base.ResetOwner(AOwner);
 			this.FDetail.ResetOwner(AOwner);
@@ -64,7 +64,7 @@ namespace GedCom551
 			this.FDetail.SaveToStream(AStream);
 		}
 
-		public TGEDCOMCustomEvent(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMCustomEvent(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
 		}
 	}

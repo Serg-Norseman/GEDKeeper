@@ -3,7 +3,11 @@ using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKSys;
+
+/// <summary>
+/// Localization: clean
+/// </summary>
 
 namespace GKUI
 {
@@ -22,8 +26,6 @@ namespace GKUI
 			this.EditName.Text = submitter.Name.FullName;
 			this.MemoAddress.Text = submitter.Address.Address.Text;
 			this.EditTel.Text = submitter.Address.GetPhoneNumber(0);
-			this.CheckAdvanced.Checked = this.Base.Engine.IsAdvanced;
-			this.edExtName.Text = this.Base.Engine.GetSpecExtName();
 		}
 
 		private void btnAccept_Click(object sender, EventArgs e)
@@ -35,8 +37,6 @@ namespace GKUI
 				submitter.Address.SetAddressArray(this.MemoAddress.Lines);
 				submitter.Address.SetPhoneNumber(0, this.EditTel.Text);
 				submitter.ChangeDate.ChangeDateTime = DateTime.Now;
-				this.Base.Engine.IsAdvanced = this.CheckAdvanced.Checked;
-				this.Base.Engine.ExtName = this.edExtName.Text;
 				this.Base.Modified = true;
 				base.DialogResult = DialogResult.OK;
 			}
@@ -52,15 +52,13 @@ namespace GKUI
 			this.InitializeComponent();
 			this.FBase = aBase;
 			this.UpdateControls();
-			this.btnAccept.Text = GKL.LSList[97];
-			this.btnCancel.Text = GKL.LSList[98];
-			this.SheetAuthor.Text = GKL.LSList[142];
-			this.Label1.Text = GKL.LSList[85];
-			this.Label2.Text = GKL.LSList[82];
-			this.Label3.Text = GKL.LSList[131];
-			this.SheetAdvanced.Text = GKL.LSList[167];
-			this.CheckAdvanced.Text = GKL.LSList[168];
-			this.Label4.Text = GKL.LSList[169];
+			this.btnAccept.Text = LangMan.LSList[97];
+			this.btnCancel.Text = LangMan.LSList[98];
+			this.SheetAuthor.Text = LangMan.LSList[142];
+			this.Label1.Text = LangMan.LSList[85];
+			this.Label2.Text = LangMan.LSList[82];
+			this.Label3.Text = LangMan.LSList[131];
+			this.SheetAdvanced.Text = LangMan.LS(LSID.LSID_Other);
 		}
 	}
 }

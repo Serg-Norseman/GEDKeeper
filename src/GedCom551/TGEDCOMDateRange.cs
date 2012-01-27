@@ -18,7 +18,7 @@ namespace GedCom551
 			get { return this.FDateBefore; }
 		}
 
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
 			this.FDateAfter = new TGEDCOMDate(AOwner, AParent, "", "");
@@ -178,20 +178,14 @@ namespace GedCom551
 			return Result;
 		}
 
-		public override void ResetOwner(TGEDCOMObject AOwner)
+		public override void ResetOwner(TGEDCOMTree AOwner)
 		{
 			base.ResetOwner(AOwner);
-			if (this.FDateAfter != null)
-			{
-				this.FDateAfter.ResetOwner(AOwner);
-			}
-			if (this.FDateBefore != null)
-			{
-				this.FDateBefore.ResetOwner(AOwner);
-			}
+			if (this.FDateAfter != null) this.FDateAfter.ResetOwner(AOwner);
+			if (this.FDateBefore != null) this.FDateBefore.ResetOwner(AOwner);
 		}
 
-		public TGEDCOMDateRange(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMDateRange(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
 		}
 

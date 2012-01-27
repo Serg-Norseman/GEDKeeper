@@ -4,9 +4,13 @@ using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKSys;
 using GKUI.Controls;
 using GKUI.Lists;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI
 {
@@ -98,7 +102,7 @@ namespace GKUI
 							else
 							{
 								TGEDCOMIndividualRecord member = ItemData as TGEDCOMIndividualRecord;
-								if (member != null && SysUtils.ShowQuestion(GKL.LSList[128]) != DialogResult.No && this.Base.Engine.RemoveGroupMember(this.FGroup, member))
+								if (member != null && TGenEngine.ShowQuestion(LangMan.LSList[128]) != DialogResult.No && this.Base.Engine.RemoveGroupMember(this.FGroup, member))
 								{
 									this.ListsRefresh();
 								}
@@ -155,14 +159,14 @@ namespace GKUI
 			this.FBase = aBase;
 			this.FMembersList = new TSheetList(this.SheetMembers);
 			this.FMembersList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
-			this.FMembersList.Buttons = TEnumSet.Create(new Enum[]
+			this.FMembersList.Buttons = EnumSet.Create(new Enum[]
 			{
 				TSheetList.TListButton.lbAdd, 
 				TSheetList.TListButton.lbEdit, 
 				TSheetList.TListButton.lbDelete, 
 				TSheetList.TListButton.lbJump
 			});
-			this.FMembersList.List.AddListColumn(GKL.LSList[85], 300, false);
+			this.FMembersList.List.AddListColumn(LangMan.LSList[85], 300, false);
 
 			this.FNotesList = new TSheetList(this.SheetNotes);
 			this.FNotesList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
@@ -172,13 +176,13 @@ namespace GKUI
 			this.FMediaList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
 			this.Base.SetupRecMediaList(this.FMediaList);
 
-			this.Text = GKL.LSList[127];
-			this.btnAccept.Text = GKL.LSList[97];
-			this.btnCancel.Text = GKL.LSList[98];
-			this.Label1.Text = GKL.LSList[125];
-			this.SheetMembers.Text = GKL.LSList[126];
-			this.SheetNotes.Text = GKL.LSList[54];
-			this.SheetMultimedia.Text = GKL.LSList[55];
+			this.Text = LangMan.LSList[127];
+			this.btnAccept.Text = LangMan.LSList[97];
+			this.btnCancel.Text = LangMan.LSList[98];
+			this.Label1.Text = LangMan.LSList[125];
+			this.SheetMembers.Text = LangMan.LSList[126];
+			this.SheetNotes.Text = LangMan.LSList[54];
+			this.SheetMultimedia.Text = LangMan.LSList[55];
 		}
 	}
 }

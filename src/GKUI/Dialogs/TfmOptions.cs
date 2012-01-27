@@ -1,18 +1,23 @@
 ﻿using System;
-using System.Drawing;
 using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKCore.Settings;
+using GKSys;
 using GKUI.Controls;
+using GKUI.Lists;
+
+/// <summary>
+/// Localization: clean
+/// </summary>
 
 namespace GKUI
 {
 	public partial class TfmOptions : Form, ILocalization
 	{
 		private TGlobalOptions FOptions;
-		private TGlobalOptions.TPersonColumnProps[] FPersonColumns = new TGlobalOptions.TPersonColumnProps[24];
+		private TIndividualListColumns FTempColumns = new TIndividualListColumns();
 
 		public TGlobalOptions Options
 		{
@@ -27,14 +32,11 @@ namespace GKUI
 			try
 			{
 				this.ListPersonColumns.Items.Clear();
-				int i = 0;
-				do
+				for (int i = 0; i < FTempColumns.Count; i++)
 				{
-					TGlobalOptions.TPersonColumnType pct = this.FPersonColumns[i].colType;
-					this.ListPersonColumns.Items.Add(GKL.LSList[(int)TGlobalOptions.PersonColumnsName[(int)pct].Name - 1], this.FPersonColumns[i].colActive);
-					i++;
+					TPersonColumnType pct = FTempColumns[i].colType;
+					this.ListPersonColumns.Items.Add(LangMan.LSList[(int)TGlobalOptions.PersonColumnsName[(int)pct].Name - 1], FTempColumns[i].colActive);
 				}
-				while (i != 24);
 			}
 			finally
 			{
@@ -62,6 +64,7 @@ namespace GKUI
 			{
 				this.RButton1.Checked = true;
 			}
+
 			TGenEngine.TNameFormat defNameFormat = this.FOptions.DefNameFormat;
 			if (defNameFormat != TGenEngine.TNameFormat.nfFNP)
 			{
@@ -81,6 +84,7 @@ namespace GKUI
 			{
 				this.RButton5.Checked = true;
 			}
+
 			TGenEngine.TDateFormat defDateFormat = this.FOptions.DefDateFormat;
 			if (defDateFormat != TGenEngine.TDateFormat.dfDD_MM_YYYY)
 			{
@@ -93,6 +97,7 @@ namespace GKUI
 			{
 				this.RButton8.Checked = true;
 			}
+
 			this.chkPlacesWithAddress.Checked = this.FOptions.PlacesWithAddress;
 			this.chkHighlightUnparented.Checked = this.FOptions.ListPersons_HighlightUnparented;
 			this.chkHighlightUnmarried.Checked = this.FOptions.ListPersons_HighlightUnmarried;
@@ -121,6 +126,7 @@ namespace GKUI
 			this.chkAttributes.Checked = this.FOptions.PedigreeOptions.IncludeAttributes;
 			this.chkNotes.Checked = this.FOptions.PedigreeOptions.IncludeNotes;
 			this.chkSources.Checked = this.FOptions.PedigreeOptions.IncludeSources;
+
 			TPedigreeOptions.TPedigreeFormat format = this.FOptions.PedigreeOptions.Format;
 			if (format != TPedigreeOptions.TPedigreeFormat.pfExcess)
 			{
@@ -133,21 +139,13 @@ namespace GKUI
 			{
 				this.RButton10.Checked = true;
 			}
+
 			this.chkShowOnStart.Checked = this.FOptions.ShowTips;
-			TGlobalOptions.TWorkMode workMode = this.FOptions.WorkMode;
-			if (workMode != TGlobalOptions.TWorkMode.wmSimple)
-			{
-				if (workMode == TGlobalOptions.TWorkMode.wmExpert)
-				{
-					this.RButton4.Checked = true;
-				}
-			}
-			else
-			{
-				this.RButton3.Checked = true;
-			}
-			Array.Copy(this.FOptions.ListPersonsColumns, this.FPersonColumns, 24);
+			this.chkRevisionsBackup.Checked = this.FOptions.RevisionsBackup;
+
+			this.FOptions.IndividualListColumns.CopyTo(FTempColumns);
 			this.UpdateColumnsList();
+
 			this.UpdateControls();
 
 			this.cbLanguages.Items.Clear();
@@ -202,7 +200,8 @@ namespace GKUI
 		
 		private void AcceptChanges()
 		{
-			this.FOptions.ListPersonsColumns = this.FPersonColumns;
+			this.FTempColumns.CopyTo(this.FOptions.IndividualListColumns);
+
 			if (this.RButton1.Checked)
 			{
 				this.FOptions.DefCharacterSet = TGEDCOMCharacterSet.csASCII;
@@ -282,18 +281,9 @@ namespace GKUI
 					this.FOptions.PedigreeOptions.Format = TPedigreeOptions.TPedigreeFormat.pfCompact;
 				}
 			}
+
 			this.FOptions.ShowTips = this.chkShowOnStart.Checked;
-			if (this.RButton3.Checked)
-			{
-				this.FOptions.WorkMode = TGlobalOptions.TWorkMode.wmSimple;
-			}
-			else
-			{
-				if (this.RButton4.Checked)
-				{
-					this.FOptions.WorkMode = TGlobalOptions.TWorkMode.wmExpert;
-				}
-			}
+			this.FOptions.RevisionsBackup = this.chkRevisionsBackup.Checked;
 
 			int code = (this.cbLanguages.Items[this.cbLanguages.SelectedIndex] as TTaggedComboItem).Tag;
 			GKUI.TfmGEDKeeper.Instance.LoadLanguage(code);
@@ -306,9 +296,9 @@ namespace GKUI
 			int idx = this.ListPersonColumns.SelectedIndex;
 			if (idx > 0)
 			{
-				TGlobalOptions.TPersonColumnProps props = this.FPersonColumns[idx - 1];
-				this.FPersonColumns[idx - 1] = this.FPersonColumns[idx];
-				this.FPersonColumns[idx] = props;
+				TPersonColumnProps props = this.FTempColumns[idx - 1];
+				this.FTempColumns[idx - 1] = this.FTempColumns[idx];
+				this.FTempColumns[idx] = props;
 				this.UpdateColumnsList();
 				this.ListPersonColumns.SelectedIndex = idx - 1;
 			}
@@ -317,11 +307,11 @@ namespace GKUI
 		private void btnColumnDown_Click(object sender, EventArgs e)
 		{
 			int idx = this.ListPersonColumns.SelectedIndex;
-			if (idx >= 0 && idx < 23)
+			if (idx >= 0 && idx < 24)
 			{
-				TGlobalOptions.TPersonColumnProps props = this.FPersonColumns[idx + 1];
-				this.FPersonColumns[idx + 1] = this.FPersonColumns[idx];
-				this.FPersonColumns[idx] = props;
+				TPersonColumnProps props = this.FTempColumns[idx + 1];
+				this.FTempColumns[idx + 1] = this.FTempColumns[idx];
+				this.FTempColumns[idx] = props;
 				this.UpdateColumnsList();
 				this.ListPersonColumns.SelectedIndex = idx + 1;
 			}
@@ -329,14 +319,16 @@ namespace GKUI
 
 		private void btnDefList_Click(object sender, EventArgs e)
 		{
-			Array.Copy(TGlobalOptions.DefPersonColumns, this.FPersonColumns, 24);
+			this.FTempColumns.SetDefaults();
 			this.UpdateColumnsList();
 		}
 
 		private void ListPersonColumns_ItemCheck(object sender, ItemCheckEventArgs e)
 		{
 			bool cs = (e.NewValue == CheckState.Checked);
-			this.FPersonColumns[e.Index].colActive = cs;
+			TPersonColumnProps props = this.FTempColumns[e.Index];
+			props.colActive = cs;
+			this.FTempColumns[e.Index] = props;
 		}
 
 		public TfmOptions()
@@ -349,64 +341,65 @@ namespace GKUI
 
 		void ILocalization.SetLang()
 		{
-			this.btnAccept.Text = GKL.LSList[97];
-			this.btnCancel.Text = GKL.LSList[98];
-			this.Text = GKL.LSList[39];
-			this.SheetCommon.Text = GKL.LSList[144];
-			this.SheetView.Text = GKL.LSList[249];
-			this.SheetTree.Text = GKL.LSList[250];
-			this.SheetPedigree.Text = GKL.LSList[251];
-			this.rgCode.Text = GKL.LSList[252];
-			this.rgEditMode.Text = GKL.LSList[253];
-			this.RButton3.Text = GKL.LSList[254];
-			this.RButton4.Text = GKL.LSList[255];
-			this.GroupBox4.Text = GKL.LSList[256];
-			this.chkProxy.Text = GKL.LSList[257];
-			this.Label1.Text = GKL.LSList[258];
-			this.Label2.Text = GKL.LSList[259];
-			this.Label3.Text = GKL.LSList[260];
-			this.Label4.Text = GKL.LSList[261];
-			this.GroupBox7.Text = GKL.LSList[262];
-			this.chkShowOnStart.Text = GKL.LSList[263];
-			this.Label6.Text = GKL.LSList[264];
-			this.SheetViewCommon.Text = GKL.LSList[265];
-			this.SheetViewPersons.Text = GKL.LSList[266];
-			this.rgFNPFormat.Text = GKL.LSList[267];
-			this.RButton5.Text = GKL.LSList[268];
-			this.RButton6.Text = GKL.LSList[269];
-			this.RButton7.Text = GKL.LSList[270];
-			this.rgDateFormat.Text = GKL.LSList[271];
-			this.chkPlacesWithAddress.Text = GKL.LSList[272];
-			this.chkHighlightUnparented.Text = GKL.LSList[273];
-			this.chkHighlightUnmarried.Text = GKL.LSList[274];
-			this.btnDefList.Text = GKL.LSList[275];
-			this.GroupBox1.Text = GKL.LSList[276];
-			this.chkFamily.Text = GKL.LSList[84];
-			this.chkName.Text = GKL.LSList[85];
-			this.chkPatronymic.Text = GKL.LSList[86];
-			this.chkDiffLines.Text = GKL.LSList[277];
-			this.chkBirthDate.Text = GKL.LSList[122];
-			this.chkDeathDate.Text = GKL.LSList[123];
-			this.chkOnlyYears.Text = GKL.LSList[278];
-			this.chkKinship.Text = GKL.LSList[279];
-			this.chkSignsVisible.Text = GKL.LSList[280];
-			this.chkTreeDecorative.Text = GKL.LSList[281];
-			this.chkPortraitsVisible.Text = GKL.LSList[282];
-			this.chkChildlessExclude.Text = GKL.LSList[283];
-			this.GroupBox2.Text = GKL.LSList[284];
-			this.PanMaleColor.Text = GKL.LSList[285];
-			this.PanFemaleColor.Text = GKL.LSList[286];
-			this.PanUnkSexColor.Text = GKL.LSList[287];
-			this.PanUnHusbandColor.Text = GKL.LSList[288];
-			this.PanUnWifeColor.Text = GKL.LSList[289];
-			this.Label5.Text = GKL.LSList[290];
-			this.GroupBox5.Text = GKL.LSList[291];
-			this.chkAttributes.Text = GKL.LSList[292];
-			this.chkNotes.Text = GKL.LSList[293];
-			this.chkSources.Text = GKL.LSList[294];
-			this.EditPedigreeFormat.Text = GKL.LSList[295];
-			this.RButton10.Text = GKL.LSList[296];
-			this.RButton11.Text = GKL.LSList[297];
+			this.btnAccept.Text = LangMan.LSList[97];
+			this.btnCancel.Text = LangMan.LSList[98];
+			this.Text = LangMan.LSList[39];
+			this.SheetCommon.Text = LangMan.LSList[144];
+			this.SheetView.Text = LangMan.LSList[249];
+			this.SheetTree.Text = LangMan.LSList[250];
+			this.SheetPedigree.Text = LangMan.LSList[251];
+			this.rgCode.Text = LangMan.LSList[252];
+
+			this.GroupBox4.Text = LangMan.LSList[256];
+			this.chkProxy.Text = LangMan.LSList[257];
+			this.Label1.Text = LangMan.LSList[258];
+			this.Label2.Text = LangMan.LSList[259];
+			this.Label3.Text = LangMan.LSList[260];
+			this.Label4.Text = LangMan.LSList[261];
+
+			this.GroupBox7.Text = LangMan.LS(LSID.LSID_Other);
+
+			this.chkShowOnStart.Text = LangMan.LSList[263];
+			this.Label6.Text = LangMan.LSList[264];
+			this.SheetViewCommon.Text = LangMan.LSList[265];
+			this.SheetViewPersons.Text = LangMan.LSList[266];
+			this.rgFNPFormat.Text = LangMan.LSList[267];
+			this.RButton5.Text = LangMan.LSList[268];
+			this.RButton6.Text = LangMan.LSList[269];
+			this.RButton7.Text = LangMan.LSList[270];
+			this.rgDateFormat.Text = LangMan.LSList[271];
+			this.chkPlacesWithAddress.Text = LangMan.LSList[272];
+			this.chkHighlightUnparented.Text = LangMan.LSList[273];
+			this.chkHighlightUnmarried.Text = LangMan.LSList[274];
+			this.btnDefList.Text = LangMan.LSList[275];
+			this.GroupBox1.Text = LangMan.LSList[276];
+			this.chkFamily.Text = LangMan.LSList[84];
+			this.chkName.Text = LangMan.LSList[85];
+			this.chkPatronymic.Text = LangMan.LSList[86];
+			this.chkDiffLines.Text = LangMan.LSList[277];
+			this.chkBirthDate.Text = LangMan.LSList[122];
+			this.chkDeathDate.Text = LangMan.LSList[123];
+			this.chkOnlyYears.Text = LangMan.LSList[278];
+			this.chkKinship.Text = LangMan.LSList[279];
+			this.chkSignsVisible.Text = LangMan.LSList[280];
+			this.chkTreeDecorative.Text = LangMan.LSList[281];
+			this.chkPortraitsVisible.Text = LangMan.LSList[282];
+			this.chkChildlessExclude.Text = LangMan.LSList[283];
+			this.GroupBox2.Text = LangMan.LSList[284];
+			this.PanMaleColor.Text = LangMan.LSList[285];
+			this.PanFemaleColor.Text = LangMan.LSList[286];
+			this.PanUnkSexColor.Text = LangMan.LSList[287];
+			this.PanUnHusbandColor.Text = LangMan.LSList[288];
+			this.PanUnWifeColor.Text = LangMan.LSList[289];
+			this.Label5.Text = LangMan.LSList[290];
+			this.GroupBox5.Text = LangMan.LSList[291];
+			this.chkAttributes.Text = LangMan.LSList[292];
+			this.chkNotes.Text = LangMan.LSList[293];
+			this.chkSources.Text = LangMan.LSList[294];
+			this.EditPedigreeFormat.Text = LangMan.LSList[295];
+			this.RButton10.Text = LangMan.LSList[296];
+			this.RButton11.Text = LangMan.LSList[297];
+			this.chkRevisionsBackup.Text = LangMan.LS(LSID.LSID_RevisionsBackup);
 		}
 	}
 }

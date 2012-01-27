@@ -2,34 +2,34 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
 
 namespace GedCom551
 {
 	public sealed class TGEDCOMSourceRecord : TGEDCOMRecord
 	{
-		private TStrings FTitle;
-		private TStrings FOriginator;
-		private TStrings FPublication;
-		private TStrings FText;
+		private StringList FTitle;
+		private StringList FOriginator;
+		private StringList FPublication;
+		private StringList FText;
 
 		private TGEDCOMListEx<TGEDCOMRepositoryCitation> _RepositoryCitations;
 
 		public TGEDCOMData Data
 		{
-			get { return this.GetData(); }
+			get { return base.TagClass("DATA", typeof(TGEDCOMData), TGEDCOMData.Create) as TGEDCOMData; }
 		}
 
-		public TStrings Originator
+		public StringList Originator
 		{
-			get { return this.GetOriginator(); }
-			set { this.SetOriginator(value); }
+			get { return base.GetTagStrings(base.TagClass("AUTH", typeof(TGEDCOMTag), TGEDCOMTag.Create), ref this.FOriginator); }
+			set { base.SetTagStrings(base.TagClass("AUTH", typeof(TGEDCOMTag), TGEDCOMTag.Create), value); }
 		}
 
-		public TStrings Title
+		public StringList Title
 		{
-			get { return this.GetTitle(); }
-			set { this.SetTitle(value); }
+			get { return base.GetTagStrings(base.TagClass("TITL", typeof(TGEDCOMTag), TGEDCOMTag.Create), ref this.FTitle); }
+			set { base.SetTagStrings(base.TagClass("TITL", typeof(TGEDCOMTag), TGEDCOMTag.Create), value); }
 		}
 
 		public string FiledByEntry
@@ -38,16 +38,16 @@ namespace GedCom551
 			set { base.SetTagStringValue("ABBR", value); }
 		}
 
-		public TStrings Publication
+		public StringList Publication
 		{
-			get { return this.GetPublication(); }
-			set { this.SetPublication(value); }
+			get { return base.GetTagStrings(base.TagClass("PUBL", typeof(TGEDCOMTag), TGEDCOMTag.Create), ref this.FPublication); }
+			set { base.SetTagStrings(base.TagClass("PUBL", typeof(TGEDCOMTag), TGEDCOMTag.Create), value); }
 		}
 
-		public TStrings Text
+		public StringList Text
 		{
-			get { return this.GetText(); }
-			set { this.SetText(value); }
+			get { return base.GetTagStrings(base.TagClass("TEXT", typeof(TGEDCOMTag), TGEDCOMTag.Create), ref this.FText); }
+			set { base.SetTagStrings(base.TagClass("TEXT", typeof(TGEDCOMTag), TGEDCOMTag.Create), value); }
 		}
 
 		public TGEDCOMListEx<TGEDCOMRepositoryCitation> RepositoryCitations
@@ -73,55 +73,10 @@ namespace GedCom551
 			get { return base.NotesCount; }
 		}*/
 
-		private TStrings GetTitle()
-		{
-			return base.GetTagStrings(base.TagClass("TITL", typeof(TGEDCOMTag)), ref this.FTitle);
-		}
-
-		private void SetTitle(TStrings Value)
-		{
-			base.SetTagStrings(base.TagClass("TITL", typeof(TGEDCOMTag)), Value);
-		}
-
-		private TStrings GetOriginator()
-		{
-			return base.GetTagStrings(base.TagClass("AUTH", typeof(TGEDCOMTag)), ref this.FOriginator);
-		}
-
-		private void SetOriginator([In] TStrings Value)
-		{
-			base.SetTagStrings(base.TagClass("AUTH", typeof(TGEDCOMTag)), Value);
-		}
-
-		private TStrings GetPublication()
-		{
-			return base.GetTagStrings(base.TagClass("PUBL", typeof(TGEDCOMTag)), ref this.FPublication);
-		}
-
-		private TStrings GetText()
-		{
-			return base.GetTagStrings(base.TagClass("TEXT", typeof(TGEDCOMTag)), ref this.FText);
-		}
-
-		private void SetPublication([In] TStrings Value)
-		{
-			base.SetTagStrings(base.TagClass("PUBL", typeof(TGEDCOMTag)), Value);
-		}
-
-		private void SetText([In] TStrings Value)
-		{
-			base.SetTagStrings(base.TagClass("TEXT", typeof(TGEDCOMTag)), Value);
-		}
-
-		private TGEDCOMData GetData()
-		{
-			return base.TagClass("DATA", typeof(TGEDCOMData)) as TGEDCOMData;
-		}
-
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
-			base.SetLists(TEnumSet.Create(new Enum[]
+			base.SetLists(EnumSet.Create(new Enum[]
 			{
 				TGEDCOMSubList.stNotes, 
 				TGEDCOMSubList.stMultimedia
@@ -141,22 +96,10 @@ namespace GedCom551
 		{
 			if (!this.Disposed_)
 			{
-				if (this.FTitle != null)
-				{
-					this.FTitle.Free();
-				}
-				if (this.FOriginator != null)
-				{
-					this.FOriginator.Free();
-				}
-				if (this.FPublication != null)
-				{
-					this.FPublication.Free();
-				}
-				if (this.FText != null)
-				{
-					this.FText.Free();
-				}
+				if (this.FTitle != null) this.FTitle.Free();
+				if (this.FOriginator != null) this.FOriginator.Free();
+				if (this.FPublication != null) this.FPublication.Free();
+				if (this.FText != null) this.FText.Free();
 
 				this._RepositoryCitations.Dispose();
 
@@ -165,7 +108,7 @@ namespace GedCom551
 			}
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, Type AClass)
+		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 
@@ -177,18 +120,11 @@ namespace GedCom551
 			{
 				if (ATag == "DATA")
 				{
-					Result = base.AddTag(ATag, AValue, typeof(TGEDCOMData));
+					Result = base.AddTag(ATag, AValue, TGEDCOMData.Create);
 				}
 				else
 				{
-					if (ATag == "REFN")
-					{
-						Result = base.UserReferences.Add(new TGEDCOMUserReference(base.Owner, this, ATag, AValue));
-					}
-					else
-					{
-						Result = base.AddTag(ATag, AValue, AClass);
-					}
+					Result = base.AddTag(ATag, AValue, ATagConstructor);
 				}
 			}
 
@@ -209,10 +145,10 @@ namespace GedCom551
 		public override void MoveTo(TGEDCOMRecord aToRecord, bool aClearDest)
 		{
 			TGEDCOMSourceRecord toSource = aToRecord as TGEDCOMSourceRecord;
-			TStringList titl = new TStringList();
-			TStringList orig = new TStringList();
-			TStringList publ = new TStringList();
-			TStringList text = new TStringList();
+			StringList titl = new StringList();
+			StringList orig = new StringList();
+			StringList publ = new StringList();
+			StringList text = new StringList();
 			try
 			{
 				titl.Text = (toSource.Title.Text + "\n" + this.Title.Text).Trim();
@@ -258,7 +194,7 @@ namespace GedCom551
 			this._RepositoryCitations.ReplaceXRefs(aMap);
 		}
 
-		public override void ResetOwner(TGEDCOMObject AOwner)
+		public override void ResetOwner(TGEDCOMTree AOwner)
 		{
 			base.ResetOwner(AOwner);
 			this._RepositoryCitations.ResetOwner(AOwner);
@@ -272,26 +208,31 @@ namespace GedCom551
 
 		public void SetOriginatorArray(params string[] Value)
 		{
-			base.SetTagStrings(base.TagClass("AUTH", typeof(TGEDCOMTag)), Value);
+			base.SetTagStrings(base.TagClass("AUTH", typeof(TGEDCOMTag), TGEDCOMTag.Create), Value);
 		}
 
 		public void SetTitleArray(params string[] Value)
 		{
-			base.SetTagStrings(base.TagClass("TITL", typeof(TGEDCOMTag)), Value);
+			base.SetTagStrings(base.TagClass("TITL", typeof(TGEDCOMTag), TGEDCOMTag.Create), Value);
 		}
 
 		public void SetPublicationArray(params string[] Value)
 		{
-			base.SetTagStrings(base.TagClass("PUBL", typeof(TGEDCOMTag)), Value);
+			base.SetTagStrings(base.TagClass("PUBL", typeof(TGEDCOMTag), TGEDCOMTag.Create), Value);
 		}
 
 		public void SetTextArray(params string[] Value)
 		{
-			base.SetTagStrings(base.TagClass("TEXT", typeof(TGEDCOMTag)), Value);
+			base.SetTagStrings(base.TagClass("TEXT", typeof(TGEDCOMTag), TGEDCOMTag.Create), Value);
 		}
 
-		public TGEDCOMSourceRecord(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMSourceRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
+		}
+
+		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+		{
+			return new TGEDCOMSourceRecord(AOwner, AParent, AName, AValue);
 		}
 	}
 }

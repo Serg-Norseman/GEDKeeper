@@ -2,13 +2,17 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GedCom551
 {
 	public class TGEDCOMRecord : TGEDCOMCustomRecord
 	{
-		private TEnumSet FLists;
+		private EnumSet FLists;
 		protected TGEDCOMRecordType FRecordType;
 
 		private TGEDCOMListEx<TGEDCOMMultimediaLink> _MultimediaLinks;
@@ -24,7 +28,7 @@ namespace GedCom551
 
 		public TGEDCOMChangeDate ChangeDate
 		{
-			get { return this.GetChangeDate(); }
+			get { return base.TagClass("CHAN", typeof(TGEDCOMChangeDate), TGEDCOMChangeDate.Create) as TGEDCOMChangeDate; }
 		}
 
 		public TGEDCOMListEx<TGEDCOMMultimediaLink> MultimediaLinks
@@ -49,19 +53,13 @@ namespace GedCom551
 
 		public string UID
 		{
-			get { return this.GetUID(); }
-			set { this.SetUID(value); }
+			get { return base.GetTagStringValue("_UID"); }
+			set { base.SetTagStringValue("_UID", value); }
 		}
 
 		public TGEDCOMListEx<TGEDCOMUserReference> UserReferences
 		{
 			get { return this._UserReferences; }
-		}
-
-		public new string XRef
-		{
-			get { return base.XRef; }
-			set { base.XRef = value; }
 		}
 
 		private string CreateUID()
@@ -75,8 +73,8 @@ namespace GedCom551
 			for (int i = 0; i <= num; i++)
 			{
 				byte val = binary[i];
-				checkA = (byte)((uint)checkA + (uint)val);
-				checkB = (byte)((uint)checkB + (uint)checkA);
+				checkA = unchecked((byte)((uint)checkA + (uint)val));
+				checkB = unchecked((byte)((uint)checkB + (uint)checkA));
 				Result += string.Format("{0:X2}", new object[] { val });
 			}
 			Result += string.Format("{0:X2}", new object[] { checkA });
@@ -84,26 +82,11 @@ namespace GedCom551
 			return Result;
 		}
 
-		private TGEDCOMChangeDate GetChangeDate()
-		{
-			return base.TagClass("CHAN", typeof(TGEDCOMChangeDate)) as TGEDCOMChangeDate;
-		}
-
-		private string GetUID()
-		{
-			return base.GetTagStringValue("_UID");
-		}
-
-		private void SetUID([In] string Value)
-		{
-			base.SetTagStringValue("_UID", Value);
-		}
-
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
 			this.FRecordType = TGEDCOMRecordType.rtNone;
-			this.FLists = TEnumSet.Create();
+			this.FLists = EnumSet.Create();
 
 			this._Notes = new TGEDCOMListEx<TGEDCOMNotes>(this);
 			this._SourceCitations = new TGEDCOMListEx<TGEDCOMSourceCitation>(this);
@@ -111,7 +94,7 @@ namespace GedCom551
 			this._UserReferences = new TGEDCOMListEx<TGEDCOMUserReference>(this);
 		}
 
-		protected void SetLists(TEnumSet ALists)
+		protected void SetLists(EnumSet ALists)
 		{
 			this.FLists = ALists;
 		}
@@ -216,7 +199,7 @@ namespace GedCom551
 			this._UserReferences.ReplaceXRefs(aMap);
 		}
 
-		public override void ResetOwner(TGEDCOMObject AOwner)
+		public override void ResetOwner(TGEDCOMTree AOwner)
 		{
 			base.ResetOwner(AOwner);
 
@@ -236,13 +219,13 @@ namespace GedCom551
 			this._UserReferences.SaveToStream(AStream);
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, Type AClass)
+		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 
 			if (ATag == "CHAN")
 			{
-				Result = base.AddTag(ATag, AValue, typeof(TGEDCOMChangeDate));
+				Result = base.AddTag(ATag, AValue, TGEDCOMChangeDate.Create);
 			}
 			else
 			{
@@ -264,7 +247,14 @@ namespace GedCom551
 						}
 						else
 						{
-							Result = base.AddTag(ATag, AValue, AClass);
+							if (ATag == "REFN")
+							{
+								Result = this._UserReferences.Add(new TGEDCOMUserReference(base.Owner, this, ATag, AValue));
+							}
+							else
+							{
+								Result = base.AddTag(ATag, AValue, ATagConstructor);
+							}
 						}
 					}
 				}
@@ -291,15 +281,15 @@ namespace GedCom551
 		{
 			if (this.FOwner != null)
 			{
-				this.FXRef = (this.FOwner as TGEDCOMTree).XRefIndex_NewXRef(this);
-				this.XRef = this.FXRef;
+				string new_xref = this.FOwner.XRefIndex_NewXRef(this);
+				this.XRef = new_xref;
 			}
 			return this.FXRef;
 		}
 
 		public void NewUID()
 		{
-			this.SetUID(this.CreateUID());
+			this.UID = this.CreateUID();
 		}
 
 		public void InitNew()
@@ -308,7 +298,7 @@ namespace GedCom551
 			this.NewUID();
 		}
 
-		public TGEDCOMRecord(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
 		}
 	}

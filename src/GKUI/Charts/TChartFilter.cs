@@ -1,5 +1,10 @@
 using System;
+
 using GKUI.Lists;
+
+/// <summary>
+/// Localization: clean
+/// </summary>
 
 namespace GKUI.Charts
 {

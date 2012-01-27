@@ -2,6 +2,10 @@ using System;
 
 using GedCom551;
 
+/// <summary>
+/// Localization: unknown
+/// </summary>
+
 namespace GKCore.Commands
 {
 	public class TCmdPersonChangePatriarch : TCustomCommand
@@ -10,7 +14,7 @@ namespace GKCore.Commands
 		private bool FOldValue;
 		private bool FNewValue;
 
-		public TCmdPersonChangePatriarch(TUndoManager aManager, TGEDCOMIndividualRecord aPerson, bool NewValue) : base(aManager)
+		public TCmdPersonChangePatriarch(UndoManager aManager, TGEDCOMIndividualRecord aPerson, bool NewValue) : base(aManager)
 		{
 			this.FPersonXRef = aPerson.XRef;
 			this.FOldValue = aPerson.Patriarch;

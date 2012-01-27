@@ -15,13 +15,13 @@ namespace GedCom551
 
 		public string XRef
 		{
-			get { return this.GetXRef(); }
-			set { this.SetXRef(value); }
+			get { return TGEDCOMObject.CleanXRef(this.FXRef); }
+			set { this.FXRef = TGEDCOMObject.EncloseXRef(value); }
 		}
 
 		protected TGEDCOMRecord GetValue()
 		{
-			return base.FindRecord(this.GetXRef());
+			return base.FindRecord(this.XRef);
 		}
 
 		protected void SetValue(TGEDCOMRecord AValue)
@@ -29,26 +29,16 @@ namespace GedCom551
 			this.FXRef = "";
 			if (AValue != null)
 			{
-				string XRef = AValue.XRef;
-				if (string.IsNullOrEmpty(XRef))
+				string xrf = AValue.XRef;
+				if (string.IsNullOrEmpty(xrf))
 				{
-					XRef = AValue.NewXRef();
+					xrf = AValue.NewXRef();
 				}
-				this.SetXRef(XRef);
+				this.XRef = xrf;
 			}
 		}
 
-		private string GetXRef()
-		{
-			return TGEDCOMObject.CleanXRef(this.FXRef);
-		}
-
-		private void SetXRef([In] string Value)
-		{
-			this.FXRef = TGEDCOMObject.EncloseXRef(Value);
-		}
-
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
 			this.FXRef = "";
@@ -86,7 +76,7 @@ namespace GedCom551
 		public override void ReplaceXRefs(TXRefReplaceMap aMap)
 		{
 			base.ReplaceXRefs(aMap);
-			this.SetXRef(aMap.FindNewXRef(this.XRef));
+			this.XRef = aMap.FindNewXRef(this.XRef);
 		}
 
 		public void SetNamedValue([In] string aName, TGEDCOMRecord aValue)
@@ -95,8 +85,13 @@ namespace GedCom551
 			this.SetValue(aValue);
 		}
 
-		public TGEDCOMPointer(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMPointer(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
+		}
+
+		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+		{
+			return new TGEDCOMPointer(AOwner, AParent, AName, AValue);
 		}
 	}
 }

@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
 
 namespace GedCom551
 {
@@ -10,42 +10,42 @@ namespace GedCom551
 	{
 		public string Classification
 		{
-			get { return this.GetStringTag(1); }
-			set { this.SetStringTag(1, value); }
+			get { return base.GetTagStringValue("TYPE"); }
+			set { base.SetTagStringValue("TYPE", value); }
 		}
 
 		public string Agency
 		{
-			get { return this.GetStringTag(2); }
-			set { this.SetStringTag(2, value); }
+			get { return base.GetTagStringValue("AGNC"); }
+			set { base.SetTagStringValue("AGNC", value); }
 		}
 
 
 		public string ReligiousAffilation
 		{
-			get { return this.GetStringTag(3); }
-			set { this.SetStringTag(3, value); }
+			get { return base.GetTagStringValue("RELI"); }
+			set { base.SetTagStringValue("RELI", value); }
 		}
 
 		public string Cause
 		{
-			get { return this.GetStringTag(4); }
-			set { this.SetStringTag(4, value); }
+			get { return base.GetTagStringValue("CAUS"); }
+			set { base.SetTagStringValue("CAUS", value); }
 		}
 
 		public TGEDCOMPlace Place
 		{
-			get { return base.TagClass("PLAC", typeof(TGEDCOMPlace)) as TGEDCOMPlace; }
+			get { return base.TagClass("PLAC", typeof(TGEDCOMPlace), TGEDCOMPlace.Create) as TGEDCOMPlace; }
 		}
 
 		public TGEDCOMAddress Address
 		{
-			get { return this.GetAddress(); }
+			get { return base.TagClass("ADDR", typeof(TGEDCOMAddress), TGEDCOMAddress.Create) as TGEDCOMAddress; }
 		}
 
 		public TGEDCOMDateValue Date
 		{
-			get { return base.TagClass("DATE", typeof(TGEDCOMDateValue)) as TGEDCOMDateValue; }
+			get { return base.TagClass("DATE", typeof(TGEDCOMDateValue), TGEDCOMDateValue.Create) as TGEDCOMDateValue; }
 		}
 
 		public TGEDCOMRestriction Restriction
@@ -105,113 +105,30 @@ namespace GedCom551
 			}
 		}*/
 
-		private string GetStringTag(int Index)
-		{
-			string Result = "";
-			if (Index != 1)
-			{
-				if (Index != 2)
-				{
-					if (Index != 3)
-					{
-						if (Index == 4)
-						{
-							Result = base.GetTagStringValue("CAUS");
-						}
-					}
-					else
-					{
-						Result = base.GetTagStringValue("RELI");
-					}
-				}
-				else
-				{
-					Result = base.GetTagStringValue("AGNC");
-				}
-			}
-			else
-			{
-				Result = base.GetTagStringValue("TYPE");
-			}
-			return Result;
-		}
-
-		private void SetStringTag(int Index, [In] string Value)
-		{
-			if (Index != 1)
-			{
-				if (Index != 2)
-				{
-					if (Index != 3)
-					{
-						if (Index == 4)
-						{
-							base.SetTagStringValue("CAUS", Value);
-						}
-					}
-					else
-					{
-						base.SetTagStringValue("RELI", Value);
-					}
-				}
-				else
-				{
-					base.SetTagStringValue("AGNC", Value);
-				}
-			}
-			else
-			{
-				base.SetTagStringValue("TYPE", Value);
-			}
-		}
-
-		private TGEDCOMAddress GetAddress()
-		{
-			return base.TagClass("ADDR", typeof(TGEDCOMAddress)) as TGEDCOMAddress;
-		}
-
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
-			base.SetLists(TEnumSet.Create(new Enum[]
-			{
-				TGEDCOMSubList.stNotes, 
-				TGEDCOMSubList.stSource, 
-				TGEDCOMSubList.stMultimedia
-			}));
+			base.SetLists(EnumSet.Create(new Enum[] { TGEDCOMSubList.stNotes, TGEDCOMSubList.stSource, TGEDCOMSubList.stMultimedia }));
 			this.FLevel = (AParent as TGEDCOMCustomTag).Level;
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, Type AClass)
+		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 			if (ATag == "DATE")
 			{
-				Result = base.AddTag(ATag, AValue, typeof(TGEDCOMDateValue));
+				Result = base.AddTag(ATag, AValue, TGEDCOMDateValue.Create);
 			}
 			else
 			{
-				if (ATag == "PLAC")
+				if (ATag == "PHON" || ATag == "EMAIL" || ATag == "FAX" || ATag == "WWW")
 				{
-					Result = base.AddTag(ATag, AValue, typeof(TGEDCOMPlace));
+					Result = this.Address.AddTag(ATag, AValue, ATagConstructor);
 				}
 				else
 				{
-					if (ATag == "ADDR")
-					{
-						Result = base.AddTag(ATag, AValue, typeof(TGEDCOMAddress));
-					}
-					else
-					{
-						if (ATag == "PHON" || ATag == "EMAIL" || ATag == "FAX" || ATag == "WWW")
-						{
-							Result = this.GetAddress().AddTag(ATag, AValue, AClass);
-						}
-						else
-						{
-							Result = base.AddTag(ATag, AValue, AClass);
-						}
-					}
+					// define "PLAC", "ADDR" by default
+					Result = base.AddTag(ATag, AValue, ATagConstructor);
 				}
 			}
 			return Result;
@@ -227,7 +144,7 @@ namespace GedCom551
 			this._MultimediaLinks.SaveToStream(AStream);
 		}
 
-		public TGEDCOMEventDetail(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMEventDetail(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
 		}
 	}

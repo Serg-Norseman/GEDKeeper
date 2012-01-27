@@ -4,8 +4,12 @@ using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKSys;
 using GKUI.Lists;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI
 {
@@ -75,12 +79,12 @@ namespace GKUI
 			this.FNotesList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
 			this.Base.SetupRecNotesList(this.FNotesList);
 
-			this.Text = GKL.LSList[134];
-			this.btnAccept.Text = GKL.LSList[97];
-			this.btnCancel.Text = GKL.LSList[98];
-			this.Label1.Text = GKL.LSList[125];
-			this.SheetNotes.Text = GKL.LSList[54];
-			this.btnAddress.Text = GKL.LSList[82] + "...";
+			this.Text = LangMan.LSList[134];
+			this.btnAccept.Text = LangMan.LSList[97];
+			this.btnCancel.Text = LangMan.LSList[98];
+			this.Label1.Text = LangMan.LSList[125];
+			this.SheetNotes.Text = LangMan.LSList[54];
+			this.btnAddress.Text = LangMan.LSList[82] + "...";
 		}
 	}
 }

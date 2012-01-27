@@ -15,6 +15,5 @@ namespace XLSFile
 			W.WriteWord(16);
 			W.WriteWord(0);
 		}
-
 	}
 }

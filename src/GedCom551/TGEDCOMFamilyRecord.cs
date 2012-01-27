@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
 
 namespace GedCom551
 {
@@ -24,17 +24,17 @@ namespace GedCom551
 
 		public TGEDCOMPointer Husband
 		{
-			get { return base.TagClass("HUSB", typeof(TGEDCOMPointer)) as TGEDCOMPointer; }
+			get { return base.TagClass("HUSB", typeof(TGEDCOMPointer), TGEDCOMPointer.Create) as TGEDCOMPointer; }
 		}
 
 		public TGEDCOMPointer Wife
 		{
-			get { return base.TagClass("WIFE", typeof(TGEDCOMPointer)) as TGEDCOMPointer; }
+			get { return base.TagClass("WIFE", typeof(TGEDCOMPointer), TGEDCOMPointer.Create) as TGEDCOMPointer; }
 		}
 
 		public TGEDCOMPointer Submitter
 		{
-			get { return base.TagClass("SUBM", typeof(TGEDCOMPointer)) as TGEDCOMPointer; }
+			get { return base.TagClass("SUBM", typeof(TGEDCOMPointer), TGEDCOMPointer.Create) as TGEDCOMPointer; }
 		}
 
 		public TGEDCOMRestriction Restriction
@@ -48,14 +48,12 @@ namespace GedCom551
 			get { return this._SpouseSealings; }
 		}
 
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
-			base.SetLists(TEnumSet.Create(new Enum[]
+			base.SetLists(EnumSet.Create(new Enum[]
 			{
-				TGEDCOMSubList.stNotes, 
-				TGEDCOMSubList.stSource, 
-				TGEDCOMSubList.stMultimedia
+				TGEDCOMSubList.stNotes, TGEDCOMSubList.stSource, TGEDCOMSubList.stMultimedia
 			}));
 			this.FRecordType = TGEDCOMRecordType.rtFamily;
 			this.FName = "FAM";
@@ -78,13 +76,13 @@ namespace GedCom551
 			}
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, Type AClass)
+		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 
 			if (ATag == "HUSB" || ATag == "WIFE")
 			{
-				Result = base.AddTag(ATag, AValue, typeof(TGEDCOMPointer));
+				Result = base.AddTag(ATag, AValue, TGEDCOMPointer.Create);
 			}
 			else
 			{
@@ -106,14 +104,7 @@ namespace GedCom551
 						}
 						else
 						{
-							if (ATag == "REFN")
-							{
-								Result = base.UserReferences.Add(new TGEDCOMUserReference(base.Owner, this, ATag, AValue));
-							}
-							else
-							{
-								Result = base.AddTag(ATag, AValue, AClass);
-							}
+							Result = base.AddTag(ATag, AValue, ATagConstructor);
 						}
 					}
 				}
@@ -218,7 +209,7 @@ namespace GedCom551
 			this._SpouseSealings.ReplaceXRefs(aMap);
 		}
 
-		public override void ResetOwner(TGEDCOMObject AOwner)
+		public override void ResetOwner(TGEDCOMTree AOwner)
 		{
 			base.ResetOwner(AOwner);
 
@@ -241,8 +232,13 @@ namespace GedCom551
 			
 		}
 
-		public TGEDCOMFamilyRecord(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMFamilyRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
+		}
+
+		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+		{
+			return new TGEDCOMFamilyRecord(AOwner, AParent, AName, AValue);
 		}
 	}
 }

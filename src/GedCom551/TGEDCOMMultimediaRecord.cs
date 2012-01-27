@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
 
 namespace GedCom551
 {
@@ -15,14 +15,10 @@ namespace GedCom551
 			get { return this._FileReferences; }
 		}
 
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
-			base.SetLists(TEnumSet.Create(new Enum[]
-			{
-				TGEDCOMSubList.stNotes, 
-				TGEDCOMSubList.stSource
-			}));
+			base.SetLists(EnumSet.Create(new Enum[] { TGEDCOMSubList.stNotes, TGEDCOMSubList.stSource }));
 			this.FRecordType = TGEDCOMRecordType.rtMultimedia;
 			this.FName = "OBJE";
 
@@ -40,7 +36,7 @@ namespace GedCom551
 			}
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, Type AClass)
+		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 			if (ATag == "FILE")
@@ -49,14 +45,7 @@ namespace GedCom551
 			}
 			else
 			{
-				if (ATag == "REFN")
-				{
-					Result = base.UserReferences.Add(new TGEDCOMUserReference(base.Owner, this, ATag, AValue));
-				}
-				else
-				{
-					Result = base.AddTag(ATag, AValue, AClass);
-				}
+				Result = base.AddTag(ATag, AValue, ATagConstructor);
 			}
 			return Result;
 		}
@@ -84,7 +73,7 @@ namespace GedCom551
 			this._FileReferences.ReplaceXRefs(aMap);
 		}
 
-		public override void ResetOwner(TGEDCOMObject AOwner)
+		public override void ResetOwner(TGEDCOMTree AOwner)
 		{
 			base.ResetOwner(AOwner);
 			this._FileReferences.ResetOwner(AOwner);
@@ -96,8 +85,13 @@ namespace GedCom551
 			this._FileReferences.SaveToStream(AStream);
 		}
 
-		public TGEDCOMMultimediaRecord(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMMultimediaRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
+		}
+
+		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+		{
+			return new TGEDCOMMultimediaRecord(AOwner, AParent, AName, AValue);
 		}
 	}
 }

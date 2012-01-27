@@ -4,9 +4,13 @@ using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKSys;
 using GKUI.Controls;
 using GKUI.Lists;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI
 {
@@ -25,7 +29,7 @@ namespace GKUI
 
 		private bool GetInput(string aTitle, ref string aValue)
 		{
-			return InputBox.Query(aTitle, GKL.LSList[202], ref aValue) && aValue.Trim() != "";
+			return InputBox.Query(aTitle, LangMan.LSList[202], ref aValue) && aValue.Trim() != "";
 		}
 
 		private void ListModify(object Sender, object ItemData, TGenEngine.TRecAction Action)
@@ -55,7 +59,7 @@ namespace GKUI
 						if (Index >= 0)
 						{
 							string val = this.FAddress.GetPhoneNumber(Index);
-							if (GetInput(GKL.LSList[131], ref val))
+							if (GetInput(LangMan.LSList[131], ref val))
 							{
 								this.FAddress.SetPhoneNumber(Index, val);
 							}
@@ -65,7 +69,7 @@ namespace GKUI
 				else
 				{
 					string val = "";
-					if (GetInput(GKL.LSList[131], ref val))
+					if (GetInput(LangMan.LSList[131], ref val))
 					{
 						this.FAddress.SetPhoneNumber(this.FAddress.GetPhoneNumbersCount(), val);
 					}
@@ -92,7 +96,7 @@ namespace GKUI
 							if (Index >= 0)
 							{
 								string val = this.FAddress.GetEmailAddress(Index);
-								if (GetInput(GKL.LSList[132], ref val))
+								if (GetInput(LangMan.LSList[132], ref val))
 								{
 									this.FAddress.SetEmailAddress(Index, val);
 								}
@@ -102,7 +106,7 @@ namespace GKUI
 					else
 					{
 						string val = "";
-						if (GetInput(GKL.LSList[132], ref val))
+						if (GetInput(LangMan.LSList[132], ref val))
 						{
 							this.FAddress.SetEmailAddress(this.FAddress.GetEmailAddressesCount(), val);
 						}
@@ -116,7 +120,7 @@ namespace GKUI
 							case TGenEngine.TRecAction.raAdd:
 							{
 								string val = "";
-								if (GetInput(GKL.LSList[133], ref val))
+								if (GetInput(LangMan.LSList[133], ref val))
 								{
 									this.FAddress.SetWebPage(this.FAddress.GetWebPagesCount(), val);
 								}
@@ -127,7 +131,7 @@ namespace GKUI
 								if (Index >= 0)
 								{
 									string val = this.FAddress.GetWebPage(Index);
-									if (GetInput(GKL.LSList[133], ref val))
+									if (GetInput(LangMan.LSList[133], ref val))
 									{
 										this.FAddress.SetWebPage(Index, val);
 									}
@@ -209,28 +213,28 @@ namespace GKUI
 
 			this.FPhonesList = new TSheetList(this.SheetPhones);
 			this.FPhonesList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
-			this.FPhonesList.List.AddListColumn(GKL.LSList[131], 350, false);
+			this.FPhonesList.List.AddListColumn(LangMan.LSList[131], 350, false);
 
 			this.FMailsList = new TSheetList(this.SheetEmails);
 			this.FMailsList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
-			this.FMailsList.List.AddListColumn(GKL.LSList[132], 350, false);
+			this.FMailsList.List.AddListColumn(LangMan.LSList[132], 350, false);
 
 			this.FWebsList = new TSheetList(this.SheetWebPages);
 			this.FWebsList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
-			this.FWebsList.List.AddListColumn(GKL.LSList[133], 350, false);
+			this.FWebsList.List.AddListColumn(LangMan.LSList[133], 350, false);
 
-			this.btnAccept.Text = GKL.LSList[97];
-			this.btnCancel.Text = GKL.LSList[98];
-			this.Text = GKL.LSList[82];
-			this.SheetCommon.Text = GKL.LSList[82];
-			this.Label1.Text = GKL.LSList[195];
-			this.Label2.Text = GKL.LSList[196];
-			this.Label3.Text = GKL.LSList[197];
-			this.Label4.Text = GKL.LSList[198];
-			this.Label5.Text = GKL.LSList[82];
-			this.SheetPhones.Text = GKL.LSList[199];
-			this.SheetEmails.Text = GKL.LSList[200];
-			this.SheetWebPages.Text = GKL.LSList[201];
+			this.btnAccept.Text = LangMan.LSList[97];
+			this.btnCancel.Text = LangMan.LSList[98];
+			this.Text = LangMan.LSList[82];
+			this.SheetCommon.Text = LangMan.LSList[82];
+			this.Label1.Text = LangMan.LSList[195];
+			this.Label2.Text = LangMan.LSList[196];
+			this.Label3.Text = LangMan.LSList[197];
+			this.Label4.Text = LangMan.LSList[198];
+			this.Label5.Text = LangMan.LSList[82];
+			this.SheetPhones.Text = LangMan.LSList[199];
+			this.SheetEmails.Text = LangMan.LSList[200];
+			this.SheetWebPages.Text = LangMan.LSList[201];
 		}
 	}
 }

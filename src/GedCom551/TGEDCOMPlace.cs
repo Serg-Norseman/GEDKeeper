@@ -1,8 +1,7 @@
 using System;
-using System.IO;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
 
 namespace GedCom551
 {
@@ -16,47 +15,34 @@ namespace GedCom551
 
 		public TGEDCOMPointer Location
 		{
-			get { return base.TagClass("_LOC", typeof(TGEDCOMPointer)) as TGEDCOMPointer; }
+			get { return base.TagClass("_LOC", typeof(TGEDCOMPointer), TGEDCOMPointer.Create) as TGEDCOMPointer; }
 		}
 
 		public TGEDCOMMap Map
 		{
-			get { return base.TagClass("MAP", typeof(TGEDCOMMap)) as TGEDCOMMap; }
+			get { return base.TagClass("MAP", typeof(TGEDCOMMap), TGEDCOMMap.Create) as TGEDCOMMap; }
 		}
 
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
-			base.SetLists(TEnumSet.Create(new Enum[]
-			{
-				TGEDCOMSubList.stNotes
-			}));
+			base.SetLists(EnumSet.Create(new Enum[] { TGEDCOMSubList.stNotes }));
 			this.FName = "PLAC";
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, Type AClass)
+		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
-			TGEDCOMTag Result;
-			if (ATag == "_LOC")
-			{
-				Result = base.AddTag(ATag, AValue, typeof(TGEDCOMPointer));
-			}
-			else
-			{
-				if (ATag == "MAP")
-				{
-					Result = base.AddTag(ATag, AValue, typeof(TGEDCOMMap));
-				}
-				else
-				{
-					Result = base.AddTag(ATag, AValue, AClass);
-				}
-			}
-			return Result;
+			// "MAP", "_LOC" defines by default
+			return base.AddTag(ATag, AValue, ATagConstructor);
 		}
 
-		public TGEDCOMPlace(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMPlace(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
+		}
+
+		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+		{
+			return new TGEDCOMPlace(AOwner, AParent, AName, AValue);
 		}
 	}
 }

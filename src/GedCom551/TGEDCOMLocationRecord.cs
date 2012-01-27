@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
 
 namespace GedCom551
 {
@@ -9,7 +9,7 @@ namespace GedCom551
 	{
 		public TGEDCOMMap Map
 		{
-			get { return base.TagClass("MAP", typeof(TGEDCOMMap)) as TGEDCOMMap; }
+			get { return base.TagClass("MAP", typeof(TGEDCOMMap), TGEDCOMMap.Create) as TGEDCOMMap; }
 		}
 
 		public string LocationName
@@ -18,34 +18,27 @@ namespace GedCom551
 			set { base.SetTagStringValue("NAME", value); }
 		}
 
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
-			base.SetLists(TEnumSet.Create(new Enum[]
-			{
-				TGEDCOMSubList.stNotes, 
-				TGEDCOMSubList.stMultimedia
-			}));
+			base.SetLists(EnumSet.Create(new Enum[] { TGEDCOMSubList.stNotes, TGEDCOMSubList.stMultimedia }));
 			this.FRecordType = TGEDCOMRecordType.rtLocation;
 			this.FName = "_LOC";
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, Type AClass)
+		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
-			TGEDCOMTag Result;
-
-			if (ATag == "MAP")
-			{
-				Result = base.AddTag(ATag, AValue, typeof(TGEDCOMMap));
-			} else {
-				Result = base.AddTag(ATag, AValue, AClass);
-			}
-
-			return Result;
+			// "MAP" defines by default
+			return base.AddTag(ATag, AValue, ATagConstructor);
 		}
 
-		public TGEDCOMLocationRecord(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMLocationRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
+		}
+
+		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+		{
+			return new TGEDCOMLocationRecord(AOwner, AParent, AName, AValue);
 		}
 	}
 }

@@ -1,9 +1,14 @@
 using System;
 using System.Runtime.InteropServices;
+using System.Security;
 using System.Security.Permissions;
 using System.Text;
 
-namespace GKCore.Sys
+/// <summary>
+/// Localization: unknown
+/// </summary>
+
+namespace GKSys
 {
 	public class EIniFileException : Exception
 	{
@@ -19,7 +24,7 @@ namespace GKCore.Sys
 	}
 
     [FileIOPermission(SecurityAction.LinkDemand, Unrestricted=true)]
-	public class TIniFile : IDisposable
+	public class IniFile : IDisposable
 	{
 		private string FFileName;
 		private bool Disposed_;
@@ -29,7 +34,7 @@ namespace GKCore.Sys
 			get { return this.FFileName; }
 		}
 
-		public TIniFile([In] string FileName)
+		public IniFile([In] string FileName)
 		{
 			this.FFileName = FileName;
 		}
@@ -124,7 +129,7 @@ namespace GKCore.Sys
 		{
 			StringBuilder Buffer = new StringBuilder(2048);
 			string Result;
-			if (SysUtils.GetPrivateProfileString(Section, Ident, Default, Buffer, (uint)Buffer.Capacity, this.FileName) != 0u)
+			if (GetPrivateProfileString(Section, Ident, Default, Buffer, (uint)Buffer.Capacity, this.FileName) != 0u)
 			{
 				Result = Buffer.ToString();
 			}
@@ -137,7 +142,7 @@ namespace GKCore.Sys
 
 		public void WriteString([In] string Section, [In] string Ident, [In] string Value)
 		{
-			if (SysUtils.WritePrivateProfileString(Section, Ident, Value, this.FileName) == (LongBool)0)
+			if (WritePrivateProfileString(Section, Ident, Value, this.FileName) == (LongBool)0)
 			{
 				throw new EIniFileException(string.Format("Unable to write to {0}", new object[] { this.FileName }));
 			}
@@ -145,7 +150,7 @@ namespace GKCore.Sys
 
 		public void EraseSection([In] string Section)
 		{
-			if (SysUtils.WritePrivateProfileString(Section, IntPtr.Zero, IntPtr.Zero, this.FileName) == (LongBool)0)
+			if (WritePrivateProfileString(Section, IntPtr.Zero, IntPtr.Zero, this.FileName) == (LongBool)0)
 			{
 				throw new EIniFileException(string.Format("Unable to write to {0}", new object[] { this.FileName }));
 			}
@@ -153,17 +158,45 @@ namespace GKCore.Sys
 
 		public void DeleteKey([In] string Section, [In] string Ident)
 		{
-			SysUtils.WritePrivateProfileString(Section, Ident, IntPtr.Zero, this.FileName);
+			WritePrivateProfileString(Section, Ident, IntPtr.Zero, this.FileName);
 		}
 
 		public void UpdateFile()
 		{
-			SysUtils.WritePrivateProfileString(IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, this.FileName);
+			WritePrivateProfileString(IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, this.FileName);
 		}
 
 		public void Free()
 		{
-			TObjectHelper.Free(this);
+			SysUtils.Free(this);
 		}
+
+		[SuppressUnmanagedCodeSecurity]
+		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+		private static extern uint GetPrivateProfileString(string lpAppName, string lpKeyName, string lpDefault, StringBuilder lpReturnedString, uint nSize, string lpFileName);
+
+		[SuppressUnmanagedCodeSecurity]
+		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+		private static extern uint GetPrivateProfileString(string lpAppName, IntPtr lpKeyName, IntPtr lpDefault, [Out] byte[] lpReturnedString, uint nSize, string lpFileName);
+
+		[SuppressUnmanagedCodeSecurity]
+		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+		private static extern uint GetPrivateProfileString(IntPtr lpAppName, IntPtr lpKeyName, IntPtr lpDefault, [Out] byte[] lpReturnedString, uint nSize, string lpFileName);
+
+		[SuppressUnmanagedCodeSecurity]
+		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+		private static extern LongBool WritePrivateProfileString(string lpAppName, string lpKeyName, string lpString, string lpFileName);
+
+		[SuppressUnmanagedCodeSecurity]
+		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+		private static extern LongBool WritePrivateProfileString(string lpAppName, string lpKeyName, IntPtr lpString, string lpFileName);
+
+		[SuppressUnmanagedCodeSecurity]
+		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+		private static extern LongBool WritePrivateProfileString(string lpAppName, IntPtr lpKeyName, IntPtr lpString, string lpFileName);
+
+		[SuppressUnmanagedCodeSecurity]
+		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+		private static extern LongBool WritePrivateProfileString(IntPtr lpAppName, IntPtr lpKeyName, IntPtr lpString, string lpFileName);
 	}
 }

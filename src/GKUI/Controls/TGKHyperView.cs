@@ -1,10 +1,13 @@
 using System;
 using System.Drawing;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-using GKCore.Sys;
+using GKSys;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI.Controls
 {
@@ -33,7 +36,7 @@ namespace GKUI.Controls
 
 			public void Free()
 			{
-				TObjectHelper.Free(this);
+				SysUtils.Free(this);
 			}
 		}
 
@@ -48,11 +51,10 @@ namespace GKUI.Controls
 		private Color FColor;
 		private SolidBrush FDefBrush;
 		private Color FDwnColor;
-		private Font FFont;
-		private ushort FHeightCount;
+		private int FHeightCount;
 		private int[] FHeights;
 		private int FLeftPos;
-		private TStringList FLines;
+		private StringList FLines;
 		private int FLink;
 		private Color FLinkColor;
 		private TList FLinks;
@@ -100,13 +102,7 @@ namespace GKUI.Controls
 			set { this.SetColor(value); }
 		}
 
-		public new Font Font
-		{
-			get { return this.FFont; }
-			set { this.SetFont(value); }
-		}
-
-		public TStringList Lines
+		public StringList Lines
 		{
 			get { return this.FLines; }
 			set { this.SetLines(value); }
@@ -131,7 +127,7 @@ namespace GKUI.Controls
 		{
 			if ((int)this.FHeightCount != this.FLines.Count)
 			{
-				this.FHeightCount = (ushort)this.FLines.Count;
+				this.FHeightCount = this.FLines.Count;
 				this.FHeights = new int[this.FHeightCount];
 			}
 
@@ -164,7 +160,7 @@ namespace GKUI.Controls
 			base.Invalidate();
 		}
 
-		private void SetLines(TStringList Value)
+		private void SetLines(StringList Value)
 		{
 			this.FLines.Assign(Value);
 		}
@@ -485,9 +481,9 @@ namespace GKUI.Controls
 			this.FTextFont = new Font(this.FTextFont, fontStyle);
 		}
 
-		private void GotoLink(ushort Link)
+		private void GotoLink(int Link)
 		{
-			string i = "~@" + (this.FLinks[(int)Link] as TGKHyperView.TLink).Name + "~";
+			string i = "~@" + (this.FLinks[Link] as TGKHyperView.TLink).Name + "~";
 			int h = this.FBorderWidth;
 
 			int num = this.FLines.Count - 1;
@@ -511,7 +507,7 @@ namespace GKUI.Controls
 			IL_77:
 			if (this.EOnLink != null)
 			{
-				this.EOnLink(this, (this.FLinks[(int)Link] as TGKHyperView.TLink).Name);
+				this.EOnLink(this, (this.FLinks[Link] as TGKHyperView.TLink).Name);
 			}
 		}
 
@@ -575,7 +571,7 @@ namespace GKUI.Controls
 			}
 			if (this.FLink >= 0)
 			{
-				this.GotoLink((ushort)this.FLink);
+				this.GotoLink(this.FLink);
 			}
 		}
 
@@ -696,7 +692,7 @@ namespace GKUI.Controls
 						if (msg == 277)
 						{
 							uint wParam = (uint)m.WParam.ToInt32();
-							switch (SysUtils.GetScrollEventType(wParam & 65535u))
+							switch (ScrollUtils.GetScrollEventType(wParam & 65535u))
 							{
 								case ScrollEventType.SmallDecrement:
 								{
@@ -744,7 +740,7 @@ namespace GKUI.Controls
 					else
 					{
 						uint wParam = (uint)m.WParam.ToInt32();
-						switch (SysUtils.GetScrollEventType(wParam & 65535u))
+						switch (ScrollUtils.GetScrollEventType(wParam & 65535u))
 						{
 							case ScrollEventType.SmallDecrement:
 							{
@@ -806,7 +802,7 @@ namespace GKUI.Controls
 			base.BorderStyle = BorderStyle.Fixed3D;
 			this.FHeightCount = 0;
 			this.FAcceptFontChange = false;
-			this.FLines = new TStringList();
+			this.FLines = new StringList();
 			this.FLines.OnChange += new TNotifyEvent(this.LinesChanged);
 			int[] fHeights = this.FHeights;
 			int[] array;
@@ -839,8 +835,7 @@ namespace GKUI.Controls
 			if (Disposing)
 			{
 				this.ClearLinks();
-				this.FLinks.Free();
-				TObjectHelper.Free(this.FFont);
+				this.FLinks.Dispose();
 				this.FHeights = null;
 				this.FLines.Free();
 			}

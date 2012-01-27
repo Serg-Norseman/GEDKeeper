@@ -23,12 +23,12 @@ namespace GedCom551
 
 		public TGEDCOMNotes Notes
 		{
-			get { return this.GetNotes(); }
+			get { return base.TagClass("NOTE", typeof(TGEDCOMNotes), TGEDCOMNotes.Create) as TGEDCOMNotes; }
 		}
 
 		private TGEDCOMDateExact GetDate()
 		{
-			return base.TagClass("DATE", typeof(TGEDCOMDateExact)) as TGEDCOMDateExact;
+			return base.TagClass("DATE", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact;
 		}
 
 		private TGEDCOMTime GetTime()
@@ -38,7 +38,7 @@ namespace GedCom551
 			{
 				DateTag = this.AddTag("DATE", "", null);
 			}
-			return DateTag.TagClass("TIME", typeof(TGEDCOMTime)) as TGEDCOMTime;
+			return DateTag.TagClass("TIME", typeof(TGEDCOMTime), TGEDCOMTime.Create) as TGEDCOMTime;
 		}
 
 		private DateTime GetChangeDateTime()
@@ -55,33 +55,28 @@ namespace GedCom551
 			}
 		}
 
-		private TGEDCOMNotes GetNotes()
-		{
-			return base.TagClass("NOTE", typeof(TGEDCOMNotes)) as TGEDCOMNotes;
-		}
-
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
 			this.FName = "CHAN";
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, Type AClass)
+		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 			if (ATag == "DATE")
 			{
-				Result = base.AddTag(ATag, AValue, typeof(TGEDCOMDateExact));
+				Result = base.AddTag(ATag, AValue, TGEDCOMDateExact.Create);
 			}
 			else
 			{
 				if (ATag == "NOTE")
 				{
-					Result = base.AddTag(ATag, AValue, typeof(TGEDCOMNotes));
+					Result = base.AddTag(ATag, AValue, TGEDCOMNotes.Create);
 				}
 				else
 				{
-					Result = base.AddTag(ATag, AValue, AClass);
+					Result = base.AddTag(ATag, AValue, ATagConstructor);
 				}
 			}
 			return Result;
@@ -90,20 +85,17 @@ namespace GedCom551
 		public override string ToString()
 		{
 			DateTime cdt = this.GetChangeDateTime();
-			string result;
-			if (cdt.Ticks == 0)
-			{
-				result = "";
-			}
-			else
-			{
-				result = cdt.ToString("yyyy.MM.dd HH:mm:ss", null);
-			}
+			string result = ((cdt.Ticks == 0) ? "" : cdt.ToString("yyyy.MM.dd HH:mm:ss", null));
 			return result;
 		}
 
-		public TGEDCOMChangeDate(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMChangeDate(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
+		}
+
+		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+		{
+			return new TGEDCOMChangeDate(AOwner, AParent, AName, AValue);
 		}
 	}
 }

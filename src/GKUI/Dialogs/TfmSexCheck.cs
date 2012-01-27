@@ -3,7 +3,11 @@ using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKSys;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI
 {
@@ -12,12 +16,12 @@ namespace GKUI
 		public TfmSexCheck()
 		{
 			this.InitializeComponent();
-			this.btnAccept.Text = GKL.LSList[97];
-			this.btnCancel.Text = GKL.LSList[98];
-			this.Text = GKL.LSList[104];
-			this.GroupBox1.Text = GKL.LSList[87];
-			this.sbMale.Text = GKL.LSList[66];
-			this.sbFemale.Text = GKL.LSList[67];
+			this.btnAccept.Text = LangMan.LSList[97];
+			this.btnCancel.Text = LangMan.LSList[98];
+			this.Text = LangMan.LSList[104];
+			this.GroupBox1.Text = LangMan.LSList[87];
+			this.sbMale.Text = LangMan.LSList[66];
+			this.sbFemale.Text = LangMan.LSList[67];
 		}
 
 		public static TGEDCOMSex DefineSex(string iName, string iPatr, TNamesTable aNamesTable)
@@ -82,7 +86,7 @@ namespace GKUI
 				}
 				finally
 				{
-					TObjectHelper.Free(dlg);
+					SysUtils.Free(dlg);
 				}
 			}
 			return Result;
@@ -93,7 +97,7 @@ namespace GKUI
 			if (iRec.Sex == TGEDCOMSex.svNone || iRec.Sex == TGEDCOMSex.svUndetermined)
 			{
 				string f_fam, f_name, f_patr;
-				TGenEngine.GetNameParts(iRec, out f_fam, out f_name, out f_patr);
+				iRec.aux_GetNameParts(out f_fam, out f_name, out f_patr);
 				iRec.Sex = DefineSex(f_name, f_patr, aNamesTable);
 			}
 		}

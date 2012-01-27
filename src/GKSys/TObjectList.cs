@@ -1,6 +1,10 @@
 using System;
 
-namespace GKCore.Sys
+/// <summary>
+/// Localization: clean
+/// </summary>
+
+namespace GKSys
 {
 	public class TObjectList : TList
 	{
@@ -16,7 +20,7 @@ namespace GKCore.Sys
 		{
 			if (this.OwnsObjects && Action == TListNotification.lnDeleted)
 			{
-				TObjectHelper.Free(Instance);
+				SysUtils.Free(Instance);
 			}
 			base.Notify(Instance, Action);
 		}

@@ -51,6 +51,15 @@
 			</OBJECT>
 	</UL>
 	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="&Igrave;&oacute;&euml;&uuml;&ograve;&egrave;&igrave;&aring;&auml;&egrave;&agrave;">
+		</OBJECT>
+	<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="&Otilde;&eth;&agrave;&iacute;&aring;&iacute;&egrave;&aring; &ocirc;&agrave;&eacute;&euml;&icirc;&acirc;">
+			<param name="Local" value="gkhMediaStore.htm">
+			</OBJECT>
+	</UL>
+	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="&Iuml;&icirc;&egrave;&ntilde;&ecirc; &egrave; &iacute;&agrave;&acirc;&egrave;&atilde;&agrave;&ouml;&egrave;&yuml;">
 		</OBJECT>
 	<UL>

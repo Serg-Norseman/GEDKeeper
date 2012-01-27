@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-using GKCore.Sys;
+using GKSys;
 
 namespace GedCom551
 {
@@ -33,7 +33,7 @@ namespace GedCom551
 			if (!this.Disposed_)
 			{
 				this.Clear();
-				this.FList.Free();
+				this.FList.Dispose();
 				this.Disposed_ = true;
 			}
 		}
@@ -110,7 +110,7 @@ namespace GedCom551
 			}
 		}
 
-		public void ResetOwner(TGEDCOMObject AOwner)
+		public void ResetOwner(TGEDCOMTree AOwner)
 		{
 			for (int i = 0; i <= this.FList.Count - 1; i++)
 			{
@@ -136,7 +136,7 @@ namespace GedCom551
 
 		public void Free()
 		{
-			TObjectHelper.Free(this);
+			SysUtils.Free(this);
 		}
 	}
 	
@@ -294,7 +294,7 @@ namespace GedCom551
 			}
 		}
 
-		public void ResetOwner(TGEDCOMObject AOwner)
+		public void ResetOwner(TGEDCOMTree AOwner)
 		{
 			if (this.FList != null)
 			{

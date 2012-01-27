@@ -33,7 +33,7 @@
     <DebugType>Full</DebugType>
     <Optimize>false</Optimize>
     <StartAction>Project</StartAction>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>..\</OutputPath>
@@ -48,19 +48,10 @@
     </Reference>
     <Reference Include="Microsoft.mshtml" />
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="XapianCSharp">
       <HintPath>XapianCSharp.dll</HintPath>
     </Reference>
@@ -135,37 +126,34 @@
     <Compile Include="GedCom551\TGEDCOMUserReference.cs" />
     <Compile Include="GedCom551\TXRefReplaceMap.cs" />
     <Compile Include="GEDKeeper2.cs" />
-    <Compile Include="GKCore\GKLangs.cs" />
+    <Compile Include="GKCore\IO\ExcelExporter.cs" />
+    <Compile Include="GKCore\IO\Exporter.cs" />
+    <Compile Include="GKCore\IO\HTMLExporter.cs" />
+    <Compile Include="GKCore\IO\Importer.cs" />
+    <Compile Include="GKCore\IO\TPedigree.cs" />
+    <Compile Include="GKCore\IO\WebExporter.cs" />
+    <Compile Include="GKCore\LangMan.cs" />
     <Compile Include="GKCore\SearchManager.cs" />
     <Compile Include="GKCore\Settings\TChartOptions.cs" />
     <Compile Include="GKCore\Settings\TGlobalOptions.cs" />
     <Compile Include="GKCore\Settings\TPedigreeOptions.cs" />
     <Compile Include="GKCore\Settings\TProxy.cs" />
-    <Compile Include="GKCore\Sys\IniFile.cs" />
-    <Compile Include="GKCore\Sys\EnumSet.cs" />
-    <Compile Include="GKCore\Sys\Structs.cs" />
-    <Compile Include="GKCore\Sys\SysUtils.cs" />
-    <Compile Include="GKCore\Sys\TList.cs" />
-    <Compile Include="GKCore\Sys\TObjectList.cs" />
-    <Compile Include="GKCore\Sys\TRect.cs" />
-    <Compile Include="GKCore\Sys\TStack.cs" />
-    <Compile Include="GKCore\Sys\TStringList.cs" />
-    <Compile Include="GKCore\Sys\TStrings.cs" />
     <Compile Include="GKCore\TCalculator.cs" />
     <Compile Include="GKCore\TCalendarConv.cs" />
-    <Compile Include="GKCore\TExcelExporter.cs" />
-    <Compile Include="GKCore\TExporter.cs" />
     <Compile Include="GKCore\TGenEngine.cs" />
-    <Compile Include="GKCore\TGKImporter.cs" />
     <Compile Include="GKCore\TGraph.cs" />
-    <Compile Include="GKCore\THTMLExporter.cs" />
-    <Compile Include="GKCore\TLangMan.cs" />
-    <Compile Include="GKCore\TPedigree.cs" />
     <Compile Include="GKCore\TScriptEngine.cs" />
-    <Compile Include="GKCore\TWebExporter.cs" />
     <Compile Include="GKResources.Designer.cs">
       <DependentUpon>GKResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="GKSys\IniFile.cs" />
+    <Compile Include="GKSys\ScrollUtils.cs" />
+    <Compile Include="GKSys\StringList.cs" />
+    <Compile Include="GKSys\Structs.cs" />
+    <Compile Include="GKSys\SysUtils.cs" />
+    <Compile Include="GKSys\TList.cs" />
+    <Compile Include="GKSys\TObjectList.cs" />
+    <Compile Include="GKSys\TStack.cs" />
     <Compile Include="GKUI\Controls\InputBox.cs" />
     <Compile Include="GKUI\Controls\TComboItem.cs" />
     <Compile Include="GKUI\Controls\TExtListItem.cs" />
@@ -223,9 +211,7 @@
     <Compile Include="GKUI\Dialogs\TfmMediaView.Designer.cs">
       <DependentUpon>TfmMediaView.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmNameEdit.cs">
-      <DependentUpon>TfmPersonNew.cs</DependentUpon>
-    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmNameEdit.cs" />
     <Compile Include="GKUI\Dialogs\TfmNameEdit.Designer.cs">
       <DependentUpon>TfmNameEdit.cs</DependentUpon>
     </Compile>
@@ -233,9 +219,7 @@
     <Compile Include="GKUI\Dialogs\TfmNoteEdit.Designer.cs">
       <DependentUpon>TfmNoteEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmOptions.cs">
-      <DependentUpon>TfmPersonNew.cs</DependentUpon>
-    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmOptions.cs" />
     <Compile Include="GKUI\Dialogs\TfmOptions.Designer.cs">
       <DependentUpon>TfmOptions.cs</DependentUpon>
     </Compile>
@@ -291,8 +275,17 @@
     <Compile Include="GKUI\Dialogs\TfmUserRefEdit.Designer.cs">
       <DependentUpon>TfmUserRefEdit.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Lists\TIndividualListColumns.cs" />
     <Compile Include="GKUI\TfmBase.Designer.cs">
       <DependentUpon>TfmBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\TfmCalcWidget.cs" />
+    <Compile Include="GKUI\TfmCalcWidget.Designer.cs">
+      <DependentUpon>TfmCalcWidget.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\TfmCalendar.cs" />
+    <Compile Include="GKUI\TfmCalendar.Designer.cs">
+      <DependentUpon>TfmCalendar.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\TfmChart.Designer.cs">
       <DependentUpon>TfmChart.cs</DependentUpon>
@@ -302,6 +295,10 @@
     </Compile>
     <Compile Include="GKUI\TfmMaps.Designer.cs">
       <DependentUpon>TfmMaps.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\TfmNamesBook.cs" />
+    <Compile Include="GKUI\TfmNamesBook.Designer.cs">
+      <DependentUpon>TfmNamesBook.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\TfmOrganizer.Designer.cs">
       <DependentUpon>TfmOrganizer.cs</DependentUpon>
@@ -318,10 +315,10 @@
     <Compile Include="GKUI\Charts\TPersonList.cs" />
     <Compile Include="GKCore\Commands\TCmdPersonChangePatriarch.cs" />
     <Compile Include="GKCore\Commands\TCmdPersonChangeSex.cs" />
-    <Compile Include="GKCore\TBackManager.cs" />
+    <Compile Include="GKCore\NavManager.cs" />
     <Compile Include="GKCore\TCustomCommand.cs" />
     <Compile Include="GKCore\TNamesTable.cs" />
-    <Compile Include="GKCore\TUndoManager.cs" />
+    <Compile Include="GKCore\UndoManager.cs" />
     <Compile Include="GKUI\Lists\TCommunicationListMan.cs" />
     <Compile Include="GKUI\Lists\TFamilyListMan.cs" />
     <Compile Include="GKUI\Lists\TFilter.cs" />
@@ -353,6 +350,10 @@
     <Compile Include="GKUI\TfmTextSearch.Designer.cs">
       <DependentUpon>TfmTextSearch.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\TfmTimeLine.cs" />
+    <Compile Include="GKUI\TfmTimeLine.Designer.cs">
+      <DependentUpon>TfmTimeLine.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\TfmTreeTools.cs" />
     <Compile Include="GKUI\TfmTreeTools.Designer.cs">
       <DependentUpon>TfmTreeTools.cs</DependentUpon>
@@ -367,24 +368,11 @@
     <Compile Include="Ext\XLSFile\TStrCell.cs" />
     <Compile Include="Ext\XLSFile\TWordCell.cs" />
     <Compile Include="Ext\XLSFile\TXLSFile.cs" />
-    <Compile Include="GKUI\Widgets\TfmCalcWidget.cs" />
-    <Compile Include="GKUI\Widgets\TfmCalcWidget.Designer.cs">
-      <DependentUpon>TfmCalcWidget.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\Widgets\TfmCalendar.cs" />
-    <Compile Include="GKUI\Widgets\TfmCalendar.Designer.cs">
-      <DependentUpon>TfmCalendar.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\Widgets\TfmNamesBook.cs" />
-    <Compile Include="GKUI\Widgets\TfmNamesBook.Designer.cs">
-      <DependentUpon>TfmNamesBook.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\Widgets\TfmTimeLine.cs" />
-    <Compile Include="GKUI\Widgets\TfmTimeLine.Designer.cs">
-      <DependentUpon>TfmTimeLine.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmAbout.resx">
+      <DependentUpon>TfmAbout.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\TfmAssociationEdit.resx">
       <DependentUpon>TfmAssociationEdit.cs</DependentUpon>
     </EmbeddedResource>
@@ -417,6 +405,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\TfmNoteEdit.resx">
       <DependentUpon>TfmNoteEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmOptions.resx">
+      <DependentUpon>TfmOptions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\TfmPersonEdit.resx">
       <DependentUpon>TfmPersonEdit.cs</DependentUpon>
@@ -463,6 +454,9 @@
     <EmbeddedResource Include="GKUI\TfmGEDKeeper.resx">
       <DependentUpon>TfmGEDKeeper.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\TfmScriptDaemon.resx">
+      <DependentUpon>TfmScriptDaemon.Designer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\TfmTextSearch.resx">
       <DependentUpon>TfmTextSearch.cs</DependentUpon>
     </EmbeddedResource>
@@ -476,11 +470,11 @@
   <ItemGroup>
     <Folder Include="Ext" />
     <Folder Include="Ext\CSV" />
+    <Folder Include="GKCore\IO" />
     <Folder Include="GKCore\Settings" />
-    <Folder Include="GKCore\Sys" />
     <Folder Include="GKUI\Controls" />
     <Folder Include="GKUI\Dialogs" />
-    <Folder Include="GKUI\Widgets" />
+    <Folder Include="GKSys" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

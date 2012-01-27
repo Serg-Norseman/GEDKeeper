@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-using GKCore.Sys;
+using GKSys;
 
 namespace GedCom551
 {
@@ -68,7 +68,7 @@ namespace GedCom551
 			set { this.FDay = value; }
 		}
 
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
 			this.FDateCalendar = TGEDCOMCalendar.dcGregorian;
@@ -399,10 +399,7 @@ namespace GedCom551
 		{
 			if (((S != null) ? S.Length : 0) != 3)
 			{
-				throw new EGEDCOMException(string.Format("The string {0} is not a valid month identifier", new object[]
-				{
-					S
-				}));
+				throw new EGEDCOMException(string.Format("The string {0} is not a valid month identifier", new object[] { S }));
 			}
 			string SU = S.ToUpper();
 			int Month = 1;
@@ -411,10 +408,7 @@ namespace GedCom551
 				Month++;
 				if (Month == 13)
 				{
-					throw new EGEDCOMException(string.Format("The string {0} is not a valid month identifier", new object[]
-					{
-						S
-					}));
+					throw new EGEDCOMException(string.Format("The string {0} is not a valid month identifier", new object[] { S }));
 				}
 			}
 			return TGEDCOMDate.GEDCOMMonthArray[Month - 1];
@@ -424,10 +418,7 @@ namespace GedCom551
 		{
 			if (((S != null) ? S.Length : 0) != 4)
 			{
-				throw new EGEDCOMException(string.Format("The string {0} is not a valid French month identifier", new object[]
-				{
-					S
-				}));
+				throw new EGEDCOMException(string.Format("The string {0} is not a valid French month identifier", new object[] { S }));
 			}
 			string SU = S.ToUpper();
 			int Month = 1;
@@ -436,10 +427,7 @@ namespace GedCom551
 				Month++;
 				if (Month == 14)
 				{
-					throw new EGEDCOMException(string.Format("The string {0} is not a valid French month identifier", new object[]
-					{
-						S
-					}));
+					throw new EGEDCOMException(string.Format("The string {0} is not a valid French month identifier", new object[] { S }));
 				}
 			}
 			return TGEDCOMDate.GEDCOMMonthFrenchArray[Month - 1];
@@ -449,10 +437,7 @@ namespace GedCom551
 		{
 			if (((S != null) ? S.Length : 0) != 3)
 			{
-				throw new EGEDCOMException(string.Format("The string {0} is not a valid Hebrew month identifier", new object[]
-				{
-					S
-				}));
+				throw new EGEDCOMException(string.Format("The string {0} is not a valid Hebrew month identifier", new object[] { S }));
 			}
 			string SU = S.ToUpper();
 			int Month = 1;
@@ -461,10 +446,7 @@ namespace GedCom551
 				Month++;
 				if (Month == 14)
 				{
-					throw new EGEDCOMException(string.Format("The string {0} is not a valid Hebrew month identifier", new object[]
-					{
-						S
-					}));
+					throw new EGEDCOMException(string.Format("The string {0} is not a valid Hebrew month identifier", new object[] { S }));
 				}
 			}
 			return TGEDCOMDate.GEDCOMMonthHebrewArray[Month - 1];
@@ -700,93 +682,36 @@ namespace GedCom551
 		{
 			TGEDCOMDate.GEDCOMMonthHebrewArray = new string[]
 			{
-				"TSH", 
-				"CSH", 
-				"KSL", 
-				"TVT", 
-				"SHV", 
-				"ADR", 
-				"ADS", 
-				"NSN", 
-				"IYR", 
-				"SVN", 
-				"TMZ", 
-				"AAV", 
-				"ELL"
+				"TSH", "CSH", "KSL", "TVT", "SHV", "ADR", 
+				"ADS", "NSN", "IYR", "SVN", "TMZ", "AAV", "ELL"
 			};
 			TGEDCOMDate.GEDCOMMonthFrenchArray = new string[]
 			{
-				"VEND", 
-				"BRUM", 
-				"FRIM", 
-				"NIVO", 
-				"PLUV", 
-				"VENT", 
-				"GERM", 
-				"FLOR", 
-				"PRAI", 
-				"MESS", 
-				"THER", 
-				"FRUC", 
-				"COMP"
+				"VEND", "BRUM", "FRIM", "NIVO", "PLUV", "VENT", 
+				"GERM", "FLOR", "PRAI", "MESS", "THER", "FRUC", "COMP"
 			};
 			TGEDCOMDate.GEDCOMMonthArray = new string[]
 			{
-				"JAN", 
-				"FEB", 
-				"MAR", 
-				"APR", 
-				"MAY", 
-				"JUN", 
-				"JUL", 
-				"AUG", 
-				"SEP", 
-				"OCT", 
-				"NOV", 
-				"DEC"
+				"JAN", "FEB", "MAR", "APR", "MAY", "JUN", 
+				"JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
 			};
 			TGEDCOMDate.GEDCOMMonthSysArray = new string[]
 			{
-				"01.", 
-				"02.", 
-				"03.", 
-				"04.", 
-				"05.", 
-				"06.", 
-				"07.", 
-				"08.", 
-				"09.", 
-				"10.", 
-				"11.", 
-				"12."
+				"01.", "02.", "03.", "04.", "05.", "06.", 
+				"07.", "08.", "09.", "10.", "11.", "12."
 			};
 			TGEDCOMDate.GEDCOMMonthRusArray = new string[]
 			{
-				"ЯНВ", 
-				"ФЕВ", 
-				"МАР", 
-				"АПР", 
-				"МАЙ", 
-				"ИЮН", 
-				"ИЮЛ", 
-				"АВГ", 
-				"СЕН", 
-				"ОКТ", 
-				"НОЯ", 
-				"ДЕК"
+				"ЯНВ", "ФЕВ", "МАР", "АПР", "МАЙ", "ИЮН", 
+				"ИЮЛ", "АВГ", "СЕН", "ОКТ", "НОЯ", "ДЕК"
 			};
 			TGEDCOMDate.GEDCOMDateEscapeArray = new string[]
 			{
-				"@#DGREGORIAN@", 
-				"@#DJULIAN@", 
-				"@#DHEBREW@", 
-				"@#DFRENCH R@", 
-				"@#DROMAN@", 
-				"@#DUNKNOWN@"
+				"@#DGREGORIAN@", "@#DJULIAN@", "@#DHEBREW@", "@#DFRENCH R@", "@#DROMAN@", "@#DUNKNOWN@"
 			};
 		}
 
-		public TGEDCOMDate(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMDate(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
 		}
 	}

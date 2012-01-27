@@ -2,8 +2,12 @@ using System;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKSys;
 using GKUI.Controls;
+
+/// <summary>
+/// Localization: clean
+/// </summary>
 
 namespace GKUI.Lists
 {
@@ -23,6 +27,23 @@ namespace GKUI.Lists
 			{
 				this.Disposed_ = true;
 			}
+		}
+
+		public bool IsMatchesMask(string S, string Mask)
+		{
+			bool result = false;
+			if (S != null && Mask != null && S != "" && Mask != "")
+			{
+				string stx = S.ToLower();
+				string[] masks = Mask.ToLower().Split(new char[] { '|' });
+
+				int num = masks.Length - 1;
+				for (int i = 0; i <= num; i++)
+				{
+					result = (result || SysUtils.MatchesMask(stx, masks[i]));
+				}
+			}
+			return result;
 		}
 
 		public void UpdateTitles(TGKListView aList, bool isMain)

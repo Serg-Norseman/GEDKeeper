@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-
-using GKCore.Sys;
 
 namespace GedCom551
 {

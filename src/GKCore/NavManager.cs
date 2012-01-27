@@ -1,11 +1,15 @@
 using System;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKCore
 {
-	public class TBackManager : IDisposable
+	public class NavManager : IDisposable
 	{
 		private bool FNavBusy;
 		private TStack FStackBackward;
@@ -34,7 +38,7 @@ namespace GKCore
 			this.FStackForward.Clear();
 		}
 
-		public TBackManager()
+		public NavManager()
 		{
 			this.FStackBackward = new TStack();
 			this.FStackForward = new TStack();
@@ -100,7 +104,7 @@ namespace GKCore
 
 		public void Free()
 		{
-			TObjectHelper.Free(this);
+			SysUtils.Free(this);
 		}
 	}
 }

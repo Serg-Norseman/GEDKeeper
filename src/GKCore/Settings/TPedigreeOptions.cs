@@ -1,9 +1,13 @@
 using System;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
 
-namespace GKCore
+/// <summary>
+/// Localization: unknown
+/// </summary>
+
+namespace GKCore.Settings
 {
 	public class TPedigreeOptions
 	{
@@ -45,7 +49,7 @@ namespace GKCore
 			this.FIncludeSources = true;
 		}
 
-		public void LoadFromFile([In] TIniFile aIniFile)
+		public void LoadFromFile([In] IniFile aIniFile)
 		{
 			this.FIncludeAttributes = aIniFile.ReadBool("Pedigree", "IncludeAttributes", true);
 			this.FIncludeNotes = aIniFile.ReadBool("Pedigree", "IncludeNotes", true);
@@ -53,7 +57,7 @@ namespace GKCore
 			this.FFormat = (TPedigreeOptions.TPedigreeFormat)aIniFile.ReadInteger("Pedigree", "Format", 0);
 		}
 
-		public void SaveToFile([In] TIniFile aIniFile)
+		public void SaveToFile([In] IniFile aIniFile)
 		{
 			aIniFile.WriteBool("Pedigree", "IncludeAttributes", this.FIncludeAttributes);
 			aIniFile.WriteBool("Pedigree", "IncludeNotes", this.FIncludeNotes);
@@ -63,7 +67,7 @@ namespace GKCore
 
 		public void Free()
 		{
-			TObjectHelper.Free(this);
+			SysUtils.Free(this);
 		}
 	}
 }

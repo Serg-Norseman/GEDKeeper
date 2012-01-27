@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Reflection;
@@ -6,9 +7,13 @@ using System.Windows.Forms;
 
 using Com.StellmanGreene.CSVReader;
 using GedCom551;
-using GKCore.Sys;
+using GKSys;
 using GKUI;
 using LuaInterface;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKCore
 {
@@ -147,6 +152,12 @@ namespace GKCore
 			lua_register(LVM, "gt_get_person_sex");
 			lua_register(LVM, "gt_set_person_sex");
 
+			lua_register(LVM, "gt_get_person_groups_count");
+			lua_register(LVM, "gt_get_person_group");
+			lua_register(LVM, "gt_get_group_name");
+
+			lua_register(LVM, "gt_get_unlinked_namesakes");
+
 			///
 
 			lua_register(LVM, "ado_open");
@@ -172,7 +183,7 @@ namespace GKCore
 	      			lua_init(lvm);
 					lvm.DoString(script);
 				} catch (Exception E) {
-					lua_print("> "+GKL.LSList[(int)LSID.LSID_Error]+": " + E.Message);
+					lua_print("> "+LangMan.LSList[(int)LSID.LSID_Error]+": " + E.Message);
 				}
 			}
 		}
@@ -350,7 +361,7 @@ namespace GKCore
 			}
 			catch
 			{
-				throw new Exception(GKL.LSList[(int)LSID.LSID_DateFormatInvalid] + ": " + date);
+				throw new Exception(LangMan.LSList[(int)LSID.LSID_DateFormatInvalid] + ": " + date);
 			}
 		}
 
@@ -368,7 +379,7 @@ namespace GKCore
 
 		public void gt_set_event_place(object ev_ptr, string place)
 		{
-			TGEDCOMIndividualEvent evt = (TGEDCOMIndividualEvent)ev_ptr;
+			TGEDCOMCustomEvent evt = (TGEDCOMCustomEvent)ev_ptr;
 			evt.Detail.Place.StringValue = place;
 		}
 
@@ -588,7 +599,7 @@ namespace GKCore
 		TGEDCOMLocationRecord loc = (TGEDCOMLocationRecord)rec_ptr;
 		int usages = 0;
 
-		TStringList link_list = new TStringList();
+		StringList link_list = new StringList();
 		try
 		{
 			TGenEngine.GetLocationLinks(fBase.Tree, loc, ref link_list);
@@ -607,6 +618,47 @@ namespace GKCore
 		TGEDCOMRecord rec = (TGEDCOMRecord)rec_ptr;
 		return rec.Notes.Count;
 	}
+
+	//
+
+	public int gt_get_person_groups_count(object rec_ptr)
+	{
+		TGEDCOMIndividualRecord rec = (TGEDCOMIndividualRecord)rec_ptr;
+		return rec.Groups.Count;
+	}
+
+	public object gt_get_person_group(object rec_ptr, int gr_idx)
+	{
+		TGEDCOMIndividualRecord rec = (TGEDCOMIndividualRecord)rec_ptr;
+		TGEDCOMGroupRecord grp = rec.Groups[gr_idx].Value as TGEDCOMGroupRecord;
+		return grp;
+	}
+
+	public string gt_get_group_name(object rec_ptr)
+	{
+		TGEDCOMGroupRecord grp = rec_ptr as TGEDCOMGroupRecord;
+		return grp.GroupName;
+	}
+
+	public void gt_get_unlinked_namesakes()
+	{
+		List<TGenEngine.ULIndividual> uln = fBase.Engine.GetUnlinkedNamesakes();
+
+		if (uln != null && uln.Count > 0)
+		{
+			for (int i = 0; i < uln.Count; i++)
+			{
+				TGenEngine.ULIndividual indiv = uln[i];
+				lua_print("    - [" + indiv.Family + "] " + TGenEngine.GetNameStr(indiv.iRec, true, false));
+			}
+		}
+		else
+		{
+			lua_print("    - not found.");
+		}
+	}
+
+	//
 
 	DataTable csv_data = null;
 
@@ -795,14 +847,14 @@ namespace GKCore
 	public void ado_dump(object conptr)
 	{
 		//string query;
-		//TStringList tables, fields;
+		//StringList tables, fields;
 
 		try
 		{
 			/*TADOConnection con = TADOConnection(conptr);
 
-		    tables = TStringList.Create;
-		    fields = TStringList.Create;
+		    tables = StringList.Create;
+		    fields = StringList.Create;
     		try
       			con.GetTableNames(tables, False);
 

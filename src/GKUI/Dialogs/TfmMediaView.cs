@@ -4,8 +4,13 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+
 using GedCom551;
-using GKCore.Sys;
+using GKSys;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI
 {
@@ -34,7 +39,6 @@ namespace GKUI
 		private void SetFileRef([In] TGEDCOMFileReferenceWithTitle Value)
 		{
 			this.FFileRef = Value;
-			Stream fs = null;
 			this.FExtern = false;
 			this.Text = this.FFileRef.Title;
 			Control ctl = null;
@@ -50,11 +54,10 @@ namespace GKUI
 				case TGEDCOMMultimediaFormat.mfTGA:
 				case TGEDCOMMultimediaFormat.mfPNG:
 				{
-					string target_fn = "";
-					this.Base.Engine.MediaLoad(this.FFileRef.StringValue, ref target_fn);
+					Image img = this.Base.Engine.BitmapLoad(this.FFileRef.StringValue, -1, -1, false);
 
 					ctl = new PictureBox();
-					(ctl as PictureBox).Image = Image.FromFile(target_fn);
+					(ctl as PictureBox).Image = img;
 					(ctl as PictureBox).SizeMode = PictureBoxSizeMode.CenterImage;
 					break;
 				}
@@ -72,7 +75,8 @@ namespace GKUI
 
 				case TGEDCOMMultimediaFormat.mfTXT:
 				{
-					this.Base.Engine.MediaLoad(this.FFileRef.StringValue, out fs);
+					Stream fs = null;
+					this.Base.Engine.MediaLoad(this.FFileRef.StringValue, out fs, false);
 					using (StreamReader strd = new StreamReader(fs, Encoding.GetEncoding(1251)))
 					{
 						ctl = new TextBox();
@@ -87,7 +91,8 @@ namespace GKUI
 
 				case TGEDCOMMultimediaFormat.mfRTF:
 				{
-					this.Base.Engine.MediaLoad(this.FFileRef.StringValue, out fs);
+					Stream fs = null;
+					this.Base.Engine.MediaLoad(this.FFileRef.StringValue, out fs, false);
 					using (StreamReader strd = new StreamReader(fs))
 					{
 						ctl = new RichTextBox();
@@ -99,11 +104,11 @@ namespace GKUI
 
 				case TGEDCOMMultimediaFormat.mfHTM:
 				{
-					string target_fn = "";
-					this.Base.Engine.MediaLoad(this.FFileRef.StringValue, ref target_fn);
+					Stream fs = null;
+					this.Base.Engine.MediaLoad(this.FFileRef.StringValue, out fs, false);
 
 					ctl = new WebBrowser();
-					(ctl as WebBrowser).Navigate(target_fn);
+					(ctl as WebBrowser).DocumentStream = fs;
 
 					break;
 				}
@@ -118,11 +123,6 @@ namespace GKUI
 			}
 
 			this.ResumeLayout(false);
-
-			if (fs != null)
-			{
-				//fs.Free();
-			}
 		}
 
 		private void TfmMediaView_KeyDown(object sender, KeyEventArgs e)

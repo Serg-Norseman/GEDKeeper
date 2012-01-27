@@ -2,8 +2,6 @@ using System;
 using System.IO;
 using System.Text;
 
-using GKCore.Sys;
-
 namespace XLSFile
 {
 	public class TBIFFWriter
@@ -35,11 +33,6 @@ namespace XLSFile
 			this.WriteByte((byte)s.Length);
 			byte[] bytes = Encoding.GetEncoding(1251).GetBytes(s);
 			this.WStream.Write(bytes, 0, bytes.Length);
-		}
-
-		public void Free()
-		{
-			TObjectHelper.Free(this);
 		}
 	}
 }

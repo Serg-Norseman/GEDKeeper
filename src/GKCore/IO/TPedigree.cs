@@ -1,15 +1,19 @@
 ﻿using System;
-using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 
 using GedCom551;
-using GKCore.Sys;
+using GKCore.Settings;
+using GKSys;
 
-namespace GKCore
+/// <summary>
+/// Localization: unknown
+/// </summary>
+
+namespace GKCore.IO
 {
-	public class TPedigree : THTMLExporter
+	public class TPedigree : HTMLExporter
 	{
 		private class TPersonObj
 		{
@@ -39,7 +43,7 @@ namespace GKCore
 
 			public void Free()
 			{
-				TObjectHelper.Free(this);
+				SysUtils.Free(this);
 			}
 		}
 
@@ -59,7 +63,7 @@ namespace GKCore
 				DateTime Result;
 				if (this.Event != null)
 				{
-					Result = TGenEngine.GEDCOMDateToDate(this.Event.Detail.Date.Value);
+					Result = TGenEngine.GEDCOMDateToDate(this.Event.Detail.Date);
 				}
 				else
 				{
@@ -70,7 +74,7 @@ namespace GKCore
 
 			public void Free()
 			{
-				TObjectHelper.Free(this);
+				SysUtils.Free(this);
 			}
 
 		}
@@ -85,7 +89,7 @@ namespace GKCore
 		private TPedigreeKind FKind;
 		private TObjectList FPersonList;
 		private TGenEngine.TShieldState FShieldState;
-		private TStringList FSourceList;
+		private StringList FSourceList;
 
 
 		public TGEDCOMIndividualRecord Ancestor
@@ -128,13 +132,11 @@ namespace GKCore
 			aStream.WriteLine("<li>");
 			aStream.WriteLine(string.Concat(new string[]
 			{
-				"<b>", 
-				this.GetIdStr(aPerson), 
-				". ", 
+				"<b>", this.GetIdStr(aPerson), ". ", 
 				TGenEngine.GetNameStr(aPerson.iRec, true, false), 
-				"</b>", 
-				this.GetPedigreeLifeStr(aPerson.iRec)
+				"</b>", this.GetPedigreeLifeStr(aPerson.iRec)
 			}));
+
 			if (this.FOptions.PedigreeOptions.IncludeSources)
 			{
 				aStream.WriteLine("&nbsp;<sup>" + aPerson.Sources + "</sup>");
@@ -184,12 +186,12 @@ namespace GKCore
 
 		private void WriteExcessFmt(StreamWriter aStream, TPedigree.TPersonObj aPerson)
 		{
-			aStream.WriteLine("<br>" + GKL.LSList[87] + ": " + TGenEngine.SexStr(aPerson.iRec.Sex));
+			aStream.WriteLine("<br>" + LangMan.LSList[87] + ": " + TGenEngine.SexStr(aPerson.iRec.Sex));
 			string st = TGenEngine.GetLifeExpectancy(aPerson.iRec);
 
 			if (st != "?" && st != "")
 			{
-				aStream.WriteLine("<br>" + GKL.LSList[306] + ": " + st);
+				aStream.WriteLine("<br>" + LangMan.LSList[306] + ": " + st);
 			}
 
 			if (aPerson.iRec.ChildToFamilyLinks.Count != 0)
@@ -201,7 +203,7 @@ namespace GKCore
 					aStream.WriteLine(string.Concat(new string[]
 					{
 						"<br>", 
-						GKL.LSList[150], 
+						LangMan.LSList[150], 
 						": ", 
 						TGenEngine.GetNameStr(irec, true, false), 
 						this.idLink(this.FindPerson(irec))
@@ -213,7 +215,7 @@ namespace GKCore
 					aStream.WriteLine(string.Concat(new string[]
 					{
 						"<br>", 
-						GKL.LSList[151], 
+						LangMan.LSList[151], 
 						": ", 
 						TGenEngine.GetNameStr(irec, true, false), 
 						this.idLink(this.FindPerson(irec))
@@ -227,7 +229,7 @@ namespace GKCore
 				int i;
 				if (aPerson.iRec.IndividualEvents.Count > 0)
 				{
-					aStream.WriteLine("<p>" + GKL.LSList[83] + ": <ul>");
+					aStream.WriteLine("<p>" + LangMan.LSList[83] + ": <ul>");
 
 					int num = aPerson.iRec.IndividualEvents.Count - 1;
 					for (i = 0; i <= num; i++)
@@ -253,14 +255,14 @@ namespace GKCore
 						if (aPerson.iRec.Sex == TGEDCOMSex.svMale)
 						{
 							sp = family.Wife;
-							st = GKL.LSList[116] + ": ";
-							unk = GKL.LSList[63];
+							st = LangMan.LSList[116] + ": ";
+							unk = LangMan.LSList[63];
 						}
 						else
 						{
 							sp = family.Husband;
-							st = GKL.LSList[115] + ": ";
-							unk = GKL.LSList[64];
+							st = LangMan.LSList[115] + ": ";
+							unk = LangMan.LSList[64];
 						}
 						TGEDCOMIndividualRecord irec = sp.Value as TGEDCOMIndividualRecord;
 						if (irec != null)
@@ -294,12 +296,12 @@ namespace GKCore
 			}
 			finally
 			{
-				ev_list.Free();
+				ev_list.Dispose();
 			}
 
 			if (this.FOptions.PedigreeOptions.IncludeNotes && aPerson.iRec.Notes.Count != 0)
 			{
-				aStream.WriteLine("<p>" + GKL.LSList[54] + ":<ul>");
+				aStream.WriteLine("<p>" + LangMan.LSList[54] + ":<ul>");
 
 				int num4 = aPerson.iRec.Notes.Count - 1;
 				for (int i = 0; i <= num4; i++)
@@ -339,13 +341,13 @@ namespace GKCore
 						{
 							sp = family.Wife;
 							st = "Ж";
-							unk = GKL.LSList[63];
+							unk = LangMan.LSList[63];
 						}
 						else
 						{
 							sp = family.Husband;
 							st = "М";
-							unk = GKL.LSList[64];
+							unk = LangMan.LSList[64];
 						}
 						if (sp_index)
 						{
@@ -499,19 +501,19 @@ namespace GKCore
 					{
 						if (ev > 0)
 						{
-							st = GKL.LSList[(int)TGenEngine.PersonEvents[ev].Name - 1];
+							st = LangMan.LSList[(int)TGenEngine.PersonEvents[ev].Name - 1];
 						}
 						else
 						{
 							st = @event.Name;
 						}
 					}
-					string dt = TGenEngine.GEDCOMCustomDateToStr(@event.Detail.Date.Value, TGenEngine.TDateFormat.dfDD_MM_YYYY, false);
+					string dt = TGenEngine.GEDCOMCustomDateToStr(@event.Detail.Date, TGenEngine.TDateFormat.dfDD_MM_YYYY, false);
 					aStream.WriteLine("<li>" + dt + ": " + st + ".");
 					if (@event.Detail.Place.StringValue != "")
 					{
 						aStream.WriteLine(string.Concat(new string[]
-						{ " ", GKL.LSList[204], ": ", @event.Detail.Place.StringValue, "</li>" }));
+						{ " ", LangMan.LSList[204], ": ", @event.Detail.Place.StringValue, "</li>" }));
 					}
 				}
 				else
@@ -523,7 +525,7 @@ namespace GKCore
 					}
 					else
 					{
-						dt = TGenEngine.GEDCOMCustomDateToStr(@event.Detail.Date.Value, TGenEngine.TDateFormat.dfDD_MM_YYYY, false);
+						dt = TGenEngine.GEDCOMCustomDateToStr(@event.Detail.Date, TGenEngine.TDateFormat.dfDD_MM_YYYY, false);
 					}
 					string st;
 					if (evObj.iRec.Sex == TGEDCOMSex.svMale)
@@ -544,17 +546,17 @@ namespace GKCore
 		{
 			if (this.FAncestor == null)
 			{
-				SysUtils.ShowError(GKL.LSList[209]);
+				TGenEngine.ShowError(LangMan.LSList[209]);
 			}
 			else
 			{
-				string title = GKL.LSList[484] + ": " + TGenEngine.GetNameStr(this.FAncestor, true, false);
-				SysUtils.CreateDir(this.FPath);
+				string title = LangMan.LSList[484] + ": " + TGenEngine.GetNameStr(this.FAncestor, true, false);
+				Directory.CreateDirectory(this.FPath);
 				StreamWriter fs_index = new StreamWriter(this.FPath + "pedigree.htm", false, Encoding.GetEncoding(1251));
 				base.WriteHeader(fs_index, title);
 				fs_index.WriteLine("<h2>" + title + "</h2>");
 				this.FPersonList = new TObjectList(true);
-				this.FSourceList = new TStringList();
+				this.FSourceList = new StringList();
 				try
 				{
 					TPedigree._Generate_Step(this, null, this.FAncestor, 1, 1);
@@ -575,7 +577,7 @@ namespace GKCore
 							fs_index.WriteLine(string.Concat(new string[]
 							{
 								"<h3>", 
-								GKL.LSList[399], 
+								LangMan.LSList[399], 
 								" ", 
 								SysUtils.GetRome(cur_level), 
 								"</h3><ul>"
@@ -586,7 +588,7 @@ namespace GKCore
 					fs_index.WriteLine("</ul>");
 					if (this.FSourceList.Count > 0)
 					{
-						fs_index.WriteLine("<h3>" + GKL.LSList[56] + "</h3>");
+						fs_index.WriteLine("<h3>" + LangMan.LSList[56] + "</h3>");
 
 						int num2 = this.FSourceList.Count - 1;
 						for (int j = 0; j <= num2; j++)
@@ -601,10 +603,10 @@ namespace GKCore
 				finally
 				{
 					this.FSourceList.Free();
-					this.FPersonList.Free();
+					this.FPersonList.Dispose();
 				}
 				base.WriteFooter(fs_index);
-				TObjectHelper.Free(fs_index);
+				SysUtils.Free(fs_index);
 				SysUtils.LoadExtFile(this.FPath + "pedigree.htm");
 			}
 		}

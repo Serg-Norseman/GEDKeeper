@@ -4,6 +4,10 @@ using GedCom551;
 using GKCore;
 using GKUI.Controls;
 
+/// <summary>
+/// Localization: unknown
+/// </summary>
+
 namespace GKUI.Lists
 {
 	public sealed class TLocationListMan : TListManager
@@ -13,7 +17,7 @@ namespace GKUI.Lists
 		public override bool CheckFilter(TPersonsFilter aFilter, TGenEngine.TShieldState aShieldState)
 		{
 			bool Result = false;
-			if (aFilter.List != TPersonsFilter.TListFilterMode.flSelector || aFilter.Name == "*" || TGenEngine.IsMatchesMask(this.FRec.LocationName, aFilter.Name))
+			if (aFilter.List != TPersonsFilter.TListFilterMode.flSelector || aFilter.Name == "*" || IsMatchesMask(this.FRec.LocationName, aFilter.Name))
 			{
 				Result = true;
 			}
@@ -62,12 +66,12 @@ namespace GKUI.Lists
 		public override void UpdateColumns(TGKListView aList, bool isMain)
 		{
 			aList.AddListColumn("№", 50, false);
-			aList.AddListColumn(GKL.LSList[125], 300, false);
-			aList.AddListColumn(GKL.LSList[171], 120, false);
-			aList.AddListColumn(GKL.LSList[172], 120, false);
+			aList.AddListColumn(LangMan.LSList[125], 300, false);
+			aList.AddListColumn(LangMan.LSList[171], 120, false);
+			aList.AddListColumn(LangMan.LSList[172], 120, false);
 			if (isMain)
 			{
-				aList.AddListColumn(GKL.LSList[317], 150, false);
+				aList.AddListColumn(LangMan.LSList[317], 150, false);
 			}
 		}
 

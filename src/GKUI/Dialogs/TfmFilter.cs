@@ -3,9 +3,13 @@ using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKSys;
 using GKUI.Controls;
 using GKUI.Lists;
+
+/// <summary>
+/// Localization: clean
+/// </summary>
 
 namespace GKUI
 {
@@ -16,15 +20,6 @@ namespace GKUI
 		public TfmBase Base
 		{
 			get { return this.FBase; }
-		}
-
-		private object[] StringsToArray(TStrings aStrings)
-		{
-			object[] result = new object[aStrings.Count];
-			for (int i = 0; i <= aStrings.Count - 1; i++) {
-				result[i] = aStrings[i];
-			}
-			return result;
 		}
 
 		private void rgLifeClick(object sender, EventArgs e)
@@ -91,7 +86,7 @@ namespace GKUI
 					}
 					catch
 					{
-						SysUtils.ShowError(GKL.LSList[532]);
+						TGenEngine.ShowError(LangMan.LSList[532]);
 						base.DialogResult = DialogResult.None;
 					}
 				}
@@ -149,9 +144,9 @@ namespace GKUI
 
 		private void TfmFilter_Load(object sender, EventArgs e)
 		{
-			this.edName.Items.AddRange(this.StringsToArray(GKUI.TfmGEDKeeper.Instance.Options.NameFilters));
-			this.cbResidence.Items.AddRange(this.StringsToArray(GKUI.TfmGEDKeeper.Instance.Options.ResidenceFilters));
-			this.cbEventVal.Items.AddRange(this.StringsToArray(GKUI.TfmGEDKeeper.Instance.Options.EventFilters));
+			this.edName.Items.AddRange(GKUI.TfmGEDKeeper.Instance.Options.NameFilters.ToArray());
+			this.cbResidence.Items.AddRange(GKUI.TfmGEDKeeper.Instance.Options.ResidenceFilters.ToArray());
+			this.cbEventVal.Items.AddRange(GKUI.TfmGEDKeeper.Instance.Options.EventFilters.ToArray());
 
 			int life_sel;
 			if (this.Base.Filter.LifeMode != TGenEngine.TLifeMode.lmTimeLine)
@@ -208,14 +203,14 @@ namespace GKUI
 				}
 			}
 			this.cbGroup.Sorted = false;
-			this.cbGroup.Items.Insert(0, new TComboItem(GKL.LSList[500], null));
-			this.cbGroup.Items.Insert(1, new TComboItem(GKL.LSList[501], null));
-			this.cbGroup.Items.Insert(2, new TComboItem(GKL.LSList[502], null));
+			this.cbGroup.Items.Insert(0, new TComboItem(LangMan.LSList[500], null));
+			this.cbGroup.Items.Insert(1, new TComboItem(LangMan.LSList[501], null));
+			this.cbGroup.Items.Insert(2, new TComboItem(LangMan.LSList[502], null));
 			if (this.Base.Filter.GroupMode != TFilter.TGroupMode.gmSelected)
 			{
-				this.cbGroup.SelectedIndex = (int)((sbyte)this.Base.Filter.GroupMode);
+				this.cbGroup.SelectedIndex = (int)this.Base.Filter.GroupMode;
 			} else {
-				this.cbGroup.SelectedIndex = this.cbGroup.Items.IndexOf(tree.XRefIndex_Find(this.Base.Filter.GroupRef));
+				this.cbGroup.Text = ((TGEDCOMGroupRecord)(tree.XRefIndex_Find(this.Base.Filter.GroupRef))).GroupName;
 			}
 
 			this.cbSource.Sorted = true;
@@ -225,14 +220,14 @@ namespace GKUI
 				}
 			}
 			this.cbSource.Sorted = false;
-			this.cbSource.Items.Insert(0, new TComboItem(GKL.LSList[500], null));
-			this.cbSource.Items.Insert(1, new TComboItem(GKL.LSList[501], null));
-			this.cbSource.Items.Insert(2, new TComboItem(GKL.LSList[502], null));
+			this.cbSource.Items.Insert(0, new TComboItem(LangMan.LSList[500], null));
+			this.cbSource.Items.Insert(1, new TComboItem(LangMan.LSList[501], null));
+			this.cbSource.Items.Insert(2, new TComboItem(LangMan.LSList[502], null));
 			if (this.Base.Filter.SourceMode != TFilter.TGroupMode.gmSelected)
 			{
-				this.cbSource.SelectedIndex = (int)((sbyte)this.Base.Filter.SourceMode);
+				this.cbSource.SelectedIndex = (int)this.Base.Filter.SourceMode;
 			} else {
-				this.cbSource.SelectedIndex = this.cbSource.Items.IndexOf(tree.XRefIndex_Find(this.Base.Filter.SourceRef));
+				this.cbSource.Text = ((TGEDCOMSourceRecord)(tree.XRefIndex_Find(this.Base.Filter.SourceRef))).FiledByEntry;
 			}
 		}
 
@@ -245,23 +240,23 @@ namespace GKUI
 
 		public void SetLang()
 		{
-			this.Text = GKL.GetLS(LSID.LSID_MIFilter);
-			this.btnAccept.Text = GKL.LSList[97];
-			this.btnCancel.Text = GKL.LSList[98];
-			this.RadioButton1.Text = GKL.LSList[522];
-			this.RadioButton2.Text = GKL.LSList[523];
-			this.RadioButton3.Text = GKL.LSList[524];
-			this.RadioButton4.Text = GKL.LSList[525].ToLower();
-			this.RadioButton5.Text = GKL.LSList[522];
-			this.RadioButton6.Text = GKL.LSList[526];
-			this.RadioButton7.Text = GKL.LSList[527];
-			this.Label2.Text = GKL.LSList[525] + ":";
-			this.Label1.Text = GKL.LSList[528];
-			this.Label3.Text = GKL.LSList[529];
-			this.Label6.Text = GKL.LSList[530];
-			this.Label4.Text = GKL.LSList[58];
-			this.Label5.Text = GKL.LSList[56];
-			this.CheckPatriarch.Text = GKL.LSList[531];
+			this.Text = LangMan.LS(LSID.LSID_MIFilter);
+			this.btnAccept.Text = LangMan.LSList[97];
+			this.btnCancel.Text = LangMan.LSList[98];
+			this.RadioButton1.Text = LangMan.LSList[522];
+			this.RadioButton2.Text = LangMan.LSList[523];
+			this.RadioButton3.Text = LangMan.LSList[524];
+			this.RadioButton4.Text = LangMan.LSList[525].ToLower();
+			this.RadioButton5.Text = LangMan.LSList[522];
+			this.RadioButton6.Text = LangMan.LSList[526];
+			this.RadioButton7.Text = LangMan.LSList[527];
+			this.Label2.Text = LangMan.LSList[525] + ":";
+			this.Label1.Text = LangMan.LSList[528];
+			this.Label3.Text = LangMan.LSList[529];
+			this.Label6.Text = LangMan.LSList[530];
+			this.Label4.Text = LangMan.LSList[58];
+			this.Label5.Text = LangMan.LSList[56];
+			this.CheckPatriarch.Text = LangMan.LSList[531];
 		}
 	}
 }

@@ -2,14 +2,16 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
+
+/// <summary>
+/// Localization: clean
+/// </summary>
 
 namespace GedCom551
 {
 	public sealed class TGEDCOMPersonalName : TGEDCOMTag
 	{
-		private TGEDCOMPersonalNamePieces FPieces;
-
 		public string FullName
 		{
 			get { return this.GetFullName(); }
@@ -31,24 +33,110 @@ namespace GedCom551
 			get { return this.GetLastPart(); }
 		}
 
-		public TGEDCOMPersonalNamePieces Pieces
-		{
-			get { return this.FPieces; }
-		}
+		public TGEDCOMPersonalNamePieces Pieces; // property/field
 
 		public TGEDCOMNameType NameType
 		{
-			get { return this.GetNameType(); }
-			set { this.SetNameType(value); }
+			get { return GetNameTypeVal(base.GetTagStringValue("TYPE").Trim().ToLower()); }
+			set { base.SetTagStringValue("TYPE", GetNameTypeStr(value)); }
+		}
+
+		public void GetNameParts(out string AFirstPart, out string ASurname/*, out string ALastPart*/)
+		{
+			string sv = base.StringValue;
+			if (sv == null || sv.Length == 0) {
+				AFirstPart = "";
+				ASurname = "";
+			} else {
+				int p = sv.IndexOf('/');
+
+				if (p < 0) {
+					AFirstPart = "";
+				} else {
+					AFirstPart = sv.Substring(0, p);
+					AFirstPart = SysUtils.TrimRight(AFirstPart);
+				}
+
+				int p2 = ((p < 0) ? -1 : sv.IndexOf('/', p + 1));
+
+				if (p < 0 || p2 < 0) {
+					ASurname = "";
+				} else {
+					p++;
+					ASurname = sv.Substring(p, p2 - p);
+				}
+			}
+
+			//ALastPart = GetLastPart();
 		}
 
 		private string GetFirstPart()
 		{
-			string Result = base.StringValue;
-			if (SysUtils.Pos("/", Result) > 0)
-			{
-				Result = SysUtils.TrimRight(SysUtils.WStrCopy(Result, 1, SysUtils.Pos("/", Result) - 1));
+			string result;
+
+			string sv = base.StringValue;
+			if (sv == null || sv.Length == 0) {
+				result = "";
+			} else {
+				int p = sv.IndexOf('/');
+				if (p < 0) {
+					result = "";
+				} else {
+					result = sv.Substring(0, p);
+					result = SysUtils.TrimRight(result);
+				}
 			}
+
+			return result;
+		}
+
+		private string GetSurname()
+		{
+			string result;
+
+			string sv = base.StringValue;
+			if (sv == null || sv.Length == 0) {
+				result = "";
+			} else {
+				int p = sv.IndexOf('/');
+				int p2 = ((p < 0) ? -1 : sv.IndexOf('/', p + 1));
+
+				if (p < 0 || p2 < 0) {
+					result = "";
+				} else {
+					p++;
+					result = sv.Substring(p, p2 - p);
+				}
+			}
+
+			return result;
+		}
+
+		private string GetLastPart()
+		{
+			string Result;
+			string sv = base.StringValue;
+
+			int p = SysUtils.Pos("/", sv);
+			if (p > 0)
+			{
+				Result = SysUtils.WStrCopy(sv, p + 1, 2147483647);
+
+				p = SysUtils.Pos("/", Result);
+				if (p > 0)
+				{
+					Result = SysUtils.TrimLeft(SysUtils.WStrCopy(Result, p + 1, 2147483647));
+				}
+				else
+				{
+					Result = "";
+				}
+			}
+			else
+			{
+				Result = "";
+			}
+
 			return Result;
 		}
 
@@ -63,169 +151,43 @@ namespace GedCom551
 			return Result;
 		}
 
-		private string GetLastPart()
-		{
-			string Result;
-			if (SysUtils.Pos("/", base.StringValue) > 0)
-			{
-				Result = SysUtils.WStrCopy(base.StringValue, SysUtils.Pos("/", base.StringValue) + 1, 2147483647);
-				if (SysUtils.Pos("/", Result) > 0)
-				{
-					Result = SysUtils.TrimLeft(SysUtils.WStrCopy(Result, SysUtils.Pos("/", Result) + 1, 2147483647));
-				}
-				else
-				{
-					Result = "";
-				}
-			}
-			else
-			{
-				Result = "";
-			}
-			return Result;
-		}
-
-		private string GetSurname()
-		{
-			string Result;
-			if (SysUtils.Pos("/", base.StringValue) > 0)
-			{
-				Result = SysUtils.WStrCopy(base.StringValue, SysUtils.Pos("/", base.StringValue) + 1, 2147483647);
-				if (SysUtils.Pos("/", Result) > 0)
-				{
-					Result = SysUtils.WStrCopy(Result, 1, SysUtils.Pos("/", Result) - 1);
-				}
-			}
-			else
-			{
-				Result = "";
-			}
-			return Result;
-		}
-
 		private void SetSurname([In] string Value)
 		{
 			base.StringValue = string.Concat(new string[]
 			{
-				SysUtils.TrimLeft(this.FirstPart + " "), 
-				"/", 
-				Value, 
-				"/", 
-				SysUtils.TrimRight(" " + this.LastPart)
+				SysUtils.TrimLeft(this.FirstPart + " "), "/", Value, "/", SysUtils.TrimRight(" " + this.LastPart)
 			});
 		}
 
-		private TGEDCOMNameType GetNameType()
-		{
-			string S = base.GetTagStringValue("TYPE").Trim().ToUpper();
-			TGEDCOMNameType Result;
-			if (S == "aka")
-			{
-				Result = TGEDCOMNameType.ntAka;
-			}
-			else
-			{
-				if (S == "birth")
-				{
-					Result = TGEDCOMNameType.ntBirth;
-				}
-				else
-				{
-					if (S == "immigrant")
-					{
-						Result = TGEDCOMNameType.ntImmigrant;
-					}
-					else
-					{
-						if (S == "maiden")
-						{
-							Result = TGEDCOMNameType.ntMaiden;
-						}
-						else
-						{
-							if (S == "married")
-							{
-								Result = TGEDCOMNameType.ntMarried;
-							}
-							else
-							{
-								Result = TGEDCOMNameType.ntNone;
-							}
-						}
-					}
-				}
-			}
-			return Result;
-		}
-
-		private void SetNameType([In] TGEDCOMNameType Value)
-		{
-			string S = "";
-			switch (Value)
-			{
-				case TGEDCOMNameType.ntNone:
-				{
-					S = "";
-					break;
-				}
-				case TGEDCOMNameType.ntAka:
-				{
-					S = "aka";
-					break;
-				}
-				case TGEDCOMNameType.ntBirth:
-				{
-					S = "birth";
-					break;
-				}
-				case TGEDCOMNameType.ntImmigrant:
-				{
-					S = "immigrant";
-					break;
-				}
-				case TGEDCOMNameType.ntMaiden:
-				{
-					S = "maiden";
-					break;
-				}
-				case TGEDCOMNameType.ntMarried:
-				{
-					S = "married";
-					break;
-				}
-			}
-			base.SetTagStringValue("TYPE", S);
-		}
-
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
 			this.FName = "NAME";
-			this.FPieces = new TGEDCOMPersonalNamePieces(AOwner, this, "", "");
-			this.FPieces.SetLevel(base.Level);
+			this.Pieces = new TGEDCOMPersonalNamePieces(AOwner, this, "", "");
+			this.Pieces.SetLevel(base.Level);
 		}
 
 		public override void Dispose()
 		{
 			if (!this.Disposed_)
 			{
-				this.FPieces.Dispose();
+				this.Pieces.Dispose();
 
 				base.Dispose();
 				this.Disposed_ = true;
 			}
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, Type AClass)
+		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 			if (ATag == "TYPE" || ATag == "FONE" || ATag == "ROMN")
 			{
-				Result = base.AddTag(ATag, AValue, AClass);
+				Result = base.AddTag(ATag, AValue, ATagConstructor);
 			}
 			else
 			{
-				Result = this.FPieces.AddTag(ATag, AValue, AClass);
+				Result = this.Pieces.AddTag(ATag, AValue, ATagConstructor);
 			}
 			return Result;
 		}
@@ -233,48 +195,46 @@ namespace GedCom551
 		public override void Assign(TGEDCOMCustomTag Source)
 		{
 			base.Assign(Source);
+
 			if (Source is TGEDCOMPersonalName)
 			{
-				this.FPieces.Assign(((TGEDCOMPersonalName)Source).Pieces);
+				this.Pieces.Assign(((TGEDCOMPersonalName)Source).Pieces);
 			}
 		}
 
 		public override void Clear()
 		{
 			base.Clear();
-			if (this.FPieces != null)
-			{
-				this.FPieces.Clear();
-			}
+			if (this.Pieces != null) this.Pieces.Clear();
 		}
 
 		public override bool IsEmpty()
 		{
-			return base.IsEmpty() && this.FPieces.IsEmpty();
+			return base.IsEmpty() && this.Pieces.IsEmpty();
 		}
 
 		public override void Pack()
 		{
 			base.Pack();
-			this.FPieces.Pack();
+			this.Pieces.Pack();
 		}
 
 		public override void ReplaceXRefs(TXRefReplaceMap aMap)
 		{
 			base.ReplaceXRefs(aMap);
-			this.FPieces.ReplaceXRefs(aMap);
+			this.Pieces.ReplaceXRefs(aMap);
 		}
 
-		public override void ResetOwner(TGEDCOMObject AOwner)
+		public override void ResetOwner(TGEDCOMTree AOwner)
 		{
 			base.ResetOwner(AOwner);
-			this.FPieces.ResetOwner(AOwner);
+			this.Pieces.ResetOwner(AOwner);
 		}
 
 		public override void SaveToStream(StreamWriter AStream)
 		{
 			base.SaveToStream(AStream);
-			this.FPieces.SaveToStream(AStream);
+			this.Pieces.SaveToStream(AStream);
 		}
 
 		public void SetNameParts([In] string FirstPart, [In] string Surname, [In] string LastPart)
@@ -285,8 +245,13 @@ namespace GedCom551
 			});
 		}
 
-		public TGEDCOMPersonalName(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMPersonalName(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
+		}
+
+		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+		{
+			return new TGEDCOMPersonalName(AOwner, AParent, AName, AValue);
 		}
 	}
 }

@@ -12,33 +12,38 @@ namespace GedCom551
 
 		private TGEDCOMDateExact GetChangeDate()
 		{
-			return base.TagClass("DATE", typeof(TGEDCOMDateExact)) as TGEDCOMDateExact;
+			return base.TagClass("DATE", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact;
 		}
 
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
 			this.FName = "STAT";
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, Type AClass)
+		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 
 			if (ATag == "DATE")
 			{
-				Result = base.AddTag(ATag, AValue, typeof(TGEDCOMDateExact));
+				Result = base.AddTag(ATag, AValue, TGEDCOMDateExact.Create);
 			}
 			else
 			{
-				Result = base.AddTag(ATag, AValue, AClass);
+				Result = base.AddTag(ATag, AValue, ATagConstructor);
 			}
 
 			return Result;
 		}
 
-		public TGEDCOMDateStatus(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMDateStatus(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
+		}
+
+		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+		{
+			return new TGEDCOMDateStatus(AOwner, AParent, AName, AValue);
 		}
 	}
 }

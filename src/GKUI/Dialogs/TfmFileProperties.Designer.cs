@@ -14,9 +14,6 @@ namespace GKUI
 		private System.Windows.Forms.TextBox EditTel;
 		private System.Windows.Forms.TextBox MemoAddress;
 		private System.Windows.Forms.TabPage SheetAdvanced;
-		private System.Windows.Forms.CheckBox CheckAdvanced;
-		private System.Windows.Forms.Label Label4;
-		private System.Windows.Forms.TextBox edExtName;
 		public System.Windows.Forms.TabControl PageControl1;
 
 		private void InitializeComponent()
@@ -32,12 +29,8 @@ namespace GKUI
 			this.EditTel = new System.Windows.Forms.TextBox();
 			this.MemoAddress = new System.Windows.Forms.TextBox();
 			this.SheetAdvanced = new System.Windows.Forms.TabPage();
-			this.Label4 = new System.Windows.Forms.Label();
-			this.CheckAdvanced = new System.Windows.Forms.CheckBox();
-			this.edExtName = new System.Windows.Forms.TextBox();
 			this.PageControl1.SuspendLayout();
 			this.SheetAuthor.SuspendLayout();
-			this.SheetAdvanced.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btnAccept
@@ -136,37 +129,11 @@ namespace GKUI
 			// 
 			// SheetAdvanced
 			// 
-			this.SheetAdvanced.Controls.Add(this.Label4);
-			this.SheetAdvanced.Controls.Add(this.CheckAdvanced);
-			this.SheetAdvanced.Controls.Add(this.edExtName);
 			this.SheetAdvanced.Location = new System.Drawing.Point(4, 22);
 			this.SheetAdvanced.Name = "SheetAdvanced";
 			this.SheetAdvanced.Size = new System.Drawing.Size(425, 247);
 			this.SheetAdvanced.TabIndex = 1;
-			this.SheetAdvanced.Text = "Расширение проекта";
-			// 
-			// Label4
-			// 
-			this.Label4.Location = new System.Drawing.Point(8, 40);
-			this.Label4.Name = "Label4";
-			this.Label4.Size = new System.Drawing.Size(200, 13);
-			this.Label4.TabIndex = 0;
-			this.Label4.Text = "Название архива и папки хранилища";
-			// 
-			// CheckAdvanced
-			// 
-			this.CheckAdvanced.Location = new System.Drawing.Point(8, 8);
-			this.CheckAdvanced.Name = "CheckAdvanced";
-			this.CheckAdvanced.Size = new System.Drawing.Size(409, 17);
-			this.CheckAdvanced.TabIndex = 0;
-			this.CheckAdvanced.Text = "Поддержка расширения (архив, хранилище файлов)";
-			// 
-			// edExtName
-			// 
-			this.edExtName.Location = new System.Drawing.Point(8, 56);
-			this.edExtName.Name = "edExtName";
-			this.edExtName.Size = new System.Drawing.Size(225, 21);
-			this.edExtName.TabIndex = 1;
+			this.SheetAdvanced.Text = "Прочие";
 			// 
 			// TfmFileProperties
 			// 
@@ -188,8 +155,6 @@ namespace GKUI
 			this.PageControl1.ResumeLayout(false);
 			this.SheetAuthor.ResumeLayout(false);
 			this.SheetAuthor.PerformLayout();
-			this.SheetAdvanced.ResumeLayout(false);
-			this.SheetAdvanced.PerformLayout();
 			this.ResumeLayout(false);
 		}
 	}

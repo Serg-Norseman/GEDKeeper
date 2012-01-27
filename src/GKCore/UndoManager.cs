@@ -1,15 +1,17 @@
 using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 using GedCom551;
-using GKCore.Sys;
+using GKSys;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKCore
 {
-	public class TUndoManager : IDisposable
+	public class UndoManager : IDisposable
 	{
-		public delegate void TTransactionEvent(object Sender, TUndoManager.TTransactionEventArg Arg);
+		public delegate void TTransactionEvent(object Sender, UndoManager.TTransactionEventArg Arg);
 
 		public enum TUndoManType : byte
 		{
@@ -26,51 +28,38 @@ namespace GKCore
 		}
 
 		private int FDepth;
-		private TUndoManager.TTransactionEvent FOnTransaction;
+		private UndoManager.TTransactionEvent FOnTransaction;
 		private TStack FStackUndo;
 		private TStack FStackRedo;
 		private TGEDCOMTree FTree;
-		private TUndoManager.TUndoManType FType;
+		private UndoManager.TUndoManType FType;
 		protected bool Disposed_;
 
 
-		public event TUndoManager.TTransactionEvent OnTransaction
+		public event UndoManager.TTransactionEvent OnTransaction
 		{
-			[MethodImpl(32)]
 			add
 			{
-				this.set_OnTransaction(value);
+				this.FOnTransaction = value;
 			}
-			[MethodImpl(32)]
 			remove
 			{
-				if (this.get_OnTransaction() == value)
+				if (this.FOnTransaction == value)
 				{
-					this.set_OnTransaction(null);
+					this.FOnTransaction = null;
 				}
 			}
 		}
 
-
 		public int Depth
 		{
-			get
-			{
-				return this.FDepth;
-			}
-			set
-			{
-				this.FDepth = value;
-			}
+			get { return this.FDepth; }
+			set { this.FDepth = value; }
 		}
-
 
 		public TGEDCOMTree Tree
 		{
-			get
-			{
-				return this.FTree;
-			}
+			get { return this.FTree; }
 		}
 
 		protected void OnIdle(object Sender, ref bool Done)
@@ -78,7 +67,7 @@ namespace GKCore
 			this.Commit();
 		}
 
-		protected void Transaction(TUndoManager.TTransactionEventArg Arg)
+		protected void Transaction(UndoManager.TTransactionEventArg Arg)
 		{
 			if (this.FOnTransaction != null)
 			{
@@ -86,7 +75,7 @@ namespace GKCore
 			}
 		}
 
-		public TUndoManager(TGEDCOMTree aTree, TUndoManager.TUndoManType aType)
+		public UndoManager(TGEDCOMTree aTree, UndoManager.TUndoManType aType)
 		{
 			this.FDepth = 1000;
 			this.FTree = aTree;
@@ -137,7 +126,7 @@ namespace GKCore
 					this.FStackRedo.Push(cmd);
 					cmd.Undo();
 				}
-				this.Transaction(TUndoManager.TTransactionEventArg.taCommitUndo);
+				this.Transaction(UndoManager.TTransactionEventArg.taCommitUndo);
 			}
 		}
 
@@ -161,7 +150,7 @@ namespace GKCore
 				}
 				this.FStackRedo.Pop();
 				this.FStackUndo.Push(null);
-				this.Transaction(TUndoManager.TTransactionEventArg.taCommitRedo);
+				this.Transaction(UndoManager.TTransactionEventArg.taCommitRedo);
 			}
 		}
 
@@ -181,7 +170,7 @@ namespace GKCore
 			if (cmd != null)
 			{
 				this.FStackUndo.Push(null);
-				this.Transaction(TUndoManager.TTransactionEventArg.taCommit);
+				this.Transaction(UndoManager.TTransactionEventArg.taCommit);
 			}
 		}
 
@@ -192,7 +181,7 @@ namespace GKCore
 				TCustomCommand cmd = this.FStackUndo.Pop() as TCustomCommand;
 				cmd.Undo();
 			}
-			this.Transaction(TUndoManager.TTransactionEventArg.taRollback);
+			this.Transaction(UndoManager.TTransactionEventArg.taRollback);
 		}
 
 		public void Clear()
@@ -202,21 +191,9 @@ namespace GKCore
 			this.FStackRedo.Clear();
 		}
 
-		[MethodImpl(32)]
-		public TUndoManager.TTransactionEvent get_OnTransaction()
-		{
-			return this.FOnTransaction;
-		}
-
-		[MethodImpl(32)]
-		public void set_OnTransaction(TUndoManager.TTransactionEvent Value)
-		{
-			this.FOnTransaction = Value;
-		}
-
 		public void Free()
 		{
-			TObjectHelper.Free(this);
+			SysUtils.Free(this);
 		}
 	}
 }

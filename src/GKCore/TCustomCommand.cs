@@ -1,14 +1,18 @@
 using System;
 
-using GKCore.Sys;
+using GKSys;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKCore
 {
 	public abstract class TCustomCommand
 	{
-		protected TUndoManager FManager;
+		protected UndoManager FManager;
 
-		public TCustomCommand(TUndoManager aManager)
+		public TCustomCommand(UndoManager aManager)
 		{
 			this.FManager = aManager;
 		}
@@ -19,7 +23,7 @@ namespace GKCore
 
 		public void Free()
 		{
-			TObjectHelper.Free(this);
+			SysUtils.Free(this);
 		}
 	}
 }

@@ -1,9 +1,13 @@
 using System;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
 
-namespace GKCore
+/// <summary>
+/// Localization: unknown
+/// </summary>
+
+namespace GKCore.Settings
 {
 	public class TProxy
 	{
@@ -48,29 +52,29 @@ namespace GKCore
 			SysUtils.BuildCRCTable();
 		}
 
-		public void LoadFromFile([In] TIniFile aIniFile)
+		public void LoadFromFile([In] IniFile aIniFile)
 		{
 			this.FUseProxy = aIniFile.ReadBool("Proxy", "UseProxy", false);
 			this.FServer = aIniFile.ReadString("Proxy", "Server", "");
 			this.FPort = aIniFile.ReadString("Proxy", "Port", "");
 			this.FLogin = aIniFile.ReadString("Proxy", "Login", "");
-			this.FPassword = SysUtils.scDecrypt(aIniFile.ReadString("Proxy", "Password", ""), (ushort)SysUtils.CrcStr("GEDKeeper"));
+			this.FPassword = SysUtils.scDecrypt(aIniFile.ReadString("Proxy", "Password", ""), unchecked((ushort)SysUtils.CrcStr("GEDKeeper")));
 		}
 
-		public void SaveToFile([In] TIniFile aIniFile)
+		public void SaveToFile([In] IniFile aIniFile)
 		{
 			aIniFile.WriteBool("Proxy", "UseProxy", this.FUseProxy);
 			aIniFile.WriteString("Proxy", "Server", this.FServer);
 			aIniFile.WriteString("Proxy", "Port", this.FPort);
 			aIniFile.WriteString("Proxy", "Login", this.FLogin);
 			
-			string pw = SysUtils.scEncrypt(this.FPassword, (ushort)SysUtils.CrcStr("GEDKeeper"));
+			string pw = SysUtils.scEncrypt(this.FPassword, unchecked((ushort)SysUtils.CrcStr("GEDKeeper")));
 			aIniFile.WriteString("Proxy", "Password", pw);
 		}
 
 		public void Free()
 		{
-			TObjectHelper.Free(this);
+			SysUtils.Free(this);
 		}
 	}
 }

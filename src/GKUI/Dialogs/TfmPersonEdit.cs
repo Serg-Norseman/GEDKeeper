@@ -5,8 +5,12 @@ using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKSys;
 using GKUI.Lists;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI
 {
@@ -37,15 +41,13 @@ namespace GKUI
 
 		private void PortraitRefresh()
 		{
-			Bitmap bmp = this.Base.Engine.GetPrimaryBitmap(this.FPerson);
-			if (bmp != null)
+			Image img = this.Base.Engine.GetPrimaryBitmap(this.FPerson, this.imgPortrait.Width, this.imgPortrait.Height, false);
+
+			if (img != null)
 			{
-				this.imgPortrait.Image = bmp;
-				if (bmp.Width > this.imgPortrait.Width || bmp.Height > this.imgPortrait.Height)
-				{
-					this.imgPortrait.SizeMode = PictureBoxSizeMode.StretchImage;
-				}
-				TObjectHelper.Free(bmp);
+				this.imgPortrait.Image = img; // освобождать нельзя, изображение исчезает
+				this.imgPortrait.SizeMode = PictureBoxSizeMode.CenterImage;
+
 				this.imgPortrait.Visible = true;
 			}
 			else
@@ -122,56 +124,42 @@ namespace GKUI
 			this.FSpousesList.List.Items.Clear();
 
 			int num = this.FPerson.SpouseToFamilyLinks.Count;
-			int idx = 1;
-			if (num >= idx)
+			for (int idx = 1; idx <= num; idx++)
 			{
-				num++;
-				do
+				TGEDCOMFamilyRecord family = this.FPerson.SpouseToFamilyLinks[idx - 1].Family;
+				if (family != null)
 				{
-					TGEDCOMFamilyRecord family = this.FPerson.SpouseToFamilyLinks[idx - 1].Family;
-					if (family != null)
+					TGEDCOMIndividualRecord rel_person;
+					string rel_name;
+					if (this.FPerson.Sex == TGEDCOMSex.svMale)
 					{
-						TGEDCOMIndividualRecord rel_person;
-						string rel_name;
-						if (this.FPerson.Sex == TGEDCOMSex.svMale)
-						{
-							rel_person = (family.Wife.Value as TGEDCOMIndividualRecord);
-							rel_name = GKL.LSList[63];
-						}
-						else
-						{
-							rel_person = (family.Husband.Value as TGEDCOMIndividualRecord);
-							rel_name = GKL.LSList[64];
-						}
-						if (rel_person != null)
-						{
-							rel_name = TGenEngine.GetNameStr(rel_person, true, false);
-						}
-						ListViewItem item = this.FSpousesList.List.AddItem(idx.ToString(), family);
-						item.SubItems.Add(rel_name);
-						item.SubItems.Add(TGenEngine.GetMarriageDate(family, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
+						rel_person = (family.Wife.Value as TGEDCOMIndividualRecord);
+						rel_name = LangMan.LSList[63];
 					}
-					idx++;
+					else
+					{
+						rel_person = (family.Husband.Value as TGEDCOMIndividualRecord);
+						rel_name = LangMan.LSList[64];
+					}
+					if (rel_person != null)
+					{
+						rel_name = TGenEngine.GetNameStr(rel_person, true, false);
+					}
+					ListViewItem item = this.FSpousesList.List.AddItem(idx.ToString(), family);
+					item.SubItems.Add(rel_name);
+					item.SubItems.Add(TGenEngine.GetMarriageDate(family, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
 				}
-				while (idx != num);
 			}
 			this.Base.RecListAssociationsRefresh(this.FPerson, this.FAssociationsList.List, null);
 			this.Base.RecListGroupsRefresh(this.FPerson, this.FGroupsList.List, null);
 
 			this.FUserRefList.List.Items.Clear();
 			int num2 = this.FPerson.UserReferences.Count - 1;
-			idx = 0;
-			if (num2 >= idx)
+			for (int idx = 0; idx <= num2; idx++)
 			{
-				num2++;
-				do
-				{
-					TGEDCOMUserReference uref = this.FPerson.UserReferences[idx];
-					ListViewItem item = this.FUserRefList.List.AddItem(uref.StringValue, uref);
-					item.SubItems.Add(uref.ReferenceType);
-					idx++;
-				}
-				while (idx != num2);
+				TGEDCOMUserReference uref = this.FPerson.UserReferences[idx];
+				ListViewItem item = this.FUserRefList.List.AddItem(uref.StringValue, uref);
+				item.SubItems.Add(uref.ReferenceType);
 			}
 			TfmPersonEdit._ControlsRefresh_LockEditor(this.FPerson.Restriction == TGEDCOMRestriction.rnLocked);
 			this.PortraitRefresh();
@@ -182,10 +170,8 @@ namespace GKUI
 			this.FPerson = Value;
 			try
 			{
-				string fam;
-				string nam;
-				string pat;
-				TGenEngine.GetNameParts(this.FPerson, out fam, out nam, out pat);
+				string fam, nam, pat;
+				this.FPerson.aux_GetNameParts(out fam, out nam, out pat);
 				this.EditFamily.Text = fam;
 				this.EditName.Text = nam;
 				this.EditPatronymic.Text = pat;
@@ -205,6 +191,7 @@ namespace GKUI
 		{
 			TGEDCOMPersonalName np = this.FPerson.PersonalNames[0];
 			np.SetNameParts(this.EditName.Text.Trim() + " " + this.EditPatronymic.Text.Trim(), this.EditFamily.Text.Trim(), np.LastPart);
+
 			TGEDCOMPersonalNamePieces pieces = np.Pieces;
 			if (pieces.Prefix != this.edPiecePrefix.Text)
 			{
@@ -222,20 +209,24 @@ namespace GKUI
 			{
 				pieces.Suffix = this.edPieceSuffix.Text;
 			}
+
 			this.Base.DoPersonChangeSex(this.FPerson, (TGEDCOMSex)this.EditSex.SelectedIndex);
 			this.Base.DoPersonChangePatriarch(this.FPerson, this.CheckPatriarch.Checked);
+
 			this.FPerson.Bookmark = this.chkBookmark.Checked;
 			this.FPerson.Restriction = (TGEDCOMRestriction)this.cbRestriction.SelectedIndex;
+
 			if (this.FPerson.ChildToFamilyLinks.Count > 0)
 			{
 				this.FPerson.ChildToFamilyLinks[0].Family.SortChilds();
 			}
+
 			this.Base.ChangeRecord(this.FPerson);
 		}
 
 		private void SetTitle()
 		{
-			this.Text = GKL.LSList[96] + " \"" + this.EditFamily.Text + " " + this.EditName.Text +
+			this.Text = LangMan.LSList[96] + " \"" + this.EditFamily.Text + " " + this.EditName.Text +
 				" " + this.EditPatronymic.Text + "\" [" + TGenEngine.GetId(this.FPerson).ToString() + "]";
 		}
 
@@ -295,7 +286,7 @@ namespace GKUI
 						case TGenEngine.TRecAction.raDelete:
 						{
 							TGEDCOMFamilyRecord family = ItemData as TGEDCOMFamilyRecord;
-							if (family != null && SysUtils.ShowQuestion(GKL.LSList[220]) != DialogResult.No)
+							if (family != null && TGenEngine.ShowQuestion(LangMan.LSList[220]) != DialogResult.No)
 							{
 								this.Base.Engine.RemoveFamilySpouse(family, this.FPerson);
 								this.ControlsRefresh();
@@ -376,7 +367,7 @@ namespace GKUI
 								if (Action == TGenEngine.TRecAction.raDelete)
 								{
 									TGEDCOMGroupRecord group = ItemData as TGEDCOMGroupRecord;
-									if (SysUtils.ShowQuestion(GKL.LSList[188]) != DialogResult.No && this.Base.Engine.RemoveGroupMember(group, this.FPerson))
+									if (TGenEngine.ShowQuestion(LangMan.LSList[188]) != DialogResult.No && this.Base.Engine.RemoveGroupMember(group, this.FPerson))
 									{
 										this.ControlsRefresh();
 									}
@@ -507,7 +498,7 @@ namespace GKUI
 
 		private void btnFatherDelete_Click(object sender, EventArgs e)
 		{
-			if (SysUtils.ShowQuestion(GKL.LSList[218]) != DialogResult.No)
+			if (TGenEngine.ShowQuestion(LangMan.LSList[218]) != DialogResult.No)
 			{
 				TGEDCOMFamilyRecord family = this.Base.GetChildFamily(this.FPerson, false, null);
 				if (family != null)
@@ -546,7 +537,7 @@ namespace GKUI
 
 		private void btnMotherDelete_Click(object sender, EventArgs e)
 		{
-			if (SysUtils.ShowQuestion(GKL.LSList[219]) != DialogResult.No)
+			if (TGenEngine.ShowQuestion(LangMan.LSList[219]) != DialogResult.No)
 			{
 				TGEDCOMFamilyRecord family = this.Base.GetChildFamily(this.FPerson, false, null);
 				if (family != null)
@@ -594,7 +585,7 @@ namespace GKUI
 
 		private void btnParentsDelete_Click(object sender, EventArgs e)
 		{
-			if (SysUtils.ShowQuestion(GKL.LSList[221]) != DialogResult.No)
+			if (TGenEngine.ShowQuestion(LangMan.LSList[221]) != DialogResult.No)
 			{
 				TGEDCOMFamilyRecord family = this.Base.GetChildFamily(this.FPerson, false, null);
 				if (family != null)
@@ -661,7 +652,8 @@ namespace GKUI
 
 		private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			this.ControlsRefresh();
+			//fixme: здесь надо бы блокировать интерфейс, а не обновлять его
+			//this.ControlsRefresh();
 		}
 
 		public TfmPersonEdit(TfmBase aBase)
@@ -681,7 +673,7 @@ namespace GKUI
 
 			this.FEventsList = new TSheetList(this.SheetEvents);
 			this.FEventsList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
-			this.FEventsList.Buttons = TEnumSet.Create(new Enum[]
+			this.FEventsList.Buttons = EnumSet.Create(new Enum[]
 			{
 				TSheetList.TListButton.lbAdd, 
 				TSheetList.TListButton.lbEdit, 
@@ -693,7 +685,7 @@ namespace GKUI
 
 			this.FSpousesList = new TSheetList(this.SheetSpouses);
 			this.FSpousesList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
-			this.FSpousesList.Buttons = TEnumSet.Create(new Enum[]
+			this.FSpousesList.Buttons = EnumSet.Create(new Enum[]
 			{
 				TSheetList.TListButton.lbAdd, 
 				TSheetList.TListButton.lbEdit, 
@@ -703,29 +695,29 @@ namespace GKUI
 				TSheetList.TListButton.lbMoveDown
 			});
 			this.FSpousesList.List.AddListColumn("№", 25, false);
-			this.FSpousesList.List.AddListColumn(GKL.LSList[216], 300, false);
-			this.FSpousesList.List.AddListColumn(GKL.LSList[217], 100, false);
+			this.FSpousesList.List.AddListColumn(LangMan.LSList[216], 300, false);
+			this.FSpousesList.List.AddListColumn(LangMan.LSList[217], 100, false);
 
 			this.FAssociationsList = new TSheetList(this.SheetAssociations);
 			this.FAssociationsList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
-			this.FAssociationsList.Buttons = TEnumSet.Create(new Enum[]
+			this.FAssociationsList.Buttons = EnumSet.Create(new Enum[]
 			{
 				TSheetList.TListButton.lbAdd, 
 				TSheetList.TListButton.lbEdit, 
 				TSheetList.TListButton.lbDelete, 
 				TSheetList.TListButton.lbJump
 			});
-			this.FAssociationsList.List.AddListColumn(GKL.LSList[95], 300, false);
-			this.FAssociationsList.List.AddListColumn(GKL.LSList[96], 200, false);
+			this.FAssociationsList.List.AddListColumn(LangMan.LSList[95], 300, false);
+			this.FAssociationsList.List.AddListColumn(LangMan.LSList[96], 200, false);
 
 			this.FGroupsList = new TSheetList(this.SheetGroups);
 			this.FGroupsList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
-			this.FGroupsList.Buttons = TEnumSet.Create(new Enum[]
+			this.FGroupsList.Buttons = EnumSet.Create(new Enum[]
 			{
 				TSheetList.TListButton.lbAdd, 
 				TSheetList.TListButton.lbDelete
 			});
-			this.FGroupsList.List.AddListColumn(GKL.LSList[185], 350, false);
+			this.FGroupsList.List.AddListColumn(LangMan.LSList[185], 350, false);
 
 			this.FNotesList = new TSheetList(this.SheetNotes);
 			this.FNotesList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
@@ -733,7 +725,7 @@ namespace GKUI
 
 			this.FMediaList = new TSheetList(this.SheetMultimedia);
 			this.FMediaList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
-			this.FMediaList.Buttons = TEnumSet.Create(new Enum[]
+			this.FMediaList.Buttons = EnumSet.Create(new Enum[]
 			{
 				TSheetList.TListButton.lbAdd, 
 				TSheetList.TListButton.lbEdit, 
@@ -754,8 +746,8 @@ namespace GKUI
 
 			this.FUserRefList = new TSheetList(this.SheetUserRefs);
 			this.FUserRefList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
-			this.FUserRefList.List.AddListColumn(GKL.LSList[112], 300, false);
-			this.FUserRefList.List.AddListColumn(GKL.LSList[113], 200, false);
+			this.FUserRefList.List.AddListColumn(LangMan.LSList[112], 300, false);
+			this.FUserRefList.List.AddListColumn(LangMan.LSList[113], 200, false);
 
 			this.btnPortraitAdd.ImageList = GKUI.TfmGEDKeeper.Instance.ImageList_Buttons;
 			this.btnPortraitAdd.ImageIndex = 3;
@@ -784,29 +776,29 @@ namespace GKUI
 
 		public void SetLang()
 		{
-			this.btnAccept.Text = GKL.LSList[97];
-			this.btnCancel.Text = GKL.LSList[98];
-			this.Text = GKL.LSList[103];
-			this.Label1.Text = GKL.LSList[84];
-			this.Label2.Text = GKL.LSList[85];
-			this.Label3.Text = GKL.LSList[86];
-			this.Label4.Text = GKL.LSList[87];
-			this.Label7.Text = GKL.LSList[88];
-			this.Label8.Text = GKL.LSList[89];
-			this.Label6.Text = GKL.LSList[90];
-			this.Label9.Text = GKL.LSList[91];
-			this.CheckPatriarch.Text = GKL.LSList[92];
-			this.chkBookmark.Text = GKL.LSList[93];
-			this.Label12.Text = GKL.LSList[152];
-			this.SheetEvents.Text = GKL.LSList[83];
-			this.SheetSpouses.Text = GKL.LSList[153];
-			this.SheetAssociations.Text = GKL.LSList[154];
-			this.SheetGroups.Text = GKL.LSList[58];
-			this.SheetNotes.Text = GKL.LSList[54];
-			this.SheetMultimedia.Text = GKL.LSList[55];
-			this.SheetSources.Text = GKL.LSList[56];
-			this.SheetUserRefs.Text = GKL.LSList[155];
-			this.Label5.Text = GKL.LSList[124];
+			this.btnAccept.Text = LangMan.LSList[97];
+			this.btnCancel.Text = LangMan.LSList[98];
+			this.Text = LangMan.LSList[103];
+			this.Label1.Text = LangMan.LSList[84];
+			this.Label2.Text = LangMan.LSList[85];
+			this.Label3.Text = LangMan.LSList[86];
+			this.Label4.Text = LangMan.LSList[87];
+			this.Label7.Text = LangMan.LSList[88];
+			this.Label8.Text = LangMan.LSList[89];
+			this.Label6.Text = LangMan.LSList[90];
+			this.Label9.Text = LangMan.LSList[91];
+			this.CheckPatriarch.Text = LangMan.LSList[92];
+			this.chkBookmark.Text = LangMan.LSList[93];
+			this.Label12.Text = LangMan.LSList[152];
+			this.SheetEvents.Text = LangMan.LSList[83];
+			this.SheetSpouses.Text = LangMan.LSList[153];
+			this.SheetAssociations.Text = LangMan.LSList[154];
+			this.SheetGroups.Text = LangMan.LSList[58];
+			this.SheetNotes.Text = LangMan.LSList[54];
+			this.SheetMultimedia.Text = LangMan.LSList[55];
+			this.SheetSources.Text = LangMan.LSList[56];
+			this.SheetUserRefs.Text = LangMan.LSList[155];
+			this.Label5.Text = LangMan.LSList[124];
 		}
 
 		private static void _ControlsRefresh_LockEditor(bool aLocked)

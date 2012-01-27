@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
 
 namespace XLSFile
 {
@@ -43,34 +43,34 @@ namespace XLSFile
 			if (!this.Disposed_)
 			{
 				this.Clear();
-				this.FList.Free();
-				this.FWriter.Free();
+				this.FList.Dispose();
+				//this.FWriter.Dispose();
 				this.Disposed_ = true;
 			}
 		}
 
 		public void AddWordCell(ushort vCol, ushort vRow, TCellAttributeSet vAttribute, ushort aValue)
 		{
-			TWordCell tWordCell = this.AddCell(vCol, vRow, vAttribute, typeof(TWordCell)) as TWordCell;
-			tWordCell.Value = aValue;
+			TWordCell wCell = this.AddCell(vCol, vRow, vAttribute, typeof(TWordCell)) as TWordCell;
+			wCell.Value = aValue;
 		}
 
 		public void AddIntegerCell(ushort vCol, ushort vRow, TCellAttributeSet vAttribute, int aValue)
 		{
-			TIntegerCell tIntegerCell = this.AddCell(vCol, vRow, vAttribute, typeof(TIntegerCell)) as TIntegerCell;
-			tIntegerCell.Value = aValue;
+			TIntegerCell iCell = this.AddCell(vCol, vRow, vAttribute, typeof(TIntegerCell)) as TIntegerCell;
+			iCell.Value = aValue;
 		}
 
 		public void AddDoubleCell(ushort vCol, ushort vRow, TCellAttributeSet vAttribute, double aValue)
 		{
-			TDoubleCell tDoubleCell = this.AddCell(vCol, vRow, vAttribute, typeof(TDoubleCell)) as TDoubleCell;
-			tDoubleCell.Value = aValue;
+			TDoubleCell dCell = this.AddCell(vCol, vRow, vAttribute, typeof(TDoubleCell)) as TDoubleCell;
+			dCell.Value = aValue;
 		}
 
 		public void AddStrCell(ushort vCol, ushort vRow, TCellAttributeSet vAttribute, string aValue)
 		{
-			TStrCell tStrCell = this.AddCell(vCol, vRow, vAttribute, typeof(TStrCell)) as TStrCell;
-			tStrCell.Value = aValue;
+			TStrCell sCell = this.AddCell(vCol, vRow, vAttribute, typeof(TStrCell)) as TStrCell;
+			sCell.Value = aValue;
 		}
 
 		public void Clear()
@@ -117,7 +117,7 @@ namespace XLSFile
 
 		public void Free()
 		{
-			TObjectHelper.Free(this);
+			SysUtils.Free(this);
 		}
 
 	}

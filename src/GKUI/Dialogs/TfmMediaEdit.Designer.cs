@@ -145,6 +145,7 @@ namespace GKUI
 			// 
 			this.edFile.Location = new System.Drawing.Point(8, 120);
 			this.edFile.Name = "edFile";
+			this.edFile.ReadOnly = true;
 			this.edFile.Size = new System.Drawing.Size(449, 21);
 			this.edFile.TabIndex = 7;
 			// 

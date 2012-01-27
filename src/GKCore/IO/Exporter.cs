@@ -1,13 +1,17 @@
 using System;
-using System.ComponentModel;
 using System.IO;
 
 using GedCom551;
-using GKCore.Sys;
+using GKCore.Settings;
+using GKSys;
 
-namespace GKCore
+/// <summary>
+/// Localization: unknown
+/// </summary>
+
+namespace GKCore.IO
 {
-	public abstract class TExporter : IDisposable
+	public abstract class Exporter : IDisposable
 	{
 		protected TGenEngine FEngine;
 		protected TGlobalOptions FOptions;
@@ -21,15 +25,12 @@ namespace GKCore
 			set { this.FOptions = value; }
 		}
 
-		public TExporter(TGenEngine aEngine, string aPath)
+		public Exporter(TGenEngine aEngine, string aPath)
 		{
 			this.FEngine = aEngine;
 			this.FTree = this.FEngine.Tree;
 			this.FPath = aPath;
-			if (!Directory.Exists(this.FPath))
-			{
-				SysUtils.CreateDir(this.FPath);
-			}
+			if (!Directory.Exists(this.FPath)) Directory.CreateDirectory(this.FPath);
 		}
 
 		public void Dispose()

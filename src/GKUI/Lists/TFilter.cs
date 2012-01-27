@@ -1,5 +1,10 @@
 using System;
-using GKCore.Sys;
+
+using GKSys;
+
+/// <summary>
+/// Localization: clean
+/// </summary>
 
 namespace GKUI.Lists
 {
@@ -15,7 +20,7 @@ namespace GKUI.Lists
 
 		public void Free()
 		{
-			TObjectHelper.Free(this);
+			SysUtils.Free(this);
 		}
 	}
 }

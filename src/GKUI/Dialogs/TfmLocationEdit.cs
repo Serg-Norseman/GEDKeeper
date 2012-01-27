@@ -4,9 +4,13 @@ using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKSys;
 using GKUI.Controls;
 using GKUI.Lists;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI
 {
@@ -101,26 +105,19 @@ namespace GKUI
 				this.FMapBrowser.ClearPoints();
 
 				int num = this.FSearchPoints.Count - 1;
-				int i = 0;
-				if (num >= i)
+				for (int i = 0; i <= num; i++)
 				{
-					num++;
-					do
+					if (this.FSearchPoints[i] is TMapBrowser.TGMapPoint)
 					{
-						if (this.FSearchPoints[i] is TMapBrowser.TGMapPoint)
-						{
-							TMapBrowser.TGMapPoint pt = this.FSearchPoints[i] as TMapBrowser.TGMapPoint;
-							TExtListItem item = new TExtListItem();
-							item.Text = pt.Hint;
-							item.Data = pt;
-							item.SubItems.Add(pt.Latitude.ToString("0.000000"));
-							item.SubItems.Add(pt.Longitude.ToString("0.000000"));
-							this.ListGeoCoords.Items.Add(item);
-							this.FMapBrowser.AddPoint(pt.Latitude, pt.Longitude, pt.Hint);
-						}
-						i++;
+						TMapBrowser.TGMapPoint pt = this.FSearchPoints[i] as TMapBrowser.TGMapPoint;
+						TExtListItem item = new TExtListItem();
+						item.Text = pt.Hint;
+						item.Data = pt;
+						item.SubItems.Add(pt.Latitude.ToString("0.000000"));
+						item.SubItems.Add(pt.Longitude.ToString("0.000000"));
+						this.ListGeoCoords.Items.Add(item);
+						this.FMapBrowser.AddPoint(pt.Latitude, pt.Longitude, pt.Hint);
 					}
-					while (i != num);
 				}
 				this.FMapBrowser.ZoomToBounds();
 			}
@@ -151,7 +148,7 @@ namespace GKUI
 
 		private void EditName_TextChanged(object sender, EventArgs e)
 		{
-			this.Text = GKL.LSList[170] + " \"" + this.EditName.Text + "\"";
+			this.Text = LangMan.LSList[170] + " \"" + this.EditName.Text + "\"";
 		}
 
 		private void btnShowOnMap_Click(object sender, EventArgs e)
@@ -179,7 +176,7 @@ namespace GKUI
 		{
 			if (Disposing)
 			{
-				this.FSearchPoints.Free();
+				this.FSearchPoints.Dispose();
 			}
 			base.Dispose(Disposing);
 		}
@@ -207,22 +204,22 @@ namespace GKUI
 
 		public void SetLang()
 		{
-			this.btnAccept.Text = GKL.LSList[97];
-			this.btnCancel.Text = GKL.LSList[98];
-			this.SheetCommon.Text = GKL.LSList[144];
-			this.SheetNotes.Text = GKL.LSList[54];
-			this.SheetMultimedia.Text = GKL.LSList[55];
-			this.Label1.Text = GKL.LSList[125];
-			this.Label2.Text = GKL.LSList[171];
-			this.Label3.Text = GKL.LSList[172];
-			this.ListGeoCoords.Columns[0].Text = GKL.LSList[125];
-			this.ListGeoCoords.Columns[1].Text = GKL.LSList[171];
-			this.ListGeoCoords.Columns[2].Text = GKL.LSList[172];
-			this.btnShowOnMap.Text = GKL.LSList[173];
-			this.GroupBox1.Text = GKL.LSList[174];
-			this.btnSearch.Text = GKL.LSList[175];
-			this.btnSelect.Text = GKL.LSList[176];
-			this.btnSelectName.Text = GKL.LSList[177];
+			this.btnAccept.Text = LangMan.LSList[97];
+			this.btnCancel.Text = LangMan.LSList[98];
+			this.SheetCommon.Text = LangMan.LSList[144];
+			this.SheetNotes.Text = LangMan.LSList[54];
+			this.SheetMultimedia.Text = LangMan.LSList[55];
+			this.Label1.Text = LangMan.LSList[125];
+			this.Label2.Text = LangMan.LSList[171];
+			this.Label3.Text = LangMan.LSList[172];
+			this.ListGeoCoords.Columns[0].Text = LangMan.LSList[125];
+			this.ListGeoCoords.Columns[1].Text = LangMan.LSList[171];
+			this.ListGeoCoords.Columns[2].Text = LangMan.LSList[172];
+			this.btnShowOnMap.Text = LangMan.LSList[173];
+			this.GroupBox1.Text = LangMan.LSList[174];
+			this.btnSearch.Text = LangMan.LSList[175];
+			this.btnSelect.Text = LangMan.LSList[176];
+			this.btnSelectName.Text = LangMan.LSList[177];
 		}
 
 	}

@@ -4,7 +4,11 @@ using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKSys;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI
 {
@@ -70,11 +74,11 @@ namespace GKUI
 				this.EditRelation.Items.Add(GKUI.TfmGEDKeeper.Instance.Options.Relations[i]);
 			}
 
-			this.btnAccept.Text = GKL.LSList[97];
-			this.btnCancel.Text = GKL.LSList[98];
-			this.Text = GKL.LSList[94];
-			this.Label1.Text = GKL.LSList[95];
-			this.Label2.Text = GKL.LSList[96];
+			this.btnAccept.Text = LangMan.LSList[97];
+			this.btnCancel.Text = LangMan.LSList[98];
+			this.Text = LangMan.LSList[94];
+			this.Label1.Text = LangMan.LSList[95];
+			this.Label2.Text = LangMan.LSList[96];
 		}
 	}
 }

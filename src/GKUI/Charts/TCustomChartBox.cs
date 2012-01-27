@@ -5,8 +5,13 @@ using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKCore.Settings;
+using GKSys;
 using GKUI.Lists;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI.Charts
 {
@@ -96,7 +101,7 @@ namespace GKUI.Charts
 					if (m.Msg == 276)
 					{
 						uint wParam = (uint)m.WParam.ToInt32();
-						ScrollEventType scrType = SysUtils.GetScrollEventType(wParam & 65535u);
+						ScrollEventType scrType = ScrollUtils.GetScrollEventType(wParam & 65535u);
 						int new_pos = this.DoScroll(0, this.LeftPos, 0, this.FRange.X, scrType);
 						this.SetLeftPos(new_pos);
 					}
@@ -105,7 +110,7 @@ namespace GKUI.Charts
 						if (m.Msg == 277)
 						{
 							uint wParam = (uint)m.WParam.ToInt32();
-							ScrollEventType scrType = SysUtils.GetScrollEventType(wParam & 65535u);
+							ScrollEventType scrType = ScrollUtils.GetScrollEventType(wParam & 65535u);
 							int new_pos = this.DoScroll(1, this.TopPos, 0, this.FRange.Y, scrType);
 							this.SetTopPos(new_pos);
 						}

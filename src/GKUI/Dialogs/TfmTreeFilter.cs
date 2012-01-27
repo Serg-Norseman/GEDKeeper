@@ -1,14 +1,16 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Drawing;
 using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKSys;
 using GKUI.Charts;
 using GKUI.Controls;
 using GKUI.Lists;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI
 {
@@ -192,9 +194,9 @@ namespace GKUI
 			}
 
 			this.cbSource.Sorted = false;
-			this.cbSource.Items.Insert(0, GKL.LSList[500]);
-			this.cbSource.Items.Insert(1, GKL.LSList[501]);
-			this.cbSource.Items.Insert(2, GKL.LSList[502]);
+			this.cbSource.Items.Insert(0, LangMan.LSList[500]);
+			this.cbSource.Items.Insert(1, LangMan.LSList[501]);
+			this.cbSource.Items.Insert(2, LangMan.LSList[502]);
 			if (this.FFilter.SourceMode != TFilter.TGroupMode.gmSelected) {
 				this.cbSource.SelectedIndex = (int)((sbyte)this.FFilter.SourceMode);
 			} else {
@@ -207,23 +209,23 @@ namespace GKUI
 			this.InitializeComponent();
 			this.FBase = aBase;
 			this.FPersonsList = new TSheetList(this.Panel1);
-			this.FPersonsList.Buttons = TEnumSet.Create(new Enum[]
+			this.FPersonsList.Buttons = EnumSet.Create(new Enum[]
 			{
 				TSheetList.TListButton.lbAdd, 
 				TSheetList.TListButton.lbDelete
 			});
 			this.FPersonsList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
-			this.FPersonsList.List.AddListColumn(GKL.LSList[52], 350, false);
+			this.FPersonsList.List.AddListColumn(LangMan.LSList[52], 350, false);
 
-			this.btnAccept.Text = GKL.LSList[97];
-			this.btnCancel.Text = GKL.LSList[98];
-			this.Text = GKL.LSList[38];
-			this.rgBranchCut.Text = GKL.LSList[496];
-			this.rbCutNone.Text = GKL.LSList[497];
-			this.rbCutYears.Text = GKL.LSList[498];
-			this.Label1.Text = GKL.LSList[490];
-			this.rbCutPersons.Text = GKL.LSList[499];
-			this.Label5.Text = GKL.LSList[56];
+			this.btnAccept.Text = LangMan.LSList[97];
+			this.btnCancel.Text = LangMan.LSList[98];
+			this.Text = LangMan.LSList[38];
+			this.rgBranchCut.Text = LangMan.LSList[496];
+			this.rbCutNone.Text = LangMan.LSList[497];
+			this.rbCutYears.Text = LangMan.LSList[498];
+			this.Label1.Text = LangMan.LSList[490];
+			this.rbCutPersons.Text = LangMan.LSList[499];
+			this.Label5.Text = LangMan.LSList[56];
 		}
 
 	}

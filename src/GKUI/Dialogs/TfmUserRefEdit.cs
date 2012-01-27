@@ -1,12 +1,14 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKSys;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI
 {
@@ -55,14 +57,14 @@ namespace GKUI
 
 			for (TGenEngine.TUserRef ur = TGenEngine.TUserRef.urCustom; ur <= TGenEngine.TUserRef.urUSSR_RearVeteran; ur++)
 			{
-				this.EditRef.Items.Add(TGenEngine.UserRefs[(int)ur].Name);
+				this.EditRef.Items.Add(TGenEngine.UserRefs[(int)ur]);
 			}
 
-			this.btnAccept.Text = GKL.LSList[97];
-			this.btnCancel.Text = GKL.LSList[98];
-			this.Text = GKL.LSList[107];
-			this.Label1.Text = GKL.LSList[112];
-			this.Label2.Text = GKL.LSList[113];
+			this.btnAccept.Text = LangMan.LSList[97];
+			this.btnCancel.Text = LangMan.LSList[98];
+			this.Text = LangMan.LSList[107];
+			this.Label1.Text = LangMan.LSList[112];
+			this.Label2.Text = LangMan.LSList[113];
 		}
 	}
 }

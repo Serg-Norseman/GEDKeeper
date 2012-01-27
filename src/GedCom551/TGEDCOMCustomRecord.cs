@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
 
 namespace GedCom551
 {
@@ -16,31 +16,29 @@ namespace GedCom551
 			set { this.SetXRef(value); }
 		}
 
-		private void SetXRef([In] string AXRef)
+		private void SetXRef([In] string newXRef)
 		{
-			this.FXRef = AXRef;
-			if (this is TGEDCOMRecord && this.FOwner != null)
+			string oldXRef = this.FXRef;
+			this.FXRef = newXRef;
+			if (this is TGEDCOMCustomRecord && this.FOwner != null)
 			{
-				(this.FOwner as TGEDCOMTree).SetXRef(this as TGEDCOMRecord, this.FXRef);
+				this.FOwner.SetXRef(oldXRef, this);
 			}
 		}
 
-		public virtual TGEDCOMTag AddSubTag(TGEDCOMCustomTag AParent, [In] string ATag, [In] string AValue, Type AClass)
+		public virtual TGEDCOMTag AddSubTag(TGEDCOMCustomTag AParent, [In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result = null;
 
 			try
 			{
-				if (AClass == null)
-				{
-					Result = AParent.InsertTag(base.CreateGEDCOMTag(base.Owner, AParent, ATag, AValue));
+				TGEDCOMTag tag;
+				if (ATagConstructor != null) {
+					tag = (TGEDCOMTag)ATagConstructor(base.Owner, AParent, ATag, AValue);
+				} else {
+					tag = base.CreateGEDCOMTag(base.Owner, AParent, ATag, AValue);
 				}
-				else
-				{
-					TGEDCOMTag tag = (TGEDCOMTag)Activator.CreateInstance(AClass, new object[] { base.Owner, AParent, ATag, AValue });
-					//AClass.Create(base.Owner, AParent, ATag, AValue) as TGEDCOMTag;
-					Result = AParent.InsertTag(tag);
-				}
+				Result = AParent.InsertTag(tag);
 			}
 			catch (Exception E)
 			{
@@ -68,23 +66,19 @@ namespace GedCom551
 			AStream.WriteLine(S);
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, Type AClass)
+		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
-			TGEDCOMTag Result;
-			if (AClass == null)
-			{
-				Result = base.InsertTag(base.CreateGEDCOMTag(base.Owner, this, ATag, AValue));
+			TGEDCOMTag tag;
+			if (ATagConstructor != null) {
+				tag = (TGEDCOMTag)ATagConstructor(base.Owner, this, ATag, AValue);
+			} else {
+				tag = base.CreateGEDCOMTag(base.Owner, this, ATag, AValue);
 			}
-			else
-			{
-				TGEDCOMTag tag = (TGEDCOMTag)Activator.CreateInstance(AClass, new object[] { base.Owner, this, ATag, AValue });
-				//AClass.Create(base.Owner, this, ATag, AValue) as TGEDCOMTag
-				Result = base.InsertTag(tag);
-			}
-			return Result;
+			base.InsertTag(tag);
+			return tag;
 		}
 
-		public TGEDCOMCustomRecord(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMCustomRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
 		}
 	}

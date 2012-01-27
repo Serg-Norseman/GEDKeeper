@@ -7,8 +7,12 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 
-using GKCore;
-using GKCore.Sys;
+using GKCore.Settings;
+using GKSys;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI.Controls
 {
@@ -58,7 +62,7 @@ namespace GKUI.Controls
 
 			public void Free()
 			{
-				TObjectHelper.Free(this);
+				SysUtils.Free(this);
 			}
 		}
 
@@ -184,38 +188,15 @@ namespace GKUI.Controls
 				else
 				{
 					int num = this.FMapPoints.Count - 1;
-					int i = 0;
-					if (num >= i)
+					for (int i = 0; i <= num; i++)
 					{
-						num++;
-						do
-						{
-							pt = (this.FMapPoints[i] as TMapBrowser.TGMapPoint);
-							if (Result.MinLon > pt.Longitude)
-							{
-								Result.MinLon = pt.Longitude;
-							}
-							else
-							{
-								if (Result.MaxLon < pt.Longitude)
-								{
-									Result.MaxLon = pt.Longitude;
-								}
-							}
-							if (Result.MinLat > pt.Latitude)
-							{
-								Result.MinLat = pt.Latitude;
-							}
-							else
-							{
-								if (Result.MaxLat < pt.Latitude)
-								{
-									Result.MaxLat = pt.Latitude;
-								}
-							}
-							i++;
-						}
-						while (i != num);
+						pt = (this.FMapPoints[i] as TMapBrowser.TGMapPoint);
+
+						if (Result.MinLon > pt.Longitude) Result.MinLon = pt.Longitude;
+						else if (Result.MaxLon < pt.Longitude) Result.MaxLon = pt.Longitude;
+
+						if (Result.MinLat > pt.Latitude) Result.MinLat = pt.Latitude;
+						else if (Result.MaxLat < pt.Latitude) Result.MaxLat = pt.Latitude;
 					}
 				}
 			}
@@ -252,7 +233,7 @@ namespace GKUI.Controls
 			{
 				File.Delete(this.FMapFile);
 				this.ClearPoints();
-				this.FMapPoints.Free();
+				this.FMapPoints.Dispose();
 			}
 			base.Dispose(Disposing);
 		}
@@ -425,7 +406,8 @@ namespace GKUI.Controls
 				Stream stm = null;
 				try
 				{
-					SearchString = SysUtils.StringReplace(SearchString.Trim(), " ", "+", TReplaceFlags.rfReplaceAll);
+					SearchString = SearchString.Trim().Replace(" ", "+");
+
 					string FileOnNet = "http://maps.google.ru/maps/geo?q={0}&output=xml&key={1}&gl=ru";
 					FileOnNet = string.Format(FileOnNet, new object[]
 					{

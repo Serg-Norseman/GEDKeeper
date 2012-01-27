@@ -4,8 +4,13 @@ using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKCore.Settings;
+using GKSys;
 using GKUI.Controls;
+
+/// <summary>
+/// Localization: clean
+/// </summary>
 
 namespace GKUI.Lists
 {
@@ -79,11 +84,10 @@ namespace GKUI.Lists
 			{
 				if (this.FListMan != null)
 				{
-					object fListMan = this.FListMan;
-					SysUtils.FreeAndNil(ref fListMan);
-					this.FListMan = (fListMan as TListManager);
+					this.FListMan.Dispose();
+					this.FListMan = null;
 				}
-				this.FContentList.Free();
+				this.FContentList.Dispose();
 			}
 			base.Dispose(Disposing);
 		}
@@ -107,7 +111,7 @@ namespace GKUI.Lists
 
 		private void SortContents()
 		{
-			SysUtils.QuickSort(this.FContentList, new SysUtils.TSortCompareFunc(this.xCompare));
+			this.FContentList.Sort(new TListSortCompare(this.xCompare));
 		}
 
 		private int xCompare(object Item1, object Item2)
@@ -137,9 +141,8 @@ namespace GKUI.Lists
 			this.FRecordType = Value;
 
 			if (this.FListMan != null) {
-				object fListMan = this.FListMan;
-				SysUtils.FreeAndNil(ref fListMan);
-				this.FListMan = (fListMan as TListManager);
+				this.FListMan.Dispose();
+				this.FListMan = null;
 			}
 
 			switch (this.FRecordType) {
@@ -199,9 +202,15 @@ namespace GKUI.Lists
 
 		private void List_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
 		{
+			if (e.ItemIndex < 0 || e.ItemIndex >= this.FContentList.Count)
+			{
+				e.Item = null;
+				return;
+			}
+
 			TGEDCOMRecord rec = this.FContentList[e.ItemIndex] as TGEDCOMRecord;
-			TExtListItem newItem;
-			newItem	= new TExtListItem(TGenEngine.GetId(rec).ToString());
+
+			TExtListItem newItem = new TExtListItem(TGenEngine.GetId(rec).ToString());
 			newItem.Data = rec;
 
 			this.FListMan.Fetch(rec);
@@ -285,7 +294,15 @@ namespace GKUI.Lists
 
 		public void DeleteRecord(TGEDCOMRecord aRec)
 		{
-			this.FContentList.Remove(aRec);
+			// защита от сбоев: при удалении в режиме диаграмм, между фактическим удалением записи и 
+			// обновлением списка успевает пройти несколько запросов на обновление пунктов списка
+			// которые могут быть уже удалены
+			int res = this.FContentList.Remove(aRec);
+			if (res >= 0)
+			{
+				this.FFilteredCount = this.FContentList.Count;
+				VirtualListSize = this.FContentList.Count;
+			}
 		}
 
 		public TGEDCOMRecord GetSelectedRecord()

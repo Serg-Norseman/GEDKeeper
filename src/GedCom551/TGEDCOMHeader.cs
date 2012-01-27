@@ -1,120 +1,100 @@
 using System;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
+
+/// <summary>
+/// Localization: clean
+/// </summary>
 
 namespace GedCom551
 {
 	public sealed class TGEDCOMHeader : TGEDCOMCustomRecord
 	{
-		private TStrings FNotes;
+		private StringList FNotes;
 
 		public TGEDCOMCharacterSet CharacterSet
 		{
-			get { return this.GetCharacterSet(); }
-			set { this.SetCharacterSet(value); }
+			get { return base.GetCharacterSetVal(base.GetTagStringValue("CHAR")); }
+			set { base.SetTagStringValue("CHAR", base.GetCharacterSetStr(value)); }
 		}
 
-		public string CharacterSetVersion
-		{
-			get { return this.GetStringTag(10); }
-			set { this.SetStringTag(10, value); }
-		}
-
-		public string Copyright
-		{
-			get { return this.GetStringTag(7); }
-			set { this.SetStringTag(7, value); }
-		}
-
-		public string FileName
-		{
-			get { return this.GetStringTag(6); }
-			set { this.SetStringTag(6, value); }
-		}
-
-		public string GEDCOMVersion
-		{
-			get { return this.GetStringTag(8); }
-			set { this.SetStringTag(8, value); }
-		}
-
-		public string GEDCOMForm
-		{
-			get { return this.GetStringTag(9); }
-			set { this.SetStringTag(9, value); }
-		}
-
-		public string Language
-		{
-			get { return this.GetStringTag(11); }
-			set { this.SetStringTag(11, value); }
-		}
-
-		public TStrings Notes
+		public StringList Notes
 		{
 			get { return this.GetNotes(); }
 			set { this.SetNotes(value); }
 		}
 
-		public string PlaceHierarchy
-		{
-			get { return this.GetStringTag(12); }
-			set { this.SetStringTag(12, value); }
-		}
-
-		public string ReceivingSystemName
-		{
-			get { return this.GetStringTag(5); }
-			set { this.SetStringTag(5, value); }
-		}
-
 		public string Source
 		{
-			get
-			{
-				return this.GetStringTag(1);
-			}
-			set
-			{
-				this.SetStringTag(1, value);
-			}
+			get { return base.GetTagStringValue("SOUR"); }
+			set { base.SetTagStringValue("SOUR", value); }
 		}
 
 		public string SourceVersion
 		{
-			get
-			{
-				return this.GetStringTag(2);
-			}
-			set
-			{
-				this.SetStringTag(2, value);
-			}
+			get { return base.GetTagStringValue("SOUR\\VERS"); }
+			set { base.SetTagStringValue("SOUR\\VERS", value); }
 		}
 
 		public string SourceProductName
 		{
-			get
-			{
-				return this.GetStringTag(3);
-			}
-			set
-			{
-				this.SetStringTag(3, value);
-			}
+			get { return base.GetTagStringValue("SOUR\\NAME"); }
+			set { base.SetTagStringValue("SOUR\\NAME", value); }
 		}
 
 		public string SourceBusinessName
 		{
-			get
-			{
-				return this.GetStringTag(4);
-			}
-			set
-			{
-				this.SetStringTag(4, value);
-			}
+			get { return base.GetTagStringValue("SOUR\\CORP"); }
+			set { base.SetTagStringValue("SOUR\\CORP", value); }
+		}
+
+		public string ReceivingSystemName
+		{
+			get { return base.GetTagStringValue("DEST"); }
+			set { base.SetTagStringValue("DEST", value); }
+		}
+
+		public string FileName
+		{
+			get { return base.GetTagStringValue("FILE"); }
+			set { base.SetTagStringValue("FILE", value); }
+		}
+
+		public string Copyright
+		{
+			get { return base.GetTagStringValue("COPR"); }
+			set { base.SetTagStringValue("COPR", value); }
+		}
+
+		public string GEDCOMVersion
+		{
+			get { return base.GetTagStringValue("GEDC\\VERS"); }
+			set { base.SetTagStringValue("GEDC\\VERS", value); }
+		}
+
+		public string GEDCOMForm
+		{
+			get { return base.GetTagStringValue("GEDC\\FORM"); }
+			set { base.SetTagStringValue("GEDC\\FORM", value); }
+		}
+
+		public string CharacterSetVersion
+		{
+			get { return base.GetTagStringValue("CHAR\\VERS"); }
+			set { base.SetTagStringValue("CHAR\\VERS", value); }
+		}
+
+		public string Language
+		{
+			get { return base.GetTagStringValue("LANG"); }
+			set { base.SetTagStringValue("LANG", value); }
+		}
+
+		public string PlaceHierarchy
+		{
+			get { return base.GetTagStringValue("PLAC\\FORM"); }
+			set { base.SetTagStringValue("PLAC\\FORM", value); }
 		}
 
 		public TGEDCOMAddress SourceBusinessAddress
@@ -148,140 +128,11 @@ namespace GedCom551
 			set { this.SetTransmissionDateTime(value); }
 		}
 
-		private string GetStringTag(int Index)
+		// new property (not standard)
+		public int FileRevision
 		{
-			string Result = "";
-			switch (Index)
-			{
-				case 1:
-				{
-					Result = base.GetTagStringValue("SOUR");
-					break;
-				}
-				case 2:
-				{
-					Result = base.GetTagStringValue("SOUR\\VERS");
-					break;
-				}
-				case 3:
-				{
-					Result = base.GetTagStringValue("SOUR\\NAME");
-					break;
-				}
-				case 4:
-				{
-					Result = base.GetTagStringValue("SOUR\\CORP");
-					break;
-				}
-				case 5:
-				{
-					Result = base.GetTagStringValue("DEST");
-					break;
-				}
-				case 6:
-				{
-					Result = base.GetTagStringValue("FILE");
-					break;
-				}
-				case 7:
-				{
-					Result = base.GetTagStringValue("COPR");
-					break;
-				}
-				case 8:
-				{
-					Result = base.GetTagStringValue("GEDC\\VERS");
-					break;
-				}
-				case 9:
-				{
-					Result = base.GetTagStringValue("GEDC\\FORM");
-					break;
-				}
-				case 10:
-				{
-					Result = base.GetTagStringValue("CHAR\\VERS");
-					break;
-				}
-				case 11:
-				{
-					Result = base.GetTagStringValue("LANG");
-					break;
-				}
-				case 12:
-				{
-					Result = base.GetTagStringValue("PLAC\\FORM");
-					break;
-				}
-			}
-			return Result;
-		}
-
-		private void SetStringTag(int Index, [In] string Value)
-		{
-			switch (Index)
-			{
-				case 1:
-				{
-					base.SetTagStringValue("SOUR", Value);
-					break;
-				}
-				case 2:
-				{
-					base.SetTagStringValue("SOUR\\VERS", Value);
-					break;
-				}
-				case 3:
-				{
-					base.SetTagStringValue("SOUR\\NAME", Value);
-					break;
-				}
-				case 4:
-				{
-					base.SetTagStringValue("SOUR\\CORP", Value);
-					break;
-				}
-				case 5:
-				{
-					base.SetTagStringValue("DEST", Value);
-					break;
-				}
-				case 6:
-				{
-					base.SetTagStringValue("FILE", Value);
-					break;
-				}
-				case 7:
-				{
-					base.SetTagStringValue("COPR", Value);
-					break;
-				}
-				case 8:
-				{
-					base.SetTagStringValue("GEDC\\VERS", Value);
-					break;
-				}
-				case 9:
-				{
-					base.SetTagStringValue("GEDC\\FORM", Value);
-					break;
-				}
-				case 10:
-				{
-					base.SetTagStringValue("CHAR\\VERS", Value);
-					break;
-				}
-				case 11:
-				{
-					base.SetTagStringValue("LANG", Value);
-					break;
-				}
-				case 12:
-				{
-					base.SetTagStringValue("PLAC\\FORM", Value);
-					break;
-				}
-			}
+			get { return base.GetTagIntegerValue("FILE\\_REV", 0); }
+			set { base.SetTagIntegerValue("FILE\\_REV", value); }
 		}
 
 		private TGEDCOMAddress GetSourceBusinessAddress()
@@ -296,12 +147,12 @@ namespace GedCom551
 			{
 				CorpTag = SourTag.AddTag("CORP", "", null);
 			}
-			return CorpTag.TagClass("ADDR", typeof(TGEDCOMAddress)) as TGEDCOMAddress;
+			return CorpTag.TagClass("ADDR", typeof(TGEDCOMAddress), TGEDCOMAddress.Create) as TGEDCOMAddress;
 		}
 
 		private TGEDCOMDateExact GetDate()
 		{
-			return base.TagClass("DATE", typeof(TGEDCOMDateExact)) as TGEDCOMDateExact;
+			return base.TagClass("DATE", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact;
 		}
 
 		private TGEDCOMTime GetTime()
@@ -311,95 +162,27 @@ namespace GedCom551
 			{
 				DateTag = this.AddTag("DATE", "", null);
 			}
-			return DateTag.TagClass("TIME", typeof(TGEDCOMTime)) as TGEDCOMTime;
+			return DateTag.TagClass("TIME", typeof(TGEDCOMTime), TGEDCOMTime.Create) as TGEDCOMTime;
 		}
 
 		private TGEDCOMPointer GetSubmittor()
 		{
-			return base.TagClass("SUBM", typeof(TGEDCOMPointer)) as TGEDCOMPointer;
+			return base.TagClass("SUBM", typeof(TGEDCOMPointer), TGEDCOMPointer.Create) as TGEDCOMPointer;
 		}
 
 		private TGEDCOMPointer GetSubmission()
 		{
-			return base.TagClass("SUBN", typeof(TGEDCOMPointer)) as TGEDCOMPointer;
+			return base.TagClass("SUBN", typeof(TGEDCOMPointer), TGEDCOMPointer.Create) as TGEDCOMPointer;
 		}
 
-		private TGEDCOMCharacterSet GetCharacterSet()
-		{
-			string S = base.GetTagStringValue("CHAR").ToUpper();
-			TGEDCOMCharacterSet Result;
-
-			if (S == "ASCII" || S == "ANSI" || S == "IBMPC")
-			{
-				Result = TGEDCOMCharacterSet.csASCII;
-			}
-			else
-			{
-				if (S == "ANSEL")
-				{
-					Result = TGEDCOMCharacterSet.csANSEL;
-				}
-				else
-				{
-					if (S == "UNICODE")
-					{
-						Result = TGEDCOMCharacterSet.csUNICODE;
-					}
-					else
-					{
-						if (S == "UTF8" || S == "UTF-8")
-						{
-							Result = TGEDCOMCharacterSet.csUTF8;
-						}
-						else
-						{
-							Result = TGEDCOMCharacterSet.csANSEL;
-						}
-					}
-				}
-			}
-			return Result;
-		}
-
-		private void SetCharacterSet([In] TGEDCOMCharacterSet Value)
-		{
-			string S = "";
-			if (Value != TGEDCOMCharacterSet.csASCII)
-			{
-				if (Value != TGEDCOMCharacterSet.csANSEL)
-				{
-					if (Value != TGEDCOMCharacterSet.csUNICODE)
-					{
-						if (Value == TGEDCOMCharacterSet.csUTF8)
-						{
-							S = "UTF-8";
-						}
-					}
-					else
-					{
-						S = "UNICODE";
-					}
-				}
-				else
-				{
-					S = "ANSEL";
-				}
-			}
-			else
-			{
-				S = "ASCII";
-			}
-			base.SetTagStringValue("CHAR", S);
-		}
-
-		private TStrings GetNotes()
+		private StringList GetNotes()
 		{
 			return base.GetTagStrings(base.FindTag("NOTE", 0), ref this.FNotes);
 		}
 
-		private void SetNotes([In] TStrings Value)
+		private void SetNotes([In] StringList Value)
 		{
-			base.SetTagStrings(base.TagClass("NOTE", typeof(TGEDCOMNotes)), Value);
+			base.SetTagStrings(base.TagClass("NOTE", typeof(TGEDCOMNotes), TGEDCOMNotes.Create), Value);
 		}
 
 		private DateTime GetTransmissionDateTime()
@@ -413,7 +196,7 @@ namespace GedCom551
 			this.TransmissionTime.Time = Value.TimeOfDay;
 		}
 
-		public override TGEDCOMTag AddSubTag(TGEDCOMCustomTag AParent, [In] string ATag, [In] string AValue, Type AClass)
+		public override TGEDCOMTag AddSubTag(TGEDCOMCustomTag AParent, [In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 			if (object.Equals(AParent, base.FindTag("SOUR\\CORP", 0)) && (ATag == "PHON" || ATag == "EMAIL" || ATag == "FAX" || ATag == "WWW"))
@@ -422,23 +205,23 @@ namespace GedCom551
 				{
 					base.SetTagStringValue("SOUR\\CORP\\ADDR", "");
 				}
-				Result = base.FindTag("SOUR\\CORP\\ADDR", 0).AddTag(ATag, AValue, AClass);
+				Result = base.FindTag("SOUR\\CORP\\ADDR", 0).AddTag(ATag, AValue, ATagConstructor);
 			}
 			else
 			{
 				if (ATag == "ADDR")
 				{
-					Result = base.AddSubTag(AParent, ATag, AValue, typeof(TGEDCOMAddress));
+					Result = base.AddSubTag(AParent, ATag, AValue, TGEDCOMAddress.Create);
 				}
 				else
 				{
-					Result = base.AddSubTag(AParent, ATag, AValue, AClass);
+					Result = base.AddSubTag(AParent, ATag, AValue, ATagConstructor);
 				}
 			}
 			return Result;
 		}
 
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
 			this.FName = "HEAD";
@@ -451,9 +234,8 @@ namespace GedCom551
 			{
 				if (this.FNotes != null)
 				{
-					object fNotes = this.FNotes;
-					SysUtils.FreeAndNil(ref fNotes);
-					this.FNotes = (fNotes as TStrings);
+					//this.FNotes.Dispose();
+					this.FNotes = null;
 				}
 				base.Dispose();
 				this.Disposed_ = true;
@@ -465,41 +247,40 @@ namespace GedCom551
 			base.Clear();
 			if (this.FNotes != null)
 			{
-				object fNotes = this.FNotes;
-				SysUtils.FreeAndNil(ref fNotes);
-				this.FNotes = (fNotes as TStrings);
+				//this.FNotes.Dispose();
+				this.FNotes = null;
 			}
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, Type AClass)
+		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 			if (ATag == "DATE")
 			{
-				Result = base.AddTag(ATag, AValue, typeof(TGEDCOMDateExact));
+				Result = base.AddTag(ATag, AValue, TGEDCOMDateExact.Create);
 			}
 			else
 			{
 				if (ATag == "SUBM")
 				{
-					Result = base.AddTag(ATag, AValue, typeof(TGEDCOMPointer));
+					Result = base.AddTag(ATag, AValue, TGEDCOMPointer.Create);
 				}
 				else
 				{
 					if (ATag == "SUBN")
 					{
-						Result = base.AddTag(ATag, AValue, typeof(TGEDCOMPointer));
+						Result = base.AddTag(ATag, AValue, TGEDCOMPointer.Create);
 					}
 					else
 					{
-						Result = base.AddTag(ATag, AValue, AClass);
+						Result = base.AddTag(ATag, AValue, ATagConstructor);
 					}
 				}
 			}
 			return Result;
 		}
 
-		public TGEDCOMHeader(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMHeader(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
 		}
 	}

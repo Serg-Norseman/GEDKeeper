@@ -1,30 +1,30 @@
 using System;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
 
 namespace GedCom551
 {
 	public sealed class TGEDCOMNotes : TGEDCOMPointer
 	{
-		private TStrings FNotes;
+		private StringList FNotes;
 
 		public bool IsPointer
 		{
 			get { return (!string.IsNullOrEmpty(base.XRef)); }
 		}
 
-		public TStrings Notes
+		public StringList Notes
 		{
 			get { return this.GetNotes(); }
 			set { this.SetNotes(value); }
 		}
 
-		private TStrings GetNotes()
+		private StringList GetNotes()
 		{
 			if (this.FNotes == null)
 			{
-				this.FNotes = new TStringList();
+				this.FNotes = new StringList();
 			}
 			else
 			{
@@ -45,13 +45,13 @@ namespace GedCom551
 			return this.FNotes;
 		}
 
-		private void SetNotes([In] TStrings Value)
+		private void SetNotes([In] StringList Value)
 		{
 			this.Clear();
 			base.SetTagStrings(this, Value);
 		}
 
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
 			this.FName = "NOTE";
@@ -89,9 +89,8 @@ namespace GedCom551
 			base.Clear();
 			if (this.FNotes != null)
 			{
-				object fNotes = this.FNotes;
-				SysUtils.FreeAndNil(ref fNotes);
-				this.FNotes = (fNotes as TStrings);
+				//this.FNotes.Dispose();
+				this.FNotes = null;
 			}
 		}
 
@@ -127,8 +126,13 @@ namespace GedCom551
 			return Result;
 		}
 
-		public TGEDCOMNotes(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMNotes(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
+		}
+
+		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+		{
+			return new TGEDCOMNotes(AOwner, AParent, AName, AValue);
 		}
 	}
 }

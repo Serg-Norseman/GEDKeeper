@@ -5,7 +5,11 @@ using System.Runtime.InteropServices;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKSys;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI.Charts
 {
@@ -31,13 +35,11 @@ namespace GKUI.Charts
 		private string FKinship;
 		private string FName;
 		private string FPatronymic;
-		private Bitmap FPortrait;
-		private int FPortraitWidth;
 		private int FPtX;
 		private int FPtY;
 		private TGEDCOMIndividualRecord FRec;
 		private TGEDCOMSex FSex;
-		private TEnumSet FSigns;
+		private EnumSet FSigns;
 		private int FWidth;
 		private bool Disposed_;
 		private TPerson FBaseSpouse;
@@ -49,7 +51,10 @@ namespace GKUI.Charts
 		private TGraph.TGraphNode FNode;
 		private TPersonList FSpouses;
 
-		public TEnumSet FFlags;
+		private Bitmap FPortrait;
+		private int FPortraitWidth;
+
+		public EnumSet FFlags;
 		public string FPathDebug;
 		public TPerson Parent;
 
@@ -147,14 +152,30 @@ namespace GKUI.Charts
 
 		public bool Divorced
 		{
-			get { return this.GetDivorced(); }
-			set { this.SetDivorced(value); }
+			get {
+				return this.FFlags.InSet(TPerson.TPersonFlag.pfDivorced);
+			}
+			set {
+				if (value) {
+					this.FFlags.Include(TPerson.TPersonFlag.pfDivorced);
+				} else {
+					this.FFlags.Exclude(TPerson.TPersonFlag.pfDivorced);
+				}
+			}
 		}
 
 		public bool IsDup
 		{
-			get { return this.GetIsDup(); }
-			set { this.SetIsDup(value); }
+			get { 
+				return this.FFlags.InSet(TPerson.TPersonFlag.pfIsDup);
+			}
+			set { 
+				if (value) {
+					this.FFlags.Include(TPerson.TPersonFlag.pfIsDup);
+				} else {
+					this.FFlags.Exclude(TPerson.TPersonFlag.pfIsDup);
+				}
+			}
 		}
 
 		public string Family
@@ -169,8 +190,18 @@ namespace GKUI.Charts
 
 		public bool IsDead
 		{
-			get { return this.GetIsDead(); }
-			set { this.SetIsDead(value); }
+			get
+			{
+				return this.FFlags.InSet(TPerson.TPersonFlag.pfIsDead);
+			}
+			set
+			{
+				if (value) {
+					this.FFlags.Include(TPerson.TPersonFlag.pfIsDead);
+				} else {
+					this.FFlags.Exclude(TPerson.TPersonFlag.pfIsDead);
+				}
+			}
 		}
 
 		public string Kinship
@@ -229,7 +260,7 @@ namespace GKUI.Charts
 			set { this.FSex = value; }
 		}
 
-		public TEnumSet Signs
+		public EnumSet Signs
 		{
 			get { return this.FSigns; }
 		}
@@ -395,39 +426,6 @@ namespace GKUI.Charts
 			return Result;
 		}
 
-		private bool GetDivorced()
-		{
-			return this.FFlags.InSet(TPerson.TPersonFlag.pfDivorced);
-		}
-
-		private void SetDivorced([In] bool Value)
-		{
-			if (Value) {
-				this.FFlags.Include(TPerson.TPersonFlag.pfDivorced);
-			} else {
-				this.FFlags.Exclude(TPerson.TPersonFlag.pfDivorced);
-			}
-		}
-
-		private bool GetIsDup()
-		{
-			return this.FFlags.InSet(TPerson.TPersonFlag.pfIsDup);
-		}
-
-		private void SetIsDup([In] bool Value)
-		{
-			if (Value) {
-				this.FFlags.Include(TPerson.TPersonFlag.pfIsDup);
-			} else {
-				this.FFlags.Exclude(TPerson.TPersonFlag.pfIsDup);
-			}
-		}
-
-		private bool GetIsDead()
-		{
-			return this.FFlags.InSet(TPerson.TPersonFlag.pfIsDead);
-		}
-
 		private Point GetPt()
 		{
 			return new Point(this.FPtX, this.FPtY);
@@ -446,15 +444,6 @@ namespace GKUI.Charts
 		private bool GetSelected()
 		{
 			return this.FFlags.InSet(TPerson.TPersonFlag.pfSelected);
-		}
-
-		private void SetIsDead([In] bool Value)
-		{
-			if (Value) {
-				this.FFlags.Include(TPerson.TPersonFlag.pfIsDead);
-			} else {
-				this.FFlags.Exclude(TPerson.TPersonFlag.pfIsDead);
-			}
 		}
 
 		private void SetKinship([In] string Value)
@@ -519,8 +508,8 @@ namespace GKUI.Charts
 			if (!this.Disposed_)
 			{
 				if (this.FPortrait != null) this.FPortrait.Dispose();
-				if (this.FChilds != null) this.FChilds.Free();
-				if (this.FSpouses != null) this.FSpouses.Free();
+				if (this.FChilds != null) this.FChilds.Dispose();
+				if (this.FSpouses != null) this.FSpouses.Dispose();
 				this.Disposed_ = true;
 			}
 		}
@@ -543,15 +532,13 @@ namespace GKUI.Charts
 			}
 		}
 
-		public void BuildBy(TGEDCOMIndividualRecord iRec)
+		public void BuildBy(TGEDCOMIndividualRecord iRec, ref bool hasMediaFail)
 		{
 			this.FRec = iRec;
 			if (iRec != null)
 			{
-				string fam;
-				string nam;
-				string pat;
-				TGenEngine.GetNameParts(iRec, out fam, out nam, out pat);
+				string fam, nam, pat;
+				iRec.aux_GetNameParts(out fam, out nam, out pat);
 				this.FFamily = fam;
 				this.FName = nam;
 				this.FPatronymic = pat;
@@ -562,9 +549,20 @@ namespace GKUI.Charts
 				this.FSigns = (this.FChart as TAncestryChartBox).GetPersonSign(iRec);
 				this.FBirthYear = TGenEngine.GetBirthDate(iRec, TGenEngine.TDateFormat.dfYYYY, false);
 				this.FDeathYear = TGenEngine.GetDeathDate(iRec, TGenEngine.TDateFormat.dfYYYY, false);
+
 				if (this.FChart.Options.PortraitsVisible)
 				{
-					this.FPortrait = this.FChart.FEngine.GetPrimaryBitmap(iRec);
+					try
+					{
+						this.FPortrait = this.FChart.FEngine.GetPrimaryBitmap(iRec, -1, -1, true);
+					}
+					catch (MediaFileNotFoundException)
+					{
+						if (!hasMediaFail) {
+							TGenEngine.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
+							hasMediaFail = true;
+						}
+					}
 				}
 			}
 			else
@@ -576,7 +574,7 @@ namespace GKUI.Charts
 				this.FDeathDate = "";
 				this.IsDead = false;
 				this.FSex = TGEDCOMSex.svNone;
-				this.FSigns = new TEnumSet();
+				this.FSigns = new EnumSet();
 			}
 
 			this.CalcBounds();
@@ -672,27 +670,18 @@ namespace GKUI.Charts
 			if (this.Selected)
 			{
 				int pen_width = 2;
-				TGEDCOMSex fSex = this.FSex;
-				Color pen_color = Color.Black;
-				if (fSex != TGEDCOMSex.svNone)
-				{
-					if (fSex == TGEDCOMSex.svMale)
-					{
+				Color pen_color;
+				switch (this.FSex) {
+					case TGEDCOMSex.svMale:
 						pen_color = Color.Blue;
-						goto IL_D1;
-					}
-					if (fSex == TGEDCOMSex.svFemale)
-					{
+						break;
+					case TGEDCOMSex.svFemale:
 						pen_color = Color.Red;
-						goto IL_D1;
-					}
-					if (fSex != TGEDCOMSex.svUndetermined)
-					{
-						goto IL_D1;
-					}
+						break;
+					default:
+						pen_color = Color.Black;
+						break;
 				}
-				pen_color = Color.Black;
-				IL_D1:
 				xpen = new Pen(pen_color, ((float)((double)pen_width)));
 			}
 
@@ -758,7 +747,7 @@ namespace GKUI.Charts
 
 		public void Free()
 		{
-			TObjectHelper.Free(this);
+			SysUtils.Free(this);
 		}
 	}
 

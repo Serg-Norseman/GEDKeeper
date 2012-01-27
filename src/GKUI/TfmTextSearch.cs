@@ -6,8 +6,12 @@ using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKSys;
 using GKUI.Controls;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI
 {
@@ -15,7 +19,6 @@ namespace GKUI
 	{
 		private TfmBase FBase;
 		private TGKHyperView FResultsText;
-		private SearchManager FSearchManager;
 
 		public TfmBase Base
 		{
@@ -40,8 +43,6 @@ namespace GKUI
 			this.Controls.Add(this.FResultsText);
 			this.ResumeLayout(false);
 			this.Controls.SetChildIndex(this.FResultsText, 0);
-
-			FSearchManager = new SearchManager(FBase);
 		}
 
 		private void Write(string text)
@@ -54,18 +55,14 @@ namespace GKUI
 			FBase.SelectRecordByXRef(LinkName);
 		}
 
-		void btnReindex_Click(object sender, EventArgs e)
-		{
-			FSearchManager.ReindexBase();
-		}
-
 		void btnSearch_Click(object sender, EventArgs e)
 		{
+			this.btnSearch.Enabled = false;
 			FResultsText.Lines.BeginUpdate();
 			try
 			{
 				FResultsText.Lines.Clear();
-				List<SearchManager.SearchEntry> search_results = FSearchManager.Search(textBox2.Text);
+				List<SearchManager.SearchEntry> search_results = TfmGEDKeeper.Instance.SearchMan.Search(FBase, textBox2.Text);
 
 				Write(string.Format("Найдено: {0} результат(ов).\r\n", search_results.Count));
 
@@ -78,7 +75,7 @@ namespace GKUI
 					Write(String.Format("~bu+1~{0}: {1}%~u~ ~^{2}:[{2}]~", entry.Rank, entry.Percent, entry.XRef) + "~b-1~");
 
 					TGEDCOMRecord rec = FBase.Tree.XRefIndex_Find(entry.XRef);
-					TStrings ctx = FBase.GetRecordContext(rec);
+					StringList ctx = FBase.GetRecordContext(rec);
 					FResultsText.Lines.AddStrings(ctx);
 					Write("");
 				}
@@ -86,14 +83,13 @@ namespace GKUI
 			finally
 			{
 				FResultsText.Lines.EndUpdate();
+				this.btnSearch.Enabled = true;
 			}
 		}
 
 		void TfmTextSearchLoad(object sender, EventArgs e)
 		{
-			if (!FSearchManager.IsIndexed()) {
-				FSearchManager.ReindexBase();
-			}
+			TfmGEDKeeper.Instance.SearchMan.ReindexBase(FBase);
 		}
 	}
 }

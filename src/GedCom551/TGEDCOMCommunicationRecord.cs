@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
 
 namespace GedCom551
 {
@@ -11,7 +11,7 @@ namespace GedCom551
 
 		public TGEDCOMDateExact Date
 		{
-			get { return base.TagClass("DATE", typeof(TGEDCOMDateExact)) as TGEDCOMDateExact; }
+			get { return base.TagClass("DATE", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact; }
 		}
 
 		public string CommName
@@ -22,8 +22,8 @@ namespace GedCom551
 
 		public TCommunicationType CommunicationType
 		{
-			get { return this.GetCommunicationType(); }
-			set { this.SetCommunicationType(value); }
+			get { return GetCommunicationTypeVal(base.GetTagStringValue("TYPE").Trim().ToLower()); }
+			set { base.SetTagStringValue("TYPE", GetCommunicationTypeStr(value)); }
 		}
 
 		/*public new <TGEDCOMNotes> Notes
@@ -31,107 +31,15 @@ namespace GedCom551
 			get { return base.GetNote(Index); }
 		}*/
 
-		private TCommunicationType GetCommunicationType()
-		{
-			string S = base.GetTagStringValue("TYPE").Trim().ToLower();
-			TCommunicationType Result;
-			if (S == "call")
-			{
-				Result = TCommunicationType.ctCall;
-			}
-			else
-			{
-				if (S == "email")
-				{
-					Result = TCommunicationType.ctEMail;
-				}
-				else
-				{
-					if (S == "fax")
-					{
-						Result = TCommunicationType.ctFax;
-					}
-					else
-					{
-						if (S == "letter")
-						{
-							Result = TCommunicationType.ctLetter;
-						}
-						else
-						{
-							if (S == "tape")
-							{
-								Result = TCommunicationType.ctTape;
-							}
-							else
-							{
-								if (S == "visit")
-								{
-									Result = TCommunicationType.ctVisit;
-								}
-								else
-								{
-									Result = TCommunicationType.ctVisit;
-								}
-							}
-						}
-					}
-				}
-			}
-			return Result;
-		}
-
-		private void SetCommunicationType([In] TCommunicationType Value)
-		{
-			string S = "";
-			switch (Value)
-			{
-				case TCommunicationType.ctCall:
-				{
-					S = "call";
-					break;
-				}
-				case TCommunicationType.ctEMail:
-				{
-					S = "email";
-					break;
-				}
-				case TCommunicationType.ctFax:
-				{
-					S = "fax";
-					break;
-				}
-				case TCommunicationType.ctLetter:
-				{
-					S = "letter";
-					break;
-				}
-				case TCommunicationType.ctTape:
-				{
-					S = "tape";
-					break;
-				}
-				case TCommunicationType.ctVisit:
-				{
-					S = "visit";
-					break;
-				}
-			}
-			base.SetTagStringValue("TYPE", S);
-		}
-
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
-			base.SetLists(TEnumSet.Create(new Enum[]
-			{
-				TGEDCOMSubList.stNotes
-			}));
+			base.SetLists(EnumSet.Create(new Enum[] { TGEDCOMSubList.stNotes }));
 			this.FRecordType = TGEDCOMRecordType.rtCommunication;
 			this.FName = "_COMM";
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, Type AClass)
+		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 			if (ATag == "NAME")
@@ -142,11 +50,11 @@ namespace GedCom551
 			{
 				if (ATag == "DATE")
 				{
-					Result = base.AddTag(ATag, AValue, typeof(TGEDCOMDateExact));
+					Result = base.AddTag(ATag, AValue, TGEDCOMDateExact.Create);
 				}
 				else
 				{
-					Result = base.AddTag(ATag, AValue, AClass);
+					Result = base.AddTag(ATag, AValue, ATagConstructor);
 				}
 			}
 			return Result;
@@ -162,7 +70,7 @@ namespace GedCom551
 			}
 			if (cr_tag != null)
 			{
-				aCorresponder = ((this.FOwner as TGEDCOMTree).XRefIndex_Find(TGEDCOMObject.CleanXRef(cr_tag.StringValue)) as TGEDCOMIndividualRecord);
+				aCorresponder = (this.FOwner.XRefIndex_Find(TGEDCOMObject.CleanXRef(cr_tag.StringValue)) as TGEDCOMIndividualRecord);
 				if (cr_tag.Name == "FROM")
 				{
 					aDir = TCommunicationDir.cdFrom;
@@ -187,8 +95,13 @@ namespace GedCom551
 			}
 		}
 
-		public TGEDCOMCommunicationRecord(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMCommunicationRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
+		}
+
+		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+		{
+			return new TGEDCOMCommunicationRecord(AOwner, AParent, AName, AValue);
 		}
 	}
 }

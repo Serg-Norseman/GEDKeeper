@@ -5,26 +5,16 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
-using System.Security.Permissions;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Windows.Forms;
 
-namespace GKCore.Sys
+/// <summary>
+/// Localization: unknown
+/// </summary>
+
+namespace GKSys
 {
-	[ComVisible(false)]
-	public class TObjectHelper
-	{
-		public static void Free(object Self)
-		{
-			if (Self != null && Self is IDisposable)
-			{
-				((IDisposable)Self).Dispose();
-			}
-		}
-	}
-
 	public class EMaskException : Exception
 	{
 		public EMaskException()
@@ -33,18 +23,6 @@ namespace GKCore.Sys
 		public EMaskException(string message) : base(message)
 		{
 		}
-	}
-
-	public enum E23 : byte
-	{
-		rfReplaceAll, rfIgnoreCase
-	}
-
-	[Flags, TSetElementType(typeof(E23))]
-	public enum TReplaceFlags : byte
-	{
-		rfReplaceAll = 1,
-		rfIgnoreCase = 2
 	}
 
 	public class EConvertError : Exception
@@ -105,37 +83,17 @@ namespace GKCore.Sys
 	{
 		public static readonly ushort[][] MonthDays = new ushort[][]
 		{
-			new ushort[]
-			{
-				31, 
-				28, 
-				31, 
-				30, 
-				31, 
-				30, 
-				31, 
-				31, 
-				30, 
-				31, 
-				30, 
-				31
-			}, 
-			new ushort[]
-			{
-				31, 
-				29, 
-				31, 
-				30, 
-				31, 
-				30, 
-				31, 
-				31, 
-				30, 
-				31, 
-				30, 
-				31
-			}
+			new ushort[] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }, 
+			new ushort[] { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
 		};
+
+		public static void Free(object Self)
+		{
+			if (Self != null && Self is IDisposable)
+			{
+				((IDisposable)Self).Dispose();
+			}
+		}
 
 		public static long Trunc([In] double AValue)
 		{
@@ -159,6 +117,16 @@ namespace GKCore.Sys
 		public static double Frac([In] double AValue)
 		{
 			return (AValue - Int(AValue));
+		}
+
+		public static int Floor([In] double X)
+		{
+			return Convert.ToInt32(Math.Floor(X));
+		}
+
+		public static int Ceil([In] double X)
+		{
+			return Convert.ToInt32(Math.Ceiling(X));
 		}
 
 		public static int ValLong([In] string s, out int code)
@@ -230,20 +198,6 @@ namespace GKCore.Sys
 			return result;
 		}
 
-		public static int PosEx([In] string SubStr, [In] string S, int Offset)
-		{
-			int Result;
-			if (Offset <= 0 || S == null || Offset > ((S != null) ? S.Length : 0))
-			{
-				Result = 0;
-			}
-			else
-			{
-				Result = S.IndexOf(SubStr, Offset - 1) + 1;
-			}
-			return Result;
-		}
-
 		public static int GetLastError()
 		{
 			return Marshal.GetLastWin32Error();
@@ -277,23 +231,17 @@ namespace GKCore.Sys
 				int num = ((S != null) ? S.Length : 0);
 				if (num > 0 && Index1 <= num)
 				{
-					int num2;
-					if (Index1 <= 0)
+					int idx = ((Index1 <= 0) ? 0 : Index1 - 1);
+
+					if (Count > num - idx)
 					{
-						num2 = 0;
+						Count = num - idx;
 					}
-					else
-					{
-						num2 = Index1 - 1;
-					}
-					if (Count > num - num2)
-					{
-						Count = num - num2;
-					}
+
 					if (Count > 0)
 					{
 						array = new byte[Count];
-						Array.Copy(S, num2, array, 0, Count);
+						Array.Copy(S, idx, array, 0, Count);
 					}
 				}
 			}
@@ -308,22 +256,16 @@ namespace GKCore.Sys
 				int len = S.Length;
 				if (len > 0 && Index1 <= len)
 				{
-					int num2;
+					int idx = ((Index1 <= 0) ? 0 : Index1 - 1);
 
-					if (Index1 <= 0) {
-						num2 = 0;
-					} else {
-						num2 = Index1 - 1;
-					}
-
-					if (Count > len - num2)
+					if (Count > len - idx)
 					{
-						Count = len - num2;
+						Count = len - idx;
 					}
 
 					if (Count > 0)
 					{
-						result = S.Substring(num2, Count);
+						result = S.Substring(idx, Count);
 					}
 				}
 			}
@@ -379,177 +321,73 @@ namespace GKCore.Sys
 		}
 
 
-		public delegate void TFilePrepareProc(string FileName);
-		public delegate int TSortCompareFunc(object Item1, object Item2);
-
-		private static readonly ScrollEventType[] _events;
-		private static string LogFilename;
-		private static uint[] Ccitt32Table;
-
 
 		[SuppressUnmanagedCodeSecurity]
 		[DllImport("hhctrl.ocx", CharSet = CharSet.Unicode, EntryPoint = "HtmlHelpW", SetLastError = true)]
-		[return: HWND]
 		public static extern uint HtmlHelp(IntPtr hwndCaller, string pszFile, uint uCommand, uint dwData);
 
 		[SuppressUnmanagedCodeSecurity]
 		[DllImport("shell32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-		[return: HINST]
-		public static extern int ShellExecute([HWND] uint hWnd, string Operation, string FileName, string Parameters, string Directory, int ShowCmd);
+		public static extern int ShellExecute(uint hWnd, string Operation, string FileName, string Parameters, string Directory, int ShowCmd);
 
 		[SuppressUnmanagedCodeSecurity]
 		[DllImport("user32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
-		public static extern LongBool ScrollWindowEx([HWND] uint hWnd, int dx, int dy, [In] ref TRect prcScroll, [In] ref TRect prcClip, [HRGN] uint hrgnUpdate, out TRect prcUpdate, uint flags);
+		public static extern LongBool ScrollWindowEx(uint hWnd, int dx, int dy, [In] ref TRect prcScroll, [In] ref TRect prcClip, uint hrgnUpdate, out TRect prcUpdate, uint flags);
 
 		[SuppressUnmanagedCodeSecurity]
 		[DllImport("user32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
-		public static extern LongBool SetScrollRange([HWND] uint hWnd, int nBar, int nMinPos, int nMaxPos, LongBool bRedraw);
+		public static extern LongBool SetScrollRange(uint hWnd, int nBar, int nMinPos, int nMaxPos, LongBool bRedraw);
 
 		[SuppressUnmanagedCodeSecurity]
 		[DllImport("user32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
-		public static extern LongBool GetScrollInfo([HWND] uint hWnd, int BarFlag, ref TScrollInfo ScrollInfo);
+		public static extern LongBool GetScrollInfo(uint hWnd, int BarFlag, ref TScrollInfo ScrollInfo);
 
 		[SuppressUnmanagedCodeSecurity]
 		[DllImport("user32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
-		public static extern LongBool InvalidateRect([HWND] uint hWnd, [In] ref TRect lpRect, LongBool bErase);
+		public static extern LongBool InvalidateRect(uint hWnd, [In] ref TRect lpRect, LongBool bErase);
 
 		[SuppressUnmanagedCodeSecurity]
 		[DllImport("user32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
-		public static extern int SetScrollPos([HWND] uint hWnd, int nBar, int nPos, LongBool bRedraw);
+		public static extern int SetScrollPos(uint hWnd, int nBar, int nPos, LongBool bRedraw);
 
 		[SuppressUnmanagedCodeSecurity]
 		[DllImport("user32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
-		[return: HKL]
 		public static extern uint GetKeyboardLayout(uint dwLayout);
 
 		[SuppressUnmanagedCodeSecurity]
 		[DllImport("user32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
-		[return: HKL]
-		public static extern uint ActivateKeyboardLayout([HKL] uint hkl, uint Flags);
+		public static extern uint ActivateKeyboardLayout(uint hkl, uint Flags);
 
 		[SuppressUnmanagedCodeSecurity]
 		[DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-		public static extern LongBool PostMessage([HWND] uint hWnd, uint Msg, int wParam, int lParam);
+		public static extern LongBool PostMessage(uint hWnd, uint Msg, int wParam, int lParam);
 
 		[SuppressUnmanagedCodeSecurity]
 		[DllImport("user32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
-		public static extern LongBool EnableWindow([HWND] uint hWnd, LongBool bEnable);
+		public static extern LongBool EnableWindow(uint hWnd, LongBool bEnable);
 
 		[SuppressUnmanagedCodeSecurity]
-		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-		public static extern uint GetPrivateProfileString(string lpAppName, string lpKeyName, string lpDefault, StringBuilder lpReturnedString, uint nSize, string lpFileName);
-
-		[SuppressUnmanagedCodeSecurity]
-		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-		public static extern uint GetPrivateProfileString(string lpAppName, IntPtr lpKeyName, IntPtr lpDefault, [Out] byte[] lpReturnedString, uint nSize, string lpFileName);
-
-		[SuppressUnmanagedCodeSecurity]
-		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-		public static extern uint GetPrivateProfileString(IntPtr lpAppName, IntPtr lpKeyName, IntPtr lpDefault, [Out] byte[] lpReturnedString, uint nSize, string lpFileName);
-
-		[SuppressUnmanagedCodeSecurity]
-		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-		public static extern LongBool WritePrivateProfileString(string lpAppName, string lpKeyName, string lpString, string lpFileName);
-
-		[SuppressUnmanagedCodeSecurity]
-		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-		public static extern LongBool WritePrivateProfileString(string lpAppName, string lpKeyName, IntPtr lpString, string lpFileName);
-
-		[SuppressUnmanagedCodeSecurity]
-		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-		public static extern LongBool WritePrivateProfileString(string lpAppName, IntPtr lpKeyName, IntPtr lpString, string lpFileName);
-
-		[SuppressUnmanagedCodeSecurity]
-		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-		public static extern LongBool WritePrivateProfileString(IntPtr lpAppName, IntPtr lpKeyName, IntPtr lpString, string lpFileName);
-
-		[SuppressUnmanagedCodeSecurity]
-		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-		public static extern int FindFirstFile(string lpFileName, out TWin32FindData lpFindFileData);
-
-		[SuppressUnmanagedCodeSecurity]
-		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-		public static extern LongBool FindNextFile(int hFindFile, out TWin32FindData lpFindFileData);
-
-		[SuppressUnmanagedCodeSecurity]
-		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-		public static extern LongBool FindClose(int hFindFile);
+		[DllImport("user32.dll", SetLastError = true)]
+		public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
 
-		public static void FreeAndNil(ref object Obj)
-		{
-			TObjectHelper.Free(Obj);
-			Obj = null;
-		}
 
-		public static bool CreateDir([In] string Dir)
-		{
-			DirectoryInfo LInfo;// = new DirectoryInfo(Dir);
-			//LInfo = LInfo.Parent;
-			bool Result;// = LInfo != null && LInfo.Exists;
-			//if (Result)
-			//{
-				LInfo = Directory.CreateDirectory(Dir);
-				Result = (LInfo != null && LInfo.Exists);
-			//}
-			return Result;
-		}
-
-		public static int Floor([In] double X)
-		{
-			return Convert.ToInt32(Math.Floor(X));
-		}
-
-		public static int Ceil([In] double X)
-		{
-			return Convert.ToInt32(Math.Ceiling(X));
-		}
-
-		[return: HINST]
 		public static int HInstance()
 		{
 			return (int)Marshal.GetHINSTANCE(Assembly.GetCallingAssembly().GetModules()[0]);
-		}
-
-		public static bool Supports([In] object Instance, [In] RuntimeTypeHandle IID, out object Intf)
-		{
-			bool Result = Type.GetTypeFromHandle(IID).IsInstanceOfType(Instance);
-			Intf = null;
-			if (Result)
-			{
-				Type typeFromHandle = Type.GetTypeFromHandle(IID);
-				if (!typeFromHandle.IsInstanceOfType(Instance))
-				{
-					throw new Exception(/*Instance, typeFromHandle*/"Invalid cast");
-				}
-				Intf = (object)Instance;
-			}
-			return Result;
 		}
 
 		public static string TrimLeft([In] string S)
 		{
 			int L = (S != null) ? S.Length : 0;
 			int I = 1;
-			while (I <= L && S[I - 1] <= ' ')
-			{
-				I++;
-			}
+			while (I <= L && S[I - 1] <= ' ') I++;
+
 			string Result;
-			if (I > L)
-			{
+			if (I > L) {
 				Result = "";
-			}
-			else
-			{
-				if (I != 1)
-				{
-					Result = WStrCopy(S, I, 2147483647);
-				}
-				else
-				{
-					Result = S;
-				}
+			} else {
+				Result = ((I != 1) ? S.Substring(I - 1) : S);
 			}
 			return Result;
 		}
@@ -558,316 +396,96 @@ namespace GKCore.Sys
 		{
 			int L = (S != null) ? S.Length : 0;
 			int I = L;
-			while (I > 0 && S[I - 1] <= ' ')
-			{
-				I--;
-			}
-			string Result;
-			if (I != L)
-			{
-				Result = WStrCopy(S, 1, I);
-			}
-			else
-			{
-				Result = S;
-			}
+			while (I > 0 && S[I - 1] <= ' ') I--;
+
+			string Result = ((I != L) ? S.Substring(0, I) : S);
 			return Result;
-		}
-
-		private static char[] CharArrayOf([In] string AText)
-		{
-			return ((AText != null) ? AText.ToCharArray() : new char[0]);
-		}
-
-		private static int LastDelimiter([In] string Delimiters, [In] string S)
-		{
-			int Result;
-			if (S != null)
-			{
-				Result = S.LastIndexOfAny(CharArrayOf(Delimiters)) + 1;
-			}
-			else
-			{
-				Result = 0;
-			}
-			return Result;
-		}
-
-		public static string ExtractFilePath([In] string FileName)
-		{
-			int I = LastDelimiter(new string(Path.DirectorySeparatorChar, 1) + new string(Path.VolumeSeparatorChar, 1), FileName);
-			return WStrCopy(FileName, 1, I);
-		}
-
-		public static string StringReplace([In] string S, [In] string OldPattern, [In] string NewPattern, TReplaceFlags Flags)
-		{
-			string SearchStr;
-			string Patt;
-			if ((Flags & TReplaceFlags.rfIgnoreCase) != (TReplaceFlags)0)
-			{
-				SearchStr = S.ToUpper();
-				Patt = OldPattern.ToUpper();
-			}
-			else
-			{
-				SearchStr = S;
-				Patt = OldPattern;
-			}
-			string NewStr = S;
-			StringBuilder SB = new StringBuilder();
-			while (SearchStr != "")
-			{
-				int Offset = Pos(Patt, SearchStr);
-				if (Offset == 0)
-				{
-					SB.Append(NewStr);
-					break;
-				}
-				SB.Append(NewStr, 0, Offset - 1);
-				SB.Append(NewPattern);
-				NewStr = WStrCopy(NewStr, Offset + ((OldPattern != null) ? OldPattern.Length : 0), 2147483647);
-				if ((Flags & TReplaceFlags.rfReplaceAll) == (TReplaceFlags)0)
-				{
-					SB.Append(NewStr);
-					break;
-				}
-				SearchStr = WStrCopy(SearchStr, Offset + ((Patt != null) ? Patt.Length : 0), 2147483647);
-			}
-			return SB.ToString();
-		}
-
-		public static int FindDelimiter([In] string Delimiters, [In] string S, int Offset)
-		{
-			int Result;
-			if (S != null)
-			{
-				if (Offset < 1)
-				{
-					Offset = 1;
-				}
-				Result = S.IndexOfAny(CharArrayOf(Delimiters), Offset - 1) + 1;
-			}
-			else
-			{
-				Result = 0;
-			}
-			return Result;
-		}
-
-		private static void InvalidMask([In] string Mask)
-		{
-			throw new EMaskException(string.Format("'{0}' is an invalid mask at (%d)", new object[] { Mask }));
-		}
-
-		private static void _ConvertMaskToRegularExpression_CheckPos(int I, int Len, [In] string Mask)
-		{
-			if (I == Len - 1)
-			{
-				InvalidMask(Mask);
-			}
 		}
 
 		private static string ConvertMaskToRegularExpression([In] string Mask)
 		{
-			string Result = "";
+			string result = "";
 			int CurPos = 0;
 			int Len = (Mask != null) ? Mask.Length : 0;
 			if (CurPos < Len)
 			{
 				do
 				{
-					int I = FindDelimiter("*?[", Mask, CurPos + 1) - 1;
-					if (I < CurPos)
-					{
-						break;
-					}
-					if (I > CurPos)
-					{
-						Result += Regex.Escape(WStrCopy(Mask, CurPos + 1, I - CurPos));
-					}
+					int I = Mask.IndexOfAny("*?".ToCharArray(), CurPos);
+					if (I < CurPos) break;
+					if (I > CurPos) result += Regex.Escape(WStrCopy(Mask, CurPos + 1, I - CurPos));
+
 					char c = Mask[I];
-					if (c != '*')
-					{
-						if (c != '?')
-						{
-							if (c == '[')
-							{
-								_ConvertMaskToRegularExpression_CheckPos(I, Len, Mask);
-								if (Mask[I + 2 - 1] == '!')
-								{
-									Result += "[^";
-									I++;
-									_ConvertMaskToRegularExpression_CheckPos(I, Len, Mask);
-								}
-								else
-								{
-									Result += "[";
-								}
-								CurPos = I + 1;
-								while (Mask[I] != ']')
-								{
-									I = FindDelimiter("]-", Mask, CurPos + 1) - 1;
-									if (I < 0)
-									{
-										InvalidMask(Mask);
-									}
-									Result += Regex.Escape(WStrCopy(Mask, CurPos + 1, I - CurPos));
-									if (Mask[I] == '-')
-									{
-										_ConvertMaskToRegularExpression_CheckPos(I, Len, Mask);
-										Result += "-";
-										CurPos = I + 1;
-									}
-								}
-								Result += "]";
-							}
-						}
-						else
-						{
-							Result += ".";
-						}
+					switch (c) {
+						case '*':
+							result += ".*";
+							break;
+						case '?':
+							result += ".";
+							break;
 					}
-					else
-					{
-						Result += ".*";
-					}
+
 					CurPos = I + 1;
 				}
 				while (CurPos < Len);
 			}
-			if (CurPos < Len)
-			{
-				Result += Regex.Escape(WStrCopy(Mask, CurPos + 1, Len - CurPos));
-			}
-			return Result;
+			if (CurPos < Len) result += Regex.Escape(WStrCopy(Mask, CurPos + 1, Len - CurPos));
+			return result;
 		}
 
-		public static bool MatchesMask([In] string Filename, [In] string Mask)
+		public static bool MatchesMask([In] string S, [In] string Mask)
 		{
-			Regex FMask = new Regex(ConvertMaskToRegularExpression(Mask), RegexOptions.IgnoreCase);
-			bool Result;
+			bool Result = false;
+			Regex regex = new Regex(ConvertMaskToRegularExpression(Mask), RegexOptions.IgnoreCase);
 			try
 			{
-				Result = false;
-				Match Match = FMask.Match(Filename);
-				GroupCollection Groups = Match.Groups;
+				Match match = regex.Match(S);
+				GroupCollection Groups = match.Groups;
 				int num = Groups.Count - 1;
-				int I = 0;
-				if (num >= I)
+				for (int I = 0; I <= num; I++)
 				{
-					num++;
-					while (true)
+					Group Group = Groups[I];
+					if (Group.Success)
 					{
-						Group Group = Groups[I];
-						if (Group.Success)
+						int num2 = Group.Captures.Count - 1;
+						for (int J = 0; J <= num2; J++)
 						{
-							int num2 = Group.Captures.Count - 1;
-							for (int J = 0; J <= num2; J++)
+							Capture Capture = Group.Captures[J];
+							if (string.Compare(Capture.Value, S, true) == 0)
 							{
-								Capture Capture = Group.Captures[J];
-								if (string.Compare(Capture.Value, Filename, true) == 0)
-								{
-									goto Block_6;
-								}
+								Result = true;
+								break;
 							}
 						}
-						I++;
-						if (I == num)
-						{
-							goto IL_A2;
-						}
+						if (Result) break;
 					}
-					Block_6:
-					Result = true;
 				}
-				IL_A2:;
 			}
 			finally
 			{
-				TObjectHelper.Free(FMask);
+				//FMask.Dispose();
 			}
 			return Result;
 		}
 
-		private static int FindMatchingFile(ref TSearchRec F)
-		{
-			int Result;
-			while ((F.FindData.dwFileAttributes & (uint)F.ExcludeAttr) != 0u)
-			{
-				if (FindNextFile(F.FindHandle, out F.FindData) == (LongBool)0)
-				{
-					Result = GetLastError();
-					return Result;
-				}
-			}
-			F.Attr = (int)F.FindData.dwFileAttributes;
-			F.Name = F.FindData.cFileName;
-			Result = 0;
-			return Result;
-		}
 
-		[FileIOPermission(SecurityAction.LinkDemand, Unrestricted=true)]
-		public static int FindFirst([In] string Path, int Attr, ref TSearchRec F)
-		{
-			F.ExcludeAttr = (~Attr & 22);
-			F.FindHandle = FindFirstFile(Path, out F.FindData);
-			int Result;
-			if (F.FindHandle != -1)
-			{
-				Result = FindMatchingFile(ref F);
-				if (Result != 0)
-				{
-					FindClose(ref F);
-				}
-			}
-			else
-			{
-				Result = GetLastError();
-			}
-			return Result;
-		}
-
-		[FileIOPermission(SecurityAction.LinkDemand, Unrestricted=true)]
-		public static int FindNext(ref TSearchRec F)
-		{
-			int Result;
-			if (FindNextFile(F.FindHandle, out F.FindData) != (LongBool)0)
-			{
-				Result = FindMatchingFile(ref F);
-			}
-			else
-			{
-				Result = GetLastError();
-			}
-			return Result;
-		}
-
-		[FileIOPermission(SecurityAction.LinkDemand, Unrestricted=true)]
-		public static void FindClose(ref TSearchRec F)
-		{
-			if (F.FindHandle != -1)
-			{
-				FindClose(F.FindHandle);
-				F.FindHandle = -1;
-			}
-		}
-
-		private static void MoveL2S([In] int Source, ref byte[] Dest, int count)
+		private static void MoveL2S([In] uint Source, ref byte[] Dest, int count)
 		{
 			byte[] bytes = new byte[4];
 
-			ushort wl = (ushort)Source;
-			ushort wh = (ushort)((uint)Source >> 16);
+			unchecked
+			{
+				ushort wl = (ushort)(Source);
+				ushort wh = (ushort)(Source >> 16);
 
-			bytes[0] = (byte)wl;
-			bytes[1] = (byte)(wl >> 8);
-			bytes[2] = (byte)wh;
-			bytes[3] = (byte)(wh >> 8);
+				bytes[0] = (byte)wl;
+				bytes[1] = (byte)(wl >> 8);
+				bytes[2] = (byte)wh;
+				bytes[3] = (byte)(wh >> 8);
+			}
 
 			if (Dest != null) {
-				for (int I = 1; I <= count; I++) {
-					Dest[(uint)(I - 1)] = bytes[I - 1];
-				}
+				for (int I = 0; I < count; I++) Dest[I] = bytes[I];
 			}
 		}
 
@@ -889,21 +507,21 @@ namespace GKCore.Sys
 		{
 			int num = (data != null) ? data.Length : 0;
 			byte[] result = null;
-			int I;
+			uint I;
 
 			switch (num) {
 				case 2:
-					I = (int)((uint)_Unnamed1.Map[(int)data[0]] + ((int)((uint)_Unnamed1.Map[(int)data[1]]) << 6));
+					I = (uint)(_Unnamed1.Map[data[0]] + (_Unnamed1.Map[data[1]] << 6));
 					result = new byte[1];
 					MoveL2S(I, ref result, 1);
 					break;
 				case 3:
-					I = (int)((uint)_Unnamed1.Map[(int)data[0]] + ((int)((uint)_Unnamed1.Map[(int)data[1]]) << 6) + ((int)((uint)_Unnamed1.Map[(int)data[2]]) << 12));
+					I = (uint)(_Unnamed1.Map[data[0]] + (_Unnamed1.Map[data[1]] << 6) + (_Unnamed1.Map[data[2]] << 12));
 					result = new byte[2];
 					MoveL2S(I, ref result, 2);
 					break;
 				case 4:
-					I = (int)((uint)_Unnamed1.Map[(int)data[0]] + ((int)((uint)_Unnamed1.Map[(int)data[1]]) << 6) + ((int)((uint)_Unnamed1.Map[(int)data[2]]) << 12) + ((int)((uint)_Unnamed1.Map[(int)data[3]]) << 18));
+					I = (uint)(_Unnamed1.Map[data[0]] + (_Unnamed1.Map[data[1]] << 6) + (_Unnamed1.Map[data[2]] << 12) + (_Unnamed1.Map[data[3]] << 18));
 					result = new byte[3];
 					MoveL2S(I, ref result, 3);
 					break;
@@ -962,7 +580,7 @@ namespace GKCore.Sys
 				for (int I = 1; I <= ppd.Length; I++)
 				{
 					tmp[I - 1] = (byte)((uint)tmp[I - 1] ^ (uint)Seed >> 8);
-					Seed = (ushort)(((uint)ppd[I - 1] + (uint)Seed) * 28732u + 28446u);
+					Seed = unchecked((ushort)(((uint)ppd[I - 1] + (uint)Seed) * 28732u + 28446u));
 				}
 				res = Encoding.ASCII.GetString(tmp);
 			}
@@ -981,7 +599,7 @@ namespace GKCore.Sys
 				for (int I = 1; I <= idata.Length; I++)
 				{
 					idata[I - 1] = (byte)((uint)idata[I - 1] ^ (uint)Seed >> 8);
-					Seed = (ushort)(((uint)idata[I - 1] + (uint)Seed) * 28732u + 28446u);
+					Seed = unchecked((ushort)(((uint)idata[I - 1] + (uint)Seed) * 28732u + 28446u));
 				}
 
 				byte[] res_data = null;
@@ -998,58 +616,9 @@ namespace GKCore.Sys
 			return res;
 		}
 
-		private static void IQuickSort(TList SortList, TSortCompareFunc SCompare, int L, int R)
-		{
-			int I;
-			do
-			{
-				I = L;
-				int J = R;
-				object P = SortList[(int)((uint)(L + R) >> 1)];
-				while (true)
-				{
-					if (SCompare(SortList[I], P) >= 0)
-					{
-						while (SCompare(SortList[J], P) > 0)
-						{
-							J--;
-						}
-						if (I <= J)
-						{
-							object T = SortList[I];
-							SortList[I] = SortList[J];
-							SortList[J] = T;
-							I++;
-							J--;
-						}
-						if (I > J)
-						{
-							break;
-						}
-					}
-					else
-					{
-						I++;
-					}
-				}
-				if (L < J)
-				{
-					IQuickSort(SortList, SCompare, L, J);
-				}
-				L = I;
-			}
-			while (I < R);
-		}
-
 		public static string GetTempDir()
 		{
 			return Environment.GetEnvironmentVariable("TEMP");
-		}
-
-		public static string GetFileVersion()
-		{
-			AssemblyName name = System.Reflection.Assembly.GetExecutingAssembly().GetName();
-			return name.Version.ToString();
 		}
 
 		public static string GetAppPath()
@@ -1064,37 +633,6 @@ namespace GKCore.Sys
 			ShellExecute(0, "open", aFileName, "", "", 5);
 		}
 
-		public static void ScanDir([In] string aPath, TFilePrepareProc aPrepareProc, bool aIncludeFolders, int FileAttrs, string aMask)
-		{
-			string PathDelim = new string(Path.DirectorySeparatorChar, 1);
-			TSearchRec sr = new TSearchRec();
-			if (FindFirst(aPath + PathDelim + aMask, FileAttrs, ref sr) == 0)
-			{
-				int res;
-				do
-				{
-					if (sr.Name != "." && sr.Name != "..")
-					{
-						string newf = aPath + PathDelim + sr.Name;
-						if ((sr.Attr & 16) == 16)
-						{
-							if (aIncludeFolders)
-							{
-								ScanDir(newf, aPrepareProc, aIncludeFolders, FileAttrs, "*.*");
-							}
-						}
-						else
-						{
-							aPrepareProc(newf);
-						}
-					}
-					res = FindNext(ref sr);
-				}
-				while (res == 0);
-			}
-			FindClose(ref sr);
-		}
-
 		public static double SafeDiv(double aDividend, double aDivisor)
 		{
 			double Result;
@@ -1105,70 +643,6 @@ namespace GKCore.Sys
 			else
 			{
 				Result = (aDividend / aDivisor);
-			}
-			return Result;
-		}
-
-		public static string GetToken(string S, char SepChar, int TokenNum)
-		{
-			string Result = "";
-			if (S != "")
-			{
-				if (S[((S != null) ? S.Length : 0) - 1] != SepChar)
-				{
-					S += SepChar;
-				}
-				int sp = 1;
-				int cur_tok = 0;
-				int num = (S != null) ? S.Length : 0;
-				int p = 1;
-				if (num >= p)
-				{
-					num++;
-					while (true)
-					{
-						if (S[p - 1] == SepChar)
-						{
-							cur_tok++;
-							if (cur_tok == TokenNum)
-							{
-								break;
-							}
-							sp = p + 1;
-						}
-						p++;
-						if (p == num)
-						{
-							return Result;
-						}
-					}
-					Result = WStrCopy(S, sp, p - sp);
-				}
-			}
-			return Result;
-		}
-
-		public static int GetTokensCount(string S, char SepChar)
-		{
-			int Result = 0;
-			if (S != "")
-			{
-				int num = (S != null) ? S.Length : 0;
-				int p = 1;
-				if (num >= p)
-				{
-					num++;
-					do
-					{
-						if (S[p - 1] == SepChar)
-						{
-							Result++;
-						}
-						p++;
-					}
-					while (p != num);
-				}
-				Result++;
 			}
 			return Result;
 		}
@@ -1212,11 +686,7 @@ namespace GKCore.Sys
 			return Result;
 		}
 
-		public static int Hole(ref object A)
-		{
-			int Result = 0;
-			return Result;
-		}
+		private static string LogFilename;
 
 		public static void LogInit([In] string aFileName)
 		{
@@ -1231,7 +701,7 @@ namespace GKCore.Sys
 			Log.Close();
 		}
 
-		public static string ConStrings(TStrings aStrings)
+		public static string ConStrings(StringList aStrings)
 		{
 			string Result = "";
 			int num = aStrings.Count - 1;
@@ -1243,30 +713,35 @@ namespace GKCore.Sys
 			return Result;
 		}
 
+		private static uint[] Ccitt32Table = new uint[256];
+
 		public static void BuildCRCTable()
 		{
-			uint i = 0u;
-			do
+			unchecked
 			{
-				uint value = i;
-				uint j = 4294967288u;
+				uint i = 0u;
 				do
 				{
-					if ((value & 1u) != 0u)
+					uint val = i;
+					uint j = 4294967288u;
+					do
 					{
-						value = (value >> 1 ^ 3988292384u);
+						if ((val & 1u) != 0u)
+						{
+							val = (val >> 1 ^ 3988292384u);
+						}
+						else
+						{
+							val >>= 1;
+						}
+						j += 1u;
 					}
-					else
-					{
-						value >>= 1;
-					}
-					j += 1u;
+					while (j != 0u);
+					Ccitt32Table[(int)i] = val;
+					i += 1u;
 				}
-				while (j != 0u);
-				Ccitt32Table[(int)i] = value;
-				i += 1u;
+				while (i != 256u);
 			}
-			while (i != 256u);
 		}
 
 		public static uint CrcStr([In] string Str)
@@ -1323,47 +798,6 @@ namespace GKCore.Sys
 			return Result;
 		}
 
-		public static void QuickSort(TList SortList, TSortCompareFunc SCompare)
-		{
-			if (SortList != null && SortList.Count > 0)
-			{
-				IQuickSort(SortList, SCompare, 0, SortList.Count - 1);
-			}
-		}
-
-		public static void MergeSort(TList aList, TSortCompareFunc aCompare)
-		{
-		}
-
-		public static void ShowMessage([In] string Msg)
-		{
-			MessageBox.Show(Msg, "GEDKeeper2", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-		}
-
-		public static void ShowError([In] string Msg)
-		{
-			MessageBox.Show(Msg, "GEDKeeper2", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-		}
-
-		public static DialogResult ShowQuestion([In] string Msg)
-		{
-			return MessageBox.Show(Msg, "GEDKeeper2", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-		}
-
-		public static ScrollEventType GetScrollEventType(uint wParam)
-		{
-			ScrollEventType Result;
-			if (wParam <= 8u)
-			{
-				Result = _events[(int)wParam];
-			}
-			else
-			{
-				Result = ScrollEventType.EndScroll;
-			}
-			return Result;
-		}
-
 		public static double StrToFloatDef([In] string S, [In] double Default)
 		{
 			NumberFormatInfo LFormat = Thread.CurrentThread.CurrentCulture.NumberFormat.Clone() as NumberFormatInfo;
@@ -1393,24 +827,28 @@ namespace GKCore.Sys
 
 		public static bool IsDigit(char C)
 		{
-			return C >= '0' && C < ':';
+			return C >= '0' && C <= '9';
 		}
 
 		public static bool IsDigits([In] string S)
 		{
 			bool res = false;
-			if (string.IsNullOrEmpty(S)) return res;
 
-			int I;
-			for (I = 1; I <= S.Length; I++)
+			if (!string.IsNullOrEmpty(S))
 			{
-				char c = S[I - 1];
-				if (c < '0' || c >= ':')
+				int I;
+				for (I = 1; I <= S.Length; I++)
 				{
-					break;
+					char c = S[I - 1];
+					if (c < '0' || c >= ':')
+					{
+						break;
+					}
 				}
+				res = (I > S.Length);
 			}
-			return (I > S.Length);
+
+			return res;
 		}
 
 		public static int StrToInt([In] string S)
@@ -1455,7 +893,7 @@ namespace GKCore.Sys
 		/// </summary>
 		/// <typeparam name="T">type of sorted data</typeparam>
 		/// <param name="array">sorted array</param>
-		private static void QuickSort<T>(T[] array)
+		public static void QuickSort<T>(T[] array)
 			where T : IComparable<T>
 		{
 			QuickSort<T>(array, 0, array.Length - 1);
@@ -1497,7 +935,7 @@ namespace GKCore.Sys
 		/// </summary>
 		/// <typeparam name="T">type of array's elements.</typeparam>
 		/// <param name="array">sorting array.</param>
-		private static void MergeSort<T>(T[] array)
+		public static void MergeSort<T>(T[] array)
 			where T : IComparable<T>
 		{
 			MergeSort<T>(array, new T[array.Length], 0, array.Length - 1);
@@ -1562,21 +1000,5 @@ namespace GKCore.Sys
 			return string.Format("{0:00}:{1:00}:{2:00}", new object[] { ts.Hours, ts.Minutes, ts.Seconds });
 		}
 
-		static SysUtils()
-		{
-			Ccitt32Table = new uint[256];
-			_events = new ScrollEventType[]
-			{
-				ScrollEventType.SmallDecrement, 
-				ScrollEventType.SmallIncrement, 
-				ScrollEventType.LargeDecrement, 
-				ScrollEventType.LargeIncrement, 
-				ScrollEventType.ThumbPosition, 
-				ScrollEventType.ThumbTrack, 
-				ScrollEventType.First, 
-				ScrollEventType.Last, 
-				ScrollEventType.EndScroll
-			};
-		}
 	}
 }

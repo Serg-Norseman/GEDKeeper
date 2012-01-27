@@ -2,6 +2,10 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
+/// <summary>
+/// Localization: clean
+/// </summary>
+
 namespace GKUI.Controls
 {
 	public class TExtListItem : ListViewItem

@@ -48,7 +48,6 @@ namespace GKUI
 		private System.Windows.Forms.CheckBox chkPlacesWithAddress;
 		private System.Windows.Forms.GroupBox GroupBox7;
 		private System.Windows.Forms.CheckBox chkShowOnStart;
-		private System.Windows.Forms.GroupBox rgEditMode;
 		private System.Windows.Forms.CheckBox chkHighlightUnparented;
 		private System.Windows.Forms.CheckBox chkHighlightUnmarried;
 		private System.Windows.Forms.CheckBox chkOnlyYears;
@@ -69,8 +68,6 @@ namespace GKUI
 		private System.Windows.Forms.CheckBox chkPortraitsVisible;
 		private System.Windows.Forms.RadioButton RButton1;
 		private System.Windows.Forms.RadioButton RButton2;
-		private System.Windows.Forms.RadioButton RButton3;
-		private System.Windows.Forms.RadioButton RButton4;
 		private System.Windows.Forms.RadioButton RButton5;
 		private System.Windows.Forms.RadioButton RButton6;
 		private System.Windows.Forms.RadioButton RButton7;
@@ -98,10 +95,8 @@ namespace GKUI
 			this.edProxyLogin = new System.Windows.Forms.TextBox();
 			this.edProxyPass = new System.Windows.Forms.TextBox();
 			this.GroupBox7 = new System.Windows.Forms.GroupBox();
+			this.chkRevisionsBackup = new System.Windows.Forms.CheckBox();
 			this.chkShowOnStart = new System.Windows.Forms.CheckBox();
-			this.rgEditMode = new System.Windows.Forms.GroupBox();
-			this.RButton4 = new System.Windows.Forms.RadioButton();
-			this.RButton3 = new System.Windows.Forms.RadioButton();
 			this.cbLanguages = new System.Windows.Forms.ComboBox();
 			this.SheetTree = new System.Windows.Forms.TabPage();
 			this.GroupBox1 = new System.Windows.Forms.GroupBox();
@@ -160,7 +155,6 @@ namespace GKUI
 			this.rgCode.SuspendLayout();
 			this.GroupBox4.SuspendLayout();
 			this.GroupBox7.SuspendLayout();
-			this.rgEditMode.SuspendLayout();
 			this.SheetTree.SuspendLayout();
 			this.GroupBox1.SuspendLayout();
 			this.GroupBox2.SuspendLayout();
@@ -193,7 +187,6 @@ namespace GKUI
 			this.SheetCommon.Controls.Add(this.rgCode);
 			this.SheetCommon.Controls.Add(this.GroupBox4);
 			this.SheetCommon.Controls.Add(this.GroupBox7);
-			this.SheetCommon.Controls.Add(this.rgEditMode);
 			this.SheetCommon.Controls.Add(this.cbLanguages);
 			this.SheetCommon.Location = new System.Drawing.Point(4, 22);
 			this.SheetCommon.Name = "SheetCommon";
@@ -203,7 +196,7 @@ namespace GKUI
 			// 
 			// Label6
 			// 
-			this.Label6.Location = new System.Drawing.Point(248, 64);
+			this.Label6.Location = new System.Drawing.Point(8, 318);
 			this.Label6.Name = "Label6";
 			this.Label6.Size = new System.Drawing.Size(35, 13);
 			this.Label6.TabIndex = 0;
@@ -215,14 +208,14 @@ namespace GKUI
 			this.rgCode.Controls.Add(this.RButton1);
 			this.rgCode.Location = new System.Drawing.Point(8, 8);
 			this.rgCode.Name = "rgCode";
-			this.rgCode.Size = new System.Drawing.Size(217, 49);
+			this.rgCode.Size = new System.Drawing.Size(231, 49);
 			this.rgCode.TabIndex = 0;
 			this.rgCode.TabStop = false;
 			this.rgCode.Text = "Кодировка сохранения файлов";
 			// 
 			// RButton2
 			// 
-			this.RButton2.Location = new System.Drawing.Point(88, 16);
+			this.RButton2.Location = new System.Drawing.Point(103, 16);
 			this.RButton2.Name = "RButton2";
 			this.RButton2.Size = new System.Drawing.Size(80, 24);
 			this.RButton2.TabIndex = 1;
@@ -247,9 +240,9 @@ namespace GKUI
 			this.GroupBox4.Controls.Add(this.edProxyPort);
 			this.GroupBox4.Controls.Add(this.edProxyLogin);
 			this.GroupBox4.Controls.Add(this.edProxyPass);
-			this.GroupBox4.Location = new System.Drawing.Point(8, 128);
+			this.GroupBox4.Location = new System.Drawing.Point(8, 63);
 			this.GroupBox4.Name = "GroupBox4";
-			this.GroupBox4.Size = new System.Drawing.Size(217, 161);
+			this.GroupBox4.Size = new System.Drawing.Size(231, 161);
 			this.GroupBox4.TabIndex = 1;
 			this.GroupBox4.TabStop = false;
 			this.GroupBox4.Text = "Загрузка из Интернета";
@@ -298,21 +291,21 @@ namespace GKUI
 			// 
 			this.edProxyServer.Location = new System.Drawing.Point(80, 48);
 			this.edProxyServer.Name = "edProxyServer";
-			this.edProxyServer.Size = new System.Drawing.Size(121, 21);
+			this.edProxyServer.Size = new System.Drawing.Size(137, 21);
 			this.edProxyServer.TabIndex = 1;
 			// 
 			// edProxyPort
 			// 
 			this.edProxyPort.Location = new System.Drawing.Point(80, 72);
 			this.edProxyPort.Name = "edProxyPort";
-			this.edProxyPort.Size = new System.Drawing.Size(121, 21);
+			this.edProxyPort.Size = new System.Drawing.Size(137, 21);
 			this.edProxyPort.TabIndex = 2;
 			// 
 			// edProxyLogin
 			// 
 			this.edProxyLogin.Location = new System.Drawing.Point(80, 96);
 			this.edProxyLogin.Name = "edProxyLogin";
-			this.edProxyLogin.Size = new System.Drawing.Size(121, 21);
+			this.edProxyLogin.Size = new System.Drawing.Size(137, 21);
 			this.edProxyLogin.TabIndex = 3;
 			// 
 			// edProxyPass
@@ -320,59 +313,41 @@ namespace GKUI
 			this.edProxyPass.Location = new System.Drawing.Point(80, 120);
 			this.edProxyPass.Name = "edProxyPass";
 			this.edProxyPass.PasswordChar = '*';
-			this.edProxyPass.Size = new System.Drawing.Size(121, 21);
+			this.edProxyPass.Size = new System.Drawing.Size(137, 21);
 			this.edProxyPass.TabIndex = 4;
 			this.edProxyPass.Text = "edProxyPass";
 			// 
 			// GroupBox7
 			// 
+			this.GroupBox7.Controls.Add(this.chkRevisionsBackup);
 			this.GroupBox7.Controls.Add(this.chkShowOnStart);
-			this.GroupBox7.Location = new System.Drawing.Point(232, 8);
+			this.GroupBox7.Location = new System.Drawing.Point(8, 230);
 			this.GroupBox7.Name = "GroupBox7";
-			this.GroupBox7.Size = new System.Drawing.Size(265, 41);
+			this.GroupBox7.Size = new System.Drawing.Size(231, 65);
 			this.GroupBox7.TabIndex = 2;
 			this.GroupBox7.TabStop = false;
-			this.GroupBox7.Text = "Подсказки";
+			this.GroupBox7.Text = "Прочее";
+			// 
+			// chkRevisionsBackup
+			// 
+			this.chkRevisionsBackup.Location = new System.Drawing.Point(8, 40);
+			this.chkRevisionsBackup.Name = "chkRevisionsBackup";
+			this.chkRevisionsBackup.Size = new System.Drawing.Size(209, 17);
+			this.chkRevisionsBackup.TabIndex = 1;
+			this.chkRevisionsBackup.Text = "Сохранять версии файлов";
 			// 
 			// chkShowOnStart
 			// 
-			this.chkShowOnStart.Location = new System.Drawing.Point(16, 16);
+			this.chkShowOnStart.Location = new System.Drawing.Point(8, 18);
 			this.chkShowOnStart.Name = "chkShowOnStart";
-			this.chkShowOnStart.Size = new System.Drawing.Size(225, 17);
+			this.chkShowOnStart.Size = new System.Drawing.Size(209, 17);
 			this.chkShowOnStart.TabIndex = 0;
-			this.chkShowOnStart.Text = "Показывать при старте";
-			// 
-			// rgEditMode
-			// 
-			this.rgEditMode.Controls.Add(this.RButton4);
-			this.rgEditMode.Controls.Add(this.RButton3);
-			this.rgEditMode.Location = new System.Drawing.Point(8, 64);
-			this.rgEditMode.Name = "rgEditMode";
-			this.rgEditMode.Size = new System.Drawing.Size(217, 57);
-			this.rgEditMode.TabIndex = 3;
-			this.rgEditMode.TabStop = false;
-			this.rgEditMode.Text = "Режим работы";
-			// 
-			// RButton4
-			// 
-			this.RButton4.Location = new System.Drawing.Point(88, 24);
-			this.RButton4.Name = "RButton4";
-			this.RButton4.Size = new System.Drawing.Size(96, 24);
-			this.RButton4.TabIndex = 1;
-			this.RButton4.Text = "Продвинутый";
-			// 
-			// RButton3
-			// 
-			this.RButton3.Location = new System.Drawing.Point(8, 24);
-			this.RButton3.Name = "RButton3";
-			this.RButton3.Size = new System.Drawing.Size(80, 24);
-			this.RButton3.TabIndex = 0;
-			this.RButton3.Text = "Простой";
+			this.chkShowOnStart.Text = "Показывать при старте подсказки";
 			// 
 			// cbLanguages
 			// 
 			this.cbLanguages.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cbLanguages.Location = new System.Drawing.Point(312, 56);
+			this.cbLanguages.Location = new System.Drawing.Point(75, 310);
 			this.cbLanguages.Name = "cbLanguages";
 			this.cbLanguages.Size = new System.Drawing.Size(164, 21);
 			this.cbLanguages.TabIndex = 4;
@@ -880,7 +855,6 @@ namespace GKUI
 			this.GroupBox4.ResumeLayout(false);
 			this.GroupBox4.PerformLayout();
 			this.GroupBox7.ResumeLayout(false);
-			this.rgEditMode.ResumeLayout(false);
 			this.SheetTree.ResumeLayout(false);
 			this.GroupBox1.ResumeLayout(false);
 			this.GroupBox2.ResumeLayout(false);
@@ -895,5 +869,6 @@ namespace GKUI
 			this.EditPedigreeFormat.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.CheckBox chkRevisionsBackup;
 	}
 }

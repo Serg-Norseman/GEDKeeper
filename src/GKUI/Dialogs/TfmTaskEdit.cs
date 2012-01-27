@@ -5,8 +5,12 @@ using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKSys;
 using GKUI.Lists;
+
+/// <summary>
+/// Localization: clean
+/// </summary>
 
 namespace GKUI
 {
@@ -49,30 +53,20 @@ namespace GKUI
 					TGoalType gt = TGoalType.gtOther;
 					TGenEngine.GetTaskGoal(this.Base.Tree, this.FTask, ref gt, ref this.FTempRec);
 					this.cbGoalType.SelectedIndex = (int)((sbyte)gt);
-					if (gt != TGoalType.gtIndividual)
-					{
-						if (gt != TGoalType.gtFamily)
-						{
-							if (gt != TGoalType.gtSource)
-							{
-								if (gt == TGoalType.gtOther)
-								{
-									this.EditGoal.Text = this.FTask.Goal;
-								}
-							}
-							else
-							{
-								this.EditGoal.Text = ((TGEDCOMSourceRecord)this.FTempRec).FiledByEntry;
-							}
-						}
-						else
-						{
+
+					switch (gt) {
+						case TGoalType.gtIndividual:
+							this.EditGoal.Text = TGenEngine.GetNameStr((TGEDCOMIndividualRecord)this.FTempRec, true, false);
+							break;
+						case TGoalType.gtFamily:
 							this.EditGoal.Text = TGenEngine.GetFamilyStr((TGEDCOMFamilyRecord)this.FTempRec);
-						}
-					}
-					else
-					{
-						this.EditGoal.Text = TGenEngine.GetNameStr((TGEDCOMIndividualRecord)this.FTempRec, true, false);
+							break;
+						case TGoalType.gtSource:
+							this.EditGoal.Text = ((TGEDCOMSourceRecord)this.FTempRec).FiledByEntry;
+							break;
+						case TGoalType.gtOther:
+							this.EditGoal.Text = this.FTask.Goal;
+							break;
 					}
 				}
 				this.cbGoalType_SelectedIndexChanged(null, null);
@@ -86,7 +80,7 @@ namespace GKUI
 
 		private void ListModify(object Sender, object ItemData, TGenEngine.TRecAction Action)
 		{
-			if (object.Equals(Sender, this.FNotesList) && this.Base.ModifyRecNote(this, this.FTask, ItemData as TGEDCOMNotes, Action))
+			if ((Sender == this.FNotesList) && this.Base.ModifyRecNote(this, this.FTask, ItemData as TGEDCOMNotes, Action))
 			{
 				this.ListsRefresh();
 			}
@@ -105,17 +99,17 @@ namespace GKUI
 				this.FTask.StartDate.ParseString(TGenEngine.StrToGEDCOMDate(this.EditStartDate.Text, true));
 				this.FTask.StopDate.ParseString(TGenEngine.StrToGEDCOMDate(this.EditStopDate.Text, true));
 				TGoalType gt = (TGoalType)this.cbGoalType.SelectedIndex;
-				if (gt >= TGoalType.gtOther)
-				{
-					if (gt == TGoalType.gtOther)
-					{
+				switch (gt) {
+					case TGoalType.gtIndividual:
+					case TGoalType.gtFamily:
+					case TGoalType.gtSource:
+						this.FTask.Goal = TGEDCOMObject.EncloseXRef(this.FTempRec.XRef);
+						break;
+					case TGoalType.gtOther:
 						this.FTask.Goal = this.EditGoal.Text;
-					}
+						break;
 				}
-				else
-				{
-					this.FTask.Goal = TGEDCOMObject.EncloseXRef(this.FTempRec.XRef);
-				}
+
 				this.Base.ChangeRecord(this.FTask);
 				base.DialogResult = DialogResult.OK;
 			}
@@ -128,71 +122,49 @@ namespace GKUI
 
 		private void btnGoalSelect_Click(object sender, EventArgs e)
 		{
-			TGoalType tGoalType = (TGoalType)this.cbGoalType.SelectedIndex;
-			if (tGoalType != TGoalType.gtIndividual)
-			{
-				if (tGoalType != TGoalType.gtFamily)
-				{
-					if (tGoalType == TGoalType.gtSource)
-					{
-						TfmBase arg_A1_0 = this.Base;
-						TGEDCOMRecordType arg_A1_1 = TGEDCOMRecordType.rtSource;
-						object[] anArgs = new object[0];
-						this.FTempRec = arg_A1_0.SelectRecord(arg_A1_1, anArgs);
-						this.EditGoal.Text = ((TGEDCOMSourceRecord)this.FTempRec).FiledByEntry;
-					}
-				}
-				else
-				{
-					TfmBase arg_65_0 = this.Base;
-					TGEDCOMRecordType arg_65_1 = TGEDCOMRecordType.rtFamily;
-					object[] anArgs2 = new object[0];
-					this.FTempRec = arg_65_0.SelectRecord(arg_65_1, anArgs2);
+			TGoalType gt = (TGoalType)this.cbGoalType.SelectedIndex;
+			switch (gt) {
+				case TGoalType.gtIndividual:
+					this.FTempRec = this.Base.SelectPerson(null, TGenEngine.TTargetMode.tmNone, TGEDCOMSex.svNone);
+					this.EditGoal.Text = TGenEngine.GetNameStr((TGEDCOMIndividualRecord)this.FTempRec, true, false);
+					break;
+				case TGoalType.gtFamily:
+					this.FTempRec = this.Base.SelectRecord(TGEDCOMRecordType.rtFamily, new object[0]);
 					this.EditGoal.Text = TGenEngine.GetFamilyStr((TGEDCOMFamilyRecord)this.FTempRec);
-				}
-			}
-			else
-			{
-				this.FTempRec = this.Base.SelectPerson(null, TGenEngine.TTargetMode.tmNone, TGEDCOMSex.svNone);
-				this.EditGoal.Text = TGenEngine.GetNameStr((TGEDCOMIndividualRecord)this.FTempRec, true, false);
+					break;
+				case TGoalType.gtSource:
+					this.FTempRec = this.Base.SelectRecord(TGEDCOMRecordType.rtSource, new object[0]);
+					this.EditGoal.Text = ((TGEDCOMSourceRecord)this.FTempRec).FiledByEntry;
+					break;
+				case TGoalType.gtOther:
+					break;
 			}
 		}
 
 		private void cbGoalType_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			TGoalType tGoalType = (TGoalType)this.cbGoalType.SelectedIndex;
-			if (tGoalType != TGoalType.gtIndividual)
-			{
-				if (tGoalType != TGoalType.gtFamily)
-				{
-					if (tGoalType != TGoalType.gtSource)
-					{
-						if (tGoalType == TGoalType.gtOther)
-						{
-							this.btnGoalSelect.Enabled = false;
-							this.EditGoal.ForeColor = SystemColors.Window;
-							this.EditGoal.ReadOnly = false;
-						}
-					}
-					else
-					{
-						this.btnGoalSelect.Enabled = true;
-						this.EditGoal.ForeColor = SystemColors.Control;
-						this.EditGoal.ReadOnly = true;
-					}
-				}
-				else
-				{
+			TGoalType gt = (TGoalType)this.cbGoalType.SelectedIndex;
+			switch (gt) {
+				case TGoalType.gtIndividual:
 					this.btnGoalSelect.Enabled = true;
-					this.EditGoal.ForeColor = SystemColors.Control;
+					this.EditGoal.BackColor = SystemColors.Control;
 					this.EditGoal.ReadOnly = true;
-				}
-			}
-			else
-			{
-				this.btnGoalSelect.Enabled = true;
-				this.EditGoal.ForeColor = SystemColors.Control;
-				this.EditGoal.ReadOnly = true;
+					break;
+				case TGoalType.gtFamily:
+					this.btnGoalSelect.Enabled = true;
+					this.EditGoal.BackColor = SystemColors.Control;
+					this.EditGoal.ReadOnly = true;
+					break;
+				case TGoalType.gtSource:
+					this.btnGoalSelect.Enabled = true;
+					this.EditGoal.BackColor = SystemColors.Control;
+					this.EditGoal.ReadOnly = true;
+					break;
+				case TGoalType.gtOther:
+					this.btnGoalSelect.Enabled = false;
+					this.EditGoal.BackColor = SystemColors.Window;
+					this.EditGoal.ReadOnly = false;
+					break;
 			}
 		}
 
@@ -203,12 +175,12 @@ namespace GKUI
 
 			for (TResearchPriority rp = TResearchPriority.rpNone; rp <= TResearchPriority.rpTop; rp++)
 			{
-				this.EditPriority.Items.Add(GKL.LSList[(int)TGenEngine.PriorityNames[(int)rp] - 1]);
+				this.EditPriority.Items.Add(LangMan.LSList[(int)TGenEngine.PriorityNames[(int)rp] - 1]);
 			}
 
 			for (TGoalType gt = TGoalType.gtIndividual; gt <= TGoalType.gtOther; gt++)
 			{
-				this.cbGoalType.Items.Add(GKL.LSList[(int)TGenEngine.GoalNames[(int)gt] - 1]);
+				this.cbGoalType.Items.Add(LangMan.LSList[(int)TGenEngine.GoalNames[(int)gt] - 1]);
 			}
 
 			this.FNotesList = new TSheetList(this.SheetNotes);
@@ -216,14 +188,14 @@ namespace GKUI
 			this.Base.SetupRecNotesList(this.FNotesList);
 
 			this.FTempRec = null;
-			this.Text = GKL.LSList[190];
-			this.btnAccept.Text = GKL.LSList[97];
-			this.btnCancel.Text = GKL.LSList[98];
-			this.SheetNotes.Text = GKL.LSList[54];
-			this.Label1.Text = GKL.LSList[182];
-			this.Label2.Text = GKL.LSList[178];
-			this.Label4.Text = GKL.LSList[180];
-			this.Label5.Text = GKL.LSList[181];
+			this.Text = LangMan.LSList[190];
+			this.btnAccept.Text = LangMan.LSList[97];
+			this.btnCancel.Text = LangMan.LSList[98];
+			this.SheetNotes.Text = LangMan.LSList[54];
+			this.Label1.Text = LangMan.LSList[182];
+			this.Label2.Text = LangMan.LSList[178];
+			this.Label4.Text = LangMan.LSList[180];
+			this.Label5.Text = LangMan.LSList[181];
 		}
 	}
 }

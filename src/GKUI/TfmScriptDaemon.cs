@@ -5,7 +5,11 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using GKCore;
-using GKCore.Sys;
+using GKSys;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI
 {
@@ -38,7 +42,7 @@ namespace GKUI
 
 			if (this.Modified)
 			{
-				DialogResult dialogResult = MessageBox.Show(GKL.LSList[69], "GEDKeeper2", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+				DialogResult dialogResult = MessageBox.Show(LangMan.LSList[69], "GEDKeeper2", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
 
 				switch (dialogResult) {
 					case DialogResult.Yes:

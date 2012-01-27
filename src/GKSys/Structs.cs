@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace GKCore.Sys
+/// <summary>
+/// Localization: clean
+/// </summary>
+
+namespace GKSys
 {
 	public class TSetElementTypeAttribute : Attribute
 	{
@@ -21,98 +26,6 @@ namespace GKCore.Sys
 	public enum LongBool : int
 	{}
 
-	public class HINST : Attribute
-	{
-		public static Type GetImplType()
-		{
-			return typeof(int);
-		}
-	}
-
-	public class HKL : Attribute
-	{
-		public static Type GetImplType()
-		{
-			return typeof(uint);
-		}
-	}
-
-	public class HRGN : Attribute
-	{
-		public static Type GetImplType()
-		{
-			return typeof(uint);
-		}
-	}
-
-	public class HRSRC : Attribute
-	{
-		public static Type GetImplType()
-		{
-			return typeof(int);
-		}
-	}
-
-	public class HWND : Attribute
-	{
-		public static Type GetImplType()
-		{
-			return typeof(uint);
-		}
-	}
-
-	public class HMODULE : Attribute
-	{
-		public static Type GetImplType()
-		{
-			return typeof(int);
-		}
-	}
-
-	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	public struct TVSFixedFileInfo
-	{
-		public uint dwSignature;
-		public uint dwStrucVersion;
-		public uint dwFileVersionMS;
-		public uint dwFileVersionLS;
-		public uint dwProductVersionMS;
-		public uint dwProductVersionLS;
-		public uint dwFileFlagsMask;
-		public uint dwFileFlags;
-		public uint dwFileOS;
-		public uint dwFileType;
-		public uint dwFileSubtype;
-		public uint dwFileDateMS;
-		public uint dwFileDateLS;
-	}
-
-	[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-	public struct TWin32FindData
-	{
-		public uint dwFileAttributes;
-		public System.Runtime.InteropServices.ComTypes.FILETIME ftCreationTime;
-		public System.Runtime.InteropServices.ComTypes.FILETIME ftLastAccessTime;
-		public System.Runtime.InteropServices.ComTypes.FILETIME ftLastWriteTime;
-		public uint nFileSizeHigh;
-		public uint nFileSizeLow;
-		public uint dwReserved0;
-		public uint dwReserved1;
-		[MarshalAs(UnmanagedType.ByValTStr, SizeConst=260)]
-		public string cFileName;
-		[MarshalAs(UnmanagedType.ByValTStr, SizeConst=14)]
-		public string cAlternateFileName;
-	}
-
-	public struct TSearchRec
-	{
-		public int Attr;
-		public string Name;
-		public int ExcludeAttr;
-		public int FindHandle;
-		public TWin32FindData FindData;
-	}
-
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public struct TScrollInfo
 	{
@@ -124,9 +37,6 @@ namespace GKCore.Sys
 		public int nPos;
 		public int nTrackPos;
 	}
-
-
-	public delegate void TNotifyEvent(object Sender);
 
 
 	[StructLayout(LayoutKind.Sequential, Pack = 1, Size = 1)]
@@ -472,5 +382,161 @@ namespace GKCore.Sys
 				'/'
 			};
 		}
+	}
+
+
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+	public struct TRect
+	{
+		public int Left;
+		public int Top;
+		public int Right;
+		public int Bottom;
+
+		public static TRect Create([In] int ALeft, [In] int ATop, [In] int ARight, [In] int ABottom)
+		{
+			TRect Result;
+			Result.Left = ALeft;
+			Result.Top = ATop;
+			Result.Right = ARight;
+			Result.Bottom = ABottom;
+			return Result;
+		}
+
+		public static TRect Bounds([In] int ALeft, [In] int ATop, [In] int AWidth, [In] int AHeight)
+		{
+			return TRect.Create(ALeft, ATop, ALeft + AWidth, ATop + AHeight);
+		}
+
+		public static TRect Empty()
+		{
+			return TRect.Create(0, 0, 0, 0);
+		}
+
+		public override string ToString()
+		{
+			return string.Concat(new string[]
+			{
+				"{X=", this.Left.ToString(), 
+				",Y=", this.Top.ToString(), 
+				",Width=", this.GetWidth().ToString(), 
+				",Height=", this.GetHeight().ToString(), 
+				"}"
+			});
+		}
+
+		public Rectangle ToRectangle()
+		{
+			return new Rectangle(this.Left, this.Top, this.Right - this.Left + 1, this.Bottom - this.Top + 1);
+		}
+
+		public int GetWidth()
+		{
+			return this.Right - this.Left + 1;
+		}
+
+		public int GetHeight()
+		{
+			return this.Bottom - this.Top + 1;
+		}
+
+		public bool IsEmpty()
+		{
+			return this.Right <= this.Left || this.Bottom <= this.Top;
+		}
+
+		public bool Contains([In] int X, [In] int Y)
+		{
+			return X >= this.Left && Y >= this.Top && X < this.Right && Y < this.Bottom;
+		}
+
+		public TRect GetOffset([In] int X, [In] int Y)
+		{
+			return TRect.Create(this.Left + X, this.Top + Y, this.Right + X, this.Bottom + Y);
+		}
+	}
+
+
+	public struct EnumSet
+	{
+		private uint FValue;
+
+		public static EnumSet Create()
+		{
+			EnumSet Result = new EnumSet();
+			Result.FValue = 0u;
+			return Result;
+		}
+
+		public static EnumSet Create(params Enum[] e)
+		{
+			EnumSet Result = EnumSet.Create();
+			Result.Include(e);
+			return Result;
+		}
+
+		public void Include(params Enum[] e)
+		{
+			//e = (Enum[])e.Clone();
+			for (int i = 0; i <= e.Length - 1; i++) {
+				this.Include(e[i]);
+			}
+		}
+
+		public void Include(Enum e)
+		{
+			unchecked
+			{
+				byte pos = ((IConvertible)e).ToByte(null);
+				this.FValue |= (uint)(1 << (int)pos);
+			}
+		}
+
+		public void Exclude(Enum e)
+		{
+			unchecked
+			{
+				byte pos = ((IConvertible)e).ToByte(null);
+				this.FValue &= (uint)(1 << (int)pos ^ -1);
+			}
+		}
+
+		public bool InSet(Enum e)
+		{
+			unchecked
+			{
+				byte pos = ((IConvertible)e).ToByte(null);
+				uint bt = (uint)(1 << (int)pos);
+				return (bt & this.FValue) > 0u;
+			}
+		}
+
+		public bool IsEmpty()
+		{
+			return this.FValue == 0u;
+		}
+
+		public string ToString(byte B)
+		{
+			byte bt = 1;
+			string s = "";
+			int i = 1;
+			do
+			{
+				if ((B & bt) > 0)
+				{
+					s = "1" + s;
+				}
+				else
+				{
+					s = "0" + s;
+				}
+				bt = (byte)((int)((uint)bt) << 1);
+				i++;
+			}
+			while (i != 9);
+			return s;
+		}
+
 	}
 }

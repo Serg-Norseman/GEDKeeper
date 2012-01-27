@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
 
 namespace GedCom551
 {
@@ -21,13 +21,12 @@ namespace GedCom551
 			set { base.SetTagStringValue("NAME", value); }
 		}
 
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
-			base.SetLists(TEnumSet.Create(new Enum[]
+			base.SetLists(EnumSet.Create(new Enum[]
 			{
-				TGEDCOMSubList.stNotes, 
-				TGEDCOMSubList.stMultimedia
+				TGEDCOMSubList.stNotes, TGEDCOMSubList.stMultimedia
 			}));
 			this.FRecordType = TGEDCOMRecordType.rtGroup;
 			this.FName = "_GROUP";
@@ -46,7 +45,7 @@ namespace GedCom551
 			}
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, Type AClass)
+		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 
@@ -62,7 +61,7 @@ namespace GedCom551
 				}
 				else
 				{
-					Result = base.AddTag(ATag, AValue, AClass);
+					Result = base.AddTag(ATag, AValue, ATagConstructor);
 				}
 			}
 
@@ -86,7 +85,7 @@ namespace GedCom551
 			this._Members.ReplaceXRefs(aMap);
 		}
 
-		public override void ResetOwner(TGEDCOMObject AOwner)
+		public override void ResetOwner(TGEDCOMTree AOwner)
 		{
 			base.ResetOwner(AOwner);
 			this._Members.ResetOwner(AOwner);
@@ -113,8 +112,13 @@ namespace GedCom551
 			return Result;
 		}
 
-		public TGEDCOMGroupRecord(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMGroupRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
+		}
+
+		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+		{
+			return new TGEDCOMGroupRecord(AOwner, AParent, AName, AValue);
 		}
 	}
 }

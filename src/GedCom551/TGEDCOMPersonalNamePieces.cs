@@ -2,7 +2,11 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
+
+/// <summary>
+/// Localization: clean
+/// </summary>
 
 namespace GedCom551
 {
@@ -44,32 +48,41 @@ namespace GedCom551
 			set { base.SetTagStringValue("NSFX", value); }
 		}
 
+
+
 		public string PatronymicName
 		{
 			get { return base.GetTagStringValue("_PATN"); }
 			set { base.SetTagStringValue("_PATN", value); }
 		}
 
+		// as BKW6
 		public string MarriedName
 		{
 			get { return base.GetTagStringValue("_MARN"); }
 			set { base.SetTagStringValue("_MARN", value); }
 		}
 
+		// as BKW6
 		public string ReligiousName
 		{
 			get { return base.GetTagStringValue("_RELN"); }
 			set { base.SetTagStringValue("_RELN", value); }
 		}
 
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		// as BKW6
+		public string CensusName
+		{
+			get { return base.GetTagStringValue("_CENN"); }
+			set { base.SetTagStringValue("_CENN", value); }
+		}
+
+
+
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
-			base.SetLists(TEnumSet.Create(new Enum[]
-			{
-				TGEDCOMSubList.stNotes, 
-				TGEDCOMSubList.stSource
-			}));
+			base.SetLists(EnumSet.Create(new Enum[] { TGEDCOMSubList.stNotes, TGEDCOMSubList.stSource }));
 		}
 
 		public override void SaveToStream(StreamWriter AStream)
@@ -81,7 +94,7 @@ namespace GedCom551
 			this._SourceCitations.SaveToStream(AStream);
 		}
 
-		public TGEDCOMPersonalNamePieces(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMPersonalNamePieces(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
 		}
 	}

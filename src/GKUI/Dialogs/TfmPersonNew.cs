@@ -4,7 +4,11 @@ using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKSys;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI
 {
@@ -30,13 +34,13 @@ namespace GKUI
 			try
 			{
 				this.FTarget = Value;
-				TNamesTable names = GKUI.TfmGEDKeeper.Instance.NamesTable;
 
 				if (this.FTarget != null)
 				{
 					string iFamily, iName, iPatronymic;
-					TGenEngine.GetNameParts(this.FTarget, out iFamily, out iName, out iPatronymic);
+					this.FTarget.aux_GetNameParts(out iFamily, out iName, out iPatronymic);
 					this.edFamily.Text = iFamily;
+					TNamesTable names = GKUI.TfmGEDKeeper.Instance.NamesTable;
 
 					switch (this.FTargetMode) {
 						case TGenEngine.TTargetMode.tmParent:
@@ -62,9 +66,10 @@ namespace GKUI
 							}
 					}
 				}
-			} catch (Exception E)
+			}
+			catch (Exception E)
 			{
-				SysUtils.LogWrite("TfmPersonNew.SetTarget(): " + E.Message);
+				SysUtils.LogWrite("TfmPersonNew.SetTarget("+this.FTargetMode.ToString()+"): " + E.Message);
 			}
 		}
 
@@ -77,8 +82,8 @@ namespace GKUI
 		{
 			if (e.KeyCode == Keys.Down && e.Control)
 			{
-				string ss = (sender as TextBox).Text;
-				(sender as TextBox).Text = SysUtils.SetAsName(ss);
+				TextBox tb = (sender as TextBox);
+				tb.Text = SysUtils.SetAsName(tb.Text);
 			}
 		}
 
@@ -99,13 +104,13 @@ namespace GKUI
 				this.EditSex.Items.Add(TGenEngine.SexStr(sx));
 			}
 
-			this.btnAccept.Text = GKL.LSList[97];
-			this.btnCancel.Text = GKL.LSList[98];
-			this.Text = GKL.LSList[102];
-			this.Label1.Text = GKL.LSList[84];
-			this.Label2.Text = GKL.LSList[85];
-			this.Label3.Text = GKL.LSList[86];
-			this.Label4.Text = GKL.LSList[87];
+			this.btnAccept.Text = LangMan.LSList[97];
+			this.btnCancel.Text = LangMan.LSList[98];
+			this.Text = LangMan.LSList[102];
+			this.Label1.Text = LangMan.LSList[84];
+			this.Label2.Text = LangMan.LSList[85];
+			this.Label3.Text = LangMan.LSList[86];
+			this.Label4.Text = LangMan.LSList[87];
 		}
 	}
 }

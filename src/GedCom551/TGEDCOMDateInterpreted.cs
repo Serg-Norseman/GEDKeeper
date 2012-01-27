@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
 
 namespace GedCom551
 {
@@ -40,7 +40,7 @@ namespace GedCom551
 			}
 		}
 
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
 			this.FDatePhrase = "";
@@ -48,15 +48,7 @@ namespace GedCom551
 
 		protected override string GetStringValue()
 		{
-			return string.Concat(new string[]
-			{
-				"INT ", 
-				base.GetStringValue(), 
-				" ", 
-				"(", 
-				this.FDatePhrase, 
-				")"
-			});
+			return string.Concat(new string[] { "INT ", base.GetStringValue(), " ", "(", this.FDatePhrase, ")" });
 		}
 
 		private string ExtractPhrase([In] string S)
@@ -128,7 +120,7 @@ namespace GedCom551
 			return Result;
 		}
 
-		public TGEDCOMDateInterpreted(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMDateInterpreted(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
 		}
 	}

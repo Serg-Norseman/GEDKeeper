@@ -4,8 +4,12 @@ using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKSys;
 using GKUI.Controls;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI
 {
@@ -14,7 +18,7 @@ namespace GKUI
 		private TfmBase FBase;
 		private TGEDCOMSourceCitation FSourceCitation;
 		private TGEDCOMSourceRecord FTempSrc;
-		private TStringList FSourcesList;
+		private StringList FSourcesList;
 
 		public TfmBase Base
 		{
@@ -32,7 +36,7 @@ namespace GKUI
 			try
 			{
 				if (this.FTempSrc == null) {
-					SysUtils.ShowError("Не задан источник");
+					TGenEngine.ShowError("Не задан источник");
 					base.DialogResult = DialogResult.None;
 				} else {
 					this.FSourceCitation.Value = this.FTempSrc;
@@ -89,7 +93,7 @@ namespace GKUI
 				int num = this.FSourcesList.Count - 1;
 				for (int i = 0; i <= num; i++) {
 					string st = this.FSourcesList[i];
-					if (aFilter == "" || TGenEngine.IsMatchesMask(st, flt))
+					if (aFilter == "" || SysUtils.MatchesMask(st, flt))
 					{
 						this.cbSource.Items.Add(new TComboItem(st, this.FSourcesList.GetObject(i)));
 					}
@@ -107,8 +111,10 @@ namespace GKUI
 			this.FTempSrc = (this.FSourceCitation.Value as TGEDCOMSourceRecord);
 			if (this.FTempSrc != null)
 			{
-				this.cbSource.SelectedIndex = this.cbSource.Items.IndexOf(this.FTempSrc.FiledByEntry);
+				//this.cbSource.SelectedIndex = this.cbSource.Items.IndexOf(this.FTempSrc.FiledByEntry);
+				this.cbSource.Text = this.FTempSrc.FiledByEntry;
 			}
+
 			this.EditPage.Text = this.FSourceCitation.Page;
 			this.EditCertainty.SelectedIndex = this.FSourceCitation.CertaintyAssessment;
 		}
@@ -129,19 +135,19 @@ namespace GKUI
 			int i = 0;
 			do
 			{
-				this.EditCertainty.Items.Add(GKL.LSList[(int)TGenEngine.CertaintyAssessments[i] - 1]);
+				this.EditCertainty.Items.Add(LangMan.LSList[(int)TGenEngine.CertaintyAssessments[i] - 1]);
 				i++;
 			}
 			while (i != 4);
-			this.FSourcesList = new TStringList();
+			this.FSourcesList = new StringList();
 			this.Base.Engine.GetSourcesList(this.FSourcesList);
 			this.RefreshSourcesList("");
-			this.btnAccept.Text = GKL.LSList[97];
-			this.btnCancel.Text = GKL.LSList[98];
-			this.Text = GKL.LSList[106];
-			this.Label2.Text = GKL.LSList[109];
-			this.Label1.Text = GKL.LSList[110];
-			this.Label3.Text = GKL.LSList[111];
+			this.btnAccept.Text = LangMan.LSList[97];
+			this.btnCancel.Text = LangMan.LSList[98];
+			this.Text = LangMan.LSList[106];
+			this.Label2.Text = LangMan.LSList[109];
+			this.Label1.Text = LangMan.LSList[110];
+			this.Label3.Text = LangMan.LSList[111];
 		}
 	}
 }

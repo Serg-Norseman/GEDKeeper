@@ -1,14 +1,16 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKSys;
 using GKUI.Controls;
 using GKUI.Lists;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI
 {
@@ -108,7 +110,7 @@ namespace GKUI
 							else
 							{
 								TGEDCOMTaskRecord task = ItemData as TGEDCOMTaskRecord;
-								if (task != null && SysUtils.ShowQuestion(GKL.LSList[186]) != DialogResult.No)
+								if (task != null && TGenEngine.ShowQuestion(LangMan.LSList[186]) != DialogResult.No)
 								{
 									this.Base.Engine.RemoveResearchTask(this.FResearch, task);
 									this.ListsRefresh();
@@ -160,7 +162,7 @@ namespace GKUI
 								else
 								{
 									TGEDCOMCommunicationRecord comm = ItemData as TGEDCOMCommunicationRecord;
-									if (comm != null && SysUtils.ShowQuestion(GKL.LSList[187]) != DialogResult.No)
+									if (comm != null && TGenEngine.ShowQuestion(LangMan.LSList[187]) != DialogResult.No)
 									{
 										this.Base.Engine.RemoveResearchComm(this.FResearch, comm);
 										this.ListsRefresh();
@@ -210,7 +212,7 @@ namespace GKUI
 								else
 								{
 									TGEDCOMGroupRecord group = ItemData as TGEDCOMGroupRecord;
-									if (group != null && SysUtils.ShowQuestion(GKL.LSList[188]) != DialogResult.No)
+									if (group != null && TGenEngine.ShowQuestion(LangMan.LSList[188]) != DialogResult.No)
 									{
 										this.Base.Engine.RemoveResearchGroup(this.FResearch, group);
 										this.ListsRefresh();
@@ -242,20 +244,13 @@ namespace GKUI
 			list.Items.Clear();
 
 			int num = this.FResearch.Tasks.Count - 1;
-			int i = 0;
-			if (num >= i)
+			for (int i = 0; i <= num; i++)
 			{
-				num++;
-				do
-				{
-					TGEDCOMTaskRecord task = this.FResearch.Tasks[i].Value as TGEDCOMTaskRecord;
-					TExtListItem item = list.AddItem(TGenEngine.GetTaskGoalStr(this.Base.Tree, task), task);
-					item.SubItems.Add(GKL.LSList[(int)TGenEngine.PriorityNames[(int)task.Priority] - 1]);
-					item.SubItems.Add(TGenEngine.GEDCOMDateToStr(task.StartDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
-					item.SubItems.Add(TGenEngine.GEDCOMDateToStr(task.StopDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
-					i++;
-				}
-				while (i != num);
+				TGEDCOMTaskRecord task = this.FResearch.Tasks[i].Value as TGEDCOMTaskRecord;
+				TExtListItem item = list.AddItem(TGenEngine.GetTaskGoalStr(this.Base.Tree, task), task);
+				item.SubItems.Add(LangMan.LSList[(int)TGenEngine.PriorityNames[(int)task.Priority] - 1]);
+				item.SubItems.Add(TGenEngine.GEDCOMDateToStr(task.StartDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
+				item.SubItems.Add(TGenEngine.GEDCOMDateToStr(task.StopDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
 			}
 			list.EndUpdate();
 
@@ -264,20 +259,13 @@ namespace GKUI
 			list2.Items.Clear();
 
 			int num2 = this.FResearch.Communications.Count - 1;
-			i = 0;
-			if (num2 >= i)
+			for (int i = 0; i <= num2; i++)
 			{
-				num2++;
-				do
-				{
-					TGEDCOMCommunicationRecord corr = this.FResearch.Communications[i].Value as TGEDCOMCommunicationRecord;
-					TExtListItem item = list2.AddItem(corr.CommName, corr);
-					item.SubItems.Add(TGenEngine.GetCorresponderStr(this.Base.Tree, corr, false));
-					item.SubItems.Add(GKL.LSList[(int)TGenEngine.CommunicationNames[(int)corr.CommunicationType] - 1]);
-					item.SubItems.Add(TGenEngine.GEDCOMDateToStr(corr.Date, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
-					i++;
-				}
-				while (i != num2);
+				TGEDCOMCommunicationRecord corr = this.FResearch.Communications[i].Value as TGEDCOMCommunicationRecord;
+				TExtListItem item = list2.AddItem(corr.CommName, corr);
+				item.SubItems.Add(TGenEngine.GetCorresponderStr(this.Base.Tree, corr, false));
+				item.SubItems.Add(LangMan.LSList[(int)TGenEngine.CommunicationNames[(int)corr.CommunicationType] - 1]);
+				item.SubItems.Add(TGenEngine.GEDCOMDateToStr(corr.Date, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
 			}
 			list2.EndUpdate();
 
@@ -286,17 +274,10 @@ namespace GKUI
 			list3.Items.Clear();
 
 			int num3 = this.FResearch.Groups.Count - 1;
-			i = 0;
-			if (num3 >= i)
+			for (int i = 0; i <= num3; i++)
 			{
-				num3++;
-				do
-				{
-					TGEDCOMGroupRecord grp = this.FResearch.Groups[i].Value as TGEDCOMGroupRecord;
-					TExtListItem item = list3.AddItem(grp.GroupName, grp);
-					i++;
-				}
-				while (i != num3);
+				TGEDCOMGroupRecord grp = this.FResearch.Groups[i].Value as TGEDCOMGroupRecord;
+				TExtListItem item = list3.AddItem(grp.GroupName, grp);
 			}
 			list3.EndUpdate();
 		}
@@ -322,52 +303,52 @@ namespace GKUI
 
 			for (TResearchPriority rp = TResearchPriority.rpNone; rp <= TResearchPriority.rpTop; rp++)
 			{
-				this.EditPriority.Items.Add(GKL.LSList[(int)TGenEngine.PriorityNames[(int)rp] - 1]);
+				this.EditPriority.Items.Add(LangMan.LSList[(int)TGenEngine.PriorityNames[(int)rp] - 1]);
 			}
 
 			for (TResearchStatus rs = TResearchStatus.rsDefined; rs <= TResearchStatus.rsWithdrawn; rs++)
 			{
-				this.EditStatus.Items.Add(GKL.LSList[(int)TGenEngine.StatusNames[(int)rs] - 1]);
+				this.EditStatus.Items.Add(LangMan.LSList[(int)TGenEngine.StatusNames[(int)rs] - 1]);
 			}
 
 			this.FTasksList = new TSheetList(this.SheetTasks);
 			this.FTasksList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
-			this.FTasksList.Buttons = TEnumSet.Create(new Enum[]
+			this.FTasksList.Buttons = EnumSet.Create(new Enum[]
 			{
 				TSheetList.TListButton.lbAdd, 
 				TSheetList.TListButton.lbEdit, 
 				TSheetList.TListButton.lbDelete, 
 				TSheetList.TListButton.lbJump
 			});
-			this.FTasksList.List.AddListColumn(GKL.LSList[182], 250, false);
-			this.FTasksList.List.AddListColumn(GKL.LSList[178], 90, false);
-			this.FTasksList.List.AddListColumn(GKL.LSList[180], 90, false);
-			this.FTasksList.List.AddListColumn(GKL.LSList[181], 90, false);
+			this.FTasksList.List.AddListColumn(LangMan.LSList[182], 250, false);
+			this.FTasksList.List.AddListColumn(LangMan.LSList[178], 90, false);
+			this.FTasksList.List.AddListColumn(LangMan.LSList[180], 90, false);
+			this.FTasksList.List.AddListColumn(LangMan.LSList[181], 90, false);
 
 			this.FCommunicationsList = new TSheetList(this.SheetCommunications);
 			this.FCommunicationsList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
-			this.FCommunicationsList.Buttons = TEnumSet.Create(new Enum[]
+			this.FCommunicationsList.Buttons = EnumSet.Create(new Enum[]
 			{
 				TSheetList.TListButton.lbAdd, 
 				TSheetList.TListButton.lbEdit, 
 				TSheetList.TListButton.lbDelete, 
 				TSheetList.TListButton.lbJump
 			});
-			this.FCommunicationsList.List.AddListColumn(GKL.LSList[183], 150, false);
-			this.FCommunicationsList.List.AddListColumn(GKL.LSList[184], 150, false);
-			this.FCommunicationsList.List.AddListColumn(GKL.LSList[113], 90, false);
-			this.FCommunicationsList.List.AddListColumn(GKL.LSList[139], 90, false);
+			this.FCommunicationsList.List.AddListColumn(LangMan.LSList[183], 150, false);
+			this.FCommunicationsList.List.AddListColumn(LangMan.LSList[184], 150, false);
+			this.FCommunicationsList.List.AddListColumn(LangMan.LSList[113], 90, false);
+			this.FCommunicationsList.List.AddListColumn(LangMan.LSList[139], 90, false);
 
 			this.FGroupsList = new TSheetList(this.SheetGroups);
 			this.FGroupsList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
-			this.FGroupsList.Buttons = TEnumSet.Create(new Enum[]
+			this.FGroupsList.Buttons = EnumSet.Create(new Enum[]
 			{
 				TSheetList.TListButton.lbAdd, 
 				TSheetList.TListButton.lbEdit, 
 				TSheetList.TListButton.lbDelete, 
 				TSheetList.TListButton.lbJump
 			});
-			this.FGroupsList.List.AddListColumn(GKL.LSList[185], 350, false);
+			this.FGroupsList.List.AddListColumn(LangMan.LSList[185], 350, false);
 
 			this.FNotesList = new TSheetList(this.SheetNotes);
 			this.FNotesList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
@@ -378,19 +359,19 @@ namespace GKUI
 
 		public void SetLang()
 		{
-			this.btnAccept.Text = GKL.LSList[97];
-			this.btnCancel.Text = GKL.LSList[98];
-			this.Text = GKL.LSList[189];
-			this.SheetTasks.Text = GKL.LSList[60];
-			this.SheetCommunications.Text = GKL.LSList[61];
-			this.SheetGroups.Text = GKL.LSList[58];
-			this.SheetNotes.Text = GKL.LSList[54];
-			this.Label1.Text = GKL.LSList[125];
-			this.Label2.Text = GKL.LSList[178];
-			this.Label3.Text = GKL.LSList[117];
-			this.Label6.Text = GKL.LSList[179];
-			this.Label4.Text = GKL.LSList[180];
-			this.Label5.Text = GKL.LSList[181];
+			this.btnAccept.Text = LangMan.LSList[97];
+			this.btnCancel.Text = LangMan.LSList[98];
+			this.Text = LangMan.LSList[189];
+			this.SheetTasks.Text = LangMan.LSList[60];
+			this.SheetCommunications.Text = LangMan.LSList[61];
+			this.SheetGroups.Text = LangMan.LSList[58];
+			this.SheetNotes.Text = LangMan.LSList[54];
+			this.Label1.Text = LangMan.LSList[125];
+			this.Label2.Text = LangMan.LSList[178];
+			this.Label3.Text = LangMan.LSList[117];
+			this.Label6.Text = LangMan.LSList[179];
+			this.Label4.Text = LangMan.LSList[180];
+			this.Label5.Text = LangMan.LSList[181];
 		}
 	}
 }

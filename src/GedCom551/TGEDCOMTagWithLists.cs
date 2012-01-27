@@ -2,13 +2,13 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
 
 namespace GedCom551
 {
 	public class TGEDCOMTagWithLists : TGEDCOMTag
 	{
-		private TEnumSet FLists;
+		private EnumSet FLists;
 		protected TGEDCOMListEx<TGEDCOMNotes> _Notes;
 		protected TGEDCOMListEx<TGEDCOMSourceCitation> _SourceCitations;
 		protected TGEDCOMListEx<TGEDCOMMultimediaLink> _MultimediaLinks;
@@ -28,17 +28,17 @@ namespace GedCom551
 			get { return this._MultimediaLinks; }
 		}
 
-		protected override void CreateObj(TGEDCOMObject AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
 		{
 			base.CreateObj(AOwner, AParent);
-			this.FLists = TEnumSet.Create();
+			this.FLists = EnumSet.Create();
 
 			this._Notes = new TGEDCOMListEx<TGEDCOMNotes>(this);
 			this._SourceCitations = new TGEDCOMListEx<TGEDCOMSourceCitation>(this);
 			this._MultimediaLinks = new TGEDCOMListEx<TGEDCOMMultimediaLink>(this);
 		}
 
-		protected void SetLists(TEnumSet ALists)
+		protected void SetLists(EnumSet ALists)
 		{
 			this.FLists = ALists;
 		}
@@ -74,7 +74,7 @@ namespace GedCom551
 			this._MultimediaLinks.ReplaceXRefs(aMap);
 		}
 
-		public override void ResetOwner(TGEDCOMObject AOwner)
+		public override void ResetOwner(TGEDCOMTree AOwner)
 		{
 			base.ResetOwner(AOwner);
 
@@ -92,7 +92,7 @@ namespace GedCom551
 			this._MultimediaLinks.SaveToStream(AStream);
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, Type AClass)
+		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 			if (ATag == "NOTE" && this.FLists.InSet(TGEDCOMSubList.stNotes))
@@ -113,7 +113,7 @@ namespace GedCom551
 					}
 					else
 					{
-						Result = base.AddTag(ATag, AValue, AClass);
+						Result = base.AddTag(ATag, AValue, ATagConstructor);
 					}
 				}
 			}
@@ -134,7 +134,7 @@ namespace GedCom551
 			return base.IsEmpty() && this._Notes.Count == 0 && this._SourceCitations.Count == 0 && this._MultimediaLinks.Count == 0;
 		}
 
-		public TGEDCOMTagWithLists(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMTagWithLists(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
 		}
 	}

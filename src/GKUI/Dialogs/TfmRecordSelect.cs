@@ -4,8 +4,12 @@ using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKSys;
 using GKUI.Lists;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI
 {
@@ -256,10 +260,10 @@ namespace GKUI
 			this.FLocalFilter = new TPersonsFilter();
 			this.FLocalFilter.List = TPersonsFilter.TListFilterMode.flSelector;
 			this.FFilter = "*";
-			this.Text = GKL.LSList[105];
-			this.btnCreate.Text = GKL.LSList[101];
-			this.btnSelect.Text = GKL.LSList[100];
-			this.btnCancel.Text = GKL.LSList[98];
+			this.Text = LangMan.LSList[105];
+			this.btnCreate.Text = LangMan.LSList[101];
+			this.btnSelect.Text = LangMan.LSList[100];
+			this.btnCancel.Text = LangMan.LSList[98];
 		}
 	}
 }

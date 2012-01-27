@@ -5,8 +5,12 @@ using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Sys;
+using GKSys;
 using GKUI.Lists;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI
 {
@@ -256,23 +260,29 @@ namespace GKUI
 		private void SetEvent([In] TGEDCOMCustomEvent Value)
 		{
 			this.FEvent = Value;
+
 			if (this.FEvent is TGEDCOMFamilyEvent)
 			{
 				for (int i = 0; i <= TGenEngine.FamilyEvents.Length - 1; i++)
 				{
-					this.EditEventType.Items.Add(GKL.LSList[(int)TGenEngine.FamilyEvents[i].Name - 1]);
+					this.EditEventType.Items.Add(LangMan.LSList[(int)TGenEngine.FamilyEvents[i].Name - 1]);
 				}
-				this.EditEventType.SelectedIndex = TGenEngine.GetFamilyEventIndex(this.FEvent.Name);
+
+				int idx = TGenEngine.GetFamilyEventIndex(this.FEvent.Name);
+				if (idx < 0) idx = 0;
+				this.EditEventType.SelectedIndex = idx;
 			}
 			else
 			{
 				for (int i = 0; i <= TGenEngine.PersonEvents.Length - 1; i++)
 				{
-					this.EditEventType.Items.Add(GKL.LSList[(int)TGenEngine.PersonEvents[i].Name - 1]);
+					this.EditEventType.Items.Add(LangMan.LSList[(int)TGenEngine.PersonEvents[i].Name - 1]);
 				}
 
 				int idx = TGenEngine.GetPersonEventIndex(this.FEvent.Name);
+				if (idx < 0) idx = 0;
 				this.EditEventType.SelectedIndex = idx;
+
 				if (idx >= 0 && TGenEngine.PersonEvents[idx].Kind == TGenEngine.TPersonEventKind.ekFact)
 				{
 					this.EditAttribute.Text = this.FEvent.StringValue;
@@ -573,19 +583,19 @@ namespace GKUI
 
 			for (int i = 0; i <= TGenEngine.DateKinds.Length - 1; i++)
 			{
-				this.EditEventDateType.Items.Add(GKL.LSList[(int)TGenEngine.DateKinds[i].Name - 1]);
+				this.EditEventDateType.Items.Add(LangMan.LSList[(int)TGenEngine.DateKinds[i].Name - 1]);
 			}
 
 			TGEDCOMCalendar gc = TGEDCOMCalendar.dcGregorian;
 			do
 			{
-				this.cbDate1Calendar.Items.Add(GKL.LSList[(int)TGenEngine.DateCalendars[(int)gc] - 1]);
-				this.cbDate2Calendar.Items.Add(GKL.LSList[(int)TGenEngine.DateCalendars[(int)gc] - 1]);
-				this.cbDate1Calendar.SelectedIndex = 0;
-				this.cbDate2Calendar.SelectedIndex = 0;
+				this.cbDate1Calendar.Items.Add(LangMan.LSList[(int)TGenEngine.DateCalendars[(int)gc] - 1]);
+				this.cbDate2Calendar.Items.Add(LangMan.LSList[(int)TGenEngine.DateCalendars[(int)gc] - 1]);
 				gc++;
 			}
 			while (gc != (TGEDCOMCalendar)6);
+			this.cbDate1Calendar.SelectedIndex = 0;
+			this.cbDate2Calendar.SelectedIndex = 0;
 
 			this.FLocation = null;
 
@@ -601,19 +611,19 @@ namespace GKUI
 			this.FSourcesList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
 			this.Base.SetupRecSourcesList(this.FSourcesList);
 
-			this.btnAccept.Text = GKL.LSList[97];
-			this.btnCancel.Text = GKL.LSList[98];
-			this.btnAddress.Text = GKL.LSList[82] + "...";
-			this.SheetCommon.Text = GKL.LSList[144];
-			this.SheetNotes.Text = GKL.LSList[54];
-			this.SheetMultimedia.Text = GKL.LSList[55];
-			this.SheetSources.Text = GKL.LSList[56];
-			this.Label1.Text = GKL.LSList[203];
-			this.LabelAttr.Text = GKL.LSList[202];
-			this.Label2.Text = GKL.LSList[204];
-			this.Label3.Text = GKL.LSList[139];
-			this.Label4.Text = GKL.LSList[205];
-			this.Label5.Text = GKL.LSList[206];
+			this.btnAccept.Text = LangMan.LSList[97];
+			this.btnCancel.Text = LangMan.LSList[98];
+			this.btnAddress.Text = LangMan.LSList[82] + "...";
+			this.SheetCommon.Text = LangMan.LSList[144];
+			this.SheetNotes.Text = LangMan.LSList[54];
+			this.SheetMultimedia.Text = LangMan.LSList[55];
+			this.SheetSources.Text = LangMan.LSList[56];
+			this.Label1.Text = LangMan.LSList[203];
+			this.LabelAttr.Text = LangMan.LSList[202];
+			this.Label2.Text = LangMan.LSList[204];
+			this.Label3.Text = LangMan.LSList[139];
+			this.Label4.Text = LangMan.LSList[205];
+			this.Label5.Text = LangMan.LSList[206];
 		}
 		
 	}

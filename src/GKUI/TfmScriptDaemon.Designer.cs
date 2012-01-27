@@ -17,6 +17,7 @@ namespace GKUI
 		private System.Windows.Forms.ToolBarButton btnSaveScript;
 		private System.Windows.Forms.SaveFileDialog SaveDialog1;
 		private System.Windows.Forms.ToolBarButton btnNewScript;
+		private System.Windows.Forms.SplitContainer splitContainer1;
 
 		private void InitializeComponent()
 		{
@@ -26,10 +27,15 @@ namespace GKUI
 			this.btnSaveScript = new System.Windows.Forms.ToolBarButton();
 			this.ToolButton2 = new System.Windows.Forms.ToolBarButton();
 			this.btnRun = new System.Windows.Forms.ToolBarButton();
-			this.mmDebugOutput = new System.Windows.Forms.TextBox();
 			this.OpenDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.SaveDialog1 = new System.Windows.Forms.SaveFileDialog();
+			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+			this.mmDebugOutput = new System.Windows.Forms.TextBox();
 			this.mmScriptText = new System.Windows.Forms.TextBox();
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+			this.splitContainer1.Panel1.SuspendLayout();
+			this.splitContainer1.Panel2.SuspendLayout();
+			this.splitContainer1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// ToolBar1
@@ -78,17 +84,6 @@ namespace GKUI
 			this.btnRun.Name = "btnRun";
 			this.btnRun.ToolTipText = "Выполнить";
 			// 
-			// mmDebugOutput
-			// 
-			this.mmDebugOutput.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.mmDebugOutput.Location = new System.Drawing.Point(0, 319);
-			this.mmDebugOutput.Multiline = true;
-			this.mmDebugOutput.Name = "mmDebugOutput";
-			this.mmDebugOutput.ReadOnly = true;
-			this.mmDebugOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.mmDebugOutput.Size = new System.Drawing.Size(712, 115);
-			this.mmDebugOutput.TabIndex = 2;
-			// 
 			// OpenDialog1
 			// 
 			this.OpenDialog1.Filter = "Скрипты|*.lua";
@@ -98,30 +93,63 @@ namespace GKUI
 			this.SaveDialog1.DefaultExt = "lua";
 			this.SaveDialog1.Filter = "Скрипты|*.lua";
 			// 
+			// splitContainer1
+			// 
+			this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.splitContainer1.Location = new System.Drawing.Point(0, 28);
+			this.splitContainer1.Name = "splitContainer1";
+			this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+			// 
+			// splitContainer1.Panel1
+			// 
+			this.splitContainer1.Panel1.Controls.Add(this.mmScriptText);
+			// 
+			// splitContainer1.Panel2
+			// 
+			this.splitContainer1.Panel2.Controls.Add(this.mmDebugOutput);
+			this.splitContainer1.Size = new System.Drawing.Size(712, 406);
+			this.splitContainer1.SplitterDistance = 238;
+			this.splitContainer1.TabIndex = 3;
+			// 
+			// mmDebugOutput
+			// 
+			this.mmDebugOutput.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.mmDebugOutput.Location = new System.Drawing.Point(0, 0);
+			this.mmDebugOutput.Multiline = true;
+			this.mmDebugOutput.Name = "mmDebugOutput";
+			this.mmDebugOutput.ReadOnly = true;
+			this.mmDebugOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+			this.mmDebugOutput.Size = new System.Drawing.Size(712, 164);
+			this.mmDebugOutput.TabIndex = 3;
+			// 
 			// mmScriptText
 			// 
 			this.mmScriptText.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.mmScriptText.Location = new System.Drawing.Point(0, 28);
+			this.mmScriptText.Location = new System.Drawing.Point(0, 0);
 			this.mmScriptText.Multiline = true;
 			this.mmScriptText.Name = "mmScriptText";
 			this.mmScriptText.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.mmScriptText.Size = new System.Drawing.Size(712, 291);
-			this.mmScriptText.TabIndex = 1;
+			this.mmScriptText.Size = new System.Drawing.Size(712, 238);
+			this.mmScriptText.TabIndex = 2;
 			// 
 			// TfmScriptDaemon
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
 			this.ClientSize = new System.Drawing.Size(712, 434);
-			this.Controls.Add(this.mmScriptText);
+			this.Controls.Add(this.splitContainer1);
 			this.Controls.Add(this.ToolBar1);
-			this.Controls.Add(this.mmDebugOutput);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.Name = "TfmScriptDaemon";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "ScriptDaemon";
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.TfmScriptDaemon_Closing);
+			this.splitContainer1.Panel1.ResumeLayout(false);
+			this.splitContainer1.Panel1.PerformLayout();
+			this.splitContainer1.Panel2.ResumeLayout(false);
+			this.splitContainer1.Panel2.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+			this.splitContainer1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}

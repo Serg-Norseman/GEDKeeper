@@ -1,6 +1,10 @@
 using System;
 
-using GKCore.Sys;
+using GKSys;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKCore
 {
@@ -17,7 +21,7 @@ namespace GKCore
 
 			public void Free()
 			{
-				TObjectHelper.Free(this);
+				SysUtils.Free(this);
 			}
 		}
 
@@ -29,28 +33,31 @@ namespace GKCore
 			public int ExtData;
 			public bool InTree;
 			public TGraph.TGraphLink NextLink;
+
 			public void Free()
 			{
-				TObjectHelper.Free(this);
+				SysUtils.Free(this);
 			}
-	
 		}
 
 		public class TCandidate
 		{
 			public TGraph.TGraphNode Node;
 			public TGraph.TCandidate NextCandidate;
+
 			public void Free()
 			{
-				TObjectHelper.Free(this);
+				SysUtils.Free(this);
 			}
 		}
+
 		public enum TNodeStatus : byte
 		{
 			nsNotInList,
 			nsWasInList,
 			nsNowInList
 		}
+
 		public TGraph.TGraphNode NodeList;
 		protected bool Disposed_;
 
@@ -94,6 +101,7 @@ namespace GKCore
 			}
 			this.NodeList = null;
 		}
+
 		public void CreateLink(TGraph.TGraphNode Node_1, TGraph.TGraphNode Node_2, int Cost, int ExtData1, int ExtData2)
 		{
 			if (Node_1 != null && Node_2 != null)
@@ -181,6 +189,7 @@ namespace GKCore
 				}
 			}
 		}
+
 		public void FindPathTree(TGraph.TGraphNode root)
 		{
 			if (root != null)
@@ -264,6 +273,7 @@ namespace GKCore
 				}
 			}
 		}
+
 		public void RemoveLinkFromNode(TGraph.TGraphNode n1, TGraph.TGraphNode n2)
 		{
 			TGraph.TGraphLink link = null;
@@ -293,6 +303,7 @@ namespace GKCore
 				next_link.Free();
 			}
 		}
+
 		public void ResetPathTree()
 		{
 			TGraph.TGraphNode node = this.NodeList;
@@ -321,7 +332,7 @@ namespace GKCore
 
 		public void Free()
 		{
-			TObjectHelper.Free(this);
+			SysUtils.Free(this);
 		}
 	}
 }

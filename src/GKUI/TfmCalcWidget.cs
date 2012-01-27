@@ -1,9 +1,12 @@
 ﻿using System;
-using System.Drawing;
 using System.Windows.Forms;
 
 using GKCore;
-using GKCore.Sys;
+using GKSys;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKUI
 {
@@ -73,8 +76,8 @@ namespace GKUI
 			this.InitializeComponent();
 			this.calc = new TCalculator();
 			this.lbOutput.Items.Clear();
-			this.Text = GKL.LSList[30];
-			this.chkPutToClipboard.Text = GKL.LSList[166];
+			this.Text = LangMan.LSList[30];
+			this.chkPutToClipboard.Text = LangMan.LSList[166];
 		}
 	}
 }

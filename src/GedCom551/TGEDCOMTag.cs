@@ -10,8 +10,13 @@ namespace GedCom551
 			get	{ return base.GetParentRecord(); }
 		}
 
-		public TGEDCOMTag(TGEDCOMObject AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMTag(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
+		}
+
+		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+		{
+			return new TGEDCOMTag(AOwner, AParent, AName, AValue);
 		}
 	}
 }

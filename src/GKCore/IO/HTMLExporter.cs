@@ -1,9 +1,13 @@
 using System;
 using System.IO;
 
-namespace GKCore
+/// <summary>
+/// Localization: unknown
+/// </summary>
+
+namespace GKCore.IO
 {
-	public abstract class THTMLExporter : TExporter
+	public abstract class HTMLExporter : Exporter
 	{
 		protected void WriteHeader(StreamWriter aStream, string aTitle)
 		{
@@ -22,7 +26,7 @@ namespace GKCore
 			aStream.WriteLine("</html>");
 		}
 
-		public THTMLExporter(TGenEngine aEngine, string aPath) : base(aEngine, aPath)
+		public HTMLExporter(TGenEngine aEngine, string aPath) : base(aEngine, aPath)
 		{
 		}
 	}

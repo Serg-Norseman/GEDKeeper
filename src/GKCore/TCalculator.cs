@@ -2,7 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-using GKCore.Sys;
+using GKSys;
+
+/// <summary>
+/// Localization: unknown
+/// </summary>
 
 namespace GKCore
 {
@@ -107,16 +111,7 @@ namespace GKCore
 
 		private double tofloat(bool B)
 		{
-			double Result;
-			if (B)
-			{
-				Result = 1.0;
-			}
-			else
-			{
-				Result = 0.0;
-			}
-			return Result;
+			return ((B) ? 1.0 : 0.0);
 		}
 
 		private double fmod(double x, double y)
@@ -414,7 +409,7 @@ namespace GKCore
 								{
 									return;
 								}
-								goto IL_B09;
+								goto Error;
 							}
 							else
 							{
@@ -436,7 +431,7 @@ namespace GKCore
 									{
 										return;
 									}
-									goto IL_B09;
+									goto Error;
 								}
 							}
 						}
@@ -613,11 +608,13 @@ namespace GKCore
 							this.FToken = TCalculator.TToken.tkIDENT;
 							return;
 						}
+
 						char c = this.FExpression[this.FPtr - 1];
 						this.FPtr++;
+
 						switch (c)
 						{
-							case '!':
+							case '!': //chk
 							{
 								this.FToken = TCalculator.TToken.tkNOT;
 								if (this.FExpression[this.FPtr - 1] == '=')
@@ -628,45 +625,7 @@ namespace GKCore
 								}
 								return;
 							}
-							case '"':
-							case '#':
-							case '$':
-							case '\'':
-							case ',':
-							case '.':
-							case '0':
-							case '1':
-							case '2':
-							case '3':
-							case '4':
-							case '5':
-							case '6':
-							case '7':
-							case '8':
-							case '9':
-							case ':':
-							{
-								IL_898:
-								if (c == '^')
-								{
-									this.FToken = TCalculator.TToken.tkXOR;
-									return;
-								}
-								if (c == '|')
-								{
-									this.FToken = TCalculator.TToken.tkOR;
-									return;
-								}
-								if (c != '~')
-								{
-									this.FToken = TCalculator.TToken.tkERROR;
-									this.FPtr--;
-									return;
-								}
-								this.FToken = TCalculator.TToken.tkINV;
-								return;
-							}
-							case '%':
+							case '%': //chk
 							{
 								this.FToken = TCalculator.TToken.tkMOD;
 								if (this.FExpression[this.FPtr - 1] == '%')
@@ -677,22 +636,22 @@ namespace GKCore
 								}
 								return;
 							}
-							case '&':
+							case '&': //chk
 							{
 								this.FToken = TCalculator.TToken.tkAND;
 								return;
 							}
-							case '(':
+							case '(': //chk
 							{
 								this.FToken = TCalculator.TToken.tkLBRACE;
 								return;
 							}
-							case ')':
+							case ')': //chk
 							{
 								this.FToken = TCalculator.TToken.tkRBRACE;
 								return;
 							}
-							case '*':
+							case '*': //chk
 							{
 								this.FToken = TCalculator.TToken.tkMUL;
 								if (this.FExpression[this.FPtr - 1] == '*')
@@ -703,27 +662,27 @@ namespace GKCore
 								}
 								return;
 							}
-							case '+':
+							case '+': //chk
 							{
 								this.FToken = TCalculator.TToken.tkADD;
 								return;
 							}
-							case '-':
+							case '-': //chk
 							{
 								this.FToken = TCalculator.TToken.tkSUB;
 								return;
 							}
-							case '/':
+							case '/': //chk
 							{
 								this.FToken = TCalculator.TToken.tkDIV;
 								return;
 							}
-							case ';':
+							case ';': //chk
 							{
 								this.FToken = TCalculator.TToken.tkSEMICOLON;
 								return;
 							}
-							case '<':
+							case '<': //chk
 							{
 								this.FToken = TCalculator.TToken.tkLT;
 								if (this.FExpression[this.FPtr - 1] == '=')
@@ -740,7 +699,7 @@ namespace GKCore
 								}
 								return;
 							}
-							case '=':
+							case '=': //chk
 							{
 								this.FToken = TCalculator.TToken.tkASSIGN;
 								if (this.FExpression[this.FPtr - 1] == '=')
@@ -751,7 +710,7 @@ namespace GKCore
 								}
 								return;
 							}
-							case '>':
+							case '>': //chk
 							{
 								this.FToken = TCalculator.TToken.tkGT;
 								if (this.FExpression[this.FPtr - 1] == '=')
@@ -768,12 +727,32 @@ namespace GKCore
 								}
 								return;
 							}
+							case '^': //chk
+							{
+								this.FToken = TCalculator.TToken.tkXOR;
+								return;
+							}
+							case '|': //chk
+							{
+								this.FToken = TCalculator.TToken.tkOR;
+								return;
+							}
+							case '~': //chk
+							{
+								this.FToken = TCalculator.TToken.tkINV;
+								return;
+							}
+							default: //chk
+								{
+									this.FToken = TCalculator.TToken.tkERROR;
+									this.FPtr--;
+									return;
+								}
 						}
-						//goto IL_898;
-						//alert!!! HOW IS IT?????!!!!
 					}
 				}
-				IL_B09:
+
+				Error:
 				this.FToken = TCalculator.TToken.tkERROR;
 			}
 		}
