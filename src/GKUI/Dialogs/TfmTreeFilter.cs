@@ -9,7 +9,7 @@ using GKUI.Controls;
 using GKUI.Lists;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKUI
@@ -88,7 +88,7 @@ namespace GKUI
 				{
 					string xref = tmp_refs[i];
 					TGEDCOMIndividualRecord p = this.Base.Tree.XRefIndex_Find(xref) as TGEDCOMIndividualRecord;
-					this.FPersonsList.List.AddItem(TGenEngine.GetNameStr(p, true, false), p);
+					if (p != null) this.FPersonsList.List.AddItem(p.aux_GetNameStr(true, false), p);
 				}
 			}
 		}

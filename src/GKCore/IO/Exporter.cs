@@ -3,10 +3,9 @@ using System.IO;
 
 using GedCom551;
 using GKCore.Settings;
-using GKSys;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKCore.IO

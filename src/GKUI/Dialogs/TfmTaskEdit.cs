@@ -53,13 +53,15 @@ namespace GKUI
 					TGoalType gt = TGoalType.gtOther;
 					TGenEngine.GetTaskGoal(this.Base.Tree, this.FTask, ref gt, ref this.FTempRec);
 					this.cbGoalType.SelectedIndex = (int)((sbyte)gt);
+					string st;
 
 					switch (gt) {
 						case TGoalType.gtIndividual:
-							this.EditGoal.Text = TGenEngine.GetNameStr((TGEDCOMIndividualRecord)this.FTempRec, true, false);
+							st = ((this.FTempRec == null) ? "" : (this.FTempRec as TGEDCOMIndividualRecord).aux_GetNameStr(true, false));
+							this.EditGoal.Text = st;
 							break;
 						case TGoalType.gtFamily:
-							this.EditGoal.Text = TGenEngine.GetFamilyStr((TGEDCOMFamilyRecord)this.FTempRec);
+							this.EditGoal.Text = TGenEngine.aux_GetFamilyStr((TGEDCOMFamilyRecord)this.FTempRec);
 							break;
 						case TGoalType.gtSource:
 							this.EditGoal.Text = ((TGEDCOMSourceRecord)this.FTempRec).FiledByEntry;
@@ -126,11 +128,11 @@ namespace GKUI
 			switch (gt) {
 				case TGoalType.gtIndividual:
 					this.FTempRec = this.Base.SelectPerson(null, TGenEngine.TTargetMode.tmNone, TGEDCOMSex.svNone);
-					this.EditGoal.Text = TGenEngine.GetNameStr((TGEDCOMIndividualRecord)this.FTempRec, true, false);
+					this.EditGoal.Text = ((this.FTempRec == null) ? "" : (this.FTempRec as TGEDCOMIndividualRecord).aux_GetNameStr(true, false));
 					break;
 				case TGoalType.gtFamily:
 					this.FTempRec = this.Base.SelectRecord(TGEDCOMRecordType.rtFamily, new object[0]);
-					this.EditGoal.Text = TGenEngine.GetFamilyStr((TGEDCOMFamilyRecord)this.FTempRec);
+					this.EditGoal.Text = TGenEngine.aux_GetFamilyStr((TGEDCOMFamilyRecord)this.FTempRec);
 					break;
 				case TGoalType.gtSource:
 					this.FTempRec = this.Base.SelectRecord(TGEDCOMRecordType.rtSource, new object[0]);

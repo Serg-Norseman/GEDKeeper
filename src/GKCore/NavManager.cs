@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using GKSys;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKCore
@@ -30,6 +30,8 @@ namespace GKCore
 
 		private void SetCurrent([In] object Value)
 		{
+			if (this.FCurrent == Value) return;
+
 			if (this.FCurrent != null)
 			{
 				this.FStackBackward.Push(this.FCurrent);

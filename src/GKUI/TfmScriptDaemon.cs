@@ -2,8 +2,8 @@
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
-
 using GKCore;
 using GKSys;
 
@@ -94,7 +94,7 @@ namespace GKUI
 		{
 			if (this.CheckModified() && this.OpenDialog1.ShowDialog() == DialogResult.OK)
 			{
-				using (StreamReader strd = new StreamReader(File.OpenRead(this.OpenDialog1.FileName)))
+				using (StreamReader strd = new StreamReader(File.OpenRead(this.OpenDialog1.FileName), Encoding.GetEncoding(1251)))
 				{
 					this.mmScriptText.Text = strd.ReadToEnd();
 					this.FileName = this.OpenDialog1.FileName;
@@ -109,7 +109,7 @@ namespace GKUI
 			this.SaveDialog1.FileName = this.FileName;
 			if (this.SaveDialog1.ShowDialog() == DialogResult.OK)
 			{
-				using (StreamWriter strd = new StreamWriter(this.SaveDialog1.FileName, false))
+				using (StreamWriter strd = new StreamWriter(this.SaveDialog1.FileName, false, Encoding.GetEncoding(1251)))
 				{
 					strd.Write(this.mmScriptText.Text);
 					this.FileName = this.SaveDialog1.FileName;

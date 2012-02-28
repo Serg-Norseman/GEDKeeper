@@ -3,7 +3,7 @@ using System;
 using GedCom551;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKCore.Commands

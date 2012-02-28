@@ -5,7 +5,7 @@ using GKCore;
 using GKUI.Controls;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKUI.Lists

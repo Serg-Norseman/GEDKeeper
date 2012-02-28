@@ -66,6 +66,7 @@ namespace GKUI
 				this.edPieceSurnamePrefix.Text = np.Pieces.SurnamePrefix;
 				this.edPieceSuffix.Text = np.Pieces.Suffix;
 			}
+
 			if (this.FPerson.ChildToFamilyLinks.Count != 0)
 			{
 				TGEDCOMFamilyRecord family = this.FPerson.ChildToFamilyLinks[0].Family;
@@ -78,7 +79,7 @@ namespace GKUI
 					this.btnFatherAdd.Enabled = false;
 					this.btnFatherDelete.Enabled = true;
 					this.btnFatherSel.Enabled = true;
-					this.EditFather.Text = TGenEngine.GetNameStr(rel_person, true, false);
+					this.EditFather.Text = rel_person.aux_GetNameStr(true, false);
 				}
 				else
 				{
@@ -87,13 +88,14 @@ namespace GKUI
 					this.btnFatherSel.Enabled = false;
 					this.EditFather.Text = "";
 				}
+
 				rel_person = (family.Wife.Value as TGEDCOMIndividualRecord);
 				if (rel_person != null)
 				{
 					this.btnMotherAdd.Enabled = false;
 					this.btnMotherDelete.Enabled = true;
 					this.btnMotherSel.Enabled = true;
-					this.EditMother.Text = TGenEngine.GetNameStr(rel_person, true, false);
+					this.EditMother.Text = rel_person.aux_GetNameStr(true, false);
 				}
 				else
 				{
@@ -143,8 +145,9 @@ namespace GKUI
 					}
 					if (rel_person != null)
 					{
-						rel_name = TGenEngine.GetNameStr(rel_person, true, false);
+						rel_name = rel_person.aux_GetNameStr(true, false);
 					}
+
 					ListViewItem item = this.FSpousesList.List.AddItem(idx.ToString(), family);
 					item.SubItems.Add(rel_name);
 					item.SubItems.Add(TGenEngine.GetMarriageDate(family, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
@@ -236,8 +239,8 @@ namespace GKUI
 			{
 				if (Action >= TGenEngine.TRecAction.raMoveUp && Action < (TGenEngine.TRecAction)6)
 				{
-					TGEDCOMCustomEvent @event = ItemData as TGEDCOMCustomEvent;
-					int idx = this.FPerson.IndividualEvents.IndexOfObject(@event);
+					TGEDCOMCustomEvent evt = ItemData as TGEDCOMCustomEvent;
+					int idx = this.FPerson.IndividualEvents.IndexOfObject(evt);
 					if (Action != TGenEngine.TRecAction.raMoveUp)
 					{
 						if (Action == TGenEngine.TRecAction.raMoveDown)
@@ -598,7 +601,7 @@ namespace GKUI
 
 		private void btnNameCopy1_Click(object sender, EventArgs e)
 		{
-			Clipboard.SetDataObject(TGenEngine.GetNameStr(this.FPerson, true, false));
+			Clipboard.SetDataObject(this.FPerson.aux_GetNameStr(true, false));
 		}
 
 		private void btnPortraitAdd_Click(object sender, EventArgs e)
@@ -652,8 +655,8 @@ namespace GKUI
 
 		private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			//fixme: здесь надо бы блокировать интерфейс, а не обновлять его
-			//this.ControlsRefresh();
+			// FIXME: здесь надо бы блокировать интерфейс, а не обновлять его
+			// this.ControlsRefresh();
 		}
 
 		public TfmPersonEdit(TfmBase aBase)

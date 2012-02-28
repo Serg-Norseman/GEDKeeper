@@ -8,7 +8,7 @@ using GKSys;
 using GKUI.Lists;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKUI
@@ -79,7 +79,7 @@ namespace GKUI
 					if (this.FTempInd != null)
 					{
 						this.EditDir.SelectedIndex = (int)dir;
-						this.EditCorresponder.Text = TGenEngine.GetNameStr(this.FTempInd, true, false);
+						this.EditCorresponder.Text = this.FTempInd.aux_GetNameStr(true, false);
 					}
 					else
 					{
@@ -116,7 +116,7 @@ namespace GKUI
 		private void btnPersonAdd_Click(object sender, EventArgs e)
 		{
 			this.FTempInd = this.Base.SelectPerson(null, TGenEngine.TTargetMode.tmNone, TGEDCOMSex.svNone);
-			this.EditCorresponder.Text = TGenEngine.GetNameStr(this.FTempInd, true, false);
+			this.EditCorresponder.Text = ((this.FTempInd == null) ? "" : this.FTempInd.aux_GetNameStr(true, false));
 		}
 
 		public TfmCommunicationEdit(TfmBase aBase)

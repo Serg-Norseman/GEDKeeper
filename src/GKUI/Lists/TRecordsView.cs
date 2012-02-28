@@ -1,12 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using GedCom551;
 using GKCore;
-using GKCore.Settings;
 using GKSys;
 using GKUI.Controls;
+using TimSort;
 
 /// <summary>
 /// Localization: clean
@@ -26,6 +27,10 @@ namespace GKUI.Lists
 
 		private int FXSortColumn = 0;
 		private SortOrder FXSortOrder = SortOrder.Ascending;
+		private int FXSortFactor;
+
+		private TExtListItem[] FCache;
+		private int FCacheFirstItem;
 
 		public TList ContentList
 		{
@@ -75,6 +80,7 @@ namespace GKUI.Lists
 			base.ColumnClick += new ColumnClickEventHandler(this.List_ColumnClick);
 
 			base.RetrieveVirtualItem += new RetrieveVirtualItemEventHandler(this.List_RetrieveVirtualItem);
+			base.CacheVirtualItems += new CacheVirtualItemsEventHandler(this.List_CacheVirtualItems);
 			base.VirtualMode = true;
 		}
 
@@ -109,31 +115,93 @@ namespace GKUI.Lists
 			base.Invalidate();
 		}
 
-		private void SortContents()
+		private class ValItem
 		{
-			this.FContentList.Sort(new TListSortCompare(this.xCompare));
+			public string ColumnValue;
+			public object Record;
 		}
 
-		private int xCompare(object Item1, object Item2)
+		private void SortContents()
 		{
-			string val1, val2;
-			TGEDCOMRecord rec1, rec2;
+			List<ValItem> buffer = new List<ValItem>();
 
-			rec1 = (TGEDCOMRecord)Item1;
-			rec2 = (TGEDCOMRecord)Item2;
+			int count = FContentList.Count;
+			for (int i = 0; i < count; i++) {
+				TGEDCOMRecord rec = (TGEDCOMRecord)FContentList[i];
 
-			if (FXSortColumn == 0) {
-				val1 = TGenEngine.GetXRefNum(rec1);
-				val2 = TGenEngine.GetXRefNum(rec2);
-			} else {
-				FListMan.Fetch(rec1);
-				val1 = FListMan.GetColumnValue(FXSortColumn, FIsMainList);
-				FListMan.Fetch(rec2);
-				val2 = FListMan.GetColumnValue(FXSortColumn, FIsMainList);
+				ValItem vi = new ValItem();
+				vi.Record = rec;
+
+				if (FXSortColumn == 0) {
+					vi.ColumnValue = TGenEngine.GetXRefNum(rec);
+				} else {
+					FListMan.Fetch(rec);
+					vi.ColumnValue = FListMan.GetColumnValue(FXSortColumn, FIsMainList);
+				}
+
+				buffer.Add(vi);
 			}
 
-			int f = (FXSortOrder == SortOrder.Ascending ? 1 : -1);
-			return SysUtils.agCompare(val1, val2) * f;
+			FXSortFactor = (FXSortOrder == SortOrder.Ascending ? 1 : -1);
+			ListTimSort<ValItem>.Sort(buffer, xCompare);
+
+			for (int i = 0; i < count; i++) FContentList[i] = buffer[i].Record;
+
+			this.ClearCache();
+		}
+
+		private int xCompare(ValItem Item1, ValItem Item2)
+		{
+			return SysUtils.agCompare(Item1.ColumnValue, Item2.ColumnValue) * FXSortFactor;
+		}
+
+		private TExtListItem GetListItem(int ItemIndex)
+		{
+			TExtListItem newItem;
+
+			if (ItemIndex < 0 || ItemIndex >= this.FContentList.Count) {
+				newItem = null;
+			} else {
+				TGEDCOMRecord rec = this.FContentList[ItemIndex] as TGEDCOMRecord;
+
+				newItem = new TExtListItem(TGenEngine.GetId(rec).ToString());
+				newItem.Data = rec;
+
+				this.FListMan.Fetch(rec);
+				this.FListMan.UpdateItem(newItem, this.FIsMainList);
+			}
+
+			return newItem;
+		}
+
+		private void List_CacheVirtualItems(object sender, CacheVirtualItemsEventArgs e)
+		{
+			// Only recreate the cache if we need to.
+			if (FCache != null && e.StartIndex >= FCacheFirstItem && e.EndIndex <= FCacheFirstItem + FCache.Length) return;
+
+			FCacheFirstItem = e.StartIndex;
+			int length = e.EndIndex - e.StartIndex + 1;
+
+			FCache = new TExtListItem[length];
+			for (int i = 0; i < FCache.Length; i++)
+			{
+				FCache[i] = GetListItem(FCacheFirstItem + i);
+			}
+		}
+
+		private void List_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
+		{
+			// If we have the item cached, return it. Otherwise, recreate it.
+			if (FCache != null && e.ItemIndex >= FCacheFirstItem && e.ItemIndex < FCacheFirstItem + FCache.Length) {
+				e.Item = FCache[e.ItemIndex - FCacheFirstItem];
+			} else {
+				e.Item = GetListItem(e.ItemIndex);
+			}
+		}
+
+		private void ClearCache()
+		{
+			FCache = null;
 		}
 
 		private void SetRecordType([In] TGEDCOMRecordType Value)
@@ -198,44 +266,6 @@ namespace GKUI.Lists
 					this.FListMan = null;
 					break;
 			}
-		}
-
-		private void List_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
-		{
-			if (e.ItemIndex < 0 || e.ItemIndex >= this.FContentList.Count)
-			{
-				e.Item = null;
-				return;
-			}
-
-			TGEDCOMRecord rec = this.FContentList[e.ItemIndex] as TGEDCOMRecord;
-
-			TExtListItem newItem = new TExtListItem(TGenEngine.GetId(rec).ToString());
-			newItem.Data = rec;
-
-			this.FListMan.Fetch(rec);
-			this.FListMan.UpdateItem(newItem, this.FIsMainList);
-
-			if (rec is TGEDCOMIndividualRecord) {
-				//&& not((cdsFocused in State) && (cdsSelected in State))
-				TGEDCOMIndividualRecord i_rec = (rec as TGEDCOMIndividualRecord);
-
-				TGlobalOptions gOptions = GKUI.TfmGEDKeeper.Instance.Options;
-
-				if ((i_rec.ChildToFamilyLinks.Count == 0) && (gOptions.ListPersons_HighlightUnparented))
-				{
-					newItem.BackColor = System.Drawing.Color.FromArgb(0xFFCACA);
-				}
-				else
-				{
-					if ((i_rec.SpouseToFamilyLinks.Count == 0) && (gOptions.ListPersons_HighlightUnmarried))
-					{
-						newItem.BackColor = System.Drawing.Color.FromArgb(0xFFFFCA);
-					}
-				}
-			}
-
-			e.Item = newItem;
 		}
 
 		public void UpdateContents(TGenEngine.TShieldState aShieldState, bool aTitles, TPersonsFilter aFilter, int aAutoSizeColumn)

@@ -9,7 +9,7 @@ using GKUI.Controls;
 using GKUI.Lists;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKUI
@@ -29,7 +29,7 @@ namespace GKUI
 
 		private bool GetInput(string aTitle, ref string aValue)
 		{
-			return InputBox.Query(aTitle, LangMan.LSList[202], ref aValue) && aValue.Trim() != "";
+			return InputBox.QueryText(aTitle, LangMan.LSList[202], ref aValue) && aValue.Trim() != "";
 		}
 
 		private void ListModify(object Sender, object ItemData, TGenEngine.TRecAction Action)

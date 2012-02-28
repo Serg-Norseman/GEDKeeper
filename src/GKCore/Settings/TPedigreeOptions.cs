@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using GKSys;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKCore.Settings

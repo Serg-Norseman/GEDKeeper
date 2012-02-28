@@ -75,6 +75,8 @@ namespace GKUI
 		private System.Windows.Forms.MenuItem miKinshipTerms;
 		private System.Windows.Forms.MenuItem miContext;
 		private System.Windows.Forms.MenuItem N11;
+		private System.Windows.Forms.MenuItem miLogSend;
+		private System.Windows.Forms.MenuItem N13;
 		private System.Windows.Forms.MenuItem miAbout;
 		private System.Windows.Forms.ContextMenu MenuMRU;
 		private System.Windows.Forms.ContextMenu MenuPedigree;
@@ -204,6 +206,8 @@ namespace GKUI
 			this.miFAQ = new System.Windows.Forms.MenuItem();
 			this.miContext = new System.Windows.Forms.MenuItem();
 			this.N12 = new System.Windows.Forms.MenuItem();
+			this.miLogSend = new System.Windows.Forms.MenuItem();
+			this.N13 = new System.Windows.Forms.MenuItem();
 			this.miAbout = new System.Windows.Forms.MenuItem();
 			this.OpenDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.SaveDialog1 = new System.Windows.Forms.SaveFileDialog();
@@ -216,7 +220,7 @@ namespace GKUI
 			// StatusBar
 			// 
 			this.StatusBar.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.StatusBar.Location = new System.Drawing.Point(0, 941);
+			this.StatusBar.Location = new System.Drawing.Point(0, 960);
 			this.StatusBar.Name = "StatusBar";
 			this.StatusBar.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
 									this.StatusBarPanel1,
@@ -875,6 +879,8 @@ namespace GKUI
 									this.miFAQ,
 									this.miContext,
 									this.N12,
+									this.miLogSend,
+									this.N13,
 									this.miAbout});
 			this.miHelp.Text = "Справка";
 			// 
@@ -908,9 +914,20 @@ namespace GKUI
 			this.N12.Index = 4;
 			this.N12.Text = "-";
 			// 
+			// miLogSend
+			// 
+			this.miLogSend.Index = 5;
+			this.miLogSend.Text = "Отправить журнал ошибок";
+			this.miLogSend.Click += new System.EventHandler(this.miLogSendClick);
+			// 
+			// N13
+			// 
+			this.N13.Index = 6;
+			this.N13.Text = "-";
+			// 
 			// miAbout
 			// 
-			this.miAbout.Index = 5;
+			this.miAbout.Index = 7;
 			this.miAbout.Text = "О программе...";
 			this.miAbout.Click += new System.EventHandler(this.miAboutClick);
 			// 
@@ -936,7 +953,7 @@ namespace GKUI
 			// 
 			this.AllowDrop = true;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-			this.ClientSize = new System.Drawing.Size(896, 961);
+			this.ClientSize = new System.Drawing.Size(896, 980);
 			this.Controls.Add(this.StatusBar);
 			this.Controls.Add(this.ToolBar1);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F);

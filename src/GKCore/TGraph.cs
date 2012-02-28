@@ -3,7 +3,7 @@ using System;
 using GKSys;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKCore
@@ -104,12 +104,8 @@ namespace GKCore
 
 		public void CreateLink(TGraph.TGraphNode Node_1, TGraph.TGraphNode Node_2, int Cost, int ExtData1, int ExtData2)
 		{
-			if (Node_1 != null && Node_2 != null)
+			if (Node_1 != null && Node_2 != null && Node_1 != Node_2)
 			{
-				if (object.Equals(Node_1, Node_2))
-				{
-					throw new Exception("You cannot make a link between a node and itself.");
-				}
 				TGraph.TGraphLink link = new TGraph.TGraphLink();
 				TGraph.TGraphLink link2 = new TGraph.TGraphLink();
 				link.Cost = Cost;

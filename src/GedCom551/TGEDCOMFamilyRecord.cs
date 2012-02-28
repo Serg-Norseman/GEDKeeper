@@ -232,6 +232,18 @@ namespace GedCom551
 			
 		}
 
+		public TGEDCOMIndividualRecord aux_GetSpouse(TGEDCOMIndividualRecord spouse)
+		{
+			TGEDCOMIndividualRecord husb = this.Husband.Value as TGEDCOMIndividualRecord;
+			TGEDCOMIndividualRecord wife = this.Wife.Value as TGEDCOMIndividualRecord;
+
+			if (spouse == husb) {
+				return wife;
+			} else {
+				return husb;
+			}
+		}
+
 		public TGEDCOMFamilyRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
 		}

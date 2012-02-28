@@ -226,7 +226,7 @@ namespace GKUI
 			// 
 			this.Label3.Location = new System.Drawing.Point(8, 216);
 			this.Label3.Name = "Label3";
-			this.Label3.Size = new System.Drawing.Size(130, 13);
+			this.Label3.Size = new System.Drawing.Size(175, 13);
 			this.Label3.TabIndex = 6;
 			this.Label3.Text = "Маска местожительства";
 			// 

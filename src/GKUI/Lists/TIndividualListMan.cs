@@ -6,10 +6,9 @@ using GKCore.Settings;
 using GKUI.Controls;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
-// fixme: change all ifs to switches
 namespace GKUI.Lists
 {
 	public sealed class TIndividualListMan : TListManager
@@ -108,7 +107,7 @@ namespace GKUI.Lists
 				{
 					bd_ev = ev;
 					int y = -1;
-					TGenEngine.GetIndependentDate(ev.Detail.Date, out y, out j, out d);
+					ev.Detail.Date.aux_GetIndependentDate(out y, out j, out d);
 					if (y > 0)
 					{
 						if (this.FYearMin > y) this.FYearMin = y;
@@ -126,82 +125,47 @@ namespace GKUI.Lists
 
 			if ((this.FRec.Restriction != TGEDCOMRestriction.rnPrivacy || aShieldState == TGenEngine.TShieldState.ssNone) 
 			    && (aFilter.Sex == TGEDCOMSex.svNone || this.FRec.Sex == aFilter.Sex) 
-			    && (aFilter.Name == "*" || IsMatchesMask(TGenEngine.GetNameStr(this.FRec, true, false), aFilter.Name)) 
+			    && (aFilter.Name == "*" || IsMatchesMask(this.FRec.aux_GetNameStr(true, false), aFilter.Name)) 
 				&& (aFilter.Residence == "*" || this.HasPlace(aFilter)) && (aFilter.EventVal == "*" || this.HasEventVal(aFilter)) 
 					&& (!aFilter.PatriarchOnly || this.FRec.Patriarch))
 			{
-				bool isLive = dd_ev == null;
-				TGenEngine.TLifeMode lifeMode = aFilter.LifeMode;
-				if (lifeMode != TGenEngine.TLifeMode.lmOnlyAlive)
-				{
-					if (lifeMode != TGenEngine.TLifeMode.lmOnlyDead)
-					{
-						if (lifeMode != TGenEngine.TLifeMode.lmAliveBefore)
+				bool isLive = (dd_ev == null);
+
+				switch (aFilter.LifeMode) {
+					case TGenEngine.TLifeMode.lmOnlyAlive:
 						{
-							if (lifeMode == TGenEngine.TLifeMode.lmTimeLine)
-							{
-								int bdy = -1;
-								if (bd_ev != null) TGenEngine.GetIndependentDate(bd_ev.Detail.Date, out bdy, out j, out d);
-
-								int ddy = -1;
-								if (dd_ev != null) TGenEngine.GetIndependentDate(dd_ev.Detail.Date, out ddy, out j, out d);
-
-								if (this.age_year > 0 && (bdy <= 0 || bdy >= this.age_year || (ddy > 0 && (ddy <= 0 || ddy <= this.age_year))))
-								{
-									return Result;
-								}
-							}
+							if (!isLive) return Result;
+							break;
 						}
-						else
+					case TGenEngine.TLifeMode.lmOnlyDead:
 						{
-							DateTime bdt;
-							if (bd_ev == null)
-							{
-								bdt = new DateTime(0);
-							}
-							else
-							{
-								bdt = TGenEngine.GEDCOMDateToDate(bd_ev.Detail.Date);
-							}
+							if (isLive) return Result;
+							break;
+						}
+					case TGenEngine.TLifeMode.lmAliveBefore:
+						{
+							DateTime bdt = ((bd_ev == null) ? new DateTime(0) : TGenEngine.GEDCOMDateToDate(bd_ev.Detail.Date));
+							DateTime ddt = ((dd_ev == null) ? new DateTime(0) : TGenEngine.GEDCOMDateToDate(dd_ev.Detail.Date));
 
-							DateTime ddt;
-							if (dd_ev == null)
-							{
-								ddt = new DateTime(0);
-							}
-							else
-							{
-								ddt = TGenEngine.GEDCOMDateToDate(dd_ev.Detail.Date);
-							}
+							if ((bdt > this.filter_abd) || (ddt < this.filter_abd)) return Result;
 
-							if (bdt.Ticks != 0 && (bdt.Ticks == 0 || !(bdt < this.filter_abd)))
+							break;
+						}
+					case TGenEngine.TLifeMode.lmTimeLine:
+						{
+							int bdy = -1;
+							if (bd_ev != null) bd_ev.Detail.Date.aux_GetIndependentDate(out bdy, out j, out d);
+
+							int ddy = -1;
+							if (dd_ev != null) dd_ev.Detail.Date.aux_GetIndependentDate(out ddy, out j, out d);
+
+							if (this.age_year > 0 && (bdy <= 0 || bdy >= this.age_year || (ddy > 0 && (ddy <= 0 || ddy <= this.age_year))))
 							{
 								return Result;
 							}
 
-							if (ddt.Ticks != 0)
-							{
-								if (ddt.Ticks == 0 || !(ddt > this.filter_abd))
-								{
-									return Result;
-								}
-							}
+							break;
 						}
-					}
-					else
-					{
-						if (isLive)
-						{
-							return Result;
-						}
-					}
-				}
-				else
-				{
-					if (!isLive)
-					{
-						return Result;
-					}
 				}
 
 				switch (aFilter.GroupMode) {
@@ -250,20 +214,13 @@ namespace GKUI.Lists
 			TPersonColumnType pct = (TPersonColumnType)this.FColumnsMap[aColIndex].col_type;
 			int sub_index = (int)this.FColumnsMap[aColIndex].col_subtype;
 			string Result = "";
+
 			switch (pct)
 			{
 				case TPersonColumnType.pctPatriarch:
-				{
-					if (this.FRec.Patriarch)
-					{
-						Result = "*";
-					}
-					else
-					{
-						Result = " ";
-					}
+					Result = ((this.FRec.Patriarch) ? "*" : " ");
 					break;
-				}
+
 				case TPersonColumnType.pctName:
 				{
 					TGenEngine.TNameFormat defNameFormat = GKUI.TfmGEDKeeper.Instance.Options.DefNameFormat;
@@ -318,146 +275,114 @@ namespace GKUI.Lists
 					}
 					else
 					{
-						Result = TGenEngine.GetNameStr(this.FRec, true, false);
+						Result = this.FRec.aux_GetNameStr(true, false);
 					}
 					break;
 				}
+
 				case TPersonColumnType.pctNick:
-				{
-					Result = TGenEngine.GetNickStr(this.FRec);
+					Result = this.FRec.aux_GetNickStr();
 					break;
-				}
+
 				case TPersonColumnType.pctSex:
-				{
 					Result = new string(TGenEngine.SexStr(this.FRec.Sex)[0], 1);
 					break;
-				}
+
 				case TPersonColumnType.pctBirthDate:
+					{
+						TGEDCOMCustomEvent ev = TGenEngine.GetIndividualEvent(this.FRec, "BIRT");
+						Result = TGenEngine.GEDCOMEventToDateStr(ev, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat, false);
+					}
+					break;
+
 				case TPersonColumnType.pctBirthPlace:
-				{
-					TGEDCOMCustomEvent ev = TGenEngine.GetIndividualEvent(this.FRec, "BIRT");
-					if (pct != TPersonColumnType.pctBirthDate)
 					{
-						if (pct == TPersonColumnType.pctBirthPlace)
-						{
-							Result = TGenEngine.GetPlaceStr(ev, false);
-						}
-					}
-					else
-					{
-						Result = TGenEngine.GEDCOMEventToDateStr(ev, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat, false);
+						TGEDCOMCustomEvent ev = TGenEngine.GetIndividualEvent(this.FRec, "BIRT");
+						Result = TGenEngine.GetPlaceStr(ev, false);
 					}
 					break;
-				}
+
 				case TPersonColumnType.pctDeathDate:
-				case TPersonColumnType.pctDeathPlace:
-				{
-					TGEDCOMCustomEvent ev = TGenEngine.GetIndividualEvent(this.FRec, "DEAT");
-					if (pct != TPersonColumnType.pctDeathDate)
 					{
-						if (pct == TPersonColumnType.pctDeathPlace)
-						{
-							Result = TGenEngine.GetPlaceStr(ev, false);
-						}
-					}
-					else
-					{
+						TGEDCOMCustomEvent ev = TGenEngine.GetIndividualEvent(this.FRec, "DEAT");
 						Result = TGenEngine.GEDCOMEventToDateStr(ev, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat, false);
 					}
 					break;
-				}
+
+				case TPersonColumnType.pctDeathPlace:
+					{
+						TGEDCOMCustomEvent ev = TGenEngine.GetIndividualEvent(this.FRec, "DEAT");
+						Result = TGenEngine.GetPlaceStr(ev, false);
+					}
+					break;
+
 				case TPersonColumnType.pctResidence:
-				{
 					Result = TGenEngine.GetResidencePlace(this.FRec, GKUI.TfmGEDKeeper.Instance.Options.PlacesWithAddress);
 					break;
-				}
+
 				case TPersonColumnType.pctAge:
-				{
 					Result = TGenEngine.GetAge(this.FRec, -1);
 					break;
-				}
+
 				case TPersonColumnType.pctLifeExpectancy:
-				{
 					Result = TGenEngine.GetLifeExpectancy(this.FRec);
 					break;
-				}
+
 				case TPersonColumnType.pctDaysForBirth:
-				{
 					Result = TGenEngine.GetDaysForBirth(this.FRec);
 					break;
-				}
+
 				case TPersonColumnType.pctGroups:
-				{
 					Result = this.GetGroups();
 					break;
-				}
+
 				case TPersonColumnType.pctReligion:
-				{
 					Result = TGenEngine.GetAttributeValue(this.FRec, "RELI");
 					break;
-				}
+
 				case TPersonColumnType.pctNationality:
-				{
 					Result = TGenEngine.GetAttributeValue(this.FRec, "NATI");
 					break;
-				}
+
 				case TPersonColumnType.pctEducation:
-				{
 					Result = TGenEngine.GetAttributeValue(this.FRec, "EDUC");
 					break;
-				}
+
 				case TPersonColumnType.pctOccupation:
-				{
 					Result = TGenEngine.GetAttributeValue(this.FRec, "OCCU");
 					break;
-				}
+
 				case TPersonColumnType.pctCaste:
-				{
 					Result = TGenEngine.GetAttributeValue(this.FRec, "CAST");
 					break;
-				}
+
 				case TPersonColumnType.pctMili:
-				{
 					Result = TGenEngine.GetAttributeValue(this.FRec, "_MILI");
 					break;
-				}
+
 				case TPersonColumnType.pctMiliInd:
-				{
 					Result = TGenEngine.GetAttributeValue(this.FRec, "_MILI_IND");
 					break;
-				}
+
 				case TPersonColumnType.pctMiliDis:
-				{
 					Result = TGenEngine.GetAttributeValue(this.FRec, "_MILI_DIS");
 					break;
-				}
+
 				case TPersonColumnType.pctMiliRank:
-				{
 					Result = TGenEngine.GetAttributeValue(this.FRec, "_MILI_RANK");
 					break;
-				}
+
 				case TPersonColumnType.pctChangeDate:
-				{
 					Result = this.FRec.ChangeDate.ToString();
 					break;
-				}
+
 				case TPersonColumnType.pctBookmark:
-				{
-					if (this.FRec.Bookmark)
-					{
-						Result = "*";
-					}
-					else
-					{
-						Result = " ";
-					}
+					Result = ((this.FRec.Bookmark) ? "*" : " ");
 					break;
-				}
+
 				case TPersonColumnType.pctTitle:
-				{
 					Result = TGenEngine.GetAttributeValue(this.FRec, "TITL");
 					break;
-				}
 			}
 			return Result;
 		}
@@ -492,7 +417,8 @@ namespace GKUI.Lists
 
 		public override void UpdateItem(TExtListItem aItem, bool isMain)
 		{
-			TIndividualListColumns columns = GKUI.TfmGEDKeeper.Instance.Options.IndividualListColumns;
+			TGlobalOptions gOptions = GKUI.TfmGEDKeeper.Instance.Options;
+			TIndividualListColumns columns = gOptions.IndividualListColumns;
 
 			TGEDCOMCustomEvent bd_ev = null;
 			TGEDCOMCustomEvent dd_ev = null;
@@ -525,7 +451,7 @@ namespace GKUI.Lists
 				}
 				else if (ev.Name == "RESI" && residence == "")
 				{
-					residence = TGenEngine.GetPlaceStr(ev, GKUI.TfmGEDKeeper.Instance.Options.PlacesWithAddress);
+					residence = TGenEngine.GetPlaceStr(ev, gOptions.PlacesWithAddress);
 				}
 				else if (ev.Name == "RELI" && religion == "")
 				{
@@ -591,7 +517,7 @@ namespace GKUI.Lists
 						}
 						case TPersonColumnType.pctName:
 						{
-							TGenEngine.TNameFormat defNameFormat = GKUI.TfmGEDKeeper.Instance.Options.DefNameFormat;
+							TGenEngine.TNameFormat defNameFormat = gOptions.DefNameFormat;
 							string f = "";
 							string j = "";
 							string p = "";
@@ -599,7 +525,7 @@ namespace GKUI.Lists
 							{
 								this.FRec.aux_GetNameParts(out f, out j, out p);
 							}
-							TGenEngine.TNameFormat defNameFormat2 = GKUI.TfmGEDKeeper.Instance.Options.DefNameFormat;
+							TGenEngine.TNameFormat defNameFormat2 = gOptions.DefNameFormat;
 							if (defNameFormat2 != TGenEngine.TNameFormat.nfFNP)
 							{
 								if (defNameFormat2 != TGenEngine.TNameFormat.nfF_NP)
@@ -619,13 +545,13 @@ namespace GKUI.Lists
 							}
 							else
 							{
-								aItem.SubItems.Add(TGenEngine.GetNameStr(this.FRec, true, false));
+								aItem.SubItems.Add(this.FRec.aux_GetNameStr(true, false));
 							}
 							break;
 						}
 						case TPersonColumnType.pctNick:
 						{
-							aItem.SubItems.Add(TGenEngine.GetNickStr(this.FRec));
+							aItem.SubItems.Add(this.FRec.aux_GetNickStr());
 							break;
 						}
 						case TPersonColumnType.pctSex:
@@ -635,12 +561,12 @@ namespace GKUI.Lists
 						}
 						case TPersonColumnType.pctBirthDate:
 						{
-							aItem.SubItems.Add(TGenEngine.GEDCOMEventToDateStr(bd_ev, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat, false));
+							aItem.SubItems.Add(TGenEngine.GEDCOMEventToDateStr(bd_ev, gOptions.DefDateFormat, false));
 							break;
 						}
 						case TPersonColumnType.pctDeathDate:
 						{
-							aItem.SubItems.Add(TGenEngine.GEDCOMEventToDateStr(dd_ev, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat, false));
+							aItem.SubItems.Add(TGenEngine.GEDCOMEventToDateStr(dd_ev, gOptions.DefDateFormat, false));
 							break;
 						}
 						case TPersonColumnType.pctBirthPlace:
@@ -749,6 +675,18 @@ namespace GKUI.Lists
 							break;
 						}
 					}
+				}
+			}
+
+			if ((FRec.ChildToFamilyLinks.Count == 0) && (gOptions.ListPersons_HighlightUnparented))
+			{
+				aItem.BackColor = System.Drawing.Color.FromArgb(0xFFCACA);
+			}
+			else
+			{
+				if ((FRec.SpouseToFamilyLinks.Count == 0) && (gOptions.ListPersons_HighlightUnmarried))
+				{
+					aItem.BackColor = System.Drawing.Color.FromArgb(0xFFFFCA);
 				}
 			}
 		}

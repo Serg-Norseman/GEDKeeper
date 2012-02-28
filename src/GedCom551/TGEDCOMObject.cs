@@ -238,7 +238,7 @@ namespace GedCom551
 					res = Encoding.UTF8;
 					break;
 				default:
-					res = Encoding.Default; // alert: ANSEL, etc
+					res = Encoding.Default; // FIXME: ANSEL, etc
 					break;
 			}
 			return res;

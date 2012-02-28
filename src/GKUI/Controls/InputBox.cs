@@ -1,84 +1,101 @@
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 
 /// <summary>
-/// Localization: clean
+/// Localization: unknown
+/// CodeTransformation: need
 /// </summary>
 
 namespace GKUI.Controls
 {
-	public class InputBox : Form
+	public partial class InputBox : Form
 	{
-		private Label lbl;
-		private TextBox textValue;
-		private Button buttonOK;
-		private Button buttonCancel;
+		private bool NumbersMode;
 
-		private InputBox(string Caption, string Text)
+		public string Value
 		{
-			this.lbl = new Label();
-			this.textValue = new TextBox();
-			this.buttonOK = new Button();
-			this.buttonCancel = new Button();
-			base.SuspendLayout();
-			this.lbl.AutoSize = true;
-			this.lbl.Location = new Point(9, 13);
-			this.lbl.Name = "label";
-			this.lbl.Size = new Size(31, 13);
-			this.lbl.TabIndex = 1;
-			this.lbl.Text = Text;
-			this.textValue.Location = new Point(12, 31);
-			this.textValue.Name = "textValue";
-			this.textValue.Size = new Size(245, 20);
-			this.textValue.TabIndex = 2;
-			this.textValue.WordWrap = false;
-			this.buttonOK.DialogResult = DialogResult.OK;
-			this.buttonOK.Location = new Point(57, 67);
-			this.buttonOK.Name = "buttonOK";
-			this.buttonOK.Size = new Size(75, 23);
-			this.buttonOK.TabIndex = 3;
-			this.buttonOK.Text = "OK";
-			this.buttonCancel.DialogResult = DialogResult.Cancel;
-			this.buttonCancel.Location = new Point(138, 67);
-			this.buttonCancel.Name = "buttonCancel";
-			this.buttonCancel.Size = new Size(75, 23);
-			this.buttonCancel.TabIndex = 4;
-			this.buttonCancel.Text = "Cancel";
-			base.AcceptButton = this.buttonOK;
-			base.CancelButton = this.buttonCancel;
-			base.ClientSize = new Size(270, 103);
-			base.Controls.Add(this.buttonCancel);
-			base.Controls.Add(this.buttonOK);
-			base.Controls.Add(this.textValue);
-			base.Controls.Add(this.lbl);
-			base.FormBorderStyle = FormBorderStyle.FixedSingle;
-			base.MaximizeBox = false;
-			base.MinimizeBox = false;
-			base.Name = "InputBox";
-			base.ShowInTaskbar = false;
-			base.StartPosition = FormStartPosition.CenterScreen;
+			get { return this.textBox1.Text; }
+			set { this.textBox1.Text = value; }
+		}
+
+		public InputBox(string Caption, string Prompt, string Value, bool NumbersMode)
+		{
+			this.InitializeComponent();
+
 			this.Text = Caption;
-			base.ResumeLayout(false);
-			base.PerformLayout();
+			this.label1.Text = Prompt;
+			this.Value = Value;
+			this.NumbersMode = NumbersMode;
+
+			base.AcceptButton = this.btnAccept;
+			base.CancelButton = this.btnCancel;
 		}
 
-
-		public static bool Query(string Caption, string Text, ref string s_val)
+		/*void OnKeyDown(object sender, KeyEventArgs e)
 		{
-			InputBox ib = new InputBox(Caption, Text);
-			ib.textValue.Text = s_val;
-			bool Result;
-			if (ib.ShowDialog() != DialogResult.OK)
+			if (this.mMode == 1)
 			{
-				Result = false;
+				this.NoneNumberEntered = false;
+				if ((e.KeyCode < Keys.D0 || e.KeyCode > Keys.D9) && (e.KeyCode < Keys.NumPad0 || e.KeyCode > Keys.NumPad9) && e.KeyCode != Keys.Back && e.KeyCode != Keys.Decimal && e.KeyCode != Keys.Oemcomma && e.KeyCode != Keys.OemMinus && e.KeyCode != Keys.Subtract)
+				{
+					this.NoneNumberEntered = true;
+				}
 			}
-			else
-			{
-				s_val = ib.textValue.Text;
-				Result = true;
-			}
-			return Result;
 		}
+
+		void OnKeyPress(object sender, KeyPressEventArgs e)
+		{
+			if (this.mMode == 1 && this.NoneNumberEntered)
+			{
+				e.Handled = true;
+			}
+		}*/
+
+		void BtnCancelClick(object sender, EventArgs e)
+		{
+			base.DialogResult = DialogResult.Cancel;
+		}
+
+		void BtnAcceptClick(object sender, EventArgs e)
+		{
+			base.DialogResult = DialogResult.OK;
+		}
+
+
+
+		public static bool QueryDouble(string Caption, string Prompt, ref double Value)
+		{
+			InputBox inputBox = new InputBox(Caption, Prompt, Value.ToString(), true);
+			if (inputBox.ShowDialog() == DialogResult.OK)
+			{
+				return double.TryParse(inputBox.Value, out Value);
+			}
+			Value = 0.0;
+			return false;
+		}
+
+		public static bool QueryInt(string Caption, string Prompt, ref int Value)
+		{
+			InputBox inputBox = new InputBox(Caption, Prompt, Value.ToString(), true);
+			if (inputBox.ShowDialog() == DialogResult.OK)
+			{
+				return int.TryParse(inputBox.Value, out Value);
+			}
+			Value = 0;
+			return false;
+		}
+
+		public static bool QueryText(string Caption, string Prompt, ref string Value)
+		{
+			InputBox inputBox = new InputBox(Caption, Prompt, Value, false);
+			if (inputBox.ShowDialog() == DialogResult.OK)
+			{
+				Value = inputBox.Value;
+				return true;
+			}
+			Value = "";
+			return false;
+		}
+
 	}
 }

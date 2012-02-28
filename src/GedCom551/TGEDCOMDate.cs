@@ -248,84 +248,75 @@ namespace GedCom551
 
 		private string ExtractMonth([In] string S)
 		{
-			DateTimeFormatInfo DateTimeInfo = Thread.CurrentThread.CurrentCulture.DateTimeFormat;
-			string Result = S;
-
-			if (Result != "")
+			string result = S;
+			if (!string.IsNullOrEmpty(result))
 			{
-				TGEDCOMCalendar fDateCalendar = this.FDateCalendar;
-				if (fDateCalendar != TGEDCOMCalendar.dcHebrew)
+				switch (this.FDateCalendar)
 				{
-					if (fDateCalendar == TGEDCOMCalendar.dcFrench)
-					{
-						string SU = SysUtils.WStrCopy(Result, 1, 4).ToUpper();
-						int I = 1;
-
-						while (TGEDCOMDate.GEDCOMMonthFrenchArray[I - 1] != SU)
+					case TGEDCOMCalendar.dcHebrew:
 						{
-							I++;
-							if (I == 14)
+							string SU = result.Substring(0, 3).ToUpper();
+							for (int I = 1; I <= GEDCOMMonthHebrewArray.Length; I++)
 							{
-								return Result;
-							}
-						}
-						this.FMonth = SU;
-						Result = Result.Remove(0, 4);
-					}
-					else
-					{
-						if (!SysUtils.IsDigit(Result[0]))
-						{
-							string SU = SysUtils.WStrCopy(Result, 1, 3).ToUpper();
-							int I = 1;
-
-							while (TGEDCOMDate.GEDCOMMonthArray[I - 1] != SU && DateTimeInfo.AbbreviatedMonthNames[I - 1].ToUpper() != SU)
-							{
-								I++;
-								if (I == 13)
+								if (GEDCOMMonthHebrewArray[I - 1] == SU)
 								{
-									return Result;
+									this.FMonth = SU;
+									result = result.Remove(0, 3);
+									break;
 								}
 							}
-							this.FMonth = TGEDCOMDate.GEDCOMMonthArray[I - 1];
-							Result = Result.Remove(0, 3);
+							break;
 						}
-						else
-						{
-							string SU = SysUtils.WStrCopy(Result, 1, 3).ToUpper();
-							int I = 1;
 
-							while (TGEDCOMDate.GEDCOMMonthSysArray[I - 1] != SU)
+					case TGEDCOMCalendar.dcFrench:
+						{
+							string SU = result.Substring(0, 4).ToUpper();
+							for (int I = 1; I <= TGEDCOMDate.GEDCOMMonthFrenchArray.Length; I++)
 							{
-								I++;
-								if (I == 13)
+								if (TGEDCOMDate.GEDCOMMonthFrenchArray[I - 1] == SU)
 								{
-									return Result;
+									this.FMonth = SU;
+									result = result.Remove(0, 4);
+									break;
 								}
 							}
-							this.FMonth = TGEDCOMDate.GEDCOMMonthArray[I - 1];
-							Result = Result.Remove(0, 2);
+							break;
 						}
-					}
-				}
-				else
-				{
-					string SU = SysUtils.WStrCopy(Result, 1, 3).ToUpper();
-					int I = 1;
 
-					while (TGEDCOMDate.GEDCOMMonthHebrewArray[I - 1] != SU)
-					{
-						I++;
-						if (I == 14)
+					default:
 						{
-							return Result;
+							if (!SysUtils.IsDigit(result[0]))
+							{
+								DateTimeFormatInfo DateTimeInfo = Thread.CurrentThread.CurrentCulture.DateTimeFormat;
+								string SU = result.Substring(0, 3).ToUpper();
+								for (int I = 1; I <= GEDCOMMonthArray.Length; I++)
+								{
+									if (GEDCOMMonthArray[I - 1] == SU || DateTimeInfo.AbbreviatedMonthNames[I - 1].ToUpper() == SU)
+									{
+										this.FMonth = TGEDCOMDate.GEDCOMMonthArray[I - 1];
+										result = result.Remove(0, 3);
+										break;
+									}
+								}
+							}
+							else
+							{
+								string SU = result.Substring(0, 3).ToUpper();
+								for (int I = 1; I <= GEDCOMMonthSysArray.Length; I++)
+								{
+									if (GEDCOMMonthSysArray[I - 1] == SU)
+									{
+										this.FMonth = GEDCOMMonthArray[I - 1];
+										result = result.Remove(0, 2);
+										break;
+									}
+								}
+							}
+							break;
 						}
-					}
-					this.FMonth = SU;
-					Result = Result.Remove(0, 3);
 				}
 			}
-			return Result;
+			return result;
 		}
 
 		private string ExtractYear([In] string S)
@@ -469,22 +460,23 @@ namespace GedCom551
 
 		private ushort GEDCOMMonthToInt([In] string S)
 		{
-			ushort Result = 0;
-			if (S != null)
+			ushort result = 0;
+
+			if (S != null && S.Length != 0)
 			{
 				string SU = S.ToUpper();
-				ushort M = 1;
-				while (TGEDCOMDate.GEDCOMMonthArray[(int)M - 1] != SU)
+
+				for (int M = 1; M <= 12; M++)
 				{
-					M += 1;
-					if (M == 13)
+					if (GEDCOMMonthArray[M - 1] == SU)
 					{
-						return Result;
+						result = (ushort)M;
+						break;
 					}
 				}
-				Result = M;
 			}
-			return Result;
+
+			return result;
 		}
 
 		private ushort GEDCOMMonthFrenchToInt([In] string S)
@@ -553,14 +545,7 @@ namespace GedCom551
 
 		public void GetDate(out int AYear, out ushort AMonth, out ushort ADay)
 		{
-			if (this.FYearBC)
-			{
-				AYear = /*-*/this.FYear; // zsv-temp-fix
-			}
-			else
-			{
-				AYear = this.FYear;
-			}
+			AYear = this.FYear;
 			AMonth = this.GEDCOMMonthToInt(this.FMonth);
 			ADay = this.FDay;
 		}

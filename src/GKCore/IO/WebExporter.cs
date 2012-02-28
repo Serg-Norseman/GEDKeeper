@@ -13,215 +13,22 @@ namespace GKCore.IO
 {
 	public class WebExporter : HTMLExporter
 	{
-		private enum TCellKind : byte { ckSpace, ckLine, ckPerson }
-
-		private class TTreeCell
-		{
-			public string Name;
-			public TCellKind Kind;
-			public int ColIndex;
-			public TObjectList Row;
-			public TGEDCOMIndividualRecord Rec;
-
-			public void Free()
-			{
-				SysUtils.Free(this);
-			}
-
-		}
-
 		private int FSurnamesCount;
 
 		private bool IsLatSym(char c)
 		{
-			uint ch = (uint)c;
-			return (ch >= (uint)'A' && ch <= (uint)'Z');
+			return (c >= 'A' && c <= 'Z');
 		}
 
 		private bool IsRusSym(char c)
 		{
-			uint ch = (uint)c;
-			return (ch >= (uint)'А' && ch <= (uint)'Я');
-		}
-
-		private TTreeCell AddCell(TObjectList aRow, TGEDCOMIndividualRecord iRec, TCellKind aKind)
-		{
-			TTreeCell Result = new TTreeCell();
-			Result.ColIndex = aRow.Add(Result);
-			Result.Kind = aKind;
-			Result.Rec = iRec;
-			Result.Row = aRow;
-			if (iRec != null)
-			{
-				Result.Name = TGenEngine.GetNameStr(iRec, true, false);
-			}
-			return Result;
-		}
-
-		private TObjectList AddRow(TObjectList aTable, int aRowIndex, int aSpaces)
-		{
-			TObjectList Result = new TObjectList();
-			aTable.Insert(aRowIndex, Result);
-			return Result;
-		}
-
-		private void DrawLine(TObjectList aTable, TTreeCell cell_ancestor, TTreeCell cell_descendant)
-		{
-			int r = aTable.IndexOf(cell_descendant.Row);
-			int r2 = aTable.IndexOf(cell_ancestor.Row);
-			int y;
-			if (r > r2)
-			{
-				y = r2;
-				r2 = r;
-				r = y;
-			}
-
-			int x = cell_descendant.ColIndex - 1;
-			int arg_3A_0 = r;
-			int num = r2;
-			y = arg_3A_0;
-			if (num >= y)
-			{
-				num++;
-				do
-				{
-					TObjectList row = aTable[y] as TObjectList;
-					(row[x] as TTreeCell).Kind = TCellKind.ckLine;
-					y++;
-				}
-				while (y != num);
-			}
-		}
-
-		private void Step(TObjectList aTable, int row_index, int col_index, TTreeCell prev, TGEDCOMIndividualRecord cur, int gen)
-		{
-			if (cur != null)
-			{
-				if (row_index < 0) row_index = 0;
-				if (row_index > aTable.Count) row_index = aTable.Count;
-
-				TObjectList row = this.AddRow(aTable, row_index, 0);
-
-				int num = col_index - 1 << 1;
-				int arg_37_0 = num;
-				int arg_37_1 = 0;
-				num++;
-				if (arg_37_0 >= arg_37_1)
-				{
-					do
-					{
-						this.AddCell(row, null, TCellKind.ckSpace);
-						num--;
-					}
-					while (num != 0);
-				}
-
-				if (prev != null) this.AddCell(row, null, TCellKind.ckLine);
-
-				TTreeCell cur_cell = this.AddCell(row, cur, TCellKind.ckPerson);
-				if (cur.ChildToFamilyLinks.Count > 0 && gen < 5)
-				{
-					TGEDCOMFamilyRecord family = cur.ChildToFamilyLinks[0].Family;
-					TGEDCOMIndividualRecord iFather = family.Husband.Value as TGEDCOMIndividualRecord;
-					TGEDCOMIndividualRecord iMother = family.Wife.Value as TGEDCOMIndividualRecord;
-					if (iFather != null || iMother != null)
-					{
-						this.AddCell(row, null, TCellKind.ckLine);
-						this.AddCell(row, null, TCellKind.ckSpace);
-
-						row_index = aTable.IndexOf(row);
-						if (iFather != null) this.AddRow(aTable, row_index, col_index + 1);
-						this.Step(aTable, row_index, col_index + 1, cur_cell, iFather, gen + 1);
-
-						row_index = aTable.IndexOf(row);
-						if (iMother != null) this.AddRow(aTable, row_index + 1, col_index + 1);
-						this.Step(aTable, row_index + 2, col_index + 1, cur_cell, iMother, gen + 1);
-					}
-				}
-
-				this.WideTable(aTable, cur_cell.ColIndex + 1);
-				if (prev != null) this.DrawLine(aTable, prev, cur_cell);
-			}
-		}
-
-		private void WideTable(TObjectList aTable, int cols)
-		{
-			for (int i = 0; i <= aTable.Count - 1; i++) {
-				TObjectList row = aTable[i] as TObjectList;
-				while (row.Count < cols) {
-					this.AddCell(row, null, TCellKind.ckSpace);
-				}
-			}
-		}
-
-		private void GenTree(StreamWriter aStream, TGEDCOMIndividualRecord iRec)
-		{
-			try
-			{
-				TObjectList table_rows = new TObjectList(true);
-				try
-				{
-					this.Step(table_rows, 0, 0, null, iRec, 1);
-
-					aStream.WriteLine("<table border=\"0\" cellspacing=\"0\">");
-
-					int num = table_rows.Count - 1;
-					int r = 0;
-					if (num >= r)
-					{
-						num++;
-						do
-						{
-							TObjectList row = table_rows[r] as TObjectList;
-							aStream.WriteLine("<tr>");
-
-							int num2 = row.Count - 1;
-							int c = 0;
-							if (num2 >= c)
-							{
-								num2++;
-								do
-								{
-									TTreeCell cell = row[c] as TTreeCell;
-									string nm = "&nbsp;";
-									string st = "";
-									if (cell.Kind != TCellKind.ckSpace)
-									{
-										if (cell.Kind == TCellKind.ckPerson && cell.Name != "")
-										{
-											nm = "<a href=\"#" + cell.Rec.XRef + "\">" + cell.Name + "</a>";
-										}
-										st = " bgcolor=\"silver\"";
-									}
-
-									aStream.WriteLine("<td" + st + ">" + nm + "</td>");
-									c++;
-								}
-								while (c != num2);
-							}
-							aStream.WriteLine("</tr>");
-							r++;
-						}
-						while (r != num);
-					}
-					aStream.WriteLine("</tr></table>");
-				}
-				finally
-				{
-					table_rows.Dispose();
-				}
-			}
-			catch (Exception E)
-			{
-				aStream.WriteLine(E.Message);
-			}
+			return (c >= 'А' && c <= 'Я');
 		}
 
 		private void WritePersons()
 		{
 			StreamWriter fs_persons = new StreamWriter(this.FPath + "persons.htm", false, Encoding.GetEncoding(1251));
-			base.WriteHeader(fs_persons, LangMan.LSList[477]);
+			base.WriteHTMLHeader(fs_persons, LangMan.LSList[477]);
 			fs_persons.WriteLine("<b>" + LangMan.LSList[478] + ":</b><ul>");
 			StringList names = new StringList();
 			try
@@ -233,7 +40,7 @@ namespace GKCore.IO
 					if (rec is TGEDCOMIndividualRecord)
 					{
 						TGEDCOMIndividualRecord ind = (TGEDCOMIndividualRecord)rec;
-						names.AddObject(TGenEngine.GetNameStr(ind, true, false), ind);
+						names.AddObject(ind.aux_GetNameStr(true, false), ind);
 					}
 				}
 				names.Sort();
@@ -243,7 +50,10 @@ namespace GKCore.IO
 				{
 					TGEDCOMIndividualRecord ind = names.GetObject(i) as TGEDCOMIndividualRecord;
 					fs_persons.WriteLine("<li><a name=\"" + ind.XRef + "\">" + names[i] + "</a><p>");
-					this.GenTree(fs_persons, ind);
+
+					WebTree wt = new WebTree();
+					wt.GenTree(fs_persons, ind);
+
 					fs_persons.WriteLine("</p></li>");
 				}
 			}
@@ -251,95 +61,238 @@ namespace GKCore.IO
 			{
 				names.Free();
 				fs_persons.WriteLine("</ul><hr>");
-				base.WriteFooter(fs_persons);
+				base.WriteHTMLFooter(fs_persons);
 				SysUtils.Free(fs_persons);
 			}
 		}
 
-		private void WriteTimeLineIndex(StreamWriter aStream, string evName, string tlFileName)
+		private void WriteSpecialIndex(string filename, string title, StringList specIndex, bool id_links)
 		{
-			StringList years = new StringList();
 			try
 			{
+				using (StreamWriter stm = new StreamWriter(this.FPath + filename, false, Encoding.GetEncoding(1251)))
+				{
+					base.WriteHTMLHeader(stm, LangMan.LSList[477]);
+					stm.WriteLine("<b>"+title+":</b><ul>");
+
+					specIndex.Sort();
+					int num2 = specIndex.Count - 1;
+					for (int i = 0; i <= num2; i++)
+					{
+						string id = specIndex[i];
+						if (id_links) id = "<a name=\"" + id + "\">" + id + "</a>";
+						stm.WriteLine("<li>" + id + "<ul>");
+
+						StringList personsIndex = specIndex.GetObject(i) as StringList;
+
+						personsIndex.Sort();
+						int num3 = personsIndex.Count - 1;
+						for (int k = 0; k <= num3; k++)
+						{
+							TGEDCOMIndividualRecord ind = personsIndex.GetObject(k) as TGEDCOMIndividualRecord;
+							stm.WriteLine("<li><a href=\"persons.htm#" + ind.XRef + "\">" + personsIndex[k] + "</a></li>");
+						}
+
+						stm.WriteLine("</ul></li><br>");
+					}
+					stm.WriteLine("</ul>");
+					base.WriteHTMLFooter(stm);
+				}
+			}
+			catch (Exception ex)
+			{
+				SysUtils.LogWrite("WebExporter.WriteSpecialIndex(): " + ex.Message);
+			}
+		}
+
+		private void PrepareSpecIndex(StringList index, string val, TGEDCOMIndividualRecord iRec)
+		{
+			StringList persons;
+
+			int idx = index.IndexOf(val);
+			if (idx < 0) {
+				persons = new StringList();
+				index.AddObject(val, persons);
+			} else {
+				persons = (StringList)index.GetObject(idx);
+			}
+
+			if (persons.IndexOfObject(iRec) < 0) {
+				persons.AddObject(iRec.aux_GetNameStr(true, false), iRec);
+			}
+		}
+
+		private void PrepareEventYear(StringList index, TGEDCOMCustomEvent evt, TGEDCOMIndividualRecord iRec)
+		{
+			int year = -1;
+			if (evt == null)
+			{
+				year = -1;
+			}
+			else
+			{
+				ushort m, d;
+				evt.Detail.Date.aux_GetIndependentDate(out year, out m, out d);
+				if (year == 0) year = -1;
+			}
+
+			string yst = ((year < 0) ? "?" : year.ToString());
+			PrepareSpecIndex(index, yst, iRec);
+		}
+
+		private void WriteSpecials(StreamWriter mainIndex)
+		{
+			string dc_file = "death_causes.htm";
+			string occ_file = "occupations.htm";
+			string places_file = "places.htm";
+			string sources_file = "sources.htm";
+
+			string birth_file = "index_birth.htm";
+			string death_file = "index_death.htm";
+
+			StringList birthes = new StringList();
+			StringList deathes = new StringList();
+
+			StringList dcauses = new StringList();
+			StringList occupations = new StringList();
+			StringList places = new StringList();
+			StringList sources = new StringList();
+			try
+			{
+				string st;
 				int num = this.FTree.RecordsCount - 1;
 				for (int i = 0; i <= num; i++)
 				{
 					TGEDCOMRecord rec = this.FTree.GetRecord(i);
 					if (rec is TGEDCOMIndividualRecord)
 					{
-						TGEDCOMIndividualRecord ind = (TGEDCOMIndividualRecord)rec;
-						TGEDCOMCustomEvent ev = TGenEngine.GetIndividualEvent(ind, evName);
-						int year = -1;
-						if (ev == null)
+						TGEDCOMIndividualRecord iRec = (TGEDCOMIndividualRecord)rec;
+
+						int src_num = iRec.SourceCitations.Count - 1;
+						for (int k = 0; k <= src_num; k++)
 						{
-							year = -1;
-						}
-						else
-						{
-							ushort j;
-							ushort d;
-							TGenEngine.GetIndependentDate(ev.Detail.Date, out year, out j, out d);
-							if (year == 0)
+							TGEDCOMSourceRecord src = iRec.SourceCitations[k].Value as TGEDCOMSourceRecord;
+							if (src != null)
 							{
-								year = -1;
+								st = src.FiledByEntry;
+								if (string.IsNullOrEmpty(st)) st = src.Title.Text;
+								PrepareSpecIndex(sources, st, iRec);
 							}
 						}
 
-						string yst = ((year < 0) ? "?" : year.ToString());
-						int k = years.IndexOf(yst);
-						if (k < 0)
+						int ev_num = iRec.IndividualEvents.Count - 1;
+						for (int k = 0; k <= ev_num; k++)
 						{
-							k = years.AddObject(yst, new StringList());
+							TGEDCOMCustomEvent ev = iRec.IndividualEvents[k];
+							if (ev != null)
+							{
+								int src_num2 = ev.Detail.SourceCitations.Count - 1;
+								for (int m = 0; m <= src_num2; m++)
+								{
+									TGEDCOMSourceRecord src = ev.Detail.SourceCitations[m].Value as TGEDCOMSourceRecord;
+									if (src != null)
+									{
+										st = src.FiledByEntry;
+										if (string.IsNullOrEmpty(st)) st = src.Title.Text;
+										PrepareSpecIndex(sources, st, iRec);
+									}
+								}
+
+								// Анализ по местам
+								st = ev.Detail.Place.StringValue;
+								if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(places, st, iRec);
+
+								// Анализ по рождениям
+								if (ev.Name == "BIRT")
+								{
+									PrepareEventYear(birthes, ev, iRec);
+								}
+
+								// Анализ по причинам смерти
+								if (ev.Name == "DEAT")
+								{
+									PrepareEventYear(deathes, ev, iRec);
+
+									st = ev.Detail.Cause;
+									if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(dcauses, st, iRec);
+								}
+
+								// Анализ по занятиям
+								if (ev.Name == "OCCU")
+								{
+									st = ev.StringValue;
+									if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(occupations, st, iRec);
+								}
+							}
 						}
-						(years.GetObject(k) as StringList).AddObject(TGenEngine.GetNameStr(ind, true, false), ind);
 					}
 				}
 
-				StreamWriter fs_timeline = new StreamWriter(this.FPath + tlFileName, false, Encoding.GetEncoding(1251));
-				try
-				{
-					base.WriteHeader(fs_timeline, LangMan.LSList[477]);
-					fs_timeline.WriteLine("<b>Индекс:</b><ul>");
-					years.Sort();
-					string index_str = "";
 
-					int num2 = years.Count - 1;
-					for (int i = 0; i <= num2; i++)
-					{
-						index_str = index_str + "<a href=\"" + tlFileName + "#" + years[i] + "\">" + years[i] + "</a>";
-						if (i < years.Count - 1)
-						{
-							index_str += " | ";
-						}
-						fs_timeline.WriteLine(string.Concat(new string[] { "<li><a name=\"", years[i], "\">", years[i], "</a><ul>" }));
-						StringList fams = years.GetObject(i) as StringList;
-						fams.Sort();
-
-						int num3 = fams.Count - 1;
-						for (int k = 0; k <= num3; k++)
-						{
-							TGEDCOMIndividualRecord ind = fams.GetObject(k) as TGEDCOMIndividualRecord;
-							fs_timeline.WriteLine(string.Concat(new string[] { "<li><a href=\"persons.htm#", ind.XRef, "\">", fams[k], "</a></li>" }));
-						}
-						fs_timeline.WriteLine("</ul></li>");
-					}
-					aStream.WriteLine("<center>" + index_str + "</center>");
-					fs_timeline.WriteLine("</ul><hr>");
-					base.WriteFooter(fs_timeline);
-				}
-				finally
+				// Запись индекса годов рождения
+				WriteSpecialIndex(birth_file, LangMan.LSList[481], birthes, true);
+				string index_str = "";
+				int num2 = birthes.Count - 1;
+				for (int i = 0; i <= num2; i++)
 				{
-					SysUtils.Free(fs_timeline);
+					index_str = index_str + "<a href=\"" + birth_file + "#" + birthes[i] + "\">" + birthes[i] + "</a>";
+					if (i < birthes.Count - 1) index_str += " | ";
 				}
+				mainIndex.WriteLine("<b>" + LangMan.LSList[481] + ":</b><ul><center>" + index_str + "</center></ul><hr>");
+
+				// Запись индекса годов смерти
+				WriteSpecialIndex(death_file, LangMan.LSList[482], deathes, true);
+				index_str = "";
+				num2 = deathes.Count - 1;
+				for (int i = 0; i <= num2; i++)
+				{
+					index_str = index_str + "<a href=\"" + death_file + "#" + deathes[i] + "\">" + deathes[i] + "</a>";
+					if (i < birthes.Count - 1) index_str += " | ";
+				}
+				mainIndex.WriteLine("<b>" + LangMan.LSList[482] + ":</b><ul><center>" + index_str + "</center></ul><hr>");
+
+
+				// Запись индекса мест
+				WriteSpecialIndex(places_file, "Места", places, false);
+				mainIndex.WriteLine("<p><a href=\""+places_file+"\">Места</a></p><hr>");
+
+				// Запись индекса причин смерти
+				WriteSpecialIndex(dc_file, "Причины смерти", dcauses, false);
+				mainIndex.WriteLine("<p><a href=\""+dc_file+"\">Причины смерти</a></p><hr>");
+
+				// Запись индекса занятий
+				WriteSpecialIndex(occ_file, "Занятия", occupations, false);
+				mainIndex.WriteLine("<p><a href=\""+occ_file+"\">Занятия</a></p><hr>");
+
+				// Запись индекса источников
+				WriteSpecialIndex(sources_file, "Источники", sources, false);
+				mainIndex.WriteLine("<p><a href=\""+sources_file+"\">Источники</a></p><hr>");
 			}
 			finally
 			{
-				int num4 = years.Count - 1;
-				for (int i = 0; i <= num4; i++)
-				{
-					SysUtils.Free(years.GetObject(i));
-				}
-				years.Free();
+				int num4 = birthes.Count - 1;
+				for (int i = 0; i <= num4; i++) SysUtils.Free(birthes.GetObject(i));
+				birthes.Free();
+
+				num4 = deathes.Count - 1;
+				for (int i = 0; i <= num4; i++) SysUtils.Free(deathes.GetObject(i));
+				deathes.Free();
+
+				num4 = dcauses.Count - 1;
+				for (int i = 0; i <= num4; i++) SysUtils.Free(dcauses.GetObject(i));
+				dcauses.Free();
+
+				num4 = occupations.Count - 1;
+				for (int i = 0; i <= num4; i++) SysUtils.Free(occupations.GetObject(i));
+				occupations.Free();
+
+				num4 = places.Count - 1;
+				for (int i = 0; i <= num4; i++) SysUtils.Free(places.GetObject(i));
+				places.Free();
+
+				num4 = sources.Count - 1;
+				for (int i = 0; i <= num4; i++) SysUtils.Free(sources.GetObject(i));
+				sources.Free();
 			}
 		}
 
@@ -354,7 +307,7 @@ namespace GKCore.IO
 			StringList unk = null;
 
 			StreamWriter fs_names = new StreamWriter(this.FPath + "index_names.htm", false, Encoding.GetEncoding(1251));
-			base.WriteHeader(fs_names, LangMan.LSList[477]);
+			base.WriteHTMLHeader(fs_names, LangMan.LSList[477]);
 			fs_names.WriteLine("<ul>");
 			try
 			{
@@ -374,7 +327,7 @@ namespace GKCore.IO
 								unk = new StringList();
 								unk.Sorted = true;
 							}
-							unk.AddObject(TGenEngine.GetNameStr(ind, false, false), ind);
+							unk.AddObject(ind.aux_GetNameStr(false, false), ind);
 						}
 						else
 						{
@@ -386,7 +339,7 @@ namespace GKCore.IO
 									lat[(int)c - 65] = new StringList();
 									lat[(int)c - 65].Sorted = true;
 								}
-								lat[(int)c - 65].AddObject(TGenEngine.GetNameStr(ind, false, false), ind);
+								lat[(int)c - 65].AddObject(ind.aux_GetNameStr(false, false), ind);
 							}
 							else
 							{
@@ -397,7 +350,7 @@ namespace GKCore.IO
 										rus[(int)c - 1040] = new StringList();
 										rus[(int)c - 1040].Sorted = true;
 									}
-									rus[(int)c - 1040].AddObject(TGenEngine.GetNameStr(ind, false, false), ind);
+									rus[(int)c - 1040].AddObject(ind.aux_GetNameStr(false, false), ind);
 								}
 								else
 								{
@@ -406,7 +359,7 @@ namespace GKCore.IO
 										unk = new StringList();
 										unk.Sorted = true;
 									}
-									unk.AddObject(TGenEngine.GetNameStr(ind, false, false), ind);
+									unk.AddObject(ind.aux_GetNameStr(false, false), ind);
 								}
 							}
 						}
@@ -414,19 +367,12 @@ namespace GKCore.IO
 				}
 				string index_str = "";
 
-				c = 'A';
-				do
+				for (c = 'A'; c <= 'Z'; c++)
 				{
 					if (lat[(int)c - 65] != null)
 					{
-						index_str = string.Concat(new string[]
-						{
-							index_str + "<a href=\"index_names.htm#" + SysUtils.NumUpdate((int)c, 3) + "\">" + c + "</a>&nbsp;"
-						});
-						fs_names.WriteLine(string.Concat(new string[]
-						{
-							"<li><a name=\"" + SysUtils.NumUpdate((int)c, 3) + "\"><b>" + c + "</b></a>"
-						}));
+						index_str = index_str + "<a href=\"index_names.htm#" + SysUtils.NumUpdate((int)c, 3) + "\">" + c + "</a>&nbsp;";
+						fs_names.WriteLine("<li><a name=\"" + SysUtils.NumUpdate((int)c, 3) + "\"><b>" + c + "</b></a>");
 						this.WriteIndex(fs_names, lat[(int)c - 65]);
 						fs_names.WriteLine("</li>");
 					}
@@ -434,17 +380,13 @@ namespace GKCore.IO
 					{
 						index_str = index_str + c + "&nbsp;";
 					}
-					c += '\u0001';
 				}
-				while (c != '[');
 
-				c = 'А';
-				do
+				for (c = 'А'; c <= 'Я'; c++)
 				{
 					if (rus[(int)c - 1040] != null)
 					{
 						index_str = index_str + "<a href=\"index_names.htm#" + SysUtils.NumUpdate((int)c, 3) + "\">" + c + "</a>&nbsp;";
-
 						fs_names.WriteLine("<li><a name=\"" + SysUtils.NumUpdate((int)c, 3) + "\"><b>" + c + "</b></a>");
 						this.WriteIndex(fs_names, rus[(int)c - 1040]);
 						fs_names.WriteLine("</li>");
@@ -453,17 +395,12 @@ namespace GKCore.IO
 					{
 						index_str = index_str + c + "&nbsp;";
 					}
-					c += '\u0001';
 				}
-				while (c != 'а');
 
 				if (unk != null)
 				{
 					index_str = index_str + "<a href=\"index_names.htm#" + SysUtils.NumUpdate(63, 3) + "\">?</a>&nbsp;";
-					fs_names.WriteLine(string.Concat(new string[]
-					{
-						"<li><a name=\"", SysUtils.NumUpdate(63, 3), "\"><b>", "?", "</b></a>"
-					}));
+					fs_names.WriteLine("<li><a name=\"" + SysUtils.NumUpdate(63, 3) + "\"><b>", "?", "</b></a>");
 					this.WriteIndex(fs_names, unk);
 					fs_names.WriteLine("</li>");
 				}
@@ -473,7 +410,7 @@ namespace GKCore.IO
 			finally
 			{
 				fs_names.WriteLine("</ul>");
-				base.WriteFooter(fs_names);
+				base.WriteHTMLFooter(fs_names);
 				SysUtils.Free(fs_names);
 
 				for (c = 'A'; c <= 'Z'; c++) {
@@ -501,7 +438,7 @@ namespace GKCore.IO
 			StringList unk = null;
 
 			StreamWriter fs_surnames = new StreamWriter(this.FPath + "index_surnames.htm", false, Encoding.GetEncoding(1251));
-			base.WriteHeader(fs_surnames, LangMan.LSList[477]);
+			base.WriteHTMLHeader(fs_surnames, LangMan.LSList[477]);
 			fs_surnames.WriteLine("<ul>");
 			try
 			{
@@ -521,7 +458,7 @@ namespace GKCore.IO
 								unk = new StringList();
 								unk.Sorted = true;
 							}
-							unk.AddObject(TGenEngine.GetNameStr(ind, true, false), ind);
+							unk.AddObject(ind.aux_GetNameStr(true, false), ind);
 						}
 						else
 						{
@@ -533,7 +470,7 @@ namespace GKCore.IO
 									lat[(int)c - 65] = new StringList();
 									lat[(int)c - 65].Sorted = true;
 								}
-								lat[(int)c - 65].AddObject(TGenEngine.GetNameStr(ind, true, false), ind);
+								lat[(int)c - 65].AddObject(ind.aux_GetNameStr(true, false), ind);
 							}
 							else
 							{
@@ -544,7 +481,7 @@ namespace GKCore.IO
 										rus[(int)c - 1040] = new StringList();
 										rus[(int)c - 1040].Sorted = true;
 									}
-									rus[(int)c - 1040].AddObject(TGenEngine.GetNameStr(ind, true, false), ind);
+									rus[(int)c - 1040].AddObject(ind.aux_GetNameStr(true, false), ind);
 								}
 								else
 								{
@@ -553,7 +490,7 @@ namespace GKCore.IO
 										unk = new StringList();
 										unk.Sorted = true;
 									}
-									unk.AddObject(TGenEngine.GetNameStr(ind, true, false), ind);
+									unk.AddObject(ind.aux_GetNameStr(true, false), ind);
 								}
 							}
 						}
@@ -561,42 +498,31 @@ namespace GKCore.IO
 				}
 
 				string index_str = "";
-				c = 'A';
-				do
+				for (c = 'A'; c <= 'Z'; c++)
 				{
 					if (lat[(int)c - 65] != null)
 					{
-						index_str = string.Concat(new string[]
-						{
-							index_str + "<a href=\"index_surnames.htm#" + SysUtils.NumUpdate((int)c, 3) + "\">" + c + "</a>&nbsp;"
-						});
+						index_str = index_str + "<a href=\"index_surnames.htm#" + SysUtils.NumUpdate((int)c, 3) + "\">" + c + "</a>&nbsp;";
 						this.WriteSurnames(fs_surnames, c, lat[(int)c - 65]);
 					}
 					else
 					{
 						index_str = index_str + c + "&nbsp;";
 					}
-					c += '\u0001';
 				}
-				while (c != '[');
-				c = 'А';
-				do
+
+				for (c = 'А'; c <= 'Я'; c++)
 				{
 					if (rus[(int)c - 1040] != null)
 					{
-						index_str = string.Concat(new string[]
-						{
-							index_str + "<a href=\"index_surnames.htm#" + SysUtils.NumUpdate((int)c, 3) + "\">" + c + "</a>&nbsp;"
-						});
+						index_str = index_str + "<a href=\"index_surnames.htm#" + SysUtils.NumUpdate((int)c, 3) + "\">" + c + "</a>&nbsp;";
 						this.WriteSurnames(fs_surnames, c, rus[(int)c - 1040]);
 					}
 					else
 					{
 						index_str = index_str + c + "&nbsp;";
 					}
-					c += '\u0001';
 				}
-				while (c != 'а');
 
 				if (unk != null)
 				{
@@ -608,7 +534,7 @@ namespace GKCore.IO
 			finally
 			{
 				fs_surnames.WriteLine("</ul>");
-				base.WriteFooter(fs_surnames);
+				base.WriteHTMLFooter(fs_surnames);
 				SysUtils.Free(fs_surnames);
 
 				for (c = 'A'; c <= 'Z'; c++) {
@@ -630,8 +556,7 @@ namespace GKCore.IO
 			aStream.WriteLine("<ul>");
 			for (int i = 0; i <= aIndex.Count - 1; i++) {
 				TGEDCOMIndividualRecord i_rec = aIndex.GetObject(i) as TGEDCOMIndividualRecord;
-				aStream.WriteLine(string.Concat(new string[]
-				{ "<li><a href=\"persons.htm#", i_rec.XRef, "\">", aIndex[i], "</a></li>" }));
+				aStream.WriteLine("<li><a href=\"persons.htm#" + i_rec.XRef + "\">" + aIndex[i] + "</a></li>");
 			}
 			aStream.WriteLine("</ul>");
 		}
@@ -663,14 +588,7 @@ namespace GKCore.IO
 				for (int i = 0; i <= num2; i++)
 				{
 					StringList nList = index.GetObject(i) as StringList;
-					aStream.WriteLine(string.Concat(new string[]
-					{
-						"<li><u>", 
-						index[i], 
-						"</u> (", 
-						nList.Count.ToString(), 
-						")"
-					}));
+					aStream.WriteLine("<li><u>" + index[i] + "</u> (" + nList.Count.ToString() + ")");
 					this.WriteIndex(aStream, nList);
 					aStream.WriteLine("</li>");
 				}
@@ -678,10 +596,7 @@ namespace GKCore.IO
 			finally
 			{
 				int num3 = index.Count - 1;
-				for (int i = 0; i <= num3; i++)
-				{
-					SysUtils.Free(index.GetObject(i));
-				}
+				for (int i = 0; i <= num3; i++) SysUtils.Free(index.GetObject(i));
 				index.Free();
 			}
 			aStream.WriteLine("</ul></li>");
@@ -689,42 +604,30 @@ namespace GKCore.IO
 
 		public override void Generate()
 		{
-			StreamWriter main_index = new StreamWriter(this.FPath + "index.htm", false, Encoding.GetEncoding(1251));
-			try
+			using (StreamWriter contents = new StreamWriter(this.FPath + "index.htm", false, Encoding.GetEncoding(1251)))
 			{
-				base.WriteHeader(main_index, LangMan.LSList[477]);
+				base.WriteHTMLHeader(contents, LangMan.LSList[477]);
 
 				this.FSurnamesCount = 0;
-				main_index.WriteLine("<b>" + LangMan.LSList[479] + ":</b><ul>");
-				this.WriteFamilyIndex(main_index);
-				main_index.WriteLine("</ul><hr>");
+				contents.WriteLine("<b>" + LangMan.LSList[479] + ":</b><ul>");
+				this.WriteFamilyIndex(contents);
+				contents.WriteLine("</ul><hr>");
 
-				main_index.WriteLine("<b>" + LangMan.LSList[480] + ":</b><ul>");
-				this.WriteNameIndex(main_index);
-				main_index.WriteLine("</ul><hr>");
-
-				main_index.WriteLine("<b>" + LangMan.LSList[481] + ":</b><ul>");
-				this.WriteTimeLineIndex(main_index, "BIRT", "index_birth.htm");
-				main_index.WriteLine("</ul><hr>");
-
-				main_index.WriteLine("<b>" + LangMan.LSList[482] + ":</b><ul>");
-				this.WriteTimeLineIndex(main_index, "DEAT", "index_death.htm");
-				main_index.WriteLine("</ul><hr>");
+				contents.WriteLine("<b>" + LangMan.LSList[480] + ":</b><ul>");
+				this.WriteNameIndex(contents);
+				contents.WriteLine("</ul><hr>");
 
 				this.WritePersons();
+				this.WriteSpecials(contents);
 
 				TGenEngine.TCommonStats stats;
 				this.FEngine.GetCommonStats(out stats);
-				main_index.WriteLine("<b>" + LangMan.LSList[483] + ":</b><ul>");
-				main_index.WriteLine("<li>Персон: " + stats.persons.ToString() + "</li>");
-				main_index.WriteLine("<li>Фамилий: " + this.FSurnamesCount.ToString() + "</li>");
-				main_index.WriteLine("</ul><hr>");
+				contents.WriteLine("<b>" + LangMan.LSList[483] + ":</b><ul>");
+				contents.WriteLine("<li>Персон: " + stats.persons.ToString() + "</li>");
+				contents.WriteLine("<li>Фамилий: " + this.FSurnamesCount.ToString() + "</li>");
+				contents.WriteLine("</ul><hr>");
 
-				base.WriteFooter(main_index);
-			}
-			finally
-			{
-				SysUtils.Free(main_index);
+				base.WriteHTMLFooter(contents);
 			}
 			SysUtils.LoadExtFile(this.FPath + "index.htm");
 		}

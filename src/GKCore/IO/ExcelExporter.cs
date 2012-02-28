@@ -6,7 +6,7 @@ using GKUI;
 using XLSFile;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKCore.IO

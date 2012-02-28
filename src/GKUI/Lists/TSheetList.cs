@@ -8,7 +8,7 @@ using GKSys;
 using GKUI.Controls;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKUI.Lists
@@ -225,12 +225,7 @@ namespace GKUI.Lists
 			base.Controls.SetChildIndex(this.FList, 0);
 			base.Controls.SetChildIndex(this.FToolBar, 1);
 			base.ResumeLayout(false);
-			this.SetButtons(EnumSet.Create(new Enum[]
-			{
-				TSheetList.TListButton.lbAdd, 
-				TSheetList.TListButton.lbEdit, 
-				TSheetList.TListButton.lbDelete
-			}));
+			this.SetButtons(EnumSet.Create(new Enum[] { TListButton.lbAdd, TListButton.lbEdit, TListButton.lbDelete }));
 		}
 
 		protected override void Dispose(bool Disposing)

@@ -93,7 +93,7 @@ namespace GKUI
 							}
 						}
 						if (p_cnt > 0) {
-							this.ComboPersons.Items.Add(new TComboItem(TGenEngine.GetNameStr(ind, true, false) + " [" + p_cnt.ToString() + "]", ind));
+							this.ComboPersons.Items.Add(new TComboItem(ind.aux_GetNameStr(true, false) + " [" + p_cnt.ToString() + "]", ind));
 						}
 					}
 					TfmProgress.ProgressStep();

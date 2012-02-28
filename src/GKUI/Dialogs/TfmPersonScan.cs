@@ -188,7 +188,7 @@ namespace GKUI
 								TGenEngine.BindRecordSource(Base.Tree, iRec, src_rec, src_page, 0);
 							}
 
-							Base.ChangeRecord(iRec); // fixme: call for all added records (by list)
+							Base.ChangeRecord(iRec); // FIXME: call for all added records (by list)
 
 							switch (link) {
 								case TPersonLink.plNone:

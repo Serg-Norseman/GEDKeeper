@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -1220,7 +1219,7 @@ namespace GKUI.Charts
 			if (this.FFilter.BranchCut != TChartFilter.TBranchCut.bcNone)
 			{
 				TGenEngine.InitExtCounts(this.FTree, 0);
-				TAncestryChartBox._DoFilter_DoDescendantsFilter(this, aRoot);
+				this._DoFilter_DoDescendantsFilter(aRoot);
 				aRoot.ExtData = true;
 			}
 		}
@@ -1340,23 +1339,23 @@ namespace GKUI.Charts
 			this.SetSelected(null);
 		}
 
-		private static bool _DoFilter_DoDescendantsFilter([In] TAncestryChartBox Self, TGEDCOMIndividualRecord aPerson)
+		private bool _DoFilter_DoDescendantsFilter(TGEDCOMIndividualRecord aPerson)
 		{
 			bool Result = false;
 			if (aPerson != null)
 			{
-				TChartFilter.TBranchCut branchCut = Self.FFilter.BranchCut;
+				TChartFilter.TBranchCut branchCut = this.FFilter.BranchCut;
 				if (branchCut != TChartFilter.TBranchCut.bcYears)
 				{
 					if (branchCut == TChartFilter.TBranchCut.bcPersons)
 					{
-						Result = (SysUtils.Pos(aPerson.XRef + ";", Self.FFilter.BranchPersons) > 0);
+						Result = (SysUtils.Pos(aPerson.XRef + ";", this.FFilter.BranchPersons) > 0);
 					}
 				}
 				else
 				{
 					int year = TGenEngine.GetIndependentYear(aPerson, "BIRT");
-					Result = (year >= Self.FFilter.BranchYear);
+					Result = (year >= this.FFilter.BranchYear);
 				}
 
 				int num = aPerson.SpouseToFamilyLinks.Count - 1;
@@ -1368,7 +1367,7 @@ namespace GKUI.Charts
 					for (int j = 0; j <= num2; j++)
 					{
 						TGEDCOMIndividualRecord child = family.Childrens[j].Value as TGEDCOMIndividualRecord;
-						bool res_child = TAncestryChartBox._DoFilter_DoDescendantsFilter(Self, child);
+						bool res_child = _DoFilter_DoDescendantsFilter(child);
 						Result |= res_child;
 					}
 				}

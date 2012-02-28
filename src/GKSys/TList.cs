@@ -43,6 +43,11 @@ namespace GKSys
 			}
 		}
 
+		public IList<object> List
+		{
+			get { return FList; }
+		}
+
 		public int Count
 		{
 			get { return this.FList.Count; }
@@ -200,10 +205,8 @@ namespace GKSys
 				{
 					if (SCompare(FList[I], P) >= 0)
 					{
-						while (SCompare(FList[J], P) > 0)
-						{
-							J--;
-						}
+						while (SCompare(FList[J], P) > 0) J--;
+
 						if (I <= J)
 						{
 							object T = FList[I];
@@ -213,6 +216,7 @@ namespace GKSys
 							I++;
 							J--;
 						}
+
 						if (I > J)
 						{
 							break;
@@ -223,10 +227,7 @@ namespace GKSys
 						I++;
 					}
 				}
-				if (L < J)
-				{
-					IQuickSort(SCompare, L, J);
-				}
+				if (L < J) IQuickSort(SCompare, L, J);
 				L = I;
 			}
 			while (I < R);
@@ -235,6 +236,38 @@ namespace GKSys
 		public void Sort(TListSortCompare SCompare)
 		{
 			if (this.Count > 0) IQuickSort(SCompare, 0, this.Count - 1);
+		}
+
+
+		public void MergeSort(TListSortCompare comparer)
+		{
+			MergeSort(new object[FList.Count], 0, FList.Count - 1, comparer);
+		}
+
+		private void MergeSort(object[] tmp, [In] int left, [In] int right, TListSortCompare comparer)
+		{
+			if (left >= right) return;
+
+			int mid = (left + right) / 2;
+			MergeSort(tmp, left, mid, comparer);
+			MergeSort(tmp, mid + 1, right, comparer);
+
+			int i = left, j = mid + 1, k = left;
+
+			while (i <= mid && j <= right)
+			{
+				if (comparer(FList[i], FList[j]) < 0)
+				{
+					tmp[k++] = FList[i++];
+				}
+				else
+				{
+					tmp[k++] = FList[j++];
+				}
+			}
+			while (i <= mid) tmp[k++] = FList[i++];
+			while (j <= right) tmp[k++] = FList[j++];
+			for (i = left; i <= right; ++i) FList[i] = tmp[i];
 		}
 
 	}

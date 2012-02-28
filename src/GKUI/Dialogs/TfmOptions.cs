@@ -197,7 +197,7 @@ namespace GKUI
 				base.DialogResult = DialogResult.None;
 			}
 		}
-		
+
 		private void AcceptChanges()
 		{
 			this.FTempColumns.CopyTo(this.FOptions.IndividualListColumns);
@@ -337,6 +337,11 @@ namespace GKUI
 			this.FOptions = GKUI.TfmGEDKeeper.Instance.Options;
 			(this as ILocalization).SetLang();
 			this.UpdateForm();
+		}
+
+		public void SetPage(int index)
+		{
+			this.PageControl1.SelectTab(index);
 		}
 
 		void ILocalization.SetLang()

@@ -1,15 +1,19 @@
-using System;
+﻿using System;
 using System.IO;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKCore.IO
 {
 	public abstract class HTMLExporter : Exporter
 	{
-		protected void WriteHeader(StreamWriter aStream, string aTitle)
+		public HTMLExporter(TGenEngine aEngine, string aPath) : base(aEngine, aPath)
+		{
+		}
+
+		protected void WriteHTMLHeader(StreamWriter aStream, string aTitle)
 		{
 			aStream.WriteLine("<html>");
 			aStream.WriteLine("<head>");
@@ -20,14 +24,10 @@ namespace GKCore.IO
 			aStream.WriteLine("<body>");
 		}
 
-		protected void WriteFooter(StreamWriter aStream)
+		protected void WriteHTMLFooter(StreamWriter aStream)
 		{
 			aStream.WriteLine("</body>");
 			aStream.WriteLine("</html>");
-		}
-
-		public HTMLExporter(TGenEngine aEngine, string aPath) : base(aEngine, aPath)
-		{
 		}
 	}
 }

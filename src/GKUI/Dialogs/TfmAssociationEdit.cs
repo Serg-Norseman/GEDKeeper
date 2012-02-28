@@ -7,7 +7,7 @@ using GKCore;
 using GKSys;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKUI
@@ -33,7 +33,8 @@ namespace GKUI
 		{
 			this.FAssociation = Value;
 			this.EditRelation.Text = this.FAssociation.Relation;
-			this.EditPerson.Text = TGenEngine.GetNameStr(this.FAssociation.Individual, true, false);
+			string st = ((this.FAssociation.Individual == null) ? "" : this.FAssociation.Individual.aux_GetNameStr(true, false));
+			this.EditPerson.Text = st;
 		}
 
 		private void btnAccept_Click(object sender, EventArgs e)
@@ -60,7 +61,7 @@ namespace GKUI
 		private void btnPersonAdd_Click(object sender, EventArgs e)
 		{
 			this.FTempInd = this.Base.SelectPerson(null, TGenEngine.TTargetMode.tmNone, TGEDCOMSex.svNone);
-			this.EditPerson.Text = TGenEngine.GetNameStr(this.FTempInd, true, false);
+			this.EditPerson.Text = ((this.FTempInd == null) ? "" : this.FTempInd.aux_GetNameStr(true, false));
 		}
 
 		public TfmAssociationEdit(TfmBase aBase)

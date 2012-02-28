@@ -597,16 +597,16 @@ namespace GedCom551
 
 			while (this._IndividualEvents.Count > 0)
 			{
-				TGEDCOMObject obj = this._IndividualEvents.Extract(0);
-				(obj as TGEDCOMCustomTag).ResetParent(toRec);
-				toRec.AddIndividualEvent(obj as TGEDCOMIndividualEvent);
+				TGEDCOMCustomEvent evt = (TGEDCOMCustomEvent)this._IndividualEvents.Extract(0);
+				evt.ResetParent(toRec);
+				toRec.AddIndividualEvent(evt);
 			}
 
 			while (this._IndividualOrdinances.Count > 0)
 			{
-				TGEDCOMObject obj = this._IndividualOrdinances.Extract(0);
-				(obj as TGEDCOMCustomTag).ResetParent(toRec);
-				toRec.IndividualOrdinances.Add(obj as TGEDCOMIndividualOrdinance);
+				TGEDCOMIndividualOrdinance ord = (TGEDCOMIndividualOrdinance)this._IndividualOrdinances.Extract(0);
+				ord.ResetParent(toRec);
+				toRec.IndividualOrdinances.Add(ord);
 			}
 
 			while (this._Submittors.Count > 0)
@@ -775,6 +775,120 @@ namespace GedCom551
 				aName = "";
 				aPatronymic = "";
 			}
+		}
+
+		public void aux_GetParents(out TGEDCOMIndividualRecord father, out TGEDCOMIndividualRecord mother)
+		{
+			TGEDCOMFamilyRecord fam = (this.ChildToFamilyLinks.Count < 1) ? null : this.ChildToFamilyLinks[0].Value as TGEDCOMFamilyRecord;
+
+			if (fam == null) {
+				father = null;
+				mother = null;
+			} else {
+				father = fam.Husband.Value as TGEDCOMIndividualRecord;
+				mother = fam.Wife.Value as TGEDCOMIndividualRecord;
+			}
+		}
+
+		public string aux_GetNameStr(bool aByFamily, bool aPieces)
+		{
+			string Result;
+			if (this._PersonalNames.Count > 0)
+			{
+				TGEDCOMPersonalName np = this._PersonalNames[0];
+
+				string firstPart, surname/*, dummy*/;
+				np.GetNameParts(out firstPart, out surname /*, out dummy*/);
+
+				if (aByFamily)
+				{
+					Result = surname + " " + firstPart;
+				}
+				else
+				{
+					Result = firstPart + " " + surname;
+				}
+
+				if (aPieces)
+				{
+					string nick = np.Pieces.Nickname;
+					if (nick != "") Result = Result + " [" + nick + "]";
+				}
+			}
+			else
+			{
+				Result = "";
+			}
+			return Result;
+		}
+
+		public string aux_GetNickStr()
+		{
+			string Result;
+			if (this._PersonalNames.Count > 0)
+			{
+				TGEDCOMPersonalName np = this._PersonalNames[0];
+				Result = np.Pieces.Nickname;
+			}
+			else
+			{
+				Result = "";
+			}
+			return Result;
+		}
+
+		public float IsMatch(TGEDCOMIndividualRecord indi)
+		{
+			float match = 0F;
+
+			// check name
+			float nameMatch = 0F;
+			for (int i = 0; i <= indi.PersonalNames.Count - 1; i++)
+			{
+				for (int k = 0; k <= _PersonalNames.Count - 1; k++)
+				{
+					float currentNameMatch = _PersonalNames[k].IsMatch(indi.PersonalNames[i]);
+
+					nameMatch = Math.Max(nameMatch, currentNameMatch);
+				}
+			}
+
+			// 0% name match would be pointless checking other details
+			if (nameMatch != 0)
+			{			
+				// check gender
+				float genderMatch = ((Sex == indi.Sex) ? 100.0F : 0.0F);
+
+				float birthMatch = 0F;
+				float deathMatch = 0F;
+
+				TGEDCOMCustomEvent birth = null;
+				TGEDCOMCustomEvent death = null;
+				TGEDCOMCustomEvent indiBirth = null;
+				TGEDCOMCustomEvent indiDeath = null;
+
+				aux_GetLifeDates(out birth, out death);
+				indi.aux_GetLifeDates(out indiBirth, out indiDeath);
+
+				if (birth != null && indiBirth != null) {
+					birthMatch = birth.IsMatch(indiBirth);
+				} else if (birth == null && indiBirth == null) {
+					birthMatch = 100.0F;
+				}
+
+				if (death != null && indiDeath != null) {
+					deathMatch = death.IsMatch(indiDeath);
+				} else if (death == null && indiDeath == null) {
+					deathMatch = 100.0F;
+				}
+
+				// FIXME: check parents ?
+
+				match = (nameMatch + genderMatch + birthMatch + deathMatch) / 4.0F;
+			}
+						
+						
+			return match;
 		}
 
 	}

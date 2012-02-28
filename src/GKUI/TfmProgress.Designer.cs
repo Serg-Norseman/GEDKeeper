@@ -30,6 +30,7 @@ namespace GKUI
 			this.ProgressBar1.Location = new System.Drawing.Point(8, 24);
 			this.ProgressBar1.Name = "ProgressBar1";
 			this.ProgressBar1.Size = new System.Drawing.Size(401, 16);
+			this.ProgressBar1.Step = 1;
 			this.ProgressBar1.TabIndex = 0;
 			// 
 			// Label1

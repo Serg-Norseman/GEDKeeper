@@ -133,14 +133,14 @@ namespace GedCom551
 			string Result = S;
 			if (!string.IsNullOrEmpty(Result))
 			{
-				if (SysUtils.WStrCopy(Result, 1, 4).ToUpper() == "FROM")
+				if (Result.StartsWith("FROM"))
 				{
 					Result = Result.Remove(0, 4);
 					Result = base.ExtractDelimiter(Result, 0);
 					Result = this.FDateFrom.ParseString(Result);
 					Result = base.ExtractDelimiter(Result, 0);
 				}
-				if (SysUtils.WStrCopy(Result, 1, 2).ToUpper() == "TO")
+				if (Result.StartsWith("TO"))
 				{
 					Result = Result.Remove(0, 2);
 					Result = base.ExtractDelimiter(Result, 0);

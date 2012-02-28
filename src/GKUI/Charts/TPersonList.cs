@@ -8,7 +8,7 @@ using GKCore;
 using GKSys;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKUI.Charts
@@ -272,7 +272,7 @@ namespace GKUI.Charts
 
 		protected int TextWidth(Graphics g, string st)
 		{
-			return g.MeasureString(st, this.FChart.FDrawFont).ToSize().Width;
+			return g.MeasureString(st, this.FChart.DrawFont).ToSize().Width;
 		}
 
 		private GraphicsPath CreateRoundedRectangle(int x, int y, int width, int height, int radius)
@@ -389,10 +389,10 @@ namespace GKUI.Charts
 
 		private void TextOut(Graphics aCanvas, TRect rt, string s, int h, ref int line)
 		{
-			int stw = aCanvas.MeasureString(s, this.FChart.FDrawFont).ToSize().Width;
+			int stw = aCanvas.MeasureString(s, this.FChart.DrawFont).ToSize().Width;
 			int rx = rt.Left + ((rt.Right - rt.Left + 1) - stw) / 2;
 			int ry = rt.Top + (10 + (h * line));
-			aCanvas.DrawString(s, this.FChart.FDrawFont, new SolidBrush(Color.Black), (float)rx, (float)ry);
+			aCanvas.DrawString(s, this.FChart.DrawFont, new SolidBrush(Color.Black), (float)rx, (float)ry);
 			line++;
 		}
 
@@ -554,7 +554,7 @@ namespace GKUI.Charts
 				{
 					try
 					{
-						this.FPortrait = this.FChart.FEngine.GetPrimaryBitmap(iRec, -1, -1, true);
+						this.FPortrait = this.FChart.Engine.GetPrimaryBitmap(iRec, -1, -1, true);
 					}
 					catch (MediaFileNotFoundException)
 					{
@@ -638,7 +638,7 @@ namespace GKUI.Charts
 				}
 
 				this.FWidth = maxwid + 20;
-				this.FHeight = g.MeasureString("A", this.FChart.FDrawFont).ToSize().Height * lines + 20;
+				this.FHeight = g.MeasureString("A", this.FChart.DrawFont).ToSize().Height * lines + 20;
 				if (this.FChart.Options.PortraitsVisible && this.FPortrait != null)
 				{
 					Rectangle prt = this.GetDestRect(TRect.Create(0, 0, this.FHeight - 1, this.FHeight - 1), this.FPortrait);
@@ -656,7 +656,7 @@ namespace GKUI.Charts
 		{
 			TRect rt = this.GetRect();
 			rt = rt.GetOffset(SPX, SPY);
-			int h = aCanvas.MeasureString("A", this.FChart.FDrawFont).ToSize().Height;
+			int h = aCanvas.MeasureString("A", this.FChart.DrawFont).ToSize().Height;
 			bool has_port = this.FChart.Options.PortraitsVisible && this.FPortrait != null;
 			Pen xpen = new Pen(Color.Black, 1f);
 

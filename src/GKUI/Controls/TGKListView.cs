@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using GKSys;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKUI.Controls
@@ -16,7 +16,6 @@ namespace GKUI.Controls
 		{
 			private int FSortColumn;
 			private SortOrder FSortOrder;
-			private CaseInsensitiveComparer FObjCompare;
 
 			public int SortColumn
 			{
@@ -34,22 +33,27 @@ namespace GKUI.Controls
 			{
 				this.FSortColumn = 0;
 				this.FSortOrder = SortOrder.None;
-				this.FObjCompare = new CaseInsensitiveComparer();
 			}
 
 			int IComparer.Compare(object x, object y)
 			{
 				int Result = 0;
 
-				if (this.FSortOrder != SortOrder.None) {
+				int sort_column = this.FSortColumn;
+
+				if (this.FSortOrder != SortOrder.None && sort_column >= 0 ) {
 					ListViewItem item = x as ListViewItem;
 					ListViewItem item2 = y as ListViewItem;
 
-					int comp_res = SysUtils.agCompare(item.SubItems[this.FSortColumn].Text, item2.SubItems[this.FSortColumn].Text);
-					if (this.FSortOrder == SortOrder.Ascending) {
-						Result = comp_res;
-					} else if (this.FSortOrder == SortOrder.Descending) {
-						Result = -comp_res;
+					if (sort_column < item.SubItems.Count && sort_column < item2.SubItems.Count)
+					{					
+						int comp_res = SysUtils.agCompare(item.SubItems[sort_column].Text, item2.SubItems[sort_column].Text);
+
+						if (this.FSortOrder == SortOrder.Ascending) {
+							Result = comp_res;
+						} else if (this.FSortOrder == SortOrder.Descending) {
+							Result = -comp_res;
+						}
 					}
 				}
 

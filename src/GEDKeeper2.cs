@@ -17,7 +17,7 @@ using GKUI;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyTitle("GEDKeeper2")]
-[assembly: AssemblyVersion("2.0.467.1")]
+[assembly: AssemblyVersion("2.0.475.4")]
 
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyFile("")]
@@ -63,7 +63,7 @@ namespace GEDKeeper2
 	    }
 
 		static void UnhandledExceptionsHandler(object sender, UnhandledExceptionEventArgs args) {
-			//fixme!!! - saving restore copies
+			// FIXME: saving restore copies
 			/*for (int i = mdiChildren.Length - 1; i >= 0; i--)
 			{
 				if (mdiChildren[i] is TfmBase)

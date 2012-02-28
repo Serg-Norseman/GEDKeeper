@@ -12,7 +12,7 @@ using GKUI.Controls;
 using GKUI.Lists;
 
 /// <summary>
-/// Localization: clean
+/// Localization: unknown
 /// </summary>
 
 namespace GKUI
@@ -63,10 +63,10 @@ namespace GKUI
 
 		private void FormCreate(object sender, EventArgs e)
 		{
-			SysUtils.LogInit(SysUtils.GetAppPath() + "GEDKeeper2.log");
+			SysUtils.LogInit(SysUtils.GetAppDataPath() + "GEDKeeper2.log");
 
 			this.FOptions = new TGlobalOptions();
-			this.FOptions.LoadFromFile(SysUtils.GetAppPath() + "GEDKeeper2.ini");
+			this.FOptions.LoadFromFile(SysUtils.GetAppDataPath() + "GEDKeeper2.ini");
 			this.FOptions.FindLanguages();
 
 			if (this.FOptions.MWinRect.Left != -1 && this.FOptions.MWinRect.Top != -1 && this.FOptions.MWinRect.Right != -1 && this.FOptions.MWinRect.Bottom != -1)
@@ -86,7 +86,7 @@ namespace GKUI
 			base.WindowState = this.FOptions.MWinState;
 
 			this.FNamesTable = new TNamesTable();
-			this.FNamesTable.LoadFromFile(SysUtils.GetAppPath() + "GEDKeeper2.nms");
+			this.FNamesTable.LoadFromFile(SysUtils.GetAppDataPath() + "GEDKeeper2.nms");
 
 			this.LoadLanguage((int)this.FOptions.InterfaceLang);
 
@@ -96,6 +96,20 @@ namespace GKUI
 			if (FCommandArgs.Length > 0) {
 				this.CreateBase(FCommandArgs[0]);
 			}
+		}
+
+		void TfmGEDKeeperFormClosed(object sender, FormClosedEventArgs e)
+		{
+			this.FOptions.MWinRect = this.GetFormRect(this);
+			this.FOptions.MWinState = base.WindowState;
+
+			SysUtils.HtmlHelp(IntPtr.Zero, null, 18u, 0u);
+
+			this.FNamesTable.SaveToFile(SysUtils.GetAppDataPath() + "GEDKeeper2.nms");
+			this.FNamesTable.Dispose();
+
+			this.FOptions.SaveToFile(SysUtils.GetAppDataPath() + "GEDKeeper2.ini");
+			this.FOptions.Dispose();
 		}
 
 		private void MRUFileClick(object sender, EventArgs e)
@@ -217,15 +231,20 @@ namespace GKUI
 			TfmOptions fmOptions = new TfmOptions();
 			try
 			{
+				Form active_form = this.ActiveMdiChild;
+				if (active_form is TfmChart) fmOptions.SetPage(1);
+
 				if (fmOptions.ShowDialog() == DialogResult.OK)
 				{
-					Form[] mdiChildren = base.MdiChildren;
-					int num = ((mdiChildren != null) ? mdiChildren.Length : 0) - 1;
+					int num = base.MdiChildren.Length;
 					for (int i = 0; i <= num; i++)
 					{
-						if (base.MdiChildren[i] is TfmBase)
-						{
-							(base.MdiChildren[i] as TfmBase).ListsRefresh(true);
+						Form child = base.MdiChildren[i];
+
+						if (child is TfmBase) {
+							(child as TfmBase).ListsRefresh(true);
+						} else if (child is TfmChart) {
+							(child as TfmChart).GenChart(false);
 						}
 					}
 				}
@@ -331,6 +350,11 @@ namespace GKUI
 				this.fmCalcWidget.Dispose();
 				this.fmCalcWidget = null;
 			}
+		}
+
+		private void miLogSendClick(object sender, EventArgs e)
+		{
+			SysUtils.LogSend();
 		}
 
 		private void miAboutClick(object sender, EventArgs e)
@@ -627,17 +651,6 @@ namespace GKUI
 		private void TfmGEDKeeper_Resize(object sender, EventArgs e)
 		{
 			this.StatusBar.Panels[0].Width = base.Width - 50;
-		}
-
-		void TfmGEDKeeperFormClosed(object sender, FormClosedEventArgs e)
-		{
-			this.FOptions.MWinRect = this.GetFormRect(this);
-			this.FOptions.MWinState = base.WindowState;
-			SysUtils.HtmlHelp(IntPtr.Zero, null, 18u, 0u);
-			this.FNamesTable.SaveToFile(SysUtils.GetAppPath() + "GEDKeeper2.nms");
-			this.FNamesTable.Dispose();
-			this.FOptions.SaveToFile(SysUtils.GetAppPath() + "GEDKeeper2.ini");
-			this.FOptions.Dispose();
 		}
 
 		void TfmGEDKeeperFormClosing(object sender, FormClosingEventArgs e)

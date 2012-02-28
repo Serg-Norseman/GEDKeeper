@@ -13,13 +13,148 @@ using GKSys;
 
 namespace GedCom551
 {
+	public interface ITreeEnumerator
+	{
+		bool MoveNext(out TGEDCOMRecord current);
+		void Reset();
+	}
+
 	public sealed class TGEDCOMTree : TGEDCOMObject, IDisposable
 	{
+		public struct StdTreeEnumerator : IEnumerator
+		{
+			private TGEDCOMTree tree;
+			private int index;
+			private int endIndex;
+			private TGEDCOMRecord currentElement;
+			private TGEDCOMRecordType rec_type;
+
+			public object Current
+			{
+				get { return this.currentElement; }
+			}
+
+			internal StdTreeEnumerator(TGEDCOMTree tree)
+			{
+				this.tree = tree;
+				this.index = -1;
+				this.endIndex = tree.RecordsCount - 1;
+				this.currentElement = null;
+				this.rec_type = TGEDCOMRecordType.rtNone;
+			}
+
+			internal StdTreeEnumerator(TGEDCOMTree tree, TGEDCOMRecordType rec_type)
+			{
+				this.tree = tree;
+				this.index = -1;
+				this.endIndex = tree.RecordsCount - 1;
+				this.currentElement = null;
+				this.rec_type = rec_type;
+			}
+
+			public bool MoveNext()
+			{
+				if (this.rec_type == TGEDCOMRecordType.rtNone)
+				{
+					if (this.index < this.endIndex)
+					{
+						this.index++;
+						this.currentElement = this.tree[this.index];
+						return true;
+					}
+				} else {
+					while (this.index < this.endIndex)
+					{
+						this.index++;
+						TGEDCOMRecord rec = this.tree[this.index];
+						if (rec.RecordType == this.rec_type) {
+							this.currentElement = rec;
+							return true;
+						}
+					}
+				}
+
+				this.index = this.endIndex + 1;
+				return false;
+			}
+
+			public void Reset()
+			{
+				this.index = -1;
+			}
+		}
+
+		public struct TreeEnumerator : ITreeEnumerator
+		{
+			private TGEDCOMTree tree;
+			private int index;
+			private int endIndex;
+			private TGEDCOMRecordType rec_type;
+
+			internal TreeEnumerator(TGEDCOMTree tree)
+			{
+				this.tree = tree;
+				this.index = -1;
+				this.endIndex = tree.RecordsCount - 1;
+				this.rec_type = TGEDCOMRecordType.rtNone;
+			}
+
+			internal TreeEnumerator(TGEDCOMTree tree, TGEDCOMRecordType rec_type)
+			{
+				this.tree = tree;
+				this.index = -1;
+				this.endIndex = tree.RecordsCount - 1;
+				this.rec_type = rec_type;
+			}
+
+			public bool MoveNext(out TGEDCOMRecord current)
+			{
+				if (this.rec_type == TGEDCOMRecordType.rtNone)
+				{
+					if (this.index < this.endIndex)
+					{
+						this.index++;
+						current = this.tree[this.index];
+						return true;
+					}
+				} else {
+					while (this.index < this.endIndex)
+					{
+						this.index++;
+						TGEDCOMRecord rec = this.tree[this.index];
+						if (rec.RecordType == this.rec_type) {
+							current = rec;
+							return true;
+						}
+					}
+				}
+
+				this.index = this.endIndex + 1;
+				current = null;
+				return false;
+			}
+
+			public void Reset()
+			{
+				this.index = -1;
+			}
+		}
+
 		private TGEDCOMListEx<TGEDCOMRecord> FRecords;
 		private TGEDCOMHeader FHeader;
 		private Hashtable FXRefIndex;
 		private TGEDCOMState FState;
 		private bool Disposed_;
+
+		public IEnumerator GetStdEnumerator(TGEDCOMRecordType rec_type)
+		{
+			return new StdTreeEnumerator(this, rec_type);
+		}
+
+		public ITreeEnumerator GetEnumerator(TGEDCOMRecordType rec_type)
+		{
+			return new TreeEnumerator(this, rec_type);
+		}
 
 		public int RecordsCount
 		{

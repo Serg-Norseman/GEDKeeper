@@ -5,7 +5,7 @@ using GKCore;
 using GKUI.Controls;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKUI.Lists
@@ -17,7 +17,7 @@ namespace GKUI.Lists
 		public override bool CheckFilter(TPersonsFilter aFilter, TGenEngine.TShieldState aShieldState)
 		{
 			bool Result = false;
-			if ((this.FRec.Restriction != TGEDCOMRestriction.rnPrivacy || aShieldState == TGenEngine.TShieldState.ssNone) && (aFilter.List != TPersonsFilter.TListFilterMode.flSelector || aFilter.Name == "*" || IsMatchesMask(TGenEngine.GetFamilyStr(this.FRec), aFilter.Name)))
+			if ((this.FRec.Restriction != TGEDCOMRestriction.rnPrivacy || aShieldState == TGenEngine.TShieldState.ssNone) && (aFilter.List != TPersonsFilter.TListFilterMode.flSelector || aFilter.Name == "*" || IsMatchesMask(TGenEngine.aux_GetFamilyStr(this.FRec), aFilter.Name)))
 			{
 				Result = true;
 			}
@@ -34,7 +34,7 @@ namespace GKUI.Lists
 			string result;
 			switch (aColIndex) {
 				case 1:
-					result = TGenEngine.GetFamilyStr(this.FRec);
+					result = TGenEngine.aux_GetFamilyStr(this.FRec);
 					break;
 				case 2:
 					result = TGenEngine.GetMarriageDate(this.FRec, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
@@ -51,7 +51,7 @@ namespace GKUI.Lists
 
 		public override void UpdateItem(TExtListItem aItem, bool isMain)
 		{
-			aItem.SubItems.Add(TGenEngine.GetFamilyStr(this.FRec));
+			aItem.SubItems.Add(TGenEngine.aux_GetFamilyStr(this.FRec));
 			aItem.SubItems.Add(TGenEngine.GetMarriageDate(this.FRec, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
 			if (isMain)
 			{

@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
+using GKCore;
 using GKSys;
 
 namespace GedCom551
@@ -27,15 +28,7 @@ namespace GedCom551
 
 		public override DateTime GetDateTime()
 		{
-			DateTime Result;
-			if (this.FValue != null)
-			{
-				Result = this.FValue.GetDateTime();
-			}
-			else
-			{
-				Result = new DateTime(0);
-			}
+			DateTime Result = ((this.FValue == null) ? new DateTime(0) : this.FValue.GetDateTime());
 			return Result;
 		}
 
@@ -114,7 +107,7 @@ namespace GedCom551
 			}
 			catch (Exception E)
 			{
-				SysUtils.LogWrite("TGEDCOMDateValue.ParseString(): " + E.Message);
+				SysUtils.LogWrite("TGEDCOMDateValue.ParseString(\"" + S + "\"): " + E.Message);
 				return S;
 			}
 		}
@@ -123,6 +116,112 @@ namespace GedCom551
 		{
 			base.ResetOwner(AOwner);
 			if (this.FValue != null) this.FValue.ResetOwner(AOwner);
+		}
+
+		public float IsMatch(TGEDCOMDateValue date)
+		{
+			float match = 0.0F;
+
+			if (date != null) {
+				int year1, year2;
+				ushort month1, day1, month2, day2;
+				this.aux_GetIndependentDate(out year1, out month1, out day1);
+				date.aux_GetIndependentDate(out year2, out month2, out day2);
+
+				float matches = 0;
+				if (year1 == year2) matches++;
+				if (month1 == month2) matches++;
+				if (day1 == day2) matches++;
+				match = (matches / 3.0F) * 100.0F;
+			}
+
+			return match;
+		}
+
+		public void aux_GetIndependentDate(out int AYear, out ushort AMonth, out ushort ADay)
+		{
+			bool BC;
+			aux_GetIndependentDate(out AYear, out AMonth, out ADay, out BC);
+		}
+
+		public void aux_GetIndependentDate(out int AYear, out ushort AMonth, out ushort ADay, out bool YearBC)
+		{
+			AYear = -1;
+			AMonth = 0;
+			ADay = 0;
+			YearBC = false;
+
+			if (FValue is TGEDCOMDateApproximated)
+			{
+				TGEDCOMDate dt = (FValue as TGEDCOMDate);
+				dt.GetDate(out AYear, out AMonth, out ADay);
+				YearBC = dt.YearBC;
+			}
+			else
+			{
+				if (FValue is TGEDCOMDateRange)
+				{
+					TGEDCOMDateRange dt_range = FValue as TGEDCOMDateRange;
+					if (dt_range.After.StringValue == "" && dt_range.Before.StringValue != "")
+					{
+						dt_range.Before.GetDate(out AYear, out AMonth, out ADay);
+						YearBC = dt_range.Before.YearBC;
+					}
+					else
+					{
+						if (dt_range.After.StringValue != "" && dt_range.Before.StringValue == "")
+						{
+							dt_range.After.GetDate(out AYear, out AMonth, out ADay);
+							YearBC = dt_range.After.YearBC;
+						}
+						else
+						{
+							if (dt_range.After.StringValue != "" && dt_range.Before.StringValue != "")
+							{
+								dt_range.After.GetDate(out AYear, out AMonth, out ADay);
+								YearBC = dt_range.After.YearBC;
+							}
+						}
+					}
+				}
+				else
+				{
+					if (FValue is TGEDCOMDatePeriod)
+					{
+						TGEDCOMDatePeriod dt_period = FValue as TGEDCOMDatePeriod;
+						if (dt_period.DateFrom.StringValue != "" && dt_period.DateTo.StringValue == "")
+						{
+							dt_period.DateFrom.GetDate(out AYear, out AMonth, out ADay);
+							YearBC = dt_period.DateFrom.YearBC;
+						}
+						else
+						{
+							if (dt_period.DateFrom.StringValue == "" && dt_period.DateTo.StringValue != "")
+							{
+								dt_period.DateTo.GetDate(out AYear, out AMonth, out ADay);
+								YearBC = dt_period.DateTo.YearBC;
+							}
+							else
+							{
+								if (dt_period.DateFrom.StringValue != "" && dt_period.DateTo.StringValue != "")
+								{
+									dt_period.DateFrom.GetDate(out AYear, out AMonth, out ADay);
+									YearBC = dt_period.DateFrom.YearBC;
+								}
+							}
+						}
+					}
+					else
+					{
+						if (FValue is TGEDCOMDate)
+						{
+							TGEDCOMDate dt = (FValue as TGEDCOMDate);
+							dt.GetDate(out AYear, out AMonth, out ADay);
+							YearBC = dt.YearBC;
+						}
+					}
+				}
+			}
 		}
 
 		public TGEDCOMDateValue(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)

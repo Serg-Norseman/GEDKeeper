@@ -9,7 +9,7 @@ using GKUI.Controls;
 using GKUI.Lists;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKUI
@@ -134,7 +134,7 @@ namespace GKUI
 			for (int i = 0; i <= num; i++)
 			{
 				TGEDCOMIndividualRecord member = this.FGroup.Members[i].Value as TGEDCOMIndividualRecord;
-				TExtListItem item = list.AddItem(TGenEngine.GetNameStr(member, true, false), member);
+				TExtListItem item = list.AddItem(member.aux_GetNameStr(true, false), member);
 			}
 			list.EndUpdate();
 		}

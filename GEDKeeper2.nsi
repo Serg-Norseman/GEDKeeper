@@ -49,6 +49,10 @@ Section "GEDKeeper2 (необходимо)"
   File ".\langs\readme.txt"
   File ".\langs\russian.sample"
 
+  CreateDirectory "$INSTDIR\backgrounds"
+  SetOutPath "$INSTDIR\backgrounds"
+  File ".\backgrounds\*.png"
+
   ; Write the installation path into the registry
   WriteRegStr HKLM SOFTWARE\GEDKeeper2 "Install_Dir" "$INSTDIR"
 

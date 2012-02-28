@@ -64,6 +64,41 @@ namespace GedCom551
 			this.FDetail.SaveToStream(AStream);
 		}
 
+		public float IsMatch(TGEDCOMCustomEvent ev)
+		{
+			float match = 0F;
+
+			// match date
+			float dateMatch = 0;
+
+			TGEDCOMDateValue dtVal = FDetail.Date;
+			TGEDCOMDateValue dtVal2 = ev.FDetail.Date;
+
+			if (dtVal == null && dtVal2 == null) {
+				dateMatch = 100.0F;
+			} else if (dtVal != null && dtVal2 != null) {
+				dateMatch = dtVal.IsMatch(dtVal2);
+			}
+
+			// match location
+			float locMatch = 0;
+			if (FDetail.Place == null && ev.FDetail.Place == null)
+			{
+				locMatch = 100.0F;
+			}
+			else if (FDetail.Place != null && ev.FDetail.Place != null)
+			{
+				if (FDetail.Place.StringValue == ev.FDetail.Place.StringValue)
+				{
+					locMatch = 100.0F;
+				}
+			}
+
+			match = (dateMatch + locMatch) / 2.0F;
+
+			return match;
+		}
+
 		public TGEDCOMCustomEvent(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
 		}

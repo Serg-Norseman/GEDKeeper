@@ -9,6 +9,8 @@ using GKCore;
 using GKSys;
 using GKUI.Charts;
 
+using GKSandbox;
+
 /// <summary>
 /// Localization: unknown
 /// </summary>
@@ -228,7 +230,8 @@ namespace GKUI
 			switch (this.FMode)
 			{
 				case ChartControlMode.ccmDefault:
-					if (e.Button == MouseButtons.Right)
+					this.FTreeBox.SelectBy(e.X, e.Y);
+					if (this.FTreeBox.Selected == null && e.Button == MouseButtons.Right)
 					{
 						this.FTreeBox.Cursor = Cursors.SizeAll;
 						this.FMode = ChartControlMode.ccmDragImage;
@@ -277,7 +280,7 @@ namespace GKUI
 			switch (this.FMode)
 			{
 				case ChartControlMode.ccmDefault:
-					this.FTreeBox.SelectBy(e.X, e.Y);
+					//this.FTreeBox.SelectBy(e.X, e.Y);
 					if (this.FTreeBox.Selected != null && this.FTreeBox.Selected.Rec != null)
 					{
 						switch (e.Button) {
@@ -449,14 +452,36 @@ namespace GKUI
 			}
 		}
 
-		private void miRebuildKinshipsClick(object sender, EventArgs e)
+		void miRebuildKinshipsClick(object sender, EventArgs e)
 		{
 			this.FTreeBox.RebuildKinships();
 		}
 
-		private void miTraceRootClick(object sender, EventArgs e)
+		void miTraceRootClick(object sender, EventArgs e)
 		{
 			this.miTraceRoot.Checked = !this.miTraceRoot.Checked;
+		}
+
+		void miFillColorClick(object sender, EventArgs e)
+		{
+			if (colorDialog1.ShowDialog() == DialogResult.OK)
+			{
+				this.FTreeBox.BackgroundImage = null;
+				this.FTreeBox.BackColor = colorDialog1.Color;
+				this.FTreeBox.Invalidate();
+			}
+		}
+
+		void miFillImageClick(object sender, EventArgs e)
+		{
+			OpenDialog1.InitialDirectory = SysUtils.GetAppPath() + "\\backgrounds";
+			if (OpenDialog1.ShowDialog() == DialogResult.OK)
+			{
+				Image img = new Bitmap(OpenDialog1.FileName);
+				this.FTreeBox.BackgroundImage = img;
+				this.FTreeBox.BackgroundImageLayout = ImageLayout.Tile;
+				this.FTreeBox.Invalidate();
+			}
 		}
 
 		private void UpdateModesMenu([In] TAncestryChartBox.TChartKind aChartKind)
@@ -608,6 +633,10 @@ namespace GKUI
 			this.miDelete.Text = LangMan.LSList[231];
 			this.miRebuildTree.Text = LangMan.LSList[232];
 			this.miRebuildKinships.Text = LangMan.LSList[233];
+
+			this.miFillColor.Text = LangMan.LS(LSID.LSID_FillColor);
+			this.miFillImage.Text = LangMan.LS(LSID.LSID_FillImage);
 		}
+
 	}
 }

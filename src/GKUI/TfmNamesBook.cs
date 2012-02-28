@@ -10,7 +10,7 @@ using GKSys;
 using GKUI.Controls;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKUI
@@ -88,7 +88,7 @@ namespace GKUI
 			if (res) {
 				res = (st.Length >= 2 && st[0] == '[' && st[st.Length - 1] == ']');
 				if (res) {
-					st = SysUtils.WStrCopy(st, 2, st.Length - 2);
+					st = st.Substring(1, st.Length - 2);
 				}
 			}
 			return res;

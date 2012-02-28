@@ -156,7 +156,10 @@ namespace GKCore
 			lua_register(LVM, "gt_get_person_group");
 			lua_register(LVM, "gt_get_group_name");
 
+			// experimentals
+
 			lua_register(LVM, "gt_get_unlinked_namesakes");
+			lua_register(LVM, "gt_find_dups");
 
 			///
 
@@ -271,10 +274,8 @@ namespace GKCore
 
 		public string gt_get_record_type_name(int rec_type)
 		{
-			string rt_name = "";
-
-			//alert
-			//rt_name = GetEnumName(TypeInfo(TGEDCOMRecordType), Integer(rec_type));
+			TGEDCOMRecordType rt = (TGEDCOMRecordType)rec_type;
+			string rt_name = rt.ToString();
 			return rt_name;
 		}
 
@@ -293,7 +294,7 @@ namespace GKCore
 		public string gt_get_person_name(object rec_ptr)
 		{
 			TGEDCOMIndividualRecord rec = (TGEDCOMIndividualRecord)rec_ptr;
-			return TGenEngine.GetNameStr(rec, true, false);
+			return ((rec == null) ? "" : rec.aux_GetNameStr(true, false));
 		}
 
 		public int gt_get_person_associations_count(object rec_ptr)
@@ -351,10 +352,9 @@ namespace GKCore
 
 		public void gt_set_event_date(object ev_ptr, string date)
 		{
-			//fixme!!!
 			try
 			{
-				if (date != "") {
+				if (ev_ptr != null && date != "") {
 					TGEDCOMIndividualEvent evt = (TGEDCOMIndividualEvent)ev_ptr;
 					evt.Detail.Date.ParseString(date);
 				}
@@ -649,12 +649,30 @@ namespace GKCore
 			for (int i = 0; i < uln.Count; i++)
 			{
 				TGenEngine.ULIndividual indiv = uln[i];
-				lua_print("    - [" + indiv.Family + "] " + TGenEngine.GetNameStr(indiv.iRec, true, false));
+				lua_print("    - [" + indiv.Family + "] " + indiv.iRec.aux_GetNameStr(true, false));
 			}
 		}
 		else
 		{
 			lua_print("    - not found.");
+		}
+	}
+
+	private void DuplicateFoundFunc(TGEDCOMIndividualRecord indi, List<TGEDCOMIndividualRecord> matches)
+	{
+		lua_print("    - [" + indi.aux_GetNameStr(true, false) + "]");
+		for (int i = 0; i <= matches.Count - 1; i++)
+			lua_print("      - [" + matches[i].aux_GetNameStr(true, false) + "]");
+	}
+
+	public void gt_find_dups()
+	{
+		if (TfmGEDKeeper.Instance.MdiChildren.Length == 2)
+		{
+			TGEDCOMTree treeA = (TfmGEDKeeper.Instance.MdiChildren[0] as TfmBase).Tree;
+			TGEDCOMTree treeB = (TfmGEDKeeper.Instance.MdiChildren[1] as TfmBase).Tree;
+
+			TGenEngine.FindDuplicates(treeA, treeB, 85, DuplicateFoundFunc);
 		}
 	}
 

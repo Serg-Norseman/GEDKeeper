@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using GKCore;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKUI
@@ -41,75 +41,38 @@ namespace GKUI
 				int day = 0;
 				cal.jd_to_julian(jd, ref year, ref month, ref day);
 				TfmCalendar._qtc_DateSelected_AddItem(this, LangMan.LSList[157], cal.date_to_str(year, month, day, TCalendarConv.TDateEra.AD));
+
 				cal.jd_to_hebrew(jd, ref year, ref month, ref day);
 				s = day.ToString() + " ";
 				s += TCalendarConv.HebrewMonths[month - 1];
-				s = string.Concat(new string[]
-				{
-					s, 
-					" ", 
-					year.ToString(), 
-					", ", 
-					TCalendarConv.HebrewWeekdays[cal.jwday(jd)]
-				});
+				s = s + " " + year.ToString() + ", " + TCalendarConv.HebrewWeekdays[cal.jwday(jd)];
 				TfmCalendar._qtc_DateSelected_AddItem(this, LangMan.LSList[158], s);
+
 				cal.jd_to_islamic(jd, ref year, ref month, ref day);
 				s = day.ToString() + " ";
 				s += TCalendarConv.IslamicMonths[month - 1];
-				s = string.Concat(new string[]
-				{
-					s, 
-					" ", 
-					year.ToString(), 
-					", йаум ", 
-					TCalendarConv.IslamicWeekdays[cal.jwday(jd)]
-				});
+				s = s + " " + year.ToString() + ", йаум " + TCalendarConv.IslamicWeekdays[cal.jwday(jd)];
 				TfmCalendar._qtc_DateSelected_AddItem(this, LangMan.LSList[159], s);
+
 				cal.jd_to_persian(jd, ref year, ref month, ref day);
 				s = day.ToString() + " ";
 				s += TCalendarConv.PersianMonths[month - 1];
-				s = string.Concat(new string[]
-				{
-					s, 
-					" ", 
-					year.ToString(), 
-					", ", 
-					TCalendarConv.PersianWeekdays[cal.jwday(jd)]
-				});
+				s = s + " " + year.ToString() + ", " + TCalendarConv.PersianWeekdays[cal.jwday(jd)];
 				TfmCalendar._qtc_DateSelected_AddItem(this, LangMan.LSList[160], s);
+
 				cal.jd_to_indian_civil(jd, ref year, ref month, ref day);
 				s = day.ToString() + " ";
 				s += TCalendarConv.IndianCivilMonths[month - 1];
-				s = string.Concat(new string[]
-				{
-					s, 
-					" ", 
-					year.ToString(), 
-					", ", 
-					TCalendarConv.IndianCivilWeekdays[cal.jwday(jd)]
-				});
+				s = s + " " + year.ToString() + ", " + TCalendarConv.IndianCivilWeekdays[cal.jwday(jd)];
 				TfmCalendar._qtc_DateSelected_AddItem(this, LangMan.LSList[161], s);
+
 				int major = 0;
 				int cycle = 0;
 				cal.jd_to_bahai(jd, ref major, ref cycle, ref year, ref month, ref day);
-				s = string.Concat(new string[]
-				{
-					"Кулл-и Шай' ", 
-					major.ToString(), 
-					", Вахид ", 
-					cycle.ToString(), 
-					", "
-				});
+				s = "Кулл-и Шай' " + major.ToString() + ", Вахид " + cycle.ToString() + ", ";
 				s = s + day.ToString() + " ";
 				s += TCalendarConv.BahaiMonths[month - 1];
-				s = string.Concat(new string[]
-				{
-					s, 
-					" ", 
-					year.ToString(), 
-					", ", 
-					TCalendarConv.BahaiWeekdays[cal.jwday(jd)]
-				});
+				s = s + " " + year.ToString() + ", " + TCalendarConv.BahaiWeekdays[cal.jwday(jd)];
 				TfmCalendar._qtc_DateSelected_AddItem(this, LangMan.LSList[162], s);
 			}
 			finally

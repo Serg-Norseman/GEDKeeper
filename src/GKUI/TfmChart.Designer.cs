@@ -49,6 +49,9 @@ namespace GKUI
 		private System.Windows.Forms.MenuItem miGens7;
 		private System.Windows.Forms.MenuItem miGens8;
 		private System.Windows.Forms.MenuItem miGens9;
+		private System.Windows.Forms.MenuItem N8;
+		private System.Windows.Forms.MenuItem miFillColor;
+		private System.Windows.Forms.MenuItem miFillImage;
 
 		private void InitializeComponent()
 		{
@@ -90,6 +93,9 @@ namespace GKUI
 			this.miModeDescendants = new System.Windows.Forms.MenuItem();
 			this.N7 = new System.Windows.Forms.MenuItem();
 			this.miTraceRoot = new System.Windows.Forms.MenuItem();
+			this.N8 = new System.Windows.Forms.MenuItem();
+			this.miFillColor = new System.Windows.Forms.MenuItem();
+			this.miFillImage = new System.Windows.Forms.MenuItem();
 			this.MenuPerson = new System.Windows.Forms.ContextMenu();
 			this.miEdit = new System.Windows.Forms.MenuItem();
 			this.N1 = new System.Windows.Forms.MenuItem();
@@ -102,6 +108,8 @@ namespace GKUI
 			this.N3 = new System.Windows.Forms.MenuItem();
 			this.miRebuildTree = new System.Windows.Forms.MenuItem();
 			this.miRebuildKinships = new System.Windows.Forms.MenuItem();
+			this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+			this.OpenDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.SuspendLayout();
 			// 
 			// SaveDialog1
@@ -130,7 +138,7 @@ namespace GKUI
 			this.ToolBar1.Location = new System.Drawing.Point(0, 0);
 			this.ToolBar1.Name = "ToolBar1";
 			this.ToolBar1.ShowToolTips = true;
-			this.ToolBar1.Size = new System.Drawing.Size(822, 36);
+			this.ToolBar1.Size = new System.Drawing.Size(822, 28);
 			this.ToolBar1.TabIndex = 0;
 			this.ToolBar1.TextAlign = System.Windows.Forms.ToolBarTextAlign.Right;
 			this.ToolBar1.ButtonClick += new System.Windows.Forms.ToolBarButtonClickEventHandler(this.ToolBar1_ButtonClick);
@@ -340,7 +348,10 @@ namespace GKUI
 									this.miModeAncestors,
 									this.miModeDescendants,
 									this.N7,
-									this.miTraceRoot});
+									this.miTraceRoot,
+									this.N8,
+									this.miFillColor,
+									this.miFillImage});
 			// 
 			// miModeBoth
 			// 
@@ -370,6 +381,23 @@ namespace GKUI
 			this.miTraceRoot.Index = 4;
 			this.miTraceRoot.Text = "miTraceRoot";
 			this.miTraceRoot.Click += new System.EventHandler(this.miTraceRootClick);
+			// 
+			// N8
+			// 
+			this.N8.Index = 5;
+			this.N8.Text = "-";
+			// 
+			// miFillColor
+			// 
+			this.miFillColor.Index = 6;
+			this.miFillColor.Text = "miFillColor";
+			this.miFillColor.Click += new System.EventHandler(this.miFillColorClick);
+			// 
+			// miFillImage
+			// 
+			this.miFillImage.Index = 7;
+			this.miFillImage.Text = "miFillImage";
+			this.miFillImage.Click += new System.EventHandler(this.miFillImageClick);
 			// 
 			// MenuPerson
 			// 
@@ -449,6 +477,10 @@ namespace GKUI
 			this.miRebuildKinships.Text = "miRebuildKinships";
 			this.miRebuildKinships.Click += new System.EventHandler(this.miRebuildKinshipsClick);
 			// 
+			// OpenDialog1
+			// 
+			this.OpenDialog1.Filter = "Image Files|*.bmp;*.gif;*.png;*.jpg";
+			// 
 			// TfmChart
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -463,6 +495,8 @@ namespace GKUI
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.OpenFileDialog OpenDialog1;
+		private System.Windows.Forms.ColorDialog colorDialog1;
 		private System.Windows.Forms.ToolBarButton tbs5;
 		private System.Windows.Forms.ToolBarButton tbs4;
 		private System.Windows.Forms.ToolBarButton tbs3;

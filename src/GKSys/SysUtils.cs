@@ -1,13 +1,16 @@
 using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+
+using GKCore;
+using MapiMail;
 
 /// <summary>
 /// Localization: unknown
@@ -87,6 +90,19 @@ namespace GKSys
 			new ushort[] { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
 		};
 
+		public static ushort DaysInAMonth([In] ushort AYear, [In] ushort AMonth)
+		{
+			return MonthDays[(AMonth == 2 && DateTime.IsLeapYear((int)AYear)) ? 1 : 0][(int)AMonth - 1];
+		}
+
+		public static string GetIPAndCompName()
+		{
+			string hostName = Dns.GetHostName();
+			IPHostEntry hostEntry = Dns.GetHostEntry(hostName);
+			string str = hostEntry.AddressList[0].ToString();
+			return str + "," + hostName;
+		}
+
 		public static void Free(object Self)
 		{
 			if (Self != null && Self is IDisposable)
@@ -102,16 +118,7 @@ namespace GKSys
 
 		public static double Int([In] double AValue)
 		{
-			double result;
-			if (AValue > (double)0f)
-			{
-				result = Math.Floor(AValue);
-			}
-			else
-			{
-				result = Math.Ceiling(AValue);
-			}
-			return result;
+			return ((AValue > (double)0f) ? Math.Floor(AValue) : Math.Ceiling(AValue));
 		}
 
 		public static double Frac([In] double AValue)
@@ -129,59 +136,11 @@ namespace GKSys
 			return Convert.ToInt32(Math.Ceiling(X));
 		}
 
-		public static int ValLong([In] string s, out int code)
-		{
-			int res;
-			if (int.TryParse(s, out res)) { code = 0; } else { code = -1; }
-			return res;
-		}
-
-		public static double ValExt([In] string s, out int code)
-		{
-			double res;
-			if (double.TryParse(s, out res)) { code = 0; } else { code = -1; }
-			return res;
-		}
-
 		public static int StrToIntDef([In] string S, int Default)
 		{
-			int E;
-			int Result = ValLong(S, out E);
-			if (E != 0)
-			{
-				Result = Default;
-			}
-			return Result;
-		}
-
-		public static string ParamStr(int Index)
-		{
-			string result;
-			if (Index == 0)
-			{
-				Assembly entryAssembly = Assembly.GetEntryAssembly();
-				if (entryAssembly != null)
-				{
-					result = entryAssembly.Location;
-				}
-				else
-				{
-					result = Process.GetCurrentProcess().MainModule.FileName;
-				}
-			}
-			else
-			{
-				string[] commandLineArgs = Environment.GetCommandLineArgs();
-				if (Index > ((commandLineArgs != null) ? commandLineArgs.Length : 0) - 1)
-				{
-					result = "";
-				}
-				else
-				{
-					result = commandLineArgs[Index];
-				}
-			}
-			return result;
+			int res;
+			if (!int.TryParse(S, out res)) res = Default;
+			return res;
 		}
 
 		public static int Pos([In] string substr, [In] string str)
@@ -205,27 +164,21 @@ namespace GKSys
 
 		public static byte[] LStrConcat2([In] byte[] L, [In] byte[] R)
 		{
-			byte[] array = null;
+			byte[] result = null;
 			int num = ((L != null) ? L.Length : 0);
 			int num2 = ((R != null) ? R.Length : 0);
 			if (num + num2 > 0)
 			{
-				array = new byte[num + num2];
-				if (num > 0)
-				{
-					Array.Copy(L, 0, array, 0, num);
-				}
-				if (num2 > 0)
-				{
-					Array.Copy(R, 0, array, num, num2);
-				}
+				result = new byte[num + num2];
+				if (num > 0) Array.Copy(L, 0, result, 0, num);
+				if (num2 > 0) Array.Copy(R, 0, result, num, num2);
 			}
-			return array;
+			return result;
 		}
 
 		public static byte[] LStrCopy([In] byte[] S, int Index1, int Count)
 		{
-			byte[] array = null;
+			byte[] result = null;
 			if (Count > 0)
 			{
 				int num = ((S != null) ? S.Length : 0);
@@ -240,12 +193,12 @@ namespace GKSys
 
 					if (Count > 0)
 					{
-						array = new byte[Count];
-						Array.Copy(S, idx, array, 0, Count);
+						result = new byte[Count];
+						Array.Copy(S, idx, result, 0, Count);
 					}
 				}
 			}
-			return array;
+			return result;
 		}
 
 		public static string WStrCopy([In] string S, int Index1, int Count)
@@ -279,15 +232,8 @@ namespace GKSys
 				int num = ((Dest != null) ? Dest.Length : 0);
 				if (num > 0 && Index1 <= num)
 				{
-					int num2;
-					if (Index1 <= 0)
-					{
-						num2 = 0;
-					}
-					else
-					{
-						num2 = Index1 - 1;
-					}
+					int num2 = ((Index1 <= 0) ? 0 : Index1 - 1);
+
 					if (Count > num - num2)
 					{
 						Count = num - num2;
@@ -299,6 +245,7 @@ namespace GKSys
 						{
 							num3 = 0;
 						}
+
 						byte[] array = new byte[num3];
 						if (num2 > 0)
 						{
@@ -402,9 +349,10 @@ namespace GKSys
 			return Result;
 		}
 
-		private static string ConvertMaskToRegularExpression([In] string Mask)
+		public static Regex InitMaskRegex([In] string Mask)
 		{
-			string result = "";
+			// convert mask to regular expression
+			string regex_str = "";
 			int CurPos = 0;
 			int Len = (Mask != null) ? Mask.Length : 0;
 			if (CurPos < Len)
@@ -413,15 +361,15 @@ namespace GKSys
 				{
 					int I = Mask.IndexOfAny("*?".ToCharArray(), CurPos);
 					if (I < CurPos) break;
-					if (I > CurPos) result += Regex.Escape(WStrCopy(Mask, CurPos + 1, I - CurPos));
+					if (I > CurPos) regex_str += Regex.Escape(WStrCopy(Mask, CurPos + 1, I - CurPos));
 
 					char c = Mask[I];
 					switch (c) {
 						case '*':
-							result += ".*";
+							regex_str += ".*";
 							break;
 						case '?':
-							result += ".";
+							regex_str += ".";
 							break;
 					}
 
@@ -429,43 +377,21 @@ namespace GKSys
 				}
 				while (CurPos < Len);
 			}
-			if (CurPos < Len) result += Regex.Escape(WStrCopy(Mask, CurPos + 1, Len - CurPos));
-			return result;
+			if (CurPos < Len) regex_str += Regex.Escape(WStrCopy(Mask, CurPos + 1, Len - CurPos));
+
+			// create regex
+			return new Regex(regex_str, RegexOptions.IgnoreCase);
+		}
+
+		public static bool MatchesRegex([In] string S, Regex regex)
+		{
+			return ((regex != null) ? regex.IsMatch(S) : false);
 		}
 
 		public static bool MatchesMask([In] string S, [In] string Mask)
 		{
-			bool Result = false;
-			Regex regex = new Regex(ConvertMaskToRegularExpression(Mask), RegexOptions.IgnoreCase);
-			try
-			{
-				Match match = regex.Match(S);
-				GroupCollection Groups = match.Groups;
-				int num = Groups.Count - 1;
-				for (int I = 0; I <= num; I++)
-				{
-					Group Group = Groups[I];
-					if (Group.Success)
-					{
-						int num2 = Group.Captures.Count - 1;
-						for (int J = 0; J <= num2; J++)
-						{
-							Capture Capture = Group.Captures[J];
-							if (string.Compare(Capture.Value, S, true) == 0)
-							{
-								Result = true;
-								break;
-							}
-						}
-						if (Result) break;
-					}
-				}
-			}
-			finally
-			{
-				//FMask.Dispose();
-			}
-			return Result;
+			Regex regex = InitMaskRegex(Mask);
+			return MatchesRegex(S, regex);
 		}
 
 
@@ -621,6 +547,13 @@ namespace GKSys
 			return Environment.GetEnvironmentVariable("TEMP");
 		}
 
+		public static string GetAppDataPath()
+		{
+			string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\" + TGenEngine.AppTitle + "\\";
+			if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+			return path;
+		}
+
 		public static string GetAppPath()
 		{
 			Module[] mods = System.Reflection.Assembly.GetExecutingAssembly().GetModules();
@@ -635,16 +568,7 @@ namespace GKSys
 
 		public static double SafeDiv(double aDividend, double aDivisor)
 		{
-			double Result;
-			if (aDivisor == (double)0f)
-			{
-				Result = 0.0;
-			}
-			else
-			{
-				Result = (aDividend / aDivisor);
-			}
-			return Result;
+			return ((aDivisor == (double)0f) ? 0.0 : (aDividend / aDivisor));
 		}
 
 		public static string GetRome(int N)
@@ -678,12 +602,14 @@ namespace GKSys
 
 		public static string NumUpdate(int val, int up)
 		{
-			string Result = val.ToString();
-			while (Result.Length < up)
+			string result = val.ToString();
+			if (result.Length < up)
 			{
-				Result = "0" + Result;
+				StringBuilder sb = new StringBuilder(result);
+				while (sb.Length < up) sb.Insert(0, '0');
+				result = sb.ToString();
 			}
-			return Result;
+			return result;
 		}
 
 		private static string LogFilename;
@@ -699,6 +625,18 @@ namespace GKSys
 			Log.WriteLine("[" + DateTime.Now.ToString() + "] -> " + aMsg);
 			Log.Flush();
 			Log.Close();
+		}
+
+		public static void LogSend()
+		{
+			if (File.Exists(LogFilename)) {
+				MapiMailMessage message = new MapiMailMessage("GEDKeeper: error notification", "This automatic notification of error.");
+				message.Recipients.Add("serg.zhdanovskih@gmail.com");
+				message.Files.Add(LogFilename);
+				message.ShowDialog();
+			} else {
+				TGenEngine.ShowMessage("Журнал ошибок пуст или не существует");
+			}
 		}
 
 		public static string ConStrings(StringList aStrings)
@@ -758,11 +696,9 @@ namespace GKSys
 
 		public static int agCompare(string Str1, string Str2)
 		{
-			int NumCode;
-			double Val = ValExt(Str1, out NumCode);
-			bool v = (NumCode == 0);
-			double Val2 = ValExt(Str2, out NumCode);
-			bool v2 = (NumCode == 0);
+			double Val, Val2;
+			bool v = double.TryParse(Str1, out Val);
+			bool v2 = double.TryParse(Str2, out Val2);
 
 			int Result;
 			if (v && v2)
@@ -816,12 +752,7 @@ namespace GKSys
 
 		public static int DaysBetween([In] DateTime ANow, [In] DateTime AThen)
 		{
-			TimeSpan span;
-			if (ANow < AThen) {
-				span = AThen - ANow;
-			} else {
-				span = ANow - AThen;
-			}
+			TimeSpan span = ((ANow < AThen) ? AThen - ANow : ANow - AThen);
 			return span.Days;
 		}
 
@@ -851,18 +782,8 @@ namespace GKSys
 			return res;
 		}
 
-		public static int StrToInt([In] string S)
+		public static double DoubleParse(string s)
 		{
-			int E;
-			int Result = ValLong(S, out E);
-			if (E != 0)
-			{
-				throw new EConvertError(string.Format("'{0}' is not a valid integer value", new object[] { S }));
-			}
-			return Result;
-		}
-
-		public static double DoubleParse(string s) {
 			if (s == null || s == "") return 0.0;
 
 			NumberFormatInfo nfi = new NumberFormatInfo();
@@ -870,135 +791,49 @@ namespace GKSys
 			return double.Parse(s, nfi);
 		}
 
-		public static string SetAsName(string s) {
+		public static string SetAsName(string s)
+		{
 			string st = s.ToLower();
 			char f = Char.ToUpper(st[0]);
 			st = f + st.Substring(1);
 			return st;
 		}
-		
-		/// <summary>
-		/// Swap two values
-		/// </summary>
-		/// <typeparam name="T">type of values</typeparam>
-		/// <param name="a">fisrt value</param>
-		/// <param name="b">second value</param>
-		private static void Swap<T>(ref T a, ref T b)
-		{
-			T tmp = a; a = b; b = tmp;
-		}
 
-		/// <summary>
-		/// Function to sort array by quick sort method
-		/// </summary>
-		/// <typeparam name="T">type of sorted data</typeparam>
-		/// <param name="array">sorted array</param>
-		public static void QuickSort<T>(T[] array)
-			where T : IComparable<T>
+		/*public static void SendMail(string smtpHost, MailAddress from, string to, string subject, string message, Attachment attach)
 		{
-			QuickSort<T>(array, 0, array.Length - 1);
-		}
+			char[] charSeparators = new char[0];
+			string[] result;
 
-		/// <summary>
-		/// Function to sort array by quick sort method
-		/// </summary>
-		/// <typeparam name="T">type of sorted data</typeparam>
-		/// <param name="array">sorted array</param>
-		/// <param name="left">begin of unsorted part</param>
-		/// <param name="right">end of unsorted part</param>
-		public static void QuickSort<T>(T[] array, int left, int right)
-			where T : IComparable<T>
-		{
-			if (left < right)
+			try
 			{
-				System.Random rnd = new Random();
-				T x = array[rnd.Next(left, right)];
-				int i = left, j = right;
-				while (i <= j)
+				MailMessage mailMessage = new MailMessage();
+				result = to.Split(charSeparators, StringSplitOptions.RemoveEmptyEntries);
+				for (int i = 0; i < result.Length; i++)
 				{
-					while (array[i].CompareTo(x) < 0) ++i;
-					while (array[j].CompareTo(x) > 0) --j;
-					if (i <= j)
-					{
-						Swap(ref array[i], ref array[j]);
-						++i;
-						--j;
-					}
+					mailMessage.To.Add(new MailAddress(result[i]));
 				}
-				QuickSort<T>(array, left, j);
-				QuickSort<T>(array, i, right);
+				mailMessage.From = from;
+				mailMessage.Subject = subject;
+				mailMessage.Body = message;
+				mailMessage.Priority = MailPriority.Normal;
+				mailMessage.BodyEncoding = Encoding.ASCII;
+				mailMessage.IsBodyHtml = false;
+				if (attach != null)
+				{
+					mailMessage.Attachments.Add(attach);
+				}
+				new SmtpClient(smtpHost)
+				{
+					Credentials = CredentialCache.DefaultNetworkCredentials
+				}.Send(mailMessage);
+
+				MessageBox.Show("Your birthday card has been sent");
 			}
-		}
-
-		/// <summary>
-		/// Sorting array using MergeSort method
-		/// </summary>
-		/// <typeparam name="T">type of array's elements.</typeparam>
-		/// <param name="array">sorting array.</param>
-		public static void MergeSort<T>(T[] array)
-			where T : IComparable<T>
-		{
-			MergeSort<T>(array, new T[array.Length], 0, array.Length - 1);
-		}
-
-		/// <summary>
-		/// Sorting array using MergeSort method.
-		/// </summary>
-		/// <typeparam name="T">type of array's elements.</typeparam>
-		/// <param name="array">sorting array.</param>
-		/// <param name="tmp">temporary array that used for sorting.
-		/// Size of sorted and temporary arrays must be the same.</param>
-		/// <param name="left">left index, from where sorting will be started.</param>
-		/// <param name="right">right index, where sorting will be finnished.</param>
-		private static void MergeSort<T>(T[] array, T[] tmp, long left, long right)
-			where T : IComparable<T>
-		{
-			if (left >= right)
+			catch (Exception ex)
 			{
-				return;
-			};
-			long mid = (left + right) / 2;
-			MergeSort<T>(array, tmp, left, mid);
-			MergeSort<T>(array, tmp, mid + 1, right);
-			Merge<T>(array, tmp, left, mid, right);
-		}
-
-		/// <summary>
-		/// Sorting array using MergeSort method.
-		/// </summary>
-		/// <typeparam name="T">type of array's elements.</typeparam>
-		/// <param name="array">sorting array.</param>
-		/// <param name="tmp">temporary array that used for sorting.
-		/// Size of sorted and temporary arrays must be the same.</param>
-		/// <param name="left">left index, from where sorting will be started.</param>
-		/// <param name="mid">middle of sorted array.</param>
-		/// <param name="right">right index, where sorting will be finnished.</param>
-		private static void Merge<T>(T[] array, T[] tmp, long left, long mid, long right)
-			where T : IComparable<T>
-		{
-			long i = left,
-			j = mid + 1,
-			k = left;
-			while (i <= mid && j <= right)
-			{
-				if (array[i].CompareTo(array[j]) < 0)
-				{
-					tmp[k++] = array[i++];
-				}
-				else
-				{
-					tmp[k++] = array[j++];
-				}
+				MessageBox.Show(ex.Message);
 			}
-			while (i <= mid) tmp[k++] = array[i++];
-			while (j <= right) tmp[k++] = array[j++];
-			for (i = left; i <= right; ++i) array[i] = tmp[i];
-		}
-
-		public static string TimeSpanToString(TimeSpan ts)
-		{
-			return string.Format("{0:00}:{1:00}:{2:00}", new object[] { ts.Hours, ts.Minutes, ts.Seconds });
-		}
+		}*/
 
 	}
 }

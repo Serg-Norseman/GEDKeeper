@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Threading;
 
 using GKCore;
 using GKSys;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKUI
@@ -24,6 +25,11 @@ namespace GKUI
 			this.Label4.Text = LangMan.LSList[138];
 		}
 
+		private string TimeSpanToString(TimeSpan ts)
+		{
+			return string.Format("{0:00}:{1:00}:{2:00}", new object[] { ts.Hours, ts.Minutes, ts.Seconds });
+		}
+
 		private void ProgressUpdate()
 		{
 			double count = (double)this.ProgressBar1.Maximum;
@@ -35,9 +41,9 @@ namespace GKUI
 			TimeSpan rest_time = new TimeSpan(SysUtils.Trunc((double)(pass_time.Ticks) / pos * (count - pos)));
 			TimeSpan sum_time = pass_time + rest_time;
 
-			this.Label7.Text = SysUtils.TimeSpanToString(pass_time);
-			this.Label8.Text = SysUtils.TimeSpanToString(rest_time);
-			this.Label9.Text = SysUtils.TimeSpanToString(sum_time);
+			this.Label7.Text = TimeSpanToString(pass_time);
+			this.Label8.Text = TimeSpanToString(rest_time);
+			this.Label9.Text = TimeSpanToString(sum_time);
 
 			base.Update();
 		}
@@ -73,7 +79,7 @@ namespace GKUI
 				if (TfmProgress.form != null) {
 					TfmProgress.form.ProgressBar1.Value = value;
 					TfmProgress.form.ProgressUpdate();
-					//Thread.Sleep(10);
+					//Thread.Sleep(1);
 				}
 			}
 		}

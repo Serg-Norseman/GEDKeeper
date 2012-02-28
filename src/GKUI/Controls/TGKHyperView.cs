@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using GKSys;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKUI.Controls

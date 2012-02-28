@@ -8,6 +8,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+
 using GedCom551;
 using GKSys;
 using GKUI;
@@ -81,9 +82,9 @@ namespace GKCore
 		{
 			public LSID Name;
 			public string Sign;
-			public TGenEngine.TPersonEventKind Kind;
+			public TPersonEventKind Kind;
 			
-			public S7(LSID aName, string aSign, TGenEngine.TPersonEventKind aKind) {
+			public S7(LSID aName, string aSign, TPersonEventKind aKind) {
 				this.Name = aName;
 				this.Sign = aSign;
 				this.Kind = aKind;
@@ -93,9 +94,9 @@ namespace GKCore
 		public struct DateKindRec
 		{
 			public LSID Name;
-			public TGenEngine.TDateControlsRange Dates;
+			public TDateControlsRange Dates;
 			
-			public DateKindRec(LSID aName, TGenEngine.TDateControlsRange aDates) {
+			public DateKindRec(LSID aName, TDateControlsRange aDates) {
 				this.Name = aName;
 				this.Dates = aDates;
 			}
@@ -219,7 +220,7 @@ namespace GKCore
 		{
 			public EnumSet PrevRels;
 			public EnumSet CurrRels;
-			public TGenEngine.TRelationKind FinRel;
+			public TRelationKind FinRel;
 			public sbyte Great;
 			public sbyte Level;
 		}
@@ -228,7 +229,7 @@ namespace GKCore
 		{
 			public TGEDCOMRecord MasterRecord;
 			public TGEDCOMRecord UpdateRecord;
-			public TGenEngine.TSyncState State;
+			public TSyncState State;
 			public string UpdateOldXRef;
 			public string UpdateNewXRef;
 
@@ -322,7 +323,7 @@ namespace GKCore
 			urLast = urUSSR_RearVeteran
 		}
 
-		[Flags, TSetElementType(typeof(TGenEngine.TChartPersonSign))]
+		[Flags, TSetElementType(typeof(TChartPersonSign))]
 		public enum TChartPersonSigns : byte
 		{
 			urRI_StGeorgeCross = 2,
@@ -421,13 +422,13 @@ namespace GKCore
 
 		public static readonly string[] Restrictions;
 		public static readonly LSID[] RecordTypes;
-		public static readonly TGenEngine.TSexRec[] SexData;
-		public static readonly TGenEngine.S5[] MarriageStatus;
-		public static readonly TGenEngine.S7[] PersonEvents;
-		public static readonly TGenEngine.DateKindRec[] DateKinds;
+		public static readonly TSexRec[] SexData;
+		public static readonly S5[] MarriageStatus;
+		public static readonly S7[] PersonEvents;
+		public static readonly DateKindRec[] DateKinds;
 		public static readonly LSID[] DateCalendars;
-		public static readonly TGenEngine.S21[] FamilyEvents;
-		public static readonly TGenEngine.StoreTypeRec[] GKStoreTypes;
+		public static readonly S21[] FamilyEvents;
+		public static readonly StoreTypeRec[] GKStoreTypes;
 		public static readonly LSID[] MediaTypes;
 		public static readonly LSID[] PriorityNames;
 		public static readonly LSID[] StatusNames;
@@ -436,10 +437,10 @@ namespace GKCore
 		public static readonly LSID[] GoalNames;
 		public static readonly LSID[] CertaintyAssessments;
 		public static readonly string[] UserRefs;
-		public static readonly TGenEngine.TGEDCOMAppFormat[] GEDCOMFormats;
+		public static readonly TGEDCOMAppFormat[] GEDCOMFormats;
 		public static readonly LSID[] RelationKinds;
 		public static readonly string[] RelationSigns;
-		public TGenEngine.TKinshipRec[] Kinships;
+		public TKinshipRec[] Kinships;
 		public static readonly string[] Numerals;
 		public static readonly string[] NumKinship;
 		private string FFileName;
@@ -460,34 +461,20 @@ namespace GKCore
 			set { this.FTree = value; }
 		}
 
-		// alert: old code
-		public void RegisterKinship(EnumSet aPrevRels, EnumSet aCurrRels, TGenEngine.TRelationKind aFinRel, sbyte aGreat, sbyte aLevel)
+		public void RegisterKinship(EnumSet aPrevRels, EnumSet aCurrRels, TRelationKind aFinRel, sbyte aGreat, sbyte aLevel)
 		{
-			TGenEngine.TKinshipRec[] kinships = this.Kinships;
-			int len = (kinships != null) ? kinships.Length : 0;
-			TGenEngine.TKinshipRec[] arg_1C_0 = this.Kinships;
+			int len = (this.Kinships == null) ? 0 : this.Kinships.Length;
 			int num = len + 1;
-			TGenEngine.TKinshipRec[] array = arg_1C_0;
-			int arg_24_0;
-			if ((arg_24_0 = num) < 0)
+
+			TKinshipRec[] new_array = new TKinshipRec[num];
+
+			if (num > 0 && this.Kinships != null)
 			{
-				arg_24_0 = 0;
+				int num2 = this.Kinships.Length;
+				if (num2 > 0) Array.Copy(this.Kinships, new_array, num2);
 			}
-			TGenEngine.TKinshipRec[] array2;
-			TGenEngine.TKinshipRec[] expr_29 = array2 = new TGenEngine.TKinshipRec[arg_24_0];
-			if (num > 0 && array != null)
-			{
-				int num2;
-				if ((num2 = array.Length) > num)
-				{
-					num2 = num;
-				}
-				if (num2 > 0)
-				{
-					Array.Copy(array, array2, num2);
-				}
-			}
-			this.Kinships = expr_29;
+
+			this.Kinships = new_array;
 			this.Kinships[len].PrevRels = aPrevRels;
 			this.Kinships[len].CurrRels = aCurrRels;
 			this.Kinships[len].FinRel = aFinRel;
@@ -497,241 +484,241 @@ namespace GKCore
 
 		public void InitKinships()
 		{
-			this.Kinships = new TGenEngine.TKinshipRec[0];
+			this.Kinships = new TKinshipRec[0];
 
 			this.RegisterKinship(EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkNone
+				TRelationKind.rkNone
 			}), EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkFather, 
-				TGenEngine.TRelationKind.rkMother, 
-				TGenEngine.TRelationKind.rkHusband, 
-				TGenEngine.TRelationKind.rkWife, 
-				TGenEngine.TRelationKind.rkSon, 
-				TGenEngine.TRelationKind.rkDaughter
-			}), TGenEngine.TRelationKind.rkSame, 0, 0);
+				TRelationKind.rkFather, 
+				TRelationKind.rkMother, 
+				TRelationKind.rkHusband, 
+				TRelationKind.rkWife, 
+				TRelationKind.rkSon, 
+				TRelationKind.rkDaughter
+			}), TRelationKind.rkSame, 0, 0);
 
 			this.RegisterKinship(EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkHusband, 
-				TGenEngine.TRelationKind.rkWife
+				TRelationKind.rkHusband, 
+				TRelationKind.rkWife
 			}), EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkSon, 
-				TGenEngine.TRelationKind.rkDaughter
-			}), TGenEngine.TRelationKind.rkSame, 0, 1);
+				TRelationKind.rkSon, 
+				TRelationKind.rkDaughter
+			}), TRelationKind.rkSame, 0, 1);
 
 			this.RegisterKinship(EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkMother
+				TRelationKind.rkMother
 			}), EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkHusband
-			}), TGenEngine.TRelationKind.rkFather, 0, 0);
+				TRelationKind.rkHusband
+			}), TRelationKind.rkFather, 0, 0);
 
 			this.RegisterKinship(EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkFather
+				TRelationKind.rkFather
 			}), EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkWife
-			}), TGenEngine.TRelationKind.rkMother, 0, 0);
+				TRelationKind.rkWife
+			}), TRelationKind.rkMother, 0, 0);
 
 			this.RegisterKinship(EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkGrandfather, 
-				TGenEngine.TRelationKind.rkGrandmother
+				TRelationKind.rkGrandfather, 
+				TRelationKind.rkGrandmother
 			}), EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkSon
-			}), TGenEngine.TRelationKind.rkUncle, 0, 1);
+				TRelationKind.rkSon
+			}), TRelationKind.rkUncle, 0, 1);
 
 			this.RegisterKinship(EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkGrandfather, 
-				TGenEngine.TRelationKind.rkGrandmother
+				TRelationKind.rkGrandfather, 
+				TRelationKind.rkGrandmother
 			}), EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkDaughter
-			}), TGenEngine.TRelationKind.rkAunt, 0, 1);
+				TRelationKind.rkDaughter
+			}), TRelationKind.rkAunt, 0, 1);
 
 			this.RegisterKinship(EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkBrother, 
-				TGenEngine.TRelationKind.rkSister
+				TRelationKind.rkBrother, 
+				TRelationKind.rkSister
 			}), EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkSon
-			}), TGenEngine.TRelationKind.rkNephew, 0, 1);
+				TRelationKind.rkSon
+			}), TRelationKind.rkNephew, 0, 1);
 
 			this.RegisterKinship(EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkBrother, 
-				TGenEngine.TRelationKind.rkSister
+				TRelationKind.rkBrother, 
+				TRelationKind.rkSister
 			}), EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkDaughter
-			}), TGenEngine.TRelationKind.rkNiece, 0, 1);
+				TRelationKind.rkDaughter
+			}), TRelationKind.rkNiece, 0, 1);
 
 			this.RegisterKinship(EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkSon
+				TRelationKind.rkSon
 			}), EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkWife
-			}), TGenEngine.TRelationKind.rkDaughterInLaw, 0, 0);
+				TRelationKind.rkWife
+			}), TRelationKind.rkDaughterInLaw, 0, 0);
 
 			this.RegisterKinship(EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkDaughter
+				TRelationKind.rkDaughter
 			}), EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkHusband
-			}), TGenEngine.TRelationKind.rkSonInLaw, 0, 0);
+				TRelationKind.rkHusband
+			}), TRelationKind.rkSonInLaw, 0, 0);
 
 			this.RegisterKinship(EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkWife
+				TRelationKind.rkWife
 			}), EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkFather
-			}), TGenEngine.TRelationKind.rkWifeFather, 0, -1);
+				TRelationKind.rkFather
+			}), TRelationKind.rkWifeFather, 0, -1);
 
 			this.RegisterKinship(EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkWife
+				TRelationKind.rkWife
 			}), EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkMother
-			}), TGenEngine.TRelationKind.rkWifeMother, 0, -1);
+				TRelationKind.rkMother
+			}), TRelationKind.rkWifeMother, 0, -1);
 
 			this.RegisterKinship(EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkHusband
+				TRelationKind.rkHusband
 			}), EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkFather
-			}), TGenEngine.TRelationKind.rkHusbandFather, 0, -1);
+				TRelationKind.rkFather
+			}), TRelationKind.rkHusbandFather, 0, -1);
 
 			this.RegisterKinship(EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkHusband
+				TRelationKind.rkHusband
 			}), EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkMother
-			}), TGenEngine.TRelationKind.rkHusbandMother, 0, -1);
+				TRelationKind.rkMother
+			}), TRelationKind.rkHusbandMother, 0, -1);
 
 			this.RegisterKinship(EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkFather, 
-				TGenEngine.TRelationKind.rkMother
+				TRelationKind.rkFather, 
+				TRelationKind.rkMother
 			}), EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkFather
-			}), TGenEngine.TRelationKind.rkGrandfather, 0, -1);
+				TRelationKind.rkFather
+			}), TRelationKind.rkGrandfather, 0, -1);
 
 			this.RegisterKinship(EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkFather, 
-				TGenEngine.TRelationKind.rkMother
+				TRelationKind.rkFather, 
+				TRelationKind.rkMother
 			}), EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkMother
-			}), TGenEngine.TRelationKind.rkGrandmother, 0, -1);
+				TRelationKind.rkMother
+			}), TRelationKind.rkGrandmother, 0, -1);
 
 			this.RegisterKinship(EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkFather, 
-				TGenEngine.TRelationKind.rkMother
+				TRelationKind.rkFather, 
+				TRelationKind.rkMother
 			}), EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkSon
-			}), TGenEngine.TRelationKind.rkBrother, 0, 1);
+				TRelationKind.rkSon
+			}), TRelationKind.rkBrother, 0, 1);
 
 			this.RegisterKinship(EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkFather, 
-				TGenEngine.TRelationKind.rkMother
+				TRelationKind.rkFather, 
+				TRelationKind.rkMother
 			}), EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkDaughter
-			}), TGenEngine.TRelationKind.rkSister, 0, 1);
+				TRelationKind.rkDaughter
+			}), TRelationKind.rkSister, 0, 1);
 
 			this.RegisterKinship(EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkGrandfather, 
-				TGenEngine.TRelationKind.rkGrandmother
+				TRelationKind.rkGrandfather, 
+				TRelationKind.rkGrandmother
 			}), EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkFather
-			}), TGenEngine.TRelationKind.rkGrandfather, 1, -1);
+				TRelationKind.rkFather
+			}), TRelationKind.rkGrandfather, 1, -1);
 
 			this.RegisterKinship(EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkGrandfather, 
-				TGenEngine.TRelationKind.rkGrandmother
+				TRelationKind.rkGrandfather, 
+				TRelationKind.rkGrandmother
 			}), EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkMother
-			}), TGenEngine.TRelationKind.rkGrandmother, 1, -1);
+				TRelationKind.rkMother
+			}), TRelationKind.rkGrandmother, 1, -1);
 
 			this.RegisterKinship(EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkSon, 
-				TGenEngine.TRelationKind.rkDaughter, 
-				TGenEngine.TRelationKind.rkSonInLaw, 
-				TGenEngine.TRelationKind.rkDaughterInLaw
+				TRelationKind.rkSon, 
+				TRelationKind.rkDaughter, 
+				TRelationKind.rkSonInLaw, 
+				TRelationKind.rkDaughterInLaw
 			}), EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkSon
-			}), TGenEngine.TRelationKind.rkGrandson, 0, 1);
+				TRelationKind.rkSon
+			}), TRelationKind.rkGrandson, 0, 1);
 
 			this.RegisterKinship(EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkSon, 
-				TGenEngine.TRelationKind.rkDaughter, 
-				TGenEngine.TRelationKind.rkSonInLaw, 
-				TGenEngine.TRelationKind.rkDaughterInLaw
+				TRelationKind.rkSon, 
+				TRelationKind.rkDaughter, 
+				TRelationKind.rkSonInLaw, 
+				TRelationKind.rkDaughterInLaw
 			}), EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkDaughter
-			}), TGenEngine.TRelationKind.rkGranddaughter, 0, 1);
+				TRelationKind.rkDaughter
+			}), TRelationKind.rkGranddaughter, 0, 1);
 
 			this.RegisterKinship(EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkGrandson, 
-				TGenEngine.TRelationKind.rkGranddaughter
+				TRelationKind.rkGrandson, 
+				TRelationKind.rkGranddaughter
 			}), EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkSon
-			}), TGenEngine.TRelationKind.rkGrandson, 1, 1);
+				TRelationKind.rkSon
+			}), TRelationKind.rkGrandson, 1, 1);
 
 			this.RegisterKinship(EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkGrandson, 
-				TGenEngine.TRelationKind.rkGranddaughter
+				TRelationKind.rkGrandson, 
+				TRelationKind.rkGranddaughter
 			}), EnumSet.Create(new Enum[]
 			{
-				TGenEngine.TRelationKind.rkDaughter
-			}), TGenEngine.TRelationKind.rkGranddaughter, 1, 1);
+				TRelationKind.rkDaughter
+			}), TRelationKind.rkGranddaughter, 1, 1);
 		}
 
-		public TGenEngine.TRelationKind FindKinship(TGenEngine.TRelationKind prev, TGenEngine.TRelationKind cur, out int great, out int level)
+		public TRelationKind FindKinship(TRelationKind prev, TRelationKind cur, out int great, out int level)
 		{
-			TGenEngine.TRelationKind Result = TGenEngine.TRelationKind.rkUndefined;
+			TRelationKind Result = TRelationKind.rkUndefined;
 			great = 0;
 			level = 0;
-			TGenEngine.TKinshipRec[] kinships = this.Kinships;
+			TKinshipRec[] kinships = this.Kinships;
 			int num = ((kinships != null) ? kinships.Length : 0) - 1;
 			for (int i = 0; i <= num; i++)
 			{
 				if (this.Kinships[i].PrevRels.InSet(prev) && this.Kinships[i].CurrRels.InSet(cur))
 				{
-					TGenEngine.TRelationKind rel = this.Kinships[i].FinRel;
+					TRelationKind rel = this.Kinships[i].FinRel;
 					great = (int)this.Kinships[i].Great;
 					level = (int)this.Kinships[i].Level;
-					if (rel == TGenEngine.TRelationKind.rkSame)
+					if (rel == TRelationKind.rkSame)
 					{
 						rel = cur;
 					}
@@ -743,27 +730,26 @@ namespace GKCore
 
 		private int PatriarchsCompare(object Item1, object Item2)
 		{
-			return (Item1 as TGenEngine.TPatriarchObj).IBirthYear - (Item2 as TGenEngine.TPatriarchObj).IBirthYear;
+			return (Item1 as TPatriarchObj).IBirthYear - (Item2 as TPatriarchObj).IBirthYear;
 		}
 
-		// alert: old code
-		private static TGenEngine.TRetCount Matching(string StrA, string StrB, int lngLen)
+		// FIXME: old code
+		private static TRetCount Matching(string StrA, string StrB, int lngLen)
 		{
-			TGenEngine.TRetCount Result;
+			TRetCount Result;
 			Result.lngSubRows = 0;
 			Result.lngCountLike = 0;
-			int arg_22_0 = 1;
+
 			int num = ((StrA != null) ? StrA.Length : 0) - lngLen + 1;
-			int PosStrA = arg_22_0;
+			int PosStrA = 1;
 			if (num >= PosStrA)
 			{
 				num++;
 				do
 				{
 					string StrTempA = SysUtils.WStrCopy(StrA, PosStrA, lngLen);
-					int arg_47_0 = 1;
 					int num2 = ((StrB != null) ? StrB.Length : 0) - lngLen + 1;
-					int PosStrB = arg_47_0;
+					int PosStrB = 1;
 					if (num2 >= PosStrB)
 					{
 						num2++;
@@ -908,11 +894,6 @@ namespace GKCore
 				Result = 1 + max;
 			}
 			return Result;
-		}
-
-		public static ushort DaysInAMonth([In] ushort AYear, [In] ushort AMonth)
-		{
-			return SysUtils.MonthDays[(AMonth == 2 && DateTime.IsLeapYear((int)AYear)) ? 1 : 0][(int)AMonth - 1];
 		}
 
 		public TGenEngine()
@@ -1226,7 +1207,7 @@ namespace GKCore
 			}
 		}
 
-		public void GetCommonStats(out TGenEngine.TCommonStats aStats)
+		public void GetCommonStats(out TCommonStats aStats)
 		{
 			aStats.persons = 0;
 			aStats.persons_m = 0;
@@ -1361,61 +1342,61 @@ namespace GKCore
 			}
 		}
 
-		private void GetSimplePersonStat(TGenEngine.TStatMode aMode, List<TListVal> aVals, TGEDCOMIndividualRecord iRec)
+		private void GetSimplePersonStat(TStatMode aMode, List<TListVal> aVals, TGEDCOMIndividualRecord iRec)
 		{
-			string iName = TGenEngine.GetNameStr(iRec, true, false);
+			string iName = iRec.aux_GetNameStr(true, false);
 
 			switch (aMode)
 			{
-				case TGenEngine.TStatMode.smAncestors:
+				case TStatMode.smAncestors:
 					{
 						aVals.Add(new TListVal(iName, TGenEngine.GetAncestorsCount(iRec) - 1));
 						break;
 					}
-				case TGenEngine.TStatMode.smDescendants:
+				case TStatMode.smDescendants:
 					{
 						aVals.Add(new TListVal(iName, TGenEngine.GetDescendantsCount(iRec) - 1));
 						break;
 					}
-				case TGenEngine.TStatMode.smDescGenerations:
+				case TStatMode.smDescGenerations:
 					{
 						aVals.Add(new TListVal(iName, TGenEngine.GetDescGenerations(iRec)));
 						break;
 					}
-				case TGenEngine.TStatMode.smChildsCount:
+				case TStatMode.smChildsCount:
 					{
 						aVals.Add(new TListVal(iName, TGenEngine.GetChildsCount(iRec)));
 						break;
 					}
-				case TGenEngine.TStatMode.smFirstbornAge:
+				case TStatMode.smFirstbornAge:
 					{
 						TGEDCOMIndividualRecord iDummy;
 						aVals.Add(new TListVal(iName, TGenEngine.GetFirstbornAge(iRec, out iDummy)));
 						break;
 					}
-				case TGenEngine.TStatMode.smMarriages:
+				case TStatMode.smMarriages:
 					{
 						aVals.Add(new TListVal(iName, TGenEngine.GetMarriagesCount(iRec)));
 						break;
 					}
-				case TGenEngine.TStatMode.smMarriageAge:
+				case TStatMode.smMarriageAge:
 					{
 						aVals.Add(new TListVal(iName, TGenEngine.GetMarriageAge(iRec)));
 						break;
 					}
 
-				case TGenEngine.TStatMode.smFamilies:
-				case TGenEngine.TStatMode.smNames:
-				case TGenEngine.TStatMode.smPatronymics:
+				case TStatMode.smFamilies:
+				case TStatMode.smNames:
+				case TStatMode.smPatronymics:
 					{
 						string V = "";
 						string fam, nam, pat;
 						iRec.aux_GetNameParts(out fam, out nam, out pat);
 						switch (aMode) {
-							case TGenEngine.TStatMode.smFamilies:
+							case TStatMode.smFamilies:
 								V = TGenEngine.PrepareRusFamily(fam, iRec.Sex == TGEDCOMSex.svFemale);
 								break;
-							case TGenEngine.TStatMode.smNames:
+							case TStatMode.smNames:
 								V = nam;
 								break;
 							case TGenEngine.TStatMode.smPatronymics:
@@ -1425,63 +1406,63 @@ namespace GKCore
 						CheckVal(aVals, V);
 						break;
 					}
-				case TGenEngine.TStatMode.smAge:
+				case TStatMode.smAge:
 					{
 						CheckVal(aVals, TGenEngine.GetAge(iRec, -1));
 						break;
 					}
-				case TGenEngine.TStatMode.smLifeExpectancy:
+				case TStatMode.smLifeExpectancy:
 					{
 						CheckVal(aVals, TGenEngine.GetLifeExpectancy(iRec));
 						break;
 					}
 
-				case TGenEngine.TStatMode.smBirthYears:
-				case TGenEngine.TStatMode.smBirthTenYears:
-				case TGenEngine.TStatMode.smDeathYears:
-				case TGenEngine.TStatMode.smDeathTenYears:
-				case TGenEngine.TStatMode.smBirthPlaces:
-				case TGenEngine.TStatMode.smDeathPlaces:
+				case TStatMode.smBirthYears:
+				case TStatMode.smBirthTenYears:
+				case TStatMode.smDeathYears:
+				case TStatMode.smDeathTenYears:
+				case TStatMode.smBirthPlaces:
+				case TStatMode.smDeathPlaces:
 					{
 						string V = "?";
 						int num2 = iRec.IndividualEvents.Count - 1;
 						for (int j = 0; j <= num2; j++)
 						{
-							TGEDCOMCustomEvent @event = iRec.IndividualEvents[j];
+							TGEDCOMCustomEvent evt = iRec.IndividualEvents[j];
 							int year;
 							ushort k, d;
-							TGenEngine.GetIndependentDate(@event.Detail.Date, out year, out k, out d);
+							evt.Detail.Date.aux_GetIndependentDate(out year, out k, out d);
 							if (Math.Abs(year) > 3000)
 							{
-								TGenEngine.ShowMessage(@event.Detail.Date.StringValue + "/" + iName);
+								TGenEngine.ShowMessage(evt.Detail.Date.StringValue + "/" + iName);
 							}
-							if (@event.Name == "BIRT")
+							if (evt.Name == "BIRT")
 							{
 								switch (aMode) {
-									case TGenEngine.TStatMode.smBirthYears:
+									case TStatMode.smBirthYears:
 										V = Convert.ToString(year);
 										break;
-									case TGenEngine.TStatMode.smBirthTenYears:
+									case TStatMode.smBirthTenYears:
 										V = Convert.ToString(year / 10 * 10);
 										break;
-									case TGenEngine.TStatMode.smBirthPlaces:
-										V = @event.Detail.Place.StringValue;
+									case TStatMode.smBirthPlaces:
+										V = evt.Detail.Place.StringValue;
 										break;
 								}
 							}
 							else
 							{
-								if (@event.Name == "DEAT")
+								if (evt.Name == "DEAT")
 								{
 									switch (aMode) {
-										case TGenEngine.TStatMode.smDeathYears:
+										case TStatMode.smDeathYears:
 											V = Convert.ToString(year);
 											break;
-										case TGenEngine.TStatMode.smDeathTenYears:
+										case TStatMode.smDeathTenYears:
 											V = Convert.ToString(year / 10 * 10);
 											break;
-										case TGenEngine.TStatMode.smDeathPlaces:
-											V = @event.Detail.Place.StringValue;
+										case TStatMode.smDeathPlaces:
+											V = evt.Detail.Place.StringValue;
 											break;
 									}
 								}
@@ -1491,67 +1472,67 @@ namespace GKCore
 						break;
 					}
 
-				case TGenEngine.TStatMode.smChildsDistribution:
+				case TStatMode.smChildsDistribution:
 					{
 						CheckVal(aVals, TGenEngine.GetChildsCount(iRec).ToString());
 						break;
 					}
-				case TGenEngine.TStatMode.smResidences:
+				case TStatMode.smResidences:
 					{
 						CheckVal(aVals, TGenEngine.GetResidencePlace(iRec, false));
 						break;
 					}
-				case TGenEngine.TStatMode.smOccupation:
+				case TStatMode.smOccupation:
 					{
 						CheckVal(aVals, TGenEngine.GetAttributeValue(iRec, "OCCU"));
 						break;
 					}
-				case TGenEngine.TStatMode.smReligious:
+				case TStatMode.smReligious:
 					{
 						CheckVal(aVals, TGenEngine.GetAttributeValue(iRec, "RELI"));
 						break;
 					}
-				case TGenEngine.TStatMode.smNational:
+				case TStatMode.smNational:
 					{
 						CheckVal(aVals, TGenEngine.GetAttributeValue(iRec, "NATI"));
 						break;
 					}
-				case TGenEngine.TStatMode.smEducation:
+				case TStatMode.smEducation:
 					{
 						CheckVal(aVals, TGenEngine.GetAttributeValue(iRec, "EDUC"));
 						break;
 					}
-				case TGenEngine.TStatMode.smCaste:
+				case TStatMode.smCaste:
 					{
 						CheckVal(aVals, TGenEngine.GetAttributeValue(iRec, "CAST"));
 						break;
 					}
-				case TGenEngine.TStatMode.smHobby:
+				case TStatMode.smHobby:
 					{
 						CheckVal(aVals, TGenEngine.GetAttributeValue(iRec, "_HOBBY"));
 						break;
 					}
-				case TGenEngine.TStatMode.smAward:
+				case TStatMode.smAward:
 					{
 						CheckVal(aVals, TGenEngine.GetAttributeValue(iRec, "_AWARD"));
 						break;
 					}
-				case TGenEngine.TStatMode.smMili:
+				case TStatMode.smMili:
 					{
 						CheckVal(aVals, TGenEngine.GetAttributeValue(iRec, "_MILI"));
 						break;
 					}
-				case TGenEngine.TStatMode.smMiliInd:
+				case TStatMode.smMiliInd:
 					{
 						CheckVal(aVals, TGenEngine.GetAttributeValue(iRec, "_MILI_IND"));
 						break;
 					}
-				case TGenEngine.TStatMode.smMiliDis:
+				case TStatMode.smMiliDis:
 					{
 						CheckVal(aVals, TGenEngine.GetAttributeValue(iRec, "_MILI_DIS"));
 						break;
 					}
-				case TGenEngine.TStatMode.smMiliRank:
+				case TStatMode.smMiliRank:
 					{
 						CheckVal(aVals, TGenEngine.GetAttributeValue(iRec, "_MILI_RANK"));
 						break;
@@ -1559,9 +1540,9 @@ namespace GKCore
 			}
 		}
 
-		public void GetSpecStats(TGenEngine.TStatMode aMode, List<TListVal> aVals)
+		public void GetSpecStats(TStatMode aMode, List<TListVal> aVals)
 		{
-			if (aMode < TGenEngine.TStatMode.smDescGenerations)
+			if (aMode < TStatMode.smDescGenerations)
 			{
 				TGenEngine.InitExtCounts(this.FTree, -1);
 			}
@@ -1576,11 +1557,11 @@ namespace GKCore
 				{
 					TGEDCOMRecord rec = this.FTree.GetRecord(i);
 
-					if (rec is TGEDCOMIndividualRecord && aMode != TGenEngine.TStatMode.smSpousesDiff)
+					if (rec is TGEDCOMIndividualRecord && aMode != TStatMode.smSpousesDiff)
 					{
 						TGEDCOMIndividualRecord iRec = (TGEDCOMIndividualRecord)rec;
 						
-						if (aMode != TGenEngine.TStatMode.smAAF_1 && aMode != TGenEngine.TStatMode.smAAF_2)
+						if (aMode != TStatMode.smAAF_1 && aMode != TStatMode.smAAF_2)
 						{
 							GetSimplePersonStat(aMode, aVals, iRec);
 						}
@@ -1593,7 +1574,7 @@ namespace GKCore
 								List<int> vals_list = null;
 
 								switch (aMode) {
-									case TGenEngine.TStatMode.smAAF_1:
+									case TStatMode.smAAF_1:
 										key = SysUtils.Trunc(GetIndependentYear(iRec, "BIRT") / 10 * 10).ToString();
 
 										if (!xvals.TryGetValue(key, out vals_list))
@@ -1604,7 +1585,7 @@ namespace GKCore
 										vals_list.Add(fba);
 
 										break;
-									case TGenEngine.TStatMode.smAAF_2:
+									case TStatMode.smAAF_2:
 										key = SysUtils.Trunc(GetIndependentYear(iChild, "BIRT") / 10 * 10).ToString();
 
 										if (!xvals.TryGetValue(key, out vals_list))
@@ -1624,12 +1605,12 @@ namespace GKCore
 						if (rec is TGEDCOMFamilyRecord && aMode == TStatMode.smSpousesDiff)
 						{
 							TGEDCOMFamilyRecord fRec = (TGEDCOMFamilyRecord)rec;
-							aVals.Add(new TListVal(TGenEngine.GetFamilyStr(fRec), TGenEngine.GetSpousesDiff(fRec)));
+							aVals.Add(new TListVal(TGenEngine.aux_GetFamilyStr(fRec), TGenEngine.GetSpousesDiff(fRec)));
 						}
 					}
 				}
 				
-				if (aMode == TGenEngine.TStatMode.smAAF_1 || aMode == TGenEngine.TStatMode.smAAF_2)
+				if (aMode == TStatMode.smAAF_1 || aMode == TStatMode.smAAF_2)
 				{
 					foreach (KeyValuePair<string, List<int>> kvp in xvals)
 					{
@@ -1683,7 +1664,7 @@ namespace GKCore
 
 						if (res)
 						{
-							TGenEngine.TPatriarchObj pObj = new TGenEngine.TPatriarchObj();
+							TPatriarchObj pObj = new TPatriarchObj();
 							pObj.IRec = i_rec;
 							pObj.IBirthYear = bYear;
 							pObj.IDescendantsCount = TGenEngine.GetDescendantsCount(i_rec) - 1;
@@ -1709,10 +1690,10 @@ namespace GKCore
 					int num2 = aList.Count - 1;
 					for (int i = 0; i <= num2; i++)
 					{
-						TGenEngine.TPatriarchObj patr = aList[i] as TGenEngine.TPatriarchObj;
+						TPatriarchObj patr = aList[i] as TPatriarchObj;
 						for (int j = i + 1; j <= num2; j++)
 						{
-							TGenEngine.TPatriarchObj patr2 = aList[j] as TGenEngine.TPatriarchObj;
+							TPatriarchObj patr2 = aList[j] as TPatriarchObj;
 							bool res = TGenEngine._GetPatriarchsList_SearchDesc(patr.IRec, patr2.IRec);
 							if (res)
 							{
@@ -1731,7 +1712,7 @@ namespace GKCore
 			}
 		}
 
-		public string GetPatriarchLinks(TObjectList lst, TGenEngine.TPatriarchObj pObj)
+		public string GetPatriarchLinks(TObjectList lst, TPatriarchObj pObj)
 		{
 			string Result = "";
 
@@ -1740,7 +1721,7 @@ namespace GKCore
 			{
 				byte ix = pObj.ILinks[i];
 				if (Result != "") Result += ", ";
-				Result += TGenEngine.GetNameStr((lst[ix] as TGenEngine.TPatriarchObj).IRec, true, false);
+				Result += (lst[ix] as TPatriarchObj).IRec.aux_GetNameStr(true, false);
 			}
 			return Result;
 		}
@@ -1784,14 +1765,14 @@ namespace GKCore
 		{
 			aFileName = aFileRef;
 			TGKStoreType Result;
-			if (aFileRef.IndexOf(TGenEngine.GKStoreTypes[2].Sign) == 0)
+			if (aFileRef.IndexOf(GKStoreTypes[2].Sign) == 0)
 			{
 				Result = TGKStoreType.gstArchive;
 				aFileName = aFileName.Remove(0, 4);
 			}
 			else
 			{
-				if (aFileRef.IndexOf(TGenEngine.GKStoreTypes[1].Sign) == 0)
+				if (aFileRef.IndexOf(GKStoreTypes[1].Sign) == 0)
 				{
 					Result = TGKStoreType.gstStorage;
 					aFileName = aFileName.Remove(0, 4);
@@ -1958,7 +1939,7 @@ namespace GKCore
 				case TGKStoreType.gstArchive:
 					{
 						sfn = spath + sfn;
-						aRefPath = TGenEngine.GKStoreTypes[(int)aStoreType].Sign + sfn;
+						aRefPath = GKStoreTypes[(int)aStoreType].Sign + sfn;
 						this.ArcFileSave(aFileName, sfn);
 						break;
 					}
@@ -1967,7 +1948,7 @@ namespace GKCore
 						string target_dir = this.GetStgFolder(true) + spath;
 						string target_fn = target_dir + sfn;
 
-						aRefPath = TGenEngine.GKStoreTypes[(int)aStoreType].Sign + spath + sfn;
+						aRefPath = GKStoreTypes[(int)aStoreType].Sign + spath + sfn;
 
 						if (!Directory.Exists(target_dir)) Directory.CreateDirectory(target_dir);
 						try
@@ -2186,7 +2167,7 @@ namespace GKCore
 
 		public static string SexStr(TGEDCOMSex Sex)
 		{
-			return LangMan.LSList[(int)TGenEngine.SexData[(int)Sex].NameId - 1];
+			return LangMan.LSList[(int)SexData[(int)Sex].NameId - 1];
 		}
 
 
@@ -2216,18 +2197,18 @@ namespace GKCore
 		}
 
 
-		public static bool IsRecordAccess(TGEDCOMRestriction aRecRestriction, TGenEngine.TShieldState aShieldState)
+		public static bool IsRecordAccess(TGEDCOMRestriction aRecRestriction, TShieldState aShieldState)
 		{
 			bool Result = false;
 
 			switch (aShieldState) {
-				case TGenEngine.TShieldState.ssMaximum:
+				case TShieldState.ssMaximum:
 					Result = (((aRecRestriction == TGEDCOMRestriction.rnConfidential || aRecRestriction == TGEDCOMRestriction.rnPrivacy) ? 1 : 0) == 0);
 					break;
-				case TGenEngine.TShieldState.ssMiddle:
+				case TShieldState.ssMiddle:
 					Result = (((aRecRestriction == TGEDCOMRestriction.rnPrivacy) ? 1 : 0) == 0);
 					break;
-				case TGenEngine.TShieldState.ssNone:
+				case TShieldState.ssNone:
 					Result = true;
 					break;
 			}
@@ -2235,11 +2216,11 @@ namespace GKCore
 			return Result;
 		}
 
-		public static TGenEngine.TPersonEventKind GetPersonEventKindBySign(string aSign)
+		public static TPersonEventKind GetPersonEventKindBySign(string aSign)
 		{
-			TGenEngine.TPersonEventKind Result = TGenEngine.TPersonEventKind.ekFact;
+			TPersonEventKind Result = TPersonEventKind.ekFact;
 			int i = 0;
-			while (TGenEngine.PersonEvents[i].Sign != aSign)
+			while (PersonEvents[i].Sign != aSign)
 			{
 				i++;
 				if (i == 36)
@@ -2247,7 +2228,7 @@ namespace GKCore
 					return Result;
 				}
 			}
-			Result = TGenEngine.PersonEvents[i].Kind;
+			Result = PersonEvents[i].Kind;
 			return Result;
 		}
 
@@ -2255,7 +2236,7 @@ namespace GKCore
 		{
 			int Result = -1;
 			int i = 0;
-			while (TGenEngine.PersonEvents[i].Sign != aSign)
+			while (PersonEvents[i].Sign != aSign)
 			{
 				i++;
 				if (i == 36)
@@ -2271,7 +2252,7 @@ namespace GKCore
 		{
 			int Result = -1;
 			int i = 0;
-			while (TGenEngine.FamilyEvents[i].Sign != aSign)
+			while (FamilyEvents[i].Sign != aSign)
 			{
 				i++;
 				if (i == 10)
@@ -2287,7 +2268,7 @@ namespace GKCore
 		{
 			int Result = 0;
 			int i = 0;
-			while (TGenEngine.MarriageStatus[i].StatSign != aSign)
+			while (MarriageStatus[i].StatSign != aSign)
 			{
 				i++;
 				if (i == 4)
@@ -2313,7 +2294,7 @@ namespace GKCore
 				{
 					if (ev > 0)
 					{
-						Result = LangMan.LSList[(int)TGenEngine.PersonEvents[ev].Name - 1];
+						Result = LangMan.LSList[(int)PersonEvents[ev].Name - 1];
 					}
 					else
 					{
@@ -2334,7 +2315,7 @@ namespace GKCore
 					{
 						if (ev > 0)
 						{
-							Result = LangMan.LSList[(int)TGenEngine.FamilyEvents[ev].Name - 1];
+							Result = LangMan.LSList[(int)FamilyEvents[ev].Name - 1];
 						}
 						else
 						{
@@ -2350,54 +2331,7 @@ namespace GKCore
 			return Result;
 		}
 
-		public static string GetNameStr(TGEDCOMIndividualRecord iRec, bool aByFamily, bool aPieces)
-		{
-			string Result;
-			if (iRec != null && iRec.PersonalNames.Count > 0)
-			{
-				TGEDCOMPersonalName np = iRec.PersonalNames[0];
-
-				string firstPart, surname/*, dummy*/;
-				np.GetNameParts(out firstPart, out surname /*, out dummy*/);
-
-				if (aByFamily)
-				{
-					Result = surname + " " + firstPart;
-				}
-				else
-				{
-					Result = firstPart + " " + surname;
-				}
-
-				if (aPieces)
-				{
-					string nick = np.Pieces.Nickname;
-					if (nick != "") Result = Result + " [" + nick + "]";
-				}
-			}
-			else
-			{
-				Result = "";
-			}
-			return Result;
-		}
-
-		public static string GetNickStr(TGEDCOMIndividualRecord iRec)
-		{
-			string Result;
-			if (iRec != null)
-			{
-				TGEDCOMPersonalName np = iRec.PersonalNames[0];
-				Result = np.Pieces.Nickname;
-			}
-			else
-			{
-				Result = "";
-			}
-			return Result;
-		}
-
-		public static string GetFamilyStr(TGEDCOMFamilyRecord aFamily)
+		public static string aux_GetFamilyStr(TGEDCOMFamilyRecord aFamily)
 		{
 			string Result = "";
 
@@ -2408,7 +2342,7 @@ namespace GKCore
 			}
 			else
 			{
-				Result += TGenEngine.GetNameStr(spouse, true, false);
+				Result += spouse.aux_GetNameStr(true, false);
 			}
 
 			Result += " - ";
@@ -2420,7 +2354,7 @@ namespace GKCore
 			}
 			else
 			{
-				Result += TGenEngine.GetNameStr(spouse, true, false);
+				Result += spouse.aux_GetNameStr(true, false);
 			}
 
 			return Result;
@@ -2479,15 +2413,10 @@ namespace GKCore
 		public static string GetXRefNum(TGEDCOMRecord aRecord)
 		{
 			string xref = aRecord.XRef;
-			while (true)
-			{
-				char c = xref[0];
-				if (c >= '0' && c < ':')
-				{
-					break;
-				}
-				xref = xref.Remove(0, 1);
-			}
+			int I = 0;
+			int L = xref.Length - 1;
+			while (I <= L && (xref[I] < '0' || xref[I] > '9')) I++;
+			xref = ((I <= L) ? xref.Substring(I) : "");
 			return xref;
 		}
 
@@ -2506,7 +2435,7 @@ namespace GKCore
 			return Result;
 		}
 
-		public static string GEDCOMDateToStr(TGEDCOMDate aDate, TGenEngine.TDateFormat aFormat)
+		public static string GEDCOMDateToStr(TGEDCOMDate aDate, TDateFormat aFormat)
 		{
 			string Result = "";
 			int year;
@@ -2516,11 +2445,11 @@ namespace GKCore
 
 			if (year > 0 || month > 0 || day > 0)
 			{
-				if (aFormat != TGenEngine.TDateFormat.dfDD_MM_YYYY)
+				if (aFormat != TDateFormat.dfDD_MM_YYYY)
 				{
-					if (aFormat != TGenEngine.TDateFormat.dfYYYY_MM_DD)
+					if (aFormat != TDateFormat.dfYYYY_MM_DD)
 					{
-						if (aFormat == TGenEngine.TDateFormat.dfYYYY)
+						if (aFormat == TDateFormat.dfYYYY)
 						{
 							if (year > 0)
 							{
@@ -2608,23 +2537,14 @@ namespace GKCore
 				string pm = dt_parts[1].Trim();
 				string py = dt_parts[2].Trim();
 
-				if (pd != "")
-				{
-					Result = Result + pd + " ";
-				}
-				if (pm != "")
-				{
-					Result = Result + TGEDCOMDate.GEDCOMMonthArray[SysUtils.StrToInt(pm) - 1] + " ";
-				}
-				if (py != "")
-				{
-					Result += py;
-				}
+				if (pd != "") Result = Result + pd + " ";
+				if (pm != "") Result = Result + TGEDCOMDate.GEDCOMMonthArray[SysUtils.StrToIntDef(pm, 1) - 1] + " ";
+				if (py != "") Result += py;
 			}
 			return Result;
 		}
 
-		public static string GEDCOMCustomDateToStr(TGEDCOMDateValue aDateValue, TGenEngine.TDateFormat aFormat, bool aSign)
+		public static string GEDCOMCustomDateToStr(TGEDCOMDateValue aDateValue, TDateFormat aFormat, bool aSign)
 		{
 			string Result = "";
 
@@ -2721,13 +2641,13 @@ namespace GKCore
 
 			if ((date is TGEDCOMDate) && (date as TGEDCOMDate).YearBC) {
 				switch (aFormat) {
-					case TGenEngine.TDateFormat.dfDD_MM_YYYY:
+					case TDateFormat.dfDD_MM_YYYY:
 						Result = Result + " BC";
 						break;
-					case TGenEngine.TDateFormat.dfYYYY_MM_DD:
+					case TDateFormat.dfYYYY_MM_DD:
 						Result = "BC " + Result;
 						break;
-					case TGenEngine.TDateFormat.dfYYYY:
+					case TDateFormat.dfYYYY:
 						Result = "BC " + Result;
 						break;
 				}
@@ -2736,7 +2656,7 @@ namespace GKCore
 			return Result;
 		}
 
-		public static string GEDCOMEventToDateStr(TGEDCOMCustomEvent aEvent, TGenEngine.TDateFormat aFormat, bool aSign)
+		public static string GEDCOMEventToDateStr(TGEDCOMCustomEvent aEvent, TDateFormat aFormat, bool aSign)
 		{
 			return ((aEvent == null) ? "" : TGenEngine.GEDCOMCustomDateToStr(aEvent.Detail.Date, aFormat, aSign));
 		}
@@ -2744,18 +2664,22 @@ namespace GKCore
 		public static DateTime GEDCOMDateToDate(TGEDCOMDateValue aDate)
 		{
 			DateTime Result;
+
 			try
 			{
-				int year;
-				ushort month;
-				ushort day;
-				TGenEngine.GetIndependentDate(aDate, out year, out month, out day);
-				if (day == 0) day = 1;
-				if (month == 0) month = 1;
-				if (year <= 0) {
+				if (aDate != null)
+				{
+					int year;
+					ushort month, day;
+					aDate.aux_GetIndependentDate(out year, out month, out day);
+					if (day == 0) day = 1;
+					if (month == 0) month = 1;
+
+					Result = ((year <= 0) ? new DateTime(0) : new DateTime(year, (int)month, (int)day));
+				}
+				else
+				{
 					Result = new DateTime(0);
-				} else {
-					Result = new DateTime(year, (int)month, (int)day);
 				}
 			}
 			catch (Exception E)
@@ -2773,6 +2697,13 @@ namespace GKCore
 		public static TGEDCOMCustomEvent GetIndividualEvent(TGEDCOMIndividualRecord iRec, string evName)
 		{
 			return ((iRec == null) ? null : iRec.GetIndividualEvent(evName));
+		}
+
+		public static string GetAttributeValue(TGEDCOMIndividualRecord iRec, string attrName)
+		{
+			TGEDCOMCustomEvent attr = TGenEngine.GetIndividualEvent(iRec, attrName);
+			string result = ((attr == null) ? "" : attr.StringValue);
+			return result;
 		}
 
 		public static TGEDCOMFamilyEvent GetFamilyEvent(TGEDCOMFamilyRecord fRec, string evName)
@@ -2801,18 +2732,18 @@ namespace GKCore
 			return result;
 		}
 
-		public static string GetBirthDate(TGEDCOMIndividualRecord iRec, TGenEngine.TDateFormat aFormat, bool aCompact)
+		public static string GetBirthDate(TGEDCOMIndividualRecord iRec, TDateFormat aFormat, bool aCompact)
 		{
-			TGEDCOMCustomEvent @event = TGenEngine.GetIndividualEvent(iRec, "BIRT");
-			string result = ((@event == null) ? "" : TGenEngine.GEDCOMCustomDateToStr(@event.Detail.Date, aFormat, false));
+			TGEDCOMCustomEvent evt = TGenEngine.GetIndividualEvent(iRec, "BIRT");
+			string result = ((evt == null) ? "" : TGenEngine.GEDCOMCustomDateToStr(evt.Detail.Date, aFormat, false));
 			if (aCompact) result = TGenEngine.CompactDate(result);
 			return result;
 		}
 
-		public static string GetDeathDate(TGEDCOMIndividualRecord iRec, TGenEngine.TDateFormat aFormat, bool aCompact)
+		public static string GetDeathDate(TGEDCOMIndividualRecord iRec, TDateFormat aFormat, bool aCompact)
 		{
-			TGEDCOMCustomEvent @event = TGenEngine.GetIndividualEvent(iRec, "DEAT");
-			string result = ((@event == null) ? "" : TGenEngine.GEDCOMCustomDateToStr(@event.Detail.Date, aFormat, false));
+			TGEDCOMCustomEvent evt = TGenEngine.GetIndividualEvent(iRec, "DEAT");
+			string result = ((evt == null) ? "" : TGenEngine.GEDCOMCustomDateToStr(evt.Detail.Date, aFormat, false));
 			if (aCompact) result = TGenEngine.CompactDate(result);
 			return result;
 		}
@@ -2821,14 +2752,14 @@ namespace GKCore
 		{
 			string Result = " (";
 
-			string ds = TGenEngine.GetBirthDate(iRec, TGenEngine.TDateFormat.dfDD_MM_YYYY, false);
+			string ds = TGenEngine.GetBirthDate(iRec, TDateFormat.dfDD_MM_YYYY, false);
 			if (ds == "")
 			{
 				ds = "?";
 			}
 			Result += ds;
 
-			ds = TGenEngine.GetDeathDate(iRec, TGenEngine.TDateFormat.dfDD_MM_YYYY, false);
+			ds = TGenEngine.GetDeathDate(iRec, TDateFormat.dfDD_MM_YYYY, false);
 			if (ds == "")
 			{
 				TGEDCOMCustomEvent ev = TGenEngine.GetIndividualEvent(iRec, "DEAT");
@@ -2849,32 +2780,16 @@ namespace GKCore
 
 		public static string GetBirthPlace(TGEDCOMIndividualRecord iRec)
 		{
-			TGEDCOMCustomEvent @event = TGenEngine.GetIndividualEvent(iRec, "BIRT");
-			string Result;
-			if (@event == null)
-			{
-				Result = "";
-			}
-			else
-			{
-				Result = @event.Detail.Place.StringValue;
-			}
-			return Result;
+			TGEDCOMCustomEvent evt = TGenEngine.GetIndividualEvent(iRec, "BIRT");
+			string result = ((evt == null) ? "" : evt.Detail.Place.StringValue);
+			return result;
 		}
 
 		public static string GetDeathPlace(TGEDCOMIndividualRecord iRec)
 		{
-			TGEDCOMCustomEvent @event = TGenEngine.GetIndividualEvent(iRec, "DEAT");
-			string Result;
-			if (@event == null)
-			{
-				Result = "";
-			}
-			else
-			{
-				Result = @event.Detail.Place.StringValue;
-			}
-			return Result;
+			TGEDCOMCustomEvent evt = TGenEngine.GetIndividualEvent(iRec, "DEAT");
+			string result = ((evt == null) ? "" : evt.Detail.Place.StringValue);
+			return result;
 		}
 
 		public static string GetResidencePlace(TGEDCOMIndividualRecord iRec, bool IncludeAddress)
@@ -2910,21 +2825,6 @@ namespace GKCore
 			return Result;
 		}
 
-		public static string GetAttributeValue(TGEDCOMIndividualRecord iRec, string attrName)
-		{
-			TGEDCOMCustomEvent attr = TGenEngine.GetIndividualEvent(iRec, attrName);
-			string Result;
-			if (attr == null)
-			{
-				Result = "";
-			}
-			else
-			{
-				Result = attr.StringValue;
-			}
-			return Result;
-		}
-
 		public static string GetAttributeStr(TGEDCOMIndividualAttribute iAttr)
 		{
 			int idx = TGenEngine.GetPersonEventIndex(iAttr.Name);
@@ -2937,7 +2837,7 @@ namespace GKCore
 			{
 				if (idx > 0)
 				{
-					st = LangMan.LSList[(int)TGenEngine.PersonEvents[idx].Name - 1];
+					st = LangMan.LSList[(int)PersonEvents[idx].Name - 1];
 				}
 				else
 				{
@@ -2953,24 +2853,16 @@ namespace GKCore
 			return st + ": " + iAttr.StringValue + place;
 		}
 
-		public static string GetMarriageDate(TGEDCOMFamilyRecord fRec, TGenEngine.TDateFormat aFormat)
+		public static string GetMarriageDate(TGEDCOMFamilyRecord fRec, TDateFormat aFormat)
 		{
-			TGEDCOMFamilyEvent @event = TGenEngine.GetFamilyEvent(fRec, "MARR");
-			string Result;
-			if (@event == null)
-			{
-				Result = "";
-			}
-			else
-			{
-				Result = TGenEngine.GEDCOMCustomDateToStr(@event.Detail.Date, aFormat, false);
-			}
-			return Result;
+			TGEDCOMFamilyEvent evt = TGenEngine.GetFamilyEvent(fRec, "MARR");
+			string result = ((evt == null) ? "" : TGenEngine.GEDCOMCustomDateToStr(evt.Detail.Date, aFormat, false));
+			return result;
 		}
 
 		public static string GetEventDesc(TGEDCOMEventDetail evDetail)
 		{
-			string dt = TGenEngine.GEDCOMCustomDateToStr(evDetail.Date, TGenEngine.TDateFormat.dfDD_MM_YYYY, false);
+			string dt = TGenEngine.GEDCOMCustomDateToStr(evDetail.Date, TDateFormat.dfDD_MM_YYYY, false);
 			string place = evDetail.Place.StringValue;
 			TGEDCOMLocationRecord location = evDetail.Place.Location.Value as TGEDCOMLocationRecord;
 
@@ -3027,92 +2919,6 @@ namespace GKCore
 			return Result;
 		}
 
-		public static void GetIndependentDate(TGEDCOMDateValue aDateValue, out int AYear, out ushort AMonth, out ushort ADay)
-		{
-			bool BC;
-			GetIndependentDate(aDateValue, out AYear, out AMonth, out ADay, out BC);
-		}
-
-		public static void GetIndependentDate(TGEDCOMDateValue aDateValue, out int AYear, out ushort AMonth, out ushort ADay, out bool YearBC)
-		{
-			AYear = -1;
-			AMonth = 0;
-			ADay = 0;
-			YearBC = false;
-
-			TGEDCOMCustomDate date = aDateValue.Value;
-
-			if (date is TGEDCOMDateApproximated)
-			{
-				(date as TGEDCOMDate).GetDate(out AYear, out AMonth, out ADay);
-				YearBC = (date as TGEDCOMDate).YearBC;
-			}
-			else
-			{
-				if (date is TGEDCOMDateRange)
-				{
-					TGEDCOMDateRange dt_range = date as TGEDCOMDateRange;
-					if (dt_range.After.StringValue == "" && dt_range.Before.StringValue != "")
-					{
-						dt_range.Before.GetDate(out AYear, out AMonth, out ADay);
-						YearBC = dt_range.Before.YearBC;
-					}
-					else
-					{
-						if (dt_range.After.StringValue != "" && dt_range.Before.StringValue == "")
-						{
-							dt_range.After.GetDate(out AYear, out AMonth, out ADay);
-							YearBC = dt_range.After.YearBC;
-						}
-						else
-						{
-							if (dt_range.After.StringValue != "" && dt_range.Before.StringValue != "")
-							{
-								dt_range.After.GetDate(out AYear, out AMonth, out ADay);
-								YearBC = dt_range.After.YearBC;
-							}
-						}
-					}
-				}
-				else
-				{
-					if (date is TGEDCOMDatePeriod)
-					{
-						TGEDCOMDatePeriod dt_period = date as TGEDCOMDatePeriod;
-						if (dt_period.DateFrom.StringValue != "" && dt_period.DateTo.StringValue == "")
-						{
-							dt_period.DateFrom.GetDate(out AYear, out AMonth, out ADay);
-							YearBC = dt_period.DateFrom.YearBC;
-						}
-						else
-						{
-							if (dt_period.DateFrom.StringValue == "" && dt_period.DateTo.StringValue != "")
-							{
-								dt_period.DateTo.GetDate(out AYear, out AMonth, out ADay);
-								YearBC = dt_period.DateTo.YearBC;
-							}
-							else
-							{
-								if (dt_period.DateFrom.StringValue != "" && dt_period.DateTo.StringValue != "")
-								{
-									dt_period.DateFrom.GetDate(out AYear, out AMonth, out ADay);
-									YearBC = dt_period.DateFrom.YearBC;
-								}
-							}
-						}
-					}
-					else
-					{
-						if (date is TGEDCOMDate)
-						{
-							(date as TGEDCOMDate).GetDate(out AYear, out AMonth, out ADay);
-							YearBC = (date as TGEDCOMDate).YearBC;
-						}
-					}
-				}
-			}
-		}
-
 		public static int GetIndependentYear(TGEDCOMIndividualRecord iRec, string evSign)
 		{
 			bool dummy;
@@ -3129,7 +2935,7 @@ namespace GKCore
 			{
 				int year;
 				ushort am, ad;
-				TGenEngine.GetIndependentDate(ev.Detail.Date, out year, out am, out ad, out YearBC);
+				ev.Detail.Date.aux_GetIndependentDate(out year, out am, out ad, out YearBC);
 				Result = year;
 			}
 			return Result;
@@ -3144,22 +2950,28 @@ namespace GKCore
 		public static double GetAbstractDate(TGEDCOMEventDetail aEventDetail, out bool YearBC)
 		{
 			double Result = 0.0;
-			int y;
-			ushort i;
-			ushort d;
-			TGenEngine.GetIndependentDate(aEventDetail.Date, out y, out i, out d, out YearBC);
-			if (y > 0)
+			YearBC = false;
+
+			if (aEventDetail != null)
 			{
-				Result = (double)y;
-				if (i > 0)
+				int y;
+				ushort i;
+				ushort d;
+				aEventDetail.Date.aux_GetIndependentDate(out y, out i, out d, out YearBC);
+				if (y > 0)
 				{
-					Result = (Result + i / 12.0);
-					if (d > 0)
+					Result = (double)y;
+					if (i > 0)
 					{
-						Result = (Result + d / TGenEngine.DaysInAMonth((ushort)y, i) / 12.0);
+						Result = (Result + i / 12.0);
+						if (d > 0)
+						{
+							Result = (Result + d / SysUtils.DaysInAMonth((ushort)y, i) / 12.0);
+						}
 					}
 				}
 			}
+
 			return Result;
 		}
 
@@ -3215,16 +3027,16 @@ namespace GKCore
 				int num = iRec.IndividualEvents.Count - 1;
 				for (int i = 0; i <= num; i++)
 				{
-					TGEDCOMCustomEvent @event = iRec.IndividualEvents[i];
-					if (@event.Name == "BIRT")
+					TGEDCOMCustomEvent evt = iRec.IndividualEvents[i];
+					if (evt.Name == "BIRT")
 					{
-						ev = @event;
+						ev = evt;
 					}
 					else
 					{
-						if (@event.Name == "DEAT")
+						if (evt.Name == "DEAT")
 						{
-							ev2 = @event;
+							ev2 = evt;
 						}
 					}
 				}
@@ -3276,7 +3088,7 @@ namespace GKCore
 					{
 						ushort dummy;
 						int i;
-						TGenEngine.GetIndependentDate(ev1.Detail.Date, out i, out dummy, out dummy);
+						ev1.Detail.Date.aux_GetIndependentDate(out i, out dummy, out dummy);
 						Result = Convert.ToString(ToYear - i);
 					}
 				}
@@ -3295,13 +3107,11 @@ namespace GKCore
 			try
 			{
 				double y2 = 0.0;
-				TGEDCOMCustomEvent @event = TGenEngine.GetIndividualEvent(iRec, "BIRT");
-				if (@event == null)
+
+				TGEDCOMCustomEvent evt = TGenEngine.GetIndividualEvent(iRec, "BIRT");
+				if (evt != null)
 				{
-				}
-				else
-				{
-					double y3 = TGenEngine.GetAbstractDate(@event.Detail);
+					double y3 = TGenEngine.GetAbstractDate(evt.Detail);
 
 					int num = iRec.SpouseToFamilyLinks.Count - 1;
 					for (int i = 0; i <= num; i++)
@@ -3312,10 +3122,10 @@ namespace GKCore
 						for (int j = 0; j <= num2; j++)
 						{
 							TGEDCOMIndividualRecord child = family.Childrens[j].Value as TGEDCOMIndividualRecord;
-							@event = TGenEngine.GetIndividualEvent(child, "BIRT");
-							if (@event != null)
+							evt = TGenEngine.GetIndividualEvent(child, "BIRT");
+							if (evt != null)
 							{
-								double y2tmp = TGenEngine.GetAbstractDate(@event.Detail);
+								double y2tmp = TGenEngine.GetAbstractDate(evt.Detail);
 								if (y2 == (double)0f)
 								{
 									y2 = y2tmp;
@@ -3356,13 +3166,11 @@ namespace GKCore
 			try
 			{
 				double y2 = 0.0;
-				TGEDCOMCustomEvent iEvent = TGenEngine.GetIndividualEvent(iRec, "BIRT");
-				if (iEvent == null)
+
+				TGEDCOMCustomEvent evt = TGenEngine.GetIndividualEvent(iRec, "BIRT");
+				if (evt != null)
 				{
-				}
-				else
-				{
-					double y3 = TGenEngine.GetAbstractDate(iEvent.Detail);
+					double y3 = TGenEngine.GetAbstractDate(evt.Detail);
 
 					int num = iRec.SpouseToFamilyLinks.Count - 1;
 					for (int i = 0; i <= num; i++)
@@ -3403,16 +3211,16 @@ namespace GKCore
 			string Result = "";
 			try
 			{
-				TGEDCOMCustomEvent @event = TGenEngine.GetIndividualEvent(iRec, "DEAT");
-				if (@event != null)
+				TGEDCOMCustomEvent evt = TGenEngine.GetIndividualEvent(iRec, "DEAT");
+				if (evt != null)
 				{
 				}
 				else
 				{
-					@event = TGenEngine.GetIndividualEvent(iRec, "BIRT");
-					if (@event != null)
+					evt = TGenEngine.GetIndividualEvent(iRec, "BIRT");
+					if (evt != null)
 					{
-						TGEDCOMDate dt = @event.Detail.Date.Value as TGEDCOMDate;
+						TGEDCOMDate dt = evt.Detail.Date.Value as TGEDCOMDate;
 						if (dt != null)
 						{
 							int bd_y;
@@ -3458,7 +3266,7 @@ namespace GKCore
 			if (aRec is TGEDCOMIndividualRecord)
 			{
 				TGEDCOMIndividualRecord ind_rec = aRec as TGEDCOMIndividualRecord;
-				if (TGenEngine.GetPersonEventKindBySign(evSign) == TGenEngine.TPersonEventKind.ekEvent)
+				if (TGenEngine.GetPersonEventKindBySign(evSign) == TPersonEventKind.ekEvent)
 				{
 					Result = new TGEDCOMIndividualEvent(aTree, ind_rec, "", "");
 				}
@@ -3684,7 +3492,7 @@ namespace GKCore
 					{
 						if (recordType == TGEDCOMRecordType.rtFamily || (byte)recordType - (byte)TGEDCOMRecordType.rtMultimedia < (byte)TGEDCOMRecordType.rtResearch)
 						{
-							sign = LangMan.LSList[(int)TGenEngine.RecordTypes[(int)aRecord.RecordType] - 1] + ": ";
+							sign = LangMan.LSList[(int)RecordTypes[(int)aRecord.RecordType] - 1] + ": ";
 						}
 					}
 					else
@@ -3695,10 +3503,10 @@ namespace GKCore
 				string st;
 				switch (aRecord.RecordType) {
 					case TGEDCOMRecordType.rtIndividual:
-						st = TGenEngine.GetNameStr(aRecord as TGEDCOMIndividualRecord, true, false);
+						st = (aRecord as TGEDCOMIndividualRecord).aux_GetNameStr(true, false);
 						break;
 					case TGEDCOMRecordType.rtFamily:
-						st = TGenEngine.GetFamilyStr(aRecord as TGEDCOMFamilyRecord);
+						st = TGenEngine.aux_GetFamilyStr(aRecord as TGEDCOMFamilyRecord);
 						break;
 					case TGEDCOMRecordType.rtMultimedia:
 						st = (aRecord as TGEDCOMMultimediaRecord).FileReferences[0].Title;
@@ -3741,12 +3549,12 @@ namespace GKCore
 			aRec.GetCorresponder(ref dir, ref corresponder);
 			if (corresponder != null)
 			{
-				string nm = TGenEngine.GetNameStr(corresponder, true, false);
+				string nm = corresponder.aux_GetNameStr(true, false);
 				if (aLink)
 				{
 					nm = TGenEngine.HyperLink(corresponder.XRef, nm, 0);
 				}
-				Result = "[" + LangMan.LSList[(int)TGenEngine.CommunicationDirs[(int)dir] - 1] + "] " + nm;
+				Result = "[" + LangMan.LSList[(int)CommunicationDirs[(int)dir] - 1] + "] " + nm;
 			}
 			return Result;
 		}
@@ -3787,10 +3595,10 @@ namespace GKCore
 
 			switch (gt) {
 				case TGoalType.gtIndividual:
-					Result = TGenEngine.GetNameStr((TGEDCOMIndividualRecord)tempRec, true, false);
+					Result = (tempRec as TGEDCOMIndividualRecord).aux_GetNameStr(true, false);
 					break;
 				case TGoalType.gtFamily:
-					Result = TGenEngine.GetFamilyStr((TGEDCOMFamilyRecord)tempRec);
+					Result = TGenEngine.aux_GetFamilyStr((TGEDCOMFamilyRecord)tempRec);
 					break;
 				case TGoalType.gtSource:
 					Result = ((TGEDCOMSourceRecord)tempRec).FiledByEntry;
@@ -3802,7 +3610,7 @@ namespace GKCore
 
 			if (gt != TGoalType.gtOther)
 			{
-				Result = "[" + LangMan.LSList[(int)TGenEngine.GoalNames[(int)gt] - 1] + "] " + Result;
+				Result = "[" + LangMan.LSList[(int)GoalNames[(int)gt] - 1] + "] " + Result;
 			}
 			return Result;
 		}
@@ -3812,7 +3620,7 @@ namespace GKCore
 			int Result = 0;
 			if (MaxMatching != 0 && (strInputMatching != null && strInputMatching.Length != 0) && (strInputStandart != null && strInputStandart.Length != 0))
 			{
-				TGenEngine.TRetCount gret;
+				TRetCount gret;
 				gret.lngCountLike = 0;
 				gret.lngSubRows = 0;
 				int lngCurLen = 1;
@@ -3821,7 +3629,7 @@ namespace GKCore
 					int num = MaxMatching + 1;
 					do
 					{
-						TGenEngine.TRetCount tret = TGenEngine.Matching(strInputMatching, strInputStandart, lngCurLen);
+						TRetCount tret = TGenEngine.Matching(strInputMatching, strInputStandart, lngCurLen);
 						gret.lngCountLike = (ushort)(gret.lngCountLike + tret.lngCountLike);
 						gret.lngSubRows = (ushort)(gret.lngSubRows + tret.lngSubRows);
 						tret = TGenEngine.Matching(strInputStandart, strInputMatching, lngCurLen);
@@ -3839,19 +3647,11 @@ namespace GKCore
 			return Result;
 		}
 
-		public static string ClearFamily(string aFamily)
+		public static string ClearFamily(string family)
 		{
-			int p = SysUtils.Pos(" (", aFamily);
-			string Result;
-			if (p > 0)
-			{
-				Result = SysUtils.WStrCopy(aFamily, 1, p - 1);
-			}
-			else
-			{
-				Result = aFamily;
-			}
-			return Result;
+			int p = SysUtils.Pos(" (", family);
+			string result = ((p > 0) ? family.Substring(0, p - 1) : family);
+			return result;
 		}
 
 		public static string PrepareRusFamily(string f, bool aFemale)
@@ -3862,11 +3662,10 @@ namespace GKCore
 			}
 			else
 			{
-				int p = SysUtils.Pos(" (", f);
-				if (p > 0) f = SysUtils.WStrCopy(f, 1, p - 1);
-
 				if (aFemale)
 				{
+					f = ClearFamily(f);
+
 					if (f.EndsWith("а")) {
 						f = f.Substring(0, f.Length - 1);
 					} else if (f.EndsWith("кая")) {
@@ -3967,17 +3766,9 @@ namespace GKCore
 			return TGenEngine.GetDescGens_Recursive(aPerson) - 1;
 		}
 
-		public static int GetMarriagesCount(TGEDCOMIndividualRecord aPerson)
+		public static int GetMarriagesCount(TGEDCOMIndividualRecord iRec)
 		{
-			int Result;
-			if (aPerson == null)
-			{
-				Result = 0;
-			}
-			else
-			{
-				Result = aPerson.SpouseToFamilyLinks.Count;
-			}
+			int Result = ((iRec == null) ? 0 : iRec.SpouseToFamilyLinks.Count);
 			return Result;
 		}
 
@@ -3986,25 +3777,20 @@ namespace GKCore
 			int Result = 0;
 			try
 			{
-				double y = -1.0;
-				double y2 = -1.0;
 				TGEDCOMIndividualRecord h = fRec.Husband.Value as TGEDCOMIndividualRecord;
 				TGEDCOMIndividualRecord w = fRec.Wife.Value as TGEDCOMIndividualRecord;
-				if (h == null || w == null)
+
+				if (h != null && w != null)
 				{
-				}
-				else
-				{
-					TGEDCOMCustomEvent @event = TGenEngine.GetIndividualEvent(h, "BIRT");
-					if (@event != null)
-					{
-						y = TGenEngine.GetAbstractDate(@event.Detail);
-					}
-					@event = TGenEngine.GetIndividualEvent(w, "BIRT");
-					if (@event != null)
-					{
-						y2 = TGenEngine.GetAbstractDate(@event.Detail);
-					}
+					double y = -1.0;
+					double y2 = -1.0;
+
+					TGEDCOMCustomEvent evt = TGenEngine.GetIndividualEvent(h, "BIRT");
+					if (evt != null) y = TGenEngine.GetAbstractDate(evt.Detail);
+
+					evt = TGenEngine.GetIndividualEvent(w, "BIRT");
+					if (evt != null) y2 = TGenEngine.GetAbstractDate(evt.Detail);
+
 					if (y > (double)0f && y2 > (double)0f)
 					{
 						Result = (int)SysUtils.Trunc((Math.Abs((y2 - y))));
@@ -4067,7 +3853,7 @@ namespace GKCore
 			string sour = aTree.Header.Source;
 			TGEDCOMFormat gf = TGEDCOMFormat.gf_Native;
 			TGEDCOMFormat Result;
-			while (TGenEngine.GEDCOMFormats[(int)gf].Sign != sour)
+			while (GEDCOMFormats[(int)gf].Sign != sour)
 			{
 				gf++;
 				if (gf == (TGEDCOMFormat)6)
@@ -4097,50 +3883,61 @@ namespace GKCore
 
 		public static bool CheckGEDCOMFormat(TGEDCOMTree aTree)
 		{
-			TfmProgress.ProgressInit(aTree.RecordsCount, LangMan.LSList[470]);
-			bool Result;
+			bool result = false;
+
 			try
 			{
-				TGEDCOMFormat format = TGenEngine.GetGEDCOMFormat(aTree);
-				bool idCheck = true;
-
-				CheckHeader(aTree, format);
-
-				for (int i = 0; i < aTree.RecordsCount; i++)
+				TfmProgress.ProgressInit(aTree.RecordsCount, LangMan.LSList[470]);
+				try
 				{
-					TGEDCOMRecord rec = aTree.GetRecord(i);
-					TGenEngine.CheckRecord(aTree, rec, format);
+					TGEDCOMFormat format = TGenEngine.GetGEDCOMFormat(aTree);
+					bool idCheck = true;
 
-					if (format != TGEDCOMFormat.gf_Native && idCheck && TGenEngine.GetId(rec) < 0)
+					CheckHeader(aTree, format);
+
+					int num = aTree.RecordsCount - 1;
+					for (int i = 0; i <= num; i++)
 					{
-						idCheck = false;
+						TGEDCOMRecord rec = aTree.GetRecord(i);
+						TGenEngine.CheckRecord(aTree, rec, format);
+
+						if (format != TGEDCOMFormat.gf_Native && idCheck && TGenEngine.GetId(rec) < 0)
+						{
+							idCheck = false;
+						}
+
+						TfmProgress.Progress = i;
 					}
 
-					TfmProgress.Progress = i; //Step();
-				}
+					if (!idCheck && TGenEngine.ShowQuestion(LangMan.LSList[471]) == DialogResult.Yes)
+					{
+						TGenEngine.CorrectIds(aTree);
+					}
 
-				if (!idCheck && TGenEngine.ShowQuestion(LangMan.LSList[471]) == DialogResult.Yes)
+					result = true;
+				}
+				finally
 				{
-					TGenEngine.CorrectIds(aTree);
+					TfmProgress.ProgressDone();
 				}
-
-				Result = true;
 			}
-			finally
+			catch (Exception ex)
 			{
-				TfmProgress.ProgressDone();
+				SysUtils.LogWrite("TGenEngine.CheckFormat(): " + ex.Message);
+				TGenEngine.ShowError(LangMan.LS(LSID.LSID_CheckGedComFailed));
 			}
-			return Result;
+
+			return result;
 		}
 
-		public static void TreeWalk(TGEDCOMIndividualRecord iRec, TGenEngine.TTreeWalkMode aMode, TList aList)
+		public static void TreeWalk(TGEDCOMIndividualRecord iRec, TTreeWalkMode aMode, TList aList)
 		{
 			if (iRec != null && aList.IndexOf(iRec) < 0)
 			{
 				aList.Add(iRec);
-				if (aMode != TGenEngine.TTreeWalkMode.twmNone)
+				if (aMode != TTreeWalkMode.twmNone)
 				{
-					if ((aMode == TGenEngine.TTreeWalkMode.twmAll || aMode == TGenEngine.TTreeWalkMode.twmAncestors) && iRec.ChildToFamilyLinks.Count > 0)
+					if ((aMode == TTreeWalkMode.twmAll || aMode == TTreeWalkMode.twmAncestors) && iRec.ChildToFamilyLinks.Count > 0)
 					{
 						TGEDCOMFamilyRecord family = iRec.ChildToFamilyLinks[0].Family;
 						TGEDCOMIndividualRecord rel_person = family.Husband.Value as TGEDCOMIndividualRecord;
@@ -4148,12 +3945,13 @@ namespace GKCore
 						rel_person = (family.Wife.Value as TGEDCOMIndividualRecord);
 						TGenEngine.TreeWalk(rel_person, aMode, aList);
 					}
-					if (aMode < TGenEngine.TTreeWalkMode.twmAncestors || aMode == TGenEngine.TTreeWalkMode.twmDescendants)
+					if (aMode < TTreeWalkMode.twmAncestors || aMode == TTreeWalkMode.twmDescendants)
 					{
 						int num = iRec.SpouseToFamilyLinks.Count - 1;
 						for (int i = 0; i <= num; i++)
 						{
 							TGEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
+
 							TGEDCOMPointer sp;
 							if (iRec.Sex == TGEDCOMSex.svMale)
 							{
@@ -4163,34 +3961,32 @@ namespace GKCore
 							{
 								sp = family.Husband;
 							}
-							TGenEngine.TTreeWalkMode int_mode;
-							if (aMode == TGenEngine.TTreeWalkMode.twmAll)
+
+							TTreeWalkMode int_mode;
+							if (aMode == TTreeWalkMode.twmAll)
 							{
-								int_mode = TGenEngine.TTreeWalkMode.twmAll;
+								int_mode = TTreeWalkMode.twmAll;
 							}
 							else
 							{
-								int_mode = TGenEngine.TTreeWalkMode.twmNone;
+								int_mode = TTreeWalkMode.twmNone;
 							}
+
 							TGEDCOMIndividualRecord rel_person = sp.Value as TGEDCOMIndividualRecord;
 							TGenEngine.TreeWalk(rel_person, int_mode, aList);
-							if (aMode != TGenEngine.TTreeWalkMode.twmAll)
-							{
-								if (aMode != TGenEngine.TTreeWalkMode.twmFamily)
-								{
-									if (aMode == TGenEngine.TTreeWalkMode.twmDescendants)
-									{
-										int_mode = TGenEngine.TTreeWalkMode.twmDescendants;
-									}
-								}
-								else
-								{
-									int_mode = TGenEngine.TTreeWalkMode.twmNone;
-								}
-							}
-							else
-							{
-								int_mode = TGenEngine.TTreeWalkMode.twmAll;
+
+							switch (aMode) {
+								case TTreeWalkMode.twmAll:
+									int_mode = TTreeWalkMode.twmAll;
+									break;
+
+								case TTreeWalkMode.twmFamily:
+									int_mode = TTreeWalkMode.twmNone;
+									break;
+
+								case TTreeWalkMode.twmDescendants:
+									int_mode = TTreeWalkMode.twmDescendants;
+									break;
 							}
 
 							int num2 = family.Childrens.Count - 1;
@@ -4263,11 +4059,11 @@ namespace GKCore
 				for (int i = 0; i <= num; i++)
 				{
 					TGEDCOMRecord rec = extTree.GetRecord(i);
-					sync_list.Add(new TGenEngine.TSyncRec
+					sync_list.Add(new TSyncRec
 					{
 						MasterRecord = null, 
 						UpdateRecord = rec, 
-						State = TGenEngine.TSyncState.ssUndefined, 
+						State = TSyncState.ssUndefined, 
 						UpdateOldXRef = "", 
 						UpdateNewXRef = ""
 					});
@@ -4276,16 +4072,16 @@ namespace GKCore
 				int num2 = sync_list.Count - 1;
 				for (int i = 0; i <= num2; i++)
 				{
-					TGenEngine.TSyncRec sync_rec = sync_list[i] as TGenEngine.TSyncRec;
+					TSyncRec sync_rec = sync_list[i] as TSyncRec;
 					TGEDCOMRecord rec = aMainTree.FindUID(sync_rec.UpdateRecord.UID);
 					if (rec != null)
 					{
 						sync_rec.MasterRecord = rec;
-						sync_rec.State = TGenEngine.TSyncState.ssHasMaster;
+						sync_rec.State = TSyncState.ssHasMaster;
 					}
 					else
 					{
-						sync_rec.State = TGenEngine.TSyncState.ssNoMaster;
+						sync_rec.State = TSyncState.ssNoMaster;
 						rec = extTree.Extract(extTree.IndexOfRecord(sync_rec.UpdateRecord));
 						string newXRef = aMainTree.XRefIndex_NewXRef(rec);
 						repMap.AddXRef(rec, rec.XRef, newXRef);
@@ -4312,8 +4108,8 @@ namespace GKCore
 				int num5 = sync_list.Count - 1;
 				for (int i = 0; i <= num5; i++)
 				{
-					TGenEngine.TSyncRec sync_rec = sync_list[i] as TGenEngine.TSyncRec;
-					if (sync_rec.State == TGenEngine.TSyncState.ssHasMaster)
+					TSyncRec sync_rec = sync_list[i] as TSyncRec;
+					if (sync_rec.State == TSyncState.ssHasMaster)
 					{
 						TGEDCOMRecord rec = extTree.Extract(extTree.IndexOfRecord(sync_rec.UpdateRecord));
 						rec.XRef = aMainTree.XRefIndex_NewXRef(rec);
@@ -4337,7 +4133,7 @@ namespace GKCore
 
 		static TGenEngine()
 		{
-			TGenEngine.NumKinship = new string[]
+			NumKinship = new string[]
 			{
 				"-", 
 				"юродный", 
@@ -4345,7 +4141,7 @@ namespace GKCore
 				""
 			};
 
-			TGenEngine.Numerals = new string[]
+			Numerals = new string[]
 			{
 				"-", 
 				"дво", 
@@ -4358,7 +4154,7 @@ namespace GKCore
 				"девяти"
 			};
 
-			TGenEngine.RelationSigns = new string[]
+			RelationSigns = new string[]
 			{
 				"?", 
 				"P", 
@@ -4392,7 +4188,7 @@ namespace GKCore
 				"-"
 			};
 
-			TGenEngine.RelationKinds = new LSID[]
+			RelationKinds = new LSID[]
 			{
 				LSID.LSID_RK_Unk, 
 				LSID.LSID_None, 
@@ -4426,14 +4222,14 @@ namespace GKCore
 				LSID.LSID_RK_Unk
 			};
 
-			TGenEngine.TGEDCOMAppFormat[] afs = new TGenEngine.TGEDCOMAppFormat[6];
+			TGEDCOMAppFormat[] afs = new TGEDCOMAppFormat[6];
 			afs[0] = new TGEDCOMAppFormat("", "");
 			afs[1] = new TGEDCOMAppFormat("GEDKeeper", "");
 			afs[2] = new TGEDCOMAppFormat("GENBOX", "Genbox Family History");
 			afs[3] = new TGEDCOMAppFormat("ALTREE", "Agelong Tree");
 			afs[4] = new TGEDCOMAppFormat("AGES", "Ages!");
 			afs[5] = new TGEDCOMAppFormat("PAF", "Personal Ancestral File");
-			TGenEngine.GEDCOMFormats = afs;
+			GEDCOMFormats = afs;
 
 			string[] array2 = new string[5];
 			array2[0] = "";
@@ -4441,9 +4237,9 @@ namespace GKCore
 			array2[2] = "СССР:ВОВ:Участник боевых действий";
 			array2[3] = "СССР:ВОВ:Погиб в бою";
 			array2[4] = "СССР:ВОВ:Труженик тыла";
-			TGenEngine.UserRefs = array2;
+			UserRefs = array2;
 
-			TGenEngine.CertaintyAssessments = new LSID[]
+			CertaintyAssessments = new LSID[]
 			{
 				LSID.LSID_Cert_1, 
 				LSID.LSID_Cert_2, 
@@ -4451,7 +4247,7 @@ namespace GKCore
 				LSID.LSID_Cert_4
 			};
 
-			TGenEngine.GoalNames = new LSID[]
+			GoalNames = new LSID[]
 			{
 				LSID.LSID_G_1, 
 				LSID.LSID_G_2, 
@@ -4459,13 +4255,13 @@ namespace GKCore
 				LSID.LSID_G_4
 			};
 
-			TGenEngine.CommunicationDirs = new LSID[]
+			CommunicationDirs = new LSID[]
 			{
 				LSID.LSID_CD_1, 
 				LSID.LSID_CD_2
 			};
 
-			TGenEngine.CommunicationNames = new LSID[]
+			CommunicationNames = new LSID[]
 			{
 				LSID.LSID_Com_1, 
 				LSID.LSID_Com_2, 
@@ -4475,7 +4271,7 @@ namespace GKCore
 				LSID.LSID_Com_6
 			};
 
-			TGenEngine.StatusNames = new LSID[]
+			StatusNames = new LSID[]
 			{
 				LSID.LSID_RStat_1, 
 				LSID.LSID_RStat_2, 
@@ -4485,7 +4281,7 @@ namespace GKCore
 				LSID.LSID_RStat_6
 			};
 
-			TGenEngine.PriorityNames = new LSID[]
+			PriorityNames = new LSID[]
 			{
 				LSID.LSID_Prt_1, 
 				LSID.LSID_Prt_2, 
@@ -4494,7 +4290,7 @@ namespace GKCore
 				LSID.LSID_Prt_5
 			};
 
-			TGenEngine.MediaTypes = new LSID[]
+			MediaTypes = new LSID[]
 			{
 				LSID.LSID_MT_01, 
 				LSID.LSID_MT_02, 
@@ -4514,14 +4310,14 @@ namespace GKCore
 			};
 
 
-			TGenEngine.StoreTypeRec[] array3 = new TGenEngine.StoreTypeRec[3];
+			StoreTypeRec[] array3 = new StoreTypeRec[3];
 			array3[0] = new StoreTypeRec(LSID.LSID_STRef, "");
 			array3[1] = new StoreTypeRec(LSID.LSID_STStg, "stg:");
 			array3[2] = new StoreTypeRec(LSID.LSID_STArc, "arc:");
-			TGenEngine.GKStoreTypes = array3;
+			GKStoreTypes = array3;
 
 
-			TGenEngine.S21[] array4 = new TGenEngine.S21[10];
+			S21[] array4 = new S21[10];
 			array4[0] = new S21(LSID.LSID_Event, "EVEN");
 			array4[1] = new S21(LSID.LSID_FEvt_1, "ENGA");
 			array4[2] = new S21(LSID.LSID_FEvt_2, "MARR");
@@ -4532,10 +4328,10 @@ namespace GKCore
 			array4[7] = new S21(LSID.LSID_FEvt_7, "ANUL");
 			array4[8] = new S21(LSID.LSID_FEvt_8, "DIVF");
 			array4[9] = new S21(LSID.LSID_FEvt_9, "DIV");
-			TGenEngine.FamilyEvents = array4;
+			FamilyEvents = array4;
 
 
-			TGenEngine.DateCalendars = new LSID[]
+			DateCalendars = new LSID[]
 			{
 				LSID.LSID_Cal_Gregorian, 
 				LSID.LSID_Cal_Julian, 
@@ -4546,77 +4342,77 @@ namespace GKCore
 			};
 
 			
-			TGenEngine.DateKindRec[] array5 = new TGenEngine.DateKindRec[10];
-			array5[0] = new DateKindRec(LSID.LSID_DK_0,  (TGenEngine.TDateControlsRange)2);
-			array5[1] = new DateKindRec(LSID.LSID_DK_1,  (TGenEngine.TDateControlsRange)4);
-			array5[2] = new DateKindRec(LSID.LSID_DK_2,  (TGenEngine.TDateControlsRange)2);
-			array5[3] = new DateKindRec(LSID.LSID_DK_3,  (TGenEngine.TDateControlsRange)6);
-			array5[4] = new DateKindRec(LSID.LSID_DK_4,  (TGenEngine.TDateControlsRange)2);
-			array5[5] = new DateKindRec(LSID.LSID_DK_5,  (TGenEngine.TDateControlsRange)4);
-			array5[6] = new DateKindRec(LSID.LSID_DK_6,  (TGenEngine.TDateControlsRange)6);
-			array5[7] = new DateKindRec(LSID.LSID_DK_7,  (TGenEngine.TDateControlsRange)2);
-			array5[8] = new DateKindRec(LSID.LSID_DK_8,  (TGenEngine.TDateControlsRange)2);
-			array5[9] = new DateKindRec(LSID.LSID_DK_9,  (TGenEngine.TDateControlsRange)2);
-			TGenEngine.DateKinds = array5;
+			DateKindRec[] array5 = new DateKindRec[10];
+			array5[0] = new DateKindRec(LSID.LSID_DK_0,  (TDateControlsRange)2);
+			array5[1] = new DateKindRec(LSID.LSID_DK_1,  (TDateControlsRange)4);
+			array5[2] = new DateKindRec(LSID.LSID_DK_2,  (TDateControlsRange)2);
+			array5[3] = new DateKindRec(LSID.LSID_DK_3,  (TDateControlsRange)6);
+			array5[4] = new DateKindRec(LSID.LSID_DK_4,  (TDateControlsRange)2);
+			array5[5] = new DateKindRec(LSID.LSID_DK_5,  (TDateControlsRange)4);
+			array5[6] = new DateKindRec(LSID.LSID_DK_6,  (TDateControlsRange)6);
+			array5[7] = new DateKindRec(LSID.LSID_DK_7,  (TDateControlsRange)2);
+			array5[8] = new DateKindRec(LSID.LSID_DK_8,  (TDateControlsRange)2);
+			array5[9] = new DateKindRec(LSID.LSID_DK_9,  (TDateControlsRange)2);
+			DateKinds = array5;
 
 
-			TGenEngine.S7[] array6 = new TGenEngine.S7[37];
-			array6[ 0] = new S7(LSID.LSID_Event, "EVEN", TGenEngine.TPersonEventKind.ekEvent);
-			array6[ 1] = new S7(LSID.LSID_Birth, "BIRT", TGenEngine.TPersonEventKind.ekEvent);
-			array6[ 2] = new S7(LSID.LSID_Adoption, "ADOP", TGenEngine.TPersonEventKind.ekEvent);
-			array6[ 3] = new S7(LSID.LSID_Christening, "CHR", TGenEngine.TPersonEventKind.ekEvent);
-			array6[ 4] = new S7(LSID.LSID_Graduation, "GRAD", TGenEngine.TPersonEventKind.ekEvent);
-			array6[ 5] = new S7(LSID.LSID_Retirement, "RETI", TGenEngine.TPersonEventKind.ekEvent);
-			array6[ 6] = new S7(LSID.LSID_Naturalization, "NATU", TGenEngine.TPersonEventKind.ekEvent);
-			array6[ 7] = new S7(LSID.LSID_Emigration, "EMIG", TGenEngine.TPersonEventKind.ekEvent);
-			array6[ 8] = new S7(LSID.LSID_Immigration, "IMMI", TGenEngine.TPersonEventKind.ekEvent);
-			array6[ 9] = new S7(LSID.LSID_Census, "CENS", TGenEngine.TPersonEventKind.ekEvent);
-			array6[10] = new S7(LSID.LSID_LastWill, "WILL", TGenEngine.TPersonEventKind.ekEvent);
-			array6[11] = new S7(LSID.LSID_ProbateOfWill, "PROB", TGenEngine.TPersonEventKind.ekEvent);
-			array6[12] = new S7(LSID.LSID_Death, "DEAT", TGenEngine.TPersonEventKind.ekEvent);
-			array6[13] = new S7(LSID.LSID_Burial, "BURI", TGenEngine.TPersonEventKind.ekEvent);
-			array6[14] = new S7(LSID.LSID_Cremation, "CREM", TGenEngine.TPersonEventKind.ekEvent);
-			array6[15] = new S7(LSID.LSID_Fact, "FACT", TGenEngine.TPersonEventKind.ekFact);
-			array6[16] = new S7(LSID.LSID_Religion, "RELI", TGenEngine.TPersonEventKind.ekFact);
-			array6[17] = new S7(LSID.LSID_Nationality, "NATI", TGenEngine.TPersonEventKind.ekFact);
-			array6[18] = new S7(LSID.LSID_Residence, "RESI", TGenEngine.TPersonEventKind.ekFact);
-			array6[19] = new S7(LSID.LSID_PhysicalDesc, "DSCR", TGenEngine.TPersonEventKind.ekFact);
-			array6[20] = new S7(LSID.LSID_NationalIDNumber, "IDNO", TGenEngine.TPersonEventKind.ekFact);
-			array6[21] = new S7(LSID.LSID_SocialSecurityNumber, "SSN", TGenEngine.TPersonEventKind.ekFact);
-			array6[22] = new S7(LSID.LSID_ChildsCount, "NCHI", TGenEngine.TPersonEventKind.ekFact);
-			array6[23] = new S7(LSID.LSID_MarriagesCount, "NMR", TGenEngine.TPersonEventKind.ekFact);
-			array6[24] = new S7(LSID.LSID_Education, "EDUC", TGenEngine.TPersonEventKind.ekFact);
-			array6[25] = new S7(LSID.LSID_Occupation, "OCCU", TGenEngine.TPersonEventKind.ekFact);
-			array6[26] = new S7(LSID.LSID_Caste, "CAST", TGenEngine.TPersonEventKind.ekFact);
-			array6[27] = new S7(LSID.LSID_Property, "PROP", TGenEngine.TPersonEventKind.ekFact);
-			array6[28] = new S7(LSID.LSID_NobilityTitle, "TITL", TGenEngine.TPersonEventKind.ekFact);
-			array6[29] = new S7(LSID.LSID_Travel, "_TRAVEL", TGenEngine.TPersonEventKind.ekFact);
-			array6[30] = new S7(LSID.LSID_Hobby, "_HOBBY", TGenEngine.TPersonEventKind.ekFact);
-			array6[31] = new S7(LSID.LSID_Award, "_AWARD", TGenEngine.TPersonEventKind.ekFact);
-			array6[32] = new S7(LSID.LSID_Mili, "_MILI", TGenEngine.TPersonEventKind.ekFact);
-			array6[33] = new S7(LSID.LSID_MiliInd, "_MILI_IND", TGenEngine.TPersonEventKind.ekFact);
-			array6[34] = new S7(LSID.LSID_MiliDis, "_MILI_DIS", TGenEngine.TPersonEventKind.ekFact);
-			array6[35] = new S7(LSID.LSID_MiliRank, "_MILI_RANK", TGenEngine.TPersonEventKind.ekFact);
-			array6[36] = new S7(LSID.LSID_DNAMarkers, "_DNA", TGenEngine.TPersonEventKind.ekFact);
-			TGenEngine.PersonEvents = array6;
+			S7[] array6 = new S7[37];
+			array6[ 0] = new S7(LSID.LSID_Event, "EVEN", TPersonEventKind.ekEvent);
+			array6[ 1] = new S7(LSID.LSID_Birth, "BIRT", TPersonEventKind.ekEvent);
+			array6[ 2] = new S7(LSID.LSID_Adoption, "ADOP", TPersonEventKind.ekEvent);
+			array6[ 3] = new S7(LSID.LSID_Christening, "CHR", TPersonEventKind.ekEvent);
+			array6[ 4] = new S7(LSID.LSID_Graduation, "GRAD", TPersonEventKind.ekEvent);
+			array6[ 5] = new S7(LSID.LSID_Retirement, "RETI", TPersonEventKind.ekEvent);
+			array6[ 6] = new S7(LSID.LSID_Naturalization, "NATU", TPersonEventKind.ekEvent);
+			array6[ 7] = new S7(LSID.LSID_Emigration, "EMIG", TPersonEventKind.ekEvent);
+			array6[ 8] = new S7(LSID.LSID_Immigration, "IMMI", TPersonEventKind.ekEvent);
+			array6[ 9] = new S7(LSID.LSID_Census, "CENS", TPersonEventKind.ekEvent);
+			array6[10] = new S7(LSID.LSID_LastWill, "WILL", TPersonEventKind.ekEvent);
+			array6[11] = new S7(LSID.LSID_ProbateOfWill, "PROB", TPersonEventKind.ekEvent);
+			array6[12] = new S7(LSID.LSID_Death, "DEAT", TPersonEventKind.ekEvent);
+			array6[13] = new S7(LSID.LSID_Burial, "BURI", TPersonEventKind.ekEvent);
+			array6[14] = new S7(LSID.LSID_Cremation, "CREM", TPersonEventKind.ekEvent);
+			array6[15] = new S7(LSID.LSID_Fact, "FACT", TPersonEventKind.ekFact);
+			array6[16] = new S7(LSID.LSID_Religion, "RELI", TPersonEventKind.ekFact);
+			array6[17] = new S7(LSID.LSID_Nationality, "NATI", TPersonEventKind.ekFact);
+			array6[18] = new S7(LSID.LSID_Residence, "RESI", TPersonEventKind.ekFact);
+			array6[19] = new S7(LSID.LSID_PhysicalDesc, "DSCR", TPersonEventKind.ekFact);
+			array6[20] = new S7(LSID.LSID_NationalIDNumber, "IDNO", TPersonEventKind.ekFact);
+			array6[21] = new S7(LSID.LSID_SocialSecurityNumber, "SSN", TPersonEventKind.ekFact);
+			array6[22] = new S7(LSID.LSID_ChildsCount, "NCHI", TPersonEventKind.ekFact);
+			array6[23] = new S7(LSID.LSID_MarriagesCount, "NMR", TPersonEventKind.ekFact);
+			array6[24] = new S7(LSID.LSID_Education, "EDUC", TPersonEventKind.ekFact);
+			array6[25] = new S7(LSID.LSID_Occupation, "OCCU", TPersonEventKind.ekFact);
+			array6[26] = new S7(LSID.LSID_Caste, "CAST", TPersonEventKind.ekFact);
+			array6[27] = new S7(LSID.LSID_Property, "PROP", TPersonEventKind.ekFact);
+			array6[28] = new S7(LSID.LSID_NobilityTitle, "TITL", TPersonEventKind.ekFact);
+			array6[29] = new S7(LSID.LSID_Travel, "_TRAVEL", TPersonEventKind.ekFact);
+			array6[30] = new S7(LSID.LSID_Hobby, "_HOBBY", TPersonEventKind.ekFact);
+			array6[31] = new S7(LSID.LSID_Award, "_AWARD", TPersonEventKind.ekFact);
+			array6[32] = new S7(LSID.LSID_Mili, "_MILI", TPersonEventKind.ekFact);
+			array6[33] = new S7(LSID.LSID_MiliInd, "_MILI_IND", TPersonEventKind.ekFact);
+			array6[34] = new S7(LSID.LSID_MiliDis, "_MILI_DIS", TPersonEventKind.ekFact);
+			array6[35] = new S7(LSID.LSID_MiliRank, "_MILI_RANK", TPersonEventKind.ekFact);
+			array6[36] = new S7(LSID.LSID_DNAMarkers, "_DNA", TPersonEventKind.ekFact);
+			PersonEvents = array6;
 
 			
-			TGenEngine.S5[] array7 = new TGenEngine.S5[4];
+			S5[] array7 = new S5[4];
 			array7[0] = new S5(LSID.LSID_Unknown, "");
 			array7[1] = new S5(LSID.LSID_MarrRegistered, "MARRIED");
 			array7[2] = new S5(LSID.LSID_MarrNotRegistered, "MARRNOTREG");
 			array7[3] = new S5(LSID.LSID_MarrDivorced, "NOTMARR");
-			TGenEngine.MarriageStatus = array7;
+			MarriageStatus = array7;
 
 
-			TGenEngine.TSexRec[] array8 = new TGenEngine.TSexRec[4];
+			TSexRec[] array8 = new TSexRec[4];
 			array8[0] = new TSexRec(LSID.LSID_SexN, "N");
 			array8[1] = new TSexRec(LSID.LSID_SexM, "M");
 			array8[2] = new TSexRec(LSID.LSID_SexF, "F");
 			array8[3] = new TSexRec(LSID.LSID_SexU, "U");
-			TGenEngine.SexData = array8;
+			SexData = array8;
 
-			TGenEngine.RecordTypes = new LSID[]
+			RecordTypes = new LSID[]
 			{
 				LSID.LSID_None, 
 				LSID.LSID_Person, 
@@ -4634,7 +4430,7 @@ namespace GKCore
 				LSID.LSID_None
 			};
 
-			TGenEngine.Restrictions = new string[]
+			Restrictions = new string[]
 			{
 				"нет", 
 				"конфиденциально", 
@@ -4842,11 +4638,11 @@ namespace GKCore
 				{
 					if (SysUtils.Pos("+", cause) > 0)
 					{
-						_CheckRecord_AddUserRef(aTree, aFormat, iRec, TGenEngine.UserRefs[3]);
+						_CheckRecord_AddUserRef(aTree, aFormat, iRec, UserRefs[3]);
 					}
 					else
 					{
-						_CheckRecord_AddUserRef(aTree, aFormat, iRec, TGenEngine.UserRefs[2]);
+						_CheckRecord_AddUserRef(aTree, aFormat, iRec, UserRefs[2]);
 					}
 					aEvent.Detail.Classification = "";
 				}
@@ -4854,7 +4650,7 @@ namespace GKCore
 				{
 					if (SysUtils.Pos("т/т", cause) > 0)
 					{
-						_CheckRecord_AddUserRef(aTree, aFormat, iRec, TGenEngine.UserRefs[4]);
+						_CheckRecord_AddUserRef(aTree, aFormat, iRec, UserRefs[4]);
 						aEvent.Detail.Classification = "";
 					}
 				}
@@ -5105,6 +4901,47 @@ namespace GKCore
 
 			//
 			return result;
+		}
+
+
+		public delegate void DuplicateFoundFunc(TGEDCOMIndividualRecord indi, List<TGEDCOMIndividualRecord> matches);
+
+		public static List<TGEDCOMIndividualRecord> FindDuplicates(TGEDCOMIndividualRecord indi, TGEDCOMTree databaseB, float matchThreshold)
+		{
+			List<TGEDCOMIndividualRecord> matches = new List<TGEDCOMIndividualRecord>();
+
+			for (int i = 0; i <= databaseB.RecordsCount - 1; i++)
+			{
+				if (databaseB[i] is TGEDCOMIndividualRecord)
+				{
+					TGEDCOMIndividualRecord matchIndi = databaseB[i] as TGEDCOMIndividualRecord;
+
+					// can't match self, databaseB could be the same database as indi.Database
+					// so we can check this
+					if (matchIndi != indi)
+					{
+						float match = indi.IsMatch(matchIndi);
+						if (match > matchThreshold) {
+							matches.Add(matchIndi);
+						}
+					}
+				}
+			}
+
+			return matches;		
+		}
+
+		public static void FindDuplicates(TGEDCOMTree databaseA, TGEDCOMTree databaseB, float matchThreshold, DuplicateFoundFunc foundFunc)
+		{		
+			for (int i = 0; i <= databaseA.RecordsCount - 1; i++)
+			{
+				if (databaseA[i] is TGEDCOMIndividualRecord)
+				{
+					TGEDCOMIndividualRecord indi = databaseA[i] as TGEDCOMIndividualRecord;
+					List<TGEDCOMIndividualRecord> matches = FindDuplicates(indi, databaseB, matchThreshold);
+					if (matches.Count > 0) foundFunc(indi, matches);
+				}
+			}
 		}
 
 	}

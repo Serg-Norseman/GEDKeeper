@@ -5,7 +5,7 @@ using System.Security.Permissions;
 using System.Text;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKSys

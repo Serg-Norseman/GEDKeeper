@@ -5,7 +5,7 @@ using GKCore;
 using GKUI.Controls;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKUI.Lists
@@ -32,21 +32,19 @@ namespace GKUI.Lists
 		public override string GetColumnValue(int aColIndex, bool isMain)
 		{
 			string Result;
-			if (aColIndex != 1)
-			{
-				if (aColIndex != 2)
-				{
-					Result = "";
-				}
-				else
-				{
+
+			switch (aColIndex) {
+				case 1:
+					Result = this.FRec.RepositoryName;
+					break;
+				case 2:
 					Result = this.FRec.ChangeDate.ToString();
-				}
+					break;
+				default:
+					Result = "";
+					break;
 			}
-			else
-			{
-				Result = this.FRec.RepositoryName;
-			}
+
 			return Result;
 		}
 

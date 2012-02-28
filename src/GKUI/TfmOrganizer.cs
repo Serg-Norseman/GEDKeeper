@@ -9,7 +9,7 @@ using GKUI.Controls;
 using GKUI.Lists;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKUI
@@ -41,7 +41,7 @@ namespace GKUI
 				if (rec is TGEDCOMIndividualRecord)
 				{
 					TGEDCOMIndividualRecord i_rec = (TGEDCOMIndividualRecord)rec;
-					string nm = TGenEngine.GetNameStr(i_rec, true, false);
+					string nm = i_rec.aux_GetNameStr(true, false);
 
 					int num2 = i_rec.IndividualEvents.Count - 1;
 					for (int j = 0; j <= num2; j++)

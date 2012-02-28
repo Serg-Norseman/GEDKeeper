@@ -33,7 +33,11 @@ namespace GedCom551
 			get { return this.GetLastPart(); }
 		}
 
-		public TGEDCOMPersonalNamePieces Pieces; // property/field
+		public TGEDCOMPersonalNamePieces Pieces
+		{
+			get;
+			set;
+		}
 
 		public TGEDCOMNameType NameType
 		{
@@ -243,6 +247,86 @@ namespace GedCom551
 			{
 				SysUtils.TrimLeft(FirstPart + " "), "/", Surname, "/", SysUtils.TrimRight(" " + LastPart)
 			});
+		}
+
+		public float IsMatch(TGEDCOMPersonalName name)
+		{
+			float match = 0F;
+			int parts = 0;
+
+			// FIXME: perform soundex check as well?
+			// how would that effect returning a % match?
+			float matches = 0;
+
+			bool surnameMatched = false;
+
+			if (!(string.IsNullOrEmpty(name.FirstPart) && string.IsNullOrEmpty(FirstPart)))
+			{
+				parts ++;
+				if (name.FirstPart == FirstPart) matches ++;
+			}
+
+			if (!(string.IsNullOrEmpty(name.Surname) && string.IsNullOrEmpty(Surname)))
+			{
+				if ((name.Surname == "?" && Surname == "?") ||
+					((string.Compare(name.Surname, "unknown", true) == 0) &&
+					 (string.Compare(Surname, "unknown", true) == 0)))
+				{
+					// not really matched, surname isn't known,
+					// don't count as part being checked, and don't penalize
+					surnameMatched = true;
+				}
+				else
+				{
+					parts ++;
+					if (name.Surname == Surname)
+					{
+						matches ++;
+						surnameMatched = true;
+					}
+				}
+			}
+			else
+			{
+				// pretend the surname matches
+				surnameMatched = true;
+			}
+
+			if (!(string.IsNullOrEmpty(name.Pieces.Prefix) && string.IsNullOrEmpty(Pieces.Prefix)))
+			{
+				parts ++;
+				if (name.Pieces.Prefix == Pieces.Prefix) matches ++;
+			}
+
+			if (!(string.IsNullOrEmpty(name.Pieces.SurnamePrefix) && string.IsNullOrEmpty(Pieces.SurnamePrefix)))
+			{
+				parts ++;
+				if (name.Pieces.SurnamePrefix == Pieces.SurnamePrefix) matches ++;
+			}
+
+			if (!(string.IsNullOrEmpty(name.Pieces.Suffix) && string.IsNullOrEmpty(Pieces.Suffix)))
+			{
+				parts ++;
+				if (name.Pieces.Suffix == Pieces.Suffix) matches ++;
+			}
+
+			if (!(string.IsNullOrEmpty(name.Pieces.Nickname) && string.IsNullOrEmpty(Pieces.Nickname)))
+			{
+				parts ++;
+				if (name.Pieces.Nickname == Pieces.Nickname) matches ++;
+			}
+
+			match = (matches / parts) * 100.0F;
+
+			// FIXME: heavily penalise the surname not matching
+			// for this to work correctly better matching needs to be
+			// performed, not just string comparison
+			if (!surnameMatched)
+			{
+				match *= 0.25F;
+			}
+
+			return match;
 		}
 
 		public TGEDCOMPersonalName(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)

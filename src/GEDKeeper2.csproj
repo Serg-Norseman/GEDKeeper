@@ -19,6 +19,7 @@
     <RunCodeAnalysis>False</RunCodeAnalysis>
     <RunSourceAnalysis>False</RunSourceAnalysis>
     <ApplicationIcon>GEDKeeper2.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -43,6 +44,9 @@
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="itextsharp">
+      <HintPath>itextsharp.dll</HintPath>
+    </Reference>
     <Reference Include="LuaInterface">
       <HintPath>LuaInterface.dll</HintPath>
     </Reference>
@@ -62,6 +66,8 @@
   <ItemGroup>
     <Compile Include="Ext\CSV\CSVReader.cs" />
     <Compile Include="Ext\CSV\StringConverter.cs" />
+    <Compile Include="Ext\ListTimSort.cs" />
+    <Compile Include="Ext\MapiMailMessage.cs" />
     <Compile Include="Ext\ZipStorer.cs" />
     <Compile Include="GedCom551\GEDCOMEnums.cs" />
     <Compile Include="GedCom551\GEDCOMFactory.cs" />
@@ -132,6 +138,7 @@
     <Compile Include="GKCore\IO\Importer.cs" />
     <Compile Include="GKCore\IO\TPedigree.cs" />
     <Compile Include="GKCore\IO\WebExporter.cs" />
+    <Compile Include="GKCore\IO\WebTree.cs" />
     <Compile Include="GKCore\LangMan.cs" />
     <Compile Include="GKCore\SearchManager.cs" />
     <Compile Include="GKCore\Settings\TChartOptions.cs" />
@@ -146,6 +153,32 @@
     <Compile Include="GKResources.Designer.cs">
       <DependentUpon>GKResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="GKSandbox\AncestorsCircle.cs" />
+    <Compile Include="GKSandbox\AncestorsCircleOptions.cs" />
+    <Compile Include="GKSandbox\frmAncCircleStyleEditor.cs" />
+    <Compile Include="GKSandbox\frmAncCircleStyleEditor.Designer.cs">
+      <DependentUpon>frmAncCircleStyleEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKSandbox\frmAncestorsCircle.cs" />
+    <Compile Include="GKSandbox\frmAncestorsCircle.Designer.cs">
+      <DependentUpon>frmAncestorsCircle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKSandbox\frmFieldsSetup.cs" />
+    <Compile Include="GKSandbox\frmFieldsSetup.Designer.cs">
+      <DependentUpon>frmFieldsSetup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKSandbox\frmReports.cs" />
+    <Compile Include="GKSandbox\frmReports.Designer.cs">
+      <DependentUpon>frmReports.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKSandbox\frmReportsSetup.cs" />
+    <Compile Include="GKSandbox\frmReportsSetup.Designer.cs">
+      <DependentUpon>frmReportsSetup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKSandbox\ReportFactory.cs" />
+    <Compile Include="GKSandbox\ReportProperties.cs" />
+    <Compile Include="GKSandbox\ReportTableProperties.cs" />
+    <Compile Include="GKSys\AnselEncoding.cs" />
     <Compile Include="GKSys\IniFile.cs" />
     <Compile Include="GKSys\ScrollUtils.cs" />
     <Compile Include="GKSys\StringList.cs" />
@@ -155,6 +188,9 @@
     <Compile Include="GKSys\TObjectList.cs" />
     <Compile Include="GKSys\TStack.cs" />
     <Compile Include="GKUI\Controls\InputBox.cs" />
+    <Compile Include="GKUI\Controls\InputBox.Designer.cs">
+      <DependentUpon>InputBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Controls\TComboItem.cs" />
     <Compile Include="GKUI\Controls\TExtListItem.cs" />
     <Compile Include="GKUI\Controls\TGKHyperView.cs" />
@@ -370,6 +406,24 @@
     <Compile Include="Ext\XLSFile\TXLSFile.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="GKSandbox\frmAncCircleStyleEditor.resx">
+      <DependentUpon>frmAncCircleStyleEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKSandbox\frmAncestorsCircle.resx">
+      <DependentUpon>frmAncestorsCircle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKSandbox\frmFieldsSetup.resx">
+      <DependentUpon>frmFieldsSetup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKSandbox\frmReports.resx">
+      <DependentUpon>frmReports.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKSandbox\frmReportsSetup.resx">
+      <DependentUpon>frmReportsSetup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Controls\InputBox.resx">
+      <DependentUpon>InputBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\TfmAbout.resx">
       <DependentUpon>TfmAbout.cs</DependentUpon>
     </EmbeddedResource>
@@ -454,6 +508,9 @@
     <EmbeddedResource Include="GKUI\TfmGEDKeeper.resx">
       <DependentUpon>TfmGEDKeeper.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\TfmProgress.resx">
+      <DependentUpon>TfmProgress.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\TfmScriptDaemon.resx">
       <DependentUpon>TfmScriptDaemon.Designer.cs</DependentUpon>
     </EmbeddedResource>
@@ -472,6 +529,7 @@
     <Folder Include="Ext\CSV" />
     <Folder Include="GKCore\IO" />
     <Folder Include="GKCore\Settings" />
+    <Folder Include="GKSandbox" />
     <Folder Include="GKUI\Controls" />
     <Folder Include="GKUI\Dialogs" />
     <Folder Include="GKSys" />
@@ -487,6 +545,7 @@
     <Content Include="lua51.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="app.manifest" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

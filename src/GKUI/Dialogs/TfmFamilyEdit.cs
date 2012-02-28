@@ -9,7 +9,7 @@ using GKUI.Controls;
 using GKUI.Lists;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKUI
@@ -88,7 +88,7 @@ namespace GKUI
 			TGEDCOMIndividualRecord spouse = this.GetHusband();
 			if (spouse != null)
 			{
-				this.EditHusband.Text = TGenEngine.GetNameStr(spouse, true, false);
+				this.EditHusband.Text = spouse.aux_GetNameStr(true, false);
 			}
 			else
 			{
@@ -101,7 +101,7 @@ namespace GKUI
 			spouse = this.GetWife();
 			if (spouse != null)
 			{
-				this.EditWife.Text = TGenEngine.GetNameStr(spouse, true, false);
+				this.EditWife.Text = spouse.aux_GetNameStr(true, false);
 			}
 			else
 			{
@@ -125,7 +125,7 @@ namespace GKUI
 			{
 				TGEDCOMIndividualRecord child = this.FFamily.Childrens[i - 1].Value as TGEDCOMIndividualRecord;
 				ListViewItem item = list.AddItem(i.ToString(), child);
-				item.SubItems.Add(TGenEngine.GetNameStr(child, true, false));
+				item.SubItems.Add(child.aux_GetNameStr(true, false));
 				item.SubItems.Add(TGenEngine.GetBirthDate(child, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat, false));
 			}
 			list.EndUpdate();

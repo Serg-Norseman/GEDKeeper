@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -10,7 +11,7 @@ using GKSys;
 using GKUI.Lists;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKUI.Charts
@@ -32,8 +33,8 @@ namespace GKUI.Charts
 		protected TGenEngine.TShieldState FShieldState;
 		protected TGEDCOMTree FTree;
 
-		public TGenEngine FEngine;
-		public Font FDrawFont;
+		protected TGenEngine FEngine;
+		protected Font FDrawFont;
 
 		public int BorderWidth
 		{
@@ -45,6 +46,11 @@ namespace GKUI.Charts
 		{
 			get { return this.FEngine; }
 			set { this.FEngine = value; }
+		}
+
+		public Font DrawFont
+		{
+			get { return this.FDrawFont; }
 		}
 
 		public TPersonsFilter Filter
@@ -251,6 +257,7 @@ namespace GKUI.Charts
 			base.TabStop = true;
 			this.TopPos = 0;
 			this.LeftPos = 0;
+			base.BackColor = Color.White;
 		}
 
 		protected override void Dispose(bool Disposing)
@@ -263,14 +270,26 @@ namespace GKUI.Charts
 
 		protected override void OnPaint(PaintEventArgs pe)
 		{
-			base.OnPaint(pe);
+			//base.OnPaint(pe);
 			this.InternalDraw(pe.Graphics, true);
 		}
 
 		public virtual void InternalDraw(Graphics aCanvas, bool Default)
 		{
+			Rectangle imgRect = new Rectangle(0, 0, FImageWidth, FImageHeight);
+			if (this.BackgroundImage == null) {
+				using (Brush brush = new SolidBrush(this.BackColor)) {
+					aCanvas.FillRectangle(brush, imgRect);
+				}
+			} else {
+				//ControlPaint.DrawBackgroundImage( aCanvas, this.BackgroundImage, BackColor, this.BackgroundImageLayout, CR, CR);
+				using (TextureBrush textureBrush = new TextureBrush(this.BackgroundImage, WrapMode.Tile))
+				{
+					aCanvas.FillRectangle(textureBrush, imgRect);
+				}
+			}
+
 			Rectangle CR = base.ClientRectangle;
-			aCanvas.FillRectangle(new SolidBrush(Color.White), CR.Left, CR.Top, CR.Width, CR.Height);
 
 			if (Default)
 			{

@@ -988,7 +988,7 @@ namespace GKUI
 			this.MinimizeBox = false;
 			this.Name = "TfmTreeTools";
 			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Инструменты";
 			this.PageControl.ResumeLayout(false);
 			this.SheetTreeCompare.ResumeLayout(false);

@@ -8,7 +8,7 @@ using GKSys;
 using GKUI.Controls;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKUI
@@ -132,13 +132,12 @@ namespace GKUI
 		{
 			this.InitializeComponent();
 			this.FBase = aBase;
-			int i = 0;
-			do
+
+			for (int i = 0; i <= TGenEngine.CertaintyAssessments.Length - 1; i++)
 			{
 				this.EditCertainty.Items.Add(LangMan.LSList[(int)TGenEngine.CertaintyAssessments[i] - 1]);
-				i++;
 			}
-			while (i != 4);
+
 			this.FSourcesList = new StringList();
 			this.Base.Engine.GetSourcesList(this.FSourcesList);
 			this.RefreshSourcesList("");
