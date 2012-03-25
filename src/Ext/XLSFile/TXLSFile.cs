@@ -2,9 +2,9 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-using GKSys;
+using Ext.Utils;
 
-namespace XLSFile
+namespace Ext.XLSFile
 {
 	public class TXLSFile : IDisposable
 	{

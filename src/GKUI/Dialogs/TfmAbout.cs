@@ -3,10 +3,9 @@ using System.Reflection;
 using System.Windows.Forms;
 
 using GKCore;
-using GKSys;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: dirty
 /// </summary>
 
 namespace GKUI
@@ -19,11 +18,13 @@ namespace GKUI
 			this.LabelCite.Text = "«История рода - это есть история Отечества»\r\n«Неуважение к предкам - есть первый признак дикости и безнравственности»\r\n(Александр Сергеевич Пушкин)";
 			this.Text = LangMan.LSList[49];
 			this.btnClose.Text = LangMan.LSList[99];
+
+			//this.familyComboBox1.Doc = TfmGEDKeeper.Instance.GetCurrentFile().Tree;
 		}
 
 		private void LabelMail_Click(object sender, EventArgs e)
 		{
-			SysUtils.LoadExtFile(this.LabelMail.Text);
+			TGenEngine.LoadExtFile(this.LabelMail.Text);
 		}
 
 		public static void ShowAbout(string AppName)
@@ -46,7 +47,7 @@ namespace GKUI
 			}
 			finally
 			{
-				SysUtils.Free(dlg);
+				dlg.Dispose();
 			}
 		}
 

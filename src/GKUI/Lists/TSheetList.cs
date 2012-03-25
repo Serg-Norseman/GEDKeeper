@@ -3,8 +3,8 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GKCore;
-using GKSys;
 using GKUI.Controls;
 
 /// <summary>
@@ -35,7 +35,7 @@ namespace GKUI.Lists
 		private ToolBarButton FBtnMoveDown;
 		private ToolBar FToolBar;
 		private EnumSet FButtons;
-		private TGKListView FList;
+		private GKListView FList;
 		private TSheetList.TModifyEvent FOnModify;
 		private bool FReadOnly;
 
@@ -60,7 +60,7 @@ namespace GKUI.Lists
 			set { this.SetButtons(value); }
 		}
 
-		public TGKListView List
+		public GKListView List
 		{
 			get { return this.FList; }
 		}
@@ -209,7 +209,7 @@ namespace GKUI.Lists
 			this.FToolBar.ImageList = GKUI.TfmGEDKeeper.Instance.ImageList_Buttons;
 			this.FToolBar.ShowToolTips = true;
 			this.FToolBar.ButtonClick += new ToolBarButtonClickEventHandler(this.ButtonClick);
-			this.FList = new TGKListView(null);
+			this.FList = new GKListView(null);
 			this.FList.Location = new Point(0, 0);
 			this.FList.Size = new Size(500, 290);
 			this.FList.HideSelection = false;

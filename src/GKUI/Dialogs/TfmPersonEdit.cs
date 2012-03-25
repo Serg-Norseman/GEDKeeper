@@ -3,13 +3,13 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKSys;
 using GKUI.Lists;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKUI

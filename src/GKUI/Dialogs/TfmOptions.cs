@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKCore.Settings;
-using GKSys;
 using GKUI.Controls;
 using GKUI.Lists;
 
@@ -14,12 +13,17 @@ using GKUI.Lists;
 
 namespace GKUI
 {
+	public enum OptionsPage
+	{
+		opCommon, opTreeChart, opAncestorsCircle, opInterface, opPedigree
+	}
+	
 	public partial class TfmOptions : Form, ILocalization
 	{
-		private TGlobalOptions FOptions;
+		private GlobalOptions FOptions;
 		private TIndividualListColumns FTempColumns = new TIndividualListColumns();
 
-		public TGlobalOptions Options
+		public GlobalOptions Options
 		{
 			get { return this.FOptions; }
 			set { this.FOptions = value; }
@@ -35,7 +39,7 @@ namespace GKUI
 				for (int i = 0; i < FTempColumns.Count; i++)
 				{
 					TPersonColumnType pct = FTempColumns[i].colType;
-					this.ListPersonColumns.Items.Add(LangMan.LSList[(int)TGlobalOptions.PersonColumnsName[(int)pct].Name - 1], FTempColumns[i].colActive);
+					this.ListPersonColumns.Items.Add(LangMan.LSList[(int)GlobalOptions.PersonColumnsName[(int)pct].Name - 1], FTempColumns[i].colActive);
 				}
 			}
 			finally
@@ -127,10 +131,10 @@ namespace GKUI
 			this.chkNotes.Checked = this.FOptions.PedigreeOptions.IncludeNotes;
 			this.chkSources.Checked = this.FOptions.PedigreeOptions.IncludeSources;
 
-			TPedigreeOptions.TPedigreeFormat format = this.FOptions.PedigreeOptions.Format;
-			if (format != TPedigreeOptions.TPedigreeFormat.pfExcess)
+			PedigreeOptions.TPedigreeFormat format = this.FOptions.PedigreeOptions.Format;
+			if (format != PedigreeOptions.TPedigreeFormat.pfExcess)
 			{
-				if (format == TPedigreeOptions.TPedigreeFormat.pfCompact)
+				if (format == PedigreeOptions.TPedigreeFormat.pfCompact)
 				{
 					this.RButton11.Checked = true;
 				}
@@ -148,19 +152,21 @@ namespace GKUI
 
 			this.UpdateControls();
 
+			this.UpdateAncCircleControls(this.FOptions.AncCircleOptions);
+
 			this.cbLanguages.Items.Clear();
-			this.cbLanguages.Items.Add(new TTaggedComboItem("Русский", 1049));
+			this.cbLanguages.Items.Add(new GKComboItem("Русский", 1049));
 
 			int idx = 0;
 			int num = this.FOptions.LangsCount - 1;
 			for (int i = 0; i <= num; i++)
 			{
-				TGlobalOptions.TLangRecord lng_rec = this.FOptions.GetLang(i);
+				GlobalOptions.TLangRecord lng_rec = this.FOptions.GetLang(i);
 				if (this.FOptions.InterfaceLang == lng_rec.Code)
 				{
 					idx = i + 1;
 				}
-				this.cbLanguages.Items.Add(new TTaggedComboItem(lng_rec.Name, (int)lng_rec.Code));
+				this.cbLanguages.Items.Add(new GKComboItem(lng_rec.Name, (int)lng_rec.Code));
 			}
 			this.cbLanguages.SelectedIndex = idx;
 		}
@@ -272,20 +278,22 @@ namespace GKUI
 			this.FOptions.PedigreeOptions.IncludeSources = this.chkSources.Checked;
 			if (this.RButton10.Checked)
 			{
-				this.FOptions.PedigreeOptions.Format = TPedigreeOptions.TPedigreeFormat.pfExcess;
+				this.FOptions.PedigreeOptions.Format = PedigreeOptions.TPedigreeFormat.pfExcess;
 			}
 			else
 			{
 				if (this.RButton11.Checked)
 				{
-					this.FOptions.PedigreeOptions.Format = TPedigreeOptions.TPedigreeFormat.pfCompact;
+					this.FOptions.PedigreeOptions.Format = PedigreeOptions.TPedigreeFormat.pfCompact;
 				}
 			}
 
 			this.FOptions.ShowTips = this.chkShowOnStart.Checked;
 			this.FOptions.RevisionsBackup = this.chkRevisionsBackup.Checked;
 
-			int code = (this.cbLanguages.Items[this.cbLanguages.SelectedIndex] as TTaggedComboItem).Tag;
+			this.SetAncCircleOptions(this.FOptions.AncCircleOptions);
+
+			int code = (int)(this.cbLanguages.Items[this.cbLanguages.SelectedIndex] as GKComboItem).Data;
 			GKUI.TfmGEDKeeper.Instance.LoadLanguage(code);
 
 			base.DialogResult = DialogResult.OK;
@@ -339,9 +347,67 @@ namespace GKUI
 			this.UpdateForm();
 		}
 
-		public void SetPage(int index)
+		public void UpdateAncCircleControls(AncestorsCircleOptions opts)
 		{
-			this.PageControl1.SelectTab(index);
+			this.acb0.BackColor = opts.BrushColor[0];
+			this.acb1.BackColor = opts.BrushColor[1];
+			this.acb2.BackColor = opts.BrushColor[2];
+			this.acb3.BackColor = opts.BrushColor[3];
+			this.acb4.BackColor = opts.BrushColor[4];
+			this.acb5.BackColor = opts.BrushColor[5];
+			this.acb6.BackColor = opts.BrushColor[6];
+			this.acb7.BackColor = opts.BrushColor[7];
+			this.acbText.BackColor = opts.BrushColor[8];
+			this.acbBack.BackColor = opts.BrushColor[9];
+			this.acbLine.BackColor = opts.BrushColor[10];
+			this.chkShowCircLines.Checked = opts.CircularLines;
+		}
+
+		private void SetAncCircleOptions(AncestorsCircleOptions opts)
+		{
+			opts.BrushColor[ 0] = this.acb0.BackColor;
+			opts.BrushColor[ 1] = this.acb1.BackColor;
+			opts.BrushColor[ 2] = this.acb2.BackColor;
+			opts.BrushColor[ 3] = this.acb3.BackColor;
+			opts.BrushColor[ 4] = this.acb4.BackColor;
+			opts.BrushColor[ 5] = this.acb5.BackColor;
+			opts.BrushColor[ 6] = this.acb6.BackColor;
+			opts.BrushColor[ 7] = this.acb7.BackColor;
+			opts.BrushColor[ 8] = this.acbText.BackColor;
+			opts.BrushColor[ 9] = this.acbBack.BackColor;
+			opts.BrushColor[10] = this.acbLine.BackColor;
+			opts.CreateBrushes();
+			opts.CircularLines = this.chkShowCircLines.Checked;
+		}
+
+		void acbMouseClick(object sender, MouseEventArgs e)
+		{
+			Label lbl = sender as Label;
+			this.ColorDialog1.Color = lbl.BackColor;
+			if (this.ColorDialog1.ShowDialog() == DialogResult.OK) lbl.BackColor = this.ColorDialog1.Color;
+		}
+
+		public void SetPage(OptionsPage page)
+		{
+			switch (page) {
+				case OptionsPage.opCommon:
+					this.PageControl1.SelectTab(0);
+					break;
+				case OptionsPage.opTreeChart:
+					this.PageControl1.SelectTab(1);
+					this.tabControl1.SelectTab(0);
+					break;
+				case OptionsPage.opAncestorsCircle:
+					this.PageControl1.SelectTab(1);
+					this.tabControl1.SelectTab(1);
+					break;
+				case OptionsPage.opInterface:
+					this.PageControl1.SelectTab(2);
+					break;
+				case OptionsPage.opPedigree:
+					this.PageControl1.SelectTab(3);
+					break;
+			}
 		}
 
 		void ILocalization.SetLang()
@@ -405,6 +471,21 @@ namespace GKUI
 			this.RButton10.Text = LangMan.LSList[296];
 			this.RButton11.Text = LangMan.LSList[297];
 			this.chkRevisionsBackup.Text = LangMan.LS(LSID.LSID_RevisionsBackup);
+			this.SheetCharts.Text = LangMan.LS(LSID.LSID_Charts);
+
+			this.SheetAncCircle.Text = LangMan.LS(LSID.LSID_AncestorsCircle);
+			this.acb0.Text = LangMan.LS(LSID.LSID_Circle) + " 0";
+			this.acb1.Text = LangMan.LS(LSID.LSID_Circle) + " 1";
+			this.acb2.Text = LangMan.LS(LSID.LSID_Circle) + " 2";
+			this.acb3.Text = LangMan.LS(LSID.LSID_Circle) + " 3";
+			this.acb4.Text = LangMan.LS(LSID.LSID_Circle) + " 4";
+			this.acb5.Text = LangMan.LS(LSID.LSID_Circle) + " 5";
+			this.acb6.Text = LangMan.LS(LSID.LSID_Circle) + " 6";
+			this.acb7.Text = LangMan.LS(LSID.LSID_Circle) + " 7";
+			this.acbText.Text = LangMan.LS(LSID.LSID_TextColor);
+			this.acbBack.Text = LangMan.LS(LSID.LSID_BackColor);
+			this.acbLine.Text = LangMan.LS(LSID.LSID_LinesColor);
+			this.chkShowCircLines.Text = LangMan.LS(LSID.LSID_ShowCircLines);
 		}
 	}
 }

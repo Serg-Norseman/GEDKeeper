@@ -2,9 +2,9 @@
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKSys;
 using GKUI.Controls;
 using GKUI.Lists;
 
@@ -37,7 +37,8 @@ namespace GKUI
 			int num = this.Base.Tree.RecordsCount - 1;
 			for (int i = 0; i <= num; i++)
 			{
-				TGEDCOMRecord rec = this.Base.Tree.GetRecord(i);
+				TGEDCOMRecord rec = this.Base.Tree[i];
+
 				if (rec is TGEDCOMIndividualRecord)
 				{
 					TGEDCOMIndividualRecord i_rec = (TGEDCOMIndividualRecord)rec;
@@ -88,9 +89,9 @@ namespace GKUI
 			this.Text = LangMan.LSList[34];
 		}
 
-		private void _CollectData_AddItem(TGKListView aList, string aPerson, string aData)
+		private void _CollectData_AddItem(GKListView aList, string aPerson, string aData)
 		{
-			TExtListItem item = aList.AddItem(aPerson, null);
+			GKListItem item = aList.AddItem(aPerson, null);
 			item.SubItems.Add(aData);
 		}
 

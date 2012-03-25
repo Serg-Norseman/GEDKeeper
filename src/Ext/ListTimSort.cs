@@ -68,7 +68,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace TimSort
+namespace Ext.TimSort
 {
 	#region class ListTimSort<T>
 

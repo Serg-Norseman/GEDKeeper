@@ -97,7 +97,7 @@ namespace GKUI
 			this.MinimizeBox = false;
 			this.Name = "TfmRecordSelect";
 			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Выбор записи";
 			this.panFilter.ResumeLayout(false);
 			this.panFilter.PerformLayout();

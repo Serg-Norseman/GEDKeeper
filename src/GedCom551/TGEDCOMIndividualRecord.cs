@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-using GKSys;
+using Ext.Utils;
 
 namespace GedCom551
 {
@@ -837,9 +837,74 @@ namespace GedCom551
 			return Result;
 		}
 
-		public float IsMatch(TGEDCOMIndividualRecord indi)
+		public bool aux_GetIndivName(bool only_np, ref string aName)
 		{
-			float match = 0F;
+			bool Result;
+
+			if (only_np)
+			{
+				string f, i, p;
+				aux_GetNameParts(out f, out i, out p);
+				aName = i + " " + p;
+				string text = aName;
+				Result = (text.Length > 3);
+			}
+			else
+			{
+				TGEDCOMPersonalName np = _PersonalNames[0];
+				aName = np.StringValue;
+				string firstPart = np.FirstPart;
+				Result = (((firstPart != null) ? firstPart.Length : 0) > 3);
+			}
+
+			return Result;
+		}
+
+		public bool IsMatchX(TGEDCOMRecord record, bool indistinctMatching, float nameAccuracy, bool birthYear, int yearInaccuracy, bool only_np)
+		{
+			bool match = false;
+
+			if (record != null) {
+				TGEDCOMIndividualRecord kRec = (TGEDCOMIndividualRecord)record;
+
+				string iName = "";
+				if (this.aux_GetIndivName(only_np, ref iName)) {
+					string kName = "";
+					if (kRec.aux_GetIndivName(only_np, ref kName) && this.Sex == kRec.Sex && (!only_np || (this.Sex == TGEDCOMSex.svFemale && kRec.Sex == TGEDCOMSex.svFemale)))
+					{
+						if (!indistinctMatching) {
+							match = (iName == kName);
+						} else {
+							match = (IndistinctMatching.GetSimilarity(iName, kName) >= nameAccuracy);
+						}
+
+						if (match && birthYear)
+						{
+							TGEDCOMCustomEvent ev;
+							int year1 = -1, year2 = -1;
+							ushort m, d;
+
+							ev = this.GetIndividualEvent("BIRT");
+							if (ev != null) ev.Detail.Date.aux_GetIndependentDate(out year1, out m, out d);
+
+							ev = kRec.GetIndividualEvent("BIRT");
+							if (ev != null) ev.Detail.Date.aux_GetIndependentDate(out year2, out m, out d);
+
+							match = (match && year1 >= 0 && year2 >= 0 && Math.Abs(year1 - year2) <= yearInaccuracy);
+						}
+					}
+				}
+
+			}
+			
+			return match;
+		}
+
+		public override bool IsMatch(TGEDCOMRecord record, float matchThreshold)
+		{
+			float match = 0.0F;
+
+			TGEDCOMIndividualRecord indi = (TGEDCOMIndividualRecord)record;
 
 			// check name
 			float nameMatch = 0F;
@@ -883,12 +948,10 @@ namespace GedCom551
 				}
 
 				// FIXME: check parents ?
-
 				match = (nameMatch + genderMatch + birthMatch + deathMatch) / 4.0F;
 			}
-						
-						
-			return match;
+
+			return (match >= matchThreshold);
 		}
 
 	}

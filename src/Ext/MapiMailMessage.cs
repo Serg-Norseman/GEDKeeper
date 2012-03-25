@@ -5,7 +5,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace MapiMail
+namespace Ext.MapiMail
 {
 	/// <summary>
 	/// Represents an email message to be sent through MAPI.

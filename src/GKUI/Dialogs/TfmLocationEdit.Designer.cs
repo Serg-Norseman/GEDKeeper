@@ -273,7 +273,7 @@ namespace GKUI
 			this.MinimizeBox = false;
 			this.Name = "TfmLocationEdit";
 			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Местоположение";
 			this.PagesData.ResumeLayout(false);
 			this.SheetCommon.ResumeLayout(false);

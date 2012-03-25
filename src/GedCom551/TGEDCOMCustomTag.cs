@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-using GKSys;
+using Ext.Utils;
 
 namespace GedCom551
 {
@@ -441,7 +441,7 @@ namespace GedCom551
 		public int GetTagIntegerValue([In] string ATag, int ADefault)
 		{
 			string S = this.GetTagStringValue(ATag);
-			int Result = ((S == "") ? ADefault : SysUtils.StrToIntDef(S, ADefault));
+			int Result = ((S == "") ? ADefault : SysUtils.ParseInt(S, ADefault));
 			return Result;
 		}
 
@@ -533,18 +533,20 @@ namespace GedCom551
 				TGEDCOMCustomTag O = this;
 				while (SU != "")
 				{
-					int Index = SysUtils.Pos("\\", SU);
 					string S;
-					if (Index > 0)
+
+					int Index = SU.IndexOf('\\');
+					if (Index >= 0)
 					{
-						S = SysUtils.WStrCopy(SU, 1, Index - 1);
-						SU = SysUtils.WStrCopy(SU, Index + 1, 2147483647);
+						S = SU.Substring(0, Index);
+						SU = SU.Substring(Index + 1);
 					}
 					else
 					{
 						S = SU;
 						SU = "";
 					}
+
 					P = O.FindTag(S, 0);
 					if (P == null)
 					{
@@ -588,21 +590,25 @@ namespace GedCom551
 					for (int I = 0; I <= num; I++)
 					{
 						string S = Value[I];
+
+						int len = ((S.Length > 248) ? 248 : S.Length) /*248*/;
+						string sub = S.Substring(0, len);
+						S = S.Remove(0, len);
+
 						if (I == 0 && !(ATag is TGEDCOMRecord))
 						{
-							ATag.StringValue = SysUtils.WStrCopy(S, 1, 248);
+							ATag.StringValue = sub;
 						}
 						else
 						{
-							ATag.AddTag("CONT", SysUtils.WStrCopy(S, 1, 248), null);
+							ATag.AddTag("CONT", sub, null);
 						}
-
-						S = S.Remove(0, ((S.Length > 248) ? 248 : S.Length) /*248*/);
 
 						while (((S != null) ? S.Length : 0) > 0)
 						{
-							ATag.AddTag("CONC", SysUtils.WStrCopy(S, 1, 248), null);
-							S = S.Remove(0, ((S.Length > 248) ? 248 : S.Length) /*248*/);
+							len = ((S.Length > 248) ? 248 : S.Length) /*248*/;
+							ATag.AddTag("CONC", S.Substring(0, len), null);
+							S = S.Remove(0, len);
 						}
 					}
 				}
@@ -612,6 +618,7 @@ namespace GedCom551
 		public void SetTagStrings(TGEDCOMCustomTag ATag, params string[] Value)
 		{
 			Value = (string[])Value.Clone();
+
 			if (ATag != null)
 			{
 				ATag.StringValue = "";
@@ -626,21 +633,25 @@ namespace GedCom551
 				for (int I = 0; I <= ((Value != null) ? Value.Length : 0) - 1; I++)
 				{
 					string S = Value[I];
+
+					int len = ((S.Length > 248) ? 248 : S.Length) /*248*/;
+					string sub = S.Substring(0, len);
+					S = S.Remove(0, len);
+
 					if (I == 0 && !(ATag is TGEDCOMRecord))
 					{
-						ATag.StringValue = SysUtils.WStrCopy(S, 1, 248);
+						ATag.StringValue = sub;
 					}
 					else
 					{
-						ATag.AddTag("CONT", SysUtils.WStrCopy(S, 1, 248), null);
+						ATag.AddTag("CONT", sub, null);
 					}
-
-					S = S.Remove(0, ((S.Length > 248) ? 248 : S.Length) /*248*/);
 
 					while (((S != null) ? S.Length : 0) > 0)
 					{
-						ATag.AddTag("CONC", SysUtils.WStrCopy(S, 1, 248), null);
-						S = S.Remove(0, ((S.Length > 248) ? 248 : S.Length) /*248*/);
+						len = ((S.Length > 248) ? 248 : S.Length) /*248*/;
+						ATag.AddTag("CONC", S.Substring(0, len), null);
+						S = S.Remove(0, len);
 					}
 				}
 			}

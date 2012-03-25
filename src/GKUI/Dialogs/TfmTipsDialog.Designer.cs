@@ -133,7 +133,7 @@ namespace GKUI
 			this.MinimizeBox = false;
 			this.Name = "TfmTipsDialog";
 			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = " ";
 			((System.ComponentModel.ISupportInitialize)(this.Image1)).EndInit();
 			this.ResumeLayout(false);

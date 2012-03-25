@@ -42,8 +42,6 @@ namespace GKUI
 		private System.Windows.Forms.GroupBox GroupBox1;
 		private System.Windows.Forms.Label Label5;
 		private System.Windows.Forms.Label Label6;
-		private System.Windows.Forms.RadioButton rbDirectMatching;
-		private System.Windows.Forms.RadioButton rbIndistinctMatching;
 		private System.Windows.Forms.NumericUpDown edNameAccuracy;
 		private System.Windows.Forms.NumericUpDown edYearInaccuracy;
 		private System.Windows.Forms.CheckBox chkBirthYear;
@@ -91,10 +89,15 @@ namespace GKUI
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TfmTreeTools));
 			this.PageControl = new System.Windows.Forms.TabControl();
 			this.SheetTreeCompare = new System.Windows.Forms.TabPage();
+			this.btnMatch = new System.Windows.Forms.Button();
+			this.gbMatchType = new System.Windows.Forms.GroupBox();
+			this.rbtnAnalysis = new System.Windows.Forms.RadioButton();
 			this.Label1 = new System.Windows.Forms.Label();
-			this.ListCompare = new System.Windows.Forms.TextBox();
 			this.edCompareFile = new System.Windows.Forms.TextBox();
 			this.btnFileChoose = new System.Windows.Forms.Button();
+			this.rbtnMatchInternal = new System.Windows.Forms.RadioButton();
+			this.rbtnMathExternal = new System.Windows.Forms.RadioButton();
+			this.ListCompare = new System.Windows.Forms.TextBox();
 			this.SheetTreeMerge = new System.Windows.Forms.TabPage();
 			this.Label4 = new System.Windows.Forms.Label();
 			this.Label7 = new System.Windows.Forms.Label();
@@ -145,8 +148,7 @@ namespace GKUI
 			this.GroupBox1 = new System.Windows.Forms.GroupBox();
 			this.Label5 = new System.Windows.Forms.Label();
 			this.Label6 = new System.Windows.Forms.Label();
-			this.rbDirectMatching = new System.Windows.Forms.RadioButton();
-			this.rbIndistinctMatching = new System.Windows.Forms.RadioButton();
+			this.chkIndistinctMatching = new System.Windows.Forms.CheckBox();
 			this.edNameAccuracy = new System.Windows.Forms.NumericUpDown();
 			this.edYearInaccuracy = new System.Windows.Forms.NumericUpDown();
 			this.chkBirthYear = new System.Windows.Forms.CheckBox();
@@ -157,6 +159,7 @@ namespace GKUI
 			this.btnBaseRepair = new System.Windows.Forms.Button();
 			this.Panel1 = new System.Windows.Forms.Panel();
 			this.SheetPatSearch = new System.Windows.Forms.TabPage();
+			this.btnPatriarchsDiagram = new System.Windows.Forms.Button();
 			this.chkWithoutDates = new System.Windows.Forms.CheckBox();
 			this.Label8 = new System.Windows.Forms.Label();
 			this.btnPatSearch = new System.Windows.Forms.Button();
@@ -173,6 +176,7 @@ namespace GKUI
 			this.btnHelp = new System.Windows.Forms.Button();
 			this.PageControl.SuspendLayout();
 			this.SheetTreeCompare.SuspendLayout();
+			this.gbMatchType.SuspendLayout();
 			this.SheetTreeMerge.SuspendLayout();
 			this.gbSyncType.SuspendLayout();
 			this.rgTreeMergeType.SuspendLayout();
@@ -213,50 +217,105 @@ namespace GKUI
 			// 
 			// SheetTreeCompare
 			// 
-			this.SheetTreeCompare.Controls.Add(this.Label1);
+			this.SheetTreeCompare.Controls.Add(this.btnMatch);
+			this.SheetTreeCompare.Controls.Add(this.gbMatchType);
 			this.SheetTreeCompare.Controls.Add(this.ListCompare);
-			this.SheetTreeCompare.Controls.Add(this.edCompareFile);
-			this.SheetTreeCompare.Controls.Add(this.btnFileChoose);
 			this.SheetTreeCompare.Location = new System.Drawing.Point(4, 22);
 			this.SheetTreeCompare.Name = "SheetTreeCompare";
 			this.SheetTreeCompare.Size = new System.Drawing.Size(713, 423);
 			this.SheetTreeCompare.TabIndex = 0;
 			this.SheetTreeCompare.Text = "Сравнить базы данных";
 			// 
+			// btnMatch
+			// 
+			this.btnMatch.Location = new System.Drawing.Point(624, 11);
+			this.btnMatch.Name = "btnMatch";
+			this.btnMatch.Size = new System.Drawing.Size(81, 25);
+			this.btnMatch.TabIndex = 7;
+			this.btnMatch.Text = "Сравнить";
+			this.btnMatch.Click += new System.EventHandler(this.btnMatch_Click);
+			// 
+			// gbMatchType
+			// 
+			this.gbMatchType.Controls.Add(this.rbtnAnalysis);
+			this.gbMatchType.Controls.Add(this.Label1);
+			this.gbMatchType.Controls.Add(this.edCompareFile);
+			this.gbMatchType.Controls.Add(this.btnFileChoose);
+			this.gbMatchType.Controls.Add(this.rbtnMatchInternal);
+			this.gbMatchType.Controls.Add(this.rbtnMathExternal);
+			this.gbMatchType.Location = new System.Drawing.Point(8, 3);
+			this.gbMatchType.Name = "gbMatchType";
+			this.gbMatchType.Size = new System.Drawing.Size(402, 115);
+			this.gbMatchType.TabIndex = 6;
+			this.gbMatchType.TabStop = false;
+			this.gbMatchType.Text = "Тип сравнения";
+			// 
+			// rbtnAnalysis
+			// 
+			this.rbtnAnalysis.Location = new System.Drawing.Point(16, 90);
+			this.rbtnAnalysis.Name = "rbtnAnalysis";
+			this.rbtnAnalysis.Size = new System.Drawing.Size(328, 17);
+			this.rbtnAnalysis.TabIndex = 7;
+			this.rbtnAnalysis.Text = "Анализ (экспериментальный)";
+			this.rbtnAnalysis.CheckedChanged += new System.EventHandler(this.rbtnMatch_CheckedChanged);
+			// 
 			// Label1
 			// 
-			this.Label1.Location = new System.Drawing.Point(8, 16);
+			this.Label1.Enabled = false;
+			this.Label1.Location = new System.Drawing.Point(16, 71);
 			this.Label1.Name = "Label1";
 			this.Label1.Size = new System.Drawing.Size(35, 13);
-			this.Label1.TabIndex = 0;
+			this.Label1.TabIndex = 4;
 			this.Label1.Text = "Файл";
+			// 
+			// edCompareFile
+			// 
+			this.edCompareFile.Enabled = false;
+			this.edCompareFile.Location = new System.Drawing.Point(57, 63);
+			this.edCompareFile.Name = "edCompareFile";
+			this.edCompareFile.ReadOnly = true;
+			this.edCompareFile.Size = new System.Drawing.Size(242, 21);
+			this.edCompareFile.TabIndex = 5;
+			// 
+			// btnFileChoose
+			// 
+			this.btnFileChoose.Enabled = false;
+			this.btnFileChoose.Location = new System.Drawing.Point(305, 60);
+			this.btnFileChoose.Name = "btnFileChoose";
+			this.btnFileChoose.Size = new System.Drawing.Size(81, 25);
+			this.btnFileChoose.TabIndex = 6;
+			this.btnFileChoose.Text = "Выбрать...";
+			this.btnFileChoose.Click += new System.EventHandler(this.btnFileChoose_Click);
+			// 
+			// rbtnMatchInternal
+			// 
+			this.rbtnMatchInternal.Checked = true;
+			this.rbtnMatchInternal.Location = new System.Drawing.Point(16, 16);
+			this.rbtnMatchInternal.Name = "rbtnMatchInternal";
+			this.rbtnMatchInternal.Size = new System.Drawing.Size(328, 17);
+			this.rbtnMatchInternal.TabIndex = 2;
+			this.rbtnMatchInternal.TabStop = true;
+			this.rbtnMatchInternal.Text = "Сравнение внутреннее (поиск дубликатов)";
+			this.rbtnMatchInternal.CheckedChanged += new System.EventHandler(this.rbtnMatch_CheckedChanged);
+			// 
+			// rbtnMathExternal
+			// 
+			this.rbtnMathExternal.Location = new System.Drawing.Point(16, 40);
+			this.rbtnMathExternal.Name = "rbtnMathExternal";
+			this.rbtnMathExternal.Size = new System.Drawing.Size(328, 17);
+			this.rbtnMathExternal.TabIndex = 3;
+			this.rbtnMathExternal.Text = "Сравнение с другой базой";
+			this.rbtnMathExternal.CheckedChanged += new System.EventHandler(this.rbtnMatch_CheckedChanged);
 			// 
 			// ListCompare
 			// 
-			this.ListCompare.Location = new System.Drawing.Point(8, 40);
+			this.ListCompare.Location = new System.Drawing.Point(8, 124);
 			this.ListCompare.Multiline = true;
 			this.ListCompare.Name = "ListCompare";
 			this.ListCompare.ReadOnly = true;
 			this.ListCompare.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.ListCompare.Size = new System.Drawing.Size(697, 376);
+			this.ListCompare.Size = new System.Drawing.Size(697, 292);
 			this.ListCompare.TabIndex = 0;
-			// 
-			// edCompareFile
-			// 
-			this.edCompareFile.Location = new System.Drawing.Point(48, 8);
-			this.edCompareFile.Name = "edCompareFile";
-			this.edCompareFile.ReadOnly = true;
-			this.edCompareFile.Size = new System.Drawing.Size(568, 21);
-			this.edCompareFile.TabIndex = 1;
-			// 
-			// btnFileChoose
-			// 
-			this.btnFileChoose.Location = new System.Drawing.Point(624, 6);
-			this.btnFileChoose.Name = "btnFileChoose";
-			this.btnFileChoose.Size = new System.Drawing.Size(81, 25);
-			this.btnFileChoose.TabIndex = 2;
-			this.btnFileChoose.Text = "Выбрать...";
-			this.btnFileChoose.Click += new System.EventHandler(this.btnFileChoose_Click);
 			// 
 			// SheetTreeMerge
 			// 
@@ -714,70 +773,59 @@ namespace GKUI
 			// 
 			this.GroupBox1.Controls.Add(this.Label5);
 			this.GroupBox1.Controls.Add(this.Label6);
-			this.GroupBox1.Controls.Add(this.rbDirectMatching);
-			this.GroupBox1.Controls.Add(this.rbIndistinctMatching);
+			this.GroupBox1.Controls.Add(this.chkIndistinctMatching);
 			this.GroupBox1.Controls.Add(this.edNameAccuracy);
 			this.GroupBox1.Controls.Add(this.edYearInaccuracy);
 			this.GroupBox1.Controls.Add(this.chkBirthYear);
 			this.GroupBox1.Controls.Add(this.chkOnlyNP);
 			this.GroupBox1.Location = new System.Drawing.Point(8, 112);
 			this.GroupBox1.Name = "GroupBox1";
-			this.GroupBox1.Size = new System.Drawing.Size(297, 161);
+			this.GroupBox1.Size = new System.Drawing.Size(295, 191);
 			this.GroupBox1.TabIndex = 1;
 			this.GroupBox1.TabStop = false;
 			this.GroupBox1.Text = "Поиск персон";
 			// 
 			// Label5
 			// 
-			this.Label5.Location = new System.Drawing.Point(8, 104);
+			this.Label5.Location = new System.Drawing.Point(16, 40);
 			this.Label5.Name = "Label5";
-			this.Label5.Size = new System.Drawing.Size(98, 13);
+			this.Label5.Size = new System.Drawing.Size(108, 13);
 			this.Label5.TabIndex = 0;
 			this.Label5.Text = "Точность имени, %";
 			// 
 			// Label6
 			// 
-			this.Label6.Location = new System.Drawing.Point(120, 104);
+			this.Label6.Location = new System.Drawing.Point(16, 125);
 			this.Label6.Name = "Label6";
-			this.Label6.Size = new System.Drawing.Size(88, 13);
+			this.Label6.Size = new System.Drawing.Size(108, 13);
 			this.Label6.TabIndex = 1;
 			this.Label6.Text = "Погрешность лет";
 			// 
-			// rbDirectMatching
+			// chkIndistinctMatching
 			// 
-			this.rbDirectMatching.Checked = true;
-			this.rbDirectMatching.Location = new System.Drawing.Point(8, 16);
-			this.rbDirectMatching.Name = "rbDirectMatching";
-			this.rbDirectMatching.Size = new System.Drawing.Size(153, 17);
-			this.rbDirectMatching.TabIndex = 0;
-			this.rbDirectMatching.TabStop = true;
-			this.rbDirectMatching.Text = "Прямое сравнение";
-			// 
-			// rbIndistinctMatching
-			// 
-			this.rbIndistinctMatching.Location = new System.Drawing.Point(8, 32);
-			this.rbIndistinctMatching.Name = "rbIndistinctMatching";
-			this.rbIndistinctMatching.Size = new System.Drawing.Size(153, 17);
-			this.rbIndistinctMatching.TabIndex = 1;
-			this.rbIndistinctMatching.Text = "Нечеткое сравнение";
+			this.chkIndistinctMatching.Location = new System.Drawing.Point(6, 20);
+			this.chkIndistinctMatching.Name = "chkIndistinctMatching";
+			this.chkIndistinctMatching.Size = new System.Drawing.Size(265, 17);
+			this.chkIndistinctMatching.TabIndex = 1;
+			this.chkIndistinctMatching.Text = "Нечеткое сравнение";
 			// 
 			// edNameAccuracy
 			// 
-			this.edNameAccuracy.Location = new System.Drawing.Point(8, 120);
+			this.edNameAccuracy.Location = new System.Drawing.Point(16, 56);
 			this.edNameAccuracy.Name = "edNameAccuracy";
-			this.edNameAccuracy.Size = new System.Drawing.Size(89, 21);
+			this.edNameAccuracy.Size = new System.Drawing.Size(108, 21);
 			this.edNameAccuracy.TabIndex = 2;
 			this.edNameAccuracy.Value = new decimal(new int[] {
-									40,
+									90,
 									0,
 									0,
 									0});
 			// 
 			// edYearInaccuracy
 			// 
-			this.edYearInaccuracy.Location = new System.Drawing.Point(120, 120);
+			this.edYearInaccuracy.Location = new System.Drawing.Point(16, 141);
 			this.edYearInaccuracy.Name = "edYearInaccuracy";
-			this.edYearInaccuracy.Size = new System.Drawing.Size(89, 21);
+			this.edYearInaccuracy.Size = new System.Drawing.Size(108, 21);
 			this.edYearInaccuracy.TabIndex = 4;
 			this.edYearInaccuracy.Value = new decimal(new int[] {
 									3,
@@ -787,7 +835,7 @@ namespace GKUI
 			// 
 			// chkBirthYear
 			// 
-			this.chkBirthYear.Location = new System.Drawing.Point(8, 80);
+			this.chkBirthYear.Location = new System.Drawing.Point(6, 106);
 			this.chkBirthYear.Name = "chkBirthYear";
 			this.chkBirthYear.Size = new System.Drawing.Size(265, 17);
 			this.chkBirthYear.TabIndex = 6;
@@ -795,7 +843,7 @@ namespace GKUI
 			// 
 			// chkOnlyNP
 			// 
-			this.chkOnlyNP.Location = new System.Drawing.Point(8, 56);
+			this.chkOnlyNP.Location = new System.Drawing.Point(6, 83);
 			this.chkOnlyNP.Name = "chkOnlyNP";
 			this.chkOnlyNP.Size = new System.Drawing.Size(265, 17);
 			this.chkOnlyNP.TabIndex = 7;
@@ -846,6 +894,7 @@ namespace GKUI
 			// 
 			// SheetPatSearch
 			// 
+			this.SheetPatSearch.Controls.Add(this.btnPatriarchsDiagram);
 			this.SheetPatSearch.Controls.Add(this.chkWithoutDates);
 			this.SheetPatSearch.Controls.Add(this.Label8);
 			this.SheetPatSearch.Controls.Add(this.btnPatSearch);
@@ -858,10 +907,19 @@ namespace GKUI
 			this.SheetPatSearch.TabIndex = 7;
 			this.SheetPatSearch.Text = "Поиск патриархов";
 			// 
+			// btnPatriarchsDiagram
+			// 
+			this.btnPatriarchsDiagram.Location = new System.Drawing.Point(622, 382);
+			this.btnPatriarchsDiagram.Name = "btnPatriarchsDiagram";
+			this.btnPatriarchsDiagram.Size = new System.Drawing.Size(75, 25);
+			this.btnPatriarchsDiagram.TabIndex = 6;
+			this.btnPatriarchsDiagram.Text = "Диаграмма";
+			this.btnPatriarchsDiagram.Click += new System.EventHandler(this.BtnPatriarchsDiagramClick);
+			// 
 			// chkWithoutDates
 			// 
 			this.chkWithoutDates.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.chkWithoutDates.Location = new System.Drawing.Point(275, 384);
+			this.chkWithoutDates.Location = new System.Drawing.Point(247, 383);
 			this.chkWithoutDates.Name = "chkWithoutDates";
 			this.chkWithoutDates.Size = new System.Drawing.Size(159, 24);
 			this.chkWithoutDates.TabIndex = 5;
@@ -870,7 +928,7 @@ namespace GKUI
 			// 
 			// Label8
 			// 
-			this.Label8.Location = new System.Drawing.Point(8, 392);
+			this.Label8.Location = new System.Drawing.Point(12, 388);
 			this.Label8.Name = "Label8";
 			this.Label8.Size = new System.Drawing.Size(166, 13);
 			this.Label8.TabIndex = 0;
@@ -878,7 +936,7 @@ namespace GKUI
 			// 
 			// btnPatSearch
 			// 
-			this.btnPatSearch.Location = new System.Drawing.Point(632, 384);
+			this.btnPatSearch.Location = new System.Drawing.Point(541, 382);
 			this.btnPatSearch.Name = "btnPatSearch";
 			this.btnPatSearch.Size = new System.Drawing.Size(75, 25);
 			this.btnPatSearch.TabIndex = 0;
@@ -906,7 +964,7 @@ namespace GKUI
 			// 
 			// btnSetPatriarch
 			// 
-			this.btnSetPatriarch.Location = new System.Drawing.Point(503, 384);
+			this.btnSetPatriarch.Location = new System.Drawing.Point(412, 382);
 			this.btnSetPatriarch.Name = "btnSetPatriarch";
 			this.btnSetPatriarch.Size = new System.Drawing.Size(123, 25);
 			this.btnSetPatriarch.TabIndex = 4;
@@ -993,6 +1051,8 @@ namespace GKUI
 			this.PageControl.ResumeLayout(false);
 			this.SheetTreeCompare.ResumeLayout(false);
 			this.SheetTreeCompare.PerformLayout();
+			this.gbMatchType.ResumeLayout(false);
+			this.gbMatchType.PerformLayout();
 			this.SheetTreeMerge.ResumeLayout(false);
 			this.SheetTreeMerge.PerformLayout();
 			this.gbSyncType.ResumeLayout(false);
@@ -1016,6 +1076,13 @@ namespace GKUI
 			this.SheetPlaceManage.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.Button btnPatriarchsDiagram;
+		private System.Windows.Forms.CheckBox chkIndistinctMatching;
+		private System.Windows.Forms.RadioButton rbtnAnalysis;
+		private System.Windows.Forms.Button btnMatch;
+		private System.Windows.Forms.RadioButton rbtnMathExternal;
+		private System.Windows.Forms.RadioButton rbtnMatchInternal;
+		private System.Windows.Forms.GroupBox gbMatchType;
 		private System.Windows.Forms.CheckBox chkWithoutDates;
 	}
 }

@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-using GKSys;
+using Ext.Utils;
 
 /// <summary>
 /// Localization: clean
@@ -118,41 +118,30 @@ namespace GedCom551
 
 		private string GetLastPart()
 		{
-			string Result;
+			string result = "";
+
 			string sv = base.StringValue;
-
-			int p = SysUtils.Pos("/", sv);
-			if (p > 0)
+			int p = sv.IndexOf('/');
+			if (p >= 0)
 			{
-				Result = SysUtils.WStrCopy(sv, p + 1, 2147483647);
-
-				p = SysUtils.Pos("/", Result);
-				if (p > 0)
+				p = sv.IndexOf('/', p + 1);
+				if (p >= 0)
 				{
-					Result = SysUtils.TrimLeft(SysUtils.WStrCopy(Result, p + 1, 2147483647));
-				}
-				else
-				{
-					Result = "";
+					result = SysUtils.TrimLeft(sv.Substring(p + 1));
 				}
 			}
-			else
-			{
-				Result = "";
-			}
 
-			return Result;
+			return result;
 		}
 
 		private string GetFullName()
 		{
-			string Result = base.StringValue;
-			while (SysUtils.Pos("/", Result) > 0)
+			string result = base.StringValue;
+			while (result.IndexOf('/') >= 0)
 			{
-				int num = SysUtils.Pos("/", Result);
-				Result = Result.Remove(num - 1, 1);
+				result = result.Remove(result.IndexOf('/'), 1);
 			}
-			return Result;
+			return result;
 		}
 
 		private void SetSurname([In] string Value)
@@ -243,10 +232,7 @@ namespace GedCom551
 
 		public void SetNameParts([In] string FirstPart, [In] string Surname, [In] string LastPart)
 		{
-			base.StringValue = string.Concat(new string[]
-			{
-				SysUtils.TrimLeft(FirstPart + " "), "/", Surname, "/", SysUtils.TrimRight(" " + LastPart)
-			});
+			base.StringValue = SysUtils.TrimLeft(FirstPart + " ") + "/" + Surname + "/" + SysUtils.TrimRight(" " + LastPart);
 		}
 
 		public float IsMatch(TGEDCOMPersonalName name)

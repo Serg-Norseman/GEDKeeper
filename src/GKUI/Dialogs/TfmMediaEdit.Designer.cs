@@ -227,7 +227,7 @@ namespace GKUI
 			this.MinimizeBox = false;
 			this.Name = "TfmMediaEdit";
 			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Редактирование мультимедиа объекта";
 			this.PagesData.ResumeLayout(false);
 			this.SheetCommon.ResumeLayout(false);

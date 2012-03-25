@@ -6,7 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 
 using GedCom551;
-using GKSys;
+using GKCore;
 
 /// <summary>
 /// Localization: clean
@@ -69,7 +69,7 @@ namespace GKUI
 					this.FExtern = true;
 					string target_fn = "";
 					this.Base.Engine.MediaLoad(this.FFileRef.StringValue, ref target_fn);
-					SysUtils.LoadExtFile(target_fn);
+					TGenEngine.LoadExtFile(target_fn);
 					break;
 				}
 

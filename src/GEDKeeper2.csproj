@@ -44,6 +44,12 @@
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GraphSharp">
+      <HintPath>GraphSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="GraphSharp.Controls">
+      <HintPath>GraphSharp.Controls.dll</HintPath>
+    </Reference>
     <Reference Include="itextsharp">
       <HintPath>itextsharp.dll</HintPath>
     </Reference>
@@ -51,11 +57,29 @@
       <HintPath>LuaInterface.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.mshtml" />
+    <Reference Include="PresentationCore">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationFramework">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="QuickGraph">
+      <HintPath>QuickGraph.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WPFExtensions">
+      <HintPath>WPFExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="XapianCSharp">
       <HintPath>XapianCSharp.dll</HintPath>
     </Reference>
@@ -64,10 +88,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ext\AnselEncoding.cs" />
+    <Compile Include="Ext\CRC32.cs" />
     <Compile Include="Ext\CSV\CSVReader.cs" />
     <Compile Include="Ext\CSV\StringConverter.cs" />
+    <Compile Include="Ext\EnumSet.cs" />
+    <Compile Include="Ext\IndistinctMatching.cs" />
+    <Compile Include="Ext\IniFile.cs" />
     <Compile Include="Ext\ListTimSort.cs" />
     <Compile Include="Ext\MapiMailMessage.cs" />
+    <Compile Include="Ext\RomeNumbers.cs" />
+    <Compile Include="Ext\SCCrypt.cs" />
+    <Compile Include="Ext\StringList.cs" />
+    <Compile Include="Ext\SysUtils.cs" />
+    <Compile Include="Ext\TCalculator.cs" />
+    <Compile Include="Ext\CalendarConverter.cs" />
+    <Compile Include="Ext\TGraph.cs" />
+    <Compile Include="Ext\TList.cs" />
+    <Compile Include="Ext\TRect.cs" />
     <Compile Include="Ext\ZipStorer.cs" />
     <Compile Include="GedCom551\GEDCOMEnums.cs" />
     <Compile Include="GedCom551\GEDCOMFactory.cs" />
@@ -132,73 +170,44 @@
     <Compile Include="GedCom551\TGEDCOMUserReference.cs" />
     <Compile Include="GedCom551\TXRefReplaceMap.cs" />
     <Compile Include="GEDKeeper2.cs" />
-    <Compile Include="GKCore\IO\ExcelExporter.cs" />
-    <Compile Include="GKCore\IO\Exporter.cs" />
-    <Compile Include="GKCore\IO\HTMLExporter.cs" />
-    <Compile Include="GKCore\IO\Importer.cs" />
-    <Compile Include="GKCore\IO\TPedigree.cs" />
-    <Compile Include="GKCore\IO\WebExporter.cs" />
-    <Compile Include="GKCore\IO\WebTree.cs" />
+    <Compile Include="GKCore\AncestorsCircleOptions.cs" />
+    <Compile Include="GKCore\ExcelExporter.cs" />
+    <Compile Include="GKCore\Exporter.cs" />
+    <Compile Include="GKCore\CustomFilter.cs" />
+    <Compile Include="GKCore\GlobalOptions.cs" />
+    <Compile Include="GKCore\HTMLExporter.cs" />
+    <Compile Include="GKCore\Importer.cs" />
+    <Compile Include="GKCore\Kinships.cs" />
     <Compile Include="GKCore\LangMan.cs" />
+    <Compile Include="GKCore\PDFExport.cs" />
+    <Compile Include="GKCore\PedigreeOptions.cs" />
+    <Compile Include="GKCore\ProxyOptions.cs" />
     <Compile Include="GKCore\SearchManager.cs" />
-    <Compile Include="GKCore\Settings\TChartOptions.cs" />
-    <Compile Include="GKCore\Settings\TGlobalOptions.cs" />
-    <Compile Include="GKCore\Settings\TPedigreeOptions.cs" />
-    <Compile Include="GKCore\Settings\TProxy.cs" />
-    <Compile Include="GKCore\TCalculator.cs" />
-    <Compile Include="GKCore\TCalendarConv.cs" />
     <Compile Include="GKCore\TGenEngine.cs" />
-    <Compile Include="GKCore\TGraph.cs" />
-    <Compile Include="GKCore\TScriptEngine.cs" />
+    <Compile Include="GKCore\PedigreeExporter.cs" />
+    <Compile Include="GKCore\ScriptEngine.cs" />
+    <Compile Include="GKCore\TreeChartOptions.cs" />
+    <Compile Include="GKCore\TreeTools.cs" />
+    <Compile Include="GKCore\WebExporter.cs" />
+    <Compile Include="GKCore\WebTree.cs" />
     <Compile Include="GKResources.Designer.cs">
       <DependentUpon>GKResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="GKSandbox\AncestorsCircle.cs" />
-    <Compile Include="GKSandbox\AncestorsCircleOptions.cs" />
-    <Compile Include="GKSandbox\frmAncCircleStyleEditor.cs" />
-    <Compile Include="GKSandbox\frmAncCircleStyleEditor.Designer.cs">
-      <DependentUpon>frmAncCircleStyleEditor.cs</DependentUpon>
+    <Compile Include="GKSandbox\PatriarchsDiagram.xaml.cs">
+      <DependentUpon>PatriarchsDiagram.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GKSandbox\frmAncestorsCircle.cs" />
-    <Compile Include="GKSandbox\frmAncestorsCircle.Designer.cs">
-      <DependentUpon>frmAncestorsCircle.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKSandbox\frmFieldsSetup.cs" />
-    <Compile Include="GKSandbox\frmFieldsSetup.Designer.cs">
-      <DependentUpon>frmFieldsSetup.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKSandbox\frmReports.cs" />
-    <Compile Include="GKSandbox\frmReports.Designer.cs">
-      <DependentUpon>frmReports.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKSandbox\frmReportsSetup.cs" />
-    <Compile Include="GKSandbox\frmReportsSetup.Designer.cs">
-      <DependentUpon>frmReportsSetup.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKSandbox\ReportFactory.cs" />
-    <Compile Include="GKSandbox\ReportProperties.cs" />
-    <Compile Include="GKSandbox\ReportTableProperties.cs" />
-    <Compile Include="GKSys\AnselEncoding.cs" />
-    <Compile Include="GKSys\IniFile.cs" />
-    <Compile Include="GKSys\ScrollUtils.cs" />
-    <Compile Include="GKSys\StringList.cs" />
-    <Compile Include="GKSys\Structs.cs" />
-    <Compile Include="GKSys\SysUtils.cs" />
-    <Compile Include="GKSys\TList.cs" />
-    <Compile Include="GKSys\TObjectList.cs" />
-    <Compile Include="GKSys\TStack.cs" />
+    <Compile Include="GKUI\Charts\AncestorsCircle.cs" />
     <Compile Include="GKUI\Controls\InputBox.cs" />
     <Compile Include="GKUI\Controls\InputBox.Designer.cs">
       <DependentUpon>InputBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Controls\TComboItem.cs" />
-    <Compile Include="GKUI\Controls\TExtListItem.cs" />
-    <Compile Include="GKUI\Controls\TGKHyperView.cs" />
-    <Compile Include="GKUI\Controls\TGKListView.cs" />
-    <Compile Include="GKUI\Controls\TGKMenuItem.cs" />
-    <Compile Include="GKUI\Controls\TGKTreeNode.cs" />
-    <Compile Include="GKUI\Controls\TMapBrowser.cs" />
-    <Compile Include="GKUI\Controls\TTaggedComboItem.cs" />
+    <Compile Include="GKUI\Controls\GKComboItem.cs" />
+    <Compile Include="GKUI\Controls\GKListItem.cs" />
+    <Compile Include="GKUI\Controls\GKHyperView.cs" />
+    <Compile Include="GKUI\Controls\GKListView.cs" />
+    <Compile Include="GKUI\Controls\GKMenuItem.cs" />
+    <Compile Include="GKUI\Controls\GKTreeNode.cs" />
+    <Compile Include="GKUI\Controls\GKMapBrowser.cs" />
     <Compile Include="GKUI\Dialogs\TfmAbout.cs" />
     <Compile Include="GKUI\Dialogs\TfmAbout.Designer.cs">
       <DependentUpon>TfmAbout.cs</DependentUpon>
@@ -312,6 +321,10 @@
       <DependentUpon>TfmUserRefEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Lists\TIndividualListColumns.cs" />
+    <Compile Include="GKUI\TfmAncestorsCircle.cs" />
+    <Compile Include="GKUI\TfmAncestorsCircle.Designer.cs">
+      <DependentUpon>TfmAncestorsCircle.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\TfmBase.Designer.cs">
       <DependentUpon>TfmBase.cs</DependentUpon>
     </Compile>
@@ -345,19 +358,18 @@
     <Compile Include="GKUI\TfmScriptDaemon.Designer.cs">
       <DependentUpon>TfmScriptDaemon.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Charts\TAncestryChartBox.cs" />
+    <Compile Include="GKUI\Charts\TTreeChartBox.cs" />
     <Compile Include="GKUI\Charts\TChartFilter.cs" />
     <Compile Include="GKUI\Charts\TCustomChartBox.cs" />
     <Compile Include="GKUI\Charts\TPersonList.cs" />
     <Compile Include="GKCore\Commands\TCmdPersonChangePatriarch.cs" />
     <Compile Include="GKCore\Commands\TCmdPersonChangeSex.cs" />
     <Compile Include="GKCore\NavManager.cs" />
-    <Compile Include="GKCore\TCustomCommand.cs" />
-    <Compile Include="GKCore\TNamesTable.cs" />
+    <Compile Include="GKCore\CustomCommand.cs" />
+    <Compile Include="GKCore\NamesTable.cs" />
     <Compile Include="GKCore\UndoManager.cs" />
     <Compile Include="GKUI\Lists\TCommunicationListMan.cs" />
     <Compile Include="GKUI\Lists\TFamilyListMan.cs" />
-    <Compile Include="GKUI\Lists\TFilter.cs" />
     <Compile Include="GKUI\Lists\TGroupListMan.cs" />
     <Compile Include="GKUI\Lists\TIndividualListMan.cs" />
     <Compile Include="GKUI\Lists\TListManager.cs" />
@@ -406,26 +418,14 @@
     <Compile Include="Ext\XLSFile\TXLSFile.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GKSandbox\frmAncCircleStyleEditor.resx">
-      <DependentUpon>frmAncCircleStyleEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKSandbox\frmAncestorsCircle.resx">
-      <DependentUpon>frmAncestorsCircle.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKSandbox\frmFieldsSetup.resx">
-      <DependentUpon>frmFieldsSetup.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKSandbox\frmReports.resx">
-      <DependentUpon>frmReports.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKSandbox\frmReportsSetup.resx">
-      <DependentUpon>frmReportsSetup.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Controls\InputBox.resx">
       <DependentUpon>InputBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\TfmAbout.resx">
       <DependentUpon>TfmAbout.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmAddressEdit.resx">
+      <DependentUpon>TfmAddressEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\TfmAssociationEdit.resx">
       <DependentUpon>TfmAssociationEdit.cs</DependentUpon>
@@ -453,6 +453,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\TfmMediaEdit.resx">
       <DependentUpon>TfmMediaEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmMediaView.resx">
+      <DependentUpon>TfmMediaView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\TfmNameEdit.resx">
       <DependentUpon>TfmNameEdit.cs</DependentUpon>
@@ -493,11 +496,17 @@
     <EmbeddedResource Include="GKUI\Dialogs\TfmTaskEdit.resx">
       <DependentUpon>TfmTaskEdit.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmTipsDialog.resx">
+      <DependentUpon>TfmTipsDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\TfmTreeFilter.resx">
       <DependentUpon>TfmTreeFilter.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\TfmUserRefEdit.resx">
       <DependentUpon>TfmUserRefEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\TfmAncestorsCircle.resx">
+      <DependentUpon>TfmAncestorsCircle.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\TfmBase.resx">
       <DependentUpon>TfmBase.cs</DependentUpon>
@@ -512,7 +521,7 @@
       <DependentUpon>TfmProgress.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\TfmScriptDaemon.resx">
-      <DependentUpon>TfmScriptDaemon.Designer.cs</DependentUpon>
+      <DependentUpon>TfmScriptDaemon.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\TfmTextSearch.resx">
       <DependentUpon>TfmTextSearch.cs</DependentUpon>
@@ -527,12 +536,9 @@
   <ItemGroup>
     <Folder Include="Ext" />
     <Folder Include="Ext\CSV" />
-    <Folder Include="GKCore\IO" />
-    <Folder Include="GKCore\Settings" />
     <Folder Include="GKSandbox" />
     <Folder Include="GKUI\Controls" />
     <Folder Include="GKUI\Dialogs" />
-    <Folder Include="GKSys" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -546,6 +552,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="app.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="GKSandbox\PatriarchsDiagram.xaml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

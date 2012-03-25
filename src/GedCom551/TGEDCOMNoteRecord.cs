@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-using GKSys;
+using Ext.Utils;
 
 namespace GedCom551
 {
@@ -73,6 +73,22 @@ namespace GedCom551
 			{
 				cont.Free();
 			}
+		}
+
+		public override bool IsMatch(TGEDCOMRecord record, float matchThreshold)
+		{
+			bool match = false;
+
+			if (record != null) {
+				TGEDCOMNoteRecord note = (TGEDCOMNoteRecord)record;
+
+				string text1 = this.Note.Text;
+				string text2 = note.Note.Text;
+
+				match = (string.Compare(text1, text2, true) == 0);
+			}
+
+			return match;
 		}
 
 		public TGEDCOMNoteRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)

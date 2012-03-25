@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-using GKSys;
+using Ext.Utils;
 
 namespace GedCom551
 {
@@ -59,7 +59,7 @@ namespace GedCom551
 		{
 			if (Index >= 3)
 			{
-				throw new EGEDCOMException(string.Format("The maximum number of languages is {0}", new object[] { 3 }));
+				throw new EGEDCOMException(string.Format("The maximum number of languages is {0}", TGEDCOMObject.GEDCOMMaxLanguages));
 			}
 			if (Index >= 0)
 			{

@@ -38,6 +38,7 @@ namespace GedCom551
 		public string FindNewXRef(string oldXRef)
 		{
 			string result = oldXRef;
+
 			int num = this.FList.Count - 1;
 			for (int i = 0; i <= num; i++)
 			{
@@ -47,6 +48,7 @@ namespace GedCom551
 					break;
 				}
 			}
+
 			return result;
 		}
 	}

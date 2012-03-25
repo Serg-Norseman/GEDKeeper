@@ -1,8 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
 
-using GKSys;
-
 namespace GedCom551
 {
 	public sealed class TGEDCOMDateInterpreted : TGEDCOMDate
@@ -18,24 +16,18 @@ namespace GedCom551
 		private void SetDatePhrase([In] string Value)
 		{
 			this.FDatePhrase = Value;
-			string fDatePhrase = this.FDatePhrase;
-			if (((fDatePhrase != null) ? fDatePhrase.Length : 0) > 0)
+
+			string phrase = this.FDatePhrase;
+			if (!string.IsNullOrEmpty(phrase))
 			{
-				if (this.FDatePhrase[0] == '(')
+				if (phrase[0] == '(')
 				{
-					this.FDatePhrase = this.FDatePhrase.Remove(0, 1);
+					phrase = phrase.Remove(0, 1);
 				}
-				string fDatePhrase2 = this.FDatePhrase;
-				if (((fDatePhrase2 != null) ? fDatePhrase2.Length : 0) > 0)
+
+				if (phrase.Length > 0 && phrase[phrase.Length - 1] == ')')
 				{
-					string arg_74_0 = this.FDatePhrase;
-					string fDatePhrase3 = this.FDatePhrase;
-					if (arg_74_0[((fDatePhrase3 != null) ? fDatePhrase3.Length : 0) - 1] == ')')
-					{
-						string fDatePhrase4 = this.FDatePhrase;
-						int num = (fDatePhrase4 != null) ? fDatePhrase4.Length : 0;
-						this.FDatePhrase = this.FDatePhrase.Remove(num - 1, 1);
-					}
+					this.FDatePhrase = phrase.Remove(phrase.Length - 1, 1);
 				}
 			}
 		}
@@ -48,58 +40,47 @@ namespace GedCom551
 
 		protected override string GetStringValue()
 		{
-			return string.Concat(new string[] { "INT ", base.GetStringValue(), " ", "(", this.FDatePhrase, ")" });
+			return ("INT " + base.GetStringValue() + " " + "(" + this.FDatePhrase + ")");
 		}
 
 		private string ExtractPhrase([In] string S)
 		{
-			string Result = S;
-			string fDatePhrase = this.FDatePhrase;
-			if (((fDatePhrase != null) ? fDatePhrase.Length : 0) >= 2 && this.FDatePhrase[0] == '(')
+			string result = S;
+			if (result.Length >= 2 && result[0] == '(')
 			{
-				Result = Result.Remove(0, 1);
-				int C = 0;
+				result = result.Remove(0, 1);
 
-				int num = (Result != null) ? Result.Length : 0;
-				int I = 1;
-				if (num >= I)
+				int C = 0;
+				int num = result.Length;
+				for (int I = 1; I <= num; I++)
 				{
-					num++;
-					while (true)
+					if (result[I - 1] == '(')
 					{
-						if (Result[I - 1] == '(')
-						{
-							C++;
-						}
-						else
-						{
-							if (Result[I - 1] == ')' || I == ((Result != null) ? Result.Length : 0))
-							{
-								C--;
-								if (C <= 0 || I == ((Result != null) ? Result.Length : 0))
-								{
-									break;
-								}
-							}
-						}
-						I++;
-						if (I == num)
-						{
-							return Result;
-						}
-					}
-					if (Result[I - 1] == ')')
-					{
-						this.FDatePhrase = SysUtils.WStrCopy(Result, 1, I - 1);
+						C++;
 					}
 					else
 					{
-						this.FDatePhrase = SysUtils.WStrCopy(Result, 1, I);
+						if (result[I - 1] == ')' || I == result.Length)
+						{
+							C--;
+							if (C <= 0 || I == result.Length)
+							{
+								if (result[I - 1] == ')')
+								{
+									this.FDatePhrase = result.Substring(0, I - 1);
+								}
+								else
+								{
+									this.FDatePhrase = result.Substring(0, I);
+								}
+								result = result.Remove(0, I);
+								break;
+							}
+						}
 					}
-					Result = Result.Remove(0, I);
 				}
 			}
-			return Result;
+			return result;
 		}
 
 		public override string ParseString([In] string S)

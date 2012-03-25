@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.Threading;
 
+using Ext.Utils;
 using GKCore;
-using GKSys;
 
 /// <summary>
 /// Localization: clean

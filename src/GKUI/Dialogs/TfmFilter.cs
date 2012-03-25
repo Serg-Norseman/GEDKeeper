@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKSys;
 using GKUI.Controls;
 using GKUI.Lists;
 
@@ -110,30 +110,30 @@ namespace GKUI
 
 			int selectedIndex = this.cbGroup.SelectedIndex;
 			if (selectedIndex >= 0 && selectedIndex < 3) {
-				this.Base.Filter.GroupMode = (TFilter.TGroupMode)this.cbGroup.SelectedIndex;
+				this.Base.Filter.GroupMode = (CustomFilter.TGroupMode)this.cbGroup.SelectedIndex;
 				this.Base.Filter.GroupRef = "";
 			} else {
-				TGEDCOMRecord rec = (this.cbGroup.Items[this.cbGroup.SelectedIndex] as TComboItem).Data as TGEDCOMRecord;
+				TGEDCOMRecord rec = (this.cbGroup.Items[this.cbGroup.SelectedIndex] as GKComboItem).Data as TGEDCOMRecord;
 				if (rec != null) {
-					this.Base.Filter.GroupMode = TFilter.TGroupMode.gmSelected;
+					this.Base.Filter.GroupMode = CustomFilter.TGroupMode.gmSelected;
 					this.Base.Filter.GroupRef = rec.XRef;
 				} else {
-					this.Base.Filter.GroupMode = TFilter.TGroupMode.gmAll;
+					this.Base.Filter.GroupMode = CustomFilter.TGroupMode.gmAll;
 					this.Base.Filter.GroupRef = "";
 				}
 			}
 
 			int selectedIndex2 = this.cbSource.SelectedIndex;
 			if (selectedIndex2 >= 0 && selectedIndex2 < 3) {
-				this.Base.Filter.SourceMode = (TFilter.TGroupMode)this.cbSource.SelectedIndex;
+				this.Base.Filter.SourceMode = (CustomFilter.TGroupMode)this.cbSource.SelectedIndex;
 				this.Base.Filter.SourceRef = "";
 			} else {
-				TGEDCOMRecord rec = (this.cbSource.Items[this.cbSource.SelectedIndex] as TComboItem).Data as TGEDCOMRecord;
+				TGEDCOMRecord rec = (this.cbSource.Items[this.cbSource.SelectedIndex] as GKComboItem).Data as TGEDCOMRecord;
 				if (rec != null) {
-					this.Base.Filter.SourceMode = TFilter.TGroupMode.gmSelected;
+					this.Base.Filter.SourceMode = CustomFilter.TGroupMode.gmSelected;
 					this.Base.Filter.SourceRef = rec.XRef;
 				} else {
-					this.Base.Filter.SourceMode = TFilter.TGroupMode.gmAll;
+					this.Base.Filter.SourceMode = CustomFilter.TGroupMode.gmAll;
 					this.Base.Filter.SourceRef = "";
 				}
 			}
@@ -198,15 +198,16 @@ namespace GKUI
 			this.cbGroup.Sorted = true;
 			int num = tree.RecordsCount - 1;
 			for (int i = 0; i <= num; i++) {
-				if (tree.GetRecord(i) is TGEDCOMGroupRecord) {
-					this.cbGroup.Items.Add(new TComboItem((tree.GetRecord(i) as TGEDCOMGroupRecord).GroupName, tree.GetRecord(i)));
+				TGEDCOMRecord rec = tree[i];
+				if (rec is TGEDCOMGroupRecord) {
+					this.cbGroup.Items.Add(new GKComboItem((rec as TGEDCOMGroupRecord).GroupName, rec));
 				}
 			}
 			this.cbGroup.Sorted = false;
-			this.cbGroup.Items.Insert(0, new TComboItem(LangMan.LSList[500], null));
-			this.cbGroup.Items.Insert(1, new TComboItem(LangMan.LSList[501], null));
-			this.cbGroup.Items.Insert(2, new TComboItem(LangMan.LSList[502], null));
-			if (this.Base.Filter.GroupMode != TFilter.TGroupMode.gmSelected)
+			this.cbGroup.Items.Insert(0, new GKComboItem(LangMan.LSList[500], null));
+			this.cbGroup.Items.Insert(1, new GKComboItem(LangMan.LSList[501], null));
+			this.cbGroup.Items.Insert(2, new GKComboItem(LangMan.LSList[502], null));
+			if (this.Base.Filter.GroupMode != CustomFilter.TGroupMode.gmSelected)
 			{
 				this.cbGroup.SelectedIndex = (int)this.Base.Filter.GroupMode;
 			} else {
@@ -215,15 +216,16 @@ namespace GKUI
 
 			this.cbSource.Sorted = true;
 			for (int i = 0; i <= tree.RecordsCount - 1; i++) {
-				if (tree.GetRecord(i) is TGEDCOMSourceRecord) {
-					this.cbSource.Items.Add(new TComboItem((tree.GetRecord(i) as TGEDCOMSourceRecord).FiledByEntry, tree.GetRecord(i)));
+				TGEDCOMRecord rec = tree[i];
+				if (tree[i] is TGEDCOMSourceRecord) {
+					this.cbSource.Items.Add(new GKComboItem((rec as TGEDCOMSourceRecord).FiledByEntry, rec));
 				}
 			}
 			this.cbSource.Sorted = false;
-			this.cbSource.Items.Insert(0, new TComboItem(LangMan.LSList[500], null));
-			this.cbSource.Items.Insert(1, new TComboItem(LangMan.LSList[501], null));
-			this.cbSource.Items.Insert(2, new TComboItem(LangMan.LSList[502], null));
-			if (this.Base.Filter.SourceMode != TFilter.TGroupMode.gmSelected)
+			this.cbSource.Items.Insert(0, new GKComboItem(LangMan.LSList[500], null));
+			this.cbSource.Items.Insert(1, new GKComboItem(LangMan.LSList[501], null));
+			this.cbSource.Items.Insert(2, new GKComboItem(LangMan.LSList[502], null));
+			if (this.Base.Filter.SourceMode != CustomFilter.TGroupMode.gmSelected)
 			{
 				this.cbSource.SelectedIndex = (int)this.Base.Filter.SourceMode;
 			} else {

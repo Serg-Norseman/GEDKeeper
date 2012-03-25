@@ -95,7 +95,7 @@ namespace GKUI
 			this.MinimizeBox = false;
 			this.Name = "TfmUserRefEdit";
 			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Пользовательская сноска";
 			this.ResumeLayout(false);
 		}

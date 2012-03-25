@@ -1,8 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-using GKCore;
-using GKSys;
+using Ext.Utils;
 
 namespace GedCom551
 {
@@ -61,7 +60,7 @@ namespace GedCom551
 			{
 				if (this.FValue != null)
 				{
-					this.FValue.Free();
+					this.FValue.Dispose();
 					this.FValue = null;
 				}
 

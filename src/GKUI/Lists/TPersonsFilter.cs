@@ -9,7 +9,7 @@ using GKCore;
 
 namespace GKUI.Lists
 {
-	public sealed class TPersonsFilter : TFilter
+	public sealed class TPersonsFilter : CustomFilter
 	{
 		public enum TListFilterMode : byte
 		{
@@ -18,26 +18,26 @@ namespace GKUI.Lists
 		}
 
 		private string Back_AliveBeforeDate;
-		private TFilter.TGroupMode Back_GroupMode;
+		private CustomFilter.TGroupMode Back_GroupMode;
 		private string Back_GroupRef;
 		private TGenEngine.TLifeMode Back_LifeMode;
 		private string Back_Name;
 		private bool Back_PatriarchOnly;
 		private string Back_Residence;
 		private TGEDCOMSex Back_Sex;
-		private TFilter.TGroupMode Back_SourceMode;
+		private CustomFilter.TGroupMode Back_SourceMode;
 		private string Back_SourceRef;
 		private string Back_EventVal;
 
 		public string AliveBeforeDate;
-		public TFilter.TGroupMode GroupMode;
+		public CustomFilter.TGroupMode GroupMode;
 		public string GroupRef;
 		public TGenEngine.TLifeMode LifeMode;
 		public string Name;
 		public bool PatriarchOnly;
 		public string Residence;
 		public TGEDCOMSex Sex;
-		public TFilter.TGroupMode SourceMode;
+		public CustomFilter.TGroupMode SourceMode;
 		public string SourceRef;
 		public string EventVal;
 		public TPersonsFilter.TListFilterMode List;
@@ -51,7 +51,7 @@ namespace GKUI.Lists
 
 		public void Clear()
 		{
-			this.GroupMode = TFilter.TGroupMode.gmAll;
+			this.GroupMode = CustomFilter.TGroupMode.gmAll;
 			this.GroupRef = "";
 			if (this.LifeMode != TGenEngine.TLifeMode.lmTimeLine)
 			{
@@ -63,7 +63,7 @@ namespace GKUI.Lists
 			this.PatriarchOnly = false;
 			this.Residence = "*";
 			this.Sex = TGEDCOMSex.svNone;
-			this.SourceMode = TFilter.TGroupMode.gmAll;
+			this.SourceMode = CustomFilter.TGroupMode.gmAll;
 			this.SourceRef = "";
 			this.EventVal = "*";
 		}

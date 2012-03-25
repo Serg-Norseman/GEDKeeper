@@ -5,7 +5,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 
-using GKSys;
+using Ext.Utils;
 
 /// <summary>
 /// Localization: clean
@@ -166,11 +166,6 @@ namespace GedCom551
 			get { return this.FRecords[Index]; }
 		}
 
-		public TGEDCOMRecord GetRecord(int Index)
-		{
-			return this.FRecords[Index];
-		}
-
 		public TGEDCOMHeader Header
 		{
 			get { return this.FHeader; }
@@ -208,7 +203,7 @@ namespace GedCom551
 			if (!this.Disposed_)
 			{
 				//this.FXRefIndex.Dispose();
-				this.FHeader.Free();
+				this.FHeader.Dispose();
 				this.FRecords.Dispose();
 
 				this.Disposed_ = true;
@@ -399,6 +394,12 @@ namespace GedCom551
 			}
 		}
 
+		private static string StrToUtf8([In] string S)
+		{
+			byte[] src = Encoding.GetEncoding(1251).GetBytes(S);
+			return Encoding.UTF8.GetString(src);
+		}
+
 		public int Progress;
 		public event EventHandler ProgressEvent;
 
@@ -427,7 +428,7 @@ namespace GedCom551
 
 					if (S.Length != 0)
 					{
-						if (!SysUtils.IsDigit(S[0]))
+						if (!IsDigit(S[0]))
 						{
 							TGEDCOMTree._LoadFromStream_LineCorrect(CurRecord, CurTag, I + 1, S.Trim());
 						}
@@ -461,7 +462,7 @@ namespace GedCom551
 							if (AValue != null && AValue.Length != 0 && CharSet == TGEDCOMCharacterSet.csUTF8)
 							{
 								if (AStream.CurrentEncoding != Encoding.UTF8) {
-									AValue = SysUtils.StrToUtf8(AValue);
+									AValue = StrToUtf8(AValue);
 								}
 							}
 							// end
@@ -619,30 +620,20 @@ namespace GedCom551
 
 		public TGEDCOMRecord FindUID([In] string UID)
 		{
-			TGEDCOMRecord Result = null;
+			TGEDCOMRecord res = null;
 
 			int num = this.FRecords.Count - 1;
-			int i = 0;
-			if (num >= i)
+			for (int i = 0; i <= num; i++)
 			{
-				num++;
-				TGEDCOMRecord rec;
-				while (true)
+				TGEDCOMRecord rec = this.FRecords[i];
+				if (rec.UID == UID)
 				{
-					rec = this.FRecords[i];
-					if (rec.UID == UID)
-					{
-						break;
-					}
-					i++;
-					if (i == num)
-					{
-						return Result;
-					}
+					res = rec;
+					break;
 				}
-				Result = rec;
 			}
-			return Result;
+
+			return res;
 		}
 
 		private static void _LoadFromStream_LineCorrect(TGEDCOMCustomRecord CurRecord, TGEDCOMCustomTag CurTag, int LineNum, string S)

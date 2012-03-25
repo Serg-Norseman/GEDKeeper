@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-using GKSys;
+using Ext.Utils;
 
 namespace GedCom551
 {
@@ -224,6 +224,22 @@ namespace GedCom551
 		public void SetTextArray(params string[] Value)
 		{
 			base.SetTagStrings(base.TagClass("TEXT", typeof(TGEDCOMTag), TGEDCOMTag.Create), Value);
+		}
+
+		public override bool IsMatch(TGEDCOMRecord record, float matchThreshold)
+		{
+			bool match = false;
+
+			if (record != null) {
+				TGEDCOMSourceRecord source = (TGEDCOMSourceRecord)record;
+
+				string title1 = this.FiledByEntry;
+				string title2 = source.FiledByEntry;
+
+				match = (string.Compare(title1, title2, true) == 0);
+			}
+
+			return match;
 		}
 
 		public TGEDCOMSourceRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)

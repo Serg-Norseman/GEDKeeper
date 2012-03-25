@@ -39,7 +39,7 @@ namespace GKUI
 			this.LabelVersion.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.LabelVersion.Location = new System.Drawing.Point(8, 56);
 			this.LabelVersion.Name = "LabelVersion";
-			this.LabelVersion.Size = new System.Drawing.Size(59, 17);
+			this.LabelVersion.Size = new System.Drawing.Size(58, 17);
 			this.LabelVersion.TabIndex = 1;
 			this.LabelVersion.Text = "Version";
 			// 
@@ -61,7 +61,7 @@ namespace GKUI
 			this.LabelCopyright.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.LabelCopyright.Location = new System.Drawing.Point(8, 88);
 			this.LabelCopyright.Name = "LabelCopyright";
-			this.LabelCopyright.Size = new System.Drawing.Size(228, 17);
+			this.LabelCopyright.Size = new System.Drawing.Size(226, 17);
 			this.LabelCopyright.TabIndex = 1;
 			this.LabelCopyright.Text = "Copyright © Serg V. Zhdanovskih";
 			// 
@@ -73,7 +73,7 @@ namespace GKUI
 			this.LabelMail.ForeColor = System.Drawing.Color.Blue;
 			this.LabelMail.Location = new System.Drawing.Point(8, 256);
 			this.LabelMail.Name = "LabelMail";
-			this.LabelMail.Size = new System.Drawing.Size(137, 13);
+			this.LabelMail.Size = new System.Drawing.Size(136, 13);
 			this.LabelMail.TabIndex = 2;
 			this.LabelMail.Text = "http://gedkeeper.ucoz.ru/";
 			this.LabelMail.Click += new System.EventHandler(this.LabelMail_Click);
@@ -106,7 +106,7 @@ namespace GKUI
 			this.MinimizeBox = false;
 			this.Name = "TfmAbout";
 			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "О программе";
 			this.ResumeLayout(false);
 			this.PerformLayout();

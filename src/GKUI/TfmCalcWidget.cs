@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GKCore;
-using GKSys;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKUI
@@ -32,9 +32,9 @@ namespace GKUI
 						Clipboard.SetDataObject(res);
 					}
 				}
-				catch (Exception E)
+				catch (Exception)
 				{
-					res = "[ошибка]: " + E.Message;
+					res = "[ ??? ]";
 				}
 				this.lbOutput.Items.Add("> " + this.edExpression.Text);
 				this.lbOutput.Items.Add("= " + res);
@@ -76,6 +76,7 @@ namespace GKUI
 			this.InitializeComponent();
 			this.calc = new TCalculator();
 			this.lbOutput.Items.Clear();
+
 			this.Text = LangMan.LSList[30];
 			this.chkPutToClipboard.Text = LangMan.LSList[166];
 		}

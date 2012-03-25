@@ -8,7 +8,7 @@ using GedCom551;
 
 namespace GKCore.Commands
 {
-	public class TCmdPersonChangePatriarch : TCustomCommand
+	public class TCmdPersonChangePatriarch : CustomCommand
 	{
 		private string FPersonXRef;
 		private bool FOldValue;

@@ -8,7 +8,7 @@ using GedCom551;
 
 namespace GKCore.Commands
 {
-	public class TCmdPersonChangeSex : TCustomCommand
+	public class TCmdPersonChangeSex : CustomCommand
 	{
 		private string FPersonXRef;
 		private TGEDCOMSex FOldSex;

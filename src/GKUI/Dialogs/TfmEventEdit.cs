@@ -3,13 +3,13 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKSys;
 using GKUI.Lists;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKUI
@@ -231,30 +231,17 @@ namespace GKUI
 
 		private void ListModify(object Sender, object ItemData, TGenEngine.TRecAction Action)
 		{
-			if (object.Equals(Sender, this.FNotesList))
-			{
-				if (this.Base.ModifyTagNote(this.FEvent.Detail, ItemData as TGEDCOMNotes, Action))
-				{
-					this.ControlsRefresh();
-				}
+			bool res = false;
+
+			if (Sender == this.FNotesList) {
+				res = this.Base.ModifyTagNote(this.FEvent.Detail, ItemData as TGEDCOMNotes, Action);
+			} else if (Sender == this.FMediaList) {
+				res = this.Base.ModifyTagMultimedia(this.FEvent.Detail, ItemData as TGEDCOMMultimediaLink, Action);
+			} else if (Sender == this.FSourcesList) {
+				res = this.Base.ModifyTagSource(this.FEvent.Detail, ItemData as TGEDCOMSourceCitation, Action);
 			}
-			else
-			{
-				if (object.Equals(Sender, this.FMediaList))
-				{
-					if (this.Base.ModifyTagMultimedia(this.FEvent.Detail, ItemData as TGEDCOMMultimediaLink, Action))
-					{
-						this.ControlsRefresh();
-					}
-				}
-				else
-				{
-					if (object.Equals(Sender, this.FSourcesList) && this.Base.ModifyTagSource(this.FEvent.Detail, ItemData as TGEDCOMSourceCitation, Action))
-					{
-						this.ControlsRefresh();
-					}
-				}
-			}
+
+			if (res) this.ControlsRefresh();
 		}
 
 		private void SetEvent([In] TGEDCOMCustomEvent Value)
@@ -442,10 +429,7 @@ namespace GKUI
 
 		private void btnPlaceAdd_Click(object sender, EventArgs e)
 		{
-			TfmBase arg_11_0 = this.Base;
-			TGEDCOMRecordType arg_11_1 = TGEDCOMRecordType.rtLocation;
-			object[] anArgs = new object[0];
-			this.FLocation = (arg_11_0.SelectRecord(arg_11_1, anArgs) as TGEDCOMLocationRecord);
+			this.FLocation = (this.Base.SelectRecord(TGEDCOMRecordType.rtLocation, null) as TGEDCOMLocationRecord);
 			this.ControlsRefresh();
 		}
 
@@ -586,14 +570,12 @@ namespace GKUI
 				this.EditEventDateType.Items.Add(LangMan.LSList[(int)TGenEngine.DateKinds[i].Name - 1]);
 			}
 
-			TGEDCOMCalendar gc = TGEDCOMCalendar.dcGregorian;
-			do
+			for (TGEDCOMCalendar gc = TGEDCOMCalendar.dcGregorian; gc <= TGEDCOMCalendar.dcLast; gc++)
 			{
-				this.cbDate1Calendar.Items.Add(LangMan.LSList[(int)TGenEngine.DateCalendars[(int)gc] - 1]);
-				this.cbDate2Calendar.Items.Add(LangMan.LSList[(int)TGenEngine.DateCalendars[(int)gc] - 1]);
-				gc++;
+				this.cbDate1Calendar.Items.Add(LangMan.LS(TGenEngine.DateCalendars[(int)gc]));
+				this.cbDate2Calendar.Items.Add(LangMan.LS(TGenEngine.DateCalendars[(int)gc]));
 			}
-			while (gc != (TGEDCOMCalendar)6);
+
 			this.cbDate1Calendar.SelectedIndex = 0;
 			this.cbDate2Calendar.SelectedIndex = 0;
 
@@ -625,6 +607,6 @@ namespace GKUI
 			this.Label4.Text = LangMan.LSList[205];
 			this.Label5.Text = LangMan.LSList[206];
 		}
-		
+
 	}
 }

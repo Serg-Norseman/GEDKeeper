@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKSys;
 using GKUI.Charts;
 using GKUI.Controls;
 using GKUI.Lists;
@@ -141,20 +141,20 @@ namespace GKUI
 			int selectedIndex = this.cbSource.SelectedIndex;
 			if (selectedIndex >= 0 && selectedIndex < 3)
 			{
-				this.FFilter.SourceMode = (TFilter.TGroupMode)this.cbSource.SelectedIndex;
+				this.FFilter.SourceMode = (CustomFilter.TGroupMode)this.cbSource.SelectedIndex;
 				this.FFilter.SourceRef = "";
 			}
 			else
 			{
-				TGEDCOMRecord rec = (this.cbSource.Items[this.cbSource.SelectedIndex] as TComboItem).Data as TGEDCOMRecord;
+				TGEDCOMRecord rec = (this.cbSource.Items[this.cbSource.SelectedIndex] as GKComboItem).Data as TGEDCOMRecord;
 				if (rec != null)
 				{
-					this.FFilter.SourceMode = TFilter.TGroupMode.gmSelected;
+					this.FFilter.SourceMode = CustomFilter.TGroupMode.gmSelected;
 					this.FFilter.SourceRef = rec.XRef;
 				}
 				else
 				{
-					this.FFilter.SourceMode = TFilter.TGroupMode.gmAll;
+					this.FFilter.SourceMode = CustomFilter.TGroupMode.gmAll;
 					this.FFilter.SourceRef = "";
 				}
 			}
@@ -188,8 +188,9 @@ namespace GKUI
 
 			int num = tree.RecordsCount - 1;
 			for (int i = 0; i <= num; i++) {
-				if (tree.GetRecord(i) is TGEDCOMSourceRecord) {
-					this.cbSource.Items.Add(new TComboItem((tree.GetRecord(i) as TGEDCOMSourceRecord).FiledByEntry, tree.GetRecord(i)));
+				TGEDCOMRecord rec = tree[i];
+				if (rec is TGEDCOMSourceRecord) {
+					this.cbSource.Items.Add(new GKComboItem((rec as TGEDCOMSourceRecord).FiledByEntry, rec));
 				}
 			}
 
@@ -197,7 +198,7 @@ namespace GKUI
 			this.cbSource.Items.Insert(0, LangMan.LSList[500]);
 			this.cbSource.Items.Insert(1, LangMan.LSList[501]);
 			this.cbSource.Items.Insert(2, LangMan.LSList[502]);
-			if (this.FFilter.SourceMode != TFilter.TGroupMode.gmSelected) {
+			if (this.FFilter.SourceMode != CustomFilter.TGroupMode.gmSelected) {
 				this.cbSource.SelectedIndex = (int)((sbyte)this.FFilter.SourceMode);
 			} else {
 				this.cbSource.SelectedIndex = this.cbSource.Items.IndexOf(tree.XRefIndex_Find(this.FFilter.SourceRef));

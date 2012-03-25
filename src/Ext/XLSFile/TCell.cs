@@ -1,25 +1,10 @@
 using System;
 
-using GKSys;
+using Ext.Utils;
 
-namespace XLSFile
+namespace Ext.XLSFile
 {
-	public enum TCellAttribute : byte
-	{
-		acHiddenFormula,
-		acLocked,
-		acShaded,
-		acBottomBorder,
-		acTopBorder,
-		acRightBorder,
-		acLeftBorder,
-		acLeft,
-		acCenter,
-		acRight,
-		acFill
-	}
-
-	[Flags, TSetElementType(typeof(TCellAttribute))]
+	[Flags]
 	public enum TCellAttributeSet : ushort
 	{
 		acHiddenFormula = 1,
@@ -48,13 +33,10 @@ namespace XLSFile
 
 		private void SetAttribute(TCellAttributeSet Value)
 		{
-			int i = 0;
-			do
+			for (int i = 0; i < this.FAttribute.Length; i++)
 			{
 				this.FAttribute[i] = 0;
-				i++;
 			}
-			while (i != 3);
 
 			if ((Value & TCellAttributeSet.acHiddenFormula) != (TCellAttributeSet)0)
 			{
@@ -112,13 +94,11 @@ namespace XLSFile
 		{
 			W.WriteWord(this.Row);
 			W.WriteWord(this.Col);
-			int i = 0;
-			do
+
+			for (int i = 0; i < this.FAttribute.Length; i++)
 			{
 				W.WriteByte(this.FAttribute[i]);
-				i++;
 			}
-			while (i != 3);
 		}
 	}
 }

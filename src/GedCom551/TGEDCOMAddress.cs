@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-using GKSys;
+using Ext.Utils;
 
 namespace GedCom551
 {
@@ -218,7 +218,7 @@ namespace GedCom551
 		{
 			if (Index >= 3)
 			{
-				throw new EGEDCOMException(string.Format("The maximum number of email addresses is {0}", new object[] { 3 }));
+				throw new EGEDCOMException(string.Format("The maximum number of email addresses is {0}", TGEDCOMObject.GEDCOMMaxEmailAddresses));
 			}
 			if (Index >= 0)
 			{
@@ -240,7 +240,7 @@ namespace GedCom551
 		{
 			if (Index >= 3)
 			{
-				throw new EGEDCOMException(string.Format("The maximum number of fax numbers is {0}", new object[] { 3 }));
+				throw new EGEDCOMException(string.Format("The maximum number of fax numbers is {0}", TGEDCOMObject.GEDCOMMaxFaxNumbers));
 			}
 			if (Index >= 0)
 			{
@@ -262,7 +262,7 @@ namespace GedCom551
 		{
 			if (Index >= 3)
 			{
-				throw new EGEDCOMException(string.Format("The maximum number of phone numbers is {0}", new object[] { 3 }));
+				throw new EGEDCOMException(string.Format("The maximum number of phone numbers is {0}", TGEDCOMObject.GEDCOMMaxPhoneNumbers));
 			}
 			if (Index >= 0)
 			{
@@ -284,7 +284,7 @@ namespace GedCom551
 		{
 			if (Index >= 3)
 			{
-				throw new EGEDCOMException(string.Format("The maximum number of web page addresses is {0}", new object[] { 3 }));
+				throw new EGEDCOMException(string.Format("The maximum number of web page addresses is {0}", TGEDCOMObject.GEDCOMMaxWebPages));
 			}
 			if (Index >= 0)
 			{
@@ -328,10 +328,10 @@ namespace GedCom551
 			if (!this.Disposed_)
 			{
 				if (this.FAddress != null) this.FAddress.Free();
-				if (this.FPhoneList != null) this.FPhoneList.Free();
-				if (this.FEmailList != null) this.FEmailList.Free();
-				if (this.FFaxList != null) this.FFaxList.Free();
-				if (this.FWWWList != null) this.FWWWList.Free();
+				if (this.FPhoneList != null) this.FPhoneList.Dispose();
+				if (this.FEmailList != null) this.FEmailList.Dispose();
+				if (this.FFaxList != null) this.FFaxList.Dispose();
+				if (this.FWWWList != null) this.FWWWList.Dispose();
 
 				base.Dispose();
 				this.Disposed_ = true;

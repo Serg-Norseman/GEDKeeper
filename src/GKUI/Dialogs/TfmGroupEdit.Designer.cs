@@ -131,7 +131,7 @@ namespace GKUI
 			this.MinimizeBox = false;
 			this.Name = "TfmGroupEdit";
 			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Правка группы";
 			this.GroupBox1.ResumeLayout(false);
 			this.GroupBox1.PerformLayout();

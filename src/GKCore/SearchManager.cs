@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 
+using Ext.Utils;
 using GedCom551;
-using GKSys;
 using GKUI;
 using Xapian;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKCore
@@ -39,8 +39,7 @@ namespace GKCore
 
 		private string GetXDBFolder()
 		{
-			string md_path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments/*ApplicationData*/);
-			string xdb_dir = Path.Combine(md_path, TGenEngine.AppTitle + "\\xdb");
+			string xdb_dir = TGenEngine.GetAppDataPath() + "xdb";
 			if (!Directory.Exists(xdb_dir)) Directory.CreateDirectory(xdb_dir);
 			return xdb_dir;
 		}
@@ -117,11 +116,11 @@ namespace GKCore
 					{
 						indexer.SetStemmer(stemmer);
 
-						TfmProgress.ProgressInit(FBase.Tree.RecordsCount, "Обновление поискового индекса");
+						TfmProgress.ProgressInit(FBase.Tree.RecordsCount, LangMan.LS(LSID.LSID_SearchIndexRefreshing));
 						int num = FBase.Tree.RecordsCount - 1;
 						for (int i = 0; i <= num; i++)
 						{
-							TGEDCOMRecord record = FBase.Tree.GetRecord(i);
+							TGEDCOMRecord record = FBase.Tree[i];
 							if (IsIndexedRecord(record)) ReindexRecord(FBase, database, indexer, record);
 							TfmProgress.ProgressStep();
 						}

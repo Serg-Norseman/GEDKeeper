@@ -2,9 +2,9 @@
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKSys;
 using GKUI.Controls;
 using GKUI.Lists;
 
@@ -18,10 +18,10 @@ namespace GKUI
 	{
 		private TfmBase FBase;
 		private TGEDCOMLocationRecord FLocationRecord;
-		private TMapBrowser FMapBrowser;
+		private GKMapBrowser FMapBrowser;
 		private TSheetList FMediaList;
 		private TSheetList FNotesList;
-		private TObjectList FSearchPoints;
+		private TList FSearchPoints;
 
 		public TfmBase Base
 		{
@@ -100,17 +100,17 @@ namespace GKUI
 			try
 			{
 				this.FSearchPoints.Clear();
-				TMapBrowser.RequestGeoCoords(this.EditName.Text, this.FSearchPoints);
+				GKMapBrowser.RequestGeoCoords(this.EditName.Text, this.FSearchPoints);
 				this.ListGeoCoords.Items.Clear();
 				this.FMapBrowser.ClearPoints();
 
 				int num = this.FSearchPoints.Count - 1;
 				for (int i = 0; i <= num; i++)
 				{
-					if (this.FSearchPoints[i] is TMapBrowser.TGMapPoint)
+					if (this.FSearchPoints[i] is GKMapBrowser.TGMapPoint)
 					{
-						TMapBrowser.TGMapPoint pt = this.FSearchPoints[i] as TMapBrowser.TGMapPoint;
-						TExtListItem item = new TExtListItem();
+						GKMapBrowser.TGMapPoint pt = this.FSearchPoints[i] as GKMapBrowser.TGMapPoint;
+						GKListItem item = new GKListItem();
 						item.Text = pt.Hint;
 						item.Data = pt;
 						item.SubItems.Add(pt.Latitude.ToString("0.000000"));
@@ -132,7 +132,7 @@ namespace GKUI
 		{
 			if (this.ListGeoCoords.SelectedItems.Count > 0)
 			{
-				TExtListItem item = this.ListGeoCoords.SelectedItems[0] as TExtListItem;
+				GKListItem item = this.ListGeoCoords.SelectedItems[0] as GKListItem;
 				this.EditLatitude.Text = item.SubItems[1].Text;
 				this.EditLongitude.Text = item.SubItems[2].Text;
 			}
@@ -142,7 +142,7 @@ namespace GKUI
 		{
 			if (this.ListGeoCoords.SelectedItems.Count > 0)
 			{
-				this.EditName.Text = (this.ListGeoCoords.SelectedItems[0] as TExtListItem).Text;
+				this.EditName.Text = (this.ListGeoCoords.SelectedItems[0] as GKListItem).Text;
 			}
 		}
 
@@ -163,8 +163,8 @@ namespace GKUI
 		{
 			if (this.ListGeoCoords.SelectedItems.Count > 0)
 			{
-				TExtListItem item = this.ListGeoCoords.SelectedItems[0] as TExtListItem;
-				TMapBrowser.TGMapPoint pt = item.Data as TMapBrowser.TGMapPoint;
+				GKListItem item = this.ListGeoCoords.SelectedItems[0] as GKListItem;
+				GKMapBrowser.TGMapPoint pt = item.Data as GKMapBrowser.TGMapPoint;
 				if (pt != null)
 				{
 					this.FMapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
@@ -185,7 +185,7 @@ namespace GKUI
 		{
 			this.InitializeComponent();
 			this.FBase = aBase;
-			this.FMapBrowser = new TMapBrowser();
+			this.FMapBrowser = new GKMapBrowser();
 			this.FMapBrowser.InitMap();
 			this.FMapBrowser.Dock = DockStyle.Fill;
 			this.panMap.Controls.Add(this.FMapBrowser);
@@ -198,7 +198,7 @@ namespace GKUI
 			this.FMediaList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
 			this.Base.SetupRecMediaList(this.FMediaList);
 
-			this.FSearchPoints = new TObjectList(true);
+			this.FSearchPoints = new TList(true);
 			this.SetLang();
 		}
 

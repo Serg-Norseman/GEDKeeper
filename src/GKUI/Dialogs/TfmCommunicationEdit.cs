@@ -2,9 +2,9 @@
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKSys;
 using GKUI.Lists;
 
 /// <summary>
@@ -123,13 +123,11 @@ namespace GKUI
 		{
 			this.InitializeComponent();
 			this.FBase = aBase;
-			TCommunicationType ct = TCommunicationType.ctCall;
-			do
+
+			for (TCommunicationType ct = TCommunicationType.ctCall; ct <= TCommunicationType.ctLast; ct++)
 			{
 				this.EditCorrType.Items.Add(LangMan.LSList[(int)TGenEngine.CommunicationNames[(int)ct] - 1]);
-				ct++;
 			}
-			while (ct != (TCommunicationType)6);
 
 			this.FNotesList = new TSheetList(this.SheetNotes);
 			this.FNotesList.OnModify += new TSheetList.TModifyEvent(this.ListModify);

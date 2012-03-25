@@ -107,8 +107,8 @@ namespace GedCom551
 		{
 			if (!this.Disposed_)
 			{
-				this.FDateAfter.Free();
-				this.FDateBefore.Free();
+				this.FDateAfter.Dispose();
+				this.FDateBefore.Dispose();
 
 				base.Dispose();
 				this.Disposed_ = true;

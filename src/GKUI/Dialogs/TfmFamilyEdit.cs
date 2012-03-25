@@ -2,9 +2,9 @@
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKSys;
 using GKUI.Controls;
 using GKUI.Lists;
 
@@ -116,7 +116,7 @@ namespace GKUI
 			this.Base.RecListMediaRefresh(this.FFamily, this.FMediaList.List, null);
 			this.Base.RecListSourcesRefresh(this.FFamily, this.FSourcesList.List, null);
 
-			TGKListView list = this.FChildsList.List;
+			GKListView list = this.FChildsList.List;
 			list.SwitchSorter();
 			list.BeginUpdate();
 			list.Items.Clear();
@@ -306,20 +306,16 @@ namespace GKUI
 		{
 			this.InitializeComponent();
 			this.FBase = aBase;
-			TGEDCOMRestriction res = TGEDCOMRestriction.rnNone;
-			do
+
+			for (TGEDCOMRestriction res = TGEDCOMRestriction.rnNone; res <= TGEDCOMRestriction.rnLast; res++)
 			{
 				this.cbRestriction.Items.Add(TGenEngine.Restrictions[(int)res]);
-				res++;
 			}
-			while (res != (TGEDCOMRestriction)4);
-			int i = 0;
-			do
+
+			for (int i = 0; i < TGenEngine.MarriageStatus.Length; i++)
 			{
 				this.EditMarriageStatus.Items.Add(LangMan.LSList[(int)TGenEngine.MarriageStatus[i].Name - 1]);
-				i++;
 			}
-			while (i != 4);
 
 			this.FChildsList = new TSheetList(this.SheetChilds);
 			this.FChildsList.OnModify += new TSheetList.TModifyEvent(this.ListModify);

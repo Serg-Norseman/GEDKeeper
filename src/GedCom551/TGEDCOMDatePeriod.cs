@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-using GKSys;
+using Ext.Utils;
 
 namespace GedCom551
 {
@@ -110,8 +110,8 @@ namespace GedCom551
 		{
 			if (!this.Disposed_)
 			{
-				this.FDateFrom.Free();
-				this.FDateTo.Free();
+				this.FDateFrom.Dispose();
+				this.FDateTo.Dispose();
 				base.Dispose();
 				this.Disposed_ = true;
 			}

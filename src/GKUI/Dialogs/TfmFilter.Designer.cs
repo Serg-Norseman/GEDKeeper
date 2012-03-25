@@ -317,7 +317,7 @@ namespace GKUI
 			this.MinimizeBox = false;
 			this.Name = "TfmFilter";
 			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Фильтр";
 			this.Load += new System.EventHandler(this.TfmFilter_Load);
 			this.rgLife.ResumeLayout(false);

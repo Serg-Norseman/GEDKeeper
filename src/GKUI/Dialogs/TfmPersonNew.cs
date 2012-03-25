@@ -2,9 +2,9 @@
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKSys;
 
 /// <summary>
 /// Localization: clean
@@ -40,7 +40,7 @@ namespace GKUI
 					string iFamily, iName, iPatronymic;
 					this.FTarget.aux_GetNameParts(out iFamily, out iName, out iPatronymic);
 					this.edFamily.Text = iFamily;
-					TNamesTable names = GKUI.TfmGEDKeeper.Instance.NamesTable;
+					NamesTable names = GKUI.TfmGEDKeeper.Instance.NamesTable;
 
 					switch (this.FTargetMode) {
 						case TGenEngine.TTargetMode.tmParent:
@@ -83,7 +83,7 @@ namespace GKUI
 			if (e.KeyCode == Keys.Down && e.Control)
 			{
 				TextBox tb = (sender as TextBox);
-				tb.Text = SysUtils.SetAsName(tb.Text);
+				tb.Text = TGenEngine.SetAsName(tb.Text);
 			}
 		}
 

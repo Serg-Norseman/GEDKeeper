@@ -225,7 +225,7 @@ namespace GKUI
 			this.MinimizeBox = false;
 			this.Name = "TfmSourceEdit";
 			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Источник";
 			this.PagesData.ResumeLayout(false);
 			this.SheetCommon.ResumeLayout(false);

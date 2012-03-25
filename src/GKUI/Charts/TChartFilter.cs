@@ -1,6 +1,6 @@
 using System;
 
-using GKUI.Lists;
+using GKCore;
 
 /// <summary>
 /// Localization: clean
@@ -8,7 +8,7 @@ using GKUI.Lists;
 
 namespace GKUI.Charts
 {
-	public class TChartFilter : TFilter
+	public class TChartFilter : CustomFilter
 	{
 
 		public enum TBranchCut : byte
@@ -18,13 +18,13 @@ namespace GKUI.Charts
 			bcPersons
 		}
 
-		private TFilter.TGroupMode Back_SourceMode;
+		private CustomFilter.TGroupMode Back_SourceMode;
 		private string Back_SourceRef;
 		private TChartFilter.TBranchCut Back_BranchCut;
 		private int Back_BranchYear;
 		private string Back_BranchPersons;
 
-		public TFilter.TGroupMode SourceMode;
+		public CustomFilter.TGroupMode SourceMode;
 		public string SourceRef;
 		public TChartFilter.TBranchCut BranchCut;
 		public int BranchYear;
@@ -37,7 +37,7 @@ namespace GKUI.Charts
 
 		public void Clear()
 		{
-			this.SourceMode = TFilter.TGroupMode.gmAll;
+			this.SourceMode = CustomFilter.TGroupMode.gmAll;
 			this.BranchCut = TChartFilter.TBranchCut.bcNone;
 		}
 

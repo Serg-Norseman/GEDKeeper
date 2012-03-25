@@ -2,9 +2,9 @@
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKSys;
 
 /// <summary>
 /// Localization: clean
@@ -14,15 +14,15 @@ namespace GKUI
 {
 	public partial class TfmNameEdit : Form
 	{
-		private TNamesTable.TName FIName;
+		private NamesTable.TName FIName;
 
-		public TNamesTable.TName IName
+		public NamesTable.TName IName
 		{
 			get { return this.FIName; }
 			set { this.SetIName(value); }
 		}
 
-		private void SetIName([In] TNamesTable.TName Value)
+		private void SetIName([In] NamesTable.TName Value)
 		{
 			this.FIName = Value;
 			if (this.FIName == null)

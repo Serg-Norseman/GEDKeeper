@@ -169,7 +169,7 @@ namespace GKUI
 			this.MinimizeBox = false;
 			this.Name = "TfmTreeFilter";
 			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Фильтр";
 			this.Load += new System.EventHandler(this.TfmTreeFilter_Load);
 			this.rgBranchCut.ResumeLayout(false);

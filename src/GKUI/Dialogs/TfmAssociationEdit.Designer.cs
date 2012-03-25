@@ -114,7 +114,7 @@ namespace GKUI
 			this.MinimizeBox = false;
 			this.Name = "TfmAssociationEdit";
 			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Ассоциация";
 			this.ResumeLayout(false);
 			this.PerformLayout();

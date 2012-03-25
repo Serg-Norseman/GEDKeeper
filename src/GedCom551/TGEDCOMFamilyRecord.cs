@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-using GKSys;
+using Ext.Utils;
 
 namespace GedCom551
 {
@@ -242,6 +242,34 @@ namespace GedCom551
 			} else {
 				return husb;
 			}
+		}
+
+		public TGEDCOMFamilyEvent aux_GetFamilyEvent(string evName)
+		{
+			TGEDCOMFamilyEvent result = null;
+
+			int num = _FamilyEvents.Count - 1;
+			for (int i = 0; i <= num; i++)
+			{
+				TGEDCOMFamilyEvent evt = _FamilyEvents[i];
+				if (evt.Name == evName)
+				{
+					result = evt;
+					break;
+				}
+			}
+
+			return result;
+		}
+
+		public override bool IsMatch(TGEDCOMRecord record, float matchThreshold)
+		{
+			bool match = false;
+
+			if (record != null) {
+			}
+
+			return match;
 		}
 
 		public TGEDCOMFamilyRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)

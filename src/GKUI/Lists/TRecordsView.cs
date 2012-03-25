@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
+using Ext.TimSort;
+using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKSys;
 using GKUI.Controls;
-using TimSort;
 
 /// <summary>
 /// Localization: clean
@@ -15,7 +15,7 @@ using TimSort;
 
 namespace GKUI.Lists
 {
-	public sealed class TRecordsView : TGKListView, IDisposable
+	public sealed class TRecordsView : GKListView, IDisposable
 	{
 		private TList FContentList;
 		private int FFilteredCount;
@@ -29,7 +29,7 @@ namespace GKUI.Lists
 		private SortOrder FXSortOrder = SortOrder.Ascending;
 		private int FXSortFactor;
 
-		private TExtListItem[] FCache;
+		private GKListItem[] FCache;
 		private int FCacheFirstItem;
 
 		public TList ContentList
@@ -152,19 +152,19 @@ namespace GKUI.Lists
 
 		private int xCompare(ValItem Item1, ValItem Item2)
 		{
-			return SysUtils.agCompare(Item1.ColumnValue, Item2.ColumnValue) * FXSortFactor;
+			return GKListView.agCompare(Item1.ColumnValue, Item2.ColumnValue) * FXSortFactor;
 		}
 
-		private TExtListItem GetListItem(int ItemIndex)
+		private GKListItem GetListItem(int ItemIndex)
 		{
-			TExtListItem newItem;
+			GKListItem newItem;
 
 			if (ItemIndex < 0 || ItemIndex >= this.FContentList.Count) {
 				newItem = null;
 			} else {
 				TGEDCOMRecord rec = this.FContentList[ItemIndex] as TGEDCOMRecord;
 
-				newItem = new TExtListItem(TGenEngine.GetId(rec).ToString());
+				newItem = new GKListItem(TGenEngine.GetId(rec).ToString());
 				newItem.Data = rec;
 
 				this.FListMan.Fetch(rec);
@@ -182,7 +182,7 @@ namespace GKUI.Lists
 			FCacheFirstItem = e.StartIndex;
 			int length = e.EndIndex - e.StartIndex + 1;
 
-			FCache = new TExtListItem[length];
+			FCache = new GKListItem[length];
 			for (int i = 0; i < FCache.Length; i++)
 			{
 				FCache[i] = GetListItem(FCacheFirstItem + i);
@@ -288,7 +288,7 @@ namespace GKUI.Lists
 					this.FContentList.Clear();
 					int num = this.FTree.RecordsCount - 1;
 					for (int i = 0; i <= num; i++) {
-						TGEDCOMRecord rec = this.FTree.GetRecord(i);
+						TGEDCOMRecord rec = this.FTree[i];
 
 						if (rec.RecordType == this.FRecordType) {
 							this.FTotalCount++;
@@ -340,7 +340,7 @@ namespace GKUI.Lists
 			TGEDCOMRecord Result = null;
 
 			if (!this.VirtualMode) {
-				TExtListItem item = base.SelectedItem();
+				GKListItem item = base.SelectedItem();
 				if (item != null) Result = (item.Data as TGEDCOMRecord);
 			} else {
 				if (base.SelectedIndices.Count > 0) {

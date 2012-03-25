@@ -1,7 +1,8 @@
 using System;
+using System.Collections;
 
+using Ext.Utils;
 using GedCom551;
-using GKSys;
 
 /// <summary>
 /// Localization: clean
@@ -29,8 +30,8 @@ namespace GKCore
 
 		private int FDepth;
 		private UndoManager.TTransactionEvent FOnTransaction;
-		private TStack FStackUndo;
-		private TStack FStackRedo;
+		private Stack FStackUndo;
+		private Stack FStackRedo;
 		private TGEDCOMTree FTree;
 		private UndoManager.TUndoManType FType;
 		protected bool Disposed_;
@@ -80,21 +81,21 @@ namespace GKCore
 			this.FDepth = 1000;
 			this.FTree = aTree;
 			this.FType = aType;
-			this.FStackUndo = new TStack();
-			this.FStackRedo = new TStack();
+			this.FStackUndo = new Stack();
+			this.FStackRedo = new Stack();
 		}
 
 		public void Dispose()
 		{
 			if (!this.Disposed_)
 			{
-				this.FStackUndo.Dispose();
-				this.FStackRedo.Dispose();
+				//this.FStackUndo.Dispose();
+				//this.FStackRedo.Dispose();
 				this.Disposed_ = true;
 			}
 		}
 
-		public bool CmdDo(TCustomCommand cmd)
+		public bool CmdDo(CustomCommand cmd)
 		{
 			bool Result;
 			if (!cmd.Redo())
@@ -113,7 +114,7 @@ namespace GKCore
 
 		public void CmdUndo()
 		{
-			if (this.FStackUndo.Count() >= 2)
+			if (this.FStackUndo.Count >= 2)
 			{
 				if (this.FStackUndo.Peek() == null)
 				{
@@ -122,7 +123,7 @@ namespace GKCore
 				this.FStackRedo.Push(null);
 				while (this.FStackUndo.Peek() != null)
 				{
-					TCustomCommand cmd = this.FStackUndo.Pop() as TCustomCommand;
+					CustomCommand cmd = this.FStackUndo.Pop() as CustomCommand;
 					this.FStackRedo.Push(cmd);
 					cmd.Undo();
 				}
@@ -132,7 +133,7 @@ namespace GKCore
 
 		public void CmdRedo()
 		{
-			if (this.FStackRedo.Count() != 0)
+			if (this.FStackRedo.Count != 0)
 			{
 				if (this.FStackUndo.Peek() != null)
 				{
@@ -140,7 +141,7 @@ namespace GKCore
 				}
 				while (this.FStackRedo.Peek() != null)
 				{
-					TCustomCommand cmd = this.FStackRedo.Pop() as TCustomCommand;
+					CustomCommand cmd = this.FStackRedo.Pop() as CustomCommand;
 					this.FStackUndo.Push(cmd);
 					if (!cmd.Redo())
 					{
@@ -156,17 +157,17 @@ namespace GKCore
 
 		public bool CanUndo()
 		{
-			return this.FStackUndo.Count() - 1 > 0;
+			return this.FStackUndo.Count - 1 > 0;
 		}
 
 		public bool CanRedo()
 		{
-			return this.FStackRedo.Count() - 1 > 0;
+			return this.FStackRedo.Count - 1 > 0;
 		}
 
 		public void Commit()
 		{
-			TCustomCommand cmd = this.FStackUndo.Peek() as TCustomCommand;
+			CustomCommand cmd = this.FStackUndo.Peek() as CustomCommand;
 			if (cmd != null)
 			{
 				this.FStackUndo.Push(null);
@@ -178,7 +179,7 @@ namespace GKCore
 		{
 			while (this.FStackUndo.Peek() != null)
 			{
-				TCustomCommand cmd = this.FStackUndo.Pop() as TCustomCommand;
+				CustomCommand cmd = this.FStackUndo.Pop() as CustomCommand;
 				cmd.Undo();
 			}
 			this.Transaction(UndoManager.TTransactionEventArg.taRollback);

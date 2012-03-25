@@ -1,8 +1,8 @@
 using System;
 
+using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKSys;
 using GKUI.Controls;
 
 /// <summary>
@@ -40,13 +40,13 @@ namespace GKUI.Lists
 				int num = masks.Length - 1;
 				for (int i = 0; i <= num; i++)
 				{
-					result = (result || SysUtils.MatchesMask(stx, masks[i]));
+					result = (result || TGenEngine.MatchesMask(stx, masks[i]));
 				}
 			}
 			return result;
 		}
 
-		public void UpdateTitles(TGKListView aList, bool isMain)
+		public void UpdateTitles(GKListView aList, bool isMain)
 		{
 			aList.BeginUpdate();
 			try
@@ -72,7 +72,7 @@ namespace GKUI.Lists
 		{
 		}
 
-		public abstract void UpdateItem(TExtListItem aItem, bool isMain);
-		public abstract void UpdateColumns(TGKListView aList, bool isMain);
+		public abstract void UpdateItem(GKListItem aItem, bool isMain);
+		public abstract void UpdateColumns(GKListView aList, bool isMain);
 	}
 }

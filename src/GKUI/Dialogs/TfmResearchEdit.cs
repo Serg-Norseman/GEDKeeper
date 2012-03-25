@@ -2,9 +2,9 @@
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKSys;
 using GKUI.Controls;
 using GKUI.Lists;
 
@@ -239,7 +239,7 @@ namespace GKUI
 		private void ListsRefresh()
 		{
 			this.Base.RecListNotesRefresh(this.FResearch, this.FNotesList.List, null);
-			TGKListView list = this.FTasksList.List;
+			GKListView list = this.FTasksList.List;
 			list.BeginUpdate();
 			list.Items.Clear();
 
@@ -247,14 +247,14 @@ namespace GKUI
 			for (int i = 0; i <= num; i++)
 			{
 				TGEDCOMTaskRecord task = this.FResearch.Tasks[i].Value as TGEDCOMTaskRecord;
-				TExtListItem item = list.AddItem(TGenEngine.GetTaskGoalStr(this.Base.Tree, task), task);
+				GKListItem item = list.AddItem(TGenEngine.GetTaskGoalStr(this.Base.Tree, task), task);
 				item.SubItems.Add(LangMan.LSList[(int)TGenEngine.PriorityNames[(int)task.Priority] - 1]);
 				item.SubItems.Add(TGenEngine.GEDCOMDateToStr(task.StartDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
 				item.SubItems.Add(TGenEngine.GEDCOMDateToStr(task.StopDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
 			}
 			list.EndUpdate();
 
-			TGKListView list2 = this.FCommunicationsList.List;
+			GKListView list2 = this.FCommunicationsList.List;
 			list2.BeginUpdate();
 			list2.Items.Clear();
 
@@ -262,14 +262,14 @@ namespace GKUI
 			for (int i = 0; i <= num2; i++)
 			{
 				TGEDCOMCommunicationRecord corr = this.FResearch.Communications[i].Value as TGEDCOMCommunicationRecord;
-				TExtListItem item = list2.AddItem(corr.CommName, corr);
+				GKListItem item = list2.AddItem(corr.CommName, corr);
 				item.SubItems.Add(TGenEngine.GetCorresponderStr(this.Base.Tree, corr, false));
 				item.SubItems.Add(LangMan.LSList[(int)TGenEngine.CommunicationNames[(int)corr.CommunicationType] - 1]);
 				item.SubItems.Add(TGenEngine.GEDCOMDateToStr(corr.Date, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
 			}
 			list2.EndUpdate();
 
-			TGKListView list3 = this.FGroupsList.List;
+			GKListView list3 = this.FGroupsList.List;
 			list3.BeginUpdate();
 			list3.Items.Clear();
 
@@ -277,7 +277,7 @@ namespace GKUI
 			for (int i = 0; i <= num3; i++)
 			{
 				TGEDCOMGroupRecord grp = this.FResearch.Groups[i].Value as TGEDCOMGroupRecord;
-				TExtListItem item = list3.AddItem(grp.GroupName, grp);
+				GKListItem item = list3.AddItem(grp.GroupName, grp);
 			}
 			list3.EndUpdate();
 		}

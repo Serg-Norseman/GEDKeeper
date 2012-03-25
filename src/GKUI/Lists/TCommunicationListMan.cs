@@ -53,7 +53,7 @@ namespace GKUI.Lists
 			return result;
 		}
 
-		public override void UpdateItem(TExtListItem aItem, bool isMain)
+		public override void UpdateItem(GKListItem aItem, bool isMain)
 		{
 			aItem.SubItems.Add(this.FRec.CommName);
 			aItem.SubItems.Add(TGenEngine.GetCorresponderStr(this.FTree, this.FRec, false));
@@ -64,7 +64,7 @@ namespace GKUI.Lists
 				aItem.SubItems.Add(this.FRec.ChangeDate.ToString());
 			}
 		}
-		public override void UpdateColumns(TGKListView aList, bool isMain)
+		public override void UpdateColumns(GKListView aList, bool isMain)
 		{
 			aList.AddListColumn("№", 50, false);
 			aList.AddListColumn(LangMan.LSList[183], 300, false);

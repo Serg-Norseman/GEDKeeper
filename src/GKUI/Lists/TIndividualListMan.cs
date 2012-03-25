@@ -2,7 +2,6 @@
 
 using GedCom551;
 using GKCore;
-using GKCore.Settings;
 using GKUI.Controls;
 
 /// <summary>
@@ -169,29 +168,29 @@ namespace GKUI.Lists
 				}
 
 				switch (aFilter.GroupMode) {
-					case TFilter.TGroupMode.gmAll:
+					case CustomFilter.TGroupMode.gmAll:
 						break;
-					case TFilter.TGroupMode.gmNone:
+					case CustomFilter.TGroupMode.gmNone:
 						if (this.FRec.Groups.Count != 0) return Result;
 						break;
-					case TFilter.TGroupMode.gmAny:
+					case CustomFilter.TGroupMode.gmAny:
 						if (this.FRec.Groups.Count == 0) return Result;
 						break;
-					case TFilter.TGroupMode.gmSelected:
+					case CustomFilter.TGroupMode.gmSelected:
 						if (this.FRec.IndexOfGroup(this.filter_grp) < 0) return Result;
 						break;
 				}
 
 				switch (aFilter.SourceMode) {
-					case TFilter.TGroupMode.gmAll:
+					case CustomFilter.TGroupMode.gmAll:
 						break;
-					case TFilter.TGroupMode.gmNone:
+					case CustomFilter.TGroupMode.gmNone:
 						if (this.FRec.SourceCitations.Count != 0) return Result;
 						break;
-					case TFilter.TGroupMode.gmAny:
+					case CustomFilter.TGroupMode.gmAny:
 						if (this.FRec.SourceCitations.Count == 0) return Result;
 						break;
-					case TFilter.TGroupMode.gmSelected:
+					case CustomFilter.TGroupMode.gmSelected:
 						if (this.FRec.IndexOfSource(this.filter_source) < 0) return Result;
 						break;
 				}
@@ -415,9 +414,9 @@ namespace GKUI.Lists
 			this.FYearMax = 0;
 		}
 
-		public override void UpdateItem(TExtListItem aItem, bool isMain)
+		public override void UpdateItem(GKListItem aItem, bool isMain)
 		{
-			TGlobalOptions gOptions = GKUI.TfmGEDKeeper.Instance.Options;
+			GlobalOptions gOptions = GKUI.TfmGEDKeeper.Instance.Options;
 			TIndividualListColumns columns = gOptions.IndividualListColumns;
 
 			TGEDCOMCustomEvent bd_ev = null;
@@ -691,7 +690,7 @@ namespace GKUI.Lists
 			}
 		}
 
-		public override void UpdateColumns(TGKListView aList, bool isMain)
+		public override void UpdateColumns(GKListView aList, bool isMain)
 		{
 			TIndividualListColumns columns = GKUI.TfmGEDKeeper.Instance.Options.IndividualListColumns;
 
@@ -752,7 +751,7 @@ namespace GKUI.Lists
 						case TPersonColumnType.pctBirthPlace:
 						case TPersonColumnType.pctDeathPlace:
 						case TPersonColumnType.pctResidence:
-							aList.AddListColumn(LangMan.LSList[(int)TGlobalOptions.PersonColumnsName[(int)col_type].Name - 1], TGlobalOptions.PersonColumnsName[(int)col_type].DefWidth, false);
+							aList.AddListColumn(LangMan.LSList[(int)GlobalOptions.PersonColumnsName[(int)col_type].Name - 1], GlobalOptions.PersonColumnsName[(int)col_type].DefWidth, false);
 							this.SetColMap((byte)col_type, 0, ref cols);
 							break;
 
@@ -774,7 +773,7 @@ namespace GKUI.Lists
 						case TPersonColumnType.pctTitle:
 							if (isMain)
 							{
-								aList.AddListColumn(LangMan.LSList[(int)TGlobalOptions.PersonColumnsName[(int)col_type].Name - 1], TGlobalOptions.PersonColumnsName[(int)col_type].DefWidth, false);
+								aList.AddListColumn(LangMan.LSList[(int)GlobalOptions.PersonColumnsName[(int)col_type].Name - 1], GlobalOptions.PersonColumnsName[(int)col_type].DefWidth, false);
 								this.SetColMap((byte)col_type, 0, ref cols);
 							}
 							break;

@@ -2,8 +2,8 @@
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GKCore;
-using GKSys;
 
 /// <summary>
 /// Localization: clean
@@ -42,7 +42,9 @@ namespace GKUI
 		public TfmTipsDialog()
 		{
 			this.InitializeComponent();
+
 			this.FTips = new StringList();
+
 			this.btnClose.Text = LangMan.LSList[99];
 			this.ShowCheck.Text = LangMan.LSList[263];
 			this.NextTipBtn.Text = LangMan.LSList[384];

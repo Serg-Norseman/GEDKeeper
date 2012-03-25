@@ -2,9 +2,9 @@
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKSys;
 using GKUI.Controls;
 
 /// <summary>
@@ -77,7 +77,7 @@ namespace GKUI
 			if (idx < 0) {
 				this.FTempSrc = null;
 			} else {
-				this.FTempSrc = ((this.cbSource.Items[idx] as TComboItem).Data as TGEDCOMSourceRecord);
+				this.FTempSrc = ((this.cbSource.Items[idx] as GKComboItem).Data as TGEDCOMSourceRecord);
 			}
 		}
 
@@ -93,9 +93,9 @@ namespace GKUI
 				int num = this.FSourcesList.Count - 1;
 				for (int i = 0; i <= num; i++) {
 					string st = this.FSourcesList[i];
-					if (aFilter == "" || SysUtils.MatchesMask(st, flt))
+					if (aFilter == "" || TGenEngine.MatchesMask(st, flt))
 					{
-						this.cbSource.Items.Add(new TComboItem(st, this.FSourcesList.GetObject(i)));
+						this.cbSource.Items.Add(new GKComboItem(st, this.FSourcesList.GetObject(i)));
 					}
 				}
 			}

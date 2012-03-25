@@ -1,26 +1,23 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKCore.Settings;
-using GKSys;
 using GKUI.Controls;
-using GKUI.Lists;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKUI
 {
 	public partial class TfmGEDKeeper : Form, ILocalization
 	{
-		private TNamesTable FNamesTable;
-		private TGlobalOptions FOptions;
+		private NamesTable FNamesTable;
+		private GlobalOptions FOptions;
 		private string[] FCommandArgs;
 		private SearchManager FSearchMan;
 
@@ -36,12 +33,12 @@ namespace GKUI
 			get { return FInstance; }
 		}
 
-		public TNamesTable NamesTable
+		public NamesTable NamesTable
 		{
 			get { return this.FNamesTable; }
 		}
 
-		public TGlobalOptions Options
+		public GlobalOptions Options
 		{
 			get { return this.FOptions; }
 		}
@@ -54,7 +51,7 @@ namespace GKUI
 		public TfmGEDKeeper(string[] args)
 		{
 			this.InitializeComponent();
-			TMapBrowser.GeoInit();
+			GKMapBrowser.GeoInit();
 			FInstance = this;
 			FSearchMan = new SearchManager();
 
@@ -63,10 +60,10 @@ namespace GKUI
 
 		private void FormCreate(object sender, EventArgs e)
 		{
-			SysUtils.LogInit(SysUtils.GetAppDataPath() + "GEDKeeper2.log");
+			SysUtils.LogInit(TGenEngine.GetAppDataPath() + "GEDKeeper2.log");
 
-			this.FOptions = new TGlobalOptions();
-			this.FOptions.LoadFromFile(SysUtils.GetAppDataPath() + "GEDKeeper2.ini");
+			this.FOptions = new GlobalOptions();
+			this.FOptions.LoadFromFile(TGenEngine.GetAppDataPath() + "GEDKeeper2.ini");
 			this.FOptions.FindLanguages();
 
 			if (this.FOptions.MWinRect.Left != -1 && this.FOptions.MWinRect.Top != -1 && this.FOptions.MWinRect.Right != -1 && this.FOptions.MWinRect.Bottom != -1)
@@ -85,8 +82,8 @@ namespace GKUI
 			}
 			base.WindowState = this.FOptions.MWinState;
 
-			this.FNamesTable = new TNamesTable();
-			this.FNamesTable.LoadFromFile(SysUtils.GetAppDataPath() + "GEDKeeper2.nms");
+			this.FNamesTable = new NamesTable();
+			this.FNamesTable.LoadFromFile(TGenEngine.GetAppDataPath() + "GEDKeeper2.nms");
 
 			this.LoadLanguage((int)this.FOptions.InterfaceLang);
 
@@ -105,16 +102,16 @@ namespace GKUI
 
 			SysUtils.HtmlHelp(IntPtr.Zero, null, 18u, 0u);
 
-			this.FNamesTable.SaveToFile(SysUtils.GetAppDataPath() + "GEDKeeper2.nms");
+			this.FNamesTable.SaveToFile(TGenEngine.GetAppDataPath() + "GEDKeeper2.nms");
 			this.FNamesTable.Dispose();
 
-			this.FOptions.SaveToFile(SysUtils.GetAppDataPath() + "GEDKeeper2.ini");
+			this.FOptions.SaveToFile(TGenEngine.GetAppDataPath() + "GEDKeeper2.ini");
 			this.FOptions.Dispose();
 		}
 
 		private void MRUFileClick(object sender, EventArgs e)
 		{
-			int idx = ((TGKMenuItem)sender).Tag;
+			int idx = ((GKMenuItem)sender).Tag;
 			this.CreateBase(this.FOptions.MRUFiles[idx].FileName);
 		}
 
@@ -129,11 +126,11 @@ namespace GKUI
 			{
 				string fn = this.FOptions.MRUFiles[i].FileName;
 
-				MenuItem mi = new TGKMenuItem(fn, i);
+				MenuItem mi = new GKMenuItem(fn, i);
 				mi.Click += new EventHandler(this.MRUFileClick);
 				this.miMRUFiles.MenuItems.Add(mi);
 
-				mi = new TGKMenuItem(fn, i);
+				mi = new GKMenuItem(fn, i);
 				mi.Click += new EventHandler(this.MRUFileClick);
 				this.MenuMRU.MenuItems.Add(mi);
 			}
@@ -190,6 +187,15 @@ namespace GKUI
 			}
 		}
 
+		private void miExportToPDFFileClick(object sender, EventArgs e)
+		{
+			TfmBase cur_base = this.GetCurrentFile();
+			if (cur_base != null)
+			{
+				cur_base.ExportToPDF();
+			}
+		}
+
 		private void miFilePropertiesClick(object sender, EventArgs e)
 		{
 			TfmBase cur_base = this.GetCurrentFile();
@@ -222,7 +228,7 @@ namespace GKUI
 			TfmBase cur_base = this.GetCurrentFile();
 			if (cur_base != null)
 			{
-				cur_base.TreeTools();
+				cur_base.ShowTreeTools();
 			}
 		}
 
@@ -232,7 +238,9 @@ namespace GKUI
 			try
 			{
 				Form active_form = this.ActiveMdiChild;
-				if (active_form is TfmChart) fmOptions.SetPage(1);
+				if (active_form is TfmBase) fmOptions.SetPage(OptionsPage.opInterface);
+				if (active_form is TfmChart) fmOptions.SetPage(OptionsPage.opTreeChart);
+				if (active_form is TfmAncestorsCircle) fmOptions.SetPage(OptionsPage.opAncestorsCircle);
 
 				if (fmOptions.ShowDialog() == DialogResult.OK)
 				{
@@ -245,41 +253,40 @@ namespace GKUI
 							(child as TfmBase).ListsRefresh(true);
 						} else if (child is TfmChart) {
 							(child as TfmChart).GenChart(false);
+						} else if (child is TfmAncestorsCircle) {
+							(child as TfmAncestorsCircle).Invalidate();
 						}
 					}
 				}
 			}
 			finally
 			{
-				SysUtils.Free(fmOptions);
+				fmOptions.Dispose();
 			}
 		}
 
 		private void miFileCloseClick(object sender, EventArgs e)
 		{
 			TfmBase cur_base = this.GetCurrentFile();
-			if (cur_base != null)
-			{
-				cur_base.Close();
-			}
+			if (cur_base != null) cur_base.Close();
 		}
 
 		private void miMapClick(object sender, EventArgs e)
 		{
 			TfmBase cur_base = this.GetCurrentFile();
-			if (cur_base != null)
-			{
-				cur_base.ShowMap();
-			}
+			if (cur_base != null) cur_base.ShowMap();
+		}
+
+		private void miAncestorsCircleClick(object sender, EventArgs e)
+		{
+			TfmBase cur_base = this.GetCurrentFile();
+			if (cur_base != null) cur_base.ShowAncestorsCircle();
 		}
 
 		private void miOrganizerClick(object sender, EventArgs e)
 		{
 			TfmBase cur_base = this.GetCurrentFile();
-			if (cur_base != null)
-			{
-				cur_base.ShowOrganizer();
-			}
+			if (cur_base != null) cur_base.ShowOrganizer();
 		}
 
 		private void miTimeLineClick(object sender, EventArgs e)
@@ -553,15 +560,6 @@ namespace GKUI
 			}
 		}
 
-		private void miExportToExcelAppClick(object sender, EventArgs e)
-		{
-			TfmBase cur_base = this.GetCurrentFile();
-			if (cur_base != null)
-			{
-				cur_base.ExportToExcel(true);
-			}
-		}
-
 		private void miTreeBothClick(object sender, EventArgs e)
 		{
 			TfmBase cur_base = this.GetCurrentFile();
@@ -586,64 +584,35 @@ namespace GKUI
 
 		private void ToolBar1_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
 		{
-			if (object.Equals(e.Button, this.tbFileNew))
-			{
+			if (e.Button == this.tbFileNew) {
 				this.miFileNewClick(null, null);
-			}
-			if (object.Equals(e.Button, this.tbFileLoad))
-			{
+			} else if (e.Button == this.tbFileLoad) {
 				this.miFileLoadClick(null, null);
-			}
-			if (object.Equals(e.Button, this.tbFileSave))
-			{
+			} else if (e.Button == this.tbFileSave) {
 				this.miFileSaveClick(null, null);
-			}
-			if (object.Equals(e.Button, this.tbRecordAdd))
-			{
+			} else if (e.Button == this.tbRecordAdd) {
 				this.miRecordAddClick(null, null);
-			}
-			if (object.Equals(e.Button, this.tbRecordEdit))
-			{
+			} else if (e.Button == this.tbRecordEdit) {
 				this.miRecordEditClick(null, null);
-			}
-			if (object.Equals(e.Button, this.tbRecordDelete))
-			{
+			} else if (e.Button == this.tbRecordDelete) {
 				this.miRecordDeleteClick(null, null);
-			}
-			if (object.Equals(e.Button, this.tbUndo))
-			{
+			} else if (e.Button == this.tbUndo) {
 				this.miUndoClick(null, null);
-			}
-			if (object.Equals(e.Button, this.tbRedo))
-			{
+			} else if (e.Button == this.tbRedo) {
 				this.miRedoClick(null, null);
-			}
-			if (object.Equals(e.Button, this.tbFilter))
-			{
+			} else if (e.Button == this.tbFilter) {
 				this.miFilterClick(null, null);
-			}
-			if (object.Equals(e.Button, this.tbTreeAncestors))
-			{
+			} else if (e.Button == this.tbTreeAncestors) {
 				this.miTreeAncestorsClick(null, null);
-			}
-			if (object.Equals(e.Button, this.tbTreeDescendants))
-			{
+			} else if (e.Button == this.tbTreeDescendants) {
 				this.miTreeDescendantsClick(null, null);
-			}
-			if (object.Equals(e.Button, this.tbTreeBoth))
-			{
+			} else if (e.Button == this.tbTreeBoth) {
 				this.miTreeBothClick(null, null);
-			}
-			if (object.Equals(e.Button, this.tbStats))
-			{
+			} else if (e.Button == this.tbStats) {
 				this.miStatsClick(null, null);
-			}
-			if (object.Equals(e.Button, this.tbPrev))
-			{
+			} else if (e.Button == this.tbPrev) {
 				this.tbPrevClick(null, null);
-			}
-			if (object.Equals(e.Button, this.tbNext))
-			{
+			} else if (e.Button == this.tbNext) {
 				this.tbNextClick(null, null);
 			}
 		}
@@ -655,13 +624,13 @@ namespace GKUI
 
 		void TfmGEDKeeperFormClosing(object sender, FormClosingEventArgs e)
 		{
-			Form[] mdiChildren = base.MdiChildren;
 			this.FOptions.ClearLastBases();
-			for (int i = mdiChildren.Length - 1; i >= 0; i--)
+			for (int i = base.MdiChildren.Length - 1; i >= 0; i--)
 			{
-				if (mdiChildren[i] is TfmBase)
+				Form mdi_child = base.MdiChildren[i];
+				if (mdi_child is TfmBase)
 				{
-					this.FOptions.AddLastBase((mdiChildren[i] as TfmBase).FileName);
+					this.FOptions.AddLastBase((mdi_child as TfmBase).FileName);
 				}
 			}
 		}
@@ -702,7 +671,7 @@ namespace GKUI
 			{
 				if (this.fmCalcWidget != null && this.fmCalcWidget.Visible)
 				{
-					SysUtils.EnableWindow((uint)this.fmCalcWidget.Handle.ToInt32(), (LongBool)(-1));
+					SysUtils.EnableWindow((uint)this.fmCalcWidget.Handle.ToInt32(), true);
 				}
 			}
 			else
@@ -724,41 +693,39 @@ namespace GKUI
 			return result;
 		}
 
-		public void AddMRU([In] string aFileName)
+		public void AddMRU(string aFileName)
 		{
 			int idx = this.FOptions.MRUFiles_IndexOf(aFileName);
 			if (idx >= 0)
 			{
-				TGlobalOptions.TMRUFile tmp_mf;
+				GlobalOptions.TMRUFile tmp_mf;
 				tmp_mf = this.FOptions.MRUFiles[0];
 				this.FOptions.MRUFiles[0] = this.FOptions.MRUFiles[idx];
 				this.FOptions.MRUFiles[idx] = tmp_mf;
 			}
 			else
 			{
-				TGlobalOptions.TMRUFile new_mf = new TGlobalOptions.TMRUFile();
+				GlobalOptions.TMRUFile new_mf = new GlobalOptions.TMRUFile();
 				new_mf.FileName = aFileName;
 				this.FOptions.MRUFiles.Insert(0, new_mf);
 			}
 
-			
-
 			this.UpdateMRU();
 		}
 
-		public void CheckMRUWin([In] string aFileName, Form frm)
+		public void CheckMRUWin(string aFileName, Form frm)
 		{
 			int idx = this.FOptions.MRUFiles_IndexOf(aFileName);
 			if (idx >= 0)
 			{
-				TGlobalOptions.TMRUFile mf = this.FOptions.MRUFiles[idx];
+				GlobalOptions.TMRUFile mf = this.FOptions.MRUFiles[idx];
 				
 				mf.WinRect = this.GetFormRect(frm);
 				mf.WinState = frm.WindowState;
 			}
 		}
 
-		public TfmBase CreateBase([In] string aFileName)
+		public TfmBase CreateBase(string aFileName)
 		{
 			TfmBase result = new TfmBase();
 			result.MdiParent = this;
@@ -773,7 +740,7 @@ namespace GKUI
 			int idx = this.FOptions.MRUFiles_IndexOf(aFileName);
 			if (idx >= 0)
 			{
-				TGlobalOptions.TMRUFile mf = this.FOptions.MRUFiles[idx];
+				GlobalOptions.TMRUFile mf = this.FOptions.MRUFiles[idx];
 				SetFormRect(result, mf.WinRect, mf.WinState);
 			}
 
@@ -797,16 +764,9 @@ namespace GKUI
 		{
 			try
 			{
-				TfmBase cur_base;
+				TfmBase cur_base = ((ForceDeactivate) ? null : this.GetCurrentFile());
+				TfmChart cur_chart = ((this.ActiveMdiChild is TfmChart) ? (this.ActiveMdiChild as TfmChart) : null);
 
-				if (ForceDeactivate)
-				{
-					cur_base = null;
-				}
-				else
-				{
-					cur_base = this.GetCurrentFile();
-				}
 
 				TGEDCOMRecordType rt;
 				bool base_en;
@@ -820,13 +780,14 @@ namespace GKUI
 					rt = (TGEDCOMRecordType)(cur_base.PageRecords.SelectedIndex + 1);
 					base_en = true;
 				}
+
 				this.miFileClose.Enabled = base_en;
 				this.miFileSave.Enabled = base_en;
 				this.tbFileSave.Enabled = this.miFileSave.Enabled;
 				this.miFileProperties.Enabled = base_en;
 				this.miExportToWeb.Enabled = base_en;
 				this.miExportToExcelFile.Enabled = base_en;
-				this.miExportToExcelApp.Enabled = base_en;
+				this.miExportToPDFFile.Enabled = base_en;
 				this.miTreeTools.Enabled = base_en;
 				this.miStreamInput.Enabled = base_en;
 				this.miRecordAdd.Enabled = base_en;
@@ -862,17 +823,12 @@ namespace GKUI
 				this.miRedo.Enabled = (test_funcs && cur_base != null && cur_base.Undoman.CanRedo());
 				this.tbRedo.Enabled = this.miRedo.Enabled;
 
-				if (cur_base != null)
-				{
-					TRecordsView rView = cur_base.GetRecordsViewByType(rt);
-
-					if (rView != null)
-					{
-						string st = LangMan.LSList[50] + ": " + rView.TotalCount.ToString();
-						st = st + ", " + LangMan.LSList[51] + ": " + rView.FilteredCount.ToString();
-						this.StatusBar.Panels[0].Text = st;
-					}
+				if (cur_base != null) {
+					this.StatusBar.Panels[0].Text = cur_base.GetStatusString();
+				} else if (cur_chart != null) {
+					this.StatusBar.Panels[0].Text = cur_chart.GetStatusString();
 				}
+
 				this.StatusBar.Invalidate();
 			}
 			catch (Exception E)
@@ -883,7 +839,7 @@ namespace GKUI
 
 		public void ShowHelpTopic(string aTopic)
 		{
-			string fns = SysUtils.GetAppPath() + "GEDKeeper2.chm" + aTopic;
+			string fns = TGenEngine.GetAppPath() + "GEDKeeper2.chm" + aTopic;
 			SysUtils.HtmlHelp(this.Handle, fns, 0u, 0u);
 		}
 
@@ -903,7 +859,6 @@ namespace GKUI
 			this.miFileProperties.Text = LangMan.LSList[11];
 			this.miExport.Text = LangMan.LSList[12];
 			this.miExportToWeb.Text = LangMan.LSList[13];
-			this.miExportToExcelApp.Text = LangMan.LSList[14];
 			this.miExportToExcelFile.Text = LangMan.LSList[15];
 			this.miExit.Text = LangMan.LSList[16];
 			this.miUndo.Text = LangMan.LSList[17];
@@ -938,54 +893,46 @@ namespace GKUI
 			this.miFAQ.Text = LangMan.LSList[47];
 			this.miContext.Text = LangMan.LSList[48];
 			this.miAbout.Text = LangMan.LSList[49] + "...";
+			this.miExportToPDFFile.Text = LangMan.LS(LSID.LSID_ExportToPDFFile);
+			this.miAncestorsCircle.Text = LangMan.LS(LSID.LSID_AncestorsCircle);
+			this.miLogSend.Text = LangMan.LS(LSID.LSID_LogSend);
+			this.miSearch.Text = LangMan.LS(LSID.LSID_FullTextSearch);
 		}
 
 		public void LoadLanguage(int LangCode)
 		{
 			Screen scr = Screen.PrimaryScreen;
-			int i;
-			if (LangCode != 1049)
+			if (LangCode != LangMan.LSDefCode)
 			{
 				bool loaded = false;
 
 				int num = this.FOptions.LangsCount - 1;
-				i = 0;
-				if (num >= i)
+				for (int i = 0; i <= num; i++)
 				{
-					num++;
-					while ((int)this.FOptions.GetLang(i).Code != LangCode)
+					if ((int)this.FOptions.GetLang(i).Code == LangCode)
 					{
-						i++;
-						if (i == num)
-						{
-							goto IL_66;
-						}
+						loaded = LangMan.LoadFromFile(this.FOptions.GetLang(i).FileName);
+						break;
 					}
-					loaded = LangMan.LoadFromFile(this.FOptions.GetLang(i).FileName);
 				}
-				IL_66:
-				if (!loaded)
-				{
-					LangCode = 1049;
-				}
+
+				if (!loaded) LangCode = LangMan.LSDefCode;
 			}
 
-			if (LangCode == 1049)
+			if (LangCode == LangMan.LSDefCode)
 			{
 				LangMan.DefInit();
 			}
 
 			int num2 = base.MdiChildren.Length - 1;
-			for (i = 0; i <= num2; i++)
+			for (int i = 0; i <= num2; i++)
 			{
-				if (base.MdiChildren[i] is ILocalization)
-				{
-					(base.MdiChildren[i] as ILocalization).SetLang();
-				}
+				Form child = base.MdiChildren[i];
+				if (child is ILocalization) (child as ILocalization).SetLang();
 			}
-			this.FOptions.InterfaceLang = (ushort)LangCode;
-
 			(this as ILocalization).SetLang();
+
+			this.FOptions.InterfaceLang = (ushort)LangCode;
 		}
 
 		public void miFileSaveClick(object sender, EventArgs e)

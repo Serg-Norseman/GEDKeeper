@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKSys;
 using GKUI.Charts;
 
-using GKSandbox;
-
 /// <summary>
-/// Localization: unknown
+/// Localization: dirty
 /// </summary>
 
 namespace GKUI
@@ -28,19 +25,19 @@ namespace GKUI
 	{
 		private NavManager FNavman;
 		private TfmBase FBase;
-		private TAncestryChartBox.TChartKind FChartKind;
+		private TTreeChartBox.TChartKind FChartKind;
 		private string FFileName;
 		private int FGensLimit;
 		private TGEDCOMIndividualRecord FPerson;
 		private int FScale;
 		private TGEDCOMTree FTree;
-		private TAncestryChartBox FTreeBox;
+		private TTreeChartBox FTreeBox;
 		private int FX;
 		private int FY;
 		private ChartControlMode FMode = ChartControlMode.ccmDefault;
 
 
-		public TAncestryChartBox.TChartKind ChartKind
+		public TTreeChartBox.TChartKind ChartKind
 		{
 			get { return this.FChartKind; }
 			set { this.SetChartKind(value); }
@@ -52,7 +49,7 @@ namespace GKUI
 
 			base.MdiParent = GKUI.TfmGEDKeeper.Instance;
 			this.ToolBar1.ImageList = GKUI.TfmGEDKeeper.Instance.ImageList_Buttons;
-			this.FTreeBox = new TAncestryChartBox();
+			this.FTreeBox = new TTreeChartBox();
 			this.FTreeBox.Dock = DockStyle.Fill;
 			this.FTreeBox.MouseDown += new MouseEventHandler(this.ImageTree_MouseDown);
 			this.FTreeBox.MouseUp += new MouseEventHandler(this.ImageTree_MouseUp);
@@ -78,7 +75,7 @@ namespace GKUI
 		{
 			if (Disposing)
 			{
-				this.FNavman.Free();
+				this.FNavman.Dispose();
 			}
 			base.Dispose(Disposing);
 		}
@@ -96,7 +93,7 @@ namespace GKUI
 			}
 			finally
 			{
-				SysUtils.Free(fmTreeFilter);
+				fmTreeFilter.Dispose();
 			}
 		}
 
@@ -140,7 +137,7 @@ namespace GKUI
 
 		private void InternalChildAdd(TGEDCOMSex aNeedSex)
 		{
-			TPerson p = this.FTreeBox.Selected;
+			TreeChartPerson p = this.FTreeBox.Selected;
 			if (p != null && p.Rec != null)
 			{
 				TGEDCOMIndividualRecord i_rec = p.Rec;
@@ -312,7 +309,7 @@ namespace GKUI
 
 		private void ImageTree_DblClick(object sender, EventArgs e)
 		{
-			TPerson p = this.FTreeBox.Selected;
+			TreeChartPerson p = this.FTreeBox.Selected;
 			if (p != null && p.Rec != null)
 			{
 				TGEDCOMIndividualRecord i_rec = p.Rec;
@@ -371,7 +368,7 @@ namespace GKUI
 
 		private void miEditClick(object sender, EventArgs e)
 		{
-			TPerson p = this.FTreeBox.Selected;
+			TreeChartPerson p = this.FTreeBox.Selected;
 			if (p != null && p.Rec != null)
 			{
 				TGEDCOMIndividualRecord i_rec = p.Rec;
@@ -384,7 +381,7 @@ namespace GKUI
 
 		private void miSpouseAddClick(object sender, EventArgs e)
 		{
-			TPerson p = this.FTreeBox.Selected;
+			TreeChartPerson p = this.FTreeBox.Selected;
 			if (p != null && p.Rec != null)
 			{
 				TGEDCOMIndividualRecord i_rec = p.Rec;
@@ -424,7 +421,7 @@ namespace GKUI
 
 		private void miFamilyAddClick(object sender, EventArgs e)
 		{
-			TPerson p = this.FTreeBox.Selected;
+			TreeChartPerson p = this.FTreeBox.Selected;
 			if (p != null && p.Rec != null)
 			{
 				TGEDCOMSex sex = p.Rec.Sex;
@@ -443,7 +440,7 @@ namespace GKUI
 
 		private void miDeleteClick(object sender, EventArgs e)
 		{
-			TPerson p = this.FTreeBox.Selected;
+			TreeChartPerson p = this.FTreeBox.Selected;
 			if (p != null && p.Rec != null && !object.Equals(p, this.FTreeBox.Root))
 			{
 				this.FBase.DeleteIndividualRecord(p.Rec, true);
@@ -474,7 +471,7 @@ namespace GKUI
 
 		void miFillImageClick(object sender, EventArgs e)
 		{
-			OpenDialog1.InitialDirectory = SysUtils.GetAppPath() + "\\backgrounds";
+			OpenDialog1.InitialDirectory = TGenEngine.GetAppPath() + "\\backgrounds";
 			if (OpenDialog1.ShowDialog() == DialogResult.OK)
 			{
 				Image img = new Bitmap(OpenDialog1.FileName);
@@ -484,7 +481,7 @@ namespace GKUI
 			}
 		}
 
-		private void UpdateModesMenu([In] TAncestryChartBox.TChartKind aChartKind)
+		private void UpdateModesMenu(TTreeChartBox.TChartKind aChartKind)
 		{
 			this.miModeBoth.Checked = false;
 			this.miModeAncestors.Checked = false;
@@ -492,19 +489,19 @@ namespace GKUI
 
 			switch (aChartKind)
 			{
-				case TAncestryChartBox.TChartKind.ckAncestors:
+				case TTreeChartBox.TChartKind.ckAncestors:
 					this.miModeAncestors.Checked = true;
 					break;
-				case TAncestryChartBox.TChartKind.ckDescendants:
+				case TTreeChartBox.TChartKind.ckDescendants:
 					this.miModeDescendants.Checked = true;
 					break;
-				case TAncestryChartBox.TChartKind.ckBoth:
+				case TTreeChartBox.TChartKind.ckBoth:
 					this.miModeBoth.Checked = true;
 					break;
 			}
 		}
 
-		private void SetChartKind([In] TAncestryChartBox.TChartKind Value)
+		private void SetChartKind(TTreeChartBox.TChartKind Value)
 		{
 			this.FChartKind = Value;
 			UpdateModesMenu(Value);
@@ -512,14 +509,14 @@ namespace GKUI
 
 		private void miModeDescendantsClick(object sender, EventArgs e)
 		{
-			TAncestryChartBox.TChartKind newMode = TAncestryChartBox.TChartKind.ckBoth;
+			TTreeChartBox.TChartKind newMode = TTreeChartBox.TChartKind.ckBoth;
 
 			if (sender == this.miModeBoth) {
-				newMode = TAncestryChartBox.TChartKind.ckBoth;
+				newMode = TTreeChartBox.TChartKind.ckBoth;
 			} else if (sender == this.miModeAncestors) {
-				newMode = TAncestryChartBox.TChartKind.ckAncestors;
+				newMode = TTreeChartBox.TChartKind.ckAncestors;
 			} else if (sender == this.miModeDescendants) {
-				newMode = TAncestryChartBox.TChartKind.ckDescendants;
+				newMode = TTreeChartBox.TChartKind.ckDescendants;
 			}
 
 			if (this.FChartKind != newMode)
@@ -533,7 +530,7 @@ namespace GKUI
 		{
 			try
 			{
-				TPerson p = this.FTreeBox.Selected;
+				TreeChartPerson p = this.FTreeBox.Selected;
 				if (p != null && p.Rec != null)
 				{
 					this.FPerson = p.Rec;
@@ -547,27 +544,27 @@ namespace GKUI
 			}
 		}
 
-		public static bool CheckData(TGEDCOMTree aTree, TGEDCOMIndividualRecord iRec, TAncestryChartBox.TChartKind aKind)
+		public static bool CheckData(TGEDCOMTree aTree, TGEDCOMIndividualRecord iRec, TTreeChartBox.TChartKind aKind)
 		{
 			bool Result = true;
-			if (aKind == TAncestryChartBox.TChartKind.ckAncestors || aKind == TAncestryChartBox.TChartKind.ckBoth)
+			if (aKind == TTreeChartBox.TChartKind.ckAncestors || aKind == TTreeChartBox.TChartKind.ckBoth)
 			{
 				TGenEngine.InitExtCounts(aTree, -1);
 				int anc_count = TGenEngine.GetAncestorsCount(iRec);
 				if (anc_count > 2048)
 				{
-					TGenEngine.ShowMessage(string.Format(LangMan.LSList[212], new object[] { anc_count.ToString() }));
+					TGenEngine.ShowMessage(string.Format(LangMan.LSList[212], anc_count.ToString()));
 					Result = false;
 					return Result;
 				}
 			}
-			if (aKind >= TAncestryChartBox.TChartKind.ckDescendants && aKind < (TAncestryChartBox.TChartKind)3)
+			if (aKind >= TTreeChartBox.TChartKind.ckDescendants && aKind < (TTreeChartBox.TChartKind)3)
 			{
 				TGenEngine.InitExtCounts(aTree, -1);
 				int desc_count = TGenEngine.GetDescendantsCount(iRec);
 				if (desc_count > 2048)
 				{
-					TGenEngine.ShowMessage(string.Format(LangMan.LSList[213], new object[] { desc_count.ToString() }));
+					TGenEngine.ShowMessage(string.Format(LangMan.LSList[213], desc_count.ToString()));
 					Result = false;
 				}
 			}
@@ -596,25 +593,33 @@ namespace GKUI
 
 					switch (this.FChartKind)
 					{
-						case TAncestryChartBox.TChartKind.ckAncestors:
+						case TTreeChartBox.TChartKind.ckAncestors:
 							this.Text = LangMan.LSList[23];
 							break;
-						case TAncestryChartBox.TChartKind.ckDescendants:
+						case TTreeChartBox.TChartKind.ckDescendants:
 							this.Text = LangMan.LSList[24];
 							break;
-						case TAncestryChartBox.TChartKind.ckBoth:
+						case TTreeChartBox.TChartKind.ckBoth:
 							this.Text = LangMan.LSList[25];
 							break;
 					}
 
 					this.Text = this.Text + " \"" + this.FFileName + "\"";
+
 					if (aShow) base.Show();
+
+					TfmGEDKeeper.Instance.UpdateControls(false);
 				}
 			}
 			catch (Exception E)
 			{
 				SysUtils.LogWrite("GKChart.GenChart(): " + E.Message);
 			}
+		}
+
+		public string GetStatusString()
+		{
+			return string.Format(LangMan.LS(LSID.LSID_TreeIndividualsCount), FTreeBox.IndividualsCount.ToString());
 		}
 
 		public void SetLang()

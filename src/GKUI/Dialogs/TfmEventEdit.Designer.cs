@@ -397,7 +397,7 @@ namespace GKUI
 			this.MinimizeBox = false;
 			this.Name = "TfmEventEdit";
 			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Событие";
 			this.PageEventData.ResumeLayout(false);
 			this.SheetCommon.ResumeLayout(false);

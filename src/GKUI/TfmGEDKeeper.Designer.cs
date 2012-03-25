@@ -39,6 +39,7 @@ namespace GKUI
 		private System.Windows.Forms.MenuItem N2;
 		private System.Windows.Forms.MenuItem miExportToWeb;
 		private System.Windows.Forms.MenuItem miExportToExcelFile;
+		private System.Windows.Forms.MenuItem miExportToPDFFile;
 		private System.Windows.Forms.MenuItem N3;
 		private System.Windows.Forms.MenuItem miTreeTools;
 		private System.Windows.Forms.MenuItem N4;
@@ -57,6 +58,7 @@ namespace GKUI
 		private System.Windows.Forms.MenuItem miPedigree;
 		private System.Windows.Forms.MenuItem miTreeAncestors;
 		private System.Windows.Forms.MenuItem miTreeDescendants;
+		private System.Windows.Forms.MenuItem miAncestorsCircle;
 		private System.Windows.Forms.MenuItem N8;
 		private System.Windows.Forms.MenuItem miPedigree_dAboville;
 		private System.Windows.Forms.MenuItem miPedigree_Konovalov;
@@ -96,7 +98,6 @@ namespace GKUI
 		private System.Windows.Forms.MenuItem miRedo;
 		private System.Windows.Forms.MenuItem miScripts;
 		private System.Windows.Forms.MenuItem miExport;
-		private System.Windows.Forms.MenuItem miExportToExcelApp;
 		private System.Windows.Forms.MenuItem miTreeBoth;
 		private System.Windows.Forms.ToolBarButton tbTreeBoth;
 		private System.Windows.Forms.StatusBarPanel StatusBarPanel1;
@@ -156,8 +157,8 @@ namespace GKUI
 			this.N2 = new System.Windows.Forms.MenuItem();
 			this.miExport = new System.Windows.Forms.MenuItem();
 			this.miExportToWeb = new System.Windows.Forms.MenuItem();
-			this.miExportToExcelApp = new System.Windows.Forms.MenuItem();
 			this.miExportToExcelFile = new System.Windows.Forms.MenuItem();
+			this.miExportToPDFFile = new System.Windows.Forms.MenuItem();
 			this.N3 = new System.Windows.Forms.MenuItem();
 			this.miExit = new System.Windows.Forms.MenuItem();
 			this.miEdit = new System.Windows.Forms.MenuItem();
@@ -173,6 +174,7 @@ namespace GKUI
 			this.miTreeAncestors = new System.Windows.Forms.MenuItem();
 			this.miTreeDescendants = new System.Windows.Forms.MenuItem();
 			this.miTreeBoth = new System.Windows.Forms.MenuItem();
+			this.miAncestorsCircle = new System.Windows.Forms.MenuItem();
 			this.N6 = new System.Windows.Forms.MenuItem();
 			this.miPedigree_dAboville = new System.Windows.Forms.MenuItem();
 			this.miPedigree_Konovalov = new System.Windows.Forms.MenuItem();
@@ -220,7 +222,7 @@ namespace GKUI
 			// StatusBar
 			// 
 			this.StatusBar.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.StatusBar.Location = new System.Drawing.Point(0, 960);
+			this.StatusBar.Location = new System.Drawing.Point(0, 979);
 			this.StatusBar.Name = "StatusBar";
 			this.StatusBar.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
 									this.StatusBarPanel1,
@@ -556,8 +558,8 @@ namespace GKUI
 			this.miExport.Index = 8;
 			this.miExport.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
 									this.miExportToWeb,
-									this.miExportToExcelApp,
-									this.miExportToExcelFile});
+									this.miExportToExcelFile,
+									this.miExportToPDFFile});
 			this.miExport.Text = "Экспорт";
 			// 
 			// miExportToWeb
@@ -566,17 +568,17 @@ namespace GKUI
 			this.miExportToWeb.Text = "Экспорт в Web...";
 			this.miExportToWeb.Click += new System.EventHandler(this.miExportToWebClick);
 			// 
-			// miExportToExcelApp
-			// 
-			this.miExportToExcelApp.Index = 1;
-			this.miExportToExcelApp.Text = "Экспорт в Excel...";
-			this.miExportToExcelApp.Click += new System.EventHandler(this.miExportToExcelAppClick);
-			// 
 			// miExportToExcelFile
 			// 
-			this.miExportToExcelFile.Index = 2;
+			this.miExportToExcelFile.Index = 1;
 			this.miExportToExcelFile.Text = "Экспорт в Excel-файл...";
 			this.miExportToExcelFile.Click += new System.EventHandler(this.miExportToExcelFileClick);
+			// 
+			// miExportToPDFFile
+			// 
+			this.miExportToPDFFile.Index = 2;
+			this.miExportToPDFFile.Text = "miExportToPDFFile";
+			this.miExportToPDFFile.Click += new System.EventHandler(this.miExportToPDFFileClick);
 			// 
 			// N3
 			// 
@@ -661,6 +663,7 @@ namespace GKUI
 									this.miTreeAncestors,
 									this.miTreeDescendants,
 									this.miTreeBoth,
+									this.miAncestorsCircle,
 									this.N6,
 									this.miPedigree_dAboville,
 									this.miPedigree_Konovalov,
@@ -689,46 +692,54 @@ namespace GKUI
 			this.miTreeBoth.Index = 2;
 			this.miTreeBoth.Text = "Древо полное";
 			this.miTreeBoth.Click += new System.EventHandler(this.miTreeBothClick);
+			
+			// 
+			// miAncestorsCircle
+			// 
+			this.miAncestorsCircle.Index = 3;
+			this.miAncestorsCircle.Text = "AncestorsCircle";
+			this.miAncestorsCircle.Click += new System.EventHandler(this.miAncestorsCircleClick);
+
 			// 
 			// N6
 			// 
-			this.N6.Index = 3;
+			this.N6.Index = 4;
 			this.N6.Text = "-";
 			// 
 			// miPedigree_dAboville
 			// 
-			this.miPedigree_dAboville.Index = 4;
+			this.miPedigree_dAboville.Index = 5;
 			this.miPedigree_dAboville.Shortcut = System.Windows.Forms.Shortcut.CtrlP;
 			this.miPedigree_dAboville.Text = "Роспись по д\'Абовиллю";
 			this.miPedigree_dAboville.Click += new System.EventHandler(this.miPedigree_dAbovilleClick);
 			// 
 			// miPedigree_Konovalov
 			// 
-			this.miPedigree_Konovalov.Index = 5;
+			this.miPedigree_Konovalov.Index = 6;
 			this.miPedigree_Konovalov.Shortcut = System.Windows.Forms.Shortcut.CtrlK;
 			this.miPedigree_Konovalov.Text = "Роспись по Коновалову";
 			this.miPedigree_Konovalov.Click += new System.EventHandler(this.miPedigree_KonovalovClick);
 			// 
 			// N7
 			// 
-			this.N7.Index = 6;
+			this.N7.Index = 7;
 			this.N7.Text = "-";
 			// 
 			// miMap
 			// 
-			this.miMap.Index = 7;
+			this.miMap.Index = 8;
 			this.miMap.Shortcut = System.Windows.Forms.Shortcut.CtrlM;
 			this.miMap.Text = "Карты...";
 			this.miMap.Click += new System.EventHandler(this.miMapClick);
 			// 
 			// N8
 			// 
-			this.N8.Index = 8;
+			this.N8.Index = 9;
 			this.N8.Text = "-";
 			// 
 			// miStats
 			// 
-			this.miStats.Index = 9;
+			this.miStats.Index = 10;
 			this.miStats.Shortcut = System.Windows.Forms.Shortcut.CtrlT;
 			this.miStats.Text = "Статистика...";
 			this.miStats.Click += new System.EventHandler(this.miStatsClick);
@@ -953,7 +964,7 @@ namespace GKUI
 			// 
 			this.AllowDrop = true;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-			this.ClientSize = new System.Drawing.Size(896, 980);
+			this.ClientSize = new System.Drawing.Size(896, 999);
 			this.Controls.Add(this.StatusBar);
 			this.Controls.Add(this.ToolBar1);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F);
@@ -986,7 +997,7 @@ namespace GKUI
 					components.Dispose();
 				}
 				//FSearchMan.Dispose();
-				TMapBrowser.GeoDone();
+				GKMapBrowser.GeoDone();
 			}
 			base.Dispose(Disposing);
 		}

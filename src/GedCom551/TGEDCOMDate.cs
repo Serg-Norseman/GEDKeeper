@@ -3,8 +3,6 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-using GKSys;
-
 namespace GedCom551
 {
 	public class TGEDCOMDate : TGEDCOMCustomDate
@@ -190,24 +188,22 @@ namespace GedCom551
 		private string ExtractEscape([In] string S)
 		{
 			string Result = S;
-			if (SysUtils.WStrCopy(Result, 1, 2) == "@#")
+			if (Result.StartsWith("@#"))
 			{
-				int P = SysUtils.Pos("@", SysUtils.WStrCopy(Result, 3, 2147483647));
-				if (P > 0)
+				int P = Result.IndexOf("@", 2);
+				if (P >= 0)
 				{
-					string SU = SysUtils.WStrCopy(Result, 1, P + 2);
-					TGEDCOMCalendar I = TGEDCOMCalendar.dcGregorian;
-					while (TGEDCOMDate.GEDCOMDateEscapeArray[(int)I] != SU)
+					string SU = Result.Substring(0, P + 1);
+
+					for (TGEDCOMCalendar I = TGEDCOMCalendar.dcGregorian; I <= TGEDCOMCalendar.dcLast; I++)
 					{
-						I++;
-						if (I == (TGEDCOMCalendar)6)
+						if (TGEDCOMDate.GEDCOMDateEscapeArray[(int)I] == SU)
 						{
-							return Result;
+							this.FDateCalendar = I;
+							Result = Result.Remove(0, SU.Length);
+							break;
 						}
 					}
-					this.FDateCalendar = I;
-					int num = (SU != null) ? SU.Length : 0;
-					Result = Result.Remove(0, num);
 				}
 			}
 			return Result;
@@ -216,16 +212,17 @@ namespace GedCom551
 		private string ExtractDay([In] string S)
 		{
 			string Result = S;
-			int I = 0;
 
-			while (I < ((Result != null) ? Result.Length : 0) && SysUtils.IsDigit(Result[I]))
+			int I = 0;
+			int num = ((Result != null) ? Result.Length : 0);
+			while (I < num && IsDigit(Result[I]))
 			{
 				I++;
 			}
 
 			if (I >= 1 && I <= 2)
 			{
-				this.FDay = (ushort)int.Parse(SysUtils.WStrCopy(Result, 1, I));
+				this.FDay = (ushort)int.Parse(Result.Substring(0, I));
 				Result = Result.Remove(0, I);
 			}
 
@@ -285,7 +282,7 @@ namespace GedCom551
 
 					default:
 						{
-							if (!SysUtils.IsDigit(result[0]))
+							if (!IsDigit(result[0]))
 							{
 								DateTimeFormatInfo DateTimeInfo = Thread.CurrentThread.CurrentCulture.DateTimeFormat;
 								string SU = result.Substring(0, 3).ToUpper();
@@ -324,19 +321,20 @@ namespace GedCom551
 			string Result = S;
 
 			int I = 0;
-			while (I < ((Result != null) ? Result.Length : 0) && SysUtils.IsDigit(Result[I]))
+			int num = ((Result != null) ? Result.Length : 0);
+			while (I < num && IsDigit(Result[I]))
 			{
 				I++;
 			}
 
 			if (I > 0)
 			{
-				this.FYear = int.Parse(SysUtils.WStrCopy(Result, 1, I));
+				this.FYear = int.Parse(Result.Substring(0, I));
 				Result = Result.Remove(0, I);
 
-				if (Result != "" && Result[0] == '/' && SysUtils.IsDigits(SysUtils.WStrCopy(Result, 2, 2)))
+				if (Result != "" && Result[0] == '/' && IsDigits(Result.Substring(1, 2)))
 				{
-					this.FYearModifier = SysUtils.WStrCopy(Result, 2, 2);
+					this.FYearModifier = Result.Substring(1, 2);
 					Result = Result.Remove(0, 3);
 				}
 
@@ -390,7 +388,7 @@ namespace GedCom551
 		{
 			if (((S != null) ? S.Length : 0) != 3)
 			{
-				throw new EGEDCOMException(string.Format("The string {0} is not a valid month identifier", new object[] { S }));
+				throw new EGEDCOMException(string.Format("The string {0} is not a valid month identifier", S));
 			}
 			string SU = S.ToUpper();
 			int Month = 1;
@@ -399,7 +397,7 @@ namespace GedCom551
 				Month++;
 				if (Month == 13)
 				{
-					throw new EGEDCOMException(string.Format("The string {0} is not a valid month identifier", new object[] { S }));
+					throw new EGEDCOMException(string.Format("The string {0} is not a valid month identifier", S));
 				}
 			}
 			return TGEDCOMDate.GEDCOMMonthArray[Month - 1];
@@ -409,7 +407,7 @@ namespace GedCom551
 		{
 			if (((S != null) ? S.Length : 0) != 4)
 			{
-				throw new EGEDCOMException(string.Format("The string {0} is not a valid French month identifier", new object[] { S }));
+				throw new EGEDCOMException(string.Format("The string {0} is not a valid French month identifier", S));
 			}
 			string SU = S.ToUpper();
 			int Month = 1;
@@ -418,7 +416,7 @@ namespace GedCom551
 				Month++;
 				if (Month == 14)
 				{
-					throw new EGEDCOMException(string.Format("The string {0} is not a valid French month identifier", new object[] { S }));
+					throw new EGEDCOMException(string.Format("The string {0} is not a valid French month identifier", S));
 				}
 			}
 			return TGEDCOMDate.GEDCOMMonthFrenchArray[Month - 1];
@@ -428,7 +426,7 @@ namespace GedCom551
 		{
 			if (((S != null) ? S.Length : 0) != 3)
 			{
-				throw new EGEDCOMException(string.Format("The string {0} is not a valid Hebrew month identifier", new object[] { S }));
+				throw new EGEDCOMException(string.Format("The string {0} is not a valid Hebrew month identifier", S));
 			}
 			string SU = S.ToUpper();
 			int Month = 1;
@@ -437,7 +435,7 @@ namespace GedCom551
 				Month++;
 				if (Month == 14)
 				{
-					throw new EGEDCOMException(string.Format("The string {0} is not a valid Hebrew month identifier", new object[] { S }));
+					throw new EGEDCOMException(string.Format("The string {0} is not a valid Hebrew month identifier", S));
 				}
 			}
 			return TGEDCOMDate.GEDCOMMonthHebrewArray[Month - 1];

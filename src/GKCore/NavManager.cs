@@ -1,7 +1,8 @@
 using System;
+using System.Collections;
 using System.Runtime.InteropServices;
 
-using GKSys;
+using Ext.Utils;
 
 /// <summary>
 /// Localization: clean
@@ -12,8 +13,8 @@ namespace GKCore
 	public class NavManager : IDisposable
 	{
 		private bool FNavBusy;
-		private TStack FStackBackward;
-		private TStack FStackForward;
+		private Stack FStackBackward;
+		private Stack FStackForward;
 		private object FCurrent;
 		protected bool Disposed_;
 
@@ -42,8 +43,8 @@ namespace GKCore
 
 		public NavManager()
 		{
-			this.FStackBackward = new TStack();
-			this.FStackForward = new TStack();
+			this.FStackBackward = new Stack();
+			this.FStackForward = new Stack();
 			this.FCurrent = null;
 		}
 
@@ -51,8 +52,8 @@ namespace GKCore
 		{
 			if (!this.Disposed_)
 			{
-				this.FStackBackward.Free();
-				this.FStackForward.Free();
+				//this.FStackBackward.Dispose();
+				//this.FStackForward.Dispose();
 				this.Disposed_ = true;
 			}
 		}
@@ -96,12 +97,12 @@ namespace GKCore
 
 		public bool CanBackward()
 		{
-			return this.FStackBackward.Count() > 0;
+			return this.FStackBackward.Count > 0;
 		}
 
 		public bool CanForward()
 		{
-			return this.FStackForward.Count() > 0;
+			return this.FStackForward.Count > 0;
 		}
 
 		public void Free()

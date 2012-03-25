@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKSys;
 using GKUI.Controls;
 using ZedGraph;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: dirty
 /// </summary>
 
 namespace GKUI
@@ -31,7 +31,7 @@ namespace GKUI
 		private enum TChartStyle : byte { csBar, csPoint }
 
 		private static TTitleRec[] StTitles;
-		private TGKListView ListStats;
+		private GKListView ListStats;
 		private ZedGraphControl zgc;
 		private TfmBase FBase;
 		private string ChartTitle;
@@ -43,7 +43,12 @@ namespace GKUI
 			get { return this.FBase; }
 		}
 
-		private void PrepareArray(GraphPane gPane, TChartStyle aStyle, bool aExcludeUnknowns)
+		private static double SafeDiv(double aDividend, double aDivisor)
+		{
+			return ((aDivisor == (double)0f) ? 0.0 : (aDividend / aDivisor));
+		}
+
+		private void PrepareArray(GraphPane gPane, TChartStyle style, bool excludeUnknowns)
 		{
 			gPane.Title.Text = ChartTitle;
 			gPane.XAxis.Title.Text = ChartXTitle;
@@ -63,15 +68,15 @@ namespace GKUI
 				{
 					lab = int.Parse(s);
 				}
-				if (lab != 0 || !aExcludeUnknowns)
+				if (lab != 0 || !excludeUnknowns)
 				{
 					int val = int.Parse(this.ListStats.Items[i].SubItems[1].Text);
 					ppList.Add((double)lab, (double)val);
 				}
 			}
 			ppList.Sort();
-			
-			switch (aStyle) {
+
+			switch (style) {
 				case TChartStyle.csBar:
 					gPane.AddBar("-", ppList, Color.Green);
 					break;
@@ -110,14 +115,6 @@ namespace GKUI
 				}
 
 				this.ListStats.Items.AddRange(items);
-
-				/*IEnumerator Enumerator = vals.GetEnumerator();
-				while (Enumerator.MoveNext())
-				{
-					TGenEngine.TListVal lv = (TGenEngine.TListVal)Enumerator.Current;
-					ListViewItem item = this.ListStats.Items.Add(lv.Item);
-					item.SubItems.Add(lv.Count.ToString());
-				}*/
 			}
 			finally
 			{
@@ -154,22 +151,22 @@ namespace GKUI
 						switch (aMode) {
 							case TGenEngine.TStatMode.smBirthYears:
 							case TGenEngine.TStatMode.smDeathYears: 
-								this.ChartXTitle = LangMan.LSList[(int)LSID.LSID_Years];
+								this.ChartXTitle = LangMan.LS(LSID.LSID_Years);
 								break;
 							case TGenEngine.TStatMode.smBirthTenYears:
 							case TGenEngine.TStatMode.smDeathTenYears: 
-								this.ChartXTitle = LangMan.LSList[(int)LSID.LSID_Decennial];
+								this.ChartXTitle = LangMan.LS(LSID.LSID_Decennial);
 								break;
 						}
 
 						switch (aMode) {
 							case TGenEngine.TStatMode.smBirthYears:
           					case TGenEngine.TStatMode.smBirthTenYears:
-          						this.ChartYTitle = LangMan.LSList[(int)LSID.LSID_HowBirthes];
+								this.ChartYTitle = LangMan.LS(LSID.LSID_HowBirthes);
           						break;
           					case TGenEngine.TStatMode.smDeathYears:
           					case TGenEngine.TStatMode.smDeathTenYears:
-          						this.ChartYTitle = LangMan.LSList[(int)LSID.LSID_HowDeads];
+          						this.ChartYTitle = LangMan.LS(LSID.LSID_HowDeads);
           						break;
 						}
 
@@ -199,8 +196,8 @@ namespace GKUI
 			this.ListCommon.Items.Clear();
 			ListViewItem item = this.ListCommon.Items.Add(LangMan.LSList[533]);
 			item.SubItems.Add(stats.persons.ToString());
-			item.SubItems.Add(stats.persons_m.ToString() + TfmStats._TfmStats_Load_GetPercent(stats.persons_m, stats.persons));
-			item.SubItems.Add(stats.persons_f.ToString() + TfmStats._TfmStats_Load_GetPercent(stats.persons_f, stats.persons));
+			item.SubItems.Add(stats.persons_m.ToString() + this.GetPercent(stats.persons_m, stats.persons));
+			item.SubItems.Add(stats.persons_f.ToString() + this.GetPercent(stats.persons_f, stats.persons));
 			item = this.ListCommon.Items.Add(LangMan.LSList[538]);
 			item.SubItems.Add(stats.lives.ToString());
 			item.SubItems.Add(stats.lives_m.ToString());
@@ -212,34 +209,34 @@ namespace GKUI
 			checked
 			{
 				item = this.ListCommon.Items.Add(LangMan.LSList[540]);
-				item.SubItems.Add((Math.Round(SysUtils.SafeDiv(stats.age, stats.age_cnt))).ToString());
-				item.SubItems.Add((Math.Round(SysUtils.SafeDiv(stats.age_m, stats.age_m_cnt))).ToString());
-				item.SubItems.Add((Math.Round(SysUtils.SafeDiv(stats.age_f, stats.age_f_cnt))).ToString());
+				item.SubItems.Add((Math.Round(SafeDiv(stats.age, stats.age_cnt))).ToString());
+				item.SubItems.Add((Math.Round(SafeDiv(stats.age_m, stats.age_m_cnt))).ToString());
+				item.SubItems.Add((Math.Round(SafeDiv(stats.age_f, stats.age_f_cnt))).ToString());
 
 				item = this.ListCommon.Items.Add(LangMan.LSList[541]);
-				item.SubItems.Add((Math.Round(SysUtils.SafeDiv(stats.life, stats.life_cnt))).ToString());
-				item.SubItems.Add((Math.Round(SysUtils.SafeDiv(stats.life_m, stats.life_m_cnt))).ToString());
-				item.SubItems.Add((Math.Round(SysUtils.SafeDiv(stats.life_f, stats.life_f_cnt))).ToString());
+				item.SubItems.Add((Math.Round(SafeDiv(stats.life, stats.life_cnt))).ToString());
+				item.SubItems.Add((Math.Round(SafeDiv(stats.life_m, stats.life_m_cnt))).ToString());
+				item.SubItems.Add((Math.Round(SafeDiv(stats.life_f, stats.life_f_cnt))).ToString());
 
 				item = this.ListCommon.Items.Add(LangMan.LSList[542]);
-				item.SubItems.Add(string.Format("{0:0.00}", SysUtils.SafeDiv(stats.childs, stats.childs_cnt)));
-				item.SubItems.Add(string.Format("{0:0.00}", SysUtils.SafeDiv(stats.childs_m, stats.childs_m_cnt)));
-				item.SubItems.Add(string.Format("{0:0.00}", SysUtils.SafeDiv(stats.childs_f, stats.childs_f_cnt)));
+				item.SubItems.Add(string.Format("{0:0.00}", SafeDiv(stats.childs, stats.childs_cnt)));
+				item.SubItems.Add(string.Format("{0:0.00}", SafeDiv(stats.childs_m, stats.childs_m_cnt)));
+				item.SubItems.Add(string.Format("{0:0.00}", SafeDiv(stats.childs_f, stats.childs_f_cnt)));
 
 				item = this.ListCommon.Items.Add(LangMan.LSList[543]);
-				item.SubItems.Add(string.Format("{0:0.00}", SysUtils.SafeDiv(stats.fba, stats.fba_cnt)));
-				item.SubItems.Add(string.Format("{0:0.00}", SysUtils.SafeDiv(stats.fba_m, stats.fba_m_cnt)));
-				item.SubItems.Add(string.Format("{0:0.00}", SysUtils.SafeDiv(stats.fba_f, stats.fba_f_cnt)));
+				item.SubItems.Add(string.Format("{0:0.00}", SafeDiv(stats.fba, stats.fba_cnt)));
+				item.SubItems.Add(string.Format("{0:0.00}", SafeDiv(stats.fba_m, stats.fba_m_cnt)));
+				item.SubItems.Add(string.Format("{0:0.00}", SafeDiv(stats.fba_f, stats.fba_f_cnt)));
 
 				item = this.ListCommon.Items.Add(LangMan.LSList[544]);
-				item.SubItems.Add(string.Format("{0:0.00}", SysUtils.SafeDiv(stats.marr, stats.marr_cnt)));
-				item.SubItems.Add(string.Format("{0:0.00}", SysUtils.SafeDiv(stats.marr_m, stats.marr_m_cnt)));
-				item.SubItems.Add(string.Format("{0:0.00}", SysUtils.SafeDiv(stats.marr_f, stats.marr_f_cnt)));
+				item.SubItems.Add(string.Format("{0:0.00}", SafeDiv(stats.marr, stats.marr_cnt)));
+				item.SubItems.Add(string.Format("{0:0.00}", SafeDiv(stats.marr_m, stats.marr_m_cnt)));
+				item.SubItems.Add(string.Format("{0:0.00}", SafeDiv(stats.marr_f, stats.marr_f_cnt)));
 
 				item = this.ListCommon.Items.Add(LangMan.LSList[545]);
-				item.SubItems.Add(string.Format("{0:0.00}", SysUtils.SafeDiv(stats.mage, stats.mage_cnt)));
-				item.SubItems.Add(string.Format("{0:0.00}", SysUtils.SafeDiv(stats.mage_m, stats.mage_m_cnt)));
-				item.SubItems.Add(string.Format("{0:0.00}", SysUtils.SafeDiv(stats.mage_f, stats.mage_f_cnt)));
+				item.SubItems.Add(string.Format("{0:0.00}", SafeDiv(stats.mage, stats.mage_cnt)));
+				item.SubItems.Add(string.Format("{0:0.00}", SafeDiv(stats.mage_m, stats.mage_m_cnt)));
+				item.SubItems.Add(string.Format("{0:0.00}", SafeDiv(stats.mage_f, stats.mage_f_cnt)));
 			}
 		}
 
@@ -291,7 +288,7 @@ namespace GKUI
 
 		void ILocalization.SetLang()
 		{
-			this.Text = LangMan.LSList[29];
+			this.Text = LangMan.LS(LSID.LSID_MIStats);
 		}
 
 		static TfmStats()
@@ -334,18 +331,10 @@ namespace GKUI
 			StTitles[33] = new TTitleRec(LSID.LSID_AAF_2, LSID.LSID_AAF_2);
 		}
 
-		private static string _TfmStats_Load_GetPercent(int aDividend, int aDivisor)
+		private string GetPercent(int aDividend, int aDivisor)
 		{
-			double value;
-			if (aDivisor == 0)
-			{
-				value = 0.0;
-			}
-			else
-			{
-				value = ((double)aDividend / (double)aDivisor * 100.0);
-			}
-			return string.Format(" ({0:0.00}%)", new object[] { value });
+			double val = ((aDivisor == 0) ? 0.0 : ((double)aDividend / (double)aDivisor * 100.0));
+			return string.Format(" ({0:0.00}%)", val);
 		}
 	}
 }

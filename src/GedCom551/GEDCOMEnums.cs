@@ -37,7 +37,9 @@ namespace GedCom551
 		rnNone,
 		rnConfidential,
 		rnLocked,
-		rnPrivacy
+		rnPrivacy,
+
+		rnLast = rnPrivacy
 	}
 
 	public enum TGEDCOMCharacterSet : byte
@@ -145,7 +147,9 @@ namespace GedCom551
 		dcHebrew,
 		dcFrench,
 		dcRoman,
-		dcUnknown
+		dcUnknown,
+
+		dcLast = dcUnknown
 	}
 
 	public enum TGEDCOMDateFormat : byte
@@ -238,7 +242,9 @@ namespace GedCom551
 		ctFax,
 		ctLetter,
 		ctTape,
-		ctVisit
+		ctVisit,
+		
+		ctLast = ctVisit
 	}
 
 	public enum TCommunicationDir : byte

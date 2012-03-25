@@ -58,7 +58,7 @@ namespace GKUI.Lists
 			return Result;
 		}
 
-		public override void UpdateItem(TExtListItem aItem, bool isMain)
+		public override void UpdateItem(GKListItem aItem, bool isMain)
 		{
 			string st;
 			if (this.FRec.Note.Count > 0)
@@ -80,7 +80,7 @@ namespace GKUI.Lists
 			}
 		}
 
-		public override void UpdateColumns(TGKListView aList, bool isMain)
+		public override void UpdateColumns(GKListView aList, bool isMain)
 		{
 			aList.AddListColumn("№", 50, false);
 			aList.AddListColumn(LangMan.LSList[108], 400, false);

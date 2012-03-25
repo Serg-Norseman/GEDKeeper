@@ -4,10 +4,10 @@ using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKCore.Settings;
-using GKSys;
+using GKUI.Controls;
 using GKUI.Lists;
 
 /// <summary>
@@ -29,7 +29,7 @@ namespace GKUI.Charts
 		protected int FSPY;
 
 		protected TPersonsFilter FFilter;
-		protected TChartOptions FOptions;
+		protected TreeChartOptions FOptions;
 		protected TGenEngine.TShieldState FShieldState;
 		protected TGEDCOMTree FTree;
 
@@ -65,7 +65,7 @@ namespace GKUI.Charts
 			set { this.SetLeftPos(value); }
 		}
 
-		public TChartOptions Options
+		public TreeChartOptions Options
 		{
 			get { return this.FOptions; }
 			set { this.FOptions = value; }
@@ -107,7 +107,7 @@ namespace GKUI.Charts
 					if (m.Msg == 276)
 					{
 						uint wParam = (uint)m.WParam.ToInt32();
-						ScrollEventType scrType = ScrollUtils.GetScrollEventType(wParam & 65535u);
+						ScrollEventType scrType = SysUtils.GetScrollEventType(wParam & 65535u);
 						int new_pos = this.DoScroll(0, this.LeftPos, 0, this.FRange.X, scrType);
 						this.SetLeftPos(new_pos);
 					}
@@ -116,7 +116,7 @@ namespace GKUI.Charts
 						if (m.Msg == 277)
 						{
 							uint wParam = (uint)m.WParam.ToInt32();
-							ScrollEventType scrType = ScrollUtils.GetScrollEventType(wParam & 65535u);
+							ScrollEventType scrType = SysUtils.GetScrollEventType(wParam & 65535u);
 							int new_pos = this.DoScroll(1, this.TopPos, 0, this.FRange.Y, scrType);
 							this.SetTopPos(new_pos);
 						}
@@ -197,8 +197,8 @@ namespace GKUI.Charts
 				this.FRange.Y = this.FImageHeight - base.ClientRectangle.Height;
 			}
 
-			SysUtils.SetScrollRange((uint)this.Handle.ToInt32(), 0, 0, this.FRange.X, (LongBool)0);
-			SysUtils.SetScrollRange((uint)this.Handle.ToInt32(), 1, 0, this.FRange.Y, (LongBool)0);
+			SysUtils.SetScrollRange((uint)this.Handle.ToInt32(), 0, 0, this.FRange.X, false);
+			SysUtils.SetScrollRange((uint)this.Handle.ToInt32(), 1, 0, this.FRange.Y, false);
 
 			base.Invalidate();
 		}
@@ -222,7 +222,7 @@ namespace GKUI.Charts
 				TRect dummy = TRect.Empty();
 				TRect R = TRect.Empty();
 				SysUtils.ScrollWindowEx((uint)this.Handle.ToInt32(), this.FLeftPos - Value, 0, ref dummy, ref dummy, 0, out R, 0u);
-				SysUtils.SetScrollPos((uint)this.Handle.ToInt32(), 0, this.FLeftPos, (LongBool)(-1));
+				SysUtils.SetScrollPos((uint)this.Handle.ToInt32(), 0, this.FLeftPos, true);
 				base.Invalidate();
 				this.FLeftPos = Value;
 			}
@@ -238,7 +238,7 @@ namespace GKUI.Charts
 				TRect dummy = TRect.Empty();
 				TRect R = TRect.Empty();
 				SysUtils.ScrollWindowEx((uint)this.Handle.ToInt32(), 0, this.FTopPos - Value, ref dummy, ref dummy, 0, out R, 0u);
-				SysUtils.SetScrollPos((uint)this.Handle.ToInt32(), 1, this.FTopPos, (LongBool)(-1));
+				SysUtils.SetScrollPos((uint)this.Handle.ToInt32(), 1, this.FTopPos, true);
 				base.Invalidate();
 				this.FTopPos = Value;
 			}

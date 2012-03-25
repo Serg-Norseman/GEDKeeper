@@ -2,10 +2,10 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-using GKSys;
+using Ext.Utils;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GedCom551
@@ -75,10 +75,10 @@ namespace GedCom551
 				byte val = binary[i];
 				checkA = unchecked((byte)((uint)checkA + (uint)val));
 				checkB = unchecked((byte)((uint)checkB + (uint)checkA));
-				Result += string.Format("{0:X2}", new object[] { val });
+				Result += string.Format("{0:X2}", val);
 			}
-			Result += string.Format("{0:X2}", new object[] { checkA });
-			Result += string.Format("{0:X2}", new object[] { checkB });
+			Result += string.Format("{0:X2}", checkA);
+			Result += string.Format("{0:X2}", checkB);
 			return Result;
 		}
 
@@ -296,6 +296,11 @@ namespace GedCom551
 		{
 			this.NewXRef();
 			this.NewUID();
+		}
+
+		public virtual bool IsMatch(TGEDCOMRecord record, float matchThreshold)
+		{
+			return false;
 		}
 
 		public TGEDCOMRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)

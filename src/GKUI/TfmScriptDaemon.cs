@@ -1,19 +1,19 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+
+using Ext.Utils;
 using GKCore;
-using GKSys;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GKUI
 {
-	public partial class TfmScriptDaemon : Form
+	public partial class TfmScriptDaemon : Form, ILocalization
 	{
 		private TfmBase FBase;
 		private string FFileName;
@@ -59,13 +59,13 @@ namespace GKUI
 			return result;
 		}
 
-		private void SetFileName([In] string Value)
+		private void SetFileName(string Value)
 		{
 			this.FFileName = Value;
 			this.SetTitle();
 		}
 
-		private void SetModified([In] bool Value)
+		private void SetModified(bool Value)
 		{
 			this.FModified = Value;
 			this.SetTitle();
@@ -124,7 +124,7 @@ namespace GKUI
 			try
 			{
 				this.mmDebugOutput.Clear();
-				using (TScriptEngine scr_engine = new TScriptEngine()) {
+				using (ScriptEngine scr_engine = new ScriptEngine()) {
 					scr_engine.lua_run(this.mmScriptText.Text, this.Base, this.mmDebugOutput);
 				}
 			}
@@ -134,32 +134,25 @@ namespace GKUI
 			}
 		}
 
-		private void TfmScriptDaemon_Closing(object sender, CancelEventArgs e)
+		void TfmScriptDaemon_Closing(object sender, CancelEventArgs e)
 		{
 			e.Cancel = !this.CheckModified();
 		}
 
-		private void mmScriptText_TextChanged(object sender, EventArgs e)
+		void mmScriptText_TextChanged(object sender, EventArgs e)
 		{
 			this.Modified = true;
 		}
 
-		private void ToolBar1_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
+		void ToolBar1_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
 		{
-			if (object.Equals(e.Button, this.btnNewScript))
-			{
+			if (e.Button == this.btnNewScript) {
 				this.NewScript();
-			}
-			if (object.Equals(e.Button, this.btnLoadScript))
-			{
+			} else if (e.Button == this.btnLoadScript) {
 				this.LoadScript();
-			}
-			if (object.Equals(e.Button, this.btnSaveScript))
-			{
+			} else if (e.Button == this.btnSaveScript) {
 				this.SaveScript();
-			}
-			if (object.Equals(e.Button, this.btnRun))
-			{
+			} else if (e.Button == this.btnRun) {
 				this.Run();
 			}
 		}
@@ -170,10 +163,11 @@ namespace GKUI
 			this.FBase = aBase;
 			this.ToolBar1.ImageList = GKUI.TfmGEDKeeper.Instance.ImageList_Buttons;
 			this.NewScript();
-			this.SetLang();
+
+			(this as ILocalization).SetLang();
 		}
 
-		public void SetLang()
+		void ILocalization.SetLang()
 		{
 		}
 	}

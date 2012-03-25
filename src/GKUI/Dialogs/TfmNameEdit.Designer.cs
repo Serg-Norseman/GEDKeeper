@@ -152,7 +152,7 @@ namespace GKUI
 			this.MinimizeBox = false;
 			this.Name = "TfmNameEdit";
 			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Имя";
 			this.GroupBox1.ResumeLayout(false);
 			this.GroupBox1.PerformLayout();

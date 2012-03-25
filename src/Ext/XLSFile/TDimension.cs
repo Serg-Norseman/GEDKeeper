@@ -1,6 +1,6 @@
 using System;
 
-namespace XLSFile
+namespace Ext.XLSFile
 {
 	public class TDimension : TData
 	{

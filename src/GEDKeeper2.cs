@@ -5,8 +5,8 @@ using System.Security.Permissions;
 using System.Threading;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GKCore;
-using GKSys;
 using GKUI;
 
 [assembly: AssemblyDescription("")]
@@ -17,7 +17,7 @@ using GKUI;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyTitle("GEDKeeper2")]
-[assembly: AssemblyVersion("2.0.475.4")]
+[assembly: AssemblyVersion("2.0.477.4")]
 
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyFile("")]

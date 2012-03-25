@@ -2,8 +2,7 @@ using System;
 using System.Windows.Forms;
 
 /// <summary>
-/// Localization: unknown
-/// CodeTransformation: need
+/// Localization: clean
 /// </summary>
 
 namespace GKUI.Controls

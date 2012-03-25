@@ -3,9 +3,9 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 
+using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKSys;
 
 /// <summary>
 /// Localization: clean
@@ -13,7 +13,7 @@ using GKSys;
 
 namespace GKUI.Charts
 {
-	public class TPerson : IDisposable
+	public class TreeChartPerson : IDisposable
 	{
 		public enum TPersonFlag : byte
 		{
@@ -42,12 +42,12 @@ namespace GKUI.Charts
 		private EnumSet FSigns;
 		private int FWidth;
 		private bool Disposed_;
-		private TPerson FBaseSpouse;
+		private TreeChartPerson FBaseSpouse;
 		private TPersonList FChilds;
-		private TPerson FFather;
+		private TreeChartPerson FFather;
 		private int FGeneration;
-		private TPerson.TPersonKind FKind;
-		private TPerson FMother;
+		private TPersonKind FKind;
+		private TreeChartPerson FMother;
 		private TGraph.TGraphNode FNode;
 		private TPersonList FSpouses;
 
@@ -56,9 +56,9 @@ namespace GKUI.Charts
 
 		public EnumSet FFlags;
 		public string FPathDebug;
-		public TPerson Parent;
+		public TreeChartPerson Parent;
 
-		public TPerson BaseSpouse
+		public TreeChartPerson BaseSpouse
 		{
 			get { return this.FBaseSpouse; }
 			set { this.FBaseSpouse = value; }
@@ -75,7 +75,7 @@ namespace GKUI.Charts
 			get { return this.GetChildsCount(); }
 		}
 
-		public TPerson Father
+		public TreeChartPerson Father
 		{
 			get { return this.FFather; }
 			set { this.FFather = value; }
@@ -87,13 +87,13 @@ namespace GKUI.Charts
 			set { this.FGeneration = value; }
 		}
 
-		public TPerson.TPersonKind Kind
+		public TPersonKind Kind
 		{
 			get { return this.FKind; }
 			set { this.FKind = value; }
 		}
 
-		public TPerson Mother
+		public TreeChartPerson Mother
 		{
 			get { return this.FMother; }
 			set { this.FMother = value; }
@@ -116,9 +116,9 @@ namespace GKUI.Charts
 			get { return this.GetSpousesCount(); }
 		}
 
-		public TPerson GetChild(int Index)
+		public TreeChartPerson GetChild(int Index)
 		{
-			TPerson Result = ((this.FChilds == null) ? null : this.FChilds[Index]);
+			TreeChartPerson Result = ((this.FChilds == null) ? null : this.FChilds[Index]);
 			return Result;
 		}
 
@@ -128,9 +128,9 @@ namespace GKUI.Charts
 			return Result;
 		}
 
-		public TPerson GetSpouse(int Index)
+		public TreeChartPerson GetSpouse(int Index)
 		{
-			TPerson Result = ((this.FSpouses == null) ? null : this.FSpouses[Index]);
+			TreeChartPerson Result = ((this.FSpouses == null) ? null : this.FSpouses[Index]);
 			return Result;
 		}
 
@@ -153,13 +153,13 @@ namespace GKUI.Charts
 		public bool Divorced
 		{
 			get {
-				return this.FFlags.InSet(TPerson.TPersonFlag.pfDivorced);
+				return this.FFlags.InSet(TPersonFlag.pfDivorced);
 			}
 			set {
 				if (value) {
-					this.FFlags.Include(TPerson.TPersonFlag.pfDivorced);
+					this.FFlags.Include(TPersonFlag.pfDivorced);
 				} else {
-					this.FFlags.Exclude(TPerson.TPersonFlag.pfDivorced);
+					this.FFlags.Exclude(TPersonFlag.pfDivorced);
 				}
 			}
 		}
@@ -167,13 +167,13 @@ namespace GKUI.Charts
 		public bool IsDup
 		{
 			get { 
-				return this.FFlags.InSet(TPerson.TPersonFlag.pfIsDup);
+				return this.FFlags.InSet(TPersonFlag.pfIsDup);
 			}
 			set { 
 				if (value) {
-					this.FFlags.Include(TPerson.TPersonFlag.pfIsDup);
+					this.FFlags.Include(TPersonFlag.pfIsDup);
 				} else {
-					this.FFlags.Exclude(TPerson.TPersonFlag.pfIsDup);
+					this.FFlags.Exclude(TPersonFlag.pfIsDup);
 				}
 			}
 		}
@@ -192,14 +192,14 @@ namespace GKUI.Charts
 		{
 			get
 			{
-				return this.FFlags.InSet(TPerson.TPersonFlag.pfIsDead);
+				return this.FFlags.InSet(TPersonFlag.pfIsDead);
 			}
 			set
 			{
 				if (value) {
-					this.FFlags.Include(TPerson.TPersonFlag.pfIsDead);
+					this.FFlags.Include(TPersonFlag.pfIsDead);
 				} else {
-					this.FFlags.Exclude(TPerson.TPersonFlag.pfIsDead);
+					this.FFlags.Exclude(TPersonFlag.pfIsDead);
 				}
 			}
 		}
@@ -443,7 +443,7 @@ namespace GKUI.Charts
 
 		private bool GetSelected()
 		{
-			return this.FFlags.InSet(TPerson.TPersonFlag.pfSelected);
+			return this.FFlags.InSet(TPersonFlag.pfSelected);
 		}
 
 		private void SetKinship([In] string Value)
@@ -461,9 +461,9 @@ namespace GKUI.Charts
 		private void SetSelected([In] bool Value)
 		{
 			if (Value) {
-				this.FFlags.Include(TPerson.TPersonFlag.pfSelected);
+				this.FFlags.Include(TPersonFlag.pfSelected);
 			} else {
-				this.FFlags.Exclude(TPerson.TPersonFlag.pfSelected);
+				this.FFlags.Exclude(TPersonFlag.pfSelected);
 			}
 		}
 
@@ -494,7 +494,7 @@ namespace GKUI.Charts
 			return Result;
 		}
 
-		public TPerson(TCustomChartBox aChart)
+		public TreeChartPerson(TCustomChartBox aChart)
 		{
 			this.FChart = aChart;
 
@@ -514,7 +514,7 @@ namespace GKUI.Charts
 			}
 		}
 
-		public void AddChild(TPerson aChild)
+		public void AddChild(TreeChartPerson aChild)
 		{
 			if (aChild != null) {
 				if (this.FChilds == null) this.FChilds = new TPersonList(false);
@@ -523,7 +523,7 @@ namespace GKUI.Charts
 			}
 		}
 
-		public void AddSpouse(TPerson aSpouse)
+		public void AddSpouse(TreeChartPerson aSpouse)
 		{
 			if (aSpouse != null) {
 				if (this.FSpouses == null) this.FSpouses = new TPersonList(false);
@@ -537,6 +537,11 @@ namespace GKUI.Charts
 			this.FRec = iRec;
 			if (iRec != null)
 			{
+				TTreeChartBox ancChart = (this.FChart as TTreeChartBox);
+				if (ancChart.FPreparedIndividuals.IndexOf(iRec.XRef) < 0) {
+					ancChart.FPreparedIndividuals.Add(iRec.XRef);
+				}
+
 				string fam, nam, pat;
 				iRec.aux_GetNameParts(out fam, out nam, out pat);
 				this.FFamily = fam;
@@ -546,7 +551,7 @@ namespace GKUI.Charts
 				this.FDeathDate = TGenEngine.GetDeathDate(iRec, TGenEngine.TDateFormat.dfDD_MM_YYYY, false);
 				this.IsDead = !iRec.IsLive();
 				this.FSex = iRec.Sex;
-				this.FSigns = (this.FChart as TAncestryChartBox).GetPersonSign(iRec);
+				this.FSigns = ancChart.GetPersonSign(iRec);
 				this.FBirthYear = TGenEngine.GetBirthDate(iRec, TGenEngine.TDateFormat.dfYYYY, false);
 				this.FDeathYear = TGenEngine.GetDeathDate(iRec, TGenEngine.TDateFormat.dfYYYY, false);
 
@@ -630,7 +635,7 @@ namespace GKUI.Charts
 					lines++;
 				}
 
-				if ((this.FChart as TAncestryChartBox).PathDebug) {
+				if ((this.FChart as TTreeChartBox).PathDebug) {
 					int wt = this.TextWidth(g, this.FPathDebug);
 					if (maxwid < wt) maxwid = wt;
 
@@ -732,14 +737,14 @@ namespace GKUI.Charts
 				{
 					if (this.FSigns.InSet(cps))
 					{
-						Bitmap pic = (this.FChart as TAncestryChartBox).SignsPic[(int)cps - 1];
+						Bitmap pic = (this.FChart as TTreeChartBox).SignsPic[(int)cps - 1];
 						aCanvas.DrawImage(pic, rt.Right, rt.Top - 21 + i * pic.Height);
 						i++;
 					}
 				}
 			}
 
-			if ((this.FChart as TAncestryChartBox).PathDebug)
+			if ((this.FChart as TTreeChartBox).PathDebug)
 			{
 				this.TextOut(aCanvas, rt, this.FPathDebug, h, ref line);
 			}
@@ -751,18 +756,14 @@ namespace GKUI.Charts
 		}
 	}
 
-	///
 
-	public class TPersonList : TObjectList
+
+	public class TPersonList : TList
 	{
-		public new TPerson this[int Index]
+		public new TreeChartPerson this[int Index]
 		{
-			get	{ return base.Get(Index) as TPerson; }
+			get	{ return base.Get(Index) as TreeChartPerson; }
 			set	{ base.Put(Index, value); }
-		}
-
-		public TPersonList()
-		{
 		}
 
 		public TPersonList(bool AOwnsObjects) : base(AOwnsObjects)

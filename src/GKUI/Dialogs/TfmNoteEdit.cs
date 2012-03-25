@@ -2,9 +2,9 @@ using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKSys;
 
 /// <summary>
 /// Localization: clean

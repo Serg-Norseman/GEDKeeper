@@ -24,7 +24,7 @@ namespace GedCom551
 		{
 			if (!this.Disposed_)
 			{
-				this.FDetail.Free();
+				this.FDetail.Dispose();
 
 				base.Dispose();
 				this.Disposed_ = true;

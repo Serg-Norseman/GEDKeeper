@@ -1,8 +1,8 @@
 using System;
 
-using GKSys;
+using Ext.Utils;
 
-namespace XLSFile
+namespace Ext.XLSFile
 {
 	public abstract class TData
 	{

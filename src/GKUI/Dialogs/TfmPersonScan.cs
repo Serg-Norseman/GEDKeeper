@@ -2,12 +2,12 @@
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKSys;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: dirty
 /// </summary>
 
 namespace GKUI
@@ -22,7 +22,9 @@ namespace GKUI
 			plMother,
 			plGodparent,
 			plSpouse,
-			plChild
+			plChild,
+			
+			plLast = plChild
 		}
 
 		private static readonly LSID[] PersonLinks;
@@ -37,19 +39,18 @@ namespace GKUI
 
 		private static TPersonLink GetLinkByName([In] string aName)
 		{
-			TPersonLink pl = TPersonLink.plPerson;
-			TPersonLink Result;
-			while (LangMan.LSList[(int)PersonLinks[(int)pl] - 1] != aName)
+			TPersonLink res = TPersonLink.plNone;
+
+			for (TPersonLink pl = TPersonLink.plPerson; pl <= TPersonLink.plLast; pl++)
 			{
-				pl++;
-				if (pl == (TPersonLink)7)
+				if (LangMan.LSList[(int)PersonLinks[(int)pl] - 1] == aName)
 				{
-					Result = TPersonLink.plNone;
-					return Result;
+					res = pl;
+					break;
 				}
 			}
-			Result = pl;
-			return Result;
+
+			return res;
 		}
 
 		private bool CheckCell(int ACol, int ARow)
@@ -113,9 +114,9 @@ namespace GKUI
 			}
 			else
 			{
-				string fam = SysUtils.SetAsName(tokens[0]);
-				string nam = SysUtils.SetAsName(tokens[1]);
-				string pat = SysUtils.SetAsName(tokens[2]);
+				string fam = TGenEngine.SetAsName(tokens[0]);
+				string nam = TGenEngine.SetAsName(tokens[1]);
+				string pat = TGenEngine.SetAsName(tokens[2]);
 
 				TGEDCOMIndividualRecord iRec = TGenEngine.CreatePersonEx(this.Base.Tree, nam, pat, fam, FSimpleTempSex, false);
 				if (this.CheckBirth.Checked) {
@@ -137,7 +138,7 @@ namespace GKUI
 		{
 			string src_name = this.cbSource.Text;
 			string src_page = this.edPage.Text;
-			if (!SysUtils.IsDigits(this.edSourceYear.Text))
+			if (!TGEDCOMObject.IsDigits(this.edSourceYear.Text))
 			{
 				TGenEngine.ShowError(LangMan.LSList[508]);
 			}
@@ -165,7 +166,7 @@ namespace GKUI
 							TGEDCOMSex sx = TfmSexCheck.DefineSex(nm, pt, TfmGEDKeeper.Instance.NamesTable);
 							TGEDCOMIndividualRecord iRec = TGenEngine.CreatePersonEx(Base.Tree, nm, pt, fm, sx, false);
 
-							if (!string.IsNullOrEmpty(age) && SysUtils.IsDigits(age)) {
+							if (!string.IsNullOrEmpty(age) && TGEDCOMObject.IsDigits(age)) {
 								int birth_year = src_year - int.Parse(age);
 								TGenEngine.CreateEventEx(Base.Tree, iRec, "BIRT", "ABT "+birth_year.ToString(), "");
 							}

@@ -4,9 +4,9 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKSys;
 using GKUI.Controls;
 
 /// <summary>
@@ -45,7 +45,7 @@ namespace GKUI
 			int idx = this.cbNames.SelectedIndex;
 			if (idx >= 0 && idx < this.cbNames.Items.Count)
 			{
-				TNameRecord rec = (this.cbNames.Items[idx] as TComboItem).Data as TNameRecord;
+				TNameRecord rec = (this.cbNames.Items[idx] as GKComboItem).Data as TNameRecord;
 
 				this.mmDesc.Text = "";
 				this.mmDesc.AppendText(rec.Name + "\r\n");
@@ -172,7 +172,7 @@ namespace GKUI
 				{
 					TNameRecord rec = this.FNames[i];
 					string ns = rec.Name;
-					this.cbNames.Items.Add(new TComboItem(ns, rec));
+					this.cbNames.Items.Add(new GKComboItem(ns, rec));
 
 					rec.ChIndex = -1;
 					ns = ns.ToUpper();
@@ -191,7 +191,7 @@ namespace GKUI
 					for (int j = 0; j <= num2; j++)
 					{
 						string st = lst[j];
-						if (st[0] == '-' && SysUtils.Pos(ns, st) > 0)
+						if (st[0] == '-' && st.IndexOf(ns) >= 0)
 						{
 							rec.ChIndex = j;
 							break;

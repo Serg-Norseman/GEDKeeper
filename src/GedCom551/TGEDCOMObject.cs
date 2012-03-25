@@ -2,10 +2,10 @@ using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
-using GKSys;
+using Ext.Utils;
 
 /// <summary>
-/// Localization: unknown
+/// Localization: clean
 /// </summary>
 
 namespace GedCom551
@@ -17,10 +17,6 @@ namespace GedCom551
 		}
 
 		public EGEDCOMException(string message) : base(message)
-		{
-		}
-
-		public EGEDCOMException(string message, Exception innerException) : base(message, innerException)
 		{
 		}
 	}
@@ -128,10 +124,7 @@ namespace GedCom551
 				{
 					if (!NoException)
 					{
-						throw new EGEDCOMException(string.Format("The string {0} contains an unterminated XRef pointer", new object[]
-						{
-							S
-						}));
+						throw new EGEDCOMException(string.Format("The string {0} contains an unterminated XRef pointer", S));
 					}
 					AXRef = ADefault;
 				}
@@ -140,10 +133,7 @@ namespace GedCom551
 			{
 				if (!NoException)
 				{
-					throw new EGEDCOMException(string.Format("The string {0} is expected to start with an XRef pointer", new object[]
-					{
-						S
-					}));
+					throw new EGEDCOMException(string.Format("The string {0} is expected to start with an XRef pointer", S));
 				}
 				AXRef = ADefault;
 			}
@@ -194,7 +184,7 @@ namespace GedCom551
 
 			if (Result != null)
 			{
-				while (I < Result.Length && SysUtils.IsDigit(Result[I]))
+				while (I < Result.Length && IsDigit(Result[I]))
 				{
 					I++;
 				}
@@ -209,14 +199,37 @@ namespace GedCom551
 			{
 				if (!NoException)
 				{
-					throw new EGEDCOMException(string.Format("The string {0} doesn't start with a valid number", new object[]
-					{
-						S
-					}));
+					throw new EGEDCOMException(string.Format("The string {0} doesn't start with a valid number", S));
 				}
 				N = ADefault;
 			}
 			return Result;
+		}
+
+		public static bool IsDigit(char C)
+		{
+			return C >= '0' && C <= '9';
+		}
+
+		public static bool IsDigits([In] string S)
+		{
+			bool res = false;
+
+			if (!string.IsNullOrEmpty(S))
+			{
+				int I;
+				for (I = 1; I <= S.Length; I++)
+				{
+					char c = S[I - 1];
+					if (c < '0' || c >= ':')
+					{
+						break;
+					}
+				}
+				res = (I > S.Length);
+			}
+
+			return res;
 		}
 
 		public void Free()

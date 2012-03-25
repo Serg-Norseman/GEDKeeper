@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-using GKSys;
+using Ext.Utils;
 
 namespace GedCom551
 {
@@ -59,7 +59,7 @@ namespace GedCom551
 			this.FMinutes = (ushort)AValue.Minutes;
 			this.FSeconds = (ushort)AValue.Seconds;
 			ushort MSec = (ushort)AValue.Milliseconds;
-			this.FFraction = (ushort)SysUtils.Trunc(MSec / 100.0);
+			this.FFraction = (ushort)Math.Truncate(MSec / 100.0);
 		}
 
 		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)

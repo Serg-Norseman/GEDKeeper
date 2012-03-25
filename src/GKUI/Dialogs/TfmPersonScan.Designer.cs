@@ -496,7 +496,7 @@ namespace GKUI
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "TfmPersonScan";
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Добавление персон из источника";
 			this.PageControl1.ResumeLayout(false);
 			this.tsSimpleInput.ResumeLayout(false);

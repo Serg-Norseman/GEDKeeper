@@ -2,9 +2,9 @@
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKSys;
 using GKUI.Controls;
 using GKUI.Lists;
 
@@ -52,7 +52,7 @@ namespace GKUI
 			this.Base.RecListNotesRefresh(this.FSourceRecord, this.FNotesList.List, null);
 			this.Base.RecListMediaRefresh(this.FSourceRecord, this.FMediaList.List, null);
 
-			TGKListView list = this.FRepositoriesList.List;
+			GKListView list = this.FRepositoriesList.List;
 			list.BeginUpdate();
 			list.Items.Clear();
 

@@ -2,9 +2,9 @@
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKSys;
 using GKUI.Controls;
 using GKUI.Lists;
 
@@ -126,7 +126,7 @@ namespace GKUI
 			this.Base.RecListNotesRefresh(this.FGroup, this.FNotesList.List, null);
 			this.Base.RecListMediaRefresh(this.FGroup, this.FMediaList.List, null);
 
-			TGKListView list = this.FMembersList.List;
+			GKListView list = this.FMembersList.List;
 
 			list.BeginUpdate();
 			list.Items.Clear();
@@ -134,7 +134,7 @@ namespace GKUI
 			for (int i = 0; i <= num; i++)
 			{
 				TGEDCOMIndividualRecord member = this.FGroup.Members[i].Value as TGEDCOMIndividualRecord;
-				TExtListItem item = list.AddItem(member.aux_GetNameStr(true, false), member);
+				GKListItem item = list.AddItem(member.aux_GetNameStr(true, false), member);
 			}
 			list.EndUpdate();
 		}

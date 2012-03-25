@@ -98,6 +98,8 @@ namespace GKUI
 			this.chkRevisionsBackup = new System.Windows.Forms.CheckBox();
 			this.chkShowOnStart = new System.Windows.Forms.CheckBox();
 			this.cbLanguages = new System.Windows.Forms.ComboBox();
+			this.SheetCharts = new System.Windows.Forms.TabPage();
+			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.SheetTree = new System.Windows.Forms.TabPage();
 			this.GroupBox1 = new System.Windows.Forms.GroupBox();
 			this.chkFamily = new System.Windows.Forms.CheckBox();
@@ -120,6 +122,19 @@ namespace GKUI
 			this.PanUnHusbandColor = new System.Windows.Forms.Panel();
 			this.PanUnWifeColor = new System.Windows.Forms.Panel();
 			this.PanDefFont = new System.Windows.Forms.Panel();
+			this.SheetAncCircle = new System.Windows.Forms.TabPage();
+			this.acbLine = new System.Windows.Forms.Label();
+			this.chkShowCircLines = new System.Windows.Forms.CheckBox();
+			this.acbBack = new System.Windows.Forms.Label();
+			this.acbText = new System.Windows.Forms.Label();
+			this.acb7 = new System.Windows.Forms.Label();
+			this.acb6 = new System.Windows.Forms.Label();
+			this.acb5 = new System.Windows.Forms.Label();
+			this.acb4 = new System.Windows.Forms.Label();
+			this.acb3 = new System.Windows.Forms.Label();
+			this.acb2 = new System.Windows.Forms.Label();
+			this.acb1 = new System.Windows.Forms.Label();
+			this.acb0 = new System.Windows.Forms.Label();
 			this.SheetView = new System.Windows.Forms.TabPage();
 			this.PageControl2 = new System.Windows.Forms.TabControl();
 			this.SheetViewCommon = new System.Windows.Forms.TabPage();
@@ -155,9 +170,12 @@ namespace GKUI
 			this.rgCode.SuspendLayout();
 			this.GroupBox4.SuspendLayout();
 			this.GroupBox7.SuspendLayout();
+			this.SheetCharts.SuspendLayout();
+			this.tabControl1.SuspendLayout();
 			this.SheetTree.SuspendLayout();
 			this.GroupBox1.SuspendLayout();
 			this.GroupBox2.SuspendLayout();
+			this.SheetAncCircle.SuspendLayout();
 			this.SheetView.SuspendLayout();
 			this.PageControl2.SuspendLayout();
 			this.SheetViewCommon.SuspendLayout();
@@ -172,7 +190,7 @@ namespace GKUI
 			// PageControl1
 			// 
 			this.PageControl1.Controls.Add(this.SheetCommon);
-			this.PageControl1.Controls.Add(this.SheetTree);
+			this.PageControl1.Controls.Add(this.SheetCharts);
 			this.PageControl1.Controls.Add(this.SheetView);
 			this.PageControl1.Controls.Add(this.SheetPedigree);
 			this.PageControl1.Location = new System.Drawing.Point(0, 0);
@@ -352,14 +370,36 @@ namespace GKUI
 			this.cbLanguages.Size = new System.Drawing.Size(164, 21);
 			this.cbLanguages.TabIndex = 4;
 			// 
+			// SheetCharts
+			// 
+			this.SheetCharts.Controls.Add(this.tabControl1);
+			this.SheetCharts.Location = new System.Drawing.Point(4, 22);
+			this.SheetCharts.Name = "SheetCharts";
+			this.SheetCharts.Padding = new System.Windows.Forms.Padding(3);
+			this.SheetCharts.Size = new System.Drawing.Size(505, 351);
+			this.SheetCharts.TabIndex = 4;
+			this.SheetCharts.Text = "Диаграммы";
+			this.SheetCharts.UseVisualStyleBackColor = true;
+			// 
+			// tabControl1
+			// 
+			this.tabControl1.Controls.Add(this.SheetTree);
+			this.tabControl1.Controls.Add(this.SheetAncCircle);
+			this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tabControl1.Location = new System.Drawing.Point(3, 3);
+			this.tabControl1.Name = "tabControl1";
+			this.tabControl1.SelectedIndex = 0;
+			this.tabControl1.Size = new System.Drawing.Size(499, 345);
+			this.tabControl1.TabIndex = 0;
+			// 
 			// SheetTree
 			// 
 			this.SheetTree.Controls.Add(this.GroupBox1);
 			this.SheetTree.Controls.Add(this.GroupBox2);
 			this.SheetTree.Location = new System.Drawing.Point(4, 22);
 			this.SheetTree.Name = "SheetTree";
-			this.SheetTree.Size = new System.Drawing.Size(505, 351);
-			this.SheetTree.TabIndex = 2;
+			this.SheetTree.Size = new System.Drawing.Size(491, 319);
+			this.SheetTree.TabIndex = 3;
 			this.SheetTree.Text = "Родословные древа";
 			// 
 			// GroupBox1
@@ -378,7 +418,7 @@ namespace GKUI
 			this.GroupBox1.Controls.Add(this.chkPortraitsVisible);
 			this.GroupBox1.Location = new System.Drawing.Point(8, 8);
 			this.GroupBox1.Name = "GroupBox1";
-			this.GroupBox1.Size = new System.Drawing.Size(289, 225);
+			this.GroupBox1.Size = new System.Drawing.Size(279, 225);
 			this.GroupBox1.TabIndex = 0;
 			this.GroupBox1.TabStop = false;
 			this.GroupBox1.Text = "Отображение персон в древе";
@@ -488,7 +528,7 @@ namespace GKUI
 			this.GroupBox2.Controls.Add(this.PanUnHusbandColor);
 			this.GroupBox2.Controls.Add(this.PanUnWifeColor);
 			this.GroupBox2.Controls.Add(this.PanDefFont);
-			this.GroupBox2.Location = new System.Drawing.Point(312, 8);
+			this.GroupBox2.Location = new System.Drawing.Point(293, 8);
 			this.GroupBox2.Name = "GroupBox2";
 			this.GroupBox2.Size = new System.Drawing.Size(185, 193);
 			this.GroupBox2.TabIndex = 1;
@@ -506,68 +546,228 @@ namespace GKUI
 			// PanMaleColor
 			// 
 			this.PanMaleColor.BackColor = System.Drawing.SystemColors.Control;
-			this.PanMaleColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.PanMaleColor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.PanMaleColor.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.PanMaleColor.Location = new System.Drawing.Point(16, 16);
 			this.PanMaleColor.Name = "PanMaleColor";
 			this.PanMaleColor.Size = new System.Drawing.Size(73, 25);
 			this.PanMaleColor.TabIndex = 0;
 			this.PanMaleColor.Text = "Мужчина";
-			this.PanMaleColor.Click += new System.EventHandler(this.PanColor_Click);
 			// 
 			// PanFemaleColor
 			// 
-			this.PanFemaleColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.PanFemaleColor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.PanFemaleColor.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.PanFemaleColor.Location = new System.Drawing.Point(96, 16);
 			this.PanFemaleColor.Name = "PanFemaleColor";
 			this.PanFemaleColor.Size = new System.Drawing.Size(73, 25);
 			this.PanFemaleColor.TabIndex = 1;
 			this.PanFemaleColor.Text = "Женщина";
-			this.PanFemaleColor.Click += new System.EventHandler(this.PanColor_Click);
 			// 
 			// PanUnkSexColor
 			// 
-			this.PanUnkSexColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.PanUnkSexColor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.PanUnkSexColor.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.PanUnkSexColor.Location = new System.Drawing.Point(16, 48);
 			this.PanUnkSexColor.Name = "PanUnkSexColor";
 			this.PanUnkSexColor.Size = new System.Drawing.Size(153, 25);
 			this.PanUnkSexColor.TabIndex = 2;
 			this.PanUnkSexColor.Text = "Неизвестный пол";
-			this.PanUnkSexColor.Click += new System.EventHandler(this.PanColor_Click);
 			// 
 			// PanUnHusbandColor
 			// 
-			this.PanUnHusbandColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.PanUnHusbandColor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.PanUnHusbandColor.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.PanUnHusbandColor.Location = new System.Drawing.Point(16, 80);
 			this.PanUnHusbandColor.Name = "PanUnHusbandColor";
 			this.PanUnHusbandColor.Size = new System.Drawing.Size(153, 25);
 			this.PanUnHusbandColor.TabIndex = 3;
 			this.PanUnHusbandColor.Text = "Разведенный супруг";
-			this.PanUnHusbandColor.Click += new System.EventHandler(this.PanColor_Click);
 			// 
 			// PanUnWifeColor
 			// 
-			this.PanUnWifeColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.PanUnWifeColor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.PanUnWifeColor.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.PanUnWifeColor.Location = new System.Drawing.Point(16, 112);
 			this.PanUnWifeColor.Name = "PanUnWifeColor";
 			this.PanUnWifeColor.Size = new System.Drawing.Size(153, 25);
 			this.PanUnWifeColor.TabIndex = 4;
 			this.PanUnWifeColor.Text = "Разведенная супруга";
-			this.PanUnWifeColor.Click += new System.EventHandler(this.PanColor_Click);
 			// 
 			// PanDefFont
 			// 
-			this.PanDefFont.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.PanDefFont.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.PanDefFont.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.PanDefFont.Location = new System.Drawing.Point(16, 160);
 			this.PanDefFont.Name = "PanDefFont";
 			this.PanDefFont.Size = new System.Drawing.Size(153, 25);
 			this.PanDefFont.TabIndex = 5;
-			this.PanDefFont.Click += new System.EventHandler(this.PanDefFont_Click);
+			// 
+			// SheetAncCircle
+			// 
+			this.SheetAncCircle.Controls.Add(this.acbLine);
+			this.SheetAncCircle.Controls.Add(this.chkShowCircLines);
+			this.SheetAncCircle.Controls.Add(this.acbBack);
+			this.SheetAncCircle.Controls.Add(this.acbText);
+			this.SheetAncCircle.Controls.Add(this.acb7);
+			this.SheetAncCircle.Controls.Add(this.acb6);
+			this.SheetAncCircle.Controls.Add(this.acb5);
+			this.SheetAncCircle.Controls.Add(this.acb4);
+			this.SheetAncCircle.Controls.Add(this.acb3);
+			this.SheetAncCircle.Controls.Add(this.acb2);
+			this.SheetAncCircle.Controls.Add(this.acb1);
+			this.SheetAncCircle.Controls.Add(this.acb0);
+			this.SheetAncCircle.Location = new System.Drawing.Point(4, 22);
+			this.SheetAncCircle.Name = "SheetAncCircle";
+			this.SheetAncCircle.Padding = new System.Windows.Forms.Padding(3);
+			this.SheetAncCircle.Size = new System.Drawing.Size(491, 319);
+			this.SheetAncCircle.TabIndex = 4;
+			this.SheetAncCircle.Text = "Круг предков";
+			this.SheetAncCircle.UseVisualStyleBackColor = true;
+			// 
+			// acbLine
+			// 
+			this.acbLine.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.acbLine.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.acbLine.ForeColor = System.Drawing.Color.White;
+			this.acbLine.Location = new System.Drawing.Point(246, 80);
+			this.acbLine.Name = "acbLine";
+			this.acbLine.Size = new System.Drawing.Size(114, 23);
+			this.acbLine.TabIndex = 42;
+			this.acbLine.Text = "Line color";
+			this.acbLine.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.acbLine.MouseClick += new System.Windows.Forms.MouseEventHandler(this.acbMouseClick);
+			// 
+			// chkShowCircLines
+			// 
+			this.chkShowCircLines.AutoSize = true;
+			this.chkShowCircLines.Location = new System.Drawing.Point(7, 117);
+			this.chkShowCircLines.Name = "chkShowCircLines";
+			this.chkShowCircLines.Size = new System.Drawing.Size(113, 17);
+			this.chkShowCircLines.TabIndex = 41;
+			this.chkShowCircLines.Text = "Show circular lines";
+			this.chkShowCircLines.UseVisualStyleBackColor = true;
+			// 
+			// acbBack
+			// 
+			this.acbBack.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.acbBack.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.acbBack.Location = new System.Drawing.Point(126, 80);
+			this.acbBack.Name = "acbBack";
+			this.acbBack.Size = new System.Drawing.Size(114, 23);
+			this.acbBack.TabIndex = 40;
+			this.acbBack.Text = "Background color";
+			this.acbBack.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.acbBack.MouseClick += new System.Windows.Forms.MouseEventHandler(this.acbMouseClick);
+			// 
+			// acbText
+			// 
+			this.acbText.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.acbText.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.acbText.ForeColor = System.Drawing.Color.White;
+			this.acbText.Location = new System.Drawing.Point(6, 80);
+			this.acbText.Name = "acbText";
+			this.acbText.Size = new System.Drawing.Size(114, 23);
+			this.acbText.TabIndex = 39;
+			this.acbText.Text = "Text color";
+			this.acbText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.acbText.MouseClick += new System.Windows.Forms.MouseEventHandler(this.acbMouseClick);
+			// 
+			// acb7
+			// 
+			this.acb7.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.acb7.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.acb7.Location = new System.Drawing.Point(366, 46);
+			this.acb7.Name = "acb7";
+			this.acb7.Size = new System.Drawing.Size(114, 23);
+			this.acb7.TabIndex = 38;
+			this.acb7.Text = "Circle 7";
+			this.acb7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.acb7.MouseClick += new System.Windows.Forms.MouseEventHandler(this.acbMouseClick);
+			// 
+			// acb6
+			// 
+			this.acb6.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.acb6.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.acb6.Location = new System.Drawing.Point(246, 46);
+			this.acb6.Name = "acb6";
+			this.acb6.Size = new System.Drawing.Size(114, 23);
+			this.acb6.TabIndex = 37;
+			this.acb6.Text = "Circle 6";
+			this.acb6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.acb6.MouseClick += new System.Windows.Forms.MouseEventHandler(this.acbMouseClick);
+			// 
+			// acb5
+			// 
+			this.acb5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.acb5.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.acb5.Location = new System.Drawing.Point(126, 46);
+			this.acb5.Name = "acb5";
+			this.acb5.Size = new System.Drawing.Size(114, 23);
+			this.acb5.TabIndex = 36;
+			this.acb5.Text = "Circle 5";
+			this.acb5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.acb5.MouseClick += new System.Windows.Forms.MouseEventHandler(this.acbMouseClick);
+			// 
+			// acb4
+			// 
+			this.acb4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.acb4.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.acb4.Location = new System.Drawing.Point(6, 46);
+			this.acb4.Name = "acb4";
+			this.acb4.Size = new System.Drawing.Size(114, 23);
+			this.acb4.TabIndex = 35;
+			this.acb4.Text = "Circle 4";
+			this.acb4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.acb4.MouseClick += new System.Windows.Forms.MouseEventHandler(this.acbMouseClick);
+			// 
+			// acb3
+			// 
+			this.acb3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.acb3.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.acb3.Location = new System.Drawing.Point(366, 12);
+			this.acb3.Name = "acb3";
+			this.acb3.Size = new System.Drawing.Size(114, 23);
+			this.acb3.TabIndex = 34;
+			this.acb3.Text = "Circle 3";
+			this.acb3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.acb3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.acbMouseClick);
+			// 
+			// acb2
+			// 
+			this.acb2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.acb2.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.acb2.Location = new System.Drawing.Point(246, 12);
+			this.acb2.Name = "acb2";
+			this.acb2.Size = new System.Drawing.Size(114, 23);
+			this.acb2.TabIndex = 33;
+			this.acb2.Text = "Circle 2";
+			this.acb2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.acb2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.acbMouseClick);
+			// 
+			// acb1
+			// 
+			this.acb1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.acb1.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.acb1.Location = new System.Drawing.Point(126, 12);
+			this.acb1.Name = "acb1";
+			this.acb1.Size = new System.Drawing.Size(114, 23);
+			this.acb1.TabIndex = 32;
+			this.acb1.Text = "Circle 1";
+			this.acb1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.acb1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.acbMouseClick);
+			// 
+			// acb0
+			// 
+			this.acb0.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.acb0.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.acb0.Location = new System.Drawing.Point(6, 12);
+			this.acb0.Name = "acb0";
+			this.acb0.Size = new System.Drawing.Size(114, 23);
+			this.acb0.TabIndex = 31;
+			this.acb0.Text = "Circle 0";
+			this.acb0.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.acb0.MouseClick += new System.Windows.Forms.MouseEventHandler(this.acbMouseClick);
 			// 
 			// SheetView
 			// 
@@ -847,7 +1047,7 @@ namespace GKUI
 			this.MinimizeBox = false;
 			this.Name = "TfmOptions";
 			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Настройки";
 			this.PageControl1.ResumeLayout(false);
 			this.SheetCommon.ResumeLayout(false);
@@ -855,9 +1055,13 @@ namespace GKUI
 			this.GroupBox4.ResumeLayout(false);
 			this.GroupBox4.PerformLayout();
 			this.GroupBox7.ResumeLayout(false);
+			this.SheetCharts.ResumeLayout(false);
+			this.tabControl1.ResumeLayout(false);
 			this.SheetTree.ResumeLayout(false);
 			this.GroupBox1.ResumeLayout(false);
 			this.GroupBox2.ResumeLayout(false);
+			this.SheetAncCircle.ResumeLayout(false);
+			this.SheetAncCircle.PerformLayout();
 			this.SheetView.ResumeLayout(false);
 			this.PageControl2.ResumeLayout(false);
 			this.SheetViewCommon.ResumeLayout(false);
@@ -869,6 +1073,21 @@ namespace GKUI
 			this.EditPedigreeFormat.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.Label acb0;
+		private System.Windows.Forms.Label acb1;
+		private System.Windows.Forms.Label acb2;
+		private System.Windows.Forms.Label acb3;
+		private System.Windows.Forms.Label acb4;
+		private System.Windows.Forms.Label acb5;
+		private System.Windows.Forms.Label acb6;
+		private System.Windows.Forms.Label acb7;
+		private System.Windows.Forms.Label acbText;
+		private System.Windows.Forms.Label acbBack;
+		private System.Windows.Forms.CheckBox chkShowCircLines;
+		private System.Windows.Forms.Label acbLine;
+		private System.Windows.Forms.TabPage SheetAncCircle;
+		private System.Windows.Forms.TabControl tabControl1;
+		private System.Windows.Forms.TabPage SheetCharts;
 		private System.Windows.Forms.CheckBox chkRevisionsBackup;
 	}
 }

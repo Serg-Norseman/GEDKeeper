@@ -215,7 +215,7 @@ namespace GKUI
 			this.MinimizeBox = false;
 			this.Name = "TfmCommunicationEdit";
 			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Редактирование коммуникации";
 			this.GroupBox1.ResumeLayout(false);
 			this.GroupBox1.PerformLayout();

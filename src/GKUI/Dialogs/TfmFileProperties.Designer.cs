@@ -150,7 +150,7 @@ namespace GKUI
 			this.MinimizeBox = false;
 			this.Name = "TfmFileProperties";
 			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Свойства файла";
 			this.PageControl1.ResumeLayout(false);
 			this.SheetAuthor.ResumeLayout(false);

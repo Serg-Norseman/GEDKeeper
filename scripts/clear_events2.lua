@@ -20,7 +20,7 @@ for i = 0, x - 1 do
       for at = at_cnt - 1, 0, -1 do
         attr = gt_get_person_event(R, at);
         val = gt_get_event_value(attr);
-        if (gk_strpos("хоз€ин", val) > 0) then 
+        if (gk_strpos("хоз€ин", val) >= 0) then 
           gk_print("  > Ќайден факт хоз€ина двора - "..val);
           gt_delete_person_event(R, at);
         end

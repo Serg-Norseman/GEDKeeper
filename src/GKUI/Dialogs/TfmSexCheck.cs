@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKSys;
 
 /// <summary>
 /// Localization: clean
@@ -24,7 +24,7 @@ namespace GKUI
 			this.sbFemale.Text = LangMan.LSList[67];
 		}
 
-		public static TGEDCOMSex DefineSex(string iName, string iPatr, TNamesTable aNamesTable)
+		public static TGEDCOMSex DefineSex(string iName, string iPatr, NamesTable aNamesTable)
 		{
 			TGEDCOMSex sx = aNamesTable.GetSexByName(iName);
 			TGEDCOMSex Result = sx;
@@ -86,13 +86,13 @@ namespace GKUI
 				}
 				finally
 				{
-					SysUtils.Free(dlg);
+					dlg.Dispose();
 				}
 			}
 			return Result;
 		}
 
-		public static void CheckPersonSex(TGEDCOMIndividualRecord iRec, TNamesTable aNamesTable)
+		public static void CheckPersonSex(TGEDCOMIndividualRecord iRec, NamesTable aNamesTable)
 		{
 			if (iRec.Sex == TGEDCOMSex.svNone || iRec.Sex == TGEDCOMSex.svUndetermined)
 			{
