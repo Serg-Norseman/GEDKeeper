@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using Ext.Utils;
 using GedCom551;
 using GKCore;
+using GKSandbox;
 using GKUI.Controls;
 
 /// <summary>
@@ -775,7 +776,7 @@ namespace GKUI
 				int num = lst.Count - 1;
 				for (int i = 0; i <= num; i++)
 				{
-					TreeTools.TPatriarchObj p_obj = lst[i] as TreeTools.TPatriarchObj;
+					TPatriarchObj p_obj = lst[i] as TPatriarchObj;
 					string p_sign = ((p_obj.IRec.Patriarch) ? "[*] " : "");
 
 					GKListItem item = this.ListPatriarchs.AddItem(p_sign + p_obj.IRec.aux_GetNameStr(true, false), p_obj.IRec);
@@ -1159,7 +1160,7 @@ namespace GKUI
 			}
 		}
 
-		private string _btnPatSearch_Click_GetLinks([In] ref TList lst, TreeTools.TPatriarchObj pObj)
+		private string _btnPatSearch_Click_GetLinks([In] ref TList lst, TPatriarchObj pObj)
 		{
 			string Result = "";
 			int num = pObj.ILinks.Count - 1;
@@ -1167,7 +1168,7 @@ namespace GKUI
 			{
 				byte ix = pObj.ILinks[i];
 				if (Result != "") Result += ", ";
-				Result += (lst[ix] as TreeTools.TPatriarchObj).IRec.aux_GetNameStr(true, false);
+				Result += (lst[ix] as TPatriarchObj).IRec.aux_GetNameStr(true, false);
 			}
 			return Result;
 		}
@@ -1393,10 +1394,10 @@ namespace GKUI
 			this.edCompareFile.Enabled = (type == TreeMatchType.tmtExternal);
 			this.btnFileChoose.Enabled = (type == TreeMatchType.tmtExternal);
 		}
-		
+
 		void BtnPatriarchsDiagramClick(object sender, EventArgs e)
 		{
-			PatriarchsDiagram wnd = new PatriarchsDiagram(FBase);
+			PatriarchsViewer wnd = new PatriarchsViewer(FBase);
 			wnd.Show();
 		}
 	}

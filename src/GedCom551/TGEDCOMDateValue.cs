@@ -223,6 +223,29 @@ namespace GedCom551
 			}
 		}
 
+		public DateTime aux_GetDate()
+		{
+			DateTime res;
+
+			try
+			{
+				int year;
+				ushort month, day;
+				this.aux_GetIndependentDate(out year, out month, out day);
+				if (day == 0) day = 1;
+				if (month == 0) month = 1;
+
+				res = ((year <= 0) ? new DateTime(0) : new DateTime(year, (int)month, (int)day));
+			}
+			catch (Exception E)
+			{
+				SysUtils.LogWrite("GEDCOMDateToDate(" + this.StringValue + "): " + E.Message);
+				res = new DateTime(0);
+			}
+
+			return res;
+		}
+
 		public TGEDCOMDateValue(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
 		}

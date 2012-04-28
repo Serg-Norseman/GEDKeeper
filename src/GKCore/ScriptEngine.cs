@@ -130,6 +130,11 @@ namespace GKCore
 
 			///
 
+			lua_register(LVM, "gt_get_person_event_ex");
+			lua_register(LVM, "gt_get_event_year");
+
+			///
+
 			lua_register(LVM, "csv_load");
 			lua_register(LVM, "csv_close");
 			lua_register(LVM, "csv_get_cols");
@@ -336,6 +341,13 @@ namespace GKCore
 			return evt;
 		}
 
+		public object gt_get_person_event_ex(object rec_ptr, string sign)
+		{
+			TGEDCOMIndividualRecord rec = (TGEDCOMIndividualRecord)rec_ptr;
+			TGEDCOMCustomEvent evt = rec.GetIndividualEvent(sign);
+			return evt;
+		}
+
 		public void gt_delete_person_event(object rec_ptr, int idx)
 		{
 			TGEDCOMIndividualRecord rec = (TGEDCOMIndividualRecord)rec_ptr;
@@ -346,6 +358,19 @@ namespace GKCore
 		{
 			TGEDCOMCustomEvent evt = (TGEDCOMCustomEvent)ev_ptr;
 			return (TGenEngine.GEDCOMEventToDateStr(evt, TGenEngine.TDateFormat.dfDD_MM_YYYY, false));
+		}
+
+		public int gt_get_event_year(object ev_ptr)
+		{
+			TGEDCOMCustomEvent evt = (TGEDCOMCustomEvent)ev_ptr;
+			if (evt == null) {
+				return 0;
+			} else {
+				int year;
+				ushort month, day;
+				evt.Detail.Date.aux_GetIndependentDate(out year, out month, out day);
+				return year;
+			}
 		}
 
 		public void gt_set_event_date(object ev_ptr, string date)

@@ -44,12 +44,6 @@
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GraphSharp">
-      <HintPath>GraphSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="GraphSharp.Controls">
-      <HintPath>GraphSharp.Controls.dll</HintPath>
-    </Reference>
     <Reference Include="itextsharp">
       <HintPath>itextsharp.dll</HintPath>
     </Reference>
@@ -57,29 +51,11 @@
       <HintPath>LuaInterface.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.mshtml" />
-    <Reference Include="PresentationCore">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="PresentationFramework">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="QuickGraph">
-      <HintPath>QuickGraph.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WPFExtensions">
-      <HintPath>WPFExtensions.dll</HintPath>
-    </Reference>
     <Reference Include="XapianCSharp">
       <HintPath>XapianCSharp.dll</HintPath>
     </Reference>
@@ -89,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Ext\AnselEncoding.cs" />
+    <Compile Include="Ext\ArborEngine.cs" />
     <Compile Include="Ext\CRC32.cs" />
     <Compile Include="Ext\CSV\CSVReader.cs" />
     <Compile Include="Ext\CSV\StringConverter.cs" />
@@ -192,9 +169,6 @@
     <Compile Include="GKCore\WebTree.cs" />
     <Compile Include="GKResources.Designer.cs">
       <DependentUpon>GKResources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="GKSandbox\PatriarchsDiagram.xaml.cs">
-      <DependentUpon>PatriarchsDiagram.xaml</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Charts\AncestorsCircle.cs" />
     <Compile Include="GKUI\Controls\InputBox.cs" />
@@ -321,6 +295,10 @@
       <DependentUpon>TfmUserRefEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Lists\TIndividualListColumns.cs" />
+    <Compile Include="GKUI\PatriarchsViewer.cs" />
+    <Compile Include="GKUI\PatriarchsViewer.Designer.cs">
+      <DependentUpon>PatriarchsViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\TfmAncestorsCircle.cs" />
     <Compile Include="GKUI\TfmAncestorsCircle.Designer.cs">
       <DependentUpon>TfmAncestorsCircle.cs</DependentUpon>
@@ -505,6 +483,9 @@
     <EmbeddedResource Include="GKUI\Dialogs\TfmUserRefEdit.resx">
       <DependentUpon>TfmUserRefEdit.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\PatriarchsViewer.resx">
+      <DependentUpon>PatriarchsViewer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\TfmAncestorsCircle.resx">
       <DependentUpon>TfmAncestorsCircle.cs</DependentUpon>
     </EmbeddedResource>
@@ -552,9 +533,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="app.manifest" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="GKSandbox\PatriarchsDiagram.xaml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

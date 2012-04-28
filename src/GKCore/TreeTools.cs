@@ -9,6 +9,24 @@ using GKUI;
 
 namespace GKCore
 {
+	public class TPatriarchObj : IDisposable
+	{
+		public TGEDCOMIndividualRecord IRec;
+		public int IBirthYear;
+		public int IDescendantsCount;
+		public int IDescGenerations;
+		public List<byte> ILinks = new List<byte>();
+		private bool Disposed_;
+
+		public void Dispose()
+		{
+			if (!this.Disposed_)
+			{
+				this.Disposed_ = true;
+			}
+		}
+	}
+
 	public class TreeTools
 	{
 		public TreeTools()
@@ -16,24 +34,6 @@ namespace GKCore
 		}
 
 		#region Patriarchs Search
-
-		public class TPatriarchObj : IDisposable
-		{
-			public TGEDCOMIndividualRecord IRec;
-			public int IBirthYear;
-			public int IDescendantsCount;
-			public int IDescGenerations;
-			public List<byte> ILinks = new List<byte>();
-			private bool Disposed_;
-
-			public void Dispose()
-			{
-				if (!this.Disposed_)
-				{
-					this.Disposed_ = true;
-				}
-			}
-		}
 
 		private static int PatriarchsCompare(object Item1, object Item2)
 		{
@@ -82,42 +82,44 @@ namespace GKCore
 			return -1;
 		}
 
-		private static bool _GetPatriarchsList_SearchAnc(TGEDCOMIndividualRecord descendantRec, TGEDCOMIndividualRecord searchRec)
+		private static bool _GetPatriarchsList_SearchAnc(TGEDCOMIndividualRecord descendantRec, TGEDCOMIndividualRecord searchRec, bool onlyMaleLine)
 		{
-			bool Result = false;
+			bool res = false;
 
 			if (descendantRec != null)
 			{
-				Result = object.Equals(descendantRec, searchRec);
+				res = (descendantRec == searchRec);
 
-				if (!Result && descendantRec.ChildToFamilyLinks.Count > 0)
+				if (!res && descendantRec.ChildToFamilyLinks.Count > 0)
 				{
 					TGEDCOMFamilyRecord family = descendantRec.ChildToFamilyLinks[0].Family;
 
 					TGEDCOMIndividualRecord ancestor = family.Husband.Value as TGEDCOMIndividualRecord;
 					if (ancestor != null)
 					{
-						Result = TreeTools._GetPatriarchsList_SearchAnc(ancestor, searchRec);
-						if (Result)
-						{
-							return Result;
-						}
+						res = TreeTools._GetPatriarchsList_SearchAnc(ancestor, searchRec, onlyMaleLine);
+						if (res) return res;
 					}
 
-					ancestor = (family.Wife.Value as TGEDCOMIndividualRecord);
-					if (ancestor != null)
+					/*if (!onlyMaleLine)
 					{
-						Result = TreeTools._GetPatriarchsList_SearchAnc(ancestor, searchRec);
-					}
+						ancestor = (family.Wife.Value as TGEDCOMIndividualRecord);
+						if (ancestor != null)
+						{
+							res = TreeTools._GetPatriarchsList_SearchAnc(ancestor, searchRec, false);
+							if (res) return res;
+						}
+					}*/
 				}
 			}
 
-			return Result;
+			return res;
 		}
 
-		private static bool _GetPatriarchsList_SearchDesc(TGEDCOMIndividualRecord ancestorRec, TGEDCOMIndividualRecord searchRec)
+		private static bool _GetPatriarchsList_SearchDesc(TGEDCOMIndividualRecord ancestorRec, TGEDCOMIndividualRecord searchRec, out TGEDCOMIndividualRecord cross)
 		{
 			bool res = false;
+			cross = null;
 
 			int num = ancestorRec.SpouseToFamilyLinks.Count - 1;
 			for (int i = 0; i <= num; i++)
@@ -127,26 +129,26 @@ namespace GKCore
 
 				if (spouse != null)
 				{
-					res = TreeTools._GetPatriarchsList_SearchAnc(spouse, searchRec);
-					if (res)
-					{
-						break;
+					res = TreeTools._GetPatriarchsList_SearchAnc(spouse, searchRec, (ancestorRec.Sex == TGEDCOMSex.svFemale));
+					if (res) {
+						cross = ancestorRec;
+						return res;
 					}
 				}
 
-				int num2 = family.Childrens.Count - 1;
-				for (int j = 0; j <= num2; j++)
-				{
-					TGEDCOMIndividualRecord child = family.Childrens[j].Value as TGEDCOMIndividualRecord;
-					res = TreeTools._GetPatriarchsList_SearchDesc(child, searchRec);
-					if (res)
+				if (ancestorRec.Sex == TGEDCOMSex.svMale) {
+					int num2 = family.Childrens.Count - 1;
+					for (int j = 0; j <= num2; j++)
 					{
-						return res;
+						TGEDCOMIndividualRecord child = family.Childrens[j].Value as TGEDCOMIndividualRecord;
+
+						res = TreeTools._GetPatriarchsList_SearchDesc(child, searchRec, out cross);
+						if (res) return res;
 					}
 				}
 			}
 
-			return res;
+			return false;
 		}
 
 		public static void GetPatriarchsList(TGEDCOMTree aTree, bool aProgress, bool aLinks, ref TList aList, int aMinGens, bool aDates = true)
@@ -211,11 +213,15 @@ namespace GKCore
 						{
 							TPatriarchObj patr2 = aList[j] as TPatriarchObj;
 
-							bool res = TreeTools._GetPatriarchsList_SearchDesc(patr.IRec, patr2.IRec);
+							TGEDCOMIndividualRecord cross;
+							bool res = TreeTools._GetPatriarchsList_SearchDesc(patr.IRec, patr2.IRec, out cross);
 							if (res)
 							{
-								patr.ILinks.Add((byte)j);
-								//patr2.ILinks.Add((byte)i);
+								if (cross.Sex == TGEDCOMSex.svFemale) {
+									patr.ILinks.Add((byte)j);
+								} else {
+									patr2.ILinks.Add((byte)i);
+								}
 							}
 						}
 

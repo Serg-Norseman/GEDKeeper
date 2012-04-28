@@ -82,6 +82,7 @@ namespace GKUI
 			this.btnSourceAdd.Name = "btnSourceAdd";
 			this.btnSourceAdd.Size = new System.Drawing.Size(28, 28);
 			this.btnSourceAdd.TabIndex = 2;
+			this.btnSourceAdd.TabStop = false;
 			this.btnSourceAdd.Click += new System.EventHandler(this.btnSourceAdd_Click);
 			// 
 			// Label3
@@ -107,8 +108,7 @@ namespace GKUI
 			this.cbSource.Size = new System.Drawing.Size(306, 21);
 			this.cbSource.Sorted = true;
 			this.cbSource.TabIndex = 1;
-			this.cbSource.SelectedIndexChanged += new System.EventHandler(this.cbSource_SelectedIndexChanged);
-			this.cbSource.KeyUp += new System.Windows.Forms.KeyEventHandler(this.cbSource_KeyUp);
+			this.cbSource.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbSource_KeyDown);
 			// 
 			// TfmSourceCitEdit
 			// 

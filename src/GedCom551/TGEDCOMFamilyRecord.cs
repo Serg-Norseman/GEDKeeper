@@ -229,7 +229,25 @@ namespace GedCom551
 
 		public void SortChilds()
 		{
-			
+			int num = this._Childrens.Count - 1;
+			for (int i = 0; i <= num; i++)
+			{
+				int num2 = this._Childrens.Count - 1;
+				for (int j = i + 1; j <= num2; j++)
+				{
+					TGEDCOMIndividualRecord iChild = this._Childrens[i].Value as TGEDCOMIndividualRecord;
+					TGEDCOMCustomEvent iEv = iChild.GetIndividualEvent("BIRT");
+
+					DateTime iDate = ((iEv != null) ? iEv.Detail.Date.aux_GetDate() : new DateTime(0));
+
+					TGEDCOMIndividualRecord kChild = this._Childrens[j].Value as TGEDCOMIndividualRecord;
+					TGEDCOMCustomEvent kEv = kChild.GetIndividualEvent("BIRT");
+
+					DateTime kDate = ((kEv != null) ? kEv.Detail.Date.aux_GetDate() : new DateTime(0));
+
+					if (iDate > kDate) this._Childrens.Exchange(i, j);
+				}
+			}
 		}
 
 		public TGEDCOMIndividualRecord aux_GetSpouse(TGEDCOMIndividualRecord spouse)

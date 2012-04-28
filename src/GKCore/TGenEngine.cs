@@ -1543,30 +1543,6 @@ namespace GKCore
 			}
 		}
 
-		// FIXME: найти все включения, переработать применение
-		public void SortFamilyChilds(TGEDCOMFamilyRecord aFamily)
-		{
-			int num = aFamily.Childrens.Count - 1;
-			for (int i = 0; i <= num; i++)
-			{
-				int num2 = aFamily.Childrens.Count - 1;
-				for (int j = i + 1; j <= num2; j++)
-				{
-					TGEDCOMIndividualRecord iChild = aFamily.Childrens[i].Value as TGEDCOMIndividualRecord;
-					TGEDCOMCustomEvent iEv = TGenEngine.GetIndividualEvent(iChild, "BIRT");
-
-					DateTime iDate = ((iEv != null) ? TGenEngine.GEDCOMDateToDate(iEv.Detail.Date) : new DateTime(0));
-
-					TGEDCOMIndividualRecord kChild = aFamily.Childrens[j].Value as TGEDCOMIndividualRecord;
-					TGEDCOMCustomEvent kEv = TGenEngine.GetIndividualEvent(kChild, "BIRT");
-
-					DateTime kDate = ((kEv != null) ? TGenEngine.GEDCOMDateToDate(kEv.Detail.Date) : new DateTime(0));
-
-					if (iDate > kDate) aFamily.Childrens.Exchange(i, j);
-				}
-			}
-		}
-
 
 		public static string SexStr(TGEDCOMSex Sex)
 		{
@@ -2061,35 +2037,7 @@ namespace GKCore
 
 		public static DateTime GEDCOMDateToDate(TGEDCOMDateValue aDate)
 		{
-			DateTime Result;
-
-			try
-			{
-				if (aDate != null)
-				{
-					int year;
-					ushort month, day;
-					aDate.aux_GetIndependentDate(out year, out month, out day);
-					if (day == 0) day = 1;
-					if (month == 0) month = 1;
-
-					Result = ((year <= 0) ? new DateTime(0) : new DateTime(year, (int)month, (int)day));
-				}
-				else
-				{
-					Result = new DateTime(0);
-				}
-			}
-			catch (Exception E)
-			{
-				int year = 0;
-				ushort month = 0;
-				ushort day = 0;
-				SysUtils.LogWrite(string.Format("GEDCOMDateToDate(%d, %d, %d): ", new object[] { year, month, day }) + E.Message);
-				SysUtils.LogWrite("Record (" + (aDate.ParentRecord as TGEDCOMRecord).XRef + "): invalid date");
-				Result = new DateTime(0);
-			}
-			return Result;
+			return ((aDate == null) ? new DateTime(0) : aDate.aux_GetDate());
 		}
 
 		public static TGEDCOMCustomEvent GetIndividualEvent(TGEDCOMIndividualRecord iRec, string evName)
