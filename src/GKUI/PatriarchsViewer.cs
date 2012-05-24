@@ -16,19 +16,19 @@ namespace GKSandbox
         private ToolTip tip = new System.Windows.Forms.ToolTip();
         private bool tipShow = false;
 
-        public PatriarchsViewer(TfmBase aBase)
+        public PatriarchsViewer(TfmBase aBase, int minGens)
 		{
 			InitializeComponent();
 			this.FBase = aBase;
-			CreateGraph();
+			CreateGraph(minGens);
 		}
 
-        private void CreateGraph()
+        private void CreateGraph(int minGens)
         {
 			TList lst = new TList(true);
 			try
 			{
-				TreeTools.GetPatriarchsList(this.FBase.Engine.Tree, true, true, ref lst, 3, false);
+				TreeTools.GetPatriarchsList(this.FBase.Engine.Tree, true, true, ref lst, minGens, false);
 
 				int num = lst.Count - 1;
 				for (int i = 0; i <= num; i++)

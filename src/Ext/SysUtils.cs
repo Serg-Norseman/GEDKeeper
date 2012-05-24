@@ -119,6 +119,13 @@ namespace Ext.Utils
 			}
 		}
 
+		public static void LogView()
+		{
+			if (File.Exists(LogFilename)) {
+				SysUtils.ShellExecute(0, "open", LogFilename, "", "", 5);
+			}
+		}
+
 
 
 		private static readonly ScrollEventType[] m_ScrollEvents;

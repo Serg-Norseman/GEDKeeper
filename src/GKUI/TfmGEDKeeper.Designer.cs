@@ -78,6 +78,7 @@ namespace GKUI
 		private System.Windows.Forms.MenuItem miContext;
 		private System.Windows.Forms.MenuItem N11;
 		private System.Windows.Forms.MenuItem miLogSend;
+		private System.Windows.Forms.MenuItem miLogView;
 		private System.Windows.Forms.MenuItem N13;
 		private System.Windows.Forms.MenuItem miAbout;
 		private System.Windows.Forms.ContextMenu MenuMRU;
@@ -209,6 +210,7 @@ namespace GKUI
 			this.miContext = new System.Windows.Forms.MenuItem();
 			this.N12 = new System.Windows.Forms.MenuItem();
 			this.miLogSend = new System.Windows.Forms.MenuItem();
+			this.miLogView = new System.Windows.Forms.MenuItem();
 			this.N13 = new System.Windows.Forms.MenuItem();
 			this.miAbout = new System.Windows.Forms.MenuItem();
 			this.OpenDialog1 = new System.Windows.Forms.OpenFileDialog();
@@ -891,6 +893,7 @@ namespace GKUI
 									this.miContext,
 									this.N12,
 									this.miLogSend,
+									this.miLogView,
 									this.N13,
 									this.miAbout});
 			this.miHelp.Text = "Справка";
@@ -931,14 +934,20 @@ namespace GKUI
 			this.miLogSend.Text = "Отправить журнал ошибок";
 			this.miLogSend.Click += new System.EventHandler(this.miLogSendClick);
 			// 
+			// miLogView
+			// 
+			this.miLogView.Index = 6;
+			this.miLogView.Text = "Просмотреть журнал ошибок";
+			this.miLogView.Click += new System.EventHandler(this.miLogViewClick);
+			// 
 			// N13
 			// 
-			this.N13.Index = 6;
+			this.N13.Index = 7;
 			this.N13.Text = "-";
 			// 
 			// miAbout
 			// 
-			this.miAbout.Index = 7;
+			this.miAbout.Index = 8;
 			this.miAbout.Text = "О программе...";
 			this.miAbout.Click += new System.EventHandler(this.miAboutClick);
 			// 

@@ -364,6 +364,11 @@ namespace GKUI
 			SysUtils.LogSend();
 		}
 
+		private void miLogViewClick(object sender, EventArgs e)
+		{
+			SysUtils.LogView();
+		}
+
 		private void miAboutClick(object sender, EventArgs e)
 		{
 			TfmAbout.ShowAbout("GEDKeeper");

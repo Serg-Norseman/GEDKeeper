@@ -203,5 +203,14 @@ namespace GKUI.Controls
 			return Result;
 		}
 
+		public void SelectItem(int index)
+		{
+			if (index >= 0 && index < this.Items.Count) {
+				ListViewItem item = this.Items[index];
+				this.SelectedIndices.Clear();
+				item.Selected = true;
+				item.EnsureVisible();
+			}
+		}
 	}
 }

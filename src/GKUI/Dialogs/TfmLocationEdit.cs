@@ -113,8 +113,8 @@ namespace GKUI
 						GKListItem item = new GKListItem();
 						item.Text = pt.Hint;
 						item.Data = pt;
-						item.SubItems.Add(pt.Latitude.ToString("0.000000"));
-						item.SubItems.Add(pt.Longitude.ToString("0.000000"));
+						item.SubItems.Add(GKMapBrowser.CoordToStr(pt.Latitude));
+						item.SubItems.Add(GKMapBrowser.CoordToStr(pt.Longitude));
 						this.ListGeoCoords.Items.Add(item);
 						this.FMapBrowser.AddPoint(pt.Latitude, pt.Longitude, pt.Hint);
 					}

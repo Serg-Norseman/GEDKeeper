@@ -1397,7 +1397,7 @@ namespace GKUI
 
 		void BtnPatriarchsDiagramClick(object sender, EventArgs e)
 		{
-			PatriarchsViewer wnd = new PatriarchsViewer(FBase);
+			PatriarchsViewer wnd = new PatriarchsViewer(FBase, decimal.ToInt32(this.edMinGens.Value));
 			wnd.Show();
 		}
 	}
