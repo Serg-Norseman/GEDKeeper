@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 
@@ -445,6 +446,13 @@ namespace GedCom551
 			return Result;
 		}
 
+		public double GetTagFloatValue([In] string ATag, double ADefault)
+		{
+			string S = this.GetTagStringValue(ATag);
+			double Result = ((S == "") ? ADefault : SysUtils.ParseFloat(S, ADefault));
+			return Result;
+		}
+
 		public string GetTagStringValue([In] string ATag)
 		{
 			TGEDCOMTag Tag = this.FindTag(ATag, 0);
@@ -518,6 +526,13 @@ namespace GedCom551
 		public void SetTagIntegerValue([In] string ATag, int AValue)
 		{
 			this.SetTagStringValue(ATag, AValue.ToString());
+		}
+
+		public void SetTagFloatValue([In] string ATag, double AValue)
+		{
+			NumberFormatInfo nfi = new NumberFormatInfo();
+			nfi.NumberDecimalSeparator = ".";
+			this.SetTagStringValue(ATag, AValue.ToString(nfi));
 		}
 
 		public void SetTagStringValue([In] string ATag, [In] string AValue)

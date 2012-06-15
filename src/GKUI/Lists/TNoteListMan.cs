@@ -10,13 +10,20 @@ using GKUI.Controls;
 
 namespace GKUI.Lists
 {
+	public enum TNoteColumnType : byte
+	{
+		nctText,
+		nctChangeDate
+	}
+
 	public sealed class TNoteListMan : TListManager
 	{
 		private TGEDCOMNoteRecord FRec;
 
 		public override bool CheckFilter(TPersonsFilter aFilter, TGenEngine.TShieldState aShieldState)
 		{
-			return true;
+			bool res = base.CheckNewFilter();
+			return res;
 		}
 
 		public override void Fetch(TGEDCOMRecord aRec)
@@ -24,70 +31,48 @@ namespace GKUI.Lists
 			this.FRec = (aRec as TGEDCOMNoteRecord);
 		}
 
-		public override string GetColumnValue(int aColIndex, bool isMain)
+		public override object GetColumnValueEx(int col_index)
 		{
-			string Result;
-			if (aColIndex != 1)
-			{
-				if (aColIndex != 2)
-				{
-					Result = "";
-				}
-				else
-				{
-					Result = this.FRec.ChangeDate.ToString();
-				}
-			}
-			else
-			{
-				string st;
-				if (this.FRec.Note.Count > 0)
-				{
-					st = this.FRec.Note[0].Trim();
-					if (st == "" && this.FRec.Note.Count > 1)
+			switch (col_index) {
+				case 1:
 					{
-						st = this.FRec.Note[1].Trim();
+						string st;
+						if (this.FRec.Note.Count > 0)
+						{
+							st = this.FRec.Note[0].Trim();
+							if (st == "" && this.FRec.Note.Count > 1)
+							{
+								st = this.FRec.Note[1].Trim();
+							}
+						}
+						else
+						{
+							st = "";
+						}
+						return st;
 					}
-				}
-				else
-				{
-					st = "";
-				}
-				Result = st;
-			}
-			return Result;
-		}
-
-		public override void UpdateItem(GKListItem aItem, bool isMain)
-		{
-			string st;
-			if (this.FRec.Note.Count > 0)
-			{
-				st = this.FRec.Note[0].Trim();
-				if (st == "" && this.FRec.Note.Count > 1)
-				{
-					st = this.FRec.Note[1].Trim();
-				}
-			}
-			else
-			{
-				st = "";
-			}
-			aItem.SubItems.Add(st);
-			if (isMain)
-			{
-				aItem.SubItems.Add(this.FRec.ChangeDate.ToString());
+				case 2:
+					return this.FRec.ChangeDate.ChangeDateTime;
+				default:
+					return null;
 			}
 		}
 
-		public override void UpdateColumns(GKListView aList, bool isMain)
+		protected override void InitColumnStatics()
 		{
-			aList.AddListColumn("№", 50, false);
-			aList.AddListColumn(LangMan.LSList[108], 400, false);
-			if (isMain)
-			{
-				aList.AddListColumn(LangMan.LSList[317], 150, false);
-			}
+			this.ColumnStatics.Clear();
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[108], TDataType.dtString, 400));
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[317], TDataType.dtDateTime, 150));
+		}
+
+		public override Type GetColumnsEnum()
+		{
+			return typeof(TNoteColumnType);
+		}
+
+		public override TListColumns GetDefaultListColumns()
+		{
+			return null;
 		}
 
 		public TNoteListMan(TGEDCOMTree aTree) : base(aTree)

@@ -38,7 +38,7 @@ namespace GKUI
 				this.ListPersonColumns.Items.Clear();
 				for (int i = 0; i < FTempColumns.Count; i++)
 				{
-					TPersonColumnType pct = FTempColumns[i].colType;
+					TPersonColumnType pct = (TPersonColumnType)FTempColumns[i].colType;
 					this.ListPersonColumns.Items.Add(LangMan.LSList[(int)GlobalOptions.PersonColumnsName[(int)pct].Name - 1], FTempColumns[i].colActive);
 				}
 			}
@@ -304,7 +304,7 @@ namespace GKUI
 			int idx = this.ListPersonColumns.SelectedIndex;
 			if (idx > 0)
 			{
-				TPersonColumnProps props = this.FTempColumns[idx - 1];
+				TColumnProps props = this.FTempColumns[idx - 1];
 				this.FTempColumns[idx - 1] = this.FTempColumns[idx];
 				this.FTempColumns[idx] = props;
 				this.UpdateColumnsList();
@@ -317,7 +317,7 @@ namespace GKUI
 			int idx = this.ListPersonColumns.SelectedIndex;
 			if (idx >= 0 && idx < 24)
 			{
-				TPersonColumnProps props = this.FTempColumns[idx + 1];
+				TColumnProps props = this.FTempColumns[idx + 1];
 				this.FTempColumns[idx + 1] = this.FTempColumns[idx];
 				this.FTempColumns[idx] = props;
 				this.UpdateColumnsList();
@@ -334,7 +334,7 @@ namespace GKUI
 		private void ListPersonColumns_ItemCheck(object sender, ItemCheckEventArgs e)
 		{
 			bool cs = (e.NewValue == CheckState.Checked);
-			TPersonColumnProps props = this.FTempColumns[e.Index];
+			TColumnProps props = this.FTempColumns[e.Index];
 			props.colActive = cs;
 			this.FTempColumns[e.Index] = props;
 		}

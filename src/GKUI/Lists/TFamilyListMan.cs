@@ -2,7 +2,6 @@
 
 using GedCom551;
 using GKCore;
-using GKUI.Controls;
 
 /// <summary>
 /// Localization: clean
@@ -10,18 +9,24 @@ using GKUI.Controls;
 
 namespace GKUI.Lists
 {
+	public enum TFamilyColumnType : byte
+	{
+		fctFamilyStr,
+		fctMarriageDate,		
+		fctChangeDate
+	}
+
 	public sealed class TFamilyListMan : TListManager
 	{
 		private TGEDCOMFamilyRecord FRec;
 
 		public override bool CheckFilter(TPersonsFilter aFilter, TGenEngine.TShieldState aShieldState)
 		{
-			bool Result = false;
-			if ((this.FRec.Restriction != TGEDCOMRestriction.rnPrivacy || aShieldState == TGenEngine.TShieldState.ssNone) && (aFilter.List != TPersonsFilter.TListFilterMode.flSelector || aFilter.Name == "*" || IsMatchesMask(TGenEngine.aux_GetFamilyStr(this.FRec), aFilter.Name)))
-			{
-				Result = true;
-			}
-			return Result;
+			bool res = ((this.FRec.Restriction != TGEDCOMRestriction.rnPrivacy || aShieldState == TGenEngine.TShieldState.ssNone) && (this.QuickFilter == "*" || IsMatchesMask(TGenEngine.aux_GetFamilyStr(this.FRec), this.QuickFilter)));
+
+			res = res && base.CheckNewFilter();
+
+			return res;
 		}
 
 		public override void Fetch(TGEDCOMRecord aRec)
@@ -29,45 +34,36 @@ namespace GKUI.Lists
 			this.FRec = (aRec as TGEDCOMFamilyRecord);
 		}
 
-		public override string GetColumnValue(int aColIndex, bool isMain)
+		public override object GetColumnValueEx(int col_index)
 		{
-			string result;
-			switch (aColIndex) {
+			switch (col_index) {
 				case 1:
-					result = TGenEngine.aux_GetFamilyStr(this.FRec);
-					break;
+					return TGenEngine.aux_GetFamilyStr(this.FRec);
 				case 2:
-					result = TGenEngine.GetMarriageDate(this.FRec, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
-					break;
+					return TGenEngine.GetMarriageDate(this.FRec, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
 				case 3:
-					result = this.FRec.ChangeDate.ToString();
-					break;
+					return this.FRec.ChangeDate.ChangeDateTime;
 				default:
-					result = "";
-					break;
-			}
-			return result;
-		}
-
-		public override void UpdateItem(GKListItem aItem, bool isMain)
-		{
-			aItem.SubItems.Add(TGenEngine.aux_GetFamilyStr(this.FRec));
-			aItem.SubItems.Add(TGenEngine.GetMarriageDate(this.FRec, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
-			if (isMain)
-			{
-				aItem.SubItems.Add(this.FRec.ChangeDate.ToString());
+					return null;
 			}
 		}
 
-		public override void UpdateColumns(GKListView aList, bool isMain)
+		protected override void InitColumnStatics()
 		{
-			aList.AddListColumn("№", 50, false);
-			aList.AddListColumn(LangMan.LSList[153], 300, false);
-			aList.AddListColumn(LangMan.LSList[217], 100, false);
-			if (isMain)
-			{
-				aList.AddListColumn(LangMan.LSList[317], 150, false);
-			}
+			this.ColumnStatics.Clear();
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[153], TDataType.dtString, 300));
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[217], TDataType.dtString, 100));
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[317], TDataType.dtDateTime, 150));
+		}
+
+		public override Type GetColumnsEnum()
+		{
+			return typeof(TFamilyColumnType);
+		}
+
+		public override TListColumns GetDefaultListColumns()
+		{
+			return null;
 		}
 
 		public TFamilyListMan(TGEDCOMTree aTree) : base(aTree)

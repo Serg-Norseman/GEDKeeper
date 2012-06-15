@@ -304,8 +304,8 @@ namespace GKUI
 				} else {
 					GKMapBrowser.TGMapPoint pt = new GKMapBrowser.TGMapPoint();
 					pt.Hint = place_name;
-					pt.Longitude = SysUtils.ParseFloat(locRec.Map.Long, 0.0);
-					pt.Latitude = SysUtils.ParseFloat(locRec.Map.Lati, 0.0);
+					pt.Longitude = locRec.Map.Long;
+					pt.Latitude = locRec.Map.Lati;
 					place.Points.Add(pt);
 					string pt_title = pt.Hint + string.Format(" [{0:0.000000}, {1:0.000000}]", pt.Latitude, pt.Longitude);
 					node.Nodes.Add(new GKTreeNode(pt_title, pt));

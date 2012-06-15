@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using GedCom551;
 using GKCore;
@@ -10,6 +11,75 @@ using GKUI.Controls;
 
 namespace GKUI.Lists
 {
+
+	public enum TPersonColumnType : byte
+	{
+		pctPatriarch,
+		pctName,
+		pctNick,
+		pctSex,
+		pctBirthDate,
+		pctDeathDate,
+		pctBirthPlace,
+		pctDeathPlace,
+		pctResidence,
+		pctAge,
+		pctLifeExpectancy,
+		pctDaysForBirth,
+		pctGroups,
+		pctReligion,
+		pctNationality,
+		pctEducation,
+		pctOccupation,
+		pctCaste,
+		pctMili,
+		pctMiliInd,
+		pctMiliDis,
+		pctMiliRank,
+		pctChangeDate,
+		pctBookmark,
+		pctTitle
+	}
+
+	public sealed class TIndividualListColumns : TListColumns
+	{
+		protected override void InitDefaultColumns()
+		{
+			TColumnProps[] array1 = new TColumnProps[25];
+			array1[0] = new TColumnProps(TPersonColumnType.pctPatriarch, true);
+			array1[1] = new TColumnProps(TPersonColumnType.pctName, true);
+			array1[2] = new TColumnProps(TPersonColumnType.pctNick, false);
+			array1[3] = new TColumnProps(TPersonColumnType.pctSex, true);
+			array1[4] = new TColumnProps(TPersonColumnType.pctBirthDate, true);
+			array1[5] = new TColumnProps(TPersonColumnType.pctDeathDate, true);
+			array1[6] = new TColumnProps(TPersonColumnType.pctBirthPlace, true);
+			array1[7] = new TColumnProps(TPersonColumnType.pctDeathPlace, true);
+			array1[8] = new TColumnProps(TPersonColumnType.pctResidence, true);
+			array1[9] = new TColumnProps(TPersonColumnType.pctAge, true);
+			array1[10] = new TColumnProps(TPersonColumnType.pctLifeExpectancy, true);
+			array1[11] = new TColumnProps(TPersonColumnType.pctDaysForBirth, true);
+			array1[12] = new TColumnProps(TPersonColumnType.pctGroups, true);
+			array1[13] = new TColumnProps(TPersonColumnType.pctReligion, false);
+			array1[14] = new TColumnProps(TPersonColumnType.pctNationality, false);
+			array1[15] = new TColumnProps(TPersonColumnType.pctEducation, false);
+			array1[16] = new TColumnProps(TPersonColumnType.pctOccupation, false);
+			array1[17] = new TColumnProps(TPersonColumnType.pctCaste, false);
+			array1[18] = new TColumnProps(TPersonColumnType.pctMili, false);
+			array1[19] = new TColumnProps(TPersonColumnType.pctMiliInd, false);
+			array1[20] = new TColumnProps(TPersonColumnType.pctMiliDis, false);
+			array1[21] = new TColumnProps(TPersonColumnType.pctMiliRank, false);
+			array1[22] = new TColumnProps(TPersonColumnType.pctChangeDate, true);
+			array1[23] = new TColumnProps(TPersonColumnType.pctBookmark, true);
+			array1[24] = new TColumnProps(TPersonColumnType.pctTitle, true);
+			DefColumns = array1;
+		}
+
+		public TIndividualListColumns()
+		{
+			InitData(typeof(TPersonColumnType));
+		}
+	}
+
 	public sealed class TIndividualListMan : TListManager
 	{
 		private struct TColRec
@@ -25,7 +95,13 @@ namespace GKUI.Lists
 		private int FYearMin;
 		private int FYearMax;
 		private int age_year;
-		private TIndividualListMan.TColRec[] FColumnsMap = new TIndividualListMan.TColRec[256];
+		private List<TColRec> FColumnsMap = new List<TColRec>();
+		private TPersonsFilter FExtFilter = new TPersonsFilter();
+
+		public TPersonsFilter ExtFilter
+		{
+			get { return this.FExtFilter; }
+		}
 
 		public int YearMin
 		{
@@ -83,13 +159,6 @@ namespace GKUI.Lists
 			return result;
 		}
 
-		private void SetColMap(byte aType, byte aSubType, ref int cols)
-		{
-			cols++;
-			this.FColumnsMap[cols].col_type = aType;
-			this.FColumnsMap[cols].col_subtype = aSubType;
-		}
-
 		public override bool CheckFilter(TPersonsFilter aFilter, TGenEngine.TShieldState aShieldState)
 		{
 			bool Result = false;
@@ -122,11 +191,15 @@ namespace GKUI.Lists
 				}
 			}
 
-			if ((this.FRec.Restriction != TGEDCOMRestriction.rnPrivacy || aShieldState == TGenEngine.TShieldState.ssNone) 
-			    && (aFilter.Sex == TGEDCOMSex.svNone || this.FRec.Sex == aFilter.Sex) 
-			    && (aFilter.Name == "*" || IsMatchesMask(this.FRec.aux_GetNameStr(true, false), aFilter.Name)) 
-				&& (aFilter.Residence == "*" || this.HasPlace(aFilter)) && (aFilter.EventVal == "*" || this.HasEventVal(aFilter)) 
-					&& (!aFilter.PatriarchOnly || this.FRec.Patriarch))
+			string fullname = this.FRec.aux_GetNameStr(true, false);
+
+			if ((this.FRec.Restriction != TGEDCOMRestriction.rnPrivacy || aShieldState == TGenEngine.TShieldState.ssNone)
+			    && (aFilter.Sex == TGEDCOMSex.svNone || this.FRec.Sex == aFilter.Sex)
+			    && (aFilter.Name == "*" || IsMatchesMask(fullname, aFilter.Name))
+			    && (this.QuickFilter == "*" || IsMatchesMask(fullname, this.QuickFilter))
+				&& (aFilter.Residence == "*" || this.HasPlace(aFilter))
+				&& (aFilter.EventVal == "*" || this.HasEventVal(aFilter))
+				&& (!aFilter.PatriarchOnly || this.FRec.Patriarch))
 			{
 				bool isLive = (dd_ev == null);
 
@@ -203,19 +276,23 @@ namespace GKUI.Lists
 			return Result;
 		}
 
-		public override void Fetch(TGEDCOMRecord aRec)
+		private void SetColMap(byte aType, byte aSubType)
 		{
-			this.FRec = (aRec as TGEDCOMIndividualRecord);
+			TColRec cr = new TColRec();
+			cr.col_type = aType;
+			cr.col_subtype = aSubType;
+			FColumnsMap.Add(cr);
 		}
 
-		public override string GetColumnValue(int aColIndex, bool isMain)
+		public override object GetColumnValueEx(int col_index)
 		{
-			TPersonColumnType pct = (TPersonColumnType)this.FColumnsMap[aColIndex].col_type;
-			int sub_index = (int)this.FColumnsMap[aColIndex].col_subtype;
-			string Result = "";
+			TColRec colrec = this.FColumnsMap[col_index];
+			TPersonColumnType pct = (TPersonColumnType)colrec.col_type;
+			int sub_index = (int)colrec.col_subtype;
 
-			switch (pct)
-			{
+			object Result = null;
+
+			switch (pct) {
 				case TPersonColumnType.pctPatriarch:
 					Result = ((this.FRec.Patriarch) ? "*" : " ");
 					break;
@@ -226,16 +303,16 @@ namespace GKUI.Lists
 					string f = "";
 					string i = "";
 					string p = "";
-					if (defNameFormat >= TGenEngine.TNameFormat.nfF_NP && defNameFormat < (TGenEngine.TNameFormat)3)
-					{
+
+					if (defNameFormat != TGenEngine.TNameFormat.nfFNP) {
 						this.FRec.aux_GetNameParts(out f, out i, out p);
 					}
-					TGenEngine.TNameFormat defNameFormat2 = GKUI.TfmGEDKeeper.Instance.Options.DefNameFormat;
-					if (defNameFormat2 != TGenEngine.TNameFormat.nfFNP)
+
+					if (defNameFormat != TGenEngine.TNameFormat.nfFNP)
 					{
-						if (defNameFormat2 != TGenEngine.TNameFormat.nfF_NP)
+						if (defNameFormat != TGenEngine.TNameFormat.nfF_NP)
 						{
-							if (defNameFormat2 == TGenEngine.TNameFormat.nfF_N_P)
+							if (defNameFormat == TGenEngine.TNameFormat.nfF_N_P)
 							{
 								if (sub_index != 0)
 								{
@@ -288,35 +365,23 @@ namespace GKUI.Lists
 					break;
 
 				case TPersonColumnType.pctBirthDate:
-					{
-						TGEDCOMCustomEvent ev = TGenEngine.GetIndividualEvent(this.FRec, "BIRT");
-						Result = TGenEngine.GEDCOMEventToDateStr(ev, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat, false);
-					}
+					Result = TGenEngine.GEDCOMEventToDateStr(buf_bd, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat, false);
 					break;
 
 				case TPersonColumnType.pctBirthPlace:
-					{
-						TGEDCOMCustomEvent ev = TGenEngine.GetIndividualEvent(this.FRec, "BIRT");
-						Result = TGenEngine.GetPlaceStr(ev, false);
-					}
+					Result = TGenEngine.GetPlaceStr(buf_bd, false);
 					break;
 
 				case TPersonColumnType.pctDeathDate:
-					{
-						TGEDCOMCustomEvent ev = TGenEngine.GetIndividualEvent(this.FRec, "DEAT");
-						Result = TGenEngine.GEDCOMEventToDateStr(ev, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat, false);
-					}
+					Result = TGenEngine.GEDCOMEventToDateStr(buf_dd, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat, false);
 					break;
 
 				case TPersonColumnType.pctDeathPlace:
-					{
-						TGEDCOMCustomEvent ev = TGenEngine.GetIndividualEvent(this.FRec, "DEAT");
-						Result = TGenEngine.GetPlaceStr(ev, false);
-					}
+					Result = TGenEngine.GetPlaceStr(buf_dd, false);
 					break;
 
 				case TPersonColumnType.pctResidence:
-					Result = TGenEngine.GetResidencePlace(this.FRec, GKUI.TfmGEDKeeper.Instance.Options.PlacesWithAddress);
+					Result = buf_residence;
 					break;
 
 				case TPersonColumnType.pctAge:
@@ -336,43 +401,43 @@ namespace GKUI.Lists
 					break;
 
 				case TPersonColumnType.pctReligion:
-					Result = TGenEngine.GetAttributeValue(this.FRec, "RELI");
+					Result = buf_religion;
 					break;
 
 				case TPersonColumnType.pctNationality:
-					Result = TGenEngine.GetAttributeValue(this.FRec, "NATI");
+					Result = buf_nationality;
 					break;
 
 				case TPersonColumnType.pctEducation:
-					Result = TGenEngine.GetAttributeValue(this.FRec, "EDUC");
+					Result = buf_education;
 					break;
 
 				case TPersonColumnType.pctOccupation:
-					Result = TGenEngine.GetAttributeValue(this.FRec, "OCCU");
+					Result = buf_occupation;
 					break;
 
 				case TPersonColumnType.pctCaste:
-					Result = TGenEngine.GetAttributeValue(this.FRec, "CAST");
+					Result = buf_caste;
 					break;
 
 				case TPersonColumnType.pctMili:
-					Result = TGenEngine.GetAttributeValue(this.FRec, "_MILI");
+					Result = buf_mili;
 					break;
 
 				case TPersonColumnType.pctMiliInd:
-					Result = TGenEngine.GetAttributeValue(this.FRec, "_MILI_IND");
+					Result = buf_mili_ind;
 					break;
 
 				case TPersonColumnType.pctMiliDis:
-					Result = TGenEngine.GetAttributeValue(this.FRec, "_MILI_DIS");
+					Result = buf_mili_dis;
 					break;
 
 				case TPersonColumnType.pctMiliRank:
-					Result = TGenEngine.GetAttributeValue(this.FRec, "_MILI_RANK");
+					Result = buf_mili_rank;
 					break;
 
 				case TPersonColumnType.pctChangeDate:
-					Result = this.FRec.ChangeDate.ToString();
+					Result = this.FRec.ChangeDate.ChangeDateTime;
 					break;
 
 				case TPersonColumnType.pctBookmark:
@@ -380,7 +445,7 @@ namespace GKUI.Lists
 					break;
 
 				case TPersonColumnType.pctTitle:
-					Result = TGenEngine.GetAttributeValue(this.FRec, "TITL");
+					Result = buf_title;
 					break;
 			}
 			return Result;
@@ -414,267 +479,106 @@ namespace GKUI.Lists
 			this.FYearMax = 0;
 		}
 
-		public override void UpdateItem(GKListItem aItem, bool isMain)
+		private TGEDCOMCustomEvent buf_bd = null;
+		private TGEDCOMCustomEvent buf_dd = null;
+		private string buf_residence = "";
+		private string buf_religion = "";
+		private string buf_nationality = "";
+		private string buf_education = "";
+		private string buf_occupation = "";
+		private string buf_caste = "";
+		private string buf_mili = "";
+		private string buf_mili_ind = "";
+		private string buf_mili_dis = "";
+		private string buf_mili_rank = "";
+		private string buf_title = "";
+
+		public override void Fetch(TGEDCOMRecord aRec)
 		{
+			this.FRec = (aRec as TGEDCOMIndividualRecord);
+
+			buf_bd = null;
+			buf_dd = null;
+			buf_residence = "";
+			buf_religion = "";
+			buf_nationality = "";
+			buf_education = "";
+			buf_occupation = "";
+			buf_caste = "";
+			buf_mili = "";
+			buf_mili_ind = "";
+			buf_mili_dis = "";
+			buf_mili_rank = "";
+			buf_title = "";
+
 			GlobalOptions gOptions = GKUI.TfmGEDKeeper.Instance.Options;
-			TIndividualListColumns columns = gOptions.IndividualListColumns;
-
-			TGEDCOMCustomEvent bd_ev = null;
-			TGEDCOMCustomEvent dd_ev = null;
-
-			string residence = "";
-			string religion = "";
-			string nationality = "";
-			string education = "";
-			string occupation = "";
-			string caste = "";
-			string mili = "";
-			string mili_ind = "";
-			string mili_dis = "";
-			string mili_rank = "";
-			string title = "";
-
-			int i;
 			int num = this.FRec.IndividualEvents.Count - 1;
-			for (i = 0; i <= num; i++)
+			for (int i = 0; i <= num; i++)
 			{
 				TGEDCOMCustomEvent ev = this.FRec.IndividualEvents[i];
 
-				if (ev.Name == "BIRT" && bd_ev == null)
+				if (ev.Name == "BIRT" && buf_bd == null)
 				{
-					bd_ev = ev;
+					buf_bd = ev;
 				}
-				else if (ev.Name == "DEAT" && dd_ev == null)
+				else if (ev.Name == "DEAT" && buf_dd == null)
 				{
-					dd_ev = ev;
+					buf_dd = ev;
 				}
-				else if (ev.Name == "RESI" && residence == "")
+				else if (ev.Name == "RESI" && buf_residence == "")
 				{
-					residence = TGenEngine.GetPlaceStr(ev, gOptions.PlacesWithAddress);
+					buf_residence = TGenEngine.GetPlaceStr(ev, gOptions.PlacesWithAddress);
 				}
-				else if (ev.Name == "RELI" && religion == "")
+				else if (ev.Name == "RELI" && buf_religion == "")
 				{
-					religion = ev.StringValue;
+					buf_religion = ev.StringValue;
 				}
-				else if (ev.Name == "NATI" && nationality == "")
+				else if (ev.Name == "NATI" && buf_nationality == "")
 				{
-					nationality = ev.StringValue;
+					buf_nationality = ev.StringValue;
 				}
-				else if (ev.Name == "EDUC" && education == "")
+				else if (ev.Name == "EDUC" && buf_education == "")
 				{
-					education = ev.StringValue;
+					buf_education = ev.StringValue;
 				}
-				else if (ev.Name == "OCCU" && occupation == "")
+				else if (ev.Name == "OCCU" && buf_occupation == "")
 				{
-					occupation = ev.StringValue;
+					buf_occupation = ev.StringValue;
 				}
-				else if (ev.Name == "CAST" && caste == "")
+				else if (ev.Name == "CAST" && buf_caste == "")
 				{
-					caste = ev.StringValue;
+					buf_caste = ev.StringValue;
 				}
-				else if (ev.Name == "_MILI" && mili == "")
+				else if (ev.Name == "_MILI" && buf_mili == "")
 				{
-					mili = ev.StringValue;
+					buf_mili = ev.StringValue;
 				}
-				else if (ev.Name == "_MILI_IND" && mili_ind == "")
+				else if (ev.Name == "_MILI_IND" && buf_mili_ind == "")
 				{
-					mili_ind = ev.StringValue;
+					buf_mili_ind = ev.StringValue;
 				}
-				else if (ev.Name == "_MILI_DIS" && mili_dis == "")
+				else if (ev.Name == "_MILI_DIS" && buf_mili_dis == "")
 				{
-					mili_dis = ev.StringValue;
+					buf_mili_dis = ev.StringValue;
 				}
-				else if (ev.Name == "_MILI_RANK" && mili_rank == "")
+				else if (ev.Name == "_MILI_RANK" && buf_mili_rank == "")
 				{
-					mili_rank = ev.StringValue;
+					buf_mili_rank = ev.StringValue;
 				}
-				else if (ev.Name == "TITL" && title == "")
+				else if (ev.Name == "TITL" && buf_title == "")
 				{
-					title = ev.StringValue;
+					buf_title = ev.StringValue;
 				}
 			}
+		}
 
-			for (i = 0; i < columns.Count; i++)
+		public override void UpdateItem(GKListItem aItem, bool isMain)
+		{
+			GlobalOptions gOptions = GKUI.TfmGEDKeeper.Instance.Options;
+
+			for (int i = 1; i < FColumnsMap.Count; i++)
 			{
-				TPersonColumnType pct = columns[i].colType;
-
-				if (columns[i].colActive)
-				{
-					switch (pct)
-					{
-						case TPersonColumnType.pctPatriarch:
-						{
-							if (this.FRec.Patriarch)
-							{
-								aItem.SubItems.Add("*");
-							}
-							else
-							{
-								aItem.SubItems.Add(" ");
-							}
-							break;
-						}
-						case TPersonColumnType.pctName:
-						{
-							TGenEngine.TNameFormat defNameFormat = gOptions.DefNameFormat;
-							string f = "";
-							string j = "";
-							string p = "";
-							if (defNameFormat >= TGenEngine.TNameFormat.nfF_NP && defNameFormat < (TGenEngine.TNameFormat)3)
-							{
-								this.FRec.aux_GetNameParts(out f, out j, out p);
-							}
-							TGenEngine.TNameFormat defNameFormat2 = gOptions.DefNameFormat;
-							if (defNameFormat2 != TGenEngine.TNameFormat.nfFNP)
-							{
-								if (defNameFormat2 != TGenEngine.TNameFormat.nfF_NP)
-								{
-									if (defNameFormat2 == TGenEngine.TNameFormat.nfF_N_P)
-									{
-										aItem.SubItems.Add(f);
-										aItem.SubItems.Add(j);
-										aItem.SubItems.Add(p);
-									}
-								}
-								else
-								{
-									aItem.SubItems.Add(f);
-									aItem.SubItems.Add(j + " " + p);
-								}
-							}
-							else
-							{
-								aItem.SubItems.Add(this.FRec.aux_GetNameStr(true, false));
-							}
-							break;
-						}
-						case TPersonColumnType.pctNick:
-						{
-							aItem.SubItems.Add(this.FRec.aux_GetNickStr());
-							break;
-						}
-						case TPersonColumnType.pctSex:
-						{
-							aItem.SubItems.Add(new string(TGenEngine.SexStr(this.FRec.Sex)[0], 1));
-							break;
-						}
-						case TPersonColumnType.pctBirthDate:
-						{
-							aItem.SubItems.Add(TGenEngine.GEDCOMEventToDateStr(bd_ev, gOptions.DefDateFormat, false));
-							break;
-						}
-						case TPersonColumnType.pctDeathDate:
-						{
-							aItem.SubItems.Add(TGenEngine.GEDCOMEventToDateStr(dd_ev, gOptions.DefDateFormat, false));
-							break;
-						}
-						case TPersonColumnType.pctBirthPlace:
-						{
-							aItem.SubItems.Add(TGenEngine.GetPlaceStr(bd_ev, false));
-							break;
-						}
-						case TPersonColumnType.pctDeathPlace:
-						{
-							aItem.SubItems.Add(TGenEngine.GetPlaceStr(dd_ev, false));
-							break;
-						}
-						case TPersonColumnType.pctResidence:
-						{
-							aItem.SubItems.Add(residence);
-							break;
-						}
-						case TPersonColumnType.pctAge:
-						{
-							if (isMain) aItem.SubItems.Add(TGenEngine.GetAge(this.FRec, this.age_year));
-							break;
-						}
-						case TPersonColumnType.pctLifeExpectancy:
-						{
-							if (isMain) aItem.SubItems.Add(TGenEngine.GetLifeExpectancy(this.FRec));
-							break;
-						}
-						case TPersonColumnType.pctDaysForBirth:
-						{
-							if (isMain) aItem.SubItems.Add(TGenEngine.GetDaysForBirth(this.FRec));
-							break;
-						}
-						case TPersonColumnType.pctGroups:
-						{
-							if (isMain) aItem.SubItems.Add(this.GetGroups());
-							break;
-						}
-						case TPersonColumnType.pctReligion:
-						{
-							if (isMain) aItem.SubItems.Add(religion);
-							break;
-						}
-						case TPersonColumnType.pctNationality:
-						{
-							if (isMain) aItem.SubItems.Add(nationality);
-							break;
-						}
-						case TPersonColumnType.pctEducation:
-						{
-							if (isMain) aItem.SubItems.Add(education);
-							break;
-						}
-						case TPersonColumnType.pctOccupation:
-						{
-							if (isMain) aItem.SubItems.Add(occupation);
-							break;
-						}
-						case TPersonColumnType.pctCaste:
-						{
-							if (isMain) aItem.SubItems.Add(caste);
-							break;
-						}
-						case TPersonColumnType.pctMili:
-						{
-							if (isMain) aItem.SubItems.Add(mili);
-							break;
-						}
-						case TPersonColumnType.pctMiliInd:
-						{
-							if (isMain) aItem.SubItems.Add(mili_ind);
-							break;
-						}
-						case TPersonColumnType.pctMiliDis:
-						{
-							if (isMain) aItem.SubItems.Add(mili_dis);
-							break;
-						}
-						case TPersonColumnType.pctMiliRank:
-						{
-							if (isMain) aItem.SubItems.Add(mili_rank);
-							break;
-						}
-						case TPersonColumnType.pctChangeDate:
-						{
-							if (isMain) aItem.SubItems.Add(this.FRec.ChangeDate.ToString());
-							break;
-						}
-						case TPersonColumnType.pctBookmark:
-						{
-							if (isMain)
-							{
-								if (this.FRec.Bookmark)
-								{
-									aItem.SubItems.Add("*");
-								}
-								else
-								{
-									aItem.SubItems.Add(" ");
-								}
-							}
-							break;
-						}
-						case TPersonColumnType.pctTitle:
-						{
-							if (isMain) aItem.SubItems.Add(title);
-							break;
-						}
-					}
-				}
+				aItem.SubItems.Add(this.GetColumnValue(i, isMain));
 			}
 
 			if ((FRec.ChildToFamilyLinks.Count == 0) && (gOptions.ListPersons_HighlightUnparented))
@@ -694,92 +598,100 @@ namespace GKUI.Lists
 		{
 			TIndividualListColumns columns = GKUI.TfmGEDKeeper.Instance.Options.IndividualListColumns;
 
-			int cols = 0;
+			FColumnsMap.Clear();
+
 			aList.AddListColumn("№", 50, false);
+			this.SetColMap(0, 0);
 
 			for (int i = 0; i < columns.Count; i++)
 			{
 				if (columns[i].colActive)
 				{
-					TPersonColumnType col_type = columns[i].colType;
+					TPersonColumnType col_type = (TPersonColumnType)columns[i].colType;
 
-					switch (col_type)
-					{
-						case TPersonColumnType.pctPatriarch:
-							aList.AddListColumn(LangMan.LSList[92], 25, false);
-							this.SetColMap((byte)col_type, 0, ref cols);
-							break;
-
-						case TPersonColumnType.pctName:
-							{
-								bool asz = false;
-								TGenEngine.TNameFormat defNameFormat = GKUI.TfmGEDKeeper.Instance.Options.DefNameFormat;
-								if (defNameFormat != TGenEngine.TNameFormat.nfFNP)
+					if (col_type == TPersonColumnType.pctName) {
+						bool asz = false;
+						TGenEngine.TNameFormat defNameFormat = GKUI.TfmGEDKeeper.Instance.Options.DefNameFormat;
+						switch (defNameFormat) {
+							case TGenEngine.TNameFormat.nfF_N_P:
 								{
-									if (defNameFormat != TGenEngine.TNameFormat.nfF_NP)
-									{
-										if (defNameFormat == TGenEngine.TNameFormat.nfF_N_P)
-										{
-											aList.AddListColumn(LangMan.LSList[84], 150, asz);
-											this.SetColMap((byte)col_type, 0, ref cols);
-											aList.AddListColumn(LangMan.LSList[85], 100, asz);
-											this.SetColMap((byte)col_type, 1, ref cols);
-											aList.AddListColumn(LangMan.LSList[86], 150, asz);
-											this.SetColMap((byte)col_type, 2, ref cols);
-										}
-									}
-									else
-									{
-										aList.AddListColumn(LangMan.LSList[84], 150, asz);
-										this.SetColMap((byte)col_type, 0, ref cols);
-										aList.AddListColumn(LangMan.LSList[85] + "," + LangMan.LSList[86], 150, asz);
-										this.SetColMap((byte)col_type, 1, ref cols);
-									}
+									aList.AddListColumn(LangMan.LSList[84], 150, asz);
+									this.SetColMap((byte)col_type, 0);
+									aList.AddListColumn(LangMan.LSList[85], 100, asz);
+									this.SetColMap((byte)col_type, 1);
+									aList.AddListColumn(LangMan.LSList[86], 150, asz);
+									this.SetColMap((byte)col_type, 2);
+									break;
 								}
-								else
+							case TGenEngine.TNameFormat.nfF_NP:
+								{
+									aList.AddListColumn(LangMan.LSList[84], 150, asz);
+									this.SetColMap((byte)col_type, 0);
+									aList.AddListColumn(LangMan.LSList[85] + "," + LangMan.LSList[86], 150, asz);
+									this.SetColMap((byte)col_type, 1);
+									break;
+								}
+							case TGenEngine.TNameFormat.nfFNP:
 								{
 									aList.AddListColumn(LangMan.LSList[301], 300, asz);
-									this.SetColMap((byte)col_type, 0, ref cols);
+									this.SetColMap((byte)col_type, 0);
+									break;
 								}
-							}
-							break;
-
-						case TPersonColumnType.pctNick:
-						case TPersonColumnType.pctSex:
-						case TPersonColumnType.pctBirthDate:
-						case TPersonColumnType.pctDeathDate:
-						case TPersonColumnType.pctBirthPlace:
-						case TPersonColumnType.pctDeathPlace:
-						case TPersonColumnType.pctResidence:
-							aList.AddListColumn(LangMan.LSList[(int)GlobalOptions.PersonColumnsName[(int)col_type].Name - 1], GlobalOptions.PersonColumnsName[(int)col_type].DefWidth, false);
-							this.SetColMap((byte)col_type, 0, ref cols);
-							break;
-
-						case TPersonColumnType.pctAge:
-						case TPersonColumnType.pctLifeExpectancy:
-						case TPersonColumnType.pctDaysForBirth:
-						case TPersonColumnType.pctGroups:
-						case TPersonColumnType.pctReligion:
-						case TPersonColumnType.pctNationality:
-						case TPersonColumnType.pctEducation:
-						case TPersonColumnType.pctOccupation:
-						case TPersonColumnType.pctCaste:
-						case TPersonColumnType.pctMili:
-						case TPersonColumnType.pctMiliInd:
-						case TPersonColumnType.pctMiliDis:
-						case TPersonColumnType.pctMiliRank:
-						case TPersonColumnType.pctChangeDate:
-						case TPersonColumnType.pctBookmark:
-						case TPersonColumnType.pctTitle:
-							if (isMain)
-							{
-								aList.AddListColumn(LangMan.LSList[(int)GlobalOptions.PersonColumnsName[(int)col_type].Name - 1], GlobalOptions.PersonColumnsName[(int)col_type].DefWidth, false);
-								this.SetColMap((byte)col_type, 0, ref cols);
-							}
-							break;
+						}
+					} else {
+						aList.AddListColumn(LangMan.LSList[(int)GlobalOptions.PersonColumnsName[(int)col_type].Name - 1], GlobalOptions.PersonColumnsName[(int)col_type].DefWidth, false);
+						this.SetColMap((byte)col_type, 0);
 					}
 				}
 			}
+		}
+
+		protected override void InitColumnStatics()
+		{
+			this.ColumnStatics.Clear();
+			for (int i = 0; i < GlobalOptions.PersonColumnsName.Length; i++) {
+				GlobalOptions.TColumnRec colrec = GlobalOptions.PersonColumnsName[i];
+
+				TDataType dataType = TDataType.dtString;
+				if (i == (int)TPersonColumnType.pctChangeDate) dataType = TDataType.dtDateTime;
+
+				this.ColumnStatics.Add(new TColumnStatic(LangMan.LS(colrec.Name), dataType, colrec.DefWidth));
+			}
+			/*this.ColumnStatics.Add(new TColumnStatic(LangMan.LS(pctPatriarch), TDataType.dtString)); // 
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LS(pctName), TDataType.dtString)); // 
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LS(pctNick), TDataType.dtString)); // 
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LS(pctSex), TDataType.dtString)); // 
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LS(pctBirthDate), TDataType.dtString)); // 
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LS(pctDeathDate), TDataType.dtString)); // 
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LS(pctBirthPlace), TDataType.dtString)); // 
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LS(pctDeathPlace), TDataType.dtString)); // 
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LS(pctResidence), TDataType.dtString)); // 
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LS(pctAge), TDataType.dtString)); // 
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LS(pctLifeExpectancy), TDataType.dtString)); // 
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LS(pctDaysForBirth), TDataType.dtString)); // 
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LS(pctGroups), TDataType.dtString)); // 
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LS(pctReligion), TDataType.dtString)); // 
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LS(pctNationality), TDataType.dtString)); // 
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LS(pctEducation), TDataType.dtString)); // 
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LS(pctOccupation), TDataType.dtString)); // 
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LS(pctCaste), TDataType.dtString)); // 
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LS(pctMili), TDataType.dtString)); // 
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LS(pctMiliInd), TDataType.dtString)); // 
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LS(pctMiliDis), TDataType.dtString)); // 
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LS(pctMiliRank), TDataType.dtString)); // 
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LS(pctChangeDate), TDataType.dtDateTime)); // 
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LS(pctBookmark), TDataType.dtString)); // 
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LS(pctTitle), TDataType.dtString)); // */
+		}
+
+		public override Type GetColumnsEnum()
+		{
+			return typeof(TPersonColumnType);
+		}
+
+		public override TListColumns GetDefaultListColumns()
+		{
+			return new TIndividualListColumns();
 		}
 
 		public TIndividualListMan(TGEDCOMTree aTree) : base(aTree)

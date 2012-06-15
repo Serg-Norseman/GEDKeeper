@@ -10,18 +10,26 @@ using GKUI.Controls;
 
 namespace GKUI.Lists
 {
+	public enum TTaskColumnType : byte
+	{
+		tctGoal,
+		tctPriority,
+		tctStartDate,
+		tctStopDate,
+		tctChangeDate
+	}
+
 	public sealed class TTaskListMan : TListManager
 	{
 		private TGEDCOMTaskRecord FRec;
 
 		public override bool CheckFilter(TPersonsFilter aFilter, TGenEngine.TShieldState aShieldState)
 		{
-			bool Result = false;
-			if (aFilter.List != TPersonsFilter.TListFilterMode.flSelector || aFilter.Name == "*" || IsMatchesMask(TGenEngine.GetTaskGoalStr(this.FTree, this.FRec), aFilter.Name))
-			{
-				Result = true;
-			}
-			return Result;
+			bool res = (this.QuickFilter == "*" || IsMatchesMask(TGenEngine.GetTaskGoalStr(this.FTree, this.FRec), this.QuickFilter));
+
+			res = res && base.CheckNewFilter();
+
+			return res;
 		}
 
 		public override void Fetch(TGEDCOMRecord aRec)
@@ -29,64 +37,42 @@ namespace GKUI.Lists
 			this.FRec = (aRec as TGEDCOMTaskRecord);
 		}
 
-		public override string GetColumnValue(int aColIndex, bool isMain)
+		public override object GetColumnValueEx(int col_index)
 		{
-			string Result;
-			switch (aColIndex)
-			{
+			switch (col_index) {
 				case 1:
-				{
-					Result = TGenEngine.GetTaskGoalStr(this.FTree, this.FRec);
-					return Result;
-				}
+					return TGenEngine.GetTaskGoalStr(this.FTree, this.FRec);
 				case 2:
-				{
-					Result = LangMan.LSList[(int)TGenEngine.PriorityNames[(int)this.FRec.Priority] - 1];
-					return Result;
-				}
+					return LangMan.LSList[(int)TGenEngine.PriorityNames[(int)this.FRec.Priority] - 1];
 				case 3:
-				{
-					Result = TGenEngine.GEDCOMDateToStr(this.FRec.StartDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
-					return Result;
-				}
+					return TGenEngine.GEDCOMDateToStr(this.FRec.StartDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
 				case 4:
-				{
-					Result = TGenEngine.GEDCOMDateToStr(this.FRec.StopDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
-					return Result;
-				}
+					return TGenEngine.GEDCOMDateToStr(this.FRec.StopDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
 				case 5:
-				{
-					Result = this.FRec.ChangeDate.ToString();
-					return Result;
-				}
-			}
-			Result = "";
-			return Result;
-		}
-
-		public override void UpdateItem(GKListItem aItem, bool isMain)
-		{
-			aItem.SubItems.Add(TGenEngine.GetTaskGoalStr(this.FTree, this.FRec));
-			aItem.SubItems.Add(LangMan.LSList[(int)TGenEngine.PriorityNames[(int)this.FRec.Priority] - 1]);
-			aItem.SubItems.Add(TGenEngine.GEDCOMDateToStr(this.FRec.StartDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
-			aItem.SubItems.Add(TGenEngine.GEDCOMDateToStr(this.FRec.StopDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
-			if (isMain)
-			{
-				aItem.SubItems.Add(this.FRec.ChangeDate.ToString());
+					return this.FRec.ChangeDate.ChangeDateTime;
+				default:
+					return null;
 			}
 		}
 
-		public override void UpdateColumns(GKListView aList, bool isMain)
+		protected override void InitColumnStatics()
 		{
-			aList.AddListColumn("№", 50, false);
-			aList.AddListColumn(LangMan.LSList[182], 300, false);
-			aList.AddListColumn(LangMan.LSList[178], 90, false);
-			aList.AddListColumn(LangMan.LSList[180], 90, false);
-			aList.AddListColumn(LangMan.LSList[181], 90, false);
-			if (isMain)
-			{
-				aList.AddListColumn(LangMan.LSList[317], 150, false);
-			}
+			this.ColumnStatics.Clear();
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[182], TDataType.dtString, 300));
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[178], TDataType.dtString, 90));
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[180], TDataType.dtString, 90));
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[181], TDataType.dtString, 90));
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[317], TDataType.dtDateTime, 150));
+		}
+
+		public override Type GetColumnsEnum()
+		{
+			return typeof(TTaskColumnType);
+		}
+
+		public override TListColumns GetDefaultListColumns()
+		{
+			return null;
 		}
 
 		public TTaskListMan(TGEDCOMTree aTree) : base(aTree)

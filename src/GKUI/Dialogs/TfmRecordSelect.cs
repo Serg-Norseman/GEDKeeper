@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Ext.Utils;
 using GedCom551;
 using GKCore;
+using GKUI.Controls;
 using GKUI.Lists;
 
 /// <summary>
@@ -57,7 +58,7 @@ namespace GKUI
 		private void DataRefresh()
 		{
 			this.FLocalFilter.Clear();
-			this.FLocalFilter.Name = this.FFilter;
+			//this.FLocalFilter.Name = this.FFilter;
 			this.FLocalFilter.Sex = this.FNeedSex;
 			if (this.ListRecords != null)
 			{
@@ -65,6 +66,9 @@ namespace GKUI
 				this.ListRecords = null;
 			}
 			this.Base.CreateRecordsView(this.panList, this.FMode, ref this.ListRecords);
+
+			this.ListRecords.ListMan.QuickFilter = this.FFilter;
+
 			this.ListRecords.UpdateContents(this.Base.ShieldState, true, this.FLocalFilter, 1);
 		}
 
@@ -258,7 +262,6 @@ namespace GKUI
 			this.InitializeComponent();
 			this.FBase = aBase;
 			this.FLocalFilter = new TPersonsFilter();
-			this.FLocalFilter.List = TPersonsFilter.TListFilterMode.flSelector;
 			this.FFilter = "*";
 			this.Text = LangMan.LSList[105];
 			this.btnCreate.Text = LangMan.LSList[101];

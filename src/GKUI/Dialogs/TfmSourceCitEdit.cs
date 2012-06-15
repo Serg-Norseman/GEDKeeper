@@ -68,6 +68,11 @@ namespace GKUI
 
 		void cbSource_KeyDown(object sender, KeyEventArgs e)
 		{
+			//
+		}
+
+		void cbSource_KeyUp(object sender, KeyEventArgs e)
+		{
 			this.RefreshSourcesList(this.cbSource.Text);
 			this.cbSource.SelectionStart = this.cbSource.Text.Length;
 		}
@@ -137,5 +142,6 @@ namespace GKUI
 			this.Base.Engine.GetSourcesList(this.FSourcesList);
 			this.RefreshSourcesList("");
 		}
+		
 	}
 }

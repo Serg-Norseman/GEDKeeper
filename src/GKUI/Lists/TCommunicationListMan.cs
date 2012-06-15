@@ -2,7 +2,6 @@
 
 using GedCom551;
 using GKCore;
-using GKUI.Controls;
 
 /// <summary>
 /// Localization: clean
@@ -10,18 +9,26 @@ using GKUI.Controls;
 
 namespace GKUI.Lists
 {
+	public enum TCommunicationColumnType : byte
+	{
+		cctCommName,
+		cctCorresponder,
+		cctCommType,
+		cctDate,		
+		cctChangeDate
+	}
+
 	public sealed class TCommunicationListMan : TListManager
 	{
 		private TGEDCOMCommunicationRecord FRec;
 
 		public override bool CheckFilter(TPersonsFilter aFilter, TGenEngine.TShieldState aShieldState)
 		{
-			bool Result = false;
-			if (aFilter.List != TPersonsFilter.TListFilterMode.flSelector || aFilter.Name == "*" || IsMatchesMask(this.FRec.CommName, aFilter.Name))
-			{
-				Result = true;
-			}
-			return Result;
+			bool res = (this.QuickFilter == "*" || IsMatchesMask(this.FRec.CommName, this.QuickFilter));
+
+			res = res && base.CheckNewFilter();
+
+			return res;
 		}
 
 		public override void Fetch(TGEDCOMRecord aRec)
@@ -29,52 +36,42 @@ namespace GKUI.Lists
 			this.FRec = (aRec as TGEDCOMCommunicationRecord);
 		}
 
-		public override string GetColumnValue(int aColIndex, bool isMain)
+		public override object GetColumnValueEx(int col_index)
 		{
-			string result;
-			switch (aColIndex) {
+			switch (col_index) {
 				case 1:
-					result = this.FRec.CommName;
-					return result;
+					return this.FRec.CommName;
 				case 2:
-					result = TGenEngine.GetCorresponderStr(this.FTree, this.FRec, false);
-					return result;
+					return TGenEngine.GetCorresponderStr(this.FTree, this.FRec, false);
 				case 3:
-					result = LangMan.LSList[(int)TGenEngine.CommunicationNames[(int)this.FRec.CommunicationType] - 1];
-					return result;
+					return LangMan.LSList[(int)TGenEngine.CommunicationNames[(int)this.FRec.CommunicationType] - 1];
 				case 4:
-					result = TGenEngine.GEDCOMDateToStr(this.FRec.Date, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
-					return result;
+					return TGenEngine.GEDCOMDateToStr(this.FRec.Date, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
 				case 5:
-					result = this.FRec.ChangeDate.ToString();
-					return result;
+					return this.FRec.ChangeDate.ChangeDateTime;
+				default:
+					return null;
 			}
-			result = "";
-			return result;
 		}
 
-		public override void UpdateItem(GKListItem aItem, bool isMain)
+		protected override void InitColumnStatics()
 		{
-			aItem.SubItems.Add(this.FRec.CommName);
-			aItem.SubItems.Add(TGenEngine.GetCorresponderStr(this.FTree, this.FRec, false));
-			aItem.SubItems.Add(LangMan.LSList[(int)TGenEngine.CommunicationNames[(int)this.FRec.CommunicationType] - 1]);
-			aItem.SubItems.Add(TGenEngine.GEDCOMDateToStr(this.FRec.Date, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
-			if (isMain)
-			{
-				aItem.SubItems.Add(this.FRec.ChangeDate.ToString());
-			}
+			this.ColumnStatics.Clear();
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[183], TDataType.dtString, 300));
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[184], TDataType.dtString, 200));
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[113], TDataType.dtString, 90));
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[139], TDataType.dtString, 90));
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[317], TDataType.dtDateTime, 150));
 		}
-		public override void UpdateColumns(GKListView aList, bool isMain)
+
+		public override Type GetColumnsEnum()
 		{
-			aList.AddListColumn("№", 50, false);
-			aList.AddListColumn(LangMan.LSList[183], 300, false);
-			aList.AddListColumn(LangMan.LSList[184], 200, false);
-			aList.AddListColumn(LangMan.LSList[113], 90, false);
-			aList.AddListColumn(LangMan.LSList[139], 90, false);
-			if (isMain)
-			{
-				aList.AddListColumn(LangMan.LSList[317], 150, false);
-			}
+			return typeof(TCommunicationColumnType);
+		}
+
+		public override TListColumns GetDefaultListColumns()
+		{
+			return null;
 		}
 
 		public TCommunicationListMan(TGEDCOMTree aTree) : base(aTree)

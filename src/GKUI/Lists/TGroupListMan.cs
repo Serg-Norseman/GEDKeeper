@@ -2,7 +2,6 @@
 
 using GedCom551;
 using GKCore;
-using GKUI.Controls;
 
 /// <summary>
 /// Localization: clean
@@ -10,18 +9,23 @@ using GKUI.Controls;
 
 namespace GKUI.Lists
 {
+	public enum TGroupColumnType : byte
+	{
+		gctName,
+		gctChangeDate
+	}
+
 	public sealed class TGroupListMan : TListManager
 	{
 		private TGEDCOMGroupRecord FRec;
 
 		public override bool CheckFilter(TPersonsFilter aFilter, TGenEngine.TShieldState aShieldState)
 		{
-			bool Result = false;
-			if (aFilter.List != TPersonsFilter.TListFilterMode.flSelector || aFilter.Name == "*" || IsMatchesMask(this.FRec.GroupName, aFilter.Name))
-			{
-				Result = true;
-			}
-			return Result;
+			bool res = (this.QuickFilter == "*" || IsMatchesMask(this.FRec.GroupName, this.QuickFilter));
+
+			res = res && base.CheckNewFilter();
+
+			return res;
 		}
 
 		public override void Fetch(TGEDCOMRecord aRec)
@@ -29,44 +33,33 @@ namespace GKUI.Lists
 			this.FRec = (aRec as TGEDCOMGroupRecord);
 		}
 
-		public override string GetColumnValue(int aColIndex, bool isMain)
+		public override object GetColumnValueEx(int col_index)
 		{
-			string Result;
-			if (aColIndex != 1)
-			{
-				if (aColIndex != 2)
-				{
-					Result = "";
-				}
-				else
-				{
-					Result = this.FRec.ChangeDate.ToString();
-				}
-			}
-			else
-			{
-				Result = this.FRec.GroupName;
-			}
-			return Result;
-		}
-
-		public override void UpdateItem(GKListItem aItem, bool isMain)
-		{
-			aItem.SubItems.Add(this.FRec.GroupName);
-			if (isMain)
-			{
-				aItem.SubItems.Add(this.FRec.ChangeDate.ToString());
+			switch (col_index) {
+				case 1:
+					return this.FRec.GroupName;
+				case 2:
+					return this.FRec.ChangeDate.ChangeDateTime;
+				default:
+					return null;
 			}
 		}
 
-		public override void UpdateColumns(GKListView aList, bool isMain)
+		protected override void InitColumnStatics()
 		{
-			aList.AddListColumn("№", 50, false);
-			aList.AddListColumn(LangMan.LSList[185], 400, false);
-			if (isMain)
-			{
-				aList.AddListColumn(LangMan.LSList[317], 150, false);
-			}
+			this.ColumnStatics.Clear();
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[185], TDataType.dtString, 400));
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[317], TDataType.dtDateTime, 150));
+		}
+
+		public override Type GetColumnsEnum()
+		{
+			return typeof(TGroupColumnType);
+		}
+
+		public override TListColumns GetDefaultListColumns()
+		{
+			return null;
 		}
 
 		public TGroupListMan(TGEDCOMTree aTree) : base(aTree)

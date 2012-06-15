@@ -443,7 +443,7 @@ namespace GKCore
 					this.FRelations.Add(ini.ReadString("Relations", "Relation_" + i.ToString(), ""));
 				}
 
-				this.FIndividualListColumns.LoadFromFile(ini);
+				this.FIndividualListColumns.LoadFromFile(ini, "PersonsColumns");
 
 				this.FListPersons_HighlightUnmarried = ini.ReadBool("ListPersons", "HighlightUnmarried", false);
 				this.FListPersons_HighlightUnparented = ini.ReadBool("ListPersons", "HighlightUnparented", false);
@@ -521,7 +521,7 @@ namespace GKCore
 					ini.WriteString("Relations", "Relation_" + i.ToString(), this.FRelations[i]);
 				}
 
-				this.FIndividualListColumns.SaveToFile(ini);
+				this.FIndividualListColumns.SaveToFile(ini, "PersonsColumns");
 
 				ini.WriteBool("ListPersons", "HighlightUnmarried", this.FListPersons_HighlightUnmarried);
 				ini.WriteBool("ListPersons", "HighlightUnparented", this.FListPersons_HighlightUnparented);

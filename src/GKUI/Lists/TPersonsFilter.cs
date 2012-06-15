@@ -11,12 +11,6 @@ namespace GKUI.Lists
 {
 	public sealed class TPersonsFilter : CustomFilter
 	{
-		public enum TListFilterMode : byte
-		{
-			flCommon,
-			flSelector
-		}
-
 		private string Back_AliveBeforeDate;
 		private CustomFilter.TGroupMode Back_GroupMode;
 		private string Back_GroupRef;
@@ -40,7 +34,6 @@ namespace GKUI.Lists
 		public CustomFilter.TGroupMode SourceMode;
 		public string SourceRef;
 		public string EventVal;
-		public TPersonsFilter.TListFilterMode List;
 		public bool ChildSelector;
 		public int TimeLineYear;
 

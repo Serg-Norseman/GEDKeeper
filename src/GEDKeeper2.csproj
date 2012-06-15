@@ -182,6 +182,8 @@
     <Compile Include="GKUI\Controls\GKMenuItem.cs" />
     <Compile Include="GKUI\Controls\GKTreeNode.cs" />
     <Compile Include="GKUI\Controls\GKMapBrowser.cs" />
+    <Compile Include="GKUI\Controls\TRecordsView.cs" />
+    <Compile Include="GKUI\Controls\TSheetList.cs" />
     <Compile Include="GKUI\Dialogs\TfmAbout.cs" />
     <Compile Include="GKUI\Dialogs\TfmAbout.Designer.cs">
       <DependentUpon>TfmAbout.cs</DependentUpon>
@@ -193,6 +195,10 @@
     <Compile Include="GKUI\Dialogs\TfmAssociationEdit.cs" />
     <Compile Include="GKUI\Dialogs\TfmAssociationEdit.Designer.cs">
       <DependentUpon>TfmAssociationEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmComFilter.cs" />
+    <Compile Include="GKUI\Dialogs\TfmComFilter.Designer.cs">
+      <DependentUpon>TfmComFilter.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\TfmCommunicationEdit.cs" />
     <Compile Include="GKUI\Dialogs\TfmCommunicationEdit.Designer.cs">
@@ -294,7 +300,7 @@
     <Compile Include="GKUI\Dialogs\TfmUserRefEdit.Designer.cs">
       <DependentUpon>TfmUserRefEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Lists\TIndividualListColumns.cs" />
+    <Compile Include="GKUI\Lists\TListColumns.cs" />
     <Compile Include="GKUI\PatriarchsViewer.cs" />
     <Compile Include="GKUI\PatriarchsViewer.Designer.cs">
       <DependentUpon>PatriarchsViewer.cs</DependentUpon>
@@ -355,10 +361,8 @@
     <Compile Include="GKUI\Lists\TMultimediaListMan.cs" />
     <Compile Include="GKUI\Lists\TNoteListMan.cs" />
     <Compile Include="GKUI\Lists\TPersonsFilter.cs" />
-    <Compile Include="GKUI\Lists\TRecordsView.cs" />
     <Compile Include="GKUI\Lists\TRepositoryListMan.cs" />
     <Compile Include="GKUI\Lists\TResearchListMan.cs" />
-    <Compile Include="GKUI\Lists\TSheetList.cs" />
     <Compile Include="GKUI\Lists\TSourceListMan.cs" />
     <Compile Include="GKUI\Lists\TTaskListMan.cs" />
     <Compile Include="GKUI\TfmBase.cs" />
@@ -407,6 +411,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\TfmAssociationEdit.resx">
       <DependentUpon>TfmAssociationEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmComFilter.resx">
+      <DependentUpon>TfmComFilter.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\TfmCommunicationEdit.resx">
       <DependentUpon>TfmCommunicationEdit.cs</DependentUpon>

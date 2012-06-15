@@ -1399,14 +1399,30 @@ namespace GKUI
 
 		public void SetFilter()
 		{
-			TfmFilter fmFilter = new TfmFilter(this);
-			try
-			{
-				GKUI.TfmGEDKeeper.Instance.ShowModalEx(fmFilter, this, false);
-			}
-			finally
-			{
-				fmFilter.Dispose();
+			TGEDCOMRecordType rt = (TGEDCOMRecordType)(this.PageRecords.SelectedIndex + 1);
+			TRecordsView rView = this.GetRecordsViewByType(rt);
+
+			switch (rt) {
+				case TGEDCOMRecordType.rtIndividual:
+					using (TfmFilter fmFilter = new TfmFilter(this)) {
+						GKUI.TfmGEDKeeper.Instance.ShowModalEx(fmFilter, this, false);
+					}
+					break;
+				case TGEDCOMRecordType.rtFamily:
+				case TGEDCOMRecordType.rtNote:
+				case TGEDCOMRecordType.rtMultimedia:
+				case TGEDCOMRecordType.rtSource:
+				case TGEDCOMRecordType.rtRepository:
+				case TGEDCOMRecordType.rtGroup:
+				case TGEDCOMRecordType.rtResearch:
+				case TGEDCOMRecordType.rtTask:
+				case TGEDCOMRecordType.rtCommunication:
+				case TGEDCOMRecordType.rtLocation:
+					using (TfmComFilter fmComFilter = new TfmComFilter(this, rView.ListMan)) {
+						DialogResult res = GKUI.TfmGEDKeeper.Instance.ShowModalEx(fmComFilter, this, false);
+						if (res == DialogResult.OK) this.ApplyFilter();
+					}
+					break;
 			}
 		}
 

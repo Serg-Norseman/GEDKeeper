@@ -10,19 +10,27 @@ using GKUI.Controls;
 
 namespace GKUI.Lists
 {
+	public enum TMultimediaColumnType : byte
+	{
+		mctTitle,
+		mctMediaType,
+		mctFileRef,
+		mctChangeDate
+	}
+
 	public sealed class TMultimediaListMan : TListManager
 	{
 		private TGEDCOMMultimediaRecord FRec;
 
 		public override bool CheckFilter(TPersonsFilter aFilter, TGenEngine.TShieldState aShieldState)
 		{
-			bool Result = false;
 			TGEDCOMFileReferenceWithTitle file_ref = this.FRec.FileReferences[0];
-			if (aFilter.List != TPersonsFilter.TListFilterMode.flSelector || aFilter.Name == "*" || IsMatchesMask(file_ref.Title, aFilter.Name))
-			{
-				Result = true;
-			}
-			return Result;
+
+			bool res = (this.QuickFilter == "*" || IsMatchesMask(file_ref.Title, this.QuickFilter));
+
+			res = res && base.CheckNewFilter();
+
+			return res;
 		}
 
 		public override void Fetch(TGEDCOMRecord aRec)
@@ -30,58 +38,41 @@ namespace GKUI.Lists
 			this.FRec = (aRec as TGEDCOMMultimediaRecord);
 		}
 
-		public override string GetColumnValue(int aColIndex, bool isMain)
+		public override object GetColumnValueEx(int col_index)
 		{
 			TGEDCOMFileReferenceWithTitle file_ref = this.FRec.FileReferences[0];
-			string result;
-			switch (aColIndex) {
+
+			switch (col_index) {
 				case 1:
-					result = file_ref.Title;
-					break;
+					return file_ref.Title;
 				case 2:
-					result = LangMan.LSList[(int)TGenEngine.MediaTypes[(int)file_ref.MediaType] - 1];
-					break;
+					return LangMan.LSList[(int)TGenEngine.MediaTypes[(int)file_ref.MediaType] - 1];
 				case 3:
-					result = file_ref.StringValue;
-					break;
+					return file_ref.StringValue;
 				case 4:
-					result = this.FRec.ChangeDate.ToString();
-					break;
+					return this.FRec.ChangeDate.ChangeDateTime;
 				default:
-					result = "";
-					break;
+					return null;
 			}
-			return result;
 		}
 
-		public override void UpdateItem(GKListItem aItem, bool isMain)
+		protected override void InitColumnStatics()
 		{
-			TGEDCOMFileReferenceWithTitle file_ref = this.FRec.FileReferences[0];
-			if (file_ref == null)
-			{
-				aItem.SubItems.Add("error " + this.FRec.XRef);
-			}
-			else
-			{
-				aItem.SubItems.Add(file_ref.Title);
-				aItem.SubItems.Add(LangMan.LSList[(int)TGenEngine.MediaTypes[(int)file_ref.MediaType] - 1]);
-				if (isMain)
-				{
-					aItem.SubItems.Add(file_ref.StringValue);
-					aItem.SubItems.Add(this.FRec.ChangeDate.ToString());
-				}
-			}
+			this.ColumnStatics.Clear();
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[125], TDataType.dtString, 150));
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[113], TDataType.dtString, 85));
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[147], TDataType.dtString, 300));
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[317], TDataType.dtDateTime, 150));
 		}
-		public override void UpdateColumns(GKListView aList, bool isMain)
+
+		public override Type GetColumnsEnum()
 		{
-			aList.AddListColumn("№", 50, false);
-			aList.AddListColumn(LangMan.LSList[125], 150, false);
-			aList.AddListColumn(LangMan.LSList[113], 85, false);
-			if (isMain)
-			{
-				aList.AddListColumn(LangMan.LSList[147], 300, false);
-				aList.AddListColumn(LangMan.LSList[317], 150, false);
-			}
+			return typeof(TMultimediaColumnType);
+		}
+
+		public override TListColumns GetDefaultListColumns()
+		{
+			return null;
 		}
 
 		public TMultimediaListMan(TGEDCOMTree aTree) : base(aTree)

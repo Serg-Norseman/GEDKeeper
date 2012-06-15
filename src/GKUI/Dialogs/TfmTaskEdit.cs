@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKUI.Lists;
+using GKUI.Controls;
 
 /// <summary>
 /// Localization: clean

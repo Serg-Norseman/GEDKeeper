@@ -5,16 +5,16 @@ namespace GedCom551
 {
 	public sealed class TGEDCOMMap : TGEDCOMTag
 	{
-		public string Lati
+		public double Lati
 		{
-			get { return base.GetTagStringValue("LATI"); }
-			set { base.SetTagStringValue("LATI", value); }
+			get { return base.GetTagFloatValue("LATI", 0.0); }
+			set { base.SetTagFloatValue("LATI", value); }
 		}
 
-		public string Long
+		public double Long
 		{
-			get { return base.GetTagStringValue("LONG"); }
-			set { base.SetTagStringValue("LONG", value); }
+			get { return base.GetTagFloatValue("LONG", 0.0); }
+			set { base.SetTagFloatValue("LONG", value); }
 		}
 
 		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)

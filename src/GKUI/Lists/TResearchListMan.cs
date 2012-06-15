@@ -10,18 +10,28 @@ using GKUI.Controls;
 
 namespace GKUI.Lists
 {
+	public enum TResearchColumnType : byte
+	{
+		rctName,
+		rctPriority,
+		rctStatus,
+		rctStartDate,
+		rctStopDate,
+		rctPercent,
+		rctChangeDate
+	}
+
 	public sealed class TResearchListMan : TListManager
 	{
 		private TGEDCOMResearchRecord FRec;
 
 		public override bool CheckFilter(TPersonsFilter aFilter, TGenEngine.TShieldState aShieldState)
 		{
-			bool Result = false;
-			if (aFilter.List != TPersonsFilter.TListFilterMode.flSelector || aFilter.Name == "*" || IsMatchesMask(this.FRec.ResearchName, aFilter.Name))
-			{
-				Result = true;
-			}
-			return Result;
+			bool res = (this.QuickFilter == "*" || IsMatchesMask(this.FRec.ResearchName, this.QuickFilter));
+
+			res = res && base.CheckNewFilter();
+
+			return res;
 		}
 
 		public override void Fetch(TGEDCOMRecord aRec)
@@ -29,78 +39,48 @@ namespace GKUI.Lists
 			this.FRec = (aRec as TGEDCOMResearchRecord);
 		}
 
-		public override string GetColumnValue(int aColIndex, bool isMain)
+		public override object GetColumnValueEx(int col_index)
 		{
-			string Result;
-			switch (aColIndex)
-			{
+			switch (col_index) {
 				case 1:
-				{
-					Result = this.FRec.ResearchName;
-					return Result;
-				}
+					return this.FRec.ResearchName;
 				case 2:
-				{
-					Result = LangMan.LSList[(int)TGenEngine.PriorityNames[(int)this.FRec.Priority] - 1];
-					return Result;
-				}
+					return LangMan.LSList[(int)TGenEngine.PriorityNames[(int)this.FRec.Priority] - 1];
 				case 3:
-				{
-					Result = LangMan.LSList[(int)TGenEngine.StatusNames[(int)this.FRec.Status] - 1];
-					return Result;
-				}
+					return LangMan.LSList[(int)TGenEngine.StatusNames[(int)this.FRec.Status] - 1];
 				case 4:
-				{
-					Result = TGenEngine.GEDCOMDateToStr(this.FRec.StartDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
-					return Result;
-				}
+					return TGenEngine.GEDCOMDateToStr(this.FRec.StartDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
 				case 5:
-				{
-					Result = TGenEngine.GEDCOMDateToStr(this.FRec.StopDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
-					return Result;
-				}
+					return TGenEngine.GEDCOMDateToStr(this.FRec.StopDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
 				case 6:
-				{
-					Result = this.FRec.Percent.ToString();
-					return Result;
-				}
+					return this.FRec.Percent;
 				case 7:
-				{
-					Result = this.FRec.ChangeDate.ToString();
-					return Result;
-				}
-			}
-			Result = "";
-			return Result;
-		}
-
-		public override void UpdateItem(GKListItem aItem, bool isMain)
-		{
-			aItem.SubItems.Add(this.FRec.ResearchName);
-			aItem.SubItems.Add(LangMan.LSList[(int)TGenEngine.PriorityNames[(int)this.FRec.Priority] - 1]);
-			aItem.SubItems.Add(LangMan.LSList[(int)TGenEngine.StatusNames[(int)this.FRec.Status] - 1]);
-			aItem.SubItems.Add(TGenEngine.GEDCOMDateToStr(this.FRec.StartDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
-			aItem.SubItems.Add(TGenEngine.GEDCOMDateToStr(this.FRec.StopDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
-			aItem.SubItems.Add(this.FRec.Percent.ToString());
-			if (isMain)
-			{
-				aItem.SubItems.Add(this.FRec.ChangeDate.ToString());
+					return this.FRec.ChangeDate.ChangeDateTime;
+				default:
+					return null;
 			}
 		}
 
-		public override void UpdateColumns(GKListView aList, bool isMain)
+		protected override void InitColumnStatics()
 		{
-			aList.AddListColumn("№", 50, false);
-			aList.AddListColumn(LangMan.LSList[125], 300, false);
-			aList.AddListColumn(LangMan.LSList[178], 90, false);
-			aList.AddListColumn(LangMan.LSList[117], 90, false);
-			aList.AddListColumn(LangMan.LSList[180], 90, false);
-			aList.AddListColumn(LangMan.LSList[181], 90, false);
-			aList.AddListColumn(LangMan.LSList[179], 90, false);
-			if (isMain)
-			{
-				aList.AddListColumn(LangMan.LSList[317], 150, false);
-			}
+			this.ColumnStatics.Clear();
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[125], TDataType.dtString, 300));
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[178], TDataType.dtString, 90));
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[117], TDataType.dtString, 90));
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[180], TDataType.dtString, 90));
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[181], TDataType.dtString, 90));
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[179], TDataType.dtInteger, 90));
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[317], TDataType.dtDateTime, 150));
+		}
+
+		public override Type GetColumnsEnum()
+		{
+			return typeof(TResearchColumnType);
+		}
+
+		public override TListColumns GetDefaultListColumns()
+		{
+			return null;
 		}
 
 		public TResearchListMan(TGEDCOMTree aTree) : base(aTree)

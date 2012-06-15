@@ -2,7 +2,6 @@
 
 using GedCom551;
 using GKCore;
-using GKUI.Controls;
 
 /// <summary>
 /// Localization: clean
@@ -10,18 +9,23 @@ using GKUI.Controls;
 
 namespace GKUI.Lists
 {
+	public enum TRepositoryColumnType : byte
+	{
+		rctName,		
+		rctChangeDate
+	}
+
 	public sealed class TRepositoryListMan : TListManager
 	{
 		private TGEDCOMRepositoryRecord FRec;
 
 		public override bool CheckFilter(TPersonsFilter aFilter, TGenEngine.TShieldState aShieldState)
 		{
-			bool Result = false;
-			if (aFilter.List != TPersonsFilter.TListFilterMode.flSelector || aFilter.Name == "*" || IsMatchesMask(this.FRec.RepositoryName, aFilter.Name))
-			{
-				Result = true;
-			}
-			return Result;
+			bool res = (this.QuickFilter == "*" || IsMatchesMask(this.FRec.RepositoryName, this.QuickFilter));
+
+			res = res && base.CheckNewFilter();
+
+			return res;
 		}
 
 		public override void Fetch(TGEDCOMRecord aRec)
@@ -29,42 +33,33 @@ namespace GKUI.Lists
 			this.FRec = (aRec as TGEDCOMRepositoryRecord);
 		}
 
-		public override string GetColumnValue(int aColIndex, bool isMain)
+		public override object GetColumnValueEx(int col_index)
 		{
-			string Result;
-
-			switch (aColIndex) {
+			switch (col_index) {
 				case 1:
-					Result = this.FRec.RepositoryName;
-					break;
+					return this.FRec.RepositoryName;
 				case 2:
-					Result = this.FRec.ChangeDate.ToString();
-					break;
+					return this.FRec.ChangeDate.ChangeDateTime;
 				default:
-					Result = "";
-					break;
-			}
-
-			return Result;
-		}
-
-		public override void UpdateItem(GKListItem aItem, bool isMain)
-		{
-			aItem.SubItems.Add(this.FRec.RepositoryName);
-			if (isMain)
-			{
-				aItem.SubItems.Add(this.FRec.ChangeDate.ToString());
+					return null;
 			}
 		}
 
-		public override void UpdateColumns(GKListView aList, bool isMain)
+		protected override void InitColumnStatics()
 		{
-			aList.AddListColumn("№", 50, false);
-			aList.AddListColumn(LangMan.LSList[134], 400, false);
-			if (isMain)
-			{
-				aList.AddListColumn(LangMan.LSList[317], 150, false);
-			}
+			this.ColumnStatics.Clear();
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[134], TDataType.dtString, 400));
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[317], TDataType.dtDateTime, 150));
+		}
+
+		public override Type GetColumnsEnum()
+		{
+			return typeof(TRepositoryColumnType);
+		}
+
+		public override TListColumns GetDefaultListColumns()
+		{
+			return null;
 		}
 
 		public TRepositoryListMan(TGEDCOMTree aTree) : base(aTree)

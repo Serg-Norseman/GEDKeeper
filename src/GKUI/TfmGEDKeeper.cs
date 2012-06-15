@@ -802,7 +802,7 @@ namespace GKUI
 				this.miRecordDelete.Enabled = base_en;
 				this.tbRecordDelete.Enabled = this.miRecordDelete.Enabled;
 				bool indiv_en = base_en && rt == TGEDCOMRecordType.rtIndividual;
-				this.miFilter.Enabled = indiv_en;
+				this.miFilter.Enabled = base_en;
 				this.tbFilter.Enabled = this.miFilter.Enabled;
 				this.miSearch.Enabled = indiv_en;
 				this.miStats.Enabled = base_en;

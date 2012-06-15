@@ -2,7 +2,6 @@
 
 using GedCom551;
 using GKCore;
-using GKUI.Controls;
 
 /// <summary>
 /// Localization: clean
@@ -10,18 +9,43 @@ using GKUI.Controls;
 
 namespace GKUI.Lists
 {
+	public enum TSourceColumnType : byte
+	{
+		sctShortName,
+		sctAuthor,
+		sctTitle,
+		sctChangeDate
+	}
+
+	public sealed class TSourceListColumns : TListColumns
+	{
+		protected override void InitDefaultColumns()
+		{
+			TColumnProps[] array1 = new TColumnProps[4];
+			array1[0] = new TColumnProps(TSourceColumnType.sctShortName, true);
+			array1[1] = new TColumnProps(TSourceColumnType.sctAuthor, true);
+			array1[2] = new TColumnProps(TSourceColumnType.sctTitle, true);
+			array1[3] = new TColumnProps(TSourceColumnType.sctChangeDate, true);
+			DefColumns = array1;
+		}
+
+		public TSourceListColumns()
+		{
+			InitData(typeof(TSourceColumnType));
+		}
+	}
+
 	public sealed class TSourceListMan : TListManager
 	{
 		private TGEDCOMSourceRecord FRec;
 
 		public override bool CheckFilter(TPersonsFilter aFilter, TGenEngine.TShieldState aShieldState)
 		{
-			bool Result = false;
-			if (aFilter.List != TPersonsFilter.TListFilterMode.flSelector || aFilter.Name == "*" || IsMatchesMask(this.FRec.FiledByEntry, aFilter.Name))
-			{
-				Result = true;
-			}
-			return Result;
+			bool res = (this.QuickFilter == "*" || IsMatchesMask(this.FRec.FiledByEntry, this.QuickFilter));
+
+			res = res && base.CheckNewFilter();
+
+			return res;
 		}
 
 		public override void Fetch(TGEDCOMRecord aRec)
@@ -29,50 +53,39 @@ namespace GKUI.Lists
 			this.FRec = (aRec as TGEDCOMSourceRecord);
 		}
 
-		public override string GetColumnValue(int aColIndex, bool isMain)
+		public override object GetColumnValueEx(int col_index)
 		{
-			string result;
-			switch (aColIndex) {
+			switch (col_index) {
 				case 1:
-					result = this.FRec.FiledByEntry.Trim();
-					break;
+					return this.FRec.FiledByEntry.Trim();
 				case 2:
-					result = this.FRec.Originator.Text.Trim();
-					break;
+					return this.FRec.Originator.Text.Trim();
 				case 3:
-					result = this.FRec.Title.Text.Trim();
-					break;
+					return this.FRec.Title.Text.Trim();
 				case 4:
-					result = this.FRec.ChangeDate.ToString();
-					break;
+					return this.FRec.ChangeDate.ChangeDateTime;
 				default:
-					result = "";
-					break;
-			}
-			return result;
-		}
-
-		public override void UpdateItem(GKListItem aItem, bool isMain)
-		{
-			aItem.SubItems.Add(this.FRec.FiledByEntry.Trim());
-			if (isMain)
-			{
-				aItem.SubItems.Add(this.FRec.Originator.Text.Trim());
-				aItem.SubItems.Add(this.FRec.Title.Text.Trim());
-				aItem.SubItems.Add(this.FRec.ChangeDate.ToString());
+					return null;
 			}
 		}
 
-		public override void UpdateColumns(GKListView aList, bool isMain)
+		protected override void InitColumnStatics()
 		{
-			aList.AddListColumn("№", 50, false);
-			aList.AddListColumn(LangMan.LSList[141], 120, false);
-			if (isMain)
-			{
-				aList.AddListColumn(LangMan.LSList[142], 200, false);
-				aList.AddListColumn(LangMan.LSList[125], 200, false);
-				aList.AddListColumn(LangMan.LSList[317], 150, false);
-			}
+			this.ColumnStatics.Clear();
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[141], TDataType.dtString, 120));
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[142], TDataType.dtString, 200));
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[125], TDataType.dtString, 200));
+			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[317], TDataType.dtDateTime, 150));
+		}
+
+		public override Type GetColumnsEnum()
+		{
+			return typeof(TSourceColumnType);
+		}
+
+		public override TListColumns GetDefaultListColumns()
+		{
+			return new TSourceListColumns();
 		}
 
 		public TSourceListMan(TGEDCOMTree aTree) : base(aTree)

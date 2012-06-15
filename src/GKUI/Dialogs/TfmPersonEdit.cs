@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKUI.Lists;
+using GKUI.Controls;
 
 /// <summary>
 /// Localization: clean
@@ -754,8 +754,11 @@ namespace GKUI
 
 			this.FSourcesList = new TSheetList(this.SheetSources);
 			this.FSourcesList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
-			this.FSourcesList.Buttons.Include(new Enum[]
+			this.FSourcesList.Buttons = EnumSet.Create(new Enum[]
 			{
+				TSheetList.TListButton.lbAdd, 
+				TSheetList.TListButton.lbEdit, 
+				TSheetList.TListButton.lbDelete, 
 				TSheetList.TListButton.lbMoveUp, 
 				TSheetList.TListButton.lbMoveDown
 			});

@@ -11,7 +11,7 @@ using GKUI.Controls;
 /// Localization: clean
 /// </summary>
 
-namespace GKUI.Lists
+namespace GKUI.Controls
 {
 	public sealed class TSheetList : ContainerControl, IDisposable
 	{

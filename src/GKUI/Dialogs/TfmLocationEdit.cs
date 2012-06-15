@@ -62,8 +62,8 @@ namespace GKUI
 		{
 			this.FLocationRecord = Value;
 			this.EditName.Text = this.FLocationRecord.LocationName;
-			this.EditLatitude.Text = this.FLocationRecord.Map.Lati;
-			this.EditLongitude.Text = this.FLocationRecord.Map.Long;
+			this.EditLatitude.Text = GKMapBrowser.CoordToStr(this.FLocationRecord.Map.Lati);
+			this.EditLongitude.Text = GKMapBrowser.CoordToStr(this.FLocationRecord.Map.Long);
 			this.ControlsRefresh();
 			this.ActiveControl = this.EditName;
 		}
@@ -81,8 +81,8 @@ namespace GKUI
 			try
 			{
 				this.FLocationRecord.LocationName = this.EditName.Text;
-				this.FLocationRecord.Map.Lati = this.EditLatitude.Text;
-				this.FLocationRecord.Map.Long = this.EditLongitude.Text;
+				this.FLocationRecord.Map.Lati = SysUtils.ParseFloat(this.EditLatitude.Text, 0.0);
+				this.FLocationRecord.Map.Long = SysUtils.ParseFloat(this.EditLongitude.Text, 0.0);
 				this.Base.ChangeRecord(this.FLocationRecord);
 				base.DialogResult = DialogResult.OK;
 			}

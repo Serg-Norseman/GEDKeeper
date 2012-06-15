@@ -7,13 +7,13 @@ using Ext.TimSort;
 using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKUI.Controls;
+using GKUI.Lists;
 
 /// <summary>
 /// Localization: clean
 /// </summary>
 
-namespace GKUI.Lists
+namespace GKUI.Controls
 {
 	public sealed class TRecordsView : GKListView, IDisposable
 	{
@@ -117,7 +117,7 @@ namespace GKUI.Lists
 
 		private class ValItem
 		{
-			public string ColumnValue;
+			public object ColumnValue;
 			public object Record;
 		}
 
@@ -133,10 +133,10 @@ namespace GKUI.Lists
 				vi.Record = rec;
 
 				if (FXSortColumn == 0) {
-					vi.ColumnValue = TGenEngine.GetXRefNum(rec);
+					vi.ColumnValue = TGenEngine.GetId(rec);
 				} else {
 					FListMan.Fetch(rec);
-					vi.ColumnValue = FListMan.GetColumnValue(FXSortColumn, FIsMainList);
+					vi.ColumnValue = FListMan.GetColumnValueEx(FXSortColumn);
 				}
 
 				buffer.Add(vi);
@@ -152,7 +152,20 @@ namespace GKUI.Lists
 
 		private int xCompare(ValItem Item1, ValItem Item2)
 		{
-			return GKListView.agCompare(Item1.ColumnValue, Item2.ColumnValue) * FXSortFactor;
+			int comp_res = ((IComparable)Item1.ColumnValue).CompareTo(Item2.ColumnValue);
+
+			if (Item1.ColumnValue is string && Item2.ColumnValue is string) {
+				string Str1 = (string)Item1.ColumnValue;
+				string Str2 = (string)Item2.ColumnValue;
+
+				if (Str1 != "" && Str2 == "") comp_res = -1;
+				if (Str1 == "" && Str2 != "") comp_res = 1;
+			} else {
+				if (Item1.ColumnValue != null && Item2.ColumnValue == null) comp_res = -1;
+				if (Item1.ColumnValue == null && Item2.ColumnValue != null) comp_res = 1;
+			}
+
+			return comp_res * FXSortFactor;
 		}
 
 		private GKListItem GetListItem(int ItemIndex)

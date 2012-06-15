@@ -109,6 +109,7 @@ namespace GKUI
 			this.cbSource.Sorted = true;
 			this.cbSource.TabIndex = 1;
 			this.cbSource.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbSource_KeyDown);
+			this.cbSource.KeyUp += new System.Windows.Forms.KeyEventHandler(this.cbSource_KeyUp);
 			// 
 			// TfmSourceCitEdit
 			// 
