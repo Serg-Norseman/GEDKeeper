@@ -860,25 +860,27 @@ namespace GedCom551
 			return Result;
 		}
 
-		public bool IsMatchX(TGEDCOMRecord record, bool indistinctMatching, float nameAccuracy, bool birthYear, int yearInaccuracy, bool only_np)
+		public override bool IsMatch(TGEDCOMRecord record, float matchThreshold, MatchParams mParams)
 		{
+
 			bool match = false;
 
 			if (record != null) {
 				TGEDCOMIndividualRecord kRec = (TGEDCOMIndividualRecord)record;
 
-				string iName = "";
-				if (this.aux_GetIndivName(only_np, ref iName)) {
+				if (this.Sex == kRec.Sex) {
+					bool womanMode = (this.Sex == TGEDCOMSex.svFemale);
+					string iName = "";
 					string kName = "";
-					if (kRec.aux_GetIndivName(only_np, ref kName) && this.Sex == kRec.Sex && (!only_np || (this.Sex == TGEDCOMSex.svFemale && kRec.Sex == TGEDCOMSex.svFemale)))
-					{
-						if (!indistinctMatching) {
+
+					if (this.aux_GetIndivName(womanMode, ref iName) && kRec.aux_GetIndivName(womanMode, ref kName)) {
+						if (!mParams.IndistinctNameMatching) {
 							match = (iName == kName);
 						} else {
-							match = (IndistinctMatching.GetSimilarity(iName, kName) >= nameAccuracy);
+							match = (IndistinctMatching.GetSimilarity(iName, kName) >= mParams.IndistinctThreshold);
 						}
 
-						if (match && birthYear)
+						if (match && mParams.CheckBirthYear)
 						{
 							TGEDCOMCustomEvent ev;
 							int year1 = -1, year2 = -1;
@@ -890,19 +892,15 @@ namespace GedCom551
 							ev = kRec.GetIndividualEvent("BIRT");
 							if (ev != null) ev.Detail.Date.aux_GetIndependentDate(out year2, out m, out d);
 
-							match = (match && year1 >= 0 && year2 >= 0 && Math.Abs(year1 - year2) <= yearInaccuracy);
+							match = (match && year1 >= 0 && year2 >= 0 && Math.Abs(year1 - year2) <= mParams.YearInaccuracy);
 						}
 					}
 				}
-
 			}
 			
 			return match;
-		}
 
-		public override bool IsMatch(TGEDCOMRecord record, float matchThreshold)
-		{
-			float match = 0.0F;
+			/*float match = 0.0F;
 
 			TGEDCOMIndividualRecord indi = (TGEDCOMIndividualRecord)record;
 
@@ -951,7 +949,7 @@ namespace GedCom551
 				match = (nameMatch + genderMatch + birthMatch + deathMatch) / 4.0F;
 			}
 
-			return (match >= matchThreshold);
+			return (match >= matchThreshold);*/
 		}
 
 	}

@@ -605,7 +605,7 @@ namespace GKCore
 		/* 567 */ LSID_RM_DirectMatching, // deprecated
 		/* 568 */ LSID_RM_IndistinctMatching,
 
-		/* 569 */ LSID_RM_OnlyNP,
+		/* 569 */ LSID_RM_OnlyNP, // deprecated
 		/* 570 */ LSID_RM_BirthYear,
 		/* 571 */ LSID_RM_NameAccuracy,
 		/* 572 */ LSID_RM_YearInaccuracy,

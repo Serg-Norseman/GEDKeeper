@@ -280,11 +280,48 @@ namespace GedCom551
 			return result;
 		}
 
-		public override bool IsMatch(TGEDCOMRecord record, float matchThreshold)
+		public string aux_GetFamilyStr(string unkHusband, string unkWife)
+		{
+			string Result = "";
+
+			TGEDCOMIndividualRecord spouse = this.Husband.Value as TGEDCOMIndividualRecord;
+			if (spouse == null)
+			{
+				if (unkHusband == null) unkHusband = "?";
+				Result += unkHusband;
+			}
+			else
+			{
+				Result += spouse.aux_GetNameStr(true, false);
+			}
+
+			Result += " - ";
+
+			spouse = (this.Wife.Value as TGEDCOMIndividualRecord);
+			if (spouse == null)
+			{
+				if (unkWife == null) unkWife = "?";
+				Result += unkWife;
+			}
+			else
+			{
+				Result += spouse.aux_GetNameStr(true, false);
+			}
+
+			return Result;
+		}
+
+		public override bool IsMatch(TGEDCOMRecord record, float matchThreshold, MatchParams matchParams)
 		{
 			bool match = false;
 
 			if (record != null) {
+				TGEDCOMFamilyRecord fam = (TGEDCOMFamilyRecord)record;
+
+				string title1 = this.aux_GetFamilyStr(null, null);
+				string title2 = fam.aux_GetFamilyStr(null, null);
+
+				match = (string.Compare(title1, title2, true) == 0);
 			}
 
 			return match;

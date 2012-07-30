@@ -75,7 +75,7 @@ namespace GedCom551
 			}
 		}
 
-		public override bool IsMatch(TGEDCOMRecord record, float matchThreshold)
+		public override bool IsMatch(TGEDCOMRecord record, float matchThreshold, MatchParams matchParams)
 		{
 			bool match = false;
 

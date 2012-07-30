@@ -135,35 +135,6 @@ namespace GKUI
 			}
 		}
 
-		private void InternalChildAdd(TGEDCOMSex aNeedSex)
-		{
-			TreeChartPerson p = this.FTreeBox.Selected;
-			if (p != null && p.Rec != null)
-			{
-				TGEDCOMIndividualRecord i_rec = p.Rec;
-				if (i_rec.SpouseToFamilyLinks.Count == 0)
-				{
-					TGenEngine.ShowError(LangMan.LSList[211]);
-				}
-				else
-				{
-					if (i_rec.SpouseToFamilyLinks.Count > 1)
-					{
-						TGenEngine.ShowError("У данной персоны несколько семей. Выбор еще не реализован.");
-					}
-					else
-					{
-						TGEDCOMFamilyRecord fam = i_rec.SpouseToFamilyLinks[0].Family;
-						TGEDCOMIndividualRecord i_child = this.FBase.SelectPerson(fam.Husband.Value as TGEDCOMIndividualRecord, TGenEngine.TTargetMode.tmParent, aNeedSex);
-						if (i_child != null && this.FBase.Engine.AddFamilyChild(fam, i_child))
-						{
-							this.UpdateChart();
-						}
-					}
-				}
-			}
-		}
-
 		private void NavRefresh()
 		{
 			this.tbPrev.Enabled = this.FNavman.CanBackward();
@@ -405,6 +376,36 @@ namespace GKUI
 					this.FBase.Engine.AddFamilySpouse(fam, i_rec);
 					this.FBase.Engine.AddFamilySpouse(fam, i_spouse);
 					this.UpdateChart();
+				}
+			}
+		}
+
+		private void InternalChildAdd(TGEDCOMSex aNeedSex)
+		{
+			TreeChartPerson p = this.FTreeBox.Selected;
+			if (p != null && p.Rec != null)
+			{
+				TGEDCOMIndividualRecord i_rec = p.Rec;
+				if (i_rec.SpouseToFamilyLinks.Count == 0)
+				{
+					TGenEngine.ShowError(LangMan.LSList[211]);
+				}
+				else
+				{
+					if (i_rec.SpouseToFamilyLinks.Count > 1)
+					{
+						TGenEngine.ShowError("У данной персоны несколько семей. Выбор еще не реализован.");
+					}
+					else
+					{
+						TGEDCOMFamilyRecord fam = i_rec.SpouseToFamilyLinks[0].Family;
+						TGEDCOMIndividualRecord i_child = this.FBase.SelectPerson(fam.Husband.Value as TGEDCOMIndividualRecord, TGenEngine.TTargetMode.tmParent, aNeedSex);
+
+						if (i_child != null && this.FBase.Engine.AddFamilyChild(fam, i_child))
+						{
+							this.UpdateChart();
+						}
+					}
 				}
 			}
 		}

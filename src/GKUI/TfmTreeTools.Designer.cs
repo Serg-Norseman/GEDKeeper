@@ -75,7 +75,6 @@ namespace GKUI
 		private System.Windows.Forms.GroupBox rgTreeMergeType;
 		private System.Windows.Forms.Button btnHelp;
 		private System.Windows.Forms.Button btnSetPatriarch;
-		private System.Windows.Forms.CheckBox chkOnlyNP;
 		private System.Windows.Forms.Button btnIntoList;
 		private System.Windows.Forms.RadioButton RadioButton3;
 		private System.Windows.Forms.RadioButton RadioButton4;
@@ -152,7 +151,6 @@ namespace GKUI
 			this.edNameAccuracy = new System.Windows.Forms.NumericUpDown();
 			this.edYearInaccuracy = new System.Windows.Forms.NumericUpDown();
 			this.chkBirthYear = new System.Windows.Forms.CheckBox();
-			this.chkOnlyNP = new System.Windows.Forms.CheckBox();
 			this.SheetFamilyGroups = new System.Windows.Forms.TabPage();
 			this.TreeView1 = new System.Windows.Forms.TreeView();
 			this.SheetTreeCheck = new System.Windows.Forms.TabPage();
@@ -777,10 +775,9 @@ namespace GKUI
 			this.GroupBox1.Controls.Add(this.edNameAccuracy);
 			this.GroupBox1.Controls.Add(this.edYearInaccuracy);
 			this.GroupBox1.Controls.Add(this.chkBirthYear);
-			this.GroupBox1.Controls.Add(this.chkOnlyNP);
 			this.GroupBox1.Location = new System.Drawing.Point(8, 112);
 			this.GroupBox1.Name = "GroupBox1";
-			this.GroupBox1.Size = new System.Drawing.Size(295, 191);
+			this.GroupBox1.Size = new System.Drawing.Size(295, 159);
 			this.GroupBox1.TabIndex = 1;
 			this.GroupBox1.TabStop = false;
 			this.GroupBox1.Text = "Поиск персон";
@@ -795,7 +792,7 @@ namespace GKUI
 			// 
 			// Label6
 			// 
-			this.Label6.Location = new System.Drawing.Point(16, 125);
+			this.Label6.Location = new System.Drawing.Point(16, 109);
 			this.Label6.Name = "Label6";
 			this.Label6.Size = new System.Drawing.Size(108, 13);
 			this.Label6.TabIndex = 1;
@@ -823,7 +820,7 @@ namespace GKUI
 			// 
 			// edYearInaccuracy
 			// 
-			this.edYearInaccuracy.Location = new System.Drawing.Point(16, 141);
+			this.edYearInaccuracy.Location = new System.Drawing.Point(16, 125);
 			this.edYearInaccuracy.Name = "edYearInaccuracy";
 			this.edYearInaccuracy.Size = new System.Drawing.Size(108, 21);
 			this.edYearInaccuracy.TabIndex = 4;
@@ -835,19 +832,11 @@ namespace GKUI
 			// 
 			// chkBirthYear
 			// 
-			this.chkBirthYear.Location = new System.Drawing.Point(6, 106);
+			this.chkBirthYear.Location = new System.Drawing.Point(6, 90);
 			this.chkBirthYear.Name = "chkBirthYear";
 			this.chkBirthYear.Size = new System.Drawing.Size(265, 17);
 			this.chkBirthYear.TabIndex = 6;
 			this.chkBirthYear.Text = "Учитывать год рождения";
-			// 
-			// chkOnlyNP
-			// 
-			this.chkOnlyNP.Location = new System.Drawing.Point(6, 83);
-			this.chkOnlyNP.Name = "chkOnlyNP";
-			this.chkOnlyNP.Size = new System.Drawing.Size(265, 17);
-			this.chkOnlyNP.TabIndex = 7;
-			this.chkOnlyNP.Text = "Только по имени/отчеству (только женщины)";
 			// 
 			// SheetFamilyGroups
 			// 

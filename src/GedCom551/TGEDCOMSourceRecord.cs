@@ -226,7 +226,7 @@ namespace GedCom551
 			base.SetTagStrings(base.TagClass("TEXT", typeof(TGEDCOMTag), TGEDCOMTag.Create), Value);
 		}
 
-		public override bool IsMatch(TGEDCOMRecord record, float matchThreshold)
+		public override bool IsMatch(TGEDCOMRecord record, float matchThreshold, MatchParams matchParams)
 		{
 			bool match = false;
 

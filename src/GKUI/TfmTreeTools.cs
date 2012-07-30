@@ -70,10 +70,11 @@ namespace GKUI
 
 		private void SearchDups()
 		{
-			double nameAccuracy = decimal.ToDouble(this.edNameAccuracy.Value) / 100.0;
-			int yearInaccuracy = decimal.ToInt32(this.edYearInaccuracy.Value);
-			bool only_np = this.chkOnlyNP.Checked;
-			bool indistinctMatching = this.chkIndistinctMatching.Checked;
+			TGEDCOMIndividualRecord.MatchParams mParams;
+			mParams.IndistinctNameMatching = this.chkIndistinctMatching.Checked;
+			mParams.IndistinctThreshold = decimal.ToDouble(this.edNameAccuracy.Value) / 100.0;
+			mParams.CheckBirthYear = this.chkBirthYear.Checked;
+			mParams.YearInaccuracy = decimal.ToInt32(this.edYearInaccuracy.Value);
 
 			bool res = false;
 			this.btnSkip.Enabled = false;
@@ -102,25 +103,7 @@ namespace GKUI
 						if (iRec == kRec) continue;
 						if (this.FRMSkip.IndexOf(iRec.XRef + "-" + kRec.XRef) >= 0) continue;
 
-						switch (this.FRMMode) {
-							case TGEDCOMRecordType.rtIndividual:
-								res = ((TGEDCOMIndividualRecord)iRec).IsMatchX((TGEDCOMIndividualRecord)kRec, indistinctMatching, (float)nameAccuracy, this.chkBirthYear.Checked, yearInaccuracy, only_np);
-								break;
-
-							case TGEDCOMRecordType.rtFamily:
-								string iName = TGenEngine.aux_GetFamilyStr((TGEDCOMFamilyRecord)iRec);
-								string kName = TGenEngine.aux_GetFamilyStr((TGEDCOMFamilyRecord)kRec);
-								res = (iName == kName);
-								break;
-
-							case TGEDCOMRecordType.rtNote:
-								res = ((TGEDCOMNoteRecord)iRec).IsMatch((TGEDCOMNoteRecord)kRec, 100.0F);
-								break;
-
-							case TGEDCOMRecordType.rtSource:
-								res = ((TGEDCOMSourceRecord)iRec).IsMatch((TGEDCOMSourceRecord)kRec, 100.0F);
-								break;
-						}
+						res = iRec.IsMatch(kRec, 100.0F, mParams);
 
 						if (res) {
 							this.SetRec1(iRec);
@@ -987,7 +970,6 @@ namespace GKUI
 			this.RadioButton8.Text = LangMan.LSList[56];
 			this.GroupBox1.Text = LangMan.LSList[565];
 			this.chkIndistinctMatching.Text = LangMan.LSList[567];
-			this.chkOnlyNP.Text = LangMan.LSList[568];
 			this.chkBirthYear.Text = LangMan.LSList[569];
 			this.Label5.Text = LangMan.LSList[570];
 			this.Label6.Text = LangMan.LSList[571];
@@ -1328,11 +1310,10 @@ namespace GKUI
 			}
 		}
 
-		private void DuplicateFoundFunc(TGEDCOMIndividualRecord indi, List<TGEDCOMIndividualRecord> matches)
+		private void DuplicateFoundFunc(TGEDCOMIndividualRecord indivA, TGEDCOMIndividualRecord indivB)
 		{
-			this.ListCompare.AppendText("    - [" + indi.aux_GetNameStr(true, false) + "]\r\n");
-			for (int i = 0; i <= matches.Count - 1; i++)
-				this.ListCompare.AppendText("      - [" + matches[i].aux_GetNameStr(true, false) + "]\r\n");
+			this.ListCompare.AppendText("    * [" + indivA.aux_GetNameStr(true, false) + "]\r\n");
+			this.ListCompare.AppendText("      [" + indivB.aux_GetNameStr(true, false) + "]\r\n");
 		}
 
 		private TreeMatchType GetTreeMatchType()

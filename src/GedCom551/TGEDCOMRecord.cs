@@ -298,7 +298,16 @@ namespace GedCom551
 			this.NewUID();
 		}
 
-		public virtual bool IsMatch(TGEDCOMRecord record, float matchThreshold)
+		public struct MatchParams
+		{
+			public bool IndistinctNameMatching;
+			public double IndistinctThreshold;
+
+			public bool CheckBirthYear;
+			public int YearInaccuracy;
+		}
+
+		public virtual bool IsMatch(TGEDCOMRecord record, float matchThreshold, MatchParams matchParams)
 		{
 			return false;
 		}

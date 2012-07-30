@@ -1708,31 +1708,7 @@ namespace GKCore
 
 		public static string aux_GetFamilyStr(TGEDCOMFamilyRecord aFamily)
 		{
-			string Result = "";
-
-			TGEDCOMIndividualRecord spouse = aFamily.Husband.Value as TGEDCOMIndividualRecord;
-			if (spouse == null)
-			{
-				Result += LangMan.LSList[64];
-			}
-			else
-			{
-				Result += spouse.aux_GetNameStr(true, false);
-			}
-
-			Result += " - ";
-
-			spouse = (aFamily.Wife.Value as TGEDCOMIndividualRecord);
-			if (spouse == null)
-			{
-				Result += LangMan.LSList[63];
-			}
-			else
-			{
-				Result += spouse.aux_GetNameStr(true, false);
-			}
-
-			return Result;
+			return aFamily.aux_GetFamilyStr(LangMan.LSList[64], LangMan.LSList[63]);
 		}
 
 		// FIXME: localization, old code
@@ -3707,37 +3683,30 @@ namespace GKCore
 		}
 
 
-		public delegate void DuplicateFoundFunc(TGEDCOMIndividualRecord indi, List<TGEDCOMIndividualRecord> matches);
-
-		public static List<TGEDCOMIndividualRecord> FindDuplicates(TGEDCOMIndividualRecord indi, TGEDCOMTree tree_B, float matchThreshold)
-		{
-			List<TGEDCOMIndividualRecord> matches = new List<TGEDCOMIndividualRecord>();
-
-			for (int i = 0; i <= tree_B.RecordsCount - 1; i++)
-			{
-				if (tree_B[i] is TGEDCOMIndividualRecord)
-				{
-					TGEDCOMIndividualRecord matchIndi = tree_B[i] as TGEDCOMIndividualRecord;
-
-					if (matchIndi != indi && indi.IsMatch(matchIndi, matchThreshold)) {
-						matches.Add(matchIndi);
-					}
-				}
-			}
-
-			return matches;		
-		}
+		public delegate void DuplicateFoundFunc(TGEDCOMIndividualRecord indivA, TGEDCOMIndividualRecord indivB);
 
 		public static void FindDuplicates(TGEDCOMTree tree_A, TGEDCOMTree tree_B, float matchThreshold, DuplicateFoundFunc foundFunc)
 		{		
-			for (int i = 0; i <= tree_A.RecordsCount - 1; i++)
-			{
-				if (tree_A[i] is TGEDCOMIndividualRecord)
-				{
-					TGEDCOMIndividualRecord indi = tree_A[i] as TGEDCOMIndividualRecord;
+			TGEDCOMRecord.MatchParams mParams;
+			mParams.IndistinctNameMatching = true;
+			mParams.IndistinctThreshold = 90;
+			mParams.CheckBirthYear = true;
+			mParams.YearInaccuracy = 5;
 
-					List<TGEDCOMIndividualRecord> matches = FindDuplicates(indi, tree_B, matchThreshold);
-					if (matches.Count > 0) foundFunc(indi, matches);
+			for (int i = 0; i <= tree_A.RecordsCount - 1; i++) {
+				TGEDCOMRecord recA = tree_A[i];
+				if (recA is TGEDCOMIndividualRecord) {
+					for (int k = 0; k <= tree_B.RecordsCount - 1; k++) {
+						TGEDCOMRecord recB = tree_B[k];
+						if (recB is TGEDCOMIndividualRecord) {
+							TGEDCOMIndividualRecord indivA = recA as TGEDCOMIndividualRecord;
+							TGEDCOMIndividualRecord indivB = recB as TGEDCOMIndividualRecord;
+
+							if (indivA != indivB && indivA.IsMatch(indivB, matchThreshold, mParams)) {
+								foundFunc(indivA, indivB);
+							}
+						}
+					}
 				}
 			}
 		}
