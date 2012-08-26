@@ -154,6 +154,7 @@
     <Compile Include="GKCore\GlobalOptions.cs" />
     <Compile Include="GKCore\HTMLExporter.cs" />
     <Compile Include="GKCore\Importer.cs" />
+    <Compile Include="GKCore\IProgressController.cs" />
     <Compile Include="GKCore\Kinships.cs" />
     <Compile Include="GKCore\LangMan.cs" />
     <Compile Include="GKCore\PDFExport.cs" />

@@ -302,6 +302,8 @@ namespace GedCom551
 		{
 			public bool IndistinctNameMatching;
 			public double IndistinctThreshold;
+			
+			public bool RusNames;
 
 			public bool CheckBirthYear;
 			public int YearInaccuracy;

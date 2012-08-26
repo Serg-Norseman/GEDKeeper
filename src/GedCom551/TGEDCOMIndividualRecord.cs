@@ -837,32 +837,28 @@ namespace GedCom551
 			return Result;
 		}
 
-		public bool aux_GetIndivName(bool only_np, ref string aName)
+		private bool aux_GetIndivName(bool rusNames, bool womanMode, ref string aName)
 		{
-			bool Result;
+			bool result;
 
-			if (only_np)
-			{
-				string f, i, p;
-				aux_GetNameParts(out f, out i, out p);
-				aName = i + " " + p;
-				string text = aName;
-				Result = (text.Length > 3);
-			}
-			else
-			{
-				TGEDCOMPersonalName np = _PersonalNames[0];
-				aName = np.StringValue;
-				string firstPart = np.FirstPart;
-				Result = (((firstPart != null) ? firstPart.Length : 0) > 3);
+			string firstPart, surname;
+			TGEDCOMPersonalName np = this._PersonalNames[0];
+			np.GetNameParts(out firstPart, out surname);
+
+			aName = ((womanMode && rusNames) ? firstPart : np.StringValue);
+			result = (aName.Length > 3);
+
+			// russian names form - with patronymics, and woman marriage families
+			if (rusNames) {
+				string[] parts = firstPart.Split(' ');
+				result = result && ((parts.Length > 1) && (parts[0].Length > 1) && (parts[1].Length > 1));
 			}
 
-			return Result;
+			return result;
 		}
 
 		public override bool IsMatch(TGEDCOMRecord record, float matchThreshold, MatchParams mParams)
 		{
-
 			bool match = false;
 
 			if (record != null) {
@@ -873,7 +869,7 @@ namespace GedCom551
 					string iName = "";
 					string kName = "";
 
-					if (this.aux_GetIndivName(womanMode, ref iName) && kRec.aux_GetIndivName(womanMode, ref kName)) {
+					if (this.aux_GetIndivName(mParams.RusNames, womanMode, ref iName) && kRec.aux_GetIndivName(mParams.RusNames, womanMode, ref kName)) {
 						if (!mParams.IndistinctNameMatching) {
 							match = (iName == kName);
 						} else {
@@ -897,7 +893,7 @@ namespace GedCom551
 					}
 				}
 			}
-			
+
 			return match;
 
 			/*float match = 0.0F;

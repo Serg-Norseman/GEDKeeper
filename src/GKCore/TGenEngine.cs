@@ -2714,12 +2714,15 @@ namespace GKCore
 		{
 			TGEDCOMNoteRecord result = null;
 
-			if (aRecord != null && aText != null) {
+			if (aText != null) {
 				result = TGenEngine.CreateNote(aTree);
 				result.Note = aText;
-				TGenEngine.BindRecordNote(aTree, aRecord, result);
 			}
 
+			if (aRecord != null && result != null) {
+				TGenEngine.BindRecordNote(aTree, aRecord, result);
+			}
+			
 			return result;
 		}
 
@@ -3614,11 +3617,15 @@ namespace GKCore
 			public TGEDCOMIndividualRecord iRec;
 		}
 
-		public List<ULIndividual> GetUnlinkedNamesakes()
+		public List<ULIndividual> GetUnlinkedNamesakes(IProgressController pc)
 		{
 			List<ULIndividual> result = new List<ULIndividual>();
 
 			Hashtable families = new Hashtable();
+
+			pc.ProgressInit(FTree.RecordsCount, "Этап 1");
+
+			// составить таблицу фамилий и персон, относящихся к этим фамилиям
 			for (int i = 0; i < FTree.RecordsCount; i++)
 			{
 				TGEDCOMRecord rec = FTree[i];
@@ -3626,6 +3633,7 @@ namespace GKCore
 				if (rec is TGEDCOMIndividualRecord)
 				{
 					TGEDCOMIndividualRecord iRec = rec as TGEDCOMIndividualRecord;
+
 					string[] fams = GetFamilies(iRec);
 					for (int k = 0; k < fams.Length; k++)
 					{
@@ -3641,8 +3649,13 @@ namespace GKCore
 						}
 					}
 				}
+
+				pc.ProgressStep();
 			}
 
+			pc.ProgressInit(families.Count, "Этап 2");
+			
+			// найти всех персон одной фамилии, не связанных узами родства
 			foreach (DictionaryEntry entry in families)
 			{
 				string fam = (string)entry.Key;
@@ -3675,9 +3688,13 @@ namespace GKCore
 						result.Add(indiv);
 					}
 				}
+
+				pc.ProgressStep();
 			}
 
 			result.Sort(new IndividualRecordComparer());
+			
+			pc.ProgressDone();
 
 			return result;
 		}
@@ -3685,29 +3702,41 @@ namespace GKCore
 
 		public delegate void DuplicateFoundFunc(TGEDCOMIndividualRecord indivA, TGEDCOMIndividualRecord indivB);
 
-		public static void FindDuplicates(TGEDCOMTree tree_A, TGEDCOMTree tree_B, float matchThreshold, DuplicateFoundFunc foundFunc)
+		public static void FindDuplicates(TGEDCOMTree tree_A, TGEDCOMTree tree_B, float matchThreshold, 
+		                                  DuplicateFoundFunc foundFunc, IProgressController pc)
 		{		
 			TGEDCOMRecord.MatchParams mParams;
 			mParams.IndistinctNameMatching = true;
-			mParams.IndistinctThreshold = 90;
+			mParams.IndistinctThreshold = 90 / 100.0;
 			mParams.CheckBirthYear = true;
-			mParams.YearInaccuracy = 5;
+			mParams.YearInaccuracy = 3;
+			mParams.RusNames = true;
 
-			for (int i = 0; i <= tree_A.RecordsCount - 1; i++) {
-				TGEDCOMRecord recA = tree_A[i];
-				if (recA is TGEDCOMIndividualRecord) {
-					for (int k = 0; k <= tree_B.RecordsCount - 1; k++) {
-						TGEDCOMRecord recB = tree_B[k];
-						if (recB is TGEDCOMIndividualRecord) {
-							TGEDCOMIndividualRecord indivA = recA as TGEDCOMIndividualRecord;
-							TGEDCOMIndividualRecord indivB = recB as TGEDCOMIndividualRecord;
+			pc.ProgressInit(tree_A.RecordsCount, "Поиск дубликатов");
+			try
+			{
+				for (int i = 0; i <= tree_A.RecordsCount - 1; i++) {
+					TGEDCOMRecord recA = tree_A[i];
+					if (recA is TGEDCOMIndividualRecord) {
+						for (int k = 0; k <= tree_B.RecordsCount - 1; k++) {
+							TGEDCOMRecord recB = tree_B[k];
+							if (recB is TGEDCOMIndividualRecord) {
+								TGEDCOMIndividualRecord indivA = recA as TGEDCOMIndividualRecord;
+								TGEDCOMIndividualRecord indivB = recB as TGEDCOMIndividualRecord;
 
-							if (indivA != indivB && indivA.IsMatch(indivB, matchThreshold, mParams)) {
-								foundFunc(indivA, indivB);
+								if (indivA != indivB && indivA.IsMatch(indivB, matchThreshold, mParams)) {
+									foundFunc(indivA, indivB);
+								}
 							}
 						}
 					}
+					pc.ProgressStep();
+					Application.DoEvents();
 				}
+			}
+			finally
+			{
+				pc.ProgressDone();
 			}
 		}
 

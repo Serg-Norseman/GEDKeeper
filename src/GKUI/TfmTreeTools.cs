@@ -17,7 +17,7 @@ using GKUI.Controls;
 
 namespace GKUI
 {
-	public partial class TfmTreeTools : Form
+	public partial class TfmTreeTools : Form, IProgressController
 	{
 		private class TPlaceObj : IDisposable
 		{
@@ -75,6 +75,7 @@ namespace GKUI
 			mParams.IndistinctThreshold = decimal.ToDouble(this.edNameAccuracy.Value) / 100.0;
 			mParams.CheckBirthYear = this.chkBirthYear.Checked;
 			mParams.YearInaccuracy = decimal.ToInt32(this.edYearInaccuracy.Value);
+			mParams.RusNames = true;
 
 			bool res = false;
 			this.btnSkip.Enabled = false;
@@ -1313,7 +1314,8 @@ namespace GKUI
 		private void DuplicateFoundFunc(TGEDCOMIndividualRecord indivA, TGEDCOMIndividualRecord indivB)
 		{
 			this.ListCompare.AppendText("    * [" + indivA.aux_GetNameStr(true, false) + "]\r\n");
-			this.ListCompare.AppendText("      [" + indivB.aux_GetNameStr(true, false) + "]\r\n");
+			this.ListCompare.AppendText("      [" + indivB.aux_GetNameStr(true, false) + "]\r\n\r\n");
+			//this.ListCompare.AppendText("\r\n");
 		}
 
 		private TreeMatchType GetTreeMatchType()
@@ -1335,7 +1337,7 @@ namespace GKUI
 			switch (type) {
 				case TreeMatchType.tmtInternal:
 					{
-						TGenEngine.FindDuplicates(this.FTree, this.FTree, 85 /*min: 80-85*/, DuplicateFoundFunc);
+						TGenEngine.FindDuplicates(this.FTree, this.FTree, 90 /*min: 80-85*/, DuplicateFoundFunc, this);
 						break;
 					}
 
@@ -1347,7 +1349,7 @@ namespace GKUI
 
 				case TreeMatchType.tmtAnalysis:
 					{
-						List<TGenEngine.ULIndividual> uln = FBase.Engine.GetUnlinkedNamesakes();
+						List<TGenEngine.ULIndividual> uln = FBase.Engine.GetUnlinkedNamesakes(this);
 
 						this.ListCompare.AppendText("  Поиск несвязанных однофамильцев:\r\n");
 						if (uln != null && uln.Count > 0)
@@ -1381,5 +1383,21 @@ namespace GKUI
 			PatriarchsViewer wnd = new PatriarchsViewer(FBase, decimal.ToInt32(this.edMinGens.Value));
 			wnd.Show();
 		}
+		
+		void IProgressController.ProgressInit(int aMax, string aTitle)
+		{
+			TfmProgress.ProgressInit(aMax, aTitle);
+		}
+		
+		void IProgressController.ProgressDone()
+		{
+			TfmProgress.ProgressDone();
+		}
+		
+		void IProgressController.ProgressStep()
+		{
+			TfmProgress.ProgressStep();
+		}
+
 	}
 }
