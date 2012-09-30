@@ -60,7 +60,7 @@ namespace GKUI
 			this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 									this.backgroundImageToolStripMenuItem});
 			this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-			this.optionsToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
+			this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
 			this.optionsToolStripMenuItem.Text = "Options";
 			// 
 			// backgroundImageToolStripMenuItem
@@ -69,7 +69,7 @@ namespace GKUI
 									this.imageToolStripMenuItem,
 									this.layoutToolStripMenuItem});
 			this.backgroundImageToolStripMenuItem.Name = "backgroundImageToolStripMenuItem";
-			this.backgroundImageToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+			this.backgroundImageToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
 			this.backgroundImageToolStripMenuItem.Text = "Background image";
 			// 
 			// imageToolStripMenuItem

@@ -24,7 +24,7 @@ namespace GKUI.Lists
 
 	public enum TConditionKind
 	{
-		ck_NotEq, ck_LT, ck_LET, ck_Eq, ck_GET, ck_GT, ck_Contains
+		ck_NotEq, ck_LT, ck_LET, ck_Eq, ck_GET, ck_GT, ck_Contains, ck_NotContains
 	}
 
 	public struct TFilterCondition
@@ -278,6 +278,9 @@ namespace GKUI.Lists
 					break;
 				case TConditionKind.ck_Contains:
 					res = TGenEngine.MatchesMask(dataval.ToString(), "*" + fcond.value.ToString() + "*");
+					break;
+				case TConditionKind.ck_NotContains:
+					res = !TGenEngine.MatchesMask(dataval.ToString(), "*" + fcond.value.ToString() + "*");
 					break;
 			}
 			return res;

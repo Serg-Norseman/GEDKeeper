@@ -27,7 +27,7 @@ namespace GKUI
 		{
 			TConditionKind res = TConditionKind.ck_NotEq;
 
-			for (TConditionKind pl = TConditionKind.ck_NotEq; pl <= TConditionKind.ck_Contains; pl++)
+			for (TConditionKind pl = TConditionKind.ck_NotEq; pl <= TConditionKind.ck_NotContains; pl++)
 			{
 				if (FCondSigns[(int)pl] == aName)
 				{
@@ -142,7 +142,7 @@ namespace GKUI
 
 			FCondSigns = new string[]
 			{
-				"!=", "<", "<=", "==", "=>", ">", "содержит"
+				"!=", "<", "<=", "==", "=>", ">", "содержит", "не содержит"
 			};
 
 			this.InitGrid();
