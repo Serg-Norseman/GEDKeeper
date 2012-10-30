@@ -39,7 +39,7 @@ namespace GKUI.Lists
 	{
 		private TGEDCOMSourceRecord FRec;
 
-		public override bool CheckFilter(TPersonsFilter aFilter, TGenEngine.TShieldState aShieldState)
+		public override bool CheckFilter(TGenEngine.TShieldState aShieldState)
 		{
 			bool res = (this.QuickFilter == "*" || IsMatchesMask(this.FRec.FiledByEntry, this.QuickFilter));
 

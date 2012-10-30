@@ -151,7 +151,7 @@ namespace GKCore
 			return false;
 		}
 
-		public static void GetPatriarchsList(TGEDCOMTree aTree, bool aProgress, bool aLinks, ref TList aList, int aMinGens, bool aDates = true)
+		public static void GetPatriarchsList(TGEDCOMTree aTree, bool aProgress, bool aLinks, TList aList, int aMinGens, bool aDates = true)
 		{
 			if (aProgress) TfmProgress.ProgressInit(aTree.RecordsCount, LangMan.LSList[474]);
 
@@ -337,6 +337,11 @@ namespace GKCore
 
 		private static void CheckRecord_PreparePtr([In] TGEDCOMTree aTree, TGEDCOMFormat aFormat, TGEDCOMPointerWithNotes ptr)
 		{
+			/*TGEDCOMRecord val = ptr.Value;
+			if (!string.IsNullOrEmpty(ptr.XRef) && val == null) {
+				ptr.Value = null;
+			}*/
+
 			int num = ptr.Notes.Count - 1;
 			for (int i = 0; i <= num; i++)
 			{
@@ -491,6 +496,16 @@ namespace GKCore
 					fam.Childrens.Delete(i);
 			}
 
+			TGEDCOMRecord val = fam.Husband.Value;
+			if (!string.IsNullOrEmpty(fam.Husband.XRef) && val == null) {
+				fam.Husband.Value = null;
+			}
+			
+			val = fam.Wife.Value;
+			if (!string.IsNullOrEmpty(fam.Wife.XRef) && val == null) {
+				fam.Wife.Value = null;
+			}
+			
 			fam.SortChilds();
 		}
 

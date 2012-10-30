@@ -9,7 +9,17 @@ using Ext.Utils;
 
 namespace GKCore
 {
-	public class PedigreeOptions
+    public class EPedigreeOptionsException : Exception
+    {
+        public EPedigreeOptionsException()
+        {
+        }
+        public EPedigreeOptionsException(string message) : base(message)
+        {
+        }
+    }
+
+    public class PedigreeOptions
 	{
 		public enum TPedigreeFormat : byte { pfExcess, pfCompact }
 
@@ -51,10 +61,17 @@ namespace GKCore
 
 		public void LoadFromFile([In] IniFile aIniFile)
 		{
-			this.FIncludeAttributes = aIniFile.ReadBool("Pedigree", "IncludeAttributes", true);
-			this.FIncludeNotes = aIniFile.ReadBool("Pedigree", "IncludeNotes", true);
-			this.FIncludeSources = aIniFile.ReadBool("Pedigree", "IncludeSources", true);
-			this.FFormat = (PedigreeOptions.TPedigreeFormat)aIniFile.ReadInteger("Pedigree", "Format", 0);
+            try
+            {
+                this.FIncludeAttributes = aIniFile.ReadBool("Pedigree", "IncludeAttributes", true);
+                this.FIncludeNotes = aIniFile.ReadBool("Pedigree", "IncludeNotes", true);
+                this.FIncludeSources = aIniFile.ReadBool("Pedigree", "IncludeSources", true);
+                this.FFormat = (PedigreeOptions.TPedigreeFormat)aIniFile.ReadInteger("Pedigree", "Format", 0);
+            }
+            catch (Exception)
+            {
+                throw new EPedigreeOptionsException("Error loading PedigreeOptions"); // FIXME
+            }
 		}
 
 		public void SaveToFile([In] IniFile aIniFile)

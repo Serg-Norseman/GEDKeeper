@@ -56,51 +56,38 @@ namespace GKUI
 
 		private void UpdateForm()
 		{
-			TGEDCOMCharacterSet defCharacterSet = this.FOptions.DefCharacterSet;
-			if (defCharacterSet != TGEDCOMCharacterSet.csASCII)
-			{
-				if (defCharacterSet == TGEDCOMCharacterSet.csUTF8)
-				{
-					this.RButton2.Checked = true;
-				}
-			}
-			else
-			{
-				this.RButton1.Checked = true;
-			}
+            switch (this.FOptions.DefCharacterSet)
+            {
+                case TGEDCOMCharacterSet.csASCII:
+                    this.RButton1.Checked = true;
+                    break;
+                case TGEDCOMCharacterSet.csUTF8:
+                    this.RButton2.Checked = true;
+                    break;
+            }
 
-			TGenEngine.TNameFormat defNameFormat = this.FOptions.DefNameFormat;
-			if (defNameFormat != TGenEngine.TNameFormat.nfFNP)
-			{
-				if (defNameFormat != TGenEngine.TNameFormat.nfF_NP)
-				{
-					if (defNameFormat == TGenEngine.TNameFormat.nfF_N_P)
-					{
-						this.RButton7.Checked = true;
-					}
-				}
-				else
-				{
-					this.RButton6.Checked = true;
-				}
-			}
-			else
-			{
-				this.RButton5.Checked = true;
-			}
+            switch (this.FOptions.DefNameFormat)
+            {
+                case TGenEngine.TNameFormat.nfFNP:
+                    this.RButton5.Checked = true;
+                    break;
+                case TGenEngine.TNameFormat.nfF_NP:
+                    this.RButton6.Checked = true;
+                    break;
+                case TGenEngine.TNameFormat.nfF_N_P:
+                    this.RButton7.Checked = true;
+                    break;
+            }
 
-			TGenEngine.TDateFormat defDateFormat = this.FOptions.DefDateFormat;
-			if (defDateFormat != TGenEngine.TDateFormat.dfDD_MM_YYYY)
-			{
-				if (defDateFormat == TGenEngine.TDateFormat.dfYYYY_MM_DD)
-				{
-					this.RButton9.Checked = true;
-				}
-			}
-			else
-			{
-				this.RButton8.Checked = true;
-			}
+            switch (this.FOptions.DefDateFormat)
+            {
+                case TGenEngine.TDateFormat.dfDD_MM_YYYY:
+                    this.RButton8.Checked = true;
+                    break;
+                case TGenEngine.TDateFormat.dfYYYY_MM_DD:
+                    this.RButton9.Checked = true;
+                    break;
+            }
 
 			this.chkPlacesWithAddress.Checked = this.FOptions.PlacesWithAddress;
 			this.chkHighlightUnparented.Checked = this.FOptions.ListPersons_HighlightUnparented;
@@ -131,18 +118,15 @@ namespace GKUI
 			this.chkNotes.Checked = this.FOptions.PedigreeOptions.IncludeNotes;
 			this.chkSources.Checked = this.FOptions.PedigreeOptions.IncludeSources;
 
-			PedigreeOptions.TPedigreeFormat format = this.FOptions.PedigreeOptions.Format;
-			if (format != PedigreeOptions.TPedigreeFormat.pfExcess)
-			{
-				if (format == PedigreeOptions.TPedigreeFormat.pfCompact)
-				{
-					this.RButton11.Checked = true;
-				}
-			}
-			else
-			{
-				this.RButton10.Checked = true;
-			}
+            switch (this.FOptions.PedigreeOptions.Format)
+            {
+                case PedigreeOptions.TPedigreeFormat.pfExcess:
+                    this.RButton10.Checked = true;
+                    break;
+                case PedigreeOptions.TPedigreeFormat.pfCompact:
+                    this.RButton11.Checked = true;
+                    break;
+            }
 
 			this.chkShowOnStart.Checked = this.FOptions.ShowTips;
 			this.chkRevisionsBackup.Checked = this.FOptions.RevisionsBackup;
@@ -173,11 +157,13 @@ namespace GKUI
 
 		private void PanColor_Click(object sender, EventArgs e)
 		{
-			this.ColorDialog1.Color = (sender as Panel).BackColor;
-			if (this.ColorDialog1.ShowDialog() == DialogResult.OK)
-			{
-				(sender as Panel).BackColor = this.ColorDialog1.Color;
-			}
+            Panel pan = (sender as Panel);
+
+            this.ColorDialog1.Color = pan.BackColor;
+            if (this.ColorDialog1.ShowDialog() == DialogResult.OK)
+            {
+                pan.BackColor = this.ColorDialog1.Color;
+            }
 		}
 
 		private void PanDefFont_Click(object sender, EventArgs e)

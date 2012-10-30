@@ -66,21 +66,44 @@ namespace GKUI.Lists
 		}
 	}
 
+	public class TListFilter
+	{
+		public List<TFilterCondition> ColumnsFilter = new List<TFilterCondition>();
+		
+		public TListFilter()
+		{
+		}
+		
+		public virtual void Clear()
+		{
+			ColumnsFilter.Clear();
+		}
+	}
+
 	public abstract class TListManager : IDisposable
 	{
+		protected TListFilter FFilter;
 		protected TGEDCOMTree FTree;
 		protected bool Disposed_;
 
 		protected List<TColumnStatic> ColumnStatics = new List<TColumnStatic>();
 
 		public string QuickFilter = "*";
-		public List<TFilterCondition> ColumnsFilter = new List<TFilterCondition>();
+
+		public TListFilter Filter
+		{
+			get
+			{
+				return this.FFilter;
+			}
+		}
 
 		public TListManager(TGEDCOMTree aTree)
 		{
 			this.FTree = aTree;
 
 			InitColumnStatics();
+			CreateFilter();
 		}
 
 		public void Dispose()
@@ -94,6 +117,11 @@ namespace GKUI.Lists
 		protected virtual void InitColumnStatics()
 		{
 			// dummy
+		}
+
+		protected virtual void CreateFilter()
+		{
+			this.FFilter = new TListFilter();
 		}
 
 		public bool IsMatchesMask(string S, string Mask)
@@ -127,7 +155,7 @@ namespace GKUI.Lists
 			}
 		}
 
-		public abstract bool CheckFilter(TPersonsFilter aFilter, TGenEngine.TShieldState aShieldState);
+		public abstract bool CheckFilter(TGenEngine.TShieldState aShieldState);
 		public abstract void Fetch(TGEDCOMRecord aRec);
 
 		public virtual string GetColumnValue(int col_index, bool isMain)
@@ -148,7 +176,7 @@ namespace GKUI.Lists
 			return null;
 		}
 
-		public virtual void InitFilter(TPersonsFilter aFilter)
+		public virtual void InitFilter()
 		{
 		}
 
@@ -243,7 +271,7 @@ namespace GKUI.Lists
 			flt_col.col_index = col;
 			flt_col.condition = condition;
 			flt_col.value = ConvColStr(value, this.GetColumnDataType(col));
-			this.ColumnsFilter.Add(flt_col);
+			this.Filter.ColumnsFilter.Add(flt_col);
 		}
 
 		private bool CheckCondition(TFilterCondition fcond)
@@ -290,9 +318,9 @@ namespace GKUI.Lists
 		{
 			bool res = true;
 
-			if (this.ColumnsFilter.Count > 0) {
-				for (int i = 0; i < this.ColumnsFilter.Count; i++) {
-					TFilterCondition fcond = this.ColumnsFilter[i];
+			if (this.Filter.ColumnsFilter.Count > 0) {
+				for (int i = 0; i < this.Filter.ColumnsFilter.Count; i++) {
+					TFilterCondition fcond = this.Filter.ColumnsFilter[i];
 					res = res && this.CheckCondition(fcond);
 				}
 			}

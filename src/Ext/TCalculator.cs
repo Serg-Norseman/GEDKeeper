@@ -11,6 +11,7 @@ namespace Ext.Utils
 	// FIXME: вычистить весь код, оптимизировать
 	public sealed class TCalculator : IDisposable
 	{
+        [Serializable]
 		public class ECalculate : Exception
 		{
 			public ECalculate()

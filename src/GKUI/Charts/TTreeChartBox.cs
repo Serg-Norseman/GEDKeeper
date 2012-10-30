@@ -76,7 +76,7 @@ namespace GKUI.Charts
 		private int FDepthLimit;
 		private int FHMax;
 		private int FWMax;
-		private new TChartFilter FFilter;
+		private TChartFilter FFilter;
 		private TGraph FGraph;
 		private TChartKind FKind;
 		private TreeChartPerson FKinRoot;
@@ -137,7 +137,7 @@ namespace GKUI.Charts
 			set { this.FDepthLimit = value; }
 		}
 
-		public new TChartFilter Filter
+		public TChartFilter Filter
 		{
 			get { return this.FFilter; }
 		}

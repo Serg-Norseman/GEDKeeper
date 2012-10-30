@@ -15,7 +15,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 
-namespace ArborEngine
+namespace Ext.ArborEngine
 {
 
 	public class ArbPoint
@@ -844,7 +844,7 @@ namespace ArborEngine
 
 
 
-	public class ArborViewer : Panel, IDisposable, IArborRenderer
+	public sealed class ArborViewer : Panel, IDisposable, IArborRenderer
 	{
 		//public Bitmap FBuffer;
 		private Font FDrawFont;
@@ -878,7 +878,8 @@ namespace ArborEngine
 		protected override void Dispose(bool Disposing)
 		{
 			if (Disposing)
-			{				
+			{
+                FDrawFont.Dispose();
 			}
 			base.Dispose(Disposing);
 		}

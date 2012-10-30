@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GKUI.Lists;
 
 /// <summary>
@@ -73,8 +74,8 @@ namespace GKUI
 		private void UpdateGrid()
 		{
 			this.dataGridView1.Rows.Clear();
-			for (int i = 0; i < FListMan.ColumnsFilter.Count; i++) {
-				TFilterCondition fcond = FListMan.ColumnsFilter[i];
+			for (int i = 0; i < FListMan.Filter.ColumnsFilter.Count; i++) {
+				TFilterCondition fcond = FListMan.Filter.ColumnsFilter[i];
 				int r = this.dataGridView1.Rows.Add();
 				DataGridViewRow row = dataGridView1.Rows[r];
 
@@ -86,11 +87,11 @@ namespace GKUI
 			}
 		}
 
-		void btnAcceptClick(object sender, EventArgs e)
+		public virtual void AcceptChanges()
 		{
 			try
 			{
-				FListMan.ColumnsFilter.Clear();
+				FListMan.Filter.Clear();
 
 				for (int r = 0; r <= dataGridView1.Rows.Count - 1; r++)
 				{
@@ -113,6 +114,20 @@ namespace GKUI
 			{
 			}
 		}
+		
+		void btnAcceptClick(object sender, EventArgs e)
+		{
+			try
+			{
+				this.AcceptChanges();
+				base.DialogResult = DialogResult.OK;
+			}
+			catch (Exception E)
+			{
+				SysUtils.LogWrite("TfmComFilter.btnAcceptClick(): " + E.Message);
+				base.DialogResult = DialogResult.None;
+			}
+		}
 
 		protected override void Dispose(bool Disposing)
 		{
@@ -122,7 +137,12 @@ namespace GKUI
 			base.Dispose(Disposing);
 		}
 
-		public TfmComFilter(TfmBase aBase, TListManager aListMan)
+        public TfmComFilter()
+        {
+            this.InitializeComponent();
+        }
+
+        public TfmComFilter(TfmBase aBase, TListManager aListMan)
 		{
 			this.InitializeComponent();
 
@@ -200,10 +220,15 @@ namespace GKUI
 			return col;
 		}
 
+		public virtual void DoReset()
+		{
+			FListMan.Filter.Clear();
+			this.UpdateGrid();
+		}
+		
 		void BtnResetClick(object sender, EventArgs e)
 		{
-			FListMan.ColumnsFilter.Clear();
-			this.UpdateGrid();
+			this.DoReset();
 		}
 	}
 }

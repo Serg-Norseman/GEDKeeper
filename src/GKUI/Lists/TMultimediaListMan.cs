@@ -22,7 +22,7 @@ namespace GKUI.Lists
 	{
 		private TGEDCOMMultimediaRecord FRec;
 
-		public override bool CheckFilter(TPersonsFilter aFilter, TGenEngine.TShieldState aShieldState)
+		public override bool CheckFilter(TGenEngine.TShieldState aShieldState)
 		{
 			TGEDCOMFileReferenceWithTitle file_ref = this.FRec.FileReferences[0];
 

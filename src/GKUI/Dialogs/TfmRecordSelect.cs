@@ -20,7 +20,6 @@ namespace GKUI
 		private TGEDCOMRecordType FMode;
 		private string FFilter;
 		private TGenEngine.TTargetMode FTargetMode;
-		private TPersonsFilter FLocalFilter;
 		public TGEDCOMIndividualRecord FTarget;
 		public TGEDCOMSex FNeedSex;
 		public TGEDCOMRecord ResultRecord;
@@ -57,9 +56,6 @@ namespace GKUI
 
 		private void DataRefresh()
 		{
-			this.FLocalFilter.Clear();
-			//this.FLocalFilter.Name = this.FFilter;
-			this.FLocalFilter.Sex = this.FNeedSex;
 			if (this.ListRecords != null)
 			{
 				this.ListRecords.Dispose();
@@ -67,9 +63,15 @@ namespace GKUI
 			}
 			this.Base.CreateRecordsView(this.panList, this.FMode, ref this.ListRecords);
 
+			this.ListRecords.ListMan.Filter.Clear();
 			this.ListRecords.ListMan.QuickFilter = this.FFilter;
 
-			this.ListRecords.UpdateContents(this.Base.ShieldState, true, this.FLocalFilter, 1);
+			if (this.FMode == TGEDCOMRecordType.rtIndividual) {
+				TIndividualListFilter iFilter = (TIndividualListFilter)this.ListRecords.ListMan.Filter;
+				iFilter.Sex = this.FNeedSex;
+			}
+
+			this.ListRecords.UpdateContents(this.Base.ShieldState, true, 1);
 		}
 
 		private void SetFilter([In] string Value)
@@ -92,7 +94,11 @@ namespace GKUI
 		private void SetTargetMode([In] TGenEngine.TTargetMode Value)
 		{
 			this.FTargetMode = Value;
-			this.FLocalFilter.ChildSelector = (this.FTargetMode == TGenEngine.TTargetMode.tmParent);
+
+			if (this.FMode == TGEDCOMRecordType.rtIndividual) {
+				TIndividualListFilter iFilter = (TIndividualListFilter)this.ListRecords.ListMan.Filter;
+				iFilter.ChildSelector = (this.FTargetMode == TGenEngine.TTargetMode.tmParent);
+			}
 		}
 
 		private void btnSelect_Click(object sender, EventArgs e)
@@ -252,7 +258,6 @@ namespace GKUI
 		{
 			if (Disposing)
 			{
-				this.FLocalFilter.Free();
 			}
 			base.Dispose(Disposing);
 		}
@@ -261,7 +266,6 @@ namespace GKUI
 		{
 			this.InitializeComponent();
 			this.FBase = aBase;
-			this.FLocalFilter = new TPersonsFilter();
 			this.FFilter = "*";
 			this.Text = LangMan.LSList[105];
 			this.btnCreate.Text = LangMan.LSList[101];

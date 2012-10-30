@@ -80,6 +80,49 @@ namespace GKUI.Lists
 		}
 	}
 
+	public class TIndividualListFilter : TListFilter
+	{
+		public string AliveBeforeDate;
+		public CustomFilter.TGroupMode GroupMode;
+		public string GroupRef;
+		public TGenEngine.TLifeMode LifeMode;
+		public string Name;
+		public bool PatriarchOnly;
+		public string Residence;
+		public TGEDCOMSex Sex;
+		public CustomFilter.TGroupMode SourceMode;
+		public string SourceRef;
+		public string EventVal;
+		public bool ChildSelector;
+		public int TimeLineYear;
+
+		public TIndividualListFilter()
+		{
+			this.Clear();
+		}
+		
+		public override void Clear()
+		{
+			base.Clear();
+
+			this.GroupMode = CustomFilter.TGroupMode.gmAll;
+			this.GroupRef = "";
+			if (this.LifeMode != TGenEngine.TLifeMode.lmTimeLine)
+			{
+				this.LifeMode = TGenEngine.TLifeMode.lmAll;
+				this.TimeLineYear = -1;
+			}
+			this.Name = "*";
+			this.AliveBeforeDate = "";
+			this.PatriarchOnly = false;
+			this.Residence = "*";
+			this.Sex = TGEDCOMSex.svNone;
+			this.SourceMode = CustomFilter.TGroupMode.gmAll;
+			this.SourceRef = "";
+			this.EventVal = "*";
+		}
+	}
+
 	public sealed class TIndividualListMan : TListManager
 	{
 		private struct TColRec
@@ -96,12 +139,6 @@ namespace GKUI.Lists
 		private int FYearMax;
 		private int age_year;
 		private List<TColRec> FColumnsMap = new List<TColRec>();
-		private TPersonsFilter FExtFilter = new TPersonsFilter();
-
-		public TPersonsFilter ExtFilter
-		{
-			get { return this.FExtFilter; }
-		}
 
 		public int YearMin
 		{
@@ -111,6 +148,11 @@ namespace GKUI.Lists
 		public int YearMax
 		{
 			get { return this.FYearMax; }
+		}
+
+		protected override void CreateFilter()
+		{
+			this.FFilter = new TIndividualListFilter();
 		}
 
 		private string GetGroups()
@@ -131,37 +173,44 @@ namespace GKUI.Lists
 			return result;
 		}
 
-		private bool HasPlace(TPersonsFilter aFilter)
+		private bool HasPlace()
 		{
 			bool res = false;
 
+			TIndividualListFilter iFilter = (TIndividualListFilter)FFilter;
 			bool addr = GKUI.TfmGEDKeeper.Instance.Options.PlacesWithAddress;
 			int num = this.FRec.IndividualEvents.Count - 1;
 			for (int i = 0; i <= num; i++)
 			{
 				string place = TGenEngine.GetPlaceStr(this.FRec.IndividualEvents[i], addr);
-				res = IsMatchesMask(place, aFilter.Residence);
+				res = IsMatchesMask(place, iFilter.Residence);
 				if (res) break;
 			}
 
 			return res;
 		}
 
-		private bool HasEventVal(TPersonsFilter aFilter)
+		private bool HasEventVal()
 		{
 			bool result = false;
+			
+			TIndividualListFilter iFilter = (TIndividualListFilter)FFilter;
 			int num = this.FRec.IndividualEvents.Count - 1;
 			for (int i = 0; i <= num; i++)
 			{
-				result = IsMatchesMask(this.FRec.IndividualEvents[i].StringValue, aFilter.EventVal);
+				result = IsMatchesMask(this.FRec.IndividualEvents[i].StringValue, iFilter.EventVal);
 				if (result) break;
 			}
+
 			return result;
 		}
 
-		public override bool CheckFilter(TPersonsFilter aFilter, TGenEngine.TShieldState aShieldState)
+		private bool CheckSpecificFilter(TGenEngine.TShieldState aShieldState)
 		{
 			bool Result = false;
+			
+			TIndividualListFilter iFilter = (TIndividualListFilter)FFilter;
+			
 			TGEDCOMCustomEvent bd_ev = null;
 			TGEDCOMCustomEvent dd_ev = null;
 
@@ -194,16 +243,16 @@ namespace GKUI.Lists
 			string fullname = this.FRec.aux_GetNameStr(true, false);
 
 			if ((this.FRec.Restriction != TGEDCOMRestriction.rnPrivacy || aShieldState == TGenEngine.TShieldState.ssNone)
-			    && (aFilter.Sex == TGEDCOMSex.svNone || this.FRec.Sex == aFilter.Sex)
-			    && (aFilter.Name == "*" || IsMatchesMask(fullname, aFilter.Name))
+			    && (iFilter.Sex == TGEDCOMSex.svNone || this.FRec.Sex == iFilter.Sex)
+			    && (iFilter.Name == "*" || IsMatchesMask(fullname, iFilter.Name))
 			    && (this.QuickFilter == "*" || IsMatchesMask(fullname, this.QuickFilter))
-				&& (aFilter.Residence == "*" || this.HasPlace(aFilter))
-				&& (aFilter.EventVal == "*" || this.HasEventVal(aFilter))
-				&& (!aFilter.PatriarchOnly || this.FRec.Patriarch))
+				&& (iFilter.Residence == "*" || this.HasPlace())
+				&& (iFilter.EventVal == "*" || this.HasEventVal())
+				&& (!iFilter.PatriarchOnly || this.FRec.Patriarch))
 			{
 				bool isLive = (dd_ev == null);
 
-				switch (aFilter.LifeMode) {
+				switch (iFilter.LifeMode) {
 					case TGenEngine.TLifeMode.lmOnlyAlive:
 						{
 							if (!isLive) return Result;
@@ -240,7 +289,7 @@ namespace GKUI.Lists
 						}
 				}
 
-				switch (aFilter.GroupMode) {
+				switch (iFilter.GroupMode) {
 					case CustomFilter.TGroupMode.gmAll:
 						break;
 					case CustomFilter.TGroupMode.gmNone:
@@ -254,7 +303,7 @@ namespace GKUI.Lists
 						break;
 				}
 
-				switch (aFilter.SourceMode) {
+				switch (iFilter.SourceMode) {
 					case CustomFilter.TGroupMode.gmAll:
 						break;
 					case CustomFilter.TGroupMode.gmNone:
@@ -268,12 +317,23 @@ namespace GKUI.Lists
 						break;
 				}
 
-				if (!aFilter.ChildSelector || this.FRec.ChildToFamilyLinks.Count == 0)
+				if (!iFilter.ChildSelector || this.FRec.ChildToFamilyLinks.Count == 0)
 				{
 					Result = true;
 				}
 			}
+
 			return Result;
+		}
+		
+		public override bool CheckFilter(TGenEngine.TShieldState aShieldState)
+		{
+			string fullname = this.FRec.aux_GetNameStr(true, false);
+			bool res = (this.QuickFilter == "*" || IsMatchesMask(fullname, this.QuickFilter));
+
+			res = res && base.CheckNewFilter() && this.CheckSpecificFilter(aShieldState);
+
+			return res;
 		}
 
 		private void SetColMap(byte aType, byte aSubType)
@@ -451,28 +511,30 @@ namespace GKUI.Lists
 			return Result;
 		}
 
-		public override void InitFilter(TPersonsFilter aFilter)
+		public override void InitFilter()
 		{
-			if (!DateTime.TryParse(aFilter.AliveBeforeDate, out this.filter_abd)) {
+			TIndividualListFilter iFilter = (TIndividualListFilter)FFilter;
+			
+			if (!DateTime.TryParse(iFilter.AliveBeforeDate, out this.filter_abd)) {
 				this.filter_abd = new DateTime(0);
 			}
 
-			if (aFilter.LifeMode != TGenEngine.TLifeMode.lmTimeLine) {
+			if (iFilter.LifeMode != TGenEngine.TLifeMode.lmTimeLine) {
 				this.age_year = -1;
 			} else {
-				this.age_year = aFilter.TimeLineYear;
+				this.age_year = iFilter.TimeLineYear;
 			}
 
-			if (aFilter.GroupRef == "") {
+			if (iFilter.GroupRef == "") {
 				this.filter_grp = null;
 			} else {
-				this.filter_grp = (TGEDCOMGroupRecord)this.FTree.XRefIndex_Find(aFilter.GroupRef);
+				this.filter_grp = (TGEDCOMGroupRecord)this.FTree.XRefIndex_Find(iFilter.GroupRef);
 			}
 
-			if (aFilter.SourceRef == "") {
+			if (iFilter.SourceRef == "") {
 				this.filter_source = null;
 			} else {
-				this.filter_source = (TGEDCOMSourceRecord)this.FTree.XRefIndex_Find(aFilter.SourceRef);
+				this.filter_source = (TGEDCOMSourceRecord)this.FTree.XRefIndex_Find(iFilter.SourceRef);
 			}
 
 			this.FYearMin = 10000;

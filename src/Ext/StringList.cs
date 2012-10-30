@@ -8,6 +8,7 @@ using System.Text;
 
 namespace Ext.Utils
 {
+    [Serializable]
 	public class EStringListError : Exception
 	{
 		public EStringListError()
@@ -18,7 +19,7 @@ namespace Ext.Utils
 		}
 	}
 
-	public delegate void TNotifyEvent(object Sender);
+	public delegate void TNotifyEvent(object sender);
 
 	public class StringList
 	{

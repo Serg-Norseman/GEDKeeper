@@ -28,7 +28,6 @@ namespace GKUI.Charts
 		protected int FSPX;
 		protected int FSPY;
 
-		protected TPersonsFilter FFilter;
 		protected TreeChartOptions FOptions;
 		protected TGenEngine.TShieldState FShieldState;
 		protected TGEDCOMTree FTree;
@@ -51,12 +50,6 @@ namespace GKUI.Charts
 		public Font DrawFont
 		{
 			get { return this.FDrawFont; }
-		}
-
-		public TPersonsFilter Filter
-		{
-			get { return this.FFilter; }
-			set { this.FFilter = value; }
 		}
 
 		public int LeftPos

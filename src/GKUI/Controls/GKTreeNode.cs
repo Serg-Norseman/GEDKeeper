@@ -7,6 +7,7 @@ using System.Windows.Forms;
 
 namespace GKUI.Controls
 {
+    [Serializable]
 	public class GKTreeNode : TreeNode
 	{
 		public object Data;

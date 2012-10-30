@@ -8,7 +8,6 @@ using System.Windows.Forms;
 using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKSandbox;
 using GKUI.Controls;
 
 /// <summary>
@@ -755,7 +754,7 @@ namespace GKUI
 			try
 			{
 				this.ListPatriarchs.Items.Clear();
-				TreeTools.GetPatriarchsList(this.Base.Engine.Tree, true, false, ref lst, decimal.ToInt32(this.edMinGens.Value), !chkWithoutDates.Checked);
+				TreeTools.GetPatriarchsList(this.Base.Engine.Tree, true, false, lst, decimal.ToInt32(this.edMinGens.Value), !chkWithoutDates.Checked);
 
 				int num = lst.Count - 1;
 				for (int i = 0; i <= num; i++)

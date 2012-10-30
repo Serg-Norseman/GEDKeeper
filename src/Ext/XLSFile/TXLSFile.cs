@@ -6,14 +6,14 @@ using Ext.Utils;
 
 namespace Ext.XLSFile
 {
-	public class TXLSFile : IDisposable
+	public sealed class TXLSFile : IDisposable
 	{
 		private TBOF BOF;
 		private TDimension FDimension;
 		private TList FList;
 		private TBIFFWriter FWriter;
 		private ushort OpcodeEOF;
-		protected bool Disposed_;
+		private bool Disposed_;
 
 		private TCell AddCell(ushort vCol, ushort vRow, TCellAttributeSet vAttribute, Type CellRef)
 		{

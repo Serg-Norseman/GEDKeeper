@@ -79,16 +79,15 @@ namespace GKUI
 
 		private void ListModify(object Sender, object ItemData, TGenEngine.TRecAction Action)
 		{
-			if (object.Equals(Sender, this.FNotesList))
+            bool res = false;
+
+			if (Sender == this.FNotesList)
 			{
-				if (this.Base.ModifyRecNote(this, this.FResearch, ItemData as TGEDCOMNotes, Action))
-				{
-					this.ListsRefresh();
-				}
+                res = this.Base.ModifyRecNote(this, this.FResearch, ItemData as TGEDCOMNotes, Action);
 			}
 			else
 			{
-				if (object.Equals(Sender, this.FTasksList))
+				if (Sender == this.FTasksList)
 				{
 					if (Action != TGenEngine.TRecAction.raAdd)
 					{
@@ -120,27 +119,18 @@ namespace GKUI
 						else
 						{
 							TGEDCOMTaskRecord task = ItemData as TGEDCOMTaskRecord;
-							if (task != null && this.Base.ModifyTask(ref task))
-							{
-								this.ListsRefresh();
-							}
+                            res = (task != null && this.Base.ModifyTask(ref task));
 						}
 					}
 					else
 					{
-						TfmBase arg_6F_0 = this.Base;
-						TGEDCOMRecordType arg_6F_1 = TGEDCOMRecordType.rtTask;
-						object[] anArgs = new object[0];
-						TGEDCOMTaskRecord task = arg_6F_0.SelectRecord(arg_6F_1, anArgs) as TGEDCOMTaskRecord;
-						if (this.Base.Engine.AddResearchTask(this.FResearch, task))
-						{
-							this.ListsRefresh();
-						}
+                        TGEDCOMTaskRecord task = this.Base.SelectRecord(TGEDCOMRecordType.rtTask, null) as TGEDCOMTaskRecord;
+                        res = this.Base.Engine.AddResearchTask(this.FResearch, task);
 					}
 				}
 				else
 				{
-					if (object.Equals(Sender, this.FCommunicationsList))
+					if (Sender == this.FCommunicationsList)
 					{
 						if (Action != TGenEngine.TRecAction.raAdd)
 						{
@@ -172,27 +162,18 @@ namespace GKUI
 							else
 							{
 								TGEDCOMCommunicationRecord comm = ItemData as TGEDCOMCommunicationRecord;
-								if (comm != null && this.Base.ModifyCommunication(ref comm))
-								{
-									this.ListsRefresh();
-								}
+                                res = (comm != null && this.Base.ModifyCommunication(ref comm));
 							}
 						}
 						else
 						{
-							TfmBase arg_17E_0 = this.Base;
-							TGEDCOMRecordType arg_17E_1 = TGEDCOMRecordType.rtCommunication;
-							object[] anArgs2 = new object[0];
-							TGEDCOMCommunicationRecord comm = arg_17E_0.SelectRecord(arg_17E_1, anArgs2) as TGEDCOMCommunicationRecord;
-							if (this.Base.Engine.AddResearchComm(this.FResearch, comm))
-							{
-								this.ListsRefresh();
-							}
+                            TGEDCOMCommunicationRecord comm = this.Base.SelectRecord(TGEDCOMRecordType.rtCommunication, null) as TGEDCOMCommunicationRecord;
+                            res = this.Base.Engine.AddResearchComm(this.FResearch, comm);
 						}
 					}
 					else
 					{
-						if (object.Equals(Sender, this.FGroupsList))
+						if (Sender == this.FGroupsList)
 						{
 							if (Action != TGenEngine.TRecAction.raAdd)
 							{
@@ -221,19 +202,15 @@ namespace GKUI
 							}
 							else
 							{
-								TfmBase arg_288_0 = this.Base;
-								TGEDCOMRecordType arg_288_1 = TGEDCOMRecordType.rtGroup;
-								object[] anArgs3 = new object[0];
-								TGEDCOMGroupRecord group = arg_288_0.SelectRecord(arg_288_1, anArgs3) as TGEDCOMGroupRecord;
-								if (this.Base.Engine.AddResearchGroup(this.FResearch, group))
-								{
-									this.ListsRefresh();
-								}
+                                TGEDCOMGroupRecord group = this.Base.SelectRecord(TGEDCOMRecordType.rtGroup, null) as TGEDCOMGroupRecord;
+                                res = this.Base.Engine.AddResearchGroup(this.FResearch, group);
 							}
 						}
 					}
 				}
 			}
+
+            if (res) this.ListsRefresh();
 		}
 
 		private void ListsRefresh()

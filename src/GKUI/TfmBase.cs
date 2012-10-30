@@ -29,7 +29,6 @@ namespace GKUI
 		private TGenEngine.TShieldState FShieldState;
 		private TGEDCOMTree FTree;
 		private UndoManager FUndoman;
-		private TPersonsFilter FXFilter;
 		public TabControl PageRecords;
 		public TRecordsView ListPersons;
 		public GKHyperView mPersonSummary;
@@ -68,11 +67,6 @@ namespace GKUI
 		{
 			get { return this.GetFileName(); }
 			set { this.SetFileName(value); }
-		}
-
-		public TPersonsFilter Filter
-		{
-			get { return this.FXFilter; }
 		}
 
 		public bool Modified
@@ -371,7 +365,6 @@ namespace GKUI
 				this.FNavman.Dispose();
 				this.FUndoman.Dispose();
 				this.FLockedRecords.Dispose();
-				this.FXFilter.Free();
 				this.FTree = null;
 				this.FEngine.Dispose();
 				for (TGEDCOMRecordType rt = TGEDCOMRecordType.rtNone; rt != TGEDCOMRecordType.rtLast; rt++)
@@ -391,7 +384,6 @@ namespace GKUI
 			}
 			this.FEngine = new TGenEngine();
 			this.FTree = this.FEngine.Tree;
-			this.FXFilter = new TPersonsFilter();
 			this.FLockedRecords = new TList();
 			this.FNavman = new NavManager();
 			this.FUndoman = new UndoManager(this.FTree, UndoManager.TUndoManType.manualCommit);
@@ -551,6 +543,14 @@ namespace GKUI
 				{
 					result = TGenEngine.CreatePersonEx(this.FTree, dlg.edName.Text, dlg.edPatronymic.Text, dlg.edFamily.Text, (TGEDCOMSex)dlg.EditSex.SelectedIndex, true);
 					this.ChangeRecord(result);
+					
+					TIndividualListFilter iFilter = (TIndividualListFilter)this.ListPersons.ListMan.Filter;
+					if (iFilter.SourceMode == CustomFilter.TGroupMode.gmSelected) {
+						TGEDCOMSourceRecord src = (TGEDCOMSourceRecord)this.FTree.XRefIndex_Find(iFilter.SourceRef);
+						if (TGenEngine.ShowQuestion("Установлен фильтр по источнику. Внести источник в новую персональную запись?") == DialogResult.Yes) {
+							TGenEngine.BindRecordSource(this.FTree, result, src, "", 0);
+						}
+ 					}
 				}
 			}
 			finally
@@ -813,7 +813,7 @@ namespace GKUI
 		private void IntUpdate(TRecordsView aRecView, int ASCol, bool aTitles)
 		{
 			TGEDCOMRecord rec = aRecView.GetSelectedRecord();
-			aRecView.UpdateContents(this.FShieldState, aTitles, this.FXFilter, ASCol);
+			aRecView.UpdateContents(this.FShieldState, aTitles, ASCol);
 			if (rec != null) aRecView.SelectItemByRec(rec);
 		}
 
@@ -1404,8 +1404,9 @@ namespace GKUI
 
 			switch (rt) {
 				case TGEDCOMRecordType.rtIndividual:
-					using (TfmFilter fmFilter = new TfmFilter(this)) {
-						GKUI.TfmGEDKeeper.Instance.ShowModalEx(fmFilter, this, false);
+					using (TfmPersonsFilter fmFilter = new TfmPersonsFilter(this, rView.ListMan)) {
+						DialogResult res = GKUI.TfmGEDKeeper.Instance.ShowModalEx(fmFilter, this, false);
+						if (res == DialogResult.OK) this.ApplyFilter();
 					}
 					break;
 				case TGEDCOMRecordType.rtFamily:
@@ -4072,13 +4073,15 @@ namespace GKUI
 
 		public void TimeLine_Init()
 		{
-			this.FXFilter.LifeMode = TGenEngine.TLifeMode.lmTimeLine;
+			((TIndividualListFilter)this.ListPersons.ListMan.Filter).LifeMode = TGenEngine.TLifeMode.lmTimeLine;
 		}
 
 		public void TimeLine_Done()
 		{
-			this.FXFilter.LifeMode = TGenEngine.TLifeMode.lmAll;
-			this.FXFilter.TimeLineYear = -1;
+			TIndividualListFilter iFilter = ((TIndividualListFilter)this.ListPersons.ListMan.Filter);
+			
+			iFilter.LifeMode = TGenEngine.TLifeMode.lmAll;
+			iFilter.TimeLineYear = -1;
 			this.ApplyFilter();
 		}
 
@@ -4086,11 +4089,11 @@ namespace GKUI
 		{
 			get
 			{
-				return this.FXFilter.TimeLineYear;
+				return ((TIndividualListFilter)this.ListPersons.ListMan.Filter).TimeLineYear;
 			}
 			set
 			{
-				this.FXFilter.TimeLineYear = value;
+				((TIndividualListFilter)this.ListPersons.ListMan.Filter).TimeLineYear = value;
 				this.ApplyFilter();
 			}
 		}

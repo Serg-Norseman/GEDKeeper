@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <ProjectGuid>138F9A44-4C12-42BA-AE71-6EB8CF8EF90F</ProjectGuid>
+    <ProjectGuid>{19B7D80A-37FD-4E49-9F59-87FA41B677E2}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>WinExe</OutputType>
@@ -65,7 +65,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Ext\AnselEncoding.cs" />
-    <Compile Include="Ext\ArborEngine.cs" />
+    <Compile Include="Ext\ArborEngine.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Ext\CRC32.cs" />
     <Compile Include="Ext\CSV\CSVReader.cs" />
     <Compile Include="Ext\CSV\StringConverter.cs" />
@@ -172,152 +174,232 @@
       <DependentUpon>GKResources.resx</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Charts\AncestorsCircle.cs" />
-    <Compile Include="GKUI\Controls\InputBox.cs" />
+    <Compile Include="GKUI\Controls\InputBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Controls\InputBox.Designer.cs">
       <DependentUpon>InputBox.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Controls\GKComboItem.cs" />
     <Compile Include="GKUI\Controls\GKListItem.cs" />
-    <Compile Include="GKUI\Controls\GKHyperView.cs" />
-    <Compile Include="GKUI\Controls\GKListView.cs" />
-    <Compile Include="GKUI\Controls\GKMenuItem.cs" />
+    <Compile Include="GKUI\Controls\GKHyperView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Controls\GKListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Controls\GKMenuItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GKUI\Controls\GKTreeNode.cs" />
-    <Compile Include="GKUI\Controls\GKMapBrowser.cs" />
-    <Compile Include="GKUI\Controls\TRecordsView.cs" />
-    <Compile Include="GKUI\Controls\TSheetList.cs" />
-    <Compile Include="GKUI\Dialogs\TfmAbout.cs" />
+    <Compile Include="GKUI\Controls\GKMapBrowser.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Controls\TRecordsView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Controls\TSheetList.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmAbout.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmAbout.Designer.cs">
       <DependentUpon>TfmAbout.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmAddressEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmAddressEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmAddressEdit.Designer.cs">
       <DependentUpon>TfmAddressEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmAssociationEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmAssociationEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmAssociationEdit.Designer.cs">
       <DependentUpon>TfmAssociationEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmComFilter.cs" />
+    <Compile Include="GKUI\Dialogs\TfmComFilter.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmComFilter.Designer.cs">
       <DependentUpon>TfmComFilter.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmCommunicationEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmCommunicationEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmCommunicationEdit.Designer.cs">
       <DependentUpon>TfmCommunicationEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmEventEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmEventEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmEventEdit.Designer.cs">
       <DependentUpon>TfmEventEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmFamilyEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmFamilyEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmFamilyEdit.Designer.cs">
       <DependentUpon>TfmFamilyEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmFileProperties.cs" />
+    <Compile Include="GKUI\Dialogs\TfmFileProperties.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmFileProperties.Designer.cs">
       <DependentUpon>TfmFileProperties.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmFilter.cs" />
-    <Compile Include="GKUI\Dialogs\TfmFilter.Designer.cs">
-      <DependentUpon>TfmFilter.cs</DependentUpon>
+    <Compile Include="GKUI\Dialogs\TfmGroupEdit.cs">
+      <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmGroupEdit.cs" />
     <Compile Include="GKUI\Dialogs\TfmGroupEdit.Designer.cs">
       <DependentUpon>TfmGroupEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmLocationEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmLocationEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmLocationEdit.Designer.cs">
       <DependentUpon>TfmLocationEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmMediaEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmMediaEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmMediaEdit.Designer.cs">
       <DependentUpon>TfmMediaEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmMediaView.cs" />
+    <Compile Include="GKUI\Dialogs\TfmMediaView.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmMediaView.Designer.cs">
       <DependentUpon>TfmMediaView.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmNameEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmNameEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmNameEdit.Designer.cs">
       <DependentUpon>TfmNameEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmNoteEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmNoteEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmNoteEdit.Designer.cs">
       <DependentUpon>TfmNoteEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmOptions.cs" />
+    <Compile Include="GKUI\Dialogs\TfmOptions.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmOptions.Designer.cs">
       <DependentUpon>TfmOptions.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmPersonEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmPersonEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmPersonEdit.Designer.cs">
       <DependentUpon>TfmPersonEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmPersonNew.cs" />
+    <Compile Include="GKUI\Dialogs\TfmPersonNew.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmPersonNew.Designer.cs">
       <DependentUpon>TfmPersonNew.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmPersonScan.cs" />
+    <Compile Include="GKUI\Dialogs\TfmPersonScan.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmPersonScan.Designer.cs">
       <DependentUpon>TfmPersonScan.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmRecordSelect.cs" />
+    <Compile Include="GKUI\Dialogs\TfmPersonsFilter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmPersonsFilter.Designer.cs">
+      <DependentUpon>TfmPersonsFilter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmRecordSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmRecordSelect.Designer.cs">
       <DependentUpon>TfmRecordSelect.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmRepositoryEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmRepositoryEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmRepositoryEdit.Designer.cs">
       <DependentUpon>TfmRepositoryEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmResearchEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmResearchEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmResearchEdit.Designer.cs">
       <DependentUpon>TfmResearchEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmSexCheck.cs" />
+    <Compile Include="GKUI\Dialogs\TfmSexCheck.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmSexCheck.Designer.cs">
       <DependentUpon>TfmSexCheck.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmSourceCitEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmSourceCitEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmSourceCitEdit.Designer.cs">
       <DependentUpon>TfmSourceCitEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmSourceEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmSourceEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmSourceEdit.Designer.cs">
       <DependentUpon>TfmSourceEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmTaskEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmTaskEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmTaskEdit.Designer.cs">
       <DependentUpon>TfmTaskEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmTipsDialog.cs" />
+    <Compile Include="GKUI\Dialogs\TfmTipsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmTipsDialog.Designer.cs">
       <DependentUpon>TfmTipsDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmTreeFilter.cs" />
+    <Compile Include="GKUI\Dialogs\TfmTreeFilter.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmTreeFilter.Designer.cs">
       <DependentUpon>TfmTreeFilter.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmUserRefEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmUserRefEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmUserRefEdit.Designer.cs">
       <DependentUpon>TfmUserRefEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Lists\TListColumns.cs" />
-    <Compile Include="GKUI\PatriarchsViewer.cs" />
+    <Compile Include="GKUI\PatriarchsViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\PatriarchsViewer.Designer.cs">
       <DependentUpon>PatriarchsViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\TfmAncestorsCircle.cs" />
+    <Compile Include="GKUI\TfmAncestorsCircle.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\TfmAncestorsCircle.Designer.cs">
       <DependentUpon>TfmAncestorsCircle.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\TfmBase.Designer.cs">
       <DependentUpon>TfmBase.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\TfmCalcWidget.cs" />
+    <Compile Include="GKUI\TfmCalcWidget.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\TfmCalcWidget.Designer.cs">
       <DependentUpon>TfmCalcWidget.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\TfmCalendar.cs" />
+    <Compile Include="GKUI\TfmCalendar.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\TfmCalendar.Designer.cs">
       <DependentUpon>TfmCalendar.cs</DependentUpon>
     </Compile>
@@ -330,7 +412,9 @@
     <Compile Include="GKUI\TfmMaps.Designer.cs">
       <DependentUpon>TfmMaps.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\TfmNamesBook.cs" />
+    <Compile Include="GKUI\TfmNamesBook.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\TfmNamesBook.Designer.cs">
       <DependentUpon>TfmNamesBook.cs</DependentUpon>
     </Compile>
@@ -343,9 +427,13 @@
     <Compile Include="GKUI\TfmScriptDaemon.Designer.cs">
       <DependentUpon>TfmScriptDaemon.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Charts\TTreeChartBox.cs" />
+    <Compile Include="GKUI\Charts\TTreeChartBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GKUI\Charts\TChartFilter.cs" />
-    <Compile Include="GKUI\Charts\TCustomChartBox.cs" />
+    <Compile Include="GKUI\Charts\TCustomChartBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GKUI\Charts\TPersonList.cs" />
     <Compile Include="GKCore\Commands\TCmdPersonChangePatriarch.cs" />
     <Compile Include="GKCore\Commands\TCmdPersonChangeSex.cs" />
@@ -361,31 +449,52 @@
     <Compile Include="GKUI\Lists\TLocationListMan.cs" />
     <Compile Include="GKUI\Lists\TMultimediaListMan.cs" />
     <Compile Include="GKUI\Lists\TNoteListMan.cs" />
-    <Compile Include="GKUI\Lists\TPersonsFilter.cs" />
     <Compile Include="GKUI\Lists\TRepositoryListMan.cs" />
     <Compile Include="GKUI\Lists\TResearchListMan.cs" />
     <Compile Include="GKUI\Lists\TSourceListMan.cs" />
     <Compile Include="GKUI\Lists\TTaskListMan.cs" />
-    <Compile Include="GKUI\TfmBase.cs" />
-    <Compile Include="GKUI\TfmChart.cs" />
-    <Compile Include="GKUI\TfmGEDKeeper.cs" />
-    <Compile Include="GKUI\TfmMaps.cs" />
-    <Compile Include="GKUI\TfmOrganizer.cs" />
-    <Compile Include="GKUI\TfmProgress.cs" />
-    <Compile Include="GKUI\TfmScriptDaemon.cs" />
-    <Compile Include="GKUI\TfmStats.cs" />
+    <Compile Include="GKUI\TfmBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\TfmChart.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\TfmGEDKeeper.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\TfmMaps.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\TfmOrganizer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\TfmProgress.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\TfmScriptDaemon.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\TfmStats.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\TfmStats.Designer.cs">
       <DependentUpon>TfmStats.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\TfmTextSearch.cs" />
+    <Compile Include="GKUI\TfmTextSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\TfmTextSearch.Designer.cs">
       <DependentUpon>TfmTextSearch.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\TfmTimeLine.cs" />
+    <Compile Include="GKUI\TfmTimeLine.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\TfmTimeLine.Designer.cs">
       <DependentUpon>TfmTimeLine.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\TfmTreeTools.cs" />
+    <Compile Include="GKUI\TfmTreeTools.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\TfmTreeTools.Designer.cs">
       <DependentUpon>TfmTreeTools.cs</DependentUpon>
     </Compile>
@@ -428,9 +537,6 @@
     <EmbeddedResource Include="GKUI\Dialogs\TfmFileProperties.resx">
       <DependentUpon>TfmFileProperties.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\TfmFilter.resx">
-      <DependentUpon>TfmFilter.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\TfmGroupEdit.resx">
       <DependentUpon>TfmGroupEdit.cs</DependentUpon>
     </EmbeddedResource>
@@ -460,6 +566,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\TfmPersonScan.resx">
       <DependentUpon>TfmPersonScan.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmPersonsFilter.resx">
+      <DependentUpon>TfmPersonsFilter.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\TfmRecordSelect.resx">
       <DependentUpon>TfmRecordSelect.cs</DependentUpon>
@@ -518,16 +627,15 @@
     <EmbeddedResource Include="GKResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\TfmTimeLine.resx">
+      <DependentUpon>TfmTimeLine.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\TfmTreeTools.resx">
       <DependentUpon>TfmTreeTools.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Ext" />
-    <Folder Include="Ext\CSV" />
-    <Folder Include="GKSandbox" />
-    <Folder Include="GKUI\Controls" />
-    <Folder Include="GKUI\Dialogs" />
+    <Folder Include="GKSandbox\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

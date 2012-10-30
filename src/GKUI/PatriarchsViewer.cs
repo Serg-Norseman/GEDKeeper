@@ -2,13 +2,12 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-using ArborEngine;
+using Ext.ArborEngine;
 using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKUI;
 
-namespace GKSandbox
+namespace GKUI
 {
 	public partial class PatriarchsViewer : Form
 	{
@@ -25,10 +24,8 @@ namespace GKSandbox
 
         private void CreateGraph(int minGens)
         {
-			TList lst = new TList(true);
-			try
-			{
-				TreeTools.GetPatriarchsList(this.FBase.Engine.Tree, true, true, ref lst, minGens, false);
+			using (TList lst = new TList(true)) {
+				TreeTools.GetPatriarchsList(this.FBase.Engine.Tree, true, true, lst, minGens, false);
 
 				int num = lst.Count - 1;
 				for (int i = 0; i <= num; i++)
@@ -56,10 +53,6 @@ namespace GKSandbox
 				}
 
 				arborViewer1.start();
-			}
-			finally
-			{
-				lst.Dispose();
 			}
         }
 

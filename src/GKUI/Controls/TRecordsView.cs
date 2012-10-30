@@ -281,7 +281,7 @@ namespace GKUI.Controls
 			}
 		}
 
-		public void UpdateContents(TGenEngine.TShieldState aShieldState, bool aTitles, TPersonsFilter aFilter, int aAutoSizeColumn)
+		public void UpdateContents(TGenEngine.TShieldState aShieldState, bool aTitles, int aAutoSizeColumn)
 		{
 			try
 			{
@@ -296,7 +296,7 @@ namespace GKUI.Controls
 				base.BeginUpdate();
 				try
 				{
-					this.FListMan.InitFilter(aFilter);
+					this.FListMan.InitFilter();
 
 					this.FContentList.Clear();
 					int num = this.FTree.RecordsCount - 1;
@@ -306,7 +306,7 @@ namespace GKUI.Controls
 						if (rec.RecordType == this.FRecordType) {
 							this.FTotalCount++;
 							this.FListMan.Fetch(rec);
-							if (this.FListMan.CheckFilter(aFilter, aShieldState))
+							if (this.FListMan.CheckFilter(aShieldState))
 							{
 								this.FContentList.Add(rec);
 							}

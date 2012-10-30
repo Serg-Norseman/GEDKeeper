@@ -23,7 +23,7 @@ namespace GKUI.Lists
 	{
 		private TGEDCOMTaskRecord FRec;
 
-		public override bool CheckFilter(TPersonsFilter aFilter, TGenEngine.TShieldState aShieldState)
+		public override bool CheckFilter(TGenEngine.TShieldState aShieldState)
 		{
 			bool res = (this.QuickFilter == "*" || IsMatchesMask(TGenEngine.GetTaskGoalStr(this.FTree, this.FRec), this.QuickFilter));
 

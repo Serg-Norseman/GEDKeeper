@@ -6,7 +6,7 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-namespace GKSandbox
+namespace GKUI
 {
 	partial class PatriarchsViewer
 	{
@@ -36,7 +36,7 @@ namespace GKSandbox
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.arborViewer1 = new ArborEngine.ArborViewer();
+            this.arborViewer1 = new Ext.ArborEngine.ArborViewer();
 			this.SuspendLayout();
 			// 
 			// arborViewer1
@@ -61,6 +61,6 @@ namespace GKSandbox
 			this.Text = "PatriarchsViewer";
 			this.ResumeLayout(false);
 		}
-		private ArborEngine.ArborViewer arborViewer1;
+        private Ext.ArborEngine.ArborViewer arborViewer1;
 	}
 }

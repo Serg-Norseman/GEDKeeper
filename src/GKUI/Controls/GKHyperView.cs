@@ -13,7 +13,7 @@ namespace GKUI.Controls
 {
 	public class GKHyperView : Panel, IDisposable
 	{
-		public delegate void TLinkEvent(object Sender, string LinkName);
+		public delegate void TLinkEvent(object sender, string linkName);
 
 		private class HyperLink
 		{
@@ -806,6 +806,9 @@ namespace GKUI.Controls
 				this.FLinks.Dispose();
 				this.FHeights = null;
 				this.FLines.Free();
+
+                if (FDefBrush != null) FDefBrush.Dispose();
+                if (FTextFont != null) FTextFont.Dispose();
 			}
 			base.Dispose(Disposing);
 		}
