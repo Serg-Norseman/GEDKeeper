@@ -41,29 +41,32 @@ namespace GKUI
 					this.FTarget.aux_GetNameParts(out iFamily, out iName, out iPatronymic);
 					this.edFamily.Text = iFamily;
 					NamesTable names = GKUI.TfmGEDKeeper.Instance.NamesTable;
+					TGEDCOMSex sx = (TGEDCOMSex)this.EditSex.SelectedIndex;
 
 					switch (this.FTargetMode) {
 						case TGenEngine.TTargetMode.tmParent:
-							{
-								this.edPatronymic.Items.Add(names.GetPatronymicByName(iName, TGEDCOMSex.svMale));
-								this.edPatronymic.Items.Add(names.GetPatronymicByName(iName, TGEDCOMSex.svFemale));
-								break;
+							if (sx == TGEDCOMSex.svFemale) {
+								this.edFamily.Text = TGenEngine.GetRusWifeFamily(iFamily);
 							}
+							this.edPatronymic.Items.Add(names.GetPatronymicByName(iName, TGEDCOMSex.svMale));
+							this.edPatronymic.Items.Add(names.GetPatronymicByName(iName, TGEDCOMSex.svFemale));
+							this.edPatronymic.Text = names.GetPatronymicByName(iName, sx);
+							break;
 
 						case TGenEngine.TTargetMode.tmChild:
-							{
-								TGEDCOMSex sx = (TGEDCOMSex)this.EditSex.SelectedIndex;
-								if (sx != TGEDCOMSex.svMale)
-								{
-									if (sx == TGEDCOMSex.svFemale)
-									{
-										this.edFamily.Text = "(" + this.edFamily.Text + ")";
-									}
-								} else {
+							switch (sx) {
+								case TGEDCOMSex.svMale:
 									this.edName.Text = names.GetNameByPatronymic(iPatronymic, TGEDCOMSex.svMale);
-								}
-								break;
+									break;
+								case TGEDCOMSex.svFemale:
+									this.edFamily.Text = "(" + TGenEngine.GetRusWifeFamily(iFamily) + ")";
+									break;
 							}
+							break;
+							
+						case TGenEngine.TTargetMode.tmWife:
+							this.edFamily.Text = "(" + TGenEngine.GetRusWifeFamily(iFamily) + ")";
+							break;
 					}
 				}
 			}

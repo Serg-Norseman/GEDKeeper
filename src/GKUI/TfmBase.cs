@@ -544,6 +544,8 @@ namespace GKUI
 					result = TGenEngine.CreatePersonEx(this.FTree, dlg.edName.Text, dlg.edPatronymic.Text, dlg.edFamily.Text, (TGEDCOMSex)dlg.EditSex.SelectedIndex, true);
 					this.ChangeRecord(result);
 					
+					TfmGEDKeeper.Instance.NamesTable.ImportNames(result);
+					
 					TIndividualListFilter iFilter = (TIndividualListFilter)this.ListPersons.ListMan.Filter;
 					if (iFilter.SourceMode == CustomFilter.TGroupMode.gmSelected) {
 						TGEDCOMSourceRecord src = (TGEDCOMSourceRecord)this.FTree.XRefIndex_Find(iFilter.SourceRef);

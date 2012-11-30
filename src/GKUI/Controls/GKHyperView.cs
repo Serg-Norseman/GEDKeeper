@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -29,14 +30,9 @@ namespace GKUI.Controls
 				this.Rect.Bottom = y + h;
 			}
 
-			public bool HasCoord(int x, int y)
+			public bool HasCoord(int x, int y, int y_offset)
 			{
-				return x >= this.Rect.Left && x <= this.Rect.Right && y >= this.Rect.Top && y <= this.Rect.Bottom;
-			}
-
-			public void Free()
-			{
-				SysUtils.Free(this);
+				return x >= this.Rect.Left && x <= this.Rect.Right && y >= this.Rect.Top + y_offset && y <= this.Rect.Bottom + y_offset;
 			}
 		}
 
@@ -57,7 +53,7 @@ namespace GKUI.Controls
 		private StringList FLines;
 		private int FLink;
 		private Color FLinkColor;
-		private TList FLinks;
+		private List<HyperLink> FLinks;
 		private GKHyperView.TLinkEvent EOnLink;
 		private int FPageHeight;
 		private int FPageWidth;
@@ -114,6 +110,40 @@ namespace GKUI.Controls
 			set { this.SetRuleStyle(value); }
 		}
 
+		public GKHyperView()
+		{
+			base.TabStop = true;
+			base.BorderStyle = BorderStyle.Fixed3D;
+			this.FHeightCount = 0;
+			this.FAcceptFontChange = false;
+			this.FLines = new StringList();
+			this.FLines.OnChange += new TNotifyEvent(this.LinesChanged);
+			this.FHeights = new int[0];
+			this.FTopPos = 0;
+			this.FLeftPos = 0;
+			this.FColor = SystemColors.Control;
+			this.FLinks = new List<HyperLink>();
+			this.FLinkColor = Color.Blue;
+			this.FLink = -1;
+			this.FUpColor = Color.Gray;
+			this.FDwnColor = Color.White;
+		}
+
+		protected override void Dispose(bool Disposing)
+		{
+			if (Disposing)
+			{
+				this.ClearLinks();
+				//this.FLinks.Dispose();
+				this.FHeights = null;
+				this.FLines.Free();
+
+                if (FDefBrush != null) FDefBrush.Dispose();
+                if (FTextFont != null) FTextFont.Dispose();
+			}
+			base.Dispose(Disposing);
+		}
+
 		private new void FontChanged(object Sender)
 		{
 			if (this.FAcceptFontChange)
@@ -125,12 +155,6 @@ namespace GKUI.Controls
 
 		private void LinesChanged(object Sender)
 		{
-			if ((int)this.FHeightCount != this.FLines.Count)
-			{
-				this.FHeightCount = this.FLines.Count;
-				this.FHeights = new int[this.FHeightCount];
-			}
-
 			this.ArrangeText();
 			this.TopPos = 0;
 			this.LeftPos = 0;
@@ -185,14 +209,20 @@ namespace GKUI.Controls
 			}
 		}
 
-		private int GetHeight(Graphics grx, string s)
+		private void ArrangeText()
 		{
-			return grx.MeasureString(s, this.FTextFont).ToSize().Height;
+			this.FTextFont = (base.Parent.Font.Clone() as Font);
+			this.FDefBrush = new SolidBrush(Color.Black);
+
+			this.PrepareText();
+			this.DoPaint();
+
+			this.ScrollRange();
 		}
 
-		private int GetWidth(Graphics grx, string s)
+		private void ClearLinks()
 		{
-			return grx.MeasureString(s, this.FTextFont).ToSize().Width;
+			this.FLinks.Clear();
 		}
 
 		private int GetFontSize(string s, ref int i)
@@ -222,180 +252,125 @@ namespace GKUI.Controls
 			return Color.FromName(ss);
 		}
 
-		private void OutText(Graphics grx, string ss, bool resize, ref int x, ref int y, ref int hMax, ref int xMax)
+		private void MeasureText(Graphics grx, string ss, ref int xPos, ref int yPos, ref int hMax, ref int xMax)
 		{
-			if (y >= -hMax && ss != "")
-			{
-				if (!resize)
-				{
-					grx.DrawString(ss, this.FTextFont, this.FDefBrush, (float)x, (float)y);
-				}
+			if (yPos >= -hMax && ss != "") {
+				Size str_size = grx.MeasureString(ss, this.FTextFont).ToSize();
+				xPos += str_size.Width;
 
-				Size s_sizes = grx.MeasureString(ss, this.FTextFont).ToSize();
-
-				x += s_sizes.Width;
-
-				if (resize)
-				{
-					if (x > xMax) xMax = x;
-					int h = s_sizes.Height;
-					if (h > hMax) hMax = h;
-				}
+				if (xPos > xMax) xMax = xPos;
+				int h = str_size.Height;
+				if (h > hMax) hMax = h;
 			}
 		}
 
-		private void DoPaint(bool aResize)
+		private void OutText(Graphics grx, string ss, ref int xPos, ref int yPos, ref int hMax)
 		{
-			if (FHeights.Length != FLines.Count) return;
+			if (yPos >= -hMax && ss != "") {
+				grx.DrawString(ss, this.FTextFont, this.FDefBrush, (float)xPos, (float)yPos);
 
+				Size str_size = grx.MeasureString(ss, this.FTextFont).ToSize();
+				xPos += str_size.Width;
+			}
+		}
+
+		private void PrepareText()
+		{
+			this.FHeightCount = this.FLines.Count;
+			this.FHeights = new int[this.FHeightCount];
+
+			this.FAcceptFontChange = false;
 			Graphics grx = base.CreateGraphics();
 			try
 			{
-				this.FAcceptFontChange = false;
 				this.ClearLinks();
-				if (!aResize)
-				{
-					grx.FillRectangle(new SolidBrush(SystemColors.Control), base.ClientRectangle);
-				}
 
-				int y;
+				int y_pos = 0;
 				int xMax = 0;
 
-				if (aResize) {
-					y = 0;
-					xMax = 0;
-				} else {
-					y = this.FBorderWidth - this.FTopPos;
-				}
-
 				int num = this.FLines.Count - 1;
-				int Line = 0;
-				if (num >= Line)
+				for (int Line = 0; Line <= num; Line++)
 				{
-					num++;
-					while (true)
-					{
-						int x;
-						int hMax;
-						if (aResize)
-						{
-							x = 0;
-							hMax = this.GetHeight(grx, "A");
-						}
-						else
-						{
-							x = this.FBorderWidth - this.FLeftPos;
-							hMax = this.FHeights[Line];
-						}
+						int x_pos = 0;
+						int line_height = grx.MeasureString("A", this.FTextFont).ToSize().Height;
 
 						string s = this.FLines[Line];
+
 						int i = 1;
 						string ss = "";
-						while (i <= ((s != null) ? s.Length : 0))
+						while (i <= s.Length)
 						{
 							if (s[i - 1] == '~')
 							{
-								if (s[i] == '~')
-								{
+								if (s[i] == '~') {
 									ss += "~";
 								}
-								this.OutText(grx, ss, aResize, ref x, ref y, ref hMax, ref xMax);
+
+								this.MeasureText(grx, ss, ref x_pos, ref y_pos, ref line_height, ref xMax);
 								i++;
 
 								while (s[i - 1] != '~')
 								{
 									char c = char.ToUpper(s[i - 1]);
-									if (c != '+')
+
+									switch (c)
 									{
-										if (c != '-')
-										{
-											if (c != '0')
-											{
-												if (c != 'B')
-												{
-													if (c != 'I')
-													{
-														if (c != 'R')
-														{
-															if (c != 'S')
-															{
-																if (c != 'U')
-																{
-																	if (c != '^')
-																	{
-																		while (s[i] != '~')
-																		{
-																			i++;
-																		}
-																	}
-																	else
-																	{
-																		string sn = "";
-																		while (s[i] != ':')
-																		{
-																			i++;
-																			sn += s[i - 1];
-																		}
-																		i++;
-																		ss = "";
-																		while (s[i] != '~')
-																		{
-																			i++;
-																			ss += s[i - 1];
-																		}
-																		Color SaveColor = this.FDefBrush.Color;
-																		this.FDefBrush.Color = this.FLinkColor;
-																		this.SetFontStyle(FontStyle.Underline);
-																		if (!aResize)
-																		{
-																			this.FLinks.Add(new GKHyperView.HyperLink(sn, x, y, this.GetWidth(grx, ss), hMax));
-																		}
-																		this.OutText(grx, ss, aResize, ref x, ref y, ref hMax, ref xMax);
-																		this.FDefBrush.Color = SaveColor;
-																		this.SetFontStyle(FontStyle.Underline);
-																	}
-																}
-																else
-																{
-																	this.SetFontStyle(FontStyle.Underline);
-																}
-															}
-															else
-															{
-																this.SetFontStyle(FontStyle.Strikeout);
-															}
-														}
-														else
-														{
-															if (!aResize)
-															{
-																goto Block_21;
-															}
-														}
-													}
-													else
-													{
-														this.SetFontStyle(FontStyle.Italic);
-													}
-												}
-												else
-												{
-													this.SetFontStyle(FontStyle.Bold);
-												}
-											}
-											else
-											{
-												this.FTextFont = (base.Parent.Font.Clone() as Font);
-											}
-										}
-										else
-										{
+										case '+':
+											this.SetFontSize(((double)this.FTextFont.Size + (double)this.GetFontSize(s, ref i)));
+											break;
+
+										case '-':
 											this.SetFontSize(((double)this.FTextFont.Size - (double)this.GetFontSize(s, ref i)));
-										}
-									}
-									else
-									{
-										this.SetFontSize(((double)this.FTextFont.Size + (double)this.GetFontSize(s, ref i)));
+											break;
+
+										case '0':
+											this.FTextFont = (base.Parent.Font.Clone() as Font);
+											break;
+
+										case 'B':
+											this.SetFontStyle(FontStyle.Bold);
+											break;
+
+										case 'I':
+											this.SetFontStyle(FontStyle.Italic);
+											break;
+
+										case 'R':
+											// dummy
+											break;
+
+										case 'S':
+											this.SetFontStyle(FontStyle.Strikeout);
+											break;
+
+										case 'U':
+											this.SetFontStyle(FontStyle.Underline);
+											break;
+
+										case '^':
+											{
+												string sn = "";
+												while (s[i] != ':') {
+													i++;
+													sn += s[i - 1];
+												}
+												i++;
+												ss = "";
+												while (s[i] != '~') {
+													i++;
+													ss += s[i - 1];
+												}
+
+												int ss_width = grx.MeasureString(ss, this.FTextFont).ToSize().Width;
+												this.FLinks.Add(new GKHyperView.HyperLink(sn, x_pos, y_pos, ss_width, line_height));
+												this.MeasureText(grx, ss, ref x_pos, ref y_pos, ref line_height, ref xMax);
+
+												break;
+											}
+
+										default:
+											while (s[i] != '~') i++;
+											break;
 									}
 
 									i++;
@@ -410,58 +385,144 @@ namespace GKUI.Controls
 							i++;
 						}
 
-						this.OutText(grx, ss, aResize, ref x, ref y, ref hMax, ref xMax);
-
-						y += hMax;
-
-						if (aResize)
-						{
-							this.FHeights[Line] = hMax;
-						}
-
-						Line++;
-						if (Line == num)
-						{
-							goto IL_359;
-						}
-					}
-
-					Block_21:
-					throw new Exception("need to realize");
+						this.MeasureText(grx, ss, ref x_pos, ref y_pos, ref line_height, ref xMax);
+						y_pos += line_height;
+						this.FHeights[Line] = line_height;
 				}
 
-				IL_359:
-
-				if (aResize)
-				{
-					this.FPageWidth = xMax + 2 * this.FBorderWidth;
-					this.FPageHeight = y + 2 * this.FBorderWidth;
-				}
-
-				this.FAcceptFontChange = true;
+				this.FPageWidth = xMax + 2 * this.FBorderWidth;
+				this.FPageHeight = y_pos + 2 * this.FBorderWidth;
 			}
 			finally
 			{
 				grx.Dispose();
+				this.FAcceptFontChange = true;
 			}
 		}
 
-		private void ArrangeText()
+		private void DoPaint()
 		{
-			this.FTextFont = (base.Parent.Font.Clone() as Font);
-			this.FDefBrush = new SolidBrush(Color.Black);
-			this.DoPaint(true);
-			this.DoPaint(false);
-			this.ScrollRange();
-		}
+			if (FHeights.Length != FLines.Count) return;
 
-		private void ClearLinks()
-		{
-			for (int i = 0; i <= this.FLinks.Count - 1; i++)
+			this.FAcceptFontChange = false;
+			Graphics grx = base.CreateGraphics();
+			try
 			{
-				(this.FLinks[i] as HyperLink).Free();
+				grx.FillRectangle(new SolidBrush(SystemColors.Control), base.ClientRectangle);
+
+				int y_pos = this.FBorderWidth - this.FTopPos;
+
+				int num = this.FLines.Count - 1;
+				for (int Line = 0; Line <= num; Line++)
+				{
+						int x_pos = this.FBorderWidth - this.FLeftPos;
+						int line_height = this.FHeights[Line];
+
+						string s = this.FLines[Line];
+
+						int i = 1;
+						string ss = "";
+						while (i <= s.Length)
+						{
+							if (s[i - 1] == '~')
+							{
+								if (s[i] == '~') {
+									ss += "~";
+								}
+
+								this.OutText(grx, ss, ref x_pos, ref y_pos, ref line_height);
+								i++;
+
+								while (s[i - 1] != '~')
+								{
+									char c = char.ToUpper(s[i - 1]);
+
+									switch (c)
+									{
+										case '+':
+											this.SetFontSize(((double)this.FTextFont.Size + (double)this.GetFontSize(s, ref i)));
+											break;
+
+										case '-':
+											this.SetFontSize(((double)this.FTextFont.Size - (double)this.GetFontSize(s, ref i)));
+											break;
+
+										case '0':
+											this.FTextFont = (base.Parent.Font.Clone() as Font);
+											break;
+
+										case 'B':
+											this.SetFontStyle(FontStyle.Bold);
+											break;
+
+										case 'I':
+											this.SetFontStyle(FontStyle.Italic);
+											break;
+
+										case 'R':
+											// need to realize
+											break;
+
+										case 'S':
+											this.SetFontStyle(FontStyle.Strikeout);
+											break;
+
+										case 'U':
+											this.SetFontStyle(FontStyle.Underline);
+											break;
+
+										case '^':
+											{
+												string sn = "";
+												while (s[i] != ':') {
+													i++;
+													sn += s[i - 1];
+												}
+												i++;
+												ss = "";
+												while (s[i] != '~') {
+													i++;
+													ss += s[i - 1];
+												}
+
+												Color save_color = this.FDefBrush.Color;
+												this.FDefBrush.Color = this.FLinkColor;
+												this.SetFontStyle(FontStyle.Underline);
+
+												this.OutText(grx, ss, ref x_pos, ref y_pos, ref line_height);
+
+												this.FDefBrush.Color = save_color;
+												this.SetFontStyle(FontStyle.Underline);
+
+												break;
+											}
+
+										default:
+											while (s[i] != '~') i++;
+											break;
+									}
+
+									i++;
+								}
+								ss = "";
+							}
+							else
+							{
+								ss += s[i - 1];
+							}
+
+							i++;
+						}
+
+						this.OutText(grx, ss, ref x_pos, ref y_pos, ref line_height);
+						y_pos += line_height;
+				}
 			}
-			this.FLinks.Clear();
+			finally
+			{
+				grx.Dispose();
+				this.FAcceptFontChange = true;
+			}
 		}
 
 		private void SetFontSize(double ASize)
@@ -510,47 +571,38 @@ namespace GKUI.Controls
 			switch (e.KeyCode)
 			{
 				case Keys.Prior:
-				{
 					this.TopPos -= base.ClientRectangle.Height / 2;
 					break;
-				}
+
 				case Keys.Next:
-				{
 					this.TopPos += base.ClientRectangle.Height / 2;
 					break;
-				}
+
 				case Keys.End:
-				{
 					this.TopPos = this.FPageHeight - base.ClientRectangle.Height + 2 * this.FBorderWidth;
 					this.LeftPos = this.FPageWidth - base.ClientRectangle.Width;
 					break;
-				}
+
 				case Keys.Home:
-				{
 					this.TopPos = 0;
 					this.LeftPos = 0;
 					break;
-				}
+
 				case Keys.Left:
-				{
 					this.LeftPos -= base.ClientRectangle.Width / 20;
 					break;
-				}
+
 				case Keys.Up:
-				{
 					this.TopPos -= base.ClientRectangle.Height / 20;
 					break;
-				}
+
 				case Keys.Right:
-				{
 					this.LeftPos += base.ClientRectangle.Width / 20;
 					break;
-				}
+
 				case Keys.Down:
-				{
 					this.TopPos += base.ClientRectangle.Height / 20;
 					break;
-				}
 			}
 		}
 
@@ -567,10 +619,12 @@ namespace GKUI.Controls
 		{
 			base.OnMouseMove(e);
 
+			int y_offset = (this.FBorderWidth - this.FTopPos);
+			
 			int num = this.FLinks.Count - 1;
 			for (int i = 0; i <= num; i++)
 			{
-				if ((this.FLinks[i] as HyperLink).HasCoord(e.X, e.Y))
+				if (this.FLinks[i].HasCoord(e.X, e.Y, y_offset))
 				{
 					this.FLink = i;
 					this.Cursor = Cursors.Hand;
@@ -604,8 +658,7 @@ namespace GKUI.Controls
 
 		protected override void OnPaint(PaintEventArgs pe)
 		{
-			base.OnPaint(pe);
-			this.DoPaint(false);
+			this.DoPaint();
 		}
 
 		private void ScrollRange()
@@ -666,6 +719,7 @@ namespace GKUI.Controls
 		{
 			base.WndProc(ref m);
 			int msg = m.Msg;
+
 			if (msg != 5)
 			{
 				if (msg != 135)
@@ -777,40 +831,6 @@ namespace GKUI.Controls
 			{
 				this.ScrollRange();
 			}
-		}
-
-		public GKHyperView()
-		{
-			base.TabStop = true;
-			base.BorderStyle = BorderStyle.Fixed3D;
-			this.FHeightCount = 0;
-			this.FAcceptFontChange = false;
-			this.FLines = new StringList();
-			this.FLines.OnChange += new TNotifyEvent(this.LinesChanged);
-			this.FHeights = new int[0];
-			this.FTopPos = 0;
-			this.FLeftPos = 0;
-			this.FColor = SystemColors.Control;
-			this.FLinks = new TList();
-			this.FLinkColor = Color.Blue;
-			this.FLink = -1;
-			this.FUpColor = Color.Gray;
-			this.FDwnColor = Color.White;
-		}
-
-		protected override void Dispose(bool Disposing)
-		{
-			if (Disposing)
-			{
-				this.ClearLinks();
-				this.FLinks.Dispose();
-				this.FHeights = null;
-				this.FLines.Free();
-
-                if (FDefBrush != null) FDefBrush.Dispose();
-                if (FTextFont != null) FTextFont.Dispose();
-			}
-			base.Dispose(Disposing);
 		}
 	}
 }

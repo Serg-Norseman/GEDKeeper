@@ -6,12 +6,12 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-
 using Ext.Utils;
 using GedCom551;
 
@@ -211,7 +211,8 @@ namespace GKCore
 			tmNone,
 			tmParent,
 			tmChild,
-			tmChildToFamily
+			tmChildToFamily,
+			tmWife
 		}
 
 		public enum TLifeMode : byte
@@ -2980,6 +2981,29 @@ namespace GKCore
 			}
 
 			return f;
+		}
+
+		public static string GetRusWifeFamily(string husbFamily)
+		{
+			const string consonants = "бвгджзклмнпрстфхцчшщ";
+			//const string vowels = "абвгдежзиклмнопрстуфхцчшщьыъэюя";
+			
+			string res;
+			if (husbFamily == null || husbFamily.Length <= 0) {
+				res = "?";
+			} else {
+				res = husbFamily;
+
+				if (consonants.Contains(res[res.Length - 1])) {
+					res = res + "а";
+				} else if (res.EndsWith("кий")) {
+					res = res.Substring(0, res.Length - 3) + "кая";
+				} else if (res.EndsWith("ный")) {
+					res = res.Substring(0, res.Length - 3) + "ная";
+				}
+			}
+
+			return res;
 		}
 
 		// FIXME: aux_candidate

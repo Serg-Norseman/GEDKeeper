@@ -369,7 +369,14 @@ namespace GKUI
 						return;
 				}
 
-				TGEDCOMIndividualRecord i_spouse = this.FBase.SelectPerson(null, TGenEngine.TTargetMode.tmNone, sx);
+				TGEDCOMIndividualRecord target = null;
+				TGenEngine.TTargetMode target_mode = TGenEngine.TTargetMode.tmNone;
+				if (sx == TGEDCOMSex.svFemale) {
+					target = i_rec;
+					target_mode = TGenEngine.TTargetMode.tmWife;
+				}
+				
+				TGEDCOMIndividualRecord i_spouse = this.FBase.SelectPerson(target, target_mode, sx);
 				if (i_spouse != null)
 				{
 					TGEDCOMFamilyRecord fam = TGenEngine.CreateFamilyEx(this.FTree);

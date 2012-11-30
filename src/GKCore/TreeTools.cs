@@ -529,6 +529,16 @@ namespace GKCore
 			}
 		}
 
+		private static void CheckRecord_Source(TGEDCOMSourceRecord src)
+		{
+			for (int i = src.RepositoryCitations.Count - 1; i >= 0; i--) {
+				TGEDCOMRecord val = src.RepositoryCitations[i].Value;
+				if (val == null) {
+					src.RepositoryCitations.Delete(i);
+				}
+			}
+		}
+
 		public static void CheckRecord(TGEDCOMTree aTree, TGEDCOMRecord aRec, TGEDCOMFormat aFormat)
 		{
 			if (aRec.UID == null || aRec.UID == "")
@@ -564,12 +574,18 @@ namespace GKCore
 				case TGEDCOMRecordType.rtIndividual:
 					CheckRecord_Individual(aTree, aFormat, (TGEDCOMIndividualRecord)aRec);
 					break;
+
 				case TGEDCOMRecordType.rtFamily:
 					CheckRecord_Family(aTree, aFormat, (TGEDCOMFamilyRecord)aRec);
 					break;
+
 				case TGEDCOMRecordType.rtGroup:
 					CheckRecord_Group((TGEDCOMGroupRecord)aRec);
 					break;
+
+				case TGEDCOMRecordType.rtSource:
+					CheckRecord_Source((TGEDCOMSourceRecord)aRec);
+					break;				
 			}
 		}
 

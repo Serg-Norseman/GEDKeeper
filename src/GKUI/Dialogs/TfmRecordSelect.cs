@@ -69,6 +69,7 @@ namespace GKUI
 			if (this.FMode == TGEDCOMRecordType.rtIndividual) {
 				TIndividualListFilter iFilter = (TIndividualListFilter)this.ListRecords.ListMan.Filter;
 				iFilter.Sex = this.FNeedSex;
+				iFilter.ChildSelector = (this.FTargetMode == TGenEngine.TTargetMode.tmParent);
 			}
 
 			this.ListRecords.UpdateContents(this.Base.ShieldState, true, 1);
@@ -77,16 +78,10 @@ namespace GKUI
 		private void SetFilter([In] string Value)
 		{
 			this.FFilter = Value;
-			if (this.FFilter == "")
-			{
+			if (this.FFilter == "") {
 				this.FFilter = "*";
-			}
-			else
-			{
-				if (this.FFilter != "*")
-				{
-					this.FFilter = "*" + this.FFilter + "*";
-				}
+			} else if (this.FFilter != "*") {
+				this.FFilter = "*" + this.FFilter + "*";
 			}
 			this.DataRefresh();
 		}
@@ -94,11 +89,6 @@ namespace GKUI
 		private void SetTargetMode([In] TGenEngine.TTargetMode Value)
 		{
 			this.FTargetMode = Value;
-
-			if (this.FMode == TGEDCOMRecordType.rtIndividual) {
-				TIndividualListFilter iFilter = (TIndividualListFilter)this.ListRecords.ListMan.Filter;
-				iFilter.ChildSelector = (this.FTargetMode == TGenEngine.TTargetMode.tmParent);
-			}
 		}
 
 		private void btnSelect_Click(object sender, EventArgs e)

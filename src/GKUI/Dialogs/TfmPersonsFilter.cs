@@ -68,8 +68,13 @@ namespace GKUI
         {
         	TIndividualListFilter iFilter = (TIndividualListFilter)FListMan.Filter;
         	
+        	this.edName.Items.Clear();
 			this.edName.Items.AddRange(GKUI.TfmGEDKeeper.Instance.Options.NameFilters.ToArray());
+
+			this.cbResidence.Items.Clear();
 			this.cbResidence.Items.AddRange(GKUI.TfmGEDKeeper.Instance.Options.ResidenceFilters.ToArray());
+
+			this.cbEventVal.Items.Clear();
 			this.cbEventVal.Items.AddRange(GKUI.TfmGEDKeeper.Instance.Options.EventFilters.ToArray());
 
 			int life_sel;
@@ -119,6 +124,7 @@ namespace GKUI
 
 			TGEDCOMTree tree = this.Base.Tree;
 
+			this.cbGroup.Items.Clear();
 			this.cbGroup.Sorted = true;
 			int num = tree.RecordsCount - 1;
 			for (int i = 0; i <= num; i++) {
@@ -138,6 +144,7 @@ namespace GKUI
 				this.cbGroup.Text = ((TGEDCOMGroupRecord)(tree.XRefIndex_Find(iFilter.GroupRef))).GroupName;
 			}
 
+			this.cbSource.Items.Clear();
 			this.cbSource.Sorted = true;
 			for (int i = 0; i <= tree.RecordsCount - 1; i++) {
 				TGEDCOMRecord rec = tree[i];
