@@ -87,7 +87,6 @@ namespace GKCore
 
 		public static readonly GlobalOptions.TColumnRec[] PersonColumnsName;
 
-		private AncestorsCircleOptions FAncCircleOptions;
 		private TreeChartOptions FChartOptions;
 		private TGEDCOMCharacterSet FDefCharacterSet;
 		private TGenEngine.TDateFormat FDefDateFormat;
@@ -114,11 +113,6 @@ namespace GKCore
 
 		protected bool Disposed_;
 
-
-		public AncestorsCircleOptions AncCircleOptions
-		{
-			get { return this.FAncCircleOptions; }
-		}
 
 		public TreeChartOptions ChartOptions
 		{
@@ -342,7 +336,6 @@ namespace GKCore
 
 		public GlobalOptions()
 		{
-			this.FAncCircleOptions = new AncestorsCircleOptions();
 			this.FChartOptions = new TreeChartOptions();
 			this.FEventFilters = new StringList();
 			this.FMRUFiles = new List<TMRUFile>();

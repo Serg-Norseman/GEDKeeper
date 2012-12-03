@@ -79,9 +79,9 @@ namespace GKUI
 				int r = this.dataGridView1.Rows.Add();
 				DataGridViewRow row = dataGridView1.Rows[r];
 
-				int cond_index =  ((IConvertible)fcond.condition).ToByte(null);
+				int cond_index = ((IConvertible)fcond.condition).ToByte(null);
 
-				row.Cells[0].Value = this.FFields[fcond.col_index];
+				row.Cells[0].Value = this.FFields[fcond.col_index + 1];
 				row.Cells[1].Value = this.FCondSigns[cond_index];
 				row.Cells[2].Value = fcond.value.ToString();
 			}

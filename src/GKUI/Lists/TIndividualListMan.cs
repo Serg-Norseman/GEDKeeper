@@ -348,7 +348,13 @@ namespace GKUI.Lists
 		{
 			TColRec colrec = this.FColumnsMap[col_index];
 			TPersonColumnType pct = (TPersonColumnType)colrec.col_type;
-			int sub_index = (int)colrec.col_subtype;
+
+			return GetColumnValueDirect(colrec.col_type, (int)colrec.col_subtype);
+		}
+
+		public override object GetColumnValueDirect(int col_type, int col_subtype)
+		{
+			TPersonColumnType pct = (TPersonColumnType)col_type;
 
 			object Result = null;
 
@@ -359,60 +365,46 @@ namespace GKUI.Lists
 
 				case TPersonColumnType.pctName:
 				{
-					TGenEngine.TNameFormat defNameFormat = GKUI.TfmGEDKeeper.Instance.Options.DefNameFormat;
-					string f = "";
-					string i = "";
-					string p = "";
-
-					if (defNameFormat != TGenEngine.TNameFormat.nfFNP) {
-						this.FRec.aux_GetNameParts(out f, out i, out p);
-					}
-
-					if (defNameFormat != TGenEngine.TNameFormat.nfFNP)
-					{
-						if (defNameFormat != TGenEngine.TNameFormat.nfF_NP)
-						{
-							if (defNameFormat == TGenEngine.TNameFormat.nfF_N_P)
-							{
-								if (sub_index != 0)
-								{
-									if (sub_index != 1)
-									{
-										if (sub_index == 2)
-										{
-											Result = p;
-										}
-									}
-									else
-									{
-										Result = i;
-									}
-								}
-								else
-								{
-									Result = f;
-								}
-							}
-						}
-						else
-						{
-							if (sub_index != 0)
-							{
-								if (sub_index == 1)
-								{
-									Result = i + " " + p;
-								}
-							}
-							else
-							{
-								Result = f;
-							}
-						}
-					}
-					else
-					{
+					if (col_subtype == -1) {
 						Result = this.FRec.aux_GetNameStr(true, false);
+					} else {
+						TGenEngine.TNameFormat defNameFormat = GKUI.TfmGEDKeeper.Instance.Options.DefNameFormat;
+						string f, i, p;
+
+						switch (defNameFormat) {
+							case TGenEngine.TNameFormat.nfFNP:
+								Result = this.FRec.aux_GetNameStr(true, false);
+								break;
+
+							case TGenEngine.TNameFormat.nfF_NP:
+								this.FRec.aux_GetNameParts(out f, out i, out p);
+								switch (col_subtype) {
+									case 0:
+										Result = f;
+										break;
+									case 1:
+										Result = i + " " + p;
+										break;
+								}
+								break;
+
+							case TGenEngine.TNameFormat.nfF_N_P:
+								this.FRec.aux_GetNameParts(out f, out i, out p);
+								switch (col_subtype) {
+									case 0:
+										Result = f;
+										break;
+									case 1:
+										Result = i;
+										break;
+									case 2:
+										Result = p;
+										break;
+								}
+								break;
+						}
 					}
+					
 					break;
 				}
 

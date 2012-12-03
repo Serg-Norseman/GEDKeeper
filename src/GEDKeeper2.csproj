@@ -149,7 +149,6 @@
     <Compile Include="GedCom551\TGEDCOMUserReference.cs" />
     <Compile Include="GedCom551\TXRefReplaceMap.cs" />
     <Compile Include="GEDKeeper2.cs" />
-    <Compile Include="GKCore\AncestorsCircleOptions.cs" />
     <Compile Include="GKCore\ExcelExporter.cs" />
     <Compile Include="GKCore\Exporter.cs" />
     <Compile Include="GKCore\CustomFilter.cs" />
@@ -173,7 +172,6 @@
     <Compile Include="GKResources.Designer.cs">
       <DependentUpon>GKResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Charts\AncestorsCircle.cs" />
     <Compile Include="GKUI\Controls\InputBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -381,12 +379,6 @@
     </Compile>
     <Compile Include="GKUI\PatriarchsViewer.Designer.cs">
       <DependentUpon>PatriarchsViewer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\TfmAncestorsCircle.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\TfmAncestorsCircle.Designer.cs">
-      <DependentUpon>TfmAncestorsCircle.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\TfmBase.Designer.cs">
       <DependentUpon>TfmBase.cs</DependentUpon>
@@ -602,9 +594,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\PatriarchsViewer.resx">
       <DependentUpon>PatriarchsViewer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\TfmAncestorsCircle.resx">
-      <DependentUpon>TfmAncestorsCircle.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\TfmBase.resx">
       <DependentUpon>TfmBase.cs</DependentUpon>

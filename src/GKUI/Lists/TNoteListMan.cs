@@ -31,10 +31,10 @@ namespace GKUI.Lists
 			this.FRec = (aRec as TGEDCOMNoteRecord);
 		}
 
-		public override object GetColumnValueEx(int col_index)
+		public override object GetColumnValueDirect(int col_type, int col_subtype)
 		{
-			switch (col_index) {
-				case 1:
+			switch (col_type) {
+				case 0:
 					{
 						string st;
 						if (this.FRec.Note.Count > 0)
@@ -51,7 +51,7 @@ namespace GKUI.Lists
 						}
 						return st;
 					}
-				case 2:
+				case 1:
 					return this.FRec.ChangeDate.ChangeDateTime;
 				default:
 					return null;

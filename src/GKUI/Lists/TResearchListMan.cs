@@ -39,22 +39,22 @@ namespace GKUI.Lists
 			this.FRec = (aRec as TGEDCOMResearchRecord);
 		}
 
-		public override object GetColumnValueEx(int col_index)
+		public override object GetColumnValueDirect(int col_type, int col_subtype)
 		{
-			switch (col_index) {
-				case 1:
+			switch (col_type) {
+				case 0:
 					return this.FRec.ResearchName;
-				case 2:
+				case 1:
 					return LangMan.LSList[(int)TGenEngine.PriorityNames[(int)this.FRec.Priority] - 1];
-				case 3:
+				case 2:
 					return LangMan.LSList[(int)TGenEngine.StatusNames[(int)this.FRec.Status] - 1];
-				case 4:
+				case 3:
 					return TGenEngine.GEDCOMDateToStr(this.FRec.StartDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
-				case 5:
+				case 4:
 					return TGenEngine.GEDCOMDateToStr(this.FRec.StopDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
-				case 6:
+				case 5:
 					return this.FRec.Percent;
-				case 7:
+				case 6:
 					return this.FRec.ChangeDate.ChangeDateTime;
 				default:
 					return null;

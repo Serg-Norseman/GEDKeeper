@@ -54,16 +54,16 @@ namespace GKUI.Lists
 			this.FRec = (aRec as TGEDCOMLocationRecord);
 		}
 
-		public override object GetColumnValueEx(int col_index)
+		public override object GetColumnValueDirect(int col_type, int col_subtype)
 		{
-			switch (col_index) {
-				case 1:
+			switch (col_type) {
+				case 0:
 					return this.FRec.LocationName;
-				case 2:
+				case 1:
 					return this.FRec.Map.Lati;
-				case 3:
+				case 2:
 					return this.FRec.Map.Long;
-				case 4:
+				case 3:
 					return this.FRec.ChangeDate.ChangeDateTime;
 				default:
 					return null;

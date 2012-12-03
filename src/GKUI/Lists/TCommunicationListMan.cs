@@ -36,18 +36,18 @@ namespace GKUI.Lists
 			this.FRec = (aRec as TGEDCOMCommunicationRecord);
 		}
 
-		public override object GetColumnValueEx(int col_index)
+		public override object GetColumnValueDirect(int col_type, int col_subtype)
 		{
-			switch (col_index) {
-				case 1:
+			switch (col_type) {
+				case 0:
 					return this.FRec.CommName;
-				case 2:
+				case 1:
 					return TGenEngine.GetCorresponderStr(this.FTree, this.FRec, false);
-				case 3:
+				case 2:
 					return LangMan.LSList[(int)TGenEngine.CommunicationNames[(int)this.FRec.CommunicationType] - 1];
-				case 4:
+				case 3:
 					return TGenEngine.GEDCOMDateToStr(this.FRec.Date, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
-				case 5:
+				case 4:
 					return this.FRec.ChangeDate.ChangeDateTime;
 				default:
 					return null;

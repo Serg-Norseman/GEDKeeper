@@ -34,14 +34,14 @@ namespace GKUI.Lists
 			this.FRec = (aRec as TGEDCOMFamilyRecord);
 		}
 
-		public override object GetColumnValueEx(int col_index)
+		public override object GetColumnValueDirect(int col_type, int col_subtype)
 		{
-			switch (col_index) {
-				case 1:
+			switch (col_type) {
+				case 0:
 					return TGenEngine.aux_GetFamilyStr(this.FRec);
-				case 2:
+				case 1:
 					return TGenEngine.GetMarriageDate(this.FRec, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
-				case 3:
+				case 2:
 					return this.FRec.ChangeDate.ChangeDateTime;
 				default:
 					return null;

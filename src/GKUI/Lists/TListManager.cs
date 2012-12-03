@@ -158,7 +158,7 @@ namespace GKUI.Lists
 		public abstract bool CheckFilter(TGenEngine.TShieldState aShieldState);
 		public abstract void Fetch(TGEDCOMRecord aRec);
 
-		public virtual string GetColumnValue(int col_index, bool isMain)
+		protected string GetColumnValue(int col_index, bool isMain)
 		{
 			// aColIndex - from 1
 			TColumnStatic cs = this.ColumnStatics[col_index - 1];
@@ -172,7 +172,12 @@ namespace GKUI.Lists
 
 		public virtual object GetColumnValueEx(int col_index)
 		{
-			// aColIndex - from 1
+			// col_index - from 1
+			return GetColumnValueDirect(col_index - 1, 0);
+		}
+
+		public virtual object GetColumnValueDirect(int col_type, int col_subtype)
+		{
 			return null;
 		}
 
@@ -264,7 +269,7 @@ namespace GKUI.Lists
 
 		public void AddCondition(Enum column, TConditionKind condition, string value)
 		{
-			int col = ((IConvertible)column).ToByte(null) + 1;
+			int col = ((IConvertible)column).ToByte(null);
 
 			TFilterCondition flt_col = new TFilterCondition();
 			flt_col.column = column;
@@ -278,7 +283,7 @@ namespace GKUI.Lists
 		{
 			bool res = true;
 
-			object dataval = this.GetColumnValueEx(fcond.col_index);
+			object dataval = this.GetColumnValueDirect(fcond.col_index, -1);
 
 			int comp_res = 0;
 			if (fcond.condition != TConditionKind.ck_Contains) {

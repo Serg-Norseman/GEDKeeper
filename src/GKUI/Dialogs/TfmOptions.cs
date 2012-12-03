@@ -136,8 +136,6 @@ namespace GKUI
 
 			this.UpdateControls();
 
-			this.UpdateAncCircleControls(this.FOptions.AncCircleOptions);
-
 			this.cbLanguages.Items.Clear();
 			this.cbLanguages.Items.Add(new GKComboItem("Русский", 1049));
 
@@ -277,8 +275,6 @@ namespace GKUI
 			this.FOptions.ShowTips = this.chkShowOnStart.Checked;
 			this.FOptions.RevisionsBackup = this.chkRevisionsBackup.Checked;
 
-			this.SetAncCircleOptions(this.FOptions.AncCircleOptions);
-
 			int code = (int)(this.cbLanguages.Items[this.cbLanguages.SelectedIndex] as GKComboItem).Data;
 			GKUI.TfmGEDKeeper.Instance.LoadLanguage(code);
 
@@ -331,39 +327,6 @@ namespace GKUI
 			this.FOptions = GKUI.TfmGEDKeeper.Instance.Options;
 			(this as ILocalization).SetLang();
 			this.UpdateForm();
-		}
-
-		public void UpdateAncCircleControls(AncestorsCircleOptions opts)
-		{
-			this.acb0.BackColor = opts.BrushColor[0];
-			this.acb1.BackColor = opts.BrushColor[1];
-			this.acb2.BackColor = opts.BrushColor[2];
-			this.acb3.BackColor = opts.BrushColor[3];
-			this.acb4.BackColor = opts.BrushColor[4];
-			this.acb5.BackColor = opts.BrushColor[5];
-			this.acb6.BackColor = opts.BrushColor[6];
-			this.acb7.BackColor = opts.BrushColor[7];
-			this.acbText.BackColor = opts.BrushColor[8];
-			this.acbBack.BackColor = opts.BrushColor[9];
-			this.acbLine.BackColor = opts.BrushColor[10];
-			this.chkShowCircLines.Checked = opts.CircularLines;
-		}
-
-		private void SetAncCircleOptions(AncestorsCircleOptions opts)
-		{
-			opts.BrushColor[ 0] = this.acb0.BackColor;
-			opts.BrushColor[ 1] = this.acb1.BackColor;
-			opts.BrushColor[ 2] = this.acb2.BackColor;
-			opts.BrushColor[ 3] = this.acb3.BackColor;
-			opts.BrushColor[ 4] = this.acb4.BackColor;
-			opts.BrushColor[ 5] = this.acb5.BackColor;
-			opts.BrushColor[ 6] = this.acb6.BackColor;
-			opts.BrushColor[ 7] = this.acb7.BackColor;
-			opts.BrushColor[ 8] = this.acbText.BackColor;
-			opts.BrushColor[ 9] = this.acbBack.BackColor;
-			opts.BrushColor[10] = this.acbLine.BackColor;
-			opts.CreateBrushes();
-			opts.CircularLines = this.chkShowCircLines.Checked;
 		}
 
 		void acbMouseClick(object sender, MouseEventArgs e)

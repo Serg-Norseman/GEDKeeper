@@ -240,7 +240,6 @@ namespace GKUI
 				Form active_form = this.ActiveMdiChild;
 				if (active_form is TfmBase) fmOptions.SetPage(OptionsPage.opInterface);
 				if (active_form is TfmChart) fmOptions.SetPage(OptionsPage.opTreeChart);
-				if (active_form is TfmAncestorsCircle) fmOptions.SetPage(OptionsPage.opAncestorsCircle);
 
 				if (fmOptions.ShowDialog() == DialogResult.OK)
 				{
@@ -253,8 +252,6 @@ namespace GKUI
 							(child as TfmBase).ListsRefresh(true);
 						} else if (child is TfmChart) {
 							(child as TfmChart).GenChart(false);
-						} else if (child is TfmAncestorsCircle) {
-							(child as TfmAncestorsCircle).Invalidate();
 						}
 					}
 				}
@@ -275,12 +272,6 @@ namespace GKUI
 		{
 			TfmBase cur_base = this.GetCurrentFile();
 			if (cur_base != null) cur_base.ShowMap();
-		}
-
-		private void miAncestorsCircleClick(object sender, EventArgs e)
-		{
-			TfmBase cur_base = this.GetCurrentFile();
-			if (cur_base != null) cur_base.ShowAncestorsCircle();
 		}
 
 		private void miOrganizerClick(object sender, EventArgs e)
@@ -899,7 +890,6 @@ namespace GKUI
 			this.miContext.Text = LangMan.LSList[48];
 			this.miAbout.Text = LangMan.LSList[49] + "...";
 			this.miExportToPDFFile.Text = LangMan.LS(LSID.LSID_ExportToPDFFile);
-			this.miAncestorsCircle.Text = LangMan.LS(LSID.LSID_AncestorsCircle);
 			this.miLogSend.Text = LangMan.LS(LSID.LSID_LogSend);
 			this.miSearch.Text = LangMan.LS(LSID.LSID_FullTextSearch);
 		}

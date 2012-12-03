@@ -37,18 +37,18 @@ namespace GKUI.Lists
 			this.FRec = (aRec as TGEDCOMTaskRecord);
 		}
 
-		public override object GetColumnValueEx(int col_index)
+		public override object GetColumnValueDirect(int col_type, int col_subtype)
 		{
-			switch (col_index) {
-				case 1:
+			switch (col_type) {
+				case 0:
 					return TGenEngine.GetTaskGoalStr(this.FTree, this.FRec);
-				case 2:
+				case 1:
 					return LangMan.LSList[(int)TGenEngine.PriorityNames[(int)this.FRec.Priority] - 1];
-				case 3:
+				case 2:
 					return TGenEngine.GEDCOMDateToStr(this.FRec.StartDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
-				case 4:
+				case 3:
 					return TGenEngine.GEDCOMDateToStr(this.FRec.StopDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
-				case 5:
+				case 4:
 					return this.FRec.ChangeDate.ChangeDateTime;
 				default:
 					return null;

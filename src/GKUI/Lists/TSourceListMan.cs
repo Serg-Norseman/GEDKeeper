@@ -53,16 +53,16 @@ namespace GKUI.Lists
 			this.FRec = (aRec as TGEDCOMSourceRecord);
 		}
 
-		public override object GetColumnValueEx(int col_index)
+		public override object GetColumnValueDirect(int col_type, int col_subtype)
 		{
-			switch (col_index) {
-				case 1:
+			switch (col_type) {
+				case 0:
 					return this.FRec.FiledByEntry.Trim();
-				case 2:
+				case 1:
 					return this.FRec.Originator.Text.Trim();
-				case 3:
+				case 2:
 					return this.FRec.Title.Text.Trim();
-				case 4:
+				case 3:
 					return this.FRec.ChangeDate.ChangeDateTime;
 				default:
 					return null;

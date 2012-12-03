@@ -38,18 +38,18 @@ namespace GKUI.Lists
 			this.FRec = (aRec as TGEDCOMMultimediaRecord);
 		}
 
-		public override object GetColumnValueEx(int col_index)
+		public override object GetColumnValueDirect(int col_type, int col_subtype)
 		{
 			TGEDCOMFileReferenceWithTitle file_ref = this.FRec.FileReferences[0];
 
-			switch (col_index) {
-				case 1:
+			switch (col_type) {
+				case 0:
 					return file_ref.Title;
-				case 2:
+				case 1:
 					return LangMan.LSList[(int)TGenEngine.MediaTypes[(int)file_ref.MediaType] - 1];
-				case 3:
+				case 2:
 					return file_ref.StringValue;
-				case 4:
+				case 3:
 					return this.FRec.ChangeDate.ChangeDateTime;
 				default:
 					return null;

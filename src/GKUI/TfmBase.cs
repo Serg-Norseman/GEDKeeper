@@ -1436,15 +1436,6 @@ namespace GKUI
 			frm_maps.Show();
 		}
 
-		public void ShowAncestorsCircle()
-		{
-			TGEDCOMIndividualRecord sp = this.GetSelectedPerson();
-			if (sp == null) return;
-
-			TfmAncestorsCircle frm = new TfmAncestorsCircle(this, sp);
-			frm.Show();
-		}
-
 		public void ShowMedia(TGEDCOMMultimediaRecord aMediaRec)
 		{
 			TfmMediaView fmMediaView = new TfmMediaView(this);
