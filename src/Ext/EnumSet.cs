@@ -13,7 +13,7 @@ namespace Ext.Utils
 		public static EnumSet Create()
 		{
 			EnumSet Result = new EnumSet();
-			Result.FValue = 0u;
+			Result.FValue = 0;
 			return Result;
 		}
 
@@ -26,7 +26,6 @@ namespace Ext.Utils
 
 		public void Include(params Enum[] e)
 		{
-			//e = (Enum[])e.Clone();
 			for (int i = 0; i <= e.Length - 1; i++) {
 				this.Include(e[i]);
 			}
@@ -37,7 +36,7 @@ namespace Ext.Utils
 			unchecked
 			{
 				byte pos = ((IConvertible)e).ToByte(null);
-				this.FValue |= (uint)(1 << (int)pos);
+				this.FValue |= (uint)(1 << pos);
 			}
 		}
 
@@ -55,14 +54,14 @@ namespace Ext.Utils
 			unchecked
 			{
 				byte pos = ((IConvertible)e).ToByte(null);
-				uint bt = (uint)(1 << (int)pos);
+				uint bt = (uint)(1 << pos);
 				return (bt & this.FValue) > 0u;
 			}
 		}
 
 		public bool IsEmpty()
 		{
-			return this.FValue == 0u;
+			return this.FValue == 0;
 		}
 
 		public string ToString(byte B)

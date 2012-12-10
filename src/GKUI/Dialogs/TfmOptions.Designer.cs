@@ -165,6 +165,7 @@ namespace GKUI
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.ColorDialog1 = new System.Windows.Forms.ColorDialog();
 			this.FontDialog1 = new System.Windows.Forms.FontDialog();
+			this.lblChartFont = new System.Windows.Forms.Label();
 			this.PageControl1.SuspendLayout();
 			this.SheetCommon.SuspendLayout();
 			this.rgCode.SuspendLayout();
@@ -175,6 +176,7 @@ namespace GKUI
 			this.SheetTree.SuspendLayout();
 			this.GroupBox1.SuspendLayout();
 			this.GroupBox2.SuspendLayout();
+			this.PanDefFont.SuspendLayout();
 			this.SheetAncCircle.SuspendLayout();
 			this.SheetView.SuspendLayout();
 			this.PageControl2.SuspendLayout();
@@ -553,6 +555,7 @@ namespace GKUI
 			this.PanMaleColor.Size = new System.Drawing.Size(73, 25);
 			this.PanMaleColor.TabIndex = 0;
 			this.PanMaleColor.Text = "Мужчина";
+			this.PanMaleColor.Click += new System.EventHandler(this.PanColor_Click);
 			// 
 			// PanFemaleColor
 			// 
@@ -563,6 +566,7 @@ namespace GKUI
 			this.PanFemaleColor.Size = new System.Drawing.Size(73, 25);
 			this.PanFemaleColor.TabIndex = 1;
 			this.PanFemaleColor.Text = "Женщина";
+			this.PanFemaleColor.Click += new System.EventHandler(this.PanColor_Click);
 			// 
 			// PanUnkSexColor
 			// 
@@ -573,6 +577,7 @@ namespace GKUI
 			this.PanUnkSexColor.Size = new System.Drawing.Size(153, 25);
 			this.PanUnkSexColor.TabIndex = 2;
 			this.PanUnkSexColor.Text = "Неизвестный пол";
+			this.PanUnkSexColor.Click += new System.EventHandler(this.PanColor_Click);
 			// 
 			// PanUnHusbandColor
 			// 
@@ -583,6 +588,7 @@ namespace GKUI
 			this.PanUnHusbandColor.Size = new System.Drawing.Size(153, 25);
 			this.PanUnHusbandColor.TabIndex = 3;
 			this.PanUnHusbandColor.Text = "Разведенный супруг";
+			this.PanUnHusbandColor.Click += new System.EventHandler(this.PanColor_Click);
 			// 
 			// PanUnWifeColor
 			// 
@@ -593,15 +599,18 @@ namespace GKUI
 			this.PanUnWifeColor.Size = new System.Drawing.Size(153, 25);
 			this.PanUnWifeColor.TabIndex = 4;
 			this.PanUnWifeColor.Text = "Разведенная супруга";
+			this.PanUnWifeColor.Click += new System.EventHandler(this.PanColor_Click);
 			// 
 			// PanDefFont
 			// 
 			this.PanDefFont.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.PanDefFont.Controls.Add(this.lblChartFont);
 			this.PanDefFont.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.PanDefFont.Location = new System.Drawing.Point(16, 160);
 			this.PanDefFont.Name = "PanDefFont";
 			this.PanDefFont.Size = new System.Drawing.Size(153, 25);
 			this.PanDefFont.TabIndex = 5;
+			this.PanDefFont.Click += new System.EventHandler(this.PanDefFont_Click);
 			// 
 			// SheetAncCircle
 			// 
@@ -1032,6 +1041,17 @@ namespace GKUI
 			this.btnCancel.Text = "Отменить";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// lblChartFont
+			// 
+			this.lblChartFont.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.lblChartFont.Location = new System.Drawing.Point(0, 0);
+			this.lblChartFont.Name = "lblChartFont";
+			this.lblChartFont.Size = new System.Drawing.Size(149, 21);
+			this.lblChartFont.TabIndex = 0;
+			this.lblChartFont.Text = "label7";
+			this.lblChartFont.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.lblChartFont.Click += new System.EventHandler(this.PanDefFont_Click);
+			// 
 			// TfmOptions
 			// 
 			this.AcceptButton = this.btnAccept;
@@ -1060,6 +1080,7 @@ namespace GKUI
 			this.SheetTree.ResumeLayout(false);
 			this.GroupBox1.ResumeLayout(false);
 			this.GroupBox2.ResumeLayout(false);
+			this.PanDefFont.ResumeLayout(false);
 			this.SheetAncCircle.ResumeLayout(false);
 			this.SheetAncCircle.PerformLayout();
 			this.SheetView.ResumeLayout(false);
@@ -1073,6 +1094,7 @@ namespace GKUI
 			this.EditPedigreeFormat.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.Label lblChartFont;
 		private System.Windows.Forms.Label acb0;
 		private System.Windows.Forms.Label acb1;
 		private System.Windows.Forms.Label acb2;

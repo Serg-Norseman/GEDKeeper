@@ -7,8 +7,6 @@ using System.Windows.Forms;
 using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKUI.Controls;
-using GKUI.Lists;
 
 /// <summary>
 /// Localization: clean
@@ -18,7 +16,14 @@ namespace GKUI.Charts
 {
 	public abstract class TCustomChartBox : Panel, IDisposable
 	{
+		public enum TDrawMode
+		{
+			dmDefault,
+			dmToFile
+		}
+		
 		private int FBorderWidth;
+		private TDrawMode FDrawMode;
 		private int FLeftPos;
 		private int FTopPos;
 		private Point FRange;
@@ -27,6 +32,7 @@ namespace GKUI.Charts
 		protected int FImageWidth;
 		protected int FSPX;
 		protected int FSPY;
+		protected TRect FVisibleArea;
 
 		protected TreeChartOptions FOptions;
 		protected TGenEngine.TShieldState FShieldState;
@@ -218,6 +224,8 @@ namespace GKUI.Charts
 				SysUtils.SetScrollPos((uint)this.Handle.ToInt32(), 0, this.FLeftPos, true);
 				base.Invalidate();
 				this.FLeftPos = Value;
+				
+				this.ResetView();
 			}
 		}
 
@@ -234,9 +242,23 @@ namespace GKUI.Charts
 				SysUtils.SetScrollPos((uint)this.Handle.ToInt32(), 1, this.FTopPos, true);
 				base.Invalidate();
 				this.FTopPos = Value;
+				
+				this.ResetView();
 			}
 		}
 
+		protected void ResetView()
+		{
+			Size sz = this.ClientSize;
+			FVisibleArea = TRect.Bounds(FLeftPos, FTopPos, sz.Width, sz.Height);
+		}
+		
+		protected override void OnResize(EventArgs e)
+		{
+			base.OnResize(e);
+			this.ResetView();
+		}
+		
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 			base.OnMouseDown(e);
@@ -264,11 +286,13 @@ namespace GKUI.Charts
 		protected override void OnPaint(PaintEventArgs pe)
 		{
 			//base.OnPaint(pe);
-			this.InternalDraw(pe.Graphics, true);
+			this.InternalDraw(pe.Graphics, TDrawMode.dmDefault);
 		}
 
-		public virtual void InternalDraw(Graphics aCanvas, bool Default)
+		public virtual void InternalDraw(Graphics aCanvas, TDrawMode mode)
 		{
+			this.FDrawMode = mode;
+			
 			Rectangle imgRect = new Rectangle(0, 0, FImageWidth, FImageHeight);
 			if (this.BackgroundImage == null) {
 				using (Brush brush = new SolidBrush(this.BackColor)) {
@@ -284,7 +308,7 @@ namespace GKUI.Charts
 
 			Rectangle CR = base.ClientRectangle;
 
-			if (Default)
+			if (this.FDrawMode == TDrawMode.dmDefault)
 			{
 				this.FSPX = this.FBorderWidth - this.FLeftPos;
 				this.FSPY = this.FBorderWidth - this.FTopPos;

@@ -36,6 +36,10 @@ namespace GKUI
 		private int FY;
 		private ChartControlMode FMode = ChartControlMode.ccmDefault;
 
+		public TfmBase Base
+		{
+			get { return this.FBase; }
+		}
 
 		public TTreeChartBox.TChartKind ChartKind
 		{
@@ -69,6 +73,8 @@ namespace GKUI
 			this.FTree = aBase.Tree;
 			this.FFileName = Path.GetFileName(aBase.FileName);
 			this.FPerson = StartPerson;
+			
+			this.miTraceRoot.Checked = true;
 		}
 
 		protected override void Dispose(bool Disposing)
@@ -163,6 +169,11 @@ namespace GKUI
 		{
 			switch (e.KeyCode)
 			{
+				case Keys.F5:
+					this.GenChart(true);
+					this.NavRefresh();
+					break;
+
 				case Keys.F6:
 					this.miRebuildTreeClick(null, null);
 					break;
@@ -245,8 +256,7 @@ namespace GKUI
 
 		private void ImageTree_MouseUp(object sender, MouseEventArgs e)
 		{
-			switch (this.FMode)
-			{
+			switch (this.FMode) {
 				case ChartControlMode.ccmDefault:
 					//this.FTreeBox.SelectBy(e.X, e.Y);
 					if (this.FTreeBox.Selected != null && this.FTreeBox.Selected.Rec != null)
@@ -255,9 +265,9 @@ namespace GKUI
 							case MouseButtons.Left:
 								if (this.miTraceRoot.Checked)
 								{
-									this.FPerson = this.FTreeBox.Selected.Rec;
-									this.GenChart(true);
-									this.FTreeBox.SelectByRec(this.FPerson);
+									//this.FPerson = this.FTreeBox.Selected.Rec;
+									//this.GenChart(true);
+									this.FTreeBox.SelectByRec(/*this.FPerson*/ this.FTreeBox.Selected.Rec, true);
 								}
 								break;
 
@@ -650,6 +660,6 @@ namespace GKUI
 			this.miFillColor.Text = LangMan.LS(LSID.LSID_FillColor);
 			this.miFillImage.Text = LangMan.LS(LSID.LSID_FillImage);
 		}
-
+		
 	}
 }

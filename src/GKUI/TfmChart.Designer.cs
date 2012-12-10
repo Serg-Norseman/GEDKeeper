@@ -138,7 +138,7 @@ namespace GKUI
 			this.ToolBar1.Location = new System.Drawing.Point(0, 0);
 			this.ToolBar1.Name = "ToolBar1";
 			this.ToolBar1.ShowToolTips = true;
-			this.ToolBar1.Size = new System.Drawing.Size(822, 28);
+			this.ToolBar1.Size = new System.Drawing.Size(822, 36);
 			this.ToolBar1.TabIndex = 0;
 			this.ToolBar1.TextAlign = System.Windows.Forms.ToolBarTextAlign.Right;
 			this.ToolBar1.ButtonClick += new System.Windows.Forms.ToolBarButtonClickEventHandler(this.ToolBar1_ButtonClick);

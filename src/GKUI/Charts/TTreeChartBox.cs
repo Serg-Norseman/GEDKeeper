@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 
+using Ext.Tween;
 using Ext.Utils;
 using GedCom551;
 using GKCore;
@@ -91,6 +93,10 @@ namespace GKUI.Charts
 		private int FSpouseDistance;
 		private TreeChartPerson FSelected;
 
+		private Pen FLinePen;
+		private Pen FDecorativeLinePen;
+		private SolidBrush FSolidBlack;
+		
 		public Bitmap[] SignsPic = new Bitmap[4];
 
 		static TTreeChartBox()
@@ -194,12 +200,16 @@ namespace GKUI.Charts
 			this.FDepthLimit = -1;
 			this.FSelected = null;
 			this.FGraph = new TGraph();
+
+			this.InitGraphics();
 		}
 
 		protected override void Dispose(bool Disposing)
 		{
 			if (Disposing)
 			{
+				this.DoneGraphics();
+
 				this.FGraph.Dispose();
 				this.FFilter.Free();
 				this.FPersons.Dispose();
@@ -667,30 +677,270 @@ namespace GKUI.Charts
 			for (int i = 0; i <= 255; i++) edges[i] = 0;
 		}
 
-		private void Line(Graphics aCanvas, int X1, int Y1, int X2, int Y2)
+		public bool PersonIsVisible(TRect pn_rect)
 		{
+			int pL, pR, pT, pB;
+			pL = pn_rect.Left;
+			pR = pn_rect.Right;
+			pT = pn_rect.Top;
+			pB = pn_rect.Bottom;
+
+			return (FVisibleArea.Contains(pL, pT) || FVisibleArea.Contains(pR, pT) ||
+			        FVisibleArea.Contains(pL, pB) || FVisibleArea.Contains(pR, pB));
+		}
+
+		private bool LineIsVisible(int X1, int Y1, int X2, int Y2)
+		{
+			return (FVisibleArea.Contains(X1, Y1) || FVisibleArea.Contains(X2, Y2));
+		}
+		
+		private void DrawLine(Graphics aCanvas, int X1, int Y1, int X2, int Y2)
+		{
+			//if (!LineIsVisible(X1, Y1, X2, Y2)) return;
+			
 			int sX = this.FSPX + X1;
 			int sX2 = this.FSPX + X2;
 			int sY = this.FSPY + Y1;
 			int sY2 = this.FSPY + Y2;
-			aCanvas.DrawLine(new Pen(Color.Black, 1f), sX, sY, sX2, sY2);
+			aCanvas.DrawLine(FLinePen, sX, sY, sX2, sY2);
 
 			if (this.FOptions.Decorative) {
-				Pen xpen = new Pen(Color.Silver, 1f);
-				try
-				{
-					if (sX == sX2) {
-						aCanvas.DrawLine(xpen, sX + 1, sY + 1, sX2 + 1, sY2 - 1);
-					} else {
-						if (sY == sY2) {
-							aCanvas.DrawLine(xpen, sX + 1, sY + 1, sX2 + 0, sY2 + 1);
-						}
+				if (sX == sX2) {
+					aCanvas.DrawLine(FDecorativeLinePen, sX + 1, sY + 1, sX2 + 1, sY2 - 1);
+				} else {
+					if (sY == sY2) {
+						aCanvas.DrawLine(FDecorativeLinePen, sX + 1, sY + 1, sX2 + 0, sY2 + 1);
 					}
 				}
-				finally
+			}
+		}
+
+		private void InitGraphics()
+		{
+			FLinePen = new Pen(Color.Black, 1f);
+			FDecorativeLinePen = new Pen(Color.Silver, 1f);
+			FSolidBlack = new SolidBrush(Color.Black);
+		}
+
+		private void DoneGraphics()
+		{
+			this.FLinePen.Dispose();
+			this.FDecorativeLinePen.Dispose();
+			this.FSolidBlack.Dispose();
+		}
+
+		private void TextOut(Graphics aCanvas, TRect rt, string s, int h, ref int line)
+		{
+			int stw = aCanvas.MeasureString(s, this.DrawFont).ToSize().Width;
+			int rx = rt.Left + ((rt.Right - rt.Left + 1) - stw) / 2;
+			int ry = rt.Top + (10 + (h * line));
+			aCanvas.DrawString(s, this.DrawFont, FSolidBlack, (float)rx, (float)ry);
+			line++;
+		}
+
+		private GraphicsPath CreateRoundedRectangle(int x, int y, int width, int height, int radius)
+	    {
+			int xw = x + width;
+			int yh = y + height;
+			int xwr = xw - radius;
+			int yhr = yh - radius;
+			int xr = x + radius;
+			int yr = y + radius;
+			int r2 = radius * 2;
+			int xwr2 = xw - r2;
+			int yhr2 = yh - r2;
+
+			GraphicsPath p = new GraphicsPath();
+			p.StartFigure();
+
+			//Top Left Corner
+			p.AddArc(x, y, r2, r2, 180, 90);
+
+			//Top Edge
+			p.AddLine(xr, y, xwr, y);
+
+			//Top Right Corner
+			p.AddArc(xwr2, y, r2, r2, 270, 90);
+
+			//Right Edge
+			p.AddLine(xw, yr, xw, yhr);
+
+			//Bottom Right Corner
+			p.AddArc(xwr2, yhr2, r2, r2, 0, 90);
+
+			//Bottom Edge
+			p.AddLine(xwr, yh, xr, yh);
+
+			//Bottom Left Corner
+			p.AddArc(x, yhr2, r2, r2, 90, 90);
+
+			//Left Edge
+			p.AddLine(x, yhr, x, yr);
+
+			p.CloseFigure();
+			return p;
+		}
+
+		private void DrawBorder(Graphics aCanvas, Pen xpen, TRect rt, bool dead, TreeChartPerson person)
+		{
+			Rectangle rect = rt.ToRectangle();
+			Color b_color;
+			switch (person.Sex) {
+				case TGEDCOMSex.svMale:
 				{
-					xpen.Dispose();
+					if (!dead) {
+						if (person.IsDup) {
+							b_color = Color.FromArgb(192, 192, 192);
+						} else {
+							if (person.Divorced) {
+								b_color = this.Options.UnHusbandColor;
+							} else {
+								b_color = this.Options.MaleColor;
+							}
+						}
+					} else {
+						b_color = Color.Black;
+					}
+					aCanvas.FillRectangle(new SolidBrush(b_color), rect.Left, rect.Top, rect.Width, rect.Height);
+					aCanvas.DrawRectangle(xpen, rect.Left, rect.Top, rect.Width, rect.Height);
+					break;
 				}
+
+				case TGEDCOMSex.svFemale:
+				{
+					if (!dead) {
+						if (person.IsDup) {
+							b_color = Color.FromArgb(192, 192, 192);
+						} else {
+							if (person.Divorced) {
+								b_color = this.Options.UnWifeColor;
+							} else {
+								b_color = this.Options.FemaleColor;
+							}
+						}
+					} else {
+						b_color = Color.Black;
+					}
+
+					GraphicsPath path = CreateRoundedRectangle(rect.Left, rect.Top, rect.Width, rect.Height, 5);
+					aCanvas.FillPath(new SolidBrush(b_color), path);
+					aCanvas.DrawPath(xpen, path);
+					break;
+				}
+
+				default: 
+				{
+					if (!dead) {
+						b_color = this.Options.UnkSexColor;
+					} else {
+						b_color = Color.Black;
+					}
+					aCanvas.FillRectangle(new SolidBrush(b_color), rect.Left, rect.Top, rect.Width, rect.Height);
+					aCanvas.DrawRectangle(xpen, rect.Left, rect.Top, rect.Width, rect.Height);
+					break;
+				}
+			}
+		}
+
+		private void DrawPerson(Graphics aCanvas, int SPX, int SPY, TreeChartPerson person)
+		{
+			TRect rt = person.Rect;
+			if (!this.PersonIsVisible(rt)) return;
+
+			rt = rt.GetOffset(SPX, SPY);
+
+			int h = aCanvas.MeasureString("A", this.DrawFont).ToSize().Height;
+			bool has_port = this.Options.PortraitsVisible && person.Portrait != null;
+
+			if (person.IsDead) {
+				TRect dt = rt;
+				dt = dt.GetOffset(-2, -2);
+				this.DrawBorder(aCanvas, FLinePen, dt, true, person);
+			}
+
+			Pen xpen = null;
+			try
+			{
+				if (person.Selected) {
+					int pen_width = 2;
+					Color pen_color;
+					switch (person.Sex) {
+						case TGEDCOMSex.svMale:
+							pen_color = Color.Blue;
+							break;
+						case TGEDCOMSex.svFemale:
+							pen_color = Color.Red;
+							break;
+						default:
+							pen_color = Color.Black;
+							break;
+					}
+					xpen = new Pen(pen_color, ((float)((double)pen_width)));
+				} else {
+					xpen = new Pen(Color.Black, 1f);
+				}
+
+				this.DrawBorder(aCanvas, xpen, rt, false, person);
+			}
+			finally
+			{
+				xpen.Dispose();
+			}
+
+			if (has_port)
+			{
+				TRect port_rt = rt;
+				port_rt.Right = port_rt.Left + person.PortraitWidth;
+				port_rt.OffsetEx(3, 3);
+				aCanvas.DrawImage(person.Portrait, person.GetDestRect(port_rt, person.Portrait));
+				rt.Left += person.PortraitWidth;
+			}
+
+			int line = 0;
+			this.TextOut(aCanvas, rt, person.Family, h, ref line);
+
+			if (!this.Options.DiffLines) {
+				this.TextOut(aCanvas, rt, person.GetFullName(), h, ref line);
+			} else {
+				this.TextOut(aCanvas, rt, person.Name, h, ref line);
+				this.TextOut(aCanvas, rt, person.Patronymic, h, ref line);
+			}
+
+			if (!this.Options.OnlyYears) {
+				if (this.Options.BirthDateVisible) {
+					this.TextOut(aCanvas, rt, person.BirthDate, h, ref line);
+				}
+
+				if (this.Options.DeathDateVisible) {
+					this.TextOut(aCanvas, rt, person.DeathDate, h, ref line);
+				}
+			} else {
+				this.TextOut(aCanvas, rt, person.GetLifeYears(), h, ref line);
+			}
+
+			if (this.Options.Kinship)
+			{
+				this.TextOut(aCanvas, rt, person.Kinship, h, ref line);
+			}
+
+			if (this.Options.SignsVisible && !person.Signs.IsEmpty())
+			{
+				int i = 0;
+				for (TGenEngine.TChartPersonSign cps = TGenEngine.TChartPersonSign.urRI_StGeorgeCross;
+				     cps <= TGenEngine.TChartPersonSign.urUSSR_RearVeteran; cps++)
+				{
+					if (person.Signs.InSet(cps))
+					{
+						Bitmap pic = this.SignsPic[(int)cps - 1];
+						aCanvas.DrawImage(pic, rt.Right, rt.Top - 21 + i * pic.Height);
+						i++;
+					}
+				}
+			}
+
+			if (this.PathDebug)
+			{
+				this.TextOut(aCanvas, rt, person.FPathDebug, h, ref line);
 			}
 		}
 
@@ -1039,17 +1289,17 @@ namespace GKUI.Charts
 			int cr_y = aPerson.PtY - this.FLevelDistance / 2;
 			if (aPerson.Father != null)
 			{
-				this.Line(aCanvas, aPerson.Father.PtX, cr_y, aPerson.PtX, cr_y);
-				this.Line(aCanvas, aPerson.Father.PtX, aPerson.Father.PtY + aPerson.Father.Height, aPerson.Father.PtX, cr_y);
+				this.DrawLine(aCanvas, aPerson.Father.PtX, cr_y, aPerson.PtX, cr_y);
+				this.DrawLine(aCanvas, aPerson.Father.PtX, aPerson.Father.PtY + aPerson.Father.Height, aPerson.Father.PtX, cr_y);
 			}
 			if (aPerson.Mother != null)
 			{
-				this.Line(aCanvas, aPerson.PtX, cr_y, aPerson.Mother.PtX, cr_y);
-				this.Line(aCanvas, aPerson.Mother.PtX, aPerson.Mother.PtY + aPerson.Mother.Height, aPerson.Mother.PtX, cr_y);
+				this.DrawLine(aCanvas, aPerson.PtX, cr_y, aPerson.Mother.PtX, cr_y);
+				this.DrawLine(aCanvas, aPerson.Mother.PtX, aPerson.Mother.PtY + aPerson.Mother.Height, aPerson.Mother.PtX, cr_y);
 			}
 			if (aPerson.Father != null || aPerson.Mother != null)
 			{
-				this.Line(aCanvas, aPerson.PtX, cr_y, aPerson.PtX, aPerson.PtY);
+				this.DrawLine(aCanvas, aPerson.PtX, cr_y, aPerson.PtX, aPerson.PtY);
 			}
 		}
 
@@ -1073,7 +1323,7 @@ namespace GKUI.Charts
 					for (int i = 0; i <= num2; i++)
 					{
 						int spb_v = spb_beg + spb_ofs * i;
-						this.Line(aCanvas, aPerson.GetSpouse(i).Rect.Right + 1, spb_v, aPerson.Rect.Left, spb_v);
+						this.DrawLine(aCanvas, aPerson.GetSpouse(i).Rect.Right + 1, spb_v, aPerson.Rect.Left, spb_v);
 					}
 				}
 			}
@@ -1083,7 +1333,7 @@ namespace GKUI.Charts
 				for (int i = 0; i <= num3; i++)
 				{
 					int spb_v = spb_beg + spb_ofs * i;
-					this.Line(aCanvas, aPerson.Rect.Right + 1, spb_v, aPerson.GetSpouse(i).Rect.Left, spb_v);
+					this.DrawLine(aCanvas, aPerson.Rect.Right + 1, spb_v, aPerson.GetSpouse(i).Rect.Left, spb_v);
 				}
 			}
 
@@ -1119,30 +1369,30 @@ namespace GKUI.Charts
 
 			if (aPerson.ChildsCount != 0)
 			{
-				this.Line(aCanvas, cx, spb_beg, cx, cr_y);
+				this.DrawLine(aCanvas, cx, spb_beg, cx, cr_y);
 				if (aPerson.ChildsCount == 1)
 				{
 					Point child_pt = aPerson.GetChild(0).Pt;
-					this.Line(aCanvas, child_pt.X, cr_y, child_pt.X, child_pt.Y);
+					this.DrawLine(aCanvas, child_pt.X, cr_y, child_pt.X, child_pt.Y);
 				}
 				else
 				{
 					int bpx = aPerson.GetChild(0).PtX;
 					int epx = aPerson.GetChild(aPerson.ChildsCount - 1).PtX;
-					this.Line(aCanvas, bpx, cr_y, epx, cr_y);
+					this.DrawLine(aCanvas, bpx, cr_y, epx, cr_y);
 					int num5 = aPerson.ChildsCount - 1;
 					for (int i = 0; i <= num5; i++)
 					{
 						Point child_pt = aPerson.GetChild(i).Pt;
-						this.Line(aCanvas, child_pt.X, cr_y, child_pt.X, child_pt.Y);
+						this.DrawLine(aCanvas, child_pt.X, cr_y, child_pt.X, child_pt.Y);
 					}
 				}
 			}
 		}
 
-		public override void InternalDraw(Graphics aCanvas, bool Default)
+		public override void InternalDraw(Graphics aCanvas, TDrawMode mode)
 		{
-			base.InternalDraw(aCanvas, Default);
+			base.InternalDraw(aCanvas, mode);
 
 			this.Draw(aCanvas, this.FRoot, this.FKind);
 
@@ -1168,7 +1418,7 @@ namespace GKUI.Charts
 						break;
 				}
 
-				aPerson.Draw(aCanvas, this.FSPX, this.FSPY);
+				this.DrawPerson(aCanvas, this.FSPX, this.FSPY, aPerson);
 			}
 		}
 
@@ -1285,7 +1535,7 @@ namespace GKUI.Charts
 					try
 					{
 						this.Predef();
-						this.InternalDraw(canv, false);
+						this.InternalDraw(canv, TDrawMode.dmToFile);
 					}
 					finally
 					{
@@ -1331,7 +1581,7 @@ namespace GKUI.Charts
 			this.SetSelected(null);
 		}
 
-		public void SelectByRec(TGEDCOMIndividualRecord iRec)
+		public void SelectByRec(TGEDCOMIndividualRecord iRec, bool centered = false)
 		{
 			int num = this.FPersons.Count - 1;
 			for (int i = 0; i <= num; i++)
@@ -1340,10 +1590,29 @@ namespace GKUI.Charts
 				if (p.Rec == iRec)
 				{
 					this.SetSelected(p);
+
+					if (centered) CenterPerson(p);
+
 					return;
 				}
 			}
-			this.SetSelected(null);
+			this.SetSelected(null);			
+		}
+
+		public void CenterPerson(TreeChartPerson p)
+		{
+			Point pt = p.Pt;
+			int dst_x = (pt.X) - (this.ClientSize.Width / 2);
+			int dst_y = (pt.Y + (p.Height / 2)) - (this.ClientSize.Height / 2);
+
+			if (dst_x < 0) dst_x = dst_x + (0 - dst_x);
+			if (dst_y < 0) dst_y = dst_y + (0 - dst_y);
+
+			if ((this.LeftPos == dst_x) && (this.TopPos == dst_y)) return;
+
+			TweenLibrary tween = new TweenLibrary();
+			tween.startTweenEvent(delegate(int newX, int newY) { this.LeftPos = newX; this.TopPos = newY; }, 
+			                      this.LeftPos, this.TopPos, dst_x, dst_y, "easeinoutquad", 50);
 		}
 
 		private bool DoDescendantsFilter(TGEDCOMIndividualRecord aPerson)

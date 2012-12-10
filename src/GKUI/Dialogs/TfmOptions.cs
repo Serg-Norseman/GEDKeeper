@@ -51,7 +51,7 @@ namespace GKUI
 
 		private void UpdateControls()
 		{
-			this.PanDefFont.Text = this.FOptions.ChartOptions.DefFont_Name + ", " + this.FOptions.ChartOptions.DefFont_Size.ToString();
+			this.lblChartFont.Text = this.FOptions.ChartOptions.DefFont_Name + ", " + this.FOptions.ChartOptions.DefFont_Size.ToString();
 		}
 
 		private void UpdateForm()
@@ -166,6 +166,9 @@ namespace GKUI
 
 		private void PanDefFont_Click(object sender, EventArgs e)
 		{
+			this.FontDialog1.Font = new System.Drawing.Font(this.FOptions.ChartOptions.DefFont_Name, 
+				                        					this.FOptions.ChartOptions.DefFont_Size);
+
 			if (this.FontDialog1.ShowDialog() == DialogResult.OK)
 			{
 				this.FOptions.ChartOptions.DefFont_Name = this.FontDialog1.Font.Name;

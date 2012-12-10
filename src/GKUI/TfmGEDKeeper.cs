@@ -676,9 +676,17 @@ namespace GKUI
 			}
 		}
 
-		public TfmBase GetCurrentFile()
+		public TfmBase GetCurrentFile(bool extMode = false)
 		{
-			TfmBase result = ((base.ActiveMdiChild is TfmBase) ? (base.ActiveMdiChild as TfmBase) : null);
+			TfmChart cur_chart = ((this.ActiveMdiChild is TfmChart) ? (this.ActiveMdiChild as TfmChart) : null);
+			TfmBase result;
+
+			if (extMode && cur_chart != null) {
+				result = cur_chart.Base;
+			} else {
+				result = ((base.ActiveMdiChild is TfmBase) ? (base.ActiveMdiChild as TfmBase) : null);
+			}
+
 			return result;
 		}
 
@@ -763,7 +771,6 @@ namespace GKUI
 				TfmBase cur_base = ((ForceDeactivate) ? null : this.GetCurrentFile());
 				TfmChart cur_chart = ((this.ActiveMdiChild is TfmChart) ? (this.ActiveMdiChild as TfmChart) : null);
 
-
 				TGEDCOMRecordType rt;
 				bool base_en;
 				if (cur_base == null)
@@ -777,9 +784,10 @@ namespace GKUI
 					base_en = true;
 				}
 
-				this.miFileClose.Enabled = base_en;
-				this.miFileSave.Enabled = base_en;
+				this.miFileSave.Enabled = base_en || (cur_chart != null);
 				this.tbFileSave.Enabled = this.miFileSave.Enabled;
+
+				this.miFileClose.Enabled = base_en;
 				this.miFileProperties.Enabled = base_en;
 				this.miExportToWeb.Enabled = base_en;
 				this.miExportToExcelFile.Enabled = base_en;
@@ -932,7 +940,8 @@ namespace GKUI
 
 		public void miFileSaveClick(object sender, EventArgs e)
 		{
-			TfmBase cur_base = this.GetCurrentFile();
+			TfmBase cur_base = this.GetCurrentFile(true);
+
 			if (cur_base != null)
 			{
 				this.SaveDialog1.FileName = cur_base.FileName;

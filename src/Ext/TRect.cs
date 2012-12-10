@@ -74,6 +74,15 @@ namespace Ext.Utils
 		{
 			return TRect.Create(this.Left + X, this.Top + Y, this.Right + X, this.Bottom + Y);
 		}
+		
+		public void OffsetEx(int DX, int DY)
+		{
+			this.Left += DX;
+			this.Right -= DX;
+			this.Top += DY;
+			this.Bottom -= DY;
+		}
+
 	}
 
 }

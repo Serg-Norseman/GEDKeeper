@@ -85,6 +85,7 @@
     <Compile Include="Ext\TGraph.cs" />
     <Compile Include="Ext\TList.cs" />
     <Compile Include="Ext\TRect.cs" />
+    <Compile Include="Ext\tween.cs" />
     <Compile Include="Ext\ZipStorer.cs" />
     <Compile Include="GedCom551\GEDCOMEnums.cs" />
     <Compile Include="GedCom551\GEDCOMFactory.cs" />
@@ -628,6 +629,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Content Include="ProfilingSessions\Session20121208_181502.sdps" />
     <Content Include="zlib1.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
