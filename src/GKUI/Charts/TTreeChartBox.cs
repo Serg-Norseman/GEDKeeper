@@ -5,6 +5,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 using Ext.Tween;
 using Ext.Utils;
@@ -17,14 +18,22 @@ using GKCore;
 
 namespace GKUI.Charts
 {
-	/*public class TScaleControl
+	public delegate void ThumbMoved(int position);
+	
+	public class TScaleControl
 	{
-		private Bitmap ControlsImage;
 		private static Rectangle ControlsScaleRect = new Rectangle(0, 0, 26, 320);
-		//private static Rectangle ControlsThumbRect = new Rectangle(0, 322, 26, 13);
-		//private static int ControlsThumbHeight = 10;
-		//private static int ScaleY1 = 22;
-		//private static int ScaleY2 = 297;
+		private static Rectangle ControlsThumbRect = new Rectangle(0, 322, 26, 11);
+		private static int ScaleY1 = 22;
+		private static int ScaleY2 = 297;
+
+		private Bitmap ControlsImage;
+		private TTreeChartBox FChart;
+		private int FDCount = 11;
+		private int FThumbPos = 5;
+		private bool FVisible;
+		private bool FThumbCaptured;
+		private Rectangle FDestRect;
 
 		public int Width
 		{
@@ -36,22 +45,91 @@ namespace GKUI.Charts
 			get { return 320; }
 		}
 
-		public TScaleControl()
+		public int DCount
 		{
-			this.ControlsImage = new Bitmap(SysUtils.GetAppPath() + "temp\\ch_controls.png");
+			get { return this.FDCount; }
+			set { this.FDCount = value; }
 		}
 
-		public void Draw(Graphics aCanvas, Rectangle destRect)
+		public int ThumbPos
+		{
+			get { return this.FThumbPos; }
+			set { this.FThumbPos = value; }
+		}
+		
+		public bool Visible
+		{
+			get { return this.FVisible; }
+			set { 
+				this.FVisible = value;
+				this.FChart.Invalidate();
+			}
+		}
+
+		public TScaleControl(TTreeChartBox chart)
+		{
+			this.FChart = chart;
+			this.ControlsImage = GKResources.iChartControls;
+		}
+
+		public void Update()
+		{
+			Rectangle cr = FChart.ClientRectangle;
+			this.FDestRect = new Rectangle(cr.Right - (10 + this.Width), 10, this.Width, this.Height);
+		}
+
+		public void Draw(Graphics aCanvas)
 		{
 			aCanvas.InterpolationMode = InterpolationMode.HighQualityBicubic;
 			aCanvas.SmoothingMode = SmoothingMode.HighQuality;
 			aCanvas.PixelOffsetMode = PixelOffsetMode.HighQuality;
 			aCanvas.CompositingQuality = CompositingQuality.HighQuality;
-			aCanvas.DrawImage(ControlsImage, destRect, ControlsScaleRect, GraphicsUnit.Pixel);
-		}
-	}*/
+			aCanvas.DrawImage(ControlsImage, FDestRect, ControlsScaleRect, GraphicsUnit.Pixel);
 
-	public class TTreeChartBox : TCustomChartBox
+			if (this.FDCount == 0) return;
+			aCanvas.DrawImage(ControlsImage, this.GetDRect(FThumbPos), ControlsThumbRect, GraphicsUnit.Pixel);
+		}
+
+		private Rectangle GetDRect(int d)
+		{
+			int dH = ((ScaleY2 - ScaleY1) - ControlsThumbRect.Height) / (this.FDCount - 1);
+			int thumbY = FDestRect.Top + ScaleY1 + (d - 1) * dH;
+			return new Rectangle(FDestRect.Left, thumbY, FDestRect.Width, ControlsThumbRect.Height);
+		}
+
+		public bool Contains(int X, int Y)
+		{
+			return FDestRect.Contains(X, Y);
+		}
+
+		public void MouseDown(int X, int Y)
+		{
+			FThumbCaptured = (this.GetDRect(FThumbPos).Contains(X, Y) && !FThumbCaptured);
+		}
+
+		public void MouseMove(int X, int Y, ThumbMoved thumbMoved)
+		{
+			if (!FThumbCaptured) return;
+			
+			for (int i = 1; i <= FDCount; i++) {
+				Rectangle r = GetDRect(i);
+				if (r.Contains(X, Y)) {
+					FThumbPos = i;
+					FChart.Invalidate();
+					if (thumbMoved != null) thumbMoved(i);
+					break;
+				}
+			}
+		}
+
+		public void MouseUp(int X, int Y)
+		{
+			if (FThumbCaptured) FThumbCaptured = false;
+		}
+	}
+
+
+	public class TTreeChartBox : Panel, IDisposable
 	{
 		private class TRelLink
 		{
@@ -72,64 +150,65 @@ namespace GKUI.Charts
 			ckBoth
 		}
 
-		private static readonly string[] SignsData;
+		private int FHMax;
+		private int FWMax;
 
 		private int FBranchDistance;
 		private int FDepthLimit;
-		private int FHMax;
-		private int FWMax;
+		private Font FDrawFont;
+		private TGenEngine FEngine;
 		private TChartFilter FFilter;
 		private TGraph FGraph;
 		private TChartKind FKind;
 		private TreeChartPerson FKinRoot;
 		private int FLevelDistance;
 		private int FMargins;
+		private TreeChartOptions FOptions;
 		private bool FPathDebug;
 		private TPersonList FPersons;
 		private List<string> FPreparedFamilies = new List<string>();
 		internal List<string> FPreparedIndividuals = new List<string>();
 		private TreeChartPerson FRoot;
-		private int FScale;
-		private int FSpouseDistance;
+		private float FScale;
+		private TScaleControl FScaleControl;
 		private TreeChartPerson FSelected;
+		private TGenEngine.TShieldState FShieldState;
+		private string[] FSignsData;
+		private Bitmap[] FSignsPic;
+		private int FSpouseDistance;
+		private bool FTraceSelected;
+		private TGEDCOMTree FTree;
+
+		public enum TDrawMode
+		{
+			dmDefault,
+			dmToFile
+		}
+		
+		private int FBorderWidth;
+		private int FLeftPos;
+		private int FTopPos;
+		private Point FRange;
+
+		protected int FImageHeight;
+		protected int FImageWidth;
+		protected int FSPX;
+		protected int FSPY;
+		protected TRect FVisibleArea;
+
+
+		//private int FGensCount;
 
 		private Pen FLinePen;
 		private Pen FDecorativeLinePen;
 		private SolidBrush FSolidBlack;
+
 		
-		public Bitmap[] SignsPic = new Bitmap[4];
-
-		static TTreeChartBox()
+		public int BorderWidth
 		{
-			TTreeChartBox.SignsData = new string[]
-			{
-				"GEORGE_CROSS", 
-				"SOLDIER", 
-				"SOLDIER_FALL", 
-				"VETERAN_REAR"
-			};
+			get { return this.FBorderWidth; }
+			set { this.SetBorderWidth(value); }
 		}
-
-		/*private TScaleControl FScaleControl = new TScaleControl();
-		private bool FControlsVisible;
-
-		public bool ControlsVisible
-		{
-			get { return this.FControlsVisible; }
-			set {
-				this.FControlsVisible = value;
-				this.Invalidate();
-			}
-		}
-
-		public Rectangle ControlsRect
-		{
-			get
-			{
-				Rectangle cr = this.ClientRectangle;
-				return new Rectangle(cr.Right - (10 + FScaleControl.Width), 10, FScaleControl.Width, FScaleControl.Height);
-			}
-		}*/
 
 		public int BranchDistance
 		{
@@ -143,10 +222,26 @@ namespace GKUI.Charts
 			set { this.FDepthLimit = value; }
 		}
 
+		public Font DrawFont
+		{
+			get { return this.FDrawFont; }
+		}
+
+		public TGenEngine Engine
+		{
+			get { return this.FEngine; }
+			set { this.FEngine = value; }
+		}
+
 		public TChartFilter Filter
 		{
 			get { return this.FFilter; }
 		}
+
+//		public int GensCount
+//		{
+//			get { return this.FGensCount; }
+//		}
 
 		public int IndividualsCount
 		{
@@ -159,10 +254,22 @@ namespace GKUI.Charts
 			set { FKind = value; }
 		}
 
+		public int LeftPos
+		{
+			get { return this.FLeftPos; }
+			set { this.SetLeftPos(value); }
+		}
+
 		public int Margins
 		{
 			get { return this.FMargins; }
 			set { this.FMargins = value; }
+		}
+
+		public TreeChartOptions Options
+		{
+			get { return this.FOptions; }
+			set { this.FOptions = value; }
 		}
 
 		public bool PathDebug
@@ -176,21 +283,71 @@ namespace GKUI.Charts
 			get { return this.FRoot; }
 		}
 
-		public new int Scale
+		public new float Scale
 		{
 			get { return this.FScale; }
-			set { this.FScale = value; }
+			set {
+				this.FScale = value;
+
+				FScaleControl.ThumbPos = (int)Math.Round((value -  0.4f) / 0.1f);
+				
+				this.Predef();
+				this.RecalcChart();
+				this.ScrollRange();
+
+				if (this.FTraceSelected && this.Selected != null) {
+					this.CenterPerson(this.Selected, false);
+				}
+			}
 		}
 
+		public new TScaleControl ScaleControl
+		{
+			get { return this.FScaleControl; }
+		}
+		
 		public TreeChartPerson Selected
 		{
 			get { return this.FSelected; }
 			set { this.SetSelected(value); }
 		}
 
+		public TGenEngine.TShieldState ShieldState
+		{
+			get { return this.FShieldState; }
+			set { this.FShieldState = value; }
+		}
+
+		public int TopPos
+		{
+			get { return this.FTopPos; }
+			set { this.SetTopPos(value); }
+		}
+
+		public bool TraceSelected
+		{
+			get { return this.FTraceSelected; }
+			set { this.FTraceSelected = true; }
+		}
+		
+		public TGEDCOMTree Tree
+		{
+			get { return this.FTree; }
+			set { this.FTree = value; }
+		}
+
+
 		public TTreeChartBox()
 		{
+			base.BorderStyle = BorderStyle.Fixed3D;
+			base.DoubleBuffered = true;
+			base.TabStop = true;
+			this.TopPos = 0;
+			this.LeftPos = 0;
+			base.BackColor = Color.White;
+
 			this.InitSigns();
+
 			this.FPersons = new TPersonList(true);
 			this.FFilter = new TChartFilter();
 			this.FSpouseDistance = 10;
@@ -199,8 +356,12 @@ namespace GKUI.Charts
 			this.FMargins = 40;
 			this.FDepthLimit = -1;
 			this.FSelected = null;
+			this.FScale = 1.0f;
+			this.FTraceSelected = true;
 			this.FGraph = new TGraph();
 
+			this.FScaleControl = new TScaleControl(this);
+			
 			this.InitGraphics();
 		}
 
@@ -220,22 +381,33 @@ namespace GKUI.Charts
 
 		private void InitSigns()
 		{
-			SignsPic[0] = GKResources.iTGGeorgeCross;
-			SignsPic[0].MakeTransparent(this.SignsPic[0].GetPixel(0, 0));
+			FSignsData = new string[] { "GEORGE_CROSS", "SOLDIER", "SOLDIER_FALL", "VETERAN_REAR" };
 
-			SignsPic[1] = GKResources.iTGSoldier;
-			SignsPic[1].MakeTransparent(this.SignsPic[1].GetPixel(0, 0));
+			FSignsPic = new Bitmap[4];
+			
+			FSignsPic[0] = GKResources.iTGGeorgeCross;
+			FSignsPic[0].MakeTransparent(this.FSignsPic[0].GetPixel(0, 0));
 
-			SignsPic[2] = GKResources.iTGSoldierFall;
-			SignsPic[2].MakeTransparent(this.SignsPic[2].GetPixel(0, 0));
+			FSignsPic[1] = GKResources.iTGSoldier;
+			FSignsPic[1].MakeTransparent(this.FSignsPic[1].GetPixel(0, 0));
 
-			SignsPic[3] = GKResources.iTGVeteranRear;
-			SignsPic[3].MakeTransparent(this.SignsPic[3].GetPixel(0, 0));
+			FSignsPic[2] = GKResources.iTGSoldierFall;
+			FSignsPic[2].MakeTransparent(this.FSignsPic[2].GetPixel(0, 0));
+
+			FSignsPic[3] = GKResources.iTGVeteranRear;
+			FSignsPic[3].MakeTransparent(this.FSignsPic[3].GetPixel(0, 0));
 		}
 
 		private void DoneSigns()
 		{
 			// dummy
+		}
+
+		protected override void OnResize(EventArgs e)
+		{
+			base.OnResize(e);
+			this.ResetView();
+			FScaleControl.Update();
 		}
 
 		private bool IsChildless(TGEDCOMIndividualRecord iRec)
@@ -781,6 +953,28 @@ namespace GKUI.Charts
 			return p;
 		}
 
+		private void DrawPathWithFuzzyLine(GraphicsPath path, Graphics gr, Color base_color, int max_opacity, int width, int opaque_width)
+		{
+			int num_steps = width - opaque_width + 1;       // Number of pens we will use.
+			float delta = (float)max_opacity / num_steps / num_steps;   // Change in alpha between pens.
+			float alpha = delta;                            // Initial alpha.
+			for (int thickness = width; thickness >= opaque_width; thickness--)
+			{
+				Color color = Color.FromArgb(
+					(int)alpha,
+					base_color.R,
+					base_color.G,
+					base_color.B);
+				using (Pen pen = new Pen(color, thickness))
+				{
+					pen.EndCap = LineCap.Round;
+					pen.StartCap = LineCap.Round;
+					gr.DrawPath(pen, path);
+				}
+				alpha += delta;
+			}
+		}
+
 		private void DrawBorder(Graphics aCanvas, Pen xpen, TRect rt, bool dead, TreeChartPerson person)
 		{
 			Rectangle rect = rt.ToRectangle();
@@ -823,6 +1017,11 @@ namespace GKUI.Charts
 					}
 
 					GraphicsPath path = CreateRoundedRectangle(rect.Left, rect.Top, rect.Width, rect.Height, 5);
+					
+					//aCanvas.TranslateTransform(3, 3);
+					//DrawPathWithFuzzyLine(path, aCanvas, Color.Black, 200, 20, 2);
+					//aCanvas.ResetTransform();
+
 					aCanvas.FillPath(new SolidBrush(b_color), path);
 					aCanvas.DrawPath(xpen, path);
 					break;
@@ -931,7 +1130,7 @@ namespace GKUI.Charts
 				{
 					if (person.Signs.InSet(cps))
 					{
-						Bitmap pic = this.SignsPic[(int)cps - 1];
+						Bitmap pic = this.FSignsPic[(int)cps - 1];
 						aCanvas.DrawImage(pic, rt.Right, rt.Top - 21 + i * pic.Height);
 						i++;
 					}
@@ -946,7 +1145,7 @@ namespace GKUI.Charts
 
 		private void Predef()
 		{
-			double sc = (double)(this.FScale / 100.0);
+			double sc = (double)(this.FScale);
 			int fsz = (int)checked((long)Math.Round(unchecked((double)this.FOptions.DefFont_Size * sc)));
 			string f_name;
 
@@ -987,16 +1186,22 @@ namespace GKUI.Charts
 
 		private void RecalcChart()
 		{
-			if (this.FOptions.Kinship)
-			{
+			if (this.FOptions.Kinship) {
 				this.FGraph.FindPathTree(this.FKinRoot.Node);
-				int num = this.FPersons.Count - 1;
-				for (int i = 0; i <= num; i++)
-				{
-					TreeChartPerson p = this.FPersons[i];
+			}
+
+			int num = this.FPersons.Count - 1;
+			for (int i = 0; i <= num; i++)
+			{
+				TreeChartPerson p = this.FPersons[i];
+
+				if (this.FOptions.Kinship) {
 					p.Kinship = this.FindRelationship(p);
 				}
+
+				p.CalcBounds();
 			}
+
 			this.FHMax = 0;
 			this.FWMax = 0;
 			TTreeChartBox.TChartKind fKind = this.FKind;
@@ -1390,13 +1595,212 @@ namespace GKUI.Charts
 			}
 		}
 
-		public override void InternalDraw(Graphics aCanvas, TDrawMode mode)
+		protected override void WndProc(ref Message m)
 		{
-			base.InternalDraw(aCanvas, mode);
+			base.WndProc(ref m);
+			if (m.Msg == 5)
+			{
+				this.ScrollRange();
+			}
+			else
+			{
+				if (m.Msg == 135)
+				{
+					m.Result = (IntPtr)(m.Result.ToInt32() | 1 | 2 | 128 | 4);
+				}
+				else
+				{
+					if (m.Msg == 276)
+					{
+						uint wParam = (uint)m.WParam.ToInt32();
+						ScrollEventType scrType = SysUtils.GetScrollEventType(wParam & 65535u);
+						int new_pos = this.DoScroll(0, this.LeftPos, 0, this.FRange.X, scrType);
+						this.SetLeftPos(new_pos);
+					}
+					else
+					{
+						if (m.Msg == 277)
+						{
+							uint wParam = (uint)m.WParam.ToInt32();
+							ScrollEventType scrType = SysUtils.GetScrollEventType(wParam & 65535u);
+							int new_pos = this.DoScroll(1, this.TopPos, 0, this.FRange.Y, scrType);
+							this.SetTopPos(new_pos);
+						}
+					}
+				}
+			}
+		}
+
+		private int DoScroll(int nBar, int aOldPos, int aMin, int aMax, ScrollEventType scrType)
+		{
+			int NewPos = aOldPos;
+			switch (scrType) {
+				case ScrollEventType.SmallDecrement:
+				{
+					NewPos--;
+					break;
+				}
+				case ScrollEventType.SmallIncrement:
+				{
+					NewPos++;
+					break;
+				}
+				case ScrollEventType.LargeDecrement:
+				{
+					NewPos--;
+					break;
+				}
+				case ScrollEventType.LargeIncrement:
+				{
+					NewPos++;
+					break;
+				}
+				case ScrollEventType.ThumbPosition:
+				case ScrollEventType.ThumbTrack:
+				{
+					TScrollInfo ScrollInfo = new TScrollInfo();
+					ScrollInfo.cbSize = (uint)Marshal.SizeOf( ScrollInfo );
+					ScrollInfo.fMask = 23u;
+					SysUtils.GetScrollInfo((uint)this.Handle.ToInt32(), nBar, ref ScrollInfo);
+					NewPos = ScrollInfo.nTrackPos;
+					break;
+				}
+				case ScrollEventType.First:
+				{
+					NewPos = 0;
+					break;
+				}
+				case ScrollEventType.Last:
+				{
+					NewPos = aMax;
+					break;
+				}
+			}
+			if (NewPos < aMin)
+			{
+				NewPos = aMin;
+			}
+			if (NewPos > aMax)
+			{
+				NewPos = aMax;
+			}
+			return NewPos;
+		}
+
+		protected void ScrollRange()
+		{
+			if (this.FImageWidth < base.ClientRectangle.Width) {
+				this.FRange.X = 0;
+				this.LeftPos = (base.ClientRectangle.Width - this.FImageWidth) / 2;
+			} else {
+				this.FRange.X = this.FImageWidth - base.ClientRectangle.Width;
+			}
+
+			if (this.FImageHeight < base.ClientRectangle.Height) {
+				this.FRange.Y = 0;
+				this.TopPos = (base.ClientRectangle.Height - this.FImageHeight) / 2;
+			} else {
+				this.FRange.Y = this.FImageHeight - base.ClientRectangle.Height;
+			}
+
+			SysUtils.SetScrollRange((uint)this.Handle.ToInt32(), 0, 0, this.FRange.X, false);
+			SysUtils.SetScrollRange((uint)this.Handle.ToInt32(), 1, 0, this.FRange.Y, false);
+
+			base.Invalidate();
+		}
+
+		private void SetBorderWidth(int Value)
+		{
+			if (this.FBorderWidth != Value)
+			{
+				this.FBorderWidth = Value;
+				base.Invalidate();
+			}
+		}
+
+		private void SetLeftPos(int Value)
+		{
+			if (Value < 0) Value = 0;
+			if (Value > this.FRange.X) Value = this.FRange.X;
+
+			if (this.FLeftPos != Value)
+			{
+				TRect dummy = TRect.Empty();
+				TRect R = TRect.Empty();
+				SysUtils.ScrollWindowEx((uint)this.Handle.ToInt32(), this.FLeftPos - Value, 0, ref dummy, ref dummy, 0, out R, 0u);
+				SysUtils.SetScrollPos((uint)this.Handle.ToInt32(), 0, this.FLeftPos, true);
+				base.Invalidate();
+				this.FLeftPos = Value;
+				
+				this.ResetView();
+			}
+		}
+
+		private void SetTopPos(int Value)
+		{
+			if (Value < 0) Value = 0;
+			if (Value > this.FRange.Y) Value = this.FRange.Y;
+
+			if (this.FTopPos != Value)
+			{
+				TRect dummy = TRect.Empty();
+				TRect R = TRect.Empty();
+				SysUtils.ScrollWindowEx((uint)this.Handle.ToInt32(), 0, this.FTopPos - Value, ref dummy, ref dummy, 0, out R, 0u);
+				SysUtils.SetScrollPos((uint)this.Handle.ToInt32(), 1, this.FTopPos, true);
+				base.Invalidate();
+				this.FTopPos = Value;
+				
+				this.ResetView();
+			}
+		}
+
+		protected void ResetView()
+		{
+			Size sz = this.ClientSize;
+			FVisibleArea = TRect.Bounds(FLeftPos, FTopPos, sz.Width, sz.Height);
+		}
+		
+		private void InternalDraw(Graphics aCanvas, TDrawMode mode)
+		{
+			Rectangle imgRect = new Rectangle(0, 0, FImageWidth, FImageHeight);
+			if (this.BackgroundImage == null) {
+				using (Brush brush = new SolidBrush(this.BackColor)) {
+					aCanvas.FillRectangle(brush, imgRect);
+				}
+			} else {
+				//ControlPaint.DrawBackgroundImage( aCanvas, this.BackgroundImage, BackColor, this.BackgroundImageLayout, CR, CR);
+				using (TextureBrush textureBrush = new TextureBrush(this.BackgroundImage, WrapMode.Tile))
+				{
+					aCanvas.FillRectangle(textureBrush, imgRect);
+				}
+			}
+
+			Rectangle CR = base.ClientRectangle;
+
+			if (mode == TDrawMode.dmDefault)
+			{
+				this.FSPX = this.FBorderWidth - this.FLeftPos;
+				this.FSPY = this.FBorderWidth - this.FTopPos;
+				if (this.FImageWidth < CR.Width)
+				{
+					this.FSPX += (CR.Width - this.FImageWidth) / 2;
+				}
+				if (this.FImageHeight < CR.Height)
+				{
+					this.FSPY += (CR.Height - this.FImageHeight) / 2;
+				}
+			}
+			else
+			{
+				this.FSPX = 0;
+				this.FSPY = 0;
+			}
+
+			// this overrided routines
 
 			this.Draw(aCanvas, this.FRoot, this.FKind);
 
-			//if (ControlsVisible) FScaleControl.Draw(aCanvas, this.ControlsRect);
+			if (FScaleControl.Visible) FScaleControl.Draw(aCanvas);
 		}
 
 		protected void Draw(Graphics aCanvas, TreeChartPerson aPerson, TChartKind aDirKind)
@@ -1508,7 +1912,7 @@ namespace GKUI.Charts
 					{
 						this.FKinRoot = p;
 						this.RecalcChart();
-						base.ScrollRange();
+						this.ScrollRange();
 					}
 				}
 			}
@@ -1564,8 +1968,10 @@ namespace GKUI.Charts
 			base.Invalidate();
 		}
 
-		public void SelectBy(int aX, int aY)
+		public TreeChartPerson FindPersonByCoords(int aX, int aY)
 		{
+			TreeChartPerson result = null;
+			
 			aX -= this.FSPX;
 			aY -= this.FSPY;
 			int num = this.FPersons.Count - 1;
@@ -1574,14 +1980,22 @@ namespace GKUI.Charts
 				TreeChartPerson p = this.FPersons[i];
 				if (p.Rect.Contains(aX, aY))
 				{
-					this.SetSelected(p);
-					return;
+					result = p;
+					break;
 				}
 			}
-			this.SetSelected(null);
+
+			return result;
 		}
 
-		public void SelectByRec(TGEDCOMIndividualRecord iRec, bool centered = false)
+		public void SelectBy(int aX, int aY)
+		{
+			TreeChartPerson p = this.FindPersonByCoords(aX, aY);
+			this.SetSelected(p);
+			//if (p != null && this.FTraceSelected) CenterPerson(p);
+		}
+
+		public void SelectByRec(TGEDCOMIndividualRecord iRec)
 		{
 			int num = this.FPersons.Count - 1;
 			for (int i = 0; i <= num; i++)
@@ -1591,7 +2005,7 @@ namespace GKUI.Charts
 				{
 					this.SetSelected(p);
 
-					if (centered) CenterPerson(p);
+					if (this.FTraceSelected) CenterPerson(p);
 
 					return;
 				}
@@ -1599,7 +2013,7 @@ namespace GKUI.Charts
 			this.SetSelected(null);			
 		}
 
-		public void CenterPerson(TreeChartPerson p)
+		public void CenterPerson(TreeChartPerson p, bool animation = true)
 		{
 			Point pt = p.Pt;
 			int dst_x = (pt.X) - (this.ClientSize.Width / 2);
@@ -1610,9 +2024,14 @@ namespace GKUI.Charts
 
 			if ((this.LeftPos == dst_x) && (this.TopPos == dst_y)) return;
 
-			TweenLibrary tween = new TweenLibrary();
-			tween.startTweenEvent(delegate(int newX, int newY) { this.LeftPos = newX; this.TopPos = newY; }, 
-			                      this.LeftPos, this.TopPos, dst_x, dst_y, "easeinoutquad", 50);
+			if (animation) {
+					TweenLibrary tween = new TweenLibrary();
+					tween.startTweenEvent(delegate(int newX, int newY) { this.LeftPos = newX; this.TopPos = newY; },
+					                      this.LeftPos, this.TopPos, dst_x, dst_y, "easeinoutquad", 50);
+			} else {
+				this.LeftPos = dst_x; 
+				this.TopPos = dst_y;
+			}
 		}
 
 		private bool DoDescendantsFilter(TGEDCOMIndividualRecord aPerson)
@@ -1649,5 +2068,33 @@ namespace GKUI.Charts
 			}
 			return Result;
 		}
+
+		protected override void OnPaint(PaintEventArgs pe)
+		{
+			this.InternalDraw(pe.Graphics, TDrawMode.dmDefault);
+		}
+
+		protected override void OnMouseDown(MouseEventArgs e)
+		{
+			base.OnMouseDown(e);
+			if (!this.Focused) base.Focus();
+		}
+
+		protected override void OnMouseWheel(MouseEventArgs e)
+		{
+			base.OnMouseWheel(e);
+
+			float newScale = this.Scale;
+			
+			if (e.Delta > 0) {
+				newScale -= 0.05f;
+			} else {
+				newScale += 0.05f;
+			}
+			
+			if (newScale < 0.5 || newScale > 1.5) return;
+			this.Scale = newScale;
+		}
+
 	}
 }

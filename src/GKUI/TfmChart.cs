@@ -29,7 +29,7 @@ namespace GKUI
 		private string FFileName;
 		private int FGensLimit;
 		private TGEDCOMIndividualRecord FPerson;
-		private int FScale;
+		private float FScale;
 		private TGEDCOMTree FTree;
 		private TTreeChartBox FTreeBox;
 		private int FX;
@@ -53,12 +53,16 @@ namespace GKUI
 
 			base.MdiParent = GKUI.TfmGEDKeeper.Instance;
 			this.ToolBar1.ImageList = GKUI.TfmGEDKeeper.Instance.ImageList_Buttons;
+
 			this.FTreeBox = new TTreeChartBox();
 			this.FTreeBox.Dock = DockStyle.Fill;
 			this.FTreeBox.MouseDown += new MouseEventHandler(this.ImageTree_MouseDown);
 			this.FTreeBox.MouseUp += new MouseEventHandler(this.ImageTree_MouseUp);
 			this.FTreeBox.MouseMove += new MouseEventHandler(this.ImageTree_MouseMove);
 			this.FTreeBox.DoubleClick += new EventHandler(this.ImageTree_DblClick);
+			this.FTreeBox.MouseClick += this.ImageTree_MouseClick;
+			this.FTreeBox.DragOver += this.ImageTree_DragOver;
+
 			base.Controls.Add(this.FTreeBox);
 			base.Controls.SetChildIndex(this.FTreeBox, 0);
 			base.Controls.SetChildIndex(this.ToolBar1, 1);
@@ -66,7 +70,7 @@ namespace GKUI
 			this.FNavman = new NavManager();
 			this.NavRefresh();
 			this.FGensLimit = -1;
-			this.FScale = 10;
+			this.FScale = 1.0f;
 			this.SetLang();
 
 			this.FBase = aBase;
@@ -74,7 +78,7 @@ namespace GKUI
 			this.FFileName = Path.GetFileName(aBase.FileName);
 			this.FPerson = StartPerson;
 			
-			this.miTraceRoot.Checked = true;
+			this.miTraceRoot.Checked = this.FTreeBox.TraceSelected;
 		}
 
 		protected override void Dispose(bool Disposing)
@@ -201,13 +205,24 @@ namespace GKUI
 			}
 		}
 
+		private void ImageTree_DragOver(object sender, DragEventArgs e)
+		{
+//			if (e.Data.GetDataPresent(typeof(string)))
+//			{
+//				e.Effect = DragDropEffects.Move;
+//			}
+//			else
+//			{
+//				e.Effect = DragDropEffects.None;
+//			}
+		}
+
 		private void ImageTree_MouseDown(object sender, MouseEventArgs e)
 		{
 			this.FX = e.X;
 			this.FY = e.Y;
 
-			switch (this.FMode)
-			{
+			switch (this.FMode) {
 				case ChartControlMode.ccmDefault:
 					this.FTreeBox.SelectBy(e.X, e.Y);
 					if (this.FTreeBox.Selected == null && e.Button == MouseButtons.Right)
@@ -221,6 +236,7 @@ namespace GKUI
 					break;
 
 				case ChartControlMode.ccmControlsVisible:
+					this.FTreeBox.ScaleControl.MouseDown(e.X, e.Y);
 					break;
 			}
 		}
@@ -230,11 +246,19 @@ namespace GKUI
 			switch (this.FMode)
 			{
 				case ChartControlMode.ccmDefault:
-					/*if (this.FTreeBox.ControlsRect.Contains(e.X, e.Y))
+					if (this.FTreeBox.ScaleControl.Contains(e.X, e.Y))
 					{
 						this.FMode = ChartControlMode.ccmControlsVisible;
-						this.FTreeBox.ControlsVisible = true;
-					}*/
+						this.FTreeBox.ScaleControl.Visible = true;
+						this.FTreeBox.ScaleControl.MouseMove(e.X, e.Y, ThumbMoved);
+					} else {
+//						TreeChartPerson p = this.FTreeBox.FindPersonByCoords(e.X, e.Y);
+//
+//						if (p != null && e.Button == MouseButtons.Left)
+//						{
+//							this.FTreeBox.DoDragDrop(p.Rec.XRef, DragDropEffects.Move);
+//						}
+					}
 					break;
 
 				case ChartControlMode.ccmDragImage:
@@ -245,30 +269,29 @@ namespace GKUI
 					break;
 
 				case ChartControlMode.ccmControlsVisible:
-					/*if (!this.FTreeBox.ControlsRect.Contains(e.X, e.Y))
-					{
+					if (!this.FTreeBox.ScaleControl.Contains(e.X, e.Y)) {
 						this.FMode = ChartControlMode.ccmDefault;
-						this.FTreeBox.ControlsVisible = false;
-					}*/
+						this.FTreeBox.ScaleControl.Visible = false;
+					} else {
+						this.FTreeBox.ScaleControl.MouseMove(e.X, e.Y, ThumbMoved);
+					}
 					break;
 			}
+		}
+
+		private void ThumbMoved(int position)
+		{
+			this.FTreeBox.Scale = 0.4f + (position * 0.1f);
 		}
 
 		private void ImageTree_MouseUp(object sender, MouseEventArgs e)
 		{
 			switch (this.FMode) {
 				case ChartControlMode.ccmDefault:
-					//this.FTreeBox.SelectBy(e.X, e.Y);
 					if (this.FTreeBox.Selected != null && this.FTreeBox.Selected.Rec != null)
 					{
 						switch (e.Button) {
 							case MouseButtons.Left:
-								if (this.miTraceRoot.Checked)
-								{
-									//this.FPerson = this.FTreeBox.Selected.Rec;
-									//this.GenChart(true);
-									this.FTreeBox.SelectByRec(/*this.FPerson*/ this.FTreeBox.Selected.Rec, true);
-								}
 								break;
 
 							case MouseButtons.Right:
@@ -284,7 +307,19 @@ namespace GKUI
 					break;
 
 				case ChartControlMode.ccmControlsVisible:
+					this.FTreeBox.ScaleControl.MouseUp(e.X, e.Y);
 					break;
+			}
+		}
+
+		private void ImageTree_MouseClick(object sender, MouseEventArgs e)
+		{
+			if (e.Clicks > 1) return;
+
+			TreeChartPerson p = this.FTreeBox.Selected;
+
+			if (this.FMode == ChartControlMode.ccmDefault && p != null && e.Button == MouseButtons.Left) {
+				if (this.FTreeBox.TraceSelected) this.FTreeBox.CenterPerson(p);
 			}
 		}
 
@@ -338,13 +373,13 @@ namespace GKUI
 			this.N1001.Checked = false;
 			(sender as MenuItem).Checked = true;
 
-			if (sender == this.N501) this.FScale = 5;
-			if (sender == this.N601) this.FScale = 6;
-			if (sender == this.N701) this.FScale = 7;
-			if (sender == this.N801) this.FScale = 8;
-			if (sender == this.N901) this.FScale = 9;
-			if (sender == this.N1001) this.FScale = 10;
-			this.GenChart(true);
+			if (sender == this.N501) this.FTreeBox.Scale = 0.5f;
+			if (sender == this.N601) this.FTreeBox.Scale = 0.6f;
+			if (sender == this.N701) this.FTreeBox.Scale = 0.7f;
+			if (sender == this.N801) this.FTreeBox.Scale = 0.8f;
+			if (sender == this.N901) this.FTreeBox.Scale = 0.9f;
+			if (sender == this.N1001) this.FTreeBox.Scale = 1.0f;
+			//this.GenChart(true);
 		}
 
 		private void miEditClick(object sender, EventArgs e)
@@ -475,6 +510,7 @@ namespace GKUI
 		void miTraceRootClick(object sender, EventArgs e)
 		{
 			this.miTraceRoot.Checked = !this.miTraceRoot.Checked;
+			FTreeBox.TraceSelected = this.miTraceRoot.Checked;
 		}
 
 		void miFillColorClick(object sender, EventArgs e)
@@ -605,7 +641,7 @@ namespace GKUI
 					this.FTreeBox.Engine = this.FBase.Engine;
 					this.FTreeBox.Tree = this.FTree;
 					this.FTreeBox.ShieldState = this.FBase.ShieldState;
-					this.FTreeBox.Scale = this.FScale * 10;
+					this.FTreeBox.Scale = this.FScale;
 
 					this.FTreeBox.GenChart(this.FPerson, this.FChartKind);
 

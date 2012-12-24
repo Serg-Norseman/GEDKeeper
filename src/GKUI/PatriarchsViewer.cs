@@ -20,6 +20,8 @@ namespace GKUI
 			InitializeComponent();
 			this.FBase = aBase;
 			CreateGraph(minGens);
+			//arborViewer1.doSample();
+			arborViewer1.start();
 		}
 
         private void CreateGraph(int minGens)
@@ -51,8 +53,6 @@ namespace GKUI
 						edge.target.color = Color.Navy;
 					}
 				}
-
-				arborViewer1.start();
 			}
         }
 
@@ -87,5 +87,6 @@ namespace GKUI
 				}
 			}
 		}
+		
 	}
 }

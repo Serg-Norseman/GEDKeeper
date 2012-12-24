@@ -384,18 +384,6 @@
     <Compile Include="GKUI\TfmBase.Designer.cs">
       <DependentUpon>TfmBase.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\TfmCalcWidget.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\TfmCalcWidget.Designer.cs">
-      <DependentUpon>TfmCalcWidget.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\TfmCalendar.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\TfmCalendar.Designer.cs">
-      <DependentUpon>TfmCalendar.cs</DependentUpon>
-    </Compile>
     <Compile Include="GKUI\TfmChart.Designer.cs">
       <DependentUpon>TfmChart.cs</DependentUpon>
     </Compile>
@@ -405,15 +393,6 @@
     <Compile Include="GKUI\TfmMaps.Designer.cs">
       <DependentUpon>TfmMaps.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\TfmNamesBook.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\TfmNamesBook.Designer.cs">
-      <DependentUpon>TfmNamesBook.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\TfmOrganizer.Designer.cs">
-      <DependentUpon>TfmOrganizer.cs</DependentUpon>
-    </Compile>
     <Compile Include="GKUI\TfmProgress.Designer.cs">
       <DependentUpon>TfmProgress.cs</DependentUpon>
     </Compile>
@@ -421,10 +400,6 @@
       <DependentUpon>TfmScriptDaemon.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Charts\TTreeChartBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKUI\Charts\TChartFilter.cs" />
-    <Compile Include="GKUI\Charts\TCustomChartBox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Charts\TPersonList.cs" />
@@ -458,9 +433,6 @@
     <Compile Include="GKUI\TfmMaps.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\TfmOrganizer.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="GKUI\TfmProgress.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -479,12 +451,6 @@
     <Compile Include="GKUI\TfmTextSearch.Designer.cs">
       <DependentUpon>TfmTextSearch.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\TfmTimeLine.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\TfmTimeLine.Designer.cs">
-      <DependentUpon>TfmTimeLine.cs</DependentUpon>
-    </Compile>
     <Compile Include="GKUI\TfmTreeTools.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -501,6 +467,36 @@
     <Compile Include="Ext\XLSFile\TStrCell.cs" />
     <Compile Include="Ext\XLSFile\TWordCell.cs" />
     <Compile Include="Ext\XLSFile\TXLSFile.cs" />
+    <Compile Include="GKUI\Widgets\TfmCalcWidget.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Widgets\TfmCalcWidget.Designer.cs">
+      <DependentUpon>TfmCalcWidget.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Widgets\TfmCalendar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Widgets\TfmCalendar.Designer.cs">
+      <DependentUpon>TfmCalendar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Widgets\TfmNamesBook.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Widgets\TfmNamesBook.Designer.cs">
+      <DependentUpon>TfmNamesBook.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Widgets\TfmOrganizer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Widgets\TfmOrganizer.Designer.cs">
+      <DependentUpon>TfmOrganizer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Widgets\TfmTimeLine.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Widgets\TfmTimeLine.Designer.cs">
+      <DependentUpon>TfmTimeLine.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GKUI\Controls\InputBox.resx">
@@ -616,16 +612,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GKResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\TfmTimeLine.resx">
-      <DependentUpon>TfmTimeLine.cs</DependentUpon>
+      <LastGenOutput>GKResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\TfmTreeTools.resx">
       <DependentUpon>TfmTreeTools.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Widgets\TfmTimeLine.resx">
+      <DependentUpon>TfmTimeLine.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GKSandbox\" />
+    <Folder Include="GKUI\Widgets" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -26,7 +26,7 @@ namespace GKUI.Charts
 
 		private string FBirthDate;
 		private string FBirthYear;
-		private TCustomChartBox FChart;
+		internal TTreeChartBox FChart;
 		private string FDeathDate;
 		private string FDeathYear;
 		private string FFamily;
@@ -216,7 +216,7 @@ namespace GKUI.Charts
 		public string Kinship
 		{
 			get { return this.FKinship; }
-			set { this.SetKinship(value); }
+			set { this.FKinship = value; }
 		}
 
 		public string Name
@@ -331,12 +331,6 @@ namespace GKUI.Charts
 			return this.FFlags.InSet(TPersonFlag.pfSelected);
 		}
 
-		private void SetKinship([In] string Value)
-		{
-			this.FKinship = Value;
-			this.CalcBounds();
-		}
-
 		private void SetPt([In] Point Value)
 		{
 			this.FPtX = Value.X;
@@ -379,7 +373,7 @@ namespace GKUI.Charts
 			return Result;
 		}
 
-		public TreeChartPerson(TCustomChartBox aChart)
+		public TreeChartPerson(TTreeChartBox aChart)
 		{
 			this.FChart = aChart;
 
@@ -422,9 +416,8 @@ namespace GKUI.Charts
 			this.FRec = iRec;
 			if (iRec != null)
 			{
-				TTreeChartBox ancChart = (this.FChart as TTreeChartBox);
-				if (ancChart.FPreparedIndividuals.IndexOf(iRec.XRef) < 0) {
-					ancChart.FPreparedIndividuals.Add(iRec.XRef);
+				if (this.FChart.FPreparedIndividuals.IndexOf(iRec.XRef) < 0) {
+					this.FChart.FPreparedIndividuals.Add(iRec.XRef);
 				}
 
 				string fam, nam, pat;
@@ -436,7 +429,7 @@ namespace GKUI.Charts
 				this.FDeathDate = TGenEngine.GetDeathDate(iRec, TGenEngine.TDateFormat.dfDD_MM_YYYY, false);
 				this.IsDead = !iRec.IsLive();
 				this.FSex = iRec.Sex;
-				this.FSigns = ancChart.GetPersonSign(iRec);
+				this.FSigns = this.FChart.GetPersonSign(iRec);
 				this.FBirthYear = TGenEngine.GetBirthDate(iRec, TGenEngine.TDateFormat.dfYYYY, false);
 				this.FDeathYear = TGenEngine.GetDeathDate(iRec, TGenEngine.TDateFormat.dfYYYY, false);
 
@@ -467,10 +460,10 @@ namespace GKUI.Charts
 				this.FSigns = new EnumSet();
 			}
 
-			this.CalcBounds();
+			//this.CalcBounds();
 		}
 
-		private void CalcBounds()
+		public void CalcBounds()
 		{
 			Graphics g = this.FChart.CreateGraphics();
 			try
@@ -520,7 +513,7 @@ namespace GKUI.Charts
 					lines++;
 				}
 
-				if ((this.FChart as TTreeChartBox).PathDebug) {
+				if (this.FChart.PathDebug) {
 					int wt = this.TextWidth(g, this.FPathDebug);
 					if (maxwid < wt) maxwid = wt;
 
@@ -559,6 +552,58 @@ namespace GKUI.Charts
 
 		public TPersonList(bool AOwnsObjects) : base(AOwnsObjects)
 		{
+		}
+	}
+
+
+	public class TChartFilter : CustomFilter
+	{
+		public enum TBranchCut : byte
+		{
+			bcNone,
+			bcYears,
+			bcPersons
+		}
+
+		private CustomFilter.TGroupMode Back_SourceMode;
+		private string Back_SourceRef;
+		private TChartFilter.TBranchCut Back_BranchCut;
+		private int Back_BranchYear;
+		private string Back_BranchPersons;
+
+		public CustomFilter.TGroupMode SourceMode;
+		public string SourceRef;
+		public TChartFilter.TBranchCut BranchCut;
+		public int BranchYear;
+		public string BranchPersons;
+
+		public TChartFilter()
+		{
+			this.Clear();
+		}
+
+		public void Clear()
+		{
+			this.SourceMode = CustomFilter.TGroupMode.gmAll;
+			this.BranchCut = TChartFilter.TBranchCut.bcNone;
+		}
+
+		public void Backup()
+		{
+			this.Back_SourceMode = this.SourceMode;
+			this.Back_SourceRef = this.SourceRef;
+			this.Back_BranchCut = this.BranchCut;
+			this.Back_BranchYear = this.BranchYear;
+			this.Back_BranchPersons = this.BranchPersons;
+		}
+
+		public void Restore()
+		{
+			this.SourceMode = this.Back_SourceMode;
+			this.SourceRef = this.Back_SourceRef;
+			this.BranchCut = this.Back_BranchCut;
+			this.BranchYear = this.Back_BranchYear;
+			this.BranchPersons = this.Back_BranchPersons;
 		}
 	}
 }

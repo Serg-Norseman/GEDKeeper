@@ -36,7 +36,7 @@ namespace GKUI
 		/// </summary>
 		private void InitializeComponent()
 		{
-            this.arborViewer1 = new Ext.ArborEngine.ArborViewer();
+			this.arborViewer1 = new Ext.ArborEngine.ArborViewer();
 			this.SuspendLayout();
 			// 
 			// arborViewer1

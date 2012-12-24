@@ -431,6 +431,8 @@ namespace GKUI
 				ListViewItem item = this.ListChecks.AddItem(checkObj.RecName, checkObj);
 				item.SubItems.Add(checkObj.Comment);
 			}
+			
+			this.ListChecks.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
 		}
 
 		void btnBaseRepair_Click(object sender, EventArgs e)
