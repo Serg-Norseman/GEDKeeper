@@ -173,6 +173,10 @@
     <Compile Include="GKResources.Designer.cs">
       <DependentUpon>GKResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Controls\GKMergeControl.cs" />
+    <Compile Include="GKUI\Controls\GKMergeControl.Designer.cs">
+      <DependentUpon>GKMergeControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Controls\InputBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -499,6 +503,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="GKUI\Controls\GKMergeControl.resx">
+      <DependentUpon>GKMergeControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Controls\InputBox.resx">
       <DependentUpon>InputBox.cs</DependentUpon>
     </EmbeddedResource>
@@ -627,7 +634,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <Content Include="ProfilingSessions\Session20121208_181502.sdps" />
     <Content Include="zlib1.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

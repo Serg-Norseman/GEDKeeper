@@ -46,8 +46,6 @@ namespace GKUI
 
 		private TList FSplitList;
 
-		private TGEDCOMRecord FRec1;
-		private TGEDCOMRecord FRec2;
 		private TGEDCOMRecordType FRMMode;
 		private StringList FRMSkip;
 		private int FRMIndex;
@@ -55,8 +53,6 @@ namespace GKUI
 		private StringList FPlaces;
 		private TList FChecksList;
 
-		private GKHyperView Memo1;
-		private GKHyperView Memo2;
 		private GKListView ListPlaces;
 		private GKListView ListChecks;
 		private GKListView ListPatriarchs;
@@ -69,6 +65,12 @@ namespace GKUI
 
 		private void SearchDups()
 		{
+			this.MergeCtl.Base = this.FBase;
+			this.MergeCtl.MergeMode = this.FRMMode;
+			
+			this.MergeCtl.SetRec1(null);
+			this.MergeCtl.SetRec2(null);
+			
 			TGEDCOMIndividualRecord.MatchParams mParams;
 			mParams.IndistinctNameMatching = this.chkIndistinctMatching.Checked;
 			mParams.IndistinctThreshold = decimal.ToDouble(this.edNameAccuracy.Value) / 100.0;
@@ -106,8 +108,8 @@ namespace GKUI
 						res = iRec.IsMatch(kRec, 100.0F, mParams);
 
 						if (res) {
-							this.SetRec1(iRec);
-							this.SetRec2(kRec);
+							this.MergeCtl.SetRec1(iRec);
+							this.MergeCtl.SetRec2(kRec);
 							break;
 						}
 					}
@@ -121,146 +123,13 @@ namespace GKUI
 			}
 		}
 
-		private void RecordMerge(TGEDCOMRecord target_rec, TGEDCOMRecord aRecCopy)
+		void btnSkip_Click(object sender, EventArgs e)
 		{
-			TXRefReplaceMap repMap = new TXRefReplaceMap();
-			try
+			if (this.MergeCtl.Rec1 != null && this.MergeCtl.Rec2 != null)
 			{
-				repMap.AddXRef(aRecCopy, aRecCopy.XRef, target_rec.XRef);
-
-				int num = this.FTree.RecordsCount - 1;
-				for (int i = 0; i <= num; i++)
-				{
-					this.FTree[i].ReplaceXRefs(repMap);
-				}
-
-				switch (target_rec.RecordType)
-				{
-					case TGEDCOMRecordType.rtIndividual:
-						(aRecCopy as TGEDCOMIndividualRecord).MoveTo(target_rec, false);
-						this.Base.DeleteIndividualRecord(aRecCopy as TGEDCOMIndividualRecord, false);
-						break;
-
-					case TGEDCOMRecordType.rtNote:
-						(aRecCopy as TGEDCOMNoteRecord).MoveTo(target_rec, false);
-						this.Base.DeleteNoteRecord(aRecCopy as TGEDCOMNoteRecord, false);
-						break;
-
-					case TGEDCOMRecordType.rtFamily:
-						(aRecCopy as TGEDCOMFamilyRecord).MoveTo(target_rec, false);
-						this.Base.DeleteFamilyRecord(aRecCopy as TGEDCOMFamilyRecord, false);
-						break;
-
-					case TGEDCOMRecordType.rtSource:
-						(aRecCopy as TGEDCOMSourceRecord).MoveTo(target_rec, false);
-						this.Base.DeleteSourceRecord(aRecCopy as TGEDCOMSourceRecord, false);
-						break;
-				}
-
-				this.Base.ChangeRecord(target_rec);
-				this.Base.ListsRefresh(false);
+				this.FRMSkip.Add(this.MergeCtl.Rec1.XRef + "-" + this.MergeCtl.Rec2.XRef);
 			}
-			finally
-			{
-				repMap.Free();
-			}
-		}
-
-		private void SetRec1([In] TGEDCOMRecord Value)
-		{
-			this.FRec1 = Value;
-			this.btnMergeToLeft.Enabled = (this.FRec1 != null && this.FRec2 != null);
-			this.btnMergeToRight.Enabled = (this.FRec1 != null && this.FRec2 != null);
-			if (this.FRec1 == null)
-			{
-				this.Lab1.Text = "XXX1";
-				this.Edit1.Text = "";
-				this.Memo1.Lines.Clear();
-			}
-			else
-			{
-				this.Lab1.Text = this.FRec1.XRef;
-
-				switch (this.FRMMode) {
-					case TGEDCOMRecordType.rtIndividual:
-						{
-							TGEDCOMIndividualRecord iRec = (this.FRec1 as TGEDCOMIndividualRecord);
-							this.Edit1.Text = iRec.aux_GetNameStr(true, false);
-							this.Base.ShowPersonInfo(iRec, this.Memo1.Lines);
-							break;
-						}
-					case TGEDCOMRecordType.rtNote:
-						{
-							TGEDCOMNoteRecord nRec = (this.FRec1 as TGEDCOMNoteRecord);
-							this.Edit1.Text = nRec.Note[0];
-							this.Base.ShowNoteInfo(nRec, this.Memo1.Lines);
-							break;
-						}
-					case TGEDCOMRecordType.rtFamily:
-						{
-							TGEDCOMFamilyRecord famRec = (this.FRec1 as TGEDCOMFamilyRecord);
-							this.Edit1.Text = TGenEngine.aux_GetFamilyStr(famRec);
-							this.Base.ShowFamilyInfo(famRec, this.Memo1.Lines);
-							break;
-						}
-					case TGEDCOMRecordType.rtSource:
-						{
-							TGEDCOMSourceRecord srcRec = (this.FRec1 as TGEDCOMSourceRecord);
-							this.Edit1.Text = srcRec.FiledByEntry;
-							this.Base.ShowSourceInfo(srcRec, this.Memo1.Lines);
-							break;
-						}
-				}
-			}
-		}
-
-		private void SetRec2([In] TGEDCOMRecord Value)
-		{
-			this.FRec2 = Value;
-			this.btnMergeToLeft.Enabled = (this.FRec1 != null && this.FRec2 != null);
-			this.btnMergeToRight.Enabled = (this.FRec1 != null && this.FRec2 != null);
-
-			if (this.FRec2 == null)
-			{
-				this.Lab2.Text = "XXX2";
-				this.Edit2.Text = "";
-				this.Memo2.Lines.Clear();
-			}
-			else
-			{
-				this.Lab2.Text = this.FRec2.XRef;
-
-				switch (this.FRMMode) {
-					case TGEDCOMRecordType.rtIndividual:
-						{
-							TGEDCOMIndividualRecord iRec = (this.FRec2 as TGEDCOMIndividualRecord);
-							this.Edit2.Text = iRec.aux_GetNameStr(true, false);
-							this.Base.ShowPersonInfo(iRec, this.Memo2.Lines);
-							break;
-						}
-					case TGEDCOMRecordType.rtNote:
-						{
-							TGEDCOMNoteRecord nRec = (this.FRec2 as TGEDCOMNoteRecord);
-							this.Edit2.Text = nRec.Note[0];
-							this.Base.ShowNoteInfo(nRec, this.Memo2.Lines);
-							break;
-						}
-					case TGEDCOMRecordType.rtFamily:
-						{
-							TGEDCOMFamilyRecord famRec = (this.FRec2 as TGEDCOMFamilyRecord);
-							this.Edit2.Text = TGenEngine.aux_GetFamilyStr(famRec);
-							this.Base.ShowFamilyInfo(famRec, this.Memo2.Lines);
-							break;
-						}
-					case TGEDCOMRecordType.rtSource:
-						{
-							TGEDCOMSourceRecord srcRec = (this.FRec2 as TGEDCOMSourceRecord);
-							this.Edit2.Text = srcRec.FiledByEntry;
-							this.Base.ShowSourceInfo(srcRec, this.Memo2.Lines);
-							break;
-						}
-				}
-			}
+			this.SearchDups();
 		}
 
 		private void Select(TGEDCOMIndividualRecord aPerson, TreeTools.TTreeWalkMode aMode)
@@ -681,41 +550,6 @@ namespace GKUI
 			this.SearchDups();
 		}
 
-		void btnRec1Select_Click(object sender, EventArgs e)
-		{
-			TGEDCOMRecord irec = this.Base.SelectRecord(this.FRMMode, null);
-			if (irec != null) this.SetRec1(irec);
-		}
-
-		void btnRec2Select_Click(object sender, EventArgs e)
-		{
-			TGEDCOMRecord irec = this.Base.SelectRecord(this.FRMMode, null);
-			if (irec != null) this.SetRec2(irec);
-		}
-
-		void btnMergeToLeft_Click(object sender, EventArgs e)
-		{
-			this.RecordMerge(this.FRec1, this.FRec2);
-			this.SetRec1(this.FRec1);
-			this.SetRec2(null);
-		}
-
-		void btnMergeToRight_Click(object sender, EventArgs e)
-		{
-			this.RecordMerge(this.FRec2, this.FRec1);
-			this.SetRec1(null);
-			this.SetRec2(this.FRec2);
-		}
-
-		void btnSkip_Click(object sender, EventArgs e)
-		{
-			if (this.FRec1 != null && this.FRec2 != null)
-			{
-				this.FRMSkip.Add(this.FRec1.XRef + "-" + this.FRec2.XRef);
-			}
-			this.SearchDups();
-		}
-
 		void btnImportFileChoose_Click(object sender, EventArgs e)
 		{
 			if (this.OpenDialog2.ShowDialog() == DialogResult.OK)
@@ -879,9 +713,6 @@ namespace GKUI
 			if (this.RadioButton6.Checked) this.FRMMode = TGEDCOMRecordType.rtNote;
 			if (this.RadioButton7.Checked) this.FRMMode = TGEDCOMRecordType.rtFamily;
 			if (this.RadioButton8.Checked) this.FRMMode = TGEDCOMRecordType.rtSource;
-
-			this.btnRec1Select.Enabled = (this.FRMMode != TGEDCOMRecordType.rtFamily);
-			this.btnRec2Select.Enabled = (this.FRMMode != TGEDCOMRecordType.rtFamily);
 		}
 
 		protected override void Dispose(bool Disposing)
@@ -906,18 +737,8 @@ namespace GKUI
 
 			this.PageControl.SelectedIndex = 0;
 			this.FSplitList = new TList();
-			this.Memo1 = new GKHyperView();
-			this.Memo1.Location = new Point(8, 56);
-			this.Memo1.Size = new Size(329, 248);
-			this.SheetMerge.Controls.Add(this.Memo1);
-			this.Memo2 = new GKHyperView();
-			this.Memo2.Location = new Point(344, 56);
-			this.Memo2.Size = new Size(329, 248);
-			this.SheetMerge.Controls.Add(this.Memo2);
 
 			this.FRMSkip = new StringList();
-			this.SetRec1(null);
-			this.SetRec2(null);
 			this.FRMMode = TGEDCOMRecordType.rtIndividual;
 
 			this.FPlaces = new StringList();
@@ -961,8 +782,6 @@ namespace GKUI
 			this.btnSave.Text = LangMan.LSList[9];
 			this.SheetMerge.Text = LangMan.LSList[561];
 			this.SheetOptions.Text = LangMan.LSList[39];
-			this.btnRec1Select.Text = LangMan.LSList[100] + "...";
-			this.btnRec2Select.Text = LangMan.LSList[100] + "...";
 			this.btnSearch.Text = LangMan.LSList[562];
 			this.btnSkip.Text = LangMan.LSList[563];
 			this.rgMode.Text = LangMan.LSList[564];

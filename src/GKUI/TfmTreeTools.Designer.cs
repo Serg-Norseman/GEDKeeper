@@ -26,15 +26,7 @@ namespace GKUI
 		private System.Windows.Forms.TabPage SheetRecMerge;
 		private System.Windows.Forms.TabControl PageControl1;
 		private System.Windows.Forms.TabPage SheetMerge;
-		private System.Windows.Forms.Label Lab1;
-		private System.Windows.Forms.Label Lab2;
 		private System.Windows.Forms.Button btnSearch;
-		private System.Windows.Forms.TextBox Edit1;
-		private System.Windows.Forms.TextBox Edit2;
-		private System.Windows.Forms.Button btnRec1Select;
-		private System.Windows.Forms.Button btnRec2Select;
-		private System.Windows.Forms.Button btnMergeToLeft;
-		private System.Windows.Forms.Button btnMergeToRight;
 		private System.Windows.Forms.Button btnSkip;
 		private System.Windows.Forms.ProgressBar ProgressBar1;
 		private System.Windows.Forms.TabPage SheetOptions;
@@ -127,15 +119,8 @@ namespace GKUI
 			this.SheetRecMerge = new System.Windows.Forms.TabPage();
 			this.PageControl1 = new System.Windows.Forms.TabControl();
 			this.SheetMerge = new System.Windows.Forms.TabPage();
-			this.Lab1 = new System.Windows.Forms.Label();
-			this.Lab2 = new System.Windows.Forms.Label();
+			this.MergeCtl = new GKUI.Controls.GKMergeControl();
 			this.btnSearch = new System.Windows.Forms.Button();
-			this.Edit1 = new System.Windows.Forms.TextBox();
-			this.Edit2 = new System.Windows.Forms.TextBox();
-			this.btnRec1Select = new System.Windows.Forms.Button();
-			this.btnRec2Select = new System.Windows.Forms.Button();
-			this.btnMergeToLeft = new System.Windows.Forms.Button();
-			this.btnMergeToRight = new System.Windows.Forms.Button();
 			this.btnSkip = new System.Windows.Forms.Button();
 			this.ProgressBar1 = new System.Windows.Forms.ProgressBar();
 			this.SheetOptions = new System.Windows.Forms.TabPage();
@@ -590,108 +575,44 @@ namespace GKUI
 			this.PageControl1.Location = new System.Drawing.Point(8, 8);
 			this.PageControl1.Name = "PageControl1";
 			this.PageControl1.SelectedIndex = 0;
-			this.PageControl1.Size = new System.Drawing.Size(689, 393);
+			this.PageControl1.Size = new System.Drawing.Size(689, 406);
 			this.PageControl1.TabIndex = 0;
 			// 
 			// SheetMerge
 			// 
-			this.SheetMerge.Controls.Add(this.Lab1);
-			this.SheetMerge.Controls.Add(this.Lab2);
+			this.SheetMerge.Controls.Add(this.MergeCtl);
 			this.SheetMerge.Controls.Add(this.btnSearch);
-			this.SheetMerge.Controls.Add(this.Edit1);
-			this.SheetMerge.Controls.Add(this.Edit2);
-			this.SheetMerge.Controls.Add(this.btnRec1Select);
-			this.SheetMerge.Controls.Add(this.btnRec2Select);
-			this.SheetMerge.Controls.Add(this.btnMergeToLeft);
-			this.SheetMerge.Controls.Add(this.btnMergeToRight);
 			this.SheetMerge.Controls.Add(this.btnSkip);
 			this.SheetMerge.Controls.Add(this.ProgressBar1);
 			this.SheetMerge.Location = new System.Drawing.Point(4, 22);
 			this.SheetMerge.Name = "SheetMerge";
-			this.SheetMerge.Size = new System.Drawing.Size(681, 367);
+			this.SheetMerge.Size = new System.Drawing.Size(681, 380);
 			this.SheetMerge.TabIndex = 0;
 			this.SheetMerge.Text = "Объединение";
 			// 
-			// Lab1
+			// MergeCtl
 			// 
-			this.Lab1.Location = new System.Drawing.Point(8, 8);
-			this.Lab1.Name = "Lab1";
-			this.Lab1.Size = new System.Drawing.Size(75, 13);
-			this.Lab1.TabIndex = 0;
-			this.Lab1.Text = "XXX1";
-			// 
-			// Lab2
-			// 
-			this.Lab2.Location = new System.Drawing.Point(344, 8);
-			this.Lab2.Name = "Lab2";
-			this.Lab2.Size = new System.Drawing.Size(75, 13);
-			this.Lab2.TabIndex = 1;
-			this.Lab2.Text = "XXX2";
+			this.MergeCtl.Base = null;
+			this.MergeCtl.Dock = System.Windows.Forms.DockStyle.Top;
+			this.MergeCtl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.MergeCtl.Location = new System.Drawing.Point(0, 0);
+			this.MergeCtl.MergeMode = GedCom551.TGEDCOMRecordType.rtNone;
+			this.MergeCtl.Name = "MergeCtl";
+			this.MergeCtl.Size = new System.Drawing.Size(681, 340);
+			this.MergeCtl.TabIndex = 11;
 			// 
 			// btnSearch
 			// 
-			this.btnSearch.Location = new System.Drawing.Point(8, 312);
+			this.btnSearch.Location = new System.Drawing.Point(12, 346);
 			this.btnSearch.Name = "btnSearch";
 			this.btnSearch.Size = new System.Drawing.Size(75, 25);
 			this.btnSearch.TabIndex = 0;
 			this.btnSearch.Text = "Автопоиск";
 			this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
 			// 
-			// Edit1
-			// 
-			this.Edit1.Location = new System.Drawing.Point(8, 24);
-			this.Edit1.Name = "Edit1";
-			this.Edit1.ReadOnly = true;
-			this.Edit1.Size = new System.Drawing.Size(241, 21);
-			this.Edit1.TabIndex = 1;
-			// 
-			// Edit2
-			// 
-			this.Edit2.Location = new System.Drawing.Point(344, 24);
-			this.Edit2.Name = "Edit2";
-			this.Edit2.ReadOnly = true;
-			this.Edit2.Size = new System.Drawing.Size(241, 21);
-			this.Edit2.TabIndex = 2;
-			// 
-			// btnRec1Select
-			// 
-			this.btnRec1Select.Location = new System.Drawing.Point(256, 22);
-			this.btnRec1Select.Name = "btnRec1Select";
-			this.btnRec1Select.Size = new System.Drawing.Size(81, 25);
-			this.btnRec1Select.TabIndex = 3;
-			this.btnRec1Select.Text = "Выбрать...";
-			this.btnRec1Select.Click += new System.EventHandler(this.btnRec1Select_Click);
-			// 
-			// btnRec2Select
-			// 
-			this.btnRec2Select.Location = new System.Drawing.Point(592, 22);
-			this.btnRec2Select.Name = "btnRec2Select";
-			this.btnRec2Select.Size = new System.Drawing.Size(81, 25);
-			this.btnRec2Select.TabIndex = 4;
-			this.btnRec2Select.Text = "Выбрать...";
-			this.btnRec2Select.Click += new System.EventHandler(this.btnRec2Select_Click);
-			// 
-			// btnMergeToLeft
-			// 
-			this.btnMergeToLeft.Location = new System.Drawing.Point(256, 312);
-			this.btnMergeToLeft.Name = "btnMergeToLeft";
-			this.btnMergeToLeft.Size = new System.Drawing.Size(81, 25);
-			this.btnMergeToLeft.TabIndex = 7;
-			this.btnMergeToLeft.Text = "<<<";
-			this.btnMergeToLeft.Click += new System.EventHandler(this.btnMergeToLeft_Click);
-			// 
-			// btnMergeToRight
-			// 
-			this.btnMergeToRight.Location = new System.Drawing.Point(344, 312);
-			this.btnMergeToRight.Name = "btnMergeToRight";
-			this.btnMergeToRight.Size = new System.Drawing.Size(81, 25);
-			this.btnMergeToRight.TabIndex = 8;
-			this.btnMergeToRight.Text = ">>>";
-			this.btnMergeToRight.Click += new System.EventHandler(this.btnMergeToRight_Click);
-			// 
 			// btnSkip
 			// 
-			this.btnSkip.Location = new System.Drawing.Point(88, 312);
+			this.btnSkip.Location = new System.Drawing.Point(92, 346);
 			this.btnSkip.Name = "btnSkip";
 			this.btnSkip.Size = new System.Drawing.Size(75, 25);
 			this.btnSkip.TabIndex = 9;
@@ -700,9 +621,9 @@ namespace GKUI
 			// 
 			// ProgressBar1
 			// 
-			this.ProgressBar1.Location = new System.Drawing.Point(8, 344);
+			this.ProgressBar1.Location = new System.Drawing.Point(173, 346);
 			this.ProgressBar1.Name = "ProgressBar1";
-			this.ProgressBar1.Size = new System.Drawing.Size(665, 16);
+			this.ProgressBar1.Size = new System.Drawing.Size(500, 25);
 			this.ProgressBar1.Step = 1;
 			this.ProgressBar1.TabIndex = 10;
 			// 
@@ -1052,7 +973,6 @@ namespace GKUI
 			this.SheetRecMerge.ResumeLayout(false);
 			this.PageControl1.ResumeLayout(false);
 			this.SheetMerge.ResumeLayout(false);
-			this.SheetMerge.PerformLayout();
 			this.SheetOptions.ResumeLayout(false);
 			this.rgMode.ResumeLayout(false);
 			this.GroupBox1.ResumeLayout(false);
@@ -1065,6 +985,7 @@ namespace GKUI
 			this.SheetPlaceManage.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
+		private GKUI.Controls.GKMergeControl MergeCtl;
 		private System.Windows.Forms.Button btnPatriarchsDiagram;
 		private System.Windows.Forms.CheckBox chkIndistinctMatching;
 		private System.Windows.Forms.RadioButton rbtnAnalysis;
