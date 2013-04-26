@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GKCore;
 
 /// <summary>
@@ -24,7 +25,7 @@ namespace GKUI
 
 		private void LabelMail_Click(object sender, EventArgs e)
 		{
-			TGenEngine.LoadExtFile(this.LabelMail.Text);
+			SysUtils.LoadExtFile(this.LabelMail.Text);
 		}
 
 		public static void ShowAbout(string AppName)

@@ -24,7 +24,7 @@ namespace GKCore.Commands
 		public override bool Redo()
 		{
 			bool Result = true;
-			TGEDCOMIndividualRecord i_rec = (TGEDCOMIndividualRecord)this.FManager.Tree.XRefIndex_Find(this.FPersonXRef);
+			TGEDCOMIndividualRecord i_rec = this.FManager.Tree.XRefIndex_Find(this.FPersonXRef) as TGEDCOMIndividualRecord;
 			if (i_rec == null)
 			{
 				Result = false;
@@ -38,7 +38,7 @@ namespace GKCore.Commands
 
 		public override void Undo()
 		{
-			TGEDCOMIndividualRecord i_rec = (TGEDCOMIndividualRecord)this.FManager.Tree.XRefIndex_Find(this.FPersonXRef);
+			TGEDCOMIndividualRecord i_rec = this.FManager.Tree.XRefIndex_Find(this.FPersonXRef) as TGEDCOMIndividualRecord;
 			if (i_rec != null)
 			{
 				i_rec.Patriarch = this.FOldValue;

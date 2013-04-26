@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Ext.Utils;
@@ -679,8 +678,8 @@ namespace GKUI.Controls
 				this.FRange.Y = (this.FPageHeight - CR.Height);
 			}
 
-			SysUtils.SetScrollRange((uint)this.Handle, 0, 0, this.FRange.X, false);
-			SysUtils.SetScrollRange((uint)this.Handle, 1, 0, this.FRange.Y, false);
+            Win32Native.SetScrollRange((uint)this.Handle, 0, 0, this.FRange.X, false);
+            Win32Native.SetScrollRange((uint)this.Handle, 1, 0, this.FRange.Y, false);
 		}
 
 		private void SetLeftPos(int Value)
@@ -692,8 +691,8 @@ namespace GKUI.Controls
 			{
 				TRect dummy = TRect.Empty();
 				TRect R = TRect.Empty();
-				SysUtils.ScrollWindowEx((uint)this.Handle, this.FLeftPos - Value, 0, ref dummy, ref dummy, 0, out R, 0u);
-				SysUtils.SetScrollPos((uint)this.Handle, 0, this.FLeftPos, true);
+                Win32Native.ScrollWindowEx((uint)this.Handle, this.FLeftPos - Value, 0, ref dummy, ref dummy, 0, out R, 0u);
+                Win32Native.SetScrollPos((uint)this.Handle, 0, this.FLeftPos, true);
 				base.Invalidate();
 				this.FLeftPos = Value;
 			}
@@ -708,8 +707,8 @@ namespace GKUI.Controls
 			{
 				TRect dummy = TRect.Empty();
 				TRect R = TRect.Empty();
-				SysUtils.ScrollWindowEx((uint)this.Handle, 0, this.FTopPos - Value, ref dummy, ref dummy, 0, out R, 0u);
-				SysUtils.SetScrollPos((uint)this.Handle, 1, this.FTopPos, true);
+                Win32Native.ScrollWindowEx((uint)this.Handle, 0, this.FTopPos - Value, ref dummy, ref dummy, 0, out R, 0u);
+                Win32Native.SetScrollPos((uint)this.Handle, 1, this.FTopPos, true);
 				base.Invalidate();
 				this.FTopPos = Value;
 			}
@@ -718,118 +717,28 @@ namespace GKUI.Controls
 		protected override void WndProc(ref Message m)
 		{
 			base.WndProc(ref m);
-			int msg = m.Msg;
 
-			if (msg != 5)
-			{
-				if (msg != 135)
-				{
-					if (msg != 276)
-					{
-						if (msg == 277)
-						{
-							uint wParam = (uint)m.WParam.ToInt32();
-							switch (SysUtils.GetScrollEventType(wParam & 65535u))
-							{
-								case ScrollEventType.SmallDecrement:
-								{
-									this.TopPos -= base.ClientRectangle.Height / 20;
-									break;
-								}
-								case ScrollEventType.SmallIncrement:
-								{
-									this.TopPos += base.ClientRectangle.Height / 20;
-									break;
-								}
-								case ScrollEventType.LargeDecrement:
-								{
-									this.TopPos -= base.ClientRectangle.Height / 2;
-									break;
-								}
-								case ScrollEventType.LargeIncrement:
-								{
-									this.TopPos += base.ClientRectangle.Height / 2;
-									break;
-								}
-								case ScrollEventType.ThumbPosition:
-								case ScrollEventType.ThumbTrack:
-								{
-									TScrollInfo ScrollInfo = new TScrollInfo();
-									ScrollInfo.cbSize = (uint)Marshal.SizeOf( ScrollInfo );
-									ScrollInfo.fMask = 23u;
-									SysUtils.GetScrollInfo((uint)this.Handle, 1, ref ScrollInfo);
-									this.TopPos = ScrollInfo.nTrackPos;
-									break;
-								}
-								case ScrollEventType.First:
-								{
-									this.TopPos = 0;
-									break;
-								}
-								case ScrollEventType.Last:
-								{
-									this.TopPos = this.FPageHeight;
-									break;
-								}
-							}
-						}
-					}
-					else
-					{
-						uint wParam = (uint)m.WParam.ToInt32();
-						switch (SysUtils.GetScrollEventType(wParam & 65535u))
-						{
-							case ScrollEventType.SmallDecrement:
-							{
-								this.LeftPos -= base.ClientRectangle.Width / 20;
-								break;
-							}
-							case ScrollEventType.SmallIncrement:
-							{
-								this.LeftPos += base.ClientRectangle.Width / 20;
-								break;
-							}
-							case ScrollEventType.LargeDecrement:
-							{
-								this.LeftPos -= base.ClientRectangle.Width / 2;
-								break;
-							}
-							case ScrollEventType.LargeIncrement:
-							{
-								this.LeftPos += base.ClientRectangle.Width / 2;
-								break;
-							}
-							case ScrollEventType.ThumbPosition:
-							case ScrollEventType.ThumbTrack:
-							{
-								TScrollInfo ScrollInfo = new TScrollInfo();
-								ScrollInfo.cbSize = (uint)Marshal.SizeOf( ScrollInfo );
-								ScrollInfo.fMask = 23u;
-								SysUtils.GetScrollInfo((uint)this.Handle, 0, ref ScrollInfo);
-								this.LeftPos = ScrollInfo.nTrackPos;
-								break;
-							}
-							case ScrollEventType.First:
-							{
-								this.LeftPos = 0;
-								break;
-							}
-							case ScrollEventType.Last:
-							{
-								this.LeftPos = this.FPageWidth;
-								break;
-							}
-						}
-					}
-				}
-				else
-				{
-					m.Result = (IntPtr)(m.Result.ToInt32() | 1 | 2 | 128);
-				}
-			}
-			else
+			if (m.Msg == Win32Native.WM_SIZE)
 			{
 				this.ScrollRange();
+			}
+			else if (m.Msg == Win32Native.WM_GETDLGCODE)
+			{
+				m.Result = (IntPtr)(m.Result.ToInt32() | Win32Native.DLGC_WANTARROWS | Win32Native.DLGC_WANTTAB | Win32Native.DLGC_WANTCHARS);
+			}
+			else if (m.Msg == Win32Native.WM_HSCROLL)
+			{
+				uint wParam = (uint)m.WParam.ToInt32();
+				int new_pos = SysUtils.DoScroll((uint)this.Handle.ToInt32(), wParam, 0, this.LeftPos, 0, this.FPageWidth,
+				                                base.ClientRectangle.Width / 20, base.ClientRectangle.Width / 2);
+				this.SetLeftPos(new_pos);
+			}
+			else if (m.Msg == Win32Native.WM_VSCROLL)
+			{
+				uint wParam = (uint)m.WParam.ToInt32();
+				int new_pos = SysUtils.DoScroll((uint)this.Handle.ToInt32(), wParam, 1, this.TopPos, 0, this.FPageHeight, 
+				                                base.ClientRectangle.Height / 20, base.ClientRectangle.Height / 2);
+				this.SetTopPos(new_pos);
 			}
 		}
 	}

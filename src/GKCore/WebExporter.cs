@@ -39,7 +39,7 @@ namespace GKCore
 					TGEDCOMRecord rec = this.FTree[i];
 					if (rec is TGEDCOMIndividualRecord)
 					{
-						TGEDCOMIndividualRecord ind = (TGEDCOMIndividualRecord)rec;
+						TGEDCOMIndividualRecord ind = rec as TGEDCOMIndividualRecord;
 						names.AddObject(ind.aux_GetNameStr(true, false), ind);
 					}
 				}
@@ -166,7 +166,7 @@ namespace GKCore
 					TGEDCOMRecord rec = this.FTree[i];
 					if (rec is TGEDCOMIndividualRecord)
 					{
-						TGEDCOMIndividualRecord iRec = (TGEDCOMIndividualRecord)rec;
+						TGEDCOMIndividualRecord iRec = rec as TGEDCOMIndividualRecord;
 
 						int src_num = iRec.SourceCitations.Count - 1;
 						for (int k = 0; k <= src_num; k++)
@@ -317,7 +317,7 @@ namespace GKCore
 					TGEDCOMRecord rec = this.FTree[i];
 					if (rec is TGEDCOMIndividualRecord)
 					{
-						TGEDCOMIndividualRecord ind = (TGEDCOMIndividualRecord)rec;
+						TGEDCOMIndividualRecord ind = rec as TGEDCOMIndividualRecord;
 						string fam, nam, pat;
 						ind.aux_GetNameParts(out fam, out nam, out pat);
 						if (nam == "")
@@ -448,7 +448,7 @@ namespace GKCore
 					TGEDCOMRecord rec = this.FTree[i];
 					if (rec is TGEDCOMIndividualRecord)
 					{
-						TGEDCOMIndividualRecord ind = (TGEDCOMIndividualRecord)rec;
+						TGEDCOMIndividualRecord ind = rec as TGEDCOMIndividualRecord;
 						string fam, nam, pat;
 						ind.aux_GetNameParts(out fam, out nam, out pat);
 						if (fam == "")
@@ -629,7 +629,7 @@ namespace GKCore
 
 				base.WriteHTMLFooter(contents);
 			}
-			TGenEngine.LoadExtFile(this.FPath + "index.htm");
+            SysUtils.LoadExtFile(this.FPath + "index.htm");
 		}
 
 		public WebExporter(TGenEngine aEngine, string aPath) : base(aEngine, aPath)

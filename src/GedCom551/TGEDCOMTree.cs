@@ -21,69 +21,6 @@ namespace GedCom551
 
 	public sealed class TGEDCOMTree : TGEDCOMObject, IDisposable
 	{
-		public struct StdTreeEnumerator : IEnumerator
-		{
-			private TGEDCOMTree tree;
-			private int index;
-			private int endIndex;
-			private TGEDCOMRecord currentElement;
-			private TGEDCOMRecordType rec_type;
-
-			public object Current
-			{
-				get { return this.currentElement; }
-			}
-
-			internal StdTreeEnumerator(TGEDCOMTree tree)
-			{
-				this.tree = tree;
-				this.index = -1;
-				this.endIndex = tree.RecordsCount - 1;
-				this.currentElement = null;
-				this.rec_type = TGEDCOMRecordType.rtNone;
-			}
-
-			internal StdTreeEnumerator(TGEDCOMTree tree, TGEDCOMRecordType rec_type)
-			{
-				this.tree = tree;
-				this.index = -1;
-				this.endIndex = tree.RecordsCount - 1;
-				this.currentElement = null;
-				this.rec_type = rec_type;
-			}
-
-			public bool MoveNext()
-			{
-				if (this.rec_type == TGEDCOMRecordType.rtNone)
-				{
-					if (this.index < this.endIndex)
-					{
-						this.index++;
-						this.currentElement = this.tree[this.index];
-						return true;
-					}
-				} else {
-					while (this.index < this.endIndex)
-					{
-						this.index++;
-						TGEDCOMRecord rec = this.tree[this.index];
-						if (rec.RecordType == this.rec_type) {
-							this.currentElement = rec;
-							return true;
-						}
-					}
-				}
-
-				this.index = this.endIndex + 1;
-				return false;
-			}
-
-			public void Reset()
-			{
-				this.index = -1;
-			}
-		}
-
 		public struct TreeEnumerator : ITreeEnumerator
 		{
 			private TGEDCOMTree tree;
@@ -146,11 +83,6 @@ namespace GedCom551
 		private TGEDCOMState FState;
 		private bool Disposed_;
 
-		public IEnumerator GetStdEnumerator(TGEDCOMRecordType rec_type)
-		{
-			return new StdTreeEnumerator(this, rec_type);
-		}
-
 		public ITreeEnumerator GetEnumerator(TGEDCOMRecordType rec_type)
 		{
 			return new TreeEnumerator(this, rec_type);
@@ -188,12 +120,12 @@ namespace GedCom551
 		{
 			GEDCOMFactory f = GEDCOMFactory.GetInstance();
 
-			f.Register("DATE", TGEDCOMDateValue.Create);
-			f.Register("TIME", TGEDCOMTime.Create);
-			f.Register("ADDR", TGEDCOMAddress.Create);
-			f.Register("PLAC", TGEDCOMPlace.Create);
-			f.Register("MAP", TGEDCOMMap.Create);
-			f.Register("_LOC", TGEDCOMPointer.Create);
+			f.RegisterTag("DATE", TGEDCOMDateValue.Create);
+			f.RegisterTag("TIME", TGEDCOMTime.Create);
+			f.RegisterTag("ADDR", TGEDCOMAddress.Create);
+			f.RegisterTag("PLAC", TGEDCOMPlace.Create);
+			f.RegisterTag("MAP", TGEDCOMMap.Create);
+			f.RegisterTag("_LOC", TGEDCOMPointer.Create);
 
 			//f.Register("xxxx", xxxx.Create);
 		}
@@ -367,30 +299,18 @@ namespace GedCom551
 
 			this.Pack();
 
-			StreamWriter fs = new StreamWriter(aFileName, false, TGEDCOMObject.GetEncodingByCharacterSet(CharSet));
-			try
-			{
+			using (StreamWriter fs = new StreamWriter(aFileName, false, TGEDCOMObject.GetEncodingByCharacterSet(CharSet))) {
 				this.SaveToStream(fs);
 				this.FHeader.CharacterSet = TGEDCOMCharacterSet.csASCII;
-			}
-			finally
-			{
-				SysUtils.Free(fs);
 			}
 		}
 
 		public void LoadFromFile([In] string aFileName)
 		{
-			StreamReader fs = new StreamReader(aFileName, Encoding.GetEncoding(1251));
-			try
-			{
+			using (StreamReader fs = new StreamReader(aFileName, Encoding.GetEncoding(1251))) {
 				this.Clear();
 				this.LoadFromStream(fs);
 				this.FHeader.CharacterSet = TGEDCOMCharacterSet.csASCII;
-			}
-			finally
-			{
-				fs.Dispose();
 			}
 		}
 
@@ -469,73 +389,69 @@ namespace GedCom551
 
 							if (ALevel == 0)
 							{
-								if (ATag == "HEAD")
+								if (ATag == "INDI")
+								{
+									CurRecord = this.AddRecord(new TGEDCOMIndividualRecord(this, this, "", ""));
+								}
+								else if (ATag == "FAM")
+								{
+									CurRecord = this.AddRecord(new TGEDCOMFamilyRecord(this, this, "", ""));
+								}
+								else if (ATag == "OBJE")
+								{
+									CurRecord = this.AddRecord(new TGEDCOMMultimediaRecord(this, this, "", ""));
+								}
+								else if (ATag == "NOTE")
+								{
+									CurRecord = this.AddRecord(new TGEDCOMNoteRecord(this, this, "", ""));
+								}
+								else if (ATag == "REPO")
+								{
+									CurRecord = this.AddRecord(new TGEDCOMRepositoryRecord(this, this, "", ""));
+								}
+								else if (ATag == "SOUR")
+								{
+									CurRecord = this.AddRecord(new TGEDCOMSourceRecord(this, this, "", ""));
+								}
+								else if (ATag == "SUBN")
+								{
+									CurRecord = this.AddRecord(new TGEDCOMSubmissionRecord(this, this, "", ""));
+								}
+								else if (ATag == "SUBM")
+								{
+									CurRecord = this.AddRecord(new TGEDCOMSubmitterRecord(this, this, "", ""));
+								}
+								else if (ATag == "_GROUP")
+								{
+									CurRecord = this.AddRecord(new TGEDCOMGroupRecord(this, this, "", ""));
+								}
+								else if (ATag == "_RESEARCH")
+								{
+									CurRecord = this.AddRecord(new TGEDCOMResearchRecord(this, this, "", ""));
+								}
+								else if (ATag == "_TASK")
+								{
+									CurRecord = this.AddRecord(new TGEDCOMTaskRecord(this, this, "", ""));
+								}
+								else if (ATag == "_COMM")
+								{
+									CurRecord = this.AddRecord(new TGEDCOMCommunicationRecord(this, this, "", ""));
+								}
+								else if (ATag == "_LOC")
+								{
+									CurRecord = this.AddRecord(new TGEDCOMLocationRecord(this, this, "", ""));
+								}
+								else if (ATag == "HEAD")
 								{
 									CurRecord = this.FHeader;
 								}
+								else if (ATag == "TRLR")
+								{
+									break;
+								}
 								else
 								{
-									if (ATag == "TRLR")
-									{
-										break;
-									}
-
-									if (ATag == "FAM")
-									{
-										CurRecord = this.AddRecord(new TGEDCOMFamilyRecord(this, this, "", ""));
-									}
-									else if (ATag == "INDI")
-									{
-										CurRecord = this.AddRecord(new TGEDCOMIndividualRecord(this, this, "", ""));
-									}
-									else if (ATag == "OBJE")
-									{
-										CurRecord = this.AddRecord(new TGEDCOMMultimediaRecord(this, this, "", ""));
-									}
-									else if (ATag == "NOTE")
-									{
-										CurRecord = this.AddRecord(new TGEDCOMNoteRecord(this, this, "", ""));
-									}
-									else if (ATag == "REPO")
-									{
-										CurRecord = this.AddRecord(new TGEDCOMRepositoryRecord(this, this, "", ""));
-									}
-									else if (ATag == "SOUR")
-									{
-										CurRecord = this.AddRecord(new TGEDCOMSourceRecord(this, this, "", ""));
-									}
-									else if (ATag == "SUBN")
-									{
-										CurRecord = this.AddRecord(new TGEDCOMSubmissionRecord(this, this, "", ""));
-									}
-									else if (ATag == "SUBM")
-									{
-										CurRecord = this.AddRecord(new TGEDCOMSubmitterRecord(this, this, "", ""));
-									}
-									else if (ATag == "_GROUP")
-									{
-										CurRecord = this.AddRecord(new TGEDCOMGroupRecord(this, this, "", ""));
-									}
-									else if (ATag == "_RESEARCH")
-									{
-										CurRecord = this.AddRecord(new TGEDCOMResearchRecord(this, this, "", ""));
-									}
-									else if (ATag == "_TASK")
-									{
-										CurRecord = this.AddRecord(new TGEDCOMTaskRecord(this, this, "", ""));
-									}
-									else if (ATag == "_COMM")
-									{
-										CurRecord = this.AddRecord(new TGEDCOMCommunicationRecord(this, this, "", ""));
-									}
-									else if (ATag == "_LOC")
-									{
-										CurRecord = this.AddRecord(new TGEDCOMLocationRecord(this, this, "", ""));
-									}
-									else
-									{
-										CurRecord = null;
-									}
+									CurRecord = null;
 								}
 
 								if (CurRecord != null && AXRef != "")
@@ -636,7 +552,7 @@ namespace GedCom551
 			return res;
 		}
 
-		private static void _LoadFromStream_LineCorrect(TGEDCOMCustomRecord CurRecord, TGEDCOMCustomTag CurTag, int LineNum, string S)
+        private static void _LoadFromStream_LineCorrect(TGEDCOMCustomRecord CurRecord, TGEDCOMTag CurTag, int LineNum, string S)
 		{
 			try
 			{

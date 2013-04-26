@@ -517,7 +517,7 @@ namespace GedCom551
 			return Result;
 		}
 
-		public override void Assign(TGEDCOMCustomTag Source)
+        public override void Assign(TGEDCOMTag Source)
 		{
 			if (Source != null && Source is TGEDCOMDate)
 			{

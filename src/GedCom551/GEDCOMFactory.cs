@@ -3,10 +3,7 @@ using System.Collections.Generic;
 
 namespace GedCom551
 {
-	// sample: TempFactory.Register("Temp1", new Func<ITemp>(() => new Temp1()));
-	// url: http://www.gutgames.com/post/Factory-Pattern-using-Generics-in-C.aspx
-
-	public delegate TGEDCOMCustomTag TagConstructor(TGEDCOMTree AOwner, TGEDCOMObject AParent, string ATagName, string AValue);
+    public delegate TGEDCOMTag TagConstructor(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue);
 
 	public sealed class GEDCOMFactory
 	{
@@ -19,20 +16,20 @@ namespace GedCom551
 			return _Instance;
 		}
 
-		public void Register(string Key, TagConstructor constructor)
+		public void RegisterTag(string key, TagConstructor constructor)
 		{
-			if (_Constructors.ContainsKey(Key))
-				_Constructors[Key] = constructor;
+			if (_Constructors.ContainsKey(key))
+				_Constructors[key] = constructor;
 			else
-				_Constructors.Add(Key, constructor);
+				_Constructors.Add(key, constructor);
 		}
 
-		public TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, string ATagName, string AValue)
+        public TGEDCOMTag CreateTag(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue)
 		{
 			TagConstructor constructor;
 
-			if (_Constructors.TryGetValue(ATagName, out constructor)) {
-				return constructor(AOwner, AParent, ATagName, AValue);
+			if (_Constructors.TryGetValue(tagName, out constructor)) {
+				return constructor(owner, parent, tagName, tagValue);
 			} else {
 				return null;
 			}

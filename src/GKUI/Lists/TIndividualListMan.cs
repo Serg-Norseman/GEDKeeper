@@ -347,7 +347,7 @@ namespace GKUI.Lists
 		public override object GetColumnValueEx(int col_index)
 		{
 			TColRec colrec = this.FColumnsMap[col_index];
-			TPersonColumnType pct = (TPersonColumnType)colrec.col_type;
+			//TPersonColumnType pct = (TPersonColumnType)colrec.col_type;
 
 			return GetColumnValueDirect(colrec.col_type, (int)colrec.col_subtype);
 		}
@@ -520,13 +520,13 @@ namespace GKUI.Lists
 			if (iFilter.GroupRef == "") {
 				this.filter_grp = null;
 			} else {
-				this.filter_grp = (TGEDCOMGroupRecord)this.FTree.XRefIndex_Find(iFilter.GroupRef);
+				this.filter_grp = this.FTree.XRefIndex_Find(iFilter.GroupRef) as TGEDCOMGroupRecord;
 			}
 
 			if (iFilter.SourceRef == "") {
 				this.filter_source = null;
 			} else {
-				this.filter_source = (TGEDCOMSourceRecord)this.FTree.XRefIndex_Find(iFilter.SourceRef);
+				this.filter_source = this.FTree.XRefIndex_Find(iFilter.SourceRef) as TGEDCOMSourceRecord;
 			}
 
 			this.FYearMin = 10000;

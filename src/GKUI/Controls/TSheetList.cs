@@ -209,7 +209,7 @@ namespace GKUI.Controls
 			this.FToolBar.ImageList = GKUI.TfmGEDKeeper.Instance.ImageList_Buttons;
 			this.FToolBar.ShowToolTips = true;
 			this.FToolBar.ButtonClick += new ToolBarButtonClickEventHandler(this.ButtonClick);
-			this.FList = new GKListView(null);
+			this.FList = new GKListView();
 			this.FList.Location = new Point(0, 0);
 			this.FList.Size = new Size(500, 290);
 			this.FList.HideSelection = false;

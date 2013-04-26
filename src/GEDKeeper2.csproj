@@ -20,6 +20,21 @@
     <RunSourceAnalysis>False</RunSourceAnalysis>
     <ApplicationIcon>GEDKeeper2.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -43,7 +58,14 @@
     <Optimize>true</Optimize>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <CodeAnalysisRuleSet>gk2rules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cyotek.Windows.Forms.ImageBox">
+      <HintPath>..\Cyotek.Windows.Forms.ImageBox.dll</HintPath>
+    </Reference>
     <Reference Include="itextsharp">
       <HintPath>itextsharp.dll</HintPath>
     </Reference>
@@ -86,10 +108,12 @@
     <Compile Include="Ext\TList.cs" />
     <Compile Include="Ext\TRect.cs" />
     <Compile Include="Ext\tween.cs" />
+    <Compile Include="Ext\Win32Native.cs" />
     <Compile Include="Ext\ZipStorer.cs" />
     <Compile Include="GedCom551\GEDCOMEnums.cs" />
     <Compile Include="GedCom551\GEDCOMFactory.cs" />
     <Compile Include="GedCom551\TGEDCOMAddress.cs" />
+    <Compile Include="GedCom551\TGEDCOMAlias.cs" />
     <Compile Include="GedCom551\TGEDCOMAssociation.cs" />
     <Compile Include="GedCom551\TGEDCOMChangeDate.cs" />
     <Compile Include="GedCom551\TGEDCOMChildToFamilyLink.cs" />
@@ -97,7 +121,7 @@
     <Compile Include="GedCom551\TGEDCOMCustomDate.cs" />
     <Compile Include="GedCom551\TGEDCOMCustomEvent.cs" />
     <Compile Include="GedCom551\TGEDCOMCustomRecord.cs" />
-    <Compile Include="GedCom551\TGEDCOMCustomTag.cs" />
+    <Compile Include="GedCom551\TGEDCOMTag.cs" />
     <Compile Include="GedCom551\TGEDCOMData.cs" />
     <Compile Include="GedCom551\TGEDCOMDate.cs" />
     <Compile Include="GedCom551\TGEDCOMDateApproximated.cs" />
@@ -142,7 +166,6 @@
     <Compile Include="GedCom551\TGEDCOMSpouseToFamilyLink.cs" />
     <Compile Include="GedCom551\TGEDCOMSubmissionRecord.cs" />
     <Compile Include="GedCom551\TGEDCOMSubmitterRecord.cs" />
-    <Compile Include="GedCom551\TGEDCOMTag.cs" />
     <Compile Include="GedCom551\TGEDCOMTagWithLists.cs" />
     <Compile Include="GedCom551\TGEDCOMTaskRecord.cs" />
     <Compile Include="GedCom551\TGEDCOMTime.cs" />
@@ -173,7 +196,15 @@
     <Compile Include="GKResources.Designer.cs">
       <DependentUpon>GKResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Controls\GKMergeControl.cs" />
+    <Compile Include="GKSandbox\ImageControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GKSandbox\ImageControl.Designer.cs">
+      <DependentUpon>ImageControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Controls\GKMergeControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="GKUI\Controls\GKMergeControl.Designer.cs">
       <DependentUpon>GKMergeControl.cs</DependentUpon>
     </Compile>
@@ -503,6 +534,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="GKSandbox\ImageControl.resx">
+      <DependentUpon>ImageControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Controls\GKMergeControl.resx">
       <DependentUpon>GKMergeControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -628,12 +662,10 @@
       <DependentUpon>TfmTimeLine.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GKSandbox\" />
-    <Folder Include="GKUI\Widgets" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="app.config" />
+    <Content Include="ProfilingSessions\Session20130421_135002.sdps" />
     <Content Include="zlib1.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -644,6 +676,28 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="app.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

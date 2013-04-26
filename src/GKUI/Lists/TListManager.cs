@@ -141,17 +141,19 @@ namespace GKUI.Lists
 			return result;
 		}
 
-		public void UpdateTitles(GKListView aList, bool isMain)
+		public void UpdateTitles(GKListView listView, bool isMain)
 		{
-			aList.BeginUpdate();
+            if (listView == null) return;
+
+			listView.BeginUpdate();
 			try
 			{
-				aList.Columns.Clear();
-				this.UpdateColumns(aList, isMain);
+				listView.Columns.Clear();
+				this.UpdateColumns(listView, isMain);
 			}
 			finally
 			{
-				aList.EndUpdate();
+				listView.EndUpdate();
 			}
 		}
 
@@ -165,7 +167,7 @@ namespace GKUI.Lists
 
 			object val = GetColumnValueEx(col_index);
 
-			string res = this.ConvColValue(val, cs);
+			string res = ConvColValue(val, cs);
 
 			return res;
 		}
@@ -185,20 +187,24 @@ namespace GKUI.Lists
 		{
 		}
 
-		public virtual void UpdateItem(GKListItem aItem, bool isMain)
+		public virtual void UpdateItem(GKListItem item, bool isMain)
 		{
+            if (item == null) return;
+
 			for (int i = 1; i <= this.ColumnStatics.Count; i++) {
-				aItem.SubItems.Add(this.GetColumnValue(i, isMain));
+				item.SubItems.Add(this.GetColumnValue(i, isMain));
 			}
 		}
 
-		public virtual void UpdateColumns(GKListView aList, bool isMain)
+		public virtual void UpdateColumns(GKListView listView, bool isMain)
 		{
-			aList.AddListColumn("¹", 50, false);
+            if (listView == null) return;
+
+			listView.AddListColumn("¹", 50, false);
 
 			for (int i = 0; i < this.ColumnStatics.Count; i++) {
 				TColumnStatic cs = this.ColumnStatics[i];
-				aList.AddListColumn(cs.colName, cs.width, false);
+				listView.AddListColumn(cs.colName, cs.width, false);
 			}
 		}
 
@@ -228,7 +234,7 @@ namespace GKUI.Lists
 
 		public abstract Type GetColumnsEnum();
 
-		protected string ConvColValue(object val, TColumnStatic cs)
+		protected static string ConvColValue(object val, TColumnStatic cs)
 		{
 			switch (cs.dataType) {
 				case TDataType.dtString:
@@ -251,7 +257,7 @@ namespace GKUI.Lists
 			return val.ToString();
 		}
 
-		protected object ConvColStr(string val, TDataType type)
+		protected static object ConvColStr(string val, TDataType type)
 		{
 			switch (type) {
 				case TDataType.dtString:

@@ -32,5 +32,10 @@ namespace GedCom551
 		public TGEDCOMChildToFamilyLink(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
 		}
+
+        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+		{
+			return new TGEDCOMChildToFamilyLink(AOwner, AParent, AName, AValue);
+		}
 	}
 }

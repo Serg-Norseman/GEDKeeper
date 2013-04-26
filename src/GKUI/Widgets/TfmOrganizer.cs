@@ -41,7 +41,7 @@ namespace GKUI
 
 				if (rec is TGEDCOMIndividualRecord)
 				{
-					TGEDCOMIndividualRecord i_rec = (TGEDCOMIndividualRecord)rec;
+					TGEDCOMIndividualRecord i_rec = rec as TGEDCOMIndividualRecord;
 					string nm = i_rec.aux_GetNameStr(true, false);
 
 					int num2 = i_rec.IndividualEvents.Count - 1;

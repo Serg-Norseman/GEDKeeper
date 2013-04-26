@@ -991,12 +991,11 @@ namespace GKUI
 		{
 			if (Disposing)
 			{
-				if (components != null) {
-					components.Dispose();
-				}
 				//FSearchMan.Dispose();
 				GKMapBrowser.GeoDone();
-			}
+
+                if (components != null) components.Dispose();
+            }
 			base.Dispose(Disposing);
 		}
 	}

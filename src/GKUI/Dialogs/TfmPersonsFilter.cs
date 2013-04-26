@@ -141,7 +141,7 @@ namespace GKUI
 			{
 				this.cbGroup.SelectedIndex = (int)iFilter.GroupMode;
 			} else {
-				this.cbGroup.Text = ((TGEDCOMGroupRecord)(tree.XRefIndex_Find(iFilter.GroupRef))).GroupName;
+				this.cbGroup.Text = (tree.XRefIndex_Find(iFilter.GroupRef) as TGEDCOMGroupRecord).GroupName;
 			}
 
 			this.cbSource.Items.Clear();
@@ -160,7 +160,7 @@ namespace GKUI
 			{
 				this.cbSource.SelectedIndex = (int)iFilter.SourceMode;
 			} else {
-				this.cbSource.Text = ((TGEDCOMSourceRecord)(tree.XRefIndex_Find(iFilter.SourceRef))).FiledByEntry;
+				this.cbSource.Text = (tree.XRefIndex_Find(iFilter.SourceRef) as TGEDCOMSourceRecord).FiledByEntry;
 			}
         }
         

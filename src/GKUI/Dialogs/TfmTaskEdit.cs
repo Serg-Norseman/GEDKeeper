@@ -51,7 +51,7 @@ namespace GKUI
 					this.EditStartDate.Text = TGenEngine.GEDCOMDateToStr(this.FTask.StartDate, TGenEngine.TDateFormat.dfDD_MM_YYYY);
 					this.EditStopDate.Text = TGenEngine.GEDCOMDateToStr(this.FTask.StopDate, TGenEngine.TDateFormat.dfDD_MM_YYYY);
 					TGoalType gt = TGoalType.gtOther;
-					TGenEngine.GetTaskGoal(this.Base.Tree, this.FTask, ref gt, ref this.FTempRec);
+                    this.FTask.aux_GetTaskGoal(ref gt, ref this.FTempRec);
 					this.cbGoalType.SelectedIndex = (int)((sbyte)gt);
 					string st;
 
@@ -61,10 +61,10 @@ namespace GKUI
 							this.EditGoal.Text = st;
 							break;
 						case TGoalType.gtFamily:
-							this.EditGoal.Text = TGenEngine.aux_GetFamilyStr((TGEDCOMFamilyRecord)this.FTempRec);
+							this.EditGoal.Text = TGenEngine.aux_GetFamilyStr(this.FTempRec as TGEDCOMFamilyRecord);
 							break;
 						case TGoalType.gtSource:
-							this.EditGoal.Text = ((TGEDCOMSourceRecord)this.FTempRec).FiledByEntry;
+							this.EditGoal.Text = (this.FTempRec as TGEDCOMSourceRecord).FiledByEntry;
 							break;
 						case TGoalType.gtOther:
 							this.EditGoal.Text = this.FTask.Goal;
@@ -132,11 +132,11 @@ namespace GKUI
 					break;
 				case TGoalType.gtFamily:
 					this.FTempRec = this.Base.SelectRecord(TGEDCOMRecordType.rtFamily, new object[0]);
-					this.EditGoal.Text = TGenEngine.aux_GetFamilyStr((TGEDCOMFamilyRecord)this.FTempRec);
+					this.EditGoal.Text = TGenEngine.aux_GetFamilyStr(this.FTempRec as TGEDCOMFamilyRecord);
 					break;
 				case TGoalType.gtSource:
 					this.FTempRec = this.Base.SelectRecord(TGEDCOMRecordType.rtSource, new object[0]);
-					this.EditGoal.Text = ((TGEDCOMSourceRecord)this.FTempRec).FiledByEntry;
+					this.EditGoal.Text = (this.FTempRec as TGEDCOMSourceRecord).FiledByEntry;
 					break;
 				case TGoalType.gtOther:
 					break;

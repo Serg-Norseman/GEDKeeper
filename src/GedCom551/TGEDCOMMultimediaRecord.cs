@@ -89,7 +89,7 @@ namespace GedCom551
 		{
 		}
 
-		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
 		{
 			return new TGEDCOMMultimediaRecord(AOwner, AParent, AName, AValue);
 		}

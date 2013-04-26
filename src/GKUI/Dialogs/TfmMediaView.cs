@@ -5,8 +5,10 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
+using Ext.Utils;
 using GedCom551;
 using GKCore;
+using GKSandbox;
 
 /// <summary>
 /// Localization: clean
@@ -56,9 +58,13 @@ namespace GKUI
 				{
 					Image img = this.Base.Engine.BitmapLoad(this.FFileRef.StringValue, -1, -1, false);
 
-					ctl = new PictureBox();
-					(ctl as PictureBox).Image = img;
-					(ctl as PictureBox).SizeMode = PictureBoxSizeMode.CenterImage;
+					ImageControl imCtl = new ImageControl();
+					imCtl.OpenImage(img);
+					ctl = imCtl;
+					
+					//ctl = new PictureBox();
+					//(ctl as PictureBox).Image = img;
+					//(ctl as PictureBox).SizeMode = PictureBoxSizeMode.CenterImage;
 					break;
 				}
 
@@ -69,7 +75,7 @@ namespace GKUI
 					this.FExtern = true;
 					string target_fn = "";
 					this.Base.Engine.MediaLoad(this.FFileRef.StringValue, ref target_fn);
-					TGenEngine.LoadExtFile(target_fn);
+                    SysUtils.LoadExtFile(target_fn);
 					break;
 				}
 

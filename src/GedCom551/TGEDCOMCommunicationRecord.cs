@@ -63,7 +63,7 @@ namespace GedCom551
 		public void GetCorresponder(ref TCommunicationDir aDir, ref TGEDCOMIndividualRecord aCorresponder)
 		{
 			aCorresponder = null;
-			TGEDCOMCustomTag cr_tag = base.FindTag("FROM", 0);
+            TGEDCOMTag cr_tag = base.FindTag("FROM", 0);
 			if (cr_tag == null)
 			{
 				cr_tag = base.FindTag("TO", 0);
@@ -99,7 +99,7 @@ namespace GedCom551
 		{
 		}
 
-		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
 		{
 			return new TGEDCOMCommunicationRecord(AOwner, AParent, AName, AValue);
 		}

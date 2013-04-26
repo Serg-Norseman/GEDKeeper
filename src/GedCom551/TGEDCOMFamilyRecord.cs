@@ -163,21 +163,21 @@ namespace GedCom551
 			while (this._FamilyEvents.Count > 0)
 			{
 				TGEDCOMObject obj = this._FamilyEvents.Extract(0);
-				(obj as TGEDCOMCustomTag).ResetParent(toRec);
+                (obj as TGEDCOMTag).ResetParent(toRec);
 				toRec.FamilyEvents.Add(obj as TGEDCOMFamilyEvent);
 			}
 
 			while (this._Childrens.Count > 0)
 			{
 				TGEDCOMObject obj = this._Childrens.Extract(0);
-				(obj as TGEDCOMCustomTag).ResetParent(toRec);
+                (obj as TGEDCOMTag).ResetParent(toRec);
 				toRec.Childrens.Add(obj as TGEDCOMPointer);
 			}
 
 			while (this._SpouseSealings.Count > 0)
 			{
 				TGEDCOMObject obj = this._SpouseSealings.Extract(0);
-				(obj as TGEDCOMCustomTag).ResetParent(toRec);
+                (obj as TGEDCOMTag).ResetParent(toRec);
 				toRec.SpouseSealings.Add(obj as TGEDCOMSpouseSealing);
 			}
 		}
@@ -316,7 +316,7 @@ namespace GedCom551
 			bool match = false;
 
 			if (record != null) {
-				TGEDCOMFamilyRecord fam = (TGEDCOMFamilyRecord)record;
+				TGEDCOMFamilyRecord fam = record as TGEDCOMFamilyRecord;
 
 				string title1 = this.aux_GetFamilyStr(null, null);
 				string title2 = fam.aux_GetFamilyStr(null, null);
@@ -331,7 +331,7 @@ namespace GedCom551
 		{
 		}
 
-		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
 		{
 			return new TGEDCOMFamilyRecord(AOwner, AParent, AName, AValue);
 		}

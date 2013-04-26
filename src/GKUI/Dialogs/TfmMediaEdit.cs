@@ -167,7 +167,7 @@ namespace GKUI
 		private void btnView_Click(object sender, EventArgs e)
 		{
 			this.AcceptChanges();
-			this.Base.ShowMedia(this.FMediaRec);
+			this.Base.ShowMedia(this.FMediaRec, true);
 		}
 
 		private void edName_TextChanged(object sender, EventArgs e)

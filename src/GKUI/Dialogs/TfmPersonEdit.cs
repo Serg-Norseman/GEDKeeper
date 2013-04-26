@@ -153,6 +153,7 @@ namespace GKUI
 					item.SubItems.Add(TGenEngine.GetMarriageDate(family, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
 				}
 			}
+
 			this.Base.RecListAssociationsRefresh(this.FPerson, this.FAssociationsList.List, null);
 			this.Base.RecListGroupsRefresh(this.FPerson, this.FGroupsList.List, null);
 
@@ -164,7 +165,9 @@ namespace GKUI
 				ListViewItem item = this.FUserRefList.List.AddItem(uref.StringValue, uref);
 				item.SubItems.Add(uref.ReferenceType);
 			}
-			TfmPersonEdit._ControlsRefresh_LockEditor(this.FPerson.Restriction == TGEDCOMRestriction.rnLocked);
+
+			LockEditor(this.FPerson.Restriction == TGEDCOMRestriction.rnLocked);
+
 			this.PortraitRefresh();
 		}
 
@@ -235,98 +238,82 @@ namespace GKUI
 
 		private void ListModify(object Sender, object ItemData, TGenEngine.TRecAction Action)
 		{
-			if (Sender == this.FEventsList)
+            bool res = false;
+
+            if (Sender == this.FEventsList)
 			{
-				if (Action >= TGenEngine.TRecAction.raMoveUp && Action < (TGenEngine.TRecAction)6)
+                if (Action == TGenEngine.TRecAction.raMoveUp || Action == TGenEngine.TRecAction.raMoveDown)
 				{
 					TGEDCOMCustomEvent evt = ItemData as TGEDCOMCustomEvent;
 					int idx = this.FPerson.IndividualEvents.IndexOfObject(evt);
 					int newIdx = idx;
-					if (Action != TGenEngine.TRecAction.raMoveUp)
-					{
-						if (Action == TGenEngine.TRecAction.raMoveDown)
-						{
+
+                    switch (Action)
+                    {
+                        case TGenEngine.TRecAction.raMoveUp:
+						    this.FPerson.IndividualEvents.Exchange(idx - 1, idx);
+						    newIdx = idx - 1;
+                            break;
+
+                        case TGenEngine.TRecAction.raMoveDown:
 							this.FPerson.IndividualEvents.Exchange(idx, idx + 1);
 							newIdx = idx + 1;
-						}
-					}
-					else
-					{
-						this.FPerson.IndividualEvents.Exchange(idx - 1, idx);
-						newIdx = idx - 1;
-					}
-					this.ControlsRefresh();
+                            break;
+                    }
+
+                    res = true;
 					this.FEventsList.List.SelectItem(newIdx);
 				}
 				else
 				{
-					if (this.Base.ModifyRecEvent(this, this.FPerson, ItemData as TGEDCOMCustomEvent, Action))
-					{
-						this.ControlsRefresh();
-					}
+                    res = (this.Base.ModifyRecEvent(this, this.FPerson, ItemData as TGEDCOMCustomEvent, Action));
 				}
 			}
 			else
 			{
 				if (Sender == this.FSpousesList)
 				{
-					switch (Action)
-					{
+                    TGEDCOMFamilyRecord family = (Action == TGenEngine.TRecAction.raAdd) ? null : ItemData as TGEDCOMFamilyRecord;
+
+					switch (Action) {
 						case TGenEngine.TRecAction.raAdd:
-						{
-							TGEDCOMFamilyRecord family = null;
-							if (this.Base.ModifyFamily(ref family, TGenEngine.TFamilyTarget.ftSpouse, this.FPerson))
-							{
-								this.ControlsRefresh();
-							}
+                            res = (this.Base.ModifyFamily(ref family, TGenEngine.TFamilyTarget.ftSpouse, this.FPerson));
 							break;
-						}
-						case TGenEngine.TRecAction.raEdit:
-						{
-							TGEDCOMFamilyRecord family = ItemData as TGEDCOMFamilyRecord;
-							if (this.Base.ModifyFamily(ref family, TGenEngine.TFamilyTarget.ftNone, null))
-							{
-								this.ControlsRefresh();
-							}
+
+                        case TGenEngine.TRecAction.raEdit:
+                            res = (this.Base.ModifyFamily(ref family, TGenEngine.TFamilyTarget.ftNone, null));
 							break;
-						}
-						case TGenEngine.TRecAction.raDelete:
-						{
-							TGEDCOMFamilyRecord family = ItemData as TGEDCOMFamilyRecord;
+
+                        case TGenEngine.TRecAction.raDelete:
 							if (family != null && TGenEngine.ShowQuestion(LangMan.LSList[220]) != DialogResult.No)
 							{
 								this.Base.Engine.RemoveFamilySpouse(family, this.FPerson);
-								this.ControlsRefresh();
+                                res = true;
 							}
 							break;
-						}
-						case TGenEngine.TRecAction.raJump:
+
+                        case TGenEngine.TRecAction.raJump:
 						{
-							TGEDCOMFamilyRecord family = ItemData as TGEDCOMFamilyRecord;
 							if (family != null)
 							{
-								TGEDCOMSex sex = this.FPerson.Sex;
-								if (sex != TGEDCOMSex.svNone)
+                                if (this.FPerson.Sex != TGEDCOMSex.svNone)
 								{
 									TGEDCOMPointer sp = null;
-									if (sex != TGEDCOMSex.svMale)
-									{
-										if (sex != TGEDCOMSex.svFemale)
-										{
-											if (sex == TGEDCOMSex.svUndetermined)
-											{
-												break;
-											}
-										}
-										else
-										{
+
+                                    switch (this.FPerson.Sex)
+                                    {
+                                        case TGEDCOMSex.svMale:
+										    sp = family.Wife;
+                                            break;
+
+                                        case TGEDCOMSex.svFemale:
 											sp = family.Husband;
-										}
-									}
-									else
-									{
-										sp = family.Wife;
-									}
+                                            break;
+
+                                        case TGEDCOMSex.svUndetermined:
+                                            break;
+                                    }
+
 									TGEDCOMIndividualRecord spouse = sp.Value as TGEDCOMIndividualRecord;
 									this.AcceptChanges();
 									this.Base.SelectRecordByXRef(spouse.XRef);
@@ -338,23 +325,23 @@ namespace GKUI
 						case TGenEngine.TRecAction.raMoveUp:
 						case TGenEngine.TRecAction.raMoveDown:
 						{
-							TGEDCOMFamilyRecord family = ItemData as TGEDCOMFamilyRecord;
 							int idx = this.FPerson.IndexOfSpouse(family);
 							int newIdx = idx;
-							if (Action != TGenEngine.TRecAction.raMoveUp)
-							{
-								if (Action == TGenEngine.TRecAction.raMoveDown)
-								{
+
+                            switch (Action)
+                            {
+                                case TGenEngine.TRecAction.raMoveUp:
+								    this.FPerson.ExchangeSpouses(idx - 1, idx);
+								    newIdx = idx - 1;
+                                    break;
+
+                                case TGenEngine.TRecAction.raMoveDown:
 									this.FPerson.ExchangeSpouses(idx, idx + 1);
 									newIdx = idx + 1;
-								}
-							}
-							else
-							{
-								this.FPerson.ExchangeSpouses(idx - 1, idx);
-								newIdx = idx - 1;
-							}
-							this.ControlsRefresh();
+                                    break;
+                            }
+
+                            res = true;
 							this.FSpousesList.List.SelectItem(newIdx);
 							break;
 						}
@@ -364,117 +351,91 @@ namespace GKUI
 				{
 					if (Sender == this.FAssociationsList)
 					{
-						if (this.Base.ModifyRecAssociation(this, this.FPerson, ItemData as TGEDCOMAssociation, Action))
-						{
-							this.ControlsRefresh();
-						}
+                        res = (this.Base.ModifyRecAssociation(this, this.FPerson, ItemData as TGEDCOMAssociation, Action));
 					}
 					else
 					{
 						if (Sender == this.FGroupsList)
 						{
-							if (Action != TGenEngine.TRecAction.raAdd)
-							{
-								if (Action == TGenEngine.TRecAction.raDelete)
-								{
-									TGEDCOMGroupRecord group = ItemData as TGEDCOMGroupRecord;
-									if (TGenEngine.ShowQuestion(LangMan.LSList[188]) != DialogResult.No && this.Base.Engine.RemoveGroupMember(group, this.FPerson))
-									{
-										this.ControlsRefresh();
-									}
-								}
-							}
-							else
-							{
-								TGEDCOMGroupRecord group = this.Base.SelectRecord(TGEDCOMRecordType.rtGroup, null) as TGEDCOMGroupRecord;
-								if (group != null && this.Base.Engine.AddGroupMember(group, this.FPerson))
-								{
-									this.ControlsRefresh();
-								}
-							}
+                            TGEDCOMGroupRecord group = (Action == TGenEngine.TRecAction.raAdd) ? null : ItemData as TGEDCOMGroupRecord;
+
+                            switch (Action)
+                            {
+                                case TGenEngine.TRecAction.raAdd:
+								    group = this.Base.SelectRecord(TGEDCOMRecordType.rtGroup, null) as TGEDCOMGroupRecord;
+                                    res = (group != null && this.Base.Engine.AddGroupMember(group, this.FPerson));
+                                    break;
+
+                                case TGenEngine.TRecAction.raDelete:
+                                    res = (TGenEngine.ShowQuestion(LangMan.LSList[188]) != DialogResult.No && this.Base.Engine.RemoveGroupMember(group, this.FPerson));
+                                    break;
+                            }
 						}
 						else
 						{
 							if (Sender == this.FNotesList)
 							{
-								if (this.Base.ModifyRecNote(this, this.FPerson, ItemData as TGEDCOMNotes, Action))
-								{
-									this.ControlsRefresh();
-								}
+                                res = (this.Base.ModifyRecNote(this, this.FPerson, ItemData as TGEDCOMNotes, Action));
 							}
 							else
 							{
 								if (Sender == this.FMediaList)
 								{
-									if (Action >= TGenEngine.TRecAction.raMoveUp && Action < (TGenEngine.TRecAction)6)
+                                    if (Action == TGenEngine.TRecAction.raMoveUp || Action == TGenEngine.TRecAction.raMoveDown)
 									{
 										TGEDCOMMultimediaLink mmLink = ItemData as TGEDCOMMultimediaLink;
 										int idx = this.FPerson.MultimediaLinks.IndexOfObject(mmLink);
 										int newIdx = idx;
-										if (Action != TGenEngine.TRecAction.raMoveUp)
-										{
-											if (Action == TGenEngine.TRecAction.raMoveDown)
-											{
+
+                                        switch (Action)
+                                        {
+                                            case TGenEngine.TRecAction.raMoveUp:
+											    this.FPerson.MultimediaLinks.Exchange(idx - 1, idx);
+											    newIdx = idx - 1;
+                                                break;
+
+                                            case TGenEngine.TRecAction.raMoveDown:
 												this.FPerson.MultimediaLinks.Exchange(idx, idx + 1);
 												newIdx = idx + 1;
-												
-											}
-										}
-										else
-										{
-											this.FPerson.MultimediaLinks.Exchange(idx - 1, idx);
-											newIdx = idx - 1;
-										}
-										this.ControlsRefresh();
+                                                break;
+                                        }
+
+                                        res = true;
 										this.FMediaList.List.SelectItem(newIdx);
-									}
-									else
-									{
-										if (this.Base.ModifyRecMultimedia(this, this.FPerson, ItemData as TGEDCOMMultimediaLink, Action))
-										{
-											this.ControlsRefresh();
-										}
+									} else {
+                                        res = (this.Base.ModifyRecMultimedia(this, this.FPerson, ItemData as TGEDCOMMultimediaLink, Action));
 									}
 								}
 								else
 								{
 									if (Sender == this.FSourcesList)
 									{
-										if (Action >= TGenEngine.TRecAction.raMoveUp && Action < (TGenEngine.TRecAction)6)
+                                        if (Action == TGenEngine.TRecAction.raMoveUp || Action == TGenEngine.TRecAction.raMoveDown)
 										{
 											TGEDCOMSourceCitation src_cit = ItemData as TGEDCOMSourceCitation;
 											int idx = this.FPerson.SourceCitations.IndexOfObject(src_cit);
 											int newIdx = idx;
-											if (Action != TGenEngine.TRecAction.raMoveUp)
-											{
-												if (Action == TGenEngine.TRecAction.raMoveDown)
-												{
+
+                                            switch (Action)
+                                            {
+                                                case TGenEngine.TRecAction.raMoveUp:
+												    this.FPerson.SourceCitations.Exchange(idx - 1, idx);
+												    newIdx = idx - 1;
+                                                    break;
+
+                                                case TGenEngine.TRecAction.raMoveDown:
 													this.FPerson.SourceCitations.Exchange(idx, idx + 1);
 													newIdx = idx + 1;
-												}
-											}
-											else
-											{
-												this.FPerson.SourceCitations.Exchange(idx - 1, idx);
-												newIdx = idx - 1;
-											}
-											this.ControlsRefresh();
+                                                    break;
+                                            }
+
+                                            res = true;
 											this.FSourcesList.List.SelectItem(newIdx);
+										} else {
+                                            res = (this.Base.ModifyRecSource(this, this.FPerson, ItemData as TGEDCOMSourceCitation, Action));
 										}
-										else
-										{
-											if (this.Base.ModifyRecSource(this, this.FPerson, ItemData as TGEDCOMSourceCitation, Action))
-											{
-												this.ControlsRefresh();
-											}
-										}
-									}
-									else
-									{
-										if ((Sender == this.FUserRefList) && this.Base.ModifyRecUserRef(this, this.FPerson, ItemData as TGEDCOMUserReference, Action))
-										{
-											this.ControlsRefresh();
-										}
+									} else {
+                                        res = ((Sender == this.FUserRefList) && this.Base.ModifyRecUserRef(this, this.FPerson, ItemData as TGEDCOMUserReference, Action));
 									}
 								}
 							}
@@ -482,6 +443,8 @@ namespace GKUI
 					}
 				}
 			}
+
+            if (res) this.ControlsRefresh();
 		}
 
 		private void EditFamily_TextChanged(object sender, EventArgs e)
@@ -620,9 +583,7 @@ namespace GKUI
 
 		private void btnPortraitAdd_Click(object sender, EventArgs e)
 		{
-			TGEDCOMRecordType arg_0F_1 = TGEDCOMRecordType.rtMultimedia;
-			object[] anArgs = new object[0];
-			TGEDCOMMultimediaRecord mmRec = FBase.SelectRecord(arg_0F_1, anArgs) as TGEDCOMMultimediaRecord;
+			TGEDCOMMultimediaRecord mmRec = FBase.SelectRecord(TGEDCOMRecordType.rtMultimedia, null) as TGEDCOMMultimediaRecord;
 			if (mmRec != null)
 			{
 				TGEDCOMMultimediaLink mmLink = this.Base.Engine.GetPrimaryMultimediaLink(this.FPerson);
@@ -821,7 +782,7 @@ namespace GKUI
 			this.Label5.Text = LangMan.LSList[124];
 		}
 
-		private static void _ControlsRefresh_LockEditor(bool aLocked)
+		private void LockEditor(bool aLocked)
 		{
 		}
 	}

@@ -109,7 +109,7 @@ namespace GedCom551
 		{
 			base.CreateObj(AOwner, AParent);
 			base.SetLists(EnumSet.Create(new Enum[] { TGEDCOMSubList.stNotes, TGEDCOMSubList.stSource, TGEDCOMSubList.stMultimedia }));
-			this.FLevel = (AParent as TGEDCOMCustomTag).Level;
+            this.FLevel = (AParent as TGEDCOMTag).Level;
 		}
 
 		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)

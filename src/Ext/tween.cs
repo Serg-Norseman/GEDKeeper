@@ -18,8 +18,6 @@ namespace Ext.Tween
 		private int timeDest;
 		private string animType;
 		
-		private float t, d, b, c;
-
 		private int[] Arr_startPos = new int[]{0,0};
 
 		private int destX, destY;
@@ -79,16 +77,17 @@ namespace Ext.Tween
 		///</summary>
 		private int tween(int prop)
 		{
-			t = (float)counter - timeStart;
-			b = (float)Arr_startPos[prop];
+            float t = (float)counter - timeStart;
+            float b = (float)Arr_startPos[prop];
+            float c;
 			
 			if (prop == 0) {
 				c = (float)destX - Arr_startPos[prop];
 			} else {
 				c = (float)destY - Arr_startPos[prop];
 			}
-			
-			d = (float)timeDest - timeStart;
+
+            float d = (float)timeDest - timeStart;
 
 			return getFormula(animType, t, b, d, c);
 		}

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 
 namespace Ext.Utils
 {
+    [Serializable]
 	public class EListError : Exception
 	{
 		public EListError()

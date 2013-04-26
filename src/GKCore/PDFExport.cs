@@ -112,7 +112,7 @@ namespace GKCore
 				TGEDCOMRecord rec;
 				while (iEnum.MoveNext(out rec))
 				{
-					TGEDCOMIndividualRecord iRec = (TGEDCOMIndividualRecord)rec;
+					TGEDCOMIndividualRecord iRec = rec as TGEDCOMIndividualRecord;
 					num++;
 
 					if (num % 2 == 1)
@@ -243,13 +243,14 @@ namespace GKCore
 
 				MultiColumnText mct = new MultiColumnText();
 				mct.AddRegularColumns(document.Left, document.Right, 10f, 3);
-
+				
 				StringList persons = new StringList();
 				TGEDCOMRecord rec;
+
 				var iEnum = this.FTree.GetEnumerator(TGEDCOMRecordType.rtIndividual);
 				while (iEnum.MoveNext(out rec))
 				{
-					TGEDCOMIndividualRecord iRec = (TGEDCOMIndividualRecord)rec;
+					TGEDCOMIndividualRecord iRec = rec as TGEDCOMIndividualRecord;
 					string text = iRec.aux_GetNameStr(true, false);
 					persons.AddObject(text, iRec);
 				}
@@ -260,7 +261,7 @@ namespace GKCore
 				for (int i = 0; i <= num; i++)
 				{
 					string text = persons[i];
-					TGEDCOMIndividualRecord iRec = (TGEDCOMIndividualRecord)persons.GetObject(i);
+					TGEDCOMIndividualRecord iRec = persons.GetObject(i) as TGEDCOMIndividualRecord;
 
 					char isym = text[0];
 					if ((isym >= 'A' && isym <= 'Z') || (isym >= 'А' && isym <= 'Я')) {
@@ -286,8 +287,8 @@ namespace GKCore
 						//img.SetDpi(50, 50);
 						//img.ScaleAbsolute(100f, 100f);
 						//img.XYRatio = 0.5f;
-						img.WidthPercentage = 80f;
-						//img.ScalePercent(0.2f);
+						//img.WidthPercentage = 40f;
+						//img.ScalePercent(0.02f); -not work
 						//img.ScalePercent(50, 50);
 						img.Alignment = Image.ALIGN_LEFT | Image.TEXTWRAP;
 						img.IndentationLeft = 5f;

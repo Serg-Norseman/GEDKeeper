@@ -95,23 +95,27 @@ namespace GKUI.Controls
 				switch (target_rec.RecordType)
 				{
 					case TGEDCOMRecordType.rtIndividual:
-						(aRecCopy as TGEDCOMIndividualRecord).MoveTo(target_rec, false);
-						this.Base.DeleteIndividualRecord(aRecCopy as TGEDCOMIndividualRecord, false);
+                        TGEDCOMIndividualRecord indRec = (aRecCopy as TGEDCOMIndividualRecord);
+                        indRec.MoveTo(target_rec, false);
+                        this.Base.DeleteIndividualRecord(indRec, false);
 						break;
 
 					case TGEDCOMRecordType.rtNote:
-						(aRecCopy as TGEDCOMNoteRecord).MoveTo(target_rec, false);
-						this.Base.DeleteNoteRecord(aRecCopy as TGEDCOMNoteRecord, false);
+                        TGEDCOMNoteRecord noteRec = (aRecCopy as TGEDCOMNoteRecord);
+                        noteRec.MoveTo(target_rec, false);
+                        this.Base.DeleteNoteRecord(noteRec, false);
 						break;
 
 					case TGEDCOMRecordType.rtFamily:
-						(aRecCopy as TGEDCOMFamilyRecord).MoveTo(target_rec, false);
-						this.Base.DeleteFamilyRecord(aRecCopy as TGEDCOMFamilyRecord, false);
+                        TGEDCOMFamilyRecord famRec = (aRecCopy as TGEDCOMFamilyRecord);
+                        famRec.MoveTo(target_rec, false);
+                        this.Base.DeleteFamilyRecord(famRec, false);
 						break;
 
 					case TGEDCOMRecordType.rtSource:
-						(aRecCopy as TGEDCOMSourceRecord).MoveTo(target_rec, false);
-						this.Base.DeleteSourceRecord(aRecCopy as TGEDCOMSourceRecord, false);
+                        TGEDCOMSourceRecord srcRec = (aRecCopy as TGEDCOMSourceRecord);
+                        srcRec.MoveTo(target_rec, false);
+                        this.Base.DeleteSourceRecord(srcRec, false);
 						break;
 				}
 

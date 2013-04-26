@@ -67,64 +67,57 @@ namespace GKUI
 
 		private void ListModify(object Sender, object ItemData, TGenEngine.TRecAction Action)
 		{
+            bool res = false;
+
 			if (object.Equals(Sender, this.FNotesList))
 			{
-				if (this.Base.ModifyRecNote(this, this.FSourceRecord, ItemData as TGEDCOMNotes, Action))
-				{
-					this.ControlsRefresh();
-				}
+                res = (this.Base.ModifyRecNote(this, this.FSourceRecord, ItemData as TGEDCOMNotes, Action));
 			}
 			else
 			{
 				if (object.Equals(Sender, this.FMediaList))
 				{
-					if (this.Base.ModifyRecMultimedia(this, this.FSourceRecord, ItemData as TGEDCOMMultimediaLink, Action))
-					{
-						this.ControlsRefresh();
-					}
+                    res = (this.Base.ModifyRecMultimedia(this, this.FSourceRecord, ItemData as TGEDCOMMultimediaLink, Action));
 				}
 				else
 				{
 					if (object.Equals(Sender, this.FRepositoriesList))
 					{
-						if (Action != TGenEngine.TRecAction.raAdd)
-						{
-							if (Action != TGenEngine.TRecAction.raDelete)
-							{
-								if (Action == TGenEngine.TRecAction.raJump)
-								{
-									TGEDCOMRepositoryCitation cit = ItemData as TGEDCOMRepositoryCitation;
-									if (cit != null)
-									{
-										this.AcceptChanges();
-										this.Base.SelectRecordByXRef((cit.Value as TGEDCOMRepositoryRecord).XRef);
-										base.Close();
-									}
-								}
-							}
-							else
-							{
-								TGEDCOMRepositoryCitation cit = ItemData as TGEDCOMRepositoryCitation;
+                        TGEDCOMRepositoryCitation cit = (Action == TGenEngine.TRecAction.raAdd) ? null : ItemData as TGEDCOMRepositoryCitation;
+
+                        switch (Action)
+                        {
+                            case TGenEngine.TRecAction.raAdd:
+							    TGEDCOMRepositoryRecord rep = FBase.SelectRecord(TGEDCOMRecordType.rtRepository, null) as TGEDCOMRepositoryRecord;
+							    if (rep != null)
+							    {
+								    TGenEngine.BindSourceRepository(this.Base.Tree, this.FSourceRecord, rep);
+                                    res = true;
+							    }
+                                break;
+
+                            case TGenEngine.TRecAction.raDelete:
 								if (cit != null && TGenEngine.ShowQuestion(LangMan.LSList[145]) != DialogResult.No)
 								{
 									this.FSourceRecord.RepositoryCitations.DeleteObject(cit);
-									this.ControlsRefresh();
+                                    res = true;
 								}
-							}
-						}
-						else
-						{
-							object[] anArgs = new object[0];
-							TGEDCOMRepositoryRecord rep = FBase.SelectRecord(TGEDCOMRecordType.rtRepository, anArgs) as TGEDCOMRepositoryRecord;
-							if (rep != null)
-							{
-								TGenEngine.BindSourceRepository(this.Base.Tree, this.FSourceRecord, rep);
-								this.ControlsRefresh();
-							}
-						}
+                                break;
+
+                            case TGenEngine.TRecAction.raJump:
+								if (cit != null)
+								{
+									this.AcceptChanges();
+									this.Base.SelectRecordByXRef((cit.Value as TGEDCOMRepositoryRecord).XRef);
+									base.Close();
+								}
+                                break;
+                        }
 					}
 				}
 			}
+
+            if (res) this.ControlsRefresh();
 		}
 
 		private void SetSourceRecord([In] TGEDCOMSourceRecord Value)

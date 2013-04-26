@@ -196,29 +196,21 @@ namespace GedCom551
 			this.TransmissionTime.Time = Value.TimeOfDay;
 		}
 
-		public override TGEDCOMTag AddSubTag(TGEDCOMCustomTag AParent, [In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
+        public override TGEDCOMTag AddSubTag(TGEDCOMTag AParent, [In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
-			TGEDCOMTag Result;
+			TGEDCOMTag result;
 			if (object.Equals(AParent, base.FindTag("SOUR\\CORP", 0)) && (ATag == "PHON" || ATag == "EMAIL" || ATag == "FAX" || ATag == "WWW"))
 			{
-				if (base.FindTag("SOUR\\CORP\\ADDR", 0) == null)
-				{
+				if (base.FindTag("SOUR\\CORP\\ADDR", 0) == null) {
 					base.SetTagStringValue("SOUR\\CORP\\ADDR", "");
 				}
-				Result = base.FindTag("SOUR\\CORP\\ADDR", 0).AddTag(ATag, AValue, ATagConstructor);
+				result = base.FindTag("SOUR\\CORP\\ADDR", 0).AddTag(ATag, AValue, ATagConstructor);
 			}
 			else
 			{
-				if (ATag == "ADDR")
-				{
-					Result = base.AddSubTag(AParent, ATag, AValue, TGEDCOMAddress.Create);
-				}
-				else
-				{
-					Result = base.AddSubTag(AParent, ATag, AValue, ATagConstructor);
-				}
+				result = base.AddSubTag(AParent, ATag, AValue, ATagConstructor);
 			}
-			return Result;
+			return result;
 		}
 
 		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)

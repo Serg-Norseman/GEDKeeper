@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 namespace GKUI.Controls
 {
+    [Serializable]
 	public class GKListItem : ListViewItem
 	{
 		public object Data;

@@ -23,11 +23,6 @@ namespace GKUI
 			public string Desc;
 			public TGEDCOMSex Sex;
 			public int ChIndex;
-
-			public void Free()
-			{
-				SysUtils.Free(this);
-			}
 		}
 
 		private List<TNameRecord> FNames;

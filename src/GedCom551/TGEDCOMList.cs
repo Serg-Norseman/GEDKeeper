@@ -92,9 +92,9 @@ namespace GedCom551
 		{
 			for (int I = 0; I <= this.FList.Count - 1; I++)
 			{
-				if (this.FList[I] is TGEDCOMCustomTag)
+				if (this.FList[I] is TGEDCOMTag)
 				{
-					(this.FList[I] as TGEDCOMCustomTag).SaveToStream(AStream);
+                    (this.FList[I] as TGEDCOMTag).SaveToStream(AStream);
 				}
 			}
 		}
@@ -103,9 +103,9 @@ namespace GedCom551
 		{
 			for (int i = 0; i <= this.FList.Count - 1; i++)
 			{
-				if (this.FList[i] is TGEDCOMCustomTag)
+                if (this.FList[i] is TGEDCOMTag)
 				{
-					(this.FList[i] as TGEDCOMCustomTag).ReplaceXRefs(aMap);
+                    (this.FList[i] as TGEDCOMTag).ReplaceXRefs(aMap);
 				}
 			}
 		}
@@ -114,7 +114,7 @@ namespace GedCom551
 		{
 			for (int i = 0; i <= this.FList.Count - 1; i++)
 			{
-				(this.FList[i] as TGEDCOMCustomTag).ResetOwner(AOwner);
+                (this.FList[i] as TGEDCOMTag).ResetOwner(AOwner);
 			}
 		}
 
@@ -122,9 +122,9 @@ namespace GedCom551
 		{
 			for (int i = this.FList.Count - 1; i >= 0; i--)
 			{
-				if (this.FList[i] is TGEDCOMCustomTag)
+                if (this.FList[i] is TGEDCOMTag)
 				{
-					TGEDCOMCustomTag tag = this.FList[i] as TGEDCOMCustomTag;
+                    TGEDCOMTag tag = this.FList[i] as TGEDCOMTag;
 					tag.Pack();
 					if (tag.IsEmpty() && tag.IsEmptySkip())
 					{
@@ -271,9 +271,9 @@ namespace GedCom551
 				int num = this.FList.Count - 1;
 				for (int I = 0; I <= num; I++)
 				{
-					if (this.FList[I] is TGEDCOMCustomTag)
+                    if (this.FList[I] is TGEDCOMTag)
 					{
-						(this.FList[I] as TGEDCOMCustomTag).SaveToStream(AStream);
+                        (this.FList[I] as TGEDCOMTag).SaveToStream(AStream);
 					}
 				}
 			}
@@ -286,9 +286,9 @@ namespace GedCom551
 				int num = this.FList.Count - 1;
 				for (int i = 0; i <= num; i++)
 				{
-					if (this.FList[i] is TGEDCOMCustomTag)
+                    if (this.FList[i] is TGEDCOMTag)
 					{
-						(this.FList[i] as TGEDCOMCustomTag).ReplaceXRefs(aMap);
+                        (this.FList[i] as TGEDCOMTag).ReplaceXRefs(aMap);
 					}
 				}
 			}
@@ -301,7 +301,7 @@ namespace GedCom551
 				int num = this.FList.Count - 1;
 				for (int i = 0; i <= num; i++)
 				{
-					(this.FList[i] as TGEDCOMCustomTag).ResetOwner(AOwner);
+                    (this.FList[i] as TGEDCOMTag).ResetOwner(AOwner);
 				}
 			}
 			//this._owner = AOwner;
@@ -313,9 +313,9 @@ namespace GedCom551
 			{
 				for (int i = this.FList.Count - 1; i >= 0; i--)
 				{
-					if (this.FList[i] is TGEDCOMCustomTag)
+                    if (this.FList[i] is TGEDCOMTag)
 					{
-						TGEDCOMCustomTag tag = this.FList[i] as TGEDCOMCustomTag;
+                        TGEDCOMTag tag = this.FList[i] as TGEDCOMTag;
 						tag.Pack();
 						if (tag.IsEmpty() && tag.IsEmptySkip())
 						{

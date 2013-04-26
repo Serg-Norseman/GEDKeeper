@@ -6,7 +6,7 @@ using Ext.Utils;
 
 namespace GedCom551
 {
-	public class TGEDCOMCustomRecord : TGEDCOMCustomTag
+	public class TGEDCOMCustomRecord : TGEDCOMTag
 	{
 		protected string FXRef;
 
@@ -26,26 +26,14 @@ namespace GedCom551
 			}
 		}
 
-		public virtual TGEDCOMTag AddSubTag(TGEDCOMCustomTag AParent, [In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
 		{
-			TGEDCOMTag Result = null;
+			return base.InternalCreateTag(this, ATag, AValue, ATagConstructor);
+		}
 
-			try
-			{
-				TGEDCOMTag tag;
-				if (ATagConstructor != null) {
-					tag = (TGEDCOMTag)ATagConstructor(base.Owner, AParent, ATag, AValue);
-				} else {
-					tag = base.CreateGEDCOMTag(base.Owner, AParent, ATag, AValue);
-				}
-				Result = AParent.InsertTag(tag);
-			}
-			catch (Exception E)
-			{
-				SysUtils.LogWrite("TGEDCOMCustomRecord.AddSubTag(): " + E.Message);
-			}
-
-			return Result;
+		public virtual TGEDCOMTag AddSubTag(TGEDCOMTag AParent, [In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
+		{
+			return base.InternalCreateTag(AParent, ATag, AValue, ATagConstructor);
 		}
 
 		protected override void SaveValueToStream(StreamWriter AStream)
@@ -64,18 +52,6 @@ namespace GedCom551
 			}
 
 			AStream.WriteLine(S);
-		}
-
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
-		{
-			TGEDCOMTag tag;
-			if (ATagConstructor != null) {
-				tag = (TGEDCOMTag)ATagConstructor(base.Owner, this, ATag, AValue);
-			} else {
-				tag = base.CreateGEDCOMTag(base.Owner, this, ATag, AValue);
-			}
-			base.InsertTag(tag);
-			return tag;
 		}
 
 		public TGEDCOMCustomRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)

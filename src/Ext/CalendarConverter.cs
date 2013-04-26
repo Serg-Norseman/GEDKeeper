@@ -219,9 +219,8 @@ namespace Ext.Utils
 			double jd = (347995.5 + (double)this.hebrew_delay_1(year) + (double)this.hebrew_delay_2(year) + (double)day + 1.0);
 			if (month < 7)
 			{
-				int arg_3B_0 = 7;
 				int num = months;
-				int mon = arg_3B_0;
+				int mon = 7;
 				if (num >= mon)
 				{
 					num++;
@@ -232,9 +231,9 @@ namespace Ext.Utils
 					}
 					while (mon != num);
 				}
-				int arg_5E_0 = 1;
+
 				int num2 = month - 1;
-				mon = arg_5E_0;
+				mon = 1;
 				if (num2 >= mon)
 				{
 					num2++;
@@ -248,9 +247,8 @@ namespace Ext.Utils
 			}
 			else
 			{
-				int arg_84_0 = 7;
 				int num3 = month - 1;
-				int mon = arg_84_0;
+				int mon = 7;
 				if (num3 >= mon)
 				{
 					num3++;
@@ -292,7 +290,7 @@ namespace Ext.Utils
 			return ((double)(day + Math.Ceiling((29.5 * (double)(month - 1))) + (year - 1) * 354 + Math.Floor(((double)(3 + 11 * year) / 30.0))) + 1948439.5 - 1.0);
 		}
 
-		public void jd_to_islamic(double jd, ref int year, ref int month, ref int day)
+        public void jd_to_islamic(double jd, ref int year, ref int month, ref int day)
 		{
 			jd = ((double)Math.Floor(jd) + 0.5);
 			year = iFloor(((30.0 * (jd - 1948439.5) + 10646.0) / 10631.0));

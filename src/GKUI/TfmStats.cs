@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-using Ext.Utils;
 using GedCom551;
 using GKCore;
 using GKUI.Controls;
@@ -267,7 +266,7 @@ namespace GKUI
 			this.Panel1.Controls.Add(this.zgc);
 			this.Panel1.Controls.Add(spl);
 
-			this.Base.CreateListView(this.Panel1, ref this.ListStats);
+			this.Base.CreateListView(this.Panel1, out this.ListStats);
 			this.ListStats.AddListColumn("-", 250, false);
 			this.ListStats.AddListColumn("-", 150, false);
 

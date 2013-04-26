@@ -56,7 +56,7 @@ namespace GKCore
 				{
 					TGEDCOMRecord rec = this.FTree[i];
 					if (rec is TGEDCOMIndividualRecord) {
-						TGEDCOMIndividualRecord ind = (TGEDCOMIndividualRecord)rec;
+						TGEDCOMIndividualRecord ind = rec as TGEDCOMIndividualRecord;
 						if (this.FSelectedRecords == null || this.FSelectedRecords.IndexOf(rec) >= 0) {
 							string fam, nam, pat;
 							ind.aux_GetNameParts(out fam, out nam, out pat);
@@ -83,7 +83,7 @@ namespace GKCore
 
 				string fname = this.FPath + "export.xls";
 				xls.SaveToFile(fname);
-				TGenEngine.LoadExtFile(fname);
+                SysUtils.LoadExtFile(fname);
 			}
 			finally
 			{

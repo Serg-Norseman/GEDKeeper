@@ -1,7 +1,5 @@
 using System;
 using System.Runtime.InteropServices;
-using System.Security;
-using System.Security.Permissions;
 using System.Text;
 
 /// <summary>
@@ -10,6 +8,7 @@ using System.Text;
 
 namespace Ext.Utils
 {
+    [Serializable]
 	public class EIniFileException : Exception
 	{
 		public EIniFileException()
@@ -20,7 +19,7 @@ namespace Ext.Utils
 		}
 	}
 
-    [FileIOPermission(SecurityAction.LinkDemand, Unrestricted=true)]
+    //[FileIOPermission(SecurityAction.LinkDemand, Unrestricted=true)]
 	public sealed class IniFile : IDisposable
 	{
 		private string FFileName;
@@ -123,7 +122,7 @@ namespace Ext.Utils
 		{
 			StringBuilder Buffer = new StringBuilder(2048);
 			string Result;
-			if (GetPrivateProfileString(Section, Ident, Default, Buffer, (uint)Buffer.Capacity, this.FileName) != 0u)
+            if (Win32Native.GetPrivateProfileString(Section, Ident, Default, Buffer, (uint)Buffer.Capacity, this.FileName) != 0u)
 			{
 				Result = Buffer.ToString();
 			}
@@ -136,7 +135,7 @@ namespace Ext.Utils
 
 		public void WriteString([In] string Section, [In] string Ident, [In] string Value)
 		{
-			if (WritePrivateProfileString(Section, Ident, Value, this.FileName) == false)
+            if (Win32Native.WritePrivateProfileString(Section, Ident, Value, this.FileName) == false)
 			{
 				throw new EIniFileException(string.Format("Unable to write to {0}", this.FileName));
 			}
@@ -144,7 +143,7 @@ namespace Ext.Utils
 
 		public void EraseSection([In] string Section)
 		{
-			if (WritePrivateProfileString(Section, IntPtr.Zero, IntPtr.Zero, this.FileName) == false)
+            if (Win32Native.WritePrivateProfileString(Section, IntPtr.Zero, IntPtr.Zero, this.FileName) == false)
 			{
 				throw new EIniFileException(string.Format("Unable to write to {0}", this.FileName));
 			}
@@ -152,49 +151,12 @@ namespace Ext.Utils
 
 		public void DeleteKey([In] string Section, [In] string Ident)
 		{
-			WritePrivateProfileString(Section, Ident, IntPtr.Zero, this.FileName);
+            Win32Native.WritePrivateProfileString(Section, Ident, IntPtr.Zero, this.FileName);
 		}
 
 		public void UpdateFile()
 		{
-			WritePrivateProfileString(IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, this.FileName);
+            Win32Native.WritePrivateProfileString(IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, this.FileName);
 		}
-
-		public void Free()
-		{
-			SysUtils.Free(this);
-		}
-
-		[SuppressUnmanagedCodeSecurity]
-		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern uint GetPrivateProfileString(string lpAppName, string lpKeyName, string lpDefault, StringBuilder lpReturnedString, uint nSize, string lpFileName);
-
-		[SuppressUnmanagedCodeSecurity]
-		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern uint GetPrivateProfileString(string lpAppName, IntPtr lpKeyName, IntPtr lpDefault, [Out] byte[] lpReturnedString, uint nSize, string lpFileName);
-
-		[SuppressUnmanagedCodeSecurity]
-		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern uint GetPrivateProfileString(IntPtr lpAppName, IntPtr lpKeyName, IntPtr lpDefault, [Out] byte[] lpReturnedString, uint nSize, string lpFileName);
-
-		[SuppressUnmanagedCodeSecurity]
-		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-		[return: MarshalAs(UnmanagedType.Bool)]
-		private static extern bool WritePrivateProfileString(string lpAppName, string lpKeyName, string lpString, string lpFileName);
-
-		[SuppressUnmanagedCodeSecurity]
-		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-		[return: MarshalAs(UnmanagedType.Bool)]
-		private static extern bool WritePrivateProfileString(string lpAppName, string lpKeyName, IntPtr lpString, string lpFileName);
-
-		[SuppressUnmanagedCodeSecurity]
-		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-		[return: MarshalAs(UnmanagedType.Bool)]
-		private static extern bool WritePrivateProfileString(string lpAppName, IntPtr lpKeyName, IntPtr lpString, string lpFileName);
-
-		[SuppressUnmanagedCodeSecurity]
-		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-		[return: MarshalAs(UnmanagedType.Bool)]
-		private static extern bool WritePrivateProfileString(IntPtr lpAppName, IntPtr lpKeyName, IntPtr lpString, string lpFileName);
 	}
 }

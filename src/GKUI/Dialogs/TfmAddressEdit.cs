@@ -40,77 +40,71 @@ namespace GKUI
 				Index = (int)ItemData - 1;
 			}
 
+            string val;
+
 			if (object.Equals(Sender, this.FPhonesList))
 			{
-				if (Action != TGenEngine.TRecAction.raAdd)
-				{
-					if (Action != TGenEngine.TRecAction.raEdit)
-					{
-						if (Action == TGenEngine.TRecAction.raDelete)
-						{
-							if (Index >= 0)
-							{
-								this.FAddress.DeletePhoneNumber(Index);
-							}
-						}
-					}
-					else
-					{
+                switch (Action)
+                {
+                    case TGenEngine.TRecAction.raAdd:
+					    val = "";
+					    if (GetInput(LangMan.LSList[131], ref val))
+					    {
+						    this.FAddress.SetPhoneNumber(this.FAddress.GetPhoneNumbersCount(), val);
+					    }
+                        break;
+
+                    case TGenEngine.TRecAction.raEdit:
 						if (Index >= 0)
 						{
-							string val = this.FAddress.GetPhoneNumber(Index);
+							val = this.FAddress.GetPhoneNumber(Index);
 							if (GetInput(LangMan.LSList[131], ref val))
 							{
 								this.FAddress.SetPhoneNumber(Index, val);
 							}
 						}
-					}
-				}
-				else
-				{
-					string val = "";
-					if (GetInput(LangMan.LSList[131], ref val))
-					{
-						this.FAddress.SetPhoneNumber(this.FAddress.GetPhoneNumbersCount(), val);
-					}
-				}
+                        break;
+
+                    case TGenEngine.TRecAction.raDelete:
+						if (Index >= 0)
+						{
+							this.FAddress.DeletePhoneNumber(Index);
+						}
+                        break;
+                }
 			}
 			else
 			{
 				if (object.Equals(Sender, this.FMailsList))
 				{
-					if (Action != TGenEngine.TRecAction.raAdd)
-					{
-						if (Action != TGenEngine.TRecAction.raEdit)
-						{
-							if (Action == TGenEngine.TRecAction.raDelete)
-							{
-								if (Index >= 0)
-								{
-									this.FAddress.DeleteEmail(Index);
-								}
-							}
-						}
-						else
-						{
+                    switch (Action)
+                    {
+                        case TGenEngine.TRecAction.raAdd:
+						    val = "";
+						    if (GetInput(LangMan.LSList[132], ref val))
+						    {
+							    this.FAddress.SetEmailAddress(this.FAddress.GetEmailAddressesCount(), val);
+						    }
+                            break;
+
+                        case TGenEngine.TRecAction.raEdit:
 							if (Index >= 0)
 							{
-								string val = this.FAddress.GetEmailAddress(Index);
+								val = this.FAddress.GetEmailAddress(Index);
 								if (GetInput(LangMan.LSList[132], ref val))
 								{
 									this.FAddress.SetEmailAddress(Index, val);
 								}
 							}
-						}
-					}
-					else
-					{
-						string val = "";
-						if (GetInput(LangMan.LSList[132], ref val))
-						{
-							this.FAddress.SetEmailAddress(this.FAddress.GetEmailAddressesCount(), val);
-						}
-					}
+                            break;
+
+                        case TGenEngine.TRecAction.raDelete:
+							if (Index >= 0)
+							{
+								this.FAddress.DeleteEmail(Index);
+							}
+                            break;
+                    }
 				}
 				else
 				{
@@ -118,34 +112,30 @@ namespace GKUI
 					{
 						switch (Action) {
 							case TGenEngine.TRecAction.raAdd:
-							{
-								string val = "";
+								val = "";
 								if (GetInput(LangMan.LSList[133], ref val))
 								{
 									this.FAddress.SetWebPage(this.FAddress.GetWebPagesCount(), val);
 								}
 								break;
-							}
-							case TGenEngine.TRecAction.raEdit:
-							{
+
+                            case TGenEngine.TRecAction.raEdit:
 								if (Index >= 0)
 								{
-									string val = this.FAddress.GetWebPage(Index);
+									val = this.FAddress.GetWebPage(Index);
 									if (GetInput(LangMan.LSList[133], ref val))
 									{
 										this.FAddress.SetWebPage(Index, val);
 									}
 								}
 								break;
-							}
-							case TGenEngine.TRecAction.raDelete:
-							{
+
+                            case TGenEngine.TRecAction.raDelete:
 								if (Index >= 0)
 								{
 									this.FAddress.DeleteWebPage(Index);
 								}
 								break;
-							}
 						}
 					}
 				}

@@ -89,122 +89,102 @@ namespace GKUI
 			{
 				if (Sender == this.FTasksList)
 				{
-					if (Action != TGenEngine.TRecAction.raAdd)
-					{
-						if (Action != TGenEngine.TRecAction.raEdit)
-						{
-							if (Action != TGenEngine.TRecAction.raDelete)
-							{
-								if (Action == TGenEngine.TRecAction.raJump)
-								{
-									TGEDCOMTaskRecord task = ItemData as TGEDCOMTaskRecord;
-									if (task != null)
-									{
-										this.AcceptChanges();
-										this.Base.SelectRecordByXRef(task.XRef);
-										base.Close();
-									}
-								}
-							}
-							else
-							{
-								TGEDCOMTaskRecord task = ItemData as TGEDCOMTaskRecord;
-								if (task != null && TGenEngine.ShowQuestion(LangMan.LSList[186]) != DialogResult.No)
-								{
-									this.Base.Engine.RemoveResearchTask(this.FResearch, task);
-									this.ListsRefresh();
-								}
-							}
-						}
-						else
-						{
-							TGEDCOMTaskRecord task = ItemData as TGEDCOMTaskRecord;
+                    TGEDCOMTaskRecord task = (Action == TGenEngine.TRecAction.raAdd) ? null : ItemData as TGEDCOMTaskRecord;
+
+                    switch (Action)
+                    {
+                        case TGenEngine.TRecAction.raAdd:
+                            task = this.Base.SelectRecord(TGEDCOMRecordType.rtTask, null) as TGEDCOMTaskRecord;
+                            res = this.Base.Engine.AddResearchTask(this.FResearch, task);
+                            break;
+
+                        case TGenEngine.TRecAction.raEdit:
                             res = (task != null && this.Base.ModifyTask(ref task));
-						}
-					}
-					else
-					{
-                        TGEDCOMTaskRecord task = this.Base.SelectRecord(TGEDCOMRecordType.rtTask, null) as TGEDCOMTaskRecord;
-                        res = this.Base.Engine.AddResearchTask(this.FResearch, task);
-					}
+                            break;
+
+                        case TGenEngine.TRecAction.raDelete:
+							if (task != null && TGenEngine.ShowQuestion(LangMan.LSList[186]) != DialogResult.No)
+							{
+								this.Base.Engine.RemoveResearchTask(this.FResearch, task);
+                                res = true;
+							}
+                            break;
+
+                        case TGenEngine.TRecAction.raJump:
+							if (task != null)
+							{
+								this.AcceptChanges();
+								this.Base.SelectRecordByXRef(task.XRef);
+								base.Close();
+							}
+                            break;
+                    }
 				}
 				else
 				{
 					if (Sender == this.FCommunicationsList)
 					{
-						if (Action != TGenEngine.TRecAction.raAdd)
-						{
-							if (Action != TGenEngine.TRecAction.raEdit)
-							{
-								if (Action != TGenEngine.TRecAction.raDelete)
-								{
-									if (Action == TGenEngine.TRecAction.raJump)
-									{
-										TGEDCOMCommunicationRecord comm = ItemData as TGEDCOMCommunicationRecord;
-										if (comm != null)
-										{
-											this.AcceptChanges();
-											this.Base.SelectRecordByXRef(comm.XRef);
-											base.Close();
-										}
-									}
-								}
-								else
-								{
-									TGEDCOMCommunicationRecord comm = ItemData as TGEDCOMCommunicationRecord;
-									if (comm != null && TGenEngine.ShowQuestion(LangMan.LSList[187]) != DialogResult.No)
-									{
-										this.Base.Engine.RemoveResearchComm(this.FResearch, comm);
-										this.ListsRefresh();
-									}
-								}
-							}
-							else
-							{
-								TGEDCOMCommunicationRecord comm = ItemData as TGEDCOMCommunicationRecord;
+                        TGEDCOMCommunicationRecord comm = (Action == TGenEngine.TRecAction.raAdd) ? null : ItemData as TGEDCOMCommunicationRecord;
+
+                        switch (Action)
+                        {
+                            case TGenEngine.TRecAction.raAdd:
+                                comm = this.Base.SelectRecord(TGEDCOMRecordType.rtCommunication, null) as TGEDCOMCommunicationRecord;
+                                res = this.Base.Engine.AddResearchComm(this.FResearch, comm);
+                                break;
+
+                            case TGenEngine.TRecAction.raEdit:
                                 res = (comm != null && this.Base.ModifyCommunication(ref comm));
-							}
-						}
-						else
-						{
-                            TGEDCOMCommunicationRecord comm = this.Base.SelectRecord(TGEDCOMRecordType.rtCommunication, null) as TGEDCOMCommunicationRecord;
-                            res = this.Base.Engine.AddResearchComm(this.FResearch, comm);
-						}
+                                break;
+
+                            case TGenEngine.TRecAction.raDelete:
+								if (comm != null && TGenEngine.ShowQuestion(LangMan.LSList[187]) != DialogResult.No)
+								{
+									this.Base.Engine.RemoveResearchComm(this.FResearch, comm);
+                                    res = true;
+								}
+                                break;
+
+                            case TGenEngine.TRecAction.raJump:
+								if (comm != null)
+								{
+									this.AcceptChanges();
+									this.Base.SelectRecordByXRef(comm.XRef);
+									base.Close();
+								}
+                                break;
+                        }
 					}
 					else
 					{
 						if (Sender == this.FGroupsList)
 						{
-							if (Action != TGenEngine.TRecAction.raAdd)
-							{
-								if (Action != TGenEngine.TRecAction.raDelete)
-								{
-									if (Action == TGenEngine.TRecAction.raJump)
-									{
-										TGEDCOMGroupRecord group = ItemData as TGEDCOMGroupRecord;
-										if (group != null)
-										{
-											this.AcceptChanges();
-											this.Base.SelectRecordByXRef(group.XRef);
-											base.Close();
-										}
-									}
-								}
-								else
-								{
-									TGEDCOMGroupRecord group = ItemData as TGEDCOMGroupRecord;
+                            TGEDCOMGroupRecord group = (Action == TGenEngine.TRecAction.raAdd) ? null : ItemData as TGEDCOMGroupRecord;
+
+                            switch (Action)
+                            {
+                                case TGenEngine.TRecAction.raAdd:
+                                    group = this.Base.SelectRecord(TGEDCOMRecordType.rtGroup, null) as TGEDCOMGroupRecord;
+                                    res = this.Base.Engine.AddResearchGroup(this.FResearch, group);
+                                    break;
+
+                                case TGenEngine.TRecAction.raDelete:
 									if (group != null && TGenEngine.ShowQuestion(LangMan.LSList[188]) != DialogResult.No)
 									{
 										this.Base.Engine.RemoveResearchGroup(this.FResearch, group);
-										this.ListsRefresh();
+                                        res = true;
 									}
-								}
-							}
-							else
-							{
-                                TGEDCOMGroupRecord group = this.Base.SelectRecord(TGEDCOMRecordType.rtGroup, null) as TGEDCOMGroupRecord;
-                                res = this.Base.Engine.AddResearchGroup(this.FResearch, group);
-							}
+                                    break;
+
+                                case TGenEngine.TRecAction.raJump:
+									if (group != null)
+									{
+										this.AcceptChanges();
+										this.Base.SelectRecordByXRef(group.XRef);
+										base.Close();
+									}
+                                    break;
+                            }
 						}
 					}
 				}
@@ -224,7 +204,7 @@ namespace GKUI
 			for (int i = 0; i <= num; i++)
 			{
 				TGEDCOMTaskRecord task = this.FResearch.Tasks[i].Value as TGEDCOMTaskRecord;
-				GKListItem item = list.AddItem(TGenEngine.GetTaskGoalStr(this.Base.Tree, task), task);
+				GKListItem item = list.AddItem(TGenEngine.GetTaskGoalStr(task), task);
 				item.SubItems.Add(LangMan.LSList[(int)TGenEngine.PriorityNames[(int)task.Priority] - 1]);
 				item.SubItems.Add(TGenEngine.GEDCOMDateToStr(task.StartDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
 				item.SubItems.Add(TGenEngine.GEDCOMDateToStr(task.StopDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));

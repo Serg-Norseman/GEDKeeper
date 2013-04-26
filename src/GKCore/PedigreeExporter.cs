@@ -31,11 +31,6 @@ namespace GKCore
 				string Result = ((this.Parent == null) ? new string(order, 1) : this.Parent.GetOrderStr() + order);
 				return Result;
 			}
-
-			public void Free()
-			{
-				SysUtils.Free(this);
-			}
 		}
 
 		private class TEventObj
@@ -54,12 +49,6 @@ namespace GKCore
 				DateTime Result = ((this.Event == null) ? new DateTime(0) : TGenEngine.GEDCOMDateToDate(this.Event.Detail.Date));
 				return Result;
 			}
-
-			public void Free()
-			{
-				SysUtils.Free(this);
-			}
-
 		}
 
 		public enum TPedigreeKind : byte
@@ -545,7 +534,7 @@ namespace GKCore
 				}
 				base.WriteHTMLFooter(fs_index);
 				SysUtils.Free(fs_index);
-				TGenEngine.LoadExtFile(this.FPath + "pedigree.htm");
+                SysUtils.LoadExtFile(this.FPath + "pedigree.htm");
 			}
 		}
 

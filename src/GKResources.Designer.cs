@@ -172,6 +172,13 @@ internal class GKResources {
 		}
 	}
 	
+	internal static System.Drawing.Bitmap iSizeToFit {
+		get {
+			object obj = ResourceManager.GetObject("iSizeToFit", resourceCulture);
+			return ((System.Drawing.Bitmap)(obj));
+		}
+	}
+	
 	internal static System.Drawing.Bitmap iTGGeorgeCross {
 		get {
 			object obj = ResourceManager.GetObject("iTGGeorgeCross", resourceCulture);
@@ -217,6 +224,20 @@ internal class GKResources {
 	internal static System.Drawing.Bitmap iUp {
 		get {
 			object obj = ResourceManager.GetObject("iUp", resourceCulture);
+			return ((System.Drawing.Bitmap)(obj));
+		}
+	}
+	
+	internal static System.Drawing.Bitmap iZoomIn {
+		get {
+			object obj = ResourceManager.GetObject("iZoomIn", resourceCulture);
+			return ((System.Drawing.Bitmap)(obj));
+		}
+	}
+	
+	internal static System.Drawing.Bitmap iZoomOut {
+		get {
+			object obj = ResourceManager.GetObject("iZoomOut", resourceCulture);
 			return ((System.Drawing.Bitmap)(obj));
 		}
 	}

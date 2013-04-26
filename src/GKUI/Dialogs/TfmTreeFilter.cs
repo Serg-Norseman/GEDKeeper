@@ -36,25 +36,25 @@ namespace GKUI
 		{
 			if (object.Equals(Sender, this.FPersonsList))
 			{
-				if (Action != TGenEngine.TRecAction.raAdd)
-				{
-					if (Action == TGenEngine.TRecAction.raDelete)
-					{
-						TGEDCOMIndividualRecord i_rec = ItemData as TGEDCOMIndividualRecord;
+                TGEDCOMIndividualRecord i_rec = (Action == TGenEngine.TRecAction.raAdd) ? null : ItemData as TGEDCOMIndividualRecord;
+
+                switch (Action)
+                {
+                    case TGenEngine.TRecAction.raAdd:
+					    i_rec = this.Base.SelectPerson(null, TGenEngine.TTargetMode.tmNone, TGEDCOMSex.svNone);
+					    if (i_rec != null)
+					    {
+						    this.FTemp = this.FTemp + i_rec.XRef + ";";
+					    }
+                        break;
+
+                    case TGenEngine.TRecAction.raDelete:
 						if (i_rec != null)
 						{
 							this.FTemp = this.FTemp.Replace(i_rec.XRef + ";", "");
 						}
-					}
-				}
-				else
-				{
-					TGEDCOMIndividualRecord i_rec = this.Base.SelectPerson(null, TGenEngine.TTargetMode.tmNone, TGEDCOMSex.svNone);
-					if (i_rec != null)
-					{
-						this.FTemp = this.FTemp + i_rec.XRef + ";";
-					}
-				}
+                        break;
+                }
 			}
 			this.UpdateControls();
 		}

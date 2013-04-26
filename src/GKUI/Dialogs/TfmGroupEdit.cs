@@ -64,61 +64,49 @@ namespace GKUI
 
 		private void ListModify(object Sender, object ItemData, TGenEngine.TRecAction Action)
 		{
+            bool res = false;
+
 			if (object.Equals(Sender, this.FNotesList))
 			{
-				if (this.Base.ModifyRecNote(this, this.FGroup, ItemData as TGEDCOMNotes, Action))
-				{
-					this.ListsRefresh();
-				}
+                res = (this.Base.ModifyRecNote(this, this.FGroup, ItemData as TGEDCOMNotes, Action));
 			}
 			else
 			{
 				if (object.Equals(Sender, this.FMediaList))
 				{
-					if (this.Base.ModifyRecMultimedia(this, this.FGroup, ItemData as TGEDCOMMultimediaLink, Action))
-					{
-						this.ListsRefresh();
-					}
+                    res = (this.Base.ModifyRecMultimedia(this, this.FGroup, ItemData as TGEDCOMMultimediaLink, Action));
 				}
 				else
 				{
 					if (object.Equals(Sender, this.FMembersList))
 					{
-						if (Action != TGenEngine.TRecAction.raAdd)
-						{
-							if (Action != TGenEngine.TRecAction.raDelete)
-							{
-								if (Action == TGenEngine.TRecAction.raJump)
+                        TGEDCOMIndividualRecord member = (Action == TGenEngine.TRecAction.raAdd) ? null : ItemData as TGEDCOMIndividualRecord;
+
+                        switch (Action)
+                        {
+                            case TGenEngine.TRecAction.raAdd:
+							    member = this.Base.SelectPerson(null, TGenEngine.TTargetMode.tmNone, TGEDCOMSex.svNone);
+                                res = (member != null && this.Base.Engine.AddGroupMember(this.FGroup, member));
+                                break;
+
+                            case TGenEngine.TRecAction.raDelete:
+                                res = (member != null && TGenEngine.ShowQuestion(LangMan.LSList[128]) != DialogResult.No && this.Base.Engine.RemoveGroupMember(this.FGroup, member));
+                                break;
+
+                            case TGenEngine.TRecAction.raJump:
+								if (member != null)
 								{
-									TGEDCOMIndividualRecord member = ItemData as TGEDCOMIndividualRecord;
-									if (member != null)
-									{
-										this.AcceptChanges();
-										this.Base.SelectRecordByXRef(member.XRef);
-										base.Close();
-									}
+									this.AcceptChanges();
+									this.Base.SelectRecordByXRef(member.XRef);
+									base.Close();
 								}
-							}
-							else
-							{
-								TGEDCOMIndividualRecord member = ItemData as TGEDCOMIndividualRecord;
-								if (member != null && TGenEngine.ShowQuestion(LangMan.LSList[128]) != DialogResult.No && this.Base.Engine.RemoveGroupMember(this.FGroup, member))
-								{
-									this.ListsRefresh();
-								}
-							}
-						}
-						else
-						{
-							TGEDCOMIndividualRecord member = this.Base.SelectPerson(null, TGenEngine.TTargetMode.tmNone, TGEDCOMSex.svNone);
-							if (member != null && this.Base.Engine.AddGroupMember(this.FGroup, member))
-							{
-								this.ListsRefresh();
-							}
-						}
+                                break;
+                        }
 					}
 				}
 			}
+
+            if (res) this.ListsRefresh();
 		}
 
 		private void ListsRefresh()
@@ -134,7 +122,7 @@ namespace GKUI
 			for (int i = 0; i <= num; i++)
 			{
 				TGEDCOMIndividualRecord member = this.FGroup.Members[i].Value as TGEDCOMIndividualRecord;
-				GKListItem item = list.AddItem(member.aux_GetNameStr(true, false), member);
+				list.AddItem(member.aux_GetNameStr(true, false), member);
 			}
 			list.EndUpdate();
 		}

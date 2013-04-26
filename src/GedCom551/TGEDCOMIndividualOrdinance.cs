@@ -384,5 +384,10 @@ namespace GedCom551
 		public TGEDCOMIndividualOrdinance(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
 		}
+
+        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+		{
+			return new TGEDCOMIndividualOrdinance(AOwner, AParent, AName, AValue);
+		}
 	}
 }

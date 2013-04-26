@@ -70,7 +70,7 @@ namespace GKUI.Controls
 			set { this.FTree = value; }
 		}
 
-		public TRecordsView(Control AOwner) : base(null)
+		public TRecordsView() : base()
 		{
 			this.FContentList = new TList();
 			this.FListMan = null;
@@ -127,7 +127,7 @@ namespace GKUI.Controls
 
 			int count = FContentList.Count;
 			for (int i = 0; i < count; i++) {
-				TGEDCOMRecord rec = (TGEDCOMRecord)FContentList[i];
+				TGEDCOMRecord rec = FContentList[i] as TGEDCOMRecord;
 
 				ValItem vi = new ValItem();
 				vi.Record = rec;
@@ -359,7 +359,7 @@ namespace GKUI.Controls
 				if (base.SelectedIndices.Count > 0) {
 					int index = base.SelectedIndices[0];
 					if (index >= 0 && index < FContentList.Count) {
-						Result = (TGEDCOMRecord)FContentList[index];
+						Result = FContentList[index] as TGEDCOMRecord;
 					}					
 				}
 			}

@@ -25,7 +25,7 @@ namespace GKUI.Lists
 
 		public override bool CheckFilter(TGenEngine.TShieldState aShieldState)
 		{
-			bool res = (this.QuickFilter == "*" || IsMatchesMask(TGenEngine.GetTaskGoalStr(this.FTree, this.FRec), this.QuickFilter));
+			bool res = (this.QuickFilter == "*" || IsMatchesMask(TGenEngine.GetTaskGoalStr(this.FRec), this.QuickFilter));
 
 			res = res && base.CheckNewFilter();
 
@@ -41,7 +41,7 @@ namespace GKUI.Lists
 		{
 			switch (col_type) {
 				case 0:
-					return TGenEngine.GetTaskGoalStr(this.FTree, this.FRec);
+					return TGenEngine.GetTaskGoalStr(this.FRec);
 				case 1:
 					return LangMan.LSList[(int)TGenEngine.PriorityNames[(int)this.FRec.Priority] - 1];
 				case 2:

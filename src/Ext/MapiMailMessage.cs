@@ -5,61 +5,13 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace Ext.MapiMail
+namespace Ext.Utils
 {
 	/// <summary>
 	/// Represents an email message to be sent through MAPI.
 	/// </summary>
 	public class MapiMailMessage
 	{
-
-		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-		private class MapiFileDescriptor
-		{
-			public int reserved = 0;
-			public int flags = 0;
-			public int position = 0;
-			public string path = null;
-			public string name = null;
-			public IntPtr type = IntPtr.Zero;
-		}
-
-		private const int MAPI_LOGON_UI = 0x1;
-
-		[DllImport("MAPI32.DLL", CharSet = CharSet.Ansi)]
-		private static extern int MAPILogon(IntPtr hwnd, string prf, string pw, int flg, int rsv, ref IntPtr sess);
-
-		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-		public class MapiMessage
-		{
-			public int Reserved = 0;
-			public string Subject = null;
-			public string NoteText = null;
-			public string MessageType = null;
-			public string DateReceived = null;
-			public string ConversationID = null;
-			public int Flags = 0;
-			public IntPtr Originator = IntPtr.Zero;
-			public int RecipientCount = 0;
-			public IntPtr Recipients = IntPtr.Zero;
-			public int FileCount = 0;
-			public IntPtr Files = IntPtr.Zero;
-		}
-
-		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-		public class MapiRecipDesc
-		{
-			public int Reserved = 0;
-			public int RecipientClass = 0;
-			public string Name = null;
-			public string Address = null;
-			public int eIDSize = 0;
-			public IntPtr EntryID = IntPtr.Zero;
-		}
-
-		[DllImport("MAPI32.DLL")]
-		private static extern int MAPISendMail(IntPtr session, IntPtr hwnd, MapiMessage message, int flg, int rsv);
-
 		/// <summary>
 		/// Specifies the valid RecipientTypes for a Recipient.
 		/// </summary>
@@ -169,7 +121,7 @@ namespace Ext.MapiMail
 		/// </summary>
 		private void _ShowMail(object ignore)
 		{
-			MapiMessage message = new MapiMessage();
+            Win32Native.MapiMessage message = new Win32Native.MapiMessage();
 
 			using (RecipientCollection.InteropRecipientCollection interopRecipients
 			       = _recipientCollection.GetInteropRepresentation())
@@ -194,7 +146,7 @@ namespace Ext.MapiMail
 				const int MAPI_DIALOG = 0x8;
 				//const int MAPI_LOGON_UI = 0x1;
 				const int SUCCESS_SUCCESS = 0;
-				int error = MAPISendMail(IntPtr.Zero, IntPtr.Zero, message, MAPI_DIALOG, 0);
+                int error = Win32Native.MAPISendMail(IntPtr.Zero, IntPtr.Zero, message, MAPI_DIALOG, 0);
 
 				if (_files.Count > 0)
 				{
@@ -214,11 +166,11 @@ namespace Ext.MapiMail
 		/// Deallocates the files in a message.
 		/// </summary>
 		/// <param name="message">The message to deallocate the files from.</param>
-		private void _DeallocFiles(MapiMessage message)
+        private void _DeallocFiles(Win32Native.MapiMessage message)
 		{
 			if (message.Files != IntPtr.Zero)
 			{
-				Type fileDescType = typeof(MapiFileDescriptor);
+                Type fileDescType = typeof(Win32Native.MapiFileDescriptor);
 				int fsize = Marshal.SizeOf(fileDescType);
 
 				// Get the ptr to the files
@@ -251,11 +203,11 @@ namespace Ext.MapiMail
 				return IntPtr.Zero;
 			}
 
-			Type atype = typeof(MapiFileDescriptor);
+            Type atype = typeof(Win32Native.MapiFileDescriptor);
 			int asize = Marshal.SizeOf(atype);
 			IntPtr ptra = Marshal.AllocHGlobal(_files.Count * asize);
 
-			MapiFileDescriptor mfd = new MapiFileDescriptor();
+            Win32Native.MapiFileDescriptor mfd = new Win32Native.MapiFileDescriptor();
 			mfd.position = -1;
 			int runptr = (int)ptra;
 			for (int i = 0; i < _files.Count; i++)
@@ -464,9 +416,9 @@ namespace Ext.MapiMail
 		/// Returns an interop representation of a recepient.
 		/// </summary>
 		/// <returns></returns>
-		internal MapiMailMessage.MapiRecipDesc GetInteropRepresentation()
+        internal Win32Native.MapiRecipDesc GetInteropRepresentation()
 		{
-			MapiMailMessage.MapiRecipDesc interop = new MapiMailMessage.MapiRecipDesc();
+            Win32Native.MapiRecipDesc interop = new Win32Native.MapiRecipDesc();
 
 			if (DisplayName == null)
 			{
@@ -568,14 +520,14 @@ namespace Ext.MapiMail
 				}
 
 				// allocate enough memory to hold all recipients
-				int size = Marshal.SizeOf(typeof(MapiMailMessage.MapiRecipDesc));
+				int size = Marshal.SizeOf(typeof(Win32Native.MapiRecipDesc));
 				_handle = Marshal.AllocHGlobal(_count * size);
 
 				// place all interop recipients into the memory just allocated
 				int ptr = (int)_handle;
 				foreach (Recipient native in outer)
 				{
-					MapiMailMessage.MapiRecipDesc interop = native.GetInteropRepresentation();
+					Win32Native.MapiRecipDesc interop = native.GetInteropRepresentation();
 
 					// stick it in the memory block
 					Marshal.StructureToPtr(interop, (IntPtr)ptr, false);
@@ -595,7 +547,7 @@ namespace Ext.MapiMail
 			{
 				if (_handle != IntPtr.Zero)
 				{
-					Type type = typeof(MapiMailMessage.MapiRecipDesc);
+					Type type = typeof(Win32Native.MapiRecipDesc);
 					int size = Marshal.SizeOf(type);
 
 					// destroy all the structures in the memory area

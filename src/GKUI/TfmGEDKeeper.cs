@@ -100,7 +100,7 @@ namespace GKUI
 			this.FOptions.MWinRect = this.GetFormRect(this);
 			this.FOptions.MWinState = base.WindowState;
 
-			SysUtils.HtmlHelp(IntPtr.Zero, null, 18u, 0u);
+            Win32Native.HtmlHelp(IntPtr.Zero, null, 18u, 0u);
 
 			this.FNamesTable.SaveToFile(TGenEngine.GetAppDataPath() + "GEDKeeper2.nms");
 			this.FNamesTable.Dispose();
@@ -663,16 +663,13 @@ namespace GKUI
 		protected override void WndProc(ref Message m)
 		{
 			base.WndProc(ref m);
-			if (m.Msg == 1135)
+
+			if (m.Msg == Win32Native.WM_KEEPMODELESS)
 			{
 				if (this.fmCalcWidget != null && this.fmCalcWidget.Visible)
 				{
-					SysUtils.EnableWindow((uint)this.fmCalcWidget.Handle.ToInt32(), true);
+                    Win32Native.EnableWindow((uint)this.fmCalcWidget.Handle.ToInt32(), true);
 				}
-			}
-			else
-			{
-				int arg_4F_0 = m.Msg;
 			}
 		}
 
@@ -844,7 +841,7 @@ namespace GKUI
 		public void ShowHelpTopic(string aTopic)
 		{
 			string fns = TGenEngine.GetAppPath() + "GEDKeeper2.chm" + aTopic;
-			SysUtils.HtmlHelp(this.Handle, fns, 0u, 0u);
+            Win32Native.HtmlHelp(this.Handle, fns, 0u, 0u);
 		}
 
 		void ILocalization.SetLang()
@@ -904,7 +901,6 @@ namespace GKUI
 
 		public void LoadLanguage(int LangCode)
 		{
-			Screen scr = Screen.PrimaryScreen;
 			if (LangCode != LangMan.LSDefCode)
 			{
 				bool loaded = false;
@@ -956,7 +952,7 @@ namespace GKUI
 		{
 			if (KeepModeless)
 			{
-				SysUtils.PostMessage((uint)GKUI.TfmGEDKeeper.Instance.Handle.ToInt32(), 1135u, 0, 0);
+                Win32Native.PostMessage((uint)GKUI.TfmGEDKeeper.Instance.Handle.ToInt32(), Win32Native.WM_KEEPMODELESS, 0, 0);
 			}
 			return aForm.ShowDialog();
 		}

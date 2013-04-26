@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Reflection;
@@ -252,26 +251,26 @@ namespace GKCore
 
 		public int gt_get_record_type(object rec_ptr)
 		{
-			TGEDCOMRecord rec = (TGEDCOMRecord)rec_ptr;
+			TGEDCOMRecord rec = rec_ptr as TGEDCOMRecord;
 			return (int)rec.RecordType;
 		}
 
 		public bool gt_delete_record(object rec_ptr)
 		{
-			TGEDCOMRecord rec = (TGEDCOMRecord)rec_ptr;
+			TGEDCOMRecord rec = rec_ptr as TGEDCOMRecord;
 			bool res = fBase.DeleteRecord(rec, false);
 			return res;
 		}
 
 		public string gt_get_record_xref(object rec_ptr)
 		{
-			TGEDCOMRecord rec = (TGEDCOMRecord)rec_ptr;
+			TGEDCOMRecord rec = rec_ptr as TGEDCOMRecord;
 			return rec.XRef;
 		}
 
 		public string gt_get_record_uid(object rec_ptr)
 		{
-			TGEDCOMRecord rec = (TGEDCOMRecord)rec_ptr;
+			TGEDCOMRecord rec = rec_ptr as TGEDCOMRecord;
 			return rec.UID;
 		}
 
@@ -284,7 +283,7 @@ namespace GKCore
 
 		public bool gt_record_is_filtered(object rec_ptr)
 		{
-			TGEDCOMRecord rec = (TGEDCOMRecord)rec_ptr;
+			TGEDCOMRecord rec = rec_ptr as TGEDCOMRecord;
 			return fBase.RecordIsFiltered(rec);
 		}
 
@@ -296,19 +295,19 @@ namespace GKCore
 
 		public string gt_get_person_name(object rec_ptr)
 		{
-			TGEDCOMIndividualRecord rec = (TGEDCOMIndividualRecord)rec_ptr;
+			TGEDCOMIndividualRecord rec = rec_ptr as TGEDCOMIndividualRecord;
 			return ((rec == null) ? "" : rec.aux_GetNameStr(true, false));
 		}
 
 		public int gt_get_person_associations_count(object rec_ptr)
 		{
-			TGEDCOMIndividualRecord rec = (TGEDCOMIndividualRecord)rec_ptr;
+			TGEDCOMIndividualRecord rec = rec_ptr as TGEDCOMIndividualRecord;
 			return rec.Associations.Count;
 		}
 
 		public object gt_get_person_association(object rec_ptr, int idx)
 		{
-			TGEDCOMIndividualRecord rec = (TGEDCOMIndividualRecord)rec_ptr;
+			TGEDCOMIndividualRecord rec = rec_ptr as TGEDCOMIndividualRecord;
 			TGEDCOMAssociation asso = rec.Associations[idx];
 
 			return asso;
@@ -316,53 +315,53 @@ namespace GKCore
 
 		public object gt_add_person_association(object rec_ptr, string rel, object a_ptr)
 		{
-			TGEDCOMIndividualRecord rec = (TGEDCOMIndividualRecord)rec_ptr;
-			TGEDCOMIndividualRecord a_rec = (TGEDCOMIndividualRecord)a_ptr;
+			TGEDCOMIndividualRecord rec = rec_ptr as TGEDCOMIndividualRecord;
+			TGEDCOMIndividualRecord a_rec = a_ptr as TGEDCOMIndividualRecord;
 			TGEDCOMAssociation asso = fBase.Engine.AddAssociation(rec, rel, a_rec);
 			return asso;
 		}
 
 		public void gt_delete_person_association(object rec_ptr, int idx)
 		{
-			TGEDCOMIndividualRecord rec = (TGEDCOMIndividualRecord)rec_ptr;
+			TGEDCOMIndividualRecord rec = rec_ptr as TGEDCOMIndividualRecord;
 			rec.Associations.Delete(idx);
 		}
 
 		public int gt_get_person_events_count(object rec_ptr)
 		{
-			TGEDCOMIndividualRecord rec = (TGEDCOMIndividualRecord)rec_ptr;
+			TGEDCOMIndividualRecord rec = rec_ptr as TGEDCOMIndividualRecord;
 			return rec.IndividualEvents.Count;
 		}
 
 		public object gt_get_person_event(object rec_ptr, int idx)
 		{
-			TGEDCOMIndividualRecord rec = (TGEDCOMIndividualRecord)rec_ptr;
+			TGEDCOMIndividualRecord rec = rec_ptr as TGEDCOMIndividualRecord;
 			TGEDCOMCustomEvent evt = rec.IndividualEvents[idx];
 			return evt;
 		}
 
 		public object gt_get_person_event_ex(object rec_ptr, string sign)
 		{
-			TGEDCOMIndividualRecord rec = (TGEDCOMIndividualRecord)rec_ptr;
+			TGEDCOMIndividualRecord rec = rec_ptr as TGEDCOMIndividualRecord;
 			TGEDCOMCustomEvent evt = rec.GetIndividualEvent(sign);
 			return evt;
 		}
 
 		public void gt_delete_person_event(object rec_ptr, int idx)
 		{
-			TGEDCOMIndividualRecord rec = (TGEDCOMIndividualRecord)rec_ptr;
+			TGEDCOMIndividualRecord rec = rec_ptr as TGEDCOMIndividualRecord;
 			rec.IndividualEvents.Delete(idx);
 		}
 
 		public string gt_get_event_date(object ev_ptr)
 		{
-			TGEDCOMCustomEvent evt = (TGEDCOMCustomEvent)ev_ptr;
+			TGEDCOMCustomEvent evt = ev_ptr as TGEDCOMCustomEvent;
 			return (TGenEngine.GEDCOMEventToDateStr(evt, TGenEngine.TDateFormat.dfDD_MM_YYYY, false));
 		}
 
 		public int gt_get_event_year(object ev_ptr)
 		{
-			TGEDCOMCustomEvent evt = (TGEDCOMCustomEvent)ev_ptr;
+			TGEDCOMCustomEvent evt = ev_ptr as TGEDCOMCustomEvent;
 			if (evt == null) {
 				return 0;
 			} else {
@@ -378,7 +377,7 @@ namespace GKCore
 			try
 			{
 				if (ev_ptr != null && date != "") {
-					TGEDCOMCustomEvent evt = (TGEDCOMCustomEvent)ev_ptr;
+					TGEDCOMCustomEvent evt = ev_ptr as TGEDCOMCustomEvent;
 					evt.Detail.Date.ParseString(date);
 				}
 			}
@@ -390,43 +389,43 @@ namespace GKCore
 
 		public string gt_get_event_value(object ev_ptr)
 		{
-			TGEDCOMCustomEvent evt = (TGEDCOMCustomEvent)ev_ptr;
+			TGEDCOMCustomEvent evt = ev_ptr as TGEDCOMCustomEvent;
 			return evt.StringValue;
 		}
 
 		public string gt_get_event_place(object ev_ptr)
 		{
-			TGEDCOMCustomEvent evt = (TGEDCOMCustomEvent)ev_ptr;
+			TGEDCOMCustomEvent evt = ev_ptr as TGEDCOMCustomEvent;
 			return evt.Detail.Place.StringValue;
 		}
 
 		public void gt_set_event_value(object ev_ptr, string value)
 		{
-			TGEDCOMCustomEvent evt = (TGEDCOMCustomEvent)ev_ptr;
+			TGEDCOMCustomEvent evt = ev_ptr as TGEDCOMCustomEvent;
 			evt.StringValue = value;
 		}
 
 		public void gt_set_event_place(object ev_ptr, string place)
 		{
-			TGEDCOMCustomEvent evt = (TGEDCOMCustomEvent)ev_ptr;
+			TGEDCOMCustomEvent evt = ev_ptr as TGEDCOMCustomEvent;
 			evt.Detail.Place.StringValue = place;
 		}
 
 	public string gt_get_event_name(object ev_ptr)
 	{
-		TGEDCOMCustomEvent evt = (TGEDCOMCustomEvent)ev_ptr;
+		TGEDCOMCustomEvent evt = ev_ptr as TGEDCOMCustomEvent;
 		return evt.Name;
 	}
 
 	public string gt_get_person_sex(object rec_ptr)
 	{
-		TGEDCOMIndividualRecord rec = (TGEDCOMIndividualRecord)rec_ptr;
+		TGEDCOMIndividualRecord rec = rec_ptr as TGEDCOMIndividualRecord;
 		return TGenEngine.SexData[(int)rec.Sex].Sign;
 	}
 
 	public void gt_set_person_sex(object rec_ptr, string s_sex)
 	{
-		TGEDCOMIndividualRecord rec = (TGEDCOMIndividualRecord)rec_ptr;
+		TGEDCOMIndividualRecord rec = rec_ptr as TGEDCOMIndividualRecord;
 
 		TGEDCOMSex sex;
 		if (s_sex.Length == 1) {
@@ -479,45 +478,45 @@ namespace GKCore
 
 	public void gt_bind_group_member(object group_ptr, object person_ptr)
 	{
-		TGEDCOMGroupRecord grp = (TGEDCOMGroupRecord)group_ptr;
-		TGEDCOMIndividualRecord person = (TGEDCOMIndividualRecord)person_ptr;
+		TGEDCOMGroupRecord grp = group_ptr as TGEDCOMGroupRecord;
+		TGEDCOMIndividualRecord person = person_ptr as TGEDCOMIndividualRecord;
 		fBase.Engine.AddGroupMember(grp, person);
 	}
 
 	public void gt_add_note_text(object note_ptr, string txt)
 	{
-		TGEDCOMNoteRecord n_rec = (TGEDCOMNoteRecord)note_ptr;
+		TGEDCOMNoteRecord n_rec = note_ptr as TGEDCOMNoteRecord;
 		TGenEngine.AddNoteText(n_rec, txt);
 	}
 
 	public void gt_bind_record_note(object rec_ptr, object note_ptr)
 	{
-		TGEDCOMRecord rec = (TGEDCOMRecord)rec_ptr;
-		TGEDCOMNoteRecord note_rec = (TGEDCOMNoteRecord)note_ptr;
+		TGEDCOMRecord rec = rec_ptr as TGEDCOMRecord;
+		TGEDCOMNoteRecord note_rec = note_ptr as TGEDCOMNoteRecord;
 
 		TGenEngine.BindRecordNote(fBase.Tree, rec, note_rec);
 	}
 
 	public void gt_bind_record_source(object rec_ptr, object src_ptr, string page, int quality)
 	{
-		TGEDCOMRecord rec = (TGEDCOMRecord)rec_ptr;
-		TGEDCOMSourceRecord src_rec = (TGEDCOMSourceRecord)src_ptr;
+		TGEDCOMRecord rec = rec_ptr as TGEDCOMRecord;
+		TGEDCOMSourceRecord src_rec = src_ptr as TGEDCOMSourceRecord;
 
 		TGenEngine.BindRecordSource(fBase.Tree, rec, src_rec, page, quality);
 	}
 
 	public void gt_bind_family_spouse(object f_ptr, object sp_ptr)
 	{
-		TGEDCOMFamilyRecord f_rec = (TGEDCOMFamilyRecord)f_ptr;
-		TGEDCOMIndividualRecord sp_rec = (TGEDCOMIndividualRecord)sp_ptr;
+		TGEDCOMFamilyRecord f_rec = f_ptr as TGEDCOMFamilyRecord;
+		TGEDCOMIndividualRecord sp_rec = sp_ptr as TGEDCOMIndividualRecord;
 
 		fBase.Engine.AddFamilySpouse(f_rec, sp_rec);
 	}
 
 	public void gt_bind_family_child(object f_ptr, object ch_ptr)
 	{
-		TGEDCOMFamilyRecord f_rec = (TGEDCOMFamilyRecord)f_ptr;
-		TGEDCOMIndividualRecord ch_rec = (TGEDCOMIndividualRecord)ch_ptr;
+		TGEDCOMFamilyRecord f_rec = f_ptr as TGEDCOMFamilyRecord;
+		TGEDCOMIndividualRecord ch_rec = ch_ptr as TGEDCOMIndividualRecord;
 
 		fBase.Engine.AddFamilyChild(f_rec, ch_rec);
 	}
@@ -537,7 +536,7 @@ namespace GKCore
 
 	public object gt_create_event(object rec_ptr, string sign)
 	{
-		TGEDCOMRecord rec = (TGEDCOMIndividualRecord)rec_ptr;
+		TGEDCOMRecord rec = rec_ptr as TGEDCOMIndividualRecord;
 		TGEDCOMCustomEvent evt = TGenEngine.CreateEventEx(fBase.Tree, rec, sign, "", "");
 
 		return evt;
@@ -561,7 +560,7 @@ namespace GKCore
 
 	public object gt_get_person_parents_family(object rec_ptr)
 	{
-		TGEDCOMIndividualRecord rec = (TGEDCOMIndividualRecord)rec_ptr;
+		TGEDCOMIndividualRecord rec = rec_ptr as TGEDCOMIndividualRecord;
 		TGEDCOMFamilyRecord fam;
 
 		if (rec.ChildToFamilyLinks.Count < 1) {
@@ -575,13 +574,13 @@ namespace GKCore
 
 	public int gt_get_person_spouses_count(object rec_ptr)
 	{
-		TGEDCOMIndividualRecord rec = (TGEDCOMIndividualRecord)rec_ptr;
+		TGEDCOMIndividualRecord rec = rec_ptr as TGEDCOMIndividualRecord;
 		return rec.SpouseToFamilyLinks.Count;
 	}
 
 	public object gt_get_person_spouse_family(object rec_ptr, int sp_idx)
 	{
-		TGEDCOMIndividualRecord rec = (TGEDCOMIndividualRecord)rec_ptr;
+		TGEDCOMIndividualRecord rec = rec_ptr as TGEDCOMIndividualRecord;
 		TGEDCOMFamilyRecord fam = rec.SpouseToFamilyLinks[sp_idx].Family;
 
 		return fam;
@@ -589,7 +588,7 @@ namespace GKCore
 
 	public object gt_get_family_husband(object rec_ptr)
 	{
-		TGEDCOMFamilyRecord fam = (TGEDCOMFamilyRecord)rec_ptr;
+		TGEDCOMFamilyRecord fam = rec_ptr as TGEDCOMFamilyRecord;
 		if (fam == null) {
 			rec_ptr = null;
 		} else {
@@ -601,7 +600,7 @@ namespace GKCore
 
 	public object gt_get_family_wife(object rec_ptr)
 	{
-		TGEDCOMFamilyRecord fam = (TGEDCOMFamilyRecord)rec_ptr;
+		TGEDCOMFamilyRecord fam = rec_ptr as TGEDCOMFamilyRecord;
 		if (fam == null) {
 			rec_ptr = null;
 		} else {
@@ -613,19 +612,19 @@ namespace GKCore
 
 	public int gt_get_family_childs_count(object rec_ptr)
 	{
-		TGEDCOMFamilyRecord fam = (TGEDCOMFamilyRecord)rec_ptr;
+		TGEDCOMFamilyRecord fam = rec_ptr as TGEDCOMFamilyRecord;
 		return fam.Childrens.Count;
 	}
 
 	public object gt_get_family_child(object rec_ptr, int ch_idx)
 	{
-		TGEDCOMFamilyRecord fam = (TGEDCOMFamilyRecord)rec_ptr;
+		TGEDCOMFamilyRecord fam = rec_ptr as TGEDCOMFamilyRecord;
 		return fam.Childrens[ch_idx].Value;
 	}
 
 	public int gt_get_location_usages(object rec_ptr)
 	{
-		TGEDCOMLocationRecord loc = (TGEDCOMLocationRecord)rec_ptr;
+		TGEDCOMLocationRecord loc = rec_ptr as TGEDCOMLocationRecord;
 		int usages = 0;
 
 		StringList link_list = new StringList();
@@ -644,7 +643,7 @@ namespace GKCore
 
 	public int gt_get_record_notes_count(object rec_ptr)
 	{
-		TGEDCOMRecord rec = (TGEDCOMRecord)rec_ptr;
+		TGEDCOMRecord rec = rec_ptr as TGEDCOMRecord;
 		return rec.Notes.Count;
 	}
 
@@ -652,13 +651,13 @@ namespace GKCore
 
 	public int gt_get_person_groups_count(object rec_ptr)
 	{
-		TGEDCOMIndividualRecord rec = (TGEDCOMIndividualRecord)rec_ptr;
+		TGEDCOMIndividualRecord rec = rec_ptr as TGEDCOMIndividualRecord;
 		return rec.Groups.Count;
 	}
 
 	public object gt_get_person_group(object rec_ptr, int gr_idx)
 	{
-		TGEDCOMIndividualRecord rec = (TGEDCOMIndividualRecord)rec_ptr;
+		TGEDCOMIndividualRecord rec = rec_ptr as TGEDCOMIndividualRecord;
 		TGEDCOMGroupRecord grp = rec.Groups[gr_idx].Value as TGEDCOMGroupRecord;
 		return grp;
 	}

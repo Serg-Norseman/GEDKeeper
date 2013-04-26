@@ -10,6 +10,7 @@ using Ext.Utils;
 
 namespace GedCom551
 {
+    [Serializable]
 	public class EGEDCOMException : Exception
 	{
 		public EGEDCOMException()
@@ -84,75 +85,62 @@ namespace GedCom551
 
 		protected string ExtractString([In] string S, out string AString, [In] string ADefault)
 		{
-			string Result = S;
-			int I = 0;
+			string result = S;
 
-			if (Result != null)
-			{
-				while (I < Result.Length && Result[I] != ' ')
-				{
+			if (!string.IsNullOrEmpty(result)) {
+				int I = 0;
+				while (I < result.Length && result[I] != ' ') {
 					I++;
 				}
-			}
 
-			if (I > 0)
-			{
-				AString = Result.Substring(0, I);
-				Result = Result.Remove(0, I);
-			}
-			else
-			{
+				if (I > 0) {
+					AString = result.Substring(0, I);
+					result = result.Remove(0, I);
+				} else {
+					AString = ADefault;
+				}
+			} else {
 				AString = ADefault;
 			}
 
-			return Result;
+			return result;
 		}
 
 		protected string ExtractXRef([In] string S, out string AXRef, bool NoException, [In] string ADefault)
 		{
-			string Result = S;
+			string result = S;
 
-			if (((Result != null) ? Result.Length : 0) > 0 && Result[0] == '@')
-			{
-				int P = Result.IndexOf('@', 1);
-				if (P > 0)
-				{
-					AXRef = Result.Substring(1, P - 1);
-					Result = Result.Remove(0, P + 1);
-				}
-				else
-				{
-					if (!NoException)
-					{
+			if (!string.IsNullOrEmpty(result) && result[0] == '@') {
+				int P = result.IndexOf('@', 1);
+				if (P > 0) {
+					AXRef = result.Substring(1, P - 1);
+					result = result.Remove(0, P + 1);
+				} else {
+					if (!NoException) {
 						throw new EGEDCOMException(string.Format("The string {0} contains an unterminated XRef pointer", S));
 					}
 					AXRef = ADefault;
 				}
-			}
-			else
-			{
-				if (!NoException)
-				{
+			} else {
+				if (!NoException) {
 					throw new EGEDCOMException(string.Format("The string {0} is expected to start with an XRef pointer", S));
 				}
 				AXRef = ADefault;
 			}
-			return Result;
+
+			return result;
 		}
 
 		public static string CleanXRef([In] string XRef)
 		{
 			string result = XRef;
 
-			if (result != null && result != "")
-			{
-				if (result[0] == '@')
-				{
+			if (!string.IsNullOrEmpty(result)) {
+				if (result[0] == '@') {
 					result = result.Remove(0, 1);
 				}
 
-				if (result.Length > 0 && result[result.Length - 1] == '@')
-				{
+				if (result.Length > 0 && result[result.Length - 1] == '@') {
 					result = result.Remove(result.Length - 1, 1);
 				}
 			}
@@ -160,17 +148,14 @@ namespace GedCom551
 			return result;
 		}
 
-		public static string EncloseXRef(string XRef)
+		public static string EncloseXRef([In] string XRef)
 		{
-			if (XRef != null && XRef != "")
-			{
-				if (XRef[0] != '@')
-				{
+			if (!string.IsNullOrEmpty(XRef)) {
+				if (XRef[0] != '@') {
 					XRef = "@" + XRef;
 				}
 
-				if (XRef[XRef.Length - 1] != '@')
-				{
+				if (XRef[XRef.Length - 1] != '@') {
 					XRef += "@";
 				}
 			}
@@ -179,31 +164,28 @@ namespace GedCom551
 
 		public static string ExtractNumber([In] string S, out int N, bool NoException, int ADefault)
 		{
-			string Result = S;
-			int I = 0;
+			string result = S;
 
-			if (Result != null)
-			{
-				while (I < Result.Length && IsDigit(Result[I]))
-				{
+			if (!string.IsNullOrEmpty(result)) {
+				int I = 0;
+				while (I < result.Length && IsDigit(result[I])) {
 					I++;
 				}
-			}
 
-			if (I > 0)
-			{
-				N = int.Parse(Result.Substring(0, I));
-				Result = Result.Remove(0, I);
-			}
-			else
-			{
-				if (!NoException)
-				{
-					throw new EGEDCOMException(string.Format("The string {0} doesn't start with a valid number", S));
+				if (I > 0) {
+					N = int.Parse(result.Substring(0, I));
+					result = result.Remove(0, I);
+				} else {
+					if (!NoException) {
+						throw new EGEDCOMException(string.Format("The string {0} doesn't start with a valid number", S));
+					}
+					N = ADefault;
 				}
+			} else {
 				N = ADefault;
 			}
-			return Result;
+
+			return result;
 		}
 
 		public static bool IsDigit(char C)

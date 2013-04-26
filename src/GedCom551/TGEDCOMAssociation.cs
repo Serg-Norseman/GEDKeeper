@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
 
 namespace GedCom551
 {
@@ -42,7 +41,7 @@ namespace GedCom551
 			}
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 			if (ATag == "SOUR")
@@ -79,8 +78,13 @@ namespace GedCom551
 			this._SourceCitations.ResetOwner(AOwner);
 		}
 
-		public TGEDCOMAssociation(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMAssociation(TGEDCOMTree AOwner, TGEDCOMObject AParent, string AName, string AValue) : base(AOwner, AParent, AName, AValue)
 		{
+		}
+
+        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, string AName, string AValue)
+		{
+			return new TGEDCOMAssociation(AOwner, AParent, AName, AValue);
 		}
 	}
 }

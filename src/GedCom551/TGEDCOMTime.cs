@@ -113,31 +113,28 @@ namespace GedCom551
 			{
 				result = base.ExtractDelimiter(result, 0);
 
-				int H;
-				result = TGEDCOMObject.ExtractNumber(result, out H, false, 0);
-				this.FHour = (ushort)H;
+				int tmp;
+				result = TGEDCOMObject.ExtractNumber(result, out tmp, false, 0);
+				this.FHour = (ushort)tmp;
 				if (result != "" && result[0] == ':')
 				{
 					result = result.Remove(0, 1);
 				}
 
-				int M;
-				result = TGEDCOMObject.ExtractNumber(result, out M, false, 0);
-				this.FMinutes = (ushort)M;
+				result = TGEDCOMObject.ExtractNumber(result, out tmp, false, 0);
+				this.FMinutes = (ushort)tmp;
 				if (result != "" && result[0] == ':')
 				{
 					result = result.Remove(0, 1);
 
-					int S;
-					result = TGEDCOMObject.ExtractNumber(result, out S, false, 0);
-					this.FSeconds = (ushort)S;
+					result = TGEDCOMObject.ExtractNumber(result, out tmp, false, 0);
+					this.FSeconds = (ushort)tmp;
 					if (result != "" && result[0] == '.')
 					{
 						result = result.Remove(0, 1);
 
-						int F;
-						result = TGEDCOMObject.ExtractNumber(result, out F, false, 0);
-						this.FFraction = (ushort)F;
+						result = TGEDCOMObject.ExtractNumber(result, out tmp, false, 0);
+						this.FFraction = (ushort)tmp;
 					}
 				}
 			}
@@ -148,7 +145,7 @@ namespace GedCom551
 		{
 		}
 
-		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
 		{
 			return new TGEDCOMTime(AOwner, AParent, AName, AValue);
 		}

@@ -80,7 +80,7 @@ namespace GedCom551
 			bool match = false;
 
 			if (record != null) {
-				TGEDCOMNoteRecord note = (TGEDCOMNoteRecord)record;
+				TGEDCOMNoteRecord note = record as TGEDCOMNoteRecord;
 
 				string text1 = this.Note.Text;
 				string text2 = note.Note.Text;
@@ -95,7 +95,7 @@ namespace GedCom551
 		{
 		}
 
-		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
 		{
 			return new TGEDCOMNoteRecord(AOwner, AParent, AName, AValue);
 		}

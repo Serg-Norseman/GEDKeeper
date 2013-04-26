@@ -16,7 +16,7 @@ namespace GKUI
 
 		private void OnModalBegin(object Sender)
 		{
-			SysUtils.PostMessage((uint)GKUI.TfmGEDKeeper.Instance.Handle.ToInt32(), 1135u, 0, 0);
+            Win32Native.PostMessage((uint)GKUI.TfmGEDKeeper.Instance.Handle.ToInt32(), Win32Native.WM_KEEPMODELESS, 0, 0);
 		}
 
 		private void edExpression_KeyDown(object sender, KeyEventArgs e)

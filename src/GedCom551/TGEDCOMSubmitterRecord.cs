@@ -88,7 +88,7 @@ namespace GedCom551
 		{
 			if (!this.Disposed_)
 			{
-				if (this.FLanguages != null) this.FLanguages.Free();
+				if (this.FLanguages != null) this.FLanguages.Dispose();
 				base.Dispose();
 				this.Disposed_ = true;
 			}
@@ -157,7 +157,7 @@ namespace GedCom551
 		{
 		}
 
-		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
 		{
 			return new TGEDCOMSubmitterRecord(AOwner, AParent, AName, AValue);
 		}

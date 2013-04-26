@@ -136,11 +136,6 @@ namespace GKUI.Charts
 			public TreeChartPerson xFrom;
 			public TreeChartPerson xTo;
 			public KinshipsMan.TRelationKind xRel;
-
-			public void Free()
-			{
-				SysUtils.Free(this);
-			}
 		}
 
 		public enum TChartKind : byte
@@ -375,6 +370,8 @@ namespace GKUI.Charts
 				this.FFilter.Free();
 				this.FPersons.Dispose();
 				this.DoneSigns();
+
+                if (FDrawFont != null) FDrawFont.Dispose();
 			}
 			base.Dispose(Disposing);
 		}
@@ -543,7 +540,7 @@ namespace GKUI.Charts
 							{
 								filter_source = null;
 							} else {
-								filter_source = (TGEDCOMSourceRecord)this.FTree.XRefIndex_Find(this.FFilter.SourceRef);
+								filter_source = this.FTree.XRefIndex_Find(this.FFilter.SourceRef) as TGEDCOMSourceRecord;
 							}
 
 							if (aPerson.IndexOfSource(filter_source) < 0)
@@ -1598,93 +1595,29 @@ namespace GKUI.Charts
 		protected override void WndProc(ref Message m)
 		{
 			base.WndProc(ref m);
-			if (m.Msg == 5)
+
+			if (m.Msg == Win32Native.WM_SIZE)
 			{
 				this.ScrollRange();
 			}
-			else
+			else if (m.Msg == Win32Native.WM_GETDLGCODE)
 			{
-				if (m.Msg == 135)
-				{
-					m.Result = (IntPtr)(m.Result.ToInt32() | 1 | 2 | 128 | 4);
-				}
-				else
-				{
-					if (m.Msg == 276)
-					{
-						uint wParam = (uint)m.WParam.ToInt32();
-						ScrollEventType scrType = SysUtils.GetScrollEventType(wParam & 65535u);
-						int new_pos = this.DoScroll(0, this.LeftPos, 0, this.FRange.X, scrType);
-						this.SetLeftPos(new_pos);
-					}
-					else
-					{
-						if (m.Msg == 277)
-						{
-							uint wParam = (uint)m.WParam.ToInt32();
-							ScrollEventType scrType = SysUtils.GetScrollEventType(wParam & 65535u);
-							int new_pos = this.DoScroll(1, this.TopPos, 0, this.FRange.Y, scrType);
-							this.SetTopPos(new_pos);
-						}
-					}
-				}
+				m.Result = (IntPtr)(m.Result.ToInt32() | 
+				                    Win32Native.DLGC_WANTARROWS | Win32Native.DLGC_WANTTAB | 
+				                    Win32Native.DLGC_WANTCHARS | Win32Native.DLGC_WANTALLKEYS);
 			}
-		}
-
-		private int DoScroll(int nBar, int aOldPos, int aMin, int aMax, ScrollEventType scrType)
-		{
-			int NewPos = aOldPos;
-			switch (scrType) {
-				case ScrollEventType.SmallDecrement:
-				{
-					NewPos--;
-					break;
-				}
-				case ScrollEventType.SmallIncrement:
-				{
-					NewPos++;
-					break;
-				}
-				case ScrollEventType.LargeDecrement:
-				{
-					NewPos--;
-					break;
-				}
-				case ScrollEventType.LargeIncrement:
-				{
-					NewPos++;
-					break;
-				}
-				case ScrollEventType.ThumbPosition:
-				case ScrollEventType.ThumbTrack:
-				{
-					TScrollInfo ScrollInfo = new TScrollInfo();
-					ScrollInfo.cbSize = (uint)Marshal.SizeOf( ScrollInfo );
-					ScrollInfo.fMask = 23u;
-					SysUtils.GetScrollInfo((uint)this.Handle.ToInt32(), nBar, ref ScrollInfo);
-					NewPos = ScrollInfo.nTrackPos;
-					break;
-				}
-				case ScrollEventType.First:
-				{
-					NewPos = 0;
-					break;
-				}
-				case ScrollEventType.Last:
-				{
-					NewPos = aMax;
-					break;
-				}
-			}
-			if (NewPos < aMin)
+			else if (m.Msg == Win32Native.WM_HSCROLL)
 			{
-				NewPos = aMin;
+				uint wParam = (uint)m.WParam.ToInt32();
+				int new_pos = SysUtils.DoScroll((uint)this.Handle.ToInt32(), wParam, 0, this.LeftPos, 0, this.FRange.X, 1, 1);
+				this.SetLeftPos(new_pos);
 			}
-			if (NewPos > aMax)
+			else if (m.Msg == Win32Native.WM_VSCROLL)
 			{
-				NewPos = aMax;
+				uint wParam = (uint)m.WParam.ToInt32();
+				int new_pos = SysUtils.DoScroll((uint)this.Handle.ToInt32(), wParam, 1, this.TopPos, 0, this.FRange.Y, 1, 1);
+				this.SetTopPos(new_pos);
 			}
-			return NewPos;
 		}
 
 		protected void ScrollRange()
@@ -1703,8 +1636,8 @@ namespace GKUI.Charts
 				this.FRange.Y = this.FImageHeight - base.ClientRectangle.Height;
 			}
 
-			SysUtils.SetScrollRange((uint)this.Handle.ToInt32(), 0, 0, this.FRange.X, false);
-			SysUtils.SetScrollRange((uint)this.Handle.ToInt32(), 1, 0, this.FRange.Y, false);
+            Win32Native.SetScrollRange((uint)this.Handle.ToInt32(), 0, 0, this.FRange.X, false);
+            Win32Native.SetScrollRange((uint)this.Handle.ToInt32(), 1, 0, this.FRange.Y, false);
 
 			base.Invalidate();
 		}
@@ -1727,8 +1660,8 @@ namespace GKUI.Charts
 			{
 				TRect dummy = TRect.Empty();
 				TRect R = TRect.Empty();
-				SysUtils.ScrollWindowEx((uint)this.Handle.ToInt32(), this.FLeftPos - Value, 0, ref dummy, ref dummy, 0, out R, 0u);
-				SysUtils.SetScrollPos((uint)this.Handle.ToInt32(), 0, this.FLeftPos, true);
+                Win32Native.ScrollWindowEx((uint)this.Handle.ToInt32(), this.FLeftPos - Value, 0, ref dummy, ref dummy, 0, out R, 0u);
+                Win32Native.SetScrollPos((uint)this.Handle.ToInt32(), 0, this.FLeftPos, true);
 				base.Invalidate();
 				this.FLeftPos = Value;
 				
@@ -1745,8 +1678,8 @@ namespace GKUI.Charts
 			{
 				TRect dummy = TRect.Empty();
 				TRect R = TRect.Empty();
-				SysUtils.ScrollWindowEx((uint)this.Handle.ToInt32(), 0, this.FTopPos - Value, ref dummy, ref dummy, 0, out R, 0u);
-				SysUtils.SetScrollPos((uint)this.Handle.ToInt32(), 1, this.FTopPos, true);
+                Win32Native.ScrollWindowEx((uint)this.Handle.ToInt32(), 0, this.FTopPos - Value, ref dummy, ref dummy, 0, out R, 0u);
+                Win32Native.SetScrollPos((uint)this.Handle.ToInt32(), 1, this.FTopPos, true);
 				base.Invalidate();
 				this.FTopPos = Value;
 				

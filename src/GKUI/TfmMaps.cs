@@ -43,11 +43,6 @@ namespace GKUI
 					this.Disposed_ = true;
 				}
 			}
-
-			public void Free()
-			{
-				SysUtils.Free(this);
-			}
 		}
 
 		private TreeNode FBaseRoot;
@@ -75,7 +70,7 @@ namespace GKUI
 					bool res = rec is TGEDCOMIndividualRecord && (this.FSelectedPersons == null || (this.FSelectedPersons != null && this.FSelectedPersons.IndexOf(rec) >= 0));
 
 					if (res) {
-						TGEDCOMIndividualRecord ind = (TGEDCOMIndividualRecord)rec;
+						TGEDCOMIndividualRecord ind = rec as TGEDCOMIndividualRecord;
 						int p_cnt = 0;
 
 						int num2 = ind.IndividualEvents.Count - 1;

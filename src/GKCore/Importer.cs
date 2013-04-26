@@ -446,10 +446,8 @@ namespace GKCore
 				string s = buf[i];
 				if (string.IsNullOrEmpty(s)) continue;
 
-				while (s.Length > 0 && (s[0] == ' ' || s[0] == '.'))
-				{
-					s = s.Remove(0, 1);
-				}
+                // skip blanks
+                s = SysUtils.TrimChars(s, new char[] { ' ', '.' });
 
 				if (s.Length > 2)
 				{
@@ -473,7 +471,7 @@ namespace GKCore
 							s = TGEDCOMObject.ExtractNumber(s, out num, true, 1);
 
 							// skip blanks
-							while (s.Length > 0 && s[0] == ' ') s = s.Remove(0, 1);
+                            s = SysUtils.TrimChars(s, ' ');
 
 							// extract date of marriage
 							int p;
@@ -494,10 +492,7 @@ namespace GKCore
 							}
 
 							// skip interval before name
-							while (s.Length > 0 && (s[0] == '–' || s[0] == ' ' || s[0] == '-'))
-							{
-								s = s.Remove(0, 1);
-							}
+                            s = SysUtils.TrimChars(s, new char[] { '–', ' ', '-' });
 
 							// extract name
 							p = 0;

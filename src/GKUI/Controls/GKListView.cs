@@ -70,7 +70,7 @@ namespace GKUI.Controls
 			set { this.lvwColumnSorter.SortColumn = value; }
 		}
 
-		public GKListView(Control AOwner)
+		public GKListView()
 		{
 			this.lvwColumnSorter = new GKListView.TListViewColumnSorter();
 			base.ListViewItemSorter = this.lvwColumnSorter;
@@ -123,12 +123,10 @@ namespace GKUI.Controls
 			base.Sort();
 		}
 
-		public void AddListColumn(string aCaption, int aWidth, bool aAutoSize)
+		public void AddListColumn(string caption, int width, bool autoSize)
 		{
-			if (aAutoSize) {
-				aWidth = -1;
-			}
-			ColumnHeader col = base.Columns.Add(aCaption, aWidth, HorizontalAlignment.Left);
+			if (autoSize) width = -1;
+			base.Columns.Add(caption, width, HorizontalAlignment.Left);
 		}
 
 		public GKListItem AddItem(string title, object data)

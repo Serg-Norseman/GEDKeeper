@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -149,12 +148,12 @@ namespace GKUI
 				{
 					case TGEDCOMRecordType.rtIndividual:
 					{
-						_CheckRelations_CheckIndividual((TGEDCOMIndividualRecord)rec);
+						_CheckRelations_CheckIndividual(rec as TGEDCOMIndividualRecord);
 						break;
 					}
 					case TGEDCOMRecordType.rtFamily:
 					{
-						_CheckRelations_CheckFamily((TGEDCOMFamilyRecord)rec);
+						_CheckRelations_CheckFamily(rec as TGEDCOMFamilyRecord);
 						break;
 					}
 					case TGEDCOMRecordType.rtNote:
@@ -169,7 +168,7 @@ namespace GKUI
 					}
 					case TGEDCOMRecordType.rtSource:
 					{
-						_CheckRelations_CheckSource((TGEDCOMSourceRecord)rec);
+						_CheckRelations_CheckSource(rec as TGEDCOMSourceRecord);
 						break;
 					}
 					case TGEDCOMRecordType.rtRepository:
@@ -203,7 +202,7 @@ namespace GKUI
 					if (rec is TGEDCOMIndividualRecord)
 					{
 						cnt++;
-						TGEDCOMIndividualRecord i_rec = (TGEDCOMIndividualRecord)rec;
+						TGEDCOMIndividualRecord i_rec = rec as TGEDCOMIndividualRecord;
 						string st = i_rec.XRef + " / " + i_rec.aux_GetNameStr(true, false);
 
 						if (this.FSplitList.IndexOf(i_rec) < 0) {
@@ -238,7 +237,7 @@ namespace GKUI
 
 					if (rec is TGEDCOMIndividualRecord)
 					{
-						TGEDCOMIndividualRecord iRec = (TGEDCOMIndividualRecord)rec;
+						TGEDCOMIndividualRecord iRec = rec as TGEDCOMIndividualRecord;
 						if (prepared.IndexOf(iRec) < 0)
 						{
 							group++;
@@ -252,7 +251,7 @@ namespace GKUI
 							int num2 = this.FSplitList.Count - 1;
 							for (int j = 0; j <= num2; j++)
 							{
-								iRec = (TGEDCOMIndividualRecord)this.FSplitList[j];
+								iRec = this.FSplitList[j] as TGEDCOMIndividualRecord;
 								prepared.Add(iRec);
 								string pn = iRec.aux_GetNameStr(true, false);
 								if (iRec.Patriarch)
@@ -279,7 +278,7 @@ namespace GKUI
 
 		private void PrepareChecksList()
 		{
-			this.Base.CreateListView(this.Panel1, ref this.ListChecks);
+			this.Base.CreateListView(this.Panel1, out this.ListChecks);
 			this.ListChecks.CheckBoxes = true;
 			this.ListChecks.DoubleClick += new EventHandler(this.ListChecksDblClick);
 			this.ListChecks.AddListColumn(LangMan.LSList[579], 400, false);
@@ -343,7 +342,7 @@ namespace GKUI
 
 		private void PreparePatriarchsList()
 		{
-			this.Base.CreateListView(this.Panel3, ref this.ListPatriarchs);
+			this.Base.CreateListView(this.Panel3, out this.ListPatriarchs);
 			this.ListPatriarchs.DoubleClick += new EventHandler(this.ListPatriarchsDblClick);
 			this.ListPatriarchs.AddListColumn(LangMan.LSList[92], 400, false);
 			this.ListPatriarchs.AddListColumn(LangMan.LSList[321], 90, false);
@@ -367,7 +366,7 @@ namespace GKUI
 
 		private void PreparePlacesList()
 		{
-			this.Base.CreateListView(this.Panel4, ref this.ListPlaces);
+			this.Base.CreateListView(this.Panel4, out this.ListPlaces);
 			this.ListPlaces.DoubleClick += new EventHandler(this.ListPlacesDblClick);
 			this.ListPlaces.AddListColumn(LangMan.LSList[204], 400, false);
 			this.ListPlaces.AddListColumn(LangMan.LSList[589], 100, false);
@@ -396,7 +395,7 @@ namespace GKUI
 
 					if (record is TGEDCOMIndividualRecord)
 					{
-						TGEDCOMIndividualRecord iRec = (TGEDCOMIndividualRecord)record;
+						TGEDCOMIndividualRecord iRec = record as TGEDCOMIndividualRecord;
 
 						int num2 = iRec.IndividualEvents.Count - 1;
 						for (int j = 0; j <= num2; j++)
@@ -408,7 +407,7 @@ namespace GKUI
 					{
 						if (record is TGEDCOMFamilyRecord)
 						{
-							TGEDCOMFamilyRecord fRec = (TGEDCOMFamilyRecord)record;
+							TGEDCOMFamilyRecord fRec = record as TGEDCOMFamilyRecord;
 
 							int num3 = fRec.FamilyEvents.Count - 1;
 							for (int j = 0; j <= num3; j++)
@@ -1021,7 +1020,7 @@ namespace GKUI
 				{
 					if (aMainTree[i] is TGEDCOMIndividualRecord)
 					{
-						TGEDCOMIndividualRecord iRec = (TGEDCOMIndividualRecord)aMainTree[i];
+						TGEDCOMIndividualRecord iRec = aMainTree[i] as TGEDCOMIndividualRecord;
 
 						int idx = names.AddObject(iRec.aux_GetNameStr(true, false), new TList());
 						(names.GetObject(idx) as TList).Add(iRec);
@@ -1038,7 +1037,7 @@ namespace GKUI
 				{
 					if (tempTree[i] is TGEDCOMIndividualRecord)
 					{
-						TGEDCOMIndividualRecord iRec = (TGEDCOMIndividualRecord)tempTree[i];
+						TGEDCOMIndividualRecord iRec = tempTree[i] as TGEDCOMIndividualRecord;
 
 						string tm = iRec.aux_GetNameStr(true, false);
 						int idx = names.IndexOf(tm);

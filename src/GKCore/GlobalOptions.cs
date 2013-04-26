@@ -255,16 +255,6 @@ namespace GKCore
 			get { return this.GetLastBasesCount(); }
 		}
 
-		private ushort GetKeyLayout()
-		{
-			return unchecked((ushort)SysUtils.GetKeyboardLayout(0u));
-		}
-
-		private void SetKeyLayout(ushort aLayout)
-		{
-			SysUtils.ActivateKeyboardLayout((uint)aLayout, 0u);
-		}
-
 		private void LngPrepareProc([In] string FileName)
 		{
 			StreamReader lng_file = new StreamReader(FileName, Encoding.UTF8);
@@ -391,8 +381,8 @@ namespace GKCore
 				this.FInterfaceLang = (ushort)ini.ReadInteger("Common", "InterfaceLang", 1049);
 				this.FRevisionsBackup = ini.ReadBool("Common", "RevisionsBackup", false);
 
-				ushort kl = (ushort)ini.ReadInteger("Common", "KeyLayout", (int)this.GetKeyLayout());
-				this.SetKeyLayout(kl);
+				ushort kl = (ushort)ini.ReadInteger("Common", "KeyLayout", (int)SysUtils.GetKeyLayout());
+                SysUtils.SetKeyLayout(kl);
 
 				this.FChartOptions.LoadFromFile(ini);
 				this.FPedigreeOptions.LoadFromFile(ini);
@@ -472,7 +462,7 @@ namespace GKCore
 				ini.WriteBool("Common", "ShowTips", this.FShowTips);
 				ini.WriteInteger("Common", "InterfaceLang", (int)this.FInterfaceLang);
 				ini.WriteBool("Common", "RevisionsBackup", this.FRevisionsBackup);
-				ini.WriteInteger("Common", "KeyLayout", (int)this.GetKeyLayout());
+				ini.WriteInteger("Common", "KeyLayout", (int)SysUtils.GetKeyLayout());
 
 				this.FChartOptions.SaveToFile(ini);
 				this.FPedigreeOptions.SaveToFile(ini);

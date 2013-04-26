@@ -45,29 +45,29 @@ namespace GedCom551
 			set { base.SetTagStringValue("TYPE", GetNameTypeStr(value)); }
 		}
 
-		public void GetNameParts(out string AFirstPart, out string ASurname/*, out string ALastPart*/)
+		public void GetNameParts(out string firstPart, out string surname/*, out string ALastPart*/)
 		{
 			string sv = base.StringValue;
 			if (sv == null || sv.Length == 0) {
-				AFirstPart = "";
-				ASurname = "";
+				firstPart = "";
+				surname = "";
 			} else {
 				int p = sv.IndexOf('/');
 
 				if (p < 0) {
-					AFirstPart = "";
+					firstPart = "";
 				} else {
-					AFirstPart = sv.Substring(0, p);
-					AFirstPart = SysUtils.TrimRight(AFirstPart);
+					firstPart = sv.Substring(0, p);
+					firstPart = SysUtils.TrimRight(firstPart);
 				}
 
 				int p2 = ((p < 0) ? -1 : sv.IndexOf('/', p + 1));
 
 				if (p < 0 || p2 < 0) {
-					ASurname = "";
+					surname = "";
 				} else {
 					p++;
-					ASurname = sv.Substring(p, p2 - p);
+					surname = sv.Substring(p, p2 - p);
 				}
 			}
 
@@ -185,13 +185,13 @@ namespace GedCom551
 			return Result;
 		}
 
-		public override void Assign(TGEDCOMCustomTag Source)
+        public override void Assign(TGEDCOMTag Source)
 		{
 			base.Assign(Source);
 
 			if (Source is TGEDCOMPersonalName)
 			{
-				this.Pieces.Assign(((TGEDCOMPersonalName)Source).Pieces);
+				this.Pieces.Assign((Source as TGEDCOMPersonalName).Pieces);
 			}
 		}
 
@@ -319,7 +319,7 @@ namespace GedCom551
 		{
 		}
 
-		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
 		{
 			return new TGEDCOMPersonalName(AOwner, AParent, AName, AValue);
 		}

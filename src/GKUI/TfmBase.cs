@@ -94,32 +94,24 @@ namespace GKUI
 		private void OutLink(TGEDCOMRecord aSubject, StringList aToList, TGEDCOMRecord aRec, TGEDCOMTag aTag, TGEDCOMPointer aExt)
 		{
 			string prefix;
-			if (aSubject is TGEDCOMSourceRecord && aExt != null)
-			{
-				if ((aExt as TGEDCOMSourceCitation).Page != "")
-				{
-					prefix = (aExt as TGEDCOMSourceCitation).Page + ": ";
-				}
-				else
-				{
+			if (aSubject is TGEDCOMSourceRecord && aExt != null) {
+                TGEDCOMSourceCitation cit = (aExt as TGEDCOMSourceCitation);
+				if (cit.Page != "") {
+					prefix = cit.Page + ": ";
+				} else {
 					prefix = "";
 				}
-			}
-			else
-			{
+			} else {
 				prefix = "";
 			}
 
 			string suffix;
-			if (aTag != null && aTag is TGEDCOMCustomEvent)
-			{
+			if (aTag != null && aTag is TGEDCOMCustomEvent) {
 				suffix = ", " + TGenEngine.GetEventName(aTag as TGEDCOMCustomEvent).ToLower();
-			}
-			else
-			{
+			} else {
 				suffix = "";
 			}
-			aToList.Add("    " + prefix + TGenEngine.GenRecordLink(this.FTree, aRec, true) + suffix);
+			aToList.Add("    " + prefix + TGenEngine.GenRecordLink(aRec, true) + suffix);
 		}
 
 		private void PrepareEvent(TGEDCOMRecord aSubject, StringList aToList, TGEDCOMRecord aRec, TGEDCOMCustomEvent evt)
@@ -176,7 +168,7 @@ namespace GKUI
 
 				if (rec is TGEDCOMFamilyRecord)
 				{
-					TGEDCOMFamilyRecord fam = (TGEDCOMFamilyRecord)rec;
+					TGEDCOMFamilyRecord fam = rec as TGEDCOMFamilyRecord;
 					TGEDCOMIndividualRecord husb = fam.Husband.Value as TGEDCOMIndividualRecord;
 					TGEDCOMIndividualRecord wife = fam.Wife.Value as TGEDCOMIndividualRecord;
 					if (husb == aNewParent || wife == aNewParent)
@@ -316,7 +308,7 @@ namespace GKUI
 				TGEDCOMRecord rec = this.FTree.XRefIndex_Find(xref);
 				if (rec != null)
 				{
-					this.ShowMedia(rec as TGEDCOMMultimediaRecord);
+					this.ShowMedia(rec as TGEDCOMMultimediaRecord, false);
 				}
 			}
 			else
@@ -371,6 +363,8 @@ namespace GKUI
 				{
 					this.FChangedRecords[(int)rt].Dispose();
 				}
+
+                if (components != null) components.Dispose();
 			}
 			base.Dispose(Disposing);
 		}
@@ -462,9 +456,9 @@ namespace GKUI
 			this.FUndoman.Clear();
 		}
 
-		public void CreateListView(Control aOwner, ref GKListView aList)
+		public void CreateListView(Control aOwner, out GKListView aList)
 		{
-			aList = new GKListView(null);
+			aList = new GKListView();
 			aList.HideSelection = false;
 			aList.LabelEdit = false;
 			aList.FullRowSelect = true;
@@ -548,7 +542,7 @@ namespace GKUI
 					
 					TIndividualListFilter iFilter = (TIndividualListFilter)this.ListPersons.ListMan.Filter;
 					if (iFilter.SourceMode == CustomFilter.TGroupMode.gmSelected) {
-						TGEDCOMSourceRecord src = (TGEDCOMSourceRecord)this.FTree.XRefIndex_Find(iFilter.SourceRef);
+						TGEDCOMSourceRecord src = this.FTree.XRefIndex_Find(iFilter.SourceRef) as TGEDCOMSourceRecord;
 						if (TGenEngine.ShowQuestion("Установлен фильтр по источнику. Внести источник в новую персональную запись?") == DialogResult.Yes) {
 							TGenEngine.BindRecordSource(this.FTree, result, src, "", 0);
 						}
@@ -564,7 +558,7 @@ namespace GKUI
 
 		public void CreateRecordsView(Control aParent, TGEDCOMRecordType aRecordType, ref TRecordsView aList)
 		{
-			aList = new TRecordsView(this);
+			aList = new TRecordsView();
 			aList.HideSelection = false;
 			aList.LabelEdit = false;
 			aList.FullRowSelect = true;
@@ -1044,7 +1038,8 @@ namespace GKUI
 		public void RecordEdit(object sender, EventArgs e)
 		{
 			bool res = false;
-			TGEDCOMRecord rec = null;
+
+            TGEDCOMRecord rec = null;
 			switch (this.PageRecords.SelectedIndex)
 			{
 				case 0:
@@ -1125,17 +1120,18 @@ namespace GKUI
 					break;
 				}
 			}
-			if (res)
+
+            if (res)
 			{
 				this.ListsRefresh(false);
 				this.ShowRecordInfo(rec);
 			}
 		}
 
-		public TRecordsView GetRecordsViewByType(TGEDCOMRecordType aType)
+		public TRecordsView GetRecordsViewByType(TGEDCOMRecordType recType)
 		{
 			TRecordsView list = null;
-			switch (aType) {
+			switch (recType) {
 				case TGEDCOMRecordType.rtIndividual:
 					list = this.ListPersons;
 					break;
@@ -1186,46 +1182,46 @@ namespace GKUI
 			}
 		}
 
-		public void SearchSubjectLinks(TGEDCOMRecord aInRecord, TGEDCOMRecord aSubject, StringList aToList)
+		public void SearchSubjectLinks(TGEDCOMRecord aInRecord, TGEDCOMRecord subject, StringList aToList)
 		{
 			try
 			{
 				int num;
 
-				if (aSubject is TGEDCOMNoteRecord) {
+				if (subject is TGEDCOMNoteRecord) {
 					num = aInRecord.Notes.Count - 1;
 					for (int i = 0; i <= num; i++) {
-						if (object.Equals(aInRecord.Notes[i].Value, aSubject)) {
-							this.OutLink(aSubject, aToList, aInRecord, null, null);
+						if (object.Equals(aInRecord.Notes[i].Value, subject)) {
+							this.OutLink(subject, aToList, aInRecord, null, null);
 						}
 					}
-				} else if (aSubject is TGEDCOMMultimediaRecord) {
+				} else if (subject is TGEDCOMMultimediaRecord) {
 					num = aInRecord.MultimediaLinks.Count - 1;
 					for (int i = 0; i <= num; i++) {
-						if (object.Equals(aInRecord.MultimediaLinks[i].Value, aSubject)) {
-							this.OutLink(aSubject, aToList, aInRecord, null, null);
+						if (object.Equals(aInRecord.MultimediaLinks[i].Value, subject)) {
+							this.OutLink(subject, aToList, aInRecord, null, null);
 						}
 					}
-				} else if (aSubject is TGEDCOMSourceRecord) {
+				} else if (subject is TGEDCOMSourceRecord) {
 					num = aInRecord.SourceCitations.Count - 1;
 					for (int i = 0; i <= num; i++) {
-						if (object.Equals(aInRecord.SourceCitations[i].Value, aSubject)) {
-							this.OutLink(aSubject, aToList, aInRecord, null, aInRecord.SourceCitations[i]);
+						if (object.Equals(aInRecord.SourceCitations[i].Value, subject)) {
+							this.OutLink(subject, aToList, aInRecord, null, aInRecord.SourceCitations[i]);
 						}
 					}
 				}
 
 				if (aInRecord is TGEDCOMIndividualRecord) {
-					TGEDCOMIndividualRecord i_rec = (TGEDCOMIndividualRecord)aInRecord;
+					TGEDCOMIndividualRecord i_rec = aInRecord as TGEDCOMIndividualRecord;
 					num = i_rec.IndividualEvents.Count - 1;
 					for (int i = 0; i <= num; i++) {
-						this.PrepareEvent(aSubject, aToList, i_rec, i_rec.IndividualEvents[i]);
+						this.PrepareEvent(subject, aToList, i_rec, i_rec.IndividualEvents[i]);
 					}
 				} else if (aInRecord is TGEDCOMFamilyRecord) {
-					TGEDCOMFamilyRecord f_rec = (TGEDCOMFamilyRecord)aInRecord;
+					TGEDCOMFamilyRecord f_rec = aInRecord as TGEDCOMFamilyRecord;
 					num = f_rec.FamilyEvents.Count - 1;
 					for (int i = 0; i <= num; i++) {
-						this.PrepareEvent(aSubject, aToList, f_rec, f_rec.FamilyEvents[i]);
+						this.PrepareEvent(subject, aToList, f_rec, f_rec.FamilyEvents[i]);
 					}
 				}
 			}
@@ -1235,7 +1231,7 @@ namespace GKUI
 			}
 		}
 
-		public TGEDCOMFamilyRecord SelectFamily(TGEDCOMIndividualRecord aTarget)
+		public TGEDCOMFamilyRecord SelectFamily(TGEDCOMIndividualRecord target)
 		{
 			TGEDCOMFamilyRecord Result;
 			try
@@ -1243,7 +1239,7 @@ namespace GKUI
 				TfmRecordSelect dlg = new TfmRecordSelect(this);
 				try
 				{
-					dlg.FTarget = aTarget;
+					dlg.FTarget = target;
 					dlg.FNeedSex = TGEDCOMSex.svNone;
 					dlg.TargetMode = TGenEngine.TTargetMode.tmChildToFamily;
 					dlg.Mode = TGEDCOMRecordType.rtFamily;
@@ -1267,7 +1263,7 @@ namespace GKUI
 			return Result;
 		}
 
-		public TGEDCOMIndividualRecord SelectPerson(TGEDCOMIndividualRecord aTarget, TGenEngine.TTargetMode aTargetMode, TGEDCOMSex aNeedSex)
+		public TGEDCOMIndividualRecord SelectPerson(TGEDCOMIndividualRecord target, TGenEngine.TTargetMode targetMode, TGEDCOMSex needSex)
 		{
 			TGEDCOMIndividualRecord Result;
 			try
@@ -1275,9 +1271,9 @@ namespace GKUI
 				TfmRecordSelect dlg = new TfmRecordSelect(this);
 				try
 				{
-					dlg.FTarget = aTarget;
-					dlg.FNeedSex = aNeedSex;
-					dlg.TargetMode = aTargetMode;
+					dlg.FTarget = target;
+					dlg.FNeedSex = needSex;
+					dlg.TargetMode = targetMode;
 					dlg.Mode = TGEDCOMRecordType.rtIndividual;
 					if (GKUI.TfmGEDKeeper.Instance.ShowModalEx(dlg, this, false) == DialogResult.OK)
 					{
@@ -1299,7 +1295,7 @@ namespace GKUI
 			return Result;
 		}
 
-		public TGEDCOMRecord SelectRecord(TGEDCOMRecordType aMode, params object[] anArgs)
+		public TGEDCOMRecord SelectRecord(TGEDCOMRecordType mode, params object[] args)
 		{
 			TGEDCOMRecord Result;
 			try
@@ -1307,10 +1303,10 @@ namespace GKUI
 				TfmRecordSelect dlg = new TfmRecordSelect(this);
 				try
 				{
-					dlg.Mode = aMode;
-					int args_cnt = ((anArgs != null) ? anArgs.Length : 0);
+					dlg.Mode = mode;
+					int args_cnt = ((args != null) ? args.Length : 0);
 					if (args_cnt > 0) {
-						dlg.edFastFilter.Text = (anArgs[0] as string);
+						dlg.edFastFilter.Text = (args[0] as string);
 					}
 
 					if (GKUI.TfmGEDKeeper.Instance.ShowModalEx(dlg, this, false) == DialogResult.OK)
@@ -1436,20 +1432,26 @@ namespace GKUI
 			frm_maps.Show();
 		}
 
-		public void ShowMedia(TGEDCOMMultimediaRecord aMediaRec)
+		public void ShowMedia(TGEDCOMMultimediaRecord mediaRec, bool modal)
 		{
 			TfmMediaView fmMediaView = new TfmMediaView(this);
 			try
 			{
-				fmMediaView.FileRef = aMediaRec.FileReferences[0];
+				fmMediaView.FileRef = mediaRec.FileReferences[0];
 				if (!fmMediaView.Extern)
 				{
-					GKUI.TfmGEDKeeper.Instance.ShowModalEx(fmMediaView, GKUI.TfmGEDKeeper.Instance, false);
+					if (modal) {
+						fmMediaView.ShowDialog();
+					} else {
+						fmMediaView.ShowInTaskbar = true;
+						fmMediaView.Show();
+					}
+					//GKUI.TfmGEDKeeper.Instance.ShowModalEx(fmMediaView, GKUI.TfmGEDKeeper.Instance, false);
 				}
 			}
 			finally
 			{
-				fmMediaView.Dispose();
+				if (modal) fmMediaView.Dispose();
 			}
 		}
 
@@ -1500,7 +1502,7 @@ namespace GKUI
 							TGEDCOMRecord rec = this.FTree[i];
 							if (rec is TGEDCOMIndividualRecord)
 							{
-								TGEDCOMIndividualRecord i_rec = (TGEDCOMIndividualRecord)rec;
+								TGEDCOMIndividualRecord i_rec = rec as TGEDCOMIndividualRecord;
 								string nm = i_rec.aux_GetNameStr(true, false);
 								string days = TGenEngine.GetDaysForBirth(i_rec);
 
@@ -1586,20 +1588,20 @@ namespace GKUI
 			return Result;
 		}
 
-		public string DefinePatronymic(string aName, TGEDCOMSex aSex, bool aConfirm)
+		public string DefinePatronymic(string name, TGEDCOMSex sex, bool confirm)
 		{
 			string Result = "";
 
-			NamesTable.TName n = GKUI.TfmGEDKeeper.Instance.NamesTable.FindName(aName);
+			NamesTable.TName n = GKUI.TfmGEDKeeper.Instance.NamesTable.FindName(name);
 			if (n == null) {
-				if (!aConfirm) {
+				if (!confirm) {
 					return Result;
 				} else {
-					n = GKUI.TfmGEDKeeper.Instance.NamesTable.AddName(aName);
+					n = GKUI.TfmGEDKeeper.Instance.NamesTable.AddName(name);
 				}
 			}
 
-			switch (aSex) {
+			switch (sex) {
 				case TGEDCOMSex.svMale: {
 					Result = n.M_Patronymic;
 					break;
@@ -1611,14 +1613,14 @@ namespace GKUI
 			}
 			
 			if (Result == "") {
-				if (!aConfirm) {
+				if (!confirm) {
 					return Result;
 				} else {
 					this.ModifyName(ref n);
 				}
 			}
 
-			switch (aSex) {
+			switch (sex) {
 				case TGEDCOMSex.svMale: {
 					Result = n.M_Patronymic;
 					break;
@@ -1632,24 +1634,24 @@ namespace GKUI
 			return Result;
 		}
 
-		public bool DeleteFamilyRecord(TGEDCOMFamilyRecord aFamily, bool aConfirm)
+		public bool DeleteFamilyRecord(TGEDCOMFamilyRecord family, bool confirm)
 		{
 			bool Result = false;
-			if (aFamily != null && (!aConfirm || TGenEngine.ShowQuestion(string.Format(LangMan.LSList[72], TGenEngine.aux_GetFamilyStr(aFamily))) != DialogResult.No))
+			if (family != null && (!confirm || TGenEngine.ShowQuestion(string.Format(LangMan.LSList[72], TGenEngine.aux_GetFamilyStr(family))) != DialogResult.No))
 			{
-				this.FEngine.CleanFamily(aFamily);
-				this.RecordNotify(aFamily, TRecNotify.rnDelete);
-				this.FTree.Delete(this.FTree.IndexOfRecord(aFamily));
+				this.FEngine.CleanFamily(family);
+				this.RecordNotify(family, TRecNotify.rnDelete);
+				this.FTree.Delete(this.FTree.IndexOfRecord(family));
 				this.Modified = true;
 				Result = true;
 			}
 			return Result;
 		}
 
-		public bool DeleteGroupRecord(TGEDCOMGroupRecord groupRec, bool aConfirm)
+		public bool DeleteGroupRecord(TGEDCOMGroupRecord groupRec, bool confirm)
 		{
 			bool Result = false;
-			if (groupRec != null && (!aConfirm || TGenEngine.ShowQuestion(string.Format(LangMan.LSList[77], groupRec.GroupName)) != DialogResult.No))
+			if (groupRec != null && (!confirm || TGenEngine.ShowQuestion(string.Format(LangMan.LSList[77], groupRec.GroupName)) != DialogResult.No))
 			{
 				for (int i = groupRec.Members.Count - 1; i >= 0; i--)
 				{
@@ -1665,10 +1667,10 @@ namespace GKUI
 			return Result;
 		}
 
-		public bool DeleteIndividualRecord(TGEDCOMIndividualRecord iRec, bool aConfirm)
+		public bool DeleteIndividualRecord(TGEDCOMIndividualRecord iRec, bool confirm)
 		{
 			bool Result = false;
-			if (iRec != null && (!aConfirm || TGenEngine.ShowQuestion(string.Format(LangMan.LSList[71], iRec.aux_GetNameStr(true, false))) != DialogResult.No))
+			if (iRec != null && (!confirm || TGenEngine.ShowQuestion(string.Format(LangMan.LSList[71], iRec.aux_GetNameStr(true, false))) != DialogResult.No))
 			{
 				for (int i = iRec.ChildToFamilyLinks.Count - 1; i >= 0; i--)
 				{
@@ -1697,10 +1699,10 @@ namespace GKUI
 			return Result;
 		}
 
-		public bool DeleteMediaRecord(TGEDCOMMultimediaRecord mRec, bool aConfirm)
+		public bool DeleteMediaRecord(TGEDCOMMultimediaRecord mRec, bool confirm)
 		{
 			bool Result = false;
-			if (mRec != null && (!aConfirm || TGenEngine.ShowQuestion(string.Format(LangMan.LSList[75], mRec.StringValue)) != DialogResult.No))
+			if (mRec != null && (!confirm || TGenEngine.ShowQuestion(string.Format(LangMan.LSList[75], mRec.StringValue)) != DialogResult.No))
 			{
 				int num = this.FTree.RecordsCount - 1;
 				for (int i = 0; i <= num; i++)
@@ -1722,10 +1724,10 @@ namespace GKUI
 			return Result;
 		}
 
-		public bool DeleteNoteRecord(TGEDCOMNoteRecord nRec, bool aConfirm)
+		public bool DeleteNoteRecord(TGEDCOMNoteRecord nRec, bool confirm)
 		{
 			bool Result = false;
-			if (nRec != null && (!aConfirm || TGenEngine.ShowQuestion(LangMan.LSList[73]) != DialogResult.No))
+			if (nRec != null && (!confirm || TGenEngine.ShowQuestion(LangMan.LSList[73]) != DialogResult.No))
 			{
 				int num = this.FTree.RecordsCount - 1;
 				for (int i = 0; i <= num; i++)
@@ -1746,10 +1748,10 @@ namespace GKUI
 			return Result;
 		}
 
-		public bool DeleteRepositoryRecord(TGEDCOMRepositoryRecord repRec, bool aConfirm)
+		public bool DeleteRepositoryRecord(TGEDCOMRepositoryRecord repRec, bool confirm)
 		{
 			bool Result = false;
-			if (repRec != null && (!aConfirm || TGenEngine.ShowQuestion(string.Format(LangMan.LSList[76], repRec.RepositoryName)) != DialogResult.No))
+			if (repRec != null && (!confirm || TGenEngine.ShowQuestion(string.Format(LangMan.LSList[76], repRec.RepositoryName)) != DialogResult.No))
 			{
 				int num = this.FTree.RecordsCount - 1;
 				for (int i = 0; i <= num; i++)
@@ -1757,7 +1759,7 @@ namespace GKUI
 					TGEDCOMRecord rec = this.FTree[i];
 					if (rec is TGEDCOMSourceRecord)
 					{
-						TGEDCOMSourceRecord srcRec = (TGEDCOMSourceRecord)rec;
+						TGEDCOMSourceRecord srcRec = rec as TGEDCOMSourceRecord;
 						for (int j = srcRec.RepositoryCitations.Count - 1; j >= 0; j--)
 						{
 							if (srcRec.RepositoryCitations[j].Value == repRec)
@@ -1776,10 +1778,10 @@ namespace GKUI
 			return Result;
 		}
 
-		public bool DeleteResearchRecord(TGEDCOMResearchRecord resRec, bool aConfirm)
+		public bool DeleteResearchRecord(TGEDCOMResearchRecord resRec, bool confirm)
 		{
 			bool Result = false;
-			if (resRec != null && (!aConfirm || TGenEngine.ShowQuestion(string.Format(LangMan.LSList[78], resRec.ResearchName)) != DialogResult.No))
+			if (resRec != null && (!confirm || TGenEngine.ShowQuestion(string.Format(LangMan.LSList[78], resRec.ResearchName)) != DialogResult.No))
 			{
 				this.RecordNotify(resRec, TRecNotify.rnDelete);
 				this.FTree.Delete(this.FTree.IndexOfRecord(resRec));
@@ -1789,10 +1791,10 @@ namespace GKUI
 			return Result;
 		}
 
-		public bool DeleteSourceRecord(TGEDCOMSourceRecord srcRec, bool aConfirm)
+		public bool DeleteSourceRecord(TGEDCOMSourceRecord srcRec, bool confirm)
 		{
 			bool Result = false;
-			if (srcRec != null && (!aConfirm || TGenEngine.ShowQuestion(string.Format(LangMan.LSList[74], srcRec.FiledByEntry)) != DialogResult.No))
+			if (srcRec != null && (!confirm || TGenEngine.ShowQuestion(string.Format(LangMan.LSList[74], srcRec.FiledByEntry)) != DialogResult.No))
 			{
 				int num = this.FTree.RecordsCount - 1;
 				for (int i = 0; i <= num; i++)
@@ -1814,10 +1816,10 @@ namespace GKUI
 			return Result;
 		}
 
-		public bool DeleteTaskRecord(TGEDCOMTaskRecord TaskRec, bool aConfirm)
+		public bool DeleteTaskRecord(TGEDCOMTaskRecord taskRec, bool confirm)
 		{
 			bool Result = false;
-			if (TaskRec != null && (!aConfirm || TGenEngine.ShowQuestion(string.Format(LangMan.LSList[79], TGenEngine.GetTaskGoalStr(this.FTree, TaskRec))) != DialogResult.No))
+			if (taskRec != null && (!confirm || TGenEngine.ShowQuestion(string.Format(LangMan.LSList[79], TGenEngine.GetTaskGoalStr(taskRec))) != DialogResult.No))
 			{
 				int num = this.FTree.RecordsCount - 1;
 				for (int i = 0; i <= num; i++)
@@ -1825,28 +1827,28 @@ namespace GKUI
 					TGEDCOMRecord rec = this.FTree[i];
 					if (rec is TGEDCOMResearchRecord)
 					{
-						TGEDCOMResearchRecord resRec = (TGEDCOMResearchRecord)rec;
+						TGEDCOMResearchRecord resRec = rec as TGEDCOMResearchRecord;
 						for (int j = resRec.Tasks.Count - 1; j >= 0; j--)
 						{
-							if (resRec.Tasks[j].Value == TaskRec)
+							if (resRec.Tasks[j].Value == taskRec)
 							{
 								resRec.Tasks.Delete(j);
 							}
 						}
 					}
 				}
-				this.RecordNotify(TaskRec, TRecNotify.rnDelete);
-				this.FTree.Delete(this.FTree.IndexOfRecord(TaskRec));
+				this.RecordNotify(taskRec, TRecNotify.rnDelete);
+				this.FTree.Delete(this.FTree.IndexOfRecord(taskRec));
 				this.Modified = true;
 				Result = true;
 			}
 			return Result;
 		}
 
-		public bool DeleteCommunicationRecord(TGEDCOMCommunicationRecord ComRec, bool aConfirm)
+		public bool DeleteCommunicationRecord(TGEDCOMCommunicationRecord commRec, bool confirm)
 		{
 			bool Result = false;
-			if (ComRec != null && (!aConfirm || TGenEngine.ShowQuestion(string.Format(LangMan.LSList[80], ComRec.CommName)) != DialogResult.No))
+			if (commRec != null && (!confirm || TGenEngine.ShowQuestion(string.Format(LangMan.LSList[80], commRec.CommName)) != DialogResult.No))
 			{
 				int num = this.FTree.RecordsCount - 1;
 				for (int i = 0; i <= num; i++)
@@ -1854,28 +1856,28 @@ namespace GKUI
 					TGEDCOMRecord rec = this.FTree[i];
 					if (rec is TGEDCOMResearchRecord)
 					{
-						TGEDCOMResearchRecord resRec = (TGEDCOMResearchRecord)rec;
+						TGEDCOMResearchRecord resRec = rec as TGEDCOMResearchRecord;
 						for (int j = resRec.Communications.Count - 1; j >= 0; j--)
 						{
-							if (resRec.Communications[j].Value == ComRec)
+							if (resRec.Communications[j].Value == commRec)
 							{
 								resRec.Communications.Delete(j);
 							}
 						}
 					}
 				}
-				this.RecordNotify(ComRec, TRecNotify.rnDelete);
-				this.FTree.Delete(this.FTree.IndexOfRecord(ComRec));
+				this.RecordNotify(commRec, TRecNotify.rnDelete);
+				this.FTree.Delete(this.FTree.IndexOfRecord(commRec));
 				this.Modified = true;
 				Result = true;
 			}
 			return Result;
 		}
 
-		public bool DeleteLocationRecord(TGEDCOMLocationRecord LocRec, bool aConfirm)
+		public bool DeleteLocationRecord(TGEDCOMLocationRecord locRec, bool confirm)
 		{
 			bool Result = false;
-			if (LocRec != null && (!aConfirm || TGenEngine.ShowQuestion(string.Format(LangMan.LSList[81], LocRec.LocationName)) != DialogResult.No))
+			if (locRec != null && (!confirm || TGenEngine.ShowQuestion(string.Format(LangMan.LSList[81], locRec.LocationName)) != DialogResult.No))
 			{
 				int num = this.FTree.RecordsCount - 1;
 				for (int i = 0; i <= num; i++)
@@ -1883,11 +1885,11 @@ namespace GKUI
 					TGEDCOMRecord rec = this.FTree[i];
 					if (rec is TGEDCOMIndividualRecord)
 					{
-						TGEDCOMIndividualRecord iRec = (TGEDCOMIndividualRecord)rec;
+						TGEDCOMIndividualRecord iRec = rec as TGEDCOMIndividualRecord;
 						for (int j = iRec.IndividualEvents.Count - 1; j >= 0; j--)
 						{
 							TGEDCOMCustomEvent ev = iRec.IndividualEvents[j];
-							if (object.Equals(ev.Detail.Place.Location.Value, LocRec))
+							if (object.Equals(ev.Detail.Place.Location.Value, locRec))
 							{
 								ev.Detail.Place.DeleteTag("_LOC");
 							}
@@ -1897,11 +1899,11 @@ namespace GKUI
 					{
 						if (rec is TGEDCOMFamilyRecord)
 						{
-							TGEDCOMFamilyRecord fRec = (TGEDCOMFamilyRecord)rec;
+							TGEDCOMFamilyRecord fRec = rec as TGEDCOMFamilyRecord;
 							for (int j = fRec.FamilyEvents.Count - 1; j >= 0; j--)
 							{
 								TGEDCOMCustomEvent ev = fRec.FamilyEvents[j];
-								if (object.Equals(ev.Detail.Place.Location.Value, LocRec))
+								if (object.Equals(ev.Detail.Place.Location.Value, locRec))
 								{
 									ev.Detail.Place.DeleteTag("_LOC");
 								}
@@ -1909,152 +1911,138 @@ namespace GKUI
 						}
 					}
 				}
-				this.RecordNotify(LocRec, TRecNotify.rnDelete);
-				this.FTree.Delete(this.FTree.IndexOfRecord(LocRec));
+				this.RecordNotify(locRec, TRecNotify.rnDelete);
+				this.FTree.Delete(this.FTree.IndexOfRecord(locRec));
 				this.Modified = true;
 				Result = true;
 			}
 			return Result;
 		}
 
-		public bool DeleteRecord(TGEDCOMRecord aRecord, bool aConfirm)
+		public bool DeleteRecord(TGEDCOMRecord record, bool confirm)
 		{
-			bool Result = false;
+			bool res = false;
 
-			if (aRecord != null)
+			if (record != null)
 			{
-				string xref = aRecord.XRef;
+				string xref = record.XRef;
 
-				switch (aRecord.RecordType)
+				switch (record.RecordType)
 				{
 					case TGEDCOMRecordType.rtIndividual:
-					{
-						Result = this.DeleteIndividualRecord((TGEDCOMIndividualRecord)aRecord, aConfirm);
+						res = this.DeleteIndividualRecord(record as TGEDCOMIndividualRecord, confirm);
 						break;
-					}
+
 					case TGEDCOMRecordType.rtFamily:
-					{
-						Result = this.DeleteFamilyRecord((TGEDCOMFamilyRecord)aRecord, aConfirm);
+						res = this.DeleteFamilyRecord(record as TGEDCOMFamilyRecord, confirm);
 						break;
-					}
+
 					case TGEDCOMRecordType.rtNote:
-					{
-						Result = this.DeleteNoteRecord((TGEDCOMNoteRecord)aRecord, aConfirm);
+						res = this.DeleteNoteRecord(record as TGEDCOMNoteRecord, confirm);
 						break;
-					}
+
 					case TGEDCOMRecordType.rtMultimedia:
-					{
-						Result = this.DeleteMediaRecord((TGEDCOMMultimediaRecord)aRecord, aConfirm);
+						res = this.DeleteMediaRecord(record as TGEDCOMMultimediaRecord, confirm);
 						break;
-					}
+
 					case TGEDCOMRecordType.rtSource:
-					{
-						Result = this.DeleteSourceRecord((TGEDCOMSourceRecord)aRecord, aConfirm);
+						res = this.DeleteSourceRecord(record as TGEDCOMSourceRecord, confirm);
 						break;
-					}
+
 					case TGEDCOMRecordType.rtRepository:
-					{
-						Result = this.DeleteRepositoryRecord((TGEDCOMRepositoryRecord)aRecord, aConfirm);
+						res = this.DeleteRepositoryRecord(record as TGEDCOMRepositoryRecord, confirm);
 						break;
-					}
+
 					case TGEDCOMRecordType.rtGroup:
-					{
-						Result = this.DeleteGroupRecord((TGEDCOMGroupRecord)aRecord, aConfirm);
+						res = this.DeleteGroupRecord(record as TGEDCOMGroupRecord, confirm);
 						break;
-					}
+
 					case TGEDCOMRecordType.rtResearch:
-					{
-						Result = this.DeleteResearchRecord((TGEDCOMResearchRecord)aRecord, aConfirm);
+						res = this.DeleteResearchRecord(record as TGEDCOMResearchRecord, confirm);
 						break;
-					}
+
 					case TGEDCOMRecordType.rtTask:
-					{
-						Result = this.DeleteTaskRecord((TGEDCOMTaskRecord)aRecord, aConfirm);
+						res = this.DeleteTaskRecord(record as TGEDCOMTaskRecord, confirm);
 						break;
-					}
+
 					case TGEDCOMRecordType.rtCommunication:
-					{
-						Result = this.DeleteCommunicationRecord((TGEDCOMCommunicationRecord)aRecord, aConfirm);
+						res = this.DeleteCommunicationRecord(record as TGEDCOMCommunicationRecord, confirm);
 						break;
-					}
+
 					case TGEDCOMRecordType.rtLocation:
-					{
-						Result = this.DeleteLocationRecord((TGEDCOMLocationRecord)aRecord, aConfirm);
+						res = this.DeleteLocationRecord(record as TGEDCOMLocationRecord, confirm);
 						break;
-					}
 				}
 
-				if (Result)
-				{
+				if (res) {
 					this.FTree.Header.TransmissionDateTime = DateTime.Now;
-
 					TfmGEDKeeper.Instance.SearchMan.DeleteRecord(this, xref);
 				}
 			}
 
-			return Result;
+			return res;
 		}
 
-		public bool RecordIsFiltered(TGEDCOMRecord aRecord)
+		public bool RecordIsFiltered(TGEDCOMRecord record)
 		{
 			bool Result = false;
-			if (aRecord != null)
+			if (record != null)
 			{
-				switch (aRecord.RecordType)
+				switch (record.RecordType)
 				{
 					case TGEDCOMRecordType.rtIndividual:
 					{
-						Result = (this.ListPersons.ContentList.IndexOf(aRecord) >= 0);
+						Result = (this.ListPersons.ContentList.IndexOf(record) >= 0);
 						break;
 					}
 					case TGEDCOMRecordType.rtFamily:
 					{
-						Result = (this.ListFamilies.ContentList.IndexOf(aRecord) >= 0);
+						Result = (this.ListFamilies.ContentList.IndexOf(record) >= 0);
 						break;
 					}
 					case TGEDCOMRecordType.rtNote:
 					{
-						Result = (this.ListNotes.ContentList.IndexOf(aRecord) >= 0);
+						Result = (this.ListNotes.ContentList.IndexOf(record) >= 0);
 						break;
 					}
 					case TGEDCOMRecordType.rtMultimedia:
 					{
-						Result = (this.ListMultimedia.ContentList.IndexOf(aRecord) >= 0);
+						Result = (this.ListMultimedia.ContentList.IndexOf(record) >= 0);
 						break;
 					}
 					case TGEDCOMRecordType.rtSource:
 					{
-						Result = (this.ListSources.ContentList.IndexOf(aRecord) >= 0);
+						Result = (this.ListSources.ContentList.IndexOf(record) >= 0);
 						break;
 					}
 					case TGEDCOMRecordType.rtRepository:
 					{
-						Result = (this.ListRepositories.ContentList.IndexOf(aRecord) >= 0);
+						Result = (this.ListRepositories.ContentList.IndexOf(record) >= 0);
 						break;
 					}
 					case TGEDCOMRecordType.rtGroup:
 					{
-						Result = (this.ListGroups.ContentList.IndexOf(aRecord) >= 0);
+						Result = (this.ListGroups.ContentList.IndexOf(record) >= 0);
 						break;
 					}
 					case TGEDCOMRecordType.rtResearch:
 					{
-						Result = (this.ListResearches.ContentList.IndexOf(aRecord) >= 0);
+						Result = (this.ListResearches.ContentList.IndexOf(record) >= 0);
 						break;
 					}
 					case TGEDCOMRecordType.rtTask:
 					{
-						Result = (this.ListTasks.ContentList.IndexOf(aRecord) >= 0);
+						Result = (this.ListTasks.ContentList.IndexOf(record) >= 0);
 						break;
 					}
 					case TGEDCOMRecordType.rtCommunication:
 					{
-						Result = (this.ListCommunications.ContentList.IndexOf(aRecord) >= 0);
+						Result = (this.ListCommunications.ContentList.IndexOf(record) >= 0);
 						break;
 					}
 					case TGEDCOMRecordType.rtLocation:
 					{
-						Result = (this.ListLocations.ContentList.IndexOf(aRecord) >= 0);
+						Result = (this.ListLocations.ContentList.IndexOf(record) >= 0);
 						break;
 					}
 				}
@@ -2076,20 +2064,20 @@ namespace GKUI
 			GKUI.TfmGEDKeeper.Instance.UpdateControls(false);
 		}
 
-		public void DoPersonChangeSex(TGEDCOMIndividualRecord aPerson, TGEDCOMSex NewSex)
+		public void DoPersonChangeSex(TGEDCOMIndividualRecord person, TGEDCOMSex newSex)
 		{
-			if (aPerson.Sex != NewSex)
+			if (person.Sex != newSex)
 			{
-				this.FUndoman.CmdDo(new TCmdPersonChangeSex(this.FUndoman, aPerson, NewSex));
+				this.FUndoman.CmdDo(new TCmdPersonChangeSex(this.FUndoman, person, newSex));
 				this.FUndoman.Commit();
 			}
 		}
 
-		public void DoPersonChangePatriarch(TGEDCOMIndividualRecord aPerson, bool NewValue)
+		public void DoPersonChangePatriarch(TGEDCOMIndividualRecord person, bool newValue)
 		{
-			if (aPerson.Patriarch != NewValue)
+			if (person.Patriarch != newValue)
 			{
-				this.FUndoman.CmdDo(new TCmdPersonChangePatriarch(this.FUndoman, aPerson, NewValue));
+				this.FUndoman.CmdDo(new TCmdPersonChangePatriarch(this.FUndoman, person, newValue));
 				this.FUndoman.Commit();
 			}
 		}
@@ -2113,12 +2101,12 @@ namespace GKUI
 			return Result;
 		}
 
-		public bool ModifyFamily(ref TGEDCOMFamilyRecord aFamilyRec, TGenEngine.TFamilyTarget aTarget, TGEDCOMIndividualRecord aPerson)
+		public bool ModifyFamily(ref TGEDCOMFamilyRecord familyRec, TGenEngine.TFamilyTarget target, TGEDCOMIndividualRecord person)
 		{
 			bool Result = false;
-			if (aTarget == TGenEngine.TFamilyTarget.ftSpouse && aPerson != null)
+			if (target == TGenEngine.TFamilyTarget.ftSpouse && person != null)
 			{
-				TGEDCOMSex sex = aPerson.Sex;
+				TGEDCOMSex sex = person.Sex;
 				if (sex < TGEDCOMSex.svMale || sex >= TGEDCOMSex.svUndetermined)
 				{
 					TGenEngine.ShowError(LangMan.LSList[210]);
@@ -2128,45 +2116,45 @@ namespace GKUI
 			TfmFamilyEdit fmFamEdit = new TfmFamilyEdit(this);
 			try
 			{
-				bool exists = aFamilyRec != null;
+				bool exists = familyRec != null;
 				if (!exists)
 				{
-					aFamilyRec = new TGEDCOMFamilyRecord(this.FTree, this.FTree, "", "");
-					aFamilyRec.InitNew();
+					familyRec = new TGEDCOMFamilyRecord(this.FTree, this.FTree, "", "");
+					familyRec.InitNew();
 				}
-				if (aTarget != TGenEngine.TFamilyTarget.ftSpouse)
+				if (target != TGenEngine.TFamilyTarget.ftSpouse)
 				{
-					if (aTarget == TGenEngine.TFamilyTarget.ftChild)
+					if (target == TGenEngine.TFamilyTarget.ftChild)
 					{
-						if (aPerson != null)
+						if (person != null)
 						{
-							this.FEngine.AddFamilyChild(aFamilyRec, aPerson);
+							this.FEngine.AddFamilyChild(familyRec, person);
 						}
 					}
 				}
 				else
 				{
-					if (aPerson != null)
+					if (person != null)
 					{
-						this.FEngine.AddFamilySpouse(aFamilyRec, aPerson);
+						this.FEngine.AddFamilySpouse(familyRec, person);
 					}
 				}
-				fmFamEdit.Family = aFamilyRec;
+				fmFamEdit.Family = familyRec;
 				Result = (GKUI.TfmGEDKeeper.Instance.ShowModalEx(fmFamEdit, this, false) == DialogResult.OK);
 				if (Result)
 				{
 					if (!exists)
 					{
-						this.FTree.AddRecord(aFamilyRec);
+						this.FTree.AddRecord(familyRec);
 					}
 				}
 				else
 				{
 					if (!exists)
 					{
-						this.FEngine.CleanFamily(aFamilyRec);
-						aFamilyRec.Dispose();
-						aFamilyRec = null;
+						this.FEngine.CleanFamily(familyRec);
+						familyRec.Dispose();
+						familyRec = null;
 					}
 				}
 			}
@@ -2177,24 +2165,24 @@ namespace GKUI
 			return Result;
 		}
 
-		public bool ModifyNote(ref TGEDCOMNoteRecord aNoteRec)
+		public bool ModifyNote(ref TGEDCOMNoteRecord noteRec)
 		{
 			bool Result = false;
 			TfmNoteEdit fmNoteEdit = new TfmNoteEdit(this);
 			try
 			{
-				bool exists = aNoteRec != null;
+				bool exists = noteRec != null;
 				if (!exists)
 				{
-					aNoteRec = new TGEDCOMNoteRecord(this.FTree, this.FTree, "", "");
-					aNoteRec.InitNew();
+					noteRec = new TGEDCOMNoteRecord(this.FTree, this.FTree, "", "");
+					noteRec.InitNew();
 				}
-				fmNoteEdit.NoteRecord = aNoteRec;
+				fmNoteEdit.NoteRecord = noteRec;
 				if (GKUI.TfmGEDKeeper.Instance.ShowModalEx(fmNoteEdit, this, false) == DialogResult.OK)
 				{
 					if (!exists)
 					{
-						this.FTree.AddRecord(aNoteRec);
+						this.FTree.AddRecord(noteRec);
 					}
 					Result = true;
 				}
@@ -2202,8 +2190,8 @@ namespace GKUI
 				{
 					if (!exists)
 					{
-						aNoteRec.Dispose();
-						aNoteRec = null;
+						noteRec.Dispose();
+						noteRec = null;
 					}
 				}
 			}
@@ -2214,25 +2202,25 @@ namespace GKUI
 			return Result;
 		}
 
-		public bool ModifyMedia(ref TGEDCOMMultimediaRecord aMediaRec)
+		public bool ModifyMedia(ref TGEDCOMMultimediaRecord mediaRec)
 		{
 			bool Result = false;
 			TfmMediaEdit fmMediaEdit = new TfmMediaEdit(this);
 			try
 			{
-				bool exists = aMediaRec != null;
+				bool exists = mediaRec != null;
 				if (!exists)
 				{
-					aMediaRec = new TGEDCOMMultimediaRecord(this.FTree, this.FTree, "", "");
-					aMediaRec.FileReferences.Add(new TGEDCOMFileReferenceWithTitle(this.FTree, aMediaRec, "", ""));
-					aMediaRec.InitNew();
+					mediaRec = new TGEDCOMMultimediaRecord(this.FTree, this.FTree, "", "");
+					mediaRec.FileReferences.Add(new TGEDCOMFileReferenceWithTitle(this.FTree, mediaRec, "", ""));
+					mediaRec.InitNew();
 				}
-				fmMediaEdit.MediaRec = aMediaRec;
+				fmMediaEdit.MediaRec = mediaRec;
 				if (GKUI.TfmGEDKeeper.Instance.ShowModalEx(fmMediaEdit, this, false) == DialogResult.OK)
 				{
 					if (!exists)
 					{
-						this.FTree.AddRecord(aMediaRec);
+						this.FTree.AddRecord(mediaRec);
 					}
 					Result = true;
 				}
@@ -2240,8 +2228,8 @@ namespace GKUI
 				{
 					if (!exists)
 					{
-						aMediaRec.Dispose();
-						aMediaRec = null;
+						mediaRec.Dispose();
+						mediaRec = null;
 					}
 				}
 			}
@@ -2252,24 +2240,24 @@ namespace GKUI
 			return Result;
 		}
 
-		public bool ModifySource(ref TGEDCOMSourceRecord aSourceRec)
+		public bool ModifySource(ref TGEDCOMSourceRecord sourceRec)
 		{
 			bool Result = false;
 			TfmSourceEdit fmSrcEdit = new TfmSourceEdit(this);
 			try
 			{
-				bool exists = aSourceRec != null;
+				bool exists = sourceRec != null;
 				if (!exists)
 				{
-					aSourceRec = new TGEDCOMSourceRecord(this.FTree, this.FTree, "", "");
-					aSourceRec.InitNew();
+					sourceRec = new TGEDCOMSourceRecord(this.FTree, this.FTree, "", "");
+					sourceRec.InitNew();
 				}
-				fmSrcEdit.SourceRecord = aSourceRec;
+				fmSrcEdit.SourceRecord = sourceRec;
 				if (GKUI.TfmGEDKeeper.Instance.ShowModalEx(fmSrcEdit, this, false) == DialogResult.OK)
 				{
 					if (!exists)
 					{
-						this.FTree.AddRecord(aSourceRec);
+						this.FTree.AddRecord(sourceRec);
 					}
 					Result = true;
 				}
@@ -2277,8 +2265,8 @@ namespace GKUI
 				{
 					if (!exists)
 					{
-						aSourceRec.Dispose();
-						aSourceRec = null;
+						sourceRec.Dispose();
+						sourceRec = null;
 					}
 				}
 			}
@@ -2289,24 +2277,24 @@ namespace GKUI
 			return Result;
 		}
 
-		public bool ModifyRepository(ref TGEDCOMRepositoryRecord aRepRec)
+		public bool ModifyRepository(ref TGEDCOMRepositoryRecord repRec)
 		{
 			bool Result = false;
 			TfmRepositoryEdit fmRepEdit = new TfmRepositoryEdit(this);
 			try
 			{
-				bool exists = aRepRec != null;
+				bool exists = repRec != null;
 				if (!exists)
 				{
-					aRepRec = new TGEDCOMRepositoryRecord(this.FTree, this.FTree, "", "");
-					aRepRec.InitNew();
+					repRec = new TGEDCOMRepositoryRecord(this.FTree, this.FTree, "", "");
+					repRec.InitNew();
 				}
-				fmRepEdit.Repository = aRepRec;
+				fmRepEdit.Repository = repRec;
 				if (GKUI.TfmGEDKeeper.Instance.ShowModalEx(fmRepEdit, this, false) == DialogResult.OK)
 				{
 					if (!exists)
 					{
-						this.FTree.AddRecord(aRepRec);
+						this.FTree.AddRecord(repRec);
 					}
 					Result = true;
 				}
@@ -2314,8 +2302,8 @@ namespace GKUI
 				{
 					if (!exists)
 					{
-						aRepRec.Dispose();
-						aRepRec = null;
+						repRec.Dispose();
+						repRec = null;
 					}
 				}
 			}
@@ -2326,24 +2314,24 @@ namespace GKUI
 			return Result;
 		}
 
-		public bool ModifyGroup(ref TGEDCOMGroupRecord aGroupRec)
+		public bool ModifyGroup(ref TGEDCOMGroupRecord groupRec)
 		{
 			bool Result = false;
 			TfmGroupEdit fmGrpEdit = new TfmGroupEdit(this);
 			try
 			{
-				bool exists = aGroupRec != null;
+				bool exists = groupRec != null;
 				if (!exists)
 				{
-					aGroupRec = new TGEDCOMGroupRecord(this.FTree, this.FTree, "", "");
-					aGroupRec.InitNew();
+					groupRec = new TGEDCOMGroupRecord(this.FTree, this.FTree, "", "");
+					groupRec.InitNew();
 				}
-				fmGrpEdit.Group = aGroupRec;
+				fmGrpEdit.Group = groupRec;
 				if (GKUI.TfmGEDKeeper.Instance.ShowModalEx(fmGrpEdit, this, false) == DialogResult.OK)
 				{
 					if (!exists)
 					{
-						this.FTree.AddRecord(aGroupRec);
+						this.FTree.AddRecord(groupRec);
 					}
 					Result = true;
 				}
@@ -2351,8 +2339,8 @@ namespace GKUI
 				{
 					if (!exists)
 					{
-						aGroupRec.Dispose();
-						aGroupRec = null;
+						groupRec.Dispose();
+						groupRec = null;
 					}
 				}
 			}
@@ -2363,24 +2351,24 @@ namespace GKUI
 			return Result;
 		}
 
-		public bool ModifyResearch(ref TGEDCOMResearchRecord aResearchRec)
+		public bool ModifyResearch(ref TGEDCOMResearchRecord researchRec)
 		{
 			bool Result = false;
 			TfmResearchEdit fmResEdit = new TfmResearchEdit(this);
 			try
 			{
-				bool exists = aResearchRec != null;
+				bool exists = researchRec != null;
 				if (!exists)
 				{
-					aResearchRec = new TGEDCOMResearchRecord(this.FTree, this.FTree, "", "");
-					aResearchRec.InitNew();
+					researchRec = new TGEDCOMResearchRecord(this.FTree, this.FTree, "", "");
+					researchRec.InitNew();
 				}
-				fmResEdit.Research = aResearchRec;
+				fmResEdit.Research = researchRec;
 				if (GKUI.TfmGEDKeeper.Instance.ShowModalEx(fmResEdit, this, false) == DialogResult.OK)
 				{
 					if (!exists)
 					{
-						this.FTree.AddRecord(aResearchRec);
+						this.FTree.AddRecord(researchRec);
 					}
 					Result = true;
 				}
@@ -2388,8 +2376,8 @@ namespace GKUI
 				{
 					if (!exists)
 					{
-						aResearchRec.Dispose();
-						aResearchRec = null;
+						researchRec.Dispose();
+						researchRec = null;
 					}
 				}
 			}
@@ -2400,24 +2388,24 @@ namespace GKUI
 			return Result;
 		}
 
-		public bool ModifyTask(ref TGEDCOMTaskRecord aTaskRec)
+		public bool ModifyTask(ref TGEDCOMTaskRecord taskRec)
 		{
 			bool Result = false;
 			TfmTaskEdit fmTaskEdit = new TfmTaskEdit(this);
 			try
 			{
-				bool exists = aTaskRec != null;
+				bool exists = taskRec != null;
 				if (!exists)
 				{
-					aTaskRec = new TGEDCOMTaskRecord(this.FTree, this.FTree, "", "");
-					aTaskRec.InitNew();
+					taskRec = new TGEDCOMTaskRecord(this.FTree, this.FTree, "", "");
+					taskRec.InitNew();
 				}
-				fmTaskEdit.Task = aTaskRec;
+				fmTaskEdit.Task = taskRec;
 				if (GKUI.TfmGEDKeeper.Instance.ShowModalEx(fmTaskEdit, this, false) == DialogResult.OK)
 				{
 					if (!exists)
 					{
-						this.FTree.AddRecord(aTaskRec);
+						this.FTree.AddRecord(taskRec);
 					}
 					Result = true;
 				}
@@ -2425,8 +2413,8 @@ namespace GKUI
 				{
 					if (!exists)
 					{
-						aTaskRec.Dispose();
-						aTaskRec = null;
+						taskRec.Dispose();
+						taskRec = null;
 					}
 				}
 			}
@@ -2437,24 +2425,24 @@ namespace GKUI
 			return Result;
 		}
 
-		public bool ModifyCommunication(ref TGEDCOMCommunicationRecord aCommunicationRec)
+		public bool ModifyCommunication(ref TGEDCOMCommunicationRecord commRec)
 		{
 			bool Result = false;
 			TfmCommunicationEdit fmCorrEdit = new TfmCommunicationEdit(this);
 			try
 			{
-				bool exists = aCommunicationRec != null;
+				bool exists = commRec != null;
 				if (!exists)
 				{
-					aCommunicationRec = new TGEDCOMCommunicationRecord(this.FTree, this.FTree, "", "");
-					aCommunicationRec.InitNew();
+					commRec = new TGEDCOMCommunicationRecord(this.FTree, this.FTree, "", "");
+					commRec.InitNew();
 				}
-				fmCorrEdit.Communication = aCommunicationRec;
+				fmCorrEdit.Communication = commRec;
 				if (GKUI.TfmGEDKeeper.Instance.ShowModalEx(fmCorrEdit, this, false) == DialogResult.OK)
 				{
 					if (!exists)
 					{
-						this.FTree.AddRecord(aCommunicationRec);
+						this.FTree.AddRecord(commRec);
 					}
 					Result = true;
 				}
@@ -2462,8 +2450,8 @@ namespace GKUI
 				{
 					if (!exists)
 					{
-						aCommunicationRec.Dispose();
-						aCommunicationRec = null;
+						commRec.Dispose();
+						commRec = null;
 					}
 				}
 			}
@@ -2474,24 +2462,24 @@ namespace GKUI
 			return Result;
 		}
 
-		public bool ModifyLocation(ref TGEDCOMLocationRecord aLocationRec)
+		public bool ModifyLocation(ref TGEDCOMLocationRecord locRec)
 		{
 			bool Result = false;
 			TfmLocationEdit fmLocEdit = new TfmLocationEdit(this);
 			try
 			{
-				bool exists = aLocationRec != null;
+				bool exists = locRec != null;
 				if (!exists)
 				{
-					aLocationRec = new TGEDCOMLocationRecord(this.FTree, this.FTree, "", "");
-					aLocationRec.InitNew();
+					locRec = new TGEDCOMLocationRecord(this.FTree, this.FTree, "", "");
+					locRec.InitNew();
 				}
-				fmLocEdit.LocationRecord = aLocationRec;
+				fmLocEdit.LocationRecord = locRec;
 				if (GKUI.TfmGEDKeeper.Instance.ShowModalEx(fmLocEdit, this, false) == DialogResult.OK)
 				{
 					if (!exists)
 					{
-						this.FTree.AddRecord(aLocationRec);
+						this.FTree.AddRecord(locRec);
 					}
 					Result = true;
 				}
@@ -2499,8 +2487,8 @@ namespace GKUI
 				{
 					if (!exists)
 					{
-						aLocationRec.Dispose();
-						aLocationRec = null;
+						locRec.Dispose();
+						locRec = null;
 					}
 				}
 			}
@@ -2511,30 +2499,27 @@ namespace GKUI
 			return Result;
 		}
 
-		public bool ModifyAddress(Form aSender, TGEDCOMAddress anAddress)
+		public bool ModifyAddress(Form sender, TGEDCOMAddress address)
 		{
-			TfmAddressEdit dlg = new TfmAddressEdit();
-			bool Result;
-			try
-			{
-				dlg.Address = anAddress;
-				Result = (GKUI.TfmGEDKeeper.Instance.ShowModalEx(dlg, aSender, false) == DialogResult.OK);
+			bool res;
+
+            using (TfmAddressEdit dlg = new TfmAddressEdit()) {
+				dlg.Address = address;
+				res = (GKUI.TfmGEDKeeper.Instance.ShowModalEx(dlg, sender, false) == DialogResult.OK);
 			}
-			finally
-			{
-				dlg.Dispose();
-			}
-			return Result;
+
+            return res;
 		}
 
-		public bool ModifyRecAssociation(Form aSender, TGEDCOMIndividualRecord aRecord, TGEDCOMAssociation aAssociation, TGenEngine.TRecAction anAction)
+		public bool ModifyRecAssociation(Form sender, TGEDCOMIndividualRecord iRec, TGEDCOMAssociation aAssociation, TGenEngine.TRecAction action)
 		{
 			bool Result = false;
-			if (anAction == TGenEngine.TRecAction.raDelete)
+
+            if (action == TGenEngine.TRecAction.raDelete)
 			{
 				if (TGenEngine.ShowQuestion(LangMan.LSList[243]) != DialogResult.No)
 				{
-					aRecord.Associations.DeleteObject(aAssociation);
+					iRec.Associations.DeleteObject(aAssociation);
 					Result = true;
 					this.Modified = true;
 				}
@@ -2545,21 +2530,21 @@ namespace GKUI
 				try
 				{
 					TGEDCOMAssociation ast;
-					if (anAction == TGenEngine.TRecAction.raEdit && aAssociation != null)
+					if (action == TGenEngine.TRecAction.raEdit && aAssociation != null)
 					{
 						ast = aAssociation;
 					}
 					else
 					{
-						ast = new TGEDCOMAssociation(this.FTree, aRecord, "", "");
+						ast = new TGEDCOMAssociation(this.FTree, iRec, "", "");
 					}
 					fmAstEdit.Association = ast;
-					DialogResult res = GKUI.TfmGEDKeeper.Instance.ShowModalEx(fmAstEdit, aSender, false);
-					if (anAction == TGenEngine.TRecAction.raAdd)
+					DialogResult res = GKUI.TfmGEDKeeper.Instance.ShowModalEx(fmAstEdit, sender, false);
+					if (action == TGenEngine.TRecAction.raAdd)
 					{
 						if (res == DialogResult.OK)
 						{
-							aRecord.Associations.Add(ast);
+							iRec.Associations.Add(ast);
 						}
 						else
 						{
@@ -2573,25 +2558,27 @@ namespace GKUI
 					fmAstEdit.Dispose();
 				}
 			}
-			return Result;
+
+            return Result;
 		}
 
-		public bool ModifyRecEvent(Form aSender, TGEDCOMRecord aRecord, TGEDCOMCustomEvent aEvent, TGenEngine.TRecAction anAction)
+		public bool ModifyRecEvent(Form sender, TGEDCOMRecord record, TGEDCOMCustomEvent aEvent, TGenEngine.TRecAction action)
 		{
+            bool Result = false;
+
 			try
 			{
-				bool Result = false;
-				if (anAction == TGenEngine.TRecAction.raDelete)
+				if (action == TGenEngine.TRecAction.raDelete)
 				{
 					if (TGenEngine.ShowQuestion(LangMan.LSList[239]) != DialogResult.No)
 					{
-						if (aRecord is TGEDCOMIndividualRecord)
+						if (record is TGEDCOMIndividualRecord)
 						{
-							(aRecord as TGEDCOMIndividualRecord).IndividualEvents.DeleteObject(aEvent);
+							(record as TGEDCOMIndividualRecord).IndividualEvents.DeleteObject(aEvent);
 						}
 						else
 						{
-							(aRecord as TGEDCOMFamilyRecord).FamilyEvents.DeleteObject(aEvent as TGEDCOMFamilyEvent);
+							(record as TGEDCOMFamilyRecord).FamilyEvents.DeleteObject(aEvent as TGEDCOMFamilyEvent);
 						}
 						Result = true;
 						this.Modified = true;
@@ -2609,17 +2596,17 @@ namespace GKUI
 						}
 						else
 						{
-							if (aRecord is TGEDCOMIndividualRecord)
+							if (record is TGEDCOMIndividualRecord)
 							{
-								evt = new TGEDCOMIndividualEvent(this.FTree, aRecord, "", "");
+								evt = new TGEDCOMIndividualEvent(this.FTree, record, "", "");
 							}
 							else
 							{
-								evt = new TGEDCOMFamilyEvent(this.FTree, aRecord, "", "");
+								evt = new TGEDCOMFamilyEvent(this.FTree, record, "", "");
 							}
 						}
 						fmEventEdit.Event = evt;
-						DialogResult dialogResult = GKUI.TfmGEDKeeper.Instance.ShowModalEx(fmEventEdit, aSender, true);
+						DialogResult dialogResult = GKUI.TfmGEDKeeper.Instance.ShowModalEx(fmEventEdit, sender, true);
 						if (dialogResult != DialogResult.OK)
 						{
 							if (dialogResult == DialogResult.Cancel)
@@ -2635,22 +2622,22 @@ namespace GKUI
 							if (aEvent == null)
 							{
 								evt = fmEventEdit.Event;
-								if (aRecord is TGEDCOMIndividualRecord)
+								if (record is TGEDCOMIndividualRecord)
 								{
-									(aRecord as TGEDCOMIndividualRecord).AddIndividualEvent(evt);
+									(record as TGEDCOMIndividualRecord).AddIndividualEvent(evt);
 								}
 								else
 								{
-									(aRecord as TGEDCOMFamilyRecord).FamilyEvents.Add(evt as TGEDCOMFamilyEvent);
+									(record as TGEDCOMFamilyRecord).FamilyEvents.Add(evt as TGEDCOMFamilyEvent);
 								}
 							}
 							else
 							{
-								if (aRecord is TGEDCOMIndividualRecord && !object.Equals(fmEventEdit.Event, aEvent))
+								if (record is TGEDCOMIndividualRecord && !object.Equals(fmEventEdit.Event, aEvent))
 								{
-									(aRecord as TGEDCOMIndividualRecord).IndividualEvents.DeleteObject(aEvent);
+									(record as TGEDCOMIndividualRecord).IndividualEvents.DeleteObject(aEvent);
 									evt = fmEventEdit.Event;
-									(aRecord as TGEDCOMIndividualRecord).AddIndividualEvent(evt);
+									(record as TGEDCOMIndividualRecord).AddIndividualEvent(evt);
 								}
 							}
 							Result = true;
@@ -2662,30 +2649,31 @@ namespace GKUI
 						fmEventEdit.Dispose();
 					}
 				}
-				return Result;
 			}
 			catch (Exception E)
 			{
 				SysUtils.LogWrite("GKBase.ModifyRecEvent(): " + E.Message);
 				return false;
 			}
-		}
 
-		public bool ModifyRecMultimedia(Form aSender, TGEDCOMRecord aRecord, TGEDCOMMultimediaLink aLink, TGenEngine.TRecAction anAction)
+            return Result;
+        }
+
+		public bool ModifyRecMultimedia(Form sender, TGEDCOMRecord record, TGEDCOMMultimediaLink aLink, TGenEngine.TRecAction action)
 		{
 			bool Result = false;
-			if (anAction == TGenEngine.TRecAction.raDelete)
+			if (action == TGenEngine.TRecAction.raDelete)
 			{
 				if (TGenEngine.ShowQuestion(LangMan.LSList[241]) != DialogResult.No)
 				{
-					aRecord.MultimediaLinks.DeleteObject(aLink);
+					record.MultimediaLinks.DeleteObject(aLink);
 					Result = true;
 					this.Modified = true;
 				}
 			}
 			else
 			{
-				if (anAction == TGenEngine.TRecAction.raEdit && aLink != null)
+				if (action == TGenEngine.TRecAction.raEdit && aLink != null)
 				{
 					TGEDCOMMultimediaRecord mmRec = aLink.Value as TGEDCOMMultimediaRecord;
 					Result = this.ModifyMedia(ref mmRec);
@@ -2695,9 +2683,9 @@ namespace GKUI
 					TGEDCOMMultimediaRecord mmRec = this.SelectRecord(TGEDCOMRecordType.rtMultimedia, new object[0]) as TGEDCOMMultimediaRecord;
 					if (mmRec != null)
 					{
-						TGEDCOMMultimediaLink mmLink = new TGEDCOMMultimediaLink(this.FTree, aRecord, "", "");
+						TGEDCOMMultimediaLink mmLink = new TGEDCOMMultimediaLink(this.FTree, record, "", "");
 						mmLink.Value = mmRec;
-						aRecord.MultimediaLinks.Add(mmLink);
+						record.MultimediaLinks.Add(mmLink);
 						Result = true;
 					}
 				}
@@ -2705,21 +2693,21 @@ namespace GKUI
 			return Result;
 		}
 
-		public bool ModifyRecNote(Form aSender, TGEDCOMRecord aRecord, TGEDCOMNotes aNote, TGenEngine.TRecAction anAction)
+		public bool ModifyRecNote(Form sender, TGEDCOMRecord record, TGEDCOMNotes aNote, TGenEngine.TRecAction action)
 		{
 			bool Result = false;
-			if (anAction == TGenEngine.TRecAction.raDelete)
+			if (action == TGenEngine.TRecAction.raDelete)
 			{
 				if (TGenEngine.ShowQuestion(LangMan.LSList[240]) != DialogResult.No)
 				{
-					aRecord.Notes.DeleteObject(aNote);
+					record.Notes.DeleteObject(aNote);
 					Result = true;
 					this.Modified = true;
 				}
 			}
 			else
 			{
-				if (anAction == TGenEngine.TRecAction.raEdit && aNote != null)
+				if (action == TGenEngine.TRecAction.raEdit && aNote != null)
 				{
 					TGEDCOMNoteRecord noteRec = aNote.Value as TGEDCOMNoteRecord;
 					Result = this.ModifyNote(ref noteRec);
@@ -2729,9 +2717,9 @@ namespace GKUI
 					TGEDCOMNoteRecord noteRec = this.SelectRecord(TGEDCOMRecordType.rtNote, new object[0]) as TGEDCOMNoteRecord;
 					if (noteRec != null)
 					{
-						TGEDCOMNotes note = new TGEDCOMNotes(this.FTree, aRecord, "", "");
+						TGEDCOMNotes note = new TGEDCOMNotes(this.FTree, record, "", "");
 						note.Value = noteRec;
-						aRecord.Notes.Add(note);
+						record.Notes.Add(note);
 						Result = true;
 					}
 				}
@@ -2739,14 +2727,14 @@ namespace GKUI
 			return Result;
 		}
 
-		public bool ModifyRecSource(Form aSender, TGEDCOMRecord aRecord, TGEDCOMSourceCitation aCit, TGenEngine.TRecAction anAction)
+		public bool ModifyRecSource(Form sender, TGEDCOMRecord record, TGEDCOMSourceCitation aCit, TGenEngine.TRecAction action)
 		{
 			bool Result = false;
-			if (anAction == TGenEngine.TRecAction.raDelete)
+			if (action == TGenEngine.TRecAction.raDelete)
 			{
 				if (TGenEngine.ShowQuestion(LangMan.LSList[242]) != DialogResult.No)
 				{
-					aRecord.SourceCitations.DeleteObject(aCit);
+					record.SourceCitations.DeleteObject(aCit);
 					Result = true;
 					this.Modified = true;
 				}
@@ -2757,21 +2745,21 @@ namespace GKUI
 				try
 				{
 					TGEDCOMSourceCitation cit;
-					if (anAction == TGenEngine.TRecAction.raEdit && aCit != null)
+					if (action == TGenEngine.TRecAction.raEdit && aCit != null)
 					{
 						cit = aCit;
 					}
 					else
 					{
-						cit = new TGEDCOMSourceCitation(this.FTree, aRecord, "", "");
+						cit = new TGEDCOMSourceCitation(this.FTree, record, "", "");
 					}
 					fmSrcCitEdit.SourceCitation = cit;
-					DialogResult res = GKUI.TfmGEDKeeper.Instance.ShowModalEx(fmSrcCitEdit, aSender, false);
-					if (anAction == TGenEngine.TRecAction.raAdd)
+					DialogResult res = GKUI.TfmGEDKeeper.Instance.ShowModalEx(fmSrcCitEdit, sender, false);
+					if (action == TGenEngine.TRecAction.raAdd)
 					{
 						if (res == DialogResult.OK)
 						{
-							aRecord.SourceCitations.Add(cit);
+							record.SourceCitations.Add(cit);
 						}
 						else
 						{
@@ -2788,14 +2776,14 @@ namespace GKUI
 			return Result;
 		}
 
-		public bool ModifyRecUserRef(Form aSender, TGEDCOMRecord aRecord, TGEDCOMUserReference aUserRef, TGenEngine.TRecAction anAction)
+		public bool ModifyRecUserRef(Form sender, TGEDCOMRecord record, TGEDCOMUserReference aUserRef, TGenEngine.TRecAction action)
 		{
 			bool Result = false;
-			if (anAction == TGenEngine.TRecAction.raDelete)
+			if (action == TGenEngine.TRecAction.raDelete)
 			{
 				if (TGenEngine.ShowQuestion(LangMan.LSList[244]) != DialogResult.No)
 				{
-					aRecord.UserReferences.DeleteObject(aUserRef);
+					record.UserReferences.DeleteObject(aUserRef);
 					Result = true;
 					this.Modified = true;
 				}
@@ -2806,21 +2794,21 @@ namespace GKUI
 				try
 				{
 					TGEDCOMUserReference @ref;
-					if (anAction == TGenEngine.TRecAction.raEdit && aUserRef != null)
+					if (action == TGenEngine.TRecAction.raEdit && aUserRef != null)
 					{
 						@ref = aUserRef;
 					}
 					else
 					{
-						@ref = new TGEDCOMUserReference(this.FTree, aRecord, "", "");
+						@ref = new TGEDCOMUserReference(this.FTree, record, "", "");
 					}
 					dlg.UserRef = @ref;
-					DialogResult res = GKUI.TfmGEDKeeper.Instance.ShowModalEx(dlg, aSender, false);
-					if (anAction == TGenEngine.TRecAction.raAdd)
+					DialogResult res = GKUI.TfmGEDKeeper.Instance.ShowModalEx(dlg, sender, false);
+					if (action == TGenEngine.TRecAction.raAdd)
 					{
 						if (res == DialogResult.OK)
 						{
-							aRecord.UserReferences.Add(@ref);
+							record.UserReferences.Add(@ref);
 						}
 						else
 						{
@@ -2962,34 +2950,34 @@ namespace GKUI
 			return Result;
 		}
 
-		public void RecListAssociationsRefresh(TGEDCOMIndividualRecord aRecord, GKListView aList, StringList aSummary)
+		public void RecListAssociationsRefresh(TGEDCOMIndividualRecord record, GKListView list, StringList summary)
 		{
 			try
 			{
-				if (aList != null)
+				if (list != null)
 				{
-					aList.Items.Clear();
+					list.Items.Clear();
 				}
-				if (aRecord.Associations.Count != 0)
+				if (record.Associations.Count != 0)
 				{
-					if (aList == null && aSummary != null)
+					if (list == null && summary != null)
 					{
-						aSummary.Add("");
-						aSummary.Add(LangMan.LSList[154] + ":");
+						summary.Add("");
+						summary.Add(LangMan.LSList[154] + ":");
 					}
 
-					int num = aRecord.Associations.Count - 1;
+					int num = record.Associations.Count - 1;
 					for (int idx = 0; idx <= num; idx++)
 					{
-						TGEDCOMAssociation ast = aRecord.Associations[idx];
+						TGEDCOMAssociation ast = record.Associations[idx];
 						string nm = ((ast.Individual == null) ? "" : ast.Individual.aux_GetNameStr(true, false));
-						if (aList == null && aSummary != null)
+						if (list == null && summary != null)
 						{
-							aSummary.Add("    " + ast.Relation + " " + TGenEngine.HyperLink(ast.Individual.XRef, nm, 0));
+							summary.Add("    " + ast.Relation + " " + TGenEngine.HyperLink(ast.Individual.XRef, nm, 0));
 						}
-						if (aList != null)
+						if (list != null)
 						{
-							GKListItem item = aList.AddItem(ast.Relation, ast);
+							GKListItem item = list.AddItem(ast.Relation, ast);
 							item.SubItems.Add(nm);
 						}
 					}
@@ -3001,27 +2989,27 @@ namespace GKUI
 			}
 		}
 
-		public void RecListFamilyEventsRefresh(TGEDCOMFamilyRecord aRecord, GKListView aList, StringList aSummary)
+		public void RecListFamilyEventsRefresh(TGEDCOMFamilyRecord record, GKListView list, StringList summary)
 		{
 			try
 			{
-				if (aList != null)
+				if (list != null)
 				{
-					aList.Items.Clear();
+					list.Items.Clear();
 				}
 
-				if (aRecord.FamilyEvents.Count != 0)
+				if (record.FamilyEvents.Count != 0)
 				{
-					if (aSummary != null)
+					if (summary != null)
 					{
-						aSummary.Add("");
-						aSummary.Add(LangMan.LSList[83] + ":");
+						summary.Add("");
+						summary.Add(LangMan.LSList[83] + ":");
 					}
 
-					int num = aRecord.FamilyEvents.Count - 1;
+					int num = record.FamilyEvents.Count - 1;
 					for (int idx = 0; idx <= num; idx++)
 					{
-						TGEDCOMFamilyEvent evt = aRecord.FamilyEvents[idx];
+						TGEDCOMFamilyEvent evt = record.FamilyEvents[idx];
 						int ev = TGenEngine.GetFamilyEventIndex(evt.Name);
 						string st;
 						if (ev == 0)
@@ -3039,15 +3027,15 @@ namespace GKUI
 								st = evt.Name;
 							}
 						}
-						if (aSummary != null)
+						if (summary != null)
 						{
-							aSummary.Add(st + ": " + TGenEngine.GetEventDesc(evt.Detail));
-							this.ShowDetailCause(evt.Detail, aSummary);
+							summary.Add(st + ": " + TGenEngine.GetEventDesc(evt.Detail));
+							this.ShowDetailCause(evt.Detail, summary);
 						}
-						this.ShowDetailInfo(evt.Detail, aSummary);
-						if (aList != null)
+						this.ShowDetailInfo(evt.Detail, summary);
+						if (list != null)
 						{
-							GKListItem item = aList.AddItem(Convert.ToString(idx + 1), evt);
+							GKListItem item = list.AddItem(Convert.ToString(idx + 1), evt);
 							item.SubItems.Add(st);
 							item.SubItems.Add(TGenEngine.GEDCOMCustomDateToStr(evt.Detail.Date, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat, false));
 							item.SubItems.Add(evt.Detail.Place.StringValue);
@@ -3062,36 +3050,30 @@ namespace GKUI
 			}
 		}
 
-		public void RecListGroupsRefresh(TGEDCOMIndividualRecord aRecord, GKListView aList, StringList aSummary)
+		public void RecListGroupsRefresh(TGEDCOMIndividualRecord record, GKListView list, StringList summary)
 		{
 			try
 			{
-				if (aList != null)
-				{
-					aList.Items.Clear();
+				if (list != null) {
+					list.Items.Clear();
 				}
-				if (aRecord.Groups.Count != 0)
-				{
-					if (aList == null && aSummary != null)
-					{
-						aSummary.Add("");
-						aSummary.Add(LangMan.LSList[58] + ":");
+
+                if (record.Groups.Count != 0) {
+					if (list == null && summary != null) {
+						summary.Add("");
+						summary.Add(LangMan.LSList[58] + ":");
 					}
 
-					int num = aRecord.Groups.Count - 1;
-					for (int idx = 0; idx <= num; idx++)
-					{
-						TGEDCOMPointer ptr = aRecord.Groups[idx];
+					int num = record.Groups.Count - 1;
+					for (int idx = 0; idx <= num; idx++) {
+						TGEDCOMPointer ptr = record.Groups[idx];
 						TGEDCOMGroupRecord grp = ptr.Value as TGEDCOMGroupRecord;
-						if (grp != null)
-						{
-							if (aList == null && aSummary != null)
-							{
-								aSummary.Add("    " + TGenEngine.HyperLink(grp.XRef, grp.GroupName, 0));
+						if (grp != null) {
+							if (list == null && summary != null) {
+								summary.Add("    " + TGenEngine.HyperLink(grp.XRef, grp.GroupName, 0));
 							}
-							if (aList != null)
-							{
-								GKListItem item = aList.AddItem(grp.GroupName, grp);
+							if (list != null) {
+								list.AddItem(grp.GroupName, grp);
 							}
 						}
 					}
@@ -3103,27 +3085,27 @@ namespace GKUI
 			}
 		}
 
-		public void RecListIndividualEventsRefresh(TGEDCOMIndividualRecord aRecord, GKListView aList, StringList aSummary)
+		public void RecListIndividualEventsRefresh(TGEDCOMIndividualRecord record, GKListView list, StringList summary)
 		{
 			try
 			{
-				if (aList != null)
+				if (list != null)
 				{
-					aList.Items.Clear();
+					list.Items.Clear();
 				}
 
-				if (aRecord.IndividualEvents.Count != 0)
+				if (record.IndividualEvents.Count != 0)
 				{
-					if (aSummary != null)
+					if (summary != null)
 					{
-						aSummary.Add("");
-						aSummary.Add(LangMan.LSList[83] + ":");
+						summary.Add("");
+						summary.Add(LangMan.LSList[83] + ":");
 					}
 
-					int num = aRecord.IndividualEvents.Count - 1;
+					int num = record.IndividualEvents.Count - 1;
 					for (int idx = 0; idx <= num; idx++)
 					{
-						TGEDCOMCustomEvent evt = aRecord.IndividualEvents[idx];
+						TGEDCOMCustomEvent evt = record.IndividualEvents[idx];
 						int ev = TGenEngine.GetPersonEventIndex(evt.Name);
 						string st;
 						if (ev == 0)
@@ -3142,21 +3124,21 @@ namespace GKUI
 							}
 						}
 
-						if (aSummary != null)
+						if (summary != null)
 						{
 							string sv = "";
 							if (evt.StringValue != "") {
 								sv = evt.StringValue + ", ";
 							}
-							aSummary.Add(st + ": " + sv + TGenEngine.GetEventDesc(evt.Detail));
-							this.ShowDetailCause(evt.Detail, aSummary);
-							this.ShowAddress(evt.Detail.Address, aSummary);
-							this.ShowDetailInfo(evt.Detail, aSummary);
+							summary.Add(st + ": " + sv + TGenEngine.GetEventDesc(evt.Detail));
+							this.ShowDetailCause(evt.Detail, summary);
+							this.ShowAddress(evt.Detail.Address, summary);
+							this.ShowDetailInfo(evt.Detail, summary);
 						}
 
-						if (aList != null)
+						if (list != null)
 						{
-							GKListItem item = aList.AddItem(Convert.ToString(idx + 1), evt);
+							GKListItem item = list.AddItem(Convert.ToString(idx + 1), evt);
 							item.SubItems.Add(st);
 							item.SubItems.Add(TGenEngine.GEDCOMCustomDateToStr(evt.Detail.Date, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat, false));
 							st = evt.Detail.Place.StringValue;
@@ -3169,7 +3151,7 @@ namespace GKUI
 						}
 					}
 
-					if (aList != null) aList.ResizeColumn(2);
+					if (list != null) list.ResizeColumn(2);
 				}
 			}
 			catch (Exception E)
@@ -3178,44 +3160,31 @@ namespace GKUI
 			}
 		}
 
-		public void RecListMediaRefresh(TGEDCOMRecord aRecord, GKListView aList, StringList aSummary)
+		public void RecListMediaRefresh(TGEDCOMRecord record, GKListView list, StringList summary)
 		{
 			try
 			{
-				if (aList != null)
-				{
-					aList.Items.Clear();
+				if (list != null) {
+					list.Items.Clear();
 				}
-				if (aRecord.MultimediaLinks.Count != 0)
-				{
-					if (aList == null && aSummary != null)
-					{
-						aSummary.Add("");
-						aSummary.Add(LangMan.LSList[55] + " (" + aRecord.MultimediaLinks.Count.ToString() + "):");
+
+                if (record.MultimediaLinks.Count != 0) {
+					if (list == null && summary != null) {
+						summary.Add("");
+						summary.Add(LangMan.LSList[55] + " (" + record.MultimediaLinks.Count.ToString() + "):");
 					}
 
-					int num = aRecord.MultimediaLinks.Count - 1;
-					for (int idx = 0; idx <= num; idx++)
-					{
-						TGEDCOMMultimediaLink mmLink = aRecord.MultimediaLinks[idx];
+					int num = record.MultimediaLinks.Count - 1;
+					for (int idx = 0; idx <= num; idx++) {
+						TGEDCOMMultimediaLink mmLink = record.MultimediaLinks[idx];
 						TGEDCOMMultimediaRecord mmRec = mmLink.Value as TGEDCOMMultimediaRecord;
-						if (mmRec != null && mmRec.FileReferences.Count != 0)
-						{
+						if (mmRec != null && mmRec.FileReferences.Count != 0) {
 							string st = mmRec.FileReferences[0].Title;
-							if (aList == null && aSummary != null)
-							{
-								aSummary.Add(string.Concat(new string[]
-								{
-									"  ", 
-									TGenEngine.HyperLink(mmRec.XRef, st, 0), 
-									" (", 
-									TGenEngine.HyperLink("view_" + mmRec.XRef, "просмотр", 0), 
-									")"
-								}));
+							if (list == null && summary != null) {
+								summary.Add("  " + TGenEngine.HyperLink(mmRec.XRef, st, 0) + " (" + TGenEngine.HyperLink("view_" + mmRec.XRef, "просмотр", 0) + ")");
 							}
-							if (aList != null)
-							{
-								aList.AddItem(st, mmLink);
+							if (list != null) {
+								list.AddItem(st, mmLink);
 							}
 						}
 					}
@@ -3227,46 +3196,46 @@ namespace GKUI
 			}
 		}
 
-		public void RecListNotesRefresh(TGEDCOMRecord aRecord, GKListView aList, StringList aSummary)
+		public void RecListNotesRefresh(TGEDCOMRecord record, GKListView list, StringList summary)
 		{
 			try
 			{
-				if (aList != null)
+				if (list != null)
 				{
-					aList.Items.Clear();
+					list.Items.Clear();
 				}
 
-				if (aRecord.Notes.Count != 0)
+				if (record.Notes.Count != 0)
 				{
-					if (aSummary != null)
+					if (summary != null)
 					{
-						aSummary.Add("");
-						aSummary.Add(LangMan.LSList[54] + " (" + aRecord.Notes.Count.ToString() + "):");
+						summary.Add("");
+						summary.Add(LangMan.LSList[54] + " (" + record.Notes.Count.ToString() + "):");
 					}
 
-					int num = aRecord.Notes.Count - 1;
+					int num = record.Notes.Count - 1;
 					for (int idx = 0; idx <= num; idx++)
 					{
-						TGEDCOMNotes note = aRecord.Notes[idx];
+						TGEDCOMNotes note = record.Notes[idx];
 
-						if (aSummary != null)
+						if (summary != null)
 						{
 							int num2 = note.Notes.Count - 1;
 							for (int i = 0; i <= num2; i++)
 							{
 								string st = note.Notes[i];
-								aSummary.Add(st);
+								summary.Add(st);
 							}
 
-							if (idx < aRecord.Notes.Count - 1)
+							if (idx < record.Notes.Count - 1)
 							{
-								aSummary.Add("");
+								summary.Add("");
 							}
 						}
 
-						if (aList != null)
+						if (list != null)
 						{
-							aList.AddItem(note.Notes.Text.Trim(), note);
+							list.AddItem(note.Notes.Text.Trim(), note);
 						}
 					}
 				}
@@ -3277,26 +3246,26 @@ namespace GKUI
 			}
 		}
 
-		public void RecListSourcesRefresh(TGEDCOMRecord aRecord, GKListView aList, StringList aSummary)
+		public void RecListSourcesRefresh(TGEDCOMRecord record, GKListView list, StringList summary)
 		{
 			try
 			{
-				if (aList != null)
+				if (list != null)
 				{
-					aList.Items.Clear();
+					list.Items.Clear();
 				}
-				if (aRecord.SourceCitations.Count != 0)
+				if (record.SourceCitations.Count != 0)
 				{
-					if (aList == null && aSummary != null)
+					if (list == null && summary != null)
 					{
-						aSummary.Add("");
-						aSummary.Add(LangMan.LSList[56] + " (" + aRecord.SourceCitations.Count.ToString() + "):");
+						summary.Add("");
+						summary.Add(LangMan.LSList[56] + " (" + record.SourceCitations.Count.ToString() + "):");
 					}
 
-					int num = aRecord.SourceCitations.Count - 1;
+					int num = record.SourceCitations.Count - 1;
 					for (int idx = 0; idx <= num; idx++)
 					{
-						TGEDCOMSourceCitation cit = aRecord.SourceCitations[idx];
+						TGEDCOMSourceCitation cit = record.SourceCitations[idx];
 						TGEDCOMSourceRecord sourceRec = cit.Value as TGEDCOMSourceRecord;
 						if (sourceRec != null)
 						{
@@ -3305,20 +3274,20 @@ namespace GKUI
 							{
 								nm = nm + ", " + cit.Page;
 							}
-							if (aList == null && aSummary != null)
+							if (list == null && summary != null)
 							{
-								aSummary.Add("  " + TGenEngine.HyperLink(sourceRec.XRef, nm, 0));
+								summary.Add("  " + TGenEngine.HyperLink(sourceRec.XRef, nm, 0));
 							}
-							if (aList != null)
+							if (list != null)
 							{
-								GKListItem item = aList.AddItem(sourceRec.Originator.Text.Trim(), cit);
+								GKListItem item = list.AddItem(sourceRec.Originator.Text.Trim(), cit);
 								item.SubItems.Add(nm);
 							}
 						}
 					}
-					if (aList != null)
+					if (list != null)
 					{
-						aList.ResizeColumn(1);
+						list.ResizeColumn(1);
 					}
 				}
 			}
@@ -3372,25 +3341,25 @@ namespace GKUI
 			aList.Columns_EndUpdate();
 		}
 
-		public void ShowDetailCause(TGEDCOMEventDetail aDetail, StringList aSummary)
+		public void ShowDetailCause(TGEDCOMEventDetail eventDetail, StringList summary)
 		{
-			string cause = TGenEngine.GetEventCause(aDetail);
-			if (aSummary != null && cause != "")
+			string cause = TGenEngine.GetEventCause(eventDetail);
+			if (summary != null && cause != "")
 			{
-				aSummary.Add("    " + cause);
+				summary.Add("    " + cause);
 			}
 		}
 
-		public void ShowDetailInfo(TGEDCOMEventDetail aDetail, StringList aSummary)
+		public void ShowDetailInfo(TGEDCOMEventDetail eventDetail, StringList summary)
 		{
-			if (aSummary != null && aDetail.SourceCitations.Count != 0)
+			if (summary != null && eventDetail.SourceCitations.Count != 0)
 			{
-				aSummary.Add("    " + LangMan.LSList[56] + " (" + aDetail.SourceCitations.Count.ToString() + "):");
+				summary.Add("    " + LangMan.LSList[56] + " (" + eventDetail.SourceCitations.Count.ToString() + "):");
 
-				int num = aDetail.SourceCitations.Count - 1;
+				int num = eventDetail.SourceCitations.Count - 1;
 				for (int idx = 0; idx <= num; idx++)
 				{
-					TGEDCOMSourceCitation cit = aDetail.SourceCitations[idx];
+					TGEDCOMSourceCitation cit = eventDetail.SourceCitations[idx];
 					TGEDCOMSourceRecord sourceRec = cit.Value as TGEDCOMSourceRecord;
 					if (sourceRec != null)
 					{
@@ -3399,54 +3368,54 @@ namespace GKUI
 						{
 							nm = nm + ", " + cit.Page;
 						}
-						aSummary.Add("      " + TGenEngine.HyperLink(sourceRec.XRef, nm, 0));
+						summary.Add("      " + TGenEngine.HyperLink(sourceRec.XRef, nm, 0));
 					}
 				}
 			}
 		}
 
-		public void ShowFamilyInfo(TGEDCOMFamilyRecord aFamily, StringList aSummary)
+		public void ShowFamilyInfo(TGEDCOMFamilyRecord familyRec, StringList summary)
 		{
 			try
 			{
-				aSummary.BeginUpdate();
+				summary.BeginUpdate();
 				try
 				{
-					aSummary.Clear();
-					if (aFamily != null)
+					summary.Clear();
+					if (familyRec != null)
 					{
-						aSummary.Add("");
+						summary.Add("");
 
-						TGEDCOMIndividualRecord irec = aFamily.Husband.Value as TGEDCOMIndividualRecord;
+						TGEDCOMIndividualRecord irec = familyRec.Husband.Value as TGEDCOMIndividualRecord;
 						string st = ((irec == null) ? LangMan.LSList[64] : TGenEngine.HyperLink(irec.XRef, irec.aux_GetNameStr(true, false), 0));
-						aSummary.Add(LangMan.LSList[115] + ": " + st + TGenEngine.GetLifeStr(irec));
+						summary.Add(LangMan.LSList[115] + ": " + st + TGenEngine.GetLifeStr(irec));
 
-						irec = (aFamily.Wife.Value as TGEDCOMIndividualRecord);
+						irec = (familyRec.Wife.Value as TGEDCOMIndividualRecord);
 						st = ((irec == null) ? LangMan.LSList[63] : TGenEngine.HyperLink(irec.XRef, irec.aux_GetNameStr(true, false), 0));
-						aSummary.Add(LangMan.LSList[116] + ": " + st + TGenEngine.GetLifeStr(irec));
+						summary.Add(LangMan.LSList[116] + ": " + st + TGenEngine.GetLifeStr(irec));
 
-						aSummary.Add("");
-						if (aFamily.Childrens.Count != 0)
+						summary.Add("");
+						if (familyRec.Childrens.Count != 0)
 						{
-							aSummary.Add(LangMan.LSList[118] + ":");
+							summary.Add(LangMan.LSList[118] + ":");
 						}
 
-						int num = aFamily.Childrens.Count - 1;
+						int num = familyRec.Childrens.Count - 1;
 						for (int i = 0; i <= num; i++)
 						{
-							irec = (aFamily.Childrens[i].Value as TGEDCOMIndividualRecord);
-							aSummary.Add("    " + TGenEngine.HyperLink(irec.XRef, irec.aux_GetNameStr(true, false), 0) + TGenEngine.GetLifeStr(irec));
+							irec = (familyRec.Childrens[i].Value as TGEDCOMIndividualRecord);
+							summary.Add("    " + TGenEngine.HyperLink(irec.XRef, irec.aux_GetNameStr(true, false), 0) + TGenEngine.GetLifeStr(irec));
 						}
-						aSummary.Add("");
-						this.RecListFamilyEventsRefresh(aFamily, null, aSummary);
-						this.RecListNotesRefresh(aFamily, null, aSummary);
-						this.RecListMediaRefresh(aFamily, null, aSummary);
-						this.RecListSourcesRefresh(aFamily, null, aSummary);
+						summary.Add("");
+						this.RecListFamilyEventsRefresh(familyRec, null, summary);
+						this.RecListNotesRefresh(familyRec, null, summary);
+						this.RecListMediaRefresh(familyRec, null, summary);
+						this.RecListSourcesRefresh(familyRec, null, summary);
 					}
 				}
 				finally
 				{
-					aSummary.EndUpdate();
+					summary.EndUpdate();
 				}
 			}
 			catch (Exception E)
@@ -3455,26 +3424,26 @@ namespace GKUI
 			}
 		}
 
-		public void ShowGroupInfo(TGEDCOMGroupRecord aGroup, StringList aSummary)
+		public void ShowGroupInfo(TGEDCOMGroupRecord groupRec, StringList summary)
 		{
 			try
 			{
 				StringList mbrList = new StringList();
-				aSummary.BeginUpdate();
+				summary.BeginUpdate();
 				try
 				{
-					aSummary.Clear();
-					if (aGroup != null)
+					summary.Clear();
+					if (groupRec != null)
 					{
-						aSummary.Add("");
-						aSummary.Add("~ub+1~" + aGroup.GroupName + "~bu-1~");
-						aSummary.Add("");
-						aSummary.Add(LangMan.LSList[126] + " (" + aGroup.Members.Count.ToString() + "):");
+						summary.Add("");
+						summary.Add("~ub+1~" + groupRec.GroupName + "~bu-1~");
+						summary.Add("");
+						summary.Add(LangMan.LSList[126] + " (" + groupRec.Members.Count.ToString() + "):");
 
-						int num = aGroup.Members.Count - 1;
+						int num = groupRec.Members.Count - 1;
 						for (int i = 0; i <= num; i++)
 						{
-							TGEDCOMPointer ptr = aGroup.Members[i];
+							TGEDCOMPointer ptr = groupRec.Members[i];
 							TGEDCOMIndividualRecord member = ptr.Value as TGEDCOMIndividualRecord;
 							mbrList.AddObject(member.aux_GetNameStr(true, false), member);
 						}
@@ -3484,15 +3453,15 @@ namespace GKUI
 						for (int i = 0; i <= num2; i++)
 						{
 							TGEDCOMIndividualRecord member = mbrList.GetObject(i) as TGEDCOMIndividualRecord;
-							aSummary.Add("    " + TGenEngine.HyperLink(member.XRef, mbrList[i], i + 1));
+							summary.Add("    " + TGenEngine.HyperLink(member.XRef, mbrList[i], i + 1));
 						}
-						this.RecListNotesRefresh(aGroup, null, aSummary);
-						this.RecListMediaRefresh(aGroup, null, aSummary);
+						this.RecListNotesRefresh(groupRec, null, summary);
+						this.RecListMediaRefresh(groupRec, null, summary);
 					}
 				}
 				finally
 				{
-					aSummary.EndUpdate();
+					summary.EndUpdate();
 					mbrList.Free();
 				}
 			}
@@ -3502,35 +3471,35 @@ namespace GKUI
 			}
 		}
 
-		public void ShowMultimediaInfo(TGEDCOMMultimediaRecord aMultimediaRec, StringList aSummary)
+		public void ShowMultimediaInfo(TGEDCOMMultimediaRecord mediaRec, StringList summary)
 		{
 			try
 			{
-				aSummary.BeginUpdate();
+				summary.BeginUpdate();
 				try
 				{
-					aSummary.Clear();
-					if (aMultimediaRec != null)
+					summary.Clear();
+					if (mediaRec != null)
 					{
-						aSummary.Add("");
-						aSummary.Add("~ub+1~" + aMultimediaRec.FileReferences[0].Title + "~bu-1~");
-						aSummary.Add("");
-						aSummary.Add("[ " + TGenEngine.HyperLink("view_" + aMultimediaRec.XRef, LangMan.LSList[148], 0) + " ]");
-						aSummary.Add("");
-						aSummary.Add(LangMan.LSList[234] + ":");
+						summary.Add("");
+						summary.Add("~ub+1~" + mediaRec.FileReferences[0].Title + "~bu-1~");
+						summary.Add("");
+						summary.Add("[ " + TGenEngine.HyperLink("view_" + mediaRec.XRef, LangMan.LSList[148], 0) + " ]");
+						summary.Add("");
+						summary.Add(LangMan.LSList[234] + ":");
 
 						int num = this.FTree.RecordsCount - 1;
 						for (int i = 0; i <= num; i++)
 						{
-							this.SearchSubjectLinks(this.FTree[i], aMultimediaRec, aSummary);
+							this.SearchSubjectLinks(this.FTree[i], mediaRec, summary);
 						}
-						this.RecListNotesRefresh(aMultimediaRec, null, aSummary);
-						this.RecListSourcesRefresh(aMultimediaRec, null, aSummary);
+						this.RecListNotesRefresh(mediaRec, null, summary);
+						this.RecListSourcesRefresh(mediaRec, null, summary);
 					}
 				}
 				finally
 				{
-					aSummary.EndUpdate();
+					summary.EndUpdate();
 				}
 			}
 			catch (Exception E)
@@ -3539,31 +3508,31 @@ namespace GKUI
 			}
 		}
 
-		public void ShowNoteInfo(TGEDCOMNoteRecord aNoteRec, StringList aSummary)
+		public void ShowNoteInfo(TGEDCOMNoteRecord noteRec, StringList summary)
 		{
 			try
 			{
-				aSummary.BeginUpdate();
+				summary.BeginUpdate();
 				try
 				{
-					aSummary.Clear();
-					if (aNoteRec != null)
+					summary.Clear();
+					if (noteRec != null)
 					{
-						aSummary.Add("");
-						aSummary.AddStrings(aNoteRec.Note);
-						aSummary.Add("");
-						aSummary.Add(LangMan.LSList[234] + ":");
+						summary.Add("");
+						summary.AddStrings(noteRec.Note);
+						summary.Add("");
+						summary.Add(LangMan.LSList[234] + ":");
 
 						int num = this.FTree.RecordsCount - 1;
 						for (int i = 0; i <= num; i++)
 						{
-							this.SearchSubjectLinks(this.FTree[i], aNoteRec, aSummary);
+							this.SearchSubjectLinks(this.FTree[i], noteRec, summary);
 						}
 					}
 				}
 				finally
 				{
-					aSummary.EndUpdate();
+					summary.EndUpdate();
 				}
 			}
 			catch (Exception E)
@@ -3572,25 +3541,25 @@ namespace GKUI
 			}
 		}
 
-		public void ShowPersonInfo(TGEDCOMIndividualRecord iRec, StringList aSummary)
+		public void ShowPersonInfo(TGEDCOMIndividualRecord iRec, StringList summary)
 		{
 			try
 			{
-				aSummary.BeginUpdate();
-				aSummary.Clear();
+				summary.BeginUpdate();
+				summary.Clear();
 				try
 				{
 					if (iRec != null)
 					{
-						aSummary.Add("");
-						aSummary.Add("~ub+1~" + iRec.aux_GetNameStr(true, true) + "~bu-1~");
-						aSummary.Add(LangMan.LSList[87] + ": " + TGenEngine.SexStr(iRec.Sex));
+						summary.Add("");
+						summary.Add("~ub+1~" + iRec.aux_GetNameStr(true, true) + "~bu-1~");
+						summary.Add(LangMan.LSList[87] + ": " + TGenEngine.SexStr(iRec.Sex));
 						try
 						{
 							if (iRec.ChildToFamilyLinks.Count != 0)
 							{
-								aSummary.Add("");
-								aSummary.Add(LangMan.LSList[152] + ":");
+								summary.Add("");
+								summary.Add(LangMan.LSList[152] + ":");
 								TGEDCOMFamilyRecord family = iRec.ChildToFamilyLinks[0].Family;
 								TGEDCOMIndividualRecord rel_person = family.Husband.Value as TGEDCOMIndividualRecord;
 								string st;
@@ -3602,7 +3571,7 @@ namespace GKUI
 								{
 									st = LangMan.LSList[64];
 								}
-								aSummary.Add("  " + LangMan.LSList[150] + ": " + st + TGenEngine.GetLifeStr(rel_person));
+								summary.Add("  " + LangMan.LSList[150] + ": " + st + TGenEngine.GetLifeStr(rel_person));
 								rel_person = (family.Wife.Value as TGEDCOMIndividualRecord);
 								if (rel_person != null)
 								{
@@ -3612,7 +3581,7 @@ namespace GKUI
 								{
 									st = LangMan.LSList[63];
 								}
-								aSummary.Add("  " + LangMan.LSList[151] + ": " + st + TGenEngine.GetLifeStr(rel_person));
+								summary.Add("  " + LangMan.LSList[151] + ": " + st + TGenEngine.GetLifeStr(rel_person));
 							}
 						}
 						catch (Exception E)
@@ -3659,7 +3628,7 @@ namespace GKUI
 											marr = LangMan.LSList[237];
 										}
 										TGEDCOMIndividualRecord rel_person = sp.Value as TGEDCOMIndividualRecord;
-										aSummary.Add("");
+										summary.Add("");
 										if (rel_person != null)
 										{
 											st = st + TGenEngine.HyperLink(rel_person.XRef, rel_person.aux_GetNameStr(true, false), 0) + " (" + TGenEngine.HyperLink(family.XRef, marr, 0) + ")";
@@ -3668,18 +3637,18 @@ namespace GKUI
 										{
 											st = st + unk + " (" + TGenEngine.HyperLink(family.XRef, marr, 0) + ")";
 										}
-										aSummary.Add(st);
+										summary.Add(st);
 										if (family.Childrens.Count != 0)
 										{
-											aSummary.Add("");
-											aSummary.Add(LangMan.LSList[118] + ":");
+											summary.Add("");
+											summary.Add(LangMan.LSList[118] + ":");
 										}
 
 										int num2 = family.Childrens.Count - 1;
 										for (int i = 0; i <= num2; i++)
 										{
 											rel_person = (family.Childrens[i].Value as TGEDCOMIndividualRecord);
-											aSummary.Add("    " + TGenEngine.HyperLink(rel_person.XRef, rel_person.aux_GetNameStr(true, false), 0) + TGenEngine.GetLifeStr(rel_person));
+											summary.Add("    " + TGenEngine.HyperLink(rel_person.XRef, rel_person.aux_GetNameStr(true, false), 0) + TGenEngine.GetLifeStr(rel_person));
 										}
 									}
 								}
@@ -3690,54 +3659,19 @@ namespace GKUI
 							SysUtils.LogWrite("GKBase.ShowPersonInfo().Families(): " + E.Message);
 						}
 
-						this.RecListIndividualEventsRefresh(iRec, null, aSummary);
-						this.RecListNotesRefresh(iRec, null, aSummary);
-						this.RecListMediaRefresh(iRec, null, aSummary);
-						this.RecListSourcesRefresh(iRec, null, aSummary);
-						this.RecListAssociationsRefresh(iRec, null, aSummary);
-						this.RecListGroupsRefresh(iRec, null, aSummary);
-						StringList namesakes = new StringList();
-						try
-						{
-							string st = iRec.aux_GetNameStr(true, false);
+						this.RecListIndividualEventsRefresh(iRec, null, summary);
+						this.RecListNotesRefresh(iRec, null, summary);
+						this.RecListMediaRefresh(iRec, null, summary);
+						this.RecListSourcesRefresh(iRec, null, summary);
+						this.RecListAssociationsRefresh(iRec, null, summary);
+						this.RecListGroupsRefresh(iRec, null, summary);
 
-							int num3 = this.FTree.RecordsCount - 1;
-							for (int i = 0; i <= num3; i++)
-							{
-								TGEDCOMRecord rec = this.FTree[i];
-								if (rec is TGEDCOMIndividualRecord && !object.Equals(rec, iRec))
-								{
-									TGEDCOMIndividualRecord rel_person = (TGEDCOMIndividualRecord)rec;
-									string unk = rel_person.aux_GetNameStr(true, false);
-									if (st == unk)
-									{
-										namesakes.AddObject(unk + TGenEngine.GetLifeStr(rel_person), rel_person);
-									}
-								}
-							}
-
-							if (namesakes.Count > 0)
-							{
-								aSummary.Add("");
-								aSummary.Add(LangMan.LSList[238] + ":");
-
-								int num4 = namesakes.Count - 1;
-								for (int i = 0; i <= num4; i++)
-								{
-									TGEDCOMIndividualRecord rel_person = (TGEDCOMIndividualRecord)namesakes.GetObject(i);
-									aSummary.Add("    " + TGenEngine.HyperLink(rel_person.XRef, namesakes[i], 0));
-								}
-							}
-						}
-						finally
-						{
-							namesakes.Free();
-						}
+                        this.ShowPersonNamesakes(iRec, summary);
 					}
 				}
 				finally
 				{
-					aSummary.EndUpdate();
+					summary.EndUpdate();
 				}
 			}
 			catch (Exception E)
@@ -3746,44 +3680,93 @@ namespace GKUI
 			}
 		}
 
-		public void ShowSourceInfo(TGEDCOMSourceRecord aSourceRec, StringList aSummary)
+        private void ShowPersonNamesakes(TGEDCOMIndividualRecord iRec, StringList summary)
+        {
+            try
+            {
+                StringList namesakes = new StringList();
+                try
+                {
+                    string st = iRec.aux_GetNameStr(true, false);
+
+                    int num3 = this.FTree.RecordsCount - 1;
+                    for (int i = 0; i <= num3; i++)
+                    {
+                        TGEDCOMRecord rec = this.FTree[i];
+                        if (rec is TGEDCOMIndividualRecord && !object.Equals(rec, iRec))
+                        {
+                            TGEDCOMIndividualRecord rel_person = rec as TGEDCOMIndividualRecord;
+                            string unk = rel_person.aux_GetNameStr(true, false);
+                            if (st == unk)
+                            {
+                                namesakes.AddObject(unk + TGenEngine.GetLifeStr(rel_person), rel_person);
+                            }
+                        }
+                    }
+
+                    if (namesakes.Count > 0)
+                    {
+                        summary.Add("");
+                        summary.Add(LangMan.LSList[238] + ":");
+
+                        int num4 = namesakes.Count - 1;
+                        for (int i = 0; i <= num4; i++)
+                        {
+                            TGEDCOMIndividualRecord rel_person = namesakes.GetObject(i) as TGEDCOMIndividualRecord;
+                            summary.Add("    " + TGenEngine.HyperLink(rel_person.XRef, namesakes[i], 0));
+                        }
+                    }
+                }
+                finally
+                {
+                    namesakes.Free();
+                }
+            }
+            catch (Exception E)
+            {
+                SysUtils.LogWrite("GKBase.ShowPersonNamesakes(): " + E.Message);
+            }
+
+        }
+
+		public void ShowSourceInfo(TGEDCOMSourceRecord sourceRec, StringList summary)
 		{
 			try
 			{
-				aSummary.BeginUpdate();
+				summary.BeginUpdate();
 				StringList link_list = new StringList();
 				try
 				{
-					aSummary.Clear();
-					if (aSourceRec != null)
+					summary.Clear();
+					if (sourceRec != null)
 					{
-						aSummary.Add("");
-						aSummary.Add("~ub+1~" + aSourceRec.FiledByEntry + "~bu-1~");
-						aSummary.Add("");
-						aSummary.Add(LangMan.LSList[142] + ": " + aSourceRec.Originator.Text.Trim());
-						aSummary.Add(LangMan.LSList[125] + ": \"" + aSourceRec.Title.Text.Trim() + "\"");
-						aSummary.Add(LangMan.LSList[143] + ": \"" + aSourceRec.Publication.Text.Trim() + "\"");
+						summary.Add("");
+						summary.Add("~ub+1~" + sourceRec.FiledByEntry + "~bu-1~");
+						summary.Add("");
+						summary.Add(LangMan.LSList[142] + ": " + sourceRec.Originator.Text.Trim());
+						summary.Add(LangMan.LSList[125] + ": \"" + sourceRec.Title.Text.Trim() + "\"");
+						summary.Add(LangMan.LSList[143] + ": \"" + sourceRec.Publication.Text.Trim() + "\"");
 
-						if (aSourceRec.RepositoryCitations.Count > 0)
+						if (sourceRec.RepositoryCitations.Count > 0)
 						{
-							aSummary.Add("");
-							aSummary.Add(LangMan.LSList[57] + ":");
+							summary.Add("");
+							summary.Add(LangMan.LSList[57] + ":");
 
-							int num = aSourceRec.RepositoryCitations.Count - 1;
+							int num = sourceRec.RepositoryCitations.Count - 1;
 							for (int i = 0; i <= num; i++)
 							{
-								TGEDCOMRepositoryRecord rep = aSourceRec.RepositoryCitations[i].Value as TGEDCOMRepositoryRecord;
-								aSummary.Add("    " + TGenEngine.HyperLink(rep.XRef, rep.RepositoryName, 0));
+								TGEDCOMRepositoryRecord rep = sourceRec.RepositoryCitations[i].Value as TGEDCOMRepositoryRecord;
+								summary.Add("    " + TGenEngine.HyperLink(rep.XRef, rep.RepositoryName, 0));
 							}
 						}
 
-						aSummary.Add("");
-						aSummary.Add(LangMan.LSList[234] + ":");
+						summary.Add("");
+						summary.Add(LangMan.LSList[234] + ":");
 
 						int num2 = this.FTree.RecordsCount - 1;
 						for (int j = 0; j <= num2; j++)
 						{
-							this.SearchSubjectLinks(this.FTree[j], aSourceRec, link_list);
+							this.SearchSubjectLinks(this.FTree[j], sourceRec, link_list);
 						}
 
 						link_list.Sort();
@@ -3791,16 +3774,16 @@ namespace GKUI
 						int num3 = link_list.Count - 1;
 						for (int j = 0; j <= num3; j++)
 						{
-							aSummary.Add(link_list[j]);
+							summary.Add(link_list[j]);
 						}
-						this.RecListNotesRefresh(aSourceRec, null, aSummary);
-						this.RecListMediaRefresh(aSourceRec, null, aSummary);
+						this.RecListNotesRefresh(sourceRec, null, summary);
+						this.RecListMediaRefresh(sourceRec, null, summary);
 					}
 				}
 				finally
 				{
 					link_list.Free();
-					aSummary.EndUpdate();
+					summary.EndUpdate();
 				}
 			}
 			catch (Exception E)
@@ -3809,22 +3792,22 @@ namespace GKUI
 			}
 		}
 
-		public void ShowRepositoryInfo(TGEDCOMRepositoryRecord aRepositoryRec, StringList aSummary)
+		public void ShowRepositoryInfo(TGEDCOMRepositoryRecord repositoryRec, StringList summary)
 		{
 			try
 			{
-				aSummary.BeginUpdate();
+				summary.BeginUpdate();
 				try
 				{
-					aSummary.Clear();
-					if (aRepositoryRec != null)
+					summary.Clear();
+					if (repositoryRec != null)
 					{
-						aSummary.Add("");
-						aSummary.Add("~ub+1~" + aRepositoryRec.RepositoryName.Trim() + "~bu-1~");
-						aSummary.Add("");
-						this.ShowAddress(aRepositoryRec.Address, aSummary);
-						aSummary.Add("");
-						aSummary.Add(LangMan.LSList[56] + ":");
+						summary.Add("");
+						summary.Add("~ub+1~" + repositoryRec.RepositoryName.Trim() + "~bu-1~");
+						summary.Add("");
+						this.ShowAddress(repositoryRec.Address, summary);
+						summary.Add("");
+						summary.Add(LangMan.LSList[56] + ":");
 
 						int num = this.FTree.RecordsCount - 1;
 						for (int i = 0; i <= num; i++)
@@ -3833,24 +3816,24 @@ namespace GKUI
 
 							if (rec is TGEDCOMSourceRecord)
 							{
-								TGEDCOMSourceRecord srcRec = (TGEDCOMSourceRecord)rec;
+								TGEDCOMSourceRecord srcRec = rec as TGEDCOMSourceRecord;
 
 								int num2 = srcRec.RepositoryCitations.Count - 1;
 								for (int j = 0; j <= num2; j++)
 								{
-									if (object.Equals(srcRec.RepositoryCitations[j].Value, aRepositoryRec))
-									{
-										aSummary.Add("    " + TGenEngine.GenRecordLink(this.FTree, srcRec, false));
+									if (object.Equals(srcRec.RepositoryCitations[j].Value, repositoryRec)) {
+										summary.Add("    " + TGenEngine.GenRecordLink(srcRec, false));
 									}
 								}
 							}
 						}
-						this.RecListNotesRefresh(aRepositoryRec, null, aSummary);
+
+						this.RecListNotesRefresh(repositoryRec, null, summary);
 					}
 				}
 				finally
 				{
-					aSummary.EndUpdate();
+					summary.EndUpdate();
 				}
 			}
 			catch (Exception E)
@@ -3859,78 +3842,69 @@ namespace GKUI
 			}
 		}
 
-		public void ShowResearchInfo(TGEDCOMResearchRecord aResearchRec, StringList aSummary)
+		public void ShowResearchInfo(TGEDCOMResearchRecord researchRec, StringList summary)
 		{
 			try
 			{
-				aSummary.BeginUpdate();
+				summary.BeginUpdate();
 				try
 				{
-					aSummary.Clear();
-					if (aResearchRec != null)
+					summary.Clear();
+					if (researchRec != null)
 					{
-						aSummary.Add("");
-						aSummary.Add(LangMan.LSList[125] + ": \"~ub+1~" + aResearchRec.ResearchName.Trim() + "~bu-1~\"");
-						aSummary.Add("");
-						aSummary.Add(LangMan.LSList[178] + ": " + LangMan.LSList[(int)TGenEngine.PriorityNames[(int)aResearchRec.Priority] - 1]);
-						aSummary.Add(string.Concat(new string[]
+						summary.Add("");
+						summary.Add(LangMan.LSList[125] + ": \"~ub+1~" + researchRec.ResearchName.Trim() + "~bu-1~\"");
+						summary.Add("");
+						summary.Add(LangMan.LSList[178] + ": " + LangMan.LSList[(int)TGenEngine.PriorityNames[(int)researchRec.Priority] - 1]);
+						summary.Add(LangMan.LSList[117] + ": " + LangMan.LSList[(int)TGenEngine.StatusNames[(int)researchRec.Status] - 1] + " (" + researchRec.Percent.ToString() + "%)");
+						summary.Add(LangMan.LSList[180] + ": " + TGenEngine.GEDCOMDateToStr(researchRec.StartDate, TGenEngine.TDateFormat.dfDD_MM_YYYY));
+						summary.Add(LangMan.LSList[181] + ": " + TGenEngine.GEDCOMDateToStr(researchRec.StopDate, TGenEngine.TDateFormat.dfDD_MM_YYYY));
+
+						if (researchRec.Tasks.Count > 0)
 						{
-							LangMan.LSList[117], 
-							": ", 
-							LangMan.LSList[(int)TGenEngine.StatusNames[(int)aResearchRec.Status] - 1], 
-							" (", 
-							aResearchRec.Percent.ToString(), 
-							"%)"
-						}));
+							summary.Add("");
+							summary.Add(LangMan.LSList[60] + ":");
 
-						aSummary.Add(LangMan.LSList[180] + ": " + TGenEngine.GEDCOMDateToStr(aResearchRec.StartDate, TGenEngine.TDateFormat.dfDD_MM_YYYY));
-						aSummary.Add(LangMan.LSList[181] + ": " + TGenEngine.GEDCOMDateToStr(aResearchRec.StopDate, TGenEngine.TDateFormat.dfDD_MM_YYYY));
-
-						if (aResearchRec.Tasks.Count > 0)
-						{
-							aSummary.Add("");
-							aSummary.Add(LangMan.LSList[60] + ":");
-
-							int num = aResearchRec.Tasks.Count - 1;
+							int num = researchRec.Tasks.Count - 1;
 							for (int i = 0; i <= num; i++)
 							{
-								TGEDCOMTaskRecord taskRec = aResearchRec.Tasks[i].Value as TGEDCOMTaskRecord;
-								aSummary.Add("    " + TGenEngine.GenRecordLink(this.FTree, taskRec, false));
+								TGEDCOMTaskRecord taskRec = researchRec.Tasks[i].Value as TGEDCOMTaskRecord;
+								summary.Add("    " + TGenEngine.GenRecordLink(taskRec, false));
 							}
 						}
 
-						if (aResearchRec.Communications.Count > 0)
+						if (researchRec.Communications.Count > 0)
 						{
-							aSummary.Add("");
-							aSummary.Add(LangMan.LSList[61] + ":");
+							summary.Add("");
+							summary.Add(LangMan.LSList[61] + ":");
 
-							int num2 = aResearchRec.Communications.Count - 1;
+							int num2 = researchRec.Communications.Count - 1;
 							for (int i = 0; i <= num2; i++)
 							{
-								TGEDCOMCommunicationRecord corrRec = aResearchRec.Communications[i].Value as TGEDCOMCommunicationRecord;
-								aSummary.Add("    " + TGenEngine.GenRecordLink(this.FTree, corrRec, false));
+								TGEDCOMCommunicationRecord corrRec = researchRec.Communications[i].Value as TGEDCOMCommunicationRecord;
+								summary.Add("    " + TGenEngine.GenRecordLink(corrRec, false));
 							}
 						}
 
-						if (aResearchRec.Groups.Count != 0)
+						if (researchRec.Groups.Count != 0)
 						{
-							aSummary.Add("");
-							aSummary.Add(LangMan.LSList[58] + ":");
+							summary.Add("");
+							summary.Add(LangMan.LSList[58] + ":");
 
-							int num3 = aResearchRec.Groups.Count - 1;
+							int num3 = researchRec.Groups.Count - 1;
 							for (int i = 0; i <= num3; i++)
 							{
-								TGEDCOMGroupRecord grp = aResearchRec.Groups[i].Value as TGEDCOMGroupRecord;
-								aSummary.Add("    " + TGenEngine.HyperLink(grp.XRef, grp.GroupName, 0));
+								TGEDCOMGroupRecord grp = researchRec.Groups[i].Value as TGEDCOMGroupRecord;
+								summary.Add("    " + TGenEngine.HyperLink(grp.XRef, grp.GroupName, 0));
 							}
 						}
 
-						this.RecListNotesRefresh(aResearchRec, null, aSummary);
+						this.RecListNotesRefresh(researchRec, null, summary);
 					}
 				}
 				finally
 				{
-					aSummary.EndUpdate();
+					summary.EndUpdate();
 				}
 			}
 			catch (Exception E)
@@ -3939,28 +3913,28 @@ namespace GKUI
 			}
 		}
 
-		public void ShowTaskInfo(TGEDCOMTaskRecord aTaskRec, StringList aSummary)
+		public void ShowTaskInfo(TGEDCOMTaskRecord taskRec, StringList summary)
 		{
 			try
 			{
-				aSummary.BeginUpdate();
+				summary.BeginUpdate();
 				try
 				{
-					aSummary.Clear();
-					if (aTaskRec != null)
+					summary.Clear();
+					if (taskRec != null)
 					{
-						aSummary.Add("");
-						aSummary.Add(LangMan.LSList[182] + ": ~ub+1~" + TGenEngine.GetTaskGoalStr(this.FTree, aTaskRec) + "~bu-1~");
-						aSummary.Add("");
-						aSummary.Add(LangMan.LSList[178] + ": " + LangMan.LSList[(int)TGenEngine.PriorityNames[(int)aTaskRec.Priority] - 1]);
-						aSummary.Add(LangMan.LSList[180] + ": " + TGenEngine.GEDCOMDateToStr(aTaskRec.StartDate, TGenEngine.TDateFormat.dfDD_MM_YYYY));
-						aSummary.Add(LangMan.LSList[181] + ": " + TGenEngine.GEDCOMDateToStr(aTaskRec.StopDate, TGenEngine.TDateFormat.dfDD_MM_YYYY));
-						this.RecListNotesRefresh(aTaskRec, null, aSummary);
+						summary.Add("");
+						summary.Add(LangMan.LSList[182] + ": ~ub+1~" + TGenEngine.GetTaskGoalStr(taskRec) + "~bu-1~");
+						summary.Add("");
+						summary.Add(LangMan.LSList[178] + ": " + LangMan.LSList[(int)TGenEngine.PriorityNames[(int)taskRec.Priority] - 1]);
+						summary.Add(LangMan.LSList[180] + ": " + TGenEngine.GEDCOMDateToStr(taskRec.StartDate, TGenEngine.TDateFormat.dfDD_MM_YYYY));
+						summary.Add(LangMan.LSList[181] + ": " + TGenEngine.GEDCOMDateToStr(taskRec.StopDate, TGenEngine.TDateFormat.dfDD_MM_YYYY));
+						this.RecListNotesRefresh(taskRec, null, summary);
 					}
 				}
 				finally
 				{
-					aSummary.EndUpdate();
+					summary.EndUpdate();
 				}
 			}
 			catch (Exception E)
@@ -3969,29 +3943,29 @@ namespace GKUI
 			}
 		}
 
-		public void ShowCommunicationInfo(TGEDCOMCommunicationRecord aCommunicationRec, StringList aSummary)
+		public void ShowCommunicationInfo(TGEDCOMCommunicationRecord commRec, StringList summary)
 		{
 			try
 			{
-				aSummary.BeginUpdate();
+				summary.BeginUpdate();
 				try
 				{
-					aSummary.Clear();
-					if (aCommunicationRec != null)
+					summary.Clear();
+					if (commRec != null)
 					{
-						aSummary.Add("");
-						aSummary.Add(LangMan.LSList[183] + ": \"~ub+1~" + aCommunicationRec.CommName.Trim() + "~bu-1~\"");
-						aSummary.Add("");
-						aSummary.Add(LangMan.LSList[184] + ": " + TGenEngine.GetCorresponderStr(this.FTree, aCommunicationRec, true));
-						aSummary.Add(LangMan.LSList[113] + ": " + LangMan.LSList[(int)TGenEngine.CommunicationNames[(int)aCommunicationRec.CommunicationType] - 1]);
-						aSummary.Add(LangMan.LSList[139] + ": " + TGenEngine.GEDCOMDateToStr(aCommunicationRec.Date, TGenEngine.TDateFormat.dfDD_MM_YYYY));
-						this.RecListNotesRefresh(aCommunicationRec, null, aSummary);
-						this.RecListMediaRefresh(aCommunicationRec, null, aSummary);
+						summary.Add("");
+						summary.Add(LangMan.LSList[183] + ": \"~ub+1~" + commRec.CommName.Trim() + "~bu-1~\"");
+						summary.Add("");
+						summary.Add(LangMan.LSList[184] + ": " + TGenEngine.GetCorresponderStr(this.FTree, commRec, true));
+						summary.Add(LangMan.LSList[113] + ": " + LangMan.LSList[(int)TGenEngine.CommunicationNames[(int)commRec.CommunicationType] - 1]);
+						summary.Add(LangMan.LSList[139] + ": " + TGenEngine.GEDCOMDateToStr(commRec.Date, TGenEngine.TDateFormat.dfDD_MM_YYYY));
+						this.RecListNotesRefresh(commRec, null, summary);
+						this.RecListMediaRefresh(commRec, null, summary);
 					}
 				}
 				finally
 				{
-					aSummary.EndUpdate();
+					summary.EndUpdate();
 				}
 			}
 			catch (Exception E)
@@ -4000,47 +3974,47 @@ namespace GKUI
 			}
 		}
 
-		public void ShowLocationInfo(TGEDCOMLocationRecord aLocationRec, StringList aSummary)
+		public void ShowLocationInfo(TGEDCOMLocationRecord locRec, StringList summary)
 		{
 			try
 			{
-				aSummary.BeginUpdate();
+				summary.BeginUpdate();
 				StringList link_list = new StringList();
 				try
 				{
-					aSummary.Clear();
-					if (aLocationRec != null)
+					summary.Clear();
+					if (locRec != null)
 					{
-						aSummary.Add("");
-						aSummary.Add("~ub+1~" + aLocationRec.LocationName.Trim() + "~bu-1~");
-						aSummary.Add("");
-						aSummary.Add(LangMan.LSList[171] + ": " + aLocationRec.Map.Lati);
-						aSummary.Add(LangMan.LSList[172] + ": " + aLocationRec.Map.Long);
+						summary.Add("");
+						summary.Add("~ub+1~" + locRec.LocationName.Trim() + "~bu-1~");
+						summary.Add("");
+						summary.Add(LangMan.LSList[171] + ": " + locRec.Map.Lati);
+						summary.Add(LangMan.LSList[172] + ": " + locRec.Map.Long);
 
-						TGenEngine.GetLocationLinks(this.FTree, aLocationRec, ref link_list);
+						TGenEngine.GetLocationLinks(this.FTree, locRec, ref link_list);
 
 						if (link_list.Count > 0)
 						{
 							link_list.Sort();
 
-							aSummary.Add("");
-							aSummary.Add(LangMan.LSList[234] + ":");
+							summary.Add("");
+							summary.Add(LangMan.LSList[234] + ":");
 
 							int num = link_list.Count - 1;
 							for (int i = 0; i <= num; i++)
 							{
-								aSummary.Add("    " + link_list[i]);
+								summary.Add("    " + link_list[i]);
 							}
 						}
 
-						this.RecListNotesRefresh(aLocationRec, null, aSummary);
-						this.RecListMediaRefresh(aLocationRec, null, aSummary);
+						this.RecListNotesRefresh(locRec, null, summary);
+						this.RecListMediaRefresh(locRec, null, summary);
 					}
 				}
 				finally
 				{
 					link_list.Free();
-					aSummary.EndUpdate();
+					summary.EndUpdate();
 				}
 			}
 			catch (Exception E)
@@ -4173,86 +4147,66 @@ namespace GKUI
 
 		public StringList GetRecordContext(TGEDCOMRecord aRecord)
 		{
-			//string res = "";
 			StringList ctx = new StringList();
-			if (aRecord != null)
+
+            if (aRecord != null)
 			{
 				try
 				{
-					//StringList ctx = new StringList();
-					try
-					{
 						switch (aRecord.RecordType)
 						{
 							case TGEDCOMRecordType.rtIndividual:
-								{
-									this.ShowPersonInfo(aRecord as TGEDCOMIndividualRecord, ctx);
-									break;
-								}
+								this.ShowPersonInfo(aRecord as TGEDCOMIndividualRecord, ctx);
+								break;
+
 							case TGEDCOMRecordType.rtFamily:
-								{
-									this.ShowFamilyInfo(aRecord as TGEDCOMFamilyRecord, ctx);
-									break;
-								}
+								this.ShowFamilyInfo(aRecord as TGEDCOMFamilyRecord, ctx);
+								break;
+
 							case TGEDCOMRecordType.rtNote:
-								{
-									this.ShowNoteInfo(aRecord as TGEDCOMNoteRecord, ctx);
-									break;
-								}
+								this.ShowNoteInfo(aRecord as TGEDCOMNoteRecord, ctx);
+								break;
+
 							case TGEDCOMRecordType.rtMultimedia:
-								{
-									this.ShowMultimediaInfo(aRecord as TGEDCOMMultimediaRecord, ctx);
-									break;
-								}
+								this.ShowMultimediaInfo(aRecord as TGEDCOMMultimediaRecord, ctx);
+								break;
+
 							case TGEDCOMRecordType.rtSource:
-								{
-									this.ShowSourceInfo(aRecord as TGEDCOMSourceRecord, ctx);
-									break;
-								}
+								this.ShowSourceInfo(aRecord as TGEDCOMSourceRecord, ctx);
+								break;
+
 							case TGEDCOMRecordType.rtRepository:
-								{
-									this.ShowRepositoryInfo(aRecord as TGEDCOMRepositoryRecord, ctx);
-									break;
-								}
+								this.ShowRepositoryInfo(aRecord as TGEDCOMRepositoryRecord, ctx);
+								break;
+
 							case TGEDCOMRecordType.rtGroup:
-								{
-									this.ShowGroupInfo(aRecord as TGEDCOMGroupRecord, ctx);
-									break;
-								}
+								this.ShowGroupInfo(aRecord as TGEDCOMGroupRecord, ctx);
+								break;
+
 							case TGEDCOMRecordType.rtResearch:
-								{
-									this.ShowResearchInfo(aRecord as TGEDCOMResearchRecord, ctx);
-									break;
-								}
+								this.ShowResearchInfo(aRecord as TGEDCOMResearchRecord, ctx);
+								break;
+
 							case TGEDCOMRecordType.rtTask:
-								{
-									this.ShowTaskInfo(aRecord as TGEDCOMTaskRecord, ctx);
-									break;
-								}
+								this.ShowTaskInfo(aRecord as TGEDCOMTaskRecord, ctx);
+								break;
+
 							case TGEDCOMRecordType.rtCommunication:
-								{
-									this.ShowCommunicationInfo(aRecord as TGEDCOMCommunicationRecord, ctx);
-									break;
-								}
+								this.ShowCommunicationInfo(aRecord as TGEDCOMCommunicationRecord, ctx);
+								break;
+
 							case TGEDCOMRecordType.rtLocation:
-								{
-									this.ShowLocationInfo(aRecord as TGEDCOMLocationRecord, ctx);
-									break;
-								}
+								this.ShowLocationInfo(aRecord as TGEDCOMLocationRecord, ctx);
+								break;
 						}
-						//res = ctx.Text;
-					}
-					finally
-					{
-						//ctx.Free();
-					}
 				}
 				catch (Exception E)
 				{
 					SysUtils.LogWrite("GKBase.GetRecordContext(): " + E.Message);
 				}
 			}
-			return ctx;
+
+            return ctx;
 		}
 
 		public string GetStatusString()

@@ -169,7 +169,7 @@ namespace GedCom551
 				while (this._RepositoryCitations.Count > 0)
 				{
 					TGEDCOMObject obj = this._RepositoryCitations.Extract(0);
-					(obj as TGEDCOMCustomTag).ResetParent(toSource);
+                    (obj as TGEDCOMTag).ResetParent(toSource);
 					toSource.RepositoryCitations.Add(obj as TGEDCOMRepositoryCitation);
 				}
 			}
@@ -231,7 +231,7 @@ namespace GedCom551
 			bool match = false;
 
 			if (record != null) {
-				TGEDCOMSourceRecord source = (TGEDCOMSourceRecord)record;
+				TGEDCOMSourceRecord source = record as TGEDCOMSourceRecord;
 
 				string title1 = this.FiledByEntry;
 				string title2 = source.FiledByEntry;
@@ -246,7 +246,7 @@ namespace GedCom551
 		{
 		}
 
-		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
 		{
 			return new TGEDCOMSourceRecord(AOwner, AParent, AName, AValue);
 		}

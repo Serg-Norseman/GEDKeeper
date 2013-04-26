@@ -51,11 +51,39 @@ namespace GedCom551
 			return Result;
 		}
 
+        public void aux_GetTaskGoal(ref TGoalType aType, ref TGEDCOMRecord aGoalRec)
+        {
+            TGEDCOMTree tree = this.Owner;
+            aGoalRec = tree.XRefIndex_Find(TGEDCOMObject.CleanXRef(this.Goal));
+            if (aGoalRec is TGEDCOMIndividualRecord)
+            {
+                aType = TGoalType.gtIndividual;
+            }
+            else
+            {
+                if (aGoalRec is TGEDCOMFamilyRecord)
+                {
+                    aType = TGoalType.gtFamily;
+                }
+                else
+                {
+                    if (aGoalRec is TGEDCOMSourceRecord)
+                    {
+                        aType = TGoalType.gtSource;
+                    }
+                    else
+                    {
+                        aType = TGoalType.gtOther;
+                    }
+                }
+            }
+        }
+
 		public TGEDCOMTaskRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
 		{
 		}
 
-		public new static TGEDCOMCustomTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
 		{
 			return new TGEDCOMTaskRecord(AOwner, AParent, AName, AValue);
 		}

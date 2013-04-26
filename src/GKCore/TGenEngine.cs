@@ -12,6 +12,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+
 using Ext.Utils;
 using GedCom551;
 
@@ -21,6 +22,7 @@ using GedCom551;
 
 namespace GKCore
 {
+    [Serializable]
 	public class MediaFileNotFoundException : Exception
 	{
 		
@@ -404,27 +406,20 @@ namespace GKCore
 		public void AddFamilySpouse(TGEDCOMFamilyRecord aFamily, TGEDCOMIndividualRecord aSpouse)
 		{
 			TGEDCOMSex sex = aSpouse.Sex;
-			if (sex != TGEDCOMSex.svNone)
+
+            if (sex != TGEDCOMSex.svNone && sex != TGEDCOMSex.svUndetermined)
 			{
-				if (sex != TGEDCOMSex.svMale)
-				{
-					if (sex != TGEDCOMSex.svFemale)
-					{
-						if (sex == TGEDCOMSex.svUndetermined)
-						{
-							return;
-						}
-					}
-					else
-					{
-						aFamily.Wife.Value = aSpouse;
-					}
-				}
-				else
-				{
-					aFamily.Husband.Value = aSpouse;
-				}
-				TGEDCOMSpouseToFamilyLink spLink = new TGEDCOMSpouseToFamilyLink(this.FTree, aSpouse, "", "");
+                switch (sex)
+                {
+                    case TGEDCOMSex.svMale:
+                        aFamily.Husband.Value = aSpouse;
+                        break;
+                    case TGEDCOMSex.svFemale:
+                        aFamily.Wife.Value = aSpouse;
+                        break;
+                }
+
+                TGEDCOMSpouseToFamilyLink spLink = new TGEDCOMSpouseToFamilyLink(this.FTree, aSpouse, "", "");
 				spLink.Family = aFamily;
 				aSpouse.SpouseToFamilyLinks.Add(spLink);
 			}
@@ -741,7 +736,7 @@ namespace GKCore
 				TGEDCOMRecord rec = this.FTree[i];
 				if (rec is TGEDCOMIndividualRecord)
 				{
-					TGEDCOMIndividualRecord ind = (TGEDCOMIndividualRecord)rec;
+					TGEDCOMIndividualRecord ind = rec as TGEDCOMIndividualRecord;
 					aStats.persons++;
 
 					switch (ind.Sex) {
@@ -1042,7 +1037,7 @@ namespace GKCore
 
 					if (rec is TGEDCOMIndividualRecord && aMode != TStatMode.smSpousesDiff)
 					{
-						TGEDCOMIndividualRecord iRec = (TGEDCOMIndividualRecord)rec;
+						TGEDCOMIndividualRecord iRec = rec as TGEDCOMIndividualRecord;
 						
 						if (aMode != TStatMode.smAAF_1 && aMode != TStatMode.smAAF_2)
 						{
@@ -1088,7 +1083,7 @@ namespace GKCore
 					{
 						if (rec is TGEDCOMFamilyRecord && aMode == TStatMode.smSpousesDiff)
 						{
-							TGEDCOMFamilyRecord fRec = (TGEDCOMFamilyRecord)rec;
+							TGEDCOMFamilyRecord fRec = rec as TGEDCOMFamilyRecord;
 							aVals.Add(new TListVal(TGenEngine.aux_GetFamilyStr(fRec), TGenEngine.GetSpousesDiff(fRec)));
 						}
 					}
@@ -1276,7 +1271,7 @@ namespace GKCore
 			}
 		}
 
-		public bool MediaSave(string aFileName, TGKStoreType aStoreType, ref string aRefPath)
+		public bool MediaSave(string aFileName, TGKStoreType storeType, ref string aRefPath)
 		{
 			bool result = true;
 
@@ -1323,7 +1318,7 @@ namespace GKCore
 				}
 			}
 
-			switch (aStoreType) {
+			switch (storeType) {
 				case TGKStoreType.gstReference:
 					{
 						aRefPath = aFileName;
@@ -1332,7 +1327,7 @@ namespace GKCore
 				case TGKStoreType.gstArchive:
 					{
 						sfn = spath + sfn;
-						aRefPath = GKStoreTypes[(int)aStoreType].Sign + sfn;
+						aRefPath = GKStoreTypes[(int)storeType].Sign + sfn;
 						this.ArcFileSave(aFileName, sfn);
 						break;
 					}
@@ -1341,7 +1336,7 @@ namespace GKCore
 						string target_dir = this.GetStgFolder(true) + spath;
 						string target_fn = target_dir + sfn;
 
-						aRefPath = GKStoreTypes[(int)aStoreType].Sign + spath + sfn;
+						aRefPath = GKStoreTypes[(int)storeType].Sign + spath + sfn;
 
 						if (!Directory.Exists(target_dir)) Directory.CreateDirectory(target_dir);
 						try
@@ -1361,38 +1356,38 @@ namespace GKCore
 			return result;
 		}
 
-		public TGEDCOMMultimediaLink SetPrimaryMultimediaRecord(TGEDCOMIndividualRecord aRec, TGEDCOMMultimediaRecord mmRec)
+		public TGEDCOMMultimediaLink SetPrimaryMultimediaRecord(TGEDCOMIndividualRecord iRec, TGEDCOMMultimediaRecord mediaRec)
 		{
 			TGEDCOMMultimediaLink mmLink = null;
-			int num = aRec.MultimediaLinks.Count - 1;
+			int num = iRec.MultimediaLinks.Count - 1;
 			for (int i = 0; i <= num; i++)
 			{
-				if (aRec.MultimediaLinks[i].Value == mmRec)
+				if (iRec.MultimediaLinks[i].Value == mediaRec)
 				{
-					mmLink = aRec.MultimediaLinks[i];
+					mmLink = iRec.MultimediaLinks[i];
 					break;
 				}
 			}
 
 			if (mmLink == null)
 			{
-				mmLink = new TGEDCOMMultimediaLink(this.FTree, aRec, "", "");
-				mmLink.Value = mmRec;
-				aRec.MultimediaLinks.Add(mmLink);
+				mmLink = new TGEDCOMMultimediaLink(this.FTree, iRec, "", "");
+				mmLink.Value = mediaRec;
+				iRec.MultimediaLinks.Add(mmLink);
 			}
 
 			mmLink.IsPrimary = true;
 			return mmLink;
 		}
 
-		public TGEDCOMMultimediaLink GetPrimaryMultimediaLink(TGEDCOMIndividualRecord aRec)
+		public TGEDCOMMultimediaLink GetPrimaryMultimediaLink(TGEDCOMIndividualRecord iRec)
 		{
 			TGEDCOMMultimediaLink result = null;
 
-			int num = aRec.MultimediaLinks.Count - 1;
+			int num = iRec.MultimediaLinks.Count - 1;
 			for (int i = 0; i <= num; i++)
 			{
-				TGEDCOMMultimediaLink mmLink = aRec.MultimediaLinks[i];
+				TGEDCOMMultimediaLink mmLink = iRec.MultimediaLinks[i];
 				if (mmLink.IsPrimary)
 				{
 					result = mmLink;
@@ -1456,12 +1451,12 @@ namespace GKCore
 			return result;
 		}
 
-		public Bitmap GetPrimaryBitmap(TGEDCOMIndividualRecord aRec, int thumbWidth, int thumbHeight, bool throwException)
+		public Bitmap GetPrimaryBitmap(TGEDCOMIndividualRecord iRec, int thumbWidth, int thumbHeight, bool throwException)
 		{
 			Bitmap result = null;
 			try
 			{
-				TGEDCOMMultimediaLink mmLink = this.GetPrimaryMultimediaLink(aRec);
+				TGEDCOMMultimediaLink mmLink = this.GetPrimaryMultimediaLink(iRec);
 				if (mmLink != null)
 				{
 					TGEDCOMMultimediaRecord mmRec = mmLink.Value as TGEDCOMMultimediaRecord;
@@ -2036,19 +2031,19 @@ namespace GKCore
 			return result;
 		}
 
-		public static string GetBirthDate(TGEDCOMIndividualRecord iRec, TDateFormat aFormat, bool aCompact)
+		public static string GetBirthDate(TGEDCOMIndividualRecord iRec, TDateFormat dateFormat, bool compact)
 		{
 			TGEDCOMCustomEvent evt = TGenEngine.GetIndividualEvent(iRec, "BIRT");
-			string result = ((evt == null) ? "" : TGenEngine.GEDCOMCustomDateToStr(evt.Detail.Date, aFormat, false));
-			if (aCompact) result = TGenEngine.CompactDate(result);
+			string result = ((evt == null) ? "" : TGenEngine.GEDCOMCustomDateToStr(evt.Detail.Date, dateFormat, false));
+			if (compact) result = TGenEngine.CompactDate(result);
 			return result;
 		}
 
-		public static string GetDeathDate(TGEDCOMIndividualRecord iRec, TDateFormat aFormat, bool aCompact)
+		public static string GetDeathDate(TGEDCOMIndividualRecord iRec, TDateFormat dateFormat, bool compact)
 		{
 			TGEDCOMCustomEvent evt = TGenEngine.GetIndividualEvent(iRec, "DEAT");
-			string result = ((evt == null) ? "" : TGenEngine.GEDCOMCustomDateToStr(evt.Detail.Date, aFormat, false));
-			if (aCompact) result = TGenEngine.CompactDate(result);
+			string result = ((evt == null) ? "" : TGenEngine.GEDCOMCustomDateToStr(evt.Detail.Date, dateFormat, false));
+			if (compact) result = TGenEngine.CompactDate(result);
 			return result;
 		}
 
@@ -2101,7 +2096,7 @@ namespace GKCore
 			return TGenEngine.GetPlaceStr(TGenEngine.GetIndividualEvent(iRec, "RESI"), IncludeAddress);
 		}
 
-		public static string GetPlaceStr(TGEDCOMCustomEvent aEvent, bool IncludeAddress)
+		public static string GetPlaceStr(TGEDCOMCustomEvent aEvent, bool includeAddress)
 		{
 			string Result;
 			if (aEvent == null)
@@ -2111,7 +2106,7 @@ namespace GKCore
 			else
 			{
 				Result = aEvent.Detail.Place.StringValue;
-				if (IncludeAddress)
+				if (includeAddress)
 				{
 					string resi = aEvent.StringValue;
 					string addr = aEvent.Detail.Address.Address.Text.Trim();
@@ -2157,7 +2152,7 @@ namespace GKCore
 			return st + ": " + iAttr.StringValue + place;
 		}
 
-		public static string GetMarriageDate(TGEDCOMFamilyRecord fRec, TDateFormat aFormat)
+		public static string GetMarriageDate(TGEDCOMFamilyRecord fRec, TDateFormat dateFormat)
 		{
 			string result;
 
@@ -2168,7 +2163,7 @@ namespace GKCore
 			else
 			{
 				TGEDCOMFamilyEvent evt = fRec.aux_GetFamilyEvent("MARR");
-				result = ((evt == null) ? "" : TGenEngine.GEDCOMCustomDateToStr(evt.Detail.Date, aFormat, false));
+				result = ((evt == null) ? "" : TGenEngine.GEDCOMCustomDateToStr(evt.Detail.Date, dateFormat, false));
 			}
 
 			return result;
@@ -2769,14 +2764,14 @@ namespace GKCore
 				TGEDCOMRecord rec = aTree[i];
 				if (rec is TGEDCOMIndividualRecord)
 				{
-					TGEDCOMIndividualRecord i_rec = (TGEDCOMIndividualRecord)rec;
+					TGEDCOMIndividualRecord i_rec = rec as TGEDCOMIndividualRecord;
 					int num2 = i_rec.IndividualEvents.Count - 1;
 					for (int j = 0; j <= num2; j++)
 					{
 						TGEDCOMCustomEvent evt = i_rec.IndividualEvents[j];
 						if (evt.Detail.Place.Location.Value == aLocation)
 						{
-							aList.Add(TGenEngine.GenRecordLink(aTree, rec, true) + ", " + TGenEngine.GetEventName(evt).ToLower());
+							aList.Add(TGenEngine.GenRecordLink(rec, true) + ", " + TGenEngine.GetEventName(evt).ToLower());
 						}
 					}
 				}
@@ -2784,14 +2779,13 @@ namespace GKCore
 				{
 					if (rec is TGEDCOMFamilyRecord)
 					{
-						TGEDCOMFamilyRecord f_rec = (TGEDCOMFamilyRecord)rec;
+						TGEDCOMFamilyRecord f_rec = rec as TGEDCOMFamilyRecord;
 						int num3 = f_rec.FamilyEvents.Count - 1;
 						for (int j = 0; j <= num3; j++)
 						{
 							TGEDCOMCustomEvent evt = f_rec.FamilyEvents[j];
-							if (evt.Detail.Place.Location.Value == aLocation)
-							{
-								aList.Add(TGenEngine.GenRecordLink(aTree, rec, true) + ", " + TGenEngine.GetEventName(evt).ToLower());
+							if (evt.Detail.Place.Location.Value == aLocation) {
+								aList.Add(TGenEngine.GenRecordLink(rec, true) + ", " + TGenEngine.GetEventName(evt).ToLower());
 							}
 						}
 					}
@@ -2810,32 +2804,26 @@ namespace GKCore
 			return Result;
 		}
 
-		public static string GenRecordLink(TGEDCOMTree aTree, TGEDCOMRecord aRecord, bool aSigned)
+		public static string GenRecordLink(TGEDCOMRecord aRecord, bool signed)
 		{
-			string Result;
-			if (aRecord == null)
-			{
-				Result = "";
-			}
-			else
-			{
+            string result = "";
+
+            if (aRecord != null) {
 				string sign = "";
-				if (aSigned)
-				{
+
+                if (signed) {
 					TGEDCOMRecordType recordType = aRecord.RecordType;
-					if (recordType != TGEDCOMRecordType.rtIndividual)
-					{
+					if (recordType != TGEDCOMRecordType.rtIndividual) {
 						if (recordType == TGEDCOMRecordType.rtFamily || (byte)recordType - (byte)TGEDCOMRecordType.rtMultimedia < (byte)TGEDCOMRecordType.rtResearch)
 						{
 							sign = LangMan.LSList[(int)RecordTypes[(int)aRecord.RecordType] - 1] + ": ";
 						}
-					}
-					else
-					{
+					} else {
 						sign = "";
 					}
 				}
-				string st;
+
+                string st;
 				switch (aRecord.RecordType) {
 					case TGEDCOMRecordType.rtIndividual:
 						st = (aRecord as TGEDCOMIndividualRecord).aux_GetNameStr(true, false);
@@ -2859,7 +2847,7 @@ namespace GKCore
 						st = (aRecord as TGEDCOMResearchRecord).ResearchName;
 						break;
 					case TGEDCOMRecordType.rtTask:
-						st = TGenEngine.GetTaskGoalStr(aTree, aRecord as TGEDCOMTaskRecord);
+						st = TGenEngine.GetTaskGoalStr(aRecord as TGEDCOMTaskRecord);
 						break;
 					case TGEDCOMRecordType.rtCommunication:
 						st = (aRecord as TGEDCOMCommunicationRecord).CommName;
@@ -2871,9 +2859,11 @@ namespace GKCore
 						st = aRecord.XRef;
 						break;
 				}
-				Result = TGenEngine.HyperLink(aRecord.XRef, sign + st, 0);
+
+                result = TGenEngine.HyperLink(aRecord.XRef, sign + st, 0);
 			}
-			return Result;
+
+            return result;
 		}
 
 		public static string GetCorresponderStr(TGEDCOMTree aTree, TGEDCOMCommunicationRecord aRec, bool aLink)
@@ -2894,39 +2884,11 @@ namespace GKCore
 			return Result;
 		}
 
-		// FIXME: aux_candidate
-		public static void GetTaskGoal(TGEDCOMTree aTree, TGEDCOMTaskRecord aTaskRec, ref TGoalType aType, ref TGEDCOMRecord aGoalRec)
-		{
-			aGoalRec = aTree.XRefIndex_Find(TGEDCOMObject.CleanXRef(aTaskRec.Goal));
-			if (aGoalRec is TGEDCOMIndividualRecord)
-			{
-				aType = TGoalType.gtIndividual;
-			}
-			else
-			{
-				if (aGoalRec is TGEDCOMFamilyRecord)
-				{
-					aType = TGoalType.gtFamily;
-				}
-				else
-				{
-					if (aGoalRec is TGEDCOMSourceRecord)
-					{
-						aType = TGoalType.gtSource;
-					}
-					else
-					{
-						aType = TGoalType.gtOther;
-					}
-				}
-			}
-		}
-
-		public static string GetTaskGoalStr(TGEDCOMTree aTree, TGEDCOMTaskRecord aRec)
+		public static string GetTaskGoalStr(TGEDCOMTaskRecord taskRec)
 		{
 			TGoalType gt = TGoalType.gtOther;
 			TGEDCOMRecord tempRec = null;
-			TGenEngine.GetTaskGoal(aTree, aRec, ref gt, ref tempRec);
+            taskRec.aux_GetTaskGoal(ref gt, ref tempRec);
 			string Result = "";
 
 			switch (gt) {
@@ -2934,13 +2896,13 @@ namespace GKCore
 					Result = (tempRec as TGEDCOMIndividualRecord).aux_GetNameStr(true, false);
 					break;
 				case TGoalType.gtFamily:
-					Result = TGenEngine.aux_GetFamilyStr((TGEDCOMFamilyRecord)tempRec);
+					Result = TGenEngine.aux_GetFamilyStr(tempRec as TGEDCOMFamilyRecord);
 					break;
 				case TGoalType.gtSource:
-					Result = ((TGEDCOMSourceRecord)tempRec).FiledByEntry;
+					Result = (tempRec as TGEDCOMSourceRecord).FiledByEntry;
 					break;
 				case TGoalType.gtOther:
-					Result = aRec.Goal;
+					Result = taskRec.Goal;
 					break;
 			}
 
@@ -3565,11 +3527,6 @@ namespace GKCore
 			Module[] mods = System.Reflection.Assembly.GetExecutingAssembly().GetModules();
 			string fn = mods[0].FullyQualifiedName;
 			return Path.GetDirectoryName(fn) + "\\";
-		}
-
-		public static void LoadExtFile([In] string aFileName)
-		{
-			SysUtils.ShellExecute(0, "open", aFileName, "", "", 5);
 		}
 
 		public static string GetAppDataPath()

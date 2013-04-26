@@ -164,7 +164,7 @@ namespace GKCore
 					TGEDCOMRecord rec = aTree[i];
 					if (rec is TGEDCOMIndividualRecord)
 					{
-						TGEDCOMIndividualRecord i_rec = (TGEDCOMIndividualRecord)rec;
+						TGEDCOMIndividualRecord i_rec = rec as TGEDCOMIndividualRecord;
 
 						string nf, nn, np;
 						i_rec.aux_GetNameParts(out nf, out nn, out np);
@@ -239,13 +239,13 @@ namespace GKCore
 
 		#region Tree Check
 
-		private static void ReformNote(TGEDCOMTree aTree, TGEDCOMNotes note)
+		private static void ReformNote(TGEDCOMTree tree, TGEDCOMNotes note)
 		{
 			StringList strData = new StringList();
 			try
 			{
 				strData.Text = note.Notes.Text;
-				TGEDCOMNoteRecord noteRec = TGenEngine.CreateNoteEx(aTree, strData, null);
+				TGEDCOMNoteRecord noteRec = TGenEngine.CreateNoteEx(tree, strData, null);
 				note.Clear();
 				note.Value = noteRec;
 			}
@@ -255,20 +255,20 @@ namespace GKCore
 			}
 		}
 
-		private static void ReformMultimediaLink(TGEDCOMTree aTree, TGEDCOMMultimediaLink mmLink)
+		private static void ReformMultimediaLink(TGEDCOMTree tree, TGEDCOMMultimediaLink mmLink)
 		{
 			try
 			{
 				string title = mmLink.Title;
-				TGEDCOMMultimediaRecord mmRec = new TGEDCOMMultimediaRecord(aTree, aTree, "", "");
+				TGEDCOMMultimediaRecord mmRec = new TGEDCOMMultimediaRecord(tree, tree, "", "");
 				mmRec.InitNew();
-				aTree.AddRecord(mmRec);
+				tree.AddRecord(mmRec);
 
 				int num = mmLink.FileReferences.Count - 1;
 				for (int i = 0; i <= num; i++)
 				{
 					TGEDCOMFileReference fr = mmLink.FileReferences[i];
-					TGEDCOMFileReferenceWithTitle frt = new TGEDCOMFileReferenceWithTitle(aTree, mmRec, "", "");
+					TGEDCOMFileReferenceWithTitle frt = new TGEDCOMFileReferenceWithTitle(tree, mmRec, "", "");
 					if (fr.MultimediaFormat != TGEDCOMMultimediaFormat.mfNone)
 					{
 						frt.MultimediaFormat = fr.MultimediaFormat;
@@ -289,32 +289,32 @@ namespace GKCore
 			}
 		}
 
-		private static void ReformSourceCitation(TGEDCOMTree aTree, TGEDCOMSourceCitation sourCit)
+		private static void ReformSourceCitation(TGEDCOMTree tree, TGEDCOMSourceCitation sourCit)
 		{
 		}
 
-		private static void CheckRecord_PrepareTag([In] TGEDCOMTree aTree, TGEDCOMFormat aFormat, TGEDCOMTagWithLists tag)
+		private static void CheckRecord_PrepareTag(TGEDCOMTree tree, TGEDCOMFormat format, TGEDCOMTagWithLists tag)
 		{
 			int num = tag.MultimediaLinks.Count - 1;
 			for (int i = 0; i <= num; i++) {
 				TGEDCOMMultimediaLink mmLink = tag.MultimediaLinks[i];
-				if (!mmLink.IsPointer) ReformMultimediaLink(aTree, mmLink);
+				if (!mmLink.IsPointer) ReformMultimediaLink(tree, mmLink);
 			}
 
 			num = tag.Notes.Count - 1;
 			for (int i = 0; i <= num; i++) {
 				TGEDCOMNotes note = tag.Notes[i];
-				if (!note.IsPointer) ReformNote(aTree, note);
+				if (!note.IsPointer) ReformNote(tree, note);
 			}
 
 			num = tag.SourceCitations.Count - 1;
 			for (int i = 0; i <= num; i++) {
 				TGEDCOMSourceCitation sourCit = tag.SourceCitations[i];
-				if (!sourCit.IsPointer) ReformSourceCitation(aTree, sourCit);
+				if (!sourCit.IsPointer) ReformSourceCitation(tree, sourCit);
 			}
 		}
 
-		private static void CheckRecord_RepairTag([In] TGEDCOMTree aTree, TGEDCOMFormat aFormat, TGEDCOMTagWithLists tag)
+		private static void CheckRecord_RepairTag(TGEDCOMTree tree, TGEDCOMFormat format, TGEDCOMTagWithLists tag)
 		{
 			int num = tag.MultimediaLinks.Count - 1;
 			for (int i = num; i >= 0; i--) {
@@ -335,7 +335,7 @@ namespace GKCore
 			}
 		}
 
-		private static void CheckRecord_PreparePtr([In] TGEDCOMTree aTree, TGEDCOMFormat aFormat, TGEDCOMPointerWithNotes ptr)
+		private static void CheckRecord_PreparePtr(TGEDCOMTree tree, TGEDCOMFormat format, TGEDCOMPointerWithNotes ptr)
 		{
 			/*TGEDCOMRecord val = ptr.Value;
 			if (!string.IsNullOrEmpty(ptr.XRef) && val == null) {
@@ -346,7 +346,7 @@ namespace GKCore
 			for (int i = 0; i <= num; i++)
 			{
 				TGEDCOMNotes note = ptr.Notes[i];
-				if (!note.IsPointer) ReformNote(aTree, note);
+				if (!note.IsPointer) ReformNote(tree, note);
 			}
 		}
 
@@ -367,14 +367,14 @@ namespace GKCore
 			}
 		}
 
-		private static void CheckRecord_AddUserRef([In] TGEDCOMTree aTree, TGEDCOMFormat aFormat, TGEDCOMIndividualRecord iRec, string reference)
+		private static void CheckRecord_AddUserRef(TGEDCOMTree tree, TGEDCOMFormat format, TGEDCOMIndividualRecord iRec, string reference)
 		{
-			TGEDCOMUserReference uRef = new TGEDCOMUserReference(aTree, iRec, "", "");
+			TGEDCOMUserReference uRef = new TGEDCOMUserReference(tree, iRec, "", "");
 			uRef.StringValue = reference;
 			iRec.UserReferences.Add(uRef);
 		}
 
-		private static void CheckRecord_AttrCompatible([In] TGEDCOMTree aTree, TGEDCOMFormat aFormat, TGEDCOMIndividualRecord iRec, TGEDCOMCustomEvent aEvent)
+		private static void CheckRecord_AttrCompatible(TGEDCOMTree tree, TGEDCOMFormat format, TGEDCOMIndividualRecord iRec, TGEDCOMCustomEvent aEvent)
 		{
 			if (aEvent.Name == "_MILI")
 			{
@@ -384,11 +384,11 @@ namespace GKCore
 				{
 					if (cause.IndexOf("+") >= 0)
 					{
-						CheckRecord_AddUserRef(aTree, aFormat, iRec, TGenEngine.UserRefs[3]);
+						CheckRecord_AddUserRef(tree, format, iRec, TGenEngine.UserRefs[3]);
 					}
 					else
 					{
-						CheckRecord_AddUserRef(aTree, aFormat, iRec, TGenEngine.UserRefs[2]);
+						CheckRecord_AddUserRef(tree, format, iRec, TGenEngine.UserRefs[2]);
 					}
 
 					aEvent.Detail.Classification = "";
@@ -397,7 +397,7 @@ namespace GKCore
 				{
 					if (cause.IndexOf("т/т") >= 0)
 					{
-						CheckRecord_AddUserRef(aTree, aFormat, iRec, TGenEngine.UserRefs[4]);
+						CheckRecord_AddUserRef(tree, format, iRec, TGenEngine.UserRefs[4]);
 						aEvent.Detail.Classification = "";
 					}
 				}
@@ -408,18 +408,18 @@ namespace GKCore
 		{
 		}
 
-		private static void CheckRecord_Individual([In] TGEDCOMTree aTree, TGEDCOMFormat aFormat, TGEDCOMIndividualRecord iRec)
+		private static void CheckRecord_Individual(TGEDCOMTree tree, TGEDCOMFormat format, TGEDCOMIndividualRecord iRec)
 		{
 			int i;
-			if (aFormat == TGEDCOMFormat.gf_Native)
+			if (format == TGEDCOMFormat.gf_Native)
 			{
 				int num = iRec.IndividualEvents.Count - 1;
 				for (i = 0; i <= num; i++)
 				{
 					TGEDCOMCustomEvent evt = iRec.IndividualEvents[i];
 					CheckRecord_EventPlace(evt);
-					CheckRecord_AttrCompatible(aTree, aFormat, iRec, evt);
-					CheckRecord_RepairTag(aTree, aFormat, evt.Detail);
+					CheckRecord_AttrCompatible(tree, format, iRec, evt);
+					CheckRecord_RepairTag(tree, format, evt.Detail);
 				}
 
 				int num2 = iRec.UserReferences.Count - 1;
@@ -433,25 +433,25 @@ namespace GKCore
 				int num3 = iRec.IndividualEvents.Count - 1;
 				for (i = 0; i <= num3; i++)
 				{
-					CheckRecord_PrepareTag(aTree, aFormat, iRec.IndividualEvents[i].Detail);
+					CheckRecord_PrepareTag(tree, format, iRec.IndividualEvents[i].Detail);
 				}
 
 				int num4 = iRec.ChildToFamilyLinks.Count - 1;
 				for (i = 0; i <= num4; i++)
 				{
-					CheckRecord_PreparePtr(aTree, aFormat, iRec.ChildToFamilyLinks[i]);
+					CheckRecord_PreparePtr(tree, format, iRec.ChildToFamilyLinks[i]);
 				}
 
 				int num5 = iRec.SpouseToFamilyLinks.Count - 1;
 				for (i = 0; i <= num5; i++)
 				{
-					CheckRecord_PreparePtr(aTree, aFormat, iRec.SpouseToFamilyLinks[i]);
+					CheckRecord_PreparePtr(tree, format, iRec.SpouseToFamilyLinks[i]);
 				}
 
 				int num6 = iRec.Associations.Count - 1;
 				for (i = 0; i <= num6; i++)
 				{
-					CheckRecord_PreparePtr(aTree, aFormat, iRec.Associations[i]);
+					CheckRecord_PreparePtr(tree, format, iRec.Associations[i]);
 				}
 			}
 
@@ -470,10 +470,10 @@ namespace GKCore
 			TfmGEDKeeper.Instance.NamesTable.ImportNames(iRec);
 		}
 
-		private static void CheckRecord_Family([In] TGEDCOMTree aTree, TGEDCOMFormat aFormat, TGEDCOMFamilyRecord fam)
+		private static void CheckRecord_Family(TGEDCOMTree tree, TGEDCOMFormat format, TGEDCOMFamilyRecord fam)
 		{
 			int i;
-			if (aFormat == TGEDCOMFormat.gf_Native)
+			if (format == TGEDCOMFormat.gf_Native)
 			{
 				int num = fam.FamilyEvents.Count - 1;
 				for (i = 0; i <= num; i++)
@@ -486,7 +486,7 @@ namespace GKCore
 				int num2 = fam.FamilyEvents.Count - 1;
 				for (i = 0; i <= num2; i++)
 				{
-					TreeTools.CheckRecord_PrepareTag(aTree, aFormat, fam.FamilyEvents[i].Detail);
+					TreeTools.CheckRecord_PrepareTag(tree, format, fam.FamilyEvents[i].Detail);
 				}
 			}
 
@@ -539,61 +539,61 @@ namespace GKCore
 			}
 		}
 
-		public static void CheckRecord(TGEDCOMTree aTree, TGEDCOMRecord aRec, TGEDCOMFormat aFormat)
+		public static void CheckRecord(TGEDCOMTree tree, TGEDCOMRecord rec, TGEDCOMFormat format)
 		{
-			if (aRec.UID == null || aRec.UID == "")
+			if (rec.UID == null || rec.UID == "")
 			{
-				aRec.NewUID();
+				rec.NewUID();
 			}
 
-			if (aFormat != TGEDCOMFormat.gf_Native)
+			if (format != TGEDCOMFormat.gf_Native)
 			{
-				int num = aRec.MultimediaLinks.Count - 1;
+				int num = rec.MultimediaLinks.Count - 1;
 				for (int i = 0; i <= num; i++)
 				{
-					TGEDCOMMultimediaLink mmLink = aRec.MultimediaLinks[i];
-					if (!mmLink.IsPointer) TreeTools.ReformMultimediaLink(aTree, mmLink);
+					TGEDCOMMultimediaLink mmLink = rec.MultimediaLinks[i];
+					if (!mmLink.IsPointer) TreeTools.ReformMultimediaLink(tree, mmLink);
 				}
 
-				num = aRec.Notes.Count - 1;
+				num = rec.Notes.Count - 1;
 				for (int i = 0; i <= num; i++)
 				{
-					TGEDCOMNotes note = aRec.Notes[i];
-					if (!note.IsPointer) TreeTools.ReformNote(aTree, note);
+					TGEDCOMNotes note = rec.Notes[i];
+					if (!note.IsPointer) TreeTools.ReformNote(tree, note);
 				}
 
-				num = aRec.SourceCitations.Count - 1;
+				num = rec.SourceCitations.Count - 1;
 				for (int i = 0; i <= num; i++)
 				{
-					TGEDCOMSourceCitation sourCit = aRec.SourceCitations[i];
-					if (!sourCit.IsPointer) TreeTools.ReformSourceCitation(aTree, sourCit);
+					TGEDCOMSourceCitation sourCit = rec.SourceCitations[i];
+					if (!sourCit.IsPointer) TreeTools.ReformSourceCitation(tree, sourCit);
 				}
 			}
 
-			switch (aRec.RecordType) {
+			switch (rec.RecordType) {
 				case TGEDCOMRecordType.rtIndividual:
-					CheckRecord_Individual(aTree, aFormat, (TGEDCOMIndividualRecord)aRec);
+					CheckRecord_Individual(tree, format, rec as TGEDCOMIndividualRecord);
 					break;
 
 				case TGEDCOMRecordType.rtFamily:
-					CheckRecord_Family(aTree, aFormat, (TGEDCOMFamilyRecord)aRec);
+					CheckRecord_Family(tree, format, rec as TGEDCOMFamilyRecord);
 					break;
 
 				case TGEDCOMRecordType.rtGroup:
-					CheckRecord_Group((TGEDCOMGroupRecord)aRec);
+					CheckRecord_Group(rec as TGEDCOMGroupRecord);
 					break;
 
 				case TGEDCOMRecordType.rtSource:
-					CheckRecord_Source((TGEDCOMSourceRecord)aRec);
+					CheckRecord_Source(rec as TGEDCOMSourceRecord);
 					break;				
 			}
 		}
 
-		public static void CheckHeader(TGEDCOMTree aTree, TGEDCOMFormat format)
+		public static void CheckHeader(TGEDCOMTree tree, TGEDCOMFormat format)
 		{
 			if (format == TGEDCOMFormat.gf_Native)
 			{
-				TGEDCOMHeader header = aTree.Header;
+				TGEDCOMHeader header = tree.Header;
 				TGEDCOMTag tag;
 
 				tag = header.FindTag("_ADVANCED", 0);
@@ -604,26 +604,26 @@ namespace GKCore
 			}
 		}
 
-		private static void CorrectIds(TGEDCOMTree aTree)
+		private static void CorrectIds(TGEDCOMTree tree)
 		{
-			TfmProgress.ProgressInit(aTree.RecordsCount, LangMan.LSList[469]);
+			TfmProgress.ProgressInit(tree.RecordsCount, LangMan.LSList[469]);
 			TXRefReplaceMap repMap = new TXRefReplaceMap();
 			try
 			{
-				int num = aTree.RecordsCount - 1;
+				int num = tree.RecordsCount - 1;
 				for (int i = 0; i <= num; i++)
 				{
-					TGEDCOMRecord rec = aTree[i];
+					TGEDCOMRecord rec = tree[i];
 					if (TGenEngine.GetId(rec) < 0)
 					{
-						string newXRef = aTree.XRefIndex_NewXRef(rec);
+						string newXRef = tree.XRefIndex_NewXRef(rec);
 						repMap.AddXRef(rec, rec.XRef, newXRef);
 						rec.XRef = newXRef;
 					}
 					TfmProgress.ProgressStep();
 				}
 
-				aTree.Header.ReplaceXRefs(repMap);
+				tree.Header.ReplaceXRefs(repMap);
 				TfmProgress.ProgressInit(repMap.Count, LangMan.LSList[469]);
 
 				int num2 = repMap.Count - 1;
@@ -641,25 +641,25 @@ namespace GKCore
 			}
 		}
 
-		public static bool CheckGEDCOMFormat(TGEDCOMTree aTree)
+		public static bool CheckGEDCOMFormat(TGEDCOMTree tree)
 		{
 			bool result = false;
 
 			try
 			{
-				TfmProgress.ProgressInit(aTree.RecordsCount, LangMan.LSList[470]);
+				TfmProgress.ProgressInit(tree.RecordsCount, LangMan.LSList[470]);
 				try
 				{
-					TGEDCOMFormat format = TGenEngine.GetGEDCOMFormat(aTree);
+					TGEDCOMFormat format = TGenEngine.GetGEDCOMFormat(tree);
 					bool idCheck = true;
 
-					TreeTools.CheckHeader(aTree, format);
+					TreeTools.CheckHeader(tree, format);
 
-					int num = aTree.RecordsCount - 1;
+					int num = tree.RecordsCount - 1;
 					for (int i = 0; i <= num; i++)
 					{
-						TGEDCOMRecord rec = aTree[i];
-						TreeTools.CheckRecord(aTree, rec, format);
+						TGEDCOMRecord rec = tree[i];
+						TreeTools.CheckRecord(tree, rec, format);
 
 						if (format != TGEDCOMFormat.gf_Native && idCheck && TGenEngine.GetId(rec) < 0)
 						{
@@ -671,7 +671,7 @@ namespace GKCore
 
 					if (!idCheck && TGenEngine.ShowQuestion(LangMan.LSList[471]) == DialogResult.Yes)
 					{
-						TreeTools.CorrectIds(aTree);
+						TreeTools.CorrectIds(tree);
 					}
 
 					result = true;

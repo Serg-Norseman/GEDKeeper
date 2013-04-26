@@ -31,7 +31,7 @@ namespace GedCom551
 			}
 		}
 
-		public override void Assign(TGEDCOMCustomTag Source)
+        public override void Assign(TGEDCOMTag Source)
 		{
 			base.Assign(Source);
 			if (Source is TGEDCOMCustomEvent)

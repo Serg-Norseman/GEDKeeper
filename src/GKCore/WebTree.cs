@@ -21,12 +21,6 @@ namespace GKCore
 			public int ColIndex;
 			public TList Row;
 			public TGEDCOMIndividualRecord Rec;
-
-			public void Free()
-			{
-				SysUtils.Free(this);
-			}
-
 		}
 
 		public WebTree()
@@ -133,21 +127,17 @@ namespace GKCore
 					aStream.WriteLine("<table border=\"0\" cellspacing=\"0\">");
 
 					int num = table_rows.Count - 1;
-					for (int r = 0; r <= num; r++)
-					{
+					for (int r = 0; r <= num; r++) {
 						TList row = table_rows[r] as TList;
 						aStream.WriteLine("<tr>");
 
 						int num2 = row.Count - 1;
-						for (int c = 0; c <= num2; c++)
-						{
+						for (int c = 0; c <= num2; c++) {
 							TTreeCell cell = row[c] as TTreeCell;
 							string nm = "&nbsp;";
 							string st = "";
-							if (cell.Kind != TCellKind.ckSpace)
-							{
-								if (cell.Kind == TCellKind.ckPerson && cell.Name != "")
-								{
+							if (cell.Kind != TCellKind.ckSpace) {
+								if (cell.Kind == TCellKind.ckPerson && cell.Name != "") {
 									nm = "<a href=\"#" + cell.Rec.XRef + "\">" + cell.Name + "</a>";
 								}
 								st = " bgcolor=\"silver\"";

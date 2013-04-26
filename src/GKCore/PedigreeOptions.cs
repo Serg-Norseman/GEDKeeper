@@ -9,6 +9,7 @@ using Ext.Utils;
 
 namespace GKCore
 {
+    [Serializable]
     public class EPedigreeOptionsException : Exception
     {
         public EPedigreeOptionsException()

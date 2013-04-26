@@ -2,12 +2,9 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Security;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-
-using Ext.MapiMail;
 
 /// <summary>
 /// Localization: clean
@@ -15,18 +12,6 @@ using Ext.MapiMail;
 
 namespace Ext.Utils
 {
-	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	public struct TScrollInfo
-	{
-		public uint cbSize;
-		public uint fMask;
-		public int nMin;
-		public int nMax;
-		public uint nPage;
-		public int nPos;
-		public int nTrackPos;
-	}
-
 	public sealed class SysUtils
 	{
 		public static void Free(object Self)
@@ -122,10 +107,24 @@ namespace Ext.Utils
 		public static void LogView()
 		{
 			if (File.Exists(LogFilename)) {
-				SysUtils.ShellExecute(0, "open", LogFilename, "", "", 5);
+                Win32Native.ShellExecute(0, "open", LogFilename, "", "", 5);
 			}
 		}
 
+
+        public static string TrimChars(string s, params char[] trimChars)
+        {
+            // FIXME: развернуть TrimStart для повышения производительности
+            // FIXME: досконально протестировать этот метод
+            if (s.Length > 0)
+            {
+                return s.TrimStart(trimChars);
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
 
 
 		private static readonly ScrollEventType[] m_ScrollEvents;
@@ -148,58 +147,92 @@ namespace Ext.Utils
 
 		public static ScrollEventType GetScrollEventType(uint wParam)
 		{
-			ScrollEventType Result = ((wParam <= 8u) ? m_ScrollEvents[(int)wParam] : ScrollEventType.EndScroll);
-			return Result;
+			ScrollEventType result;
+			result = ((wParam <= 8u) ? m_ScrollEvents[(int)wParam] : ScrollEventType.EndScroll);
+			return result;
 		}
 
+        public static ushort GetKeyLayout()
+        {
+            return unchecked((ushort)Win32Native.GetKeyboardLayout(0u));
+        }
 
+        public static void SetKeyLayout(ushort aLayout)
+        {
+            Win32Native.ActivateKeyboardLayout((uint)aLayout, 0u);
+        }
 
-		[SuppressUnmanagedCodeSecurity]
-		[DllImport("shell32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-		public static extern int ShellExecute(uint hWnd, string Operation, string FileName, string Parameters, string Directory, int ShowCmd);
+        public static void LoadExtFile([In] string aFileName)
+        {
+            Win32Native.ShellExecute(0, "open", aFileName, "", "", 5);
+        }
 
-		[SuppressUnmanagedCodeSecurity]
-		[DllImport("user32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
-		public static extern uint GetKeyboardLayout(uint dwLayout);
+		public static int DoScroll(uint handle, uint wParam, int nBar, int aOldPos, int aMin, int aMax, int sm_piece, int big_piece)
+		{
+			ScrollEventType scrType = SysUtils.GetScrollEventType(wParam & 65535u);
+			
+			int NewPos = aOldPos;
 
-		[SuppressUnmanagedCodeSecurity]
-		[DllImport("user32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
-		public static extern uint ActivateKeyboardLayout(uint hkl, uint Flags);
+			switch (scrType) {
+				case ScrollEventType.SmallDecrement:
+				{
+					NewPos -= sm_piece;
+					break;
+				}
 
-		[SuppressUnmanagedCodeSecurity]
-		[DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-		[return: MarshalAs(UnmanagedType.Bool)]
-		public static extern bool PostMessage(uint hWnd, uint Msg, int wParam, int lParam);
+				case ScrollEventType.SmallIncrement:
+				{
+					NewPos += sm_piece;
+					break;
+				}
 
-		[SuppressUnmanagedCodeSecurity]
-		[DllImport("user32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
-		[return: MarshalAs(UnmanagedType.Bool)]
-		public static extern bool EnableWindow(uint hWnd, bool bEnable);
+				case ScrollEventType.LargeDecrement:
+				{
+					NewPos -= big_piece;
+					break;
+				}
 
-		[SuppressUnmanagedCodeSecurity]
-		[DllImport("user32.dll", SetLastError = true)]
-		public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+				case ScrollEventType.LargeIncrement:
+				{
+					NewPos += big_piece;
+					break;
+				}
 
-		[SuppressUnmanagedCodeSecurity]
-		[DllImport("hhctrl.ocx", CharSet = CharSet.Unicode, EntryPoint = "HtmlHelpW", SetLastError = true)]
-		public static extern uint HtmlHelp(IntPtr hwndCaller, string pszFile, uint uCommand, uint dwData);
+				case ScrollEventType.ThumbPosition:
+				case ScrollEventType.ThumbTrack:
+				{
+					Win32Native.TScrollInfo ScrollInfo = new Win32Native.TScrollInfo();
+					ScrollInfo.cbSize = (uint)Marshal.SizeOf( ScrollInfo );
+					ScrollInfo.fMask = 23u;
+                    Win32Native.GetScrollInfo(handle, nBar, ref ScrollInfo);
+					NewPos = ScrollInfo.nTrackPos;
+					break;
+				}
 
-		[SuppressUnmanagedCodeSecurity]
-		[DllImport("user32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
-		[return: MarshalAs(UnmanagedType.Bool)]
-		public static extern bool GetScrollInfo(uint hWnd, int BarFlag, ref TScrollInfo ScrollInfo);
+				case ScrollEventType.First:
+				{
+					NewPos = 0;
+					break;
+				}
 
-		[SuppressUnmanagedCodeSecurity]
-		[DllImport("user32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
-		public static extern int ScrollWindowEx(uint hWnd, int dx, int dy, [In] ref TRect prcScroll, [In] ref TRect prcClip, uint hrgnUpdate, out TRect prcUpdate, uint flags);
+				case ScrollEventType.Last:
+				{
+					NewPos = aMax;
+					break;
+				}
+			}
 
-		[SuppressUnmanagedCodeSecurity]
-		[DllImport("user32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
-		public static extern bool SetScrollRange(uint hWnd, int nBar, int nMinPos, int nMaxPos, bool bRedraw);
+			if (NewPos < aMin)
+			{
+				NewPos = aMin;
+			}
+			if (NewPos > aMax)
+			{
+				NewPos = aMax;
+			}
 
-		[SuppressUnmanagedCodeSecurity]
-		[DllImport("user32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
-		public static extern int SetScrollPos(uint hWnd, int nBar, int nPos, bool bRedraw);
+			return NewPos;
+		}
 
 	}
 }
