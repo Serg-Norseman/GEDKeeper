@@ -19,17 +19,15 @@ namespace GKUI.Lists
 
 	public sealed class TSourceListColumns : TListColumns
 	{
-		protected override void InitDefaultColumns()
+		protected override void InitColumnStatics()
 		{
-			TColumnProps[] array1 = new TColumnProps[4];
-			array1[0] = new TColumnProps(TSourceColumnType.sctShortName, true);
-			array1[1] = new TColumnProps(TSourceColumnType.sctAuthor, true);
-			array1[2] = new TColumnProps(TSourceColumnType.sctTitle, true);
-			array1[3] = new TColumnProps(TSourceColumnType.sctChangeDate, true);
-			DefColumns = array1;
+			this.AddStatic(LangMan.LSList[141], TDataType.dtString, 120, true);
+			this.AddStatic(LangMan.LSList[142], TDataType.dtString, 200, true);
+			this.AddStatic(LangMan.LSList[125], TDataType.dtString, 200, true);
+			this.AddStatic(LangMan.LSList[317], TDataType.dtDateTime, 150, true);
 		}
 
-		public TSourceListColumns()
+		public TSourceListColumns() : base()
 		{
 			InitData(typeof(TSourceColumnType));
 		}
@@ -53,7 +51,7 @@ namespace GKUI.Lists
 			this.FRec = (aRec as TGEDCOMSourceRecord);
 		}
 
-		public override object GetColumnValueDirect(int col_type, int col_subtype)
+		protected override object GetColumnValueEx(int col_type, int col_subtype)
 		{
 			switch (col_type) {
 				case 0:
@@ -67,15 +65,6 @@ namespace GKUI.Lists
 				default:
 					return null;
 			}
-		}
-
-		protected override void InitColumnStatics()
-		{
-			this.ColumnStatics.Clear();
-			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[141], TDataType.dtString, 120));
-			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[142], TDataType.dtString, 200));
-			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[125], TDataType.dtString, 200));
-			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[317], TDataType.dtDateTime, 150));
 		}
 
 		public override Type GetColumnsEnum()

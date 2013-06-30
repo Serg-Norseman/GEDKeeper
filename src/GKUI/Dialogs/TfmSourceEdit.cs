@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Ext.Utils;
 using GedCom551;
 using GKCore;
 using GKUI.Controls;
-using GKUI.Lists;
 
 /// <summary>
 /// Localization: clean
@@ -18,9 +16,9 @@ namespace GKUI
 	{
 		private TfmBase FBase;
 		private TGEDCOMSourceRecord FSourceRecord;
-		private TSheetList FNotesList;
-		private TSheetList FMediaList;
-		private TSheetList FRepositoriesList;
+		private GKSheetList FNotesList;
+		private GKSheetList FMediaList;
+		private GKSheetList FRepositoriesList;
 
 		public TfmBase Base
 		{
@@ -91,7 +89,7 @@ namespace GKUI
 							    TGEDCOMRepositoryRecord rep = FBase.SelectRecord(TGEDCOMRecordType.rtRepository, null) as TGEDCOMRepositoryRecord;
 							    if (rep != null)
 							    {
-								    TGenEngine.BindSourceRepository(this.Base.Tree, this.FSourceRecord, rep);
+								    this.FSourceRecord.aux_AddRepository(rep);
                                     res = true;
 							    }
                                 break;
@@ -120,7 +118,7 @@ namespace GKUI
             if (res) this.ControlsRefresh();
 		}
 
-		private void SetSourceRecord([In] TGEDCOMSourceRecord Value)
+		private void SetSourceRecord(TGEDCOMSourceRecord Value)
 		{
 			this.FSourceRecord = Value;
 			this.EditShortTitle.Text = this.FSourceRecord.FiledByEntry;
@@ -156,22 +154,22 @@ namespace GKUI
 			this.InitializeComponent();
 			this.FBase = aBase;
 
-			this.FNotesList = new TSheetList(this.SheetNotes);
-			this.FNotesList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
+			this.FNotesList = new GKSheetList(this.SheetNotes);
+			this.FNotesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
 			this.Base.SetupRecNotesList(this.FNotesList);
 
-			this.FMediaList = new TSheetList(this.SheetMultimedia);
-			this.FMediaList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
+			this.FMediaList = new GKSheetList(this.SheetMultimedia);
+			this.FMediaList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
 			this.Base.SetupRecMediaList(this.FMediaList);
 
-			this.FRepositoriesList = new TSheetList(this.SheetRepositories);
-			this.FRepositoriesList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
+			this.FRepositoriesList = new GKSheetList(this.SheetRepositories);
+			this.FRepositoriesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
 			this.FRepositoriesList.Buttons = EnumSet.Create(new Enum[]
 			{
-				TSheetList.TListButton.lbAdd, 
-				TSheetList.TListButton.lbEdit, 
-				TSheetList.TListButton.lbDelete, 
-				TSheetList.TListButton.lbJump
+				GKSheetList.TListButton.lbAdd, 
+				GKSheetList.TListButton.lbEdit, 
+				GKSheetList.TListButton.lbDelete, 
+				GKSheetList.TListButton.lbJump
 			});
 			this.FRepositoriesList.List.AddListColumn(LangMan.LSList[134], 300, false);
 			this.btnAccept.Text = LangMan.LSList[97];

@@ -1,7 +1,6 @@
 using System;
 using System.Globalization;
 using System.IO;
-using System.Runtime.InteropServices;
 
 using Ext.Utils;
 
@@ -27,22 +26,35 @@ namespace GedCom551
 		protected string FName;
 		protected TGEDCOMObject FParent;
 		protected string FStringValue;
-		protected TGEDCOMListEx<TGEDCOMTag> FTags;
+		protected GEDCOMList<TGEDCOMTag> FTags;
 		protected bool Disposed_;
 
 		protected TGEDCOMCustomRecord ParentRecord
 		{
-			get	{ return this.GetParentRecord(); }
+			get	{ 
+				TGEDCOMCustomRecord Result = null;
+				TGEDCOMObject O = this.Parent;
+				while (O != null && O is TGEDCOMTag)
+				{
+					if (O is TGEDCOMCustomRecord)
+					{
+						Result = (O as TGEDCOMCustomRecord);
+						break;
+					}
+					O = (O as TGEDCOMTag).Parent;
+				}
+				return Result;
+			}
 		}
 
 		public int Count
 		{
-			get { return ((this.FTags == null) ? 0 : this.FTags.Count); }
+			get { return this.FTags.Count; }
 		}
 
 		public TGEDCOMTag this[int Index]
 		{
-			get { return ((this.FTags == null) ? null : (this.FTags[Index] as TGEDCOMTag)); }
+			get { return this.FTags[Index]; }
 		}
 
 		public int Level
@@ -72,7 +84,7 @@ namespace GedCom551
 			set { this.SetStringValue(value); }
 		}
 
-		private TTagPropsRec GetTagProps([In] string aName)
+		private TTagPropsRec GetTagProps(string aName)
 		{
 			TTagPropsRec result;
 
@@ -90,53 +102,15 @@ namespace GedCom551
 			return result;
 		}
 
-		protected TGEDCOMCustomRecord GetParentRecord()
+		protected TGEDCOMRecord FindRecord(string xref)
 		{
-			TGEDCOMCustomRecord Result = null;
-			TGEDCOMObject O = this.Parent;
-			while (O != null && O is TGEDCOMTag)
-			{
-				if (O is TGEDCOMCustomRecord)
-				{
-                    Result = (O as TGEDCOMCustomRecord);
-					break;
-				}
-				O = (O as TGEDCOMTag).Parent;
-			}
-			return Result;
+			return ((this.FOwner == null) ? null : this.FOwner.XRefIndex_Find(xref));
 		}
 
-		protected virtual void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
+		protected TGEDCOMTag InsertTag(TGEDCOMTag tag)
 		{
-			this.FOwner = AOwner;
-			this.FParent = AParent;
-			this.FTags = null;
-			this.FStringValue = "";
-
-			if (AParent != null && AParent is TGEDCOMTag)
-			{
-				this.FLevel = (AParent as TGEDCOMTag).Level + 1;
-			}
-			else
-			{
-				this.FLevel = 0;
-			}
-		}
-
-		protected TGEDCOMRecord FindRecord([In] string XRef)
-		{
-			return ((this.FOwner == null) ? null : this.FOwner.XRefIndex_Find(XRef));
-		}
-
-		public TGEDCOMTag InsertTag(TGEDCOMTag ATag)
-		{
-			if (this.FTags == null)
-			{
-				this.FTags = new TGEDCOMListEx<TGEDCOMTag>(this);
-			}
-
-			this.FTags.Add(ATag);
-			return ATag;
+			this.FTags.Add(tag);
+			return tag;
 		}
 
 		public bool IsEmptySkip()
@@ -154,35 +128,12 @@ namespace GedCom551
 			return this.FStringValue;
 		}
 
-		protected virtual void SetStringValue([In] string S)
+		protected virtual void SetStringValue(string S)
 		{
 			this.ParseString(S);
 		}
 
-		protected virtual void SaveTagToStream(StreamWriter AStream, TGEDCOMTag ATag)
-		{
-			if (ATag != null)
-			{
-				ATag.SaveToStream(AStream);
-			}
-		}
-
-		protected virtual void SaveTagToStream(StreamWriter AStream, [In] string ATag)
-		{
-			TGEDCOMTag Tag = this.FindTag(ATag, 0);
-			if (Tag != null)
-			{
-				do
-				{
-					int Index = this.IndexOfTag(Tag);
-					Tag.SaveToStream(AStream);
-					Tag = this.FindTag(ATag, Index + 1);
-				}
-				while (Tag != null);
-			}
-		}
-
-		protected virtual void SaveTagsToStream(StreamWriter AStream, [In] params string[] ATagSorting)
+		protected virtual void SaveTagsToStream(StreamWriter AStream)
 		{
 			if (this.Count > 0)
 			{
@@ -205,7 +156,7 @@ namespace GedCom551
 						{
 							if (this[I].Name == "CONC" || this[I].Name == "CONT")
 							{
-								this.SaveTagToStream(AStream, this[I]);
+								this[I].SaveToStream(AStream);
 							}
 						}
 						if (SavedTags.IndexOf("CONC") >= 0)
@@ -218,34 +169,10 @@ namespace GedCom551
 						}
 					}
 
-					if (ATagSorting == null || ATagSorting.Length == 0)
-					{
-						int num3 = this.Count - 1;
-						for (int I = 0; I <= num3; I++)
-						{
-							if (this[I].Name != "CONT" && this[I].Name != "CONC")
-							{
-								this.SaveTagToStream(AStream, this[I]);
-							}
-						}
-					}
-					else
-					{
-						int num4 = ((ATagSorting != null) ? ATagSorting.Length : 0) - 1;
-						for (int I = 0; I <= num4; I++)
-						{
-							int Index = SavedTags.IndexOf(ATagSorting[I]);
-							if (Index >= 0)
-							{
-								SavedTags.Delete(Index);
-							}
-							this.SaveTagToStream(AStream, ATagSorting[I]);
-						}
-
-						int num5 = SavedTags.Count - 1;
-						for (int I = 0; I <= num5; I++)
-						{
-							this.SaveTagToStream(AStream, SavedTags[I]);
+					int num3 = this.Count - 1;
+					for (int I = 0; I <= num3; I++) {
+						if (this[I].Name != "CONT" && this[I].Name != "CONC") {
+							this[I].SaveToStream(AStream);
 						}
 					}
 				}
@@ -256,38 +183,59 @@ namespace GedCom551
 			}
 		}
 
-		protected virtual void SaveValueToStream(StreamWriter AStream)
+		protected virtual void SaveValueToStream(StreamWriter stream)
 		{
-			string S = this.Level.ToString() + " " + this.Name;
+			string S = this.FLevel.ToString() + " " + this.FName;
+
 			string Val = this.StringValue;
+			if (!string.IsNullOrEmpty(Val)) {
+				S = S + " " + Val;
+			}
 
-			if (Val != "") S = S + " " + Val;
-
-			AStream.WriteLine(S);
+			stream.WriteLine(S);
 		}
 
-		public TGEDCOMTag(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+		public virtual void SaveToStream(StreamWriter stream)
 		{
-			this.CreateObj(AOwner, AParent);
+			this.SaveValueToStream(stream);
+			this.SaveTagsToStream(stream);
+		}
 
-			if (AName != "" || AValue != "")
-			{
-				this.Name = AName;
-				this.SetStringValue(AValue);
+		protected virtual void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
+		{
+			this.FOwner = owner;
+			this.FParent = parent;
+			this.FTags = new GEDCOMList<TGEDCOMTag>(this);
+			this.FStringValue = "";
+
+			if (parent != null && parent is TGEDCOMTag) {
+				this.FLevel = (parent as TGEDCOMTag).Level + 1;
+			} else {
+				this.FLevel = 0;
 			}
 		}
 
-		public static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+		public TGEDCOMTag(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue)
 		{
-            return new TGEDCOMTag(AOwner, AParent, AName, AValue);
+			this.CreateObj(owner, parent);
+
+			if (tagName != "" || tagValue != "")
+			{
+				this.Name = tagName;
+				this.SetStringValue(tagValue);
+			}
+		}
+
+		public static TGEDCOMTag Create(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue)
+		{
+            return new TGEDCOMTag(owner, parent, tagName, tagValue);
 		}
 
 		public virtual void Dispose()
 		{
 			if (!this.Disposed_)
 			{
-				if (this.FTags != null)
-				{
+				if (this.FTags != null) {
 					this.FTags.Dispose();
 					this.FTags = null;
 				}
@@ -295,39 +243,21 @@ namespace GedCom551
 			}
 		}
 
-		public virtual TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
-		{
-			TGEDCOMTag tag = null;
-			try
-			{
-				if (this.ParentRecord != null) {
-					tag = this.ParentRecord.AddSubTag(this, ATag, AValue, ATagConstructor);
-				} else {
-					tag = this.InternalCreateTag(this, ATag, AValue, ATagConstructor);
-				}
-			}
-			catch (Exception E)
-			{
-				SysUtils.LogWrite("TGEDCOMTag.AddTag(): " + E.Message);
-			}
-			return tag;
-		}
-
-		protected TGEDCOMTag InternalCreateTag(TGEDCOMTag parent, [In] string tagName, [In] string tagValue, TagConstructor tagConstructor)
+		public virtual TGEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
 		{
 			TGEDCOMTag tag = null;
 			try
 			{
 				if (tagConstructor != null) {
-					tag = tagConstructor(this.Owner, parent, tagName, tagValue);
+					tag = tagConstructor(this.FOwner, this, tagName, tagValue);
 				} else {
-					tag = GEDCOMFactory.GetInstance().CreateTag(this.Owner, parent, tagName, tagValue);
+					tag = GEDCOMFactory.GetInstance().CreateTag(this.FOwner, this, tagName, tagValue);
 					if (tag == null) {
-						tag = new TGEDCOMTag(this.Owner, parent, tagName, tagValue);
+						tag = new TGEDCOMTag(this.FOwner, this, tagName, tagValue);
 					}
 				}
 
-				parent.InsertTag(tag);
+				this.InsertTag(tag);
 			}
 			catch (Exception E)
 			{
@@ -335,62 +265,66 @@ namespace GedCom551
 			}
 			return tag;
 		}
-		
-		public virtual void Assign(TGEDCOMTag Source)
-		{
-			if (Source != null)
-			{
-				this.Name = Source.Name;
-				this.StringValue = Source.StringValue;
 
-				int num = Source.Count - 1;
+		public virtual void Assign(TGEDCOMTag source)
+		{
+			if (source != null)
+			{
+				this.Name = source.Name;
+				this.StringValue = source.StringValue;
+
+				int num = source.Count - 1;
 				for (int i = 0; i <= num; i++)
 				{
-					TGEDCOMTag tag = Source[i];
-					//TGEDCOMTag copy = (tag.ClassType() as TGEDCOMTag.MetaTGEDCOMTag).Create(this.Owner, this, "", "") as TGEDCOMTag;
-					TGEDCOMTag copy = (TGEDCOMTag)Activator.CreateInstance(tag.GetType(), new object[] { this.Owner, this, "", "" });
-					copy.Assign(tag);
+					TGEDCOMTag sourceTag = source[i];
+					TGEDCOMTag copy = Activator.CreateInstance(sourceTag.GetType(), new object[] { this.Owner, this, "", "" }) as TGEDCOMTag;
+					copy.Assign(sourceTag);
 					this.InsertTag(copy);
 				}
 			}
 		}
 
+		protected void AssignList(GEDCOMList<TGEDCOMTag> srcList, GEDCOMList<TGEDCOMTag> destList)
+		{
+			int num = srcList.Count - 1;
+			for (int i = 0; i <= num; i++)
+			{
+				TGEDCOMTag sourceTag = srcList[i];
+				TGEDCOMTag copy = Activator.CreateInstance(sourceTag.GetType(), new object[] { this.Owner, this, "", "" }) as TGEDCOMTag;
+				copy.Assign(sourceTag);
+				destList.Add(copy);
+			}
+		}
+
 		public virtual void Clear()
 		{
-			if (this.FTags != null)
-			{
-				this.FTags.Dispose();
-				this.FTags = null;
-			}
+			this.FTags.Clear();
 			this.FStringValue = "";
 		}
 
-		public void Delete(int Index)
+		public void Delete(int index)
 		{
-			this.FTags.Delete(Index);
+			this.FTags.Delete(index);
 		}
 
-		public void DeleteTag([In] string ATag)
+		//FIXME: некачественна€ реализаци€, перепроверить
+		public void DeleteTag(string tagName)
 		{
-			if (this.FTags != null)
-			{
-				TGEDCOMTag Tag = this.FindTag(ATag, 0);
-				int Index = this.FTags.IndexOfObject(Tag);
-				if (Tag != null)
+			TGEDCOMTag tag = this.FindTag(tagName, 0);
+			if (tag != null) {
+				do
 				{
-					do
-					{
-						this.FTags.DeleteObject(Tag);
-						Tag = this.FindTag(ATag, Index);
-					}
-					while (Tag != null);
+					int idx = this.FTags.IndexOfObject(tag);
+					this.FTags.Delete(idx);
+					tag = this.FindTag(tagName, idx);
 				}
+				while (tag != null);
 			}
 		}
 
-		public TGEDCOMTag FindTag([In] string ATag, int StartIndex)
+		public TGEDCOMTag FindTag(string ATag, int StartIndex)
 		{
-			string SU = ATag.ToUpper();
+			string SU = ATag.ToUpperInvariant();
 
 			int pos = SU.IndexOf('\\');
 			string S = ((pos >= 0) ? SU.Substring(0, pos) : SU);
@@ -429,7 +363,7 @@ namespace GedCom551
 			return Result;
 		}
 
-		public TGEDCOMTag TagClass([In] string ATag, Type ATagClass, TagConstructor ATagConstructor)
+		public TGEDCOMTag TagClass(string ATag, Type ATagClass, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag result = this.FindTag(ATag, 0);
 
@@ -451,21 +385,21 @@ namespace GedCom551
 			return result;
 		}
 
-		public int GetTagIntegerValue([In] string ATag, int ADefault)
+		public int GetTagIntegerValue(string ATag, int ADefault)
 		{
 			string S = this.GetTagStringValue(ATag);
 			int Result = ((S == "") ? ADefault : SysUtils.ParseInt(S, ADefault));
 			return Result;
 		}
 
-		public double GetTagFloatValue([In] string ATag, double ADefault)
+		public double GetTagFloatValue(string ATag, double ADefault)
 		{
 			string S = this.GetTagStringValue(ATag);
 			double Result = ((S == "") ? ADefault : SysUtils.ParseFloat(S, ADefault));
 			return Result;
 		}
 
-		public string GetTagStringValue([In] string ATag)
+		public string GetTagStringValue(string ATag)
 		{
 			TGEDCOMTag Tag = this.FindTag(ATag, 0);
 			string Result = ((Tag == null) ? "" : Tag.StringValue);
@@ -511,43 +445,36 @@ namespace GedCom551
 			return AStrings;
 		}
 
-		public int IndexOfTag(TGEDCOMTag ATag)
+		public int IndexOfTag(TGEDCOMTag tag)
 		{
-			return ((this.FTags == null) ? -1 : this.FTags.IndexOfObject(ATag));
+			return this.FTags.IndexOfObject(tag);
 		}
 
 		public virtual bool IsEmpty()
 		{
-			return (this.FStringValue == "" && (this.FTags == null || this.FTags.Count == 0));
+			return ((this.FStringValue == "") && (this.FTags.Count == 0));
 		}
 
-		public virtual string ParseString([In] string AString)
+		public virtual string ParseString(string AString)
 		{
 			this.FStringValue = AString;
 			string Result = "";
 			return Result;
 		}
 
-		public virtual void SaveToStream(StreamWriter AStream)
-		{
-			this.SaveValueToStream(AStream);
-			string[] aTagSorting = new string[0];
-			this.SaveTagsToStream(AStream, aTagSorting);
-		}
-
-		public void SetTagIntegerValue([In] string ATag, int AValue)
+		public void SetTagIntegerValue(string ATag, int AValue)
 		{
 			this.SetTagStringValue(ATag, AValue.ToString());
 		}
 
-		public void SetTagFloatValue([In] string ATag, double AValue)
+		public void SetTagFloatValue(string ATag, double AValue)
 		{
 			NumberFormatInfo nfi = new NumberFormatInfo();
 			nfi.NumberDecimalSeparator = ".";
 			this.SetTagStringValue(ATag, AValue.ToString(nfi));
 		}
 
-		public void SetTagStringValue([In] string ATag, [In] string AValue)
+		public void SetTagStringValue(string ATag, string AValue)
 		{
 			string SU = ATag;
 			TGEDCOMTag P = this.FindTag(SU, 0);
@@ -686,24 +613,23 @@ namespace GedCom551
 
 		public virtual void Pack()
 		{
-			if (this.FTags != null) this.FTags.Pack();
+			this.FTags.Pack();
 		}
 
-		public virtual void ReplaceXRefs(TXRefReplaceMap aMap)
+		public virtual void ReplaceXRefs(TXRefReplaceMap map)
 		{
-			if (this.FTags != null) this.FTags.ReplaceXRefs(aMap);
+			this.FTags.ReplaceXRefs(map);
 		}
 
-		public virtual void ResetOwner(TGEDCOMTree AOwner)
+		public virtual void ResetOwner(TGEDCOMTree owner)
 		{
-			this.FOwner = AOwner;
-
-			if (this.FTags != null) this.FTags.ResetOwner(AOwner);
+			this.FOwner = owner;
+			this.FTags.ResetOwner(owner);
 		}
 
-		public void ResetParent(TGEDCOMObject AParent)
+		public void ResetParent(TGEDCOMObject parent)
 		{
-			this.FParent = AParent;
+			this.FParent = parent;
 		}
 
 		static TGEDCOMTag()

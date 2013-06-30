@@ -150,13 +150,13 @@ namespace GKUI.Controls
 			return Result;
 		}
 
-		public void ResizeColumn(int aColumnIndex)
+		public void ResizeColumn(int columnIndex)
 		{
-			if (aColumnIndex >= 0) {
-				this.AutoResizeColumn(aColumnIndex, ColumnHeaderAutoResizeStyle.ColumnContent);
+			if (columnIndex >= 0) {
+				this.AutoResizeColumn(columnIndex, ColumnHeaderAutoResizeStyle.ColumnContent);
 
-				if (this.Columns[aColumnIndex].Width < 20) {
-					this.AutoResizeColumn(aColumnIndex, ColumnHeaderAutoResizeStyle.HeaderSize);
+				if (this.Columns[columnIndex].Width < 20) {
+					this.AutoResizeColumn(columnIndex, ColumnHeaderAutoResizeStyle.HeaderSize);
 				}
 			}
 		}
@@ -170,20 +170,12 @@ namespace GKUI.Controls
 			int Result;
 			if (v && v2)
 			{
-				if (Val < Val2)
-				{
+				if (Val < Val2) {
 					Result = -1;
-				}
-				else
-				{
-					if (Val > Val2)
-					{
-						Result = 1;
-					}
-					else
-					{
-						Result = 0;
-					}
+				} else if (Val > Val2) {
+					Result = 1;
+				} else {
+					Result = 0;
 				}
 			}
 			else

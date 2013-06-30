@@ -33,7 +33,6 @@ namespace GKUI
 		private System.Windows.Forms.TextBox EditAttribute;
 		private System.Windows.Forms.Button btnPlaceAdd;
 		private System.Windows.Forms.Button btnPlaceDelete;
-		private System.Windows.Forms.Button btnPlaceSel;
 		private System.Windows.Forms.ComboBox cbDate1Calendar;
 		private System.Windows.Forms.ComboBox cbDate2Calendar;
 		private System.Windows.Forms.CheckBox btnBC1;
@@ -65,7 +64,6 @@ namespace GKUI
 			this.LabelAttr = new System.Windows.Forms.Label();
 			this.btnPlaceAdd = new System.Windows.Forms.Button();
 			this.btnPlaceDelete = new System.Windows.Forms.Button();
-			this.btnPlaceSel = new System.Windows.Forms.Button();
 			this.EditEventType = new System.Windows.Forms.ComboBox();
 			this.EditEventName = new System.Windows.Forms.TextBox();
 			this.EditEventPlace = new System.Windows.Forms.TextBox();
@@ -134,7 +132,6 @@ namespace GKUI
 			this.SheetCommon.Controls.Add(this.LabelAttr);
 			this.SheetCommon.Controls.Add(this.btnPlaceAdd);
 			this.SheetCommon.Controls.Add(this.btnPlaceDelete);
-			this.SheetCommon.Controls.Add(this.btnPlaceSel);
 			this.SheetCommon.Controls.Add(this.EditEventType);
 			this.SheetCommon.Controls.Add(this.EditEventName);
 			this.SheetCommon.Controls.Add(this.EditEventPlace);
@@ -225,7 +222,7 @@ namespace GKUI
 			this.btnPlaceAdd.AccessibleDescription = "Выбрать или добавить место";
 			this.btnPlaceAdd.Enabled = false;
 			this.btnPlaceAdd.Image = global::GKResources.iRecNew;
-			this.btnPlaceAdd.Location = new System.Drawing.Point(334, 117);
+			this.btnPlaceAdd.Location = new System.Drawing.Point(365, 117);
 			this.btnPlaceAdd.Name = "btnPlaceAdd";
 			this.btnPlaceAdd.Size = new System.Drawing.Size(28, 28);
 			this.btnPlaceAdd.TabIndex = 7;
@@ -233,25 +230,14 @@ namespace GKUI
 			// 
 			// btnPlaceDelete
 			// 
-			this.btnPlaceDelete.AccessibleDescription = "Отсоединить место";
+			this.btnPlaceDelete.AccessibleDescription = "Перейти на запись места";
 			this.btnPlaceDelete.Enabled = false;
-			this.btnPlaceDelete.Image = global::GKResources.iRecEdit;
-			this.btnPlaceDelete.Location = new System.Drawing.Point(366, 117);
+			this.btnPlaceDelete.Image = global::GKResources.iRecDelete;
+			this.btnPlaceDelete.Location = new System.Drawing.Point(398, 117);
 			this.btnPlaceDelete.Name = "btnPlaceDelete";
 			this.btnPlaceDelete.Size = new System.Drawing.Size(28, 28);
-			this.btnPlaceDelete.TabIndex = 8;
+			this.btnPlaceDelete.TabIndex = 9;
 			this.btnPlaceDelete.Click += new System.EventHandler(this.btnPlaceDelete_Click);
-			// 
-			// btnPlaceSel
-			// 
-			this.btnPlaceSel.AccessibleDescription = "Перейти на запись места";
-			this.btnPlaceSel.Enabled = false;
-			this.btnPlaceSel.Image = global::GKResources.iRecDelete;
-			this.btnPlaceSel.Location = new System.Drawing.Point(398, 117);
-			this.btnPlaceSel.Name = "btnPlaceSel";
-			this.btnPlaceSel.Size = new System.Drawing.Size(28, 28);
-			this.btnPlaceSel.TabIndex = 9;
-			this.btnPlaceSel.Click += new System.EventHandler(this.btnPlaceSel_Click);
 			// 
 			// EditEventType
 			// 
@@ -273,7 +259,7 @@ namespace GKUI
 			// 
 			this.EditEventPlace.Location = new System.Drawing.Point(8, 120);
 			this.EditEventPlace.Name = "EditEventPlace";
-			this.EditEventPlace.Size = new System.Drawing.Size(320, 21);
+			this.EditEventPlace.Size = new System.Drawing.Size(351, 21);
 			this.EditEventPlace.TabIndex = 6;
 			this.EditEventPlace.KeyDown += new System.Windows.Forms.KeyEventHandler(this.EditEventPlace_KeyDown);
 			// 

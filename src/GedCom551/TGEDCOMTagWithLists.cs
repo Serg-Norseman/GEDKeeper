@@ -1,46 +1,36 @@
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
-
-using Ext.Utils;
 
 namespace GedCom551
 {
 	public class TGEDCOMTagWithLists : TGEDCOMTag
 	{
-		private EnumSet FLists;
-		protected TGEDCOMListEx<TGEDCOMNotes> _Notes;
-		protected TGEDCOMListEx<TGEDCOMSourceCitation> _SourceCitations;
-		protected TGEDCOMListEx<TGEDCOMMultimediaLink> _MultimediaLinks;
+		protected GEDCOMList<TGEDCOMNotes> _Notes;
+		protected GEDCOMList<TGEDCOMSourceCitation> _SourceCitations;
+		protected GEDCOMList<TGEDCOMMultimediaLink> _MultimediaLinks;
 
-		public TGEDCOMListEx<TGEDCOMNotes> Notes
+		public GEDCOMList<TGEDCOMNotes> Notes
 		{
 			get { return this._Notes; }
 		}
 
-		public TGEDCOMListEx<TGEDCOMSourceCitation> SourceCitations
+		public GEDCOMList<TGEDCOMSourceCitation> SourceCitations
 		{
 			get { return this._SourceCitations; }
 		}
 
-		public TGEDCOMListEx<TGEDCOMMultimediaLink> MultimediaLinks
+		public GEDCOMList<TGEDCOMMultimediaLink> MultimediaLinks
 		{
 			get { return this._MultimediaLinks; }
 		}
 
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			base.CreateObj(AOwner, AParent);
-			this.FLists = EnumSet.Create();
+			base.CreateObj(owner, parent);
 
-			this._Notes = new TGEDCOMListEx<TGEDCOMNotes>(this);
-			this._SourceCitations = new TGEDCOMListEx<TGEDCOMSourceCitation>(this);
-			this._MultimediaLinks = new TGEDCOMListEx<TGEDCOMMultimediaLink>(this);
-		}
-
-		protected void SetLists(EnumSet ALists)
-		{
-			this.FLists = ALists;
+			this._Notes = new GEDCOMList<TGEDCOMNotes>(this);
+			this._SourceCitations = new GEDCOMList<TGEDCOMSourceCitation>(this);
+			this._MultimediaLinks = new GEDCOMList<TGEDCOMMultimediaLink>(this);
 		}
 
 		public override void Dispose()
@@ -92,31 +82,27 @@ namespace GedCom551
 			this._MultimediaLinks.SaveToStream(AStream);
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
-			if (ATag == "NOTE" && this.FLists.InSet(TGEDCOMSubList.stNotes))
+
+			if (ATag == "NOTE")
 			{
 				Result = this.Notes.Add(new TGEDCOMNotes(base.Owner, this, ATag, AValue));
 			}
+			else if (ATag == "SOUR")
+			{
+				Result = this.SourceCitations.Add(new TGEDCOMSourceCitation(base.Owner, this, ATag, AValue));
+			}
+			else if (ATag == "OBJE")
+			{
+				Result = this.MultimediaLinks.Add(new TGEDCOMMultimediaLink(base.Owner, this, ATag, AValue));
+			}
 			else
 			{
-				if (ATag == "SOUR" && this.FLists.InSet(TGEDCOMSubList.stSource))
-				{
-					Result = this.SourceCitations.Add(new TGEDCOMSourceCitation(base.Owner, this, ATag, AValue));
-				}
-				else
-				{
-					if (ATag == "OBJE" && this.FLists.InSet(TGEDCOMSubList.stMultimedia))
-					{
-						Result = this.MultimediaLinks.Add(new TGEDCOMMultimediaLink(base.Owner, this, ATag, AValue));
-					}
-					else
-					{
-						Result = base.AddTag(ATag, AValue, ATagConstructor);
-					}
-				}
+				Result = base.AddTag(ATag, AValue, ATagConstructor);
 			}
+
 			return Result;
 		}
 
@@ -134,7 +120,7 @@ namespace GedCom551
 			return base.IsEmpty() && this._Notes.Count == 0 && this._SourceCitations.Count == 0 && this._MultimediaLinks.Count == 0;
 		}
 
-		public TGEDCOMTagWithLists(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMTagWithLists(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 	}

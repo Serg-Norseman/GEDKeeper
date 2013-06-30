@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
 
 namespace GedCom551
 {
@@ -18,11 +17,11 @@ namespace GedCom551
 			get { return this.FDateBefore; }
 		}
 
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			base.CreateObj(AOwner, AParent);
-			this.FDateAfter = new TGEDCOMDate(AOwner, AParent, "", "");
-			this.FDateBefore = new TGEDCOMDate(AOwner, AParent, "", "");
+			base.CreateObj(owner, parent);
+			this.FDateAfter = new TGEDCOMDate(owner, parent, "", "");
+			this.FDateBefore = new TGEDCOMDate(owner, parent, "", "");
 		}
 
 		protected override string GetStringValue()
@@ -126,7 +125,7 @@ namespace GedCom551
 			return base.IsEmpty() && this.FDateAfter.IsEmpty() && this.FDateBefore.IsEmpty();
 		}
 
-		public override string ParseString([In] string S)
+		public override string ParseString(string S)
 		{
 			this.FDateAfter.Clear();
 			this.FDateBefore.Clear();
@@ -185,11 +184,11 @@ namespace GedCom551
 			if (this.FDateBefore != null) this.FDateBefore.ResetOwner(AOwner);
 		}
 
-		public TGEDCOMDateRange(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMDateRange(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 
-		private static string _ParseString_FixFTB([In] string S)
+		private static string _ParseString_FixFTB(string S)
 		{
 			string Result = S;
 			string SU = Result.Substring(0, 3).ToUpper();

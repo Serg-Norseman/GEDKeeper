@@ -57,22 +57,42 @@ namespace Ext.Utils
 			get { return this.FList.Count; }
 		}
 
-		/*public object Objects//[int Index]
-		{
-			get { return this.GetObject(Index); }
-			set { this.PutObject(Index, value); }
-		}*/
-
 		public string this[int Index]
 		{
-			get { return this.Get(Index); }
-			set { this.Put(Index, value); }
+			get {
+				if (Index < 0 || Index >= this.FList.Count)
+				{
+					this.Error("List index out of bounds (%d)", Index);
+				}
+
+				return this.FList[Index].FString;
+			}
+			set {
+				if (this.Sorted)
+				{
+					this.Error("Operation not allowed on sorted list", 0);
+				}
+				if (Index < 0 || Index >= this.FList.Count)
+				{
+					this.Error("List index out of bounds (%d)", Index);
+				}
+
+				this.Changing();
+				StringItem item = this.FList[Index];
+				item.FString = value;
+				this.FList[Index] = item;
+				this.Changed();
+			}
 		}
 
 		public string Text
 		{
-			get { return this.GetTextStr(); }
-			set { this.SetTextStr(value); }
+			get {
+				return this.GetTextStr();
+			}
+			set {
+				this.SetTextStr(value);
+			}
 		}
 
 		public StringList()
@@ -109,45 +129,33 @@ namespace Ext.Utils
 
 		public bool Sorted
 		{
-			get { return this.FSorted; }
-			set { this.SetSorted(value); }
+			get {
+				return this.FSorted;
+			}
+			set {
+				if (this.FSorted != value) {
+					if (value) this.Sort();
+					this.FSorted = value;
+				}
+			}
 		}
 
 		public bool CaseSensitive
 		{
-			get { return this.FCaseSensitive; }
-			set { this.SetCaseSensitive(value); }
+			get {
+				return this.FCaseSensitive;
+			}
+			set {
+				if (value != this.FCaseSensitive) {
+					this.FCaseSensitive = value;
+					if (this.FSorted) this.Sort();
+				}
+			}
 		}
 
 		private void Error(string Msg, int Data)
 		{
 			throw new EStringListError(string.Format(Msg, Data));
-		}
-
-		private string Get(int Index)
-		{
-			if (Index < 0 || Index >= this.FList.Count)
-			{
-				this.Error("List index out of bounds (%d)", Index);
-			}
-			return this.FList[Index].FString;
-		}
-
-		private void Put(int Index, string S)
-		{
-			if (this.Sorted)
-			{
-				this.Error("Operation not allowed on sorted list", 0);
-			}
-			if (Index < 0 || Index >= this.FList.Count)
-			{
-				this.Error("List index out of bounds (%d)", Index);
-			}
-			this.Changing();
-			StringItem item = this.FList[Index];
-			item.FString = S;
-			this.FList[Index] = item;
-			this.Changed();
 		}
 
 		public object GetObject(int index)
@@ -159,7 +167,7 @@ namespace Ext.Utils
 			return this.FList[index].FObject;
 		}
 
-		public void PutObject(int Index, object AObject)
+		public void SetObject(int Index, object AObject)
 		{
 			if (Index < 0 || Index >= this.FList.Count)
 			{
@@ -180,9 +188,10 @@ namespace Ext.Utils
 			int num = Count - 1;
 			for (int I = 0; I <= num; I++)
 			{
-				Buffer.Append(this.Get(I));
+				Buffer.Append(this[I]);
 				Buffer.Append(StringList.LineBreak);
 			}
+
 			return Buffer.ToString();
 		}
 
@@ -252,15 +261,15 @@ namespace Ext.Utils
 			return Result;
 		}
 
-		public void AddStrings(StringList Strings)
+		public void AddStrings(StringList strings)
 		{
 			this.BeginUpdate();
 			try
 			{
-				int num = Strings.Count - 1;
+				int num = strings.Count - 1;
 				for (int I = 0; I <= num; I++)
 				{
-					this.AddObject(Strings[I], Strings.GetObject(I));
+					this.AddObject(strings[I], strings.GetObject(I));
 				}
 			}
 			finally
@@ -514,24 +523,6 @@ namespace Ext.Utils
 				L = I;
 			}
 			while (I < R);
-		}
-
-		private void SetSorted(bool Value)
-		{
-			if (this.FSorted != Value)
-			{
-				if (Value) this.Sort();
-				this.FSorted = Value;
-			}
-		}
-
-		private void SetCaseSensitive(bool Value)
-		{
-			if (Value != this.FCaseSensitive)
-			{
-				this.FCaseSensitive = Value;
-				if (this.Sorted) this.Sort();
-			}
 		}
 
 		private void Changed()

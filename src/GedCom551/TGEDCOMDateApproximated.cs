@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
 
 namespace GedCom551
 {
@@ -13,9 +12,9 @@ namespace GedCom551
 			set { this.FDateApproximated = value; }
 		}
 
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			base.CreateObj(AOwner, AParent);
+			base.CreateObj(owner, parent);
 			this.FDateApproximated = TGEDCOMApproximated.daExact;
 		}
 
@@ -42,7 +41,7 @@ namespace GedCom551
 			return Result;
 		}
 
-		private string ExtractApproximated([In] string S)
+		private string ExtractApproximated(string S)
 		{
 			string Result = S;
 			string SU = Result.Substring(0, 3).ToUpper();
@@ -60,7 +59,7 @@ namespace GedCom551
 			return Result;
 		}
 
-		public override string ParseString([In] string S)
+		public override string ParseString(string S)
 		{
 			string Result = base.ExtractDelimiter(S, 0);
 			Result = this.ExtractApproximated(Result);
@@ -68,7 +67,7 @@ namespace GedCom551
 			return base.ParseString(Result);
 		}
 
-		public TGEDCOMDateApproximated(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMDateApproximated(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 	}

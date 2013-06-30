@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Ext.Utils;
 using GedCom551;
 using GKCore;
 using GKUI.Controls;
-using GKUI.Lists;
 
 /// <summary>
 /// Localization: clean
@@ -18,9 +16,9 @@ namespace GKUI
 	{
 		private TfmBase FBase;
 		private TGEDCOMGroupRecord FGroup;
-		private TSheetList FMembersList;
-		private TSheetList FNotesList;
-		private TSheetList FMediaList;
+		private GKSheetList FMembersList;
+		private GKSheetList FNotesList;
+		private GKSheetList FMediaList;
 
 
 		public TfmBase Base
@@ -41,7 +39,7 @@ namespace GKUI
 			this.Base.ChangeRecord(this.FGroup);
 		}
 
-		private void SetGroup([In] TGEDCOMGroupRecord Value)
+		private void SetGroup(TGEDCOMGroupRecord Value)
 		{
 			this.FGroup = Value;
 			try
@@ -86,11 +84,11 @@ namespace GKUI
                         {
                             case TGenEngine.TRecAction.raAdd:
 							    member = this.Base.SelectPerson(null, TGenEngine.TTargetMode.tmNone, TGEDCOMSex.svNone);
-                                res = (member != null && this.Base.Engine.AddGroupMember(this.FGroup, member));
+                                res = (member != null && this.FGroup.aux_AddMember(member));
                                 break;
 
                             case TGenEngine.TRecAction.raDelete:
-                                res = (member != null && TGenEngine.ShowQuestion(LangMan.LSList[128]) != DialogResult.No && this.Base.Engine.RemoveGroupMember(this.FGroup, member));
+                                res = (member != null && TGenEngine.ShowQuestion(LangMan.LSList[128]) != DialogResult.No && this.FGroup.aux_RemoveMember(member));
                                 break;
 
                             case TGenEngine.TRecAction.raJump:
@@ -145,23 +143,23 @@ namespace GKUI
 		{
 			this.InitializeComponent();
 			this.FBase = aBase;
-			this.FMembersList = new TSheetList(this.SheetMembers);
-			this.FMembersList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
+			this.FMembersList = new GKSheetList(this.SheetMembers);
+			this.FMembersList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
 			this.FMembersList.Buttons = EnumSet.Create(new Enum[]
 			{
-				TSheetList.TListButton.lbAdd, 
-				TSheetList.TListButton.lbEdit, 
-				TSheetList.TListButton.lbDelete, 
-				TSheetList.TListButton.lbJump
+				GKSheetList.TListButton.lbAdd, 
+				GKSheetList.TListButton.lbEdit, 
+				GKSheetList.TListButton.lbDelete, 
+				GKSheetList.TListButton.lbJump
 			});
 			this.FMembersList.List.AddListColumn(LangMan.LSList[85], 300, false);
 
-			this.FNotesList = new TSheetList(this.SheetNotes);
-			this.FNotesList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
+			this.FNotesList = new GKSheetList(this.SheetNotes);
+			this.FNotesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
 			this.Base.SetupRecNotesList(this.FNotesList);
 
-			this.FMediaList = new TSheetList(this.SheetMultimedia);
-			this.FMediaList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
+			this.FMediaList = new GKSheetList(this.SheetMultimedia);
+			this.FMediaList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
 			this.Base.SetupRecMediaList(this.FMediaList);
 
 			this.Text = LangMan.LSList[127];

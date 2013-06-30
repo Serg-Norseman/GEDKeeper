@@ -2,7 +2,6 @@
 
 using GedCom551;
 using GKCore;
-using GKUI.Controls;
 
 /// <summary>
 /// Localization: clean
@@ -19,6 +18,25 @@ namespace GKUI.Lists
 		rctStopDate,
 		rctPercent,
 		rctChangeDate
+	}
+
+	public sealed class TResearchListColumns : TListColumns
+	{
+		protected override void InitColumnStatics()
+		{
+			this.AddStatic(LangMan.LSList[125], TDataType.dtString, 300, true);
+			this.AddStatic(LangMan.LSList[178], TDataType.dtString, 90, true);
+			this.AddStatic(LangMan.LSList[117], TDataType.dtString, 90, true);
+			this.AddStatic(LangMan.LSList[180], TDataType.dtString, 90, true);
+			this.AddStatic(LangMan.LSList[181], TDataType.dtString, 90, true);
+			this.AddStatic(LangMan.LSList[179], TDataType.dtInteger, 90, true);
+			this.AddStatic(LangMan.LSList[317], TDataType.dtDateTime, 150, true);
+		}
+
+		public TResearchListColumns() : base()
+		{
+			InitData(typeof(TResearchColumnType));
+		}
 	}
 
 	public sealed class TResearchListMan : TListManager
@@ -39,7 +57,7 @@ namespace GKUI.Lists
 			this.FRec = (aRec as TGEDCOMResearchRecord);
 		}
 
-		public override object GetColumnValueDirect(int col_type, int col_subtype)
+		protected override object GetColumnValueEx(int col_type, int col_subtype)
 		{
 			switch (col_type) {
 				case 0:
@@ -61,18 +79,6 @@ namespace GKUI.Lists
 			}
 		}
 
-		protected override void InitColumnStatics()
-		{
-			this.ColumnStatics.Clear();
-			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[125], TDataType.dtString, 300));
-			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[178], TDataType.dtString, 90));
-			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[117], TDataType.dtString, 90));
-			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[180], TDataType.dtString, 90));
-			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[181], TDataType.dtString, 90));
-			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[179], TDataType.dtInteger, 90));
-			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[317], TDataType.dtDateTime, 150));
-		}
-
 		public override Type GetColumnsEnum()
 		{
 			return typeof(TResearchColumnType);
@@ -80,7 +86,7 @@ namespace GKUI.Lists
 
 		public override TListColumns GetDefaultListColumns()
 		{
-			return null;
+			return new TResearchListColumns();
 		}
 
 		public TResearchListMan(TGEDCOMTree aTree) : base(aTree)

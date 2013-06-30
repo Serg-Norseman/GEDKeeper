@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Ext.Utils;
@@ -22,7 +21,7 @@ namespace GKUI
 			set { this.SetIName(value); }
 		}
 
-		private void SetIName([In] NamesTable.TName Value)
+		private void SetIName(NamesTable.TName Value)
 		{
 			this.FIName = Value;
 			if (this.FIName == null)

@@ -66,6 +66,9 @@
     <Reference Include="Cyotek.Windows.Forms.ImageBox">
       <HintPath>..\Cyotek.Windows.Forms.ImageBox.dll</HintPath>
     </Reference>
+    <Reference Include="ExcelLibrary">
+      <HintPath>ExcelLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="itextsharp">
       <HintPath>itextsharp.dll</HintPath>
     </Reference>
@@ -115,6 +118,7 @@
     <Compile Include="GedCom551\TGEDCOMAddress.cs" />
     <Compile Include="GedCom551\TGEDCOMAlias.cs" />
     <Compile Include="GedCom551\TGEDCOMAssociation.cs" />
+    <Compile Include="GedCom551\TGEDCOMBloodGroup.cs" />
     <Compile Include="GedCom551\TGEDCOMChangeDate.cs" />
     <Compile Include="GedCom551\TGEDCOMChildToFamilyLink.cs" />
     <Compile Include="GedCom551\TGEDCOMCommunicationRecord.cs" />
@@ -143,7 +147,7 @@
     <Compile Include="GedCom551\TGEDCOMIndividualEvent.cs" />
     <Compile Include="GedCom551\TGEDCOMIndividualOrdinance.cs" />
     <Compile Include="GedCom551\TGEDCOMIndividualRecord.cs" />
-    <Compile Include="GedCom551\TGEDCOMList.cs" />
+    <Compile Include="GedCom551\GEDCOMList.cs" />
     <Compile Include="GedCom551\TGEDCOMLocationRecord.cs" />
     <Compile Include="GedCom551\TGEDCOMMap.cs" />
     <Compile Include="GedCom551\TGEDCOMMultimediaLink.cs" />
@@ -173,34 +177,27 @@
     <Compile Include="GedCom551\TGEDCOMUserReference.cs" />
     <Compile Include="GedCom551\TXRefReplaceMap.cs" />
     <Compile Include="GEDKeeper2.cs" />
-    <Compile Include="GKCore\ExcelExporter.cs" />
-    <Compile Include="GKCore\Exporter.cs" />
     <Compile Include="GKCore\CustomFilter.cs" />
-    <Compile Include="GKCore\GlobalOptions.cs" />
-    <Compile Include="GKCore\HTMLExporter.cs" />
+    <Compile Include="GKCore\Export\ExcelExporter.cs" />
+    <Compile Include="GKCore\Export\Exporter.cs" />
+    <Compile Include="GKCore\Export\FamilyBookExporter.cs" />
+    <Compile Include="GKCore\Export\PDFExporter.cs" />
+    <Compile Include="GKCore\Export\PedigreeExporter.cs" />
     <Compile Include="GKCore\Importer.cs" />
     <Compile Include="GKCore\IProgressController.cs" />
     <Compile Include="GKCore\Kinships.cs" />
     <Compile Include="GKCore\LangMan.cs" />
-    <Compile Include="GKCore\PDFExport.cs" />
-    <Compile Include="GKCore\PedigreeOptions.cs" />
-    <Compile Include="GKCore\ProxyOptions.cs" />
+    <Compile Include="GKCore\Options\GlobalOptions.cs" />
+    <Compile Include="GKCore\Options\PedigreeOptions.cs" />
+    <Compile Include="GKCore\Options\ProxyOptions.cs" />
+    <Compile Include="GKCore\Options\TreeChartOptions.cs" />
     <Compile Include="GKCore\SearchManager.cs" />
     <Compile Include="GKCore\TGenEngine.cs" />
-    <Compile Include="GKCore\PedigreeExporter.cs" />
     <Compile Include="GKCore\ScriptEngine.cs" />
-    <Compile Include="GKCore\TreeChartOptions.cs" />
+    <Compile Include="GKCore\TreeStats.cs" />
     <Compile Include="GKCore\TreeTools.cs" />
-    <Compile Include="GKCore\WebExporter.cs" />
-    <Compile Include="GKCore\WebTree.cs" />
     <Compile Include="GKResources.Designer.cs">
       <DependentUpon>GKResources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="GKSandbox\ImageControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="GKSandbox\ImageControl.Designer.cs">
-      <DependentUpon>ImageControl.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Controls\GKMergeControl.cs">
       <SubType>UserControl</SubType>
@@ -208,11 +205,17 @@
     <Compile Include="GKUI\Controls\GKMergeControl.Designer.cs">
       <DependentUpon>GKMergeControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Controls\InputBox.cs">
+    <Compile Include="GKUI\Controls\GKImageControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GKUI\Controls\GKImageControl.Designer.cs">
+      <DependentUpon>GKImageControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Controls\GKInputBox.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Controls\InputBox.Designer.cs">
-      <DependentUpon>InputBox.cs</DependentUpon>
+    <Compile Include="GKUI\Controls\GKInputBox.Designer.cs">
+      <DependentUpon>GKInputBox.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Controls\GKComboItem.cs" />
     <Compile Include="GKUI\Controls\GKListItem.cs" />
@@ -229,10 +232,10 @@
     <Compile Include="GKUI\Controls\GKMapBrowser.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Controls\TRecordsView.cs">
+    <Compile Include="GKUI\Controls\GKRecordsView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Controls\TSheetList.cs">
+    <Compile Include="GKUI\Controls\GKSheetList.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Dialogs\TfmAbout.cs">
@@ -252,6 +255,18 @@
     </Compile>
     <Compile Include="GKUI\Dialogs\TfmAssociationEdit.Designer.cs">
       <DependentUpon>TfmAssociationEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmCalcWidget.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmCalcWidget.Designer.cs">
+      <DependentUpon>TfmCalcWidget.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmCalendar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmCalendar.Designer.cs">
+      <DependentUpon>TfmCalendar.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\TfmComFilter.cs">
       <SubType>Form</SubType>
@@ -313,6 +328,12 @@
     <Compile Include="GKUI\Dialogs\TfmNameEdit.Designer.cs">
       <DependentUpon>TfmNameEdit.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Dialogs\TfmNamesBook.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmNamesBook.Designer.cs">
+      <DependentUpon>TfmNamesBook.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmNoteEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -324,6 +345,12 @@
     </Compile>
     <Compile Include="GKUI\Dialogs\TfmOptions.Designer.cs">
       <DependentUpon>TfmOptions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmOrganizer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmOrganizer.Designer.cs">
+      <DependentUpon>TfmOrganizer.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\TfmPersonEdit.cs">
       <SubType>Form</SubType>
@@ -391,6 +418,12 @@
     <Compile Include="GKUI\Dialogs\TfmTaskEdit.Designer.cs">
       <DependentUpon>TfmTaskEdit.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Dialogs\TfmTimeLine.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\TfmTimeLine.Designer.cs">
+      <DependentUpon>TfmTimeLine.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmTipsDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -438,12 +471,8 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Charts\TPersonList.cs" />
-    <Compile Include="GKCore\Commands\TCmdPersonChangePatriarch.cs" />
-    <Compile Include="GKCore\Commands\TCmdPersonChangeSex.cs" />
     <Compile Include="GKCore\NavManager.cs" />
-    <Compile Include="GKCore\CustomCommand.cs" />
     <Compile Include="GKCore\NamesTable.cs" />
-    <Compile Include="GKCore\UndoManager.cs" />
     <Compile Include="GKUI\Lists\TCommunicationListMan.cs" />
     <Compile Include="GKUI\Lists\TFamilyListMan.cs" />
     <Compile Include="GKUI\Lists\TGroupListMan.cs" />
@@ -492,56 +521,16 @@
     <Compile Include="GKUI\TfmTreeTools.Designer.cs">
       <DependentUpon>TfmTreeTools.cs</DependentUpon>
     </Compile>
-    <Compile Include="Ext\XLSFile\TBIFFWriter.cs" />
-    <Compile Include="Ext\XLSFile\TBOF.cs" />
-    <Compile Include="Ext\XLSFile\TCell.cs" />
-    <Compile Include="Ext\XLSFile\TData.cs" />
-    <Compile Include="Ext\XLSFile\TDimension.cs" />
-    <Compile Include="Ext\XLSFile\TDoubleCell.cs" />
-    <Compile Include="Ext\XLSFile\TIntegerCell.cs" />
-    <Compile Include="Ext\XLSFile\TStrCell.cs" />
-    <Compile Include="Ext\XLSFile\TWordCell.cs" />
-    <Compile Include="Ext\XLSFile\TXLSFile.cs" />
-    <Compile Include="GKUI\Widgets\TfmCalcWidget.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\Widgets\TfmCalcWidget.Designer.cs">
-      <DependentUpon>TfmCalcWidget.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\Widgets\TfmCalendar.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\Widgets\TfmCalendar.Designer.cs">
-      <DependentUpon>TfmCalendar.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\Widgets\TfmNamesBook.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\Widgets\TfmNamesBook.Designer.cs">
-      <DependentUpon>TfmNamesBook.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\Widgets\TfmOrganizer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\Widgets\TfmOrganizer.Designer.cs">
-      <DependentUpon>TfmOrganizer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\Widgets\TfmTimeLine.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\Widgets\TfmTimeLine.Designer.cs">
-      <DependentUpon>TfmTimeLine.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GKSandbox\ImageControl.resx">
-      <DependentUpon>ImageControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Controls\GKMergeControl.resx">
       <DependentUpon>GKMergeControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Controls\InputBox.resx">
-      <DependentUpon>InputBox.cs</DependentUpon>
+    <EmbeddedResource Include="GKUI\Controls\GKImageControl.resx">
+      <DependentUpon>GKImageControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Controls\GKInputBox.resx">
+      <DependentUpon>GKInputBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\TfmAbout.resx">
       <DependentUpon>TfmAbout.cs</DependentUpon>
@@ -621,6 +610,9 @@
     <EmbeddedResource Include="GKUI\Dialogs\TfmTaskEdit.resx">
       <DependentUpon>TfmTaskEdit.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmTimeLine.resx">
+      <DependentUpon>TfmTimeLine.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\TfmTipsDialog.resx">
       <DependentUpon>TfmTipsDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -658,14 +650,14 @@
     <EmbeddedResource Include="GKUI\TfmTreeTools.resx">
       <DependentUpon>TfmTreeTools.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Widgets\TfmTimeLine.resx">
-      <DependentUpon>TfmTimeLine.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="GKCore\Export" />
+    <Folder Include="GKCore\Options" />
+    <Folder Include="GKSandbox" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <Content Include="ProfilingSessions\Session20130421_135002.sdps" />
     <Content Include="zlib1.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

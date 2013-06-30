@@ -1,8 +1,5 @@
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
-
-using Ext.Utils;
 
 namespace GedCom551
 {
@@ -54,97 +51,43 @@ namespace GedCom551
 			set { base.SetTagStringValue("RESN", GetRestrictionStr(value)); }
 		}
 
-		/*
-		public new TGEDCOMNotes Notes
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			get
-			{
-				return base.GetNote(Index);
-			}
+			base.CreateObj(owner, parent);
+			this.FLevel = (parent as TGEDCOMTag).Level;
 		}
 
-		public new int NotesCount
+		public override TGEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
 		{
-			get
+			TGEDCOMTag result;
+
+			if (tagName == "DATE")
 			{
-				return base.NotesCount;
+				result = base.AddTag(tagName, tagValue, TGEDCOMDateValue.Create);
 			}
-		}*/
-
-		/*
-		public new TGEDCOMSourceCitation SourceCitations
-		{
-			get
+			else if (tagName == "PHON" || tagName == "EMAIL" || tagName == "FAX" || tagName == "WWW")
 			{
-				return base.GetSourceCitation(Index);
-			}
-		}
-
-		public new int SourceCitationsCount
-		{
-			get
-			{
-				return base.SourceCitationsCount;
-			}
-		}*/
-
-		/*
-		public new TGEDCOMMultimediaLink MultimediaLinks
-		{
-			get
-			{
-				return base.GetMultimediaLink(Index);
-			}
-		}
-
-		public new int MultimediaLinksCount
-		{
-			get
-			{
-				return base.MultimediaLinksCount;
-			}
-		}*/
-
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
-		{
-			base.CreateObj(AOwner, AParent);
-			base.SetLists(EnumSet.Create(new Enum[] { TGEDCOMSubList.stNotes, TGEDCOMSubList.stSource, TGEDCOMSubList.stMultimedia }));
-            this.FLevel = (AParent as TGEDCOMTag).Level;
-		}
-
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
-		{
-			TGEDCOMTag Result;
-			if (ATag == "DATE")
-			{
-				Result = base.AddTag(ATag, AValue, TGEDCOMDateValue.Create);
+				result = this.Address.AddTag(tagName, tagValue, tagConstructor);
 			}
 			else
 			{
-				if (ATag == "PHON" || ATag == "EMAIL" || ATag == "FAX" || ATag == "WWW")
-				{
-					Result = this.Address.AddTag(ATag, AValue, ATagConstructor);
-				}
-				else
-				{
-					// define "PLAC", "ADDR" by default
-					Result = base.AddTag(ATag, AValue, ATagConstructor);
-				}
+				// define "PLAC", "ADDR" by default
+				result = base.AddTag(tagName, tagValue, tagConstructor);
 			}
-			return Result;
+
+			return result;
 		}
 
 		public override void SaveToStream(StreamWriter AStream)
 		{
-			string[] aTagSorting = new string[0];
-			this.SaveTagsToStream(AStream, aTagSorting);
+			this.SaveTagsToStream(AStream);
 
 			this._Notes.SaveToStream(AStream);
 			this._SourceCitations.SaveToStream(AStream);
 			this._MultimediaLinks.SaveToStream(AStream);
 		}
 
-		public TGEDCOMEventDetail(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMEventDetail(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 	}

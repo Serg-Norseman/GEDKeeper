@@ -109,6 +109,13 @@ internal class GKResources {
 		}
 	}
 	
+	internal static System.Drawing.Bitmap iChartControls_old {
+		get {
+			object obj = ResourceManager.GetObject("iChartControls_old", resourceCulture);
+			return ((System.Drawing.Bitmap)(obj));
+		}
+	}
+	
 	internal static System.Drawing.Bitmap iCopy {
 		get {
 			object obj = ResourceManager.GetObject("iCopy", resourceCulture);

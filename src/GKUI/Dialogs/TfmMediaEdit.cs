@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Ext.Utils;
@@ -19,8 +18,8 @@ namespace GKUI
 		private bool FIsNew;
 		private TGEDCOMMultimediaRecord FMediaRec;
 		private TfmBase FBase;
-		private TSheetList FNotesList;
-		private TSheetList FSourcesList;
+		private GKSheetList FNotesList;
+		private GKSheetList FSourcesList;
 
 		public TfmBase Base
 		{
@@ -111,7 +110,7 @@ namespace GKUI
 			if (refresh) this.ControlsRefresh();
 		}
 
-		private void SetMediaRec([In] TGEDCOMMultimediaRecord Value)
+		private void SetMediaRec(TGEDCOMMultimediaRecord Value)
 		{
 			this.FMediaRec = Value;
 			try
@@ -196,12 +195,12 @@ namespace GKUI
 				this.cbMediaType.Items.Add(LangMan.LSList[(int)TGenEngine.MediaTypes[(int)mt] - 1]);
 			}
 
-			this.FNotesList = new TSheetList(this.SheetNotes);
-			this.FNotesList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
+			this.FNotesList = new GKSheetList(this.SheetNotes);
+			this.FNotesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
 			this.Base.SetupRecNotesList(this.FNotesList);
 
-			this.FSourcesList = new TSheetList(this.SheetSources);
-			this.FSourcesList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
+			this.FSourcesList = new GKSheetList(this.SheetSources);
+			this.FSourcesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
 			this.Base.SetupRecSourcesList(this.FSourcesList);
 
 			this.btnAccept.Text = LangMan.LSList[97];

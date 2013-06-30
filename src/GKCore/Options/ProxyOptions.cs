@@ -1,6 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
-
 using Ext.Utils;
 
 /// <summary>
@@ -51,7 +49,7 @@ namespace GKCore
 		{
 		}
 
-		public void LoadFromFile([In] IniFile aIniFile)
+		public void LoadFromFile(IniFile aIniFile)
 		{
 			this.FUseProxy = aIniFile.ReadBool("Proxy", "UseProxy", false);
 			this.FServer = aIniFile.ReadString("Proxy", "Server", "");
@@ -60,7 +58,7 @@ namespace GKCore
 			this.FPassword = SCCrypt.scDecrypt(aIniFile.ReadString("Proxy", "Password", ""), unchecked((ushort)CRC32.CrcStr("GEDKeeper")));
 		}
 
-		public void SaveToFile([In] IniFile aIniFile)
+		public void SaveToFile(IniFile aIniFile)
 		{
 			aIniFile.WriteBool("Proxy", "UseProxy", this.FUseProxy);
 			aIniFile.WriteString("Proxy", "Server", this.FServer);

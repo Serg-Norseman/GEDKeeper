@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
 
 using Ext.Utils;
 
@@ -8,16 +7,16 @@ namespace GedCom551
 {
 	public sealed class TGEDCOMFamilyRecord : TGEDCOMRecord
 	{
-		private TGEDCOMListEx<TGEDCOMFamilyEvent> _FamilyEvents;
-		private TGEDCOMListEx<TGEDCOMPointer> _Childrens;
-		private TGEDCOMListEx<TGEDCOMSpouseSealing> _SpouseSealings;
+		private GEDCOMList<TGEDCOMFamilyEvent> _FamilyEvents;
+		private GEDCOMList<TGEDCOMPointer> _Childrens;
+		private GEDCOMList<TGEDCOMSpouseSealing> _SpouseSealings;
 
-		public TGEDCOMListEx<TGEDCOMPointer> Childrens
+		public GEDCOMList<TGEDCOMPointer> Childrens
 		{
 			get { return this._Childrens; }
 		}
 
-		public TGEDCOMListEx<TGEDCOMFamilyEvent> FamilyEvents
+		public GEDCOMList<TGEDCOMFamilyEvent> FamilyEvents
 		{
 			get { return this._FamilyEvents; }
 		}
@@ -43,24 +42,20 @@ namespace GedCom551
 			set { base.SetTagStringValue("RESN", GetRestrictionStr(value)); }
 		}
 
-		public TGEDCOMListEx<TGEDCOMSpouseSealing> SpouseSealings
+		public GEDCOMList<TGEDCOMSpouseSealing> SpouseSealings
 		{
 			get { return this._SpouseSealings; }
 		}
 
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			base.CreateObj(AOwner, AParent);
-			base.SetLists(EnumSet.Create(new Enum[]
-			{
-				TGEDCOMSubList.stNotes, TGEDCOMSubList.stSource, TGEDCOMSubList.stMultimedia
-			}));
+			base.CreateObj(owner, parent);
 			this.FRecordType = TGEDCOMRecordType.rtFamily;
 			this.FName = "FAM";
 
-			this._FamilyEvents = new TGEDCOMListEx<TGEDCOMFamilyEvent>(this);
-			this._Childrens = new TGEDCOMListEx<TGEDCOMPointer>(this);
-			this._SpouseSealings = new TGEDCOMListEx<TGEDCOMSpouseSealing>(this);
+			this._FamilyEvents = new GEDCOMList<TGEDCOMFamilyEvent>(this);
+			this._Childrens = new GEDCOMList<TGEDCOMPointer>(this);
+			this._SpouseSealings = new GEDCOMList<TGEDCOMSpouseSealing>(this);
 		}
 
 		public override void Dispose()
@@ -76,40 +71,59 @@ namespace GedCom551
 			}
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
+		private static GEDCOMFactory _factory;
+		
+		static TGEDCOMFamilyRecord()
 		{
-			TGEDCOMTag Result;
+			GEDCOMFactory f = new GEDCOMFactory();
+			
+			f.RegisterTag("SLGS", TGEDCOMSpouseSealing.Create);
+			
+			f.RegisterTag("ANUL", TGEDCOMFamilyEvent.Create);
+			f.RegisterTag("CENS", TGEDCOMFamilyEvent.Create);
+			f.RegisterTag("DIV", TGEDCOMFamilyEvent.Create);
+			f.RegisterTag("DIVF", TGEDCOMFamilyEvent.Create);
+			f.RegisterTag("ENGA", TGEDCOMFamilyEvent.Create);
+			f.RegisterTag("MARB", TGEDCOMFamilyEvent.Create);
+			f.RegisterTag("MARC", TGEDCOMFamilyEvent.Create);
+			f.RegisterTag("MARR", TGEDCOMFamilyEvent.Create);
+			f.RegisterTag("MARL", TGEDCOMFamilyEvent.Create);
+			f.RegisterTag("MARS", TGEDCOMFamilyEvent.Create);
+			f.RegisterTag("RESI", TGEDCOMFamilyEvent.Create);
+			f.RegisterTag("EVEN", TGEDCOMFamilyEvent.Create);
+
+			_factory = f;
+		}
+		
+		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
+		{
+			TGEDCOMTag result;
 
 			if (ATag == "HUSB" || ATag == "WIFE")
 			{
-				Result = base.AddTag(ATag, AValue, TGEDCOMPointer.Create);
+				result = base.AddTag(ATag, AValue, TGEDCOMPointer.Create);
+			}
+			else if (ATag == "CHIL")
+			{
+				result = this._Childrens.Add(new TGEDCOMPointer(base.Owner, this, ATag, AValue));
 			}
 			else
 			{
-				if (ATag == "CHIL")
+				result = _factory.CreateTag(this.Owner, this, ATag, AValue);
+
+				if (result != null)
 				{
-					Result = this._Childrens.Add(new TGEDCOMPointer(base.Owner, this, ATag, AValue));
-				}
-				else
-				{
-					if (ATag == "ANUL" || ATag == "CENS" || ATag == "DIV" || ATag == "DIVF" || ATag == "ENGA" || ATag == "MARB" || ATag == "MARC" || ATag == "MARR" || ATag == "MARL" || ATag == "MARS" || ATag == "RESI" || ATag == "EVEN")
-					{
-						Result = this._FamilyEvents.Add(new TGEDCOMFamilyEvent(base.Owner, this, ATag, AValue));
+					if (result is TGEDCOMFamilyEvent) {
+						result = this._FamilyEvents.Add(result as TGEDCOMFamilyEvent);
+					} else if (result is TGEDCOMSpouseSealing) {
+						result = this._SpouseSealings.Add(result as TGEDCOMSpouseSealing);
 					}
-					else
-					{
-						if (ATag == "SLGS")
-						{
-							Result = this._SpouseSealings.Add(new TGEDCOMSpouseSealing(base.Owner, this, ATag, AValue));
-						}
-						else
-						{
-							Result = base.AddTag(ATag, AValue, ATagConstructor);
-						}
-					}
+				} else {
+					result = base.AddTag(ATag, AValue, ATagConstructor);
 				}
 			}
-			return Result;
+
+			return result;
 		}
 
 		public override void Clear()
@@ -327,13 +341,94 @@ namespace GedCom551
 			return match;
 		}
 
-		public TGEDCOMFamilyRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMFamilyRecord(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 
-        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue)
 		{
-			return new TGEDCOMFamilyRecord(AOwner, AParent, AName, AValue);
+			return new TGEDCOMFamilyRecord(owner, parent, tagName, tagValue);
 		}
+
+		public void aux_AddSpouse(TGEDCOMIndividualRecord aSpouse)
+		{
+			TGEDCOMSex sex = aSpouse.Sex;
+
+            if (sex != TGEDCOMSex.svNone && sex != TGEDCOMSex.svUndetermined)
+			{
+                switch (sex)
+                {
+                    case TGEDCOMSex.svMale:
+                        this.Husband.Value = aSpouse;
+                        break;
+                    case TGEDCOMSex.svFemale:
+                        this.Wife.Value = aSpouse;
+                        break;
+                }
+
+                TGEDCOMSpouseToFamilyLink spLink = new TGEDCOMSpouseToFamilyLink(this.Owner, aSpouse, "", "");
+				spLink.Family = this;
+				aSpouse.SpouseToFamilyLinks.Add(spLink);
+			}
+		}
+
+		public void aux_RemoveSpouse(TGEDCOMIndividualRecord aSpouse)
+		{
+			if (aSpouse != null)
+			{
+				aSpouse.DeleteSpouseToFamilyLink(this);
+				TGEDCOMSex sex = aSpouse.Sex;
+				if (sex != TGEDCOMSex.svMale)
+				{
+					if (sex == TGEDCOMSex.svFemale)
+					{
+						this.Wife.Value = null;
+					}
+				}
+				else
+				{
+					this.Husband.Value = null;
+				}
+			}
+		}
+
+		public bool aux_AddChild(TGEDCOMIndividualRecord aChild)
+		{
+			bool Result;
+			try
+			{
+				TGEDCOMPointer ptr = new TGEDCOMPointer(this.Owner, this, "", "");
+				ptr.SetNamedValue("CHIL", aChild);
+				this.Childrens.Add(ptr);
+				TGEDCOMChildToFamilyLink chLink = new TGEDCOMChildToFamilyLink(this.Owner, aChild, "", "");
+				chLink.Family = this;
+				aChild.ChildToFamilyLinks.Add(chLink);
+				Result = true;
+			}
+			catch (Exception E)
+			{
+				SysUtils.LogWrite("TGenEngine.AddFamilyChild(): " + E.Message);
+				Result = false;
+			}
+			return Result;
+		}
+
+		public bool aux_RemoveChild(TGEDCOMIndividualRecord aChild)
+		{
+			bool Result;
+			try
+			{
+				this.DeleteChild(aChild);
+				aChild.DeleteChildToFamilyLink(this);
+				Result = true;
+			}
+			catch (Exception E)
+			{
+				SysUtils.LogWrite("TGenEngine.RemoveFamilyChild(): " + E.Message);
+				Result = false;
+			}
+			return Result;
+		}
+
 	}
 }

@@ -317,7 +317,7 @@ namespace GKCore
 		{
 			TGEDCOMIndividualRecord rec = rec_ptr as TGEDCOMIndividualRecord;
 			TGEDCOMIndividualRecord a_rec = a_ptr as TGEDCOMIndividualRecord;
-			TGEDCOMAssociation asso = fBase.Engine.AddAssociation(rec, rel, a_rec);
+			TGEDCOMAssociation asso = rec.aux_AddAssociation(rel, a_rec);
 			return asso;
 		}
 
@@ -480,7 +480,7 @@ namespace GKCore
 	{
 		TGEDCOMGroupRecord grp = group_ptr as TGEDCOMGroupRecord;
 		TGEDCOMIndividualRecord person = person_ptr as TGEDCOMIndividualRecord;
-		fBase.Engine.AddGroupMember(grp, person);
+		grp.aux_AddMember(person);
 	}
 
 	public void gt_add_note_text(object note_ptr, string txt)
@@ -494,7 +494,7 @@ namespace GKCore
 		TGEDCOMRecord rec = rec_ptr as TGEDCOMRecord;
 		TGEDCOMNoteRecord note_rec = note_ptr as TGEDCOMNoteRecord;
 
-		TGenEngine.BindRecordNote(fBase.Tree, rec, note_rec);
+		rec.aux_AddNote(note_rec);
 	}
 
 	public void gt_bind_record_source(object rec_ptr, object src_ptr, string page, int quality)
@@ -502,7 +502,7 @@ namespace GKCore
 		TGEDCOMRecord rec = rec_ptr as TGEDCOMRecord;
 		TGEDCOMSourceRecord src_rec = src_ptr as TGEDCOMSourceRecord;
 
-		TGenEngine.BindRecordSource(fBase.Tree, rec, src_rec, page, quality);
+		rec.aux_AddSource(src_rec, page, quality);
 	}
 
 	public void gt_bind_family_spouse(object f_ptr, object sp_ptr)
@@ -510,7 +510,7 @@ namespace GKCore
 		TGEDCOMFamilyRecord f_rec = f_ptr as TGEDCOMFamilyRecord;
 		TGEDCOMIndividualRecord sp_rec = sp_ptr as TGEDCOMIndividualRecord;
 
-		fBase.Engine.AddFamilySpouse(f_rec, sp_rec);
+		f_rec.aux_AddSpouse(sp_rec);
 	}
 
 	public void gt_bind_family_child(object f_ptr, object ch_ptr)
@@ -518,7 +518,7 @@ namespace GKCore
 		TGEDCOMFamilyRecord f_rec = f_ptr as TGEDCOMFamilyRecord;
 		TGEDCOMIndividualRecord ch_rec = ch_ptr as TGEDCOMIndividualRecord;
 
-		fBase.Engine.AddFamilyChild(f_rec, ch_rec);
+		f_rec.aux_AddChild(ch_rec);
 	}
 
 	public string gt_define_sex(string name, string patr)

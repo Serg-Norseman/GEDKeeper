@@ -1,11 +1,9 @@
 using System;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Ext.Utils;
 using GKCore;
-using GKUI.Controls;
 
 /// <summary>
 /// Localization: clean
@@ -13,7 +11,7 @@ using GKUI.Controls;
 
 namespace GKUI.Controls
 {
-	public sealed class TSheetList : ContainerControl, IDisposable
+	public sealed class GKSheetList : ContainerControl, IDisposable
 	{
 		public delegate void TModifyEvent(object Sender, object ItemData, TGenEngine.TRecAction Action);
 
@@ -36,10 +34,10 @@ namespace GKUI.Controls
 		private ToolBar FToolBar;
 		private EnumSet FButtons;
 		private GKListView FList;
-		private TSheetList.TModifyEvent FOnModify;
+		private GKSheetList.TModifyEvent FOnModify;
 		private bool FReadOnly;
 
-		public event TSheetList.TModifyEvent OnModify
+		public event GKSheetList.TModifyEvent OnModify
 		{
 			add
 			{
@@ -132,15 +130,15 @@ namespace GKUI.Controls
 			this.FList.Focus();
 		}
 
-		private void SetButtons([In] EnumSet Value)
+		private void SetButtons(EnumSet Value)
 		{
 			this.FButtons = Value;
-			this.FBtnAdd.Visible = this.FButtons.InSet(TSheetList.TListButton.lbAdd);
-			this.FBtnDelete.Visible = this.FButtons.InSet(TSheetList.TListButton.lbDelete);
-			this.FBtnEdit.Visible = this.FButtons.InSet(TSheetList.TListButton.lbEdit);
-			this.FBtnLinkJump.Visible = this.FButtons.InSet(TSheetList.TListButton.lbJump);
-			this.FBtnMoveUp.Visible = this.FButtons.InSet(TSheetList.TListButton.lbMoveUp);
-			this.FBtnMoveDown.Visible = this.FButtons.InSet(TSheetList.TListButton.lbMoveDown);
+			this.FBtnAdd.Visible = this.FButtons.InSet(GKSheetList.TListButton.lbAdd);
+			this.FBtnDelete.Visible = this.FButtons.InSet(GKSheetList.TListButton.lbDelete);
+			this.FBtnEdit.Visible = this.FButtons.InSet(GKSheetList.TListButton.lbEdit);
+			this.FBtnLinkJump.Visible = this.FButtons.InSet(GKSheetList.TListButton.lbJump);
+			this.FBtnMoveUp.Visible = this.FButtons.InSet(GKSheetList.TListButton.lbMoveUp);
+			this.FBtnMoveDown.Visible = this.FButtons.InSet(GKSheetList.TListButton.lbMoveDown);
 			this.FToolBar.Visible = !this.FButtons.IsEmpty();
 		}
 
@@ -154,7 +152,7 @@ namespace GKUI.Controls
 			return result;
 		}
 
-		private void SetReadOnly([In] bool Value)
+		private void SetReadOnly(bool Value)
 		{
 			this.FReadOnly = Value;
 			this.FBtnAdd.Enabled = !this.FReadOnly;
@@ -172,7 +170,7 @@ namespace GKUI.Controls
 			}
 		}
 
-		public TSheetList(Control AOwner)
+		public GKSheetList(Control AOwner)
 		{
 			AOwner.SuspendLayout();
 			this.Dock = DockStyle.Fill;

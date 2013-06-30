@@ -1,7 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
-
-using Ext.Utils;
 
 namespace GedCom551
 {
@@ -29,15 +26,14 @@ namespace GedCom551
 			get { return base.TagClass("_STOPDATE", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact; }
 		}
 
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			base.CreateObj(AOwner, AParent);
-			base.SetLists(EnumSet.Create(new Enum[] { TGEDCOMSubList.stNotes }));
+			base.CreateObj(owner, parent);
 			this.FRecordType = TGEDCOMRecordType.rtTask;
 			this.FName = "_TASK";
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 			if (ATag == "_STARTDATE" || ATag == "_STOPDATE")
@@ -55,37 +51,32 @@ namespace GedCom551
         {
             TGEDCOMTree tree = this.Owner;
             aGoalRec = tree.XRefIndex_Find(TGEDCOMObject.CleanXRef(this.Goal));
+
             if (aGoalRec is TGEDCOMIndividualRecord)
             {
-                aType = TGoalType.gtIndividual;
+            	aType = TGoalType.gtIndividual;
+            }
+            else if (aGoalRec is TGEDCOMFamilyRecord)
+            {
+            	aType = TGoalType.gtFamily;
+            }
+            else if (aGoalRec is TGEDCOMSourceRecord)
+            {
+            	aType = TGoalType.gtSource;
             }
             else
             {
-                if (aGoalRec is TGEDCOMFamilyRecord)
-                {
-                    aType = TGoalType.gtFamily;
-                }
-                else
-                {
-                    if (aGoalRec is TGEDCOMSourceRecord)
-                    {
-                        aType = TGoalType.gtSource;
-                    }
-                    else
-                    {
-                        aType = TGoalType.gtOther;
-                    }
-                }
+            	aType = TGoalType.gtOther;
             }
         }
 
-		public TGEDCOMTaskRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMTaskRecord(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 
-        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue)
 		{
-			return new TGEDCOMTaskRecord(AOwner, AParent, AName, AValue);
+			return new TGEDCOMTaskRecord(owner, parent, tagName, tagValue);
 		}
 	}
 }

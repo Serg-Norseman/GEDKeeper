@@ -29,22 +29,26 @@ namespace GKUI
 			return string.Format("{0:00}:{1:00}:{2:00}", new object[] { ts.Hours, ts.Minutes, ts.Seconds });
 		}
 
-		private void ProgressUpdate()
+		private void ProgressUpdate(int value)
 		{
-			double count = (double)this.ProgressBar1.Maximum;
-			double pos = (double)this.ProgressBar1.Value;
-			if (pos == 0) pos = 1;
-			//Text = pos.ToString() + " / " + count.ToString();
+			if (this.ProgressBar1.Value != value) {
+				this.ProgressBar1.Value = value;
 
-			TimeSpan pass_time = DateTime.Now - this.StartTime;
-			TimeSpan rest_time = new TimeSpan(SysUtils.Trunc((double)(pass_time.Ticks) / pos * (count - pos)));
-			TimeSpan sum_time = pass_time + rest_time;
+				double count = (double)this.ProgressBar1.Maximum;
+				double pos = (double)this.ProgressBar1.Value;
+				if (pos == 0) pos = 1;
+				//Text = pos.ToString() + " / " + count.ToString();
 
-			this.Label7.Text = TimeSpanToString(pass_time);
-			this.Label8.Text = TimeSpanToString(rest_time);
-			this.Label9.Text = TimeSpanToString(sum_time);
+				TimeSpan pass_time = DateTime.Now - this.StartTime;
+				TimeSpan rest_time = new TimeSpan(SysUtils.Trunc((double)(pass_time.Ticks) / pos * (count - pos)));
+				TimeSpan sum_time = pass_time + rest_time;
 
-			base.Update();
+				this.Label7.Text = TimeSpanToString(pass_time);
+				this.Label8.Text = TimeSpanToString(rest_time);
+				this.Label9.Text = TimeSpanToString(sum_time);
+
+				base.Update();
+			}
 		}
 
 		public static void ProgressInit(int aMax, string aTitle)
@@ -76,9 +80,7 @@ namespace GKUI
 			}
 			set {
 				if (TfmProgress.form != null) {
-					TfmProgress.form.ProgressBar1.Value = value;
-					TfmProgress.form.ProgressUpdate();
-					//Thread.Sleep(1);
+					TfmProgress.form.ProgressUpdate(value);
 				}
 			}
 		}
@@ -87,8 +89,8 @@ namespace GKUI
 		{
 			if (TfmProgress.form != null)
 			{
-				TfmProgress.form.ProgressBar1.Increment(1);
-				TfmProgress.form.ProgressUpdate();
+				//TfmProgress.form.ProgressBar1.Increment(1);
+				TfmProgress.form.ProgressUpdate(TfmProgress.form.ProgressBar1.Value + 1);
 			}
 		}
 	}

@@ -70,9 +70,11 @@ namespace GKUI
         	
         	this.edName.Items.Clear();
 			this.edName.Items.AddRange(GKUI.TfmGEDKeeper.Instance.Options.NameFilters.ToArray());
+			this.edName.Items.Insert(0, "*");
 
 			this.cbResidence.Items.Clear();
 			this.cbResidence.Items.AddRange(GKUI.TfmGEDKeeper.Instance.Options.ResidenceFilters.ToArray());
+			this.cbResidence.Items.Insert(0, "*");
 
 			this.cbEventVal.Items.Clear();
 			this.cbEventVal.Items.AddRange(GKUI.TfmGEDKeeper.Instance.Options.EventFilters.ToArray());

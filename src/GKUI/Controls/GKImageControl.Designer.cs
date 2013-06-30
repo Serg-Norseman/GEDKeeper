@@ -1,6 +1,6 @@
-﻿namespace GKSandbox
+﻿namespace GKUI.Controls
 {
-    partial class ImageControl
+    partial class GKImageControl
     {
         /// <summary> 
         /// Required designer variable.

@@ -2,13 +2,12 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Ext.Utils;
 using GedCom551;
 using GKCore;
-using GKCore.Commands;
+using GKCore.Export;
 using GKUI.Charts;
 using GKUI.Controls;
 using GKUI.Lists;
@@ -28,29 +27,28 @@ namespace GKUI
 		private bool FModified;
 		private TGenEngine.TShieldState FShieldState;
 		private TGEDCOMTree FTree;
-		private UndoManager FUndoman;
 		public TabControl PageRecords;
-		public TRecordsView ListPersons;
+		public GKRecordsView ListPersons;
 		public GKHyperView mPersonSummary;
-		public TRecordsView ListFamilies;
+		public GKRecordsView ListFamilies;
 		public GKHyperView mFamilySummary;
-		public TRecordsView ListNotes;
+		public GKRecordsView ListNotes;
 		public GKHyperView mNoteSummary;
-		public TRecordsView ListMultimedia;
+		public GKRecordsView ListMultimedia;
 		public GKHyperView mMediaSummary;
-		public TRecordsView ListSources;
+		public GKRecordsView ListSources;
 		public GKHyperView mSourceSummary;
-		public TRecordsView ListRepositories;
+		public GKRecordsView ListRepositories;
 		public GKHyperView mRepositorySummary;
-		public TRecordsView ListGroups;
+		public GKRecordsView ListGroups;
 		public GKHyperView mGroupSummary;
-		public TRecordsView ListResearches;
+		public GKRecordsView ListResearches;
 		public GKHyperView mResearchSummary;
-		public TRecordsView ListTasks;
+		public GKRecordsView ListTasks;
 		public GKHyperView mTaskSummary;
-		public TRecordsView ListCommunications;
+		public GKRecordsView ListCommunications;
 		public GKHyperView mCommunicationSummary;
-		public TRecordsView ListLocations;
+		public GKRecordsView ListLocations;
 		public GKHyperView mLocationSummary;
 
 		public NavManager Navman
@@ -65,30 +63,45 @@ namespace GKUI
 
 		public string FileName
 		{
-			get { return this.GetFileName(); }
-			set { this.SetFileName(value); }
+			get {
+				return this.FEngine.FileName;
+			}
+			set {
+				this.FEngine.FileName = value;
+				this.SetMainTitle();
+				GKUI.TfmGEDKeeper.Instance.Options.LastDir = Path.GetDirectoryName(this.FEngine.FileName);
+			}
 		}
 
 		public bool Modified
 		{
-			get { return this.FModified; }
-			set { this.SetModified(value); }
+			get {
+				return this.FModified;
+			}
+			set {
+				this.FModified = value;
+				this.SetMainTitle();
+			}
 		}
 
 		public TGenEngine.TShieldState ShieldState
 		{
-			get { return this.FShieldState; }
-			set { this.SetShieldState(value); }
+			get {
+				return this.FShieldState;
+			}
+			set {
+				bool up = (this.FShieldState != TGenEngine.TShieldState.ssNone && value == TGenEngine.TShieldState.ssNone) || (this.FShieldState == TGenEngine.TShieldState.ssNone && value != TGenEngine.TShieldState.ssNone);
+				this.FShieldState = value;
+				if (up)
+				{
+					this.ListsRefresh(false);
+				}
+			}
 		}
 
 		public TGEDCOMTree Tree
 		{
 			get { return this.FTree; }
-		}
-
-		public UndoManager Undoman
-		{
-			get { return this.FUndoman; }
 		}
 
 		private void OutLink(TGEDCOMRecord aSubject, StringList aToList, TGEDCOMRecord aRec, TGEDCOMTag aTag, TGEDCOMPointer aExt)
@@ -188,7 +201,7 @@ namespace GKUI
 
 		private void List_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			TGEDCOMRecord data = (sender as TRecordsView).GetSelectedRecord();
+			TGEDCOMRecord data = (sender as GKRecordsView).GetSelectedRecord();
 			if (data != null)
 			{
 				this.NavAdd(data);
@@ -205,13 +218,6 @@ namespace GKUI
 			}
 		}
 
-		private void SetFileName([In] string Value)
-		{
-			this.FEngine.FileName = Value;
-			this.SetMainTitle();
-			GKUI.TfmGEDKeeper.Instance.Options.LastDir = Path.GetDirectoryName(this.FEngine.FileName);
-		}
-
 		private void SetMainTitle()
 		{
 			this.Text = Path.GetFileName(this.FileName);
@@ -219,12 +225,6 @@ namespace GKUI
 			{
 				this.Text = "* " + this.Text;
 			}
-		}
-
-		private void SetModified([In] bool Value)
-		{
-			this.FModified = Value;
-			this.SetMainTitle();
 		}
 
 		private void ShowAddress(TGEDCOMAddress anAddress, StringList aSummary)
@@ -265,39 +265,21 @@ namespace GKUI
 					aSummary.Add("    " + ts);
 				}
 
-				int num = anAddress.GetPhoneNumbersCount() - 1;
-				for (int i = 0; i <= num; i++)
-				{
-					aSummary.Add("    " + anAddress.GetPhoneNumber(i));
+				int num = anAddress.PhoneNumbers.Count - 1;
+				for (int i = 0; i <= num; i++) {
+					aSummary.Add("    " + anAddress.PhoneNumbers[i].StringValue);
 				}
 
-				int num2 = anAddress.GetEmailAddressesCount() - 1;
-				for (int i = 0; i <= num2; i++)
-				{
-					aSummary.Add("    " + anAddress.GetEmailAddress(i));
+				int num2 = anAddress.EmailAddresses.Count - 1;
+				for (int i = 0; i <= num2; i++) {
+					aSummary.Add("    " + anAddress.EmailAddresses[i].StringValue);
 				}
 
-				int num3 = anAddress.GetWebPagesCount() - 1;
-				for (int i = 0; i <= num3; i++)
-				{
-					aSummary.Add("    " + anAddress.GetWebPage(i));
+				int num3 = anAddress.WebPages.Count - 1;
+				for (int i = 0; i <= num3; i++) {
+					aSummary.Add("    " + anAddress.WebPages[i].StringValue);
 				}
 			}
-		}
-
-		private void SetShieldState([In] TGenEngine.TShieldState Value)
-		{
-			bool up = (this.FShieldState != TGenEngine.TShieldState.ssNone && Value == TGenEngine.TShieldState.ssNone) || (this.FShieldState == TGenEngine.TShieldState.ssNone && Value != TGenEngine.TShieldState.ssNone);
-			this.FShieldState = Value;
-			if (up)
-			{
-				this.ListsRefresh(false);
-			}
-		}
-
-		private string GetFileName()
-		{
-			return this.FEngine.FileName;
 		}
 
 		private void mPersonSummaryLink(object sender, string LinkName)
@@ -355,7 +337,6 @@ namespace GKUI
 			if (Disposing)
 			{
 				this.FNavman.Dispose();
-				this.FUndoman.Dispose();
 				this.FLockedRecords.Dispose();
 				this.FTree = null;
 				this.FEngine.Dispose();
@@ -380,7 +361,6 @@ namespace GKUI
 			this.FTree = this.FEngine.Tree;
 			this.FLockedRecords = new TList();
 			this.FNavman = new NavManager();
-			this.FUndoman = new UndoManager(this.FTree, UndoManager.TUndoManType.manualCommit);
 			this.CreatePage(LangMan.LSList[52], TGEDCOMRecordType.rtIndividual, ref this.ListPersons, ref this.mPersonSummary);
 			this.CreatePage(LangMan.LSList[53], TGEDCOMRecordType.rtFamily, ref this.ListFamilies, ref this.mFamilySummary);
 			this.CreatePage(LangMan.LSList[54], TGEDCOMRecordType.rtNote, ref this.ListNotes, ref this.mNoteSummary);
@@ -453,7 +433,6 @@ namespace GKUI
 		{
 			this.FTree.Clear();
 			this.FNavman.Clear();
-			this.FUndoman.Clear();
 		}
 
 		public void CreateListView(Control aOwner, out GKListView aList)
@@ -467,7 +446,7 @@ namespace GKUI
 			aOwner.Controls.Add(aList);
 		}
 
-		private void CreatePage(string aPageText, TGEDCOMRecordType aRecType, ref TRecordsView aList, ref GKHyperView aSummary)
+		private void CreatePage(string aPageText, TGEDCOMRecordType aRecType, ref GKRecordsView aList, ref GKHyperView aSummary)
 		{
 			this.PageRecords.SuspendLayout();
 
@@ -516,10 +495,6 @@ namespace GKUI
 					case Keys.Return:
 						this.RecordEdit(null, null);
 						break;
-
-					case Keys.F10:
-						PDFExport.GenReport(FEngine, PDFReportType.rtFamilyBook);
-						break;
 				}
 			}
 		}
@@ -527,12 +502,13 @@ namespace GKUI
 		public TGEDCOMIndividualRecord CreatePersonDialog(TGEDCOMIndividualRecord aTarget, TGenEngine.TTargetMode aTargetMode, TGEDCOMSex aNeedSex)
 		{
 			TGEDCOMIndividualRecord result = null;
-			TfmPersonNew dlg = new TfmPersonNew();
-			try
+
+			using (TfmPersonNew dlg = new TfmPersonNew())
 			{
 				dlg.EditSex.SelectedIndex = (int)aNeedSex;
 				dlg.TargetMode = aTargetMode;
 				dlg.Target = aTarget;
+
 				if (GKUI.TfmGEDKeeper.Instance.ShowModalEx(dlg, this, false) == DialogResult.OK)
 				{
 					result = TGenEngine.CreatePersonEx(this.FTree, dlg.edName.Text, dlg.edPatronymic.Text, dlg.edFamily.Text, (TGEDCOMSex)dlg.EditSex.SelectedIndex, true);
@@ -544,21 +520,18 @@ namespace GKUI
 					if (iFilter.SourceMode == CustomFilter.TGroupMode.gmSelected) {
 						TGEDCOMSourceRecord src = this.FTree.XRefIndex_Find(iFilter.SourceRef) as TGEDCOMSourceRecord;
 						if (TGenEngine.ShowQuestion("Установлен фильтр по источнику. Внести источник в новую персональную запись?") == DialogResult.Yes) {
-							TGenEngine.BindRecordSource(this.FTree, result, src, "", 0);
+							result.aux_AddSource(src, "", 0);
 						}
  					}
 				}
 			}
-			finally
-			{
-				dlg.Dispose();
-			}
+
 			return result;
 		}
 
-		public void CreateRecordsView(Control aParent, TGEDCOMRecordType aRecordType, ref TRecordsView aList)
+		public void CreateRecordsView(Control aParent, TGEDCOMRecordType aRecordType, ref GKRecordsView aList)
 		{
-			aList = new TRecordsView();
+			aList = new GKRecordsView();
 			aList.HideSelection = false;
 			aList.LabelEdit = false;
 			aList.FullRowSelect = true;
@@ -568,40 +541,6 @@ namespace GKUI
 			aList.Dock = DockStyle.Fill;
 			aParent.Controls.Add(aList);
 			aParent.Controls.SetChildIndex(aList, 0);
-		}
-
-		public void ExportToExcel(bool appmode)
-		{
-			ExcelExporter ex_exp = new ExcelExporter(this.FEngine, this.GetCurFileTempPath());
-			try
-			{
-				ex_exp.Options = GKUI.TfmGEDKeeper.Instance.Options;
-				ex_exp.SelectedRecords = this.ListPersons.ContentList;
-				ex_exp.AppMode = appmode;
-				ex_exp.Generate();
-			}
-			finally
-			{
-				ex_exp.Dispose();
-			}
-		}
-
-		public void ExportToPDF()
-		{
-			PDFExport.GenReport(FEngine, PDFReportType.rtPersonsTable);
-		}
-
-		public void ExportToWeb()
-		{
-			WebExporter web = new WebExporter(this.FEngine, this.GetCurFileTempPath());
-			try
-			{
-				web.Generate();
-			}
-			finally
-			{
-				web.Dispose();
-			}
 		}
 
 		public string GetRestoreFilename(string aFileName)
@@ -697,7 +636,7 @@ namespace GKUI
 			}
 		}
 
-		public void FileSave([In] string aFileName)
+		public void FileSave(string aFileName)
 		{
 			try
 			{
@@ -738,35 +677,44 @@ namespace GKUI
 
 		public void GenPedigree_dAboville()
 		{
-			PedigreeExporter p = new PedigreeExporter(this.FEngine, this.GetCurFileTempPath());
-			try
+			using (PedigreeExporter p = new PedigreeExporter(this.FEngine))
 			{
 				p.Ancestor = this.GetSelectedPerson();
 				p.Options = GKUI.TfmGEDKeeper.Instance.Options;
 				p.ShieldState = this.FShieldState;
 				p.Kind = PedigreeExporter.TPedigreeKind.pk_dAboville;
-				p.Generate();
-			}
-			finally
-			{
-				p.Dispose();
+				p.Generate(true);
 			}
 		}
 
 		public void GenPedigree_Konovalov()
 		{
-			PedigreeExporter p = new PedigreeExporter(this.FEngine, this.GetCurFileTempPath());
-			try
+			using (PedigreeExporter p = new PedigreeExporter(this.FEngine))
 			{
 				p.Ancestor = this.GetSelectedPerson();
 				p.Options = GKUI.TfmGEDKeeper.Instance.Options;
 				p.ShieldState = this.FShieldState;
 				p.Kind = PedigreeExporter.TPedigreeKind.pk_Konovalov;
-				p.Generate();
+				p.Generate(true);
 			}
-			finally
+		}
+
+		public void ExportToExcel(bool appmode)
+		{
+			using (ExcelExporter ex_exp = new ExcelExporter(this.FEngine))
 			{
-				p.Dispose();
+				ex_exp.Options = GKUI.TfmGEDKeeper.Instance.Options;
+				ex_exp.SelectedRecords = this.ListPersons.ContentList;
+				ex_exp.AppMode = appmode;
+				ex_exp.Generate(true);
+			}
+		}
+
+		public void ExportToFamilyBook()
+		{
+			using (FamilyBookExporter fb = new FamilyBookExporter(FEngine))
+			{
+				fb.Generate(true);
 			}
 		}
 
@@ -788,7 +736,7 @@ namespace GKUI
 						{
 							fam = TGenEngine.CreateFamilyEx(this.FTree);
 						}
-						this.FEngine.AddFamilyChild(fam, iChild);
+						fam.aux_AddChild(iChild);
 						Result = fam;
 					}
 				}
@@ -806,7 +754,7 @@ namespace GKUI
 			return this.ListPersons.GetSelectedRecord() as TGEDCOMIndividualRecord;
 		}
 
-		private void IntUpdate(TRecordsView aRecView, int ASCol, bool aTitles)
+		private void IntUpdate(GKRecordsView aRecView, int ASCol, bool aTitles)
 		{
 			TGEDCOMRecord rec = aRecView.GetSelectedRecord();
 			aRecView.UpdateContents(this.FShieldState, aTitles, ASCol);
@@ -1128,9 +1076,9 @@ namespace GKUI
 			}
 		}
 
-		public TRecordsView GetRecordsViewByType(TGEDCOMRecordType recType)
+		public GKRecordsView GetRecordsViewByType(TGEDCOMRecordType recType)
 		{
-			TRecordsView list = null;
+			GKRecordsView list = null;
 			switch (recType) {
 				case TGEDCOMRecordType.rtIndividual:
 					list = this.ListPersons;
@@ -1173,7 +1121,7 @@ namespace GKUI
 		{
 			if (record != null)
 			{
-				TRecordsView list = GetRecordsViewByType(record.RecordType);
+				GKRecordsView list = GetRecordsViewByType(record.RecordType);
 
 				if (list != null && notify == TRecNotify.rnDelete)
 				{
@@ -1398,7 +1346,7 @@ namespace GKUI
 		public void SetFilter()
 		{
 			TGEDCOMRecordType rt = (TGEDCOMRecordType)(this.PageRecords.SelectedIndex + 1);
-			TRecordsView rView = this.GetRecordsViewByType(rt);
+			GKRecordsView rView = this.GetRecordsViewByType(rt);
 
 			switch (rt) {
 				case TGEDCOMRecordType.rtIndividual:
@@ -1656,7 +1604,7 @@ namespace GKUI
 				for (int i = groupRec.Members.Count - 1; i >= 0; i--)
 				{
 					TGEDCOMIndividualRecord member = groupRec.Members[i].Value as TGEDCOMIndividualRecord;
-					this.FEngine.RemoveGroupMember(groupRec, member);
+					groupRec.aux_RemoveMember(member);
 				}
 
 				this.RecordNotify(groupRec, TRecNotify.rnDelete);
@@ -1681,14 +1629,14 @@ namespace GKUI
 				for (int i = iRec.SpouseToFamilyLinks.Count - 1; i >= 0; i--)
 				{
 					TGEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
-					this.FEngine.RemoveFamilySpouse(family, iRec);
+					family.aux_RemoveSpouse(iRec);
 				}
 
 				for (int i = iRec.Groups.Count - 1; i >= 0; i--)
 				{
 					TGEDCOMPointer ptr = iRec.Groups[i];
 					TGEDCOMGroupRecord group = ptr.Value as TGEDCOMGroupRecord;
-					this.FEngine.RemoveGroupMember(group, iRec);
+					group.aux_RemoveMember(iRec);
 				}
 
 				this.RecordNotify(iRec, TRecNotify.rnDelete);
@@ -2050,38 +1998,6 @@ namespace GKUI
 			return Result;
 		}
 
-		public void DoUndo()
-		{
-			this.FUndoman.CmdUndo();
-			this.ListsRefresh(false);
-			GKUI.TfmGEDKeeper.Instance.UpdateControls(false);
-		}
-
-		public void DoRedo()
-		{
-			this.FUndoman.CmdRedo();
-			this.ListsRefresh(false);
-			GKUI.TfmGEDKeeper.Instance.UpdateControls(false);
-		}
-
-		public void DoPersonChangeSex(TGEDCOMIndividualRecord person, TGEDCOMSex newSex)
-		{
-			if (person.Sex != newSex)
-			{
-				this.FUndoman.CmdDo(new TCmdPersonChangeSex(this.FUndoman, person, newSex));
-				this.FUndoman.Commit();
-			}
-		}
-
-		public void DoPersonChangePatriarch(TGEDCOMIndividualRecord person, bool newValue)
-		{
-			if (person.Patriarch != newValue)
-			{
-				this.FUndoman.CmdDo(new TCmdPersonChangePatriarch(this.FUndoman, person, newValue));
-				this.FUndoman.Commit();
-			}
-		}
-
 		public bool ModifyPerson(ref TGEDCOMIndividualRecord aIndivRec)
 		{
 			bool Result = false;
@@ -2128,7 +2044,7 @@ namespace GKUI
 					{
 						if (person != null)
 						{
-							this.FEngine.AddFamilyChild(familyRec, person);
+							familyRec.aux_AddChild(person);
 						}
 					}
 				}
@@ -2136,7 +2052,7 @@ namespace GKUI
 				{
 					if (person != null)
 					{
-						this.FEngine.AddFamilySpouse(familyRec, person);
+						familyRec.aux_AddSpouse(person);
 					}
 				}
 				fmFamEdit.Family = familyRec;
@@ -2511,6 +2427,25 @@ namespace GKUI
             return res;
 		}
 
+		public bool ModifyRecGroup(Form sender, TGEDCOMIndividualRecord iRec, TGEDCOMGroupRecord groupRec, TGenEngine.TRecAction action)
+		{
+			bool res = false;
+
+			switch (action)
+			{
+				case TGenEngine.TRecAction.raAdd:
+					groupRec = this.SelectRecord(TGEDCOMRecordType.rtGroup, null) as TGEDCOMGroupRecord;
+					res = (groupRec != null && groupRec.aux_AddMember(iRec));
+					break;
+
+				case TGenEngine.TRecAction.raDelete:
+					res = (TGenEngine.ShowQuestion(LangMan.LSList[188]) != DialogResult.No && groupRec.aux_RemoveMember(iRec));
+					break;
+			}
+
+            return res;
+		}
+
 		public bool ModifyRecAssociation(Form sender, TGEDCOMIndividualRecord iRec, TGEDCOMAssociation aAssociation, TGenEngine.TRecAction action)
 		{
 			bool Result = false;
@@ -2564,7 +2499,7 @@ namespace GKUI
 
 		public bool ModifyRecEvent(Form sender, TGEDCOMRecord record, TGEDCOMCustomEvent aEvent, TGenEngine.TRecAction action)
 		{
-            bool Result = false;
+            bool result = false;
 
 			try
 			{
@@ -2572,36 +2507,25 @@ namespace GKUI
 				{
 					if (TGenEngine.ShowQuestion(LangMan.LSList[239]) != DialogResult.No)
 					{
-						if (record is TGEDCOMIndividualRecord)
-						{
+						if (record is TGEDCOMIndividualRecord) {
 							(record as TGEDCOMIndividualRecord).IndividualEvents.DeleteObject(aEvent);
-						}
-						else
-						{
+						} else {
 							(record as TGEDCOMFamilyRecord).FamilyEvents.DeleteObject(aEvent as TGEDCOMFamilyEvent);
 						}
-						Result = true;
-						this.Modified = true;
+						result = true;
 					}
 				}
 				else
 				{
-					TfmEventEdit fmEventEdit = new TfmEventEdit(this);
-					try
+					using (TfmEventEdit fmEventEdit = new TfmEventEdit(this))
 					{
 						TGEDCOMCustomEvent evt;
-						if (aEvent != null)
-						{
+						if (aEvent != null) {
 							evt = aEvent;
-						}
-						else
-						{
-							if (record is TGEDCOMIndividualRecord)
-							{
+						} else {
+							if (record is TGEDCOMIndividualRecord) {
 								evt = new TGEDCOMIndividualEvent(this.FTree, record, "", "");
-							}
-							else
-							{
+							} else {
 								evt = new TGEDCOMFamilyEvent(this.FTree, record, "", "");
 							}
 						}
@@ -2622,12 +2546,9 @@ namespace GKUI
 							if (aEvent == null)
 							{
 								evt = fmEventEdit.Event;
-								if (record is TGEDCOMIndividualRecord)
-								{
+								if (record is TGEDCOMIndividualRecord) {
 									(record as TGEDCOMIndividualRecord).AddIndividualEvent(evt);
-								}
-								else
-								{
+								} else {
 									(record as TGEDCOMFamilyRecord).FamilyEvents.Add(evt as TGEDCOMFamilyEvent);
 								}
 							}
@@ -2640,15 +2561,12 @@ namespace GKUI
 									(record as TGEDCOMIndividualRecord).AddIndividualEvent(evt);
 								}
 							}
-							Result = true;
-							this.Modified = true;
+							result = true;
 						}
 					}
-					finally
-					{
-						fmEventEdit.Dispose();
-					}
 				}
+
+				if (result) this.Modified = true;
 			}
 			catch (Exception E)
 			{
@@ -2656,41 +2574,38 @@ namespace GKUI
 				return false;
 			}
 
-            return Result;
+            return result;
         }
 
-		public bool ModifyRecMultimedia(Form sender, TGEDCOMRecord record, TGEDCOMMultimediaLink aLink, TGenEngine.TRecAction action)
+		public bool ModifyRecMultimedia(Form sender, TGEDCOMRecord record, TGEDCOMMultimediaLink mmLink, TGenEngine.TRecAction action)
 		{
-			bool Result = false;
-			if (action == TGenEngine.TRecAction.raDelete)
-			{
-				if (TGenEngine.ShowQuestion(LangMan.LSList[241]) != DialogResult.No)
-				{
-					record.MultimediaLinks.DeleteObject(aLink);
-					Result = true;
-					this.Modified = true;
-				}
-			}
-			else
-			{
-				if (action == TGenEngine.TRecAction.raEdit && aLink != null)
-				{
-					TGEDCOMMultimediaRecord mmRec = aLink.Value as TGEDCOMMultimediaRecord;
-					Result = this.ModifyMedia(ref mmRec);
-				}
-				else
-				{
-					TGEDCOMMultimediaRecord mmRec = this.SelectRecord(TGEDCOMRecordType.rtMultimedia, new object[0]) as TGEDCOMMultimediaRecord;
-					if (mmRec != null)
-					{
-						TGEDCOMMultimediaLink mmLink = new TGEDCOMMultimediaLink(this.FTree, record, "", "");
-						mmLink.Value = mmRec;
-						record.MultimediaLinks.Add(mmLink);
-						Result = true;
+			bool res = false;
+			TGEDCOMMultimediaRecord mmRec;
+
+			switch (action) {
+				case TGenEngine.TRecAction.raAdd:
+					mmRec = this.SelectRecord(TGEDCOMRecordType.rtMultimedia, new object[0]) as TGEDCOMMultimediaRecord;
+					res = (record.aux_AddMultimedia(mmRec) != null);
+					break;
+
+				case TGenEngine.TRecAction.raEdit:
+					if (mmLink != null) {
+						mmRec = mmLink.Value as TGEDCOMMultimediaRecord;
+						res = this.ModifyMedia(ref mmRec);
 					}
-				}
+					break;
+
+				case TGenEngine.TRecAction.raDelete:
+					if (TGenEngine.ShowQuestion(LangMan.LSList[241]) != DialogResult.No) {
+						record.MultimediaLinks.DeleteObject(mmLink);
+						res = true;
+					}
+					break;
 			}
-			return Result;
+			
+			if (res) this.Modified = true;
+			
+			return res;
 		}
 
 		public bool ModifyRecNote(Form sender, TGEDCOMRecord record, TGEDCOMNotes aNote, TGenEngine.TRecAction action)
@@ -2714,7 +2629,7 @@ namespace GKUI
 				}
 				else
 				{
-					TGEDCOMNoteRecord noteRec = this.SelectRecord(TGEDCOMRecordType.rtNote, new object[0]) as TGEDCOMNoteRecord;
+					TGEDCOMNoteRecord noteRec = this.SelectRecord(TGEDCOMRecordType.rtNote, null) as TGEDCOMNoteRecord;
 					if (noteRec != null)
 					{
 						TGEDCOMNotes note = new TGEDCOMNotes(this.FTree, record, "", "");
@@ -3297,7 +3212,7 @@ namespace GKUI
 			}
 		}
 
-		public void SetupRecEventsList(TSheetList aList, bool PersonsMode)
+		public void SetupRecEventsList(GKSheetList aList, bool PersonsMode)
 		{
 			aList.Columns_BeginUpdate();
 			aList.Columns_Clear();
@@ -3316,7 +3231,7 @@ namespace GKUI
 			aList.Columns_EndUpdate();
 		}
 
-		public void SetupRecMediaList(TSheetList aList)
+		public void SetupRecMediaList(GKSheetList aList)
 		{
 			aList.Columns_BeginUpdate();
 			aList.Columns_Clear();
@@ -3324,7 +3239,7 @@ namespace GKUI
 			aList.Columns_EndUpdate();
 		}
 
-		public void SetupRecNotesList(TSheetList aList)
+		public void SetupRecNotesList(GKSheetList aList)
 		{
 			aList.Columns_BeginUpdate();
 			aList.Columns_Clear();
@@ -3332,7 +3247,7 @@ namespace GKUI
 			aList.Columns_EndUpdate();
 		}
 
-		public void SetupRecSourcesList(TSheetList aList)
+		public void SetupRecSourcesList(GKSheetList aList)
 		{
 			aList.Columns_BeginUpdate();
 			aList.Columns_Clear();
@@ -4065,7 +3980,7 @@ namespace GKUI
 			}
 		}
 
-		private static void _SelectRecordByXRef_SelectItemByRec([In] TfmBase Self, TRecordsView aList, TGEDCOMRecord aRec, int aTab)
+		private static void _SelectRecordByXRef_SelectItemByRec(TfmBase Self, GKRecordsView aList, TGEDCOMRecord aRec, int aTab)
 		{
 			Self.PageRecords.SelectedIndex = aTab;
 			Self.PageRecords_SelectedIndexChanged(null, null);
@@ -4214,7 +4129,7 @@ namespace GKUI
 			string res = "";
 
 			TGEDCOMRecordType rt = (TGEDCOMRecordType)(this.PageRecords.SelectedIndex + 1);
-			TRecordsView rView = this.GetRecordsViewByType(rt);
+			GKRecordsView rView = this.GetRecordsViewByType(rt);
 
 			if (rView != null)
 			{

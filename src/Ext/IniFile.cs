@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
 using System.Text;
 
 /// <summary>
@@ -30,7 +29,7 @@ namespace Ext.Utils
 			get { return this.FFileName; }
 		}
 
-		public IniFile([In] string FileName)
+		public IniFile(string FileName)
 		{
 			this.FFileName = FileName;
 		}
@@ -44,7 +43,7 @@ namespace Ext.Utils
 			}
 		}
 
-		public int ReadInteger([In] string Section, [In] string Ident, int Default)
+		public int ReadInteger(string Section, string Ident, int Default)
 		{
 			string IntStr = this.ReadString(Section, Ident, "");
 			if (!string.IsNullOrEmpty(IntStr))
@@ -57,22 +56,22 @@ namespace Ext.Utils
 			return SysUtils.ParseInt(IntStr, Default);
 		}
 
-		public void WriteInteger([In] string Section, [In] string Ident, int Value)
+		public void WriteInteger(string Section, string Ident, int Value)
 		{
 			this.WriteString(Section, Ident, Value.ToString());
 		}
 
-		public bool ReadBool([In] string Section, [In] string Ident, bool Default)
+		public bool ReadBool(string Section, string Ident, bool Default)
 		{
 			return this.ReadInteger(Section, Ident, (int)(Default ? 1 : 0)) > 0;
 		}
 
-		public void WriteBool([In] string Section, [In] string Ident, bool Value)
+		public void WriteBool(string Section, string Ident, bool Value)
 		{
 			this.WriteInteger(Section, Ident, (Value ? 1 : 0));
 		}
 
-		public DateTime ReadDateTime([In] string Section, [In] string Name, DateTime Default)
+		public DateTime ReadDateTime(string Section, string Name, DateTime Default)
 		{
 			string DateStr = this.ReadString(Section, Name, "");
 			DateTime Result = Default;
@@ -90,12 +89,12 @@ namespace Ext.Utils
 			return Result;
 		}
 
-		public void WriteDateTime([In] string Section, [In] string Name, DateTime Value)
+		public void WriteDateTime(string Section, string Name, DateTime Value)
 		{
 			this.WriteString(Section, Name, Value.ToString());
 		}
 
-		public double ReadFloat([In] string Section, [In] string Name, double Default)
+		public double ReadFloat(string Section, string Name, double Default)
 		{
 			string FloatStr = this.ReadString(Section, Name, "");
 			double Result = Default;
@@ -113,12 +112,12 @@ namespace Ext.Utils
 			return Result;
 		}
 
-		public void WriteFloat([In] string Section, [In] string Name, double Value)
+		public void WriteFloat(string Section, string Name, double Value)
 		{
 			this.WriteString(Section, Name, Value.ToString());
 		}
 
-		public string ReadString([In] string Section, [In] string Ident, [In] string Default)
+		public string ReadString(string Section, string Ident, string Default)
 		{
 			StringBuilder Buffer = new StringBuilder(2048);
 			string Result;
@@ -133,7 +132,7 @@ namespace Ext.Utils
 			return Result;
 		}
 
-		public void WriteString([In] string Section, [In] string Ident, [In] string Value)
+		public void WriteString(string Section, string Ident, string Value)
 		{
             if (Win32Native.WritePrivateProfileString(Section, Ident, Value, this.FileName) == false)
 			{
@@ -141,7 +140,7 @@ namespace Ext.Utils
 			}
 		}
 
-		public void EraseSection([In] string Section)
+		public void EraseSection(string Section)
 		{
             if (Win32Native.WritePrivateProfileString(Section, IntPtr.Zero, IntPtr.Zero, this.FileName) == false)
 			{
@@ -149,7 +148,7 @@ namespace Ext.Utils
 			}
 		}
 
-		public void DeleteKey([In] string Section, [In] string Ident)
+		public void DeleteKey(string Section, string Ident)
 		{
             Win32Native.WritePrivateProfileString(Section, Ident, IntPtr.Zero, this.FileName);
 		}

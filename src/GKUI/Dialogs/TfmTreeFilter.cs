@@ -18,7 +18,7 @@ namespace GKUI
 	{
 		private TfmBase FBase;
 		private TChartFilter FFilter;
-		private TSheetList FPersonsList;
+		private GKSheetList FPersonsList;
 		private string FTemp;
 
 		public TfmBase Base
@@ -209,13 +209,13 @@ namespace GKUI
 		{
 			this.InitializeComponent();
 			this.FBase = aBase;
-			this.FPersonsList = new TSheetList(this.Panel1);
+			this.FPersonsList = new GKSheetList(this.Panel1);
 			this.FPersonsList.Buttons = EnumSet.Create(new Enum[]
 			{
-				TSheetList.TListButton.lbAdd, 
-				TSheetList.TListButton.lbDelete
+				GKSheetList.TListButton.lbAdd, 
+				GKSheetList.TListButton.lbDelete
 			});
-			this.FPersonsList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
+			this.FPersonsList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
 			this.FPersonsList.List.AddListColumn(LangMan.LSList[52], 350, false);
 
 			this.btnAccept.Text = LangMan.LSList[97];

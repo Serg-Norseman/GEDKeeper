@@ -2,7 +2,6 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Net;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
@@ -83,16 +82,6 @@ namespace GKUI.Controls
 		private int FUpdateCount;
 		private static XmlDocument xmlDocument;
 
-		public GKMapBrowser.TGMapPoint this[int Index]
-		{
-			get { return this.GetMapPoint(Index); }
-		}
-
-		public int MapPointsCount
-		{
-			get { return this.GetMapPointsCount(); }
-		}
-
 		public bool ShowPoints
 		{
 			get { return this.FShowPoints; }
@@ -153,7 +142,7 @@ namespace GKUI.Controls
 			return Result;
 		}
 
-		private GKMapBrowser.TGMapPoint GetMapPoint(int Index)
+		public GKMapBrowser.TGMapPoint GetMapPoint(int Index)
 		{
 			GKMapBrowser.TGMapPoint Result = null;
 			if (Index >= 0 && Index < this.FMapPoints.Count)
@@ -163,7 +152,7 @@ namespace GKUI.Controls
 			return Result;
 		}
 
-		private int GetMapPointsCount()
+		public int GetMapPointsCount()
 		{
 			return this.FMapPoints.Count;
 		}
@@ -290,14 +279,14 @@ namespace GKUI.Controls
 		public void RefreshPoints()
 		{
 			this.gm_ClearPoints();
-			if (this.MapPointsCount > 0)
+			if (this.FMapPoints.Count > 0)
 			{
 				string PointsScript = "";
 				string PolylineScript = "";
 
-				for (int i = 0; i <= this.MapPointsCount - 1; i++)
+				for (int i = 0; i <= this.FMapPoints.Count - 1; i++)
 				{
-					GKMapBrowser.TGMapPoint pt = this[i];
+					TGMapPoint pt = this.FMapPoints[i] as TGMapPoint;
 					PointsScript += string.Format("addMarker({0}, {1}, \"{2}\");", new object[]
 					{ CoordToStr(pt.Latitude), CoordToStr(pt.Longitude), pt.Hint });
 
@@ -323,7 +312,7 @@ namespace GKUI.Controls
 			}
 		}
 
-		public void SaveSnapshot([In] string aFileName)
+		public void SaveSnapshot(string aFileName)
 		{
 		}
 
@@ -371,7 +360,7 @@ namespace GKUI.Controls
 			GKMapBrowser.xmlDocument = null;
 		}
 
-		public static bool GetInetFile([In] string FileURL, ref Stream Stream)
+		public static bool GetInetFile(string FileURL, ref Stream Stream)
 		{
 			bool Result;
 			try

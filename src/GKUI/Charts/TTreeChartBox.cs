@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Ext.Tween;
@@ -33,6 +32,7 @@ namespace GKUI.Charts
 		private int FThumbPos = 5;
 		private bool FVisible;
 		private bool FThumbCaptured;
+		private string FTip;
 		private Rectangle FDestRect;
 
 		public int Width
@@ -55,6 +55,12 @@ namespace GKUI.Charts
 		{
 			get { return this.FThumbPos; }
 			set { this.FThumbPos = value; }
+		}
+		
+		public string Tip
+		{
+			get { return this.FTip; }
+			set { this.FTip = value; }
 		}
 		
 		public bool Visible
@@ -179,7 +185,7 @@ namespace GKUI.Charts
 			dmDefault,
 			dmToFile
 		}
-		
+
 		private int FBorderWidth;
 		private int FLeftPos;
 		private int FTopPos;
@@ -191,14 +197,12 @@ namespace GKUI.Charts
 		protected int FSPY;
 		protected TRect FVisibleArea;
 
-
 		//private int FGensCount;
 
 		private Pen FLinePen;
 		private Pen FDecorativeLinePen;
 		private SolidBrush FSolidBlack;
 
-		
 		public int BorderWidth
 		{
 			get { return this.FBorderWidth; }
@@ -285,7 +289,7 @@ namespace GKUI.Charts
 				this.FScale = value;
 
 				FScaleControl.ThumbPos = (int)Math.Round((value -  0.4f) / 0.1f);
-				
+
 				this.Predef();
 				this.RecalcChart();
 				this.ScrollRange();
@@ -300,7 +304,7 @@ namespace GKUI.Charts
 		{
 			get { return this.FScaleControl; }
 		}
-		
+
 		public TreeChartPerson Selected
 		{
 			get { return this.FSelected; }
@@ -322,15 +326,23 @@ namespace GKUI.Charts
 		public bool TraceSelected
 		{
 			get { return this.FTraceSelected; }
-			set { this.FTraceSelected = true; }
+			set { this.FTraceSelected = value; }
 		}
-		
+
 		public TGEDCOMTree Tree
 		{
 			get { return this.FTree; }
 			set { this.FTree = value; }
 		}
 
+		/*protected override CreateParams CreateParams
+		{ 
+			get {
+				CreateParams cp = base.CreateParams;
+				cp.Style |= Win32Native.WS_HSCROLL | Win32Native.WS_VSCROLL;
+				return cp;
+			}
+		}*/
 
 		public TTreeChartBox()
 		{
@@ -356,7 +368,14 @@ namespace GKUI.Charts
 			this.FGraph = new TGraph();
 
 			this.FScaleControl = new TScaleControl(this);
-			
+
+			//this.AutoScroll = false;
+			//this.HorizontalScroll.Visible = true;
+			//this.VerticalScroll.Visible = true;
+
+			//Win32Native.EnableScrollBar(this.Handle, Win32Native.SB_HORZ, Win32Native.ESB_ENABLE_BOTH);
+			//Win32Native.EnableScrollBar(this.Handle, Win32Native.SB_VERT, Win32Native.ESB_ENABLE_BOTH);
+
 			this.InitGraphics();
 		}
 
@@ -381,7 +400,7 @@ namespace GKUI.Charts
 			FSignsData = new string[] { "GEORGE_CROSS", "SOLDIER", "SOLDIER_FALL", "VETERAN_REAR" };
 
 			FSignsPic = new Bitmap[4];
-			
+
 			FSignsPic[0] = GKResources.iTGGeorgeCross;
 			FSignsPic[0].MakeTransparent(this.FSignsPic[0].GetPixel(0, 0));
 
@@ -1231,7 +1250,7 @@ namespace GKUI.Charts
 				{
 					pp.PtX += aOffset;
 					edges[pp.Generation] = pp.Rect.Right;
-					if (pp.ChildsCount < 1) {
+					if (pp.GetChildsCount() < 1) {
 						pp = null;
 					} else {
 						pp = pp.GetChild(0);
@@ -1308,7 +1327,7 @@ namespace GKUI.Charts
 					aSingle = false;
 				}
 				aPerson.PtX += aOffset;
-				if (aPerson.BaseSpouse != null && (aPerson.BaseSpouse.Sex == TGEDCOMSex.svFemale || aPerson.BaseSpouse.SpousesCount == 1))
+				if (aPerson.BaseSpouse != null && (aPerson.BaseSpouse.Sex == TGEDCOMSex.svFemale || aPerson.BaseSpouse.GetSpousesCount() == 1))
 				{
 					this.ShiftDesc(aPerson.BaseSpouse, aOffset, aSingle);
 				}
@@ -1340,9 +1359,9 @@ namespace GKUI.Charts
 		private void RecalcDescChilds(ref int[] edges, TreeChartPerson aPerson)
 		{
 			//edges = (int[])edges.Clone();
-			if (aPerson.ChildsCount != 0)
+			if (aPerson.GetChildsCount() != 0)
 			{
-				bool fix_pair = aPerson.BaseSpouse != null && aPerson.BaseSpouse.SpousesCount == 1;
+				bool fix_pair = aPerson.BaseSpouse != null && aPerson.BaseSpouse.GetSpousesCount() == 1;
 				int cent_x = 0;
 				if (fix_pair)
 				{
@@ -1364,9 +1383,9 @@ namespace GKUI.Charts
 					cent_x = aPerson.PtX;
 				}
 				int cur_y = aPerson.PtY + this.FLevelDistance + aPerson.Height;
-				int childs_width = (aPerson.ChildsCount - 1) * this.FBranchDistance;
+				int childs_width = (aPerson.GetChildsCount() - 1) * this.FBranchDistance;
 
-				int num = aPerson.ChildsCount - 1;
+				int num = aPerson.GetChildsCount() - 1;
 				for (int i = 0; i <= num; i++)
 				{
 					childs_width += aPerson.GetChild(i).Width;
@@ -1374,7 +1393,7 @@ namespace GKUI.Charts
 
 				int cur_x = cent_x - childs_width / 2;
 
-				int num2 = aPerson.ChildsCount - 1;
+				int num2 = aPerson.GetChildsCount() - 1;
 				for (int i = 0; i <= num2; i++)
 				{
 					TreeChartPerson child = aPerson.GetChild(i);
@@ -1383,9 +1402,9 @@ namespace GKUI.Charts
 				}
 
 				cur_x = aPerson.GetChild(0).PtX;
-				if (aPerson.ChildsCount > 1)
+				if (aPerson.GetChildsCount() > 1)
 				{
-					cur_x += (aPerson.GetChild(aPerson.ChildsCount - 1).PtX - cur_x) / 2;
+					cur_x += (aPerson.GetChild(aPerson.GetChildsCount() - 1).PtX - cur_x) / 2;
 				}
 				if (fix_pair)
 				{
@@ -1440,10 +1459,10 @@ namespace GKUI.Charts
 					edges[gen] = aPerson.Rect.Right;
 				}
 
-				if (aPerson.SpousesCount > 0)
+				if (aPerson.GetSpousesCount() > 0)
 				{
 					TreeChartPerson prev = aPerson;
-					int num = aPerson.SpousesCount - 1;
+					int num = aPerson.GetSpousesCount() - 1;
 					for (int i = 0; i <= num; i++)
 					{
 						TreeChartPerson sp = aPerson.GetSpouse(i);
@@ -1507,21 +1526,21 @@ namespace GKUI.Charts
 
 		private void DrawDescendants(Graphics aCanvas, TreeChartPerson aPerson)
 		{
-			int num = aPerson.ChildsCount - 1;
+			int num = aPerson.GetChildsCount() - 1;
 			for (int i = 0; i <= num; i++)
 			{
 				this.Draw(aCanvas, aPerson.GetChild(i), TTreeChartBox.TChartKind.ckDescendants);
 			}
 
-			int spb_ofs = (aPerson.Height - 10) / (aPerson.SpousesCount + 1);
-			int spb_beg = aPerson.PtY + (aPerson.Height - spb_ofs * (aPerson.SpousesCount - 1)) / 2;
+			int spb_ofs = (aPerson.Height - 10) / (aPerson.GetSpousesCount() + 1);
+			int spb_beg = aPerson.PtY + (aPerson.Height - spb_ofs * (aPerson.GetSpousesCount() - 1)) / 2;
 
 			TGEDCOMSex sex = aPerson.Sex;
 			if (sex != TGEDCOMSex.svMale)
 			{
 				if (sex == TGEDCOMSex.svFemale)
 				{
-					int num2 = aPerson.SpousesCount - 1;
+					int num2 = aPerson.GetSpousesCount() - 1;
 					for (int i = 0; i <= num2; i++)
 					{
 						int spb_v = spb_beg + spb_ofs * i;
@@ -1531,7 +1550,7 @@ namespace GKUI.Charts
 			}
 			else
 			{
-				int num3 = aPerson.SpousesCount - 1;
+				int num3 = aPerson.GetSpousesCount() - 1;
 				for (int i = 0; i <= num3; i++)
 				{
 					int spb_v = spb_beg + spb_ofs * i;
@@ -1539,7 +1558,7 @@ namespace GKUI.Charts
 				}
 			}
 
-			int num4 = aPerson.SpousesCount - 1;
+			int num4 = aPerson.GetSpousesCount() - 1;
 			for (int i = 0; i <= num4; i++)
 			{
 				this.Draw(aCanvas, aPerson.GetSpouse(i), TTreeChartBox.TChartKind.ckDescendants);
@@ -1547,7 +1566,7 @@ namespace GKUI.Charts
 
 			int cr_y = aPerson.PtY + aPerson.Height + this.FLevelDistance / 2;
 			int cx = 0;
-			if (aPerson.BaseSpouse == null || (aPerson.BaseSpouse != null && aPerson.BaseSpouse.SpousesCount > 1))
+			if (aPerson.BaseSpouse == null || (aPerson.BaseSpouse != null && aPerson.BaseSpouse.GetSpousesCount() > 1))
 			{
 				cx = aPerson.PtX;
 				spb_beg = aPerson.PtY + aPerson.Height - 1;
@@ -1569,10 +1588,10 @@ namespace GKUI.Charts
 				spb_beg -= spb_ofs / 2;
 			}
 
-			if (aPerson.ChildsCount != 0)
+			if (aPerson.GetChildsCount() != 0)
 			{
 				this.DrawLine(aCanvas, cx, spb_beg, cx, cr_y);
-				if (aPerson.ChildsCount == 1)
+				if (aPerson.GetChildsCount() == 1)
 				{
 					Point child_pt = aPerson.GetChild(0).Pt;
 					this.DrawLine(aCanvas, child_pt.X, cr_y, child_pt.X, child_pt.Y);
@@ -1580,9 +1599,9 @@ namespace GKUI.Charts
 				else
 				{
 					int bpx = aPerson.GetChild(0).PtX;
-					int epx = aPerson.GetChild(aPerson.ChildsCount - 1).PtX;
+					int epx = aPerson.GetChild(aPerson.GetChildsCount() - 1).PtX;
 					this.DrawLine(aCanvas, bpx, cr_y, epx, cr_y);
-					int num5 = aPerson.ChildsCount - 1;
+					int num5 = aPerson.GetChildsCount() - 1;
 					for (int i = 0; i <= num5; i++)
 					{
 						Point child_pt = aPerson.GetChild(i).Pt;
@@ -1608,14 +1627,16 @@ namespace GKUI.Charts
 			}
 			else if (m.Msg == Win32Native.WM_HSCROLL)
 			{
+				int page = this.ClientSize.Width / 10;
 				uint wParam = (uint)m.WParam.ToInt32();
-				int new_pos = SysUtils.DoScroll((uint)this.Handle.ToInt32(), wParam, 0, this.LeftPos, 0, this.FRange.X, 1, 1);
+				int new_pos = SysUtils.DoScroll((uint)this.Handle.ToInt32(), wParam, 0, this.LeftPos, 0, this.FRange.X, 1, page);
 				this.SetLeftPos(new_pos);
 			}
 			else if (m.Msg == Win32Native.WM_VSCROLL)
 			{
+				int page = this.ClientSize.Height / 10;
 				uint wParam = (uint)m.WParam.ToInt32();
-				int new_pos = SysUtils.DoScroll((uint)this.Handle.ToInt32(), wParam, 1, this.TopPos, 0, this.FRange.Y, 1, 1);
+				int new_pos = SysUtils.DoScroll((uint)this.Handle.ToInt32(), wParam, 1, this.TopPos, 0, this.FRange.Y, 1, page);
 				this.SetTopPos(new_pos);
 			}
 		}
@@ -1855,7 +1876,7 @@ namespace GKUI.Charts
 			}
 		}
 
-		public void SaveSnapshot([In] string aFileName)
+		public void SaveSnapshot(string aFileName)
 		{
 			string ext = Path.GetExtension(aFileName).ToLower();
 
@@ -1892,7 +1913,7 @@ namespace GKUI.Charts
 			}
 		}
 
-		private void SetSelected([In] TreeChartPerson Value)
+		private void SetSelected(TreeChartPerson Value)
 		{
 			if (this.FSelected != null) this.FSelected.Selected = false;
 			this.FSelected = Value;
@@ -1921,11 +1942,11 @@ namespace GKUI.Charts
 			return result;
 		}
 
-		public void SelectBy(int aX, int aY)
+		public void SelectBy(int aX, int aY, bool needCenter)
 		{
 			TreeChartPerson p = this.FindPersonByCoords(aX, aY);
 			this.SetSelected(p);
-			//if (p != null && this.FTraceSelected) CenterPerson(p);
+			if (p != null && needCenter && this.FTraceSelected) CenterPerson(p);
 		}
 
 		public void SelectByRec(TGEDCOMIndividualRecord iRec)
@@ -2017,16 +2038,23 @@ namespace GKUI.Charts
 		{
 			base.OnMouseWheel(e);
 
-			float newScale = this.Scale;
-			
-			if (e.Delta > 0) {
-				newScale -= 0.05f;
+			if (ModifierKeys == Keys.Control) {
+				float newScale = this.Scale;
+				
+				if (e.Delta > 0) {
+					newScale -= 0.05f;
+				} else {
+					newScale += 0.05f;
+				}
+				
+				if (newScale < 0.5 || newScale > 1.5) return;
+				this.Scale = newScale;
 			} else {
-				newScale += 0.05f;
+				var direction = e.Delta > 0 ? Win32Native.SB_PAGELEFT : Win32Native.SB_PAGERIGHT;
+				uint msg = (ModifierKeys == Keys.Shift) ? Win32Native.WM_HSCROLL : Win32Native.WM_VSCROLL;
+
+				Win32Native.SendMessage(this.Handle, msg, (IntPtr)direction, IntPtr.Zero);
 			}
-			
-			if (newScale < 0.5 || newScale > 1.5) return;
-			this.Scale = newScale;
 		}
 
 	}

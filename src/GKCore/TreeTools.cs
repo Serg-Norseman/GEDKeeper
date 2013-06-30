@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Ext.Utils;
@@ -614,7 +613,7 @@ namespace GKCore
 				for (int i = 0; i <= num; i++)
 				{
 					TGEDCOMRecord rec = tree[i];
-					if (TGenEngine.GetId(rec) < 0)
+					if (rec.aux_GetId() < 0)
 					{
 						string newXRef = tree.XRefIndex_NewXRef(rec);
 						repMap.AddXRef(rec, rec.XRef, newXRef);
@@ -661,7 +660,7 @@ namespace GKCore
 						TGEDCOMRecord rec = tree[i];
 						TreeTools.CheckRecord(tree, rec, format);
 
-						if (format != TGEDCOMFormat.gf_Native && idCheck && TGenEngine.GetId(rec) < 0)
+						if (format != TGEDCOMFormat.gf_Native && idCheck && rec.aux_GetId() < 0)
 						{
 							idCheck = false;
 						}
@@ -950,12 +949,7 @@ namespace GKCore
 			public TGEDCOMRecord Rec;
 			public TCheckSolve Solve;
 
-			public string RecName
-			{
-				get	{ return this.GetRecName(); }
-			}
-
-			private string GetRecName()
+			public string GetRecordName()
 			{
 				string Result = "[" + this.Rec.XRef + "] ";
 				switch (this.Rec.RecordType) {

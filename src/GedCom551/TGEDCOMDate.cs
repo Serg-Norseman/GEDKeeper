@@ -1,22 +1,11 @@
 ﻿using System;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace GedCom551
 {
 	public class TGEDCOMDate : TGEDCOMCustomDate
 	{
-		public static readonly string[] GEDCOMDateApproximatedArray = new string[] { "", "ABT", "CAL", "EST" };
-		public static readonly string[] GEDCOMDateRangeArray = new string[] { "AFT", "BEF", "BET", "AND" };
-
-		public static readonly string[] GEDCOMDateEscapeArray;
-		public static readonly string[] GEDCOMMonthRusArray;
-		public static readonly string[] GEDCOMMonthSysArray;
-		public static readonly string[] GEDCOMMonthArray;
-		public static readonly string[] GEDCOMMonthFrenchArray;
-		public static readonly string[] GEDCOMMonthHebrewArray;
-
 		private TGEDCOMCalendar FDateCalendar;
 		private TGEDCOMDateFormat FDateFormat;
 		private ushort FDay;
@@ -24,12 +13,6 @@ namespace GedCom551
 		private int FYear;
 		private bool FYearBC;
 		private string FYearModifier;
-
-		public new DateTime Date
-		{
-			get { return this.GetDateTime(); }
-			set { this.SetDateTime(value); }
-		}
 
 		public TGEDCOMCalendar DateCalendar
 		{
@@ -66,9 +49,9 @@ namespace GedCom551
 			set { this.FDay = value; }
 		}
 
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			base.CreateObj(AOwner, AParent);
+			base.CreateObj(owner, parent);
 			this.FDateCalendar = TGEDCOMCalendar.dcGregorian;
 			this.FYear = -1;
 			this.FYearBC = false;
@@ -185,7 +168,7 @@ namespace GedCom551
 			return Result;
 		}
 
-		private string ExtractEscape([In] string S)
+		private string ExtractEscape(string S)
 		{
 			string Result = S;
 			if (Result.StartsWith("@#"))
@@ -209,7 +192,7 @@ namespace GedCom551
 			return Result;
 		}
 
-		private string ExtractDay([In] string S)
+		private string ExtractDay(string S)
 		{
 			string Result = S;
 
@@ -229,7 +212,7 @@ namespace GedCom551
 			return Result;
 		}
 
-		private string ExtractDelimiterEx([In] string S)
+		private string ExtractDelimiterEx(string S)
 		{
 			string Result;
 			if (this.FDateFormat == TGEDCOMDateFormat.dfSystem)
@@ -243,7 +226,7 @@ namespace GedCom551
 			return Result;
 		}
 
-		private string ExtractMonth([In] string S)
+		private string ExtractMonth(string S)
 		{
 			string result = S;
 			if (!string.IsNullOrEmpty(result))
@@ -316,7 +299,7 @@ namespace GedCom551
 			return result;
 		}
 
-		private string ExtractYear([In] string S)
+		private string ExtractYear(string S)
 		{
 			string Result = S;
 
@@ -366,7 +349,7 @@ namespace GedCom551
 		{
 			ushort M = this.GEDCOMMonthToInt(this.FMonth);
 			DateTime Result;
-			if (this.FYear >= 0 && M >= 1 && M < 13)
+			if (this.FYear >= 0 && M >= 1 && M <= 12)
 			{
 				ushort fDay = this.FDay;
 				if (fDay >= 1 && fDay < 32)
@@ -384,7 +367,7 @@ namespace GedCom551
 			this.SetGregorian((ushort)ADateTime.Day, TGEDCOMDate.GEDCOMMonthArray[ADateTime.Month - 1], ADateTime.Year, "", false);
 		}
 
-		private string StrToGEDCOMMonth([In] string S)
+		private string StrToGEDCOMMonth(string S)
 		{
 			if (((S != null) ? S.Length : 0) != 3)
 			{
@@ -403,7 +386,7 @@ namespace GedCom551
 			return TGEDCOMDate.GEDCOMMonthArray[Month - 1];
 		}
 
-		private string StrToGEDCOMMonthFrench([In] string S)
+		private string StrToGEDCOMMonthFrench(string S)
 		{
 			if (((S != null) ? S.Length : 0) != 4)
 			{
@@ -422,7 +405,7 @@ namespace GedCom551
 			return TGEDCOMDate.GEDCOMMonthFrenchArray[Month - 1];
 		}
 
-		private string StrToGEDCOMMonthHebrew([In] string S)
+		private string StrToGEDCOMMonthHebrew(string S)
 		{
 			if (((S != null) ? S.Length : 0) != 3)
 			{
@@ -456,7 +439,7 @@ namespace GedCom551
 			return TGEDCOMDate.GEDCOMMonthHebrewArray[(int)M - 1];
 		}
 
-		private ushort GEDCOMMonthToInt([In] string S)
+		private ushort GEDCOMMonthToInt(string S)
 		{
 			ushort result = 0;
 
@@ -477,7 +460,7 @@ namespace GedCom551
 			return result;
 		}
 
-		private ushort GEDCOMMonthFrenchToInt([In] string S)
+		private ushort GEDCOMMonthFrenchToInt(string S)
 		{
 			ushort Result = 0;
 			if (S != null)
@@ -497,7 +480,7 @@ namespace GedCom551
 			return Result;
 		}
 
-		private ushort GEDCOMMonthHebrewToInt([In] string S)
+		private ushort GEDCOMMonthHebrewToInt(string S)
 		{
 			ushort Result = 0;
 			if (S != null)
@@ -548,7 +531,7 @@ namespace GedCom551
 			ADay = this.FDay;
 		}
 
-		public void SetGregorian([In] ushort ADay, [In] string AMonth, int AYear, [In] string AYearModifier, bool BC)
+		public void SetGregorian(ushort ADay, string AMonth, int AYear, string AYearModifier, bool BC)
 		{
 			this.FDateCalendar = TGEDCOMCalendar.dcGregorian;
 			this.FDay = ADay;
@@ -558,7 +541,7 @@ namespace GedCom551
 			this.FYearBC = BC;
 		}
 
-		public void SetJulian([In] ushort ADay, [In] string AMonth, ushort AYear, bool BC)
+		public void SetJulian(ushort ADay, string AMonth, ushort AYear, bool BC)
 		{
 			this.FDateCalendar = TGEDCOMCalendar.dcJulian;
 			this.FYear = (int)AYear;
@@ -568,7 +551,7 @@ namespace GedCom551
 			this.FMonth = this.StrToGEDCOMMonth(AMonth);
 		}
 
-		public void SetHebrew([In] ushort ADay, [In] string AMonth, int AYear, bool BC)
+		public void SetHebrew(ushort ADay, string AMonth, int AYear, bool BC)
 		{
 			this.FDateCalendar = TGEDCOMCalendar.dcHebrew;
 			this.FYear = AYear;
@@ -578,7 +561,7 @@ namespace GedCom551
 			this.FDay = ADay;
 		}
 
-		public void SetFrench([In] ushort ADay, [In] string AMonth, ushort AYear, bool BC)
+		public void SetFrench(ushort ADay, string AMonth, ushort AYear, bool BC)
 		{
 			this.FDateCalendar = TGEDCOMCalendar.dcFrench;
 			this.FYear = (int)AYear;
@@ -588,7 +571,7 @@ namespace GedCom551
 			this.FDay = ADay;
 		}
 
-		public void SetRoman([In] ushort ADay, [In] string AMonth, ushort AYear, bool BC)
+		public void SetRoman(ushort ADay, string AMonth, ushort AYear, bool BC)
 		{
 			this.FDateCalendar = TGEDCOMCalendar.dcRoman;
 			this.FYear = (int)AYear;
@@ -598,7 +581,7 @@ namespace GedCom551
 			this.FMonth = this.StrToGEDCOMMonth(AMonth);
 		}
 
-		public void SetUnknown([In] ushort ADay, [In] string AMonth, ushort AYear, bool BC)
+		public void SetUnknown(ushort ADay, string AMonth, ushort AYear, bool BC)
 		{
 			this.FDateCalendar = TGEDCOMCalendar.dcUnknown;
 			this.FYear = (int)AYear;
@@ -623,7 +606,7 @@ namespace GedCom551
 			return base.IsEmpty() && this.FYear <= -1 && this.FMonth == "" && this.FDay <= 0;
 		}
 
-		public override string ParseString([In] string AString)
+		public override string ParseString(string AString)
 		{
 			this.FDateCalendar = TGEDCOMCalendar.dcGregorian;
 			this.FYear = -1;
@@ -661,40 +644,7 @@ namespace GedCom551
 			return Result;
 		}
 
-		static TGEDCOMDate()
-		{
-			TGEDCOMDate.GEDCOMMonthHebrewArray = new string[]
-			{
-				"TSH", "CSH", "KSL", "TVT", "SHV", "ADR", 
-				"ADS", "NSN", "IYR", "SVN", "TMZ", "AAV", "ELL"
-			};
-			TGEDCOMDate.GEDCOMMonthFrenchArray = new string[]
-			{
-				"VEND", "BRUM", "FRIM", "NIVO", "PLUV", "VENT", 
-				"GERM", "FLOR", "PRAI", "MESS", "THER", "FRUC", "COMP"
-			};
-			TGEDCOMDate.GEDCOMMonthArray = new string[]
-			{
-				"JAN", "FEB", "MAR", "APR", "MAY", "JUN", 
-				"JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
-			};
-			TGEDCOMDate.GEDCOMMonthSysArray = new string[]
-			{
-				"01.", "02.", "03.", "04.", "05.", "06.", 
-				"07.", "08.", "09.", "10.", "11.", "12."
-			};
-			TGEDCOMDate.GEDCOMMonthRusArray = new string[]
-			{
-				"ЯНВ", "ФЕВ", "МАР", "АПР", "МАЙ", "ИЮН", 
-				"ИЮЛ", "АВГ", "СЕН", "ОКТ", "НОЯ", "ДЕК"
-			};
-			TGEDCOMDate.GEDCOMDateEscapeArray = new string[]
-			{
-				"@#DGREGORIAN@", "@#DJULIAN@", "@#DHEBREW@", "@#DFRENCH R@", "@#DROMAN@", "@#DUNKNOWN@"
-			};
-		}
-
-		public TGEDCOMDate(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMDate(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 	}

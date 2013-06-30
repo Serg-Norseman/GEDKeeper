@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Ext.Utils;
@@ -37,7 +36,7 @@ namespace GKUI
 			get { return this.FBase; }
 		}
 
-		private static TPersonLink GetLinkByName([In] string aName)
+		private static TPersonLink GetLinkByName(string aName)
 		{
 			TPersonLink res = TPersonLink.plNone;
 
@@ -138,14 +137,15 @@ namespace GKUI
 		{
 			string src_name = this.cbSource.Text;
 			string src_page = this.edPage.Text;
-			if (!TGEDCOMObject.IsDigits(this.edSourceYear.Text))
+			int src_year;
+			string place = this.edPlace.Text;
+
+			if (!int.TryParse(this.edSourceYear.Text, out src_year))
 			{
 				TGenEngine.ShowError(LangMan.LSList[508]);
 			}
 			else
 			{
-				int src_year = int.Parse(this.edSourceYear.Text);
-				string place = this.edPlace.Text;
 				TGEDCOMIndividualRecord iMain = null;
 				try
 				{
@@ -186,10 +186,12 @@ namespace GKUI
 									src_rec = TGenEngine.CreateSource(Base.Tree);
 									src_rec.FiledByEntry = src_name;
 								}
-								TGenEngine.BindRecordSource(Base.Tree, iRec, src_rec, src_page, 0);
+								iRec.aux_AddSource(src_rec, src_page, 0);
 							}
 
 							Base.ChangeRecord(iRec); // FIXME: call for all added records (by list)
+
+							TGEDCOMFamilyRecord family = null;
 
 							switch (link) {
 								case TPersonLink.plNone:
@@ -211,10 +213,8 @@ namespace GKUI
 										if (ev_name == "BIRT" || ev_name == "DEAT") {
 											TGEDCOMCustomEvent evt = TGenEngine.CreateEventEx(Base.Tree, iRec, ev_name, TGenEngine.StrToGEDCOMDate(edEventDate.Text, false), "");
 											evt.Detail.Place.StringValue = place;
-										}
-										else
-											if (ev_name == "MARR") {
-											TGEDCOMFamilyRecord family = _ParseSource_GetMarriageFamily(iRec);
+										} else if (ev_name == "MARR") {
+											family = _ParseSource_GetMarriageFamily(iRec);
 											TGEDCOMCustomEvent evt = TGenEngine.CreateEventEx(Base.Tree, family, ev_name, TGenEngine.StrToGEDCOMDate(edEventDate.Text, false), "");
 											evt.Detail.Place.StringValue = place;
 										}
@@ -223,45 +223,37 @@ namespace GKUI
 
 								case TPersonLink.plFather:
 								case TPersonLink.plMother:
-									{
-										_ParseSource_CheckMain(iMain);
-										TGEDCOMFamilyRecord family = _ParseSource_GetParentsFamily(iMain);
-										Base.Engine.AddFamilySpouse(family, iRec);
-									}
+									_ParseSource_CheckMain(iMain);
+									family = _ParseSource_GetParentsFamily(iMain);
+									family.aux_AddSpouse(iRec);
 									break;
 
 								case TPersonLink.plGodparent:
-									{
-										_ParseSource_CheckMain(iMain);
-										Base.Engine.AddAssociation(iMain, LangMan.LS(LSID.LSID_PLGodparent), iRec);
-									}
+									_ParseSource_CheckMain(iMain);
+									iMain.aux_AddAssociation(LangMan.LS(LSID.LSID_PLGodparent), iRec);
 									break;
 
 								case TPersonLink.plSpouse:
-									{
-										_ParseSource_CheckMain(iMain);
-										TGEDCOMFamilyRecord family = _ParseSource_GetMarriageFamily(iMain);
-										Base.Engine.AddFamilySpouse(family, iRec);
-									}
+									_ParseSource_CheckMain(iMain);
+									family = _ParseSource_GetMarriageFamily(iMain);
+									family.aux_AddSpouse(iRec);
 									break;
 
 								case TPersonLink.plChild:
-									{
-										_ParseSource_CheckMain(iMain);
-										TGEDCOMFamilyRecord family = _ParseSource_GetMarriageFamily(iMain);
-										Base.Engine.AddFamilyChild(family, iRec);
-									}
+									_ParseSource_CheckMain(iMain);
+									family = _ParseSource_GetMarriageFamily(iMain);
+									family.aux_AddChild(iRec);
 									break;
 							}
 						}
 					}
 				}
-			finally
-			{
+				finally
+				{
+				}
+				this.InitSourceControls();
 			}
-			this.InitSourceControls();
 		}
-	}
 
 		private void EditNameKeyPress(object sender, KeyPressEventArgs e)
 		{
@@ -368,42 +360,42 @@ namespace GKUI
 
 		private TGEDCOMFamilyRecord _ParseSource_GetParentsFamily(TGEDCOMIndividualRecord iRec)
 		{
-			TGEDCOMFamilyRecord Result;
+			TGEDCOMFamilyRecord result;
 			if (iRec.ChildToFamilyLinks.Count > 0)
 			{
-				Result = iRec.ChildToFamilyLinks[0].Family;
+				result = iRec.ChildToFamilyLinks[0].Family;
 			}
 			else
 			{
-				Result = TGenEngine.CreateFamilyEx(Base.Tree);
-				Base.Engine.AddFamilyChild(Result, iRec);
+				result = TGenEngine.CreateFamilyEx(Base.Tree);
+				result.aux_AddChild(iRec);
 			}
-			return Result;
+			return result;
 		}
 
 		private TGEDCOMFamilyRecord _ParseSource_GetMarriageFamily(TGEDCOMIndividualRecord iRec)
 		{
-			TGEDCOMFamilyRecord Result;
+			TGEDCOMFamilyRecord result;
 			if (iRec.SpouseToFamilyLinks.Count > 0)
 			{
-				Result = iRec.SpouseToFamilyLinks[0].Family;
+				result = iRec.SpouseToFamilyLinks[0].Family;
 			}
 			else
 			{
-				Result = TGenEngine.CreateFamilyEx(Base.Tree);
-				Base.Engine.AddFamilySpouse(Result, iRec);
+				result = TGenEngine.CreateFamilyEx(Base.Tree);
+				result.aux_AddSpouse(iRec);
 			}
-			return Result;
+			return result;
 		}
 
 		private bool _ParseSource_CheckMain(TGEDCOMIndividualRecord aMain)
 		{
-			bool Result = aMain != null;
-			if (!Result)
+			bool result = (aMain != null);
+			if (!result)
 			{
 				throw new Exception(LangMan.LSList[507]);
 			}
-			return Result;
+			return result;
 		}
 
 		void BtnMaleClick(object sender, EventArgs e)

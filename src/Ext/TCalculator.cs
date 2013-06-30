@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
 /// <summary>
 /// Localization: clean
@@ -8,7 +7,7 @@ using System.Runtime.InteropServices;
 
 namespace Ext.Utils
 {
-	// FIXME: вычистить весь код, оптимизировать
+	// FIXME: перестроить, вычистить весь код, оптимизировать
 	public sealed class TCalculator : IDisposable
 	{
         [Serializable]
@@ -23,14 +22,13 @@ namespace Ext.Utils
 			}
 		}
 
-		// FIXME: перестроить, вычистить
 		public class TNamedVar
 		{
 			public string Name;
 			public double Value;
 		}
 
-		private enum TCalcCBType : byte
+		private enum CallbackType : byte
 		{
 			ctGetValue,
 			ctSetValue,
@@ -75,11 +73,6 @@ namespace Ext.Utils
 		private List<TNamedVar> FVars;
 		private bool Disposed_;
 
-		/*public double Vars[string Name]
-		{
-			get { return this.GetVar(Name); }
-			set { this.SetVar(Name, Value); }
-		}*/
 
 		public TCalculator()
 		{
@@ -126,14 +119,14 @@ namespace Ext.Utils
 			return (AValue - Int(AValue));
 		}
 
-		private bool DefCalcProc(TCalcCBType ctype, [In] string S, ref double V)
+		private bool DefCalcProc(CallbackType ctype, string S, ref double V)
 		{
 			bool Result = true;
-			if (ctype != TCalcCBType.ctGetValue)
+			if (ctype != CallbackType.ctGetValue)
 			{
-				if (ctype != TCalcCBType.ctSetValue)
+				if (ctype != CallbackType.ctSetValue)
 				{
-					if (ctype == TCalcCBType.ctFunction)
+					if (ctype == CallbackType.ctFunction)
 					{
 						if (S == "round")
 						{
@@ -278,22 +271,21 @@ namespace Ext.Utils
 			return Result;
 		}
 
-		private bool Callback(TCalcCBType ctype, [In] string Name, ref double Res)
+		private bool Callback(CallbackType ctype, string Name, ref double Res)
 		{
 			bool Result = this.DefCalcProc(ctype, Name, ref Res);
 
-			if (!Result)
-			{
+			if (!Result) {
 				Result = true;
 
 				switch (ctype) {
-					case TCalcCBType.ctGetValue:
+					case CallbackType.ctGetValue:
 						Res = this.GetVar(Name);
 						break;
-					case TCalcCBType.ctSetValue:
+					case CallbackType.ctSetValue:
 						this.SetVar(Name, Res);
 						break;
-					case TCalcCBType.ctFunction:
+					case CallbackType.ctFunction:
 						Result = false;
 						break;
 				}
@@ -302,15 +294,13 @@ namespace Ext.Utils
 			return Result;
 		}
 
-		private double GetVar([In] string Name)
+		private double GetVar(string Name)
 		{
 			int num = this.FVars.Count - 1;
-			for (int i = 0; i <= num; i++)
-			{
-				TNamedVar V = (this.FVars[i] as TNamedVar);
+			for (int i = 0; i <= num; i++) {
+				TNamedVar V = this.FVars[i];
 
-				if (string.Compare(V.Name, Name, false) == 0)
-				{
+				if (string.Compare(V.Name, Name, false) == 0) {
 					return V.Value;
 				}
 			}
@@ -318,16 +308,15 @@ namespace Ext.Utils
 			throw new TCalculator.ECalculate("Unknown function or variable \"" + Name + "\".");
 		}
 
-		private void SetVar([In] string Name, double Value)
+		private void SetVar(string Name, double Value)
 		{
 			TNamedVar V = null;
 
 			int num = this.FVars.Count - 1;
 			for (int i = 0; i <= num; i++)
 			{
-				TNamedVar nv = (this.FVars[i] as TNamedVar);
-				if (string.Compare(nv.Name, Name, false) == 0)
-				{
+				TNamedVar nv = this.FVars[i];
+				if (string.Compare(nv.Name, Name, false) == 0) {
 					V = nv;
 				}
 			}
@@ -747,7 +736,8 @@ namespace Ext.Utils
 		private void term(ref double R)
 		{
 			TCalculator.TToken fToken = this.FToken;
-			if (fToken != TCalculator.TToken.tkLBRACE)
+
+            if (fToken != TCalculator.TToken.tkLBRACE)
 			{
 				if (fToken != TCalculator.TToken.tkNUMBER)
 				{
@@ -771,7 +761,8 @@ namespace Ext.Utils
 							{
 								this.RaiseError("Syntax error");
 							}
-							if (!this.Callback(TCalculator.TCalcCBType.ctFunction, st, ref R))
+
+                            if (!this.Callback(TCalculator.CallbackType.ctFunction, st, ref R))
 							{
 								this.RaiseError("Unknown function or variable \"" + st + "\".");
 							}
@@ -782,37 +773,30 @@ namespace Ext.Utils
 							{
 								this.lex();
 								this.expr6(ref R);
-								if (!this.Callback(TCalculator.TCalcCBType.ctSetValue, st, ref R))
+								if (!this.Callback(CallbackType.ctSetValue, st, ref R))
 								{
 									this.RaiseError("Unknown function or variable \"" + st + "\".");
 								}
 							}
 							else
 							{
-								if (!this.Callback(TCalculator.TCalcCBType.ctGetValue, st, ref R))
+								if (!this.Callback(CallbackType.ctGetValue, st, ref R))
 								{
 									this.RaiseError("Unknown function or variable \"" + st + "\".");
 								}
 							}
 						}
 					}
-				}
-				else
-				{
+				} else {
 					R = this.fvalue;
 					this.lex();
 				}
-			}
-			else
-			{
+			} else {
 				this.lex();
 				this.expr6(ref R);
-				if (this.FToken == TCalculator.TToken.tkRBRACE)
-				{
+				if (this.FToken == TCalculator.TToken.tkRBRACE) {
 					this.lex();
-				}
-				else
-				{
+				} else {
 					this.RaiseError("Syntax error");
 				}
 			}
@@ -821,7 +805,8 @@ namespace Ext.Utils
 		private void expr1(ref double R)
 		{
 			this.term(ref R);
-			if (this.FToken == TCalculator.TToken.tkPOW)
+
+            if (this.FToken == TCalculator.TToken.tkPOW)
 			{
 				this.lex();
 				double V = 0.0;
@@ -850,9 +835,7 @@ namespace Ext.Utils
 						R = (-R);
 						break;
 				}
-			}
-			else
-			{
+			} else {
 				this.expr1(ref R);
 			}
 		}
@@ -986,9 +969,9 @@ namespace Ext.Utils
 			}
 		}
 
-		public double Calc(string aExpression)
+		public double Calc(string expression)
 		{
-			this.FExpression = aExpression + "\0";
+			this.FExpression = expression + "\0";
 			this.FPtr = 1;
 			this.lex();
 			double Result = 0.0;

@@ -1,6 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
-
 using Ext.Utils;
 
 namespace GedCom551
@@ -14,9 +12,9 @@ namespace GedCom551
 			get { return this.FValue; }
 		}
 
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			base.CreateObj(AOwner, AParent);
+			base.CreateObj(owner, parent);
 			this.FValue = null;
 		}
 
@@ -27,8 +25,8 @@ namespace GedCom551
 
 		public override DateTime GetDateTime()
 		{
-			DateTime Result = ((this.FValue == null) ? new DateTime(0) : this.FValue.GetDateTime());
-			return Result;
+			DateTime result = ((this.FValue == null) ? new DateTime(0) : this.FValue.GetDateTime());
+			return result;
 		}
 
 		public override void SetDateTime(DateTime ADateTime)
@@ -54,52 +52,40 @@ namespace GedCom551
 			return this.FValue == null || this.FValue.IsEmpty();
 		}
 
-		public override string ParseString([In] string S)
+		public override string ParseString(string S)
 		{
 			try
 			{
-				if (this.FValue != null)
-				{
+				if (this.FValue != null) {
 					this.FValue.Dispose();
 					this.FValue = null;
 				}
 
-				if (string.IsNullOrEmpty(S))
-				{
+				if (string.IsNullOrEmpty(S)) {
 					return "";
 				}
 
-				string SU = S.Substring(0, 3).ToUpper();
+				string SU = S.Substring(0, 3).ToUpperInvariant();
 
-				if (SU == TGEDCOMDate.GEDCOMDateApproximatedArray[1] || SU == TGEDCOMDate.GEDCOMDateApproximatedArray[2] || SU == TGEDCOMDate.GEDCOMDateApproximatedArray[3])
+				if (SU == GEDCOMDateApproximatedArray[1] || SU == GEDCOMDateApproximatedArray[2] || SU == GEDCOMDateApproximatedArray[3])
 				{
 					this.FValue = new TGEDCOMDateApproximated(base.Owner, this, "", "");
 				}
+				else if (SU == "INT")
+				{
+					this.FValue = new TGEDCOMDateInterpreted(base.Owner, this, "", "");
+				}
+				else if (SU == GEDCOMDateRangeArray[0] || SU == GEDCOMDateRangeArray[1] || SU == GEDCOMDateRangeArray[2])
+				{
+					this.FValue = new TGEDCOMDateRange(base.Owner, this, "", "");
+				}
+				else if (S.StartsWith("FROM", StringComparison.InvariantCulture) || S.StartsWith("TO", StringComparison.InvariantCulture))
+				{
+					this.FValue = new TGEDCOMDatePeriod(base.Owner, this, "", "");
+				}
 				else
 				{
-					if (SU == "INT")
-					{
-						this.FValue = new TGEDCOMDateInterpreted(base.Owner, this, "", "");
-					}
-					else
-					{
-						if (SU == TGEDCOMDate.GEDCOMDateRangeArray[0] || SU == TGEDCOMDate.GEDCOMDateRangeArray[1] || SU == TGEDCOMDate.GEDCOMDateRangeArray[2])
-						{
-							this.FValue = new TGEDCOMDateRange(base.Owner, this, "", "");
-						}
-						else
-						{
-							// checkit: this safe (by indexes and length), but std validness?
-							if (S.IndexOf("FROM", 0) == 0 || S.IndexOf("TO", 0) == 0)
-							{
-								this.FValue = new TGEDCOMDatePeriod(base.Owner, this, "", "");
-							}
-							else
-							{
-								this.FValue = new TGEDCOMDate(base.Owner, this, "", "");
-							}
-						}
-					}
+					this.FValue = new TGEDCOMDate(base.Owner, this, "", "");
 				}
 
 				return this.FValue.ParseString(S);
@@ -140,7 +126,7 @@ namespace GedCom551
 		public void aux_GetIndependentDate(out int AYear, out ushort AMonth, out ushort ADay)
 		{
 			bool BC;
-			aux_GetIndependentDate(out AYear, out AMonth, out ADay, out BC);
+			this.aux_GetIndependentDate(out AYear, out AMonth, out ADay, out BC);
 		}
 
 		public void aux_GetIndependentDate(out int AYear, out ushort AMonth, out ushort ADay, out bool YearBC)
@@ -246,13 +232,13 @@ namespace GedCom551
 			return res;
 		}
 
-		public TGEDCOMDateValue(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMDateValue(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 
-        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue)
 		{
-			return new TGEDCOMDateValue(AOwner, AParent, AName, AValue);
+			return new TGEDCOMDateValue(owner, parent, tagName, tagValue);
 		}
 	}
 }

@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
 
 namespace GedCom551
 {
@@ -7,21 +6,18 @@ namespace GedCom551
 	{
 		public TGEDCOMDateExact ChangeDate
 		{
-			get { return this.GetChangeDate(); }
+			get {
+				return base.TagClass("DATE", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact;
+			}
 		}
 
-		private TGEDCOMDateExact GetChangeDate()
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			return base.TagClass("DATE", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact;
-		}
-
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
-		{
-			base.CreateObj(AOwner, AParent);
+			base.CreateObj(owner, parent);
 			this.FName = "STAT";
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 
@@ -37,13 +33,13 @@ namespace GedCom551
 			return Result;
 		}
 
-		public TGEDCOMDateStatus(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMDateStatus(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 
-        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue)
 		{
-			return new TGEDCOMDateStatus(AOwner, AParent, AName, AValue);
+			return new TGEDCOMDateStatus(owner, parent, tagName, tagValue);
 		}
 	}
 }

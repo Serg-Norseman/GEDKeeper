@@ -2,7 +2,6 @@
 
 using GedCom551;
 using GKCore;
-using GKUI.Controls;
 
 /// <summary>
 /// Localization: clean
@@ -14,6 +13,20 @@ namespace GKUI.Lists
 	{
 		nctText,
 		nctChangeDate
+	}
+
+	public sealed class TNoteListColumns : TListColumns
+	{
+		protected override void InitColumnStatics()
+		{
+			this.AddStatic(LangMan.LSList[108], TDataType.dtString, 400, true);
+			this.AddStatic(LangMan.LSList[317], TDataType.dtDateTime, 150, true);
+		}
+
+		public TNoteListColumns() : base()
+		{
+			InitData(typeof(TNoteColumnType));
+		}
 	}
 
 	public sealed class TNoteListMan : TListManager
@@ -31,7 +44,7 @@ namespace GKUI.Lists
 			this.FRec = (aRec as TGEDCOMNoteRecord);
 		}
 
-		public override object GetColumnValueDirect(int col_type, int col_subtype)
+		protected override object GetColumnValueEx(int col_type, int col_subtype)
 		{
 			switch (col_type) {
 				case 0:
@@ -58,13 +71,6 @@ namespace GKUI.Lists
 			}
 		}
 
-		protected override void InitColumnStatics()
-		{
-			this.ColumnStatics.Clear();
-			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[108], TDataType.dtString, 400));
-			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[317], TDataType.dtDateTime, 150));
-		}
-
 		public override Type GetColumnsEnum()
 		{
 			return typeof(TNoteColumnType);
@@ -72,7 +78,7 @@ namespace GKUI.Lists
 
 		public override TListColumns GetDefaultListColumns()
 		{
-			return null;
+			return new TNoteListColumns();
 		}
 
 		public TNoteListMan(TGEDCOMTree aTree) : base(aTree)

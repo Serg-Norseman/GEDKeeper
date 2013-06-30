@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Ext.Utils;
@@ -100,7 +99,7 @@ namespace GKUI
 			}
 		}
 
-		private void SetSourceCitation([In] TGEDCOMSourceCitation Value)
+		private void SetSourceCitation(TGEDCOMSourceCitation Value)
 		{
 			this.FSourceCitation = Value;
 

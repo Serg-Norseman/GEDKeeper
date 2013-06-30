@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Ext.Utils;
@@ -51,7 +50,7 @@ namespace GKUI
 			this.TitleLabel.Text = LangMan.LSList[385];
 		}
 
-		public static bool ShowTipsEx([In] string ACaption, bool ShowTipsChecked, StringList Tips)
+		public static bool ShowTipsEx(string ACaption, bool ShowTipsChecked, StringList Tips)
 		{
 			TfmTipsDialog dlg = new TfmTipsDialog();
 			bool result = false;

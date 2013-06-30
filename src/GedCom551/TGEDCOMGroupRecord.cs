@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
 
 using Ext.Utils;
 
@@ -8,9 +7,9 @@ namespace GedCom551
 {
 	public sealed class TGEDCOMGroupRecord : TGEDCOMRecord
 	{
-		private TGEDCOMListEx<TGEDCOMPointer> _Members;
+		private GEDCOMList<TGEDCOMPointer> _Members;
 
-		public TGEDCOMListEx<TGEDCOMPointer> Members
+		public GEDCOMList<TGEDCOMPointer> Members
 		{
 			get { return this._Members; }
 		}
@@ -21,17 +20,13 @@ namespace GedCom551
 			set { base.SetTagStringValue("NAME", value); }
 		}
 
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			base.CreateObj(AOwner, AParent);
-			base.SetLists(EnumSet.Create(new Enum[]
-			{
-				TGEDCOMSubList.stNotes, TGEDCOMSubList.stMultimedia
-			}));
+			base.CreateObj(owner, parent);
 			this.FRecordType = TGEDCOMRecordType.rtGroup;
 			this.FName = "_GROUP";
 
-			this._Members = new TGEDCOMListEx<TGEDCOMPointer>(this);
+			this._Members = new GEDCOMList<TGEDCOMPointer>(this);
 		}
 
 		public override void Dispose()
@@ -45,7 +40,7 @@ namespace GedCom551
 			}
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 
@@ -53,16 +48,13 @@ namespace GedCom551
 			{
 				Result = base.AddTag(ATag, AValue, null);
 			}
+			else if (ATag == "_MEMBER")
+			{
+				Result = this._Members.Add(new TGEDCOMPointer(base.Owner, this, ATag, AValue));
+			}
 			else
 			{
-				if (ATag == "_MEMBER")
-				{
-					Result = this._Members.Add(new TGEDCOMPointer(base.Owner, this, ATag, AValue));
-				}
-				else
-				{
-					Result = base.AddTag(ATag, AValue, ATagConstructor);
-				}
+				Result = base.AddTag(ATag, AValue, ATagConstructor);
 			}
 
 			return Result;
@@ -112,13 +104,52 @@ namespace GedCom551
 			return Result;
 		}
 
-		public TGEDCOMGroupRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMGroupRecord(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 
-        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue)
 		{
-			return new TGEDCOMGroupRecord(AOwner, AParent, AName, AValue);
+			return new TGEDCOMGroupRecord(owner, parent, tagName, tagValue);
 		}
+
+		public bool aux_AddMember(TGEDCOMIndividualRecord aMember)
+		{
+			bool Result;
+			try
+			{
+				TGEDCOMPointer ptr = new TGEDCOMPointer(this.Owner, this, "", "");
+				ptr.SetNamedValue("_MEMBER", aMember);
+				this.Members.Add(ptr);
+				ptr = new TGEDCOMPointer(this.Owner, aMember, "", "");
+				ptr.SetNamedValue("_GROUP", this);
+				aMember.Groups.Add(ptr);
+				Result = true;
+			}
+			catch (Exception E)
+			{
+				SysUtils.LogWrite("TGenEngine.AddGroupMember(): " + E.Message);
+				Result = false;
+			}
+			return Result;
+		}
+
+		public bool aux_RemoveMember(TGEDCOMIndividualRecord aMember)
+		{
+			bool Result;
+			try
+			{
+				this.Members.Delete(this.IndexOfMember(aMember));
+				aMember.Groups.Delete(aMember.IndexOfGroup(this));
+				Result = true;
+			}
+			catch (Exception E)
+			{
+				SysUtils.LogWrite("TGenEngine.RemoveGroupMember(): " + E.Message);
+				Result = false;
+			}
+			return Result;
+		}
+
 	}
 }

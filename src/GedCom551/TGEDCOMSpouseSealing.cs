@@ -1,7 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
-
-using Ext.Utils;
 
 namespace GedCom551
 {
@@ -32,49 +29,35 @@ namespace GedCom551
 
 		public TGEDCOMDateExact SpouseSealingChangeDate
 		{
-			get { return this.GetChangeDate(); }
+			get { return this.DateStatus.TagClass("CHAN", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact; }
 		}
 
-		private TGEDCOMDateExact GetChangeDate()
+		public TGEDCOMDateStatus DateStatus
 		{
-			TGEDCOMTag StatTag = base.FindTag("STAT", 0);
-			if (StatTag == null)
-			{
-				this.AddTag("STAT", "", null);
-			}
-			return StatTag.TagClass("CHAN", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact;
+			get { return base.TagClass("STAT", typeof(TGEDCOMDateStatus), TGEDCOMDateStatus.Create) as TGEDCOMDateStatus; }
 		}
 
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
-		{
-			base.CreateObj(AOwner, AParent);
-			base.SetLists(EnumSet.Create(new Enum[] { TGEDCOMSubList.stNotes, TGEDCOMSubList.stSource }));
-		}
-
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
 		{
 			TGEDCOMTag Result;
 
-			if (ATag == "DATE")
+			if (tagName == "DATE")
 			{
-				Result = base.AddTag(ATag, AValue, TGEDCOMDateValue.Create);
+				Result = base.AddTag(tagName, tagValue, TGEDCOMDateValue.Create);
+			}
+			else if (tagName == "STAT")
+			{
+				Result = base.AddTag(tagName, tagValue, TGEDCOMDateStatus.Create);
 			}
 			else
 			{
-				if (ATag == "STAT")
-				{
-					Result = base.AddTag(ATag, AValue, TGEDCOMDateStatus.Create);
-				}
-				else
-				{
-					Result = base.AddTag(ATag, AValue, ATagConstructor);
-				}
+				Result = base.AddTag(tagName, tagValue, tagConstructor);
 			}
 
 			return Result;
 		}
 
-		public TGEDCOMSpouseSealing(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMSpouseSealing(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 	}

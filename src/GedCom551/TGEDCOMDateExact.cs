@@ -1,17 +1,16 @@
 using System;
-using System.Runtime.InteropServices;
 
 namespace GedCom551
 {
 	public sealed class TGEDCOMDateExact : TGEDCOMDate
 	{
-		public TGEDCOMDateExact(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMDateExact(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 
-        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue)
 		{
-			return new TGEDCOMDateExact(AOwner, AParent, AName, AValue);
+			return new TGEDCOMDateExact(owner, parent, tagName, tagValue);
 		}
 	}
 }

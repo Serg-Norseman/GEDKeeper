@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Text;
 
 using Ext.Utils;
@@ -77,7 +76,7 @@ namespace GedCom551
 			}
 		}
 
-		private TGEDCOMListEx<TGEDCOMRecord> FRecords;
+		private GEDCOMList<TGEDCOMRecord> FRecords;
 		private TGEDCOMHeader FHeader;
 		private Hashtable FXRefIndex;
 		private TGEDCOMState FState;
@@ -111,7 +110,7 @@ namespace GedCom551
 
 		public TGEDCOMTree()
 		{
-			this.FRecords = new TGEDCOMListEx<TGEDCOMRecord>(this);
+			this.FRecords = new GEDCOMList<TGEDCOMRecord>(this);
 			this.FHeader = new TGEDCOMHeader(this, this, "", "");
 			this.FXRefIndex = new Hashtable();
 		}
@@ -127,7 +126,7 @@ namespace GedCom551
 			f.RegisterTag("MAP", TGEDCOMMap.Create);
 			f.RegisterTag("_LOC", TGEDCOMPointer.Create);
 
-			//f.Register("xxxx", xxxx.Create);
+			//f.RegisterTag("xxxx", xxxx.Create);
 		}
 
 		public void Dispose()
@@ -206,7 +205,7 @@ namespace GedCom551
 			}
 		}
 
-		public void SetXRef([In] string oldXRef, TGEDCOMCustomRecord Sender)
+		public void SetXRef(string oldXRef, TGEDCOMCustomRecord Sender)
 		{
 			if (!string.IsNullOrEmpty(oldXRef))
 			{
@@ -223,7 +222,7 @@ namespace GedCom551
 			if (exists) this.FXRefIndex.Remove(ARecord.XRef);
 		}
 
-		public TGEDCOMRecord XRefIndex_Find([In] string XRef)
+		public TGEDCOMRecord XRefIndex_Find(string XRef)
 		{
 			return (this.FXRefIndex[XRef] as TGEDCOMRecord);
 		}
@@ -276,7 +275,7 @@ namespace GedCom551
 			return this.FRecords.IndexOfObject(ARecord);
 		}
 
-		public void SaveToFile([In] string aFileName, [In] TGEDCOMCharacterSet CharSet)
+		public void SaveToFile(string aFileName, TGEDCOMCharacterSet CharSet)
 		{
 			string subm = this.FHeader.GetTagStringValue("SUBM");
 			int rev = this.FHeader.FileRevision;
@@ -305,7 +304,7 @@ namespace GedCom551
 			}
 		}
 
-		public void LoadFromFile([In] string aFileName)
+		public void LoadFromFile(string aFileName)
 		{
 			using (StreamReader fs = new StreamReader(aFileName, Encoding.GetEncoding(1251))) {
 				this.Clear();
@@ -314,7 +313,7 @@ namespace GedCom551
 			}
 		}
 
-		private static string StrToUtf8([In] string S)
+		private static string StrToUtf8(string S)
 		{
 			byte[] src = Encoding.GetEncoding(1251).GetBytes(S);
 			return Encoding.UTF8.GetString(src);
@@ -534,7 +533,7 @@ namespace GedCom551
 			}
 		}
 
-		public TGEDCOMRecord FindUID([In] string UID)
+		public TGEDCOMRecord FindUID(string UID)
 		{
 			TGEDCOMRecord res = null;
 
@@ -574,5 +573,19 @@ namespace GedCom551
 				Trace.Write("Line " + LineNum.ToString() + ". Failed correct: " + E.Message);
 			}
 		}
+
+		public TGEDCOMSubmitterRecord aux_GetSubmitter()
+		{
+			TGEDCOMSubmitterRecord submitter = this.FHeader.Submitter.Value as TGEDCOMSubmitterRecord;
+			if (submitter == null)
+			{
+				submitter = new TGEDCOMSubmitterRecord(this, this, "", "");
+				submitter.InitNew();
+				this.AddRecord(submitter);
+				this.FHeader.SetTagStringValue("SUBM", "@" + submitter.XRef + "@");
+			}
+			return submitter;
+		}
+
 	}
 }

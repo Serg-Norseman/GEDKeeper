@@ -4,11 +4,11 @@ using System.Windows.Forms;
 
 using Cyotek.Windows.Forms;
 
-namespace GKSandbox
+namespace GKUI.Controls
 {
-    public partial class ImageControl : UserControl
+    public partial class GKImageControl : UserControl
     {
-        public ImageControl()
+        public GKImageControl()
         {
             InitializeComponent();
             this.FillZoomLevels();

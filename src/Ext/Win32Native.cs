@@ -21,7 +21,25 @@ namespace Ext.Utils
 		public const uint DLGC_WANTTAB 		= 0x0002;
 		public const uint DLGC_WANTCHARS 	= 0x0080;
 		public const uint DLGC_WANTALLKEYS 	= 0x0004;
+
+		public const int WS_VSCROLL 		= 0x00200000;
+		public const int WS_HSCROLL 		= 0x00100000;
+
+		public const int SB_LINELEFT = 0; 
+		public const int SB_LINERIGHT = 1; 
+		public const int SB_PAGELEFT = 2;
+		public const int SB_PAGERIGHT = 3;
+
+		public const int SB_HORZ = 0;
+        public const int SB_VERT = 1;
+        public const int SB_CTL = 2;
+        public const int SB_BOTH = 3;
+        
+        public const int ESB_ENABLE_BOTH = 0;
 		
+		[DllImport("user32.dll", CharSet = CharSet.Auto)]
+		public static extern int SendMessage(IntPtr hWnd, uint wMsg, IntPtr wParam, IntPtr lParam);
+
         [DllImport("shell32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern int ShellExecute(uint hWnd, string Operation, string FileName, string Parameters, string Directory, int ShowCmd);
 
@@ -58,6 +76,9 @@ namespace Ext.Utils
         	public int nTrackPos;
         }
 
+
+        [DllImport("user32.dll")]
+		public static extern bool EnableScrollBar(IntPtr hWnd, uint wSBflags, uint wArrows);
 
         [DllImport("user32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -144,6 +165,9 @@ namespace Ext.Utils
 
         [DllImport("MAPI32.DLL")]
         public static extern int MAPISendMail(IntPtr session, IntPtr hwnd, MapiMessage message, int flg, int rsv);
+
+        [DllImport("wininet.dll", EntryPoint = "InternetGetConnectedState")]  
+        public static extern bool InternetGetConnectedState(out int conState, int reder);
 
     }
 }

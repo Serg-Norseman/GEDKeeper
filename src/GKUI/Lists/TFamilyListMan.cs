@@ -16,6 +16,21 @@ namespace GKUI.Lists
 		fctChangeDate
 	}
 
+	public sealed class TFamilyListColumns : TListColumns
+	{
+		protected override void InitColumnStatics()
+		{
+			this.AddStatic(LangMan.LSList[153], TDataType.dtString, 300, true);
+			this.AddStatic(LangMan.LSList[217], TDataType.dtString, 100, true);
+			this.AddStatic(LangMan.LSList[317], TDataType.dtDateTime, 150, true);
+		}
+
+		public TFamilyListColumns() : base()
+		{
+			InitData(typeof(TFamilyColumnType));
+		}
+	}
+
 	public sealed class TFamilyListMan : TListManager
 	{
 		private TGEDCOMFamilyRecord FRec;
@@ -34,7 +49,7 @@ namespace GKUI.Lists
 			this.FRec = (aRec as TGEDCOMFamilyRecord);
 		}
 
-		public override object GetColumnValueDirect(int col_type, int col_subtype)
+		protected override object GetColumnValueEx(int col_type, int col_subtype)
 		{
 			switch (col_type) {
 				case 0:
@@ -48,14 +63,6 @@ namespace GKUI.Lists
 			}
 		}
 
-		protected override void InitColumnStatics()
-		{
-			this.ColumnStatics.Clear();
-			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[153], TDataType.dtString, 300));
-			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[217], TDataType.dtString, 100));
-			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[317], TDataType.dtDateTime, 150));
-		}
-
 		public override Type GetColumnsEnum()
 		{
 			return typeof(TFamilyColumnType);
@@ -63,7 +70,7 @@ namespace GKUI.Lists
 
 		public override TListColumns GetDefaultListColumns()
 		{
-			return null;
+			return new TFamilyListColumns();
 		}
 
 		public TFamilyListMan(TGEDCOMTree aTree) : base(aTree)

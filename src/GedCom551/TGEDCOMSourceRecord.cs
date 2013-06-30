@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
 
 using Ext.Utils;
 
@@ -13,7 +12,7 @@ namespace GedCom551
 		private StringList FPublication;
 		private StringList FText;
 
-		private TGEDCOMListEx<TGEDCOMRepositoryCitation> _RepositoryCitations;
+		private GEDCOMList<TGEDCOMRepositoryCitation> _RepositoryCitations;
 
 		public TGEDCOMData Data
 		{
@@ -50,37 +49,14 @@ namespace GedCom551
 			set { base.SetTagStrings(base.TagClass("TEXT", typeof(TGEDCOMTag), TGEDCOMTag.Create), value); }
 		}
 
-		public TGEDCOMListEx<TGEDCOMRepositoryCitation> RepositoryCitations
+		public GEDCOMList<TGEDCOMRepositoryCitation> RepositoryCitations
 		{
 			get { return this._RepositoryCitations; }
 		}
 
-		/*public new TGEDCOMMultimediaLink MultimediaLinks
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			get { return base.GetMultimediaLink(Index); }
-		}
-		public new int MultimediaLinksCount
-		{
-			get { return base.MultimediaLinksCount; }
-		}*/
-
-		/*public new TGEDCOMNotes Notes
-		{
-			get	{ return base.GetNote(Index); }
-		}
-		public new int NotesCount
-		{
-			get { return base.NotesCount; }
-		}*/
-
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
-		{
-			base.CreateObj(AOwner, AParent);
-			base.SetLists(EnumSet.Create(new Enum[]
-			{
-				TGEDCOMSubList.stNotes, 
-				TGEDCOMSubList.stMultimedia
-			}));
+			base.CreateObj(owner, parent);
 			this.FRecordType = TGEDCOMRecordType.rtSource;
 			this.FName = "SOUR";
 
@@ -89,7 +65,7 @@ namespace GedCom551
 			this.FPublication = null;
 			this.FText = null;
 
-			this._RepositoryCitations = new TGEDCOMListEx<TGEDCOMRepositoryCitation>(this);
+			this._RepositoryCitations = new GEDCOMList<TGEDCOMRepositoryCitation>(this);
 		}
 
 		public override void Dispose()
@@ -108,7 +84,7 @@ namespace GedCom551
 			}
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 
@@ -116,16 +92,13 @@ namespace GedCom551
 			{
 				Result = this._RepositoryCitations.Add(new TGEDCOMRepositoryCitation(base.Owner, this, ATag, AValue));
 			}
+			else if (ATag == "DATA")
+			{
+				Result = base.AddTag(ATag, AValue, TGEDCOMData.Create);
+			}
 			else
 			{
-				if (ATag == "DATA")
-				{
-					Result = base.AddTag(ATag, AValue, TGEDCOMData.Create);
-				}
-				else
-				{
-					Result = base.AddTag(ATag, AValue, ATagConstructor);
-				}
+				Result = base.AddTag(ATag, AValue, ATagConstructor);
 			}
 
 			return Result;
@@ -242,13 +215,23 @@ namespace GedCom551
 			return match;
 		}
 
-		public TGEDCOMSourceRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMSourceRecord(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 
-        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue)
 		{
-			return new TGEDCOMSourceRecord(AOwner, AParent, AName, AValue);
+			return new TGEDCOMSourceRecord(owner, parent, tagName, tagValue);
 		}
+
+		public void aux_AddRepository(TGEDCOMRepositoryRecord aRepRec)
+		{
+			if (aRepRec != null) {
+				TGEDCOMRepositoryCitation cit = new TGEDCOMRepositoryCitation(this.Owner, this, "", "");
+				cit.Value = aRepRec;
+				this.RepositoryCitations.Add(cit);
+			}
+		}
+
 	}
 }

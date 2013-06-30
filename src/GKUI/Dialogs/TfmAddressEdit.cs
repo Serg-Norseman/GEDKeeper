@@ -17,9 +17,9 @@ namespace GKUI
 	public partial class TfmAddressEdit : Form
 	{
 		private TGEDCOMAddress FAddress;
-		private TSheetList FPhonesList;
-		private TSheetList FMailsList;
-		private TSheetList FWebsList;
+		private GKSheetList FPhonesList;
+		private GKSheetList FMailsList;
+		private GKSheetList FWebsList;
 
 		public TGEDCOMAddress Address
 		{
@@ -29,122 +29,86 @@ namespace GKUI
 
 		private bool GetInput(string aTitle, ref string aValue)
 		{
-			return InputBox.QueryText(aTitle, LangMan.LSList[202], ref aValue) && aValue.Trim() != "";
+			return GKInputBox.QueryText(aTitle, LangMan.LSList[202], ref aValue) && aValue.Trim() != "";
 		}
 
-		private void ListModify(object Sender, object ItemData, TGenEngine.TRecAction Action)
+		private void ListModify(object sender, object itemData, TGenEngine.TRecAction action)
 		{
-			int Index = -1;
-			if (Action >= TGenEngine.TRecAction.raEdit && Action < TGenEngine.TRecAction.raJump)
-			{
-				Index = (int)ItemData - 1;
-			}
+            TGEDCOMTag itemTag = itemData as TGEDCOMTag;
+            if ((action == TGenEngine.TRecAction.raEdit || action == TGenEngine.TRecAction.raDelete) && (itemTag == null)) return;
 
             string val;
+            if (object.Equals(sender, this.FPhonesList))
+            {
+            	switch (action) {
+            		case TGenEngine.TRecAction.raAdd:
+            			val = "";
+            			if (GetInput(LangMan.LSList[131], ref val)) {
+            				this.FAddress.AddPhoneNumber(val);
+            			}
+            			break;
 
-			if (object.Equals(Sender, this.FPhonesList))
-			{
-                switch (Action)
-                {
-                    case TGenEngine.TRecAction.raAdd:
-					    val = "";
-					    if (GetInput(LangMan.LSList[131], ref val))
-					    {
-						    this.FAddress.SetPhoneNumber(this.FAddress.GetPhoneNumbersCount(), val);
-					    }
-                        break;
+            		case TGenEngine.TRecAction.raEdit:
+            			val = itemTag.StringValue;
+            			if (GetInput(LangMan.LSList[131], ref val)) {
+            				itemTag.StringValue = val;
+            			}
+            			break;
 
-                    case TGenEngine.TRecAction.raEdit:
-						if (Index >= 0)
-						{
-							val = this.FAddress.GetPhoneNumber(Index);
-							if (GetInput(LangMan.LSList[131], ref val))
-							{
-								this.FAddress.SetPhoneNumber(Index, val);
-							}
-						}
-                        break;
+            		case TGenEngine.TRecAction.raDelete:
+            			this.FAddress.PhoneNumbers.DeleteObject(itemTag);
+            			break;
+            	}
+            }
+            else if (object.Equals(sender, this.FMailsList))
+            {
+            	switch (action) {
+            		case TGenEngine.TRecAction.raAdd:
+            			val = "";
+            			if (GetInput(LangMan.LSList[132], ref val)) {
+            				this.FAddress.AddEmailAddress(val);
+            			}
+            			break;
 
-                    case TGenEngine.TRecAction.raDelete:
-						if (Index >= 0)
-						{
-							this.FAddress.DeletePhoneNumber(Index);
-						}
-                        break;
-                }
-			}
-			else
-			{
-				if (object.Equals(Sender, this.FMailsList))
-				{
-                    switch (Action)
-                    {
-                        case TGenEngine.TRecAction.raAdd:
-						    val = "";
-						    if (GetInput(LangMan.LSList[132], ref val))
-						    {
-							    this.FAddress.SetEmailAddress(this.FAddress.GetEmailAddressesCount(), val);
-						    }
-                            break;
+            		case TGenEngine.TRecAction.raEdit:
+            			val = itemTag.StringValue;
+            			if (GetInput(LangMan.LSList[132], ref val)) {
+            				itemTag.StringValue = val;
+            			}
+            			break;
 
-                        case TGenEngine.TRecAction.raEdit:
-							if (Index >= 0)
-							{
-								val = this.FAddress.GetEmailAddress(Index);
-								if (GetInput(LangMan.LSList[132], ref val))
-								{
-									this.FAddress.SetEmailAddress(Index, val);
-								}
-							}
-                            break;
+            		case TGenEngine.TRecAction.raDelete:
+            			this.FAddress.EmailAddresses.DeleteObject(itemTag);
+            			break;
+            	}
+            }
+            else if (object.Equals(sender, this.FWebsList))
+            {
+            	switch (action) {
+            		case TGenEngine.TRecAction.raAdd:
+            			val = "";
+            			if (GetInput(LangMan.LSList[133], ref val)) {
+            				this.FAddress.AddWebPage(val);
+            			}
+            			break;
 
-                        case TGenEngine.TRecAction.raDelete:
-							if (Index >= 0)
-							{
-								this.FAddress.DeleteEmail(Index);
-							}
-                            break;
-                    }
-				}
-				else
-				{
-					if (object.Equals(Sender, this.FWebsList))
-					{
-						switch (Action) {
-							case TGenEngine.TRecAction.raAdd:
-								val = "";
-								if (GetInput(LangMan.LSList[133], ref val))
-								{
-									this.FAddress.SetWebPage(this.FAddress.GetWebPagesCount(), val);
-								}
-								break;
+            		case TGenEngine.TRecAction.raEdit:
+            			val = itemTag.StringValue;
+            			if (GetInput(LangMan.LSList[133], ref val)) {
+            				itemTag.StringValue = val;
+            			}
+            			break;
 
-                            case TGenEngine.TRecAction.raEdit:
-								if (Index >= 0)
-								{
-									val = this.FAddress.GetWebPage(Index);
-									if (GetInput(LangMan.LSList[133], ref val))
-									{
-										this.FAddress.SetWebPage(Index, val);
-									}
-								}
-								break;
-
-                            case TGenEngine.TRecAction.raDelete:
-								if (Index >= 0)
-								{
-									this.FAddress.DeleteWebPage(Index);
-								}
-								break;
-						}
-					}
-				}
-			}
+            		case TGenEngine.TRecAction.raDelete:
+            			this.FAddress.WebPages.DeleteObject(itemTag);
+            			break;
+            	}
+            }
 
 			this.UpdateLists();
 		}
 
-		private void SetAddress([In] TGEDCOMAddress Value)
+		private void SetAddress(TGEDCOMAddress Value)
 		{
 			this.FAddress = Value;
 			this.edCountry.Text = this.FAddress.AddressCountry;
@@ -158,24 +122,27 @@ namespace GKUI
 		private void UpdateLists()
 		{
 			this.FPhonesList.List.Items.Clear();
-			int num = this.FAddress.GetPhoneNumbersCount() - 1;
-			for (int i = 0; i <= num; i++)
-			{
-				this.FPhonesList.List.AddItem(this.FAddress.GetPhoneNumber(i), i + 1);
-			}
-
 			this.FMailsList.List.Items.Clear();
-			int num2 = this.FAddress.GetEmailAddressesCount() - 1;
-			for (int i = 0; i <= num2; i++)
-			{
-				this.FMailsList.List.AddItem(this.FAddress.GetEmailAddress(i), i + 1);
+			this.FWebsList.List.Items.Clear();
+
+			TGEDCOMTag tag;
+
+			int num = this.FAddress.PhoneNumbers.Count - 1;
+			for (int i = 0; i <= num; i++) {
+				tag = this.FAddress.PhoneNumbers[i];
+				this.FPhonesList.List.AddItem(tag.StringValue, tag);
 			}
 
-			this.FWebsList.List.Items.Clear();
-			int num3 = this.FAddress.GetWebPagesCount() - 1;
-			for (int i = 0; i <= num3; i++)
-			{
-				this.FWebsList.List.AddItem(this.FAddress.GetWebPage(i), i + 1);
+			int num2 = this.FAddress.EmailAddresses.Count - 1;
+			for (int i = 0; i <= num2; i++) {
+				tag = this.FAddress.EmailAddresses[i];
+				this.FMailsList.List.AddItem(tag.StringValue, tag);
+			}
+
+			int num3 = this.FAddress.WebPages.Count - 1;
+			for (int i = 0; i <= num3; i++) {
+				tag = this.FAddress.WebPages[i];
+				this.FWebsList.List.AddItem(tag.StringValue, tag);
 			}
 		}
 
@@ -201,16 +168,16 @@ namespace GKUI
 		{
 			this.InitializeComponent();
 
-			this.FPhonesList = new TSheetList(this.SheetPhones);
-			this.FPhonesList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
+			this.FPhonesList = new GKSheetList(this.SheetPhones);
+			this.FPhonesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
 			this.FPhonesList.List.AddListColumn(LangMan.LSList[131], 350, false);
 
-			this.FMailsList = new TSheetList(this.SheetEmails);
-			this.FMailsList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
+			this.FMailsList = new GKSheetList(this.SheetEmails);
+			this.FMailsList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
 			this.FMailsList.List.AddListColumn(LangMan.LSList[132], 350, false);
 
-			this.FWebsList = new TSheetList(this.SheetWebPages);
-			this.FWebsList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
+			this.FWebsList = new GKSheetList(this.SheetWebPages);
+			this.FWebsList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
 			this.FWebsList.List.AddListColumn(LangMan.LSList[133], 350, false);
 
 			this.btnAccept.Text = LangMan.LSList[97];

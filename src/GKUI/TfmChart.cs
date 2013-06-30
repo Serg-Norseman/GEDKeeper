@@ -224,7 +224,8 @@ namespace GKUI
 
 			switch (this.FMode) {
 				case ChartControlMode.ccmDefault:
-					this.FTreeBox.SelectBy(e.X, e.Y);
+					this.FTreeBox.SelectBy(e.X, e.Y, (e.Button == MouseButtons.Left));
+
 					if (this.FTreeBox.Selected == null && e.Button == MouseButtons.Right)
 					{
 						this.FTreeBox.Cursor = Cursors.SizeAll;
@@ -251,6 +252,10 @@ namespace GKUI
 						this.FMode = ChartControlMode.ccmControlsVisible;
 						this.FTreeBox.ScaleControl.Visible = true;
 						this.FTreeBox.ScaleControl.MouseMove(e.X, e.Y, ThumbMoved);
+
+						Point pt = new Point(e.X, e.Y);
+						pt.Offset(+this.FTreeBox.Left, +this.FTreeBox.Top);
+						this.toolTip1.Show(this.FTreeBox.ScaleControl.Tip, this, pt, 1500);
 					} else {
 //						TreeChartPerson p = this.FTreeBox.FindPersonByCoords(e.X, e.Y);
 //
@@ -272,6 +277,7 @@ namespace GKUI
 					if (!this.FTreeBox.ScaleControl.Contains(e.X, e.Y)) {
 						this.FMode = ChartControlMode.ccmDefault;
 						this.FTreeBox.ScaleControl.Visible = false;
+						this.toolTip1.Hide(this);
 					} else {
 						this.FTreeBox.ScaleControl.MouseMove(e.X, e.Y, ThumbMoved);
 					}
@@ -314,13 +320,6 @@ namespace GKUI
 
 		private void ImageTree_MouseClick(object sender, MouseEventArgs e)
 		{
-			if (e.Clicks > 1) return;
-
-			TreeChartPerson p = this.FTreeBox.Selected;
-
-			if (this.FMode == ChartControlMode.ccmDefault && p != null && e.Button == MouseButtons.Left) {
-				if (this.FTreeBox.TraceSelected) this.FTreeBox.CenterPerson(p);
-			}
 		}
 
 		private void ImageTree_DblClick(object sender, EventArgs e)
@@ -361,25 +360,6 @@ namespace GKUI
 			if (sender == this.miGens8) this.FGensLimit = 8;
 			if (sender == this.miGens9) this.FGensLimit = 9;
 			this.GenChart(true);
-		}
-
-		private void N1001Click(object sender, EventArgs e)
-		{
-			this.N501.Checked = false;
-			this.N601.Checked = false;
-			this.N701.Checked = false;
-			this.N801.Checked = false;
-			this.N901.Checked = false;
-			this.N1001.Checked = false;
-			(sender as MenuItem).Checked = true;
-
-			if (sender == this.N501) this.FTreeBox.Scale = 0.5f;
-			if (sender == this.N601) this.FTreeBox.Scale = 0.6f;
-			if (sender == this.N701) this.FTreeBox.Scale = 0.7f;
-			if (sender == this.N801) this.FTreeBox.Scale = 0.8f;
-			if (sender == this.N901) this.FTreeBox.Scale = 0.9f;
-			if (sender == this.N1001) this.FTreeBox.Scale = 1.0f;
-			//this.GenChart(true);
 		}
 
 		private void miEditClick(object sender, EventArgs e)
@@ -425,14 +405,14 @@ namespace GKUI
 				if (i_spouse != null)
 				{
 					TGEDCOMFamilyRecord fam = TGenEngine.CreateFamilyEx(this.FTree);
-					this.FBase.Engine.AddFamilySpouse(fam, i_rec);
-					this.FBase.Engine.AddFamilySpouse(fam, i_spouse);
+					fam.aux_AddSpouse(i_rec);
+					fam.aux_AddSpouse(i_spouse);
 					this.UpdateChart();
 				}
 			}
 		}
 
-		private void InternalChildAdd(TGEDCOMSex aNeedSex)
+		private void InternalChildAdd(TGEDCOMSex needSex)
 		{
 			TreeChartPerson p = this.FTreeBox.Selected;
 			if (p != null && p.Rec != null)
@@ -451,9 +431,9 @@ namespace GKUI
 					else
 					{
 						TGEDCOMFamilyRecord fam = i_rec.SpouseToFamilyLinks[0].Family;
-						TGEDCOMIndividualRecord i_child = this.FBase.SelectPerson(fam.Husband.Value as TGEDCOMIndividualRecord, TGenEngine.TTargetMode.tmParent, aNeedSex);
+						TGEDCOMIndividualRecord i_child = this.FBase.SelectPerson(fam.Husband.Value as TGEDCOMIndividualRecord, TGenEngine.TTargetMode.tmParent, needSex);
 
-						if (i_child != null && this.FBase.Engine.AddFamilyChild(fam, i_child))
+						if (i_child != null && fam.aux_AddChild(i_child))
 						{
 							this.UpdateChart();
 						}
@@ -485,7 +465,7 @@ namespace GKUI
 				else
 				{
 					TGEDCOMFamilyRecord fam = TGenEngine.CreateFamilyEx(this.FTree);
-					this.FBase.Engine.AddFamilySpouse(fam, p.Rec);
+					fam.aux_AddSpouse(p.Rec);
 					this.UpdateChart();
 				}
 			}
@@ -535,13 +515,13 @@ namespace GKUI
 			}
 		}
 
-		private void UpdateModesMenu(TTreeChartBox.TChartKind aChartKind)
+		private void UpdateModesMenu(TTreeChartBox.TChartKind chartKind)
 		{
 			this.miModeBoth.Checked = false;
 			this.miModeAncestors.Checked = false;
 			this.miModeDescendants.Checked = false;
 
-			switch (aChartKind)
+			switch (chartKind)
 			{
 				case TTreeChartBox.TChartKind.ckAncestors:
 					this.miModeAncestors.Checked = true;
@@ -598,34 +578,37 @@ namespace GKUI
 			}
 		}
 
-		public static bool CheckData(TGEDCOMTree aTree, TGEDCOMIndividualRecord iRec, TTreeChartBox.TChartKind aKind)
+		public static bool CheckData(TGEDCOMTree tree, TGEDCOMIndividualRecord iRec, TTreeChartBox.TChartKind chartKind)
 		{
-			bool Result = true;
-			if (aKind == TTreeChartBox.TChartKind.ckAncestors || aKind == TTreeChartBox.TChartKind.ckBoth)
+			bool result = true;
+
+			if (chartKind == TTreeChartBox.TChartKind.ckAncestors || chartKind == TTreeChartBox.TChartKind.ckBoth)
 			{
-				TGenEngine.InitExtCounts(aTree, -1);
+				TGenEngine.InitExtCounts(tree, -1);
 				int anc_count = TGenEngine.GetAncestorsCount(iRec);
 				if (anc_count > 2048)
 				{
 					TGenEngine.ShowMessage(string.Format(LangMan.LSList[212], anc_count.ToString()));
-					Result = false;
-					return Result;
+					result = false;
+					return result;
 				}
 			}
-			if (aKind >= TTreeChartBox.TChartKind.ckDescendants && aKind < (TTreeChartBox.TChartKind)3)
+
+			if (chartKind >= TTreeChartBox.TChartKind.ckDescendants && chartKind < (TTreeChartBox.TChartKind)3)
 			{
-				TGenEngine.InitExtCounts(aTree, -1);
+				TGenEngine.InitExtCounts(tree, -1);
 				int desc_count = TGenEngine.GetDescendantsCount(iRec);
 				if (desc_count > 2048)
 				{
 					TGenEngine.ShowMessage(string.Format(LangMan.LSList[213], desc_count.ToString()));
-					Result = false;
+					result = false;
 				}
 			}
-			return Result;
+
+			return result;
 		}
 
-		public void GenChart(bool aShow)
+		public void GenChart(bool show)
 		{
 			try
 			{
@@ -660,7 +643,7 @@ namespace GKUI
 
 					this.Text = this.Text + " \"" + this.FFileName + "\"";
 
-					if (aShow) base.Show();
+					if (show) base.Show();
 
 					TfmGEDKeeper.Instance.UpdateControls(false);
 				}
@@ -695,7 +678,9 @@ namespace GKUI
 
 			this.miFillColor.Text = LangMan.LS(LSID.LSID_FillColor);
 			this.miFillImage.Text = LangMan.LS(LSID.LSID_FillImage);
+
+			this.FTreeBox.ScaleControl.Tip = LangMan.LS(LSID.LSID_Scale);
 		}
-		
+
 	}
 }

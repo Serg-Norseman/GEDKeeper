@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
 
 namespace GedCom551
 {
@@ -18,9 +17,9 @@ namespace GedCom551
 			set { base.SetTagStringValue(this.MediaTypeTagName(), GetMediaTypeStr(value)); }
 		}
 
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			base.CreateObj(AOwner, AParent);
+			base.CreateObj(owner, parent);
 			this.FName = "FILE";
 		}
 
@@ -29,14 +28,14 @@ namespace GedCom551
 			return "FORM\\MEDI";
 		}
 
-		public void LinkFile([In] string AFile, TGEDCOMMediaType AMediaType, TGEDCOMMultimediaFormat AMultimediaFormat)
+		public void LinkFile(string AFile, TGEDCOMMediaType AMediaType, TGEDCOMMultimediaFormat AMultimediaFormat)
 		{
 			this.FStringValue = AFile;
 			this.MultimediaFormat = RecognizeFormat(AFile);
 			this.MediaType = AMediaType;
 		}
 
-		public static TGEDCOMMultimediaFormat RecognizeFormat([In] string AFile)
+		public static TGEDCOMMultimediaFormat RecognizeFormat(string AFile)
 		{
 			string E = Path.GetExtension(AFile).ToLower();
 			TGEDCOMMultimediaFormat Result;
@@ -103,7 +102,7 @@ namespace GedCom551
 			return Result;
 		}
 
-		public TGEDCOMFileReference(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMFileReference(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 	}

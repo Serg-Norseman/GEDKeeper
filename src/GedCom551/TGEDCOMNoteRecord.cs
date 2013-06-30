@@ -1,6 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
-
 using Ext.Utils;
 
 namespace GedCom551
@@ -11,18 +9,12 @@ namespace GedCom551
 
 		public StringList Note
 		{
-			get { return this.GetNotes(); }
-			set { this.SetNotes(value); }
-		}
-
-		private StringList GetNotes()
-		{
-			return base.GetTagStrings(this, ref this.FNote);
-		}
-
-		private void SetNotes(StringList Value)
-		{
-			base.SetTagStrings(this, Value);
+			get {
+				return base.GetTagStrings(this, ref this.FNote);
+			}
+			set {
+				base.SetTagStrings(this, value);
+			}
 		}
 
 		public void SetNotesArray(params string[] Value)
@@ -30,10 +22,9 @@ namespace GedCom551
 			base.SetTagStrings(this, Value);
 		}
 
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			base.CreateObj(AOwner, AParent);
-			base.SetLists(EnumSet.Create(new Enum[] { TGEDCOMSubList.stSource }));
+			base.CreateObj(owner, parent);
 			this.FRecordType = TGEDCOMRecordType.rtNote;
 			this.FName = "NOTE";
 
@@ -53,11 +44,9 @@ namespace GedCom551
 			}
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
 		{
-			TGEDCOMTag Result;
-			Result = base.AddTag(ATag, AValue, ATagConstructor);
-			return Result;
+			return base.AddTag(ATag, AValue, ATagConstructor);
 		}
 
 		public override void MoveTo(TGEDCOMRecord aToRecord, bool aClearDest)
@@ -65,9 +54,11 @@ namespace GedCom551
 			StringList cont = new StringList();
 			try
 			{
-				cont.Text = (aToRecord as TGEDCOMNoteRecord).Note.Text;
+				TGEDCOMNoteRecord to_note = (aToRecord as TGEDCOMNoteRecord);
+				
+				cont.Text = to_note.Note.Text;
 				base.MoveTo(aToRecord, aClearDest);
-				(aToRecord as TGEDCOMNoteRecord).Note = cont;
+				to_note.Note = cont;
 			}
 			finally
 			{
@@ -91,13 +82,13 @@ namespace GedCom551
 			return match;
 		}
 
-		public TGEDCOMNoteRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMNoteRecord(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 
-        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue)
 		{
-			return new TGEDCOMNoteRecord(AOwner, AParent, AName, AValue);
+			return new TGEDCOMNoteRecord(owner, parent, tagName, tagValue);
 		}
 	}
 }

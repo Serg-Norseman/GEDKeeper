@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Runtime.InteropServices;
 
 using Ext.Utils;
 
@@ -29,7 +28,7 @@ namespace GKCore
 			set { this.SetCurrent(value); }
 		}
 
-		private void SetCurrent([In] object Value)
+		private void SetCurrent(object Value)
 		{
 			if (this.FCurrent == Value) return;
 

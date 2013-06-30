@@ -15,6 +15,20 @@ namespace GKUI.Lists
 		rctChangeDate
 	}
 
+	public sealed class TRepositoryListColumns : TListColumns
+	{
+		protected override void InitColumnStatics()
+		{
+			this.AddStatic(LangMan.LSList[134], TDataType.dtString, 400, true);
+			this.AddStatic(LangMan.LSList[317], TDataType.dtDateTime, 150, true);
+		}
+
+		public TRepositoryListColumns() : base()
+		{
+			InitData(typeof(TRepositoryColumnType));
+		}
+	}
+
 	public sealed class TRepositoryListMan : TListManager
 	{
 		private TGEDCOMRepositoryRecord FRec;
@@ -33,7 +47,7 @@ namespace GKUI.Lists
 			this.FRec = (aRec as TGEDCOMRepositoryRecord);
 		}
 
-		public override object GetColumnValueDirect(int col_type, int col_subtype)
+		protected override object GetColumnValueEx(int col_type, int col_subtype)
 		{
 			switch (col_type) {
 				case 0:
@@ -45,13 +59,6 @@ namespace GKUI.Lists
 			}
 		}
 
-		protected override void InitColumnStatics()
-		{
-			this.ColumnStatics.Clear();
-			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[134], TDataType.dtString, 400));
-			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[317], TDataType.dtDateTime, 150));
-		}
-
 		public override Type GetColumnsEnum()
 		{
 			return typeof(TRepositoryColumnType);
@@ -59,7 +66,7 @@ namespace GKUI.Lists
 
 		public override TListColumns GetDefaultListColumns()
 		{
-			return null;
+			return new TRepositoryListColumns();
 		}
 
 		public TRepositoryListMan(TGEDCOMTree aTree) : base(aTree)

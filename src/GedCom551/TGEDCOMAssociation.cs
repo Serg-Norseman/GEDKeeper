@@ -4,12 +4,12 @@ namespace GedCom551
 {
 	public sealed class TGEDCOMAssociation : TGEDCOMPointerWithNotes
 	{
-		private TGEDCOMListEx<TGEDCOMSourceCitation> _SourceCitations;
+		private GEDCOMList<TGEDCOMSourceCitation> _SourceCitations;
 
 		public TGEDCOMIndividualRecord Individual
 		{
-			get { return base.GetValue() as TGEDCOMIndividualRecord; }
-			set { base.SetValue(value); }
+			get { return (base.Value as TGEDCOMIndividualRecord); }
+			set { base.Value = value; }
 		}
 
 		public string Relation
@@ -18,16 +18,16 @@ namespace GedCom551
 			set { base.SetTagStringValue("RELA", value); }
 		}
 
-		public TGEDCOMListEx<TGEDCOMSourceCitation> SourceCitations
+		public GEDCOMList<TGEDCOMSourceCitation> SourceCitations
 		{
 			get { return this._SourceCitations; }
 		}
 
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			base.CreateObj(AOwner, AParent);
+			base.CreateObj(owner, parent);
 			this.FName = "ASSO";
-			this._SourceCitations = new TGEDCOMListEx<TGEDCOMSourceCitation>(this);
+			this._SourceCitations = new GEDCOMList<TGEDCOMSourceCitation>(this);
 		}
 
 		public override void Dispose()
@@ -41,16 +41,16 @@ namespace GedCom551
 			}
 		}
 
-		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
 		{
 			TGEDCOMTag Result;
-			if (ATag == "SOUR")
+			if (tagName == "SOUR")
 			{
-				Result = this._SourceCitations.Add(new TGEDCOMSourceCitation(base.Owner, this, ATag, AValue));
+				Result = this._SourceCitations.Add(new TGEDCOMSourceCitation(base.Owner, this, tagName, tagValue));
 			}
 			else
 			{
-				Result = base.AddTag(ATag, AValue, ATagConstructor);
+				Result = base.AddTag(tagName, tagValue, tagConstructor);
 			}
 			return Result;
 		}
@@ -78,13 +78,13 @@ namespace GedCom551
 			this._SourceCitations.ResetOwner(AOwner);
 		}
 
-		public TGEDCOMAssociation(TGEDCOMTree AOwner, TGEDCOMObject AParent, string AName, string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMAssociation(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 
-        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, string AName, string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue)
 		{
-			return new TGEDCOMAssociation(AOwner, AParent, AName, AValue);
+			return new TGEDCOMAssociation(owner, parent, tagName, tagValue);
 		}
 	}
 }

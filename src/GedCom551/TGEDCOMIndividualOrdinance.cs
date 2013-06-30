@@ -1,10 +1,8 @@
 using System;
-using System.Runtime.InteropServices;
-
-using Ext.Utils;
 
 namespace GedCom551
 {
+	//FIXME: changedate: возможны многочисленные нарушения стандарта, перепроверить вложенность тэгов
 	public sealed class TGEDCOMIndividualOrdinance : TGEDCOMTagWithLists
 	{
 		public TGEDCOMDateValue Date
@@ -62,6 +60,11 @@ namespace GedCom551
 			get { return this.GetChangeDate(); }
 		}
 
+
+		private TGEDCOMDateExact GetChangeDate()
+		{
+			return this.DateStatus.TagClass("CHAN", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact;
+		}
 
 		private TGEDCOMBaptismDateStatus GetBaptismDateStatus()
 		{
@@ -246,49 +249,36 @@ namespace GedCom551
 		{
 			string S = base.GetTagStringValue("STAT").Trim().ToUpper();
 			TGEDCOMChildSealingDateStatus Result;
+
 			if (S == "BIC")
 			{
 				Result = TGEDCOMChildSealingDateStatus.cdsBIC;
 			}
+			else if (S == "EXCLUDED")
+			{
+				Result = TGEDCOMChildSealingDateStatus.cdsExcluded;
+			}
+			else if (S == "PRE-1970")
+			{
+				Result = TGEDCOMChildSealingDateStatus.cdsPre1970;
+			}
+			else if (S == "STILLBORN")
+			{
+				Result = TGEDCOMChildSealingDateStatus.cdsStillborn;
+			}
+			else if (S == "SUBMITTED")
+			{
+				Result = TGEDCOMChildSealingDateStatus.cdsSubmitted;
+			}
+			else if (S == "UNCLEARED")
+			{
+				Result = TGEDCOMChildSealingDateStatus.cdsUncleared;
+			}
 			else
 			{
-				if (S == "EXCLUDED")
-				{
-					Result = TGEDCOMChildSealingDateStatus.cdsExcluded;
-				}
-				else
-				{
-					if (S == "PRE-1970")
-					{
-						Result = TGEDCOMChildSealingDateStatus.cdsPre1970;
-					}
-					else
-					{
-						if (S == "STILLBORN")
-						{
-							Result = TGEDCOMChildSealingDateStatus.cdsStillborn;
-						}
-						else
-						{
-							if (S == "SUBMITTED")
-							{
-								Result = TGEDCOMChildSealingDateStatus.cdsSubmitted;
-							}
-							else
-							{
-								if (S == "UNCLEARED")
-								{
-									Result = TGEDCOMChildSealingDateStatus.cdsUncleared;
-								}
-								else
-								{
-									Result = TGEDCOMChildSealingDateStatus.cdsNone;
-								}
-							}
-						}
-					}
-				}
+				Result = TGEDCOMChildSealingDateStatus.cdsNone;
 			}
+
 			return Result;
 		}
 
@@ -333,61 +323,41 @@ namespace GedCom551
 			base.SetTagStringValue("STAT", S);
 		}
 
-		private TGEDCOMDateExact GetChangeDate()
+		public TGEDCOMDateStatus DateStatus
 		{
-			TGEDCOMTag StatTag = base.FindTag("STAT", 0);
-			if (StatTag == null)
-			{
-				this.AddTag("STAT", "", null);
-			}
-			return StatTag.TagClass("CHAN", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact;
+			get { return base.TagClass("STAT", typeof(TGEDCOMDateStatus), TGEDCOMDateStatus.Create) as TGEDCOMDateStatus; }
 		}
 
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
-		{
-			base.CreateObj(AOwner, AParent);
-			base.SetLists(EnumSet.Create(new Enum[]
-			{
-				TGEDCOMSubList.stNotes, 
-				TGEDCOMSubList.stSource
-			}));
-		}
-
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 			if (ATag == "DATE")
 			{
 				Result = base.AddTag(ATag, AValue, TGEDCOMDateValue.Create);
 			}
+			else if (ATag == "STAT")
+			{
+				Result = base.AddTag(ATag, AValue, TGEDCOMDateStatus.Create);
+			}
+			else if (ATag == "FAMC")
+			{
+				Result = base.AddTag(ATag, AValue, TGEDCOMPointer.Create);
+			}
 			else
 			{
-				if (ATag == "STAT")
-				{
-					Result = base.AddTag(ATag, AValue, TGEDCOMDateStatus.Create);
-				}
-				else
-				{
-					if (ATag == "FAMC")
-					{
-						Result = base.AddTag(ATag, AValue, TGEDCOMPointer.Create);
-					}
-					else
-					{
-						Result = base.AddTag(ATag, AValue, ATagConstructor);
-					}
-				}
+				Result = base.AddTag(ATag, AValue, ATagConstructor);
 			}
+
 			return Result;
 		}
 
-		public TGEDCOMIndividualOrdinance(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMIndividualOrdinance(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 
-        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue)
 		{
-			return new TGEDCOMIndividualOrdinance(AOwner, AParent, AName, AValue);
+			return new TGEDCOMIndividualOrdinance(owner, parent, tagName, tagValue);
 		}
 	}
 }

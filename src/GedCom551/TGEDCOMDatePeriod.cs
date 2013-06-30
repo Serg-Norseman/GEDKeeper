@@ -1,7 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
-
-using Ext.Utils;
 
 namespace GedCom551
 {
@@ -20,11 +17,11 @@ namespace GedCom551
 			get { return this.FDateTo; }
 		}
 
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			base.CreateObj(AOwner, AParent);
-			this.FDateFrom = new TGEDCOMDate(AOwner, this, "", "");
-			this.FDateTo = new TGEDCOMDate(AOwner, this, "", "");
+			base.CreateObj(owner, parent);
+			this.FDateFrom = new TGEDCOMDate(owner, this, "", "");
+			this.FDateTo = new TGEDCOMDate(owner, this, "", "");
 		}
 
 		protected override string GetStringValue()
@@ -128,7 +125,7 @@ namespace GedCom551
 			return base.IsEmpty() && this.FDateFrom.IsEmpty() && this.FDateTo.IsEmpty();
 		}
 
-		public override string ParseString([In] string S)
+		public override string ParseString(string S)
 		{
 			string Result = S;
 			if (!string.IsNullOrEmpty(Result))
@@ -163,13 +160,13 @@ namespace GedCom551
 			}
 		}
 
-		public TGEDCOMDatePeriod(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMDatePeriod(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 
-        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue)
 		{
-			return new TGEDCOMDatePeriod(AOwner, AParent, AName, AValue);
+			return new TGEDCOMDatePeriod(owner, parent, tagName, tagValue);
 		}
 	}
 }

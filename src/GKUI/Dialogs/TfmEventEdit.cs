@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Ext.Utils;
@@ -16,9 +15,9 @@ namespace GKUI
 {
 	public partial class TfmEventEdit : Form
 	{
-		private TSheetList FNotesList;
-		private TSheetList FMediaList;
-		private TSheetList FSourcesList;
+		private GKSheetList FNotesList;
+		private GKSheetList FMediaList;
+		private GKSheetList FSourcesList;
 
 		private TfmBase FBase;
 		private TGEDCOMCustomEvent FEvent;
@@ -35,6 +34,77 @@ namespace GKUI
 			set { this.SetEvent(value); }
 		}
 
+		private string AssembleDate()
+		{
+			string result = "";
+
+			TGEDCOMCalendar cal = (TGEDCOMCalendar)this.cbDate1Calendar.SelectedIndex;
+			TGEDCOMCalendar cal2 = (TGEDCOMCalendar)this.cbDate2Calendar.SelectedIndex;
+
+			string gcd = TGenEngine.StrToGEDCOMDate(this.EditEventDate1.Text, true);
+			string gcd2 = TGenEngine.StrToGEDCOMDate(this.EditEventDate2.Text, true);
+
+			if (cal != TGEDCOMCalendar.dcGregorian) {
+				gcd = TGEDCOMDate.GEDCOMDateEscapeArray[(int)cal] + " " + gcd;
+			}
+
+			if (cal2 != TGEDCOMCalendar.dcGregorian) {
+				gcd2 = TGEDCOMDate.GEDCOMDateEscapeArray[(int)cal2] + " " + gcd2;
+			}
+
+			if (btnBC1.Checked) {
+				gcd = gcd + TGEDCOMObject.GEDCOMYearBC;
+			}
+
+			if (btnBC2.Checked) {
+				gcd2 = gcd2 + TGEDCOMObject.GEDCOMYearBC;
+			}
+
+			switch (this.EditEventDateType.SelectedIndex) {
+				case 0:
+					result = gcd;
+					break;
+
+				case 1:
+					result = "BEF " + gcd2;
+					break;
+
+				case 2:
+					result = "AFT " + gcd;
+					break;
+
+				case 3:
+					result = "BET " + gcd + " AND " + gcd2;
+					break;
+
+				case 4:
+					result = "FROM " + gcd;
+					break;
+
+				case 5:
+					result = "TO " + gcd2;
+					break;
+
+				case 6:
+					result = "FROM " + gcd + " TO " + gcd2;
+					break;
+
+				case 7:
+					result = "ABT " + gcd;
+					break;
+
+				case 8:
+					result = "CAL " + gcd;
+					break;
+
+				case 9:
+					result = "EST " + gcd;
+					break;
+			}
+
+			return result;
+		}
+
 		private void AcceptChanges()
 		{
 			this.FEvent.Detail.Place.StringValue = this.EditEventPlace.Text;
@@ -42,86 +112,8 @@ namespace GKUI
 			this.FEvent.Detail.Classification = this.EditEventName.Text;
 			this.FEvent.Detail.Cause = this.EditEventCause.Text;
 			this.FEvent.Detail.Agency = this.EditEventOrg.Text;
-			TGEDCOMCalendar cal = (TGEDCOMCalendar)this.cbDate1Calendar.SelectedIndex;
-			TGEDCOMCalendar cal2 = (TGEDCOMCalendar)this.cbDate2Calendar.SelectedIndex;
 
-			string gcd = TGenEngine.StrToGEDCOMDate(this.EditEventDate1.Text, true);
-			string gcd2 = TGenEngine.StrToGEDCOMDate(this.EditEventDate2.Text, true);
-
-			if (cal != TGEDCOMCalendar.dcGregorian)
-			{
-				gcd = TGEDCOMDate.GEDCOMDateEscapeArray[(int)cal] + " " + gcd;
-			}
-
-			if (cal2 != TGEDCOMCalendar.dcGregorian)
-			{
-				gcd2 = TGEDCOMDate.GEDCOMDateEscapeArray[(int)cal2] + " " + gcd2;
-			}
-
-			if (btnBC1.Checked)
-			{
-				gcd = gcd + TGEDCOMObject.GEDCOMYearBC;
-			}
-
-			if (btnBC2.Checked)
-			{
-				gcd2 = gcd2 + TGEDCOMObject.GEDCOMYearBC;
-			}
-
-			string dt = "";
-			switch (this.EditEventDateType.SelectedIndex)
-			{
-				case 0:
-				{
-					dt = gcd;
-					break;
-				}
-				case 1:
-				{
-					dt = "BEF " + gcd2;
-					break;
-				}
-				case 2:
-				{
-					dt = "AFT " + gcd;
-					break;
-				}
-				case 3:
-				{
-					dt = "BET " + gcd + " AND " + gcd2;
-					break;
-				}
-				case 4:
-				{
-					dt = "FROM " + gcd;
-					break;
-				}
-				case 5:
-				{
-					dt = "TO " + gcd2;
-					break;
-				}
-				case 6:
-				{
-					dt = "FROM " + gcd + " TO " + gcd2;
-					break;
-				}
-				case 7:
-				{
-					dt = "ABT " + gcd;
-					break;
-				}
-				case 8:
-				{
-					dt = "CAL " + gcd;
-					break;
-				}
-				case 9:
-				{
-					dt = "EST " + gcd;
-					break;
-				}
-			}
+			string dt = this.AssembleDate();
 			this.FEvent.Detail.Date.ParseString(dt);
 
 			if (this.FEvent is TGEDCOMFamilyEvent)
@@ -216,13 +208,11 @@ namespace GKUI
 
 				string st = "\"" + sourceRec.FiledByEntry + "\"";
 
-				if (cit.Page != "")
-				{
+				if (cit.Page != "") {
 					st = st + ", " + cit.Page;
 				}
 
-				if (sourceRec != null)
-				{
+				if (sourceRec != null) {
 					ListViewItem item = this.FSourcesList.List.AddItem(sourceRec.Originator.Text.Trim(), cit);
 					item.SubItems.Add(st);
 				}
@@ -244,7 +234,7 @@ namespace GKUI
 			if (res) this.ControlsRefresh();
 		}
 
-		private void SetEvent([In] TGEDCOMCustomEvent Value)
+		private void SetEvent(TGEDCOMCustomEvent Value)
 		{
 			this.FEvent = Value;
 
@@ -282,31 +272,22 @@ namespace GKUI
 			if (date is TGEDCOMDateApproximated)
 			{
 				TGEDCOMApproximated approximated = (date as TGEDCOMDateApproximated).Approximated;
-				if (approximated != TGEDCOMApproximated.daExact)
-				{
-					if (approximated != TGEDCOMApproximated.daAbout)
-					{
-						if (approximated != TGEDCOMApproximated.daCalculated)
-						{
-							if (approximated == TGEDCOMApproximated.daEstimated)
-							{
-								this.EditEventDateType.SelectedIndex = 9;
-							}
-						}
-						else
-						{
-							this.EditEventDateType.SelectedIndex = 8;
-						}
-					}
-					else
-					{
+
+				switch (approximated) {
+					case TGEDCOMApproximated.daExact:
+						this.EditEventDateType.SelectedIndex = 0;
+						break;
+					case TGEDCOMApproximated.daAbout:
 						this.EditEventDateType.SelectedIndex = 7;
-					}
+						break;
+					case TGEDCOMApproximated.daCalculated:
+						this.EditEventDateType.SelectedIndex = 8;
+						break;
+					case TGEDCOMApproximated.daEstimated:
+						this.EditEventDateType.SelectedIndex = 9;
+						break;
 				}
-				else
-				{
-					this.EditEventDateType.SelectedIndex = 0;
-				}
+
 				this.EditEventDate1.Text = TGenEngine.GEDCOMDateToStr(date as TGEDCOMDate, TGenEngine.TDateFormat.dfDD_MM_YYYY);
 				this.cbDate1Calendar.SelectedIndex = (int)(date as TGEDCOMDate).DateCalendar;
 				this.btnBC1.Checked = (date as TGEDCOMDate).YearBC;
@@ -334,6 +315,7 @@ namespace GKUI
 							}
 						}
 					}
+
 					this.EditEventDate1.Text = TGenEngine.GEDCOMDateToStr(dt_range.After, TGenEngine.TDateFormat.dfDD_MM_YYYY);
 					this.EditEventDate2.Text = TGenEngine.GEDCOMDateToStr(dt_range.Before, TGenEngine.TDateFormat.dfDD_MM_YYYY);
 					this.cbDate1Calendar.SelectedIndex = (int)dt_range.After.DateCalendar;
@@ -364,6 +346,7 @@ namespace GKUI
 								}
 							}
 						}
+
 						this.EditEventDate1.Text = TGenEngine.GEDCOMDateToStr(dt_period.DateFrom, TGenEngine.TDateFormat.dfDD_MM_YYYY);
 						this.EditEventDate2.Text = TGenEngine.GEDCOMDateToStr(dt_period.DateTo, TGenEngine.TDateFormat.dfDD_MM_YYYY);
 						this.cbDate1Calendar.SelectedIndex = (int)dt_period.DateFrom.DateCalendar;
@@ -390,6 +373,7 @@ namespace GKUI
 					}
 				}
 			}
+
 			this.EditEventDateType_SelectedIndexChanged(null, null);
 			this.EditEventName.Text = this.FEvent.Detail.Classification;
 			this.EditEventCause.Text = this.FEvent.Detail.Cause;
@@ -439,18 +423,11 @@ namespace GKUI
 			this.ControlsRefresh();
 		}
 
-		private void btnPlaceSel_Click(object sender, EventArgs e)
-		{
-		}
-
 		private void EditEventDate1_DragOver(object sender, DragEventArgs e)
 		{
-			if (e.Data.GetDataPresent(typeof(string)))
-			{
+			if (e.Data.GetDataPresent(typeof(string))) {
 				e.Effect = DragDropEffects.Move;
-			}
-			else
-			{
+			} else {
 				e.Effect = DragDropEffects.None;
 			}
 		}
@@ -517,47 +494,13 @@ namespace GKUI
 			TGenEngine.TDateControlsRange dates = TGenEngine.DateKinds[idx].Dates;
 
 			this.EditEventDate1.Enabled = ((dates & (TGenEngine.TDateControlsRange)2) > (TGenEngine.TDateControlsRange)0);
-			/*if (this.EditEventDate1.Enabled) {
-				this.EditEventDate1.BackColor = SystemColors.Window;
-			} else {
-				this.EditEventDate1.BackColor = SystemColors.Control;
-			}*/
-
 			this.EditEventDate2.Enabled = ((dates & (TGenEngine.TDateControlsRange)4) > (TGenEngine.TDateControlsRange)0);
-			/*if (this.EditEventDate2.Enabled) {
-				this.EditEventDate2.BackColor = SystemColors.Window;
-			} else {
-				this.EditEventDate2.BackColor = SystemColors.Control;
-			}*/
 
 			this.cbDate1Calendar.Enabled = this.EditEventDate1.Enabled;
-			/*if (this.cbDate1Calendar.Enabled) {
-				this.cbDate1Calendar.BackColor = SystemColors.Window;
-			} else {
-				this.cbDate1Calendar.BackColor = SystemColors.Control;
-			}*/
-
 			this.cbDate2Calendar.Enabled = this.EditEventDate2.Enabled;
-			/*if (this.cbDate2Calendar.Enabled) {
-				this.cbDate2Calendar.BackColor = SystemColors.Window;
-			} else {
-				this.cbDate2Calendar.BackColor = SystemColors.Control;
-			}*/
-
 
 			this.btnBC1.Enabled = this.EditEventDate1.Enabled;
-			/*if (this.btnBC1.Enabled) {
-				this.btnBC1.BackColor = SystemColors.Window;
-			} else {
-				this.btnBC1.BackColor = SystemColors.Control;
-			}*/
-
 			this.btnBC2.Enabled = this.EditEventDate2.Enabled;
-			/*if (this.btnBC2.Enabled) {
-				this.btnBC2.BackColor = SystemColors.Window;
-			} else {
-				this.btnBC2.BackColor = SystemColors.Control;
-			}*/
 		}
 
 		public TfmEventEdit(TfmBase aBase)
@@ -581,16 +524,16 @@ namespace GKUI
 
 			this.FLocation = null;
 
-			this.FNotesList = new TSheetList(this.SheetNotes);
-			this.FNotesList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
+			this.FNotesList = new GKSheetList(this.SheetNotes);
+			this.FNotesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
 			this.Base.SetupRecNotesList(this.FNotesList);
 
-			this.FMediaList = new TSheetList(this.SheetMultimedia);
-			this.FMediaList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
+			this.FMediaList = new GKSheetList(this.SheetMultimedia);
+			this.FMediaList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
 			this.Base.SetupRecMediaList(this.FMediaList);
 
-			this.FSourcesList = new TSheetList(this.SheetSources);
-			this.FSourcesList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
+			this.FSourcesList = new GKSheetList(this.SheetSources);
+			this.FSourcesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
 			this.Base.SetupRecSourcesList(this.FSourcesList);
 
 			this.btnAccept.Text = LangMan.LSList[97];

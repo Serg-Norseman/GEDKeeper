@@ -1,6 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
-
 using Ext.Utils;
 
 /// <summary>
@@ -21,8 +19,12 @@ namespace GedCom551
 
 		public StringList Notes
 		{
-			get { return this.GetNotes(); }
-			set { this.SetNotes(value); }
+			get {
+				return base.GetTagStrings(base.FindTag("NOTE", 0), ref this.FNotes);
+			}
+			set {
+				base.SetTagStrings(base.TagClass("NOTE", typeof(TGEDCOMNotes), TGEDCOMNotes.Create), value);
+			}
 		}
 
 		public string Source
@@ -47,6 +49,14 @@ namespace GedCom551
 		{
 			get { return base.GetTagStringValue("SOUR\\CORP"); }
 			set { base.SetTagStringValue("SOUR\\CORP", value); }
+		}
+
+		public TGEDCOMAddress SourceBusinessAddress
+		{
+			get {
+				TGEDCOMTag CorpTag = base.TagClass("SOUR\\CORP", typeof(TGEDCOMTag), TGEDCOMTag.Create);
+				return CorpTag.TagClass("ADDR", typeof(TGEDCOMAddress), TGEDCOMAddress.Create) as TGEDCOMAddress;
+			}
 		}
 
 		public string ReceivingSystemName
@@ -97,35 +107,35 @@ namespace GedCom551
 			set { base.SetTagStringValue("PLAC\\FORM", value); }
 		}
 
-		public TGEDCOMAddress SourceBusinessAddress
-		{
-			get { return this.GetSourceBusinessAddress(); }
-		}
-
 		public TGEDCOMPointer Submission
 		{
-			get { return this.GetSubmission(); }
+			get { return base.TagClass("SUBN", typeof(TGEDCOMPointer), TGEDCOMPointer.Create) as TGEDCOMPointer; }
 		}
 
 		public TGEDCOMPointer Submitter
 		{
-			get { return this.GetSubmittor(); }
+			get { return base.TagClass("SUBM", typeof(TGEDCOMPointer), TGEDCOMPointer.Create) as TGEDCOMPointer; }
 		}
 
 		public TGEDCOMDateExact TransmissionDate
 		{
-			get { return this.GetDate(); }
+			get { return base.TagClass("DATE", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact; }
 		}
 
 		public TGEDCOMTime TransmissionTime
 		{
-			get { return this.GetTime(); }
+			get { return this.TransmissionDate.TagClass("TIME", typeof(TGEDCOMTime), TGEDCOMTime.Create) as TGEDCOMTime; }
 		}
 
 		public DateTime TransmissionDateTime
 		{
-			get { return this.GetTransmissionDateTime(); }
-			set { this.SetTransmissionDateTime(value); }
+			get {
+				return this.TransmissionDate.Date.Add(this.TransmissionTime.Value);
+			}
+			set {
+				this.TransmissionDate.Date = value.Date;
+				this.TransmissionTime.Value = value.TimeOfDay;
+			}
 		}
 
 		// new property (not standard)
@@ -135,87 +145,9 @@ namespace GedCom551
 			set { base.SetTagIntegerValue("FILE\\_REV", value); }
 		}
 
-		private TGEDCOMAddress GetSourceBusinessAddress()
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			TGEDCOMTag SourTag = base.FindTag("SOUR", 0);
-			if (SourTag == null)
-			{
-				SourTag = this.AddTag("SOUR", "", null);
-			}
-			TGEDCOMTag CorpTag = SourTag.FindTag("CORP", 0);
-			if (CorpTag == null)
-			{
-				CorpTag = SourTag.AddTag("CORP", "", null);
-			}
-			return CorpTag.TagClass("ADDR", typeof(TGEDCOMAddress), TGEDCOMAddress.Create) as TGEDCOMAddress;
-		}
-
-		private TGEDCOMDateExact GetDate()
-		{
-			return base.TagClass("DATE", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact;
-		}
-
-		private TGEDCOMTime GetTime()
-		{
-			TGEDCOMTag DateTag = base.FindTag("DATE", 0);
-			if (DateTag == null)
-			{
-				DateTag = this.AddTag("DATE", "", null);
-			}
-			return DateTag.TagClass("TIME", typeof(TGEDCOMTime), TGEDCOMTime.Create) as TGEDCOMTime;
-		}
-
-		private TGEDCOMPointer GetSubmittor()
-		{
-			return base.TagClass("SUBM", typeof(TGEDCOMPointer), TGEDCOMPointer.Create) as TGEDCOMPointer;
-		}
-
-		private TGEDCOMPointer GetSubmission()
-		{
-			return base.TagClass("SUBN", typeof(TGEDCOMPointer), TGEDCOMPointer.Create) as TGEDCOMPointer;
-		}
-
-		private StringList GetNotes()
-		{
-			return base.GetTagStrings(base.FindTag("NOTE", 0), ref this.FNotes);
-		}
-
-		private void SetNotes([In] StringList Value)
-		{
-			base.SetTagStrings(base.TagClass("NOTE", typeof(TGEDCOMNotes), TGEDCOMNotes.Create), Value);
-		}
-
-		private DateTime GetTransmissionDateTime()
-		{
-			return this.TransmissionDate.Date.Add(this.TransmissionTime.Time);
-		}
-
-		private void SetTransmissionDateTime([In] DateTime Value)
-		{
-			this.TransmissionDate.Date = Value.Date;
-			this.TransmissionTime.Time = Value.TimeOfDay;
-		}
-
-        public override TGEDCOMTag AddSubTag(TGEDCOMTag AParent, [In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
-		{
-			TGEDCOMTag result;
-			if (object.Equals(AParent, base.FindTag("SOUR\\CORP", 0)) && (ATag == "PHON" || ATag == "EMAIL" || ATag == "FAX" || ATag == "WWW"))
-			{
-				if (base.FindTag("SOUR\\CORP\\ADDR", 0) == null) {
-					base.SetTagStringValue("SOUR\\CORP\\ADDR", "");
-				}
-				result = base.FindTag("SOUR\\CORP\\ADDR", 0).AddTag(ATag, AValue, ATagConstructor);
-			}
-			else
-			{
-				result = base.AddSubTag(AParent, ATag, AValue, ATagConstructor);
-			}
-			return result;
-		}
-
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
-		{
-			base.CreateObj(AOwner, AParent);
+			base.CreateObj(owner, parent);
 			this.FName = "HEAD";
 			this.FNotes = null;
 		}
@@ -244,35 +176,31 @@ namespace GedCom551
 			}
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
+
 			if (ATag == "DATE")
 			{
 				Result = base.AddTag(ATag, AValue, TGEDCOMDateExact.Create);
 			}
+			else if (ATag == "SUBM")
+			{
+				Result = base.AddTag(ATag, AValue, TGEDCOMPointer.Create);
+			}
+			else if (ATag == "SUBN")
+			{
+				Result = base.AddTag(ATag, AValue, TGEDCOMPointer.Create);
+			}
 			else
 			{
-				if (ATag == "SUBM")
-				{
-					Result = base.AddTag(ATag, AValue, TGEDCOMPointer.Create);
-				}
-				else
-				{
-					if (ATag == "SUBN")
-					{
-						Result = base.AddTag(ATag, AValue, TGEDCOMPointer.Create);
-					}
-					else
-					{
-						Result = base.AddTag(ATag, AValue, ATagConstructor);
-					}
-				}
+				Result = base.AddTag(ATag, AValue, ATagConstructor);
 			}
+
 			return Result;
 		}
 
-		public TGEDCOMHeader(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMHeader(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 	}

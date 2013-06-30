@@ -1,7 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
-
-using Ext.Utils;
 
 namespace GedCom551
 {
@@ -36,35 +33,23 @@ namespace GedCom551
 			set { this.FSeconds = value; }
 		}
 
-		public TimeSpan Time
-		{
-			get { return this.GetValue(); }
-			set { this.SetValue(value); }
-		}
-
 		public TimeSpan Value
 		{
-			get { return this.GetValue(); }
-			set { this.SetValue(value); }
+			get {
+				return new TimeSpan(0, (int)this.FHour, (int)this.FMinutes, (int)this.FSeconds, (int)(100u * (uint)this.FFraction));
+			}
+			set {
+				this.FHour = (ushort)value.Hours;
+				this.FMinutes = (ushort)value.Minutes;
+				this.FSeconds = (ushort)value.Seconds;
+				ushort MSec = (ushort)value.Milliseconds;
+				this.FFraction = (ushort)Math.Truncate(MSec / 100.0);
+			}
 		}
 
-		private TimeSpan GetValue()
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			return new TimeSpan(0, (int)this.FHour, (int)this.FMinutes, (int)this.FSeconds, (int)(100u * (uint)this.FFraction));
-		}
-
-		private void SetValue(TimeSpan AValue)
-		{
-			this.FHour = (ushort)AValue.Hours;
-			this.FMinutes = (ushort)AValue.Minutes;
-			this.FSeconds = (ushort)AValue.Seconds;
-			ushort MSec = (ushort)AValue.Milliseconds;
-			this.FFraction = (ushort)Math.Truncate(MSec / 100.0);
-		}
-
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
-		{
-			base.CreateObj(AOwner, AParent);
+			base.CreateObj(owner, parent);
 			this.FName = "TIME";
 		}
 
@@ -101,7 +86,7 @@ namespace GedCom551
 			return base.IsEmpty() && this.FHour == 0 && this.FMinutes == 0 && this.FSeconds == 0;
 		}
 
-		public override string ParseString([In] string AString)
+		public override string ParseString(string AString)
 		{
 			this.FHour = 0;
 			this.FMinutes = 0;
@@ -141,13 +126,13 @@ namespace GedCom551
 			return result;
 		}
 
-		public TGEDCOMTime(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMTime(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 
-        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue)
 		{
-			return new TGEDCOMTime(AOwner, AParent, AName, AValue);
+			return new TGEDCOMTime(owner, parent, tagName, tagValue);
 		}
 	}
 }

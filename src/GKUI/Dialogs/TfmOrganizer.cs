@@ -16,10 +16,10 @@ namespace GKUI
 {
 	public partial class TfmOrganizer : Form
 	{
-		private TSheetList FAdrList;
-		private TSheetList FPhonesList;
-		private TSheetList FMailsList;
-		private TSheetList FWebsList;
+		private GKSheetList FAdrList;
+		private GKSheetList FPhonesList;
+		private GKSheetList FMailsList;
+		private GKSheetList FWebsList;
 		private TfmBase FBase;
 
 		public TfmBase Base
@@ -45,9 +45,8 @@ namespace GKUI
 					string nm = i_rec.aux_GetNameStr(true, false);
 
 					int num2 = i_rec.IndividualEvents.Count - 1;
-					for (int j = 0; j <= num2; j++)
-					{
-						_CollectData_PrepareEvent(this, nm, i_rec.IndividualEvents[j]);
+					for (int j = 0; j <= num2; j++) {
+						this.PrepareEvent(nm, i_rec.IndividualEvents[j]);
 					}
 				}
 			}
@@ -70,58 +69,53 @@ namespace GKUI
 		{
 			this.InitializeComponent();
 			this.FBase = aBase;
-			this.FAdrList = new TSheetList(this.SheetAddresses);
+			this.FAdrList = new GKSheetList(this.SheetAddresses);
 			this.FAdrList.Buttons = EnumSet.Create();
 			this.FAdrList.List.AddListColumn(LangMan.LSList[96], 350, false);
 			this.FAdrList.List.AddListColumn(LangMan.LSList[82], 100, false);
-			this.FPhonesList = new TSheetList(this.SheetTelephones);
+			this.FPhonesList = new GKSheetList(this.SheetTelephones);
 			this.FPhonesList.Buttons = EnumSet.Create();
 			this.FPhonesList.List.AddListColumn(LangMan.LSList[96], 350, false);
 			this.FPhonesList.List.AddListColumn(LangMan.LSList[131], 100, false);
-			this.FMailsList = new TSheetList(this.SheetEMails);
+			this.FMailsList = new GKSheetList(this.SheetEMails);
 			this.FMailsList.Buttons = EnumSet.Create();
 			this.FMailsList.List.AddListColumn(LangMan.LSList[96], 350, false);
 			this.FMailsList.List.AddListColumn(LangMan.LSList[132], 100, false);
-			this.FWebsList = new TSheetList(this.SheetWebs);
+			this.FWebsList = new GKSheetList(this.SheetWebs);
 			this.FWebsList.Buttons = EnumSet.Create();
 			this.FWebsList.List.AddListColumn(LangMan.LSList[96], 350, false);
 			this.FWebsList.List.AddListColumn(LangMan.LSList[133], 100, false);
 			this.Text = LangMan.LSList[34];
 		}
 
-		private void _CollectData_AddItem(GKListView aList, string aPerson, string aData)
+		private void AddItem(GKListView aList, string aPerson, string aData)
 		{
 			GKListItem item = aList.AddItem(aPerson, null);
 			item.SubItems.Add(aData);
 		}
 
-		private void _CollectData_PrepareEvent([In] TfmOrganizer Self, string iName, TGEDCOMCustomEvent ev)
+		private void PrepareEvent(string iName, TGEDCOMCustomEvent ev)
 		{
 			TGEDCOMAddress addr = ev.Detail.Address;
-			if (addr != null)
-			{
+			if (addr != null) {
 				string addr_str = addr.Address.Text.Trim();
-				if (addr_str != "")
-				{
-					_CollectData_AddItem(Self.FAdrList.List, iName, addr_str);
+				if (addr_str != "") {
+					this.AddItem(this.FAdrList.List, iName, addr_str);
 				}
 
-				int num = addr.GetPhoneNumbersCount() - 1;
-				for (int i = 0; i <= num; i++)
-				{
-					_CollectData_AddItem(Self.FPhonesList.List, iName, addr.GetPhoneNumber(i));
+				int num = addr.PhoneNumbers.Count - 1;
+				for (int i = 0; i <= num; i++) {
+					this.AddItem(this.FPhonesList.List, iName, addr.PhoneNumbers[i].StringValue);
 				}
 
-				int num2 = addr.GetEmailAddressesCount() - 1;
-				for (int i = 0; i <= num2; i++)
-				{
-					_CollectData_AddItem(Self.FMailsList.List, iName, addr.GetEmailAddress(i));
+				int num2 = addr.EmailAddresses.Count - 1;
+				for (int i = 0; i <= num2; i++) {
+					this.AddItem(this.FMailsList.List, iName, addr.EmailAddresses[i].StringValue);
 				}
 
-				int num3 = addr.GetWebPagesCount() - 1;
-				for (int i = 0; i <= num3; i++)
-				{
-					_CollectData_AddItem(Self.FWebsList.List, iName, addr.GetWebPage(i));
+				int num3 = addr.WebPages.Count - 1;
+				for (int i = 0; i <= num3; i++) {
+					this.AddItem(this.FWebsList.List, iName, addr.WebPages[i].StringValue);
 				}
 			}
 		}

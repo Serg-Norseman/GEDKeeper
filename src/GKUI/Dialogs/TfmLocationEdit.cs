@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Ext.Utils;
 using GedCom551;
 using GKCore;
 using GKUI.Controls;
-using GKUI.Lists;
 
 /// <summary>
 /// Localization: clean
@@ -19,8 +17,8 @@ namespace GKUI
 		private TfmBase FBase;
 		private TGEDCOMLocationRecord FLocationRecord;
 		private GKMapBrowser FMapBrowser;
-		private TSheetList FMediaList;
-		private TSheetList FNotesList;
+		private GKSheetList FMediaList;
+		private GKSheetList FNotesList;
 		private TList FSearchPoints;
 
 		public TfmBase Base
@@ -58,7 +56,7 @@ namespace GKUI
 			}
 		}
 
-		private void SetLocationRecord([In] TGEDCOMLocationRecord Value)
+		private void SetLocationRecord(TGEDCOMLocationRecord Value)
 		{
 			this.FLocationRecord = Value;
 			this.EditName.Text = this.FLocationRecord.LocationName;
@@ -190,12 +188,12 @@ namespace GKUI
 			this.FMapBrowser.Dock = DockStyle.Fill;
 			this.panMap.Controls.Add(this.FMapBrowser);
 
-			this.FNotesList = new TSheetList(this.SheetNotes);
-			this.FNotesList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
+			this.FNotesList = new GKSheetList(this.SheetNotes);
+			this.FNotesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
 			this.Base.SetupRecNotesList(this.FNotesList);
 
-			this.FMediaList = new TSheetList(this.SheetMultimedia);
-			this.FMediaList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
+			this.FMediaList = new GKSheetList(this.SheetMultimedia);
+			this.FMediaList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
 			this.Base.SetupRecMediaList(this.FMediaList);
 
 			this.FSearchPoints = new TList(true);

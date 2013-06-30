@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
+using System.Globalization;
 
 using Ext.Utils;
 
@@ -10,26 +10,36 @@ using Ext.Utils;
 
 namespace GKUI.Lists
 {
-
 	public struct TColumnProps
 	{
 		public byte colType;
 		public bool colActive;
 
-		public TColumnProps(Enum colType, bool colActive)
+		public TColumnProps(byte colType, bool colActive)
 		{
-			this.colType = ((IConvertible)colType).ToByte(null);
+			this.colType = colType;
 			this.colActive = colActive;
 		}
 	}
 
+	public struct TColumnStatic
+	{
+		//public byte colType;
+		public string colName;
+		public TDataType dataType;
+		public NumberFormatInfo nfi;
+		public string format;
+		public int width;
+		public bool active;
+	}
 
 	public abstract class TListColumns
 	{
 		protected List<TColumnProps> FColumns;
-		protected TColumnProps[] DefColumns;
 		protected Type ColEnum;
 
+		public List<TColumnStatic> ColumnStatics;
+		
 		public int Count
 		{
 			get { return FColumns.Count; }
@@ -46,24 +56,53 @@ namespace GKUI.Lists
 			get { return this.ColEnum; }
 		}
 
+		protected abstract void InitColumnStatics();
+
+		public TListColumns()
+		{
+			this.ColumnStatics = new List<TColumnStatic>();
+		}
+
 		public void Clear()
 		{
 			FColumns.Clear();
 		}
 
-		protected virtual void InitDefaultColumns()
+		public void AddStatic(/*Enum colType*/ string colName, TDataType dataType, int width, bool defActive)
 		{
-			
+			TColumnStatic cs = new TColumnStatic();
+
+			//cs.colType = ((IConvertible)colType).ToByte(null);
+			cs.colName = colName;
+			cs.dataType = dataType;
+			cs.width = width;
+			cs.nfi = null;
+			cs.format = null;
+			cs.active = defActive;
+
+			this.ColumnStatics.Add(cs);
 		}
 
-		public TListColumns()
+		public void AddStatic(/*Enum colType*/ string colName, TDataType dataType, int width, string format, NumberFormatInfo nfi, bool defActive)
 		{
+			TColumnStatic cs = new TColumnStatic();
+
+			//cs.colType = ((IConvertible)colType).ToByte(null);
+			cs.colName = colName;
+			cs.dataType = dataType;
+			cs.width = width;
+			cs.nfi = nfi;
+			cs.format = format;
+			cs.active = defActive;
+
+			this.ColumnStatics.Add(cs);
 		}
 
 		protected void InitData(Type colEnum)
 		{
 			ColEnum = colEnum;
-			InitDefaultColumns();
+
+			InitColumnStatics();
 
 			FColumns = new List<TColumnProps>();
 			foreach (Enum e in Enum.GetValues(ColEnum))
@@ -72,13 +111,15 @@ namespace GKUI.Lists
 			}
 		}
 
-		public void SetDefaults()
+		public void ResetDefaults()
 		{
 			foreach (Enum e in Enum.GetValues(ColEnum))
 			{
-				byte i = ((IConvertible)e).ToByte(null);
+				byte i = (e as IConvertible).ToByte(null);
 
-				FColumns[i] = DefColumns[i];
+				TColumnStatic cs = ColumnStatics[i];
+
+				FColumns[i] = new TColumnProps(i, cs.active);
 			}
 		}
 
@@ -86,32 +127,33 @@ namespace GKUI.Lists
 		{
 			foreach (Enum e in Enum.GetValues(ColEnum))
 			{
-				byte i = ((IConvertible)e).ToByte(null);
+				byte i = (e as IConvertible).ToByte(null);
 
 				TColumnProps col = this.FColumns[i];
 				columns[i] = col;
 			}
 		}
 
-		public void LoadFromFile([In] IniFile aIniFile, string section)
+		public void LoadFromFile(IniFile aIniFile, string section)
 		{
 			foreach (Enum e in Enum.GetValues(ColEnum))
 			{
-				byte i = ((IConvertible)e).ToByte(null);
+				byte i = (e as IConvertible).ToByte(null);
 
-				TColumnProps def_col = DefColumns[i];
+				TColumnStatic def_col = ColumnStatics[i];
+
 				TColumnProps col = this.FColumns[i];
-				col.colType = (byte)aIniFile.ReadInteger(section, "ColType_" + i.ToString(), def_col.colType);
-				col.colActive = aIniFile.ReadBool(section, "ColActive_" + i.ToString(), def_col.colActive);
+				col.colType = (byte)aIniFile.ReadInteger(section, "ColType_" + i.ToString(), i);
+				col.colActive = aIniFile.ReadBool(section, "ColActive_" + i.ToString(), def_col.active);
 				this.FColumns[i] = col;
 			}
 		}
 
-		public void SaveToFile([In] IniFile aIniFile, string section)
+		public void SaveToFile(IniFile aIniFile, string section)
 		{
 			foreach (Enum e in Enum.GetValues(ColEnum))
 			{
-				byte i = ((IConvertible)e).ToByte(null);
+				byte i = (e as IConvertible).ToByte(null);
 
 				aIniFile.WriteInteger(section, "ColType_" + i.ToString(), this.FColumns[i].colType);
 				aIniFile.WriteBool(section, "ColActive_" + i.ToString(), this.FColumns[i].colActive);

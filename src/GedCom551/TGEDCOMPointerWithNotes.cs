@@ -1,21 +1,20 @@
 using System;
-using System.Runtime.InteropServices;
 
 namespace GedCom551
 {
 	public class TGEDCOMPointerWithNotes : TGEDCOMPointer
 	{
-		private TGEDCOMListEx<TGEDCOMNotes> _Notes;
+		private GEDCOMList<TGEDCOMNotes> _Notes;
 
-		public TGEDCOMListEx<TGEDCOMNotes> Notes
+		public GEDCOMList<TGEDCOMNotes> Notes
 		{
 			get { return this._Notes; }
 		}
 
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			base.CreateObj(AOwner, AParent);
-			this._Notes = new TGEDCOMListEx<TGEDCOMNotes>(this);
+			base.CreateObj(owner, parent);
+			this._Notes = new GEDCOMList<TGEDCOMNotes>(this);
 		}
 
 		public override void Dispose()
@@ -29,7 +28,7 @@ namespace GedCom551
 			}
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 			if (ATag == "NOTE")
@@ -66,7 +65,7 @@ namespace GedCom551
 			this._Notes.ResetOwner(AOwner);
 		}
 
-		public TGEDCOMPointerWithNotes(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMPointerWithNotes(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 	}

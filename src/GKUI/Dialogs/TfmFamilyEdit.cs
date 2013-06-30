@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Ext.Utils;
 using GedCom551;
 using GKCore;
 using GKUI.Controls;
-using GKUI.Lists;
 
 /// <summary>
 /// Localization: clean
@@ -18,11 +16,11 @@ namespace GKUI
 	{
 		private TfmBase FBase;
 		private TGEDCOMFamilyRecord FFamily;
-		private TSheetList FChildsList;
-		private TSheetList FEventsList;
-		private TSheetList FNotesList;
-		private TSheetList FMediaList;
-		private TSheetList FSourcesList;
+		private GKSheetList FChildsList;
+		private GKSheetList FEventsList;
+		private GKSheetList FNotesList;
+		private GKSheetList FMediaList;
+		private GKSheetList FSourcesList;
 
 		public TfmBase Base
 		{
@@ -54,7 +52,7 @@ namespace GKUI
 			return this.FFamily.Wife.Value as TGEDCOMIndividualRecord;
 		}
 
-		private void SetFamily([In] TGEDCOMFamilyRecord Value)
+		private void SetFamily(TGEDCOMFamilyRecord Value)
 		{
 			this.FFamily = Value;
 			try
@@ -159,7 +157,7 @@ namespace GKUI
 					case TGenEngine.TRecAction.raAdd:
 						{
 							TGEDCOMIndividualRecord child = this.Base.SelectPerson(this.GetHusband(), TGenEngine.TTargetMode.tmParent, TGEDCOMSex.svNone);
-							need_refresh = (child != null && this.Base.Engine.AddFamilyChild(this.FFamily, child));
+							need_refresh = (child != null && this.FFamily.aux_AddChild(child));
 							break;
 						}
 
@@ -173,7 +171,7 @@ namespace GKUI
 					case TGenEngine.TRecAction.raDelete:
 						{
 							TGEDCOMIndividualRecord child = ItemData as TGEDCOMIndividualRecord;
-							need_refresh = (child != null && TGenEngine.ShowQuestion(LangMan.LSList[121]) != DialogResult.No && this.Base.Engine.RemoveFamilyChild(this.FFamily, child));
+							need_refresh = (child != null && TGenEngine.ShowQuestion(LangMan.LSList[121]) != DialogResult.No && this.FFamily.aux_RemoveChild(child));
 							break;
 						}
 
@@ -218,7 +216,7 @@ namespace GKUI
 			TGEDCOMIndividualRecord husband = this.Base.SelectPerson(null, TGenEngine.TTargetMode.tmNone, TGEDCOMSex.svMale);
 			if (husband != null && this.FFamily.Husband.StringValue == "")
 			{
-				this.Base.Engine.AddFamilySpouse(this.FFamily, husband);
+				this.FFamily.aux_AddSpouse(husband);
 				this.ControlsRefresh();
 			}
 		}
@@ -227,7 +225,7 @@ namespace GKUI
 		{
 			if (TGenEngine.ShowQuestion(LangMan.LSList[119]) != DialogResult.No)
 			{
-				this.Base.Engine.RemoveFamilySpouse(this.FFamily, this.GetHusband());
+				this.FFamily.aux_RemoveSpouse(this.GetHusband());
 				this.ControlsRefresh();
 			}
 		}
@@ -248,7 +246,7 @@ namespace GKUI
 			TGEDCOMIndividualRecord wife = this.Base.SelectPerson(null, TGenEngine.TTargetMode.tmNone, TGEDCOMSex.svFemale);
 			if (wife != null && this.FFamily.Wife.StringValue == "")
 			{
-				this.Base.Engine.AddFamilySpouse(this.FFamily, wife);
+				this.FFamily.aux_AddSpouse(wife);
 				this.ControlsRefresh();
 			}
 		}
@@ -257,7 +255,7 @@ namespace GKUI
 		{
 			if (TGenEngine.ShowQuestion(LangMan.LSList[120]) != DialogResult.No)
 			{
-				this.Base.Engine.RemoveFamilySpouse(this.FFamily, this.GetWife());
+				this.FFamily.aux_RemoveSpouse(this.GetWife());
 				this.ControlsRefresh();
 			}
 		}
@@ -317,33 +315,33 @@ namespace GKUI
 				this.EditMarriageStatus.Items.Add(LangMan.LSList[(int)TGenEngine.MarriageStatus[i].Name - 1]);
 			}
 
-			this.FChildsList = new TSheetList(this.SheetChilds);
-			this.FChildsList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
+			this.FChildsList = new GKSheetList(this.SheetChilds);
+			this.FChildsList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
 			this.FChildsList.Buttons = EnumSet.Create(new Enum[]
 			{
-				TSheetList.TListButton.lbAdd, 
-				TSheetList.TListButton.lbEdit, 
-				TSheetList.TListButton.lbDelete, 
-				TSheetList.TListButton.lbJump
+				GKSheetList.TListButton.lbAdd, 
+				GKSheetList.TListButton.lbEdit, 
+				GKSheetList.TListButton.lbDelete, 
+				GKSheetList.TListButton.lbJump
 			});
 			this.FChildsList.List.AddListColumn("№", 25, false);
 			this.FChildsList.List.AddListColumn(LangMan.LSList[85], 300, false);
 			this.FChildsList.List.AddListColumn(LangMan.LSList[122], 100, false);
 
-			this.FEventsList = new TSheetList(this.SheetEvents);
-			this.FEventsList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
+			this.FEventsList = new GKSheetList(this.SheetEvents);
+			this.FEventsList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
 			this.Base.SetupRecEventsList(this.FEventsList, false);
 
-			this.FNotesList = new TSheetList(this.SheetNotes);
-			this.FNotesList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
+			this.FNotesList = new GKSheetList(this.SheetNotes);
+			this.FNotesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
 			this.Base.SetupRecNotesList(this.FNotesList);
 
-			this.FMediaList = new TSheetList(this.SheetMultimedia);
-			this.FMediaList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
+			this.FMediaList = new GKSheetList(this.SheetMultimedia);
+			this.FMediaList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
 			this.Base.SetupRecMediaList(this.FMediaList);
 
-			this.FSourcesList = new TSheetList(this.SheetSources);
-			this.FSourcesList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
+			this.FSourcesList = new GKSheetList(this.SheetSources);
+			this.FSourcesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
 			this.Base.SetupRecSourcesList(this.FSourcesList);
 
 			this.SetLang();

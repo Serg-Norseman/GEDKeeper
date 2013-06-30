@@ -1,8 +1,6 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Runtime.InteropServices;
 
 using GedCom551;
 using GKCore;
@@ -134,7 +132,7 @@ namespace GKUI.Controls
 			this.btnMergeToRight.Enabled = (this.FRec1 != null && this.FRec2 != null);
 		}
 
-		public void SetRec1([In] TGEDCOMRecord Value)
+		public void SetRec1(TGEDCOMRecord Value)
 		{
 			this.FRec1 = Value;
 			this.UpdateMergeButtons();
@@ -182,7 +180,7 @@ namespace GKUI.Controls
 			}
 		}
 
-		public void SetRec2([In] TGEDCOMRecord Value)
+		public void SetRec2(TGEDCOMRecord Value)
 		{
 			this.FRec2 = Value;
 			this.UpdateMergeButtons();

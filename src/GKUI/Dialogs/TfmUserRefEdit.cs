@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Ext.Utils;
@@ -28,7 +27,7 @@ namespace GKUI
 			set { this.SetUserRef(value); }
 		}
 
-		private void SetUserRef([In] TGEDCOMUserReference Value)
+		private void SetUserRef(TGEDCOMUserReference Value)
 		{
 			this.FUserRef = Value;
 			this.EditRef.Text = this.FUserRef.StringValue;

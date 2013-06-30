@@ -1,6 +1,5 @@
 using System;
 using System.Drawing;
-using System.Runtime.InteropServices;
 
 using Ext.Utils;
 
@@ -195,7 +194,7 @@ namespace GKCore
 			}
 		}
 
-		public void LoadFromFile([In] IniFile aIniFile)
+		public void LoadFromFile(IniFile aIniFile)
 		{
 			this.FChildlessExclude = aIniFile.ReadBool("Chart", "ChildlessExclude", false);
 			this.FDecorative = aIniFile.ReadBool("Chart", "Decorative", true);
@@ -220,7 +219,7 @@ namespace GKCore
 			this.FDefFont_Style = (FontStyle)((uint)aIniFile.ReadInteger("Chart", "FontStyle", 0));
 		}
 
-		public void SaveToFile([In] IniFile aIniFile)
+		public void SaveToFile(IniFile aIniFile)
 		{
 			aIniFile.WriteBool("Chart", "ChildlessExclude", this.FChildlessExclude);
 			aIniFile.WriteBool("Chart", "Decorative", this.FDecorative);

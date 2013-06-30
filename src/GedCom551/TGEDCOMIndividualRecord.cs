@@ -1,24 +1,22 @@
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
-
 using Ext.Utils;
 
 namespace GedCom551
 {
 	public sealed class TGEDCOMIndividualRecord : TGEDCOMRecord
 	{
-		private TGEDCOMListEx<TGEDCOMPersonalName> _PersonalNames;
-		private TGEDCOMListEx<TGEDCOMCustomEvent> _IndividualEvents;
-		private TGEDCOMListEx<TGEDCOMIndividualOrdinance> _IndividualOrdinances;
-		private TGEDCOMListEx<TGEDCOMChildToFamilyLink> _ChildToFamilyLinks;
-		private TGEDCOMListEx<TGEDCOMSpouseToFamilyLink> _SpouseToFamilyLinks;
-		private TGEDCOMListEx<TGEDCOMPointer> _Submittors;
-		private TGEDCOMListEx<TGEDCOMAssociation> _Associations;
-		private TGEDCOMListEx<TGEDCOMAlias> _Aliasses;
-		private TGEDCOMListEx<TGEDCOMPointer> _AncestorsInterest;
-		private TGEDCOMListEx<TGEDCOMPointer> _DescendantsInterest;
-		private TGEDCOMListEx<TGEDCOMPointer> _Groups;
+		private GEDCOMList<TGEDCOMPersonalName> _PersonalNames;
+		private GEDCOMList<TGEDCOMCustomEvent> _IndividualEvents;
+		private GEDCOMList<TGEDCOMIndividualOrdinance> _IndividualOrdinances;
+		private GEDCOMList<TGEDCOMChildToFamilyLink> _ChildToFamilyLinks;
+		private GEDCOMList<TGEDCOMSpouseToFamilyLink> _SpouseToFamilyLinks;
+		private GEDCOMList<TGEDCOMPointer> _Submittors;
+		private GEDCOMList<TGEDCOMAssociation> _Associations;
+		private GEDCOMList<TGEDCOMAlias> _Aliasses;
+		private GEDCOMList<TGEDCOMPointer> _AncestorsInterest;
+		private GEDCOMList<TGEDCOMPointer> _DescendantsInterest;
+		private GEDCOMList<TGEDCOMPointer> _Groups;
 
 		public string AncestralFileNumber
 		{
@@ -32,17 +30,17 @@ namespace GedCom551
 			set { base.SetTagStringValue("RFN", value); }
 		}
 
-		public TGEDCOMListEx<TGEDCOMCustomEvent> IndividualEvents
+		public GEDCOMList<TGEDCOMCustomEvent> IndividualEvents
 		{
 			get { return this._IndividualEvents; }
 		}
 
-		public TGEDCOMListEx<TGEDCOMIndividualOrdinance> IndividualOrdinances
+		public GEDCOMList<TGEDCOMIndividualOrdinance> IndividualOrdinances
 		{
 			get { return this._IndividualOrdinances; }
 		}
 
-		public TGEDCOMListEx<TGEDCOMPersonalName> PersonalNames
+		public GEDCOMList<TGEDCOMPersonalName> PersonalNames
 		{
 			get { return this._PersonalNames; }
 		}
@@ -55,221 +53,99 @@ namespace GedCom551
 
 		public TGEDCOMSex Sex
 		{
-			get { return this.GetSex(); }
-			set { this.SetSex(value); }
+			get { return base.GetSexVal(base.GetTagStringValue("SEX").Trim().ToUpper()); }
+			set { base.SetTagStringValue("SEX", GetSexStr(value)); }
 		}
 
 		public bool Bookmark
 		{
-			get { return this.GetBookmark(); }
-			set { this.SetBookmark(value); }
+			get {
+				return base.FindTag("_BOOKMARK", 0) != null;
+			}
+			set {
+				if (value) {
+					if (base.FindTag("_BOOKMARK", 0) == null) {
+						this.AddTag("_BOOKMARK", "", null);
+					}
+				} else {
+					base.DeleteTag("_BOOKMARK");
+				}
+			}
 		}
 
 		public bool Patriarch
 		{
-			get { return this.GetPatriarch(); }
-			set { this.SetPatriarch(value); }
+			get {
+				return base.FindTag("_PATRIARCH", 0) != null;
+			}
+			set {
+				if (value) {
+					if (base.FindTag("_PATRIARCH", 0) == null) {
+						this.AddTag("_PATRIARCH", "", null);
+					}
+				} else {
+					base.DeleteTag("_PATRIARCH");
+				}
+			}
 		}
 
-		public TGEDCOMListEx<TGEDCOMChildToFamilyLink> ChildToFamilyLinks
+		public GEDCOMList<TGEDCOMChildToFamilyLink> ChildToFamilyLinks
 		{
 			get { return this._ChildToFamilyLinks; }
 		}
 
-		public TGEDCOMListEx<TGEDCOMSpouseToFamilyLink> SpouseToFamilyLinks
+		public GEDCOMList<TGEDCOMSpouseToFamilyLink> SpouseToFamilyLinks
 		{
 			get { return this._SpouseToFamilyLinks; }
 		}
 
-		public TGEDCOMListEx<TGEDCOMPointer> Submittors
+		public GEDCOMList<TGEDCOMPointer> Submittors
 		{
 			get { return this._Submittors; }
 		}
 
-		public TGEDCOMListEx<TGEDCOMAssociation> Associations
+		public GEDCOMList<TGEDCOMAssociation> Associations
 		{
 			get { return this._Associations; }
 		}
 
-		public TGEDCOMListEx<TGEDCOMAlias> Aliasses
+		public GEDCOMList<TGEDCOMAlias> Aliasses
 		{
 			get { return this._Aliasses; }
 		}
 
-		public TGEDCOMListEx<TGEDCOMPointer> AncestorsInterest
+		public GEDCOMList<TGEDCOMPointer> AncestorsInterest
 		{
 			get { return this._AncestorsInterest; }
 		}
 
-		public TGEDCOMListEx<TGEDCOMPointer> DescendantsInterest
+		public GEDCOMList<TGEDCOMPointer> DescendantsInterest
 		{
 			get { return this._DescendantsInterest; }
 		}
 
-		public TGEDCOMListEx<TGEDCOMPointer> Groups
+		public GEDCOMList<TGEDCOMPointer> Groups
 		{
 			get { return this._Groups; }
 		}
 
-		/*
-		public new TGEDCOMNotes Notes
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			get { return base.GetNote(Index); }
-		}*/
-
-		/*
-		public new int NotesCount
-		{
-			get
-			{
-				return base.NotesCount;
-			}
-		}*/
-
-		/*
-		public new TGEDCOMSourceCitation SourceCitations
-		{
-			get { return base.GetSourceCitation(Index); }
-		}*/
-
-		/*
-		public new int SourceCitationsCount
-		{
-			get { return base.SourceCitationsCount; }
-		}*/
-
-		/*
-		public new TGEDCOMMultimediaLink MultimediaLinks
-		{
-			get { return base.GetMultimediaLink(Index); }
-		}*/
-
-		/*
-		public new int MultimediaLinksCount
-		{
-			get
-			{
-				return base.MultimediaLinksCount;
-			}
-		}*/
-
-		private TGEDCOMSex GetSex()
-		{
-			string S = base.GetTagStringValue("SEX").Trim().ToUpper();
-			TGEDCOMSex Result;
-
-			switch (S) {
-				case "M":
-					Result = TGEDCOMSex.svMale;
-					break;
-				case "F":
-					Result = TGEDCOMSex.svFemale;
-					break;
-				case "U":
-					Result = TGEDCOMSex.svUndetermined;
-					break;
-				default:
-					Result = TGEDCOMSex.svNone;
-					break;
-			}
-			
-			return Result;
-		}
-
-		private void SetSex([In] TGEDCOMSex Value)
-		{
-			string S = "";
-			if (Value != TGEDCOMSex.svNone)
-			{
-				if (Value != TGEDCOMSex.svMale)
-				{
-					if (Value != TGEDCOMSex.svFemale)
-					{
-						if (Value == TGEDCOMSex.svUndetermined)
-						{
-							S = "U";
-						}
-					}
-					else
-					{
-						S = "F";
-					}
-				}
-				else
-				{
-					S = "M";
-				}
-			}
-			else
-			{
-				S = "";
-			}
-			base.SetTagStringValue("SEX", S);
-		}
-
-		private bool GetPatriarch()
-		{
-			return base.FindTag("_PATRIARCH", 0) != null;
-		}
-
-		private void SetPatriarch([In] bool Value)
-		{
-			if (Value)
-			{
-				if (base.FindTag("_PATRIARCH", 0) == null)
-				{
-					this.AddTag("_PATRIARCH", "", null);
-				}
-			}
-			else
-			{
-				base.DeleteTag("_PATRIARCH");
-			}
-		}
-
-		private bool GetBookmark()
-		{
-			return base.FindTag("_BOOKMARK", 0) != null;
-		}
-
-		private void SetBookmark([In] bool Value)
-		{
-			if (Value)
-			{
-				if (base.FindTag("_BOOKMARK", 0) == null)
-				{
-					this.AddTag("_BOOKMARK", "", null);
-				}
-			}
-			else
-			{
-				base.DeleteTag("_BOOKMARK");
-			}
-		}
-
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
-		{
-			base.CreateObj(AOwner, AParent);
-			base.SetLists(EnumSet.Create(new Enum[]
-			{
-				TGEDCOMSubList.stNotes, 
-				TGEDCOMSubList.stSource, 
-				TGEDCOMSubList.stMultimedia
-			}));
+			base.CreateObj(owner, parent);
 			this.FRecordType = TGEDCOMRecordType.rtIndividual;
 			this.FName = "INDI";
 
-			this._PersonalNames = new TGEDCOMListEx<TGEDCOMPersonalName>(this);
-			this._IndividualEvents = new TGEDCOMListEx<TGEDCOMCustomEvent>(this);
-			this._IndividualOrdinances = new TGEDCOMListEx<TGEDCOMIndividualOrdinance>(this);
-			this._ChildToFamilyLinks = new TGEDCOMListEx<TGEDCOMChildToFamilyLink>(this);
-			this._SpouseToFamilyLinks = new TGEDCOMListEx<TGEDCOMSpouseToFamilyLink>(this);
-			this._Submittors = new TGEDCOMListEx<TGEDCOMPointer>(this);
-			this._Associations = new TGEDCOMListEx<TGEDCOMAssociation>(this);
-			this._Aliasses = new TGEDCOMListEx<TGEDCOMAlias>(this);
-			this._AncestorsInterest = new TGEDCOMListEx<TGEDCOMPointer>(this);
-			this._DescendantsInterest = new TGEDCOMListEx<TGEDCOMPointer>(this);
-			this._Groups = new TGEDCOMListEx<TGEDCOMPointer>(this);
+			this._PersonalNames = new GEDCOMList<TGEDCOMPersonalName>(this);
+			this._IndividualEvents = new GEDCOMList<TGEDCOMCustomEvent>(this);
+			this._IndividualOrdinances = new GEDCOMList<TGEDCOMIndividualOrdinance>(this);
+			this._ChildToFamilyLinks = new GEDCOMList<TGEDCOMChildToFamilyLink>(this);
+			this._SpouseToFamilyLinks = new GEDCOMList<TGEDCOMSpouseToFamilyLink>(this);
+			this._Submittors = new GEDCOMList<TGEDCOMPointer>(this);
+			this._Associations = new GEDCOMList<TGEDCOMAssociation>(this);
+			this._Aliasses = new GEDCOMList<TGEDCOMAlias>(this);
+			this._AncestorsInterest = new GEDCOMList<TGEDCOMPointer>(this);
+			this._DescendantsInterest = new GEDCOMList<TGEDCOMPointer>(this);
+			this._Groups = new GEDCOMList<TGEDCOMPointer>(this);
 		}
 
 		public override void Dispose()
@@ -367,10 +243,12 @@ namespace GedCom551
 			f.RegisterTag("_MILI_DIS", TGEDCOMIndividualAttribute.Create);
 			f.RegisterTag("_MILI_RANK", TGEDCOMIndividualAttribute.Create);
 			
+			//f.RegisterTag("_BGRO", TGEDCOMBloodGroup.Create);
+
 			_factory = f;
 		}
-		
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
+
+		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag result;
 
@@ -751,13 +629,13 @@ namespace GedCom551
 			this._Groups.SaveToStream(AStream);
 		}
 
-		public TGEDCOMIndividualRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMIndividualRecord(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 
-        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue)
 		{
-			return new TGEDCOMIndividualRecord(AOwner, AParent, AName, AValue);
+			return new TGEDCOMIndividualRecord(owner, parent, tagName, tagValue);
 		}
 
 		public void aux_GetLifeDates(out TGEDCOMCustomEvent birthEvent, out TGEDCOMCustomEvent deathEvent)
@@ -785,9 +663,9 @@ namespace GedCom551
 
 		public void aux_GetNameParts(out string surname, out string name, out string patronymic)
 		{
-			if (this.PersonalNames.Count > 0)
+			if (this._PersonalNames.Count > 0)
 			{
-				TGEDCOMPersonalName np = this.PersonalNames[0];
+				TGEDCOMPersonalName np = this._PersonalNames[0];
 
 				string firstPart /*, dummy*/;
 				np.GetNameParts(out firstPart, out surname /*, out dummy*/);
@@ -978,6 +856,52 @@ namespace GedCom551
 
 			return (match >= matchThreshold);*/
 		}
+
+		public TGEDCOMAssociation aux_AddAssociation(string aRel, TGEDCOMIndividualRecord aRelPerson)
+		{
+			TGEDCOMAssociation Result = new TGEDCOMAssociation(this.Owner, this, "", "");
+			Result.Relation = aRel;
+			Result.Individual = aRelPerson;
+			this.Associations.Add(Result);
+			return Result;
+		}
+
+		public TGEDCOMMultimediaLink aux_SetPrimaryMultimediaLink(TGEDCOMMultimediaRecord mediaRec)
+		{
+			TGEDCOMMultimediaLink mmLink = null;
+
+			int num = this.MultimediaLinks.Count - 1;
+			for (int i = 0; i <= num; i++) {
+				if (this.MultimediaLinks[i].Value == mediaRec) {
+					mmLink = this.MultimediaLinks[i];
+					break;
+				}
+			}
+
+			if (mmLink == null) {
+				mmLink = this.aux_AddMultimedia(mediaRec);
+			}
+
+			mmLink.IsPrimary = true;
+			return mmLink;
+		}
+
+		public TGEDCOMMultimediaLink aux_GetPrimaryMultimediaLink()
+		{
+			TGEDCOMMultimediaLink result = null;
+
+			int num = this.MultimediaLinks.Count - 1;
+			for (int i = 0; i <= num; i++) {
+				TGEDCOMMultimediaLink mmLink = this.MultimediaLinks[i];
+				if (mmLink.IsPrimary) {
+					result = mmLink;
+					break;
+				}
+			}
+
+			return result;
+		}
+
 
 	}
 }

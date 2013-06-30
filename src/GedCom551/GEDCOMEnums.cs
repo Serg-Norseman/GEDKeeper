@@ -6,6 +6,18 @@
 
 namespace GedCom551
 {
+	public enum TGEDCOMFormat : byte
+	{
+		gf_Unknown,
+		gf_Native,
+		gf_GENBOX,
+		gf_ALTREE,
+		gf_AGES,
+		gf_PAF,
+		
+		gf_Last = gf_PAF
+	}
+
 	public enum TGEDCOMRecordType : byte
 	{
 		rtNone,
@@ -78,13 +90,6 @@ namespace GedCom551
 		svUndetermined,
 
 		svLast = svUndetermined
-	}
-
-	public enum TGEDCOMSubList : byte
-	{
-		stNotes,
-		stSource,
-		stMultimedia
 	}
 
 	public enum TGEDCOMPedigreeLinkageType : byte
@@ -278,5 +283,55 @@ namespace GedCom551
 		rsProblems,
 		rsCompleted,
 		rsWithdrawn
+	}
+
+
+
+//					this.WriteLine(1, "_HCOL", person.Biology.HairColor.ToString(), false);
+//					this.WriteLine(1, "_LECL", person.Biology.LeftEyeColor.ToString(), false);
+//					this.WriteLine(1, "_RECL", person.Biology.RightEyeColor.ToString(), false);
+//					this.WriteLine(1, "_BGRO", person.Biology.BloodGroup.ToString(), false);
+//					this.WriteLine(1, "_YDNA", person.Biology.HaplogroupY.ToString(), false);
+//					this.WriteLine(1, "_MDNA", person.Biology.HaplogroupM.ToString(), false);
+
+	[Serializable]
+	public enum BloodGroup
+	{
+		APositive,
+		ANegative,
+		BPositive,
+		BNegative,
+		ABPositive,
+		ABNegative,
+		OPositive,
+		ONegative,
+		Unknown
+	}
+
+	[Serializable]
+	public enum EyeColor
+	{
+		Amber,
+		Blue,
+		Brown,
+		Grey,
+		Green,
+		Hazel,
+		Red,
+		Albino,
+		Unknown
+	}
+
+	[Serializable]
+	public enum HairColor
+	{
+		Auburn,
+		Brown,
+		Black,
+		Blond,
+		Grey,
+		Red,
+		White,
+		Unknown
 	}
 }

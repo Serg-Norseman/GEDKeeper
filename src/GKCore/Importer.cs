@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
@@ -58,7 +57,7 @@ namespace GKCore
 		private TGEDCOMFamilyRecord AddFamily(TGEDCOMIndividualRecord parent)
 		{
 			TGEDCOMFamilyRecord Result = TGenEngine.CreateFamilyEx(this.FTree);
-			this.FEngine.AddFamilySpouse(Result, parent);
+			Result.aux_AddSpouse(parent);
 			return Result;
 		}
 
@@ -74,7 +73,7 @@ namespace GKCore
 			return aStr.Trim();
 		}
 
-		private void DefinePersonName([In] string aStr, [In] string p_id, ref string f_name, ref string f_pat, ref string f_fam, ref string bd, ref string dd)
+		private void DefinePersonName(string aStr, string p_id, ref string f_name, ref string f_pat, ref string f_fam, ref string bd, ref string dd)
 		{
 			f_name = "";
 			f_pat = "";
@@ -110,7 +109,7 @@ namespace GKCore
 			if (tokens.Length > 2) f_fam = this.CheckDot(tokens[2]);
 		}
 
-		private string DeleteBlanks([In] string S)
+		private string DeleteBlanks(string S)
 		{
 			string Result = S;
 			if (Result != null)
@@ -131,7 +130,7 @@ namespace GKCore
 			return Result;
 		}
 
-		private string ExtractNumComment([In] string S, ref string Comment, bool NoException)
+		private string ExtractNumComment(string S, ref string Comment, bool NoException)
 		{
 			string result = S;
 
@@ -157,7 +156,7 @@ namespace GKCore
 
 		private const string PersonIdChars = "0123456789- ()/?";
 
-		private bool IsPersonLine([In] string aStr, ref string p_id)
+		private bool IsPersonLine(string aStr, ref string p_id)
 		{
 			p_id = "";
 
@@ -188,7 +187,7 @@ namespace GKCore
 			return (c == 'I' || c == 'V' || c == 'X' || c == 'L' || c == 'C' || c == 'D' || c == 'M');
 		}
 
-		private bool IsRomeLine([In] string aStr)
+		private bool IsRomeLine(string aStr)
 		{
 			int i = 1;
 			string rs = "";
@@ -400,7 +399,7 @@ namespace GKCore
 			}
 		}
 
-		private bool IsSpouseLine([In] string S, out TGEDCOMSex spouseSex, out int spouseNum)
+		private bool IsSpouseLine(string S, out TGEDCOMSex spouseSex, out int spouseNum)
 		{
 			bool res = false;
 			spouseNum = 1;
@@ -519,7 +518,7 @@ namespace GKCore
 								if (nm_parts.Length > 2) f_fam = this.CheckDot(nm_parts[2]);
 
 								TGEDCOMIndividualRecord sp = TGenEngine.CreatePersonEx(this.FTree, f_name, f_pat, f_fam, sx, false);
-								this.FEngine.AddFamilySpouse(fam, sp);
+								fam.aux_AddSpouse(sp);
 							}
 						}
 						catch (Exception E)

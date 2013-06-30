@@ -1,18 +1,20 @@
 ﻿using System;
-using System.IO;
-using System.Text;
+using System.Collections.Generic;
 
 using Ext.Utils;
 using GedCom551;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using it = iTextSharp.text;
 
 /// <summary>
 /// Localization: dirty
 /// </summary>
 
-namespace GKCore
+namespace GKCore.Export
 {
 	// FIXME: вычистить код
-	public class PedigreeExporter : HTMLExporter
+	public sealed class PedigreeExporter : PDFExporter
 	{
 		private class TPersonObj
 		{
@@ -21,7 +23,7 @@ namespace GKCore
 			public TGEDCOMIndividualRecord iRec;
 			public int Level;
 			public string BirthDate;
-			public string Sources;
+			public List<string> Sources = new List<string>();
 			public int FamilyOrder;
 			public int ChildIdx;
 
@@ -63,6 +65,13 @@ namespace GKCore
 		private TGenEngine.TShieldState FShieldState;
 		private StringList FSourceList;
 
+		private Font title_font;
+		private Font chap_font;
+		private Font person_font;
+		private Font link_font;
+		private Font text_font, suptext;
+		
+		private PedigreeOptions.TPedigreeFormat format;
 
 		public TGEDCOMIndividualRecord Ancestor
 		{
@@ -99,50 +108,66 @@ namespace GKCore
 			return res;
 		}
 
-		private void WritePerson(StreamWriter aStream, TGEDCOMTree aTree, TPersonObj aPerson)
+		private void WritePerson(TPersonObj person)
 		{
-			aStream.WriteLine("<li>");
-			aStream.WriteLine("<b>" + this.GetIdStr(aPerson) + ". " + aPerson.iRec.aux_GetNameStr(true, false) + "</b>" + this.GetPedigreeLifeStr(aPerson.iRec));
+			Paragraph p = new Paragraph();
+			p.Alignment = Element.ALIGN_JUSTIFIED;
+			p.SpacingBefore = 6f;
+			p.SpacingAfter = 6f;
+			p.Add(new Chunk(this.GetIdStr(person) + ". " + person.iRec.aux_GetNameStr(true, false), person_font).SetLocalDestination(person.Id));
+			p.Add(new Chunk(this.GetPedigreeLifeStr(person.iRec), text_font));
 
-			if (this.FOptions.PedigreeOptions.IncludeSources)
+			if (this.FOptions.PedigreeOptions.IncludeSources && person.Sources.Count > 0)
 			{
-				aStream.WriteLine("&nbsp;<sup>" + aPerson.Sources + "</sup>");
-			}
-			PedigreeOptions.TPedigreeFormat format = this.FOptions.PedigreeOptions.Format;
-			if (format != PedigreeOptions.TPedigreeFormat.pfExcess)
-			{
-				if (format == PedigreeOptions.TPedigreeFormat.pfCompact)
-				{
-					this.WriteCompactFmt(aStream, aPerson);
+				p.Add(new Chunk(" ", text_font));
+
+				for (int i = 0; i < person.Sources.Count; i++) {
+					string lnk = person.Sources[i];
+					
+					if (i > 0) {
+						p.Add(new Chunk(", ", text_font).SetTextRise(4));
+					}
+
+					Chunk lnkChunk = new Chunk(lnk, suptext);
+					lnkChunk.SetTextRise(4);
+					lnkChunk.SetLocalGoto("src_" + lnk);
+					lnkChunk.SetUnderline(0.5f, 3f);
+					p.Add(lnkChunk);
 				}
 			}
-			else
-			{
-				this.WriteExcessFmt(aStream, aPerson);
+
+			fDocument.Add(p);
+
+			switch (format) {
+				case PedigreeOptions.TPedigreeFormat.pfExcess:
+					this.WriteExcessFmt(person);
+					break;
+
+				case PedigreeOptions.TPedigreeFormat.pfCompact:
+					this.WriteCompactFmt(person);
+					break;
 			}
-			aStream.WriteLine("</li><br>");
 		}
 
-		private string idLink(TPersonObj aObj)
+		private Chunk idLink(TPersonObj person)
 		{
-			string res = "";
-			if (aObj != null)
-			{
-				res = " [<a href=\"#" + aObj.Id + "\">" + aObj.Id + "</a>]";
+			if (person != null) {
+				return new Chunk(person.Id, link_font).SetLocalGoto(person.Id);
+			} else {
+				return new Chunk();
 			}
-			return res;
 		}
 
-		private string GetIdStr(TPersonObj aPerson)
+		private string GetIdStr(TPersonObj person)
 		{
-			string Result = "<a name=\"" + aPerson.Id + "\">" + aPerson.Id + "</a>";
+			string Result = person.Id;
 
-			if (this.FKind == TPedigreeKind.pk_Konovalov && aPerson.Parent != null)
+			if (this.FKind == TPedigreeKind.pk_Konovalov && person.Parent != null)
 			{
-				TGEDCOMFamilyRecord family = aPerson.iRec.ChildToFamilyLinks[0].Family;
+				TGEDCOMFamilyRecord family = person.iRec.ChildToFamilyLinks[0].Family;
 				string sp_str = "";
-				int idx = aPerson.Parent.iRec.IndexOfSpouse(family);
-				if (aPerson.Parent.iRec.SpouseToFamilyLinks.Count > 1)
+				int idx = person.Parent.iRec.IndexOfSpouse(family);
+				if (person.Parent.iRec.SpouseToFamilyLinks.Count > 1)
 				{
 					sp_str = "/" + (idx + 1).ToString();
 				}
@@ -151,82 +176,86 @@ namespace GKCore
 			return Result;
 		}
 
-		private void WriteExcessFmt(StreamWriter aStream, TPersonObj aPerson)
+		private void WriteExcessFmt(TPersonObj person)
 		{
-			aStream.WriteLine("<br>" + LangMan.LSList[87] + ": " + TGenEngine.SexStr(aPerson.iRec.Sex));
-			string st = TGenEngine.GetLifeExpectancy(aPerson.iRec);
+			fDocument.Add(new Paragraph(LangMan.LSList[87] + ": " + TGenEngine.SexStr(person.iRec.Sex), text_font));
 
-			if (st != "?" && st != "")
-			{
-				aStream.WriteLine("<br>" + LangMan.LSList[306] + ": " + st);
+			string st = TGenEngine.GetLifeExpectancy(person.iRec);
+			if (st != "?" && st != "") {
+				fDocument.Add(new Paragraph(LangMan.LSList[306] + ": " + st, text_font));
 			}
 
 			TGEDCOMIndividualRecord father, mother;
-			aPerson.iRec.aux_GetParents(out father, out mother);
-			if (father != null) aStream.WriteLine("<br>" + LangMan.LSList[150] + ": " + father.aux_GetNameStr(true, false) + this.idLink(this.FindPerson(father)));
-			if (mother != null) aStream.WriteLine("<br>" + LangMan.LSList[151] + ": " + mother.aux_GetNameStr(true, false) + this.idLink(this.FindPerson(mother)));
+			person.iRec.aux_GetParents(out father, out mother);
+			if (father != null) {
+				Paragraph p = new Paragraph();
+				p.Add(new Chunk(LangMan.LSList[150] + ": " + father.aux_GetNameStr(true, false) + " ", text_font));
+				p.Add(this.idLink(this.FindPerson(father)));
+				fDocument.Add(p);
+			}
+			if (mother != null) {
+				Paragraph p = new Paragraph();
+				p.Add(new Chunk(LangMan.LSList[151] + ": " + mother.aux_GetNameStr(true, false) + " ", text_font));
+				p.Add(this.idLink(this.FindPerson(mother)));
+				fDocument.Add(p);
+			}
 
 			TList ev_list = new TList(true);
 			try
 			{
 				int i;
-				if (aPerson.iRec.IndividualEvents.Count > 0)
+				if (person.iRec.IndividualEvents.Count > 0)
 				{
-					aStream.WriteLine("<p>" + LangMan.LSList[83] + ": <ul>");
+					fDocument.Add(new Paragraph(LangMan.LSList[83] + ":", text_font));
 
-					int num = aPerson.iRec.IndividualEvents.Count - 1;
+					int num = person.iRec.IndividualEvents.Count - 1;
 					for (i = 0; i <= num; i++)
 					{
-						TGEDCOMCustomEvent evt = aPerson.iRec.IndividualEvents[i];
+						TGEDCOMCustomEvent evt = person.iRec.IndividualEvents[i];
 						if (!(evt is TGEDCOMIndividualAttribute) || (evt is TGEDCOMIndividualAttribute && this.FOptions.PedigreeOptions.IncludeAttributes))
 						{
-							ev_list.Add(new TEventObj(evt, aPerson.iRec));
+							ev_list.Add(new TEventObj(evt, person.iRec));
 						}
 					}
-					this.WriteEventList(aStream, aPerson, ev_list);
-					aStream.WriteLine("</ul></p>");
+					this.WriteEventList(person, ev_list);
 				}
 
-				int num2 = aPerson.iRec.SpouseToFamilyLinks.Count - 1;
+				int num2 = person.iRec.SpouseToFamilyLinks.Count - 1;
 				for (i = 0; i <= num2; i++)
 				{
-					TGEDCOMFamilyRecord family = aPerson.iRec.SpouseToFamilyLinks[i].Family;
+					TGEDCOMFamilyRecord family = person.iRec.SpouseToFamilyLinks[i].Family;
 					if (TGenEngine.IsRecordAccess(family.Restriction, this.FShieldState))
 					{
 						TGEDCOMPointer sp;
 						string unk;
-						if (aPerson.iRec.Sex == TGEDCOMSex.svMale)
-						{
+						if (person.iRec.Sex == TGEDCOMSex.svMale) {
 							sp = family.Wife;
 							st = LangMan.LSList[116] + ": ";
 							unk = LangMan.LSList[63];
-						}
-						else
-						{
+						} else {
 							sp = family.Husband;
 							st = LangMan.LSList[115] + ": ";
 							unk = LangMan.LSList[64];
 						}
-						TGEDCOMIndividualRecord irec = sp.Value as TGEDCOMIndividualRecord;
-						if (irec != null)
-						{
-							aStream.WriteLine("<p>" + st + irec.aux_GetNameStr(true, false) + this.GetPedigreeLifeStr(irec) + this.idLink(this.FindPerson(irec)));
-						}
-						else
-						{
-							aStream.WriteLine("<p>" + st + unk);
-						}
-						aStream.WriteLine("<ul>");
-						ev_list.Clear();
 
+						TGEDCOMIndividualRecord irec = sp.Value as TGEDCOMIndividualRecord;
+						string sps;
+						if (irec != null) {
+							sps = st + irec.aux_GetNameStr(true, false) + this.GetPedigreeLifeStr(irec) + this.idLink(this.FindPerson(irec));
+						} else {
+							sps = st + unk;
+						}
+
+						fDocument.Add(new Paragraph(sps, text_font));
+
+						ev_list.Clear();
 						int num3 = family.Childrens.Count - 1;
 						for (int j = 0; j <= num3; j++)
 						{
 							irec = (family.Childrens[j].Value as TGEDCOMIndividualRecord);
 							ev_list.Add(new TEventObj(TGenEngine.GetIndividualEvent(irec, "BIRT"), irec));
 						}
-						this.WriteEventList(aStream, aPerson, ev_list);
-						aStream.WriteLine("</ul></p>");
+						this.WriteEventList(person, ev_list);
 					}
 				}
 			}
@@ -235,45 +264,50 @@ namespace GKCore
 				ev_list.Dispose();
 			}
 
-			if (this.FOptions.PedigreeOptions.IncludeNotes && aPerson.iRec.Notes.Count != 0)
+			if (this.FOptions.PedigreeOptions.IncludeNotes && person.iRec.Notes.Count != 0)
 			{
-				aStream.WriteLine("<p>" + LangMan.LSList[54] + ":<ul>");
+				fDocument.Add(new Paragraph(LangMan.LSList[54] + ":", text_font));
+				
+				it.List list = new it.List(it.List.UNORDERED);
+				list.SetListSymbol("\u2022");
+				list.IndentationLeft = 10f;
 
-				int num4 = aPerson.iRec.Notes.Count - 1;
+				int num4 = person.iRec.Notes.Count - 1;
 				for (int i = 0; i <= num4; i++)
 				{
-					TGEDCOMNotes note = aPerson.iRec.Notes[i];
-					aStream.WriteLine("<li>" + TGenEngine.ConStrings(note.Notes) + "</li>");
+					TGEDCOMNotes note = person.iRec.Notes[i];
+					list.Add(new it.ListItem(new Chunk(" " + TGenEngine.ConStrings(note.Notes), text_font)));
 				}
-				aStream.WriteLine("</ul></p>");
+				fDocument.Add(list);
 			}
 		}
 
-		private void WriteCompactFmt(StreamWriter aStream, TPersonObj aPerson)
+		private void WriteCompactFmt(TPersonObj person)
 		{
-			if (this.FOptions.PedigreeOptions.IncludeNotes && aPerson.iRec.Notes.Count != 0)
+			if (this.FOptions.PedigreeOptions.IncludeNotes && person.iRec.Notes.Count != 0)
 			{
-				int num = aPerson.iRec.Notes.Count - 1;
+				int num = person.iRec.Notes.Count - 1;
 				for (int i = 0; i <= num; i++)
 				{
-					TGEDCOMNotes note = aPerson.iRec.Notes[i];
-					aStream.WriteLine("<p style=\"margin-top:2pt; margin-bottom:2pt\">" + TGenEngine.ConStrings(note.Notes) + "</p>");
+					TGEDCOMNotes note = person.iRec.Notes[i];
+					fDocument.Add(new Paragraph(TGenEngine.ConStrings(note.Notes), text_font));
 				}
 			}
+
 			try
 			{
-				bool sp_index = aPerson.iRec.SpouseToFamilyLinks.Count > 1;
+				bool sp_index = person.iRec.SpouseToFamilyLinks.Count > 1;
 
-				int num2 = aPerson.iRec.SpouseToFamilyLinks.Count - 1;
+				int num2 = person.iRec.SpouseToFamilyLinks.Count - 1;
 				for (int i = 0; i <= num2; i++)
 				{
-					TGEDCOMFamilyRecord family = aPerson.iRec.SpouseToFamilyLinks[i].Family;
+					TGEDCOMFamilyRecord family = person.iRec.SpouseToFamilyLinks[i].Family;
 					if (TGenEngine.IsRecordAccess(family.Restriction, this.FShieldState))
 					{
 						TGEDCOMPointer sp;
 						string st;
 						string unk;
-						if (aPerson.iRec.Sex == TGEDCOMSex.svMale)
+						if (person.iRec.Sex == TGEDCOMSex.svMale)
 						{
 							sp = family.Wife;
 							st = "Ж";
@@ -285,11 +319,13 @@ namespace GKCore
 							st = "М";
 							unk = LangMan.LSList[64];
 						}
+
 						if (sp_index)
 						{
 							st += (i + 1).ToString();
 						}
 						st += " - ";
+
 						TGEDCOMIndividualRecord irec = sp.Value as TGEDCOMIndividualRecord;
 						if (irec != null)
 						{
@@ -299,7 +335,8 @@ namespace GKCore
 						{
 							st += unk;
 						}
-						aStream.WriteLine("<p style=\"margin-top:2pt; margin-bottom:2pt\">" + st + "</p>");
+
+						fDocument.Add(new Paragraph(st, text_font));
 					}
 				}
 			}
@@ -311,7 +348,9 @@ namespace GKCore
 		private string GetPedigreeLifeStr(TGEDCOMIndividualRecord iRec)
 		{
 			string res_str = "";
+
 			PedigreeOptions.TPedigreeFormat format = this.FOptions.PedigreeOptions.Format;
+
 			if (format != PedigreeOptions.TPedigreeFormat.pfExcess)
 			{
 				if (format == PedigreeOptions.TPedigreeFormat.pfCompact)
@@ -373,19 +412,20 @@ namespace GKCore
 					res_str = res_str + " - " + ds;
 				}
 			}
-			string Result;
+
+			string result;
 			if (res_str == "" || res_str == " ")
 			{
-				Result = "";
+				result = "";
 			}
 			else
 			{
-				Result = " (" + res_str + ")";
+				result = " (" + res_str + ")";
 			}
-			return Result;
+			return result;
 		}
 
-		private void WriteEventList(StreamWriter aStream, TPersonObj aPerson, TList ev_list)
+		private void WriteEventList(TPersonObj aPerson, TList ev_list)
 		{
 			int num = ev_list.Count - 1;
 			for (int i = 0; i <= num; i++)
@@ -406,185 +446,190 @@ namespace GKCore
 				TGEDCOMCustomEvent evt = (ev_list[i] as TEventObj).Event;
 				if (evt != null && object.Equals((ev_list[i] as TEventObj).iRec, aPerson.iRec))
 				{
-					if (evt.Name == "BIRT")
-					{
+					if (evt.Name == "BIRT") {
 						ev_list.Exchange(i, 0);
-					}
-					else
-					{
-						if (evt.Name == "DEAT")
-						{
-							ev_list.Exchange(i, ev_list.Count - 1);
-						}
+					} else if (evt.Name == "DEAT") {
+						ev_list.Exchange(i, ev_list.Count - 1);
 					}
 				}
 			}
+
+			it.List list = new it.List(it.List.UNORDERED);
+			list.SetListSymbol("\u2022");
+			list.IndentationLeft = 10f;
 
 			int num4 = ev_list.Count - 1;
 			for (int i = 0; i <= num4; i++)
 			{
 				TEventObj evObj = ev_list[i] as TEventObj;
 				TGEDCOMCustomEvent evt = evObj.Event;
+				string li;
+				Paragraph p = new Paragraph();
 				if (object.Equals(evObj.iRec, aPerson.iRec))
 				{
 					int ev = TGenEngine.GetPersonEventIndex(evt.Name);
 					string st;
-					if (ev == 0)
-					{
+					if (ev == 0) {
 						st = evt.Detail.Classification;
-					}
-					else
-					{
-						if (ev > 0)
-						{
+					} else {
+						if (ev > 0) {
 							st = LangMan.LSList[(int)TGenEngine.PersonEvents[ev].Name - 1];
-						}
-						else
-						{
+						} else {
 							st = evt.Name;
 						}
 					}
+
 					string dt = TGenEngine.GEDCOMCustomDateToStr(evt.Detail.Date, TGenEngine.TDateFormat.dfDD_MM_YYYY, false);
-					aStream.WriteLine("<li>" + dt + ": " + st + ".");
+					li = dt + ": " + st + ".";
 					if (evt.Detail.Place.StringValue != "")
 					{
-						aStream.WriteLine(" " + LangMan.LSList[204] + ": " + evt.Detail.Place.StringValue + "</li>");
+						li = li + " " + LangMan.LSList[204] + ": " + evt.Detail.Place.StringValue;
 					}
+
+					p.Add(new Chunk(" " + li, text_font));
 				}
 				else
 				{
-					string dt;
-					if (evt == null)
-					{
-						dt = "?";
-					}
-					else
-					{
-						dt = TGenEngine.GEDCOMCustomDateToStr(evt.Detail.Date, TGenEngine.TDateFormat.dfDD_MM_YYYY, false);
-					}
+					string dt = (evt == null) ? "?" : TGenEngine.GEDCOMCustomDateToStr(evt.Detail.Date, TGenEngine.TDateFormat.dfDD_MM_YYYY, false);
 					string st;
-					if (evObj.iRec.Sex == TGEDCOMSex.svMale)
-					{
+					if (evObj.iRec.Sex == TGEDCOMSex.svMale) {
 						st = ": Родился ";
-					}
-					else
-					{
+					} else {
 						st = ": Родилась ";
 					}
 
-					aStream.WriteLine("<li>" + dt + st + evObj.iRec.aux_GetNameStr(true, false) + this.idLink(this.FindPerson(evObj.iRec)) + "</li>");
+					li = dt + st + evObj.iRec.aux_GetNameStr(true, false);
+					p.Add(new Chunk(" " + li + " ", text_font));
+					p.Add(this.idLink(this.FindPerson(evObj.iRec)));
 				}
+
+				list.Add(new it.ListItem(p));
 			}
+
+			fDocument.Add(list);
 		}
 
-		public override void Generate()
+		protected override void InternalGenerate()
 		{
-			if (this.FAncestor == null)
+			try
 			{
-				TGenEngine.ShowError(LangMan.LSList[209]);
-			}
-			else
-			{
-				string title = LangMan.LSList[484] + ": " + this.FAncestor.aux_GetNameStr(true, false);
-				Directory.CreateDirectory(this.FPath);
-				StreamWriter fs_index = new StreamWriter(this.FPath + "pedigree.htm", false, Encoding.GetEncoding(1251));
-				base.WriteHTMLHeader(fs_index, title);
-				fs_index.WriteLine("<h2>" + title + "</h2>");
-				this.FPersonList = new TList(true);
-				this.FSourceList = new StringList();
-				try
-				{
-					_Generate_Step(null, this.FAncestor, 1, 1);
-					_Generate_ReIndex();
-					int cur_level = 0;
+				format = this.FOptions.PedigreeOptions.Format;
 
-					int num = this.FPersonList.Count - 1;
-					for (int i = 0; i <= num; i++)
+				if (this.FAncestor == null)
+				{
+					TGenEngine.ShowError(LangMan.LSList[209]);
+				}
+				else
+				{
+					string title = LangMan.LSList[484] + ": " + this.FAncestor.aux_GetNameStr(true, false);
+
+					fDocument.AddTitle("Pedigree");
+					fDocument.AddSubject("Pedigree");
+					fDocument.AddAuthor("");
+					fDocument.AddCreator(TGenEngine.AppTitle);
+					fDocument.Open();
+
+					BaseFont base_font = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Times.ttf"), "CP1251", BaseFont.EMBEDDED);
+					title_font = new Font(base_font, 20f, Font.BOLD);
+					chap_font = new Font(base_font, 16f, Font.BOLD, Color.BLACK);
+					person_font = new Font(base_font, 10f, Font.BOLD, Color.BLACK);
+					link_font = new Font(base_font, 8f, Font.UNDERLINE, Color.BLUE);
+					text_font = new Font(base_font, 8f, Font.NORMAL, Color.BLACK);
+					suptext = new Font(base_font, 5f, Font.NORMAL, Color.BLUE);
+
+					fDocument.Add(new Paragraph(title, title_font) { Alignment = Element.ALIGN_CENTER, SpacingAfter = 6f });
+
+					this.FPersonList = new TList(true);
+					this.FSourceList = new StringList();
+					try
 					{
-						TPersonObj pObj = this.FPersonList[i] as TPersonObj;
-						if (cur_level != pObj.Level)
+						this.GenStep(null, this.FAncestor, 1, 1);
+						this.ReIndex();
+
+						int cur_level = 0;
+						int num = this.FPersonList.Count - 1;
+						for (int i = 0; i <= num; i++)
 						{
-							if (cur_level > 0)
+							TPersonObj person = this.FPersonList[i] as TPersonObj;
+							if (cur_level != person.Level)
 							{
-								fs_index.WriteLine("</ul>");
+								cur_level = person.Level;
+								string gen_title = LangMan.LSList[399]+" "+RomeNumbers.GetRome(cur_level);
+								fDocument.Add(new Paragraph(gen_title, chap_font) { Alignment = Element.ALIGN_LEFT, SpacingBefore = 2f, SpacingAfter = 2f });
 							}
-							cur_level = pObj.Level;
-							fs_index.WriteLine("<h3>"+LangMan.LSList[399]+" "+RomeNumbers.GetRome(cur_level)+"</h3><ul>");
-						}
-						this.WritePerson(fs_index, this.FTree, pObj);
-					}
-					fs_index.WriteLine("</ul>");
-					if (this.FSourceList.Count > 0)
-					{
-						fs_index.WriteLine("<h3>" + LangMan.LSList[56] + "</h3>");
 
-						int num2 = this.FSourceList.Count - 1;
-						for (int j = 0; j <= num2; j++)
+							this.WritePerson(person);
+						}
+
+						if (this.FSourceList.Count > 0)
 						{
-							string sn = (j + 1).ToString();
-							fs_index.WriteLine("<p><sup><a name=\"src" + sn + "\">" + sn + "</a></sup>&nbsp;");
-							fs_index.WriteLine(this.FSourceList[j] + "</p>");
+							fDocument.Add(new Paragraph(LangMan.LSList[56], chap_font) { Alignment = Element.ALIGN_CENTER });
+
+							int num2 = this.FSourceList.Count - 1;
+							for (int j = 0; j <= num2; j++)
+							{
+								string sn = (j + 1).ToString();
+								Chunk chunk = new Chunk(sn + ". " + this.FSourceList[j], text_font);
+								chunk.SetLocalDestination("src_" + sn);
+								fDocument.Add(new Paragraph(chunk));
+							}
 						}
 					}
+					finally
+					{
+						this.FSourceList.Free();
+						this.FPersonList.Dispose();
+					}
 				}
-				finally
-				{
-					this.FSourceList.Free();
-					this.FPersonList.Dispose();
-				}
-				base.WriteHTMLFooter(fs_index);
-				SysUtils.Free(fs_index);
-                SysUtils.LoadExtFile(this.FPath + "pedigree.htm");
+			}
+			catch (Exception)
+			{
+				throw;
 			}
 		}
 
-		public PedigreeExporter(TGenEngine aEngine, string aPath) : base(aEngine, aPath)
+		public PedigreeExporter(TGenEngine engine) : base(engine)
 		{
 		}
 
-		private void _Generate_Step(TPersonObj aParent, TGEDCOMIndividualRecord iRec, int aLevel, int aFamilyOrder)
+		private void GenStep(TPersonObj parent, TGEDCOMIndividualRecord iRec, int level, int familyOrder)
 		{
 			if (iRec != null)
 			{
 				TPersonObj res = new TPersonObj();
-				res.Parent = aParent;
+				res.Parent = parent;
 				res.iRec = iRec;
-				res.Level = aLevel;
+				res.Level = level;
 				res.ChildIdx = 0;
 				res.BirthDate = TGenEngine.GetBirthDate(iRec, TGenEngine.TDateFormat.dfYYYY_MM_DD, true);
-				res.FamilyOrder = aFamilyOrder;
+				res.FamilyOrder = familyOrder;
 				this.FPersonList.Add(res);
-				string i_sources = "";
+
+				string[] i_sources = new string[0];
 				int j;
+
 				if (this.FOptions.PedigreeOptions.IncludeSources)
 				{
 					int num = iRec.SourceCitations.Count - 1;
 					for (int i = 0; i <= num; i++)
 					{
-						TGEDCOMSourceCitation cit = iRec.SourceCitations[i];
-						TGEDCOMSourceRecord sourceRec = cit.Value as TGEDCOMSourceRecord;
-						if (sourceRec != null)
-						{
+						TGEDCOMSourceRecord sourceRec = iRec.SourceCitations[i].Value as TGEDCOMSourceRecord;
+
+						if (sourceRec != null) {
 							string src_name = TGenEngine.ConStrings(sourceRec.Title);
-							if (src_name == "")
-							{
+							if (src_name == "") {
 								src_name = sourceRec.FiledByEntry;
 							}
+
 							j = this.FSourceList.IndexOf(src_name);
-							if (j < 0)
-							{
+							if (j < 0) {
 								j = this.FSourceList.Add(src_name);
 							}
-							if (i_sources != "")
-							{
-								i_sources += ",";
-							}
-							string sn = (j + 1).ToString();
-							i_sources = i_sources + "<a href=\"#src" + sn + "\">" + sn + "</a>";
+
+							res.Sources.Add((j + 1).ToString());
 						}
 					}
 				}
-				res.Sources = i_sources;
 
 				int num2 = iRec.SpouseToFamilyLinks.Count - 1;
 				for (j = 0; j <= num2; j++)
@@ -598,14 +643,14 @@ namespace GKCore
 						for (int i = 0; i <= num3; i++)
 						{
 							TGEDCOMIndividualRecord child = family.Childrens[i].Value as TGEDCOMIndividualRecord;
-							_Generate_Step(res, child, aLevel + 1, i + 1);
+							GenStep(res, child, level + 1, i + 1);
 						}
 					}
 				}
 			}
 		}
 
-		private void _Generate_ReIndex()
+		private void ReIndex()
 		{
 			int num = this.FPersonList.Count - 1;
 			for (int i = 0; i <= num; i++)
@@ -628,11 +673,18 @@ namespace GKCore
 			for (int i = 0; i <= num3; i++)
 			{
 				TPersonObj obj = this.FPersonList[i] as TPersonObj;
-				TPedigreeKind fKind = this.FKind;
-				if (fKind != TPedigreeKind.pk_dAboville)
-				{
-					if (fKind == TPedigreeKind.pk_Konovalov)
-					{
+
+				switch (this.FKind) {
+					case TPedigreeKind.pk_dAboville:
+						if (obj.Parent == null) {
+							obj.Id = "1";
+						} else {
+							obj.Parent.ChildIdx++;
+							obj.Id = obj.Parent.Id + "." + obj.Parent.ChildIdx.ToString();
+						}
+						break;
+
+					case TPedigreeKind.pk_Konovalov:
 						obj.Id = (i + 1).ToString();
 						if (obj.Parent != null)
 						{
@@ -643,19 +695,7 @@ namespace GKCore
 
 							obj.Id = obj.Id + "-" + pid;
 						}
-					}
-				}
-				else
-				{
-					if (obj.Parent == null)
-					{
-						obj.Id = "1";
-					}
-					else
-					{
-						obj.Parent.ChildIdx++;
-						obj.Id = obj.Parent.Id + "." + obj.Parent.ChildIdx.ToString();
-					}
+						break;
 				}
 			}
 		}

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -35,37 +34,37 @@ namespace GKUI
 				this.lvDates.Items.Clear();
 				DateTime gdt = this.qtc.SelectionStart;
 				string s = cal.date_to_str(gdt.Year, gdt.Month, gdt.Day, CalendarConverter.TDateEra.AD) + ", " + DateTimeInfo.DayNames[(int)gdt.DayOfWeek];
-				TfmCalendar._qtc_DateSelected_AddItem(this, LangMan.LSList[156], s);
+				this.AddItem(LangMan.LSList[156], s);
 				double jd = cal.gregorian_to_jd(gdt.Year, gdt.Month, gdt.Day);
 				int year = 0;
 				int month = 0;
 				int day = 0;
 				cal.jd_to_julian(jd, ref year, ref month, ref day);
-				TfmCalendar._qtc_DateSelected_AddItem(this, LangMan.LSList[157], cal.date_to_str(year, month, day, CalendarConverter.TDateEra.AD));
+				this.AddItem(LangMan.LSList[157], cal.date_to_str(year, month, day, CalendarConverter.TDateEra.AD));
 
 				cal.jd_to_hebrew(jd, ref year, ref month, ref day);
 				s = day.ToString() + " ";
 				s += CalendarConverter.HebrewMonths[month - 1];
 				s = s + " " + year.ToString() + ", " + CalendarConverter.HebrewWeekdays[cal.jwday(jd)];
-				TfmCalendar._qtc_DateSelected_AddItem(this, LangMan.LSList[158], s);
+				this.AddItem(LangMan.LSList[158], s);
 
 				cal.jd_to_islamic(jd, ref year, ref month, ref day);
 				s = day.ToString() + " ";
 				s += CalendarConverter.IslamicMonths[month - 1];
 				s = s + " " + year.ToString() + ", йаум " + CalendarConverter.IslamicWeekdays[cal.jwday(jd)];
-				TfmCalendar._qtc_DateSelected_AddItem(this, LangMan.LSList[159], s);
+				this.AddItem(LangMan.LSList[159], s);
 
 				cal.jd_to_persian(jd, ref year, ref month, ref day);
 				s = day.ToString() + " ";
 				s += CalendarConverter.PersianMonths[month - 1];
 				s = s + " " + year.ToString() + ", " + CalendarConverter.PersianWeekdays[cal.jwday(jd)];
-				TfmCalendar._qtc_DateSelected_AddItem(this, LangMan.LSList[160], s);
+				this.AddItem(LangMan.LSList[160], s);
 
 				cal.jd_to_indian_civil(jd, ref year, ref month, ref day);
 				s = day.ToString() + " ";
 				s += CalendarConverter.IndianCivilMonths[month - 1];
 				s = s + " " + year.ToString() + ", " + CalendarConverter.IndianCivilWeekdays[cal.jwday(jd)];
-				TfmCalendar._qtc_DateSelected_AddItem(this, LangMan.LSList[161], s);
+				this.AddItem(LangMan.LSList[161], s);
 
 				int major = 0;
 				int cycle = 0;
@@ -74,7 +73,7 @@ namespace GKUI
 				s = s + day.ToString() + " ";
 				s += CalendarConverter.BahaiMonths[month - 1];
 				s = s + " " + year.ToString() + ", " + CalendarConverter.BahaiWeekdays[cal.jwday(jd)];
-				TfmCalendar._qtc_DateSelected_AddItem(this, LangMan.LSList[162], s);
+				this.AddItem(LangMan.LSList[162], s);
 			}
 			finally
 			{
@@ -89,9 +88,9 @@ namespace GKUI
 			GKUI.TfmGEDKeeper.Instance.fmCalendar = null;
 		}
 
-		private static void _qtc_DateSelected_AddItem([In] TfmCalendar Self, string aCalendar, string aDate)
+		private void AddItem(string aCalendar, string aDate)
 		{
-			ListViewItem item = Self.lvDates.Items.Add(aCalendar);
+			ListViewItem item = this.lvDates.Items.Add(aCalendar);
 			item.SubItems.Add(aDate);
 		}
 	}

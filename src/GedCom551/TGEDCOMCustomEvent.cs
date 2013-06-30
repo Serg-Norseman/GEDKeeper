@@ -1,10 +1,9 @@
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
 
 namespace GedCom551
 {
-	public class TGEDCOMCustomEvent : TGEDCOMTag
+	public abstract class TGEDCOMCustomEvent : TGEDCOMTag
 	{
 		private TGEDCOMEventDetail FDetail;
 
@@ -13,9 +12,9 @@ namespace GedCom551
 			get { return this.FDetail; }
 		}
 
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			base.CreateObj(AOwner, AParent);
+			base.CreateObj(owner, parent);
 			this.FDetail = new TGEDCOMEventDetail(base.Owner, this, "", "");
 			this.FDetail.SetLevel(base.Level);
 		}
@@ -36,7 +35,7 @@ namespace GedCom551
 			base.Assign(Source);
 			if (Source is TGEDCOMCustomEvent)
 			{
-				this.FDetail.Assign(((TGEDCOMCustomEvent)Source).Detail);
+				this.FDetail.Assign((Source as TGEDCOMCustomEvent).Detail);
 			}
 		}
 
@@ -99,7 +98,7 @@ namespace GedCom551
 			return match;
 		}
 
-		public TGEDCOMCustomEvent(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMCustomEvent(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 	}

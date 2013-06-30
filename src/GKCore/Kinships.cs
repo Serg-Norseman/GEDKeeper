@@ -4,7 +4,7 @@ using Ext.Utils;
 
 namespace GKCore
 {
-	public class KinshipsMan
+	public static class KinshipsMan
 	{
 		public enum TRelationKind : byte
 		{
@@ -50,10 +50,6 @@ namespace GKCore
 		}
 
 		public static TKinshipRec[] Kinships;
-
-		public KinshipsMan()
-		{
-		}
 
 		static KinshipsMan()
 		{

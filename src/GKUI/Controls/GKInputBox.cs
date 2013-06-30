@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace GKUI.Controls
 {
-	public partial class InputBox : Form
+	public partial class GKInputBox : Form
 	{
 		private bool NumbersMode;
 
@@ -17,7 +17,7 @@ namespace GKUI.Controls
 			set { this.textBox1.Text = value; }
 		}
 
-		public InputBox(string Caption, string Prompt, string Value, bool NumbersMode)
+		public GKInputBox(string Caption, string Prompt, string Value, bool NumbersMode)
 		{
 			this.InitializeComponent();
 
@@ -64,7 +64,7 @@ namespace GKUI.Controls
 
 		public static bool QueryDouble(string Caption, string Prompt, ref double Value)
 		{
-			InputBox inputBox = new InputBox(Caption, Prompt, Value.ToString(), true);
+			GKInputBox inputBox = new GKInputBox(Caption, Prompt, Value.ToString(), true);
 			if (inputBox.ShowDialog() == DialogResult.OK)
 			{
 				return double.TryParse(inputBox.Value, out Value);
@@ -75,7 +75,7 @@ namespace GKUI.Controls
 
 		public static bool QueryInt(string Caption, string Prompt, ref int Value)
 		{
-			InputBox inputBox = new InputBox(Caption, Prompt, Value.ToString(), true);
+			GKInputBox inputBox = new GKInputBox(Caption, Prompt, Value.ToString(), true);
 			if (inputBox.ShowDialog() == DialogResult.OK)
 			{
 				return int.TryParse(inputBox.Value, out Value);
@@ -86,7 +86,7 @@ namespace GKUI.Controls
 
 		public static bool QueryText(string Caption, string Prompt, ref string Value)
 		{
-			InputBox inputBox = new InputBox(Caption, Prompt, Value, false);
+			GKInputBox inputBox = new GKInputBox(Caption, Prompt, Value, false);
 			if (inputBox.ShowDialog() == DialogResult.OK)
 			{
 				Value = inputBox.Value;

@@ -1,17 +1,16 @@
 using System;
-using System.Runtime.InteropServices;
 
 namespace GedCom551
 {
 	public sealed class TGEDCOMRepositoryCitation : TGEDCOMPointer
 	{
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			base.CreateObj(AOwner, AParent);
+			base.CreateObj(owner, parent);
 			this.FName = "REPO";
 		}
 
-		public TGEDCOMRepositoryCitation(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMRepositoryCitation(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 	}

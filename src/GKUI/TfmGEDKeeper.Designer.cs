@@ -17,7 +17,6 @@ namespace GKUI
 		private System.Windows.Forms.ToolBarButton tbRecordDelete;
 		private System.Windows.Forms.ToolBarButton TBS2;
 		private System.Windows.Forms.ToolBarButton tbFilter;
-		private System.Windows.Forms.ToolBarButton TBS3;
 		private System.Windows.Forms.ToolBarButton tbTreeAncestors;
 		private System.Windows.Forms.ToolBarButton tbTreeDescendants;
 		private System.Windows.Forms.ToolBarButton TBS4;
@@ -37,12 +36,10 @@ namespace GKUI
 		private System.Windows.Forms.MenuItem N1;
 		private System.Windows.Forms.MenuItem miFileProperties;
 		private System.Windows.Forms.MenuItem N2;
-		private System.Windows.Forms.MenuItem miExportToWeb;
 		private System.Windows.Forms.MenuItem miExportToExcelFile;
-		private System.Windows.Forms.MenuItem miExportToPDFFile;
+		private System.Windows.Forms.MenuItem miExportToFamilyBook;
 		private System.Windows.Forms.MenuItem N3;
 		private System.Windows.Forms.MenuItem miTreeTools;
-		private System.Windows.Forms.MenuItem N4;
 		private System.Windows.Forms.MenuItem miExit;
 		private System.Windows.Forms.MenuItem miEdit;
 		private System.Windows.Forms.MenuItem miRecordAdd;
@@ -87,15 +84,11 @@ namespace GKUI
 		private System.Windows.Forms.OpenFileDialog OpenDialog1;
 		private System.Windows.Forms.SaveFileDialog SaveDialog1;
 		private System.Windows.Forms.ToolBarButton TBS7;
-		private System.Windows.Forms.ToolBarButton tbUndo;
-		private System.Windows.Forms.ToolBarButton tbRedo;
 		private System.Windows.Forms.MenuItem miFAQ;
 		private System.Windows.Forms.ImageList ImageList_Shields;
 		private System.Windows.Forms.MenuItem miOrganizer;
 		private System.Windows.Forms.MenuItem miService;
 		private System.Windows.Forms.MenuItem N12;
-		private System.Windows.Forms.MenuItem miUndo;
-		private System.Windows.Forms.MenuItem miRedo;
 		private System.Windows.Forms.MenuItem miScripts;
 		private System.Windows.Forms.MenuItem miExport;
 		private System.Windows.Forms.MenuItem miTreeBoth;
@@ -127,9 +120,6 @@ namespace GKUI
 			this.tbRecordEdit = new System.Windows.Forms.ToolBarButton();
 			this.tbRecordDelete = new System.Windows.Forms.ToolBarButton();
 			this.TBS2 = new System.Windows.Forms.ToolBarButton();
-			this.tbUndo = new System.Windows.Forms.ToolBarButton();
-			this.tbRedo = new System.Windows.Forms.ToolBarButton();
-			this.TBS3 = new System.Windows.Forms.ToolBarButton();
 			this.tbFilter = new System.Windows.Forms.ToolBarButton();
 			this.TBS4 = new System.Windows.Forms.ToolBarButton();
 			this.tbTreeAncestors = new System.Windows.Forms.ToolBarButton();
@@ -156,15 +146,11 @@ namespace GKUI
 			this.miFileProperties = new System.Windows.Forms.MenuItem();
 			this.N2 = new System.Windows.Forms.MenuItem();
 			this.miExport = new System.Windows.Forms.MenuItem();
-			this.miExportToWeb = new System.Windows.Forms.MenuItem();
 			this.miExportToExcelFile = new System.Windows.Forms.MenuItem();
-			this.miExportToPDFFile = new System.Windows.Forms.MenuItem();
+			this.miExportToFamilyBook = new System.Windows.Forms.MenuItem();
 			this.N3 = new System.Windows.Forms.MenuItem();
 			this.miExit = new System.Windows.Forms.MenuItem();
 			this.miEdit = new System.Windows.Forms.MenuItem();
-			this.miUndo = new System.Windows.Forms.MenuItem();
-			this.miRedo = new System.Windows.Forms.MenuItem();
-			this.N4 = new System.Windows.Forms.MenuItem();
 			this.miRecordAdd = new System.Windows.Forms.MenuItem();
 			this.miRecordEdit = new System.Windows.Forms.MenuItem();
 			this.miRecordDelete = new System.Windows.Forms.MenuItem();
@@ -297,9 +283,6 @@ namespace GKUI
 									this.tbRecordEdit,
 									this.tbRecordDelete,
 									this.TBS2,
-									this.tbUndo,
-									this.tbRedo,
-									this.TBS3,
 									this.tbFilter,
 									this.TBS4,
 									this.tbTreeAncestors,
@@ -370,21 +353,6 @@ namespace GKUI
 			// 
 			this.TBS2.Name = "TBS2";
 			this.TBS2.Style = System.Windows.Forms.ToolBarButtonStyle.Separator;
-			// 
-			// tbUndo
-			// 
-			this.tbUndo.ImageIndex = 31;
-			this.tbUndo.Name = "tbUndo";
-			// 
-			// tbRedo
-			// 
-			this.tbRedo.ImageIndex = 32;
-			this.tbRedo.Name = "tbRedo";
-			// 
-			// TBS3
-			// 
-			this.TBS3.Name = "TBS3";
-			this.TBS3.Style = System.Windows.Forms.ToolBarButtonStyle.Separator;
 			// 
 			// tbFilter
 			// 
@@ -557,28 +525,14 @@ namespace GKUI
 			// 
 			this.miExport.Index = 8;
 			this.miExport.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-									this.miExportToWeb,
-									this.miExportToExcelFile,
-									this.miExportToPDFFile});
+									this.miExportToExcelFile});
 			this.miExport.Text = "Экспорт";
-			// 
-			// miExportToWeb
-			// 
-			this.miExportToWeb.Index = 0;
-			this.miExportToWeb.Text = "Экспорт в Web...";
-			this.miExportToWeb.Click += new System.EventHandler(this.miExportToWebClick);
 			// 
 			// miExportToExcelFile
 			// 
-			this.miExportToExcelFile.Index = 1;
+			this.miExportToExcelFile.Index = 0;
 			this.miExportToExcelFile.Text = "Экспорт в Excel-файл...";
 			this.miExportToExcelFile.Click += new System.EventHandler(this.miExportToExcelFileClick);
-			// 
-			// miExportToPDFFile
-			// 
-			this.miExportToPDFFile.Index = 2;
-			this.miExportToPDFFile.Text = "miExportToPDFFile";
-			this.miExportToPDFFile.Click += new System.EventHandler(this.miExportToPDFFileClick);
 			// 
 			// N3
 			// 
@@ -596,9 +550,6 @@ namespace GKUI
 			// 
 			this.miEdit.Index = 1;
 			this.miEdit.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-									this.miUndo,
-									this.miRedo,
-									this.N4,
 									this.miRecordAdd,
 									this.miRecordEdit,
 									this.miRecordDelete,
@@ -606,53 +557,34 @@ namespace GKUI
 									this.miStreamInput});
 			this.miEdit.Text = "Правка";
 			// 
-			// miUndo
-			// 
-			this.miUndo.Index = 0;
-			this.miUndo.Shortcut = System.Windows.Forms.Shortcut.CtrlZ;
-			this.miUndo.Text = "Отменить";
-			this.miUndo.Click += new System.EventHandler(this.miUndoClick);
-			// 
-			// miRedo
-			// 
-			this.miRedo.Index = 1;
-			this.miRedo.Shortcut = System.Windows.Forms.Shortcut.CtrlY;
-			this.miRedo.Text = "Вернуть";
-			this.miRedo.Click += new System.EventHandler(this.miRedoClick);
-			// 
-			// N4
-			// 
-			this.N4.Index = 2;
-			this.N4.Text = "-";
-			// 
 			// miRecordAdd
 			// 
-			this.miRecordAdd.Index = 3;
+			this.miRecordAdd.Index = 0;
 			this.miRecordAdd.Shortcut = System.Windows.Forms.Shortcut.CtrlI;
 			this.miRecordAdd.Text = "Добавить запись";
 			this.miRecordAdd.Click += new System.EventHandler(this.miRecordAddClick);
 			// 
 			// miRecordEdit
 			// 
-			this.miRecordEdit.Index = 4;
+			this.miRecordEdit.Index = 1;
 			this.miRecordEdit.Text = "Изменить запись";
 			this.miRecordEdit.Click += new System.EventHandler(this.miRecordEditClick);
 			// 
 			// miRecordDelete
 			// 
-			this.miRecordDelete.Index = 5;
+			this.miRecordDelete.Index = 2;
 			this.miRecordDelete.Shortcut = System.Windows.Forms.Shortcut.CtrlL;
 			this.miRecordDelete.Text = "Удалить запись";
 			this.miRecordDelete.Click += new System.EventHandler(this.miRecordDeleteClick);
 			// 
 			// N5
 			// 
-			this.N5.Index = 6;
+			this.N5.Index = 3;
 			this.N5.Text = "-";
 			// 
 			// miStreamInput
 			// 
-			this.miStreamInput.Index = 7;
+			this.miStreamInput.Index = 4;
 			this.miStreamInput.Text = "Поточный ввод...";
 			this.miStreamInput.Click += new System.EventHandler(this.miStreamInputClick);
 			// 
@@ -666,6 +598,7 @@ namespace GKUI
 									this.N6,
 									this.miPedigree_dAboville,
 									this.miPedigree_Konovalov,
+			                        this.miExportToFamilyBook,
 									this.N7,
 									this.miMap,
 									this.N8,
@@ -711,26 +644,32 @@ namespace GKUI
 			this.miPedigree_Konovalov.Text = "Роспись по Коновалову";
 			this.miPedigree_Konovalov.Click += new System.EventHandler(this.miPedigree_KonovalovClick);
 			// 
+			// miExportToFamilyBook
+			// 
+			this.miExportToFamilyBook.Index = 6;
+			this.miExportToFamilyBook.Text = "miExportToFamilyBook";
+			this.miExportToFamilyBook.Click += new System.EventHandler(this.miExportToFamilyBookClick);
+			// 
 			// N7
 			// 
-			this.N7.Index = 6;
+			this.N7.Index = 7;
 			this.N7.Text = "-";
 			// 
 			// miMap
 			// 
-			this.miMap.Index = 7;
+			this.miMap.Index = 8;
 			this.miMap.Shortcut = System.Windows.Forms.Shortcut.CtrlM;
 			this.miMap.Text = "Карты...";
 			this.miMap.Click += new System.EventHandler(this.miMapClick);
 			// 
 			// N8
 			// 
-			this.N8.Index = 8;
+			this.N8.Index = 9;
 			this.N8.Text = "-";
 			// 
 			// miStats
 			// 
-			this.miStats.Index = 9;
+			this.miStats.Index = 10;
 			this.miStats.Shortcut = System.Windows.Forms.Shortcut.CtrlT;
 			this.miStats.Text = "Статистика...";
 			this.miStats.Click += new System.EventHandler(this.miStatsClick);

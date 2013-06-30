@@ -51,40 +51,37 @@ namespace Ext.Utils
 			get { return this.FList.Count; }
 		}
 
-		public object this[int Index]
-		{
-			get { return this.Get(Index); }
-			set { this.Put(Index, value); }
-		}
-
 		public bool OwnsObjects
 		{
 			get { return this.FOwnsObjects; }
 			set { this.FOwnsObjects = value; }
 		}
 
-		protected object Get(int Index)
+		public object this[int Index]
 		{
-			return this.FList[Index];
-		}
-
-		protected void Put(int Index, object Item)
-		{
-			if (Index < 0 || Index >= this.Count)
-			{
-				TList.Error("List index out of bounds (%d)", Index); // FIXME: таких включений много; исправить!
+			get {
+				return this.FList[Index];
 			}
-			if (!object.Equals(Item, this.FList[Index]))
-			{
-				object Temp = this.FList[Index];
-				this.FList[Index] = Item;
-				if (Temp != null)
+			set {
+				if (Index < 0 || Index >= this.Count)
 				{
-					this.Notify(Temp, TListNotification.lnDeleted);
+					TList.Error("List index out of bounds (%d)", Index); // FIXME: таких включений много; исправить!
 				}
-				if (Item != null)
+
+				if (!object.Equals(value, this.FList[Index]))
 				{
-					this.Notify(Item, TListNotification.lnAdded);
+					object Temp = this.FList[Index];
+					this.FList[Index] = value;
+
+					if (Temp != null)
+					{
+						this.Notify(Temp, TListNotification.lnDeleted);
+					}
+
+					if (value != null)
+					{
+						this.Notify(value, TListNotification.lnAdded);
+					}
 				}
 			}
 		}

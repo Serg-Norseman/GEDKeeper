@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Text;
 
 using Ext.Utils;
@@ -101,7 +100,7 @@ namespace GKCore
 			}
 		}
 
-		public void LoadFromFile([In] string aFileName)
+		public void LoadFromFile(string aFileName)
 		{
 			if (File.Exists(aFileName))
 			{
@@ -129,7 +128,7 @@ namespace GKCore
 			}
 		}
 
-		public void SaveToFile([In] string aFileName)
+		public void SaveToFile(string aFileName)
 		{
 			StreamWriter strd = new StreamWriter(aFileName, false, Encoding.GetEncoding(1251));
 			try

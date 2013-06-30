@@ -18,6 +18,23 @@ namespace GKUI.Lists
 		cctChangeDate
 	}
 
+	public sealed class TCommunicationListColumns : TListColumns
+	{
+		protected override void InitColumnStatics()
+		{
+			this.AddStatic(LangMan.LSList[183], TDataType.dtString, 300, true);
+			this.AddStatic(LangMan.LSList[184], TDataType.dtString, 200, true);
+			this.AddStatic(LangMan.LSList[113], TDataType.dtString, 90, true);
+			this.AddStatic(LangMan.LSList[139], TDataType.dtString, 90, true);
+			this.AddStatic(LangMan.LSList[317], TDataType.dtDateTime, 150, true);
+		}
+
+		public TCommunicationListColumns() : base()
+		{
+			InitData(typeof(TCommunicationColumnType));
+		}
+	}
+
 	public sealed class TCommunicationListMan : TListManager
 	{
 		private TGEDCOMCommunicationRecord FRec;
@@ -36,7 +53,7 @@ namespace GKUI.Lists
 			this.FRec = (aRec as TGEDCOMCommunicationRecord);
 		}
 
-		public override object GetColumnValueDirect(int col_type, int col_subtype)
+		protected override object GetColumnValueEx(int col_type, int col_subtype)
 		{
 			switch (col_type) {
 				case 0:
@@ -54,16 +71,6 @@ namespace GKUI.Lists
 			}
 		}
 
-		protected override void InitColumnStatics()
-		{
-			this.ColumnStatics.Clear();
-			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[183], TDataType.dtString, 300));
-			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[184], TDataType.dtString, 200));
-			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[113], TDataType.dtString, 90));
-			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[139], TDataType.dtString, 90));
-			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[317], TDataType.dtDateTime, 150));
-		}
-
 		public override Type GetColumnsEnum()
 		{
 			return typeof(TCommunicationColumnType);
@@ -71,7 +78,7 @@ namespace GKUI.Lists
 
 		public override TListColumns GetDefaultListColumns()
 		{
-			return null;
+			return new TCommunicationListColumns();
 		}
 
 		public TCommunicationListMan(TGEDCOMTree aTree) : base(aTree)

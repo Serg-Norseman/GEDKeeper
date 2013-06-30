@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Ext.Utils;
@@ -29,7 +28,7 @@ namespace GKUI
 			set { this.FTargetMode = value; }
 		}
 
-		private void SetTarget([In] TGEDCOMIndividualRecord Value)
+		private void SetTarget(TGEDCOMIndividualRecord Value)
 		{
 			try
 			{

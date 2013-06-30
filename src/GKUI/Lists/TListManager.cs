@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 using Ext.Utils;
 using GedCom551;
@@ -36,36 +35,6 @@ namespace GKUI.Lists
 		public object value;
 	}
 
-	public struct TColumnStatic
-	{
-		//public byte colType;
-		public string colName;
-		public TDataType dataType;
-		public NumberFormatInfo nfi;
-		public string format;
-		public int width;
-
-		public TColumnStatic(/*Enum colType*/ string colName, TDataType dataType, int width)
-		{
-			//this.colType = ((IConvertible)colType).ToByte(null);
-			this.colName = colName;
-			this.dataType = dataType;
-			this.width = width;
-			this.nfi = null;
-			this.format = null;
-		}
-
-		public TColumnStatic(/*Enum colType*/ string colName, TDataType dataType, int width, string format, NumberFormatInfo nfi)
-		{
-			//this.colType = ((IConvertible)colType).ToByte(null);
-			this.colName = colName;
-			this.dataType = dataType;
-			this.width = width;
-			this.nfi = nfi;
-			this.format = format;
-		}
-	}
-
 	public class TListFilter
 	{
 		public List<TFilterCondition> ColumnsFilter = new List<TFilterCondition>();
@@ -82,11 +51,18 @@ namespace GKUI.Lists
 
 	public abstract class TListManager : IDisposable
 	{
+		protected struct TColMapRec
+		{
+			public byte col_type;
+			public byte col_subtype;
+		}
+
 		protected TListFilter FFilter;
 		protected TGEDCOMTree FTree;
 		protected bool Disposed_;
 
-		protected List<TColumnStatic> ColumnStatics = new List<TColumnStatic>();
+		private TListColumns FListColumns;
+		private List<TColMapRec> FColumnsMap;
 
 		public string QuickFilter = "*";
 
@@ -98,11 +74,20 @@ namespace GKUI.Lists
 			}
 		}
 
+		public TListColumns ListColumns
+		{
+			get
+			{
+				return this.FListColumns;
+			}
+		}
+
 		public TListManager(TGEDCOMTree aTree)
 		{
 			this.FTree = aTree;
+			this.FListColumns = GetDefaultListColumns();
+			this.FColumnsMap = new List<TColMapRec>();
 
-			InitColumnStatics();
 			CreateFilter();
 		}
 
@@ -114,9 +99,19 @@ namespace GKUI.Lists
 			}
 		}
 
-		protected virtual void InitColumnStatics()
+		protected void AddListColumn(GKListView aList, string caption, int width, bool autoSize, byte colType, byte colSubType)
 		{
-			// dummy
+			aList.AddListColumn(caption, width, autoSize);
+
+			TColMapRec cr = new TColMapRec();
+			cr.col_type = colType;
+			cr.col_subtype = colSubType;
+			FColumnsMap.Add(cr);
+		}
+
+		protected void ColumnsMap_Clear()
+		{
+			FColumnsMap.Clear();
 		}
 
 		protected virtual void CreateFilter()
@@ -124,7 +119,7 @@ namespace GKUI.Lists
 			this.FFilter = new TListFilter();
 		}
 
-		public bool IsMatchesMask(string S, string Mask)
+		protected bool IsMatchesMask(string S, string Mask)
 		{
 			bool result = false;
 			if (S != null && Mask != null && S != "" && Mask != "")
@@ -160,25 +155,14 @@ namespace GKUI.Lists
 		public abstract bool CheckFilter(TGenEngine.TShieldState aShieldState);
 		public abstract void Fetch(TGEDCOMRecord aRec);
 
-		protected string GetColumnValue(int col_index, bool isMain)
-		{
-			// aColIndex - from 1
-			TColumnStatic cs = this.ColumnStatics[col_index - 1];
-
-			object val = GetColumnValueEx(col_index);
-
-			string res = ConvColValue(val, cs);
-
-			return res;
-		}
-
-		public virtual object GetColumnValueEx(int col_index)
+		public object GetColumnValue(int col_index)
 		{
 			// col_index - from 1
-			return GetColumnValueDirect(col_index - 1, 0);
+			TColMapRec colrec = this.FColumnsMap[col_index];
+			return GetColumnValueEx(colrec.col_type, colrec.col_subtype);
 		}
 
-		public virtual object GetColumnValueDirect(int col_type, int col_subtype)
+		protected virtual object GetColumnValueEx(int col_type, int col_subtype)
 		{
 			return null;
 		}
@@ -189,22 +173,31 @@ namespace GKUI.Lists
 
 		public virtual void UpdateItem(GKListItem item, bool isMain)
 		{
-            if (item == null) return;
+			if (item == null) return;
 
-			for (int i = 1; i <= this.ColumnStatics.Count; i++) {
-				item.SubItems.Add(this.GetColumnValue(i, isMain));
+			for (int i = 1; i < FColumnsMap.Count; i++)
+			{
+				TColMapRec colrec = this.FColumnsMap[i];
+
+				// aColIndex - from 1
+				TColumnStatic cs = this.FListColumns.ColumnStatics[colrec.col_type];
+				object val = GetColumnValueEx(colrec.col_type, colrec.col_subtype);
+				string res = ConvColValue(val, cs);
+
+				item.SubItems.Add(res);
 			}
 		}
 
-		public virtual void UpdateColumns(GKListView listView, bool isMain)
+		protected virtual void UpdateColumns(GKListView listView, bool isMain)
 		{
             if (listView == null) return;
 
-			listView.AddListColumn("№", 50, false);
+			this.ColumnsMap_Clear();
+			this.AddListColumn(listView, "№", 50, false, 0, 0);
 
-			for (int i = 0; i < this.ColumnStatics.Count; i++) {
-				TColumnStatic cs = this.ColumnStatics[i];
-				listView.AddListColumn(cs.colName, cs.width, false);
+			for (int i = 0; i < this.FListColumns.ColumnStatics.Count; i++) {
+				TColumnStatic cs = this.FListColumns.ColumnStatics[i];
+				this.AddListColumn(listView, cs.colName, cs.width, false, (byte)i, 0);
 			}
 		}
 
@@ -212,9 +205,9 @@ namespace GKUI.Lists
 
 		public string GetColumnName(Enum colType)
 		{
-			int col = ((IConvertible)colType).ToByte(null);
-			if (col >= 0 && col < ColumnStatics.Count) {
-				return ColumnStatics[col].colName;
+			int col = (colType as IConvertible).ToByte(null);
+			if (col >= 0 && col < FListColumns.ColumnStatics.Count) {
+				return FListColumns.ColumnStatics[col].colName;
 			} else {
 				return "<?>";
 			}
@@ -223,8 +216,8 @@ namespace GKUI.Lists
 		public TDataType GetColumnDataType(int index)
 		{
 			int col = index - 1;
-			if (col >= 0 && col < ColumnStatics.Count) {
-				return ColumnStatics[col].dataType;
+			if (col >= 0 && col < FListColumns.ColumnStatics.Count) {
+				return FListColumns.ColumnStatics[col].dataType;
 			} else {
 				return TDataType.dtString;
 			}
@@ -232,9 +225,12 @@ namespace GKUI.Lists
 
 		public abstract TListColumns GetDefaultListColumns();
 
+		/// <summary>
+		/// Используется в блоке настройки общей фильтрации, TfmComFilter
+		/// </summary>
 		public abstract Type GetColumnsEnum();
 
-		protected static string ConvColValue(object val, TColumnStatic cs)
+		private static string ConvColValue(object val, TColumnStatic cs)
 		{
 			switch (cs.dataType) {
 				case TDataType.dtString:
@@ -257,7 +253,7 @@ namespace GKUI.Lists
 			return val.ToString();
 		}
 
-		protected static object ConvColStr(string val, TDataType type)
+		private static object ConvColStr(string val, TDataType type)
 		{
 			switch (type) {
 				case TDataType.dtString:
@@ -275,25 +271,25 @@ namespace GKUI.Lists
 
 		public void AddCondition(Enum column, TConditionKind condition, string value)
 		{
-			int col = ((IConvertible)column).ToByte(null);
+			int col = (column as IConvertible).ToByte(null);
 
-			TFilterCondition flt_col = new TFilterCondition();
-			flt_col.column = column;
-			flt_col.col_index = col;
-			flt_col.condition = condition;
-			flt_col.value = ConvColStr(value, this.GetColumnDataType(col));
-			this.Filter.ColumnsFilter.Add(flt_col);
+			TFilterCondition fltCond = new TFilterCondition();
+			fltCond.column = column;
+			fltCond.col_index = col;
+			fltCond.condition = condition;
+			fltCond.value = ConvColStr(value, this.GetColumnDataType(col));
+			this.Filter.ColumnsFilter.Add(fltCond);
 		}
 
 		private bool CheckCondition(TFilterCondition fcond)
 		{
 			bool res = true;
 
-			object dataval = this.GetColumnValueDirect(fcond.col_index, -1);
+			object dataval = this.GetColumnValueEx(fcond.col_index, -1);
 
 			int comp_res = 0;
 			if (fcond.condition != TConditionKind.ck_Contains) {
-				comp_res = ((IComparable)dataval).CompareTo(fcond.value);
+				comp_res = (dataval as IComparable).CompareTo(fcond.value);
 			}
 
 			switch (fcond.condition) {

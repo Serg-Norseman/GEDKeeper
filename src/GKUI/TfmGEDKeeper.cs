@@ -169,12 +169,12 @@ namespace GKUI
 			base.Close();
 		}
 
-		private void miExportToWebClick(object sender, EventArgs e)
+		private void miExportToFamilyBookClick(object sender, EventArgs e)
 		{
 			TfmBase cur_base = this.GetCurrentFile();
 			if (cur_base != null)
 			{
-				cur_base.ExportToWeb();
+				cur_base.ExportToFamilyBook();
 			}
 		}
 
@@ -184,15 +184,6 @@ namespace GKUI
 			if (cur_base != null)
 			{
 				cur_base.ExportToExcel(false);
-			}
-		}
-
-		private void miExportToPDFFileClick(object sender, EventArgs e)
-		{
-			TfmBase cur_base = this.GetCurrentFile();
-			if (cur_base != null)
-			{
-				cur_base.ExportToPDF();
 			}
 		}
 
@@ -475,24 +466,6 @@ namespace GKUI
 			}
 		}
 
-		private void miUndoClick(object sender, EventArgs e)
-		{
-			TfmBase cur_base = this.GetCurrentFile();
-			if (cur_base != null)
-			{
-				cur_base.DoUndo();
-			}
-		}
-
-		private void miRedoClick(object sender, EventArgs e)
-		{
-			TfmBase cur_base = this.GetCurrentFile();
-			if (cur_base != null)
-			{
-				cur_base.DoRedo();
-			}
-		}
-
 		private void miTreeAncestorsClick(object sender, EventArgs e)
 		{
 			TfmBase cur_base = this.GetCurrentFile();
@@ -567,7 +540,7 @@ namespace GKUI
 
 		private void FormShow(object sender, EventArgs e)
 		{
-			int num = this.FOptions.LastBasesCount - 1;
+			int num = this.FOptions.GetLastBasesCount() - 1;
 			for (int i = 0; i <= num; i++)
 			{
 				string lb = this.FOptions.GetLastBase(i);
@@ -592,10 +565,6 @@ namespace GKUI
 				this.miRecordEditClick(null, null);
 			} else if (e.Button == this.tbRecordDelete) {
 				this.miRecordDeleteClick(null, null);
-			} else if (e.Button == this.tbUndo) {
-				this.miUndoClick(null, null);
-			} else if (e.Button == this.tbRedo) {
-				this.miRedoClick(null, null);
 			} else if (e.Button == this.tbFilter) {
 				this.miFilterClick(null, null);
 			} else if (e.Button == this.tbTreeAncestors) {
@@ -761,11 +730,11 @@ namespace GKUI
 			}
 		}
 
-		public void UpdateControls(bool ForceDeactivate)
+		public void UpdateControls(bool forceDeactivate)
 		{
 			try
 			{
-				TfmBase cur_base = ((ForceDeactivate) ? null : this.GetCurrentFile());
+				TfmBase cur_base = ((forceDeactivate) ? null : this.GetCurrentFile());
 				TfmChart cur_chart = ((this.ActiveMdiChild is TfmChart) ? (this.ActiveMdiChild as TfmChart) : null);
 
 				TGEDCOMRecordType rt;
@@ -786,9 +755,8 @@ namespace GKUI
 
 				this.miFileClose.Enabled = base_en;
 				this.miFileProperties.Enabled = base_en;
-				this.miExportToWeb.Enabled = base_en;
+				this.miExportToFamilyBook.Enabled = base_en;
 				this.miExportToExcelFile.Enabled = base_en;
-				this.miExportToPDFFile.Enabled = base_en;
 				this.miTreeTools.Enabled = base_en;
 				this.miStreamInput.Enabled = base_en;
 				this.miRecordAdd.Enabled = base_en;
@@ -818,11 +786,6 @@ namespace GKUI
 				this.miScripts.Enabled = base_en;
 				this.tbPrev.Enabled = (cur_base != null && cur_base.Navman.CanBackward());
 				this.tbNext.Enabled = (cur_base != null && cur_base.Navman.CanForward());
-				bool test_funcs = TGenEngine.IsDevComp();
-				this.miUndo.Enabled = (test_funcs && cur_base != null && cur_base.Undoman.CanUndo());
-				this.tbUndo.Enabled = this.miUndo.Enabled;
-				this.miRedo.Enabled = (test_funcs && cur_base != null && cur_base.Undoman.CanRedo());
-				this.tbRedo.Enabled = this.miRedo.Enabled;
 
 				if (cur_base != null) {
 					this.StatusBar.Panels[0].Text = cur_base.GetStatusString();
@@ -859,11 +822,9 @@ namespace GKUI
 			this.miFileClose.Text = LangMan.LSList[10];
 			this.miFileProperties.Text = LangMan.LSList[11];
 			this.miExport.Text = LangMan.LSList[12];
-			this.miExportToWeb.Text = LangMan.LSList[13];
+			this.miExportToFamilyBook.Text = LangMan.LSList[13];
 			this.miExportToExcelFile.Text = LangMan.LSList[15];
 			this.miExit.Text = LangMan.LSList[16];
-			this.miUndo.Text = LangMan.LSList[17];
-			this.miRedo.Text = LangMan.LSList[18];
 			this.miRecordAdd.Text = LangMan.LSList[19];
 			this.miRecordEdit.Text = LangMan.LSList[20];
 			this.miRecordDelete.Text = LangMan.LSList[21];
@@ -894,7 +855,6 @@ namespace GKUI
 			this.miFAQ.Text = LangMan.LSList[47];
 			this.miContext.Text = LangMan.LSList[48];
 			this.miAbout.Text = LangMan.LSList[49] + "...";
-			this.miExportToPDFFile.Text = LangMan.LS(LSID.LSID_ExportToPDFFile);
 			this.miLogSend.Text = LangMan.LS(LSID.LSID_LogSend);
 			this.miSearch.Text = LangMan.LS(LSID.LSID_FullTextSearch);
 		}
@@ -905,7 +865,7 @@ namespace GKUI
 			{
 				bool loaded = false;
 
-				int num = this.FOptions.LangsCount - 1;
+				int num = this.FOptions.GetLangsCount() - 1;
 				for (int i = 0; i <= num; i++)
 				{
 					if ((int)this.FOptions.GetLang(i).Code == LangCode)

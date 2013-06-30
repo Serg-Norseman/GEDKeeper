@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Ext.Utils;
@@ -23,7 +22,7 @@ namespace GKUI
 		public TGEDCOMIndividualRecord FTarget;
 		public TGEDCOMSex FNeedSex;
 		public TGEDCOMRecord ResultRecord;
-		public TRecordsView ListRecords;
+		public GKRecordsView ListRecords;
 
 		public TfmBase Base
 		{
@@ -48,7 +47,7 @@ namespace GKUI
 			set { this.SetTargetMode(value); }
 		}
 
-		private void SetMode([In] TGEDCOMRecordType Value)
+		private void SetMode(TGEDCOMRecordType Value)
 		{
 			this.FMode = Value;
 			this.DataRefresh();
@@ -75,7 +74,7 @@ namespace GKUI
 			this.ListRecords.UpdateContents(this.Base.ShieldState, true, 1);
 		}
 
-		private void SetFilter([In] string Value)
+		private void SetFilter(string Value)
 		{
 			this.FFilter = Value;
 			if (this.FFilter == "") {
@@ -86,7 +85,7 @@ namespace GKUI
 			this.DataRefresh();
 		}
 
-		private void SetTargetMode([In] TGenEngine.TTargetMode Value)
+		private void SetTargetMode(TGenEngine.TTargetMode Value)
 		{
 			this.FTargetMode = Value;
 		}

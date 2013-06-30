@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
 
 namespace GedCom551
 {
@@ -13,7 +12,7 @@ namespace GedCom551
 			set	{ this.SetDatePhrase(value); }
 		}
 
-		private void SetDatePhrase([In] string Value)
+		private void SetDatePhrase(string Value)
 		{
 			this.FDatePhrase = Value;
 
@@ -32,9 +31,9 @@ namespace GedCom551
 			}
 		}
 
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			base.CreateObj(AOwner, AParent);
+			base.CreateObj(owner, parent);
 			this.FDatePhrase = "";
 		}
 
@@ -43,7 +42,7 @@ namespace GedCom551
 			return ("INT " + base.GetStringValue() + " " + "(" + this.FDatePhrase + ")");
 		}
 
-		private string ExtractPhrase([In] string S)
+		private string ExtractPhrase(string S)
 		{
 			string result = S;
 			if (result.Length >= 2 && result[0] == '(')
@@ -83,7 +82,7 @@ namespace GedCom551
 			return result;
 		}
 
-		public override string ParseString([In] string S)
+		public override string ParseString(string S)
 		{
 			string Result = S;
 			if (!string.IsNullOrEmpty(Result))
@@ -101,7 +100,7 @@ namespace GedCom551
 			return Result;
 		}
 
-		public TGEDCOMDateInterpreted(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMDateInterpreted(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 	}

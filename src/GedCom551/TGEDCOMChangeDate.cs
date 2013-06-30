@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
 
 namespace GedCom551
 {
@@ -7,18 +6,30 @@ namespace GedCom551
 	{
 		public TGEDCOMDateExact ChangeDate
 		{
-			get { return this.GetDate(); }
+			get {
+				return base.TagClass("DATE", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact;
+			}
 		}
 
 		public TGEDCOMTime ChangeTime
 		{
-			get { return this.GetTime(); }
+			get {
+				TGEDCOMTag DateTag = this.ChangeDate;
+				return DateTag.TagClass("TIME", typeof(TGEDCOMTime), TGEDCOMTime.Create) as TGEDCOMTime;
+			}
 		}
 
 		public DateTime ChangeDateTime
 		{
-			get { return this.GetChangeDateTime(); }
-			set { this.SetChangeDateTime(value); }
+			get {
+				return this.ChangeDate.Date + this.ChangeTime.Value;
+			}
+			set {
+				this.ChangeDate.Date = value.Date;
+				if (value.TimeOfDay != TimeSpan.Zero) {
+					this.ChangeTime.Value = value.TimeOfDay;
+				}
+			}
 		}
 
 		public TGEDCOMNotes Notes
@@ -26,76 +37,46 @@ namespace GedCom551
 			get { return base.TagClass("NOTE", typeof(TGEDCOMNotes), TGEDCOMNotes.Create) as TGEDCOMNotes; }
 		}
 
-		private TGEDCOMDateExact GetDate()
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			return base.TagClass("DATE", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact;
-		}
-
-		private TGEDCOMTime GetTime()
-		{
-			TGEDCOMTag DateTag = base.FindTag("DATE", 0);
-			if (DateTag == null)
-			{
-				DateTag = this.AddTag("DATE", "", null);
-			}
-			return DateTag.TagClass("TIME", typeof(TGEDCOMTime), TGEDCOMTime.Create) as TGEDCOMTime;
-		}
-
-		private DateTime GetChangeDateTime()
-		{
-			return this.GetDate().Date + this.GetTime().Time;
-		}
-
-		private void SetChangeDateTime([In] DateTime Value)
-		{
-			this.GetDate().Date = Value.Date;
-			if (Value.TimeOfDay != TimeSpan.Zero)
-			{
-				this.GetTime().Time = Value.TimeOfDay;
-			}
-		}
-
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
-		{
-			base.CreateObj(AOwner, AParent);
+			base.CreateObj(owner, parent);
 			this.FName = "CHAN";
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
 		{
 			TGEDCOMTag Result;
-			if (ATag == "DATE")
+
+			if (tagName == "DATE")
 			{
-				Result = base.AddTag(ATag, AValue, TGEDCOMDateExact.Create);
+				Result = base.AddTag(tagName, tagValue, TGEDCOMDateExact.Create);
+			}
+			else if (tagName == "NOTE")
+			{
+				Result = base.AddTag(tagName, tagValue, TGEDCOMNotes.Create);
 			}
 			else
 			{
-				if (ATag == "NOTE")
-				{
-					Result = base.AddTag(ATag, AValue, TGEDCOMNotes.Create);
-				}
-				else
-				{
-					Result = base.AddTag(ATag, AValue, ATagConstructor);
-				}
+				Result = base.AddTag(tagName, tagValue, tagConstructor);
 			}
+
 			return Result;
 		}
 
 		public override string ToString()
 		{
-			DateTime cdt = this.GetChangeDateTime();
+			DateTime cdt = this.ChangeDateTime;
 			string result = ((cdt.Ticks == 0) ? "" : cdt.ToString("yyyy.MM.dd HH:mm:ss", null));
 			return result;
 		}
 
-		public TGEDCOMChangeDate(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMChangeDate(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 
-        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue)
 		{
-			return new TGEDCOMChangeDate(AOwner, AParent, AName, AValue);
+			return new TGEDCOMChangeDate(owner, parent, tagName, tagValue);
 		}
 	}
 }

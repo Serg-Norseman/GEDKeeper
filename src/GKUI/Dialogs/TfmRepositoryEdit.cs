@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Ext.Utils;
@@ -17,7 +16,7 @@ namespace GKUI
 	{
 		private TfmBase FBase;
 		private TGEDCOMRepositoryRecord FRepository;
-		private TSheetList FNotesList;
+		private GKSheetList FNotesList;
 
 		public TfmBase Base
 		{
@@ -43,7 +42,7 @@ namespace GKUI
 			}
 		}
 
-		private void SetRepository([In] TGEDCOMRepositoryRecord Value)
+		private void SetRepository(TGEDCOMRepositoryRecord Value)
 		{
 			this.FRepository = Value;
 			this.edName.Text = this.FRepository.RepositoryName;
@@ -75,8 +74,8 @@ namespace GKUI
 			this.InitializeComponent();
 			this.FBase = aBase;
 
-			this.FNotesList = new TSheetList(this.SheetNotes);
-			this.FNotesList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
+			this.FNotesList = new GKSheetList(this.SheetNotes);
+			this.FNotesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
 			this.Base.SetupRecNotesList(this.FNotesList);
 
 			this.Text = LangMan.LSList[134];

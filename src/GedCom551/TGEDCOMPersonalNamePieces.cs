@@ -1,8 +1,5 @@
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
-
-using Ext.Utils;
 
 /// <summary>
 /// Localization: clean
@@ -78,23 +75,15 @@ namespace GedCom551
 		}
 
 
-
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
+		public override void SaveToStream(StreamWriter stream)
 		{
-			base.CreateObj(AOwner, AParent);
-			base.SetLists(EnumSet.Create(new Enum[] { TGEDCOMSubList.stNotes, TGEDCOMSubList.stSource }));
+			this.SaveTagsToStream(stream);
+
+			this._Notes.SaveToStream(stream);
+			this._SourceCitations.SaveToStream(stream);
 		}
 
-		public override void SaveToStream(StreamWriter AStream)
-		{
-			string[] aTagSorting = new string[0];
-			this.SaveTagsToStream(AStream, aTagSorting);
-
-			this._Notes.SaveToStream(AStream);
-			this._SourceCitations.SaveToStream(AStream);
-		}
-
-		public TGEDCOMPersonalNamePieces(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMPersonalNamePieces(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 	}

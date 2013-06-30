@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
 using System.Text;
 
 using Ext.Utils;
@@ -28,12 +27,16 @@ namespace GedCom551
 		public const char GEDCOMYearModifierSeparator = '/';
 		public const string GEDCOMYearBC = "B.C."; // const restored
 		public const char GEDCOMPointerDelimiter = '@';
-		public const byte GEDCOMMaxPhoneNumbers = 3;
-		public const byte GEDCOMMaxEmailAddresses = 3;
-		public const byte GEDCOMMaxFaxNumbers = 3;
-		public const byte GEDCOMMaxWebPages = 3;
-		public const byte GEDCOMMaxLanguages = 3;
 		//const string GEDCOMNewLine = "#13#10";
+
+		// deprecated
+		//public const byte GEDCOMMaxPhoneNumbers = 3;
+		//public const byte GEDCOMMaxEmailAddresses = 3;
+		//public const byte GEDCOMMaxFaxNumbers = 3;
+		//public const byte GEDCOMMaxWebPages = 3;
+		//public const byte GEDCOMMaxLanguages = 3;
+
+		public static readonly string[] BloodGroups = new string[] { "(I) O+", "(I) O-", "(II) A+", "(II) A-", "(III) B+", "(III) B-", "(IV) AB+", "(IV) AB-" };
 
 		private object FExtData;
 
@@ -43,7 +46,7 @@ namespace GedCom551
 			set	{ this.FExtData = value; }
 		}
 
-		protected string ExtractDelimiter([In] string S, int Max)
+		protected string ExtractDelimiter(string S, int Max)
 		{
 			string Result = S;
 
@@ -63,7 +66,7 @@ namespace GedCom551
 			return Result;
 		}
 
-		protected string ExtractDotDelimiter([In] string S, int Max)
+		protected string ExtractDotDelimiter(string S, int Max)
 		{
 			string Result = S;
 
@@ -83,7 +86,7 @@ namespace GedCom551
 			return Result;
 		}
 
-		protected string ExtractString([In] string S, out string AString, [In] string ADefault)
+		protected string ExtractString(string S, out string AString, string ADefault)
 		{
 			string result = S;
 
@@ -106,7 +109,7 @@ namespace GedCom551
 			return result;
 		}
 
-		protected string ExtractXRef([In] string S, out string AXRef, bool NoException, [In] string ADefault)
+		protected string ExtractXRef(string S, out string AXRef, bool NoException, string ADefault)
 		{
 			string result = S;
 
@@ -131,7 +134,7 @@ namespace GedCom551
 			return result;
 		}
 
-		public static string CleanXRef([In] string XRef)
+		public static string CleanXRef(string XRef)
 		{
 			string result = XRef;
 
@@ -148,7 +151,7 @@ namespace GedCom551
 			return result;
 		}
 
-		public static string EncloseXRef([In] string XRef)
+		public static string EncloseXRef(string XRef)
 		{
 			if (!string.IsNullOrEmpty(XRef)) {
 				if (XRef[0] != '@') {
@@ -162,7 +165,7 @@ namespace GedCom551
 			return XRef;
 		}
 
-		public static string ExtractNumber([In] string S, out int N, bool NoException, int ADefault)
+		public static string ExtractNumber(string S, out int N, bool NoException, int ADefault)
 		{
 			string result = S;
 
@@ -193,7 +196,7 @@ namespace GedCom551
 			return C >= '0' && C <= '9';
 		}
 
-		public static bool IsDigits([In] string S)
+		public static bool IsDigits(string S)
 		{
 			bool res = false;
 
@@ -261,7 +264,7 @@ namespace GedCom551
 			return res;
 		}
 
-		protected string GetRestrictionStr([In] TGEDCOMRestriction val)
+		protected string GetRestrictionStr(TGEDCOMRestriction val)
 		{
 			string S;
 			switch (val) {
@@ -307,7 +310,7 @@ namespace GedCom551
 			return Result;
 		}
 
-		protected string GetPedigreeLinkageTypeStr([In] TGEDCOMPedigreeLinkageType val)
+		protected string GetPedigreeLinkageTypeStr(TGEDCOMPedigreeLinkageType val)
 		{
 			string S;
 			switch (val) {
@@ -352,7 +355,7 @@ namespace GedCom551
 			return Result;
 		}
 
-		protected string GetChildLinkageStatusStr([In] TGEDCOMChildLinkageStatus val)
+		protected string GetChildLinkageStatusStr(TGEDCOMChildLinkageStatus val)
 		{
 			string S;
 			switch (val) {
@@ -406,7 +409,7 @@ namespace GedCom551
 			return Result;
 		}
 
-		protected string GetCommunicationTypeStr([In] TCommunicationType Value)
+		protected string GetCommunicationTypeStr(TCommunicationType Value)
 		{
 			string S = "";
 			switch (Value) {
@@ -502,7 +505,7 @@ namespace GedCom551
 			return Result;
 		}
 
-		protected string GetMultimediaFormatStr([In] TGEDCOMMultimediaFormat Value)
+		protected string GetMultimediaFormatStr(TGEDCOMMultimediaFormat Value)
 		{
 			string S;
 			switch (Value) {
@@ -621,7 +624,7 @@ namespace GedCom551
 			return Result;
 		}
 
-		protected string GetMediaTypeStr([In] TGEDCOMMediaType Value)
+		protected string GetMediaTypeStr(TGEDCOMMediaType Value)
 		{
 			string S;
 			switch (Value) {
@@ -701,7 +704,7 @@ namespace GedCom551
 			return Result;
 		}
 
-		protected string GetNameTypeStr([In] TGEDCOMNameType Value)
+		protected string GetNameTypeStr(TGEDCOMNameType Value)
 		{
 			string S = "";
 			switch (Value) {
@@ -757,7 +760,7 @@ namespace GedCom551
 			return Result;
 		}
 
-		protected string GetStatusStr([In] TResearchStatus Value)
+		protected string GetStatusStr(TResearchStatus Value)
 		{
 			string S = "";
 			switch (Value) {
@@ -878,7 +881,7 @@ namespace GedCom551
 			return Result;
 		}
 
-		protected string GetOrdinanceProcessFlagStr([In] TGEDCOMOrdinanceProcessFlag Value)
+		protected string GetOrdinanceProcessFlagStr(TGEDCOMOrdinanceProcessFlag Value)
 		{
 			string S;
 			switch (Value) {
@@ -898,7 +901,7 @@ namespace GedCom551
 			return S;
 		}
 
-		protected string GetPriorityStr([In] TResearchPriority val)
+		protected string GetPriorityStr(TResearchPriority val)
 		{
 			string S = "";
 			switch (val)
@@ -922,7 +925,7 @@ namespace GedCom551
 			return S;
 		}
 
-		protected TResearchPriority GetPriorityVal([In] string S)
+		protected TResearchPriority GetPriorityVal(string S)
 		{
 			TResearchPriority result;
 
@@ -950,7 +953,7 @@ namespace GedCom551
 			return result;
 		}
 
-		protected string GetCharacterSetStr([In] TGEDCOMCharacterSet Value)
+		protected string GetCharacterSetStr(TGEDCOMCharacterSet Value)
 		{
 			string S = "";
 			switch (Value) {
@@ -970,11 +973,11 @@ namespace GedCom551
 			return S;
 		}
 
-		protected TGEDCOMCharacterSet GetCharacterSetVal([In] string S)
+		protected TGEDCOMCharacterSet GetCharacterSetVal(string S)
 		{
 			TGEDCOMCharacterSet Result;
 
-			string SU = S.ToUpper();
+			string SU = S.ToUpperInvariant();
 			switch (SU) {
 				case "ASCII":
 				case "ANSI":
@@ -1019,5 +1022,49 @@ namespace GedCom551
 			return Result;
 		}
 
+		protected TGEDCOMSex GetSexVal(string S)
+		{
+			TGEDCOMSex Result;
+
+			switch (S) {
+				case "M":
+					Result = TGEDCOMSex.svMale;
+					break;
+				case "F":
+					Result = TGEDCOMSex.svFemale;
+					break;
+				case "U":
+					Result = TGEDCOMSex.svUndetermined;
+					break;
+				default:
+					Result = TGEDCOMSex.svNone;
+					break;
+			}
+			
+			return Result;
+		}
+
+		protected string GetSexStr(TGEDCOMSex Value)
+		{
+			string S = "";
+			
+			switch (Value) {
+				case TGEDCOMSex.svMale:
+					S = "M";
+					break;
+				case TGEDCOMSex.svFemale:
+					S = "F";
+					break;
+				case TGEDCOMSex.svUndetermined:
+					S = "U";
+					break;
+				default:
+					S = "";
+					break;
+			}
+			
+			return S;
+		}
+		
 	}
 }

@@ -63,17 +63,6 @@ namespace GKUI.Charts
 			set { this.FBaseSpouse = value; }
 		}
 
-		/*
-		public TPerson Childs
-		{
-			get { return this.GetChild(Index); }
-		}*/
-
-		public int ChildsCount
-		{
-			get { return this.GetChildsCount(); }
-		}
-
 		public TreeChartPerson Father
 		{
 			get { return this.FFather; }
@@ -114,17 +103,6 @@ namespace GKUI.Charts
 			get { return this.FPortraitWidth; }
 		}
 		
-		/*
-		public TPerson Spouses
-		{
-			get { return this.GetSpouse(Index); }
-		}*/
-
-		public int SpousesCount
-		{
-			get { return this.GetSpousesCount(); }
-		}
-
 		public TreeChartPerson GetChild(int Index)
 		{
 			TreeChartPerson Result = ((this.FChilds == null) ? null : this.FChilds[Index]);
@@ -231,8 +209,13 @@ namespace GKUI.Charts
 
 		public Point Pt
 		{
-			get { return this.GetPt(); }
-			set { this.SetPt(value); }
+			get {
+				return new Point(this.FPtX, this.FPtY);
+			}
+			set {
+				this.FPtX = value.X;
+				this.FPtY = value.Y;
+			}
 		}
 
 		public int PtX
@@ -266,8 +249,16 @@ namespace GKUI.Charts
 
 		public bool Selected
 		{
-			get { return this.GetSelected(); }
-			set { this.SetSelected(value); }
+			get {
+				return this.FFlags.InSet(TPersonFlag.pfSelected);
+			}
+			set {
+				if (value) {
+					this.FFlags.Include(TPersonFlag.pfSelected);
+				} else {
+					this.FFlags.Exclude(TPersonFlag.pfSelected);
+				}
+			}
 		}
 
 		public TGEDCOMSex Sex
@@ -319,31 +310,6 @@ namespace GKUI.Charts
 			Rectangle Result = new Rectangle(rt.Left, rt.Top, w, h);
 			Result.Offset((cw - w) / 2, (ch - h) / 2);
 			return Result;
-		}
-
-		private Point GetPt()
-		{
-			return new Point(this.FPtX, this.FPtY);
-		}
-
-		private bool GetSelected()
-		{
-			return this.FFlags.InSet(TPersonFlag.pfSelected);
-		}
-
-		private void SetPt([In] Point Value)
-		{
-			this.FPtX = Value.X;
-			this.FPtY = Value.Y;
-		}
-
-		private void SetSelected([In] bool Value)
-		{
-			if (Value) {
-				this.FFlags.Include(TPersonFlag.pfSelected);
-			} else {
-				this.FFlags.Exclude(TPersonFlag.pfSelected);
-			}
 		}
 
 		public string GetFullName()
@@ -546,8 +512,8 @@ namespace GKUI.Charts
 	{
 		public new TreeChartPerson this[int Index]
 		{
-			get	{ return base.Get(Index) as TreeChartPerson; }
-			set	{ base.Put(Index, value); }
+			get	{ return base[Index] as TreeChartPerson; }
+			set	{ base[Index] = value; }
 		}
 
 		public TPersonList(bool AOwnsObjects) : base(AOwnsObjects)

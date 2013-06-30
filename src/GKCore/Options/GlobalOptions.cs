@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
@@ -35,7 +34,7 @@ namespace GKCore
 			public TRect WinRect;
 			public FormWindowState WinState;
 
-			public void Load([In] IniFile ini, string aSection)
+			public void Load(IniFile ini, string aSection)
 			{
 				this.FileName		= ini.ReadString(aSection, "FileName", "");
 				this.WinRect.Left	= ini.ReadInteger(aSection, "WinL", 10);
@@ -45,7 +44,7 @@ namespace GKCore
 				this.WinState		= (FormWindowState)((uint)ini.ReadInteger(aSection, "WinState", 0));
 			}
 
-			public void Save([In] IniFile ini, string aSection)
+			public void Save(IniFile ini, string aSection)
 			{
 				ini.WriteString(aSection, "FileName", this.FileName);
 				ini.WriteInteger(aSection, "WinL", this.WinRect.Left);
@@ -55,7 +54,7 @@ namespace GKCore
 				ini.WriteInteger(aSection, "WinState", (int)this.WinState);
 			}
 
-			public static void DeleteKeys([In] IniFile ini, string aSection)
+			public static void DeleteKeys(IniFile ini, string aSection)
 			{
 				ini.DeleteKey(aSection, "FileName");
 				ini.DeleteKey(aSection, "WinL");
@@ -148,16 +147,6 @@ namespace GKCore
 			set { this.FInterfaceLang = value; }
 		}
 
-		/*public TGlobalOptions.TLangRecord Langs
-		{
-			get { return this.GetLang(Index); }
-		}*/
-
-		public int LangsCount
-		{
-			get { return this.GetLangsCount(); }
-		}
-
 		public string LastDir
 		{
 			get { return this.FLastDir; }
@@ -241,21 +230,7 @@ namespace GKCore
 			get { return this.FIndividualListColumns; }
 		}
 
-		/*
-		public TGlobalOptions.TBaseWin LastBases
-		{
-			get
-			{
-				return this.GetLastBase(Index);
-			}
-		}*/
-
-		public int LastBasesCount
-		{
-			get { return this.GetLastBasesCount(); }
-		}
-
-		private void LngPrepareProc([In] string FileName)
+		private void LngPrepareProc(string FileName)
 		{
 			StreamReader lng_file = new StreamReader(FileName, Encoding.UTF8);
 			try
@@ -336,7 +311,7 @@ namespace GKCore
 			this.FRelations = new StringList();
 
 			this.FIndividualListColumns = new TIndividualListColumns();
-			this.FIndividualListColumns.SetDefaults();
+			this.FIndividualListColumns.ResetDefaults();
 
 			this.FLanguages = new TList(true);
 			this.FLastBases = new StringList();
@@ -367,7 +342,7 @@ namespace GKCore
 			for (int i = 0; i < lang_files.Length; i++) this.LngPrepareProc(lang_files[i]);
 		}
 
-		public void LoadFromFile([In] string FileName)
+		public void LoadFromFile(string FileName)
 		{
 			IniFile ini = new IniFile(FileName);
 			try
@@ -449,7 +424,7 @@ namespace GKCore
 			}
 		}
 
-		public void SaveToFile([In] string FileName)
+		public void SaveToFile(string FileName)
 		{
 			IniFile ini = new IniFile(FileName);
 			try

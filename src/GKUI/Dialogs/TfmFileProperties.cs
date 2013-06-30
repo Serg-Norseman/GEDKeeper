@@ -22,20 +22,29 @@ namespace GKUI
 
 		private void UpdateControls()
 		{
-			TGEDCOMSubmitterRecord submitter = this.Base.Engine.GetSubmitter();
+			TGEDCOMSubmitterRecord submitter = this.Base.Engine.Tree.aux_GetSubmitter();
 			this.EditName.Text = submitter.Name.FullName;
 			this.MemoAddress.Text = submitter.Address.Address.Text;
-			this.EditTel.Text = submitter.Address.GetPhoneNumber(0);
+
+			if (submitter.Address.PhoneNumbers.Count > 0) {
+				this.EditTel.Text = submitter.Address.PhoneNumbers[0].StringValue;
+			}
 		}
 
 		private void btnAccept_Click(object sender, EventArgs e)
 		{
 			try
 			{
-				TGEDCOMSubmitterRecord submitter = this.Base.Engine.GetSubmitter();
+				TGEDCOMSubmitterRecord submitter = this.Base.Engine.Tree.aux_GetSubmitter();
 				submitter.Name.StringValue = this.EditName.Text;
 				submitter.Address.SetAddressArray(this.MemoAddress.Lines);
-				submitter.Address.SetPhoneNumber(0, this.EditTel.Text);
+
+				if (submitter.Address.PhoneNumbers.Count > 0) {
+					submitter.Address.PhoneNumbers[0].StringValue = this.EditTel.Text;
+				} else {
+					submitter.Address.AddPhoneNumber(this.EditTel.Text);
+				}
+
 				submitter.ChangeDate.ChangeDateTime = DateTime.Now;
 				this.Base.Modified = true;
 				base.DialogResult = DialogResult.OK;

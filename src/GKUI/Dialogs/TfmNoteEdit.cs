@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Ext.Utils;
@@ -28,7 +27,7 @@ namespace GKUI
 			set { this.SetNoteRecord(value); }
 		}
 
-		private void SetNoteRecord([In] TGEDCOMNoteRecord Value)
+		private void SetNoteRecord(TGEDCOMNoteRecord Value)
 		{
 			this.FNoteRecord = Value;
 			this.mmNote.Text = this.FNoteRecord.Note.Text.Trim();

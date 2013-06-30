@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
 
 using Ext.Utils;
 
@@ -10,15 +9,14 @@ using Ext.Utils;
 
 namespace GedCom551
 {
-	public class TGEDCOMRecord : TGEDCOMCustomRecord
+	public abstract class TGEDCOMRecord : TGEDCOMCustomRecord
 	{
-		private EnumSet FLists;
 		protected TGEDCOMRecordType FRecordType;
 
-		private TGEDCOMListEx<TGEDCOMMultimediaLink> _MultimediaLinks;
-		private TGEDCOMListEx<TGEDCOMNotes> _Notes;
-		private TGEDCOMListEx<TGEDCOMSourceCitation> _SourceCitations;
-		private TGEDCOMListEx<TGEDCOMUserReference> _UserReferences;
+		private GEDCOMList<TGEDCOMMultimediaLink> _MultimediaLinks;
+		private GEDCOMList<TGEDCOMNotes> _Notes;
+		private GEDCOMList<TGEDCOMSourceCitation> _SourceCitations;
+		private GEDCOMList<TGEDCOMUserReference> _UserReferences;
 
 		public string AutomatedRecordID
 		{
@@ -31,12 +29,12 @@ namespace GedCom551
 			get { return base.TagClass("CHAN", typeof(TGEDCOMChangeDate), TGEDCOMChangeDate.Create) as TGEDCOMChangeDate; }
 		}
 
-		public TGEDCOMListEx<TGEDCOMMultimediaLink> MultimediaLinks
+		public GEDCOMList<TGEDCOMMultimediaLink> MultimediaLinks
 		{
 			get	{ return this._MultimediaLinks; }
 		}
 
-		public TGEDCOMListEx<TGEDCOMNotes> Notes
+		public GEDCOMList<TGEDCOMNotes> Notes
 		{
 			get { return this._Notes; }
 		}
@@ -46,7 +44,7 @@ namespace GedCom551
 			get { return this.FRecordType; }
 		}
 
-		public TGEDCOMListEx<TGEDCOMSourceCitation> SourceCitations
+		public GEDCOMList<TGEDCOMSourceCitation> SourceCitations
 		{
 			get { return this._SourceCitations; }
 		}
@@ -57,7 +55,7 @@ namespace GedCom551
 			set { base.SetTagStringValue("_UID", value); }
 		}
 
-		public TGEDCOMListEx<TGEDCOMUserReference> UserReferences
+		public GEDCOMList<TGEDCOMUserReference> UserReferences
 		{
 			get { return this._UserReferences; }
 		}
@@ -82,21 +80,15 @@ namespace GedCom551
 			return Result;
 		}
 
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			base.CreateObj(AOwner, AParent);
+			base.CreateObj(owner, parent);
 			this.FRecordType = TGEDCOMRecordType.rtNone;
-			this.FLists = EnumSet.Create();
 
-			this._Notes = new TGEDCOMListEx<TGEDCOMNotes>(this);
-			this._SourceCitations = new TGEDCOMListEx<TGEDCOMSourceCitation>(this);
-			this._MultimediaLinks = new TGEDCOMListEx<TGEDCOMMultimediaLink>(this);
-			this._UserReferences = new TGEDCOMListEx<TGEDCOMUserReference>(this);
-		}
-
-		protected void SetLists(EnumSet ALists)
-		{
-			this.FLists = ALists;
+			this._Notes = new GEDCOMList<TGEDCOMNotes>(this);
+			this._SourceCitations = new GEDCOMList<TGEDCOMSourceCitation>(this);
+			this._MultimediaLinks = new GEDCOMList<TGEDCOMMultimediaLink>(this);
+			this._UserReferences = new GEDCOMList<TGEDCOMUserReference>(this);
 		}
 
 		public override void Dispose()
@@ -219,7 +211,7 @@ namespace GedCom551
 			this._UserReferences.SaveToStream(AStream);
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 
@@ -227,38 +219,27 @@ namespace GedCom551
 			{
 				Result = base.AddTag(ATag, AValue, TGEDCOMChangeDate.Create);
 			}
+			else if (ATag == "NOTE")
+			{
+				Result = this._Notes.Add(new TGEDCOMNotes(base.Owner, this, ATag, AValue));
+			}
+			else if (ATag == "SOUR")
+			{
+				Result = this._SourceCitations.Add(new TGEDCOMSourceCitation(base.Owner, this, ATag, AValue));
+			}
+			else if (ATag == "OBJE")
+			{
+				Result = this._MultimediaLinks.Add(new TGEDCOMMultimediaLink(base.Owner, this, ATag, AValue));
+			}
+			else if (ATag == "REFN")
+			{
+				Result = this._UserReferences.Add(new TGEDCOMUserReference(base.Owner, this, ATag, AValue));
+			}
 			else
 			{
-				if (ATag == "NOTE" && this.FLists.InSet(TGEDCOMSubList.stNotes))
-				{
-					Result = this._Notes.Add(new TGEDCOMNotes(base.Owner, this, ATag, AValue));
-				}
-				else
-				{
-					if (ATag == "SOUR" && this.FLists.InSet(TGEDCOMSubList.stSource))
-					{
-						Result = this._SourceCitations.Add(new TGEDCOMSourceCitation(base.Owner, this, ATag, AValue));
-					}
-					else
-					{
-						if (ATag == "OBJE" && this.FLists.InSet(TGEDCOMSubList.stMultimedia))
-						{
-							Result = this._MultimediaLinks.Add(new TGEDCOMMultimediaLink(base.Owner, this, ATag, AValue));
-						}
-						else
-						{
-							if (ATag == "REFN")
-							{
-								Result = this._UserReferences.Add(new TGEDCOMUserReference(base.Owner, this, ATag, AValue));
-							}
-							else
-							{
-								Result = base.AddTag(ATag, AValue, ATagConstructor);
-							}
-						}
-					}
-				}
+				Result = base.AddTag(ATag, AValue, ATagConstructor);
 			}
+
 			return Result;
 		}
 
@@ -314,8 +295,68 @@ namespace GedCom551
 			return false;
 		}
 
-		public TGEDCOMRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMRecord(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
+
+		public string aux_GetXRefNum()
+		{
+			string xref = this.FXRef;
+
+			int I = 0;
+			int L = xref.Length - 1;
+			while (I <= L && (xref[I] < '0' || xref[I] > '9')) I++;
+			xref = ((I <= L) ? xref.Substring(I) : "");
+			return xref;
+		}
+
+		public int aux_GetId()
+		{
+			int result;
+			try
+			{
+				string xref = this.aux_GetXRefNum();
+				result = SysUtils.ParseInt(xref, 0);
+			}
+			catch (Exception)
+			{
+				result = -1;
+			}
+			return result;
+		}
+
+		public void aux_AddNote(TGEDCOMNoteRecord aNoteRec)
+		{
+			if (aNoteRec != null) {
+				TGEDCOMNotes note = new TGEDCOMNotes(this.Owner, this, "", "");
+				note.Value = aNoteRec;
+				this.Notes.Add(note);
+			}
+		}
+
+		public void aux_AddSource(TGEDCOMSourceRecord aSrcRec, string aPage, int aQuality)
+		{
+			if (aSrcRec != null) {
+				TGEDCOMSourceCitation cit = new TGEDCOMSourceCitation(this.Owner, this, "", "");
+				cit.Value = aSrcRec;
+				cit.Page = aPage;
+				cit.CertaintyAssessment = aQuality;
+				this.SourceCitations.Add(cit);
+			}
+		}
+
+		public TGEDCOMMultimediaLink aux_AddMultimedia(TGEDCOMMultimediaRecord mediaRec)
+		{
+			TGEDCOMMultimediaLink mmLink = null;
+
+			if (mediaRec != null) {
+				mmLink = new TGEDCOMMultimediaLink(this.Owner, this, "", "");
+				mmLink.Value = mediaRec;
+				this.MultimediaLinks.Add(mmLink);
+			}
+
+			return mmLink;
+		}
+
 	}
 }

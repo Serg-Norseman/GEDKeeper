@@ -14,27 +14,27 @@ namespace Ext.Utils
 {
 	public sealed class SysUtils
 	{
-		public static void Free(object Self)
+		public static void Free(object self)
 		{
-			if (Self != null && Self is IDisposable)
+			if (self != null && self is IDisposable)
 			{
-				((IDisposable)Self).Dispose();
+				(self as IDisposable).Dispose();
 			}
 		}
 
-		public static long Trunc([In] double AValue)
+		public static long Trunc(double AValue)
 		{
 			return (long)Math.Truncate(AValue);
 		}
 
-		public static int ParseInt([In] string S, [In] int Default)
+		public static int ParseInt(string S, int Default)
 		{
 			int res;
 			if (!int.TryParse(S, out res)) res = Default;
 			return res;
 		}
 
-		public static double ParseFloat([In] string S, [In] double Default)
+		public static double ParseFloat(string S, double Default)
 		{
 			if (string.IsNullOrEmpty(S)) return Default;
 
@@ -52,7 +52,7 @@ namespace Ext.Utils
 			return Result;
 		}
 
-		public static string TrimLeft([In] string S)
+		public static string TrimLeft(string S)
 		{
 			int L = (S != null) ? S.Length : 0;
 			int I = 1;
@@ -67,7 +67,7 @@ namespace Ext.Utils
 			return Result;
 		}
 
-		public static string TrimRight([In] string S)
+		public static string TrimRight(string S)
 		{
 			int L = (S != null) ? S.Length : 0;
 			int I = L;
@@ -79,12 +79,12 @@ namespace Ext.Utils
 
 		private static string LogFilename;
 
-		public static void LogInit([In] string aFileName)
+		public static void LogInit(string aFileName)
 		{
 			LogFilename = aFileName;
 		}
 
-		public static void LogWrite([In] string aMsg)
+		public static void LogWrite(string aMsg)
 		{
 			using (StreamWriter Log = new StreamWriter(LogFilename, true, Encoding.GetEncoding(1251)))
 			{
@@ -162,9 +162,15 @@ namespace Ext.Utils
             Win32Native.ActivateKeyboardLayout((uint)aLayout, 0u);
         }
 
-        public static void LoadExtFile([In] string aFileName)
+        public static void LoadExtFile(string aFileName)
         {
             Win32Native.ShellExecute(0, "open", aFileName, "", "", 5);
+        }
+
+        public bool IsConnectedToInternet()  
+        {  
+            int iDesc = 0;
+            return Win32Native.InternetGetConnectedState(out iDesc, 0);
         }
 
 		public static int DoScroll(uint handle, uint wParam, int nBar, int aOldPos, int aMin, int aMax, int sm_piece, int big_piece)

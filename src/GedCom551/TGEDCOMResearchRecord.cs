@@ -1,16 +1,13 @@
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
-
-using Ext.Utils;
 
 namespace GedCom551
 {
 	public sealed class TGEDCOMResearchRecord : TGEDCOMRecord
 	{
-		private TGEDCOMListEx<TGEDCOMPointer> _Tasks;
-		private TGEDCOMListEx<TGEDCOMPointer> _Communications;
-		private TGEDCOMListEx<TGEDCOMPointer> _Groups;
+		private GEDCOMList<TGEDCOMPointer> _Tasks;
+		private GEDCOMList<TGEDCOMPointer> _Communications;
+		private GEDCOMList<TGEDCOMPointer> _Groups;
 
 		public string ResearchName
 		{
@@ -46,31 +43,30 @@ namespace GedCom551
 			set { base.SetTagIntegerValue("_PERCENT", value); }
 		}
 
-		public TGEDCOMListEx<TGEDCOMPointer> Tasks
+		public GEDCOMList<TGEDCOMPointer> Tasks
 		{
 			get { return this._Tasks; }
 		}
 
-		public TGEDCOMListEx<TGEDCOMPointer> Communications
+		public GEDCOMList<TGEDCOMPointer> Communications
 		{
 			get { return this._Communications; }
 		}
 
-		public TGEDCOMListEx<TGEDCOMPointer> Groups
+		public GEDCOMList<TGEDCOMPointer> Groups
 		{
 			get { return this._Groups; }
 		}
 
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			base.CreateObj(AOwner, AParent);
-			base.SetLists(EnumSet.Create(new Enum[] { TGEDCOMSubList.stNotes }));
+			base.CreateObj(owner, parent);
 			this.FRecordType = TGEDCOMRecordType.rtResearch;
 			this.FName = "_RESEARCH";
 
-			this._Tasks = new TGEDCOMListEx<TGEDCOMPointer>(this);
-			this._Communications = new TGEDCOMListEx<TGEDCOMPointer>(this);
-			this._Groups = new TGEDCOMListEx<TGEDCOMPointer>(this);
+			this._Tasks = new GEDCOMList<TGEDCOMPointer>(this);
+			this._Communications = new GEDCOMList<TGEDCOMPointer>(this);
+			this._Groups = new GEDCOMList<TGEDCOMPointer>(this);
 		}
 
 		public override void Dispose()
@@ -86,45 +82,35 @@ namespace GedCom551
 			}
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
+
 			if (ATag == "NAME")
 			{
 				Result = base.AddTag(ATag, AValue, null);
 			}
+			else if (ATag == "_STARTDATE" || ATag == "_STOPDATE")
+			{
+				Result = base.AddTag(ATag, AValue, TGEDCOMDateExact.Create);
+			}
+			else if (ATag == "_TASK")
+			{
+				Result = this.Tasks.Add(new TGEDCOMPointer(base.Owner, this, ATag, AValue));
+			}
+			else if (ATag == "_COMM")
+			{
+				Result = this.Communications.Add(new TGEDCOMPointer(base.Owner, this, ATag, AValue));
+			}
+			else if (ATag == "_GROUP")
+			{
+				Result = this.Groups.Add(new TGEDCOMPointer(base.Owner, this, ATag, AValue));
+			}
 			else
 			{
-				if (ATag == "_STARTDATE" || ATag == "_STOPDATE")
-				{
-					Result = base.AddTag(ATag, AValue, TGEDCOMDateExact.Create);
-				}
-				else
-				{
-					if (ATag == "_TASK")
-					{
-						Result = this.Tasks.Add(new TGEDCOMPointer(base.Owner, this, ATag, AValue));
-					}
-					else
-					{
-						if (ATag == "_COMM")
-						{
-							Result = this.Communications.Add(new TGEDCOMPointer(base.Owner, this, ATag, AValue));
-						}
-						else
-						{
-							if (ATag == "_GROUP")
-							{
-								Result = this.Groups.Add(new TGEDCOMPointer(base.Owner, this, ATag, AValue));
-							}
-							else
-							{
-								Result = base.AddTag(ATag, AValue, ATagConstructor);
-							}
-						}
-					}
-				}
+				Result = base.AddTag(ATag, AValue, ATagConstructor);
 			}
+
 			return Result;
 		}
 
@@ -214,13 +200,68 @@ namespace GedCom551
 			return Result;
 		}
 
-		public TGEDCOMResearchRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMResearchRecord(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 
-        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue)
 		{
-			return new TGEDCOMResearchRecord(AOwner, AParent, AName, AValue);
+			return new TGEDCOMResearchRecord(owner, parent, tagName, tagValue);
 		}
+
+		public bool aux_AddTask(TGEDCOMTaskRecord aTask)
+		{
+			bool Result = false;
+			if (aTask != null)
+			{
+				TGEDCOMPointer ptr = new TGEDCOMPointer(this.Owner, this, "", "");
+				ptr.SetNamedValue("_TASK", aTask);
+				this.Tasks.Add(ptr);
+				Result = true;
+			}
+			return Result;
+		}
+
+		public void aux_RemoveTask(TGEDCOMTaskRecord aTask)
+		{
+			this.Tasks.Delete(this.IndexOfTask(aTask));
+		}
+
+		public bool aux_AddGroup(TGEDCOMGroupRecord aGroup)
+		{
+			bool Result = false;
+			if (aGroup != null)
+			{
+				TGEDCOMPointer ptr = new TGEDCOMPointer(this.Owner, this, "", "");
+				ptr.SetNamedValue("_GROUP", aGroup);
+				this.Groups.Add(ptr);
+				Result = true;
+			}
+			return Result;
+		}
+
+		public void aux_RemoveGroup(TGEDCOMGroupRecord aGroup)
+		{
+			this.Groups.Delete(this.IndexOfGroup(aGroup));
+		}
+
+		public bool aux_AddCommunication(TGEDCOMCommunicationRecord aComm)
+		{
+			bool Result = false;
+			if (aComm != null)
+			{
+				TGEDCOMPointer ptr = new TGEDCOMPointer(this.Owner, this, "", "");
+				ptr.SetNamedValue("_COMM", aComm);
+				this.Communications.Add(ptr);
+				Result = true;
+			}
+			return Result;
+		}
+
+		public void aux_RemoveCommunication(TGEDCOMCommunicationRecord aComm)
+		{
+			this.Communications.Delete(this.IndexOfCommunication(aComm));
+		}
+
 	}
 }

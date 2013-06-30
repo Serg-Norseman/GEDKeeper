@@ -3,8 +3,6 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 
-using Ext.Utils;
-
 /// <summary>
 /// Localization: clean
 /// </summary>
@@ -34,14 +32,16 @@ namespace GKCore
 		/* 011 */ LSID_MIFileClose,
 		/* 012 */ LSID_MIFileProperties,
 		/* 013 */ LSID_MIExport,
-		/* 014 */ LSID_MIExportToWeb,
+		/* 014 */ LSID_MIExportToFamilyBook,
 
 		/* 015 */ LSID_Deprecated_00,
 
 		/* 016 */ LSID_MIExportToExcelFile,
 		/* 017 */ LSID_MIExit,
-		/* 018 */ LSID_MIUndo,
-		/* 019 */ LSID_MIRedo,
+
+		/* 018 */ LSID_MIUndo, // deprecated
+		/* 019 */ LSID_MIRedo, // deprecated
+
 		/* 020 */ LSID_MIRecordAdd,
 		/* 021 */ LSID_MIRecordEdit,
 		/* 022 */ LSID_MIRecordDelete,
@@ -509,13 +509,15 @@ namespace GKCore
 		/* 475 */ LSID_PatSearch,
 		/* 476 */ LSID_LinksSearch,
 		/* 477 */ LSID_ArcNotFound,
-		/* 478 */ LSID_GenDB,
-		/* 479 */ LSID_GenIndex,
-		/* 480 */ LSID_SurnamesIndex,
-		/* 481 */ LSID_NamesIndex,
-		/* 482 */ LSID_BirthIndex,
-		/* 483 */ LSID_DeathIndex,
-		/* 484 */ LSID_CommonStats,
+		/* 478 */ LSID_Scale,
+
+		/* 479 */ LSID_GenIndex, // deprecated
+		/* 480 */ LSID_SurnamesIndex, // deprecated
+		/* 481 */ LSID_NamesIndex, // deprecated
+		/* 482 */ LSID_BirthIndex, // deprecated
+		/* 483 */ LSID_DeathIndex, // deprecated
+		/* 484 */ LSID_CommonStats, // deprecated
+
 		/* 485 */ LSID_ExpPedigree,
 		/* 486 */ LSID_InputSimple,
 		/* 487 */ LSID_InputSource,
@@ -604,8 +606,8 @@ namespace GKCore
 
 		/* 567 */ LSID_RM_DirectMatching, // deprecated
 		/* 568 */ LSID_RM_IndistinctMatching,
-
 		/* 569 */ LSID_RM_OnlyNP, // deprecated
+
 		/* 570 */ LSID_RM_BirthYear,
 		/* 571 */ LSID_RM_NameAccuracy,
 		/* 572 */ LSID_RM_YearInaccuracy,
@@ -639,7 +641,9 @@ namespace GKCore
 		/* 600 */ LSID_FillColor,
 		/* 601 */ LSID_FillImage,
 		/* 602 */ LSID_TreeIndividualsCount,
-		/* 603 */ LSID_ExportToPDFFile,
+
+		/* 603 */ LSID_ExportToPDFFile, // deprecated
+
 		/* 604 */ LSID_AncestorsCircle,
 		/* 605 */ LSID_Circle,
 		/* 606 */ LSID_TextColor,
@@ -674,14 +678,16 @@ namespace GKCore
 			/* 011 */ "Закрыть",
 			/* 012 */ "Свойства файла...",
 			/* 013 */ "Экспорт",
-			/* 014 */ "Экспорт в Web...",
+			/* 014 */ "Фамильная книга...",
 
 			/* 015 */ "<->",
 
 			/* 016 */ "Экспорт в Excel-файл...",
 			/* 017 */ "Выход",
-			/* 018 */ "Отменить",
-			/* 019 */ "Вернуть",
+
+			/* 018 */ "Отменить", // deprecated
+			/* 019 */ "Вернуть", // deprecated
+
 			/* 020 */ "Добавить запись",
 			/* 021 */ "Изменить запись",
 			/* 022 */ "Удалить запись",
@@ -1147,13 +1153,15 @@ namespace GKCore
 			/* 475 */ "Поиск патриархов",
 			/* 476 */ "Поиск взаимосвязей",
 			/* 477 */ "Медиа-файл не загружен, т.к. отсутствует в медиа-контейнере (хранилище или архиве)",
-			/* 478 */ "Генеалогическая база данных",
+			/* 478 */ "Масштаб",
+
 			/* 479 */ "Индекс",
 			/* 480 */ "Индекс фамилий",
 			/* 481 */ "Индекс имен",
 			/* 482 */ "Индекс годов рождения",
 			/* 483 */ "Индекс годов смерти",
 			/* 484 */ "Общая статистика",
+
 			/* 485 */ "Родословная роспись",
 			/* 486 */ "Простой ввод",
 			/* 487 */ "Источник (метрики/ревизии)",
@@ -1238,9 +1246,9 @@ namespace GKCore
 			/* 564 */ "Пропустить",
 			/* 565 */ "Записи",
 			/* 566 */ "Поиск персон",
-			/* 567 */ "Прямое сравнение",
+			/* 567 */ "Прямое сравнение", // deprecated
 			/* 568 */ "Нечеткое сравнение имен",
-			/* 569 */ "Только по имени/отчеству (только женщины)",
+			/* 569 */ "Только по имени/отчеству (только женщины)", // deprecated
 			/* 570 */ "Учитывать год рождения",
 			/* 571 */ "Точность имени, %",
 			/* 572 */ "Погрешность лет",
@@ -1274,7 +1282,9 @@ namespace GKCore
 			/* 600 */ "Цвет фона...",
 			/* 601 */ "Изображение фона...",
 			/* 602 */ "Персон в древе: {0}",
-			/* 603 */ "Экспорт в PDF файл...",
+
+			/* 603 */ "Экспорт в PDF файл...", // deprecated
+
 			/* 604 */ "Круг предков",
 			/* 605 */ "Круг",
 			/* 606 */ "Цвет текста",
@@ -1295,7 +1305,7 @@ namespace GKCore
 			return LSList[(int)lsid - 1];
 		}
 
-		public static bool LoadFromFile([In] string aFileName)
+		public static bool LoadFromFile(string aFileName)
 		{
 			bool Result = false;
 			if (File.Exists(aFileName))

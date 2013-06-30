@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
 
 namespace GedCom551
 {
@@ -9,8 +8,21 @@ namespace GedCom551
 
 		public TGEDCOMRecord Value
 		{
-			get	{ return this.GetValue(); }
-			set	{ this.SetValue(value); }
+			get	{
+				return base.FindRecord(this.XRef);
+			}
+			set	{
+				this.FXRef = "";
+				if (value != null)
+				{
+					string xrf = value.XRef;
+					if (string.IsNullOrEmpty(xrf))
+					{
+						xrf = value.NewXRef();
+					}
+					this.XRef = xrf;
+				}
+			}
 		}
 
 		public string XRef
@@ -19,28 +31,9 @@ namespace GedCom551
 			set { this.FXRef = TGEDCOMObject.EncloseXRef(value); }
 		}
 
-		protected TGEDCOMRecord GetValue()
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			return base.FindRecord(this.XRef);
-		}
-
-		protected void SetValue(TGEDCOMRecord AValue)
-		{
-			this.FXRef = "";
-			if (AValue != null)
-			{
-				string xrf = AValue.XRef;
-				if (string.IsNullOrEmpty(xrf))
-				{
-					xrf = AValue.NewXRef();
-				}
-				this.XRef = xrf;
-			}
-		}
-
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
-		{
-			base.CreateObj(AOwner, AParent);
+			base.CreateObj(owner, parent);
 			this.FXRef = "";
 		}
 
@@ -54,7 +47,7 @@ namespace GedCom551
 			return (string.IsNullOrEmpty(this.FXRef));
 		}
 
-		public override string ParseString([In] string AString)
+		public override string ParseString(string AString)
 		{
 			this.FXRef = "";
 			string result = AString;
@@ -79,19 +72,19 @@ namespace GedCom551
 			this.XRef = aMap.FindNewXRef(this.XRef);
 		}
 
-		public void SetNamedValue([In] string aName, TGEDCOMRecord aValue)
+		public void SetNamedValue(string aName, TGEDCOMRecord aValue)
 		{
 			base.Name = aName;
-			this.SetValue(aValue);
+			this.Value = aValue;
 		}
 
-		public TGEDCOMPointer(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMPointer(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 
-        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue)
 		{
-			return new TGEDCOMPointer(AOwner, AParent, AName, AValue);
+			return new TGEDCOMPointer(owner, parent, tagName, tagValue);
 		}
 	}
 }

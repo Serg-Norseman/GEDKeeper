@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Ext.Utils;
@@ -19,7 +18,7 @@ namespace GKUI
 		private TfmBase FBase;
 		private TGEDCOMTaskRecord FTask;
 		private TGEDCOMRecord FTempRec;
-		private TSheetList FNotesList;
+		private GKSheetList FNotesList;
 
 		public TfmBase Base
 		{
@@ -32,7 +31,7 @@ namespace GKUI
 			set { this.SetTask(value); }
 		}
 
-		private void SetTask([In] TGEDCOMTaskRecord Value)
+		private void SetTask(TGEDCOMTaskRecord Value)
 		{
 			this.FTask = Value;
 			try
@@ -185,8 +184,8 @@ namespace GKUI
 				this.cbGoalType.Items.Add(LangMan.LSList[(int)TGenEngine.GoalNames[(int)gt] - 1]);
 			}
 
-			this.FNotesList = new TSheetList(this.SheetNotes);
-			this.FNotesList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
+			this.FNotesList = new GKSheetList(this.SheetNotes);
+			this.FNotesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
 			this.Base.SetupRecNotesList(this.FNotesList);
 
 			this.FTempRec = null;

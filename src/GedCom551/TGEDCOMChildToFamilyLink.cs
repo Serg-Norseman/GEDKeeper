@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
 
 namespace GedCom551
 {
@@ -19,23 +18,23 @@ namespace GedCom551
 
 		public TGEDCOMFamilyRecord Family
 		{
-			get { return base.GetValue() as TGEDCOMFamilyRecord; }
-			set { base.SetValue(value); }
+			get { return (base.Value as TGEDCOMFamilyRecord); }
+			set { base.Value = value; }
 		}
 
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			base.CreateObj(AOwner, AParent);
+			base.CreateObj(owner, parent);
 			this.FName = "FAMC";
 		}
 
-		public TGEDCOMChildToFamilyLink(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMChildToFamilyLink(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 
-        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue)
 		{
-			return new TGEDCOMChildToFamilyLink(AOwner, AParent, AName, AValue);
+			return new TGEDCOMChildToFamilyLink(owner, parent, tagName, tagValue);
 		}
 	}
 }

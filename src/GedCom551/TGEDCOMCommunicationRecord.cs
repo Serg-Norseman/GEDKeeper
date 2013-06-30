@@ -1,6 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
-
 using Ext.Utils;
 
 namespace GedCom551
@@ -26,37 +24,30 @@ namespace GedCom551
 			set { base.SetTagStringValue("TYPE", GetCommunicationTypeStr(value)); }
 		}
 
-		/*public new <TGEDCOMNotes> Notes
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			get { return base.GetNote(Index); }
-		}*/
-
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
-		{
-			base.CreateObj(AOwner, AParent);
-			base.SetLists(EnumSet.Create(new Enum[] { TGEDCOMSubList.stNotes }));
+			base.CreateObj(owner, parent);
 			this.FRecordType = TGEDCOMRecordType.rtCommunication;
 			this.FName = "_COMM";
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
+
 			if (ATag == "NAME")
 			{
 				Result = base.AddTag(ATag, AValue, null);
 			}
+			else if (ATag == "DATE")
+			{
+				Result = base.AddTag(ATag, AValue, TGEDCOMDateExact.Create);
+			}
 			else
 			{
-				if (ATag == "DATE")
-				{
-					Result = base.AddTag(ATag, AValue, TGEDCOMDateExact.Create);
-				}
-				else
-				{
-					Result = base.AddTag(ATag, AValue, ATagConstructor);
-				}
+				Result = base.AddTag(ATag, AValue, ATagConstructor);
 			}
+
 			return Result;
 		}
 
@@ -95,13 +86,13 @@ namespace GedCom551
 			}
 		}
 
-		public TGEDCOMCommunicationRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMCommunicationRecord(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 
-        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue)
 		{
-			return new TGEDCOMCommunicationRecord(AOwner, AParent, AName, AValue);
+			return new TGEDCOMCommunicationRecord(owner, parent, tagName, tagValue);
 		}
 	}
 }

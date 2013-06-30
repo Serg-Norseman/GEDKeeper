@@ -36,6 +36,7 @@ namespace GKUI
 		private string ChartTitle;
 		private string ChartXTitle;
 		private string ChartYTitle;
+		private TreeStats FTreeStats;
 
 		public TfmBase Base
 		{
@@ -85,7 +86,7 @@ namespace GKUI
 			}
 		}
 
-		private void CalcStats(TGEDCOMTree aTree, TGenEngine.TStatMode aMode)
+		private void CalcStats(TGEDCOMTree aTree, TreeStats.TStatMode aMode)
 		{
 			this.ListStats.SortColumn = 0;
 			this.ListStats.Columns[0].Text = LangMan.LSList[(int)StTitles[(int)aMode].Cap - 1];
@@ -95,15 +96,15 @@ namespace GKUI
 			this.ListStats.SortColumn = -1;
 			this.ListStats.BeginUpdate();
 			this.ListStats.Items.Clear();
-
-			List<TGenEngine.TListVal> vals = new List<TGenEngine.TListVal>();
+			
+			List<TreeStats.TListVal> vals = new List<TreeStats.TListVal>();
 			try
 			{
-				this.Base.Engine.GetSpecStats(aMode, vals);
+				FTreeStats.GetSpecStats(aMode, vals);
 				ListViewItem[] items = new ListViewItem[vals.Count];
 
 				int i = 0;
-				foreach (TGenEngine.TListVal lv in vals)
+				foreach (TreeStats.TListVal lv in vals)
 				{
 					ListViewItem item = new ListViewItem();
 					item.Text = lv.Item;
@@ -129,42 +130,42 @@ namespace GKUI
 				this.ChartTitle = LangMan.LSList[(int)StTitles[(int)aMode].Title - 1];
 
 				switch (aMode) {
-					case TGenEngine.TStatMode.smAge: {
+					case TreeStats.TStatMode.smAge: {
 						this.ChartXTitle = LangMan.LSList[305];
 						this.ChartYTitle = LangMan.LSList[533];
 						this.PrepareArray(gPane, TfmStats.TChartStyle.csPoint, true);
 						break;
 					}
 
-					case TGenEngine.TStatMode.smLifeExpectancy: {
+					case TreeStats.TStatMode.smLifeExpectancy: {
 						this.ChartXTitle = LangMan.LSList[306];
 						this.ChartYTitle = LangMan.LSList[533];
 						this.PrepareArray(gPane, TfmStats.TChartStyle.csPoint, true);
 						break;
 					}
 
-					case TGenEngine.TStatMode.smBirthYears:
-					case TGenEngine.TStatMode.smBirthTenYears:
-					case TGenEngine.TStatMode.smDeathYears: 
-					case TGenEngine.TStatMode.smDeathTenYears: {
+					case TreeStats.TStatMode.smBirthYears:
+					case TreeStats.TStatMode.smBirthTenYears:
+					case TreeStats.TStatMode.smDeathYears: 
+					case TreeStats.TStatMode.smDeathTenYears: {
 						switch (aMode) {
-							case TGenEngine.TStatMode.smBirthYears:
-							case TGenEngine.TStatMode.smDeathYears: 
+							case TreeStats.TStatMode.smBirthYears:
+							case TreeStats.TStatMode.smDeathYears: 
 								this.ChartXTitle = LangMan.LS(LSID.LSID_Years);
 								break;
-							case TGenEngine.TStatMode.smBirthTenYears:
-							case TGenEngine.TStatMode.smDeathTenYears: 
+							case TreeStats.TStatMode.smBirthTenYears:
+							case TreeStats.TStatMode.smDeathTenYears: 
 								this.ChartXTitle = LangMan.LS(LSID.LSID_Decennial);
 								break;
 						}
 
 						switch (aMode) {
-							case TGenEngine.TStatMode.smBirthYears:
-          					case TGenEngine.TStatMode.smBirthTenYears:
+							case TreeStats.TStatMode.smBirthYears:
+          					case TreeStats.TStatMode.smBirthTenYears:
 								this.ChartYTitle = LangMan.LS(LSID.LSID_HowBirthes);
           						break;
-          					case TGenEngine.TStatMode.smDeathYears:
-          					case TGenEngine.TStatMode.smDeathTenYears:
+          					case TreeStats.TStatMode.smDeathYears:
+          					case TreeStats.TStatMode.smDeathTenYears:
           						this.ChartYTitle = LangMan.LS(LSID.LSID_HowDeads);
           						break;
 						}
@@ -173,7 +174,7 @@ namespace GKUI
 						break;
 					}
 
-					case TGenEngine.TStatMode.smChildsDistribution: {
+					case TreeStats.TStatMode.smChildsDistribution: {
 						this.ChartXTitle = LangMan.LSList[118];
 						this.ChartYTitle = LangMan.LSList[152];
 						this.PrepareArray(gPane, TfmStats.TChartStyle.csBar, true);
@@ -190,21 +191,28 @@ namespace GKUI
 
 		private void TfmStats_Load(object sender, EventArgs e)
 		{
-			TGenEngine.TCommonStats stats;
-			this.Base.Engine.GetCommonStats(out stats);
+			FTreeStats = new TreeStats(this.Base.Engine);
+			
+			TreeStats.TCommonStats stats;
+			FTreeStats.GetCommonStats(out stats);
+
 			this.ListCommon.Items.Clear();
+
 			ListViewItem item = this.ListCommon.Items.Add(LangMan.LSList[533]);
 			item.SubItems.Add(stats.persons.ToString());
 			item.SubItems.Add(stats.persons_m.ToString() + this.GetPercent(stats.persons_m, stats.persons));
 			item.SubItems.Add(stats.persons_f.ToString() + this.GetPercent(stats.persons_f, stats.persons));
+
 			item = this.ListCommon.Items.Add(LangMan.LSList[538]);
 			item.SubItems.Add(stats.lives.ToString());
 			item.SubItems.Add(stats.lives_m.ToString());
 			item.SubItems.Add(stats.lives_f.ToString());
+
 			item = this.ListCommon.Items.Add(LangMan.LSList[539]);
 			item.SubItems.Add((stats.persons - stats.lives).ToString());
 			item.SubItems.Add((stats.persons_m - stats.lives_m).ToString());
 			item.SubItems.Add((stats.persons_f - stats.lives_f).ToString());
+
 			checked
 			{
 				item = this.ListCommon.Items.Add(LangMan.LSList[540]);
@@ -246,7 +254,7 @@ namespace GKUI
 
 		private void cbType_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			this.CalcStats(this.Base.Tree, (TGenEngine.TStatMode)this.cbType.SelectedIndex);
+			this.CalcStats(this.Base.Tree, (TreeStats.TStatMode)this.cbType.SelectedIndex);
 		}
 
 		public TfmStats(TfmBase aBase)
@@ -276,7 +284,7 @@ namespace GKUI
 			this.Panel1.Controls.SetChildIndex(this.ToolBar1, 4);
 			this.cbType.Items.Clear();
 
-			for (TGenEngine.TStatMode i = TGenEngine.TStatMode.smAncestors; i <= TGenEngine.TStatMode.smAAF_2; i++)
+			for (TreeStats.TStatMode i = TreeStats.TStatMode.smAncestors; i <= TreeStats.TStatMode.smAAF_2; i++)
 			{
 				TTitleRec tr = StTitles[(int)i];
 				this.cbType.Items.Add(LangMan.LSList[(int)tr.Title - 1]);

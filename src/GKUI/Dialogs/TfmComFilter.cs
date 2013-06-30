@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Ext.Utils;
@@ -24,7 +23,7 @@ namespace GKUI
 			get { return this.FBase; }
 		}
 
-		private TConditionKind GetCondByName([In] string aName)
+		private TConditionKind GetCondByName(string aName)
 		{
 			TConditionKind res = TConditionKind.ck_NotEq;
 
@@ -40,7 +39,7 @@ namespace GKUI
 			return res;
 		}
 
-		private Enum GetFieldColumn([In] string aField)
+		private Enum GetFieldColumn(string aField)
 		{
 			int idx = -1;
 			for (int i = 0; i < FFields.Length; i++)

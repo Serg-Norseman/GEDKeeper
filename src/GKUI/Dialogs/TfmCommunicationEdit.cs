@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Ext.Utils;
@@ -18,8 +17,8 @@ namespace GKUI
 		private TfmBase FBase;
 		private TGEDCOMCommunicationRecord FCommunication;
 		private TGEDCOMIndividualRecord FTempInd;
-		private TSheetList FNotesList;
-		private TSheetList FMediaList;
+		private GKSheetList FNotesList;
+		private GKSheetList FMediaList;
 
 		public TfmBase Base
 		{
@@ -56,7 +55,7 @@ namespace GKUI
 			this.Base.RecListMediaRefresh(this.FCommunication, this.FMediaList.List, null);
 		}
 
-		private void SetCommunication([In] TGEDCOMCommunicationRecord Value)
+		private void SetCommunication(TGEDCOMCommunicationRecord Value)
 		{
 			this.FCommunication = Value;
 			try
@@ -129,12 +128,12 @@ namespace GKUI
 				this.EditCorrType.Items.Add(LangMan.LSList[(int)TGenEngine.CommunicationNames[(int)ct] - 1]);
 			}
 
-			this.FNotesList = new TSheetList(this.SheetNotes);
-			this.FNotesList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
+			this.FNotesList = new GKSheetList(this.SheetNotes);
+			this.FNotesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
 			this.Base.SetupRecNotesList(this.FNotesList);
 
-			this.FMediaList = new TSheetList(this.SheetMultimedia);
-			this.FMediaList.OnModify += new TSheetList.TModifyEvent(this.ListModify);
+			this.FMediaList = new GKSheetList(this.SheetMultimedia);
+			this.FMediaList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
 			this.Base.SetupRecMediaList(this.FMediaList);
 
 			this.FTempInd = null;

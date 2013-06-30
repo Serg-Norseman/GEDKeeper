@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Ext.TimSort;
@@ -15,7 +14,7 @@ using GKUI.Lists;
 
 namespace GKUI.Controls
 {
-	public sealed class TRecordsView : GKListView, IDisposable
+	public sealed class GKRecordsView : GKListView, IDisposable
 	{
 		private TList FContentList;
 		private int FFilteredCount;
@@ -70,7 +69,7 @@ namespace GKUI.Controls
 			set { this.FTree = value; }
 		}
 
-		public TRecordsView() : base()
+		public GKRecordsView() : base()
 		{
 			this.FContentList = new TList();
 			this.FListMan = null;
@@ -133,10 +132,10 @@ namespace GKUI.Controls
 				vi.Record = rec;
 
 				if (FXSortColumn == 0) {
-					vi.ColumnValue = TGenEngine.GetId(rec);
+					vi.ColumnValue = rec.aux_GetId();
 				} else {
 					FListMan.Fetch(rec);
-					vi.ColumnValue = FListMan.GetColumnValueEx(FXSortColumn);
+					vi.ColumnValue = FListMan.GetColumnValue(FXSortColumn);
 				}
 
 				buffer.Add(vi);
@@ -177,7 +176,7 @@ namespace GKUI.Controls
 			} else {
 				TGEDCOMRecord rec = this.FContentList[ItemIndex] as TGEDCOMRecord;
 
-				newItem = new GKListItem(TGenEngine.GetId(rec).ToString());
+				newItem = new GKListItem(rec.aux_GetXRefNum());
 				newItem.Data = rec;
 
 				this.FListMan.Fetch(rec);
@@ -217,7 +216,7 @@ namespace GKUI.Controls
 			FCache = null;
 		}
 
-		private void SetRecordType([In] TGEDCOMRecordType Value)
+		private void SetRecordType(TGEDCOMRecordType Value)
 		{
 			this.FRecordType = Value;
 

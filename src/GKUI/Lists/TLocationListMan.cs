@@ -20,14 +20,15 @@ namespace GKUI.Lists
 
 	public sealed class TLocationListColumns : TListColumns
 	{
-		protected override void InitDefaultColumns()
+		protected override void InitColumnStatics()
 		{
-			TColumnProps[] array1 = new TColumnProps[4];
-			array1[0] = new TColumnProps(TLocationColumnType.lctName, true);
-			array1[1] = new TColumnProps(TLocationColumnType.lctLati, true);
-			array1[2] = new TColumnProps(TLocationColumnType.lctLong, true);
-			array1[3] = new TColumnProps(TLocationColumnType.lctChangeDate, true);
-			DefColumns = array1;
+			NumberFormatInfo nfi = new NumberFormatInfo();
+			nfi.NumberDecimalSeparator = ".";
+
+			this.AddStatic(LangMan.LSList[125], TDataType.dtString, 300, true);
+			this.AddStatic(LangMan.LSList[171], TDataType.dtFloat, 120, "0.000000", nfi, true);
+			this.AddStatic(LangMan.LSList[172], TDataType.dtFloat, 120, "0.000000", nfi, true);
+			this.AddStatic(LangMan.LSList[317], TDataType.dtDateTime, 150, true);
 		}
 
 		public TLocationListColumns()
@@ -54,7 +55,7 @@ namespace GKUI.Lists
 			this.FRec = (aRec as TGEDCOMLocationRecord);
 		}
 
-		public override object GetColumnValueDirect(int col_type, int col_subtype)
+		protected override object GetColumnValueEx(int col_type, int col_subtype)
 		{
 			switch (col_type) {
 				case 0:
@@ -68,18 +69,6 @@ namespace GKUI.Lists
 				default:
 					return null;
 			}
-		}
-
-		protected override void InitColumnStatics()
-		{
-			NumberFormatInfo nfi = new NumberFormatInfo();
-			nfi.NumberDecimalSeparator = ".";
-
-			this.ColumnStatics.Clear();
-			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[125], TDataType.dtString, 300));
-			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[171], TDataType.dtFloat, 120, "0.000000", nfi));
-			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[172], TDataType.dtFloat, 120, "0.000000", nfi));
-			this.ColumnStatics.Add(new TColumnStatic(LangMan.LSList[317], TDataType.dtDateTime, 150));
 		}
 
 		public override Type GetColumnsEnum()

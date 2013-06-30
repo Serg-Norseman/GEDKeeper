@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
 using Ext.Utils;
 using GedCom551;
-using GKCore;
-using GKSandbox;
+using GKUI.Controls;
 
 /// <summary>
 /// Localization: clean
@@ -38,7 +36,7 @@ namespace GKUI
 			set { this.SetFileRef(value); }
 		}
 
-		private void SetFileRef([In] TGEDCOMFileReferenceWithTitle Value)
+		private void SetFileRef(TGEDCOMFileReferenceWithTitle Value)
 		{
 			this.FFileRef = Value;
 			this.FExtern = false;
@@ -58,7 +56,7 @@ namespace GKUI
 				{
 					Image img = this.Base.Engine.BitmapLoad(this.FFileRef.StringValue, -1, -1, false);
 
-					ImageControl imCtl = new ImageControl();
+					GKImageControl imCtl = new GKImageControl();
 					imCtl.OpenImage(img);
 					ctl = imCtl;
 					

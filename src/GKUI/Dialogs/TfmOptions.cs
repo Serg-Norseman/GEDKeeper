@@ -140,7 +140,7 @@ namespace GKUI
 			this.cbLanguages.Items.Add(new GKComboItem("Русский", 1049));
 
 			int idx = 0;
-			int num = this.FOptions.LangsCount - 1;
+			int num = this.FOptions.GetLangsCount() - 1;
 			for (int i = 0; i <= num; i++)
 			{
 				GlobalOptions.TLangRecord lng_rec = this.FOptions.GetLang(i);
@@ -166,13 +166,14 @@ namespace GKUI
 
 		private void PanDefFont_Click(object sender, EventArgs e)
 		{
-			this.FontDialog1.Font = new System.Drawing.Font(this.FOptions.ChartOptions.DefFont_Name, 
-				                        					this.FOptions.ChartOptions.DefFont_Size);
+			TreeChartOptions chartOptions = this.FOptions.ChartOptions;
+
+			this.FontDialog1.Font = new System.Drawing.Font(chartOptions.DefFont_Name, chartOptions.DefFont_Size);
 
 			if (this.FontDialog1.ShowDialog() == DialogResult.OK)
 			{
-				this.FOptions.ChartOptions.DefFont_Name = this.FontDialog1.Font.Name;
-				this.FOptions.ChartOptions.DefFont_Size = (int)checked((long)Math.Round((double)this.FontDialog1.Font.Size));
+				chartOptions.DefFont_Name = this.FontDialog1.Font.Name;
+				chartOptions.DefFont_Size = (int)checked((long)Math.Round((double)this.FontDialog1.Font.Size));
 			}
 			this.UpdateControls();
 		}
@@ -199,42 +200,33 @@ namespace GKUI
 			{
 				this.FOptions.DefCharacterSet = TGEDCOMCharacterSet.csASCII;
 			}
-			else
+			else if (this.RButton2.Checked)
 			{
-				if (this.RButton2.Checked)
-				{
-					this.FOptions.DefCharacterSet = TGEDCOMCharacterSet.csUTF8;
-				}
+				this.FOptions.DefCharacterSet = TGEDCOMCharacterSet.csUTF8;
 			}
+
 			if (this.RButton5.Checked)
 			{
 				this.FOptions.DefNameFormat = TGenEngine.TNameFormat.nfFNP;
 			}
-			else
+			else if (this.RButton6.Checked)
 			{
-				if (this.RButton6.Checked)
-				{
-					this.FOptions.DefNameFormat = TGenEngine.TNameFormat.nfF_NP;
-				}
-				else
-				{
-					if (this.RButton7.Checked)
-					{
-						this.FOptions.DefNameFormat = TGenEngine.TNameFormat.nfF_N_P;
-					}
-				}
+				this.FOptions.DefNameFormat = TGenEngine.TNameFormat.nfF_NP;
 			}
+			else if (this.RButton7.Checked)
+			{
+				this.FOptions.DefNameFormat = TGenEngine.TNameFormat.nfF_N_P;
+			}
+
 			if (this.RButton8.Checked)
 			{
 				this.FOptions.DefDateFormat = TGenEngine.TDateFormat.dfDD_MM_YYYY;
 			}
-			else
+			else if (this.RButton9.Checked)
 			{
-				if (this.RButton9.Checked)
-				{
-					this.FOptions.DefDateFormat = TGenEngine.TDateFormat.dfYYYY_MM_DD;
-				}
+				this.FOptions.DefDateFormat = TGenEngine.TDateFormat.dfYYYY_MM_DD;
 			}
+
 			this.FOptions.PlacesWithAddress = this.chkPlacesWithAddress.Checked;
 			this.FOptions.ListPersons_HighlightUnparented = this.chkHighlightUnparented.Checked;
 			this.FOptions.ListPersons_HighlightUnmarried = this.chkHighlightUnmarried.Checked;
@@ -263,16 +255,14 @@ namespace GKUI
 			this.FOptions.PedigreeOptions.IncludeAttributes = this.chkAttributes.Checked;
 			this.FOptions.PedigreeOptions.IncludeNotes = this.chkNotes.Checked;
 			this.FOptions.PedigreeOptions.IncludeSources = this.chkSources.Checked;
+
 			if (this.RButton10.Checked)
 			{
 				this.FOptions.PedigreeOptions.Format = PedigreeOptions.TPedigreeFormat.pfExcess;
 			}
-			else
+			else if (this.RButton11.Checked)
 			{
-				if (this.RButton11.Checked)
-				{
-					this.FOptions.PedigreeOptions.Format = PedigreeOptions.TPedigreeFormat.pfCompact;
-				}
+				this.FOptions.PedigreeOptions.Format = PedigreeOptions.TPedigreeFormat.pfCompact;
 			}
 
 			this.FOptions.ShowTips = this.chkShowOnStart.Checked;
@@ -312,7 +302,7 @@ namespace GKUI
 
 		private void btnDefList_Click(object sender, EventArgs e)
 		{
-			this.FTempColumns.SetDefaults();
+			this.FTempColumns.ResetDefaults();
 			this.UpdateColumnsList();
 		}
 

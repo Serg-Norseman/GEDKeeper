@@ -1,14 +1,13 @@
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
 
 namespace GedCom551
 {
 	public sealed class TGEDCOMMultimediaLink : TGEDCOMPointer
 	{
-		private TGEDCOMListEx<TGEDCOMFileReference> _FileReferences;
+		private GEDCOMList<TGEDCOMFileReference> _FileReferences;
 
-		public TGEDCOMListEx<TGEDCOMFileReference> FileReferences
+		public GEDCOMList<TGEDCOMFileReference> FileReferences
 		{
 			get { return this._FileReferences; }
 		}
@@ -26,49 +25,36 @@ namespace GedCom551
 
 		public bool IsPrimary
 		{
-			get { return this.GetIsPrimary(); }
-			set { this.SetIsPrimary(value); }
-		}
-
-		private bool GetIsPrimary()
-		{
-			TGEDCOMTag tag = base.FindTag("_PRIM", 0);
-			return tag != null && (tag.StringValue == "Y");
-		}
-
-		private void SetIsPrimary([In] bool Value)
-		{
-			if (Value)
-			{
+			get {
 				TGEDCOMTag tag = base.FindTag("_PRIM", 0);
-				if (tag == null)
-				{
-					tag = this.AddTag("_PRIM", "", null);
-				}
-				tag.StringValue = "Y";
+				return (tag != null) && (tag.StringValue == "Y");
 			}
-			else
-			{
-				base.DeleteTag("_PRIM");
+			set {
+				if (value) {
+					TGEDCOMTag tag = base.FindTag("_PRIM", 0);
+					if (tag == null) {
+						tag = this.AddTag("_PRIM", "", null);
+					}
+					tag.StringValue = "Y";
+				} else {
+					base.DeleteTag("_PRIM");
+				}
 			}
 		}
 
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			base.CreateObj(AOwner, AParent);
+			base.CreateObj(owner, parent);
 			this.FName = "OBJE";
-			this._FileReferences = new TGEDCOMListEx<TGEDCOMFileReference>(this);
+			this._FileReferences = new GEDCOMList<TGEDCOMFileReference>(this);
 		}
 
 		protected override string GetStringValue()
 		{
 			string Result;
-			if (this.IsPointer)
-			{
+			if (this.IsPointer) {
 				Result = base.GetStringValue();
-			}
-			else
-			{
+			} else {
 				Result = this.FStringValue;
 			}
 			return Result;
@@ -85,15 +71,12 @@ namespace GedCom551
 			}
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
-			if (ATag == "FILE")
-			{
+			if (ATag == "FILE") {
 				Result = this.FileReferences.Add(new TGEDCOMFileReference(base.Owner, this, ATag, AValue));
-			}
-			else
-			{
+			} else {
 				Result = base.AddTag(ATag, AValue, ATagConstructor);
 			}
 			return Result;
@@ -108,18 +91,15 @@ namespace GedCom551
 		public override bool IsEmpty()
 		{
 			bool Result;
-			if (this.IsPointer)
-			{
+			if (this.IsPointer) {
 				Result = base.IsEmpty();
-			}
-			else
-			{
+			} else {
 				Result = (base.Count == 0 && (this._FileReferences.Count == 0));
 			}
 			return Result;
 		}
 
-		public override string ParseString([In] string AString)
+		public override string ParseString(string AString)
 		{
 			this.FStringValue = "";
 			return base.ParseString(AString);
@@ -137,7 +117,7 @@ namespace GedCom551
 			this._FileReferences.SaveToStream(AStream);
 		}
 
-		public TGEDCOMMultimediaLink(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMMultimediaLink(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 	}

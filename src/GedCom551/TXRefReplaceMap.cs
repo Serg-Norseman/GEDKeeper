@@ -18,14 +18,14 @@ namespace GedCom551
 			}
 		}
 
-		private List<TXRefReplaceMap.TXRefRec> FList = new List<TXRefReplaceMap.TXRefRec>();
+		private List<TXRefRec> FList = new List<TXRefRec>();
 
 		public int Count
 		{
 			get	{ return this.FList.Count; }
 		}
 
-		public TXRefReplaceMap.TXRefRec this[int Index]
+		public TXRefRec this[int Index]
 		{
 			get { return this.FList[Index]; }
 		}

@@ -2,147 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-using Ext.Utils;
-
 namespace GedCom551
 {
-	public class TGEDCOMList : IDisposable
-	{
-		private TList FList;
-		//private TGEDCOMObject FOwner;
-		private bool Disposed_;
-
-		public int Count
-		{
-			get { return this.FList.Count; }
-		}
-
-		public TGEDCOMObject this[int Index]
-		{
-			get { return (this.FList[Index] as TGEDCOMObject); }
-		}
-
-		public TGEDCOMList(TGEDCOMObject AOwner)
-		{
-			//this.FOwner = AOwner;
-			this.FList = new TList();
-		}
-
-		public void Dispose()
-		{
-			if (!this.Disposed_)
-			{
-				this.Clear();
-				this.FList.Dispose();
-				this.Disposed_ = true;
-			}
-		}
-
-		public TGEDCOMObject Add(TGEDCOMObject AObject)
-		{
-			this.FList.Add(AObject);
-			return AObject;
-		}
-
-		public void Clear()
-		{
-			for (int I = this.FList.Count - 1; I >= 0; I--)
-			{
-				(this.FList[I] as TGEDCOMObject).Free();
-			}
-			this.FList.Clear();
-		}
-
-		public void Delete(int Index)
-		{
-			(this.FList[Index] as TGEDCOMObject).Free();
-			this.FList.Delete(Index);
-		}
-
-		public void DeleteObject(TGEDCOMObject AObject)
-		{
-			int Index = this.FList.IndexOf(AObject);
-			if (Index >= 0)
-			{
-				this.Delete(Index);
-			}
-		}
-
-		public void Exchange(int Index1, int Index2)
-		{
-			if (Index1 >= 0 && Index1 < this.FList.Count && Index2 >= 0 && Index2 < this.FList.Count)
-			{
-				this.FList.Exchange(Index1, Index2);
-			}
-		}
-
-		public TGEDCOMObject Extract(int Index)
-		{
-			TGEDCOMObject Result = this[Index];
-			this.FList.Delete(Index);
-			return Result;
-		}
-
-		public int IndexOfObject(TGEDCOMObject AObject)
-		{
-			return this.FList.IndexOf(AObject);
-		}
-
-		public virtual void SaveToStream(StreamWriter AStream)
-		{
-			for (int I = 0; I <= this.FList.Count - 1; I++)
-			{
-				if (this.FList[I] is TGEDCOMTag)
-				{
-                    (this.FList[I] as TGEDCOMTag).SaveToStream(AStream);
-				}
-			}
-		}
-
-		public void ReplaceXRefs(TXRefReplaceMap aMap)
-		{
-			for (int i = 0; i <= this.FList.Count - 1; i++)
-			{
-                if (this.FList[i] is TGEDCOMTag)
-				{
-                    (this.FList[i] as TGEDCOMTag).ReplaceXRefs(aMap);
-				}
-			}
-		}
-
-		public void ResetOwner(TGEDCOMTree AOwner)
-		{
-			for (int i = 0; i <= this.FList.Count - 1; i++)
-			{
-                (this.FList[i] as TGEDCOMTag).ResetOwner(AOwner);
-			}
-		}
-
-		public void Pack()
-		{
-			for (int i = this.FList.Count - 1; i >= 0; i--)
-			{
-                if (this.FList[i] is TGEDCOMTag)
-				{
-                    TGEDCOMTag tag = this.FList[i] as TGEDCOMTag;
-					tag.Pack();
-					if (tag.IsEmpty() && tag.IsEmptySkip())
-					{
-						this.Delete(i);
-					}
-				}
-			}
-		}
-
-		public void Free()
-		{
-			SysUtils.Free(this);
-		}
-	}
-	
-	// // // // // // //
-
-	public sealed class TGEDCOMListEx<T> : IDisposable
+	public sealed class GEDCOMList<T> : IDisposable
 	{
 		private List<T> FList = null; // lazy implementation
 		//private TGEDCOMObject _owner;
@@ -162,7 +24,7 @@ namespace GedCom551
 			}
 		}
 
-		public TGEDCOMListEx(TGEDCOMObject AOwner)
+		public GEDCOMList(TGEDCOMObject AOwner)
 		{
 			//this._owner = AOwner;
 		}
@@ -254,14 +116,7 @@ namespace GedCom551
 
 		public int IndexOfObject(T item)
 		{
-			if (this.FList != null)
-			{
-				return this.FList.IndexOf(item);
-			}
-			else
-			{
-				return -1;
-			}
+			return (this.FList == null) ? -1 : this.FList.IndexOf(item);
 		}
 
 		public void SaveToStream(StreamWriter AStream)

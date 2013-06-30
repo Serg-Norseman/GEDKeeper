@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Ext.Utils;
@@ -296,7 +295,7 @@ namespace GKUI
 			for (int i = 0; i <= num2; i++)
 			{
 				TreeTools.TCheckObj checkObj = this.FChecksList[i] as TreeTools.TCheckObj;
-				ListViewItem item = this.ListChecks.AddItem(checkObj.RecName, checkObj);
+				ListViewItem item = this.ListChecks.AddItem(checkObj.GetRecordName(), checkObj);
 				item.SubItems.Add(checkObj.Comment);
 			}
 			
@@ -712,6 +711,8 @@ namespace GKUI
 			if (this.RadioButton6.Checked) this.FRMMode = TGEDCOMRecordType.rtNote;
 			if (this.RadioButton7.Checked) this.FRMMode = TGEDCOMRecordType.rtFamily;
 			if (this.RadioButton8.Checked) this.FRMMode = TGEDCOMRecordType.rtSource;
+
+			this.MergeCtl.MergeMode = this.FRMMode;
 		}
 
 		protected override void Dispose(bool Disposing)
@@ -739,6 +740,9 @@ namespace GKUI
 
 			this.FRMSkip = new StringList();
 			this.FRMMode = TGEDCOMRecordType.rtIndividual;
+
+			this.MergeCtl.Base = this.FBase;
+			this.MergeCtl.MergeMode = this.FRMMode;
 
 			this.FPlaces = new StringList();
 			this.FPlaces.Sorted = true;
@@ -962,7 +966,7 @@ namespace GKUI
 			}
 		}
 
-		private string _btnPatSearch_Click_GetLinks([In] ref TList lst, TPatriarchObj pObj)
+		private string _btnPatSearch_Click_GetLinks(ref TList lst, TPatriarchObj pObj)
 		{
 			string Result = "";
 			int num = pObj.ILinks.Count - 1;
@@ -1053,7 +1057,7 @@ namespace GKUI
 						idx = fams.IndexOf(tm);
 						if (idx >= 0)
 						{
-							fams.PutObject(idx, 1);
+							fams.SetObject(idx, 1);
 						}
 					}
 				}

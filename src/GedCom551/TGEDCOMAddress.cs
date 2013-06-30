@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
 
 using Ext.Utils;
 
@@ -9,28 +8,18 @@ namespace GedCom551
 	public sealed class TGEDCOMAddress : TGEDCOMTag
 	{
 		private StringList FAddress;
-		private TGEDCOMList FPhoneList;
-		private TGEDCOMList FEmailList;
-		private TGEDCOMList FFaxList;
-		private TGEDCOMList FWWWList;
+		private GEDCOMList<TGEDCOMTag> FPhoneList;
+		private GEDCOMList<TGEDCOMTag> FEmailList;
+		private GEDCOMList<TGEDCOMTag> FFaxList;
+		private GEDCOMList<TGEDCOMTag> FWWWList;
 
 		public StringList Address
 		{
-			get { return this.GetAddress(); }
-			set { this.SetAddress(value); }
+			get { return base.GetTagStrings(this, ref this.FAddress); }
+			set { base.SetTagStrings(this, value); }
 		}
 
-		private StringList GetAddress()
-		{
-			return base.GetTagStrings(this, ref this.FAddress);
-		}
-
-		public void SetAddress([In] StringList Value)
-		{
-			base.SetTagStrings(this, Value);
-		}
-
-		public void SetAddressArray([In] string[] Value)
+		public void SetAddressArray(string[] Value)
 		{
 			base.SetTagStrings(this, Value);
 		}
@@ -78,249 +67,69 @@ namespace GedCom551
 			set { base.SetTagStringValue("CTRY", value); }
 		}
 
-		/*public string PhoneNumbers
+		public GEDCOMList<TGEDCOMTag> PhoneNumbers
 		{
-			get
-			{
-				return this.GetPhoneNumber(Index);
-			}
-			set
-			{
-				this.SetPhoneNumbers(Index, Value);
-			}
+			get { return this.FPhoneList; }
 		}
 
-		public int PhoneNumbersCount
+		public GEDCOMList<TGEDCOMTag> EmailAddresses
 		{
-			get
-			{
-				return this.GetPhoneNumbersCount();
-			}
-		}*/
-
-		/*public string EmailAddresses
-		{
-			get
-			{
-				return this.GetEmailAddresses(Index);
-			}
-			set
-			{
-				this.SetEmailAddresses(Index, Value);
-			}
+			get { return this.FEmailList; }
 		}
 
-		public int EmailAddressesCount
+		public GEDCOMList<TGEDCOMTag> FaxNumbers
 		{
-			get
-			{
-				return this.GetEmailAddressesCount();
-			}
-		}*/
-
-		/*public string FaxNumbers
-		{
-			get { return this.GetFaxNumbers(Index); }
-			set { this.SetFaxNumbers(Index, Value); }
-		}
-		public int FaxNumbersCount
-		{
-			get { return this.GetFaxNumbersCount(); }
-		}*/
-
-		/*public string WebPages
-		{
-			get { return this.GetWebPages(Index); }
-			set { this.SetWebPages(Index, Value); }
-		}
-		public int WebPagesCount
-		{
-			get { return this.GetWebPagesCount(); }
-		}*/
-
-		public string GetEmailAddress(int Index)
-		{
-			string Result;
-			if (this.FEmailList == null || Index < 0 || Index >= this.FEmailList.Count)
-			{
-				Result = "";
-			}
-			else
-			{
-				Result = (this.FEmailList[Index] as TGEDCOMTag).StringValue;
-			}
-			return Result;
+			get { return this.FFaxList; }
 		}
 
-		public int GetEmailAddressesCount()
+		public GEDCOMList<TGEDCOMTag> WebPages
 		{
-			return ((this.FEmailList == null) ? 0 : this.FEmailList.Count);
+			get { return this.FWWWList; }
 		}
 
-		public string GetFaxNumber(int Index)
+		public void AddEmailAddress(string value)
 		{
-			string Result;
-			if (this.FFaxList == null || Index < 0 || Index >= this.FFaxList.Count)
-			{
-				Result = "";
-			}
-			else
-			{
-				Result = (this.FFaxList[Index] as TGEDCOMTag).StringValue;
-			}
-			return Result;
+			TGEDCOMTag tag = this.FEmailList.Add(new TGEDCOMTag(base.Owner, this, "EMAIL", value));
+			tag.SetLevel(base.Level);
 		}
 
-		public int GetFaxNumbersCount()
+		public void AddFaxNumber(string value)
 		{
-			return ((this.FFaxList == null) ? 0 : this.FFaxList.Count);
+			TGEDCOMTag tag = this.FFaxList.Add(new TGEDCOMTag(base.Owner, this, "FAX", value));
+			tag.SetLevel(base.Level);
 		}
 
-		public string GetPhoneNumber(int Index)
+		public void AddPhoneNumber(string value)
 		{
-			string Result;
-			if (this.FPhoneList == null || Index < 0 || Index >= this.FPhoneList.Count)
-			{
-				Result = "";
-			}
-			else
-			{
-				Result = (this.FPhoneList[Index] as TGEDCOMTag).StringValue;
-			}
-			return Result;
+			TGEDCOMTag tag = this.FPhoneList.Add(new TGEDCOMTag(base.Owner, this, "PHON", value));
+			tag.SetLevel(base.Level);
 		}
 
-		public int GetPhoneNumbersCount()
+		public void AddWebPage(string value)
 		{
-			return ((this.FPhoneList == null) ? 0 : this.FPhoneList.Count);
+			TGEDCOMTag tag = this.FWWWList.Add(new TGEDCOMTag(base.Owner, this, "WWW", value));
+			tag.SetLevel(base.Level);
 		}
 
-		public string GetWebPage(int Index)
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			string Result;
-			if (this.FWWWList == null || Index < 0 || Index >= this.FWWWList.Count)
-			{
-				Result = "";
-			}
-			else
-			{
-				Result = (this.FWWWList[Index] as TGEDCOMTag).StringValue;
-			}
-			return Result;
-		}
-
-		public int GetWebPagesCount()
-		{
-			return ((this.FWWWList == null) ? 0 : this.FWWWList.Count);
-		}
-
-		public void SetEmailAddress(int Index, [In] string Value)
-		{
-			if (Index >= 3)
-			{
-				throw new EGEDCOMException(string.Format("The maximum number of email addresses is {0}", TGEDCOMObject.GEDCOMMaxEmailAddresses));
-			}
-			if (Index >= 0)
-			{
-				if (this.FEmailList == null)
-				{
-					this.FEmailList = new TGEDCOMList(this);
-				}
-				while (Index >= this.FEmailList.Count)
-				{
-					this.FEmailList.Add(new TGEDCOMTag(base.Owner, this, "EMAIL", ""));
-				}
-				TGEDCOMTag tag = this.FEmailList[Index] as TGEDCOMTag;
-				tag.StringValue = Value;
-				tag.SetLevel(base.Level);
-			}
-		}
-
-		public void SetFaxNumber(int Index, [In] string Value)
-		{
-			if (Index >= 3)
-			{
-				throw new EGEDCOMException(string.Format("The maximum number of fax numbers is {0}", TGEDCOMObject.GEDCOMMaxFaxNumbers));
-			}
-			if (Index >= 0)
-			{
-				if (this.FFaxList == null)
-				{
-					this.FFaxList = new TGEDCOMList(this);
-				}
-				while (Index >= this.FFaxList.Count)
-				{
-					this.FFaxList.Add(new TGEDCOMTag(base.Owner, this, "FAX", ""));
-				}
-				TGEDCOMTag tag = this.FFaxList[Index] as TGEDCOMTag;
-				tag.StringValue = Value;
-				tag.SetLevel(base.Level);
-			}
-		}
-
-		public void SetPhoneNumber(int Index, [In] string Value)
-		{
-			if (Index >= 3)
-			{
-				throw new EGEDCOMException(string.Format("The maximum number of phone numbers is {0}", TGEDCOMObject.GEDCOMMaxPhoneNumbers));
-			}
-			if (Index >= 0)
-			{
-				if (this.FPhoneList == null)
-				{
-					this.FPhoneList = new TGEDCOMList(this);
-				}
-				while (Index >= this.FPhoneList.Count)
-				{
-					this.FPhoneList.Add(new TGEDCOMTag(base.Owner, this, "PHON", ""));
-				}
-				TGEDCOMTag tag = this.FPhoneList[Index] as TGEDCOMTag;
-				tag.StringValue = Value;
-				tag.SetLevel(base.Level);
-			}
-		}
-
-		public void SetWebPage(int Index, [In] string Value)
-		{
-			if (Index >= 3)
-			{
-				throw new EGEDCOMException(string.Format("The maximum number of web page addresses is {0}", TGEDCOMObject.GEDCOMMaxWebPages));
-			}
-			if (Index >= 0)
-			{
-				if (this.FWWWList == null)
-				{
-					this.FWWWList = new TGEDCOMList(this);
-				}
-				while (Index >= this.FWWWList.Count)
-				{
-					this.FWWWList.Add(new TGEDCOMTag(base.Owner, this, "WWW", ""));
-				}
-				TGEDCOMTag tag = this.FWWWList[Index] as TGEDCOMTag;
-				tag.StringValue = Value;
-				tag.SetLevel(base.Level);
-			}
-		}
-
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
-		{
-			base.CreateObj(AOwner, AParent);
+			base.CreateObj(owner, parent);
 			this.FName = "ADDR";
 			this.FAddress = null;
 
-			this.FPhoneList = null;
-			this.FEmailList = null;
-			this.FFaxList = null;
-			this.FWWWList = null;
+			this.FPhoneList = new GEDCOMList<TGEDCOMTag>(this);
+			this.FEmailList = new GEDCOMList<TGEDCOMTag>(this);
+			this.FFaxList = new GEDCOMList<TGEDCOMTag>(this);
+			this.FWWWList = new GEDCOMList<TGEDCOMTag>(this);
 		}
 
-		protected override void SaveTagsToStream(StreamWriter AStream, [In] params string[] ATagSorting)
+		protected override void SaveTagsToStream(StreamWriter stream)
 		{
-			base.SaveTagsToStream(AStream, ATagSorting);
-			if (this.FPhoneList != null) this.FPhoneList.SaveToStream(AStream);
-			if (this.FEmailList != null) this.FEmailList.SaveToStream(AStream);
-			if (this.FFaxList != null) this.FFaxList.SaveToStream(AStream);
-			if (this.FWWWList != null) this.FWWWList.SaveToStream(AStream);
+			base.SaveTagsToStream(stream);
+			this.FPhoneList.SaveToStream(stream);
+			this.FEmailList.SaveToStream(stream);
+			this.FFaxList.SaveToStream(stream);
+			this.FWWWList.SaveToStream(stream);
 		}
 
 		public override void Dispose()
@@ -328,125 +137,93 @@ namespace GedCom551
 			if (!this.Disposed_)
 			{
 				if (this.FAddress != null) this.FAddress.Free();
-				if (this.FPhoneList != null) this.FPhoneList.Dispose();
-				if (this.FEmailList != null) this.FEmailList.Dispose();
-				if (this.FFaxList != null) this.FFaxList.Dispose();
-				if (this.FWWWList != null) this.FWWWList.Dispose();
+
+				this.FPhoneList.Dispose();
+				this.FEmailList.Dispose();
+				this.FFaxList.Dispose();
+				this.FWWWList.Dispose();
 
 				base.Dispose();
 				this.Disposed_ = true;
 			}
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
+        public override void Assign(TGEDCOMTag Source)
 		{
-			TGEDCOMTag Result;
-			if (ATag == "PHON")
+			base.Assign(Source);
+
+			if (Source is TGEDCOMAddress) {
+				TGEDCOMAddress srcaddr = Source as TGEDCOMAddress;
+
+				base.AssignList(srcaddr.FPhoneList, this.FPhoneList);
+				base.AssignList(srcaddr.FEmailList, this.FEmailList);
+				base.AssignList(srcaddr.FFaxList, this.FFaxList);
+				base.AssignList(srcaddr.FWWWList, this.FWWWList);
+			}
+		}
+
+		public override TGEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
+		{
+			TGEDCOMTag result;
+
+			if (tagName == "PHON")
 			{
-				if (this.FPhoneList == null)
-				{
-					this.FPhoneList = new TGEDCOMList(this);
-				}
-				Result = (this.FPhoneList.Add(new TGEDCOMTag(base.Owner, this, ATag, AValue)) as TGEDCOMTag);
-				Result.SetLevel(base.Level);
+				result = (this.FPhoneList.Add(new TGEDCOMTag(base.Owner, this, tagName, tagValue)));
+				result.SetLevel(base.Level);
+			}
+			else if (tagName == "EMAIL")
+			{
+				result = (this.FEmailList.Add(new TGEDCOMTag(base.Owner, this, tagName, tagValue)));
+				result.SetLevel(base.Level);
+			}
+			else if (tagName == "FAX")
+			{
+				result = (this.FFaxList.Add(new TGEDCOMTag(base.Owner, this, tagName, tagValue)));
+				result.SetLevel(base.Level);
+			}
+			else if (tagName == "WWW")
+			{
+				result = (this.FWWWList.Add(new TGEDCOMTag(base.Owner, this, tagName, tagValue)));
+				result.SetLevel(base.Level);
 			}
 			else
 			{
-				if (ATag == "EMAIL")
-				{
-					if (this.FEmailList == null)
-					{
-						this.FEmailList = new TGEDCOMList(this);
-					}
-					Result = (this.FEmailList.Add(new TGEDCOMTag(base.Owner, this, ATag, AValue)) as TGEDCOMTag);
-					Result.SetLevel(base.Level);
-				}
-				else
-				{
-					if (ATag == "FAX")
-					{
-						if (this.FFaxList == null)
-						{
-							this.FFaxList = new TGEDCOMList(this);
-						}
-						Result = (this.FFaxList.Add(new TGEDCOMTag(base.Owner, this, ATag, AValue)) as TGEDCOMTag);
-						Result.SetLevel(base.Level);
-					}
-					else
-					{
-						if (ATag == "WWW")
-						{
-							if (this.FWWWList == null)
-							{
-								this.FWWWList = new TGEDCOMList(this);
-							}
-							Result = (this.FWWWList.Add(new TGEDCOMTag(base.Owner, this, ATag, AValue)) as TGEDCOMTag);
-							Result.SetLevel(base.Level);
-						}
-						else
-						{
-							Result = base.AddTag(ATag, AValue, ATagConstructor);
-						}
-					}
-				}
+				result = base.AddTag(tagName, tagValue, tagConstructor);
 			}
-			return Result;
+
+			return result;
 		}
 
 		public override void Clear()
 		{
 			base.Clear();
-			if (this.FPhoneList != null) this.FPhoneList.Clear();
-			if (this.FEmailList != null) this.FEmailList.Clear();
-			if (this.FFaxList != null) this.FFaxList.Clear();
-			if (this.FWWWList != null) this.FWWWList.Clear();
+			this.FPhoneList.Clear();
+			this.FEmailList.Clear();
+			this.FFaxList.Clear();
+			this.FWWWList.Clear();
 		}
 
 		public override bool IsEmpty()
 		{
-			return base.IsEmpty() && this.GetPhoneNumbersCount() == 0 && this.GetEmailAddressesCount() == 0 && this.GetFaxNumbersCount() == 0 && this.GetWebPagesCount() == 0;
+			return base.IsEmpty() && this.FPhoneList.Count == 0 && this.FEmailList.Count == 0 && this.FFaxList.Count == 0 && this.FWWWList.Count == 0;
 		}
 
 		public override void ResetOwner(TGEDCOMTree AOwner)
 		{
 			base.ResetOwner(AOwner);
-			if (this.FPhoneList != null) this.FPhoneList.ResetOwner(AOwner);
-			if (this.FEmailList != null) this.FEmailList.ResetOwner(AOwner);
-			if (this.FFaxList != null) this.FFaxList.ResetOwner(AOwner);
-			if (this.FWWWList != null) this.FWWWList.ResetOwner(AOwner);
+			this.FPhoneList.ResetOwner(AOwner);
+			this.FEmailList.ResetOwner(AOwner);
+			this.FFaxList.ResetOwner(AOwner);
+			this.FWWWList.ResetOwner(AOwner);
 		}
 
-		public void DeletePhoneNumber(int Index)
-		{
-			if (this.FPhoneList != null && Index >= 0 && Index < this.FPhoneList.Count)
-			{
-				this.FPhoneList.Delete(Index);
-			}
-		}
-
-		public void DeleteEmail(int Index)
-		{
-			if (this.FEmailList != null && Index >= 0 && Index < this.FEmailList.Count)
-			{
-				this.FEmailList.Delete(Index);
-			}
-		}
-
-		public void DeleteWebPage(int Index)
-		{
-			if (this.FWWWList != null && Index >= 0 && Index < this.FWWWList.Count)
-			{
-				this.FWWWList.Delete(Index);
-			}
-		}
-
-		public TGEDCOMAddress(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMAddress(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 
-        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue)
 		{
-			return new TGEDCOMAddress(AOwner, AParent, AName, AValue);
+			return new TGEDCOMAddress(owner, parent, tagName, tagValue);
 		}
 	}
 }

@@ -1,28 +1,24 @@
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
-
-using Ext.Utils;
 
 namespace GedCom551
 {
 	public sealed class TGEDCOMMultimediaRecord : TGEDCOMRecord
 	{
-		private TGEDCOMListEx<TGEDCOMFileReferenceWithTitle> _FileReferences;
+		private GEDCOMList<TGEDCOMFileReferenceWithTitle> _FileReferences;
 
-		public TGEDCOMListEx<TGEDCOMFileReferenceWithTitle> FileReferences
+		public GEDCOMList<TGEDCOMFileReferenceWithTitle> FileReferences
 		{
 			get { return this._FileReferences; }
 		}
 
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			base.CreateObj(AOwner, AParent);
-			base.SetLists(EnumSet.Create(new Enum[] { TGEDCOMSubList.stNotes, TGEDCOMSubList.stSource }));
+			base.CreateObj(owner, parent);
 			this.FRecordType = TGEDCOMRecordType.rtMultimedia;
 			this.FName = "OBJE";
 
-			this._FileReferences = new TGEDCOMListEx<TGEDCOMFileReferenceWithTitle>(this);
+			this._FileReferences = new GEDCOMList<TGEDCOMFileReferenceWithTitle>(this);
 		}
 
 		public override void Dispose()
@@ -36,7 +32,7 @@ namespace GedCom551
 			}
 		}
 
-		public override TGEDCOMTag AddTag([In] string ATag, [In] string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
 		{
 			TGEDCOMTag Result;
 			if (ATag == "FILE")
@@ -85,13 +81,13 @@ namespace GedCom551
 			this._FileReferences.SaveToStream(AStream);
 		}
 
-		public TGEDCOMMultimediaRecord(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMMultimediaRecord(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 
-        public new static TGEDCOMTag Create(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue)
+        public new static TGEDCOMTag Create(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue)
 		{
-			return new TGEDCOMMultimediaRecord(AOwner, AParent, AName, AValue);
+			return new TGEDCOMMultimediaRecord(owner, parent, tagName, tagValue);
 		}
 	}
 }

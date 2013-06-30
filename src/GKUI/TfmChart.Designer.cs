@@ -29,14 +29,6 @@ namespace GKUI
 		private System.Windows.Forms.MenuItem N7;
 		private System.Windows.Forms.MenuItem miTraceRoot;
 		private System.Windows.Forms.MenuItem miRebuildTree;
-		private System.Windows.Forms.ToolBarButton tbScales;
-		private System.Windows.Forms.ContextMenu MenuScales;
-		private System.Windows.Forms.MenuItem N501;
-		private System.Windows.Forms.MenuItem N601;
-		private System.Windows.Forms.MenuItem N701;
-		private System.Windows.Forms.MenuItem N801;
-		private System.Windows.Forms.MenuItem N901;
-		private System.Windows.Forms.MenuItem N1001;
 		private System.Windows.Forms.ToolBarButton tbGens;
 		private System.Windows.Forms.ContextMenu MenuGens;
 		private System.Windows.Forms.MenuItem miGensInf;
@@ -55,6 +47,7 @@ namespace GKUI
 
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.SaveDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.ToolBar1 = new System.Windows.Forms.ToolBar();
 			this.tbImageSave = new System.Windows.Forms.ToolBarButton();
@@ -75,15 +68,6 @@ namespace GKUI
 			this.tbPrev = new System.Windows.Forms.ToolBarButton();
 			this.tbNext = new System.Windows.Forms.ToolBarButton();
 			this.tbs3 = new System.Windows.Forms.ToolBarButton();
-			this.tbScales = new System.Windows.Forms.ToolBarButton();
-			this.MenuScales = new System.Windows.Forms.ContextMenu();
-			this.N501 = new System.Windows.Forms.MenuItem();
-			this.N601 = new System.Windows.Forms.MenuItem();
-			this.N701 = new System.Windows.Forms.MenuItem();
-			this.N801 = new System.Windows.Forms.MenuItem();
-			this.N901 = new System.Windows.Forms.MenuItem();
-			this.N1001 = new System.Windows.Forms.MenuItem();
-			this.tbs4 = new System.Windows.Forms.ToolBarButton();
 			this.tbFilter = new System.Windows.Forms.ToolBarButton();
 			this.tbs5 = new System.Windows.Forms.ToolBarButton();
 			this.tbModes = new System.Windows.Forms.ToolBarButton();
@@ -110,6 +94,7 @@ namespace GKUI
 			this.miRebuildKinships = new System.Windows.Forms.MenuItem();
 			this.colorDialog1 = new System.Windows.Forms.ColorDialog();
 			this.OpenDialog1 = new System.Windows.Forms.OpenFileDialog();
+			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.SuspendLayout();
 			// 
 			// SaveDialog1
@@ -129,8 +114,6 @@ namespace GKUI
 									this.tbPrev,
 									this.tbNext,
 									this.tbs3,
-									this.tbScales,
-									this.tbs4,
 									this.tbFilter,
 									this.tbs5,
 									this.tbModes});
@@ -138,7 +121,7 @@ namespace GKUI
 			this.ToolBar1.Location = new System.Drawing.Point(0, 0);
 			this.ToolBar1.Name = "ToolBar1";
 			this.ToolBar1.ShowToolTips = true;
-			this.ToolBar1.Size = new System.Drawing.Size(822, 36);
+			this.ToolBar1.Size = new System.Drawing.Size(822, 37);
 			this.ToolBar1.TabIndex = 0;
 			this.ToolBar1.TextAlign = System.Windows.Forms.ToolBarTextAlign.Right;
 			this.ToolBar1.ButtonClick += new System.Windows.Forms.ToolBarButtonClickEventHandler(this.ToolBar1_ButtonClick);
@@ -260,66 +243,6 @@ namespace GKUI
 			this.tbs3.ImageIndex = 24;
 			this.tbs3.Name = "tbs3";
 			this.tbs3.Style = System.Windows.Forms.ToolBarButtonStyle.Separator;
-			// 
-			// tbScales
-			// 
-			this.tbScales.DropDownMenu = this.MenuScales;
-			this.tbScales.Name = "tbScales";
-			this.tbScales.Style = System.Windows.Forms.ToolBarButtonStyle.DropDownButton;
-			this.tbScales.Text = "Масштаб";
-			// 
-			// MenuScales
-			// 
-			this.MenuScales.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-									this.N501,
-									this.N601,
-									this.N701,
-									this.N801,
-									this.N901,
-									this.N1001});
-			// 
-			// N501
-			// 
-			this.N501.Index = 0;
-			this.N501.Text = "  50%";
-			this.N501.Click += new System.EventHandler(this.N1001Click);
-			// 
-			// N601
-			// 
-			this.N601.Index = 1;
-			this.N601.Text = "  60%";
-			this.N601.Click += new System.EventHandler(this.N1001Click);
-			// 
-			// N701
-			// 
-			this.N701.Index = 2;
-			this.N701.Text = "  70%";
-			this.N701.Click += new System.EventHandler(this.N1001Click);
-			// 
-			// N801
-			// 
-			this.N801.Index = 3;
-			this.N801.Text = "  80%";
-			this.N801.Click += new System.EventHandler(this.N1001Click);
-			// 
-			// N901
-			// 
-			this.N901.Index = 4;
-			this.N901.Text = "  90%";
-			this.N901.Click += new System.EventHandler(this.N1001Click);
-			// 
-			// N1001
-			// 
-			this.N1001.Checked = true;
-			this.N1001.Index = 5;
-			this.N1001.Text = "100%";
-			this.N1001.Click += new System.EventHandler(this.N1001Click);
-			// 
-			// tbs4
-			// 
-			this.tbs4.ImageIndex = 25;
-			this.tbs4.Name = "tbs4";
-			this.tbs4.Style = System.Windows.Forms.ToolBarButtonStyle.Separator;
 			// 
 			// tbFilter
 			// 
@@ -483,7 +406,7 @@ namespace GKUI
 			// 
 			// TfmChart
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
+			this.AutoScaleBaseSize = new System.Drawing.Size(7, 17);
 			this.ClientSize = new System.Drawing.Size(822, 453);
 			this.Controls.Add(this.ToolBar1);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -495,10 +418,11 @@ namespace GKUI
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.ComponentModel.IContainer components;
+		private System.Windows.Forms.ToolTip toolTip1;
 		private System.Windows.Forms.OpenFileDialog OpenDialog1;
 		private System.Windows.Forms.ColorDialog colorDialog1;
 		private System.Windows.Forms.ToolBarButton tbs5;
-		private System.Windows.Forms.ToolBarButton tbs4;
 		private System.Windows.Forms.ToolBarButton tbs3;
 		private System.Windows.Forms.ToolBarButton tbs2;
 		private System.Windows.Forms.ToolBarButton tbs1;

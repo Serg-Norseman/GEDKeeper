@@ -1,6 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
-
 using Ext.Utils;
 
 namespace GedCom551
@@ -57,15 +55,15 @@ namespace GedCom551
 			return this.FDescription;
 		}
 
-		private void SetDescription([In] StringList Value)
+		private void SetDescription(StringList Value)
 		{
 			this.Clear();
 			base.SetTagStrings(this, Value);
 		}
 
-		protected override void CreateObj(TGEDCOMTree AOwner, TGEDCOMObject AParent)
+		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
 		{
-			base.CreateObj(AOwner, AParent);
+			base.CreateObj(owner, parent);
 			this.FName = "SOUR";
 		}
 
@@ -120,7 +118,7 @@ namespace GedCom551
 			return Result;
 		}
 
-		public override string ParseString([In] string AString)
+		public override string ParseString(string AString)
 		{
 			this.FStringValue = "";
 			base.XRef = "";
@@ -138,7 +136,7 @@ namespace GedCom551
 			return Result;
 		}
 
-		public TGEDCOMSourceCitation(TGEDCOMTree AOwner, TGEDCOMObject AParent, [In] string AName, [In] string AValue) : base(AOwner, AParent, AName, AValue)
+		public TGEDCOMSourceCitation(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 	}

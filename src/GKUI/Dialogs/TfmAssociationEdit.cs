@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Ext.Utils;
@@ -29,7 +28,7 @@ namespace GKUI
 			get { return this.FBase; }
 		}
 
-		private void SetAssociation([In] TGEDCOMAssociation Value)
+		private void SetAssociation(TGEDCOMAssociation Value)
 		{
 			this.FAssociation = Value;
 			this.EditRelation.Text = this.FAssociation.Relation;
