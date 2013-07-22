@@ -529,7 +529,7 @@ namespace GKCore.Export
 					fDocument.AddCreator(TGenEngine.AppTitle);
 					fDocument.Open();
 
-					BaseFont base_font = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Times.ttf"), "CP1251", BaseFont.EMBEDDED);
+					BaseFont base_font = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Times.ttf"), BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 					title_font = new Font(base_font, 20f, Font.BOLD);
 					chap_font = new Font(base_font, 16f, Font.BOLD, Color.BLACK);
 					person_font = new Font(base_font, 10f, Font.BOLD, Color.BLACK);

@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
         	this.toolStrip = new System.Windows.Forms.ToolStrip();
-        	this.actualSizeToolStripButton = new System.Windows.Forms.ToolStripButton();
-        	this.zoomInToolStripButton = new System.Windows.Forms.ToolStripButton();
-        	this.zoomOutToolStripButton = new System.Windows.Forms.ToolStripButton();
+        	this.btnSizeToFit = new System.Windows.Forms.ToolStripButton();
+        	this.btnZoomIn = new System.Windows.Forms.ToolStripButton();
+        	this.btnZoomOut = new System.Windows.Forms.ToolStripButton();
         	this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
         	this.zoomLevelsToolStripComboBox = new System.Windows.Forms.ToolStripComboBox();
         	this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
@@ -42,84 +42,86 @@
         	// toolStrip
         	// 
         	this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-        	        	        	this.actualSizeToolStripButton,
-        	        	        	this.zoomInToolStripButton,
-        	        	        	this.zoomOutToolStripButton,
+        	        	        	this.btnSizeToFit,
+        	        	        	this.btnZoomIn,
+        	        	        	this.btnZoomOut,
         	        	        	this.toolStripSeparator2,
         	        	        	this.zoomLevelsToolStripComboBox,
         	        	        	this.toolStripSeparator4});
         	this.toolStrip.Location = new System.Drawing.Point(0, 0);
         	this.toolStrip.Name = "toolStrip";
-        	this.toolStrip.Size = new System.Drawing.Size(708, 25);
+        	this.toolStrip.Size = new System.Drawing.Size(944, 28);
         	this.toolStrip.TabIndex = 2;
         	// 
-        	// actualSizeToolStripButton
+        	// btnSizeToFit
         	// 
-        	this.actualSizeToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-        	this.actualSizeToolStripButton.Image = global::GKResources.iSizeToFit;
-        	this.actualSizeToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-        	this.actualSizeToolStripButton.Name = "actualSizeToolStripButton";
-        	this.actualSizeToolStripButton.Size = new System.Drawing.Size(23, 22);
-        	this.actualSizeToolStripButton.Text = "Actual Size";
-        	this.actualSizeToolStripButton.Click += new System.EventHandler(this.actualSizeToolStripButton_Click);
+        	this.btnSizeToFit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+        	this.btnSizeToFit.Image = global::GKResources.iSizeToFit2;
+        	this.btnSizeToFit.ImageTransparentColor = System.Drawing.Color.Magenta;
+        	this.btnSizeToFit.Name = "btnSizeToFit";
+        	this.btnSizeToFit.Size = new System.Drawing.Size(23, 25);
+        	this.btnSizeToFit.Text = "Actual Size";
+        	this.btnSizeToFit.Click += new System.EventHandler(this.btnSizeToFit_Click);
         	// 
-        	// zoomInToolStripButton
+        	// btnZoomIn
         	// 
-        	this.zoomInToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-        	this.zoomInToolStripButton.Image = global::GKResources.iZoomIn;
-        	this.zoomInToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-        	this.zoomInToolStripButton.Name = "zoomInToolStripButton";
-        	this.zoomInToolStripButton.Size = new System.Drawing.Size(23, 22);
-        	this.zoomInToolStripButton.Text = "Zoom In";
-        	this.zoomInToolStripButton.Click += new System.EventHandler(this.zoomInToolStripButton_Click);
+        	this.btnZoomIn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+        	this.btnZoomIn.Image = global::GKResources.iZoomIn2;
+        	this.btnZoomIn.ImageTransparentColor = System.Drawing.Color.Magenta;
+        	this.btnZoomIn.Name = "btnZoomIn";
+        	this.btnZoomIn.Size = new System.Drawing.Size(23, 25);
+        	this.btnZoomIn.Text = "Zoom In";
+        	this.btnZoomIn.Click += new System.EventHandler(this.btnZoomIn_Click);
         	// 
-        	// zoomOutToolStripButton
+        	// btnZoomOut
         	// 
-        	this.zoomOutToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-        	this.zoomOutToolStripButton.Image = global::GKResources.iZoomOut;
-        	this.zoomOutToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-        	this.zoomOutToolStripButton.Name = "zoomOutToolStripButton";
-        	this.zoomOutToolStripButton.Size = new System.Drawing.Size(23, 22);
-        	this.zoomOutToolStripButton.Text = "Zoom Out";
-        	this.zoomOutToolStripButton.Click += new System.EventHandler(this.zoomOutToolStripButton_Click);
+        	this.btnZoomOut.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+        	this.btnZoomOut.Image = global::GKResources.iZoomOut2;
+        	this.btnZoomOut.ImageTransparentColor = System.Drawing.Color.Magenta;
+        	this.btnZoomOut.Name = "btnZoomOut";
+        	this.btnZoomOut.Size = new System.Drawing.Size(23, 25);
+        	this.btnZoomOut.Text = "Zoom Out";
+        	this.btnZoomOut.Click += new System.EventHandler(this.btnZoomOut_Click);
         	// 
         	// toolStripSeparator2
         	// 
         	this.toolStripSeparator2.Name = "toolStripSeparator2";
-        	this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+        	this.toolStripSeparator2.Size = new System.Drawing.Size(6, 28);
         	// 
         	// zoomLevelsToolStripComboBox
         	// 
         	this.zoomLevelsToolStripComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
         	this.zoomLevelsToolStripComboBox.Name = "zoomLevelsToolStripComboBox";
-        	this.zoomLevelsToolStripComboBox.Size = new System.Drawing.Size(140, 25);
+        	this.zoomLevelsToolStripComboBox.Size = new System.Drawing.Size(140, 28);
         	this.zoomLevelsToolStripComboBox.SelectedIndexChanged += new System.EventHandler(this.zoomLevelsToolStripComboBox_SelectedIndexChanged);
         	// 
         	// toolStripSeparator4
         	// 
         	this.toolStripSeparator4.Name = "toolStripSeparator4";
-        	this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+        	this.toolStripSeparator4.Size = new System.Drawing.Size(6, 28);
         	// 
         	// imageBox
         	// 
         	this.imageBox.BackColor = System.Drawing.SystemColors.ControlDark;
         	this.imageBox.Dock = System.Windows.Forms.DockStyle.Fill;
         	this.imageBox.GridDisplayMode = Cyotek.Windows.Forms.ImageBoxGridDisplayMode.None;
-        	this.imageBox.Location = new System.Drawing.Point(0, 25);
+        	this.imageBox.Location = new System.Drawing.Point(0, 28);
+        	this.imageBox.Margin = new System.Windows.Forms.Padding(4);
         	this.imageBox.Name = "imageBox";
-        	this.imageBox.Size = new System.Drawing.Size(708, 291);
+        	this.imageBox.Size = new System.Drawing.Size(944, 361);
         	this.imageBox.TabIndex = 0;
         	this.imageBox.ZoomChanged += new System.EventHandler(this.imageBox_ZoomChanged);
         	this.imageBox.ZoomLevelsChanged += new System.EventHandler(this.imageBox_ZoomLevelsChanged);
         	// 
-        	// ImageControl
+        	// GKImageControl
         	// 
-        	this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+        	this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
         	this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         	this.Controls.Add(this.imageBox);
         	this.Controls.Add(this.toolStrip);
-        	this.Name = "ImageControl";
-        	this.Size = new System.Drawing.Size(708, 316);
+        	this.Margin = new System.Windows.Forms.Padding(4);
+        	this.Name = "GKImageControl";
+        	this.Size = new System.Drawing.Size(944, 389);
         	this.toolStrip.ResumeLayout(false);
         	this.toolStrip.PerformLayout();
         	this.ResumeLayout(false);
@@ -130,9 +132,9 @@
 
         private Cyotek.Windows.Forms.ImageBox imageBox;
         private System.Windows.Forms.ToolStrip toolStrip;
-        private System.Windows.Forms.ToolStripButton actualSizeToolStripButton;
-        private System.Windows.Forms.ToolStripButton zoomInToolStripButton;
-        private System.Windows.Forms.ToolStripButton zoomOutToolStripButton;
+        private System.Windows.Forms.ToolStripButton btnSizeToFit;
+        private System.Windows.Forms.ToolStripButton btnZoomIn;
+        private System.Windows.Forms.ToolStripButton btnZoomOut;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripComboBox zoomLevelsToolStripComboBox;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;

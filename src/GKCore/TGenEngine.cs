@@ -327,9 +327,9 @@ namespace GKCore
 			return Result;
 		}
 
-		public string GetContainerName(bool arc)
+		public string GetContainerName(string fileName, bool arc)
 		{
-			string result = Path.GetFileNameWithoutExtension(this.FFileName);
+			string result = Path.GetFileNameWithoutExtension(fileName);
 			if (arc) {
 				result += ".zip";
 			} else {

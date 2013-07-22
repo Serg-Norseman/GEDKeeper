@@ -656,7 +656,11 @@ namespace GKCore
 		/* 613 */ LSID_LogSend,
 		/* 614 */ LSID_Charts,
 
-		/* 000 */ LSID_Last = LSID_Charts
+		/* 615 */ LSID_SizeToFit,
+		/* 616 */ LSID_ZoomIn,
+		/* 617 */ LSID_ZoomOut,
+
+		/* 000 */ LSID_Last = LSID_ZoomOut
 	}
 
 	public static class LangMan
@@ -1295,7 +1299,11 @@ namespace GKCore
 			/* 611 */ "Полнотекстовый поиск",
 			/* 612 */ "Найдено: {0} результат(ов).\r\n",
 			/* 613 */ "Отправить журнал ошибок",
-			/* 614 */ "Диаграммы"
+			/* 614 */ "Диаграммы",
+
+			/* 615 */ "Под размер окна",
+			/* 616 */ "Увеличить",
+			/* 617 */ "Уменьшить"
 		};
 
 		public static string[] LSList = new string[(int)LSID.LSID_Last + 1];

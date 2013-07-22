@@ -16,41 +16,20 @@ namespace GKUI
 {
 	public partial class TfmTreeTools : Form, IProgressController
 	{
-		private class TPlaceObj : IDisposable
-		{
-			public string Name;
-			public TList Facts;
-			protected bool Disposed_;
-
-			public TPlaceObj()
-			{
-				this.Facts = new TList();
-			}
-
-			public void Dispose()
-			{
-				if (!this.Disposed_)
-				{
-					this.Facts.Dispose();
-					this.Disposed_ = true;
-				}
-			}
-		}
-
 		private static readonly string[] HelpTopics;
 
+		// runtime
 		private TfmBase FBase;
 		private TGEDCOMTree FTree;
 
 		private TList FSplitList;
-
 		private TGEDCOMRecordType FRMMode;
 		private StringList FRMSkip;
 		private int FRMIndex;
-
 		private StringList FPlaces;
 		private TList FChecksList;
 
+		// UI
 		private GKListView ListPlaces;
 		private GKListView ListChecks;
 		private GKListView ListPatriarchs;
@@ -60,6 +39,201 @@ namespace GKUI
 		{
 			get	{ return this.FBase; }
 		}
+
+		protected override void Dispose(bool Disposing)
+		{
+			if (Disposing)
+			{
+				this.FChecksList.Dispose();
+				TreeTools.PlacesSearch_Clear(this.FPlaces);
+				this.FPlaces.Free();
+				this.FRMSkip.Free();
+				this.FSplitList.Dispose();
+			}
+			base.Dispose(Disposing);
+		}
+
+		public TfmTreeTools(TfmBase aBase)
+		{
+			this.InitializeComponent();
+
+			this.FBase = aBase;
+			this.FTree = this.Base.Tree;
+
+			this.PageControl.SelectedIndex = 0;
+			this.FSplitList = new TList();
+
+			this.FRMSkip = new StringList();
+			this.FRMMode = TGEDCOMRecordType.rtIndividual;
+
+			this.MergeCtl.Base = this.FBase;
+			this.MergeCtl.MergeMode = this.FRMMode;
+
+			this.FPlaces = new StringList();
+			this.FPlaces.Sorted = true;
+			this.FChecksList = new TList(true);
+
+			this.PrepareChecksList();
+			this.PreparePatriarchsList();
+			this.PreparePlacesList();
+
+			this.SetLang();
+		}
+
+		public void SetLang()
+		{
+			this.Text = LangMan.LS(LSID.LSID_MITreeTools);
+
+			this.SheetTreeCompare.Text = LangMan.LS(LSID.LSID_ToolOp_1);
+			this.SheetTreeMerge.Text = LangMan.LS(LSID.LSID_ToolOp_2);
+			this.SheetTreeSplit.Text = LangMan.LS(LSID.LSID_ToolOp_3);
+			this.SheetRecMerge.Text = LangMan.LS(LSID.LSID_ToolOp_4);
+			this.SheetTreeImport.Text = LangMan.LS(LSID.LSID_ToolOp_5);
+			this.SheetFamilyGroups.Text = LangMan.LS(LSID.LSID_ToolOp_6);
+			this.SheetTreeCheck.Text = LangMan.LS(LSID.LSID_ToolOp_7);
+			this.SheetPatSearch.Text = LangMan.LS(LSID.LSID_ToolOp_8);
+			this.SheetPlaceManage.Text = LangMan.LS(LSID.LSID_ToolOp_9);
+			
+			//this.SheetMerge.Text
+			//this.SheetOptions.Text
+
+			this.btnClose.Text = LangMan.LSList[99];
+			this.btnHelp.Text = LangMan.LSList[5];
+			this.Label1.Text = LangMan.LSList[0];
+			this.btnFileChoose.Text = LangMan.LSList[100] + "...";
+			this.btnTreeMerge.Text = LangMan.LSList[100] + "...";
+			this.btnSelectAll.Text = LangMan.LSList[557];
+			this.btnSelectFamily.Text = LangMan.LSList[558];
+			this.btnSelectAncestors.Text = LangMan.LSList[559];
+			this.btnSelectDescendants.Text = LangMan.LSList[560];
+			this.btnDelete.Text = LangMan.LSList[231];
+			this.btnSave.Text = LangMan.LSList[9];
+			this.SheetMerge.Text = LangMan.LSList[561];
+			this.SheetOptions.Text = LangMan.LSList[39];
+			this.btnSearch.Text = LangMan.LSList[562];
+			this.btnSkip.Text = LangMan.LSList[563];
+			this.rgMode.Text = LangMan.LSList[564];
+			this.RadioButton5.Text = LangMan.LSList[52];
+			this.RadioButton6.Text = LangMan.LSList[54];
+			this.RadioButton7.Text = LangMan.LSList[53];
+			this.RadioButton8.Text = LangMan.LSList[56];
+			this.GroupBox1.Text = LangMan.LSList[565];
+			this.chkIndistinctMatching.Text = LangMan.LSList[567];
+			this.chkBirthYear.Text = LangMan.LSList[569];
+			this.Label5.Text = LangMan.LSList[570];
+			this.Label6.Text = LangMan.LSList[571];
+			this.Label3.Text = LangMan.LSList[0];
+			this.btnImportFileChoose.Text = LangMan.LSList[100] + "...";
+			this.btnBaseRepair.Text = LangMan.LSList[572];
+			this.Label8.Text = LangMan.LSList[573];
+			this.btnSetPatriarch.Text = LangMan.LSList[574];
+			this.btnPatSearch.Text = LangMan.LSList[175];
+			this.btnIntoList.Text = LangMan.LSList[575];
+		}
+
+		static TfmTreeTools()
+		{
+			TfmTreeTools.HelpTopics = new string[]
+			{
+				"::/gkhTools_TreeCompare.htm", 
+				"::/gkhTools_TreeMerge.htm", 
+				"::/gkhTools_TreeSplit.htm", 
+				"::/gkhTools_DubsMerge.htm", 
+				"::/gkhTools_TreeImport.htm", 
+				"::/gkhTools_FamiliesConnectivity.htm", 
+				"::/gkhTools_TreeCheck.htm", 
+				"::/gkhTools_PatSearch.htm", 
+				"::/gkhTools_PlacesManage.htm"
+			};
+		}
+
+		void btnHelp_Click(object sender, EventArgs e)
+		{
+			GKUI.TfmGEDKeeper.Instance.ShowHelpTopic(TfmTreeTools.HelpTopics[this.PageControl.TabIndex]);
+		}
+
+		void PageControl_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (this.PageControl.SelectedTab == this.SheetFamilyGroups)
+			{
+				this.CheckGroups();
+			}
+			else
+			{
+				if (this.PageControl.SelectedTab == this.SheetTreeCheck)
+				{
+					this.CheckBase();
+				}
+				else
+				{
+					if (this.PageControl.SelectedTab == this.SheetPlaceManage)
+					{
+						this.CheckPlaces();
+					}
+				}
+			}
+		}
+
+		#region Clear UI
+
+		void IProgressController.ProgressInit(int aMax, string aTitle)
+		{
+			TfmProgress.ProgressInit(aMax, aTitle);
+		}
+
+		void IProgressController.ProgressDone()
+		{
+			TfmProgress.ProgressDone();
+		}
+
+		void IProgressController.ProgressStep()
+		{
+			TfmProgress.ProgressStep();
+		}
+
+		void btnTreeMerge_Click(object sender, EventArgs e)
+		{
+			if (this.OpenDialog1.ShowDialog() == DialogResult.OK) {
+				this.edUpdateBase.Text = this.OpenDialog1.FileName;
+
+				TreeTools.TreeMerge(this.Base.Tree, this.edUpdateBase.Text, this.mSyncRes);
+
+				this.Base.ListsRefresh(false);
+			}
+		}
+
+		void RadioButton8_Click(object sender, EventArgs e)
+		{
+			if (this.RadioButton5.Checked) this.FRMMode = TGEDCOMRecordType.rtIndividual;
+			if (this.RadioButton6.Checked) this.FRMMode = TGEDCOMRecordType.rtNote;
+			if (this.RadioButton7.Checked) this.FRMMode = TGEDCOMRecordType.rtFamily;
+			if (this.RadioButton8.Checked) this.FRMMode = TGEDCOMRecordType.rtSource;
+
+			this.MergeCtl.MergeMode = this.FRMMode;
+		}
+
+		void btnImportFileChoose_Click(object sender, EventArgs e)
+		{
+			if (this.OpenDialog2.ShowDialog() == DialogResult.OK)
+			{
+				this.edImportFile.Text = this.OpenDialog2.FileName;
+				Importer imp = new Importer(this.Base.Engine, this.ListBox1.Items);
+				try
+				{
+					imp.TreeImportEx(this.edImportFile.Text);
+				}
+				finally
+				{
+					imp.Free();
+				}
+				this.ListBox1.SelectedIndex = this.ListBox1.Items.Count - 1;
+				this.Base.ListsRefresh(false);
+			}
+		}
+
+		#endregion
+
+		#region Duplicates Search
 
 		private void SearchDups()
 		{
@@ -130,95 +304,16 @@ namespace GKUI
 			this.SearchDups();
 		}
 
-		private void Select(TGEDCOMIndividualRecord aPerson, TreeTools.TTreeWalkMode aMode)
+		void btnSearch_Click(object sender, EventArgs e)
 		{
-			this.FSplitList.Clear();
-			TreeTools.TreeWalk(aPerson, aMode, this.FSplitList);
-			this.UpdateSplitLists();
+			this.FRMIndex = 0;
+			this.FRMSkip.Clear();
+			this.SearchDups();
 		}
 
-		private void CheckRelations()
-		{
-			int num = this.FSplitList.Count;
-			for (int i = 0; i < num; i++)
-			{
-				TGEDCOMRecord rec = this.FSplitList[i] as TGEDCOMRecord;
-				switch (rec.RecordType)
-				{
-					case TGEDCOMRecordType.rtIndividual:
-					{
-						_CheckRelations_CheckIndividual(rec as TGEDCOMIndividualRecord);
-						break;
-					}
-					case TGEDCOMRecordType.rtFamily:
-					{
-						_CheckRelations_CheckFamily(rec as TGEDCOMFamilyRecord);
-						break;
-					}
-					case TGEDCOMRecordType.rtNote:
-					{
-						_CheckRelations_CheckRecord(rec);
-						break;
-					}
-					case TGEDCOMRecordType.rtMultimedia:
-					{
-						_CheckRelations_CheckRecord(rec);
-						break;
-					}
-					case TGEDCOMRecordType.rtSource:
-					{
-						_CheckRelations_CheckSource(rec as TGEDCOMSourceRecord);
-						break;
-					}
-					case TGEDCOMRecordType.rtRepository:
-					{
-						_CheckRelations_CheckRecord(rec);
-						break;
-					}
-					case TGEDCOMRecordType.rtSubmitter:
-					{
-						_CheckRelations_CheckRecord(rec);
-						break;
-					}
-				}
-			}
-		}
+		#endregion
 
-		private void UpdateSplitLists()
-		{
-			this.ListSelected.BeginUpdate();
-			this.ListSelected.Items.Clear();
-			this.ListSkipped.BeginUpdate();
-			this.ListSkipped.Items.Clear();
-			try
-			{
-				int cnt = 0;
-
-				int num = this.FTree.RecordsCount - 1;
-				for (int i = 0; i <= num; i++)
-				{
-					TGEDCOMRecord rec = this.FTree[i];
-					if (rec is TGEDCOMIndividualRecord)
-					{
-						cnt++;
-						TGEDCOMIndividualRecord i_rec = rec as TGEDCOMIndividualRecord;
-						string st = i_rec.XRef + " / " + i_rec.aux_GetNameStr(true, false);
-
-						if (this.FSplitList.IndexOf(i_rec) < 0) {
-							this.ListSkipped.Items.Add(st);
-						} else {
-							this.ListSelected.Items.Add(st);
-						}
-					}
-				}
-				this.Text = this.FSplitList.Count.ToString() + " / " + cnt.ToString();
-			}
-			finally
-			{
-				this.ListSelected.EndUpdate();
-				this.ListSkipped.EndUpdate();
-			}
-		}
+		#region CheckGroups
 
 		private void CheckGroups()
 		{
@@ -274,6 +369,24 @@ namespace GKUI
 				TfmProgress.ProgressDone();
 			}
 		}
+
+		void TreeView1_DoubleClick(object sender, EventArgs e)
+		{
+			GKTreeNode node = this.TreeView1.SelectedNode as GKTreeNode;
+			if (node != null)
+			{
+				TGEDCOMIndividualRecord i_rec = node.Data as TGEDCOMIndividualRecord;
+				if (i_rec != null)
+				{
+					this.Base.SelectRecordByXRef(i_rec.XRef);
+					base.Close();
+				}
+			}
+		}
+
+		#endregion
+
+		#region Tree Verify
 
 		private void PrepareChecksList()
 		{
@@ -339,29 +452,9 @@ namespace GKUI
 			}
 		}
 
-		private void PreparePatriarchsList()
-		{
-			this.Base.CreateListView(this.Panel3, out this.ListPatriarchs);
-			this.ListPatriarchs.DoubleClick += new EventHandler(this.ListPatriarchsDblClick);
-			this.ListPatriarchs.AddListColumn(LangMan.LSList[92], 400, false);
-			this.ListPatriarchs.AddListColumn(LangMan.LSList[321], 90, false);
-			this.ListPatriarchs.AddListColumn(LangMan.LSList[587], 90, false);
-			this.ListPatriarchs.AddListColumn(LangMan.LSList[588], 90, false);
-		}
+		#endregion
 
-		void ListPatriarchsDblClick(object sender, EventArgs e)
-		{
-			GKListItem item = this.ListPatriarchs.SelectedItem();
-			if (item != null)
-			{
-				TGEDCOMIndividualRecord i_rec = item.Data as TGEDCOMIndividualRecord;
-				if (i_rec != null)
-				{
-					this.Base.SelectRecordByXRef(i_rec.XRef);
-					this.Close();
-				}
-			}
-		}
+		#region Places Management
 
 		private void PreparePlacesList()
 		{
@@ -371,57 +464,18 @@ namespace GKUI
 			this.ListPlaces.AddListColumn(LangMan.LSList[589], 100, false);
 		}
 
-		private void PlacesClear()
-		{
-			for (int i = this.FPlaces.Count - 1; i >= 0; i--) (this.FPlaces.GetObject(i) as TPlaceObj).Dispose();
-			this.FPlaces.Clear();
-		}
-
 		private void CheckPlaces()
 		{
-			TfmProgress.ProgressInit(this.FTree.RecordsCount, LangMan.LSList[590]);
 			this.ListPlaces.BeginUpdate();
 			try
 			{
-				this.PlacesClear();
+				TreeTools.PlacesSearch(this.FTree, this.FPlaces, this);
 
-				int num = this.FTree.RecordsCount - 1;
-				for (int i = 0; i <= num; i++)
-				{
-					TfmProgress.ProgressStep();
-
-					TGEDCOMRecord record = this.FTree[i];
-
-					if (record is TGEDCOMIndividualRecord)
-					{
-						TGEDCOMIndividualRecord iRec = record as TGEDCOMIndividualRecord;
-
-						int num2 = iRec.IndividualEvents.Count - 1;
-						for (int j = 0; j <= num2; j++)
-						{
-							_CheckPlaces_PrepareEvent(iRec.IndividualEvents[j]);
-						}
-					}
-					else
-					{
-						if (record is TGEDCOMFamilyRecord)
-						{
-							TGEDCOMFamilyRecord fRec = record as TGEDCOMFamilyRecord;
-
-							int num3 = fRec.FamilyEvents.Count - 1;
-							for (int j = 0; j <= num3; j++)
-							{
-								_CheckPlaces_PrepareEvent(fRec.FamilyEvents[j]);
-							}
-						}
-					}
-				}
 				this.ListPlaces.Items.Clear();
-
 				int num4 = this.FPlaces.Count - 1;
 				for (int i = 0; i <= num4; i++)
 				{
-					TPlaceObj place_obj = this.FPlaces.GetObject(i) as TfmTreeTools.TPlaceObj;
+					TPlaceObj place_obj = this.FPlaces.GetObject(i) as TPlaceObj;
 					GKListItem item = this.ListPlaces.AddItem(this.FPlaces[i], place_obj);
 					item.SubItems.Add(place_obj.Facts.Count.ToString());
 				}
@@ -429,8 +483,12 @@ namespace GKUI
 			finally
 			{
 				this.ListPlaces.EndUpdate();
-				TfmProgress.ProgressDone();
 			}
+		}
+
+		void btnIntoList_Click(object sender, EventArgs e)
+		{
+			this.ListPlacesDblClick(null, null);
 		}
 
 		void ListPlacesDblClick(object sender, EventArgs e)
@@ -438,7 +496,7 @@ namespace GKUI
 			GKListItem item = this.ListPlaces.SelectedItem();
 			if (item != null)
 			{
-				TfmTreeTools.TPlaceObj p_obj = item.Data as TfmTreeTools.TPlaceObj;
+				TPlaceObj p_obj = item.Data as TPlaceObj;
 				if (p_obj != null)
 				{
 					if (p_obj.Name.IndexOf("[*]") == 0)
@@ -465,6 +523,53 @@ namespace GKUI
 			}
 		}
 
+		#endregion
+
+		#region Tree Splitting
+
+		private void UpdateSplitLists()
+		{
+			this.ListSelected.BeginUpdate();
+			this.ListSelected.Items.Clear();
+			this.ListSkipped.BeginUpdate();
+			this.ListSkipped.Items.Clear();
+			try
+			{
+				int cnt = 0;
+
+				int num = this.FTree.RecordsCount - 1;
+				for (int i = 0; i <= num; i++)
+				{
+					TGEDCOMRecord rec = this.FTree[i];
+					if (rec is TGEDCOMIndividualRecord)
+					{
+						cnt++;
+						TGEDCOMIndividualRecord i_rec = rec as TGEDCOMIndividualRecord;
+						string st = i_rec.XRef + " / " + i_rec.aux_GetNameStr(true, false);
+
+						if (this.FSplitList.IndexOf(i_rec) < 0) {
+							this.ListSkipped.Items.Add(st);
+						} else {
+							this.ListSelected.Items.Add(st);
+						}
+					}
+				}
+				this.Text = this.FSplitList.Count.ToString() + " / " + cnt.ToString();
+			}
+			finally
+			{
+				this.ListSelected.EndUpdate();
+				this.ListSkipped.EndUpdate();
+			}
+		}
+
+		private void Select(TGEDCOMIndividualRecord aPerson, TreeTools.TTreeWalkMode aMode)
+		{
+			this.FSplitList.Clear();
+			TreeTools.TreeWalk(aPerson, aMode, this.FSplitList);
+			this.UpdateSplitLists();
+		}
+
 		void btnSelectFamily_Click(object sender, EventArgs e)
 		{
 			this.Select(this.Base.GetSelectedPerson(), TreeTools.TTreeWalkMode.twmFamily);
@@ -478,6 +583,11 @@ namespace GKUI
 		void btnSelectDescendants_Click(object sender, EventArgs e)
 		{
 			this.Select(this.Base.GetSelectedPerson(), TreeTools.TTreeWalkMode.twmDescendants);
+		}
+
+		void btnSelectAll_Click(object sender, EventArgs e)
+		{
+			this.Select(this.Base.GetSelectedPerson(), TreeTools.TTreeWalkMode.twmAll);
 		}
 
 		void btnDelete_Click(object sender, EventArgs e)
@@ -501,7 +611,8 @@ namespace GKUI
 		{
 			if (this.SaveDialog1.ShowDialog() == DialogResult.OK)
 			{
-				this.CheckRelations();
+				TreeTools.CheckRelations(FSplitList);
+
 				string subm = this.FTree.Header.GetTagStringValue("SUBM");
 				this.FTree.Header.Clear();
 				this.FTree.Header.Source = "GEDKeeper";
@@ -541,42 +652,30 @@ namespace GKUI
 			}
 		}
 
-		void btnSearch_Click(object sender, EventArgs e)
+		#endregion
+
+		#region Patriarchs Search
+
+		private void PreparePatriarchsList()
 		{
-			this.FRMIndex = 0;
-			this.FRMSkip.Clear();
-			this.SearchDups();
+			this.Base.CreateListView(this.Panel3, out this.ListPatriarchs);
+			this.ListPatriarchs.DoubleClick += new EventHandler(this.ListPatriarchsDblClick);
+			this.ListPatriarchs.AddListColumn(LangMan.LSList[92], 400, false);
+			this.ListPatriarchs.AddListColumn(LangMan.LSList[321], 90, false);
+			this.ListPatriarchs.AddListColumn(LangMan.LSList[587], 90, false);
+			this.ListPatriarchs.AddListColumn(LangMan.LSList[588], 90, false);
 		}
 
-		void btnImportFileChoose_Click(object sender, EventArgs e)
+		void ListPatriarchsDblClick(object sender, EventArgs e)
 		{
-			if (this.OpenDialog2.ShowDialog() == DialogResult.OK)
+			GKListItem item = this.ListPatriarchs.SelectedItem();
+			if (item != null)
 			{
-				this.edImportFile.Text = this.OpenDialog2.FileName;
-				Importer imp = new Importer(this.Base.Engine, this.ListBox1.Items);
-				try
-				{
-					imp.TreeImportEx(this.edImportFile.Text);
-				}
-				finally
-				{
-					imp.Free();
-				}
-				this.ListBox1.SelectedIndex = this.ListBox1.Items.Count - 1;
-				this.Base.ListsRefresh(false);
-			}
-		}
-
-		void TreeView1_DoubleClick(object sender, EventArgs e)
-		{
-			GKTreeNode node = this.TreeView1.SelectedNode as GKTreeNode;
-			if (node != null)
-			{
-				TGEDCOMIndividualRecord i_rec = node.Data as TGEDCOMIndividualRecord;
+				TGEDCOMIndividualRecord i_rec = item.Data as TGEDCOMIndividualRecord;
 				if (i_rec != null)
 				{
 					this.Base.SelectRecordByXRef(i_rec.XRef);
-					base.Close();
+					this.Close();
 				}
 			}
 		}
@@ -630,343 +729,7 @@ namespace GKUI
 			}
 		}
 
-		void btnIntoList_Click(object sender, EventArgs e)
-		{
-			this.ListPlacesDblClick(null, null);
-		}
-
-		void btnHelp_Click(object sender, EventArgs e)
-		{
-			GKUI.TfmGEDKeeper.Instance.ShowHelpTopic(TfmTreeTools.HelpTopics[this.PageControl.TabIndex]);
-		}
-
-		void PageControl_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if (this.PageControl.SelectedTab == this.SheetFamilyGroups)
-			{
-				this.CheckGroups();
-			}
-			else
-			{
-				if (this.PageControl.SelectedTab == this.SheetTreeCheck)
-				{
-					this.CheckBase();
-				}
-				else
-				{
-					if (this.PageControl.SelectedTab == this.SheetPlaceManage)
-					{
-						this.CheckPlaces();
-					}
-				}
-			}
-		}
-
-		void btnUpdateSelect_Click(object sender, EventArgs e)
-		{
-			if (this.OpenDialog1.ShowDialog() == DialogResult.OK)
-			{
-				this.edUpdateBase.Text = this.OpenDialog1.FileName;
-				int tmt = 0;
-				if (this.RadioButton3.Checked)
-				{
-					tmt = 0;
-				}
-				else
-				{
-					if (this.RadioButton3.Checked)
-					{
-						tmt = 1;
-					}
-				}
-				if (tmt != 0)
-				{
-					if (tmt == 1)
-					{
-						TreeTools.TreeSync(this.Base.Tree, this.edUpdateBase.Text, this.mSyncRes);
-					}
-				}
-				else
-				{
-					TreeTools.TreeMerge(this.Base.Tree, this.edUpdateBase.Text, this.mSyncRes);
-				}
-
-				this.Base.ListsRefresh(false);
-			}
-		}
-
-		void btnSelectAll_Click(object sender, EventArgs e)
-		{
-			this.Select(this.Base.GetSelectedPerson(), TreeTools.TTreeWalkMode.twmAll);
-		}
-
-		void RadioButton3_Click(object sender, EventArgs e)
-		{
-			this.gbSyncType.Enabled = this.RadioButton4.Checked;
-		}
-
-		void RadioButton8_Click(object sender, EventArgs e)
-		{
-			if (this.RadioButton5.Checked) this.FRMMode = TGEDCOMRecordType.rtIndividual;
-			if (this.RadioButton6.Checked) this.FRMMode = TGEDCOMRecordType.rtNote;
-			if (this.RadioButton7.Checked) this.FRMMode = TGEDCOMRecordType.rtFamily;
-			if (this.RadioButton8.Checked) this.FRMMode = TGEDCOMRecordType.rtSource;
-
-			this.MergeCtl.MergeMode = this.FRMMode;
-		}
-
-		protected override void Dispose(bool Disposing)
-		{
-			if (Disposing)
-			{
-				this.FChecksList.Dispose();
-				this.PlacesClear();
-				this.FPlaces.Free();
-				this.FRMSkip.Free();
-				this.FSplitList.Dispose();
-			}
-			base.Dispose(Disposing);
-		}
-
-		public TfmTreeTools(TfmBase aBase)
-		{
-			this.InitializeComponent();
-
-			this.FBase = aBase;
-			this.FTree = this.Base.Tree;
-
-			this.PageControl.SelectedIndex = 0;
-			this.FSplitList = new TList();
-
-			this.FRMSkip = new StringList();
-			this.FRMMode = TGEDCOMRecordType.rtIndividual;
-
-			this.MergeCtl.Base = this.FBase;
-			this.MergeCtl.MergeMode = this.FRMMode;
-
-			this.FPlaces = new StringList();
-			this.FPlaces.Sorted = true;
-			this.FChecksList = new TList(true);
-
-			this.PrepareChecksList();
-			this.PreparePatriarchsList();
-			this.PreparePlacesList();
-
-			this.SetLang();
-		}
-
-		public void SetLang()
-		{
-			this.Text = LangMan.LS(LSID.LSID_MITreeTools);
-
-			this.SheetTreeCompare.Text = LangMan.LS(LSID.LSID_ToolOp_1);
-			this.SheetTreeMerge.Text = LangMan.LS(LSID.LSID_ToolOp_2);
-			this.SheetTreeSplit.Text = LangMan.LS(LSID.LSID_ToolOp_3);
-			this.SheetRecMerge.Text = LangMan.LS(LSID.LSID_ToolOp_4);
-			this.SheetTreeImport.Text = LangMan.LS(LSID.LSID_ToolOp_5);
-			this.SheetFamilyGroups.Text = LangMan.LS(LSID.LSID_ToolOp_6);
-			this.SheetTreeCheck.Text = LangMan.LS(LSID.LSID_ToolOp_7);
-			this.SheetPatSearch.Text = LangMan.LS(LSID.LSID_ToolOp_8);
-			this.SheetPlaceManage.Text = LangMan.LS(LSID.LSID_ToolOp_9);
-			
-			//this.SheetMerge.Text
-			//this.SheetOptions.Text
-
-			this.btnClose.Text = LangMan.LSList[99];
-			this.btnHelp.Text = LangMan.LSList[5];
-			this.Label1.Text = LangMan.LSList[0];
-			this.btnFileChoose.Text = LangMan.LSList[100] + "...";
-			this.btnUpdateSelect.Text = LangMan.LSList[100] + "...";
-			this.btnSelectAll.Text = LangMan.LSList[557];
-			this.btnSelectFamily.Text = LangMan.LSList[558];
-			this.btnSelectAncestors.Text = LangMan.LSList[559];
-			this.btnSelectDescendants.Text = LangMan.LSList[560];
-			this.btnDelete.Text = LangMan.LSList[231];
-			this.btnSave.Text = LangMan.LSList[9];
-			this.SheetMerge.Text = LangMan.LSList[561];
-			this.SheetOptions.Text = LangMan.LSList[39];
-			this.btnSearch.Text = LangMan.LSList[562];
-			this.btnSkip.Text = LangMan.LSList[563];
-			this.rgMode.Text = LangMan.LSList[564];
-			this.RadioButton5.Text = LangMan.LSList[52];
-			this.RadioButton6.Text = LangMan.LSList[54];
-			this.RadioButton7.Text = LangMan.LSList[53];
-			this.RadioButton8.Text = LangMan.LSList[56];
-			this.GroupBox1.Text = LangMan.LSList[565];
-			this.chkIndistinctMatching.Text = LangMan.LSList[567];
-			this.chkBirthYear.Text = LangMan.LSList[569];
-			this.Label5.Text = LangMan.LSList[570];
-			this.Label6.Text = LangMan.LSList[571];
-			this.Label3.Text = LangMan.LSList[0];
-			this.btnImportFileChoose.Text = LangMan.LSList[100] + "...";
-			this.btnBaseRepair.Text = LangMan.LSList[572];
-			this.Label8.Text = LangMan.LSList[573];
-			this.btnSetPatriarch.Text = LangMan.LSList[574];
-			this.btnPatSearch.Text = LangMan.LSList[175];
-			this.btnIntoList.Text = LangMan.LSList[575];
-		}
-
-		static TfmTreeTools()
-		{
-			TfmTreeTools.HelpTopics = new string[]
-			{
-				"::/gkhTools_TreeCompare.htm", 
-				"::/gkhTools_TreeMerge.htm", 
-				"::/gkhTools_TreeSplit.htm", 
-				"::/gkhTools_DubsMerge.htm", 
-				"::/gkhTools_TreeImport.htm", 
-				"::/gkhTools_FamiliesConnectivity.htm", 
-				"::/gkhTools_TreeCheck.htm", 
-				"::/gkhTools_PatSearch.htm", 
-				"::/gkhTools_PlacesManage.htm"
-			};
-		}
-
-		private void _CheckRelations_AddRel(TGEDCOMRecord aRec)
-		{
-			if (FSplitList.IndexOf(aRec) < 0)
-			{
-				FSplitList.Add(aRec);
-			}
-		}
-
-		private void _CheckRelations_CheckRecord(TGEDCOMRecord rec)
-		{
-			int num = rec.MultimediaLinks.Count - 1;
-			for (int i = 0; i <= num; i++)
-			{
-				_CheckRelations_AddRel(rec.MultimediaLinks[i].Value);
-			}
-
-			int num2 = rec.Notes.Count - 1;
-			for (int i = 0; i <= num2; i++)
-			{
-				_CheckRelations_AddRel(rec.Notes[i].Value);
-			}
-
-			int num3 = rec.SourceCitations.Count - 1;
-			for (int i = 0; i <= num3; i++)
-			{
-				_CheckRelations_AddRel(rec.SourceCitations[i].Value);
-			}
-		}
-
-		private void _CheckRelations_CheckTag(TGEDCOMTagWithLists tag)
-		{
-			int num = tag.MultimediaLinks.Count - 1;
-			for (int i = 0; i <= num; i++)
-			{
-				_CheckRelations_AddRel(tag.MultimediaLinks[i].Value);
-			}
-
-			int num2 = tag.Notes.Count - 1;
-			for (int i = 0; i <= num2; i++)
-			{
-				_CheckRelations_AddRel(tag.Notes[i].Value);
-			}
-
-			int num3 = tag.SourceCitations.Count - 1;
-			for (int i = 0; i <= num3; i++)
-			{
-				_CheckRelations_AddRel(tag.SourceCitations[i].Value);
-			}
-		}
-
-		private void _CheckRelations_CheckIndividual(TGEDCOMIndividualRecord iRec)
-		{
-			_CheckRelations_CheckRecord(iRec);
-
-			int num = iRec.ChildToFamilyLinks.Count - 1;
-			for (int i = 0; i <= num; i++)
-			{
-				_CheckRelations_AddRel(iRec.ChildToFamilyLinks[i].Family);
-			}
-
-			int num2 = iRec.SpouseToFamilyLinks.Count - 1;
-			for (int i = 0; i <= num2; i++)
-			{
-				_CheckRelations_AddRel(iRec.SpouseToFamilyLinks[i].Family);
-			}
-
-			int num3 = iRec.IndividualEvents.Count - 1;
-			for (int i = 0; i <= num3; i++)
-			{
-				_CheckRelations_CheckTag(iRec.IndividualEvents[i].Detail);
-			}
-
-			int num4 = iRec.IndividualOrdinances.Count - 1;
-			for (int i = 0; i <= num4; i++)
-			{
-				_CheckRelations_CheckTag(iRec.IndividualOrdinances[i]);
-			}
-
-			int num5 = iRec.Submittors.Count - 1;
-			for (int i = 0; i <= num5; i++)
-			{
-				_CheckRelations_AddRel(iRec.Submittors[i].Value);
-			}
-
-			int num6 = iRec.Associations.Count - 1;
-			for (int i = 0; i <= num6; i++)
-			{
-				_CheckRelations_AddRel(iRec.Associations[i].Value);
-			}
-
-			int num7 = iRec.Aliasses.Count - 1;
-			for (int i = 0; i <= num7; i++)
-			{
-				_CheckRelations_AddRel(iRec.Aliasses[i].Value);
-			}
-
-			int num8 = iRec.AncestorsInterest.Count - 1;
-			for (int i = 0; i <= num8; i++)
-			{
-				_CheckRelations_AddRel(iRec.AncestorsInterest[i].Value);
-			}
-
-			int num9 = iRec.DescendantsInterest.Count - 1;
-			for (int i = 0; i <= num9; i++)
-			{
-				_CheckRelations_AddRel(iRec.DescendantsInterest[i].Value);
-			}
-
-			int num10 = iRec.Groups.Count - 1;
-			for (int i = 0; i <= num10; i++)
-			{
-				_CheckRelations_AddRel(iRec.Groups[i].Value);
-			}
-		}
-
-		private void _CheckRelations_CheckFamily(TGEDCOMFamilyRecord fRec)
-		{
-			_CheckRelations_CheckRecord(fRec);
-
-			int num = fRec.FamilyEvents.Count - 1;
-			for (int i = 0; i <= num; i++)
-			{
-				_CheckRelations_CheckTag(fRec.FamilyEvents[i].Detail);
-			}
-			_CheckRelations_AddRel(fRec.Submitter.Value);
-
-			int num2 = fRec.SpouseSealings.Count - 1;
-			for (int i = 0; i <= num2; i++)
-			{
-				_CheckRelations_CheckTag(fRec.SpouseSealings[i]);
-			}
-		}
-
-		private void _CheckRelations_CheckSource(TGEDCOMSourceRecord sRec)
-		{
-			_CheckRelations_CheckRecord(sRec);
-
-			int num = sRec.RepositoryCitations.Count - 1;
-			for (int i = 0; i <= num; i++)
-			{
-				_CheckRelations_AddRel(sRec.RepositoryCitations[i].Value);
-			}
-		}
-
-		private string _btnPatSearch_Click_GetLinks(ref TList lst, TPatriarchObj pObj)
+		private string _btnPatSearch_Click_GetLinks(TList lst, TPatriarchObj pObj)
 		{
 			string Result = "";
 			int num = pObj.ILinks.Count - 1;
@@ -979,148 +742,15 @@ namespace GKUI
 			return Result;
 		}
 
-		private void _CheckPlaces_PrepareEvent(TGEDCOMCustomEvent aEvent)
+		void BtnPatriarchsDiagramClick(object sender, EventArgs e)
 		{
-			string place_str = aEvent.Detail.Place.StringValue;
-			if (place_str != "")
-			{
-				TGEDCOMLocationRecord loc = aEvent.Detail.Place.Location.Value as TGEDCOMLocationRecord;
-				if (loc != null)
-				{
-					place_str = "[*] " + place_str;
-				}
-
-				int idx = FPlaces.IndexOf(place_str);
-
-				TPlaceObj place_obj;
-				if (idx >= 0)
-				{
-					place_obj = (FPlaces.GetObject(idx) as TPlaceObj);
-				}
-				else
-				{
-					place_obj = new TPlaceObj();
-					place_obj.Name = place_str;
-					FPlaces.AddObject(place_str, place_obj);
-				}
-				place_obj.Facts.Add(aEvent);
-			}
+			PatriarchsViewer wnd = new PatriarchsViewer(FBase, decimal.ToInt32(this.edMinGens.Value));
+			wnd.Show();
 		}
 
-		private void TreeCompare(TGEDCOMTree aMainTree, string aFileName)
-		{
-			TGEDCOMTree tempTree = new TGEDCOMTree();
-			tempTree.LoadFromFile(aFileName);
+		#endregion
 
-			StringList fams = new StringList();
-			StringList names = new StringList();
-
-			try
-			{
-				this.ListCompare.AppendText(LangMan.LSList[520] + "\r\n");
-
-				int num = aMainTree.RecordsCount - 1;
-				for (int i = 0; i <= num; i++)
-				{
-					if (aMainTree[i] is TGEDCOMIndividualRecord)
-					{
-						TGEDCOMIndividualRecord iRec = aMainTree[i] as TGEDCOMIndividualRecord;
-
-						int idx = names.AddObject(iRec.aux_GetNameStr(true, false), new TList());
-						(names.GetObject(idx) as TList).Add(iRec);
-
-						string fam, nam, pat;
-						iRec.aux_GetNameParts(out fam, out nam, out pat);
-
-						fams.AddObject(TGenEngine.PrepareRusFamily(fam, iRec.Sex == TGEDCOMSex.svFemale), null);
-					}
-				}
-
-				int num2 = tempTree.RecordsCount - 1;
-				for (int i = 0; i <= num2; i++)
-				{
-					if (tempTree[i] is TGEDCOMIndividualRecord)
-					{
-						TGEDCOMIndividualRecord iRec = tempTree[i] as TGEDCOMIndividualRecord;
-
-						string tm = iRec.aux_GetNameStr(true, false);
-						int idx = names.IndexOf(tm);
-						if (idx >= 0)
-						{
-							(names.GetObject(idx) as TList).Add(iRec);
-						}
-
-						string fam, nam, pat;
-						iRec.aux_GetNameParts(out fam, out nam, out pat);
-
-						tm = TGenEngine.PrepareRusFamily(fam, iRec.Sex == TGEDCOMSex.svFemale);
-						idx = fams.IndexOf(tm);
-						if (idx >= 0)
-						{
-							fams.SetObject(idx, 1);
-						}
-					}
-				}
-
-				for (int i = fams.Count - 1; i >= 0; i--)
-				{
-					if (fams.GetObject(i) == null || fams[i] == "?")
-						fams.Delete(i);
-				}
-
-				for (int i = names.Count - 1; i >= 0; i--)
-				{
-					if ((names.GetObject(i) as TList).Count == 1)
-					{
-						(names.GetObject(i) as TList).Dispose();
-						names.Delete(i);
-					}
-				}
-
-				if (fams.Count != 0)
-				{
-					this.ListCompare.AppendText(LangMan.LSList[576] + "\r\n");
-
-					int num3 = fams.Count - 1;
-					for (int i = 0; i <= num3; i++)
-					{
-						this.ListCompare.AppendText("    " + fams[i] + "\r\n");
-					}
-				}
-
-				if (names.Count != 0)
-				{
-					this.ListCompare.AppendText(LangMan.LSList[577] + "\r\n");
-
-					int num4 = names.Count - 1;
-					for (int i = 0; i <= num4; i++)
-					{
-						this.ListCompare.AppendText("    " + names[i] + "\r\n");
-						TList lst = names.GetObject(i) as TList;
-
-						int num5 = lst.Count - 1;
-						for (int j = 0; j <= num5; j++)
-						{
-							TGEDCOMIndividualRecord iRec = lst[j] as TGEDCOMIndividualRecord;
-							this.ListCompare.AppendText("      * " + iRec.aux_GetNameStr(true, false) + " " + TGenEngine.GetLifeStr(iRec) + "\r\n");
-						}
-					}
-				}
-			}
-			finally
-			{
-				int num6 = names.Count - 1;
-				for (int i = 0; i <= num6; i++)
-				{
-					SysUtils.Free(names.GetObject(i));
-				}
-
-				names.Free();
-				fams.Free();
-
-				tempTree.Dispose();
-			}
-		}
+		#region Match files
 
 		private string external_match_db;
 		private enum TreeMatchType { tmtInternal, tmtExternal, tmtAnalysis }
@@ -1166,7 +796,7 @@ namespace GKUI
 
 				case TreeMatchType.tmtExternal:
 					{
-						this.TreeCompare(this.FTree, external_match_db);
+						TreeTools.TreeCompare(this.FTree, external_match_db, this.ListCompare);
 						break;
 					}
 
@@ -1201,26 +831,7 @@ namespace GKUI
 			this.btnFileChoose.Enabled = (type == TreeMatchType.tmtExternal);
 		}
 
-		void BtnPatriarchsDiagramClick(object sender, EventArgs e)
-		{
-			PatriarchsViewer wnd = new PatriarchsViewer(FBase, decimal.ToInt32(this.edMinGens.Value));
-			wnd.Show();
-		}
-		
-		void IProgressController.ProgressInit(int aMax, string aTitle)
-		{
-			TfmProgress.ProgressInit(aMax, aTitle);
-		}
-		
-		void IProgressController.ProgressDone()
-		{
-			TfmProgress.ProgressDone();
-		}
-		
-		void IProgressController.ProgressStep()
-		{
-			TfmProgress.ProgressStep();
-		}
+		#endregion
 
 	}
 }

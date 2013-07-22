@@ -52,10 +52,7 @@ namespace GKUI
 		private System.Windows.Forms.TextBox edMasterBase;
 		private System.Windows.Forms.Label Label7;
 		private System.Windows.Forms.TextBox edUpdateBase;
-		private System.Windows.Forms.Button btnUpdateSelect;
-		private System.Windows.Forms.GroupBox gbSyncType;
-		private System.Windows.Forms.RadioButton RadioButton1;
-		private System.Windows.Forms.RadioButton RadioButton2;
+		private System.Windows.Forms.Button btnTreeMerge;
 		private System.Windows.Forms.TextBox mSyncRes;
 		private System.Windows.Forms.TabPage SheetPatSearch;
 		private System.Windows.Forms.Button btnPatSearch;
@@ -64,12 +61,9 @@ namespace GKUI
 		private System.Windows.Forms.NumericUpDown edMinGens;
 		private System.Windows.Forms.TabPage SheetPlaceManage;
 		private System.Windows.Forms.Panel Panel4;
-		private System.Windows.Forms.GroupBox rgTreeMergeType;
 		private System.Windows.Forms.Button btnHelp;
 		private System.Windows.Forms.Button btnSetPatriarch;
 		private System.Windows.Forms.Button btnIntoList;
-		private System.Windows.Forms.RadioButton RadioButton3;
-		private System.Windows.Forms.RadioButton RadioButton4;
 		private System.Windows.Forms.RadioButton RadioButton5;
 		private System.Windows.Forms.RadioButton RadioButton6;
 		private System.Windows.Forms.RadioButton RadioButton7;
@@ -94,14 +88,8 @@ namespace GKUI
 			this.Label7 = new System.Windows.Forms.Label();
 			this.edMasterBase = new System.Windows.Forms.TextBox();
 			this.edUpdateBase = new System.Windows.Forms.TextBox();
-			this.btnUpdateSelect = new System.Windows.Forms.Button();
-			this.gbSyncType = new System.Windows.Forms.GroupBox();
-			this.RadioButton1 = new System.Windows.Forms.RadioButton();
-			this.RadioButton2 = new System.Windows.Forms.RadioButton();
+			this.btnTreeMerge = new System.Windows.Forms.Button();
 			this.mSyncRes = new System.Windows.Forms.TextBox();
-			this.rgTreeMergeType = new System.Windows.Forms.GroupBox();
-			this.RadioButton3 = new System.Windows.Forms.RadioButton();
-			this.RadioButton4 = new System.Windows.Forms.RadioButton();
 			this.SheetTreeSplit = new System.Windows.Forms.TabPage();
 			this.btnSelectAll = new System.Windows.Forms.Button();
 			this.ListSelected = new System.Windows.Forms.ListBox();
@@ -161,8 +149,6 @@ namespace GKUI
 			this.SheetTreeCompare.SuspendLayout();
 			this.gbMatchType.SuspendLayout();
 			this.SheetTreeMerge.SuspendLayout();
-			this.gbSyncType.SuspendLayout();
-			this.rgTreeMergeType.SuspendLayout();
 			this.SheetTreeSplit.SuspendLayout();
 			this.SheetTreeImport.SuspendLayout();
 			this.SheetRecMerge.SuspendLayout();
@@ -306,10 +292,8 @@ namespace GKUI
 			this.SheetTreeMerge.Controls.Add(this.Label7);
 			this.SheetTreeMerge.Controls.Add(this.edMasterBase);
 			this.SheetTreeMerge.Controls.Add(this.edUpdateBase);
-			this.SheetTreeMerge.Controls.Add(this.btnUpdateSelect);
-			this.SheetTreeMerge.Controls.Add(this.gbSyncType);
+			this.SheetTreeMerge.Controls.Add(this.btnTreeMerge);
 			this.SheetTreeMerge.Controls.Add(this.mSyncRes);
-			this.SheetTreeMerge.Controls.Add(this.rgTreeMergeType);
 			this.SheetTreeMerge.Location = new System.Drawing.Point(4, 22);
 			this.SheetTreeMerge.Name = "SheetTreeMerge";
 			this.SheetTreeMerge.Size = new System.Drawing.Size(713, 423);
@@ -350,86 +334,24 @@ namespace GKUI
 			this.edUpdateBase.Size = new System.Drawing.Size(609, 21);
 			this.edUpdateBase.TabIndex = 1;
 			// 
-			// btnUpdateSelect
+			// btnTreeMerge
 			// 
-			this.btnUpdateSelect.Location = new System.Drawing.Point(624, 70);
-			this.btnUpdateSelect.Name = "btnUpdateSelect";
-			this.btnUpdateSelect.Size = new System.Drawing.Size(81, 25);
-			this.btnUpdateSelect.TabIndex = 2;
-			this.btnUpdateSelect.Text = "Выбрать...";
-			this.btnUpdateSelect.Click += new System.EventHandler(this.btnUpdateSelect_Click);
-			// 
-			// gbSyncType
-			// 
-			this.gbSyncType.Controls.Add(this.RadioButton1);
-			this.gbSyncType.Controls.Add(this.RadioButton2);
-			this.gbSyncType.Enabled = false;
-			this.gbSyncType.Location = new System.Drawing.Point(376, 104);
-			this.gbSyncType.Name = "gbSyncType";
-			this.gbSyncType.Size = new System.Drawing.Size(329, 65);
-			this.gbSyncType.TabIndex = 3;
-			this.gbSyncType.TabStop = false;
-			this.gbSyncType.Text = "Синхронизация";
-			// 
-			// RadioButton1
-			// 
-			this.RadioButton1.Checked = true;
-			this.RadioButton1.Location = new System.Drawing.Point(16, 16);
-			this.RadioButton1.Name = "RadioButton1";
-			this.RadioButton1.Size = new System.Drawing.Size(289, 17);
-			this.RadioButton1.TabIndex = 0;
-			this.RadioButton1.TabStop = true;
-			this.RadioButton1.Text = "Доверенный источник (безусловная синхронизация)";
-			// 
-			// RadioButton2
-			// 
-			this.RadioButton2.Enabled = false;
-			this.RadioButton2.Location = new System.Drawing.Point(16, 40);
-			this.RadioButton2.Name = "RadioButton2";
-			this.RadioButton2.Size = new System.Drawing.Size(289, 17);
-			this.RadioButton2.TabIndex = 1;
-			this.RadioButton2.Text = "Проверка всех элементов баз данных";
+			this.btnTreeMerge.Location = new System.Drawing.Point(624, 70);
+			this.btnTreeMerge.Name = "btnTreeMerge";
+			this.btnTreeMerge.Size = new System.Drawing.Size(81, 25);
+			this.btnTreeMerge.TabIndex = 2;
+			this.btnTreeMerge.Text = "Выбрать...";
+			this.btnTreeMerge.Click += new System.EventHandler(this.btnTreeMerge_Click);
 			// 
 			// mSyncRes
 			// 
-			this.mSyncRes.Location = new System.Drawing.Point(8, 176);
+			this.mSyncRes.Location = new System.Drawing.Point(8, 108);
 			this.mSyncRes.Multiline = true;
 			this.mSyncRes.Name = "mSyncRes";
 			this.mSyncRes.ReadOnly = true;
 			this.mSyncRes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.mSyncRes.Size = new System.Drawing.Size(697, 240);
+			this.mSyncRes.Size = new System.Drawing.Size(697, 308);
 			this.mSyncRes.TabIndex = 4;
-			// 
-			// rgTreeMergeType
-			// 
-			this.rgTreeMergeType.Controls.Add(this.RadioButton3);
-			this.rgTreeMergeType.Controls.Add(this.RadioButton4);
-			this.rgTreeMergeType.Location = new System.Drawing.Point(8, 104);
-			this.rgTreeMergeType.Name = "rgTreeMergeType";
-			this.rgTreeMergeType.Size = new System.Drawing.Size(361, 65);
-			this.rgTreeMergeType.TabIndex = 5;
-			this.rgTreeMergeType.TabStop = false;
-			this.rgTreeMergeType.Text = "Тип объединения";
-			// 
-			// RadioButton3
-			// 
-			this.RadioButton3.Checked = true;
-			this.RadioButton3.Location = new System.Drawing.Point(16, 16);
-			this.RadioButton3.Name = "RadioButton3";
-			this.RadioButton3.Size = new System.Drawing.Size(328, 17);
-			this.RadioButton3.TabIndex = 2;
-			this.RadioButton3.TabStop = true;
-			this.RadioButton3.Text = "Простое слияние данных";
-			this.RadioButton3.Click += new System.EventHandler(this.RadioButton3_Click);
-			// 
-			// RadioButton4
-			// 
-			this.RadioButton4.Location = new System.Drawing.Point(16, 40);
-			this.RadioButton4.Name = "RadioButton4";
-			this.RadioButton4.Size = new System.Drawing.Size(328, 17);
-			this.RadioButton4.TabIndex = 3;
-			this.RadioButton4.Text = "Синхронизация (незавершено, только для тестирования)";
-			this.RadioButton4.Click += new System.EventHandler(this.RadioButton3_Click);
 			// 
 			// SheetTreeSplit
 			// 
@@ -460,14 +382,14 @@ namespace GKUI
 			// 
 			this.ListSelected.Location = new System.Drawing.Point(8, 8);
 			this.ListSelected.Name = "ListSelected";
-			this.ListSelected.Size = new System.Drawing.Size(345, 329);
+			this.ListSelected.Size = new System.Drawing.Size(345, 316);
 			this.ListSelected.TabIndex = 1;
 			// 
 			// ListSkipped
 			// 
 			this.ListSkipped.Location = new System.Drawing.Point(360, 8);
 			this.ListSkipped.Name = "ListSkipped";
-			this.ListSkipped.Size = new System.Drawing.Size(345, 329);
+			this.ListSkipped.Size = new System.Drawing.Size(345, 316);
 			this.ListSkipped.TabIndex = 2;
 			// 
 			// btnSelectFamily
@@ -556,7 +478,7 @@ namespace GKUI
 			// 
 			this.ListBox1.Location = new System.Drawing.Point(8, 40);
 			this.ListBox1.Name = "ListBox1";
-			this.ListBox1.Size = new System.Drawing.Size(697, 368);
+			this.ListBox1.Size = new System.Drawing.Size(697, 342);
 			this.ListBox1.TabIndex = 2;
 			// 
 			// SheetRecMerge
@@ -633,7 +555,7 @@ namespace GKUI
 			this.SheetOptions.Controls.Add(this.GroupBox1);
 			this.SheetOptions.Location = new System.Drawing.Point(4, 22);
 			this.SheetOptions.Name = "SheetOptions";
-			this.SheetOptions.Size = new System.Drawing.Size(681, 367);
+			this.SheetOptions.Size = new System.Drawing.Size(681, 380);
 			this.SheetOptions.TabIndex = 1;
 			this.SheetOptions.Text = "Настройки";
 			// 
@@ -945,7 +867,7 @@ namespace GKUI
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
 			this.CancelButton = this.btnClose;
-			this.ClientSize = new System.Drawing.Size(737, 513);
+			this.ClientSize = new System.Drawing.Size(736, 515);
 			this.Controls.Add(this.PageControl);
 			this.Controls.Add(this.btnClose);
 			this.Controls.Add(this.btnHelp);
@@ -965,8 +887,6 @@ namespace GKUI
 			this.gbMatchType.PerformLayout();
 			this.SheetTreeMerge.ResumeLayout(false);
 			this.SheetTreeMerge.PerformLayout();
-			this.gbSyncType.ResumeLayout(false);
-			this.rgTreeMergeType.ResumeLayout(false);
 			this.SheetTreeSplit.ResumeLayout(false);
 			this.SheetTreeImport.ResumeLayout(false);
 			this.SheetTreeImport.PerformLayout();

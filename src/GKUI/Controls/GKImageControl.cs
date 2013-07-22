@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using Cyotek.Windows.Forms;
+using GKCore;
 
 namespace GKUI.Controls
 {
@@ -14,6 +15,8 @@ namespace GKUI.Controls
             this.FillZoomLevels();
             //this.OpenImage(Properties.Resources.Sample);
             imageBox.SelectionMode = ImageBoxSelectionMode.Zoom;
+            
+            SetLang();
         }
 
         private void FillZoomLevels()
@@ -37,7 +40,7 @@ namespace GKUI.Controls
             zoomLevelsToolStripComboBox.Text = string.Format("{0}%", imageBox.Zoom);
         }
 
-        private void actualSizeToolStripButton_Click(object sender, EventArgs e)
+        private void btnSizeToFit_Click(object sender, EventArgs e)
         {
             imageBox.ZoomToFit();
             this.UpdateStatusBar();
@@ -74,7 +77,7 @@ namespace GKUI.Controls
             }
         }
 
-        private void zoomInToolStripButton_Click(object sender, EventArgs e)
+        private void btnZoomIn_Click(object sender, EventArgs e)
         {
             imageBox.ZoomIn();
         }
@@ -86,9 +89,16 @@ namespace GKUI.Controls
             imageBox.Zoom = zoom;
         }
 
-        private void zoomOutToolStripButton_Click(object sender, EventArgs e)
+        private void btnZoomOut_Click(object sender, EventArgs e)
         {
             imageBox.ZoomOut();
+        }
+
+        public void SetLang()
+        {
+        	this.btnSizeToFit.Text = LangMan.LS(LSID.LSID_SizeToFit);
+			this.btnZoomIn.Text = LangMan.LS(LSID.LSID_ZoomIn);
+			this.btnZoomOut.Text = LangMan.LS(LSID.LSID_ZoomOut);
         }
 
     }

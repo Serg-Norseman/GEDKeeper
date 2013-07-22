@@ -434,55 +434,56 @@ namespace GKUI.Charts
 			Graphics g = this.FChart.CreateGraphics();
 			try
 			{
-				int lines = 2;
-				int maxwid = this.TextWidth(g, this.FFamily);
-
-				if (!this.FChart.Options.DiffLines) {
-					int wt = this.TextWidth(g, this.GetFullName());
-					if (maxwid < wt) maxwid = wt;
-				} else {
-					int wt = this.TextWidth(g, this.FName);
-					if (maxwid < wt) maxwid = wt;
-
-					wt = this.TextWidth(g, this.FPatronymic);
-					if (maxwid < wt) maxwid = wt;
-
+				int lines = 0;
+				int maxwid = 0;
+				int wt;
+				
+				if (this.FChart.Options.FamilyVisible) {
+					maxwid = this.TextWidth(g, this.FFamily);
 					lines++;
 				}
 
-				if (!this.FChart.Options.OnlyYears)
-				{
-					if (this.FChart.Options.BirthDateVisible) {
-						int wt = this.TextWidth(g, this.FBirthDate);
-						if (maxwid < wt) maxwid = wt;
+				if (!this.FChart.Options.DiffLines) {
+					wt = this.TextWidth(g, this.GetFullName());
+					if (maxwid < wt) maxwid = wt;
+					lines++;
+				} else {
+					wt = this.TextWidth(g, this.FName);
+					if (maxwid < wt) maxwid = wt;
+					lines++;
 
+					wt = this.TextWidth(g, this.FPatronymic);
+					if (maxwid < wt) maxwid = wt;
+					lines++;
+				}
+
+				if (!this.FChart.Options.OnlyYears) {
+					if (this.FChart.Options.BirthDateVisible) {
+						wt = this.TextWidth(g, this.FBirthDate);
+						if (maxwid < wt) maxwid = wt;
 						lines++;
 					}
 
 					if (this.FChart.Options.DeathDateVisible) {
-						int wt = this.TextWidth(g, this.FDeathDate);
+						wt = this.TextWidth(g, this.FDeathDate);
 						if (maxwid < wt) maxwid = wt;
-
 						lines++;
 					}
 				} else {
-					int wt = this.TextWidth(g, this.GetLifeYears());
+					wt = this.TextWidth(g, this.GetLifeYears());
 					if (maxwid < wt) maxwid = wt;
-
 					lines++;
 				}
 
 				if (this.FChart.Options.Kinship) {
-					int wt = this.TextWidth(g, this.FKinship);
+					wt = this.TextWidth(g, this.FKinship);
 					if (maxwid < wt) maxwid = wt;
-
 					lines++;
 				}
 
 				if (this.FChart.PathDebug) {
-					int wt = this.TextWidth(g, this.FPathDebug);
+					wt = this.TextWidth(g, this.FPathDebug);
 					if (maxwid < wt) maxwid = wt;
-
 					lines++;
 				}
 

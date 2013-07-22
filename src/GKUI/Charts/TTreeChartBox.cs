@@ -1112,7 +1112,10 @@ namespace GKUI.Charts
 			}
 
 			int line = 0;
-			this.TextOut(aCanvas, rt, person.Family, h, ref line);
+
+			if (this.Options.FamilyVisible) {
+				this.TextOut(aCanvas, rt, person.Family, h, ref line);
+			}
 
 			if (!this.Options.DiffLines) {
 				this.TextOut(aCanvas, rt, person.GetFullName(), h, ref line);

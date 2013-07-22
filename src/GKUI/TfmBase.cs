@@ -617,22 +617,24 @@ namespace GKUI
 
 		public void CheckMediaContainers(string oldFileName, string newFileName)
 		{
+			// ничего не делать, если имя файла не изменилось
+			if (string.Equals(oldFileName, newFileName)) return;
+
 			bool has_arc = File.Exists(this.Engine.GetArcFileName());
 			bool has_stg = Directory.Exists(this.Engine.GetStgFolder(false));
-			string old_path = Path.GetDirectoryName(oldFileName);
+
 			string new_path = Path.GetDirectoryName(newFileName);
+			string new_name = Path.GetFileName(newFileName);
 
-			if (!string.Equals(old_path, new_path)) {
-				// переместить архив и хранилище
-				if (has_arc) {
-					string new_arc = new_path + "\\" + this.Engine.GetContainerName(true);
-					File.Move(this.Engine.GetArcFileName(), new_arc);
-				}
+			// переместить архив и хранилище
+			if (has_arc) {
+				string new_arc = new_path + "\\" + this.Engine.GetContainerName(new_name, true);
+				File.Move(this.Engine.GetArcFileName(), new_arc);
+			}
 
-				if (has_stg) {
-					string new_stg = new_path + "\\" + this.Engine.GetContainerName(false);
-					Directory.Move(this.Engine.GetStgFolder(false), new_stg);
-				}
+			if (has_stg) {
+				string new_stg = new_path + "\\" + this.Engine.GetContainerName(new_name, false);
+				Directory.Move(this.Engine.GetStgFolder(false), new_stg);
 			}
 		}
 
