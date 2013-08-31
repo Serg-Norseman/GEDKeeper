@@ -2,6 +2,10 @@
 
 using Ext.Utils;
 
+/// <summary>
+/// Localization: clean
+/// </summary>
+
 namespace GKCore
 {
 	public static class KinshipsMan

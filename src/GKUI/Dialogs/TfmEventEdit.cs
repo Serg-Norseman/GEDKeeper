@@ -118,13 +118,13 @@ namespace GKUI
 
 			if (this.FEvent is TGEDCOMFamilyEvent)
 			{
-				this.FEvent.Name = TGenEngine.FamilyEvents[this.EditEventType.SelectedIndex].Sign;
+				this.FEvent.Name = GKData.FamilyEvents[this.EditEventType.SelectedIndex].Sign;
 			}
 			else
 			{
 				int id = this.EditEventType.SelectedIndex;
-				this.FEvent.Name = TGenEngine.PersonEvents[id].Sign;
-				if (TGenEngine.PersonEvents[id].Kind == TGenEngine.TPersonEventKind.ekFact)
+				this.FEvent.Name = GKData.PersonEvents[id].Sign;
+				if (GKData.PersonEvents[id].Kind == TPersonEventKind.ekFact)
 				{
 					this.FEvent.StringValue = this.EditAttribute.Text;
 				}
@@ -137,7 +137,7 @@ namespace GKUI
 			if (this.FEvent is TGEDCOMIndividualEvent)
 			{
 				int id = this.EditEventType.SelectedIndex;
-				if (TGenEngine.PersonEvents[id].Kind == TGenEngine.TPersonEventKind.ekFact)
+				if (GKData.PersonEvents[id].Kind == TPersonEventKind.ekFact)
 				{
 					TGEDCOMIndividualAttribute attr = new TGEDCOMIndividualAttribute(this.FEvent.Owner, this.FEvent.Parent, "", "");
 					attr.Assign(this.FEvent);
@@ -219,7 +219,7 @@ namespace GKUI
 			}
 		}
 
-		private void ListModify(object Sender, object ItemData, TGenEngine.TRecAction Action)
+		private void ListModify(object Sender, object ItemData, TRecAction Action)
 		{
 			bool res = false;
 
@@ -240,9 +240,9 @@ namespace GKUI
 
 			if (this.FEvent is TGEDCOMFamilyEvent)
 			{
-				for (int i = 0; i <= TGenEngine.FamilyEvents.Length - 1; i++)
+				for (int i = 0; i <= GKData.FamilyEvents.Length - 1; i++)
 				{
-					this.EditEventType.Items.Add(LangMan.LSList[(int)TGenEngine.FamilyEvents[i].Name - 1]);
+					this.EditEventType.Items.Add(LangMan.LSList[(int)GKData.FamilyEvents[i].Name - 1]);
 				}
 
 				int idx = TGenEngine.GetFamilyEventIndex(this.FEvent.Name);
@@ -251,16 +251,16 @@ namespace GKUI
 			}
 			else
 			{
-				for (int i = 0; i <= TGenEngine.PersonEvents.Length - 1; i++)
+				for (int i = 0; i <= GKData.PersonEvents.Length - 1; i++)
 				{
-					this.EditEventType.Items.Add(LangMan.LSList[(int)TGenEngine.PersonEvents[i].Name - 1]);
+					this.EditEventType.Items.Add(LangMan.LSList[(int)GKData.PersonEvents[i].Name - 1]);
 				}
 
 				int idx = TGenEngine.GetPersonEventIndex(this.FEvent.Name);
 				if (idx < 0) idx = 0;
 				this.EditEventType.SelectedIndex = idx;
 
-				if (idx >= 0 && TGenEngine.PersonEvents[idx].Kind == TGenEngine.TPersonEventKind.ekFact)
+				if (idx >= 0 && GKData.PersonEvents[idx].Kind == TPersonEventKind.ekFact)
 				{
 					this.EditAttribute.Text = this.FEvent.StringValue;
 				}
@@ -288,7 +288,7 @@ namespace GKUI
 						break;
 				}
 
-				this.EditEventDate1.Text = TGenEngine.GEDCOMDateToStr(date as TGEDCOMDate, TGenEngine.TDateFormat.dfDD_MM_YYYY);
+				this.EditEventDate1.Text = TGenEngine.GEDCOMDateToStr(date as TGEDCOMDate, TDateFormat.dfDD_MM_YYYY);
 				this.cbDate1Calendar.SelectedIndex = (int)(date as TGEDCOMDate).DateCalendar;
 				this.btnBC1.Checked = (date as TGEDCOMDate).YearBC;
 			}
@@ -316,8 +316,8 @@ namespace GKUI
 						}
 					}
 
-					this.EditEventDate1.Text = TGenEngine.GEDCOMDateToStr(dt_range.After, TGenEngine.TDateFormat.dfDD_MM_YYYY);
-					this.EditEventDate2.Text = TGenEngine.GEDCOMDateToStr(dt_range.Before, TGenEngine.TDateFormat.dfDD_MM_YYYY);
+					this.EditEventDate1.Text = TGenEngine.GEDCOMDateToStr(dt_range.After, TDateFormat.dfDD_MM_YYYY);
+					this.EditEventDate2.Text = TGenEngine.GEDCOMDateToStr(dt_range.Before, TDateFormat.dfDD_MM_YYYY);
 					this.cbDate1Calendar.SelectedIndex = (int)dt_range.After.DateCalendar;
 					this.cbDate2Calendar.SelectedIndex = (int)dt_range.Before.DateCalendar;
 					this.btnBC1.Checked = (dt_range.After as TGEDCOMDate).YearBC;
@@ -347,8 +347,8 @@ namespace GKUI
 							}
 						}
 
-						this.EditEventDate1.Text = TGenEngine.GEDCOMDateToStr(dt_period.DateFrom, TGenEngine.TDateFormat.dfDD_MM_YYYY);
-						this.EditEventDate2.Text = TGenEngine.GEDCOMDateToStr(dt_period.DateTo, TGenEngine.TDateFormat.dfDD_MM_YYYY);
+						this.EditEventDate1.Text = TGenEngine.GEDCOMDateToStr(dt_period.DateFrom, TDateFormat.dfDD_MM_YYYY);
+						this.EditEventDate2.Text = TGenEngine.GEDCOMDateToStr(dt_period.DateTo, TDateFormat.dfDD_MM_YYYY);
 						this.cbDate1Calendar.SelectedIndex = (int)dt_period.DateFrom.DateCalendar;
 						this.cbDate2Calendar.SelectedIndex = (int)dt_period.DateTo.DateCalendar;
 						this.btnBC1.Checked = (dt_period.DateFrom as TGEDCOMDate).YearBC;
@@ -359,7 +359,7 @@ namespace GKUI
 						if (date is TGEDCOMDate)
 						{
 							this.EditEventDateType.SelectedIndex = 0;
-							this.EditEventDate1.Text = TGenEngine.GEDCOMDateToStr(date as TGEDCOMDate, TGenEngine.TDateFormat.dfDD_MM_YYYY);
+							this.EditEventDate1.Text = TGenEngine.GEDCOMDateToStr(date as TGEDCOMDate, TDateFormat.dfDD_MM_YYYY);
 							this.cbDate1Calendar.SelectedIndex = (int)(date as TGEDCOMDate).DateCalendar;
 							this.btnBC1.Checked = (date as TGEDCOMDate).YearBC;
 						}
@@ -460,7 +460,7 @@ namespace GKUI
 			{
 				int idx = this.EditEventType.SelectedIndex;
 				if (idx >= 0) {
-					if (TGenEngine.PersonEvents[idx].Kind == TGenEngine.TPersonEventKind.ekEvent)
+					if (GKData.PersonEvents[idx].Kind == TPersonEventKind.ekEvent)
 					{
 						this.EditAttribute.Enabled = false;
 						this.EditAttribute.BackColor = SystemColors.Control;
@@ -489,12 +489,12 @@ namespace GKUI
 		private void EditEventDateType_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			int idx = this.EditEventDateType.SelectedIndex;
-			if (idx < 0 || idx >= TGenEngine.DateKinds.Length) return;
+			if (idx < 0 || idx >= GKData.DateKinds.Length) return;
 
-			TGenEngine.TDateControlsRange dates = TGenEngine.DateKinds[idx].Dates;
+			TDateControlsRange dates = GKData.DateKinds[idx].Dates;
 
-			this.EditEventDate1.Enabled = ((dates & (TGenEngine.TDateControlsRange)2) > (TGenEngine.TDateControlsRange)0);
-			this.EditEventDate2.Enabled = ((dates & (TGenEngine.TDateControlsRange)4) > (TGenEngine.TDateControlsRange)0);
+			this.EditEventDate1.Enabled = ((dates & (TDateControlsRange)2) > (TDateControlsRange)0);
+			this.EditEventDate2.Enabled = ((dates & (TDateControlsRange)4) > (TDateControlsRange)0);
 
 			this.cbDate1Calendar.Enabled = this.EditEventDate1.Enabled;
 			this.cbDate2Calendar.Enabled = this.EditEventDate2.Enabled;
@@ -508,15 +508,15 @@ namespace GKUI
 			this.InitializeComponent();
 			this.FBase = aBase;
 
-			for (int i = 0; i <= TGenEngine.DateKinds.Length - 1; i++)
+			for (int i = 0; i <= GKData.DateKinds.Length - 1; i++)
 			{
-				this.EditEventDateType.Items.Add(LangMan.LSList[(int)TGenEngine.DateKinds[i].Name - 1]);
+				this.EditEventDateType.Items.Add(LangMan.LSList[(int)GKData.DateKinds[i].Name - 1]);
 			}
 
 			for (TGEDCOMCalendar gc = TGEDCOMCalendar.dcGregorian; gc <= TGEDCOMCalendar.dcLast; gc++)
 			{
-				this.cbDate1Calendar.Items.Add(LangMan.LS(TGenEngine.DateCalendars[(int)gc]));
-				this.cbDate2Calendar.Items.Add(LangMan.LS(TGenEngine.DateCalendars[(int)gc]));
+				this.cbDate1Calendar.Items.Add(LangMan.LS(GKData.DateCalendars[(int)gc]));
+				this.cbDate2Calendar.Items.Add(LangMan.LS(GKData.DateCalendars[(int)gc]));
 			}
 
 			this.cbDate1Calendar.SelectedIndex = 0;

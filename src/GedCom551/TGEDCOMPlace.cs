@@ -12,12 +12,12 @@ namespace GedCom551
 
 		public TGEDCOMPointer Location
 		{
-			get { return base.TagClass("_LOC", typeof(TGEDCOMPointer), TGEDCOMPointer.Create) as TGEDCOMPointer; }
+			get { return base.TagClass("_LOC", TGEDCOMPointer.Create) as TGEDCOMPointer; }
 		}
 
 		public TGEDCOMMap Map
 		{
-			get { return base.TagClass("MAP", typeof(TGEDCOMMap), TGEDCOMMap.Create) as TGEDCOMMap; }
+			get { return base.TagClass("MAP", TGEDCOMMap.Create) as TGEDCOMMap; }
 		}
 
 		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)

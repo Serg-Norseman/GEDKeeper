@@ -7,7 +7,7 @@ namespace GedCom551
 		public TGEDCOMDateExact ChangeDate
 		{
 			get {
-				return base.TagClass("DATE", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact;
+				return base.TagClass("DATE", TGEDCOMDateExact.Create) as TGEDCOMDateExact;
 			}
 		}
 
@@ -15,7 +15,7 @@ namespace GedCom551
 		{
 			get {
 				TGEDCOMTag DateTag = this.ChangeDate;
-				return DateTag.TagClass("TIME", typeof(TGEDCOMTime), TGEDCOMTime.Create) as TGEDCOMTime;
+				return DateTag.TagClass("TIME", TGEDCOMTime.Create) as TGEDCOMTime;
 			}
 		}
 
@@ -34,7 +34,7 @@ namespace GedCom551
 
 		public TGEDCOMNotes Notes
 		{
-			get { return base.TagClass("NOTE", typeof(TGEDCOMNotes), TGEDCOMNotes.Create) as TGEDCOMNotes; }
+			get { return base.TagClass("NOTE", TGEDCOMNotes.Create) as TGEDCOMNotes; }
 		}
 
 		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)

@@ -152,7 +152,7 @@ namespace GKUI.Lists
 			}
 		}
 
-		public abstract bool CheckFilter(TGenEngine.TShieldState aShieldState);
+		public abstract bool CheckFilter(TShieldState aShieldState);
 		public abstract void Fetch(TGEDCOMRecord aRec);
 
 		public object GetColumnValue(int col_index)

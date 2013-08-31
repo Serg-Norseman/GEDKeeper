@@ -39,7 +39,7 @@ namespace GKUI.Lists
 	{
 		private TGEDCOMCommunicationRecord FRec;
 
-		public override bool CheckFilter(TGenEngine.TShieldState aShieldState)
+		public override bool CheckFilter(TShieldState aShieldState)
 		{
 			bool res = (this.QuickFilter == "*" || IsMatchesMask(this.FRec.CommName, this.QuickFilter));
 
@@ -61,7 +61,7 @@ namespace GKUI.Lists
 				case 1:
 					return TGenEngine.GetCorresponderStr(this.FTree, this.FRec, false);
 				case 2:
-					return LangMan.LSList[(int)TGenEngine.CommunicationNames[(int)this.FRec.CommunicationType] - 1];
+					return LangMan.LSList[(int)GKData.CommunicationNames[(int)this.FRec.CommunicationType] - 1];
 				case 3:
 					return TGenEngine.GEDCOMDateToStr(this.FRec.Date, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
 				case 4:

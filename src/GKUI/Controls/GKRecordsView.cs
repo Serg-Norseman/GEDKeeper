@@ -280,7 +280,7 @@ namespace GKUI.Controls
 			}
 		}
 
-		public void UpdateContents(TGenEngine.TShieldState aShieldState, bool aTitles, int aAutoSizeColumn)
+		public void UpdateContents(TShieldState aShieldState, bool aTitles, int aAutoSizeColumn)
 		{
 			try
 			{

@@ -26,7 +26,7 @@ namespace GedCom551
 
 		public TGEDCOMChangeDate ChangeDate
 		{
-			get { return base.TagClass("CHAN", typeof(TGEDCOMChangeDate), TGEDCOMChangeDate.Create) as TGEDCOMChangeDate; }
+			get { return base.TagClass("CHAN", TGEDCOMChangeDate.Create) as TGEDCOMChangeDate; }
 		}
 
 		public GEDCOMList<TGEDCOMMultimediaLink> MultimediaLinks
@@ -211,36 +211,36 @@ namespace GedCom551
 			this._UserReferences.SaveToStream(AStream);
 		}
 
-		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
 		{
-			TGEDCOMTag Result;
+			TGEDCOMTag result;
 
-			if (ATag == "CHAN")
+			if (tagName == "CHAN")
 			{
-				Result = base.AddTag(ATag, AValue, TGEDCOMChangeDate.Create);
+				result = base.AddTag(tagName, tagValue, TGEDCOMChangeDate.Create);
 			}
-			else if (ATag == "NOTE")
+			else if (tagName == "NOTE")
 			{
-				Result = this._Notes.Add(new TGEDCOMNotes(base.Owner, this, ATag, AValue));
+				result = this._Notes.Add(new TGEDCOMNotes(base.Owner, this, tagName, tagValue));
 			}
-			else if (ATag == "SOUR")
+			else if (tagName == "SOUR")
 			{
-				Result = this._SourceCitations.Add(new TGEDCOMSourceCitation(base.Owner, this, ATag, AValue));
+				result = this._SourceCitations.Add(new TGEDCOMSourceCitation(base.Owner, this, tagName, tagValue));
 			}
-			else if (ATag == "OBJE")
+			else if (tagName == "OBJE")
 			{
-				Result = this._MultimediaLinks.Add(new TGEDCOMMultimediaLink(base.Owner, this, ATag, AValue));
+				result = this._MultimediaLinks.Add(new TGEDCOMMultimediaLink(base.Owner, this, tagName, tagValue));
 			}
-			else if (ATag == "REFN")
+			else if (tagName == "REFN")
 			{
-				Result = this._UserReferences.Add(new TGEDCOMUserReference(base.Owner, this, ATag, AValue));
+				result = this._UserReferences.Add(new TGEDCOMUserReference(base.Owner, this, tagName, tagValue));
 			}
 			else
 			{
-				Result = base.AddTag(ATag, AValue, ATagConstructor);
+				result = base.AddTag(tagName, tagValue, tagConstructor);
 			}
 
-			return Result;
+			return result;
 		}
 
 		public override void Clear()
@@ -279,6 +279,12 @@ namespace GedCom551
 			this.NewUID();
 		}
 
+		public TGEDCOMRecord(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
+		{
+		}
+
+		#region Auxiliary
+
 		public struct MatchParams
 		{
 			public bool IndistinctNameMatching;
@@ -290,13 +296,9 @@ namespace GedCom551
 			public int YearInaccuracy;
 		}
 
-		public virtual bool IsMatch(TGEDCOMRecord record, float matchThreshold, MatchParams matchParams)
+		public virtual bool aux_IsMatch(TGEDCOMRecord record, float matchThreshold, MatchParams matchParams)
 		{
 			return false;
-		}
-
-		public TGEDCOMRecord(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-		{
 		}
 
 		public string aux_GetXRefNum()
@@ -325,22 +327,22 @@ namespace GedCom551
 			return result;
 		}
 
-		public void aux_AddNote(TGEDCOMNoteRecord aNoteRec)
+		public void aux_AddNote(TGEDCOMNoteRecord noteRec)
 		{
-			if (aNoteRec != null) {
+			if (noteRec != null) {
 				TGEDCOMNotes note = new TGEDCOMNotes(this.Owner, this, "", "");
-				note.Value = aNoteRec;
+				note.Value = noteRec;
 				this.Notes.Add(note);
 			}
 		}
 
-		public void aux_AddSource(TGEDCOMSourceRecord aSrcRec, string aPage, int aQuality)
+		public void aux_AddSource(TGEDCOMSourceRecord sourceRec, string page, int quality)
 		{
-			if (aSrcRec != null) {
+			if (sourceRec != null) {
 				TGEDCOMSourceCitation cit = new TGEDCOMSourceCitation(this.Owner, this, "", "");
-				cit.Value = aSrcRec;
-				cit.Page = aPage;
-				cit.CertaintyAssessment = aQuality;
+				cit.Value = sourceRec;
+				cit.Page = page;
+				cit.CertaintyAssessment = quality;
 				this.SourceCitations.Add(cit);
 			}
 		}
@@ -358,5 +360,6 @@ namespace GedCom551
 			return mmLink;
 		}
 
+		#endregion
 	}
 }

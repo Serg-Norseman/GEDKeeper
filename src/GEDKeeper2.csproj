@@ -183,6 +183,8 @@
     <Compile Include="GKCore\Export\FamilyBookExporter.cs" />
     <Compile Include="GKCore\Export\PDFExporter.cs" />
     <Compile Include="GKCore\Export\PedigreeExporter.cs" />
+    <Compile Include="GKCore\GKData.cs" />
+    <Compile Include="GKCore\GKTypes.cs" />
     <Compile Include="GKCore\Importer.cs" />
     <Compile Include="GKCore\IProgressController.cs" />
     <Compile Include="GKCore\Kinships.cs" />

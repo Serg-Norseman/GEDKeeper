@@ -31,7 +31,7 @@ namespace GKUI
 			set { this.SetCommunication(value); }
 		}
 
-		private void ListModify(object Sender, object ItemData, TGenEngine.TRecAction Action)
+		private void ListModify(object Sender, object ItemData, TRecAction Action)
 		{
 			if (object.Equals(Sender, this.FNotesList))
 			{
@@ -72,7 +72,7 @@ namespace GKUI
 				{
 					this.EditName.Text = this.FCommunication.CommName;
 					this.EditCorrType.SelectedIndex = (int)this.FCommunication.CommunicationType;
-					this.EditDate.Text = TGenEngine.GEDCOMDateToStr(this.FCommunication.Date, TGenEngine.TDateFormat.dfDD_MM_YYYY);
+					this.EditDate.Text = TGenEngine.GEDCOMDateToStr(this.FCommunication.Date, TDateFormat.dfDD_MM_YYYY);
 					TCommunicationDir dir = TCommunicationDir.cdFrom;
 					this.FCommunication.GetCorresponder(ref dir, ref this.FTempInd);
 					if (this.FTempInd != null)
@@ -114,7 +114,7 @@ namespace GKUI
 
 		private void btnPersonAdd_Click(object sender, EventArgs e)
 		{
-			this.FTempInd = this.Base.SelectPerson(null, TGenEngine.TTargetMode.tmNone, TGEDCOMSex.svNone);
+			this.FTempInd = this.Base.SelectPerson(null, TTargetMode.tmNone, TGEDCOMSex.svNone);
 			this.EditCorresponder.Text = ((this.FTempInd == null) ? "" : this.FTempInd.aux_GetNameStr(true, false));
 		}
 
@@ -125,7 +125,7 @@ namespace GKUI
 
 			for (TCommunicationType ct = TCommunicationType.ctCall; ct <= TCommunicationType.ctLast; ct++)
 			{
-				this.EditCorrType.Items.Add(LangMan.LSList[(int)TGenEngine.CommunicationNames[(int)ct] - 1]);
+				this.EditCorrType.Items.Add(LangMan.LSList[(int)GKData.CommunicationNames[(int)ct] - 1]);
 			}
 
 			this.FNotesList = new GKSheetList(this.SheetNotes);

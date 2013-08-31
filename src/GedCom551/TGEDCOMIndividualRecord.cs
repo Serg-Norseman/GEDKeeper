@@ -248,33 +248,33 @@ namespace GedCom551
 			_factory = f;
 		}
 
-		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
 		{
 			TGEDCOMTag result;
 
-			if (ATag == "NAME")
+			if (tagName == "NAME")
 			{
-				result = this.AddPersonalName(new TGEDCOMPersonalName(base.Owner, this, ATag, AValue));
+				result = this.AddPersonalName(new TGEDCOMPersonalName(base.Owner, this, tagName, tagValue));
 			}
-			else if (ATag == "SUBM")
+			else if (tagName == "SUBM")
 			{
-				result = this.Submittors.Add(new TGEDCOMPointer(base.Owner, this, ATag, AValue));
+				result = this.Submittors.Add(new TGEDCOMPointer(base.Owner, this, tagName, tagValue));
 			}
-			else if (ATag == "ANCI")
+			else if (tagName == "ANCI")
 			{
-				result = this.AncestorsInterest.Add(new TGEDCOMPointer(base.Owner, this, ATag, AValue));
+				result = this.AncestorsInterest.Add(new TGEDCOMPointer(base.Owner, this, tagName, tagValue));
 			}
-			else if (ATag == "DESI")
+			else if (tagName == "DESI")
 			{
-				result = this.DescendantsInterest.Add(new TGEDCOMPointer(base.Owner, this, ATag, AValue));
+				result = this.DescendantsInterest.Add(new TGEDCOMPointer(base.Owner, this, tagName, tagValue));
 			}
-			else if (ATag == "_GROUP")
+			else if (tagName == "_GROUP")
 			{
-				result = this._Groups.Add(new TGEDCOMPointer(base.Owner, this, ATag, AValue));
+				result = this._Groups.Add(new TGEDCOMPointer(base.Owner, this, tagName, tagValue));
 			}
 			else
 			{
-				result = _factory.CreateTag(this.Owner, this, ATag, AValue);
+				result = _factory.CreateTag(this.Owner, this, tagName, tagValue);
 
 				if (result != null)
 				{
@@ -294,7 +294,7 @@ namespace GedCom551
 						result = this.Aliasses.Add(result as TGEDCOMAlias);
 					}
 				} else {
-					result = base.AddTag(ATag, AValue, ATagConstructor);
+					result = base.AddTag(tagName, tagValue, tagConstructor);
 				}
 			}
 
@@ -638,7 +638,9 @@ namespace GedCom551
 			return new TGEDCOMIndividualRecord(owner, parent, tagName, tagValue);
 		}
 
-		public void aux_GetLifeDates(out TGEDCOMCustomEvent birthEvent, out TGEDCOMCustomEvent deathEvent)
+        #region Auxiliary
+
+        public void aux_GetLifeDates(out TGEDCOMCustomEvent birthEvent, out TGEDCOMCustomEvent deathEvent)
 		{
 			birthEvent = null;
 			deathEvent = null;
@@ -766,7 +768,7 @@ namespace GedCom551
 			return result;
 		}
 
-		public override bool IsMatch(TGEDCOMRecord record, float matchThreshold, MatchParams mParams)
+		public override bool aux_IsMatch(TGEDCOMRecord record, float matchThreshold, MatchParams mParams)
 		{
 			bool match = false;
 
@@ -902,6 +904,6 @@ namespace GedCom551
 			return result;
 		}
 
-
+		#endregion
 	}
 }

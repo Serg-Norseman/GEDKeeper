@@ -34,6 +34,7 @@ namespace GKUI.Charts
 		private string FKinship;
 		private string FName;
 		private string FPatronymic;
+		private string FNick;
 		private int FPtX;
 		private int FPtY;
 		private TGEDCOMIndividualRecord FRec;
@@ -42,6 +43,7 @@ namespace GKUI.Charts
 		private int FWidth;
 		private bool Disposed_;
 		private TreeChartPerson FBaseSpouse;
+		private TGEDCOMFamilyRecord FBaseFamily;
 		private TPersonList FChilds;
 		private TreeChartPerson FFather;
 		private int FGeneration;
@@ -61,6 +63,12 @@ namespace GKUI.Charts
 		{
 			get { return this.FBaseSpouse; }
 			set { this.FBaseSpouse = value; }
+		}
+
+		public TGEDCOMFamilyRecord BaseFamily
+		{
+			get { return this.FBaseFamily; }
+			set { this.FBaseFamily = value; }
 		}
 
 		public TreeChartPerson Father
@@ -199,12 +207,21 @@ namespace GKUI.Charts
 
 		public string Name
 		{
-			get { return this.FName; }
+			get {
+				string st = this.FName;
+				if (this.FChart.Options.NickVisible && !string.IsNullOrEmpty(this.FNick)) st = st + " \"" + this.FNick + "\"";
+				return st;
+			}
 		}
 
 		public string Patronymic
 		{
 			get { return this.FPatronymic; }
+		}
+
+		public string Nick
+		{
+			get { return this.FNick; }
 		}
 
 		public Point Pt
@@ -314,7 +331,7 @@ namespace GKUI.Charts
 
 		public string GetFullName()
 		{
-			return this.FName + " " + this.FPatronymic;
+			return this.Name + " " + this.FPatronymic; // attention: Name - combined property
 		}
 
 		public string GetLifeYears()
@@ -339,9 +356,9 @@ namespace GKUI.Charts
 			return Result;
 		}
 
-		public TreeChartPerson(TTreeChartBox aChart)
+		public TreeChartPerson(TTreeChartBox chart)
 		{
-			this.FChart = aChart;
+			this.FChart = chart;
 
 			this.FPortrait = null;
 			this.FSpouses = null;
@@ -359,22 +376,22 @@ namespace GKUI.Charts
 			}
 		}
 
-		public void AddChild(TreeChartPerson aChild)
+		public void AddChild(TreeChartPerson child)
 		{
-			if (aChild != null) {
-				if (this.FChilds == null) this.FChilds = new TPersonList(false);
+			if (child == null) return;
 
-				this.FChilds.Add(aChild);
-			}
+			if (this.FChilds == null) this.FChilds = new TPersonList(false);
+
+			this.FChilds.Add(child);
 		}
 
-		public void AddSpouse(TreeChartPerson aSpouse)
+		public void AddSpouse(TreeChartPerson spouse)
 		{
-			if (aSpouse != null) {
-				if (this.FSpouses == null) this.FSpouses = new TPersonList(false);
+			if (spouse == null) return;
 
-				this.FSpouses.Add(aSpouse);
-			}
+			if (this.FSpouses == null) this.FSpouses = new TPersonList(false);
+
+			this.FSpouses.Add(spouse);
 		}
 
 		public void BuildBy(TGEDCOMIndividualRecord iRec, ref bool hasMediaFail)
@@ -391,13 +408,14 @@ namespace GKUI.Charts
 				this.FFamily = fam;
 				this.FName = nam;
 				this.FPatronymic = pat;
-				this.FBirthDate = TGenEngine.GetBirthDate(iRec, TGenEngine.TDateFormat.dfDD_MM_YYYY, false);
-				this.FDeathDate = TGenEngine.GetDeathDate(iRec, TGenEngine.TDateFormat.dfDD_MM_YYYY, false);
+				this.FNick = iRec.aux_GetNickStr();
+				this.FBirthDate = TGenEngine.GetBirthDate(iRec, TDateFormat.dfDD_MM_YYYY, false);
+				this.FDeathDate = TGenEngine.GetDeathDate(iRec, TDateFormat.dfDD_MM_YYYY, false);
 				this.IsDead = !iRec.IsLive();
 				this.FSex = iRec.Sex;
 				this.FSigns = this.FChart.GetPersonSign(iRec);
-				this.FBirthYear = TGenEngine.GetBirthDate(iRec, TGenEngine.TDateFormat.dfYYYY, false);
-				this.FDeathYear = TGenEngine.GetDeathDate(iRec, TGenEngine.TDateFormat.dfYYYY, false);
+				this.FBirthYear = TGenEngine.GetBirthDate(iRec, TDateFormat.dfYYYY, false);
+				this.FDeathYear = TGenEngine.GetDeathDate(iRec, TDateFormat.dfYYYY, false);
 
 				if (this.FChart.Options.PortraitsVisible)
 				{
@@ -419,6 +437,7 @@ namespace GKUI.Charts
 				this.FFamily = "";
 				this.FName = "< ? >";
 				this.FPatronymic = "";
+				this.FNick = "";
 				this.FBirthDate = "";
 				this.FDeathDate = "";
 				this.IsDead = false;
@@ -448,7 +467,7 @@ namespace GKUI.Charts
 					if (maxwid < wt) maxwid = wt;
 					lines++;
 				} else {
-					wt = this.TextWidth(g, this.FName);
+					wt = this.TextWidth(g, this.Name); // attention: this combined property
 					if (maxwid < wt) maxwid = wt;
 					lines++;
 

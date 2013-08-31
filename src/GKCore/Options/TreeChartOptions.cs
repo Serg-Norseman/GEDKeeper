@@ -65,6 +65,12 @@ namespace GKCore
 			set { this.FPatronymicVisible = value; }
 		}
 
+		public bool NickVisible
+		{
+			get;
+			set;
+		}
+
 		public bool DiffLines
 		{
 			get { return this.FDiffLines; }
@@ -168,6 +174,7 @@ namespace GKCore
 			this.FFamilyVisible = true;
 			this.FNameVisible = true;
 			this.FPatronymicVisible = true;
+			this.NickVisible = false;
 			this.FDiffLines = false;
 			this.FBirthDateVisible = false;
 			this.FDeathDateVisible = false;
@@ -201,6 +208,7 @@ namespace GKCore
 			this.FFamilyVisible = aIniFile.ReadBool("Chart", "FamilyVisible", true);
 			this.FNameVisible = aIniFile.ReadBool("Chart", "NameVisible", true);
 			this.FPatronymicVisible = aIniFile.ReadBool("Chart", "PatronymicVisible", true);
+			this.NickVisible = aIniFile.ReadBool("Chart", "NickVisible", true);
 			this.FDiffLines = aIniFile.ReadBool("Chart", "DiffLines", false);
 			this.FBirthDateVisible = aIniFile.ReadBool("Chart", "BirthDateVisible", false);
 			this.FDeathDateVisible = aIniFile.ReadBool("Chart", "DeathDateVisible", false);
@@ -226,6 +234,7 @@ namespace GKCore
 			aIniFile.WriteBool("Chart", "FamilyVisible", this.FFamilyVisible);
 			aIniFile.WriteBool("Chart", "NameVisible", this.FNameVisible);
 			aIniFile.WriteBool("Chart", "PatronymicVisible", this.FPatronymicVisible);
+			aIniFile.WriteBool("Chart", "NickVisible", this.NickVisible);
 			aIniFile.WriteBool("Chart", "DiffLines", this.FDiffLines);
 			aIniFile.WriteBool("Chart", "BirthDateVisible", this.FBirthDateVisible);
 			aIniFile.WriteBool("Chart", "DeathDateVisible", this.FDeathDateVisible);

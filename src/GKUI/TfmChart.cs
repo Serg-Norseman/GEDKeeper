@@ -325,12 +325,28 @@ namespace GKUI
 		private void ImageTree_DblClick(object sender, EventArgs e)
 		{
 			TreeChartPerson p = this.FTreeBox.Selected;
-			if (p != null && p.Rec != null)
+			if (p != null)
 			{
-				TGEDCOMIndividualRecord i_rec = p.Rec;
-				if (this.FBase.ModifyPerson(ref i_rec))
-				{
-					this.UpdateChart();
+				if (p.Rec != null) {
+					TGEDCOMIndividualRecord i_rec = p.Rec;
+
+					if (this.FBase.ModifyPerson(ref i_rec)) {
+						this.UpdateChart();
+					}
+				} else {
+					// this is "stub" person, only in descendant tree
+					// key properties = BaseSpouse & BaseFamily
+					TreeChartPerson baseSpouse = p.BaseSpouse;
+					TGEDCOMFamilyRecord baseFamily = p.BaseFamily;
+
+					if (baseSpouse != null && baseFamily != null) {
+						TGEDCOMIndividualRecord i_spouse = this.SelectSpouseFor(p.BaseSpouse.Rec);
+
+						if (i_spouse != null) {
+							baseFamily.aux_AddSpouse(i_spouse);
+							this.UpdateChart();
+						}
+					}
 				}
 			}
 		}
@@ -375,36 +391,47 @@ namespace GKUI
 			}
 		}
 
+		private TGEDCOMIndividualRecord SelectSpouseFor(TGEDCOMIndividualRecord iRec)
+		{
+			TGEDCOMIndividualRecord result = null;
+
+			TGEDCOMSex needSex;
+			switch (iRec.Sex) {
+				case TGEDCOMSex.svMale:
+					needSex = TGEDCOMSex.svFemale;
+					break;
+				case TGEDCOMSex.svFemale:
+					needSex = TGEDCOMSex.svMale;
+					break;
+				default:
+					TGenEngine.ShowError(LangMan.LSList[210]);
+					return null;
+			}
+
+			TGEDCOMIndividualRecord target = null;
+			TTargetMode target_mode = TTargetMode.tmNone;
+			if (needSex == TGEDCOMSex.svFemale) {
+				target = iRec;
+				target_mode = TTargetMode.tmWife;
+			}
+
+			result = this.FBase.SelectPerson(target, target_mode, needSex);
+
+			return result;
+		}
+		
 		private void miSpouseAddClick(object sender, EventArgs e)
 		{
 			TreeChartPerson p = this.FTreeBox.Selected;
 			if (p != null && p.Rec != null)
 			{
 				TGEDCOMIndividualRecord i_rec = p.Rec;
-				TGEDCOMSex sx;
-				switch (i_rec.Sex) {
-					case TGEDCOMSex.svMale:
-						sx = TGEDCOMSex.svFemale;
-						break;
-					case TGEDCOMSex.svFemale:
-						sx = TGEDCOMSex.svMale;
-						break;
-					default:
-						TGenEngine.ShowError(LangMan.LSList[210]);
-						return;
-				}
 
-				TGEDCOMIndividualRecord target = null;
-				TGenEngine.TTargetMode target_mode = TGenEngine.TTargetMode.tmNone;
-				if (sx == TGEDCOMSex.svFemale) {
-					target = i_rec;
-					target_mode = TGenEngine.TTargetMode.tmWife;
-				}
-				
-				TGEDCOMIndividualRecord i_spouse = this.FBase.SelectPerson(target, target_mode, sx);
+				TGEDCOMIndividualRecord i_spouse = this.SelectSpouseFor(i_rec);
+
 				if (i_spouse != null)
 				{
-					TGEDCOMFamilyRecord fam = TGenEngine.CreateFamilyEx(this.FTree);
+					TGEDCOMFamilyRecord fam = this.FTree.aux_CreateFamily();
 					fam.aux_AddSpouse(i_rec);
 					fam.aux_AddSpouse(i_spouse);
 					this.UpdateChart();
@@ -431,7 +458,7 @@ namespace GKUI
 					else
 					{
 						TGEDCOMFamilyRecord fam = i_rec.SpouseToFamilyLinks[0].Family;
-						TGEDCOMIndividualRecord i_child = this.FBase.SelectPerson(fam.Husband.Value as TGEDCOMIndividualRecord, TGenEngine.TTargetMode.tmParent, needSex);
+						TGEDCOMIndividualRecord i_child = this.FBase.SelectPerson(fam.Husband.Value as TGEDCOMIndividualRecord, TTargetMode.tmParent, needSex);
 
 						if (i_child != null && fam.aux_AddChild(i_child))
 						{
@@ -464,7 +491,7 @@ namespace GKUI
 				}
 				else
 				{
-					TGEDCOMFamilyRecord fam = TGenEngine.CreateFamilyEx(this.FTree);
+					TGEDCOMFamilyRecord fam = this.FTree.aux_CreateFamily();
 					fam.aux_AddSpouse(p.Rec);
 					this.UpdateChart();
 				}
@@ -584,8 +611,8 @@ namespace GKUI
 
 			if (chartKind == TTreeChartBox.TChartKind.ckAncestors || chartKind == TTreeChartBox.TChartKind.ckBoth)
 			{
-				TGenEngine.InitExtCounts(tree, -1);
-				int anc_count = TGenEngine.GetAncestorsCount(iRec);
+				TreeStats.InitExtCounts(tree, -1);
+				int anc_count = TreeStats.GetAncestorsCount(iRec);
 				if (anc_count > 2048)
 				{
 					TGenEngine.ShowMessage(string.Format(LangMan.LSList[212], anc_count.ToString()));
@@ -596,8 +623,8 @@ namespace GKUI
 
 			if (chartKind >= TTreeChartBox.TChartKind.ckDescendants && chartKind < (TTreeChartBox.TChartKind)3)
 			{
-				TGenEngine.InitExtCounts(tree, -1);
-				int desc_count = TGenEngine.GetDescendantsCount(iRec);
+				TreeStats.InitExtCounts(tree, -1);
+				int desc_count = TreeStats.GetDescendantsCount(iRec);
 				if (desc_count > 2048)
 				{
 					TGenEngine.ShowMessage(string.Format(LangMan.LSList[213], desc_count.ToString()));

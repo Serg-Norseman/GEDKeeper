@@ -71,15 +71,17 @@ namespace GedCom551
 			}
 		}
 
-		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
 		{
-			TGEDCOMTag Result;
-			if (ATag == "FILE") {
-				Result = this.FileReferences.Add(new TGEDCOMFileReference(base.Owner, this, ATag, AValue));
+			TGEDCOMTag result;
+
+			if (tagName == "FILE") {
+				result = this._FileReferences.Add(new TGEDCOMFileReference(base.Owner, this, tagName, tagValue));
 			} else {
-				Result = base.AddTag(ATag, AValue, ATagConstructor);
+				result = base.AddTag(tagName, tagValue, tagConstructor);
 			}
-			return Result;
+
+			return result;
 		}
 
 		public override void Clear()

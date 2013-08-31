@@ -16,20 +16,8 @@ namespace GKUI
 {
 	public partial class TfmStats : Form, ILocalization
 	{
-		private struct TTitleRec
-		{
-			public LSID Title;
-			public LSID Cap;
-
-			public TTitleRec(LSID title, LSID cap) {
-				this.Title = title;
-				this.Cap = cap;
-			}
-		}
-
 		private enum TChartStyle : byte { csBar, csPoint }
 
-		private static TTitleRec[] StTitles;
 		private GKListView ListStats;
 		private ZedGraphControl zgc;
 		private TfmBase FBase;
@@ -43,9 +31,15 @@ namespace GKUI
 			get { return this.FBase; }
 		}
 
-		private static double SafeDiv(double aDividend, double aDivisor)
+		private static double SafeDiv(double dividend, double divisor)
 		{
-			return ((aDivisor == (double)0f) ? 0.0 : (aDividend / aDivisor));
+			return ((divisor == (double)0f) ? 0.0 : (dividend / divisor));
+		}
+
+		private static string GetPercent(int dividend, int divisor)
+		{
+			double val = ((divisor == 0) ? 0.0 : ((double)dividend / (double)divisor * 100.0));
+			return string.Format(" ({0:0.00}%)", val);
 		}
 
 		private void PrepareArray(GraphPane gPane, TChartStyle style, bool excludeUnknowns)
@@ -89,7 +83,7 @@ namespace GKUI
 		private void CalcStats(TGEDCOMTree aTree, TreeStats.TStatMode aMode)
 		{
 			this.ListStats.SortColumn = 0;
-			this.ListStats.Columns[0].Text = LangMan.LSList[(int)StTitles[(int)aMode].Cap - 1];
+			this.ListStats.Columns[0].Text = LangMan.LSList[(int)GKData.StatsTitles[(int)aMode].Cap - 1];
 			this.ListStats.Columns[1].Text = LangMan.LSList[202];
 
 			this.ListStats.Sorting = SortOrder.None;
@@ -127,7 +121,7 @@ namespace GKUI
 			try
 			{
 				gPane.CurveList.Clear();
-				this.ChartTitle = LangMan.LSList[(int)StTitles[(int)aMode].Title - 1];
+				this.ChartTitle = LangMan.LSList[(int)GKData.StatsTitles[(int)aMode].Title - 1];
 
 				switch (aMode) {
 					case TreeStats.TStatMode.smAge: {
@@ -200,8 +194,8 @@ namespace GKUI
 
 			ListViewItem item = this.ListCommon.Items.Add(LangMan.LSList[533]);
 			item.SubItems.Add(stats.persons.ToString());
-			item.SubItems.Add(stats.persons_m.ToString() + this.GetPercent(stats.persons_m, stats.persons));
-			item.SubItems.Add(stats.persons_f.ToString() + this.GetPercent(stats.persons_f, stats.persons));
+			item.SubItems.Add(stats.persons_m.ToString() + TfmStats.GetPercent(stats.persons_m, stats.persons));
+			item.SubItems.Add(stats.persons_f.ToString() + TfmStats.GetPercent(stats.persons_f, stats.persons));
 
 			item = this.ListCommon.Items.Add(LangMan.LSList[538]);
 			item.SubItems.Add(stats.lives.ToString());
@@ -286,7 +280,7 @@ namespace GKUI
 
 			for (TreeStats.TStatMode i = TreeStats.TStatMode.smAncestors; i <= TreeStats.TStatMode.smAAF_2; i++)
 			{
-				TTitleRec tr = StTitles[(int)i];
+				GKData.TStatsTitleStruct tr = GKData.StatsTitles[(int)i];
 				this.cbType.Items.Add(LangMan.LSList[(int)tr.Title - 1]);
 			}
 
@@ -296,52 +290,6 @@ namespace GKUI
 		void ILocalization.SetLang()
 		{
 			this.Text = LangMan.LS(LSID.LSID_MIStats);
-		}
-
-		static TfmStats()
-		{
-			StTitles = new TTitleRec[34];
-			StTitles[0] = new TTitleRec(LSID.LSID_AncestorsCount, LSID.LSID_Name);
-			StTitles[1] = new TTitleRec(LSID.LSID_DescendantsCount, LSID.LSID_Name);
-			StTitles[2] = new TTitleRec(LSID.LSID_GenerationsCount, LSID.LSID_Name);
-			StTitles[3] = new TTitleRec(LSID.LSID_Surname, LSID.LSID_Surname);
-			StTitles[4] = new TTitleRec(LSID.LSID_Name, LSID.LSID_Name);
-			StTitles[5] = new TTitleRec(LSID.LSID_Patronymic, LSID.LSID_Patronymic);
-			StTitles[6] = new TTitleRec(LSID.LSID_Age, LSID.LSID_Age);
-			StTitles[7] = new TTitleRec(LSID.LSID_LifeExpectancy, LSID.LSID_Age);
-			StTitles[8] = new TTitleRec(LSID.LSID_BirthYears, LSID.LSID_BirthYears);
-			StTitles[9] = new TTitleRec(LSID.LSID_BirthYearsDec, LSID.LSID_BirthYears);
-			StTitles[10] = new TTitleRec(LSID.LSID_DeathYears, LSID.LSID_DeathYears);
-			StTitles[11] = new TTitleRec(LSID.LSID_DeathYearsDec, LSID.LSID_DeathYears);
-			StTitles[12] = new TTitleRec(LSID.LSID_ChildsCount, LSID.LSID_Name);
-			StTitles[13] = new TTitleRec(LSID.LSID_DistrChilds, LSID.LSID_ChildsCount);
-			StTitles[14] = new TTitleRec(LSID.LSID_BirthPlace, LSID.LSID_BirthPlace);
-			StTitles[15] = new TTitleRec(LSID.LSID_DeathPlace, LSID.LSID_DeathPlace);
-			StTitles[16] = new TTitleRec(LSID.LSID_Residence, LSID.LSID_Residence);
-			StTitles[17] = new TTitleRec(LSID.LSID_Occupation, LSID.LSID_Occupation);
-			StTitles[18] = new TTitleRec(LSID.LSID_Religion, LSID.LSID_Religion);
-			StTitles[19] = new TTitleRec(LSID.LSID_Nationality, LSID.LSID_Nationality);
-			StTitles[20] = new TTitleRec(LSID.LSID_Education, LSID.LSID_Education);
-			StTitles[21] = new TTitleRec(LSID.LSID_Caste, LSID.LSID_Caste);
-			StTitles[22] = new TTitleRec(LSID.LSID_AgeFirstborn, LSID.LSID_Name);
-			StTitles[23] = new TTitleRec(LSID.LSID_MarriagesCount, LSID.LSID_Name);
-			StTitles[24] = new TTitleRec(LSID.LSID_MarriagesAge, LSID.LSID_Name);
-			StTitles[25] = new TTitleRec(LSID.LSID_DiffSpouses, LSID.LSID_Family);
-			StTitles[26] = new TTitleRec(LSID.LSID_Hobby, LSID.LSID_Hobby);
-			StTitles[27] = new TTitleRec(LSID.LSID_Award, LSID.LSID_Award);
-			StTitles[28] = new TTitleRec(LSID.LSID_Mili, LSID.LSID_Mili);
-			StTitles[29] = new TTitleRec(LSID.LSID_MiliInd, LSID.LSID_MiliInd);
-			StTitles[30] = new TTitleRec(LSID.LSID_MiliDis, LSID.LSID_MiliDis);
-			StTitles[31] = new TTitleRec(LSID.LSID_MiliRank, LSID.LSID_MiliRank);
-
-			StTitles[32] = new TTitleRec(LSID.LSID_AAF_1, LSID.LSID_AAF_1);
-			StTitles[33] = new TTitleRec(LSID.LSID_AAF_2, LSID.LSID_AAF_2);
-		}
-
-		private string GetPercent(int aDividend, int aDivisor)
-		{
-			double val = ((aDivisor == 0) ? 0.0 : ((double)aDividend / (double)aDivisor * 100.0));
-			return string.Format(" ({0:0.00}%)", val);
 		}
 	}
 }

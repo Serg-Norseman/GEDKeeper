@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
@@ -7,7 +8,7 @@ using GedCom551;
 using GKUI;
 
 /// <summary>
-/// Localization: clean
+/// Localization: dirty
 /// </summary>
 
 namespace GKCore
@@ -51,10 +52,17 @@ namespace GKCore
 		}
 	}
 
-	public class TreeTools
+	public static class TreeTools
 	{
-		public TreeTools()
+		public static LSID[] CheckSolveNames;
+
+		static TreeTools()
 		{
+			CheckSolveNames = new LSID[4];
+			CheckSolveNames[0] = LSID.LSID_RM_Skip;
+			CheckSolveNames[1] = LSID.LSID_SetIsDead;
+			CheckSolveNames[2] = LSID.LSID_DefineSex;
+			CheckSolveNames[3] = LSID.LSID_DoDelete;
 		}
 
 		#region Patriarchs Search
@@ -64,7 +72,7 @@ namespace GKCore
 			return (Item1 as TPatriarchObj).IBirthYear - (Item2 as TPatriarchObj).IBirthYear;
 		}
 
-		public string GetPatriarchLinks(TList lst, TPatriarchObj pObj)
+		public static string GetPatriarchLinks(TList lst, TPatriarchObj pObj)
 		{
 			string Result = "";
 
@@ -179,7 +187,7 @@ namespace GKCore
 		{
 			if (aProgress) TfmProgress.ProgressInit(aTree.RecordsCount, LangMan.LSList[474]);
 
-			TGenEngine.InitExtCounts(aTree, -1);
+			TreeStats.InitExtCounts(aTree, -1);
 			try
 			{
 				int num = aTree.RecordsCount - 1;
@@ -194,7 +202,7 @@ namespace GKCore
 						i_rec.aux_GetNameParts(out nf, out nn, out np);
 
 						int bYear = _GetPatriarchsList_GetBirthYear(i_rec);
-						int descGens = TGenEngine.GetDescGenerations(i_rec);
+						int descGens = TreeStats.GetDescGenerations(i_rec);
 						bool res = i_rec.ChildToFamilyLinks.Count == 0;
 						res = (res && i_rec.Sex == TGEDCOMSex.svMale);
 						res = (res && /*nf != "" && nf != "?" &&*/ nn != "" && nn != "?");
@@ -207,7 +215,7 @@ namespace GKCore
 							TPatriarchObj pObj = new TPatriarchObj();
 							pObj.IRec = i_rec;
 							pObj.IBirthYear = bYear;
-							pObj.IDescendantsCount = TGenEngine.GetDescendantsCount(i_rec) - 1;
+							pObj.IDescendantsCount = TreeStats.GetDescendantsCount(i_rec) - 1;
 							pObj.IDescGenerations = descGens;
 							aList.Add(pObj);
 						}
@@ -408,11 +416,11 @@ namespace GKCore
 				{
 					if (cause.IndexOf("+") >= 0)
 					{
-						CheckRecord_AddUserRef(tree, format, iRec, TGenEngine.UserRefs[3]);
+						CheckRecord_AddUserRef(tree, format, iRec, GKData.UserRefs[3]);
 					}
 					else
 					{
-						CheckRecord_AddUserRef(tree, format, iRec, TGenEngine.UserRefs[2]);
+						CheckRecord_AddUserRef(tree, format, iRec, GKData.UserRefs[2]);
 					}
 
 					aEvent.Detail.Classification = "";
@@ -421,7 +429,7 @@ namespace GKCore
 				{
 					if (cause.IndexOf("т/т") >= 0)
 					{
-						CheckRecord_AddUserRef(tree, format, iRec, TGenEngine.UserRefs[4]);
+						CheckRecord_AddUserRef(tree, format, iRec, GKData.UserRefs[4]);
 						aEvent.Detail.Classification = "";
 					}
 				}
@@ -530,7 +538,7 @@ namespace GKCore
 				fam.Wife.Value = null;
 			}
 			
-			fam.SortChilds();
+			fam.aux_SortChilds();
 		}
 
 		private static void CheckRecord_Group(TGEDCOMGroupRecord group)
@@ -665,13 +673,13 @@ namespace GKCore
 			}
 		}
 
-		public static bool CheckGEDCOMFormat(TGEDCOMTree tree)
+		public static bool CheckGEDCOMFormat(TGEDCOMTree tree, IProgressController pc)
 		{
 			bool result = false;
 
 			try
 			{
-				TfmProgress.ProgressInit(tree.RecordsCount, LangMan.LSList[470]);
+				pc.ProgressInit(tree.RecordsCount, LangMan.LSList[470]);
 				try
 				{
 					TGEDCOMFormat format = TGenEngine.GetGEDCOMFormat(tree);
@@ -690,7 +698,7 @@ namespace GKCore
 							idCheck = false;
 						}
 
-						TfmProgress.Progress = i;
+						pc.ProgressStep();
 					}
 
 					if (!idCheck && TGenEngine.ShowQuestion(LangMan.LSList[471]) == DialogResult.Yes)
@@ -702,7 +710,7 @@ namespace GKCore
 				}
 				finally
 				{
-					TfmProgress.ProgressDone();
+					pc.ProgressDone();
 				}
 			}
 			catch (Exception ex)
@@ -935,7 +943,7 @@ namespace GKCore
 				aChecksList.Add(checkObj);
 			}
 
-			iAge = TGenEngine.GetMarriageAge(iRec);
+			iAge = TreeStats.GetMarriageAge(iRec);
 			if (iAge > 0 && (iAge <= 13 || iAge >= 50))
 			{
 				TCheckObj checkObj = new TCheckObj(iRec, TCheckDiag.cdStrangeSpouse, TCheckSolve.csSkip);
@@ -944,7 +952,7 @@ namespace GKCore
 			}
 
 			TGEDCOMIndividualRecord iDummy;
-			iAge = TGenEngine.GetFirstbornAge(iRec, out iDummy);
+			iAge = TreeStats.GetFirstbornAge(iRec, out iDummy);
 			if (iAge > 0 && (iAge <= 13 || iAge >= 50))
 			{
 				TCheckObj checkObj = new TCheckObj(iRec, TCheckDiag.cdStrangeParent, TCheckSolve.csSkip);
@@ -1223,6 +1231,142 @@ namespace GKCore
 
 		#region Tree Compare
 
+		public class IndividualRecordComparer: IComparer<ULIndividual>
+		{
+			public int Compare(ULIndividual x, ULIndividual y)
+			{
+				return string.Compare(x.Family, y.Family, false);
+			}
+		}
+
+		public struct ULIndividual
+		{
+			public string Family;
+			public TGEDCOMIndividualRecord iRec;
+		}
+
+		public static List<ULIndividual> GetUnlinkedNamesakes(TGEDCOMTree tree, IProgressController pc)
+		{
+			List<ULIndividual> result = new List<ULIndividual>();
+
+			Hashtable families = new Hashtable();
+
+			pc.ProgressInit(tree.RecordsCount, "Этап 1");
+
+			// составить таблицу фамилий и персон, относящихся к этим фамилиям
+			for (int i = 0; i < tree.RecordsCount; i++)
+			{
+				TGEDCOMRecord rec = tree[i];
+
+				if (rec is TGEDCOMIndividualRecord)
+				{
+					TGEDCOMIndividualRecord iRec = rec as TGEDCOMIndividualRecord;
+
+					string[] fams = TGenEngine.GetFamilies(iRec);
+					for (int k = 0; k < fams.Length; k++)
+					{
+						string f = fams[k];
+						if (f.Length > 1)
+						{
+							List<TGEDCOMIndividualRecord> ps = (List<TGEDCOMIndividualRecord>)families[f];
+							if (ps == null) {
+								ps = new List<TGEDCOMIndividualRecord>();
+								families[f] = ps;
+							}
+							ps.Add(iRec);
+						}
+					}
+				}
+
+				pc.ProgressStep();
+			}
+
+			pc.ProgressInit(families.Count, "Этап 2");
+			
+			// найти всех персон одной фамилии, не связанных узами родства
+			foreach (DictionaryEntry entry in families)
+			{
+				string fam = (string)entry.Key;
+				List<TGEDCOMIndividualRecord> ps = (List<TGEDCOMIndividualRecord>)entry.Value;
+
+				int i = 0;
+				while (i < ps.Count)
+				{
+					TGEDCOMIndividualRecord iRec = ps[i];
+
+					using (TList lst = new TList())
+					{
+						TreeTools.TreeWalk(iRec, TreeTools.TTreeWalkMode.twmAll, lst);
+						for (int k = 0; k < lst.Count; k++)
+						{
+							TGEDCOMIndividualRecord item = lst[k] as TGEDCOMIndividualRecord;
+							int idx = ps.IndexOf(item);
+							if (item != iRec && idx >= 0 && idx > i) ps.RemoveAt(idx);
+						}
+					}
+
+					i++;
+				}
+
+				if (ps.Count > 1) {
+					for (i = 0; i < ps.Count; i++) {
+						ULIndividual indiv;
+						indiv.Family = fam;
+						indiv.iRec = ps[i];
+						result.Add(indiv);
+					}
+				}
+
+				pc.ProgressStep();
+			}
+
+			result.Sort(new IndividualRecordComparer());
+			
+			pc.ProgressDone();
+
+			return result;
+		}
+
+		public delegate void DuplicateFoundFunc(TGEDCOMIndividualRecord indivA, TGEDCOMIndividualRecord indivB);
+
+		public static void FindDuplicates(TGEDCOMTree tree_A, TGEDCOMTree tree_B, float matchThreshold, 
+		                                  DuplicateFoundFunc foundFunc, IProgressController pc)
+		{		
+			TGEDCOMRecord.MatchParams mParams;
+			mParams.IndistinctNameMatching = true;
+			mParams.IndistinctThreshold = 90 / 100.0;
+			mParams.CheckBirthYear = true;
+			mParams.YearInaccuracy = 3;
+			mParams.RusNames = true;
+
+			pc.ProgressInit(tree_A.RecordsCount, "Поиск дубликатов");
+			try
+			{
+				for (int i = 0; i <= tree_A.RecordsCount - 1; i++) {
+					TGEDCOMRecord recA = tree_A[i];
+					if (recA is TGEDCOMIndividualRecord) {
+						for (int k = 0; k <= tree_B.RecordsCount - 1; k++) {
+							TGEDCOMRecord recB = tree_B[k];
+							if (recB is TGEDCOMIndividualRecord) {
+								TGEDCOMIndividualRecord indivA = recA as TGEDCOMIndividualRecord;
+								TGEDCOMIndividualRecord indivB = recB as TGEDCOMIndividualRecord;
+
+								if (indivA != indivB && indivA.aux_IsMatch(indivB, matchThreshold, mParams)) {
+									foundFunc(indivA, indivB);
+								}
+							}
+						}
+					}
+					pc.ProgressStep();
+					Application.DoEvents();
+				}
+			}
+			finally
+			{
+				pc.ProgressDone();
+			}
+		}
+
 		public static void TreeCompare(TGEDCOMTree aMainTree, string aFileName, TextBox logBox)
 		{
 			TGEDCOMTree tempTree = new TGEDCOMTree();
@@ -1248,7 +1392,7 @@ namespace GKCore
 						string fam, nam, pat;
 						iRec.aux_GetNameParts(out fam, out nam, out pat);
 
-						fams.AddObject(TGenEngine.PrepareRusFamily(fam, iRec.Sex == TGEDCOMSex.svFemale), null);
+						fams.AddObject(TGenEngine.PrepareRusSurname(fam, iRec.Sex == TGEDCOMSex.svFemale), null);
 					}
 				}
 
@@ -1269,7 +1413,7 @@ namespace GKCore
 						string fam, nam, pat;
 						iRec.aux_GetNameParts(out fam, out nam, out pat);
 
-						tm = TGenEngine.PrepareRusFamily(fam, iRec.Sex == TGEDCOMSex.svFemale);
+						tm = TGenEngine.PrepareRusSurname(fam, iRec.Sex == TGEDCOMSex.svFemale);
 						idx = fams.IndexOf(tm);
 						if (idx >= 0)
 						{

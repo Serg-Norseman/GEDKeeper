@@ -22,50 +22,45 @@ namespace GKCore
 	{
 		public enum TPedigreeFormat : byte { pfExcess, pfCompact }
 
-		private TPedigreeFormat FFormat;
-		private bool FIncludeNotes;
-		private bool FIncludeAttributes;
-		private bool FIncludeSources;
-
 		public TPedigreeFormat Format
 		{
-			get { return this.FFormat; }
-			set { this.FFormat = value; }
+			get;
+			set;
 		}
 
 		public bool IncludeAttributes
 		{
-			get { return this.FIncludeAttributes; }
-			set { this.FIncludeAttributes = value; }
+			get;
+			set;
 		}
 
 		public bool IncludeNotes
 		{
-			get { return this.FIncludeNotes; }
-			set { this.FIncludeNotes = value; }
+			get;
+			set;
 		}
 
 		public bool IncludeSources
 		{
-			get { return this.FIncludeSources; }
-			set { this.FIncludeSources = value; }
+			get;
+			set;
 		}
 
 		public PedigreeOptions()
 		{
-			this.FIncludeAttributes = true;
-			this.FIncludeNotes = true;
-			this.FIncludeSources = true;
+			this.IncludeAttributes = true;
+			this.IncludeNotes = true;
+			this.IncludeSources = true;
 		}
 
 		public void LoadFromFile(IniFile iniFile)
 		{
             try
             {
-                this.FIncludeAttributes = iniFile.ReadBool("Pedigree", "IncludeAttributes", true);
-                this.FIncludeNotes = iniFile.ReadBool("Pedigree", "IncludeNotes", true);
-                this.FIncludeSources = iniFile.ReadBool("Pedigree", "IncludeSources", true);
-                this.FFormat = (PedigreeOptions.TPedigreeFormat)iniFile.ReadInteger("Pedigree", "Format", 0);
+                this.IncludeAttributes = iniFile.ReadBool("Pedigree", "IncludeAttributes", true);
+                this.IncludeNotes = iniFile.ReadBool("Pedigree", "IncludeNotes", true);
+                this.IncludeSources = iniFile.ReadBool("Pedigree", "IncludeSources", true);
+                this.Format = (PedigreeOptions.TPedigreeFormat)iniFile.ReadInteger("Pedigree", "Format", 0);
             }
             catch (Exception)
             {
@@ -75,10 +70,10 @@ namespace GKCore
 
 		public void SaveToFile(IniFile iniFile)
 		{
-			iniFile.WriteBool("Pedigree", "IncludeAttributes", this.FIncludeAttributes);
-			iniFile.WriteBool("Pedigree", "IncludeNotes", this.FIncludeNotes);
-			iniFile.WriteBool("Pedigree", "IncludeSources", this.FIncludeSources);
-			iniFile.WriteInteger("Pedigree", "Format", (int)((sbyte)this.FFormat));
+			iniFile.WriteBool("Pedigree", "IncludeAttributes", this.IncludeAttributes);
+			iniFile.WriteBool("Pedigree", "IncludeNotes", this.IncludeNotes);
+			iniFile.WriteBool("Pedigree", "IncludeSources", this.IncludeSources);
+			iniFile.WriteInteger("Pedigree", "Format", (int)((sbyte)this.Format));
 		}
 
 		public void Free()

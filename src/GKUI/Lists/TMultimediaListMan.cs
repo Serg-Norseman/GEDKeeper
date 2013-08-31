@@ -37,7 +37,7 @@ namespace GKUI.Lists
 	{
 		private TGEDCOMMultimediaRecord FRec;
 
-		public override bool CheckFilter(TGenEngine.TShieldState aShieldState)
+		public override bool CheckFilter(TShieldState aShieldState)
 		{
 			TGEDCOMFileReferenceWithTitle file_ref = this.FRec.FileReferences[0];
 
@@ -61,7 +61,7 @@ namespace GKUI.Lists
 				case 0:
 					return file_ref.Title;
 				case 1:
-					return LangMan.LSList[(int)TGenEngine.MediaTypes[(int)file_ref.MediaType] - 1];
+					return LangMan.LSList[(int)GKData.MediaTypes[(int)file_ref.MediaType] - 1];
 				case 2:
 					return file_ref.StringValue;
 				case 3:

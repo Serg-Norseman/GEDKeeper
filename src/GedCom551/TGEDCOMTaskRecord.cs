@@ -18,12 +18,12 @@ namespace GedCom551
 
 		public TGEDCOMDateExact StartDate
 		{
-			get { return base.TagClass("_STARTDATE", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact; }
+			get { return base.TagClass("_STARTDATE", TGEDCOMDateExact.Create) as TGEDCOMDateExact; }
 		}
 
 		public TGEDCOMDateExact StopDate
 		{
-			get { return base.TagClass("_STOPDATE", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact; }
+			get { return base.TagClass("_STOPDATE", TGEDCOMDateExact.Create) as TGEDCOMDateExact; }
 		}
 
 		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
@@ -33,21 +33,34 @@ namespace GedCom551
 			this.FName = "_TASK";
 		}
 
-		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
 		{
-			TGEDCOMTag Result;
-			if (ATag == "_STARTDATE" || ATag == "_STOPDATE")
+			TGEDCOMTag result;
+
+			if (tagName == "_STARTDATE" || tagName == "_STOPDATE")
 			{
-				Result = base.AddTag(ATag, AValue, TGEDCOMDateExact.Create);
+				result = base.AddTag(tagName, tagValue, TGEDCOMDateExact.Create);
 			}
 			else
 			{
-				Result = base.AddTag(ATag, AValue, ATagConstructor);
+				result = base.AddTag(tagName, tagValue, tagConstructor);
 			}
-			return Result;
+
+			return result;
 		}
 
-        public void aux_GetTaskGoal(ref TGoalType aType, ref TGEDCOMRecord aGoalRec)
+		public TGEDCOMTaskRecord(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
+		{
+		}
+
+        public new static TGEDCOMTag Create(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue)
+		{
+			return new TGEDCOMTaskRecord(owner, parent, tagName, tagValue);
+		}
+
+		#region Auxiliary
+
+		public void aux_GetTaskGoal(ref TGoalType aType, ref TGEDCOMRecord aGoalRec)
         {
             TGEDCOMTree tree = this.Owner;
             aGoalRec = tree.XRefIndex_Find(TGEDCOMObject.CleanXRef(this.Goal));
@@ -70,13 +83,6 @@ namespace GedCom551
             }
         }
 
-		public TGEDCOMTaskRecord(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-		{
-		}
-
-        public new static TGEDCOMTag Create(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue)
-		{
-			return new TGEDCOMTaskRecord(owner, parent, tagName, tagValue);
-		}
+		#endregion
 	}
 }

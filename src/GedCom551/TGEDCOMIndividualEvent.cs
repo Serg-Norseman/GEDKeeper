@@ -6,21 +6,23 @@ namespace GedCom551
 	{
 		public TGEDCOMPointer Family
 		{
-			get	{ return base.TagClass("FAMC", typeof(TGEDCOMPointer), TGEDCOMPointer.Create) as TGEDCOMPointer; }
+			get	{ return base.TagClass("FAMC", TGEDCOMPointer.Create) as TGEDCOMPointer; }
 		}
 
-		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
 		{
-			TGEDCOMTag Result;
-			if (ATag == "FAMC")
+			TGEDCOMTag result;
+
+			if (tagName == "FAMC")
 			{
-				Result = base.AddTag(ATag, AValue, TGEDCOMPointer.Create);
+				result = base.AddTag(tagName, tagValue, TGEDCOMPointer.Create);
 			}
 			else
 			{
-				Result = this.Detail.AddTag(ATag, AValue, ATagConstructor);
+				result = this.Detail.AddTag(tagName, tagValue, tagConstructor);
 			}
-			return Result;
+
+			return result;
 		}
 
 		public TGEDCOMIndividualEvent(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

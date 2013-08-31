@@ -6,7 +6,7 @@ namespace GedCom551
 	{
 		public TGEDCOMDateValue Date
 		{
-			get { return base.TagClass("DATE", typeof(TGEDCOMDateValue), TGEDCOMDateValue.Create) as TGEDCOMDateValue; }
+			get { return base.TagClass("DATE", TGEDCOMDateValue.Create) as TGEDCOMDateValue; }
 		}
 
 		public string TempleCode
@@ -29,32 +29,29 @@ namespace GedCom551
 
 		public TGEDCOMDateExact SpouseSealingChangeDate
 		{
-			get { return this.DateStatus.TagClass("CHAN", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact; }
+			get { return this.DateStatus.TagClass("CHAN", TGEDCOMDateExact.Create) as TGEDCOMDateExact; }
 		}
 
 		public TGEDCOMDateStatus DateStatus
 		{
-			get { return base.TagClass("STAT", typeof(TGEDCOMDateStatus), TGEDCOMDateStatus.Create) as TGEDCOMDateStatus; }
+			get { return base.TagClass("STAT", TGEDCOMDateStatus.Create) as TGEDCOMDateStatus; }
 		}
 
 		public override TGEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
 		{
-			TGEDCOMTag Result;
+			TGEDCOMTag result;
 
-			if (tagName == "DATE")
+			if (tagName == "STAT")
 			{
-				Result = base.AddTag(tagName, tagValue, TGEDCOMDateValue.Create);
-			}
-			else if (tagName == "STAT")
-			{
-				Result = base.AddTag(tagName, tagValue, TGEDCOMDateStatus.Create);
+				result = base.AddTag(tagName, tagValue, TGEDCOMDateStatus.Create);
 			}
 			else
 			{
-				Result = base.AddTag(tagName, tagValue, tagConstructor);
+				// define "DATE" by default
+				result = base.AddTag(tagName, tagValue, tagConstructor);
 			}
 
-			return Result;
+			return result;
 		}
 
 		public TGEDCOMSpouseSealing(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

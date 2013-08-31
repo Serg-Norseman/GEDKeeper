@@ -4,21 +4,21 @@ namespace GedCom551
 {
 	public sealed class TGEDCOMSubmitterRecord : TGEDCOMRecord
 	{
-		private GEDCOMList<TGEDCOMTag> FLanguages;
+		private GEDCOMList<TGEDCOMTag> fLanguages;
 
 		public TGEDCOMAddress Address
 		{
-			get { return base.TagClass("ADDR", typeof(TGEDCOMAddress), TGEDCOMAddress.Create) as TGEDCOMAddress; }
+			get { return base.TagClass("ADDR", TGEDCOMAddress.Create) as TGEDCOMAddress; }
 		}
 
 		public GEDCOMList<TGEDCOMTag> Languages
 		{
-			get { return this.FLanguages; }
+			get { return this.fLanguages; }
 		}
 
 		public new TGEDCOMPersonalName Name
 		{
-			get { return base.TagClass("NAME", typeof(TGEDCOMPersonalName), TGEDCOMPersonalName.Create) as TGEDCOMPersonalName; }
+			get { return base.TagClass("NAME", TGEDCOMPersonalName.Create) as TGEDCOMPersonalName; }
 		}
 
 		public string RegisteredReference
@@ -31,11 +31,11 @@ namespace GedCom551
 		{
 			if (Index >= 0)
 			{
-				while (Index >= this.FLanguages.Count)
+				while (Index >= this.fLanguages.Count)
 				{
-					this.FLanguages.Add(new TGEDCOMTag(base.Owner, this, "LANG", ""));
+					this.fLanguages.Add(new TGEDCOMTag(base.Owner, this, "LANG", ""));
 				}
-				(this.FLanguages[Index] as TGEDCOMTag).StringValue = Value;
+				(this.fLanguages[Index] as TGEDCOMTag).StringValue = Value;
 			}
 		}
 
@@ -45,14 +45,14 @@ namespace GedCom551
 			this.FRecordType = TGEDCOMRecordType.rtSubmitter;
 			this.FName = "SUBM";
 
-			this.FLanguages = new GEDCOMList<TGEDCOMTag>(this);
+			this.fLanguages = new GEDCOMList<TGEDCOMTag>(this);
 		}
 
 		public override void Dispose()
 		{
 			if (!this.Disposed_)
 			{
-				this.FLanguages.Dispose();
+				this.fLanguages.Dispose();
 
 				base.Dispose();
 				this.Disposed_ = true;
@@ -61,56 +61,56 @@ namespace GedCom551
 
 		public TGEDCOMTag AddLanguage(TGEDCOMTag Value)
 		{
-			this.FLanguages.Add(Value);
+			this.fLanguages.Add(Value);
 			return Value;
 		}
 
-		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
 		{
-			TGEDCOMTag Result;
+			TGEDCOMTag result;
 
-			if (ATag == "NAME")
+			if (tagName == "NAME")
 			{
-				Result = base.AddTag(ATag, AValue, TGEDCOMPersonalName.Create);
+				result = base.AddTag(tagName, tagValue, TGEDCOMPersonalName.Create);
 			}
-			else if (ATag == "PHON" || ATag == "EMAIL" || ATag == "FAX" || ATag == "WWW")
+			else if (tagName == "PHON" || tagName == "EMAIL" || tagName == "FAX" || tagName == "WWW")
 			{
-				Result = this.Address.AddTag(ATag, AValue, ATagConstructor);
+				result = this.Address.AddTag(tagName, tagValue, tagConstructor);
 			}
-			else if (ATag == "LANG")
+			else if (tagName == "LANG")
 			{
-				Result = this.AddLanguage(new TGEDCOMTag(base.Owner, this, ATag, AValue));
+				result = this.AddLanguage(new TGEDCOMTag(base.Owner, this, tagName, tagValue));
 			}
 			else
 			{
 				// "ADDR" defines by default
-				Result = base.AddTag(ATag, AValue, ATagConstructor);
+				result = base.AddTag(tagName, tagValue, tagConstructor);
 			}
 
-			return Result;
+			return result;
 		}
 
 		public override void Clear()
 		{
 			base.Clear();
-			this.FLanguages.Clear();
+			this.fLanguages.Clear();
 		}
 
 		public override bool IsEmpty()
 		{
-			return base.IsEmpty() && (this.FLanguages.Count == 0);
+			return base.IsEmpty() && (this.fLanguages.Count == 0);
 		}
 
 		public override void ReplaceXRefs(TXRefReplaceMap aMap)
 		{
 			base.ReplaceXRefs(aMap);
-			this.FLanguages.ReplaceXRefs(aMap);
+			this.fLanguages.ReplaceXRefs(aMap);
 		}
 
 		public override void ResetOwner(TGEDCOMTree AOwner)
 		{
 			base.ResetOwner(AOwner);
-			this.FLanguages.ResetOwner(AOwner);
+			this.fLanguages.ResetOwner(AOwner);
 		}
 
 		public TGEDCOMSubmitterRecord(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

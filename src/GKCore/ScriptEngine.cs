@@ -356,7 +356,7 @@ namespace GKCore
 		public string gt_get_event_date(object ev_ptr)
 		{
 			TGEDCOMCustomEvent evt = ev_ptr as TGEDCOMCustomEvent;
-			return (TGenEngine.GEDCOMEventToDateStr(evt, TGenEngine.TDateFormat.dfDD_MM_YYYY, false));
+			return (TGenEngine.GEDCOMEventToDateStr(evt, TDateFormat.dfDD_MM_YYYY, false));
 		}
 
 		public int gt_get_event_year(object ev_ptr)
@@ -420,7 +420,7 @@ namespace GKCore
 	public string gt_get_person_sex(object rec_ptr)
 	{
 		TGEDCOMIndividualRecord rec = rec_ptr as TGEDCOMIndividualRecord;
-		return TGenEngine.SexData[(int)rec.Sex].Sign;
+		return GKData.SexData[(int)rec.Sex].Sign;
 	}
 
 	public void gt_set_person_sex(object rec_ptr, string s_sex)
@@ -452,26 +452,26 @@ namespace GKCore
 
 	public object gt_create_family()
 	{
-		TGEDCOMFamilyRecord f_rec = TGenEngine.CreateFamilyEx(fBase.Tree);
+		TGEDCOMFamilyRecord f_rec = fBase.Tree.aux_CreateFamily();
 		return f_rec;
 	}
 
 	public object gt_create_note()
 	{
-		TGEDCOMNoteRecord n_rec = TGenEngine.CreateNote(fBase.Tree);
+		TGEDCOMNoteRecord n_rec = fBase.Tree.aux_CreateNote();
 		return n_rec;
 	}
 
 	public object gt_create_source(string name)
 	{
-		TGEDCOMSourceRecord src_rec = TGenEngine.CreateSource(fBase.Tree);
+		TGEDCOMSourceRecord src_rec = fBase.Tree.aux_CreateSource();
 		src_rec.FiledByEntry = name;
 		return src_rec;
 	}
 
 	public object gt_create_group(string name)
 	{
-		TGEDCOMGroupRecord grp_rec = TGenEngine.CreateGroup(fBase.Tree);
+		TGEDCOMGroupRecord grp_rec = fBase.Tree.aux_CreateGroup();
 		grp_rec.GroupName = name;
 		return grp_rec;
 	}
@@ -525,12 +525,12 @@ namespace GKCore
 	{
 		TGEDCOMSex sx = TfmSexCheck.DefineSex(name, patr, TfmGEDKeeper.Instance.NamesTable);
 
-		return (TGenEngine.SexData[(int)sx].Sign);
+		return (GKData.SexData[(int)sx].Sign);
 	}
 
 	public object gt_find_source(string name)
 	{
-		TGEDCOMSourceRecord src_rec = fBase.Engine.FindSource(name);
+		TGEDCOMSourceRecord src_rec = fBase.Engine.aux_FindSource(name);
 		return src_rec;
 	}
 

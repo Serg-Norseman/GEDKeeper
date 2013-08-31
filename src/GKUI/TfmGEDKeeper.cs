@@ -883,6 +883,8 @@ namespace GKUI
 				LangMan.DefInit();
 			}
 
+			GKData.DataSetup();
+
 			int num2 = base.MdiChildren.Length - 1;
 			for (int i = 0; i <= num2; i++)
 			{
@@ -923,13 +925,13 @@ namespace GKUI
 			if (cur_base != null) {
 				Bitmap pic = null;
 				switch (cur_base.ShieldState) {
-					case TGenEngine.TShieldState.ssNone:
+					case TShieldState.ssNone:
 						pic = (Bitmap)GKResources.iRGShieldNone.Clone();
 						break;
-					case TGenEngine.TShieldState.ssMiddle:
+					case TShieldState.ssMiddle:
 						pic = (Bitmap)GKResources.iRGShieldMid.Clone();
 						break;
-					case TGenEngine.TShieldState.ssMaximum:
+					case TShieldState.ssMaximum:
 						pic = (Bitmap)GKResources.iRGShieldMax.Clone();
 						break;
 				}
@@ -946,11 +948,11 @@ namespace GKUI
 			if (e.StatusBarPanel == StatusBarPanel2 && e.Clicks == 2) {
 				TfmBase cur_base = this.GetCurrentFile();
 				if (cur_base == null) return;
-				TGenEngine.TShieldState ss = cur_base.ShieldState;
-				if (ss == TGenEngine.TShieldState.ssNone) {
-					ss = TGenEngine.TShieldState.ssMaximum;
+				TShieldState ss = cur_base.ShieldState;
+				if (ss == TShieldState.ssNone) {
+					ss = TShieldState.ssMaximum;
 				} else {
-					ss = (TGenEngine.TShieldState)((int)ss + 1);
+					ss = (TShieldState)((int)ss + 1);
 				}
 				cur_base.ShieldState = ss;
 				StatusBar.Invalidate();

@@ -7,11 +7,11 @@ namespace GedCom551
 {
 	public sealed class TGEDCOMGroupRecord : TGEDCOMRecord
 	{
-		private GEDCOMList<TGEDCOMPointer> _Members;
+		private GEDCOMList<TGEDCOMPointer> fMembers;
 
 		public GEDCOMList<TGEDCOMPointer> Members
 		{
-			get { return this._Members; }
+			get { return this.fMembers; }
 		}
 
 		public string GroupName
@@ -26,76 +26,76 @@ namespace GedCom551
 			this.FRecordType = TGEDCOMRecordType.rtGroup;
 			this.FName = "_GROUP";
 
-			this._Members = new GEDCOMList<TGEDCOMPointer>(this);
+			this.fMembers = new GEDCOMList<TGEDCOMPointer>(this);
 		}
 
 		public override void Dispose()
 		{
 			if (!this.Disposed_)
 			{
-				this._Members.Dispose();
+				this.fMembers.Dispose();
 
 				base.Dispose();
 				this.Disposed_ = true;
 			}
 		}
 
-		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
 		{
-			TGEDCOMTag Result;
+			TGEDCOMTag result;
 
-			if (ATag == "NAME")
+			if (tagName == "NAME")
 			{
-				Result = base.AddTag(ATag, AValue, null);
+				result = base.AddTag(tagName, tagValue, null);
 			}
-			else if (ATag == "_MEMBER")
+			else if (tagName == "_MEMBER")
 			{
-				Result = this._Members.Add(new TGEDCOMPointer(base.Owner, this, ATag, AValue));
+				result = this.fMembers.Add(new TGEDCOMPointer(base.Owner, this, tagName, tagValue));
 			}
 			else
 			{
-				Result = base.AddTag(ATag, AValue, ATagConstructor);
+				result = base.AddTag(tagName, tagValue, tagConstructor);
 			}
 
-			return Result;
+			return result;
 		}
 
 		public override void Clear()
 		{
 			base.Clear();
-			this._Members.Clear();
+			this.fMembers.Clear();
 		}
 
 		public override bool IsEmpty()
 		{
-			return base.IsEmpty() && this._Members.Count == 0;
+			return base.IsEmpty() && this.fMembers.Count == 0;
 		}
 
 		public override void ReplaceXRefs(TXRefReplaceMap aMap)
 		{
 			base.ReplaceXRefs(aMap);
-			this._Members.ReplaceXRefs(aMap);
+			this.fMembers.ReplaceXRefs(aMap);
 		}
 
 		public override void ResetOwner(TGEDCOMTree AOwner)
 		{
 			base.ResetOwner(AOwner);
-			this._Members.ResetOwner(AOwner);
+			this.fMembers.ResetOwner(AOwner);
 		}
 
 		public override void SaveToStream(StreamWriter AStream)
 		{
 			base.SaveToStream(AStream);
-			this._Members.SaveToStream(AStream);
+			this.fMembers.SaveToStream(AStream);
 		}
 
 		public int IndexOfMember(TGEDCOMIndividualRecord aMember)
 		{
 			int Result = -1;
-			int num = this._Members.Count - 1;
+			int num = this.fMembers.Count - 1;
 			for (int i = 0; i <= num; i++)
 			{
-				if (this._Members[i].XRef == aMember.XRef)
+				if (this.fMembers[i].XRef == aMember.XRef)
 				{
 					Result = i;
 					break;
@@ -113,7 +113,9 @@ namespace GedCom551
 			return new TGEDCOMGroupRecord(owner, parent, tagName, tagValue);
 		}
 
-		public bool aux_AddMember(TGEDCOMIndividualRecord aMember)
+        #region Auxiliary
+
+        public bool aux_AddMember(TGEDCOMIndividualRecord aMember)
 		{
 			bool Result;
 			try
@@ -151,5 +153,6 @@ namespace GedCom551
 			return Result;
 		}
 
+		#endregion
 	}
 }

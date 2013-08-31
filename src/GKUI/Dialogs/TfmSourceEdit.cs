@@ -63,7 +63,7 @@ namespace GKUI
 			list.EndUpdate();
 		}
 
-		private void ListModify(object Sender, object ItemData, TGenEngine.TRecAction Action)
+		private void ListModify(object Sender, object ItemData, TRecAction Action)
 		{
             bool res = false;
 
@@ -81,11 +81,11 @@ namespace GKUI
 				{
 					if (object.Equals(Sender, this.FRepositoriesList))
 					{
-                        TGEDCOMRepositoryCitation cit = (Action == TGenEngine.TRecAction.raAdd) ? null : ItemData as TGEDCOMRepositoryCitation;
+                        TGEDCOMRepositoryCitation cit = (Action == TRecAction.raAdd) ? null : ItemData as TGEDCOMRepositoryCitation;
 
                         switch (Action)
                         {
-                            case TGenEngine.TRecAction.raAdd:
+                            case TRecAction.raAdd:
 							    TGEDCOMRepositoryRecord rep = FBase.SelectRecord(TGEDCOMRecordType.rtRepository, null) as TGEDCOMRepositoryRecord;
 							    if (rep != null)
 							    {
@@ -94,7 +94,7 @@ namespace GKUI
 							    }
                                 break;
 
-                            case TGenEngine.TRecAction.raDelete:
+                            case TRecAction.raDelete:
 								if (cit != null && TGenEngine.ShowQuestion(LangMan.LSList[145]) != DialogResult.No)
 								{
 									this.FSourceRecord.RepositoryCitations.DeleteObject(cit);
@@ -102,7 +102,7 @@ namespace GKUI
 								}
                                 break;
 
-                            case TGenEngine.TRecAction.raJump:
+                            case TRecAction.raJump:
 								if (cit != null)
 								{
 									this.AcceptChanges();

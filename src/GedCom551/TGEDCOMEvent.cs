@@ -6,12 +6,12 @@ namespace GedCom551
 	{
 		public TGEDCOMDatePeriod Date
 		{
-			get	{ return base.TagClass("DATE", typeof(TGEDCOMDatePeriod), TGEDCOMDatePeriod.Create) as TGEDCOMDatePeriod; }
+			get	{ return base.TagClass("DATE", TGEDCOMDatePeriod.Create) as TGEDCOMDatePeriod; }
 		}
 
 		public TGEDCOMPlace Place
 		{
-			get	{ return base.TagClass("PLAC", typeof(TGEDCOMPlace), TGEDCOMPlace.Create) as TGEDCOMPlace; }
+			get	{ return base.TagClass("PLAC", TGEDCOMPlace.Create) as TGEDCOMPlace; }
 		}
 
 		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
@@ -20,21 +20,21 @@ namespace GedCom551
 			this.FName = "EVEN";
 		}
 
-		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
 		{
-			TGEDCOMTag Result;
+			TGEDCOMTag result;
 
-			if (ATag == "DATE")
+			if (tagName == "DATE")
 			{
-				Result = base.AddTag(ATag, AValue, TGEDCOMDatePeriod.Create);
+				result = base.AddTag(tagName, tagValue, TGEDCOMDatePeriod.Create);
 			}
 			else
 			{
 				// define "PLAC" by default
-				Result = base.AddTag(ATag, AValue, ATagConstructor);
+				result = base.AddTag(tagName, tagValue, tagConstructor);
 			}
 
-			return Result;
+			return result;
 		}
 
 		public TGEDCOMEvent(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

@@ -38,7 +38,7 @@ namespace GKUI
 			this.Base.RecListMediaRefresh(this.FLocationRecord, this.FMediaList.List, null);
 		}
 
-		private void ListModify(object Sender, object ItemData, TGenEngine.TRecAction Action)
+		private void ListModify(object Sender, object ItemData, TRecAction Action)
 		{
 			if (object.Equals(Sender, this.FNotesList))
 			{

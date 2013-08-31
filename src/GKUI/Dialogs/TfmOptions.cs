@@ -68,23 +68,23 @@ namespace GKUI
 
             switch (this.FOptions.DefNameFormat)
             {
-                case TGenEngine.TNameFormat.nfFNP:
+                case TNameFormat.nfFNP:
                     this.RButton5.Checked = true;
                     break;
-                case TGenEngine.TNameFormat.nfF_NP:
+                case TNameFormat.nfF_NP:
                     this.RButton6.Checked = true;
                     break;
-                case TGenEngine.TNameFormat.nfF_N_P:
+                case TNameFormat.nfF_N_P:
                     this.RButton7.Checked = true;
                     break;
             }
 
             switch (this.FOptions.DefDateFormat)
             {
-                case TGenEngine.TDateFormat.dfDD_MM_YYYY:
+                case TDateFormat.dfDD_MM_YYYY:
                     this.RButton8.Checked = true;
                     break;
-                case TGenEngine.TDateFormat.dfYYYY_MM_DD:
+                case TDateFormat.dfYYYY_MM_DD:
                     this.RButton9.Checked = true;
                     break;
             }
@@ -207,24 +207,24 @@ namespace GKUI
 
 			if (this.RButton5.Checked)
 			{
-				this.FOptions.DefNameFormat = TGenEngine.TNameFormat.nfFNP;
+				this.FOptions.DefNameFormat = TNameFormat.nfFNP;
 			}
 			else if (this.RButton6.Checked)
 			{
-				this.FOptions.DefNameFormat = TGenEngine.TNameFormat.nfF_NP;
+				this.FOptions.DefNameFormat = TNameFormat.nfF_NP;
 			}
 			else if (this.RButton7.Checked)
 			{
-				this.FOptions.DefNameFormat = TGenEngine.TNameFormat.nfF_N_P;
+				this.FOptions.DefNameFormat = TNameFormat.nfF_N_P;
 			}
 
 			if (this.RButton8.Checked)
 			{
-				this.FOptions.DefDateFormat = TGenEngine.TDateFormat.dfDD_MM_YYYY;
+				this.FOptions.DefDateFormat = TDateFormat.dfDD_MM_YYYY;
 			}
 			else if (this.RButton9.Checked)
 			{
-				this.FOptions.DefDateFormat = TGenEngine.TDateFormat.dfYYYY_MM_DD;
+				this.FOptions.DefDateFormat = TDateFormat.dfYYYY_MM_DD;
 			}
 
 			this.FOptions.PlacesWithAddress = this.chkPlacesWithAddress.Checked;

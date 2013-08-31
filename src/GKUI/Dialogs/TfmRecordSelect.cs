@@ -18,7 +18,7 @@ namespace GKUI
 		private TfmBase FBase;
 		private TGEDCOMRecordType FMode;
 		private string FFilter;
-		private TGenEngine.TTargetMode FTargetMode;
+		private TTargetMode FTargetMode;
 		public TGEDCOMIndividualRecord FTarget;
 		public TGEDCOMSex FNeedSex;
 		public TGEDCOMRecord ResultRecord;
@@ -41,7 +41,7 @@ namespace GKUI
 			set { this.SetMode(value); }
 		}
 
-		public TGenEngine.TTargetMode TargetMode
+		public TTargetMode TargetMode
 		{
 			get { return this.FTargetMode; }
 			set { this.SetTargetMode(value); }
@@ -68,7 +68,7 @@ namespace GKUI
 			if (this.FMode == TGEDCOMRecordType.rtIndividual) {
 				TIndividualListFilter iFilter = (TIndividualListFilter)this.ListRecords.ListMan.Filter;
 				iFilter.Sex = this.FNeedSex;
-				iFilter.ChildSelector = (this.FTargetMode == TGenEngine.TTargetMode.tmParent);
+				iFilter.ChildSelector = (this.FTargetMode == TTargetMode.tmParent);
 			}
 
 			this.ListRecords.UpdateContents(this.Base.ShieldState, true, 1);
@@ -85,7 +85,7 @@ namespace GKUI
 			this.DataRefresh();
 		}
 
-		private void SetTargetMode(TGenEngine.TTargetMode Value)
+		private void SetTargetMode(TTargetMode Value)
 		{
 			this.FTargetMode = Value;
 		}
@@ -124,14 +124,14 @@ namespace GKUI
 					case TGEDCOMRecordType.rtFamily:
 						{
 							TGEDCOMFamilyRecord famRec = null;
-							TGenEngine.TFamilyTarget fam_target;
-							if (this.FTargetMode == TGenEngine.TTargetMode.tmChildToFamily)
+							TFamilyTarget fam_target;
+							if (this.FTargetMode == TTargetMode.tmChildToFamily)
 							{
-								fam_target = TGenEngine.TFamilyTarget.ftChild;
+								fam_target = TFamilyTarget.ftChild;
 							}
 							else
 							{
-								fam_target = TGenEngine.TFamilyTarget.ftNone;
+								fam_target = TFamilyTarget.ftNone;
 							}
 							if (this.Base.ModifyFamily(ref famRec, fam_target, this.FTarget))
 							{

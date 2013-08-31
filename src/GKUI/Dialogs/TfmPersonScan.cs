@@ -75,7 +75,7 @@ namespace GKUI
 
 		private void InitSourceControls()
 		{
-			this.Base.Engine.GetSourcesList(this.FSourcesList);
+			this.Base.Engine.aux_GetSourcesList(this.FSourcesList);
 			cbSource.Items.Clear();
 			for (int i = 0; i <= FSourcesList.Count - 1; i++) cbSource.Items.Add(FSourcesList[i]);
 
@@ -181,9 +181,9 @@ namespace GKUI
 							}
 
 							if (!string.IsNullOrEmpty(src_name)) {
-								TGEDCOMSourceRecord src_rec = Base.Engine.FindSource(src_name);
+								TGEDCOMSourceRecord src_rec = Base.Engine.aux_FindSource(src_name);
 								if (src_rec == null) {
-									src_rec = TGenEngine.CreateSource(Base.Tree);
+									src_rec = Base.Tree.aux_CreateSource();
 									src_rec.FiledByEntry = src_name;
 								}
 								iRec.aux_AddSource(src_rec, src_page, 0);
@@ -367,7 +367,7 @@ namespace GKUI
 			}
 			else
 			{
-				result = TGenEngine.CreateFamilyEx(Base.Tree);
+				result = Base.Tree.aux_CreateFamily();
 				result.aux_AddChild(iRec);
 			}
 			return result;
@@ -376,15 +376,17 @@ namespace GKUI
 		private TGEDCOMFamilyRecord _ParseSource_GetMarriageFamily(TGEDCOMIndividualRecord iRec)
 		{
 			TGEDCOMFamilyRecord result;
+
 			if (iRec.SpouseToFamilyLinks.Count > 0)
 			{
 				result = iRec.SpouseToFamilyLinks[0].Family;
 			}
 			else
 			{
-				result = TGenEngine.CreateFamilyEx(Base.Tree);
+				result = Base.Tree.aux_CreateFamily();
 				result.aux_AddSpouse(iRec);
 			}
+
 			return result;
 		}
 

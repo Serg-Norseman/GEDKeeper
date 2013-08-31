@@ -16,19 +16,19 @@ namespace GedCom551
 
 		public TGEDCOMData Data
 		{
-			get { return base.TagClass("DATA", typeof(TGEDCOMData), TGEDCOMData.Create) as TGEDCOMData; }
+			get { return base.TagClass("DATA", TGEDCOMData.Create) as TGEDCOMData; }
 		}
 
 		public StringList Originator
 		{
-			get { return base.GetTagStrings(base.TagClass("AUTH", typeof(TGEDCOMTag), TGEDCOMTag.Create), ref this.FOriginator); }
-			set { base.SetTagStrings(base.TagClass("AUTH", typeof(TGEDCOMTag), TGEDCOMTag.Create), value); }
+			get { return base.GetTagStrings(base.TagClass("AUTH", TGEDCOMTag.Create), ref this.FOriginator); }
+			set { base.SetTagStrings(base.TagClass("AUTH", TGEDCOMTag.Create), value); }
 		}
 
 		public StringList Title
 		{
-			get { return base.GetTagStrings(base.TagClass("TITL", typeof(TGEDCOMTag), TGEDCOMTag.Create), ref this.FTitle); }
-			set { base.SetTagStrings(base.TagClass("TITL", typeof(TGEDCOMTag), TGEDCOMTag.Create), value); }
+			get { return base.GetTagStrings(base.TagClass("TITL", TGEDCOMTag.Create), ref this.FTitle); }
+			set { base.SetTagStrings(base.TagClass("TITL", TGEDCOMTag.Create), value); }
 		}
 
 		public string FiledByEntry
@@ -39,14 +39,14 @@ namespace GedCom551
 
 		public StringList Publication
 		{
-			get { return base.GetTagStrings(base.TagClass("PUBL", typeof(TGEDCOMTag), TGEDCOMTag.Create), ref this.FPublication); }
-			set { base.SetTagStrings(base.TagClass("PUBL", typeof(TGEDCOMTag), TGEDCOMTag.Create), value); }
+			get { return base.GetTagStrings(base.TagClass("PUBL", TGEDCOMTag.Create), ref this.FPublication); }
+			set { base.SetTagStrings(base.TagClass("PUBL", TGEDCOMTag.Create), value); }
 		}
 
 		public StringList Text
 		{
-			get { return base.GetTagStrings(base.TagClass("TEXT", typeof(TGEDCOMTag), TGEDCOMTag.Create), ref this.FText); }
-			set { base.SetTagStrings(base.TagClass("TEXT", typeof(TGEDCOMTag), TGEDCOMTag.Create), value); }
+			get { return base.GetTagStrings(base.TagClass("TEXT", TGEDCOMTag.Create), ref this.FText); }
+			set { base.SetTagStrings(base.TagClass("TEXT", TGEDCOMTag.Create), value); }
 		}
 
 		public GEDCOMList<TGEDCOMRepositoryCitation> RepositoryCitations
@@ -84,24 +84,24 @@ namespace GedCom551
 			}
 		}
 
-		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
 		{
-			TGEDCOMTag Result;
+			TGEDCOMTag result;
 
-			if (ATag == "REPO")
+			if (tagName == "REPO")
 			{
-				Result = this._RepositoryCitations.Add(new TGEDCOMRepositoryCitation(base.Owner, this, ATag, AValue));
+				result = this._RepositoryCitations.Add(new TGEDCOMRepositoryCitation(base.Owner, this, tagName, tagValue));
 			}
-			else if (ATag == "DATA")
+			else if (tagName == "DATA")
 			{
-				Result = base.AddTag(ATag, AValue, TGEDCOMData.Create);
+				result = base.AddTag(tagName, tagValue, TGEDCOMData.Create);
 			}
 			else
 			{
-				Result = base.AddTag(ATag, AValue, ATagConstructor);
+				result = base.AddTag(tagName, tagValue, tagConstructor);
 			}
 
-			return Result;
+			return result;
 		}
 
 		public override void Clear()
@@ -181,25 +181,36 @@ namespace GedCom551
 
 		public void SetOriginatorArray(params string[] Value)
 		{
-			base.SetTagStrings(base.TagClass("AUTH", typeof(TGEDCOMTag), TGEDCOMTag.Create), Value);
+			base.SetTagStrings(base.TagClass("AUTH", TGEDCOMTag.Create), Value);
 		}
 
 		public void SetTitleArray(params string[] Value)
 		{
-			base.SetTagStrings(base.TagClass("TITL", typeof(TGEDCOMTag), TGEDCOMTag.Create), Value);
+			base.SetTagStrings(base.TagClass("TITL", TGEDCOMTag.Create), Value);
 		}
 
 		public void SetPublicationArray(params string[] Value)
 		{
-			base.SetTagStrings(base.TagClass("PUBL", typeof(TGEDCOMTag), TGEDCOMTag.Create), Value);
+			base.SetTagStrings(base.TagClass("PUBL", TGEDCOMTag.Create), Value);
 		}
 
 		public void SetTextArray(params string[] Value)
 		{
-			base.SetTagStrings(base.TagClass("TEXT", typeof(TGEDCOMTag), TGEDCOMTag.Create), Value);
+			base.SetTagStrings(base.TagClass("TEXT", TGEDCOMTag.Create), Value);
 		}
 
-		public override bool IsMatch(TGEDCOMRecord record, float matchThreshold, MatchParams matchParams)
+		public TGEDCOMSourceRecord(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
+		{
+		}
+
+        public new static TGEDCOMTag Create(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue)
+		{
+			return new TGEDCOMSourceRecord(owner, parent, tagName, tagValue);
+		}
+
+        #region Auxiliary
+
+        public override bool aux_IsMatch(TGEDCOMRecord record, float matchThreshold, MatchParams matchParams)
 		{
 			bool match = false;
 
@@ -215,15 +226,6 @@ namespace GedCom551
 			return match;
 		}
 
-		public TGEDCOMSourceRecord(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-		{
-		}
-
-        public new static TGEDCOMTag Create(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue)
-		{
-			return new TGEDCOMSourceRecord(owner, parent, tagName, tagValue);
-		}
-
 		public void aux_AddRepository(TGEDCOMRepositoryRecord aRepRec)
 		{
 			if (aRepRec != null) {
@@ -233,5 +235,6 @@ namespace GedCom551
 			}
 		}
 
+		#endregion
 	}
 }

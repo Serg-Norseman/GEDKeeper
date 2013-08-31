@@ -5,11 +5,11 @@ namespace GedCom551
 {
 	public sealed class TGEDCOMData : TGEDCOMTagWithLists
 	{
-		private GEDCOMList<TGEDCOMEvent> _Events;
+		private GEDCOMList<TGEDCOMEvent> fEvents;
 
 		public GEDCOMList<TGEDCOMEvent> Events
 		{
-			get { return this._Events; }
+			get { return this.fEvents; }
 		}
 
 		public string Agency
@@ -23,49 +23,51 @@ namespace GedCom551
 			base.CreateObj(owner, parent);
 			this.FName = "DATA";
 
-			this._Events = new GEDCOMList<TGEDCOMEvent>(this);
+			this.fEvents = new GEDCOMList<TGEDCOMEvent>(this);
 		}
 
 		public override void Dispose()
 		{
 			if (!this.Disposed_)
 			{
-				this._Events.Dispose();
+				this.fEvents.Dispose();
 
 				base.Dispose();
 				this.Disposed_ = true;
 			}
 		}
 
-		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
 		{
-			TGEDCOMTag Result;
-			if (ATag == "EVEN")
+			TGEDCOMTag result;
+
+			if (tagName == "EVEN")
 			{
-				Result = this._Events.Add(new TGEDCOMEvent(base.Owner, this, ATag, AValue));
+				result = this.fEvents.Add(new TGEDCOMEvent(base.Owner, this, tagName, tagValue));
 			}
 			else
 			{
-				Result = base.AddTag(ATag, AValue, ATagConstructor);
+				result = base.AddTag(tagName, tagValue, tagConstructor);
 			}
-			return Result;
+
+			return result;
 		}
 
 		public override void Clear()
 		{
 			base.Clear();
-			this._Events.Clear();
+			this.fEvents.Clear();
 		}
 
 		public override bool IsEmpty()
 		{
-			return base.IsEmpty() && (this._Events.Count == 0);
+			return base.IsEmpty() && (this.fEvents.Count == 0);
 		}
 
 		public override void ResetOwner(TGEDCOMTree AOwner)
 		{
 			base.ResetOwner(AOwner);
-			this._Events.ResetOwner(AOwner);
+			this.fEvents.ResetOwner(AOwner);
 		}
 
 		public TGEDCOMData(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

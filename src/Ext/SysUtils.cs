@@ -167,7 +167,7 @@ namespace Ext.Utils
             Win32Native.ShellExecute(0, "open", aFileName, "", "", 5);
         }
 
-        public bool IsConnectedToInternet()  
+        public static bool IsConnectedToInternet()  
         {  
             int iDesc = 0;
             return Win32Native.InternetGetConnectedState(out iDesc, 0);
@@ -238,6 +238,35 @@ namespace Ext.Utils
 			}
 
 			return NewPos;
+		}
+
+		public static int DaysBetween(DateTime ANow, DateTime AThen)
+		{
+			TimeSpan span = ((ANow < AThen) ? AThen - ANow : ANow - AThen);
+			return span.Days;
+		}
+
+		private static readonly ushort[][] MonthDays = new ushort[][]
+		{
+			new ushort[] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }, 
+			new ushort[] { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
+		};
+
+		public static ushort DaysInAMonth(ushort AYear, ushort AMonth)
+		{
+			return MonthDays[(AMonth == 2 && DateTime.IsLeapYear((int)AYear)) ? 1 : 0][(int)AMonth - 1];
+		}
+
+		public static string NumUpdate(int val, int up)
+		{
+			string result = val.ToString();
+			if (result.Length < up)
+			{
+				StringBuilder sb = new StringBuilder(result);
+				while (sb.Length < up) sb.Insert(0, '0');
+				result = sb.ToString();
+			}
+			return result;
 		}
 
 	}

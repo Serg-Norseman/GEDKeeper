@@ -660,7 +660,10 @@ namespace GKCore
 		/* 616 */ LSID_ZoomIn,
 		/* 617 */ LSID_ZoomOut,
 
-		/* 000 */ LSID_Last = LSID_ZoomOut
+		/* 618 */ LSID_SetIsDead,
+		/* 619 */ LSID_DefineSex,
+
+		/* 000 */ LSID_Last = LSID_DefineSex
 	}
 
 	public static class LangMan
@@ -1303,7 +1306,10 @@ namespace GKCore
 
 			/* 615 */ "Под размер окна",
 			/* 616 */ "Увеличить",
-			/* 617 */ "Уменьшить"
+			/* 617 */ "Уменьшить",
+
+			/* 618 */ "Установить факт смерти",
+			/* 619 */ "Определить пол"
 		};
 
 		public static string[] LSList = new string[(int)LSID.LSID_Last + 1];

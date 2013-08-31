@@ -39,7 +39,7 @@ namespace GKUI.Lists
 	{
 		private TGEDCOMTaskRecord FRec;
 
-		public override bool CheckFilter(TGenEngine.TShieldState aShieldState)
+		public override bool CheckFilter(TShieldState aShieldState)
 		{
 			bool res = (this.QuickFilter == "*" || IsMatchesMask(TGenEngine.GetTaskGoalStr(this.FRec), this.QuickFilter));
 
@@ -59,7 +59,7 @@ namespace GKUI.Lists
 				case 0:
 					return TGenEngine.GetTaskGoalStr(this.FRec);
 				case 1:
-					return LangMan.LSList[(int)TGenEngine.PriorityNames[(int)this.FRec.Priority] - 1];
+					return LangMan.LSList[(int)GKData.PriorityNames[(int)this.FRec.Priority] - 1];
 				case 2:
 					return TGenEngine.GEDCOMDateToStr(this.FRec.StartDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
 				case 3:

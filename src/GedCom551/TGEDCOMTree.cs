@@ -20,6 +20,8 @@ namespace GedCom551
 
 	public sealed class TGEDCOMTree : TGEDCOMObject, IDisposable
 	{
+		#region Tree Enumerator
+
 		public struct TreeEnumerator : ITreeEnumerator
 		{
 			private TGEDCOMTree tree;
@@ -76,11 +78,20 @@ namespace GedCom551
 			}
 		}
 
+		#endregion
+
 		private GEDCOMList<TGEDCOMRecord> FRecords;
 		private TGEDCOMHeader FHeader;
 		private Hashtable FXRefIndex;
 		private TGEDCOMState FState;
+//		private string FFileName;
 		private bool Disposed_;
+
+//		public string FileName
+//		{
+//			get { return this.FFileName; }
+//			//set { this.FFileName = value; }
+//		}
 
 		public ITreeEnumerator GetEnumerator(TGEDCOMRecordType rec_type)
 		{
@@ -115,6 +126,20 @@ namespace GedCom551
 			this.FXRefIndex = new Hashtable();
 		}
 
+		public void Dispose()
+		{
+			if (!this.Disposed_)
+			{
+				//this.FXRefIndex.Dispose();
+				this.FHeader.Dispose();
+				this.FRecords.Dispose();
+
+				this.Disposed_ = true;
+			}
+		}
+
+		#region Internal
+
 		static TGEDCOMTree()
 		{
 			GEDCOMFactory f = GEDCOMFactory.GetInstance();
@@ -129,21 +154,16 @@ namespace GedCom551
 			//f.RegisterTag("xxxx", xxxx.Create);
 		}
 
-		public void Dispose()
+		private static string StrToUtf8(string S)
 		{
-			if (!this.Disposed_)
-			{
-				//this.FXRefIndex.Dispose();
-				this.FHeader.Dispose();
-				this.FRecords.Dispose();
-
-				this.Disposed_ = true;
-			}
+			byte[] src = Encoding.GetEncoding(1251).GetBytes(S);
+			return Encoding.UTF8.GetString(src);
 		}
 
 		private string GetSignByRecord(TGEDCOMRecord aRecord)
 		{
 			string result = "";
+
 			if (aRecord != null)
 			{
 				switch (aRecord.RecordType) {
@@ -188,8 +208,13 @@ namespace GedCom551
 						break;
 				}
 			}
+
 			return result;
 		}
+
+		#endregion
+
+		#region XRef Search
 
 		private void XRefIndex_Clear()
 		{
@@ -238,6 +263,10 @@ namespace GedCom551
 			return sign + I.ToString();
 		}
 
+		#endregion
+
+		#region Main functionality
+
 		public TGEDCOMRecord AddRecord(TGEDCOMRecord ARecord)
 		{
 			this.FRecords.Add(ARecord);
@@ -275,8 +304,52 @@ namespace GedCom551
 			return this.FRecords.IndexOfObject(ARecord);
 		}
 
-		public void SaveToFile(string aFileName, TGEDCOMCharacterSet CharSet)
+		public void Pack()
 		{
+			int num = this.FRecords.Count - 1;
+			for (int i = 0; i <= num; i++)
+			{
+				this.FRecords[i].Pack();
+			}
+		}
+
+		public TGEDCOMRecord FindUID(string UID)
+		{
+			TGEDCOMRecord res = null;
+
+			int num = this.FRecords.Count - 1;
+			for (int i = 0; i <= num; i++)
+			{
+				TGEDCOMRecord rec = this.FRecords[i];
+				if (rec.UID == UID)
+				{
+					res = rec;
+					break;
+				}
+			}
+
+			return res;
+		}
+
+		#endregion
+
+		#region Load/Save
+
+		public void LoadFromFile(string fileName)
+		{
+			//this.FFileName = fileName;
+
+			using (StreamReader fs = new StreamReader(fileName, Encoding.GetEncoding(1251))) {
+				this.Clear();
+				this.LoadFromStream(fs);
+				this.FHeader.CharacterSet = TGEDCOMCharacterSet.csASCII;
+			}
+		}
+
+		public void SaveToFile(string fileName, TGEDCOMCharacterSet CharSet)
+		{
+			//this.FFileName = fileName;
+
 			string subm = this.FHeader.GetTagStringValue("SUBM");
 			int rev = this.FHeader.FileRevision;
 
@@ -287,7 +360,7 @@ namespace GedCom551
 			this.FHeader.Language = "Russian";
 			this.FHeader.GEDCOMVersion = "5.5";
 			this.FHeader.GEDCOMForm = "LINEAGE-LINKED";
-			this.FHeader.FileName = Path.GetFileName(aFileName);
+			this.FHeader.FileName = Path.GetFileName(fileName);
 			this.FHeader.TransmissionDateTime = DateTime.Now;
 			this.FHeader.FileRevision = rev + 1;
 
@@ -298,29 +371,37 @@ namespace GedCom551
 
 			this.Pack();
 
-			using (StreamWriter fs = new StreamWriter(aFileName, false, TGEDCOMObject.GetEncodingByCharacterSet(CharSet))) {
+			using (StreamWriter fs = new StreamWriter(fileName, false, TGEDCOMObject.GetEncodingByCharacterSet(CharSet))) {
 				this.SaveToStream(fs);
 				this.FHeader.CharacterSet = TGEDCOMCharacterSet.csASCII;
 			}
 		}
 
-		public void LoadFromFile(string aFileName)
-		{
-			using (StreamReader fs = new StreamReader(aFileName, Encoding.GetEncoding(1251))) {
-				this.Clear();
-				this.LoadFromStream(fs);
-				this.FHeader.CharacterSet = TGEDCOMCharacterSet.csASCII;
-			}
-		}
-
-		private static string StrToUtf8(string S)
-		{
-			byte[] src = Encoding.GetEncoding(1251).GetBytes(S);
-			return Encoding.UTF8.GetString(src);
-		}
-
 		public int Progress;
 		public event EventHandler ProgressEvent;
+
+        private static void LoadFromStream_LineCorrect(TGEDCOMCustomRecord CurRecord, TGEDCOMTag CurTag, int LineNum, string S)
+		{
+			try
+			{
+				if (CurTag != null && CurTag is TGEDCOMNotes)
+				{
+					CurTag.AddTag("CONT", S, null);
+				}
+				else
+				{
+					if (CurRecord != null)
+					{
+						CurRecord.AddTag("NOTE", S, null);
+					}
+				}
+				Trace.Write("TGEDCOMTree.LoadFromStream(): " + CurRecord.XRef + " notes correct");
+			}
+			catch (Exception E)
+			{
+				Trace.Write("Line " + LineNum.ToString() + ". Failed correct: " + E.Message);
+			}
+		}
 
 		public void LoadFromStream(StreamReader AStream)
 		{
@@ -349,7 +430,7 @@ namespace GedCom551
 					{
 						if (!IsDigit(S[0]))
 						{
-							TGEDCOMTree._LoadFromStream_LineCorrect(CurRecord, CurTag, I + 1, S.Trim());
+							TGEDCOMTree.LoadFromStream_LineCorrect(CurRecord, CurTag, I + 1, S.Trim());
 						}
 						else
 						{
@@ -524,55 +605,9 @@ namespace GedCom551
 			AStream.WriteLine(S);
 		}
 
-		public void Pack()
-		{
-			int num = this.FRecords.Count - 1;
-			for (int i = 0; i <= num; i++)
-			{
-				this.FRecords[i].Pack();
-			}
-		}
+		#endregion
 
-		public TGEDCOMRecord FindUID(string UID)
-		{
-			TGEDCOMRecord res = null;
-
-			int num = this.FRecords.Count - 1;
-			for (int i = 0; i <= num; i++)
-			{
-				TGEDCOMRecord rec = this.FRecords[i];
-				if (rec.UID == UID)
-				{
-					res = rec;
-					break;
-				}
-			}
-
-			return res;
-		}
-
-        private static void _LoadFromStream_LineCorrect(TGEDCOMCustomRecord CurRecord, TGEDCOMTag CurTag, int LineNum, string S)
-		{
-			try
-			{
-				if (CurTag != null && CurTag is TGEDCOMNotes)
-				{
-					CurTag.AddTag("CONT", S, null);
-				}
-				else
-				{
-					if (CurRecord != null)
-					{
-						CurRecord.AddTag("NOTE", S, null);
-					}
-				}
-				Trace.Write("TGEDCOMTree.LoadFromStream(): " + CurRecord.XRef + " notes correct");
-			}
-			catch (Exception E)
-			{
-				Trace.Write("Line " + LineNum.ToString() + ". Failed correct: " + E.Message);
-			}
-		}
+		#region Auxiliary
 
 		public TGEDCOMSubmitterRecord aux_GetSubmitter()
 		{
@@ -587,5 +622,50 @@ namespace GedCom551
 			return submitter;
 		}
 
+		public TGEDCOMFamilyRecord aux_CreateFamily()
+		{
+			TGEDCOMFamilyRecord result = new TGEDCOMFamilyRecord(this, this, "", "");
+			result.InitNew();
+			result.ChangeDate.ChangeDateTime = DateTime.Now;
+
+			this.AddRecord(result);
+
+			return result;
+		}
+
+		public TGEDCOMNoteRecord aux_CreateNote()
+		{
+			TGEDCOMNoteRecord result = new TGEDCOMNoteRecord(this, this, "", "");
+			result.InitNew();
+			result.ChangeDate.ChangeDateTime = DateTime.Now;
+
+			this.AddRecord(result);
+
+			return result;
+		}
+
+		public TGEDCOMSourceRecord aux_CreateSource()
+		{
+			TGEDCOMSourceRecord result = new TGEDCOMSourceRecord(this, this, "", "");
+			result.InitNew();
+			result.ChangeDate.ChangeDateTime = DateTime.Now;
+
+			this.AddRecord(result);
+
+			return result;
+		}
+
+		public TGEDCOMGroupRecord aux_CreateGroup()
+		{
+			TGEDCOMGroupRecord result = new TGEDCOMGroupRecord(this, this, "", "");
+			result.InitNew();
+			result.ChangeDate.ChangeDateTime = DateTime.Now;
+
+			this.AddRecord(result);
+
+			return result;
+		}
+
+		#endregion
 	}
 }

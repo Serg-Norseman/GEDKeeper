@@ -6,7 +6,7 @@ namespace GedCom551
 	{
 		public TGEDCOMMap Map
 		{
-			get { return base.TagClass("MAP", typeof(TGEDCOMMap), TGEDCOMMap.Create) as TGEDCOMMap; }
+			get { return base.TagClass("MAP", TGEDCOMMap.Create) as TGEDCOMMap; }
 		}
 
 		public string LocationName

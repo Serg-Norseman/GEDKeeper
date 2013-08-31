@@ -47,8 +47,8 @@ namespace GKUI
 				else
 				{
 					this.EditPriority.SelectedIndex = (int)((sbyte)this.FTask.Priority);
-					this.EditStartDate.Text = TGenEngine.GEDCOMDateToStr(this.FTask.StartDate, TGenEngine.TDateFormat.dfDD_MM_YYYY);
-					this.EditStopDate.Text = TGenEngine.GEDCOMDateToStr(this.FTask.StopDate, TGenEngine.TDateFormat.dfDD_MM_YYYY);
+					this.EditStartDate.Text = TGenEngine.GEDCOMDateToStr(this.FTask.StartDate, TDateFormat.dfDD_MM_YYYY);
+					this.EditStopDate.Text = TGenEngine.GEDCOMDateToStr(this.FTask.StopDate, TDateFormat.dfDD_MM_YYYY);
 					TGoalType gt = TGoalType.gtOther;
                     this.FTask.aux_GetTaskGoal(ref gt, ref this.FTempRec);
 					this.cbGoalType.SelectedIndex = (int)((sbyte)gt);
@@ -79,7 +79,7 @@ namespace GKUI
 			}
 		}
 
-		private void ListModify(object Sender, object ItemData, TGenEngine.TRecAction Action)
+		private void ListModify(object Sender, object ItemData, TRecAction Action)
 		{
 			if ((Sender == this.FNotesList) && this.Base.ModifyRecNote(this, this.FTask, ItemData as TGEDCOMNotes, Action))
 			{
@@ -126,7 +126,7 @@ namespace GKUI
 			TGoalType gt = (TGoalType)this.cbGoalType.SelectedIndex;
 			switch (gt) {
 				case TGoalType.gtIndividual:
-					this.FTempRec = this.Base.SelectPerson(null, TGenEngine.TTargetMode.tmNone, TGEDCOMSex.svNone);
+					this.FTempRec = this.Base.SelectPerson(null, TTargetMode.tmNone, TGEDCOMSex.svNone);
 					this.EditGoal.Text = ((this.FTempRec == null) ? "" : (this.FTempRec as TGEDCOMIndividualRecord).aux_GetNameStr(true, false));
 					break;
 				case TGoalType.gtFamily:
@@ -176,12 +176,12 @@ namespace GKUI
 
 			for (TResearchPriority rp = TResearchPriority.rpNone; rp <= TResearchPriority.rpTop; rp++)
 			{
-				this.EditPriority.Items.Add(LangMan.LSList[(int)TGenEngine.PriorityNames[(int)rp] - 1]);
+				this.EditPriority.Items.Add(LangMan.LSList[(int)GKData.PriorityNames[(int)rp] - 1]);
 			}
 
 			for (TGoalType gt = TGoalType.gtIndividual; gt <= TGoalType.gtOther; gt++)
 			{
-				this.cbGoalType.Items.Add(LangMan.LSList[(int)TGenEngine.GoalNames[(int)gt] - 1]);
+				this.cbGoalType.Items.Add(LangMan.LSList[(int)GKData.GoalNames[(int)gt] - 1]);
 			}
 
 			this.FNotesList = new GKSheetList(this.SheetNotes);

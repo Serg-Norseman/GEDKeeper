@@ -222,7 +222,7 @@ namespace GKUI
 
 			if (this.FPerson.ChildToFamilyLinks.Count > 0)
 			{
-				this.FPerson.ChildToFamilyLinks[0].Family.SortChilds();
+				this.FPerson.ChildToFamilyLinks[0].Family.aux_SortChilds();
 			}
 
 			this.Base.ChangeRecord(this.FPerson);
@@ -234,13 +234,13 @@ namespace GKUI
 				" " + this.EditPatronymic.Text + "\" [" + this.FPerson.aux_GetXRefNum() + "]";
 		}
 
-		private void ListModify(object sender, object itemData, TGenEngine.TRecAction Action)
+		private void ListModify(object sender, object itemData, TRecAction Action)
 		{
             bool res = false;
 
             if (sender == this.FEventsList)
 			{
-                if (Action == TGenEngine.TRecAction.raMoveUp || Action == TGenEngine.TRecAction.raMoveDown)
+                if (Action == TRecAction.raMoveUp || Action == TRecAction.raMoveDown)
 				{
 					TGEDCOMCustomEvent evt = itemData as TGEDCOMCustomEvent;
 					int idx = this.FPerson.IndividualEvents.IndexOfObject(evt);
@@ -248,12 +248,12 @@ namespace GKUI
 
                     switch (Action)
                     {
-                        case TGenEngine.TRecAction.raMoveUp:
+                        case TRecAction.raMoveUp:
 						    this.FPerson.IndividualEvents.Exchange(idx - 1, idx);
 						    newIdx = idx - 1;
                             break;
 
-                        case TGenEngine.TRecAction.raMoveDown:
+                        case TRecAction.raMoveDown:
 							this.FPerson.IndividualEvents.Exchange(idx, idx + 1);
 							newIdx = idx + 1;
                             break;
@@ -271,18 +271,18 @@ namespace GKUI
 			{
 				if (sender == this.FSpousesList)
 				{
-                    TGEDCOMFamilyRecord family = (Action == TGenEngine.TRecAction.raAdd) ? null : itemData as TGEDCOMFamilyRecord;
+                    TGEDCOMFamilyRecord family = (Action == TRecAction.raAdd) ? null : itemData as TGEDCOMFamilyRecord;
 
 					switch (Action) {
-						case TGenEngine.TRecAction.raAdd:
-                            res = (this.Base.ModifyFamily(ref family, TGenEngine.TFamilyTarget.ftSpouse, this.FPerson));
+						case TRecAction.raAdd:
+                            res = (this.Base.ModifyFamily(ref family, TFamilyTarget.ftSpouse, this.FPerson));
 							break;
 
-                        case TGenEngine.TRecAction.raEdit:
-                            res = (this.Base.ModifyFamily(ref family, TGenEngine.TFamilyTarget.ftNone, null));
+                        case TRecAction.raEdit:
+                            res = (this.Base.ModifyFamily(ref family, TFamilyTarget.ftNone, null));
 							break;
 
-                        case TGenEngine.TRecAction.raDelete:
+                        case TRecAction.raDelete:
 							if (family != null && TGenEngine.ShowQuestion(LangMan.LSList[220]) != DialogResult.No)
 							{
 								family.aux_RemoveSpouse(this.FPerson);
@@ -290,7 +290,7 @@ namespace GKUI
 							}
 							break;
 
-                        case TGenEngine.TRecAction.raJump:
+                        case TRecAction.raJump:
 							if (family != null && (this.FPerson.Sex == TGEDCOMSex.svMale || this.FPerson.Sex == TGEDCOMSex.svFemale)) {
 								TGEDCOMPointer sp = null;
 
@@ -311,20 +311,20 @@ namespace GKUI
 							}
 							break;
 
-						case TGenEngine.TRecAction.raMoveUp:
-						case TGenEngine.TRecAction.raMoveDown:
+						case TRecAction.raMoveUp:
+						case TRecAction.raMoveDown:
 						{
 							int idx = this.FPerson.IndexOfSpouse(family);
 							int newIdx = idx;
 
                             switch (Action)
                             {
-                                case TGenEngine.TRecAction.raMoveUp:
+                                case TRecAction.raMoveUp:
 								    this.FPerson.ExchangeSpouses(idx - 1, idx);
 								    newIdx = idx - 1;
                                     break;
 
-                                case TGenEngine.TRecAction.raMoveDown:
+                                case TRecAction.raMoveDown:
 									this.FPerson.ExchangeSpouses(idx, idx + 1);
 									newIdx = idx + 1;
                                     break;
@@ -358,7 +358,7 @@ namespace GKUI
 							{
 								if (sender == this.FMediaList)
 								{
-                                    if (Action == TGenEngine.TRecAction.raMoveUp || Action == TGenEngine.TRecAction.raMoveDown)
+                                    if (Action == TRecAction.raMoveUp || Action == TRecAction.raMoveDown)
 									{
 										TGEDCOMMultimediaLink mmLink = itemData as TGEDCOMMultimediaLink;
 										int idx = this.FPerson.MultimediaLinks.IndexOfObject(mmLink);
@@ -366,12 +366,12 @@ namespace GKUI
 
                                         switch (Action)
                                         {
-                                            case TGenEngine.TRecAction.raMoveUp:
+                                            case TRecAction.raMoveUp:
 											    this.FPerson.MultimediaLinks.Exchange(idx - 1, idx);
 											    newIdx = idx - 1;
                                                 break;
 
-                                            case TGenEngine.TRecAction.raMoveDown:
+                                            case TRecAction.raMoveDown:
 												this.FPerson.MultimediaLinks.Exchange(idx, idx + 1);
 												newIdx = idx + 1;
                                                 break;
@@ -387,7 +387,7 @@ namespace GKUI
 								{
 									if (sender == this.FSourcesList)
 									{
-                                        if (Action == TGenEngine.TRecAction.raMoveUp || Action == TGenEngine.TRecAction.raMoveDown)
+                                        if (Action == TRecAction.raMoveUp || Action == TRecAction.raMoveDown)
 										{
 											TGEDCOMSourceCitation src_cit = itemData as TGEDCOMSourceCitation;
 											int idx = this.FPerson.SourceCitations.IndexOfObject(src_cit);
@@ -395,12 +395,12 @@ namespace GKUI
 
                                             switch (Action)
                                             {
-                                                case TGenEngine.TRecAction.raMoveUp:
+                                                case TRecAction.raMoveUp:
 												    this.FPerson.SourceCitations.Exchange(idx - 1, idx);
 												    newIdx = idx - 1;
                                                     break;
 
-                                                case TGenEngine.TRecAction.raMoveDown:
+                                                case TRecAction.raMoveDown:
 													this.FPerson.SourceCitations.Exchange(idx, idx + 1);
 													newIdx = idx + 1;
                                                     break;
@@ -441,7 +441,7 @@ namespace GKUI
 
 		private void btnFatherAdd_Click(object sender, EventArgs e)
 		{
-			TGEDCOMIndividualRecord father = this.Base.SelectPerson(this.FPerson, TGenEngine.TTargetMode.tmChild, TGEDCOMSex.svMale);
+			TGEDCOMIndividualRecord father = this.Base.SelectPerson(this.FPerson, TTargetMode.tmChild, TGEDCOMSex.svMale);
 			if (father != null)
 			{
 				TGEDCOMFamilyRecord family = this.Base.GetChildFamily(this.FPerson, true, father);
@@ -480,7 +480,7 @@ namespace GKUI
 
 		private void btnMotherAdd_Click(object sender, EventArgs e)
 		{
-			TGEDCOMIndividualRecord mother = this.Base.SelectPerson(this.FPerson, TGenEngine.TTargetMode.tmChild, TGEDCOMSex.svFemale);
+			TGEDCOMIndividualRecord mother = this.Base.SelectPerson(this.FPerson, TTargetMode.tmChild, TGEDCOMSex.svFemale);
 			if (mother != null)
 			{
 				TGEDCOMFamilyRecord family = this.Base.GetChildFamily(this.FPerson, true, mother);
@@ -534,7 +534,7 @@ namespace GKUI
 		private void btnParentsEdit_Click(object sender, EventArgs e)
 		{
 			TGEDCOMFamilyRecord family = this.Base.GetChildFamily(this.FPerson, false, null);
-			if (family != null && this.Base.ModifyFamily(ref family, TGenEngine.TFamilyTarget.ftNone, null))
+			if (family != null && this.Base.ModifyFamily(ref family, TFamilyTarget.ftNone, null))
 			{
 				this.ControlsRefresh();
 			}
@@ -618,7 +618,7 @@ namespace GKUI
 
 			for (TGEDCOMRestriction res = TGEDCOMRestriction.rnNone; res <= TGEDCOMRestriction.rnPrivacy; res++)
 			{
-				this.cbRestriction.Items.Add(TGenEngine.Restrictions[(int)res]);
+				this.cbRestriction.Items.Add(GKData.Restrictions[(int)res]);
 			}
 
 			for (TGEDCOMSex sx = TGEDCOMSex.svNone; sx <= TGEDCOMSex.svUndetermined; sx++)

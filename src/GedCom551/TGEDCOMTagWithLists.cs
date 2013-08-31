@@ -82,28 +82,28 @@ namespace GedCom551
 			this._MultimediaLinks.SaveToStream(AStream);
 		}
 
-		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
 		{
-			TGEDCOMTag Result;
+			TGEDCOMTag result;
 
-			if (ATag == "NOTE")
+			if (tagName == "NOTE")
 			{
-				Result = this.Notes.Add(new TGEDCOMNotes(base.Owner, this, ATag, AValue));
+				result = this.Notes.Add(new TGEDCOMNotes(base.Owner, this, tagName, tagValue));
 			}
-			else if (ATag == "SOUR")
+			else if (tagName == "SOUR")
 			{
-				Result = this.SourceCitations.Add(new TGEDCOMSourceCitation(base.Owner, this, ATag, AValue));
+				result = this.SourceCitations.Add(new TGEDCOMSourceCitation(base.Owner, this, tagName, tagValue));
 			}
-			else if (ATag == "OBJE")
+			else if (tagName == "OBJE")
 			{
-				Result = this.MultimediaLinks.Add(new TGEDCOMMultimediaLink(base.Owner, this, ATag, AValue));
+				result = this.MultimediaLinks.Add(new TGEDCOMMultimediaLink(base.Owner, this, tagName, tagValue));
 			}
 			else
 			{
-				Result = base.AddTag(ATag, AValue, ATagConstructor);
+				result = base.AddTag(tagName, tagValue, tagConstructor);
 			}
 
-			return Result;
+			return result;
 		}
 
 		public override void Clear()

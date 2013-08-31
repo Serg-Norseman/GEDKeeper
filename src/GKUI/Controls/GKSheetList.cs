@@ -13,7 +13,7 @@ namespace GKUI.Controls
 {
 	public sealed class GKSheetList : ContainerControl, IDisposable
 	{
-		public delegate void TModifyEvent(object Sender, object ItemData, TGenEngine.TRecAction Action);
+		public delegate void TModifyEvent(object Sender, object ItemData, TRecAction Action);
 
 		public enum TListButton : byte
 		{
@@ -246,7 +246,7 @@ namespace GKUI.Controls
 		{
 			if (!this.FReadOnly && this.FOnModify != null)
 			{
-				this.FOnModify(this, null, TGenEngine.TRecAction.raAdd);
+				this.FOnModify(this, null, TRecAction.raAdd);
 			}
 		}
 
@@ -254,7 +254,7 @@ namespace GKUI.Controls
 		{
 			if (!this.FReadOnly && this.FOnModify != null && this.GetSelectedData() != null)
 			{
-				this.FOnModify(this, this.GetSelectedData(), TGenEngine.TRecAction.raEdit);
+				this.FOnModify(this, this.GetSelectedData(), TRecAction.raEdit);
 			}
 		}
 
@@ -262,7 +262,7 @@ namespace GKUI.Controls
 		{
 			if (!this.FReadOnly && this.FOnModify != null && this.GetSelectedData() != null)
 			{
-				this.FOnModify(this, this.GetSelectedData(), TGenEngine.TRecAction.raDelete);
+				this.FOnModify(this, this.GetSelectedData(), TRecAction.raDelete);
 			}
 		}
 
@@ -270,7 +270,7 @@ namespace GKUI.Controls
 		{
 			if (this.FOnModify != null && this.GetSelectedData() != null)
 			{
-				this.FOnModify(this, this.GetSelectedData(), TGenEngine.TRecAction.raJump);
+				this.FOnModify(this, this.GetSelectedData(), TRecAction.raJump);
 			}
 		}
 
@@ -278,7 +278,7 @@ namespace GKUI.Controls
 		{
 			if (!this.FReadOnly && this.FOnModify != null && this.GetSelectedData() != null)
 			{
-				this.FOnModify(this, this.GetSelectedData(), TGenEngine.TRecAction.raMoveUp);
+				this.FOnModify(this, this.GetSelectedData(), TRecAction.raMoveUp);
 			}
 		}
 
@@ -286,7 +286,7 @@ namespace GKUI.Controls
 		{
 			if (!this.FReadOnly && this.FOnModify != null && this.GetSelectedData() != null)
 			{
-				this.FOnModify(this, this.GetSelectedData(), TGenEngine.TRecAction.raMoveDown);
+				this.FOnModify(this, this.GetSelectedData(), TRecAction.raMoveDown);
 			}
 		}
 

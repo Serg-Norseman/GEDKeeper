@@ -34,7 +34,7 @@ namespace GKUI
 			this.Base.RecListNotesRefresh(this.FRepository, this.FNotesList.List, null);
 		}
 
-		private void ListModify(object Sender, object ItemData, TGenEngine.TRecAction Action)
+		private void ListModify(object Sender, object ItemData, TRecAction Action)
 		{
 			if (object.Equals(Sender, this.FNotesList) && this.Base.ModifyRecNote(this, this.FRepository, ItemData as TGEDCOMNotes, Action))
 			{

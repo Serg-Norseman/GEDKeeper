@@ -71,8 +71,8 @@ namespace GKCore.Export
 //							xls.AddStrCell( 3, row, cas, nam);
 //							xls.AddStrCell( 4, row, cas, pat);
 //							xls.AddStrCell( 5, row, cas, sx);
-//							xls.AddStrCell( 6, row, cas, TGenEngine.GetBirthDate(ind, TGenEngine.TDateFormat.dfDD_MM_YYYY, false));
-//							xls.AddStrCell( 7, row, cas, TGenEngine.GetDeathDate(ind, TGenEngine.TDateFormat.dfDD_MM_YYYY, false));
+//							xls.AddStrCell( 6, row, cas, TGenEngine.GetBirthDate(ind, TDateFormat.dfDD_MM_YYYY, false));
+//							xls.AddStrCell( 7, row, cas, TGenEngine.GetDeathDate(ind, TDateFormat.dfDD_MM_YYYY, false));
 //							xls.AddStrCell( 8, row, cas, TGenEngine.GetBirthPlace(ind));
 //							xls.AddStrCell( 9, row, cas, TGenEngine.GetDeathPlace(ind));
 //							xls.AddStrCell(10, row, cas, TGenEngine.GetResidencePlace(ind, this.FOptions.PlacesWithAddress));
@@ -139,8 +139,8 @@ namespace GKCore.Export
 							worksheet.Cells[row, 3] = new Cell(nam);
 							worksheet.Cells[row, 4] = new Cell(pat);
 							worksheet.Cells[row, 5] = new Cell(sx);
-							worksheet.Cells[row, 6] = new Cell(TGenEngine.GetBirthDate(ind, TGenEngine.TDateFormat.dfDD_MM_YYYY, false));
-							worksheet.Cells[row, 7] = new Cell(TGenEngine.GetDeathDate(ind, TGenEngine.TDateFormat.dfDD_MM_YYYY, false));
+							worksheet.Cells[row, 6] = new Cell(TGenEngine.GetBirthDate(ind, TDateFormat.dfDD_MM_YYYY, false));
+							worksheet.Cells[row, 7] = new Cell(TGenEngine.GetDeathDate(ind, TDateFormat.dfDD_MM_YYYY, false));
 							worksheet.Cells[row, 8] = new Cell(TGenEngine.GetBirthPlace(ind));
 							worksheet.Cells[row, 9] = new Cell(TGenEngine.GetDeathPlace(ind));
 							worksheet.Cells[row,10] = new Cell(TGenEngine.GetResidencePlace(ind, this.FOptions.PlacesWithAddress));

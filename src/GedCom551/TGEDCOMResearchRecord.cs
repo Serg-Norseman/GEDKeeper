@@ -29,12 +29,12 @@ namespace GedCom551
 
 		public TGEDCOMDateExact StartDate
 		{
-			get { return base.TagClass("_STARTDATE", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact; }
+			get { return base.TagClass("_STARTDATE", TGEDCOMDateExact.Create) as TGEDCOMDateExact; }
 		}
 
 		public TGEDCOMDateExact StopDate
 		{
-			get { return base.TagClass("_STOPDATE", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact; }
+			get { return base.TagClass("_STOPDATE", TGEDCOMDateExact.Create) as TGEDCOMDateExact; }
 		}
 
 		public int Percent
@@ -82,36 +82,36 @@ namespace GedCom551
 			}
 		}
 
-		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
 		{
-			TGEDCOMTag Result;
+			TGEDCOMTag result;
 
-			if (ATag == "NAME")
+			if (tagName == "NAME")
 			{
-				Result = base.AddTag(ATag, AValue, null);
+				result = base.AddTag(tagName, tagValue, null);
 			}
-			else if (ATag == "_STARTDATE" || ATag == "_STOPDATE")
+			else if (tagName == "_STARTDATE" || tagName == "_STOPDATE")
 			{
-				Result = base.AddTag(ATag, AValue, TGEDCOMDateExact.Create);
+				result = base.AddTag(tagName, tagValue, TGEDCOMDateExact.Create);
 			}
-			else if (ATag == "_TASK")
+			else if (tagName == "_TASK")
 			{
-				Result = this.Tasks.Add(new TGEDCOMPointer(base.Owner, this, ATag, AValue));
+				result = this.Tasks.Add(new TGEDCOMPointer(base.Owner, this, tagName, tagValue));
 			}
-			else if (ATag == "_COMM")
+			else if (tagName == "_COMM")
 			{
-				Result = this.Communications.Add(new TGEDCOMPointer(base.Owner, this, ATag, AValue));
+				result = this.Communications.Add(new TGEDCOMPointer(base.Owner, this, tagName, tagValue));
 			}
-			else if (ATag == "_GROUP")
+			else if (tagName == "_GROUP")
 			{
-				Result = this.Groups.Add(new TGEDCOMPointer(base.Owner, this, ATag, AValue));
+				result = this.Groups.Add(new TGEDCOMPointer(base.Owner, this, tagName, tagValue));
 			}
 			else
 			{
-				Result = base.AddTag(ATag, AValue, ATagConstructor);
+				result = base.AddTag(tagName, tagValue, tagConstructor);
 			}
 
-			return Result;
+			return result;
 		}
 
 		public override void Clear()
@@ -209,7 +209,9 @@ namespace GedCom551
 			return new TGEDCOMResearchRecord(owner, parent, tagName, tagValue);
 		}
 
-		public bool aux_AddTask(TGEDCOMTaskRecord aTask)
+        #region Auxiliary
+
+        public bool aux_AddTask(TGEDCOMTaskRecord aTask)
 		{
 			bool Result = false;
 			if (aTask != null)
@@ -263,5 +265,6 @@ namespace GedCom551
 			this.Communications.Delete(this.IndexOfCommunication(aComm));
 		}
 
+		#endregion
 	}
 }

@@ -60,7 +60,7 @@ namespace GKUI
 			}
 		}
 
-		private void ListModify(object Sender, object ItemData, TGenEngine.TRecAction Action)
+		private void ListModify(object Sender, object ItemData, TRecAction Action)
 		{
             bool res = false;
 
@@ -78,20 +78,20 @@ namespace GKUI
 				{
 					if (object.Equals(Sender, this.FMembersList))
 					{
-                        TGEDCOMIndividualRecord member = (Action == TGenEngine.TRecAction.raAdd) ? null : ItemData as TGEDCOMIndividualRecord;
+                        TGEDCOMIndividualRecord member = (Action == TRecAction.raAdd) ? null : ItemData as TGEDCOMIndividualRecord;
 
                         switch (Action)
                         {
-                            case TGenEngine.TRecAction.raAdd:
-							    member = this.Base.SelectPerson(null, TGenEngine.TTargetMode.tmNone, TGEDCOMSex.svNone);
+                            case TRecAction.raAdd:
+							    member = this.Base.SelectPerson(null, TTargetMode.tmNone, TGEDCOMSex.svNone);
                                 res = (member != null && this.FGroup.aux_AddMember(member));
                                 break;
 
-                            case TGenEngine.TRecAction.raDelete:
+                            case TRecAction.raDelete:
                                 res = (member != null && TGenEngine.ShowQuestion(LangMan.LSList[128]) != DialogResult.No && this.FGroup.aux_RemoveMember(member));
                                 break;
 
-                            case TGenEngine.TRecAction.raJump:
+                            case TRecAction.raJump:
 								if (member != null)
 								{
 									this.AcceptChanges();

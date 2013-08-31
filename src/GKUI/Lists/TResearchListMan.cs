@@ -43,7 +43,7 @@ namespace GKUI.Lists
 	{
 		private TGEDCOMResearchRecord FRec;
 
-		public override bool CheckFilter(TGenEngine.TShieldState aShieldState)
+		public override bool CheckFilter(TShieldState aShieldState)
 		{
 			bool res = (this.QuickFilter == "*" || IsMatchesMask(this.FRec.ResearchName, this.QuickFilter));
 
@@ -63,9 +63,9 @@ namespace GKUI.Lists
 				case 0:
 					return this.FRec.ResearchName;
 				case 1:
-					return LangMan.LSList[(int)TGenEngine.PriorityNames[(int)this.FRec.Priority] - 1];
+					return LangMan.LSList[(int)GKData.PriorityNames[(int)this.FRec.Priority] - 1];
 				case 2:
-					return LangMan.LSList[(int)TGenEngine.StatusNames[(int)this.FRec.Status] - 1];
+					return LangMan.LSList[(int)GKData.StatusNames[(int)this.FRec.Status] - 1];
 				case 3:
 					return TGenEngine.GEDCOMDateToStr(this.FRec.StartDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
 				case 4:

@@ -35,10 +35,10 @@ namespace GKUI
 
 		private void AcceptChanges()
 		{
-			string stat = TGenEngine.MarriageStatus[this.EditMarriageStatus.SelectedIndex].StatSign;
+			string stat = GKData.MarriageStatus[this.EditMarriageStatus.SelectedIndex].StatSign;
 			this.FFamily.SetTagStringValue("_STAT", stat);
 			this.FFamily.Restriction = (TGEDCOMRestriction)this.cbRestriction.SelectedIndex;
-			this.FFamily.SortChilds();
+			this.FFamily.aux_SortChilds();
 			this.Base.ChangeRecord(this.FFamily);
 		}
 
@@ -146,7 +146,7 @@ namespace GKUI
 			this.Text = LangMan.LSList[114] + " \"" + this.EditHusband.Text + " - " + this.EditWife.Text + "\"";
 		}
 
-		private void ListModify(object Sender, object ItemData, TGenEngine.TRecAction Action)
+		private void ListModify(object Sender, object ItemData, TRecAction Action)
 		{
 			bool need_refresh = false;
 
@@ -154,28 +154,28 @@ namespace GKUI
 			{
 				switch (Action)
 				{
-					case TGenEngine.TRecAction.raAdd:
+					case TRecAction.raAdd:
 						{
-							TGEDCOMIndividualRecord child = this.Base.SelectPerson(this.GetHusband(), TGenEngine.TTargetMode.tmParent, TGEDCOMSex.svNone);
+							TGEDCOMIndividualRecord child = this.Base.SelectPerson(this.GetHusband(), TTargetMode.tmParent, TGEDCOMSex.svNone);
 							need_refresh = (child != null && this.FFamily.aux_AddChild(child));
 							break;
 						}
 
-					case TGenEngine.TRecAction.raEdit:
+					case TRecAction.raEdit:
 						{
 							TGEDCOMIndividualRecord child = ItemData as TGEDCOMIndividualRecord;
 							need_refresh = (this.Base.ModifyPerson(ref child));
 							break;
 						}
 
-					case TGenEngine.TRecAction.raDelete:
+					case TRecAction.raDelete:
 						{
 							TGEDCOMIndividualRecord child = ItemData as TGEDCOMIndividualRecord;
 							need_refresh = (child != null && TGenEngine.ShowQuestion(LangMan.LSList[121]) != DialogResult.No && this.FFamily.aux_RemoveChild(child));
 							break;
 						}
 
-					case TGenEngine.TRecAction.raJump:
+					case TRecAction.raJump:
 						{
 							TGEDCOMIndividualRecord child = ItemData as TGEDCOMIndividualRecord;
 							if (child != null)
@@ -213,7 +213,7 @@ namespace GKUI
 
 		private void btnHusbandAddClick(object sender, EventArgs e)
 		{
-			TGEDCOMIndividualRecord husband = this.Base.SelectPerson(null, TGenEngine.TTargetMode.tmNone, TGEDCOMSex.svMale);
+			TGEDCOMIndividualRecord husband = this.Base.SelectPerson(null, TTargetMode.tmNone, TGEDCOMSex.svMale);
 			if (husband != null && this.FFamily.Husband.StringValue == "")
 			{
 				this.FFamily.aux_AddSpouse(husband);
@@ -243,7 +243,7 @@ namespace GKUI
 
 		private void btnWifeAddClick(object sender, EventArgs e)
 		{
-			TGEDCOMIndividualRecord wife = this.Base.SelectPerson(null, TGenEngine.TTargetMode.tmNone, TGEDCOMSex.svFemale);
+			TGEDCOMIndividualRecord wife = this.Base.SelectPerson(null, TTargetMode.tmNone, TGEDCOMSex.svFemale);
 			if (wife != null && this.FFamily.Wife.StringValue == "")
 			{
 				this.FFamily.aux_AddSpouse(wife);
@@ -307,12 +307,12 @@ namespace GKUI
 
 			for (TGEDCOMRestriction res = TGEDCOMRestriction.rnNone; res <= TGEDCOMRestriction.rnLast; res++)
 			{
-				this.cbRestriction.Items.Add(TGenEngine.Restrictions[(int)res]);
+				this.cbRestriction.Items.Add(GKData.Restrictions[(int)res]);
 			}
 
-			for (int i = 0; i < TGenEngine.MarriageStatus.Length; i++)
+			for (int i = 0; i < GKData.MarriageStatus.Length; i++)
 			{
-				this.EditMarriageStatus.Items.Add(LangMan.LSList[(int)TGenEngine.MarriageStatus[i].Name - 1]);
+				this.EditMarriageStatus.Items.Add(LangMan.LSList[(int)GKData.MarriageStatus[i].Name - 1]);
 			}
 
 			this.FChildsList = new GKSheetList(this.SheetChilds);

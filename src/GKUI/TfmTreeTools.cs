@@ -277,7 +277,7 @@ namespace GKUI
 						if (iRec == kRec) continue;
 						if (this.FRMSkip.IndexOf(iRec.XRef + "-" + kRec.XRef) >= 0) continue;
 
-						res = iRec.IsMatch(kRec, 100.0F, mParams);
+						res = iRec.aux_IsMatch(kRec, 100.0F, mParams);
 
 						if (res) {
 							this.MergeCtl.SetRec1(iRec);
@@ -410,8 +410,9 @@ namespace GKUI
 				TreeTools.TCheckObj checkObj = this.FChecksList[i] as TreeTools.TCheckObj;
 				ListViewItem item = this.ListChecks.AddItem(checkObj.GetRecordName(), checkObj);
 				item.SubItems.Add(checkObj.Comment);
+				item.SubItems.Add(LangMan.LS(TreeTools.CheckSolveNames[(int)checkObj.Solve]));
 			}
-			
+
 			this.ListChecks.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
 		}
 
@@ -790,7 +791,7 @@ namespace GKUI
 			switch (type) {
 				case TreeMatchType.tmtInternal:
 					{
-						TGenEngine.FindDuplicates(this.FTree, this.FTree, 90 /*min: 80-85*/, DuplicateFoundFunc, this);
+						TreeTools.FindDuplicates(this.FTree, this.FTree, 90 /*min: 80-85*/, DuplicateFoundFunc, this);
 						break;
 					}
 
@@ -802,14 +803,14 @@ namespace GKUI
 
 				case TreeMatchType.tmtAnalysis:
 					{
-						List<TGenEngine.ULIndividual> uln = FBase.Engine.GetUnlinkedNamesakes(this);
+						List<TreeTools.ULIndividual> uln = TreeTools.GetUnlinkedNamesakes(this.FTree, this);
 
 						this.ListCompare.AppendText("  Поиск несвязанных однофамильцев:\r\n");
 						if (uln != null && uln.Count > 0)
 						{
 							for (int i = 0; i < uln.Count; i++)
 							{
-								TGenEngine.ULIndividual indiv = uln[i];
+								TreeTools.ULIndividual indiv = uln[i];
 								this.ListCompare.AppendText("    - [" + indiv.Family + "] " + indiv.iRec.aux_GetNameStr(true, false) + "\r\n");
 							}
 						}

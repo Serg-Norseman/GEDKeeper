@@ -237,20 +237,20 @@ namespace GKCore
 					TakeVal(v_life, ind.Sex, ref aStats.life, ref aStats.life_cnt,
 					        ref aStats.life_f, ref aStats.life_f_cnt, ref aStats.life_m, ref aStats.life_m_cnt);
 
-					int ch_cnt = TGenEngine.GetChildsCount(ind);
+					int ch_cnt = TreeStats.GetChildsCount(ind);
 					TakeVal(ch_cnt, ind.Sex, ref aStats.childs, ref aStats.childs_cnt,
 					        ref aStats.childs_f, ref aStats.childs_f_cnt, ref aStats.childs_m, ref aStats.childs_m_cnt);
 
 					TGEDCOMIndividualRecord iDummy;
-					int v_fba = TGenEngine.GetFirstbornAge(ind, out iDummy);
+					int v_fba = TreeStats.GetFirstbornAge(ind, out iDummy);
 					TakeVal(v_fba, ind.Sex, ref aStats.fba, ref aStats.fba_cnt,
 					        ref aStats.fba_f, ref aStats.fba_f_cnt, ref aStats.fba_m, ref aStats.fba_m_cnt);
 
-					int m_cnt = TGenEngine.GetMarriagesCount(ind);
+					int m_cnt = TreeStats.GetMarriagesCount(ind);
 					TakeVal(m_cnt, ind.Sex, ref aStats.marr, ref aStats.marr_cnt,
 					        ref aStats.marr_f, ref aStats.marr_f_cnt, ref aStats.marr_m, ref aStats.marr_m_cnt);
 
-					int v_mage = TGenEngine.GetMarriageAge(ind);
+					int v_mage = TreeStats.GetMarriageAge(ind);
 					TakeVal(v_mage, ind.Sex, ref aStats.mage, ref aStats.mage_cnt,
 					        ref aStats.mage_f, ref aStats.mage_f_cnt, ref aStats.mage_m, ref aStats.mage_m_cnt);
 				}
@@ -295,38 +295,38 @@ namespace GKCore
 			{
 				case TStatMode.smAncestors:
 					{
-						aVals.Add(new TListVal(iName, TGenEngine.GetAncestorsCount(iRec) - 1));
+						aVals.Add(new TListVal(iName, TreeStats.GetAncestorsCount(iRec) - 1));
 						break;
 					}
 				case TStatMode.smDescendants:
 					{
-						aVals.Add(new TListVal(iName, TGenEngine.GetDescendantsCount(iRec) - 1));
+						aVals.Add(new TListVal(iName, TreeStats.GetDescendantsCount(iRec) - 1));
 						break;
 					}
 				case TStatMode.smDescGenerations:
 					{
-						aVals.Add(new TListVal(iName, TGenEngine.GetDescGenerations(iRec)));
+						aVals.Add(new TListVal(iName, TreeStats.GetDescGenerations(iRec)));
 						break;
 					}
 				case TStatMode.smChildsCount:
 					{
-						aVals.Add(new TListVal(iName, TGenEngine.GetChildsCount(iRec)));
+						aVals.Add(new TListVal(iName, TreeStats.GetChildsCount(iRec)));
 						break;
 					}
 				case TStatMode.smFirstbornAge:
 					{
 						TGEDCOMIndividualRecord iDummy;
-						aVals.Add(new TListVal(iName, TGenEngine.GetFirstbornAge(iRec, out iDummy)));
+						aVals.Add(new TListVal(iName, TreeStats.GetFirstbornAge(iRec, out iDummy)));
 						break;
 					}
 				case TStatMode.smMarriages:
 					{
-						aVals.Add(new TListVal(iName, TGenEngine.GetMarriagesCount(iRec)));
+						aVals.Add(new TListVal(iName, TreeStats.GetMarriagesCount(iRec)));
 						break;
 					}
 				case TStatMode.smMarriageAge:
 					{
-						aVals.Add(new TListVal(iName, TGenEngine.GetMarriageAge(iRec)));
+						aVals.Add(new TListVal(iName, TreeStats.GetMarriageAge(iRec)));
 						break;
 					}
 
@@ -339,7 +339,7 @@ namespace GKCore
 						iRec.aux_GetNameParts(out fam, out nam, out pat);
 						switch (aMode) {
 							case TStatMode.smFamilies:
-								V = TGenEngine.PrepareRusFamily(fam, iRec.Sex == TGEDCOMSex.svFemale);
+								V = TGenEngine.PrepareRusSurname(fam, iRec.Sex == TGEDCOMSex.svFemale);
 								break;
 							case TStatMode.smNames:
 								V = nam;
@@ -419,7 +419,7 @@ namespace GKCore
 
 				case TStatMode.smChildsDistribution:
 					{
-						CheckVal(aVals, TGenEngine.GetChildsCount(iRec).ToString());
+						CheckVal(aVals, TreeStats.GetChildsCount(iRec).ToString());
 						break;
 					}
 				case TStatMode.smResidences:
@@ -489,7 +489,7 @@ namespace GKCore
 		{
 			if (aMode < TStatMode.smDescGenerations)
 			{
-				TGenEngine.InitExtCounts(this.FTree, -1);
+				TreeStats.InitExtCounts(this.FTree, -1);
 			}
 
 			try
@@ -513,7 +513,7 @@ namespace GKCore
 						else
 						{
 							TGEDCOMIndividualRecord iChild;
-							int fba = TGenEngine.GetFirstbornAge(iRec, out iChild);
+							int fba = TreeStats.GetFirstbornAge(iRec, out iChild);
 							if (fba > 0) {
 								string key;
 								List<int> vals_list = null;
@@ -551,7 +551,7 @@ namespace GKCore
 						if (rec is TGEDCOMFamilyRecord && aMode == TStatMode.smSpousesDiff)
 						{
 							TGEDCOMFamilyRecord fRec = rec as TGEDCOMFamilyRecord;
-							aVals.Add(new TListVal(TGenEngine.aux_GetFamilyStr(fRec), TGenEngine.GetSpousesDiff(fRec)));
+							aVals.Add(new TListVal(TGenEngine.aux_GetFamilyStr(fRec), TreeStats.GetSpousesDiff(fRec)));
 						}
 					}
 				}
@@ -579,6 +579,279 @@ namespace GKCore
 			finally
 			{
 			}
+		}
+
+		public static void InitExtCounts(TGEDCOMTree tree, int value)
+		{
+			int num = tree.RecordsCount - 1;
+			for (int i = 0; i <= num; i++)
+			{
+				TGEDCOMRecord rec = tree[i];
+
+				if (rec is TGEDCOMIndividualRecord)
+				{
+					rec.ExtData = value;
+				}
+			}
+		}
+
+		public static int GetAncestorsCount(TGEDCOMIndividualRecord iRec)
+		{
+			int Result = 0;
+
+			if (iRec != null)
+			{
+				int val = (int)iRec.ExtData;
+
+				if (val < 0)
+				{
+					val = 1;
+					if (iRec.ChildToFamilyLinks.Count > 0)
+					{
+						TGEDCOMFamilyRecord family = iRec.ChildToFamilyLinks[0].Family;
+						TGEDCOMIndividualRecord anc;
+
+						anc = family.Husband.Value as TGEDCOMIndividualRecord;
+						val += TreeStats.GetAncestorsCount(anc);
+
+						anc = (family.Wife.Value as TGEDCOMIndividualRecord);
+						val += TreeStats.GetAncestorsCount(anc);
+					}
+
+					iRec.ExtData = val;
+				}
+
+				Result = val;
+			}
+
+			return Result;
+		}
+
+		public static int GetDescendantsCount(TGEDCOMIndividualRecord iRec)
+		{
+			int Result = 0;
+
+			if (iRec != null)
+			{
+				int val = (int)iRec.ExtData;
+				if (val < 0)
+				{
+					val = 1;
+
+					int num = iRec.SpouseToFamilyLinks.Count - 1;
+					for (int i = 0; i <= num; i++)
+					{
+						TGEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
+
+						int num2 = family.Childrens.Count - 1;
+						for (int j = 0; j <= num2; j++)
+						{
+							TGEDCOMIndividualRecord iChild = family.Childrens[j].Value as TGEDCOMIndividualRecord;
+							val += TreeStats.GetDescendantsCount(iChild);
+						}
+					}
+					iRec.ExtData = val;
+				}
+				Result = val;
+			}
+
+			return Result;
+		}
+
+		private static int GetDescGens_Recursive(TGEDCOMIndividualRecord iRec)
+		{
+			int Result = 0;
+
+			if (iRec != null)
+			{
+				int max = 0;
+
+				int num = iRec.SpouseToFamilyLinks.Count - 1;
+				for (int i = 0; i <= num; i++)
+				{
+					TGEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
+
+					int num2 = family.Childrens.Count - 1;
+					for (int j = 0; j <= num2; j++)
+					{
+						TGEDCOMIndividualRecord iChild = family.Childrens[j].Value as TGEDCOMIndividualRecord;
+						int res = TreeStats.GetDescGens_Recursive(iChild);
+						if (max < res)
+						{
+							max = res;
+						}
+					}
+				}
+				Result = 1 + max;
+			}
+
+			return Result;
+		}
+
+		public static int GetDescGenerations(TGEDCOMIndividualRecord iRec)
+		{
+			return TreeStats.GetDescGens_Recursive(iRec) - 1;
+		}
+
+		public static int GetMarriagesCount(TGEDCOMIndividualRecord iRec)
+		{
+			int Result = ((iRec == null) ? 0 : iRec.SpouseToFamilyLinks.Count);
+			return Result;
+		}
+
+		public static int GetSpousesDiff(TGEDCOMFamilyRecord fRec)
+		{
+			int Result = 0;
+			try
+			{
+				TGEDCOMIndividualRecord h = fRec.Husband.Value as TGEDCOMIndividualRecord;
+				TGEDCOMIndividualRecord w = fRec.Wife.Value as TGEDCOMIndividualRecord;
+
+				if (h != null && w != null)
+				{
+					double y = -1.0;
+					double y2 = -1.0;
+
+					TGEDCOMCustomEvent evt = TGenEngine.GetIndividualEvent(h, "BIRT");
+					if (evt != null) y = TGenEngine.GetAbstractDate(evt.Detail);
+
+					evt = TGenEngine.GetIndividualEvent(w, "BIRT");
+					if (evt != null) y2 = TGenEngine.GetAbstractDate(evt.Detail);
+
+					if (y > (double)0f && y2 > (double)0f)
+					{
+						Result = (int)SysUtils.Trunc(Math.Abs(y2 - y));
+					}
+				}
+			}
+			catch (Exception E)
+			{
+				SysUtils.LogWrite("TGenEngine.GetSpousesDiff(): " + E.Message);
+			}
+			return Result;
+		}
+
+		public static int GetFirstbornAge(TGEDCOMIndividualRecord iRec, out TGEDCOMIndividualRecord iChild)
+		{
+			int Result = 0;
+			iChild = null;
+			try
+			{
+				double y2 = 0.0;
+
+				TGEDCOMCustomEvent evt = TGenEngine.GetIndividualEvent(iRec, "BIRT");
+				if (evt != null)
+				{
+					double y3 = TGenEngine.GetAbstractDate(evt.Detail);
+
+					int num = iRec.SpouseToFamilyLinks.Count - 1;
+					for (int i = 0; i <= num; i++)
+					{
+						TGEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
+
+						int num2 = family.Childrens.Count - 1;
+						for (int j = 0; j <= num2; j++)
+						{
+							TGEDCOMIndividualRecord child = family.Childrens[j].Value as TGEDCOMIndividualRecord;
+							evt = TGenEngine.GetIndividualEvent(child, "BIRT");
+							if (evt != null)
+							{
+								double y2tmp = TGenEngine.GetAbstractDate(evt.Detail);
+								if (y2 == (double)0f)
+								{
+									y2 = y2tmp;
+									iChild = child;
+								}
+								else
+								{
+									if (y2 > y2tmp)
+									{
+										y2 = y2tmp;
+										iChild = child;
+									}
+								}
+							}
+						}
+					}
+
+					if (y3 > (double)1f && y2 > (double)1f)
+					{
+						Result = (int)SysUtils.Trunc(y2 - y3);
+					}
+					else
+					{
+						iChild = null;
+					}
+				}
+			}
+			catch (Exception E)
+			{
+				SysUtils.LogWrite("TGenEngine.GetFirstbornAge(): " + E.Message);
+			}
+			return Result;
+		}
+
+		public static int GetMarriageAge(TGEDCOMIndividualRecord iRec)
+		{
+			int Result = 0;
+			try
+			{
+				double y2 = 0.0;
+
+				TGEDCOMCustomEvent evt = TGenEngine.GetIndividualEvent(iRec, "BIRT");
+				if (evt != null)
+				{
+					double y3 = TGenEngine.GetAbstractDate(evt.Detail);
+
+					int num = iRec.SpouseToFamilyLinks.Count - 1;
+					for (int i = 0; i <= num; i++)
+					{
+						TGEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
+						TGEDCOMFamilyEvent fEvent = family.aux_GetFamilyEvent("MARR");
+						if (fEvent != null)
+						{
+							double y2tmp = TGenEngine.GetAbstractDate(fEvent.Detail);
+							if (y2 == (double)0f)
+							{
+								y2 = y2tmp;
+							}
+							else
+							{
+								if (y2 > y2tmp)
+								{
+									y2 = y2tmp;
+								}
+							}
+						}
+					}
+					if (y3 > (double)1f && y2 > (double)1f)
+					{
+						Result = (int)SysUtils.Trunc(y2 - y3);
+					}
+				}
+			}
+			catch (Exception E)
+			{
+				SysUtils.LogWrite("TGenEngine.GetMarriageAge(): " + E.Message);
+			}
+			return Result;
+		}
+
+		public static int GetChildsCount(TGEDCOMIndividualRecord iRec)
+		{
+			int Result = 0;
+
+			if (iRec != null && iRec.SpouseToFamilyLinks.Count > 0)
+			{
+				int num = iRec.SpouseToFamilyLinks.Count - 1;
+				for (int i = 0; i <= num; i++)
+				{
+					TGEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
+					Result += family.Childrens.Count;
+				}
+			}
+
+			return Result;
 		}
 
 	}

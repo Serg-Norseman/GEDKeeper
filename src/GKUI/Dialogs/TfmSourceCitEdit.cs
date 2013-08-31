@@ -29,7 +29,7 @@ namespace GKUI
 			set { this.SetSourceCitation(value); }
 		}
 
-		private void btnAccept_Click(object sender, EventArgs e)
+		void btnAccept_Click(object sender, EventArgs e)
 		{
 			try
 			{
@@ -53,13 +53,13 @@ namespace GKUI
 			}
 		}
 
-		private void btnSourceAdd_Click(object sender, EventArgs e)
+		void btnSourceAdd_Click(object sender, EventArgs e)
 		{
 			object[] anArgs = new object[0];
 			TGEDCOMSourceRecord src = FBase.SelectRecord(TGEDCOMRecordType.rtSource, anArgs) as TGEDCOMSourceRecord;
 			if (src != null)
 			{
-				this.Base.Engine.GetSourcesList(this.FSourcesList);
+				this.Base.Engine.aux_GetSourcesList(this.FSourcesList);
 				this.RefreshSourcesList("");
 				this.cbSource.Text = src.FiledByEntry;
 			}
@@ -124,9 +124,9 @@ namespace GKUI
 			this.InitializeComponent();
 			this.FBase = aBase;
 
-			for (int i = 0; i <= TGenEngine.CertaintyAssessments.Length - 1; i++)
+			for (int i = 0; i <= GKData.CertaintyAssessments.Length - 1; i++)
 			{
-				this.EditCertainty.Items.Add(LangMan.LSList[(int)TGenEngine.CertaintyAssessments[i] - 1]);
+				this.EditCertainty.Items.Add(LangMan.LSList[(int)GKData.CertaintyAssessments[i] - 1]);
 			}
 
 			this.FSourcesList = new StringList();
@@ -138,7 +138,7 @@ namespace GKUI
 			this.Label1.Text = LangMan.LSList[110];
 			this.Label3.Text = LangMan.LSList[111];
 
-			this.Base.Engine.GetSourcesList(this.FSourcesList);
+			this.Base.Engine.aux_GetSourcesList(this.FSourcesList);
 			this.RefreshSourcesList("");
 		}
 		

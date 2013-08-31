@@ -14,7 +14,7 @@ namespace GKUI
 	public partial class TfmPersonNew : Form
 	{
 		private TGEDCOMIndividualRecord FTarget;
-		private TGenEngine.TTargetMode FTargetMode;
+		private TTargetMode FTargetMode;
 
 		public TGEDCOMIndividualRecord Target
 		{
@@ -22,7 +22,7 @@ namespace GKUI
 			set { this.SetTarget(value); }
 		}
 
-		public TGenEngine.TTargetMode TargetMode
+		public TTargetMode TargetMode
 		{
 			get { return this.FTargetMode; }
 			set { this.FTargetMode = value; }
@@ -43,7 +43,7 @@ namespace GKUI
 					TGEDCOMSex sx = (TGEDCOMSex)this.EditSex.SelectedIndex;
 
 					switch (this.FTargetMode) {
-						case TGenEngine.TTargetMode.tmParent:
+						case TTargetMode.tmParent:
 							if (sx == TGEDCOMSex.svFemale) {
 								this.edFamily.Text = TGenEngine.GetRusWifeFamily(iFamily);
 							}
@@ -52,7 +52,7 @@ namespace GKUI
 							this.edPatronymic.Text = names.GetPatronymicByName(iName, sx);
 							break;
 
-						case TGenEngine.TTargetMode.tmChild:
+						case TTargetMode.tmChild:
 							switch (sx) {
 								case TGEDCOMSex.svMale:
 									this.edName.Text = names.GetNameByPatronymic(iPatronymic, TGEDCOMSex.svMale);
@@ -63,7 +63,7 @@ namespace GKUI
 							}
 							break;
 							
-						case TGenEngine.TTargetMode.tmWife:
+						case TTargetMode.tmWife:
 							this.edFamily.Text = "(" + TGenEngine.GetRusWifeFamily(iFamily) + ")";
 							break;
 					}

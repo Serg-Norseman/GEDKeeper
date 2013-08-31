@@ -88,8 +88,8 @@ namespace GKCore
 
 		private TreeChartOptions FChartOptions;
 		private TGEDCOMCharacterSet FDefCharacterSet;
-		private TGenEngine.TDateFormat FDefDateFormat;
-		private TGenEngine.TNameFormat FDefNameFormat;
+		private TDateFormat FDefDateFormat;
+		private TNameFormat FDefNameFormat;
 		private StringList FEventFilters;
 		private ushort FInterfaceLang;
 		private TList FLanguages;
@@ -124,13 +124,13 @@ namespace GKCore
 			set { this.FDefCharacterSet = value; }
 		}
 
-		public TGenEngine.TDateFormat DefDateFormat
+		public TDateFormat DefDateFormat
 		{
 			get { return this.FDefDateFormat; }
 			set { this.FDefDateFormat = value; }
 		}
 
-		public TGenEngine.TNameFormat DefNameFormat
+		public TNameFormat DefNameFormat
 		{
 			get { return this.FDefNameFormat; }
 			set { this.FDefNameFormat = value; }
@@ -348,8 +348,8 @@ namespace GKCore
 			try
 			{
 				this.FDefCharacterSet = (TGEDCOMCharacterSet)ini.ReadInteger("Common", "DefCharacterSet", 3);
-				this.FDefNameFormat = (TGenEngine.TNameFormat)ini.ReadInteger("Common", "DefNameFormat", 0);
-				this.FDefDateFormat = (TGenEngine.TDateFormat)ini.ReadInteger("Common", "DefDateFormat", 0);
+				this.FDefNameFormat = (TNameFormat)ini.ReadInteger("Common", "DefNameFormat", 0);
+				this.FDefDateFormat = (TDateFormat)ini.ReadInteger("Common", "DefDateFormat", 0);
 				this.FLastDir = ini.ReadString("Common", "LastDir", "");
 				this.FPlacesWithAddress = ini.ReadBool("Common", "PlacesWithAddress", false);
 				this.FShowTips = ini.ReadBool("Common", "ShowTips", true);

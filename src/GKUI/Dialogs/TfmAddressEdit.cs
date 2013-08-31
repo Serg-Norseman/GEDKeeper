@@ -32,30 +32,30 @@ namespace GKUI
 			return GKInputBox.QueryText(aTitle, LangMan.LSList[202], ref aValue) && aValue.Trim() != "";
 		}
 
-		private void ListModify(object sender, object itemData, TGenEngine.TRecAction action)
+		private void ListModify(object sender, object itemData, TRecAction action)
 		{
             TGEDCOMTag itemTag = itemData as TGEDCOMTag;
-            if ((action == TGenEngine.TRecAction.raEdit || action == TGenEngine.TRecAction.raDelete) && (itemTag == null)) return;
+            if ((action == TRecAction.raEdit || action == TRecAction.raDelete) && (itemTag == null)) return;
 
             string val;
             if (object.Equals(sender, this.FPhonesList))
             {
             	switch (action) {
-            		case TGenEngine.TRecAction.raAdd:
+            		case TRecAction.raAdd:
             			val = "";
             			if (GetInput(LangMan.LSList[131], ref val)) {
             				this.FAddress.AddPhoneNumber(val);
             			}
             			break;
 
-            		case TGenEngine.TRecAction.raEdit:
+            		case TRecAction.raEdit:
             			val = itemTag.StringValue;
             			if (GetInput(LangMan.LSList[131], ref val)) {
             				itemTag.StringValue = val;
             			}
             			break;
 
-            		case TGenEngine.TRecAction.raDelete:
+            		case TRecAction.raDelete:
             			this.FAddress.PhoneNumbers.DeleteObject(itemTag);
             			break;
             	}
@@ -63,21 +63,21 @@ namespace GKUI
             else if (object.Equals(sender, this.FMailsList))
             {
             	switch (action) {
-            		case TGenEngine.TRecAction.raAdd:
+            		case TRecAction.raAdd:
             			val = "";
             			if (GetInput(LangMan.LSList[132], ref val)) {
             				this.FAddress.AddEmailAddress(val);
             			}
             			break;
 
-            		case TGenEngine.TRecAction.raEdit:
+            		case TRecAction.raEdit:
             			val = itemTag.StringValue;
             			if (GetInput(LangMan.LSList[132], ref val)) {
             				itemTag.StringValue = val;
             			}
             			break;
 
-            		case TGenEngine.TRecAction.raDelete:
+            		case TRecAction.raDelete:
             			this.FAddress.EmailAddresses.DeleteObject(itemTag);
             			break;
             	}
@@ -85,21 +85,21 @@ namespace GKUI
             else if (object.Equals(sender, this.FWebsList))
             {
             	switch (action) {
-            		case TGenEngine.TRecAction.raAdd:
+            		case TRecAction.raAdd:
             			val = "";
             			if (GetInput(LangMan.LSList[133], ref val)) {
             				this.FAddress.AddWebPage(val);
             			}
             			break;
 
-            		case TGenEngine.TRecAction.raEdit:
+            		case TRecAction.raEdit:
             			val = itemTag.StringValue;
             			if (GetInput(LangMan.LSList[133], ref val)) {
             				itemTag.StringValue = val;
             			}
             			break;
 
-            		case TGenEngine.TRecAction.raDelete:
+            		case TRecAction.raDelete:
             			this.FAddress.WebPages.DeleteObject(itemTag);
             			break;
             	}

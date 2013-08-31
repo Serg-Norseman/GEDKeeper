@@ -33,7 +33,7 @@ namespace GKUI.Lists
 	{
 		private TGEDCOMNoteRecord FRec;
 
-		public override bool CheckFilter(TGenEngine.TShieldState aShieldState)
+		public override bool CheckFilter(TShieldState aShieldState)
 		{
 			bool res = base.CheckNewFilter();
 			return res;

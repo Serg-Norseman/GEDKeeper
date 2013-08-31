@@ -35,9 +35,9 @@ namespace GKUI.Lists
 	{
 		private TGEDCOMFamilyRecord FRec;
 
-		public override bool CheckFilter(TGenEngine.TShieldState aShieldState)
+		public override bool CheckFilter(TShieldState aShieldState)
 		{
-			bool res = ((this.FRec.Restriction != TGEDCOMRestriction.rnPrivacy || aShieldState == TGenEngine.TShieldState.ssNone) && (this.QuickFilter == "*" || IsMatchesMask(TGenEngine.aux_GetFamilyStr(this.FRec), this.QuickFilter)));
+			bool res = ((this.FRec.Restriction != TGEDCOMRestriction.rnPrivacy || aShieldState == TShieldState.ssNone) && (this.QuickFilter == "*" || IsMatchesMask(TGenEngine.aux_GetFamilyStr(this.FRec), this.QuickFilter)));
 
 			res = res && base.CheckNewFilter();
 

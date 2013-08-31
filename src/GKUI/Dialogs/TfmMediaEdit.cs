@@ -80,11 +80,11 @@ namespace GKUI
 			this.edFile.Text = file_ref.StringValue;
 
 			if (this.FIsNew) {
-				StoreTypesRefresh(true, TGKStoreType.gstReference);
+				this.StoreTypesRefresh(true, TGKStoreType.gstReference);
 			} else {
 				string dummy = "";
-				TGKStoreType gst = this.Base.Engine.GetStoreType(file_ref.StringValue, ref dummy);
-				StoreTypesRefresh((gst == TGKStoreType.gstArchive), gst);
+				TGKStoreType gst = TGenEngine.GetStoreType(file_ref.StringValue, ref dummy);
+				this.StoreTypesRefresh((gst == TGKStoreType.gstArchive), gst);
 			}
 
 			this.btnFileSelect.Enabled = this.FIsNew;
@@ -94,17 +94,17 @@ namespace GKUI
 			this.Base.RecListSourcesRefresh(this.FMediaRec, this.FSourcesList.List, null);
 		}
 
-		private void ListModify(object Sender, object ItemData, TGenEngine.TRecAction Action)
+		private void ListModify(object sender, object itemData, TRecAction action)
 		{
 			bool refresh = false;
 
-			if (object.Equals(Sender, this.FNotesList))
+			if (sender == this.FNotesList)
 			{
-				refresh = (this.Base.ModifyRecNote(this, this.FMediaRec, ItemData as TGEDCOMNotes, Action));
+				refresh = (this.Base.ModifyRecNote(this, this.FMediaRec, itemData as TGEDCOMNotes, action));
 			}
 			else
 			{
-				refresh = (object.Equals(Sender, this.FSourcesList) && this.Base.ModifyRecSource(this, this.FMediaRec, ItemData as TGEDCOMSourceCitation, Action));
+				refresh = ((sender == this.FSourcesList) && this.Base.ModifyRecSource(this, this.FMediaRec, itemData as TGEDCOMSourceCitation, action));
 			}
 
 			if (refresh) this.ControlsRefresh();
@@ -177,10 +177,10 @@ namespace GKUI
 		private void StoreTypesRefresh(bool allow_arc, TGKStoreType select)
 		{
 			this.cbStoreType.Items.Clear();
-			this.cbStoreType.Items.Add(LangMan.LSList[(int)TGenEngine.GKStoreTypes[(int)TGKStoreType.gstReference].Name - 1]);
-			this.cbStoreType.Items.Add(LangMan.LSList[(int)TGenEngine.GKStoreTypes[(int)TGKStoreType.gstStorage].Name - 1]);
+			this.cbStoreType.Items.Add(LangMan.LSList[(int)GKData.GKStoreTypes[(int)TGKStoreType.gstReference].Name - 1]);
+			this.cbStoreType.Items.Add(LangMan.LSList[(int)GKData.GKStoreTypes[(int)TGKStoreType.gstStorage].Name - 1]);
 			if (allow_arc) {
-				this.cbStoreType.Items.Add(LangMan.LSList[(int)TGenEngine.GKStoreTypes[(int)TGKStoreType.gstArchive].Name - 1]);
+				this.cbStoreType.Items.Add(LangMan.LSList[(int)GKData.GKStoreTypes[(int)TGKStoreType.gstArchive].Name - 1]);
 			}
 			this.cbStoreType.SelectedIndex = (int)select;
 		}
@@ -192,7 +192,7 @@ namespace GKUI
 
 			for (TGEDCOMMediaType mt = TGEDCOMMediaType.mtNone; mt <= TGEDCOMMediaType.mtLast; mt++)
 			{
-				this.cbMediaType.Items.Add(LangMan.LSList[(int)TGenEngine.MediaTypes[(int)mt] - 1]);
+				this.cbMediaType.Items.Add(LangMan.LSList[(int)GKData.MediaTypes[(int)mt] - 1]);
 			}
 
 			this.FNotesList = new GKSheetList(this.SheetNotes);

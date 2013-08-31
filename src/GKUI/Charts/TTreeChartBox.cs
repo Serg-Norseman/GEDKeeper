@@ -12,7 +12,7 @@ using GedCom551;
 using GKCore;
 
 /// <summary>
-/// Localization: clean
+/// Localization: dirty
 /// </summary>
 
 namespace GKUI.Charts
@@ -173,7 +173,7 @@ namespace GKUI.Charts
 		private float FScale;
 		private TScaleControl FScaleControl;
 		private TreeChartPerson FSelected;
-		private TGenEngine.TShieldState FShieldState;
+		private TShieldState FShieldState;
 		private string[] FSignsData;
 		private Bitmap[] FSignsPic;
 		private int FSpouseDistance;
@@ -311,7 +311,7 @@ namespace GKUI.Charts
 			set { this.SetSelected(value); }
 		}
 
-		public TGenEngine.TShieldState ShieldState
+		public TShieldState ShieldState
 		{
 			get { return this.FShieldState; }
 			set { this.FShieldState = value; }
@@ -607,26 +607,29 @@ namespace GKUI.Charts
 						TreeChartPerson ft = null;
 						TreeChartPerson mt = null;
 						TreeChartPerson.TPersonFlag desc_flag = TreeChartPerson.TPersonFlag.pfDescByFather;
-						if (sex != TGEDCOMSex.svMale)
-						{
-							if (sex == TGEDCOMSex.svFemale)
-							{
-								TGEDCOMIndividualRecord sp = family.Husband.Value as TGEDCOMIndividualRecord;
-								res_parent = this.AddDescPerson(null, sp, TreeChartPerson.TPersonKind.pkSpouse, aLevel);
-								res_parent.Sex = TGEDCOMSex.svMale;
-								ft = res_parent;
-								mt = res;
-								desc_flag = TreeChartPerson.TPersonFlag.pfDescByFather;
-							}
-						}
-						else
-						{
-							TGEDCOMIndividualRecord sp = family.Wife.Value as TGEDCOMIndividualRecord;
-							res_parent = this.AddDescPerson(null, sp, TreeChartPerson.TPersonKind.pkSpouse, aLevel);
-							res_parent.Sex = TGEDCOMSex.svFemale;
-							ft = res;
-							mt = res_parent;
-							desc_flag = TreeChartPerson.TPersonFlag.pfDescByMother;
+
+						switch (sex) {
+							case TGEDCOMSex.svFemale:
+								{
+									TGEDCOMIndividualRecord sp = family.Husband.Value as TGEDCOMIndividualRecord;
+									res_parent = this.AddDescPerson(null, sp, TreeChartPerson.TPersonKind.pkSpouse, aLevel);
+									res_parent.Sex = TGEDCOMSex.svMale;
+									ft = res_parent;
+									mt = res;
+									desc_flag = TreeChartPerson.TPersonFlag.pfDescByFather;
+									break;
+								}
+
+							case TGEDCOMSex.svMale:
+								{
+									TGEDCOMIndividualRecord sp = family.Wife.Value as TGEDCOMIndividualRecord;
+									res_parent = this.AddDescPerson(null, sp, TreeChartPerson.TPersonKind.pkSpouse, aLevel);
+									res_parent.Sex = TGEDCOMSex.svFemale;
+									ft = res;
+									mt = res_parent;
+									desc_flag = TreeChartPerson.TPersonFlag.pfDescByMother;
+									break;
+								}
 						}
 
 						if (this.FOptions.Kinship)
@@ -638,6 +641,7 @@ namespace GKUI.Charts
 						{
 							res.AddSpouse(res_parent);
 							res_parent.BaseSpouse = res;
+							res_parent.BaseFamily = family;
 						}
 						else
 						{
@@ -712,7 +716,7 @@ namespace GKUI.Charts
 						{
 							tmp = string.Concat(new string[]
 							{
-								tmp, L.xFrom.Rec.XRef, ">", TGenEngine.RelationSigns[(int)cur_rel], ">"
+								tmp, L.xFrom.Rec.XRef, ">", GKData.RelationSigns[(int)cur_rel], ">"
 							});
 						}
 						if (L.xTo.Rec != null)
@@ -817,7 +821,7 @@ namespace GKUI.Charts
 			{
 				if (Rel >= KinshipsMan.TRelationKind.rkUncle && Rel < KinshipsMan.TRelationKind.rkNephew)
 				{
-					tmp = TGenEngine.Numerals[Great] + TGenEngine.NumKinship[(int)aTarget.Sex] + " ";
+					tmp = GKData.Numerals[Great] + GKData.NumKinship[(int)aTarget.Sex] + " ";
 					if (Rel == KinshipsMan.TRelationKind.rkUncle)
 					{
 						Rel = KinshipsMan.TRelationKind.rkGrandfather;
@@ -839,7 +843,7 @@ namespace GKUI.Charts
 			{
 				tmp = "";
 			}
-			return tmp + LangMan.LSList[(int)TGenEngine.RelationKinds[(int)Rel] - 1];
+			return tmp + LangMan.LSList[(int)GKData.RelationKinds[(int)Rel] - 1];
 		}
 
 		private string GetGreat(int n)
@@ -926,7 +930,7 @@ namespace GKUI.Charts
 			line++;
 		}
 
-		private GraphicsPath CreateRoundedRectangle(int x, int y, int width, int height, int radius)
+		private static GraphicsPath CreateRoundedRectangle(int x, int y, int width, int height, int radius)
 	    {
 			int xw = x + width;
 			int yh = y + height;
@@ -969,7 +973,7 @@ namespace GKUI.Charts
 			return p;
 		}
 
-		private void DrawPathWithFuzzyLine(GraphicsPath path, Graphics gr, Color base_color, int max_opacity, int width, int opaque_width)
+		private static void DrawPathWithFuzzyLine(GraphicsPath path, Graphics gr, Color base_color, int max_opacity, int width, int opaque_width)
 		{
 			int num_steps = width - opaque_width + 1;       // Number of pens we will use.
 			float delta = (float)max_opacity / num_steps / num_steps;   // Change in alpha between pens.
@@ -1144,8 +1148,8 @@ namespace GKUI.Charts
 			if (this.Options.SignsVisible && !person.Signs.IsEmpty())
 			{
 				int i = 0;
-				for (TGenEngine.TChartPersonSign cps = TGenEngine.TChartPersonSign.urRI_StGeorgeCross;
-				     cps <= TGenEngine.TChartPersonSign.urUSSR_RearVeteran; cps++)
+				for (TChartPersonSign cps = TChartPersonSign.urRI_StGeorgeCross;
+				     cps <= TChartPersonSign.urUSSR_RearVeteran; cps++)
 				{
 					if (person.Signs.InSet(cps))
 					{
@@ -1836,7 +1840,7 @@ namespace GKUI.Charts
 		{
 			if (this.FFilter.BranchCut != TChartFilter.TBranchCut.bcNone)
 			{
-				TGenEngine.InitExtCounts(this.FTree, 0);
+				TreeStats.InitExtCounts(this.FTree, 0);
 				this.DoDescendantsFilter(aRoot);
 				aRoot.ExtData = true;
 			}
@@ -1849,10 +1853,10 @@ namespace GKUI.Charts
 			for (int i = 0; i <= num; i++)
 			{
 				string rs = iRec.UserReferences[i].StringValue;
-				for (TGenEngine.TChartPersonSign cps = TGenEngine.TChartPersonSign.urRI_StGeorgeCross; 
-				     cps <= TGenEngine.TChartPersonSign.urLast; cps++)
+				for (TChartPersonSign cps = TChartPersonSign.urRI_StGeorgeCross; 
+				     cps <= TChartPersonSign.urLast; cps++)
 				{
-					if (rs == TGenEngine.UserRefs[(int)cps]) result.Include(cps);
+					if (rs == GKData.UserRefs[(int)cps]) result.Include(cps);
 				}
 			}
 			return result;

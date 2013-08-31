@@ -32,23 +32,23 @@ namespace GKUI
 			set	{ this.FFilter = value;	}
 		}
 
-		private void ListModify(object Sender, object ItemData, TGenEngine.TRecAction Action)
+		private void ListModify(object Sender, object ItemData, TRecAction Action)
 		{
 			if (object.Equals(Sender, this.FPersonsList))
 			{
-                TGEDCOMIndividualRecord i_rec = (Action == TGenEngine.TRecAction.raAdd) ? null : ItemData as TGEDCOMIndividualRecord;
+                TGEDCOMIndividualRecord i_rec = (Action == TRecAction.raAdd) ? null : ItemData as TGEDCOMIndividualRecord;
 
                 switch (Action)
                 {
-                    case TGenEngine.TRecAction.raAdd:
-					    i_rec = this.Base.SelectPerson(null, TGenEngine.TTargetMode.tmNone, TGEDCOMSex.svNone);
+                    case TRecAction.raAdd:
+					    i_rec = this.Base.SelectPerson(null, TTargetMode.tmNone, TGEDCOMSex.svNone);
 					    if (i_rec != null)
 					    {
 						    this.FTemp = this.FTemp + i_rec.XRef + ";";
 					    }
                         break;
 
-                    case TGenEngine.TRecAction.raDelete:
+                    case TRecAction.raDelete:
 						if (i_rec != null)
 						{
 							this.FTemp = this.FTemp.Replace(i_rec.XRef + ";", "");

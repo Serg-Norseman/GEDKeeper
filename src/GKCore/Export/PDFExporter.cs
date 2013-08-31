@@ -130,10 +130,10 @@ namespace GKCore.Export
 					table.AddCell(new Phrase(iRec.XRef, cells_font));
 					table.AddCell(new Phrase(iRec.aux_GetNameStr(true, false), cells_font));
 
-					table.AddCell(new Phrase(TGenEngine.GetBirthDate(iRec, TGenEngine.TDateFormat.dfDD_MM_YYYY, false), cells_font));
+					table.AddCell(new Phrase(TGenEngine.GetBirthDate(iRec, TDateFormat.dfDD_MM_YYYY, false), cells_font));
 					table.AddCell(new Phrase(TGenEngine.GetBirthPlace(iRec), cells_font));
 
-					table.AddCell(new Phrase(TGenEngine.GetDeathDate(iRec, TGenEngine.TDateFormat.dfDD_MM_YYYY, false), cells_font));
+					table.AddCell(new Phrase(TGenEngine.GetDeathDate(iRec, TDateFormat.dfDD_MM_YYYY, false), cells_font));
 					table.AddCell(new Phrase(TGenEngine.GetDeathPlace(iRec), cells_font));
 
 					TGEDCOMCustomEvent evt2 = iRec.GetIndividualEvent("OCCU");

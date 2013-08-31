@@ -80,7 +80,7 @@ namespace GKUI
 			this.cbEventVal.Items.AddRange(GKUI.TfmGEDKeeper.Instance.Options.EventFilters.ToArray());
 
 			int life_sel;
-			if (iFilter.LifeMode != TGenEngine.TLifeMode.lmTimeLine)
+			if (iFilter.LifeMode != TLifeMode.lmTimeLine)
 			{
 				life_sel = (int)iFilter.LifeMode;
 				this.rgLife.Enabled = true;
@@ -194,7 +194,7 @@ namespace GKUI
 			if (this.RadioButton3.Checked) life_sel = 2;
 			if (this.RadioButton4.Checked) life_sel = 3;
 
-			if (iFilter.LifeMode != TGenEngine.TLifeMode.lmTimeLine)
+			if (iFilter.LifeMode != TLifeMode.lmTimeLine)
 			{
 				iFilter.AliveBeforeDate = this.edAliveBeforeDate.Text;
 				if (life_sel == 3)
@@ -209,7 +209,7 @@ namespace GKUI
 						base.DialogResult = DialogResult.None;
 					}
 				}
-				iFilter.LifeMode = (TGenEngine.TLifeMode)life_sel;
+				iFilter.LifeMode = (TLifeMode)life_sel;
 			}
 
 			int sex_sel = 0;

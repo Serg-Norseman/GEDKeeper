@@ -4,9 +4,9 @@ namespace GedCom551
 {
 	public sealed class TGEDCOMFamilyEvent : TGEDCOMCustomEvent
 	{
-		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
 		{
-			return this.Detail.AddTag(ATag, AValue, ATagConstructor);
+			return this.Detail.AddTag(tagName, tagValue, tagConstructor);
 		}
 
 		public TGEDCOMFamilyEvent(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

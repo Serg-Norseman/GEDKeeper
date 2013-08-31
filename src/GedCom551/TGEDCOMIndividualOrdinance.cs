@@ -7,7 +7,7 @@ namespace GedCom551
 	{
 		public TGEDCOMDateValue Date
 		{
-			get { return base.TagClass("DATE", typeof(TGEDCOMDateValue), TGEDCOMDateValue.Create) as TGEDCOMDateValue; }
+			get { return base.TagClass("DATE", TGEDCOMDateValue.Create) as TGEDCOMDateValue; }
 		}
 
 		public string TempleCode
@@ -46,7 +46,7 @@ namespace GedCom551
 
 		public TGEDCOMPointer Family
 		{
-			get { return base.TagClass("FAMC", typeof(TGEDCOMPointer), TGEDCOMPointer.Create) as TGEDCOMPointer; }
+			get { return base.TagClass("FAMC", TGEDCOMPointer.Create) as TGEDCOMPointer; }
 		}
 
 		public TGEDCOMChildSealingDateStatus ChildSealingDateStatus
@@ -63,7 +63,7 @@ namespace GedCom551
 
 		private TGEDCOMDateExact GetChangeDate()
 		{
-			return this.DateStatus.TagClass("CHAN", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact;
+			return this.DateStatus.TagClass("CHAN", TGEDCOMDateExact.Create) as TGEDCOMDateExact;
 		}
 
 		private TGEDCOMBaptismDateStatus GetBaptismDateStatus()
@@ -325,30 +325,28 @@ namespace GedCom551
 
 		public TGEDCOMDateStatus DateStatus
 		{
-			get { return base.TagClass("STAT", typeof(TGEDCOMDateStatus), TGEDCOMDateStatus.Create) as TGEDCOMDateStatus; }
+			get { return base.TagClass("STAT", TGEDCOMDateStatus.Create) as TGEDCOMDateStatus; }
 		}
 
-		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
 		{
-			TGEDCOMTag Result;
-			if (ATag == "DATE")
+			TGEDCOMTag result;
+
+			if (tagName == "STAT")
 			{
-				Result = base.AddTag(ATag, AValue, TGEDCOMDateValue.Create);
+				result = base.AddTag(tagName, tagValue, TGEDCOMDateStatus.Create);
 			}
-			else if (ATag == "STAT")
+			else if (tagName == "FAMC")
 			{
-				Result = base.AddTag(ATag, AValue, TGEDCOMDateStatus.Create);
-			}
-			else if (ATag == "FAMC")
-			{
-				Result = base.AddTag(ATag, AValue, TGEDCOMPointer.Create);
+				result = base.AddTag(tagName, tagValue, TGEDCOMPointer.Create);
 			}
 			else
 			{
-				Result = base.AddTag(ATag, AValue, ATagConstructor);
+				// define "DATE" by default
+				result = base.AddTag(tagName, tagValue, tagConstructor);
 			}
 
-			return Result;
+			return result;
 		}
 
 		public TGEDCOMIndividualOrdinance(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

@@ -6,9 +6,7 @@ namespace GedCom551
 	{
 		public TGEDCOMDateExact ChangeDate
 		{
-			get {
-				return base.TagClass("DATE", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact;
-			}
+			get { return base.TagClass("DATE", TGEDCOMDateExact.Create) as TGEDCOMDateExact; }
 		}
 
 		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
@@ -17,20 +15,20 @@ namespace GedCom551
 			this.FName = "STAT";
 		}
 
-		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
 		{
-			TGEDCOMTag Result;
+			TGEDCOMTag result;
 
-			if (ATag == "DATE")
+			if (tagName == "DATE")
 			{
-				Result = base.AddTag(ATag, AValue, TGEDCOMDateExact.Create);
+				result = base.AddTag(tagName, tagValue, TGEDCOMDateExact.Create);
 			}
 			else
 			{
-				Result = base.AddTag(ATag, AValue, ATagConstructor);
+				result = base.AddTag(tagName, tagValue, tagConstructor);
 			}
 
-			return Result;
+			return result;
 		}
 
 		public TGEDCOMDateStatus(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

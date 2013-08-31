@@ -133,6 +133,13 @@ namespace GedCom551
 			this.ParseString(S);
 		}
 
+		public virtual string ParseString(string AString)
+		{
+			this.FStringValue = AString;
+			string Result = "";
+			return Result;
+		}
+
 		protected virtual void SaveTagsToStream(StreamWriter AStream)
 		{
 			if (this.Count > 0)
@@ -322,26 +329,26 @@ namespace GedCom551
 			}
 		}
 
-		public TGEDCOMTag FindTag(string ATag, int StartIndex)
+		public TGEDCOMTag FindTag(string tagName, int startIndex)
 		{
-			string SU = ATag.ToUpperInvariant();
+			string SU = tagName.ToUpperInvariant();
 
 			int pos = SU.IndexOf('\\');
 			string S = ((pos >= 0) ? SU.Substring(0, pos) : SU);
 
-			TGEDCOMTag O = this;
-			TGEDCOMTag Result;
+			TGEDCOMTag tempTag = this;
+			TGEDCOMTag resultTag;
 
 			while (true)
 			{
-				int Index = ((S == SU) ? StartIndex : 0);
+				int Index = ((S == SU) ? startIndex : 0);
 
-				while (Index < O.Count && O[Index].Name != S) Index++;
+				while (Index < tempTag.Count && tempTag[Index].Name != S) Index++;
 
-				if (Index >= O.Count) break;
+				if (Index >= tempTag.Count) break;
 
-				Result = O[Index];
-				O = Result;
+				resultTag = tempTag[Index];
+				tempTag = resultTag;
 
 				pos = SU.IndexOf('\\');
 				if (pos >= 0)
@@ -356,52 +363,41 @@ namespace GedCom551
 					SU = "";
 				}
 
-				if (SU == "") return Result;
+				if (SU == "") return resultTag;
 			}
 
-			Result = null;
-			return Result;
+			resultTag = null;
+			return resultTag;
 		}
 
-		public TGEDCOMTag TagClass(string ATag, Type ATagClass, TagConstructor ATagConstructor)
+		public TGEDCOMTag TagClass(string tagName, TagConstructor tagConstructor)
 		{
-			TGEDCOMTag result = this.FindTag(ATag, 0);
+			TGEDCOMTag result = this.FindTag(tagName, 0);
 
-			if (result == null)
-			{
-				result = this.AddTag(ATag, "", ATagConstructor);
-			}
-			else
-			{
-				if (!ATagClass.IsInstanceOfType(result))
-				{
-					throw new EGEDCOMException(string.Format("The tag {0} is of type {1}, but type {2} was expected", new object[]
-					{
-						ATag, result.GetType().Name, ATagClass.Name
-					}));
-				}
+			if (result == null) {
+				result = this.AddTag(tagName, "", tagConstructor);
 			}
 
 			return result;
 		}
 
-		public int GetTagIntegerValue(string ATag, int ADefault)
+		public int GetTagIntegerValue(string tagName, int ADefault)
 		{
-			string S = this.GetTagStringValue(ATag);
+			string S = this.GetTagStringValue(tagName);
 			int Result = ((S == "") ? ADefault : SysUtils.ParseInt(S, ADefault));
 			return Result;
 		}
 
-		public double GetTagFloatValue(string ATag, double ADefault)
+		public double GetTagFloatValue(string tagName, double ADefault)
 		{
-			string S = this.GetTagStringValue(ATag);
+			string S = this.GetTagStringValue(tagName);
 			double Result = ((S == "") ? ADefault : SysUtils.ParseFloat(S, ADefault));
 			return Result;
 		}
 
-		public string GetTagStringValue(string ATag)
+		public string GetTagStringValue(string tagName)
 		{
-			TGEDCOMTag Tag = this.FindTag(ATag, 0);
+			TGEDCOMTag Tag = this.FindTag(tagName, 0);
 			string Result = ((Tag == null) ? "" : Tag.StringValue);
 			return Result;
 		}
@@ -455,28 +451,21 @@ namespace GedCom551
 			return ((this.FStringValue == "") && (this.FTags.Count == 0));
 		}
 
-		public virtual string ParseString(string AString)
+		public void SetTagIntegerValue(string tagName, int AValue)
 		{
-			this.FStringValue = AString;
-			string Result = "";
-			return Result;
+			this.SetTagStringValue(tagName, AValue.ToString());
 		}
 
-		public void SetTagIntegerValue(string ATag, int AValue)
-		{
-			this.SetTagStringValue(ATag, AValue.ToString());
-		}
-
-		public void SetTagFloatValue(string ATag, double AValue)
+		public void SetTagFloatValue(string tagName, double AValue)
 		{
 			NumberFormatInfo nfi = new NumberFormatInfo();
 			nfi.NumberDecimalSeparator = ".";
-			this.SetTagStringValue(ATag, AValue.ToString(nfi));
+			this.SetTagStringValue(tagName, AValue.ToString(nfi));
 		}
 
-		public void SetTagStringValue(string ATag, string AValue)
+		public void SetTagStringValue(string tagName, string AValue)
 		{
-			string SU = ATag;
+			string SU = tagName;
 			TGEDCOMTag P = this.FindTag(SU, 0);
 			if (P != null)
 			{

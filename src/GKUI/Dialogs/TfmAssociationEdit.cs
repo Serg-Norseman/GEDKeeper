@@ -59,7 +59,7 @@ namespace GKUI
 
 		private void btnPersonAdd_Click(object sender, EventArgs e)
 		{
-			this.FTempInd = this.Base.SelectPerson(null, TGenEngine.TTargetMode.tmNone, TGEDCOMSex.svNone);
+			this.FTempInd = this.Base.SelectPerson(null, TTargetMode.tmNone, TGEDCOMSex.svNone);
 			this.EditPerson.Text = ((this.FTempInd == null) ? "" : this.FTempInd.aux_GetNameStr(true, false));
 		}
 

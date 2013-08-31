@@ -136,7 +136,7 @@ namespace GKCore
 				foreach (DictionaryEntry de in this.FNames)
 		        {
 					TName nm = (de.Value as TName);
-					string st = nm.Name + ";" + nm.F_Patronymic + ";" + nm.M_Patronymic + ";" + TGenEngine.SexData[(int)nm.Sex].Sign;
+					string st = nm.Name + ";" + nm.F_Patronymic + ";" + nm.M_Patronymic + ";" + GKData.SexData[(int)nm.Sex].Sign;
 					strd.WriteLine(st);
 		        }
 			}

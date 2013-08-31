@@ -6,7 +6,7 @@ namespace GedCom551
 	{
 		public TGEDCOMAddress Address
 		{
-			get { return base.TagClass("ADDR", typeof(TGEDCOMAddress), TGEDCOMAddress.Create) as TGEDCOMAddress; }
+			get { return base.TagClass("ADDR", TGEDCOMAddress.Create) as TGEDCOMAddress; }
 		}
 
 		public string RepositoryName
@@ -22,21 +22,21 @@ namespace GedCom551
 			this.FName = "REPO";
 		}
 
-		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
 		{
-			TGEDCOMTag Result;
+			TGEDCOMTag result;
 
-			if (ATag == "PHON" || ATag == "EMAIL" || ATag == "FAX" || ATag == "WWW")
+			if (tagName == "PHON" || tagName == "EMAIL" || tagName == "FAX" || tagName == "WWW")
 			{
-				Result = this.Address.AddTag(ATag, AValue, ATagConstructor);
+				result = this.Address.AddTag(tagName, tagValue, tagConstructor);
 			}
 			else
 			{
 				// "ADDR" defines by default
-				Result = base.AddTag(ATag, AValue, ATagConstructor);
+				result = base.AddTag(tagName, tagValue, tagConstructor);
 			}
 
-			return Result;
+			return result;
 		}
 
 		public TGEDCOMRepositoryRecord(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

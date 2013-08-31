@@ -56,7 +56,7 @@ namespace GKCore
 
 		private TGEDCOMFamilyRecord AddFamily(TGEDCOMIndividualRecord parent)
 		{
-			TGEDCOMFamilyRecord Result = TGenEngine.CreateFamilyEx(this.FTree);
+			TGEDCOMFamilyRecord Result = this.FTree.aux_CreateFamily();
 			Result.aux_AddSpouse(parent);
 			return Result;
 		}

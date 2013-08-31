@@ -36,7 +36,7 @@ namespace GedCom551
 
 		public TGEDCOMPointer Submitter
 		{
-			get { return base.TagClass("SUBM", typeof(TGEDCOMPointer), TGEDCOMPointer.Create) as TGEDCOMPointer; }
+			get { return base.TagClass("SUBM", TGEDCOMPointer.Create) as TGEDCOMPointer; }
 		}
 
 		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)

@@ -82,7 +82,7 @@ namespace GKUI.Lists
 		public string AliveBeforeDate;
 		public CustomFilter.TGroupMode GroupMode;
 		public string GroupRef;
-		public TGenEngine.TLifeMode LifeMode;
+		public TLifeMode LifeMode;
 		public string Name;
 		public bool PatriarchOnly;
 		public string Residence;
@@ -104,9 +104,9 @@ namespace GKUI.Lists
 
 			this.GroupMode = CustomFilter.TGroupMode.gmAll;
 			this.GroupRef = "";
-			if (this.LifeMode != TGenEngine.TLifeMode.lmTimeLine)
+			if (this.LifeMode != TLifeMode.lmTimeLine)
 			{
-				this.LifeMode = TGenEngine.TLifeMode.lmAll;
+				this.LifeMode = TLifeMode.lmAll;
 				this.TimeLineYear = -1;
 			}
 			this.Name = "*";
@@ -195,7 +195,7 @@ namespace GKUI.Lists
 			return result;
 		}
 
-		private bool CheckSpecificFilter(TGenEngine.TShieldState aShieldState)
+		private bool CheckSpecificFilter(TShieldState aShieldState)
 		{
 			bool result = false;
 
@@ -230,7 +230,7 @@ namespace GKUI.Lists
 
 			string fullname = this.FRec.aux_GetNameStr(true, false);
 
-			if ((this.FRec.Restriction != TGEDCOMRestriction.rnPrivacy || aShieldState == TGenEngine.TShieldState.ssNone)
+			if ((this.FRec.Restriction != TGEDCOMRestriction.rnPrivacy || aShieldState == TShieldState.ssNone)
 			    && (iFilter.Sex == TGEDCOMSex.svNone || this.FRec.Sex == iFilter.Sex)
 			    && (iFilter.Name == "*" || IsMatchesMask(fullname, iFilter.Name))
 			    && (this.QuickFilter == "*" || IsMatchesMask(fullname, this.QuickFilter))
@@ -241,21 +241,21 @@ namespace GKUI.Lists
 				bool isLive = (dd_ev == null);
 
 				switch (iFilter.LifeMode) {
-					case TGenEngine.TLifeMode.lmOnlyAlive:
+					case TLifeMode.lmOnlyAlive:
 						if (!isLive) return result;
 						break;
 
-					case TGenEngine.TLifeMode.lmOnlyDead:
+					case TLifeMode.lmOnlyDead:
 						if (isLive) return result;
 						break;
 
-					case TGenEngine.TLifeMode.lmAliveBefore:
+					case TLifeMode.lmAliveBefore:
 						DateTime bdt = ((bd_ev == null) ? new DateTime(0) : TGenEngine.GEDCOMDateToDate(bd_ev.Detail.Date));
 						DateTime ddt = ((dd_ev == null) ? new DateTime(0) : TGenEngine.GEDCOMDateToDate(dd_ev.Detail.Date));
 						if ((bdt > this.filter_abd) || (ddt < this.filter_abd)) return result;
 						break;
 
-					case TGenEngine.TLifeMode.lmTimeLine:
+					case TLifeMode.lmTimeLine:
 						int bdy = -1;
 						if (bd_ev != null) bd_ev.Detail.Date.aux_GetIndependentDate(out bdy, out j, out d);
 
@@ -306,7 +306,7 @@ namespace GKUI.Lists
 			return result;
 		}
 
-		public override bool CheckFilter(TGenEngine.TShieldState aShieldState)
+		public override bool CheckFilter(TShieldState aShieldState)
 		{
 			string fullname = this.FRec.aux_GetNameStr(true, false);
 			bool res = (this.QuickFilter == "*" || IsMatchesMask(fullname, this.QuickFilter));
@@ -332,15 +332,15 @@ namespace GKUI.Lists
 					if (col_subtype == -1) {
 						Result = this.FRec.aux_GetNameStr(true, false);
 					} else {
-						TGenEngine.TNameFormat defNameFormat = GKUI.TfmGEDKeeper.Instance.Options.DefNameFormat;
+						TNameFormat defNameFormat = GKUI.TfmGEDKeeper.Instance.Options.DefNameFormat;
 						string f, i, p;
 
 						switch (defNameFormat) {
-							case TGenEngine.TNameFormat.nfFNP:
+							case TNameFormat.nfFNP:
 								Result = this.FRec.aux_GetNameStr(true, false);
 								break;
 
-							case TGenEngine.TNameFormat.nfF_NP:
+							case TNameFormat.nfF_NP:
 								this.FRec.aux_GetNameParts(out f, out i, out p);
 								switch (col_subtype) {
 									case 0:
@@ -352,7 +352,7 @@ namespace GKUI.Lists
 								}
 								break;
 
-							case TGenEngine.TNameFormat.nfF_N_P:
+							case TNameFormat.nfF_N_P:
 								this.FRec.aux_GetNameParts(out f, out i, out p);
 								switch (col_subtype) {
 									case 0:
@@ -475,7 +475,7 @@ namespace GKUI.Lists
 				this.filter_abd = new DateTime(0);
 			}
 
-			if (iFilter.LifeMode != TGenEngine.TLifeMode.lmTimeLine) {
+			if (iFilter.LifeMode != TLifeMode.lmTimeLine) {
 				this.age_year = -1;
 			} else {
 				this.age_year = iFilter.TimeLineYear;
@@ -609,7 +609,7 @@ namespace GKUI.Lists
 		protected override void UpdateColumns(GKListView aList, bool isMain)
 		{
 			TIndividualListColumns columns = GKUI.TfmGEDKeeper.Instance.Options.IndividualListColumns;
-			TGenEngine.TNameFormat defNameFormat = GKUI.TfmGEDKeeper.Instance.Options.DefNameFormat;
+			TNameFormat defNameFormat = GKUI.TfmGEDKeeper.Instance.Options.DefNameFormat;
 
 			this.ColumnsMap_Clear();
 			this.AddListColumn(aList, "№", 50, false, 0, 0);
@@ -624,18 +624,18 @@ namespace GKUI.Lists
 					if (col_type == TPersonColumnType.pctName) {
 						bool asz = false;
 						switch (defNameFormat) {
-							case TGenEngine.TNameFormat.nfF_N_P:
+							case TNameFormat.nfF_N_P:
 								this.AddListColumn(aList, LangMan.LSList[84], 150, asz, bColType, 0);
 								this.AddListColumn(aList, LangMan.LSList[85], 100, asz, bColType, 1);
 								this.AddListColumn(aList, LangMan.LSList[86], 150, asz, bColType, 2);
 								break;
 
-							case TGenEngine.TNameFormat.nfF_NP:
+							case TNameFormat.nfF_NP:
 								this.AddListColumn(aList, LangMan.LSList[84], 150, asz, bColType, 0);
 								this.AddListColumn(aList, LangMan.LSList[85] + "," + LangMan.LSList[86], 150, asz, bColType, 1);
 								break;
 
-							case TGenEngine.TNameFormat.nfFNP:
+							case TNameFormat.nfFNP:
 								this.AddListColumn(aList, LangMan.LSList[301], 300, asz, bColType, 0);
 								break;
 						}

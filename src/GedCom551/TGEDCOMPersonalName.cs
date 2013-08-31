@@ -172,18 +172,20 @@ namespace GedCom551
 			}
 		}
 
-		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
 		{
-			TGEDCOMTag Result;
-			if (ATag == "TYPE" || ATag == "FONE" || ATag == "ROMN")
+			TGEDCOMTag result;
+
+			if (tagName == "TYPE" || tagName == "FONE" || tagName == "ROMN")
 			{
-				Result = base.AddTag(ATag, AValue, ATagConstructor);
+				result = base.AddTag(tagName, tagValue, tagConstructor);
 			}
 			else
 			{
-				Result = this._Pieces.AddTag(ATag, AValue, ATagConstructor);
+				result = this._Pieces.AddTag(tagName, tagValue, tagConstructor);
 			}
-			return Result;
+
+			return result;
 		}
 
         public override void Assign(TGEDCOMTag Source)

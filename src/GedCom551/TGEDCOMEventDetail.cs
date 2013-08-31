@@ -32,17 +32,17 @@ namespace GedCom551
 
 		public TGEDCOMPlace Place
 		{
-			get { return base.TagClass("PLAC", typeof(TGEDCOMPlace), TGEDCOMPlace.Create) as TGEDCOMPlace; }
+			get { return base.TagClass("PLAC", TGEDCOMPlace.Create) as TGEDCOMPlace; }
 		}
 
 		public TGEDCOMAddress Address
 		{
-			get { return base.TagClass("ADDR", typeof(TGEDCOMAddress), TGEDCOMAddress.Create) as TGEDCOMAddress; }
+			get { return base.TagClass("ADDR", TGEDCOMAddress.Create) as TGEDCOMAddress; }
 		}
 
 		public TGEDCOMDateValue Date
 		{
-			get { return base.TagClass("DATE", typeof(TGEDCOMDateValue), TGEDCOMDateValue.Create) as TGEDCOMDateValue; }
+			get { return base.TagClass("DATE", TGEDCOMDateValue.Create) as TGEDCOMDateValue; }
 		}
 
 		public TGEDCOMRestriction Restriction
@@ -61,17 +61,13 @@ namespace GedCom551
 		{
 			TGEDCOMTag result;
 
-			if (tagName == "DATE")
-			{
-				result = base.AddTag(tagName, tagValue, TGEDCOMDateValue.Create);
-			}
-			else if (tagName == "PHON" || tagName == "EMAIL" || tagName == "FAX" || tagName == "WWW")
+			if (tagName == "PHON" || tagName == "EMAIL" || tagName == "FAX" || tagName == "WWW")
 			{
 				result = this.Address.AddTag(tagName, tagValue, tagConstructor);
 			}
 			else
 			{
-				// define "PLAC", "ADDR" by default
+				// define "PLAC", "ADDR", "DATE" by default
 				result = base.AddTag(tagName, tagValue, tagConstructor);
 			}
 

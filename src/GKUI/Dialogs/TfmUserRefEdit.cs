@@ -54,9 +54,9 @@ namespace GKUI
 			this.InitializeComponent();
 			this.FBase = aBase;
 
-			for (TGenEngine.TUserRef ur = TGenEngine.TUserRef.urCustom; ur <= TGenEngine.TUserRef.urUSSR_RearVeteran; ur++)
+			for (TUserRef ur = TUserRef.urCustom; ur <= TUserRef.urUSSR_RearVeteran; ur++)
 			{
-				this.EditRef.Items.Add(TGenEngine.UserRefs[(int)ur]);
+				this.EditRef.Items.Add(GKData.UserRefs[(int)ur]);
 			}
 
 			this.btnAccept.Text = LangMan.LSList[97];

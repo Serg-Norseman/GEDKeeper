@@ -62,7 +62,7 @@ namespace GKCore.Export
 		private TGEDCOMIndividualRecord FAncestor;
 		private TPedigreeKind FKind;
 		private TList FPersonList;
-		private TGenEngine.TShieldState FShieldState;
+		private TShieldState FShieldState;
 		private StringList FSourceList;
 
 		private Font title_font;
@@ -85,7 +85,7 @@ namespace GKCore.Export
 			set { this.FKind = value; }
 		}
 
-		public TGenEngine.TShieldState ShieldState
+		public TShieldState ShieldState
 		{
 			get { return this.FShieldState; }
 			set { this.FShieldState = value; }
@@ -355,7 +355,7 @@ namespace GKCore.Export
 			{
 				if (format == PedigreeOptions.TPedigreeFormat.pfCompact)
 				{
-					string ds = TGenEngine.GetBirthDate(iRec, TGenEngine.TDateFormat.dfDD_MM_YYYY, true);
+					string ds = TGenEngine.GetBirthDate(iRec, TDateFormat.dfDD_MM_YYYY, true);
 					string ps = TGenEngine.GetBirthPlace(iRec);
 					if (ps != "")
 					{
@@ -370,7 +370,7 @@ namespace GKCore.Export
 						ds = "*" + ds;
 					}
 					res_str += ds;
-					ds = TGenEngine.GetDeathDate(iRec, TGenEngine.TDateFormat.dfDD_MM_YYYY, true);
+					ds = TGenEngine.GetDeathDate(iRec, TDateFormat.dfDD_MM_YYYY, true);
 					ps = TGenEngine.GetDeathPlace(iRec);
 					if (ps != "")
 					{
@@ -392,13 +392,13 @@ namespace GKCore.Export
 			}
 			else
 			{
-				string ds = TGenEngine.GetBirthDate(iRec, TGenEngine.TDateFormat.dfDD_MM_YYYY, true);
+				string ds = TGenEngine.GetBirthDate(iRec, TDateFormat.dfDD_MM_YYYY, true);
 				if (ds == "")
 				{
 					ds = "?";
 				}
 				res_str += ds;
-				ds = TGenEngine.GetDeathDate(iRec, TGenEngine.TDateFormat.dfDD_MM_YYYY, true);
+				ds = TGenEngine.GetDeathDate(iRec, TDateFormat.dfDD_MM_YYYY, true);
 				if (ds == "")
 				{
 					TGEDCOMCustomEvent ev = TGenEngine.GetIndividualEvent(iRec, "DEAT");
@@ -473,13 +473,13 @@ namespace GKCore.Export
 						st = evt.Detail.Classification;
 					} else {
 						if (ev > 0) {
-							st = LangMan.LSList[(int)TGenEngine.PersonEvents[ev].Name - 1];
+							st = LangMan.LSList[(int)GKData.PersonEvents[ev].Name - 1];
 						} else {
 							st = evt.Name;
 						}
 					}
 
-					string dt = TGenEngine.GEDCOMCustomDateToStr(evt.Detail.Date, TGenEngine.TDateFormat.dfDD_MM_YYYY, false);
+					string dt = TGenEngine.GEDCOMCustomDateToStr(evt.Detail.Date, TDateFormat.dfDD_MM_YYYY, false);
 					li = dt + ": " + st + ".";
 					if (evt.Detail.Place.StringValue != "")
 					{
@@ -490,7 +490,7 @@ namespace GKCore.Export
 				}
 				else
 				{
-					string dt = (evt == null) ? "?" : TGenEngine.GEDCOMCustomDateToStr(evt.Detail.Date, TGenEngine.TDateFormat.dfDD_MM_YYYY, false);
+					string dt = (evt == null) ? "?" : TGenEngine.GEDCOMCustomDateToStr(evt.Detail.Date, TDateFormat.dfDD_MM_YYYY, false);
 					string st;
 					if (evObj.iRec.Sex == TGEDCOMSex.svMale) {
 						st = ": Родился ";
@@ -601,7 +601,7 @@ namespace GKCore.Export
 				res.iRec = iRec;
 				res.Level = level;
 				res.ChildIdx = 0;
-				res.BirthDate = TGenEngine.GetBirthDate(iRec, TGenEngine.TDateFormat.dfYYYY_MM_DD, true);
+				res.BirthDate = TGenEngine.GetBirthDate(iRec, TDateFormat.dfYYYY_MM_DD, true);
 				res.FamilyOrder = familyOrder;
 				this.FPersonList.Add(res);
 
@@ -637,7 +637,7 @@ namespace GKCore.Export
 					TGEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[j].Family;
 					if (TGenEngine.IsRecordAccess(family.Restriction, this.FShieldState))
 					{
-						family.SortChilds();
+						family.aux_SortChilds();
 
 						int num3 = family.Childrens.Count - 1;
 						for (int i = 0; i <= num3; i++)

@@ -9,7 +9,7 @@ namespace GedCom551
 
 		public TGEDCOMDateExact Date
 		{
-			get { return base.TagClass("DATE", typeof(TGEDCOMDateExact), TGEDCOMDateExact.Create) as TGEDCOMDateExact; }
+			get { return base.TagClass("DATE", TGEDCOMDateExact.Create) as TGEDCOMDateExact; }
 		}
 
 		public string CommName
@@ -31,24 +31,24 @@ namespace GedCom551
 			this.FName = "_COMM";
 		}
 
-		public override TGEDCOMTag AddTag(string ATag, string AValue, TagConstructor ATagConstructor)
+		public override TGEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
 		{
-			TGEDCOMTag Result;
+			TGEDCOMTag result;
 
-			if (ATag == "NAME")
+			if (tagName == "NAME")
 			{
-				Result = base.AddTag(ATag, AValue, null);
+				result = base.AddTag(tagName, tagValue, null);
 			}
-			else if (ATag == "DATE")
+			else if (tagName == "DATE")
 			{
-				Result = base.AddTag(ATag, AValue, TGEDCOMDateExact.Create);
+				result = base.AddTag(tagName, tagValue, TGEDCOMDateExact.Create);
 			}
 			else
 			{
-				Result = base.AddTag(ATag, AValue, ATagConstructor);
+				result = base.AddTag(tagName, tagValue, tagConstructor);
 			}
 
-			return Result;
+			return result;
 		}
 
 		public void GetCorresponder(ref TCommunicationDir aDir, ref TGEDCOMIndividualRecord aCorresponder)
