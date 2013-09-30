@@ -2,7 +2,7 @@
 
 namespace Ext.Utils
 {
-	public sealed class RomeNumbers
+	public static class RomeNumbers
 	{
 		private static readonly int[] Rn_N;
 		private static readonly string[] Rn_S;
@@ -42,10 +42,6 @@ namespace Ext.Utils
 				"CM", 
 				"M"
 			};
-		}
-
-		public RomeNumbers()
-		{
 		}
 
 		public static string GetRome(int N)

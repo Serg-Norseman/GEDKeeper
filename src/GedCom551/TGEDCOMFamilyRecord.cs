@@ -40,8 +40,8 @@ namespace GedCom551
 
 		public TGEDCOMRestriction Restriction
 		{
-			get { return GetRestrictionVal(base.GetTagStringValue("RESN").Trim().ToUpper()); }
-			set { base.SetTagStringValue("RESN", GetRestrictionStr(value)); }
+			get { return GEDCOMUtils.GetRestrictionVal(base.GetTagStringValue("RESN").Trim().ToUpper()); }
+			set { base.SetTagStringValue("RESN", GEDCOMUtils.GetRestrictionStr(value)); }
 		}
 
 		public GEDCOMList<TGEDCOMSpouseSealing> SpouseSealings
@@ -211,11 +211,11 @@ namespace GedCom551
 
 			if (this.Husband != null)
 			{
-				this.Husband.StringValue = TGEDCOMObject.EncloseXRef(aMap.FindNewXRef(this.Husband.StringValue));
+				this.Husband.StringValue = GEDCOMUtils.EncloseXRef(aMap.FindNewXRef(this.Husband.StringValue));
 			}
 			if (this.Wife != null)
 			{
-				this.Wife.StringValue = TGEDCOMObject.EncloseXRef(aMap.FindNewXRef(this.Wife.StringValue));
+				this.Wife.StringValue = GEDCOMUtils.EncloseXRef(aMap.FindNewXRef(this.Wife.StringValue));
 			}
 
 			this._Childrens.ReplaceXRefs(aMap);

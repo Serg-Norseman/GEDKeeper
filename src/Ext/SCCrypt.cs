@@ -8,11 +8,8 @@ using System.Text;
 
 namespace Ext.Utils
 {
-	public sealed class SCCrypt
+	public static class SCCrypt
 	{
-		public SCCrypt()
-		{
-		}
 
 		private static byte[] LStrConcat2([In] byte[] L, [In] byte[] R)
 		{

@@ -27,8 +27,8 @@ namespace GedCom551
 
 		public string XRef
 		{
-			get { return TGEDCOMObject.CleanXRef(this.FXRef); }
-			set { this.FXRef = TGEDCOMObject.EncloseXRef(value); }
+			get { return GEDCOMUtils.CleanXRef(this.FXRef); }
+			set { this.FXRef = GEDCOMUtils.EncloseXRef(value); }
 		}
 
 		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
@@ -51,7 +51,7 @@ namespace GedCom551
 		{
 			this.FXRef = "";
 			string result = AString;
-			result = base.ExtractDelimiter(result, 0);
+			result = GEDCOMUtils.ExtractDelimiter(result, 0);
 
 			if (!string.IsNullOrEmpty(result) && result[0] == '@' && result[1] != '#')
 			{

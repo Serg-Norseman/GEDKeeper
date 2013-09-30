@@ -26,9 +26,7 @@ namespace GedCom551
 			}
 			set {
 				this.ChangeDate.Date = value.Date;
-				if (value.TimeOfDay != TimeSpan.Zero) {
-					this.ChangeTime.Value = value.TimeOfDay;
-				}
+				this.ChangeTime.Value = value.TimeOfDay;
 			}
 		}
 

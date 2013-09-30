@@ -104,7 +104,7 @@ namespace GKUI
 					case TGoalType.gtIndividual:
 					case TGoalType.gtFamily:
 					case TGoalType.gtSource:
-						this.FTask.Goal = TGEDCOMObject.EncloseXRef(this.FTempRec.XRef);
+						this.FTask.Goal = GEDCOMUtils.EncloseXRef(this.FTempRec.XRef);
 						break;
 					case TGoalType.gtOther:
 						this.FTask.Goal = this.EditGoal.Text;

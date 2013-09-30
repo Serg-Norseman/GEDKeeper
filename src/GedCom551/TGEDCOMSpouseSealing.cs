@@ -23,8 +23,8 @@ namespace GedCom551
 
 		public TGEDCOMSpouseSealingDateStatus SpouseSealingDateStatus
 		{
-			get { return GetSpouseSealingDateStatusVal(base.GetTagStringValue("STAT").Trim().ToUpper()); }
-			set { base.SetTagStringValue("STAT", GetSpouseSealingDateStatusStr(value)); }
+			get { return GEDCOMUtils.GetSpouseSealingDateStatusVal(base.GetTagStringValue("STAT").Trim().ToUpper()); }
+			set { base.SetTagStringValue("STAT", GEDCOMUtils.GetSpouseSealingDateStatusStr(value)); }
 		}
 
 		public TGEDCOMDateExact SpouseSealingChangeDate

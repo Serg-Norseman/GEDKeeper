@@ -31,7 +31,7 @@ using GKUI;
 /// Localization: clean
 /// </summary>
 
-namespace GEDKeeper2
+namespace GK2
 {
 	internal sealed class Program
 	{

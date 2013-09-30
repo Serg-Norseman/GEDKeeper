@@ -41,8 +41,8 @@ namespace GedCom551
 
 		public TGEDCOMNameType NameType
 		{
-			get { return GetNameTypeVal(base.GetTagStringValue("TYPE").Trim().ToLower()); }
-			set { base.SetTagStringValue("TYPE", GetNameTypeStr(value)); }
+			get { return GEDCOMUtils.GetNameTypeVal(base.GetTagStringValue("TYPE").Trim().ToLower()); }
+			set { base.SetTagStringValue("TYPE", GEDCOMUtils.GetNameTypeStr(value)); }
 		}
 
 		public void GetNameParts(out string firstPart, out string surname/*, out string ALastPart*/)

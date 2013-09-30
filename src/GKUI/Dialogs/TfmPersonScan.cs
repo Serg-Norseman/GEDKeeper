@@ -166,7 +166,7 @@ namespace GKUI
 							TGEDCOMSex sx = TfmSexCheck.DefineSex(nm, pt, TfmGEDKeeper.Instance.NamesTable);
 							TGEDCOMIndividualRecord iRec = TGenEngine.CreatePersonEx(Base.Tree, nm, pt, fm, sx, false);
 
-							if (!string.IsNullOrEmpty(age) && TGEDCOMObject.IsDigits(age)) {
+							if (!string.IsNullOrEmpty(age) && GEDCOMUtils.IsDigits(age)) {
 								int birth_year = src_year - int.Parse(age);
 								TGenEngine.CreateEventEx(Base.Tree, iRec, "BIRT", "ABT "+birth_year.ToString(), "");
 							}

@@ -138,7 +138,7 @@ namespace GedCom551
 				if (SU == TGEDCOMDate.GEDCOMDateRangeArray[0])
 				{
 					Result = Result.Remove(0, 3);
-					Result = base.ExtractDelimiter(Result, 0);
+					Result = GEDCOMUtils.ExtractDelimiter(Result, 0);
 					Result = this.FDateAfter.ParseString(Result);
 				}
 				else
@@ -146,7 +146,7 @@ namespace GedCom551
 					if (SU == TGEDCOMDate.GEDCOMDateRangeArray[1])
 					{
 						Result = Result.Remove(0, 3);
-						Result = base.ExtractDelimiter(Result, 0);
+						Result = GEDCOMUtils.ExtractDelimiter(Result, 0);
 						Result = this.FDateBefore.ParseString(Result);
 					}
 					else
@@ -154,19 +154,19 @@ namespace GedCom551
 						if (SU == TGEDCOMDate.GEDCOMDateRangeArray[2])
 						{
 							Result = Result.Remove(0, 3);
-							Result = base.ExtractDelimiter(Result, 0);
+							Result = GEDCOMUtils.ExtractDelimiter(Result, 0);
 
 							Result = TGEDCOMDateRange._ParseString_FixFTB(Result);
 
 							Result = this.FDateAfter.ParseString(Result);
-							Result = base.ExtractDelimiter(Result, 0);
+							Result = GEDCOMUtils.ExtractDelimiter(Result, 0);
 
 							SU = Result.Substring(0, 3).ToUpper();
 
 							if (SU == TGEDCOMDate.GEDCOMDateRangeArray[3])
 							{
 								Result = Result.Remove(0, 3);
-								Result = base.ExtractDelimiter(Result, 0);
+								Result = GEDCOMUtils.ExtractDelimiter(Result, 0);
 								Result = TGEDCOMDateRange._ParseString_FixFTB(Result);
 								Result = this.FDateBefore.ParseString(Result);
 							}

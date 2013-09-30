@@ -630,7 +630,7 @@ namespace GKUI
 					this.FTree.Header.SetTagStringValue("SUBM", subm);
 				}
 
-				StreamWriter fs = new StreamWriter(this.SaveDialog1.FileName, false, TGEDCOMObject.GetEncodingByCharacterSet(this.FTree.Header.CharacterSet));
+				StreamWriter fs = new StreamWriter(this.SaveDialog1.FileName, false, GEDCOMUtils.GetEncodingByCharacterSet(this.FTree.Header.CharacterSet));
 				try
 				{
 					this.FTree.SaveHeaderToStream(fs);

@@ -13,8 +13,8 @@ namespace GedCom551
 
 		public TGEDCOMCharacterSet CharacterSet
 		{
-			get { return base.GetCharacterSetVal(base.GetTagStringValue("CHAR")); }
-			set { base.SetTagStringValue("CHAR", base.GetCharacterSetStr(value)); }
+			get { return GEDCOMUtils.GetCharacterSetVal(base.GetTagStringValue("CHAR")); }
+			set { base.SetTagStringValue("CHAR", GEDCOMUtils.GetCharacterSetStr(value)); }
 		}
 
 		public StringList Notes

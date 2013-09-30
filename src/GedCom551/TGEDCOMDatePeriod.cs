@@ -133,14 +133,14 @@ namespace GedCom551
 				if (Result.StartsWith("FROM"))
 				{
 					Result = Result.Remove(0, 4);
-					Result = base.ExtractDelimiter(Result, 0);
+					Result = GEDCOMUtils.ExtractDelimiter(Result, 0);
 					Result = this.FDateFrom.ParseString(Result);
-					Result = base.ExtractDelimiter(Result, 0);
+					Result = GEDCOMUtils.ExtractDelimiter(Result, 0);
 				}
 				if (Result.StartsWith("TO"))
 				{
 					Result = Result.Remove(0, 2);
-					Result = base.ExtractDelimiter(Result, 0);
+					Result = GEDCOMUtils.ExtractDelimiter(Result, 0);
 					Result = this.FDateTo.ParseString(Result);
 				}
 			}

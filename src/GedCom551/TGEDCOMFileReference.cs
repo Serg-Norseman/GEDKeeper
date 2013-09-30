@@ -7,14 +7,14 @@ namespace GedCom551
 	{
 		public TGEDCOMMultimediaFormat MultimediaFormat
 		{
-			get { return GetMultimediaFormatVal(base.GetTagStringValue("FORM").Trim().ToUpper()); }
-			set { base.SetTagStringValue("FORM", GetMultimediaFormatStr(value)); }
+			get { return GEDCOMUtils.GetMultimediaFormatVal(base.GetTagStringValue("FORM").Trim().ToUpper()); }
+			set { base.SetTagStringValue("FORM", GEDCOMUtils.GetMultimediaFormatStr(value)); }
 		}
 
 		public TGEDCOMMediaType MediaType
 		{
-			get { return GetMediaTypeVal(base.GetTagStringValue(this.MediaTypeTagName()).Trim().ToUpper()); }
-			set { base.SetTagStringValue(this.MediaTypeTagName(), GetMediaTypeStr(value)); }
+			get { return GEDCOMUtils.GetMediaTypeVal(base.GetTagStringValue(this.MediaTypeTagName()).Trim().ToUpper()); }
+			set { base.SetTagStringValue(this.MediaTypeTagName(), GEDCOMUtils.GetMediaTypeStr(value)); }
 		}
 
 		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)

@@ -371,7 +371,7 @@ namespace GedCom551
 
 			this.Pack();
 
-			using (StreamWriter fs = new StreamWriter(fileName, false, TGEDCOMObject.GetEncodingByCharacterSet(CharSet))) {
+			using (StreamWriter fs = new StreamWriter(fileName, false, GEDCOMUtils.GetEncodingByCharacterSet(CharSet))) {
 				this.SaveToStream(fs);
 				this.FHeader.CharacterSet = TGEDCOMCharacterSet.csASCII;
 			}
@@ -428,7 +428,7 @@ namespace GedCom551
 
 					if (S.Length != 0)
 					{
-						if (!IsDigit(S[0]))
+						if (!GEDCOMUtils.IsDigit(S[0]))
 						{
 							TGEDCOMTree.LoadFromStream_LineCorrect(CurRecord, CurTag, I + 1, S.Trim());
 						}
@@ -440,13 +440,13 @@ namespace GedCom551
 							string AValue;
 							try
 							{
-								S = TGEDCOMObject.ExtractNumber(S, out ALevel, false, 0);
-								S = base.ExtractDelimiter(S, 0);
-								S = base.ExtractXRef(S, out AXRef, true, "");
-								S = base.ExtractDelimiter(S, 0);
-								S = base.ExtractString(S, out ATag, "");
+								S = GEDCOMUtils.ExtractNumber(S, out ALevel, false, 0);
+								S = GEDCOMUtils.ExtractDelimiter(S, 0);
+								S = GEDCOMUtils.ExtractXRef(S, out AXRef, true, "");
+								S = GEDCOMUtils.ExtractDelimiter(S, 0);
+								S = GEDCOMUtils.ExtractString(S, out ATag, "");
 								ATag = ATag.ToUpperInvariant();
-								S = base.ExtractDelimiter(S, 1);
+								S = GEDCOMUtils.ExtractDelimiter(S, 1);
 								AValue = S;
 							}
 							catch (EGEDCOMException E)
@@ -544,7 +544,7 @@ namespace GedCom551
 							{
 								// temp hack
 								if (ATag == "CHAR") {
-									CharSet = base.GetCharacterSetVal(AValue);
+									CharSet = GEDCOMUtils.GetCharacterSetVal(AValue);
 								}
 								// end
 

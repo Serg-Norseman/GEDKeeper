@@ -198,7 +198,7 @@ namespace GedCom551
 
 			int I = 0;
 			int num = ((Result != null) ? Result.Length : 0);
-			while (I < num && IsDigit(Result[I]))
+			while (I < num && GEDCOMUtils.IsDigit(Result[I]))
 			{
 				I++;
 			}
@@ -217,11 +217,11 @@ namespace GedCom551
 			string Result;
 			if (this.FDateFormat == TGEDCOMDateFormat.dfSystem)
 			{
-				Result = base.ExtractDotDelimiter(S, 0);
+				Result = GEDCOMUtils.ExtractDotDelimiter(S, 0);
 			}
 			else
 			{
-				Result = base.ExtractDelimiter(S, 0);
+				Result = GEDCOMUtils.ExtractDelimiter(S, 0);
 			}
 			return Result;
 		}
@@ -265,7 +265,7 @@ namespace GedCom551
 
 					default:
 						{
-							if (!IsDigit(result[0]))
+							if (!GEDCOMUtils.IsDigit(result[0]))
 							{
 								DateTimeFormatInfo DateTimeInfo = Thread.CurrentThread.CurrentCulture.DateTimeFormat;
 								string SU = result.Substring(0, 3).ToUpper();
@@ -305,7 +305,7 @@ namespace GedCom551
 
 			int I = 0;
 			int num = ((Result != null) ? Result.Length : 0);
-			while (I < num && IsDigit(Result[I]))
+			while (I < num && GEDCOMUtils.IsDigit(Result[I]))
 			{
 				I++;
 			}
@@ -315,7 +315,7 @@ namespace GedCom551
 				this.FYear = int.Parse(Result.Substring(0, I));
 				Result = Result.Remove(0, I);
 
-				if (Result != "" && Result[0] == '/' && IsDigits(Result.Substring(1, 2)))
+				if (Result != "" && Result[0] == '/' && GEDCOMUtils.IsDigits(Result.Substring(1, 2)))
 				{
 					this.FYearModifier = Result.Substring(1, 2);
 					Result = Result.Remove(0, 3);
@@ -618,9 +618,9 @@ namespace GedCom551
 
 			if (!string.IsNullOrEmpty(Result))
 			{
-				Result = base.ExtractDelimiter(Result, 0);
+				Result = GEDCOMUtils.ExtractDelimiter(Result, 0);
 				Result = this.ExtractEscape(Result);
-				Result = base.ExtractDelimiter(Result, 0);
+				Result = GEDCOMUtils.ExtractDelimiter(Result, 0);
 				Result = this.ExtractDay(Result);
 				if (Result.Length > 0)
 				{

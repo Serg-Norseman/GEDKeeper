@@ -17,14 +17,14 @@ namespace GedCom551
 
 		public TResearchPriority Priority
 		{
-			get { return GetPriorityVal(base.GetTagStringValue("_PRIORITY").Trim().ToLower()); }
-			set { base.SetTagStringValue("_PRIORITY", GetPriorityStr(value)); }
+			get { return GEDCOMUtils.GetPriorityVal(base.GetTagStringValue("_PRIORITY").Trim().ToLower()); }
+			set { base.SetTagStringValue("_PRIORITY", GEDCOMUtils.GetPriorityStr(value)); }
 		}
 
 		public TResearchStatus Status
 		{
-			get { return GetStatusVal(base.GetTagStringValue("_STATUS").Trim().ToLower()); }
-			set { base.SetTagStringValue("_STATUS", GetStatusStr(value)); }
+			get { return GEDCOMUtils.GetStatusVal(base.GetTagStringValue("_STATUS").Trim().ToLower()); }
+			set { base.SetTagStringValue("_STATUS", GEDCOMUtils.GetStatusStr(value)); }
 		}
 
 		public TGEDCOMDateExact StartDate

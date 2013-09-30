@@ -115,6 +115,7 @@
     <Compile Include="Ext\ZipStorer.cs" />
     <Compile Include="GedCom551\GEDCOMEnums.cs" />
     <Compile Include="GedCom551\GEDCOMFactory.cs" />
+    <Compile Include="GedCom551\GEDCOMUtils.cs" />
     <Compile Include="GedCom551\TGEDCOMAddress.cs" />
     <Compile Include="GedCom551\TGEDCOMAlias.cs" />
     <Compile Include="GedCom551\TGEDCOMAssociation.cs" />

@@ -42,7 +42,7 @@ namespace GedCom551
 			int num = this.FList.Count - 1;
 			for (int i = 0; i <= num; i++)
 			{
-				if (CleanXRef(this.FList[i].OldXRef) == CleanXRef(oldXRef))
+				if (GEDCOMUtils.CleanXRef(this.FList[i].OldXRef) == GEDCOMUtils.CleanXRef(oldXRef))
 				{
 					result = this.FList[i].NewXRef;
 					break;

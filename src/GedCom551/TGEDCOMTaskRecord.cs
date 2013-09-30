@@ -12,8 +12,8 @@ namespace GedCom551
 
 		public TResearchPriority Priority
 		{
-			get { return GetPriorityVal(base.GetTagStringValue("_PRIORITY").Trim().ToLower()); }
-			set { base.SetTagStringValue("_PRIORITY", GetPriorityStr(value)); }
+			get { return GEDCOMUtils.GetPriorityVal(base.GetTagStringValue("_PRIORITY").Trim().ToLower()); }
+			set { base.SetTagStringValue("_PRIORITY", GEDCOMUtils.GetPriorityStr(value)); }
 		}
 
 		public TGEDCOMDateExact StartDate
@@ -63,7 +63,7 @@ namespace GedCom551
 		public void aux_GetTaskGoal(ref TGoalType aType, ref TGEDCOMRecord aGoalRec)
         {
             TGEDCOMTree tree = this.Owner;
-            aGoalRec = tree.XRefIndex_Find(TGEDCOMObject.CleanXRef(this.Goal));
+            aGoalRec = tree.XRefIndex_Find(GEDCOMUtils.CleanXRef(this.Goal));
 
             if (aGoalRec is TGEDCOMIndividualRecord)
             {

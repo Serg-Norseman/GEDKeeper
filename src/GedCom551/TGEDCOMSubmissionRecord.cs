@@ -30,8 +30,8 @@ namespace GedCom551
 
 		public TGEDCOMOrdinanceProcessFlag OrdinanceProcessFlag
 		{
-			get { return GetOrdinanceProcessFlagVal(base.GetTagStringValue("ORDI").Trim().ToUpper()); }
-			set { base.SetTagStringValue("ORDI", GetOrdinanceProcessFlagStr(value)); }
+			get { return GEDCOMUtils.GetOrdinanceProcessFlagVal(base.GetTagStringValue("ORDI").Trim().ToUpper()); }
+			set { base.SetTagStringValue("ORDI", GEDCOMUtils.GetOrdinanceProcessFlagStr(value)); }
 		}
 
 		public TGEDCOMPointer Submitter

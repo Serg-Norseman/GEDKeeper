@@ -47,14 +47,14 @@ namespace GedCom551
 
 		public TGEDCOMRestriction Restriction
 		{
-			get { return GetRestrictionVal(base.GetTagStringValue("RESN").Trim().ToUpper()); }
-			set { base.SetTagStringValue("RESN", GetRestrictionStr(value)); }
+			get { return GEDCOMUtils.GetRestrictionVal(base.GetTagStringValue("RESN").Trim().ToUpper()); }
+			set { base.SetTagStringValue("RESN", GEDCOMUtils.GetRestrictionStr(value)); }
 		}
 
 		public TGEDCOMSex Sex
 		{
-			get { return base.GetSexVal(base.GetTagStringValue("SEX").Trim().ToUpper()); }
-			set { base.SetTagStringValue("SEX", GetSexStr(value)); }
+			get { return GEDCOMUtils.GetSexVal(base.GetTagStringValue("SEX").Trim().ToUpper()); }
+			set { base.SetTagStringValue("SEX", GEDCOMUtils.GetSexStr(value)); }
 		}
 
 		public bool Bookmark

@@ -20,51 +20,44 @@ namespace GedCom551
 
 		protected override string GetStringValue()
 		{
-			return this.ApproximatedString(false) + base.GetStringValue();
+			string prefix;
+			if (this.FDateApproximated == TGEDCOMApproximated.daExact) {
+				prefix = "";
+			} else {
+				prefix = TGEDCOMDate.GEDCOMDateApproximatedArray[(int)this.FDateApproximated];
+				prefix += " ";
+			}
+
+			return prefix + base.GetStringValue();
 		}
 
-		private string ApproximatedString(bool NoDelimiter)
-		{
-			string Result;
-			if (this.FDateApproximated == TGEDCOMApproximated.daExact)
-			{
-				Result = "";
-			}
-			else
-			{
-				Result = TGEDCOMDate.GEDCOMDateApproximatedArray[(int)this.FDateApproximated];
-				if (!NoDelimiter)
-				{
-					Result += " ";
-				}
-			}
-			return Result;
-		}
-
+		// code-state: ugly
 		private string ExtractApproximated(string S)
 		{
-			string Result = S;
-			string SU = Result.Substring(0, 3).ToUpper();
+			string result = S;
+
+			string SU = result.Substring(0, 3).ToUpper();
 			TGEDCOMApproximated I = TGEDCOMApproximated.daAbout;
 			while (SU != TGEDCOMDate.GEDCOMDateApproximatedArray[(int)I])
 			{
 				I++;
 				if (I == (TGEDCOMApproximated)4)
 				{
-					return Result;
+					return result;
 				}
 			}
 			this.FDateApproximated = I;
-			Result = Result.Remove(0, 3);
-			return Result;
+			result = result.Remove(0, 3);
+
+			return result;
 		}
 
 		public override string ParseString(string S)
 		{
-			string Result = base.ExtractDelimiter(S, 0);
-			Result = this.ExtractApproximated(Result);
-			Result = base.ExtractDelimiter(Result, 0);
-			return base.ParseString(Result);
+			string result = GEDCOMUtils.ExtractDelimiter(S, 0);
+			result = this.ExtractApproximated(result);
+			result = GEDCOMUtils.ExtractDelimiter(result, 0);
+			return base.ParseString(result);
 		}
 
 		public TGEDCOMDateApproximated(TGEDCOMTree owner, TGEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

@@ -282,12 +282,12 @@ namespace GKCore
 			int mar_id = -1;
 
 			string S = this.DeleteBlanks(p_id);
-			S = TGEDCOMObject.ExtractNumber(S, out self_id, true, -1);
+			S = GEDCOMUtils.ExtractNumber(S, out self_id, true, -1);
 
 			if (S != "" && S[0] == '-')
 			{
 				S = S.Remove(0, 1);
-				S = TGEDCOMObject.ExtractNumber(S, out parent_id, true, -1);
+				S = GEDCOMUtils.ExtractNumber(S, out parent_id, true, -1);
 
 				if (S != "" && S[0] == '(')
 				{
@@ -298,7 +298,7 @@ namespace GKCore
 				if (S != "" && S[0] == '/')
 				{
 					S = S.Remove(0, 1);
-					S = TGEDCOMObject.ExtractNumber(S, out mar_id, true, -1);
+					S = GEDCOMUtils.ExtractNumber(S, out mar_id, true, -1);
 				}
 			}
 
@@ -467,7 +467,7 @@ namespace GKCore
 
 							// number of spouse
 							int num;
-							s = TGEDCOMObject.ExtractNumber(s, out num, true, 1);
+							s = GEDCOMUtils.ExtractNumber(s, out num, true, 1);
 
 							// skip blanks
                             s = SysUtils.TrimChars(s, ' ');

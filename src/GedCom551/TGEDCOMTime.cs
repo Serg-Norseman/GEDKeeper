@@ -96,29 +96,29 @@ namespace GedCom551
 			string result = AString;
 			if (!string.IsNullOrEmpty(result))
 			{
-				result = base.ExtractDelimiter(result, 0);
+				result = GEDCOMUtils.ExtractDelimiter(result, 0);
 
 				int tmp;
-				result = TGEDCOMObject.ExtractNumber(result, out tmp, false, 0);
+				result = GEDCOMUtils.ExtractNumber(result, out tmp, false, 0);
 				this.FHour = (ushort)tmp;
 				if (result != "" && result[0] == ':')
 				{
 					result = result.Remove(0, 1);
 				}
 
-				result = TGEDCOMObject.ExtractNumber(result, out tmp, false, 0);
+				result = GEDCOMUtils.ExtractNumber(result, out tmp, false, 0);
 				this.FMinutes = (ushort)tmp;
 				if (result != "" && result[0] == ':')
 				{
 					result = result.Remove(0, 1);
 
-					result = TGEDCOMObject.ExtractNumber(result, out tmp, false, 0);
+					result = GEDCOMUtils.ExtractNumber(result, out tmp, false, 0);
 					this.FSeconds = (ushort)tmp;
 					if (result != "" && result[0] == '.')
 					{
 						result = result.Remove(0, 1);
 
-						result = TGEDCOMObject.ExtractNumber(result, out tmp, false, 0);
+						result = GEDCOMUtils.ExtractNumber(result, out tmp, false, 0);
 						this.FFraction = (ushort)tmp;
 					}
 				}

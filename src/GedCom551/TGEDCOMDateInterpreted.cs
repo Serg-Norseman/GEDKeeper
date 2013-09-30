@@ -87,14 +87,14 @@ namespace GedCom551
 			string Result = S;
 			if (!string.IsNullOrEmpty(Result))
 			{
-				Result = base.ExtractDelimiter(Result, 0);
+				Result = GEDCOMUtils.ExtractDelimiter(Result, 0);
 				if (Result.Substring(0, 3).ToUpper() == "INT")
 				{
 					Result = Result.Remove(0, 3);
 				}
-				Result = base.ExtractDelimiter(Result, 0);
+				Result = GEDCOMUtils.ExtractDelimiter(Result, 0);
 				Result = base.ParseString(Result);
-				Result = base.ExtractDelimiter(Result, 0);
+				Result = GEDCOMUtils.ExtractDelimiter(Result, 0);
 				Result = this.ExtractPhrase(Result);
 			}
 			return Result;

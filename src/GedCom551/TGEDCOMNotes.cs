@@ -113,7 +113,7 @@ namespace GedCom551
 			string Result = AString;
 			if (!string.IsNullOrEmpty(Result))
 			{
-				Result = base.ExtractDelimiter(Result, 0);
+				Result = GEDCOMUtils.ExtractDelimiter(Result, 0);
 				Result = base.ParseString(Result);
 				if (!this.IsPointer)
 				{

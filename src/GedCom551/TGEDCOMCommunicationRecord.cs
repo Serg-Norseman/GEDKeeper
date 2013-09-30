@@ -20,8 +20,8 @@ namespace GedCom551
 
 		public TCommunicationType CommunicationType
 		{
-			get { return GetCommunicationTypeVal(base.GetTagStringValue("TYPE").Trim().ToLower()); }
-			set { base.SetTagStringValue("TYPE", GetCommunicationTypeStr(value)); }
+			get { return GEDCOMUtils.GetCommunicationTypeVal(base.GetTagStringValue("TYPE").Trim().ToLower()); }
+			set { base.SetTagStringValue("TYPE", GEDCOMUtils.GetCommunicationTypeStr(value)); }
 		}
 
 		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)
@@ -61,7 +61,7 @@ namespace GedCom551
 			}
 			if (cr_tag != null)
 			{
-				aCorresponder = (this.FOwner.XRefIndex_Find(TGEDCOMObject.CleanXRef(cr_tag.StringValue)) as TGEDCOMIndividualRecord);
+				aCorresponder = (this.FOwner.XRefIndex_Find(GEDCOMUtils.CleanXRef(cr_tag.StringValue)) as TGEDCOMIndividualRecord);
 				if (cr_tag.Name == "FROM")
 				{
 					aDir = TCommunicationDir.cdFrom;
@@ -82,7 +82,7 @@ namespace GedCom551
 			base.DeleteTag("TO");
 			if (aCorresponder != null)
 			{
-				this.AddTag(TGEDCOMCommunicationRecord.CommunicationTags[(int)aDir], TGEDCOMObject.EncloseXRef(aCorresponder.XRef), null);
+				this.AddTag(TGEDCOMCommunicationRecord.CommunicationTags[(int)aDir], GEDCOMUtils.EncloseXRef(aCorresponder.XRef), null);
 			}
 		}
 

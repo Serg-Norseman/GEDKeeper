@@ -47,8 +47,8 @@ namespace GedCom551
 
 		public TGEDCOMRestriction Restriction
 		{
-			get { return GetRestrictionVal(base.GetTagStringValue("RESN").Trim().ToUpper()); }
-			set { base.SetTagStringValue("RESN", GetRestrictionStr(value)); }
+			get { return GEDCOMUtils.GetRestrictionVal(base.GetTagStringValue("RESN").Trim().ToUpper()); }
+			set { base.SetTagStringValue("RESN", GEDCOMUtils.GetRestrictionStr(value)); }
 		}
 
 		protected override void CreateObj(TGEDCOMTree owner, TGEDCOMObject parent)

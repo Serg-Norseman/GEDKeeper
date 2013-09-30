@@ -6,14 +6,14 @@ namespace GedCom551
 	{
 		public TGEDCOMChildLinkageStatus ChildLinkageStatus
 		{
-			get { return GetChildLinkageStatusVal(base.GetTagStringValue("STAT").Trim().ToLower()); }
-			set { base.SetTagStringValue("STAT", GetChildLinkageStatusStr(value)); }
+			get { return GEDCOMUtils.GetChildLinkageStatusVal(base.GetTagStringValue("STAT").Trim().ToLower()); }
+			set { base.SetTagStringValue("STAT", GEDCOMUtils.GetChildLinkageStatusStr(value)); }
 		}
 
 		public TGEDCOMPedigreeLinkageType PedigreeLinkageType
 		{
-			get { return GetPedigreeLinkageTypeVal(base.GetTagStringValue("PEDI").Trim().ToLower()); }
-			set { base.SetTagStringValue("PEDI", GetPedigreeLinkageTypeStr(value)); }
+			get { return GEDCOMUtils.GetPedigreeLinkageTypeVal(base.GetTagStringValue("PEDI").Trim().ToLower()); }
+			set { base.SetTagStringValue("PEDI", GEDCOMUtils.GetPedigreeLinkageTypeStr(value)); }
 		}
 
 		public TGEDCOMFamilyRecord Family
