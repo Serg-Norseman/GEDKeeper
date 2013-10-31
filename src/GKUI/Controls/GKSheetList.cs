@@ -11,9 +11,38 @@ using GKCore;
 
 namespace GKUI.Controls
 {
+	public class ModifyEventArgs : EventArgs
+	{
+		private readonly TRecAction fAction;
+		private object fItemData;
+
+		public TRecAction Action
+		{
+			get {
+				return this.fAction;
+			}
+		}
+
+		public object ItemData
+		{
+			get {
+				return this.fItemData;
+			}
+			set {
+				this.fItemData = value;
+			}
+		}
+
+		public ModifyEventArgs(TRecAction action, object itemData)
+		{
+			this.fAction = action;
+			this.fItemData = itemData;
+		}
+	}
+
 	public sealed class GKSheetList : ContainerControl, IDisposable
 	{
-		public delegate void TModifyEvent(object Sender, object ItemData, TRecAction Action);
+		public delegate void ModifyEventHandler(object sender, ModifyEventArgs eArgs);
 
 		public enum TListButton : byte
 		{
@@ -34,10 +63,10 @@ namespace GKUI.Controls
 		private ToolBar FToolBar;
 		private EnumSet FButtons;
 		private GKListView FList;
-		private GKSheetList.TModifyEvent FOnModify;
+		private GKSheetList.ModifyEventHandler FOnModify;
 		private bool FReadOnly;
 
-		public event GKSheetList.TModifyEvent OnModify
+		public event GKSheetList.ModifyEventHandler OnModify
 		{
 			add
 			{
@@ -242,51 +271,76 @@ namespace GKUI.Controls
 			base.Dispose(Disposing);
 		}
 
+		private void RestoreSelected(object itemData)
+		{
+			if (itemData != null) this.FList.SelectItem(itemData);
+		}
+
 		private void ItemAdd()
 		{
+			object itemData = null;
 			if (!this.FReadOnly && this.FOnModify != null)
 			{
-				this.FOnModify(this, null, TRecAction.raAdd);
+				ModifyEventArgs eArgs = new ModifyEventArgs(TRecAction.raAdd, itemData);
+				this.FOnModify(this, eArgs);
+
+				this.RestoreSelected(eArgs.ItemData);
 			}
 		}
 
 		private void ItemEdit()
 		{
-			if (!this.FReadOnly && this.FOnModify != null && this.GetSelectedData() != null)
+			object itemData = this.GetSelectedData();
+			if (!this.FReadOnly && this.FOnModify != null && itemData != null)
 			{
-				this.FOnModify(this, this.GetSelectedData(), TRecAction.raEdit);
+				ModifyEventArgs eArgs = new ModifyEventArgs(TRecAction.raEdit, itemData);
+				this.FOnModify(this, eArgs);
+				
+				this.RestoreSelected(eArgs.ItemData);
 			}
 		}
 
 		private void ItemDelete()
 		{
-			if (!this.FReadOnly && this.FOnModify != null && this.GetSelectedData() != null)
+			object itemData = this.GetSelectedData();
+			if (!this.FReadOnly && this.FOnModify != null && itemData != null)
 			{
-				this.FOnModify(this, this.GetSelectedData(), TRecAction.raDelete);
+				ModifyEventArgs eArgs = new ModifyEventArgs(TRecAction.raDelete, itemData);
+				this.FOnModify(this, eArgs);
 			}
 		}
 
 		private void ItemJump()
 		{
-			if (this.FOnModify != null && this.GetSelectedData() != null)
+			object itemData = this.GetSelectedData();
+			if (this.FOnModify != null && itemData != null)
 			{
-				this.FOnModify(this, this.GetSelectedData(), TRecAction.raJump);
+				ModifyEventArgs eArgs = new ModifyEventArgs(TRecAction.raJump, itemData);
+				this.FOnModify(this, eArgs);
 			}
 		}
 
 		private void ItemMoveUp()
 		{
-			if (!this.FReadOnly && this.FOnModify != null && this.GetSelectedData() != null)
+			object itemData = this.GetSelectedData();
+			if (!this.FReadOnly && this.FOnModify != null && itemData != null)
 			{
-				this.FOnModify(this, this.GetSelectedData(), TRecAction.raMoveUp);
+				ModifyEventArgs eArgs = new ModifyEventArgs(TRecAction.raMoveUp, itemData);
+				this.FOnModify(this, eArgs);
+				
+				this.RestoreSelected(eArgs.ItemData);
 			}
 		}
 
 		private void ItemMoveDown()
 		{
-			if (!this.FReadOnly && this.FOnModify != null && this.GetSelectedData() != null)
+			object itemData = this.GetSelectedData();
+			if (!this.FReadOnly && this.FOnModify != null && itemData != null)
 			{
-				this.FOnModify(this, this.GetSelectedData(), TRecAction.raMoveDown);
+				ModifyEventArgs eArgs = new ModifyEventArgs(TRecAction.raMoveDown, itemData);
+				this.FOnModify(this, eArgs);
+				
+				this.RestoreSelected(eArgs.ItemData);
 			}
 		}
 
@@ -306,9 +360,9 @@ namespace GKUI.Controls
 		{
 		}
 
-		public void AddColumn(string aCaption, int aWidth, bool aAutoSize)
+		public void AddColumn(string caption, int width, bool autoSize)
 		{
-			this.FList.AddListColumn(aCaption, aWidth, aAutoSize);
+			this.FList.AddListColumn(caption, width, autoSize);
 		}
 	}
 }

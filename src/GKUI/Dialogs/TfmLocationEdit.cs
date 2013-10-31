@@ -38,22 +38,20 @@ namespace GKUI
 			this.Base.RecListMediaRefresh(this.FLocationRecord, this.FMediaList.List, null);
 		}
 
-		private void ListModify(object Sender, object ItemData, TRecAction Action)
+		private void ListModify(object sender, ModifyEventArgs eArgs)
 		{
-			if (object.Equals(Sender, this.FNotesList))
+			bool res = false;
+
+			if (sender == this.FNotesList)
 			{
-				if (this.Base.ModifyRecNote(this, this.FLocationRecord, ItemData as TGEDCOMNotes, Action))
-				{
-					this.ControlsRefresh();
-				}
+				res = (this.Base.ModifyRecNote(this, this.FLocationRecord, eArgs.ItemData as TGEDCOMNotes, eArgs.Action));
 			}
-			else
+			else if (sender == this.FMediaList)
 			{
-				if (object.Equals(Sender, this.FMediaList) && this.Base.ModifyRecMultimedia(this, this.FLocationRecord, ItemData as TGEDCOMMultimediaLink, Action))
-				{
-					this.ControlsRefresh();
-				}
+				res = this.Base.ModifyRecMultimedia(this, this.FLocationRecord, eArgs.ItemData as TGEDCOMMultimediaLink, eArgs.Action);
 			}
+
+			if (res) this.ControlsRefresh();
 		}
 
 		private void SetLocationRecord(TGEDCOMLocationRecord Value)
@@ -189,11 +187,11 @@ namespace GKUI
 			this.panMap.Controls.Add(this.FMapBrowser);
 
 			this.FNotesList = new GKSheetList(this.SheetNotes);
-			this.FNotesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FNotesList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.Base.SetupRecNotesList(this.FNotesList);
 
 			this.FMediaList = new GKSheetList(this.SheetMultimedia);
-			this.FMediaList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FMediaList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.Base.SetupRecMediaList(this.FMediaList);
 
 			this.FSearchPoints = new TList(true);

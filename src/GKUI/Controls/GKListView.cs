@@ -131,10 +131,10 @@ namespace GKUI.Controls
 
 		public GKListItem AddItem(string title, object data)
 		{
-			GKListItem Result = new GKListItem(title);
-			Result.Data = data;
-			base.Items.Add(Result);
-			return Result;
+			GKListItem result = new GKListItem(title);
+			result.Data = data;
+			base.Items.Add(result);
+			return result;
 		}
 
 		public GKListItem SelectedItem()
@@ -193,13 +193,32 @@ namespace GKUI.Controls
 			return Result;
 		}
 
+		public void SelectItem(ListViewItem item)
+		{
+			if (item != null) {
+				this.SelectedIndices.Clear();
+				item.Selected = true;
+				item.EnsureVisible();
+			}
+		}
+
 		public void SelectItem(int index)
 		{
 			if (index >= 0 && index < this.Items.Count) {
 				ListViewItem item = this.Items[index];
-				this.SelectedIndices.Clear();
-				item.Selected = true;
-				item.EnsureVisible();
+				this.SelectItem(item);
+			}
+		}
+
+		public void SelectItem(object data)
+		{
+			GKListItem item;
+			for (int i = 0; i < this.Items.Count; i++) {
+				item = this.Items[i] as GKListItem;
+				if (item.Data == data) {
+					this.SelectItem(item);
+					return;
+				}
 			}
 		}
 	}

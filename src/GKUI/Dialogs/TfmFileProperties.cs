@@ -22,7 +22,7 @@ namespace GKUI
 
 		private void UpdateControls()
 		{
-			TGEDCOMSubmitterRecord submitter = this.Base.Engine.Tree.aux_GetSubmitter();
+			TGEDCOMSubmitterRecord submitter = this.Base.Tree.aux_GetSubmitter();
 			this.EditName.Text = submitter.Name.FullName;
 			this.MemoAddress.Text = submitter.Address.Address.Text;
 
@@ -35,7 +35,7 @@ namespace GKUI
 		{
 			try
 			{
-				TGEDCOMSubmitterRecord submitter = this.Base.Engine.Tree.aux_GetSubmitter();
+				TGEDCOMSubmitterRecord submitter = this.Base.Tree.aux_GetSubmitter();
 				submitter.Name.StringValue = this.EditName.Text;
 				submitter.Address.SetAddressArray(this.MemoAddress.Lines);
 

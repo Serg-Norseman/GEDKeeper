@@ -157,7 +157,7 @@ namespace GKUI.Charts
 		private int FBranchDistance;
 		private int FDepthLimit;
 		private Font FDrawFont;
-		private TGenEngine FEngine;
+		private MediaManager FMedia;
 		private TChartFilter FFilter;
 		private TGraph FGraph;
 		private TChartKind FKind;
@@ -224,12 +224,6 @@ namespace GKUI.Charts
 		public Font DrawFont
 		{
 			get { return this.FDrawFont; }
-		}
-
-		public TGenEngine Engine
-		{
-			get { return this.FEngine; }
-			set { this.FEngine = value; }
 		}
 
 		public TChartFilter Filter
@@ -335,6 +329,12 @@ namespace GKUI.Charts
 			set { this.FTree = value; }
 		}
 
+		public MediaManager Media
+		{
+			get { return this.FMedia; }
+			set { this.FMedia = value; }
+		}
+
 		/*protected override CreateParams CreateParams
 		{ 
 			get {
@@ -428,7 +428,7 @@ namespace GKUI.Charts
 
 		private bool IsChildless(TGEDCOMIndividualRecord iRec)
 		{
-			string exp = TGenEngine.GetLifeExpectancy(iRec);
+			string exp = GKUtils.GetLifeExpectancy(iRec);
 			return (exp != "" && exp != "?" && int.Parse(exp) < 15);
 		}
 
@@ -491,13 +491,13 @@ namespace GKUI.Charts
 					bool is_dup = (this.FPreparedFamilies.IndexOf(family.XRef) >= 0);
 					if (!is_dup) this.FPreparedFamilies.Add(family.XRef);
 
-					if (TGenEngine.IsRecordAccess(family.Restriction, this.FShieldState))
+					if (GKUtils.IsRecordAccess(family.Restriction, this.FShieldState))
 					{
 						TGEDCOMIndividualRecord iFather = family.Husband.Value as TGEDCOMIndividualRecord;
 						TGEDCOMIndividualRecord iMother = family.Wife.Value as TGEDCOMIndividualRecord;
 						bool divorced = (family.GetTagStringValue("_STAT") == "NOTMARR");
 
-						if (iFather != null && TGenEngine.IsRecordAccess(iFather.Restriction, this.FShieldState))
+						if (iFather != null && GKUtils.IsRecordAccess(iFather.Restriction, this.FShieldState))
 						{
 							Result.Father = this.DoAncestorsStep(Result, iFather, aGeneration + 1, is_dup);
 							if (Result.Father != null)
@@ -513,7 +513,7 @@ namespace GKUI.Charts
 							Result.Father = null;
 						}
 
-						if (iMother != null && TGenEngine.IsRecordAccess(iMother.Restriction, this.FShieldState))
+						if (iMother != null && GKUtils.IsRecordAccess(iMother.Restriction, this.FShieldState))
 						{
 							Result.Mother = this.DoAncestorsStep(Result, iMother, aGeneration + 1, is_dup);
 							if (Result.Mother != null)
@@ -600,7 +600,7 @@ namespace GKUI.Charts
 					bool is_dup = (this.FPreparedFamilies.IndexOf(family.XRef) >= 0);
 					if (!is_dup) this.FPreparedFamilies.Add(family.XRef);
 
-					if (TGenEngine.IsRecordAccess(family.Restriction, this.FShieldState))
+					if (GKUtils.IsRecordAccess(family.Restriction, this.FShieldState))
 					{
 						TreeChartPerson res_parent = null;
 						TGEDCOMSex sex = aPerson.Sex;
@@ -657,7 +657,7 @@ namespace GKUI.Charts
 							for (int j = 0; j <= num2; j++)
 							{
 								TGEDCOMIndividualRecord child_rec = family.Childrens[j].Value as TGEDCOMIndividualRecord;
-								if (TGenEngine.IsRecordAccess(child_rec.Restriction, this.FShieldState))
+								if (GKUtils.IsRecordAccess(child_rec.Restriction, this.FShieldState))
 								{
 									TreeChartPerson child = this.DoDescendantsStep(res_parent, child_rec, aLevel + 1);
 									if (child != null)
@@ -1889,7 +1889,7 @@ namespace GKUI.Charts
 
 			if ((ext == ".bmp" || ext == ".jpg") && this.FImageWidth >= 65535)
 			{
-				TGenEngine.ShowError(LangMan.LSList[380]);
+				GKUtils.ShowError(LangMan.LSList[380]);
 			}
 			else
 			{
@@ -1988,7 +1988,7 @@ namespace GKUI.Charts
 			if (animation) {
 					TweenLibrary tween = new TweenLibrary();
 					tween.startTweenEvent(delegate(int newX, int newY) { this.LeftPos = newX; this.TopPos = newY; },
-					                      this.LeftPos, this.TopPos, dst_x, dst_y, "easeinoutquad", 50);
+					                      this.LeftPos, this.TopPos, dst_x, dst_y, AnimType.easeInOutQuad, 20);
 			} else {
 				this.LeftPos = dst_x; 
 				this.TopPos = dst_y;
@@ -2003,7 +2003,7 @@ namespace GKUI.Charts
 				TChartFilter.TBranchCut branchCut = this.FFilter.BranchCut;
 				switch (branchCut) {
 					case TChartFilter.TBranchCut.bcYears:
-						int year = TGenEngine.GetIndependentYear(aPerson, "BIRT");
+						int year = GKUtils.GetIndependentYear(aPerson, "BIRT");
 						Result = (year >= this.FFilter.BranchYear);
 						break;
 

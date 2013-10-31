@@ -67,9 +67,9 @@ namespace GKUI.Lists
 				case 2:
 					return LangMan.LSList[(int)GKData.StatusNames[(int)this.FRec.Status] - 1];
 				case 3:
-					return TGenEngine.GEDCOMDateToStr(this.FRec.StartDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
+					return GKUtils.GEDCOMDateToStr(this.FRec.StartDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
 				case 4:
-					return TGenEngine.GEDCOMDateToStr(this.FRec.StopDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
+					return GKUtils.GEDCOMDateToStr(this.FRec.StopDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
 				case 5:
 					return this.FRec.Percent;
 				case 6:

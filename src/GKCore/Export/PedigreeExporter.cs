@@ -48,7 +48,7 @@ namespace GKCore.Export
 
 			public DateTime GetDate()
 			{
-				DateTime Result = ((this.Event == null) ? new DateTime(0) : TGenEngine.GEDCOMDateToDate(this.Event.Detail.Date));
+				DateTime Result = ((this.Event == null) ? new DateTime(0) : GKUtils.GEDCOMDateToDate(this.Event.Detail.Date));
 				return Result;
 			}
 		}
@@ -178,9 +178,9 @@ namespace GKCore.Export
 
 		private void WriteExcessFmt(TPersonObj person)
 		{
-			fDocument.Add(new Paragraph(LangMan.LSList[87] + ": " + TGenEngine.SexStr(person.iRec.Sex), text_font));
+			fDocument.Add(new Paragraph(LangMan.LSList[87] + ": " + GKUtils.SexStr(person.iRec.Sex), text_font));
 
-			string st = TGenEngine.GetLifeExpectancy(person.iRec);
+			string st = GKUtils.GetLifeExpectancy(person.iRec);
 			if (st != "?" && st != "") {
 				fDocument.Add(new Paragraph(LangMan.LSList[306] + ": " + st, text_font));
 			}
@@ -224,7 +224,7 @@ namespace GKCore.Export
 				for (i = 0; i <= num2; i++)
 				{
 					TGEDCOMFamilyRecord family = person.iRec.SpouseToFamilyLinks[i].Family;
-					if (TGenEngine.IsRecordAccess(family.Restriction, this.FShieldState))
+					if (GKUtils.IsRecordAccess(family.Restriction, this.FShieldState))
 					{
 						TGEDCOMPointer sp;
 						string unk;
@@ -253,7 +253,7 @@ namespace GKCore.Export
 						for (int j = 0; j <= num3; j++)
 						{
 							irec = (family.Childrens[j].Value as TGEDCOMIndividualRecord);
-							ev_list.Add(new TEventObj(TGenEngine.GetIndividualEvent(irec, "BIRT"), irec));
+							ev_list.Add(new TEventObj(GKUtils.GetIndividualEvent(irec, "BIRT"), irec));
 						}
 						this.WriteEventList(person, ev_list);
 					}
@@ -276,7 +276,7 @@ namespace GKCore.Export
 				for (int i = 0; i <= num4; i++)
 				{
 					TGEDCOMNotes note = person.iRec.Notes[i];
-					list.Add(new it.ListItem(new Chunk(" " + TGenEngine.ConStrings(note.Notes), text_font)));
+					list.Add(new it.ListItem(new Chunk(" " + GKUtils.ConStrings(note.Notes), text_font)));
 				}
 				fDocument.Add(list);
 			}
@@ -290,7 +290,7 @@ namespace GKCore.Export
 				for (int i = 0; i <= num; i++)
 				{
 					TGEDCOMNotes note = person.iRec.Notes[i];
-					fDocument.Add(new Paragraph(TGenEngine.ConStrings(note.Notes), text_font));
+					fDocument.Add(new Paragraph(GKUtils.ConStrings(note.Notes), text_font));
 				}
 			}
 
@@ -302,7 +302,7 @@ namespace GKCore.Export
 				for (int i = 0; i <= num2; i++)
 				{
 					TGEDCOMFamilyRecord family = person.iRec.SpouseToFamilyLinks[i].Family;
-					if (TGenEngine.IsRecordAccess(family.Restriction, this.FShieldState))
+					if (GKUtils.IsRecordAccess(family.Restriction, this.FShieldState))
 					{
 						TGEDCOMPointer sp;
 						string st;
@@ -355,8 +355,8 @@ namespace GKCore.Export
 			{
 				if (format == PedigreeOptions.TPedigreeFormat.pfCompact)
 				{
-					string ds = TGenEngine.GetBirthDate(iRec, TDateFormat.dfDD_MM_YYYY, true);
-					string ps = TGenEngine.GetBirthPlace(iRec);
+					string ds = GKUtils.GetBirthDate(iRec, TDateFormat.dfDD_MM_YYYY, true);
+					string ps = GKUtils.GetBirthPlace(iRec);
 					if (ps != "")
 					{
 						if (ds != "")
@@ -370,8 +370,8 @@ namespace GKCore.Export
 						ds = "*" + ds;
 					}
 					res_str += ds;
-					ds = TGenEngine.GetDeathDate(iRec, TDateFormat.dfDD_MM_YYYY, true);
-					ps = TGenEngine.GetDeathPlace(iRec);
+					ds = GKUtils.GetDeathDate(iRec, TDateFormat.dfDD_MM_YYYY, true);
+					ps = GKUtils.GetDeathPlace(iRec);
 					if (ps != "")
 					{
 						if (ds != "")
@@ -392,16 +392,16 @@ namespace GKCore.Export
 			}
 			else
 			{
-				string ds = TGenEngine.GetBirthDate(iRec, TDateFormat.dfDD_MM_YYYY, true);
+				string ds = GKUtils.GetBirthDate(iRec, TDateFormat.dfDD_MM_YYYY, true);
 				if (ds == "")
 				{
 					ds = "?";
 				}
 				res_str += ds;
-				ds = TGenEngine.GetDeathDate(iRec, TDateFormat.dfDD_MM_YYYY, true);
+				ds = GKUtils.GetDeathDate(iRec, TDateFormat.dfDD_MM_YYYY, true);
 				if (ds == "")
 				{
-					TGEDCOMCustomEvent ev = TGenEngine.GetIndividualEvent(iRec, "DEAT");
+					TGEDCOMCustomEvent ev = GKUtils.GetIndividualEvent(iRec, "DEAT");
 					if (ev != null)
 					{
 						ds = "?";
@@ -467,7 +467,7 @@ namespace GKCore.Export
 				Paragraph p = new Paragraph();
 				if (object.Equals(evObj.iRec, aPerson.iRec))
 				{
-					int ev = TGenEngine.GetPersonEventIndex(evt.Name);
+					int ev = GKUtils.GetPersonEventIndex(evt.Name);
 					string st;
 					if (ev == 0) {
 						st = evt.Detail.Classification;
@@ -479,7 +479,7 @@ namespace GKCore.Export
 						}
 					}
 
-					string dt = TGenEngine.GEDCOMCustomDateToStr(evt.Detail.Date, TDateFormat.dfDD_MM_YYYY, false);
+					string dt = GKUtils.GEDCOMCustomDateToStr(evt.Detail.Date, TDateFormat.dfDD_MM_YYYY, false);
 					li = dt + ": " + st + ".";
 					if (evt.Detail.Place.StringValue != "")
 					{
@@ -490,7 +490,7 @@ namespace GKCore.Export
 				}
 				else
 				{
-					string dt = (evt == null) ? "?" : TGenEngine.GEDCOMCustomDateToStr(evt.Detail.Date, TDateFormat.dfDD_MM_YYYY, false);
+					string dt = (evt == null) ? "?" : GKUtils.GEDCOMCustomDateToStr(evt.Detail.Date, TDateFormat.dfDD_MM_YYYY, false);
 					string st;
 					if (evObj.iRec.Sex == TGEDCOMSex.svMale) {
 						st = ": Родился ";
@@ -517,7 +517,7 @@ namespace GKCore.Export
 
 				if (this.FAncestor == null)
 				{
-					TGenEngine.ShowError(LangMan.LSList[209]);
+					GKUtils.ShowError(LangMan.LSList[209]);
 				}
 				else
 				{
@@ -526,7 +526,7 @@ namespace GKCore.Export
 					fDocument.AddTitle("Pedigree");
 					fDocument.AddSubject("Pedigree");
 					fDocument.AddAuthor("");
-					fDocument.AddCreator(TGenEngine.AppTitle);
+					fDocument.AddCreator(GKData.AppTitle);
 					fDocument.Open();
 
 					BaseFont base_font = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Times.ttf"), BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
@@ -588,7 +588,7 @@ namespace GKCore.Export
 			}
 		}
 
-		public PedigreeExporter(TGenEngine engine) : base(engine)
+		public PedigreeExporter(TGEDCOMTree tree) : base(tree)
 		{
 		}
 
@@ -601,7 +601,7 @@ namespace GKCore.Export
 				res.iRec = iRec;
 				res.Level = level;
 				res.ChildIdx = 0;
-				res.BirthDate = TGenEngine.GetBirthDate(iRec, TDateFormat.dfYYYY_MM_DD, true);
+				res.BirthDate = GKUtils.GetBirthDate(iRec, TDateFormat.dfYYYY_MM_DD, true);
 				res.FamilyOrder = familyOrder;
 				this.FPersonList.Add(res);
 
@@ -616,7 +616,7 @@ namespace GKCore.Export
 						TGEDCOMSourceRecord sourceRec = iRec.SourceCitations[i].Value as TGEDCOMSourceRecord;
 
 						if (sourceRec != null) {
-							string src_name = TGenEngine.ConStrings(sourceRec.Title);
+							string src_name = GKUtils.ConStrings(sourceRec.Title);
 							if (src_name == "") {
 								src_name = sourceRec.FiledByEntry;
 							}
@@ -635,7 +635,7 @@ namespace GKCore.Export
 				for (j = 0; j <= num2; j++)
 				{
 					TGEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[j].Family;
-					if (TGenEngine.IsRecordAccess(family.Restriction, this.FShieldState))
+					if (GKUtils.IsRecordAccess(family.Restriction, this.FShieldState))
 					{
 						family.aux_SortChilds();
 

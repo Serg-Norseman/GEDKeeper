@@ -32,30 +32,28 @@ namespace GKUI
 			set	{ this.FFilter = value;	}
 		}
 
-		private void ListModify(object Sender, object ItemData, TRecAction Action)
+		private void ListModify(object sender, ModifyEventArgs eArgs)
 		{
-			if (object.Equals(Sender, this.FPersonsList))
-			{
-                TGEDCOMIndividualRecord i_rec = (Action == TRecAction.raAdd) ? null : ItemData as TGEDCOMIndividualRecord;
+			if (sender == this.FPersonsList) {
+                TGEDCOMIndividualRecord i_rec = eArgs.ItemData as TGEDCOMIndividualRecord;
 
-                switch (Action)
+                switch (eArgs.Action)
                 {
                     case TRecAction.raAdd:
 					    i_rec = this.Base.SelectPerson(null, TTargetMode.tmNone, TGEDCOMSex.svNone);
-					    if (i_rec != null)
-					    {
+					    if (i_rec != null) {
 						    this.FTemp = this.FTemp + i_rec.XRef + ";";
 					    }
                         break;
 
                     case TRecAction.raDelete:
-						if (i_rec != null)
-						{
+						if (i_rec != null) {
 							this.FTemp = this.FTemp.Replace(i_rec.XRef + ";", "");
 						}
                         break;
                 }
 			}
+
 			this.UpdateControls();
 		}
 
@@ -215,7 +213,7 @@ namespace GKUI
 				GKSheetList.TListButton.lbAdd, 
 				GKSheetList.TListButton.lbDelete
 			});
-			this.FPersonsList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FPersonsList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.FPersonsList.List.AddListColumn(LangMan.LSList[52], 350, false);
 
 			this.btnAccept.Text = LangMan.LSList[97];

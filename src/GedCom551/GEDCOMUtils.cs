@@ -12,13 +12,13 @@ namespace GedCom551
 
 		public static string ExtractDelimiter(string S, int Max)
 		{
-			string Result = S;
+			string result = S;
 
-			if (Result != null)
+			if (result != null)
 			{
-				while (Result.Length > 0 && Result[0] == ' ')
+				while (result.Length > 0 && result[0] == ' ')
 				{
-					Result = Result.Remove(0, 1);
+					result = result.Remove(0, 1);
 					if (Max > 0)
 					{
 						Max--;
@@ -27,7 +27,7 @@ namespace GedCom551
 				}
 			}
 
-			return Result;
+			return result;
 		}
 
 		public static string ExtractDotDelimiter(string S, int Max)

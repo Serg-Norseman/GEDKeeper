@@ -8,6 +8,8 @@ namespace GKCore
 {
 	public static class GKData
 	{
+		public const string AppTitle = "GEDKeeper2";
+
 		public struct SexStruct
 		{
 			public LSID NameId;

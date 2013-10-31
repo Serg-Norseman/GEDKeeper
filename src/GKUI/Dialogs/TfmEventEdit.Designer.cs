@@ -30,7 +30,7 @@ namespace GKUI
 		private System.Windows.Forms.MaskedTextBox EditEventDate2;
 		private System.Windows.Forms.TextBox EditEventCause;
 		private System.Windows.Forms.TextBox EditEventOrg;
-		private System.Windows.Forms.TextBox EditAttribute;
+		private System.Windows.Forms.ComboBox EditAttribute;
 		private System.Windows.Forms.Button btnPlaceAdd;
 		private System.Windows.Forms.Button btnPlaceDelete;
 		private System.Windows.Forms.ComboBox cbDate1Calendar;
@@ -72,7 +72,7 @@ namespace GKUI
 			this.EditEventDate2 = new System.Windows.Forms.MaskedTextBox();
 			this.EditEventCause = new System.Windows.Forms.TextBox();
 			this.EditEventOrg = new System.Windows.Forms.TextBox();
-			this.EditAttribute = new System.Windows.Forms.TextBox();
+			this.EditAttribute = new System.Windows.Forms.ComboBox();
 			this.cbDate1Calendar = new System.Windows.Forms.ComboBox();
 			this.cbDate2Calendar = new System.Windows.Forms.ComboBox();
 			this.SheetNotes = new System.Windows.Forms.TabPage();

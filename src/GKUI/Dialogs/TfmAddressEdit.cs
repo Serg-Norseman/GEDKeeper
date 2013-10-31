@@ -32,15 +32,15 @@ namespace GKUI
 			return GKInputBox.QueryText(aTitle, LangMan.LSList[202], ref aValue) && aValue.Trim() != "";
 		}
 
-		private void ListModify(object sender, object itemData, TRecAction action)
+		private void ListModify(object sender, ModifyEventArgs eArgs)
 		{
-            TGEDCOMTag itemTag = itemData as TGEDCOMTag;
-            if ((action == TRecAction.raEdit || action == TRecAction.raDelete) && (itemTag == null)) return;
+            TGEDCOMTag itemTag = eArgs.ItemData as TGEDCOMTag;
+            if ((eArgs.Action == TRecAction.raEdit || eArgs.Action == TRecAction.raDelete) && (itemTag == null)) return;
 
             string val;
-            if (object.Equals(sender, this.FPhonesList))
+            if (sender == this.FPhonesList)
             {
-            	switch (action) {
+            	switch (eArgs.Action) {
             		case TRecAction.raAdd:
             			val = "";
             			if (GetInput(LangMan.LSList[131], ref val)) {
@@ -60,9 +60,9 @@ namespace GKUI
             			break;
             	}
             }
-            else if (object.Equals(sender, this.FMailsList))
+            else if (sender == this.FMailsList)
             {
-            	switch (action) {
+            	switch (eArgs.Action) {
             		case TRecAction.raAdd:
             			val = "";
             			if (GetInput(LangMan.LSList[132], ref val)) {
@@ -82,9 +82,9 @@ namespace GKUI
             			break;
             	}
             }
-            else if (object.Equals(sender, this.FWebsList))
+            else if (sender == this.FWebsList)
             {
-            	switch (action) {
+            	switch (eArgs.Action) {
             		case TRecAction.raAdd:
             			val = "";
             			if (GetInput(LangMan.LSList[133], ref val)) {
@@ -154,7 +154,9 @@ namespace GKUI
 				this.FAddress.AddressState = this.edState.Text;
 				this.FAddress.AddressCity = this.edCity.Text;
 				this.FAddress.AddressPostalCode = this.edPostalCode.Text;
-				TGenEngine.SetAddressValue(this.FAddress, this.edAddress.Text);
+
+				this.FAddress.aux_SetAddressValue(this.edAddress.Text);
+
 				base.DialogResult = DialogResult.OK;
 			}
 			catch (Exception E)
@@ -169,15 +171,15 @@ namespace GKUI
 			this.InitializeComponent();
 
 			this.FPhonesList = new GKSheetList(this.SheetPhones);
-			this.FPhonesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FPhonesList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.FPhonesList.List.AddListColumn(LangMan.LSList[131], 350, false);
 
 			this.FMailsList = new GKSheetList(this.SheetEmails);
-			this.FMailsList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FMailsList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.FMailsList.List.AddListColumn(LangMan.LSList[132], 350, false);
 
 			this.FWebsList = new GKSheetList(this.SheetWebPages);
-			this.FWebsList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FWebsList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.FWebsList.List.AddListColumn(LangMan.LSList[133], 350, false);
 
 			this.btnAccept.Text = LangMan.LSList[97];

@@ -27,7 +27,7 @@ namespace GKUI
         private void CreateGraph(int minGens)
         {
 			using (TList lst = new TList(true)) {
-				TreeTools.GetPatriarchsList(this.FBase.Engine.Tree, true, true, lst, minGens, false);
+				TreeTools.GetPatriarchsList(this.FBase.Tree, true, true, lst, minGens, false);
 
 				int num = lst.Count - 1;
 				for (int i = 0; i <= num; i++)

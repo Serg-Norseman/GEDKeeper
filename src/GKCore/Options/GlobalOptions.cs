@@ -337,7 +337,7 @@ namespace GKCore
 
 		public void FindLanguages()
 		{
-			string path = TGenEngine.GetAppPath() + "langs\\";
+			string path = GKUtils.GetAppPath() + "langs\\";
 			string[] lang_files = Directory.GetFiles(path, "*.lng", SearchOption.TopDirectoryOnly);
 			for (int i = 0; i < lang_files.Length; i++) this.LngPrepareProc(lang_files[i]);
 		}

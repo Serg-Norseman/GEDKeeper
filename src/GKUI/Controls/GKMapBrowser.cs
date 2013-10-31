@@ -262,7 +262,7 @@ namespace GKUI.Controls
 
 		public void InitMap()
 		{
-			this.FMapFile = TGenEngine.GetTempDir() + "\\GEDKeeperMap.html";
+			this.FMapFile = GKUtils.GetTempDir() + "\\GEDKeeperMap.html";
 			StreamWriter tf = new StreamWriter(this.FMapFile, false, Encoding.UTF8);
 			tf.WriteLine(GKMapBrowser.MapContent);
 			tf.Close();

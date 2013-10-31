@@ -134,7 +134,7 @@ namespace GedCom551
 			}
 		}
 
-		public void ReplaceXRefs(TXRefReplaceMap aMap)
+		public void ReplaceXRefs(XRefReplacer aMap)
 		{
 			if (this.FList != null)
 			{

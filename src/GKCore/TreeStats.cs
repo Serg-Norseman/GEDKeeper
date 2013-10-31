@@ -109,13 +109,11 @@ namespace GKCore
 			smAAF_2
 		}
 
-		private TGenEngine FEngine;
 		private TGEDCOMTree FTree;
 		
-		public TreeStats(TGenEngine engine)
+		public TreeStats(TGEDCOMTree tree)
 		{
-			this.FEngine = engine;
-			this.FTree = engine.Tree;
+			this.FTree = tree;
 		}
 
 		private void TakeVal(int val, TGEDCOMSex sex,
@@ -229,11 +227,11 @@ namespace GKCore
 						}
 					}
 
-					string v_age = TGenEngine.GetAge(ind, -1);
+					string v_age = GKUtils.GetAge(ind, -1);
 					TakeVal(v_age, ind.Sex, ref aStats.age, ref aStats.age_cnt, 
 					        ref aStats.age_f, ref aStats.age_f_cnt, ref aStats.age_m, ref aStats.age_m_cnt);
 
-					string v_life = TGenEngine.GetLifeExpectancy(ind);
+					string v_life = GKUtils.GetLifeExpectancy(ind);
 					TakeVal(v_life, ind.Sex, ref aStats.life, ref aStats.life_cnt,
 					        ref aStats.life_f, ref aStats.life_f_cnt, ref aStats.life_m, ref aStats.life_m_cnt);
 
@@ -339,7 +337,7 @@ namespace GKCore
 						iRec.aux_GetNameParts(out fam, out nam, out pat);
 						switch (aMode) {
 							case TStatMode.smFamilies:
-								V = TGenEngine.PrepareRusSurname(fam, iRec.Sex == TGEDCOMSex.svFemale);
+								V = NamesTable.PrepareRusSurname(fam, iRec.Sex == TGEDCOMSex.svFemale);
 								break;
 							case TStatMode.smNames:
 								V = nam;
@@ -353,12 +351,12 @@ namespace GKCore
 					}
 				case TStatMode.smAge:
 					{
-						CheckVal(aVals, TGenEngine.GetAge(iRec, -1));
+						CheckVal(aVals, GKUtils.GetAge(iRec, -1));
 						break;
 					}
 				case TStatMode.smLifeExpectancy:
 					{
-						CheckVal(aVals, TGenEngine.GetLifeExpectancy(iRec));
+						CheckVal(aVals, GKUtils.GetLifeExpectancy(iRec));
 						break;
 					}
 
@@ -379,7 +377,7 @@ namespace GKCore
 							evt.Detail.Date.aux_GetIndependentDate(out year, out k, out d);
 							if (Math.Abs(year) > 3000)
 							{
-								TGenEngine.ShowMessage(evt.Detail.Date.StringValue + "/" + iName);
+								GKUtils.ShowMessage(evt.Detail.Date.StringValue + "/" + iName);
 							}
 							if (evt.Name == "BIRT")
 							{
@@ -424,62 +422,62 @@ namespace GKCore
 					}
 				case TStatMode.smResidences:
 					{
-						CheckVal(aVals, TGenEngine.GetResidencePlace(iRec, false));
+						CheckVal(aVals, GKUtils.GetResidencePlace(iRec, false));
 						break;
 					}
 				case TStatMode.smOccupation:
 					{
-						CheckVal(aVals, TGenEngine.GetAttributeValue(iRec, "OCCU"));
+						CheckVal(aVals, GKUtils.GetAttributeValue(iRec, "OCCU"));
 						break;
 					}
 				case TStatMode.smReligious:
 					{
-						CheckVal(aVals, TGenEngine.GetAttributeValue(iRec, "RELI"));
+						CheckVal(aVals, GKUtils.GetAttributeValue(iRec, "RELI"));
 						break;
 					}
 				case TStatMode.smNational:
 					{
-						CheckVal(aVals, TGenEngine.GetAttributeValue(iRec, "NATI"));
+						CheckVal(aVals, GKUtils.GetAttributeValue(iRec, "NATI"));
 						break;
 					}
 				case TStatMode.smEducation:
 					{
-						CheckVal(aVals, TGenEngine.GetAttributeValue(iRec, "EDUC"));
+						CheckVal(aVals, GKUtils.GetAttributeValue(iRec, "EDUC"));
 						break;
 					}
 				case TStatMode.smCaste:
 					{
-						CheckVal(aVals, TGenEngine.GetAttributeValue(iRec, "CAST"));
+						CheckVal(aVals, GKUtils.GetAttributeValue(iRec, "CAST"));
 						break;
 					}
 				case TStatMode.smHobby:
 					{
-						CheckVal(aVals, TGenEngine.GetAttributeValue(iRec, "_HOBBY"));
+						CheckVal(aVals, GKUtils.GetAttributeValue(iRec, "_HOBBY"));
 						break;
 					}
 				case TStatMode.smAward:
 					{
-						CheckVal(aVals, TGenEngine.GetAttributeValue(iRec, "_AWARD"));
+						CheckVal(aVals, GKUtils.GetAttributeValue(iRec, "_AWARD"));
 						break;
 					}
 				case TStatMode.smMili:
 					{
-						CheckVal(aVals, TGenEngine.GetAttributeValue(iRec, "_MILI"));
+						CheckVal(aVals, GKUtils.GetAttributeValue(iRec, "_MILI"));
 						break;
 					}
 				case TStatMode.smMiliInd:
 					{
-						CheckVal(aVals, TGenEngine.GetAttributeValue(iRec, "_MILI_IND"));
+						CheckVal(aVals, GKUtils.GetAttributeValue(iRec, "_MILI_IND"));
 						break;
 					}
 				case TStatMode.smMiliDis:
 					{
-						CheckVal(aVals, TGenEngine.GetAttributeValue(iRec, "_MILI_DIS"));
+						CheckVal(aVals, GKUtils.GetAttributeValue(iRec, "_MILI_DIS"));
 						break;
 					}
 				case TStatMode.smMiliRank:
 					{
-						CheckVal(aVals, TGenEngine.GetAttributeValue(iRec, "_MILI_RANK"));
+						CheckVal(aVals, GKUtils.GetAttributeValue(iRec, "_MILI_RANK"));
 						break;
 					}
 			}
@@ -520,7 +518,7 @@ namespace GKCore
 
 								switch (aMode) {
 									case TStatMode.smAAF_1:
-										key = SysUtils.Trunc(TGenEngine.GetIndependentYear(iRec, "BIRT") / 10 * 10).ToString();
+										key = SysUtils.Trunc(GKUtils.GetIndependentYear(iRec, "BIRT") / 10 * 10).ToString();
 
 										if (!xvals.TryGetValue(key, out vals_list))
 										{
@@ -532,7 +530,7 @@ namespace GKCore
 										break;
 
 									case TStatMode.smAAF_2:
-										key = SysUtils.Trunc(TGenEngine.GetIndependentYear(iChild, "BIRT") / 10 * 10).ToString();
+										key = SysUtils.Trunc(GKUtils.GetIndependentYear(iChild, "BIRT") / 10 * 10).ToString();
 
 										if (!xvals.TryGetValue(key, out vals_list))
 										{
@@ -551,7 +549,7 @@ namespace GKCore
 						if (rec is TGEDCOMFamilyRecord && aMode == TStatMode.smSpousesDiff)
 						{
 							TGEDCOMFamilyRecord fRec = rec as TGEDCOMFamilyRecord;
-							aVals.Add(new TListVal(TGenEngine.aux_GetFamilyStr(fRec), TreeStats.GetSpousesDiff(fRec)));
+							aVals.Add(new TListVal(GKUtils.aux_GetFamilyStr(fRec), TreeStats.GetSpousesDiff(fRec)));
 						}
 					}
 				}
@@ -712,11 +710,11 @@ namespace GKCore
 					double y = -1.0;
 					double y2 = -1.0;
 
-					TGEDCOMCustomEvent evt = TGenEngine.GetIndividualEvent(h, "BIRT");
-					if (evt != null) y = TGenEngine.GetAbstractDate(evt.Detail);
+					TGEDCOMCustomEvent evt = GKUtils.GetIndividualEvent(h, "BIRT");
+					if (evt != null) y = GKUtils.GetAbstractDate(evt.Detail);
 
-					evt = TGenEngine.GetIndividualEvent(w, "BIRT");
-					if (evt != null) y2 = TGenEngine.GetAbstractDate(evt.Detail);
+					evt = GKUtils.GetIndividualEvent(w, "BIRT");
+					if (evt != null) y2 = GKUtils.GetAbstractDate(evt.Detail);
 
 					if (y > (double)0f && y2 > (double)0f)
 					{
@@ -726,7 +724,7 @@ namespace GKCore
 			}
 			catch (Exception E)
 			{
-				SysUtils.LogWrite("TGenEngine.GetSpousesDiff(): " + E.Message);
+				SysUtils.LogWrite("GKUtils.GetSpousesDiff(): " + E.Message);
 			}
 			return Result;
 		}
@@ -739,10 +737,10 @@ namespace GKCore
 			{
 				double y2 = 0.0;
 
-				TGEDCOMCustomEvent evt = TGenEngine.GetIndividualEvent(iRec, "BIRT");
+				TGEDCOMCustomEvent evt = GKUtils.GetIndividualEvent(iRec, "BIRT");
 				if (evt != null)
 				{
-					double y3 = TGenEngine.GetAbstractDate(evt.Detail);
+					double y3 = GKUtils.GetAbstractDate(evt.Detail);
 
 					int num = iRec.SpouseToFamilyLinks.Count - 1;
 					for (int i = 0; i <= num; i++)
@@ -753,10 +751,10 @@ namespace GKCore
 						for (int j = 0; j <= num2; j++)
 						{
 							TGEDCOMIndividualRecord child = family.Childrens[j].Value as TGEDCOMIndividualRecord;
-							evt = TGenEngine.GetIndividualEvent(child, "BIRT");
+							evt = GKUtils.GetIndividualEvent(child, "BIRT");
 							if (evt != null)
 							{
-								double y2tmp = TGenEngine.GetAbstractDate(evt.Detail);
+								double y2tmp = GKUtils.GetAbstractDate(evt.Detail);
 								if (y2 == (double)0f)
 								{
 									y2 = y2tmp;
@@ -786,7 +784,7 @@ namespace GKCore
 			}
 			catch (Exception E)
 			{
-				SysUtils.LogWrite("TGenEngine.GetFirstbornAge(): " + E.Message);
+				SysUtils.LogWrite("GKUtils.GetFirstbornAge(): " + E.Message);
 			}
 			return Result;
 		}
@@ -798,10 +796,10 @@ namespace GKCore
 			{
 				double y2 = 0.0;
 
-				TGEDCOMCustomEvent evt = TGenEngine.GetIndividualEvent(iRec, "BIRT");
+				TGEDCOMCustomEvent evt = GKUtils.GetIndividualEvent(iRec, "BIRT");
 				if (evt != null)
 				{
-					double y3 = TGenEngine.GetAbstractDate(evt.Detail);
+					double y3 = GKUtils.GetAbstractDate(evt.Detail);
 
 					int num = iRec.SpouseToFamilyLinks.Count - 1;
 					for (int i = 0; i <= num; i++)
@@ -810,7 +808,7 @@ namespace GKCore
 						TGEDCOMFamilyEvent fEvent = family.aux_GetFamilyEvent("MARR");
 						if (fEvent != null)
 						{
-							double y2tmp = TGenEngine.GetAbstractDate(fEvent.Detail);
+							double y2tmp = GKUtils.GetAbstractDate(fEvent.Detail);
 							if (y2 == (double)0f)
 							{
 								y2 = y2tmp;
@@ -832,7 +830,7 @@ namespace GKCore
 			}
 			catch (Exception E)
 			{
-				SysUtils.LogWrite("TGenEngine.GetMarriageAge(): " + E.Message);
+				SysUtils.LogWrite("GKUtils.GetMarriageAge(): " + E.Message);
 			}
 			return Result;
 		}

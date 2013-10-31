@@ -172,7 +172,7 @@ namespace GKUI.Lists
 			int num = this.FRec.IndividualEvents.Count - 1;
 			for (int i = 0; i <= num; i++)
 			{
-				string place = TGenEngine.GetPlaceStr(this.FRec.IndividualEvents[i], addr);
+				string place = GKUtils.GetPlaceStr(this.FRec.IndividualEvents[i], addr);
 				res = IsMatchesMask(place, iFilter.Residence);
 				if (res) break;
 			}
@@ -250,8 +250,8 @@ namespace GKUI.Lists
 						break;
 
 					case TLifeMode.lmAliveBefore:
-						DateTime bdt = ((bd_ev == null) ? new DateTime(0) : TGenEngine.GEDCOMDateToDate(bd_ev.Detail.Date));
-						DateTime ddt = ((dd_ev == null) ? new DateTime(0) : TGenEngine.GEDCOMDateToDate(dd_ev.Detail.Date));
+						DateTime bdt = ((bd_ev == null) ? new DateTime(0) : GKUtils.GEDCOMDateToDate(bd_ev.Detail.Date));
+						DateTime ddt = ((dd_ev == null) ? new DateTime(0) : GKUtils.GEDCOMDateToDate(dd_ev.Detail.Date));
 						if ((bdt > this.filter_abd) || (ddt < this.filter_abd)) return result;
 						break;
 
@@ -377,23 +377,23 @@ namespace GKUI.Lists
 					break;
 
 				case TPersonColumnType.pctSex:
-					Result = new string(TGenEngine.SexStr(this.FRec.Sex)[0], 1);
+					Result = new string(GKUtils.SexStr(this.FRec.Sex)[0], 1);
 					break;
 
 				case TPersonColumnType.pctBirthDate:
-					Result = TGenEngine.GEDCOMEventToDateStr(buf_bd, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat, false);
+					Result = GKUtils.GEDCOMEventToDateStr(buf_bd, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat, false);
 					break;
 
 				case TPersonColumnType.pctBirthPlace:
-					Result = TGenEngine.GetPlaceStr(buf_bd, false);
+					Result = GKUtils.GetPlaceStr(buf_bd, false);
 					break;
 
 				case TPersonColumnType.pctDeathDate:
-					Result = TGenEngine.GEDCOMEventToDateStr(buf_dd, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat, false);
+					Result = GKUtils.GEDCOMEventToDateStr(buf_dd, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat, false);
 					break;
 
 				case TPersonColumnType.pctDeathPlace:
-					Result = TGenEngine.GetPlaceStr(buf_dd, false);
+					Result = GKUtils.GetPlaceStr(buf_dd, false);
 					break;
 
 				case TPersonColumnType.pctResidence:
@@ -401,15 +401,15 @@ namespace GKUI.Lists
 					break;
 
 				case TPersonColumnType.pctAge:
-					Result = TGenEngine.GetAge(this.FRec, -1);
+					Result = GKUtils.GetAge(this.FRec, -1);
 					break;
 
 				case TPersonColumnType.pctLifeExpectancy:
-					Result = TGenEngine.GetLifeExpectancy(this.FRec);
+					Result = GKUtils.GetLifeExpectancy(this.FRec);
 					break;
 
 				case TPersonColumnType.pctDaysForBirth:
-					Result = TGenEngine.GetDaysForBirth(this.FRec);
+					Result = GKUtils.GetDaysForBirth(this.FRec);
 					break;
 
 				case TPersonColumnType.pctGroups:
@@ -545,7 +545,7 @@ namespace GKUI.Lists
 				}
 				else if (ev.Name == "RESI" && buf_residence == "")
 				{
-					buf_residence = TGenEngine.GetPlaceStr(ev, gOptions.PlacesWithAddress);
+					buf_residence = GKUtils.GetPlaceStr(ev, gOptions.PlacesWithAddress);
 				}
 				else if (ev.Name == "RELI" && buf_religion == "")
 				{

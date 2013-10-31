@@ -41,8 +41,8 @@ namespace GKUI
 			TGEDCOMCalendar cal = (TGEDCOMCalendar)this.cbDate1Calendar.SelectedIndex;
 			TGEDCOMCalendar cal2 = (TGEDCOMCalendar)this.cbDate2Calendar.SelectedIndex;
 
-			string gcd = TGenEngine.StrToGEDCOMDate(this.EditEventDate1.Text, true);
-			string gcd2 = TGenEngine.StrToGEDCOMDate(this.EditEventDate2.Text, true);
+			string gcd = GKUtils.StrToGEDCOMDate(this.EditEventDate1.Text, true);
+			string gcd2 = GKUtils.StrToGEDCOMDate(this.EditEventDate2.Text, true);
 
 			if (cal != TGEDCOMCalendar.dcGregorian) {
 				gcd = TGEDCOMDate.GEDCOMDateEscapeArray[(int)cal] + " " + gcd;
@@ -219,16 +219,16 @@ namespace GKUI
 			}
 		}
 
-		private void ListModify(object Sender, object ItemData, TRecAction Action)
+		private void ListModify(object sender, ModifyEventArgs eArgs)
 		{
 			bool res = false;
 
-			if (Sender == this.FNotesList) {
-				res = this.Base.ModifyTagNote(this.FEvent.Detail, ItemData as TGEDCOMNotes, Action);
-			} else if (Sender == this.FMediaList) {
-				res = this.Base.ModifyTagMultimedia(this.FEvent.Detail, ItemData as TGEDCOMMultimediaLink, Action);
-			} else if (Sender == this.FSourcesList) {
-				res = this.Base.ModifyTagSource(this.FEvent.Detail, ItemData as TGEDCOMSourceCitation, Action);
+			if (sender == this.FNotesList) {
+				res = this.Base.ModifyTagNote(this.FEvent.Detail, eArgs.ItemData as TGEDCOMNotes, eArgs.Action);
+			} else if (sender == this.FMediaList) {
+				res = this.Base.ModifyTagMultimedia(this.FEvent.Detail, eArgs.ItemData as TGEDCOMMultimediaLink, eArgs.Action);
+			} else if (sender == this.FSourcesList) {
+				res = this.Base.ModifyTagSource(this.FEvent.Detail, eArgs.ItemData as TGEDCOMSourceCitation, eArgs.Action);
 			}
 
 			if (res) this.ControlsRefresh();
@@ -245,7 +245,7 @@ namespace GKUI
 					this.EditEventType.Items.Add(LangMan.LSList[(int)GKData.FamilyEvents[i].Name - 1]);
 				}
 
-				int idx = TGenEngine.GetFamilyEventIndex(this.FEvent.Name);
+				int idx = GKUtils.GetFamilyEventIndex(this.FEvent.Name);
 				if (idx < 0) idx = 0;
 				this.EditEventType.SelectedIndex = idx;
 			}
@@ -256,7 +256,7 @@ namespace GKUI
 					this.EditEventType.Items.Add(LangMan.LSList[(int)GKData.PersonEvents[i].Name - 1]);
 				}
 
-				int idx = TGenEngine.GetPersonEventIndex(this.FEvent.Name);
+				int idx = GKUtils.GetPersonEventIndex(this.FEvent.Name);
 				if (idx < 0) idx = 0;
 				this.EditEventType.SelectedIndex = idx;
 
@@ -288,7 +288,7 @@ namespace GKUI
 						break;
 				}
 
-				this.EditEventDate1.Text = TGenEngine.GEDCOMDateToStr(date as TGEDCOMDate, TDateFormat.dfDD_MM_YYYY);
+				this.EditEventDate1.Text = GKUtils.GEDCOMDateToStr(date as TGEDCOMDate, TDateFormat.dfDD_MM_YYYY);
 				this.cbDate1Calendar.SelectedIndex = (int)(date as TGEDCOMDate).DateCalendar;
 				this.btnBC1.Checked = (date as TGEDCOMDate).YearBC;
 			}
@@ -316,8 +316,8 @@ namespace GKUI
 						}
 					}
 
-					this.EditEventDate1.Text = TGenEngine.GEDCOMDateToStr(dt_range.After, TDateFormat.dfDD_MM_YYYY);
-					this.EditEventDate2.Text = TGenEngine.GEDCOMDateToStr(dt_range.Before, TDateFormat.dfDD_MM_YYYY);
+					this.EditEventDate1.Text = GKUtils.GEDCOMDateToStr(dt_range.After, TDateFormat.dfDD_MM_YYYY);
+					this.EditEventDate2.Text = GKUtils.GEDCOMDateToStr(dt_range.Before, TDateFormat.dfDD_MM_YYYY);
 					this.cbDate1Calendar.SelectedIndex = (int)dt_range.After.DateCalendar;
 					this.cbDate2Calendar.SelectedIndex = (int)dt_range.Before.DateCalendar;
 					this.btnBC1.Checked = (dt_range.After as TGEDCOMDate).YearBC;
@@ -347,8 +347,8 @@ namespace GKUI
 							}
 						}
 
-						this.EditEventDate1.Text = TGenEngine.GEDCOMDateToStr(dt_period.DateFrom, TDateFormat.dfDD_MM_YYYY);
-						this.EditEventDate2.Text = TGenEngine.GEDCOMDateToStr(dt_period.DateTo, TDateFormat.dfDD_MM_YYYY);
+						this.EditEventDate1.Text = GKUtils.GEDCOMDateToStr(dt_period.DateFrom, TDateFormat.dfDD_MM_YYYY);
+						this.EditEventDate2.Text = GKUtils.GEDCOMDateToStr(dt_period.DateTo, TDateFormat.dfDD_MM_YYYY);
 						this.cbDate1Calendar.SelectedIndex = (int)dt_period.DateFrom.DateCalendar;
 						this.cbDate2Calendar.SelectedIndex = (int)dt_period.DateTo.DateCalendar;
 						this.btnBC1.Checked = (dt_period.DateFrom as TGEDCOMDate).YearBC;
@@ -359,7 +359,7 @@ namespace GKUI
 						if (date is TGEDCOMDate)
 						{
 							this.EditEventDateType.SelectedIndex = 0;
-							this.EditEventDate1.Text = TGenEngine.GEDCOMDateToStr(date as TGEDCOMDate, TDateFormat.dfDD_MM_YYYY);
+							this.EditEventDate1.Text = GKUtils.GEDCOMDateToStr(date as TGEDCOMDate, TDateFormat.dfDD_MM_YYYY);
 							this.cbDate1Calendar.SelectedIndex = (int)(date as TGEDCOMDate).DateCalendar;
 							this.btnBC1.Checked = (date as TGEDCOMDate).YearBC;
 						}
@@ -473,6 +473,26 @@ namespace GKUI
 					}
 				}
 			}
+
+			string evName;
+			int id = this.EditEventType.SelectedIndex;
+			if (this.FEvent is TGEDCOMFamilyEvent) {
+				evName = GKData.FamilyEvents[id].Sign;
+			} else {
+				evName = GKData.PersonEvents[id].Sign;
+			}
+
+			string[] vals = this.FBase.ValuesCollection.GetValues(evName);
+			if (vals != null) {
+				string tmp = this.EditAttribute.Text;
+				this.EditAttribute.Sorted = false;
+
+				this.EditAttribute.Items.Clear();
+				this.EditAttribute.Items.AddRange(vals);
+
+				this.EditAttribute.Sorted = true;
+				this.EditAttribute.Text = tmp;
+			}
 		}
 
 		public void SetControlEnabled(Control ctl, bool enabled)
@@ -525,15 +545,15 @@ namespace GKUI
 			this.FLocation = null;
 
 			this.FNotesList = new GKSheetList(this.SheetNotes);
-			this.FNotesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FNotesList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.Base.SetupRecNotesList(this.FNotesList);
 
 			this.FMediaList = new GKSheetList(this.SheetMultimedia);
-			this.FMediaList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FMediaList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.Base.SetupRecMediaList(this.FMediaList);
 
 			this.FSourcesList = new GKSheetList(this.SheetSources);
-			this.FSourcesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FSourcesList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.Base.SetupRecSourcesList(this.FSourcesList);
 
 			this.btnAccept.Text = LangMan.LSList[97];

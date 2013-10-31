@@ -31,22 +31,21 @@ namespace GKUI
 			set { this.SetCommunication(value); }
 		}
 
-		private void ListModify(object Sender, object ItemData, TRecAction Action)
+		private void ListModify(object sender, ModifyEventArgs eArgs)
 		{
-			if (object.Equals(Sender, this.FNotesList))
-			{
-				if (this.Base.ModifyRecNote(this, this.FCommunication, ItemData as TGEDCOMNotes, Action))
-				{
-					this.ListsRefresh();
-				}
+			bool res = false;
+
+			if (sender == this.FNotesList) {
+				TGEDCOMNotes notes = eArgs.ItemData as TGEDCOMNotes;
+				res = (this.Base.ModifyRecNote(this, this.FCommunication, notes, eArgs.Action));
 			}
-			else
+			else if (sender == this.FMediaList)
 			{
-				if (object.Equals(Sender, this.FMediaList) && this.Base.ModifyRecMultimedia(this, this.FCommunication, ItemData as TGEDCOMMultimediaLink, Action))
-				{
-					this.ListsRefresh();
-				}
+				TGEDCOMMultimediaLink mmLink = eArgs.ItemData as TGEDCOMMultimediaLink;
+				res = this.Base.ModifyRecMultimedia(this, this.FCommunication, mmLink, eArgs.Action);
 			}
+
+			if (res) this.ListsRefresh();
 		}
 
 		private void ListsRefresh()
@@ -72,7 +71,7 @@ namespace GKUI
 				{
 					this.EditName.Text = this.FCommunication.CommName;
 					this.EditCorrType.SelectedIndex = (int)this.FCommunication.CommunicationType;
-					this.EditDate.Text = TGenEngine.GEDCOMDateToStr(this.FCommunication.Date, TDateFormat.dfDD_MM_YYYY);
+					this.EditDate.Text = GKUtils.GEDCOMDateToStr(this.FCommunication.Date, TDateFormat.dfDD_MM_YYYY);
 					TCommunicationDir dir = TCommunicationDir.cdFrom;
 					this.FCommunication.GetCorresponder(ref dir, ref this.FTempInd);
 					if (this.FTempInd != null)
@@ -100,7 +99,7 @@ namespace GKUI
 			{
 				this.FCommunication.CommName = this.EditName.Text;
 				this.FCommunication.CommunicationType = (TCommunicationType)this.EditCorrType.SelectedIndex;
-				this.FCommunication.Date.ParseString(TGenEngine.StrToGEDCOMDate(this.EditDate.Text, true));
+				this.FCommunication.Date.ParseString(GKUtils.StrToGEDCOMDate(this.EditDate.Text, true));
 				this.FCommunication.SetCorresponder((TCommunicationDir)this.EditDir.SelectedIndex, this.FTempInd);
 				this.Base.ChangeRecord(this.FCommunication);
 				base.DialogResult = DialogResult.OK;
@@ -129,11 +128,11 @@ namespace GKUI
 			}
 
 			this.FNotesList = new GKSheetList(this.SheetNotes);
-			this.FNotesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FNotesList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.Base.SetupRecNotesList(this.FNotesList);
 
 			this.FMediaList = new GKSheetList(this.SheetMultimedia);
-			this.FMediaList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FMediaList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.Base.SetupRecMediaList(this.FMediaList);
 
 			this.FTempInd = null;

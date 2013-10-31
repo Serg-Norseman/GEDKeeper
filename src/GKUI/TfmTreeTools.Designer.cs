@@ -145,6 +145,7 @@ namespace GKUI
 			this.SaveDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.OpenDialog2 = new System.Windows.Forms.OpenFileDialog();
 			this.btnHelp = new System.Windows.Forms.Button();
+			this.gkLogChart1 = new GKUI.Controls.GKLogChart();
 			this.PageControl.SuspendLayout();
 			this.SheetTreeCompare.SuspendLayout();
 			this.gbMatchType.SuspendLayout();
@@ -683,6 +684,7 @@ namespace GKUI
 			// 
 			// SheetFamilyGroups
 			// 
+			this.SheetFamilyGroups.Controls.Add(this.gkLogChart1);
 			this.SheetFamilyGroups.Controls.Add(this.TreeView1);
 			this.SheetFamilyGroups.Location = new System.Drawing.Point(4, 22);
 			this.SheetFamilyGroups.Name = "SheetFamilyGroups";
@@ -694,7 +696,7 @@ namespace GKUI
 			// 
 			this.TreeView1.Location = new System.Drawing.Point(8, 8);
 			this.TreeView1.Name = "TreeView1";
-			this.TreeView1.Size = new System.Drawing.Size(697, 401);
+			this.TreeView1.Size = new System.Drawing.Size(697, 360);
 			this.TreeView1.TabIndex = 0;
 			this.TreeView1.DoubleClick += new System.EventHandler(this.TreeView1_DoubleClick);
 			// 
@@ -863,6 +865,14 @@ namespace GKUI
 			this.btnHelp.Text = "Справка";
 			this.btnHelp.Click += new System.EventHandler(this.btnHelp_Click);
 			// 
+			// gkLogChart1
+			// 
+			this.gkLogChart1.Location = new System.Drawing.Point(8, 380);
+			this.gkLogChart1.Name = "gkLogChart1";
+			this.gkLogChart1.Size = new System.Drawing.Size(697, 28);
+			this.gkLogChart1.TabIndex = 1;
+			this.gkLogChart1.TabStop = true;
+			// 
 			// TfmTreeTools
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -905,6 +915,7 @@ namespace GKUI
 			this.SheetPlaceManage.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
+		private GKUI.Controls.GKLogChart gkLogChart1;
 		private GKUI.Controls.GKMergeControl MergeCtl;
 		private System.Windows.Forms.Button btnPatriarchsDiagram;
 		private System.Windows.Forms.CheckBox chkIndistinctMatching;

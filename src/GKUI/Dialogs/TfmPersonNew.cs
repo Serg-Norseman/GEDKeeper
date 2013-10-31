@@ -45,7 +45,7 @@ namespace GKUI
 					switch (this.FTargetMode) {
 						case TTargetMode.tmParent:
 							if (sx == TGEDCOMSex.svFemale) {
-								this.edFamily.Text = TGenEngine.GetRusWifeFamily(iFamily);
+								this.edFamily.Text = NamesTable.GetRusWifeSurname(iFamily);
 							}
 							this.edPatronymic.Items.Add(names.GetPatronymicByName(iName, TGEDCOMSex.svMale));
 							this.edPatronymic.Items.Add(names.GetPatronymicByName(iName, TGEDCOMSex.svFemale));
@@ -58,13 +58,13 @@ namespace GKUI
 									this.edName.Text = names.GetNameByPatronymic(iPatronymic, TGEDCOMSex.svMale);
 									break;
 								case TGEDCOMSex.svFemale:
-									this.edFamily.Text = "(" + TGenEngine.GetRusWifeFamily(iFamily) + ")";
+									this.edFamily.Text = "(" + NamesTable.GetRusWifeSurname(iFamily) + ")";
 									break;
 							}
 							break;
 							
 						case TTargetMode.tmWife:
-							this.edFamily.Text = "(" + TGenEngine.GetRusWifeFamily(iFamily) + ")";
+							this.edFamily.Text = "(" + NamesTable.GetRusWifeSurname(iFamily) + ")";
 							break;
 					}
 				}
@@ -85,7 +85,7 @@ namespace GKUI
 			if (e.KeyCode == Keys.Down && e.Control)
 			{
 				TextBox tb = (sender as TextBox);
-				tb.Text = TGenEngine.SetAsName(tb.Text);
+				tb.Text = GKUtils.SetAsName(tb.Text);
 			}
 		}
 
@@ -103,7 +103,7 @@ namespace GKUI
 
 			for (TGEDCOMSex sx = TGEDCOMSex.svNone; sx <= TGEDCOMSex.svUndetermined; sx++)
 			{
-				this.EditSex.Items.Add(TGenEngine.SexStr(sx));
+				this.EditSex.Items.Add(GKUtils.SexStr(sx));
 			}
 
 			this.btnAccept.Text = LangMan.LSList[97];

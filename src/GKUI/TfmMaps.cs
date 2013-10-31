@@ -310,7 +310,7 @@ namespace GKUI
 			}
 
 			TPlaceRef pRef = new TPlaceRef();
-			pRef.Date = TGenEngine.GEDCOMDateToDate(aRef.Detail.Date);
+			pRef.Date = GKUtils.GEDCOMDateToDate(aRef.Detail.Date);
 			pRef.Event = aRef;
 			place.PlaceRefs.Add(pRef);
 		}

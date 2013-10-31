@@ -47,8 +47,8 @@ namespace GKUI
 				else
 				{
 					this.EditPriority.SelectedIndex = (int)((sbyte)this.FTask.Priority);
-					this.EditStartDate.Text = TGenEngine.GEDCOMDateToStr(this.FTask.StartDate, TDateFormat.dfDD_MM_YYYY);
-					this.EditStopDate.Text = TGenEngine.GEDCOMDateToStr(this.FTask.StopDate, TDateFormat.dfDD_MM_YYYY);
+					this.EditStartDate.Text = GKUtils.GEDCOMDateToStr(this.FTask.StartDate, TDateFormat.dfDD_MM_YYYY);
+					this.EditStopDate.Text = GKUtils.GEDCOMDateToStr(this.FTask.StopDate, TDateFormat.dfDD_MM_YYYY);
 					TGoalType gt = TGoalType.gtOther;
                     this.FTask.aux_GetTaskGoal(ref gt, ref this.FTempRec);
 					this.cbGoalType.SelectedIndex = (int)((sbyte)gt);
@@ -60,7 +60,7 @@ namespace GKUI
 							this.EditGoal.Text = st;
 							break;
 						case TGoalType.gtFamily:
-							this.EditGoal.Text = TGenEngine.aux_GetFamilyStr(this.FTempRec as TGEDCOMFamilyRecord);
+							this.EditGoal.Text = GKUtils.aux_GetFamilyStr(this.FTempRec as TGEDCOMFamilyRecord);
 							break;
 						case TGoalType.gtSource:
 							this.EditGoal.Text = (this.FTempRec as TGEDCOMSourceRecord).FiledByEntry;
@@ -79,12 +79,17 @@ namespace GKUI
 			}
 		}
 
-		private void ListModify(object Sender, object ItemData, TRecAction Action)
+		private void ListModify(object sender, ModifyEventArgs eArgs)
 		{
-			if ((Sender == this.FNotesList) && this.Base.ModifyRecNote(this, this.FTask, ItemData as TGEDCOMNotes, Action))
+			bool res = false;
+
+			if (sender == this.FNotesList)
 			{
-				this.ListsRefresh();
+				TGEDCOMNotes notes = eArgs.ItemData as TGEDCOMNotes;
+				res = this.Base.ModifyRecNote(this, this.FTask, notes, eArgs.Action);
 			}
+
+			if (res) this.ListsRefresh();
 		}
 
 		private void ListsRefresh()
@@ -97,8 +102,8 @@ namespace GKUI
 			try
 			{
 				this.FTask.Priority = (TResearchPriority)this.EditPriority.SelectedIndex;
-				this.FTask.StartDate.ParseString(TGenEngine.StrToGEDCOMDate(this.EditStartDate.Text, true));
-				this.FTask.StopDate.ParseString(TGenEngine.StrToGEDCOMDate(this.EditStopDate.Text, true));
+				this.FTask.StartDate.ParseString(GKUtils.StrToGEDCOMDate(this.EditStartDate.Text, true));
+				this.FTask.StopDate.ParseString(GKUtils.StrToGEDCOMDate(this.EditStopDate.Text, true));
 				TGoalType gt = (TGoalType)this.cbGoalType.SelectedIndex;
 				switch (gt) {
 					case TGoalType.gtIndividual:
@@ -131,7 +136,7 @@ namespace GKUI
 					break;
 				case TGoalType.gtFamily:
 					this.FTempRec = this.Base.SelectRecord(TGEDCOMRecordType.rtFamily, new object[0]);
-					this.EditGoal.Text = TGenEngine.aux_GetFamilyStr(this.FTempRec as TGEDCOMFamilyRecord);
+					this.EditGoal.Text = GKUtils.aux_GetFamilyStr(this.FTempRec as TGEDCOMFamilyRecord);
 					break;
 				case TGoalType.gtSource:
 					this.FTempRec = this.Base.SelectRecord(TGEDCOMRecordType.rtSource, new object[0]);
@@ -185,7 +190,7 @@ namespace GKUI
 			}
 
 			this.FNotesList = new GKSheetList(this.SheetNotes);
-			this.FNotesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FNotesList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.Base.SetupRecNotesList(this.FNotesList);
 
 			this.FTempRec = null;

@@ -37,7 +37,7 @@ namespace GKUI
 				TGEDCOMSourceRecord src = ((idx < 0) ? null : (this.FSourcesList.GetObject(idx) as TGEDCOMSourceRecord));
 
 				if (src == null) {
-					TGenEngine.ShowError("Не задан источник");
+					GKUtils.ShowError("Не задан источник");
 					base.DialogResult = DialogResult.None;
 				} else {
 					this.FSourceCitation.Value = src;
@@ -59,7 +59,7 @@ namespace GKUI
 			TGEDCOMSourceRecord src = FBase.SelectRecord(TGEDCOMRecordType.rtSource, anArgs) as TGEDCOMSourceRecord;
 			if (src != null)
 			{
-				this.Base.Engine.aux_GetSourcesList(this.FSourcesList);
+				GKUtils.aux_GetSourcesList(this.Base.Tree, this.FSourcesList);
 				this.RefreshSourcesList("");
 				this.cbSource.Text = src.FiledByEntry;
 			}
@@ -87,7 +87,7 @@ namespace GKUI
 				int num = this.FSourcesList.Count - 1;
 				for (int i = 0; i <= num; i++) {
 					string st = this.FSourcesList[i];
-					if (aFilter == "" || TGenEngine.MatchesMask(st, flt))
+					if (aFilter == "" || GKUtils.MatchesMask(st, flt))
 					{
 						this.cbSource.Items.Add(new GKComboItem(st, this.FSourcesList.GetObject(i)));
 					}
@@ -138,7 +138,7 @@ namespace GKUI
 			this.Label1.Text = LangMan.LSList[110];
 			this.Label3.Text = LangMan.LSList[111];
 
-			this.Base.Engine.aux_GetSourcesList(this.FSourcesList);
+			GKUtils.aux_GetSourcesList(this.Base.Tree, this.FSourcesList);
 			this.RefreshSourcesList("");
 		}
 		

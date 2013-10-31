@@ -2,6 +2,13 @@ using System;
 
 namespace Ext.Tween
 {
+	public enum AnimType {
+		Linear,
+		easeInQuad, easeOutQuad, easeInOutQuad,
+		easeInCubic, easeOutCubic, easeInOutCubic,
+		easeInQuart, easeInExpo, easeOutExpo
+	}
+
 	public delegate void TweenDelegate(int newX, int newY);
 	
 	///<summary>
@@ -13,10 +20,12 @@ namespace Ext.Tween
 	///</summary>
 	public class TweenLibrary
 	{
+		private static bool busy = false;
+
 		private int counter = 0;
 		private int timeStart;
 		private int timeDest;
-		private string animType;
+		private AnimType animType;
 		
 		private int[] Arr_startPos = new int[]{0,0};
 
@@ -30,8 +39,11 @@ namespace Ext.Tween
 		///<summary>
 		///this method kicks off the process
 		///</summary>
-		public void startTweenEvent(TweenDelegate tweenDelegate, int srcX, int srcY, int destX, int destY, string _animType, int _timeInterval)
+		public void startTweenEvent(TweenDelegate tweenDelegate, int srcX, int srcY, int destX, int destY, AnimType _animType, int _timeInterval)
 		{
+			if (busy) return;
+			busy = true;
+
 			//inits the parameters for the tween process
 			this._tweenDelegate = tweenDelegate;
 			this.counter = 0;
@@ -62,6 +74,8 @@ namespace Ext.Tween
 			if (curX == destX && curY == destY) {
 				_timer.Stop();
 				_timer.Enabled = false;
+				
+				busy = false;
 			} else {
 				curX = tween(0);
 				curY = tween(1);
@@ -79,8 +93,8 @@ namespace Ext.Tween
 		{
             float t = (float)counter - timeStart;
             float b = (float)Arr_startPos[prop];
+
             float c;
-			
 			if (prop == 0) {
 				c = (float)destX - Arr_startPos[prop];
 			} else {
@@ -89,53 +103,53 @@ namespace Ext.Tween
 
             float d = (float)timeDest - timeStart;
 
-			return getFormula(animType, t, b, d, c);
+			return getFormula(t, b, d, c);
 		}
 
 		///<summary>
 		///this method selects which formula to pick and then returns a number for the tween position of the pictureBox
 		///</summary>
-		private int getFormula(string animType, float t, float b, float d, float c)
+		private int getFormula(float t, float b, float d, float c)
 		{
 			//adjust formula to selected algoritm from combobox
 			switch (animType) {
-				case "linear":
+				case AnimType.Linear:
 					// simple linear tweening - no easing
 					return (int)(c*t/d+b);
 
-				case "easeinquad":
+				case AnimType.easeInQuad:
 					// quadratic (t^2) easing in - accelerating from zero velocity
 					return (int)(c*(t/=d)*t + b);
 					
-				case "easeoutquad":
+				case AnimType.easeOutQuad:
 					// quadratic (t^2) easing out - decelerating to zero velocity
 					return (int)(-c*(t=t/d)*(t-2)+b);
 					
-				case "easeinoutquad":
+				case AnimType.easeInOutQuad:
 					// quadratic easing in/out - acceleration until halfway, then deceleration
 					if ((t/=d/2)<1) return (int)(c/2*t*t+b); else return (int)(-c/2*((--t)*(t-2)-1)+b);
 					
-				case "easeincubic":
+				case AnimType.easeInCubic:
 					// cubic easing in - accelerating from zero velocity
 					return (int)(c*(t/=d)*t*t + b);
 
-				case "easeoutcubic":
+				case AnimType.easeOutCubic:
 					// cubic easing in - accelerating from zero velocity
 					return (int)(c*((t=t/d-1)*t*t + 1) + b);
 					
-				case "easeinoutcubic":
+				case AnimType.easeInOutCubic:
 					// cubic easing in - accelerating from zero velocity
 					if ((t/=d/2) < 1)return (int)(c/2*t*t*t+b);else return (int)(c/2*((t-=2)*t*t + 2)+b);
 
-				case "easeinquart":
+				case AnimType.easeInQuart:
 					// quartic easing in - accelerating from zero velocity
 					return (int)(c*(t/=d)*t*t*t + b);
 
-				case "easeinexpo":
+				case AnimType.easeInExpo:
 					// exponential (2^t) easing in - accelerating from zero velocity
 					if (t==0) return (int)b; else return (int)(c*Math.Pow(2,(10*(t/d-1)))+b);
 					
-				case "easeoutexpo":
+				case AnimType.easeOutExpo:
 					// exponential (2^t) easing out - decelerating to zero velocity
 					if (t==d) return (int)(b+c); else return (int)(c * (-Math.Pow(2,-10*t/d)+1)+b);
 

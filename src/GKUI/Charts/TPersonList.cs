@@ -24,9 +24,10 @@ namespace GKUI.Charts
 			pkDefault, pkSpouse
 		}
 
+		internal TTreeChartBox FChart;
+
 		private string FBirthDate;
 		private string FBirthYear;
-		internal TTreeChartBox FChart;
 		private string FDeathDate;
 		private string FDeathYear;
 		private string FFamily;
@@ -409,24 +410,24 @@ namespace GKUI.Charts
 				this.FName = nam;
 				this.FPatronymic = pat;
 				this.FNick = iRec.aux_GetNickStr();
-				this.FBirthDate = TGenEngine.GetBirthDate(iRec, TDateFormat.dfDD_MM_YYYY, false);
-				this.FDeathDate = TGenEngine.GetDeathDate(iRec, TDateFormat.dfDD_MM_YYYY, false);
+				this.FBirthDate = GKUtils.GetBirthDate(iRec, TDateFormat.dfDD_MM_YYYY, false);
+				this.FDeathDate = GKUtils.GetDeathDate(iRec, TDateFormat.dfDD_MM_YYYY, false);
 				this.IsDead = !iRec.IsLive();
 				this.FSex = iRec.Sex;
 				this.FSigns = this.FChart.GetPersonSign(iRec);
-				this.FBirthYear = TGenEngine.GetBirthDate(iRec, TDateFormat.dfYYYY, false);
-				this.FDeathYear = TGenEngine.GetDeathDate(iRec, TDateFormat.dfYYYY, false);
+				this.FBirthYear = GKUtils.GetBirthDate(iRec, TDateFormat.dfYYYY, false);
+				this.FDeathYear = GKUtils.GetDeathDate(iRec, TDateFormat.dfYYYY, false);
 
 				if (this.FChart.Options.PortraitsVisible)
 				{
 					try
 					{
-						this.FPortrait = this.FChart.Engine.GetPrimaryBitmap(iRec, -1, -1, true);
+						this.FPortrait = this.FChart.Media.GetPrimaryBitmap(iRec, -1, -1, true);
 					}
 					catch (MediaFileNotFoundException)
 					{
 						if (!hasMediaFail) {
-							TGenEngine.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
+							GKUtils.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
 							hasMediaFail = true;
 						}
 					}

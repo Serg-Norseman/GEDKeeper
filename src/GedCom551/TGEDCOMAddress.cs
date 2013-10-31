@@ -225,5 +225,22 @@ namespace GedCom551
 		{
 			return new TGEDCOMAddress(owner, parent, tagName, tagValue);
 		}
+        
+        #region Auxiliary
+
+		public void aux_SetAddressValue(string aValue)
+		{
+			StringList sl = new StringList(aValue);
+			try
+			{
+				this.Address = sl;
+			}
+			finally
+			{
+				sl.Free();
+			}
+		}
+
+        #endregion
 	}
 }

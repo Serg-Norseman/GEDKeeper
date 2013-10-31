@@ -34,12 +34,16 @@ namespace GKUI
 			this.Base.RecListNotesRefresh(this.FRepository, this.FNotesList.List, null);
 		}
 
-		private void ListModify(object Sender, object ItemData, TRecAction Action)
+		private void ListModify(object sender, ModifyEventArgs eArgs)
 		{
-			if (object.Equals(Sender, this.FNotesList) && this.Base.ModifyRecNote(this, this.FRepository, ItemData as TGEDCOMNotes, Action))
+			bool res = false;
+
+			if (sender == this.FNotesList)
 			{
-				this.ControlsRefresh();
+				res = this.Base.ModifyRecNote(this, this.FRepository, eArgs.ItemData as TGEDCOMNotes, eArgs.Action);
 			}
+
+			if (res) this.ControlsRefresh();
 		}
 
 		private void SetRepository(TGEDCOMRepositoryRecord Value)
@@ -75,7 +79,7 @@ namespace GKUI
 			this.FBase = aBase;
 
 			this.FNotesList = new GKSheetList(this.SheetNotes);
-			this.FNotesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FNotesList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.Base.SetupRecNotesList(this.FNotesList);
 
 			this.Text = LangMan.LSList[134];

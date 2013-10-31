@@ -25,7 +25,7 @@ namespace GKUI
 			get { return this.FBase; }
 			set {
 				this.FBase = value;
-				this.Text = string.Format(LangMan.LS(LSID.LSID_FullTextSearch)+" [{0}]", Path.GetFileName(FBase.FileName));
+				this.Text = string.Format(LangMan.LS(LSID.LSID_FullTextSearch)+" [{0}]", Path.GetFileName(FBase.Tree.FileName));
 			}
 		}
 

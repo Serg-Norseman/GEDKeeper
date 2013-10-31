@@ -66,7 +66,7 @@ namespace GedCom551
 			return base.IsEmpty() && this._SourceCitations.Count == 0;
 		}
 
-		public override void ReplaceXRefs(TXRefReplaceMap aMap)
+		public override void ReplaceXRefs(XRefReplacer aMap)
 		{
 			base.ReplaceXRefs(aMap);
 			this._SourceCitations.ReplaceXRefs(aMap);

@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace Ext.Utils
 {
-	public sealed class CalendarConverter
+	public static class CalendarConverter
 	{
 		public enum TDateEra : byte
 		{
@@ -37,17 +37,17 @@ namespace Ext.Utils
 			return (int)Math.Ceiling(X);
 		}
 
-		private double _modf(double a, double b)
+		private static double _modf(double a, double b)
 		{
 			return (a - b * Math.Floor((a / b)));
 		}
 
-		private int _modi(double a, double b)
+		private static int _modi(double a, double b)
 		{
 			return (int)SysUtils.Trunc(a - b * Math.Floor((a / b)));
 		}
 
-		private int _if(bool aCond, int aThen, int aElse)
+		private static int _if(bool aCond, int aThen, int aElse)
 		{
 			int Result;
 			if (aCond)
@@ -61,42 +61,42 @@ namespace Ext.Utils
 			return Result;
 		}
 
-		public bool hebrew_leap(int year)
+		public static bool hebrew_leap(int year)
 		{
-			return this._modf((double)(year * 7 + 1), 19.0) < (double)7f;
+			return _modf((double)(year * 7 + 1), 19.0) < (double)7f;
 		}
 
-		private int hebrew_year_months(int year)
+		private static int hebrew_year_months(int year)
 		{
-			return this._if(this.hebrew_leap(year), 13, 12);
+			return _if(hebrew_leap(year), 13, 12);
 		}
 
-		private int hebrew_delay_1(int year)
+		private static int hebrew_delay_1(int year)
 		{
 			int months = iFloor(((double)(235 * year - 234) / 19.0));
 			int parts = 12084 + 13753 * months;
 			int day = months * 29 + iFloor(((double)parts / 25920.0));
-			if (this._modf((double)(3 * (day + 1)), 7.0) < (double)3f)
+			if (_modf((double)(3 * (day + 1)), 7.0) < (double)3f)
 			{
 				day++;
 			}
 			return day;
 		}
 
-		private int hebrew_delay_2(int year)
+		private static int hebrew_delay_2(int year)
 		{
-			int last = this.hebrew_delay_1(year - 1);
-			int present = this.hebrew_delay_1(year);
-			int next = this.hebrew_delay_1(year + 1);
-			return this._if(next - present == 356, 2, this._if(present - last == 382, 1, 0));
+			int last = hebrew_delay_1(year - 1);
+			int present = hebrew_delay_1(year);
+			int next = hebrew_delay_1(year + 1);
+			return _if(next - present == 356, 2, _if(present - last == 382, 1, 0));
 		}
 
-		private double hebrew_year_days(int year)
+		private static double hebrew_year_days(int year)
 		{
-			return (this.hebrew_to_jd(year + 1, 7, 1) - this.hebrew_to_jd(year, 7, 1));
+			return (hebrew_to_jd(year + 1, 7, 1) - hebrew_to_jd(year, 7, 1));
 		}
 
-		private int hebrew_month_days(int year, int month)
+		private static int hebrew_month_days(int year, int month)
 		{
 			int Result;
 			if (month == 2 || month == 4 || month == 6 || month == 10 || month == 13)
@@ -105,19 +105,19 @@ namespace Ext.Utils
 			}
 			else
 			{
-				if (month == 12 && !this.hebrew_leap(year))
+				if (month == 12 && !hebrew_leap(year))
 				{
 					Result = 29;
 				}
 				else
 				{
-					if (month == 8 && this._modf(this.hebrew_year_days(year), 10.0) != (double)5f)
+					if (month == 8 && _modf(hebrew_year_days(year), 10.0) != (double)5f)
 					{
 						Result = 29;
 					}
 					else
 					{
-						if (month == 9 && this._modf(this.hebrew_year_days(year), 10.0) == (double)3f)
+						if (month == 9 && _modf(hebrew_year_days(year), 10.0) == (double)3f)
 						{
 							Result = 29;
 						}
@@ -131,59 +131,59 @@ namespace Ext.Utils
 			return Result;
 		}
 
-		public bool leap_gregorian(int year)
+		public static bool leap_gregorian(int year)
 		{
 			return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
 		}
 
-		public bool leap_julian(int year)
+		public static bool leap_julian(int year)
 		{
-			return this._modf((double)year, 4.0) == (double)this._if(year > 0, 0, 3);
+			return _modf((double)year, 4.0) == (double)_if(year > 0, 0, 3);
 		}
 
-		public bool leap_islamic(int year)
+		public static bool leap_islamic(int year)
 		{
 			return (year * 11 + 14) % 30 < 11;
 		}
 
-		public bool leap_persian(int year)
+		public static bool leap_persian(int year)
 		{
-			return ((year - this._if(year > 0, 474, 473)) % 2820 + 474 + 38) * 682 % 2816 < 682;
+			return ((year - _if(year > 0, 474, 473)) % 2820 + 474 + 38) * 682 % 2816 < 682;
 		}
 
-		public int jwday(double j)
+		public static int jwday(double j)
 		{
-			return this._modi(Math.Floor((j + 1.5)), 7.0);
+			return _modi(Math.Floor((j + 1.5)), 7.0);
 		}
 
-		public double gregorian_to_jd(int year, int month, int day)
+		public static double gregorian_to_jd(int year, int month, int day)
 		{
-			return (1721424.5 + (double)(365 * (year - 1)) + Math.Floor(((double)(year - 1) / 4.0)) + -Math.Floor(((double)(year - 1) / 100.0)) + Math.Floor(((double)(year - 1) / 400.0)) + Math.Floor(((double)(367 * month - 362) / 12.0 + (double)this._if(month <= 2, 0, this._if(this.leap_gregorian(year), -1, -2)) + (double)day)));
+			return (1721424.5 + (double)(365 * (year - 1)) + Math.Floor(((double)(year - 1) / 4.0)) + -Math.Floor(((double)(year - 1) / 100.0)) + Math.Floor(((double)(year - 1) / 400.0)) + Math.Floor(((double)(367 * month - 362) / 12.0 + (double)_if(month <= 2, 0, _if(leap_gregorian(year), -1, -2)) + (double)day)));
 		}
 
-		public void jd_to_gregorian(double jd, ref int year, ref int month, ref int day)
+		public static void jd_to_gregorian(double jd, ref int year, ref int month, ref int day)
 		{
 			double wjd = (Math.Floor((jd - 0.5)) + 0.5);
 			double depoch = (wjd - 1721425.5);
 			int quadricent = iFloor((depoch / 146097.0));
-			double dqc = this._modf(depoch, 146097.0);
+			double dqc = _modf(depoch, 146097.0);
 			int cent = iFloor((dqc / 36524.0));
-			double dcent = this._modf(dqc, 36524.0);
+			double dcent = _modf(dqc, 36524.0);
 			int quad = iFloor((dcent / 1461.0));
-			double dquad = this._modf(dcent, 1461.0);
+			double dquad = _modf(dcent, 1461.0);
 			int yindex = iFloor((dquad / 365.0));
 			year = quadricent * 400 + cent * 100 + (quad << 2) + yindex;
 			if (cent != 4 && yindex != 4)
 			{
 				year++;
 			}
-			double yearday = (wjd - this.gregorian_to_jd(year, 1, 1));
-			int leapadj = this._if(wjd < this.gregorian_to_jd(year, 3, 1), 0, this._if(this.leap_gregorian(year), 1, 2));
+			double yearday = (wjd - gregorian_to_jd(year, 1, 1));
+			int leapadj = _if(wjd < gregorian_to_jd(year, 3, 1), 0, _if(leap_gregorian(year), 1, 2));
 			month = iFloor((((yearday + (double)leapadj) * 12.0 + 373.0) / 367.0));
-			day = (int)(Math.Truncate(wjd - this.gregorian_to_jd(year, month, 1)) + 1);
+			day = (int)(Math.Truncate(wjd - gregorian_to_jd(year, month, 1)) + 1);
 		}
 
-		public double julian_to_jd(int year, int month, int day)
+		public static double julian_to_jd(int year, int month, int day)
 		{
 			if (year < 1)
 			{
@@ -197,15 +197,15 @@ namespace Ext.Utils
 			return (Math.Floor((365.25 * (double)(year + 4716))) + Math.Floor((30.6001 * (double)(month + 1))) + (double)day - 1524.5);
 		}
 
-		public void jd_to_julian(double jd, ref int year, ref int month, ref int day)
+		public static void jd_to_julian(double jd, ref int year, ref int month, ref int day)
 		{
 			jd = (jd + 0.5);
 			int b = iFloor(jd) + 1524;
 			int c = iFloor((((double)b - 122.1) / 365.25));
 			int d = iFloor((365.25 * (double)c));
 			int e = iFloor(((double)(b - d) / 30.6001));
-			month = iFloor((double)this._if(e < 14, e - 1, e - 13));
-			year = iFloor((double)this._if(month > 2, c - 4716, c - 4715));
+			month = iFloor((double)_if(e < 14, e - 1, e - 13));
+			year = iFloor((double)_if(month > 2, c - 4716, c - 4715));
 			day = b - d - iFloor((30.6001 * (double)e));
 			if (year < 1)
 			{
@@ -213,10 +213,10 @@ namespace Ext.Utils
 			}
 		}
 
-		public double hebrew_to_jd(int year, int month, int day)
+		public static double hebrew_to_jd(int year, int month, int day)
 		{
-			int months = this.hebrew_year_months(year);
-			double jd = (347995.5 + (double)this.hebrew_delay_1(year) + (double)this.hebrew_delay_2(year) + (double)day + 1.0);
+			int months = hebrew_year_months(year);
+			double jd = (347995.5 + (double)hebrew_delay_1(year) + (double)hebrew_delay_2(year) + (double)day + 1.0);
 			if (month < 7)
 			{
 				int num = months;
@@ -226,7 +226,7 @@ namespace Ext.Utils
 					num++;
 					do
 					{
-						jd = (jd + (double)this.hebrew_month_days(year, mon));
+						jd = (jd + (double)hebrew_month_days(year, mon));
 						mon++;
 					}
 					while (mon != num);
@@ -239,7 +239,7 @@ namespace Ext.Utils
 					num2++;
 					do
 					{
-						jd = (jd + (double)this.hebrew_month_days(year, mon));
+						jd = (jd + (double)hebrew_month_days(year, mon));
 						mon++;
 					}
 					while (mon != num2);
@@ -254,7 +254,7 @@ namespace Ext.Utils
 					num3++;
 					do
 					{
-						jd = (jd + (double)this.hebrew_month_days(year, mon));
+						jd = (jd + (double)hebrew_month_days(year, mon));
 						mon++;
 					}
 					while (mon != num3);
@@ -263,54 +263,54 @@ namespace Ext.Utils
 			return jd;
 		}
 
-		public void jd_to_hebrew(double jd, ref int year, ref int month, ref int day)
+		public static void jd_to_hebrew(double jd, ref int year, ref int month, ref int day)
 		{
 			jd = (Math.Floor(jd) + 0.5);
 			int count = iFloor(((jd - 347995.5) * 98496.0 / 35975351.0));
 			year = count - 1;
 			int i = count;
-			while (jd >= this.hebrew_to_jd(i, 7, 1))
+			while (jd >= hebrew_to_jd(i, 7, 1))
 			{
 				i++;
 				year++;
 			}
-			int first = this._if(jd < this.hebrew_to_jd(year, 1, 1), 7, 1);
+			int first = _if(jd < hebrew_to_jd(year, 1, 1), 7, 1);
 			month = first;
 			i = first;
-			while (jd > this.hebrew_to_jd(year, i, this.hebrew_month_days(year, i)))
+			while (jd > hebrew_to_jd(year, i, hebrew_month_days(year, i)))
 			{
 				i++;
 				month++;
 			}
-			day = (int)Math.Truncate(jd - this.hebrew_to_jd(year, month, 1) + 1.0);
+			day = (int)Math.Truncate(jd - hebrew_to_jd(year, month, 1) + 1.0);
 		}
 
-		public double islamic_to_jd(int year, int month, int day)
+		public static double islamic_to_jd(int year, int month, int day)
 		{
 			return ((double)(day + Math.Ceiling((29.5 * (double)(month - 1))) + (year - 1) * 354 + Math.Floor(((double)(3 + 11 * year) / 30.0))) + 1948439.5 - 1.0);
 		}
 
-        public void jd_to_islamic(double jd, ref int year, ref int month, ref int day)
+        public static void jd_to_islamic(double jd, ref int year, ref int month, ref int day)
 		{
 			jd = ((double)Math.Floor(jd) + 0.5);
 			year = iFloor(((30.0 * (jd - 1948439.5) + 10646.0) / 10631.0));
-			month = Math.Min(12, iCeil(((jd - (29.0 + this.islamic_to_jd(year, 1, 1))) / 29.5)) + 1);
-			day = (int)Math.Truncate(jd - this.islamic_to_jd(year, month, 1) + 1.0);
+			month = Math.Min(12, iCeil(((jd - (29.0 + islamic_to_jd(year, 1, 1))) / 29.5)) + 1);
+			day = (int)Math.Truncate(jd - islamic_to_jd(year, month, 1) + 1.0);
 		}
 
-		public double persian_to_jd(int year, int month, int day)
+		public static double persian_to_jd(int year, int month, int day)
 		{
-			double epbase = (double)(year - this._if(year >= 0, 474, 473));
-			double epyear = (474.0 + this._modf(epbase, 2820.0));
-			return ((double)(day + this._if(month <= 7, (month - 1) * 31, (month - 1) * 30 + 6) + Math.Floor(((epyear * 682.0 - 110.0) / 2816.0))) + (epyear - 1.0) * 365.0 + (Math.Floor((epbase / 2820.0)) * 1029983) + 1948319.5);
+			double epbase = (double)(year - _if(year >= 0, 474, 473));
+			double epyear = (474.0 + _modf(epbase, 2820.0));
+			return ((double)(day + _if(month <= 7, (month - 1) * 31, (month - 1) * 30 + 6) + Math.Floor(((epyear * 682.0 - 110.0) / 2816.0))) + (epyear - 1.0) * 365.0 + (Math.Floor((epbase / 2820.0)) * 1029983) + 1948319.5);
 		}
 
-		public void jd_to_persian(double jd, ref int year, ref int month, ref int day)
+		public static void jd_to_persian(double jd, ref int year, ref int month, ref int day)
 		{
 			jd = (Math.Floor(jd) + 0.5);
-			double depoch = (jd - this.persian_to_jd(475, 1, 1));
+			double depoch = (jd - persian_to_jd(475, 1, 1));
 			int cycle = iFloor((depoch / 1029983.0));
-			int cyear = this._modi(depoch, 1029983.0);
+			int cyear = _modi(depoch, 1029983.0);
 			int ycycle;
 			if (cyear == 1029982)
 			{
@@ -319,7 +319,7 @@ namespace Ext.Utils
 			else
 			{
 				int aux = iFloor(((double)cyear / 366.0));
-				int aux2 = this._modi((double)cyear, 366.0);
+				int aux2 = _modi((double)cyear, 366.0);
 				ycycle = iFloor(((double)(2134 * aux + 2816 * aux2 + 2815) / 1028522.0)) + aux + 1;
 			}
 			year = ycycle + 2820 * cycle + 474;
@@ -327,17 +327,17 @@ namespace Ext.Utils
 			{
 				year--;
 			}
-			double yday = (jd - this.persian_to_jd(year, 1, 1) + 1.0);
-			month = this._if(yday <= (double)186f, iCeil((yday / 31.0)), iCeil(((yday - 6.0) / 30.0)));
-			day = (int)Math.Truncate(jd - this.persian_to_jd(year, month, 1) + 1.0);
+			double yday = (jd - persian_to_jd(year, 1, 1) + 1.0);
+			month = _if(yday <= (double)186f, iCeil((yday / 31.0)), iCeil(((yday - 6.0) / 30.0)));
+			day = (int)Math.Truncate(jd - persian_to_jd(year, month, 1) + 1.0);
 		}
 
-		public double indian_civil_to_jd(int year, int month, int day)
+		public static double indian_civil_to_jd(int year, int month, int day)
 		{
 			int gyear = year + 78;
-			bool leap = this.leap_gregorian(gyear);
-			double start = this.gregorian_to_jd(gyear, 3, this._if(leap, 21, 22));
-			int Caitra = this._if(leap, 31, 30);
+			bool leap = leap_gregorian(gyear);
+			double start = gregorian_to_jd(gyear, 3, _if(leap, 21, 22));
+			int Caitra = _if(leap, 31, 30);
 			double jd;
 			if (month == 1)
 			{
@@ -359,7 +359,7 @@ namespace Ext.Utils
 			return jd;
 		}
 
-		public void jd_to_indian_civil(double jd, ref int year, ref int month, ref int day)
+		public static void jd_to_indian_civil(double jd, ref int year, ref int month, ref int day)
 		{
 			int Saka = 78;
 			double start = 80.0;
@@ -367,12 +367,12 @@ namespace Ext.Utils
 			int greg_y = 0;
 			int greg_m = 0;
 			int greg_d = 0;
-			this.jd_to_gregorian(jd, ref greg_y, ref greg_m, ref greg_d);
-			bool leap = this.leap_gregorian(greg_y);
+			jd_to_gregorian(jd, ref greg_y, ref greg_m, ref greg_d);
+			bool leap = leap_gregorian(greg_y);
 			year = greg_y - Saka;
-			double greg = this.gregorian_to_jd(greg_y, 1, 1);
+			double greg = gregorian_to_jd(greg_y, 1, 1);
 			double yday = (jd - greg);
-			int Caitra = this._if(leap, 31, 30);
+			int Caitra = _if(leap, 31, 30);
 			if (yday < start)
 			{
 				year--;
@@ -401,34 +401,34 @@ namespace Ext.Utils
 			}
 		}
 
-		public double bahai_to_jd(int major, int cycle, int year, int month, int day)
+		public static double bahai_to_jd(int major, int cycle, int year, int month, int day)
 		{
 			int by = 0;
 			int dummy = 0;
-			this.jd_to_gregorian(2394646.5, ref by, ref dummy, ref dummy);
+			jd_to_gregorian(2394646.5, ref by, ref dummy, ref dummy);
 			int gy = 361 * (major - 1) + 19 * (cycle - 1) + (year - 1) + by;
-			return (this.gregorian_to_jd(gy, 3, 20) + (double)(19 * (month - 1)) + (double)this._if(month != 20, 0, this._if(this.leap_gregorian(gy + 1), -14, -15)) + (double)day);
+			return (gregorian_to_jd(gy, 3, 20) + (double)(19 * (month - 1)) + (double)_if(month != 20, 0, _if(leap_gregorian(gy + 1), -14, -15)) + (double)day);
 		}
 
-		public void jd_to_bahai(double jd, ref int major, ref int cycle, ref int year, ref int month, ref int day)
+		public static void jd_to_bahai(double jd, ref int major, ref int cycle, ref int year, ref int month, ref int day)
 		{
 			jd = (Math.Floor(jd) + 0.5);
 			int gy = 0;
 			int dummy = 0;
-			this.jd_to_gregorian(jd, ref gy, ref dummy, ref dummy);
+			jd_to_gregorian(jd, ref gy, ref dummy, ref dummy);
 			int bstarty = 0;
-			this.jd_to_gregorian(2394646.5, ref bstarty, ref dummy, ref dummy);
-			int bys = gy - (bstarty + this._if(this.gregorian_to_jd(gy, 1, 1) <= jd && jd <= this.gregorian_to_jd(gy, 3, 20), 1, 0));
+			jd_to_gregorian(2394646.5, ref bstarty, ref dummy, ref dummy);
+			int bys = gy - (bstarty + _if(gregorian_to_jd(gy, 1, 1) <= jd && jd <= gregorian_to_jd(gy, 3, 20), 1, 0));
 			major = iFloor(((double)bys / 361.0)) + 1;
-			cycle = iFloor((this._modf((double)bys, 361.0) / 19.0)) + 1;
-			year = this._modi((double)bys, 19.0) + 1;
-			double days = (jd - this.bahai_to_jd(major, cycle, year, 1, 1));
-			double bld = this.bahai_to_jd(major, cycle, year, 20, 1);
-			month = this._if(jd >= bld, 20, iFloor((days / 19.0)) + 1);
-			day = iFloor((jd + 1.0 - this.bahai_to_jd(major, cycle, year, month, 1)));
+			cycle = iFloor((_modf((double)bys, 361.0) / 19.0)) + 1;
+			year = _modi((double)bys, 19.0) + 1;
+			double days = (jd - bahai_to_jd(major, cycle, year, 1, 1));
+			double bld = bahai_to_jd(major, cycle, year, 20, 1);
+			month = _if(jd >= bld, 20, iFloor((days / 19.0)) + 1);
+			day = iFloor((jd + 1.0 - bahai_to_jd(major, cycle, year, month, 1)));
 		}
 
-		public string date_to_str(int aYear, int aMonth, int aDay, CalendarConverter.TDateEra aEra)
+		public static string date_to_str(int aYear, int aMonth, int aDay, CalendarConverter.TDateEra aEra)
 		{
 			DateTimeFormatInfo DateTimeInfo = Thread.CurrentThread.CurrentCulture.DateTimeFormat;
 			string Result = string.Concat(new string[]
@@ -444,11 +444,6 @@ namespace Ext.Utils
 				Result += " до н.э.";
 			}
 			return Result;
-		}
-
-		public void Free()
-		{
-			SysUtils.Free(this);
 		}
 
 		static CalendarConverter()

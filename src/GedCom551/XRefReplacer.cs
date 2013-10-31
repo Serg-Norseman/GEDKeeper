@@ -3,36 +3,36 @@ using System.Collections.Generic;
 
 namespace GedCom551
 {
-	public sealed class TXRefReplaceMap : TGEDCOMObject
+	public sealed class XRefReplacer : TGEDCOMObject
 	{
-		public struct TXRefRec
+		public struct XRefEntry
 		{
 			public TGEDCOMRecord Rec;
 			public string OldXRef;
 			public string NewXRef;
 
-			public TXRefRec(TGEDCOMRecord aRec, string aOldXRef, string aNewXRef) {
+			public XRefEntry(TGEDCOMRecord aRec, string aOldXRef, string aNewXRef) {
 				this.Rec = aRec;
 				this.OldXRef = aOldXRef;
 				this.NewXRef = aNewXRef;
 			}
 		}
 
-		private List<TXRefRec> FList = new List<TXRefRec>();
+		private List<XRefEntry> FList = new List<XRefEntry>();
 
 		public int Count
 		{
 			get	{ return this.FList.Count; }
 		}
 
-		public TXRefRec this[int Index]
+		public XRefEntry this[int Index]
 		{
 			get { return this.FList[Index]; }
 		}
 
 		public void AddXRef(TGEDCOMRecord rec, string oldXRef, string newXRef)
 		{
-			this.FList.Add(new TXRefRec(rec, oldXRef, newXRef));
+			this.FList.Add(new XRefEntry(rec, oldXRef, newXRef));
 		}
 
 		public string FindNewXRef(string oldXRef)

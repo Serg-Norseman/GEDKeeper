@@ -161,7 +161,7 @@ namespace GedCom551
 			this._RepositoryCitations.Pack();
 		}
 
-		public override void ReplaceXRefs(TXRefReplaceMap aMap)
+		public override void ReplaceXRefs(XRefReplacer aMap)
 		{
 			base.ReplaceXRefs(aMap);
 			this._RepositoryCitations.ReplaceXRefs(aMap);

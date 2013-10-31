@@ -15,7 +15,6 @@ namespace GKCore
 {
 	public class Importer
 	{
-		private TGenEngine FEngine;
 		private TGEDCOMTree FTree;
 		private ListBox.ObjectCollection FLog;
 		private StringList FPersonsList;
@@ -202,7 +201,7 @@ namespace GKCore
 		private void SetEvent(TGEDCOMIndividualRecord iRec, string evName, string date)
 		{
 			int[] val = new int[3];
-			TGEDCOMCustomEvent ev = TGenEngine.CreateEventEx(this.FTree, iRec, evName, "", "");
+			TGEDCOMCustomEvent ev = GKUtils.CreateEventEx(this.FTree, iRec, evName, "", "");
 			try
 			{
 				string prefix = "";
@@ -309,7 +308,7 @@ namespace GKCore
 			string dd = "";
 
 			this.DefinePersonName(aStr, p_id, ref f_name, ref f_pat, ref f_fam, ref bd, ref dd);
-			TGEDCOMIndividualRecord Result = TGenEngine.CreatePersonEx(this.FTree, f_name, f_pat, f_fam, TGEDCOMSex.svNone, false);
+			TGEDCOMIndividualRecord Result = GKUtils.CreatePersonEx(this.FTree, f_name, f_pat, f_fam, TGEDCOMSex.svNone, false);
 			TfmSexCheck.CheckPersonSex(Result, GKUI.TfmGEDKeeper.Instance.NamesTable);
 			this.FPersonsList.AddObject(self_id.ToString(), Result);
 
@@ -394,7 +393,7 @@ namespace GKCore
 				{
 					this.CheckSpouses(buf, iRec);
 				}
-				TGenEngine.CreateNoteEx(this.FTree, buf, iRec);
+				this.FTree.aux_CreateNoteEx(iRec, buf);
 				buf.Clear();
 			}
 		}
@@ -517,7 +516,7 @@ namespace GKCore
 								if (nm_parts.Length > 1) f_pat = this.CheckDot(nm_parts[1]);
 								if (nm_parts.Length > 2) f_fam = this.CheckDot(nm_parts[2]);
 
-								TGEDCOMIndividualRecord sp = TGenEngine.CreatePersonEx(this.FTree, f_name, f_pat, f_fam, sx, false);
+								TGEDCOMIndividualRecord sp = GKUtils.CreatePersonEx(this.FTree, f_name, f_pat, f_fam, sx, false);
 								fam.aux_AddSpouse(sp);
 							}
 						}
@@ -589,10 +588,9 @@ namespace GKCore
 			}
 		}
 
-		public Importer(TGenEngine aEngine, ListBox.ObjectCollection aLog)
+		public Importer(TGEDCOMTree tree, ListBox.ObjectCollection aLog)
 		{
-			this.FEngine = aEngine;
-			this.FTree = this.FEngine.Tree;
+			this.FTree = tree;
 			this.FLog = aLog;
 		}
 

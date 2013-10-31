@@ -13,15 +13,15 @@ namespace GKUI
 {
 	public partial class TfmNameEdit : Form
 	{
-		private NamesTable.TName FIName;
+		private NamesTable.NameEntry FIName;
 
-		public NamesTable.TName IName
+		public NamesTable.NameEntry IName
 		{
 			get { return this.FIName; }
 			set { this.SetIName(value); }
 		}
 
-		private void SetIName(NamesTable.TName Value)
+		private void SetIName(NamesTable.NameEntry Value)
 		{
 			this.FIName = Value;
 			if (this.FIName == null)
@@ -71,7 +71,7 @@ namespace GKUI
 
 			for (TGEDCOMSex sx = TGEDCOMSex.svNone; sx <= TGEDCOMSex.svLast; sx++)
 			{
-				this.edSex.Items.Add(TGenEngine.SexStr(sx));
+				this.edSex.Items.Add(GKUtils.SexStr(sx));
 			}
 
 			this.btnAccept.Text = LangMan.LSList[97];

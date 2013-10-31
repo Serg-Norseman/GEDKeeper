@@ -17,16 +17,25 @@ namespace GKTests
 			string s1 = "abcd 12345 efgh";
 			string s2, st;
 			s2 = GEDCOMUtils.ExtractString(s1, out st, "");
-			Assert.True(st == "abcd");
-			Assert.True(s2 == " 12345 efgh");
+			Assert.AreEqual(st, "abcd");
+			Assert.AreEqual(s2, " 12345 efgh");
 			
 			s2 = GEDCOMUtils.ExtractDelimiter(s2, 0);
-			Assert.True(s2 == "12345 efgh");
+			Assert.AreEqual(s2, "12345 efgh");
+
+			// проверить, что нормально отработает, если задан максимум
+			s1 = GEDCOMUtils.ExtractDelimiter("    abrvalg", 2);
+			Assert.AreEqual(s1, "  abrvalg");
 			
 			int N;
 			s2 = GEDCOMUtils.ExtractNumber(s2, out N, true, 0);
-			Assert.True(s2 == " efgh");
-			Assert.True(N == 12345);
+			Assert.AreEqual(s2, " efgh");
+			Assert.AreEqual(N, 12345);
+
+			string xref;
+			s2 = GEDCOMUtils.ExtractXRef("@I101@ sample", out xref, true, "");
+			Assert.AreEqual(s2, " sample");
+			Assert.AreEqual(xref, "I101");
 
 			//
 			Assert.IsFalse(GEDCOMUtils.IsDigit('F'), "IsDigit(F)");
@@ -45,34 +54,36 @@ namespace GKTests
 		public void GEDCOMFactoryTests()
 		{
 			GEDCOMFactory f = GEDCOMFactory.GetInstance();
-			Assert.IsFalse(f == null, "f != null");
+			Assert.IsNotNull(f, "f != null");
 			
 			f.RegisterTag("DATE", TGEDCOMDateValue.Create);
 
 			TGEDCOMTag tag = f.CreateTag(null, null, "DATE", "");
-			Assert.IsTrue(tag != null, "tag != null");
+			Assert.IsNotNull(tag, "tag != null");
 
 			tag = f.CreateTag(null, null, "TEST", "");
-			Assert.IsTrue(tag == null, "tag == null");
+			Assert.IsNull(tag, "tag == null");
 		}
 
 		[Test]
 		public void GEDCOMDateTests1()
 		{
 			TGEDCOMChangeDate cd = new TGEDCOMChangeDate(null, null, "CHAN", "");
-			Assert.IsTrue(cd != null, "cd != null");
+			Assert.IsNotNull(cd, "cd != null");
 
 			DateTime dtNow = DateTime.Now;
-			dtNow = dtNow.AddMilliseconds(-(double)dtNow.Millisecond);
+			dtNow = dtNow.AddTicks(-dtNow.Ticks % 10000000);
 			cd.ChangeDateTime = dtNow;
-			Assert.IsTrue(cd.ChangeDateTime.Equals(dtNow), "cd.ChangeDateTime == dtNow");
+			
+			DateTime dtx = cd.ChangeDateTime;
+			Assert.IsTrue(dtx.Equals(dtNow), "cd.ChangeDateTime == dtNow");
 		}
 
 		[Test]
 		public void GEDCOMDateTests2()
 		{
 			TGEDCOMDateExact dtx1 = new TGEDCOMDateExact(null, null, "DATE", "20 JAN 2013");
-			Assert.IsTrue(dtx1 != null, "dtx1 != null");
+			Assert.IsNotNull(dtx1, "dtx1 != null");
 
 			DateTime dt = DateTime.Parse("20.01.2013");
 			Assert.IsTrue(dtx1.Date.Equals(dt), "dtx1.DateTime.Equals(dt)");
@@ -82,7 +93,7 @@ namespace GKTests
 		public void GEDCOMDateTests3()
 		{
 			TGEDCOMDateValue dtx1 = new TGEDCOMDateValue(null, null, "DATE", "20 JAN 2013");
-			Assert.IsTrue(dtx1 != null, "dtx1 != null");
+			Assert.IsNotNull(dtx1, "dtx1 != null");
 
 			DateTime dt = DateTime.Parse("20.01.2013");
 			Assert.IsTrue(dtx1.Date.Equals(dt), "dtx1.DateTime.Equals(dt)");
@@ -95,29 +106,29 @@ namespace GKTests
 			st = "ABT 20 JAN 2013";
 			dtx1.ParseString(st);
 			Assert.IsTrue(dtx1.Date.Equals(dt));
-			Assert.IsTrue(st == dtx1.StringValue);
-			Assert.IsTrue(((TGEDCOMDateApproximated)dtx1.Value).Approximated == TGEDCOMApproximated.daAbout);
+			Assert.AreEqual(st, dtx1.StringValue);
+			Assert.AreEqual(((TGEDCOMDateApproximated)dtx1.Value).Approximated, TGEDCOMApproximated.daAbout);
 			
 			st = "CAL 20 JAN 2013";
 			dtx1.ParseString(st);
-			Assert.IsTrue(dtx1.Date.Equals(dt));
-			Assert.IsTrue(st == dtx1.StringValue);
-			Assert.IsTrue(((TGEDCOMDateApproximated)dtx1.Value).Approximated == TGEDCOMApproximated.daCalculated);
+			Assert.AreEqual(dtx1.Date, dt);
+			Assert.AreEqual(st, dtx1.StringValue);
+			Assert.AreEqual(((TGEDCOMDateApproximated)dtx1.Value).Approximated, TGEDCOMApproximated.daCalculated);
 			
 			st = "EST 20 JAN 2013";
 			dtx1.ParseString(st);
-			Assert.IsTrue(dtx1.Date.Equals(dt));
-			Assert.IsTrue(st == dtx1.StringValue);
-			Assert.IsTrue(((TGEDCOMDateApproximated)dtx1.Value).Approximated == TGEDCOMApproximated.daEstimated);
+			Assert.AreEqual(dtx1.Date, dt);
+			Assert.AreEqual(st, dtx1.StringValue);
+			Assert.AreEqual(((TGEDCOMDateApproximated)dtx1.Value).Approximated, TGEDCOMApproximated.daEstimated);
 
 			dtx1.ParseString("FROM 04 JAN 2013 TO 20 JAN 2013");
 			Assert.IsFalse(dtx1.IsEmpty(), "!dtx1.IsEmpty");
 
 			dtx1.ParseString("BEF 20 JAN 2013");
-			Assert.IsTrue(dtx1.Date.Equals(dt), "BEF");
+			Assert.AreEqual(dtx1.Date, dt, "BEF");
 
 			dtx1.ParseString("AFT 20 JAN 2013");
-			Assert.IsTrue(dtx1.Date.Equals(dt), "AFT");
+			Assert.AreEqual(dtx1.Date, dt, "AFT");
 
 			dtx1.ParseString("BET 04 JAN 2013 AND 20 JAN 2013");
 			Assert.IsFalse(dtx1.IsEmpty(), "!dtx1.IsEmpty");
@@ -126,89 +137,99 @@ namespace GKTests
 		[Test]
 		public void GEDCOMAddressTests()
 		{
-			TGEDCOMTag addr = TGEDCOMAddress.Create(null, null, "ADDR", "");
-			Assert.IsTrue(addr != null, "addr != null");
+			TGEDCOMAddress addr = TGEDCOMAddress.Create(null, null, "ADDR", "") as TGEDCOMAddress;
+			Assert.IsNotNull(addr, "addr != null");
+			
+			addr.aux_SetAddressValue("test");
+			Assert.AreEqual(addr.Address.Text.Trim(), "test");
 		}
 
 		[Test]
 		public void GEDCOMAliasTests()
 		{
 			TGEDCOMTag alias = TGEDCOMAlias.Create(null, null, "ALIA", "");
-			Assert.IsTrue(alias != null, "alias != null");
+			Assert.IsNotNull(alias, "alias != null");
 		}
 
 		[Test]
 		public void GEDCOMAssociationTests()
 		{
 			TGEDCOMTag association = TGEDCOMAssociation.Create(null, null, "ASSO", "");
-			Assert.IsTrue(association != null, "association != null");
+			Assert.IsNotNull(association, "association != null");
+		}
+
+		//[Test]
+		public void GEDCOMIndiTests(TGEDCOMTree tree)
+		{
+			
 		}
 
 		[Test]
 		public void GEDCOMTreeTests()
 		{
 			TGEDCOMTree tree = new TGEDCOMTree();
-			Assert.IsTrue(tree != null, "tree != null");
+			Assert.IsNotNull(tree, "tree != null");
 			
 			TGEDCOMRecord rec;
 			
-			rec = tree.AddRecord(new TGEDCOMIndividualRecord(tree, tree, "", ""));
-			Assert.IsTrue(rec != null, "rec1 != null");
+			//GEDCOMIndiTests(tree);
+			rec = tree.AddRecord(TGEDCOMIndividualRecord.Create(tree, tree, "", "") as TGEDCOMRecord);
+			Assert.IsNotNull(rec, "rec1 != null");
 			rec.InitNew();
 
 			string xref = rec.XRef;
 			rec = tree.XRefIndex_Find(xref);
-			Assert.IsTrue(rec != null, "rec2 != null");
-			Assert.IsTrue(rec.XRef == xref, "rec.XRef == xref");
+			Assert.IsNotNull(rec, "rec2 != null");
+			Assert.AreEqual(rec.XRef, xref, "rec.XRef == xref");
 			
 			//
 			
-			rec = tree.AddRecord(new TGEDCOMFamilyRecord(tree, tree, "", ""));
-			Assert.IsTrue(rec != null, "rec1 != null");
+			rec = tree.AddRecord(TGEDCOMFamilyRecord.Create(tree, tree, "", "") as TGEDCOMRecord);
+			Assert.IsNotNull(rec, "rec1 != null");
 			rec.InitNew();
 			
-			rec = tree.AddRecord(new TGEDCOMNoteRecord(tree, tree, "", ""));
-			Assert.IsTrue(rec != null, "rec1 != null");
+			rec = tree.AddRecord(TGEDCOMNoteRecord.Create(tree, tree, "", "") as TGEDCOMRecord);
+			Assert.IsNotNull(rec, "rec1 != null");
 			rec.InitNew();
 			
-			rec = tree.AddRecord(new TGEDCOMSourceRecord(tree, tree, "", ""));
-			Assert.IsTrue(rec != null, "rec1 != null");
+			rec = tree.AddRecord(TGEDCOMSourceRecord.Create(tree, tree, "", "") as TGEDCOMRecord);
+			Assert.IsNotNull(rec, "rec1 != null");
 			rec.InitNew();
 			
-			rec = tree.AddRecord(new TGEDCOMRepositoryRecord(tree, tree, "", ""));
-			Assert.IsTrue(rec != null, "rec1 != null");
+			rec = tree.AddRecord(TGEDCOMRepositoryRecord.Create(tree, tree, "", "") as TGEDCOMRecord);
+			Assert.IsNotNull(rec, "rec1 != null");
 			rec.InitNew();
 			
-			rec = tree.AddRecord(new TGEDCOMMultimediaRecord(tree, tree, "", ""));
-			Assert.IsTrue(rec != null, "rec1 != null");
+			rec = tree.AddRecord(TGEDCOMMultimediaRecord.Create(tree, tree, "", "") as TGEDCOMRecord);
+			Assert.IsNotNull(rec, "rec1 != null");
 			rec.InitNew();
 			
-			rec = tree.AddRecord(new TGEDCOMSubmissionRecord(tree, tree, "", ""));
-			Assert.IsTrue(rec != null, "rec1 != null");
+			rec = tree.AddRecord(TGEDCOMSubmissionRecord.Create(tree, tree, "", "") as TGEDCOMRecord);
+			Assert.IsNotNull(rec, "rec1 != null");
 			rec.InitNew();
 			
-			rec = tree.AddRecord(new TGEDCOMSubmitterRecord(tree, tree, "", ""));
-			Assert.IsTrue(rec != null, "rec1 != null");
+			rec = tree.AddRecord(TGEDCOMSubmitterRecord.Create(tree, tree, "", "") as TGEDCOMRecord);
+			Assert.IsNotNull(rec, "rec1 != null");
 			rec.InitNew();
 			
-			rec = tree.AddRecord(new TGEDCOMGroupRecord(tree, tree, "", ""));
-			Assert.IsTrue(rec != null, "rec1 != null");
+			rec = tree.AddRecord(TGEDCOMGroupRecord.Create(tree, tree, "", "") as TGEDCOMRecord);
+			Assert.IsNotNull(rec, "rec1 != null");
 			rec.InitNew();
 			
-			rec = tree.AddRecord(new TGEDCOMResearchRecord(tree, tree, "", ""));
-			Assert.IsTrue(rec != null, "rec1 != null");
+			rec = tree.AddRecord(TGEDCOMResearchRecord.Create(tree, tree, "", "") as TGEDCOMRecord);
+			Assert.IsNotNull(rec, "rec1 != null");
 			rec.InitNew();
 			
-			rec = tree.AddRecord(new TGEDCOMTaskRecord(tree, tree, "", ""));
-			Assert.IsTrue(rec != null, "rec1 != null");
+			rec = tree.AddRecord(TGEDCOMTaskRecord.Create(tree, tree, "", "") as TGEDCOMRecord);
+			Assert.IsNotNull(rec, "rec1 != null");
 			rec.InitNew();
 			
-			rec = tree.AddRecord(new TGEDCOMCommunicationRecord(tree, tree, "", ""));
-			Assert.IsTrue(rec != null, "rec1 != null");
+			rec = tree.AddRecord(TGEDCOMCommunicationRecord.Create(tree, tree, "", "") as TGEDCOMRecord);
+			Assert.IsNotNull(rec, "rec1 != null");
 			rec.InitNew();
 
-			rec = tree.AddRecord(new TGEDCOMLocationRecord(tree, tree, "", ""));
-			Assert.IsTrue(rec != null, "rec1 != null");
+			rec = tree.AddRecord(TGEDCOMLocationRecord.Create(tree, tree, "", "") as TGEDCOMRecord);
+			Assert.IsNotNull(rec, "rec1 != null");
 			rec.InitNew();
 
 			tree.Pack();

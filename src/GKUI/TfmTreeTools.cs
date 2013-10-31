@@ -191,6 +191,11 @@ namespace GKUI
 			TfmProgress.ProgressStep();
 		}
 
+		void IProgressController.ProgressStep(int value)
+		{
+			TfmProgress.ProgressStep(value);
+		}
+
 		void btnTreeMerge_Click(object sender, EventArgs e)
 		{
 			if (this.OpenDialog1.ShowDialog() == DialogResult.OK) {
@@ -217,7 +222,7 @@ namespace GKUI
 			if (this.OpenDialog2.ShowDialog() == DialogResult.OK)
 			{
 				this.edImportFile.Text = this.OpenDialog2.FileName;
-				Importer imp = new Importer(this.Base.Engine, this.ListBox1.Items);
+				Importer imp = new Importer(this.Base.Tree, this.ListBox1.Items);
 				try
 				{
 					imp.TreeImportEx(this.edImportFile.Text);
@@ -317,6 +322,7 @@ namespace GKUI
 
 		private void CheckGroups()
 		{
+			gkLogChart1.Clear();
 			TfmProgress.ProgressInit(this.FTree.RecordsCount, LangMan.LSList[521]);
 			TList prepared = new TList();
 			try
@@ -342,7 +348,8 @@ namespace GKUI
 							TreeNode root = this.TreeView1.Nodes.Add(
 								group.ToString() + " " + LangMan.LSList[185].ToLower() + " (" + this.FSplitList.Count.ToString() + ")");
 
-							int num2 = this.FSplitList.Count - 1;
+							int cnt = this.FSplitList.Count;
+							int num2 = cnt - 1;
 							for (int j = 0; j <= num2; j++)
 							{
 								iRec = this.FSplitList[j] as TGEDCOMIndividualRecord;
@@ -355,6 +362,8 @@ namespace GKUI
 								root.Nodes.Add(new GKTreeNode(pn, iRec));
 							}
 							root.ExpandAll();
+							
+							gkLogChart1.AddFragment(cnt);
 						}
 					}
 
@@ -502,7 +511,7 @@ namespace GKUI
 				{
 					if (p_obj.Name.IndexOf("[*]") == 0)
 					{
-						TGenEngine.ShowMessage(LangMan.LSList[591]);
+						GKUtils.ShowMessage(LangMan.LSList[591]);
 					}
 					else
 					{
@@ -602,7 +611,7 @@ namespace GKUI
 					this.Base.DeleteIndividualRecord(obj as TGEDCOMIndividualRecord, false);
 				}
 			}
-			TGenEngine.ShowMessage(LangMan.LSList[578]);
+			GKUtils.ShowMessage(LangMan.LSList[578]);
 			this.FSplitList.Clear();
 			this.UpdateSplitLists();
 			this.Base.ListsRefresh(false);
@@ -688,7 +697,7 @@ namespace GKUI
 			try
 			{
 				this.ListPatriarchs.Items.Clear();
-				TreeTools.GetPatriarchsList(this.Base.Engine.Tree, true, false, lst, decimal.ToInt32(this.edMinGens.Value), !chkWithoutDates.Checked);
+				TreeTools.GetPatriarchsList(this.Base.Tree, true, false, lst, decimal.ToInt32(this.edMinGens.Value), !chkWithoutDates.Checked);
 
 				int num = lst.Count - 1;
 				for (int i = 0; i <= num; i++)

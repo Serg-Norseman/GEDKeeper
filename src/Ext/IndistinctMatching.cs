@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Ext.Utils
 {
@@ -14,9 +13,12 @@ namespace Ext.Utils
 			return min;
 		}
 
-		// quality checked
+		// quality checked, reduced memory useage
 		public static int LevenshteinDistance(string source, string target)
 		{
+			// Return trivial case - where they are equal
+			if (source.Equals(target)) return 0;
+
 			if (string.IsNullOrEmpty(source)) {
 				if (string.IsNullOrEmpty(target)) return 0;
 				return target.Length;
@@ -32,6 +34,9 @@ namespace Ext.Utils
 				source = temp;
 			}
 
+			// Return trivial case - where string1 is contained within string2
+			if (target.Contains(source)) return target.Length - source.Length;
+
 			int m = target.Length;
 			int n = source.Length;
 
@@ -39,14 +44,14 @@ namespace Ext.Utils
 			for (int j = 1; j <= m; j++) dist[0, j] = j;
 
 			int cur_row = 0;
+			int prev_row, cost;
 			for (int i = 1; i <= n; ++i) {
 				cur_row = i & 1;
 				dist[cur_row, 0] = i;
-				int prev_row = cur_row ^ 1;
+				prev_row = cur_row ^ 1;
 
 				for (int j = 1; j <= m; j++) {
-					int cost = (target[j - 1] == source[i - 1] ? 0 : 1);
-
+					cost = (target[j - 1] == source[i - 1] ? 0 : 1);
 					dist[cur_row, j] = Minimum(dist[prev_row, j] + 1, dist[cur_row, j - 1] + 1, dist[prev_row, j - 1] + cost);
 				}
 			}
@@ -54,60 +59,61 @@ namespace Ext.Utils
 			return dist[cur_row, m];
 		}
 
-		public static int DamerauLevenshteinDistance(string source, string target)
+
+		public static int DamerauLevenshteinDistance(string string1, string string2)
 		{
-			if (string.IsNullOrEmpty(source)) {
-				if (string.IsNullOrEmpty(target)) {
-					return 0;
-				} else {
-					return target.Length;
-				}
-			} else if (string.IsNullOrEmpty(target)) {
-				return source.Length;
+			// Return trivial case - where they are equal
+			if (string1.Equals(string2))
+				return 0;
+
+			// Return trivial case - where one is empty
+			if (String.IsNullOrEmpty(string1) || String.IsNullOrEmpty(string2))
+				return (string1 ?? "").Length + (string2 ?? "").Length;
+
+
+			// Ensure string2 (inner cycle) is longer
+			if (string1.Length > string2.Length)
+			{
+				var tmp = string1;
+				string1 = string2;
+				string2 = tmp;
 			}
 
-			int m = source.Length;
-			int n = target.Length;
-			int[,] H = new int[m + 2, n + 2];
+			// Return trivial case - where string1 is contained within string2
+			if (string2.Contains(string1))
+				return string2.Length - string1.Length;
 
-			int INF = m + n;
-			H[0, 0] = INF;
-			for (int i = 0; i <= m; i++) { H[i + 1, 1] = i; H[i + 1, 0] = INF; }
-			for (int j = 0; j <= n; j++) { H[1, j + 1] = j; H[0, j + 1] = INF; }
+			var length1 = string1.Length;
+			var length2 = string2.Length;
 
-			Dictionary<char, int> sd = new Dictionary<char, int>();
-			foreach (char Letter in (source + target))
+			var d = new int[length1 + 1, length2 + 1];
+
+			for (var i = 0; i <= d.GetUpperBound(0); i++)
+				d[i, 0] = i;
+
+			for (var i = 0; i <= d.GetUpperBound(1); i++)
+				d[0, i] = i;
+
+			for (var i = 1; i <= d.GetUpperBound(0); i++)
 			{
-				if (!sd.ContainsKey(Letter))
-					sd.Add(Letter, 0);
-			}
-
-			for (int i = 1; i <= m; i++)
-			{
-				int DB = 0;
-				for (int j = 1; j <= n; j++)
+				for (var j = 1; j <= d.GetUpperBound(1); j++)
 				{
-					int i1 = sd[target[j - 1]];
-					int j1 = DB;
+					var cost = string1[i - 1] == string2[j - 1] ? 0 : 1;
 
-					if (source[i - 1] == target[j - 1])
-					{
-						H[i + 1, j + 1] = H[i, j];
-						DB = j;
-					}
-					else
-					{
-						H[i + 1, j + 1] = Math.Min(H[i, j], Math.Min(H[i + 1, j], H[i, j + 1])) + 1;
-					}
+					var del = d[i - 1, j] + 1;
+					var ins = d[i, j - 1] + 1;
+					var sub = d[i - 1, j - 1] + cost;
 
-					H[i + 1, j + 1] = Math.Min(H[i + 1, j + 1], H[i1, j1] + (i - i1 - 1) + 1 + (j - j1 - 1));
+					d[i, j] = Math.Min(del, Math.Min(ins, sub));
+
+					if (i > 1 && j > 1 && string1[i - 1] == string2[j - 2] && string1[i - 2] == string2[j - 1])
+						d[i, j] = Math.Min(d[i, j], d[i - 2, j - 2] + cost);
 				}
-
-				sd[source[i - 1]] = i;
 			}
 
-			return H[m + 1, n + 1];
+			return d[d.GetUpperBound(0), d.GetUpperBound(1)];
 		}
+
 
 		public static double GetSimilarity(string firstString, string secondString)
 		{
@@ -124,20 +130,6 @@ namespace Ext.Utils
 			double percent = distance / (double)longestLenght;
 			return 1.0 - percent;
 		}
-
-		/*void Button1Click(object sender, EventArgs e)
-		{
-			this.button1.Enabled = false;
-
-			for (int i = 1; i <= 10000; i++) {
-				int res1 = LevenshteinDistance(this.textBox1.Text, this.textBox2.Text);
-				int res2 = DamerauLevenshteinDistance(this.textBox1.Text, this.textBox2.Text);
-
-				this.Text = res1.ToString() + " / " + res2.ToString();
-			}
-
-			this.button1.Enabled = true;
-		}*/
 		
 	}
 }

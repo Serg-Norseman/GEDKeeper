@@ -45,7 +45,7 @@ namespace GedCom551
 			this.FDetail.Pack();
 		}
 
-		public override void ReplaceXRefs(TXRefReplaceMap aMap)
+		public override void ReplaceXRefs(XRefReplacer aMap)
 		{
 			base.ReplaceXRefs(aMap);
 			this.FDetail.ReplaceXRefs(aMap);

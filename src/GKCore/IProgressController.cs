@@ -4,10 +4,17 @@ namespace GKCore
 {
 	public interface IProgressController
 	{
-		void ProgressInit(int aMax, string aTitle);
+		void ProgressInit(int max, string title);
 		void ProgressDone();
+
 		void ProgressStep();
+		void ProgressStep(int value);
 		
+		/*bool IsAborting
+		{
+			get;
+		}*/
+
 		/*int Progress
 		{
 			get;

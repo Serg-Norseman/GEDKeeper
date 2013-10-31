@@ -12,6 +12,8 @@ using Ext.Utils;
 
 namespace GedCom551
 {
+	public delegate void ProgressHandler(object sender, int progress);
+
 	public interface ITreeEnumerator
 	{
 		bool MoveNext(out TGEDCOMRecord current);
@@ -84,14 +86,27 @@ namespace GedCom551
 		private TGEDCOMHeader FHeader;
 		private Hashtable FXRefIndex;
 		private TGEDCOMState FState;
-//		private string FFileName;
+		private string FFileName;
 		private bool Disposed_;
+		private ProgressHandler fOnProgress;
 
-//		public string FileName
-//		{
-//			get { return this.FFileName; }
-//			//set { this.FFileName = value; }
-//		}
+		public string FileName
+		{
+			get { return this.FFileName; }
+			//set { this.FFileName = value; }
+		}
+
+		public event ProgressHandler OnProgress
+		{
+			add {
+				this.fOnProgress = value;
+			}
+			remove {
+				if (this.fOnProgress == value) {
+					this.fOnProgress = null;
+				}
+			}
+		}
 
 		public ITreeEnumerator GetEnumerator(TGEDCOMRecordType rec_type)
 		{
@@ -124,6 +139,7 @@ namespace GedCom551
 			this.FRecords = new GEDCOMList<TGEDCOMRecord>(this);
 			this.FHeader = new TGEDCOMHeader(this, this, "", "");
 			this.FXRefIndex = new Hashtable();
+			this.FFileName = "";
 		}
 
 		public void Dispose()
@@ -335,9 +351,14 @@ namespace GedCom551
 
 		#region Load/Save
 
+		public void SetFileName(string fileName)
+		{
+			this.FFileName = fileName;
+		}
+
 		public void LoadFromFile(string fileName)
 		{
-			//this.FFileName = fileName;
+			this.FFileName = fileName;
 
 			using (StreamReader fs = new StreamReader(fileName, Encoding.GetEncoding(1251))) {
 				this.Clear();
@@ -348,7 +369,7 @@ namespace GedCom551
 
 		public void SaveToFile(string fileName, TGEDCOMCharacterSet CharSet)
 		{
-			//this.FFileName = fileName;
+			this.FFileName = fileName;
 
 			string subm = this.FHeader.GetTagStringValue("SUBM");
 			int rev = this.FHeader.FileRevision;
@@ -377,24 +398,18 @@ namespace GedCom551
 			}
 		}
 
-		public int Progress;
-		public event EventHandler ProgressEvent;
-
-        private static void LoadFromStream_LineCorrect(TGEDCOMCustomRecord CurRecord, TGEDCOMTag CurTag, int LineNum, string S)
+        private static void CorrectLine(TGEDCOMCustomRecord CurRecord, TGEDCOMTag CurTag, int LineNum, string S)
 		{
 			try
 			{
-				if (CurTag != null && CurTag is TGEDCOMNotes)
-				{
+				if (CurTag != null && CurTag is TGEDCOMNotes) {
 					CurTag.AddTag("CONT", S, null);
-				}
-				else
-				{
-					if (CurRecord != null)
-					{
+				} else {
+					if (CurRecord != null) {
 						CurRecord.AddTag("NOTE", S, null);
 					}
 				}
+
 				Trace.Write("TGEDCOMTree.LoadFromStream(): " + CurRecord.XRef + " notes correct");
 			}
 			catch (Exception E)
@@ -403,8 +418,12 @@ namespace GedCom551
 			}
 		}
 
-		public void LoadFromStream(StreamReader AStream)
+		public void LoadFromStream(StreamReader stream)
 		{
+			long file_size = stream.BaseStream.Length;
+			long file_pos = 0;
+			int progress = 0;
+
 			this.FState = TGEDCOMState.osLoading;
 			try
 			{
@@ -412,25 +431,18 @@ namespace GedCom551
 				TGEDCOMTag CurTag = null;
 				TGEDCOMCharacterSet CharSet = TGEDCOMCharacterSet.csASCII;
 
-				long file_pos = 0;
-				long file_size = AStream.BaseStream.Length;
-
-				Progress = 0;
-
 				int I = -1;
-				while (AStream.Peek() != -1)
+				while (stream.Peek() != -1)
 				{
 					I++;
-					string S = AStream.ReadLine();
-					file_pos += S.Length + Environment.NewLine.Length;
-
-					S = SysUtils.TrimLeft(S);
+					string srcLine = stream.ReadLine();
+					string S = SysUtils.TrimLeft(srcLine);
 
 					if (S.Length != 0)
 					{
 						if (!GEDCOMUtils.IsDigit(S[0]))
 						{
-							TGEDCOMTree.LoadFromStream_LineCorrect(CurRecord, CurTag, I + 1, S.Trim());
+							TGEDCOMTree.CorrectLine(CurRecord, CurTag, I + 1, S.Trim());
 						}
 						else
 						{
@@ -461,7 +473,7 @@ namespace GedCom551
 							// temp hack
 							if (AValue != null && AValue.Length != 0 && CharSet == TGEDCOMCharacterSet.csUTF8)
 							{
-								if (AStream.CurrentEncoding != Encoding.UTF8) {
+								if (stream.CurrentEncoding != Encoding.UTF8) {
 									AValue = StrToUtf8(AValue);
 								}
 							}
@@ -567,11 +579,15 @@ namespace GedCom551
 						}
 					}
 
-					int new_progress = (int)Math.Min(100, (file_pos * 100.0F) / file_size);
-					if (Progress != new_progress)
-					{
-						Progress = new_progress;
-						if (ProgressEvent != null) ProgressEvent(this, EventArgs.Empty);
+					if (fOnProgress != null) {
+						file_pos += Encoding.UTF8.GetByteCount(srcLine) + Environment.NewLine.Length;
+
+						int new_progress = (int)Math.Min(100, (file_pos * 100.0F) / file_size);
+
+						if (progress != new_progress) {
+							fOnProgress(this, progress);
+							progress = new_progress;
+						}
 					}
 				}
 			}
@@ -641,6 +657,35 @@ namespace GedCom551
 
 			this.AddRecord(result);
 
+			return result;
+		}
+
+		public TGEDCOMNoteRecord aux_CreateNoteEx(TGEDCOMRecord toRecord, string text)
+		{
+			TGEDCOMNoteRecord result = null;
+
+			if (toRecord != null && !string.IsNullOrEmpty(text)) {
+				result = this.aux_CreateNote();
+				result.aux_AddNoteText(text);
+				toRecord.aux_AddNote(result);
+			}
+
+			return result;
+		}
+
+		public TGEDCOMNoteRecord aux_CreateNoteEx(TGEDCOMRecord toRecord, StringList text)
+		{
+			TGEDCOMNoteRecord result = null;
+
+			if (text != null) {
+				result = this.aux_CreateNote();
+				result.Note = text;
+			}
+
+			if (toRecord != null && result != null) {
+				toRecord.aux_AddNote(result);
+			}
+			
 			return result;
 		}
 

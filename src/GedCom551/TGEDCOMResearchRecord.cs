@@ -128,7 +128,7 @@ namespace GedCom551
 			return base.IsEmpty() && this._Tasks.Count == 0 && this._Communications.Count == 0 && this._Groups.Count == 0;
 		}
 
-		public override void ReplaceXRefs(TXRefReplaceMap aMap)
+		public override void ReplaceXRefs(XRefReplacer aMap)
 		{
 			base.ReplaceXRefs(aMap);
 

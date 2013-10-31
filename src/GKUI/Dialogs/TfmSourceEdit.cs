@@ -63,57 +63,51 @@ namespace GKUI
 			list.EndUpdate();
 		}
 
-		private void ListModify(object Sender, object ItemData, TRecAction Action)
+		private void ListModify(object sender, ModifyEventArgs eArgs)
 		{
             bool res = false;
 
-			if (object.Equals(Sender, this.FNotesList))
-			{
-                res = (this.Base.ModifyRecNote(this, this.FSourceRecord, ItemData as TGEDCOMNotes, Action));
-			}
-			else
-			{
-				if (object.Equals(Sender, this.FMediaList))
-				{
-                    res = (this.Base.ModifyRecMultimedia(this, this.FSourceRecord, ItemData as TGEDCOMMultimediaLink, Action));
-				}
-				else
-				{
-					if (object.Equals(Sender, this.FRepositoriesList))
-					{
-                        TGEDCOMRepositoryCitation cit = (Action == TRecAction.raAdd) ? null : ItemData as TGEDCOMRepositoryCitation;
+            if (sender == this.FNotesList)
+            {
+            	res = (this.Base.ModifyRecNote(this, this.FSourceRecord, eArgs.ItemData as TGEDCOMNotes, eArgs.Action));
+            }
+            else if (sender == this.FMediaList)
+            {
+            	res = (this.Base.ModifyRecMultimedia(this, this.FSourceRecord, eArgs.ItemData as TGEDCOMMultimediaLink, eArgs.Action));
+            }
+            else if (sender == this.FRepositoriesList)
+            {
+            	TGEDCOMRepositoryCitation cit = eArgs.ItemData as TGEDCOMRepositoryCitation;
 
-                        switch (Action)
-                        {
-                            case TRecAction.raAdd:
-							    TGEDCOMRepositoryRecord rep = FBase.SelectRecord(TGEDCOMRecordType.rtRepository, null) as TGEDCOMRepositoryRecord;
-							    if (rep != null)
-							    {
-								    this.FSourceRecord.aux_AddRepository(rep);
-                                    res = true;
-							    }
-                                break;
+            	switch (eArgs.Action)
+            	{
+            		case TRecAction.raAdd:
+            			TGEDCOMRepositoryRecord rep = FBase.SelectRecord(TGEDCOMRecordType.rtRepository, null) as TGEDCOMRepositoryRecord;
+            			if (rep != null)
+            			{
+            				this.FSourceRecord.aux_AddRepository(rep);
+            				res = true;
+            			}
+            			break;
 
-                            case TRecAction.raDelete:
-								if (cit != null && TGenEngine.ShowQuestion(LangMan.LSList[145]) != DialogResult.No)
-								{
-									this.FSourceRecord.RepositoryCitations.DeleteObject(cit);
-                                    res = true;
-								}
-                                break;
+            		case TRecAction.raDelete:
+            			if (cit != null && GKUtils.ShowQuestion(LangMan.LSList[145]) != DialogResult.No)
+            			{
+            				this.FSourceRecord.RepositoryCitations.DeleteObject(cit);
+            				res = true;
+            			}
+            			break;
 
-                            case TRecAction.raJump:
-								if (cit != null)
-								{
-									this.AcceptChanges();
-									this.Base.SelectRecordByXRef((cit.Value as TGEDCOMRepositoryRecord).XRef);
-									base.Close();
-								}
-                                break;
-                        }
-					}
-				}
-			}
+            		case TRecAction.raJump:
+            			if (cit != null)
+            			{
+            				this.AcceptChanges();
+            				this.Base.SelectRecordByXRef((cit.Value as TGEDCOMRepositoryRecord).XRef);
+            				base.Close();
+            			}
+            			break;
+            	}
+            }
 
             if (res) this.ControlsRefresh();
 		}
@@ -155,15 +149,15 @@ namespace GKUI
 			this.FBase = aBase;
 
 			this.FNotesList = new GKSheetList(this.SheetNotes);
-			this.FNotesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FNotesList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.Base.SetupRecNotesList(this.FNotesList);
 
 			this.FMediaList = new GKSheetList(this.SheetMultimedia);
-			this.FMediaList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FMediaList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.Base.SetupRecMediaList(this.FMediaList);
 
 			this.FRepositoriesList = new GKSheetList(this.SheetRepositories);
-			this.FRepositoriesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FRepositoriesList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.FRepositoriesList.Buttons = EnumSet.Create(new Enum[]
 			{
 				GKSheetList.TListButton.lbAdd, 

@@ -10,7 +10,7 @@ namespace GedCom551
 		private GEDCOMList<TGEDCOMFamilyEvent> _FamilyEvents;
 		private GEDCOMList<TGEDCOMPointer> _Childrens;
 		private GEDCOMList<TGEDCOMSpouseSealing> _SpouseSealings;
-		private static GEDCOMFactory fFactory;
+		private static GEDCOMFactory fTagsFactory;
 
 
 		public GEDCOMList<TGEDCOMPointer> Childrens
@@ -76,6 +76,7 @@ namespace GedCom551
 		static TGEDCOMFamilyRecord()
 		{
 			GEDCOMFactory f = new GEDCOMFactory();
+			fTagsFactory = f;
 
 			f.RegisterTag("SLGS", TGEDCOMSpouseSealing.Create);
 
@@ -91,8 +92,6 @@ namespace GedCom551
 			f.RegisterTag("MARS", TGEDCOMFamilyEvent.Create);
 			f.RegisterTag("RESI", TGEDCOMFamilyEvent.Create);
 			f.RegisterTag("EVEN", TGEDCOMFamilyEvent.Create);
-
-			fFactory = f;
 		}
 
 		public override TGEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
@@ -109,7 +108,7 @@ namespace GedCom551
 			}
 			else
 			{
-				result = fFactory.CreateTag(this.Owner, this, tagName, tagValue);
+				result = fTagsFactory.CreateTag(this.Owner, this, tagName, tagValue);
 
 				if (result != null)
 				{
@@ -205,7 +204,7 @@ namespace GedCom551
 			this._SpouseSealings.Pack();
 		}
 
-		public override void ReplaceXRefs(TXRefReplaceMap aMap)
+		public override void ReplaceXRefs(XRefReplacer aMap)
 		{
 			base.ReplaceXRefs(aMap);
 
@@ -409,7 +408,7 @@ namespace GedCom551
 			}
 			catch (Exception E)
 			{
-				SysUtils.LogWrite("TGenEngine.AddFamilyChild(): " + E.Message);
+				SysUtils.LogWrite("GKUtils.AddFamilyChild(): " + E.Message);
 				Result = false;
 			}
 			return Result;
@@ -426,7 +425,7 @@ namespace GedCom551
 			}
 			catch (Exception E)
 			{
-				SysUtils.LogWrite("TGenEngine.RemoveFamilyChild(): " + E.Message);
+				SysUtils.LogWrite("GKUtils.RemoveFamilyChild(): " + E.Message);
 				Result = false;
 			}
 			return Result;

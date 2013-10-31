@@ -40,7 +40,7 @@ namespace GK2
 		private static void Main(string[] args)
 		{
 			bool isFirstInstance;
-			using (Mutex mtx = new Mutex(true, TGenEngine.AppTitle, out isFirstInstance)) {
+			using (Mutex mtx = new Mutex(true, GKData.AppTitle, out isFirstInstance)) {
 				if (isFirstInstance) {
 					Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(ExExceptionHandler);
 					Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException, true);

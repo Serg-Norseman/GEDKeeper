@@ -183,7 +183,7 @@ namespace GedCom551
 			this._UserReferences.Pack();
 		}
 
-		public override void ReplaceXRefs(TXRefReplaceMap aMap)
+		public override void ReplaceXRefs(XRefReplacer aMap)
 		{
 			this._Notes.ReplaceXRefs(aMap);
 			this._SourceCitations.ReplaceXRefs(aMap);

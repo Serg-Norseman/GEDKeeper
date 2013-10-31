@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.IO;
-using System.IO.Compression;
-using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -19,50 +13,21 @@ using GedCom551;
 
 namespace GKCore
 {
-	public class TGenEngine : IDisposable
+	public static class GKUtils
 	{
-		public const string AppTitle = "GEDKeeper2";
-
-		private string FFileName;
-		private TGEDCOMTree FTree;
-		private bool Disposed_;
-
-
-		public string FileName
+		static GKUtils()
 		{
-			get { return this.FFileName; }
-			set { this.FFileName = value; }
-		}
-
-		public TGEDCOMTree Tree
-		{
-			get { return this.FTree; }
-			set { this.FTree = value; }
-		}
-
-		public TGenEngine()
-		{
-			this.FTree = new TGEDCOMTree();
-		}
-
-		public void Dispose()
-		{
-			if (!this.Disposed_)
-			{
-				this.FTree.Dispose();
-				this.Disposed_ = true;
-			}
 		}
 
 		#region Data Manipulation
 
-		public TGEDCOMSourceRecord aux_FindSource(string sourceName)
+		public static TGEDCOMSourceRecord aux_FindSource(TGEDCOMTree tree, string sourceName)
 		{
 			TGEDCOMSourceRecord result = null;
-			int num = this.FTree.RecordsCount - 1;
+			int num = tree.RecordsCount - 1;
 			for (int i = 0; i <= num; i++)
 			{
-				TGEDCOMRecord rec = this.FTree[i];
+				TGEDCOMRecord rec = tree[i];
 
 				if (rec is TGEDCOMSourceRecord && (rec as TGEDCOMSourceRecord).FiledByEntry == sourceName)
 				{
@@ -73,15 +38,15 @@ namespace GKCore
 			return result;
 		}
 
-		public void aux_GetSourcesList(StringList aSources)
+		public static void aux_GetSourcesList(TGEDCOMTree tree, StringList aSources)
 		{
 			if (aSources != null)
 			{
 				aSources.Clear();
-				int num = this.FTree.RecordsCount - 1;
+				int num = tree.RecordsCount - 1;
 				for (int i = 0; i <= num; i++)
 				{
-					TGEDCOMRecord rec = this.FTree[i];
+					TGEDCOMRecord rec = tree[i];
 					if (rec is TGEDCOMSourceRecord)
 					{
 						aSources.AddObject((rec as TGEDCOMSourceRecord).FiledByEntry, rec);
@@ -90,64 +55,66 @@ namespace GKCore
 			}
 		}
 
-		public static void CleanFamily(TGEDCOMFamilyRecord aFamily)
+		public static void CleanFamily(TGEDCOMFamilyRecord family)
 		{
-			if (aFamily != null)
+			if (family != null)
 			{
-				int num = aFamily.Childrens.Count - 1;
+				int num = family.Childrens.Count - 1;
 				for (int i = 0; i <= num; i++)
 				{
-					TGEDCOMIndividualRecord child = aFamily.Childrens[i].Value as TGEDCOMIndividualRecord;
-					child.DeleteChildToFamilyLink(aFamily);
+					TGEDCOMIndividualRecord child = family.Childrens[i].Value as TGEDCOMIndividualRecord;
+					child.DeleteChildToFamilyLink(family);
 				}
 
 				TGEDCOMIndividualRecord spouse;
 
-				spouse = aFamily.Husband.Value as TGEDCOMIndividualRecord;
-				aFamily.aux_RemoveSpouse(spouse);
+				spouse = family.Husband.Value as TGEDCOMIndividualRecord;
+				family.aux_RemoveSpouse(spouse);
 
-				spouse = (aFamily.Wife.Value as TGEDCOMIndividualRecord);
-				aFamily.aux_RemoveSpouse(spouse);
+				spouse = (family.Wife.Value as TGEDCOMIndividualRecord);
+				family.aux_RemoveSpouse(spouse);
 			}
 		}
 		
 		public static TGEDCOMCustomEvent CreateEventEx(TGEDCOMTree tree, TGEDCOMRecord aRec, string evSign, string evDate, string evPlace)
 		{
-			TGEDCOMCustomEvent Result;
+			TGEDCOMCustomEvent result;
+
 			if (aRec is TGEDCOMIndividualRecord)
 			{
 				TGEDCOMIndividualRecord ind_rec = aRec as TGEDCOMIndividualRecord;
-				if (TGenEngine.GetPersonEventKindBySign(evSign) == TPersonEventKind.ekEvent)
+				if (GKUtils.GetPersonEventKindBySign(evSign) == TPersonEventKind.ekEvent)
 				{
-					Result = new TGEDCOMIndividualEvent(tree, ind_rec, "", "");
+					result = new TGEDCOMIndividualEvent(tree, ind_rec, "", "");
 				}
 				else
 				{
-					Result = new TGEDCOMIndividualAttribute(tree, ind_rec, "", "");
+					result = new TGEDCOMIndividualAttribute(tree, ind_rec, "", "");
 				}
-				ind_rec.AddIndividualEvent(Result);
+				ind_rec.AddIndividualEvent(result);
 			}
 			else
 			{
 				if (!(aRec is TGEDCOMFamilyRecord))
 				{
-					Result = null;
-					return Result;
+					result = null;
+					return result;
 				}
 				TGEDCOMFamilyRecord fam_rec = aRec as TGEDCOMFamilyRecord;
-				Result = new TGEDCOMFamilyEvent(tree, fam_rec, "", "");
-				fam_rec.FamilyEvents.Add(Result as TGEDCOMFamilyEvent);
+				result = new TGEDCOMFamilyEvent(tree, fam_rec, "", "");
+				fam_rec.FamilyEvents.Add(result as TGEDCOMFamilyEvent);
 			}
-			Result.Name = evSign;
-			if (evDate != "")
-			{
-				Result.Detail.Date.ParseString(evDate);
+			result.Name = evSign;
+
+			if (evDate != "") {
+				result.Detail.Date.ParseString(evDate);
 			}
-			if (evPlace != "")
-			{
-				Result.Detail.Place.StringValue = evPlace;
+
+			if (evPlace != "") {
+				result.Detail.Place.StringValue = evPlace;
 			}
-			return Result;
+
+			return result;
 		}
 
 		public static TGEDCOMIndividualRecord CreatePersonEx(TGEDCOMTree tree, string iName, string iPatronymic, string iSurname, TGEDCOMSex iSex, bool birthEvent)
@@ -163,437 +130,9 @@ namespace GKCore
 
 			tree.AddRecord(iRec);
 
-			if (birthEvent) TGenEngine.CreateEventEx(tree, iRec, "BIRT", "", "");
+			if (birthEvent) GKUtils.CreateEventEx(tree, iRec, "BIRT", "", "");
 
 			return iRec;
-		}
-
-		public static void SetAddressValue(TGEDCOMAddress anAddress, string aValue)
-		{
-			StringList sl = new StringList(aValue);
-			try
-			{
-				anAddress.Address = sl;
-			}
-			finally
-			{
-				sl.Free();
-			}
-		}
-
-		public static void AddNoteText(TGEDCOMNoteRecord noteRec, string aText)
-		{
-			StringList strData = new StringList();
-			try
-			{
-				strData.Text = noteRec.Note.Text.Trim();
-				strData.Add(aText);
-				noteRec.Note = strData;
-			}
-			finally
-			{
-				strData.Free();
-			}
-		}
-
-		public static TGEDCOMNoteRecord CreateNoteEx(TGEDCOMTree tree, string text, TGEDCOMRecord toRecord)
-		{
-			TGEDCOMNoteRecord result = null;
-
-			if (toRecord != null && !string.IsNullOrEmpty(text)) {
-				result = tree.aux_CreateNote();
-				AddNoteText(result, text);
-				toRecord.aux_AddNote(result);
-			}
-
-			return result;
-		}
-
-		public static TGEDCOMNoteRecord CreateNoteEx(TGEDCOMTree tree, StringList text, TGEDCOMRecord toRecord)
-		{
-			TGEDCOMNoteRecord result = null;
-
-			if (text != null) {
-				result = tree.aux_CreateNote();
-				result.Note = text;
-			}
-
-			if (toRecord != null && result != null) {
-				toRecord.aux_AddNote(result);
-			}
-			
-			return result;
-		}
-
-		#endregion
-
-		#region Media Management
-
-		public bool CheckPath()
-		{
-			string path = Path.GetDirectoryName(this.FFileName);
-
-			bool result = (!string.IsNullOrEmpty(path));
-			if (!result)
-			{
-				TGenEngine.ShowError("Для типов хранения \"архив\" и \"хранилище\" новый файл БД нужно предварительно сохранить");
-			}
-			return result;
-		}
-
-		public string GetContainerName(string fileName, bool arc)
-		{
-			string result = Path.GetFileNameWithoutExtension(fileName);
-			if (arc) {
-				result += ".zip";
-			} else {
-				result += "\\";
-			}
-			return result;
-		}
-
-		public string GetArcFileName()
-		{
-			string result = Path.GetDirectoryName(this.FFileName) + "\\" + Path.GetFileNameWithoutExtension(this.FFileName) + ".zip";
-			return result;
-		}
-
-		public string GetStgFolder(bool create)
-		{
-			string result = Path.GetDirectoryName(this.FFileName) + "\\" + Path.GetFileNameWithoutExtension(this.FFileName) + "\\";
-			if (!Directory.Exists(result) && create) Directory.CreateDirectory(result);
-			return result;
-		}
-
-		public static TGKStoreType GetStoreType(string fileRef, ref string fileName)
-		{
-			fileName = fileRef;
-			TGKStoreType result;
-
-			if (fileRef.IndexOf(GKData.GKStoreTypes[2].Sign) == 0)
-			{
-				result = TGKStoreType.gstArchive;
-				fileName = fileName.Remove(0, 4);
-			}
-			else
-			{
-				if (fileRef.IndexOf(GKData.GKStoreTypes[1].Sign) == 0)
-				{
-					result = TGKStoreType.gstStorage;
-					fileName = fileName.Remove(0, 4);
-				}
-				else
-				{
-					result = TGKStoreType.gstReference;
-				}
-			}
-
-			return result;
-		}
-
-		public void MediaLoad(string aRefName, out Stream aStream, bool throwException)
-		{
-			aStream = null;
-			string target_fn = "";
-			TGKStoreType gst = TGenEngine.GetStoreType(aRefName, ref target_fn);
-
-			switch (gst) {
-				case TGKStoreType.gstStorage:
-					target_fn = this.GetStgFolder(false) + target_fn;
-					if (!File.Exists(target_fn)) {
-						if (throwException) {
-							throw new MediaFileNotFoundException();
-						} else {
-							TGenEngine.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
-						}
-					} else {
-						aStream = new FileStream(target_fn, FileMode.Open);
-					}
-					break;
-
-				case TGKStoreType.gstArchive:
-					aStream = new MemoryStream();
-					if (!File.Exists(this.GetArcFileName())) {
-						if (throwException) {
-							throw new MediaFileNotFoundException();
-						} else {
-							TGenEngine.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
-						}
-					} else {
-						this.ArcFileLoad(target_fn, aStream);
-						aStream.Seek((long)0, SeekOrigin.Begin);
-					}
-					break;
-
-				case TGKStoreType.gstReference:
-					aStream = new FileStream(target_fn, FileMode.Open);
-					break;
-			}
-		}
-
-		public void MediaLoad(string aRefName, ref string aFileName)
-		{
-			try
-			{
-				string target_fn = "";
-				TGKStoreType gst = TGenEngine.GetStoreType(aRefName, ref target_fn);
-
-				switch (gst) {
-					case TGKStoreType.gstStorage:
-						aFileName = this.GetStgFolder(false) + target_fn;
-						break;
-
-					case TGKStoreType.gstArchive:
-						aFileName = TGenEngine.GetTempDir() + "\\" + Path.GetFileName(target_fn);
-						FileStream fs = new FileStream(aFileName, FileMode.Create);
-						try
-						{
-							if (!File.Exists(this.GetArcFileName())) {
-								TGenEngine.ShowError(LangMan.LSList[476]);
-							} else {
-								target_fn = target_fn.Replace("\\", "/");
-								this.ArcFileLoad(target_fn, fs);
-							}
-						}
-						finally
-						{
-							fs.Close();
-							fs.Dispose();
-						}
-						break;
-
-					case TGKStoreType.gstReference:
-						aFileName = target_fn;
-						break;
-				}
-			}
-			catch (Exception E)
-			{
-				SysUtils.LogWrite("TGenEngine.MediaLoad_fn(): " + E.Message);
-				aFileName = "";
-			}
-		}
-
-		public bool MediaSave(string aFileName, TGKStoreType storeType, ref string aRefPath)
-		{
-			bool result = true;
-
-			string sfn = Path.GetFileName(aFileName);
-			string spath = "";
-
-			switch (TGEDCOMFileReference.RecognizeFormat(aFileName))
-			{
-				case TGEDCOMMultimediaFormat.mfNone:
-				case TGEDCOMMultimediaFormat.mfOLE:
-				case TGEDCOMMultimediaFormat.mfUnknown:
-					spath = "unknown\\";
-					break;
-
-				case TGEDCOMMultimediaFormat.mfBMP:
-				case TGEDCOMMultimediaFormat.mfGIF:
-				case TGEDCOMMultimediaFormat.mfJPG:
-				case TGEDCOMMultimediaFormat.mfPCX:
-				case TGEDCOMMultimediaFormat.mfTIF:
-				case TGEDCOMMultimediaFormat.mfTGA:
-				case TGEDCOMMultimediaFormat.mfPNG:
-					spath = "images\\";
-					break;
-
-				case TGEDCOMMultimediaFormat.mfWAV:
-					spath = "audio\\";
-					break;
-
-				case TGEDCOMMultimediaFormat.mfTXT:
-				case TGEDCOMMultimediaFormat.mfRTF:
-				case TGEDCOMMultimediaFormat.mfHTM:
-					spath = "texts\\";
-					break;
-
-				case TGEDCOMMultimediaFormat.mfAVI:
-				case TGEDCOMMultimediaFormat.mfMPG:
-					spath = "video\\";
-					break;
-			}
-
-			switch (storeType) {
-				case TGKStoreType.gstReference:
-					{
-						aRefPath = aFileName;
-						break;
-					}
-
-				case TGKStoreType.gstArchive:
-					{
-						sfn = spath + sfn;
-						aRefPath = GKData.GKStoreTypes[(int)storeType].Sign + sfn;
-						this.ArcFileSave(aFileName, sfn);
-						break;
-					}
-
-				case TGKStoreType.gstStorage:
-					{
-						string target_dir = this.GetStgFolder(true) + spath;
-						string target_fn = target_dir + sfn;
-
-						aRefPath = GKData.GKStoreTypes[(int)storeType].Sign + spath + sfn;
-
-						if (!Directory.Exists(target_dir)) Directory.CreateDirectory(target_dir);
-						try
-						{
-							File.Copy(aFileName, target_fn, false);
-						}
-						catch (IOException)
-						{
-							TGenEngine.ShowError("Файл с таким именем уже есть в хранилище");
-							result = false;
-						}
-
-						break;
-					}
-			}
-
-			return result;
-		}
-
-		public Bitmap BitmapLoad(string media, int thumbWidth, int thumbHeight, bool throwException)
-		{
-			Bitmap result = null;
-			try
-			{
-				Stream stm;
-				this.MediaLoad(media, out stm, throwException);
-				if (stm != null)
-				{
-					if (stm.Length != 0) {
-						using (Bitmap bmp = new Bitmap(stm))
-						{
-							int new_width;
-							int new_height;
-
-							if (thumbWidth > 0 && thumbHeight > 0)
-							{
-								int maxSize_src = ((bmp.Height > bmp.Width) ? bmp.Height : bmp.Width);
-								int minSize_dst = ((thumbHeight < thumbWidth) ? thumbHeight : thumbWidth);
-								double ratio = (double)minSize_dst / maxSize_src;
-								new_width = (int)(bmp.Width * ratio);
-								new_height = (int)(bmp.Height * ratio);
-							} else {
-								new_width = bmp.Width;
-								new_height = bmp.Height;
-							}
-
-							Bitmap new_image = new Bitmap(new_width, new_height, PixelFormat.Format24bppRgb);
-							Graphics graphic = Graphics.FromImage(new_image);
-							graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
-							graphic.SmoothingMode = SmoothingMode.HighQuality;
-							graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
-							graphic.CompositingQuality = CompositingQuality.HighQuality;
-							graphic.DrawImage(bmp, 0, 0, new_width, new_height);
-
-							result = new_image;
-						}
-					}
-					stm.Dispose();
-				}
-			}
-			catch (MediaFileNotFoundException ex)
-			{
-				throw ex;
-			}
-			catch (Exception E)
-			{
-				SysUtils.LogWrite("TGenEngine.BitmapLoad(): " + E.Message);
-				result = null;
-			}
-			return result;
-		}
-
-		public Bitmap GetPrimaryBitmap(TGEDCOMIndividualRecord iRec, int thumbWidth, int thumbHeight, bool throwException)
-		{
-			Bitmap result = null;
-			try
-			{
-				TGEDCOMMultimediaLink mmLink = iRec.aux_GetPrimaryMultimediaLink();
-				if (mmLink != null)
-				{
-					TGEDCOMMultimediaRecord mmRec = mmLink.Value as TGEDCOMMultimediaRecord;
-					result = this.BitmapLoad(mmRec.FileReferences[0].StringValue, thumbWidth, thumbHeight, throwException);
-				}
-			}
-			catch (MediaFileNotFoundException ex)
-			{
-				throw ex;
-			}
-			catch (Exception E)
-			{
-				SysUtils.LogWrite("TGenEngine.GetPrimaryBitmap(): " + E.Message);
-				result = null;
-			}
-			return result;
-		}
-
-		public Stream GetPrimaryBitmapStream(TGEDCOMIndividualRecord aRec)
-		{
-			Stream result = null;
-			try
-			{
-				TGEDCOMMultimediaLink mmLink = aRec.aux_GetPrimaryMultimediaLink();
-				if (mmLink != null)
-				{
-					TGEDCOMMultimediaRecord mmRec = mmLink.Value as TGEDCOMMultimediaRecord;
-					this.MediaLoad(mmRec.FileReferences[0].StringValue, out result, false);
-				}
-			}
-			catch (MediaFileNotFoundException ex)
-			{
-				throw ex;
-			}
-			catch (Exception E)
-			{
-				SysUtils.LogWrite("TGenEngine.GetPrimaryBitmapStream(): " + E.Message);
-				result = null;
-			}
-			return result;
-		}
-
-		public void ArcFileLoad(string target_fn, Stream toStream)
-		{
-			// http://www.icsharpcode.net/OpenSource/SharpZipLib/ - slow, but high compression ratio
-			// http://dotnetzip.codeplex.com/ - fast, but low compression ratio
-
-			target_fn = target_fn.Replace('\\', '/');
-
-			using (ZipStorer zip = ZipStorer.Open(this.GetArcFileName(), FileAccess.Read))
-			{
-				List<ZipStorer.ZipFileEntry> dir = zip.ReadCentralDir();
-				foreach (ZipStorer.ZipFileEntry entry in dir)
-				{
-					if (entry.FilenameInZip.Equals(target_fn)) {
-						zip.ExtractFile(entry, toStream);
-						break;
-					}
-				}
-			}
-		}
-
-		public void ArcFileSave(string aFileName, string sfn)
-		{
-			string arc_fn = this.GetArcFileName();
-			ZipStorer zip = null;
-
-			try
-			{
-				if (File.Exists(arc_fn)) {
-					zip = ZipStorer.Open(arc_fn, FileAccess.ReadWrite);
-				} else {
-					zip = ZipStorer.Create(arc_fn, "");
-				}
-				zip.AddFile(ZipStorer.Compression.Deflate, aFileName, sfn, null);
-			}
-			finally
-			{
-				if (zip != null) zip.Dispose();
-			}
 		}
 
 		#endregion
@@ -645,76 +184,28 @@ namespace GKCore
 			return (Environment.MachineName == "VALHALLA" || Environment.UserName == "Zhdanovskih_SV");
 		}
 
-		public static bool IsRecordAccess(TGEDCOMRestriction aRecRestriction, TShieldState aShieldState)
+		public static bool IsRecordAccess(TGEDCOMRestriction restriction, TShieldState shieldState)
 		{
-			bool Result = false;
+			bool result = false;
 
-			switch (aShieldState) {
+			switch (shieldState) {
 				case TShieldState.ssMaximum:
-					Result = (((aRecRestriction == TGEDCOMRestriction.rnConfidential || aRecRestriction == TGEDCOMRestriction.rnPrivacy) ? 1 : 0) == 0);
+					result = (((restriction == TGEDCOMRestriction.rnConfidential || restriction == TGEDCOMRestriction.rnPrivacy) ? 1 : 0) == 0);
 					break;
 				case TShieldState.ssMiddle:
-					Result = (((aRecRestriction == TGEDCOMRestriction.rnPrivacy) ? 1 : 0) == 0);
+					result = (((restriction == TGEDCOMRestriction.rnPrivacy) ? 1 : 0) == 0);
 					break;
 				case TShieldState.ssNone:
-					Result = true;
+					result = true;
 					break;
 			}
 
-			return Result;
+			return result;
 		}
 
 		public static string aux_GetFamilyStr(TGEDCOMFamilyRecord aFamily)
 		{
 			return aFamily.aux_GetFamilyStr(LangMan.LSList[64], LangMan.LSList[63]);
-		}
-
-		// FIXME: localization, old code
-		public static TGEDCOMSex GetSex(string f_name, string f_pat, bool aQuery)
-		{
-			TGEDCOMSex Result = TGEDCOMSex.svNone;
-			char c = f_name[((f_name != null) ? f_name.Length : 0) - 1];
-			if (c != 'а')
-			{
-				if (c - 'в' < '\u0003' || c == 'й' || c - 'л' < '\u0006')
-				{
-					Result = TGEDCOMSex.svMale;
-					goto IL_AE;
-				}
-				if (c != 'я')
-				{
-					goto IL_AE;
-				}
-			}
-			if (((f_pat != null) ? f_pat.Length : 0) > 1)
-			{
-				char c2 = f_pat[((f_pat != null) ? f_pat.Length : 0) - 1];
-				if (c2 == '0' || c2 == 'O')
-				{
-					Result = TGEDCOMSex.svFemale;
-				}
-				else
-				{
-					char c3 = f_pat[((f_pat != null) ? f_pat.Length : 0) - 1];
-					if (c3 >= '2' && (c3 < '5' || c3 == '9' || (c3 >= ';' && c3 < 'A')))
-					{
-						Result = TGEDCOMSex.svMale;
-					}
-				}
-			}
-			IL_AE:
-			if (aQuery && Result == TGEDCOMSex.svNone)
-			{
-				if (TGenEngine.ShowQuestion("Не определяется пол человека по имени \"" + f_name + " " + f_pat + "\". Это мужской пол?") == DialogResult.Yes)
-				{
-					Result = TGEDCOMSex.svMale;
-				}
-				else
-				{
-					Result = TGEDCOMSex.svFemale;
-				}
-			}
-			return Result;
 		}
 
 		public static string SetAsName(string s)
@@ -737,39 +228,6 @@ namespace GKCore
 			return Result;
 		}
 
-		public static string[] GetFamilies(TGEDCOMIndividualRecord iRec)
-		{
-			string[] result = new string[1];
-			string fam, nam, pat;
-			iRec.aux_GetNameParts(out fam, out nam, out pat);
-			bool female = (iRec.Sex == TGEDCOMSex.svFemale);
-
-			if (female) {
-				fam = fam.Trim();
-				int p = fam.IndexOf('(');
-				if (p >= 0) {
-					string part = fam.Substring(0, p).Trim();
-					result[0] = PrepareRusSurname(part, female);
-					part = fam.Substring(p).Trim();
-					part = part.Substring(1, part.Length-2);
-
-					string[] parts = part.Split(',');
-					for (int i = 0; i < parts.Length; i++) {
-						string[] newres = new string[result.Length+1];
-						result.CopyTo(newres, 0);
-						result = newres;
-						result[result.Length-1] = PrepareRusSurname(parts[i].Trim(), female);
-					}
-				} else {
-					result[0] = PrepareRusSurname(fam, female);
-				}
-			} else {
-				result[0] = fam;
-			}
-
-			return result;
-		}
-
 		public static void GetLocationLinks(TGEDCOMTree tree, TGEDCOMLocationRecord locRec, ref StringList aList)
 		{
 			int num = tree.RecordsCount - 1;
@@ -785,7 +243,7 @@ namespace GKCore
 						TGEDCOMCustomEvent evt = i_rec.IndividualEvents[j];
 						if (evt.Detail.Place.Location.Value == locRec)
 						{
-							aList.Add(TGenEngine.GenRecordLink(rec, true) + ", " + TGenEngine.GetEventName(evt).ToLower());
+							aList.Add(GKUtils.GenRecordLink(rec, true) + ", " + GKUtils.GetEventName(evt).ToLower());
 						}
 					}
 				}
@@ -799,7 +257,7 @@ namespace GKCore
 						{
 							TGEDCOMCustomEvent evt = f_rec.FamilyEvents[j];
 							if (evt.Detail.Place.Location.Value == locRec) {
-								aList.Add(TGenEngine.GenRecordLink(rec, true) + ", " + TGenEngine.GetEventName(evt).ToLower());
+								aList.Add(GKUtils.GenRecordLink(rec, true) + ", " + GKUtils.GetEventName(evt).ToLower());
 							}
 						}
 					}
@@ -843,7 +301,7 @@ namespace GKCore
 						st = (record as TGEDCOMIndividualRecord).aux_GetNameStr(true, false);
 						break;
 					case TGEDCOMRecordType.rtFamily:
-						st = TGenEngine.aux_GetFamilyStr(record as TGEDCOMFamilyRecord);
+						st = GKUtils.aux_GetFamilyStr(record as TGEDCOMFamilyRecord);
 						break;
 					case TGEDCOMRecordType.rtMultimedia:
 						st = (record as TGEDCOMMultimediaRecord).FileReferences[0].Title;
@@ -861,7 +319,7 @@ namespace GKCore
 						st = (record as TGEDCOMResearchRecord).ResearchName;
 						break;
 					case TGEDCOMRecordType.rtTask:
-						st = TGenEngine.GetTaskGoalStr(record as TGEDCOMTaskRecord);
+						st = GKUtils.GetTaskGoalStr(record as TGEDCOMTaskRecord);
 						break;
 					case TGEDCOMRecordType.rtCommunication:
 						st = (record as TGEDCOMCommunicationRecord).CommName;
@@ -874,7 +332,7 @@ namespace GKCore
 						break;
 				}
 
-                result = TGenEngine.HyperLink(record.XRef, sign + st, 0);
+                result = GKUtils.HyperLink(record.XRef, sign + st, 0);
 			}
 
             return result;
@@ -891,7 +349,7 @@ namespace GKCore
 				string nm = corresponder.aux_GetNameStr(true, false);
 				if (aLink)
 				{
-					nm = TGenEngine.HyperLink(corresponder.XRef, nm, 0);
+					nm = GKUtils.HyperLink(corresponder.XRef, nm, 0);
 				}
 				Result = "[" + LangMan.LSList[(int)GKData.CommunicationDirs[(int)dir] - 1] + "] " + nm;
 			}
@@ -910,7 +368,7 @@ namespace GKCore
 					Result = (tempRec as TGEDCOMIndividualRecord).aux_GetNameStr(true, false);
 					break;
 				case TGoalType.gtFamily:
-					Result = TGenEngine.aux_GetFamilyStr(tempRec as TGEDCOMFamilyRecord);
+					Result = GKUtils.aux_GetFamilyStr(tempRec as TGEDCOMFamilyRecord);
 					break;
 				case TGoalType.gtSource:
 					Result = (tempRec as TGEDCOMSourceRecord).FiledByEntry;
@@ -927,61 +385,6 @@ namespace GKCore
 			return Result;
 		}
 
-		public static string ClearSurname(string surname)
-		{
-			int p = surname.IndexOf(" (");
-			string result = ((p >= 0) ? surname.Substring(0, p) : surname);
-			return result;
-		}
-
-		public static string PrepareRusSurname(string f, bool aFemale)
-		{
-			if (f == null || f.Length <= 0 || (f[0] == '(' && f[f.Length - 1] == ')'))
-			{
-				f = "?";
-			}
-			else
-			{
-				if (aFemale)
-				{
-					f = ClearSurname(f);
-
-					if (f.EndsWith("а")) {
-						f = f.Substring(0, f.Length - 1);
-					} else if (f.EndsWith("кая")) {
-						f = f.Substring(0, f.Length - 3) + "кий";
-					} else if (f.EndsWith("ная")) {
-						f = f.Substring(0, f.Length - 3) + "ный";
-					}
-				}
-			}
-
-			return f;
-		}
-
-		public static string GetRusWifeFamily(string husbFamily)
-		{
-			const string consonants = "бвгджзклмнпрстфхцчшщ";
-			//const string vowels = "абвгдежзиклмнопрстуфхцчшщьыъэюя";
-			
-			string res;
-			if (husbFamily == null || husbFamily.Length <= 0) {
-				res = "?";
-			} else {
-				res = husbFamily;
-
-				if (consonants.Contains(res[res.Length - 1])) {
-					res = res + "а";
-				} else if (res.EndsWith("кий")) {
-					res = res.Substring(0, res.Length - 3) + "кая";
-				} else if (res.EndsWith("ный")) {
-					res = res.Substring(0, res.Length - 3) + "ная";
-				}
-			}
-
-			return res;
-		}
-
 		#endregion
 
 		#region Event Utils
@@ -993,7 +396,7 @@ namespace GKCore
 
 		public static string GetAttributeValue(TGEDCOMIndividualRecord iRec, string attrName)
 		{
-			TGEDCOMCustomEvent attr = TGenEngine.GetIndividualEvent(iRec, attrName);
+			TGEDCOMCustomEvent attr = GKUtils.GetIndividualEvent(iRec, attrName);
 			string result = ((attr == null) ? "" : attr.StringValue);
 			return result;
 		}
@@ -1068,7 +471,7 @@ namespace GKCore
 
 			if (aEvent is TGEDCOMIndividualEvent || aEvent is TGEDCOMIndividualAttribute)
 			{
-				int ev = TGenEngine.GetPersonEventIndex(aEvent.Name);
+				int ev = GKUtils.GetPersonEventIndex(aEvent.Name);
 				if (ev == 0) {
 					result = aEvent.Detail.Classification;
 				} else {
@@ -1081,7 +484,7 @@ namespace GKCore
 			}
 			else if (aEvent is TGEDCOMFamilyEvent)
 			{
-				int ev = TGenEngine.GetFamilyEventIndex(aEvent.Name);
+				int ev = GKUtils.GetFamilyEventIndex(aEvent.Name);
 				if (ev == 0) {
 					result = aEvent.Detail.Classification;
 				} else {
@@ -1098,7 +501,7 @@ namespace GKCore
 
 		public static string GetAttributeStr(TGEDCOMIndividualAttribute iAttr)
 		{
-			int idx = TGenEngine.GetPersonEventIndex(iAttr.Name);
+			int idx = GKUtils.GetPersonEventIndex(iAttr.Name);
 			string st;
 			if (idx == 0)
 			{
@@ -1126,13 +529,13 @@ namespace GKCore
 
 		public static string GetEventDesc(TGEDCOMEventDetail eventDetail)
 		{
-			string dt = TGenEngine.GEDCOMCustomDateToStr(eventDetail.Date, TDateFormat.dfDD_MM_YYYY, false);
+			string dt = GKUtils.GEDCOMCustomDateToStr(eventDetail.Date, TDateFormat.dfDD_MM_YYYY, false);
 			string place = eventDetail.Place.StringValue;
 			TGEDCOMLocationRecord location = eventDetail.Place.Location.Value as TGEDCOMLocationRecord;
 
 			if (place != "" && location != null)
 			{
-				place = TGenEngine.HyperLink(location.XRef, place, 0);
+				place = GKUtils.HyperLink(location.XRef, place, 0);
 			}
 
 			string Result;
@@ -1311,7 +714,7 @@ namespace GKCore
 			{
 				if (date is TGEDCOMDateApproximated)
 				{
-					result = TGenEngine.GEDCOMDateToStr(date as TGEDCOMDate, format);
+					result = GKUtils.GEDCOMDateToStr(date as TGEDCOMDate, format);
 					if (sign && (date as TGEDCOMDateApproximated).Approximated != TGEDCOMApproximated.daExact)
 					{
 						result = "~ " + result;
@@ -1324,7 +727,7 @@ namespace GKCore
 						TGEDCOMDateRange dt_range = date as TGEDCOMDateRange;
 						if (dt_range.After.StringValue == "" && dt_range.Before.StringValue != "")
 						{
-							result = TGenEngine.GEDCOMDateToStr(dt_range.Before, format);
+							result = GKUtils.GEDCOMDateToStr(dt_range.Before, format);
 							if (sign)
 							{
 								result = "< " + result;
@@ -1334,7 +737,7 @@ namespace GKCore
 						{
 							if (dt_range.After.StringValue != "" && dt_range.Before.StringValue == "")
 							{
-								result = TGenEngine.GEDCOMDateToStr(dt_range.After, format);
+								result = GKUtils.GEDCOMDateToStr(dt_range.After, format);
 								if (sign)
 								{
 									result += " >";
@@ -1344,7 +747,7 @@ namespace GKCore
 							{
 								if (dt_range.After.StringValue != "" && dt_range.Before.StringValue != "")
 								{
-									result = TGenEngine.GEDCOMDateToStr(dt_range.After, format) + "-" + TGenEngine.GEDCOMDateToStr(dt_range.Before, format);
+									result = GKUtils.GEDCOMDateToStr(dt_range.After, format) + "-" + GKUtils.GEDCOMDateToStr(dt_range.Before, format);
 								}
 							}
 						}
@@ -1356,7 +759,7 @@ namespace GKCore
 							TGEDCOMDatePeriod dt_period = date as TGEDCOMDatePeriod;
 							if (dt_period.DateFrom.StringValue != "" && dt_period.DateTo.StringValue == "")
 							{
-								result = TGenEngine.GEDCOMDateToStr(dt_period.DateFrom, format);
+								result = GKUtils.GEDCOMDateToStr(dt_period.DateFrom, format);
 								if (sign)
 								{
 									result += " >";
@@ -1366,7 +769,7 @@ namespace GKCore
 							{
 								if (dt_period.DateFrom.StringValue == "" && dt_period.DateTo.StringValue != "")
 								{
-									result = TGenEngine.GEDCOMDateToStr(dt_period.DateTo, format);
+									result = GKUtils.GEDCOMDateToStr(dt_period.DateTo, format);
 									if (sign)
 									{
 										result = "< " + result;
@@ -1376,7 +779,7 @@ namespace GKCore
 								{
 									if (dt_period.DateFrom.StringValue != "" && dt_period.DateTo.StringValue != "")
 									{
-										result = TGenEngine.GEDCOMDateToStr(dt_period.DateFrom, format) + "-" + TGenEngine.GEDCOMDateToStr(dt_period.DateTo, format);
+										result = GKUtils.GEDCOMDateToStr(dt_period.DateFrom, format) + "-" + GKUtils.GEDCOMDateToStr(dt_period.DateTo, format);
 									}
 								}
 							}
@@ -1385,7 +788,7 @@ namespace GKCore
 						{
 							if (date is TGEDCOMDate)
 							{
-								result = TGenEngine.GEDCOMDateToStr(date as TGEDCOMDate, format);
+								result = GKUtils.GEDCOMDateToStr(date as TGEDCOMDate, format);
 							}
 						}
 					}
@@ -1411,7 +814,7 @@ namespace GKCore
 
 		public static string GEDCOMEventToDateStr(TGEDCOMCustomEvent aEvent, TDateFormat format, bool sign)
 		{
-			return ((aEvent == null) ? "" : TGenEngine.GEDCOMCustomDateToStr(aEvent.Detail.Date, format, sign));
+			return ((aEvent == null) ? "" : GKUtils.GEDCOMCustomDateToStr(aEvent.Detail.Date, format, sign));
 		}
 
 		public static DateTime GEDCOMDateToDate(TGEDCOMDateValue date)
@@ -1428,17 +831,17 @@ namespace GKCore
 
 		public static string GetBirthDate(TGEDCOMIndividualRecord iRec, TDateFormat dateFormat, bool compact)
 		{
-			TGEDCOMCustomEvent evt = TGenEngine.GetIndividualEvent(iRec, "BIRT");
-			string result = ((evt == null) ? "" : TGenEngine.GEDCOMCustomDateToStr(evt.Detail.Date, dateFormat, false));
-			if (compact) result = TGenEngine.CompactDate(result);
+			TGEDCOMCustomEvent evt = GKUtils.GetIndividualEvent(iRec, "BIRT");
+			string result = ((evt == null) ? "" : GKUtils.GEDCOMCustomDateToStr(evt.Detail.Date, dateFormat, false));
+			if (compact) result = GKUtils.CompactDate(result);
 			return result;
 		}
 
 		public static string GetDeathDate(TGEDCOMIndividualRecord iRec, TDateFormat dateFormat, bool compact)
 		{
-			TGEDCOMCustomEvent evt = TGenEngine.GetIndividualEvent(iRec, "DEAT");
-			string result = ((evt == null) ? "" : TGenEngine.GEDCOMCustomDateToStr(evt.Detail.Date, dateFormat, false));
-			if (compact) result = TGenEngine.CompactDate(result);
+			TGEDCOMCustomEvent evt = GKUtils.GetIndividualEvent(iRec, "DEAT");
+			string result = ((evt == null) ? "" : GKUtils.GEDCOMCustomDateToStr(evt.Detail.Date, dateFormat, false));
+			if (compact) result = GKUtils.CompactDate(result);
 			return result;
 		}
 
@@ -1446,17 +849,17 @@ namespace GKCore
 		{
 			string Result = " (";
 
-			string ds = TGenEngine.GetBirthDate(iRec, TDateFormat.dfDD_MM_YYYY, false);
+			string ds = GKUtils.GetBirthDate(iRec, TDateFormat.dfDD_MM_YYYY, false);
 			if (ds == "")
 			{
 				ds = "?";
 			}
 			Result += ds;
 
-			ds = TGenEngine.GetDeathDate(iRec, TDateFormat.dfDD_MM_YYYY, false);
+			ds = GKUtils.GetDeathDate(iRec, TDateFormat.dfDD_MM_YYYY, false);
 			if (ds == "")
 			{
-				TGEDCOMCustomEvent ev = TGenEngine.GetIndividualEvent(iRec, "DEAT");
+				TGEDCOMCustomEvent ev = GKUtils.GetIndividualEvent(iRec, "DEAT");
 				if (ev != null)
 				{
 					ds = "?";
@@ -1484,7 +887,7 @@ namespace GKCore
 			int Result = -1;
 			YearBC = false;
 
-			TGEDCOMCustomEvent ev = TGenEngine.GetIndividualEvent(iRec, evSign);
+			TGEDCOMCustomEvent ev = GKUtils.GetIndividualEvent(iRec, evSign);
 			if (ev != null)
 			{
 				int year;
@@ -1536,8 +939,8 @@ namespace GKCore
 			try
 			{
 				bool ybc, ybc2;
-				double y = ((ev1 == null) ? -1.0 : TGenEngine.GetAbstractDate(ev1.Detail, out ybc));
-				double y2 = ((ev2 == null) ? -1.0 : TGenEngine.GetAbstractDate(ev2.Detail, out ybc2));
+				double y = ((ev1 == null) ? -1.0 : GKUtils.GetAbstractDate(ev1.Detail, out ybc));
+				double y2 = ((ev2 == null) ? -1.0 : GKUtils.GetAbstractDate(ev2.Detail, out ybc2));
 
 				if (aCurEnd && y2 <= (double)1f)
 				{
@@ -1565,7 +968,7 @@ namespace GKCore
 			}
 			catch (Exception E)
 			{
-				SysUtils.LogWrite("TGenEngine.GetEventsYearsDiff(): " + E.Message);
+				SysUtils.LogWrite("GKUtils.GetEventsYearsDiff(): " + E.Message);
 			}
 
 			return result;
@@ -1594,11 +997,11 @@ namespace GKCore
 					}
 				}
 
-				result = TGenEngine.GetEventsYearsDiff(ev, ev2, false);
+				result = GKUtils.GetEventsYearsDiff(ev, ev2, false);
 			}
 			catch (Exception E)
 			{
-				SysUtils.LogWrite("TGenEngine.GetLifeExpectancy(): " + E.Message);
+				SysUtils.LogWrite("GKUtils.GetLifeExpectancy(): " + E.Message);
 			}
 
 			return result;
@@ -1632,7 +1035,7 @@ namespace GKCore
 
 				if (ToYear == -1)
 				{
-					result = TGenEngine.GetEventsYearsDiff(ev1, ev2, ev2 == null);
+					result = GKUtils.GetEventsYearsDiff(ev1, ev2, ev2 == null);
 				}
 				else
 				{
@@ -1651,7 +1054,7 @@ namespace GKCore
 			}
 			catch (Exception E)
 			{
-				SysUtils.LogWrite("TGenEngine.GetAge(): " + E.Message);
+				SysUtils.LogWrite("GKUtils.GetAge(): " + E.Message);
 			}
 
 			return result;
@@ -1664,7 +1067,7 @@ namespace GKCore
 			if (fRec != null)
 			{
 				TGEDCOMFamilyEvent evt = fRec.aux_GetFamilyEvent("MARR");
-				result = ((evt == null) ? "" : TGenEngine.GEDCOMCustomDateToStr(evt.Detail.Date, dateFormat, false));
+				result = ((evt == null) ? "" : GKUtils.GEDCOMCustomDateToStr(evt.Detail.Date, dateFormat, false));
 			}
 
 			return result;
@@ -1675,13 +1078,13 @@ namespace GKCore
 			string Result = "";
 			try
 			{
-				TGEDCOMCustomEvent evt = TGenEngine.GetIndividualEvent(iRec, "DEAT");
+				TGEDCOMCustomEvent evt = GKUtils.GetIndividualEvent(iRec, "DEAT");
 				if (evt != null)
 				{
 				}
 				else
 				{
-					evt = TGenEngine.GetIndividualEvent(iRec, "BIRT");
+					evt = GKUtils.GetIndividualEvent(iRec, "BIRT");
 					if (evt != null)
 					{
 						TGEDCOMDate dt = evt.Detail.Date.Value as TGEDCOMDate;
@@ -1719,7 +1122,7 @@ namespace GKCore
 			}
 			catch (Exception E)
 			{
-				SysUtils.LogWrite("TGenEngine.GetDaysForBirth(): " + E.Message);
+				SysUtils.LogWrite("GKUtils.GetDaysForBirth(): " + E.Message);
 			}
 			return Result;
 		}
@@ -1730,21 +1133,21 @@ namespace GKCore
 
 		public static string GetBirthPlace(TGEDCOMIndividualRecord iRec)
 		{
-			TGEDCOMCustomEvent evt = TGenEngine.GetIndividualEvent(iRec, "BIRT");
+			TGEDCOMCustomEvent evt = GKUtils.GetIndividualEvent(iRec, "BIRT");
 			string result = ((evt == null) ? "" : evt.Detail.Place.StringValue);
 			return result;
 		}
 
 		public static string GetDeathPlace(TGEDCOMIndividualRecord iRec)
 		{
-			TGEDCOMCustomEvent evt = TGenEngine.GetIndividualEvent(iRec, "DEAT");
+			TGEDCOMCustomEvent evt = GKUtils.GetIndividualEvent(iRec, "DEAT");
 			string result = ((evt == null) ? "" : evt.Detail.Place.StringValue);
 			return result;
 		}
 
 		public static string GetResidencePlace(TGEDCOMIndividualRecord iRec, bool includeAddress)
 		{
-			return TGenEngine.GetPlaceStr(TGenEngine.GetIndividualEvent(iRec, "RESI"), includeAddress);
+			return GKUtils.GetPlaceStr(GKUtils.GetIndividualEvent(iRec, "RESI"), includeAddress);
 		}
 
 		public static string GetPlaceStr(TGEDCOMCustomEvent aEvent, bool includeAddress)
@@ -1854,7 +1257,7 @@ namespace GKCore
 
 		public static string GetAppDataPath()
 		{
-			string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\" + TGenEngine.AppTitle + "\\";
+			string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\" + GKData.AppTitle + "\\";
 			if (!Directory.Exists(path)) Directory.CreateDirectory(path);
 			return path;
 		}
@@ -1865,17 +1268,17 @@ namespace GKCore
 
 		public static void ShowMessage(string Msg)
 		{
-			MessageBox.Show(Msg, AppTitle, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+			MessageBox.Show(Msg, GKData.AppTitle, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
 		}
 
 		public static void ShowError(string Msg)
 		{
-			MessageBox.Show(Msg, AppTitle, MessageBoxButtons.OK, MessageBoxIcon.Hand);
+			MessageBox.Show(Msg, GKData.AppTitle, MessageBoxButtons.OK, MessageBoxIcon.Hand);
 		}
 
 		public static DialogResult ShowQuestion(string Msg)
 		{
-			return MessageBox.Show(Msg, AppTitle, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+			return MessageBox.Show(Msg, GKData.AppTitle, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 		}
 
 		#endregion

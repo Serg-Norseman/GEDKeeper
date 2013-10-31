@@ -68,7 +68,7 @@ namespace GKUI
 				else
 				{
 					string stat = this.FFamily.GetTagStringValue("_STAT");
-					int stat_idx = TGenEngine.GetMarriageStatusIndex(stat);
+					int stat_idx = GKUtils.GetMarriageStatusIndex(stat);
 					this.EditMarriageStatus.Enabled = true;
 					this.EditMarriageStatus.SelectedIndex = stat_idx;
 					this.cbRestriction.SelectedIndex = (int)((sbyte)this.FFamily.Restriction);
@@ -124,21 +124,23 @@ namespace GKUI
 				TGEDCOMIndividualRecord child = this.FFamily.Childrens[i - 1].Value as TGEDCOMIndividualRecord;
 				ListViewItem item = list.AddItem(i.ToString(), child);
 				item.SubItems.Add(child.aux_GetNameStr(true, false));
-				item.SubItems.Add(TGenEngine.GetBirthDate(child, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat, false));
+				item.SubItems.Add(GKUtils.GetBirthDate(child, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat, false));
 			}
 			list.EndUpdate();
 			list.SwitchSorter();
 
-			this.btnHusbandAdd.Enabled = (this.btnHusbandAdd.Enabled && this.FFamily.Restriction != TGEDCOMRestriction.rnLocked);
-			this.btnHusbandDelete.Enabled = (this.btnHusbandDelete.Enabled && this.FFamily.Restriction != TGEDCOMRestriction.rnLocked);
-			this.btnWifeAdd.Enabled = (this.btnWifeAdd.Enabled && this.FFamily.Restriction != TGEDCOMRestriction.rnLocked);
-			this.btnWifeDelete.Enabled = (this.btnWifeDelete.Enabled && this.FFamily.Restriction != TGEDCOMRestriction.rnLocked);
-			this.EditMarriageStatus.Enabled = (this.EditMarriageStatus.Enabled && this.FFamily.Restriction != TGEDCOMRestriction.rnLocked);
-			this.FChildsList.ReadOnly = (this.FFamily.Restriction == TGEDCOMRestriction.rnLocked);
-			this.FEventsList.ReadOnly = (this.FFamily.Restriction == TGEDCOMRestriction.rnLocked);
-			this.FNotesList.ReadOnly = (this.FFamily.Restriction == TGEDCOMRestriction.rnLocked);
-			this.FMediaList.ReadOnly = (this.FFamily.Restriction == TGEDCOMRestriction.rnLocked);
-			this.FSourcesList.ReadOnly = (this.FFamily.Restriction == TGEDCOMRestriction.rnLocked);
+			bool locked = (this.FFamily.Restriction == TGEDCOMRestriction.rnLocked);
+			
+			this.btnHusbandAdd.Enabled = (this.btnHusbandAdd.Enabled && !locked);
+			this.btnHusbandDelete.Enabled = (this.btnHusbandDelete.Enabled && !locked);
+			this.btnWifeAdd.Enabled = (this.btnWifeAdd.Enabled && !locked);
+			this.btnWifeDelete.Enabled = (this.btnWifeDelete.Enabled && !locked);
+			this.EditMarriageStatus.Enabled = (this.EditMarriageStatus.Enabled && !locked);
+			this.FChildsList.ReadOnly = locked;
+			this.FEventsList.ReadOnly = locked;
+			this.FNotesList.ReadOnly = locked;
+			this.FMediaList.ReadOnly = locked;
+			this.FSourcesList.ReadOnly = locked;
 		}
 
 		private void SetTitle()
@@ -146,69 +148,59 @@ namespace GKUI
 			this.Text = LangMan.LSList[114] + " \"" + this.EditHusband.Text + " - " + this.EditWife.Text + "\"";
 		}
 
-		private void ListModify(object Sender, object ItemData, TRecAction Action)
+		private void ListModify(object sender, ModifyEventArgs eArgs)
 		{
-			bool need_refresh = false;
+			bool res = false;
 
-			if (Sender == this.FChildsList)
+			if (sender == this.FChildsList)
 			{
-				switch (Action)
+				TGEDCOMIndividualRecord child = eArgs.ItemData as TGEDCOMIndividualRecord;
+
+				switch (eArgs.Action)
 				{
 					case TRecAction.raAdd:
-						{
-							TGEDCOMIndividualRecord child = this.Base.SelectPerson(this.GetHusband(), TTargetMode.tmParent, TGEDCOMSex.svNone);
-							need_refresh = (child != null && this.FFamily.aux_AddChild(child));
-							break;
-						}
+						child = this.Base.SelectPerson(this.GetHusband(), TTargetMode.tmParent, TGEDCOMSex.svNone);
+						res = (child != null && this.FFamily.aux_AddChild(child));
+						break;
 
 					case TRecAction.raEdit:
-						{
-							TGEDCOMIndividualRecord child = ItemData as TGEDCOMIndividualRecord;
-							need_refresh = (this.Base.ModifyPerson(ref child));
-							break;
-						}
+						res = (this.Base.ModifyPerson(ref child));
+						break;
 
 					case TRecAction.raDelete:
-						{
-							TGEDCOMIndividualRecord child = ItemData as TGEDCOMIndividualRecord;
-							need_refresh = (child != null && TGenEngine.ShowQuestion(LangMan.LSList[121]) != DialogResult.No && this.FFamily.aux_RemoveChild(child));
-							break;
-						}
+						res = (child != null && GKUtils.ShowQuestion(LangMan.LSList[121]) != DialogResult.No && this.FFamily.aux_RemoveChild(child));
+						break;
 
 					case TRecAction.raJump:
+						if (child != null)
 						{
-							TGEDCOMIndividualRecord child = ItemData as TGEDCOMIndividualRecord;
-							if (child != null)
-							{
-								this.AcceptChanges();
-								this.Base.SelectRecordByXRef(child.XRef);
-								base.Close();
-							}
-							break;
+							this.AcceptChanges();
+							this.Base.SelectRecordByXRef(child.XRef);
+							base.Close();
 						}
+						break;
 				}
 			}
-			else
+			else if (sender == this.FEventsList)
 			{
-				if (Sender == this.FEventsList)
-				{
-					need_refresh = (this.Base.ModifyRecEvent(this, this.FFamily, ItemData as TGEDCOMCustomEvent, Action));
-				}
-				else if (Sender == this.FNotesList)
-				{
-					need_refresh = (this.Base.ModifyRecNote(this, this.FFamily, ItemData as TGEDCOMNotes, Action));
-				}
-				else if (Sender == this.FMediaList)
-				{
-					need_refresh = (this.Base.ModifyRecMultimedia(this, this.FFamily, ItemData as TGEDCOMMultimediaLink, Action));
-				}
-				else if (Sender == this.FSourcesList)
-				{
-					need_refresh = (this.Base.ModifyRecSource(this, this.FFamily, ItemData as TGEDCOMSourceCitation, Action));
-				}
+				TGEDCOMCustomEvent evt = eArgs.ItemData as TGEDCOMCustomEvent;
+				res = (this.Base.ModifyRecEvent(this, this.FFamily, ref evt, eArgs.Action));
+				if (res && eArgs.Action == TRecAction.raAdd) eArgs.ItemData = evt;
+			}
+			else if (sender == this.FNotesList)
+			{
+				res = (this.Base.ModifyRecNote(this, this.FFamily, eArgs.ItemData as TGEDCOMNotes, eArgs.Action));
+			}
+			else if (sender == this.FMediaList)
+			{
+				res = (this.Base.ModifyRecMultimedia(this, this.FFamily, eArgs.ItemData as TGEDCOMMultimediaLink, eArgs.Action));
+			}
+			else if (sender == this.FSourcesList)
+			{
+				res = (this.Base.ModifyRecSource(this, this.FFamily, eArgs.ItemData as TGEDCOMSourceCitation, eArgs.Action));
 			}
 
-			if (need_refresh) this.ControlsRefresh();
+			if (res) this.ControlsRefresh();
 		}
 
 		private void btnHusbandAddClick(object sender, EventArgs e)
@@ -223,7 +215,7 @@ namespace GKUI
 
 		private void btnHusbandDeleteClick(object sender, EventArgs e)
 		{
-			if (TGenEngine.ShowQuestion(LangMan.LSList[119]) != DialogResult.No)
+			if (GKUtils.ShowQuestion(LangMan.LSList[119]) != DialogResult.No)
 			{
 				this.FFamily.aux_RemoveSpouse(this.GetHusband());
 				this.ControlsRefresh();
@@ -253,7 +245,7 @@ namespace GKUI
 
 		private void btnWifeDeleteClick(object sender, EventArgs e)
 		{
-			if (TGenEngine.ShowQuestion(LangMan.LSList[120]) != DialogResult.No)
+			if (GKUtils.ShowQuestion(LangMan.LSList[120]) != DialogResult.No)
 			{
 				this.FFamily.aux_RemoveSpouse(this.GetWife());
 				this.ControlsRefresh();
@@ -316,7 +308,7 @@ namespace GKUI
 			}
 
 			this.FChildsList = new GKSheetList(this.SheetChilds);
-			this.FChildsList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FChildsList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.FChildsList.Buttons = EnumSet.Create(new Enum[]
 			{
 				GKSheetList.TListButton.lbAdd, 
@@ -329,19 +321,19 @@ namespace GKUI
 			this.FChildsList.List.AddListColumn(LangMan.LSList[122], 100, false);
 
 			this.FEventsList = new GKSheetList(this.SheetEvents);
-			this.FEventsList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FEventsList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.Base.SetupRecEventsList(this.FEventsList, false);
 
 			this.FNotesList = new GKSheetList(this.SheetNotes);
-			this.FNotesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FNotesList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.Base.SetupRecNotesList(this.FNotesList);
 
 			this.FMediaList = new GKSheetList(this.SheetMultimedia);
-			this.FMediaList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FMediaList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.Base.SetupRecMediaList(this.FMediaList);
 
 			this.FSourcesList = new GKSheetList(this.SheetSources);
-			this.FSourcesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FSourcesList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.Base.SetupRecSourcesList(this.FSourcesList);
 
 			this.SetLang();

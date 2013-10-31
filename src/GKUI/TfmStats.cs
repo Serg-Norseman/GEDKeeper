@@ -185,7 +185,7 @@ namespace GKUI
 
 		private void TfmStats_Load(object sender, EventArgs e)
 		{
-			FTreeStats = new TreeStats(this.Base.Engine);
+			FTreeStats = new TreeStats(this.Base.Tree);
 			
 			TreeStats.TCommonStats stats;
 			FTreeStats.GetCommonStats(out stats);

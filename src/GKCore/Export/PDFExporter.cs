@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows.Forms;
 
 using Ext.Utils;
+using GedCom551;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 
@@ -19,7 +20,7 @@ namespace GKCore.Export
 		protected Document fDocument;
 		protected bool albumPage;
 
-		public PDFExporter(TGenEngine engine) : base(engine)
+		public PDFExporter(TGEDCOMTree tree) : base(tree)
 		{
 			this.Margins.Left = 20;
 			this.Margins.Top = 20;
@@ -130,11 +131,11 @@ namespace GKCore.Export
 					table.AddCell(new Phrase(iRec.XRef, cells_font));
 					table.AddCell(new Phrase(iRec.aux_GetNameStr(true, false), cells_font));
 
-					table.AddCell(new Phrase(TGenEngine.GetBirthDate(iRec, TDateFormat.dfDD_MM_YYYY, false), cells_font));
-					table.AddCell(new Phrase(TGenEngine.GetBirthPlace(iRec), cells_font));
+					table.AddCell(new Phrase(GKUtils.GetBirthDate(iRec, TDateFormat.dfDD_MM_YYYY, false), cells_font));
+					table.AddCell(new Phrase(GKUtils.GetBirthPlace(iRec), cells_font));
 
-					table.AddCell(new Phrase(TGenEngine.GetDeathDate(iRec, TDateFormat.dfDD_MM_YYYY, false), cells_font));
-					table.AddCell(new Phrase(TGenEngine.GetDeathPlace(iRec), cells_font));
+					table.AddCell(new Phrase(GKUtils.GetDeathDate(iRec, TDateFormat.dfDD_MM_YYYY, false), cells_font));
+					table.AddCell(new Phrase(GKUtils.GetDeathPlace(iRec), cells_font));
 
 					TGEDCOMCustomEvent evt2 = iRec.GetIndividualEvent("OCCU");
 					string st = ((evt2 == null) ? "" : evt2.StringValue);

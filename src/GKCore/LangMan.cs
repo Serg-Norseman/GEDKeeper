@@ -1355,7 +1355,7 @@ namespace GKCore
 
 		public static void SaveDefaultLanguage()
 		{
-			StreamWriter lf = new StreamWriter(TGenEngine.GetAppPath() + "langs\\russian.sample", false, Encoding.UTF8);
+			StreamWriter lf = new StreamWriter(GKUtils.GetAppPath() + "langs\\russian.sample", false, Encoding.UTF8);
 			try
 			{
 				lf.WriteLine(";" + LSDefCode.ToString() + "," + "Русский");

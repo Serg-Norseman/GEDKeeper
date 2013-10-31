@@ -14,7 +14,6 @@ namespace GKCore.Export
 {
 	public abstract class Exporter : IDisposable
 	{
-		protected TGenEngine FEngine;
 		protected GlobalOptions FOptions;
 		protected string FPath;
 		protected TGEDCOMTree FTree;
@@ -26,10 +25,9 @@ namespace GKCore.Export
 			set { this.FOptions = value; }
 		}
 
-		public Exporter(TGenEngine engine)
+		public Exporter(TGEDCOMTree tree)
 		{
-			this.FEngine = engine;
-			this.FTree = this.FEngine.Tree;
+			this.FTree = tree;
 
 			//if (!Directory.Exists(this.FPath)) Directory.CreateDirectory(this.FPath);
 		}

@@ -71,7 +71,7 @@ namespace GedCom551
 			return base.IsEmpty() && this.fMembers.Count == 0;
 		}
 
-		public override void ReplaceXRefs(TXRefReplaceMap aMap)
+		public override void ReplaceXRefs(XRefReplacer aMap)
 		{
 			base.ReplaceXRefs(aMap);
 			this.fMembers.ReplaceXRefs(aMap);
@@ -130,7 +130,7 @@ namespace GedCom551
 			}
 			catch (Exception E)
 			{
-				SysUtils.LogWrite("TGenEngine.AddGroupMember(): " + E.Message);
+				SysUtils.LogWrite("GKUtils.AddGroupMember(): " + E.Message);
 				Result = false;
 			}
 			return Result;
@@ -147,7 +147,7 @@ namespace GedCom551
 			}
 			catch (Exception E)
 			{
-				SysUtils.LogWrite("TGenEngine.RemoveGroupMember(): " + E.Message);
+				SysUtils.LogWrite("GKUtils.RemoveGroupMember(): " + E.Message);
 				Result = false;
 			}
 			return Result;

@@ -79,7 +79,7 @@ namespace GKUI.Controls
 
 		private void RecordMerge(TGEDCOMRecord target_rec, TGEDCOMRecord aRecCopy)
 		{
-			TXRefReplaceMap repMap = new TXRefReplaceMap();
+			XRefReplacer repMap = new XRefReplacer();
 			try
 			{
 				repMap.AddXRef(aRecCopy, aRecCopy.XRef, target_rec.XRef);
@@ -165,7 +165,7 @@ namespace GKUI.Controls
 					case TGEDCOMRecordType.rtFamily:
 						{
 							TGEDCOMFamilyRecord famRec = (this.FRec1 as TGEDCOMFamilyRecord);
-							this.Edit1.Text = TGenEngine.aux_GetFamilyStr(famRec);
+							this.Edit1.Text = GKUtils.aux_GetFamilyStr(famRec);
 							this.Base.ShowFamilyInfo(famRec, this.Memo1.Lines);
 							break;
 						}
@@ -213,7 +213,7 @@ namespace GKUI.Controls
 					case TGEDCOMRecordType.rtFamily:
 						{
 							TGEDCOMFamilyRecord famRec = (this.FRec2 as TGEDCOMFamilyRecord);
-							this.Edit2.Text = TGenEngine.aux_GetFamilyStr(famRec);
+							this.Edit2.Text = GKUtils.aux_GetFamilyStr(famRec);
 							this.Base.ShowFamilyInfo(famRec, this.Memo2.Lines);
 							break;
 						}

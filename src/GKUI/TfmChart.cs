@@ -26,7 +26,6 @@ namespace GKUI
 		private NavManager FNavman;
 		private TfmBase FBase;
 		private TTreeChartBox.TChartKind FChartKind;
-		private string FFileName;
 		private int FGensLimit;
 		private TGEDCOMIndividualRecord FPerson;
 		private float FScale;
@@ -75,7 +74,6 @@ namespace GKUI
 
 			this.FBase = aBase;
 			this.FTree = aBase.Tree;
-			this.FFileName = Path.GetFileName(aBase.FileName);
 			this.FPerson = StartPerson;
 			
 			this.miTraceRoot.Checked = this.FTreeBox.TraceSelected;
@@ -92,18 +90,13 @@ namespace GKUI
 
 		private void DoFilter()
 		{
-			TfmTreeFilter fmTreeFilter = new TfmTreeFilter(this.FBase);
-			try
-			{
-				fmTreeFilter.Filter = this.FTreeBox.Filter;
-				if (fmTreeFilter.ShowDialog() == DialogResult.OK)
+			using (TfmTreeFilter dlgFilter = new TfmTreeFilter(this.FBase)) {
+				dlgFilter.Filter = this.FTreeBox.Filter;
+
+				if (dlgFilter.ShowDialog() == DialogResult.OK)
 				{
 					this.GenChart(true);
 				}
-			}
-			finally
-			{
-				fmTreeFilter.Dispose();
 			}
 		}
 
@@ -404,7 +397,7 @@ namespace GKUI
 					needSex = TGEDCOMSex.svMale;
 					break;
 				default:
-					TGenEngine.ShowError(LangMan.LSList[210]);
+					GKUtils.ShowError(LangMan.LSList[210]);
 					return null;
 			}
 
@@ -447,13 +440,13 @@ namespace GKUI
 				TGEDCOMIndividualRecord i_rec = p.Rec;
 				if (i_rec.SpouseToFamilyLinks.Count == 0)
 				{
-					TGenEngine.ShowError(LangMan.LSList[211]);
+					GKUtils.ShowError(LangMan.LSList[211]);
 				}
 				else
 				{
 					if (i_rec.SpouseToFamilyLinks.Count > 1)
 					{
-						TGenEngine.ShowError("У данной персоны несколько семей. Выбор еще не реализован.");
+						GKUtils.ShowError("У данной персоны несколько семей. Выбор еще не реализован.");
 					}
 					else
 					{
@@ -487,7 +480,7 @@ namespace GKUI
 				TGEDCOMSex sex = p.Rec.Sex;
 				if (sex < TGEDCOMSex.svMale || sex >= TGEDCOMSex.svUndetermined)
 				{
-					TGenEngine.ShowError(LangMan.LSList[210]);
+					GKUtils.ShowError(LangMan.LSList[210]);
 				}
 				else
 				{
@@ -532,7 +525,7 @@ namespace GKUI
 
 		void miFillImageClick(object sender, EventArgs e)
 		{
-			OpenDialog1.InitialDirectory = TGenEngine.GetAppPath() + "\\backgrounds";
+			OpenDialog1.InitialDirectory = GKUtils.GetAppPath() + "\\backgrounds";
 			if (OpenDialog1.ShowDialog() == DialogResult.OK)
 			{
 				Image img = new Bitmap(OpenDialog1.FileName);
@@ -615,7 +608,7 @@ namespace GKUI
 				int anc_count = TreeStats.GetAncestorsCount(iRec);
 				if (anc_count > 2048)
 				{
-					TGenEngine.ShowMessage(string.Format(LangMan.LSList[212], anc_count.ToString()));
+					GKUtils.ShowMessage(string.Format(LangMan.LSList[212], anc_count.ToString()));
 					result = false;
 					return result;
 				}
@@ -627,7 +620,7 @@ namespace GKUI
 				int desc_count = TreeStats.GetDescendantsCount(iRec);
 				if (desc_count > 2048)
 				{
-					TGenEngine.ShowMessage(string.Format(LangMan.LSList[213], desc_count.ToString()));
+					GKUtils.ShowMessage(string.Format(LangMan.LSList[213], desc_count.ToString()));
 					result = false;
 				}
 			}
@@ -641,15 +634,15 @@ namespace GKUI
 			{
 				if (this.FPerson == null)
 				{
-					TGenEngine.ShowError(LangMan.LSList[209]);
+					GKUtils.ShowError(LangMan.LSList[209]);
 				}
 				else
 				{
 					this.NavAdd(this.FPerson);
 					this.FTreeBox.DepthLimit = this.FGensLimit;
 					this.FTreeBox.Options = GKUI.TfmGEDKeeper.Instance.Options.ChartOptions;
-					this.FTreeBox.Engine = this.FBase.Engine;
 					this.FTreeBox.Tree = this.FTree;
+					this.FTreeBox.Media = this.FBase.Media;
 					this.FTreeBox.ShieldState = this.FBase.ShieldState;
 					this.FTreeBox.Scale = this.FScale;
 
@@ -668,7 +661,7 @@ namespace GKUI
 							break;
 					}
 
-					this.Text = this.Text + " \"" + this.FFileName + "\"";
+					this.Text = this.Text + " \"" + Path.GetFileName(FBase.Tree.FileName) + "\"";
 
 					if (show) base.Show();
 

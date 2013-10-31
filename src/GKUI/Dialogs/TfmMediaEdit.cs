@@ -40,14 +40,14 @@ namespace GKUI
 			if (this.FIsNew)
 			{
 				TGKStoreType gst = (TGKStoreType)this.cbStoreType.SelectedIndex;
-				if ((gst == TGKStoreType.gstArchive || gst == TGKStoreType.gstStorage) && !this.Base.Engine.CheckPath())
+				if ((gst == TGKStoreType.gstArchive || gst == TGKStoreType.gstStorage) && !this.Base.Media.CheckPath())
 				{
 					result = false;
 					return result;
 				}
 
 				string ref_fn = "";
-				result = this.Base.Engine.MediaSave(this.edFile.Text, gst, ref ref_fn);
+				result = this.Base.Media.MediaSave(this.edFile.Text, gst, ref ref_fn);
 
 				if (result) {
 					file_ref.LinkFile(ref_fn, (TGEDCOMMediaType)this.cbMediaType.SelectedIndex, TGEDCOMMultimediaFormat.mfUnknown);
@@ -83,7 +83,7 @@ namespace GKUI
 				this.StoreTypesRefresh(true, TGKStoreType.gstReference);
 			} else {
 				string dummy = "";
-				TGKStoreType gst = TGenEngine.GetStoreType(file_ref.StringValue, ref dummy);
+				TGKStoreType gst = MediaManager.GetStoreType(file_ref.StringValue, ref dummy);
 				this.StoreTypesRefresh((gst == TGKStoreType.gstArchive), gst);
 			}
 
@@ -94,20 +94,18 @@ namespace GKUI
 			this.Base.RecListSourcesRefresh(this.FMediaRec, this.FSourcesList.List, null);
 		}
 
-		private void ListModify(object sender, object itemData, TRecAction action)
+		private void ListModify(object sender, ModifyEventArgs eArgs)
 		{
-			bool refresh = false;
+			bool res = false;
 
-			if (sender == this.FNotesList)
-			{
-				refresh = (this.Base.ModifyRecNote(this, this.FMediaRec, itemData as TGEDCOMNotes, action));
+			if (sender == this.FNotesList) {
+				res = (this.Base.ModifyRecNote(this, this.FMediaRec, eArgs.ItemData as TGEDCOMNotes, eArgs.Action));
 			}
-			else
-			{
-				refresh = ((sender == this.FSourcesList) && this.Base.ModifyRecSource(this, this.FMediaRec, itemData as TGEDCOMSourceCitation, action));
+			else if (sender == this.FSourcesList) {
+				res = this.Base.ModifyRecSource(this, this.FMediaRec, eArgs.ItemData as TGEDCOMSourceCitation, eArgs.Action);
 			}
 
-			if (refresh) this.ControlsRefresh();
+			if (res) this.ControlsRefresh();
 		}
 
 		private void SetMediaRec(TGEDCOMMultimediaRecord Value)
@@ -196,11 +194,11 @@ namespace GKUI
 			}
 
 			this.FNotesList = new GKSheetList(this.SheetNotes);
-			this.FNotesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FNotesList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.Base.SetupRecNotesList(this.FNotesList);
 
 			this.FSourcesList = new GKSheetList(this.SheetSources);
-			this.FSourcesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FSourcesList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.Base.SetupRecSourcesList(this.FSourcesList);
 
 			this.btnAccept.Text = LangMan.LSList[97];

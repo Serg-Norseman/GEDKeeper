@@ -84,6 +84,21 @@ namespace GedCom551
 			return match;
 		}
 
+		public void aux_AddNoteText(string aText)
+		{
+			StringList strData = new StringList();
+			try
+			{
+				strData.Text = this.Note.Text.Trim();
+				strData.Add(aText);
+				this.Note = strData;
+			}
+			finally
+			{
+				strData.Free();
+			}
+		}
+
         #endregion
 	}
 }

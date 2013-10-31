@@ -54,7 +54,7 @@ namespace GKUI
 				case TGEDCOMMultimediaFormat.mfTGA:
 				case TGEDCOMMultimediaFormat.mfPNG:
 				{
-					Image img = this.Base.Engine.BitmapLoad(this.FFileRef.StringValue, -1, -1, false);
+					Image img = this.Base.Media.BitmapLoad(this.FFileRef.StringValue, -1, -1, false);
 
 					GKImageControl imCtl = new GKImageControl();
 					imCtl.OpenImage(img);
@@ -72,7 +72,7 @@ namespace GKUI
 				{
 					this.FExtern = true;
 					string target_fn = "";
-					this.Base.Engine.MediaLoad(this.FFileRef.StringValue, ref target_fn);
+					this.Base.Media.MediaLoad(this.FFileRef.StringValue, ref target_fn);
                     SysUtils.LoadExtFile(target_fn);
 					break;
 				}
@@ -80,7 +80,7 @@ namespace GKUI
 				case TGEDCOMMultimediaFormat.mfTXT:
 				{
 					Stream fs = null;
-					this.Base.Engine.MediaLoad(this.FFileRef.StringValue, out fs, false);
+					this.Base.Media.MediaLoad(this.FFileRef.StringValue, out fs, false);
 					using (StreamReader strd = new StreamReader(fs, Encoding.GetEncoding(1251)))
 					{
 						ctl = new TextBox();
@@ -96,7 +96,7 @@ namespace GKUI
 				case TGEDCOMMultimediaFormat.mfRTF:
 				{
 					Stream fs = null;
-					this.Base.Engine.MediaLoad(this.FFileRef.StringValue, out fs, false);
+					this.Base.Media.MediaLoad(this.FFileRef.StringValue, out fs, false);
 					using (StreamReader strd = new StreamReader(fs))
 					{
 						ctl = new RichTextBox();
@@ -109,7 +109,7 @@ namespace GKUI
 				case TGEDCOMMultimediaFormat.mfHTM:
 				{
 					Stream fs = null;
-					this.Base.Engine.MediaLoad(this.FFileRef.StringValue, out fs, false);
+					this.Base.Media.MediaLoad(this.FFileRef.StringValue, out fs, false);
 
 					ctl = new WebBrowser();
 					(ctl as WebBrowser).DocumentStream = fs;

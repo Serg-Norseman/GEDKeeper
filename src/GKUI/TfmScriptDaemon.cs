@@ -26,14 +26,24 @@ namespace GKUI
 
 		public string FileName
 		{
-			get { return this.FFileName; }
-			set { this.SetFileName(value); }
+			get {
+				return this.FFileName;
+			}
+			set {
+				this.FFileName = value;
+				this.SetTitle();
+			}
 		}
 
 		public bool Modified
 		{
-			get { return this.FModified; }
-			set { this.SetModified(value); }
+			get {
+				return this.FModified;
+			}
+			set {
+				this.FModified = value;
+				this.SetTitle();
+			}
 		}
 
 		private bool CheckModified()
@@ -57,18 +67,6 @@ namespace GKUI
 			}
 
 			return result;
-		}
-
-		private void SetFileName(string Value)
-		{
-			this.FFileName = Value;
-			this.SetTitle();
-		}
-
-		private void SetModified(bool Value)
-		{
-			this.FModified = Value;
-			this.SetTitle();
 		}
 
 		private void SetTitle()

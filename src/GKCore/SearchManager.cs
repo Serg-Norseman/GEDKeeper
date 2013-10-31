@@ -23,7 +23,7 @@ namespace GKCore
 
 		private string GetSign(TfmBase aBase)
 		{
-			return Path.GetFileNameWithoutExtension(aBase.Engine.FileName);
+			return Path.GetFileNameWithoutExtension(aBase.Tree.FileName);
 		}
 
 		private bool IsIndexedRecord(TGEDCOMRecord rec)
@@ -39,7 +39,7 @@ namespace GKCore
 
 		private string GetXDBFolder()
 		{
-			string xdb_dir = TGenEngine.GetAppDataPath() + "xdb";
+			string xdb_dir = GKUtils.GetAppDataPath() + "xdb";
 			if (!Directory.Exists(xdb_dir)) Directory.CreateDirectory(xdb_dir);
 			return xdb_dir;
 		}

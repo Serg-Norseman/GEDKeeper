@@ -60,49 +60,43 @@ namespace GKUI
 			}
 		}
 
-		private void ListModify(object Sender, object ItemData, TRecAction Action)
+		private void ListModify(object sender, ModifyEventArgs eArgs)
 		{
             bool res = false;
 
-			if (object.Equals(Sender, this.FNotesList))
-			{
-                res = (this.Base.ModifyRecNote(this, this.FGroup, ItemData as TGEDCOMNotes, Action));
-			}
-			else
-			{
-				if (object.Equals(Sender, this.FMediaList))
-				{
-                    res = (this.Base.ModifyRecMultimedia(this, this.FGroup, ItemData as TGEDCOMMultimediaLink, Action));
-				}
-				else
-				{
-					if (object.Equals(Sender, this.FMembersList))
-					{
-                        TGEDCOMIndividualRecord member = (Action == TRecAction.raAdd) ? null : ItemData as TGEDCOMIndividualRecord;
+            if (sender == this.FNotesList)
+            {
+            	res = (this.Base.ModifyRecNote(this, this.FGroup, eArgs.ItemData as TGEDCOMNotes, eArgs.Action));
+            }
+            else if (sender == this.FMediaList)
+            {
+            	res = (this.Base.ModifyRecMultimedia(this, this.FGroup, eArgs.ItemData as TGEDCOMMultimediaLink, eArgs.Action));
+            }
+            else if (sender == this.FMembersList)
+            {
+            	TGEDCOMIndividualRecord member = eArgs.ItemData as TGEDCOMIndividualRecord;
 
-                        switch (Action)
-                        {
-                            case TRecAction.raAdd:
-							    member = this.Base.SelectPerson(null, TTargetMode.tmNone, TGEDCOMSex.svNone);
-                                res = (member != null && this.FGroup.aux_AddMember(member));
-                                break;
+            	switch (eArgs.Action)
+            	{
+            		case TRecAction.raAdd:
+            			member = this.Base.SelectPerson(null, TTargetMode.tmNone, TGEDCOMSex.svNone);
+            			res = (member != null && this.FGroup.aux_AddMember(member));
+            			break;
 
-                            case TRecAction.raDelete:
-                                res = (member != null && TGenEngine.ShowQuestion(LangMan.LSList[128]) != DialogResult.No && this.FGroup.aux_RemoveMember(member));
-                                break;
+            		case TRecAction.raDelete:
+            			res = (member != null && GKUtils.ShowQuestion(LangMan.LSList[128]) != DialogResult.No && this.FGroup.aux_RemoveMember(member));
+            			break;
 
-                            case TRecAction.raJump:
-								if (member != null)
-								{
-									this.AcceptChanges();
-									this.Base.SelectRecordByXRef(member.XRef);
-									base.Close();
-								}
-                                break;
-                        }
-					}
-				}
-			}
+            		case TRecAction.raJump:
+            			if (member != null)
+            			{
+            				this.AcceptChanges();
+            				this.Base.SelectRecordByXRef(member.XRef);
+            				base.Close();
+            			}
+            			break;
+            	}
+            }
 
             if (res) this.ListsRefresh();
 		}
@@ -144,7 +138,7 @@ namespace GKUI
 			this.InitializeComponent();
 			this.FBase = aBase;
 			this.FMembersList = new GKSheetList(this.SheetMembers);
-			this.FMembersList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FMembersList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.FMembersList.Buttons = EnumSet.Create(new Enum[]
 			{
 				GKSheetList.TListButton.lbAdd, 
@@ -155,11 +149,11 @@ namespace GKUI
 			this.FMembersList.List.AddListColumn(LangMan.LSList[85], 300, false);
 
 			this.FNotesList = new GKSheetList(this.SheetNotes);
-			this.FNotesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FNotesList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.Base.SetupRecNotesList(this.FNotesList);
 
 			this.FMediaList = new GKSheetList(this.SheetMultimedia);
-			this.FMediaList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FMediaList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.Base.SetupRecMediaList(this.FMediaList);
 
 			this.Text = LangMan.LSList[127];

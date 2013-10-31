@@ -65,7 +65,7 @@ namespace GedCom551
 			this._FileReferences.Pack();
 		}
 
-		public override void ReplaceXRefs(TXRefReplaceMap aMap)
+		public override void ReplaceXRefs(XRefReplacer aMap)
 		{
 			base.ReplaceXRefs(aMap);
 			this._FileReferences.ReplaceXRefs(aMap);

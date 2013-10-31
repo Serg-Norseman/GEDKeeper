@@ -130,7 +130,7 @@ namespace GKUI.Lists
 				int num = masks.Length - 1;
 				for (int i = 0; i <= num; i++)
 				{
-					result = (result || TGenEngine.MatchesMask(stx, masks[i]));
+					result = (result || GKUtils.MatchesMask(stx, masks[i]));
 				}
 			}
 			return result;
@@ -312,10 +312,10 @@ namespace GKUI.Lists
 					res = comp_res > 0;
 					break;
 				case TConditionKind.ck_Contains:
-					res = TGenEngine.MatchesMask(dataval.ToString(), "*" + fcond.value.ToString() + "*");
+					res = GKUtils.MatchesMask(dataval.ToString(), "*" + fcond.value.ToString() + "*");
 					break;
 				case TConditionKind.ck_NotContains:
-					res = !TGenEngine.MatchesMask(dataval.ToString(), "*" + fcond.value.ToString() + "*");
+					res = !GKUtils.MatchesMask(dataval.ToString(), "*" + fcond.value.ToString() + "*");
 					break;
 			}
 			return res;

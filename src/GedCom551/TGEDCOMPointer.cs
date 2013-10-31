@@ -66,7 +66,7 @@ namespace GedCom551
 			return result;
 		}
 
-		public override void ReplaceXRefs(TXRefReplaceMap aMap)
+		public override void ReplaceXRefs(XRefReplacer aMap)
 		{
 			base.ReplaceXRefs(aMap);
 			this.XRef = aMap.FindNewXRef(this.XRef);

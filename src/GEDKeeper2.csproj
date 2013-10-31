@@ -101,6 +101,7 @@
     <Compile Include="Ext\IniFile.cs" />
     <Compile Include="Ext\ListTimSort.cs" />
     <Compile Include="Ext\MapiMailMessage.cs" />
+    <Compile Include="Ext\ValuesCollection.cs" />
     <Compile Include="Ext\RomeNumbers.cs" />
     <Compile Include="Ext\SCCrypt.cs" />
     <Compile Include="Ext\StringList.cs" />
@@ -176,7 +177,7 @@
     <Compile Include="GedCom551\TGEDCOMTime.cs" />
     <Compile Include="GedCom551\TGEDCOMTree.cs" />
     <Compile Include="GedCom551\TGEDCOMUserReference.cs" />
-    <Compile Include="GedCom551\TXRefReplaceMap.cs" />
+    <Compile Include="GedCom551\XRefReplacer.cs" />
     <Compile Include="GEDKeeper2.cs" />
     <Compile Include="GKCore\CustomFilter.cs" />
     <Compile Include="GKCore\Export\ExcelExporter.cs" />
@@ -190,18 +191,21 @@
     <Compile Include="GKCore\IProgressController.cs" />
     <Compile Include="GKCore\Kinships.cs" />
     <Compile Include="GKCore\LangMan.cs" />
+    <Compile Include="GKCore\MediaManager.cs" />
     <Compile Include="GKCore\Options\GlobalOptions.cs" />
     <Compile Include="GKCore\Options\PedigreeOptions.cs" />
     <Compile Include="GKCore\Options\ProxyOptions.cs" />
     <Compile Include="GKCore\Options\TreeChartOptions.cs" />
     <Compile Include="GKCore\SearchManager.cs" />
-    <Compile Include="GKCore\TGenEngine.cs" />
+    <Compile Include="GKCore\GKUtils.cs" />
     <Compile Include="GKCore\ScriptEngine.cs" />
     <Compile Include="GKCore\TreeStats.cs" />
     <Compile Include="GKCore\TreeTools.cs" />
     <Compile Include="GKResources.Designer.cs">
       <DependentUpon>GKResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="GKSandbox\ProgressController.cs" />
+    <Compile Include="GKUI\Controls\GKLogChart.cs" />
     <Compile Include="GKUI\Controls\GKMergeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -524,6 +528,7 @@
     <Compile Include="GKUI\TfmTreeTools.Designer.cs">
       <DependentUpon>TfmTreeTools.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\UIUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GKUI\Controls\GKMergeControl.resx">
@@ -661,6 +666,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Content Include="ProfilingSessions\Session20131028_101541.sdps" />
+    <Content Include="ProfilingSessions\Session20131028_102025.sdps" />
+    <Content Include="ProfilingSessions\Session20131028_102344.sdps" />
     <Content Include="zlib1.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

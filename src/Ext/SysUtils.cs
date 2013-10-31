@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace Ext.Utils
 {
-	public sealed class SysUtils
+	public static class SysUtils
 	{
 		public static void Free(object self)
 		{
@@ -58,13 +58,13 @@ namespace Ext.Utils
 			int I = 1;
 			while (I <= L && S[I - 1] <= ' ') I++;
 
-			string Result;
+			string result;
 			if (I > L) {
-				Result = "";
+				result = "";
 			} else {
-				Result = ((I != 1) ? S.Substring(I - 1) : S);
+				result = ((I != 1) ? S.Substring(I - 1) : S);
 			}
-			return Result;
+			return result;
 		}
 
 		public static string TrimRight(string S)
@@ -73,8 +73,8 @@ namespace Ext.Utils
 			int I = L;
 			while (I > 0 && S[I - 1] <= ' ') I--;
 
-			string Result = ((I != L) ? S.Substring(0, I) : S);
-			return Result;
+			string result = ((I != L) ? S.Substring(0, I) : S);
+			return result;
 		}
 
 		private static string LogFilename;

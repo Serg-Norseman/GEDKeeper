@@ -7,21 +7,21 @@ using System.Collections.Generic;
 
 namespace Ext.Utils
 {
+	[Serializable]
+	public class CalculateException : Exception
+	{
+		public CalculateException()
+		{
+		}
+
+		public CalculateException(string message) : base(message)
+		{
+		}
+	}
+
 	// FIXME: перестроить, вычистить весь код, оптимизировать
 	public sealed class TCalculator : IDisposable
 	{
-        [Serializable]
-		public class ECalculate : Exception
-		{
-			public ECalculate()
-			{
-			}
-
-			public ECalculate(string message) : base(message)
-			{
-			}
-		}
-
 		public class TNamedVar
 		{
 			public string Name;
@@ -96,187 +96,146 @@ namespace Ext.Utils
 
 		private void RaiseError(string Msg)
 		{
-			throw new TCalculator.ECalculate(Msg);
+			throw new CalculateException(Msg);
 		}
 
-		private double bfloat(bool B)
+		private static double bfloat(bool B)
 		{
 			return ((B) ? 1.0 : 0.0);
 		}
 
-		private double fmod(double x, double y)
+		private static double fmod(double x, double y)
 		{
 			return (x - Int((x / y)) * y);
 		}
 
-		public double Int(double AValue)
+		private static double Int(double AValue)
 		{
 			return ((AValue > (double)0f) ? Math.Floor(AValue) : Math.Ceiling(AValue));
 		}
 
-		private double Frac(double AValue)
+		private static double Frac(double AValue)
 		{
 			return (AValue - Int(AValue));
 		}
 
+		private bool DefCalcFunc(string S, ref double V)
+		{
+			bool result = true;
+
+			if (S == "round")
+			{
+				V = ((double)checked((long)Math.Round(V)));
+			}
+			else if (S == "trunc")
+			{
+				V = ((double)Math.Truncate(V));
+			}
+			else if (S == "int")
+			{
+				V = Int(V);
+			}
+			else if (S == "frac")
+			{
+				V = Frac(V);
+			}
+			else if (S == "sin")
+			{
+				V = Math.Sin(V);
+			}
+			else if (S == "cos")
+			{
+				V = Math.Cos(V);
+			}
+			else if (S == "tan")
+			{
+				V = Math.Tan(V);
+			}
+			else if (S == "atan")
+			{
+				V = Math.Atan(V);
+			}
+			else if (S == "ln")
+			{
+				V = Math.Log(V);
+			}
+			else if (S == "exp")
+			{
+				V = Math.Exp(V);
+			}
+			else if (S == "sign")
+			{
+				if (V > (double)0f)
+				{
+					V = 1.0;
+				}
+				else
+				{
+					if (V < (double)0f)
+					{
+						V = -1.0;
+					}
+				}
+			}
+			else if (S == "sgn")
+			{
+				if (V > (double)0f)
+				{
+					V = 1.0;
+				}
+				else
+				{
+					if (V < (double)0f)
+					{
+						V = 0.0;
+					}
+				}
+			}
+			else if (S == "xsgn") {
+				if (V < (double)0f)
+				{
+					V = 0.0;
+				}
+			} else {
+				result = false;
+			}
+
+			return result;
+		}
+
 		private bool DefCalcProc(CallbackType ctype, string S, ref double V)
 		{
-			bool Result = true;
-			if (ctype != CallbackType.ctGetValue)
-			{
-				if (ctype != CallbackType.ctSetValue)
-				{
-					if (ctype == CallbackType.ctFunction)
-					{
-						if (S == "round")
-						{
-							V = ((double)checked((long)Math.Round(V)));
-						}
-						else
-						{
-							if (S == "trunc")
-							{
-								V = ((double)Math.Truncate(V));
-							}
-							else
-							{
-								if (S == "int")
-								{
-									V = Int(V);
-								}
-								else
-								{
-									if (S == "frac")
-									{
-										V = Frac(V);
-									}
-									else
-									{
-										if (S == "sin")
-										{
-											V = Math.Sin(V);
-										}
-										else
-										{
-											if (S == "cos")
-											{
-												V = Math.Cos(V);
-											}
-											else
-											{
-												if (S == "tan")
-												{
-													V = Math.Tan(V);
-												}
-												else
-												{
-													if (S == "atan")
-													{
-														V = Math.Atan(V);
-													}
-													else
-													{
-														if (S == "ln")
-														{
-															V = Math.Log(V);
-														}
-														else
-														{
-															if (S == "exp")
-															{
-																V = Math.Exp(V);
-															}
-															else
-															{
-																if (S == "sign")
-																{
-																	if (V > (double)0f)
-																	{
-																		V = 1.0;
-																	}
-																	else
-																	{
-																		if (V < (double)0f)
-																		{
-																			V = -1.0;
-																		}
-																	}
-																}
-																else
-																{
-																	if (S == "sgn")
-																	{
-																		if (V > (double)0f)
-																		{
-																			V = 1.0;
-																		}
-																		else
-																		{
-																			if (V < (double)0f)
-																			{
-																				V = 0.0;
-																			}
-																		}
-																	}
-																	else
-																	{
-																		if (S == "xsgn")
-																		{
-																			if (V < (double)0f)
-																			{
-																				V = 0.0;
-																			}
-																		}
-																		else
-																		{
-																			Result = false;
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-				else
-				{
-					Result = false;
-				}
-			}
-			else
-			{
-				if (S == "pi")
-				{
-					V = 3.1415926535897931;
-				}
-				else
-				{
-					if (S == "e")
-					{
+			bool result = true;
+
+			switch (ctype) {
+				case CallbackType.ctGetValue:
+					if (S == "pi") {
+						V = 3.1415926535897931;
+					} else if (S == "e") {
 						V = 2.718281828;
+					} else {
+						result = false;
 					}
-					else
-					{
-						Result = false;
-					}
-				}
+					break;
+
+				case CallbackType.ctSetValue:
+					result = false;
+					break;
+
+				case CallbackType.ctFunction:
+					result = DefCalcFunc(S, ref V);
+					break;
 			}
-			return Result;
+
+			return result;
 		}
 
 		private bool Callback(CallbackType ctype, string Name, ref double Res)
 		{
-			bool Result = this.DefCalcProc(ctype, Name, ref Res);
+			bool result = this.DefCalcProc(ctype, Name, ref Res);
 
-			if (!Result) {
-				Result = true;
+			if (!result) {
+				result = true;
 
 				switch (ctype) {
 					case CallbackType.ctGetValue:
@@ -286,12 +245,12 @@ namespace Ext.Utils
 						this.SetVar(Name, Res);
 						break;
 					case CallbackType.ctFunction:
-						Result = false;
+						result = false;
 						break;
 				}
 			}
 
-			return Result;
+			return result;
 		}
 
 		private double GetVar(string Name)
@@ -305,7 +264,7 @@ namespace Ext.Utils
 				}
 			}
 
-			throw new TCalculator.ECalculate("Unknown function or variable \"" + Name + "\".");
+			throw new CalculateException("Unknown function or variable \"" + Name + "\".");
 		}
 
 		private void SetVar(string Name, double Value)
@@ -337,7 +296,9 @@ namespace Ext.Utils
 			{
 				this.FPtr++;
 			}
+
 			this.FToken = TCalculator.TToken.tkEOF;
+
 			if (this.FExpression[this.FPtr - 1] != '\0')
 			{
 				int s_pos = this.FPtr;
@@ -354,7 +315,8 @@ namespace Ext.Utils
 						}
 						this.FPtr++;
 					}
-					if (this._lex_ConvertNumber(s_pos, this.FPtr, 16))
+
+					if (this.ConvertNumber(s_pos, this.FPtr, 16))
 					{
 						return;
 					}
@@ -381,7 +343,8 @@ namespace Ext.Utils
 									}
 									this.FPtr++;
 								}
-								if (this._lex_ConvertNumber(s_pos, this.FPtr, 16))
+
+								if (this.ConvertNumber(s_pos, this.FPtr, 16))
 								{
 									return;
 								}
@@ -403,7 +366,8 @@ namespace Ext.Utils
 										}
 										this.FPtr++;
 									}
-									if (this._lex_ConvertNumber(s_pos, this.FPtr, 2))
+
+									if (this.ConvertNumber(s_pos, this.FPtr, 2))
 									{
 										return;
 									}
@@ -423,7 +387,7 @@ namespace Ext.Utils
 						char c9 = this.FExpression[this.FPtr - 1];
 						if (c9 == 'H' || c9 == 'h')
 						{
-							if (this._lex_ConvertNumber(s_pos, this.FPtr, 16))
+							if (this.ConvertNumber(s_pos, this.FPtr, 16))
 							{
 								this.FPtr++;
 								return;
@@ -434,7 +398,7 @@ namespace Ext.Utils
 							char c10 = this.FExpression[this.FPtr - 1];
 							if (c10 == 'B' || c10 == 'b')
 							{
-								if (this._lex_ConvertNumber(s_pos, this.FPtr, 2))
+								if (this.ConvertNumber(s_pos, this.FPtr, 2))
 								{
 									this.FPtr++;
 									return;
@@ -442,7 +406,7 @@ namespace Ext.Utils
 							}
 							else
 							{
-								if (this._lex_ConvertNumber(s_pos, this.FPtr, 10))
+								if (this.ConvertNumber(s_pos, this.FPtr, 10))
 								{
 									if (this.FExpression[this.FPtr - 1] == '`')
 									{
@@ -476,7 +440,7 @@ namespace Ext.Utils
 											}
 											this.fvalue = (this.fvalue + frac * 3.1415926535897931 / 180.0 / 60.0 / 60.0);
 										}
-										this.fvalue = this.fmod(this.fvalue, 6.2831853071795862);
+										this.fvalue = TCalculator.fmod(this.fvalue, 6.2831853071795862);
 										return;
 									}
 									if (this.FExpression[this.FPtr - 1] == '.')
@@ -829,7 +793,7 @@ namespace Ext.Utils
 						R = ((double)(~SysUtils.Trunc(R)));
 						break;
 					case TToken.tkNOT:
-						R = this.bfloat(SysUtils.Trunc(R) <= 0);
+						R = TCalculator.bfloat(SysUtils.Trunc(R) <= 0);
 						break;
 					case TToken.tkSUB:
 						R = (-R);
@@ -906,22 +870,22 @@ namespace Ext.Utils
 
 				switch (oldt) {
 					case TToken.tkLT:
-						R = this.bfloat(R < V);
+						R = TCalculator.bfloat(R < V);
 						break;
 					case TToken.tkLE:
-						R = this.bfloat(R <= V);
+						R = TCalculator.bfloat(R <= V);
 						break;
 					case TToken.tkEQ:
-						R = this.bfloat(R == V);
+						R = TCalculator.bfloat(R == V);
 						break;
 					case TToken.tkNE:
-						R = this.bfloat(R != V);
+						R = TCalculator.bfloat(R != V);
 						break;
 					case TToken.tkGE:
-						R = this.bfloat(R >= V);
+						R = TCalculator.bfloat(R >= V);
 						break;
 					case TToken.tkGT:
-						R = this.bfloat(R > V);
+						R = TCalculator.bfloat(R > V);
 						break;
 				}
 			}
@@ -974,12 +938,13 @@ namespace Ext.Utils
 			this.FExpression = expression + "\0";
 			this.FPtr = 1;
 			this.lex();
-			double Result = 0.0;
-			this.start(ref Result);
-			return Result;
+
+			double result = 0.0;
+			this.start(ref result);
+			return result;
 		}
 
-		private bool _lex_ConvertNumber(int first, int last, ushort @base)
+		private bool ConvertNumber(int first, int last, ushort @base)
 		{
 			this.fvalue = 0.0;
 			if (first < last)
@@ -1006,5 +971,6 @@ namespace Ext.Utils
 			}
 			return first == last;
 		}
+
 	}
 }

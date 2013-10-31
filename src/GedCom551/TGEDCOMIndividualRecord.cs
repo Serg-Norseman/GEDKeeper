@@ -17,6 +17,8 @@ namespace GedCom551
 		private GEDCOMList<TGEDCOMPointer> _AncestorsInterest;
 		private GEDCOMList<TGEDCOMPointer> _DescendantsInterest;
 		private GEDCOMList<TGEDCOMPointer> _Groups;
+		private static GEDCOMFactory fTagsFactory;
+
 
 		public string AncestralFileNumber
 		{
@@ -169,12 +171,11 @@ namespace GedCom551
 			}
 		}
 
-		private static GEDCOMFactory _factory;
-		
 		static TGEDCOMIndividualRecord()
 		{
 			GEDCOMFactory f = new GEDCOMFactory();
-			
+			fTagsFactory = f;
+
 			//f.RegisterTag("xxxx", xxxxxx.Create);
 			
 			f.RegisterTag("FAMC", TGEDCOMChildToFamilyLink.Create);
@@ -244,8 +245,6 @@ namespace GedCom551
 			f.RegisterTag("_MILI_RANK", TGEDCOMIndividualAttribute.Create);
 			
 			//f.RegisterTag("_BGRO", TGEDCOMBloodGroup.Create);
-
-			_factory = f;
 		}
 
 		public override TGEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
@@ -274,7 +273,7 @@ namespace GedCom551
 			}
 			else
 			{
-				result = _factory.CreateTag(this.Owner, this, tagName, tagValue);
+				result = fTagsFactory.CreateTag(this.Owner, this, tagName, tagValue);
 
 				if (result != null)
 				{
@@ -578,7 +577,7 @@ namespace GedCom551
 			this._Groups.Pack();
 		}
 
-		public override void ReplaceXRefs(TXRefReplaceMap aMap)
+		public override void ReplaceXRefs(XRefReplacer aMap)
 		{
 			base.ReplaceXRefs(aMap);
 

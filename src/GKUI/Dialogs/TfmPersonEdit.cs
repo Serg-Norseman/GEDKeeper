@@ -40,7 +40,7 @@ namespace GKUI
 
 		private void PortraitRefresh()
 		{
-			Image img = this.Base.Engine.GetPrimaryBitmap(this.FPerson, this.imgPortrait.Width, this.imgPortrait.Height, false);
+			Image img = this.Base.Media.GetPrimaryBitmap(this.FPerson, this.imgPortrait.Width, this.imgPortrait.Height, false);
 
 			if (img != null)
 			{
@@ -149,7 +149,7 @@ namespace GKUI
 
 					ListViewItem item = this.FSpousesList.List.AddItem(idx.ToString(), family);
 					item.SubItems.Add(rel_name);
-					item.SubItems.Add(TGenEngine.GetMarriageDate(family, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
+					item.SubItems.Add(GKUtils.GetMarriageDate(family, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
 				}
 			}
 
@@ -234,48 +234,47 @@ namespace GKUI
 				" " + this.EditPatronymic.Text + "\" [" + this.FPerson.aux_GetXRefNum() + "]";
 		}
 
-		private void ListModify(object sender, object itemData, TRecAction Action)
+		private void ListModify(object sender, ModifyEventArgs eArgs)
 		{
             bool res = false;
 
             if (sender == this.FEventsList)
 			{
-                if (Action == TRecAction.raMoveUp || Action == TRecAction.raMoveDown)
-				{
-					TGEDCOMCustomEvent evt = itemData as TGEDCOMCustomEvent;
-					int idx = this.FPerson.IndividualEvents.IndexOfObject(evt);
-					int newIdx = idx;
+				TGEDCOMCustomEvent evt = eArgs.ItemData as TGEDCOMCustomEvent;
 
-                    switch (Action)
+				if (eArgs.Action == TRecAction.raMoveUp || eArgs.Action == TRecAction.raMoveDown)
+				{
+					int idx = this.FPerson.IndividualEvents.IndexOfObject(evt);
+
+                    switch (eArgs.Action)
                     {
                         case TRecAction.raMoveUp:
 						    this.FPerson.IndividualEvents.Exchange(idx - 1, idx);
-						    newIdx = idx - 1;
                             break;
 
                         case TRecAction.raMoveDown:
 							this.FPerson.IndividualEvents.Exchange(idx, idx + 1);
-							newIdx = idx + 1;
                             break;
                     }
 
                     res = true;
-					this.FEventsList.List.SelectItem(newIdx);
 				}
 				else
 				{
-                    res = (this.Base.ModifyRecEvent(this, this.FPerson, itemData as TGEDCOMCustomEvent, Action));
+                    res = (this.Base.ModifyRecEvent(this, this.FPerson, ref evt, eArgs.Action));
+                    if (res && eArgs.Action == TRecAction.raAdd) eArgs.ItemData = evt;
 				}
 			}
 			else
 			{
 				if (sender == this.FSpousesList)
 				{
-                    TGEDCOMFamilyRecord family = (Action == TRecAction.raAdd) ? null : itemData as TGEDCOMFamilyRecord;
+                    TGEDCOMFamilyRecord family = eArgs.ItemData as TGEDCOMFamilyRecord;
 
-					switch (Action) {
+					switch (eArgs.Action) {
 						case TRecAction.raAdd:
                             res = (this.Base.ModifyFamily(ref family, TFamilyTarget.ftSpouse, this.FPerson));
+                            if (res) eArgs.ItemData = family;
 							break;
 
                         case TRecAction.raEdit:
@@ -283,7 +282,7 @@ namespace GKUI
 							break;
 
                         case TRecAction.raDelete:
-							if (family != null && TGenEngine.ShowQuestion(LangMan.LSList[220]) != DialogResult.No)
+							if (family != null && GKUtils.ShowQuestion(LangMan.LSList[220]) != DialogResult.No)
 							{
 								family.aux_RemoveSpouse(this.FPerson);
                                 res = true;
@@ -315,23 +314,19 @@ namespace GKUI
 						case TRecAction.raMoveDown:
 						{
 							int idx = this.FPerson.IndexOfSpouse(family);
-							int newIdx = idx;
 
-                            switch (Action)
+                            switch (eArgs.Action)
                             {
                                 case TRecAction.raMoveUp:
 								    this.FPerson.ExchangeSpouses(idx - 1, idx);
-								    newIdx = idx - 1;
                                     break;
 
                                 case TRecAction.raMoveDown:
 									this.FPerson.ExchangeSpouses(idx, idx + 1);
-									newIdx = idx + 1;
                                     break;
                             }
 
                             res = true;
-							this.FSpousesList.List.SelectItem(newIdx);
 							break;
 						}
 					}
@@ -340,79 +335,73 @@ namespace GKUI
 				{
 					if (sender == this.FAssociationsList)
 					{
-                        res = (this.Base.ModifyRecAssociation(this, this.FPerson, itemData as TGEDCOMAssociation, Action));
+                        res = (this.Base.ModifyRecAssociation(this, this.FPerson, eArgs.ItemData as TGEDCOMAssociation, eArgs.Action));
 					}
 					else
 					{
 						if (sender == this.FGroupsList)
 						{
-                            res = this.Base.ModifyRecGroup(this, this.FPerson, itemData as TGEDCOMGroupRecord, Action);
+                            res = this.Base.ModifyRecGroup(this, this.FPerson, eArgs.ItemData as TGEDCOMGroupRecord, eArgs.Action);
 						}
 						else
 						{
 							if (sender == this.FNotesList)
 							{
-                                res = (this.Base.ModifyRecNote(this, this.FPerson, itemData as TGEDCOMNotes, Action));
+                                res = (this.Base.ModifyRecNote(this, this.FPerson, eArgs.ItemData as TGEDCOMNotes, eArgs.Action));
 							}
 							else
 							{
 								if (sender == this.FMediaList)
 								{
-                                    if (Action == TRecAction.raMoveUp || Action == TRecAction.raMoveDown)
-									{
-										TGEDCOMMultimediaLink mmLink = itemData as TGEDCOMMultimediaLink;
-										int idx = this.FPerson.MultimediaLinks.IndexOfObject(mmLink);
-										int newIdx = idx;
+									TGEDCOMMultimediaLink mmLink = eArgs.ItemData as TGEDCOMMultimediaLink;
 
-                                        switch (Action)
+									if (eArgs.Action == TRecAction.raMoveUp || eArgs.Action == TRecAction.raMoveDown)
+									{
+										int idx = this.FPerson.MultimediaLinks.IndexOfObject(mmLink);
+
+                                        switch (eArgs.Action)
                                         {
                                             case TRecAction.raMoveUp:
 											    this.FPerson.MultimediaLinks.Exchange(idx - 1, idx);
-											    newIdx = idx - 1;
                                                 break;
 
                                             case TRecAction.raMoveDown:
 												this.FPerson.MultimediaLinks.Exchange(idx, idx + 1);
-												newIdx = idx + 1;
                                                 break;
                                         }
 
                                         res = true;
-										this.FMediaList.List.SelectItem(newIdx);
 									} else {
-                                        res = (this.Base.ModifyRecMultimedia(this, this.FPerson, itemData as TGEDCOMMultimediaLink, Action));
+                                        res = (this.Base.ModifyRecMultimedia(this, this.FPerson, mmLink, eArgs.Action));
 									}
 								}
 								else
 								{
 									if (sender == this.FSourcesList)
 									{
-                                        if (Action == TRecAction.raMoveUp || Action == TRecAction.raMoveDown)
-										{
-											TGEDCOMSourceCitation src_cit = itemData as TGEDCOMSourceCitation;
-											int idx = this.FPerson.SourceCitations.IndexOfObject(src_cit);
-											int newIdx = idx;
+										TGEDCOMSourceCitation src_cit = eArgs.ItemData as TGEDCOMSourceCitation;
 
-                                            switch (Action)
+										if (eArgs.Action == TRecAction.raMoveUp || eArgs.Action == TRecAction.raMoveDown)
+										{
+											int idx = this.FPerson.SourceCitations.IndexOfObject(src_cit);
+
+                                            switch (eArgs.Action)
                                             {
                                                 case TRecAction.raMoveUp:
 												    this.FPerson.SourceCitations.Exchange(idx - 1, idx);
-												    newIdx = idx - 1;
                                                     break;
 
                                                 case TRecAction.raMoveDown:
 													this.FPerson.SourceCitations.Exchange(idx, idx + 1);
-													newIdx = idx + 1;
                                                     break;
                                             }
 
                                             res = true;
-											this.FSourcesList.List.SelectItem(newIdx);
 										} else {
-                                            res = (this.Base.ModifyRecSource(this, this.FPerson, itemData as TGEDCOMSourceCitation, Action));
+                                            res = (this.Base.ModifyRecSource(this, this.FPerson, src_cit, eArgs.Action));
 										}
 									} else {
-                                        res = ((sender == this.FUserRefList) && this.Base.ModifyRecUserRef(this, this.FPerson, itemData as TGEDCOMUserReference, Action));
+                                        res = ((sender == this.FUserRefList) && this.Base.ModifyRecUserRef(this, this.FPerson, eArgs.ItemData as TGEDCOMUserReference, eArgs.Action));
 									}
 								}
 							}
@@ -455,7 +444,7 @@ namespace GKUI
 
 		private void btnFatherDelete_Click(object sender, EventArgs e)
 		{
-			if (TGenEngine.ShowQuestion(LangMan.LSList[218]) != DialogResult.No)
+			if (GKUtils.ShowQuestion(LangMan.LSList[218]) != DialogResult.No)
 			{
 				TGEDCOMFamilyRecord family = this.Base.GetChildFamily(this.FPerson, false, null);
 				if (family != null)
@@ -494,7 +483,7 @@ namespace GKUI
 
 		private void btnMotherDelete_Click(object sender, EventArgs e)
 		{
-			if (TGenEngine.ShowQuestion(LangMan.LSList[219]) != DialogResult.No)
+			if (GKUtils.ShowQuestion(LangMan.LSList[219]) != DialogResult.No)
 			{
 				TGEDCOMFamilyRecord family = this.Base.GetChildFamily(this.FPerson, false, null);
 				if (family != null)
@@ -542,7 +531,7 @@ namespace GKUI
 
 		private void btnParentsDelete_Click(object sender, EventArgs e)
 		{
-			if (TGenEngine.ShowQuestion(LangMan.LSList[221]) != DialogResult.No)
+			if (GKUtils.ShowQuestion(LangMan.LSList[221]) != DialogResult.No)
 			{
 				TGEDCOMFamilyRecord family = this.Base.GetChildFamily(this.FPerson, false, null);
 				if (family != null)
@@ -623,11 +612,11 @@ namespace GKUI
 
 			for (TGEDCOMSex sx = TGEDCOMSex.svNone; sx <= TGEDCOMSex.svUndetermined; sx++)
 			{
-				this.EditSex.Items.Add(TGenEngine.SexStr(sx));
+				this.EditSex.Items.Add(GKUtils.SexStr(sx));
 			}
 
 			this.FEventsList = new GKSheetList(this.SheetEvents);
-			this.FEventsList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FEventsList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.FEventsList.Buttons = EnumSet.Create(new Enum[]
 			{
 				GKSheetList.TListButton.lbAdd, 
@@ -639,7 +628,7 @@ namespace GKUI
 			this.Base.SetupRecEventsList(this.FEventsList, true);
 
 			this.FSpousesList = new GKSheetList(this.SheetSpouses);
-			this.FSpousesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FSpousesList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.FSpousesList.Buttons = EnumSet.Create(new Enum[]
 			{
 				GKSheetList.TListButton.lbAdd, 
@@ -654,7 +643,7 @@ namespace GKUI
 			this.FSpousesList.List.AddListColumn(LangMan.LSList[217], 100, false);
 
 			this.FAssociationsList = new GKSheetList(this.SheetAssociations);
-			this.FAssociationsList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FAssociationsList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.FAssociationsList.Buttons = EnumSet.Create(new Enum[]
 			{
 				GKSheetList.TListButton.lbAdd, 
@@ -666,7 +655,7 @@ namespace GKUI
 			this.FAssociationsList.List.AddListColumn(LangMan.LSList[96], 200, false);
 
 			this.FGroupsList = new GKSheetList(this.SheetGroups);
-			this.FGroupsList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FGroupsList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.FGroupsList.Buttons = EnumSet.Create(new Enum[]
 			{
 				GKSheetList.TListButton.lbAdd, 
@@ -675,11 +664,11 @@ namespace GKUI
 			this.FGroupsList.List.AddListColumn(LangMan.LSList[185], 350, false);
 
 			this.FNotesList = new GKSheetList(this.SheetNotes);
-			this.FNotesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FNotesList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.Base.SetupRecNotesList(this.FNotesList);
 
 			this.FMediaList = new GKSheetList(this.SheetMultimedia);
-			this.FMediaList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FMediaList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.FMediaList.Buttons = EnumSet.Create(new Enum[]
 			{
 				GKSheetList.TListButton.lbAdd, 
@@ -691,7 +680,7 @@ namespace GKUI
 			this.Base.SetupRecMediaList(this.FMediaList);
 
 			this.FSourcesList = new GKSheetList(this.SheetSources);
-			this.FSourcesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FSourcesList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.FSourcesList.Buttons = EnumSet.Create(new Enum[]
 			{
 				GKSheetList.TListButton.lbAdd, 
@@ -703,7 +692,7 @@ namespace GKUI
 			this.Base.SetupRecSourcesList(this.FSourcesList);
 
 			this.FUserRefList = new GKSheetList(this.SheetUserRefs);
-			this.FUserRefList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FUserRefList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.FUserRefList.List.AddListColumn(LangMan.LSList[112], 300, false);
 			this.FUserRefList.List.AddListColumn(LangMan.LSList[113], 200, false);
 

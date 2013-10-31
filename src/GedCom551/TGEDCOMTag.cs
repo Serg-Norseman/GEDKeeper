@@ -605,7 +605,7 @@ namespace GedCom551
 			this.FTags.Pack();
 		}
 
-		public virtual void ReplaceXRefs(TXRefReplaceMap map)
+		public virtual void ReplaceXRefs(XRefReplacer map)
 		{
 			this.FTags.ReplaceXRefs(map);
 		}

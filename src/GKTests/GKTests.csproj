@@ -42,6 +42,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CoreTests.cs" />
     <Compile Include="ExtTests.cs" />
     <Compile Include="GedcomTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

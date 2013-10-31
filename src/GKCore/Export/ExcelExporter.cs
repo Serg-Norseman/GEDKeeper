@@ -63,7 +63,7 @@ namespace GKCore.Export
 //							string fam, nam, pat;
 //							ind.aux_GetNameParts(out fam, out nam, out pat);
 //
-//							string sx = "" + TGenEngine.SexStr(ind.Sex)[0];
+//							string sx = "" + GKUtils.SexStr(ind.Sex)[0];
 //							row++;
 //
 //							xls.AddStrCell( 1, row, cas, ind.aux_GetXRefNum());
@@ -71,13 +71,13 @@ namespace GKCore.Export
 //							xls.AddStrCell( 3, row, cas, nam);
 //							xls.AddStrCell( 4, row, cas, pat);
 //							xls.AddStrCell( 5, row, cas, sx);
-//							xls.AddStrCell( 6, row, cas, TGenEngine.GetBirthDate(ind, TDateFormat.dfDD_MM_YYYY, false));
-//							xls.AddStrCell( 7, row, cas, TGenEngine.GetDeathDate(ind, TDateFormat.dfDD_MM_YYYY, false));
-//							xls.AddStrCell( 8, row, cas, TGenEngine.GetBirthPlace(ind));
-//							xls.AddStrCell( 9, row, cas, TGenEngine.GetDeathPlace(ind));
-//							xls.AddStrCell(10, row, cas, TGenEngine.GetResidencePlace(ind, this.FOptions.PlacesWithAddress));
-//							xls.AddStrCell(11, row, cas, TGenEngine.GetAge(ind, -1));
-//							xls.AddStrCell(12, row, cas, TGenEngine.GetLifeExpectancy(ind));
+//							xls.AddStrCell( 6, row, cas, GKUtils.GetBirthDate(ind, TDateFormat.dfDD_MM_YYYY, false));
+//							xls.AddStrCell( 7, row, cas, GKUtils.GetDeathDate(ind, TDateFormat.dfDD_MM_YYYY, false));
+//							xls.AddStrCell( 8, row, cas, GKUtils.GetBirthPlace(ind));
+//							xls.AddStrCell( 9, row, cas, GKUtils.GetDeathPlace(ind));
+//							xls.AddStrCell(10, row, cas, GKUtils.GetResidencePlace(ind, this.FOptions.PlacesWithAddress));
+//							xls.AddStrCell(11, row, cas, GKUtils.GetAge(ind, -1));
+//							xls.AddStrCell(12, row, cas, GKUtils.GetLifeExpectancy(ind));
 //						}
 //					}
 //					TfmProgress.ProgressStep();
@@ -131,7 +131,7 @@ namespace GKCore.Export
 							string fam, nam, pat;
 							ind.aux_GetNameParts(out fam, out nam, out pat);
 
-							string sx = "" + TGenEngine.SexStr(ind.Sex)[0];
+							string sx = "" + GKUtils.SexStr(ind.Sex)[0];
 							row++;
 
 							worksheet.Cells[row, 1] = new Cell(ind.aux_GetXRefNum());
@@ -139,13 +139,13 @@ namespace GKCore.Export
 							worksheet.Cells[row, 3] = new Cell(nam);
 							worksheet.Cells[row, 4] = new Cell(pat);
 							worksheet.Cells[row, 5] = new Cell(sx);
-							worksheet.Cells[row, 6] = new Cell(TGenEngine.GetBirthDate(ind, TDateFormat.dfDD_MM_YYYY, false));
-							worksheet.Cells[row, 7] = new Cell(TGenEngine.GetDeathDate(ind, TDateFormat.dfDD_MM_YYYY, false));
-							worksheet.Cells[row, 8] = new Cell(TGenEngine.GetBirthPlace(ind));
-							worksheet.Cells[row, 9] = new Cell(TGenEngine.GetDeathPlace(ind));
-							worksheet.Cells[row,10] = new Cell(TGenEngine.GetResidencePlace(ind, this.FOptions.PlacesWithAddress));
-							worksheet.Cells[row,11] = new Cell(TGenEngine.GetAge(ind, -1));
-							worksheet.Cells[row,12] = new Cell(TGenEngine.GetLifeExpectancy(ind));
+							worksheet.Cells[row, 6] = new Cell(GKUtils.GetBirthDate(ind, TDateFormat.dfDD_MM_YYYY, false));
+							worksheet.Cells[row, 7] = new Cell(GKUtils.GetDeathDate(ind, TDateFormat.dfDD_MM_YYYY, false));
+							worksheet.Cells[row, 8] = new Cell(GKUtils.GetBirthPlace(ind));
+							worksheet.Cells[row, 9] = new Cell(GKUtils.GetDeathPlace(ind));
+							worksheet.Cells[row,10] = new Cell(GKUtils.GetResidencePlace(ind, this.FOptions.PlacesWithAddress));
+							worksheet.Cells[row,11] = new Cell(GKUtils.GetAge(ind, -1));
+							worksheet.Cells[row,12] = new Cell(GKUtils.GetLifeExpectancy(ind));
 						}
 					}
 					TfmProgress.ProgressStep();
@@ -162,7 +162,7 @@ namespace GKCore.Export
 			}
 		}
 
-		public ExcelExporter(TGenEngine engine) : base(engine)
+		public ExcelExporter(TGEDCOMTree tree) : base(tree)
 		{
 		}
 	}

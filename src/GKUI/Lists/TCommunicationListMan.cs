@@ -59,11 +59,11 @@ namespace GKUI.Lists
 				case 0:
 					return this.FRec.CommName;
 				case 1:
-					return TGenEngine.GetCorresponderStr(this.FTree, this.FRec, false);
+					return GKUtils.GetCorresponderStr(this.FTree, this.FRec, false);
 				case 2:
 					return LangMan.LSList[(int)GKData.CommunicationNames[(int)this.FRec.CommunicationType] - 1];
 				case 3:
-					return TGenEngine.GEDCOMDateToStr(this.FRec.Date, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
+					return GKUtils.GEDCOMDateToStr(this.FRec.Date, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
 				case 4:
 					return this.FRec.ChangeDate.ChangeDateTime;
 				default:

@@ -60,10 +60,10 @@ namespace GKUI
 
 		private void FormCreate(object sender, EventArgs e)
 		{
-			SysUtils.LogInit(TGenEngine.GetAppDataPath() + "GEDKeeper2.log");
+			SysUtils.LogInit(GKUtils.GetAppDataPath() + "GEDKeeper2.log");
 
 			this.FOptions = new GlobalOptions();
-			this.FOptions.LoadFromFile(TGenEngine.GetAppDataPath() + "GEDKeeper2.ini");
+			this.FOptions.LoadFromFile(GKUtils.GetAppDataPath() + "GEDKeeper2.ini");
 			this.FOptions.FindLanguages();
 
 			if (this.FOptions.MWinRect.Left != -1 && this.FOptions.MWinRect.Top != -1 && this.FOptions.MWinRect.Right != -1 && this.FOptions.MWinRect.Bottom != -1)
@@ -83,7 +83,7 @@ namespace GKUI
 			base.WindowState = this.FOptions.MWinState;
 
 			this.FNamesTable = new NamesTable();
-			this.FNamesTable.LoadFromFile(TGenEngine.GetAppDataPath() + "GEDKeeper2.nms");
+			this.FNamesTable.LoadFromFile(GKUtils.GetAppDataPath() + "GEDKeeper2.nms");
 
 			this.LoadLanguage((int)this.FOptions.InterfaceLang);
 
@@ -102,10 +102,10 @@ namespace GKUI
 
             Win32Native.HtmlHelp(IntPtr.Zero, null, 18u, 0u);
 
-			this.FNamesTable.SaveToFile(TGenEngine.GetAppDataPath() + "GEDKeeper2.nms");
+			this.FNamesTable.SaveToFile(GKUtils.GetAppDataPath() + "GEDKeeper2.nms");
 			this.FNamesTable.Dispose();
 
-			this.FOptions.SaveToFile(TGenEngine.GetAppDataPath() + "GEDKeeper2.ini");
+			this.FOptions.SaveToFile(GKUtils.GetAppDataPath() + "GEDKeeper2.ini");
 			this.FOptions.Dispose();
 		}
 
@@ -595,7 +595,7 @@ namespace GKUI
 				Form mdi_child = base.MdiChildren[i];
 				if (mdi_child is TfmBase)
 				{
-					this.FOptions.AddLastBase((mdi_child as TfmBase).FileName);
+					this.FOptions.AddLastBase((mdi_child as TfmBase).Tree.FileName);
 				}
 			}
 		}
@@ -659,7 +659,7 @@ namespace GKUI
 		public string GetCurrentFileName()
 		{
 			TfmBase cb = this.GetCurrentFile();
-			string result = ((cb == null) ? "" : cb.FileName);
+			string result = ((cb == null) ? "" : cb.Tree.FileName);
 			return result;
 		}
 
@@ -803,7 +803,7 @@ namespace GKUI
 
 		public void ShowHelpTopic(string aTopic)
 		{
-			string fns = TGenEngine.GetAppPath() + "GEDKeeper2.chm" + aTopic;
+			string fns = GKUtils.GetAppPath() + "GEDKeeper2.chm" + aTopic;
             Win32Native.HtmlHelp(this.Handle, fns, 0u, 0u);
 		}
 
@@ -902,7 +902,7 @@ namespace GKUI
 
 			if (cur_base != null)
 			{
-				this.SaveDialog1.FileName = cur_base.FileName;
+				this.SaveDialog1.FileName = cur_base.Tree.FileName;
 				if (this.SaveDialog1.ShowDialog() == DialogResult.OK)
 				{
 					cur_base.FileSave(this.SaveDialog1.FileName);

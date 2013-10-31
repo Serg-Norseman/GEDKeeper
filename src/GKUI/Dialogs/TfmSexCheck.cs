@@ -27,7 +27,8 @@ namespace GKUI
 		public static TGEDCOMSex DefineSex(string iName, string iPatr, NamesTable aNamesTable)
 		{
 			TGEDCOMSex sx = aNamesTable.GetSexByName(iName);
-			TGEDCOMSex Result = sx;
+			TGEDCOMSex result = sx;
+
 			if (sx == TGEDCOMSex.svNone)
 			{
 				TfmSexCheck dlg = new TfmSexCheck();
@@ -36,7 +37,8 @@ namespace GKUI
 					if (dlg != null)
 					{
 						dlg.edName.Text = iName + " " + iPatr;
-						sx = TGenEngine.GetSex(iName, iPatr, false);
+						sx = NamesTable.GetSex(iName, iPatr, false);
+
 						if (sx != TGEDCOMSex.svNone)
 						{
 							if (sx == TGEDCOMSex.svMale)
@@ -55,6 +57,7 @@ namespace GKUI
 							}
 						}
 						dlg.sbNone.Checked = true;
+
 						IL_78:
 						if (dlg.ShowDialog() == DialogResult.OK)
 						{
@@ -76,7 +79,7 @@ namespace GKUI
 									}
 								}
 							}
-							Result = sx;
+							result = sx;
 							if (sx != TGEDCOMSex.svNone)
 							{
 								aNamesTable.SetNameSex(iName, sx);
@@ -89,7 +92,8 @@ namespace GKUI
 					dlg.Dispose();
 				}
 			}
-			return Result;
+
+			return result;
 		}
 
 		public static void CheckPersonSex(TGEDCOMIndividualRecord iRec, NamesTable aNamesTable)

@@ -38,8 +38,8 @@ namespace GKUI
 			this.FResearch.ResearchName = this.EditName.Text;
 			this.FResearch.Priority = (TResearchPriority)this.EditPriority.SelectedIndex;
 			this.FResearch.Status = (TResearchStatus)this.EditStatus.SelectedIndex;
-			this.FResearch.StartDate.ParseString(TGenEngine.StrToGEDCOMDate(this.EditStartDate.Text, true));
-			this.FResearch.StopDate.ParseString(TGenEngine.StrToGEDCOMDate(this.EditStopDate.Text, true));
+			this.FResearch.StartDate.ParseString(GKUtils.StrToGEDCOMDate(this.EditStartDate.Text, true));
+			this.FResearch.StopDate.ParseString(GKUtils.StrToGEDCOMDate(this.EditStopDate.Text, true));
 			this.FResearch.Percent = int.Parse(this.EditPercent.Text);
 			this.Base.ChangeRecord(this.FResearch);
 		}
@@ -63,8 +63,8 @@ namespace GKUI
 					this.EditName.Text = this.FResearch.ResearchName;
 					this.EditPriority.SelectedIndex = (int)this.FResearch.Priority;
 					this.EditStatus.SelectedIndex = (int)this.FResearch.Status;
-					this.EditStartDate.Text = TGenEngine.GEDCOMDateToStr(this.FResearch.StartDate, TDateFormat.dfDD_MM_YYYY);
-					this.EditStopDate.Text = TGenEngine.GEDCOMDateToStr(this.FResearch.StopDate, TDateFormat.dfDD_MM_YYYY);
+					this.EditStartDate.Text = GKUtils.GEDCOMDateToStr(this.FResearch.StartDate, TDateFormat.dfDD_MM_YYYY);
+					this.EditStopDate.Text = GKUtils.GEDCOMDateToStr(this.FResearch.StopDate, TDateFormat.dfDD_MM_YYYY);
 					this.EditPercent.Text = this.FResearch.Percent.ToString();
 				}
 				this.ListsRefresh();
@@ -75,118 +75,109 @@ namespace GKUI
 			}
 		}
 
-		private void ListModify(object Sender, object ItemData, TRecAction Action)
+		private void ListModify(object sender, ModifyEventArgs eArgs)
 		{
             bool res = false;
 
-			if (Sender == this.FNotesList)
-			{
-                res = this.Base.ModifyRecNote(this, this.FResearch, ItemData as TGEDCOMNotes, Action);
-			}
-			else
-			{
-				if (Sender == this.FTasksList)
-				{
-                    TGEDCOMTaskRecord task = (Action == TRecAction.raAdd) ? null : ItemData as TGEDCOMTaskRecord;
+            if (sender == this.FNotesList)
+            {
+            	res = this.Base.ModifyRecNote(this, this.FResearch, eArgs.ItemData as TGEDCOMNotes, eArgs.Action);
+            }
+            else if (sender == this.FTasksList)
+            {
+            	TGEDCOMTaskRecord task = eArgs.ItemData as TGEDCOMTaskRecord;
 
-                    switch (Action)
-                    {
-                        case TRecAction.raAdd:
-                            task = this.Base.SelectRecord(TGEDCOMRecordType.rtTask, null) as TGEDCOMTaskRecord;
-                            res = this.FResearch.aux_AddTask(task);
-                            break;
+            	switch (eArgs.Action)
+            	{
+            		case TRecAction.raAdd:
+            			task = this.Base.SelectRecord(TGEDCOMRecordType.rtTask, null) as TGEDCOMTaskRecord;
+            			res = this.FResearch.aux_AddTask(task);
+            			break;
 
-                        case TRecAction.raEdit:
-                            res = (task != null && this.Base.ModifyTask(ref task));
-                            break;
+            		case TRecAction.raEdit:
+            			res = (task != null && this.Base.ModifyTask(ref task));
+            			break;
 
-                        case TRecAction.raDelete:
-							if (task != null && TGenEngine.ShowQuestion(LangMan.LSList[186]) != DialogResult.No)
-							{
-								this.FResearch.aux_RemoveTask(task);
-                                res = true;
-							}
-                            break;
+            		case TRecAction.raDelete:
+            			if (task != null && GKUtils.ShowQuestion(LangMan.LSList[186]) != DialogResult.No)
+            			{
+            				this.FResearch.aux_RemoveTask(task);
+            				res = true;
+            			}
+            			break;
 
-                        case TRecAction.raJump:
-							if (task != null)
-							{
-								this.AcceptChanges();
-								this.Base.SelectRecordByXRef(task.XRef);
-								base.Close();
-							}
-                            break;
-                    }
-				}
-				else
-				{
-					if (Sender == this.FCommunicationsList)
-					{
-                        TGEDCOMCommunicationRecord comm = (Action == TRecAction.raAdd) ? null : ItemData as TGEDCOMCommunicationRecord;
+            		case TRecAction.raJump:
+            			if (task != null)
+            			{
+            				this.AcceptChanges();
+            				this.Base.SelectRecordByXRef(task.XRef);
+            				base.Close();
+            			}
+            			break;
+            	}
+            }
+            else if (sender == this.FCommunicationsList)
+            {
+            	TGEDCOMCommunicationRecord comm = eArgs.ItemData as TGEDCOMCommunicationRecord;
 
-                        switch (Action)
-                        {
-                            case TRecAction.raAdd:
-                                comm = this.Base.SelectRecord(TGEDCOMRecordType.rtCommunication, null) as TGEDCOMCommunicationRecord;
-                                res = this.FResearch.aux_AddCommunication(comm);
-                                break;
+            	switch (eArgs.Action)
+            	{
+            		case TRecAction.raAdd:
+            			comm = this.Base.SelectRecord(TGEDCOMRecordType.rtCommunication, null) as TGEDCOMCommunicationRecord;
+            			res = this.FResearch.aux_AddCommunication(comm);
+            			break;
 
-                            case TRecAction.raEdit:
-                                res = (comm != null && this.Base.ModifyCommunication(ref comm));
-                                break;
+            		case TRecAction.raEdit:
+            			res = (comm != null && this.Base.ModifyCommunication(ref comm));
+            			break;
 
-                            case TRecAction.raDelete:
-								if (comm != null && TGenEngine.ShowQuestion(LangMan.LSList[187]) != DialogResult.No)
-								{
-									this.FResearch.aux_RemoveCommunication(comm);
-                                    res = true;
-								}
-                                break;
+            		case TRecAction.raDelete:
+            			if (comm != null && GKUtils.ShowQuestion(LangMan.LSList[187]) != DialogResult.No)
+            			{
+            				this.FResearch.aux_RemoveCommunication(comm);
+            				res = true;
+            			}
+            			break;
 
-                            case TRecAction.raJump:
-								if (comm != null)
-								{
-									this.AcceptChanges();
-									this.Base.SelectRecordByXRef(comm.XRef);
-									base.Close();
-								}
-                                break;
-                        }
-					}
-					else
-					{
-						if (Sender == this.FGroupsList)
-						{
-                            TGEDCOMGroupRecord group = (Action == TRecAction.raAdd) ? null : ItemData as TGEDCOMGroupRecord;
+            		case TRecAction.raJump:
+            			if (comm != null)
+            			{
+            				this.AcceptChanges();
+            				this.Base.SelectRecordByXRef(comm.XRef);
+            				base.Close();
+            			}
+            			break;
+            	}
+            }
+            else if (sender == this.FGroupsList)
+            {
+            	TGEDCOMGroupRecord group = eArgs.ItemData as TGEDCOMGroupRecord;
 
-                            switch (Action)
-                            {
-                                case TRecAction.raAdd:
-                                    group = this.Base.SelectRecord(TGEDCOMRecordType.rtGroup, null) as TGEDCOMGroupRecord;
-                                    res = this.FResearch.aux_AddGroup(group);
-                                    break;
+            	switch (eArgs.Action)
+            	{
+            		case TRecAction.raAdd:
+            			group = this.Base.SelectRecord(TGEDCOMRecordType.rtGroup, null) as TGEDCOMGroupRecord;
+            			res = this.FResearch.aux_AddGroup(group);
+            			break;
 
-                                case TRecAction.raDelete:
-									if (group != null && TGenEngine.ShowQuestion(LangMan.LSList[188]) != DialogResult.No)
-									{
-										this.FResearch.aux_RemoveGroup(group);
-                                        res = true;
-									}
-                                    break;
+            		case TRecAction.raDelete:
+            			if (group != null && GKUtils.ShowQuestion(LangMan.LSList[188]) != DialogResult.No)
+            			{
+            				this.FResearch.aux_RemoveGroup(group);
+            				res = true;
+            			}
+            			break;
 
-                                case TRecAction.raJump:
-									if (group != null)
-									{
-										this.AcceptChanges();
-										this.Base.SelectRecordByXRef(group.XRef);
-										base.Close();
-									}
-                                    break;
-                            }
-						}
-					}
-				}
-			}
+            		case TRecAction.raJump:
+            			if (group != null)
+            			{
+            				this.AcceptChanges();
+            				this.Base.SelectRecordByXRef(group.XRef);
+            				base.Close();
+            			}
+            			break;
+            	}
+            }
 
             if (res) this.ListsRefresh();
 		}
@@ -202,10 +193,10 @@ namespace GKUI
 			for (int i = 0; i <= num; i++)
 			{
 				TGEDCOMTaskRecord task = this.FResearch.Tasks[i].Value as TGEDCOMTaskRecord;
-				GKListItem item = list.AddItem(TGenEngine.GetTaskGoalStr(task), task);
+				GKListItem item = list.AddItem(GKUtils.GetTaskGoalStr(task), task);
 				item.SubItems.Add(LangMan.LSList[(int)GKData.PriorityNames[(int)task.Priority] - 1]);
-				item.SubItems.Add(TGenEngine.GEDCOMDateToStr(task.StartDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
-				item.SubItems.Add(TGenEngine.GEDCOMDateToStr(task.StopDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
+				item.SubItems.Add(GKUtils.GEDCOMDateToStr(task.StartDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
+				item.SubItems.Add(GKUtils.GEDCOMDateToStr(task.StopDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
 			}
 			list.EndUpdate();
 
@@ -218,9 +209,9 @@ namespace GKUI
 			{
 				TGEDCOMCommunicationRecord corr = this.FResearch.Communications[i].Value as TGEDCOMCommunicationRecord;
 				GKListItem item = list2.AddItem(corr.CommName, corr);
-				item.SubItems.Add(TGenEngine.GetCorresponderStr(this.Base.Tree, corr, false));
+				item.SubItems.Add(GKUtils.GetCorresponderStr(this.Base.Tree, corr, false));
 				item.SubItems.Add(LangMan.LSList[(int)GKData.CommunicationNames[(int)corr.CommunicationType] - 1]);
-				item.SubItems.Add(TGenEngine.GEDCOMDateToStr(corr.Date, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
+				item.SubItems.Add(GKUtils.GEDCOMDateToStr(corr.Date, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat));
 			}
 			list2.EndUpdate();
 
@@ -267,7 +258,7 @@ namespace GKUI
 			}
 
 			this.FTasksList = new GKSheetList(this.SheetTasks);
-			this.FTasksList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FTasksList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.FTasksList.Buttons = EnumSet.Create(new Enum[]
 			{
 				GKSheetList.TListButton.lbAdd, 
@@ -281,7 +272,7 @@ namespace GKUI
 			this.FTasksList.List.AddListColumn(LangMan.LSList[181], 90, false);
 
 			this.FCommunicationsList = new GKSheetList(this.SheetCommunications);
-			this.FCommunicationsList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FCommunicationsList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.FCommunicationsList.Buttons = EnumSet.Create(new Enum[]
 			{
 				GKSheetList.TListButton.lbAdd, 
@@ -295,7 +286,7 @@ namespace GKUI
 			this.FCommunicationsList.List.AddListColumn(LangMan.LSList[139], 90, false);
 
 			this.FGroupsList = new GKSheetList(this.SheetGroups);
-			this.FGroupsList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FGroupsList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.FGroupsList.Buttons = EnumSet.Create(new Enum[]
 			{
 				GKSheetList.TListButton.lbAdd, 
@@ -306,7 +297,7 @@ namespace GKUI
 			this.FGroupsList.List.AddListColumn(LangMan.LSList[185], 350, false);
 
 			this.FNotesList = new GKSheetList(this.SheetNotes);
-			this.FNotesList.OnModify += new GKSheetList.TModifyEvent(this.ListModify);
+			this.FNotesList.OnModify += new GKSheetList.ModifyEventHandler(this.ListModify);
 			this.Base.SetupRecNotesList(this.FNotesList);
 
 			this.SetLang();

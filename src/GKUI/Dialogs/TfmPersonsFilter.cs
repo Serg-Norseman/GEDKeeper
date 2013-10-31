@@ -205,7 +205,7 @@ namespace GKUI
 					}
 					catch
 					{
-						TGenEngine.ShowError(LangMan.LSList[532]);
+						GKUtils.ShowError(LangMan.LSList[532]);
 						base.DialogResult = DialogResult.None;
 					}
 				}

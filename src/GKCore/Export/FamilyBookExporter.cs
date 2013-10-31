@@ -26,11 +26,14 @@ namespace GKCore.Export
 		private StringList byIndex, dyIndex, bpIndex, dpIndex;
 		private StringList deathCauses, occuIndex, sourcesIndex;
 
-		public FamilyBookExporter(TGenEngine engine) : base(engine)
+		private MediaManager media;
+
+		public FamilyBookExporter(TGEDCOMTree tree) : base(tree)
 		{
 			this.albumPage = true;
+			this.media = new MediaManager(tree);
 		}
-		
+
 		protected override void InternalGenerate()
 		{
 			try
@@ -38,7 +41,7 @@ namespace GKCore.Export
 				fDocument.AddTitle("FamilyBook");
 				fDocument.AddSubject("FamilyBook");
 				fDocument.AddAuthor("");
-				fDocument.AddCreator(TGenEngine.AppTitle);
+				fDocument.AddCreator(GKData.AppTitle);
 				fDocument.Open();
 
 				BaseFont base_font = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Times.ttf"), "CP1251", BaseFont.EMBEDDED);
@@ -215,14 +218,14 @@ namespace GKCore.Export
 						if (evt.Name == "BIRT") {
 							// Анализ по рождениям
 							Exporter.PrepareEventYear(byIndex, evt, iRec);
-							st = TGenEngine.GetPlaceStr(evt, false);
+							st = GKUtils.GetPlaceStr(evt, false);
 							if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(bpIndex, st, iRec);
 						} 
 						else if (evt.Name == "DEAT")
 						{
 							// Анализ по причинам смерти
 							Exporter.PrepareEventYear(dyIndex, evt, iRec);
-							st = TGenEngine.GetPlaceStr(evt, false);
+							st = GKUtils.GetPlaceStr(evt, false);
 							if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(dpIndex, st, iRec);
 
 							st = evt.Detail.Cause;
@@ -267,7 +270,7 @@ namespace GKCore.Export
 			Paragraph p = new Paragraph(chunk);
 			mct.AddElement(p);
 
-			Stream portrait_stm = this.FEngine.GetPrimaryBitmapStream(iRec);
+			Stream portrait_stm = this.media.GetPrimaryBitmapStream(iRec);
 			if (portrait_stm != null) {
 				iTextSharp.text.Image img = iTextSharp.text.Image.GetInstance(portrait_stm);
 				img.WidthPercentage = 40f;

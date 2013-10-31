@@ -37,7 +37,7 @@ namespace GKUI.Lists
 
 		public override bool CheckFilter(TShieldState aShieldState)
 		{
-			bool res = ((this.FRec.Restriction != TGEDCOMRestriction.rnPrivacy || aShieldState == TShieldState.ssNone) && (this.QuickFilter == "*" || IsMatchesMask(TGenEngine.aux_GetFamilyStr(this.FRec), this.QuickFilter)));
+			bool res = ((this.FRec.Restriction != TGEDCOMRestriction.rnPrivacy || aShieldState == TShieldState.ssNone) && (this.QuickFilter == "*" || IsMatchesMask(GKUtils.aux_GetFamilyStr(this.FRec), this.QuickFilter)));
 
 			res = res && base.CheckNewFilter();
 
@@ -53,9 +53,9 @@ namespace GKUI.Lists
 		{
 			switch (col_type) {
 				case 0:
-					return TGenEngine.aux_GetFamilyStr(this.FRec);
+					return GKUtils.aux_GetFamilyStr(this.FRec);
 				case 1:
-					return TGenEngine.GetMarriageDate(this.FRec, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
+					return GKUtils.GetMarriageDate(this.FRec, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
 				case 2:
 					return this.FRec.ChangeDate.ChangeDateTime;
 				default:

@@ -356,7 +356,7 @@ namespace GKCore
 		public string gt_get_event_date(object ev_ptr)
 		{
 			TGEDCOMCustomEvent evt = ev_ptr as TGEDCOMCustomEvent;
-			return (TGenEngine.GEDCOMEventToDateStr(evt, TDateFormat.dfDD_MM_YYYY, false));
+			return (GKUtils.GEDCOMEventToDateStr(evt, TDateFormat.dfDD_MM_YYYY, false));
 		}
 
 		public int gt_get_event_year(object ev_ptr)
@@ -429,7 +429,7 @@ namespace GKCore
 
 		TGEDCOMSex sex;
 		if (s_sex.Length == 1) {
-			sex = TGenEngine.GetSexBySign(s_sex[1]);
+			sex = GKUtils.GetSexBySign(s_sex[1]);
 		} else {
 			sex = TGEDCOMSex.svNone;
 		}
@@ -441,12 +441,12 @@ namespace GKCore
 	{
 		TGEDCOMSex sex;
 		if (s_sex.Length == 1) {
-			sex = TGenEngine.GetSexBySign(s_sex[0]);
+			sex = GKUtils.GetSexBySign(s_sex[0]);
 		} else {
 			sex = TGEDCOMSex.svNone;
 		}
 
-		TGEDCOMIndividualRecord i_rec = TGenEngine.CreatePersonEx(fBase.Tree, name, patronymic, family, sex, false);
+		TGEDCOMIndividualRecord i_rec = GKUtils.CreatePersonEx(fBase.Tree, name, patronymic, family, sex, false);
 		return i_rec;
 	}
 
@@ -486,7 +486,7 @@ namespace GKCore
 	public void gt_add_note_text(object note_ptr, string txt)
 	{
 		TGEDCOMNoteRecord n_rec = note_ptr as TGEDCOMNoteRecord;
-		TGenEngine.AddNoteText(n_rec, txt);
+		n_rec.aux_AddNoteText(txt);
 	}
 
 	public void gt_bind_record_note(object rec_ptr, object note_ptr)
@@ -530,14 +530,14 @@ namespace GKCore
 
 	public object gt_find_source(string name)
 	{
-		TGEDCOMSourceRecord src_rec = fBase.Engine.aux_FindSource(name);
+		TGEDCOMSourceRecord src_rec = GKUtils.aux_FindSource(fBase.Tree, name);
 		return src_rec;
 	}
 
 	public object gt_create_event(object rec_ptr, string sign)
 	{
 		TGEDCOMRecord rec = rec_ptr as TGEDCOMIndividualRecord;
-		TGEDCOMCustomEvent evt = TGenEngine.CreateEventEx(fBase.Tree, rec, sign, "", "");
+		TGEDCOMCustomEvent evt = GKUtils.CreateEventEx(fBase.Tree, rec, sign, "", "");
 
 		return evt;
 	}
@@ -548,7 +548,7 @@ namespace GKCore
 		TGEDCOMSex sex;
 
 		if (child_sex.Length == 1) {
-			sex = TGenEngine.GetSexBySign(child_sex[1]);
+			sex = GKUtils.GetSexBySign(child_sex[1]);
 		} else {
 			sex = TGEDCOMSex.svNone;
 		}
@@ -630,7 +630,7 @@ namespace GKCore
 		StringList link_list = new StringList();
 		try
 		{
-			TGenEngine.GetLocationLinks(fBase.Tree, loc, ref link_list);
+			GKUtils.GetLocationLinks(fBase.Tree, loc, ref link_list);
 			usages = link_list.Count;
 		}
 		finally

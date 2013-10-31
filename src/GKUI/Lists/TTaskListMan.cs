@@ -41,7 +41,7 @@ namespace GKUI.Lists
 
 		public override bool CheckFilter(TShieldState aShieldState)
 		{
-			bool res = (this.QuickFilter == "*" || IsMatchesMask(TGenEngine.GetTaskGoalStr(this.FRec), this.QuickFilter));
+			bool res = (this.QuickFilter == "*" || IsMatchesMask(GKUtils.GetTaskGoalStr(this.FRec), this.QuickFilter));
 
 			res = res && base.CheckNewFilter();
 
@@ -57,13 +57,13 @@ namespace GKUI.Lists
 		{
 			switch (col_type) {
 				case 0:
-					return TGenEngine.GetTaskGoalStr(this.FRec);
+					return GKUtils.GetTaskGoalStr(this.FRec);
 				case 1:
 					return LangMan.LSList[(int)GKData.PriorityNames[(int)this.FRec.Priority] - 1];
 				case 2:
-					return TGenEngine.GEDCOMDateToStr(this.FRec.StartDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
+					return GKUtils.GEDCOMDateToStr(this.FRec.StartDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
 				case 3:
-					return TGenEngine.GEDCOMDateToStr(this.FRec.StopDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
+					return GKUtils.GEDCOMDateToStr(this.FRec.StopDate, GKUI.TfmGEDKeeper.Instance.Options.DefDateFormat);
 				case 4:
 					return this.FRec.ChangeDate.ChangeDateTime;
 				default:

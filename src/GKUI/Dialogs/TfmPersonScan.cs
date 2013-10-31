@@ -75,7 +75,7 @@ namespace GKUI
 
 		private void InitSourceControls()
 		{
-			this.Base.Engine.aux_GetSourcesList(this.FSourcesList);
+			GKUtils.aux_GetSourcesList(this.Base.Tree, this.FSourcesList);
 			cbSource.Items.Clear();
 			for (int i = 0; i <= FSourcesList.Count - 1; i++) cbSource.Items.Add(FSourcesList[i]);
 
@@ -109,23 +109,23 @@ namespace GKUI
 			string[] tokens = tmp.Split(' ');
 			if (tokens.Length < 3)
 			{
-				TGenEngine.ShowError(LangMan.LSList[506]);
+				GKUtils.ShowError(LangMan.LSList[506]);
 			}
 			else
 			{
-				string fam = TGenEngine.SetAsName(tokens[0]);
-				string nam = TGenEngine.SetAsName(tokens[1]);
-				string pat = TGenEngine.SetAsName(tokens[2]);
+				string fam = GKUtils.SetAsName(tokens[0]);
+				string nam = GKUtils.SetAsName(tokens[1]);
+				string pat = GKUtils.SetAsName(tokens[2]);
 
-				TGEDCOMIndividualRecord iRec = TGenEngine.CreatePersonEx(this.Base.Tree, nam, pat, fam, FSimpleTempSex, false);
+				TGEDCOMIndividualRecord iRec = GKUtils.CreatePersonEx(this.Base.Tree, nam, pat, fam, FSimpleTempSex, false);
 				if (this.CheckBirth.Checked) {
-					TGenEngine.CreateEventEx(this.Base.Tree, iRec, "BIRT", TGenEngine.StrToGEDCOMDate(this.EditBirthDate.Text, true), this.EditBirthPlace.Text);
+					GKUtils.CreateEventEx(this.Base.Tree, iRec, "BIRT", GKUtils.StrToGEDCOMDate(this.EditBirthDate.Text, true), this.EditBirthPlace.Text);
 				}
 				if (this.CheckDeath.Checked) {
-					TGenEngine.CreateEventEx(this.Base.Tree, iRec, "DEAT", TGenEngine.StrToGEDCOMDate(this.EditDeathDate.Text, true), this.EditDeathPlace.Text);
+					GKUtils.CreateEventEx(this.Base.Tree, iRec, "DEAT", GKUtils.StrToGEDCOMDate(this.EditDeathDate.Text, true), this.EditDeathPlace.Text);
 				}
 				if (this.MemoNote.Text != "") {
-  					TGenEngine.CreateNoteEx(Base.Tree, MemoNote.Text, iRec);
+  					Base.Tree.aux_CreateNoteEx(iRec, MemoNote.Text);
 				}
 				this.Base.ChangeRecord(iRec);
 
@@ -142,7 +142,7 @@ namespace GKUI
 
 			if (!int.TryParse(this.edSourceYear.Text, out src_year))
 			{
-				TGenEngine.ShowError(LangMan.LSList[508]);
+				GKUtils.ShowError(LangMan.LSList[508]);
 			}
 			else
 			{
@@ -164,24 +164,24 @@ namespace GKUI
 							TPersonLink link = GetLinkByName(lnk);
 
 							TGEDCOMSex sx = TfmSexCheck.DefineSex(nm, pt, TfmGEDKeeper.Instance.NamesTable);
-							TGEDCOMIndividualRecord iRec = TGenEngine.CreatePersonEx(Base.Tree, nm, pt, fm, sx, false);
+							TGEDCOMIndividualRecord iRec = GKUtils.CreatePersonEx(Base.Tree, nm, pt, fm, sx, false);
 
 							if (!string.IsNullOrEmpty(age) && GEDCOMUtils.IsDigits(age)) {
 								int birth_year = src_year - int.Parse(age);
-								TGenEngine.CreateEventEx(Base.Tree, iRec, "BIRT", "ABT "+birth_year.ToString(), "");
+								GKUtils.CreateEventEx(Base.Tree, iRec, "BIRT", "ABT "+birth_year.ToString(), "");
 							}
 
 							if (!string.IsNullOrEmpty(place)) {
-								TGEDCOMCustomEvent evt = TGenEngine.CreateEventEx(Base.Tree, iRec, "RESI", "", "");
+								TGEDCOMCustomEvent evt = GKUtils.CreateEventEx(Base.Tree, iRec, "RESI", "", "");
 								evt.Detail.Place.StringValue = place;
 							}
 
 							if (!string.IsNullOrEmpty(comment)) {
-								TGEDCOMNoteRecord note = TGenEngine.CreateNoteEx(Base.Tree, comment, iRec);
+								TGEDCOMNoteRecord note = Base.Tree.aux_CreateNoteEx(iRec, comment);
 							}
 
 							if (!string.IsNullOrEmpty(src_name)) {
-								TGEDCOMSourceRecord src_rec = Base.Engine.aux_FindSource(src_name);
+								TGEDCOMSourceRecord src_rec = GKUtils.aux_FindSource(Base.Tree, src_name);
 								if (src_rec == null) {
 									src_rec = Base.Tree.aux_CreateSource();
 									src_rec.FiledByEntry = src_name;
@@ -211,11 +211,11 @@ namespace GKUI
 										}
 
 										if (ev_name == "BIRT" || ev_name == "DEAT") {
-											TGEDCOMCustomEvent evt = TGenEngine.CreateEventEx(Base.Tree, iRec, ev_name, TGenEngine.StrToGEDCOMDate(edEventDate.Text, false), "");
+											TGEDCOMCustomEvent evt = GKUtils.CreateEventEx(Base.Tree, iRec, ev_name, GKUtils.StrToGEDCOMDate(edEventDate.Text, false), "");
 											evt.Detail.Place.StringValue = place;
 										} else if (ev_name == "MARR") {
 											family = _ParseSource_GetMarriageFamily(iRec);
-											TGEDCOMCustomEvent evt = TGenEngine.CreateEventEx(Base.Tree, family, ev_name, TGenEngine.StrToGEDCOMDate(edEventDate.Text, false), "");
+											TGEDCOMCustomEvent evt = GKUtils.CreateEventEx(Base.Tree, family, ev_name, GKUtils.StrToGEDCOMDate(edEventDate.Text, false), "");
 											evt.Detail.Place.StringValue = place;
 										}
 									}

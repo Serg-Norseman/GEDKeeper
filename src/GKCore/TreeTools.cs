@@ -89,7 +89,7 @@ namespace GKCore
 		private static int _GetPatriarchsList_GetBirthYear(TGEDCOMIndividualRecord iRec)
 		{
 			if (iRec != null) {
-				int year = TGenEngine.GetIndependentYear(iRec, "BIRT");
+				int year = GKUtils.GetIndependentYear(iRec, "BIRT");
 				if (year > 0) {
 					return year;
 				}
@@ -277,7 +277,7 @@ namespace GKCore
 			try
 			{
 				strData.Text = note.Notes.Text;
-				TGEDCOMNoteRecord noteRec = TGenEngine.CreateNoteEx(tree, strData, null);
+				TGEDCOMNoteRecord noteRec = tree.aux_CreateNoteEx(null, strData);
 				note.Clear();
 				note.Value = noteRec;
 			}
@@ -440,7 +440,7 @@ namespace GKCore
 		{
 		}
 
-		private static void CheckRecord_Individual(TGEDCOMTree tree, TGEDCOMFormat format, TGEDCOMIndividualRecord iRec)
+		private static void CheckRecord_Individual(TGEDCOMTree tree, TGEDCOMFormat format, TGEDCOMIndividualRecord iRec, ValuesCollection valuesCollection)
 		{
 			int i;
 			if (format == TGEDCOMFormat.gf_Native)
@@ -452,6 +452,12 @@ namespace GKCore
 					CheckRecord_EventPlace(evt);
 					CheckRecord_AttrCompatible(tree, format, iRec, evt);
 					CheckRecord_RepairTag(tree, format, evt.Detail);
+					
+					if (valuesCollection != null) {
+						string evName = evt.Name;
+						string evVal = evt.StringValue;
+						valuesCollection.Add(evName, evVal, true);
+					}
 				}
 
 				int num2 = iRec.UserReferences.Count - 1;
@@ -502,7 +508,7 @@ namespace GKCore
 			TfmGEDKeeper.Instance.NamesTable.ImportNames(iRec);
 		}
 
-		private static void CheckRecord_Family(TGEDCOMTree tree, TGEDCOMFormat format, TGEDCOMFamilyRecord fam)
+		private static void CheckRecord_Family(TGEDCOMTree tree, TGEDCOMFormat format, TGEDCOMFamilyRecord fam, ValuesCollection valuesCollection)
 		{
 			int i;
 			if (format == TGEDCOMFormat.gf_Native)
@@ -571,7 +577,7 @@ namespace GKCore
 			}
 		}
 
-		public static void CheckRecord(TGEDCOMTree tree, TGEDCOMRecord rec, TGEDCOMFormat format)
+		public static void CheckRecord(TGEDCOMTree tree, TGEDCOMRecord rec, TGEDCOMFormat format, ValuesCollection valuesCollection)
 		{
 			if (rec.UID == null || rec.UID == "")
 			{
@@ -604,11 +610,11 @@ namespace GKCore
 
 			switch (rec.RecordType) {
 				case TGEDCOMRecordType.rtIndividual:
-					CheckRecord_Individual(tree, format, rec as TGEDCOMIndividualRecord);
+					CheckRecord_Individual(tree, format, rec as TGEDCOMIndividualRecord, valuesCollection);
 					break;
 
 				case TGEDCOMRecordType.rtFamily:
-					CheckRecord_Family(tree, format, rec as TGEDCOMFamilyRecord);
+					CheckRecord_Family(tree, format, rec as TGEDCOMFamilyRecord, valuesCollection);
 					break;
 
 				case TGEDCOMRecordType.rtGroup:
@@ -639,7 +645,7 @@ namespace GKCore
 		private static void CorrectIds(TGEDCOMTree tree)
 		{
 			TfmProgress.ProgressInit(tree.RecordsCount, LangMan.LSList[469]);
-			TXRefReplaceMap repMap = new TXRefReplaceMap();
+			XRefReplacer repMap = new XRefReplacer();
 			try
 			{
 				int num = tree.RecordsCount - 1;
@@ -673,7 +679,7 @@ namespace GKCore
 			}
 		}
 
-		public static bool CheckGEDCOMFormat(TGEDCOMTree tree, IProgressController pc)
+		public static bool CheckGEDCOMFormat(TGEDCOMTree tree, ValuesCollection valuesCollection, IProgressController pc)
 		{
 			bool result = false;
 
@@ -682,7 +688,7 @@ namespace GKCore
 				pc.ProgressInit(tree.RecordsCount, LangMan.LSList[470]);
 				try
 				{
-					TGEDCOMFormat format = TGenEngine.GetGEDCOMFormat(tree);
+					TGEDCOMFormat format = GKUtils.GetGEDCOMFormat(tree);
 					bool idCheck = true;
 
 					TreeTools.CheckHeader(tree, format);
@@ -691,7 +697,7 @@ namespace GKCore
 					for (int i = 0; i <= num; i++)
 					{
 						TGEDCOMRecord rec = tree[i];
-						TreeTools.CheckRecord(tree, rec, format);
+						TreeTools.CheckRecord(tree, rec, format, valuesCollection);
 
 						if (format != TGEDCOMFormat.gf_Native && idCheck && rec.aux_GetId() < 0)
 						{
@@ -701,7 +707,7 @@ namespace GKCore
 						pc.ProgressStep();
 					}
 
-					if (!idCheck && TGenEngine.ShowQuestion(LangMan.LSList[471]) == DialogResult.Yes)
+					if (!idCheck && GKUtils.ShowQuestion(LangMan.LSList[471]) == DialogResult.Yes)
 					{
 						TreeTools.CorrectIds(tree);
 					}
@@ -716,7 +722,7 @@ namespace GKCore
 			catch (Exception ex)
 			{
 				SysUtils.LogWrite("TreeTools.CheckGEDCOMFormat(): " + ex.Message);
-				TGenEngine.ShowError(LangMan.LS(LSID.LSID_CheckGedComFailed));
+				GKUtils.ShowError(LangMan.LS(LSID.LSID_CheckGedComFailed));
 			}
 
 			return result;
@@ -812,7 +818,7 @@ namespace GKCore
 
 			TGEDCOMTree extTree = new TGEDCOMTree();
 
-			TXRefReplaceMap repMap = new TXRefReplaceMap();
+			XRefReplacer repMap = new XRefReplacer();
 			try
 			{
 				extTree.LoadFromFile(fileName);
@@ -893,7 +899,7 @@ namespace GKCore
 						break;
 
 					case TGEDCOMRecordType.rtFamily:
-						Result = Result + TGenEngine.aux_GetFamilyStr(this.Rec as TGEDCOMFamilyRecord);
+						Result = Result + GKUtils.aux_GetFamilyStr(this.Rec as TGEDCOMFamilyRecord);
 						break;
 				}
 
@@ -909,9 +915,9 @@ namespace GKCore
 		private static void CheckIndividualRecord(TGEDCOMIndividualRecord iRec, TList aChecksList)
 		{
 			int iAge;
-			if (TGenEngine.GetIndividualEvent(iRec, "DEAT") == null)
+			if (GKUtils.GetIndividualEvent(iRec, "DEAT") == null)
 			{
-				string age = TGenEngine.GetAge(iRec, -1);
+				string age = GKUtils.GetAge(iRec, -1);
 				if (age != "" && age != "?")
 				{
 					iAge = int.Parse(age);
@@ -933,8 +939,8 @@ namespace GKCore
 			}
 
 			bool yBC1, yBC2;
-			int y_birth = TGenEngine.GetIndependentYear(iRec, "BIRT", out yBC1);
-			int y_death = TGenEngine.GetIndependentYear(iRec, "DEAT", out yBC2);
+			int y_birth = GKUtils.GetIndependentYear(iRec, "BIRT", out yBC1);
+			int y_death = GKUtils.GetIndependentYear(iRec, "DEAT", out yBC2);
 			int delta = (y_death - y_birth);
 			if (y_birth > -1 && y_death > -1 && delta < 0 && !yBC2)
 			{
@@ -1011,7 +1017,7 @@ namespace GKCore
 				case TreeTools.TCheckDiag.cdPersonLonglived:
 					{
 						TGEDCOMIndividualRecord iRec = checkObj.Rec as TGEDCOMIndividualRecord;
-						TGenEngine.CreateEventEx(aTree, iRec, "DEAT", "", "");
+						GKUtils.CreateEventEx(aTree, iRec, "DEAT", "", "");
 						//this.Base.ChangeRecord(iRec);
 						break;
 					}
@@ -1262,7 +1268,7 @@ namespace GKCore
 				{
 					TGEDCOMIndividualRecord iRec = rec as TGEDCOMIndividualRecord;
 
-					string[] fams = TGenEngine.GetFamilies(iRec);
+					string[] fams = NamesTable.GetSurnames(iRec);
 					for (int k = 0; k < fams.Length; k++)
 					{
 						string f = fams[k];
@@ -1367,10 +1373,10 @@ namespace GKCore
 			}
 		}
 
-		public static void TreeCompare(TGEDCOMTree aMainTree, string aFileName, TextBox logBox)
+		public static void TreeCompare(TGEDCOMTree mainTree, string fileName, TextBox logBox)
 		{
 			TGEDCOMTree tempTree = new TGEDCOMTree();
-			tempTree.LoadFromFile(aFileName);
+			tempTree.LoadFromFile(fileName);
 
 			StringList fams = new StringList();
 			StringList names = new StringList();
@@ -1379,12 +1385,12 @@ namespace GKCore
 			{
 				logBox.AppendText(LangMan.LSList[520] + "\r\n");
 
-				int num = aMainTree.RecordsCount - 1;
+				int num = mainTree.RecordsCount - 1;
 				for (int i = 0; i <= num; i++)
 				{
-					if (aMainTree[i] is TGEDCOMIndividualRecord)
+					if (mainTree[i] is TGEDCOMIndividualRecord)
 					{
-						TGEDCOMIndividualRecord iRec = aMainTree[i] as TGEDCOMIndividualRecord;
+						TGEDCOMIndividualRecord iRec = mainTree[i] as TGEDCOMIndividualRecord;
 
 						int idx = names.AddObject(iRec.aux_GetNameStr(true, false), new TList());
 						(names.GetObject(idx) as TList).Add(iRec);
@@ -1392,7 +1398,7 @@ namespace GKCore
 						string fam, nam, pat;
 						iRec.aux_GetNameParts(out fam, out nam, out pat);
 
-						fams.AddObject(TGenEngine.PrepareRusSurname(fam, iRec.Sex == TGEDCOMSex.svFemale), null);
+						fams.AddObject(NamesTable.PrepareRusSurname(fam, iRec.Sex == TGEDCOMSex.svFemale), null);
 					}
 				}
 
@@ -1413,7 +1419,7 @@ namespace GKCore
 						string fam, nam, pat;
 						iRec.aux_GetNameParts(out fam, out nam, out pat);
 
-						tm = TGenEngine.PrepareRusSurname(fam, iRec.Sex == TGEDCOMSex.svFemale);
+						tm = NamesTable.PrepareRusSurname(fam, iRec.Sex == TGEDCOMSex.svFemale);
 						idx = fams.IndexOf(tm);
 						if (idx >= 0)
 						{
@@ -1462,7 +1468,7 @@ namespace GKCore
 						for (int j = 0; j <= num5; j++)
 						{
 							TGEDCOMIndividualRecord iRec = lst[j] as TGEDCOMIndividualRecord;
-							logBox.AppendText("      * " + iRec.aux_GetNameStr(true, false) + " " + TGenEngine.GetLifeStr(iRec) + "\r\n");
+							logBox.AppendText("      * " + iRec.aux_GetNameStr(true, false) + " " + GKUtils.GetLifeStr(iRec) + "\r\n");
 						}
 					}
 				}

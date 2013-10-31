@@ -48,6 +48,7 @@ namespace GedCom551
 		public void GetNameParts(out string firstPart, out string surname/*, out string ALastPart*/)
 		{
 			string sv = base.StringValue;
+
 			if (sv == null || sv.Length == 0) {
 				firstPart = "";
 				surname = "";
@@ -72,6 +73,11 @@ namespace GedCom551
 			}
 
 			//ALastPart = GetLastPart();
+		}
+
+		public void SetNameParts(string firstPart, string surname, string lastPart)
+		{
+			base.StringValue = SysUtils.TrimLeft(firstPart + " ") + "/" + surname + "/" + SysUtils.TrimRight(" " + lastPart);
 		}
 
 		private string GetFirstPart()
@@ -215,7 +221,7 @@ namespace GedCom551
 			this._Pieces.Pack();
 		}
 
-		public override void ReplaceXRefs(TXRefReplaceMap map)
+		public override void ReplaceXRefs(XRefReplacer map)
 		{
 			base.ReplaceXRefs(map);
 			this._Pieces.ReplaceXRefs(map);
@@ -231,11 +237,6 @@ namespace GedCom551
 		{
 			base.SaveToStream(stream);
 			this._Pieces.SaveToStream(stream);
-		}
-
-		public void SetNameParts(string FirstPart, string Surname, string LastPart)
-		{
-			base.StringValue = SysUtils.TrimLeft(FirstPart + " ") + "/" + Surname + "/" + SysUtils.TrimRight(" " + LastPart);
 		}
 
 		public float IsMatch(TGEDCOMPersonalName name)
