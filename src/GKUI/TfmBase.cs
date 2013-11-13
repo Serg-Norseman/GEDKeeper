@@ -434,10 +434,18 @@ namespace GKUI
 					TfmGEDKeeper.Instance.NamesTable.ImportNames(result);
 					
 					TIndividualListFilter iFilter = (TIndividualListFilter)this.ListPersons.ListMan.Filter;
+
 					if (iFilter.SourceMode == CustomFilter.TGroupMode.gmSelected) {
 						TGEDCOMSourceRecord src = this.FTree.XRefIndex_Find(iFilter.SourceRef) as TGEDCOMSourceRecord;
 						if (GKUtils.ShowQuestion("Установлен фильтр по источнику. Внести источник в новую персональную запись?") == DialogResult.Yes) {
 							result.aux_AddSource(src, "", 0);
+						}
+ 					}
+
+					if (iFilter.GroupMode == CustomFilter.TGroupMode.gmSelected) {
+						TGEDCOMGroupRecord grp = this.FTree.XRefIndex_Find(iFilter.GroupRef) as TGEDCOMGroupRecord;
+						if (GKUtils.ShowQuestion("Установлен фильтр по группе. Внести группу в новую персональную запись?") == DialogResult.Yes) {
+							grp.aux_AddMember(result);
 						}
  					}
 				}
@@ -3589,6 +3597,7 @@ namespace GKUI
 						this.RecListGroupsRefresh(iRec, null, summary);
 
                         UIUtils.ShowPersonNamesakes(this.FTree, iRec, summary);
+                        UIUtils.ShowPersonExtInfo(this.FTree, iRec, summary);
 					}
 				}
 				finally

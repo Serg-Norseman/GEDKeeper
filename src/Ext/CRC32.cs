@@ -2,7 +2,7 @@
 
 namespace Ext.Utils
 {
-	public sealed class CRC32
+	public static class CRC32
 	{
 		private static uint[] Ccitt32Table = new uint[256];
 
@@ -50,10 +50,6 @@ namespace Ext.Utils
 		static CRC32()
 		{
 			BuildCRCTable();
-		}
-
-		public CRC32()
-		{
 		}
 	}
 }

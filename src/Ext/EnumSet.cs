@@ -64,25 +64,27 @@ namespace Ext.Utils
 			return this.FValue == 0;
 		}
 
-		public string ToString(byte B)
+		// FIXME
+		public override string ToString()
 		{
-			byte bt = 1;
+			uint B = (byte)this.FValue;
+			uint bt = 1;
 			string s = "";
 			int i = 1;
+
 			do
 			{
-				if ((B & bt) > 0)
-				{
+				if ((B & bt) > 0) {
 					s = "1" + s;
-				}
-				else
-				{
+				} else {
 					s = "0" + s;
 				}
-				bt = (byte)((int)((uint)bt) << 1);
+
+				bt = bt << 1;
 				i++;
 			}
 			while (i != 9);
+
 			return s;
 		}
 	}

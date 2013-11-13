@@ -827,7 +827,7 @@ namespace Ext.Utils
 						R = ((double)(SysUtils.Trunc(R) % SysUtils.Trunc(V)));
 						break;
 					case TToken.tkPER:
-						R = (R * V / 100.0);
+						R = ((R / V) * 100.0);
 						break;
 				}
 			}

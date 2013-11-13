@@ -167,7 +167,31 @@ namespace GKUI
 			aToList.Add("    " + prefix + GKUtils.GenRecordLink(aRec, true) + suffix);
 		}
 
-        public static void ShowPersonNamesakes(TGEDCOMTree tree, TGEDCOMIndividualRecord iRec, StringList summary)
+		public static void ShowPersonExtInfo(TGEDCOMTree tree, TGEDCOMIndividualRecord iRec, StringList summary)
+		{
+        	summary.Add("");
+        	for (int i = 0, count = tree.RecordsCount; i < count; i++) {
+        		TGEDCOMRecord rec = tree[i];
+        		if (rec.RecordType == TGEDCOMRecordType.rtIndividual) {
+        			TGEDCOMIndividualRecord ir = rec as TGEDCOMIndividualRecord;
+        			
+        			TGEDCOMAssociation asso;
+        			bool first = true;
+        			for (int k = 0, cnt = ir.Associations.Count; k < cnt; k++) {
+        				asso = ir.Associations[k];
+        				if (asso.Individual == iRec) {
+        					if (first) {
+        						summary.Add(LangMan.LS(LSID.LSID_Associations) + ":");
+        						first = false;
+        					}
+        					summary.Add("    " + GKUtils.HyperLink(ir.XRef, ir.aux_GetNameStr(true, false), 0));
+        				}
+        			}
+        		}
+        	}
+		}
+
+		public static void ShowPersonNamesakes(TGEDCOMTree tree, TGEDCOMIndividualRecord iRec, StringList summary)
         {
             try
             {

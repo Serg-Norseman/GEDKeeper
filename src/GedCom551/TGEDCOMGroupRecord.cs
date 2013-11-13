@@ -71,31 +71,31 @@ namespace GedCom551
 			return base.IsEmpty() && this.fMembers.Count == 0;
 		}
 
-		public override void ReplaceXRefs(XRefReplacer aMap)
+		public override void ReplaceXRefs(XRefReplacer replacer)
 		{
-			base.ReplaceXRefs(aMap);
-			this.fMembers.ReplaceXRefs(aMap);
+			base.ReplaceXRefs(replacer);
+			this.fMembers.ReplaceXRefs(replacer);
 		}
 
-		public override void ResetOwner(TGEDCOMTree AOwner)
+		public override void ResetOwner(TGEDCOMTree owner)
 		{
-			base.ResetOwner(AOwner);
-			this.fMembers.ResetOwner(AOwner);
+			base.ResetOwner(owner);
+			this.fMembers.ResetOwner(owner);
 		}
 
-		public override void SaveToStream(StreamWriter AStream)
+		public override void SaveToStream(StreamWriter stream)
 		{
-			base.SaveToStream(AStream);
-			this.fMembers.SaveToStream(AStream);
+			base.SaveToStream(stream);
+			this.fMembers.SaveToStream(stream);
 		}
 
-		public int IndexOfMember(TGEDCOMIndividualRecord aMember)
+		public int IndexOfMember(TGEDCOMIndividualRecord member)
 		{
 			int Result = -1;
 			int num = this.fMembers.Count - 1;
 			for (int i = 0; i <= num; i++)
 			{
-				if (this.fMembers[i].XRef == aMember.XRef)
+				if (this.fMembers[i].XRef == member.XRef)
 				{
 					Result = i;
 					break;
@@ -115,42 +115,49 @@ namespace GedCom551
 
         #region Auxiliary
 
-        public bool aux_AddMember(TGEDCOMIndividualRecord aMember)
+        public bool aux_AddMember(TGEDCOMIndividualRecord member)
 		{
-			bool Result;
+			bool result;
+
 			try
 			{
 				TGEDCOMPointer ptr = new TGEDCOMPointer(this.Owner, this, "", "");
-				ptr.SetNamedValue("_MEMBER", aMember);
+				ptr.SetNamedValue("_MEMBER", member);
 				this.Members.Add(ptr);
-				ptr = new TGEDCOMPointer(this.Owner, aMember, "", "");
+
+				ptr = new TGEDCOMPointer(this.Owner, member, "", "");
 				ptr.SetNamedValue("_GROUP", this);
-				aMember.Groups.Add(ptr);
-				Result = true;
+				member.Groups.Add(ptr);
+
+				result = true;
 			}
 			catch (Exception E)
 			{
 				SysUtils.LogWrite("GKUtils.AddGroupMember(): " + E.Message);
-				Result = false;
+				result = false;
 			}
-			return Result;
+
+			return result;
 		}
 
-		public bool aux_RemoveMember(TGEDCOMIndividualRecord aMember)
+		public bool aux_RemoveMember(TGEDCOMIndividualRecord member)
 		{
-			bool Result;
+			bool result;
+
 			try
 			{
-				this.Members.Delete(this.IndexOfMember(aMember));
-				aMember.Groups.Delete(aMember.IndexOfGroup(this));
-				Result = true;
+				this.Members.Delete(this.IndexOfMember(member));
+				member.Groups.Delete(member.IndexOfGroup(this));
+
+				result = true;
 			}
 			catch (Exception E)
 			{
 				SysUtils.LogWrite("GKUtils.RemoveGroupMember(): " + E.Message);
-				Result = false;
+				result = false;
 			}
-			return Result;
+
+			return result;
 		}
 
 		#endregion

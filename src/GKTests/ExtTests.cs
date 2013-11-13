@@ -48,6 +48,13 @@ namespace GKTests
 			es.Exclude(TGEDCOMRestriction.rnPrivacy);
 			Assert.IsFalse(es.InSet(TGEDCOMRestriction.rnPrivacy));
 			Assert.IsTrue(es.InSet(TGEDCOMRestriction.rnLocked));
+			
+			es = EnumSet.Create(new Enum[] {TGEDCOMRestriction.rnNone, TGEDCOMRestriction.rnLocked});
+			Assert.IsTrue(es.InSet(TGEDCOMRestriction.rnNone));
+			Assert.IsTrue(es.InSet(TGEDCOMRestriction.rnLocked));
+			
+			string test = es.ToString();
+			Assert.AreEqual(test, "00000101");
 		}
 
 		[Test]
@@ -113,6 +120,9 @@ namespace GKTests
 			str = SysUtils.TrimLeft("	test1");
 			Assert.AreEqual(str, "test1");
 
+			str = SysUtils.TrimLeft(null);
+			Assert.AreEqual(str, "");
+
 			str = SysUtils.TrimRight("test2		");
 			Assert.AreEqual(str, "test2");
 
@@ -134,6 +144,21 @@ namespace GKTests
 			
 			val = calc.Calc("2**3");
 			Assert.AreEqual(val, 8.0);
+			
+			val = calc.Calc("2 * 3");
+			Assert.AreEqual(val, 6.0);
+			
+			val = calc.Calc("3 / 2");
+			Assert.AreEqual(val, 1.5);
+			
+			val = calc.Calc("3 % 2");
+			Assert.AreEqual(val, 1.0);
+			
+			val = calc.Calc("3 %% 2");
+			Assert.AreEqual(val, 150.0);
+			
+			val = calc.Calc("-2");
+			Assert.AreEqual(val, -2.0);
 		}
 
 		[Test]
