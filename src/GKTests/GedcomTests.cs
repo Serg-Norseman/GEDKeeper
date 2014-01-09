@@ -1,4 +1,5 @@
 ﻿using System;
+using Ext.Utils;
 using GedCom551;
 using NUnit.Framework;
 
@@ -10,6 +11,11 @@ namespace GKTests
 		[Test]
 		public void GEDCOMUtilsTests()
 		{
+			TGEDCOMObject obj = new TGEDCOMObject();
+			obj.ExtData = this;
+			Assert.AreEqual(obj.ExtData, this);
+			SysUtils.Free(obj);
+
 			Assert.AreEqual("I12", GEDCOMUtils.CleanXRef("@I12@"), "CleanXRef(@I12@)");
 			Assert.AreEqual("@I12@", GEDCOMUtils.EncloseXRef("I12"), "EncloseXRef(I12)");
 
@@ -231,6 +237,20 @@ namespace GKTests
 			rec = tree.AddRecord(TGEDCOMLocationRecord.Create(tree, tree, "", "") as TGEDCOMRecord);
 			Assert.IsNotNull(rec, "rec1 != null");
 			rec.InitNew();
+
+
+			rec = tree.aux_CreateFamily();
+			Assert.IsNotNull(rec, "rec1 != null");
+			
+			rec = tree.aux_CreateNote();
+			Assert.IsNotNull(rec, "rec1 != null");
+			
+			rec = tree.aux_CreateSource();
+			Assert.IsNotNull(rec, "rec1 != null");
+			
+			rec = tree.aux_CreateGroup();
+			Assert.IsNotNull(rec, "rec1 != null");
+
 
 			tree.Pack();
 		}

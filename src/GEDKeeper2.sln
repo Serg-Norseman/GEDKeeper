@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-# SharpDevelop 4.2.0.8774-RC
+# SharpDevelop 4.3
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeper2", "GEDKeeper2.csproj", "{19B7D80A-37FD-4E49-9F59-87FA41B677E2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKTests", "GKTests\GKTests.csproj", "{A8B53A6B-40A6-40BA-A671-03FC911BC37B}"
@@ -26,6 +26,10 @@ Global
 		{A8B53A6B-40A6-40BA-A671-03FC911BC37B}.Release|Any CPU.ActiveCfg = Release|x86
 		{A8B53A6B-40A6-40BA-A671-03FC911BC37B}.Release|x86.Build.0 = Release|x86
 		{A8B53A6B-40A6-40BA-A671-03FC911BC37B}.Release|x86.ActiveCfg = Release|x86
+		{19B7D80A-37FD-4E49-9F59-87FA41B677E2}.Debug|x86.Build.0 = Debug|Any CPU
+		{19B7D80A-37FD-4E49-9F59-87FA41B677E2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{19B7D80A-37FD-4E49-9F59-87FA41B677E2}.Release|x86.Build.0 = Release|Any CPU
+		{19B7D80A-37FD-4E49-9F59-87FA41B677E2}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

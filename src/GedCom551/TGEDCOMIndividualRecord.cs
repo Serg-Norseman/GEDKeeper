@@ -217,7 +217,7 @@ namespace GedCom551
 			f.RegisterTag("GRAD", TGEDCOMIndividualEvent.Create);
 			f.RegisterTag("RETI", TGEDCOMIndividualEvent.Create);
 			f.RegisterTag("EVEN", TGEDCOMIndividualEvent.Create);
-			
+
 
 			f.RegisterTag("CAST", TGEDCOMIndividualAttribute.Create);
 			f.RegisterTag("DSCR", TGEDCOMIndividualAttribute.Create);
@@ -243,7 +243,7 @@ namespace GedCom551
 			f.RegisterTag("_MILI_IND", TGEDCOMIndividualAttribute.Create);
 			f.RegisterTag("_MILI_DIS", TGEDCOMIndividualAttribute.Create);
 			f.RegisterTag("_MILI_RANK", TGEDCOMIndividualAttribute.Create);
-			
+
 			//f.RegisterTag("_BGRO", TGEDCOMBloodGroup.Create);
 		}
 

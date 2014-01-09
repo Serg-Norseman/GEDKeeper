@@ -19,7 +19,28 @@ namespace GKCore
 		public int IBirthYear;
 		public int IDescendantsCount;
 		public int IDescGenerations;
-		public List<byte> ILinks = new List<byte>();
+		public List<TPatriarchObj> ILinks = new List<TPatriarchObj>();
+		public bool HasLinks; // obsolete, remove
+		
+		public object data;
+		public object data2;
+
+		private bool Disposed_;
+
+		public void Dispose()
+		{
+			if (!this.Disposed_)
+			{
+				this.Disposed_ = true;
+			}
+		}
+	}
+
+	public class TDescendantObj : IDisposable
+	{
+		public TGEDCOMIndividualRecord IRec;
+		public TGEDCOMIndividualRecord Patr1, Patr2;
+
 		private bool Disposed_;
 
 		public void Dispose()
@@ -79,14 +100,13 @@ namespace GKCore
 			int num = pObj.ILinks.Count - 1;
 			for (int i = 0; i <= num; i++)
 			{
-				byte ix = pObj.ILinks[i];
 				if (Result != "") Result += ", ";
-				Result += (lst[ix] as TPatriarchObj).IRec.aux_GetNameStr(true, false);
+				Result += pObj.ILinks[i].IRec.aux_GetNameStr(true, false);
 			}
 			return Result;
 		}
 
-		private static int _GetPatriarchsList_GetBirthYear(TGEDCOMIndividualRecord iRec)
+		public static int PL_GetBirthYear(TGEDCOMIndividualRecord iRec)
 		{
 			if (iRec != null) {
 				int year = GKUtils.GetIndependentYear(iRec, "BIRT");
@@ -103,7 +123,7 @@ namespace GKCore
 					for (int j = 0; j <= num2; j++)
 					{
 						TGEDCOMIndividualRecord child = family.Childrens[j].Value as TGEDCOMIndividualRecord;
-						year = _GetPatriarchsList_GetBirthYear(child);
+						year = PL_GetBirthYear(child);
 						if (year > 0) {
 							return (year - 20);
 						}
@@ -114,7 +134,40 @@ namespace GKCore
 			return -1;
 		}
 
-		private static bool _GetPatriarchsList_SearchAnc(TGEDCOMIndividualRecord descendantRec, TGEDCOMIndividualRecord searchRec, bool onlyMaleLine)
+		public static int PL_GetDeathYear(TGEDCOMIndividualRecord iRec)
+		{
+			if (iRec != null) {
+				int year = GKUtils.GetIndependentYear(iRec, "DEAT");
+				if (year > 0) {
+					return year;
+				}
+
+				int max = 0;
+				int num = iRec.SpouseToFamilyLinks.Count - 1;
+				for (int i = 0; i <= num; i++)
+				{
+					TGEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
+
+					int num2 = family.Childrens.Count - 1;
+					for (int j = 0; j <= num2; j++)
+					{
+						TGEDCOMIndividualRecord child = family.Childrens[j].Value as TGEDCOMIndividualRecord;
+						int y = PL_GetBirthYear(child);
+						if (y > 0) {
+							if (max < y) max = y;
+						}
+					}
+				}
+
+				if (max > 0) {
+					return max + 1;
+				}
+			}
+
+			return -1;
+		}
+
+		private static bool PL_SearchAnc(TGEDCOMIndividualRecord descendantRec, TGEDCOMIndividualRecord searchRec, bool onlyMaleLine)
 		{
 			bool res = false;
 
@@ -129,7 +182,7 @@ namespace GKCore
 					TGEDCOMIndividualRecord ancestor = family.Husband.Value as TGEDCOMIndividualRecord;
 					if (ancestor != null)
 					{
-						res = TreeTools._GetPatriarchsList_SearchAnc(ancestor, searchRec, onlyMaleLine);
+						res = TreeTools.PL_SearchAnc(ancestor, searchRec, onlyMaleLine);
 						if (res) return res;
 					}
 
@@ -148,7 +201,7 @@ namespace GKCore
 			return res;
 		}
 
-		private static bool _GetPatriarchsList_SearchDesc(TGEDCOMIndividualRecord ancestorRec, TGEDCOMIndividualRecord searchRec, out TGEDCOMIndividualRecord cross)
+		private static bool PL_SearchDesc(TGEDCOMIndividualRecord ancestorRec, TGEDCOMIndividualRecord searchRec, out TGEDCOMIndividualRecord cross)
 		{
 			bool res = false;
 			cross = null;
@@ -161,7 +214,7 @@ namespace GKCore
 
 				if (spouse != null)
 				{
-					res = TreeTools._GetPatriarchsList_SearchAnc(spouse, searchRec, (ancestorRec.Sex == TGEDCOMSex.svFemale));
+					res = TreeTools.PL_SearchAnc(spouse, searchRec, (ancestorRec.Sex == TGEDCOMSex.svFemale));
 					if (res) {
 						cross = ancestorRec;
 						return res;
@@ -174,7 +227,7 @@ namespace GKCore
 					{
 						TGEDCOMIndividualRecord child = family.Childrens[j].Value as TGEDCOMIndividualRecord;
 
-						res = TreeTools._GetPatriarchsList_SearchDesc(child, searchRec, out cross);
+						res = TreeTools.PL_SearchDesc(child, searchRec, out cross);
 						if (res) return res;
 					}
 				}
@@ -183,88 +236,119 @@ namespace GKCore
 			return false;
 		}
 
-		public static void GetPatriarchsList(TGEDCOMTree aTree, bool aProgress, bool aLinks, TList aList, int aMinGens, bool aDates = true)
+		public struct GPLParams
 		{
-			if (aProgress) TfmProgress.ProgressInit(aTree.RecordsCount, LangMan.LSList[474]);
+			public bool aLinks;
+			public bool aDates;
+			//public bool aLoneSuppress;
+		}
 
-			TreeStats.InitExtCounts(aTree, -1);
+		public static void GetPatriarchsList(TGEDCOMTree tree, TList patList, TList descList, int aMinGens,
+		                                     IProgressController pc, GPLParams gpl_params)
+		{
+			if (pc != null) pc.ProgressInit(tree.RecordsCount, LangMan.LSList[474]);
+
+			TreeStats.InitExtCounts(tree, -1);
 			try
 			{
-				int num = aTree.RecordsCount - 1;
+				int num = tree.RecordsCount - 1;
 				for (int i = 0; i <= num; i++)
 				{
-					TGEDCOMRecord rec = aTree[i];
-					if (rec is TGEDCOMIndividualRecord)
-					{
+					TGEDCOMRecord rec = tree[i];
+
+					if (rec is TGEDCOMIndividualRecord) {
 						TGEDCOMIndividualRecord i_rec = rec as TGEDCOMIndividualRecord;
 
 						string nf, nn, np;
 						i_rec.aux_GetNameParts(out nf, out nn, out np);
 
-						int bYear = _GetPatriarchsList_GetBirthYear(i_rec);
+						int bYear = PL_GetBirthYear(i_rec);
 						int descGens = TreeStats.GetDescGenerations(i_rec);
 						bool res = i_rec.ChildToFamilyLinks.Count == 0;
 						res = (res && i_rec.Sex == TGEDCOMSex.svMale);
 						res = (res && /*nf != "" && nf != "?" &&*/ nn != "" && nn != "?");
 						res = (res && descGens >= aMinGens);
 
-						if (aDates) { res = (res && bYear > 0); }
+						if (gpl_params.aDates) {
+							res = (res && bYear > 0);
+						}
 
-						if (res)
-						{
+						if (res) {
 							TPatriarchObj pObj = new TPatriarchObj();
 							pObj.IRec = i_rec;
 							pObj.IBirthYear = bYear;
 							pObj.IDescendantsCount = TreeStats.GetDescendantsCount(i_rec) - 1;
 							pObj.IDescGenerations = descGens;
-							aList.Add(pObj);
+							patList.Add(pObj);
 						}
 					}
 
-					if (aProgress) TfmProgress.ProgressStep();
+					if (pc != null) pc.ProgressStep();
 				}
 
-				aList.Sort(TreeTools.PatriarchsCompare);
+				patList.Sort(TreeTools.PatriarchsCompare);
 			}
 			finally
 			{
-				if (aProgress) TfmProgress.ProgressDone();
+				if (pc != null) pc.ProgressDone();
 			}
 
-			if (aLinks)
+
+			if (gpl_params.aLinks)
 			{
-				if (aProgress) TfmProgress.ProgressInit(aList.Count, LangMan.LSList[475]);
+				if (pc != null) pc.ProgressInit(patList.Count, LangMan.LSList[475]);
 				try
 				{
-					int num2 = aList.Count - 1;
+					int num2 = patList.Count - 1;
 					for (int i = 0; i <= num2; i++)
 					{
-						TPatriarchObj patr = aList[i] as TPatriarchObj;
+						TPatriarchObj patr = patList[i] as TPatriarchObj;
 
 						for (int j = i + 1; j <= num2; j++)
 						{
-							TPatriarchObj patr2 = aList[j] as TPatriarchObj;
+							TPatriarchObj patr2 = patList[j] as TPatriarchObj;
 
 							TGEDCOMIndividualRecord cross;
-							bool res = TreeTools._GetPatriarchsList_SearchDesc(patr.IRec, patr2.IRec, out cross);
-							if (res)
-							{
+							bool res = TreeTools.PL_SearchDesc(patr.IRec, patr2.IRec, out cross);
+
+							if (res) {
+								patr.HasLinks = true;
+								patr2.HasLinks = true;
+
 								if (cross.Sex == TGEDCOMSex.svFemale) {
-									patr.ILinks.Add((byte)j);
+									patr.ILinks.Add(patr2);
 								} else {
-									patr2.ILinks.Add((byte)i);
+									patr2.ILinks.Add(patr);
+								}
+
+								if (descList != null) {
+									TDescendantObj descObj = new TDescendantObj();
+									descObj.IRec = cross;
+									descObj.Patr1 = patr.IRec;
+									descObj.Patr2 = patr2.IRec;
+
+									descList.Add(descObj);
 								}
 							}
 						}
 
-						if (aProgress) TfmProgress.ProgressStep();
+						if (pc != null) pc.ProgressStep();
 					}
 				}
 				finally
 				{
-					if (aProgress) TfmProgress.ProgressDone();
+					if (pc != null) pc.ProgressDone();
 				}
 			}
+
+
+			/*if (gpl_params.aLoneSuppress) {
+				for (int i = aList.Count - 1; i >= 0; i--) {
+					TPatriarchObj patr = aList[i] as TPatriarchObj;
+					if (patr.ILinks.Count == 0) aList.Delete(i);
+				}
+				aList.Pack();
+			}*/
 		}
 
 		#endregion

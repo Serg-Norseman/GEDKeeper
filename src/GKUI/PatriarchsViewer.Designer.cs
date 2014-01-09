@@ -57,6 +57,7 @@ namespace GKUI
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(894, 587);
 			this.Controls.Add(this.arborViewer1);
+			this.KeyPreview = true;
 			this.Name = "PatriarchsViewer";
 			this.Text = "PatriarchsViewer";
 			this.ResumeLayout(false);

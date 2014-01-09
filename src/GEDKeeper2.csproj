@@ -63,6 +63,9 @@
     <CodeAnalysisRuleSet>gk2rules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="csgl">
+      <HintPath>csgl.dll</HintPath>
+    </Reference>
     <Reference Include="Cyotek.Windows.Forms.ImageBox">
       <HintPath>..\Cyotek.Windows.Forms.ImageBox.dll</HintPath>
     </Reference>
@@ -204,7 +207,10 @@
     <Compile Include="GKResources.Designer.cs">
       <DependentUpon>GKResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="GKSandbox\HighResolutionTimer.cs" />
     <Compile Include="GKSandbox\ProgressController.cs" />
+    <Compile Include="GKSandbox\TreeVizControl.cs" />
+    <Compile Include="GKSandbox\TreeVizViewer.cs" />
     <Compile Include="GKUI\Controls\GKLogChart.cs" />
     <Compile Include="GKUI\Controls\GKMergeControl.cs">
       <SubType>UserControl</SubType>
@@ -679,6 +685,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="app.manifest" />
+    <Content Include="csgl.native.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

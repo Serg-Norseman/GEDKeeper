@@ -115,6 +115,7 @@ namespace Ext.ArborEngine
     	public Node target;
     	public double length;
     	public bool directed;
+    	public object data;
 
     	public Edge(Node b, Node c, double len = 1)
     	{
@@ -377,6 +378,7 @@ namespace Ext.ArborEngine
 	}
 
 
+	public delegate void ArborEventHandler(object sender, EventArgs eArgs);
 
 	public class ArborSystem
 	{
@@ -417,11 +419,38 @@ namespace Ext.ArborEngine
 		public List<Node> c_nodes = new List<Node>();
 		public List<Edge> c_edges = new List<Edge>();
 
-		public ArborSystem(double d, double p, double e, IArborRenderer renderer)
+		private ArborEventHandler FOnStart;
+		private ArborEventHandler FOnStop;
+		
+		public event ArborEventHandler OnStart
 		{
-			this.param_repulsion = d;
-			this.param_stiffness = p;
-			this.param_friction = e;
+			add {
+				this.FOnStart = value;
+			}
+			remove {
+				if (this.FOnStart == value) {
+					this.FOnStart = null;
+				}
+			}
+		}
+
+		public event ArborEventHandler OnStop
+		{
+			add {
+				this.FOnStop = value;
+			}
+			remove {
+				if (this.FOnStop == value) {
+					this.FOnStop = null;
+				}
+			}
+		}
+
+		public ArborSystem(double repulsion, double stiffness, double friction, IArborRenderer renderer)
+		{
+			this.param_repulsion = repulsion;
+			this.param_stiffness = stiffness;
+			this.param_friction = friction;
 			this.c_renderer = renderer;
 		}
 
@@ -432,7 +461,7 @@ namespace Ext.ArborEngine
 			try
 			{
 				this.tick();
-				this._updateBounds();
+				this.updateBounds();
 
 				if (c_renderer != null) {
 					c_renderer.redraw();
@@ -466,7 +495,7 @@ namespace Ext.ArborEngine
 			timer.Start();
 			return timer;
 		}
-		
+
 		private void clearInterval(System.Timers.Timer timer)
 		{
 			if (timer != null) timer.Stop();
@@ -474,6 +503,8 @@ namespace Ext.ArborEngine
 
 		public void start()
 		{
+			if (FOnStart != null) FOnStart(this, new EventArgs());
+
 			if (itv != null) {
 				return;
 			}
@@ -487,13 +518,13 @@ namespace Ext.ArborEngine
 				clearInterval(itv);
 				itv = null;
 			}
+
+			if (FOnStop != null) FOnStop(this, new EventArgs());
 		}
 
 		public Node addNode(string w)
 		{
-			Node node;
-
-			node = this.getNode(w);
+			Node node = this.getNode(w);
 
 			if (node != null) {
 				return node;
@@ -538,34 +569,34 @@ namespace Ext.ArborEngine
 			return x;
 		}
 
-		public void screenSize(int v, int w)
+		public void setScreenSize(int width, int height)
 		{
-			usz.Width = v;
-			usz.Height = w;
-			this._updateBounds();
+			usz.Width = width;
+			usz.Height = height;
+			this.updateBounds();
 		}
 
-		public ArbPoint toScreen(ArbPoint x)
+		public ArbPoint toScreen(ArbPoint pt)
 		{
 			if (n_bnd == null) return null;
 
 			ArbPoint v = n_bnd.bottomright.sub(n_bnd.topleft);
-			double z = margins[3] + x.sub(n_bnd.topleft).div(v.x).x * (usz.Width - (margins[1] + margins[3]));
-			double y = margins[0] + x.sub(n_bnd.topleft).div(v.y).y * (usz.Height - (margins[0] + margins[2]));
-			return new ArbPoint(z, y);
+			double sx = margins[3] + pt.sub(n_bnd.topleft).div(v.x).x * (usz.Width - (margins[1] + margins[3]));
+			double sy = margins[0] + pt.sub(n_bnd.topleft).div(v.y).y * (usz.Height - (margins[0] + margins[2]));
+			return new ArbPoint(sx, sy);
 		}
 
-		public ArbPoint fromScreen(int zx, int zy)
+		public ArbPoint fromScreen(int sx, int sy)
 		{
 			if (n_bnd == null) return null;
 
 			ArbPoint x = n_bnd.bottomright.sub(n_bnd.topleft);
-			double w = (zx - margins[3]) / (usz.Width - (margins[1] + margins[3])) * x.x + n_bnd.topleft.x;
-			double v = (zy - margins[0]) / (usz.Height - (margins[0] + margins[2])) * x.y + n_bnd.topleft.y;
+			double w = (sx - margins[3]) / (usz.Width - (margins[1] + margins[3])) * x.x + n_bnd.topleft.x;
+			double v = (sy - margins[0]) / (usz.Height - (margins[0] + margins[2])) * x.y + n_bnd.topleft.y;
 			return new ArbPoint(w, v);
 		}
 
-		private void _updateBounds()
+		private void updateBounds()
 		{
 			try
 			{
@@ -608,26 +639,31 @@ namespace Ext.ArborEngine
 
 		private PSBounds getBounds()
 		{
-			ArbPoint w = null;
-			ArbPoint v = null;
+			ArbPoint tl = null;
+			ArbPoint br = null;
+
 			foreach (Node node in c_nodes)
 			{
 				ArbPoint pt = node.pt;
 				if (pt.exploded()) continue;
 
-				if (w == null) {
-					w = new ArbPoint(pt.x, pt.y);
-					v = new ArbPoint(pt.x, pt.y);
+				if (br == null) {
+					br = new ArbPoint(pt.x, pt.y);
+					tl = new ArbPoint(pt.x, pt.y);
 				}
 
-				if (pt.x > w.x) w.x = pt.x;
-				if (pt.y > w.y) w.y = pt.y;
-				if (pt.x < v.x) v.x = pt.x;
-				if (pt.y < v.y) v.y = pt.y;
+				if (pt.x < tl.x) tl.x = pt.x;
+				if (pt.y < tl.y) tl.y = pt.y;
+				if (pt.x > br.x) br.x = pt.x;
+				if (pt.y > br.y) br.y = pt.y;
 			}
 
-			if (w != null && v != null) {
-				return new PSBounds(v, w);
+			if (br != null && tl != null) {
+				tl.x -= 1.2;
+				tl.y -= 1.2;
+				br.x += 1.2;
+				br.y += 1.2;
+				return new PSBounds(tl, br);
 			} else {
 				return new PSBounds(new ArbPoint(-1, -1), new ArbPoint(1, 1));
 			}
@@ -863,7 +899,7 @@ namespace Ext.ArborEngine
 			base.BackColor = Color.White;
 
 			FSys = new ArborSystem(10000, 1000, 0.1, this);
-			FSys.screenSize(this.Width, this.Height);
+			FSys.setScreenSize(this.Width, this.Height);
 
 			this.FDrawFont = new Font("Calibri", 9);
 			this.Resize += new EventHandler(this.av_Resize);
@@ -871,7 +907,7 @@ namespace Ext.ArborEngine
 
 		private void av_Resize(object sender, EventArgs e)
 		{
-			FSys.screenSize(this.Width, this.Height);
+			FSys.setScreenSize(this.Width, this.Height);
 			(this as IArborRenderer).redraw();
 		}
 

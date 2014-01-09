@@ -12,31 +12,41 @@ namespace GKUI
 	public partial class PatriarchsViewer : Form
 	{
         private TfmBase FBase;
+        private int fMinGens;
         private ToolTip tip = new System.Windows.Forms.ToolTip();
         private bool tipShow = false;
 
         public PatriarchsViewer(TfmBase aBase, int minGens)
 		{
 			InitializeComponent();
+
 			this.FBase = aBase;
-			CreateGraph(minGens);
-			//arborViewer1.doSample();
+			this.fMinGens = minGens;
+			this.CreateGraph(arborViewer1.Sys, minGens);
 			arborViewer1.start();
 		}
 
-        private void CreateGraph(int minGens)
+        private void CreateGraph(ArborSystem sys, int minGens)
         {
+        	TreeTools.GPLParams gpl_params = new TreeTools.GPLParams();
+        	gpl_params.aLinks = true;
+        	gpl_params.aDates = false;
+
+        	bool loneSuppress = true;
+
 			using (TList lst = new TList(true)) {
-				TreeTools.GetPatriarchsList(this.FBase.Tree, true, true, lst, minGens, false);
+				TreeTools.GetPatriarchsList(this.FBase.Tree, lst, null, minGens, null, gpl_params);
 
 				int num = lst.Count - 1;
 				for (int i = 0; i <= num; i++)
 				{
 					TPatriarchObj p_obj = lst[i] as TPatriarchObj;
 
-					Node node = arborViewer1.Sys.addNode(p_obj.IRec.XRef);
-					node.data = p_obj.IRec;
-					node.color = Color.Gray;
+					if ((!loneSuppress) || (loneSuppress && p_obj.HasLinks)) {
+						Node node = sys.addNode(p_obj.IRec.XRef);
+						node.data = p_obj.IRec;
+						node.color = Color.Gray;
+					}
 				}
 
 				for (int i = 0; i <= num; i++)
@@ -45,10 +55,9 @@ namespace GKUI
 
 					for (int k = 0; k < pat1.ILinks.Count; k++)
 					{
-						int dest = pat1.ILinks[k];
-						TPatriarchObj pat2 = lst[dest] as TPatriarchObj;
+						TPatriarchObj pat2 = pat1.ILinks[k];
 
-						Edge edge = arborViewer1.Sys.addEdge(pat1.IRec.XRef, pat2.IRec.XRef, 1);
+						Edge edge = sys.addEdge(pat1.IRec.XRef, pat2.IRec.XRef, 1);
 						edge.source.color = Color.Navy;
 						edge.target.color = Color.Navy;
 					}

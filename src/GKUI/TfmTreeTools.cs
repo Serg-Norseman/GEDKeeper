@@ -7,6 +7,7 @@ using Ext.Utils;
 using GedCom551;
 using GKCore;
 using GKUI.Controls;
+using GKSandbox;
 
 /// <summary>
 /// Localization: dirty
@@ -692,12 +693,16 @@ namespace GKUI
 
 		void btnPatSearch_Click(object sender, EventArgs e)
 		{
+			TreeTools.GPLParams gpl_params = new TreeTools.GPLParams();
+			gpl_params.aLinks = false;
+			gpl_params.aDates = !chkWithoutDates.Checked;
+
 			this.ListPatriarchs.BeginUpdate();
 			TList lst = new TList(true);
 			try
 			{
 				this.ListPatriarchs.Items.Clear();
-				TreeTools.GetPatriarchsList(this.Base.Tree, true, false, lst, decimal.ToInt32(this.edMinGens.Value), !chkWithoutDates.Checked);
+				TreeTools.GetPatriarchsList(this.Base.Tree, lst, null, decimal.ToInt32(this.edMinGens.Value), null, gpl_params);
 
 				int num = lst.Count - 1;
 				for (int i = 0; i <= num; i++)
@@ -745,17 +750,21 @@ namespace GKUI
 			int num = pObj.ILinks.Count - 1;
 			for (int i = 0; i <= num; i++)
 			{
-				byte ix = pObj.ILinks[i];
 				if (Result != "") Result += ", ";
-				Result += (lst[ix] as TPatriarchObj).IRec.aux_GetNameStr(true, false);
+				Result += pObj.ILinks[i].IRec.aux_GetNameStr(true, false);
 			}
 			return Result;
 		}
 
 		void BtnPatriarchsDiagramClick(object sender, EventArgs e)
 		{
-			PatriarchsViewer wnd = new PatriarchsViewer(FBase, decimal.ToInt32(this.edMinGens.Value));
-			wnd.Show();
+			//PatriarchsViewer wnd = new PatriarchsViewer(FBase, decimal.ToInt32(this.edMinGens.Value));
+			//wnd.Show();
+
+			using (TreeVizViewer viewer = new TreeVizViewer(FBase, decimal.ToInt32(this.edMinGens.Value)))
+			{
+				viewer.ShowDialog();
+			}
 		}
 
 		#endregion
