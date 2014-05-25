@@ -1,5 +1,6 @@
 ﻿using System;
-using Ext.Utils;
+
+using ExtUtils;
 using GedCom551;
 using NUnit.Framework;
 
@@ -9,7 +10,7 @@ namespace GKTests
 	public class ExtTests
 	{
 		[Test]
-		public void RomeNumbers_Test()
+		public void RomeNumbers_Tests()
 		{
 			Assert.AreEqual("VIII", RomeNumbers.GetRome(8), "RomeTest_01");
 			Assert.AreEqual("IX", RomeNumbers.GetRome(9), "RomeTest_02");
@@ -24,9 +25,9 @@ namespace GKTests
 		}
 
 		[Test]
-		public void SCCrypt_Test()
+		public void SCCrypt_Tests()
 		{
-			string pw = "test password";
+			const string pw = "test password";
 			string crypt = SCCrypt.scEncrypt(pw, unchecked((ushort)CRC32.CrcStr("test")));
 			string pw1 = SCCrypt.scDecrypt(crypt, unchecked((ushort)CRC32.CrcStr("test")));
 			
@@ -34,7 +35,7 @@ namespace GKTests
 		}
 
 		[Test]
-		public void EnumSet_Test()
+		public void EnumSet_Tests()
 		{
 			//TGEDCOMRestriction
 			EnumSet es = EnumSet.Create();
@@ -54,23 +55,27 @@ namespace GKTests
 			Assert.IsTrue(es.InSet(TGEDCOMRestriction.rnLocked));
 			
 			string test = es.ToString();
-			Assert.AreEqual(test, "00000101");
+			Assert.AreEqual("00000101", test);
+			
+			EnumSet es2 = EnumSet.Create(new Enum[] {TGEDCOMRestriction.rnNone, TGEDCOMRestriction.rnLocked});
+			Assert.IsTrue(es.Equals(es2));
+			Assert.IsFalse(es.Equals(null));
 		}
 
 		[Test]
-		public void IndistinctMatching_Test()
+		public void IndistinctMatching_Tests()
 		{
 			int res1, res2;
 
 			res1 = IndistinctMatching.LevenshteinDistance("Иванов", "Иванов");
-			Assert.AreEqual(res1, 0);
+			Assert.AreEqual(0, res1);
 			res1 = IndistinctMatching.LevenshteinDistance("Иванво", "Иванов");
-			Assert.AreEqual(res1, 2);
+			Assert.AreEqual(2, res1);
 
 			res2 = IndistinctMatching.DamerauLevenshteinDistance("Иванов", "Иванов");
-			Assert.AreEqual(res2, 0);
+			Assert.AreEqual(0, res2);
 			res2 = IndistinctMatching.DamerauLevenshteinDistance("Иванво", "Иванов");
-			Assert.AreEqual(res2, 1);
+			Assert.AreEqual(1, res2);
 			
 			double sim = IndistinctMatching.GetSimilarity("Иванво", "Иванов");
 			Assert.GreaterOrEqual(sim, 0.8333);
@@ -99,13 +104,25 @@ namespace GKTests
 		}
 
 		[Test]
-		public void StringList_Test()
+		public void StringList_Tests()
 		{
+			string[] list = new string[4] { "The", "string", "list", "test" };
 			
+			StringList strList = new StringList(list);
+			Assert.AreEqual("The", strList[0]);
+			Assert.AreEqual("string", strList[1]);
+			Assert.AreEqual("list", strList[2]);
+			Assert.AreEqual("test", strList[3]);
+			
+			strList.Exchange(1, 2);
+			Assert.AreEqual("string", strList[2]);
+			Assert.AreEqual("list", strList[1]);
+			
+			strList.Clear();
 		}
 
 		[Test]
-		public void SysUtils_Test()
+		public void SysUtils_Tests()
 		{
 			long val = SysUtils.Trunc(495.575);
 			Assert.AreEqual(val, 495);
@@ -134,9 +151,9 @@ namespace GKTests
 		}
 
 		[Test]
-		public void Calculator_Test()
+		public void Calculator_Tests()
 		{
-			TCalculator calc = new TCalculator();
+			ExtCalculator calc = new ExtCalculator();
 			Assert.IsNotNull(calc);
 
 			double val = calc.Calc("2 + 7.703 - 3");
@@ -159,10 +176,20 @@ namespace GKTests
 			
 			val = calc.Calc("-2");
 			Assert.AreEqual(val, -2.0);
+			
+			calc.SetVar("a", 10);
+			Assert.AreEqual(10, calc.GetVar("a"));
+			calc.SetVar("b", 2);
+			Assert.AreEqual(2, calc.GetVar("b"));
+			calc.SetVar("c", 0.75);
+			Assert.AreEqual(0.75, calc.GetVar("c"));
+			
+			val = calc.Calc("a+b+c");
+			Assert.AreEqual(12.75, val);
 		}
 
 		[Test]
-		public void TList_Test()
+		public void TList_Tests()
 		{
 			
 		}

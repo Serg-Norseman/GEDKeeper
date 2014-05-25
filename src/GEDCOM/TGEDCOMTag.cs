@@ -1,0 +1,604 @@
+using System;
+using System.Globalization;
+using System.IO;
+
+using ExtUtils;
+
+namespace GedCom551
+{
+	public class TGEDCOMTag : GEDCOMObject
+	{
+		#region Protected fields
+
+		protected int fLevel;
+		protected TGEDCOMTree fOwner;
+		protected string fName;
+		protected GEDCOMObject fParent;
+		protected string fStringValue;
+		protected GEDCOMList<TGEDCOMTag> fTags;
+
+		#endregion
+		
+		#region Public properties
+		
+		public int Count
+		{
+			get { return this.fTags.Count; }
+		}
+
+		public TGEDCOMTag this[int index]
+		{
+			get { return this.fTags[index]; }
+		}
+
+		public int Level
+		{
+			get { return this.fLevel; }
+		}
+
+		public string Name
+		{
+			get { return this.fName; }
+			set { this.fName = value; }
+		}
+
+		public TGEDCOMTree Owner
+		{
+			get { return this.fOwner; }
+		}
+
+		public GEDCOMObject Parent
+		{
+			get { return this.fParent; }
+		}
+
+		public string StringValue
+		{
+			get { return this.GetStringValue(); }
+			set { this.SetStringValue(value); }
+		}
+
+		#endregion
+		
+		#region Object management
+		
+		protected virtual void CreateObj(TGEDCOMTree owner, GEDCOMObject parent)
+		{
+			this.fOwner = owner;
+			this.fParent = parent;
+			this.fTags = new GEDCOMList<TGEDCOMTag>(this);
+			this.fStringValue = "";
+
+			if (parent != null && parent is TGEDCOMTag) {
+				this.fLevel = (parent as TGEDCOMTag).Level + 1;
+			} else {
+				this.fLevel = 0;
+			}
+		}
+
+		public TGEDCOMTag(TGEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+		{
+			this.CreateObj(owner, parent);
+
+			if (tagName != "" || tagValue != "")
+			{
+				this.Name = tagName;
+				this.SetStringValue(tagValue);
+			}
+		}
+
+        protected override void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				if (this.fTags != null) {
+					this.fTags.Dispose();
+					this.fTags = null;
+				}
+			}
+            base.Dispose(disposing);
+		}
+
+		public static TGEDCOMTag Create(TGEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+		{
+            return new TGEDCOMTag(owner, parent, tagName, tagValue);
+		}
+
+		#endregion
+		
+        #region Content management
+
+		protected TGEDCOMRecord FindRecord(string xref)
+		{
+			return ((this.fOwner == null) ? null : this.fOwner.XRefIndex_Find(xref));
+		}
+
+		protected TGEDCOMTag InsertTag(TGEDCOMTag tag)
+		{
+			this.fTags.Add(tag);
+			return tag;
+		}
+
+		public bool IsEmptySkip()
+		{
+			return GEDCOMUtils.GetTagProps(this.fName).EmptySkip;
+		}
+
+		public void SetLevel(int value)
+		{
+			this.fLevel = value;
+		}
+
+		public virtual TGEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
+		{
+			TGEDCOMTag tag = null;
+			try
+			{
+				if (tagConstructor != null) {
+					tag = tagConstructor(this.fOwner, this, tagName, tagValue);
+				} else {
+					tag = GEDCOMFactory.GetInstance().CreateTag(this.fOwner, this, tagName, tagValue);
+					if (tag == null) {
+						tag = new TGEDCOMTag(this.fOwner, this, tagName, tagValue);
+					}
+				}
+
+				this.InsertTag(tag);
+			}
+			catch (Exception ex)
+			{
+				SysUtils.LogWrite("TGEDCOMTag.InternalCreateTag(): " + ex.Message);
+			}
+			return tag;
+		}
+
+		public virtual void Assign(TGEDCOMTag source)
+		{
+			if (source != null)
+			{
+				this.Name = source.Name;
+				this.StringValue = source.StringValue;
+
+				int num = source.Count - 1;
+				for (int i = 0; i <= num; i++)
+				{
+					TGEDCOMTag sourceTag = source[i];
+					TGEDCOMTag copy = Activator.CreateInstance(sourceTag.GetType(), new object[] { this.Owner, this, "", "" }) as TGEDCOMTag;
+					copy.Assign(sourceTag);
+					this.InsertTag(copy);
+				}
+			}
+		}
+
+		protected void AssignList(GEDCOMList<TGEDCOMTag> srcList, GEDCOMList<TGEDCOMTag> destList)
+		{
+			int num = srcList.Count - 1;
+			for (int i = 0; i <= num; i++)
+			{
+				TGEDCOMTag sourceTag = srcList[i];
+				TGEDCOMTag copy = Activator.CreateInstance(sourceTag.GetType(), new object[] { this.Owner, this, "", "" }) as TGEDCOMTag;
+				copy.Assign(sourceTag);
+				destList.Add(copy);
+			}
+		}
+
+		public virtual void Clear()
+		{
+			this.fTags.Clear();
+			this.fStringValue = "";
+		}
+
+		public void Delete(int index)
+		{
+			this.fTags.Delete(index);
+		}
+
+		public void DeleteTag(string tagName)
+		{
+			TGEDCOMTag tag = this.FindTag(tagName, 0);
+			if (tag != null) {
+				do
+				{
+					int idx = this.fTags.IndexOfObject(tag);
+					this.fTags.Delete(idx);
+					tag = this.FindTag(tagName, idx);
+				}
+				while (tag != null);
+			}
+		}
+
+		public TGEDCOMTag FindTag(string tagName, int startIndex)
+		{
+			string SU = tagName.ToUpperInvariant();
+
+			int pos = SU.IndexOf('\\');
+			string S = ((pos >= 0) ? SU.Substring(0, pos) : SU);
+
+			TGEDCOMTag tempTag = this;
+			TGEDCOMTag resultTag;
+
+			while (true)
+			{
+				int index = ((S == SU) ? startIndex : 0);
+
+				while (index < tempTag.Count && tempTag[index].Name != S) index++;
+
+				if (index >= tempTag.Count) break;
+
+				resultTag = tempTag[index];
+				tempTag = resultTag;
+
+				pos = SU.IndexOf('\\');
+				if (pos >= 0)
+				{
+					SU = SU.Substring(pos + 1);
+
+					pos = SU.IndexOf('\\');
+					S = ((pos >= 0) ? SU.Substring(0, pos) : SU);
+				}
+				else
+				{
+					SU = "";
+				}
+
+				if (SU == "") return resultTag;
+			}
+
+			resultTag = null;
+			return resultTag;
+		}
+
+		public TGEDCOMTag TagClass(string tagName, TagConstructor tagConstructor)
+		{
+			TGEDCOMTag result = this.FindTag(tagName, 0);
+
+			if (result == null) {
+				result = this.AddTag(tagName, "", tagConstructor);
+			}
+
+			return result;
+		}
+
+		public int IndexOfTag(TGEDCOMTag tag)
+		{
+			return this.fTags.IndexOfObject(tag);
+		}
+
+		public virtual bool IsEmpty()
+		{
+			return ((this.fStringValue == "") && (this.fTags.Count == 0));
+		}
+		
+		public virtual float IsMatch(TGEDCOMTag tag, MatchParams matchParams)
+		{
+			return 0.0f;
+		}
+		
+		#endregion
+
+		#region Values management
+
+		protected virtual string GetStringValue()
+		{
+			return this.fStringValue;
+		}
+
+		protected virtual void SetStringValue(string S)
+		{
+			this.ParseString(S);
+		}
+
+		public virtual string ParseString(string strValue)
+		{
+			this.fStringValue = strValue;
+			return string.Empty;
+		}
+
+
+		public int GetTagIntegerValue(string tagName, int defValue)
+		{
+			string S = this.GetTagStringValue(tagName);
+			int result = ((S == "") ? defValue : SysUtils.ParseInt(S, defValue));
+			return result;
+		}
+
+		public void SetTagIntegerValue(string tagName, int value)
+		{
+			this.SetTagStringValue(tagName, value.ToString());
+		}
+
+
+		public double GetTagFloatValue(string tagName, double defValue)
+		{
+			string S = this.GetTagStringValue(tagName);
+			double result = ((S == "") ? defValue : SysUtils.ParseFloat(S, defValue));
+			return result;
+		}
+
+		public void SetTagFloatValue(string tagName, double value)
+		{
+			NumberFormatInfo nfi = new NumberFormatInfo();
+			nfi.NumberDecimalSeparator = ".";
+			this.SetTagStringValue(tagName, value.ToString(nfi));
+		}
+
+
+		public string GetTagStringValue(string tagName)
+		{
+			TGEDCOMTag tag = this.FindTag(tagName, 0);
+			string result = ((tag == null) ? "" : tag.StringValue);
+			return result;
+		}
+
+		public void SetTagStringValue(string tagName, string value)
+		{
+			string SU = tagName;
+
+			TGEDCOMTag P = this.FindTag(SU, 0);
+
+			if (P != null)
+			{
+				P.StringValue = value;
+			}
+			else
+			{
+				TGEDCOMTag O = this;
+				while (SU != "")
+				{
+					string S;
+
+					int Index = SU.IndexOf('\\');
+					if (Index >= 0)
+					{
+						S = SU.Substring(0, Index);
+						SU = SU.Substring(Index + 1);
+					}
+					else
+					{
+						S = SU;
+						SU = "";
+					}
+
+					P = O.FindTag(S, 0);
+					if (P == null)
+					{
+						if (SU == "")
+						{
+							P = O.AddTag(S, value, null);
+						}
+						else
+						{
+							P = O.AddTag(S, "", null);
+						}
+					}
+					else
+					{
+						if (SU == "")
+						{
+							P.StringValue = value;
+						}
+					}
+					O = P;
+				}
+			}
+		}
+
+
+		public StringList GetTagStrings(TGEDCOMTag ATag)
+		{
+			StringList strings = new StringList();
+
+			if (ATag != null)
+			{
+				if (ATag.StringValue != "")
+				{
+					strings.Add(ATag.StringValue);
+				}
+
+				int num = ATag.Count - 1;
+				for (int I = 0; I <= num; I++)
+				{
+					TGEDCOMTag tag = ATag[I];
+					if (tag.Name == "CONC")
+					{
+						strings[strings.Count - 1] = strings[strings.Count - 1] + tag.StringValue;
+					}
+					else
+					{
+						if (tag.Name == "CONT")
+						{
+							strings.Add(tag.StringValue);
+						}
+					}
+				}
+			}
+
+			return strings;
+		}
+
+		public void SetTagStrings(TGEDCOMTag tag, StringList value)
+		{
+			if (tag != null)
+			{
+				tag.StringValue = "";
+				for (int I = tag.Count - 1; I >= 0; I--)
+				{
+					if (tag[I].Name == "CONT" || tag[I].Name == "CONC")
+					{
+						tag.Delete(I);
+					}
+				}
+
+				if (value != null)
+				{
+					int num = value.Count - 1;
+					for (int I = 0; I <= num; I++)
+					{
+						string S = value[I];
+
+						int len = ((S.Length > 248) ? 248 : S.Length) /*248*/;
+						string sub = S.Substring(0, len);
+						S = S.Remove(0, len);
+
+						if (I == 0 && !(tag is TGEDCOMRecord))
+						{
+							tag.StringValue = sub;
+						}
+						else
+						{
+							tag.AddTag("CONT", sub, null);
+						}
+
+						while (((S != null) ? S.Length : 0) > 0)
+						{
+							len = ((S.Length > 248) ? 248 : S.Length) /*248*/;
+							tag.AddTag("CONC", S.Substring(0, len), null);
+							S = S.Remove(0, len);
+						}
+					}
+				}
+			}
+		}
+
+        public void SetTagStrings(TGEDCOMTag tag, string[] value)
+		{
+			value = (string[])value.Clone();
+
+			if (tag != null)
+			{
+				tag.StringValue = "";
+				for (int I = tag.Count - 1; I >= 0; I--)
+				{
+					if (tag[I].Name == "CONT" || tag[I].Name == "CONC")
+					{
+						tag.Delete(I);
+					}
+				}
+
+				for (int I = 0; I <= ((value != null) ? value.Length : 0) - 1; I++)
+				{
+					string S = value[I];
+
+					int len = ((S.Length > 248) ? 248 : S.Length) /*248*/;
+					string sub = S.Substring(0, len);
+					S = S.Remove(0, len);
+
+					if (I == 0 && !(tag is TGEDCOMRecord))
+					{
+						tag.StringValue = sub;
+					}
+					else
+					{
+						tag.AddTag("CONT", sub, null);
+					}
+
+					while (((S != null) ? S.Length : 0) > 0)
+					{
+						len = ((S.Length > 248) ? 248 : S.Length) /*248*/;
+						tag.AddTag("CONC", S.Substring(0, len), null);
+						S = S.Remove(0, len);
+					}
+				}
+			}
+		}
+
+        #endregion
+
+		#region Tree management
+
+		public virtual void Pack()
+		{
+			this.fTags.Pack();
+		}
+
+		public virtual void ReplaceXRefs(XRefReplacer map)
+		{
+			this.fTags.ReplaceXRefs(map);
+		}
+
+		public virtual void ResetOwner(TGEDCOMTree newOwner)
+		{
+			this.fOwner = newOwner;
+			this.fTags.ResetOwner(newOwner);
+		}
+
+		public void ResetParent(GEDCOMObject parent)
+		{
+			this.fParent = parent;
+		}
+
+		#endregion
+		
+		#region Stream management
+
+		protected virtual void SaveTagsToStream(StreamWriter stream)
+		{
+			if (this.Count > 0)
+			{
+				StringList savedTags = new StringList();
+				try
+				{
+					savedTags.Duplicates = StringList.TDuplicates.dupIgnore;
+					savedTags.Sorted = true;
+
+					int num = this.Count - 1;
+					for (int I = 0; I <= num; I++)
+					{
+						savedTags.Add(this[I].Name);
+					}
+
+					if (savedTags.IndexOf("CONC") >= 0 || savedTags.IndexOf("CONT") >= 0)
+					{
+						int num2 = this.Count - 1;
+						for (int I = 0; I <= num2; I++)
+						{
+							if (this[I].Name == "CONC" || this[I].Name == "CONT")
+							{
+								this[I].SaveToStream(stream);
+							}
+						}
+						if (savedTags.IndexOf("CONC") >= 0)
+						{
+							savedTags.Delete(savedTags.IndexOf("CONC"));
+						}
+						if (savedTags.IndexOf("CONT") >= 0)
+						{
+							savedTags.Delete(savedTags.IndexOf("CONT"));
+						}
+					}
+
+					int num3 = this.Count - 1;
+					for (int I = 0; I <= num3; I++) {
+						if (this[I].Name != "CONT" && this[I].Name != "CONC") {
+							this[I].SaveToStream(stream);
+						}
+					}
+				}
+				finally
+				{
+                    savedTags.Dispose();
+				}
+			}
+		}
+
+		protected virtual void SaveValueToStream(StreamWriter stream)
+		{
+			string S = this.fLevel.ToString() + " " + this.fName;
+
+			string Val = this.StringValue;
+			if (!string.IsNullOrEmpty(Val)) {
+				S = S + " " + Val;
+			}
+
+			stream.WriteLine(S);
+		}
+
+		public virtual void SaveToStream(StreamWriter stream)
+		{
+			this.SaveValueToStream(stream);
+			this.SaveTagsToStream(stream);
+		}
+
+		#endregion
+	}
+}

@@ -1,3 +1,5 @@
+!include "MUI2.nsh"
+!include "DotNetChecker.nsh"
 
 Name "GEDKeeper2"
 OutFile "GEDKeeper2-Installer.exe"
@@ -25,33 +27,34 @@ Section "GEDKeeper2 (необходимо)"
   SectionIn RO
 
   SetOutPath $INSTDIR
+
+  !insertmacro CheckNetFramework 40Client
+  ;!insertmacro CheckNetFramework 30
+
+  File "ExtUtils.dll"
+  File "GEDCOM.dll"
+  File "GKInterfaces.dll"
+
   File "GEDKeeper2.exe"
   File "GEDKeeper2.chm"
   File "history.txt"
-  File "rus-nobles.ged"
 
-  File "_XapianSharp.dll"
+  File "Cyotek.Windows.Forms.ImageBox.dll"
+  File "ZedGraph.dll"
+  File "itextsharp.dll"
   File "lua51.dll"
   File "LuaInterface.dll"
-  File "XapianCSharp.dll"
-  File "ZedGraph.dll"
-  File "ZedGraph.xml"
-  File "zlib1.dll"
+  File "ExcelLibrary.dll"
 
   CreateDirectory "$SMPROGRAMS\GEDKeeper2"
   CreateShortCut "$SMPROGRAMS\GEDKeeper2\GEDKeeper2.lnk" "$INSTDIR\GEDKeeper2.exe" "" "$INSTDIR\GEDKeeper2.exe" 0
   CreateShortCut "$SMPROGRAMS\GEDKeeper2\Справка.lnk" "$INSTDIR\GEDKeeper2.chm" "" "$INSTDIR\GEDKeeper2.chm" 0
-  CreateShortCut "$SMPROGRAMS\GEDKeeper2\Благородные фамилии России.lnk" "$INSTDIR\rus-nobles.ged" "" "$INSTDIR\rus-nobles.ged" 0
   CreateShortCut "$SMPROGRAMS\GEDKeeper2\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
 
   CreateDirectory "$INSTDIR\langs"
   SetOutPath "$INSTDIR\langs"
   File ".\langs\readme.txt"
   File ".\langs\russian.sample"
-
-  CreateDirectory "$INSTDIR\backgrounds"
-  SetOutPath "$INSTDIR\backgrounds"
-  File ".\backgrounds\*.png"
 
   ; Write the installation path into the registry
   WriteRegStr HKLM SOFTWARE\GEDKeeper2 "Install_Dir" "$INSTDIR"
@@ -85,18 +88,44 @@ Section "Регистрация в системе"
   WriteRegStr HKCR "GEDCOM.File\shell\open\command" "" '$INSTDIR\GEDKeeper2.exe "%1"'
 SectionEnd
 
-SectionGroup /e "Языки" 
+SectionGroup /e "Языки"
+	Section "English"
+  		SetOutPath "$INSTDIR\langs"
+  		File ".\langs\english.lng"
+	SectionEnd
 
-Section "English"
-  SetOutPath "$INSTDIR\langs"
-  File ".\langs\english.lng"
-SectionEnd
+	Section "Украинский"
+  		SetOutPath "$INSTDIR\langs"
+  		File ".\langs\ukrainian.lng"
+	SectionEnd
+SectionGroupEnd
 
-Section "Украинский"
-  SetOutPath "$INSTDIR\langs"
-  File ".\langs\ukrainian.lng"
-SectionEnd
+SectionGroup /e "Плагины"
+	Section "Импорт росписей"
+  		SetOutPath "$INSTDIR\plugins"
+  		File ".\plugins\GKPedigreeImporterPlugin.dll"
+  		File ".\plugins\GKPedigreeImporterPlugin.rus"
+  		File ".\plugins\GKPedigreeImporterPlugin.eng"
+  		File ".\plugins\GKPedigreeImporterPlugin.ukr"
+	SectionEnd
 
+	Section "Полнотекстовый поиск"
+  		SetOutPath "$INSTDIR\plugins"
+  		File ".\plugins\_XapianSharp.dll"
+  		File ".\plugins\XapianCSharp.dll"
+  		File ".\plugins\zlib1.dll"
+		File ".\plugins\GKTextSearchPlugin.dll"
+  		File ".\plugins\GKTextSearchPlugin.rus"
+  		File ".\plugins\GKTextSearchPlugin.eng"
+  		File ".\plugins\GKTextSearchPlugin.ukr"
+	SectionEnd
+
+	Section "3D визуализация"
+  		SetOutPath "$INSTDIR\plugins"
+  		File ".\plugins\csgl.dll"
+  		File ".\plugins\csgl.native.dll"
+		File ".\plugins\GKTreeVizPlugin.dll"
+	SectionEnd
 SectionGroupEnd
 
 Section "Uninstall"
@@ -112,26 +141,33 @@ Section "Uninstall"
   Delete $INSTDIR\GEDKeeper2.exe
   Delete $INSTDIR\GEDKeeper2.chm
   Delete $INSTDIR\history.txt
-  Delete $INSTDIR\rus-nobles.ged
 
-  Delete $INSTDIR\_XapianSharp.dll
+  Delete $INSTDIR\ExtUtils.dll
+  Delete $INSTDIR\GEDCOM.dll
+  Delete $INSTDIR\GKInterfaces.dll
+  Delete $INSTDIR\Cyotek.Windows.Forms.ImageBox.dll
+  Delete $INSTDIR\ZedGraph.dll
+  Delete $INSTDIR\itextsharp.dll
   Delete $INSTDIR\lua51.dll
   Delete $INSTDIR\LuaInterface.dll
+
+  Delete $INSTDIR\_XapianSharp.dll
   Delete $INSTDIR\XapianCSharp.dll
-  Delete $INSTDIR\ZedGraph.dll
-  Delete $INSTDIR\ZedGraph.xml
   Delete $INSTDIR\zlib1.dll
+  Delete $INSTDIR\csgl.dll
+  Delete $INSTDIR\csgl.native.dll
+  Delete $INSTDIR\ExcelLibrary.dll
 
   Delete $INSTDIR\uninstall.exe
-
-  Delete "$INSTDIR\samples\*.*"
-  RMDir "$INSTDIR\samples"
 
   Delete "$INSTDIR\scripts\*.lua"
   RMDir "$INSTDIR\scripts"
 
   Delete "$INSTDIR\langs\*.*"
   RMDir "$INSTDIR\langs"
+
+  Delete "$INSTDIR\plugins\*.*"
+  RMDir "$INSTDIR\plugins"
 
   ; Remove shortcuts, if any
   Delete "$SMPROGRAMS\GEDKeeper2\*.*"
