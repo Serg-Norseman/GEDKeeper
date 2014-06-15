@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+//using System.Linq;
 
 /// <summary>
 /// Localization: clean
@@ -209,31 +209,31 @@ namespace ExtUtils.Graph
 			root.Visited = true;
 			root.EdgeIn = null;
 
-			PathCandidate top_candidate = new PathCandidate(root, null);
+			PathCandidate topCandidate = new PathCandidate(root, null);
 
 			// processing
-			while (top_candidate != null)
+			while (topCandidate != null)
 			{
-				IVertex node = top_candidate.Node;
-				top_candidate = top_candidate.Next;
+				IVertex topNode = topCandidate.Node;
+				topCandidate = topCandidate.Next;
 
-				int node_dist = node.Dist;
-				node.Visited = false;
+				int nodeDist = topNode.Dist;
+				topNode.Visited = false;
 
-				foreach (IEdge link in node.EdgesOut)
+				foreach (IEdge link in topNode.EdgesOut)
 				{
-					int new_dist = node_dist + link.Cost;
+                    IVertex target = link.Target;
+                    int newDist = nodeDist + link.Cost;
 
-					IVertex to_node = link.Target;
-					if (new_dist < to_node.Dist)
+					if (newDist < target.Dist)
 					{
-						to_node.Dist = new_dist;
-						to_node.EdgeIn = link;
+						target.Dist = newDist;
+						target.EdgeIn = link;
 
-						if (!to_node.Visited)
+						if (!target.Visited)
 						{
-							to_node.Visited = true;
-							top_candidate = new PathCandidate(to_node, top_candidate);
+							target.Visited = true;
+							topCandidate = new PathCandidate(target, topCandidate);
 						}
 					}
 				}

@@ -290,13 +290,12 @@ namespace GKUI.Dialogs
 
 			this.fTasksList = new GKSheetList(this.SheetTasks);
 			this.fTasksList.OnModify += this.ListModify;
-			this.fTasksList.Buttons = EnumSet.Create(new Enum[]
-			{
+			this.fTasksList.Buttons = EnumSet<GKSheetList.SheetButton>.Create(
 				GKSheetList.SheetButton.lbAdd, 
 				GKSheetList.SheetButton.lbEdit, 
 				GKSheetList.SheetButton.lbDelete, 
 				GKSheetList.SheetButton.lbJump
-			});
+			);
 			this.fTasksList.List.AddListColumn(LangMan.LS(LSID.LSID_Goal), 250, false);
 			this.fTasksList.List.AddListColumn(LangMan.LS(LSID.LSID_Priority), 90, false);
 			this.fTasksList.List.AddListColumn(LangMan.LS(LSID.LSID_StartDate), 90, false);
@@ -304,13 +303,12 @@ namespace GKUI.Dialogs
 
 			this.fCommunicationsList = new GKSheetList(this.SheetCommunications);
 			this.fCommunicationsList.OnModify += this.ListModify;
-			this.fCommunicationsList.Buttons = EnumSet.Create(new Enum[]
-			{
+			this.fCommunicationsList.Buttons = EnumSet<GKSheetList.SheetButton>.Create(
 				GKSheetList.SheetButton.lbAdd, 
 				GKSheetList.SheetButton.lbEdit, 
 				GKSheetList.SheetButton.lbDelete, 
 				GKSheetList.SheetButton.lbJump
-			});
+			);
 			this.fCommunicationsList.List.AddListColumn(LangMan.LS(LSID.LSID_Theme), 150, false);
 			this.fCommunicationsList.List.AddListColumn(LangMan.LS(LSID.LSID_Corresponder), 150, false);
 			this.fCommunicationsList.List.AddListColumn(LangMan.LS(LSID.LSID_Type), 90, false);
@@ -318,13 +316,12 @@ namespace GKUI.Dialogs
 
 			this.fGroupsList = new GKSheetList(this.SheetGroups);
 			this.fGroupsList.OnModify += this.ListModify;
-			this.fGroupsList.Buttons = EnumSet.Create(new Enum[]
-			{
+			this.fGroupsList.Buttons = EnumSet<GKSheetList.SheetButton>.Create(
 				GKSheetList.SheetButton.lbAdd, 
 				GKSheetList.SheetButton.lbEdit, 
 				GKSheetList.SheetButton.lbDelete, 
 				GKSheetList.SheetButton.lbJump
-			});
+			);
 			this.fGroupsList.List.AddListColumn(LangMan.LS(LSID.LSID_Group), 350, false);
 
 			this.fNotesList = new GKNotesSheet(this, this.SheetNotes);

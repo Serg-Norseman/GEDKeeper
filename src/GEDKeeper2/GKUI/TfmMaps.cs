@@ -24,15 +24,15 @@ namespace GKUI
 		private class MapPlace : IDisposable
 		{
 			public string Name;
-			public readonly ExtList Points;
-			public readonly ExtList PlaceRefs;
+			public readonly ExtList<GKMapBrowser.GMapPoint> Points;
+			public readonly ExtList<TPlaceRef> PlaceRefs;
 
             private bool fDisposed;
 
             public MapPlace()
 			{
-				this.Points = new ExtList(true);
-				this.PlaceRefs = new ExtList(false);
+				this.Points = new ExtList<GKMapBrowser.GMapPoint>(true);
+				this.PlaceRefs = new ExtList<TPlaceRef>(false);
 			}
 
 			public void Dispose()
@@ -48,9 +48,9 @@ namespace GKUI
 
 		private readonly TreeNode fBaseRoot;
 		private readonly GKMapBrowser fMapBrowser;
-		private readonly ExtList fMapPoints;
-		private readonly ExtList fPlaces;
-		private readonly ExtList fSelectedPersons;
+		private readonly ExtList<GKMapBrowser.GMapPoint> fMapPoints;
+		private readonly ExtList<MapPlace> fPlaces;
+		private readonly ExtList<TGEDCOMRecord> fSelectedPersons;
 		private readonly IBase fBase;
 		private readonly TGEDCOMTree fTree;
 
@@ -110,7 +110,7 @@ namespace GKUI
 			}
 		}
 
-		private void PreparePointsList(ExtList aPoints, bool byPerson)
+		private void PreparePointsList(ExtList<GKMapBrowser.GMapPoint> aPoints, bool byPerson)
 		{
 			this.fMapBrowser.BeginUpdate();
 			try
@@ -119,12 +119,13 @@ namespace GKUI
 				int num = aPoints.Count - 1;
 				for (int i = 0; i <= num; i++)
 				{
-					GKMapBrowser.GMapPoint pt = aPoints[i] as GKMapBrowser.GMapPoint;
+					GKMapBrowser.GMapPoint pt = aPoints[i];
 					string stHint = pt.Hint;
 					if (byPerson)
 					{
 						stHint = stHint + " [" + pt.Date.ToString() + "]";
 					}
+
 					this.fMapBrowser.AddPoint(pt.Latitude, pt.Longitude, stHint);
 				}
 				this.fMapBrowser.ZoomToBounds();
@@ -182,18 +183,18 @@ namespace GKUI
 			int num = this.fPlaces.Count - 1;
 			for (int i = 0; i <= num; i++)
 			{
-                MapPlace place = this.fPlaces[i] as MapPlace;
+                MapPlace place = this.fPlaces[i];
 
 				if (place.Points.Count >= 1)
 				{
 					int num2 = place.PlaceRefs.Count - 1;
 					for (int j = 0; j <= num2; j++)
 					{
-						TGEDCOMCustomEvent evt = (place.PlaceRefs[j] as TPlaceRef).Event;
+						TGEDCOMCustomEvent evt = place.PlaceRefs[j].Event;
 
 						if ((ind != null && (evt.Parent == ind)) || (condBirth && evt.Name == "BIRT") || (condDeath && evt.Name == "DEAT") || (condResidence && evt.Name == "RESI"))
 						{
-							this.CopyPoint(place.Points[0] as GKMapBrowser.GMapPoint, place.PlaceRefs[j] as TPlaceRef);
+							this.CopyPoint(place.Points[0], place.PlaceRefs[j]);
 						}
 					}
 				}
@@ -237,8 +238,8 @@ namespace GKUI
 			this.fMapBrowser.Dock = DockStyle.Fill;
 			this.fMapBrowser.InitMap();
 			this.Panel1.Controls.Add(this.fMapBrowser);
-			this.fMapPoints = new ExtList(true);
-			this.fPlaces = new ExtList(true);
+			this.fMapPoints = new ExtList<GKMapBrowser.GMapPoint>(true);
+			this.fPlaces = new ExtList<MapPlace>(true);
 			this.fBaseRoot = this.TreePlaces.Nodes.Add(LangMan.LS(LSID.LSID_RPLocations));
 			this.radTotal.Checked = true;
 

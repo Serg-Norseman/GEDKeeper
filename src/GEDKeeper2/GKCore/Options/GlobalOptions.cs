@@ -98,7 +98,7 @@ namespace GKCore.Options
 		private NameFormat FDefNameFormat;
 		private readonly StringList FEventFilters;
 		private ushort FInterfaceLang;
-		private readonly ExtList FLanguages;
+		private readonly ExtList<TLangRecord> FLanguages;
 		private string FLastDir;
 		private readonly List<TMRUFile> FMRUFiles;
 		private readonly StringList FNameFilters;
@@ -320,7 +320,7 @@ namespace GKCore.Options
 			this.FIndividualListColumns = new TIndividualListColumns();
 			this.FIndividualListColumns.ResetDefaults();
 
-			this.FLanguages = new ExtList(true);
+			this.FLanguages = new ExtList<TLangRecord>(true);
 			this.FLastBases = new StringList();
 		}
 

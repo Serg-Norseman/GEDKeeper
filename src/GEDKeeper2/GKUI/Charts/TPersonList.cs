@@ -41,7 +41,7 @@ namespace GKUI.Charts
 		private int FPtY;
 		private TGEDCOMIndividualRecord FRec;
 		private TGEDCOMSex FSex;
-		private EnumSet FSigns;
+		private EnumSet<TChartPersonSign> FSigns;
 		private int FWidth;
 		private TreeChartPerson FBaseSpouse;
 		private TGEDCOMFamilyRecord FBaseFamily;
@@ -52,12 +52,12 @@ namespace GKUI.Charts
 		private TreeChartPerson FMother;
 		private IVertex FNode;
 		private TPersonList FSpouses;
-		private EnumSet fFlags;
+		private EnumSet<TPersonFlag> fFlags;
 
 		private Bitmap FPortrait;
 		private int FPortraitWidth;
 
-        public EnumSet Flags 
+        public EnumSet<TPersonFlag> Flags 
         {
         	get { return this.fFlags; }
         }
@@ -154,7 +154,7 @@ namespace GKUI.Charts
 		public bool Divorced
 		{
 			get {
-				return this.fFlags.InSet(TPersonFlag.pfDivorced);
+				return this.fFlags.Contains(TPersonFlag.pfDivorced);
 			}
 			set {
 				if (value) {
@@ -168,7 +168,7 @@ namespace GKUI.Charts
 		public bool IsDup
 		{
 			get { 
-				return this.fFlags.InSet(TPersonFlag.pfIsDup);
+				return this.fFlags.Contains(TPersonFlag.pfIsDup);
 			}
 			set { 
 				if (value) {
@@ -193,7 +193,7 @@ namespace GKUI.Charts
 		{
 			get
 			{
-				return this.fFlags.InSet(TPersonFlag.pfIsDead);
+				return this.fFlags.Contains(TPersonFlag.pfIsDead);
 			}
 			set
 			{
@@ -273,7 +273,7 @@ namespace GKUI.Charts
 		public bool Selected
 		{
 			get {
-				return this.fFlags.InSet(TPersonFlag.pfSelected);
+				return this.fFlags.Contains(TPersonFlag.pfSelected);
 			}
 			set {
 				if (value) {
@@ -290,7 +290,7 @@ namespace GKUI.Charts
 			set { this.FSex = value; }
 		}
 
-		public EnumSet Signs
+		public EnumSet<TChartPersonSign> Signs
 		{
 			get { return this.FSigns; }
 		}
@@ -304,7 +304,7 @@ namespace GKUI.Charts
         {
             this.fChart = chart;
 
-            this.fFlags = new EnumSet();
+            this.fFlags = new EnumSet<TPersonFlag>();
             this.FPortrait = null;
             this.FSpouses = null;
             this.FChilds = null;
@@ -449,7 +449,7 @@ namespace GKUI.Charts
 				this.FDeathDate = "";
 				this.IsDead = false;
 				this.FSex = TGEDCOMSex.svNone;
-				this.FSigns = new EnumSet();
+				this.FSigns = new EnumSet<TChartPersonSign>();
 			}
 
 			//this.CalcBounds();
@@ -531,7 +531,7 @@ namespace GKUI.Charts
     }
 
 
-	public class TPersonList : ExtList
+	public class TPersonList : ExtList<TreeChartPerson>
 	{
 		public new TreeChartPerson this[int index]
 		{

@@ -23,12 +23,12 @@ namespace GKUI
 		private readonly IBase fBase;
 		private readonly TGEDCOMTree fTree;
 
-        private readonly ExtList FSplitList;
+        private readonly ExtList<TGEDCOMRecord> FSplitList;
 		private TGEDCOMRecordType FRMMode;
 		private readonly StringList FRMSkip;
 		private int FRMIndex;
 		private readonly StringList FPlaces;
-		private readonly ExtList fChecksList;
+		private readonly ExtList<TreeTools.TCheckObj> fChecksList;
 
 		// UI
 		private GKListView ListPlaces;
@@ -63,7 +63,7 @@ namespace GKUI
 
 			this.PageControl.SelectedIndex = 0;
 
-            this.FSplitList = new ExtList();
+            this.FSplitList = new ExtList<TGEDCOMRecord>();
 			this.FRMSkip = new StringList();
 			this.FRMMode = TGEDCOMRecordType.rtIndividual;
 
@@ -72,7 +72,7 @@ namespace GKUI
 
 			this.FPlaces = new StringList();
 			this.FPlaces.Sorted = true;
-			this.fChecksList = new ExtList(true);
+			this.fChecksList = new ExtList<TreeTools.TCheckObj>(true);
 
 			this.PrepareChecksList();
 			this.PreparePatriarchsList();
@@ -279,7 +279,7 @@ namespace GKUI
 		{
 			gkLogChart1.Clear();
 			fBase.ProgressInit(LangMan.LS(LSID.LSID_CheckFamiliesConnection), this.fTree.RecordsCount);
-			ExtList prepared = new ExtList();
+			ExtList<TGEDCOMIndividualRecord> prepared = new ExtList<TGEDCOMIndividualRecord>();
 			try
 			{
 				int group = 0;
@@ -650,7 +650,7 @@ namespace GKUI
 		void btnPatSearch_Click(object sender, EventArgs e)
 		{
 			this.ListPatriarchs.BeginUpdate();
-			ExtList lst = new ExtList(true);
+			ExtList<TPatriarchObj> lst = new ExtList<TPatriarchObj>(true);
 			try
 			{
 				this.ListPatriarchs.Items.Clear();
@@ -659,7 +659,7 @@ namespace GKUI
 				int num = lst.Count - 1;
 				for (int i = 0; i <= num; i++)
 				{
-					TPatriarchObj p_obj = lst[i] as TPatriarchObj;
+					TPatriarchObj p_obj = lst[i];
 					string p_sign = ((p_obj.IRec.Patriarch) ? "[*] " : "");
 
 					GKListItem item = this.ListPatriarchs.AddItem(p_sign + p_obj.IRec.aux_GetNameStr(true, false), p_obj.IRec);

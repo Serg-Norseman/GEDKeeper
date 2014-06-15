@@ -109,67 +109,71 @@ namespace ExtUtils
                 CrcTable[i] = c;
             }
         }
+
         /// <summary>
         /// Method to create a new storage file
         /// </summary>
-        /// <param name="_filename">Full path of Zip file to create</param>
-        /// <param name="_comment">General comment for Zip file</param>
+        /// <param name="filename">Full path of Zip file to create</param>
+        /// <param name="comment">General comment for Zip file</param>
         /// <returns>A valid ZipStorer object</returns>
-        public static ZipStorer Create(string _filename, string _comment)
+        public static ZipStorer Create(string filename, string comment)
         {
-            Stream stream = new FileStream(_filename, FileMode.Create, FileAccess.ReadWrite);
+            Stream stream = new FileStream(filename, FileMode.Create, FileAccess.ReadWrite);
 
-            ZipStorer zip = Create(stream, _comment);
-            zip.Comment = _comment;
-            zip.FileName = _filename;
+            ZipStorer zip = Create(stream, comment);
+            zip.Comment = comment;
+            zip.FileName = filename;
 
             return zip;
         }
+
         /// <summary>
         /// Method to create a new zip storage in a stream
         /// </summary>
-        /// <param name="_stream"></param>
-        /// <param name="_comment"></param>
+        /// <param name="stream"></param>
+        /// <param name="comment"></param>
         /// <returns>A valid ZipStorer object</returns>
-        public static ZipStorer Create(Stream _stream, string _comment)
+        public static ZipStorer Create(Stream stream, string comment)
         {
             ZipStorer zip = new ZipStorer();
-            zip.Comment = _comment;
-            zip.ZipFileStream = _stream;
+            zip.Comment = comment;
+            zip.ZipFileStream = stream;
             zip.Access = FileAccess.Write;
 
             return zip;
         }
+
         /// <summary>
         /// Method to open an existing storage file
         /// </summary>
-        /// <param name="_filename">Full path of Zip file to open</param>
-        /// <param name="_access">File access mode as used in FileStream constructor</param>
+        /// <param name="filename">Full path of Zip file to open</param>
+        /// <param name="access">File access mode as used in FileStream constructor</param>
         /// <returns>A valid ZipStorer object</returns>
-        public static ZipStorer Open(string _filename, FileAccess _access)
+        public static ZipStorer Open(string filename, FileAccess access)
         {
-            Stream stream = (Stream)new FileStream(_filename, FileMode.Open, _access == FileAccess.Read ? FileAccess.Read : FileAccess.ReadWrite);
+            Stream stream = (Stream)new FileStream(filename, FileMode.Open, access == FileAccess.Read ? FileAccess.Read : FileAccess.ReadWrite);
 
-            ZipStorer zip = Open(stream, _access);
-            zip.FileName = _filename;
+            ZipStorer zip = Open(stream, access);
+            zip.FileName = filename;
 
             return zip;
         }
+
         /// <summary>
         /// Method to open an existing storage from stream
         /// </summary>
-        /// <param name="_stream">Already opened stream with zip contents</param>
-        /// <param name="_access">File access mode for stream operations</param>
+        /// <param name="stream">Already opened stream with zip contents</param>
+        /// <param name="access">File access mode for stream operations</param>
         /// <returns>A valid ZipStorer object</returns>
-        public static ZipStorer Open(Stream _stream, FileAccess _access)
+        public static ZipStorer Open(Stream stream, FileAccess access)
         {
-            if (!_stream.CanSeek && _access != FileAccess.Read)
+            if (!stream.CanSeek && access != FileAccess.Read)
                 throw new InvalidOperationException("Stream cannot seek");
 
             ZipStorer zip = new ZipStorer();
             //zip.FileName = _filename;
-            zip.ZipFileStream = _stream;
-            zip.Access = _access;
+            zip.ZipFileStream = stream;
+            zip.Access = access;
 
             if (zip.ReadFileInfo())
                 return zip;
@@ -699,6 +703,7 @@ namespace ExtUtils
 
             return filename.Trim('/');
         }
+
         // Reads the end-of-central-directory record
         private bool ReadFileInfo()
         {

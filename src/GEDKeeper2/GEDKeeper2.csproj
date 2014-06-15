@@ -433,30 +433,6 @@
     <Compile Include="GKUI\TfmTreeTools.Designer.cs">
       <DependentUpon>TfmTreeTools.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Widgets\TfmCalcWidget.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\Widgets\TfmCalcWidget.Designer.cs">
-      <DependentUpon>TfmCalcWidget.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\Widgets\TfmCalendar.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\Widgets\TfmCalendar.Designer.cs">
-      <DependentUpon>TfmCalendar.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\Widgets\TfmNamesBook.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\Widgets\TfmNamesBook.Designer.cs">
-      <DependentUpon>TfmNamesBook.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\Widgets\TfmTimeLine.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\Widgets\TfmTimeLine.Designer.cs">
-      <DependentUpon>TfmTimeLine.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GKUI\Controls\GKMergeControl.resx">
@@ -576,9 +552,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\TfmTreeTools.resx">
       <DependentUpon>TfmTreeTools.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Widgets\TfmTimeLine.resx">
-      <DependentUpon>TfmTimeLine.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

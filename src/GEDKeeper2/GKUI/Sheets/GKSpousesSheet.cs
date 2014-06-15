@@ -19,15 +19,14 @@ namespace GKUI.Sheets
             this.List.AddListColumn(LangMan.LS(LSID.LSID_MarriageDate), 100, false);
             this.Columns_EndUpdate();
 
-            this.Buttons = EnumSet.Create(new Enum[]
-			{
+            this.Buttons = EnumSet<GKSheetList.SheetButton>.Create(
 				GKSheetList.SheetButton.lbAdd, 
 				GKSheetList.SheetButton.lbEdit, 
 				GKSheetList.SheetButton.lbDelete, 
 				GKSheetList.SheetButton.lbJump, 
 				GKSheetList.SheetButton.lbMoveUp, 
 				GKSheetList.SheetButton.lbMoveDown
-			});
+			);
 
             this.OnModify += this.ListModify;
         }

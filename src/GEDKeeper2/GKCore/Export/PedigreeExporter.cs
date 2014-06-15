@@ -68,7 +68,7 @@ namespace GKCore.Export
 
 		private TGEDCOMIndividualRecord FAncestor;
 		private TPedigreeKind FKind;
-		private ExtList FPersonList;
+		private ExtList<TPersonObj> FPersonList;
 		private ShieldState FShieldState;
 		private StringList FSourceList;
 
@@ -209,7 +209,7 @@ namespace GKCore.Export
 				fDocument.Add(p);
 			}
 
-			ExtList ev_list = new ExtList(true);
+			ExtList<TEventObj> ev_list = new ExtList<TEventObj>(true);
 			try
 			{
 				int i;
@@ -434,7 +434,7 @@ namespace GKCore.Export
 			return result;
 		}
 
-		private void WriteEventList(TPersonObj aPerson, ExtList ev_list)
+		private void WriteEventList(TPersonObj aPerson, ExtList<TEventObj> ev_list)
 		{
 			int num = ev_list.Count - 1;
 			for (int i = 0; i <= num; i++)
@@ -442,7 +442,7 @@ namespace GKCore.Export
 				int num2 = ev_list.Count - 1;
 				for (int j = i + 1; j <= num2; j++)
 				{
-					if ((ev_list[i] as TEventObj).GetDate() > (ev_list[j] as TEventObj).GetDate())
+					if (ev_list[i].GetDate() > ev_list[j].GetDate())
 					{
 						ev_list.Exchange(i, j);
 					}
@@ -452,8 +452,8 @@ namespace GKCore.Export
 			int num3 = ev_list.Count - 1;
 			for (int i = 0; i <= num3; i++)
 			{
-				TGEDCOMCustomEvent evt = (ev_list[i] as TEventObj).Event;
-				if (evt != null && object.Equals((ev_list[i] as TEventObj).iRec, aPerson.iRec))
+				TGEDCOMCustomEvent evt = ev_list[i].Event;
+				if (evt != null && object.Equals(ev_list[i].iRec, aPerson.iRec))
 				{
 					if (evt.Name == "BIRT") {
 						ev_list.Exchange(i, 0);
@@ -544,7 +544,7 @@ namespace GKCore.Export
 
 					fDocument.Add(new Paragraph(title, title_font) { Alignment = Element.ALIGN_CENTER, SpacingAfter = 6f });
 
-					this.FPersonList = new ExtList(true);
+					this.FPersonList = new ExtList<TPersonObj>(true);
 					this.FSourceList = new StringList();
 					try
 					{

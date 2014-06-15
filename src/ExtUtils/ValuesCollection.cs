@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 
 namespace ExtUtils
 {
+    [Serializable]
 	public sealed class ValuesCollection : NameObjectCollectionBase
 	{
         public ValuesCollection()

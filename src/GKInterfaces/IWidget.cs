@@ -10,5 +10,6 @@ namespace GKCore.Interfaces
 
 		void BaseChanged(IBase aBase);
 		void WidgetInit(IHost host, MenuItem menuItem);
+		void WidgetEnable();
 	}
 }

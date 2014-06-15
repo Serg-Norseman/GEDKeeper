@@ -586,7 +586,7 @@ namespace GKTreeVizPlugin
         		fSys.setScreenSize(50, 50);
         		fSys.OnStop += Arbor_OnStop;
 
-        		using (ExtList patList = new ExtList(false)) {
+        		using (ExtList<TPatriarchObj> patList = new ExtList<TPatriarchObj>(false)) {
         			aBase.Context.GetPatriarchsLinks(patList, minGens, false, loneSuppress);
 
         			int num = patList.Count - 1;

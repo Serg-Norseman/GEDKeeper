@@ -24,8 +24,8 @@ namespace GKCore.Interfaces
 		int FindDeathYear(TGEDCOMIndividualRecord iRec);
 		
 		// Patriarchs Search
-		void GetPatriarchsList(ExtList patList, int gensMin, bool datesCheck);
-		void GetPatriarchsLinks(ExtList patList, int gensMin, bool datesCheck, bool loneSuppress);
+		void GetPatriarchsList(ExtList<TPatriarchObj> patList, int gensMin, bool datesCheck);
+		void GetPatriarchsLinks(ExtList<TPatriarchObj> patList, int gensMin, bool datesCheck, bool loneSuppress);
 		TGraph GetPatriarchsGraph(int gensMin, bool datesCheck, bool loneSuppress = true);
 	}
 }

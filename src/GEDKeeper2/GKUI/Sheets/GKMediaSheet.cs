@@ -18,14 +18,13 @@ namespace GKUI.Sheets
             this.AddColumn(LangMan.LS(LSID.LSID_Type), 300, false);
             this.Columns_EndUpdate();
 
-            this.Buttons = EnumSet.Create(new Enum[]
-			{
+            this.Buttons = EnumSet<GKSheetList.SheetButton>.Create(
 				GKSheetList.SheetButton.lbAdd, 
 				GKSheetList.SheetButton.lbEdit, 
 				GKSheetList.SheetButton.lbDelete, 
 				GKSheetList.SheetButton.lbMoveUp, 
 				GKSheetList.SheetButton.lbMoveDown
-			});
+			);
 
             this.OnModify += this.ListModify;
         }

@@ -171,30 +171,30 @@ namespace ExtUtils
 		{
 			ScrollEventType scrType = SysUtils.GetScrollEventType(wParam & 65535u);
 			
-			int NewPos = aOldPos;
+			int newPos = aOldPos;
 
 			switch (scrType) {
 				case ScrollEventType.SmallDecrement:
 				{
-					NewPos -= sm_piece;
+					newPos -= sm_piece;
 					break;
 				}
 
 				case ScrollEventType.SmallIncrement:
 				{
-					NewPos += sm_piece;
+					newPos += sm_piece;
 					break;
 				}
 
 				case ScrollEventType.LargeDecrement:
 				{
-					NewPos -= big_piece;
+					newPos -= big_piece;
 					break;
 				}
 
 				case ScrollEventType.LargeIncrement:
 				{
-					NewPos += big_piece;
+					newPos += big_piece;
 					break;
 				}
 
@@ -205,33 +205,33 @@ namespace ExtUtils
 					ScrollInfo.cbSize = (uint)Marshal.SizeOf( ScrollInfo );
 					ScrollInfo.fMask = 23u;
                     Win32Native.GetScrollInfo(handle, nBar, ref ScrollInfo);
-					NewPos = ScrollInfo.nTrackPos;
+					newPos = ScrollInfo.nTrackPos;
 					break;
 				}
 
 				case ScrollEventType.First:
 				{
-					NewPos = 0;
+					newPos = 0;
 					break;
 				}
 
 				case ScrollEventType.Last:
 				{
-					NewPos = aMax;
+					newPos = aMax;
 					break;
 				}
 			}
 
-			if (NewPos < aMin)
+			if (newPos < aMin)
 			{
-				NewPos = aMin;
+				newPos = aMin;
 			}
-			if (NewPos > aMax)
+			if (newPos > aMax)
 			{
-				NewPos = aMax;
+				newPos = aMax;
 			}
 
-			return NewPos;
+			return newPos;
 		}
 
 		public static int DaysBetween(DateTime ANow, DateTime AThen)

@@ -14,7 +14,7 @@ namespace GKCore.Export
 	public sealed class ExcelExporter : Exporter
 	{
 		private bool fAppMode;
-		private ExtList fSelectedRecords;
+		private ExtList<TGEDCOMRecord> fSelectedRecords;
 
 		public bool AppMode
 		{
@@ -22,7 +22,7 @@ namespace GKCore.Export
 			set { this.fAppMode = value; }
 		}
 
-		public ExtList SelectedRecords
+		public ExtList<TGEDCOMRecord> SelectedRecords
 		{
 			get { return this.fSelectedRecords; }
 			set { this.fSelectedRecords = value; }

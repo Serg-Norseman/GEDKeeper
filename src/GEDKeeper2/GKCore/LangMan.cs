@@ -52,10 +52,12 @@ namespace GKCore
 		/* 028 */ LSID_MIPedigree_Konovalov,
 		/* 029 */ LSID_MIMap,
 		/* 030 */ LSID_MIStats,
-		/* 031 */ LSID_MICalc,
-		/* 032 */ LSID_MINamesBook,
-		/* 033 */ LSID_MICalendar,
-		/* 034 */ LSID_MITimeLine,
+
+		/* 031 */ LSID_MICalc, // deprecated
+		/* 032 */ LSID_MINamesBook, // deprecated
+		/* 033 */ LSID_MICalendar, // deprecated
+		/* 034 */ LSID_MITimeLine, // deprecated
+
 		/* 035 */ LSID_MIOrganizer,
 		/* 036 */ LSID_MIScripts,
 
@@ -157,8 +159,10 @@ namespace GKCore
 		/* 127 */ LSID_Members,
 		/* 128 */ LSID_WinGroupEdit,
 		/* 129 */ LSID_DetachMemberQuery,
-		/* 130 */ LSID_TimeScale,
-		/* 131 */ LSID_CurrentYear,
+
+		/* 130 */ LSID_TimeScale, // deprecated
+		/* 131 */ LSID_CurrentYear, // deprecated
+
 		/* 132 */ LSID_Telephone,
 		/* 133 */ LSID_Mail,
 		/* 134 */ LSID_WebSite,
@@ -194,7 +198,9 @@ namespace GKCore
 		/* 164 */ LSID_Cal_French,
 		/* 165 */ LSID_Cal_Roman,
 		/* 166 */ LSID_Unknown,
-		/* 167 */ LSID_CopyResultToClipboard,
+
+		/* 167 */ LSID_CopyResultToClipboard, // deprecated
+
 		/* 168 */ LSID_Other,
 
 		/* 169 */ LSID_Deprecated_05,

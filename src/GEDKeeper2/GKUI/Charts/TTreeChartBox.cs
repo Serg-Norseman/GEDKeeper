@@ -1157,7 +1157,7 @@ namespace GKUI.Charts
 				for (TChartPersonSign cps = TChartPersonSign.urRI_StGeorgeCross;
 				     cps <= TChartPersonSign.urUSSR_RearVeteran; cps++)
 				{
-					if (person.Signs.InSet(cps))
+					if (person.Signs.Contains(cps))
 					{
 						Bitmap pic = this.FSignsPic[(int)cps - 1];
 						aCanvas.DrawImage(pic, rt.Right, rt.Top - 21 + i * pic.Height);
@@ -1190,7 +1190,7 @@ namespace GKUI.Charts
 		{
 			int[] edges = new int[256];
 			InitEdges(ref edges);
-			ExtList prev = new ExtList();
+			ExtList<TreeChartPerson> prev = new ExtList<TreeChartPerson>();
 			try
 			{
 				this.RecalcAnc(prev, ref edges, this.FRoot, new Point(this.FMargins, this.FMargins));
@@ -1266,7 +1266,7 @@ namespace GKUI.Charts
 			}
 		}
 
-		private void RecalcAnc(ExtList prev, ref int[] edges, TreeChartPerson aPerson, Point aPt)
+		private void RecalcAnc(ExtList<TreeChartPerson> prev, ref int[] edges, TreeChartPerson aPerson, Point aPt)
 		{
 			if (aPerson != null)
 			{
@@ -1345,13 +1345,13 @@ namespace GKUI.Charts
 					}
 					else
 					{
-						if (aPerson.Flags.InSet(TreeChartPerson.TPersonFlag.pfDescByFather))
+						if (aPerson.Flags.Contains(TreeChartPerson.TPersonFlag.pfDescByFather))
 						{
 							this.ShiftDesc(aPerson.Father, aOffset, single);
 						}
 						else
 						{
-							if (aPerson.Flags.InSet(TreeChartPerson.TPersonFlag.pfDescByMother))
+							if (aPerson.Flags.Contains(TreeChartPerson.TPersonFlag.pfDescByMother))
 							{
 								this.ShiftDesc(aPerson.Mother, aOffset, single);
 							}
@@ -1810,9 +1810,10 @@ namespace GKUI.Charts
 			}
 		}
 
-		public EnumSet GetPersonSign(TGEDCOMIndividualRecord iRec)
+		public EnumSet<TChartPersonSign> GetPersonSign(TGEDCOMIndividualRecord iRec)
 		{
-			EnumSet result = new EnumSet();
+			EnumSet<TChartPersonSign> result = new EnumSet<TChartPersonSign>();
+			
 			int num = iRec.UserReferences.Count - 1;
 			for (int i = 0; i <= num; i++)
 			{
@@ -1823,6 +1824,7 @@ namespace GKUI.Charts
 					if (rs == GKData.UserRefs[(int)cps]) result.Include(cps);
 				}
 			}
+			
 			return result;
 		}
 

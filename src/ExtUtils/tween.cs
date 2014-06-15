@@ -22,7 +22,7 @@ namespace ExtUtils
 	{
 		private static bool busy = false;
 
-		private int counter = 0;
+		private int counter;
 		private int timeStart;
 		private int timeDest;
         private int fDestX, fDestY;
@@ -34,6 +34,11 @@ namespace ExtUtils
         private TweenDelegate fTweenDelegate;
 
 		private System.ComponentModel.IContainer components;
+
+        public TweenLibrary()
+        {
+            this.counter = 0;
+        }
 
         protected override void Dispose(bool disposing)
         {
@@ -75,7 +80,7 @@ namespace ExtUtils
 		///<summary>
 		///This is the method that gets called every tick interval
 		///</summary>
-		public void timer_Tick(object sender, System.EventArgs e)
+		private void timer_Tick(object sender, System.EventArgs e)
 		{
 			if (curX == fDestX && curY == fDestY) {
                 this.fTimer.Stop();

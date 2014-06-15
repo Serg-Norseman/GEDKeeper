@@ -94,10 +94,6 @@ namespace GKUI
 		private System.Windows.Forms.StatusBarPanel StatusBarPanel2;
 		private System.Windows.Forms.ToolTip ToolTip1;
 		public System.Windows.Forms.ImageList ImageList_Buttons;
-		public System.Windows.Forms.MenuItem miCalc;
-		public System.Windows.Forms.MenuItem miNamesBook;
-		public System.Windows.Forms.MenuItem miCalendar;
-		public System.Windows.Forms.MenuItem miTimeLine;
 		private System.Windows.Forms.MenuItem miPlugins;
 
 		private void InitializeComponent()
@@ -164,10 +160,6 @@ namespace GKUI
 			this.N8 = new System.Windows.Forms.MenuItem();
 			this.miStats = new System.Windows.Forms.MenuItem();
 			this.miService = new System.Windows.Forms.MenuItem();
-			this.miCalc = new System.Windows.Forms.MenuItem();
-			this.miNamesBook = new System.Windows.Forms.MenuItem();
-			this.miCalendar = new System.Windows.Forms.MenuItem();
-			this.miTimeLine = new System.Windows.Forms.MenuItem();
 			this.miOrganizer = new System.Windows.Forms.MenuItem();
 			this.N9 = new System.Windows.Forms.MenuItem();
 			this.miScripts = new System.Windows.Forms.MenuItem();
@@ -662,10 +654,6 @@ namespace GKUI
 			// 
 			this.miService.Index = 3;
 			this.miService.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-									this.miCalc,
-									this.miNamesBook,
-									this.miCalendar,
-									this.miTimeLine,
 									this.miOrganizer,
 									this.N9,
 									this.miScripts,
@@ -676,74 +664,50 @@ namespace GKUI
 									this.miOptions});
 			this.miService.Text = "Сервис";
 			// 
-			// miCalc
-			// 
-			this.miCalc.Index = 0;
-			this.miCalc.Text = "Калькулятор...";
-			this.miCalc.Click += new System.EventHandler(this.miCalcClick);
-			// 
-			// miNamesBook
-			// 
-			this.miNamesBook.Index = 1;
-			this.miNamesBook.Text = "Справочник имен...";
-			this.miNamesBook.Click += new System.EventHandler(this.miNamesBookClick);
-			// 
-			// miCalendar
-			// 
-			this.miCalendar.Index = 2;
-			this.miCalendar.Text = "Календарь...";
-			this.miCalendar.Click += new System.EventHandler(this.miCalendarClick);
-			// 
-			// miTimeLine
-			// 
-			this.miTimeLine.Index = 3;
-			this.miTimeLine.Text = "Линия времени...";
-			this.miTimeLine.Click += new System.EventHandler(this.miTimeLineClick);
-			// 
 			// miOrganizer
 			// 
-			this.miOrganizer.Index = 4;
+			this.miOrganizer.Index = 0;
 			this.miOrganizer.Text = "Органайзер...";
 			this.miOrganizer.Click += new System.EventHandler(this.miOrganizerClick);
 			// 
 			// N9
 			// 
-			this.N9.Index = 5;
+			this.N9.Index = 1;
 			this.N9.Text = "-";
 			// 
 			// miScripts
 			// 
-			this.miScripts.Index = 6;
+			this.miScripts.Index = 2;
 			this.miScripts.Shortcut = System.Windows.Forms.Shortcut.CtrlF11;
 			this.miScripts.Text = "Скрипты...";
 			this.miScripts.Click += new System.EventHandler(this.miScriptsClick);
 			// 
 			// miTreeTools
 			// 
-			this.miTreeTools.Index = 7;
+			this.miTreeTools.Index = 3;
 			this.miTreeTools.Text = "Инструменты...";
 			this.miTreeTools.Click += new System.EventHandler(this.miTreeToolsClick);
 			// 
 			// N10
 			// 
-			this.N10.Index = 8;
+			this.N10.Index = 4;
 			this.N10.Text = "-";
 			// 
 			// miFilter
 			// 
-			this.miFilter.Index = 9;
+			this.miFilter.Index = 5;
 			this.miFilter.Shortcut = System.Windows.Forms.Shortcut.CtrlF;
 			this.miFilter.Text = "Фильтр...";
 			this.miFilter.Click += new System.EventHandler(this.miFilterClick);
 			// 
 			// N11
 			// 
-			this.N11.Index = 10;
+			this.N11.Index = 6;
 			this.N11.Text = "-";
 			// 
 			// miOptions
 			// 
-			this.miOptions.Index = 11;
+			this.miOptions.Index = 7;
 			this.miOptions.Text = "Настройки...";
 			this.miOptions.Click += new System.EventHandler(this.miOptionsClick);
 			// 

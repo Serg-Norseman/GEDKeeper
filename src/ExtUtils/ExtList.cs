@@ -27,12 +27,12 @@ namespace ExtUtils
 		lnDeleted
 	}
 
-    public class ExtList : BaseObject
+    public class ExtList<T> : BaseObject
 	{
-		private readonly List<object> fList;
+		private readonly List<T> fList;
 		private bool fOwnsObjects;
 
-		public IList<object> List
+		public IList<T> List
 		{
 			get { return this.fList; }
 		}
@@ -48,21 +48,21 @@ namespace ExtUtils
 			set { this.fOwnsObjects = value; }
 		}
 
-		public object this[int Index]
+		public T this[int index]
 		{
 			get {
-				return this.fList[Index];
+				return this.fList[index];
 			}
 			set {
-				if (Index < 0 || Index >= this.Count)
+				if (index < 0 || index >= this.Count)
 				{
-					ExtList.Error("List index out of bounds ({0})", Index);
+					ExtList<T>.Error("List index out of bounds ({0})", index);
 				}
 
-				if (value != this.fList[Index])
+				if (!value.Equals(this.fList[index]))
 				{
-					object temp = this.fList[Index];
-					this.fList[Index] = value;
+					T temp = this.fList[index];
+					this.fList[index] = value;
 
 					if (temp != null)
 					{
@@ -79,13 +79,13 @@ namespace ExtUtils
 
 		public ExtList()
 		{
-			this.fList = new List<object>();
+			this.fList = new List<T>();
 			this.fOwnsObjects = false;
 		}
 
 		public ExtList(bool ownsObjects)
 		{
-			this.fList = new List<object>();
+			this.fList = new List<T>();
 			this.fOwnsObjects = ownsObjects;
 		}
 
@@ -99,23 +99,23 @@ namespace ExtUtils
             base.Dispose(disposing);
         }
 
-		private void Notify(object Instance, ListNotification Action)
+		private void Notify(object instance, ListNotification action)
 		{
-			if (this.fOwnsObjects && Action == ListNotification.lnDeleted)
+			if (this.fOwnsObjects && action == ListNotification.lnDeleted)
 			{
-				SysUtils.Free(Instance);
+				SysUtils.Free(instance);
 			}
 		}
 
-		public int Add(object Item)
+		public int Add(T item)
 		{
-			int Result = this.fList.Count;
-			this.fList.Add(Item);
-			if (Item != null)
+			int result = this.fList.Count;
+			this.fList.Add(item);
+			if (item != null)
 			{
-				this.Notify(Item, ListNotification.lnAdded);
+				this.Notify(item, ListNotification.lnAdded);
 			}
-			return Result;
+			return result;
 		}
 
 		public void Clear()
@@ -124,65 +124,65 @@ namespace ExtUtils
 			this.fList.Clear();
 		}
 
-		public void Delete(int Index)
+		public void Delete(int index)
 		{
-			object Temp = this.fList[Index];
+			object temp = this.fList[index];
 
-			this.fList.RemoveAt(Index);
+			this.fList.RemoveAt(index);
 
-			if (Temp != null)
+			if (temp != null)
 			{
-				this.Notify(Temp, ListNotification.lnDeleted);
+				this.Notify(temp, ListNotification.lnDeleted);
 			}
 		}
 
-		public static void Error(string Msg, int Data)
+		public static void Error(string msg, int data)
 		{
-			throw new ListException(string.Format(Msg, Data));
+			throw new ListException(string.Format(msg, data));
 		}
 
-		public void Exchange(int Index1, int Index2)
+		public void Exchange(int index1, int index2)
 		{
-			object Item = this.fList[Index1];
-			this.fList[Index1] = this.fList[Index2];
-			this.fList[Index2] = Item;
+			T item = this.fList[index1];
+			this.fList[index1] = this.fList[index2];
+			this.fList[index2] = item;
 		}
 
-		public object Extract(object Item)
+		public object Extract(T item)
 		{
-			object Result = null;
-			int I = this.IndexOf(Item);
+			object result = null;
+			int I = this.IndexOf(item);
 			if (I >= 0)
 			{
-				Result = Item;
+				result = item;
 				this.fList.RemoveAt(I);
-				this.Notify(Result, ListNotification.lnExtracted);
+				this.Notify(result, ListNotification.lnExtracted);
 			}
-			return Result;
+			return result;
 		}
 
-		public int IndexOf(object Item)
+		public int IndexOf(T item)
 		{
-			return this.fList.IndexOf(Item);
+			return this.fList.IndexOf(item);
 		}
 
-		public void Insert(int Index, object Item)
+		public void Insert(int index, T item)
 		{
-			this.fList.Insert(Index, Item);
-			if (Item != null)
+			this.fList.Insert(index, item);
+			if (item != null)
 			{
-				this.Notify(Item, ListNotification.lnAdded);
+				this.Notify(item, ListNotification.lnAdded);
 			}
 		}
 
-		public int Remove(object Item)
+		public int Remove(T item)
 		{
-			int Result = this.IndexOf(Item);
-			if (Result >= 0)
+			int result = this.IndexOf(item);
+			if (result >= 0)
 			{
-				this.Delete(Result);
+				this.Delete(result);
 			}
-			return Result;
+			return result;
 		}
 
 		public void Pack()
@@ -194,7 +194,7 @@ namespace ExtUtils
 			}
 		}
 
-		private void IQuickSort(TListSortCompare SCompare, int L, int R)
+        private void QuickSort(TListSortCompare comparer, int L, int R)
 		{
 			int I;
 			do
@@ -204,15 +204,15 @@ namespace ExtUtils
 				object P = fList[(int)((uint)(L + R) >> 1)];
 				while (true)
 				{
-					if (SCompare(fList[I], P) >= 0)
+                    if (comparer(fList[I], P) >= 0)
 					{
-						while (SCompare(fList[J], P) > 0) J--;
+                        while (comparer(fList[J], P) > 0) J--;
 
 						if (I <= J)
 						{
-							object T = fList[I];
+							T tmp = fList[I];
 							fList[I] = fList[J];
-							fList[J] = T;
+							fList[J] = tmp;
 
 							I++;
 							J--;
@@ -228,23 +228,25 @@ namespace ExtUtils
 						I++;
 					}
 				}
-				if (L < J) IQuickSort(SCompare, L, J);
+                if (L < J) QuickSort(comparer, L, J);
 				L = I;
 			}
 			while (I < R);
 		}
 
-		public void Sort(TListSortCompare SCompare)
+        public void QuickSort(TListSortCompare comparer)
 		{
-			if (this.Count > 0) IQuickSort(SCompare, 0, this.Count - 1);
+            if (this.Count > 0) {
+                QuickSort(comparer, 0, this.Count - 1);
+            }
 		}
 
 		public void MergeSort(TListSortCompare comparer)
 		{
-			MergeSort(new object[fList.Count], 0, fList.Count - 1, comparer);
+			MergeSort(new T[fList.Count], 0, fList.Count - 1, comparer);
 		}
 
-		private void MergeSort(object[] tmp, int left, int right, TListSortCompare comparer)
+		private void MergeSort(T[] tmp, int left, int right, TListSortCompare comparer)
 		{
 			if (left >= right) return;
 

@@ -46,7 +46,7 @@ namespace GKUI.Controls
 		private readonly ToolBar fToolBar;
 		private readonly GKListView fList;
 
-        private EnumSet fButtons;
+        private EnumSet<SheetButton> fButtons;
 		private bool fReadOnly;
 
         private static readonly object EventModify;
@@ -57,7 +57,7 @@ namespace GKUI.Controls
 			remove { base.Events.RemoveHandler(GKSheetList.EventModify, value); }
 		}
 
-		public EnumSet Buttons
+		public EnumSet<SheetButton> Buttons
 		{
 			get { return this.fButtons; }
 			set { this.SetButtons(value); }
@@ -140,15 +140,15 @@ namespace GKUI.Controls
 			this.fList.Focus();
 		}*/
 
-		private void SetButtons(EnumSet value)
+		private void SetButtons(EnumSet<SheetButton> value)
 		{
 			this.fButtons = value;
-			this.fBtnAdd.Visible = this.fButtons.InSet(SheetButton.lbAdd);
-			this.fBtnDelete.Visible = this.fButtons.InSet(SheetButton.lbDelete);
-			this.fBtnEdit.Visible = this.fButtons.InSet(SheetButton.lbEdit);
-			this.fBtnLinkJump.Visible = this.fButtons.InSet(SheetButton.lbJump);
-			this.fBtnMoveUp.Visible = this.fButtons.InSet(SheetButton.lbMoveUp);
-			this.fBtnMoveDown.Visible = this.fButtons.InSet(SheetButton.lbMoveDown);
+			this.fBtnAdd.Visible = this.fButtons.Contains(SheetButton.lbAdd);
+			this.fBtnDelete.Visible = this.fButtons.Contains(SheetButton.lbDelete);
+			this.fBtnEdit.Visible = this.fButtons.Contains(SheetButton.lbEdit);
+			this.fBtnLinkJump.Visible = this.fButtons.Contains(SheetButton.lbJump);
+			this.fBtnMoveUp.Visible = this.fButtons.Contains(SheetButton.lbMoveUp);
+			this.fBtnMoveDown.Visible = this.fButtons.Contains(SheetButton.lbMoveDown);
 			this.fToolBar.Visible = !this.fButtons.IsEmpty();
 		}
 
@@ -227,7 +227,8 @@ namespace GKUI.Controls
 			base.Controls.SetChildIndex(this.fList, 0);
 			base.Controls.SetChildIndex(this.fToolBar, 1);
 			base.ResumeLayout(false);
-			this.SetButtons(EnumSet.Create(new Enum[] { SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete }));
+
+			this.SetButtons(EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete));
 		}
 
 		protected override void Dispose(bool disposing)

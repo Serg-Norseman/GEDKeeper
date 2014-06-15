@@ -41,7 +41,7 @@ namespace GKUI.Controls
 		}
 
 
-		private readonly ExtList fMapPoints;
+		private readonly ExtList<GMapPoint> fMapPoints;
 		private bool fShowPoints;
 		private bool fShowLines;
 		private int fUpdateCount;
@@ -88,7 +88,7 @@ namespace GKUI.Controls
 
 		public GKMapBrowser()
 		{
-			this.fMapPoints = new ExtList(true);
+			this.fMapPoints = new ExtList<GMapPoint>(true);
 			this.fUpdateCount = 0;
 			this.fShowPoints = true;
 			this.fShowLines = true;
@@ -332,7 +332,7 @@ namespace GKUI.Controls
 			return result;
 		}
 
-		public static void RequestGeoCoords(string searchValue, ExtList aPoints)
+		public static void RequestGeoCoords(string searchValue, ExtList<GKMapBrowser.GMapPoint> aPoints)
 		{
 			if (aPoints != null)
 			{

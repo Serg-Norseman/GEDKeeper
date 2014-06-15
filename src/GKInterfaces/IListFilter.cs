@@ -31,4 +31,9 @@ namespace GKCore.Interfaces
 		List<TFilterCondition> ColumnsFilter { get; }
 		void Clear();
 	}
+	
+	public interface IIndividualListFilter : IListFilter
+	{
+		TLifeMode LifeMode { get; set; }
+	}
 }

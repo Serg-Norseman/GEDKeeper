@@ -15,7 +15,6 @@ using GKCore.Options;
 using GKUI.Charts;
 using GKUI.Controls;
 using GKUI.Dialogs;
-using GKUI.Widgets;
 
 /// <summary>
 /// Localization: clean
@@ -31,11 +30,6 @@ namespace GKUI
 
         private readonly List<IWidget> fActiveWidgets;
         private readonly string[] fCommandArgs;
-
-		public TfmTimeLine fmTimeLine;
-		public TfmCalendar fmCalendar;
-		public TfmNamesBook fmNamesBook;
-		public TfmCalcWidget fmCalcWidget;
 
 		private static TfmGEDKeeper fInstance = null;
 
@@ -215,9 +209,9 @@ namespace GKUI
 
 			if (m.Msg == Win32Native.WM_KEEPMODELESS)
 			{
-				if (this.fmCalcWidget != null && this.fmCalcWidget.Visible)
+				foreach (IWidget widget in this.fActiveWidgets)
 				{
-                    Win32Native.EnableWindow(this.fmCalcWidget.Handle, true);
+					widget.WidgetEnable();
 				}
 			}
 		}
@@ -461,7 +455,6 @@ namespace GKUI
 				this.miExportToExcelFile.Enabled = base_en;
 				this.miFileClose.Enabled = base_en;
 				this.miFileProperties.Enabled = base_en;
-				this.miTimeLine.Enabled = base_en;
 				this.miOrganizer.Enabled = base_en;
 				this.miScripts.Enabled = base_en;
 				
@@ -918,10 +911,6 @@ namespace GKUI
 			this.miMap.Text = LangMan.LS(LSID.LSID_MIMap) + "...";
 			this.miStats.Text = LangMan.LS(LSID.LSID_MIStats) + "...";
 
-			this.miCalc.Text = LangMan.LS(LSID.LSID_MICalc) + "...";
-			this.miNamesBook.Text = LangMan.LS(LSID.LSID_MINamesBook) + "...";
-			this.miCalendar.Text = LangMan.LS(LSID.LSID_MICalendar) + "...";
-			this.miTimeLine.Text = LangMan.LS(LSID.LSID_MITimeLine) + "...";
 			this.miOrganizer.Text = LangMan.LS(LSID.LSID_MIOrganizer) + "...";
 			this.miScripts.Text = LangMan.LS(LSID.LSID_MIScripts);
 			this.miTreeTools.Text = LangMan.LS(LSID.LSID_MITreeTools);
@@ -942,54 +931,6 @@ namespace GKUI
 
 			this.miLogSend.Text = LangMan.LS(LSID.LSID_LogSend);
 			this.miPlugins.Text = LangMan.LS(LSID.LSID_Plugins);
-		}
-
-		#endregion
-
-		#region Widgets
-
-		private void miTimeLineClick(object sender, EventArgs e)
-		{
-			if (!this.miTimeLine.Checked) {
-				this.fmTimeLine = new TfmTimeLine();
-				((IWidget)this.fmTimeLine).WidgetInit(this, this.miTimeLine);
-				this.fmTimeLine.Show();
-			} else {
-				this.fmTimeLine.Close();
-			}
-		}
-
-		private void miCalendarClick(object sender, EventArgs e)
-		{
-			if (!this.miCalendar.Checked) {
-				this.fmCalendar = new TfmCalendar();
-				((IWidget)this.fmCalendar).WidgetInit(this, this.miCalendar);
-				this.fmCalendar.Show();
-			} else {
-				this.fmCalendar.Close();
-			}
-		}
-
-		private void miNamesBookClick(object sender, EventArgs e)
-		{
-			if (!this.miNamesBook.Checked) {
-				this.fmNamesBook = new TfmNamesBook();
-				((IWidget)this.fmNamesBook).WidgetInit(this, this.miNamesBook);
-				this.fmNamesBook.Show();
-			} else {
-				this.fmNamesBook.Close();
-			}
-		}
-
-		private void miCalcClick(object sender, EventArgs e)
-		{
-			if (!this.miCalc.Checked) {
-				this.fmCalcWidget = new TfmCalcWidget();
-				((IWidget)this.fmCalcWidget).WidgetInit(this, this.miCalc);
-				this.fmCalcWidget.Show();
-			} else {
-				this.fmCalcWidget.Close();
-			}
 		}
 
 		#endregion
@@ -1062,6 +1003,10 @@ namespace GKUI
 				mi.Click += this.Plugin_Click;
 				mi.Tag = this.fPlugins[i];
 				this.miPlugins.MenuItems.Add(mi);
+				
+				if (this.fPlugins[i] is IWidget) {
+					(this.fPlugins[i] as IWidget).WidgetInit(this, mi);
+				}
 			}
         }
 

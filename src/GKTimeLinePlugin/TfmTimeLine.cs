@@ -2,76 +2,55 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-using ExtUtils;
 using GedCom551;
 using GKCore;
 using GKCore.Interfaces;
-using GKUI.Lists;
 
 /// <summary>
 /// Localization: clean
 /// </summary>
 
-namespace GKUI.Widgets
+namespace GKTimeLinePlugin
 {
-    public partial class TfmTimeLine : Form, IWidget
+    public partial class TfmTimeLine : Form
 	{
-    	#region IWidget common
-
-    	private IHost fHost;
-    	private MenuItem fMenuItem;
-
-    	IHost IWidget.Host
-    	{
-    		get { return this.fHost; }
-    	}
-
-    	MenuItem IWidget.MenuItem
-    	{
-    		get { return this.fMenuItem; }
-    	}
-
-    	void IWidget.WidgetInit(IHost host, MenuItem menuItem)
-    	{
-    		this.fHost = host;
-    		this.fMenuItem = menuItem;
-    	}
-
-    	#endregion
-
+    	private Plugin fPlugin;
 		private IBase fBase;
         private int fYearMin;
         private int fYearMax;
         private int fYearCurrent;
 
-        public TfmTimeLine() : base()
+        public TfmTimeLine(Plugin plugin) : base()
 		{
 			this.InitializeComponent();
-			this.Text = LangMan.LS(LSID.LSID_MITimeLine);
+			
+			this.fPlugin = plugin;
+			
+			this.Text = this.fPlugin.LangMan.LS(PLS.LSID_MITimeLine);
 			
             this.Location = new Point(10, Screen.PrimaryScreen.WorkingArea.Height - this.Height - 10);
 		}
 
         private void TfmTimeLine_Load(object sender, EventArgs e)
         {
-        	this.fHost.WidgetShow(this);
-        	((IWidget)this).BaseChanged(fHost.GetCurrentFile());
+        	this.fPlugin.Host.WidgetShow(this.fPlugin);
+        	this.BaseChanged(this.fPlugin.Host.GetCurrentFile());
         }
 
         private void TfmTimeLine_Closed(object sender, EventArgs e)
         {
-            ((IWidget)this).BaseChanged(null);
-            this.fHost.WidgetClose(this);
+            this.BaseChanged(null);
+            this.fPlugin.Host.WidgetClose(this.fPlugin);
         }
 
-        void IWidget.BaseChanged(IBase aBase)
+        public void BaseChanged(IBase aBase)
         {
             if (this.fBase != aBase && this.fBase != null)
             {
             	IListManager listMan = this.fBase.GetRecordsListManByType(TGEDCOMRecordType.rtIndividual);
             	
                 listMan.ExternalFilter = null;
-                (listMan.Filter as TIndividualListFilter).LifeMode = TLifeMode.lmAll;
+                (listMan.Filter as IIndividualListFilter).LifeMode = TLifeMode.lmAll;
                 
                 this.fBase.ApplyFilter();
             }
@@ -86,7 +65,7 @@ namespace GKUI.Widgets
             {
             	IListManager listMan = this.fBase.GetRecordsListManByType(TGEDCOMRecordType.rtIndividual);
 
-                (listMan.Filter as TIndividualListFilter).LifeMode = TLifeMode.lmTimeLocked;
+                (listMan.Filter as IIndividualListFilter).LifeMode = TLifeMode.lmTimeLocked;
                 listMan.ExternalFilter = this.FilterHandler;
 
                 this.CollectData();
@@ -143,8 +122,8 @@ namespace GKUI.Widgets
 		private void StatusUpdate()
 		{
 			if (this.fBase != null) {
-				this.StatusBarPanel1.Text = LangMan.LS(LSID.LSID_TimeScale) + ": " + this.fYearMin.ToString() + " - " + this.fYearMax.ToString();
-				this.StatusBarPanel2.Text = LangMan.LS(LSID.LSID_CurrentYear) + ": " + this.fYearCurrent.ToString();
+				this.StatusBarPanel1.Text = this.fPlugin.LangMan.LS(PLS.LSID_TimeScale) + ": " + this.fYearMin.ToString() + " - " + this.fYearMax.ToString();
+				this.StatusBarPanel2.Text = this.fPlugin.LangMan.LS(PLS.LSID_CurrentYear) + ": " + this.fYearCurrent.ToString();
 			} else {
 				this.StatusBarPanel1.Text = "";
 				this.StatusBarPanel2.Text = "";
@@ -179,12 +158,10 @@ namespace GKUI.Widgets
             bool result = true;
 
             try
-            {
-                TIndividualListMan iListMan = this.fBase.GetRecordsListManByType(TGEDCOMRecordType.rtIndividual) as TIndividualListMan;
-                //TGEDCOMIndividualRecord iRec = record as TGEDCOMIndividualRecord;
-
-                TGEDCOMCustomEvent buf_bd = iListMan.buf_bd;
-                TGEDCOMCustomEvent buf_dd = iListMan.buf_dd;
+            {               
+            	TGEDCOMIndividualRecord iRec = record as TGEDCOMIndividualRecord;
+            	TGEDCOMCustomEvent buf_bd = iRec.GetIndividualEvent("BIRT");
+                TGEDCOMCustomEvent buf_dd = iRec.GetIndividualEvent("DEAT");
 
                 ushort j, d;
 
@@ -195,11 +172,11 @@ namespace GKUI.Widgets
                 if (buf_dd != null) buf_dd.Detail.Date.aux_GetIndependentDate(out ddy, out j, out d);
 
                 if (bdy > 0 && ddy <= 0) {
-                    ddy = bdy + GKUtils.ProvedLifeLength;
+                    ddy = bdy + GKConsts.ProvedLifeLength;
                 }
 
                 if (bdy <= 0 && ddy > 0) {
-                    bdy = ddy - GKUtils.ProvedLifeLength;
+                    bdy = ddy - GKConsts.ProvedLifeLength;
                 }
 
                 if (this.fYearCurrent > 0) {
@@ -210,7 +187,7 @@ namespace GKUI.Widgets
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("TfmTimeLine.FilterHandler(): " + ex.Message);
+                this.fPlugin.Host.LogWrite("TfmTimeLine.FilterHandler(): " + ex.Message);
             }
 
             return result;

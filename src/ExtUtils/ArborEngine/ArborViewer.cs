@@ -62,6 +62,8 @@ namespace ExtUtils.ArborEngine
 			strFormat.Alignment = StringAlignment.Center;
 			strFormat.LineAlignment = StringAlignment.Center;
 
+		    SolidBrush whiteBrush = new SolidBrush(Color.White);
+
 			try
 			{
 				gfx.SmoothingMode = SmoothingMode.AntiAlias;
@@ -73,31 +75,32 @@ namespace ExtUtils.ArborEngine
 
 					node.Box = this.getNodeRect(gfx, node);
 					gfx.FillRectangle(new SolidBrush(node.Color), node.Box);
-					gfx.DrawString(node.Sign, fDrawFont, new SolidBrush(Color.White), node.Box, strFormat);
+                    gfx.DrawString(node.Sign, fDrawFont, whiteBrush, node.Box, strFormat);
 				}
 
-				for (int i = 0; i <= fSys.Edges.Count - 1; i++)
-				{
-					ArborEdge edge = fSys.Edges[i];
+                using (Pen grayPen = new Pen(Color.Gray, 1))
+                {
+                    grayPen.StartCap = LineCap.NoAnchor;
+                    grayPen.EndCap = LineCap.ArrowAnchor;
 
-					ArborNode srcNode = edge.Source;
-					ArborNode tgtNode = edge.Target;
+                    for (int i = 0; i <= fSys.Edges.Count - 1; i++)
+                    {
+                        ArborEdge edge = fSys.Edges[i];
 
-					ArborPoint pt1 = fSys.toScreen(srcNode.Pt);
-					ArborPoint pt2 = fSys.toScreen(tgtNode.Pt);
+                        ArborNode srcNode = edge.Source;
+                        ArborNode tgtNode = edge.Target;
 
-					ArborPoint tail = intersect_line_box(pt1, pt2, srcNode.Box);
-					ArborPoint head = (tail == null) ? null : intersect_line_box(tail, pt2, tgtNode.Box);
+                        ArborPoint pt1 = fSys.toScreen(srcNode.Pt);
+                        ArborPoint pt2 = fSys.toScreen(tgtNode.Pt);
 
-					if (head != null && tail != null) {
-						using (Pen p = new Pen(Color.Gray, 1))
-						{
-							p.StartCap = LineCap.NoAnchor;
-							p.EndCap = LineCap.ArrowAnchor;
-							gfx.DrawLine(p, (int)tail.x, (int)tail.y, (int)head.x, (int)head.y);
-						}
-					}
-				}
+                        ArborPoint tail = intersect_line_box(pt1, pt2, srcNode.Box);
+                        ArborPoint head = (tail == null) ? null : intersect_line_box(tail, pt2, tgtNode.Box);
+
+                        if (head != null && tail != null) {
+                            gfx.DrawLine(grayPen, (int)tail.x, (int)tail.y, (int)head.x, (int)head.y);
+                        }
+                    }
+                }
 
 				// this is debug, don't delete
 				//string energy = "max=" + FSys.energy_max + ", mean=" + FSys.energy_mean + ", thres=" + FSys.energy_threshold;

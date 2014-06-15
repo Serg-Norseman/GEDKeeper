@@ -30,7 +30,7 @@ namespace GKCore.Interfaces
 		void FileSave(string fileName);
 
 		TGEDCOMFamilyRecord GetChildFamily(TGEDCOMIndividualRecord iChild, bool aCanCreate, TGEDCOMIndividualRecord aNewParent); // bad
-		ExtList GetContentList(TGEDCOMRecordType recType); // bad
+		ExtList<TGEDCOMRecord> GetContentList(TGEDCOMRecordType recType); // bad
 		StringList GetRecordContent(TGEDCOMRecord record);
 		IListManager GetRecordsListManByType(TGEDCOMRecordType recType); // bad
 		TGEDCOMIndividualRecord GetSelectedPerson();

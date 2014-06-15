@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 
+using ExtUtils;
+
 /// <summary>
 /// Localization: clean
 /// </summary>
 
-namespace ExtUtils
+namespace GKCalculatorPlugin
 {
 	[Serializable]
 	public class CalculateException : Exception

@@ -9,41 +9,32 @@ using ExtUtils;
 using GedCom551;
 using GKCore;
 using GKCore.Interfaces;
-using GKUI.Controls;
 
 /// <summary>
 /// Localization: clean
 /// </summary>
 
-namespace GKUI.Widgets
+namespace GKNamesBookPlugin
 {
-	public partial class TfmNamesBook : Form, IWidget
+	public class GKComboItem
 	{
-    	#region IWidget common
+		public readonly string Caption;
+		public readonly object Data;
 
-    	private IHost fHost;
-    	private MenuItem fMenuItem;
+		public GKComboItem(string caption, object data)
+		{
+			this.Caption = caption;
+			this.Data = data;
+		}
 
-    	IHost IWidget.Host
-    	{
-    		get { return this.fHost; }
-    	}
+		public override string ToString()
+		{
+			return this.Caption;
+		}
+	}
 
-    	MenuItem IWidget.MenuItem
-    	{
-    		get { return this.fMenuItem; }
-    	}
-
-    	void IWidget.WidgetInit(IHost host, MenuItem menuItem)
-    	{
-    		this.fHost = host;
-    		this.fMenuItem = menuItem;
-    	}
-
-        void IWidget.BaseChanged(IBase aBase) {}
-
-        #endregion
-
+	public partial class TfmNamesBook : Form
+	{
 		private class TNameRecord
 		{
 			public string Name;
@@ -52,14 +43,17 @@ namespace GKUI.Widgets
 			public int ChIndex;
 		}
 
+		private readonly Plugin fPlugin;
 		private readonly List<TNameRecord> fNames;
 		private readonly StringList fChurchFNames;
 		private readonly StringList fChurchMNames;
 
-        public TfmNamesBook() : base()
+        public TfmNamesBook(Plugin plugin) : base()
         {
             this.InitializeComponent();
 
+            this.fPlugin = plugin;
+            
             Screen scr = Screen.PrimaryScreen;
             this.Location = new Point(scr.WorkingArea.Width - this.Width - 10, (scr.WorkingArea.Height - this.Height) / 2);
 
@@ -70,7 +64,7 @@ namespace GKUI.Widgets
             this.PrepareList();
             this.UpdateList();
 
-            this.Text = LangMan.LS(LSID.LSID_MINamesBook);
+            this.Text = this.fPlugin.LangMan.LS(NLS.LSID_MINamesBook);
         }
 
         protected override void Dispose(bool disposing)
@@ -86,12 +80,12 @@ namespace GKUI.Widgets
 
         private void TfmNamesBook_Load(object sender, EventArgs e)
         {
-        	this.fHost.WidgetShow(this);
+        	this.fPlugin.Host.WidgetShow(this.fPlugin);
         }
 
 		private void TfmNamesBook_Closed(object sender, EventArgs e)
 		{
-			this.fHost.WidgetClose(this);
+			this.fPlugin.Host.WidgetClose(this.fPlugin);
 		}
 
 		private void cbNames_SelectedIndexChanged(object sender, EventArgs e)
@@ -151,9 +145,42 @@ namespace GKUI.Widgets
 			return res;
 		}
 
+		/*private static System.Resources.ResourceManager resourceMan;
+		
+		internal static System.Resources.ResourceManager ResourceManager {
+			get {
+				if (object.ReferenceEquals(resourceMan, null)) {
+					System.Resources.ResourceManager temp = new System.Resources.ResourceManager("GKResources", typeof(GKResources).Assembly);
+					resourceMan = temp;
+				}
+				return resourceMan;
+			}
+		}
+		
+		internal static byte[] book_names {
+			get {
+				object obj = ResourceManager.GetObject("book_names", resourceCulture);
+				return ((byte[])(obj));
+			}
+		}
+		
+		internal static byte[] book_names_cf {
+			get {
+				object obj = ResourceManager.GetObject("book_names_cf", resourceCulture);
+				return ((byte[])(obj));
+			}
+		}
+		
+		internal static byte[] book_names_cm {
+			get {
+				object obj = ResourceManager.GetObject("book_names_cm", resourceCulture);
+				return ((byte[])(obj));
+			}
+		}*/
+
 		private void PrepareList()
 		{
-		    using (MemoryStream memStream = new MemoryStream(GKResources.book_names))
+		    using (MemoryStream memStream = new MemoryStream(NBResources.book_names))
 		    {
                 using (StreamReader strd = new StreamReader(memStream, Encoding.GetEncoding(1251)))
                 {
@@ -192,7 +219,7 @@ namespace GKUI.Widgets
                 }
             }
 
-            using (MemoryStream memStream = new MemoryStream(GKResources.book_names_cf))
+            using (MemoryStream memStream = new MemoryStream(NBResources.book_names_cf))
             {
                 using (StreamReader strd = new StreamReader(memStream, Encoding.GetEncoding(1251)))
 			    {
@@ -203,7 +230,7 @@ namespace GKUI.Widgets
 			    }
             }
 
-            using (MemoryStream memStream = new MemoryStream(GKResources.book_names_cm))
+            using (MemoryStream memStream = new MemoryStream(NBResources.book_names_cm))
 		    {
                 using (StreamReader strd = new StreamReader(memStream, Encoding.GetEncoding(1251)))
                 {

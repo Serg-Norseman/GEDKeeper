@@ -153,7 +153,7 @@ namespace ExtUtils
 			return (1721424.5 + (double)(365 * (year - 1)) + Math.Floor(((double)(year - 1) / 4.0)) + -Math.Floor(((double)(year - 1) / 100.0)) + Math.Floor(((double)(year - 1) / 400.0)) + Math.Floor(((double)(367 * month - 362) / 12.0 + (double)_if(month <= 2, 0, _if(leap_gregorian(year), -1, -2)) + (double)day)));
 		}
 
-		public static void jd_to_gregorian(double jd, ref int year, ref int month, ref int day)
+        public static void jd_to_gregorian(double jd, out int year, out int month, out int day)
 		{
 			double wjd = (Math.Floor((jd - 0.5)) + 0.5);
 			double depoch = (wjd - 1721425.5);
@@ -359,7 +359,7 @@ namespace ExtUtils
 			int greg_y = 0;
 			int greg_m = 0;
 			int greg_d = 0;
-			jd_to_gregorian(jd, ref greg_y, ref greg_m, ref greg_d);
+            jd_to_gregorian(jd, out greg_y, out greg_m, out greg_d);
 			bool leap = leap_gregorian(greg_y);
 			year = greg_y - Saka;
 			double greg = gregorian_to_jd(greg_y, 1, 1);
@@ -397,7 +397,7 @@ namespace ExtUtils
 		{
 			int by = 0;
 			int dummy = 0;
-			jd_to_gregorian(2394646.5, ref by, ref dummy, ref dummy);
+            jd_to_gregorian(2394646.5, out by, out dummy, out dummy);
 			int gy = 361 * (major - 1) + 19 * (cycle - 1) + (year - 1) + by;
 			return (gregorian_to_jd(gy, 3, 20) + (double)(19 * (month - 1)) + (double)_if(month != 20, 0, _if(leap_gregorian(gy + 1), -14, -15)) + (double)day);
 		}
@@ -407,9 +407,9 @@ namespace ExtUtils
 			jd = (Math.Floor(jd) + 0.5);
 			int gy = 0;
 			int dummy = 0;
-			jd_to_gregorian(jd, ref gy, ref dummy, ref dummy);
+            jd_to_gregorian(jd, out gy, out dummy, out dummy);
 			int bstarty = 0;
-			jd_to_gregorian(2394646.5, ref bstarty, ref dummy, ref dummy);
+            jd_to_gregorian(2394646.5, out bstarty, out dummy, out dummy);
 			int bys = gy - (bstarty + _if(gregorian_to_jd(gy, 1, 1) <= jd && jd <= gregorian_to_jd(gy, 3, 20), 1, 0));
 			major = iFloor(((double)bys / 361.0)) + 1;
 			cycle = iFloor((_modf((double)bys, 361.0) / 19.0)) + 1;

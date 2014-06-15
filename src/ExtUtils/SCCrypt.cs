@@ -106,18 +106,18 @@ namespace ExtUtils
 			}
 		}
 
-		private static void MoveS2L([In] byte[] Source, ref int Dest, int count)
+		private static void MoveS2L([In] byte[] source, out int dest, int count)
 		{
 			byte[] bytes = new byte[4];
 			for (int I = 1; I <= 4; I++) {
 				if (I <= count) {
-					bytes[I - 1] = Source[I - 1];
+					bytes[I - 1] = source[I - 1];
 				} else {
 					bytes[I - 1] = 0;
 				}
 			}
 
-			Dest = (int)((bytes[0] | bytes[1] << 8) | (bytes[2] | bytes[3] << 8) << 16);
+			dest = (int)((bytes[0] | bytes[1] << 8) | (bytes[2] | bytes[3] << 8) << 16);
 		}
 
 		private static byte[] Decode([In] byte[] data)
@@ -151,7 +151,7 @@ namespace ExtUtils
 		{
 			int I = 0;
 			int num = (data != null) ? data.Length : 0;
-			MoveS2L(data, ref I, num);
+            MoveS2L(data, out I, num);
 
 			byte[] res = new byte[num + 1];
 

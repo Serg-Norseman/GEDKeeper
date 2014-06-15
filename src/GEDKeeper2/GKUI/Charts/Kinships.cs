@@ -1,6 +1,7 @@
 ﻿using System;
 
 using ExtUtils;
+using GKCore;
 
 /// <summary>
 /// Localization: clean
@@ -8,46 +9,14 @@ using ExtUtils;
 
 namespace GKUI.Charts
 {
-	public enum TRelationKind : byte
-	{
-		rkNone,		/* 0 */
-		rkParent,	/* 1 */
-		rkSpouse,	/* 2 */
-		rkChild,	/* 3 */
-		rkFather,	/* 4 */
-		rkMother,	/* 5 */
-		rkHusband,	/* 6 */
-		rkWife,		/* 7 */
-		rkSon,		/* 8 */
-		rkDaughter,	/* 9 */
-		rkGrandfather,
-		rkGrandmother,
-		rkGrandson,
-		rkGranddaughter,
-		rkBrother,
-		rkSister,
-		rkSonInLaw,
-		rkDaughterInLaw,
-		rkHusbandFather,
-		rkHusbandMother,
-		rkWifeFather,
-		rkWifeMother,
-		rkUncle,
-		rkAunt,
-		rkNephew,
-		rkNiece,
-		rkCousinM,
-		rkCousinF,
-		rkSame,
-		rkUndefined
-	}
+	using TRelationSet = EnumSet<TRelationKind>;
 
 	public static class KinshipsMan
 	{
 		public struct TKinshipRec
 		{
-			public EnumSet PrevRels;
-			public EnumSet CurrRels;
+			public TRelationSet PrevRels;
+			public TRelationSet CurrRels;
 			public TRelationKind FinRel;
 			public sbyte Great;
 			public sbyte Level;
@@ -60,7 +29,7 @@ namespace GKUI.Charts
 			InitKinships();
 		}
 
-		private static void RegisterKinship(EnumSet prevRels, EnumSet currRels, TRelationKind finRel, sbyte great, sbyte level)
+		private static void RegisterKinship(TRelationSet prevRels, TRelationSet currRels, TRelationKind finRel, sbyte great, sbyte level)
 		{
 			int len = (Kinships == null) ? 0 : Kinships.Length;
 			int num = len + 1;
@@ -85,10 +54,10 @@ namespace GKUI.Charts
 		{
 			Kinships = new TKinshipRec[0];
 
-			RegisterKinship(EnumSet.Create(new Enum[]
+			RegisterKinship(TRelationSet.Create(new TRelationKind[]
 			{
 				TRelationKind.rkNone
-			}), EnumSet.Create(new Enum[]
+			}), TRelationSet.Create(new TRelationKind[]
 			{
 				TRelationKind.rkFather, 
 				TRelationKind.rkMother, 
@@ -98,163 +67,163 @@ namespace GKUI.Charts
 				TRelationKind.rkDaughter
 			}), TRelationKind.rkSame, 0, 0);
 
-			RegisterKinship(EnumSet.Create(new Enum[]
+			RegisterKinship(TRelationSet.Create(new TRelationKind[]
 			{
 				TRelationKind.rkHusband, 
 				TRelationKind.rkWife
-			}), EnumSet.Create(new Enum[]
+			}), TRelationSet.Create(new TRelationKind[]
 			{
 				TRelationKind.rkSon, 
 				TRelationKind.rkDaughter
 			}), TRelationKind.rkSame, 0, 1);
 
-			RegisterKinship(EnumSet.Create(new Enum[]
+			RegisterKinship(TRelationSet.Create(new TRelationKind[]
 			{
 				TRelationKind.rkMother
-			}), EnumSet.Create(new Enum[]
+			}), TRelationSet.Create(new TRelationKind[]
 			{
 				TRelationKind.rkHusband
 			}), TRelationKind.rkFather, 0, 0);
 
-			RegisterKinship(EnumSet.Create(new Enum[]
+			RegisterKinship(TRelationSet.Create(new TRelationKind[]
 			{
 				TRelationKind.rkFather
-			}), EnumSet.Create(new Enum[]
+			}), TRelationSet.Create(new TRelationKind[]
 			{
 				TRelationKind.rkWife
 			}), TRelationKind.rkMother, 0, 0);
 
-			RegisterKinship(EnumSet.Create(new Enum[]
+			RegisterKinship(TRelationSet.Create(new TRelationKind[]
 			{
 				TRelationKind.rkGrandfather, 
 				TRelationKind.rkGrandmother
-			}), EnumSet.Create(new Enum[]
+			}), TRelationSet.Create(new TRelationKind[]
 			{
 				TRelationKind.rkSon
 			}), TRelationKind.rkUncle, 0, 1);
 
-			RegisterKinship(EnumSet.Create(new Enum[]
+			RegisterKinship(TRelationSet.Create(new TRelationKind[]
 			{
 				TRelationKind.rkGrandfather, 
 				TRelationKind.rkGrandmother
-			}), EnumSet.Create(new Enum[]
+			}), TRelationSet.Create(new TRelationKind[]
 			{
 				TRelationKind.rkDaughter
 			}), TRelationKind.rkAunt, 0, 1);
 
-			RegisterKinship(EnumSet.Create(new Enum[]
+			RegisterKinship(TRelationSet.Create(new TRelationKind[]
 			{
 				TRelationKind.rkBrother, 
 				TRelationKind.rkSister
-			}), EnumSet.Create(new Enum[]
+			}), TRelationSet.Create(new TRelationKind[]
 			{
 				TRelationKind.rkSon
 			}), TRelationKind.rkNephew, 0, 1);
 
-			RegisterKinship(EnumSet.Create(new Enum[]
+			RegisterKinship(TRelationSet.Create(new TRelationKind[]
 			{
 				TRelationKind.rkBrother, 
 				TRelationKind.rkSister
-			}), EnumSet.Create(new Enum[]
+			}), TRelationSet.Create(new TRelationKind[]
 			{
 				TRelationKind.rkDaughter
 			}), TRelationKind.rkNiece, 0, 1);
 
-			RegisterKinship(EnumSet.Create(new Enum[]
+			RegisterKinship(TRelationSet.Create(new TRelationKind[]
 			{
 				TRelationKind.rkSon
-			}), EnumSet.Create(new Enum[]
+			}), TRelationSet.Create(new TRelationKind[]
 			{
 				TRelationKind.rkWife
 			}), TRelationKind.rkDaughterInLaw, 0, 0);
 
-			RegisterKinship(EnumSet.Create(new Enum[]
+			RegisterKinship(TRelationSet.Create(new TRelationKind[]
 			{
 				TRelationKind.rkDaughter
-			}), EnumSet.Create(new Enum[]
+			}), TRelationSet.Create(new TRelationKind[]
 			{
 				TRelationKind.rkHusband
 			}), TRelationKind.rkSonInLaw, 0, 0);
 
-			RegisterKinship(EnumSet.Create(new Enum[]
+			RegisterKinship(TRelationSet.Create(new TRelationKind[]
 			{
 				TRelationKind.rkWife
-			}), EnumSet.Create(new Enum[]
+			}), TRelationSet.Create(new TRelationKind[]
 			{
 				TRelationKind.rkFather
 			}), TRelationKind.rkWifeFather, 0, -1);
 
-			RegisterKinship(EnumSet.Create(new Enum[]
+			RegisterKinship(TRelationSet.Create(new TRelationKind[]
 			{
 				TRelationKind.rkWife
-			}), EnumSet.Create(new Enum[]
+			}), TRelationSet.Create(new TRelationKind[]
 			{
 				TRelationKind.rkMother
 			}), TRelationKind.rkWifeMother, 0, -1);
 
-			RegisterKinship(EnumSet.Create(new Enum[]
+			RegisterKinship(TRelationSet.Create(new TRelationKind[]
 			{
 				TRelationKind.rkHusband
-			}), EnumSet.Create(new Enum[]
+			}), TRelationSet.Create(new TRelationKind[]
 			{
 				TRelationKind.rkFather
 			}), TRelationKind.rkHusbandFather, 0, -1);
 
-			RegisterKinship(EnumSet.Create(new Enum[]
+			RegisterKinship(TRelationSet.Create(new TRelationKind[]
 			{
 				TRelationKind.rkHusband
-			}), EnumSet.Create(new Enum[]
+			}), TRelationSet.Create(new TRelationKind[]
 			{
 				TRelationKind.rkMother
 			}), TRelationKind.rkHusbandMother, 0, -1);
 
 			RegisterKinship(
-				EnumSet.Create(new Enum[] { TRelationKind.rkFather, TRelationKind.rkMother }), 
-				EnumSet.Create(new Enum[] { TRelationKind.rkFather }), 
+				TRelationSet.Create(new TRelationKind[] { TRelationKind.rkFather, TRelationKind.rkMother }), 
+				TRelationSet.Create(new TRelationKind[] { TRelationKind.rkFather }), 
 				TRelationKind.rkGrandfather, 0, -1);
 
 			RegisterKinship(
-				EnumSet.Create(new Enum[] { TRelationKind.rkFather, TRelationKind.rkMother }), 
-				EnumSet.Create(new Enum[] { TRelationKind.rkMother }), 
+				TRelationSet.Create(new TRelationKind[] { TRelationKind.rkFather, TRelationKind.rkMother }), 
+				TRelationSet.Create(new TRelationKind[] { TRelationKind.rkMother }), 
 				TRelationKind.rkGrandmother, 0, -1);
 
 			RegisterKinship(
-				EnumSet.Create(new Enum[] { TRelationKind.rkFather, TRelationKind.rkMother }), 
-				EnumSet.Create(new Enum[] { TRelationKind.rkSon }), 
+				TRelationSet.Create(new TRelationKind[] { TRelationKind.rkFather, TRelationKind.rkMother }), 
+				TRelationSet.Create(new TRelationKind[] { TRelationKind.rkSon }), 
 				TRelationKind.rkBrother, 0, 1);
 
 			RegisterKinship(
-				EnumSet.Create(new Enum[] { TRelationKind.rkFather, TRelationKind.rkMother }), 
-				EnumSet.Create(new Enum[] { TRelationKind.rkDaughter }), 
+				TRelationSet.Create(new TRelationKind[] { TRelationKind.rkFather, TRelationKind.rkMother }), 
+				TRelationSet.Create(new TRelationKind[] { TRelationKind.rkDaughter }), 
 				TRelationKind.rkSister, 0, 1);
 
 			RegisterKinship(
-				EnumSet.Create(new Enum[] { TRelationKind.rkGrandfather, TRelationKind.rkGrandmother }), 
-				EnumSet.Create(new Enum[] { TRelationKind.rkFather }), 
+				TRelationSet.Create(new TRelationKind[] { TRelationKind.rkGrandfather, TRelationKind.rkGrandmother }), 
+				TRelationSet.Create(new TRelationKind[] { TRelationKind.rkFather }), 
 				TRelationKind.rkGrandfather, 1, -1);
 
 			RegisterKinship(
-				EnumSet.Create(new Enum[] { TRelationKind.rkGrandfather, TRelationKind.rkGrandmother }), 
-				EnumSet.Create(new Enum[] { TRelationKind.rkMother }), 
+				TRelationSet.Create(new TRelationKind[] { TRelationKind.rkGrandfather, TRelationKind.rkGrandmother }), 
+				TRelationSet.Create(new TRelationKind[] { TRelationKind.rkMother }), 
 				TRelationKind.rkGrandmother, 1, -1);
 
 			RegisterKinship(
-				EnumSet.Create(new Enum[] { TRelationKind.rkSon, TRelationKind.rkDaughter, TRelationKind.rkSonInLaw, TRelationKind.rkDaughterInLaw }), 
-				EnumSet.Create(new Enum[] { TRelationKind.rkSon }), TRelationKind.rkGrandson, 0, 1);
+				TRelationSet.Create(new TRelationKind[] { TRelationKind.rkSon, TRelationKind.rkDaughter, TRelationKind.rkSonInLaw, TRelationKind.rkDaughterInLaw }), 
+				TRelationSet.Create(new TRelationKind[] { TRelationKind.rkSon }), TRelationKind.rkGrandson, 0, 1);
 
 			RegisterKinship(
-				EnumSet.Create(new Enum[] { TRelationKind.rkSon, TRelationKind.rkDaughter, TRelationKind.rkSonInLaw, TRelationKind.rkDaughterInLaw }), 
-				EnumSet.Create(new Enum[] { TRelationKind.rkDaughter }), 
+				TRelationSet.Create(new TRelationKind[] { TRelationKind.rkSon, TRelationKind.rkDaughter, TRelationKind.rkSonInLaw, TRelationKind.rkDaughterInLaw }), 
+				TRelationSet.Create(new TRelationKind[] { TRelationKind.rkDaughter }), 
 				TRelationKind.rkGranddaughter, 0, 1);
 
 			RegisterKinship(
-				EnumSet.Create(new Enum[] { TRelationKind.rkGrandson, TRelationKind.rkGranddaughter }), 
-				EnumSet.Create(new Enum[] { TRelationKind.rkSon }), 
+				TRelationSet.Create(new TRelationKind[] { TRelationKind.rkGrandson, TRelationKind.rkGranddaughter }), 
+				TRelationSet.Create(new TRelationKind[] { TRelationKind.rkSon }), 
 				TRelationKind.rkGrandson, 1, 1);
 
 			RegisterKinship(
-				EnumSet.Create(new Enum[] { TRelationKind.rkGrandson, TRelationKind.rkGranddaughter }), 
-				EnumSet.Create(new Enum[] { TRelationKind.rkDaughter }), 
+				TRelationSet.Create(new TRelationKind[] { TRelationKind.rkGrandson, TRelationKind.rkGranddaughter }), 
+				TRelationSet.Create(new TRelationKind[] { TRelationKind.rkDaughter }), 
 				TRelationKind.rkGranddaughter, 1, 1);
 		}
 
@@ -269,7 +238,7 @@ namespace GKUI.Charts
 			{
 				TKinshipRec kinship = Kinships[i];
 
-				if (kinship.PrevRels.InSet(prev) && kinship.CurrRels.InSet(cur))
+				if (kinship.PrevRels.Contains(prev) && kinship.CurrRels.Contains(cur))
 				{
 					TRelationKind rel = kinship.FinRel;
 					great = (int)kinship.Great;

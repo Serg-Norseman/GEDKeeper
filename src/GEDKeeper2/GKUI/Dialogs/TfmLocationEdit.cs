@@ -20,7 +20,7 @@ namespace GKUI.Dialogs
 		private readonly GKMapBrowser fMapBrowser;
         private readonly GKMediaSheet fMediaList;
 		private readonly GKNotesSheet fNotesList;
-		private readonly ExtList fSearchPoints;
+		private readonly ExtList<GKMapBrowser.GMapPoint> fSearchPoints;
 
         private TGEDCOMLocationRecord fLocationRecord;
         
@@ -47,7 +47,7 @@ namespace GKUI.Dialogs
 			this.fNotesList = new GKNotesSheet(this, this.SheetNotes);
             this.fMediaList = new GKMediaSheet(this, this.SheetMultimedia);
 
-			this.fSearchPoints = new ExtList(true);
+			this.fSearchPoints = new ExtList<GKMapBrowser.GMapPoint>(true);
 			this.SetLang();
 		}
 

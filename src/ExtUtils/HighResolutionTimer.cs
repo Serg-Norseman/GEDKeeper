@@ -79,7 +79,7 @@ namespace ExtUtils
 
 		static HighResolutionTimer()
 		{
-			bool test = false;
+			bool test;
 			ulong testTime = 0;
 
 			// Try The Windows QueryPerformanceCounter.
@@ -95,7 +95,7 @@ namespace ExtUtils
 				test = false;
 			}
 
-			if(test && fFrequency != 0) {
+			if (test && fFrequency != 0) {
 				fType = TimerType.QueryPerformanceCounter;
 			}
 			else {

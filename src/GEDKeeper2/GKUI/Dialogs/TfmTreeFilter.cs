@@ -215,11 +215,10 @@ namespace GKUI.Dialogs
 
             this.fBase = aBase;
 			this.fPersonsList = new GKSheetList(this.Panel1);
-			this.fPersonsList.Buttons = EnumSet.Create(new Enum[]
-			{
+			this.fPersonsList.Buttons = EnumSet<GKSheetList.SheetButton>.Create(
 				GKSheetList.SheetButton.lbAdd, 
 				GKSheetList.SheetButton.lbDelete
-			});
+			);
 			this.fPersonsList.OnModify += this.ListModify;
 			this.fPersonsList.List.AddListColumn(LangMan.LS(LSID.LSID_RPIndividuals), 350, false);
 

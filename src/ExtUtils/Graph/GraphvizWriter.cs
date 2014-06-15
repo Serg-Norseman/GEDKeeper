@@ -1,7 +1,7 @@
 using System.IO;
 using System.Text;
 
-namespace ExtUtils
+namespace ExtUtils.Graph
 {
 	public sealed class GraphvizWriter
 	{

@@ -7,8 +7,8 @@ namespace ExtUtils.Graph
 		#region Private fields
 
 		//private int fCost;
-		private Vertex fSource;
-		private Vertex fTarget;
+		private readonly Vertex fSource;
+		private readonly Vertex fTarget;
 		//private object fValue;
 
 		#endregion

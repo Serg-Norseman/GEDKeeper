@@ -205,7 +205,7 @@ namespace GKCore
 			return (item1 as TPatriarchObj).IBirthYear - (item2 as TPatriarchObj).IBirthYear;
 		}
 
-		public void GetPatriarchsList(ExtList patList, int gensMin, bool datesCheck)
+		public void GetPatriarchsList(ExtList<TPatriarchObj> patList, int gensMin, bool datesCheck)
 		{
 			TGEDCOMTree tree = this.fTree;
 			IProgressController pctl = this.fViewer as IProgressController;
@@ -251,7 +251,7 @@ namespace GKCore
 					pctl.ProgressStep();
 				}
 
-				patList.Sort(PatriarchsCompare);
+				patList.QuickSort(PatriarchsCompare);
 			}
 			finally
 			{
@@ -259,7 +259,7 @@ namespace GKCore
 			}
 		}
 
-		public void GetPatriarchsLinks(ExtList patList, int gensMin, bool datesCheck, bool loneSuppress)
+		public void GetPatriarchsLinks(ExtList<TPatriarchObj> patList, int gensMin, bool datesCheck, bool loneSuppress)
 		{
 			GetPatriarchsList(patList, gensMin, datesCheck);
 
@@ -343,7 +343,7 @@ namespace GKCore
 		{
 			TGraph graph = new TGraph();
 
-			using (ExtList patList = new ExtList(true))
+			using (ExtList<TPatriarchObj> patList = new ExtList<TPatriarchObj>(true))
 			{
 				TGEDCOMTree tree = this.fTree;
 				IProgressController pctl = this.fViewer as IProgressController;

@@ -55,6 +55,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GKConsts.cs" />
     <Compile Include="GKTypes.cs" />
     <Compile Include="IBase.cs" />
     <Compile Include="IBaseContext.cs" />

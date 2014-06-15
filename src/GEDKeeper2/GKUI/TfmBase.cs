@@ -28,7 +28,7 @@ namespace GKUI
     	
         /*private readonly ExtList[] fChangedRecords;*/
 
-        private readonly ExtList fLockedRecords;
+        private readonly ExtList<TGEDCOMRecord> fLockedRecords;
         private readonly NavigationStack fNavman;
         private readonly ValuesCollection fValuesCollection;
 
@@ -136,7 +136,7 @@ namespace GKUI
             this.fTree = new TGEDCOMTree();
             this.fContext = new BaseContext(this.fTree, this);
 
-            this.fLockedRecords = new ExtList();
+            this.fLockedRecords = new ExtList<TGEDCOMRecord>();
             this.fNavman = new NavigationStack();
             this.fValuesCollection = new ValuesCollection();
 
@@ -200,6 +200,7 @@ namespace GKUI
 
             if (!e.Cancel)
             {
+            	TfmGEDKeeper.Instance.BaseChanged(null);
                 TfmGEDKeeper.Instance.CheckMRUWin(this.fTree.FileName, this);
             }
         }
@@ -313,7 +314,7 @@ namespace GKUI
 		}
 
 		// FIXME
-		public ExtList GetContentList(TGEDCOMRecordType recType)
+		public ExtList<TGEDCOMRecord> GetContentList(TGEDCOMRecordType recType)
 		{
 			GKRecordsView rView = this.GetRecordsViewByType(recType);
 			if (rView == null) return null;

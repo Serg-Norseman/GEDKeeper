@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GKUI.Widgets
+namespace GKCalculatorPlugin
 {
 	partial class TfmCalcWidget
 	{

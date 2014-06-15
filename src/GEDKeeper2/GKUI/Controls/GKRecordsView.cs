@@ -18,7 +18,7 @@ namespace GKUI.Controls
 	{
 		#region Private fields
 
-		private readonly ExtList fContentList;
+		private readonly ExtList<TGEDCOMRecord> fContentList;
 
 		private int FFilteredCount;
 		private bool FIsMainList;
@@ -38,7 +38,7 @@ namespace GKUI.Controls
 
 		#region Public properties
 
-		public ExtList ContentList
+		public ExtList<TGEDCOMRecord> ContentList
 		{
 			get { return this.fContentList; }
 		}
@@ -80,7 +80,7 @@ namespace GKUI.Controls
 
 		public GKRecordsView() : base()
 		{
-			this.fContentList = new ExtList();
+			this.fContentList = new ExtList<TGEDCOMRecord>();
 			this.FListMan = null;
 			this.FRecordType = TGEDCOMRecordType.rtNone;
             this.FXSortColumn = 0;

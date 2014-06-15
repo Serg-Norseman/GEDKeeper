@@ -31,8 +31,8 @@ namespace ExtUtils.ArborEngine
         private const int q_sw = 3;
         private const int q_none = 4;
 
-		private Branch root = null;
-		private double d = 0.5;
+		private readonly Branch root;
+		private readonly double d = 0.5;
 
 		public BarnesHutTree(ArborPoint origin, ArborPoint h, double d)
 		{

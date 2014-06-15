@@ -68,22 +68,22 @@ namespace GKUI.Dialogs
             this.fBase = aBase;
 			
             this.fAdrList = new GKSheetList(this.SheetAddresses);
-			this.fAdrList.Buttons = EnumSet.Create();
+            this.fAdrList.Buttons.Clear();
 			this.fAdrList.List.AddListColumn(LangMan.LS(LSID.LSID_Person), 350, false);
 			this.fAdrList.List.AddListColumn(LangMan.LS(LSID.LSID_Address), 100, false);
 			
             this.fPhonesList = new GKSheetList(this.SheetTelephones);
-			this.fPhonesList.Buttons = EnumSet.Create();
+			this.fPhonesList.Buttons.Clear();
 			this.fPhonesList.List.AddListColumn(LangMan.LS(LSID.LSID_Person), 350, false);
 			this.fPhonesList.List.AddListColumn(LangMan.LS(LSID.LSID_Telephone), 100, false);
 			
             this.fMailsList = new GKSheetList(this.SheetEMails);
-			this.fMailsList.Buttons = EnumSet.Create();
+			this.fMailsList.Buttons.Clear();
 			this.fMailsList.List.AddListColumn(LangMan.LS(LSID.LSID_Person), 350, false);
 			this.fMailsList.List.AddListColumn(LangMan.LS(LSID.LSID_Mail), 100, false);
 			
             this.fWebsList = new GKSheetList(this.SheetWebs);
-			this.fWebsList.Buttons = EnumSet.Create();
+			this.fWebsList.Buttons.Clear();
 			this.fWebsList.List.AddListColumn(LangMan.LS(LSID.LSID_Person), 350, false);
 			this.fWebsList.List.AddListColumn(LangMan.LS(LSID.LSID_WebSite), 100, false);
 			

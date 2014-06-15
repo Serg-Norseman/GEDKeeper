@@ -79,12 +79,11 @@ namespace GKUI.Lists
 		}
 	}
 
-	public class TIndividualListFilter : TListFilter
+	public class TIndividualListFilter : TListFilter, IIndividualListFilter
 	{
 		public string AliveBeforeDate;
 		public TGroupMode GroupMode;
 		public string GroupRef;
-		public TLifeMode LifeMode;
 		public string Name;
 		public bool PatriarchOnly;
 		public string Residence;
@@ -92,6 +91,8 @@ namespace GKUI.Lists
 		public TGroupMode SourceMode;
 		public string SourceRef;
 		public string EventVal;
+
+		public TLifeMode LifeMode { get; set; }
 
 		public TIndividualListFilter()
 		{
@@ -438,8 +439,8 @@ namespace GKUI.Lists
 			}
 		}
 
-		public TGEDCOMCustomEvent buf_bd;
-		public TGEDCOMCustomEvent buf_dd;
+		private TGEDCOMCustomEvent buf_bd;
+		private TGEDCOMCustomEvent buf_dd;
 
 		private string buf_residence;
 		private string buf_religion;

@@ -35,31 +35,55 @@ namespace GKTests
 		}
 
 		[Test]
-		public void EnumSet_Tests()
+		public void TSet_Tests()
 		{
-			//TGEDCOMRestriction
-			EnumSet es = EnumSet.Create();
+			EnumSet<TGEDCOMRestriction> es = EnumSet<TGEDCOMRestriction>.Create();
 			Assert.IsTrue(es.IsEmpty());
 
-			es.Include(new Enum[] {TGEDCOMRestriction.rnPrivacy, TGEDCOMRestriction.rnLocked});
-			Assert.IsTrue(es.InSet(TGEDCOMRestriction.rnPrivacy));
-			Assert.IsFalse(es.InSet(TGEDCOMRestriction.rnNone));
+			es.Include(TGEDCOMRestriction.rnPrivacy, TGEDCOMRestriction.rnLocked);
+			Assert.IsTrue(es.Contains(TGEDCOMRestriction.rnPrivacy));
+			Assert.IsFalse(es.Contains(TGEDCOMRestriction.rnNone));
 			Assert.IsFalse(es.IsEmpty());
 
 			es.Exclude(TGEDCOMRestriction.rnPrivacy);
-			Assert.IsFalse(es.InSet(TGEDCOMRestriction.rnPrivacy));
-			Assert.IsTrue(es.InSet(TGEDCOMRestriction.rnLocked));
+			Assert.IsFalse(es.Contains(TGEDCOMRestriction.rnPrivacy));
+			Assert.IsTrue(es.Contains(TGEDCOMRestriction.rnLocked));
 			
-			es = EnumSet.Create(new Enum[] {TGEDCOMRestriction.rnNone, TGEDCOMRestriction.rnLocked});
-			Assert.IsTrue(es.InSet(TGEDCOMRestriction.rnNone));
-			Assert.IsTrue(es.InSet(TGEDCOMRestriction.rnLocked));
+			es = EnumSet<TGEDCOMRestriction>.Create(TGEDCOMRestriction.rnNone, TGEDCOMRestriction.rnLocked);
+			Assert.IsTrue(es.Contains(TGEDCOMRestriction.rnNone));
+			Assert.IsTrue(es.Contains(TGEDCOMRestriction.rnLocked));
 			
-			string test = es.ToString();
+			string test = es.ByteToStr((int)0);
 			Assert.AreEqual("00000101", test);
 			
-			EnumSet es2 = EnumSet.Create(new Enum[] {TGEDCOMRestriction.rnNone, TGEDCOMRestriction.rnLocked});
+			EnumSet<TGEDCOMRestriction> es2 = EnumSet<TGEDCOMRestriction>.Create(TGEDCOMRestriction.rnNone, TGEDCOMRestriction.rnLocked);
+
 			Assert.IsTrue(es.Equals(es2));
 			Assert.IsFalse(es.Equals(null));
+			
+			Assert.IsTrue(es.Contains(TGEDCOMRestriction.rnLocked));
+			Assert.IsFalse(es.Contains(TGEDCOMRestriction.rnPrivacy));
+
+			EnumSet<TGEDCOMRestriction> es3 = EnumSet<TGEDCOMRestriction>.Create(TGEDCOMRestriction.rnLocked);
+			EnumSet<TGEDCOMRestriction> es4 = es * es3;
+			Assert.IsTrue(es.Contains(TGEDCOMRestriction.rnLocked));
+			
+			es = EnumSet<TGEDCOMRestriction>.Create(TGEDCOMRestriction.rnNone);
+			es2 = EnumSet<TGEDCOMRestriction>.Create(TGEDCOMRestriction.rnLocked);
+			Assert.IsTrue(es != es2);
+			
+			es = es + es2;
+			es3 = EnumSet<TGEDCOMRestriction>.Create(TGEDCOMRestriction.rnNone, TGEDCOMRestriction.rnLocked);
+			Assert.IsTrue(es.Equals(es3));
+			
+			Assert.IsTrue(es3.ContainsAll(TGEDCOMRestriction.rnNone, TGEDCOMRestriction.rnLocked));
+			Assert.IsFalse(es3.ContainsAll(TGEDCOMRestriction.rnNone, TGEDCOMRestriction.rnPrivacy));
+			Assert.IsTrue(es3.HasIntersect(TGEDCOMRestriction.rnNone, TGEDCOMRestriction.rnPrivacy));
+			Assert.IsFalse(es3.HasIntersect(TGEDCOMRestriction.rnPrivacy));
+			
+			es = es - es2;
+			es3 = EnumSet<TGEDCOMRestriction>.Create(TGEDCOMRestriction.rnNone);
+			Assert.IsTrue(es == es3);
 		}
 
 		[Test]
@@ -153,7 +177,7 @@ namespace GKTests
 		[Test]
 		public void Calculator_Tests()
 		{
-			ExtCalculator calc = new ExtCalculator();
+			/*ExtCalculator calc = new ExtCalculator();
 			Assert.IsNotNull(calc);
 
 			double val = calc.Calc("2 + 7.703 - 3");
@@ -185,7 +209,7 @@ namespace GKTests
 			Assert.AreEqual(0.75, calc.GetVar("c"));
 			
 			val = calc.Calc("a+b+c");
-			Assert.AreEqual(12.75, val);
+			Assert.AreEqual(12.75, val);*/
 		}
 
 		[Test]

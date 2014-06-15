@@ -17,8 +17,6 @@ namespace GKCore
 {
 	public static class GKUtils
 	{
-        public const int ProvedLifeLength = 130;
-
 		public static T GetAssemblyAttribute<T>(this System.Reflection.Assembly ass) where T : Attribute
 		{
 			object[] attributes = ass.GetCustomAttributes(typeof(T), false);
