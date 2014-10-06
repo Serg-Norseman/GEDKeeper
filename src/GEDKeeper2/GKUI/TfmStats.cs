@@ -45,8 +45,8 @@ namespace GKUI
 			gPane.YAxis.Title.Text = fChartYTitle;
 			PointPairList ppList = new PointPairList();
 
-			int num = this.fListStats.Items.Count - 1;
-			for (int i = 0; i <= num; i++)
+			int num = this.fListStats.Items.Count;
+			for (int i = 0; i < num; i++)
 			{
 				string s = this.fListStats.Items[i].Text;
 

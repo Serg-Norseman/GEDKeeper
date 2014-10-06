@@ -41,7 +41,7 @@ namespace GKUI.Charts
 		private int FPtY;
 		private TGEDCOMIndividualRecord FRec;
 		private TGEDCOMSex FSex;
-		private EnumSet<TChartPersonSign> FSigns;
+		private EnumSet<TChartPersonSign> fSigns;
 		private int FWidth;
 		private TreeChartPerson FBaseSpouse;
 		private TGEDCOMFamilyRecord FBaseFamily;
@@ -54,8 +54,8 @@ namespace GKUI.Charts
 		private TPersonList FSpouses;
 		private EnumSet<TPersonFlag> fFlags;
 
-		private Bitmap FPortrait;
-		private int FPortraitWidth;
+		private Bitmap fPortrait;
+		private int fPortraitWidth;
 
         public EnumSet<TPersonFlag> Flags 
         {
@@ -109,12 +109,12 @@ namespace GKUI.Charts
 
 		public Bitmap Portrait
 		{
-			get { return this.FPortrait; }
+			get { return this.fPortrait; }
 		}
 
 		public int PortraitWidth
 		{
-			get { return this.FPortraitWidth; }
+			get { return this.fPortraitWidth; }
 		}
 		
 		public TreeChartPerson GetChild(int index)
@@ -292,7 +292,7 @@ namespace GKUI.Charts
 
 		public EnumSet<TChartPersonSign> Signs
 		{
-			get { return this.FSigns; }
+			get { return this.fSigns; }
 		}
 
 		public int Width
@@ -304,8 +304,8 @@ namespace GKUI.Charts
         {
             this.fChart = chart;
 
-            this.fFlags = new EnumSet<TPersonFlag>();
-            this.FPortrait = null;
+            this.fFlags = EnumSet<TPersonFlag>.Create();
+            this.fPortrait = null;
             this.FSpouses = null;
             this.FChilds = null;
         }
@@ -314,7 +314,7 @@ namespace GKUI.Charts
         {
             if (disposing)
             {
-                if (this.FPortrait != null) this.FPortrait.Dispose();
+                if (this.fPortrait != null) this.fPortrait.Dispose();
                 if (this.FChilds != null) this.FChilds.Dispose();
                 if (this.FSpouses != null) this.FSpouses.Dispose();
             }
@@ -403,56 +403,65 @@ namespace GKUI.Charts
 
 		public void BuildBy(TGEDCOMIndividualRecord iRec, ref bool hasMediaFail)
 		{
-			this.FRec = iRec;
-			if (iRec != null)
+			try
 			{
-				if (this.fChart.FPreparedIndividuals.IndexOf(iRec.XRef) < 0) {
-					this.fChart.FPreparedIndividuals.Add(iRec.XRef);
-				}
+				this.FRec = iRec;
 
-				string fam, nam, pat;
-				iRec.aux_GetNameParts(out fam, out nam, out pat);
-				this.FFamily = fam;
-				this.FName = nam;
-				this.FPatronymic = pat;
-				this.FNick = iRec.aux_GetNickStr();
-				this.FBirthDate = GKUtils.GetBirthDate(iRec, DateFormat.dfDD_MM_YYYY, false);
-				this.FDeathDate = GKUtils.GetDeathDate(iRec, DateFormat.dfDD_MM_YYYY, false);
-				this.IsDead = !iRec.IsLive();
-				this.FSex = iRec.Sex;
-				this.FSigns = this.fChart.GetPersonSign(iRec);
-				this.FBirthYear = GKUtils.GetBirthDate(iRec, DateFormat.dfYYYY, false);
-				this.FDeathYear = GKUtils.GetDeathDate(iRec, DateFormat.dfYYYY, false);
-
-				if (this.fChart.Options.PortraitsVisible)
+				if (iRec != null)
 				{
-					try
-					{
-						this.FPortrait = this.fChart.Base.GetPrimaryBitmap(iRec, -1, -1, true);
+					if (this.fChart.fPreparedIndividuals.IndexOf(iRec.XRef) < 0) {
+						this.fChart.fPreparedIndividuals.Add(iRec.XRef);
 					}
-					catch (MediaFileNotFoundException)
+
+					string fam, nam, pat;
+					iRec.aux_GetNameParts(out fam, out nam, out pat);
+					this.FFamily = fam;
+					this.FName = nam;
+					this.FPatronymic = pat;
+					this.FNick = iRec.aux_GetNickStr();
+					this.FBirthDate = GKUtils.GetBirthDate(iRec, DateFormat.dfDD_MM_YYYY, false);
+					this.FDeathDate = GKUtils.GetDeathDate(iRec, DateFormat.dfDD_MM_YYYY, false);
+					this.IsDead = !iRec.IsLive();
+					this.FSex = iRec.Sex;
+					this.fSigns = this.fChart.GetPersonSign(iRec);
+					this.FBirthYear = GKUtils.GetBirthDate(iRec, DateFormat.dfYYYY, false);
+					this.FDeathYear = GKUtils.GetDeathDate(iRec, DateFormat.dfYYYY, false);
+
+					if (this.fChart.Options.PortraitsVisible)
 					{
-						if (!hasMediaFail) {
-							GKUtils.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
-							hasMediaFail = true;
+						try
+						{
+							this.fPortrait = this.fChart.Base.GetPrimaryBitmap(iRec, -1, -1, true);
+						}
+						catch (MediaFileNotFoundException)
+						{
+							if (!hasMediaFail) {
+								GKUtils.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
+								hasMediaFail = true;
+							}
 						}
 					}
 				}
-			}
-			else
-			{
-				this.FFamily = "";
-				this.FName = "< ? >";
-				this.FPatronymic = "";
-				this.FNick = "";
-				this.FBirthDate = "";
-				this.FDeathDate = "";
-				this.IsDead = false;
-				this.FSex = TGEDCOMSex.svNone;
-				this.FSigns = new EnumSet<TChartPersonSign>();
-			}
+				else
+				{
+					this.FFamily = "";
+					this.FName = "< ? >";
+					this.FPatronymic = "";
+					this.FNick = "";
+					this.FBirthDate = "";
+					this.FDeathDate = "";
+					this.IsDead = false;
+					this.FSex = TGEDCOMSex.svNone;
+					this.fSigns = EnumSet<TChartPersonSign>.Create();
+				}
 
-			//this.CalcBounds();
+				//this.CalcBounds();
+			}
+			catch (Exception ex)
+			{
+				this.fChart.Base.Host.LogWrite("TreeChartPerson.BuildBy(): " + ex.Message);
+				throw ex;
+			}
 		}
 
 		public void CalcBounds()
@@ -515,11 +524,11 @@ namespace GKUI.Charts
 
 				this.FWidth = maxwid + 20;
 				this.FHeight = g.MeasureString("A", this.fChart.DrawFont).ToSize().Height * lines + 20;
-				if (this.fChart.Options.PortraitsVisible && this.FPortrait != null)
+				if (this.fChart.Options.PortraitsVisible && this.fPortrait != null)
 				{
-					Rectangle prt = this.GetDestRect(ExtRect.Create(0, 0, this.FHeight - 1, this.FHeight - 1), this.FPortrait);
-					this.FPortraitWidth = prt.Right - prt.Left + 1;
-					this.FWidth += this.FPortraitWidth;
+					Rectangle prt = this.GetDestRect(ExtRect.Create(0, 0, this.FHeight - 1, this.FHeight - 1), this.fPortrait);
+					this.fPortraitWidth = prt.Right - prt.Left + 1;
+					this.FWidth += this.fPortraitWidth;
 				}
 			}
 			finally

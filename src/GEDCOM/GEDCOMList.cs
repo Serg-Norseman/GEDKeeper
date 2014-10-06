@@ -128,9 +128,9 @@ namespace GedCom551
 		{
 			if (this.fList != null)
 			{
-				for (int I = this.fList.Count - 1; I >= 0; I--)
+				for (int i = this.fList.Count - 1; i >= 0; i--)
 				{
-					(this.fList[I] as GEDCOMObject).Dispose();
+					(this.fList[i] as GEDCOMObject).Dispose();
 				}
 				this.fList.Clear();
 			}
@@ -190,12 +190,11 @@ namespace GedCom551
 		{
 			if (this.fList != null)
 			{
-				int num = this.fList.Count - 1;
-				for (int I = 0; I <= num; I++)
-				{
-                    if (this.fList[I] is TGEDCOMTag)
-					{
-                        (this.fList[I] as TGEDCOMTag).SaveToStream(stream);
+				int num = this.fList.Count;
+				for (int i = 0; i < num; i++) {
+					T item = this.fList[i];
+                    if (item is TGEDCOMTag) {
+                        (item as TGEDCOMTag).SaveToStream(stream);
 					}
 				}
 			}
@@ -205,12 +204,11 @@ namespace GedCom551
 		{
 			if (this.fList != null)
 			{
-				int num = this.fList.Count - 1;
-				for (int i = 0; i <= num; i++)
-				{
-                    if (this.fList[i] is TGEDCOMTag)
-					{
-                        (this.fList[i] as TGEDCOMTag).ReplaceXRefs(map);
+				int num = this.fList.Count;
+				for (int i = 0; i < num; i++) {
+					T item = this.fList[i];
+                    if (item is TGEDCOMTag) {
+                        (item as TGEDCOMTag).ReplaceXRefs(map);
 					}
 				}
 			}
@@ -220,9 +218,8 @@ namespace GedCom551
 		{
 			if (this.fList != null)
 			{
-				int num = this.fList.Count - 1;
-				for (int i = 0; i <= num; i++)
-				{
+				int num = this.fList.Count;
+				for (int i = 0; i < num; i++) {
                     (this.fList[i] as TGEDCOMTag).ResetOwner(newOwner);
 				}
 			}

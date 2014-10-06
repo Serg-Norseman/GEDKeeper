@@ -327,8 +327,8 @@ namespace GKUI.Controls
 					this.FListMan.InitFilter();
 
 					this.fContentList.Clear();
-					int num = this.FTree.RecordsCount - 1;
-					for (int i = 0; i <= num; i++) {
+					int num = this.FTree.RecordsCount;
+					for (int i = 0; i < num; i++) {
 						TGEDCOMRecord rec = this.FTree[i];
 
 						if (rec.RecordType == this.FRecordType) {

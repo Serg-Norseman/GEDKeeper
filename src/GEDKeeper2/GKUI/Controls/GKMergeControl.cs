@@ -78,9 +78,8 @@ namespace GKUI.Controls
 			{
 				repMap.AddXRef(aRecCopy, aRecCopy.XRef, targetRec.XRef);
 
-				int num = this.fTree.RecordsCount - 1;
-				for (int i = 0; i <= num; i++)
-				{
+				int num = this.fTree.RecordsCount;
+				for (int i = 0; i < num; i++) {
 					this.fTree[i].ReplaceXRefs(repMap);
 				}
 

@@ -542,8 +542,8 @@ namespace GKUI
 		{
 			TGEDCOMFamilyRecord result = null;
 
-			int num = this.fTree.RecordsCount - 1;
-			for (int i = 0; i <= num; i++)
+			int num = this.fTree.RecordsCount;
+			for (int i = 0; i < num; i++)
 			{
 				TGEDCOMRecord rec = this.fTree[i];
 
@@ -812,24 +812,22 @@ namespace GKUI
 					StringList birthDays = new StringList();
 					try
 					{
-						int num = this.fTree.RecordsCount - 1;
-						for (int i = 0; i <= num; i++)
+						int num = this.fTree.RecordsCount;
+						for (int i = 0; i < num; i++)
 						{
 							TGEDCOMRecord rec = this.fTree[i];
-							if (rec is TGEDCOMIndividualRecord)
-							{
+							if (rec is TGEDCOMIndividualRecord) {
 								TGEDCOMIndividualRecord iRec = rec as TGEDCOMIndividualRecord;
 								string nm = iRec.aux_GetNameStr(true, false);
 								string days = GKUtils.GetDaysForBirth(iRec);
 
-								if (days != "" && int.Parse(days) < 3)
-								{
+								if (days != "" && int.Parse(days) < 3) {
 									birthDays.Add(string.Format(LangMan.LS(LSID.LSID_DaysRemained), nm, days));
 								}
 							}
 						}
-						if (birthDays.Count > 0)
-						{
+
+						if (birthDays.Count > 0) {
 							TfmGEDKeeper.Instance.Options.ShowTips = TfmTipsDialog.ShowTipsEx(LangMan.LS(LSID.LSID_BirthDays), TfmGEDKeeper.Instance.Options.ShowTips, birthDays);
 						}
 					}

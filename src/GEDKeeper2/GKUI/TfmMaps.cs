@@ -72,8 +72,8 @@ namespace GKUI
 				this.ComboPersons.Sorted = false;
 				this.ComboPersons.Items.Add(new GKComboItem(LangMan.LS(LSID.LSID_NotSelected), null));
 
-				int num = this.fTree.RecordsCount - 1;
-				for (int i = 0; i <= num; i++) {
+				int num = this.fTree.RecordsCount;
+				for (int i = 0; i < num; i++) {
 					TGEDCOMRecord rec = this.fTree[i];
 					bool res = rec is TGEDCOMIndividualRecord && this.IsSelected(rec);
 
@@ -81,8 +81,8 @@ namespace GKUI
 						TGEDCOMIndividualRecord ind = rec as TGEDCOMIndividualRecord;
 						int p_cnt = 0;
 
-						int num2 = ind.IndividualEvents.Count - 1;
-						for (int j = 0; j <= num2; j++)
+						int num2 = ind.IndividualEvents.Count;
+						for (int j = 0; j < num2; j++)
 						{
 							TGEDCOMCustomEvent ev = ind.IndividualEvents[j];
 							if (ev.Detail.Place.StringValue != "") {
@@ -116,8 +116,8 @@ namespace GKUI
 			try
 			{
 				this.fMapBrowser.ClearPoints();
-				int num = aPoints.Count - 1;
-				for (int i = 0; i <= num; i++)
+				int num = aPoints.Count;
+				for (int i = 0; i < num; i++)
 				{
 					GKMapBrowser.GMapPoint pt = aPoints[i];
 					string stHint = pt.Hint;
@@ -180,15 +180,15 @@ namespace GKUI
 			this.fMapBrowser.ShowLines = (ind != null && this.chkLinesVisible.Checked);
 			this.fMapPoints.Clear();
 
-			int num = this.fPlaces.Count - 1;
-			for (int i = 0; i <= num; i++)
+			int num = this.fPlaces.Count;
+			for (int i = 0; i < num; i++)
 			{
                 MapPlace place = this.fPlaces[i];
 
 				if (place.Points.Count >= 1)
 				{
-					int num2 = place.PlaceRefs.Count - 1;
-					for (int j = 0; j <= num2; j++)
+					int num2 = place.PlaceRefs.Count;
+					for (int j = 0; j < num2; j++)
 					{
 						TGEDCOMCustomEvent evt = place.PlaceRefs[j].Event;
 
@@ -260,17 +260,15 @@ namespace GKUI
 			this.btnSelectPlaces.Text = LangMan.LS(LSID.LSID_Show);
 		}
 
-		private TreeNode FindTreeNode(string aPlace)
+		private TreeNode FindTreeNode(string place)
 		{
-			TreeNode result = null;			
-			for (int idx = 0; idx <= this.fBaseRoot.Nodes.Count - 1; idx++) {
-				if (this.fBaseRoot.Nodes[idx].Text == aPlace)
-				{
-					result = this.fBaseRoot.Nodes[idx];
-					break;
+			for (int i = 0; i < this.fBaseRoot.Nodes.Count; i++) {
+				TreeNode node = this.fBaseRoot.Nodes[i];
+				if (node.Text == place) {
+					return node;
 				}
 			}
-			return result;
+			return null;
 		}
 
 		private void AddPlace(TGEDCOMPlace aPlace, TGEDCOMCustomEvent aRef)
@@ -293,8 +291,8 @@ namespace GKUI
 				if (locRec == null) {
 					GKMapBrowser.RequestGeoCoords(place_name, place.Points);
 
-					int num = place.Points.Count - 1;
-					for (int i = 0; i <= num; i++) {
+					int num = place.Points.Count;
+					for (int i = 0; i < num; i++) {
 						if (place.Points[i] is GKMapBrowser.GMapPoint) {
 							GKMapBrowser.GMapPoint pt = place.Points[i] as GKMapBrowser.GMapPoint;
 							string pt_title = pt.Hint + string.Format(" [{0:0.000000}, {1:0.000000}]", pt.Latitude, pt.Longitude);
@@ -321,12 +319,10 @@ namespace GKUI
 		private void CopyPoint(GKMapBrowser.GMapPoint aPt, TPlaceRef aRef)
 		{
 			GKMapBrowser.GMapPoint pt;
-			int num = this.fMapPoints.Count - 1;
-			for (int i = 0; i <= num; i++)
-			{
+			int num = this.fMapPoints.Count;
+			for (int i = 0; i < num; i++) {
 				pt = (this.fMapPoints[i] as GKMapBrowser.GMapPoint);
-				if (pt.Hint == aPt.Hint)
-				{
+				if (pt.Hint == aPt.Hint) {
 					return;
 				}
 			}
@@ -338,17 +334,13 @@ namespace GKUI
 
 		private void SortPointsByDate()
 		{
-			int num = this.fMapPoints.Count - 1;
-			for (int i = 0; i <= num; i++)
-			{
-				int num2 = this.fMapPoints.Count - 1;
-				for (int j = i + 1; j <= num2; j++)
-				{
+			int num = this.fMapPoints.Count;
+			for (int i = 0; i < num; i++) {
+				for (int j = i + 1; j < num; j++) {
 					GKMapBrowser.GMapPoint pt = this.fMapPoints[i] as GKMapBrowser.GMapPoint;
 					GKMapBrowser.GMapPoint pt2 = this.fMapPoints[j] as GKMapBrowser.GMapPoint;
 
-					if (pt.Date > pt2.Date)
-					{
+					if (pt.Date > pt2.Date) {
 						this.fMapPoints.Exchange(i, j);
 					}
 				}

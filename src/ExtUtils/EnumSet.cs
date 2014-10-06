@@ -17,23 +17,17 @@ namespace ExtUtils
 
 		public static EnumSet<T> Create(params T[] args)
 		{
-			if (args != null) {
-				args = (T[])args.Clone();
-			}
-
 			EnumSet<T> result = new EnumSet<T>();
 			result.data = new byte[32];
-
-			int num = ((args != null) ? args.Length : 0) - 1;
-			for (int I = 0; I <= num; I++) {
-				result.Include(args[I]);
-			}
+			result.Include(args);
 			return result;
 		}
 
 		public void Include(params T[] e)
 		{
-			for (int i = 0; i <= e.Length - 1; i++) {
+			if (e == null) return;
+
+			for (int i = 0; i < e.Length; i++) {
 				this.Include(e[i]);
 			}
 		}
@@ -58,7 +52,7 @@ namespace ExtUtils
 
 		public bool ContainsAll(params T[] e)
 		{
-			for (int i = 0; i <= e.Length - 1; i++) {
+			for (int i = 0; i < e.Length; i++) {
 				if (!this.Contains(e[i])) {
 					return false;
 				}
@@ -68,7 +62,7 @@ namespace ExtUtils
 
 		public bool HasIntersect(params T[] e)
 		{
-			for (int i = 0; i <= e.Length - 1; i++) {
+			for (int i = 0; i < e.Length; i++) {
 				if (this.Contains(e[i])) {
 					return true;
 				}
@@ -168,27 +162,25 @@ namespace ExtUtils
 			return res;
 		}
 
-        public override int GetHashCode()
-        {
-        	return this.data.GetHashCode();
-        }
-        
-        public override bool Equals(object obj)
-        {
-        	if (!(obj is EnumSet<T>)) return false;
+		public override int GetHashCode()
+		{
+			return this.data.GetHashCode();
+		}
 
-        	EnumSet<T> setObj = (EnumSet<T>)obj;
-        	return (this == setObj);
-        }
-        
-        object ICloneable.Clone()
-        {
-        	EnumSet<T> result = new EnumSet<T>();
-        	
-        	result.data = new byte[32];
-        	Array.Copy(this.data, result.data, 32);
-        	
-        	return result;
-        }
+		public override bool Equals(object obj)
+		{
+			if (!(obj is EnumSet<T>)) return false;
+
+			EnumSet<T> setObj = (EnumSet<T>)obj;
+			return (this == setObj);
+		}
+
+		object ICloneable.Clone()
+		{
+			EnumSet<T> result = new EnumSet<T>();
+			result.data = new byte[32];
+			Array.Copy(this.data, result.data, 32);
+			return result;
+		}
 	}
 }

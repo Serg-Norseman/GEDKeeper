@@ -79,6 +79,7 @@
     <Compile Include="CRC32.cs" />
     <Compile Include="CSV\CSVReader.cs" />
     <Compile Include="CSV\StringConverter.cs" />
+    <Compile Include="EnumSet.cs" />
     <Compile Include="Graph\Edge.cs" />
     <Compile Include="Graph\GraphvizWriter.cs" />
     <Compile Include="Graph\IEdge.cs" />
@@ -100,7 +101,6 @@
     <Compile Include="SysUtils.cs" />
     <Compile Include="ExtList.cs" />
     <Compile Include="ExtRect.cs" />
-    <Compile Include="ExtSet.cs" />
     <Compile Include="tween.cs" />
     <Compile Include="ValuesCollection.cs" />
     <Compile Include="Win32Native.cs" />

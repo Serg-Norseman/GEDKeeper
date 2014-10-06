@@ -229,31 +229,29 @@ namespace GKUI.Charts
 
 		public static TRelationKind FindKinship(TRelationKind prev, TRelationKind cur, out int great, out int level)
 		{
-			TRelationKind Result = TRelationKind.rkUndefined;
+			TRelationKind result = TRelationKind.rkUndefined;
 			great = 0;
 			level = 0;
 
-			int num = Kinships.Length - 1;
-			for (int i = 0; i <= num; i++)
+			int num = Kinships.Length;
+			for (int i = 0; i < num; i++)
 			{
 				TKinshipRec kinship = Kinships[i];
 
-				if (kinship.PrevRels.Contains(prev) && kinship.CurrRels.Contains(cur))
-				{
+				if (kinship.PrevRels.Contains(prev) && kinship.CurrRels.Contains(cur)) {
 					TRelationKind rel = kinship.FinRel;
 					great = (int)kinship.Great;
 					level = (int)kinship.Level;
 
-					if (rel == TRelationKind.rkSame)
-					{
+					if (rel == TRelationKind.rkSame) {
 						rel = cur;
 					}
 
-					Result = rel;
+					result = rel;
 				}
 			}
 
-			return Result;
+			return result;
 		}
 
 	}

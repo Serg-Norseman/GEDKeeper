@@ -149,12 +149,10 @@ namespace GKUI
 
 		private void Form_Show(object sender, EventArgs e)
 		{
-			int num = this.fOptions.GetLastBasesCount() - 1;
-			for (int i = 0; i <= num; i++)
-			{
+			int num = this.fOptions.GetLastBasesCount();
+			for (int i = 0; i < num; i++) {
 				string lb = this.fOptions.GetLastBase(i);
-				if (File.Exists(lb))
-				{
+				if (File.Exists(lb)) {
                     this.CreateBase(lb);
 				}
 			}
@@ -190,8 +188,7 @@ namespace GKUI
 				Array a = e.Data.GetData(DataFormats.FileDrop) as Array;
 				if (a != null)
 				{
-					for (int i = 0; i <= a.Length - 1; i++)
-					{
+					for (int i = 0; i < a.Length; i++) {
 						string fn = a.GetValue(i).ToString();
 						this.CreateBase(fn);
 					}
@@ -304,11 +301,9 @@ namespace GKUI
 			{
 				bool loaded = false;
 
-				int num = this.fOptions.GetLangsCount() - 1;
-				for (int i = 0; i <= num; i++)
-				{
-					if (this.fOptions.GetLang(i).Code == langCode)
-					{
+				int num = this.fOptions.GetLangsCount();
+				for (int i = 0; i < num; i++) {
+					if (this.fOptions.GetLang(i).Code == langCode) {
 						loaded = LangMan.LoadFromFile(this.fOptions.GetLang(i).FileName);
 						break;
 					}
@@ -317,19 +312,18 @@ namespace GKUI
 				if (!loaded) langCode = LangMan.LSDefCode;
 			}
 
-			if (langCode == LangMan.LSDefCode)
-			{
+			if (langCode == LangMan.LSDefCode) {
 				LangMan.DefInit();
 			}
 
 			GKData.DataSetup();
 
-			int num2 = base.MdiChildren.Length - 1;
-			for (int i = 0; i <= num2; i++)
-			{
+			int num2 = base.MdiChildren.Length;
+			for (int i = 0; i < num2; i++) {
 				Form child = base.MdiChildren[i];
 				if (child is ILocalization) (child as ILocalization).SetLang();
 			}
+
 			(this as ILocalization).SetLang();
 
 			this.fOptions.InterfaceLang = (ushort)langCode;
@@ -365,9 +359,8 @@ namespace GKUI
 			this.miMRUFiles.MenuItems.Clear();
 			this.MenuMRU.MenuItems.Clear();
 
-			int num = this.fOptions.MRUFiles.Count - 1;
-			for (int i = 0; i <= num; i++)
-			{
+			int num = this.fOptions.MRUFiles.Count;
+			for (int i = 0; i < num; i++) {
 				string fn = this.fOptions.MRUFiles[i].FileName;
 
 				MenuItem mi = new GKMenuItem(fn, i);
@@ -513,8 +506,8 @@ namespace GKUI
 		{
 			try
 			{
-				int num = base.MdiChildren.Length - 1;
-				for (int i = 0; i <= num; i++)
+				int num = base.MdiChildren.Length;
+				for (int i = 0; i < num; i++)
 				{
 					Form child = base.MdiChildren[i];
 
@@ -601,8 +594,8 @@ namespace GKUI
 
 				if (fmOptions.ShowDialog() == DialogResult.OK)
 				{
-					int num = base.MdiChildren.Length - 1;
-					for (int i = 0; i <= num; i++)
+					int num = base.MdiChildren.Length;
+					for (int i = 0; i < num; i++)
 					{
 						Form child = base.MdiChildren[i];
 
@@ -962,16 +955,14 @@ namespace GKUI
 		{
 			if (this.fPlugins == null) return;
 			
-			int num = this.fPlugins.Count - 1;
-			for (int i = 0; i <= num; i++)
-			{
+			int num = this.fPlugins.Count;
+			for (int i = 0; i < num; i++) {
 				IPlugin plugin = this.fPlugins[i];
 				plugin.OnLanguageChange();
 			}
 
-			num = this.miPlugins.MenuItems.Count - 1;
-			for (int i = 0; i <= num; i++)
-			{
+			num = this.miPlugins.MenuItems.Count;
+			for (int i = 0; i < num; i++) {
 				MenuItem mi = this.miPlugins.MenuItems[i];
 				IPlugin plugin = mi.Tag as IPlugin;
 				mi.Text = plugin.DisplayName;
@@ -994,8 +985,8 @@ namespace GKUI
 			this.miPlugins.Visible = (this.fPlugins.Count > 0);
 			this.miPlugins.MenuItems.Clear();
 
-			int num = this.fPlugins.Count - 1;
-			for (int i = 0; i <= num; i++)
+			int num = this.fPlugins.Count;
+			for (int i = 0; i < num; i++)
 			{
 				string dispName = this.fPlugins[i].DisplayName;
 
@@ -1014,8 +1005,8 @@ namespace GKUI
         {
 			if (this.fPlugins == null) return;
 			
-			int num = this.fPlugins.Count - 1;
-			for (int i = 0; i <= num; i++)
+			int num = this.fPlugins.Count;
+			for (int i = 0; i < num; i++)
 			{
 				IPlugin plugin = this.fPlugins[i];
 				plugin.Shutdown();
@@ -1120,8 +1111,8 @@ namespace GKUI
         	if (this.fPlugins == null) return;
         	if (aBase == null || record == null) return;
 			
-			int num = this.fPlugins.Count - 1;
-			for (int i = 0; i <= num; i++)
+			int num = this.fPlugins.Count;
+			for (int i = 0; i < num; i++)
 			{
 				IPlugin plugin = this.fPlugins[i];
 				
