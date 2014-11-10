@@ -1,0 +1,426 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{658AE6DC-A4FA-4042-A26F-E5B6CC7EF56B}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>res\gedmill.ico</ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>GEDmill</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>GEDmill</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE;PRO_VERSION;ALLOW_NON_PICTURES</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="src\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\CAsidPair.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\CListableMFR.cs" />
+    <Compile Include="src\CListableNumber.cs" />
+    <Compile Include="src\Exceptions\CBlobException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\CChild.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\CChildXref.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\CConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\CGedcom.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\CGedcomLine.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\CHeader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Exceptions\CHTMLException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\CISRecordChanges.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\CListableBool.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\CListableName.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\CListableSource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\CListableString.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\CListableYear.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\CNameXrefPair.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Exceptions\CParsingException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\CRecordDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\CThreadError.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\Form2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\HTMLClasses\CAlphabetComparer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTMLClasses\CCreator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTMLClasses\CCreatorFrontPage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTMLClasses\CCreatorHelppage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTMLClasses\CCreatorIndexIndividuals.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTMLClasses\CCreatorRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTMLClasses\CCreatorRecordIndividual.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTMLClasses\CCreatorRecordSource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTMLClasses\CCreatorStylesheet.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTMLClasses\CFilenameAndSize.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTMLClasses\CHTMLFile.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTMLClasses\CHusbandAndWife.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTMLClasses\CIEvent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTMLClasses\CIMultimedia.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTMLClasses\CIndexLetter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTMLClasses\CIndexPage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTMLClasses\CNameAndSource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTMLClasses\COccupationCounter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTMLClasses\CPGDate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTMLClasses\CPGQualifiedDate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTMLClasses\CStats.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTMLClasses\CStringTuple.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTMLClasses\CWebsite.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\HTMLClasses\CYear.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\TreeDrawer\CMiniTreeGroup.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\TreeDrawer\CMiniTreeIndividual.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\TreeDrawer\CMiniTreeMap.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\TreeDrawer\CMiniTreeObject.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\TreeDrawer\CPaintbox.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\TreeDrawer\CTreeDrawer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\IndividualBrowserDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\IProgressCallback.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\CSortableListComparer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CAddressStructure.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CAssociationStructure.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CBackReference.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CChangeDate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CChildToFamilyLink.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CEventDetail.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CEventRecorded.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CFamilyEventStructure.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CFamilyRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CIndividualEventStructure.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CIndividualRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CISRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CLdsOrdinance.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CMultimediaFileReference.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CMultimediaLink.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CMultimediaLinkInLine.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CMultimediaLinkXref.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CMultimediaRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CNamePhoneticVariation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CNameRomanizedVariation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CNoteRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CNoteStructure.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CNoteStructureInLine.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CNoteStructureXref.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CParserObject.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CPersonalNamePieces.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CPersonalNameStructure.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CPlaceStructure.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CRepositoryRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CSourceCallNumber.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CSourceCitation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CSourceCitationInLine.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CSourceCitationXref.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CSourceRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CSourceRepositoryCitation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CSpouseToFamilyLink.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CSubmissionRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CSubmitterRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LLClasses\CUserReferenceNumber.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\LogFile.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\MessageBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\PicturesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\ProgressWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\CSortableListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <EmbeddedResource Include="src\CRecordDetailsForm.resx">
+      <DependentUpon>CRecordDetailsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\IndividualBrowserDialog.resx">
+      <DependentUpon>IndividualBrowserDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\MessageBox.resx">
+      <DependentUpon>MessageBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\PicturesForm.resx">
+      <DependentUpon>PicturesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\ProgressWindow.resx">
+      <DependentUpon>ProgressWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\CSortableListView.resx">
+      <DependentUpon>CSortableListView.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,629 @@
+/* CTreeDrawer.cs
+ *
+ * $Id: print.c 26850 2008-11-26 07:34:57Z jake $
+ *
+ * History:  
+ * 10Dec08 AlexC          Migrated from GEDmill 1.10
+ *
+ *
+ * GEDmill - Family History Website Creator
+ * By Alexander Curtis <alex@logicmill.com>
+ * Copyright 2008 Alexander Curtis
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, 
+ * MA  02111-1307, USA.
+ */
+/*
+* REFACTOR
+* REFACTOR USING
+* REFACTOR PRIVATE
+* REFACTOR METHODS (see separate refactor commentry block)
+* REFACTOR FIELDS     (private, comment, m_)
+* REFACTOR INDENTATION
+* REFACTOR NOCOMMENTEDOUT
+* REFACTOR METHODORDER
+*/
+
+using System;
+using GEDmill.LLClasses;
+using System.Drawing;
+using System.Collections;
+using System.Drawing.Imaging;
+
+namespace GEDmill.ImageClasses
+{
+    
+
+    // REFACTOR CHECKED:
+    // REFACTOR Does it modify any member vars?:
+    // REFACTOR Does it access any member vars?:
+    // REFACTOR Does the name make sense?:
+    // REFACTOR Does it have a method label title comment?:
+    // REFACTOR Callers:
+    // REFACTOR Calls:
+    /// <summary>
+  /// Summary description for CTreeDrawer.
+  /// </summary>
+  // In this file, Parents are the top generation, siblings are the middle generation (including the subject of the tree), and children are the bottom generation. Subject's spouses come in middle generation.
+
+    // The data structure looks like this:
+/*
+ *    ________   _____________________________________________________________________________________________________   ________
+ *   | father | | siblings                                                                                            | | mother |
+ *   |        |-|  _______   _______   ________   _________________   ______   _________________   _______   _______  |-|        |
+ *   |________| | |sibling| |sibling| |spouse/ | |children         | |spouse| |children         | |subject| |sibling| | |________|
+ *              | |       |-|       |-|subject |-|  _____   _____  |-|      |-|  _____   _____  |-|/spouse|-|       | |
+ *              | |_______| |_______| |________| | |child| |child| | |______| | |child| |child| | |_______| |_______| |
+ *              |                                | |_____|-|_____|--------------|_____|-|_____| |                     |
+ *              |                                |_________________|          |_________________|                     |
+ *              |_____________________________________________________________________________________________________|
+ */
+
+  public class CTreeDrawer
+  {
+      private class CBoxText
+      {
+          public string m_sName;
+          public string m_sDate;
+          public string m_sFirstName;
+          public string m_sSurname;
+          public bool m_bConcealed;
+          public CBoxText(CIndividualRecord ir)
+          {
+              m_sFirstName = "";
+              m_sSurname = "";
+
+              m_bConcealed = (ir.Visibility() == CIndividualRecord.EVisibility.eV_Restricted);
+              if (m_bConcealed && !MainForm.s_config.m_bUseWithheldNames)
+              {
+                  m_sFirstName = "";
+                  m_sSurname = m_sName = MainForm.s_config.m_sConcealedName;
+
+              }
+              else
+              {
+                  if (ir.Name != "")
+                  {
+                      m_sName = MainForm.s_config.CapitaliseName(ir.Name, ref m_sFirstName, ref m_sSurname);
+                  }
+                  else
+                  {
+                      m_sFirstName = "";
+                      m_sSurname = m_sName = MainForm.s_config.m_sUnknownName;
+                  }
+
+              }
+
+              if (m_bConcealed)
+              {
+                  m_sDate = "";
+              }
+              else
+              {
+                  m_sDate = ir.LifeYears;
+              }
+
+          }
+      }
+    protected SizeF m_sizeTotal;
+
+  const bool SELECTED = true;
+      const bool CREATE_STALK = true;
+      const bool HIGHLIGHT = true;
+      const bool INCLUDE_INVISIBLE = true;
+      const bool SHADE_INVISIBLE = true;
+      const bool DONT_CARE = false;
+      const bool SHADE = true;
+      const bool DONT_KNOW = false;
+      const bool CONNECT_ALIEN_CHILDREN = true;
+
+            // REFACTOR CHECKED:
+    // REFACTOR Does it modify any member vars?:
+    // REFACTOR Does it access any member vars?:
+    // REFACTOR Does the name make sense?:
+    // REFACTOR Does it have a method label title comment?:
+    // REFACTOR Callers:
+    // REFACTOR Calls:
+        public CTreeDrawer()
+    {
+    }
+
+    // REFACTOR CHECKED:
+    // REFACTOR Does it modify any member vars?:
+    // REFACTOR Does it access any member vars?:
+    // REFACTOR Does the name make sense?:
+    // REFACTOR Does it have a method label title comment?:
+    // REFACTOR Callers: OutputMiniTree
+    // REFACTOR Calls:
+    // This is the main tree drawing method.
+    // irSubject is the individual for whom the tree is based. 
+    // nTargeWidth is the width below which the layout is free to use up space to produce a nice tree.
+    public ArrayList CreateMiniTree( CGedcom gedcom, CPaintbox paintbox, CIndividualRecord ir, string filename, int targetWidth, System.Drawing.Imaging.ImageFormat imageFormat )
+    {
+      // First calculate size required for tree, by iterating through individuals and building a data structure
+      CMiniTreeGroup parentGroup = CreateDataStructure( gedcom, ir );
+ 
+// REFACTOR: Extract remainder of thsi method into new method.
+      // For each individual calculate size of box required for display using helper function
+
+      // There must be a better way to get a graphics:
+      Bitmap bmp = new Bitmap( 1, 1, System.Drawing.Imaging.PixelFormat.Format24bppRgb );
+      Graphics g = Graphics.FromImage( bmp );
+      
+      Font f = paintbox.m_font;
+      // Record what font windows actually used, in case it chose a different one
+      MainForm.s_config.m_sTreeFontName = f.Name;
+      MainForm.s_config.m_fTreeFontSize = f.Size;
+      parentGroup.CalculateSize( g, f ); // Recursively calculates sizes of other groups
+      g.Dispose();
+      bmp.Dispose();
+
+      // Now calculate sizes of each row
+      // Total width includes irSubject, their spouses and their siblings.
+      // Total height is always three generations
+
+
+      // Now calculate how best to position each generation
+      // Calculate the width of each generation
+      // There are three cases : parents widest, siblings widest, children widest
+      // Plus two aims : minimise total width, get offspring centred under parents.
+      // If targetWidth is exceeded simply because of number of individuals in one row, that 
+      // row's width becomes the new target width.
+      // If targetWidth is exceeded otherwise, minimising total width becomes the priority
+      parentGroup.CalculateLayout( 0f, 0f );
+      parentGroup.Compress();
+
+
+      RectangleF rect = parentGroup.GetExtent();
+      m_sizeTotal = new SizeF( rect.Width, rect.Height );
+      parentGroup.Translate( -rect.Left, -rect.Top );
+
+      // Calculate offset for each row
+      // Can't do this so create a new bitmap: bmp.Width = totalSize.Width;
+      // Can't do this so create a new bitmap: bmp.Height = totalSize.Height;
+      int totalWidthInt = (int)(m_sizeTotal.Width+1.0f);
+      int totalHeightInt = (int)(m_sizeTotal.Height+1.0f);
+      bmp = new Bitmap( totalWidthInt, totalHeightInt, System.Drawing.Imaging.PixelFormat.Format32bppArgb );
+      //const int nBytesPerPixel = 4;
+
+
+      g = Graphics.FromImage( bmp );
+
+      // Do background fill
+      if( MainForm.s_config.m_bFakeMiniTreeTransparency && paintbox.m_brushFakeTransparency != null )
+      {
+        g.FillRectangle( paintbox.m_brushFakeTransparency, 0, 0, totalWidthInt, totalHeightInt );
+      }
+      else if( imageFormat == ImageFormat.Gif && paintbox.m_brushBgGif != null )
+      {
+        g.FillRectangle( paintbox.m_brushBgGif, 0, 0, totalWidthInt, totalHeightInt );
+      }
+      /* No longer provide the possibility to have a non-transparent background
+      else if( paintbox.bgBrush != null )
+      {
+        g.FillRectangle( paintbox.bgBrush, 0, 0, totalWidthInt, totalHeightInt );
+      }*/
+
+      ArrayList map = new ArrayList();
+      parentGroup.DrawBitmap( paintbox, g, map );
+
+      // Save the bitmap
+      //bmp.MakeTransparent( paintbox.m_gifTransparentColour );
+      LogFile.TheLogFile.WriteLine( LogFile.DT_HTML, LogFile.EDebugLevel.eDL_Note, "Saving mini tree as " + filename );
+
+      if( System.IO.File.Exists( filename ) )
+      {
+        // Delete any current file
+        System.IO.File.SetAttributes( filename, System.IO.FileAttributes.Normal );
+        System.IO.File.Delete( filename );
+      }
+
+      // Save using FileStream to try to avoid crash (only seen by customers)
+      System.IO.FileStream fs = new System.IO.FileStream( filename, System.IO.FileMode.Create );
+      bmp.Save( fs, imageFormat );
+      fs.Close();
+  
+      g.Dispose();
+      bmp.Dispose();
+
+      // For gifs we need to reload and set transparency colour
+      if( imageFormat == ImageFormat.Gif && !MainForm.s_config.m_bFakeMiniTreeTransparency )
+      {
+        Image _gifImage;
+        ColorPalette cp;
+        _gifImage=Image.FromFile( filename );
+        cp=_gifImage.Palette;
+
+        //Creates a new GIF image with a modified colour palette
+        if(cp!=null)
+        {
+          //Create a new 8 bit per pixel image
+          Bitmap bm=new Bitmap(_gifImage.Width,_gifImage.Height,PixelFormat.Format8bppIndexed);
+
+          //get it's palette
+          ColorPalette ncp=bm.Palette;
+
+          //copy all the entries from the old palette removing any transparency
+          int n=0;
+          foreach(Color c in cp.Entries)
+          {
+            ncp.Entries[n++]=Color.FromArgb(255,c);         
+          }
+
+
+
+          //now to copy the actual bitmap data
+          //lock the source and destination bits
+          BitmapData src=((Bitmap)_gifImage).LockBits(new Rectangle(0,0,_gifImage.Width,_gifImage.Height),ImageLockMode.ReadOnly,_gifImage.PixelFormat);
+          BitmapData dst=bm.LockBits(new Rectangle(0,0,bm.Width,bm.Height),ImageLockMode.WriteOnly,bm.PixelFormat);
+ 
+          //uses pointers so we need unsafe code.
+          //the project is also compiled with /unsafe
+          byte backColor = 0;
+          unsafe  
+          {
+            backColor = ((byte *)src.Scan0.ToPointer())[0]; // Assume transparent colour appears as first pixel.
+
+            byte* src_ptr = ((byte *)src.Scan0.ToPointer());
+            byte* dst_ptr = ((byte *)dst.Scan0.ToPointer());
+            // May be useful: System.Runtime.InteropServices.Marshal.Copy(IntPtr source, byte[], destination, int start, int length)
+            // May be useful: System.IO.MemoryStream ms = new System.IO.MemoryStream(src_ptr);
+            int width = _gifImage.Width;
+            int src_stride = src.Stride - width;
+            int dst_stride = dst.Stride - width;
+            for(int y=0;y<_gifImage.Height;y++)
+            {
+              // Can't convert IntPtr to byte[]: Buffer.BlockCopy( src_ptr, 0, dst_ptr, 0, width );
+              int x = width;
+              while( x-- > 0 )
+              {
+                *dst_ptr++ = *src_ptr++;
+              }
+              src_ptr += src_stride;
+              dst_ptr += dst_stride;
+            }
+          }
+
+          //Set the newly selected transparency
+          ncp.Entries[(int)backColor]=Color.FromArgb(0,Color.Magenta);
+
+          //re-insert the palette
+          bm.Palette=ncp;
+
+          //all done, unlock the bitmaps
+          ((Bitmap)_gifImage).UnlockBits(src);
+          bm.UnlockBits(dst);
+
+          _gifImage.Dispose();
+
+          //set the new image in place
+          _gifImage=bm;
+          cp=_gifImage.Palette;
+
+          LogFile.TheLogFile.WriteLine( LogFile.DT_HTML, LogFile.EDebugLevel.eDL_Note, "Re-saving mini gif as " + filename );
+
+          _gifImage.Save( filename, imageFormat );
+        }
+      }
+
+      return map;
+    }
+
+        // REFACTOR CHECKED:
+        // REFACTOR Does it modify any member vars?:
+        // REFACTOR Does it access any member vars?:
+        // REFACTOR Does the name make sense?:
+        // REFACTOR Does it have a method label title comment?:
+        // REFACTOR Callers:
+        // REFACTOR Calls:
+    // Calculate size required for tree by iterating through individuals and building a data structure.
+    protected CMiniTreeGroup CreateDataStructure( CGedcom gedcom, CIndividualRecord ir )
+    {
+      // Get irSubject's parents
+      CFamilyRecord frParents = gedcom.GetFamilyByChild( ir, 0 );
+
+      // Create a tree group for the parents row
+      CMiniTreeGroup mtgParents = new CMiniTreeGroup();
+
+      CMiniTreeIndividual mtiParentLeft = AddFather(gedcom, frParents, mtgParents, null);
+
+      CMiniTreeGroup mtgSiblings = AddSiblings(gedcom, ir, frParents, mtgParents);
+      mtgSiblings.LeftBox = mtiParentLeft;
+
+        AddMother(gedcom, frParents, mtgParents, mtgSiblings);
+
+      return mtgParents;
+    }
+
+
+      private static CMiniTreeGroup AddSiblings(CGedcom gedcom, CIndividualRecord ir, CFamilyRecord frParents, CMiniTreeGroup mtgParents)
+      {
+          CMiniTreeIndividual mtiNew = null;
+          // Create a group for the siblings of the individual in question  
+          // Store irSubject's siblings
+          // Store irSubject's spouses
+          // Store irSubject's children by each spouse
+          CMiniTreeGroup mtgSiblings = new CMiniTreeGroup();
+          int nChildren = 0;
+          CIndividualRecord irSibling = null;
+
+          // If parents unknown, put irSubject as an only child. (Contrived loop below to loop through once in this case)
+          //irSibling = ir;
+
+          CMiniTreeIndividual mtiLatestSiblingOrSpouse = null;
+
+          // Reference to the box for the rightmost child box by subjects previous spouse.
+          CMiniTreeIndividual mtiLastAlienChild = null;
+
+          // Extract method
+          // For each child of the parents
+          do
+          {
+              CMiniTreeGroup mtgOffspring = null;
+              if (frParents != null)
+              {
+                  // The ordering of children in the tree can be selected to be the same as it is in the GEDCOM file. This 
+                  // is because the file should be ordered as the user chose to order the family when entering the data in 
+                  // their family history app, regardless of actual birth dates. 
+                  if (MainForm.s_config.m_bKeepSiblingOrder)
+                  {
+                      irSibling = frParents.GetChildByPositionInFile(nChildren);
+                  }
+                  else
+                  {
+                      irSibling = frParents.GetChild(nChildren);
+                  }
+              }
+
+              // When we reach the child that this tree is for, add their families too (They may have more than one spouse).
+              // If frParents == null, they won't have any known siblings, so add the subject here.
+              if (frParents == null || irSibling == ir)
+              {
+                  AddSubjectAndTheirFamilies(gedcom, ir, frParents, ref mtiNew, mtgSiblings, ref mtiLatestSiblingOrSpouse, ref mtiLastAlienChild, ref mtgOffspring);
+              }
+              else
+              {
+                  mtiLatestSiblingOrSpouse = AddIndividual(!SELECTED, !CREATE_STALK, INCLUDE_INVISIBLE, SHADE_INVISIBLE, !CONNECT_ALIEN_CHILDREN, SHADE, mtgSiblings, null, irSibling, null, null);
+              }
+
+              nChildren++;
+
+              // Exit loop if parents unknown. (Implies there will be no other siblings.)
+          }
+          while (frParents != null && irSibling != null);
+          mtgParents.AddGroup(mtgSiblings);
+          return mtgSiblings;
+      }
+
+      // Add the subject of the tree, their siblings, their spouses and their children.
+      private static void AddSubjectAndTheirFamilies(CGedcom gedcom, CIndividualRecord irSubject, CFamilyRecord frParents, ref CMiniTreeIndividual mtiNew, CMiniTreeGroup mtgSiblings, ref CMiniTreeIndividual mtiLatestSiblingOrSpouse, ref CMiniTreeIndividual mtiLatestChild, ref CMiniTreeGroup mtgLatestChildren)
+      {
+          bool bAddedSubject = false;
+          int nSpouses = 0;
+          CMiniTreeGroup.ECrossbar ecbCrossbarType = CMiniTreeGroup.ECrossbar.eCB_Solid;
+          ArrayList alSubjectsFamilies = gedcom.GetFamilyArray(irSubject);
+
+          // For each spouse of the subject
+          foreach (CFamilyRecord fri in alSubjectsFamilies)
+          {
+              CIndividualRecord irSpouse = null;
+              bool bSubjectIsHusband = (fri.m_xrefHusband == irSubject.m_xref);
+              if (bSubjectIsHusband)
+              {
+                  irSpouse = gedcom.GetIndividualRecord(fri.m_xrefWife);
+              }
+              else
+              {
+                  irSpouse = gedcom.GetIndividualRecord(fri.m_xrefHusband);
+              }
+
+              // Is the subject the wife in the family?
+              if (!bSubjectIsHusband)
+              {
+                  // Subject is wife.
+                  // Add their spouse first, as the husband.
+                  mtiNew = AddIndividual(!SELECTED, !CREATE_STALK, INCLUDE_INVISIBLE, SHADE_INVISIBLE, !CONNECT_ALIEN_CHILDREN, SHADE, mtgSiblings, null, irSpouse, null, null);
+                  if (null != mtiNew)
+                  {
+                      mtiLatestSiblingOrSpouse = mtiNew;
+                  }
+                  // All but her last husband have dotted bars
+                  ecbCrossbarType = CMiniTreeGroup.ECrossbar.eCB_DottedLeft;
+              }
+              else
+              {
+                  // Subject is husband.
+                  if (Exists(irSubject) && !bAddedSubject)
+                  {
+                      // Put subject first, before children.
+                      mtiNew = AddIndividual(SELECTED, frParents != null, !INCLUDE_INVISIBLE, DONT_CARE, !CONNECT_ALIEN_CHILDREN, !SHADE, mtgSiblings, null, irSubject, null, null);
+                      if (null != mtiNew)
+                      {
+                          mtiLatestSiblingOrSpouse = mtiNew;
+                      }
+
+                      // To stop it being added at end, as would be the case for irSubject==wife.
+                      bAddedSubject = true; 
+
+                  }
+              }
+
+              // Have we already added a group of offspring?
+              if (mtgLatestChildren != null)
+              {
+                  // Already added offspring from previous marriage. Connect them to the father of this offspring group.
+                  mtgLatestChildren.RightBox = mtiLatestSiblingOrSpouse;
+              }
+
+              // Create group for children by this spouse.
+              mtgLatestChildren = CreateChildrenGroup(ref mtiLatestChild, ecbCrossbarType, fri);
+
+              // Add children group to current group
+              mtgSiblings.AddGroup(mtgLatestChildren);
+
+              // Point the children group at their left neighbour.
+              if (mtgLatestChildren != null)
+              {
+                  mtgLatestChildren.LeftBox = mtiLatestSiblingOrSpouse;
+              }
+
+              // Is the individual in question the husband in the family? I.e. Have we yet to add their wife?
+              if (bSubjectIsHusband)
+              {
+                  // Yes so add their wife now.
+                  ecbCrossbarType = CMiniTreeGroup.ECrossbar.eCB_DottedRight;
+                  mtiNew = AddIndividual(!SELECTED, !CREATE_STALK, INCLUDE_INVISIBLE, SHADE_INVISIBLE, !CONNECT_ALIEN_CHILDREN, !SHADE, mtgSiblings, null, irSpouse, null, null);
+                  if (null != mtiNew)
+                  {
+                      mtiLatestSiblingOrSpouse = mtiNew;
+                  }
+
+                  // Point the children group at their right neighbour.
+                  if (mtgLatestChildren != null)
+                  {
+                      mtgLatestChildren.RightBox = mtiLatestSiblingOrSpouse;
+                  }
+              }
+
+              nSpouses++;
+          }
+
+          // REFACTOR: SIX
+          if (!bAddedSubject)
+          {
+              mtiNew = AddIndividual(SELECTED, frParents != null, !INCLUDE_INVISIBLE, DONT_CARE, !CONNECT_ALIEN_CHILDREN, !SHADE, mtgSiblings, null, irSubject, mtgLatestChildren, null);
+              if (null != mtiNew)
+              {
+                  mtiLatestSiblingOrSpouse = mtiNew;
+              }
+          }
+      }
+
+      // Creates a new mini tree group and fills it with the children of the given family record.
+      private static CMiniTreeGroup CreateChildrenGroup(ref CMiniTreeIndividual mtiLatestIndividual, CMiniTreeGroup.ECrossbar ecbCrossbarType, CFamilyRecord fri)
+      {
+          int nChild = 0;
+          CIndividualRecord irChild = null;
+          CMiniTreeGroup mtgOffspring = new CMiniTreeGroup();
+          mtgOffspring.m_ecCrossbar = ecbCrossbarType;
+          CMiniTreeIndividual mtiChild = null;
+
+          // Iterate and add all children in the given family record.
+          while ((irChild = fri.GetChild(nChild)) != null)
+          {
+              CMiniTreeIndividual mtiNew = AddIndividual(!SELECTED, CREATE_STALK, !INCLUDE_INVISIBLE, DONT_CARE, nChild == 0 && mtiLatestIndividual != null, !SHADE, mtgOffspring, null, irChild, null, mtiLatestIndividual);
+              if (null != mtiNew)
+              {
+                  mtiChild = mtiNew;
+              }
+              nChild++;
+          }
+          if (mtiChild != null)
+          {
+              mtiLatestIndividual = mtiChild;
+          }
+
+          return mtgOffspring;
+      }
+
+      private static CMiniTreeIndividual AddFather(CGedcom gedcom, CFamilyRecord frParents, CMiniTreeGroup mtgThis, CMiniTreeGroup mtgOnLeft)
+      {
+          CMiniTreeIndividual mtiParentLeft = null;
+          // Add father to parents group
+          if (frParents != null)
+          {
+              CIndividualRecord irHusband = gedcom.GetIndividualRecord(frParents.m_xrefHusband);
+
+              // REFACTOR: ONE
+              mtiParentLeft = AddIndividual(!SELECTED, !CREATE_STALK, INCLUDE_INVISIBLE, !SHADE_INVISIBLE, !CONNECT_ALIEN_CHILDREN, !SHADE, mtgThis, mtgOnLeft, irHusband, null, null);
+          }
+
+    
+          return mtiParentLeft;
+      }
+
+      private static void AddMother(CGedcom gedcom, CFamilyRecord frParents, CMiniTreeGroup mtgThis, CMiniTreeGroup mtgOnLeft)
+      {
+          CMiniTreeIndividual mtiParentRight = null;
+
+          if (frParents != null)
+          {
+              CIndividualRecord irWife = gedcom.GetIndividualRecord(frParents.m_xrefWife);
+              // REFACTOR: SEVEN
+              mtiParentRight = AddIndividual(!SELECTED, !CREATE_STALK, INCLUDE_INVISIBLE, !SHADE_INVISIBLE, !CONNECT_ALIEN_CHILDREN, DONT_KNOW, mtgThis, mtgOnLeft, irWife, null, null);
+          }
+      }
+      private static CMiniTreeIndividual AddIndividual(bool bSelected, bool bCreateStalk, bool bIncludeEvenIfInvisible, bool bShadeInvisible, bool bConnectAlienChildren, bool bShade, CMiniTreeGroup mtgThis, CMiniTreeGroup mtgOnLeft, CIndividualRecord ir, CMiniTreeGroup mtgOffspring, CMiniTreeIndividual mtiLastAlienChild )
+      {
+          CMiniTreeIndividual mtiNew = null;
+          if ( Exists(ir) )
+          {
+              CBoxText boxtext = new CBoxText(ir);
+
+              mtiNew = mtgThis.AddIndividual(ir, boxtext.m_sFirstName, boxtext.m_sSurname, boxtext.m_sDate, !bSelected, bCreateStalk, bSelected, boxtext.m_bConcealed, bShade);
+              if (null != mtgOnLeft)
+              {
+                  mtgOnLeft.RightBox = mtiNew;
+              }
+              if ( mtgOffspring != null)
+              {
+                  // To get here implies irSubject is female
+                  mtgOffspring.m_ecCrossbar = CMiniTreeGroup.ECrossbar.eCB_Solid; // Wife and closest (last added) spouse need solid line
+                  mtgOffspring.RightBox = mtiNew;
+              }
+        
+              if (bConnectAlienChildren)
+              {
+                  mtiLastAlienChild.RightObjectAlien = mtiNew;
+                  mtiNew.LeftObjectAlien = mtiLastAlienChild;
+              }
+              
+          }
+          else if( bIncludeEvenIfInvisible )
+          {
+              mtiNew = mtgThis.AddIndividual(null, "", MainForm.s_config.m_sUnknownName, " ", false, false, false, false, bShadeInvisible);
+              if (null != mtgOnLeft)
+              {
+                  mtgOnLeft.RightBox = mtiNew;
+              }
+          }
+          return mtiNew;
+      }
+
+      
+
+    // REFACTOR CHECKED:OK
+    // REFACTOR Does it modify any member vars?:n
+    // REFACTOR Does it access any member vars?:y
+    // REFACTOR Does the name make sense?:y
+    // REFACTOR Does it have a method label title comment?:y
+    // REFACTOR Callers:OutputMiniTree
+    // REFACTOR Calls:none
+    // Returns the height of the whole tree diagram.
+    public int Height
+    {
+      get
+      {
+        return (int)(m_sizeTotal.Height);
+      }
+    }
+
+    private static bool Exists( CIndividualRecord ir )
+{
+return (ir != null && ir.Visibility() != CIndividualRecord.EVisibility.eV_Invisible);
+}
+
+  }
+}
