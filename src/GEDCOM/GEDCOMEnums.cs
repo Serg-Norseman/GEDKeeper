@@ -1,7 +1,7 @@
 ﻿using System;
 
 /// <summary>
-/// Localization: clean
+/// 
 /// </summary>
 
 namespace GedCom551

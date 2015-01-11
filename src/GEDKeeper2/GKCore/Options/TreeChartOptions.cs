@@ -3,7 +3,7 @@ using System.Drawing;
 using ExtUtils;
 
 /// <summary>
-/// Localization: clean
+/// 
 /// </summary>
 
 namespace GKCore.Options

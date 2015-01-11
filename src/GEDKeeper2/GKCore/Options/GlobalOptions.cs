@@ -9,7 +9,7 @@ using GedCom551;
 using GKUI.Lists;
 
 /// <summary>
-/// Localization: clean
+/// 
 /// </summary>
 
 namespace GKCore.Options

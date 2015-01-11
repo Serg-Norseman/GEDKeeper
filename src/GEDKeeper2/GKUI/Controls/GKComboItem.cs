@@ -3,7 +3,7 @@ using System;
 using ExtUtils;
 
 /// <summary>
-/// Localization: clean
+/// 
 /// </summary>
 
 namespace GKUI.Controls

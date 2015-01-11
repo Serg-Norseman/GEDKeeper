@@ -17,7 +17,7 @@ using GKUI.Controls;
 using GKUI.Dialogs;
 
 /// <summary>
-/// Localization: clean
+/// 
 /// </summary>
 
 namespace GKUI

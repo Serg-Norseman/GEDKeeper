@@ -9,7 +9,7 @@ using GKUI.Controls;
 using GKUI.Sheets;
 
 /// <summary>
-/// Localization: clean
+/// 
 /// </summary>
 
 namespace GKUI.Dialogs

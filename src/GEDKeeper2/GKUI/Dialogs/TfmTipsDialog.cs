@@ -5,7 +5,7 @@ using ExtUtils;
 using GKCore;
 
 /// <summary>
-/// Localization: clean
+/// 
 /// </summary>
 
 namespace GKUI.Dialogs

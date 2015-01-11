@@ -6,7 +6,7 @@ using ExtUtils;
 using GKCore.Interfaces;
 
 /// <summary>
-/// Localization: clean
+/// 
 /// </summary>
 
 namespace GKUI.Lists

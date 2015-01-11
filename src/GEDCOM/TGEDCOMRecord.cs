@@ -4,7 +4,7 @@ using System.IO;
 using ExtUtils;
 
 /// <summary>
-/// Localization: clean
+/// 
 /// </summary>
 
 namespace GedCom551

@@ -5,7 +5,7 @@ using ExtUtils;
 using GedCom551;
 
 /// <summary>
-/// Localization: clean
+/// 
 /// </summary>
 
 namespace GKCore

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 
 /// <summary>
-/// Localization: clean
+/// 
 /// </summary>
 
 namespace ExtUtils

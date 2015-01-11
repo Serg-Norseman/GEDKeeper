@@ -9,7 +9,7 @@ using GKCore.Interfaces;
 using GKCore.Options;
 
 /// <summary>
-/// Localization: clean
+/// 
 /// </summary>
 
 namespace GKCore.Export

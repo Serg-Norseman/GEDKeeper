@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using ExtUtils;
 
 /// <summary>
-/// Localization: clean
+/// 
 /// </summary>
 
 namespace GKCalendarPlugin

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 //using System.Linq;
 
 /// <summary>
-/// Localization: clean
+/// 
 /// </summary>
 
 namespace ExtUtils.Graph

@@ -5,7 +5,7 @@ using GedCom551;
 using GKCore;
 
 /// <summary>
-/// Localization: clean
+/// 
 /// </summary>
 
 namespace GKUI.Dialogs

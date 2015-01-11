@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 
 /// <summary>
-/// Localization: clean
+/// 
 /// </summary>
 
 namespace ExtUtils

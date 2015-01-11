@@ -9,7 +9,7 @@ using ExtUtils;
 using GKCore.Options;
 
 /// <summary>
-/// Localization: clean
+/// 
 /// </summary>
 
 namespace GKUI.Controls

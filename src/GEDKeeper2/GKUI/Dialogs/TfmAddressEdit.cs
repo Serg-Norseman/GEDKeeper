@@ -7,7 +7,7 @@ using GKCore.Interfaces;
 using GKUI.Controls;
 
 /// <summary>
-/// Localization: clean
+/// 
 /// </summary>
 
 namespace GKUI.Dialogs
@@ -33,7 +33,8 @@ namespace GKUI.Dialogs
 
 		private static bool GetInput(string title, ref string value)
 		{
-			return GKInputBox.QueryText(title, LangMan.LS(LSID.LSID_Value), ref value) && value.Trim() != "";
+            bool res = GKInputBox.QueryText(title, LangMan.LS(LSID.LSID_Value), ref value);
+            return res && !string.IsNullOrEmpty(value);
 		}
 
 		private void ListModify(object sender, ModifyEventArgs eArgs)
@@ -115,12 +116,14 @@ namespace GKUI.Dialogs
 		private void SetAddress(TGEDCOMAddress value)
 		{
 			this.fAddress = value;
-			this.edCountry.Text = this.fAddress.AddressCountry;
+
+            this.edCountry.Text = this.fAddress.AddressCountry;
 			this.edState.Text = this.fAddress.AddressState;
 			this.edCity.Text = this.fAddress.AddressCity;
 			this.edPostalCode.Text = this.fAddress.AddressPostalCode;
 			this.edAddress.Text = this.fAddress.Address.Text.Trim();
-			this.UpdateLists();
+
+            this.UpdateLists();
 		}
 
 		private void UpdateLists()
@@ -131,20 +134,20 @@ namespace GKUI.Dialogs
 
 			TGEDCOMTag tag;
 
-			int num = this.fAddress.PhoneNumbers.Count - 1;
-			for (int i = 0; i <= num; i++) {
+			int num = this.fAddress.PhoneNumbers.Count;
+			for (int i = 0; i < num; i++) {
 				tag = this.fAddress.PhoneNumbers[i];
 				this.fPhonesList.List.AddItem(tag.StringValue, tag);
 			}
 
-			int num2 = this.fAddress.EmailAddresses.Count - 1;
-			for (int i = 0; i <= num2; i++) {
+			int num2 = this.fAddress.EmailAddresses.Count;
+			for (int i = 0; i < num2; i++) {
 				tag = this.fAddress.EmailAddresses[i];
 				this.fMailsList.List.AddItem(tag.StringValue, tag);
 			}
 
-			int num3 = this.fAddress.WebPages.Count - 1;
-			for (int i = 0; i <= num3; i++) {
+			int num3 = this.fAddress.WebPages.Count;
+			for (int i = 0; i < num3; i++) {
 				tag = this.fAddress.WebPages[i];
 				this.fWebsList.List.AddItem(tag.StringValue, tag);
 			}

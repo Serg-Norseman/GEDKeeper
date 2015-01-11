@@ -6,7 +6,7 @@ using GedCom551;
 using GKCore.Interfaces;
 
 /// <summary>
-/// Localization: clean
+/// 
 /// </summary>
 
 namespace GKCore.Export

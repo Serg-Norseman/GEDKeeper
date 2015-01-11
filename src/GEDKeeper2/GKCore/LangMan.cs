@@ -6,7 +6,7 @@ using System.Text;
 using GKCore.Interfaces;
 
 /// <summary>
-/// Localization: clean
+/// 
 /// </summary>
 
 namespace GKCore

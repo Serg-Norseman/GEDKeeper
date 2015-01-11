@@ -2,7 +2,7 @@ using System;
 using System.Windows.Forms;
 
 /// <summary>
-/// Localization: clean
+/// 
 /// </summary>
 
 namespace GKUI.Controls
@@ -96,13 +96,12 @@ namespace GKUI.Controls
 		public static bool QueryText(string caption, string prompt, ref string value)
 		{
             bool result = false;
-            value = "";
 
             using (GKInputBox inputBox = new GKInputBox(caption, prompt, value, false))
             {
                 if (inputBox.ShowDialog() == DialogResult.OK)
                 {
-                    value = inputBox.Value;
+                    value = inputBox.Value.Trim();
                     result = true;
                 }
             }

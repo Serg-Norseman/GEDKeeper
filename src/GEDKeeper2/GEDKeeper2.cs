@@ -26,7 +26,7 @@ using GKUI;
 [assembly: ComVisible(false)]
 
 /// <summary>
-/// Localization: clean
+/// 
 /// </summary>
 
 namespace GK2

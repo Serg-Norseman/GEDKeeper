@@ -2,7 +2,7 @@ using System.Collections;
 using System.Windows.Forms;
 
 /// <summary>
-/// Localization: clean
+/// 
 /// </summary>
 
 namespace GKUI.Controls

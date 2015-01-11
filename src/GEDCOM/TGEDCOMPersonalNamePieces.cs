@@ -2,7 +2,7 @@ using System;
 using System.IO;
 
 /// <summary>
-/// Localization: clean
+/// 
 /// </summary>
 
 namespace GedCom551

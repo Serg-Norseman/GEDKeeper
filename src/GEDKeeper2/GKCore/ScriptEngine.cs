@@ -11,7 +11,7 @@ using GKCore.Interfaces;
 using LuaInterface;
 
 /// <summary>
-/// Localization: clean
+/// 
 /// </summary>
 
 namespace GKCore

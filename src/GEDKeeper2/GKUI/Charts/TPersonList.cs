@@ -8,7 +8,7 @@ using GKCore;
 using GKCore.Interfaces;
 
 /// <summary>
-/// Localization: clean
+/// 
 /// </summary>
 
 namespace GKUI.Charts
