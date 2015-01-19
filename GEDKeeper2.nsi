@@ -1,5 +1,4 @@
 !include "MUI2.nsh"
-!include "DotNetChecker.nsh"
 
 Name "GEDKeeper2"
 OutFile "GEDKeeper2-Installer.exe"
@@ -28,8 +27,6 @@ Section "GEDKeeper2 (необходимо)"
 
   SetOutPath $INSTDIR
 
-  !insertmacro CheckNetFramework 40Client
-  ;!insertmacro CheckNetFramework 30
 
   File "ExtUtils.dll"
   File "GEDCOM.dll"
@@ -101,6 +98,46 @@ SectionGroup /e "Языки"
 SectionGroupEnd
 
 SectionGroup /e "Плагины"
+	Section "Калькулятор выражений"
+  		SetOutPath "$INSTDIR\plugins"
+  		File ".\plugins\GKCalculatorPlugin.dll"
+  		File ".\plugins\GKCalculatorPlugin.rus"
+  		File ".\plugins\GKCalculatorPlugin.eng"
+  		File ".\plugins\GKCalculatorPlugin.ukr"
+	SectionEnd
+
+	Section "Календарь"
+  		SetOutPath "$INSTDIR\plugins"
+  		File ".\plugins\GKCalendarPlugin.dll"
+  		File ".\plugins\GKCalendarPlugin.rus"
+  		File ".\plugins\GKCalendarPlugin.eng"
+  		File ".\plugins\GKCalendarPlugin.ukr"
+	SectionEnd
+
+	Section "Справочник имен"
+  		SetOutPath "$INSTDIR\plugins"
+  		File ".\plugins\GKNamesBookPlugin.dll"
+  		File ".\plugins\GKNamesBookPlugin.rus"
+  		File ".\plugins\GKNamesBookPlugin.eng"
+  		File ".\plugins\GKNamesBookPlugin.ukr"
+	SectionEnd
+
+	Section "Линия времени"
+  		SetOutPath "$INSTDIR\plugins"
+  		File ".\plugins\GKTimeLinePlugin.dll"
+  		File ".\plugins\GKTimeLinePlugin.rus"
+  		File ".\plugins\GKTimeLinePlugin.eng"
+  		File ".\plugins\GKTimeLinePlugin.ukr"
+	SectionEnd
+
+	Section "Поточный ввод"
+  		SetOutPath "$INSTDIR\plugins"
+  		File ".\plugins\GKFlowInputPlugin.dll"
+  		File ".\plugins\GKFlowInputPlugin.rus"
+  		File ".\plugins\GKFlowInputPlugin.eng"
+  		File ".\plugins\GKFlowInputPlugin.ukr"
+	SectionEnd
+
 	Section "Импорт росписей"
   		SetOutPath "$INSTDIR\plugins"
   		File ".\plugins\GKPedigreeImporterPlugin.dll"
@@ -150,12 +187,6 @@ Section "Uninstall"
   Delete $INSTDIR\itextsharp.dll
   Delete $INSTDIR\lua51.dll
   Delete $INSTDIR\LuaInterface.dll
-
-  Delete $INSTDIR\_XapianSharp.dll
-  Delete $INSTDIR\XapianCSharp.dll
-  Delete $INSTDIR\zlib1.dll
-  Delete $INSTDIR\csgl.dll
-  Delete $INSTDIR\csgl.native.dll
   Delete $INSTDIR\ExcelLibrary.dll
 
   Delete $INSTDIR\uninstall.exe
