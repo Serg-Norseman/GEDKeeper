@@ -3,7 +3,6 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using Cyotek.Windows.Forms;
-using GKCore;
 
 namespace GKUI.Controls
 {
@@ -15,8 +14,6 @@ namespace GKUI.Controls
 
             this.FillZoomLevels();
             imageBox.SelectionMode = ImageBoxSelectionMode.Zoom;
-            
-            this.SetLang();
         }
 
         private void FillZoomLevels()
@@ -70,14 +67,9 @@ namespace GKUI.Controls
         private void btnZoomOut_Click(object sender, EventArgs e)
         {
             imageBox.ZoomOut();
+            //this.btnSizeToFit.Image = global::GKImageControl.iSizeToFit2;
+            //this.btnZoomIn.Image = global::GKResources.iZoomIn2;
+            //this.btnZoomOut.Image = global::GKResources.iZoomOut2;
         }
-
-        public void SetLang()
-        {
-        	this.btnSizeToFit.Text = LangMan.LS(LSID.LSID_SizeToFit);
-			this.btnZoomIn.Text = LangMan.LS(LSID.LSID_ZoomIn);
-			this.btnZoomOut.Text = LangMan.LS(LSID.LSID_ZoomOut);
-        }
-
     }
 }

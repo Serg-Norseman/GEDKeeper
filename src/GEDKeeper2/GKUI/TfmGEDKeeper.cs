@@ -1152,6 +1152,14 @@ namespace GKUI
                 widget.BaseChanged(aBase);
             }
         }
+        
+        public void ShowMDI(Form form)
+        {
+        	if (form != null) {
+        		form.MdiParent = this;
+        		form.Show();
+        	}
+        }
 
 		#endregion
     }

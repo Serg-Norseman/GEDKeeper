@@ -44,12 +44,11 @@ namespace GedCom551
 		{
 			string result = oldXRef;
 
-			int num = this.fList.Count - 1;
-			for (int i = 0; i <= num; i++)
+			foreach (XRefEntry entry in this.fList)
 			{
-				if (GEDCOMUtils.CleanXRef(this.fList[i].OldXRef) == GEDCOMUtils.CleanXRef(oldXRef))
+				if (GEDCOMUtils.CleanXRef(entry.OldXRef) == GEDCOMUtils.CleanXRef(oldXRef))
 				{
-					result = this.fList[i].NewXRef;
+					result = entry.NewXRef;
 					break;
 				}
 			}

@@ -56,7 +56,7 @@
         	// btnSizeToFit
         	// 
         	this.btnSizeToFit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-        	this.btnSizeToFit.Image = global::GKResources.iSizeToFit2;
+        	this.btnSizeToFit.Image = global::ExtUtils.Controls.ExtResources.iSizeToFit;
         	this.btnSizeToFit.ImageTransparentColor = System.Drawing.Color.Magenta;
         	this.btnSizeToFit.Name = "btnSizeToFit";
         	this.btnSizeToFit.Size = new System.Drawing.Size(23, 25);
@@ -66,7 +66,7 @@
         	// btnZoomIn
         	// 
         	this.btnZoomIn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-        	this.btnZoomIn.Image = global::GKResources.iZoomIn2;
+        	this.btnZoomIn.Image = global::ExtUtils.Controls.ExtResources.iZoomIn;
         	this.btnZoomIn.ImageTransparentColor = System.Drawing.Color.Magenta;
         	this.btnZoomIn.Name = "btnZoomIn";
         	this.btnZoomIn.Size = new System.Drawing.Size(23, 25);
@@ -76,7 +76,7 @@
         	// btnZoomOut
         	// 
         	this.btnZoomOut.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-        	this.btnZoomOut.Image = global::GKResources.iZoomOut2;
+        	this.btnZoomOut.Image = global::ExtUtils.Controls.ExtResources.iZoomOut;
         	this.btnZoomOut.ImageTransparentColor = System.Drawing.Color.Magenta;
         	this.btnZoomOut.Name = "btnZoomOut";
         	this.btnZoomOut.Size = new System.Drawing.Size(23, 25);
@@ -132,9 +132,9 @@
 
         private Cyotek.Windows.Forms.ImageBox imageBox;
         private System.Windows.Forms.ToolStrip toolStrip;
-        private System.Windows.Forms.ToolStripButton btnSizeToFit;
-        private System.Windows.Forms.ToolStripButton btnZoomIn;
-        private System.Windows.Forms.ToolStripButton btnZoomOut;
+        public System.Windows.Forms.ToolStripButton btnSizeToFit;
+        public System.Windows.Forms.ToolStripButton btnZoomIn;
+        public System.Windows.Forms.ToolStripButton btnZoomOut;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripComboBox zoomLevelsToolStripComboBox;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;

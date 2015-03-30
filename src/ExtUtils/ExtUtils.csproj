@@ -73,6 +73,16 @@
     <Compile Include="ArborEngine\IArborRenderer.cs" />
     <Compile Include="BaseObject.cs" />
     <Compile Include="Controls\ControlExtensions.cs" />
+    <Compile Include="Controls\ExtResources.Designer.cs">
+      <DependentUpon>ExtResources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Controls\GKImageControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\GKImageControl.Designer.cs">
+      <DependentUpon>GKImageControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\HyperView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -89,6 +99,16 @@
     <Compile Include="Graph\TGraph.cs" />
     <Compile Include="Graph\Vertex.cs" />
     <Compile Include="HighResolutionTimer.cs" />
+    <Compile Include="ImageBox\ImageBox.cs" />
+    <Compile Include="ImageBox\ImageBoxBorderStyle.cs" />
+    <Compile Include="ImageBox\ImageBoxGridDisplayMode.cs" />
+    <Compile Include="ImageBox\ImageBoxGridScale.cs" />
+    <Compile Include="ImageBox\ImageBoxNativeMethods.cs" />
+    <Compile Include="ImageBox\ImageBoxSelectionMode.cs" />
+    <Compile Include="ImageBox\ScrollControl.cs" />
+    <Compile Include="ImageBox\VirtualScrollableControl.cs" />
+    <Compile Include="ImageBox\ZoomLevelCollection.cs" />
+    <Compile Include="ImageBox\ZoomLevelCollectionConverter.cs" />
     <Compile Include="IndistinctMatching.cs" />
     <Compile Include="IniFile.cs" />
     <Compile Include="ListTimSort.cs" />
@@ -106,6 +126,17 @@
     <Compile Include="Win32Native.cs" />
     <Compile Include="ZipStorer.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ImageBox" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\ExtResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ExtResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\GKImageControl.resx">
+      <DependentUpon>GKImageControl.Designer.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

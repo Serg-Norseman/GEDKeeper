@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 
 namespace GKCore.Interfaces
 {
@@ -20,5 +21,7 @@ namespace GKCore.Interfaces
 
         void WidgetShow(IWidget widget);
         void WidgetClose(IWidget widget);
+        
+        void ShowMDI(Form form);
     }
 }

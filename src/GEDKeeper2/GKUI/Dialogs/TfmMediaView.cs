@@ -8,6 +8,7 @@ using ExtUtils;
 using GedCom551;
 using GKCore.Interfaces;
 using GKUI.Controls;
+using GKCore;
 
 /// <summary>
 /// 
@@ -15,12 +16,13 @@ using GKUI.Controls;
 
 namespace GKUI.Dialogs
 {
-	public partial class TfmMediaView : Form
+	public partial class TfmMediaView : Form, ILocalization
 	{
 		private readonly IBase fBase;
 
         private TGEDCOMFileReferenceWithTitle fFileRef;
 		private bool fExtern;
+		private GKImageControl fImageCtl;
 
 		public bool Extern
 		{
@@ -53,9 +55,9 @@ namespace GKUI.Dialogs
 				{
 					Image img = this.fBase.BitmapLoad(this.fFileRef, -1, -1, false);
 
-					GKImageControl imCtl = new GKImageControl();
-					imCtl.OpenImage(img);
-					ctl = imCtl;
+					this.fImageCtl = new GKImageControl();
+					this.fImageCtl.OpenImage(img);
+					ctl = this.fImageCtl;
 					break;
 				}
 
@@ -135,6 +137,15 @@ namespace GKUI.Dialogs
 		{
 			this.InitializeComponent();
 			this.fBase = aBase;
+		}
+		
+		void ILocalization.SetLang()
+		{
+			if (this.fImageCtl != null) {
+        		this.fImageCtl.btnSizeToFit.Text = LangMan.LS(LSID.LSID_SizeToFit);
+				this.fImageCtl.btnZoomIn.Text = LangMan.LS(LSID.LSID_ZoomIn);
+				this.fImageCtl.btnZoomOut.Text = LangMan.LS(LSID.LSID_ZoomOut);
+			}
 		}
 	}
 }

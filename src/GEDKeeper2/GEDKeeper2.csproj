@@ -69,9 +69,6 @@
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cyotek.Windows.Forms.ImageBox">
-      <HintPath>Cyotek.Windows.Forms.ImageBox.dll</HintPath>
-    </Reference>
     <Reference Include="ExcelLibrary">
       <HintPath>ExcelLibrary.dll</HintPath>
     </Reference>
@@ -120,12 +117,6 @@
     </Compile>
     <Compile Include="GKUI\Controls\GKMergeControl.Designer.cs">
       <DependentUpon>GKMergeControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GKUI\Controls\GKImageControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="GKUI\Controls\GKImageControl.Designer.cs">
-      <DependentUpon>GKImageControl.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Controls\GKInputBox.cs">
       <SubType>Form</SubType>
@@ -437,9 +428,6 @@
   <ItemGroup>
     <EmbeddedResource Include="GKUI\Controls\GKMergeControl.resx">
       <DependentUpon>GKMergeControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Controls\GKImageControl.resx">
-      <DependentUpon>GKImageControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Controls\GKInputBox.resx">
       <DependentUpon>GKInputBox.cs</DependentUpon>

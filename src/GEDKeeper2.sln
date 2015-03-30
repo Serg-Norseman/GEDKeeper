@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKTimeLinePlugin", "GKTimeL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKCalculatorPlugin", "GKCalculatorPlugin\GKCalculatorPlugin.csproj", "{782E9338-ECA7-4095-9157-6CA003801F05}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKImageViewerPlugin", "GKImageViewerPlugin\GKImageViewerPlugin.csproj", "33EE6BBB-571A-4348-A543-A97F85D97030"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -122,6 +124,14 @@ Global
 		{782E9338-ECA7-4095-9157-6CA003801F05}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{782E9338-ECA7-4095-9157-6CA003801F05}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{782E9338-ECA7-4095-9157-6CA003801F05}.Release|x86.ActiveCfg = Release|Any CPU
+		33EE6BBB-571A-4348-A543-A97F85D97030.Debug|Any CPU.Build.0 = Debug|Any CPU
+		33EE6BBB-571A-4348-A543-A97F85D97030.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		33EE6BBB-571A-4348-A543-A97F85D97030.Debug|x86.Build.0 = Debug|Any CPU
+		33EE6BBB-571A-4348-A543-A97F85D97030.Debug|x86.ActiveCfg = Debug|Any CPU
+		33EE6BBB-571A-4348-A543-A97F85D97030.Release|Any CPU.Build.0 = Release|Any CPU
+		33EE6BBB-571A-4348-A543-A97F85D97030.Release|Any CPU.ActiveCfg = Release|Any CPU
+		33EE6BBB-571A-4348-A543-A97F85D97030.Release|x86.Build.0 = Release|Any CPU
+		33EE6BBB-571A-4348-A543-A97F85D97030.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
