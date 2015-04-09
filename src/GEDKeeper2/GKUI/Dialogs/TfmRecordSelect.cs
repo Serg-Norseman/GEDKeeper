@@ -1,30 +1,30 @@
 ﻿using System;
 using System.Windows.Forms;
-
-using GedCom551;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKUI.Controls;
 using GKUI.Lists;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKUI.Dialogs
 {
-	public partial class TfmRecordSelect : Form
+    /// <summary>
+    /// 
+    /// </summary>
+    public partial class TfmRecordSelect : Form
 	{
 		private readonly IBase fBase;
 
-        private TGEDCOMRecordType fMode;
+        private GEDCOMRecordType fMode;
 		private string fFilter;
 		private TargetMode fTargetMode;
         private GKRecordsView fListRecords;
 
-	    public TGEDCOMIndividualRecord Target { get; set; }
-        public TGEDCOMSex NeedSex { get; set; }
-        public TGEDCOMRecord ResultRecord { get; set; }
+	    public GEDCOMIndividualRecord Target { get; set; }
+        public GEDCOMSex NeedSex { get; set; }
+        public GEDCOMRecord ResultRecord { get; set; }
 
 
 		public string Filter
@@ -33,7 +33,7 @@ namespace GKUI.Dialogs
 			set { this.SetFilter(value); }
 		}
 
-		public TGEDCOMRecordType Mode
+		public GEDCOMRecordType Mode
 		{
 			get { return this.fMode; }
 			set {
@@ -80,8 +80,8 @@ namespace GKUI.Dialogs
 			this.fListRecords.ListMan.Filter.Clear();
 			this.fListRecords.ListMan.QuickFilter = this.fFilter;
 
-			if (this.fMode == TGEDCOMRecordType.rtIndividual) {
-				TIndividualListFilter iFilter = (TIndividualListFilter)this.fListRecords.ListMan.Filter;
+			if (this.fMode == GEDCOMRecordType.rtIndividual) {
+				IndividualListFilter iFilter = (IndividualListFilter)this.fListRecords.ListMan.Filter;
 				iFilter.Sex = this.NeedSex;
 				
 				if (this.fTargetMode == TargetMode.tmParent) {
@@ -92,9 +92,9 @@ namespace GKUI.Dialogs
 			this.fListRecords.UpdateContents(this.fBase.ShieldState, true, 1);
 		}
 
-        private bool ChildSelectorHandler(TGEDCOMRecord record)
+        private bool ChildSelectorHandler(GEDCOMRecord record)
         {
-        	TGEDCOMIndividualRecord iRec = record as TGEDCOMIndividualRecord;
+        	GEDCOMIndividualRecord iRec = record as GEDCOMIndividualRecord;
         	bool result = (iRec.ChildToFamilyLinks.Count == 0);
             return result;
         }
@@ -130,9 +130,9 @@ namespace GKUI.Dialogs
 			try
 			{
 				switch (this.fMode) {
-					case TGEDCOMRecordType.rtIndividual:
+					case GEDCOMRecordType.rtIndividual:
 						{
-							TGEDCOMIndividualRecord iRec = this.fBase.CreatePersonDialog(this.Target, this.fTargetMode, this.NeedSex);
+							GEDCOMIndividualRecord iRec = this.fBase.CreatePersonDialog(this.Target, this.fTargetMode, this.NeedSex);
 							if (iRec != null)
 							{
 								this.ResultRecord = iRec;
@@ -141,14 +141,14 @@ namespace GKUI.Dialogs
 							break;
 						}
 
-					case TGEDCOMRecordType.rtFamily:
+					case GEDCOMRecordType.rtFamily:
 						{
-							TGEDCOMFamilyRecord famRec = null;
+							GEDCOMFamilyRecord famRec = null;
 
-                            FamilyTarget fam_target;
-							fam_target = (this.fTargetMode == TargetMode.tmChildToFamily) ? FamilyTarget.ftChild : FamilyTarget.ftNone;
+                            FamilyTarget famTarget;
+							famTarget = (this.fTargetMode == TargetMode.tmChildToFamily) ? FamilyTarget.ftChild : FamilyTarget.ftNone;
 
-                            if (this.fBase.ModifyFamily(ref famRec, fam_target, this.Target))
+                            if (this.fBase.ModifyFamily(ref famRec, famTarget, this.Target))
 							{
 								this.ResultRecord = famRec;
 								base.DialogResult = DialogResult.OK;
@@ -156,9 +156,9 @@ namespace GKUI.Dialogs
 							break;
 						}
 
-					case TGEDCOMRecordType.rtNote:
+					case GEDCOMRecordType.rtNote:
 						{
-							TGEDCOMNoteRecord noteRec = null;
+							GEDCOMNoteRecord noteRec = null;
                             if (this.fBase.ModifyNote(ref noteRec))
 							{
 								this.ResultRecord = noteRec;
@@ -167,9 +167,9 @@ namespace GKUI.Dialogs
 							break;
 						}
 
-					case TGEDCOMRecordType.rtMultimedia:
+					case GEDCOMRecordType.rtMultimedia:
 						{
-							TGEDCOMMultimediaRecord mmRec = null;
+							GEDCOMMultimediaRecord mmRec = null;
                             if (this.fBase.ModifyMedia(ref mmRec))
 							{
 								this.ResultRecord = mmRec;
@@ -178,9 +178,9 @@ namespace GKUI.Dialogs
 							break;
 						}
 
-					case TGEDCOMRecordType.rtSource:
+					case GEDCOMRecordType.rtSource:
 						{
-							TGEDCOMSourceRecord sourceRec = null;
+							GEDCOMSourceRecord sourceRec = null;
                             if (this.fBase.ModifySource(ref sourceRec))
 							{
 								this.ResultRecord = sourceRec;
@@ -189,9 +189,9 @@ namespace GKUI.Dialogs
 							break;
 						}
 
-					case TGEDCOMRecordType.rtRepository:
+					case GEDCOMRecordType.rtRepository:
 						{
-							TGEDCOMRepositoryRecord repRec = null;
+							GEDCOMRepositoryRecord repRec = null;
                             if (this.fBase.ModifyRepository(ref repRec))
 							{
 								this.ResultRecord = repRec;
@@ -200,9 +200,9 @@ namespace GKUI.Dialogs
 							break;
 						}
 
-					case TGEDCOMRecordType.rtGroup:
+					case GEDCOMRecordType.rtGroup:
 						{
-							TGEDCOMGroupRecord groupRec = null;
+							GEDCOMGroupRecord groupRec = null;
                             if (this.fBase.ModifyGroup(ref groupRec))
 							{
 								this.ResultRecord = groupRec;
@@ -211,9 +211,9 @@ namespace GKUI.Dialogs
 							break;
 						}
 
-					case TGEDCOMRecordType.rtTask:
+					case GEDCOMRecordType.rtTask:
 						{
-							TGEDCOMTaskRecord taskRec = null;
+							GEDCOMTaskRecord taskRec = null;
                             if (this.fBase.ModifyTask(ref taskRec))
 							{
 								this.ResultRecord = taskRec;
@@ -222,9 +222,9 @@ namespace GKUI.Dialogs
 							break;
 						}
 
-					case TGEDCOMRecordType.rtCommunication:
+					case GEDCOMRecordType.rtCommunication:
 						{
-							TGEDCOMCommunicationRecord corrRec = null;
+							GEDCOMCommunicationRecord corrRec = null;
                             if (this.fBase.ModifyCommunication(ref corrRec))
 							{
 								this.ResultRecord = corrRec;
@@ -233,9 +233,9 @@ namespace GKUI.Dialogs
 							break;
 						}
 
-					case TGEDCOMRecordType.rtLocation:
+					case GEDCOMRecordType.rtLocation:
 						{
-							TGEDCOMLocationRecord locRec = null;
+							GEDCOMLocationRecord locRec = null;
                             if (this.fBase.ModifyLocation(ref locRec))
 							{
 								this.ResultRecord = locRec;

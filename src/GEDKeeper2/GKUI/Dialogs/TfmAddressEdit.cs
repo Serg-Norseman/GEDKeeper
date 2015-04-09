@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Windows.Forms;
-
-using GedCom551;
+using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKUI.Controls;
-
-/// <summary>
-/// 
-/// </summary>
 
 namespace GKUI.Dialogs
 {
-	public partial class TfmAddressEdit : Form, IBaseEditor
+    /// <summary>
+    /// 
+    /// </summary>
+    public partial class TfmAddressEdit : Form, IBaseEditor
 	{
         private readonly IBase fBase;
-		private TGEDCOMAddress fAddress;
+		private GEDCOMAddress fAddress;
 		private readonly GKSheetList fPhonesList;
 		private readonly GKSheetList fMailsList;
 		private readonly GKSheetList fWebsList;
@@ -25,7 +24,7 @@ namespace GKUI.Dialogs
 			get { return this.fBase; }
 		}
 
-		public TGEDCOMAddress Address
+		public GEDCOMAddress Address
 		{
 			get { return this.fAddress; }
 			set { this.SetAddress(value); }
@@ -39,7 +38,7 @@ namespace GKUI.Dialogs
 
 		private void ListModify(object sender, ModifyEventArgs eArgs)
 		{
-            TGEDCOMTag itemTag = eArgs.ItemData as TGEDCOMTag;
+            GEDCOMTag itemTag = eArgs.ItemData as GEDCOMTag;
             if ((eArgs.Action == RecordAction.raEdit || eArgs.Action == RecordAction.raDelete) && (itemTag == null)) return;
 
             string val;
@@ -113,7 +112,7 @@ namespace GKUI.Dialogs
 			this.UpdateLists();
 		}
 
-		private void SetAddress(TGEDCOMAddress value)
+		private void SetAddress(GEDCOMAddress value)
 		{
 			this.fAddress = value;
 
@@ -132,7 +131,7 @@ namespace GKUI.Dialogs
 			this.fMailsList.List.Items.Clear();
 			this.fWebsList.List.Items.Clear();
 
-			TGEDCOMTag tag;
+			GEDCOMTag tag;
 
 			int num = this.fAddress.PhoneNumbers.Count;
 			for (int i = 0; i < num; i++) {

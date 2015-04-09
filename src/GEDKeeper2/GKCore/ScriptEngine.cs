@@ -5,18 +5,16 @@ using System.Reflection;
 using System.Windows.Forms;
 
 using Com.StellmanGreene.CSVReader;
-using ExtUtils;
-using GedCom551;
+using GKCommon;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore.Interfaces;
+using GKCore.Types;
 using LuaInterface;
-
-/// <summary>
-/// 
-/// </summary>
 
 namespace GKCore
 {
-	public enum TScriptResource { srProgress, srCSV }
+	public enum ScriptResource { srProgress, srCSV }
 
 	[Serializable]
 	public class ScriptException : Exception
@@ -30,7 +28,10 @@ namespace GKCore
 		}
 	}
 
-	public class ScriptEngine : BaseObject
+    /// <summary>
+    /// 
+    /// </summary>
+    public class ScriptEngine : BaseObject
 	{
 		private TextBox fDebugOutput;
 		private IBase fBase;
@@ -72,20 +73,20 @@ namespace GKCore
 			lua_register(LVM, "gk_update_view");
 			lua_register(LVM, "gk_select_file");
 
-			LVM["rtNone"] = (int)TGEDCOMRecordType.rtNone;
-			LVM["rtIndividual"] = (int)TGEDCOMRecordType.rtIndividual;
-			LVM["rtFamily"] = (int)TGEDCOMRecordType.rtFamily;
-			LVM["rtNote"] = (int)TGEDCOMRecordType.rtNote;
-			LVM["rtMultimedia"] = (int)TGEDCOMRecordType.rtMultimedia;
-			LVM["rtSource"] = (int)TGEDCOMRecordType.rtSource;
-			LVM["rtRepository"] = (int)TGEDCOMRecordType.rtRepository;
-			LVM["rtGroup"] = (int)TGEDCOMRecordType.rtGroup;
-			LVM["rtResearch"] = (int)TGEDCOMRecordType.rtResearch;
-			LVM["rtTask"] = (int)TGEDCOMRecordType.rtTask;
-			LVM["rtCommunication"] = (int)TGEDCOMRecordType.rtCommunication;
-			LVM["rtLocation"] = (int)TGEDCOMRecordType.rtLocation;
-			LVM["rtSubmission"] = (int)TGEDCOMRecordType.rtSubmission;
-			LVM["rtSubmitter"] = (int)TGEDCOMRecordType.rtSubmitter;
+			LVM["rtNone"] = (int)GEDCOMRecordType.rtNone;
+			LVM["rtIndividual"] = (int)GEDCOMRecordType.rtIndividual;
+			LVM["rtFamily"] = (int)GEDCOMRecordType.rtFamily;
+			LVM["rtNote"] = (int)GEDCOMRecordType.rtNote;
+			LVM["rtMultimedia"] = (int)GEDCOMRecordType.rtMultimedia;
+			LVM["rtSource"] = (int)GEDCOMRecordType.rtSource;
+			LVM["rtRepository"] = (int)GEDCOMRecordType.rtRepository;
+			LVM["rtGroup"] = (int)GEDCOMRecordType.rtGroup;
+			LVM["rtResearch"] = (int)GEDCOMRecordType.rtResearch;
+			LVM["rtTask"] = (int)GEDCOMRecordType.rtTask;
+			LVM["rtCommunication"] = (int)GEDCOMRecordType.rtCommunication;
+			LVM["rtLocation"] = (int)GEDCOMRecordType.rtLocation;
+			LVM["rtSubmission"] = (int)GEDCOMRecordType.rtSubmission;
+			LVM["rtSubmitter"] = (int)GEDCOMRecordType.rtSubmitter;
 
 			lua_register(LVM, "gt_get_records_count");
 			lua_register(LVM, "gt_get_record");
@@ -255,117 +256,117 @@ namespace GKCore
 
 		public int gt_get_record_type(object recPtr)
 		{
-			TGEDCOMRecord rec = recPtr as TGEDCOMRecord;
-			return (rec == null) ? (int)TGEDCOMRecordType.rtNone : (int)rec.RecordType;
+			GEDCOMRecord rec = recPtr as GEDCOMRecord;
+			return (rec == null) ? (int)GEDCOMRecordType.rtNone : (int)rec.RecordType;
 		}
 
 		public bool gt_delete_record(object recPtr)
 		{
-			TGEDCOMRecord rec = recPtr as TGEDCOMRecord;
+			GEDCOMRecord rec = recPtr as GEDCOMRecord;
 			bool res = fBase.RecordDelete(rec, false);
 			return res;
 		}
 
 		public string gt_get_record_xref(object recPtr)
 		{
-			TGEDCOMRecord rec = recPtr as TGEDCOMRecord;
+			GEDCOMRecord rec = recPtr as GEDCOMRecord;
 			return rec.XRef;
 		}
 
 		public string gt_get_record_uid(object recPtr)
 		{
-			TGEDCOMRecord rec = recPtr as TGEDCOMRecord;
+			GEDCOMRecord rec = recPtr as GEDCOMRecord;
 			return rec.UID;
 		}
 
 		public string gt_get_record_type_name(int recType)
 		{
-			TGEDCOMRecordType rt = (TGEDCOMRecordType)recType;
+			GEDCOMRecordType rt = (GEDCOMRecordType)recType;
 			string rt_name = rt.ToString();
 			return rt_name;
 		}
 
 		public bool gt_record_is_filtered(object recPtr)
 		{
-			TGEDCOMRecord rec = recPtr as TGEDCOMRecord;
+			GEDCOMRecord rec = recPtr as GEDCOMRecord;
 			return fBase.RecordIsFiltered(rec);
 		}
 
 		public object gt_select_record(int recType)
 		{
-			TGEDCOMRecord rec = fBase.SelectRecord((TGEDCOMRecordType)recType, null);
+			GEDCOMRecord rec = fBase.SelectRecord((GEDCOMRecordType)recType, null);
 			return rec;
 		}
 
 		public string gt_get_person_name(object recPtr)
 		{
-			TGEDCOMIndividualRecord rec = recPtr as TGEDCOMIndividualRecord;
+			GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
 			return ((rec == null) ? "" : rec.aux_GetNameStr(true, false));
 		}
 
 		public int gt_get_person_associations_count(object recPtr)
 		{
-			TGEDCOMIndividualRecord rec = recPtr as TGEDCOMIndividualRecord;
+			GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
 			return rec.Associations.Count;
 		}
 
 		public object gt_get_person_association(object recPtr, int idx)
 		{
-			TGEDCOMIndividualRecord rec = recPtr as TGEDCOMIndividualRecord;
-			TGEDCOMAssociation asso = rec.Associations[idx];
+			GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
+			GEDCOMAssociation asso = rec.Associations[idx];
 
 			return asso;
 		}
 
 		public object gt_add_person_association(object recPtr, string rel, object a_ptr)
 		{
-			TGEDCOMIndividualRecord rec = recPtr as TGEDCOMIndividualRecord;
-			TGEDCOMIndividualRecord a_rec = a_ptr as TGEDCOMIndividualRecord;
-			TGEDCOMAssociation asso = rec.aux_AddAssociation(rel, a_rec);
+			GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
+			GEDCOMIndividualRecord a_rec = a_ptr as GEDCOMIndividualRecord;
+			GEDCOMAssociation asso = rec.aux_AddAssociation(rel, a_rec);
 			return asso;
 		}
 
 		public void gt_delete_person_association(object recPtr, int idx)
 		{
-			TGEDCOMIndividualRecord rec = recPtr as TGEDCOMIndividualRecord;
+			GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
 			rec.Associations.Delete(idx);
 		}
 
 		public int gt_get_person_events_count(object recPtr)
 		{
-			TGEDCOMIndividualRecord rec = recPtr as TGEDCOMIndividualRecord;
+			GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
 			return rec.IndividualEvents.Count;
 		}
 
 		public object gt_get_person_event(object recPtr, int idx)
 		{
-			TGEDCOMIndividualRecord rec = recPtr as TGEDCOMIndividualRecord;
-			TGEDCOMCustomEvent evt = rec.IndividualEvents[idx];
+			GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
+			GEDCOMCustomEvent evt = rec.IndividualEvents[idx];
 			return evt;
 		}
 
 		public object gt_get_person_event_ex(object recPtr, string sign)
 		{
-			TGEDCOMIndividualRecord rec = recPtr as TGEDCOMIndividualRecord;
-			TGEDCOMCustomEvent evt = rec.GetIndividualEvent(sign);
+			GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
+			GEDCOMCustomEvent evt = rec.GetIndividualEvent(sign);
 			return evt;
 		}
 
 		public void gt_delete_person_event(object recPtr, int idx)
 		{
-			TGEDCOMIndividualRecord rec = recPtr as TGEDCOMIndividualRecord;
+			GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
 			rec.IndividualEvents.Delete(idx);
 		}
 
 		public string gt_get_event_date(object evPtr)
 		{
-			TGEDCOMCustomEvent evt = evPtr as TGEDCOMCustomEvent;
+			GEDCOMCustomEvent evt = evPtr as GEDCOMCustomEvent;
 			return (GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false));
 		}
 
 		public int gt_get_event_year(object evPtr)
 		{
-			TGEDCOMCustomEvent evt = evPtr as TGEDCOMCustomEvent;
+			GEDCOMCustomEvent evt = evPtr as GEDCOMCustomEvent;
 			if (evt == null) {
 				return 0;
 			}
@@ -381,7 +382,7 @@ namespace GKCore
 			try
 			{
 				if (evPtr != null && date != "") {
-					TGEDCOMCustomEvent evt = evPtr as TGEDCOMCustomEvent;
+					GEDCOMCustomEvent evt = evPtr as GEDCOMCustomEvent;
 					evt.Detail.Date.ParseString(date);
 				}
 			}
@@ -393,151 +394,151 @@ namespace GKCore
 
 		public string gt_get_event_value(object evPtr)
 		{
-			TGEDCOMCustomEvent evt = evPtr as TGEDCOMCustomEvent;
+			GEDCOMCustomEvent evt = evPtr as GEDCOMCustomEvent;
 			return evt.StringValue;
 		}
 
 		public string gt_get_event_place(object evPtr)
 		{
-			TGEDCOMCustomEvent evt = evPtr as TGEDCOMCustomEvent;
+			GEDCOMCustomEvent evt = evPtr as GEDCOMCustomEvent;
 			return evt.Detail.Place.StringValue;
 		}
 
 		public void gt_set_event_value(object evPtr, string value)
 		{
-			TGEDCOMCustomEvent evt = evPtr as TGEDCOMCustomEvent;
+			GEDCOMCustomEvent evt = evPtr as GEDCOMCustomEvent;
 			evt.StringValue = value;
 		}
 
 		public void gt_set_event_place(object evPtr, string place)
 		{
-			TGEDCOMCustomEvent evt = evPtr as TGEDCOMCustomEvent;
+			GEDCOMCustomEvent evt = evPtr as GEDCOMCustomEvent;
 			evt.Detail.Place.StringValue = place;
 		}
 
 		public string gt_get_event_name(object evPtr)
 		{
-			TGEDCOMCustomEvent evt = evPtr as TGEDCOMCustomEvent;
+			GEDCOMCustomEvent evt = evPtr as GEDCOMCustomEvent;
 			return evt.Name;
 		}
 
 		public string gt_get_person_sex(object recPtr)
 		{
-			TGEDCOMIndividualRecord rec = recPtr as TGEDCOMIndividualRecord;
+			GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
 			return GKData.SexData[(int)rec.Sex].Sign;
 		}
 
 		public void gt_set_person_sex(object recPtr, string s_sex)
 		{
-			TGEDCOMIndividualRecord rec = recPtr as TGEDCOMIndividualRecord;
+			GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
 
-			TGEDCOMSex sex = (s_sex.Length == 1) ? GKUtils.GetSexBySign(s_sex[1]) : TGEDCOMSex.svNone;
+			GEDCOMSex sex = (s_sex.Length == 1) ? GKUtils.GetSexBySign(s_sex[1]) : GEDCOMSex.svNone;
 			rec.Sex = sex;
 		}
 
 		public object gt_create_person(string name, string patronymic, string family, string s_sex)
 		{
-			TGEDCOMSex sex = (s_sex.Length == 1) ? GKUtils.GetSexBySign(s_sex[0]) : TGEDCOMSex.svNone;
+			GEDCOMSex sex = (s_sex.Length == 1) ? GKUtils.GetSexBySign(s_sex[0]) : GEDCOMSex.svNone;
 
-			TGEDCOMIndividualRecord i_rec = fBase.Context.CreatePersonEx(name, patronymic, family, sex, false);
+			GEDCOMIndividualRecord i_rec = fBase.Context.CreatePersonEx(name, patronymic, family, sex, false);
 			return i_rec;
 		}
 
 		public object gt_create_family()
 		{
-			TGEDCOMFamilyRecord fRec = fBase.Tree.aux_CreateFamily();
+			GEDCOMFamilyRecord fRec = fBase.Tree.aux_CreateFamily();
 			return fRec;
 		}
 
 		public object gt_create_note()
 		{
-			TGEDCOMNoteRecord nRec = fBase.Tree.aux_CreateNote();
+			GEDCOMNoteRecord nRec = fBase.Tree.aux_CreateNote();
 			return nRec;
 		}
 
 		public object gt_create_source(string name)
 		{
-			TGEDCOMSourceRecord srcRec = fBase.Tree.aux_CreateSource();
+			GEDCOMSourceRecord srcRec = fBase.Tree.aux_CreateSource();
 			srcRec.FiledByEntry = name;
 			return srcRec;
 		}
 
 		public object gt_create_group(string name)
 		{
-			TGEDCOMGroupRecord grpRec = fBase.Tree.aux_CreateGroup();
+			GEDCOMGroupRecord grpRec = fBase.Tree.aux_CreateGroup();
 			grpRec.GroupName = name;
 			return grpRec;
 		}
 
 		public void gt_bind_group_member(object groupPtr, object personPtr)
 		{
-			TGEDCOMGroupRecord grp = groupPtr as TGEDCOMGroupRecord;
-			TGEDCOMIndividualRecord person = personPtr as TGEDCOMIndividualRecord;
+			GEDCOMGroupRecord grp = groupPtr as GEDCOMGroupRecord;
+			GEDCOMIndividualRecord person = personPtr as GEDCOMIndividualRecord;
 			grp.aux_AddMember(person);
 		}
 
 		public void gt_add_note_text(object notePtr, string txt)
 		{
-			TGEDCOMNoteRecord nRec = notePtr as TGEDCOMNoteRecord;
+			GEDCOMNoteRecord nRec = notePtr as GEDCOMNoteRecord;
 			nRec.aux_AddNoteText(txt);
 		}
 
 		public void gt_bind_record_note(object recPtr, object notePtr)
 		{
-			TGEDCOMRecord rec = recPtr as TGEDCOMRecord;
-			TGEDCOMNoteRecord noteRec = notePtr as TGEDCOMNoteRecord;
+			GEDCOMRecord rec = recPtr as GEDCOMRecord;
+			GEDCOMNoteRecord noteRec = notePtr as GEDCOMNoteRecord;
 
-			rec.aux_AddNote(noteRec);
+			rec.AddNote(noteRec);
 		}
 
 		public void gt_bind_record_source(object recPtr, object srcPtr, string page, int quality)
 		{
-			TGEDCOMRecord rec = recPtr as TGEDCOMRecord;
-			TGEDCOMSourceRecord srcRec = srcPtr as TGEDCOMSourceRecord;
+			GEDCOMRecord rec = recPtr as GEDCOMRecord;
+			GEDCOMSourceRecord srcRec = srcPtr as GEDCOMSourceRecord;
 
-			rec.aux_AddSource(srcRec, page, quality);
+			rec.AddSource(srcRec, page, quality);
 		}
 
-		public void gt_bind_family_spouse(object f_ptr, object sp_ptr)
+		public void gt_bind_family_spouse(object familyPtr, object spousePtr)
 		{
-			TGEDCOMFamilyRecord f_rec = f_ptr as TGEDCOMFamilyRecord;
-			TGEDCOMIndividualRecord sp_rec = sp_ptr as TGEDCOMIndividualRecord;
+			GEDCOMFamilyRecord fRec = familyPtr as GEDCOMFamilyRecord;
+			GEDCOMIndividualRecord spRec = spousePtr as GEDCOMIndividualRecord;
 
-			f_rec.aux_AddSpouse(sp_rec);
+			fRec.aux_AddSpouse(spRec);
 		}
 
-		public void gt_bind_family_child(object f_ptr, object ch_ptr)
+		public void gt_bind_family_child(object familyPtr, object childPtr)
 		{
-			TGEDCOMFamilyRecord f_rec = f_ptr as TGEDCOMFamilyRecord;
-			TGEDCOMIndividualRecord ch_rec = ch_ptr as TGEDCOMIndividualRecord;
+			GEDCOMFamilyRecord fRec = familyPtr as GEDCOMFamilyRecord;
+			GEDCOMIndividualRecord chRec = childPtr as GEDCOMIndividualRecord;
 
-			f_rec.aux_AddChild(ch_rec);
+			fRec.aux_AddChild(chRec);
 		}
 
 		public string gt_define_sex(string name, string patr)
 		{
-			TGEDCOMSex sx = this.fBase.DefineSex(name, patr);
+			GEDCOMSex sx = this.fBase.DefineSex(name, patr);
 
 			return (GKData.SexData[(int)sx].Sign);
 		}
 
 		public object gt_find_source(string name)
 		{
-			TGEDCOMSourceRecord srcRec = this.fBase.Context.aux_FindSource(name);
+			GEDCOMSourceRecord srcRec = this.fBase.Context.aux_FindSource(name);
 			return srcRec;
 		}
 
 		public object gt_create_event(object recPtr, string sign)
 		{
-			TGEDCOMRecord rec = recPtr as TGEDCOMIndividualRecord;
-			TGEDCOMCustomEvent evt = this.fBase.Context.CreateEventEx(rec, sign, "", "");
+			GEDCOMRecord rec = recPtr as GEDCOMIndividualRecord;
+			GEDCOMCustomEvent evt = this.fBase.Context.CreateEventEx(rec, sign, "", "");
 
 			return evt;
 		}
 
 		public string gt_define_patronymic(string fatherName, string childSex, bool confirm)
 		{
-			TGEDCOMSex sex = (childSex.Length == 1) ? GKUtils.GetSexBySign(childSex[1]) : TGEDCOMSex.svNone;
+			GEDCOMSex sex = (childSex.Length == 1) ? GKUtils.GetSexBySign(childSex[1]) : GEDCOMSex.svNone;
 
 			string childPatronymic = fBase.DefinePatronymic(fatherName, sex, confirm);
 			return childPatronymic;
@@ -545,55 +546,55 @@ namespace GKCore
 
 		public object gt_get_person_parents_family(object recPtr)
 		{
-			TGEDCOMIndividualRecord rec = recPtr as TGEDCOMIndividualRecord;
+			GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
 
-			TGEDCOMFamilyRecord fam = (rec.ChildToFamilyLinks.Count < 1) ? null : rec.ChildToFamilyLinks[0].Family;
+			GEDCOMFamilyRecord fam = (rec.ChildToFamilyLinks.Count < 1) ? null : rec.ChildToFamilyLinks[0].Family;
 			return fam;
 		}
 
 		public int gt_get_person_spouses_count(object recPtr)
 		{
-			TGEDCOMIndividualRecord rec = recPtr as TGEDCOMIndividualRecord;
+			GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
 			return rec.SpouseToFamilyLinks.Count;
 		}
 
-		public object gt_get_person_spouse_family(object recPtr, int sp_idx)
+		public object gt_get_person_spouse_family(object recPtr, int spIdx)
 		{
-			TGEDCOMIndividualRecord rec = recPtr as TGEDCOMIndividualRecord;
-			TGEDCOMFamilyRecord fam = rec.SpouseToFamilyLinks[sp_idx].Family;
+			GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
+			GEDCOMFamilyRecord fam = rec.SpouseToFamilyLinks[spIdx].Family;
 
 			return fam;
 		}
 
 		public object gt_get_family_husband(object recPtr)
 		{
-			TGEDCOMFamilyRecord fam = recPtr as TGEDCOMFamilyRecord;
+			GEDCOMFamilyRecord fam = recPtr as GEDCOMFamilyRecord;
 			recPtr = (fam == null) ? null : fam.Husband.Value;
 			return recPtr;
 		}
 
 		public object gt_get_family_wife(object recPtr)
 		{
-			TGEDCOMFamilyRecord fam = recPtr as TGEDCOMFamilyRecord;
+			GEDCOMFamilyRecord fam = recPtr as GEDCOMFamilyRecord;
 			recPtr = (fam == null) ? null : fam.Wife.Value;
 			return recPtr;
 		}
 
 		public int gt_get_family_childs_count(object recPtr)
 		{
-			TGEDCOMFamilyRecord fam = recPtr as TGEDCOMFamilyRecord;
+			GEDCOMFamilyRecord fam = recPtr as GEDCOMFamilyRecord;
 			return (fam == null) ? -1 : fam.Childrens.Count;
 		}
 
 		public object gt_get_family_child(object recPtr, int childIndex)
 		{
-			TGEDCOMFamilyRecord fam = recPtr as TGEDCOMFamilyRecord;
+			GEDCOMFamilyRecord fam = recPtr as GEDCOMFamilyRecord;
 			return (fam == null) ? null : fam.Childrens[childIndex].Value;
 		}
 
 		public int gt_get_location_usages(object recPtr)
 		{
-			TGEDCOMLocationRecord loc = recPtr as TGEDCOMLocationRecord;
+			GEDCOMLocationRecord loc = recPtr as GEDCOMLocationRecord;
 			int usages;
 
 			StringList linkList = new StringList();
@@ -612,7 +613,7 @@ namespace GKCore
 
 		public int gt_get_record_notes_count(object recPtr)
 		{
-			TGEDCOMRecord rec = recPtr as TGEDCOMRecord;
+			GEDCOMRecord rec = recPtr as GEDCOMRecord;
             return (rec == null) ? -1 : rec.Notes.Count;
 		}
 
@@ -620,20 +621,20 @@ namespace GKCore
 
 		public int gt_get_person_groups_count(object recPtr)
 		{
-			TGEDCOMIndividualRecord rec = recPtr as TGEDCOMIndividualRecord;
+			GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
 			return (rec == null) ? -1 : rec.Groups.Count;
 		}
 
-		public object gt_get_person_group(object recPtr, int gr_idx)
+		public object gt_get_person_group(object recPtr, int grIdx)
 		{
-			TGEDCOMIndividualRecord rec = recPtr as TGEDCOMIndividualRecord;
-			TGEDCOMGroupRecord grp = rec.Groups[gr_idx].Value as TGEDCOMGroupRecord;
+			GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
+			GEDCOMGroupRecord grp = rec.Groups[grIdx].Value as GEDCOMGroupRecord;
 			return grp;
 		}
 
 		public string gt_get_group_name(object recPtr)
 		{
-			TGEDCOMGroupRecord grp = recPtr as TGEDCOMGroupRecord;
+			GEDCOMGroupRecord grp = recPtr as GEDCOMGroupRecord;
 			return (grp == null) ? "" : grp.GroupName;
 		}
 
@@ -641,7 +642,7 @@ namespace GKCore
 
 		DataTable csv_data = null;
 
-		public bool csv_load(string fileName, bool first_line_is_schema)
+		public bool csv_load(string fileName, bool firstLineIsSchema)
 		{
 			bool res = false;
 
@@ -649,7 +650,7 @@ namespace GKCore
 			{
 				try
 				{
-					csv_data = CSVReader.ReadCSVFile(fileName, first_line_is_schema);
+					csv_data = CSVReader.ReadCSVFile(fileName, firstLineIsSchema);
 					res = true;
 				}
 				catch

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
 
-using ExtUtils;
-using GedCom551;
+using GKCommon;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKUI.Controls;
 
 namespace GKUI.Sheets
@@ -19,11 +21,11 @@ namespace GKUI.Sheets
             this.List.AddListColumn(LangMan.LS(LSID.LSID_BirthDate), 100, false);
             this.Columns_EndUpdate();
 
-            this.Buttons = EnumSet<GKSheetList.SheetButton>.Create(
-				GKSheetList.SheetButton.lbAdd, 
-				GKSheetList.SheetButton.lbEdit, 
-				GKSheetList.SheetButton.lbDelete, 
-				GKSheetList.SheetButton.lbJump
+            this.Buttons = EnumSet<SheetButton>.Create(
+				SheetButton.lbAdd, 
+				SheetButton.lbEdit, 
+				SheetButton.lbDelete, 
+				SheetButton.lbJump
 			);
 
             this.OnModify += this.ListModify;
@@ -42,10 +44,10 @@ namespace GKUI.Sheets
                 int idx = 0;
                 this.DataList.Reset();
                 while (this.DataList.MoveNext()) {
-                    TGEDCOMPointer ptr = this.DataList.Current as TGEDCOMPointer;
+                    GEDCOMPointer ptr = this.DataList.Current as GEDCOMPointer;
                     idx += 1;
 
-                    TGEDCOMIndividualRecord child = ptr.Value as TGEDCOMIndividualRecord;
+                    GEDCOMIndividualRecord child = ptr.Value as GEDCOMIndividualRecord;
                     ListViewItem item = this.List.AddItem(idx.ToString(), child);
                     item.SubItems.Add(child.aux_GetNameStr(true, false));
                     item.SubItems.Add(GKUtils.GetBirthDate(child, TfmGEDKeeper.Instance.Options.DefDateFormat, false));
@@ -69,13 +71,13 @@ namespace GKUI.Sheets
 
             bool result = false;
 
-            TGEDCOMFamilyRecord familyRecord = this.DataList.Owner as TGEDCOMFamilyRecord;
-            TGEDCOMIndividualRecord child = eArgs.ItemData as TGEDCOMIndividualRecord;
+            GEDCOMFamilyRecord familyRecord = this.DataList.Owner as GEDCOMFamilyRecord;
+            GEDCOMIndividualRecord child = eArgs.ItemData as GEDCOMIndividualRecord;
 
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    child = aBase.SelectPerson(familyRecord.Husband.Value as TGEDCOMIndividualRecord, TargetMode.tmParent, TGEDCOMSex.svNone);
+                    child = aBase.SelectPerson(familyRecord.Husband.Value as GEDCOMIndividualRecord, TargetMode.tmParent, GEDCOMSex.svNone);
                     result = (child != null && familyRecord.aux_AddChild(child));
                     break;
 

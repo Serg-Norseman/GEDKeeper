@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Windows.Forms;
 
-using ExtUtils;
-using GedCom551;
+using GKCommon;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKUI.Controls;
 using GKUI.Sheets;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKUI.Dialogs
 {
-	public partial class TfmResearchEdit : Form, IBaseEditor
+    /// <summary>
+    /// 
+    /// </summary>
+    public partial class TfmResearchEdit : Form, IBaseEditor
 	{
 		private readonly IBase fBase;
 
@@ -23,9 +24,9 @@ namespace GKUI.Dialogs
 		private readonly GKSheetList fGroupsList;
 		private readonly GKNotesSheet fNotesList;
 
-        private TGEDCOMResearchRecord fResearch;
+        private GEDCOMResearchRecord fResearch;
 
-		public TGEDCOMResearchRecord Research
+		public GEDCOMResearchRecord Research
 		{
 			get { return this.fResearch; }
 			set { this.SetResearch(value); }
@@ -39,15 +40,15 @@ namespace GKUI.Dialogs
 		private void AcceptChanges()
 		{
 			this.fResearch.ResearchName = this.EditName.Text;
-			this.fResearch.Priority = (TResearchPriority)this.EditPriority.SelectedIndex;
-			this.fResearch.Status = (TResearchStatus)this.EditStatus.SelectedIndex;
+			this.fResearch.Priority = (GKResearchPriority)this.EditPriority.SelectedIndex;
+			this.fResearch.Status = (GKResearchStatus)this.EditStatus.SelectedIndex;
 			this.fResearch.StartDate.ParseString(GEDCOMUtils.StrToGEDCOMDate(this.EditStartDate.Text, true));
 			this.fResearch.StopDate.ParseString(GEDCOMUtils.StrToGEDCOMDate(this.EditStopDate.Text, true));
 			this.fResearch.Percent = int.Parse(this.EditPercent.Text);
 			this.fBase.ChangeRecord(this.fResearch);
 		}
 
-		private void SetResearch(TGEDCOMResearchRecord value)
+		private void SetResearch(GEDCOMResearchRecord value)
 		{
 			this.fResearch = value;
 			try
@@ -83,12 +84,12 @@ namespace GKUI.Dialogs
 	    {
             bool res = false;
 
-            TGEDCOMTaskRecord task = eArgs.ItemData as TGEDCOMTaskRecord;
+            GEDCOMTaskRecord task = eArgs.ItemData as GEDCOMTaskRecord;
 
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    task = this.fBase.SelectRecord(TGEDCOMRecordType.rtTask, null) as TGEDCOMTaskRecord;
+                    task = this.fBase.SelectRecord(GEDCOMRecordType.rtTask, null) as GEDCOMTaskRecord;
                     res = this.fResearch.aux_AddTask(task);
                     break;
 
@@ -121,12 +122,12 @@ namespace GKUI.Dialogs
         {
             bool res = false;
 
-            TGEDCOMCommunicationRecord comm = eArgs.ItemData as TGEDCOMCommunicationRecord;
+            GEDCOMCommunicationRecord comm = eArgs.ItemData as GEDCOMCommunicationRecord;
 
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    comm = this.fBase.SelectRecord(TGEDCOMRecordType.rtCommunication, null) as TGEDCOMCommunicationRecord;
+                    comm = this.fBase.SelectRecord(GEDCOMRecordType.rtCommunication, null) as GEDCOMCommunicationRecord;
                     res = this.fResearch.aux_AddCommunication(comm);
                     break;
 
@@ -159,12 +160,12 @@ namespace GKUI.Dialogs
         {
             bool res = false;
 
-            TGEDCOMGroupRecord group = eArgs.ItemData as TGEDCOMGroupRecord;
+            GEDCOMGroupRecord group = eArgs.ItemData as GEDCOMGroupRecord;
 
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    group = this.fBase.SelectRecord(TGEDCOMRecordType.rtGroup, null) as TGEDCOMGroupRecord;
+                    group = this.fBase.SelectRecord(GEDCOMRecordType.rtGroup, null) as GEDCOMGroupRecord;
                     res = this.fResearch.aux_AddGroup(group);
                     break;
 
@@ -222,7 +223,7 @@ namespace GKUI.Dialogs
 			int num = this.fResearch.Tasks.Count - 1;
 			for (int i = 0; i <= num; i++)
 			{
-				TGEDCOMTaskRecord task = this.fResearch.Tasks[i].Value as TGEDCOMTaskRecord;
+				GEDCOMTaskRecord task = this.fResearch.Tasks[i].Value as GEDCOMTaskRecord;
 				GKListItem item = list.AddItem(GKUtils.GetTaskGoalStr(task), task);
 				item.SubItems.Add(LangMan.LS(GKData.PriorityNames[(int)task.Priority]));
                 item.SubItems.Add(GKUtils.GEDCOMDateToStr(task.StartDate, defaultDateFormat));
@@ -237,7 +238,7 @@ namespace GKUI.Dialogs
 			int num2 = this.fResearch.Communications.Count - 1;
 			for (int i = 0; i <= num2; i++)
 			{
-				TGEDCOMCommunicationRecord corr = this.fResearch.Communications[i].Value as TGEDCOMCommunicationRecord;
+				GEDCOMCommunicationRecord corr = this.fResearch.Communications[i].Value as GEDCOMCommunicationRecord;
 				GKListItem item = list2.AddItem(corr.CommName, corr);
 				item.SubItems.Add(GKUtils.GetCorresponderStr(this.fBase.Tree, corr, false));
 				item.SubItems.Add(LangMan.LS(GKData.CommunicationNames[(int)corr.CommunicationType]));
@@ -252,7 +253,7 @@ namespace GKUI.Dialogs
 			int num3 = this.fResearch.Groups.Count - 1;
 			for (int i = 0; i <= num3; i++)
 			{
-				TGEDCOMGroupRecord grp = this.fResearch.Groups[i].Value as TGEDCOMGroupRecord;
+				GEDCOMGroupRecord grp = this.fResearch.Groups[i].Value as GEDCOMGroupRecord;
 				list3.AddItem(grp.GroupName, grp);
 			}
 			list3.EndUpdate();
@@ -278,12 +279,12 @@ namespace GKUI.Dialogs
 
 			this.fBase = aBase;
 
-			for (TResearchPriority rp = TResearchPriority.rpNone; rp <= TResearchPriority.rpTop; rp++)
+			for (GKResearchPriority rp = GKResearchPriority.rpNone; rp <= GKResearchPriority.rpTop; rp++)
 			{
 				this.EditPriority.Items.Add(LangMan.LS(GKData.PriorityNames[(int)rp]));
 			}
 
-			for (TResearchStatus rs = TResearchStatus.rsDefined; rs <= TResearchStatus.rsWithdrawn; rs++)
+			for (GKResearchStatus rs = GKResearchStatus.rsDefined; rs <= GKResearchStatus.rsWithdrawn; rs++)
 			{
 				this.EditStatus.Items.Add(LangMan.LS(GKData.StatusNames[(int)rs]));
 			}

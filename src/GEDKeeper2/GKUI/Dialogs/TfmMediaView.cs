@@ -1,41 +1,39 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-
-using ExtUtils;
-using GedCom551;
-using GKCore.Interfaces;
-using GKUI.Controls;
+using GKCommon;
+using GKCommon.Controls;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
-
-/// <summary>
-/// 
-/// </summary>
+using GKCore.Interfaces;
 
 namespace GKUI.Dialogs
 {
-	public partial class TfmMediaView : Form, ILocalization
+    /// <summary>
+    /// 
+    /// </summary>
+    public partial class TfmMediaView : Form, ILocalization
 	{
 		private readonly IBase fBase;
 
-        private TGEDCOMFileReferenceWithTitle fFileRef;
+        private GEDCOMFileReferenceWithTitle fFileRef;
 		private bool fExtern;
-		private GKImageControl fImageCtl;
+		private ImageView fImageCtl;
 
 		public bool Extern
 		{
 			get { return this.fExtern; }
 		}
 
-		public TGEDCOMFileReferenceWithTitle FileRef
+		public GEDCOMFileReferenceWithTitle FileRef
 		{
 			get { return this.fFileRef; }
 			set { this.SetFileRef(value); }
 		}
 
-		private void SetFileRef(TGEDCOMFileReferenceWithTitle value)
+		private void SetFileRef(GEDCOMFileReferenceWithTitle value)
 		{
 			this.fFileRef = value;
 			this.fExtern = false;
@@ -45,25 +43,25 @@ namespace GKUI.Dialogs
 			this.SuspendLayout();
 			switch (this.fFileRef.MultimediaFormat)
 			{
-				case TGEDCOMMultimediaFormat.mfBMP:
-				case TGEDCOMMultimediaFormat.mfGIF:
-				case TGEDCOMMultimediaFormat.mfJPG:
-				case TGEDCOMMultimediaFormat.mfPCX:
-				case TGEDCOMMultimediaFormat.mfTIF:
-				case TGEDCOMMultimediaFormat.mfTGA:
-				case TGEDCOMMultimediaFormat.mfPNG:
+				case GEDCOMMultimediaFormat.mfBMP:
+				case GEDCOMMultimediaFormat.mfGIF:
+				case GEDCOMMultimediaFormat.mfJPG:
+				case GEDCOMMultimediaFormat.mfPCX:
+				case GEDCOMMultimediaFormat.mfTIF:
+				case GEDCOMMultimediaFormat.mfTGA:
+				case GEDCOMMultimediaFormat.mfPNG:
 				{
 					Image img = this.fBase.BitmapLoad(this.fFileRef, -1, -1, false);
 
-					this.fImageCtl = new GKImageControl();
+					this.fImageCtl = new ImageView();
 					this.fImageCtl.OpenImage(img);
 					ctl = this.fImageCtl;
 					break;
 				}
 
-				case TGEDCOMMultimediaFormat.mfWAV:
-				case TGEDCOMMultimediaFormat.mfAVI:
-				case TGEDCOMMultimediaFormat.mfMPG:
+				case GEDCOMMultimediaFormat.mfWAV:
+				case GEDCOMMultimediaFormat.mfAVI:
+				case GEDCOMMultimediaFormat.mfMPG:
 				{
 					this.fExtern = true;
 					string targetFile = "";
@@ -72,7 +70,7 @@ namespace GKUI.Dialogs
 					break;
 				}
 
-				case TGEDCOMMultimediaFormat.mfTXT:
+				case GEDCOMMultimediaFormat.mfTXT:
 				{
 					Stream fs;
 					this.fBase.MediaLoad(this.fFileRef, out fs, false);
@@ -82,13 +80,13 @@ namespace GKUI.Dialogs
                         txtBox.Multiline = true;
                         txtBox.ReadOnly = true;
                         txtBox.ScrollBars = ScrollBars.Both;
-                        txtBox.Text = strd.ReadToEnd().ToString();
+                        txtBox.Text = strd.ReadToEnd();
                         ctl = txtBox;
 					}
 					break;
 				}
 
-				case TGEDCOMMultimediaFormat.mfRTF:
+				case GEDCOMMultimediaFormat.mfRTF:
 				{
 					Stream fs;
 					this.fBase.MediaLoad(this.fFileRef, out fs, false);
@@ -96,13 +94,13 @@ namespace GKUI.Dialogs
 					{
 					    RichTextBox txtBox = new RichTextBox();
                         txtBox.ReadOnly = true;
-                        txtBox.Text = strd.ReadToEnd().ToString();
+                        txtBox.Text = strd.ReadToEnd();
                         ctl = txtBox;
 					}
 					break;
 				}
 
-				case TGEDCOMMultimediaFormat.mfHTM:
+				case GEDCOMMultimediaFormat.mfHTM:
 				{
 					Stream fs;
 					this.fBase.MediaLoad(this.fFileRef, out fs, false);

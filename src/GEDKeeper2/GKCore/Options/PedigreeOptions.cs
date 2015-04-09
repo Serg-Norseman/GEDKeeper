@@ -1,9 +1,6 @@
 using System;
-using ExtUtils;
-
-/// <summary>
-/// 
-/// </summary>
+using GKCommon;
+using GKCore.Types;
 
 namespace GKCore.Options
 {
@@ -18,35 +15,15 @@ namespace GKCore.Options
         }
     }
 
-    public sealed class PedigreeOptions : IDisposable
-	{
-		public enum PedigreeFormat { pfExcess, pfCompact }
-
-        private bool fDisposed;
-
-		public PedigreeFormat Format
-		{
-			get;
-			set;
-		}
-
-		public bool IncludeAttributes
-		{
-			get;
-			set;
-		}
-
-		public bool IncludeNotes
-		{
-			get;
-			set;
-		}
-
-		public bool IncludeSources
-		{
-			get;
-			set;
-		}
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class PedigreeOptions : BaseObject
+    {
+        public PedigreeFormat Format;
+        public bool IncludeAttributes;
+        public bool IncludeNotes;
+        public bool IncludeSources;
 
 		public PedigreeOptions()
 		{
@@ -54,14 +31,6 @@ namespace GKCore.Options
 			this.IncludeNotes = true;
 			this.IncludeSources = true;
 		}
-
-        public void Dispose()
-        {
-            if (!this.fDisposed)
-            {
-                this.fDisposed = true;
-            }
-        }
 
 		public void LoadFromFile(IniFile iniFile)
 		{

@@ -3,9 +3,11 @@ using System.IO;
 using System.Windows.Forms;
 
 using ExtUtils;
-using GedCom551;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKUI.Sheets;
 
 /// <summary>
@@ -17,13 +19,13 @@ namespace GKUI.Dialogs
 	public partial class TfmMediaEdit : Form, IBaseEditor
 	{
 		private bool fIsNew;
-		private TGEDCOMMultimediaRecord fMediaRec;
+		private GEDCOMMultimediaRecord fMediaRec;
 
         private readonly IBase fBase;
 		private readonly GKNotesSheet fNotesList;
 		private readonly GKSourcesSheet fSourcesList;
 
-		public TGEDCOMMultimediaRecord MediaRec
+		public GEDCOMMultimediaRecord MediaRec
 		{
 			get { return this.fMediaRec; }
 			set { this.SetMediaRec(value); }
@@ -38,7 +40,7 @@ namespace GKUI.Dialogs
 		{
 			bool result = true;
 
-			TGEDCOMFileReferenceWithTitle fileRef = this.fMediaRec.FileReferences[0];
+			GEDCOMFileReferenceWithTitle fileRef = this.fMediaRec.FileReferences[0];
 
 			if (this.fIsNew)
 			{
@@ -55,7 +57,7 @@ namespace GKUI.Dialogs
 				}
 			}
 
-			fileRef.MediaType = (TGEDCOMMediaType)this.cbMediaType.SelectedIndex;
+			fileRef.MediaType = (GEDCOMMediaType)this.cbMediaType.SelectedIndex;
 			fileRef.Title = this.edName.Text;
 
 			this.ControlsRefresh();
@@ -66,7 +68,7 @@ namespace GKUI.Dialogs
 
 		private void ControlsRefresh()
 		{
-			TGEDCOMFileReferenceWithTitle fileRef = this.fMediaRec.FileReferences[0];
+			GEDCOMFileReferenceWithTitle fileRef = this.fMediaRec.FileReferences[0];
 
 			this.fIsNew = (fileRef.StringValue == "");
 
@@ -89,7 +91,7 @@ namespace GKUI.Dialogs
 			this.fSourcesList.DataList = this.fMediaRec.SourceCitations.GetEnumerator();
 		}
 
-		private void SetMediaRec(TGEDCOMMultimediaRecord value)
+		private void SetMediaRec(GEDCOMMultimediaRecord value)
 		{
 			this.fMediaRec = value;
 			try
@@ -123,7 +125,7 @@ namespace GKUI.Dialogs
 				string file = this.OpenDialog1.FileName;
 
 				this.edFile.Text = file;
-				TGEDCOMMultimediaFormat fileFmt = TGEDCOMFileReference.RecognizeFormat(file);
+				GEDCOMMultimediaFormat fileFmt = GEDCOMFileReference.RecognizeFormat(file);
 
 				FileInfo info = new FileInfo(file);
 				double fileSize = (((double)info.Length / 1024) / 1024); // mb
@@ -134,13 +136,13 @@ namespace GKUI.Dialogs
 			}
 		}
 
-        private static bool CheckFormatArchived(TGEDCOMMultimediaFormat format)
+        private static bool CheckFormatArchived(GEDCOMMultimediaFormat format)
         {
             switch (format)
             {
-                case TGEDCOMMultimediaFormat.mfWAV:
-                case TGEDCOMMultimediaFormat.mfAVI:
-                case TGEDCOMMultimediaFormat.mfMPG:
+                case GEDCOMMultimediaFormat.mfWAV:
+                case GEDCOMMultimediaFormat.mfAVI:
+                case GEDCOMMultimediaFormat.mfMPG:
                     return false;
                 default:
                     return true;
@@ -174,7 +176,7 @@ namespace GKUI.Dialogs
 			this.InitializeComponent();
 			this.fBase = aBase;
 
-			for (TGEDCOMMediaType mt = TGEDCOMMediaType.mtNone; mt <= TGEDCOMMediaType.mtLast; mt++)
+			for (GEDCOMMediaType mt = GEDCOMMediaType.mtNone; mt <= GEDCOMMediaType.mtLast; mt++)
 			{
 				this.cbMediaType.Items.Add(LangMan.LS(GKData.MediaTypes[(int)mt]));
 			}

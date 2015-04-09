@@ -3,7 +3,9 @@ using System.IO;
 using System.Text;
 
 using ExtUtils;
-using GedCom551;
+using GKCommon;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using NUnit.Framework;
 
 namespace GKTests
@@ -135,149 +137,149 @@ namespace GKTests
 			Assert.IsFalse(GEDCOMUtils.IsDigits("f09"), "IsDigits(f09)");
 			Assert.IsTrue(GEDCOMUtils.IsDigits("99"), "IsDigits(99)");
 
-			Assert.AreEqual("M", GEDCOMUtils.GetSexStr(TGEDCOMSex.svMale), "GetSexStr(svMale)");
-			Assert.AreEqual("F", GEDCOMUtils.GetSexStr(TGEDCOMSex.svFemale), "GetSexStr(svFemale)");
-			Assert.AreEqual("U", GEDCOMUtils.GetSexStr(TGEDCOMSex.svUndetermined), "GetSexStr(svUndetermined)");
-			Assert.AreEqual("", GEDCOMUtils.GetSexStr(TGEDCOMSex.svNone), "GetSexStr(svNone)");
+			Assert.AreEqual("M", GEDCOMUtils.GetSexStr(GEDCOMSex.svMale), "GetSexStr(svMale)");
+			Assert.AreEqual("F", GEDCOMUtils.GetSexStr(GEDCOMSex.svFemale), "GetSexStr(svFemale)");
+			Assert.AreEqual("U", GEDCOMUtils.GetSexStr(GEDCOMSex.svUndetermined), "GetSexStr(svUndetermined)");
+			Assert.AreEqual("", GEDCOMUtils.GetSexStr(GEDCOMSex.svNone), "GetSexStr(svNone)");
 			
-			Assert.AreEqual(TGEDCOMSex.svMale, GEDCOMUtils.GetSexVal("M"), "GetSexVal(svMale)");
-			Assert.AreEqual(TGEDCOMSex.svFemale, GEDCOMUtils.GetSexVal("F"), "GetSexVal(svFemale)");
-			Assert.AreEqual(TGEDCOMSex.svUndetermined, GEDCOMUtils.GetSexVal("U"), "GetSexVal(svUndetermined)");
-			Assert.AreEqual(TGEDCOMSex.svNone, GEDCOMUtils.GetSexVal(""), "GetSexVal(svNone)");
+			Assert.AreEqual(GEDCOMSex.svMale, GEDCOMUtils.GetSexVal("M"), "GetSexVal(svMale)");
+			Assert.AreEqual(GEDCOMSex.svFemale, GEDCOMUtils.GetSexVal("F"), "GetSexVal(svFemale)");
+			Assert.AreEqual(GEDCOMSex.svUndetermined, GEDCOMUtils.GetSexVal("U"), "GetSexVal(svUndetermined)");
+			Assert.AreEqual(GEDCOMSex.svNone, GEDCOMUtils.GetSexVal(""), "GetSexVal(svNone)");
 			
-			Assert.AreEqual("ASCII", GEDCOMUtils.GetCharacterSetStr(TGEDCOMCharacterSet.csASCII));
-			Assert.AreEqual("ANSEL", GEDCOMUtils.GetCharacterSetStr(TGEDCOMCharacterSet.csANSEL));
-			Assert.AreEqual("UNICODE", GEDCOMUtils.GetCharacterSetStr(TGEDCOMCharacterSet.csUNICODE));
-			Assert.AreEqual("UTF-8", GEDCOMUtils.GetCharacterSetStr(TGEDCOMCharacterSet.csUTF8));
+			Assert.AreEqual("ASCII", GEDCOMUtils.GetCharacterSetStr(GEDCOMCharacterSet.csASCII));
+			Assert.AreEqual("ANSEL", GEDCOMUtils.GetCharacterSetStr(GEDCOMCharacterSet.csANSEL));
+			Assert.AreEqual("UNICODE", GEDCOMUtils.GetCharacterSetStr(GEDCOMCharacterSet.csUNICODE));
+			Assert.AreEqual("UTF-8", GEDCOMUtils.GetCharacterSetStr(GEDCOMCharacterSet.csUTF8));
 			
-			Assert.AreEqual(TGEDCOMCharacterSet.csASCII, GEDCOMUtils.GetCharacterSetVal("ASCII"));
-			Assert.AreEqual(TGEDCOMCharacterSet.csASCII, GEDCOMUtils.GetCharacterSetVal("ANSI"));
-			Assert.AreEqual(TGEDCOMCharacterSet.csASCII, GEDCOMUtils.GetCharacterSetVal("IBMPC"));
-			Assert.AreEqual(TGEDCOMCharacterSet.csANSEL, GEDCOMUtils.GetCharacterSetVal("ANSEL"));
-			Assert.AreEqual(TGEDCOMCharacterSet.csUNICODE, GEDCOMUtils.GetCharacterSetVal("UNICODE"));
-			Assert.AreEqual(TGEDCOMCharacterSet.csUTF8, GEDCOMUtils.GetCharacterSetVal("UTF-8"));
-			Assert.AreEqual(TGEDCOMCharacterSet.csUTF8, GEDCOMUtils.GetCharacterSetVal("UTF8"));
-			Assert.AreEqual(TGEDCOMCharacterSet.csASCII, GEDCOMUtils.GetCharacterSetVal(""));
-			
-			//
-
-			Assert.AreEqual(TResearchPriority.rpLow, GEDCOMUtils.GetPriorityVal(GEDCOMUtils.GetPriorityStr(TResearchPriority.rpLow)));
-			Assert.AreEqual(TResearchPriority.rpNormal, GEDCOMUtils.GetPriorityVal(GEDCOMUtils.GetPriorityStr(TResearchPriority.rpNormal)));
-			Assert.AreEqual(TResearchPriority.rpHigh, GEDCOMUtils.GetPriorityVal(GEDCOMUtils.GetPriorityStr(TResearchPriority.rpHigh)));
-			Assert.AreEqual(TResearchPriority.rpTop, GEDCOMUtils.GetPriorityVal(GEDCOMUtils.GetPriorityStr(TResearchPriority.rpTop)));
-			Assert.AreEqual(TResearchPriority.rpNone, GEDCOMUtils.GetPriorityVal(GEDCOMUtils.GetPriorityStr(TResearchPriority.rpNone)));
+			Assert.AreEqual(GEDCOMCharacterSet.csASCII, GEDCOMUtils.GetCharacterSetVal("ASCII"));
+			Assert.AreEqual(GEDCOMCharacterSet.csASCII, GEDCOMUtils.GetCharacterSetVal("ANSI"));
+			Assert.AreEqual(GEDCOMCharacterSet.csASCII, GEDCOMUtils.GetCharacterSetVal("IBMPC"));
+			Assert.AreEqual(GEDCOMCharacterSet.csANSEL, GEDCOMUtils.GetCharacterSetVal("ANSEL"));
+			Assert.AreEqual(GEDCOMCharacterSet.csUNICODE, GEDCOMUtils.GetCharacterSetVal("UNICODE"));
+			Assert.AreEqual(GEDCOMCharacterSet.csUTF8, GEDCOMUtils.GetCharacterSetVal("UTF-8"));
+			Assert.AreEqual(GEDCOMCharacterSet.csUTF8, GEDCOMUtils.GetCharacterSetVal("UTF8"));
+			Assert.AreEqual(GEDCOMCharacterSet.csASCII, GEDCOMUtils.GetCharacterSetVal(""));
 			
 			//
 
-			Assert.AreEqual(TGEDCOMOrdinanceProcessFlag.opYes, GEDCOMUtils.GetOrdinanceProcessFlagVal(GEDCOMUtils.GetOrdinanceProcessFlagStr(TGEDCOMOrdinanceProcessFlag.opYes)));
-			Assert.AreEqual(TGEDCOMOrdinanceProcessFlag.opNo, GEDCOMUtils.GetOrdinanceProcessFlagVal(GEDCOMUtils.GetOrdinanceProcessFlagStr(TGEDCOMOrdinanceProcessFlag.opNo)));
-			Assert.AreEqual(TGEDCOMOrdinanceProcessFlag.opNone, GEDCOMUtils.GetOrdinanceProcessFlagVal(GEDCOMUtils.GetOrdinanceProcessFlagStr(TGEDCOMOrdinanceProcessFlag.opNone)));
+			Assert.AreEqual(GKResearchPriority.rpLow, GEDCOMUtils.GetPriorityVal(GEDCOMUtils.GetPriorityStr(GKResearchPriority.rpLow)));
+			Assert.AreEqual(GKResearchPriority.rpNormal, GEDCOMUtils.GetPriorityVal(GEDCOMUtils.GetPriorityStr(GKResearchPriority.rpNormal)));
+			Assert.AreEqual(GKResearchPriority.rpHigh, GEDCOMUtils.GetPriorityVal(GEDCOMUtils.GetPriorityStr(GKResearchPriority.rpHigh)));
+			Assert.AreEqual(GKResearchPriority.rpTop, GEDCOMUtils.GetPriorityVal(GEDCOMUtils.GetPriorityStr(GKResearchPriority.rpTop)));
+			Assert.AreEqual(GKResearchPriority.rpNone, GEDCOMUtils.GetPriorityVal(GEDCOMUtils.GetPriorityStr(GKResearchPriority.rpNone)));
 			
 			//
 
-			Assert.AreEqual(TResearchStatus.rsInProgress, GEDCOMUtils.GetStatusVal(GEDCOMUtils.GetStatusStr(TResearchStatus.rsInProgress)));
-			Assert.AreEqual(TResearchStatus.rsOnHold, GEDCOMUtils.GetStatusVal(GEDCOMUtils.GetStatusStr(TResearchStatus.rsOnHold)));
-			Assert.AreEqual(TResearchStatus.rsProblems, GEDCOMUtils.GetStatusVal(GEDCOMUtils.GetStatusStr(TResearchStatus.rsProblems)));
-			Assert.AreEqual(TResearchStatus.rsCompleted, GEDCOMUtils.GetStatusVal(GEDCOMUtils.GetStatusStr(TResearchStatus.rsCompleted)));
-			Assert.AreEqual(TResearchStatus.rsWithdrawn, GEDCOMUtils.GetStatusVal(GEDCOMUtils.GetStatusStr(TResearchStatus.rsWithdrawn)));
-			Assert.AreEqual(TResearchStatus.rsDefined, GEDCOMUtils.GetStatusVal(GEDCOMUtils.GetStatusStr(TResearchStatus.rsDefined)));
+			Assert.AreEqual(GEDCOMOrdinanceProcessFlag.opYes, GEDCOMUtils.GetOrdinanceProcessFlagVal(GEDCOMUtils.GetOrdinanceProcessFlagStr(GEDCOMOrdinanceProcessFlag.opYes)));
+			Assert.AreEqual(GEDCOMOrdinanceProcessFlag.opNo, GEDCOMUtils.GetOrdinanceProcessFlagVal(GEDCOMUtils.GetOrdinanceProcessFlagStr(GEDCOMOrdinanceProcessFlag.opNo)));
+			Assert.AreEqual(GEDCOMOrdinanceProcessFlag.opNone, GEDCOMUtils.GetOrdinanceProcessFlagVal(GEDCOMUtils.GetOrdinanceProcessFlagStr(GEDCOMOrdinanceProcessFlag.opNone)));
 			
 			//
 
-			Assert.AreEqual(TGEDCOMNameType.ntNone, GEDCOMUtils.GetNameTypeVal(GEDCOMUtils.GetNameTypeStr(TGEDCOMNameType.ntNone)));
-			Assert.AreEqual(TGEDCOMNameType.ntAka, GEDCOMUtils.GetNameTypeVal(GEDCOMUtils.GetNameTypeStr(TGEDCOMNameType.ntAka)));
-			Assert.AreEqual(TGEDCOMNameType.ntBirth, GEDCOMUtils.GetNameTypeVal(GEDCOMUtils.GetNameTypeStr(TGEDCOMNameType.ntBirth)));
-			Assert.AreEqual(TGEDCOMNameType.ntImmigrant, GEDCOMUtils.GetNameTypeVal(GEDCOMUtils.GetNameTypeStr(TGEDCOMNameType.ntImmigrant)));
-			Assert.AreEqual(TGEDCOMNameType.ntMaiden, GEDCOMUtils.GetNameTypeVal(GEDCOMUtils.GetNameTypeStr(TGEDCOMNameType.ntMaiden)));
-			Assert.AreEqual(TGEDCOMNameType.ntMarried, GEDCOMUtils.GetNameTypeVal(GEDCOMUtils.GetNameTypeStr(TGEDCOMNameType.ntMarried)));
+			Assert.AreEqual(GKResearchStatus.rsInProgress, GEDCOMUtils.GetStatusVal(GEDCOMUtils.GetStatusStr(GKResearchStatus.rsInProgress)));
+			Assert.AreEqual(GKResearchStatus.rsOnHold, GEDCOMUtils.GetStatusVal(GEDCOMUtils.GetStatusStr(GKResearchStatus.rsOnHold)));
+			Assert.AreEqual(GKResearchStatus.rsProblems, GEDCOMUtils.GetStatusVal(GEDCOMUtils.GetStatusStr(GKResearchStatus.rsProblems)));
+			Assert.AreEqual(GKResearchStatus.rsCompleted, GEDCOMUtils.GetStatusVal(GEDCOMUtils.GetStatusStr(GKResearchStatus.rsCompleted)));
+			Assert.AreEqual(GKResearchStatus.rsWithdrawn, GEDCOMUtils.GetStatusVal(GEDCOMUtils.GetStatusStr(GKResearchStatus.rsWithdrawn)));
+			Assert.AreEqual(GKResearchStatus.rsDefined, GEDCOMUtils.GetStatusVal(GEDCOMUtils.GetStatusStr(GKResearchStatus.rsDefined)));
+			
+			//
+
+			Assert.AreEqual(GEDCOMNameType.ntNone, GEDCOMUtils.GetNameTypeVal(GEDCOMUtils.GetNameTypeStr(GEDCOMNameType.ntNone)));
+			Assert.AreEqual(GEDCOMNameType.ntAka, GEDCOMUtils.GetNameTypeVal(GEDCOMUtils.GetNameTypeStr(GEDCOMNameType.ntAka)));
+			Assert.AreEqual(GEDCOMNameType.ntBirth, GEDCOMUtils.GetNameTypeVal(GEDCOMUtils.GetNameTypeStr(GEDCOMNameType.ntBirth)));
+			Assert.AreEqual(GEDCOMNameType.ntImmigrant, GEDCOMUtils.GetNameTypeVal(GEDCOMUtils.GetNameTypeStr(GEDCOMNameType.ntImmigrant)));
+			Assert.AreEqual(GEDCOMNameType.ntMaiden, GEDCOMUtils.GetNameTypeVal(GEDCOMUtils.GetNameTypeStr(GEDCOMNameType.ntMaiden)));
+			Assert.AreEqual(GEDCOMNameType.ntMarried, GEDCOMUtils.GetNameTypeVal(GEDCOMUtils.GetNameTypeStr(GEDCOMNameType.ntMarried)));
 
 			//
 
-			Assert.AreEqual(TCommunicationType.ctCall, GEDCOMUtils.GetCommunicationTypeVal(GEDCOMUtils.GetCommunicationTypeStr(TCommunicationType.ctCall)));
-			Assert.AreEqual(TCommunicationType.ctEMail, GEDCOMUtils.GetCommunicationTypeVal(GEDCOMUtils.GetCommunicationTypeStr(TCommunicationType.ctEMail)));
-			Assert.AreEqual(TCommunicationType.ctFax, GEDCOMUtils.GetCommunicationTypeVal(GEDCOMUtils.GetCommunicationTypeStr(TCommunicationType.ctFax)));
-			Assert.AreEqual(TCommunicationType.ctLetter, GEDCOMUtils.GetCommunicationTypeVal(GEDCOMUtils.GetCommunicationTypeStr(TCommunicationType.ctLetter)));
-			Assert.AreEqual(TCommunicationType.ctTape, GEDCOMUtils.GetCommunicationTypeVal(GEDCOMUtils.GetCommunicationTypeStr(TCommunicationType.ctTape)));
-			Assert.AreEqual(TCommunicationType.ctVisit, GEDCOMUtils.GetCommunicationTypeVal(GEDCOMUtils.GetCommunicationTypeStr(TCommunicationType.ctVisit)));
-			Assert.AreEqual(TCommunicationType.ctVisit, GEDCOMUtils.GetCommunicationTypeVal(""));
+			Assert.AreEqual(GKCommunicationType.ctCall, GEDCOMUtils.GetCommunicationTypeVal(GEDCOMUtils.GetCommunicationTypeStr(GKCommunicationType.ctCall)));
+			Assert.AreEqual(GKCommunicationType.ctEMail, GEDCOMUtils.GetCommunicationTypeVal(GEDCOMUtils.GetCommunicationTypeStr(GKCommunicationType.ctEMail)));
+			Assert.AreEqual(GKCommunicationType.ctFax, GEDCOMUtils.GetCommunicationTypeVal(GEDCOMUtils.GetCommunicationTypeStr(GKCommunicationType.ctFax)));
+			Assert.AreEqual(GKCommunicationType.ctLetter, GEDCOMUtils.GetCommunicationTypeVal(GEDCOMUtils.GetCommunicationTypeStr(GKCommunicationType.ctLetter)));
+			Assert.AreEqual(GKCommunicationType.ctTape, GEDCOMUtils.GetCommunicationTypeVal(GEDCOMUtils.GetCommunicationTypeStr(GKCommunicationType.ctTape)));
+			Assert.AreEqual(GKCommunicationType.ctVisit, GEDCOMUtils.GetCommunicationTypeVal(GEDCOMUtils.GetCommunicationTypeStr(GKCommunicationType.ctVisit)));
+			Assert.AreEqual(GKCommunicationType.ctVisit, GEDCOMUtils.GetCommunicationTypeVal(""));
 
 			//
 
-			Assert.AreEqual(TGEDCOMChildLinkageStatus.clChallenged, GEDCOMUtils.GetChildLinkageStatusVal(GEDCOMUtils.GetChildLinkageStatusStr(TGEDCOMChildLinkageStatus.clChallenged)));
-			Assert.AreEqual(TGEDCOMChildLinkageStatus.clDisproven, GEDCOMUtils.GetChildLinkageStatusVal(GEDCOMUtils.GetChildLinkageStatusStr(TGEDCOMChildLinkageStatus.clDisproven)));
-			Assert.AreEqual(TGEDCOMChildLinkageStatus.clProven, GEDCOMUtils.GetChildLinkageStatusVal(GEDCOMUtils.GetChildLinkageStatusStr(TGEDCOMChildLinkageStatus.clProven)));
-			Assert.AreEqual(TGEDCOMChildLinkageStatus.clNone, GEDCOMUtils.GetChildLinkageStatusVal(GEDCOMUtils.GetChildLinkageStatusStr(TGEDCOMChildLinkageStatus.clNone)));
+			Assert.AreEqual(GEDCOMChildLinkageStatus.clChallenged, GEDCOMUtils.GetChildLinkageStatusVal(GEDCOMUtils.GetChildLinkageStatusStr(GEDCOMChildLinkageStatus.clChallenged)));
+			Assert.AreEqual(GEDCOMChildLinkageStatus.clDisproven, GEDCOMUtils.GetChildLinkageStatusVal(GEDCOMUtils.GetChildLinkageStatusStr(GEDCOMChildLinkageStatus.clDisproven)));
+			Assert.AreEqual(GEDCOMChildLinkageStatus.clProven, GEDCOMUtils.GetChildLinkageStatusVal(GEDCOMUtils.GetChildLinkageStatusStr(GEDCOMChildLinkageStatus.clProven)));
+			Assert.AreEqual(GEDCOMChildLinkageStatus.clNone, GEDCOMUtils.GetChildLinkageStatusVal(GEDCOMUtils.GetChildLinkageStatusStr(GEDCOMChildLinkageStatus.clNone)));
 
 			//
 
-			Assert.AreEqual(TGEDCOMPedigreeLinkageType.plAdopted, GEDCOMUtils.GetPedigreeLinkageTypeVal(GEDCOMUtils.GetPedigreeLinkageTypeStr(TGEDCOMPedigreeLinkageType.plAdopted)));
-			Assert.AreEqual(TGEDCOMPedigreeLinkageType.plBirth, GEDCOMUtils.GetPedigreeLinkageTypeVal(GEDCOMUtils.GetPedigreeLinkageTypeStr(TGEDCOMPedigreeLinkageType.plBirth)));
-			Assert.AreEqual(TGEDCOMPedigreeLinkageType.plFoster, GEDCOMUtils.GetPedigreeLinkageTypeVal(GEDCOMUtils.GetPedigreeLinkageTypeStr(TGEDCOMPedigreeLinkageType.plFoster)));
-			Assert.AreEqual(TGEDCOMPedigreeLinkageType.plSealing, GEDCOMUtils.GetPedigreeLinkageTypeVal(GEDCOMUtils.GetPedigreeLinkageTypeStr(TGEDCOMPedigreeLinkageType.plSealing)));
-			Assert.AreEqual(TGEDCOMPedigreeLinkageType.plNone, GEDCOMUtils.GetPedigreeLinkageTypeVal(GEDCOMUtils.GetPedigreeLinkageTypeStr(TGEDCOMPedigreeLinkageType.plNone)));
+			Assert.AreEqual(GEDCOMPedigreeLinkageType.plAdopted, GEDCOMUtils.GetPedigreeLinkageTypeVal(GEDCOMUtils.GetPedigreeLinkageTypeStr(GEDCOMPedigreeLinkageType.plAdopted)));
+			Assert.AreEqual(GEDCOMPedigreeLinkageType.plBirth, GEDCOMUtils.GetPedigreeLinkageTypeVal(GEDCOMUtils.GetPedigreeLinkageTypeStr(GEDCOMPedigreeLinkageType.plBirth)));
+			Assert.AreEqual(GEDCOMPedigreeLinkageType.plFoster, GEDCOMUtils.GetPedigreeLinkageTypeVal(GEDCOMUtils.GetPedigreeLinkageTypeStr(GEDCOMPedigreeLinkageType.plFoster)));
+			Assert.AreEqual(GEDCOMPedigreeLinkageType.plSealing, GEDCOMUtils.GetPedigreeLinkageTypeVal(GEDCOMUtils.GetPedigreeLinkageTypeStr(GEDCOMPedigreeLinkageType.plSealing)));
+			Assert.AreEqual(GEDCOMPedigreeLinkageType.plNone, GEDCOMUtils.GetPedigreeLinkageTypeVal(GEDCOMUtils.GetPedigreeLinkageTypeStr(GEDCOMPedigreeLinkageType.plNone)));
 
 			//
 
-			Assert.AreEqual(TGEDCOMRestriction.rnConfidential, GEDCOMUtils.GetRestrictionVal(GEDCOMUtils.GetRestrictionStr(TGEDCOMRestriction.rnConfidential)));
-			Assert.AreEqual(TGEDCOMRestriction.rnLocked, GEDCOMUtils.GetRestrictionVal(GEDCOMUtils.GetRestrictionStr(TGEDCOMRestriction.rnLocked)));
-			Assert.AreEqual(TGEDCOMRestriction.rnPrivacy, GEDCOMUtils.GetRestrictionVal(GEDCOMUtils.GetRestrictionStr(TGEDCOMRestriction.rnPrivacy)));
-			Assert.AreEqual(TGEDCOMRestriction.rnNone, GEDCOMUtils.GetRestrictionVal(GEDCOMUtils.GetRestrictionStr(TGEDCOMRestriction.rnNone)));
+			Assert.AreEqual(GEDCOMRestriction.rnConfidential, GEDCOMUtils.GetRestrictionVal(GEDCOMUtils.GetRestrictionStr(GEDCOMRestriction.rnConfidential)));
+			Assert.AreEqual(GEDCOMRestriction.rnLocked, GEDCOMUtils.GetRestrictionVal(GEDCOMUtils.GetRestrictionStr(GEDCOMRestriction.rnLocked)));
+			Assert.AreEqual(GEDCOMRestriction.rnPrivacy, GEDCOMUtils.GetRestrictionVal(GEDCOMUtils.GetRestrictionStr(GEDCOMRestriction.rnPrivacy)));
+			Assert.AreEqual(GEDCOMRestriction.rnNone, GEDCOMUtils.GetRestrictionVal(GEDCOMUtils.GetRestrictionStr(GEDCOMRestriction.rnNone)));
 
 			//
 
-			Assert.AreEqual(TGEDCOMMediaType.mtNone, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(TGEDCOMMediaType.mtNone)));
-			Assert.AreEqual(TGEDCOMMediaType.mtAudio, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(TGEDCOMMediaType.mtAudio)));
-			Assert.AreEqual(TGEDCOMMediaType.mtBook, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(TGEDCOMMediaType.mtBook)));
-			Assert.AreEqual(TGEDCOMMediaType.mtCard, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(TGEDCOMMediaType.mtCard)));
-			Assert.AreEqual(TGEDCOMMediaType.mtElectronic, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(TGEDCOMMediaType.mtElectronic)));
-			Assert.AreEqual(TGEDCOMMediaType.mtFiche, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(TGEDCOMMediaType.mtFiche)));
-			Assert.AreEqual(TGEDCOMMediaType.mtFilm, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(TGEDCOMMediaType.mtFilm)));
-			Assert.AreEqual(TGEDCOMMediaType.mtMagazine, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(TGEDCOMMediaType.mtMagazine)));
-			Assert.AreEqual(TGEDCOMMediaType.mtManuscript, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(TGEDCOMMediaType.mtManuscript)));
-			Assert.AreEqual(TGEDCOMMediaType.mtMap, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(TGEDCOMMediaType.mtMap)));
-			Assert.AreEqual(TGEDCOMMediaType.mtNewspaper, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(TGEDCOMMediaType.mtNewspaper)));
-			Assert.AreEqual(TGEDCOMMediaType.mtPhoto, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(TGEDCOMMediaType.mtPhoto)));
-			Assert.AreEqual(TGEDCOMMediaType.mtTombstone, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(TGEDCOMMediaType.mtTombstone)));
-			Assert.AreEqual(TGEDCOMMediaType.mtVideo, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(TGEDCOMMediaType.mtVideo)));
-			Assert.AreEqual(TGEDCOMMediaType.mtUnknown, GEDCOMUtils.GetMediaTypeVal("sample"));
+			Assert.AreEqual(GEDCOMMediaType.mtNone, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(GEDCOMMediaType.mtNone)));
+			Assert.AreEqual(GEDCOMMediaType.mtAudio, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(GEDCOMMediaType.mtAudio)));
+			Assert.AreEqual(GEDCOMMediaType.mtBook, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(GEDCOMMediaType.mtBook)));
+			Assert.AreEqual(GEDCOMMediaType.mtCard, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(GEDCOMMediaType.mtCard)));
+			Assert.AreEqual(GEDCOMMediaType.mtElectronic, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(GEDCOMMediaType.mtElectronic)));
+			Assert.AreEqual(GEDCOMMediaType.mtFiche, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(GEDCOMMediaType.mtFiche)));
+			Assert.AreEqual(GEDCOMMediaType.mtFilm, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(GEDCOMMediaType.mtFilm)));
+			Assert.AreEqual(GEDCOMMediaType.mtMagazine, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(GEDCOMMediaType.mtMagazine)));
+			Assert.AreEqual(GEDCOMMediaType.mtManuscript, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(GEDCOMMediaType.mtManuscript)));
+			Assert.AreEqual(GEDCOMMediaType.mtMap, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(GEDCOMMediaType.mtMap)));
+			Assert.AreEqual(GEDCOMMediaType.mtNewspaper, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(GEDCOMMediaType.mtNewspaper)));
+			Assert.AreEqual(GEDCOMMediaType.mtPhoto, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(GEDCOMMediaType.mtPhoto)));
+			Assert.AreEqual(GEDCOMMediaType.mtTombstone, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(GEDCOMMediaType.mtTombstone)));
+			Assert.AreEqual(GEDCOMMediaType.mtVideo, GEDCOMUtils.GetMediaTypeVal(GEDCOMUtils.GetMediaTypeStr(GEDCOMMediaType.mtVideo)));
+			Assert.AreEqual(GEDCOMMediaType.mtUnknown, GEDCOMUtils.GetMediaTypeVal("sample"));
 
 			//
 
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfNone, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(TGEDCOMMultimediaFormat.mfNone)));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfBMP, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(TGEDCOMMultimediaFormat.mfBMP)));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfGIF, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(TGEDCOMMultimediaFormat.mfGIF)));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfJPG, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(TGEDCOMMultimediaFormat.mfJPG)));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfOLE, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(TGEDCOMMultimediaFormat.mfOLE)));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfPCX, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(TGEDCOMMultimediaFormat.mfPCX)));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfTIF, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(TGEDCOMMultimediaFormat.mfTIF)));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfWAV, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(TGEDCOMMultimediaFormat.mfWAV)));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfTXT, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(TGEDCOMMultimediaFormat.mfTXT)));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfRTF, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(TGEDCOMMultimediaFormat.mfRTF)));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfAVI, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(TGEDCOMMultimediaFormat.mfAVI)));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfTGA, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(TGEDCOMMultimediaFormat.mfTGA)));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfPNG, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(TGEDCOMMultimediaFormat.mfPNG)));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfMPG, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(TGEDCOMMultimediaFormat.mfMPG)));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfHTM, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(TGEDCOMMultimediaFormat.mfHTM)));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfUnknown, GEDCOMUtils.GetMultimediaFormatVal("xxx"));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfNone, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GEDCOMMultimediaFormat.mfNone)));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfBMP, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GEDCOMMultimediaFormat.mfBMP)));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfGIF, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GEDCOMMultimediaFormat.mfGIF)));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfJPG, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GEDCOMMultimediaFormat.mfJPG)));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfOLE, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GEDCOMMultimediaFormat.mfOLE)));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfPCX, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GEDCOMMultimediaFormat.mfPCX)));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfTIF, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GEDCOMMultimediaFormat.mfTIF)));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfWAV, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GEDCOMMultimediaFormat.mfWAV)));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfTXT, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GEDCOMMultimediaFormat.mfTXT)));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfRTF, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GEDCOMMultimediaFormat.mfRTF)));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfAVI, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GEDCOMMultimediaFormat.mfAVI)));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfTGA, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GEDCOMMultimediaFormat.mfTGA)));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfPNG, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GEDCOMMultimediaFormat.mfPNG)));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfMPG, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GEDCOMMultimediaFormat.mfMPG)));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfHTM, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GEDCOMMultimediaFormat.mfHTM)));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfUnknown, GEDCOMUtils.GetMultimediaFormatVal("xxx"));
 
 			//
 
-			Assert.AreEqual(TGEDCOMSpouseSealingDateStatus.sdsNone, GEDCOMUtils.GetSpouseSealingDateStatusVal(GEDCOMUtils.GetSpouseSealingDateStatusStr(TGEDCOMSpouseSealingDateStatus.sdsNone)));
-			Assert.AreEqual(TGEDCOMSpouseSealingDateStatus.sdsCanceled, GEDCOMUtils.GetSpouseSealingDateStatusVal(GEDCOMUtils.GetSpouseSealingDateStatusStr(TGEDCOMSpouseSealingDateStatus.sdsCanceled)));
-			Assert.AreEqual(TGEDCOMSpouseSealingDateStatus.sdsCompleted, GEDCOMUtils.GetSpouseSealingDateStatusVal(GEDCOMUtils.GetSpouseSealingDateStatusStr(TGEDCOMSpouseSealingDateStatus.sdsCompleted)));
-			Assert.AreEqual(TGEDCOMSpouseSealingDateStatus.sdsExcluded, GEDCOMUtils.GetSpouseSealingDateStatusVal(GEDCOMUtils.GetSpouseSealingDateStatusStr(TGEDCOMSpouseSealingDateStatus.sdsExcluded)));
-			Assert.AreEqual(TGEDCOMSpouseSealingDateStatus.sdsDNS, GEDCOMUtils.GetSpouseSealingDateStatusVal(GEDCOMUtils.GetSpouseSealingDateStatusStr(TGEDCOMSpouseSealingDateStatus.sdsDNS)));
-			Assert.AreEqual(TGEDCOMSpouseSealingDateStatus.sdsDNSCAN, GEDCOMUtils.GetSpouseSealingDateStatusVal(GEDCOMUtils.GetSpouseSealingDateStatusStr(TGEDCOMSpouseSealingDateStatus.sdsDNSCAN)));
-			Assert.AreEqual(TGEDCOMSpouseSealingDateStatus.sdsPre1970, GEDCOMUtils.GetSpouseSealingDateStatusVal(GEDCOMUtils.GetSpouseSealingDateStatusStr(TGEDCOMSpouseSealingDateStatus.sdsPre1970)));
-			Assert.AreEqual(TGEDCOMSpouseSealingDateStatus.sdsSubmitted, GEDCOMUtils.GetSpouseSealingDateStatusVal(GEDCOMUtils.GetSpouseSealingDateStatusStr(TGEDCOMSpouseSealingDateStatus.sdsSubmitted)));
-			Assert.AreEqual(TGEDCOMSpouseSealingDateStatus.sdsUncleared, GEDCOMUtils.GetSpouseSealingDateStatusVal(GEDCOMUtils.GetSpouseSealingDateStatusStr(TGEDCOMSpouseSealingDateStatus.sdsUncleared)));
+			Assert.AreEqual(GEDCOMSpouseSealingDateStatus.sdsNone, GEDCOMUtils.GetSpouseSealingDateStatusVal(GEDCOMUtils.GetSpouseSealingDateStatusStr(GEDCOMSpouseSealingDateStatus.sdsNone)));
+			Assert.AreEqual(GEDCOMSpouseSealingDateStatus.sdsCanceled, GEDCOMUtils.GetSpouseSealingDateStatusVal(GEDCOMUtils.GetSpouseSealingDateStatusStr(GEDCOMSpouseSealingDateStatus.sdsCanceled)));
+			Assert.AreEqual(GEDCOMSpouseSealingDateStatus.sdsCompleted, GEDCOMUtils.GetSpouseSealingDateStatusVal(GEDCOMUtils.GetSpouseSealingDateStatusStr(GEDCOMSpouseSealingDateStatus.sdsCompleted)));
+			Assert.AreEqual(GEDCOMSpouseSealingDateStatus.sdsExcluded, GEDCOMUtils.GetSpouseSealingDateStatusVal(GEDCOMUtils.GetSpouseSealingDateStatusStr(GEDCOMSpouseSealingDateStatus.sdsExcluded)));
+			Assert.AreEqual(GEDCOMSpouseSealingDateStatus.sdsDNS, GEDCOMUtils.GetSpouseSealingDateStatusVal(GEDCOMUtils.GetSpouseSealingDateStatusStr(GEDCOMSpouseSealingDateStatus.sdsDNS)));
+			Assert.AreEqual(GEDCOMSpouseSealingDateStatus.sdsDNSCAN, GEDCOMUtils.GetSpouseSealingDateStatusVal(GEDCOMUtils.GetSpouseSealingDateStatusStr(GEDCOMSpouseSealingDateStatus.sdsDNSCAN)));
+			Assert.AreEqual(GEDCOMSpouseSealingDateStatus.sdsPre1970, GEDCOMUtils.GetSpouseSealingDateStatusVal(GEDCOMUtils.GetSpouseSealingDateStatusStr(GEDCOMSpouseSealingDateStatus.sdsPre1970)));
+			Assert.AreEqual(GEDCOMSpouseSealingDateStatus.sdsSubmitted, GEDCOMUtils.GetSpouseSealingDateStatusVal(GEDCOMUtils.GetSpouseSealingDateStatusStr(GEDCOMSpouseSealingDateStatus.sdsSubmitted)));
+			Assert.AreEqual(GEDCOMSpouseSealingDateStatus.sdsUncleared, GEDCOMUtils.GetSpouseSealingDateStatusVal(GEDCOMUtils.GetSpouseSealingDateStatusStr(GEDCOMSpouseSealingDateStatus.sdsUncleared)));
 
 			//
 
-			Assert.AreEqual(Encoding.GetEncoding(1251), GEDCOMUtils.GetEncodingByCharacterSet(TGEDCOMCharacterSet.csASCII));
-			Assert.AreEqual(Encoding.Unicode, GEDCOMUtils.GetEncodingByCharacterSet(TGEDCOMCharacterSet.csUNICODE));
-			Assert.AreEqual(Encoding.UTF8, GEDCOMUtils.GetEncodingByCharacterSet(TGEDCOMCharacterSet.csUTF8));
-			Assert.AreEqual(Encoding.Default, GEDCOMUtils.GetEncodingByCharacterSet(TGEDCOMCharacterSet.csANSEL));
+			Assert.AreEqual(Encoding.GetEncoding(1251), GEDCOMUtils.GetEncodingByCharacterSet(GEDCOMCharacterSet.csASCII));
+			Assert.AreEqual(Encoding.Unicode, GEDCOMUtils.GetEncodingByCharacterSet(GEDCOMCharacterSet.csUNICODE));
+			Assert.AreEqual(Encoding.UTF8, GEDCOMUtils.GetEncodingByCharacterSet(GEDCOMCharacterSet.csUTF8));
+			Assert.AreEqual(Encoding.Default, GEDCOMUtils.GetEncodingByCharacterSet(GEDCOMCharacterSet.csANSEL));
 		}
 
 		[Test]
@@ -286,9 +288,9 @@ namespace GKTests
 			GEDCOMFactory f = GEDCOMFactory.GetInstance();
 			Assert.IsNotNull(f, "f != null");
 
-			f.RegisterTag("DATE", TGEDCOMDateValue.Create);
+			f.RegisterTag("DATE", GEDCOMDateValue.Create);
 
-			TGEDCOMTag tag = f.CreateTag(null, null, "DATE", "");
+			GEDCOMTag tag = f.CreateTag(null, null, "DATE", "");
 			Assert.IsNotNull(tag, "tag != null");
 
 			tag = f.CreateTag(null, null, "TEST", "");
@@ -298,21 +300,21 @@ namespace GKTests
 		[Test]
 		public void GEDCOMMathes_Tests()
 		{
-			TGEDCOMTree tree = new TGEDCOMTree();
+			GEDCOMTree tree = new GEDCOMTree();
 			Assert.IsNotNull(tree);
 
-			TGEDCOMIndividualRecord ind1, ind2;
-			TGEDCOMCustomEvent ev1, ev2;
-			TGEDCOMDateValue dtVal1, dtVal2;
+			GEDCOMIndividualRecord ind1, ind2;
+			GEDCOMCustomEvent ev1, ev2;
+			GEDCOMDateValue dtVal1, dtVal2;
 
-			ind1 = tree.aux_CreateIndividual("Ivan", "Fedoroff", "Ivanov", TGEDCOMSex.svMale);
-			ind2 = tree.aux_CreateIndividual("Ivan", "Fedoroff", "Ivanovich", TGEDCOMSex.svMale);
+			ind1 = tree.aux_CreateIndividual("Ivan", "Fedoroff", "Ivanov", GEDCOMSex.svMale);
+			ind2 = tree.aux_CreateIndividual("Ivan", "Fedoroff", "Ivanovich", GEDCOMSex.svMale);
 
-			ev1 = new TGEDCOMIndividualEvent(tree, ind1, "BIRT", "");
+			ev1 = new GEDCOMIndividualEvent(tree, ind1, "BIRT", "");
 			dtVal1 = ev1.Detail.Date;
 			ind1.AddIndividualEvent(ev1);
 
-			ev2 = new TGEDCOMIndividualEvent(tree, ind2, "BIRT", "");
+			ev2 = new GEDCOMIndividualEvent(tree, ind2, "BIRT", "");
 			dtVal2 = ev2.Detail.Date;
 			ind2.AddIndividualEvent(ev2);
 
@@ -379,7 +381,7 @@ namespace GKTests
 		[Test]
 		public void GEDCOMChangeDate_Tests()
 		{
-			TGEDCOMChangeDate cd = new TGEDCOMChangeDate(null, null, "CHAN", "");
+			GEDCOMChangeDate cd = new GEDCOMChangeDate(null, null, "CHAN", "");
 			Assert.IsNotNull(cd);
 
 			DateTime dtNow = DateTime.Now;
@@ -389,7 +391,7 @@ namespace GKTests
 			DateTime dtx = cd.ChangeDateTime;
 			Assert.AreEqual(dtNow, dtx);
 			
-			TGEDCOMTime time = cd.ChangeTime;
+			GEDCOMTime time = cd.ChangeTime;
 			Assert.AreEqual(dtNow.Second, time.Seconds);
 			Assert.AreEqual(dtNow.Minute, time.Minutes);
 			Assert.AreEqual(dtNow.Hour, time.Hour);
@@ -411,14 +413,14 @@ namespace GKTests
 		[Test]
 		public void GEDCOMDateExact_Tests()
 		{
-			TGEDCOMDateExact dtx1 = new TGEDCOMDateExact(null, null, "DATE", "20 JAN 2013");
+			GEDCOMDateExact dtx1 = new GEDCOMDateExact(null, null, "DATE", "20 JAN 2013");
 			Assert.IsNotNull(dtx1, "dtx1 != null");
 
 			DateTime dt = DateTime.Parse("20.01.2013");
 			Assert.IsTrue(dtx1.Date.Equals(dt), "dtx1.DateTime.Equals(dt)");
 			
-			//dtx1.DateCalendar = TGEDCOMCalendar.dcFrench;
-			//Assert.AreEqual(TGEDCOMCalendar.dcFrench, dtx1.DateCalendar);
+			//dtx1.DateCalendar = GEDCOMCalendar.dcFrench;
+			//Assert.AreEqual(GEDCOMCalendar.dcFrench, dtx1.DateCalendar);
 			
 			dtx1.Day = 21;
 			Assert.AreEqual(21, dtx1.Day);
@@ -439,7 +441,7 @@ namespace GKTests
 		[Test]
 		public void GEDCOMDateValue_Tests()
 		{
-			TGEDCOMDateValue dtx1 = new TGEDCOMDateValue(null, null, "DATE", "20 JAN 2013");
+			GEDCOMDateValue dtx1 = new GEDCOMDateValue(null, null, "DATE", "20 JAN 2013");
 			Assert.IsNotNull(dtx1, "dtx1 != null");
 
 			DateTime dt = DateTime.Parse("20.01.2013");
@@ -447,10 +449,10 @@ namespace GKTests
 			
 			dtx1.ParseString("INT 20 JAN 2013 (today)");
 			Assert.IsTrue(dtx1.Date.Equals(dt), "dtx1.DateTime.Equals(dt)");
-			Assert.AreEqual((dtx1.Value as TGEDCOMDateInterpreted).DatePhrase, "today");
-			(dtx1.Value as TGEDCOMDateInterpreted).DatePhrase = "now";
+			Assert.AreEqual((dtx1.Value as GEDCOMDateInterpreted).DatePhrase, "today");
+			(dtx1.Value as GEDCOMDateInterpreted).DatePhrase = "now";
 			Assert.AreEqual(dtx1.StringValue, "INT 20 JAN 2013 (now)");
-			(dtx1.Value as TGEDCOMDateInterpreted).DatePhrase = "(yesterday)";
+			(dtx1.Value as GEDCOMDateInterpreted).DatePhrase = "(yesterday)";
 			Assert.AreEqual(dtx1.StringValue, "INT 20 JAN 2013 (yesterday)");
 
 			//FIXME: не проходит
@@ -463,24 +465,24 @@ namespace GKTests
 			dtx1.ParseString(st);
 			Assert.IsTrue(dtx1.Date.Equals(dt));
 			Assert.AreEqual(st, dtx1.StringValue);
-			Assert.AreEqual(((TGEDCOMDateApproximated)dtx1.Value).Approximated, TGEDCOMApproximated.daAbout);
+			Assert.AreEqual(((GEDCOMDateApproximated)dtx1.Value).Approximated, GEDCOMApproximated.daAbout);
 			
 			st = "CAL 20 JAN 2013";
 			dtx1.ParseString(st);
 			Assert.AreEqual(dtx1.Date, dt);
 			Assert.AreEqual(st, dtx1.StringValue);
-			Assert.AreEqual(((TGEDCOMDateApproximated)dtx1.Value).Approximated, TGEDCOMApproximated.daCalculated);
+			Assert.AreEqual(((GEDCOMDateApproximated)dtx1.Value).Approximated, GEDCOMApproximated.daCalculated);
 			
 			st = "EST 20 DEC 2013";
 			dtx1.ParseString(st);
 			Assert.AreEqual(dtx1.Date, DateTime.Parse("20.12.2013"));
 			Assert.AreEqual(st, dtx1.StringValue);
-			Assert.AreEqual(((TGEDCOMDateApproximated)dtx1.Value).Approximated, TGEDCOMApproximated.daEstimated);
+			Assert.AreEqual(((GEDCOMDateApproximated)dtx1.Value).Approximated, GEDCOMApproximated.daEstimated);
 
-			((TGEDCOMDateApproximated)dtx1.Value).Approximated = TGEDCOMApproximated.daCalculated;
+			((GEDCOMDateApproximated)dtx1.Value).Approximated = GEDCOMApproximated.daCalculated;
 			Assert.AreEqual(dtx1.StringValue, "CAL 20 DEC 2013");
 
-			((TGEDCOMDateApproximated)dtx1.Value).Approximated = TGEDCOMApproximated.daExact;
+			((GEDCOMDateApproximated)dtx1.Value).Approximated = GEDCOMApproximated.daExact;
 			Assert.AreEqual(dtx1.StringValue, "20 DEC 2013");
 			
 			//
@@ -488,8 +490,8 @@ namespace GKTests
 			dtx1.ParseString("FROM 04 JAN 2013 TO 23 JAN 2013");
 			Assert.IsFalse(dtx1.IsEmpty());
 			Assert.AreEqual("FROM 04 JAN 2013 TO 23 JAN 2013", dtx1.StringValue);
-			Assert.AreEqual("04 JAN 2013", (dtx1.Value as TGEDCOMDatePeriod).DateFrom.StringValue);
-			Assert.AreEqual("23 JAN 2013", (dtx1.Value as TGEDCOMDatePeriod).DateTo.StringValue);
+			Assert.AreEqual("04 JAN 2013", (dtx1.Value as GEDCOMDatePeriod).DateFrom.StringValue);
+			Assert.AreEqual("23 JAN 2013", (dtx1.Value as GEDCOMDatePeriod).DateTo.StringValue);
 
 			dtx1.ParseString("BEF 20 JAN 2013");
 			Assert.IsFalse(dtx1.IsEmpty());
@@ -504,8 +506,8 @@ namespace GKTests
 			dtx1.ParseString("BET 04 JAN 2013 AND 25 JAN 2013");
 			Assert.IsFalse(dtx1.IsEmpty());
 			Assert.AreEqual("BET 04 JAN 2013 AND 25 JAN 2013", dtx1.StringValue);
-			Assert.AreEqual("04 JAN 2013", (dtx1.Value as TGEDCOMDateRange).After.StringValue);
-			Assert.AreEqual("25 JAN 2013", (dtx1.Value as TGEDCOMDateRange).Before.StringValue);
+			Assert.AreEqual("04 JAN 2013", (dtx1.Value as GEDCOMDateRange).After.StringValue);
+			Assert.AreEqual("25 JAN 2013", (dtx1.Value as GEDCOMDateRange).Before.StringValue);
 			
 			dtx1.Clear();
 			Assert.IsTrue(dtx1.IsEmpty());
@@ -514,7 +516,7 @@ namespace GKTests
 		[Test]
 		public void GEDCOMAddress_Tests()
 		{
-			TGEDCOMAddress addr = TGEDCOMAddress.Create(null, null, "ADDR", "") as TGEDCOMAddress;
+			GEDCOMAddress addr = GEDCOMAddress.Create(null, null, "ADDR", "") as GEDCOMAddress;
 			Assert.IsNotNull(addr, "addr != null");
 			
 			GEDCOMAddressTest(addr, true);
@@ -523,14 +525,14 @@ namespace GKTests
 		[Test]
 		public void GEDCOMAlias_Tests()
 		{
-			TGEDCOMTag alias = TGEDCOMAlias.Create(null, null, "ALIA", "");
+			GEDCOMTag alias = GEDCOMAlias.Create(null, null, "ALIA", "");
 			Assert.IsNotNull(alias, "alias != null");
 		}
 
 		[Test]
 		public void GEDCOMAssociation_Tests()
 		{
-			TGEDCOMAssociation association = TGEDCOMAssociation.Create(null, null, "ASSO", "") as TGEDCOMAssociation;
+			GEDCOMAssociation association = GEDCOMAssociation.Create(null, null, "ASSO", "") as GEDCOMAssociation;
 			Assert.IsNotNull(association);
 
 			association.Relation = "This is test relation";
@@ -544,14 +546,14 @@ namespace GKTests
 		[Test]
 		public void GEDCOMTree_Tests()
 		{
-			TGEDCOMTree tree = new TGEDCOMTree();
+			GEDCOMTree tree = new GEDCOMTree();
 			Assert.IsNotNull(tree);
 			
 			GEDCOMHeaderRecordTest(tree.Header);
 			
-			TGEDCOMRecord rec;
+			GEDCOMRecord rec;
 			
-			TGEDCOMIndividualRecord iRec = tree.AddRecord(TGEDCOMIndividualRecord.Create(tree, tree, "", "") as TGEDCOMRecord) as TGEDCOMIndividualRecord;
+			GEDCOMIndividualRecord iRec = tree.AddRecord(GEDCOMIndividualRecord.Create(tree, tree, "", "") as GEDCOMRecord) as GEDCOMIndividualRecord;
 			Assert.IsNotNull(iRec);
 			iRec.InitNew();
 			GEDCOMIndividualRecordTest(iRec);
@@ -563,88 +565,88 @@ namespace GKTests
 			
 			//
 			
-			TGEDCOMFamilyRecord famRec = tree.AddRecord(TGEDCOMFamilyRecord.Create(tree, tree, "", "") as TGEDCOMRecord) as TGEDCOMFamilyRecord;
+			GEDCOMFamilyRecord famRec = tree.AddRecord(GEDCOMFamilyRecord.Create(tree, tree, "", "") as GEDCOMRecord) as GEDCOMFamilyRecord;
 			Assert.IsNotNull(famRec, "rec1 != null");
 			famRec.InitNew();
 			GEDCOMFamilyRecordTest(famRec, iRec);
 			
 			//
 			
-			rec = tree.AddRecord(TGEDCOMNoteRecord.Create(tree, tree, "", "") as TGEDCOMRecord);
+			rec = tree.AddRecord(GEDCOMNoteRecord.Create(tree, tree, "", "") as GEDCOMRecord);
 			Assert.IsNotNull(rec, "rec1 != null");
 			rec.InitNew();
-			GEDCOMNoteRecordTest(rec as TGEDCOMNoteRecord, iRec);
+			GEDCOMNoteRecordTest(rec as GEDCOMNoteRecord, iRec);
 			
 			//
 			
-			TGEDCOMRepositoryRecord repRec = tree.AddRecord(TGEDCOMRepositoryRecord.Create(tree, tree, "", "") as TGEDCOMRecord) as TGEDCOMRepositoryRecord;
+			GEDCOMRepositoryRecord repRec = tree.AddRecord(GEDCOMRepositoryRecord.Create(tree, tree, "", "") as GEDCOMRecord) as GEDCOMRepositoryRecord;
 			Assert.IsNotNull(repRec, "rec1 != null");
 			repRec.InitNew();
 			GEDCOMRepositoryRecordTest(repRec);
 			
 			//
 			
-			TGEDCOMSourceRecord srcRec = tree.AddRecord(TGEDCOMSourceRecord.Create(tree, tree, "", "") as TGEDCOMRecord) as TGEDCOMSourceRecord;
+			GEDCOMSourceRecord srcRec = tree.AddRecord(GEDCOMSourceRecord.Create(tree, tree, "", "") as GEDCOMRecord) as GEDCOMSourceRecord;
 			Assert.IsNotNull(srcRec, "rec1 != null");
 			srcRec.InitNew();
 			GEDCOMSourceRecordTest(srcRec, iRec, repRec);
 			
 			//
 			
-			rec = tree.AddRecord(TGEDCOMMultimediaRecord.Create(tree, tree, "", "") as TGEDCOMRecord);
+			rec = tree.AddRecord(GEDCOMMultimediaRecord.Create(tree, tree, "", "") as GEDCOMRecord);
 			Assert.IsNotNull(rec, "rec1 != null");
 			rec.InitNew();
-			GEDCOMMultimediaRecordTest(rec as TGEDCOMMultimediaRecord, iRec);
+			GEDCOMMultimediaRecordTest(rec as GEDCOMMultimediaRecord, iRec);
 			
 			//
 			
-			rec = tree.AddRecord(TGEDCOMSubmitterRecord.Create(tree, tree, "", "") as TGEDCOMRecord);
+			rec = tree.AddRecord(GEDCOMSubmitterRecord.Create(tree, tree, "", "") as GEDCOMRecord);
 			Assert.IsNotNull(rec, "rec1 != null");
 			rec.InitNew();
-			GEDCOMSubmitterRecordTest(rec as TGEDCOMSubmitterRecord);
+			GEDCOMSubmitterRecordTest(rec as GEDCOMSubmitterRecord);
 			string submXRef = rec.XRef;
 			
 			//
 			
-			rec = tree.AddRecord(TGEDCOMSubmissionRecord.Create(tree, tree, "", "") as TGEDCOMRecord);
+			rec = tree.AddRecord(GEDCOMSubmissionRecord.Create(tree, tree, "", "") as GEDCOMRecord);
 			Assert.IsNotNull(rec, "rec1 != null");
 			rec.InitNew();
-			GEDCOMSubmissionRecordTest(rec as TGEDCOMSubmissionRecord, submXRef);
+			GEDCOMSubmissionRecordTest(rec as GEDCOMSubmissionRecord, submXRef);
 			
 			//
 			
-			TGEDCOMGroupRecord groupRec = tree.AddRecord(TGEDCOMGroupRecord.Create(tree, tree, "", "") as TGEDCOMRecord) as TGEDCOMGroupRecord;
+			GEDCOMGroupRecord groupRec = tree.AddRecord(GEDCOMGroupRecord.Create(tree, tree, "", "") as GEDCOMRecord) as GEDCOMGroupRecord;
 			Assert.IsNotNull(groupRec, "rec1 != null");
 			groupRec.InitNew();
 			GEDCOMGroupRecordTest(groupRec, iRec);
 						
 			//
 			
-			TGEDCOMTaskRecord taskRec = tree.AddRecord(TGEDCOMTaskRecord.Create(tree, tree, "", "") as TGEDCOMRecord) as TGEDCOMTaskRecord;
+			GEDCOMTaskRecord taskRec = tree.AddRecord(GEDCOMTaskRecord.Create(tree, tree, "", "") as GEDCOMRecord) as GEDCOMTaskRecord;
 			Assert.IsNotNull(taskRec, "rec1 != null");
 			taskRec.InitNew();
 			GEDCOMTaskRecordTest(taskRec, iRec, famRec, srcRec);
 			
 			//
 			
-			TGEDCOMCommunicationRecord commRec = tree.AddRecord(TGEDCOMCommunicationRecord.Create(tree, tree, "", "") as TGEDCOMRecord) as TGEDCOMCommunicationRecord;
+			GEDCOMCommunicationRecord commRec = tree.AddRecord(GEDCOMCommunicationRecord.Create(tree, tree, "", "") as GEDCOMRecord) as GEDCOMCommunicationRecord;
 			Assert.IsNotNull(commRec, "rec1 != null");
 			commRec.InitNew();
 			GEDCOMCommunicationRecordTest(commRec, iRec);
 			
 			//
 			
-			TGEDCOMResearchRecord resRec = tree.AddRecord(TGEDCOMResearchRecord.Create(tree, tree, "", "") as TGEDCOMRecord) as TGEDCOMResearchRecord;
+			GEDCOMResearchRecord resRec = tree.AddRecord(GEDCOMResearchRecord.Create(tree, tree, "", "") as GEDCOMRecord) as GEDCOMResearchRecord;
 			Assert.IsNotNull(resRec, "rec1 != null");
 			resRec.InitNew();
 			GEDCOMResearchRecordTest(resRec, commRec, taskRec, groupRec);
 			
 			//
 
-			rec = tree.AddRecord(TGEDCOMLocationRecord.Create(tree, tree, "", "") as TGEDCOMRecord);
+			rec = tree.AddRecord(GEDCOMLocationRecord.Create(tree, tree, "", "") as GEDCOMRecord);
 			Assert.IsNotNull(rec, "rec1 != null");
 			rec.InitNew();
-			GEDCOMLocationRecordTest(rec as TGEDCOMLocationRecord);
+			GEDCOMLocationRecordTest(rec as GEDCOMLocationRecord);
 			
 			//
 
@@ -668,7 +670,7 @@ namespace GKTests
 
 		#region Public Partial Tests
 
-		public static void GEDCOMAddressTest(TGEDCOMAddress addr, bool checkStream)
+		public static void GEDCOMAddressTest(GEDCOMAddress addr, bool checkStream)
 		{
 			addr.aux_SetAddressValue("test");
 			Assert.AreEqual("test", addr.Address.Text.Trim());
@@ -744,7 +746,7 @@ namespace GKTests
 			Assert.IsTrue(addr.IsEmpty());
 		}
 
-		public static void GEDCOMMapTest(TGEDCOMMap map)
+		public static void GEDCOMMapTest(GEDCOMMap map)
 		{
 			map.Lati = 5.11111;
 			map.Long = 7.99999;
@@ -757,13 +759,13 @@ namespace GKTests
 
 		#region Private Partial Tests
 
-		private void GEDCOMHeaderRecordTest(TGEDCOMHeader headRec)
+		private void GEDCOMHeaderRecordTest(GEDCOMHeader headRec)
 		{
 			headRec.Notes = new StringList("This notes test");
 			Assert.AreEqual("This notes test", headRec.Notes[0]);
 
-			headRec.CharacterSet = TGEDCOMCharacterSet.csASCII;
-			Assert.AreEqual(TGEDCOMCharacterSet.csASCII, headRec.CharacterSet);
+			headRec.CharacterSet = GEDCOMCharacterSet.csASCII;
+			Assert.AreEqual(GEDCOMCharacterSet.csASCII, headRec.CharacterSet);
 
 			headRec.CharacterSetVersion = "1x";
 			Assert.AreEqual("1x", headRec.CharacterSetVersion);
@@ -817,27 +819,27 @@ namespace GKTests
 			Assert.IsTrue(headRec.IsEmpty());
 		}
 
-		private void GEDCOMRecordTest(TGEDCOMRecord rec)
+		private void GEDCOMRecordTest(GEDCOMRecord rec)
 		{
 			rec.AutomatedRecordID = "test11";
 			Assert.AreEqual("test11", rec.AutomatedRecordID);
 			
-			Assert.AreEqual(TGEDCOMRecordType.rtIndividual, rec.RecordType);
+			Assert.AreEqual(GEDCOMRecordType.rtIndividual, rec.RecordType);
 			
 			Assert.AreEqual(1, rec.aux_GetId());
 			Assert.AreEqual("1", rec.aux_GetXRefNum());
 		}
 
-		private void GEDCOMPersonalNameTest(TGEDCOMIndividualRecord indiRec)
+		private void GEDCOMPersonalNameTest(GEDCOMIndividualRecord indiRec)
 		{
-			TGEDCOMPersonalName persName;
+			GEDCOMPersonalName persName;
 
-			persName = TGEDCOMPersonalName.Create(indiRec.Owner, indiRec, "", "") as TGEDCOMPersonalName;
+			persName = GEDCOMPersonalName.Create(indiRec.Owner, indiRec, "", "") as GEDCOMPersonalName;
 			indiRec.AddPersonalName(persName);
  
 			persName = indiRec.PersonalNames[0];
-			persName.NameType = TGEDCOMNameType.ntBirth;
-			Assert.AreEqual(TGEDCOMNameType.ntBirth, persName.NameType);
+			persName.NameType = GEDCOMNameType.ntBirth;
+			Assert.AreEqual(GEDCOMNameType.ntBirth, persName.NameType);
 			
 			///
 			
@@ -852,7 +854,7 @@ namespace GKTests
 			
 			///
 			
-			TGEDCOMPersonalNamePieces pnPieces = persName.Pieces;
+			GEDCOMPersonalNamePieces pnPieces = persName.Pieces;
 			
 			pnPieces.Prefix = "Prefix";
 			Assert.AreEqual("Prefix", pnPieces.Prefix);
@@ -888,14 +890,14 @@ namespace GKTests
 			Assert.IsTrue(persName.IsEmpty());
 		}
 
-		private void GEDCOMIndividualRecordTest(TGEDCOMIndividualRecord indiRec)
+		private void GEDCOMIndividualRecordTest(GEDCOMIndividualRecord indiRec)
 		{
 			this.GEDCOMRecordTest(indiRec);
 
 			this.GEDCOMPersonalNameTest(indiRec);
 
-			indiRec.Restriction = TGEDCOMRestriction.rnLocked;
-			Assert.AreEqual(TGEDCOMRestriction.rnLocked, indiRec.Restriction);
+			indiRec.Restriction = GEDCOMRestriction.rnLocked;
+			Assert.AreEqual(GEDCOMRestriction.rnLocked, indiRec.Restriction);
 
 			indiRec.Patriarch = true;
 			Assert.AreEqual(true, indiRec.Patriarch);
@@ -919,10 +921,10 @@ namespace GKTests
 			Assert.IsTrue(indiRec.IsEmpty());
 		}
 
-		private void GEDCOMFamilyRecordTest(TGEDCOMFamilyRecord famRec, TGEDCOMIndividualRecord indiv)
+		private void GEDCOMFamilyRecordTest(GEDCOMFamilyRecord famRec, GEDCOMIndividualRecord indiv)
 		{
-			famRec.Restriction = TGEDCOMRestriction.rnLocked;
-			Assert.AreEqual(TGEDCOMRestriction.rnLocked, famRec.Restriction);
+			famRec.Restriction = GEDCOMRestriction.rnLocked;
+			Assert.AreEqual(GEDCOMRestriction.rnLocked, famRec.Restriction);
 
 			famRec.aux_AddChild(indiv);
 			Assert.AreEqual(0, famRec.IndexOfChild(indiv));
@@ -943,7 +945,7 @@ namespace GKTests
 			famRec.Wife.Value = null;
 
 			//
-			indiv.Sex = TGEDCOMSex.svMale;
+			indiv.Sex = GEDCOMSex.svMale;
 			famRec.aux_AddSpouse(indiv);
 			this.GEDCOMSpouseToFamilyLinkTest(indiv.SpouseToFamilyLinks[0]);
 			//
@@ -953,23 +955,23 @@ namespace GKTests
 			Assert.IsTrue(famRec.IsEmpty());
 		}
 
-		private void GEDCOMChildToFamilyLinkTest(TGEDCOMChildToFamilyLink childLink)
+		private void GEDCOMChildToFamilyLinkTest(GEDCOMChildToFamilyLink childLink)
 		{
-			childLink.ChildLinkageStatus = TGEDCOMChildLinkageStatus.clChallenged;
-			Assert.AreEqual(TGEDCOMChildLinkageStatus.clChallenged, childLink.ChildLinkageStatus);
+			childLink.ChildLinkageStatus = GEDCOMChildLinkageStatus.clChallenged;
+			Assert.AreEqual(GEDCOMChildLinkageStatus.clChallenged, childLink.ChildLinkageStatus);
 
-			childLink.PedigreeLinkageType = TGEDCOMPedigreeLinkageType.plFoster;
-			Assert.AreEqual(TGEDCOMPedigreeLinkageType.plFoster, childLink.PedigreeLinkageType);
+			childLink.PedigreeLinkageType = GEDCOMPedigreeLinkageType.plFoster;
+			Assert.AreEqual(GEDCOMPedigreeLinkageType.plFoster, childLink.PedigreeLinkageType);
 			
 			Assert.IsNotNull(childLink.Family);
 		}
 
-		private void GEDCOMSpouseToFamilyLinkTest(TGEDCOMSpouseToFamilyLink spouseLink)
+		private void GEDCOMSpouseToFamilyLinkTest(GEDCOMSpouseToFamilyLink spouseLink)
 		{
 			Assert.IsNotNull(spouseLink.Family);
 		}
 
-		private void GEDCOMSourceRecordTest(TGEDCOMSourceRecord sourRec, TGEDCOMIndividualRecord indiv, TGEDCOMRepositoryRecord repRec)
+		private void GEDCOMSourceRecordTest(GEDCOMSourceRecord sourRec, GEDCOMIndividualRecord indiv, GEDCOMRepositoryRecord repRec)
 		{
 			sourRec.FiledByEntry = "This is test source";
 			Assert.AreEqual("This is test source", sourRec.FiledByEntry);
@@ -994,9 +996,9 @@ namespace GKTests
 			Assert.IsTrue(sourRec.IsEmpty());
 		}
 
-		private void GEDCOMSourceCitationTest(TGEDCOMSourceRecord sourRec, TGEDCOMIndividualRecord indiv)
+		private void GEDCOMSourceCitationTest(GEDCOMSourceRecord sourRec, GEDCOMIndividualRecord indiv)
 		{
-			TGEDCOMSourceCitation srcCit = indiv.aux_AddSource(sourRec, "p2", 3);
+			GEDCOMSourceCitation srcCit = indiv.AddSource(sourRec, "p2", 3);
 			
 			Assert.AreEqual("p2", srcCit.Page);
 			Assert.AreEqual(3, srcCit.CertaintyAssessment);
@@ -1006,23 +1008,23 @@ namespace GKTests
 			Assert.IsFalse(srcCit.IsEmpty(), "srcCit.IsEmpty()"); // its pointer
 		}
 
-		private void GEDCOMRepositoryCitationTest(TGEDCOMSourceRecord sourRec, TGEDCOMRepositoryRecord repRec)
+		private void GEDCOMRepositoryCitationTest(GEDCOMSourceRecord sourRec, GEDCOMRepositoryRecord repRec)
 		{
-			TGEDCOMRepositoryCitation repCit = sourRec.aux_AddRepository(repRec);
+			GEDCOMRepositoryCitation repCit = sourRec.aux_AddRepository(repRec);
 			
 			Assert.IsFalse(repCit.IsEmpty(), "repCit.IsEmpty()"); // its pointer
 		}
 
-		private void GEDCOMResearchRecordTest(TGEDCOMResearchRecord resRec, TGEDCOMCommunicationRecord commRec, TGEDCOMTaskRecord taskRec, TGEDCOMGroupRecord groupRec)
+		private void GEDCOMResearchRecordTest(GEDCOMResearchRecord resRec, GEDCOMCommunicationRecord commRec, GEDCOMTaskRecord taskRec, GEDCOMGroupRecord groupRec)
 		{
 			resRec.ResearchName = "Test Research";
 			Assert.AreEqual("Test Research", resRec.ResearchName);
 			
-			resRec.Priority = TResearchPriority.rpNormal;
-			Assert.AreEqual(TResearchPriority.rpNormal, resRec.Priority);
+			resRec.Priority = GKResearchPriority.rpNormal;
+			Assert.AreEqual(GKResearchPriority.rpNormal, resRec.Priority);
 			
-			resRec.Status = TResearchStatus.rsOnHold;
-			Assert.AreEqual(TResearchStatus.rsOnHold, resRec.Status);
+			resRec.Status = GKResearchStatus.rsOnHold;
+			Assert.AreEqual(GKResearchStatus.rsOnHold, resRec.Status);
 			
 			resRec.StartDate.Date = DateTime.Parse("20.01.2013");
 			Assert.AreEqual(DateTime.Parse("20.01.2013"), resRec.StartDate.Date);
@@ -1047,7 +1049,7 @@ namespace GKTests
 			Assert.IsTrue(resRec.IsEmpty());
 		}
 
-		private void GEDCOMRepositoryRecordTest(TGEDCOMRepositoryRecord repoRec)
+		private void GEDCOMRepositoryRecordTest(GEDCOMRepositoryRecord repoRec)
 		{
 			repoRec.RepositoryName = "Test Repository";
 			Assert.AreEqual("Test Repository", repoRec.RepositoryName);
@@ -1060,41 +1062,41 @@ namespace GKTests
 			Assert.IsTrue(repoRec.IsEmpty());
 		}
 
-		private void GEDCOMMultimediaRecordTest(TGEDCOMMultimediaRecord mediaRec, TGEDCOMIndividualRecord indiv)
+		private void GEDCOMMultimediaRecordTest(GEDCOMMultimediaRecord mediaRec, GEDCOMIndividualRecord indiv)
 		{
 			mediaRec.AddTag("FILE", "", null);
-			TGEDCOMFileReferenceWithTitle file_ref = mediaRec.FileReferences[0];
+			GEDCOMFileReferenceWithTitle file_ref = mediaRec.FileReferences[0];
 			Assert.IsNotNull(file_ref);
 			
 			file_ref.Title = "File Title 2";
 			Assert.AreEqual("File Title 2", file_ref.Title);
 			
 			file_ref.LinkFile("sample.png");
-			file_ref.MediaType = TGEDCOMMediaType.mtManuscript;
+			file_ref.MediaType = GEDCOMMediaType.mtManuscript;
 			Assert.AreEqual("sample.png", file_ref.StringValue);
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfPNG, file_ref.MultimediaFormat);
-			Assert.AreEqual(TGEDCOMMediaType.mtManuscript, file_ref.MediaType);
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfPNG, file_ref.MultimediaFormat);
+			Assert.AreEqual(GEDCOMMediaType.mtManuscript, file_ref.MediaType);
 			
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfUnknown, TGEDCOMFileReference.RecognizeFormat(""));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfUnknown, TGEDCOMFileReference.RecognizeFormat("sample.xxx"));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfBMP, TGEDCOMFileReference.RecognizeFormat("sample.BMP"));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfGIF, TGEDCOMFileReference.RecognizeFormat("sample.Gif"));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfJPG, TGEDCOMFileReference.RecognizeFormat("sample.jpg"));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfJPG, TGEDCOMFileReference.RecognizeFormat("sample.Jpeg"));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfOLE, TGEDCOMFileReference.RecognizeFormat("sample.ole"));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfPCX, TGEDCOMFileReference.RecognizeFormat("sample.pCx"));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfTIF, TGEDCOMFileReference.RecognizeFormat("sample.TiF"));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfTIF, TGEDCOMFileReference.RecognizeFormat("sample.tiff"));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfWAV, TGEDCOMFileReference.RecognizeFormat("sample.wav"));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfTXT, TGEDCOMFileReference.RecognizeFormat("sample.txt"));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfRTF, TGEDCOMFileReference.RecognizeFormat("sample.rtf"));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfAVI, TGEDCOMFileReference.RecognizeFormat("sample.AvI"));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfTGA, TGEDCOMFileReference.RecognizeFormat("sample.TGA"));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfPNG, TGEDCOMFileReference.RecognizeFormat("sample.png"));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfMPG, TGEDCOMFileReference.RecognizeFormat("sample.mpg"));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfMPG, TGEDCOMFileReference.RecognizeFormat("sample.mpeg"));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfHTM, TGEDCOMFileReference.RecognizeFormat("sample.htm"));
-			Assert.AreEqual(TGEDCOMMultimediaFormat.mfHTM, TGEDCOMFileReference.RecognizeFormat("sample.html"));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfUnknown, GEDCOMFileReference.RecognizeFormat(""));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfUnknown, GEDCOMFileReference.RecognizeFormat("sample.xxx"));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfBMP, GEDCOMFileReference.RecognizeFormat("sample.BMP"));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfGIF, GEDCOMFileReference.RecognizeFormat("sample.Gif"));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfJPG, GEDCOMFileReference.RecognizeFormat("sample.jpg"));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfJPG, GEDCOMFileReference.RecognizeFormat("sample.Jpeg"));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfOLE, GEDCOMFileReference.RecognizeFormat("sample.ole"));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfPCX, GEDCOMFileReference.RecognizeFormat("sample.pCx"));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfTIF, GEDCOMFileReference.RecognizeFormat("sample.TiF"));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfTIF, GEDCOMFileReference.RecognizeFormat("sample.tiff"));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfWAV, GEDCOMFileReference.RecognizeFormat("sample.wav"));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfTXT, GEDCOMFileReference.RecognizeFormat("sample.txt"));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfRTF, GEDCOMFileReference.RecognizeFormat("sample.rtf"));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfAVI, GEDCOMFileReference.RecognizeFormat("sample.AvI"));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfTGA, GEDCOMFileReference.RecognizeFormat("sample.TGA"));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfPNG, GEDCOMFileReference.RecognizeFormat("sample.png"));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfMPG, GEDCOMFileReference.RecognizeFormat("sample.mpg"));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfMPG, GEDCOMFileReference.RecognizeFormat("sample.mpeg"));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfHTM, GEDCOMFileReference.RecognizeFormat("sample.htm"));
+			Assert.AreEqual(GEDCOMMultimediaFormat.mfHTM, GEDCOMFileReference.RecognizeFormat("sample.html"));
 			
 			this.GEDCOMMultimediaLinkTest(mediaRec, indiv);
 			
@@ -1103,9 +1105,9 @@ namespace GKTests
 			Assert.IsTrue(mediaRec.IsEmpty());
 		}
 
-		private void GEDCOMMultimediaLinkTest(TGEDCOMMultimediaRecord mediaRec, TGEDCOMIndividualRecord indiv)
+		private void GEDCOMMultimediaLinkTest(GEDCOMMultimediaRecord mediaRec, GEDCOMIndividualRecord indiv)
 		{
-			TGEDCOMMultimediaLink mmLink = indiv.aux_AddMultimedia(mediaRec);
+			GEDCOMMultimediaLink mmLink = indiv.AddMultimedia(mediaRec);
 			
 			mmLink.Title = "Title1";
 			Assert.AreEqual("Title1", mmLink.Title);
@@ -1118,7 +1120,7 @@ namespace GKTests
 			Assert.IsFalse(mmLink.IsEmpty(), "mmLink.IsEmpty()"); // its pointer
 		}
 
-		private void GEDCOMSubmissionRecordTest(TGEDCOMSubmissionRecord submRec, string submitterXRef)
+		private void GEDCOMSubmissionRecordTest(GEDCOMSubmissionRecord submRec, string submitterXRef)
 		{
 			submRec.FamilyFileName = "FamilyFileName";
 			Assert.AreEqual("FamilyFileName", submRec.FamilyFileName);
@@ -1132,11 +1134,11 @@ namespace GKTests
 			submRec.GenerationsOfDescendants = 77;
 			Assert.AreEqual(77, submRec.GenerationsOfDescendants);
 
-			submRec.OrdinanceProcessFlag = TGEDCOMOrdinanceProcessFlag.opYes;
-			Assert.AreEqual(TGEDCOMOrdinanceProcessFlag.opYes, submRec.OrdinanceProcessFlag);
+			submRec.OrdinanceProcessFlag = GEDCOMOrdinanceProcessFlag.opYes;
+			Assert.AreEqual(GEDCOMOrdinanceProcessFlag.opYes, submRec.OrdinanceProcessFlag);
 			
 			submRec.AddTag("SUBM", GEDCOMUtils.EncloseXRef(submitterXRef), null);
-			TGEDCOMSubmitterRecord subr = submRec.Submitter.Value as TGEDCOMSubmitterRecord;
+			GEDCOMSubmitterRecord subr = submRec.Submitter.Value as GEDCOMSubmitterRecord;
 			Assert.IsNotNull(subr);
 			
 			
@@ -1145,7 +1147,7 @@ namespace GKTests
 			Assert.IsTrue(submRec.IsEmpty());
 		}
 
-		private void GEDCOMSubmitterRecordTest(TGEDCOMSubmitterRecord subrRec)
+		private void GEDCOMSubmitterRecordTest(GEDCOMSubmitterRecord subrRec)
 		{
 			subrRec.Name.StringValue = "Test Submitter";
 			Assert.AreEqual("Test Submitter", subrRec.Name.StringValue);
@@ -1167,7 +1169,7 @@ namespace GKTests
 			Assert.IsTrue(subrRec.IsEmpty());
 		}
 
-		private void GEDCOMGroupRecordTest(TGEDCOMGroupRecord groupRec, TGEDCOMIndividualRecord member)
+		private void GEDCOMGroupRecordTest(GEDCOMGroupRecord groupRec, GEDCOMIndividualRecord member)
 		{
 			groupRec.GroupName = "Test Group";
 			Assert.AreEqual("Test Group", groupRec.GroupName);
@@ -1197,28 +1199,28 @@ namespace GKTests
 			Assert.IsTrue(groupRec.IsEmpty());
 		}
 
-		private void GEDCOMCommunicationRecordTest(TGEDCOMCommunicationRecord comRec, TGEDCOMIndividualRecord iRec)
+		private void GEDCOMCommunicationRecordTest(GEDCOMCommunicationRecord comRec, GEDCOMIndividualRecord iRec)
 		{
 			comRec.CommName = "Test Communication";
 			Assert.AreEqual("Test Communication", comRec.CommName);
 
-			comRec.CommunicationType = TCommunicationType.ctFax;
-			Assert.AreEqual(TCommunicationType.ctFax, comRec.CommunicationType);
+			comRec.CommunicationType = GKCommunicationType.ctFax;
+			Assert.AreEqual(GKCommunicationType.ctFax, comRec.CommunicationType);
 			
 			comRec.Date.Date = DateTime.Parse("23.01.2013");
 			Assert.AreEqual(DateTime.Parse("23.01.2013"), comRec.Date.Date);
 			
-			TCommunicationDir dir = TCommunicationDir.cdFrom;
-			TGEDCOMIndividualRecord corr = null;
+			GKCommunicationDir dir = GKCommunicationDir.cdFrom;
+			GEDCOMIndividualRecord corr = null;
 
-			comRec.SetCorresponder(TCommunicationDir.cdFrom, iRec);
+			comRec.SetCorresponder(GKCommunicationDir.cdFrom, iRec);
 			comRec.GetCorresponder(ref dir, ref corr);
-			Assert.AreEqual(TCommunicationDir.cdFrom, dir);
+			Assert.AreEqual(GKCommunicationDir.cdFrom, dir);
 			Assert.AreEqual(iRec, corr);
 			
-			comRec.SetCorresponder(TCommunicationDir.cdTo, iRec);
+			comRec.SetCorresponder(GKCommunicationDir.cdTo, iRec);
 			comRec.GetCorresponder(ref dir, ref corr);
-			Assert.AreEqual(TCommunicationDir.cdTo, dir);
+			Assert.AreEqual(GKCommunicationDir.cdTo, dir);
 			Assert.AreEqual(iRec, corr);
 			
 			
@@ -1227,7 +1229,7 @@ namespace GKTests
 			Assert.IsTrue(comRec.IsEmpty());
 		}
 
-		private void GEDCOMLocationRecordTest(TGEDCOMLocationRecord locRec)
+		private void GEDCOMLocationRecordTest(GEDCOMLocationRecord locRec)
 		{
 			locRec.LocationName = "Test Location";
 			Assert.AreEqual("Test Location", locRec.LocationName);
@@ -1239,13 +1241,13 @@ namespace GKTests
 			Assert.IsTrue(locRec.IsEmpty());
 		}
 
-		private void GEDCOMTaskRecordTest(TGEDCOMTaskRecord taskRec, TGEDCOMIndividualRecord indiv, TGEDCOMFamilyRecord famRec, TGEDCOMSourceRecord srcRec)
+		private void GEDCOMTaskRecordTest(GEDCOMTaskRecord taskRec, GEDCOMIndividualRecord indiv, GEDCOMFamilyRecord famRec, GEDCOMSourceRecord srcRec)
 		{
-			TGoalType gType;
-			TGEDCOMRecord gRec;
+			GKGoalType gType;
+			GEDCOMRecord gRec;
 
-			taskRec.Priority = TResearchPriority.rpNormal;
-			Assert.AreEqual(TResearchPriority.rpNormal, taskRec.Priority);
+			taskRec.Priority = GKResearchPriority.rpNormal;
+			Assert.AreEqual(GKResearchPriority.rpNormal, taskRec.Priority);
 			
 			taskRec.StartDate.Date = DateTime.Parse("20.01.2013");
 			Assert.AreEqual(DateTime.Parse("20.01.2013"), taskRec.StartDate.Date);
@@ -1256,22 +1258,22 @@ namespace GKTests
 			taskRec.Goal = "Test Goal";
 			Assert.AreEqual("Test Goal", taskRec.Goal);
 			taskRec.aux_GetTaskGoal(out gType, out gRec);
-			Assert.AreEqual(TGoalType.gtOther, gType);
+			Assert.AreEqual(GKGoalType.gtOther, gType);
 			Assert.AreEqual(null, gRec);
 			
 			taskRec.Goal = indiv.XRef;
 			taskRec.aux_GetTaskGoal(out gType, out gRec);
-			Assert.AreEqual(TGoalType.gtIndividual, gType);
+			Assert.AreEqual(GKGoalType.gtIndividual, gType);
 			Assert.AreEqual(indiv, gRec);
 			
 			taskRec.Goal = famRec.XRef;
 			taskRec.aux_GetTaskGoal(out gType, out gRec);
-			Assert.AreEqual(TGoalType.gtFamily, gType);
+			Assert.AreEqual(GKGoalType.gtFamily, gType);
 			Assert.AreEqual(famRec, gRec);
 			
 			taskRec.Goal = srcRec.XRef;
 			taskRec.aux_GetTaskGoal(out gType, out gRec);
-			Assert.AreEqual(TGoalType.gtSource, gType);
+			Assert.AreEqual(GKGoalType.gtSource, gType);
 			Assert.AreEqual(srcRec, gRec);
 			
 			Assert.IsFalse(taskRec.IsEmpty());
@@ -1279,7 +1281,7 @@ namespace GKTests
 			Assert.IsTrue(taskRec.IsEmpty());
 		}
 
-		private void GEDCOMNoteRecordTest(TGEDCOMNoteRecord noteRec, TGEDCOMIndividualRecord indiv)
+		private void GEDCOMNoteRecordTest(GEDCOMNoteRecord noteRec, GEDCOMIndividualRecord indiv)
 		{
 			noteRec.SetNotesArray(new string[] { "This", "notes", "test" });
 			
@@ -1305,9 +1307,9 @@ namespace GKTests
 			Assert.IsTrue(noteRec.IsEmpty());
 		}
 
-		private void GEDCOMNotesTest(TGEDCOMNoteRecord noteRec, TGEDCOMIndividualRecord indiv)
+		private void GEDCOMNotesTest(GEDCOMNoteRecord noteRec, GEDCOMIndividualRecord indiv)
 		{
-			TGEDCOMNotes notes = indiv.aux_AddNote(noteRec);
+			GEDCOMNotes notes = indiv.AddNote(noteRec);
 			
 			Assert.IsTrue(notes.IsPointer, "notes.IsPointer");
 			
@@ -1318,7 +1320,7 @@ namespace GKTests
 		
 		#region Private Aux functions
 		
-		private static string TagStreamTest(TGEDCOMTag tag)
+		private static string TagStreamTest(GEDCOMTag tag)
 		{
 			string result;
 			

@@ -4,25 +4,24 @@ using System.Windows.Forms;
 using GKCore.Interfaces;
 using GKUI.Lists;
 
-/// <summary>
-/// Localization: dirty
-/// </summary>
-
 namespace GKUI.Dialogs
 {
-	public partial class TfmComFilter : Form
+    /// <summary>
+    /// Localization: dirty
+    /// </summary>
+    public partial class TfmComFilter : Form
 	{
         private readonly IBase fBase;
         private readonly string[] fCondSigns;
 		private readonly string[] fFields;
-		private readonly TListManager fListMan;
+		private readonly ListManager fListMan;
 
 		public IBase Base
 		{
 			get { return this.fBase; }
 		}
 
-        public TfmComFilter(IBase aBase, TListManager aListMan)
+        public TfmComFilter(IBase aBase, ListManager aListMan)
         {
             this.InitializeComponent();
 
@@ -114,10 +113,10 @@ namespace GKUI.Dialogs
 				int r = this.dataGridView1.Rows.Add();
 				DataGridViewRow row = dataGridView1.Rows[r];
 
-				int cond_index = ((IConvertible)fcond.condition).ToByte(null);
+				int condIndex = ((IConvertible)fcond.condition).ToByte(null);
 
 				row.Cells[0].Value = this.fFields[fcond.col_index + 1];
-				row.Cells[1].Value = this.fCondSigns[cond_index];
+				row.Cells[1].Value = this.fCondSigns[condIndex];
 				row.Cells[2].Value = fcond.value.ToString();
 			}
 		}

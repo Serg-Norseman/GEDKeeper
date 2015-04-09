@@ -1,4 +1,6 @@
 ﻿using System;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 
 namespace GKUI
 {
@@ -463,7 +465,7 @@ namespace GKUI
 			this.MergeCtl.Dock = System.Windows.Forms.DockStyle.Top;
 			this.MergeCtl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.MergeCtl.Location = new System.Drawing.Point(0, 0);
-			this.MergeCtl.MergeMode = GedCom551.TGEDCOMRecordType.rtNone;
+			this.MergeCtl.MergeMode = GEDCOMRecordType.rtNone;
 			this.MergeCtl.Name = "MergeCtl";
 			this.MergeCtl.Size = new System.Drawing.Size(681, 340);
 			this.MergeCtl.TabIndex = 11;

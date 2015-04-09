@@ -65,7 +65,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <UseVSHostingProcess>false</UseVSHostingProcess>
-    <CodeAnalysisRuleSet>gk2rules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\gk2rules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
   </PropertyGroup>
   <ItemGroup>
@@ -96,8 +96,11 @@
     <Compile Include="GKCore\Export\PDFExporter.cs" />
     <Compile Include="GKCore\Export\PedigreeExporter.cs" />
     <Compile Include="GKCore\GKData.cs" />
+    <Compile Include="GKCore\Kinships\KinshipRec.cs" />
     <Compile Include="GKCore\LangMan.cs" />
     <Compile Include="GKCore\Options\GlobalOptions.cs" />
+    <Compile Include="GKCore\Options\LangRecord.cs" />
+    <Compile Include="GKCore\Options\MRUFile.cs" />
     <Compile Include="GKCore\Options\PedigreeOptions.cs" />
     <Compile Include="GKCore\Options\ProxyOptions.cs" />
     <Compile Include="GKCore\Options\TreeChartOptions.cs" />
@@ -108,7 +111,11 @@
     <Compile Include="GKResources.Designer.cs">
       <DependentUpon>GKResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Charts\Kinships.cs" />
+    <Compile Include="GKUI\Charts\ChartFilter.cs" />
+    <Compile Include="GKCore\Kinships\KinshipsMan.cs" />
+    <Compile Include="GKUI\Charts\PersonModifyEventArgs.cs" />
+    <Compile Include="GKUI\Charts\ScaleControl.cs" />
+    <Compile Include="GKUI\Charts\TreeChartPerson.cs" />
     <Compile Include="GKUI\Controls\GKLogChart.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -142,6 +149,7 @@
     <Compile Include="GKUI\Controls\GKSheetList.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GKUI\Controls\ModifyEventArgs.cs" />
     <Compile Include="GKUI\Dialogs\TfmAbout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -316,7 +324,8 @@
     <Compile Include="GKUI\Dialogs\TfmUserRefEdit.Designer.cs">
       <DependentUpon>TfmUserRefEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Lists\TListColumns.cs" />
+    <Compile Include="GKUI\Lists\ListFilter.cs" />
+    <Compile Include="GKUI\Lists\ListColumns.cs" />
     <Compile Include="GKUI\PatriarchsViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -377,23 +386,23 @@
     <Compile Include="GKUI\TfmScriptDaemon.Designer.cs">
       <DependentUpon>TfmScriptDaemon.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Charts\TTreeChartBox.cs">
+    <Compile Include="GKUI\Charts\TreeChartBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Charts\TPersonList.cs" />
+    <Compile Include="GKUI\Charts\PersonList.cs" />
     <Compile Include="GKCore\NamesTable.cs" />
-    <Compile Include="GKUI\Lists\TCommunicationListMan.cs" />
-    <Compile Include="GKUI\Lists\TFamilyListMan.cs" />
-    <Compile Include="GKUI\Lists\TGroupListMan.cs" />
-    <Compile Include="GKUI\Lists\TIndividualListMan.cs" />
-    <Compile Include="GKUI\Lists\TListManager.cs" />
-    <Compile Include="GKUI\Lists\TLocationListMan.cs" />
-    <Compile Include="GKUI\Lists\TMultimediaListMan.cs" />
-    <Compile Include="GKUI\Lists\TNoteListMan.cs" />
-    <Compile Include="GKUI\Lists\TRepositoryListMan.cs" />
-    <Compile Include="GKUI\Lists\TResearchListMan.cs" />
-    <Compile Include="GKUI\Lists\TSourceListMan.cs" />
-    <Compile Include="GKUI\Lists\TTaskListMan.cs" />
+    <Compile Include="GKUI\Lists\CommunicationListMan.cs" />
+    <Compile Include="GKUI\Lists\FamilyListMan.cs" />
+    <Compile Include="GKUI\Lists\GroupListMan.cs" />
+    <Compile Include="GKUI\Lists\IndividualListMan.cs" />
+    <Compile Include="GKUI\Lists\ListManager.cs" />
+    <Compile Include="GKUI\Lists\LocationListMan.cs" />
+    <Compile Include="GKUI\Lists\MultimediaListMan.cs" />
+    <Compile Include="GKUI\Lists\NoteListMan.cs" />
+    <Compile Include="GKUI\Lists\RepositoryListMan.cs" />
+    <Compile Include="GKUI\Lists\ResearchListMan.cs" />
+    <Compile Include="GKUI\Lists\SourceListMan.cs" />
+    <Compile Include="GKUI\Lists\TaskListMan.cs" />
     <Compile Include="GKUI\TfmBase.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -572,13 +581,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ExtUtils\ExtUtils.csproj">
+    <ProjectReference Include="..\GKCommon\GKCommon.csproj">
       <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
-      <Name>ExtUtils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GEDCOM\GEDCOM.csproj">
-      <Project>{5F4BCDBD-5FF0-4406-A650-9B665F26A69A}</Project>
-      <Name>GEDCOM</Name>
+      <Name>GKCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\GKInterfaces\GKInterfaces.csproj">
       <Project>{B86F8B3B-E1CD-4A00-A73B-2D454924B8D2}</Project>

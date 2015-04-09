@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Windows.Forms;
 
-using ExtUtils;
-using GedCom551;
+using GKCommon;
+using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKUI.Controls;
 using GKUI.Sheets;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKUI.Dialogs
 {
-	public partial class TfmLocationEdit : Form, IBaseEditor
+    /// <summary>
+    /// 
+    /// </summary>
+    public partial class TfmLocationEdit : Form, IBaseEditor
 	{
 		private readonly IBase fBase;
 		private readonly GKMapBrowser fMapBrowser;
@@ -22,9 +21,9 @@ namespace GKUI.Dialogs
 		private readonly GKNotesSheet fNotesList;
 		private readonly ExtList<GKMapBrowser.GMapPoint> fSearchPoints;
 
-        private TGEDCOMLocationRecord fLocationRecord;
+        private GEDCOMLocationRecord fLocationRecord;
         
-		public TGEDCOMLocationRecord LocationRecord
+		public GEDCOMLocationRecord LocationRecord
 		{
 			get { return this.fLocationRecord; }
 			set { this.SetLocationRecord(value); }
@@ -60,7 +59,7 @@ namespace GKUI.Dialogs
 			base.Dispose(disposing);
 		}
 
-		private void SetLocationRecord(TGEDCOMLocationRecord value)
+		private void SetLocationRecord(GEDCOMLocationRecord value)
 		{
 			this.fLocationRecord = value;
 			this.EditName.Text = this.fLocationRecord.LocationName;

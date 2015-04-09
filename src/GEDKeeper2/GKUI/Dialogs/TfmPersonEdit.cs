@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-
-using GedCom551;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKUI.Controls;
 using GKUI.Sheets;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKUI.Dialogs
 {
-	public partial class TfmPersonEdit : Form, IBaseEditor
+    /// <summary>
+    /// 
+    /// </summary>
+    public partial class TfmPersonEdit : Form, IBaseEditor
 	{
 		private readonly IBase fBase;
 
@@ -27,9 +27,9 @@ namespace GKUI.Dialogs
 		private readonly GKSourcesSheet fSourcesList;
         private readonly GKUserRefsSheet fUserRefList;
 
-        private TGEDCOMIndividualRecord fPerson;
+        private GEDCOMIndividualRecord fPerson;
 
-        public TGEDCOMIndividualRecord Person
+        public GEDCOMIndividualRecord Person
 		{
 			get { return this.fPerson; }
 			set { this.SetPerson(value); }
@@ -62,7 +62,7 @@ namespace GKUI.Dialogs
 		{
 			if (this.fPerson.PersonalNames.Count > 0)
 			{
-				TGEDCOMPersonalName np = this.fPerson.PersonalNames[0];
+				GEDCOMPersonalName np = this.fPerson.PersonalNames[0];
 				this.edPiecePrefix.Text = np.Pieces.Prefix;
 				this.edPieceNickname.Text = np.Pieces.Nickname;
 				this.edPieceSurnamePrefix.Text = np.Pieces.SurnamePrefix;
@@ -71,17 +71,18 @@ namespace GKUI.Dialogs
 
 			if (this.fPerson.ChildToFamilyLinks.Count != 0)
 			{
-				TGEDCOMFamilyRecord family = this.fPerson.ChildToFamilyLinks[0].Family;
+				GEDCOMFamilyRecord family = this.fPerson.ChildToFamilyLinks[0].Family;
 				this.btnParentsAdd.Enabled = false;
 				this.btnParentsEdit.Enabled = true;
 				this.btnParentsDelete.Enabled = true;
-				TGEDCOMIndividualRecord rel_person = family.Husband.Value as TGEDCOMIndividualRecord;
-				if (rel_person != null)
+
+                GEDCOMIndividualRecord relPerson = family.Husband.Value as GEDCOMIndividualRecord;
+				if (relPerson != null)
 				{
 					this.btnFatherAdd.Enabled = false;
 					this.btnFatherDelete.Enabled = true;
 					this.btnFatherSel.Enabled = true;
-					this.EditFather.Text = rel_person.aux_GetNameStr(true, false);
+					this.EditFather.Text = relPerson.aux_GetNameStr(true, false);
 				}
 				else
 				{
@@ -91,13 +92,13 @@ namespace GKUI.Dialogs
 					this.EditFather.Text = "";
 				}
 
-				rel_person = (family.Wife.Value as TGEDCOMIndividualRecord);
-				if (rel_person != null)
+				relPerson = (family.Wife.Value as GEDCOMIndividualRecord);
+				if (relPerson != null)
 				{
 					this.btnMotherAdd.Enabled = false;
 					this.btnMotherDelete.Enabled = true;
 					this.btnMotherSel.Enabled = true;
-					this.EditMother.Text = rel_person.aux_GetNameStr(true, false);
+					this.EditMother.Text = relPerson.aux_GetNameStr(true, false);
 				}
 				else
 				{
@@ -133,10 +134,10 @@ namespace GKUI.Dialogs
 
 			this.RefreshPortrait();
 
-			LockEditor(this.fPerson.Restriction == TGEDCOMRestriction.rnLocked);
+			LockEditor(this.fPerson.Restriction == GEDCOMRestriction.rnLocked);
 		}
 
-		private void SetPerson(TGEDCOMIndividualRecord value)
+		private void SetPerson(GEDCOMIndividualRecord value)
 		{
 			this.fPerson = value;
 			try
@@ -160,19 +161,19 @@ namespace GKUI.Dialogs
 
 		private void AcceptChanges()
 		{
-			TGEDCOMPersonalName np = this.fPerson.PersonalNames[0];
+			GEDCOMPersonalName np = this.fPerson.PersonalNames[0];
 			np.SetNameParts(this.EditName.Text.Trim() + " " + this.EditPatronymic.Text.Trim(), this.EditFamily.Text.Trim(), np.LastPart);
 
-			TGEDCOMPersonalNamePieces pieces = np.Pieces;
+			GEDCOMPersonalNamePieces pieces = np.Pieces;
 			pieces.Nickname = this.edPieceNickname.Text;
 			pieces.Prefix = this.edPiecePrefix.Text;
 			pieces.SurnamePrefix = this.edPieceSurnamePrefix.Text;
 			pieces.Suffix = this.edPieceSuffix.Text;
 
-			this.fPerson.Sex = (TGEDCOMSex)this.EditSex.SelectedIndex;
+			this.fPerson.Sex = (GEDCOMSex)this.EditSex.SelectedIndex;
 			this.fPerson.Patriarch = this.CheckPatriarch.Checked;
 			this.fPerson.Bookmark = this.chkBookmark.Checked;
-			this.fPerson.Restriction = (TGEDCOMRestriction)this.cbRestriction.SelectedIndex;
+			this.fPerson.Restriction = (GEDCOMRestriction)this.cbRestriction.SelectedIndex;
 
 			if (this.fPerson.ChildToFamilyLinks.Count > 0)
 			{
@@ -192,21 +193,21 @@ namespace GKUI.Dialogs
 		{
             if (sender == this.fSpousesList && eArgs.Action == RecordAction.raJump)
 			{
-                TGEDCOMFamilyRecord family = eArgs.ItemData as TGEDCOMFamilyRecord;
-                if (family != null && (this.fPerson.Sex == TGEDCOMSex.svMale || this.fPerson.Sex == TGEDCOMSex.svFemale))
+                GEDCOMFamilyRecord family = eArgs.ItemData as GEDCOMFamilyRecord;
+                if (family != null && (this.fPerson.Sex == GEDCOMSex.svMale || this.fPerson.Sex == GEDCOMSex.svFemale))
                 {
-                    TGEDCOMPointer sp = null;
+                    GEDCOMPointer sp = null;
                     switch (this.fPerson.Sex) {
-                        case TGEDCOMSex.svMale:
+                        case GEDCOMSex.svMale:
                             sp = family.Wife;
                             break;
 
-                        case TGEDCOMSex.svFemale:
+                        case GEDCOMSex.svFemale:
                             sp = family.Husband;
                             break;
                     }
 
-                    TGEDCOMIndividualRecord spouse = sp.Value as TGEDCOMIndividualRecord;
+                    GEDCOMIndividualRecord spouse = sp.Value as GEDCOMIndividualRecord;
                     this.AcceptChanges();
                     this.fBase.SelectRecordByXRef(spouse.XRef);
                     base.Close();
@@ -216,7 +217,7 @@ namespace GKUI.Dialogs
 			{
                 if (sender == this.fAssociationsList && eArgs.Action == RecordAction.raJump)
 				{
-                    TGEDCOMAssociation ast = eArgs.ItemData as TGEDCOMAssociation;
+                    GEDCOMAssociation ast = eArgs.ItemData as GEDCOMAssociation;
 
                     this.AcceptChanges();
                     this.fBase.SelectRecordByXRef(ast.Individual.XRef);
@@ -226,7 +227,7 @@ namespace GKUI.Dialogs
 				{
                     if (sender == this.fGroupsList && eArgs.Action == RecordAction.raJump)
 					{
-                        TGEDCOMGroupRecord grp = eArgs.ItemData as TGEDCOMGroupRecord;
+                        GEDCOMGroupRecord grp = eArgs.ItemData as GEDCOMGroupRecord;
 
                         this.AcceptChanges();
                         this.fBase.SelectRecordByXRef(grp.XRef);
@@ -253,26 +254,25 @@ namespace GKUI.Dialogs
 
 		private void btnFatherAdd_Click(object sender, EventArgs e)
 		{
-			TGEDCOMIndividualRecord father = this.fBase.SelectPerson(this.fPerson, TargetMode.tmChild, TGEDCOMSex.svMale);
-			if (father != null)
-			{
-				TGEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, true, father);
-				if (family.Husband.Value == null)
-				{
-					family.aux_AddSpouse(father);
-				}
-				this.ControlsRefresh();
-			}
+			GEDCOMIndividualRecord father = this.fBase.SelectPerson(this.fPerson, TargetMode.tmChild, GEDCOMSex.svMale);
+		    if (father == null) return;
+		    
+            GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, true, father);
+		    if (family.Husband.Value == null)
+		    {
+		        family.aux_AddSpouse(father);
+		    }
+		    this.ControlsRefresh();
 		}
 
 		private void btnFatherDelete_Click(object sender, EventArgs e)
 		{
 			if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachFatherQuery)) != DialogResult.No)
 			{
-				TGEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, false, null);
+				GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, false, null);
 				if (family != null)
 				{
-					family.aux_RemoveSpouse(family.Husband.Value as TGEDCOMIndividualRecord);
+					family.aux_RemoveSpouse(family.Husband.Value as GEDCOMIndividualRecord);
 					this.ControlsRefresh();
 				}
 			}
@@ -280,38 +280,36 @@ namespace GKUI.Dialogs
 
 		private void btnFatherSel_Click(object sender, EventArgs e)
 		{
-			TGEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, false, null);
-			if (family != null)
-			{
-				this.AcceptChanges();
-				TGEDCOMIndividualRecord father = family.Husband.Value as TGEDCOMIndividualRecord;
-				this.fBase.SelectRecordByXRef(father.XRef);
-				base.Close();
-			}
+			GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, false, null);
+		    if (family == null) return;
+		    
+            this.AcceptChanges();
+		    GEDCOMIndividualRecord father = family.Husband.Value as GEDCOMIndividualRecord;
+		    this.fBase.SelectRecordByXRef(father.XRef);
+		    base.Close();
 		}
 
 		private void btnMotherAdd_Click(object sender, EventArgs e)
 		{
-			TGEDCOMIndividualRecord mother = this.fBase.SelectPerson(this.fPerson, TargetMode.tmChild, TGEDCOMSex.svFemale);
-			if (mother != null)
-			{
-				TGEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, true, mother);
-				if (family.Wife.Value == null)
-				{
-					family.aux_AddSpouse(mother);
-				}
-				this.ControlsRefresh();
-			}
+			GEDCOMIndividualRecord mother = this.fBase.SelectPerson(this.fPerson, TargetMode.tmChild, GEDCOMSex.svFemale);
+		    if (mother == null) return;
+		    
+            GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, true, mother);
+		    if (family.Wife.Value == null)
+		    {
+		        family.aux_AddSpouse(mother);
+		    }
+		    this.ControlsRefresh();
 		}
 
 		private void btnMotherDelete_Click(object sender, EventArgs e)
 		{
 			if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachMotherQuery)) != DialogResult.No)
 			{
-				TGEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, false, null);
+				GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, false, null);
 				if (family != null)
 				{
-					TGEDCOMIndividualRecord mother = family.Wife.Value as TGEDCOMIndividualRecord;
+					GEDCOMIndividualRecord mother = family.Wife.Value as GEDCOMIndividualRecord;
 					family.aux_RemoveSpouse(mother);
 					this.ControlsRefresh();
 				}
@@ -320,32 +318,30 @@ namespace GKUI.Dialogs
 
 		private void btnMotherSel_Click(object sender, EventArgs e)
 		{
-			TGEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, false, null);
-			if (family != null)
-			{
-				this.AcceptChanges();
-				TGEDCOMIndividualRecord mother = family.Wife.Value as TGEDCOMIndividualRecord;
-				this.fBase.SelectRecordByXRef(mother.XRef);
-				base.Close();
-			}
+			GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, false, null);
+		    if (family == null) return;
+
+            this.AcceptChanges();
+		    GEDCOMIndividualRecord mother = family.Wife.Value as GEDCOMIndividualRecord;
+		    this.fBase.SelectRecordByXRef(mother.XRef);
+		    base.Close();
 		}
 
 		private void btnParentsAdd_Click(object sender, EventArgs e)
 		{
-			TGEDCOMFamilyRecord family = this.fBase.SelectFamily(this.fPerson);
-			if (family != null)
-			{
-				if (family.IndexOfChild(this.fPerson) < 0)
-				{
-					family.aux_AddChild(this.fPerson);
-				}
-				this.ControlsRefresh();
-			}
+			GEDCOMFamilyRecord family = this.fBase.SelectFamily(this.fPerson);
+		    if (family == null) return;
+
+            if (family.IndexOfChild(this.fPerson) < 0)
+		    {
+		        family.aux_AddChild(this.fPerson);
+		    }
+		    this.ControlsRefresh();
 		}
 
 		private void btnParentsEdit_Click(object sender, EventArgs e)
 		{
-			TGEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, false, null);
+			GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, false, null);
 			if (family != null && this.fBase.ModifyFamily(ref family, FamilyTarget.ftNone, null))
 			{
 				this.ControlsRefresh();
@@ -356,7 +352,7 @@ namespace GKUI.Dialogs
 		{
 			if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachParentsQuery)) != DialogResult.No)
 			{
-				TGEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, false, null);
+				GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, false, null);
 				if (family != null)
 				{
 					family.aux_RemoveChild(this.fPerson);
@@ -372,28 +368,26 @@ namespace GKUI.Dialogs
 
 		private void btnPortraitAdd_Click(object sender, EventArgs e)
 		{
-			TGEDCOMMultimediaRecord mmRec = fBase.SelectRecord(TGEDCOMRecordType.rtMultimedia, null) as TGEDCOMMultimediaRecord;
-			if (mmRec != null)
-			{
-				TGEDCOMMultimediaLink mmLink = this.fPerson.aux_GetPrimaryMultimediaLink();
-				if (mmLink != null)
-				{
-					mmLink.IsPrimary = false;
-				}
-				this.fPerson.aux_SetPrimaryMultimediaLink(mmRec);
-				this.fMediaList.UpdateSheet();
-				this.RefreshPortrait();
-			}
+			GEDCOMMultimediaRecord mmRec = fBase.SelectRecord(GEDCOMRecordType.rtMultimedia, null) as GEDCOMMultimediaRecord;
+		    if (mmRec == null) return;
+		    
+            GEDCOMMultimediaLink mmLink = this.fPerson.aux_GetPrimaryMultimediaLink();
+		    if (mmLink != null)
+		    {
+		        mmLink.IsPrimary = false;
+		    }
+		    this.fPerson.aux_SetPrimaryMultimediaLink(mmRec);
+		    this.fMediaList.UpdateSheet();
+		    this.RefreshPortrait();
 		}
 
 		private void btnPortraitDelete_Click(object sender, EventArgs e)
 		{
-			TGEDCOMMultimediaLink mmLink = this.fPerson.aux_GetPrimaryMultimediaLink();
-			if (mmLink != null)
-			{
-				mmLink.IsPrimary = false;
-				this.RefreshPortrait();
-			}
+			GEDCOMMultimediaLink mmLink = this.fPerson.aux_GetPrimaryMultimediaLink();
+		    if (mmLink == null) return;
+		    
+            mmLink.IsPrimary = false;
+		    this.RefreshPortrait();
 		}
 
 		private void EditFamily_KeyPress(object sender, KeyPressEventArgs e)
@@ -429,12 +423,12 @@ namespace GKUI.Dialogs
 			this.InitializeComponent();
 			this.fBase = aBase;
 
-			for (TGEDCOMRestriction res = TGEDCOMRestriction.rnNone; res <= TGEDCOMRestriction.rnPrivacy; res++)
+			for (GEDCOMRestriction res = GEDCOMRestriction.rnNone; res <= GEDCOMRestriction.rnPrivacy; res++)
 			{
 				this.cbRestriction.Items.Add(GKData.Restrictions[(int)res]);
 			}
 
-			for (TGEDCOMSex sx = TGEDCOMSex.svNone; sx <= TGEDCOMSex.svUndetermined; sx++)
+			for (GEDCOMSex sx = GEDCOMSex.svNone; sx <= GEDCOMSex.svUndetermined; sx++)
 			{
 				this.EditSex.Items.Add(GKUtils.SexStr(sx));
 			}

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Windows.Forms;
-
-using GedCom551;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 
 /// <summary>
 /// 
@@ -14,7 +15,7 @@ namespace GKUI.Dialogs
 	public partial class TfmPersonNew : Form, IBaseEditor
 	{
 		private readonly IBase fBase;
-		private TGEDCOMIndividualRecord fTarget;
+		private GEDCOMIndividualRecord fTarget;
 		private TargetMode fTargetMode;
 
         public IBase Base
@@ -22,7 +23,7 @@ namespace GKUI.Dialogs
 			get { return this.fBase; }
 		}
 
-		public TGEDCOMIndividualRecord Target
+		public GEDCOMIndividualRecord Target
 		{
 			get { return this.fTarget; }
 			set { this.SetTarget(value); }
@@ -34,7 +35,7 @@ namespace GKUI.Dialogs
 			set { this.fTargetMode = value; }
 		}
 
-		private void SetTarget(TGEDCOMIndividualRecord value)
+		private void SetTarget(GEDCOMIndividualRecord value)
 		{
 			try
 			{
@@ -46,24 +47,24 @@ namespace GKUI.Dialogs
 					this.fTarget.aux_GetNameParts(out iFamily, out iName, out iPatronymic);
 					this.edFamily.Text = iFamily;
 					NamesTable names = TfmGEDKeeper.Instance.NamesTable;
-					TGEDCOMSex sx = (TGEDCOMSex)this.EditSex.SelectedIndex;
+					GEDCOMSex sx = (GEDCOMSex)this.EditSex.SelectedIndex;
 
 					switch (this.fTargetMode) {
 						case TargetMode.tmParent:
-							if (sx == TGEDCOMSex.svFemale) {
+							if (sx == GEDCOMSex.svFemale) {
 								this.edFamily.Text = NamesTable.GetRusWifeSurname(iFamily);
 							}
-							this.edPatronymic.Items.Add(names.GetPatronymicByName(iName, TGEDCOMSex.svMale));
-							this.edPatronymic.Items.Add(names.GetPatronymicByName(iName, TGEDCOMSex.svFemale));
+							this.edPatronymic.Items.Add(names.GetPatronymicByName(iName, GEDCOMSex.svMale));
+							this.edPatronymic.Items.Add(names.GetPatronymicByName(iName, GEDCOMSex.svFemale));
 							this.edPatronymic.Text = names.GetPatronymicByName(iName, sx);
 							break;
 
 						case TargetMode.tmChild:
 							switch (sx) {
-								case TGEDCOMSex.svMale:
+								case GEDCOMSex.svMale:
 									this.edName.Text = names.GetNameByPatronymic(iPatronymic);
 									break;
-								case TGEDCOMSex.svFemale:
+								case GEDCOMSex.svFemale:
 									this.edFamily.Text = "(" + NamesTable.GetRusWifeSurname(iFamily) + ")";
 									break;
 							}
@@ -108,7 +109,7 @@ namespace GKUI.Dialogs
 			this.InitializeComponent();
 			this.fBase = aBase;
 
-			for (TGEDCOMSex sx = TGEDCOMSex.svNone; sx <= TGEDCOMSex.svUndetermined; sx++)
+			for (GEDCOMSex sx = GEDCOMSex.svNone; sx <= GEDCOMSex.svUndetermined; sx++)
 			{
 				this.EditSex.Items.Add(GKUtils.SexStr(sx));
 			}

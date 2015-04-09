@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-
-using GedCom551;
+using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKUI.Sheets;
@@ -17,9 +16,9 @@ namespace GKUI.Dialogs
 		private readonly IBase fBase;
         private readonly GKNotesSheet fNotesList;
 
-        private TGEDCOMRepositoryRecord fRepository;
+        private GEDCOMRepositoryRecord fRepository;
         
-		public TGEDCOMRepositoryRecord Repository
+		public GEDCOMRepositoryRecord Repository
 		{
 			get { return this.fRepository; }
 			set { this.SetRepository(value); }
@@ -30,7 +29,7 @@ namespace GKUI.Dialogs
 			get { return this.fBase; }
 		}
 
-		private void SetRepository(TGEDCOMRepositoryRecord value)
+		private void SetRepository(GEDCOMRepositoryRecord value)
 		{
 			this.fRepository = value;
 			this.edName.Text = this.fRepository.RepositoryName;

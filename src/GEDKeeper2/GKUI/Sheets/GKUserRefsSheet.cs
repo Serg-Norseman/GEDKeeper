@@ -2,9 +2,11 @@
 using System.Windows.Forms;
 
 using ExtUtils;
-using GedCom551;
+using GKCommon;
+using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKUI.Controls;
 using GKUI.Dialogs;
 
@@ -32,7 +34,7 @@ namespace GKUI.Sheets
 
                 this.DataList.Reset();
                 while (this.DataList.MoveNext()) {
-                    TGEDCOMUserReference uref = this.DataList.Current as TGEDCOMUserReference;
+                    GEDCOMUserReference uref = this.DataList.Current as GEDCOMUserReference;
                     ListViewItem item = this.List.AddItem(uref.StringValue, uref);
                     item.SubItems.Add(uref.ReferenceType);
                 }
@@ -50,8 +52,8 @@ namespace GKUI.Sheets
             IBase aBase = this.Editor.Base;
             if (aBase == null) return;
 
-            TGEDCOMRecord record = this.DataList.Owner as TGEDCOMRecord;
-            TGEDCOMUserReference userRef = eArgs.ItemData as TGEDCOMUserReference;
+            GEDCOMRecord record = this.DataList.Owner as GEDCOMRecord;
+            GEDCOMUserReference userRef = eArgs.ItemData as GEDCOMUserReference;
 
             bool result = false;
 
@@ -62,7 +64,7 @@ namespace GKUI.Sheets
             		try
             		{
             			if (eArgs.Action == RecordAction.raAdd) {
-            				userRef = new TGEDCOMUserReference(aBase.Tree, record, "", "");
+            				userRef = new GEDCOMUserReference(aBase.Tree, record, "", "");
             			}
 
             			dlg.UserRef = userRef;

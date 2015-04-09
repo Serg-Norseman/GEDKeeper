@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 
 using ExtUtils;
-using GedCom551;
+using GKCommon;
+using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using Xapian;
 
@@ -31,9 +32,9 @@ namespace GKTextSearchPlugin
 			return Path.GetFileNameWithoutExtension(aBase.Tree.FileName);
 		}
 
-		private static bool IsIndexedRecord(TGEDCOMRecord rec)
+		private static bool IsIndexedRecord(GEDCOMRecord rec)
 		{
-			return !((rec is TGEDCOMLocationRecord || rec is TGEDCOMGroupRecord));
+			return !((rec is GEDCOMLocationRecord || rec is GEDCOMGroupRecord));
 		}
 
 		private static void SetDBLastChange(IBase aBase, WritableDatabase database)
@@ -65,7 +66,7 @@ namespace GKTextSearchPlugin
 			return result;
 		}
 
-		private static void SetDocumentContext(IBase aBase, Document doc, TermGenerator indexer, TGEDCOMRecord rec)
+		private static void SetDocumentContext(IBase aBase, Document doc, TermGenerator indexer, GEDCOMRecord rec)
 		{
 			StringList ctx = aBase.GetRecordContent(rec);
 			string rec_lastchange = rec.ChangeDate.ToString();
@@ -80,7 +81,7 @@ namespace GKTextSearchPlugin
 			indexer.IndexText(ctx.Text);
 		}
 
-		private static void ReindexRecord(IBase aBase, WritableDatabase database, TermGenerator indexer, TGEDCOMRecord record)
+		private static void ReindexRecord(IBase aBase, WritableDatabase database, TermGenerator indexer, GEDCOMRecord record)
 		{
 			uint docid = FindDocId(aBase, database, record.XRef);
 
@@ -129,7 +130,7 @@ namespace GKTextSearchPlugin
 						int num = aBase.Tree.RecordsCount - 1;
 						for (int i = 0; i <= num; i++)
 						{
-							TGEDCOMRecord record = aBase.Tree[i];
+							GEDCOMRecord record = aBase.Tree[i];
 							if (IsIndexedRecord(record)) ReindexRecord(aBase, database, indexer, record);
 
 							aBase.ProgressStep();
@@ -146,7 +147,7 @@ namespace GKTextSearchPlugin
 			}
 		}
 
-		public void UpdateRecord(IBase aBase, TGEDCOMRecord record)
+		public void UpdateRecord(IBase aBase, GEDCOMRecord record)
 		{
 			if (record == null || !IsIndexedRecord(record)) return;
 

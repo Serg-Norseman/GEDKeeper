@@ -1,4 +1,5 @@
 ﻿using System;
+using GKCore.Types;
 
 /// <summary>
 /// Localization: dirty
@@ -44,9 +45,9 @@ namespace GKCore
 		{
 			public LSID Name;
 			public string Sign;
-			public TPersonEventKind Kind;
+			public PersonEventKind Kind;
 			
-			public PersonEventStruct(LSID aName, string aSign, TPersonEventKind aKind) {
+			public PersonEventStruct(LSID aName, string aSign, PersonEventKind aKind) {
 				this.Name = aName;
 				this.Sign = aSign;
 				this.Kind = aKind;
@@ -378,44 +379,44 @@ namespace GKCore
 
 
 			PersonEventStruct[] array6 = new PersonEventStruct[37];
-			array6[ 0] = new PersonEventStruct(LSID.LSID_Event, "EVEN", TPersonEventKind.ekEvent);
-			array6[ 1] = new PersonEventStruct(LSID.LSID_Birth, "BIRT", TPersonEventKind.ekEvent);
-			array6[ 2] = new PersonEventStruct(LSID.LSID_Adoption, "ADOP", TPersonEventKind.ekEvent);
-			array6[ 3] = new PersonEventStruct(LSID.LSID_Christening, "CHR", TPersonEventKind.ekEvent);
-			array6[ 4] = new PersonEventStruct(LSID.LSID_Graduation, "GRAD", TPersonEventKind.ekEvent);
-			array6[ 5] = new PersonEventStruct(LSID.LSID_Retirement, "RETI", TPersonEventKind.ekEvent);
-			array6[ 6] = new PersonEventStruct(LSID.LSID_Naturalization, "NATU", TPersonEventKind.ekEvent);
-			array6[ 7] = new PersonEventStruct(LSID.LSID_Emigration, "EMIG", TPersonEventKind.ekEvent);
-			array6[ 8] = new PersonEventStruct(LSID.LSID_Immigration, "IMMI", TPersonEventKind.ekEvent);
-			array6[ 9] = new PersonEventStruct(LSID.LSID_Census, "CENS", TPersonEventKind.ekEvent);
-			array6[10] = new PersonEventStruct(LSID.LSID_LastWill, "WILL", TPersonEventKind.ekEvent);
-			array6[11] = new PersonEventStruct(LSID.LSID_ProbateOfWill, "PROB", TPersonEventKind.ekEvent);
-			array6[12] = new PersonEventStruct(LSID.LSID_Death, "DEAT", TPersonEventKind.ekEvent);
-			array6[13] = new PersonEventStruct(LSID.LSID_Burial, "BURI", TPersonEventKind.ekEvent);
-			array6[14] = new PersonEventStruct(LSID.LSID_Cremation, "CREM", TPersonEventKind.ekEvent);
+			array6[ 0] = new PersonEventStruct(LSID.LSID_Event, "EVEN", PersonEventKind.ekEvent);
+			array6[ 1] = new PersonEventStruct(LSID.LSID_Birth, "BIRT", PersonEventKind.ekEvent);
+			array6[ 2] = new PersonEventStruct(LSID.LSID_Adoption, "ADOP", PersonEventKind.ekEvent);
+			array6[ 3] = new PersonEventStruct(LSID.LSID_Christening, "CHR", PersonEventKind.ekEvent);
+			array6[ 4] = new PersonEventStruct(LSID.LSID_Graduation, "GRAD", PersonEventKind.ekEvent);
+			array6[ 5] = new PersonEventStruct(LSID.LSID_Retirement, "RETI", PersonEventKind.ekEvent);
+			array6[ 6] = new PersonEventStruct(LSID.LSID_Naturalization, "NATU", PersonEventKind.ekEvent);
+			array6[ 7] = new PersonEventStruct(LSID.LSID_Emigration, "EMIG", PersonEventKind.ekEvent);
+			array6[ 8] = new PersonEventStruct(LSID.LSID_Immigration, "IMMI", PersonEventKind.ekEvent);
+			array6[ 9] = new PersonEventStruct(LSID.LSID_Census, "CENS", PersonEventKind.ekEvent);
+			array6[10] = new PersonEventStruct(LSID.LSID_LastWill, "WILL", PersonEventKind.ekEvent);
+			array6[11] = new PersonEventStruct(LSID.LSID_ProbateOfWill, "PROB", PersonEventKind.ekEvent);
+			array6[12] = new PersonEventStruct(LSID.LSID_Death, "DEAT", PersonEventKind.ekEvent);
+			array6[13] = new PersonEventStruct(LSID.LSID_Burial, "BURI", PersonEventKind.ekEvent);
+			array6[14] = new PersonEventStruct(LSID.LSID_Cremation, "CREM", PersonEventKind.ekEvent);
 
-			array6[15] = new PersonEventStruct(LSID.LSID_Fact, "FACT", TPersonEventKind.ekFact);
-			array6[16] = new PersonEventStruct(LSID.LSID_Religion, "RELI", TPersonEventKind.ekFact);
-			array6[17] = new PersonEventStruct(LSID.LSID_Nationality, "NATI", TPersonEventKind.ekFact);
-			array6[18] = new PersonEventStruct(LSID.LSID_Residence, "RESI", TPersonEventKind.ekFact);
-			array6[19] = new PersonEventStruct(LSID.LSID_PhysicalDesc, "DSCR", TPersonEventKind.ekFact);
-			array6[20] = new PersonEventStruct(LSID.LSID_NationalIDNumber, "IDNO", TPersonEventKind.ekFact);
-			array6[21] = new PersonEventStruct(LSID.LSID_SocialSecurityNumber, "SSN", TPersonEventKind.ekFact);
-			array6[22] = new PersonEventStruct(LSID.LSID_ChildsCount, "NCHI", TPersonEventKind.ekFact);
-			array6[23] = new PersonEventStruct(LSID.LSID_MarriagesCount, "NMR", TPersonEventKind.ekFact);
-			array6[24] = new PersonEventStruct(LSID.LSID_Education, "EDUC", TPersonEventKind.ekFact);
-			array6[25] = new PersonEventStruct(LSID.LSID_Occupation, "OCCU", TPersonEventKind.ekFact);
-			array6[26] = new PersonEventStruct(LSID.LSID_Caste, "CAST", TPersonEventKind.ekFact);
-			array6[27] = new PersonEventStruct(LSID.LSID_Property, "PROP", TPersonEventKind.ekFact);
-			array6[28] = new PersonEventStruct(LSID.LSID_NobilityTitle, "TITL", TPersonEventKind.ekFact);
-			array6[29] = new PersonEventStruct(LSID.LSID_Travel, "_TRAVEL", TPersonEventKind.ekFact);
-			array6[30] = new PersonEventStruct(LSID.LSID_Hobby, "_HOBBY", TPersonEventKind.ekFact);
-			array6[31] = new PersonEventStruct(LSID.LSID_Award, "_AWARD", TPersonEventKind.ekFact);
-			array6[32] = new PersonEventStruct(LSID.LSID_Mili, "_MILI", TPersonEventKind.ekFact);
-			array6[33] = new PersonEventStruct(LSID.LSID_MiliInd, "_MILI_IND", TPersonEventKind.ekFact);
-			array6[34] = new PersonEventStruct(LSID.LSID_MiliDis, "_MILI_DIS", TPersonEventKind.ekFact);
-			array6[35] = new PersonEventStruct(LSID.LSID_MiliRank, "_MILI_RANK", TPersonEventKind.ekFact);
-			array6[36] = new PersonEventStruct(LSID.LSID_DNAMarkers, "_DNA", TPersonEventKind.ekFact);
+			array6[15] = new PersonEventStruct(LSID.LSID_Fact, "FACT", PersonEventKind.ekFact);
+			array6[16] = new PersonEventStruct(LSID.LSID_Religion, "RELI", PersonEventKind.ekFact);
+			array6[17] = new PersonEventStruct(LSID.LSID_Nationality, "NATI", PersonEventKind.ekFact);
+			array6[18] = new PersonEventStruct(LSID.LSID_Residence, "RESI", PersonEventKind.ekFact);
+			array6[19] = new PersonEventStruct(LSID.LSID_PhysicalDesc, "DSCR", PersonEventKind.ekFact);
+			array6[20] = new PersonEventStruct(LSID.LSID_NationalIDNumber, "IDNO", PersonEventKind.ekFact);
+			array6[21] = new PersonEventStruct(LSID.LSID_SocialSecurityNumber, "SSN", PersonEventKind.ekFact);
+			array6[22] = new PersonEventStruct(LSID.LSID_ChildsCount, "NCHI", PersonEventKind.ekFact);
+			array6[23] = new PersonEventStruct(LSID.LSID_MarriagesCount, "NMR", PersonEventKind.ekFact);
+			array6[24] = new PersonEventStruct(LSID.LSID_Education, "EDUC", PersonEventKind.ekFact);
+			array6[25] = new PersonEventStruct(LSID.LSID_Occupation, "OCCU", PersonEventKind.ekFact);
+			array6[26] = new PersonEventStruct(LSID.LSID_Caste, "CAST", PersonEventKind.ekFact);
+			array6[27] = new PersonEventStruct(LSID.LSID_Property, "PROP", PersonEventKind.ekFact);
+			array6[28] = new PersonEventStruct(LSID.LSID_NobilityTitle, "TITL", PersonEventKind.ekFact);
+			array6[29] = new PersonEventStruct(LSID.LSID_Travel, "_TRAVEL", PersonEventKind.ekFact);
+			array6[30] = new PersonEventStruct(LSID.LSID_Hobby, "_HOBBY", PersonEventKind.ekFact);
+			array6[31] = new PersonEventStruct(LSID.LSID_Award, "_AWARD", PersonEventKind.ekFact);
+			array6[32] = new PersonEventStruct(LSID.LSID_Mili, "_MILI", PersonEventKind.ekFact);
+			array6[33] = new PersonEventStruct(LSID.LSID_MiliInd, "_MILI_IND", PersonEventKind.ekFact);
+			array6[34] = new PersonEventStruct(LSID.LSID_MiliDis, "_MILI_DIS", PersonEventKind.ekFact);
+			array6[35] = new PersonEventStruct(LSID.LSID_MiliRank, "_MILI_RANK", PersonEventKind.ekFact);
+			array6[36] = new PersonEventStruct(LSID.LSID_DNAMarkers, "_DNA", PersonEventKind.ekFact);
 			PersonEvents = array6;
 
 			

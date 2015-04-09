@@ -5,10 +5,6 @@ using System.Text;
 
 using GKCore.Interfaces;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKCore
 {
 	public enum LSID
@@ -1413,13 +1409,8 @@ namespace GKCore
 		public string LS(Enum lsid)
 		{
 			int idx = ((IConvertible)lsid).ToInt32(null);
-			
 			string res;
-			if (this.fList.TryGetValue(idx, out res)) {
-				return res;
-			} else {
-				return "?";
-			}
+			return (this.fList.TryGetValue(idx, out res)) ? res : "?";
 		}
 
 		public bool LoadFromFile(string fileName)

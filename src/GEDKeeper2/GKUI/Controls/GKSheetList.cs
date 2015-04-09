@@ -2,28 +2,16 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-using ExtUtils;
+using GKCommon;
 using GKCore;
-
-/// <summary>
-/// 
-/// </summary>
+using GKCore.Types;
 
 namespace GKUI.Controls
 {
-	public class ModifyEventArgs : EventArgs
-	{
-	    public RecordAction Action { get; private set; }
-	    public object ItemData { get; set; }
-
-	    public ModifyEventArgs(RecordAction action, object itemData)
-		{
-			this.Action = action;
-			this.ItemData = itemData;
-		}
-	}
-
-	public class GKSheetList : ContainerControl
+    /// <summary>
+    /// 
+    /// </summary>
+    public class GKSheetList : ContainerControl
 	{
 		public delegate void ModifyEventHandler(object sender, ModifyEventArgs eArgs);
 

@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 
 using ExtUtils;
+using GKCommon;
 using GKCore;
 
 /// <summary>

@@ -1,27 +1,27 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-
-using GedCom551;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKUI.Sheets;
-
-/// <summary>
-/// 
-/// </summary>
 
 namespace GKUI.Dialogs
 {
-	public partial class TfmTaskEdit : Form, IBaseEditor
+    /// <summary>
+    /// 
+    /// </summary>
+    public partial class TfmTaskEdit : Form, IBaseEditor
 	{
 		private readonly IBase fBase;
         private readonly GKNotesSheet fNotesList;
         
-        private TGEDCOMTaskRecord fTask;
-		private TGEDCOMRecord fTempRec;
+        private GEDCOMTaskRecord fTask;
+		private GEDCOMRecord fTempRec;
 
-		public TGEDCOMTaskRecord Task
+		public GEDCOMTaskRecord Task
 		{
 			get { return this.fTask; }
 			set { this.SetTask(value); }
@@ -32,7 +32,7 @@ namespace GKUI.Dialogs
 			get { return this.fBase; }
 		}
 
-		private void SetTask(TGEDCOMTaskRecord value)
+		private void SetTask(GEDCOMTaskRecord value)
 		{
 			this.fTask = value;
 			try
@@ -51,22 +51,22 @@ namespace GKUI.Dialogs
 					this.EditStartDate.Text = GKUtils.GEDCOMDateToStr(this.fTask.StartDate, DateFormat.dfDD_MM_YYYY);
 					this.EditStopDate.Text = GKUtils.GEDCOMDateToStr(this.fTask.StopDate, DateFormat.dfDD_MM_YYYY);
 
-                    TGoalType gt;
+                    GKGoalType gt;
                     this.fTask.aux_GetTaskGoal(out gt, out this.fTempRec);
 					this.cbGoalType.SelectedIndex = (sbyte)gt;
 
 					switch (gt) {
-						case TGoalType.gtIndividual:
-                            string st = ((this.fTempRec == null) ? "" : (this.fTempRec as TGEDCOMIndividualRecord).aux_GetNameStr(true, false));
+						case GKGoalType.gtIndividual:
+                            string st = ((this.fTempRec == null) ? "" : (this.fTempRec as GEDCOMIndividualRecord).aux_GetNameStr(true, false));
 							this.EditGoal.Text = st;
 							break;
-						case TGoalType.gtFamily:
-							this.EditGoal.Text = GKUtils.aux_GetFamilyStr(this.fTempRec as TGEDCOMFamilyRecord);
+						case GKGoalType.gtFamily:
+							this.EditGoal.Text = GKUtils.aux_GetFamilyStr(this.fTempRec as GEDCOMFamilyRecord);
 							break;
-						case TGoalType.gtSource:
-							this.EditGoal.Text = (this.fTempRec as TGEDCOMSourceRecord).FiledByEntry;
+						case GKGoalType.gtSource:
+							this.EditGoal.Text = (this.fTempRec as GEDCOMSourceRecord).FiledByEntry;
 							break;
-						case TGoalType.gtOther:
+						case GKGoalType.gtOther:
 							this.EditGoal.Text = this.fTask.Goal;
 							break;
 					}
@@ -85,17 +85,17 @@ namespace GKUI.Dialogs
 		{
 			try
 			{
-				this.fTask.Priority = (TResearchPriority)this.EditPriority.SelectedIndex;
+				this.fTask.Priority = (GKResearchPriority)this.EditPriority.SelectedIndex;
 				this.fTask.StartDate.ParseString(GEDCOMUtils.StrToGEDCOMDate(this.EditStartDate.Text, true));
 				this.fTask.StopDate.ParseString(GEDCOMUtils.StrToGEDCOMDate(this.EditStopDate.Text, true));
-				TGoalType gt = (TGoalType)this.cbGoalType.SelectedIndex;
+				GKGoalType gt = (GKGoalType)this.cbGoalType.SelectedIndex;
 				switch (gt) {
-					case TGoalType.gtIndividual:
-					case TGoalType.gtFamily:
-					case TGoalType.gtSource:
+					case GKGoalType.gtIndividual:
+					case GKGoalType.gtFamily:
+					case GKGoalType.gtSource:
 						this.fTask.Goal = GEDCOMUtils.EncloseXRef(this.fTempRec.XRef);
 						break;
-					case TGoalType.gtOther:
+					case GKGoalType.gtOther:
 						this.fTask.Goal = this.EditGoal.Text;
 						break;
 				}
@@ -112,45 +112,45 @@ namespace GKUI.Dialogs
 
 		private void btnGoalSelect_Click(object sender, EventArgs e)
 		{
-			TGoalType gt = (TGoalType)this.cbGoalType.SelectedIndex;
+			GKGoalType gt = (GKGoalType)this.cbGoalType.SelectedIndex;
 			switch (gt) {
-				case TGoalType.gtIndividual:
-					this.fTempRec = this.Base.SelectPerson(null, TargetMode.tmNone, TGEDCOMSex.svNone);
-					this.EditGoal.Text = ((this.fTempRec == null) ? "" : (this.fTempRec as TGEDCOMIndividualRecord).aux_GetNameStr(true, false));
+				case GKGoalType.gtIndividual:
+					this.fTempRec = this.Base.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
+					this.EditGoal.Text = ((this.fTempRec == null) ? "" : (this.fTempRec as GEDCOMIndividualRecord).aux_GetNameStr(true, false));
 					break;
-				case TGoalType.gtFamily:
-					this.fTempRec = this.Base.SelectRecord(TGEDCOMRecordType.rtFamily, new object[0]);
-					this.EditGoal.Text = GKUtils.aux_GetFamilyStr(this.fTempRec as TGEDCOMFamilyRecord);
+				case GKGoalType.gtFamily:
+					this.fTempRec = this.Base.SelectRecord(GEDCOMRecordType.rtFamily, new object[0]);
+					this.EditGoal.Text = GKUtils.aux_GetFamilyStr(this.fTempRec as GEDCOMFamilyRecord);
 					break;
-				case TGoalType.gtSource:
-					this.fTempRec = this.Base.SelectRecord(TGEDCOMRecordType.rtSource, new object[0]);
-					this.EditGoal.Text = (this.fTempRec as TGEDCOMSourceRecord).FiledByEntry;
+				case GKGoalType.gtSource:
+					this.fTempRec = this.Base.SelectRecord(GEDCOMRecordType.rtSource, new object[0]);
+					this.EditGoal.Text = (this.fTempRec as GEDCOMSourceRecord).FiledByEntry;
 					break;
-				case TGoalType.gtOther:
+				case GKGoalType.gtOther:
 					break;
 			}
 		}
 
 		private void cbGoalType_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			TGoalType gt = (TGoalType)this.cbGoalType.SelectedIndex;
+			GKGoalType gt = (GKGoalType)this.cbGoalType.SelectedIndex;
 			switch (gt) {
-				case TGoalType.gtIndividual:
+				case GKGoalType.gtIndividual:
 					this.btnGoalSelect.Enabled = true;
 					this.EditGoal.BackColor = SystemColors.Control;
 					this.EditGoal.ReadOnly = true;
 					break;
-				case TGoalType.gtFamily:
+				case GKGoalType.gtFamily:
 					this.btnGoalSelect.Enabled = true;
 					this.EditGoal.BackColor = SystemColors.Control;
 					this.EditGoal.ReadOnly = true;
 					break;
-				case TGoalType.gtSource:
+				case GKGoalType.gtSource:
 					this.btnGoalSelect.Enabled = true;
 					this.EditGoal.BackColor = SystemColors.Control;
 					this.EditGoal.ReadOnly = true;
 					break;
-				case TGoalType.gtOther:
+				case GKGoalType.gtOther:
 					this.btnGoalSelect.Enabled = false;
 					this.EditGoal.BackColor = SystemColors.Window;
 					this.EditGoal.ReadOnly = false;
@@ -163,12 +163,12 @@ namespace GKUI.Dialogs
 			this.InitializeComponent();
 			this.fBase = aBase;
 
-			for (TResearchPriority rp = TResearchPriority.rpNone; rp <= TResearchPriority.rpTop; rp++)
+			for (GKResearchPriority rp = GKResearchPriority.rpNone; rp <= GKResearchPriority.rpTop; rp++)
 			{
 				this.EditPriority.Items.Add(LangMan.LS(GKData.PriorityNames[(int)rp]));
 			}
 
-			for (TGoalType gt = TGoalType.gtIndividual; gt <= TGoalType.gtOther; gt++)
+			for (GKGoalType gt = GKGoalType.gtIndividual; gt <= GKGoalType.gtOther; gt++)
 			{
 				this.cbGoalType.Items.Add(LangMan.LS(GKData.GoalNames[(int)gt]));
 			}

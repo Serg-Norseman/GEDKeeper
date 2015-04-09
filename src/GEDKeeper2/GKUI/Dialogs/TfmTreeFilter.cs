@@ -1,25 +1,26 @@
 ﻿using System;
 using System.Windows.Forms;
 
-using ExtUtils;
-using GedCom551;
+using GKCommon;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKUI.Charts;
 using GKUI.Controls;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKUI.Dialogs
 {
-	public partial class TfmTreeFilter : Form
+    /// <summary>
+    /// 
+    /// </summary>
+    public partial class TfmTreeFilter : Form
 	{
 		private readonly IBase fBase;
         private readonly GKSheetList fPersonsList;
         
-        private TChartFilter fFilter;
+        private ChartFilter fFilter;
 		private string fTemp;
 
 		public IBase Base
@@ -27,7 +28,7 @@ namespace GKUI.Dialogs
 			get	{ return this.fBase; }
 		}
 
-		public TChartFilter Filter
+		public ChartFilter Filter
 		{
 			get	{ return this.fFilter; }
 			set	{ this.fFilter = value;	}
@@ -36,20 +37,20 @@ namespace GKUI.Dialogs
 		private void ListModify(object sender, ModifyEventArgs eArgs)
 		{
 			if (sender == this.fPersonsList) {
-                TGEDCOMIndividualRecord i_rec = eArgs.ItemData as TGEDCOMIndividualRecord;
+                GEDCOMIndividualRecord iRec = eArgs.ItemData as GEDCOMIndividualRecord;
 
                 switch (eArgs.Action)
                 {
                     case RecordAction.raAdd:
-					    i_rec = this.Base.SelectPerson(null, TargetMode.tmNone, TGEDCOMSex.svNone);
-					    if (i_rec != null) {
-						    this.fTemp = this.fTemp + i_rec.XRef + ";";
+					    iRec = this.Base.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
+					    if (iRec != null) {
+						    this.fTemp = this.fTemp + iRec.XRef + ";";
 					    }
                         break;
 
                     case RecordAction.raDelete:
-						if (i_rec != null) {
-							this.fTemp = this.fTemp.Replace(i_rec.XRef + ";", "");
+						if (iRec != null) {
+							this.fTemp = this.fTemp.Replace(iRec.XRef + ";", "");
 						}
                         break;
                 }
@@ -61,22 +62,22 @@ namespace GKUI.Dialogs
 		private void UpdateControls()
 		{
 			switch (this.fFilter.BranchCut) {
-				case TChartFilter.TBranchCut.bcPersons: {
+				case ChartFilter.TBranchCut.bcPersons: {
 					this.rbCutPersons.Checked = true;
 					break;
 				}
-				case TChartFilter.TBranchCut.bcYears: {
+				case ChartFilter.TBranchCut.bcYears: {
 					this.rbCutYears.Checked = true;
 					break;
 				}
-				case TChartFilter.TBranchCut.bcNone: {
+				case ChartFilter.TBranchCut.bcNone: {
 					this.rbCutNone.Checked = true;
 					break;
 				}
 			}
 
-			this.edYear.Enabled = (this.fFilter.BranchCut == TChartFilter.TBranchCut.bcYears);
-			this.fPersonsList.Enabled = (this.fFilter.BranchCut == TChartFilter.TBranchCut.bcPersons);
+			this.edYear.Enabled = (this.fFilter.BranchCut == ChartFilter.TBranchCut.bcYears);
+			this.fPersonsList.Enabled = (this.fFilter.BranchCut == ChartFilter.TBranchCut.bcPersons);
 			this.edYear.Text = this.fFilter.BranchYear.ToString();
 			this.fPersonsList.List.Items.Clear();
 
@@ -86,16 +87,16 @@ namespace GKUI.Dialogs
 				for (int i = 0; i <= num; i++)
 				{
 					string xref = tmp_refs[i];
-					TGEDCOMIndividualRecord p = this.Base.Tree.XRefIndex_Find(xref) as TGEDCOMIndividualRecord;
+					GEDCOMIndividualRecord p = this.Base.Tree.XRefIndex_Find(xref) as GEDCOMIndividualRecord;
 					if (p != null) this.fPersonsList.List.AddItem(p.aux_GetNameStr(true, false), p);
 				}
 			}
 
-			if (this.fFilter.SourceMode != TGroupMode.gmSelected) {
+			if (this.fFilter.SourceMode != FilterGroupMode.gmSelected) {
 				this.cbSource.SelectedIndex = (sbyte)this.fFilter.SourceMode;
 			} else {
-				TGEDCOMSourceRecord src_rec = this.Base.Tree.XRefIndex_Find(this.fFilter.SourceRef) as TGEDCOMSourceRecord;
-				this.cbSource.Text = src_rec.FiledByEntry;
+				GEDCOMSourceRecord srcRec = this.Base.Tree.XRefIndex_Find(this.fFilter.SourceRef) as GEDCOMSourceRecord;
+				this.cbSource.Text = srcRec.FiledByEntry;
 			}
 		}
 
@@ -103,19 +104,19 @@ namespace GKUI.Dialogs
 		{
 			if (this.rbCutNone.Checked)
 			{
-				this.fFilter.BranchCut = TChartFilter.TBranchCut.bcNone;
+				this.fFilter.BranchCut = ChartFilter.TBranchCut.bcNone;
 			}
 			else
 			{
 				if (this.rbCutYears.Checked)
 				{
-					this.fFilter.BranchCut = TChartFilter.TBranchCut.bcYears;
+					this.fFilter.BranchCut = ChartFilter.TBranchCut.bcYears;
 				}
 				else
 				{
 					if (this.rbCutPersons.Checked)
 					{
-						this.fFilter.BranchCut = TChartFilter.TBranchCut.bcPersons;
+						this.fFilter.BranchCut = ChartFilter.TBranchCut.bcPersons;
 					}
 				}
 			}
@@ -126,20 +127,20 @@ namespace GKUI.Dialogs
 		{
 			if (this.rbCutNone.Checked)
 			{
-				this.fFilter.BranchCut = TChartFilter.TBranchCut.bcNone;
+				this.fFilter.BranchCut = ChartFilter.TBranchCut.bcNone;
 			}
 			else
 			{
 				if (this.rbCutYears.Checked)
 				{
-					this.fFilter.BranchCut = TChartFilter.TBranchCut.bcYears;
+					this.fFilter.BranchCut = ChartFilter.TBranchCut.bcYears;
 					this.fFilter.BranchYear = int.Parse(this.edYear.Text);
 				}
 				else
 				{
 					if (this.rbCutPersons.Checked)
 					{
-						this.fFilter.BranchCut = TChartFilter.TBranchCut.bcPersons;
+						this.fFilter.BranchCut = ChartFilter.TBranchCut.bcPersons;
 						this.fFilter.BranchPersons = this.fTemp;
 					}
 				}
@@ -148,21 +149,21 @@ namespace GKUI.Dialogs
             int selectedIndex = this.cbSource.SelectedIndex;
 			if (selectedIndex >= 0 && selectedIndex < 3)
 			{
-				this.fFilter.SourceMode = (TGroupMode)this.cbSource.SelectedIndex;
+				this.fFilter.SourceMode = (FilterGroupMode)this.cbSource.SelectedIndex;
 				this.fFilter.SourceRef = "";
 			}
 			else
 			{
 			    GKComboItem item = this.cbSource.Items[this.cbSource.SelectedIndex] as GKComboItem;
-				TGEDCOMRecord rec = item.Data as TGEDCOMRecord;
+				GEDCOMRecord rec = item.Data as GEDCOMRecord;
 				if (rec != null)
 				{
-					this.fFilter.SourceMode = TGroupMode.gmSelected;
+					this.fFilter.SourceMode = FilterGroupMode.gmSelected;
 					this.fFilter.SourceRef = rec.XRef;
 				}
 				else
 				{
-					this.fFilter.SourceMode = TGroupMode.gmAll;
+					this.fFilter.SourceMode = FilterGroupMode.gmAll;
 					this.fFilter.SourceRef = "";
 				}
 			}
@@ -189,15 +190,15 @@ namespace GKUI.Dialogs
 
 		private void TfmTreeFilter_Load(object sender, EventArgs e)
 		{
-			TGEDCOMTree tree = this.Base.Tree;
+			GEDCOMTree tree = this.Base.Tree;
 			this.fTemp = this.fFilter.BranchPersons;
 
 			this.cbSource.Sorted = true;
 			int num = tree.RecordsCount - 1;
 			for (int i = 0; i <= num; i++) {
-				TGEDCOMRecord rec = tree[i];
-				if (rec is TGEDCOMSourceRecord) {
-					this.cbSource.Items.Add(new GKComboItem((rec as TGEDCOMSourceRecord).FiledByEntry, rec));
+				GEDCOMRecord rec = tree[i];
+				if (rec is GEDCOMSourceRecord) {
+					this.cbSource.Items.Add(new GKComboItem((rec as GEDCOMSourceRecord).FiledByEntry, rec));
 				}
 			}
 			this.cbSource.Sorted = false;

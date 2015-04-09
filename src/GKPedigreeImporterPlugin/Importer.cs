@@ -4,7 +4,9 @@ using System.Text;
 using System.Windows.Forms;
 
 using ExtUtils;
-using GedCom551;
+using GKCommon;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore.Interfaces;
 
 /// <summary>
@@ -28,7 +30,7 @@ namespace GKPedigreeImporterPlugin
     public class Importer : BaseObject
 	{
     	private readonly IBase fBase;
-		private readonly TGEDCOMTree fTree;
+		private readonly GEDCOMTree fTree;
 		private readonly ListBox.ObjectCollection fLog;
 		private StringList fPersonsList;
 		private ILangMan fLangMan;
@@ -50,7 +52,7 @@ namespace GKPedigreeImporterPlugin
             base.Dispose(disposing);
         }
 
-        private void AddChild(TGEDCOMIndividualRecord parent, TGEDCOMIndividualRecord child, int mar_id)
+        private void AddChild(GEDCOMIndividualRecord parent, GEDCOMIndividualRecord child, int mar_id)
 		{
 			if (mar_id < 0)
 			{
@@ -62,10 +64,10 @@ namespace GKPedigreeImporterPlugin
 				// ???
 			}
 
-			TGEDCOMSex sex = parent.Sex;
-			if (sex == TGEDCOMSex.svNone || sex == TGEDCOMSex.svUndetermined)
+			GEDCOMSex sex = parent.Sex;
+			if (sex == GEDCOMSex.svNone || sex == GEDCOMSex.svUndetermined)
 			{
-				parent.Sex = TGEDCOMSex.svMale;
+				parent.Sex = GEDCOMSex.svMale;
 			}
 
 			while (parent.SpouseToFamilyLinks.Count < mar_id)
@@ -74,19 +76,19 @@ namespace GKPedigreeImporterPlugin
 			}
 			mar_id--;
 
-			TGEDCOMFamilyRecord family = parent.SpouseToFamilyLinks[mar_id].Family;
-			TGEDCOMPointer ptr = new TGEDCOMPointer(this.fTree, family, "", "");
+			GEDCOMFamilyRecord family = parent.SpouseToFamilyLinks[mar_id].Family;
+			GEDCOMPointer ptr = new GEDCOMPointer(this.fTree, family, "", "");
 			ptr.SetNamedValue("CHIL", child);
 			family.Childrens.Add(ptr);
 
-			TGEDCOMChildToFamilyLink chLink = new TGEDCOMChildToFamilyLink(this.fTree, child, "", "");
+			GEDCOMChildToFamilyLink chLink = new GEDCOMChildToFamilyLink(this.fTree, child, "", "");
 			chLink.Family = family;
 			child.ChildToFamilyLinks.Add(chLink);
 		}
 
-		private TGEDCOMFamilyRecord AddFamily(TGEDCOMIndividualRecord parent)
+		private GEDCOMFamilyRecord AddFamily(GEDCOMIndividualRecord parent)
 		{
-			TGEDCOMFamilyRecord result = this.fTree.aux_CreateFamily();
+			GEDCOMFamilyRecord result = this.fTree.aux_CreateFamily();
 			result.aux_AddSpouse(parent);
 			return result;
 		}
@@ -229,10 +231,10 @@ namespace GKPedigreeImporterPlugin
 			return (rs != "" && rs == aStr);
 		}
 
-		private void SetEvent(TGEDCOMIndividualRecord iRec, string evName, string date)
+		private void SetEvent(GEDCOMIndividualRecord iRec, string evName, string date)
 		{
 			int[] val = new int[3];
-			TGEDCOMCustomEvent ev = this.fBase.Context.CreateEventEx(iRec, evName, "", "");
+			GEDCOMCustomEvent ev = this.fBase.Context.CreateEventEx(iRec, evName, "", "");
 			try
 			{
 				string prefix = "";
@@ -278,12 +280,12 @@ namespace GKPedigreeImporterPlugin
 					{
 						if (toks.Length == 3)
 						{
-                            tmp = val[0].ToString() + " " + TGEDCOMCustomDate.GEDCOMMonthArray[val[1] - 1] + " " + val[2].ToString();
+                            tmp = val[0].ToString() + " " + GEDCOMCustomDate.GEDCOMMonthArray[val[1] - 1] + " " + val[2].ToString();
 						}
 					}
 					else
 					{
-						tmp = TGEDCOMCustomDate.GEDCOMMonthArray[val[0] - 1] + " " + val[1].ToString();
+						tmp = GEDCOMCustomDate.GEDCOMMonthArray[val[0] - 1] + " " + val[1].ToString();
 					}
 				}
 				else
@@ -305,7 +307,7 @@ namespace GKPedigreeImporterPlugin
 			}
 		}
 
-		private TGEDCOMIndividualRecord ParsePerson(StringList buf, string aStr, string p_id, ref int self_id)
+		private GEDCOMIndividualRecord ParsePerson(StringList buf, string aStr, string p_id, ref int self_id)
 		{
 			self_id = -1;
 			int parent_id = -1;
@@ -339,7 +341,7 @@ namespace GKPedigreeImporterPlugin
 			string dd = "";
 
 			this.DefinePersonName(aStr, p_id, ref f_name, ref f_pat, ref f_fam, ref bd, ref dd);
-			TGEDCOMIndividualRecord result = this.fBase.Context.CreatePersonEx(f_name, f_pat, f_fam, TGEDCOMSex.svNone, false);
+			GEDCOMIndividualRecord result = this.fBase.Context.CreatePersonEx(f_name, f_pat, f_fam, GEDCOMSex.svNone, false);
 			this.fBase.CheckPersonSex(result);
 			this.fPersonsList.AddObject(self_id.ToString(), result);
 
@@ -353,7 +355,7 @@ namespace GKPedigreeImporterPlugin
 				int x = this.fPersonsList.IndexOf(parent_id.ToString());
 				if (x >= 0)
 				{
-					TGEDCOMIndividualRecord parent = this.fPersonsList.GetObject(x) as TGEDCOMIndividualRecord;
+					GEDCOMIndividualRecord parent = this.fPersonsList.GetObject(x) as GEDCOMIndividualRecord;
 					this.AddChild(parent, result, mar_id);
 				}
 				else
@@ -416,7 +418,7 @@ namespace GKPedigreeImporterPlugin
 			}
 		}
 
-		private void CheckBuf(StringList buf, TGEDCOMIndividualRecord iRec)
+		private void CheckBuf(StringList buf, GEDCOMIndividualRecord iRec)
 		{
 			if (buf.Text != "")
 			{
@@ -429,7 +431,7 @@ namespace GKPedigreeImporterPlugin
 			}
 		}
 
-		private void CheckSpouses(StringList buf, TGEDCOMIndividualRecord iRec)
+		private void CheckSpouses(StringList buf, GEDCOMIndividualRecord iRec)
 		{
 			int num2 = buf.Count - 1;
 			for (int i = 0; i <= num2; i++)
@@ -449,7 +451,7 @@ namespace GKPedigreeImporterPlugin
 						try
 						{
 							// define sex
-							TGEDCOMSex sx = (s[0] == 'М') ? TGEDCOMSex.svMale : TGEDCOMSex.svFemale;
+							GEDCOMSex sx = (s[0] == 'М') ? GEDCOMSex.svMale : GEDCOMSex.svFemale;
                             s = s.Remove(0, 1);
 
 							// number of spouse
@@ -494,7 +496,7 @@ namespace GKPedigreeImporterPlugin
 
 							if (name != "")
 							{
-								TGEDCOMFamilyRecord fam = this.AddFamily(iRec);
+								GEDCOMFamilyRecord fam = this.AddFamily(iRec);
 
 								string f_name = "";
 								string f_pat = "";
@@ -504,7 +506,7 @@ namespace GKPedigreeImporterPlugin
 								if (nm_parts.Length > 1) f_pat = CheckDot(nm_parts[1]);
 								if (nm_parts.Length > 2) f_fam = CheckDot(nm_parts[2]);
 
-								TGEDCOMIndividualRecord sp = this.fBase.Context.CreatePersonEx(f_name, f_pat, f_fam, sx, false);
+								GEDCOMIndividualRecord sp = this.fBase.Context.CreatePersonEx(f_name, f_pat, f_fam, sx, false);
 								fam.aux_AddSpouse(sp);
 							}
 						}
@@ -525,7 +527,7 @@ namespace GKPedigreeImporterPlugin
 			try
 			{
 				int prev_id = 0;
-				TGEDCOMIndividualRecord i_rec = null;
+				GEDCOMIndividualRecord i_rec = null;
 
 				int num = aContent.Count - 1;
 				for (int i = 0; i <= num; i++)

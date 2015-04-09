@@ -2,9 +2,12 @@
 using System.Windows.Forms;
 
 using ExtUtils;
-using GedCom551;
+using GKCommon;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKUI.Controls;
 
 namespace GKUI.Sheets
@@ -36,8 +39,8 @@ namespace GKUI.Sheets
 
                 this.DataList.Reset();
                 while (this.DataList.MoveNext()) {
-                    TGEDCOMPointer ptr = this.DataList.Current as TGEDCOMPointer;
-                    TGEDCOMGroupRecord grp = ptr.Value as TGEDCOMGroupRecord;
+                    GEDCOMPointer ptr = this.DataList.Current as GEDCOMPointer;
+                    GEDCOMGroupRecord grp = ptr.Value as GEDCOMGroupRecord;
                     if (grp != null)
                     {
                         this.List.AddItem(grp.GroupName, grp);
@@ -58,15 +61,15 @@ namespace GKUI.Sheets
             if (aBase == null) return;
 
             GEDCOMObject dataOwner = this.DataList.Owner;
-            TGEDCOMIndividualRecord iRec = dataOwner as TGEDCOMIndividualRecord;
-            TGEDCOMGroupRecord groupRec = eArgs.ItemData as TGEDCOMGroupRecord;
+            GEDCOMIndividualRecord iRec = dataOwner as GEDCOMIndividualRecord;
+            GEDCOMGroupRecord groupRec = eArgs.ItemData as GEDCOMGroupRecord;
 
             bool result = false;
 
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    groupRec = aBase.SelectRecord(TGEDCOMRecordType.rtGroup, null) as TGEDCOMGroupRecord;
+                    groupRec = aBase.SelectRecord(GEDCOMRecordType.rtGroup, null) as GEDCOMGroupRecord;
                     result = (groupRec != null && groupRec.aux_AddMember(iRec));
                     break;
 

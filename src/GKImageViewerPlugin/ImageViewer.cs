@@ -3,10 +3,10 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-
-using GedCom551;
+using GKCommon.Controls;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore.Interfaces;
-using GKUI.Controls;
 
 /// <summary>
 /// 
@@ -16,7 +16,7 @@ namespace GKImageViewerPlugin
 {
 	public partial class ImageViewer : Form, ILocalization
 	{
-		private GKImageControl fImageCtl;
+		private ImageView fImageCtl;
 
 		public ImageViewer(IPlugin plugin)
 		{
@@ -58,33 +58,33 @@ namespace GKImageViewerPlugin
 			Control ctl = null;
 			this.fImageCtl = null;
 
-			TGEDCOMMultimediaFormat fmt = TGEDCOMFileReference.RecognizeFormat(fileName);
+			GEDCOMMultimediaFormat fmt = GEDCOMFileReference.RecognizeFormat(fileName);
 			
 			switch (fmt)
 			{
-				case TGEDCOMMultimediaFormat.mfBMP:
-				case TGEDCOMMultimediaFormat.mfGIF:
-				case TGEDCOMMultimediaFormat.mfJPG:
-				case TGEDCOMMultimediaFormat.mfPCX:
-				case TGEDCOMMultimediaFormat.mfTIF:
-				case TGEDCOMMultimediaFormat.mfTGA:
-				case TGEDCOMMultimediaFormat.mfPNG:
+				case GEDCOMMultimediaFormat.mfBMP:
+				case GEDCOMMultimediaFormat.mfGIF:
+				case GEDCOMMultimediaFormat.mfJPG:
+				case GEDCOMMultimediaFormat.mfPCX:
+				case GEDCOMMultimediaFormat.mfTIF:
+				case GEDCOMMultimediaFormat.mfTGA:
+				case GEDCOMMultimediaFormat.mfPNG:
 					{
 						using (Stream fs = new FileStream(fileName, FileMode.Open))
 						{
-							this.fImageCtl = new GKImageControl();
+							this.fImageCtl = new ImageView();
 							this.fImageCtl.OpenImage(new Bitmap(fs));
 							ctl = this.fImageCtl;
 						}
 						break;
 					}
 
-				case TGEDCOMMultimediaFormat.mfWAV:
-				case TGEDCOMMultimediaFormat.mfAVI:
-				case TGEDCOMMultimediaFormat.mfMPG:
+				case GEDCOMMultimediaFormat.mfWAV:
+				case GEDCOMMultimediaFormat.mfAVI:
+				case GEDCOMMultimediaFormat.mfMPG:
 					break;
 
-				case TGEDCOMMultimediaFormat.mfTXT:
+				case GEDCOMMultimediaFormat.mfTXT:
 					{
 						using (Stream fs = new FileStream(fileName, FileMode.Open))
 						{
@@ -101,7 +101,7 @@ namespace GKImageViewerPlugin
 						break;
 					}
 
-				case TGEDCOMMultimediaFormat.mfRTF:
+				case GEDCOMMultimediaFormat.mfRTF:
 					{
 						using (Stream fs = new FileStream(fileName, FileMode.Open))
 						{
@@ -116,7 +116,7 @@ namespace GKImageViewerPlugin
 						break;
 					}
 
-				case TGEDCOMMultimediaFormat.mfHTM:
+				case GEDCOMMultimediaFormat.mfHTM:
 					{
 						using (Stream fs = new FileStream(fileName, FileMode.Open))
 						{

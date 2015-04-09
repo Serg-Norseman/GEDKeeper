@@ -6,7 +6,9 @@ using System.Text;
 using System.Windows.Forms;
 
 using ExtUtils;
-using GedCom551;
+using GKCommon;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 
@@ -39,7 +41,7 @@ namespace GKNamesBookPlugin
 		{
 			public string Name;
 			public string Desc;
-			public TGEDCOMSex Sex;
+			public GEDCOMSex Sex;
 			public int ChIndex;
 		}
 
@@ -106,13 +108,13 @@ namespace GKNamesBookPlugin
 					this.mmDesc.AppendText("Святцы:\r\n");
 					
                     StringList lst = null;
-					if (rec.Sex == TGEDCOMSex.svMale)
+					if (rec.Sex == GEDCOMSex.svMale)
 					{
 						lst = this.fChurchMNames;
 					}
 					else
 					{
-						if (rec.Sex == TGEDCOMSex.svFemale)
+						if (rec.Sex == GEDCOMSex.svFemale)
 						{
 							lst = this.fChurchFNames;
 						}
@@ -204,10 +206,10 @@ namespace GKNamesBookPlugin
                                     switch (c)
                                     {
                                         case 'f':
-                                            rec.Sex = TGEDCOMSex.svFemale;
+                                            rec.Sex = GEDCOMSex.svFemale;
                                             break;
                                         case 'm':
-                                            rec.Sex = TGEDCOMSex.svMale;
+                                            rec.Sex = GEDCOMSex.svMale;
                                             break;
                                     }
                                 }
@@ -260,11 +262,11 @@ namespace GKNamesBookPlugin
                     ns = ns.ToUpper();
 
                     StringList lst = null;
-                    if (rec.Sex == TGEDCOMSex.svMale)
+                    if (rec.Sex == GEDCOMSex.svMale)
                     {
                         lst = this.fChurchMNames;
                     }
-                    else if (rec.Sex == TGEDCOMSex.svFemale)
+                    else if (rec.Sex == GEDCOMSex.svFemale)
                     {
                         lst = this.fChurchFNames;
                     }

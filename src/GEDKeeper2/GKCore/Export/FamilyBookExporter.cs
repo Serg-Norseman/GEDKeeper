@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using ExtUtils;
-using GedCom551;
+using GKCommon;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore.Interfaces;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 
-/// <summary>
-/// Localization: dirty
-/// CodeTransformation: need
-/// </summary>
-
 namespace GKCore.Export
 {
-	public sealed class FamilyBookExporter : PDFExporter
+    /// <summary>
+    /// Localization: dirty
+    /// CodeTransformation: need
+    /// </summary>
+    public sealed class FamilyBookExporter : PDFExporter
 	{
 		private enum BookCatalog {
 			Catalog_First = 0,
@@ -32,13 +32,13 @@ namespace GKCore.Export
 		}
 
 		private struct CatalogProps {
-			public string sign;
-			public string title;
+			public readonly string Sign;
+			public readonly string Title;
 			
 			public CatalogProps(string sign, string title)
 			{
-				this.sign = sign;
-				this.title = title;
+				this.Sign = sign;
+				this.Title = title;
 			}
 		}
 		
@@ -53,12 +53,12 @@ namespace GKCore.Export
 			new CatalogProps("Catalog_Sources", "2.8. Источники")
 		};
 		
-		private Font title_font;
-		private Font chap_font;
-		private Font subchap_font;
-		private Font link_font;
-		private Font text_font;
-		private Font sym_font;
+		private Font fTitleFont;
+		private Font fChapFont;
+		private Font fSubchapFont;
+		private Font fLinkFont;
+		private Font fTextFont;
+		private Font fSymFont;
 
 		private StringList mainIndex;
 		private StringList byIndex, dyIndex, bpIndex, dpIndex;
@@ -66,7 +66,7 @@ namespace GKCore.Export
 
 		public FamilyBookExporter(IBase aBase) : base(aBase)
 		{
-			this.albumPage = true;
+			this.fAlbumPage = true;
 		}
 
         protected override void Dispose(bool disposing)
@@ -96,45 +96,45 @@ namespace GKCore.Export
 				fDocument.Open();
 
 				BaseFont base_font = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Times.ttf"), "CP1251", BaseFont.EMBEDDED);
-				title_font = new Font(base_font, 30f, Font.BOLD);
-				chap_font = new Font(base_font, 16f, Font.BOLD, BaseColor.BLACK);
-				subchap_font = new Font(base_font, 14f, Font.BOLD, BaseColor.BLACK);
-				link_font = new Font(base_font, 8f, Font.UNDERLINE, BaseColor.BLUE);
-				text_font = new Font(base_font, 8f, Font.NORMAL, BaseColor.BLACK);
-				sym_font = new Font(base_font, 16f, Font.BOLD, BaseColor.BLACK);
+				fTitleFont = new Font(base_font, 30f, Font.BOLD);
+				fChapFont = new Font(base_font, 16f, Font.BOLD, BaseColor.BLACK);
+				fSubchapFont = new Font(base_font, 14f, Font.BOLD, BaseColor.BLACK);
+				fLinkFont = new Font(base_font, 8f, Font.UNDERLINE, BaseColor.BLUE);
+				fTextFont = new Font(base_font, 8f, Font.NORMAL, BaseColor.BLACK);
+				fSymFont = new Font(base_font, 16f, Font.BOLD, BaseColor.BLACK);
 
 				base_font = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Calibri.ttf"), "CP1251", BaseFont.EMBEDDED);
 				Font page_font = new Font(base_font, 9f, Font.NORMAL);
 				
 				fWriter.PageEvent = new PDFWriterEvents(base_font, "Страница: ");
 
-				float halfpage = (fDocument.Top - fDocument.Bottom - (title_font.Size) * 4) / 2f;
+				float halfpage = (fDocument.Top - fDocument.Bottom - (fTitleFont.Size) * 4) / 2f;
 				fDocument.Add(new Paragraph(Chunk.NEWLINE) { SpacingAfter = halfpage });
-				fDocument.Add(new Paragraph("Фамильная книга", title_font) { Alignment = Element.ALIGN_CENTER });
+				fDocument.Add(new Paragraph("Фамильная книга", fTitleFont) { Alignment = Element.ALIGN_CENTER });
 				fDocument.NewPage();
 
-				Chunk chap_chunk = new Chunk("Оглавление", chap_font);
+				Chunk chap_chunk = new Chunk("Оглавление", fChapFont);
 				fDocument.Add(new Paragraph(chap_chunk));
 				fDocument.Add(new Paragraph(Chunk.NEWLINE));
 
-				chap_chunk = new Chunk("1. Персональные записи", link_font);
+				chap_chunk = new Chunk("1. Персональные записи", fLinkFont);
 				chap_chunk.SetLocalGoto("IndividualRecords");
 				fDocument.Add(new Paragraph(chap_chunk));
 
-				chap_chunk = new Chunk("2. Каталоги", link_font);
+				chap_chunk = new Chunk("2. Каталоги", fLinkFont);
 				chap_chunk.SetLocalGoto("Catalogs");
 				fDocument.Add(new Paragraph(chap_chunk));
 
 				for (BookCatalog cat = BookCatalog.Catalog_First; cat <= BookCatalog.Catalog_Last; cat++)
 				{
-					chap_chunk = new Chunk(BookCatalogs[(int)cat].title, link_font);
-					chap_chunk.SetLocalGoto(BookCatalogs[(int)cat].sign);
+					chap_chunk = new Chunk(BookCatalogs[(int)cat].Title, fLinkFont);
+					chap_chunk.SetLocalGoto(BookCatalogs[(int)cat].Sign);
 					fDocument.Add(new Paragraph(chap_chunk) { IndentationLeft = 1f });
 				}
 
 				fDocument.NewPage();
 
-				chap_chunk = new Chunk("Персональные записи", chap_font);
+				chap_chunk = new Chunk("Персональные записи", fChapFont);
 				chap_chunk.SetLocalDestination("IndividualRecords");
 				fDocument.Add(new Paragraph(chap_chunk) { Alignment = 1 });
 				fDocument.Add(new Paragraph(Chunk.NEWLINE));
@@ -150,12 +150,12 @@ namespace GKCore.Export
 				for (int i = 0; i <= num; i++)
 				{
 					string text = mainIndex[i];
-					TGEDCOMIndividualRecord iRec = mainIndex.GetObject(i) as TGEDCOMIndividualRecord;
+					GEDCOMIndividualRecord iRec = mainIndex.GetObject(i) as GEDCOMIndividualRecord;
 
 					char isym = text[0];
 					if ((isym >= 'A' && isym <= 'Z') || (isym >= 'А' && isym <= 'Я')) {
 						if (sym != isym) {
-							Paragraph ps = new Paragraph(new Chunk(isym, sym_font));
+							Paragraph ps = new Paragraph(new Chunk(isym, fSymFont));
 							ps.SpacingBefore = 0f;
 							ps.SpacingAfter = 20f;
 							ps.Alignment = 1;
@@ -165,14 +165,14 @@ namespace GKCore.Export
 						}
 					}
 
-					this.ExposePerson(columnText, iRec, text, text_font, link_font, colWidth);
+					this.ExposePerson(columnText, iRec, text, fTextFont, fLinkFont, colWidth);
 
 					columnText.AddElement(new Paragraph(Chunk.NEWLINE) { SpacingAfter = 10f });
 				}
 
 				fDocument.NewPage();
 
-				chap_chunk = new Chunk("Каталоги", chap_font);
+				chap_chunk = new Chunk("Каталоги", fChapFont);
 				chap_chunk.SetLocalDestination("Catalogs");
 				fDocument.Add(new Paragraph(chap_chunk) { Alignment = 1 });
 				fDocument.Add(new Paragraph(Chunk.NEWLINE));
@@ -220,12 +220,12 @@ namespace GKCore.Export
 			occuIndex = new StringList();
 			sourcesIndex = new StringList();
 			
-			TGEDCOMRecord rec;
+			GEDCOMRecord rec;
 
-			var iEnum = this.FTree.GetEnumerator(TGEDCOMRecordType.rtIndividual);
+			var iEnum = this.FTree.GetEnumerator(GEDCOMRecordType.rtIndividual);
 			while (iEnum.MoveNext(out rec))
 			{
-				TGEDCOMIndividualRecord iRec = rec as TGEDCOMIndividualRecord;
+				GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
 				string text = iRec.aux_GetNameStr(true, false);
                 string st;
 
@@ -234,13 +234,13 @@ namespace GKCore.Export
 				int ev_num = iRec.IndividualEvents.Count - 1;
 				for (int k = 0; k <= ev_num; k++) 
 				{
-                    TGEDCOMCustomEvent evt = iRec.IndividualEvents[k];
+                    GEDCOMCustomEvent evt = iRec.IndividualEvents[k];
 					if (evt != null)
 					{
 						int src_num2 = evt.Detail.SourceCitations.Count - 1;
 						for (int m = 0; m <= src_num2; m++)
 						{
-							TGEDCOMSourceRecord src = evt.Detail.SourceCitations[m].Value as TGEDCOMSourceRecord;
+							GEDCOMSourceRecord src = evt.Detail.SourceCitations[m].Value as GEDCOMSourceRecord;
 							if (src != null)
 							{
 								st = src.FiledByEntry;
@@ -281,7 +281,7 @@ namespace GKCore.Export
 				int src_num = iRec.SourceCitations.Count - 1;
 				for (int k = 0; k <= src_num; k++)
 				{
-					TGEDCOMSourceRecord src = iRec.SourceCitations[k].Value as TGEDCOMSourceRecord;
+					GEDCOMSourceRecord src = iRec.SourceCitations[k].Value as GEDCOMSourceRecord;
 					if (src != null)
 					{
 						st = src.FiledByEntry;
@@ -301,7 +301,7 @@ namespace GKCore.Export
 			sourcesIndex.Sort();
 		}
 
-		private void ExposePerson(ColumnText mct, TGEDCOMIndividualRecord iRec, string iName, Font textFont, Font linkFont, float colWidth)
+		private void ExposePerson(ColumnText mct, GEDCOMIndividualRecord iRec, string iName, Font textFont, Font linkFont, float colWidth)
 		{
 			Chunk chunk = new Chunk(iName, textFont);
 			chunk.SetLocalDestination(iRec.XRef);
@@ -330,7 +330,7 @@ namespace GKCore.Export
 				mct.AddElement(img);
 			}
 
-			TGEDCOMIndividualRecord father, mother;
+			GEDCOMIndividualRecord father, mother;
 			iRec.aux_GetParents(out father, out mother);
 			string text;
 
@@ -354,7 +354,7 @@ namespace GKCore.Export
 
 			//string st;
 
-			/*TGEDCOMCustomEvent evt = iRec.GetIndividualEvent("BIRT");
+			/*GEDCOMCustomEvent evt = iRec.GetIndividualEvent("BIRT");
 			if (evt != null) {
 				mct.AddElement(new Paragraph("Родился: " + st));
 			}
@@ -370,8 +370,8 @@ namespace GKCore.Export
 
 		private void ExposeCatalog(Document document, StringList index, BookCatalog catalog)
 		{
-			Chunk chunk = new Chunk(BookCatalogs[(int)catalog].title, subchap_font);
-			chunk.SetLocalDestination(BookCatalogs[(int)catalog].sign);
+			Chunk chunk = new Chunk(BookCatalogs[(int)catalog].Title, fSubchapFont);
+			chunk.SetLocalDestination(BookCatalogs[(int)catalog].Sign);
 			document.Add(new Paragraph(chunk));
 			document.Add(new Paragraph(Chunk.NEWLINE));
 
@@ -380,7 +380,7 @@ namespace GKCore.Export
 			SimpleColumnText columnText = new SimpleColumnText(fDocument, fWriter.DirectContent, 3, 10f);
 			for (int i = 0; i < index.Count; i++)
 			{
-				Paragraph ps = new Paragraph(new Chunk(index[i], sym_font));
+				Paragraph ps = new Paragraph(new Chunk(index[i], fSymFont));
 				ps.SpacingBefore = 0f;
 				ps.SpacingAfter = 20f;
 				ps.Alignment = 1;
@@ -392,9 +392,9 @@ namespace GKCore.Export
 
 				for (int k = 0; k < persons.Count; k++)
 				{
-					TGEDCOMIndividualRecord iRec = persons.GetObject(k) as TGEDCOMIndividualRecord;
+					GEDCOMIndividualRecord iRec = persons.GetObject(k) as GEDCOMIndividualRecord;
 
-					chunk = new Chunk(persons[k], text_font);
+					chunk = new Chunk(persons[k], fTextFont);
 					chunk.SetLocalGoto(iRec.XRef);
 					Paragraph p = new Paragraph(chunk);
 					columnText.AddElement(p);
@@ -407,8 +407,8 @@ namespace GKCore.Export
 	
 	public class PDFWriterEvents : IPdfPageEvent
 	{
-		private BaseFont fFont;
-		private string fFooter;
+		private readonly BaseFont fFont;
+		private readonly string fFooter;
 
 		public PDFWriterEvents(BaseFont font, string footer)
 		{
@@ -457,13 +457,15 @@ namespace GKCore.Export
 	
 	public class SimpleColumnText : ColumnText
 	{
-		private Document fDocument;
-		private List<Rectangle> columns = new List<Rectangle>();
-		private int currentColumn = 0;
+		private readonly Document fDocument;
+		private readonly List<Rectangle> fColumns;
+		private int fCurrentColumn;
 
 		public SimpleColumnText(Document document, PdfContentByte content, int columnCount, float columnSpacing) : base(content)
 		{
 			this.fDocument = document;
+            this.fColumns = new List<Rectangle>();
+            this.fCurrentColumn = 0;
 			this.CalculateColumnBoundries(columnCount, columnSpacing);
 		}
 
@@ -480,7 +482,7 @@ namespace GKCore.Export
 				float ury = columnHeight;
 
 				Rectangle newRectangle = new Rectangle(llx, lly, urx, ury);
-				columns.Add(newRectangle);
+				fColumns.Add(newRectangle);
 			}
 		}
 
@@ -489,18 +491,18 @@ namespace GKCore.Export
 			base.AddElement(element);
 
 			int status = 0;
-			if (currentColumn == 0) {
+			if (fCurrentColumn == 0) {
 				status = ColumnText.NO_MORE_COLUMN;
 			}
 
 			do {
 				if (status == ColumnText.NO_MORE_COLUMN) {
-					if (currentColumn == columns.Count) {
+					if (fCurrentColumn == fColumns.Count) {
 						fDocument.NewPage();
-						currentColumn = 0;
+						fCurrentColumn = 0;
 					}
-					base.SetSimpleColumn(this.columns[currentColumn]);
-					currentColumn += 1;
+					base.SetSimpleColumn(this.fColumns[fCurrentColumn]);
+					fCurrentColumn += 1;
 				}
 
 				status = base.Go();

@@ -2,10 +2,10 @@
 using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.InteropServices;
-
-using GedCom551;
+using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 
 [assembly: AssemblyTitle("GKTextSearchPlugin")]
 [assembly: AssemblyDescription("GEDKeeper2 TextSearch plugin")]
@@ -73,11 +73,11 @@ namespace GKTextSearchPlugin
         	
         	switch (action) {
         		case RecordAction.raEdit:
-        			this.fSearchMan.UpdateRecord(aBase, record as TGEDCOMRecord);
+        			this.fSearchMan.UpdateRecord(aBase, record as GEDCOMRecord);
         			break;
 
         		case RecordAction.raDelete:
-        			this.fSearchMan.DeleteRecord(aBase, (record as TGEDCOMRecord).XRef);
+        			this.fSearchMan.DeleteRecord(aBase, (record as GEDCOMRecord).XRef);
         			break;
         	}
         }

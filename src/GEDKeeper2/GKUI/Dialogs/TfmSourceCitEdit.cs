@@ -1,26 +1,26 @@
 ﻿using System;
 using System.Windows.Forms;
 
-using ExtUtils;
-using GedCom551;
+using GKCommon;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 using GKUI.Controls;
 
-/// <summary>
-/// Localization: dirty
-/// </summary>
-
 namespace GKUI.Dialogs
 {
-	public partial class TfmSourceCitEdit : Form, IBaseEditor
+    /// <summary>
+    /// Localization: dirty
+    /// </summary>
+    public partial class TfmSourceCitEdit : Form, IBaseEditor
 	{
 		private readonly IBase fBase;
         private readonly StringList fSourcesList;
 
-        private TGEDCOMSourceCitation fSourceCitation;
+        private GEDCOMSourceCitation fSourceCitation;
 
-		public TGEDCOMSourceCitation SourceCitation
+		public GEDCOMSourceCitation SourceCitation
 		{
 			get { return this.fSourceCitation; }
 			set { this.SetSourceCitation(value); }
@@ -36,7 +36,7 @@ namespace GKUI.Dialogs
 			try
 			{
 				int idx = this.fSourcesList.IndexOf(this.cbSource.Text);
-				TGEDCOMSourceRecord src = ((idx < 0) ? null : (this.fSourcesList.GetObject(idx) as TGEDCOMSourceRecord));
+				GEDCOMSourceRecord src = ((idx < 0) ? null : (this.fSourcesList.GetObject(idx) as GEDCOMSourceRecord));
 
 				if (src == null) {
 					GKUtils.ShowError("Не задан источник");
@@ -58,13 +58,12 @@ namespace GKUI.Dialogs
 		void btnSourceAdd_Click(object sender, EventArgs e)
 		{
 			object[] anArgs = new object[0];
-			TGEDCOMSourceRecord src = fBase.SelectRecord(TGEDCOMRecordType.rtSource, anArgs) as TGEDCOMSourceRecord;
-			if (src != null)
-			{
-				this.fBase.Context.aux_GetSourcesList(this.fSourcesList);
-				this.RefreshSourcesList("");
-				this.cbSource.Text = src.FiledByEntry;
-			}
+			GEDCOMSourceRecord src = fBase.SelectRecord(GEDCOMRecordType.rtSource, anArgs) as GEDCOMSourceRecord;
+		    if (src == null) return;
+		    
+            this.fBase.Context.aux_GetSourcesList(this.fSourcesList);
+		    this.RefreshSourcesList("");
+		    this.cbSource.Text = src.FiledByEntry;
 		}
 
         // FIXME
@@ -102,11 +101,11 @@ namespace GKUI.Dialogs
 			}
 		}
 
-		private void SetSourceCitation(TGEDCOMSourceCitation value)
+		private void SetSourceCitation(GEDCOMSourceCitation value)
 		{
 			this.fSourceCitation = value;
 
-			TGEDCOMSourceRecord src = (this.fSourceCitation.Value as TGEDCOMSourceRecord);
+			GEDCOMSourceRecord src = (this.fSourceCitation.Value as GEDCOMSourceRecord);
 			if (src != null) this.cbSource.Text = src.FiledByEntry;
 
 			this.EditPage.Text = this.fSourceCitation.Page;

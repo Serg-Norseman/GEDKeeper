@@ -2,12 +2,11 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKUI.Controls
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [Serializable]
 	public class GKListItem : ListViewItem
 	{
@@ -21,7 +20,13 @@ namespace GKUI.Controls
 		{
 		}
 
-		public GKListItem(string text, int imageIndex) : base(text, imageIndex)
+        public GKListItem(string text, object data) : base(text)
+        {
+            this.Data = data;
+        }
+
+        public GKListItem(string text, int imageIndex)
+            : base(text, imageIndex)
 		{
 		}
 

@@ -8,12 +8,11 @@ using GKCore.Interfaces;
 using GKUI.Controls;
 using ZedGraph;
 
-/// <summary>
-/// Localization: dirty
-/// </summary>
-
 namespace GKUI
 {
+    /// <summary>
+    /// Localization: dirty
+    /// </summary>
     public sealed partial class TfmStats : Form, ILocalization
 	{
 		private enum TChartStyle : byte { csBar, csPoint }
@@ -55,7 +54,7 @@ namespace GKUI
                 if (lab != 0 || !excludeUnknowns)
 				{
 					int val = int.Parse(this.fListStats.Items[i].SubItems[1].Text);
-					ppList.Add((double)lab, (double)val);
+					ppList.Add(lab, val);
 				}
 			}
 			ppList.Sort();
@@ -176,7 +175,7 @@ namespace GKUI
 		{
 			this.fTreeStats = new TreeStats(this.fBase.Tree);
 			
-			TreeStats.TCommonStats stats;
+			TreeStats.CommonStats stats;
 			fTreeStats.GetCommonStats(out stats);
 
 			this.ListCommon.Items.Clear();

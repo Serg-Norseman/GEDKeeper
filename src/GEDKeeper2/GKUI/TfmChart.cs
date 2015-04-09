@@ -3,36 +3,37 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
-using ExtUtils;
-using GedCom551;
+using GKCommon;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKUI.Charts;
 using GKUI.Dialogs;
 
-/// <summary>
-/// Localization: dirty
-/// </summary>
-
 namespace GKUI
 {
-	public partial class TfmChart : Form, ILocalization, IWorkWindow
+    /// <summary>
+    /// Localization: dirty
+    /// </summary>
+    public partial class TfmChart : Form, ILocalization, IWorkWindow
 	{
         private readonly IBase fBase;
         private readonly NavigationStack fNavman;
-        private readonly TGEDCOMTree fTree;
-        private readonly TTreeChartBox fTreeBox;
+        private readonly GEDCOMTree fTree;
+        private readonly TreeChartBox fTreeBox;
 
-        private TTreeChartBox.TChartKind fChartKind;
+        private TreeChartBox.TChartKind fChartKind;
 		private int fGensLimit;
-		private TGEDCOMIndividualRecord fPerson;
+		private GEDCOMIndividualRecord fPerson;
 
 		public IBase Base
 		{
 			get { return this.fBase; }
 		}
 
-		public TTreeChartBox.TChartKind ChartKind
+		public TreeChartBox.TChartKind ChartKind
 		{
 			get { return this.fChartKind; }
 			set {
@@ -41,18 +42,18 @@ namespace GKUI
 			}
 		}
 
-		public TfmChart(IBase aBase, TGEDCOMIndividualRecord startPerson)
+		public TfmChart(IBase aBase, GEDCOMIndividualRecord startPerson)
 		{
 			this.InitializeComponent();
 			base.MdiParent = TfmGEDKeeper.Instance;
 
 			this.ToolBar1.ImageList = TfmGEDKeeper.Instance.ImageList_Buttons;
 
-			this.miModeBoth.Tag = TTreeChartBox.TChartKind.ckBoth;
-			this.miModeAncestors.Tag = TTreeChartBox.TChartKind.ckAncestors;
-			this.miModeDescendants.Tag = TTreeChartBox.TChartKind.ckDescendants;
+			this.miModeBoth.Tag = TreeChartBox.TChartKind.ckBoth;
+			this.miModeAncestors.Tag = TreeChartBox.TChartKind.ckAncestors;
+			this.miModeDescendants.Tag = TreeChartBox.TChartKind.ckDescendants;
 
-			this.fTreeBox = new TTreeChartBox();
+			this.fTreeBox = new TreeChartBox();
 			this.fTreeBox.Base = aBase;
 			this.fTreeBox.Dock = DockStyle.Fill;
 			//this.fTreeBox.MouseClick += this.ImageTree_MouseClick;
@@ -115,7 +116,7 @@ namespace GKUI
 			this.tbNext.Enabled = this.fNavman.CanForward();
 		}
 
-		private void NavAdd(TGEDCOMIndividualRecord aRec)
+		private void NavAdd(GEDCOMIndividualRecord aRec)
 		{
 			if (aRec != null && !this.fNavman.Busy)
 			{
@@ -192,7 +193,7 @@ namespace GKUI
 			if (person == null) return;
 
 			if (person.Rec != null) {
-				TGEDCOMIndividualRecord iRec = person.Rec;
+				GEDCOMIndividualRecord iRec = person.Rec;
 
 				if (this.fBase.ModifyPerson(ref iRec))
 				{
@@ -202,10 +203,10 @@ namespace GKUI
 				// this is "stub" person, only in descendant tree
 				// key properties = BaseSpouse & BaseFamily
 				TreeChartPerson baseSpouse = person.BaseSpouse;
-				TGEDCOMFamilyRecord baseFamily = person.BaseFamily;
+				GEDCOMFamilyRecord baseFamily = person.BaseFamily;
 
 				if (baseSpouse != null && baseFamily != null) {
-					TGEDCOMIndividualRecord iSpouse = this.SelectSpouseFor(person.BaseSpouse.Rec);
+					GEDCOMIndividualRecord iSpouse = this.SelectSpouseFor(person.BaseSpouse.Rec);
 
 					if (iSpouse != null) {
 						baseFamily.aux_AddSpouse(iSpouse);
@@ -248,7 +249,7 @@ namespace GKUI
 			TreeChartPerson p = this.fTreeBox.Selected;
 			if (p != null && p.Rec != null)
 			{
-				TGEDCOMIndividualRecord iRec = p.Rec;
+				GEDCOMIndividualRecord iRec = p.Rec;
 				if (this.fBase.ModifyPerson(ref iRec))
 				{
 					this.UpdateChart();
@@ -256,29 +257,29 @@ namespace GKUI
 			}
 		}
 
-		private TGEDCOMIndividualRecord SelectSpouseFor(TGEDCOMIndividualRecord iRec)
+		private GEDCOMIndividualRecord SelectSpouseFor(GEDCOMIndividualRecord iRec)
 		{
-		    TGEDCOMSex needSex;
+		    GEDCOMSex needSex;
 			switch (iRec.Sex) {
-				case TGEDCOMSex.svMale:
-					needSex = TGEDCOMSex.svFemale;
+				case GEDCOMSex.svMale:
+					needSex = GEDCOMSex.svFemale;
 					break;
-				case TGEDCOMSex.svFemale:
-					needSex = TGEDCOMSex.svMale;
+				case GEDCOMSex.svFemale:
+					needSex = GEDCOMSex.svMale;
 					break;
 				default:
 					GKUtils.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
 					return null;
 			}
 
-			TGEDCOMIndividualRecord target = null;
+			GEDCOMIndividualRecord target = null;
 			TargetMode targetMode = TargetMode.tmNone;
-			if (needSex == TGEDCOMSex.svFemale) {
+			if (needSex == GEDCOMSex.svFemale) {
 				target = iRec;
 				targetMode = TargetMode.tmWife;
 			}
 
-			TGEDCOMIndividualRecord result = this.fBase.SelectPerson(target, targetMode, needSex);
+			GEDCOMIndividualRecord result = this.fBase.SelectPerson(target, targetMode, needSex);
 			return result;
 		}
 		
@@ -287,12 +288,12 @@ namespace GKUI
 			TreeChartPerson p = this.fTreeBox.Selected;
 			if (p != null && p.Rec != null)
 			{
-				TGEDCOMIndividualRecord iRec = p.Rec;
-				TGEDCOMIndividualRecord iSpouse = this.SelectSpouseFor(iRec);
+				GEDCOMIndividualRecord iRec = p.Rec;
+				GEDCOMIndividualRecord iSpouse = this.SelectSpouseFor(iRec);
 
 				if (iSpouse != null)
 				{
-					TGEDCOMFamilyRecord fam = this.fTree.aux_CreateFamily();
+					GEDCOMFamilyRecord fam = this.fTree.aux_CreateFamily();
 					fam.aux_AddSpouse(iRec);
 					fam.aux_AddSpouse(iSpouse);
 					this.UpdateChart();
@@ -300,12 +301,12 @@ namespace GKUI
 			}
 		}
 
-		private void InternalChildAdd(TGEDCOMSex needSex)
+		private void InternalChildAdd(GEDCOMSex needSex)
 		{
 			TreeChartPerson p = this.fTreeBox.Selected;
 			if (p != null && p.Rec != null)
 			{
-				TGEDCOMIndividualRecord iRec = p.Rec;
+				GEDCOMIndividualRecord iRec = p.Rec;
 
                 if (iRec.SpouseToFamilyLinks.Count == 0)
 				{
@@ -319,8 +320,8 @@ namespace GKUI
 					}
 					else
 					{
-						TGEDCOMFamilyRecord fam = iRec.SpouseToFamilyLinks[0].Family;
-						TGEDCOMIndividualRecord iChild = this.fBase.SelectPerson(fam.Husband.Value as TGEDCOMIndividualRecord, TargetMode.tmParent, needSex);
+						GEDCOMFamilyRecord fam = iRec.SpouseToFamilyLinks[0].Family;
+						GEDCOMIndividualRecord iChild = this.fBase.SelectPerson(fam.Husband.Value as GEDCOMIndividualRecord, TargetMode.tmParent, needSex);
 
 						if (iChild != null && fam.aux_AddChild(iChild))
 						{
@@ -333,12 +334,12 @@ namespace GKUI
 
 		private void miSonAddClick(object sender, EventArgs e)
 		{
-			this.InternalChildAdd(TGEDCOMSex.svMale);
+			this.InternalChildAdd(GEDCOMSex.svMale);
 		}
 
 		private void miDaughterAddClick(object sender, EventArgs e)
 		{
-			this.InternalChildAdd(TGEDCOMSex.svFemale);
+			this.InternalChildAdd(GEDCOMSex.svFemale);
 		}
 
 		private void miFamilyAddClick(object sender, EventArgs e)
@@ -346,14 +347,14 @@ namespace GKUI
 			TreeChartPerson p = this.fTreeBox.Selected;
 			if (p != null && p.Rec != null)
 			{
-				TGEDCOMSex sex = p.Rec.Sex;
-				if (sex < TGEDCOMSex.svMale || sex >= TGEDCOMSex.svUndetermined)
+				GEDCOMSex sex = p.Rec.Sex;
+				if (sex < GEDCOMSex.svMale || sex >= GEDCOMSex.svUndetermined)
 				{
 					GKUtils.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
 				}
 				else
 				{
-					TGEDCOMFamilyRecord fam = this.fTree.aux_CreateFamily();
+					GEDCOMFamilyRecord fam = this.fTree.aux_CreateFamily();
 					fam.aux_AddSpouse(p.Rec);
 					this.UpdateChart();
 				}
@@ -418,15 +419,15 @@ namespace GKUI
 
 			switch (this.fChartKind)
 			{
-				case TTreeChartBox.TChartKind.ckAncestors:
+				case TreeChartBox.TChartKind.ckAncestors:
 					this.miModeAncestors.Checked = true;
 					break;
 
-				case TTreeChartBox.TChartKind.ckDescendants:
+				case TreeChartBox.TChartKind.ckDescendants:
 					this.miModeDescendants.Checked = true;
 					break;
 
-				case TTreeChartBox.TChartKind.ckBoth:
+				case TreeChartBox.TChartKind.ckBoth:
 					this.miModeBoth.Checked = true;
 					break;
 			}
@@ -434,7 +435,7 @@ namespace GKUI
 
 		private void miModeItem_Click(object sender, EventArgs e)
 		{
-			TTreeChartBox.TChartKind newMode = (TTreeChartBox.TChartKind)(sender as MenuItem).Tag;
+			TreeChartBox.TChartKind newMode = (TreeChartBox.TChartKind)(sender as MenuItem).Tag;
 
 			if (this.fChartKind != newMode)
 			{
@@ -461,11 +462,11 @@ namespace GKUI
 			}
 		}
 
-		public static bool CheckData(TGEDCOMTree tree, TGEDCOMIndividualRecord iRec, TTreeChartBox.TChartKind chartKind)
+		public static bool CheckData(GEDCOMTree tree, GEDCOMIndividualRecord iRec, TreeChartBox.TChartKind chartKind)
 		{
 			bool result = true;
 
-			if (chartKind == TTreeChartBox.TChartKind.ckAncestors || chartKind == TTreeChartBox.TChartKind.ckBoth)
+			if (chartKind == TreeChartBox.TChartKind.ckAncestors || chartKind == TreeChartBox.TChartKind.ckBoth)
 			{
 				TreeStats.InitExtCounts(tree, -1);
 				int ancCount = TreeStats.GetAncestorsCount(iRec);
@@ -476,7 +477,7 @@ namespace GKUI
 				}
 			}
 
-			if (chartKind >= TTreeChartBox.TChartKind.ckDescendants && chartKind < (TTreeChartBox.TChartKind)3)
+			if (chartKind >= TreeChartBox.TChartKind.ckDescendants && chartKind < (TreeChartBox.TChartKind)3)
 			{
 				TreeStats.InitExtCounts(tree, -1);
 				int descCount = TreeStats.GetDescendantsCount(iRec);
@@ -511,13 +512,13 @@ namespace GKUI
 
 					switch (this.fChartKind)
 					{
-						case TTreeChartBox.TChartKind.ckAncestors:
+						case TreeChartBox.TChartKind.ckAncestors:
 							this.Text = LangMan.LS(LSID.LSID_MITreeAncestors);
 							break;
-						case TTreeChartBox.TChartKind.ckDescendants:
+						case TreeChartBox.TChartKind.ckDescendants:
 							this.Text = LangMan.LS(LSID.LSID_MITreeDescendants);
 							break;
-						case TTreeChartBox.TChartKind.ckBoth:
+						case TreeChartBox.TChartKind.ckBoth:
 							this.Text = LangMan.LS(LSID.LSID_MITreeBoth);
 							break;
 					}
@@ -576,7 +577,7 @@ namespace GKUI
 			this.fNavman.BeginNav();
 			try
 			{
-				this.fPerson = (this.fNavman.Next() as TGEDCOMIndividualRecord);
+				this.fPerson = (this.fNavman.Next() as GEDCOMIndividualRecord);
 				this.GenChart(true);
 				this.NavRefresh();
 			}
@@ -591,7 +592,7 @@ namespace GKUI
 			this.fNavman.BeginNav();
 			try
 			{
-				this.fPerson = (this.fNavman.Back() as TGEDCOMIndividualRecord);
+				this.fPerson = (this.fNavman.Back() as GEDCOMIndividualRecord);
 				this.GenChart(true);
 				this.NavRefresh();
 			}

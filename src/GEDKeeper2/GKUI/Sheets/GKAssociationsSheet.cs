@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Windows.Forms;
 
-using ExtUtils;
-using GedCom551;
+using GKCommon;
+using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKUI.Controls;
 using GKUI.Dialogs;
 
@@ -19,11 +20,11 @@ namespace GKUI.Sheets
             this.List.AddListColumn(LangMan.LS(LSID.LSID_Person), 200, false);
             this.Columns_EndUpdate();
 
-            this.Buttons = EnumSet<GKSheetList.SheetButton>.Create(
-				GKSheetList.SheetButton.lbAdd, 
-				GKSheetList.SheetButton.lbEdit, 
-				GKSheetList.SheetButton.lbDelete, 
-				GKSheetList.SheetButton.lbJump
+            this.Buttons = EnumSet<SheetButton>.Create(
+				SheetButton.lbAdd, 
+				SheetButton.lbEdit, 
+				SheetButton.lbDelete, 
+				SheetButton.lbJump
 			);
 
             this.OnModify += this.ListModify;
@@ -39,7 +40,7 @@ namespace GKUI.Sheets
 
                 this.DataList.Reset();
                 while (this.DataList.MoveNext()) {
-                    TGEDCOMAssociation ast = this.DataList.Current as TGEDCOMAssociation;
+                    GEDCOMAssociation ast = this.DataList.Current as GEDCOMAssociation;
                     if (ast == null) continue;
 
                     string nm = ((ast.Individual == null) ? "" : ast.Individual.aux_GetNameStr(true, false));
@@ -61,8 +62,8 @@ namespace GKUI.Sheets
             IBase aBase = this.Editor.Base;
             if (aBase == null) return;
 
-            TGEDCOMIndividualRecord iRec = this.DataList.Owner as TGEDCOMIndividualRecord;
-            TGEDCOMAssociation ast = eArgs.ItemData as TGEDCOMAssociation;
+            GEDCOMIndividualRecord iRec = this.DataList.Owner as GEDCOMIndividualRecord;
+            GEDCOMAssociation ast = eArgs.ItemData as GEDCOMAssociation;
 
             bool result = false;
 
@@ -74,7 +75,7 @@ namespace GKUI.Sheets
                     try
                     {
                         if (eArgs.Action == RecordAction.raAdd) {
-                            ast = new TGEDCOMAssociation(aBase.Tree, iRec, "", "");
+                            ast = new GEDCOMAssociation(aBase.Tree, iRec, "", "");
                         }
 
                         fmAstEdit.Association = ast;

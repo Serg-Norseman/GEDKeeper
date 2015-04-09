@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
-
-using GedCom551;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
 
 /// <summary>
@@ -30,32 +30,32 @@ namespace GKUI.Dialogs
 			set { this.edName.Text = value; }
 		}
 		
-		public TGEDCOMSex Sex
+		public GEDCOMSex Sex
 		{
 			get
 			{
-				if (this.sbMale.Checked) {
-					return TGEDCOMSex.svMale;
-				} else if (this.sbFemale.Checked) {
-					return TGEDCOMSex.svFemale;
-				} else {
-					return TGEDCOMSex.svNone;
+			    if (this.sbMale.Checked) {
+					return GEDCOMSex.svMale;
 				}
+			    if (this.sbFemale.Checked) {
+			        return GEDCOMSex.svFemale;
+			    }
+			    return GEDCOMSex.svNone;
 			}
-			set
+		    set
 			{
 				switch (value) 
 				{
-					case TGEDCOMSex.svNone:
-					case TGEDCOMSex.svUndetermined:
+					case GEDCOMSex.svNone:
+					case GEDCOMSex.svUndetermined:
 						this.sbNone.Checked = true;
 						break;
 
-					case TGEDCOMSex.svMale:
+					case GEDCOMSex.svMale:
 						this.sbMale.Checked = true;
 						break;
 
-					case TGEDCOMSex.svFemale:
+					case GEDCOMSex.svFemale:
 						this.sbFemale.Checked = true;
 						break;
 				}

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Windows.Forms;
-
-using GedCom551;
+﻿using System.Windows.Forms;
+using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKUI.Controls;
 

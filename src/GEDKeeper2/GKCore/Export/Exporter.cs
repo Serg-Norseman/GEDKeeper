@@ -1,25 +1,23 @@
-using System;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 
-using ExtUtils;
-using GedCom551;
+using GKCommon;
+using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Options;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKCore.Export
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public abstract class Exporter : BaseObject
 	{
 		protected GlobalOptions FOptions;
 		protected string FPath;
 		protected readonly IBase fBase;
-		protected TGEDCOMTree FTree;
+		protected GEDCOMTree FTree;
 
 		public GlobalOptions Options
 		{
@@ -76,7 +74,7 @@ namespace GKCore.Export
 			}
 		}
 
-		protected static void PrepareSpecIndex(StringList index, string val, TGEDCOMIndividualRecord iRec)
+		protected static void PrepareSpecIndex(StringList index, string val, GEDCOMIndividualRecord iRec)
 		{
 			StringList persons;
 
@@ -93,7 +91,7 @@ namespace GKCore.Export
 			}
 		}
 
-		protected static void PrepareEventYear(StringList index, TGEDCOMCustomEvent evt, TGEDCOMIndividualRecord iRec)
+		protected static void PrepareEventYear(StringList index, GEDCOMCustomEvent evt, GEDCOMIndividualRecord iRec)
 		{
 			int year = -1;
 			if (evt == null)

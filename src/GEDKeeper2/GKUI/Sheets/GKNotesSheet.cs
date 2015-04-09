@@ -2,9 +2,12 @@
 using System.Windows.Forms;
 
 using ExtUtils;
-using GedCom551;
+using GKCommon;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKUI.Controls;
 
 namespace GKUI.Sheets
@@ -30,7 +33,7 @@ namespace GKUI.Sheets
 
                 this.DataList.Reset();
                 while (this.DataList.MoveNext()) {
-                	TGEDCOMNotes note = this.DataList.Current as TGEDCOMNotes;
+                	GEDCOMNotes note = this.DataList.Current as GEDCOMNotes;
                 	this.List.AddItem(note.Notes.Text.Trim(), note);
                 }
             }
@@ -48,18 +51,18 @@ namespace GKUI.Sheets
             if (aBase == null) return;
 
             IGEDCOMStructWithLists _struct = this.DataList.Owner as IGEDCOMStructWithLists;
-            TGEDCOMNotes aNote = eArgs.ItemData as TGEDCOMNotes;
+            GEDCOMNotes aNote = eArgs.ItemData as GEDCOMNotes;
             
             bool result = false;
 
-            TGEDCOMNoteRecord noteRec;
+            GEDCOMNoteRecord noteRec;
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    noteRec = aBase.SelectRecord(TGEDCOMRecordType.rtNote, null) as TGEDCOMNoteRecord;
+                    noteRec = aBase.SelectRecord(GEDCOMRecordType.rtNote, null) as GEDCOMNoteRecord;
                     if (noteRec != null)
                     {
-                        TGEDCOMNotes note = new TGEDCOMNotes(aBase.Tree, _struct as GEDCOMObject, "", "");
+                        GEDCOMNotes note = new GEDCOMNotes(aBase.Tree, _struct as GEDCOMObject, "", "");
                         note.Value = noteRec;
                         _struct.Notes.Add(note);
                         result = true;
@@ -69,7 +72,7 @@ namespace GKUI.Sheets
                 case RecordAction.raEdit:
                     if (aNote != null)
                     {
-                        noteRec = aNote.Value as TGEDCOMNoteRecord;
+                        noteRec = aNote.Value as GEDCOMNoteRecord;
                         result = aBase.ModifyNote(ref noteRec);
                     }
                     break;

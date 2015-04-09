@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Xml;
 
 using ExtUtils;
+using GKCommon;
 using GKCore.Options;
 
 /// <summary>

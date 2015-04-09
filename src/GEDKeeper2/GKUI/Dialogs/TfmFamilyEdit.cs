@@ -2,9 +2,11 @@
 using System.Windows.Forms;
 
 using ExtUtils;
-using GedCom551;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKUI.Controls;
 using GKUI.Sheets;
 
@@ -24,14 +26,14 @@ namespace GKUI.Dialogs
         private readonly GKMediaSheet fMediaList;
 		private readonly GKSourcesSheet fSourcesList;
 
-        private TGEDCOMFamilyRecord fFamily;
+        private GEDCOMFamilyRecord fFamily;
 
 		public IBase Base
 		{
 			get { return this.fBase; }
 		}
         
-		public TGEDCOMFamilyRecord Family
+		public GEDCOMFamilyRecord Family
 		{
 			get	{ return this.fFamily; }
 			set	{ this.SetFamily(value); }
@@ -41,22 +43,22 @@ namespace GKUI.Dialogs
 		{
 			string stat = GKData.MarriageStatus[this.EditMarriageStatus.SelectedIndex].StatSign;
 			this.fFamily.SetTagStringValue("_STAT", stat);
-			this.fFamily.Restriction = (TGEDCOMRestriction)this.cbRestriction.SelectedIndex;
+			this.fFamily.Restriction = (GEDCOMRestriction)this.cbRestriction.SelectedIndex;
 			this.fFamily.aux_SortChilds();
 			this.fBase.ChangeRecord(this.fFamily);
 		}
 
-		private TGEDCOMIndividualRecord GetHusband()
+		private GEDCOMIndividualRecord GetHusband()
 		{
-			return this.fFamily.Husband.Value as TGEDCOMIndividualRecord;
+			return this.fFamily.Husband.Value as GEDCOMIndividualRecord;
 		}
 
-		private TGEDCOMIndividualRecord GetWife()
+		private GEDCOMIndividualRecord GetWife()
 		{
-			return this.fFamily.Wife.Value as TGEDCOMIndividualRecord;
+			return this.fFamily.Wife.Value as GEDCOMIndividualRecord;
 		}
 
-		private void SetFamily(TGEDCOMFamilyRecord value)
+		private void SetFamily(GEDCOMFamilyRecord value)
 		{
 			this.fFamily = value;
 			try
@@ -88,7 +90,7 @@ namespace GKUI.Dialogs
 
 		private void ControlsRefresh()
 		{
-			TGEDCOMIndividualRecord spouse = this.GetHusband();
+			GEDCOMIndividualRecord spouse = this.GetHusband();
 			this.EditHusband.Text = (spouse != null) ? spouse.aux_GetNameStr(true, false) : LangMan.LS(LSID.LSID_UnkMale);
 
             this.btnHusbandAdd.Enabled = (spouse == null);
@@ -108,7 +110,7 @@ namespace GKUI.Dialogs
 		    this.fSourcesList.DataList = this.fFamily.SourceCitations.GetEnumerator();
 		    this.fChildsList.DataList = this.fFamily.Childrens.GetEnumerator();
 
-			bool locked = (this.fFamily.Restriction == TGEDCOMRestriction.rnLocked);
+			bool locked = (this.fFamily.Restriction == GEDCOMRestriction.rnLocked);
 			
 			this.btnHusbandAdd.Enabled = (this.btnHusbandAdd.Enabled && !locked);
 			this.btnHusbandDelete.Enabled = (this.btnHusbandDelete.Enabled && !locked);
@@ -131,7 +133,7 @@ namespace GKUI.Dialogs
 		{
 			if (sender == this.fChildsList && eArgs.Action == RecordAction.raJump)
 			{
-				TGEDCOMIndividualRecord child = eArgs.ItemData as TGEDCOMIndividualRecord;
+				GEDCOMIndividualRecord child = eArgs.ItemData as GEDCOMIndividualRecord;
 				if (child != null) {
 					this.AcceptChanges();
 					this.fBase.SelectRecordByXRef(child.XRef);
@@ -142,7 +144,7 @@ namespace GKUI.Dialogs
 
 		private void btnHusbandAddClick(object sender, EventArgs e)
 		{
-			TGEDCOMIndividualRecord husband = this.fBase.SelectPerson(null, TargetMode.tmNone, TGEDCOMSex.svMale);
+			GEDCOMIndividualRecord husband = this.fBase.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svMale);
 			if (husband != null && this.fFamily.Husband.StringValue == "")
 			{
 				this.fFamily.aux_AddSpouse(husband);
@@ -161,7 +163,7 @@ namespace GKUI.Dialogs
 
 		private void btnHusbandSelClick(object sender, EventArgs e)
 		{
-			TGEDCOMIndividualRecord spouse = this.GetHusband();
+			GEDCOMIndividualRecord spouse = this.GetHusband();
 			if (spouse != null)
 			{
 				this.AcceptChanges();
@@ -172,7 +174,7 @@ namespace GKUI.Dialogs
 
 		private void btnWifeAddClick(object sender, EventArgs e)
 		{
-			TGEDCOMIndividualRecord wife = this.fBase.SelectPerson(null, TargetMode.tmNone, TGEDCOMSex.svFemale);
+			GEDCOMIndividualRecord wife = this.fBase.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svFemale);
 			if (wife != null && this.fFamily.Wife.StringValue == "")
 			{
 				this.fFamily.aux_AddSpouse(wife);
@@ -191,7 +193,7 @@ namespace GKUI.Dialogs
 
 		private void btnWifeSelClick(object sender, EventArgs e)
 		{
-			TGEDCOMIndividualRecord spouse = this.GetWife();
+			GEDCOMIndividualRecord spouse = this.GetWife();
 			if (spouse != null)
 			{
 				this.AcceptChanges();
@@ -234,7 +236,7 @@ namespace GKUI.Dialogs
 			this.InitializeComponent();
 			this.fBase = aBase;
 
-			for (TGEDCOMRestriction res = TGEDCOMRestriction.rnNone; res <= TGEDCOMRestriction.rnLast; res++)
+			for (GEDCOMRestriction res = GEDCOMRestriction.rnNone; res <= GEDCOMRestriction.rnLast; res++)
 			{
 				this.cbRestriction.Items.Add(GKData.Restrictions[(int)res]);
 			}

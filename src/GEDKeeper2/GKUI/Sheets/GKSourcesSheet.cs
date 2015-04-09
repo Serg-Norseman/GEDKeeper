@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Windows.Forms;
 
-using ExtUtils;
-using GedCom551;
+using GKCommon;
+using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKUI.Controls;
 using GKUI.Dialogs;
 
@@ -21,12 +22,12 @@ namespace GKUI.Sheets
             this.AddColumn(LangMan.LS(LSID.LSID_Certainty), 220, false);
             this.Columns_EndUpdate();
 
-            this.Buttons = EnumSet<GKSheetList.SheetButton>.Create(
-				GKSheetList.SheetButton.lbAdd, 
-				GKSheetList.SheetButton.lbEdit, 
-				GKSheetList.SheetButton.lbDelete, 
-				GKSheetList.SheetButton.lbMoveUp, 
-				GKSheetList.SheetButton.lbMoveDown
+            this.Buttons = EnumSet<SheetButton>.Create(
+				SheetButton.lbAdd, 
+				SheetButton.lbEdit, 
+				SheetButton.lbDelete, 
+				SheetButton.lbMoveUp, 
+				SheetButton.lbMoveDown
 			);
 
             this.OnModify += this.ListModify;
@@ -42,8 +43,8 @@ namespace GKUI.Sheets
 
                 this.DataList.Reset();
                 while (this.DataList.MoveNext()) {
-                	TGEDCOMSourceCitation cit = this.DataList.Current as TGEDCOMSourceCitation;
-                	TGEDCOMSourceRecord sourceRec = cit.Value as TGEDCOMSourceRecord;
+                	GEDCOMSourceCitation cit = this.DataList.Current as GEDCOMSourceCitation;
+                	GEDCOMSourceRecord sourceRec = cit.Value as GEDCOMSourceRecord;
 
                 	if (sourceRec != null)
                 	{
@@ -72,7 +73,7 @@ namespace GKUI.Sheets
             if (aBase == null) return;
 
             IGEDCOMStructWithLists _struct = this.DataList.Owner as IGEDCOMStructWithLists;
-            TGEDCOMSourceCitation aCit = eArgs.ItemData as TGEDCOMSourceCitation;
+            GEDCOMSourceCitation aCit = eArgs.ItemData as GEDCOMSourceCitation;
             
 			bool result = false;
 
@@ -86,7 +87,7 @@ namespace GKUI.Sheets
             			{
             				if (eArgs.Action == RecordAction.raAdd)
             				{
-            					aCit = new TGEDCOMSourceCitation(aBase.Tree, _struct as GEDCOMObject, "", "");
+            					aCit = new GEDCOMSourceCitation(aBase.Tree, _struct as GEDCOMObject, "", "");
             				}
 
             				fmSrcCitEdit.SourceCitation = aCit;

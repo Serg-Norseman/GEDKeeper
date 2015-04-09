@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
-
-using GedCom551;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 
@@ -51,7 +51,7 @@ namespace GKUI.Dialogs
 			try
 			{
 				this.fNameEntry.Name = this.edName.Text;
-				this.fNameEntry.Sex = (TGEDCOMSex)this.edSex.SelectedIndex;
+				this.fNameEntry.Sex = (GEDCOMSex)this.edSex.SelectedIndex;
 				this.fNameEntry.F_Patronymic = this.edFPatr.Text;
 				this.fNameEntry.M_Patronymic = this.edMPatr.Text;
 				base.DialogResult = DialogResult.OK;
@@ -76,7 +76,7 @@ namespace GKUI.Dialogs
 			this.InitializeComponent();
 			this.fBase = aBase;
 
-			for (TGEDCOMSex sx = TGEDCOMSex.svNone; sx <= TGEDCOMSex.svLast; sx++)
+			for (GEDCOMSex sx = GEDCOMSex.svNone; sx <= GEDCOMSex.svLast; sx++)
 			{
 				this.edSex.Items.Add(GKUtils.SexStr(sx));
 			}

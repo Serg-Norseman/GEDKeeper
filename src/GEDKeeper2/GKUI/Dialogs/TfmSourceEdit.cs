@@ -1,28 +1,27 @@
 ﻿using System;
 using System.Windows.Forms;
-
-using GedCom551;
+using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKUI.Controls;
 using GKUI.Sheets;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKUI.Dialogs
 {
-	public partial class TfmSourceEdit : Form, IBaseEditor
+    /// <summary>
+    /// 
+    /// </summary>
+    public partial class TfmSourceEdit : Form, IBaseEditor
 	{
 		private readonly IBase fBase;
 		private readonly GKNotesSheet fNotesList;
         private readonly GKMediaSheet fMediaList;
         private readonly GKRepositoriesSheet fRepositoriesList;
 
-        private TGEDCOMSourceRecord fSourceRecord;
+        private GEDCOMSourceRecord fSourceRecord;
 
-		public TGEDCOMSourceRecord SourceRecord
+		public GEDCOMSourceRecord SourceRecord
 		{
 			get { return this.fSourceRecord; }
 			set { this.SetSourceRecord(value); }
@@ -52,17 +51,17 @@ namespace GKUI.Dialogs
 		{
             if (sender == this.fRepositoriesList && eArgs.Action == RecordAction.raJump)
             {
-            	TGEDCOMRepositoryCitation cit = eArgs.ItemData as TGEDCOMRepositoryCitation;
+            	GEDCOMRepositoryCitation cit = eArgs.ItemData as GEDCOMRepositoryCitation;
             	if (cit != null)
             	{
             		this.AcceptChanges();
-            		this.Base.SelectRecordByXRef((cit.Value as TGEDCOMRepositoryRecord).XRef);
+            		this.Base.SelectRecordByXRef((cit.Value as GEDCOMRepositoryRecord).XRef);
             		base.Close();
             	}
             }
 		}
 
-        private void SetSourceRecord(TGEDCOMSourceRecord value)
+        private void SetSourceRecord(GEDCOMSourceRecord value)
 		{
 			this.fSourceRecord = value;
 			

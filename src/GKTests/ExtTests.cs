@@ -1,7 +1,9 @@
 ﻿using System;
 
 using ExtUtils;
-using GedCom551;
+using GKCommon;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using NUnit.Framework;
 
 namespace GKTests
@@ -37,52 +39,52 @@ namespace GKTests
 		[Test]
 		public void TSet_Tests()
 		{
-			EnumSet<TGEDCOMRestriction> es = EnumSet<TGEDCOMRestriction>.Create();
+			EnumSet<GEDCOMRestriction> es = EnumSet<GEDCOMRestriction>.Create();
 			Assert.IsTrue(es.IsEmpty());
 
-			es.Include(TGEDCOMRestriction.rnPrivacy, TGEDCOMRestriction.rnLocked);
-			Assert.IsTrue(es.Contains(TGEDCOMRestriction.rnPrivacy));
-			Assert.IsFalse(es.Contains(TGEDCOMRestriction.rnNone));
+			es.Include(GEDCOMRestriction.rnPrivacy, GEDCOMRestriction.rnLocked);
+			Assert.IsTrue(es.Contains(GEDCOMRestriction.rnPrivacy));
+			Assert.IsFalse(es.Contains(GEDCOMRestriction.rnNone));
 			Assert.IsFalse(es.IsEmpty());
 
-			es.Exclude(TGEDCOMRestriction.rnPrivacy);
-			Assert.IsFalse(es.Contains(TGEDCOMRestriction.rnPrivacy));
-			Assert.IsTrue(es.Contains(TGEDCOMRestriction.rnLocked));
+			es.Exclude(GEDCOMRestriction.rnPrivacy);
+			Assert.IsFalse(es.Contains(GEDCOMRestriction.rnPrivacy));
+			Assert.IsTrue(es.Contains(GEDCOMRestriction.rnLocked));
 			
-			es = EnumSet<TGEDCOMRestriction>.Create(TGEDCOMRestriction.rnNone, TGEDCOMRestriction.rnLocked);
-			Assert.IsTrue(es.Contains(TGEDCOMRestriction.rnNone));
-			Assert.IsTrue(es.Contains(TGEDCOMRestriction.rnLocked));
+			es = EnumSet<GEDCOMRestriction>.Create(GEDCOMRestriction.rnNone, GEDCOMRestriction.rnLocked);
+			Assert.IsTrue(es.Contains(GEDCOMRestriction.rnNone));
+			Assert.IsTrue(es.Contains(GEDCOMRestriction.rnLocked));
 			
 			string test = es.ByteToStr((int)0);
 			Assert.AreEqual("00000101", test);
 			
-			EnumSet<TGEDCOMRestriction> es2 = EnumSet<TGEDCOMRestriction>.Create(TGEDCOMRestriction.rnNone, TGEDCOMRestriction.rnLocked);
+			EnumSet<GEDCOMRestriction> es2 = EnumSet<GEDCOMRestriction>.Create(GEDCOMRestriction.rnNone, GEDCOMRestriction.rnLocked);
 
 			Assert.IsTrue(es.Equals(es2));
 			Assert.IsFalse(es.Equals(null));
 			
-			Assert.IsTrue(es.Contains(TGEDCOMRestriction.rnLocked));
-			Assert.IsFalse(es.Contains(TGEDCOMRestriction.rnPrivacy));
+			Assert.IsTrue(es.Contains(GEDCOMRestriction.rnLocked));
+			Assert.IsFalse(es.Contains(GEDCOMRestriction.rnPrivacy));
 
-			EnumSet<TGEDCOMRestriction> es3 = EnumSet<TGEDCOMRestriction>.Create(TGEDCOMRestriction.rnLocked);
-			EnumSet<TGEDCOMRestriction> es4 = es * es3;
-			Assert.IsTrue(es.Contains(TGEDCOMRestriction.rnLocked));
+			EnumSet<GEDCOMRestriction> es3 = EnumSet<GEDCOMRestriction>.Create(GEDCOMRestriction.rnLocked);
+			EnumSet<GEDCOMRestriction> es4 = es * es3;
+			Assert.IsTrue(es.Contains(GEDCOMRestriction.rnLocked));
 			
-			es = EnumSet<TGEDCOMRestriction>.Create(TGEDCOMRestriction.rnNone);
-			es2 = EnumSet<TGEDCOMRestriction>.Create(TGEDCOMRestriction.rnLocked);
+			es = EnumSet<GEDCOMRestriction>.Create(GEDCOMRestriction.rnNone);
+			es2 = EnumSet<GEDCOMRestriction>.Create(GEDCOMRestriction.rnLocked);
 			Assert.IsTrue(es != es2);
 			
 			es = es + es2;
-			es3 = EnumSet<TGEDCOMRestriction>.Create(TGEDCOMRestriction.rnNone, TGEDCOMRestriction.rnLocked);
+			es3 = EnumSet<GEDCOMRestriction>.Create(GEDCOMRestriction.rnNone, GEDCOMRestriction.rnLocked);
 			Assert.IsTrue(es.Equals(es3));
 			
-			Assert.IsTrue(es3.ContainsAll(TGEDCOMRestriction.rnNone, TGEDCOMRestriction.rnLocked));
-			Assert.IsFalse(es3.ContainsAll(TGEDCOMRestriction.rnNone, TGEDCOMRestriction.rnPrivacy));
-			Assert.IsTrue(es3.HasIntersect(TGEDCOMRestriction.rnNone, TGEDCOMRestriction.rnPrivacy));
-			Assert.IsFalse(es3.HasIntersect(TGEDCOMRestriction.rnPrivacy));
+			Assert.IsTrue(es3.ContainsAll(GEDCOMRestriction.rnNone, GEDCOMRestriction.rnLocked));
+			Assert.IsFalse(es3.ContainsAll(GEDCOMRestriction.rnNone, GEDCOMRestriction.rnPrivacy));
+			Assert.IsTrue(es3.HasIntersect(GEDCOMRestriction.rnNone, GEDCOMRestriction.rnPrivacy));
+			Assert.IsFalse(es3.HasIntersect(GEDCOMRestriction.rnPrivacy));
 			
 			es = es - es2;
-			es3 = EnumSet<TGEDCOMRestriction>.Create(TGEDCOMRestriction.rnNone);
+			es3 = EnumSet<GEDCOMRestriction>.Create(GEDCOMRestriction.rnNone);
 			Assert.IsTrue(es == es3);
 		}
 

@@ -2,9 +2,10 @@
 using System.Windows.Forms;
 
 using ExtUtils;
-using GedCom551;
+using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKUI.Controls;
 using GKUI.Sheets;
 
@@ -21,9 +22,9 @@ namespace GKUI.Dialogs
 		private readonly GKNotesSheet fNotesList;
         private readonly GKMediaSheet fMediaList;
 
-        private TGEDCOMGroupRecord fGroup;
+        private GEDCOMGroupRecord fGroup;
 
-		public TGEDCOMGroupRecord Group
+		public GEDCOMGroupRecord Group
 		{
 			get { return this.fGroup; }
 			set { this.SetGroup(value); }
@@ -40,7 +41,7 @@ namespace GKUI.Dialogs
 			this.fBase.ChangeRecord(this.fGroup);
 		}
 
-		private void SetGroup(TGEDCOMGroupRecord value)
+		private void SetGroup(GEDCOMGroupRecord value)
 		{
 			this.fGroup = value;
 			try
@@ -59,7 +60,7 @@ namespace GKUI.Dialogs
 
 		private void ListModify(object sender, ModifyEventArgs eArgs)
 		{
-            TGEDCOMIndividualRecord member = eArgs.ItemData as TGEDCOMIndividualRecord;
+            GEDCOMIndividualRecord member = eArgs.ItemData as GEDCOMIndividualRecord;
 
             if (sender == this.fMembersList && eArgs.Action == RecordAction.raJump && member != null)
             {

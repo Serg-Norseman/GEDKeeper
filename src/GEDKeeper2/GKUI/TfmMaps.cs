@@ -1,24 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
-using ExtUtils;
-using GedCom551;
+using GKCommon;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 using GKUI.Controls;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKUI
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed partial class TfmMaps : Form, ILocalization
 	{
 		private class TPlaceRef
 		{
 			public DateTime Date;
-			public TGEDCOMCustomEvent Event;
+			public GEDCOMCustomEvent Event;
 		}
 
 		private class MapPlace : IDisposable
@@ -50,11 +51,11 @@ namespace GKUI
 		private readonly GKMapBrowser fMapBrowser;
 		private readonly ExtList<GKMapBrowser.GMapPoint> fMapPoints;
 		private readonly ExtList<MapPlace> fPlaces;
-		private readonly ExtList<TGEDCOMRecord> fSelectedPersons;
+		private readonly List<GEDCOMRecord> fSelectedPersons;
 		private readonly IBase fBase;
-		private readonly TGEDCOMTree fTree;
+		private readonly GEDCOMTree fTree;
 
-		private bool IsSelected(TGEDCOMRecord iRec)
+		private bool IsSelected(GEDCOMRecord iRec)
 		{
 			bool res = (this.fSelectedPersons == null || (this.fSelectedPersons != null && this.fSelectedPersons.IndexOf(iRec) >= 0));
 			return res;
@@ -74,17 +75,17 @@ namespace GKUI
 
 				int num = this.fTree.RecordsCount;
 				for (int i = 0; i < num; i++) {
-					TGEDCOMRecord rec = this.fTree[i];
-					bool res = rec is TGEDCOMIndividualRecord && this.IsSelected(rec);
+					GEDCOMRecord rec = this.fTree[i];
+					bool res = rec is GEDCOMIndividualRecord && this.IsSelected(rec);
 
 					if (res) {
-						TGEDCOMIndividualRecord ind = rec as TGEDCOMIndividualRecord;
+						GEDCOMIndividualRecord ind = rec as GEDCOMIndividualRecord;
 						int p_cnt = 0;
 
 						int num2 = ind.IndividualEvents.Count;
 						for (int j = 0; j < num2; j++)
 						{
-							TGEDCOMCustomEvent ev = ind.IndividualEvents[j];
+							GEDCOMCustomEvent ev = ind.IndividualEvents[j];
 							if (ev.Detail.Place.StringValue != "") {
 								AddPlace(ev.Detail.Place, ev);
 								p_cnt++;
@@ -160,7 +161,7 @@ namespace GKUI
 
 		private void btnSelectPlaces_Click(object sender, EventArgs e)
 		{
-			TGEDCOMIndividualRecord ind = null;
+			GEDCOMIndividualRecord ind = null;
 
 			bool condBirth = false;
 			bool condDeath = false;
@@ -173,7 +174,7 @@ namespace GKUI
 			} else if (this.radSelected.Checked) {
 				if (this.ComboPersons.SelectedIndex >= 0)
 				{
-					ind = ((this.ComboPersons.Items[this.ComboPersons.SelectedIndex] as GKComboItem).Data as TGEDCOMIndividualRecord);
+					ind = ((this.ComboPersons.Items[this.ComboPersons.SelectedIndex] as GKComboItem).Data as GEDCOMIndividualRecord);
 				}
 			}
 
@@ -190,7 +191,7 @@ namespace GKUI
 					int num2 = place.PlaceRefs.Count;
 					for (int j = 0; j < num2; j++)
 					{
-						TGEDCOMCustomEvent evt = place.PlaceRefs[j].Event;
+						GEDCOMCustomEvent evt = place.PlaceRefs[j].Event;
 
 						if ((ind != null && (evt.Parent == ind)) || (condBirth && evt.Name == "BIRT") || (condDeath && evt.Name == "DEAT") || (condResidence && evt.Name == "RESI"))
 						{
@@ -233,7 +234,7 @@ namespace GKUI
 
 			this.fBase = aBase;
 			this.fTree = aBase.Tree;
-			this.fSelectedPersons = aBase.GetContentList(TGEDCOMRecordType.rtIndividual);
+			this.fSelectedPersons = aBase.GetContentList(GEDCOMRecordType.rtIndividual);
 			this.fMapBrowser = new GKMapBrowser();
 			this.fMapBrowser.Dock = DockStyle.Fill;
 			this.fMapBrowser.InitMap();
@@ -271,36 +272,36 @@ namespace GKUI
 			return null;
 		}
 
-		private void AddPlace(TGEDCOMPlace aPlace, TGEDCOMCustomEvent aRef)
+		private void AddPlace(GEDCOMPlace aPlace, GEDCOMCustomEvent aRef)
 		{
-			TGEDCOMLocationRecord locRec = aPlace.Location.Value as TGEDCOMLocationRecord;
+			GEDCOMLocationRecord locRec = aPlace.Location.Value as GEDCOMLocationRecord;
 
-            string place_name = (locRec != null) ? locRec.LocationName : aPlace.StringValue;
+            string placeName = (locRec != null) ? locRec.LocationName : aPlace.StringValue;
 
-			TreeNode node = this.FindTreeNode(place_name);
+			TreeNode node = this.FindTreeNode(placeName);
             MapPlace place;
 
 			if (node == null) {
                 place = new MapPlace();
-				place.Name = place_name;
+				place.Name = placeName;
 				this.fPlaces.Add(place);
 
-				node = new GKTreeNode(place_name, place);
+				node = new GKTreeNode(placeName, place);
 				this.fBaseRoot.Nodes.Add(node);
 
 				if (locRec == null) {
-					GKMapBrowser.RequestGeoCoords(place_name, place.Points);
+					GKMapBrowser.RequestGeoCoords(placeName, place.Points);
 
 					int num = place.Points.Count;
 					for (int i = 0; i < num; i++) {
 						if (place.Points[i] is GKMapBrowser.GMapPoint) {
 							GKMapBrowser.GMapPoint pt = place.Points[i] as GKMapBrowser.GMapPoint;
-							string pt_title = pt.Hint + string.Format(" [{0:0.000000}, {1:0.000000}]", pt.Latitude, pt.Longitude);
-							node.Nodes.Add(new GKTreeNode(pt_title, pt));
+							string ptTitle = pt.Hint + string.Format(" [{0:0.000000}, {1:0.000000}]", pt.Latitude, pt.Longitude);
+							node.Nodes.Add(new GKTreeNode(ptTitle, pt));
 						}
 					}
 				} else {
-					GKMapBrowser.GMapPoint pt = new GKMapBrowser.GMapPoint(locRec.Map.Lati, locRec.Map.Long, place_name);
+					GKMapBrowser.GMapPoint pt = new GKMapBrowser.GMapPoint(locRec.Map.Lati, locRec.Map.Long, placeName);
 					place.Points.Add(pt);
 
                     string ptTitle = pt.Hint + string.Format(" [{0:0.000000}, {1:0.000000}]", pt.Latitude, pt.Longitude);
@@ -321,7 +322,7 @@ namespace GKUI
 			GKMapBrowser.GMapPoint pt;
 			int num = this.fMapPoints.Count;
 			for (int i = 0; i < num; i++) {
-				pt = (this.fMapPoints[i] as GKMapBrowser.GMapPoint);
+				pt = this.fMapPoints[i];
 				if (pt.Hint == aPt.Hint) {
 					return;
 				}
@@ -337,8 +338,8 @@ namespace GKUI
 			int num = this.fMapPoints.Count;
 			for (int i = 0; i < num; i++) {
 				for (int j = i + 1; j < num; j++) {
-					GKMapBrowser.GMapPoint pt = this.fMapPoints[i] as GKMapBrowser.GMapPoint;
-					GKMapBrowser.GMapPoint pt2 = this.fMapPoints[j] as GKMapBrowser.GMapPoint;
+					GKMapBrowser.GMapPoint pt = this.fMapPoints[i];
+					GKMapBrowser.GMapPoint pt2 = this.fMapPoints[j];
 
 					if (pt.Date > pt2.Date) {
 						this.fMapPoints.Exchange(i, j);

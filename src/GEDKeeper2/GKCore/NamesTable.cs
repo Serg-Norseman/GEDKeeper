@@ -5,23 +5,23 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-using ExtUtils;
-using GedCom551;
-
-/// <summary>
-/// Localization: dirty
-/// </summary>
+using GKCommon;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 
 namespace GKCore
 {
-	public sealed class NamesTable : BaseObject
+    /// <summary>
+    /// Localization: dirty
+    /// </summary>
+    public sealed class NamesTable : BaseObject
 	{
 		public class NameEntry
 		{
 			public string Name;
 			public string F_Patronymic;
 			public string M_Patronymic;
-			public TGEDCOMSex Sex;
+			public GEDCOMSex Sex;
 		}
 
 		private readonly Hashtable fNames;
@@ -44,31 +44,25 @@ namespace GKCore
 
 		private static bool Comparable(string aName, string aPatronymic)
 		{
-			if (aName == null || aPatronymic == null)
-			{
+		    if (aName == null || aPatronymic == null) {
 				return false;
 			}
-			else
-			{
-				if (aName.Length <= 1 || aPatronymic.Length <= 1)
-				{
-					return false;
-				}
-				else
-				{
-					int cmp = 0;
-					int len = Math.Min(aName.Length, aPatronymic.Length);
-					for (int i = 1; i <= len; i++)
-					{
-						if (aName[i - 1] == aPatronymic[i - 1])	cmp++; else break;
-					}
+		    
+            if (aName.Length <= 1 || aPatronymic.Length <= 1) {
+		        return false;
+		    }
+		    
+            int cmp = 0;
+		    int len = Math.Min(aName.Length, aPatronymic.Length);
+		    for (int i = 1; i <= len; i++)
+		    {
+		        if (aName[i - 1] == aPatronymic[i - 1])	cmp++; else break;
+		    }
 
-					return (int)cmp >= (int)Math.Round((len * 3) / 4.0);
-				}
-			}
+		    return (int)cmp >= (int)Math.Round((len * 3) / 4.0);
 		}
 
-		#endregion
+        #endregion
 
 		#region Load/save functions
 
@@ -136,7 +130,7 @@ namespace GKCore
 			return (this.fNames[aName] as NameEntry);
 		}
 
-		public string GetPatronymicByName(string aName, TGEDCOMSex aSex)
+		public string GetPatronymicByName(string aName, GEDCOMSex aSex)
 		{
 			string result = "";
 
@@ -144,10 +138,10 @@ namespace GKCore
 			if (nm != null)
 			{
 				switch (aSex) {
-					case TGEDCOMSex.svMale:
+					case GEDCOMSex.svMale:
 						result = nm.M_Patronymic;
 						break;
-					case TGEDCOMSex.svFemale:
+					case GEDCOMSex.svFemale:
 						result = nm.F_Patronymic;
 						break;
 				}
@@ -176,13 +170,13 @@ namespace GKCore
 			return result;
 		}
 
-		public TGEDCOMSex GetSexByName(string aName)
+		public GEDCOMSex GetSexByName(string aName)
 		{
 			NameEntry nm = this.FindName(aName);
-			return ((nm == null) ? TGEDCOMSex.svNone : nm.Sex);
+			return ((nm == null) ? GEDCOMSex.svNone : nm.Sex);
 		}
 
-		public void SetName(string aName, string aPatronymic, TGEDCOMSex aSex)
+		public void SetName(string aName, string aPatronymic, GEDCOMSex aSex)
 		{
 			if (aName != "")
 			{
@@ -190,31 +184,31 @@ namespace GKCore
 				if (nm == null) nm = this.AddName(aName);
 
 				switch (aSex) {
-					case TGEDCOMSex.svMale:
+					case GEDCOMSex.svMale:
 						if (string.IsNullOrEmpty(nm.M_Patronymic)) nm.M_Patronymic = aPatronymic;
 						break;
-					case TGEDCOMSex.svFemale:
+					case GEDCOMSex.svFemale:
 						if (string.IsNullOrEmpty(nm.F_Patronymic)) nm.F_Patronymic = aPatronymic;
 						break;
 				}
 			}
 		}
 
-		public void SetNameSex(string aName, TGEDCOMSex aSex)
+		public void SetNameSex(string aName, GEDCOMSex aSex)
 		{
 			if (aName != "")
 			{
 				NameEntry nm = this.FindName(aName);
 				if (nm == null) nm = this.AddName(aName);
 
-				if (nm.Sex == TGEDCOMSex.svNone && aSex >= TGEDCOMSex.svMale && aSex < TGEDCOMSex.svUndetermined)
+				if (nm.Sex == GEDCOMSex.svNone && aSex >= GEDCOMSex.svMale && aSex < GEDCOMSex.svUndetermined)
 				{
 					nm.Sex = aSex;
 				}
 			}
 		}
 		
-		public void ImportNames(TGEDCOMIndividualRecord iRec)
+		public void ImportNames(GEDCOMIndividualRecord iRec)
 		{
 		    if (iRec == null) return;
 
@@ -223,15 +217,15 @@ namespace GKCore
 				string dummy, ch_name, ch_pat;
 				iRec.aux_GetNameParts(out dummy, out ch_name, out ch_pat);
 
-				TGEDCOMSex iSex = iRec.Sex;
+				GEDCOMSex iSex = iRec.Sex;
 				this.SetNameSex(ch_name, iSex);
 
 				if (iRec.ChildToFamilyLinks.Count != 0)
 				{
-					TGEDCOMFamilyRecord family = iRec.ChildToFamilyLinks[0].Family;
+					GEDCOMFamilyRecord family = iRec.ChildToFamilyLinks[0].Family;
 					if (family != null)
 					{
-						TGEDCOMIndividualRecord iFather = family.Husband.Value as TGEDCOMIndividualRecord;
+						GEDCOMIndividualRecord iFather = family.Husband.Value as GEDCOMIndividualRecord;
 						if (iFather != null)
 						{
 							string fat_nam;
@@ -342,11 +336,11 @@ namespace GKCore
 			return result;
 		}
 
-		public static string[] GetSurnames(TGEDCOMIndividualRecord iRec)
+		public static string[] GetSurnames(GEDCOMIndividualRecord iRec)
 		{
 			string fam, nam, pat;
 			iRec.aux_GetNameParts(out fam, out nam, out pat);
-			bool female = (iRec.Sex == TGEDCOMSex.svFemale);
+			bool female = (iRec.Sex == GEDCOMSex.svFemale);
 
 			return GetSurnames(fam, female);
 		}
@@ -356,12 +350,12 @@ namespace GKCore
 			return str.IndexOf(c) >= 0;
 		}
 
-		public static TGEDCOMSex GetSex(string f_name, string f_pat, bool canQuery)
+		public static GEDCOMSex GetSex(string f_name, string f_pat, bool canQuery)
 		{
 			const string fem_endings = "ая";
 			const string male_endings = "вгдйлмнопр";
 
-			TGEDCOMSex result = TGEDCOMSex.svNone;
+			GEDCOMSex result = GEDCOMSex.svNone;
 			if (string.IsNullOrEmpty(f_name)) return result;
 
 			char nc = f_name[f_name.Length - 1];
@@ -371,19 +365,19 @@ namespace GKCore
 					char pc = f_pat[f_pat.Length - 1];
 
 					if (StrContains(fem_endings, pc)) {
-						result = TGEDCOMSex.svFemale;
+						result = GEDCOMSex.svFemale;
 					} else if (StrContains(male_endings, pc)) {
-						result = TGEDCOMSex.svMale;
+						result = GEDCOMSex.svMale;
 					}
 				}
 			} else if (StrContains(male_endings, nc)) {
-				result = TGEDCOMSex.svMale;
+				result = GEDCOMSex.svMale;
 			}
 
-			if (result == TGEDCOMSex.svNone && canQuery) {
+			if (result == GEDCOMSex.svNone && canQuery) {
 				string fn = f_name + " " + f_pat;
 				DialogResult res = GKUtils.ShowQuestion("Не определяется пол человека по имени \"" + fn + "\". Это мужской пол?");
-				result = (res == DialogResult.Yes) ? TGEDCOMSex.svMale : TGEDCOMSex.svFemale;
+				result = (res == DialogResult.Yes) ? GEDCOMSex.svMale : GEDCOMSex.svFemale;
 			}
 
 			return result;

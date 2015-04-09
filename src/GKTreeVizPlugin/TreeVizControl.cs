@@ -7,9 +7,12 @@ using System.Windows.Forms;
 using CsGL.OpenGL;
 using ExtUtils;
 using ExtUtils.ArborEngine;
-using GedCom551;
+using GKCommon;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 
 namespace GKTreeVizPlugin
 {
@@ -39,7 +42,7 @@ namespace GKTreeVizPlugin
 			
 			public readonly int Idx;
 			public TVPerson Parent;
-			public TGEDCOMIndividualRecord IRec;
+			public GEDCOMIndividualRecord IRec;
 			public PointF Pt;
 			public int BirthYear, DeathYear;
 			public float BaseRadius;
@@ -586,12 +589,12 @@ namespace GKTreeVizPlugin
         		fSys.setScreenSize(50, 50);
         		fSys.OnStop += Arbor_OnStop;
 
-        		using (ExtList<TPatriarchObj> patList = new ExtList<TPatriarchObj>(false)) {
+        		using (ExtList<PatriarchObj> patList = new ExtList<PatriarchObj>(false)) {
         			aBase.Context.GetPatriarchsLinks(patList, minGens, false, loneSuppress);
 
         			int num = patList.Count - 1;
         			for (int i = 0; i <= num; i++) {
-        				TPatriarchObj p_obj = patList[i] as TPatriarchObj;
+        				PatriarchObj p_obj = patList[i] as PatriarchObj;
 
         				if ((!loneSuppress) || (loneSuppress && p_obj.HasLinks)) {
         					ArborNode node = fSys.addNode(p_obj.IRec.XRef);
@@ -600,10 +603,10 @@ namespace GKTreeVizPlugin
         			}
 
         			for (int i = 0; i <= num; i++) {
-        				TPatriarchObj pat1 = patList[i] as TPatriarchObj;
+        				PatriarchObj pat1 = patList[i] as PatriarchObj;
 
-        				for (int k = 0; k < pat1.ILinks.Count; k++) {
-        					TPatriarchObj pat2 = pat1.ILinks[k];
+        				for (int k = 0; k < pat1.Links.Count; k++) {
+        					PatriarchObj pat2 = pat1.Links[k];
 
         					fSys.addEdge(pat1.IRec.XRef, pat2.IRec.XRef, 1);
         				}
@@ -631,8 +634,8 @@ namespace GKTreeVizPlugin
 				// загрузить из ArborSystem точки и сигнатуры патриархов
 				foreach (ArborNode node in fSys.Nodes)
 				{
-					TGEDCOMIndividualRecord iRec = (TGEDCOMIndividualRecord)fBase.Tree.XRefIndex_Find(node.Sign);
-					int descGens = (node.Data as TPatriarchObj).IDescGenerations;
+					GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)fBase.Tree.XRefIndex_Find(node.Sign);
+					int descGens = (node.Data as PatriarchObj).DescGenerations;
 
 					TVPerson patr = this.PreparePerson(null, iRec);
 					patr.Pt = new PointF((float)node.Pt.x * MAGIC_SCALE, (float)node.Pt.y * MAGIC_SCALE);
@@ -689,7 +692,7 @@ namespace GKTreeVizPlugin
 				int gens = (person.DescGenerations <= 0) ? 1 : person.DescGenerations;
 				person.GenSlice = person.BaseRadius / gens; // ?
 
-				TGEDCOMIndividualRecord iRec = person.IRec;
+				GEDCOMIndividualRecord iRec = person.IRec;
 
 				if (iRec.SpouseToFamilyLinks.Count > 0)
 				{
@@ -698,10 +701,10 @@ namespace GKTreeVizPlugin
 					int num2 = iRec.SpouseToFamilyLinks.Count - 1;
 					for (int k = 0; k <= num2; k++)
 					{
-						TGEDCOMFamilyRecord famRec = iRec.SpouseToFamilyLinks[k].Family;
+						GEDCOMFamilyRecord famRec = iRec.SpouseToFamilyLinks[k].Family;
 
 						// обработать супруга текущей персоны
-						TGEDCOMIndividualRecord spouse = famRec.aux_GetSpouse(iRec);
+						GEDCOMIndividualRecord spouse = famRec.aux_GetSpouse(iRec);
 						if (spouse != null) {
 							TVPerson sps = this.PreparePerson(null, spouse);
 							sps.Pt = pts[k];
@@ -712,7 +715,7 @@ namespace GKTreeVizPlugin
 						int num3 = famRec.Childrens.Count - 1;
 						for (int m = 0; m <= num3; m++)
 						{
-							TGEDCOMIndividualRecord child = famRec.Childrens[m].Value as TGEDCOMIndividualRecord;
+							GEDCOMIndividualRecord child = famRec.Childrens[m].Value as GEDCOMIndividualRecord;
 
 							// исключить бездетные ветви
 							if (EXCLUDE_CHILDLESS && (this.fBase.Context.IsChildless(child) || child.aux_GetChildsCount() < 1)) continue;
@@ -813,7 +816,7 @@ namespace GKTreeVizPlugin
  			return result;
 		}
 
-		/*private TVPerson TryPreparePerson(TVPerson parent, TGEDCOMIndividualRecord iRec)
+		/*private TVPerson TryPreparePerson(TVPerson parent, GEDCOMIndividualRecord iRec)
 		{
 			TVPerson result;
 			
@@ -832,7 +835,7 @@ namespace GKTreeVizPlugin
 			}
 		}*/
 		
-		private TVPerson PreparePerson(TVPerson parent, TGEDCOMIndividualRecord iRec)
+		private TVPerson PreparePerson(TVPerson parent, GEDCOMIndividualRecord iRec)
 		{
 			TVPerson result;
 			
@@ -1016,7 +1019,7 @@ namespace GKTreeVizPlugin
 				zBirth = this.fYearSize * (person.BirthYear - this.fMinYear);
 				zDeath = this.fYearSize * (endYear - this.fMinYear);
 
-				TGEDCOMSex sex = person.IRec.Sex;
+				GEDCOMSex sex = person.IRec.Sex;
 				PointF ppt = person.Pt;
 
 				GL.glPushName(OBJ_NODE + (uint)person.Idx);
@@ -1061,14 +1064,14 @@ namespace GKTreeVizPlugin
 			}
 		}
 
-		private static void SetLineColor(TGEDCOMSex sex)
+		private static void SetLineColor(GEDCOMSex sex)
 		{
 			switch (sex) {
-				case TGEDCOMSex.svMale:
+				case GEDCOMSex.svMale:
 					GL.glColor3f(0.1F, 0.3F, 0.9F);
 					break;
 
-				case TGEDCOMSex.svFemale:
+				case GEDCOMSex.svFemale:
 					GL.glColor3f(0.9F, 0.3F, 0.1F);
 					break;
 			}

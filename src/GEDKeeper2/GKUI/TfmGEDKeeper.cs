@@ -6,22 +6,23 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 
-using ExtUtils;
-using GedCom551;
+using GKCommon;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Options;
+using GKCore.Types;
 using GKUI.Charts;
 using GKUI.Controls;
 using GKUI.Dialogs;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKUI
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed partial class TfmGEDKeeper : Form, ILocalization, IHost
 	{
 		private NamesTable fNamesTable;
@@ -67,16 +68,16 @@ namespace GKUI
             //LangMan.SaveDefaultLanguage();
 		}
 
-		protected override void Dispose(bool Disposing)
+		protected override void Dispose(bool disposing)
 		{
-			if (Disposing)
+			if (disposing)
 			{
                 fNamesTable.Dispose();
                 fOptions.Dispose();
 
                 if (components != null) components.Dispose();
             }
-			base.Dispose(Disposing);
+			base.Dispose(disposing);
 		}
 
 		#endregion
@@ -378,13 +379,13 @@ namespace GKUI
 			int idx = this.fOptions.MRUFiles_IndexOf(fileName);
 			if (idx >= 0)
 			{
-				GlobalOptions.TMRUFile tmp_mf = this.fOptions.MRUFiles[0];
+				MRUFile tmp_mf = this.fOptions.MRUFiles[0];
 				this.fOptions.MRUFiles[0] = this.fOptions.MRUFiles[idx];
 				this.fOptions.MRUFiles[idx] = tmp_mf;
 			}
 			else
 			{
-				GlobalOptions.TMRUFile new_mf = new GlobalOptions.TMRUFile();
+				MRUFile new_mf = new MRUFile();
 				new_mf.FileName = fileName;
 				this.fOptions.MRUFiles.Insert(0, new_mf);
 			}
@@ -397,7 +398,7 @@ namespace GKUI
 			int idx = this.fOptions.MRUFiles_IndexOf(fileName);
 			if (idx >= 0)
 			{
-				GlobalOptions.TMRUFile mf = this.fOptions.MRUFiles[idx];
+				MRUFile mf = this.fOptions.MRUFiles[idx];
 				
 				mf.WinRect = SysUtils.GetFormRect(frm);
 				mf.WinState = frm.WindowState;
@@ -409,7 +410,7 @@ namespace GKUI
 			int idx = this.fOptions.MRUFiles_IndexOf(fileName);
 			if (idx >= 0)
 			{
-				GlobalOptions.TMRUFile mf = this.fOptions.MRUFiles[idx];
+				MRUFile mf = this.fOptions.MRUFiles[idx];
 				SysUtils.SetFormRect(aBase as Form, mf.WinRect, mf.WinState);
 			}
 		}
@@ -427,42 +428,42 @@ namespace GKUI
 
 				IWorkWindow workWin = ((curChart != null) ? (curChart as IWorkWindow) : curBase);
 				
-				TGEDCOMRecordType rt = (curBase == null) ? TGEDCOMRecordType.rtNone : curBase.GetSelectedRecordType();
-				bool base_en = (rt != TGEDCOMRecordType.rtNone);
+				GEDCOMRecordType rt = (curBase == null) ? GEDCOMRecordType.rtNone : curBase.GetSelectedRecordType();
+				bool baseEn = (rt != GEDCOMRecordType.rtNone);
 
-				this.miFileSave.Enabled = base_en || (curChart != null);
+				this.miFileSave.Enabled = baseEn || (curChart != null);
 				this.tbFileSave.Enabled = this.miFileSave.Enabled;
-				this.miRecordAdd.Enabled = base_en;
+				this.miRecordAdd.Enabled = baseEn;
 				this.tbRecordAdd.Enabled = this.miRecordAdd.Enabled;
-				this.miRecordEdit.Enabled = base_en;
+				this.miRecordEdit.Enabled = baseEn;
 				this.tbRecordEdit.Enabled = this.miRecordEdit.Enabled;
-				this.miRecordDelete.Enabled = base_en;
+				this.miRecordDelete.Enabled = baseEn;
 				this.tbRecordDelete.Enabled = this.miRecordDelete.Enabled;
-				this.miStats.Enabled = base_en;
+				this.miStats.Enabled = baseEn;
 				this.tbStats.Enabled = this.miStats.Enabled;
-				this.miFilter.Enabled = base_en;
+				this.miFilter.Enabled = baseEn;
 				this.tbFilter.Enabled = this.miFilter.Enabled;
 
-				this.miTreeTools.Enabled = base_en;
-				this.miExportToFamilyBook.Enabled = base_en;
-				this.miExportToExcelFile.Enabled = base_en;
-				this.miFileClose.Enabled = base_en;
-				this.miFileProperties.Enabled = base_en;
-				this.miOrganizer.Enabled = base_en;
-				this.miScripts.Enabled = base_en;
+				this.miTreeTools.Enabled = baseEn;
+				this.miExportToFamilyBook.Enabled = baseEn;
+				this.miExportToExcelFile.Enabled = baseEn;
+				this.miFileClose.Enabled = baseEn;
+				this.miFileProperties.Enabled = baseEn;
+				this.miOrganizer.Enabled = baseEn;
+				this.miScripts.Enabled = baseEn;
 				
-				bool indiv_en = base_en && rt == TGEDCOMRecordType.rtIndividual;
+				bool indivEn = baseEn && rt == GEDCOMRecordType.rtIndividual;
 				
-				this.miTreeAncestors.Enabled = indiv_en;
+				this.miTreeAncestors.Enabled = indivEn;
 				this.tbTreeAncestors.Enabled = this.miTreeAncestors.Enabled;
-				this.miTreeDescendants.Enabled = indiv_en;
+				this.miTreeDescendants.Enabled = indivEn;
 				this.tbTreeDescendants.Enabled = this.miTreeDescendants.Enabled;
-				this.miTreeBoth.Enabled = indiv_en;
+				this.miTreeBoth.Enabled = indivEn;
 				this.tbTreeBoth.Enabled = this.miTreeBoth.Enabled;
-				this.miPedigree.Enabled = indiv_en;
+				this.miPedigree.Enabled = indivEn;
 				this.tbPedigree.Enabled = this.miPedigree.Enabled;
-				this.miPedigree_dAboville.Enabled = indiv_en;
-				this.miPedigree_Konovalov.Enabled = indiv_en;
+				this.miPedigree_dAboville.Enabled = indivEn;
+				this.miPedigree_Konovalov.Enabled = indivEn;
 
 				this.tbPrev.Enabled = (curBase != null && curBase.NavCanBackward());
 				this.tbNext.Enabled = (curBase != null && curBase.NavCanForward());
@@ -512,7 +513,7 @@ namespace GKUI
 					Form child = base.MdiChildren[i];
 
 					if (child is TfmBase) {
-						TGEDCOMTree tree = (child as TfmBase).Tree;
+						GEDCOMTree tree = (child as TfmBase).Tree;
 						
 						string rfn = Path.ChangeExtension(tree.FileName, ".restore");
 						tree.SaveToFile(rfn, this.fOptions.DefCharacterSet);
@@ -544,7 +545,7 @@ namespace GKUI
 			using (ExcelExporter exExp = new ExcelExporter(curBase))
 			{
 				exExp.Options = this.fOptions;
-				exExp.SelectedRecords = curBase.GetContentList(TGEDCOMRecordType.rtIndividual);
+				exExp.SelectedRecords = curBase.GetContentList(GEDCOMRecordType.rtIndividual);
 				exExp.AppMode = false;
 				exExp.Generate(true);
 			}
@@ -706,10 +707,10 @@ namespace GKUI
 			IBase curBase = this.GetCurrentFile();
 		    if (curBase == null) return;
 
-			if (TfmChart.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TTreeChartBox.TChartKind.ckAncestors))
+			if (TfmChart.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartBox.TChartKind.ckAncestors))
 			{
 				TfmChart fmChart = new TfmChart(curBase, curBase.GetSelectedPerson());
-				fmChart.ChartKind = TTreeChartBox.TChartKind.ckAncestors;
+				fmChart.ChartKind = TreeChartBox.TChartKind.ckAncestors;
 				fmChart.GenChart(true);
 			}
 		}
@@ -719,10 +720,10 @@ namespace GKUI
 			IBase curBase = this.GetCurrentFile();
 		    if (curBase == null) return;
 
-			if (TfmChart.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TTreeChartBox.TChartKind.ckDescendants))
+			if (TfmChart.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartBox.TChartKind.ckDescendants))
 			{
 				TfmChart fmChart = new TfmChart(curBase, curBase.GetSelectedPerson());
-				fmChart.ChartKind = TTreeChartBox.TChartKind.ckDescendants;
+				fmChart.ChartKind = TreeChartBox.TChartKind.ckDescendants;
 				fmChart.GenChart(true);
 			}
 		}
@@ -737,7 +738,7 @@ namespace GKUI
 				p.Ancestor = curBase.GetSelectedPerson();
 				p.Options = this.fOptions;
 				p.ShieldState = curBase.ShieldState;
-				p.Kind = PedigreeExporter.TPedigreeKind.pk_dAboville;
+				p.Kind = PedigreeExporter.PedigreeKind.pk_dAboville;
 				p.Generate(true);
 			}
 		}
@@ -752,7 +753,7 @@ namespace GKUI
 				p.Ancestor = curBase.GetSelectedPerson();
 				p.Options = this.fOptions;
 				p.ShieldState = curBase.ShieldState;
-				p.Kind = PedigreeExporter.TPedigreeKind.pk_Konovalov;
+				p.Kind = PedigreeExporter.PedigreeKind.pk_Konovalov;
 				p.Generate(true);
 			}
 		}
@@ -786,10 +787,10 @@ namespace GKUI
 			IBase curBase = this.GetCurrentFile();
 		    if (curBase == null) return;
 
-			if (TfmChart.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TTreeChartBox.TChartKind.ckBoth))
+			if (TfmChart.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartBox.TChartKind.ckBoth))
 			{
 				TfmChart fmChart = new TfmChart(curBase, curBase.GetSelectedPerson());
-				fmChart.ChartKind = TTreeChartBox.TChartKind.ckBoth;
+				fmChart.ChartKind = TreeChartBox.TChartKind.ckBoth;
 				fmChart.GenChart(true);
 			}
 		}
@@ -1023,42 +1024,34 @@ namespace GKUI
             Type pluginType = typeof(IPlugin);
             string[] pluginFiles = Directory.GetFiles(path, "*.dll");
 
-            for (int i = 0; i < pluginFiles.Length; i++)
+            foreach (string pfn in pluginFiles)
             {
-            	string pfn = pluginFiles[i];
-
                 try
                 {
                     Assembly asm;
 
                     try {
-                    	asm = Assembly.LoadFile(pfn);
+                        asm = Assembly.LoadFile(pfn);
                     } catch {
-                    	asm = null; // block exceptions for bad or non-dotnet assemblies
+                        asm = null; // block exceptions for bad or non-dotnet assemblies
                     }
 
-                    if (asm != null)
-                    {
-						Type[] types = asm.GetTypes();
+                    if (asm == null) continue;
 
-						foreach (Type type in types)
-						{
-							if (type.IsInterface || type.IsAbstract) {
-								continue;
-							} else {
-								if (type.GetInterface(pluginType.FullName) != null) {
-									IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
-									plugin.Startup(this);
-									
-									this.fPlugins.Add(plugin);
-								}
-							}
-						}
+                    Type[] types = asm.GetTypes();
+                    foreach (Type type in types)
+                    {
+                        if (type.IsInterface || type.IsAbstract) continue;
+                        if (type.GetInterface(pluginType.FullName) == null) continue;
+
+                        IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
+                        plugin.Startup(this);
+                        this.fPlugins.Add(plugin);
                     }
                 }
                 catch (Exception ex)
                 {
-                	SysUtils.LogWrite("TfmGEDKeeper.LoadPlugins(" +pfn+ "): " + ex.Message);
+                    SysUtils.LogWrite("TfmGEDKeeper.LoadPlugins(" +pfn+ "): " + ex.Message);
                 }
             }
         }

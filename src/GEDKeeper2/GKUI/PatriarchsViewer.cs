@@ -1,12 +1,12 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
 using ExtUtils.ArborEngine;
-using ExtUtils.Graph;
-using GedCom551;
+using GKCommon.GEDCOM;
+using GKCommon.Graph;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 
 namespace GKUI
 {
@@ -21,7 +21,7 @@ namespace GKUI
 			InitializeComponent();
 
 			this.fBase = aBase;
-            this.fTip = new System.Windows.Forms.ToolTip();
+            this.fTip = new ToolTip();
             this.fTipShow = false;
 
         	TGraph graph = this.fBase.Context.GetPatriarchsGraph(minGens, false);
@@ -42,10 +42,10 @@ namespace GKUI
 			} else {
 				if (!fTipShow) {
 					string xref = resNode.Sign;
-					//TGEDCOMIndividualRecord iRec = this.fBase.Tree.XRefIndex_Find(xref) as TGEDCOMIndividualRecord;
+					//GEDCOMIndividualRecord iRec = this.fBase.Tree.XRefIndex_Find(xref) as GEDCOMIndividualRecord;
 					//string txt = iRec.aux_GetNameStr(true, false) + " [" + xref + "]";
 
-					TGEDCOMFamilyRecord famRec = this.fBase.Tree.XRefIndex_Find(xref) as TGEDCOMFamilyRecord;
+					GEDCOMFamilyRecord famRec = this.fBase.Tree.XRefIndex_Find(xref) as GEDCOMFamilyRecord;
 					string txt = GKUtils.aux_GetFamilyStr(famRec) + " [" + xref + "]";
 
 					fTip.Show(txt, arborViewer1, new Point(e.X + 24, e.Y));
@@ -60,11 +60,7 @@ namespace GKUI
 				ArborNode arbNode = sys.addNode(vtx.Sign);
 				PatriarchsGraphNode pgNode = (PatriarchsGraphNode)vtx.Value;
 
-				if (pgNode.Type == NodeType.ntIntersection) {
-					arbNode.Color = Color.BlueViolet;
-				} else {
-					arbNode.Color = Color.Navy;
-				}
+				arbNode.Color = (pgNode.Type == NodeType.ntIntersection) ? Color.BlueViolet : Color.Navy;
 			}
 
 			foreach (IEdge edge in graph.Edges) {

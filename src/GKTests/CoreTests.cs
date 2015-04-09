@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
-
-using GedCom551;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
+using GKCore.Types;
 using NUnit.Framework;
 
 namespace GKTests
@@ -10,15 +11,15 @@ namespace GKTests
 	[TestFixture]
 	public class CoreTests
 	{
-		private void PersonalName_Tests(TGEDCOMIndividualRecord iRec)
+		private void PersonalName_Tests(GEDCOMIndividualRecord iRec)
 		{
-			TGEDCOMPersonalName pName = iRec.PersonalNames[0];
+			GEDCOMPersonalName pName = iRec.PersonalNames[0];
 			string first, surname;
 			pName.GetNameParts(out first, out surname);
 			Assert.AreEqual("surname", surname);
 			Assert.AreEqual("name patr", first);
 			
-//			TGEDCOMPersonalNamePieces pieces = pName.Pieces;
+//			GEDCOMPersonalNamePieces pieces = pName.Pieces;
 //			Assert.AreEqual(pieces.Surname, "surname");
 //			Assert.AreEqual(pieces.Name, "name");
 //			Assert.AreEqual(pieces.PatronymicName, "patr");
@@ -33,7 +34,7 @@ namespace GKTests
 		[Test]
 		public void Utils_Tests()
 		{
-			TGEDCOMTree tree = new TGEDCOMTree();
+			GEDCOMTree tree = new GEDCOMTree();
 			Assert.IsNotNull(tree);
 
 			BaseContext context = new BaseContext(tree, null);
@@ -41,7 +42,7 @@ namespace GKTests
 			// createPerson test
 			/*try
 			{
-				context.CreatePersonEx(null, "name", "patr", "surname", TGEDCOMSex.svMale, true);
+				context.CreatePersonEx(null, "name", "patr", "surname", GEDCOMSex.svMale, true);
 				Assert.Fail("CreatePersonEx(null) must raise exception");
 			}
 			catch (ArgumentNullException)
@@ -54,18 +55,18 @@ namespace GKTests
 			}*/
 			
 			// createPerson test
-			TGEDCOMIndividualRecord iRec = context.CreatePersonEx("name", "patr", "surname", TGEDCOMSex.svMale, true);
+			GEDCOMIndividualRecord iRec = context.CreatePersonEx("name", "patr", "surname", GEDCOMSex.svMale, true);
 			Assert.IsNotNull(iRec);
-			Assert.AreEqual(TGEDCOMSex.svMale, iRec.Sex);
+			Assert.AreEqual(GEDCOMSex.svMale, iRec.Sex);
 
 			this.PersonalName_Tests(iRec);
 						
 			//
 			
-			TGEDCOMCustomEvent evt = context.CreateEventEx(null, "BIRT", "28 DEC 1990", "Ivanovo");
+			GEDCOMCustomEvent evt = context.CreateEventEx(null, "BIRT", "28 DEC 1990", "Ivanovo");
 			Assert.IsNull(evt);
 			
-			TGEDCOMNoteRecord note = tree.aux_CreateNote();
+			GEDCOMNoteRecord note = tree.aux_CreateNote();
 			evt = context.CreateEventEx(note, "BIRT", "28 DEC 1990", "Ivanovo");
 			Assert.IsNull(evt);
 			
@@ -82,7 +83,7 @@ namespace GKTests
 			Assert.IsNotNull(evt);
 			GEDCOMCustomEventTest(evt, "17.01.2013");
 			
-			TGEDCOMIndividualRecord father, mother;
+			GEDCOMIndividualRecord father, mother;
 			iRec.aux_GetParents(out father, out mother);
 			Assert.IsNull(father);
 			Assert.IsNull(mother);
@@ -90,7 +91,7 @@ namespace GKTests
 			string dst = GKUtils.CompactDate("__.__.2013");
 			Assert.AreEqual("2013", dst);
 			
-			TGEDCOMFamilyRecord fRec = tree.aux_CreateFamily();
+			GEDCOMFamilyRecord fRec = tree.aux_CreateFamily();
 			Assert.IsNotNull(fRec);
 			
 			evt = context.CreateEventEx(fRec, "MARR", "28 DEC 2013", "Ivanovo");
@@ -98,11 +99,11 @@ namespace GKTests
 			GEDCOMCustomEventTest(evt, "28.12.2013");
 			
 			// format tests
-			TGEDCOMFormat fmt = GKUtils.GetGEDCOMFormat(null);
-			Assert.AreEqual(TGEDCOMFormat.gf_Unknown, fmt);
+			GEDCOMFormat fmt = GKUtils.GetGEDCOMFormat(null);
+			Assert.AreEqual(GEDCOMFormat.gf_Unknown, fmt);
 
 			fmt = GKUtils.GetGEDCOMFormat(tree);
-			Assert.AreEqual(TGEDCOMFormat.gf_Unknown, fmt);
+			Assert.AreEqual(GEDCOMFormat.gf_Unknown, fmt);
 			
 			// other
 			string st = "иван";
@@ -113,13 +114,13 @@ namespace GKTests
 			Assert.AreEqual("", st);
 			
 			// sex tests
-			TGEDCOMSex sex;
+			GEDCOMSex sex;
 			sex = GKUtils.GetSexBySign('F');
-			Assert.AreEqual(TGEDCOMSex.svFemale, sex);
+			Assert.AreEqual(GEDCOMSex.svFemale, sex);
 			sex = GKUtils.GetSexBySign('M');
-			Assert.AreEqual(TGEDCOMSex.svMale, sex);
+			Assert.AreEqual(GEDCOMSex.svMale, sex);
 			sex = GKUtils.GetSexBySign('U');
-			Assert.AreEqual(TGEDCOMSex.svUndetermined, sex);
+			Assert.AreEqual(GEDCOMSex.svUndetermined, sex);
 			
 			// path tests
 			st = GKUtils.GetTempDir();
@@ -136,25 +137,25 @@ namespace GKTests
 			Assert.IsFalse(res);
 
 			// access tests
-			Assert.IsTrue(GKUtils.IsRecordAccess(TGEDCOMRestriction.rnNone, ShieldState.ssNone));
-			Assert.IsTrue(GKUtils.IsRecordAccess(TGEDCOMRestriction.rnConfidential, ShieldState.ssNone));
-			Assert.IsTrue(GKUtils.IsRecordAccess(TGEDCOMRestriction.rnPrivacy, ShieldState.ssNone));
+			Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnNone, ShieldState.ssNone));
+			Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnConfidential, ShieldState.ssNone));
+			Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnPrivacy, ShieldState.ssNone));
 
-			Assert.IsTrue(GKUtils.IsRecordAccess(TGEDCOMRestriction.rnNone, ShieldState.ssMiddle));
-			Assert.IsTrue(GKUtils.IsRecordAccess(TGEDCOMRestriction.rnConfidential, ShieldState.ssMiddle));
-			Assert.IsFalse(GKUtils.IsRecordAccess(TGEDCOMRestriction.rnPrivacy, ShieldState.ssMiddle));
+			Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnNone, ShieldState.ssMiddle));
+			Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnConfidential, ShieldState.ssMiddle));
+			Assert.IsFalse(GKUtils.IsRecordAccess(GEDCOMRestriction.rnPrivacy, ShieldState.ssMiddle));
 
-			Assert.IsTrue(GKUtils.IsRecordAccess(TGEDCOMRestriction.rnNone, ShieldState.ssMaximum));
-			Assert.IsFalse(GKUtils.IsRecordAccess(TGEDCOMRestriction.rnConfidential, ShieldState.ssMaximum));
-			Assert.IsFalse(GKUtils.IsRecordAccess(TGEDCOMRestriction.rnPrivacy, ShieldState.ssMaximum));
+			Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnNone, ShieldState.ssMaximum));
+			Assert.IsFalse(GKUtils.IsRecordAccess(GEDCOMRestriction.rnConfidential, ShieldState.ssMaximum));
+			Assert.IsFalse(GKUtils.IsRecordAccess(GEDCOMRestriction.rnPrivacy, ShieldState.ssMaximum));
 		}
 
-		private void GEDCOMCustomEventTest(TGEDCOMCustomEvent evt, string dateTest)
+		private void GEDCOMCustomEventTest(GEDCOMCustomEvent evt, string dateTest)
 		{
 			GEDCOMEventDetailTest(evt.Detail, dateTest);
 		}
 		
-		private void GEDCOMPlaceTest(TGEDCOMPlace place)
+		private void GEDCOMPlaceTest(GEDCOMPlace place)
 		{
 			place.Form = "abrakadabra";
 			Assert.AreEqual("abrakadabra", place.Form);
@@ -162,7 +163,7 @@ namespace GKTests
 			GedcomTests.GEDCOMMapTest(place.Map);			
 		}
 
-		private void GEDCOMEventDetailTest(TGEDCOMEventDetail detail, string dateTest)
+		private void GEDCOMEventDetailTest(GEDCOMEventDetail detail, string dateTest)
 		{
 			Assert.AreEqual(DateTime.Parse(dateTest), detail.Date.Date);
 			Assert.AreEqual("Ivanovo", detail.Place.StringValue);
@@ -181,8 +182,8 @@ namespace GKTests
 			detail.ReligiousAffilation = "test aff";
 			Assert.AreEqual("test aff", detail.ReligiousAffilation);
 			
-			detail.Restriction = TGEDCOMRestriction.rnLocked;
-			Assert.AreEqual(TGEDCOMRestriction.rnLocked, detail.Restriction);
+			detail.Restriction = GEDCOMRestriction.rnLocked;
+			Assert.AreEqual(GEDCOMRestriction.rnLocked, detail.Restriction);
 			
 			GedcomTests.GEDCOMAddressTest(detail.Address, false);
 		}
@@ -247,11 +248,11 @@ namespace GKTests
 
 			///
 
-			TGEDCOMSex sx = NamesTable.GetSex("Мария", "Петровна", false);
-			Assert.AreEqual(TGEDCOMSex.svFemale, sx);
+			GEDCOMSex sx = NamesTable.GetSex("Мария", "Петровна", false);
+			Assert.AreEqual(GEDCOMSex.svFemale, sx);
 
 			sx = NamesTable.GetSex("Иван", "Петрович", false);
-			Assert.AreEqual(TGEDCOMSex.svMale, sx);
+			Assert.AreEqual(GEDCOMSex.svMale, sx);
 		}
 	}
 }

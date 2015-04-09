@@ -2,9 +2,11 @@
 using System.Windows.Forms;
 
 using ExtUtils;
-using GedCom551;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 
 /// <summary>
 /// 
@@ -15,10 +17,10 @@ namespace GKUI.Dialogs
 	public partial class TfmAssociationEdit : Form, IBaseEditor
 	{
 		private readonly IBase fBase;
-		private TGEDCOMAssociation fAssociation;
-		private TGEDCOMIndividualRecord fTempInd;
+		private GEDCOMAssociation fAssociation;
+		private GEDCOMIndividualRecord fTempInd;
 
-		public TGEDCOMAssociation Association
+		public GEDCOMAssociation Association
 		{
 			get { return this.fAssociation; }
 			set { this.SetAssociation(value); }
@@ -29,7 +31,7 @@ namespace GKUI.Dialogs
 			get { return this.fBase; }
 		}
 
-		private void SetAssociation(TGEDCOMAssociation value)
+		private void SetAssociation(GEDCOMAssociation value)
 		{
 			this.fAssociation = value;
 			this.EditRelation.Text = this.fAssociation.Relation;
@@ -60,7 +62,7 @@ namespace GKUI.Dialogs
 
 		private void btnPersonAdd_Click(object sender, EventArgs e)
 		{
-			this.fTempInd = this.fBase.SelectPerson(null, TargetMode.tmNone, TGEDCOMSex.svNone);
+			this.fTempInd = this.fBase.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
 			this.EditPerson.Text = ((this.fTempInd == null) ? "" : this.fTempInd.aux_GetNameStr(true, false));
 		}
 

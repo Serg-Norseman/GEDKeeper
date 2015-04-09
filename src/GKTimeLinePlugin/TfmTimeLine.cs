@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-
-using GedCom551;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 
 /// <summary>
 /// 
@@ -47,10 +48,10 @@ namespace GKTimeLinePlugin
         {
             if (this.fBase != aBase && this.fBase != null)
             {
-            	IListManager listMan = this.fBase.GetRecordsListManByType(TGEDCOMRecordType.rtIndividual);
+            	IListManager listMan = this.fBase.GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
             	
                 listMan.ExternalFilter = null;
-                (listMan.Filter as IIndividualListFilter).LifeMode = TLifeMode.lmAll;
+                (listMan.Filter as IIndividualListFilter).FilterLifeMode = FilterLifeMode.lmAll;
                 
                 this.fBase.ApplyFilter();
             }
@@ -63,9 +64,9 @@ namespace GKTimeLinePlugin
 
             if (this.fBase != null)
             {
-            	IListManager listMan = this.fBase.GetRecordsListManByType(TGEDCOMRecordType.rtIndividual);
+            	IListManager listMan = this.fBase.GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
 
-                (listMan.Filter as IIndividualListFilter).LifeMode = TLifeMode.lmTimeLocked;
+                (listMan.Filter as IIndividualListFilter).FilterLifeMode = FilterLifeMode.lmTimeLocked;
                 listMan.ExternalFilter = this.FilterHandler;
 
                 this.CollectData();
@@ -78,21 +79,21 @@ namespace GKTimeLinePlugin
 
         private void CollectData()
         {
-            TGEDCOMTree tree = this.fBase.Tree;
+            GEDCOMTree tree = this.fBase.Tree;
 
             int num = tree.RecordsCount - 1;
             for (int i = 0; i <= num; i++)
             {
-                TGEDCOMRecord rec = tree[i];
+                GEDCOMRecord rec = tree[i];
 
-                if (rec.RecordType == TGEDCOMRecordType.rtIndividual)
+                if (rec.RecordType == GEDCOMRecordType.rtIndividual)
                 {
-                    TGEDCOMIndividualRecord iRec = rec as TGEDCOMIndividualRecord;
+                    GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
 
                     int num2 = iRec.IndividualEvents.Count - 1;
                     for (int k = 0; k <= num2; k++)
                     {
-                        TGEDCOMCustomEvent ev = iRec.IndividualEvents[k];
+                        GEDCOMCustomEvent ev = iRec.IndividualEvents[k];
 
                         if (ev.Name == "BIRT" || ev.Name == "DEAT")
                         {
@@ -153,15 +154,15 @@ namespace GKTimeLinePlugin
 		}
 
         // FIXME: возможно необходимо определение максимального возраста по статистике
-        private bool FilterHandler(TGEDCOMRecord record)
+        private bool FilterHandler(GEDCOMRecord record)
         {
             bool result = true;
 
             try
             {               
-            	TGEDCOMIndividualRecord iRec = record as TGEDCOMIndividualRecord;
-            	TGEDCOMCustomEvent buf_bd = iRec.GetIndividualEvent("BIRT");
-                TGEDCOMCustomEvent buf_dd = iRec.GetIndividualEvent("DEAT");
+            	GEDCOMIndividualRecord iRec = record as GEDCOMIndividualRecord;
+            	GEDCOMCustomEvent buf_bd = iRec.GetIndividualEvent("BIRT");
+                GEDCOMCustomEvent buf_dd = iRec.GetIndividualEvent("DEAT");
 
                 ushort j, d;
 

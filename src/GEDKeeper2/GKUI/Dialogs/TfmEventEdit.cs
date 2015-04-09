@@ -1,34 +1,34 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-
-using GedCom551;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKUI.Sheets;
-
-/// <summary>
-/// 
-/// </summary>
 
 namespace GKUI.Dialogs
 {
-	public partial class TfmEventEdit : Form, IBaseEditor
+    /// <summary>
+    /// 
+    /// </summary>
+    public partial class TfmEventEdit : Form, IBaseEditor
 	{
         private readonly IBase fBase;
         private readonly GKNotesSheet fNotesList;
         private readonly GKMediaSheet fMediaList;
 		private readonly GKSourcesSheet fSourcesList;
 
-		private TGEDCOMCustomEvent fEvent;
-		private TGEDCOMLocationRecord fLocation;
+		private GEDCOMCustomEvent fEvent;
+		private GEDCOMLocationRecord fLocation;
 
 		public IBase Base
 		{
 			get { return this.fBase; }
 		}
 
-		public TGEDCOMCustomEvent Event
+		public GEDCOMCustomEvent Event
 		{
 			get { return this.fEvent; }
 			set { this.SetEvent(value); }
@@ -38,18 +38,18 @@ namespace GKUI.Dialogs
 		{
 			string result = "";
 
-			TGEDCOMCalendar cal = (TGEDCOMCalendar)this.cbDate1Calendar.SelectedIndex;
-			TGEDCOMCalendar cal2 = (TGEDCOMCalendar)this.cbDate2Calendar.SelectedIndex;
+			GEDCOMCalendar cal = (GEDCOMCalendar)this.cbDate1Calendar.SelectedIndex;
+			GEDCOMCalendar cal2 = (GEDCOMCalendar)this.cbDate2Calendar.SelectedIndex;
 
 			string gcd = GEDCOMUtils.StrToGEDCOMDate(this.EditEventDate1.Text, true);
 			string gcd2 = GEDCOMUtils.StrToGEDCOMDate(this.EditEventDate2.Text, true);
 
-			if (cal != TGEDCOMCalendar.dcGregorian) {
-				gcd = TGEDCOMCustomDate.GEDCOMDateEscapeArray[(int)cal] + " " + gcd;
+			if (cal != GEDCOMCalendar.dcGregorian) {
+				gcd = GEDCOMCustomDate.GEDCOMDateEscapeArray[(int)cal] + " " + gcd;
 			}
 
-			if (cal2 != TGEDCOMCalendar.dcGregorian) {
-                gcd2 = TGEDCOMCustomDate.GEDCOMDateEscapeArray[(int)cal2] + " " + gcd2;
+			if (cal2 != GEDCOMCalendar.dcGregorian) {
+                gcd2 = GEDCOMCustomDate.GEDCOMDateEscapeArray[(int)cal2] + " " + gcd2;
 			}
 
 			if (btnBC1.Checked) {
@@ -116,7 +116,7 @@ namespace GKUI.Dialogs
 			string dt = this.AssembleDate();
 			this.fEvent.Detail.Date.ParseString(dt);
 
-			if (this.fEvent is TGEDCOMFamilyEvent)
+			if (this.fEvent is GEDCOMFamilyEvent)
 			{
 				this.fEvent.Name = GKData.FamilyEvents[this.EditEventType.SelectedIndex].Sign;
 			}
@@ -124,7 +124,7 @@ namespace GKUI.Dialogs
 			{
 				int id = this.EditEventType.SelectedIndex;
 				this.fEvent.Name = GKData.PersonEvents[id].Sign;
-				if (GKData.PersonEvents[id].Kind == TPersonEventKind.ekFact)
+				if (GKData.PersonEvents[id].Kind == PersonEventKind.ekFact)
 				{
 					this.fEvent.StringValue = this.EditAttribute.Text;
 				}
@@ -134,12 +134,12 @@ namespace GKUI.Dialogs
 				}
 			}
 
-			if (this.fEvent is TGEDCOMIndividualEvent)
+			if (this.fEvent is GEDCOMIndividualEvent)
 			{
 				int id = this.EditEventType.SelectedIndex;
-				if (GKData.PersonEvents[id].Kind == TPersonEventKind.ekFact)
+				if (GKData.PersonEvents[id].Kind == PersonEventKind.ekFact)
 				{
-					TGEDCOMIndividualAttribute attr = new TGEDCOMIndividualAttribute(this.fEvent.Owner, this.fEvent.Parent, "", "");
+					GEDCOMIndividualAttribute attr = new GEDCOMIndividualAttribute(this.fEvent.Owner, this.fEvent.Parent, "", "");
 					attr.Assign(this.fEvent);
 					this.fEvent = attr;
 				}
@@ -167,11 +167,11 @@ namespace GKUI.Dialogs
             this.fSourcesList.DataList = this.fEvent.Detail.SourceCitations.GetEnumerator();
 		}
 
-		private void SetEvent(TGEDCOMCustomEvent value)
+		private void SetEvent(GEDCOMCustomEvent value)
 		{
 			this.fEvent = value;
 
-			if (this.fEvent is TGEDCOMFamilyEvent)
+			if (this.fEvent is GEDCOMFamilyEvent)
 			{
 				for (int i = 0; i <= GKData.FamilyEvents.Length - 1; i++)
 				{
@@ -193,7 +193,7 @@ namespace GKUI.Dialogs
 				if (idx < 0) idx = 0;
 				this.EditEventType.SelectedIndex = idx;
 
-				if (idx >= 0 && GKData.PersonEvents[idx].Kind == TPersonEventKind.ekFact)
+				if (idx >= 0 && GKData.PersonEvents[idx].Kind == PersonEventKind.ekFact)
 				{
 					this.EditAttribute.Text = this.fEvent.StringValue;
 				}
@@ -201,35 +201,35 @@ namespace GKUI.Dialogs
 
 			this.EditEventType_SelectedIndexChanged(null, null);
 
-			TGEDCOMCustomDate date = this.fEvent.Detail.Date.Value;
-			if (date is TGEDCOMDateApproximated)
+			GEDCOMCustomDate date = this.fEvent.Detail.Date.Value;
+			if (date is GEDCOMDateApproximated)
 			{
-				TGEDCOMApproximated approximated = (date as TGEDCOMDateApproximated).Approximated;
+				GEDCOMApproximated approximated = (date as GEDCOMDateApproximated).Approximated;
 
 				switch (approximated) {
-					case TGEDCOMApproximated.daExact:
+					case GEDCOMApproximated.daExact:
 						this.EditEventDateType.SelectedIndex = 0;
 						break;
-					case TGEDCOMApproximated.daAbout:
+					case GEDCOMApproximated.daAbout:
 						this.EditEventDateType.SelectedIndex = 7;
 						break;
-					case TGEDCOMApproximated.daCalculated:
+					case GEDCOMApproximated.daCalculated:
 						this.EditEventDateType.SelectedIndex = 8;
 						break;
-					case TGEDCOMApproximated.daEstimated:
+					case GEDCOMApproximated.daEstimated:
 						this.EditEventDateType.SelectedIndex = 9;
 						break;
 				}
 
-				this.EditEventDate1.Text = GKUtils.GEDCOMDateToStr(date as TGEDCOMDate, DateFormat.dfDD_MM_YYYY);
-				this.cbDate1Calendar.SelectedIndex = (int)(date as TGEDCOMDate).DateCalendar;
-				this.btnBC1.Checked = (date as TGEDCOMDate).YearBC;
+				this.EditEventDate1.Text = GKUtils.GEDCOMDateToStr(date as GEDCOMDate, DateFormat.dfDD_MM_YYYY);
+				this.cbDate1Calendar.SelectedIndex = (int)(date as GEDCOMDate).DateCalendar;
+				this.btnBC1.Checked = (date as GEDCOMDate).YearBC;
 			}
 			else
 			{
-				if (date is TGEDCOMDateRange)
+				if (date is GEDCOMDateRange)
 				{
-					TGEDCOMDateRange dtRange = date as TGEDCOMDateRange;
+					GEDCOMDateRange dtRange = date as GEDCOMDateRange;
 					if (dtRange.After.StringValue == "" && dtRange.Before.StringValue != "")
 					{
 						this.EditEventDateType.SelectedIndex = 1;
@@ -258,9 +258,9 @@ namespace GKUI.Dialogs
 				}
 				else
 				{
-					if (date is TGEDCOMDatePeriod)
+					if (date is GEDCOMDatePeriod)
 					{
-						TGEDCOMDatePeriod dtPeriod = date as TGEDCOMDatePeriod;
+						GEDCOMDatePeriod dtPeriod = date as GEDCOMDatePeriod;
 						if (dtPeriod.DateFrom.StringValue != "" && dtPeriod.DateTo.StringValue == "")
 						{
 							this.EditEventDateType.SelectedIndex = 4;
@@ -289,12 +289,12 @@ namespace GKUI.Dialogs
 					}
 					else
 					{
-						if (date is TGEDCOMDate)
+						if (date is GEDCOMDate)
 						{
 							this.EditEventDateType.SelectedIndex = 0;
-							this.EditEventDate1.Text = GKUtils.GEDCOMDateToStr(date as TGEDCOMDate, DateFormat.dfDD_MM_YYYY);
-							this.cbDate1Calendar.SelectedIndex = (int)(date as TGEDCOMDate).DateCalendar;
-							this.btnBC1.Checked = (date as TGEDCOMDate).YearBC;
+							this.EditEventDate1.Text = GKUtils.GEDCOMDateToStr(date as GEDCOMDate, DateFormat.dfDD_MM_YYYY);
+							this.cbDate1Calendar.SelectedIndex = (int)(date as GEDCOMDate).DateCalendar;
+							this.btnBC1.Checked = (date as GEDCOMDate).YearBC;
 						}
 						else
 						{
@@ -311,7 +311,7 @@ namespace GKUI.Dialogs
 			this.EditEventName.Text = this.fEvent.Detail.Classification;
 			this.EditEventCause.Text = this.fEvent.Detail.Cause;
 			this.EditEventOrg.Text = this.fEvent.Detail.Agency;
-			this.fLocation = (this.fEvent.Detail.Place.Location.Value as TGEDCOMLocationRecord);
+			this.fLocation = (this.fEvent.Detail.Place.Location.Value as GEDCOMLocationRecord);
 			this.ControlsRefresh();
 
 			this.ActiveControl = this.EditEventType;
@@ -346,7 +346,7 @@ namespace GKUI.Dialogs
 
 		private void btnPlaceAdd_Click(object sender, EventArgs e)
 		{
-			this.fLocation = (this.fBase.SelectRecord(TGEDCOMRecordType.rtLocation, null) as TGEDCOMLocationRecord);
+			this.fLocation = (this.fBase.SelectRecord(GEDCOMRecordType.rtLocation, null) as GEDCOMLocationRecord);
 			this.ControlsRefresh();
 		}
 
@@ -380,7 +380,7 @@ namespace GKUI.Dialogs
 
 		private void EditEventType_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (this.fEvent is TGEDCOMFamilyEvent)
+			if (this.fEvent is GEDCOMFamilyEvent)
 			{
 				this.EditAttribute.Enabled = false;
 				this.EditAttribute.BackColor = SystemColors.Control;
@@ -389,7 +389,7 @@ namespace GKUI.Dialogs
 			{
 				int idx = this.EditEventType.SelectedIndex;
 				if (idx >= 0) {
-					if (GKData.PersonEvents[idx].Kind == TPersonEventKind.ekEvent)
+					if (GKData.PersonEvents[idx].Kind == PersonEventKind.ekEvent)
 					{
 						this.EditAttribute.Enabled = false;
 						this.EditAttribute.BackColor = SystemColors.Control;
@@ -405,7 +405,7 @@ namespace GKUI.Dialogs
 
 			string evName;
 			int id = this.EditEventType.SelectedIndex;
-			if (this.fEvent is TGEDCOMFamilyEvent) {
+			if (this.fEvent is GEDCOMFamilyEvent) {
 				evName = GKData.FamilyEvents[id].Sign;
 			} else {
 				evName = GKData.PersonEvents[id].Sign;
@@ -459,7 +459,7 @@ namespace GKUI.Dialogs
 				this.EditEventDateType.Items.Add(LangMan.LS(GKData.DateKinds[i].Name));
 			}
 
-			for (TGEDCOMCalendar gc = TGEDCOMCalendar.dcGregorian; gc <= TGEDCOMCalendar.dcLast; gc++)
+			for (GEDCOMCalendar gc = GEDCOMCalendar.dcGregorian; gc <= GEDCOMCalendar.dcLast; gc++)
 			{
 				this.cbDate1Calendar.Items.Add(LangMan.LS(GKData.DateCalendars[(int)gc]));
 				this.cbDate2Calendar.Items.Add(LangMan.LS(GKData.DateCalendars[(int)gc]));

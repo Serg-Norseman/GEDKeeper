@@ -1,20 +1,18 @@
-using System;
-
+using System.Collections.Generic;
 using ExcelLibrary.SpreadSheet;
-using ExtUtils;
-using GedCom551;
+using GKCommon.GEDCOM;
 using GKCore.Interfaces;
-
-/// <summary>
-/// 
-/// </summary>
+using GKCore.Types;
 
 namespace GKCore.Export
 {
-	public sealed class ExcelExporter : Exporter
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class ExcelExporter : Exporter
 	{
 		private bool fAppMode;
-		private ExtList<TGEDCOMRecord> fSelectedRecords;
+		private List<GEDCOMRecord> fSelectedRecords;
 
 		public bool AppMode
 		{
@@ -22,7 +20,7 @@ namespace GKCore.Export
 			set { this.fAppMode = value; }
 		}
 
-		public ExtList<TGEDCOMRecord> SelectedRecords
+		public List<GEDCOMRecord> SelectedRecords
 		{
 			get { return this.fSelectedRecords; }
 			set { this.fSelectedRecords = value; }
@@ -62,9 +60,9 @@ namespace GKCore.Export
 				int num = this.FTree.RecordsCount - 1;
 				for (int i = 0; i <= num; i++)
 				{
-					TGEDCOMRecord rec = this.FTree[i];
-					if (rec is TGEDCOMIndividualRecord) {
-						TGEDCOMIndividualRecord ind = rec as TGEDCOMIndividualRecord;
+					GEDCOMRecord rec = this.FTree[i];
+					if (rec is GEDCOMIndividualRecord) {
+						GEDCOMIndividualRecord ind = rec as GEDCOMIndividualRecord;
 						if (this.fSelectedRecords == null || this.fSelectedRecords.IndexOf(rec) >= 0) {
 							string fam, nam, pat;
 							ind.aux_GetNameParts(out fam, out nam, out pat);

@@ -5,8 +5,10 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-using ExtUtils;
-using GedCom551;
+using GKCommon;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
+using GKCore.Types;
 using GKUI.Controls;
 
 /// <summary>
@@ -27,13 +29,13 @@ namespace GKCore
 
 		#region Aux functions
 
-		public static TGEDCOMFormat GetGEDCOMFormat(TGEDCOMTree tree)
+		public static GEDCOMFormat GetGEDCOMFormat(GEDCOMTree tree)
 		{
 			if (tree != null) 
 			{
 				string sour = tree.Header.Source;
 
-				for (TGEDCOMFormat gf = TGEDCOMFormat.gf_Native; gf <= TGEDCOMFormat.gf_Last; gf++)
+				for (GEDCOMFormat gf = GEDCOMFormat.gf_Native; gf <= GEDCOMFormat.gf_Last; gf++)
 				{
 					if (GKData.GEDCOMFormats[(int)gf].Sign == sour)
 					{
@@ -42,27 +44,27 @@ namespace GKCore
 				}
 			}
 			
-			return TGEDCOMFormat.gf_Unknown;
+			return GEDCOMFormat.gf_Unknown;
 		}
 
-		public static string SexStr(TGEDCOMSex sex)
+		public static string SexStr(GEDCOMSex sex)
 		{
 			return LangMan.LS(GKData.SexData[(int)sex].NameId);
 		}
 
-		public static TGEDCOMSex GetSexBySign(char sexSign)
+		public static GEDCOMSex GetSexBySign(char sexSign)
 		{
-			TGEDCOMSex result = TGEDCOMSex.svNone;
+			GEDCOMSex result = GEDCOMSex.svNone;
 			
 			switch (sexSign) {
 				case 'F':
-					result = TGEDCOMSex.svFemale;
+					result = GEDCOMSex.svFemale;
 					break;
 				case 'M':
-					result = TGEDCOMSex.svMale;
+					result = GEDCOMSex.svMale;
 					break;
 				case 'U':
-					result = TGEDCOMSex.svUndetermined;
+					result = GEDCOMSex.svUndetermined;
 					break;
 			}
 			
@@ -74,16 +76,16 @@ namespace GKCore
 			return (Environment.MachineName == "VALHALLA" || Environment.UserName == "Zhdanovskih_SV");
 		}
 
-		public static bool IsRecordAccess(TGEDCOMRestriction restriction, ShieldState shieldState)
+		public static bool IsRecordAccess(GEDCOMRestriction restriction, ShieldState shieldState)
 		{
 			bool result = false;
 
 			switch (shieldState) {
 				case ShieldState.ssMaximum:
-					result = (((restriction == TGEDCOMRestriction.rnConfidential || restriction == TGEDCOMRestriction.rnPrivacy) ? 1 : 0) == 0);
+					result = (((restriction == GEDCOMRestriction.rnConfidential || restriction == GEDCOMRestriction.rnPrivacy) ? 1 : 0) == 0);
 					break;
 				case ShieldState.ssMiddle:
-					result = (((restriction == TGEDCOMRestriction.rnPrivacy) ? 1 : 0) == 0);
+					result = (((restriction == GEDCOMRestriction.rnPrivacy) ? 1 : 0) == 0);
 					break;
 				case ShieldState.ssNone:
 					result = true;
@@ -93,7 +95,7 @@ namespace GKCore
 			return result;
 		}
 
-		public static string aux_GetFamilyStr(TGEDCOMFamilyRecord family)
+		public static string aux_GetFamilyStr(GEDCOMFamilyRecord family)
 		{
 			return family.aux_GetFamilyStr(LangMan.LS(LSID.LSID_UnkMale), LangMan.LS(LSID.LSID_UnkFemale));
 		}
@@ -113,19 +115,19 @@ namespace GKCore
 			return result;
 		}
 
-		public static void GetLocationLinks(TGEDCOMTree tree, TGEDCOMLocationRecord locRec, ref StringList aList)
+		public static void GetLocationLinks(GEDCOMTree tree, GEDCOMLocationRecord locRec, ref StringList aList)
 		{
 			int num = tree.RecordsCount - 1;
 			for (int i = 0; i <= num; i++)
 			{
-				TGEDCOMRecord rec = tree[i];
-				if (rec is TGEDCOMIndividualRecord)
+				GEDCOMRecord rec = tree[i];
+				if (rec is GEDCOMIndividualRecord)
 				{
-					TGEDCOMIndividualRecord i_rec = rec as TGEDCOMIndividualRecord;
+					GEDCOMIndividualRecord i_rec = rec as GEDCOMIndividualRecord;
 					int num2 = i_rec.IndividualEvents.Count - 1;
 					for (int j = 0; j <= num2; j++)
 					{
-						TGEDCOMCustomEvent evt = i_rec.IndividualEvents[j];
+						GEDCOMCustomEvent evt = i_rec.IndividualEvents[j];
 						if (evt.Detail.Place.Location.Value == locRec)
 						{
 							aList.Add(GKUtils.GenRecordLink(rec, true) + ", " + GKUtils.GetEventName(evt).ToLower());
@@ -134,13 +136,13 @@ namespace GKCore
 				}
 				else
 				{
-					if (rec is TGEDCOMFamilyRecord)
+					if (rec is GEDCOMFamilyRecord)
 					{
-						TGEDCOMFamilyRecord f_rec = rec as TGEDCOMFamilyRecord;
+						GEDCOMFamilyRecord f_rec = rec as GEDCOMFamilyRecord;
 						int num3 = f_rec.FamilyEvents.Count - 1;
 						for (int j = 0; j <= num3; j++)
 						{
-							TGEDCOMCustomEvent evt = f_rec.FamilyEvents[j];
+							GEDCOMCustomEvent evt = f_rec.FamilyEvents[j];
 							if (evt.Detail.Place.Location.Value == locRec) {
 								aList.Add(GKUtils.GenRecordLink(rec, true) + ", " + GKUtils.GetEventName(evt).ToLower());
 							}
@@ -161,7 +163,7 @@ namespace GKCore
 			return result;
 		}
 
-		public static string GenRecordLink(TGEDCOMRecord record, bool signed)
+		public static string GenRecordLink(GEDCOMRecord record, bool signed)
 		{
             string result = "";
 
@@ -169,9 +171,9 @@ namespace GKCore
 				string sign = "";
 
                 if (signed) {
-					TGEDCOMRecordType recordType = record.RecordType;
-					if (recordType != TGEDCOMRecordType.rtIndividual) {
-						if (recordType == TGEDCOMRecordType.rtFamily || (byte)recordType - (byte)TGEDCOMRecordType.rtMultimedia < (byte)TGEDCOMRecordType.rtResearch)
+					GEDCOMRecordType recordType = record.RecordType;
+					if (recordType != GEDCOMRecordType.rtIndividual) {
+						if (recordType == GEDCOMRecordType.rtFamily || (byte)recordType - (byte)GEDCOMRecordType.rtMultimedia < (byte)GEDCOMRecordType.rtResearch)
 						{
 							sign = LangMan.LS(GKData.RecordTypes[(int)record.RecordType]) + ": ";
 						}
@@ -182,35 +184,35 @@ namespace GKCore
 
                 string st;
 				switch (record.RecordType) {
-					case TGEDCOMRecordType.rtIndividual:
-						st = (record as TGEDCOMIndividualRecord).aux_GetNameStr(true, false);
+					case GEDCOMRecordType.rtIndividual:
+						st = (record as GEDCOMIndividualRecord).aux_GetNameStr(true, false);
 						break;
-					case TGEDCOMRecordType.rtFamily:
-						st = GKUtils.aux_GetFamilyStr(record as TGEDCOMFamilyRecord);
+					case GEDCOMRecordType.rtFamily:
+						st = GKUtils.aux_GetFamilyStr(record as GEDCOMFamilyRecord);
 						break;
-					case TGEDCOMRecordType.rtMultimedia:
-						st = (record as TGEDCOMMultimediaRecord).FileReferences[0].Title;
+					case GEDCOMRecordType.rtMultimedia:
+						st = (record as GEDCOMMultimediaRecord).FileReferences[0].Title;
 						break;
-					case TGEDCOMRecordType.rtSource:
-						st = (record as TGEDCOMSourceRecord).FiledByEntry;
+					case GEDCOMRecordType.rtSource:
+						st = (record as GEDCOMSourceRecord).FiledByEntry;
 						break;
-					case TGEDCOMRecordType.rtRepository:
-						st = (record as TGEDCOMRepositoryRecord).RepositoryName;
+					case GEDCOMRecordType.rtRepository:
+						st = (record as GEDCOMRepositoryRecord).RepositoryName;
 						break;
-					case TGEDCOMRecordType.rtGroup:
-						st = (record as TGEDCOMGroupRecord).GroupName;
+					case GEDCOMRecordType.rtGroup:
+						st = (record as GEDCOMGroupRecord).GroupName;
 						break;
-					case TGEDCOMRecordType.rtResearch:
-						st = (record as TGEDCOMResearchRecord).ResearchName;
+					case GEDCOMRecordType.rtResearch:
+						st = (record as GEDCOMResearchRecord).ResearchName;
 						break;
-					case TGEDCOMRecordType.rtTask:
-						st = GKUtils.GetTaskGoalStr(record as TGEDCOMTaskRecord);
+					case GEDCOMRecordType.rtTask:
+						st = GKUtils.GetTaskGoalStr(record as GEDCOMTaskRecord);
 						break;
-					case TGEDCOMRecordType.rtCommunication:
-						st = (record as TGEDCOMCommunicationRecord).CommName;
+					case GEDCOMRecordType.rtCommunication:
+						st = (record as GEDCOMCommunicationRecord).CommName;
 						break;
-					case TGEDCOMRecordType.rtLocation:
-						st = (record as TGEDCOMLocationRecord).LocationName;
+					case GEDCOMRecordType.rtLocation:
+						st = (record as GEDCOMLocationRecord).LocationName;
 						break;
 					default:
 						st = record.XRef;
@@ -223,11 +225,11 @@ namespace GKCore
             return result;
 		}
 
-		public static string GetCorresponderStr(TGEDCOMTree tree, TGEDCOMCommunicationRecord commRec, bool aLink)
+		public static string GetCorresponderStr(GEDCOMTree tree, GEDCOMCommunicationRecord commRec, bool aLink)
 		{
 			string result = "";
-			TCommunicationDir dir = TCommunicationDir.cdFrom;
-			TGEDCOMIndividualRecord corresponder = null;
+			GKCommunicationDir dir = GKCommunicationDir.cdFrom;
+			GEDCOMIndividualRecord corresponder = null;
 			commRec.GetCorresponder(ref dir, ref corresponder);
 			if (corresponder != null)
 			{
@@ -241,32 +243,32 @@ namespace GKCore
 			return result;
 		}
 
-		public static string GetTaskGoalStr(TGEDCOMTaskRecord taskRec)
+		public static string GetTaskGoalStr(GEDCOMTaskRecord taskRec)
 		{
 		    if (taskRec == null) return string.Empty;
             
             string result = "";
             
-            TGoalType gt;
-			TGEDCOMRecord tempRec;
+            GKGoalType gt;
+			GEDCOMRecord tempRec;
             taskRec.aux_GetTaskGoal(out gt, out tempRec);
 
 			switch (gt) {
-				case TGoalType.gtIndividual:
-					result = (tempRec as TGEDCOMIndividualRecord).aux_GetNameStr(true, false);
+				case GKGoalType.gtIndividual:
+					result = (tempRec as GEDCOMIndividualRecord).aux_GetNameStr(true, false);
 					break;
-				case TGoalType.gtFamily:
-					result = GKUtils.aux_GetFamilyStr(tempRec as TGEDCOMFamilyRecord);
+				case GKGoalType.gtFamily:
+					result = GKUtils.aux_GetFamilyStr(tempRec as GEDCOMFamilyRecord);
 					break;
-				case TGoalType.gtSource:
-					result = (tempRec as TGEDCOMSourceRecord).FiledByEntry;
+				case GKGoalType.gtSource:
+					result = (tempRec as GEDCOMSourceRecord).FiledByEntry;
 					break;
-				case TGoalType.gtOther:
+				case GKGoalType.gtOther:
 					result = taskRec.Goal;
 					break;
 			}
 
-			if (gt != TGoalType.gtOther)
+			if (gt != GKGoalType.gtOther)
 			{
 				result = "[" + LangMan.LS(GKData.GoalNames[(int)gt]) + "] " + result;
 			}
@@ -278,18 +280,18 @@ namespace GKCore
 
 		#region Event Utils
 		
-		public static string GetAttributeValue(TGEDCOMIndividualRecord iRec, string attrName)
+		public static string GetAttributeValue(GEDCOMIndividualRecord iRec, string attrName)
 		{
 			if (iRec == null) return string.Empty;
 
-			TGEDCOMCustomEvent attr = iRec.GetIndividualEvent(attrName);
+			GEDCOMCustomEvent attr = iRec.GetIndividualEvent(attrName);
 			string result = ((attr == null) ? "" : attr.StringValue);
 			return result;
 		}
 
-		public static TPersonEventKind GetPersonEventKindBySign(string aSign)
+		public static PersonEventKind GetPersonEventKindBySign(string aSign)
 		{
-			TPersonEventKind res = TPersonEventKind.ekFact;
+			PersonEventKind res = PersonEventKind.ekFact;
 
 			for (int i = 0; i < GKData.PersonEvents.Length; i++)
 			{
@@ -351,11 +353,11 @@ namespace GKCore
 			return res;
 		}
 
-		public static string GetEventName(TGEDCOMCustomEvent aEvent)
+		public static string GetEventName(GEDCOMCustomEvent aEvent)
 		{
 			string result = "";
 
-			if (aEvent is TGEDCOMIndividualEvent || aEvent is TGEDCOMIndividualAttribute)
+			if (aEvent is GEDCOMIndividualEvent || aEvent is GEDCOMIndividualAttribute)
 			{
 				int ev = GKUtils.GetPersonEventIndex(aEvent.Name);
 				if (ev == 0) {
@@ -368,7 +370,7 @@ namespace GKCore
 					}
 				}
 			}
-			else if (aEvent is TGEDCOMFamilyEvent)
+			else if (aEvent is GEDCOMFamilyEvent)
 			{
 				int ev = GKUtils.GetFamilyEventIndex(aEvent.Name);
 				if (ev == 0) {
@@ -385,7 +387,7 @@ namespace GKCore
 			return result;
 		}
 
-		public static string GetAttributeStr(TGEDCOMIndividualAttribute iAttr)
+		public static string GetAttributeStr(GEDCOMIndividualAttribute iAttr)
 		{
 			int idx = GKUtils.GetPersonEventIndex(iAttr.Name);
 			string st;
@@ -413,11 +415,11 @@ namespace GKCore
 			return st + ": " + iAttr.StringValue + place;
 		}
 
-		public static string GetEventDesc(TGEDCOMEventDetail eventDetail)
+		public static string GetEventDesc(GEDCOMEventDetail eventDetail)
 		{
 			string dt = GKUtils.GEDCOMCustomDateToStr(eventDetail.Date, DateFormat.dfDD_MM_YYYY, false);
 			string place = eventDetail.Place.StringValue;
-			TGEDCOMLocationRecord location = eventDetail.Place.Location.Value as TGEDCOMLocationRecord;
+			GEDCOMLocationRecord location = eventDetail.Place.Location.Value as GEDCOMLocationRecord;
 
 			if (place != "" && location != null)
 			{
@@ -452,7 +454,7 @@ namespace GKCore
 			return result;
 		}
 
-		public static string GetEventCause(TGEDCOMEventDetail eventDetail)
+		public static string GetEventCause(GEDCOMEventDetail eventDetail)
 		{
 			string result = "";
 
@@ -473,7 +475,7 @@ namespace GKCore
 			return result;
 		}
 
-        public static string GetIndividualEventName(TGEDCOMCustomEvent evt)
+        public static string GetIndividualEventName(GEDCOMCustomEvent evt)
         {
             string result;
 
@@ -497,7 +499,7 @@ namespace GKCore
             return result;
         }
 
-        public static string GetFamilyEventName(TGEDCOMFamilyEvent evt)
+        public static string GetFamilyEventName(GEDCOMFamilyEvent evt)
         {
             string result;
 
@@ -525,7 +527,7 @@ namespace GKCore
 
 		#region Date functions
 
-		public static string GEDCOMDateToStr(TGEDCOMDate aDate, DateFormat aFormat)
+		public static string GEDCOMDateToStr(GEDCOMDate aDate, DateFormat aFormat)
 		{
 			string result = "";
 			int year;
@@ -606,12 +608,12 @@ namespace GKCore
 			return result;
 		}
 
-		public static string GEDCOMCustomDateToStr(TGEDCOMDateValue dateValue, DateFormat format, bool sign)
+		public static string GEDCOMCustomDateToStr(GEDCOMDateValue dateValue, DateFormat format, bool sign)
 		{
 		    if (dateValue == null) return string.Empty;
 			string result = "";
 
-			TGEDCOMCustomDate date = dateValue.Value;
+			GEDCOMCustomDate date = dateValue.Value;
 
 			if (date == null)
 			{
@@ -619,19 +621,19 @@ namespace GKCore
 			}
 			else
 			{
-				if (date is TGEDCOMDateApproximated)
+				if (date is GEDCOMDateApproximated)
 				{
-					result = GKUtils.GEDCOMDateToStr(date as TGEDCOMDate, format);
-					if (sign && (date as TGEDCOMDateApproximated).Approximated != TGEDCOMApproximated.daExact)
+					result = GKUtils.GEDCOMDateToStr(date as GEDCOMDate, format);
+					if (sign && (date as GEDCOMDateApproximated).Approximated != GEDCOMApproximated.daExact)
 					{
 						result = "~ " + result;
 					}
 				}
 				else
 				{
-					if (date is TGEDCOMDateRange)
+					if (date is GEDCOMDateRange)
 					{
-						TGEDCOMDateRange dt_range = date as TGEDCOMDateRange;
+						GEDCOMDateRange dt_range = date as GEDCOMDateRange;
 						if (dt_range.After.StringValue == "" && dt_range.Before.StringValue != "")
 						{
 							result = GKUtils.GEDCOMDateToStr(dt_range.Before, format);
@@ -661,9 +663,9 @@ namespace GKCore
 					}
 					else
 					{
-						if (date is TGEDCOMDatePeriod)
+						if (date is GEDCOMDatePeriod)
 						{
-							TGEDCOMDatePeriod dt_period = date as TGEDCOMDatePeriod;
+							GEDCOMDatePeriod dt_period = date as GEDCOMDatePeriod;
 							if (dt_period.DateFrom.StringValue != "" && dt_period.DateTo.StringValue == "")
 							{
 								result = GKUtils.GEDCOMDateToStr(dt_period.DateFrom, format);
@@ -693,16 +695,16 @@ namespace GKCore
 						}
 						else
 						{
-							if (date is TGEDCOMDate)
+							if (date is GEDCOMDate)
 							{
-								result = GKUtils.GEDCOMDateToStr(date as TGEDCOMDate, format);
+								result = GKUtils.GEDCOMDateToStr(date as GEDCOMDate, format);
 							}
 						}
 					}
 				}
 			}
 
-			if ((date is TGEDCOMDate) && (date as TGEDCOMDate).YearBC) {
+			if ((date is GEDCOMDate) && (date as GEDCOMDate).YearBC) {
 				switch (format) {
 					case DateFormat.dfDD_MM_YYYY:
 						result = result + " BC";
@@ -719,12 +721,12 @@ namespace GKCore
 			return result;
 		}
 
-		public static string GEDCOMEventToDateStr(TGEDCOMCustomEvent aEvent, DateFormat format, bool sign)
+		public static string GEDCOMEventToDateStr(GEDCOMCustomEvent aEvent, DateFormat format, bool sign)
 		{
 			return ((aEvent == null) ? "" : GKUtils.GEDCOMCustomDateToStr(aEvent.Detail.Date, format, sign));
 		}
 
-		public static DateTime GEDCOMDateToDate(TGEDCOMDateValue date)
+		public static DateTime GEDCOMDateToDate(GEDCOMDateValue date)
 		{
 			return ((date == null) ? new DateTime(0) : date.aux_GetDate());
 		}
@@ -736,27 +738,27 @@ namespace GKCore
 			return result;
 		}
 
-		public static string GetBirthDate(TGEDCOMIndividualRecord iRec, DateFormat dateFormat, bool compact)
+		public static string GetBirthDate(GEDCOMIndividualRecord iRec, DateFormat dateFormat, bool compact)
 		{
 			if (iRec == null) return string.Empty;
 
-			TGEDCOMCustomEvent evt = iRec.GetIndividualEvent("BIRT");
+			GEDCOMCustomEvent evt = iRec.GetIndividualEvent("BIRT");
 			string result = ((evt == null) ? "" : GKUtils.GEDCOMCustomDateToStr(evt.Detail.Date, dateFormat, false));
 			if (compact) result = GKUtils.CompactDate(result);
 			return result;
 		}
 
-		public static string GetDeathDate(TGEDCOMIndividualRecord iRec, DateFormat dateFormat, bool compact)
+		public static string GetDeathDate(GEDCOMIndividualRecord iRec, DateFormat dateFormat, bool compact)
 		{
 			if (iRec == null) return string.Empty;
 
-			TGEDCOMCustomEvent evt = iRec.GetIndividualEvent("DEAT");
+			GEDCOMCustomEvent evt = iRec.GetIndividualEvent("DEAT");
 			string result = ((evt == null) ? "" : GKUtils.GEDCOMCustomDateToStr(evt.Detail.Date, dateFormat, false));
 			if (compact) result = GKUtils.CompactDate(result);
 			return result;
 		}
 
-		public static string GetLifeStr(TGEDCOMIndividualRecord iRec)
+		public static string GetLifeStr(GEDCOMIndividualRecord iRec)
 		{
 			if (iRec == null) return string.Empty;			
 
@@ -772,7 +774,7 @@ namespace GKCore
 			ds = GKUtils.GetDeathDate(iRec, DateFormat.dfDD_MM_YYYY, false);
 			if (ds == "")
 			{
-				TGEDCOMCustomEvent ev = iRec.GetIndividualEvent("DEAT");
+				GEDCOMCustomEvent ev = iRec.GetIndividualEvent("DEAT");
 				if (ev != null)
 				{
 					ds = "?";
@@ -788,19 +790,19 @@ namespace GKCore
 			return result;
 		}
 
-		public static int GetIndependentYear(TGEDCOMIndividualRecord iRec, string evSign)
+		public static int GetIndependentYear(GEDCOMIndividualRecord iRec, string evSign)
 		{
 			bool dummy;
 			return GetIndependentYear(iRec, evSign, out dummy);
 		}
 
-		public static int GetIndependentYear(TGEDCOMIndividualRecord iRec, string evSign, out bool YearBC)
+		public static int GetIndependentYear(GEDCOMIndividualRecord iRec, string evSign, out bool YearBC)
 		{
 			int result = -1;
             YearBC = false;
             if (iRec == null) return result;
 
-			TGEDCOMCustomEvent ev = iRec.GetIndividualEvent(evSign);
+			GEDCOMCustomEvent ev = iRec.GetIndividualEvent(evSign);
 			if (ev != null)
 			{
 				int year;
@@ -811,13 +813,13 @@ namespace GKCore
 			return result;
 		}
 
-		public static double GetAbstractDate(TGEDCOMEventDetail eventDetail)
+		public static double GetAbstractDate(GEDCOMEventDetail eventDetail)
 		{
 			bool dummy;
 			return GetAbstractDate(eventDetail, out dummy);
 		}
 
-		public static double GetAbstractDate(TGEDCOMEventDetail eventDetail, out bool YearBC)
+		public static double GetAbstractDate(GEDCOMEventDetail eventDetail, out bool YearBC)
 		{
 			double result = 0.0;
 			YearBC = false;
@@ -845,7 +847,7 @@ namespace GKCore
 			return result;
 		}
 
-		public static string GetEventsYearsDiff(TGEDCOMCustomEvent ev1, TGEDCOMCustomEvent ev2, bool aCurEnd)
+		public static string GetEventsYearsDiff(GEDCOMCustomEvent ev1, GEDCOMCustomEvent ev2, bool aCurEnd)
 		{
 			string result = "?";
 
@@ -887,20 +889,20 @@ namespace GKCore
 			return result;
 		}
 
-		public static string GetLifeExpectancy(TGEDCOMIndividualRecord iRec)
+		public static string GetLifeExpectancy(GEDCOMIndividualRecord iRec)
 		{
 			string result = "";
             if (iRec == null) return result;
 
 			try
 			{
-				TGEDCOMCustomEvent ev = null;
-				TGEDCOMCustomEvent ev2 = null;
+				GEDCOMCustomEvent ev = null;
+				GEDCOMCustomEvent ev2 = null;
 
 				int num = iRec.IndividualEvents.Count - 1;
 				for (int i = 0; i <= num; i++)
 				{
-					TGEDCOMCustomEvent evt = iRec.IndividualEvents[i];
+					GEDCOMCustomEvent evt = iRec.IndividualEvents[i];
 					if (evt.Name == "BIRT")
 					{
 						ev = evt;
@@ -921,20 +923,20 @@ namespace GKCore
 			return result;
 		}
 
-		public static string GetAge(TGEDCOMIndividualRecord iRec, int ToYear)
+		public static string GetAge(GEDCOMIndividualRecord iRec, int ToYear)
 		{
 			string result = "";
             if (iRec == null) return result;
 
 			try
 			{
-				TGEDCOMCustomEvent ev1 = null;
-				TGEDCOMCustomEvent ev2 = null;
+				GEDCOMCustomEvent ev1 = null;
+				GEDCOMCustomEvent ev2 = null;
 
 				int num = iRec.IndividualEvents.Count - 1;
 				for (int i = 0; i <= num; i++)
 				{
-					TGEDCOMCustomEvent evt = iRec.IndividualEvents[i];
+					GEDCOMCustomEvent evt = iRec.IndividualEvents[i];
 					if (evt.Name == "BIRT" && ev1 == null)
 					{
 						ev1 = evt;
@@ -975,27 +977,27 @@ namespace GKCore
 			return result;
 		}
 
-		public static string GetMarriageDate(TGEDCOMFamilyRecord fRec, DateFormat dateFormat)
+		public static string GetMarriageDate(GEDCOMFamilyRecord fRec, DateFormat dateFormat)
 		{
 			string result = "";
 
 			if (fRec != null)
 			{
-				TGEDCOMFamilyEvent evt = fRec.aux_GetFamilyEvent("MARR");
+				GEDCOMFamilyEvent evt = fRec.aux_GetFamilyEvent("MARR");
 				result = ((evt == null) ? "" : GKUtils.GEDCOMCustomDateToStr(evt.Detail.Date, dateFormat, false));
 			}
 
 			return result;
 		}
 
-		public static string GetDaysForBirth(TGEDCOMIndividualRecord iRec)
+		public static string GetDaysForBirth(GEDCOMIndividualRecord iRec)
 		{
             if (iRec == null) return string.Empty;
 
 			string result = "";
 			try
 			{
-				TGEDCOMCustomEvent evt = iRec.GetIndividualEvent("DEAT");
+				GEDCOMCustomEvent evt = iRec.GetIndividualEvent("DEAT");
 				if (evt != null)
 				{
 				}
@@ -1004,7 +1006,7 @@ namespace GKCore
 					evt = iRec.GetIndividualEvent("BIRT");
 					if (evt != null)
 					{
-						TGEDCOMDate dt = evt.Detail.Date.Value as TGEDCOMDate;
+						GEDCOMDate dt = evt.Detail.Date.Value as GEDCOMDate;
 						if (dt != null)
 						{
 							int bd_y;
@@ -1048,32 +1050,32 @@ namespace GKCore
 
 		#region Places functions
 
-		public static string GetBirthPlace(TGEDCOMIndividualRecord iRec)
+		public static string GetBirthPlace(GEDCOMIndividualRecord iRec)
 		{
             if (iRec == null) return string.Empty;
 
-			TGEDCOMCustomEvent evt = iRec.GetIndividualEvent("BIRT");
+			GEDCOMCustomEvent evt = iRec.GetIndividualEvent("BIRT");
 			string result = ((evt == null) ? "" : evt.Detail.Place.StringValue);
 			return result;
 		}
 
-		public static string GetDeathPlace(TGEDCOMIndividualRecord iRec)
+		public static string GetDeathPlace(GEDCOMIndividualRecord iRec)
 		{
             if (iRec == null) return string.Empty;
 
-			TGEDCOMCustomEvent evt = iRec.GetIndividualEvent("DEAT");
+			GEDCOMCustomEvent evt = iRec.GetIndividualEvent("DEAT");
 			string result = ((evt == null) ? "" : evt.Detail.Place.StringValue);
 			return result;
 		}
 
-		public static string GetResidencePlace(TGEDCOMIndividualRecord iRec, bool includeAddress)
+		public static string GetResidencePlace(GEDCOMIndividualRecord iRec, bool includeAddress)
 		{
             if (iRec == null) return string.Empty;
 
 			return GKUtils.GetPlaceStr(iRec.GetIndividualEvent("RESI"), includeAddress);
 		}
 
-		public static string GetPlaceStr(TGEDCOMCustomEvent aEvent, bool includeAddress)
+		public static string GetPlaceStr(GEDCOMCustomEvent aEvent, bool includeAddress)
 		{
 			string result;
 			if (aEvent == null)
@@ -1208,7 +1210,7 @@ namespace GKCore
 			parent.Controls.Add(listView);
 		}
 
-		public static void CreateRecordsView(Control parent, TGEDCOMTree tree, TGEDCOMRecordType recType, out GKRecordsView recView)
+		public static void CreateRecordsView(Control parent, GEDCOMTree tree, GEDCOMRecordType recType, out GKRecordsView recView)
 		{
 			recView = new GKRecordsView();
 			recView.HideSelection = false;
@@ -1227,7 +1229,7 @@ namespace GKCore
 
         #region Show information summary
 
-        public static void ShowAddressSummary(TGEDCOMAddress address, StringList summary)
+        public static void ShowAddressSummary(GEDCOMAddress address, StringList summary)
 		{
 			if (address != null && !address.IsEmpty() && summary != null)
 			{
@@ -1282,7 +1284,7 @@ namespace GKCore
 			}
 		}
 
-		public static void ShowDetailCause(TGEDCOMEventDetail eventDetail, StringList summary)
+		public static void ShowDetailCause(GEDCOMEventDetail eventDetail, StringList summary)
 		{
 			string cause = GKUtils.GetEventCause(eventDetail);
 			if (summary != null && cause != "")
@@ -1291,7 +1293,7 @@ namespace GKCore
 			}
 		}
 
-		public static void ShowDetailInfo(TGEDCOMEventDetail eventDetail, StringList summary)
+		public static void ShowDetailInfo(GEDCOMEventDetail eventDetail, StringList summary)
 		{
 			if (summary != null && eventDetail.SourceCitations.Count != 0)
 			{
@@ -1300,8 +1302,8 @@ namespace GKCore
 				int num = eventDetail.SourceCitations.Count - 1;
 				for (int idx = 0; idx <= num; idx++)
 				{
-					TGEDCOMSourceCitation cit = eventDetail.SourceCitations[idx];
-					TGEDCOMSourceRecord sourceRec = cit.Value as TGEDCOMSourceRecord;
+					GEDCOMSourceCitation cit = eventDetail.SourceCitations[idx];
+					GEDCOMSourceRecord sourceRec = cit.Value as GEDCOMSourceRecord;
 					if (sourceRec != null)
 					{
 						string nm = "\"" + sourceRec.FiledByEntry + "\"";
@@ -1315,9 +1317,9 @@ namespace GKCore
 			}
 		}
 
-		public static void ShowEvent(TGEDCOMRecord aSubject, StringList aToList, TGEDCOMRecord aRec, TGEDCOMCustomEvent evt)
+		public static void ShowEvent(GEDCOMRecord aSubject, StringList aToList, GEDCOMRecord aRec, GEDCOMCustomEvent evt)
 		{
-			if (aSubject is TGEDCOMNoteRecord)
+			if (aSubject is GEDCOMNoteRecord)
 			{
 				int num = evt.Detail.Notes.Count - 1;
 				for (int i = 0; i <= num; i++)
@@ -1330,7 +1332,7 @@ namespace GKCore
 			}
 			else
 			{
-				if (aSubject is TGEDCOMMultimediaRecord)
+				if (aSubject is GEDCOMMultimediaRecord)
 				{
 					int num2 = evt.Detail.MultimediaLinks.Count - 1;
 					for (int i = 0; i <= num2; i++)
@@ -1343,7 +1345,7 @@ namespace GKCore
 				}
 				else
 				{
-					if (aSubject is TGEDCOMSourceRecord)
+					if (aSubject is GEDCOMSourceRecord)
 					{
 						int num3 = evt.Detail.SourceCitations.Count - 1;
 						for (int i = 0; i <= num3; i++)
@@ -1358,11 +1360,11 @@ namespace GKCore
 			}
 		}
 
-		public static void ShowLink(TGEDCOMRecord aSubject, StringList aToList, TGEDCOMRecord aRec, TGEDCOMTag aTag, TGEDCOMPointer aExt)
+		public static void ShowLink(GEDCOMRecord aSubject, StringList aToList, GEDCOMRecord aRec, GEDCOMTag aTag, GEDCOMPointer aExt)
 		{
 			string prefix;
-			if (aSubject is TGEDCOMSourceRecord && aExt != null) {
-                TGEDCOMSourceCitation cit = (aExt as TGEDCOMSourceCitation);
+			if (aSubject is GEDCOMSourceRecord && aExt != null) {
+                GEDCOMSourceCitation cit = (aExt as GEDCOMSourceCitation);
 				if (cit.Page != "") {
 					prefix = cit.Page + ": ";
 				} else {
@@ -1373,27 +1375,27 @@ namespace GKCore
 			}
 
 			string suffix;
-			if (aTag != null && aTag is TGEDCOMCustomEvent) {
-				suffix = ", " + GKUtils.GetEventName(aTag as TGEDCOMCustomEvent).ToLower();
+			if (aTag != null && aTag is GEDCOMCustomEvent) {
+				suffix = ", " + GKUtils.GetEventName(aTag as GEDCOMCustomEvent).ToLower();
 			} else {
 				suffix = "";
 			}
 			aToList.Add("    " + prefix + GKUtils.GenRecordLink(aRec, true) + suffix);
 		}
 
-		public static void ShowPersonExtInfo(TGEDCOMTree tree, TGEDCOMIndividualRecord iRec, StringList summary)
+		public static void ShowPersonExtInfo(GEDCOMTree tree, GEDCOMIndividualRecord iRec, StringList summary)
 		{
 		    //if (tree == null || iRec == null || summary == null) return;
 
         	summary.Add("");
         	for (int i = 0, count = tree.RecordsCount; i < count; i++) {
-        		TGEDCOMRecord rec = tree[i];
-        		if (rec.RecordType == TGEDCOMRecordType.rtIndividual) {
-        			TGEDCOMIndividualRecord ir = rec as TGEDCOMIndividualRecord;
+        		GEDCOMRecord rec = tree[i];
+        		if (rec.RecordType == GEDCOMRecordType.rtIndividual) {
+        			GEDCOMIndividualRecord ir = rec as GEDCOMIndividualRecord;
         			
         			bool first = true;
         			for (int k = 0, cnt = ir.Associations.Count; k < cnt; k++) {
-                        TGEDCOMAssociation asso = ir.Associations[k];
+                        GEDCOMAssociation asso = ir.Associations[k];
 
                         if (asso.Individual == iRec) {
         					if (first) {
@@ -1407,7 +1409,7 @@ namespace GKCore
         	}
 		}
 
-		public static void ShowPersonNamesakes(TGEDCOMTree tree, TGEDCOMIndividualRecord iRec, StringList summary)
+		public static void ShowPersonNamesakes(GEDCOMTree tree, GEDCOMIndividualRecord iRec, StringList summary)
         {
             try
             {
@@ -1419,10 +1421,10 @@ namespace GKCore
                     int num3 = tree.RecordsCount - 1;
                     for (int i = 0; i <= num3; i++)
                     {
-                        TGEDCOMRecord rec = tree[i];
-                        if (rec is TGEDCOMIndividualRecord && rec != iRec)
+                        GEDCOMRecord rec = tree[i];
+                        if (rec is GEDCOMIndividualRecord && rec != iRec)
                         {
-                            TGEDCOMIndividualRecord rel_person = rec as TGEDCOMIndividualRecord;
+                            GEDCOMIndividualRecord rel_person = rec as GEDCOMIndividualRecord;
                             string unk = rel_person.aux_GetNameStr(true, false);
                             if (st == unk)
                             {
@@ -1439,7 +1441,7 @@ namespace GKCore
                         int num4 = namesakes.Count - 1;
                         for (int i = 0; i <= num4; i++)
                         {
-                            TGEDCOMIndividualRecord rel_person = namesakes.GetObject(i) as TGEDCOMIndividualRecord;
+                            GEDCOMIndividualRecord rel_person = namesakes.GetObject(i) as GEDCOMIndividualRecord;
                             summary.Add("    " + GKUtils.HyperLink(rel_person.XRef, namesakes[i], 0));
                         }
                     }
@@ -1455,27 +1457,27 @@ namespace GKCore
             }
         }
 
-		public static void ShowSubjectLinks(TGEDCOMRecord aInRecord, TGEDCOMRecord subject, StringList aToList)
+		public static void ShowSubjectLinks(GEDCOMRecord aInRecord, GEDCOMRecord subject, StringList aToList)
 		{
 			try
 			{
 				int num;
 
-				if (subject is TGEDCOMNoteRecord) {
+				if (subject is GEDCOMNoteRecord) {
 					num = aInRecord.Notes.Count - 1;
 					for (int i = 0; i <= num; i++) {
 						if (aInRecord.Notes[i].Value == subject) {
 							GKUtils.ShowLink(subject, aToList, aInRecord, null, null);
 						}
 					}
-				} else if (subject is TGEDCOMMultimediaRecord) {
+				} else if (subject is GEDCOMMultimediaRecord) {
 					num = aInRecord.MultimediaLinks.Count - 1;
 					for (int i = 0; i <= num; i++) {
 						if (aInRecord.MultimediaLinks[i].Value == subject) {
 							GKUtils.ShowLink(subject, aToList, aInRecord, null, null);
 						}
 					}
-				} else if (subject is TGEDCOMSourceRecord) {
+				} else if (subject is GEDCOMSourceRecord) {
 					num = aInRecord.SourceCitations.Count - 1;
 					for (int i = 0; i <= num; i++) {
 						if (aInRecord.SourceCitations[i].Value == subject) {
@@ -1484,14 +1486,14 @@ namespace GKCore
 					}
 				}
 
-				if (aInRecord is TGEDCOMIndividualRecord) {
-					TGEDCOMIndividualRecord iRec = aInRecord as TGEDCOMIndividualRecord;
+				if (aInRecord is GEDCOMIndividualRecord) {
+					GEDCOMIndividualRecord iRec = aInRecord as GEDCOMIndividualRecord;
 					num = iRec.IndividualEvents.Count - 1;
 					for (int i = 0; i <= num; i++) {
 						GKUtils.ShowEvent(subject, aToList, iRec, iRec.IndividualEvents[i]);
 					}
-				} else if (aInRecord is TGEDCOMFamilyRecord) {
-					TGEDCOMFamilyRecord fRec = aInRecord as TGEDCOMFamilyRecord;
+				} else if (aInRecord is GEDCOMFamilyRecord) {
+					GEDCOMFamilyRecord fRec = aInRecord as GEDCOMFamilyRecord;
 					num = fRec.FamilyEvents.Count - 1;
 					for (int i = 0; i <= num; i++) {
 						GKUtils.ShowEvent(subject, aToList, fRec, fRec.FamilyEvents[i]);
@@ -1504,7 +1506,7 @@ namespace GKCore
 			}
         }
 
-        public static void RecListMediaRefresh(TGEDCOMRecord record, StringList summary)
+        public static void RecListMediaRefresh(GEDCOMRecord record, StringList summary)
         {
             if (record == null || summary == null) return;
 
@@ -1518,8 +1520,8 @@ namespace GKCore
                     int num = record.MultimediaLinks.Count - 1;
                     for (int idx = 0; idx <= num; idx++)
                     {
-                        TGEDCOMMultimediaLink mmLink = record.MultimediaLinks[idx];
-                        TGEDCOMMultimediaRecord mmRec = mmLink.Value as TGEDCOMMultimediaRecord;
+                        GEDCOMMultimediaLink mmLink = record.MultimediaLinks[idx];
+                        GEDCOMMultimediaRecord mmRec = mmLink.Value as GEDCOMMultimediaRecord;
 
                         if (mmRec != null && mmRec.FileReferences.Count != 0)
                         {
@@ -1536,7 +1538,7 @@ namespace GKCore
             }
         }
 
-        public static void RecListNotesRefresh(TGEDCOMRecord record, StringList summary)
+        public static void RecListNotesRefresh(GEDCOMRecord record, StringList summary)
         {
             if (record == null || summary == null) return;
 
@@ -1550,7 +1552,7 @@ namespace GKCore
                     int num = record.Notes.Count - 1;
                     for (int idx = 0; idx <= num; idx++)
                     {
-                        TGEDCOMNotes note = record.Notes[idx];
+                        GEDCOMNotes note = record.Notes[idx];
 
                         int num2 = note.Notes.Count - 1;
                         for (int i = 0; i <= num2; i++)
@@ -1572,7 +1574,7 @@ namespace GKCore
             }
         }
 
-        public static void RecListSourcesRefresh(TGEDCOMRecord record, StringList summary)
+        public static void RecListSourcesRefresh(GEDCOMRecord record, StringList summary)
         {
             if (record == null || summary == null) return;
 
@@ -1586,8 +1588,8 @@ namespace GKCore
                     int num = record.SourceCitations.Count - 1;
                     for (int idx = 0; idx <= num; idx++)
                     {
-                        TGEDCOMSourceCitation cit = record.SourceCitations[idx];
-                        TGEDCOMSourceRecord sourceRec = cit.Value as TGEDCOMSourceRecord;
+                        GEDCOMSourceCitation cit = record.SourceCitations[idx];
+                        GEDCOMSourceRecord sourceRec = cit.Value as GEDCOMSourceRecord;
 
                         if (sourceRec != null)
                         {
@@ -1609,7 +1611,7 @@ namespace GKCore
             }
         }
 
-        public static void RecListAssociationsRefresh(TGEDCOMIndividualRecord record, StringList summary)
+        public static void RecListAssociationsRefresh(GEDCOMIndividualRecord record, StringList summary)
         {
             if (record == null || summary == null) return;
 
@@ -1623,7 +1625,7 @@ namespace GKCore
                     int num = record.Associations.Count - 1;
                     for (int idx = 0; idx <= num; idx++)
                     {
-                        TGEDCOMAssociation ast = record.Associations[idx];
+                        GEDCOMAssociation ast = record.Associations[idx];
                         string nm = ((ast.Individual == null) ? "" : ast.Individual.aux_GetNameStr(true, false));
 
                         summary.Add("    " + ast.Relation + " " + GKUtils.HyperLink(ast.Individual.XRef, nm, 0));
@@ -1636,7 +1638,7 @@ namespace GKCore
             }
         }
 
-        public static void RecListIndividualEventsRefresh(TGEDCOMIndividualRecord record, StringList summary)
+        public static void RecListIndividualEventsRefresh(GEDCOMIndividualRecord record, StringList summary)
         {
             if (record == null || summary == null) return;
 
@@ -1650,7 +1652,7 @@ namespace GKCore
                     int num = record.IndividualEvents.Count - 1;
                     for (int idx = 0; idx <= num; idx++)
                     {
-                        TGEDCOMCustomEvent evt = record.IndividualEvents[idx];
+                        GEDCOMCustomEvent evt = record.IndividualEvents[idx];
                         string st = GKUtils.GetIndividualEventName(evt);
 
                         string sv = "";
@@ -1672,7 +1674,7 @@ namespace GKCore
             }
         }
 
-        public static void RecListFamilyEventsRefresh(TGEDCOMFamilyRecord record, StringList summary)
+        public static void RecListFamilyEventsRefresh(GEDCOMFamilyRecord record, StringList summary)
         {
             if (record == null || summary == null) return;
 
@@ -1686,7 +1688,7 @@ namespace GKCore
                     int num = record.FamilyEvents.Count - 1;
                     for (int idx = 0; idx <= num; idx++)
                     {
-                        TGEDCOMFamilyEvent evt = record.FamilyEvents[idx];
+                        GEDCOMFamilyEvent evt = record.FamilyEvents[idx];
                         string st = GKUtils.GetFamilyEventName(evt);
 
                         summary.Add(st + ": " + GKUtils.GetEventDesc(evt.Detail));
@@ -1701,7 +1703,7 @@ namespace GKCore
             }
         }
 
-        public static void RecListGroupsRefresh(TGEDCOMIndividualRecord record, StringList summary)
+        public static void RecListGroupsRefresh(GEDCOMIndividualRecord record, StringList summary)
         {
             if (record == null || summary == null) return;
 
@@ -1715,8 +1717,8 @@ namespace GKCore
                     int num = record.Groups.Count - 1;
                     for (int idx = 0; idx <= num; idx++)
                     {
-                        TGEDCOMPointer ptr = record.Groups[idx];
-                        TGEDCOMGroupRecord grp = ptr.Value as TGEDCOMGroupRecord;
+                        GEDCOMPointer ptr = record.Groups[idx];
+                        GEDCOMGroupRecord grp = ptr.Value as GEDCOMGroupRecord;
                         if (grp != null)
                         {
                             summary.Add("    " + GKUtils.HyperLink(grp.XRef, grp.GroupName, 0));
@@ -1732,7 +1734,7 @@ namespace GKCore
 
         //
 
-        public static void ShowFamilyInfo(TGEDCOMFamilyRecord familyRec, StringList summary, ShieldState shieldState)
+        public static void ShowFamilyInfo(GEDCOMFamilyRecord familyRec, StringList summary, ShieldState shieldState)
         {
             if (summary == null) return;
 
@@ -1746,11 +1748,11 @@ namespace GKCore
                     {
                         summary.Add("");
 
-                        TGEDCOMIndividualRecord irec = familyRec.Husband.Value as TGEDCOMIndividualRecord;
+                        GEDCOMIndividualRecord irec = familyRec.Husband.Value as GEDCOMIndividualRecord;
                         string st = ((irec == null) ? LangMan.LS(LSID.LSID_UnkMale) : GKUtils.HyperLink(irec.XRef, irec.aux_GetNameStr(true, false), 0));
                         summary.Add(LangMan.LS(LSID.LSID_Husband) + ": " + st + GKUtils.GetLifeStr(irec));
 
-                        irec = (familyRec.Wife.Value as TGEDCOMIndividualRecord);
+                        irec = (familyRec.Wife.Value as GEDCOMIndividualRecord);
                         st = ((irec == null) ? LangMan.LS(LSID.LSID_UnkFemale) : GKUtils.HyperLink(irec.XRef, irec.aux_GetNameStr(true, false), 0));
                         summary.Add(LangMan.LS(LSID.LSID_Wife) + ": " + st + GKUtils.GetLifeStr(irec));
 
@@ -1763,7 +1765,7 @@ namespace GKCore
                         int num = familyRec.Childrens.Count - 1;
                         for (int i = 0; i <= num; i++)
                         {
-                            irec = (familyRec.Childrens[i].Value as TGEDCOMIndividualRecord);
+                            irec = (familyRec.Childrens[i].Value as GEDCOMIndividualRecord);
                             summary.Add("    " + GKUtils.HyperLink(irec.XRef, irec.aux_GetNameStr(true, false), 0) + GKUtils.GetLifeStr(irec));
                         }
                         summary.Add("");
@@ -1785,7 +1787,7 @@ namespace GKCore
             }
         }
         
-        public static void ShowGroupInfo(TGEDCOMGroupRecord groupRec, StringList summary)
+        public static void ShowGroupInfo(GEDCOMGroupRecord groupRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -1806,8 +1808,8 @@ namespace GKCore
                         int num = groupRec.Members.Count - 1;
                         for (int i = 0; i <= num; i++)
                         {
-                            TGEDCOMPointer ptr = groupRec.Members[i];
-                            TGEDCOMIndividualRecord member = ptr.Value as TGEDCOMIndividualRecord;
+                            GEDCOMPointer ptr = groupRec.Members[i];
+                            GEDCOMIndividualRecord member = ptr.Value as GEDCOMIndividualRecord;
                             mbrList.AddObject(member.aux_GetNameStr(true, false), member);
                         }
                         mbrList.Sort();
@@ -1815,7 +1817,7 @@ namespace GKCore
                         int num2 = mbrList.Count - 1;
                         for (int i = 0; i <= num2; i++)
                         {
-                            TGEDCOMIndividualRecord member = mbrList.GetObject(i) as TGEDCOMIndividualRecord;
+                            GEDCOMIndividualRecord member = mbrList.GetObject(i) as GEDCOMIndividualRecord;
                             summary.Add("    " + GKUtils.HyperLink(member.XRef, mbrList[i], i + 1));
                         }
 
@@ -1835,7 +1837,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowMultimediaInfo(TGEDCOMMultimediaRecord mediaRec, StringList summary)
+        public static void ShowMultimediaInfo(GEDCOMMultimediaRecord mediaRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -1854,7 +1856,7 @@ namespace GKCore
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Links) + ":");
 
-                        TGEDCOMTree tree = mediaRec.Owner;
+                        GEDCOMTree tree = mediaRec.Owner;
                         int num = tree.RecordsCount - 1;
                         for (int i = 0; i <= num; i++)
                         {
@@ -1876,7 +1878,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowNoteInfo(TGEDCOMNoteRecord noteRec, StringList summary)
+        public static void ShowNoteInfo(GEDCOMNoteRecord noteRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -1893,7 +1895,7 @@ namespace GKCore
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Links) + ":");
 
-                        TGEDCOMTree tree = noteRec.Owner;
+                        GEDCOMTree tree = noteRec.Owner;
                         int num = tree.RecordsCount - 1;
                         for (int i = 0; i <= num; i++)
                         {
@@ -1912,7 +1914,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowPersonInfo(TGEDCOMIndividualRecord iRec, StringList summary, ShieldState shieldState)
+        public static void ShowPersonInfo(GEDCOMIndividualRecord iRec, StringList summary, ShieldState shieldState)
         {
             if (summary == null) return;
 
@@ -1924,7 +1926,7 @@ namespace GKCore
                 {
                     if (iRec != null)
                     {
-                        TGEDCOMTree tree = iRec.Owner;
+                        GEDCOMTree tree = iRec.Owner;
 
                         summary.Add("");
                         summary.Add("~ub+1~" + iRec.aux_GetNameStr(true, true) + "~bu-1~");
@@ -1936,9 +1938,9 @@ namespace GKCore
                                 summary.Add("");
                                 summary.Add(LangMan.LS(LSID.LSID_Parents) + ":");
 
-                                TGEDCOMFamilyRecord family = iRec.ChildToFamilyLinks[0].Family;
+                                GEDCOMFamilyRecord family = iRec.ChildToFamilyLinks[0].Family;
 
-                                TGEDCOMIndividualRecord relPerson = family.Husband.Value as TGEDCOMIndividualRecord;
+                                GEDCOMIndividualRecord relPerson = family.Husband.Value as GEDCOMIndividualRecord;
                                 string st;
                                 if (relPerson != null)
                                 {
@@ -1950,7 +1952,7 @@ namespace GKCore
                                 }
                                 summary.Add("  " + LangMan.LS(LSID.LSID_Father) + ": " + st + GKUtils.GetLifeStr(relPerson));
 
-                                relPerson = (family.Wife.Value as TGEDCOMIndividualRecord);
+                                relPerson = (family.Wife.Value as GEDCOMIndividualRecord);
                                 if (relPerson != null)
                                 {
                                     st = GKUtils.HyperLink(relPerson.XRef, relPerson.aux_GetNameStr(true, false), 0);
@@ -1972,15 +1974,15 @@ namespace GKCore
                             int num = iRec.SpouseToFamilyLinks.Count - 1;
                             for (int idx = 0; idx <= num; idx++)
                             {
-                                TGEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[idx].Family;
+                                GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[idx].Family;
                                 if (family != null)
                                 {
                                     if (GKUtils.IsRecordAccess(family.Restriction, shieldState))
                                     {
                                         string st;
-                                        TGEDCOMPointer sp;
+                                        GEDCOMPointer sp;
                                         string unk;
-                                        if (iRec.Sex == TGEDCOMSex.svMale)
+                                        if (iRec.Sex == GEDCOMSex.svMale)
                                         {
                                             sp = family.Wife;
                                             st = LangMan.LS(LSID.LSID_Wife) + ": ";
@@ -2001,7 +2003,7 @@ namespace GKCore
                                         {
                                         	marr = LangMan.LS(LSID.LSID_LFamily);
                                         }
-                                        TGEDCOMIndividualRecord rel_person = sp.Value as TGEDCOMIndividualRecord;
+                                        GEDCOMIndividualRecord rel_person = sp.Value as GEDCOMIndividualRecord;
                                         summary.Add("");
                                         if (rel_person != null)
                                         {
@@ -2021,7 +2023,7 @@ namespace GKCore
                                         int num2 = family.Childrens.Count - 1;
                                         for (int i = 0; i <= num2; i++)
                                         {
-                                            rel_person = (family.Childrens[i].Value as TGEDCOMIndividualRecord);
+                                            rel_person = (family.Childrens[i].Value as GEDCOMIndividualRecord);
                                             summary.Add("    " + GKUtils.HyperLink(rel_person.XRef, rel_person.aux_GetNameStr(true, false), 0) + GKUtils.GetLifeStr(rel_person));
                                         }
                                     }
@@ -2055,7 +2057,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowSourceInfo(TGEDCOMSourceRecord sourceRec, StringList summary)
+        public static void ShowSourceInfo(GEDCOMSourceRecord sourceRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -2083,7 +2085,7 @@ namespace GKCore
                             int num = sourceRec.RepositoryCitations.Count - 1;
                             for (int i = 0; i <= num; i++)
                             {
-                                TGEDCOMRepositoryRecord rep = sourceRec.RepositoryCitations[i].Value as TGEDCOMRepositoryRecord;
+                                GEDCOMRepositoryRecord rep = sourceRec.RepositoryCitations[i].Value as GEDCOMRepositoryRecord;
                                 summary.Add("    " + GKUtils.HyperLink(rep.XRef, rep.RepositoryName, 0));
                             }
                         }
@@ -2091,7 +2093,7 @@ namespace GKCore
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Links) + ":");
 
-                        TGEDCOMTree tree = sourceRec.Owner;
+                        GEDCOMTree tree = sourceRec.Owner;
 
                         int num2 = tree.RecordsCount - 1;
                         for (int j = 0; j <= num2; j++)
@@ -2123,7 +2125,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowRepositoryInfo(TGEDCOMRepositoryRecord repositoryRec, StringList summary)
+        public static void ShowRepositoryInfo(GEDCOMRepositoryRecord repositoryRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -2144,16 +2146,16 @@ namespace GKCore
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_RPSources) + ":");
 
-                        TGEDCOMTree tree = repositoryRec.Owner;
+                        GEDCOMTree tree = repositoryRec.Owner;
 
                         int num = tree.RecordsCount - 1;
                         for (int i = 0; i <= num; i++)
                         {
-                            TGEDCOMRecord rec = tree[i];
+                            GEDCOMRecord rec = tree[i];
 
-                            if (rec is TGEDCOMSourceRecord)
+                            if (rec is GEDCOMSourceRecord)
                             {
-                                TGEDCOMSourceRecord srcRec = rec as TGEDCOMSourceRecord;
+                                GEDCOMSourceRecord srcRec = rec as GEDCOMSourceRecord;
 
                                 int num2 = srcRec.RepositoryCitations.Count - 1;
                                 for (int j = 0; j <= num2; j++)
@@ -2180,7 +2182,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowResearchInfo(TGEDCOMResearchRecord researchRec, StringList summary)
+        public static void ShowResearchInfo(GEDCOMResearchRecord researchRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -2208,7 +2210,7 @@ namespace GKCore
                             int num = researchRec.Tasks.Count - 1;
                             for (int i = 0; i <= num; i++)
                             {
-                                TGEDCOMTaskRecord taskRec = researchRec.Tasks[i].Value as TGEDCOMTaskRecord;
+                                GEDCOMTaskRecord taskRec = researchRec.Tasks[i].Value as GEDCOMTaskRecord;
                                 summary.Add("    " + GKUtils.GenRecordLink(taskRec, false));
                             }
                         }
@@ -2221,7 +2223,7 @@ namespace GKCore
                             int num2 = researchRec.Communications.Count - 1;
                             for (int i = 0; i <= num2; i++)
                             {
-                                TGEDCOMCommunicationRecord corrRec = researchRec.Communications[i].Value as TGEDCOMCommunicationRecord;
+                                GEDCOMCommunicationRecord corrRec = researchRec.Communications[i].Value as GEDCOMCommunicationRecord;
                                 summary.Add("    " + GKUtils.GenRecordLink(corrRec, false));
                             }
                         }
@@ -2234,7 +2236,7 @@ namespace GKCore
                             int num3 = researchRec.Groups.Count - 1;
                             for (int i = 0; i <= num3; i++)
                             {
-                                TGEDCOMGroupRecord grp = researchRec.Groups[i].Value as TGEDCOMGroupRecord;
+                                GEDCOMGroupRecord grp = researchRec.Groups[i].Value as GEDCOMGroupRecord;
                                 summary.Add("    " + GKUtils.HyperLink(grp.XRef, grp.GroupName, 0));
                             }
                         }
@@ -2253,7 +2255,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowTaskInfo(TGEDCOMTaskRecord taskRec, StringList summary)
+        public static void ShowTaskInfo(GEDCOMTaskRecord taskRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -2286,7 +2288,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowCommunicationInfo(TGEDCOMCommunicationRecord commRec, StringList summary)
+        public static void ShowCommunicationInfo(GEDCOMCommunicationRecord commRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -2298,7 +2300,7 @@ namespace GKCore
                     summary.Clear();
                     if (commRec != null)
                     {
-                        TGEDCOMTree tree = commRec.Owner;
+                        GEDCOMTree tree = commRec.Owner;
 
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Theme) + ": \"~ub+1~" + commRec.CommName.Trim() + "~bu-1~\"");
@@ -2322,7 +2324,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowLocationInfo(TGEDCOMLocationRecord locRec, StringList summary)
+        public static void ShowLocationInfo(GEDCOMLocationRecord locRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -2341,7 +2343,7 @@ namespace GKCore
                         summary.Add(LangMan.LS(LSID.LSID_Latitude) + ": " + locRec.Map.Lati);
                         summary.Add(LangMan.LS(LSID.LSID_Longitude) + ": " + locRec.Map.Long);
 
-                        TGEDCOMTree tree = locRec.Owner;
+                        GEDCOMTree tree = locRec.Owner;
 
                         GKUtils.GetLocationLinks(tree, locRec, ref linkList);
 

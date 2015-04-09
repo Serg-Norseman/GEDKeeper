@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Windows.Forms;
 
-using ExtUtils;
-using GedCom551;
+using GKCommon;
+using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKUI.Controls;
 using GKUI.Dialogs;
 
@@ -52,7 +53,7 @@ namespace GKUI.Sheets
                 int idx = 0;
                 this.DataList.Reset();
                 while (this.DataList.MoveNext()) {
-                    TGEDCOMCustomEvent evt = this.DataList.Current as TGEDCOMCustomEvent;
+                    GEDCOMCustomEvent evt = this.DataList.Current as GEDCOMCustomEvent;
                     idx += 1;
                 	
                     if (this.fPersonsMode)
@@ -72,7 +73,7 @@ namespace GKUI.Sheets
                     }
                     else
                     {
-                        string st = GKUtils.GetFamilyEventName(evt as TGEDCOMFamilyEvent);
+                        string st = GKUtils.GetFamilyEventName(evt as GEDCOMFamilyEvent);
 
                         GKListItem item = this.List.AddItem(idx.ToString(), evt);
                         item.SubItems.Add(st);
@@ -99,16 +100,16 @@ namespace GKUI.Sheets
             IBase aBase = this.Editor.Base;
             if (aBase == null) return;
 
-            TGEDCOMCustomEvent evt = eArgs.ItemData as TGEDCOMCustomEvent;
+            GEDCOMCustomEvent evt = eArgs.ItemData as GEDCOMCustomEvent;
 
-            bool result = this.ModifyRecEvent(aBase, this.DataList.Owner as TGEDCOMRecord, ref evt, eArgs.Action);
+            bool result = this.ModifyRecEvent(aBase, this.DataList.Owner as GEDCOMRecord, ref evt, eArgs.Action);
             if (result && eArgs.Action == RecordAction.raAdd) eArgs.ItemData = evt;
 
             if (result) this.UpdateSheet();
         }
 
         // FIXME
-        private bool ModifyRecEvent(IBase aBase, TGEDCOMRecord record, ref TGEDCOMCustomEvent aEvent, RecordAction action)
+        private bool ModifyRecEvent(IBase aBase, GEDCOMRecord record, ref GEDCOMCustomEvent aEvent, RecordAction action)
         {
             bool result = false;
 
@@ -120,20 +121,20 @@ namespace GKUI.Sheets
                     case RecordAction.raEdit:
                         using (TfmEventEdit fmEventEdit = new TfmEventEdit(aBase))
                         {
-                            TGEDCOMCustomEvent newEvent;
+                            GEDCOMCustomEvent newEvent;
                             if (aEvent != null)
                             {
                                 newEvent = aEvent;
                             }
                             else
                             {
-                                if (record is TGEDCOMIndividualRecord)
+                                if (record is GEDCOMIndividualRecord)
                                 {
-                                    newEvent = new TGEDCOMIndividualEvent(aBase.Tree, record, "", "");
+                                    newEvent = new GEDCOMIndividualEvent(aBase.Tree, record, "", "");
                                 }
                                 else
                                 {
-                                    newEvent = new TGEDCOMFamilyEvent(aBase.Tree, record, "", "");
+                                    newEvent = new GEDCOMFamilyEvent(aBase.Tree, record, "", "");
                                 }
                             }
 
@@ -156,21 +157,21 @@ namespace GKUI.Sheets
 
                                 if (aEvent == null)
                                 {
-                                    if (record is TGEDCOMIndividualRecord)
+                                    if (record is GEDCOMIndividualRecord)
                                     {
-                                        (record as TGEDCOMIndividualRecord).AddIndividualEvent(newEvent);
+                                        (record as GEDCOMIndividualRecord).AddIndividualEvent(newEvent);
                                     }
                                     else
                                     {
-                                        (record as TGEDCOMFamilyRecord).FamilyEvents.Add(newEvent as TGEDCOMFamilyEvent);
+                                        (record as GEDCOMFamilyRecord).FamilyEvents.Add(newEvent as GEDCOMFamilyEvent);
                                     }
                                 }
                                 else
                                 {
-                                    if (record is TGEDCOMIndividualRecord && newEvent != aEvent)
+                                    if (record is GEDCOMIndividualRecord && newEvent != aEvent)
                                     {
-                                        (record as TGEDCOMIndividualRecord).IndividualEvents.DeleteObject(aEvent);
-                                        (record as TGEDCOMIndividualRecord).AddIndividualEvent(newEvent);
+                                        (record as GEDCOMIndividualRecord).IndividualEvents.DeleteObject(aEvent);
+                                        (record as GEDCOMIndividualRecord).AddIndividualEvent(newEvent);
                                     }
                                 }
 
@@ -182,10 +183,10 @@ namespace GKUI.Sheets
 
                     case RecordAction.raDelete:
                         if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_RemoveEventQuery)) != DialogResult.No) {
-                            if (record is TGEDCOMIndividualRecord) {
-                                (record as TGEDCOMIndividualRecord).IndividualEvents.DeleteObject(aEvent);
+                            if (record is GEDCOMIndividualRecord) {
+                                (record as GEDCOMIndividualRecord).IndividualEvents.DeleteObject(aEvent);
                             } else {
-                                (record as TGEDCOMFamilyRecord).FamilyEvents.DeleteObject(aEvent as TGEDCOMFamilyEvent);
+                                (record as GEDCOMFamilyRecord).FamilyEvents.DeleteObject(aEvent as GEDCOMFamilyEvent);
                             }
 
                             aEvent = null;
@@ -195,9 +196,9 @@ namespace GKUI.Sheets
 
                     case RecordAction.raMoveUp:
                     case RecordAction.raMoveDown:
-                        if (record is TGEDCOMIndividualRecord)
+                        if (record is GEDCOMIndividualRecord)
                         {
-                            TGEDCOMIndividualRecord iRec = record as TGEDCOMIndividualRecord;
+                            GEDCOMIndividualRecord iRec = record as GEDCOMIndividualRecord;
                             int idx = iRec.IndividualEvents.IndexOfObject(aEvent);
                             switch (action)
                             {
@@ -213,8 +214,8 @@ namespace GKUI.Sheets
                         }
                         else
                         {
-                            TGEDCOMFamilyRecord fRec = record as TGEDCOMFamilyRecord;
-                            int idx = fRec.FamilyEvents.IndexOfObject(aEvent as TGEDCOMFamilyEvent);
+                            GEDCOMFamilyRecord fRec = record as GEDCOMFamilyRecord;
+                            int idx = fRec.FamilyEvents.IndexOfObject(aEvent as GEDCOMFamilyEvent);
                             switch (action)
                             {
                                 case RecordAction.raMoveUp:

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
 
-using ExtUtils;
-using GedCom551;
+using GKCommon;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKUI.Controls;
 
 namespace GKUI.Sheets
@@ -19,13 +21,13 @@ namespace GKUI.Sheets
             this.List.AddListColumn(LangMan.LS(LSID.LSID_MarriageDate), 100, false);
             this.Columns_EndUpdate();
 
-            this.Buttons = EnumSet<GKSheetList.SheetButton>.Create(
-				GKSheetList.SheetButton.lbAdd, 
-				GKSheetList.SheetButton.lbEdit, 
-				GKSheetList.SheetButton.lbDelete, 
-				GKSheetList.SheetButton.lbJump, 
-				GKSheetList.SheetButton.lbMoveUp, 
-				GKSheetList.SheetButton.lbMoveDown
+            this.Buttons = EnumSet<SheetButton>.Create(
+				SheetButton.lbAdd, 
+				SheetButton.lbEdit, 
+				SheetButton.lbDelete, 
+				SheetButton.lbJump, 
+				SheetButton.lbMoveUp, 
+				SheetButton.lbMoveDown
 			);
 
             this.OnModify += this.ListModify;
@@ -39,28 +41,28 @@ namespace GKUI.Sheets
             {
                 this.List.Items.Clear();
 
-                TGEDCOMIndividualRecord person = this.DataList.Owner as TGEDCOMIndividualRecord;
+                GEDCOMIndividualRecord person = this.DataList.Owner as GEDCOMIndividualRecord;
 
                 int idx = 0;
                 this.DataList.Reset();
                 while (this.DataList.MoveNext()) {
-                    TGEDCOMSpouseToFamilyLink spLink = this.DataList.Current as TGEDCOMSpouseToFamilyLink;
+                    GEDCOMSpouseToFamilyLink spLink = this.DataList.Current as GEDCOMSpouseToFamilyLink;
                     idx += 1;
 
-                    TGEDCOMFamilyRecord family = spLink.Family;
+                    GEDCOMFamilyRecord family = spLink.Family;
                     if (family != null)
                     {
-                        TGEDCOMIndividualRecord relPerson;
+                        GEDCOMIndividualRecord relPerson;
                         string relName;
 
-                        if (person.Sex == TGEDCOMSex.svMale)
+                        if (person.Sex == GEDCOMSex.svMale)
                         {
-                            relPerson = (family.Wife.Value as TGEDCOMIndividualRecord);
+                            relPerson = (family.Wife.Value as GEDCOMIndividualRecord);
                             relName = LangMan.LS(LSID.LSID_UnkFemale);
                         }
                         else
                         {
-                            relPerson = (family.Husband.Value as TGEDCOMIndividualRecord);
+                            relPerson = (family.Husband.Value as GEDCOMIndividualRecord);
                             relName = LangMan.LS(LSID.LSID_UnkMale);
                         }
 
@@ -91,8 +93,8 @@ namespace GKUI.Sheets
 
             bool result = false;
 
-            TGEDCOMIndividualRecord person = this.DataList.Owner as TGEDCOMIndividualRecord;
-            TGEDCOMFamilyRecord family = eArgs.ItemData as TGEDCOMFamilyRecord;
+            GEDCOMIndividualRecord person = this.DataList.Owner as GEDCOMIndividualRecord;
+            GEDCOMFamilyRecord family = eArgs.ItemData as GEDCOMFamilyRecord;
 
             switch (eArgs.Action)
             {

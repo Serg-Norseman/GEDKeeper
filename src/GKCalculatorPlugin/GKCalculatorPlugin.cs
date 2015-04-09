@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using ExtUtils;
+using GKCommon;
 using GKCore.Interfaces;
 
 [assembly: AssemblyTitle("GKCalculatorPlugin")]

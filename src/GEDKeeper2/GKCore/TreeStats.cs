@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using ExtUtils;
-using GedCom551;
+using GKCommon;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 
 namespace GKCore
 {
 	public class TreeStats
 	{
-		public struct TCommonStats
+		public struct CommonStats
 		{
 			public int persons;
 			public int persons_m;
@@ -109,14 +110,14 @@ namespace GKCore
 			smAAF_2
 		}
 
-		private readonly TGEDCOMTree fTree;
+		private readonly GEDCOMTree fTree;
 		
-		public TreeStats(TGEDCOMTree tree)
+		public TreeStats(GEDCOMTree tree)
 		{
 			this.fTree = tree;
 		}
 
-		private static void TakeVal(int val, TGEDCOMSex sex,
+		private static void TakeVal(int val, GEDCOMSex sex,
 		                     ref int com_sum, ref int com_count,
 		                     ref int f_sum, ref int f_count,
 		                     ref int m_sum, ref int m_count)
@@ -127,18 +128,18 @@ namespace GKCore
 			com_count++;
 			
 			switch (sex) {
-				case TGEDCOMSex.svFemale:
+				case GEDCOMSex.svFemale:
 					f_sum += val;
 					f_count++;
 					break;
-				case TGEDCOMSex.svMale:
+				case GEDCOMSex.svMale:
 					m_sum += val;
 					m_count++;
 					break;
 			}
 		}
 
-		private static void TakeVal(string val, TGEDCOMSex sex,
+		private static void TakeVal(string val, GEDCOMSex sex,
 							 ref int com_sum, ref int com_count,
 							 ref int f_sum, ref int f_count,
 							 ref int m_sum, ref int m_count)
@@ -150,7 +151,7 @@ namespace GKCore
 			}
 		}
 
-		public void GetCommonStats(out TCommonStats aStats)
+		public void GetCommonStats(out CommonStats aStats)
 		{
 			aStats.persons = 0;
 			aStats.persons_m = 0;
@@ -198,14 +199,14 @@ namespace GKCore
 			int num = this.fTree.RecordsCount - 1;
 			for (int i = 0; i <= num; i++)
 			{
-				TGEDCOMRecord rec = this.fTree[i];
-				if (rec is TGEDCOMIndividualRecord)
+				GEDCOMRecord rec = this.fTree[i];
+				if (rec is GEDCOMIndividualRecord)
 				{
-					TGEDCOMIndividualRecord ind = rec as TGEDCOMIndividualRecord;
+					GEDCOMIndividualRecord ind = rec as GEDCOMIndividualRecord;
 					aStats.persons++;
 
 					switch (ind.Sex) {
-						case TGEDCOMSex.svFemale:
+						case GEDCOMSex.svFemale:
 						{
 							aStats.persons_f++;
 							if (ind.IsLive())
@@ -215,7 +216,7 @@ namespace GKCore
 							}
 							break;
 						}
-						case TGEDCOMSex.svMale:
+						case GEDCOMSex.svMale:
 						{
 							aStats.persons_m++;
 							if (ind.IsLive())
@@ -239,7 +240,7 @@ namespace GKCore
 					TakeVal(ch_cnt, ind.Sex, ref aStats.childs, ref aStats.childs_cnt,
 					        ref aStats.childs_f, ref aStats.childs_f_cnt, ref aStats.childs_m, ref aStats.childs_m_cnt);
 
-					TGEDCOMIndividualRecord iDummy;
+					GEDCOMIndividualRecord iDummy;
 					int v_fba = TreeStats.GetFirstbornAge(ind, out iDummy);
 					TakeVal(v_fba, ind.Sex, ref aStats.fba, ref aStats.fba_cnt,
 					        ref aStats.fba_f, ref aStats.fba_f_cnt, ref aStats.fba_m, ref aStats.fba_m_cnt);
@@ -284,7 +285,7 @@ namespace GKCore
 			}
 		}
 
-		private static void GetSimplePersonStat(TStatMode aMode, List<TListVal> aVals, TGEDCOMIndividualRecord iRec)
+		private static void GetSimplePersonStat(TStatMode aMode, List<TListVal> aVals, GEDCOMIndividualRecord iRec)
 		{
 			string iName = iRec.aux_GetNameStr(true, false);
 
@@ -307,7 +308,7 @@ namespace GKCore
 						break;
 
 				case TStatMode.smFirstbornAge:
-						TGEDCOMIndividualRecord iDummy;
+						GEDCOMIndividualRecord iDummy;
 						aVals.Add(new TListVal(iName, TreeStats.GetFirstbornAge(iRec, out iDummy)));
 						break;
 
@@ -328,7 +329,7 @@ namespace GKCore
 						iRec.aux_GetNameParts(out fam, out nam, out pat);
 						switch (aMode) {
 							case TStatMode.smFamilies:
-								V = NamesTable.PrepareRusSurname(fam, iRec.Sex == TGEDCOMSex.svFemale);
+								V = NamesTable.PrepareRusSurname(fam, iRec.Sex == GEDCOMSex.svFemale);
 								break;
 							case TStatMode.smNames:
 								V = nam;
@@ -360,7 +361,7 @@ namespace GKCore
 						int num2 = iRec.IndividualEvents.Count - 1;
 						for (int j = 0; j <= num2; j++)
 						{
-							TGEDCOMCustomEvent evt = iRec.IndividualEvents[j];
+							GEDCOMCustomEvent evt = iRec.IndividualEvents[j];
 							int year;
 							ushort k, d;
 							evt.Detail.Date.aux_GetIndependentDate(out year, out k, out d);
@@ -473,11 +474,11 @@ namespace GKCore
 				int num = this.fTree.RecordsCount - 1;
 				for (int i = 0; i <= num; i++)
 				{
-					TGEDCOMRecord rec = this.fTree[i];
+					GEDCOMRecord rec = this.fTree[i];
 
-					if (rec is TGEDCOMIndividualRecord && aMode != TStatMode.smSpousesDiff)
+					if (rec is GEDCOMIndividualRecord && aMode != TStatMode.smSpousesDiff)
 					{
-						TGEDCOMIndividualRecord iRec = rec as TGEDCOMIndividualRecord;
+						GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
 						
 						if (aMode != TStatMode.smAAF_1 && aMode != TStatMode.smAAF_2)
 						{
@@ -485,7 +486,7 @@ namespace GKCore
 						}
 						else
 						{
-							TGEDCOMIndividualRecord iChild;
+							GEDCOMIndividualRecord iChild;
 							int fba = TreeStats.GetFirstbornAge(iRec, out iChild);
 							if (fba > 0) {
 								string key;
@@ -521,9 +522,9 @@ namespace GKCore
 					}
 					else
 					{
-						if (rec is TGEDCOMFamilyRecord && aMode == TStatMode.smSpousesDiff)
+						if (rec is GEDCOMFamilyRecord && aMode == TStatMode.smSpousesDiff)
 						{
-							TGEDCOMFamilyRecord fRec = rec as TGEDCOMFamilyRecord;
+							GEDCOMFamilyRecord fRec = rec as GEDCOMFamilyRecord;
 							aVals.Add(new TListVal(GKUtils.aux_GetFamilyStr(fRec), TreeStats.GetSpousesDiff(fRec)));
 						}
 					}
@@ -554,26 +555,26 @@ namespace GKCore
 			}
 		}
 
-		public static void InitExtCounts(TGEDCOMTree tree, int value)
+		public static void InitExtCounts(GEDCOMTree tree, int value)
 		{
 			for (int i = 0, count = tree.RecordsCount; i < count; i++) {
-				TGEDCOMRecord rec = tree[i];
+				GEDCOMRecord rec = tree[i];
 
-				if (rec is TGEDCOMIndividualRecord) {
+				if (rec is GEDCOMIndividualRecord) {
 					rec.ExtData = value;
 				}
 			}
 		}
 
-		public static void InitExtData(TGEDCOMTree tree)
+		public static void InitExtData(GEDCOMTree tree)
 		{
 			for (int i = 0, count = tree.RecordsCount; i < count; i++) {
-				TGEDCOMRecord rec = tree[i];
+				GEDCOMRecord rec = tree[i];
 				rec.ExtData = null;
 			}
 		}
 
-		public static int GetAncestorsCount(TGEDCOMIndividualRecord iRec)
+		public static int GetAncestorsCount(GEDCOMIndividualRecord iRec)
 		{
 			int result = 0;
 
@@ -586,13 +587,13 @@ namespace GKCore
 					val = 1;
 					if (iRec.ChildToFamilyLinks.Count > 0)
 					{
-						TGEDCOMFamilyRecord family = iRec.ChildToFamilyLinks[0].Family;
-						TGEDCOMIndividualRecord anc;
+						GEDCOMFamilyRecord family = iRec.ChildToFamilyLinks[0].Family;
+						GEDCOMIndividualRecord anc;
 
-						anc = family.Husband.Value as TGEDCOMIndividualRecord;
+						anc = family.Husband.Value as GEDCOMIndividualRecord;
 						val += TreeStats.GetAncestorsCount(anc);
 
-						anc = (family.Wife.Value as TGEDCOMIndividualRecord);
+						anc = (family.Wife.Value as GEDCOMIndividualRecord);
 						val += TreeStats.GetAncestorsCount(anc);
 					}
 
@@ -605,7 +606,7 @@ namespace GKCore
 			return result;
 		}
 
-		public static int GetDescendantsCount(TGEDCOMIndividualRecord iRec)
+		public static int GetDescendantsCount(GEDCOMIndividualRecord iRec)
 		{
 			int result = 0;
 
@@ -619,12 +620,12 @@ namespace GKCore
 					int num = iRec.SpouseToFamilyLinks.Count - 1;
 					for (int i = 0; i <= num; i++)
 					{
-						TGEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
+						GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
 
 						int num2 = family.Childrens.Count - 1;
 						for (int j = 0; j <= num2; j++)
 						{
-							TGEDCOMIndividualRecord iChild = family.Childrens[j].Value as TGEDCOMIndividualRecord;
+							GEDCOMIndividualRecord iChild = family.Childrens[j].Value as GEDCOMIndividualRecord;
 							val += TreeStats.GetDescendantsCount(iChild);
 						}
 					}
@@ -636,7 +637,7 @@ namespace GKCore
 			return result;
 		}
 
-		private static int GetDescGens_Recursive(TGEDCOMIndividualRecord iRec)
+		private static int GetDescGens_Recursive(GEDCOMIndividualRecord iRec)
 		{
 			int result = 0;
 
@@ -647,12 +648,12 @@ namespace GKCore
 				int num = iRec.SpouseToFamilyLinks.Count - 1;
 				for (int i = 0; i <= num; i++)
 				{
-					TGEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
+					GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
 
 					int num2 = family.Childrens.Count - 1;
 					for (int j = 0; j <= num2; j++)
 					{
-						TGEDCOMIndividualRecord iChild = family.Childrens[j].Value as TGEDCOMIndividualRecord;
+						GEDCOMIndividualRecord iChild = family.Childrens[j].Value as GEDCOMIndividualRecord;
 						int res = TreeStats.GetDescGens_Recursive(iChild);
 						if (max < res)
 						{
@@ -666,39 +667,39 @@ namespace GKCore
 			return result;
 		}
 
-		public static int GetDescGenerations(TGEDCOMIndividualRecord iRec)
+		public static int GetDescGenerations(GEDCOMIndividualRecord iRec)
 		{
 			return TreeStats.GetDescGens_Recursive(iRec) - 1;
 		}
 
-		public static int GetMarriagesCount(TGEDCOMIndividualRecord iRec)
+		public static int GetMarriagesCount(GEDCOMIndividualRecord iRec)
 		{
 			int result = ((iRec == null) ? 0 : iRec.SpouseToFamilyLinks.Count);
 			return result;
 		}
 
-		public static int GetSpousesDiff(TGEDCOMFamilyRecord fRec)
+		public static int GetSpousesDiff(GEDCOMFamilyRecord fRec)
 		{
 			int result = 0;
             if (fRec == null) return result;
 
 			try
 			{
-				TGEDCOMIndividualRecord h = fRec.Husband.Value as TGEDCOMIndividualRecord;
-				TGEDCOMIndividualRecord w = fRec.Wife.Value as TGEDCOMIndividualRecord;
+				GEDCOMIndividualRecord h = fRec.Husband.Value as GEDCOMIndividualRecord;
+				GEDCOMIndividualRecord w = fRec.Wife.Value as GEDCOMIndividualRecord;
 
 				if (h != null && w != null)
 				{
 					double y = -1.0;
 					double y2 = -1.0;
 
-					TGEDCOMCustomEvent evt = h.GetIndividualEvent("BIRT");
+					GEDCOMCustomEvent evt = h.GetIndividualEvent("BIRT");
 					if (evt != null) y = GKUtils.GetAbstractDate(evt.Detail);
 
 					evt = w.GetIndividualEvent("BIRT");
 					if (evt != null) y2 = GKUtils.GetAbstractDate(evt.Detail);
 
-					if (y > (double)0f && y2 > (double)0f)
+					if (y > 0f && y2 > 0f)
 					{
 						result = (int)SysUtils.Trunc(Math.Abs(y2 - y));
 					}
@@ -711,7 +712,7 @@ namespace GKCore
 			return result;
 		}
 
-		public static int GetFirstbornAge(TGEDCOMIndividualRecord iRec, out TGEDCOMIndividualRecord iChild)
+		public static int GetFirstbornAge(GEDCOMIndividualRecord iRec, out GEDCOMIndividualRecord iChild)
 		{
 			int result = 0;
 			iChild = null;
@@ -721,7 +722,7 @@ namespace GKCore
 			{
 				double y2 = 0.0;
 
-				TGEDCOMCustomEvent evt = iRec.GetIndividualEvent("BIRT");
+				GEDCOMCustomEvent evt = iRec.GetIndividualEvent("BIRT");
 				if (evt != null)
 				{
 					double y3 = GKUtils.GetAbstractDate(evt.Detail);
@@ -729,12 +730,12 @@ namespace GKCore
 					int num = iRec.SpouseToFamilyLinks.Count - 1;
 					for (int i = 0; i <= num; i++)
 					{
-						TGEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
+						GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
 
 						int num2 = family.Childrens.Count - 1;
 						for (int j = 0; j <= num2; j++)
 						{
-							TGEDCOMIndividualRecord child = family.Childrens[j].Value as TGEDCOMIndividualRecord;
+							GEDCOMIndividualRecord child = family.Childrens[j].Value as GEDCOMIndividualRecord;
 							evt = child.GetIndividualEvent("BIRT");
 							if (evt != null)
 							{
@@ -756,7 +757,7 @@ namespace GKCore
 						}
 					}
 
-					if (y3 > (double)1f && y2 > (double)1f)
+					if (y3 > 1.0f && y2 > 1.0f)
 					{
 						result = (int)SysUtils.Trunc(y2 - y3);
 					}
@@ -773,7 +774,7 @@ namespace GKCore
 			return result;
 		}
 
-		public static int GetMarriageAge(TGEDCOMIndividualRecord iRec)
+		public static int GetMarriageAge(GEDCOMIndividualRecord iRec)
 		{
 			int result = 0;
             if (iRec == null) return result;
@@ -782,7 +783,7 @@ namespace GKCore
 			{
 				double y2 = 0.0;
 
-				TGEDCOMCustomEvent evt = iRec.GetIndividualEvent("BIRT");
+				GEDCOMCustomEvent evt = iRec.GetIndividualEvent("BIRT");
 				if (evt != null)
 				{
 					double y3 = GKUtils.GetAbstractDate(evt.Detail);
@@ -790,12 +791,12 @@ namespace GKCore
 					int num = iRec.SpouseToFamilyLinks.Count - 1;
 					for (int i = 0; i <= num; i++)
 					{
-						TGEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
-						TGEDCOMFamilyEvent fEvent = family.aux_GetFamilyEvent("MARR");
+						GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
+						GEDCOMFamilyEvent fEvent = family.aux_GetFamilyEvent("MARR");
 						if (fEvent != null)
 						{
 							double y2tmp = GKUtils.GetAbstractDate(fEvent.Detail);
-							if (y2 == (double)0f)
+							if (y2 == 0.0d)
 							{
 								y2 = y2tmp;
 							}
@@ -808,7 +809,7 @@ namespace GKCore
 							}
 						}
 					}
-					if (y3 > (double)1f && y2 > (double)1f)
+					if (y3 > 1f && y2 > 1f)
 					{
 						result = (int)SysUtils.Trunc(y2 - y3);
 					}

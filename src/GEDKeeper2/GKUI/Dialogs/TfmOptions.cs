@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Windows.Forms;
 
-using GedCom551;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Options;
+using GKCore.Types;
 using GKUI.Controls;
 using GKUI.Lists;
-
-/// <summary>
-/// 
-/// </summary>
 
 namespace GKUI.Dialogs
 {
@@ -19,11 +16,14 @@ namespace GKUI.Dialogs
 		opCommon, opTreeChart, opAncestorsCircle, opInterface, opPedigree
 	}
 
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed partial class TfmOptions : Form, ILocalization
 	{
 		private readonly IHost fHost;
 		private GlobalOptions fOptions;
-		private readonly TIndividualListColumns fTempColumns;
+		private readonly IndividualListColumns fTempColumns;
 
 		public GlobalOptions Options
 		{
@@ -37,7 +37,7 @@ namespace GKUI.Dialogs
 
             this.fHost = aHost;
             this.fOptions = TfmGEDKeeper.Instance.Options;
-            this.fTempColumns = new TIndividualListColumns();
+            this.fTempColumns = new IndividualListColumns();
 
             (this as ILocalization).SetLang();
             this.UpdateForm();
@@ -52,7 +52,7 @@ namespace GKUI.Dialogs
 				this.ListPersonColumns.Items.Clear();
 				for (int i = 0; i < fTempColumns.Count; i++)
 				{
-					TPersonColumnType pct = (TPersonColumnType)fTempColumns[i].colType;
+					PersonColumnType pct = (PersonColumnType)fTempColumns[i].colType;
 					string colName = LangMan.LS(GlobalOptions.PersonColumnsName[(int) pct].Name);
                     this.ListPersonColumns.Items.Add(colName, fTempColumns[i].colActive);
 				}
@@ -66,7 +66,7 @@ namespace GKUI.Dialogs
 
 		private void UpdateControls()
 		{
-			this.lblChartFont.Text = this.fOptions.ChartOptions.DefFont_Name + ", " + this.fOptions.ChartOptions.DefFont_Size.ToString();
+			this.lblChartFont.Text = this.fOptions.ChartOptions.DefFontName + ", " + this.fOptions.ChartOptions.DefFontSize.ToString();
 		}
 
 	    private void UpdateLangs()
@@ -78,7 +78,7 @@ namespace GKUI.Dialogs
             int num = this.fOptions.GetLangsCount() - 1;
             for (int i = 0; i <= num; i++)
             {
-                GlobalOptions.TLangRecord lngRec = this.fOptions.GetLang(i);
+                LangRecord lngRec = this.fOptions.GetLang(i);
                 if (this.fOptions.InterfaceLang == lngRec.Code)
                 {
                     idx = i + 1;
@@ -92,10 +92,10 @@ namespace GKUI.Dialogs
 		{
             switch (this.fOptions.DefCharacterSet)
             {
-                case TGEDCOMCharacterSet.csASCII:
+                case GEDCOMCharacterSet.csASCII:
                     this.RButton1.Checked = true;
                     break;
-                case TGEDCOMCharacterSet.csUTF8:
+                case GEDCOMCharacterSet.csUTF8:
                     this.RButton2.Checked = true;
                     break;
             }
@@ -154,10 +154,10 @@ namespace GKUI.Dialogs
 
             switch (this.fOptions.PedigreeOptions.Format)
             {
-                case PedigreeOptions.PedigreeFormat.pfExcess:
+                case PedigreeFormat.pfExcess:
                     this.RButton10.Checked = true;
                     break;
-                case PedigreeOptions.PedigreeFormat.pfCompact:
+                case PedigreeFormat.pfCompact:
                     this.RButton11.Checked = true;
                     break;
             }
@@ -204,12 +204,12 @@ namespace GKUI.Dialogs
 		{
 			TreeChartOptions chartOptions = this.fOptions.ChartOptions;
 
-			this.FontDialog1.Font = new System.Drawing.Font(chartOptions.DefFont_Name, chartOptions.DefFont_Size);
+			this.FontDialog1.Font = new System.Drawing.Font(chartOptions.DefFontName, chartOptions.DefFontSize);
 
 			if (this.FontDialog1.ShowDialog() == DialogResult.OK)
 			{
-				chartOptions.DefFont_Name = this.FontDialog1.Font.Name;
-				chartOptions.DefFont_Size = (int)checked((long)Math.Round((double)this.FontDialog1.Font.Size));
+				chartOptions.DefFontName = this.FontDialog1.Font.Name;
+				chartOptions.DefFontSize = (int)(Math.Round(this.FontDialog1.Font.Size));
 			}
 			this.UpdateControls();
 		}
@@ -234,11 +234,11 @@ namespace GKUI.Dialogs
 
 			if (this.RButton1.Checked)
 			{
-				this.fOptions.DefCharacterSet = TGEDCOMCharacterSet.csASCII;
+				this.fOptions.DefCharacterSet = GEDCOMCharacterSet.csASCII;
 			}
 			else if (this.RButton2.Checked)
 			{
-				this.fOptions.DefCharacterSet = TGEDCOMCharacterSet.csUTF8;
+				this.fOptions.DefCharacterSet = GEDCOMCharacterSet.csUTF8;
 			}
 
 			if (this.RButton5.Checked)
@@ -294,11 +294,11 @@ namespace GKUI.Dialogs
 
 			if (this.RButton10.Checked)
 			{
-				this.fOptions.PedigreeOptions.Format = PedigreeOptions.PedigreeFormat.pfExcess;
+				this.fOptions.PedigreeOptions.Format = PedigreeFormat.pfExcess;
 			}
 			else if (this.RButton11.Checked)
 			{
-				this.fOptions.PedigreeOptions.Format = PedigreeOptions.PedigreeFormat.pfCompact;
+				this.fOptions.PedigreeOptions.Format = PedigreeFormat.pfCompact;
 			}
 
 			this.fOptions.ShowTips = this.chkShowOnStart.Checked;

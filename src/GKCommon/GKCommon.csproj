@@ -1,0 +1,238 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <ProjectGuid>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Library</OutputType>
+    <RootNamespace>GKCommon</RootNamespace>
+    <AssemblyName>GKCommon</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <NoWin32Manifest>False</NoWin32Manifest>
+    <SignAssembly>False</SignAssembly>
+    <DelaySign>False</DelaySign>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <NoStdLib>False</NoStdLib>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <BaseAddress>4194304</BaseAddress>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <FileAlignment>4096</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\</OutputPath>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\</OutputPath>
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>True</Optimize>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <DefineConstants>TRACE</DefineConstants>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="src\ExtUtils\ArborEngine\ArborEdge.cs" />
+    <Compile Include="src\ExtUtils\ArborEngine\ArborNode.cs" />
+    <Compile Include="src\ExtUtils\ArborEngine\ArborPoint.cs" />
+    <Compile Include="src\ExtUtils\ArborEngine\ArborSystem.cs" />
+    <Compile Include="src\ExtUtils\ArborEngine\ArborViewer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="src\ExtUtils\ArborEngine\BarnesHutTree.cs" />
+    <Compile Include="src\ExtUtils\ArborEngine\IArborRenderer.cs" />
+    <Compile Include="src\AssemblyInfo.cs" />
+    <Compile Include="src\Controls\ControlExtensions.cs" />
+    <Compile Include="src\Controls\ExtResources.Designer.cs">
+      <DependentUpon>ExtResources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="src\Controls\ImageView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\Controls\ImageView.Designer.cs">
+      <DependentUpon>ImageView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\Controls\HyperView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="src\ExtUtils\CSV\CSVReader.cs" />
+    <Compile Include="src\ExtUtils\CSV\StringConverter.cs" />
+    <Compile Include="src\ExtUtils\ListTimSort.cs" />
+    <Compile Include="src\ExtUtils\ZipStorer.cs" />
+    <Compile Include="src\Format\DateFormat.cs" />
+    <Compile Include="src\Format\NameFormat.cs" />
+    <Compile Include="src\Format\WomanSurnameFormat.cs" />
+    <Compile Include="src\GEDCOM\AnselEncoding.cs" />
+    <Compile Include="src\GEDCOM\EGEDCOMException.cs" />
+    <Compile Include="src\GEDCOM\Enums\GEDCOMApproximated.cs" />
+    <Compile Include="src\GEDCOM\Enums\GEDCOMBaptismDateStatus.cs" />
+    <Compile Include="src\GEDCOM\Enums\GEDCOMCalendar.cs" />
+    <Compile Include="src\GEDCOM\Enums\GEDCOMCharacterSet.cs" />
+    <Compile Include="src\GEDCOM\Enums\GEDCOMChildLinkageStatus.cs" />
+    <Compile Include="src\GEDCOM\Enums\GEDCOMChildSealingDateStatus.cs" />
+    <Compile Include="src\GEDCOM\Enums\GEDCOMDateFormat.cs" />
+    <Compile Include="src\GEDCOM\Enums\GEDCOMEndowmentDateStatus.cs" />
+    <Compile Include="src\GEDCOM\Enums\GEDCOMMediaType.cs" />
+    <Compile Include="src\GEDCOM\Enums\GEDCOMMultimediaFormat.cs" />
+    <Compile Include="src\GEDCOM\Enums\GEDCOMNamePieceType.cs" />
+    <Compile Include="src\GEDCOM\Enums\GEDCOMNameType.cs" />
+    <Compile Include="src\GEDCOM\Enums\GEDCOMOrdinanceProcessFlag.cs" />
+    <Compile Include="src\GEDCOM\Enums\GEDCOMPedigreeLinkageType.cs" />
+    <Compile Include="src\GEDCOM\Enums\GEDCOMRange.cs" />
+    <Compile Include="src\GEDCOM\Enums\GEDCOMRestriction.cs" />
+    <Compile Include="src\GEDCOM\Enums\GEDCOMSex.cs" />
+    <Compile Include="src\GEDCOM\Enums\GEDCOMSpouseSealingDateStatus.cs" />
+    <Compile Include="src\GEDCOM\Enums\GKCommunicationDir.cs" />
+    <Compile Include="src\GEDCOM\Enums\GKCommunicationType.cs" />
+    <Compile Include="src\GEDCOM\Enums\GKGoalType.cs" />
+    <Compile Include="src\GEDCOM\Enums\GKResearchPriority.cs" />
+    <Compile Include="src\GEDCOM\Enums\GKResearchStatus.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMFactory.cs" />
+    <Compile Include="src\GEDCOM\Enums\GEDCOMFormat.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMList.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMObject.cs" />
+    <Compile Include="src\GEDCOM\Enums\GEDCOMRecordType.cs" />
+    <Compile Include="src\GEDCOM\Enums\GEDCOMState.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMUtils.cs" />
+    <Compile Include="src\GEDCOM\IGEDCOMStructWithLists.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMAddress.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMAlias.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMAssociation.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMChangeDate.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMChildToFamilyLink.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMCommunicationRecord.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMCustomDate.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMCustomEvent.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMCustomRecord.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMData.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMDate.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMDateApproximated.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMDateExact.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMDateInterpreted.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMDatePeriod.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMDateRange.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMDateStatus.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMDateValue.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMEvent.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMEventDetail.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMFamilyEvent.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMFamilyRecord.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMFileReference.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMFileReferenceWithTitle.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMGroupRecord.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMHeader.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMIndividualAttribute.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMIndividualEvent.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMIndividualOrdinance.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMIndividualRecord.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMLocationRecord.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMMap.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMMultimediaLink.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMMultimediaRecord.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMNoteRecord.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMNotes.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMPersonalName.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMPersonalNamePieces.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMPlace.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMPointer.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMPointerWithNotes.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMRecord.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMRepositoryCitation.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMRepositoryRecord.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMResearchRecord.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMSourceCitation.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMSourceRecord.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMSpouseSealing.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMSpouseToFamilyLink.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMSubmissionRecord.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMSubmitterRecord.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMTag.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMTagWithLists.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMTaskRecord.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMTime.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMTree.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMUserReference.cs" />
+    <Compile Include="src\GEDCOM\MatchParams.cs" />
+    <Compile Include="src\GEDCOM\XRefReplacer.cs" />
+    <Compile Include="src\Graph\Edge.cs" />
+    <Compile Include="src\Graph\GraphvizWriter.cs" />
+    <Compile Include="src\Graph\IEdge.cs" />
+    <Compile Include="src\Graph\IGraph.cs" />
+    <Compile Include="src\Graph\IVertex.cs" />
+    <Compile Include="src\Graph\IDataProvider.cs" />
+    <Compile Include="src\Graph\TGraph.cs" />
+    <Compile Include="src\Graph\Vertex.cs" />
+    <Compile Include="src\ExtUtils\ImageBox\ImageBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="src\ExtUtils\ImageBox\ImageBoxBorderStyle.cs" />
+    <Compile Include="src\ExtUtils\ImageBox\ImageBoxGridDisplayMode.cs" />
+    <Compile Include="src\ExtUtils\ImageBox\ImageBoxGridScale.cs" />
+    <Compile Include="src\ExtUtils\ImageBox\ImageBoxNativeMethods.cs" />
+    <Compile Include="src\ExtUtils\ImageBox\ImageBoxSelectionMode.cs" />
+    <Compile Include="src\ExtUtils\ImageBox\ScrollControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="src\ExtUtils\ImageBox\VirtualScrollableControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="src\ExtUtils\ImageBox\ZoomLevelCollection.cs" />
+    <Compile Include="src\BaseObject.cs" />
+    <Compile Include="src\CRC32.cs" />
+    <Compile Include="src\EnumSet.cs" />
+    <Compile Include="src\ExtList.cs" />
+    <Compile Include="src\ExtRect.cs" />
+    <Compile Include="src\HighResolutionTimer.cs" />
+    <Compile Include="src\IndistinctMatching.cs" />
+    <Compile Include="src\IniFile.cs" />
+    <Compile Include="src\ExtUtils\MapiMailMessage.cs" />
+    <Compile Include="src\NavigationStack.cs" />
+    <Compile Include="src\RomeNumbers.cs" />
+    <Compile Include="src\SCCrypt.cs" />
+    <Compile Include="src\StringList.cs" />
+    <Compile Include="src\SysUtils.cs" />
+    <Compile Include="src\Tween.cs" />
+    <Compile Include="src\ValuesCollection.cs" />
+    <Compile Include="src\Win32Native.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\Format" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="src\Controls\ExtResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ExtResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\Controls\GKImageControl.resx">
+      <DependentUpon>ImageView.Designer.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

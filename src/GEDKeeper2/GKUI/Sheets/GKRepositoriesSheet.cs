@@ -2,9 +2,12 @@
 using System.Windows.Forms;
 
 using ExtUtils;
-using GedCom551;
+using GKCommon;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKUI.Controls;
 
 namespace GKUI.Sheets
@@ -36,8 +39,8 @@ namespace GKUI.Sheets
 
                 this.DataList.Reset();
                 while (this.DataList.MoveNext()) {
-                    TGEDCOMRepositoryCitation repCit = this.DataList.Current as TGEDCOMRepositoryCitation;
-                    TGEDCOMRepositoryRecord rep = repCit.Value as TGEDCOMRepositoryRecord;
+                    GEDCOMRepositoryCitation repCit = this.DataList.Current as GEDCOMRepositoryCitation;
+                    GEDCOMRepositoryRecord rep = repCit.Value as GEDCOMRepositoryRecord;
                     this.List.AddItem(rep.RepositoryName, repCit);
                 }
             }
@@ -54,15 +57,15 @@ namespace GKUI.Sheets
             IBase aBase = this.Editor.Base;
             if (aBase == null) return;
 
-            TGEDCOMSourceRecord sourceRecord = this.DataList.Owner as TGEDCOMSourceRecord;
-            TGEDCOMRepositoryCitation cit = eArgs.ItemData as TGEDCOMRepositoryCitation;
+            GEDCOMSourceRecord sourceRecord = this.DataList.Owner as GEDCOMSourceRecord;
+            GEDCOMRepositoryCitation cit = eArgs.ItemData as GEDCOMRepositoryCitation;
 
             bool result = false;
 
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    TGEDCOMRepositoryRecord rep = aBase.SelectRecord(TGEDCOMRecordType.rtRepository, null) as TGEDCOMRepositoryRecord;
+                    GEDCOMRepositoryRecord rep = aBase.SelectRecord(GEDCOMRecordType.rtRepository, null) as GEDCOMRepositoryRecord;
                     if (rep != null) {
                         sourceRecord.aux_AddRepository(rep);
                         result = true;

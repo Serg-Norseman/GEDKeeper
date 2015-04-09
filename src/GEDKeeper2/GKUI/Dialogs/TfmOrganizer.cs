@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Windows.Forms;
 
-using ExtUtils;
-using GedCom551;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 using GKUI.Controls;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKUI.Dialogs
 {
-	public partial class TfmOrganizer : Form
+    /// <summary>
+    /// 
+    /// </summary>
+    public partial class TfmOrganizer : Form
 	{
         private readonly IBase fBase;
         private readonly GKSheetList fAdrList;
@@ -32,18 +31,16 @@ namespace GKUI.Dialogs
 			int num = this.fBase.Tree.RecordsCount - 1;
 			for (int i = 0; i <= num; i++)
 			{
-				TGEDCOMRecord rec = this.fBase.Tree[i];
+				GEDCOMRecord rec = this.fBase.Tree[i];
+			    if (rec.RecordType != GEDCOMRecordType.rtIndividual) continue;
+			    
+                GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
+			    string nm = iRec.aux_GetNameStr(true, false);
 
-				if (rec is TGEDCOMIndividualRecord)
-				{
-					TGEDCOMIndividualRecord i_rec = rec as TGEDCOMIndividualRecord;
-					string nm = i_rec.aux_GetNameStr(true, false);
-
-					int num2 = i_rec.IndividualEvents.Count - 1;
-					for (int j = 0; j <= num2; j++) {
-						this.PrepareEvent(nm, i_rec.IndividualEvents[j]);
-					}
-				}
+			    int num2 = iRec.IndividualEvents.Count - 1;
+			    for (int j = 0; j <= num2; j++) {
+			        this.PrepareEvent(nm, iRec.IndividualEvents[j]);
+			    }
 			}
 
 			this.fAdrList.List.ResizeColumn(0);
@@ -96,30 +93,30 @@ namespace GKUI.Dialogs
 			item.SubItems.Add(value);
 		}
 
-		private void PrepareEvent(string iName, TGEDCOMCustomEvent ev)
+		private void PrepareEvent(string iName, GEDCOMCustomEvent ev)
 		{
-			TGEDCOMAddress addr = ev.Detail.Address;
-			if (addr != null) {
-				string addrStr = addr.Address.Text.Trim();
-				if (addrStr != "") {
-					AddItem(this.fAdrList.List, iName, addrStr);
-				}
+			GEDCOMAddress addr = ev.Detail.Address;
+		    if (addr == null) return;
+		    
+            string addrStr = addr.Address.Text.Trim();
+		    if (addrStr != "") {
+		        AddItem(this.fAdrList.List, iName, addrStr);
+		    }
 
-				int num = addr.PhoneNumbers.Count - 1;
-				for (int i = 0; i <= num; i++) {
-					AddItem(this.fPhonesList.List, iName, addr.PhoneNumbers[i].StringValue);
-				}
+		    int num = addr.PhoneNumbers.Count - 1;
+		    for (int i = 0; i <= num; i++) {
+		        AddItem(this.fPhonesList.List, iName, addr.PhoneNumbers[i].StringValue);
+		    }
 
-				int num2 = addr.EmailAddresses.Count - 1;
-				for (int i = 0; i <= num2; i++) {
-					AddItem(this.fMailsList.List, iName, addr.EmailAddresses[i].StringValue);
-				}
+		    int num2 = addr.EmailAddresses.Count - 1;
+		    for (int i = 0; i <= num2; i++) {
+		        AddItem(this.fMailsList.List, iName, addr.EmailAddresses[i].StringValue);
+		    }
 
-				int num3 = addr.WebPages.Count - 1;
-				for (int i = 0; i <= num3; i++) {
-					AddItem(this.fWebsList.List, iName, addr.WebPages[i].StringValue);
-				}
-			}
+		    int num3 = addr.WebPages.Count - 1;
+		    for (int i = 0; i <= num3; i++) {
+		        AddItem(this.fWebsList.List, iName, addr.WebPages[i].StringValue);
+		    }
 		}
 	}
 }

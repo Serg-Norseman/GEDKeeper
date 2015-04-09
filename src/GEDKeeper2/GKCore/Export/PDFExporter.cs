@@ -6,27 +6,26 @@ using GKCore.Interfaces;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 
-/// <summary>
-/// Localization: dirty
-/// CodeTransformation: need
-/// </summary>
-
 namespace GKCore.Export
 {
-	public abstract class PDFExporter : Exporter
+    /// <summary>
+    /// Localization: dirty
+    /// CodeTransformation: need
+    /// </summary>
+    public abstract class PDFExporter : Exporter
 	{
-		private Padding Margins;
+		private Padding fMargins;
 		protected Document fDocument;
 		protected PdfWriter fWriter;
-		protected bool albumPage;
+		protected bool fAlbumPage;
 
 	    protected PDFExporter(IBase aBase) : base(aBase)
 		{
-			this.Margins.Left = 20;
-			this.Margins.Top = 20;
-			this.Margins.Right = 20;
-			this.Margins.Bottom = 20;
-			this.albumPage = false;
+			this.fMargins.Left = 20;
+			this.fMargins.Top = 20;
+			this.fMargins.Right = 20;
+			this.fMargins.Bottom = 20;
+			this.fAlbumPage = false;
 		}
 
         protected override void Dispose(bool disposing)
@@ -45,9 +44,9 @@ namespace GKCore.Export
 			bool success = false;
 			if (!this.IsRequireFilename("PDF files (*.pdf)|*.pdf")) return;
 
-			Rectangle pageSize = !this.albumPage ? PageSize.A4 : PageSize.A4.Rotate();
+			Rectangle pageSize = !this.fAlbumPage ? PageSize.A4 : PageSize.A4.Rotate();
 			
-			fDocument = new Document(pageSize, (float)this.Margins.Left, (float)this.Margins.Right, (float)this.Margins.Top, (float)this.Margins.Bottom);
+			fDocument = new Document(pageSize, this.fMargins.Left, this.fMargins.Right, this.fMargins.Top, this.fMargins.Bottom);
 			try
 			{
 				try
@@ -118,11 +117,11 @@ namespace GKCore.Export
 
 				int num = 0;
 
-				var iEnum = this.FTree.GetEnumerator(TGEDCOMRecordType.rtIndividual);
-				TGEDCOMRecord rec;
+				var iEnum = this.FTree.GetEnumerator(GEDCOMRecordType.rtIndividual);
+				GEDCOMRecord rec;
 				while (iEnum.MoveNext(out rec))
 				{
-					TGEDCOMIndividualRecord iRec = rec as TGEDCOMIndividualRecord;
+					GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
 					num++;
 
 					if (num % 2 == 1)
@@ -141,7 +140,7 @@ namespace GKCore.Export
 					table.AddCell(new Phrase(GKUtils.GetDeathDate(iRec, TDateFormat.dfDD_MM_YYYY, false), cells_font));
 					table.AddCell(new Phrase(GKUtils.GetDeathPlace(iRec), cells_font));
 
-					TGEDCOMCustomEvent evt2 = iRec.GetIndividualEvent("OCCU");
+					GEDCOMCustomEvent evt2 = iRec.GetIndividualEvent("OCCU");
 					string st = ((evt2 == null) ? "" : evt2.StringValue);
 					table.AddCell(new Phrase(st, cells_font));
 

@@ -7,7 +7,7 @@
     <ProjectGuid>{B86F8B3B-E1CD-4A00-A73B-2D454924B8D2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GKCore.Interfaces</RootNamespace>
+    <RootNamespace>GKCore</RootNamespace>
     <AssemblyName>GKInterfaces</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>4096</FileAlignment>
@@ -25,15 +25,15 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>Full</DebugType>
     <Optimize>False</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <DebugType>PdbOnly</DebugType>
+    <Optimize>True</Optimize>
+    <OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -49,40 +49,56 @@
     <RegisterForComInterop>False</RegisterForComInterop>
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GKConsts.cs" />
-    <Compile Include="GKTypes.cs" />
-    <Compile Include="IBase.cs" />
-    <Compile Include="IBaseContext.cs" />
-    <Compile Include="IBaseEditor.cs" />
-    <Compile Include="ICustomFilter.cs" />
-    <Compile Include="ILangMan.cs" />
-    <Compile Include="IListFilter.cs" />
-    <Compile Include="IListManager.cs" />
-    <Compile Include="ILocalization.cs" />
-    <Compile Include="IHost.cs" />
-    <Compile Include="IPlugin.cs" />
-    <Compile Include="IProgressController.cs" />
-    <Compile Include="ISubscriber.cs" />
-    <Compile Include="IWidget.cs" />
-    <Compile Include="IWorkWindow.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\AssemblyInfo.cs" />
+    <Compile Include="src\GKConsts.cs" />
+    <Compile Include="src\Types\FamilyTarget.cs" />
+    <Compile Include="src\Types\MediaFileNotFoundException.cs" />
+    <Compile Include="src\Interfaces\IBase.cs" />
+    <Compile Include="src\Interfaces\IBaseContext.cs" />
+    <Compile Include="src\Interfaces\IBaseEditor.cs" />
+    <Compile Include="src\Interfaces\ICustomFilter.cs" />
+    <Compile Include="src\Interfaces\IHost.cs" />
+    <Compile Include="src\Interfaces\ILangMan.cs" />
+    <Compile Include="src\Interfaces\IListFilter.cs" />
+    <Compile Include="src\Interfaces\IListManager.cs" />
+    <Compile Include="src\Interfaces\ILocalization.cs" />
+    <Compile Include="src\Interfaces\IPlugin.cs" />
+    <Compile Include="src\Interfaces\IProgressController.cs" />
+    <Compile Include="src\Interfaces\ISubscriber.cs" />
+    <Compile Include="src\Interfaces\IWidget.cs" />
+    <Compile Include="src\Interfaces\IWorkWindow.cs" />
+    <Compile Include="src\Types\MediaStoreType.cs" />
+    <Compile Include="src\Types\NodeType.cs" />
+    <Compile Include="src\Types\PatriarchsGraphNode.cs" />
+    <Compile Include="src\Types\PedigreeFormat.cs" />
+    <Compile Include="src\Types\RecordAction.cs" />
+    <Compile Include="src\Types\ShieldState.cs" />
+    <Compile Include="src\Types\TargetMode.cs" />
+    <Compile Include="src\Types\ChartPersonSign.cs" />
+    <Compile Include="src\Types\FilterGroupMode.cs" />
+    <Compile Include="src\Types\FilterLifeMode.cs" />
+    <Compile Include="src\Types\PatriarchObj.cs" />
+    <Compile Include="src\Types\PersonEventKind.cs" />
+    <Compile Include="src\Types\RelationKind.cs" />
+    <Compile Include="src\Types\TUserRef.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ExtUtils\ExtUtils.csproj">
+    <ProjectReference Include="..\GKCommon\GKCommon.csproj">
       <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
-      <Name>ExtUtils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GEDCOM\GEDCOM.csproj">
-      <Project>{5F4BCDBD-5FF0-4406-A650-9B665F26A69A}</Project>
-      <Name>GEDCOM</Name>
+      <Name>GKCommon</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

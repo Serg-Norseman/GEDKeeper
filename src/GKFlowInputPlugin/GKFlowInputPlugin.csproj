@@ -67,13 +67,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ExtUtils\ExtUtils.csproj">
+    <ProjectReference Include="..\GKCommon\GKCommon.csproj">
       <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
-      <Name>ExtUtils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GEDCOM\GEDCOM.csproj">
-      <Project>{5F4BCDBD-5FF0-4406-A650-9B665F26A69A}</Project>
-      <Name>GEDCOM</Name>
+      <Name>GKCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\GKInterfaces\GKInterfaces.csproj">
       <Project>{B86F8B3B-E1CD-4A00-A73B-2D454924B8D2}</Project>

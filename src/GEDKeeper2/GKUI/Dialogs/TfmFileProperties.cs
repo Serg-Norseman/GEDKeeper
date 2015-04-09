@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Windows.Forms;
-
-using GedCom551;
+using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKUI.Dialogs
 {
-	public partial class TfmFileProperties : Form, IBaseEditor
+    /// <summary>
+    /// 
+    /// </summary>
+    public partial class TfmFileProperties : Form, IBaseEditor
 	{
 		private readonly IBase fBase;
 
@@ -39,7 +37,7 @@ namespace GKUI.Dialogs
 
 		private void UpdateControls()
 		{
-			TGEDCOMSubmitterRecord submitter = this.fBase.Tree.aux_GetSubmitter();
+			GEDCOMSubmitterRecord submitter = this.fBase.Tree.aux_GetSubmitter();
 			this.EditName.Text = submitter.Name.FullName;
 			this.MemoAddress.Text = submitter.Address.Address.Text;
 
@@ -52,7 +50,7 @@ namespace GKUI.Dialogs
 		{
 			try
 			{
-				TGEDCOMSubmitterRecord submitter = this.fBase.Tree.aux_GetSubmitter();
+				GEDCOMSubmitterRecord submitter = this.fBase.Tree.aux_GetSubmitter();
 				submitter.Name.StringValue = this.EditName.Text;
 				submitter.Address.SetAddressArray(this.MemoAddress.Lines);
 

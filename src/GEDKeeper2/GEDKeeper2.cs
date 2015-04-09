@@ -6,6 +6,7 @@ using System.Threading;
 using System.Windows.Forms;
 
 using ExtUtils;
+using GKCommon;
 using GKCore;
 using GKUI;
 

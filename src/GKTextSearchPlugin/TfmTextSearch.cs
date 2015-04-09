@@ -5,8 +5,9 @@ using System.IO;
 using System.Windows.Forms;
 
 using ExtUtils;
-using ExtUtils.Controls;
-using GedCom551;
+using GKCommon;
+using GKCommon.Controls;
+using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 
 /// <summary>
@@ -71,7 +72,7 @@ namespace GKTextSearchPlugin
 					SearchManager.SearchEntry entry = search_results[i];
 					Write(String.Format("~bu+1~{0}: {1}%~u~ ~^{2}:[{2}]~", entry.Rank, entry.Percent, entry.XRef) + "~b-1~");
 
-					TGEDCOMRecord rec = fBase.Tree.XRefIndex_Find(entry.XRef);
+					GEDCOMRecord rec = fBase.Tree.XRefIndex_Find(entry.XRef);
 					StringList ctx = fBase.GetRecordContent(rec);
 					fResultsText.Lines.AddStrings(ctx);
 					Write("");

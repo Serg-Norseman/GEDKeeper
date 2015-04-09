@@ -2,9 +2,12 @@
 using System.Windows.Forms;
 
 using ExtUtils;
-using GedCom551;
+using GKCommon;
+using GKCommon.GEDCOM;
+using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 using GKUI.Controls;
 
 namespace GKUI.Sheets
@@ -36,9 +39,9 @@ namespace GKUI.Sheets
 
                 this.DataList.Reset();
                 while (this.DataList.MoveNext()) {
-                    TGEDCOMPointer ptrMember = this.DataList.Current as TGEDCOMPointer;
+                    GEDCOMPointer ptrMember = this.DataList.Current as GEDCOMPointer;
 
-                    TGEDCOMIndividualRecord member = ptrMember.Value as TGEDCOMIndividualRecord;
+                    GEDCOMIndividualRecord member = ptrMember.Value as GEDCOMIndividualRecord;
                     this.List.AddItem(member.aux_GetNameStr(true, false), member);
                 }
             }
@@ -57,13 +60,13 @@ namespace GKUI.Sheets
 
             bool result = false;
 
-            TGEDCOMGroupRecord groupRecord = this.DataList.Owner as TGEDCOMGroupRecord;
-            TGEDCOMIndividualRecord member = eArgs.ItemData as TGEDCOMIndividualRecord;
+            GEDCOMGroupRecord groupRecord = this.DataList.Owner as GEDCOMGroupRecord;
+            GEDCOMIndividualRecord member = eArgs.ItemData as GEDCOMIndividualRecord;
 
             switch (eArgs.Action)
             {
                 case RecordAction.raAdd:
-                    member = aBase.SelectPerson(null, TargetMode.tmNone, TGEDCOMSex.svNone);
+                    member = aBase.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
                     result = (member != null && groupRecord.aux_AddMember(member));
                     break;
 

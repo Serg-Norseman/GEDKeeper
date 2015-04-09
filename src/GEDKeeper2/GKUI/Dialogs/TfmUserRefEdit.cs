@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Windows.Forms;
-
-using GedCom551;
+using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
-
-/// <summary>
-/// 
-/// </summary>
+using GKCore.Types;
 
 namespace GKUI.Dialogs
 {
-	public partial class TfmUserRefEdit : Form, IBaseEditor
+    /// <summary>
+    /// 
+    /// </summary>
+    public partial class TfmUserRefEdit : Form, IBaseEditor
 	{
 		private readonly IBase fBase;
 
-        private TGEDCOMUserReference fUserRef;
+        private GEDCOMUserReference fUserRef;
 
-		public TGEDCOMUserReference UserRef
+		public GEDCOMUserReference UserRef
 		{
 			get { return this.fUserRef; }
 			set { this.SetUserRef(value); }
@@ -28,7 +27,7 @@ namespace GKUI.Dialogs
 			get { return this.fBase; }
 		}
 
-		private void SetUserRef(TGEDCOMUserReference value)
+		private void SetUserRef(GEDCOMUserReference value)
 		{
 			this.fUserRef = value;
 			this.EditRef.Text = this.fUserRef.StringValue;

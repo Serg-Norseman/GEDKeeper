@@ -1,22 +1,20 @@
 using System;
 using System.Windows.Forms;
-
-using GedCom551;
+using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKUI.Dialogs
 {
-	public partial class TfmNoteEdit : Form, IBaseEditor
+    /// <summary>
+    /// 
+    /// </summary>
+    public partial class TfmNoteEdit : Form, IBaseEditor
 	{
 		private readonly IBase fBase;
-		private TGEDCOMNoteRecord fNoteRecord;
+		private GEDCOMNoteRecord fNoteRecord;
 
-		public TGEDCOMNoteRecord NoteRecord
+		public GEDCOMNoteRecord NoteRecord
 		{
 			get { return this.fNoteRecord; }
 			set { this.SetNoteRecord(value); }
@@ -27,7 +25,7 @@ namespace GKUI.Dialogs
 			get { return this.fBase; }
 		}
 
-		private void SetNoteRecord(TGEDCOMNoteRecord value)
+		private void SetNoteRecord(GEDCOMNoteRecord value)
 		{
 			this.fNoteRecord = value;
 			this.mmNote.Text = this.fNoteRecord.Note.Text.Trim();

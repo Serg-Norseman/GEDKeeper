@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BD2B94CA-5913-415B-9428-ED3C6D270602}</ProjectGuid>
+    <ProjectGuid>{FFE7826E-C352-46F3-AAC9-67FCCD9F6987}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GKImageViewerPlugin</RootNamespace>
@@ -54,7 +54,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GKImageViewerPlugin.cs" />
-    <Compile Include="ImageViewer.cs" />
+    <Compile Include="ImageViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ImageViewer.Designer.cs">
       <DependentUpon>ImageViewer.cs</DependentUpon>
     </Compile>
@@ -65,13 +67,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ExtUtils\ExtUtils.csproj">
+    <ProjectReference Include="..\GKCommon\GKCommon.csproj">
       <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
-      <Name>ExtUtils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GEDCOM\GEDCOM.csproj">
-      <Project>{5F4BCDBD-5FF0-4406-A650-9B665F26A69A}</Project>
-      <Name>GEDCOM</Name>
+      <Name>GKCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\GKInterfaces\GKInterfaces.csproj">
       <Project>{B86F8B3B-E1CD-4A00-A73B-2D454924B8D2}</Project>
