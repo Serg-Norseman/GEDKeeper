@@ -58,7 +58,7 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>..\..\</OutputPath>
     <DebugSymbols>false</DebugSymbols>
-    <DebugType>PdbOnly</DebugType>
+    <DebugType>None</DebugType>
     <Optimize>True</Optimize>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
@@ -95,6 +95,7 @@
     <Compile Include="GKCore\Export\FamilyBookExporter.cs" />
     <Compile Include="GKCore\Export\PDFExporter.cs" />
     <Compile Include="GKCore\Export\PedigreeExporter.cs" />
+    <Compile Include="GKCore\Export\TreesAlbumExporter.cs" />
     <Compile Include="GKCore\GKData.cs" />
     <Compile Include="GKCore\Kinships\KinshipRec.cs" />
     <Compile Include="GKCore\LangMan.cs" />
@@ -113,6 +114,8 @@
     </Compile>
     <Compile Include="GKUI\Charts\ChartFilter.cs" />
     <Compile Include="GKCore\Kinships\KinshipsMan.cs" />
+    <Compile Include="GKUI\Charts\ITreeControl.cs" />
+    <Compile Include="GKUI\Charts\PersonControl.cs" />
     <Compile Include="GKUI\Charts\PersonModifyEventArgs.cs" />
     <Compile Include="GKUI\Charts\ScaleControl.cs" />
     <Compile Include="GKUI\Charts\TreeChartPerson.cs" />

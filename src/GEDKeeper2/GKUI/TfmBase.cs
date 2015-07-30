@@ -2158,7 +2158,7 @@ namespace GKUI
 
 				case MediaStoreType.mstArchive:
 					refPath = GKData.GKStoreTypes[(int)storeType].Sign + storePath + storeFile;
-					this.ArcFileSave(fileName, storeFile);
+					this.ArcFileSave(fileName, storePath + storeFile);
 					break;
 
 				case MediaStoreType.mstStorage:

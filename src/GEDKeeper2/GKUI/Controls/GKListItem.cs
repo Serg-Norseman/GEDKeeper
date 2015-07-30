@@ -25,8 +25,7 @@ namespace GKUI.Controls
             this.Data = data;
         }
 
-        public GKListItem(string text, int imageIndex)
-            : base(text, imageIndex)
+        public GKListItem(string text, int imageIndex) : base(text, imageIndex)
 		{
 		}
 

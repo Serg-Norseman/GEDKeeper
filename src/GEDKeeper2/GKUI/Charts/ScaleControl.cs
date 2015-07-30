@@ -3,7 +3,7 @@ using System.Drawing.Drawing2D;
 
 namespace GKUI.Charts
 {
-    public class ScaleControl
+	public class ScaleControl : ITreeControl
     {
         #region Private fields
 		

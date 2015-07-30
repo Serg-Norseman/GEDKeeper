@@ -14,21 +14,21 @@ namespace GKCore.Export
     /// </summary>
     public abstract class Exporter : BaseObject
 	{
-		protected GlobalOptions FOptions;
-		protected string FPath;
+		protected GlobalOptions fOptions;
+		protected string fPath;
 		protected readonly IBase fBase;
-		protected GEDCOMTree FTree;
+		protected GEDCOMTree fTree;
 
 		public GlobalOptions Options
 		{
-			get { return this.FOptions; }
-			set { this.FOptions = value; }
+			get { return this.fOptions; }
+			set { this.fOptions = value; }
 		}
 
 	    protected Exporter(IBase aBase)
 		{
 	    	this.fBase = aBase;
-			this.FTree = aBase.Tree;
+			this.fTree = aBase.Tree;
 
 			//if (!Directory.Exists(this.FPath)) Directory.CreateDirectory(this.FPath);
 		}
@@ -61,7 +61,7 @@ namespace GKCore.Export
 				dlg.Filter = filter;
 				result = (dlg.ShowDialog() == DialogResult.OK);
 
-				if (result) this.FPath = dlg.FileName;
+				if (result) this.fPath = dlg.FileName;
 			}
 
 			return result;
@@ -69,8 +69,8 @@ namespace GKCore.Export
 
 		protected void ShowResult()
 		{
-			if (File.Exists(this.FPath)) {
-				Process.Start(this.FPath);
+			if (File.Exists(this.fPath)) {
+				Process.Start(this.fPath);
 			}
 		}
 

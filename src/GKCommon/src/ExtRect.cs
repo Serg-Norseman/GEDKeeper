@@ -23,7 +23,7 @@ namespace GKCommon
 
 		public static ExtRect Bounds(int left, int top, int width, int height)
 		{
-			return ExtRect.Create(left, top, left + width, top + height);
+			return ExtRect.Create(left, top, left + width - 1, top + height - 1);
 		}
 
 		public static ExtRect Empty()

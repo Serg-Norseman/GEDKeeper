@@ -1,8 +1,6 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 using GKCore.Interfaces;
 
@@ -33,7 +31,6 @@ namespace GKTimeLinePlugin
         private string fDisplayName = "GKTimeLinePlugin";
         private IHost fHost;
         private ILangMan fLangMan;
-    	private MenuItem fMenuItem; // for IWidget
 
         public string DisplayName { get { return this.fDisplayName; } }
         public IHost Host { get { return fHost; } }
@@ -43,7 +40,7 @@ namespace GKTimeLinePlugin
         
         public void Execute()
         {
-			if (!this.fMenuItem.Checked) {
+			if (!this.fHost.IsWidgetActive(this)) {
 				frm = new TfmTimeLine(this);
 				frm.Show();
 			} else {
@@ -52,9 +49,9 @@ namespace GKTimeLinePlugin
 			}
         }
 
-        public void OnHostClosing(object sender, CancelEventArgs e) {}
-		public void OnHostActivated(object sender, EventArgs e) {}
-		public void OnHostDeactivate(object sender, EventArgs e) {}
+        public void OnHostClosing(ref bool cancelClosing) {}
+		public void OnHostActivate() {}
+		public void OnHostDeactivate() {}
 
 		public void OnLanguageChange()
         {
@@ -102,15 +99,7 @@ namespace GKTimeLinePlugin
 
     	#region IWidget common
 
-    	MenuItem IWidget.MenuItem
-    	{
-    		get { return this.fMenuItem; }
-    	}
-
-    	void IWidget.WidgetInit(IHost host, MenuItem menuItem)
-    	{
-    		this.fMenuItem = menuItem;
-    	}
+    	void IWidget.WidgetInit(IHost host) {}
 
         void IWidget.BaseChanged(IBase aBase)
         {
@@ -118,6 +107,13 @@ namespace GKTimeLinePlugin
         		frm.BaseChanged(aBase);
         	}
     	}
+        
+        void IWidget.BaseClosed(IBase aBase)
+        {
+        	if (frm != null) {
+        		frm.BaseChanged(null);
+        	}
+        }
 
      	void IWidget.WidgetEnable() {}
 

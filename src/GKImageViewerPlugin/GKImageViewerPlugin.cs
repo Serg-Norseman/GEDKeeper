@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -43,9 +42,9 @@ namespace GKImageViewerPlugin
         	}
         }
 
-        public void OnHostClosing(object sender, CancelEventArgs e) {}
-		public void OnHostActivated(object sender, EventArgs e) {}
-		public void OnHostDeactivate(object sender, EventArgs e) {}
+        public void OnHostClosing(ref bool cancelClosing) {}
+		public void OnHostActivate() {}
+		public void OnHostDeactivate() {}
 
 		public void OnLanguageChange()
         {

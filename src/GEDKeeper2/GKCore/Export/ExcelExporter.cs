@@ -37,7 +37,7 @@ namespace GKCore.Export
 			Workbook workbook = new Workbook();
 			Worksheet worksheet = new Worksheet("First Sheet");
 
-			this.fBase.ProgressInit(LangMan.LS(LSID.LSID_MIExport) + "...", this.FTree.RecordsCount);
+			this.fBase.ProgressInit(LangMan.LS(LSID.LSID_MIExport) + "...", this.fTree.RecordsCount);
 
 			//TCellAttributeSet cas = (TCellAttributeSet.acBottomBorder | TCellAttributeSet.acTopBorder | TCellAttributeSet.acRightBorder | TCellAttributeSet.acLeftBorder);
 
@@ -57,10 +57,10 @@ namespace GKCore.Export
 				worksheet.Cells[1, 12] = new Cell(LangMan.LS(LSID.LSID_LifeExpectancy));
 
 				ushort row = 1;
-				int num = this.FTree.RecordsCount - 1;
+				int num = this.fTree.RecordsCount - 1;
 				for (int i = 0; i <= num; i++)
 				{
-					GEDCOMRecord rec = this.FTree[i];
+					GEDCOMRecord rec = this.fTree[i];
 					if (rec is GEDCOMIndividualRecord) {
 						GEDCOMIndividualRecord ind = rec as GEDCOMIndividualRecord;
 						if (this.fSelectedRecords == null || this.fSelectedRecords.IndexOf(rec) >= 0) {
@@ -79,7 +79,7 @@ namespace GKCore.Export
 							worksheet.Cells[row, 7] = new Cell(GKUtils.GetDeathDate(ind, DateFormat.dfDD_MM_YYYY, false));
 							worksheet.Cells[row, 8] = new Cell(GKUtils.GetBirthPlace(ind));
 							worksheet.Cells[row, 9] = new Cell(GKUtils.GetDeathPlace(ind));
-							worksheet.Cells[row,10] = new Cell(GKUtils.GetResidencePlace(ind, this.FOptions.PlacesWithAddress));
+							worksheet.Cells[row,10] = new Cell(GKUtils.GetResidencePlace(ind, this.fOptions.PlacesWithAddress));
 							worksheet.Cells[row,11] = new Cell(GKUtils.GetAge(ind, -1));
 							worksheet.Cells[row,12] = new Cell(GKUtils.GetLifeExpectancy(ind));
 						}
@@ -89,7 +89,7 @@ namespace GKCore.Export
 				}
 
 				workbook.Worksheets.Add(worksheet);
-				workbook.Save(this.FPath);
+				workbook.Save(this.fPath);
 
 				if (show) this.ShowResult();
 			}

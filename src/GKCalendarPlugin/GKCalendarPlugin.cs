@@ -1,8 +1,6 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 using GKCore.Interfaces;
 
@@ -39,7 +37,6 @@ namespace GKCalendarPlugin
         private string fDisplayName = "GKCalendarPlugin";
         private IHost fHost;
         private ILangMan fLangMan;
-    	private MenuItem fMenuItem; // for IWidget
 
         public string DisplayName { get { return this.fDisplayName; } }
         public IHost Host { get { return fHost; } }
@@ -49,7 +46,7 @@ namespace GKCalendarPlugin
         
         public void Execute()
         {
-			if (!this.fMenuItem.Checked) {
+			if (!this.fHost.IsWidgetActive(this)) {
 				frm = new TfmCalendar(this);
 				frm.Show();
 			} else {
@@ -57,9 +54,9 @@ namespace GKCalendarPlugin
 			}
         }
 
-        public void OnHostClosing(object sender, CancelEventArgs e) {}
-		public void OnHostActivated(object sender, EventArgs e) {}
-		public void OnHostDeactivate(object sender, EventArgs e) {}
+        public void OnHostClosing(ref bool cancelClosing) {}
+		public void OnHostActivate() {}
+		public void OnHostDeactivate() {}
 
 		public void OnLanguageChange()
         {
@@ -107,17 +104,9 @@ namespace GKCalendarPlugin
 
     	#region IWidget common
 
-    	MenuItem IWidget.MenuItem
-    	{
-    		get { return this.fMenuItem; }
-    	}
-
-    	void IWidget.WidgetInit(IHost host, MenuItem menuItem)
-    	{
-    		this.fMenuItem = menuItem;
-    	}
-
+    	void IWidget.WidgetInit(IHost host) {}
         void IWidget.BaseChanged(IBase aBase) {}
+        void IWidget.BaseClosed(IBase aBase) {}
         void IWidget.WidgetEnable() {}
 
         #endregion

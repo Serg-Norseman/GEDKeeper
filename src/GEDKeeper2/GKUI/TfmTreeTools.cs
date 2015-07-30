@@ -655,8 +655,7 @@ namespace GKUI
 				this.ListPatriarchs.Items.Clear();
 				this.fBase.Context.GetPatriarchsList(lst, decimal.ToInt32(this.edMinGens.Value), !chkWithoutDates.Checked);
 
-				int num = lst.Count - 1;
-				for (int i = 0; i <= num; i++)
+				for (int i = 0; i < lst.Count; i++)
 				{
 					PatriarchObj p_obj = lst[i];
 					string p_sign = ((p_obj.IRec.Patriarch) ? "[*] " : "");

@@ -31,7 +31,7 @@ namespace GKCommon
         private int curX, curY;
 
         private TweenAnimation fAnimation;
-		private int[] fStartPos = new int[] {0,0};
+		private float[] fStartPos = new float[] {0,0};
         private System.Windows.Forms.Timer fTimer;
         private TweenDelegate fTweenDelegate;
 		private IContainer fComponents;
@@ -66,6 +66,8 @@ namespace GKCommon
 			this.fAnimation = animType;
 			this.fStartPos[0] = srcX;
 			this.fStartPos[1] = srcY;
+			this.curX = srcX;
+			this.curY = srcY;
 			this.fDestX = destX;
 			this.fDestY = destY;
 
@@ -103,9 +105,6 @@ namespace GKCommon
 		///</summary>
 		private int Tween(int prop)
 		{
-            float t = (float)counter - timeStart;
-            float b = (float)fStartPos[prop];
-
             float c;
 			if (prop == 0) {
 				c = (float)fDestX - fStartPos[prop];
@@ -113,9 +112,10 @@ namespace GKCommon
 				c = (float)fDestY - fStartPos[prop];
 			}
 
+            float t = (float)counter - timeStart;
             float d = (float)timeDest - timeStart;
 
-			return this.GetFormula(t, b, d, c);
+			return this.GetFormula(t, fStartPos[prop], d, c);
 		}
 
 		///<summary>

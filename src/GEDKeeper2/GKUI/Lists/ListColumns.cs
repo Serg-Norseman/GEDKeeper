@@ -51,10 +51,10 @@ namespace GKUI.Lists
 			set { fColumns[index] = value; }
 		}
 
-		public Type ColumnEnum
+		/*public Type ColumnEnum
 		{
             get { return this.fColumnEnum; }
-		}
+		}*/
 
 		protected abstract void InitColumnStatics();
 

@@ -51,7 +51,7 @@ namespace GKCore.Export
 			{
 				try
 				{
-					this.fWriter = PdfWriter.GetInstance(fDocument, new FileStream(this.FPath, FileMode.Create));
+					this.fWriter = PdfWriter.GetInstance(fDocument, new FileStream(this.fPath, FileMode.Create));
 					this.InternalGenerate();
 					success = true;
 				}

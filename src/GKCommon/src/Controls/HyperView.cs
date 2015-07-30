@@ -582,8 +582,8 @@ namespace GKCommon.Controls
 				this.FRange.Y = (this.FPageHeight - CR.Height);
 			}
 
-            Win32Native.SetScrollRange(this.Handle, 0, 0, this.FRange.X, false);
-            Win32Native.SetScrollRange(this.Handle, 1, 0, this.FRange.Y, false);
+            Win32Native.SetScrollRange(this.Handle, Win32Native.SB_HORZ, 0, this.FRange.X, false);
+            Win32Native.SetScrollRange(this.Handle, Win32Native.SB_VERT, 0, this.FRange.Y, false);
 		}
 
 		private void SetLeftPos(int value)

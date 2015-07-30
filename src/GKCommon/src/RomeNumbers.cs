@@ -45,25 +45,22 @@
 		public static string GetRome(int N)
 		{
 			string S = "";
-			byte T = 13;
+			int T = 12;
+
 			if (N > 0)
 			{
 				while (true)
 				{
-					if (N >= RomeNumbers.Rn_N[(int)T - 1])
-					{
-						while (N >= RomeNumbers.Rn_N[(int)T - 1])
-						{
-							N -= RomeNumbers.Rn_N[(int)T - 1];
-							S += RomeNumbers.Rn_S[(int)T - 1];
+					int RN = RomeNumbers.Rn_N[T];
+					
+					if (N >= RN) {
+						while (N >= RN) {
+							N -= RN;
+							S += RomeNumbers.Rn_S[T];
 						}
-						if (N <= 0)
-						{
-							break;
-						}
-					}
-					else
-					{
+
+						if (N <= 0) break;
+					} else {
 						T -= 1;
 					}
 				}

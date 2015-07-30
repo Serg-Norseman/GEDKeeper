@@ -14,6 +14,7 @@ namespace GKTests
 		[Test]
 		public void RomeNumbers_Tests()
 		{
+			Assert.AreEqual("VI", RomeNumbers.GetRome(6), "RomeTest_00");
 			Assert.AreEqual("VIII", RomeNumbers.GetRome(8), "RomeTest_01");
 			Assert.AreEqual("IX", RomeNumbers.GetRome(9), "RomeTest_02");
 			Assert.AreEqual("XXXI", RomeNumbers.GetRome(31), "RomeTest_03");

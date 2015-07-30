@@ -25,11 +25,17 @@ namespace GKUI
     /// </summary>
     public sealed partial class TfmGEDKeeper : Form, ILocalization, IHost
 	{
+    	private class WidgetInfo
+    	{
+    		public IWidget Widget;
+    		public MenuItem MenuItem;
+    	}
+    	
 		private NamesTable fNamesTable;
 		private GlobalOptions fOptions;
         private List<IPlugin> fPlugins;
 
-        private readonly List<IWidget> fActiveWidgets;
+        private readonly List<WidgetInfo> fActiveWidgets;
         private readonly string[] fCommandArgs;
 
 		private static TfmGEDKeeper fInstance = null;
@@ -63,7 +69,7 @@ namespace GKUI
             fInstance = this;
 
             this.fCommandArgs = (string[])args.Clone();
-            this.fActiveWidgets = new List<IWidget>();
+            this.fActiveWidgets = new List<WidgetInfo>();
             
             //LangMan.SaveDefaultLanguage();
 		}
@@ -145,6 +151,16 @@ namespace GKUI
 			if (e.KeyCode == Keys.F12)
 			{
 				// dummy
+				IBase curBase = this.GetCurrentFile();
+				if (curBase == null) return;
+
+				using (TreesAlbumExporter p = new TreesAlbumExporter(curBase))
+				{
+					p.Ancestor = curBase.GetSelectedPerson();
+					p.Options = this.fOptions;
+					p.ShieldState = curBase.ShieldState;
+					p.Generate(true);
+				}
 			}
 		}
 
@@ -207,9 +223,9 @@ namespace GKUI
 
 			if (m.Msg == Win32Native.WM_KEEPMODELESS)
 			{
-				foreach (IWidget widget in this.fActiveWidgets)
+				foreach (WidgetInfo widgetInfo in this.fActiveWidgets)
 				{
-					widget.WidgetEnable();
+					widgetInfo.Widget.WidgetEnable();
 				}
 			}
 		}
@@ -707,10 +723,10 @@ namespace GKUI
 			IBase curBase = this.GetCurrentFile();
 		    if (curBase == null) return;
 
-			if (TfmChart.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartBox.TChartKind.ckAncestors))
+			if (TfmChart.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartBox.ChartKind.ckAncestors))
 			{
 				TfmChart fmChart = new TfmChart(curBase, curBase.GetSelectedPerson());
-				fmChart.ChartKind = TreeChartBox.TChartKind.ckAncestors;
+				fmChart.ChartKind = TreeChartBox.ChartKind.ckAncestors;
 				fmChart.GenChart(true);
 			}
 		}
@@ -720,10 +736,10 @@ namespace GKUI
 			IBase curBase = this.GetCurrentFile();
 		    if (curBase == null) return;
 
-			if (TfmChart.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartBox.TChartKind.ckDescendants))
+			if (TfmChart.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartBox.ChartKind.ckDescendants))
 			{
 				TfmChart fmChart = new TfmChart(curBase, curBase.GetSelectedPerson());
-				fmChart.ChartKind = TreeChartBox.TChartKind.ckDescendants;
+				fmChart.ChartKind = TreeChartBox.ChartKind.ckDescendants;
 				fmChart.GenChart(true);
 			}
 		}
@@ -787,10 +803,10 @@ namespace GKUI
 			IBase curBase = this.GetCurrentFile();
 		    if (curBase == null) return;
 
-			if (TfmChart.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartBox.TChartKind.ckBoth))
+			if (TfmChart.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartBox.ChartKind.ckBoth))
 			{
 				TfmChart fmChart = new TfmChart(curBase, curBase.GetSelectedPerson());
-				fmChart.ChartKind = TreeChartBox.TChartKind.ckBoth;
+				fmChart.ChartKind = TreeChartBox.ChartKind.ckBoth;
 				fmChart.GenChart(true);
 			}
 		}
@@ -986,18 +1002,26 @@ namespace GKUI
 			this.miPlugins.Visible = (this.fPlugins.Count > 0);
 			this.miPlugins.MenuItems.Clear();
 
+			this.fActiveWidgets.Clear();
+			
 			int num = this.fPlugins.Count;
 			for (int i = 0; i < num; i++)
 			{
-				string dispName = this.fPlugins[i].DisplayName;
+				IPlugin plugin = this.fPlugins[i];
+				string dispName = plugin.DisplayName;
 
 				MenuItem mi = new GKMenuItem(dispName, i);
 				mi.Click += this.Plugin_Click;
-				mi.Tag = this.fPlugins[i];
+				mi.Tag = plugin;
 				this.miPlugins.MenuItems.Add(mi);
 				
-				if (this.fPlugins[i] is IWidget) {
-					(this.fPlugins[i] as IWidget).WidgetInit(this, mi);
+				if (plugin is IWidget) {
+					WidgetInfo widInfo = new WidgetInfo();
+					widInfo.Widget = (plugin as IWidget);
+					widInfo.MenuItem = mi;
+					this.fActiveWidgets.Add(widInfo);
+
+					(plugin as IWidget).WidgetInit(this);
 				}
 			}
         }
@@ -1122,27 +1146,57 @@ namespace GKUI
 			return path;
 		}
 
+		private WidgetInfo FindWidgetInfo(IWidget widget)
+		{
+			foreach (WidgetInfo widgetInfo in this.fActiveWidgets)
+            {
+				if (widgetInfo.Widget == widget) {
+					return widgetInfo;
+				}
+            }
+			
+			return null;
+		}
+		
         public void WidgetShow(IWidget widget)
         {
-            if (this.fActiveWidgets.Contains(widget)) return;
-	    	this.fActiveWidgets.Add(widget);
-
-	    	if (widget.MenuItem != null) widget.MenuItem.Checked = true;
+        	WidgetInfo widInfo = this.FindWidgetInfo(widget);
+            if (widInfo == null) return;
+            
+	    	if (widInfo.MenuItem != null) widInfo.MenuItem.Checked = true;
         }
 
         public void WidgetClose(IWidget widget)
         {
-            if (!this.fActiveWidgets.Contains(widget)) return;
-            this.fActiveWidgets.Remove(widget);
-
-            if (widget.MenuItem != null) widget.MenuItem.Checked = false;
+        	WidgetInfo widInfo = this.FindWidgetInfo(widget);
+            if (widInfo == null) return;
+            
+            if (widInfo.MenuItem != null) widInfo.MenuItem.Checked = false;
         }
 
+        public bool IsWidgetActive(IWidget widget)
+        {
+        	WidgetInfo widInfo = this.FindWidgetInfo(widget);
+        	if (widInfo == null || widInfo.MenuItem == null) {
+        		return false;
+        	} else {
+        		return widInfo.MenuItem.Checked;
+        	}
+        }
+        
         public void BaseChanged(IBase aBase)
         {
-            foreach (IWidget widget in this.fActiveWidgets)
+            foreach (WidgetInfo widgetInfo in this.fActiveWidgets)
             {
-                widget.BaseChanged(aBase);
+                widgetInfo.Widget.BaseChanged(aBase);
+            }
+        }
+        
+        public void BaseClosed(IBase aBase)
+        {
+        	foreach (WidgetInfo widgetInfo in this.fActiveWidgets)
+            {
+                widgetInfo.Widget.BaseClosed(aBase);
             }
         }
         

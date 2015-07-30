@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
 using GKCore.Interfaces;
+using GKCore.Types;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 
@@ -58,6 +58,7 @@ namespace GKCore.Export
 		private Font fSubchapFont;
 		private Font fLinkFont;
 		private Font fTextFont;
+		private Font fBoldFont;
 		private Font fSymFont;
 
 		private StringList mainIndex;
@@ -101,7 +102,8 @@ namespace GKCore.Export
 				fSubchapFont = new Font(base_font, 14f, Font.BOLD, BaseColor.BLACK);
 				fLinkFont = new Font(base_font, 8f, Font.UNDERLINE, BaseColor.BLUE);
 				fTextFont = new Font(base_font, 8f, Font.NORMAL, BaseColor.BLACK);
-				fSymFont = new Font(base_font, 16f, Font.BOLD, BaseColor.BLACK);
+				fBoldFont = new Font(base_font, 8f, Font.BOLD, BaseColor.BLACK);
+				fSymFont = new Font(base_font, 14f, Font.BOLD, BaseColor.BLACK);
 
 				base_font = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Calibri.ttf"), "CP1251", BaseFont.EMBEDDED);
 				Font page_font = new Font(base_font, 9f, Font.NORMAL);
@@ -125,6 +127,12 @@ namespace GKCore.Export
 				chap_chunk.SetLocalGoto("Catalogs");
 				fDocument.Add(new Paragraph(chap_chunk));
 
+				// debug
+				/*Rectangle pgSize = fDocument.PageSize;
+				fDocument.Add(new Paragraph(Chunk.NEWLINE));
+				chap_chunk = new Chunk(pgSize.Height.ToString() + " / " + pgSize.Width.ToString(), fChapFont);
+				fDocument.Add(new Paragraph(chap_chunk) { Alignment = 1 });*/
+				
 				for (BookCatalog cat = BookCatalog.Catalog_First; cat <= BookCatalog.Catalog_Last; cat++)
 				{
 					chap_chunk = new Chunk(BookCatalogs[(int)cat].Title, fLinkFont);
@@ -136,7 +144,7 @@ namespace GKCore.Export
 
 				chap_chunk = new Chunk("Персональные записи", fChapFont);
 				chap_chunk.SetLocalDestination("IndividualRecords");
-				fDocument.Add(new Paragraph(chap_chunk) { Alignment = 1 });
+				fDocument.Add(new Paragraph(chap_chunk) { Alignment = 1, SpacingAfter = 20f });
 				fDocument.Add(new Paragraph(Chunk.NEWLINE));
 
 				SimpleColumnText columnText = new SimpleColumnText(fDocument, fWriter.DirectContent, 3, 10f);
@@ -156,18 +164,16 @@ namespace GKCore.Export
 					if ((isym >= 'A' && isym <= 'Z') || (isym >= 'А' && isym <= 'Я')) {
 						if (sym != isym) {
 							Paragraph ps = new Paragraph(new Chunk(isym, fSymFont));
-							ps.SpacingBefore = 0f;
-							ps.SpacingAfter = 20f;
 							ps.Alignment = 1;
-							ps.Add(Chunk.NEWLINE);
 							columnText.AddElement(ps);
+							columnText.AddElement(new Paragraph(Chunk.NEWLINE));
 							sym = isym;
 						}
 					}
 
-					this.ExposePerson(columnText, iRec, text, fTextFont, fLinkFont, colWidth);
+					this.ExposePerson(columnText, iRec, text, colWidth);
 
-					columnText.AddElement(new Paragraph(Chunk.NEWLINE) { SpacingAfter = 10f });
+					columnText.AddElement(new Paragraph(Chunk.NEWLINE));
 				}
 
 				fDocument.NewPage();
@@ -222,7 +228,7 @@ namespace GKCore.Export
 			
 			GEDCOMRecord rec;
 
-			var iEnum = this.FTree.GetEnumerator(GEDCOMRecordType.rtIndividual);
+			var iEnum = this.fTree.GetEnumerator(GEDCOMRecordType.rtIndividual);
 			while (iEnum.MoveNext(out rec))
 			{
 				GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
@@ -301,13 +307,16 @@ namespace GKCore.Export
 			sourcesIndex.Sort();
 		}
 
-		private void ExposePerson(ColumnText mct, GEDCOMIndividualRecord iRec, string iName, Font textFont, Font linkFont, float colWidth)
+		private void ExposePerson(ColumnText mct, GEDCOMIndividualRecord iRec, string iName, float colWidth)
 		{
-			Chunk chunk = new Chunk(iName, textFont);
+			Paragraph pg = new Paragraph();
+			Chunk chunk = new Chunk(iName, fBoldFont);
 			chunk.SetLocalDestination(iRec.XRef);
-			Paragraph p = new Paragraph(chunk);
-			p.KeepTogether = true;
-			mct.AddElement(p);
+			pg.Add(chunk);
+			chunk = new Chunk(GKUtils.GetPedigreeLifeStr(iRec, PedigreeFormat.pfCompact), fTextFont);
+			pg.Add(chunk);
+			pg.KeepTogether = true;
+			mct.AddElement(pg);
 
 			var bmp = this.fBase.GetPrimaryBitmap(iRec, 0, 0, false);
 			if (bmp != null)
@@ -335,21 +344,19 @@ namespace GKCore.Export
 			string text;
 
 			if (father != null) {
-				p = new Paragraph();
-				text = father.aux_GetNameStr(true, false);
-				chunk = new Chunk(text, linkFont);
+				pg = new Paragraph();
+				chunk = new Chunk(father.aux_GetNameStr(true, false), fLinkFont);
 				chunk.SetLocalGoto(father.XRef);
-				p.Add(new Chunk("Отец: ", textFont)); p.Add(chunk);
-				mct.AddElement(p);
+				pg.Add(new Chunk("Отец: ", fTextFont)); pg.Add(chunk);
+				mct.AddElement(pg);
 			}
 
 			if (mother != null) {
-				p = new Paragraph();
-				text = mother.aux_GetNameStr(true, false);
-				chunk = new Chunk(text, linkFont);
+				pg = new Paragraph();
+				chunk = new Chunk(mother.aux_GetNameStr(true, false), fLinkFont);
 				chunk.SetLocalGoto(mother.XRef);
-				p.Add(new Chunk("Мать: ", textFont)); p.Add(chunk);
-				mct.AddElement(p);
+				pg.Add(new Chunk("Мать: ", fTextFont)); pg.Add(chunk);
+				mct.AddElement(pg);
 			}
 
 			//string st;

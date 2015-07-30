@@ -54,12 +54,12 @@ namespace GKCore
 		    
             int cmp = 0;
 		    int len = Math.Min(aName.Length, aPatronymic.Length);
-		    for (int i = 1; i <= len; i++)
+		    for (int i = 0; i < len; i++)
 		    {
-		        if (aName[i - 1] == aPatronymic[i - 1])	cmp++; else break;
+		        if (aName[i] == aPatronymic[i]) cmp++; else break;
 		    }
 
-		    return (int)cmp >= (int)Math.Round((len * 3) / 4.0);
+		    return cmp >= (int)Math.Round(len * 0.5); // [Пав]ел/Павлович (3/5), [Ил]ья/Ильич (2/4)
 		}
 
         #endregion

@@ -5,11 +5,9 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
-//using System.Drawing.Drawing2D;
-
 namespace GKUI.Controls
 {
-	public class GKLogChart : Panel
+	public sealed class GKLogChart : Panel
 	{
 		private class Fragment
 		{
@@ -25,19 +23,22 @@ namespace GKUI.Controls
 			public Rectangle rect;
 		}
 
+		private readonly Brush FRAG_BRUSH = new SolidBrush(Color.Green);
+		private readonly Brush EMPTY_BRUSH = new SolidBrush(Color.Gray);
+		
 		private readonly List<Fragment> fList;
-		private readonly System.Windows.Forms.ToolTip toolTip;
+		private readonly System.Windows.Forms.ToolTip fToolTip;
+		private string fHint;
 
 		public GKLogChart()
 		{
             this.fList = new List<Fragment>();
 
-			//base.TabStop = true;
-			this.toolTip = new System.Windows.Forms.ToolTip();// this.components
-			this.toolTip.AutoPopDelay = 5000;
-			this.toolTip.InitialDelay = 250;
-			this.toolTip.ReshowDelay = 50;
-			this.toolTip.ShowAlways = true;
+			this.fToolTip = new System.Windows.Forms.ToolTip();
+			this.fToolTip.AutoPopDelay = 5000;
+			this.fToolTip.InitialDelay = 250;
+			this.fToolTip.ReshowDelay = 50;
+			this.fToolTip.ShowAlways = true;
 		}
 
 		protected override void Dispose(bool disposing)
@@ -134,44 +135,46 @@ namespace GKUI.Controls
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			base.OnPaint(e);
-
+			
 			if (this.Width <= 0 || this.Height <= 0) return;
+
+			Graphics gfx = e.Graphics;
 
 			int count = fList.Count;
 			if (count > 0) {
 				for (int i = 0; i < count; i++) {
 					Fragment frag = fList[i];
-					this.DrawRect(e, frag.x, frag.width, Color.Green, Color.Lime);
+					this.DrawRect(gfx, frag.x, frag.width, FRAG_BRUSH);
 				}
 			} else {
-				this.DrawRect(e, 0, this.Width, Color.Gray, Color.Silver);
+				this.DrawRect(gfx, 0, this.Width, EMPTY_BRUSH);
 			}
 		}
 
-		private void DrawRect(PaintEventArgs e, int x, int width, Color color1, Color color2)
+		private void DrawRect(Graphics gfx, int x, int width, Brush lb)
 		{
-			Brush lb = new SolidBrush(color1);
-			//LinearGradientBrush lb = new LinearGradientBrush(
-			//	new Rectangle(0, 0, width, this.Height),
-			//	Color.FromArgb(255, color1), Color.FromArgb(50, color2), LinearGradientMode.ForwardDiagonal);
-
-			e.Graphics.FillRectangle(lb, x, 0, width, this.Height);
-			lb.Dispose();
+			gfx.FillRectangle(lb, x, 0, width, this.Height);
 		}
 
 		protected override void OnMouseMove(MouseEventArgs e)
 		{
 			base.OnMouseMove(e);
 
+			string hint = "";
 			int count = fList.Count;
 			for (int i = 0; i < count; i++) {
 				Fragment frag = fList[i];
 
 				if (frag.rect.Contains(e.X, e.Y)) {
 					string st = (i + 1).ToString();
-					toolTip.Show("Фрагмент: " + st + ", размер = " + frag.srcval.ToString(), this, e.X, e.Y, 3000);
+					hint = "Фрагмент: " + st + ", размер = " + frag.srcval.ToString();
 					break;
 				}
+			}
+
+			if (this.fHint != hint) {
+				this.fHint = hint;
+				fToolTip.Show(hint, this, e.X, e.Y, 3000);
 			}
 		}
 

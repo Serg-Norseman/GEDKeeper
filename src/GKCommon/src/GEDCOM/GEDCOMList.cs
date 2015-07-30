@@ -228,16 +228,13 @@ namespace GKCommon.GEDCOM
 
 		public void Pack()
 		{
-			if (this.fList != null)
-			{
-				for (int i = this.fList.Count - 1; i >= 0; i--)
-				{
-                    if (this.fList[i] is GEDCOMTag)
-					{
-                        GEDCOMTag tag = this.fList[i] as GEDCOMTag;
+			if (this.fList != null) {
+				for (int i = this.fList.Count - 1; i >= 0; i--) {
+					T item = this.fList[i];
+					if (item is GEDCOMTag) {
+						GEDCOMTag tag = item as GEDCOMTag;
 						tag.Pack();
-						if (tag.IsEmpty() && tag.IsEmptySkip())
-						{
+						if (tag.IsEmpty() && tag.IsEmptySkip()) {
 							this.Delete(i);
 						}
 					}

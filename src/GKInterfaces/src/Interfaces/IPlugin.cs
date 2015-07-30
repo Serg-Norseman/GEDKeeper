@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 
 namespace GKCore.Interfaces
 {
@@ -13,9 +12,9 @@ namespace GKCore.Interfaces
         bool Startup(IHost host);
         bool Shutdown();
 
-		void OnHostClosing(object sender, CancelEventArgs e);
-		void OnHostActivated(object sender, EventArgs e);
-		void OnHostDeactivate(object sender, EventArgs e);
+		void OnHostClosing(ref bool cancelClosing);
+		void OnHostActivate();
+		void OnHostDeactivate();
         void OnLanguageChange();
     }
 }

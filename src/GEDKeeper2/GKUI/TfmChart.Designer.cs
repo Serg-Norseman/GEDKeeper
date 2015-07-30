@@ -102,7 +102,7 @@ namespace GKUI
 			// SaveDialog1
 			// 
 			this.SaveDialog1.DefaultExt = "tga";
-			this.SaveDialog1.Filter = "Файлы BMP (*.bmp)|*.bmp|Файлы JPEG (*.jpg)|*.jpg|Файлы EMF (*.emf)|*.emf";
+			this.SaveDialog1.Filter = "Файлы BMP (*.bmp)|*.bmp|Файлы JPEG (*.jpg)|*.jpg|Файлы EMF (*.emf)|*.emf|Файлы PNG (*.png)|*.png|Файлы GIF (*.gif)|*.gif";
 			this.SaveDialog1.FilterIndex = 2;
 			// 
 			// ToolBar1
