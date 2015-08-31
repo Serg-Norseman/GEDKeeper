@@ -6,7 +6,8 @@ namespace GKCore.Types
         urUSSR_Soldier,
         urUSSR_FallInBattle,
         urUSSR_RearVeteran,
+        urUSSR_Repression,
 		
-        urLast = urUSSR_RearVeteran
+        urLast = urUSSR_Repression
     }
 }

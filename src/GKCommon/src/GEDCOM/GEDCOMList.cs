@@ -4,9 +4,9 @@ using System.IO;
 
 namespace GKCommon.GEDCOM
 {
-	public interface IGEDCOMListEnumerator
+	public interface IGEDCOMListEnumerator<out T>
 	{
-		object Current
+		T Current
 		{
 			get;
 		}
@@ -24,46 +24,42 @@ namespace GKCommon.GEDCOM
 	{
 		#region ListEnumerator
 
-		public sealed class GEDCOMListEnumerator : IGEDCOMListEnumerator
+		private struct GEDCOMListEnumerator : IGEDCOMListEnumerator<T>
 		{
 			private readonly GEDCOMList<T> fList;
 			private int fIndex;
+			private int fSize;
 
 			public GEDCOMListEnumerator(GEDCOMList<T> list)
 			{
 				this.fList = list;
 				this.fIndex = -1;
+				this.fSize = list.Count;
 			}
 
-			void IGEDCOMListEnumerator.Reset()
+			void IGEDCOMListEnumerator<T>.Reset()
 			{
 				this.fIndex = -1;
+				this.fSize = this.fList.Count;
 			}
 
-			GEDCOMObject IGEDCOMListEnumerator.Owner
+			GEDCOMObject IGEDCOMListEnumerator<T>.Owner
 			{
 				get {
 					return this.fList.fOwner;
 				}
 			}
 
-			bool IGEDCOMListEnumerator.MoveNext()
+			bool IGEDCOMListEnumerator<T>.MoveNext()
 			{
 				this.fIndex++;
-				return (this.fIndex < this.fList.Count);
+				return (this.fIndex < this.fSize);
 			}
 
-			object IGEDCOMListEnumerator.Current
+			T IGEDCOMListEnumerator<T>.Current
 			{
 				get {
-					try
-					{
-						return this.fList[fIndex];
-					}
-					catch (IndexOutOfRangeException)
-					{
-						throw new InvalidOperationException();
-					}
+					return this.fList[fIndex];
 				}
 			}
 		}
@@ -89,6 +85,13 @@ namespace GKCommon.GEDCOM
 			}
 		}
 
+		public GEDCOMObject Owner
+		{
+			get {
+				return this.fOwner;
+			}
+		}
+		
 		public GEDCOMList(GEDCOMObject owner)
 		{
 		    this.fOwner = owner;
@@ -105,7 +108,7 @@ namespace GKCommon.GEDCOM
 			}
 		}
 
-		public IGEDCOMListEnumerator GetEnumerator()
+		public IGEDCOMListEnumerator<T> GetEnumerator()
 		{
 			return new GEDCOMListEnumerator(this);
 		}
@@ -188,55 +191,53 @@ namespace GKCommon.GEDCOM
 
 		public void SaveToStream(StreamWriter stream)
 		{
-			if (this.fList != null)
-			{
-				int num = this.fList.Count;
-				for (int i = 0; i < num; i++) {
-					T item = this.fList[i];
-                    if (item is GEDCOMTag) {
-                        (item as GEDCOMTag).SaveToStream(stream);
-					}
+			if (this.fList == null) return;
+
+			int num = this.fList.Count;
+			for (int i = 0; i < num; i++) {
+				T item = this.fList[i];
+				if (item is GEDCOMTag) {
+					(item as GEDCOMTag).SaveToStream(stream);
 				}
 			}
 		}
 
 		public void ReplaceXRefs(XRefReplacer map)
 		{
-			if (this.fList != null)
-			{
-				int num = this.fList.Count;
-				for (int i = 0; i < num; i++) {
-					T item = this.fList[i];
-                    if (item is GEDCOMTag) {
-                        (item as GEDCOMTag).ReplaceXRefs(map);
-					}
+			if (this.fList == null) return;
+
+			int num = this.fList.Count;
+			for (int i = 0; i < num; i++) {
+				T item = this.fList[i];
+				if (item is GEDCOMTag) {
+					(item as GEDCOMTag).ReplaceXRefs(map);
 				}
 			}
 		}
 
 		public void ResetOwner(GEDCOMTree newOwner)
 		{
-			if (this.fList != null)
-			{
-				int num = this.fList.Count;
-				for (int i = 0; i < num; i++) {
-                    (this.fList[i] as GEDCOMTag).ResetOwner(newOwner);
-				}
+			if (this.fList == null) return;
+
+			int num = this.fList.Count;
+			for (int i = 0; i < num; i++) {
+				(this.fList[i] as GEDCOMTag).ResetOwner(newOwner);
 			}
+
 			//this._owner = newOwner;
 		}
 
 		public void Pack()
 		{
-			if (this.fList != null) {
-				for (int i = this.fList.Count - 1; i >= 0; i--) {
-					T item = this.fList[i];
-					if (item is GEDCOMTag) {
-						GEDCOMTag tag = item as GEDCOMTag;
-						tag.Pack();
-						if (tag.IsEmpty() && tag.IsEmptySkip()) {
-							this.Delete(i);
-						}
+			if (this.fList == null) return;
+
+			for (int i = this.fList.Count - 1; i >= 0; i--) {
+				T item = this.fList[i];
+				if (item is GEDCOMTag) {
+					GEDCOMTag tag = item as GEDCOMTag;
+					tag.Pack();
+					if (tag.IsEmpty() && tag.IsEmptySkip()) {
+						this.Delete(i);
 					}
 				}
 			}

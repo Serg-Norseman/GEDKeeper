@@ -2,7 +2,7 @@ using System.IO;
 
 namespace GKCommon.GEDCOM
 {
-	public class GEDCOMCustomRecord : GEDCOMTag
+	public abstract class GEDCOMCustomRecord : GEDCOMTag
 	{
 		protected string FXRef;
 

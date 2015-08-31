@@ -141,6 +141,16 @@ internal class GKResources {
 	}
 	
 	/// <summary>
+	///   Looks up a localized resource of type System.Drawing.Bitmap.
+	/// </summary>
+	internal static System.Drawing.Bitmap iLeft1 {
+		get {
+			object obj = ResourceManager.GetObject("iLeft1", resourceCulture);
+			return ((System.Drawing.Bitmap)(obj));
+		}
+	}
+	
+	/// <summary>
 	///   Looks up a localized resource of type System.Windows.Forms.ImageListStreamer.
 	/// </summary>
 	internal static System.Windows.Forms.ImageListStreamer ImageList_Buttons_ImageStream {
@@ -213,6 +223,16 @@ internal class GKResources {
 	/// <summary>
 	///   Looks up a localized resource of type System.Drawing.Bitmap.
 	/// </summary>
+	internal static System.Drawing.Bitmap iRight1 {
+		get {
+			object obj = ResourceManager.GetObject("iRight1", resourceCulture);
+			return ((System.Drawing.Bitmap)(obj));
+		}
+	}
+	
+	/// <summary>
+	///   Looks up a localized resource of type System.Drawing.Bitmap.
+	/// </summary>
 	internal static System.Drawing.Bitmap iSizeToFit {
 		get {
 			object obj = ResourceManager.GetObject("iSizeToFit", resourceCulture);
@@ -226,6 +246,16 @@ internal class GKResources {
 	internal static System.Drawing.Bitmap iSizeToFit2 {
 		get {
 			object obj = ResourceManager.GetObject("iSizeToFit2", resourceCulture);
+			return ((System.Drawing.Bitmap)(obj));
+		}
+	}
+	
+	/// <summary>
+	///   Looks up a localized resource of type System.Drawing.Bitmap.
+	/// </summary>
+	internal static System.Drawing.Bitmap iTGBarbedWire {
+		get {
+			object obj = ResourceManager.GetObject("iTGBarbedWire", resourceCulture);
 			return ((System.Drawing.Bitmap)(obj));
 		}
 	}

@@ -50,11 +50,12 @@ namespace GKUI.Dialogs
 			try
 			{
 				this.ListPersonColumns.Items.Clear();
-				for (int i = 0; i < fTempColumns.Count; i++)
-				{
-					PersonColumnType pct = (PersonColumnType)fTempColumns[i].colType;
-					string colName = LangMan.LS(GlobalOptions.PersonColumnsName[(int) pct].Name);
-                    this.ListPersonColumns.Items.Add(colName, fTempColumns[i].colActive);
+				for (int i = 0; i < fTempColumns.Count; i++) {
+					TColumnProps colProps = fTempColumns[i];
+					
+					string colName = LangMan.LS(fTempColumns.ColumnStatics[colProps.colType].colName);
+
+					this.ListPersonColumns.Items.Add(colName, colProps.colActive);
 				}
 			}
 			finally
@@ -315,11 +316,7 @@ namespace GKUI.Dialogs
 		private void btnColumnUp_Click(object sender, EventArgs e)
 		{
 			int idx = this.ListPersonColumns.SelectedIndex;
-			if (idx > 0)
-			{
-				TColumnProps props = this.fTempColumns[idx - 1];
-				this.fTempColumns[idx - 1] = this.fTempColumns[idx];
-				this.fTempColumns[idx] = props;
+			if (this.fTempColumns.MoveColumn(idx, true)) {
 				this.UpdateColumnsList();
 				this.ListPersonColumns.SelectedIndex = idx - 1;
 			}
@@ -328,11 +325,7 @@ namespace GKUI.Dialogs
 		private void btnColumnDown_Click(object sender, EventArgs e)
 		{
 			int idx = this.ListPersonColumns.SelectedIndex;
-			if (idx >= 0 && idx < 24)
-			{
-				TColumnProps props = this.fTempColumns[idx + 1];
-				this.fTempColumns[idx + 1] = this.fTempColumns[idx];
-				this.fTempColumns[idx] = props;
+			if (this.fTempColumns.MoveColumn(idx, false)) {
 				this.UpdateColumnsList();
 				this.ListPersonColumns.SelectedIndex = idx + 1;
 			}

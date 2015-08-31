@@ -246,12 +246,13 @@ namespace GKCore
 			};
 
 
-			UserRefs = new string[5] {
+			UserRefs = new string[6] {
 				"",
 				"РИ:Георгиевский кавалер",
 				"СССР:ВОВ:Участник боевых действий",
 				"СССР:ВОВ:Погиб в бою",
-				"СССР:ВОВ:Труженик тыла"
+				"СССР:ВОВ:Труженик тыла",
+				"СССР:Репрессирован"
 			};
 
 
@@ -464,7 +465,7 @@ namespace GKCore
 			};
 
 
-			StatsTitles = new TStatsTitleStruct[34];
+			StatsTitles = new TStatsTitleStruct[35];
 			StatsTitles[0] = new TStatsTitleStruct(LSID.LSID_AncestorsCount, LSID.LSID_Name);
 			StatsTitles[1] = new TStatsTitleStruct(LSID.LSID_DescendantsCount, LSID.LSID_Name);
 			StatsTitles[2] = new TStatsTitleStruct(LSID.LSID_GenerationsCount, LSID.LSID_Name);
@@ -497,9 +498,9 @@ namespace GKCore
 			StatsTitles[29] = new TStatsTitleStruct(LSID.LSID_MiliInd, LSID.LSID_MiliInd);
 			StatsTitles[30] = new TStatsTitleStruct(LSID.LSID_MiliDis, LSID.LSID_MiliDis);
 			StatsTitles[31] = new TStatsTitleStruct(LSID.LSID_MiliRank, LSID.LSID_MiliRank);
-
 			StatsTitles[32] = new TStatsTitleStruct(LSID.LSID_AAF_1, LSID.LSID_AAF_1);
 			StatsTitles[33] = new TStatsTitleStruct(LSID.LSID_AAF_2, LSID.LSID_AAF_2);
+			StatsTitles[34] = new TStatsTitleStruct(LSID.LSID_CertaintyIndex, LSID.LSID_CertaintyIndex);
 
 			CheckSolveNames = new LSID[4];
 			CheckSolveNames[0] = LSID.LSID_RM_Skip;

@@ -45,6 +45,8 @@ namespace GKUI
 		private System.Windows.Forms.MenuItem miRecordAdd;
 		private System.Windows.Forms.MenuItem miRecordEdit;
 		private System.Windows.Forms.MenuItem miRecordDelete;
+		private System.Windows.Forms.MenuItem N15;
+		private System.Windows.Forms.MenuItem miSearch;
 		private System.Windows.Forms.MenuItem N6;
 		private System.Windows.Forms.MenuItem miFilter;
 		private System.Windows.Forms.MenuItem N7;
@@ -148,6 +150,8 @@ namespace GKUI
 			this.miRecordAdd = new System.Windows.Forms.MenuItem();
 			this.miRecordEdit = new System.Windows.Forms.MenuItem();
 			this.miRecordDelete = new System.Windows.Forms.MenuItem();
+			this.N15 = new System.Windows.Forms.MenuItem();
+			this.miSearch = new System.Windows.Forms.MenuItem();
 			this.miPedigree = new System.Windows.Forms.MenuItem();
 			this.miTreeAncestors = new System.Windows.Forms.MenuItem();
 			this.miTreeDescendants = new System.Windows.Forms.MenuItem();
@@ -541,7 +545,9 @@ namespace GKUI
 			this.miEdit.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
 									this.miRecordAdd,
 									this.miRecordEdit,
-									this.miRecordDelete});
+									this.miRecordDelete,
+			                        this.N15,
+			                        this.miSearch});
 			this.miEdit.Text = "Правка";
 			// 
 			// miRecordAdd
@@ -563,6 +569,17 @@ namespace GKUI
 			this.miRecordDelete.Shortcut = System.Windows.Forms.Shortcut.CtrlL;
 			this.miRecordDelete.Text = "Удалить запись";
 			this.miRecordDelete.Click += new System.EventHandler(this.miRecordDeleteClick);
+			// 
+			// N15
+			// 
+			this.N15.Index = 3;
+			this.N15.Text = "-";
+			// 
+			// miSearch
+			// 
+			this.miSearch.Index = 4;
+			this.miSearch.Text = "miSearch";
+			this.miSearch.Click += new System.EventHandler(this.miSearchClick);
 			// 
 			// miPedigree
 			// 

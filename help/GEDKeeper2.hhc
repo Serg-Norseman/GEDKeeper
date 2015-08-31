@@ -75,6 +75,12 @@
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="&Dstrok;&agrave;&ntilde;&oslash;&egrave;&eth;&aring;&iacute;&iacute;&ucirc;&aring; &acirc;&icirc;&ccedil;&igrave;&icirc;&aelig;&iacute;&icirc;&ntilde;&ograve;&egrave;">
 		</OBJECT>
+	<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="&Iuml;&euml;&agrave;&atilde;&egrave;&iacute;&ucirc;">
+			<param name="Local" value="gkhPlugins.htm">
+			</OBJECT>
+	</UL>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="&Ntilde;&aring;&eth;&acirc;&egrave;&ntilde;&ucirc;">
 		</OBJECT>

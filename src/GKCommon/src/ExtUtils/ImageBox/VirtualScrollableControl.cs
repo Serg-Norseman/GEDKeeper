@@ -13,11 +13,8 @@ namespace Cyotek.Windows.Forms
 		#region Instance Fields
 
 		private bool _autoScroll;
-
 		private Size _autoScrollMargin;
-
 		private Size _autoScrollMinSize;
-
 		private Point _autoScrollPosition;
 
 		#endregion

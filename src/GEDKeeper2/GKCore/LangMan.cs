@@ -678,8 +678,13 @@ namespace GKCore
 		/* 619 */ LSID_DefineSex,
 		/* 620 */ LSID_Plugins,
 		/* 621 */ LSID_TM_TraceKinships,
+		
+		/* 622 */ LSID_NoMatchesFound,
+		/* 623 */ LSID_FindPrevious,
+		/* 624 */ LSID_FindNext,
+		/* 625 */ LSID_CertaintyIndex,
 
-		/* 000 */ LSID_Last = LSID_TM_TraceKinships
+		/* 000 */ LSID_Last = LSID_CertaintyIndex
 	}
 
 	public static class LangMan
@@ -1333,7 +1338,12 @@ namespace GKCore
 			/* 618 */ "Установить факт смерти",
 			/* 619 */ "Определить пол",
 			/* 620 */ "Дополнения",
-			/* 621 */ "Автопересчет родства"
+			/* 621 */ "Автопересчет родства",
+			
+			/* 622 */ "Не найдено соответствий",
+			/* 623 */ "Найти предыдущее",
+			/* 624 */ "Найти следующее",
+			/* 625 */ "Индекс достоверности"
 		};
 
 		private static string[] LSList = new string[(int)LSID.LSID_Last + 1];

@@ -3,26 +3,33 @@ using System.Collections.Generic;
 using System.Globalization;
 
 using GKCommon;
+using GKCore;
 using GKCore.Interfaces;
 
 namespace GKUI.Lists
 {
-	public struct TColumnProps
+	public class TColumnProps
 	{
 		public byte colType;
 		public bool colActive;
+		public int colWidth;
 
-		public TColumnProps(byte colType, bool colActive)
+		public TColumnProps()
+		{
+		}
+
+		public TColumnProps(byte colType, bool colActive, int colWidth)
 		{
 			this.colType = colType;
 			this.colActive = colActive;
+			this.colWidth = colWidth;
 		}
 	}
 
 	public struct TColumnStatic
 	{
 		//public byte colType;
-		public string colName;
+		public LSID colName;
 		public TDataType dataType;
 		public NumberFormatInfo nfi;
 		public string format;
@@ -35,7 +42,7 @@ namespace GKUI.Lists
     /// </summary>
     public abstract class ListColumns
 	{
-		protected List<TColumnProps> fColumns;
+		private List<TColumnProps> fColumns;
         private Type fColumnEnum;
 
 		public List<TColumnStatic> ColumnStatics;
@@ -51,10 +58,10 @@ namespace GKUI.Lists
 			set { fColumns[index] = value; }
 		}
 
-		/*public Type ColumnEnum
+		public Type ColumnEnum
 		{
             get { return this.fColumnEnum; }
-		}*/
+		}
 
 		protected abstract void InitColumnStatics();
 
@@ -63,19 +70,44 @@ namespace GKUI.Lists
 			this.ColumnStatics = new List<TColumnStatic>();
 		}
 
-		public void Clear()
+		protected void InitData(Type colEnum)
 		{
-			fColumns.Clear();
+            this.fColumnEnum = colEnum;
+
+			InitColumnStatics();
+
+			this.fColumns = new List<TColumnProps>();
+            foreach (Enum e in Enum.GetValues(this.fColumnEnum))
+			{
+				this.fColumns.Add(new TColumnProps());
+			}
 		}
 
-		public void AddStatic(/*Enum colType*/ string colName, TDataType dataType, int width, bool defActive)
+		public void ResetDefaults()
+		{
+            foreach (Enum e in Enum.GetValues(this.fColumnEnum))
+			{
+				byte i = (e as IConvertible).ToByte(null);
+
+				TColumnStatic cs = ColumnStatics[i];
+
+				fColumns[i] = new TColumnProps(i, cs.active, cs.width);
+			}
+		}
+
+		public void Clear()
+		{
+			this.fColumns.Clear();
+		}
+
+		public void AddStatic(/*Enum colType*/ LSID colName, TDataType dataType, int defWidth, bool defActive)
 		{
 			TColumnStatic cs = new TColumnStatic();
 
 			//cs.colType = ((IConvertible)colType).ToByte(null);
 			cs.colName = colName;
 			cs.dataType = dataType;
-			cs.width = width;
+			cs.width = defWidth;
 			cs.nfi = null;
 			cs.format = null;
 			cs.active = defActive;
@@ -83,14 +115,14 @@ namespace GKUI.Lists
 			this.ColumnStatics.Add(cs);
 		}
 
-		public void AddStatic(/*Enum colType*/ string colName, TDataType dataType, int width, string format, NumberFormatInfo nfi, bool defActive)
+		public void AddStatic(/*Enum colType*/ LSID colName, TDataType dataType, int defWidth, bool defActive, string format, NumberFormatInfo nfi)
 		{
 			TColumnStatic cs = new TColumnStatic();
 
 			//cs.colType = ((IConvertible)colType).ToByte(null);
 			cs.colName = colName;
 			cs.dataType = dataType;
-			cs.width = width;
+			cs.width = defWidth;
 			cs.nfi = nfi;
 			cs.format = format;
 			cs.active = defActive;
@@ -98,34 +130,9 @@ namespace GKUI.Lists
 			this.ColumnStatics.Add(cs);
 		}
 
-		protected void InitData(Type colEnum)
+		public void CopyTo(ListColumns columns)
 		{
-            this.fColumnEnum = colEnum;
-
-			InitColumnStatics();
-
-			fColumns = new List<TColumnProps>();
-            foreach (Enum e in Enum.GetValues(fColumnEnum))
-			{
-				fColumns.Add(new TColumnProps());
-			}
-		}
-
-		public void ResetDefaults()
-		{
-            foreach (Enum e in Enum.GetValues(fColumnEnum))
-			{
-				byte i = (e as IConvertible).ToByte(null);
-
-				TColumnStatic cs = ColumnStatics[i];
-
-				fColumns[i] = new TColumnProps(i, cs.active);
-			}
-		}
-
-		public void CopyTo(IndividualListColumns columns)
-		{
-            foreach (Enum e in Enum.GetValues(fColumnEnum))
+            foreach (Enum e in Enum.GetValues(this.fColumnEnum))
 			{
 				byte i = (e as IConvertible).ToByte(null);
 
@@ -138,7 +145,7 @@ namespace GKUI.Lists
 		{
 		    if (iniFile == null) return;
 
-            foreach (Enum e in Enum.GetValues(fColumnEnum))
+            foreach (Enum e in Enum.GetValues(this.fColumnEnum))
 			{
 				byte i = (e as IConvertible).ToByte(null);
 
@@ -147,6 +154,13 @@ namespace GKUI.Lists
 				TColumnProps col = this.fColumns[i];
 				col.colType = (byte)iniFile.ReadInteger(section, "ColType_" + i.ToString(), i);
 				col.colActive = iniFile.ReadBool(section, "ColActive_" + i.ToString(), defCol.active);
+				col.colWidth = iniFile.ReadInteger(section, "ColWidth_" + i.ToString(), defCol.width);
+				
+				// protection zero/hidden columns
+				if (col.colWidth <= 10) {
+					col.colWidth = defCol.width;
+				}
+				
 				this.fColumns[i] = col;
 			}
 		}
@@ -155,13 +169,61 @@ namespace GKUI.Lists
 		{
             if (iniFile == null) return;
 
-            foreach (Enum e in Enum.GetValues(fColumnEnum))
+            foreach (Enum e in Enum.GetValues(this.fColumnEnum))
 			{
 				byte i = (e as IConvertible).ToByte(null);
 
 				iniFile.WriteInteger(section, "ColType_" + i.ToString(), this.fColumns[i].colType);
 				iniFile.WriteBool(section, "ColActive_" + i.ToString(), this.fColumns[i].colActive);
+				iniFile.WriteInteger(section, "ColWidth_" + i.ToString(), this.fColumns[i].colWidth);
 			}
+		}
+		
+		public TColumnProps GetActiveColumnByIndex(int index)
+		{
+			int activeIndex = -1;
+			foreach (TColumnProps colProps in this.fColumns) {
+				if (colProps.colActive) {
+					activeIndex++;
+					
+					if (activeIndex == index) {
+						return colProps;
+					}
+				}
+			}
+			
+			return null;
+		}
+		
+		public void WidthChanged(int colIndex, int colWidth)
+		{
+			TColumnProps colProps = this.GetActiveColumnByIndex(colIndex - 1); // since column "Num" excluded
+			if (colProps != null) {
+				colProps.colWidth = colWidth;
+			}
+		}
+		
+		public bool MoveColumn(int idx, bool up)
+		{
+			if (up) {
+				if (idx > 0) {
+					TColumnProps temp = this.fColumns[idx - 1];
+					this.fColumns[idx - 1] = this.fColumns[idx];
+					this.fColumns[idx] = temp;
+
+					return true;
+				}
+			} else {
+				if (idx >= 0 && idx < this.fColumns.Count - 1) {
+					TColumnProps temp = this.fColumns[idx + 1];
+					this.fColumns[idx + 1] = this.fColumns[idx];
+					this.fColumns[idx] = temp;
+
+					return true;
+				}
+			}
+
+			return false;
 		}
 	}
 

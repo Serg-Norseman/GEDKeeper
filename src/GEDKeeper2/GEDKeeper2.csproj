@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>WinExe</OutputType>
     <AssemblyName>GEDKeeper2</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
     <WarningLevel>4</WarningLevel>
     <TargetFrameworkProfile />
     <SourceAnalysisOverrideSettingsFile>C:\Documents and Settings\Zhdanovskih_SV\Application Data\ICSharpCode/SharpDevelop4.0\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
@@ -78,11 +78,20 @@
     <Reference Include="LuaInterface">
       <HintPath>LuaInterface.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationFramework">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
     <Reference Include="ZedGraph">
       <HintPath>ZedGraph.dll</HintPath>
     </Reference>
@@ -90,6 +99,7 @@
   <ItemGroup>
     <Compile Include="GEDKeeper2.cs" />
     <Compile Include="GKCore\BaseContext.cs" />
+    <Compile Include="GKCore\BaseSearchStrategy.cs" />
     <Compile Include="GKCore\Export\ExcelExporter.cs" />
     <Compile Include="GKCore\Export\Exporter.cs" />
     <Compile Include="GKCore\Export\FamilyBookExporter.cs" />
@@ -109,6 +119,7 @@
     <Compile Include="GKCore\ScriptEngine.cs" />
     <Compile Include="GKCore\TreeStats.cs" />
     <Compile Include="GKCore\TreeTools.cs" />
+    <Compile Include="GKCore\WeightedMean.cs" />
     <Compile Include="GKResources.Designer.cs">
       <DependentUpon>GKResources.resx</DependentUpon>
     </Compile>
@@ -118,7 +129,9 @@
     <Compile Include="GKUI\Charts\PersonControl.cs" />
     <Compile Include="GKUI\Charts\PersonModifyEventArgs.cs" />
     <Compile Include="GKUI\Charts\ScaleControl.cs" />
+    <Compile Include="GKUI\Charts\SearchPanel.cs" />
     <Compile Include="GKUI\Charts\TreeChartPerson.cs" />
+    <Compile Include="GKUI\Charts\TreeSearchStrategy.cs" />
     <Compile Include="GKUI\Controls\GKLogChart.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -153,55 +153,49 @@ namespace GKCommon.GEDCOM
 			this.fGroups.SaveToStream(stream);
 		}
 
-		public int IndexOfTask(GEDCOMTaskRecord aTask)
+		public int IndexOfTask(GEDCOMTaskRecord taskRec)
 		{
-			int result = -1;
-            if (aTask == null) return result;
-
-			int num = this.fTasks.Count - 1;
-			for (int i = 0; i <= num; i++)
-			{
-				if (this.fTasks[i].XRef == aTask.XRef)
+			if (taskRec != null) {
+				int num = this.fTasks.Count;
+				for (int i = 0; i < num; i++)
 				{
-					result = i;
-					break;
+					if (this.fTasks[i].XRef == taskRec.XRef) {
+						return i;
+					}
 				}
 			}
-			return result;
+
+			return -1;
 		}
 
-		public int IndexOfCommunication(GEDCOMCommunicationRecord aCommunication)
+		public int IndexOfCommunication(GEDCOMCommunicationRecord commRec)
 		{
-			int result = -1;
-            if (aCommunication == null) return result;
-
-			int num = this.fCommunications.Count - 1;
-			for (int i = 0; i <= num; i++)
-			{
-				if (this.fCommunications[i].XRef == aCommunication.XRef)
+			if (commRec != null) {
+				int num = this.fCommunications.Count;
+				for (int i = 0; i < num; i++)
 				{
-					result = i;
-					break;
+					if (this.fCommunications[i].XRef == commRec.XRef) {
+						return i;
+					}
 				}
 			}
-			return result;
+
+			return -1;
 		}
 
-		public int IndexOfGroup(GEDCOMGroupRecord aGroup)
+		public int IndexOfGroup(GEDCOMGroupRecord groupRec)
 		{
-			int result = -1;
-            if (aGroup == null) return result;
-
-			int num = this.fGroups.Count - 1;
-			for (int i = 0; i <= num; i++)
-			{
-				if (this.fGroups[i].XRef == aGroup.XRef)
+			if (groupRec != null) {
+				int num = this.fGroups.Count;
+				for (int i = 0; i < num; i++)
 				{
-					result = i;
-					break;
+					if (this.fGroups[i].XRef == groupRec.XRef) {
+						return i;
+					}
 				}
 			}
-			return result;
+
+			return -1;
 		}
 
 		public GEDCOMResearchRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
@@ -215,7 +209,7 @@ namespace GKCommon.GEDCOM
 
         #region Auxiliary
 
-        public bool aux_AddTask(GEDCOMTaskRecord taskRecord)
+        public bool AddTask(GEDCOMTaskRecord taskRecord)
 		{
 			bool result = false;
 
@@ -223,21 +217,21 @@ namespace GKCommon.GEDCOM
 			{
 				GEDCOMPointer ptr = new GEDCOMPointer(this.Owner, this, "", "");
 				ptr.SetNamedValue("_TASK", taskRecord);
-				this.Tasks.Add(ptr);
+				this.fTasks.Add(ptr);
 				result = true;
 			}
 
 			return result;
 		}
 
-		public void aux_RemoveTask(GEDCOMTaskRecord taskRecord)
+		public void RemoveTask(GEDCOMTaskRecord taskRecord)
 		{
             if (taskRecord == null) return;
 
-			this.Tasks.Delete(this.IndexOfTask(taskRecord));
+			this.fTasks.Delete(this.IndexOfTask(taskRecord));
 		}
 
-		public bool aux_AddGroup(GEDCOMGroupRecord groupRecord)
+		public bool AddGroup(GEDCOMGroupRecord groupRecord)
 		{
 			bool result = false;
 
@@ -245,21 +239,21 @@ namespace GKCommon.GEDCOM
 			{
 				GEDCOMPointer ptr = new GEDCOMPointer(this.Owner, this, "", "");
 				ptr.SetNamedValue("_GROUP", groupRecord);
-				this.Groups.Add(ptr);
+				this.fGroups.Add(ptr);
 				result = true;
 			}
 
 			return result;
 		}
 
-		public void aux_RemoveGroup(GEDCOMGroupRecord groupRecord)
+		public void RemoveGroup(GEDCOMGroupRecord groupRecord)
 		{
 		    if (groupRecord == null) return;
 
-			this.Groups.Delete(this.IndexOfGroup(groupRecord));
+			this.fGroups.Delete(this.IndexOfGroup(groupRecord));
 		}
 
-		public bool aux_AddCommunication(GEDCOMCommunicationRecord commRecord)
+		public bool AddCommunication(GEDCOMCommunicationRecord commRecord)
 		{
             bool result = false;
 
@@ -267,18 +261,18 @@ namespace GKCommon.GEDCOM
 			{
 				GEDCOMPointer ptr = new GEDCOMPointer(this.Owner, this, "", "");
 				ptr.SetNamedValue("_COMM", commRecord);
-				this.Communications.Add(ptr);
+				this.fCommunications.Add(ptr);
 				result = true;
 			}
 
 			return result;
 		}
 
-		public void aux_RemoveCommunication(GEDCOMCommunicationRecord commRecord)
+		public void RemoveCommunication(GEDCOMCommunicationRecord commRecord)
 		{
 		    if (commRecord == null) return;
 
-			this.Communications.Delete(this.IndexOfCommunication(commRecord));
+			this.fCommunications.Delete(this.IndexOfCommunication(commRecord));
 		}
 
 		#endregion

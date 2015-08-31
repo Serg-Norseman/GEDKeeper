@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>GKCommon</RootNamespace>
     <AssemblyName>GKCommon</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -51,9 +51,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -196,8 +193,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="src\ExtUtils\ImageBox\ImageBoxBorderStyle.cs" />
-    <Compile Include="src\ExtUtils\ImageBox\ImageBoxGridDisplayMode.cs" />
-    <Compile Include="src\ExtUtils\ImageBox\ImageBoxGridScale.cs" />
     <Compile Include="src\ExtUtils\ImageBox\ImageBoxNativeMethods.cs" />
     <Compile Include="src\ExtUtils\ImageBox\ImageBoxSelectionMode.cs" />
     <Compile Include="src\ExtUtils\ImageBox\ScrollControl.cs">

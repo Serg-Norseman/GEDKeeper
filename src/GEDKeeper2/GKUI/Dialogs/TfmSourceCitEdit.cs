@@ -126,7 +126,7 @@ namespace GKUI.Dialogs
 			this.InitializeComponent();
 			this.fBase = aBase;
 
-			for (int i = 0; i <= GKData.CertaintyAssessments.Length - 1; i++)
+			for (int i = 0; i < GKData.CertaintyAssessments.Length; i++)
 			{
 				this.EditCertainty.Items.Add(LangMan.LS(GKData.CertaintyAssessments[i]));
 			}

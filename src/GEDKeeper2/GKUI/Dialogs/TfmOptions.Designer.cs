@@ -775,9 +775,9 @@ namespace GKUI.Dialogs
 			// 
 			// btnDefList
 			// 
-			this.btnDefList.Location = new System.Drawing.Point(352, 288);
+			this.btnDefList.Location = new System.Drawing.Point(352, 280);
 			this.btnDefList.Name = "btnDefList";
-			this.btnDefList.Size = new System.Drawing.Size(137, 25);
+			this.btnDefList.Size = new System.Drawing.Size(137, 36);
 			this.btnDefList.TabIndex = 1;
 			this.btnDefList.Text = "Значения по умолчанию";
 			this.btnDefList.Click += new System.EventHandler(this.btnDefList_Click);

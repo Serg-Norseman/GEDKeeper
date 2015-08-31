@@ -44,7 +44,7 @@ namespace GKUI.Dialogs
 				if (this.fTarget != null)
 				{
 					string iFamily, iName, iPatronymic;
-					this.fTarget.aux_GetNameParts(out iFamily, out iName, out iPatronymic);
+					this.fTarget.GetNameParts(out iFamily, out iName, out iPatronymic);
 					this.edFamily.Text = iFamily;
 					NamesTable names = TfmGEDKeeper.Instance.NamesTable;
 					GEDCOMSex sx = (GEDCOMSex)this.EditSex.SelectedIndex;

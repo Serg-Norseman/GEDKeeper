@@ -29,6 +29,7 @@ namespace GKUI
 		private System.Windows.Forms.MenuItem N7;
 		private System.Windows.Forms.MenuItem miTraceSelected;
 		private System.Windows.Forms.MenuItem miTraceKinships;
+		private System.Windows.Forms.MenuItem miCertaintyIndex;
 		private System.Windows.Forms.MenuItem miRebuildTree;
 		private System.Windows.Forms.ToolBarButton tbGens;
 		private System.Windows.Forms.ContextMenu MenuGens;
@@ -45,6 +46,8 @@ namespace GKUI
 		private System.Windows.Forms.MenuItem N8;
 		private System.Windows.Forms.MenuItem miFillColor;
 		private System.Windows.Forms.MenuItem miFillImage;
+		private System.Windows.Forms.MenuItem N9;
+		private System.Windows.Forms.MenuItem miSearch;
 
 		private void InitializeComponent()
 		{
@@ -79,6 +82,7 @@ namespace GKUI
 			this.N7 = new System.Windows.Forms.MenuItem();
 			this.miTraceSelected = new System.Windows.Forms.MenuItem();
 			this.miTraceKinships = new System.Windows.Forms.MenuItem();
+			this.miCertaintyIndex = new System.Windows.Forms.MenuItem();
 			this.N8 = new System.Windows.Forms.MenuItem();
 			this.miFillColor = new System.Windows.Forms.MenuItem();
 			this.miFillImage = new System.Windows.Forms.MenuItem();
@@ -97,12 +101,15 @@ namespace GKUI
 			this.colorDialog1 = new System.Windows.Forms.ColorDialog();
 			this.OpenDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+			this.N9 = new System.Windows.Forms.MenuItem();
+			this.miSearch = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// SaveDialog1
 			// 
 			this.SaveDialog1.DefaultExt = "tga";
-			this.SaveDialog1.Filter = "Файлы BMP (*.bmp)|*.bmp|Файлы JPEG (*.jpg)|*.jpg|Файлы EMF (*.emf)|*.emf|Файлы PNG (*.png)|*.png|Файлы GIF (*.gif)|*.gif";
+			this.SaveDialog1.Filter = "Файлы BMP (*.bmp)|*.bmp|Файлы JPEG (*.jpg)|*.jpg|Файлы EMF (*.emf)|*.emf|Файлы PN" +
+			"G (*.png)|*.png|Файлы GIF (*.gif)|*.gif";
 			this.SaveDialog1.FilterIndex = 2;
 			// 
 			// ToolBar1
@@ -275,9 +282,12 @@ namespace GKUI
 									this.N7,
 									this.miTraceSelected,
 									this.miTraceKinships,
+									this.miCertaintyIndex,
 									this.N8,
 									this.miFillColor,
-									this.miFillImage});
+									this.miFillImage,
+			                        this.N9,
+			                        this.miSearch});
 			// 
 			// miModeBoth
 			// 
@@ -311,25 +321,42 @@ namespace GKUI
 			// miTraceKinships
 			// 
 			this.miTraceKinships.Index = 5;
-			this.miTraceKinships.Text = "miTraceRoot";
+			this.miTraceKinships.Text = "miTraceKinships";
 			this.miTraceKinships.Click += new System.EventHandler(this.miTraceKinships_Click);
+			// 
+			// miCertaintyIndex
+			// 
+			this.miCertaintyIndex.Index = 6;
+			this.miCertaintyIndex.Text = "miCertaintyIndex";
+			this.miCertaintyIndex.Click += new System.EventHandler(this.miCertaintyIndex_Click);
 			// 
 			// N8
 			// 
-			this.N8.Index = 6;
+			this.N8.Index = 7;
 			this.N8.Text = "-";
 			// 
 			// miFillColor
 			// 
-			this.miFillColor.Index = 7;
+			this.miFillColor.Index = 8;
 			this.miFillColor.Text = "miFillColor";
 			this.miFillColor.Click += new System.EventHandler(this.miFillColorClick);
 			// 
 			// miFillImage
 			// 
-			this.miFillImage.Index = 8;
+			this.miFillImage.Index = 9;
 			this.miFillImage.Text = "miFillImage";
 			this.miFillImage.Click += new System.EventHandler(this.miFillImageClick);
+			// 
+			// N9
+			// 
+			this.N9.Index = 10;
+			this.N9.Text = "-";
+			// 
+			// miSearch
+			// 
+			this.miSearch.Index = 11;
+			this.miSearch.Text = "miSearch";
+			this.miSearch.Click += new System.EventHandler(this.miSearchClick);
 			// 
 			// MenuPerson
 			// 

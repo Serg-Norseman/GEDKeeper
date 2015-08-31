@@ -19,13 +19,13 @@ namespace GKCore.Export
 		private enum BookCatalog {
 			Catalog_First = 0,
 			
-			Catalog_Places = Catalog_First,
-			Catalog_BirthYears,
+			Catalog_BirthYears = Catalog_First,
 			Catalog_DeathYears,
 			Catalog_BirthPlaces,
 			Catalog_DeathPlaces,
 			Catalog_DeathCauses,
 			Catalog_Occupations,
+			Catalog_Religion,
 			Catalog_Sources,
 			
 			Catalog_Last = Catalog_Sources
@@ -43,13 +43,13 @@ namespace GKCore.Export
 		}
 		
 		private readonly CatalogProps[] BookCatalogs = { 
-			new CatalogProps("Catalog_Places", "2.1. Места"),
-			new CatalogProps("Catalog_BirthYears", "2.2. Годы рождения"),
-			new CatalogProps("Catalog_DeathYears", "2.3. Годы смерти"),
-			new CatalogProps("Catalog_BirthPlaces", "2.4. Места рождения"),
-			new CatalogProps("Catalog_DeathPlaces", "2.5. Места смерти"),
-			new CatalogProps("Catalog_DeathCauses", "2.6. Причины смерти"),
-			new CatalogProps("Catalog_Occupations", "2.7. Профессии"),
+			new CatalogProps("Catalog_BirthYears", "2.1. Годы рождения"),
+			new CatalogProps("Catalog_DeathYears", "2.2. Годы смерти"),
+			new CatalogProps("Catalog_BirthPlaces", "2.3. Места рождения"),
+			new CatalogProps("Catalog_DeathPlaces", "2.4. Места смерти"),
+			new CatalogProps("Catalog_DeathCauses", "2.5. Причины смерти"),
+			new CatalogProps("Catalog_Occupations", "2.6. Профессии"),
+			new CatalogProps("Catalog_Religion", "2.7. Вероисповедание"),
 			new CatalogProps("Catalog_Sources", "2.8. Источники")
 		};
 		
@@ -63,7 +63,7 @@ namespace GKCore.Export
 
 		private StringList mainIndex;
 		private StringList byIndex, dyIndex, bpIndex, dpIndex;
-		private StringList deathCauses, occuIndex, sourcesIndex;
+		private StringList deathCauses, occuIndex, reliIndex, sourcesIndex;
 
 		public FamilyBookExporter(IBase aBase) : base(aBase)
 		{
@@ -81,6 +81,7 @@ namespace GKCore.Export
                 if (dpIndex != null) dpIndex.Dispose();
                 if (deathCauses != null) deathCauses.Dispose();
                 if (occuIndex != null) occuIndex.Dispose();
+                if (reliIndex != null) reliIndex.Dispose();
                 if (sourcesIndex != null) sourcesIndex.Dispose();
             }
             base.Dispose(disposing);
@@ -183,8 +184,6 @@ namespace GKCore.Export
 				fDocument.Add(new Paragraph(chap_chunk) { Alignment = 1 });
 				fDocument.Add(new Paragraph(Chunk.NEWLINE));
 
-				this.ExposeCatalog(fDocument, null, BookCatalog.Catalog_Places);
-
 				fDocument.NewPage();
 				this.ExposeCatalog(fDocument, byIndex, BookCatalog.Catalog_BirthYears);
 
@@ -202,6 +201,9 @@ namespace GKCore.Export
 
 				fDocument.NewPage();
 				this.ExposeCatalog(fDocument, occuIndex, BookCatalog.Catalog_Occupations);
+
+				fDocument.NewPage();
+				this.ExposeCatalog(fDocument, reliIndex, BookCatalog.Catalog_Religion);
 
 				fDocument.NewPage();
 				this.ExposeCatalog(fDocument, sourcesIndex, BookCatalog.Catalog_Sources);
@@ -224,6 +226,7 @@ namespace GKCore.Export
 			
 			deathCauses = new StringList();
 			occuIndex = new StringList();
+			reliIndex = new StringList();
 			sourcesIndex = new StringList();
 			
 			GEDCOMRecord rec;
@@ -281,6 +284,12 @@ namespace GKCore.Export
 							st = evt.StringValue;
 							if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(occuIndex, st, iRec);
 						}
+						else if (evt.Name == "RELI")
+						{
+							// Анализ по вероисповеданию
+							st = evt.StringValue;
+							if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(reliIndex, st, iRec);
+						}
 					}
 				}
 
@@ -304,6 +313,7 @@ namespace GKCore.Export
 			dpIndex.Sort();
 			deathCauses.Sort();
 			occuIndex.Sort();
+			reliIndex.Sort();
 			sourcesIndex.Sort();
 		}
 
@@ -340,8 +350,8 @@ namespace GKCore.Export
 			}
 
 			GEDCOMIndividualRecord father, mother;
-			iRec.aux_GetParents(out father, out mother);
-			string text;
+			iRec.GetParents(out father, out mother);
+			//string text;
 
 			if (father != null) {
 				pg = new Paragraph();

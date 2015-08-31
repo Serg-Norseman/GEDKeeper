@@ -47,31 +47,31 @@ namespace GKUI.Lists
 	{
 		protected override void InitColumnStatics()
 		{
-			this.AddStatic(LangMan.LS(LSID.LSID_Patriarch), TDataType.dtString, 25, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_FullName), TDataType.dtString, 25, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_Nickname), TDataType.dtString, 75, false);
-			this.AddStatic(LangMan.LS(LSID.LSID_Sex), TDataType.dtString, 45, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_BirthDate), TDataType.dtString, 100, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_DeathDate), TDataType.dtString, 100, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_BirthPlace), TDataType.dtString, 100, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_DeathPlace), TDataType.dtString, 100, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_Residence), TDataType.dtString, 100, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_Age), TDataType.dtString, 100, false);
-			this.AddStatic(LangMan.LS(LSID.LSID_LifeExpectancy), TDataType.dtString, 100, false);
-			this.AddStatic(LangMan.LS(LSID.LSID_DaysForBirth), TDataType.dtString, 100, false);
-			this.AddStatic(LangMan.LS(LSID.LSID_RPGroups), TDataType.dtString, 200, false);
-			this.AddStatic(LangMan.LS(LSID.LSID_Religion), TDataType.dtString, 200, false);
-			this.AddStatic(LangMan.LS(LSID.LSID_Nationality), TDataType.dtString, 200, false);
-			this.AddStatic(LangMan.LS(LSID.LSID_Education), TDataType.dtString, 200, false);
-			this.AddStatic(LangMan.LS(LSID.LSID_Occupation), TDataType.dtString, 200, false);
-			this.AddStatic(LangMan.LS(LSID.LSID_Caste), TDataType.dtString, 200, false);
-			this.AddStatic(LangMan.LS(LSID.LSID_Mili), TDataType.dtString, 200, false);
-			this.AddStatic(LangMan.LS(LSID.LSID_MiliInd), TDataType.dtString, 200, false);
-			this.AddStatic(LangMan.LS(LSID.LSID_MiliDis), TDataType.dtString, 200, false);
-			this.AddStatic(LangMan.LS(LSID.LSID_MiliRank), TDataType.dtString, 200, false);
-			this.AddStatic(LangMan.LS(LSID.LSID_Changed), TDataType.dtDateTime, 150, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_Bookmark), TDataType.dtString, 25, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_NobilityTitle), TDataType.dtString, 200, false);
+			this.AddStatic(LSID.LSID_Patriarch, TDataType.dtString, 25, true);
+			this.AddStatic(LSID.LSID_FullName, TDataType.dtString, 300, true);
+			this.AddStatic(LSID.LSID_Nickname, TDataType.dtString, 75, false);
+			this.AddStatic(LSID.LSID_Sex, TDataType.dtString, 45, true);
+			this.AddStatic(LSID.LSID_BirthDate, TDataType.dtString, 100, true);
+			this.AddStatic(LSID.LSID_DeathDate, TDataType.dtString, 100, true);
+			this.AddStatic(LSID.LSID_BirthPlace, TDataType.dtString, 100, true);
+			this.AddStatic(LSID.LSID_DeathPlace, TDataType.dtString, 100, true);
+			this.AddStatic(LSID.LSID_Residence, TDataType.dtString, 100, true);
+			this.AddStatic(LSID.LSID_Age, TDataType.dtString, 100, false);
+			this.AddStatic(LSID.LSID_LifeExpectancy, TDataType.dtString, 100, false);
+			this.AddStatic(LSID.LSID_DaysForBirth, TDataType.dtString, 100, false);
+			this.AddStatic(LSID.LSID_RPGroups, TDataType.dtString, 200, false);
+			this.AddStatic(LSID.LSID_Religion, TDataType.dtString, 200, false);
+			this.AddStatic(LSID.LSID_Nationality, TDataType.dtString, 200, false);
+			this.AddStatic(LSID.LSID_Education, TDataType.dtString, 200, false);
+			this.AddStatic(LSID.LSID_Occupation, TDataType.dtString, 200, false);
+			this.AddStatic(LSID.LSID_Caste, TDataType.dtString, 200, false);
+			this.AddStatic(LSID.LSID_Mili, TDataType.dtString, 200, false);
+			this.AddStatic(LSID.LSID_MiliInd, TDataType.dtString, 200, false);
+			this.AddStatic(LSID.LSID_MiliDis, TDataType.dtString, 200, false);
+			this.AddStatic(LSID.LSID_MiliRank, TDataType.dtString, 200, false);
+			this.AddStatic(LSID.LSID_Changed, TDataType.dtDateTime, 150, true);
+			this.AddStatic(LSID.LSID_Bookmark, TDataType.dtString, 25, true);
+			this.AddStatic(LSID.LSID_NobilityTitle, TDataType.dtString, 200, false);
 		}
 
 		public IndividualListColumns()
@@ -293,7 +293,7 @@ namespace GKUI.Lists
 								break;
 
 							case NameFormat.nfF_NP:
-								this.fRec.aux_GetNameParts(out f, out i, out p);
+								this.fRec.GetNameParts(out f, out i, out p);
 								switch (colSubtype) {
 									case 0:
 										result = f;
@@ -305,7 +305,7 @@ namespace GKUI.Lists
 								break;
 
 							case NameFormat.nfF_N_P:
-								this.fRec.aux_GetNameParts(out f, out i, out p);
+								this.fRec.GetNameParts(out f, out i, out p);
 								switch (colSubtype) {
 									case 0:
 										result = f;
@@ -563,6 +563,7 @@ namespace GKUI.Lists
 				if (columns[i].colActive) {
 					byte bColType = columns[i].colType;
 					PersonColumnType colType = (PersonColumnType)bColType;
+					int colWidth = columns[i].colWidth;
 
 					if (colType == PersonColumnType.pctName) {
 					    const bool asz = false;
@@ -580,12 +581,12 @@ namespace GKUI.Lists
 								break;
 
 							case NameFormat.nfFNP:
-								this.AddListColumn(aList, LangMan.LS(LSID.LSID_FullName), 300, asz, bColType, 0);
+								this.AddListColumn(aList, LangMan.LS(LSID.LSID_FullName), colWidth, asz, bColType, 0);
 								break;
 						}
 					} else {
-						this.AddListColumn(aList, LangMan.LS(GlobalOptions.PersonColumnsName[bColType].Name),
-						                   GlobalOptions.PersonColumnsName[bColType].DefWidth, false, bColType, 0);
+						string colName = LangMan.LS(columns.ColumnStatics[bColType].colName);
+						this.AddListColumn(aList, colName, colWidth, false, bColType, 0);
 					}
 				}
 			}

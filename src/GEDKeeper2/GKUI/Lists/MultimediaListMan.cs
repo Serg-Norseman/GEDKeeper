@@ -22,10 +22,10 @@ namespace GKUI.Lists
 	{
 		protected override void InitColumnStatics()
 		{
-			this.AddStatic(LangMan.LS(LSID.LSID_Title), TDataType.dtString, 150, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_Type), TDataType.dtString, 85, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_File), TDataType.dtString, 300, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_Changed), TDataType.dtDateTime, 150, true);
+			this.AddStatic(LSID.LSID_Title, TDataType.dtString, 150, true);
+			this.AddStatic(LSID.LSID_Type, TDataType.dtString, 85, true);
+			this.AddStatic(LSID.LSID_File, TDataType.dtString, 300, true);
+			this.AddStatic(LSID.LSID_Changed, TDataType.dtDateTime, 150, true);
 		}
 
 		public MultimediaListColumns() : base()

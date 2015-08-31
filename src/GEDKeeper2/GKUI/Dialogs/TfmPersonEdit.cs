@@ -143,7 +143,7 @@ namespace GKUI.Dialogs
 			try
 			{
 				string fam, nam, pat;
-				this.fPerson.aux_GetNameParts(out fam, out nam, out pat);
+				this.fPerson.GetNameParts(out fam, out nam, out pat);
 				this.EditFamily.Text = fam;
 				this.EditName.Text = nam;
 				this.EditPatronymic.Text = pat;
@@ -186,7 +186,7 @@ namespace GKUI.Dialogs
 		private void SetTitle()
 		{
 			this.Text = LangMan.LS(LSID.LSID_Person) + " \"" + this.EditFamily.Text + " " + this.EditName.Text +
-				" " + this.EditPatronymic.Text + "\" [" + this.fPerson.aux_GetXRefNum() + "]";
+				" " + this.EditPatronymic.Text + "\" [" + this.fPerson.GetXRefNum() + "]";
 		}
 
         private void ListModify(object sender, ModifyEventArgs eArgs)

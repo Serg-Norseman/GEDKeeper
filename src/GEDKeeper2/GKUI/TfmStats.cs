@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-
+using GKCommon;
+using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKUI.Controls;
@@ -18,6 +19,7 @@ namespace GKUI
 		private enum TChartStyle : byte { csBar, csPoint }
 
         private readonly IBase fBase;
+        private readonly List<GEDCOMRecord> fSelectedRecords;
 		private readonly ZedGraphControl fGraph;
         private readonly GKListView fListStats;
 
@@ -49,7 +51,7 @@ namespace GKUI
 			{
 				string s = this.fListStats.Items[i].Text;
 
-                int lab = (s == "?") ? 0 : int.Parse(s);
+                double lab = (s == "?") ? 0.0f : SysUtils.ParseFloat(s, 0.0f, true);
 
                 if (lab != 0 || !excludeUnknowns)
 				{
@@ -162,6 +164,12 @@ namespace GKUI
 						this.fChartYTitle = LangMan.LS(LSID.LSID_Parents);
 						this.PrepareArray(gPane, TChartStyle.csBar, true);
 						break;
+
+					case TreeStats.TStatMode.smCertaintyIndex:
+						this.fChartXTitle = LangMan.LS(LSID.LSID_CertaintyIndex);
+						this.fChartYTitle = LangMan.LS(LSID.LSID_People);
+						this.PrepareArray(gPane, TChartStyle.csBar, true);
+						break;
 				}
 			}
 			finally
@@ -173,7 +181,7 @@ namespace GKUI
 
 		private void TfmStats_Load(object sender, EventArgs e)
 		{
-			this.fTreeStats = new TreeStats(this.fBase.Tree);
+			this.fTreeStats = new TreeStats(this.fBase.Tree, this.fSelectedRecords);
 			
 			TreeStats.CommonStats stats;
 			fTreeStats.GetCommonStats(out stats);
@@ -226,6 +234,11 @@ namespace GKUI
 				item.SubItems.Add(string.Format("{0:0.00}", SafeDiv(stats.mage, stats.mage_cnt)));
 				item.SubItems.Add(string.Format("{0:0.00}", SafeDiv(stats.mage_m, stats.mage_m_cnt)));
 				item.SubItems.Add(string.Format("{0:0.00}", SafeDiv(stats.mage_f, stats.mage_f_cnt)));
+
+				item = this.ListCommon.Items.Add(LangMan.LS(LSID.LSID_CertaintyIndex));
+				item.SubItems.Add(string.Format("{0:0.00}", SafeDiv(stats.ci, stats.ci_cnt)));
+				item.SubItems.Add(string.Format("{0:0.00}", SafeDiv(stats.ci_m, stats.ci_m_cnt)));
+				item.SubItems.Add(string.Format("{0:0.00}", SafeDiv(stats.ci_f, stats.ci_f_cnt)));
 			}
 		}
 
@@ -239,11 +252,12 @@ namespace GKUI
 			this.CalcStats((TreeStats.TStatMode)this.cbType.SelectedIndex);
 		}
 
-		public TfmStats(IBase aBase)
+		public TfmStats(IBase aBase, List<GEDCOMRecord> selectedRecords)
 		{
 			this.InitializeComponent();
 			base.MdiParent = TfmGEDKeeper.Instance;
 			this.fBase = aBase;
+			this.fSelectedRecords = selectedRecords;
 
 			this.fGraph = new ZedGraphControl();
 			this.fGraph.IsShowPointValues = true;
@@ -267,7 +281,7 @@ namespace GKUI
 			this.Panel1.Controls.SetChildIndex(this.ToolBar1, 4);
 			this.cbType.Items.Clear();
 
-			for (TreeStats.TStatMode i = TreeStats.TStatMode.smAncestors; i <= TreeStats.TStatMode.smAAF_2; i++)
+			for (TreeStats.TStatMode i = TreeStats.TStatMode.smAncestors; i <= TreeStats.TStatMode.smLast; i++)
 			{
 				GKData.TStatsTitleStruct tr = GKData.StatsTitles[(int)i];
 				this.cbType.Items.Add(LangMan.LS(tr.Title));

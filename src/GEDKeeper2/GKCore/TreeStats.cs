@@ -53,6 +53,13 @@ namespace GKCore
 			public int mage_cnt;
 			public int mage_m_cnt;
 			public int mage_f_cnt;
+
+			public float ci;
+			public float ci_m;
+			public float ci_f;
+			public int ci_cnt;
+			public int ci_m_cnt;
+			public int ci_f_cnt;
 		}
 
 		public class TValsItem
@@ -107,14 +114,19 @@ namespace GKCore
 			smMiliDis,
 			smMiliRank,
 			smAAF_1,
-			smAAF_2
+			smAAF_2,
+			smCertaintyIndex,
+			
+			smLast = smCertaintyIndex
 		}
 
 		private readonly GEDCOMTree fTree;
+		private readonly List<GEDCOMRecord> fSelectedRecords;
 		
-		public TreeStats(GEDCOMTree tree)
+		public TreeStats(GEDCOMTree tree, List<GEDCOMRecord> selectedRecords)
 		{
 			this.fTree = tree;
+			this.fSelectedRecords = selectedRecords;
 		}
 
 		private static void TakeVal(int val, GEDCOMSex sex,
@@ -124,6 +136,26 @@ namespace GKCore
 		{
 			if (val == 0) return;
 
+			com_sum += val;
+			com_count++;
+			
+			switch (sex) {
+				case GEDCOMSex.svFemale:
+					f_sum += val;
+					f_count++;
+					break;
+				case GEDCOMSex.svMale:
+					m_sum += val;
+					m_count++;
+					break;
+			}
+		}
+
+		private static void TakeVal(float val, GEDCOMSex sex,
+		                     ref float com_sum, ref int com_count,
+		                     ref float f_sum, ref int f_count,
+		                     ref float m_sum, ref int m_count)
+		{
 			com_sum += val;
 			com_count++;
 			
@@ -151,107 +183,115 @@ namespace GKCore
 			}
 		}
 
-		public void GetCommonStats(out CommonStats aStats)
+		public void GetCommonStats(out CommonStats stats)
 		{
-			aStats.persons = 0;
-			aStats.persons_m = 0;
-			aStats.persons_f = 0;
-			aStats.lives = 0;
-			aStats.lives_m = 0;
-			aStats.lives_f = 0;
-			aStats.age = 0;
-			aStats.age_m = 0;
-			aStats.age_f = 0;
-			aStats.age_cnt = 0;
-			aStats.age_m_cnt = 0;
-			aStats.age_f_cnt = 0;
-			aStats.life = 0;
-			aStats.life_m = 0;
-			aStats.life_f = 0;
-			aStats.life_cnt = 0;
-			aStats.life_m_cnt = 0;
-			aStats.life_f_cnt = 0;
-			aStats.childs = 0;
-			aStats.childs_m = 0;
-			aStats.childs_f = 0;
-			aStats.childs_cnt = 0;
-			aStats.childs_m_cnt = 0;
-			aStats.childs_f_cnt = 0;
-			aStats.fba = 0;
-			aStats.fba_m = 0;
-			aStats.fba_f = 0;
-			aStats.fba_cnt = 0;
-			aStats.fba_m_cnt = 0;
-			aStats.fba_f_cnt = 0;
-			aStats.marr = 0;
-			aStats.marr_m = 0;
-			aStats.marr_f = 0;
-			aStats.marr_cnt = 0;
-			aStats.marr_m_cnt = 0;
-			aStats.marr_f_cnt = 0;
-			aStats.mage = 0;
-			aStats.mage_m = 0;
-			aStats.mage_f = 0;
-			aStats.mage_cnt = 0;
-			aStats.mage_m_cnt = 0;
-			aStats.mage_f_cnt = 0;
+			stats.persons = 0;
+			stats.persons_m = 0;
+			stats.persons_f = 0;
+			stats.lives = 0;
+			stats.lives_m = 0;
+			stats.lives_f = 0;
+			stats.age = 0;
+			stats.age_m = 0;
+			stats.age_f = 0;
+			stats.age_cnt = 0;
+			stats.age_m_cnt = 0;
+			stats.age_f_cnt = 0;
+			stats.life = 0;
+			stats.life_m = 0;
+			stats.life_f = 0;
+			stats.life_cnt = 0;
+			stats.life_m_cnt = 0;
+			stats.life_f_cnt = 0;
+			stats.childs = 0;
+			stats.childs_m = 0;
+			stats.childs_f = 0;
+			stats.childs_cnt = 0;
+			stats.childs_m_cnt = 0;
+			stats.childs_f_cnt = 0;
+			stats.fba = 0;
+			stats.fba_m = 0;
+			stats.fba_f = 0;
+			stats.fba_cnt = 0;
+			stats.fba_m_cnt = 0;
+			stats.fba_f_cnt = 0;
+			stats.marr = 0;
+			stats.marr_m = 0;
+			stats.marr_f = 0;
+			stats.marr_cnt = 0;
+			stats.marr_m_cnt = 0;
+			stats.marr_f_cnt = 0;
+			stats.mage = 0;
+			stats.mage_m = 0;
+			stats.mage_f = 0;
+			stats.mage_cnt = 0;
+			stats.mage_m_cnt = 0;
+			stats.mage_f_cnt = 0;
+			stats.ci = 0;
+			stats.ci_m = 0;
+			stats.ci_f = 0;
+			stats.ci_cnt = 0;
+			stats.ci_m_cnt = 0;
+			stats.ci_f_cnt = 0;
 
-			int num = this.fTree.RecordsCount - 1;
-			for (int i = 0; i <= num; i++)
+			int num = this.fSelectedRecords.Count;
+			for (int i = 0; i < num; i++)
 			{
-				GEDCOMRecord rec = this.fTree[i];
+				GEDCOMRecord rec = this.fSelectedRecords[i];
 				if (rec is GEDCOMIndividualRecord)
 				{
 					GEDCOMIndividualRecord ind = rec as GEDCOMIndividualRecord;
-					aStats.persons++;
+					stats.persons++;
 
 					switch (ind.Sex) {
 						case GEDCOMSex.svFemale:
 						{
-							aStats.persons_f++;
-							if (ind.IsLive())
-							{
-								aStats.lives_f++;
-								aStats.lives++;
+							stats.persons_f++;
+							if (ind.IsLive()) {
+								stats.lives_f++;
+								stats.lives++;
 							}
 							break;
 						}
 						case GEDCOMSex.svMale:
 						{
-							aStats.persons_m++;
-							if (ind.IsLive())
-							{
-								aStats.lives_m++;
-								aStats.lives++;
+							stats.persons_m++;
+							if (ind.IsLive()) {
+								stats.lives_m++;
+								stats.lives++;
 							}
 							break;
 						}
 					}
 
 					string v_age = GKUtils.GetAge(ind, -1);
-					TakeVal(v_age, ind.Sex, ref aStats.age, ref aStats.age_cnt, 
-					        ref aStats.age_f, ref aStats.age_f_cnt, ref aStats.age_m, ref aStats.age_m_cnt);
+					TakeVal(v_age, ind.Sex, ref stats.age, ref stats.age_cnt, 
+					        ref stats.age_f, ref stats.age_f_cnt, ref stats.age_m, ref stats.age_m_cnt);
 
 					string v_life = GKUtils.GetLifeExpectancy(ind);
-					TakeVal(v_life, ind.Sex, ref aStats.life, ref aStats.life_cnt,
-					        ref aStats.life_f, ref aStats.life_f_cnt, ref aStats.life_m, ref aStats.life_m_cnt);
+					TakeVal(v_life, ind.Sex, ref stats.life, ref stats.life_cnt,
+					        ref stats.life_f, ref stats.life_f_cnt, ref stats.life_m, ref stats.life_m_cnt);
 
 					int ch_cnt = ind.aux_GetChildsCount();
-					TakeVal(ch_cnt, ind.Sex, ref aStats.childs, ref aStats.childs_cnt,
-					        ref aStats.childs_f, ref aStats.childs_f_cnt, ref aStats.childs_m, ref aStats.childs_m_cnt);
+					TakeVal(ch_cnt, ind.Sex, ref stats.childs, ref stats.childs_cnt,
+					        ref stats.childs_f, ref stats.childs_f_cnt, ref stats.childs_m, ref stats.childs_m_cnt);
 
 					GEDCOMIndividualRecord iDummy;
 					int v_fba = TreeStats.GetFirstbornAge(ind, out iDummy);
-					TakeVal(v_fba, ind.Sex, ref aStats.fba, ref aStats.fba_cnt,
-					        ref aStats.fba_f, ref aStats.fba_f_cnt, ref aStats.fba_m, ref aStats.fba_m_cnt);
+					TakeVal(v_fba, ind.Sex, ref stats.fba, ref stats.fba_cnt,
+					        ref stats.fba_f, ref stats.fba_f_cnt, ref stats.fba_m, ref stats.fba_m_cnt);
 
 					int m_cnt = TreeStats.GetMarriagesCount(ind);
-					TakeVal(m_cnt, ind.Sex, ref aStats.marr, ref aStats.marr_cnt,
-					        ref aStats.marr_f, ref aStats.marr_f_cnt, ref aStats.marr_m, ref aStats.marr_m_cnt);
+					TakeVal(m_cnt, ind.Sex, ref stats.marr, ref stats.marr_cnt,
+					        ref stats.marr_f, ref stats.marr_f_cnt, ref stats.marr_m, ref stats.marr_m_cnt);
 
 					int v_mage = TreeStats.GetMarriageAge(ind);
-					TakeVal(v_mage, ind.Sex, ref aStats.mage, ref aStats.mage_cnt,
-					        ref aStats.mage_f, ref aStats.mage_f_cnt, ref aStats.mage_m, ref aStats.mage_m_cnt);
+					TakeVal(v_mage, ind.Sex, ref stats.mage, ref stats.mage_cnt,
+					        ref stats.mage_f, ref stats.mage_f_cnt, ref stats.mage_m, ref stats.mage_m_cnt);
+
+					float v_ci = ind.GetCertaintyAssessment();
+					TakeVal(v_ci, ind.Sex, ref stats.ci, ref stats.ci_cnt,
+					        ref stats.ci_f, ref stats.ci_f_cnt, ref stats.ci_m, ref stats.ci_m_cnt);
 				}
 			}
 		}
@@ -285,39 +325,39 @@ namespace GKCore
 			}
 		}
 
-		private static void GetSimplePersonStat(TStatMode aMode, List<TListVal> aVals, GEDCOMIndividualRecord iRec)
+		private static void GetSimplePersonStat(TStatMode mode, List<TListVal> values, GEDCOMIndividualRecord iRec)
 		{
 			string iName = iRec.aux_GetNameStr(true, false);
 
-			switch (aMode)
+			switch (mode)
 			{
 				case TStatMode.smAncestors:
-						aVals.Add(new TListVal(iName, TreeStats.GetAncestorsCount(iRec) - 1));
+						values.Add(new TListVal(iName, TreeStats.GetAncestorsCount(iRec) - 1));
 						break;
 
 				case TStatMode.smDescendants:
-						aVals.Add(new TListVal(iName, TreeStats.GetDescendantsCount(iRec) - 1));
+						values.Add(new TListVal(iName, TreeStats.GetDescendantsCount(iRec) - 1));
 						break;
 
 				case TStatMode.smDescGenerations:
-						aVals.Add(new TListVal(iName, TreeStats.GetDescGenerations(iRec)));
+						values.Add(new TListVal(iName, TreeStats.GetDescGenerations(iRec)));
 						break;
 
 				case TStatMode.smChildsCount:
-						aVals.Add(new TListVal(iName, iRec.aux_GetChildsCount()));
+						values.Add(new TListVal(iName, iRec.aux_GetChildsCount()));
 						break;
 
 				case TStatMode.smFirstbornAge:
 						GEDCOMIndividualRecord iDummy;
-						aVals.Add(new TListVal(iName, TreeStats.GetFirstbornAge(iRec, out iDummy)));
+						values.Add(new TListVal(iName, TreeStats.GetFirstbornAge(iRec, out iDummy)));
 						break;
 
 				case TStatMode.smMarriages:
-						aVals.Add(new TListVal(iName, TreeStats.GetMarriagesCount(iRec)));
+						values.Add(new TListVal(iName, TreeStats.GetMarriagesCount(iRec)));
 						break;
 
 				case TStatMode.smMarriageAge:
-						aVals.Add(new TListVal(iName, TreeStats.GetMarriageAge(iRec)));
+						values.Add(new TListVal(iName, TreeStats.GetMarriageAge(iRec)));
 						break;
 
 				case TStatMode.smFamilies:
@@ -326,8 +366,8 @@ namespace GKCore
 					{
 						string V = "";
 						string fam, nam, pat;
-						iRec.aux_GetNameParts(out fam, out nam, out pat);
-						switch (aMode) {
+						iRec.GetNameParts(out fam, out nam, out pat);
+						switch (mode) {
 							case TStatMode.smFamilies:
 								V = NamesTable.PrepareRusSurname(fam, iRec.Sex == GEDCOMSex.svFemale);
 								break;
@@ -338,16 +378,16 @@ namespace GKCore
 								V = pat;
 								break;
 						}
-						CheckVal(aVals, V);
+						CheckVal(values, V);
 						break;
 					}
 
                 case TStatMode.smAge:
-						CheckVal(aVals, GKUtils.GetAge(iRec, -1));
+						CheckVal(values, GKUtils.GetAge(iRec, -1));
 						break;
 
 				case TStatMode.smLifeExpectancy:
-						CheckVal(aVals, GKUtils.GetLifeExpectancy(iRec));
+						CheckVal(values, GKUtils.GetLifeExpectancy(iRec));
 						break;
 
 				case TStatMode.smBirthYears:
@@ -371,7 +411,7 @@ namespace GKCore
 							}
 							if (evt.Name == "BIRT")
 							{
-								switch (aMode) {
+								switch (mode) {
 									case TStatMode.smBirthYears:
 										V = Convert.ToString(year);
 										break;
@@ -387,7 +427,7 @@ namespace GKCore
 							{
 								if (evt.Name == "DEAT")
 								{
-									switch (aMode) {
+									switch (mode) {
 										case TStatMode.smDeathYears:
 											V = Convert.ToString(year);
 											break;
@@ -401,67 +441,71 @@ namespace GKCore
 								}
 							}
 						}
-						CheckVal(aVals, V);
+						CheckVal(values, V);
 						break;
 					}
 
 				case TStatMode.smChildsDistribution:
-						CheckVal(aVals, iRec.aux_GetChildsCount().ToString());
+						CheckVal(values, iRec.aux_GetChildsCount().ToString());
 						break;
 
 				case TStatMode.smResidences:
-						CheckVal(aVals, GKUtils.GetResidencePlace(iRec, false));
+						CheckVal(values, GKUtils.GetResidencePlace(iRec, false));
 						break;
 
 				case TStatMode.smOccupation:
-						CheckVal(aVals, GKUtils.GetAttributeValue(iRec, "OCCU"));
+						CheckVal(values, GKUtils.GetAttributeValue(iRec, "OCCU"));
 						break;
 
 				case TStatMode.smReligious:
-						CheckVal(aVals, GKUtils.GetAttributeValue(iRec, "RELI"));
+						CheckVal(values, GKUtils.GetAttributeValue(iRec, "RELI"));
 						break;
 
 				case TStatMode.smNational:
-						CheckVal(aVals, GKUtils.GetAttributeValue(iRec, "NATI"));
+						CheckVal(values, GKUtils.GetAttributeValue(iRec, "NATI"));
 						break;
 
 				case TStatMode.smEducation:
-						CheckVal(aVals, GKUtils.GetAttributeValue(iRec, "EDUC"));
+						CheckVal(values, GKUtils.GetAttributeValue(iRec, "EDUC"));
 						break;
 
 				case TStatMode.smCaste:
-						CheckVal(aVals, GKUtils.GetAttributeValue(iRec, "CAST"));
+						CheckVal(values, GKUtils.GetAttributeValue(iRec, "CAST"));
 						break;
 
 				case TStatMode.smHobby:
-						CheckVal(aVals, GKUtils.GetAttributeValue(iRec, "_HOBBY"));
+						CheckVal(values, GKUtils.GetAttributeValue(iRec, "_HOBBY"));
 						break;
 
 				case TStatMode.smAward:
-						CheckVal(aVals, GKUtils.GetAttributeValue(iRec, "_AWARD"));
+						CheckVal(values, GKUtils.GetAttributeValue(iRec, "_AWARD"));
 						break;
 
 				case TStatMode.smMili:
-						CheckVal(aVals, GKUtils.GetAttributeValue(iRec, "_MILI"));
+						CheckVal(values, GKUtils.GetAttributeValue(iRec, "_MILI"));
 						break;
 
 				case TStatMode.smMiliInd:
-						CheckVal(aVals, GKUtils.GetAttributeValue(iRec, "_MILI_IND"));
+						CheckVal(values, GKUtils.GetAttributeValue(iRec, "_MILI_IND"));
 						break;
 
 				case TStatMode.smMiliDis:
-						CheckVal(aVals, GKUtils.GetAttributeValue(iRec, "_MILI_DIS"));
+						CheckVal(values, GKUtils.GetAttributeValue(iRec, "_MILI_DIS"));
 						break;
 
 				case TStatMode.smMiliRank:
-						CheckVal(aVals, GKUtils.GetAttributeValue(iRec, "_MILI_RANK"));
+						CheckVal(values, GKUtils.GetAttributeValue(iRec, "_MILI_RANK"));
+						break;
+
+				case TStatMode.smCertaintyIndex:
+						CheckVal(values, string.Format("{0:0.00}", iRec.GetCertaintyAssessment()));
 						break;
 			}
 		}
 
-		public void GetSpecStats(TStatMode aMode, List<TListVal> aVals)
+		public void GetSpecStats(TStatMode mode, List<TListVal> values)
 		{
-			if (aMode < TStatMode.smDescGenerations)
+			if (mode < TStatMode.smDescGenerations)
 			{
 				TreeStats.InitExtCounts(this.fTree, -1);
 			}
@@ -471,18 +515,18 @@ namespace GKCore
 				// спецбуферы для сложных расчетов по усредненным возрастам
 				Dictionary<string, List<int>> xvals = new Dictionary<string, List<int>>();
 
-				int num = this.fTree.RecordsCount - 1;
-				for (int i = 0; i <= num; i++)
+				int num = this.fTree.RecordsCount;
+				for (int i = 0; i < num; i++)
 				{
 					GEDCOMRecord rec = this.fTree[i];
 
-					if (rec is GEDCOMIndividualRecord && aMode != TStatMode.smSpousesDiff)
+					if (rec is GEDCOMIndividualRecord && mode != TStatMode.smSpousesDiff && this.fSelectedRecords.Contains(rec))
 					{
 						GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
 						
-						if (aMode != TStatMode.smAAF_1 && aMode != TStatMode.smAAF_2)
+						if (mode != TStatMode.smAAF_1 && mode != TStatMode.smAAF_2)
 						{
-							GetSimplePersonStat(aMode, aVals, iRec);
+							GetSimplePersonStat(mode, values, iRec);
 						}
 						else
 						{
@@ -492,7 +536,7 @@ namespace GKCore
 								string key;
 								List<int> valsList = null;
 
-								switch (aMode) {
+								switch (mode) {
 									case TStatMode.smAAF_1:
 										key = SysUtils.Trunc(GKUtils.GetIndependentYear(iRec, "BIRT") / 10 * 10).ToString();
 
@@ -522,15 +566,15 @@ namespace GKCore
 					}
 					else
 					{
-						if (rec is GEDCOMFamilyRecord && aMode == TStatMode.smSpousesDiff)
+						if (rec is GEDCOMFamilyRecord && mode == TStatMode.smSpousesDiff)
 						{
 							GEDCOMFamilyRecord fRec = rec as GEDCOMFamilyRecord;
-							aVals.Add(new TListVal(GKUtils.aux_GetFamilyStr(fRec), TreeStats.GetSpousesDiff(fRec)));
+							values.Add(new TListVal(GKUtils.aux_GetFamilyStr(fRec), TreeStats.GetSpousesDiff(fRec)));
 						}
 					}
 				}
 				
-				if (aMode == TStatMode.smAAF_1 || aMode == TStatMode.smAAF_2)
+				if (mode == TStatMode.smAAF_1 || mode == TStatMode.smAAF_2)
 				{
 					foreach (KeyValuePair<string, List<int>> kvp in xvals)
 					{
@@ -546,7 +590,7 @@ namespace GKCore
 							for (int i = 0; i <= vals_list.Count - 1; i++) sum += vals_list[i];
 							avg = (int)Math.Round((double)(sum / vals_list.Count));
 						}
-						aVals.Add(new TListVal(kvp.Key, avg));
+						values.Add(new TListVal(kvp.Key, avg));
 					}
 				}
 			}
@@ -792,7 +836,7 @@ namespace GKCore
 					for (int i = 0; i <= num; i++)
 					{
 						GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
-						GEDCOMFamilyEvent fEvent = family.aux_GetFamilyEvent("MARR");
+						GEDCOMFamilyEvent fEvent = family.GetFamilyEvent("MARR");
 						if (fEvent != null)
 						{
 							double y2tmp = GKUtils.GetAbstractDate(fEvent.Detail);

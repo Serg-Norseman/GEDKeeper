@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -215,7 +214,7 @@ namespace GKCore
 			try
 			{
 				string dummy, ch_name, ch_pat;
-				iRec.aux_GetNameParts(out dummy, out ch_name, out ch_pat);
+				iRec.GetNameParts(out dummy, out ch_name, out ch_pat);
 
 				GEDCOMSex iSex = iRec.Sex;
 				this.SetNameSex(ch_name, iSex);
@@ -229,7 +228,7 @@ namespace GKCore
 						if (iFather != null)
 						{
 							string fat_nam;
-							iFather.aux_GetNameParts(out dummy, out fat_nam, out dummy);
+							iFather.GetNameParts(out dummy, out fat_nam, out dummy);
 
 							if (NamesTable.Comparable(fat_nam, ch_pat))
 							{
@@ -293,8 +292,7 @@ namespace GKCore
 				res = husbSurname;
 
 				char last_sym = res[res.Length - 1];
-				
-				if (consonants.Contains(last_sym)) {
+				if (consonants.IndexOf(last_sym) >= 0) {
 					res = res + "а";
 				} else if (res.EndsWith("кий")) {
 					res = res.Substring(0, res.Length - 3) + "кая";
@@ -339,7 +337,7 @@ namespace GKCore
 		public static string[] GetSurnames(GEDCOMIndividualRecord iRec)
 		{
 			string fam, nam, pat;
-			iRec.aux_GetNameParts(out fam, out nam, out pat);
+			iRec.GetNameParts(out fam, out nam, out pat);
 			bool female = (iRec.Sex == GEDCOMSex.svFemale);
 
 			return GetSurnames(fam, female);

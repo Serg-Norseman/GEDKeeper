@@ -54,7 +54,7 @@ namespace GKUI.Dialogs
 			this.InitializeComponent();
 			this.fBase = aBase;
 
-			for (TUserRef ur = TUserRef.urCustom; ur <= TUserRef.urUSSR_RearVeteran; ur++)
+			for (TUserRef ur = TUserRef.urCustom; ur <= TUserRef.urLast; ur++)
 			{
 				this.EditRef.Items.Add(GKData.UserRefs[(int)ur]);
 			}

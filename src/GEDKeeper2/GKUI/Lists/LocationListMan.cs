@@ -26,10 +26,10 @@ namespace GKUI.Lists
 			NumberFormatInfo nfi = new NumberFormatInfo();
 			nfi.NumberDecimalSeparator = ".";
 
-			this.AddStatic(LangMan.LS(LSID.LSID_Title), TDataType.dtString, 300, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_Latitude), TDataType.dtFloat, 120, "0.000000", nfi, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_Longitude), TDataType.dtFloat, 120, "0.000000", nfi, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_Changed), TDataType.dtDateTime, 150, true);
+			this.AddStatic(LSID.LSID_Title, TDataType.dtString, 300, true);
+			this.AddStatic(LSID.LSID_Latitude, TDataType.dtFloat, 120, true, "0.000000", nfi);
+			this.AddStatic(LSID.LSID_Longitude, TDataType.dtFloat, 120, true, "0.000000", nfi);
+			this.AddStatic(LSID.LSID_Changed, TDataType.dtDateTime, 150, true);
 		}
 
 		public LocationListColumns()

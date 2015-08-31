@@ -64,16 +64,17 @@ namespace GKCommon.GEDCOM
 			string result = "";
 			byte checkA = 0;
 			byte checkB = 0;
-			byte[] binary = Guid.NewGuid().ToByteArray();
 
-			int num = binary.Length - 1;
-			for (int i = 0; i <= num; i++)
+			byte[] binary = Guid.NewGuid().ToByteArray();
+			int num = binary.Length;
+			for (int i = 0; i < num; i++)
 			{
 				byte val = binary[i];
 				checkA = unchecked((byte)((uint)checkA + (uint)val));
 				checkB = unchecked((byte)((uint)checkB + (uint)checkA));
 				result += string.Format("{0:X2}", val);
 			}
+
 			result += string.Format("{0:X2}", checkA);
 			result += string.Format("{0:X2}", checkB);
 			return result;
@@ -102,22 +103,19 @@ namespace GKCommon.GEDCOM
 			base.Dispose(disposing);
 		}
 
-		public int IndexOfSource(GEDCOMSourceRecord aSource)
+		public int IndexOfSource(GEDCOMSourceRecord sourceRec)
 		{
-			int result = -1;
-            if (aSource == null) return result;
-
-			int num = this.fSourceCitations.Count - 1;
-			for (int i = 0; i <= num; i++)
-			{
-				if (this.fSourceCitations[i].XRef == aSource.XRef)
+			if (sourceRec != null) {
+				int num = this.fSourceCitations.Count;
+				for (int i = 0; i < num; i++)
 				{
-					result = i;
-					break;
+					if (this.fSourceCitations[i].XRef == sourceRec.XRef) {
+						return i;
+					}
 				}
 			}
 
-			return result;
+			return -1;
 		}
 
         public virtual void MoveTo(GEDCOMRecord targetRecord, bool clearDest)
@@ -285,7 +283,7 @@ namespace GKCommon.GEDCOM
 
 		#region Auxiliary
 
-		public string aux_GetXRefNum()
+		public string GetXRefNum()
 		{
 			string xref = this.FXRef;
 
@@ -296,12 +294,12 @@ namespace GKCommon.GEDCOM
 			return xref;
 		}
 
-		public int aux_GetId()
+		public int GetId()
 		{
 			int result;
 			try
 			{
-				string xref = this.aux_GetXRefNum();
+				string xref = this.GetXRefNum();
 				result = SysUtils.ParseInt(xref, 0);
 			}
 			catch (Exception)

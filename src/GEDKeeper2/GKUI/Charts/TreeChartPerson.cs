@@ -66,6 +66,7 @@ namespace GKUI.Charts
         public IVertex Node;
         public string PathDebug;
 
+        public float CertaintyAssessment;
 
         public EnumSet<PersonFlag> Flags
         {
@@ -334,7 +335,7 @@ namespace GKUI.Charts
                     }
 
                     string fam, nam, pat;
-                    iRec.aux_GetNameParts(out fam, out nam, out pat);
+                    iRec.GetNameParts(out fam, out nam, out pat);
                     this.fSurname = fam;
                     this.fName = nam;
                     this.fPatronymic = pat;
@@ -360,6 +361,8 @@ namespace GKUI.Charts
                             }
                         }
                     }
+
+                    this.CertaintyAssessment = iRec.GetCertaintyAssessment();
                 } else {
                     this.fSurname = "";
                     this.fName = "< ? >";
@@ -370,6 +373,8 @@ namespace GKUI.Charts
                     this.IsDead = false;
                     this.fSex = GEDCOMSex.svNone;
                     this.fSigns = EnumSet<ChartPersonSign>.Create();
+
+                    this.CertaintyAssessment = 0.0f;
                 }
             }
             catch (Exception ex)

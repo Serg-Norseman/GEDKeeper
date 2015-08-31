@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Cyotek.Windows.Forms
 {
@@ -15,8 +14,7 @@ namespace Cyotek.Windows.Forms
 			this.List = new SortedList<int, int>();
 		}
 
-		public ZoomLevelCollection(IEnumerable<int> collection)
-			: this()
+		public ZoomLevelCollection(IEnumerable<int> collection) : this()
 		{
 			if (collection == null)
 				throw new ArgumentNullException("collection");
@@ -87,15 +85,25 @@ namespace Cyotek.Windows.Forms
 			return this.List.ContainsKey(item);
 		}
 
-		public void CopyTo(int[] array, int arrayIndex)
-		{
-			if (this.Count != 0)
-				Array.Copy(this.List.Values.ToArray(), 0, array, arrayIndex, this.Count);
-		}
-
 		public int FindNearest(int zoomLevel)
 		{
-			return this.OrderBy(v => Math.Abs(v - zoomLevel)).First();
+			int min = int.MaxValue;
+			int minVal = 0;
+			
+			int size = this.Count;
+			if (size != 0) {
+				IList<int> listVals = this.List.Values;
+				for (int i = 0; i < size; i++) {
+					int val = listVals[i];
+					int d = Math.Abs(val - zoomLevel);
+					if (min > d) {
+						min = d;
+						minVal = val;
+					}
+				}
+			}			
+			
+			return minVal;
 		}
 
 		public IEnumerator<int> GetEnumerator()
@@ -153,6 +161,17 @@ namespace Cyotek.Windows.Forms
 			this.CopyTo(results, 0);
 
 			return results;
+		}
+
+		public void CopyTo(int[] array, int arrayIndex)
+		{
+			int size = this.Count;
+			
+			if (size != 0) {
+				for (int i = 0; i < size; i++) {
+					array[arrayIndex + i] = this.List.Values[i];
+				}
+			}
 		}
 
 		#endregion

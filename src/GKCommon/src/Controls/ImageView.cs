@@ -12,11 +12,10 @@ namespace GKCommon.Controls
             InitializeComponent();
 
             this.FillZoomLevels();
-            //imageBox.GridCellSize = 10;
-            //imageBox.GridDisplayMode = ImageBoxGridDisplayMode.Client;
             imageBox.ImageBorderStyle = ImageBoxBorderStyle.FixedSingleGlowShadow;
             imageBox.ImageBorderColor = Color.AliceBlue;
             imageBox.SelectionMode = ImageBoxSelectionMode.Zoom;
+            //imageBox.ShowPixelGrid = true;
         }
 
         private void FillZoomLevels()

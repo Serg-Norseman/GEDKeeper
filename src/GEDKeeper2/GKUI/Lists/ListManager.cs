@@ -64,9 +64,9 @@ namespace GKUI.Lists
             base.Dispose(disposing);
         }
 
-		protected void AddListColumn(GKListView aList, string caption, int width, bool autoSize, byte colType, byte colSubType)
+		protected void AddListColumn(GKListView list, string caption, int width, bool autoSize, byte colType, byte colSubType)
 		{
-			aList.AddListColumn(caption, width, autoSize);
+			list.AddListColumn(caption, width, autoSize);
 
 			TColMapRec cr = new TColMapRec();
 			cr.ColType = colType;
@@ -133,7 +133,7 @@ namespace GKUI.Lists
 				// aColIndex - from 1
 				TColumnStatic cs = this.fListColumns.ColumnStatics[colrec.ColType];
 				object val = GetColumnValueEx(colrec.ColType, colrec.ColSubtype);
-				string res = ConvColValue(val, cs);
+				string res = ConvertColumnValue(val, cs);
 
 				item.SubItems.Add(res);
 			}
@@ -148,7 +148,7 @@ namespace GKUI.Lists
 
 			for (int i = 0; i < this.fListColumns.ColumnStatics.Count; i++) {
 				TColumnStatic cs = this.fListColumns.ColumnStatics[i];
-				this.AddListColumn(listView, cs.colName, cs.width, false, (byte)i, 0);
+				this.AddListColumn(listView, LangMan.LS(cs.colName), cs.width, false, (byte)i, 0);
 			}
 		}
 
@@ -159,7 +159,7 @@ namespace GKUI.Lists
 			int col = (colType as IConvertible).ToByte(null);
 
             if (col >= 0 && col < fListColumns.ColumnStatics.Count) {
-				return fListColumns.ColumnStatics[col].colName;
+				return LangMan.LS(fListColumns.ColumnStatics[col].colName);
 			}
 
             return "<?>";
@@ -183,7 +183,7 @@ namespace GKUI.Lists
 		/// </summary>
 		public abstract Type GetColumnsEnum();
 
-		private static string ConvColValue(object val, TColumnStatic cs)
+		private static string ConvertColumnValue(object val, TColumnStatic cs)
 		{
 			switch (cs.dataType) {
 				case TDataType.dtString:
@@ -201,12 +201,13 @@ namespace GKUI.Lists
 
 				case TDataType.dtFloat:
 					return ((double)val).ToString(cs.format, cs.nfi);
+					
+				default:
+					return val.ToString();
 			}
-
-			return val.ToString();
 		}
 
-		private static object ConvColStr(string val, TDataType type)
+		private static object ConvertColumnStr(string val, TDataType type)
 		{
 			switch (type) {
 				case TDataType.dtString:
@@ -230,7 +231,7 @@ namespace GKUI.Lists
 			fltCond.column = column;
 			fltCond.col_index = col;
 			fltCond.condition = condition;
-			fltCond.value = ConvColStr(value, this.GetColumnDataType(col));
+			fltCond.value = ConvertColumnStr(value, this.GetColumnDataType(col));
 			this.Filter.ColumnsFilter.Add(fltCond);
 		}
 

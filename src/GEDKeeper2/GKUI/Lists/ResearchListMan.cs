@@ -25,13 +25,13 @@ namespace GKUI.Lists
 	{
 		protected override void InitColumnStatics()
 		{
-			this.AddStatic(LangMan.LS(LSID.LSID_Title), TDataType.dtString, 300, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_Priority), TDataType.dtString, 90, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_Status), TDataType.dtString, 90, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_StartDate), TDataType.dtString, 90, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_StopDate), TDataType.dtString, 90, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_Percent), TDataType.dtInteger, 90, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_Changed), TDataType.dtDateTime, 150, true);
+			this.AddStatic(LSID.LSID_Title, TDataType.dtString, 300, true);
+			this.AddStatic(LSID.LSID_Priority, TDataType.dtString, 90, true);
+			this.AddStatic(LSID.LSID_Status, TDataType.dtString, 90, true);
+			this.AddStatic(LSID.LSID_StartDate, TDataType.dtString, 90, true);
+			this.AddStatic(LSID.LSID_StopDate, TDataType.dtString, 90, true);
+			this.AddStatic(LSID.LSID_Percent, TDataType.dtInteger, 90, true);
+			this.AddStatic(LSID.LSID_Changed, TDataType.dtDateTime, 150, true);
 		}
 
 		public ResearchListColumns() : base()

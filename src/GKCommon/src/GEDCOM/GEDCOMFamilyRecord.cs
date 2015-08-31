@@ -266,11 +266,10 @@ namespace GKCommon.GEDCOM
 
 		public void aux_SortChilds()
 		{
-			int num = this.fChildrens.Count - 1;
-			for (int i = 0; i <= num; i++)
+			int num = this.fChildrens.Count;
+			for (int i = 0; i < num; i++)
 			{
-				int num2 = this.fChildrens.Count - 1;
-				for (int j = i + 1; j <= num2; j++)
+				for (int j = i + 1; j < num; j++)
 				{
 					GEDCOMIndividualRecord iChild = this.fChildrens[i].Value as GEDCOMIndividualRecord;
 					GEDCOMCustomEvent iEv = iChild.GetIndividualEvent("BIRT");
@@ -299,7 +298,7 @@ namespace GKCommon.GEDCOM
 			}
 		}
 
-		public GEDCOMFamilyEvent aux_GetFamilyEvent(string evName)
+		public GEDCOMFamilyEvent GetFamilyEvent(string evName)
 		{
 			GEDCOMFamilyEvent result = null;
 

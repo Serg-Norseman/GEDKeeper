@@ -20,8 +20,6 @@ namespace GKCommon.GEDCOM
 		//public const byte GEDCOMMaxWebPages = 3;
 		//public const byte GEDCOMMaxLanguages = 3;
 
-		//public static readonly string[] BloodGroups = new string[] { "(I) O+", "(I) O-", "(II) A+", "(II) A-", "(III) B+", "(III) B-", "(IV) AB+", "(IV) AB-" };
-
         private bool fDisposed;
 
 		public object ExtData

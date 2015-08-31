@@ -65,12 +65,12 @@ namespace GKCore.Export
 						GEDCOMIndividualRecord ind = rec as GEDCOMIndividualRecord;
 						if (this.fSelectedRecords == null || this.fSelectedRecords.IndexOf(rec) >= 0) {
 							string fam, nam, pat;
-							ind.aux_GetNameParts(out fam, out nam, out pat);
+							ind.GetNameParts(out fam, out nam, out pat);
 
 							string sx = "" + GKUtils.SexStr(ind.Sex)[0];
 							row++;
 
-							worksheet.Cells[row, 1] = new Cell(ind.aux_GetXRefNum());
+							worksheet.Cells[row, 1] = new Cell(ind.GetXRefNum());
 							worksheet.Cells[row, 2] = new Cell(fam);
 							worksheet.Cells[row, 3] = new Cell(nam);
 							worksheet.Cells[row, 4] = new Cell(pat);

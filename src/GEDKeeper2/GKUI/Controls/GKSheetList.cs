@@ -162,12 +162,12 @@ namespace GKUI.Controls
             this.fList.BackColor = (this.fReadOnly) ? SystemColors.Control : SystemColors.Window;
 		}
 
-		public GKSheetList(Control aOwner)
+		public GKSheetList(Control owner)
 		{
-			aOwner.SuspendLayout();
+			owner.SuspendLayout();
 			this.Dock = DockStyle.Fill;
-			aOwner.Controls.Add(this);
-			aOwner.ResumeLayout(false);
+			owner.Controls.Add(this);
+			owner.ResumeLayout(false);
 			base.SuspendLayout();
 			this.fBtnMoveDown = new ToolBarButton();
 			this.fBtnMoveDown.ImageIndex = 30;

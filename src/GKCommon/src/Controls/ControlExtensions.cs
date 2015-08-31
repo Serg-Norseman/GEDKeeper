@@ -5,7 +5,7 @@ namespace GKCommon.Controls
 {
 	public static class ControlExtensions
 	{
-		public static void Do<TControl>(this TControl control, Action<TControl> action) where TControl: Control
+		public static void Do<T>(T control, Action<T> action) where T: Control
 		{
 			if (control.InvokeRequired)
 				control.Invoke(action, control);

@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 using ExtUtils;
@@ -15,6 +16,7 @@ using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
+using GKUI.Charts;
 using GKUI.Controls;
 using GKUI.Dialogs;
 using GKUI.Lists;
@@ -209,22 +211,27 @@ namespace GKUI
 
         private void Form_KeyDown(object sender, KeyEventArgs e)
 		{
-			if (e.Control)
-			{
-				switch (e.KeyCode) {
-					/*case Keys.I:
+        	switch (e.KeyCode) {
+        			/*case Keys.I:
 						this.ItemAdd();
 						break;
 					case Keys.D:
 						this.ItemDelete();
 						break;*/
 
-					case Keys.Return:
-						this.RecordEdit(null, null);
-						break;
-				}
-			}
-		}
+        		case Keys.Return:
+        			if (e.Control) {
+        				this.RecordEdit(null, null);
+        			}
+        			break;
+        			
+        		/*case Keys.F:
+        			if (e.Control) {
+        				this.QuickFind();
+        			}
+        			break;*/
+        	}
+        }
 
         #endregion
         
@@ -931,7 +938,7 @@ namespace GKUI
 			if (iRec.Sex == GEDCOMSex.svNone || iRec.Sex == GEDCOMSex.svUndetermined)
 			{
 				string fFam, fName, fPatr;
-				iRec.aux_GetNameParts(out fFam, out fName, out fPatr);
+				iRec.GetNameParts(out fFam, out fName, out fPatr);
 				iRec.Sex = this.DefineSex(fName, fPatr);
 			}
 		}
@@ -1484,6 +1491,45 @@ namespace GKUI
 				result = (rView.ContentList.IndexOf(record) >= 0);
 			}
 			return result;
+		}
+
+		public IList<ISearchResult> FindAll(string searchPattern)
+		{
+			List<ISearchResult> result = new List<ISearchResult>();
+			
+			Regex regex = GKUtils.InitMaskRegex(searchPattern);
+			
+			int num = this.fTree.RecordsCount;
+			for (int i = 0; i < num; i++) {
+				GEDCOMRecord rec = this.fTree[i];
+				if (rec.RecordType == GEDCOMRecordType.rtIndividual) {
+					GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
+					
+					string fullname = iRec.aux_GetNameStr(true, false);
+					if (GKUtils.MatchesRegex(fullname, regex)) {
+						//yield return new SearchResult(iRec);
+						result.Add(new SearchResult(iRec));
+					}
+				}
+			}
+			
+			return result;
+		}
+
+		public void SelectByRec(GEDCOMIndividualRecord iRec)
+		{
+			this.SelectRecordByXRef(iRec.XRef);
+		}
+
+		public void QuickFind()
+		{
+			SearchPanel panel = new SearchPanel(this);
+			
+			Rectangle client = this.ClientRectangle;
+			Point pt = this.PointToScreen(new Point(client.Left, client.Bottom - panel.Height));
+			panel.Location = pt;
+
+			panel.Show();
 		}
 
 		#endregion

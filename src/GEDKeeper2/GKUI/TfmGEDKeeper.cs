@@ -460,6 +460,8 @@ namespace GKUI
 				this.miFilter.Enabled = baseEn;
 				this.tbFilter.Enabled = this.miFilter.Enabled;
 
+				this.miSearch.Enabled = (workWin != null);
+				
 				this.miTreeTools.Enabled = baseEn;
 				this.miExportToFamilyBook.Enabled = baseEn;
 				this.miExportToExcelFile.Enabled = baseEn;
@@ -688,7 +690,9 @@ namespace GKUI
 			IBase curBase = this.GetCurrentFile();
 		    if (curBase == null) return;
 
-			TfmStats fmStats = new TfmStats(curBase);
+		    List<GEDCOMRecord> selectedRecords = curBase.GetContentList(GEDCOMRecordType.rtIndividual);
+
+			TfmStats fmStats = new TfmStats(curBase, selectedRecords);
 			fmStats.Show();
 		}
 
@@ -796,6 +800,14 @@ namespace GKUI
 		    if (curBase == null) return;
 
 		    curBase.RecordDelete();
+		}
+
+		private void miSearchClick(object sender, EventArgs e)
+		{
+			IBase curBase = this.GetCurrentFile();
+		    if (curBase == null) return;
+
+			curBase.QuickFind();
 		}
 
 		private void miTreeBothClick(object sender, EventArgs e)
@@ -941,6 +953,8 @@ namespace GKUI
 
 			this.miLogSend.Text = LangMan.LS(LSID.LSID_LogSend);
 			this.miPlugins.Text = LangMan.LS(LSID.LSID_Plugins);
+			
+			this.miSearch.Text = LangMan.LS(LSID.LSID_Search);
 		}
 
 		#endregion
@@ -953,16 +967,16 @@ namespace GKUI
 
 			Assembly asm = plugin.GetType().Assembly;
 			
-			var attr1 = asm.GetAssemblyAttribute<AssemblyTitleAttribute>();
+			var attr1 = GKUtils.GetAssemblyAttribute<AssemblyTitleAttribute>(asm);
 			if (attr1 != null) info.Title = attr1.Title;
 			
-			var attr2 = asm.GetAssemblyAttribute<AssemblyDescriptionAttribute>();
+			var attr2 = GKUtils.GetAssemblyAttribute<AssemblyDescriptionAttribute>(asm);
 			if (attr2 != null) info.Description = attr2.Description;
 			
-			var attr3 = asm.GetAssemblyAttribute<AssemblyCopyrightAttribute>();
+			var attr3 = GKUtils.GetAssemblyAttribute<AssemblyCopyrightAttribute>(asm);
 			if (attr3 != null) info.Copyright = attr3.Copyright;
 			
-			var attr4 = asm.GetAssemblyAttribute<AssemblyFileVersionAttribute>();
+			var attr4 = GKUtils.GetAssemblyAttribute<AssemblyFileVersionAttribute>(asm);
 			if (attr4 != null) info.Version = attr4.Version;
 			
 			return info;

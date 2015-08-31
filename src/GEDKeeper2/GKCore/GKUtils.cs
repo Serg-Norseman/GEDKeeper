@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Drawing;
-using System.Drawing.Drawing2D;
 
 using GKCommon;
 using GKCommon.GEDCOM;
@@ -21,12 +21,91 @@ namespace GKCore
 {
 	public static class GKUtils
 	{
-		public static T GetAssemblyAttribute<T>(this System.Reflection.Assembly ass) where T : Attribute
+		public static T GetAssemblyAttribute<T>(System.Reflection.Assembly ass) where T : Attribute
 		{
 			object[] attributes = ass.GetCustomAttributes(typeof(T), false);
 			if (attributes == null || attributes.Length == 0)
 				return null;
-			return attributes.OfType<T>().SingleOrDefault();
+			return SingleOrDefault(OfTypeIterator<T>((T[])attributes));
+		}
+		
+		private static IEnumerable<TResult> OfTypeIterator<TResult>(IEnumerable<TResult> source)
+		{
+			foreach (object current in source)
+			{
+				if (current is TResult)
+				{
+					yield return (TResult)((object)current);
+				}
+			}
+			yield break;
+		}
+		
+		public static TSource SingleOrDefault<TSource>(IEnumerable<TSource> source)
+		{
+			if (source == null)
+			{
+				throw new ArgumentNullException("source");
+			}
+
+			IList<TSource> list = source as IList<TSource>;
+
+			if (list != null)
+			{
+				switch (list.Count)
+				{
+					case 0:
+						return default(TSource);
+					case 1:
+						return list[0];
+				}
+			}
+			else
+			{
+				using (IEnumerator<TSource> enumerator = source.GetEnumerator())
+				{
+					if (!enumerator.MoveNext())
+					{
+						TSource result = default(TSource);
+						return result;
+					}
+					TSource current = enumerator.Current;
+					if (!enumerator.MoveNext())
+					{
+						TSource result = current;
+						return result;
+					}
+				}
+			}
+
+			throw new Exception("MoreThanOneElement");
+		}
+
+		public static T FirstOrDefault<T>(IList<T> list)
+		{
+			if (list == null) {
+				throw new ArgumentNullException("list");
+			}
+
+			if (list.Count > 0) {
+				return list[0];
+			}
+
+			return default(T);
+		}
+
+		public static T LastOrDefault<T>(IList<T> list)
+		{
+			if (list == null) {
+				throw new ArgumentNullException("list");
+			}
+
+			int count = list.Count;
+			if (count > 0) {
+				return list[count - 1];
+			}
+
+			return default(T);
 		}
 
 		#region Aux functions
@@ -977,24 +1056,11 @@ namespace GKCore
 
 			try
 			{
-				GEDCOMCustomEvent ev = null;
-				GEDCOMCustomEvent ev2 = null;
+				GEDCOMCustomEvent bd;
+				GEDCOMCustomEvent dd;
+				iRec.GetLifeDates(out bd, out dd);
 
-				int num = iRec.IndividualEvents.Count - 1;
-				for (int i = 0; i <= num; i++)
-				{
-					GEDCOMCustomEvent evt = iRec.IndividualEvents[i];
-					if (evt.Name == "BIRT")
-					{
-						ev = evt;
-					}
-					else if (evt.Name == "DEAT")
-					{
-						ev2 = evt;
-					}
-				}
-
-				result = GKUtils.GetEventsYearsDiff(ev, ev2, false);
+				result = GKUtils.GetEventsYearsDiff(bd, dd, false);
 			}
 			catch (Exception ex)
 			{
@@ -1011,41 +1077,19 @@ namespace GKCore
 
 			try
 			{
-				GEDCOMCustomEvent ev1 = null;
-				GEDCOMCustomEvent ev2 = null;
+				GEDCOMCustomEvent bd;
+				GEDCOMCustomEvent dd;
+				iRec.GetLifeDates(out bd, out dd);
 
-				int num = iRec.IndividualEvents.Count - 1;
-				for (int i = 0; i <= num; i++)
-				{
-					GEDCOMCustomEvent evt = iRec.IndividualEvents[i];
-					if (evt.Name == "BIRT" && ev1 == null)
-					{
-						ev1 = evt;
-					}
-					else
-					{
-						if (evt.Name == "DEAT" && ev2 == null)
-						{
-							ev2 = evt;
-						}
-					}
-				}
-
-				if (ToYear == -1)
-				{
-					result = GKUtils.GetEventsYearsDiff(ev1, ev2, ev2 == null);
-				}
-				else
-				{
-					if (ev1 == null)
-					{
+				if (ToYear == -1) {
+					result = GKUtils.GetEventsYearsDiff(bd, dd, dd == null);
+				} else {
+					if (bd == null) {
 						result = "";
-					}
-					else
-					{
+					} else {
 						ushort dummy;
 						int i;
-						ev1.Detail.Date.aux_GetIndependentDate(out i, out dummy, out dummy);
+						bd.Detail.Date.aux_GetIndependentDate(out i, out dummy, out dummy);
 						result = Convert.ToString(ToYear - i);
 					}
 				}
@@ -1064,7 +1108,7 @@ namespace GKCore
 
 			if (fRec != null)
 			{
-				GEDCOMFamilyEvent evt = fRec.aux_GetFamilyEvent("MARR");
+				GEDCOMFamilyEvent evt = fRec.GetFamilyEvent("MARR");
 				result = ((evt == null) ? "" : GKUtils.GEDCOMCustomDateToStr(evt.Detail.Date, dateFormat, false));
 			}
 
@@ -1676,8 +1720,7 @@ namespace GKCore
                         {
                             string nm = "\"" + sourceRec.FiledByEntry + "\"";
 
-                            if (cit.Page != "")
-                            {
+                            if (cit.Page != "") {
                                 nm = nm + ", " + cit.Page;
                             }
 
@@ -1843,8 +1886,8 @@ namespace GKCore
                         	summary.Add(LangMan.LS(LSID.LSID_Childs) + ":");
                         }
 
-                        int num = familyRec.Childrens.Count - 1;
-                        for (int i = 0; i <= num; i++)
+                        int num = familyRec.Childrens.Count;
+                        for (int i = 0; i < num; i++)
                         {
                             irec = (familyRec.Childrens[i].Value as GEDCOMIndividualRecord);
                             summary.Add("    " + GKUtils.HyperLink(irec.XRef, irec.aux_GetNameStr(true, false), 0) + GKUtils.GetLifeStr(irec));
@@ -1886,8 +1929,8 @@ namespace GKCore
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Members) + " (" + groupRec.Members.Count.ToString() + "):");
 
-                        int num = groupRec.Members.Count - 1;
-                        for (int i = 0; i <= num; i++)
+                        int num = groupRec.Members.Count;
+                        for (int i = 0; i < num; i++)
                         {
                             GEDCOMPointer ptr = groupRec.Members[i];
                             GEDCOMIndividualRecord member = ptr.Value as GEDCOMIndividualRecord;
@@ -1895,8 +1938,8 @@ namespace GKCore
                         }
                         mbrList.Sort();
 
-                        int num2 = mbrList.Count - 1;
-                        for (int i = 0; i <= num2; i++)
+                        int num2 = mbrList.Count;
+                        for (int i = 0; i < num2; i++)
                         {
                             GEDCOMIndividualRecord member = mbrList.GetObject(i) as GEDCOMIndividualRecord;
                             summary.Add("    " + GKUtils.HyperLink(member.XRef, mbrList[i], i + 1));
@@ -2476,6 +2519,8 @@ namespace GKCore
         
         #endregion
 
+        #region Color utils
+        
 		public static Color darker(Color color, float fraction)
 		{
 			float factor = (1.0f - fraction);
@@ -2532,6 +2577,10 @@ namespace GKCore
 			return Color.FromArgb(red, green, blue);
 		}
 
+		#endregion
+		
+		#region Graphics primitives
+		
 		public static GraphicsPath CreateRoundedRectangle(int x, int y, int width, int height, int radius)
 	    {
 			int xw = x + width;
@@ -2580,5 +2629,7 @@ namespace GKCore
 				alpha += delta;
 			}
 		}
+		
+		#endregion
 	}
 }

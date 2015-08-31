@@ -104,7 +104,6 @@
         	// 
         	this.imageBox.BackColor = System.Drawing.SystemColors.ControlDark;
         	this.imageBox.Dock = System.Windows.Forms.DockStyle.Fill;
-        	this.imageBox.GridDisplayMode = Cyotek.Windows.Forms.ImageBoxGridDisplayMode.None;
         	this.imageBox.Location = new System.Drawing.Point(0, 28);
         	this.imageBox.Margin = new System.Windows.Forms.Padding(4);
         	this.imageBox.Name = "imageBox";

@@ -557,7 +557,7 @@ namespace GKCore
 				for (int i = 0; i <= num; i++)
 				{
 					GEDCOMRecord rec = tree[i];
-					if (rec.aux_GetId() < 0)
+					if (rec.GetId() < 0)
 					{
 						string newXRef = tree.XRefIndex_NewXRef(rec);
 						repMap.AddXRef(rec, rec.XRef, newXRef);
@@ -604,7 +604,7 @@ namespace GKCore
 						GEDCOMRecord rec = tree[i];
 						TreeTools.CheckRecord(tree, rec, format, valuesCollection);
 
-						if (format != GEDCOMFormat.gf_Native && idCheck && rec.aux_GetId() < 0)
+						if (format != GEDCOMFormat.gf_Native && idCheck && rec.GetId() < 0)
 						{
 							idCheck = false;
 						}
@@ -1311,7 +1311,7 @@ namespace GKCore
 						(names.GetObject(idx) as ExtList<GEDCOMIndividualRecord>).Add(iRec);
 
 						string fam, nam, pat;
-						iRec.aux_GetNameParts(out fam, out nam, out pat);
+						iRec.GetNameParts(out fam, out nam, out pat);
 
 						fams.AddObject(NamesTable.PrepareRusSurname(fam, iRec.Sex == GEDCOMSex.svFemale), null);
 					}
@@ -1332,7 +1332,7 @@ namespace GKCore
 						}
 
 						string fam, nam, pat;
-						iRec.aux_GetNameParts(out fam, out nam, out pat);
+						iRec.GetNameParts(out fam, out nam, out pat);
 
 						tm = NamesTable.PrepareRusSurname(fam, iRec.Sex == GEDCOMSex.svFemale);
 						idx = fams.IndexOf(tm);

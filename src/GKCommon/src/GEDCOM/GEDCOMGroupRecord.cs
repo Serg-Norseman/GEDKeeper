@@ -89,19 +89,17 @@ namespace GKCommon.GEDCOM
 
 		public int IndexOfMember(GEDCOMIndividualRecord member)
 		{
-			int result = -1;
-            if (member == null) return result;
-
-			int num = this.fMembers.Count - 1;
-			for (int i = 0; i <= num; i++)
-			{
-				if (this.fMembers[i].XRef == member.XRef)
+			if (member != null) {
+				int num = this.fMembers.Count;
+				for (int i = 0; i < num; i++)
 				{
-					result = i;
-					break;
+					if (this.fMembers[i].XRef == member.XRef) {
+						return i;
+					}
 				}
 			}
-			return result;
+
+			return -1;
 		}
 
 		public GEDCOMGroupRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

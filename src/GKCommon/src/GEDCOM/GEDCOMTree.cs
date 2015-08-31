@@ -21,7 +21,7 @@ namespace GKCommon.GEDCOM
 	{
 		#region Tree Enumerator
 
-		public struct TreeEnumerator : ITreeEnumerator
+		private struct TreeEnumerator : ITreeEnumerator
 		{
 			private readonly GEDCOMTree tree;
             private readonly GEDCOMRecordType rec_type;
@@ -319,8 +319,8 @@ namespace GKCommon.GEDCOM
 
 		public void Pack()
 		{
-			int num = this.fRecords.Count - 1;
-			for (int i = 0; i <= num; i++)
+			int num = this.fRecords.Count;
+			for (int i = 0; i < num; i++)
 			{
 				this.fRecords[i].Pack();
 			}
@@ -328,20 +328,16 @@ namespace GKCommon.GEDCOM
 
 		public GEDCOMRecord FindUID(string UID)
 		{
-			GEDCOMRecord res = null;
-
-			int num = this.fRecords.Count - 1;
-			for (int i = 0; i <= num; i++)
+			int num = this.fRecords.Count;
+			for (int i = 0; i < num; i++)
 			{
 				GEDCOMRecord rec = this.fRecords[i];
-				if (rec.UID == UID)
-				{
-					res = rec;
-					break;
+				if (rec.UID == UID) {
+					return rec;
 				}
 			}
 
-			return res;
+			return null;
 		}
 
 		#endregion
@@ -926,8 +922,8 @@ namespace GKCommon.GEDCOM
 			bool result = false;
 			if (taskRec != null)
 			{
-				int num = this.RecordsCount - 1;
-				for (int i = 0; i <= num; i++)
+				int num = this.RecordsCount;
+				for (int i = 0; i < num; i++)
 				{
 					GEDCOMRecord rec = this[i];
 					if (rec is GEDCOMResearchRecord)
@@ -954,8 +950,8 @@ namespace GKCommon.GEDCOM
 			bool result = false;
 			if (commRec != null)
 			{
-				int num = this.RecordsCount - 1;
-				for (int i = 0; i <= num; i++)
+				int num = this.RecordsCount;
+				for (int i = 0; i < num; i++)
 				{
 					GEDCOMRecord rec = this[i];
 					if (rec is GEDCOMResearchRecord)
@@ -982,8 +978,8 @@ namespace GKCommon.GEDCOM
 			bool result = false;
 			if (locRec != null)
 			{
-				int num = this.RecordsCount - 1;
-				for (int i = 0; i <= num; i++)
+				int num = this.RecordsCount;
+				for (int i = 0; i < num; i++)
 				{
 					GEDCOMRecord rec = this[i];
 					if (rec is GEDCOMIndividualRecord)

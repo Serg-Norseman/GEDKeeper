@@ -22,9 +22,9 @@ namespace GKUI.Lists
 	{
 		protected override void InitColumnStatics()
 		{
-			this.AddStatic(LangMan.LS(LSID.LSID_Spouses), TDataType.dtString, 300, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_MarriageDate), TDataType.dtString, 100, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_Changed), TDataType.dtDateTime, 150, true);
+			this.AddStatic(LSID.LSID_Spouses, TDataType.dtString, 300, true);
+			this.AddStatic(LSID.LSID_MarriageDate, TDataType.dtString, 100, true);
+			this.AddStatic(LSID.LSID_Changed, TDataType.dtDateTime, 150, true);
 		}
 
 		public FamilyListColumns() : base()

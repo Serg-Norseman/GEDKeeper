@@ -20,8 +20,8 @@ namespace GKUI.Lists
 	{
 		protected override void InitColumnStatics()
 		{
-			this.AddStatic(LangMan.LS(LSID.LSID_Note), TDataType.dtString, 400, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_Changed), TDataType.dtDateTime, 150, true);
+			this.AddStatic(LSID.LSID_Note, TDataType.dtString, 400, true);
+			this.AddStatic(LSID.LSID_Changed, TDataType.dtDateTime, 150, true);
 		}
 
 		public NoteListColumns() : base()

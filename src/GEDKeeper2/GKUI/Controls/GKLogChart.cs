@@ -1,8 +1,6 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace GKUI.Controls
@@ -79,13 +77,14 @@ namespace GKUI.Controls
 
 			Fragment frag;
 
+			// расчет простой суммы фрагментов
 			double sum = 0.0;
 			for (int i = 0; i < count; i++) {
 				frag = fList[i];
-
 				sum = sum + frag.val;
 			}
 
+			// расчет логарифма величины фрагмента и суммы логарифмов
 			double logSum = 0.0;
 			for (int i = 0; i < count; i++) {
 				frag = fList[i];
@@ -94,6 +93,7 @@ namespace GKUI.Controls
 				logSum = logSum + frag.log;
 			}
 
+			// расчет визуальной ширины фрагментов и их суммы
 			int resWidth = 0;
 			for (int i = 0; i < count; i++) {
 				frag = fList[i];
@@ -103,13 +103,16 @@ namespace GKUI.Controls
 				resWidth = resWidth + frag.width;
 			}
 
-			// arrange delta
+			// распределить разницу между реальной шириной компонента и суммой ширины фрагментов
 			int d = wid - resWidth;
 			if (d > 0) {
-				var list = fList.OrderByDescending(z => z.width).ToList();
+				// разницу распределяем между наибольшими фрагментами
+				List<Fragment> ordList = new List<Fragment>(this.fList);
+				ordList.Sort(new FragmentComparer());
+
 				int idx = 0;
 				while (d > 0) {
-					frag = list[idx];
+					frag = ordList[idx];
 					frag.width = frag.width + 1;
 
 					if (idx == count - 1) {
@@ -120,6 +123,7 @@ namespace GKUI.Controls
 				}
 			}
 
+			// подготовить области отрисовки фрагментов
 			int x = 0;
 			for (int i = 0; i < count; i++) {
 				frag = fList[i];
@@ -130,6 +134,14 @@ namespace GKUI.Controls
 			}
 
 			base.Invalidate();
+		}
+
+		private class FragmentComparer: IComparer<Fragment>
+		{
+			public int Compare(Fragment x, Fragment y)
+			{
+				return -x.width.CompareTo(y.width);
+			}
 		}
 
 		protected override void OnPaint(PaintEventArgs e)

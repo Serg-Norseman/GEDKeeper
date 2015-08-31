@@ -91,6 +91,7 @@ namespace GKUI.Controls
 			base.RetrieveVirtualItem += this.List_RetrieveVirtualItem;
 			base.CacheVirtualItems += this.List_CacheVirtualItems;
 			base.VirtualMode = true;
+			base.ColumnWidthChanged += this.List_ColumnWidthChanged;
 		}
 
 		protected override void Dispose(bool disposing)
@@ -108,6 +109,20 @@ namespace GKUI.Controls
 			base.Dispose(disposing);
 		}
 
+		private void List_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
+		{
+			switch (this.fRecordType) {
+				case GEDCOMRecordType.rtIndividual:
+					IndividualListColumns columns = TfmGEDKeeper.Instance.Options.IndividualListColumns;
+					columns.WidthChanged(e.ColumnIndex, this.Columns[e.ColumnIndex].Width);
+					break;
+					
+				default:
+					// dummy
+					break;
+			}
+		}
+
 		private void List_ColumnClick(object sender, ColumnClickEventArgs e)
 		{
 			GEDCOMRecord rec = this.GetSelectedRecord();
@@ -119,8 +134,7 @@ namespace GKUI.Controls
 				fXSortOrder = SortOrder.Ascending;
 			}
 
-			SortContents();
-
+			this.SortContents();
 			this.SelectItemByRec(rec);
 			base.Invalidate();
 		}
@@ -147,7 +161,7 @@ namespace GKUI.Controls
 
 			    object columnValue;
 				if (fXSortColumn == 0) {
-					columnValue = rec.aux_GetId();
+					columnValue = rec.GetId();
 				} else {
 					fListMan.Fetch(rec);
 					columnValue = fListMan.GetColumnValue(fXSortColumn);
@@ -191,7 +205,7 @@ namespace GKUI.Controls
 			} else {
 				GEDCOMRecord rec = this.fContentList[itemIndex];
 
-				newItem = new GKListItem(rec.aux_GetXRefNum(), rec);
+				newItem = new GKListItem(rec.GetXRefNum(), rec);
 
 				this.fListMan.Fetch(rec);
 				this.fListMan.UpdateItem(newItem, this.fIsMainList);

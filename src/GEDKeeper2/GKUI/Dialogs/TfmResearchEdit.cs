@@ -90,7 +90,7 @@ namespace GKUI.Dialogs
             {
                 case RecordAction.raAdd:
                     task = this.fBase.SelectRecord(GEDCOMRecordType.rtTask, null) as GEDCOMTaskRecord;
-                    res = this.fResearch.aux_AddTask(task);
+                    res = this.fResearch.AddTask(task);
                     break;
 
                 case RecordAction.raEdit:
@@ -100,7 +100,7 @@ namespace GKUI.Dialogs
                 case RecordAction.raDelete:
                     if (task != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachTaskQuery)) != DialogResult.No)
                     {
-                        this.fResearch.aux_RemoveTask(task);
+                        this.fResearch.RemoveTask(task);
                         res = true;
                     }
                     break;
@@ -128,7 +128,7 @@ namespace GKUI.Dialogs
             {
                 case RecordAction.raAdd:
                     comm = this.fBase.SelectRecord(GEDCOMRecordType.rtCommunication, null) as GEDCOMCommunicationRecord;
-                    res = this.fResearch.aux_AddCommunication(comm);
+                    res = this.fResearch.AddCommunication(comm);
                     break;
 
                 case RecordAction.raEdit:
@@ -138,7 +138,7 @@ namespace GKUI.Dialogs
                 case RecordAction.raDelete:
                     if (comm != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachCommunicationQuery)) != DialogResult.No)
                     {
-                        this.fResearch.aux_RemoveCommunication(comm);
+                        this.fResearch.RemoveCommunication(comm);
                         res = true;
                     }
                     break;
@@ -166,13 +166,13 @@ namespace GKUI.Dialogs
             {
                 case RecordAction.raAdd:
                     group = this.fBase.SelectRecord(GEDCOMRecordType.rtGroup, null) as GEDCOMGroupRecord;
-                    res = this.fResearch.aux_AddGroup(group);
+                    res = this.fResearch.AddGroup(group);
                     break;
 
                 case RecordAction.raDelete:
                     if (group != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachGroupQuery)) != DialogResult.No)
                     {
-                        this.fResearch.aux_RemoveGroup(group);
+                        this.fResearch.RemoveGroup(group);
                         res = true;
                     }
                     break;

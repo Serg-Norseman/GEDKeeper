@@ -8,9 +8,9 @@ namespace GKUI.Sheets
     public abstract class GKCustomSheet : GKSheetList
 	{
     	private readonly IBaseEditor fBaseEditor;
-        private IGEDCOMListEnumerator fDataList;
+        private IGEDCOMListEnumerator<GEDCOMObject> fDataList;
 
-        public IGEDCOMListEnumerator DataList
+        public IGEDCOMListEnumerator<GEDCOMObject> DataList
         {
             get { return this.fDataList; }
             set { 
@@ -24,7 +24,7 @@ namespace GKUI.Sheets
         	get { return this.fBaseEditor; }
         }
         
-        protected GKCustomSheet(IBaseEditor baseEditor, Control aOwner) : base(aOwner)
+        protected GKCustomSheet(IBaseEditor baseEditor, Control owner) : base(owner)
         {
         	this.fBaseEditor = baseEditor;
             this.fDataList = null;

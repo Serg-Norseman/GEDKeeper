@@ -195,7 +195,7 @@ namespace GKCore.Export
 			}
 
 			GEDCOMIndividualRecord father, mother;
-			person.IRec.aux_GetParents(out father, out mother);
+			person.IRec.GetParents(out father, out mother);
 			if (father != null) {
 				Paragraph p = new Paragraph();
 				p.Add(new Chunk(LangMan.LS(LSID.LSID_Father) + ": " + father.aux_GetNameStr(true, false) + " ", fTextFont));

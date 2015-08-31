@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 using GKCommon;
@@ -72,6 +73,7 @@ namespace GKUI.Charts
 		
 		private IBase fBase;
 		private int fBranchDistance;
+		private bool fCertaintyIndex;
 		private int fDepthLimit;
 		private Font fDrawFont;
 		private ChartFilter fFilter;
@@ -172,6 +174,15 @@ namespace GKUI.Charts
 			set { this.fBranchDistance = value; }
 		}
 
+		public bool CertaintyIndex
+		{
+			get { return this.fCertaintyIndex; }
+			set {
+				this.fCertaintyIndex = value;
+				this.Invalidate();
+			}
+		}
+		
 		public int DepthLimit
 		{
 			get { return this.fDepthLimit; }
@@ -281,6 +292,7 @@ namespace GKUI.Charts
         static TreeChartBox()
         {
             TreeChartBox.EventPersonModify = new object();
+            TreeChartBox.EventRootChanged = new object();
             TreeChartBox.EventPersonProperties = new object();
         }
 
@@ -344,7 +356,7 @@ namespace GKUI.Charts
 		{
 			//FSignsData = new string[] { "GEORGE_CROSS", "SOLDIER", "SOLDIER_FALL", "VETERAN_REAR" };
 
-			fSignsPic = new Bitmap[4];
+			fSignsPic = new Bitmap[5];
 
 			fSignsPic[0] = GKResources.iTGGeorgeCross;
 			fSignsPic[0].MakeTransparent(this.fSignsPic[0].GetPixel(0, 0));
@@ -357,6 +369,9 @@ namespace GKUI.Charts
 
 			fSignsPic[3] = GKResources.iTGVeteranRear;
 			fSignsPic[3].MakeTransparent(this.fSignsPic[3].GetPixel(0, 0));
+
+			fSignsPic[4] = GKResources.iTGBarbedWire;
+			fSignsPic[4].MakeTransparent(this.fSignsPic[4].GetPixel(0, 0));
 			
 			fExpPic = GKResources.iExpand;
 			fExpPic.MakeTransparent(this.fExpPic.GetPixel(0, 0));
@@ -983,6 +998,11 @@ namespace GKUI.Charts
 				gfx.DrawImage(fExpPic, expRt.Left, expRt.Top);
 			}
 
+			if (this.fCertaintyIndex) {
+				string cas = string.Format("{0:0.00}", person.CertaintyAssessment);
+				gfx.DrawString(cas, this.DrawFont, fSolidBlack, rt.Left, rt.Bottom);
+			}
+
 			if (hasPort) {
 				ExtRect portRt = rt;
 				portRt.Right = portRt.Left + person.PortraitWidth;
@@ -995,11 +1015,11 @@ namespace GKUI.Charts
 			for (int k = 0; k < lines; k++) {
 				this.DrawText(gfx, rt, person.Lines[k], h, k);
 			}
-
+			
 			if (this.Options.SignsVisible && !person.Signs.IsEmpty())
 			{
 				int i = 0;
-				for (ChartPersonSign cps = ChartPersonSign.urRI_StGeorgeCross; cps <= ChartPersonSign.urUSSR_RearVeteran; cps++)
+				for (ChartPersonSign cps = ChartPersonSign.urRI_StGeorgeCross; cps <= ChartPersonSign.urLast; cps++)
 				{
 					if (person.Signs.Contains(cps)) {
 						Bitmap pic = this.fSignsPic[(int)cps - 1];
@@ -1793,7 +1813,7 @@ namespace GKUI.Charts
 			if (p != null && needCenter && this.fTraceSelected) CenterPerson(p);
 		}
 
-		private void SelectByRec(GEDCOMIndividualRecord iRec)
+		public void SelectByRec(GEDCOMIndividualRecord iRec)
 		{
 			if (iRec == null) return;
 			
@@ -2157,6 +2177,28 @@ namespace GKUI.Charts
 					this.Invalidate();
 				}
 			}*/
+		}
+		
+		public IList<ISearchResult> FindAll(String searchPattern)
+		{
+			List<ISearchResult> result = new List<ISearchResult>();
+			
+			Regex regex = GKUtils.InitMaskRegex(searchPattern);
+			
+			int num = this.fPersons.Count;
+			for (int i = 0; i < num; i++) {
+				TreeChartPerson person = this.fPersons[i];
+				GEDCOMIndividualRecord iRec = person.Rec;
+				if (iRec == null) continue;
+				
+				string fullname = iRec.aux_GetNameStr(true, false);
+				if (GKUtils.MatchesRegex(fullname, regex)) {
+					//yield return new SearchResult(iRec);
+					result.Add(new SearchResult(iRec));
+				}
+			}
+			
+			return result;
 		}
 	}
 }

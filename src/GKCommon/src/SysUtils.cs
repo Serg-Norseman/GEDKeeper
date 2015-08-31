@@ -34,12 +34,19 @@ namespace GKCommon
 			return res;
 		}
 
-		public static double ParseFloat(string S, double Default)
+		public static double ParseFloat(string S, double Default, bool checkSeparator = false)
 		{
 			if (string.IsNullOrEmpty(S)) return Default;
 
+			string decSep;
+			if (checkSeparator) {
+				decSep = (S.Contains(",") ? "," : ".");
+			} else {
+				decSep = ".";
+			}
+			
 			NumberFormatInfo LFormat = Thread.CurrentThread.CurrentCulture.NumberFormat.Clone() as NumberFormatInfo;
-			LFormat.NumberDecimalSeparator = ".";
+			LFormat.NumberDecimalSeparator = decSep;
 			LFormat.NumberGroupSeparator = " ";
 
 			double value;

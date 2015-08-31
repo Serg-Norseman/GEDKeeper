@@ -7,7 +7,7 @@ Default topic=gkhAbout.htm
 Display compile progress=Yes
 Full-text search=Yes
 Index file=GEDKeeper2.hhk
-Language=0x419 Русский
+Language=0x419 Русский (Россия)
 Title=GEDKeeper
 
 
@@ -42,6 +42,7 @@ gkhWorkBeginning.htm
 gkhWorkNavigation.htm
 gkhRestrictions.htm
 gkhMediaStore.htm
+gkhPlugins.htm
 
 [ALIAS]
 Auto Index=Yes

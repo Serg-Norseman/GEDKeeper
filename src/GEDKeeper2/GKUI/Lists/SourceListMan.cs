@@ -22,10 +22,10 @@ namespace GKUI.Lists
 	{
 		protected override void InitColumnStatics()
 		{
-			this.AddStatic(LangMan.LS(LSID.LSID_ShortTitle), TDataType.dtString, 120, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_Author), TDataType.dtString, 200, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_Title), TDataType.dtString, 200, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_Changed), TDataType.dtDateTime, 150, true);
+			this.AddStatic(LSID.LSID_ShortTitle, TDataType.dtString, 120, true);
+			this.AddStatic(LSID.LSID_Author, TDataType.dtString, 200, true);
+			this.AddStatic(LSID.LSID_Title, TDataType.dtString, 200, true);
+			this.AddStatic(LSID.LSID_Changed, TDataType.dtDateTime, 150, true);
 		}
 
 		public SourceListColumns() : base()
@@ -78,7 +78,7 @@ namespace GKUI.Lists
 			return new SourceListColumns();
 		}
 
-		public SourceListMan(GEDCOMTree aTree) : base(aTree)
+		public SourceListMan(GEDCOMTree tree) : base(tree)
 		{
 		}
 	}

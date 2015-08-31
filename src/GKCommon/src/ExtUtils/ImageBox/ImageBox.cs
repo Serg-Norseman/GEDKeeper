@@ -36,11 +36,6 @@ namespace Cyotek.Windows.Forms
 		private bool _autoCenter;
 		private bool _autoPan;
 		private int _dropShadowSize;
-		private int _gridCellSize;
-		private Color _gridColor;
-		private Color _gridColorAlternate;
-		private ImageBoxGridDisplayMode _gridDisplayMode;
-		private ImageBoxGridScale _gridScale;
 		private Bitmap _gridTile;
 		private System.Drawing.Image _image;
 		private Color _imageBorderColor;
@@ -88,11 +83,6 @@ namespace Cyotek.Windows.Forms
 			this.BackColor = Color.White;
 			this.AutoSize = false;
 			this.AutoScroll = true;
-			this.GridScale = ImageBoxGridScale.Small;
-			this.GridDisplayMode = ImageBoxGridDisplayMode.Client;
-			this.GridColor = Color.Gainsboro;
-			this.GridColorAlternate = Color.White;
-			this.GridCellSize = 8;
 			this.AutoPan = true;
 			this.InterpolationMode = InterpolationMode.NearestNeighbor;
 			this.AutoCenter = true;
@@ -144,36 +134,6 @@ namespace Cyotek.Windows.Forms
 		/// </summary>
 		[Category("Property Changed")]
 		public event EventHandler DropShadowSizeChanged;
-
-		/// <summary>
-		///   Occurs when the GridSizeCell property is changed.
-		/// </summary>
-		[Category("Property Changed")]
-		public event EventHandler GridCellSizeChanged;
-
-		/// <summary>
-		///   Occurs when the GridColorAlternate property is changed.
-		/// </summary>
-		[Category("Property Changed")]
-		public event EventHandler GridColorAlternateChanged;
-
-		/// <summary>
-		///   Occurs when the GridColor property is changed.
-		/// </summary>
-		[Category("Property Changed")]
-		public event EventHandler GridColorChanged;
-
-		/// <summary>
-		///   Occurs when the GridDisplayMode property is changed.
-		/// </summary>
-		[Category("Property Changed")]
-		public event EventHandler GridDisplayModeChanged;
-
-		/// <summary>
-		///   Occurs when the GridScale property is changed.
-		/// </summary>
-		[Category("Property Changed")]
-		public event EventHandler GridScaleChanged;
 
 		/// <summary>
 		///   Occurs when the ImageBorderColor property value changes
@@ -306,55 +266,6 @@ namespace Cyotek.Windows.Forms
 		/// </summary>
 		[Category("Property Changed")]
 		public event EventHandler ZoomLevelsChanged;
-
-		#endregion
-
-		#region Class Members
-
-		/// <summary>
-		///   Creates a bitmap image containing a 2x2 grid using the specified cell size and colors.
-		/// </summary>
-		/// <param name="cellSize">Size of the cell.</param>
-		/// <param name="cellColor">Cell color.</param>
-		/// <param name="alternateCellColor">Alternate cell color.</param>
-		/// <returns></returns>
-		public static Bitmap CreateCheckerBoxTile(int cellSize, Color cellColor, Color alternateCellColor)
-		{
-			Bitmap result;
-			int width;
-			int height;
-
-			// draw the tile
-			width = cellSize * 2;
-			height = cellSize * 2;
-			result = new Bitmap(width, height);
-
-			using (Graphics g = Graphics.FromImage(result))
-			{
-				using (Brush brush = new SolidBrush(cellColor))
-				{
-					g.FillRectangle(brush, new Rectangle(cellSize, 0, cellSize, cellSize));
-					g.FillRectangle(brush, new Rectangle(0, cellSize, cellSize, cellSize));
-				}
-
-				using (Brush brush = new SolidBrush(alternateCellColor))
-				{
-					g.FillRectangle(brush, new Rectangle(0, 0, cellSize, cellSize));
-					g.FillRectangle(brush, new Rectangle(cellSize, cellSize, cellSize, cellSize));
-				}
-			}
-
-			return result;
-		}
-
-		/// <summary>
-		///   Creates a checked tile texture using default values.
-		/// </summary>
-		/// <returns></returns>
-		public static Bitmap CreateCheckerBoxTile()
-		{
-			return ImageBox.CreateCheckerBoxTile(8, Color.Gainsboro, Color.WhiteSmoke);
-		}
 
 		#endregion
 
@@ -596,96 +507,6 @@ namespace Cyotek.Windows.Forms
 		{
 			get { return base.Font; }
 			set { base.Font = value; }
-		}
-
-		/// <summary>
-		///   Gets or sets the size of the grid cells.
-		/// </summary>
-		/// <value>The size of the grid cells.</value>
-		[Category("Appearance"), DefaultValue(8)]
-		public virtual int GridCellSize
-		{
-			get { return _gridCellSize; }
-			set
-			{
-				if (_gridCellSize != value)
-				{
-					_gridCellSize = value;
-					this.OnGridCellSizeChanged(EventArgs.Empty);
-				}
-			}
-		}
-
-		/// <summary>
-		///   Gets or sets the color of primary cells in the grid.
-		/// </summary>
-		/// <value>The color of primary cells in the grid.</value>
-		[Category("Appearance"), DefaultValue(typeof(Color), "Gainsboro")]
-		public virtual Color GridColor
-		{
-			get { return _gridColor; }
-			set
-			{
-				if (_gridColor != value)
-				{
-					_gridColor = value;
-					this.OnGridColorChanged(EventArgs.Empty);
-				}
-			}
-		}
-
-		/// <summary>
-		///   Gets or sets the color of alternate cells in the grid.
-		/// </summary>
-		/// <value>The color of alternate cells in the grid.</value>
-		[Category("Appearance"), DefaultValue(typeof(Color), "White")]
-		public virtual Color GridColorAlternate
-		{
-			get { return _gridColorAlternate; }
-			set
-			{
-				if (_gridColorAlternate != value)
-				{
-					_gridColorAlternate = value;
-					this.OnGridColorAlternateChanged(EventArgs.Empty);
-				}
-			}
-		}
-
-		/// <summary>
-		///   Gets or sets the grid display mode.
-		/// </summary>
-		/// <value>The grid display mode.</value>
-		[DefaultValue(ImageBoxGridDisplayMode.Client), Category("Appearance")]
-		public virtual ImageBoxGridDisplayMode GridDisplayMode
-		{
-			get { return _gridDisplayMode; }
-			set
-			{
-				if (_gridDisplayMode != value)
-				{
-					_gridDisplayMode = value;
-					this.OnGridDisplayModeChanged(EventArgs.Empty);
-				}
-			}
-		}
-
-		/// <summary>
-		///   Gets or sets the grid scale.
-		/// </summary>
-		/// <value>The grid scale.</value>
-		[DefaultValue(typeof(ImageBoxGridScale), "Small"), Category("Appearance")]
-		public virtual ImageBoxGridScale GridScale
-		{
-			get { return _gridScale; }
-			set
-			{
-				if (_gridScale != value)
-				{
-					_gridScale = value;
-					this.OnGridScaleChanged(EventArgs.Empty);
-				}
-			}
 		}
 
 		/// <summary>
@@ -1806,37 +1627,6 @@ namespace Cyotek.Windows.Forms
 		}
 
 		/// <summary>
-		///   Creates the grid tile image.
-		/// </summary>
-		/// <param name="cellSize">Size of the cell.</param>
-		/// <param name="firstColor">The first color.</param>
-		/// <param name="secondColor">Color of the second.</param>
-		/// <returns></returns>
-		protected virtual Bitmap CreateGridTileImage(int cellSize, Color firstColor, Color secondColor)
-		{
-			float scale;
-
-			// rescale the cell size
-			switch (this.GridScale)
-			{
-				case ImageBoxGridScale.Medium:
-					scale = 1.5F;
-					break;
-
-				case ImageBoxGridScale.Large:
-					scale = 2;
-					break;
-				default:
-					scale = 1;
-					break;
-			}
-
-			cellSize = (int)(cellSize * scale);
-
-			return ImageBox.CreateCheckerBoxTile(cellSize, firstColor, secondColor);
-		}
-
-		/// <summary>
 		///   Clean up any resources being used.
 		/// </summary>
 		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -2210,97 +2000,6 @@ namespace Cyotek.Windows.Forms
 		}
 
 		/// <summary>
-		///   Raises the <see cref="GridCellSizeChanged" /> event.
-		/// </summary>
-		/// <param name="e">
-		///   The <see cref="System.EventArgs" /> instance containing the event data.
-		/// </param>
-		protected virtual void OnGridCellSizeChanged(EventArgs e)
-		{
-			EventHandler handler;
-
-			this.InitializeGridTile();
-
-			handler = this.GridCellSizeChanged;
-
-			if (handler != null)
-				handler(this, e);
-		}
-
-		/// <summary>
-		///   Raises the <see cref="GridColorAlternateChanged" /> event.
-		/// </summary>
-		/// <param name="e">
-		///   The <see cref="System.EventArgs" /> instance containing the event data.
-		/// </param>
-		protected virtual void OnGridColorAlternateChanged(EventArgs e)
-		{
-			EventHandler handler;
-
-			this.InitializeGridTile();
-
-			handler = this.GridColorAlternateChanged;
-
-			if (handler != null)
-				handler(this, e);
-		}
-
-		/// <summary>
-		///   Raises the <see cref="GridColorChanged" /> event.
-		/// </summary>
-		/// <param name="e">
-		///   The <see cref="System.EventArgs" /> instance containing the event data.
-		/// </param>
-		protected virtual void OnGridColorChanged(EventArgs e)
-		{
-			EventHandler handler;
-
-			this.InitializeGridTile();
-
-			handler = this.GridColorChanged;
-
-			if (handler != null)
-				handler(this, e);
-		}
-
-		/// <summary>
-		///   Raises the <see cref="GridDisplayModeChanged" /> event.
-		/// </summary>
-		/// <param name="e">
-		///   The <see cref="System.EventArgs" /> instance containing the event data.
-		/// </param>
-		protected virtual void OnGridDisplayModeChanged(EventArgs e)
-		{
-			EventHandler handler;
-
-			this.InitializeGridTile();
-			this.Invalidate();
-
-			handler = this.GridDisplayModeChanged;
-
-			if (handler != null)
-				handler(this, e);
-		}
-
-		/// <summary>
-		///   Raises the <see cref="GridScaleChanged" /> event.
-		/// </summary>
-		/// <param name="e">
-		///   The <see cref="System.EventArgs" /> instance containing the event data.
-		/// </param>
-		protected virtual void OnGridScaleChanged(EventArgs e)
-		{
-			EventHandler handler;
-
-			this.InitializeGridTile();
-
-			handler = this.GridScaleChanged;
-
-			if (handler != null)
-				handler(this, e);
-		}
-
-		/// <summary>
 		///   Raises the <see cref="ImageBorderColorChanged" /> event.
 		/// </summary>
 		/// <param name="e">
@@ -2531,23 +2230,6 @@ namespace Cyotek.Windows.Forms
 				// draw the background
 				using (SolidBrush brush = new SolidBrush(this.BackColor))
 					e.Graphics.FillRectangle(brush, innerRectangle);
-
-				if (_texture != null && this.GridDisplayMode != ImageBoxGridDisplayMode.None)
-				{
-					switch (this.GridDisplayMode)
-					{
-						case ImageBoxGridDisplayMode.Image:
-							Rectangle fillRectangle;
-
-							fillRectangle = this.GetImageViewPort();
-							e.Graphics.FillRectangle(_texture, fillRectangle);
-							break;
-
-						case ImageBoxGridDisplayMode.Client:
-							e.Graphics.FillRectangle(_texture, innerRectangle);
-							break;
-					}
-				}
 
 				// draw the image
 				if (!this.ViewSize.IsEmpty)
@@ -3088,26 +2770,6 @@ namespace Cyotek.Windows.Forms
 			this.AutoScrollPosition = position;
 			this.Invalidate();
 			this.OnScroll(new ScrollEventArgs(ScrollEventType.EndScroll, 0));
-		}
-
-		/// <summary>
-		///   Initializes the grid tile.
-		/// </summary>
-		private void InitializeGridTile()
-		{
-			if (_texture != null)
-				_texture.Dispose();
-
-			if (_gridTile != null)
-				_gridTile.Dispose();
-
-			if (this.GridDisplayMode != ImageBoxGridDisplayMode.None && this.GridCellSize != 0)
-			{
-				_gridTile = this.CreateGridTileImage(this.GridCellSize, this.GridColor, this.GridColorAlternate);
-				_texture = new TextureBrush(_gridTile);
-			}
-
-			this.Invalidate();
 		}
 
 		#endregion

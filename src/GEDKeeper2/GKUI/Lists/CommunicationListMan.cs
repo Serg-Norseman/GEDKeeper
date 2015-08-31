@@ -23,11 +23,11 @@ namespace GKUI.Lists
 	{
 		protected override void InitColumnStatics()
 		{
-			this.AddStatic(LangMan.LS(LSID.LSID_Theme), TDataType.dtString, 300, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_Corresponder), TDataType.dtString, 200, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_Type), TDataType.dtString, 90, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_Date), TDataType.dtString, 90, true);
-			this.AddStatic(LangMan.LS(LSID.LSID_Changed), TDataType.dtDateTime, 150, true);
+			this.AddStatic(LSID.LSID_Theme, TDataType.dtString, 300, true);
+			this.AddStatic(LSID.LSID_Corresponder, TDataType.dtString, 200, true);
+			this.AddStatic(LSID.LSID_Type, TDataType.dtString, 90, true);
+			this.AddStatic(LSID.LSID_Date, TDataType.dtString, 90, true);
+			this.AddStatic(LSID.LSID_Changed, TDataType.dtDateTime, 150, true);
 		}
 
 		public CommunicationListColumns() : base()

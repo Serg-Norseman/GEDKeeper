@@ -79,6 +79,5 @@ namespace GKCore.Interfaces
 		void SetFilter();
 		void Show();
 		void ShowMedia(GEDCOMMultimediaRecord mediaRec, bool modal);
-
 	}
 }

@@ -225,7 +225,7 @@ namespace GKCore
 						GEDCOMIndividualRecord i_rec = rec as GEDCOMIndividualRecord;
 
 						string nf, nn, np;
-						i_rec.aux_GetNameParts(out nf, out nn, out np);
+						i_rec.GetNameParts(out nf, out nn, out np);
 
 						int bYear = this.FindBirthYear(i_rec);
 						int descGens = TreeStats.GetDescGenerations(i_rec);

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using ExtUtils;
 
 namespace GKCommon
 {
@@ -193,8 +192,8 @@ namespace GKCommon
 		{
 			StringBuilder buffer = new StringBuilder();
 
-			int num = this.fList.Count - 1;
-			for (int i = 0; i <= num; i++)
+			int num = this.fList.Count;
+			for (int i = 0; i < num; i++)
 			{
 				buffer.Append(this[i]);
 				buffer.Append(StringList.LineBreak);
@@ -594,8 +593,9 @@ namespace GKCommon
 
 		public object[] ToArray()
 		{
-			object[] result = new object[this.Count];
-			for (int i = 0; i <= this.Count - 1; i++) {
+			int len = this.Count;
+			object[] result = new object[len];
+			for (int i = 0; i < len; i++) {
 				result[i] = this[i];
 			}
 			return result;

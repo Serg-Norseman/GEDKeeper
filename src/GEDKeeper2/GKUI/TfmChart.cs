@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -145,6 +146,12 @@ namespace GKUI
 
 				case Keys.Escape:
 					base.Close();
+					break;
+					
+				case Keys.F:
+					if (e.Control) {
+						this.QuickFind();
+					}
 					break;
 			}
 		}
@@ -393,6 +400,12 @@ namespace GKUI
 			this.fTreeBox.TraceKinships = this.miTraceKinships.Checked;
 		}
 
+		void miCertaintyIndex_Click(object sender, EventArgs e)
+		{
+			this.miCertaintyIndex.Checked = !this.miCertaintyIndex.Checked;
+			this.fTreeBox.CertaintyIndex = this.miCertaintyIndex.Checked;
+		}
+
 		void miFillColorClick(object sender, EventArgs e)
 		{
 			if (colorDialog1.ShowDialog() == DialogResult.OK)
@@ -548,6 +561,32 @@ namespace GKUI
 			this.fTreeBox.RefreshTree();
 		}
 
+		void miSearchClick(object sender, EventArgs e)
+		{
+			this.QuickFind();
+		}
+
+		public IList<ISearchResult> FindAll(string searchPattern)
+		{
+			return this.fTreeBox.FindAll(searchPattern);
+		}
+
+		public void SelectByRec(GEDCOMIndividualRecord iRec)
+		{
+			this.fTreeBox.SelectByRec(iRec);
+		}
+
+		public void QuickFind()
+		{
+			SearchPanel panel = new SearchPanel(this);
+			
+			Rectangle client = this.ClientRectangle;
+			Point pt = this.PointToScreen(new Point(client.Left, client.Bottom - panel.Height));
+			panel.Location = pt;
+
+			panel.Show();
+		}
+
 		#region ILocalization implementation
 		
 		public void SetLang()
@@ -573,6 +612,9 @@ namespace GKUI
 			this.miTraceKinships.Text = LangMan.LS(LSID.LSID_TM_TraceKinships);
 
 			this.fTreeBox.ScaleControl.Tip = LangMan.LS(LSID.LSID_Scale);
+			
+			this.miSearch.Text = LangMan.LS(LSID.LSID_Search);
+			this.miCertaintyIndex.Text = LangMan.LS(LSID.LSID_CertaintyIndex);
 		}
 
 		#endregion

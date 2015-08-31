@@ -25,7 +25,7 @@ namespace GKTests
 //			Assert.AreEqual(pieces.PatronymicName, "patr");
 			
 			string name, patr;
-			iRec.aux_GetNameParts(out surname, out name, out patr);
+			iRec.GetNameParts(out surname, out name, out patr);
 			Assert.AreEqual("surname", surname);
 			Assert.AreEqual("name", name);
 			Assert.AreEqual("patr", patr);
@@ -84,7 +84,7 @@ namespace GKTests
 			GEDCOMCustomEventTest(evt, "17.01.2013");
 			
 			GEDCOMIndividualRecord father, mother;
-			iRec.aux_GetParents(out father, out mother);
+			iRec.GetParents(out father, out mother);
 			Assert.IsNull(father);
 			Assert.IsNull(mother);
 			
