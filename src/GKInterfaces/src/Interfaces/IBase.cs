@@ -44,7 +44,7 @@ namespace GKCore.Interfaces
 		//
 		bool CheckBasePath();
 		MediaStoreType GetStoreType(GEDCOMFileReference fileReference, ref string fileName);
-		void MediaLoad(GEDCOMFileReference fileReference, out Stream aStream, bool throwException);
+		void MediaLoad(GEDCOMFileReference fileReference, out Stream stream, bool throwException);
 		void MediaLoad(GEDCOMFileReference fileReference, ref string fileName);
 		bool MediaSave(GEDCOMFileReference fileReference, string fileName, MediaStoreType storeType);
 		Bitmap BitmapLoad(GEDCOMFileReference fileReference, int thumbWidth, int thumbHeight, bool throwException);

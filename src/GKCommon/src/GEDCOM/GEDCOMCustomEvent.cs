@@ -1,4 +1,5 @@
 using System.IO;
+using System;
 
 namespace GKCommon.GEDCOM
 {
@@ -60,6 +61,12 @@ namespace GKCommon.GEDCOM
 			this.fDetail.SaveToStream(stream);
 		}
 
+	    protected GEDCOMCustomEvent(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
+		{
+		}
+	    
+	    #region Auxiliary
+
 		public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
 		{
 			if (tag == null) return 0.0f;
@@ -96,8 +103,30 @@ namespace GKCommon.GEDCOM
 			return match;
 		}
 
-	    protected GEDCOMCustomEvent(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
+		public DateTime GetIndependentDate()
 		{
+			DateTime res;
+			GEDCOMDateValue dateVal = this.fDetail.Date;
+
+			try
+			{
+				int year;
+				ushort month, day;
+				dateVal.GetIndependentDate(out year, out month, out day);
+				if (day == 0) day = 1;
+				if (month == 0) month = 1;
+
+				res = ((year <= 0) ? new DateTime(0) : new DateTime(year, (int)month, (int)day));
+			}
+			catch (Exception ex)
+			{
+				SysUtils.LogWrite("GEDCOMCustomEvent.GetIndependentDate(" + dateVal.StringValue + "): " + ex.Message);
+				res = new DateTime(0);
+			}
+
+			return res;
 		}
+
+	    #endregion
 	}
 }

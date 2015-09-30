@@ -37,7 +37,7 @@ namespace GKNamesBookPlugin
 
 	public partial class TfmNamesBook : Form
 	{
-		private class TNameRecord
+		private class NameRecord
 		{
 			public string Name;
 			public string Desc;
@@ -46,7 +46,7 @@ namespace GKNamesBookPlugin
 		}
 
 		private readonly Plugin fPlugin;
-		private readonly List<TNameRecord> fNames;
+		private readonly List<NameRecord> fNames;
 		private readonly StringList fChurchFNames;
 		private readonly StringList fChurchMNames;
 
@@ -59,7 +59,7 @@ namespace GKNamesBookPlugin
             Screen scr = Screen.PrimaryScreen;
             this.Location = new Point(scr.WorkingArea.Width - this.Width - 10, (scr.WorkingArea.Height - this.Height) / 2);
 
-            this.fNames = new List<TNameRecord>();
+            this.fNames = new List<NameRecord>();
             this.fChurchFNames = new StringList();
             this.fChurchMNames = new StringList();
 
@@ -96,7 +96,7 @@ namespace GKNamesBookPlugin
 			if (idx >= 0 && idx < this.cbNames.Items.Count)
 			{
 			    GKComboItem item = (this.cbNames.Items[idx] as GKComboItem);
-				TNameRecord rec = item.Data as TNameRecord;
+				NameRecord rec = item.Data as NameRecord;
 
 				this.mmDesc.Text = "";
 				this.mmDesc.AppendText(rec.Name + "\r\n");
@@ -120,8 +120,8 @@ namespace GKNamesBookPlugin
 						}
 					}
 
-					int num = lst.Count - 1;
-					for (int i = rec.ChIndex + 1; i <= num; i++)
+					int num = lst.Count;
+					for (int i = rec.ChIndex + 1; i < num; i++)
 					{
 						string st = lst[i].Trim();
 						if (st[0] == '-')
@@ -194,7 +194,7 @@ namespace GKNamesBookPlugin
                             string[] toks = ns.Split('/');
                             if (toks.Length >= 3)
                             {
-                                TNameRecord rec = new TNameRecord();
+                                NameRecord rec = new NameRecord();
 
                                 rec.Name = toks[0].Trim();
                                 rec.Desc = toks[2].Trim();
@@ -251,10 +251,9 @@ namespace GKNamesBookPlugin
             try
             {
                 this.cbNames.Items.Clear();
-                int num = this.fNames.Count - 1;
-                for (int i = 0; i <= num; i++)
+
+                foreach (NameRecord rec in this.fNames)
                 {
-                    TNameRecord rec = this.fNames[i];
                     string ns = rec.Name;
                     this.cbNames.Items.Add(new GKComboItem(ns, rec));
 
@@ -262,17 +261,14 @@ namespace GKNamesBookPlugin
                     ns = ns.ToUpper();
 
                     StringList lst = null;
-                    if (rec.Sex == GEDCOMSex.svMale)
-                    {
-                        lst = this.fChurchMNames;
-                    }
-                    else if (rec.Sex == GEDCOMSex.svFemale)
-                    {
-                        lst = this.fChurchFNames;
+                    if (rec.Sex == GEDCOMSex.svMale) {
+                    	lst = this.fChurchMNames;
+                    } else if (rec.Sex == GEDCOMSex.svFemale) {
+                    	lst = this.fChurchFNames;
                     }
 
-                    int num2 = lst.Count - 1;
-                    for (int j = 0; j <= num2; j++)
+                    int num2 = lst.Count;
+                    for (int j = 0; j < num2; j++)
                     {
                         string st = lst[j];
                         if (st[0] == '-' && st.IndexOf(ns) >= 0)

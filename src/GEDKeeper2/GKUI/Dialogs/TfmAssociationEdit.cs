@@ -35,7 +35,7 @@ namespace GKUI.Dialogs
 		{
 			this.fAssociation = value;
 			this.EditRelation.Text = this.fAssociation.Relation;
-			string st = ((this.fAssociation.Individual == null) ? "" : this.fAssociation.Individual.aux_GetNameStr(true, false));
+			string st = ((this.fAssociation.Individual == null) ? "" : this.fAssociation.Individual.GetNameString(true, false));
 			this.EditPerson.Text = st;
 		}
 
@@ -63,7 +63,7 @@ namespace GKUI.Dialogs
 		private void btnPersonAdd_Click(object sender, EventArgs e)
 		{
 			this.fTempInd = this.fBase.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
-			this.EditPerson.Text = ((this.fTempInd == null) ? "" : this.fTempInd.aux_GetNameStr(true, false));
+			this.EditPerson.Text = ((this.fTempInd == null) ? "" : this.fTempInd.GetNameString(true, false));
 		}
 
 		public TfmAssociationEdit(IBase aBase)
@@ -71,8 +71,8 @@ namespace GKUI.Dialogs
 			this.InitializeComponent();
 			this.fBase = aBase;
 
-			int num = TfmGEDKeeper.Instance.Options.Relations.Count - 1;
-			for (int i = 0; i <= num; i++)
+			int num = TfmGEDKeeper.Instance.Options.Relations.Count;
+			for (int i = 0; i < num; i++)
 			{
 				this.EditRelation.Items.Add(TfmGEDKeeper.Instance.Options.Relations[i]);
 			}

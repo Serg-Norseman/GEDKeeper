@@ -92,23 +92,23 @@ namespace GKCore
 			}
 		}
 
-		public struct TGEDCOMAppFormat
+		public struct GEDCOMAppFormat
 		{
 			public string Sign;
 			public string Name;
 			
-			public TGEDCOMAppFormat(string aSign, string aName) {
+			public GEDCOMAppFormat(string aSign, string aName) {
 				this.Sign = aSign;
 				this.Name = aName;
 			}
 		}
 
-		public struct TStatsTitleStruct
+		public struct StatsTitleStruct
 		{
 			public LSID Title;
 			public LSID Cap;
 
-			public TStatsTitleStruct(LSID title, LSID cap) {
+			public StatsTitleStruct(LSID title, LSID cap) {
 				this.Title = title;
 				this.Cap = cap;
 			}
@@ -132,12 +132,12 @@ namespace GKCore
 		public static LSID[] GoalNames;
 		public static LSID[] CertaintyAssessments;
 		public static string[] UserRefs;
-		public static TGEDCOMAppFormat[] GEDCOMFormats;
+		public static GEDCOMAppFormat[] GEDCOMFormats;
 		public static LSID[] RelationKinds;
 		public static string[] RelationSigns;
 		public static string[] Numerals;
 		public static string[] NumKinship;
-		public static TStatsTitleStruct[] StatsTitles;
+		public static StatsTitleStruct[] StatsTitles;
 		public static LSID[] CheckSolveNames;
 
 		static GKData()
@@ -236,13 +236,13 @@ namespace GKCore
 				LSID.LSID_RK_Unk
 			};
 
-			GEDCOMFormats = new TGEDCOMAppFormat[6] {
-				new TGEDCOMAppFormat("", ""),
-				new TGEDCOMAppFormat("GEDKeeper", ""),
-				new TGEDCOMAppFormat("GENBOX", "Genbox Family History"),
-				new TGEDCOMAppFormat("ALTREE", "Agelong Tree"),
-				new TGEDCOMAppFormat("AGES", "Ages!"),
-				new TGEDCOMAppFormat("PAF", "Personal Ancestral File")
+			GEDCOMFormats = new GEDCOMAppFormat[6] {
+				new GEDCOMAppFormat("", ""),
+				new GEDCOMAppFormat("GEDKeeper", ""),
+				new GEDCOMAppFormat("GENBOX", "Genbox Family History"),
+				new GEDCOMAppFormat("ALTREE", "Agelong Tree"),
+				new GEDCOMAppFormat("AGES", "Ages!"),
+				new GEDCOMAppFormat("PAF", "Personal Ancestral File")
 			};
 
 
@@ -465,42 +465,43 @@ namespace GKCore
 			};
 
 
-			StatsTitles = new TStatsTitleStruct[35];
-			StatsTitles[0] = new TStatsTitleStruct(LSID.LSID_AncestorsCount, LSID.LSID_Name);
-			StatsTitles[1] = new TStatsTitleStruct(LSID.LSID_DescendantsCount, LSID.LSID_Name);
-			StatsTitles[2] = new TStatsTitleStruct(LSID.LSID_GenerationsCount, LSID.LSID_Name);
-			StatsTitles[3] = new TStatsTitleStruct(LSID.LSID_Surname, LSID.LSID_Surname);
-			StatsTitles[4] = new TStatsTitleStruct(LSID.LSID_Name, LSID.LSID_Name);
-			StatsTitles[5] = new TStatsTitleStruct(LSID.LSID_Patronymic, LSID.LSID_Patronymic);
-			StatsTitles[6] = new TStatsTitleStruct(LSID.LSID_Age, LSID.LSID_Age);
-			StatsTitles[7] = new TStatsTitleStruct(LSID.LSID_LifeExpectancy, LSID.LSID_Age);
-			StatsTitles[8] = new TStatsTitleStruct(LSID.LSID_BirthYears, LSID.LSID_BirthYears);
-			StatsTitles[9] = new TStatsTitleStruct(LSID.LSID_BirthYearsDec, LSID.LSID_BirthYears);
-			StatsTitles[10] = new TStatsTitleStruct(LSID.LSID_DeathYears, LSID.LSID_DeathYears);
-			StatsTitles[11] = new TStatsTitleStruct(LSID.LSID_DeathYearsDec, LSID.LSID_DeathYears);
-			StatsTitles[12] = new TStatsTitleStruct(LSID.LSID_ChildsCount, LSID.LSID_Name);
-			StatsTitles[13] = new TStatsTitleStruct(LSID.LSID_DistrChilds, LSID.LSID_ChildsCount);
-			StatsTitles[14] = new TStatsTitleStruct(LSID.LSID_BirthPlace, LSID.LSID_BirthPlace);
-			StatsTitles[15] = new TStatsTitleStruct(LSID.LSID_DeathPlace, LSID.LSID_DeathPlace);
-			StatsTitles[16] = new TStatsTitleStruct(LSID.LSID_Residence, LSID.LSID_Residence);
-			StatsTitles[17] = new TStatsTitleStruct(LSID.LSID_Occupation, LSID.LSID_Occupation);
-			StatsTitles[18] = new TStatsTitleStruct(LSID.LSID_Religion, LSID.LSID_Religion);
-			StatsTitles[19] = new TStatsTitleStruct(LSID.LSID_Nationality, LSID.LSID_Nationality);
-			StatsTitles[20] = new TStatsTitleStruct(LSID.LSID_Education, LSID.LSID_Education);
-			StatsTitles[21] = new TStatsTitleStruct(LSID.LSID_Caste, LSID.LSID_Caste);
-			StatsTitles[22] = new TStatsTitleStruct(LSID.LSID_AgeFirstborn, LSID.LSID_Name);
-			StatsTitles[23] = new TStatsTitleStruct(LSID.LSID_MarriagesCount, LSID.LSID_Name);
-			StatsTitles[24] = new TStatsTitleStruct(LSID.LSID_MarriagesAge, LSID.LSID_Name);
-			StatsTitles[25] = new TStatsTitleStruct(LSID.LSID_DiffSpouses, LSID.LSID_Family);
-			StatsTitles[26] = new TStatsTitleStruct(LSID.LSID_Hobby, LSID.LSID_Hobby);
-			StatsTitles[27] = new TStatsTitleStruct(LSID.LSID_Award, LSID.LSID_Award);
-			StatsTitles[28] = new TStatsTitleStruct(LSID.LSID_Mili, LSID.LSID_Mili);
-			StatsTitles[29] = new TStatsTitleStruct(LSID.LSID_MiliInd, LSID.LSID_MiliInd);
-			StatsTitles[30] = new TStatsTitleStruct(LSID.LSID_MiliDis, LSID.LSID_MiliDis);
-			StatsTitles[31] = new TStatsTitleStruct(LSID.LSID_MiliRank, LSID.LSID_MiliRank);
-			StatsTitles[32] = new TStatsTitleStruct(LSID.LSID_AAF_1, LSID.LSID_AAF_1);
-			StatsTitles[33] = new TStatsTitleStruct(LSID.LSID_AAF_2, LSID.LSID_AAF_2);
-			StatsTitles[34] = new TStatsTitleStruct(LSID.LSID_CertaintyIndex, LSID.LSID_CertaintyIndex);
+			StatsTitles = new StatsTitleStruct[36];
+			StatsTitles[0] = new StatsTitleStruct(LSID.LSID_AncestorsCount, LSID.LSID_Name);
+			StatsTitles[1] = new StatsTitleStruct(LSID.LSID_DescendantsCount, LSID.LSID_Name);
+			StatsTitles[2] = new StatsTitleStruct(LSID.LSID_GenerationsCount, LSID.LSID_Name);
+			StatsTitles[3] = new StatsTitleStruct(LSID.LSID_Surname, LSID.LSID_Surname);
+			StatsTitles[4] = new StatsTitleStruct(LSID.LSID_Name, LSID.LSID_Name);
+			StatsTitles[5] = new StatsTitleStruct(LSID.LSID_Patronymic, LSID.LSID_Patronymic);
+			StatsTitles[6] = new StatsTitleStruct(LSID.LSID_Age, LSID.LSID_Age);
+			StatsTitles[7] = new StatsTitleStruct(LSID.LSID_LifeExpectancy, LSID.LSID_Age);
+			StatsTitles[8] = new StatsTitleStruct(LSID.LSID_BirthYears, LSID.LSID_BirthYears);
+			StatsTitles[9] = new StatsTitleStruct(LSID.LSID_BirthYearsDec, LSID.LSID_BirthYears);
+			StatsTitles[10] = new StatsTitleStruct(LSID.LSID_DeathYears, LSID.LSID_DeathYears);
+			StatsTitles[11] = new StatsTitleStruct(LSID.LSID_DeathYearsDec, LSID.LSID_DeathYears);
+			StatsTitles[12] = new StatsTitleStruct(LSID.LSID_ChildsCount, LSID.LSID_Name);
+			StatsTitles[13] = new StatsTitleStruct(LSID.LSID_DistrChilds, LSID.LSID_ChildsCount);
+			StatsTitles[14] = new StatsTitleStruct(LSID.LSID_BirthPlace, LSID.LSID_BirthPlace);
+			StatsTitles[15] = new StatsTitleStruct(LSID.LSID_DeathPlace, LSID.LSID_DeathPlace);
+			StatsTitles[16] = new StatsTitleStruct(LSID.LSID_Residence, LSID.LSID_Residence);
+			StatsTitles[17] = new StatsTitleStruct(LSID.LSID_Occupation, LSID.LSID_Occupation);
+			StatsTitles[18] = new StatsTitleStruct(LSID.LSID_Religion, LSID.LSID_Religion);
+			StatsTitles[19] = new StatsTitleStruct(LSID.LSID_Nationality, LSID.LSID_Nationality);
+			StatsTitles[20] = new StatsTitleStruct(LSID.LSID_Education, LSID.LSID_Education);
+			StatsTitles[21] = new StatsTitleStruct(LSID.LSID_Caste, LSID.LSID_Caste);
+			StatsTitles[22] = new StatsTitleStruct(LSID.LSID_AgeFirstborn, LSID.LSID_Name);
+			StatsTitles[23] = new StatsTitleStruct(LSID.LSID_MarriagesCount, LSID.LSID_Name);
+			StatsTitles[24] = new StatsTitleStruct(LSID.LSID_MarriagesAge, LSID.LSID_Name);
+			StatsTitles[25] = new StatsTitleStruct(LSID.LSID_DiffSpouses, LSID.LSID_Family);
+			StatsTitles[26] = new StatsTitleStruct(LSID.LSID_Hobby, LSID.LSID_Hobby);
+			StatsTitles[27] = new StatsTitleStruct(LSID.LSID_Award, LSID.LSID_Award);
+			StatsTitles[28] = new StatsTitleStruct(LSID.LSID_Mili, LSID.LSID_Mili);
+			StatsTitles[29] = new StatsTitleStruct(LSID.LSID_MiliInd, LSID.LSID_MiliInd);
+			StatsTitles[30] = new StatsTitleStruct(LSID.LSID_MiliDis, LSID.LSID_MiliDis);
+			StatsTitles[31] = new StatsTitleStruct(LSID.LSID_MiliRank, LSID.LSID_MiliRank);
+			StatsTitles[32] = new StatsTitleStruct(LSID.LSID_AAF_1, LSID.LSID_AAF_1);
+			StatsTitles[33] = new StatsTitleStruct(LSID.LSID_AAF_2, LSID.LSID_AAF_2);
+			StatsTitles[34] = new StatsTitleStruct(LSID.LSID_CertaintyIndex, LSID.LSID_CertaintyIndex);
+			StatsTitles[35] = new StatsTitleStruct(LSID.LSID_BirthByMonth, LSID.LSID_BirthByMonth);
 
 			CheckSolveNames = new LSID[4];
 			CheckSolveNames[0] = LSID.LSID_RM_Skip;

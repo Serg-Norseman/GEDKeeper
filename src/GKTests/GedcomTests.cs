@@ -79,17 +79,7 @@ namespace GKTests
 			Assert.AreEqual("", s2);
 			Assert.AreEqual(1111, N);
 
-			try
-			{
-				s2 = GEDCOMUtils.ExtractNumber("num", out N, false, 2222);
-			}
-			catch (EGEDCOMException)
-			{
-			}
-			catch (Exception)
-			{
-				throw;
-			}
+			Assert.Throws(typeof(EGEDCOMException), () => { GEDCOMUtils.ExtractNumber("num", out N, false, 2222); });
 
 			//
 			
@@ -106,29 +96,9 @@ namespace GKTests
 			Assert.AreEqual("@sample", s2);
 			Assert.AreEqual("test", xref);
 			
-			try
-			{
-				s2 = GEDCOMUtils.ExtractXRef("", out xref, false, "test");
-			}
-			catch (EGEDCOMException)
-			{
-			}
-			catch (Exception)
-			{
-				throw;
-			}
+			Assert.Throws(typeof(EGEDCOMException), () => { GEDCOMUtils.ExtractXRef("", out xref, false, "test"); });
 
-			try
-			{
-				s2 = GEDCOMUtils.ExtractXRef("@sample", out xref, false, "test");
-			}
-			catch (EGEDCOMException)
-			{
-			}
-			catch (Exception)
-			{
-				throw;
-			}
+			Assert.Throws(typeof(EGEDCOMException), () => { GEDCOMUtils.ExtractXRef("@sample", out xref, false, "test"); });
 
 			//
 			Assert.IsFalse(GEDCOMUtils.IsDigit('F'), "IsDigit(F)");
@@ -307,8 +277,8 @@ namespace GKTests
 			GEDCOMCustomEvent ev1, ev2;
 			GEDCOMDateValue dtVal1, dtVal2;
 
-			ind1 = tree.aux_CreateIndividual("Ivan", "Fedoroff", "Ivanov", GEDCOMSex.svMale);
-			ind2 = tree.aux_CreateIndividual("Ivan", "Fedoroff", "Ivanovich", GEDCOMSex.svMale);
+			ind1 = tree.CreateIndividual("Ivan", "Fedoroff", "Ivanov", GEDCOMSex.svMale);
+			ind2 = tree.CreateIndividual("Ivan", "Fedoroff", "Ivanovich", GEDCOMSex.svMale);
 
 			ev1 = new GEDCOMIndividualEvent(tree, ind1, "BIRT", "");
 			dtVal1 = ev1.Detail.Date;
@@ -455,7 +425,7 @@ namespace GKTests
 			(dtx1.Value as GEDCOMDateInterpreted).DatePhrase = "(yesterday)";
 			Assert.AreEqual(dtx1.StringValue, "INT 20 JAN 2013 (yesterday)");
 
-			//FIXME: не проходит
+			// TODO: не проходит
 			//dtx1.ParseString("INT 20 JAN 2013 (today (yesterday))");
 			//Assert.AreEqual(dtx1.StringValue, "INT 20 JAN 2013 (yesterday)");
 			
@@ -650,16 +620,16 @@ namespace GKTests
 			
 			//
 
-			rec = tree.aux_CreateFamily();
+			rec = tree.CreateFamily();
 			Assert.IsNotNull(rec, "rec1 != null");
 			
-			rec = tree.aux_CreateNote();
+			rec = tree.CreateNote();
 			Assert.IsNotNull(rec, "rec1 != null");
 			
-			rec = tree.aux_CreateSource();
+			rec = tree.CreateSource();
 			Assert.IsNotNull(rec, "rec1 != null");
 			
-			rec = tree.aux_CreateGroup();
+			rec = tree.CreateGroup();
 			Assert.IsNotNull(rec, "rec1 != null");
 
 
@@ -672,7 +642,7 @@ namespace GKTests
 
 		public static void GEDCOMAddressTest(GEDCOMAddress addr, bool checkStream)
 		{
-			addr.aux_SetAddressValue("test");
+			addr.SetAddressText("test");
 			Assert.AreEqual("test", addr.Address.Text.Trim());
 
 			addr.Address = new StringList("This\r\naddress\r\ntest");
@@ -926,12 +896,12 @@ namespace GKTests
 			famRec.Restriction = GEDCOMRestriction.rnLocked;
 			Assert.AreEqual(GEDCOMRestriction.rnLocked, famRec.Restriction);
 
-			famRec.aux_AddChild(indiv);
+			famRec.AddChild(indiv);
 			Assert.AreEqual(0, famRec.IndexOfChild(indiv));
 
 			this.GEDCOMChildToFamilyLinkTest(indiv.ChildToFamilyLinks[0]);
 
-			famRec.aux_RemoveChild(indiv);
+			famRec.RemoveChild(indiv);
 			Assert.AreEqual(-1, famRec.IndexOfChild(indiv));
 
 			//
@@ -946,7 +916,7 @@ namespace GKTests
 
 			//
 			indiv.Sex = GEDCOMSex.svMale;
-			famRec.aux_AddSpouse(indiv);
+			famRec.AddSpouse(indiv);
 			this.GEDCOMSpouseToFamilyLinkTest(indiv.SpouseToFamilyLinks[0]);
 			//
 
@@ -1010,7 +980,7 @@ namespace GKTests
 
 		private void GEDCOMRepositoryCitationTest(GEDCOMSourceRecord sourRec, GEDCOMRepositoryRecord repRec)
 		{
-			GEDCOMRepositoryCitation repCit = sourRec.aux_AddRepository(repRec);
+			GEDCOMRepositoryCitation repCit = sourRec.AddRepository(repRec);
 			
 			Assert.IsFalse(repCit.IsEmpty(), "repCit.IsEmpty()"); // its pointer
 		}
@@ -1178,18 +1148,18 @@ namespace GKTests
 			string buf = TagStreamTest(groupRec);
 			Assert.AreEqual("0 @G1@ _GROUP\r\n1 NAME Test Group\r\n", buf);
 			
-			bool res = groupRec.aux_AddMember(null);
+			bool res = groupRec.AddMember(null);
 			Assert.IsFalse(res);
 			
-			res = groupRec.aux_RemoveMember(null);
+			res = groupRec.RemoveMember(null);
 			Assert.IsFalse(res);
 			
 			Assert.AreEqual(-1, groupRec.IndexOfMember(null));
 			
-			groupRec.aux_AddMember(member);
+			groupRec.AddMember(member);
 			Assert.AreEqual(0, groupRec.IndexOfMember(member));
 			
-			groupRec.aux_RemoveMember(member);
+			groupRec.RemoveMember(member);
 			Assert.AreEqual(-1, groupRec.IndexOfMember(member));
 			
 			//Assert.AreEqual(-1, groupRec.IndexOfMember(null));
@@ -1257,22 +1227,22 @@ namespace GKTests
 
 			taskRec.Goal = "Test Goal";
 			Assert.AreEqual("Test Goal", taskRec.Goal);
-			taskRec.aux_GetTaskGoal(out gType, out gRec);
+			taskRec.GetTaskGoal(out gType, out gRec);
 			Assert.AreEqual(GKGoalType.gtOther, gType);
 			Assert.AreEqual(null, gRec);
 			
 			taskRec.Goal = indiv.XRef;
-			taskRec.aux_GetTaskGoal(out gType, out gRec);
+			taskRec.GetTaskGoal(out gType, out gRec);
 			Assert.AreEqual(GKGoalType.gtIndividual, gType);
 			Assert.AreEqual(indiv, gRec);
 			
 			taskRec.Goal = famRec.XRef;
-			taskRec.aux_GetTaskGoal(out gType, out gRec);
+			taskRec.GetTaskGoal(out gType, out gRec);
 			Assert.AreEqual(GKGoalType.gtFamily, gType);
 			Assert.AreEqual(famRec, gRec);
 			
 			taskRec.Goal = srcRec.XRef;
-			taskRec.aux_GetTaskGoal(out gType, out gRec);
+			taskRec.GetTaskGoal(out gType, out gRec);
 			Assert.AreEqual(GKGoalType.gtSource, gType);
 			Assert.AreEqual(srcRec, gRec);
 			
@@ -1285,7 +1255,7 @@ namespace GKTests
 		{
 			noteRec.SetNotesArray(new string[] { "This", "notes", "test" });
 			
-			string ctx = GKCore.GKUtils.ConStrings(noteRec.Note);
+			string ctx = GKCore.GKUtils.MergeStrings(noteRec.Note);
 			Assert.AreEqual("This notes test", ctx);
 
 			noteRec.Note = new StringList("This\r\nnotes2\r\ntest2");
@@ -1293,11 +1263,11 @@ namespace GKTests
 			Assert.AreEqual("notes2", noteRec.Note[1]);
 			Assert.AreEqual("test2", noteRec.Note[2]);
 			
-			ctx = GKCore.GKUtils.ConStrings(noteRec.Note);
+			ctx = GKCore.GKUtils.MergeStrings(noteRec.Note);
 			Assert.AreEqual("This notes2 test2", ctx);
 			
 			noteRec.Clear();
-			noteRec.aux_AddNoteText("Test text");
+			noteRec.AddNoteText("Test text");
 			Assert.AreEqual("Test text", noteRec.Note.Text.Trim());
 			
 			this.GEDCOMNotesTest(noteRec, indiv);

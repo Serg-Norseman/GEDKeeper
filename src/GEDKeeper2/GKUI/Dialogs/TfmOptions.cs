@@ -50,8 +50,10 @@ namespace GKUI.Dialogs
 			try
 			{
 				this.ListPersonColumns.Items.Clear();
-				for (int i = 0; i < fTempColumns.Count; i++) {
-					TColumnProps colProps = fTempColumns[i];
+
+				int num = this.fTempColumns.Count;
+				for (int i = 0; i < num; i++) {
+					ColumnProps colProps = fTempColumns[i];
 					
 					string colName = LangMan.LS(fTempColumns.ColumnStatics[colProps.colType].colName);
 
@@ -139,11 +141,11 @@ namespace GKUI.Dialogs
 			this.chkChildlessExclude.Checked = this.fOptions.ChartOptions.ChildlessExclude;
 			this.chkTreeDecorative.Checked = this.fOptions.ChartOptions.Decorative;
 			this.chkPortraitsVisible.Checked = this.fOptions.ChartOptions.PortraitsVisible;
-			this.PanMaleColor.BackColor = this.fOptions.ChartOptions.MaleColor;
-			this.PanFemaleColor.BackColor = this.fOptions.ChartOptions.FemaleColor;
-			this.PanUnkSexColor.BackColor = this.fOptions.ChartOptions.UnkSexColor;
-			this.PanUnHusbandColor.BackColor = this.fOptions.ChartOptions.UnHusbandColor;
-			this.PanUnWifeColor.BackColor = this.fOptions.ChartOptions.UnWifeColor;
+			this.lblMaleColor.BackColor = this.fOptions.ChartOptions.MaleColor;
+			this.lblFemaleColor.BackColor = this.fOptions.ChartOptions.FemaleColor;
+			this.lblUnkSexColor.BackColor = this.fOptions.ChartOptions.UnkSexColor;
+			this.lblUnHusbandColor.BackColor = this.fOptions.ChartOptions.UnHusbandColor;
+			this.lblUnWifeColor.BackColor = this.fOptions.ChartOptions.UnWifeColor;
 			this.chkProxy.Checked = this.fOptions.Proxy.UseProxy;
 			this.edProxyServer.Text = this.fOptions.Proxy.Server;
 			this.edProxyPort.Text = this.fOptions.Proxy.Port;
@@ -190,13 +192,13 @@ namespace GKUI.Dialogs
 			}
 		}
 
-		private void PanColor_Click(object sender, EventArgs e)
+        private void PanColor_Click(object sender, EventArgs e)
 		{
-            Panel pan = (sender as Panel);
+            Label pan = (sender as Label);
 
+            this.ColorDialog1.FullOpen = true;
             this.ColorDialog1.Color = pan.BackColor;
-            if (this.ColorDialog1.ShowDialog() == DialogResult.OK)
-            {
+            if (this.ColorDialog1.ShowDialog() == DialogResult.OK) {
                 pan.BackColor = this.ColorDialog1.Color;
             }
 		}
@@ -279,11 +281,11 @@ namespace GKUI.Dialogs
 			this.fOptions.ChartOptions.ChildlessExclude = this.chkChildlessExclude.Checked;
 			this.fOptions.ChartOptions.Decorative = this.chkTreeDecorative.Checked;
 			this.fOptions.ChartOptions.PortraitsVisible = this.chkPortraitsVisible.Checked;
-			this.fOptions.ChartOptions.MaleColor = this.PanMaleColor.BackColor;
-			this.fOptions.ChartOptions.FemaleColor = this.PanFemaleColor.BackColor;
-			this.fOptions.ChartOptions.UnkSexColor = this.PanUnkSexColor.BackColor;
-			this.fOptions.ChartOptions.UnHusbandColor = this.PanUnHusbandColor.BackColor;
-			this.fOptions.ChartOptions.UnWifeColor = this.PanUnWifeColor.BackColor;
+			this.fOptions.ChartOptions.MaleColor = this.lblMaleColor.BackColor;
+			this.fOptions.ChartOptions.FemaleColor = this.lblFemaleColor.BackColor;
+			this.fOptions.ChartOptions.UnkSexColor = this.lblUnkSexColor.BackColor;
+			this.fOptions.ChartOptions.UnHusbandColor = this.lblUnHusbandColor.BackColor;
+			this.fOptions.ChartOptions.UnWifeColor = this.lblUnWifeColor.BackColor;
 			this.fOptions.Proxy.UseProxy = this.chkProxy.Checked;
 			this.fOptions.Proxy.Server = this.edProxyServer.Text;
 			this.fOptions.Proxy.Port = this.edProxyPort.Text;
@@ -340,16 +342,9 @@ namespace GKUI.Dialogs
 		private void ListPersonColumns_ItemCheck(object sender, ItemCheckEventArgs e)
 		{
 			bool cs = (e.NewValue == CheckState.Checked);
-			TColumnProps props = this.fTempColumns[e.Index];
+			ColumnProps props = this.fTempColumns[e.Index];
 			props.colActive = cs;
 			this.fTempColumns[e.Index] = props;
-		}
-
-		void acbMouseClick(object sender, MouseEventArgs e)
-		{
-			Label lbl = sender as Label;
-			this.ColorDialog1.Color = lbl.BackColor;
-			if (this.ColorDialog1.ShowDialog() == DialogResult.OK) lbl.BackColor = this.ColorDialog1.Color;
 		}
 
 		public void SetPage(OptionsPage page)
@@ -422,11 +417,11 @@ namespace GKUI.Dialogs
 			this.chkPortraitsVisible.Text = LangMan.LS(LSID.LSID_PortraitsVisible);
 			this.chkChildlessExclude.Text = LangMan.LS(LSID.LSID_ChildlessExclude);
 			this.GroupBox2.Text = LangMan.LS(LSID.LSID_Decor);
-			this.PanMaleColor.Text = LangMan.LS(LSID.LSID_Man);
-			this.PanFemaleColor.Text = LangMan.LS(LSID.LSID_Woman);
-			this.PanUnkSexColor.Text = LangMan.LS(LSID.LSID_UnkSex);
-			this.PanUnHusbandColor.Text = LangMan.LS(LSID.LSID_UnHusband);
-			this.PanUnWifeColor.Text = LangMan.LS(LSID.LSID_UnWife);
+			this.lblMaleColor.Text = LangMan.LS(LSID.LSID_Man);
+			this.lblFemaleColor.Text = LangMan.LS(LSID.LSID_Woman);
+			this.lblUnkSexColor.Text = LangMan.LS(LSID.LSID_UnkSex);
+			this.lblUnHusbandColor.Text = LangMan.LS(LSID.LSID_UnHusband);
+			this.lblUnWifeColor.Text = LangMan.LS(LSID.LSID_UnWife);
 			this.Label5.Text = LangMan.LS(LSID.LSID_Font);
 			this.GroupBox5.Text = LangMan.LS(LSID.LSID_PedigreeGen);
 			this.chkAttributes.Text = LangMan.LS(LSID.LSID_IncludeAttributes);

@@ -3,7 +3,7 @@ using System.Drawing.Drawing2D;
 
 namespace GKUI.Charts
 {
-	public class ScaleControl : ITreeControl
+	public sealed class ScaleControl : ITreeControl
     {
         #region Private fields
 		
@@ -70,6 +70,11 @@ namespace GKUI.Charts
         {
             this.fChart = chart;
             this.fControlsImage = GKResources.iChartControls;
+        }
+
+        public void Dispose()
+        {
+            // dummy
         }
 
         public void Update()

@@ -137,7 +137,7 @@ namespace GKUI
 			this.fOptions.MWinRect = SysUtils.GetFormRect(this);
 			this.fOptions.MWinState = base.WindowState;
 
-            Win32Native.HtmlHelp(IntPtr.Zero, null, 18u, 0u);
+            NativeMethods.HtmlHelp(IntPtr.Zero, null, 18u, 0u);
 
 			this.fNamesTable.SaveToFile(this.GetAppDataPath() + "GEDKeeper2.nms");
 			this.fNamesTable.Dispose();
@@ -221,7 +221,7 @@ namespace GKUI
 		{
 			base.WndProc(ref m);
 
-			if (m.Msg == Win32Native.WM_KEEPMODELESS)
+			if (m.Msg == NativeMethods.WM_KEEPMODELESS)
 			{
 				foreach (WidgetInfo widgetInfo in this.fActiveWidgets)
 				{
@@ -354,7 +354,7 @@ namespace GKUI
 
 			if (keepModeless)
 			{
-                Win32Native.PostMessage(this.Handle, Win32Native.WM_KEEPMODELESS, 0, 0);
+                NativeMethods.PostMessage(this.Handle, NativeMethods.WM_KEEPMODELESS, 0, 0);
 			}
 
 			return form.ShowDialog();
@@ -442,7 +442,7 @@ namespace GKUI
 				IBase curBase = ((forceDeactivate) ? null : this.GetCurrentFile());
 				TfmChart curChart = ((this.ActiveMdiChild is TfmChart) ? (this.ActiveMdiChild as TfmChart) : null);
 
-				IWorkWindow workWin = ((curChart != null) ? (curChart as IWorkWindow) : curBase);
+				IWorkWindow workWin = this.GetWorkWindow();
 				
 				GEDCOMRecordType rt = (curBase == null) ? GEDCOMRecordType.rtNone : curBase.GetSelectedRecordType();
 				bool baseEn = (rt != GEDCOMRecordType.rtNone);
@@ -640,27 +640,6 @@ namespace GKUI
 		    curBase.Close();
 		}
 
-		private void miMapClick(object sender, EventArgs e)
-		{
-			IBase curBase = this.GetCurrentFile();
-		    if (curBase == null) return;
-
-		    TfmMaps frm_maps = new TfmMaps(curBase);
-			frm_maps.MdiParent = this;
-			frm_maps.Show();
-		}
-
-		private void miOrganizerClick(object sender, EventArgs e)
-		{
-			IBase curBase = this.GetCurrentFile();
-		    if (curBase == null) return;
-
-			using (TfmOrganizer dlg = new TfmOrganizer(curBase))
-			{
-				TfmGEDKeeper.Instance.ShowModalEx(dlg, false);
-			}
-		}
-
 		private void miFilterClick(object sender, EventArgs e)
 		{
 			IBase curBase = this.GetCurrentFile();
@@ -683,17 +662,6 @@ namespace GKUI
 		    if (curBase == null) return;
 
 		    curBase.NavNext();
-		}
-
-		private void miStatsClick(object sender, EventArgs e)
-		{
-			IBase curBase = this.GetCurrentFile();
-		    if (curBase == null) return;
-
-		    List<GEDCOMRecord> selectedRecords = curBase.GetContentList(GEDCOMRecordType.rtIndividual);
-
-			TfmStats fmStats = new TfmStats(curBase, selectedRecords);
-			fmStats.Show();
 		}
 
 		private void miFileNewClick(object sender, EventArgs e)
@@ -722,30 +690,68 @@ namespace GKUI
 		    }
 		}
 
-		private void miTreeAncestorsClick(object sender, EventArgs e)
+		private void miRecordAddClick(object sender, EventArgs e)
 		{
 			IBase curBase = this.GetCurrentFile();
 		    if (curBase == null) return;
 
-			if (TfmChart.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartBox.ChartKind.ckAncestors))
+		    curBase.RecordAdd();
+		}
+
+		private void miRecordEditClick(object sender, EventArgs e)
+		{
+			IBase curBase = this.GetCurrentFile();
+		    if (curBase == null) return;
+
+		    curBase.RecordEdit(sender, e);
+		}
+
+		private void miRecordDeleteClick(object sender, EventArgs e)
+		{
+			IBase curBase = this.GetCurrentFile();
+		    if (curBase == null) return;
+
+		    curBase.RecordDelete();
+		}
+
+		private void miSearchClick(object sender, EventArgs e)
+		{
+			IWorkWindow win = this.GetWorkWindow();
+		    if (win == null) return;
+
+			win.QuickFind();
+		}
+
+		private void miMapClick(object sender, EventArgs e)
+		{
+			IBase curBase = this.GetCurrentFile();
+		    if (curBase == null) return;
+
+		    TfmMaps frm_maps = new TfmMaps(curBase);
+			frm_maps.MdiParent = this;
+			frm_maps.Show();
+		}
+
+		private void miOrganizerClick(object sender, EventArgs e)
+		{
+			IBase curBase = this.GetCurrentFile();
+		    if (curBase == null) return;
+
+			using (TfmOrganizer dlg = new TfmOrganizer(curBase))
 			{
-				TfmChart fmChart = new TfmChart(curBase, curBase.GetSelectedPerson());
-				fmChart.ChartKind = TreeChartBox.ChartKind.ckAncestors;
-				fmChart.GenChart(true);
+				TfmGEDKeeper.Instance.ShowModalEx(dlg, false);
 			}
 		}
 
-		private void miTreeDescendantsClick(object sender, EventArgs e)
+		private void miStatsClick(object sender, EventArgs e)
 		{
 			IBase curBase = this.GetCurrentFile();
 		    if (curBase == null) return;
 
-			if (TfmChart.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartBox.ChartKind.ckDescendants))
-			{
-				TfmChart fmChart = new TfmChart(curBase, curBase.GetSelectedPerson());
-				fmChart.ChartKind = TreeChartBox.ChartKind.ckDescendants;
-				fmChart.GenChart(true);
-			}
+		    List<GEDCOMRecord> selectedRecords = curBase.GetContentList(GEDCOMRecordType.rtIndividual);
+
+			TfmStats fmStats = new TfmStats(curBase, selectedRecords);
+			fmStats.Show();
 		}
 
 		private void miPedigree_dAbovilleClick(object sender, EventArgs e)
@@ -778,36 +784,30 @@ namespace GKUI
 			}
 		}
 
-		private void miRecordAddClick(object sender, EventArgs e)
+		private void miTreeAncestorsClick(object sender, EventArgs e)
 		{
 			IBase curBase = this.GetCurrentFile();
 		    if (curBase == null) return;
 
-		    curBase.RecordAdd();
+			if (TfmChart.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartBox.ChartKind.ckAncestors))
+			{
+				TfmChart fmChart = new TfmChart(curBase, curBase.GetSelectedPerson());
+				fmChart.ChartKind = TreeChartBox.ChartKind.ckAncestors;
+				fmChart.GenChart(true);
+			}
 		}
 
-		private void miRecordEditClick(object sender, EventArgs e)
+		private void miTreeDescendantsClick(object sender, EventArgs e)
 		{
 			IBase curBase = this.GetCurrentFile();
 		    if (curBase == null) return;
 
-		    curBase.RecordEdit(sender, e);
-		}
-
-		private void miRecordDeleteClick(object sender, EventArgs e)
-		{
-			IBase curBase = this.GetCurrentFile();
-		    if (curBase == null) return;
-
-		    curBase.RecordDelete();
-		}
-
-		private void miSearchClick(object sender, EventArgs e)
-		{
-			IBase curBase = this.GetCurrentFile();
-		    if (curBase == null) return;
-
-			curBase.QuickFind();
+			if (TfmChart.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartBox.ChartKind.ckDescendants))
+			{
+				TfmChart fmChart = new TfmChart(curBase, curBase.GetSelectedPerson());
+				fmChart.ChartKind = TreeChartBox.ChartKind.ckDescendants;
+				fmChart.GenChart(true);
+			}
 		}
 
 		private void miTreeBothClick(object sender, EventArgs e)
@@ -845,7 +845,7 @@ namespace GKUI
 		public void ShowHelpTopic(string topic)
 		{
 			string fns = GKUtils.GetAppPath() + "GEDKeeper2.chm" + topic;
-            Win32Native.HtmlHelp(this.Handle, fns, 0u, 0u);
+            NativeMethods.HtmlHelp(this.Handle, fns, 0u, 0u);
 		}
 
 		private void miGenResourcesClick(object sender, EventArgs e)
@@ -885,10 +885,9 @@ namespace GKUI
 
 		private void miWinMinimizeClick(object sender, EventArgs e)
 		{
-			Form[] mdiChildren = base.MdiChildren;
-			for (int I = mdiChildren.Length - 1; I >= 0; I--)
+			for (int i = base.MdiChildren.Length - 1; i >= 0; i--)
 			{
-				mdiChildren[I].WindowState = FormWindowState.Minimized;
+				base.MdiChildren[i].WindowState = FormWindowState.Minimized;
 			}
 		}
 
@@ -963,7 +962,11 @@ namespace GKUI
 
 		public PluginInfo GetPluginAttributes(IPlugin plugin)
 		{
-			PluginInfo info = new PluginInfo();
+            if (plugin == null) {
+                throw new ArgumentNullException("plugin");
+            }
+
+            PluginInfo info = new PluginInfo();
 
 			Assembly asm = plugin.GetType().Assembly;
 			
@@ -1125,6 +1128,12 @@ namespace GKUI
 			}
 
 			return result;
+		}
+
+		public IWorkWindow GetWorkWindow()
+		{
+			Form activeForm = this.ActiveMdiChild;
+			return (activeForm is IWorkWindow) ? activeForm as IWorkWindow : null;
 		}
 
         public bool Register(IPlugin plugin)

@@ -152,26 +152,25 @@ namespace GKCommon.GEDCOM
 
 		public virtual void Assign(GEDCOMTag source)
 		{
-			if (source != null)
-			{
-				this.Name = source.Name;
-				this.StringValue = source.StringValue;
+			if (source == null) return;
+			
+			this.Name = source.Name;
+			this.StringValue = source.StringValue;
 
-				int num = source.Count - 1;
-				for (int i = 0; i <= num; i++)
-				{
-					GEDCOMTag sourceTag = source[i];
-					GEDCOMTag copy = Activator.CreateInstance(sourceTag.GetType(), new object[] { this.Owner, this, "", "" }) as GEDCOMTag;
-					copy.Assign(sourceTag);
-					this.InsertTag(copy);
-				}
+			int num = source.Count;
+			for (int i = 0; i < num; i++)
+			{
+				GEDCOMTag sourceTag = source[i];
+				GEDCOMTag copy = Activator.CreateInstance(sourceTag.GetType(), new object[] { this.Owner, this, "", "" }) as GEDCOMTag;
+				copy.Assign(sourceTag);
+				this.InsertTag(copy);
 			}
 		}
 
 		protected void AssignList(GEDCOMList<GEDCOMTag> srcList, GEDCOMList<GEDCOMTag> destList)
 		{
-			int num = srcList.Count - 1;
-			for (int i = 0; i <= num; i++)
+			int num = srcList.Count;
+			for (int i = 0; i < num; i++)
 			{
 				GEDCOMTag sourceTag = srcList[i];
 				GEDCOMTag copy = Activator.CreateInstance(sourceTag.GetType(), new object[] { this.Owner, this, "", "" }) as GEDCOMTag;
@@ -388,23 +387,19 @@ namespace GKCommon.GEDCOM
 
 			if (ATag != null)
 			{
-				if (ATag.StringValue != "")
-				{
+				if (ATag.StringValue != "") {
 					strings.Add(ATag.StringValue);
 				}
 
-				int num = ATag.Count - 1;
-				for (int I = 0; I <= num; I++)
+				int num = ATag.Count;
+				for (int i = 0; i < num; i++)
 				{
-					GEDCOMTag tag = ATag[I];
-					if (tag.Name == "CONC")
-					{
+					GEDCOMTag tag = ATag[i];
+
+					if (tag.Name == "CONC") {
 						strings[strings.Count - 1] = strings[strings.Count - 1] + tag.StringValue;
-					}
-					else
-					{
-						if (tag.Name == "CONT")
-						{
+					} else {
+						if (tag.Name == "CONT") {
 							strings.Add(tag.StringValue);
 						}
 					}
@@ -419,31 +414,28 @@ namespace GKCommon.GEDCOM
 			if (tag != null)
 			{
 				tag.StringValue = "";
-				for (int I = tag.Count - 1; I >= 0; I--)
+				for (int i = tag.Count - 1; i >= 0; i--)
 				{
-					if (tag[I].Name == "CONT" || tag[I].Name == "CONC")
+					if (tag[i].Name == "CONT" || tag[i].Name == "CONC")
 					{
-						tag.Delete(I);
+						tag.Delete(i);
 					}
 				}
 
 				if (value != null)
 				{
-					int num = value.Count - 1;
-					for (int I = 0; I <= num; I++)
+					int num = value.Count;
+					for (int i = 0; i < num; i++)
 					{
-						string S = value[I];
+						string S = value[i];
 
 						int len = ((S.Length > 248) ? 248 : S.Length) /*248*/;
 						string sub = S.Substring(0, len);
 						S = S.Remove(0, len);
 
-						if (I == 0 && !(tag is GEDCOMRecord))
-						{
+						if (i == 0 && !(tag is GEDCOMRecord)) {
 							tag.StringValue = sub;
-						}
-						else
-						{
+						} else {
 							tag.AddTag("CONT", sub, null);
 						}
 
@@ -458,47 +450,44 @@ namespace GKCommon.GEDCOM
 			}
 		}
 
-        public void SetTagStrings(GEDCOMTag tag, string[] value)
+        public void SetTagStrings(GEDCOMTag tag, string[] strings)
 		{
-			value = (string[])value.Clone();
+        	if (tag == null || strings == null) return;
+        	
+        	tag.StringValue = "";
+        	for (int i = tag.Count - 1; i >= 0; i--)
+        	{
+        		if (tag[i].Name == "CONT" || tag[i].Name == "CONC")
+        		{
+        			tag.Delete(i);
+        		}
+        	}
 
-			if (tag != null)
-			{
-				tag.StringValue = "";
-				for (int I = tag.Count - 1; I >= 0; I--)
-				{
-					if (tag[I].Name == "CONT" || tag[I].Name == "CONC")
-					{
-						tag.Delete(I);
-					}
-				}
+        	for (int i = 0; i < strings.Length; i++)
+        	{
+        		string S = strings[i];
 
-				for (int I = 0; I <= ((value != null) ? value.Length : 0) - 1; I++)
-				{
-					string S = value[I];
+        		int len = ((S.Length > 248) ? 248 : S.Length) /*248*/;
+        		string sub = S.Substring(0, len);
+        		S = S.Remove(0, len);
 
-					int len = ((S.Length > 248) ? 248 : S.Length) /*248*/;
-					string sub = S.Substring(0, len);
-					S = S.Remove(0, len);
+        		if (i == 0 && !(tag is GEDCOMRecord))
+        		{
+        			tag.StringValue = sub;
+        		}
+        		else
+        		{
+        			tag.AddTag("CONT", sub, null);
+        		}
 
-					if (I == 0 && !(tag is GEDCOMRecord))
-					{
-						tag.StringValue = sub;
-					}
-					else
-					{
-						tag.AddTag("CONT", sub, null);
-					}
-
-					while (((S != null) ? S.Length : 0) > 0)
-					{
-						len = ((S.Length > 248) ? 248 : S.Length) /*248*/;
-						tag.AddTag("CONC", S.Substring(0, len), null);
-						S = S.Remove(0, len);
-					}
-				}
-			}
-		}
+        		while (((S != null) ? S.Length : 0) > 0)
+        		{
+        			len = ((S.Length > 248) ? 248 : S.Length) /*248*/;
+        			tag.AddTag("CONC", S.Substring(0, len), null);
+        			S = S.Remove(0, len);
+        		}
+        	}
+        }
 
         #endregion
 
@@ -539,22 +528,25 @@ namespace GKCommon.GEDCOM
 					savedTags.Duplicates = StringList.TDuplicates.dupIgnore;
 					savedTags.Sorted = true;
 
-					int num = this.Count - 1;
-					for (int I = 0; I <= num; I++)
+					int num = this.Count;
+					for (int i = 0; i < num; i++)
 					{
-						savedTags.Add(this[I].Name);
+						savedTags.Add(this[i].Name);
 					}
 
 					if (savedTags.IndexOf("CONC") >= 0 || savedTags.IndexOf("CONT") >= 0)
 					{
-						int num2 = this.Count - 1;
-						for (int I = 0; I <= num2; I++)
+						int num2 = this.Count;
+						for (int i = 0; i < num2; i++)
 						{
-							if (this[I].Name == "CONC" || this[I].Name == "CONT")
+							GEDCOMTag tmp = this[i];
+							
+							if (tmp.Name == "CONC" || tmp.Name == "CONT")
 							{
-								this[I].SaveToStream(stream);
+								tmp.SaveToStream(stream);
 							}
 						}
+
 						if (savedTags.IndexOf("CONC") >= 0)
 						{
 							savedTags.Delete(savedTags.IndexOf("CONC"));
@@ -565,10 +557,12 @@ namespace GKCommon.GEDCOM
 						}
 					}
 
-					int num3 = this.Count - 1;
-					for (int I = 0; I <= num3; I++) {
-						if (this[I].Name != "CONT" && this[I].Name != "CONC") {
-							this[I].SaveToStream(stream);
+					int num3 = this.Count;
+					for (int i = 0; i < num3; i++) {
+						GEDCOMTag tmp = this[i];
+						
+						if (tmp.Name != "CONT" && tmp.Name != "CONC") {
+							tmp.SaveToStream(stream);
 						}
 					}
 				}

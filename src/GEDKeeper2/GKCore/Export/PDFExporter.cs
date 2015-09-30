@@ -32,7 +32,7 @@ namespace GKCore.Export
         {
             if (disposing)
             {
-                //if (fDocument != null) fDocument.Dispose();
+                if (fDocument != null) fDocument.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -132,7 +132,7 @@ namespace GKCore.Export
 					table.DefaultHorizontalAlignment = 0;
 
 					table.AddCell(new Phrase(iRec.XRef, cells_font));
-					table.AddCell(new Phrase(iRec.aux_GetNameStr(true, false), cells_font));
+					table.AddCell(new Phrase(iRec.GetNameString(true, false), cells_font));
 
 					table.AddCell(new Phrase(GKUtils.GetBirthDate(iRec, TDateFormat.dfDD_MM_YYYY, false), cells_font));
 					table.AddCell(new Phrase(GKUtils.GetBirthPlace(iRec), cells_font));

@@ -27,21 +27,16 @@ Section "GEDKeeper2 (необходимо)"
 
   SetOutPath $INSTDIR
 
-
-  File "ExtUtils.dll"
-  File "GEDCOM.dll"
-  File "GKInterfaces.dll"
-
   File "GEDKeeper2.exe"
   File "GEDKeeper2.chm"
-  File "history.txt"
+  File "GKCommon.dll"
+  File "GKInterfaces.dll"
 
-  File "Cyotek.Windows.Forms.ImageBox.dll"
-  File "ZedGraph.dll"
+  File "ExcelLibrary.dll"
   File "itextsharp.dll"
   File "lua51.dll"
   File "LuaInterface.dll"
-  File "ExcelLibrary.dll"
+  File "ZedGraph.dll"
 
   CreateDirectory "$SMPROGRAMS\GEDKeeper2"
   CreateShortCut "$SMPROGRAMS\GEDKeeper2\GEDKeeper2.lnk" "$INSTDIR\GEDKeeper2.exe" "" "$INSTDIR\GEDKeeper2.exe" 0
@@ -91,7 +86,7 @@ SectionGroup /e "Языки"
   		File ".\langs\english.lng"
 	SectionEnd
 
-	Section "Украинский"
+	Section "Українська"
   		SetOutPath "$INSTDIR\langs"
   		File ".\langs\ukrainian.lng"
 	SectionEnd
@@ -157,11 +152,24 @@ SectionGroup /e "Плагины"
   		File ".\plugins\GKTextSearchPlugin.ukr"
 	SectionEnd
 
+	Section "Круг предков"
+  		SetOutPath "$INSTDIR\plugins"
+  		File ".\plugins\GKAncestorsCirclePlugin.dll"
+  		File ".\plugins\GKAncestorsCirclePlugin.rus"
+  		File ".\plugins\GKAncestorsCirclePlugin.eng"
+  		File ".\plugins\GKAncestorsCirclePlugin.ukr"
+	SectionEnd
+
 	Section "3D визуализация"
   		SetOutPath "$INSTDIR\plugins"
   		File ".\plugins\csgl.dll"
   		File ".\plugins\csgl.native.dll"
 		File ".\plugins\GKTreeVizPlugin.dll"
+	SectionEnd
+
+	Section "Просмотр изображений"
+  		SetOutPath "$INSTDIR\plugins"
+		File ".\plugins\GKImageViewerPlugin.dll"
 	SectionEnd
 SectionGroupEnd
 
@@ -177,17 +185,14 @@ Section "Uninstall"
   ; Remove files and uninstaller
   Delete $INSTDIR\GEDKeeper2.exe
   Delete $INSTDIR\GEDKeeper2.chm
-  Delete $INSTDIR\history.txt
-
-  Delete $INSTDIR\ExtUtils.dll
-  Delete $INSTDIR\GEDCOM.dll
+  Delete $INSTDIR\GKCommon.dll
   Delete $INSTDIR\GKInterfaces.dll
-  Delete $INSTDIR\Cyotek.Windows.Forms.ImageBox.dll
-  Delete $INSTDIR\ZedGraph.dll
+
+  Delete $INSTDIR\ExcelLibrary.dll
   Delete $INSTDIR\itextsharp.dll
   Delete $INSTDIR\lua51.dll
   Delete $INSTDIR\LuaInterface.dll
-  Delete $INSTDIR\ExcelLibrary.dll
+  Delete $INSTDIR\ZedGraph.dll
 
   Delete $INSTDIR\uninstall.exe
 

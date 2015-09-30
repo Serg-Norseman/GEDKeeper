@@ -82,7 +82,7 @@ namespace GKUI.Dialogs
 					this.btnFatherAdd.Enabled = false;
 					this.btnFatherDelete.Enabled = true;
 					this.btnFatherSel.Enabled = true;
-					this.EditFather.Text = relPerson.aux_GetNameStr(true, false);
+					this.EditFather.Text = relPerson.GetNameString(true, false);
 				}
 				else
 				{
@@ -98,7 +98,7 @@ namespace GKUI.Dialogs
 					this.btnMotherAdd.Enabled = false;
 					this.btnMotherDelete.Enabled = true;
 					this.btnMotherSel.Enabled = true;
-					this.EditMother.Text = relPerson.aux_GetNameStr(true, false);
+					this.EditMother.Text = relPerson.GetNameString(true, false);
 				}
 				else
 				{
@@ -177,7 +177,7 @@ namespace GKUI.Dialogs
 
 			if (this.fPerson.ChildToFamilyLinks.Count > 0)
 			{
-				this.fPerson.ChildToFamilyLinks[0].Family.aux_SortChilds();
+				this.fPerson.ChildToFamilyLinks[0].Family.SortChilds();
 			}
 
 			this.fBase.ChangeRecord(this.fPerson);
@@ -260,7 +260,7 @@ namespace GKUI.Dialogs
             GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, true, father);
 		    if (family.Husband.Value == null)
 		    {
-		        family.aux_AddSpouse(father);
+		        family.AddSpouse(father);
 		    }
 		    this.ControlsRefresh();
 		}
@@ -272,7 +272,7 @@ namespace GKUI.Dialogs
 				GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, false, null);
 				if (family != null)
 				{
-					family.aux_RemoveSpouse(family.Husband.Value as GEDCOMIndividualRecord);
+					family.RemoveSpouse(family.Husband.Value as GEDCOMIndividualRecord);
 					this.ControlsRefresh();
 				}
 			}
@@ -297,7 +297,7 @@ namespace GKUI.Dialogs
             GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, true, mother);
 		    if (family.Wife.Value == null)
 		    {
-		        family.aux_AddSpouse(mother);
+		        family.AddSpouse(mother);
 		    }
 		    this.ControlsRefresh();
 		}
@@ -310,7 +310,7 @@ namespace GKUI.Dialogs
 				if (family != null)
 				{
 					GEDCOMIndividualRecord mother = family.Wife.Value as GEDCOMIndividualRecord;
-					family.aux_RemoveSpouse(mother);
+					family.RemoveSpouse(mother);
 					this.ControlsRefresh();
 				}
 			}
@@ -334,7 +334,7 @@ namespace GKUI.Dialogs
 
             if (family.IndexOfChild(this.fPerson) < 0)
 		    {
-		        family.aux_AddChild(this.fPerson);
+		        family.AddChild(this.fPerson);
 		    }
 		    this.ControlsRefresh();
 		}
@@ -355,7 +355,7 @@ namespace GKUI.Dialogs
 				GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, false, null);
 				if (family != null)
 				{
-					family.aux_RemoveChild(this.fPerson);
+					family.RemoveChild(this.fPerson);
 					this.ControlsRefresh();
 				}
 			}
@@ -363,7 +363,7 @@ namespace GKUI.Dialogs
 
 		private void btnNameCopy1_Click(object sender, EventArgs e)
 		{
-			Clipboard.SetDataObject(this.fPerson.aux_GetNameStr(true, false));
+			Clipboard.SetDataObject(this.fPerson.GetNameString(true, false));
 		}
 
 		private void btnPortraitAdd_Click(object sender, EventArgs e)
@@ -371,19 +371,19 @@ namespace GKUI.Dialogs
 			GEDCOMMultimediaRecord mmRec = fBase.SelectRecord(GEDCOMRecordType.rtMultimedia, null) as GEDCOMMultimediaRecord;
 		    if (mmRec == null) return;
 		    
-            GEDCOMMultimediaLink mmLink = this.fPerson.aux_GetPrimaryMultimediaLink();
+            GEDCOMMultimediaLink mmLink = this.fPerson.GetPrimaryMultimediaLink();
 		    if (mmLink != null)
 		    {
 		        mmLink.IsPrimary = false;
 		    }
-		    this.fPerson.aux_SetPrimaryMultimediaLink(mmRec);
+		    this.fPerson.SetPrimaryMultimediaLink(mmRec);
 		    this.fMediaList.UpdateSheet();
 		    this.RefreshPortrait();
 		}
 
 		private void btnPortraitDelete_Click(object sender, EventArgs e)
 		{
-			GEDCOMMultimediaLink mmLink = this.fPerson.aux_GetPrimaryMultimediaLink();
+			GEDCOMMultimediaLink mmLink = this.fPerson.GetPrimaryMultimediaLink();
 		    if (mmLink == null) return;
 		    
             mmLink.IsPrimary = false;

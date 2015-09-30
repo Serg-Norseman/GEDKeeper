@@ -88,8 +88,8 @@ namespace GKPedigreeImporterPlugin
 
 		private GEDCOMFamilyRecord AddFamily(GEDCOMIndividualRecord parent)
 		{
-			GEDCOMFamilyRecord result = this.fTree.aux_CreateFamily();
-			result.aux_AddSpouse(parent);
+			GEDCOMFamilyRecord result = this.fTree.CreateFamily();
+			result.AddSpouse(parent);
 			return result;
 		}
 
@@ -426,15 +426,15 @@ namespace GKPedigreeImporterPlugin
 				{
 					this.CheckSpouses(buf, iRec);
 				}
-				this.fTree.aux_CreateNoteEx(iRec, buf);
+				this.fTree.CreateNoteEx(iRec, buf);
 				buf.Clear();
 			}
 		}
 
 		private void CheckSpouses(StringList buf, GEDCOMIndividualRecord iRec)
 		{
-			int num2 = buf.Count - 1;
-			for (int i = 0; i <= num2; i++)
+			int num2 = buf.Count;
+			for (int i = 0; i < num2; i++)
 			{
 				string s = buf[i];
 				if (string.IsNullOrEmpty(s)) continue;
@@ -507,7 +507,7 @@ namespace GKPedigreeImporterPlugin
 								if (nm_parts.Length > 2) f_fam = CheckDot(nm_parts[2]);
 
 								GEDCOMIndividualRecord sp = this.fBase.Context.CreatePersonEx(f_name, f_pat, f_fam, sx, false);
-								fam.aux_AddSpouse(sp);
+								fam.AddSpouse(sp);
 							}
 						}
 						catch (Exception ex)
@@ -529,8 +529,8 @@ namespace GKPedigreeImporterPlugin
 				int prev_id = 0;
 				GEDCOMIndividualRecord i_rec = null;
 
-				int num = aContent.Count - 1;
-				for (int i = 0; i <= num; i++)
+				int num = aContent.Count;
+				for (int i = 0; i < num; i++)
 				{
 					string s = aContent[i].Trim();
 					if (s == "")

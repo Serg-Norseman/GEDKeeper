@@ -4,7 +4,7 @@ namespace GKCommon.GEDCOM
 {
 	public sealed class XRefReplacer : GEDCOMObject
 	{
-		public struct XRefEntry
+		public sealed class XRefEntry
 		{
 			public readonly GEDCOMRecord Rec;
 			public readonly string OldXRef;

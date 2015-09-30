@@ -49,7 +49,7 @@ namespace GKUI.Sheets
 
                     GEDCOMIndividualRecord child = ptr.Value as GEDCOMIndividualRecord;
                     ListViewItem item = this.List.AddItem(idx.ToString(), child);
-                    item.SubItems.Add(child.aux_GetNameStr(true, false));
+                    item.SubItems.Add(child.GetNameString(true, false));
                     item.SubItems.Add(GKUtils.GetBirthDate(child, TfmGEDKeeper.Instance.Options.DefDateFormat, false));
                 }
 
@@ -78,7 +78,7 @@ namespace GKUI.Sheets
             {
                 case RecordAction.raAdd:
                     child = aBase.SelectPerson(familyRecord.Husband.Value as GEDCOMIndividualRecord, TargetMode.tmParent, GEDCOMSex.svNone);
-                    result = (child != null && familyRecord.aux_AddChild(child));
+                    result = (child != null && familyRecord.AddChild(child));
                     break;
 
                 case RecordAction.raEdit:
@@ -86,7 +86,7 @@ namespace GKUI.Sheets
                     break;
 
                 case RecordAction.raDelete:
-                    result = (child != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachChildQuery)) != DialogResult.No && familyRecord.aux_RemoveChild(child));
+                    result = (child != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachChildQuery)) != DialogResult.No && familyRecord.RemoveChild(child));
                     break;
             }
 

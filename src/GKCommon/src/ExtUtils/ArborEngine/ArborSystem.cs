@@ -47,7 +47,7 @@ namespace ExtUtils.ArborEngine
 
 		private ArborPoint gdt_topleft = new ArborPoint(-1, -1);
 		private ArborPoint gdt_bottomright = new ArborPoint(1, 1);
-		private double theta = 0.4;
+        private double theta = 0.4;
 
 		public double energy_sum = 0;
 		public double energy_max = 0;
@@ -353,9 +353,6 @@ namespace ExtUtils.ArborEngine
 				}
 
 				this.eulerIntegrator();
-
-				// update geometry
-				//for (int i = 0; i <= fNodes.Count - 1; i++) {}
 			}
 			catch (Exception ex)
 			{
@@ -433,7 +430,7 @@ namespace ExtUtils.ArborEngine
 			double q = 0.0;
 			ArborPoint r = new ArborPoint(0, 0);
 			foreach (ArborNode s in fNodes) {
-				r.add(s.Pt);
+				r = r.add(s.Pt);
 				q++;
 			}
 
@@ -447,7 +444,7 @@ namespace ExtUtils.ArborEngine
 
 		private void applyCenterGravity()
 		{
-			foreach(ArborNode p in fNodes) {
+			foreach (ArborNode p in fNodes) {
 				ArborPoint q = p.Pt.mul(-1);
 				p.applyForce(q.mul(param_repulsion / 100));
 			}

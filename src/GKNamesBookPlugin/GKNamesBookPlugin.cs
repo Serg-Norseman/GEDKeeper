@@ -26,7 +26,7 @@ namespace GKNamesBookPlugin
     
     public class Plugin : IPlugin, IWidget
     {
-        private string fDisplayName = "Тестовый плагин";
+        private string fDisplayName = "GKNamesBookPlugin";
         private IHost fHost;
         private ILangMan fLangMan;
 
@@ -94,9 +94,9 @@ namespace GKNamesBookPlugin
         	return result;
         }
 
-    	#region IWidget common
+        #region IWidget support
 
-    	void IWidget.WidgetInit(IHost host) {}
+        void IWidget.WidgetInit(IHost host) {}
         void IWidget.BaseChanged(IBase aBase) {}
         void IWidget.BaseClosed(IBase aBase) {}
         void IWidget.WidgetEnable() {}

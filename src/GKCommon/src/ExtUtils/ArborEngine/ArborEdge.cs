@@ -10,7 +10,6 @@ using System;
 
 namespace ExtUtils.ArborEngine
 {
-
 	public class ArborEdge
     {
     	public ArborNode Source;
@@ -29,5 +28,4 @@ namespace ExtUtils.ArborEngine
     		this.Stiffness = stiffness;
     	}
     }
-
 }

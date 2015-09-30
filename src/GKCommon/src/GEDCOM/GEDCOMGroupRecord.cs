@@ -87,6 +87,17 @@ namespace GKCommon.GEDCOM
 			this.fMembers.SaveToStream(stream);
 		}
 
+		public GEDCOMGroupRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
+		{
+		}
+
+        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+		{
+			return new GEDCOMGroupRecord(owner, parent, tagName, tagValue);
+		}
+
+        #region Auxiliary
+
 		public int IndexOfMember(GEDCOMIndividualRecord member)
 		{
 			if (member != null) {
@@ -102,18 +113,7 @@ namespace GKCommon.GEDCOM
 			return -1;
 		}
 
-		public GEDCOMGroupRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-		{
-		}
-
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-		{
-			return new GEDCOMGroupRecord(owner, parent, tagName, tagValue);
-		}
-
-        #region Auxiliary
-
-        public bool aux_AddMember(GEDCOMIndividualRecord member)
+        public bool AddMember(GEDCOMIndividualRecord member)
         {
             if (member == null) return false;
 			bool result;
@@ -132,14 +132,14 @@ namespace GKCommon.GEDCOM
 			}
 			catch (Exception ex)
 			{
-				SysUtils.LogWrite("GEDCOMGroupRecord.AddGroupMember(): " + ex.Message);
+				SysUtils.LogWrite("GEDCOMGroupRecord.AddMember(): " + ex.Message);
 				result = false;
 			}
 
 			return result;
 		}
 
-		public bool aux_RemoveMember(GEDCOMIndividualRecord member)
+		public bool RemoveMember(GEDCOMIndividualRecord member)
 		{
             if (member == null) return false;
 			bool result;
@@ -153,7 +153,7 @@ namespace GKCommon.GEDCOM
 			}
 			catch (Exception ex)
 			{
-				SysUtils.LogWrite("GEDCOMGroupRecord.RemoveGroupMember(): " + ex.Message);
+				SysUtils.LogWrite("GEDCOMGroupRecord.RemoveMember(): " + ex.Message);
 				result = false;
 			}
 

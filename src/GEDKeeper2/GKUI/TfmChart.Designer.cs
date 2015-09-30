@@ -47,7 +47,6 @@ namespace GKUI
 		private System.Windows.Forms.MenuItem miFillColor;
 		private System.Windows.Forms.MenuItem miFillImage;
 		private System.Windows.Forms.MenuItem N9;
-		private System.Windows.Forms.MenuItem miSearch;
 
 		private void InitializeComponent()
 		{
@@ -102,7 +101,6 @@ namespace GKUI
 			this.OpenDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.N9 = new System.Windows.Forms.MenuItem();
-			this.miSearch = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// SaveDialog1
@@ -286,8 +284,7 @@ namespace GKUI
 									this.N8,
 									this.miFillColor,
 									this.miFillImage,
-			                        this.N9,
-			                        this.miSearch});
+			                        this.N9});
 			// 
 			// miModeBoth
 			// 
@@ -351,12 +348,7 @@ namespace GKUI
 			// 
 			this.N9.Index = 10;
 			this.N9.Text = "-";
-			// 
-			// miSearch
-			// 
-			this.miSearch.Index = 11;
-			this.miSearch.Text = "miSearch";
-			this.miSearch.Click += new System.EventHandler(this.miSearchClick);
+			this.N9.Visible = false;
 			// 
 			// MenuPerson
 			// 

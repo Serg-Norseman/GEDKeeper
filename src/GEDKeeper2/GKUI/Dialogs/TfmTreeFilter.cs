@@ -83,12 +83,13 @@ namespace GKUI.Dialogs
 
 			if (!string.IsNullOrEmpty(this.fTemp)) {
 				string[] tmp_refs = this.fTemp.Split(';');
-				int num = tmp_refs.Length - 1;
-				for (int i = 0; i <= num; i++)
+
+				int num = tmp_refs.Length;
+				for (int i = 0; i < num; i++)
 				{
 					string xref = tmp_refs[i];
 					GEDCOMIndividualRecord p = this.Base.Tree.XRefIndex_Find(xref) as GEDCOMIndividualRecord;
-					if (p != null) this.fPersonsList.List.AddItem(p.aux_GetNameStr(true, false), p);
+					if (p != null) this.fPersonsList.List.AddItem(p.GetNameString(true, false), p);
 				}
 			}
 

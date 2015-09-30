@@ -2,8 +2,6 @@
 
 namespace GKCommon.GEDCOM
 {
-    public delegate GEDCOMTag TagConstructor(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue);
-
 	public sealed class GEDCOMFactory
 	{
 		private static GEDCOMFactory fInstance = null;

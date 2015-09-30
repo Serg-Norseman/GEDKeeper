@@ -253,8 +253,8 @@ namespace GKCommon.GEDCOM
 			float match = 0.0f;
 
 			GEDCOMFamilyRecord fam = tag as GEDCOMFamilyRecord;
-			string title1 = this.aux_GetFamilyStr(null, null);
-			string title2 = fam.aux_GetFamilyStr(null, null);
+			string title1 = this.GetFamilyString(null, null);
+			string title2 = fam.GetFamilyString(null, null);
 			if (string.Compare(title1, title2, true) == 0) {
 				match = 100.0f;
 			}
@@ -264,7 +264,7 @@ namespace GKCommon.GEDCOM
 
         #region Auxiliary
 
-		public void aux_SortChilds()
+		public void SortChilds()
 		{
 			int num = this.fChildrens.Count;
 			for (int i = 0; i < num; i++)
@@ -273,41 +273,27 @@ namespace GKCommon.GEDCOM
 				{
 					GEDCOMIndividualRecord iChild = this.fChildrens[i].Value as GEDCOMIndividualRecord;
 					GEDCOMCustomEvent iEv = iChild.GetIndividualEvent("BIRT");
-
-					DateTime iDate = ((iEv != null) ? iEv.Detail.Date.aux_GetDate() : new DateTime(0));
+					DateTime iDate = ((iEv != null) ? iEv.GetIndependentDate() : new DateTime(0));
 
 					GEDCOMIndividualRecord kChild = this.fChildrens[j].Value as GEDCOMIndividualRecord;
 					GEDCOMCustomEvent kEv = kChild.GetIndividualEvent("BIRT");
-
-					DateTime kDate = ((kEv != null) ? kEv.Detail.Date.aux_GetDate() : new DateTime(0));
+					DateTime kDate = ((kEv != null) ? kEv.GetIndependentDate() : new DateTime(0));
 
 					if (iDate > kDate) this.fChildrens.Exchange(i, j);
 				}
 			}
 		}
 
-		public GEDCOMIndividualRecord aux_GetSpouse(GEDCOMIndividualRecord spouse)
-		{
-			GEDCOMIndividualRecord husb = this.Husband.Value as GEDCOMIndividualRecord;
-			GEDCOMIndividualRecord wife = this.Wife.Value as GEDCOMIndividualRecord;
-
-			if (spouse == husb) {
-				return wife;
-			} else {
-				return husb;
-			}
-		}
-
-		public GEDCOMFamilyEvent GetFamilyEvent(string evName)
+		public GEDCOMFamilyEvent GetFamilyEvent(string eventName)
 		{
 			GEDCOMFamilyEvent result = null;
 
-			int num = fFamilyEvents.Count - 1;
-			for (int i = 0; i <= num; i++)
+			int num = this.fFamilyEvents.Count;
+			for (int i = 0; i < num; i++)
 			{
-				GEDCOMFamilyEvent evt = fFamilyEvents[i];
-				if (evt.Name == evName)
-				{
+				GEDCOMFamilyEvent evt = this.fFamilyEvents[i];
+
+				if (evt.Name == eventName) {
 					result = evt;
 					break;
 				}
@@ -316,7 +302,7 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		public string aux_GetFamilyStr(string unkHusband, string unkWife)
+		public string GetFamilyString(string unkHusband, string unkWife)
 		{
 			string result = "";
 
@@ -328,7 +314,7 @@ namespace GKCommon.GEDCOM
 			}
 			else
 			{
-				result += spouse.aux_GetNameStr(true, false);
+				result += spouse.GetNameString(true, false);
 			}
 
 			result += " - ";
@@ -341,13 +327,25 @@ namespace GKCommon.GEDCOM
 			}
 			else
 			{
-				result += spouse.aux_GetNameStr(true, false);
+				result += spouse.GetNameString(true, false);
 			}
 
 			return result;
 		}
 
-        public void aux_AddSpouse(GEDCOMIndividualRecord spouse)
+		public GEDCOMIndividualRecord GetSpouseBy(GEDCOMIndividualRecord spouse)
+		{
+			GEDCOMIndividualRecord husb = this.Husband.Value as GEDCOMIndividualRecord;
+			GEDCOMIndividualRecord wife = this.Wife.Value as GEDCOMIndividualRecord;
+
+			if (spouse == husb) {
+				return wife;
+			} else {
+				return husb;
+			}
+		}
+
+        public void AddSpouse(GEDCOMIndividualRecord spouse)
 		{
             if (spouse == null) return;
 
@@ -359,7 +357,8 @@ namespace GKCommon.GEDCOM
                     case GEDCOMSex.svMale:
                         this.Husband.Value = spouse;
                         break;
-                    case GEDCOMSex.svFemale:
+
+                       case GEDCOMSex.svFemale:
                         this.Wife.Value = spouse;
                         break;
                 }
@@ -370,7 +369,7 @@ namespace GKCommon.GEDCOM
 			}
 		}
 
-		public void aux_RemoveSpouse(GEDCOMIndividualRecord spouse)
+		public void RemoveSpouse(GEDCOMIndividualRecord spouse)
 		{
 		    if (spouse == null) return;
 
@@ -388,7 +387,7 @@ namespace GKCommon.GEDCOM
             }
 		}
 
-		public bool aux_AddChild(GEDCOMIndividualRecord child)
+		public bool AddChild(GEDCOMIndividualRecord child)
 		{
             if (child == null) return false;
 
@@ -398,20 +397,22 @@ namespace GKCommon.GEDCOM
 				GEDCOMPointer ptr = new GEDCOMPointer(this.Owner, this, "", "");
 				ptr.SetNamedValue("CHIL", child);
 				this.Childrens.Add(ptr);
+
 				GEDCOMChildToFamilyLink chLink = new GEDCOMChildToFamilyLink(this.Owner, child, "", "");
 				chLink.Family = this;
 				child.ChildToFamilyLinks.Add(chLink);
+
 				result = true;
 			}
 			catch (Exception ex)
 			{
-                SysUtils.LogWrite("GEDCOMFamilyRecord.AddFamilyChild(): " + ex.Message);
+                SysUtils.LogWrite("GEDCOMFamilyRecord.AddChild(): " + ex.Message);
 				result = false;
 			}
 			return result;
 		}
 
-		public bool aux_RemoveChild(GEDCOMIndividualRecord child)
+		public bool RemoveChild(GEDCOMIndividualRecord child)
 		{
 		    if (child == null) return false;
             bool result;
@@ -424,7 +425,7 @@ namespace GKCommon.GEDCOM
 			}
 			catch (Exception ex)
 			{
-                SysUtils.LogWrite("GEDCOMFamilyRecord.RemoveFamilyChild(): " + ex.Message);
+                SysUtils.LogWrite("GEDCOMFamilyRecord.RemoveChild(): " + ex.Message);
                 result = false;
 			}
 			return result;

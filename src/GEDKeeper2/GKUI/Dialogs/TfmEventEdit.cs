@@ -173,7 +173,8 @@ namespace GKUI.Dialogs
 
 			if (this.fEvent is GEDCOMFamilyEvent)
 			{
-				for (int i = 0; i <= GKData.FamilyEvents.Length - 1; i++)
+				int num = GKData.FamilyEvents.Length;
+				for (int i = 0; i < num; i++)
 				{
 					this.EditEventType.Items.Add(LangMan.LS(GKData.FamilyEvents[i].Name));
 				}
@@ -184,7 +185,8 @@ namespace GKUI.Dialogs
 			}
 			else
 			{
-				for (int i = 0; i <= GKData.PersonEvents.Length - 1; i++)
+				int num = GKData.PersonEvents.Length;
+				for (int i = 0; i < num; i++)
 				{
 					this.EditEventType.Items.Add(LangMan.LS(GKData.PersonEvents[i].Name));
 				}
@@ -454,7 +456,8 @@ namespace GKUI.Dialogs
 			this.InitializeComponent();
 			this.fBase = aBase;
 
-			for (int i = 0; i <= GKData.DateKinds.Length - 1; i++)
+			int num = GKData.DateKinds.Length;
+			for (int i = 0; i < num; i++)
 			{
 				this.EditEventDateType.Items.Add(LangMan.LS(GKData.DateKinds[i].Name));
 			}

@@ -7,6 +7,7 @@ namespace GKCore.Interfaces
     {
 		ILangMan CreateLangMan(object sender);
     	IBase GetCurrentFile(bool extMode = false);
+    	IWorkWindow GetWorkWindow();
 
     	void BaseChanged(IBase aBase);
     	void BaseClosed(IBase aBase);

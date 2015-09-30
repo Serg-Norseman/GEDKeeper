@@ -43,10 +43,10 @@ namespace GKUI
 				if (!fTipShow) {
 					string xref = resNode.Sign;
 					//GEDCOMIndividualRecord iRec = this.fBase.Tree.XRefIndex_Find(xref) as GEDCOMIndividualRecord;
-					//string txt = iRec.aux_GetNameStr(true, false) + " [" + xref + "]";
+					//string txt = iRec.GetNameString(true, false) + " [" + xref + "]";
 
 					GEDCOMFamilyRecord famRec = this.fBase.Tree.XRefIndex_Find(xref) as GEDCOMFamilyRecord;
-					string txt = GKUtils.aux_GetFamilyStr(famRec) + " [" + xref + "]";
+					string txt = GKUtils.GetFamilyString(famRec) + " [" + xref + "]";
 
 					fTip.Show(txt, arborViewer1, new Point(e.X + 24, e.Y));
 					fTipShow = true;
@@ -58,9 +58,9 @@ namespace GKUI
 		{
 			foreach (IVertex vtx in graph.Vertices) {
 				ArborNode arbNode = sys.addNode(vtx.Sign);
-				PatriarchsGraphNode pgNode = (PatriarchsGraphNode)vtx.Value;
+				PGNode pgNode = (PGNode)vtx.Value;
 
-				arbNode.Color = (pgNode.Type == NodeType.ntIntersection) ? Color.BlueViolet : Color.Navy;
+				arbNode.Color = (pgNode.Type == PGNodeType.ntIntersection) ? Color.BlueViolet : Color.Navy;
 			}
 
 			foreach (IEdge edge in graph.Edges) {

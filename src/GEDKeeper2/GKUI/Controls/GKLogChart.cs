@@ -41,8 +41,9 @@ namespace GKUI.Controls
 
 		protected override void Dispose(bool disposing)
 		{
-			if (disposing)
-			{
+			if (disposing) {
+                FRAG_BRUSH.Dispose();
+                EMPTY_BRUSH.Dispose();
 			}
 			base.Dispose(disposing);
 		}

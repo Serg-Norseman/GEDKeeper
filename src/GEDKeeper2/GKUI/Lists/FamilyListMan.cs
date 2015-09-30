@@ -11,7 +11,7 @@ using GKCore.Types;
 
 namespace GKUI.Lists
 {
-	public enum FamilyColumnType : byte
+	public enum FamilyColumnType
 	{
 		fctFamilyStr,
 		fctMarriageDate,		
@@ -39,7 +39,7 @@ namespace GKUI.Lists
 
 		public override bool CheckFilter(ShieldState aShieldState)
 		{
-			bool res = ((this.fRec.Restriction != GEDCOMRestriction.rnPrivacy || aShieldState == ShieldState.ssNone) && (this.QuickFilter == "*" || IsMatchesMask(GKUtils.aux_GetFamilyStr(this.fRec), this.QuickFilter)));
+			bool res = ((this.fRec.Restriction != GEDCOMRestriction.rnPrivacy || aShieldState == ShieldState.ssNone) && (this.QuickFilter == "*" || IsMatchesMask(GKUtils.GetFamilyString(this.fRec), this.QuickFilter)));
 
 			res = res && base.CheckNewFilter();
 
@@ -55,7 +55,7 @@ namespace GKUI.Lists
 		{
 			switch (colType) {
 				case 0:
-					return GKUtils.aux_GetFamilyStr(this.fRec);
+					return GKUtils.GetFamilyString(this.fRec);
 				case 1:
 					return GKUtils.GetMarriageDate(this.fRec, TfmGEDKeeper.Instance.Options.DefDateFormat);
 				case 2:

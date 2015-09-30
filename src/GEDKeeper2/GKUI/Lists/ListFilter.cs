@@ -5,11 +5,11 @@ namespace GKUI.Lists
 {
     public class ListFilter : IListFilter
     {
-        public List<TFilterCondition> ColumnsFilter { get; private set; }
+        public List<FilterCondition> ColumnsFilter { get; private set; }
 		
         public ListFilter()
         {
-            this.ColumnsFilter = new List<TFilterCondition>();
+            this.ColumnsFilter = new List<FilterCondition>();
         }
 		
         public virtual void Clear()

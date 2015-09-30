@@ -53,18 +53,14 @@ namespace GKCommon.Graph
 
 		#region Properties
 
-		IEnumerable<IVertex> IGraph.Vertices
+		public IEnumerable<IVertex> Vertices
 		{
-			get {
-				return this.fVerticesList;
-			}
+			get { return this.fVerticesList; }
 		}
 
-		IEnumerable<IEdge> IGraph.Edges
+		public IEnumerable<IEdge> Edges
 		{
-			get {
-				return this.fEdgesList;
-			}
+			get { return this.fEdgesList; }
 		}
 
 		#endregion
@@ -237,16 +233,17 @@ namespace GKCommon.Graph
 			}
 		}
 
-		public IEnumerable<IEdge> GetPath(IVertex target)
+		public List<IEdge> GetPath(IVertex target)
 		{
 			List<IEdge> result = new List<IEdge>();
-			if (target == null) return result;
 
-			IEdge edge = target.EdgeIn;
-			while (edge != null)
-			{
-				result.Insert(0, edge);
-				edge = edge.Source.EdgeIn;
+			if (target != null) {
+				IEdge edge = target.EdgeIn;
+				while (edge != null)
+				{
+					result.Insert(0, edge);
+					edge = edge.Source.EdgeIn;
+				}
 			}
 
 			return result;

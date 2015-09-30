@@ -15,10 +15,16 @@ namespace GKUI.Lists
     /// </summary>
     public abstract class ListManager : BaseObject, IListManager
 	{
-		protected struct TColMapRec
+		protected sealed class TColMapRec
 		{
 			public byte ColType;
 			public byte ColSubtype;
+			
+			public TColMapRec(byte colType, byte colSubtype)
+			{
+				this.ColType = colType;
+				this.ColSubtype = colSubtype;
+			}
 		}
 
 		protected ListFilter fFilter;
@@ -64,14 +70,14 @@ namespace GKUI.Lists
             base.Dispose(disposing);
         }
 
-		protected void AddListColumn(GKListView list, string caption, int width, bool autoSize, byte colType, byte colSubType)
+		protected void AddListColumn(GKListView list, string caption, int width, bool autoSize, byte colType, byte colSubtype)
 		{
-			list.AddListColumn(caption, width, autoSize);
+            if (list == null) {
+                throw new ArgumentNullException("list");
+            }
 
-			TColMapRec cr = new TColMapRec();
-			cr.ColType = colType;
-			cr.ColSubtype = colSubType;
-			fColumnsMap.Add(cr);
+            list.AddListColumn(caption, width, autoSize);
+			this.fColumnsMap.Add(new TColMapRec(colType, colSubtype));
 		}
 
 		protected void ColumnsMap_Clear()
@@ -93,8 +99,8 @@ namespace GKUI.Lists
 				string stx = str.ToLower();
 				string[] masks = mask.ToLower().Split(new char[] { '|' });
 
-				int num = masks.Length - 1;
-				for (int i = 0; i <= num; i++)
+				int num = masks.Length;
+				for (int i = 0; i < num; i++)
 				{
 					result = (result || GKUtils.MatchesMask(stx, masks[i]));
 				}
@@ -126,12 +132,13 @@ namespace GKUI.Lists
 		{
 			if (item == null) return;
 
-			for (int i = 1; i < fColumnsMap.Count; i++)
+			int num = this.fColumnsMap.Count;
+			for (int i = 1; i < num; i++)
 			{
 				TColMapRec colrec = this.fColumnsMap[i];
 
 				// aColIndex - from 1
-				TColumnStatic cs = this.fListColumns.ColumnStatics[colrec.ColType];
+				ColumnStatic cs = this.fListColumns.ColumnStatics[colrec.ColType];
 				object val = GetColumnValueEx(colrec.ColType, colrec.ColSubtype);
 				string res = ConvertColumnValue(val, cs);
 
@@ -146,13 +153,13 @@ namespace GKUI.Lists
 			this.ColumnsMap_Clear();
 			this.AddListColumn(listView, "¹", 50, false, 0, 0);
 
-			for (int i = 0; i < this.fListColumns.ColumnStatics.Count; i++) {
-				TColumnStatic cs = this.fListColumns.ColumnStatics[i];
+			int num = this.fListColumns.ColumnStatics.Count;
+			for (int i = 0; i < num; i++) {
+				ColumnStatic cs = this.fListColumns.ColumnStatics[i];
+
 				this.AddListColumn(listView, LangMan.LS(cs.colName), cs.width, false, (byte)i, 0);
 			}
 		}
-
-		//
 
 		public string GetColumnName(Enum colType)
 		{
@@ -183,7 +190,7 @@ namespace GKUI.Lists
 		/// </summary>
 		public abstract Type GetColumnsEnum();
 
-		private static string ConvertColumnValue(object val, TColumnStatic cs)
+		private static string ConvertColumnValue(object val, ColumnStatic cs)
 		{
 			switch (cs.dataType) {
 				case TDataType.dtString:
@@ -223,11 +230,11 @@ namespace GKUI.Lists
 			return val;
 		}
 
-		public void AddCondition(Enum column, TConditionKind condition, string value)
+		public void AddCondition(Enum column, ConditionKind condition, string value)
 		{
 			int col = (column as IConvertible).ToByte(null);
 
-			TFilterCondition fltCond = new TFilterCondition();
+			FilterCondition fltCond = new FilterCondition();
 			fltCond.column = column;
 			fltCond.col_index = col;
 			fltCond.condition = condition;
@@ -235,7 +242,7 @@ namespace GKUI.Lists
 			this.Filter.ColumnsFilter.Add(fltCond);
 		}
 
-		private bool CheckCondition(TFilterCondition fcond)
+		private bool CheckCondition(FilterCondition fcond)
 		{
 			object dataval = this.GetColumnValueEx(fcond.col_index, -1);
 		    if (dataval == null) return true;
@@ -243,33 +250,33 @@ namespace GKUI.Lists
             bool res = true;
 
             int compRes = 0;
-			if (fcond.condition != TConditionKind.ck_Contains) {
+			if (fcond.condition != ConditionKind.ck_Contains) {
 				compRes = (dataval as IComparable).CompareTo(fcond.value);
 			}
 
 			switch (fcond.condition) {
-				case TConditionKind.ck_NotEq:
+				case ConditionKind.ck_NotEq:
 					res = compRes != 0;
 					break;
-				case TConditionKind.ck_LT:
+				case ConditionKind.ck_LT:
 					res = compRes < 0;
 					break;
-				case TConditionKind.ck_LET:
+				case ConditionKind.ck_LET:
 					res = compRes <= 0;
 					break;
-				case TConditionKind.ck_Eq:
+				case ConditionKind.ck_Eq:
 					res = compRes == 0;
 					break;
-				case TConditionKind.ck_GET:
+				case ConditionKind.ck_GET:
 					res = compRes >= 0;
 					break;
-				case TConditionKind.ck_GT:
+				case ConditionKind.ck_GT:
 					res = compRes > 0;
 					break;
-				case TConditionKind.ck_Contains:
+				case ConditionKind.ck_Contains:
 					res = GKUtils.MatchesMask(dataval.ToString(), "*" + fcond.value.ToString() + "*");
 					break;
-				case TConditionKind.ck_NotContains:
+				case ConditionKind.ck_NotContains:
 					res = !GKUtils.MatchesMask(dataval.ToString(), "*" + fcond.value.ToString() + "*");
 					break;
 			}
@@ -280,13 +287,10 @@ namespace GKUI.Lists
 		{
 			bool res = true;
 
-			if (this.Filter.ColumnsFilter.Count > 0)
-			{
-			    int num = this.Filter.ColumnsFilter.Count;
-				for (int i = 0; i < num; i++) {
-					TFilterCondition fcond = this.Filter.ColumnsFilter[i];
-					res = res && this.CheckCondition(fcond);
-				}
+			int num = this.Filter.ColumnsFilter.Count;
+			for (int i = 0; i < num; i++) {
+				FilterCondition fcond = this.Filter.ColumnsFilter[i];
+				res = res && this.CheckCondition(fcond);
 			}
 
 			return res;

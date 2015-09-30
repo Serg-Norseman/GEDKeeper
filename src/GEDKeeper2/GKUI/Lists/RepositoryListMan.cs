@@ -10,7 +10,7 @@ using GKCore.Types;
 
 namespace GKUI.Lists
 {
-	public enum RepositoryColumnType : byte
+	public enum RepositoryColumnType
 	{
 		rctName,		
 		rctChangeDate

@@ -13,23 +13,23 @@ namespace GKCore.Interfaces
 		dtDateTime
 	}
 
-	public enum TConditionKind
+	public enum ConditionKind
 	{
 		ck_NotEq, ck_LT, ck_LET, ck_Eq, ck_GET, ck_GT, ck_Contains, ck_NotContains
 	}
 
-	public struct TFilterCondition
+	// TODO: refactoring!
+	public sealed class FilterCondition
 	{
 		public int col_index;
-
 		public Enum column;
-		public TConditionKind condition;
+		public ConditionKind condition;
 		public object value;
 	}
 
 	public interface IListFilter
 	{
-		List<TFilterCondition> ColumnsFilter { get; }
+		List<FilterCondition> ColumnsFilter { get; }
 		void Clear();
 	}
 	

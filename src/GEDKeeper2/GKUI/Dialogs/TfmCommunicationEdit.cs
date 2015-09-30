@@ -56,7 +56,7 @@ namespace GKUI.Dialogs
 					if (this.fTempInd != null)
 					{
 						this.EditDir.SelectedIndex = (int)dir;
-						this.EditCorresponder.Text = this.fTempInd.aux_GetNameStr(true, false);
+						this.EditCorresponder.Text = this.fTempInd.GetNameString(true, false);
 					}
 					else
 					{
@@ -95,7 +95,7 @@ namespace GKUI.Dialogs
 		private void btnPersonAdd_Click(object sender, EventArgs e)
 		{
 			this.fTempInd = this.fBase.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
-			this.EditCorresponder.Text = ((this.fTempInd == null) ? "" : this.fTempInd.aux_GetNameStr(true, false));
+			this.EditCorresponder.Text = ((this.fTempInd == null) ? "" : this.fTempInd.GetNameString(true, false));
 		}
 
 		public TfmCommunicationEdit(IBase aBase)

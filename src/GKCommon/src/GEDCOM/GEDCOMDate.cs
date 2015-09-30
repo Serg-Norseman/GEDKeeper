@@ -539,17 +539,17 @@ namespace GKCommon.GEDCOM
 			}
 		}
 
-		public void GetDate(out int AYear, out ushort AMonth, out ushort ADay)
+		public void GetDate(out int year, out ushort month, out ushort day)
 		{
-			AYear = this.fYear;
+			year = this.fYear;
 
 			switch (this.fDateCalendar) {
 				case GEDCOMCalendar.dcHebrew:
-					AMonth = GEDCOMMonthHebrewToInt(this.fMonth);
+					month = GEDCOMMonthHebrewToInt(this.fMonth);
 					break;
 					
 				case GEDCOMCalendar.dcFrench:
-					AMonth = GEDCOMMonthFrenchToInt(this.fMonth);
+					month = GEDCOMMonthFrenchToInt(this.fMonth);
 					break;
 				
 				case GEDCOMCalendar.dcGregorian:
@@ -557,11 +557,11 @@ namespace GKCommon.GEDCOM
 				case GEDCOMCalendar.dcRoman:
 				case GEDCOMCalendar.dcUnknown:
 				default:
-					AMonth = GEDCOMMonthToInt(this.fMonth);
+					month = GEDCOMMonthToInt(this.fMonth);
 					break;
 			}
 
-			ADay = this.fDay;
+			day = this.fDay;
 		}
 
 		public void SetGregorian(ushort ADay, ushort AMonth, ushort AYear)

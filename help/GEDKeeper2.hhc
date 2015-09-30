@@ -21,6 +21,10 @@
 			<param name="Local" value="gkhWorkBeginning.htm">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="&Icirc;&iuml;&aring;&eth;&agrave;&ouml;&egrave;&egrave;">
+			<param name="Local" value="gkhWorkOperations.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="&Iacute;&agrave;&acirc;&egrave;&atilde;&agrave;&ouml;&egrave;&yuml;">
 			<param name="Local" value="gkhWorkNavigation.htm">
 			</OBJECT>
@@ -76,6 +80,10 @@
 		<param name="Name" value="&Dstrok;&agrave;&ntilde;&oslash;&egrave;&eth;&aring;&iacute;&iacute;&ucirc;&aring; &acirc;&icirc;&ccedil;&igrave;&icirc;&aelig;&iacute;&icirc;&ntilde;&ograve;&egrave;">
 		</OBJECT>
 	<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="&Ntilde;&ecirc;&eth;&egrave;&iuml;&ograve;&ucirc;">
+			<param name="Local" value="gkhScripts.htm">
+			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="&Iuml;&euml;&agrave;&atilde;&egrave;&iacute;&ucirc;">
 			<param name="Local" value="gkhPlugins.htm">
@@ -171,6 +179,10 @@
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="&Agrave;&acirc;&ograve;&icirc;&eth;&ucirc;">
 		<param name="Local" value="gkhAuthors.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="&Egrave;&ntilde;&ograve;&icirc;&eth;&egrave;&yuml; &acirc;&aring;&eth;&ntilde;&egrave;&eacute;">
+		<param name="Local" value="gkhHistory.htm">
 		</OBJECT>
 </UL>
 </BODY></HTML>

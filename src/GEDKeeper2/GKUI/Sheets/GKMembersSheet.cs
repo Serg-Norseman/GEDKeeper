@@ -42,7 +42,7 @@ namespace GKUI.Sheets
                     GEDCOMPointer ptrMember = this.DataList.Current as GEDCOMPointer;
 
                     GEDCOMIndividualRecord member = ptrMember.Value as GEDCOMIndividualRecord;
-                    this.List.AddItem(member.aux_GetNameStr(true, false), member);
+                    this.List.AddItem(member.GetNameString(true, false), member);
                 }
             }
             catch (Exception ex)
@@ -67,11 +67,11 @@ namespace GKUI.Sheets
             {
                 case RecordAction.raAdd:
                     member = aBase.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
-                    result = (member != null && groupRecord.aux_AddMember(member));
+                    result = (member != null && groupRecord.AddMember(member));
                     break;
 
                 case RecordAction.raDelete:
-                    result = (member != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachMemberQuery)) != DialogResult.No && groupRecord.aux_RemoveMember(member));
+                    result = (member != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachMemberQuery)) != DialogResult.No && groupRecord.RemoveMember(member));
                     break;
             }
 

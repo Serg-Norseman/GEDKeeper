@@ -1,4 +1,4 @@
-﻿
+﻿using System;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
@@ -38,11 +38,12 @@ namespace GKCore
 
 		#region Data search
 
-		public GEDCOMSourceRecord aux_FindSource(string sourceName)
+		public GEDCOMSourceRecord FindSource(string sourceName)
 		{
 			GEDCOMSourceRecord result = null;
-			int num = this.fTree.RecordsCount - 1;
-			for (int i = 0; i <= num; i++)
+
+			int num = this.fTree.RecordsCount;
+			for (int i = 0; i < num; i++)
 			{
 				GEDCOMRecord rec = this.fTree[i];
 
@@ -52,21 +53,23 @@ namespace GKCore
 					break;
 				}
 			}
+
 			return result;
 		}
 
-		public void aux_GetSourcesList(StringList aSources)
+		public void GetSourcesList(StringList sources)
 		{
-            if (aSources != null)
+            if (sources != null)
 			{
-				aSources.Clear();
-				int num = this.fTree.RecordsCount - 1;
-				for (int i = 0; i <= num; i++)
+				sources.Clear();
+
+				int num = this.fTree.RecordsCount;
+				for (int i = 0; i < num; i++)
 				{
 					GEDCOMRecord rec = this.fTree[i];
 					if (rec is GEDCOMSourceRecord)
 					{
-						aSources.AddObject((rec as GEDCOMSourceRecord).FiledByEntry, rec);
+						sources.AddObject((rec as GEDCOMSourceRecord).FiledByEntry, rec);
 					}
 				}
 			}
@@ -121,7 +124,7 @@ namespace GKCore
 
 		public GEDCOMIndividualRecord CreatePersonEx(string iName, string iPatronymic, string iSurname, GEDCOMSex iSex, bool birthEvent)
 		{
-			GEDCOMIndividualRecord iRec = this.fTree.aux_CreateIndividual(iName, iPatronymic, iSurname, iSex);
+			GEDCOMIndividualRecord iRec = this.fTree.CreateIndividual(iName, iPatronymic, iSurname, iSex);
 			if (birthEvent) this.CreateEventEx(iRec, "BIRT", "", "");
 			return iRec;
 		}
@@ -144,13 +147,13 @@ namespace GKCore
 					return year;
 				}
 
-				int num = iRec.SpouseToFamilyLinks.Count - 1;
-				for (int i = 0; i <= num; i++)
+				int num = iRec.SpouseToFamilyLinks.Count;
+				for (int i = 0; i < num; i++)
 				{
 					GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
 
-					int num2 = family.Childrens.Count - 1;
-					for (int j = 0; j <= num2; j++)
+					int num2 = family.Childrens.Count;
+					for (int j = 0; j < num2; j++)
 					{
 						GEDCOMIndividualRecord child = family.Childrens[j].Value as GEDCOMIndividualRecord;
 						year = FindBirthYear(child);
@@ -173,15 +176,16 @@ namespace GKCore
 				}
 
 				int max = 0;
-				int num = iRec.SpouseToFamilyLinks.Count - 1;
-				for (int i = 0; i <= num; i++)
+				int num = iRec.SpouseToFamilyLinks.Count;
+				for (int i = 0; i < num; i++)
 				{
 					GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
 
-					int num2 = family.Childrens.Count - 1;
-					for (int j = 0; j <= num2; j++)
+					int num2 = family.Childrens.Count;
+					for (int j = 0; j < num2; j++)
 					{
 						GEDCOMIndividualRecord child = family.Childrens[j].Value as GEDCOMIndividualRecord;
+
 						int y = FindBirthYear(child);
 						if (y > 0) {
 							if (max < y) max = y;
@@ -208,7 +212,11 @@ namespace GKCore
 
 		public void GetPatriarchsList(ExtList<PatriarchObj> patList, int gensMin, bool datesCheck)
 		{
-			GEDCOMTree tree = this.fTree;
+            if (patList == null) {
+                throw new ArgumentNullException("patList");
+            }
+
+            GEDCOMTree tree = this.fTree;
 			IProgressController pctl = this.fViewer as IProgressController;
 			
 			pctl.ProgressInit(LangMan.LS(LSID.LSID_PatSearch), tree.RecordsCount);
@@ -262,6 +270,10 @@ namespace GKCore
 
 		public void GetPatriarchsLinks(ExtList<PatriarchObj> patList, int gensMin, bool datesCheck, bool loneSuppress)
 		{
+            if (patList == null) {
+                throw new ArgumentNullException("patList");
+            }
+
 			GetPatriarchsList(patList, gensMin, datesCheck);
 
 			IProgressController pctl = this.fViewer as IProgressController;
@@ -269,12 +281,12 @@ namespace GKCore
 			pctl.ProgressInit(LangMan.LS(LSID.LSID_LinksSearch), patList.Count);
 			try
 			{
-				int num2 = patList.Count - 1;
-				for (int i = 0; i <= num2; i++)
+				int num2 = patList.Count;
+				for (int i = 0; i < num2; i++)
 				{
 					PatriarchObj patr = patList[i] as PatriarchObj;
 
-					for (int j = i + 1; j <= num2; j++)
+					for (int j = i + 1; j < num2; j++)
 					{
 						PatriarchObj patr2 = patList[j] as PatriarchObj;
 
@@ -312,14 +324,14 @@ namespace GKCore
 			}
 		}
 
-		private static void PL_WalkDescLinks(TGraph graph, PatriarchsGraphNode prevNode, GEDCOMIndividualRecord ancestor)
+		private static void PL_WalkDescLinks(TGraph graph, PGNode prevNode, GEDCOMIndividualRecord ancestor)
 		{
 			for (int i = 0, count = ancestor.SpouseToFamilyLinks.Count; i < count; i++)
 			{
 				GEDCOMFamilyRecord family = ancestor.SpouseToFamilyLinks[i].Family;
-				PatriarchsGraphNode node = family.ExtData as PatriarchsGraphNode;
+				PGNode node = family.ExtData as PGNode;
 
-				if (node != null && node.Type != NodeType.ntDefault) {
+				if (node != null && node.Type != PGNodeType.ntDefault) {
 					IVertex vtx = graph.FindVertex(node.FamilyXRef);
 					if (vtx == null) {
 						vtx = graph.AddVertex(node.FamilyXRef, node);
@@ -355,25 +367,27 @@ namespace GKCore
 				TreeStats.InitExtData(tree);
 
 				// prepare
-				for (int i = 0, count = patList.Count; i < count; i++) {
+				int count = patList.Count;
+				for (int i = 0; i < count; i++) {
 					PatriarchObj patNode = patList[i] as PatriarchObj;
 					GEDCOMIndividualRecord iRec = patNode.IRec;
 
-					for (int k = 0, count2 = iRec.SpouseToFamilyLinks.Count; k < count2; k++) {
+					int count2 = iRec.SpouseToFamilyLinks.Count;
+					for (int k = 0; k < count2; k++) {
 						GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[k].Family;
-						family.ExtData = new PatriarchsGraphNode(family.XRef, NodeType.ntPatriarch);
+						family.ExtData = new PGNode(family.XRef, PGNodeType.ntPatriarch);
 					}
 				}
 
 				pctl.ProgressInit(LangMan.LS(LSID.LSID_LinksSearch), patList.Count);
 				try
 				{
-					int num2 = patList.Count - 1;
-					for (int i = 0; i <= num2; i++)
+					int num2 = patList.Count;
+					for (int i = 0; i < num2; i++)
 					{
 						PatriarchObj patr = patList[i] as PatriarchObj;
 
-						for (int j = i + 1; j <= num2; j++)
+						for (int j = i + 1; j < num2; j++)
 						{
 							PatriarchObj patr2 = patList[j] as PatriarchObj;
 
@@ -381,12 +395,12 @@ namespace GKCore
 
 							if (cross != null)
 							{
-								PatriarchsGraphNode node = cross.ExtData as PatriarchsGraphNode;
+								PGNode node = cross.ExtData as PGNode;
 
-								if (node != null && node.Type == NodeType.ntPatriarch) {
+								if (node != null && node.Type == PGNodeType.ntPatriarch) {
 									// dummy
 								} else {
-									cross.ExtData = new PatriarchsGraphNode(cross.XRef, NodeType.ntIntersection);
+									cross.ExtData = new PGNode(cross.XRef, PGNodeType.ntIntersection);
 								}
 							}
 						}
@@ -400,7 +414,8 @@ namespace GKCore
 				}
 
 				// create graph
-				for (int i = 0, count = patList.Count; i < count; i++) {
+				int count3 = patList.Count;
+				for (int i = 0; i < count3; i++) {
 					PatriarchObj patNode = patList[i] as PatriarchObj;
 					PL_WalkDescLinks(graph, null, patNode.IRec);
 				}
@@ -419,6 +434,11 @@ namespace GKCore
 			return graph;
 		}
 		
+		#endregion
+		
+		#region Media support
+
+
 		#endregion
 	}
 }

@@ -1,5 +1,4 @@
 using System.IO;
-using ExtUtils;
 using GKCommon.GEDCOM.Enums;
 
 namespace GKCommon.GEDCOM
@@ -167,6 +166,7 @@ namespace GKCommon.GEDCOM
 			this.fRepositoryCitations.SaveToStream(stream);
 		}
 
+
 		public void SetOriginatorArray(params string[] value)
 		{
 			base.SetTagStrings(base.TagClass("AUTH", GEDCOMTag.Create), value);
@@ -186,6 +186,7 @@ namespace GKCommon.GEDCOM
 		{
 			base.SetTagStrings(base.TagClass("TEXT", GEDCOMTag.Create), value);
 		}
+
 
 		public GEDCOMSourceRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
@@ -211,13 +212,13 @@ namespace GKCommon.GEDCOM
 
         #region Auxiliary
 
-		public GEDCOMRepositoryCitation aux_AddRepository(GEDCOMRepositoryRecord aRepRec)
+		public GEDCOMRepositoryCitation AddRepository(GEDCOMRepositoryRecord repRec)
 		{
 			GEDCOMRepositoryCitation cit = null;
 			
-			if (aRepRec != null) {
+			if (repRec != null) {
 				cit = new GEDCOMRepositoryCitation(this.Owner, this, "", "");
-				cit.Value = aRepRec;
+				cit.Value = repRec;
 				this.RepositoryCitations.Add(cit);
 			}
 			

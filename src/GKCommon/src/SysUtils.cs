@@ -114,7 +114,7 @@ namespace GKCommon
 		public static void LogView()
 		{
 			if (File.Exists(LogFilename)) {
-                Win32Native.ShellExecute(IntPtr.Zero, "open", LogFilename, "", "", Win32Native.ShowCommands.SW_SHOW);
+                NativeMethods.ShellExecute(IntPtr.Zero, "open", LogFilename, "", "", NativeMethods.ShowCommands.SW_SHOW);
 			}
 		}
 
@@ -155,88 +155,69 @@ namespace GKCommon
 
         public static ushort GetKeyLayout()
         {
-            return unchecked((ushort)Win32Native.GetKeyboardLayout(0u));
+            return unchecked((ushort)NativeMethods.GetKeyboardLayout(0u));
         }
 
         public static void SetKeyLayout(ushort aLayout)
         {
-            Win32Native.ActivateKeyboardLayout((uint)aLayout, 0u);
+            NativeMethods.ActivateKeyboardLayout((uint)aLayout, 0u);
         }
 
         public static void LoadExtFile(string fileName)
         {
-            Win32Native.ShellExecute(IntPtr.Zero, "open", fileName, "", "", Win32Native.ShowCommands.SW_SHOW);
+            NativeMethods.ShellExecute(IntPtr.Zero, "open", fileName, "", "", NativeMethods.ShowCommands.SW_SHOW);
         }
 
         public static bool IsConnectedToInternet()  
         {  
             int iDesc;
-            return Win32Native.InternetGetConnectedState(out iDesc, 0);
+            return NativeMethods.InternetGetConnectedState(out iDesc, 0);
         }
 
-        public static int DoScroll(IntPtr handle, uint wParam, int nBar, int aOldPos, int aMin, int aMax, int sm_piece, int big_piece)
+        public static int DoScroll(IntPtr handle, uint wParam, int nBar, int oldPos, int min, int max, int smallPiece, int bigPiece)
 		{
 			ScrollEventType scrType = SysUtils.GetScrollEventType(wParam & 65535u);
-			
-			int newPos = aOldPos;
+			int newPos = oldPos;
 
 			switch (scrType) {
 				case ScrollEventType.SmallDecrement:
-				{
-					newPos -= sm_piece;
+					newPos -= smallPiece;
 					break;
-				}
 
 				case ScrollEventType.SmallIncrement:
-				{
-					newPos += sm_piece;
+					newPos += smallPiece;
 					break;
-				}
 
 				case ScrollEventType.LargeDecrement:
-				{
-					newPos -= big_piece;
+					newPos -= bigPiece;
 					break;
-				}
 
 				case ScrollEventType.LargeIncrement:
-				{
-					newPos += big_piece;
+					newPos += bigPiece;
 					break;
-				}
 
 				case ScrollEventType.ThumbPosition:
 				case ScrollEventType.ThumbTrack:
 				{
-					Win32Native.TScrollInfo ScrollInfo = new Win32Native.TScrollInfo();
-					ScrollInfo.cbSize = (uint)Marshal.SizeOf( ScrollInfo );
-					ScrollInfo.fMask = 23u;
-                    Win32Native.GetScrollInfo(handle, nBar, ref ScrollInfo);
-					newPos = ScrollInfo.nTrackPos;
+					NativeMethods.ScrollInfo scrollInfo = new NativeMethods.ScrollInfo();
+					scrollInfo.cbSize = (uint)Marshal.SizeOf( scrollInfo );
+					scrollInfo.fMask = 23u;
+                    NativeMethods.GetScrollInfo(handle, nBar, ref scrollInfo);
+					newPos = scrollInfo.nTrackPos;
 					break;
 				}
 
 				case ScrollEventType.First:
-				{
 					newPos = 0;
 					break;
-				}
 
 				case ScrollEventType.Last:
-				{
-					newPos = aMax;
+					newPos = max;
 					break;
-				}
 			}
 
-			if (newPos < aMin)
-			{
-				newPos = aMin;
-			}
-			if (newPos > aMax)
-			{
-				newPos = aMax;
-			}
+			if (newPos < min) newPos = min;
+			if (newPos > max) newPos = max;
 
 			return newPos;
 		}

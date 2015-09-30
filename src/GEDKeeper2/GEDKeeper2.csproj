@@ -129,7 +129,9 @@
     <Compile Include="GKUI\Charts\PersonControl.cs" />
     <Compile Include="GKUI\Charts\PersonModifyEventArgs.cs" />
     <Compile Include="GKUI\Charts\ScaleControl.cs" />
-    <Compile Include="GKUI\Charts\SearchPanel.cs" />
+    <Compile Include="GKUI\Charts\SearchPanel.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Charts\TreeChartPerson.cs" />
     <Compile Include="GKUI\Charts\TreeSearchStrategy.cs" />
     <Compile Include="GKUI\Controls\GKLogChart.cs">

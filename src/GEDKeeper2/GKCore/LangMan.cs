@@ -683,13 +683,15 @@ namespace GKCore
 		/* 623 */ LSID_FindPrevious,
 		/* 624 */ LSID_FindNext,
 		/* 625 */ LSID_CertaintyIndex,
+		/* 626 */ LSID_BirthByMonth,
+		/* 627 */ LSID_Month,
 
-		/* 000 */ LSID_Last = LSID_CertaintyIndex
+		/* 000 */ LSID_Last = LSID_Month
 	}
 
 	public static class LangMan
 	{
-		public static int LSDefCode = 1049;
+		public const int LSDefCode = 1049;
 
 		private static readonly string[] LSDefList = new string[]
 		{
@@ -1343,7 +1345,9 @@ namespace GKCore
 			/* 622 */ "Не найдено соответствий",
 			/* 623 */ "Найти предыдущее",
 			/* 624 */ "Найти следующее",
-			/* 625 */ "Индекс достоверности"
+			/* 625 */ "Индекс достоверности",
+			/* 626 */ "Месяца рождений",
+			/* 627 */ "Месяц"
 		};
 
 		private static string[] LSList = new string[(int)LSID.LSID_Last + 1];

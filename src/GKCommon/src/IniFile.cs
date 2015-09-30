@@ -120,7 +120,7 @@ namespace GKCommon
 		{
 			StringBuilder buffer = new StringBuilder(2048);
 
-		    uint res = Win32Native.GetPrivateProfileString(section, ident, Default, buffer, (uint) buffer.Capacity,
+		    uint res = NativeMethods.GetPrivateProfileString(section, ident, Default, buffer, (uint) buffer.Capacity,
 		                                                   this.FileName);
 
             string result = (res != 0u) ? buffer.ToString() : "";
@@ -129,7 +129,7 @@ namespace GKCommon
 
 		public void WriteString(string section, string ident, string value)
 		{
-            if (Win32Native.WritePrivateProfileString(section, ident, value, this.FileName) == false)
+            if (NativeMethods.WritePrivateProfileString(section, ident, value, this.FileName) == false)
 			{
 				throw new EIniFileException(string.Format("Unable to write to {0}", this.FileName));
 			}
@@ -137,7 +137,7 @@ namespace GKCommon
 
 		public void EraseSection(string section)
 		{
-            if (Win32Native.WritePrivateProfileString(section, IntPtr.Zero, IntPtr.Zero, this.FileName) == false)
+            if (NativeMethods.WritePrivateProfileString(section, IntPtr.Zero, IntPtr.Zero, this.FileName) == false)
 			{
 				throw new EIniFileException(string.Format("Unable to write to {0}", this.FileName));
 			}
@@ -145,12 +145,12 @@ namespace GKCommon
 
 		public void DeleteKey(string section, string ident)
 		{
-            Win32Native.WritePrivateProfileString(section, ident, IntPtr.Zero, this.FileName);
+            NativeMethods.WritePrivateProfileString(section, ident, IntPtr.Zero, this.FileName);
 		}
 
 		public void UpdateFile()
 		{
-            Win32Native.WritePrivateProfileString(IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, this.FileName);
+            NativeMethods.WritePrivateProfileString(IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, this.FileName);
 		}
 	}
 }

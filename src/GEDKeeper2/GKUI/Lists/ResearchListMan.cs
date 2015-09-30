@@ -10,7 +10,7 @@ using GKCore.Types;
 
 namespace GKUI.Lists
 {
-	public enum ResearchColumnType : byte
+	public enum ResearchColumnType
 	{
 		rctName,
 		rctPriority,

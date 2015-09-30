@@ -10,7 +10,7 @@ using GKCore.Types;
 
 namespace GKUI.Lists
 {
-	public enum TaskColumnType : byte
+	public enum TaskColumnType
 	{
 		tctGoal,
 		tctPriority,

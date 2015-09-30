@@ -502,7 +502,7 @@ namespace GKTreeVizPlugin
 
 							TVPerson prs = this.FindPersonByIdx(id);
 							if (prs != null) {
-								SelectedObject = "["+prs.IRec.XRef+"] " + prs.IRec.aux_GetNameStr(true, false)+
+								SelectedObject = "["+prs.IRec.XRef+"] " + prs.IRec.GetNameString(true, false)+
 									", " + prs.BirthYear.ToString() + " - " + prs.DeathYear.ToString();
 							} else {
 								SelectedObject = "<none>";
@@ -592,8 +592,8 @@ namespace GKTreeVizPlugin
         		using (ExtList<PatriarchObj> patList = new ExtList<PatriarchObj>(false)) {
         			aBase.Context.GetPatriarchsLinks(patList, minGens, false, loneSuppress);
 
-        			int num = patList.Count - 1;
-        			for (int i = 0; i <= num; i++) {
+        			int num = patList.Count;
+        			for (int i = 0; i < num; i++) {
         				PatriarchObj p_obj = patList[i] as PatriarchObj;
 
         				if ((!loneSuppress) || (loneSuppress && p_obj.HasLinks)) {
@@ -602,10 +602,11 @@ namespace GKTreeVizPlugin
         				}
         			}
 
-        			for (int i = 0; i <= num; i++) {
+        			for (int i = 0; i < num; i++) {
         				PatriarchObj pat1 = patList[i] as PatriarchObj;
 
-        				for (int k = 0; k < pat1.Links.Count; k++) {
+        				int num2 = pat1.Links.Count;
+        				for (int k = 0; k < num2; k++) {
         					PatriarchObj pat2 = pat1.Links[k];
 
         					fSys.addEdge(pat1.IRec.XRef, pat2.IRec.XRef, 1);
@@ -632,8 +633,10 @@ namespace GKTreeVizPlugin
 			try
 			{
 				// загрузить из ArborSystem точки и сигнатуры патриархов
-				foreach (ArborNode node in fSys.Nodes)
+				int num = fSys.Nodes.Count;
+				for (int i = 0; i < num; i++)
 				{
+					ArborNode node = fSys.Nodes[i];
 					GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)fBase.Tree.XRefIndex_Find(node.Sign);
 					int descGens = (node.Data as PatriarchObj).DescGenerations;
 
@@ -652,7 +655,8 @@ namespace GKTreeVizPlugin
 				}
 
 				// подготовить радиусы основания патриархов
-				for (int i = 0; i <= fSys.Edges.Count - 1; i++) {
+				int num2 = fSys.Edges.Count;
+				for (int i = 0; i < num2; i++) {
 					ArborEdge edge = fSys.Edges[i];
 
 					TVPerson srcPers = this.FindPersonByXRef(edge.Source.Sign);
@@ -698,13 +702,13 @@ namespace GKTreeVizPlugin
 				{
 					PointF[] pts = GetCirclePoints(person.BeautySpouses, person.Pt, iRec.SpouseToFamilyLinks.Count, person.GenSlice / 3);
 
-					int num2 = iRec.SpouseToFamilyLinks.Count - 1;
-					for (int k = 0; k <= num2; k++)
+					int num2 = iRec.SpouseToFamilyLinks.Count;
+					for (int k = 0; k < num2; k++)
 					{
 						GEDCOMFamilyRecord famRec = iRec.SpouseToFamilyLinks[k].Family;
 
 						// обработать супруга текущей персоны
-						GEDCOMIndividualRecord spouse = famRec.aux_GetSpouse(iRec);
+						GEDCOMIndividualRecord spouse = famRec.GetSpouseBy(iRec);
 						if (spouse != null) {
 							TVPerson sps = this.PreparePerson(null, spouse);
 							sps.Pt = pts[k];
@@ -712,13 +716,13 @@ namespace GKTreeVizPlugin
 						}
 
 						// обработать детей текущей семьи
-						int num3 = famRec.Childrens.Count - 1;
-						for (int m = 0; m <= num3; m++)
+						int num3 = famRec.Childrens.Count;
+						for (int m = 0; m < num3; m++)
 						{
 							GEDCOMIndividualRecord child = famRec.Childrens[m].Value as GEDCOMIndividualRecord;
 
 							// исключить бездетные ветви
-							if (EXCLUDE_CHILDLESS && (this.fBase.Context.IsChildless(child) || child.aux_GetChildsCount() < 1)) continue;
+							if (EXCLUDE_CHILDLESS && (this.fBase.Context.IsChildless(child) || child.GetTotalChildsCount() < 1)) continue;
 
 							TVPerson chp = this.PreparePerson(person, child);
 							person.Childs.Add(chp);
@@ -727,8 +731,8 @@ namespace GKTreeVizPlugin
 
 					pts = GetCirclePoints(person.BeautyChilds, person.Pt, person.Childs.Count, person.BaseRadius / 2);
 
-					int num = person.Childs.Count - 1;
-					for (int i = 0; i <= num; i++)
+					int num = person.Childs.Count;
+					for (int i = 0; i < num; i++)
 					{
 						TVPerson chp = person.Childs[i];
 						chp.Pt = pts[i];
@@ -958,8 +962,10 @@ namespace GKTreeVizPlugin
 
 			try
 			{
-				foreach (ArborNode node in fSys.Nodes)
+				int num = fSys.Nodes.Count;
+				for (int i = 0; i < num; i++)
 				{
+					ArborNode node = fSys.Nodes[i];
 					ArborPoint pt = node.Pt;
 
 					GL.glPushMatrix();
@@ -969,7 +975,8 @@ namespace GKTreeVizPlugin
 					GL.glPopMatrix();
 				}
 
-				for (int i = 0; i <= fSys.Edges.Count - 1; i++)
+				int num2 = fSys.Edges.Count;
+				for (int i = 0; i < num2; i++)
 				{
 					ArborEdge edge = fSys.Edges[i];
 					ArborPoint pt1 = edge.Source.Pt;
@@ -998,7 +1005,7 @@ namespace GKTreeVizPlugin
 			if (person.BirthYear < this.fMinYear || person.DeathYear < this.fMinYear) {
 				// персоны, для которых авто-определение дат не дало результата; не отображать
 				return false;
-				//string st = result.IRec.aux_GetNameStr(true, false);
+				//string st = result.IRec.GetNameString(true, false);
 				//Debug.WriteLine(st);
 				//Debug.WriteLine(result.BirthYear.ToString() + " / " + result.DeathYear.ToString());
 			}

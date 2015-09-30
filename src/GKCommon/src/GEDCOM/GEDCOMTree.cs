@@ -2,18 +2,11 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Text;
+
 using GKCommon.GEDCOM.Enums;
 
 namespace GKCommon.GEDCOM
 {
-	public delegate void ProgressEventHandler(object sender, int progress);
-
-	public interface ITreeEnumerator
-	{
-		bool MoveNext(out GEDCOMRecord current);
-		void Reset();
-	}
-
     /// <summary>
     /// 
     /// </summary>
@@ -21,15 +14,14 @@ namespace GKCommon.GEDCOM
 	{
 		#region Tree Enumerator
 
-		private struct TreeEnumerator : ITreeEnumerator
+		private struct TreeEnumerator : IGEDCOMTreeEnumerator
 		{
 			private readonly GEDCOMTree tree;
             private readonly GEDCOMRecordType rec_type;
             private readonly int endIndex;
-
             private int index;
 
-			internal TreeEnumerator(GEDCOMTree tree)
+			public TreeEnumerator(GEDCOMTree tree)
 			{
 				this.tree = tree;
 				this.index = -1;
@@ -37,7 +29,7 @@ namespace GKCommon.GEDCOM
 				this.rec_type = GEDCOMRecordType.rtNone;
 			}
 
-			internal TreeEnumerator(GEDCOMTree tree, GEDCOMRecordType rec_type)
+			public TreeEnumerator(GEDCOMTree tree, GEDCOMRecordType rec_type)
 			{
 				this.tree = tree;
 				this.index = -1;
@@ -104,11 +96,6 @@ namespace GKCommon.GEDCOM
 					this.fOnProgressEvent = null;
 				}
 			}
-		}
-
-		public ITreeEnumerator GetEnumerator(GEDCOMRecordType recType)
-		{
-			return new TreeEnumerator(this, recType);
 		}
 
 		public int RecordsCount
@@ -279,6 +266,11 @@ namespace GKCommon.GEDCOM
 		#endregion
 
 		#region Main functionality
+
+		public IGEDCOMTreeEnumerator GetEnumerator(GEDCOMRecordType recType)
+		{
+			return new TreeEnumerator(this, recType);
+		}
 
 		public GEDCOMRecord AddRecord(GEDCOMRecord record)
 		{
@@ -592,10 +584,10 @@ namespace GKCommon.GEDCOM
 		{
 			this.SaveHeaderToStream(stream);
 
-			int num = this.fRecords.Count - 1;
-			for (int I = 0; I <= num; I++)
+			int num = this.fRecords.Count;
+			for (int i = 0; i < num; i++)
 			{
-				this.fRecords[I].SaveToStream(stream);
+				this.fRecords[i].SaveToStream(stream);
 			}
 
 			this.SaveFooterToStream(stream);
@@ -616,7 +608,7 @@ namespace GKCommon.GEDCOM
 
 		#region Auxiliary
 
-		public GEDCOMSubmitterRecord aux_GetSubmitter()
+		public GEDCOMSubmitterRecord GetSubmitter()
 		{
 			GEDCOMSubmitterRecord submitter = this.fHeader.Submitter.Value as GEDCOMSubmitterRecord;
 			if (submitter == null)
@@ -629,7 +621,7 @@ namespace GKCommon.GEDCOM
 			return submitter;
 		}
 
-		public GEDCOMIndividualRecord aux_CreateIndividual()
+		public GEDCOMIndividualRecord CreateIndividual()
 		{
 			GEDCOMIndividualRecord result = new GEDCOMIndividualRecord(this, this, "", "");
 			result.InitNew();
@@ -640,9 +632,9 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		public GEDCOMIndividualRecord aux_CreateIndividual(string iName, string iPatronymic, string iSurname, GEDCOMSex iSex)
+		public GEDCOMIndividualRecord CreateIndividual(string iName, string iPatronymic, string iSurname, GEDCOMSex iSex)
 		{
-			GEDCOMIndividualRecord result = this.aux_CreateIndividual();
+			GEDCOMIndividualRecord result = this.CreateIndividual();
 
 			result.Sex = iSex;
 			GEDCOMPersonalName pn = new GEDCOMPersonalName(this, result, "", "");
@@ -652,7 +644,7 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		public GEDCOMFamilyRecord aux_CreateFamily()
+		public GEDCOMFamilyRecord CreateFamily()
 		{
 			GEDCOMFamilyRecord result = new GEDCOMFamilyRecord(this, this, "", "");
 			result.InitNew();
@@ -663,7 +655,7 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		public GEDCOMNoteRecord aux_CreateNote()
+		public GEDCOMNoteRecord CreateNote()
 		{
 			GEDCOMNoteRecord result = new GEDCOMNoteRecord(this, this, "", "");
 			result.InitNew();
@@ -674,25 +666,25 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		public GEDCOMNoteRecord aux_CreateNoteEx(GEDCOMRecord toRecord, string text)
+		public GEDCOMNoteRecord CreateNoteEx(GEDCOMRecord toRecord, string text)
 		{
 			GEDCOMNoteRecord result = null;
 
 			if (toRecord != null && !string.IsNullOrEmpty(text)) {
-				result = this.aux_CreateNote();
-				result.aux_AddNoteText(text);
+				result = this.CreateNote();
+				result.AddNoteText(text);
 				toRecord.AddNote(result);
 			}
 
 			return result;
 		}
 
-		public GEDCOMNoteRecord aux_CreateNoteEx(GEDCOMRecord toRecord, StringList text)
+		public GEDCOMNoteRecord CreateNoteEx(GEDCOMRecord toRecord, StringList text)
 		{
 			GEDCOMNoteRecord result = null;
 
 			if (text != null) {
-				result = this.aux_CreateNote();
+				result = this.CreateNote();
 				result.Note = text;
 			}
 
@@ -703,7 +695,7 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		public GEDCOMSourceRecord aux_CreateSource()
+		public GEDCOMSourceRecord CreateSource()
 		{
 			GEDCOMSourceRecord result = new GEDCOMSourceRecord(this, this, "", "");
 			result.InitNew();
@@ -714,7 +706,7 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		public GEDCOMGroupRecord aux_CreateGroup()
+		public GEDCOMGroupRecord CreateGroup()
 		{
 			GEDCOMGroupRecord result = new GEDCOMGroupRecord(this, this, "", "");
 			result.InitNew();
@@ -727,12 +719,12 @@ namespace GKCommon.GEDCOM
 
 		//
 		
-		public void aux_CleanFamily(GEDCOMFamilyRecord family)
+		public void CleanFamily(GEDCOMFamilyRecord family)
 		{
 			if (family != null)
 			{
-				int num = family.Childrens.Count - 1;
-				for (int i = 0; i <= num; i++)
+				int num = family.Childrens.Count;
+				for (int i = 0; i < num; i++)
 				{
 					GEDCOMIndividualRecord child = family.Childrens[i].Value as GEDCOMIndividualRecord;
 					child.DeleteChildToFamilyLink(family);
@@ -741,19 +733,19 @@ namespace GKCommon.GEDCOM
 				GEDCOMIndividualRecord spouse;
 
 				spouse = family.Husband.Value as GEDCOMIndividualRecord;
-				family.aux_RemoveSpouse(spouse);
+				family.RemoveSpouse(spouse);
 
 				spouse = (family.Wife.Value as GEDCOMIndividualRecord);
-				family.aux_RemoveSpouse(spouse);
+				family.RemoveSpouse(spouse);
 			}
 		}
 		
-		public bool aux_DeleteFamilyRecord(GEDCOMFamilyRecord family)
+		public bool DeleteFamilyRecord(GEDCOMFamilyRecord family)
 		{
 			bool result = false;
 			if (family != null)
 			{
-				this.aux_CleanFamily(family);
+				this.CleanFamily(family);
 
 				this.Delete(this.IndexOfRecord(family));
 				result = true;
@@ -761,7 +753,7 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		public bool aux_DeleteGroupRecord(GEDCOMGroupRecord groupRec)
+		public bool DeleteGroupRecord(GEDCOMGroupRecord groupRec)
 		{
 			bool result = false;
 			if (groupRec != null)
@@ -769,7 +761,7 @@ namespace GKCommon.GEDCOM
 				for (int i = groupRec.Members.Count - 1; i >= 0; i--)
 				{
 					GEDCOMIndividualRecord member = groupRec.Members[i].Value as GEDCOMIndividualRecord;
-					groupRec.aux_RemoveMember(member);
+					groupRec.RemoveMember(member);
 				}
 
 				this.Delete(this.IndexOfRecord(groupRec));
@@ -778,7 +770,7 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		public bool aux_DeleteIndividualRecord(GEDCOMIndividualRecord iRec)
+		public bool DeleteIndividualRecord(GEDCOMIndividualRecord iRec)
 		{
 			bool result = false;
 			if (iRec != null)
@@ -792,14 +784,14 @@ namespace GKCommon.GEDCOM
 				for (int i = iRec.SpouseToFamilyLinks.Count - 1; i >= 0; i--)
 				{
 					GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
-					family.aux_RemoveSpouse(iRec);
+					family.RemoveSpouse(iRec);
 				}
 
 				for (int i = iRec.Groups.Count - 1; i >= 0; i--)
 				{
 					GEDCOMPointer ptr = iRec.Groups[i];
 					GEDCOMGroupRecord group = ptr.Value as GEDCOMGroupRecord;
-					group.aux_RemoveMember(iRec);
+					group.RemoveMember(iRec);
 				}
 
 				this.Delete(this.IndexOfRecord(iRec));
@@ -808,7 +800,7 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		public bool aux_DeleteMediaRecord(GEDCOMMultimediaRecord mRec)
+		public bool DeleteMediaRecord(GEDCOMMultimediaRecord mRec)
 		{
 			bool result = false;
 			if (mRec != null)
@@ -832,7 +824,7 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		public bool aux_DeleteNoteRecord(GEDCOMNoteRecord nRec)
+		public bool DeleteNoteRecord(GEDCOMNoteRecord nRec)
 		{
 			bool result = false;
 			if (nRec != null)
@@ -854,7 +846,7 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		public bool aux_DeleteRepositoryRecord(GEDCOMRepositoryRecord repRec)
+		public bool DeleteRepositoryRecord(GEDCOMRepositoryRecord repRec)
 		{
 			bool result = false;
 			if (repRec != null)
@@ -882,7 +874,7 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		public bool aux_DeleteResearchRecord(GEDCOMResearchRecord resRec)
+		public bool DeleteResearchRecord(GEDCOMResearchRecord resRec)
 		{
 			bool result = false;
 			if (resRec != null)
@@ -893,7 +885,7 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		public bool aux_DeleteSourceRecord(GEDCOMSourceRecord srcRec)
+		public bool DeleteSourceRecord(GEDCOMSourceRecord srcRec)
 		{
 			bool result = false;
 			if (srcRec != null)
@@ -917,7 +909,7 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		public bool aux_DeleteTaskRecord(GEDCOMTaskRecord taskRec)
+		public bool DeleteTaskRecord(GEDCOMTaskRecord taskRec)
 		{
 			bool result = false;
 			if (taskRec != null)
@@ -945,7 +937,7 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		public bool aux_DeleteCommunicationRecord(GEDCOMCommunicationRecord commRec)
+		public bool DeleteCommunicationRecord(GEDCOMCommunicationRecord commRec)
 		{
 			bool result = false;
 			if (commRec != null)
@@ -973,7 +965,7 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		public bool aux_DeleteLocationRecord(GEDCOMLocationRecord locRec)
+		public bool DeleteLocationRecord(GEDCOMLocationRecord locRec)
 		{
 			bool result = false;
 			if (locRec != null)

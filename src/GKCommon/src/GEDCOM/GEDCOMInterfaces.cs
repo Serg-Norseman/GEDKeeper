@@ -1,5 +1,21 @@
+using System.Collections;
+
 namespace GKCommon.GEDCOM
 {
+	public interface IGEDCOMListEnumerator : IEnumerator
+	{
+		GEDCOMObject Owner
+		{
+			get;
+		}
+	}
+
+	public interface IGEDCOMTreeEnumerator
+	{
+		bool MoveNext(out GEDCOMRecord current);
+		void Reset();
+	}
+
     public interface IGEDCOMStructWithLists
     {
         GEDCOMList<GEDCOMNotes> Notes { get; }

@@ -43,6 +43,9 @@ gkhWorkNavigation.htm
 gkhRestrictions.htm
 gkhMediaStore.htm
 gkhPlugins.htm
+gkhHistory.htm
+gkhScripts.htm
+gkhWorkOperations.htm
 
 [ALIAS]
 Auto Index=Yes

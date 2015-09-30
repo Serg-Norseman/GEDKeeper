@@ -50,7 +50,7 @@ namespace GKCore.Export
 				}
 				else
 				{
-					string title = LangMan.LS(LSID.LSID_ExpPedigree) + ": " + this.fAncestor.aux_GetNameStr(true, false);
+					string title = LangMan.LS(LSID.LSID_ExpPedigree) + ": " + this.fAncestor.GetNameString(true, false);
 
 					fDocument.AddTitle("Pedigree");
 					fDocument.AddSubject("Pedigree");
@@ -70,7 +70,8 @@ namespace GKCore.Export
 
 					this.PreparePatriarchs();
 					
-					for (int i = 0; i < this.fPatList.Count; i++) {
+					int num = this.fPatList.Count;
+					for (int i = 0; i < num; i++) {
 						String iName = this.fPatList[i];
 						GEDCOMIndividualRecord iRec = this.fPatList.GetObject(i) as GEDCOMIndividualRecord;
 						fDocument.Add(new Paragraph(iName, fTextFont) { Alignment = Element.ALIGN_LEFT, SpacingBefore = 2f, SpacingAfter = 2f });
@@ -136,9 +137,11 @@ namespace GKCore.Export
 			{
 				this.fBase.Context.GetPatriarchsList(lst, 3, false);
 
-				for (int i = 0; i < lst.Count; i++) {
+				int num = lst.Count;
+				for (int i = 0; i < num; i++) {
 					PatriarchObj p_obj = lst[i];
-					this.fPatList.AddObject(p_obj.IRec.aux_GetNameStr(true, false), p_obj.IRec);
+
+					this.fPatList.AddObject(p_obj.IRec.GetNameString(true, false), p_obj.IRec);
 				}
 				
 				this.fPatList.Sort();

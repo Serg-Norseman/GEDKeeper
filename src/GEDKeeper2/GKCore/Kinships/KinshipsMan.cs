@@ -154,8 +154,11 @@ namespace GKCore.Kinships
 			great = 0;
 			level = 0;
 
-			foreach (KinshipRec kinship in fKinships)
+			int num = fKinships.Count;
+			for (int i = 0; i < num; i++)
 			{
+				KinshipRec kinship = fKinships[i];
+				
 				if (kinship.PrevRels.Contains(prev) && kinship.CurrRels.Contains(cur)) {
 					RelationKind rel = kinship.FinRel;
 					great = kinship.Great;

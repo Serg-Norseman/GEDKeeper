@@ -214,7 +214,8 @@ namespace GKCore.Options
 
 		public int MRUFiles_IndexOf(string fileName)
 		{
-			for (int i = 0; i < this.fMRUFiles.Count; i++) {
+			int num = this.fMRUFiles.Count;
+			for (int i = 0; i < num; i++) {
 				if (this.fMRUFiles[i].FileName == fileName) {
 					return i;
 				}
@@ -258,6 +259,7 @@ namespace GKCore.Options
                 this.fPedigreeOptions.Dispose();
                 this.fChartOptions.Dispose();
 			}
+            base.Dispose(disposing);
 		}
 
 		public void FindLanguages()

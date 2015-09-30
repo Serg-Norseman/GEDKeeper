@@ -64,7 +64,8 @@ namespace GKTextSearchPlugin
 
 				Write(string.Format(fPlugin.LangMan.LS(TLS.LSID_SearchResults) + "\r\n", search_results.Count));
 
-				for (int i = 0; i <= search_results.Count - 1; i++)
+				int num = search_results.Count;
+				for (int i = 0; i < num; i++)
 				{
 					Write("__________________________________________________________________________________________");
 					Write("");

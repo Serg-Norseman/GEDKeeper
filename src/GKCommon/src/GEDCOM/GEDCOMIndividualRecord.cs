@@ -407,10 +407,11 @@ namespace GKCommon.GEDCOM
 		{
 			GEDCOMCustomEvent result = null;
 
-			int num = this.fIndividualEvents.Count - 1;
-			for (int i = 0; i <= num; i++)
+			int num = this.fIndividualEvents.Count;
+			for (int i = 0; i < num; i++)
 			{
 				GEDCOMCustomEvent evt = this.fIndividualEvents[i];
+
 				if (evt.Name == eventName) {
 					result = evt;
 					break;
@@ -452,11 +453,13 @@ namespace GKCommon.GEDCOM
 				GEDCOMChildToFamilyLink ctf_link = this.fChildToFamilyLinks.Extract(0);
 				GEDCOMFamilyRecord family = ctf_link.Family;
 
-				int num = family.Childrens.Count - 1;
-				for (int idx = 0; idx <= num; idx++)
+				int num = family.Childrens.Count;
+				for (int i = 0; i < num; i++)
 				{
-					if (family.Childrens[idx].StringValue == "@" + base.XRef + "@") {
-						family.Childrens[idx].StringValue = "@" + targetRecord.XRef + "@";
+					GEDCOMPointer childPtr = family.Childrens[i];
+					
+					if (childPtr.StringValue == "@" + base.XRef + "@") {
+						childPtr.StringValue = "@" + targetRecord.XRef + "@";
 					}
 				}
 				
@@ -672,12 +675,7 @@ namespace GKCommon.GEDCOM
 			}
 		}
 
-		/*public string aux_GetNameStr(bool aByFamily, bool aPieces)
-		{
-			
-		}*/
-		
-		public string aux_GetNameStr(bool aByFamily, bool aPieces)
+		public string GetNameString(bool startByFamily, bool includePieces)
 		{
 			string result;
 			if (this.fPersonalNames.Count > 0)
@@ -687,7 +685,7 @@ namespace GKCommon.GEDCOM
 				string firstPart, surname/*, dummy*/;
 				np.GetNameParts(out firstPart, out surname /*, out dummy*/);
 
-				if (aByFamily)
+				if (startByFamily)
 				{
 					result = surname + " " + firstPart;
 				}
@@ -696,7 +694,7 @@ namespace GKCommon.GEDCOM
 					result = firstPart + " " + surname;
 				}
 
-				if (aPieces)
+				if (includePieces)
 				{
 					string nick = np.Pieces.Nickname;
                     if (!string.IsNullOrEmpty(nick)) result = result + " [" + nick + "]";
@@ -709,7 +707,7 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		public string aux_GetNickStr()
+		public string GetNickString()
 		{
 			string result;
 			if (this.fPersonalNames.Count > 0)
@@ -724,7 +722,7 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		private bool aux_GetIndivName(bool rusNames, bool womanMode, ref string aName)
+		private bool GetIndivName(bool rusNames, bool womanMode, ref string aName)
 		{
 			string firstPart, surname;
 			GEDCOMPersonalName np = this.fPersonalNames[0];
@@ -753,9 +751,9 @@ namespace GKCommon.GEDCOM
 
 			// check name
 			float nameMatch = 0.0f;
-			/*for (int i = 0; i <= indi.PersonalNames.Count - 1; i++)
+			/*for (int i = 0; i < indi.PersonalNames.Count; i++)
 			{
-				for (int k = 0; k <= fPersonalNames.Count - 1; k++)
+				for (int k = 0; k < fPersonalNames.Count; k++)
 				{
 					float currentNameMatch = fPersonalNames[k].IsMatch(indi.PersonalNames[i]);
 					nameMatch = Math.Max(nameMatch, currentNameMatch);
@@ -764,8 +762,8 @@ namespace GKCommon.GEDCOM
 			bool womanMode = (this.Sex == GEDCOMSex.svFemale);
 			string iName = "";
 			string kName = "";
-			bool res = this.aux_GetIndivName(matchParams.RusNames, womanMode, ref iName);
-			res = res && indi.aux_GetIndivName(matchParams.RusNames, womanMode, ref kName);
+			bool res = this.GetIndivName(matchParams.RusNames, womanMode, ref iName);
+			res = res && indi.GetIndivName(matchParams.RusNames, womanMode, ref kName);
 			if (res)
 			{
 				if (matchParams.NamesIndistinctThreshold >= 0.99f) {
@@ -824,23 +822,26 @@ namespace GKCommon.GEDCOM
 			return match;
 		}
 
-		public GEDCOMAssociation aux_AddAssociation(string aRel, GEDCOMIndividualRecord aRelPerson)
+		public GEDCOMAssociation AddAssociation(string relation, GEDCOMIndividualRecord relPerson)
 		{
 			GEDCOMAssociation result = new GEDCOMAssociation(this.Owner, this, "", "");
-			result.Relation = aRel;
-			result.Individual = aRelPerson;
+			result.Relation = relation;
+			result.Individual = relPerson;
 			this.Associations.Add(result);
 			return result;
 		}
 
-		public GEDCOMMultimediaLink aux_SetPrimaryMultimediaLink(GEDCOMMultimediaRecord mediaRec)
+		public GEDCOMMultimediaLink SetPrimaryMultimediaLink(GEDCOMMultimediaRecord mediaRec)
 		{
 			GEDCOMMultimediaLink mmLink = null;
 
-			int num = this.MultimediaLinks.Count - 1;
-			for (int i = 0; i <= num; i++) {
-				if (this.MultimediaLinks[i].Value == mediaRec) {
-					mmLink = this.MultimediaLinks[i];
+			int num = this.MultimediaLinks.Count;
+			for (int i = 0; i < num; i++)
+			{
+				GEDCOMMultimediaLink lnk = this.MultimediaLinks[i];
+				
+				if (lnk.Value == mediaRec) {
+					mmLink = lnk;
 					break;
 				}
 			}
@@ -853,12 +854,12 @@ namespace GKCommon.GEDCOM
 			return mmLink;
 		}
 
-		public GEDCOMMultimediaLink aux_GetPrimaryMultimediaLink()
+		public GEDCOMMultimediaLink GetPrimaryMultimediaLink()
 		{
 			GEDCOMMultimediaLink result = null;
 
-			int num = this.MultimediaLinks.Count - 1;
-			for (int i = 0; i <= num; i++) {
+			int num = this.MultimediaLinks.Count;
+			for (int i = 0; i < num; i++) {
 				GEDCOMMultimediaLink mmLink = this.MultimediaLinks[i];
 				if (mmLink.IsPrimary) {
 					result = mmLink;
@@ -869,18 +870,15 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		public int aux_GetChildsCount()
+		public int GetTotalChildsCount()
 		{
 			int result = 0;
 
-			if (this.SpouseToFamilyLinks.Count > 0)
+			int num = this.SpouseToFamilyLinks.Count;
+			for (int i = 0; i < num; i++)
 			{
-				int num = this.SpouseToFamilyLinks.Count - 1;
-				for (int i = 0; i <= num; i++)
-				{
-					GEDCOMFamilyRecord family = this.SpouseToFamilyLinks[i].Family;
-					result += family.Childrens.Count;
-				}
+				GEDCOMFamilyRecord family = this.SpouseToFamilyLinks[i].Family;
+				result += family.Childrens.Count;
 			}
 
 			return result;

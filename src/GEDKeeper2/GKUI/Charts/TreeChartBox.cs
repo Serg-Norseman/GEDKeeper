@@ -7,6 +7,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Security.Permissions;
 
 using GKCommon;
 using GKCommon.GEDCOM;
@@ -23,7 +24,7 @@ namespace GKUI.Charts
 	public delegate void ThumbMoved(int position);
 
     public delegate void PersonModifyEventHandler(object sender, PersonModifyEventArgs eArgs);
-    
+
     public delegate void RootChangedEventHandler(object sender, TreeChartPerson person);
 
     /// <summary>
@@ -35,9 +36,9 @@ namespace GKUI.Charts
 		public const int DefSpouseDistance = 10;
 		public const int DefBranchDistance = 40;
 		public const int DefLevelDistance = 46;
-    	
+
 		private const bool DEBUG_IMAGE = false;
-		
+
 		#region Subtypes
 		
         private enum ChartControlMode
@@ -68,7 +69,7 @@ namespace GKUI.Charts
 		}
 		
 		#endregion
-		
+
 		#region Private fields
 		
 		private IBase fBase;
@@ -286,7 +287,7 @@ namespace GKUI.Charts
 		}
 
 		#endregion
-		
+
 		#region Instance control
 		
         static TreeChartBox()
@@ -349,8 +350,6 @@ namespace GKUI.Charts
 			}
 			base.Dispose(disposing);
 		}
-
-		#endregion
 		
 		private void InitSigns()
 		{
@@ -382,6 +381,171 @@ namespace GKUI.Charts
 		{
 			// dummy
 		}
+
+		private void InitTimer()
+		{
+			/*this.fComponents = new System.ComponentModel.Container();
+			this.fTimer = new System.Windows.Forms.Timer(this.fComponents);
+			this.fTimer.Interval = 1;
+			this.fTimer.Tick += this.timer_Tick;
+            this.fTimer.Stop();
+            this.fTimer.Enabled = false;
+            this.fTimer.Enabled = true;*/
+		}
+		
+		private void timer_Tick(object sender, System.EventArgs e)
+		{
+			/*if (this.fHighlightedPerson != null) {
+				DateTime st = DateTime.FromBinary(this.fHighlightedStart);
+				DateTime cur = DateTime.Now;
+				TimeSpan d = cur - st;
+
+				if (d.Seconds >= 1 && !this.fPersonControl.Visible) {
+					this.fPersonControl.Visible = true;
+					this.Invalidate();
+				}
+			}*/
+		}
+
+		public void GenChart(GEDCOMIndividualRecord iRec, ChartKind kind, bool center)
+		{
+			if (iRec == null) return;
+			
+			try
+			{
+				this.Predef();
+
+				this.fKind = kind;
+				this.fSelected = null;
+				this.fPersons.Clear();
+				this.fGraph.Clear();
+				this.DoFilter(iRec);
+				this.fRoot = null;
+				this.fPreparedIndividuals.Clear();
+
+				switch (this.fKind) {
+					case ChartKind.ckAncestors:
+						this.fPreparedFamilies.Clear();
+						this.fRoot = this.DoAncestorsStep(null, iRec, 1, false);
+						break;
+						
+					case ChartKind.ckDescendants:
+						this.fPreparedFamilies.Clear();
+						this.fRoot = this.DoDescendantsStep(null, iRec, 1);
+						break;
+
+					case ChartKind.ckBoth:
+						this.fPreparedFamilies.Clear();
+						this.fRoot = this.DoAncestorsStep(null, iRec, 1, false);
+						this.fPreparedFamilies.Clear();
+						this.DoDescendantsStep(null, iRec, 1);
+						break;
+				}
+
+				this.fKinRoot = this.fRoot;
+
+				this.RecalcChart();
+
+				if (center) this.CenterPerson(this.fRoot);
+			}
+			catch (Exception ex)
+			{
+				this.fBase.Host.LogWrite("TreeChartBox.GenChart(): " + ex.Message);
+			}
+		}
+
+		public void RefreshTree()
+		{
+			try {
+				if (this.fRoot == null) return;
+
+				GEDCOMIndividualRecord rootRec = this.fRoot.Rec;
+				
+				this.SaveSelection();
+				this.GenChart(rootRec, this.fKind, false);
+				this.RestoreSelection();
+			}
+			catch (Exception ex)
+			{
+				this.fBase.Host.LogWrite("TreeChartBox.RefreshTree(): " + ex.Message);
+			}
+		}
+
+		public void SaveSelection()
+		{
+			this.fSaveSelection = (this.fSelected == null) ? null : this.fSelected.Rec;
+		}
+		
+		public void RestoreSelection()
+		{
+			this.SelectByRec(this.fSaveSelection);
+		}
+
+		public void RebuildKinships(bool noRedraw = false)
+		{
+			try
+			{
+				if (this.fOptions.Kinship) {
+					TreeChartPerson p = this.fSelected;
+					if (p != null) {
+						this.fKinRoot = p;
+						this.RecalcChart(noRedraw);
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				this.fBase.Host.LogWrite("TreeChartBox.RebuildKinships(): " + ex.Message);
+			}
+		}
+
+		public void SaveSnapshot(string fileName)
+		{
+			string ext = Path.GetExtension(fileName).ToLowerInvariant();
+
+			if ((ext == ".bmp" || ext == ".jpg") && this.fImageWidth >= 65535)
+			{
+				GKUtils.ShowError(LangMan.LS(LSID.LSID_TooMuchWidth));
+			}
+			else
+			{
+				ImageFormat imFmt = ImageFormat.Png;
+				if (ext == ".bmp") { imFmt = ImageFormat.Bmp; }
+				else
+					if (ext == ".emf") { imFmt = ImageFormat.Emf; }
+				else
+					if (ext == ".png") { imFmt = ImageFormat.Png; }
+				else
+					if (ext == ".gif") { imFmt = ImageFormat.Gif; }
+				else
+					if (ext == ".jpg") { imFmt = ImageFormat.Jpeg; }
+
+				Image pic;
+				if (imFmt == ImageFormat.Emf) {
+					pic = new Metafile(fileName, this.CreateGraphics().GetHdc());
+				} else {
+					pic = new Bitmap(this.fImageWidth, this.fImageHeight, PixelFormat.Format24bppRgb);
+				}
+				
+				try
+				{
+					using (Graphics gfx = Graphics.FromImage(pic)) {
+						this.Predef();
+						this.InternalDraw(gfx, DrawMode.dmFile);
+					}
+
+					pic.Save(fileName, imFmt);
+				}
+				finally
+				{
+					SysUtils.Free(pic);
+				}
+			}
+		}
+
+		#endregion
+
+		#region Tree walking
 
 		private bool hasMediaFail = false;
 
@@ -500,7 +664,7 @@ namespace GKUI.Charts
 						}
 					}
 					
-					if (aPerson.aux_GetChildsCount() > 1 || aPerson.SpouseToFamilyLinks.Count > 1) {
+					if (aPerson.GetTotalChildsCount() > 1 || aPerson.SpouseToFamilyLinks.Count > 1) {
 						result.Flags.Include(PersonFlag.pfHasInvDesc);
 					}
 				}
@@ -676,6 +840,10 @@ namespace GKUI.Charts
 			}
 		}
 
+		#endregion
+
+		#region Kinship relations
+
 		private void FindRelationship(TreeChartPerson target)
 		{
 			if (target == null) return;
@@ -687,7 +855,7 @@ namespace GKUI.Charts
 
 		    try
 			{
-				IEnumerable<IEdge> edgesPath = this.fGraph.GetPath(target.Node);
+				List<IEdge> edgesPath = this.fGraph.GetPath(target.Node);
 
 				string tmp = "";
 				RelationKind prevRel = RelationKind.rkNone;
@@ -822,10 +990,9 @@ namespace GKUI.Charts
             return result;
 		}
 
-		private static void InitEdges(ref int[] edges)
-		{
-			for (int i = 0; i <= 255; i++) edges[i] = 0;
-		}
+		#endregion
+
+		#region Drawing routines
 
 		private bool PersonIsVisible(ExtRect pnRect)
 		{
@@ -842,7 +1009,7 @@ namespace GKUI.Charts
 		{
 			return (FVisibleArea.Contains(X1, Y1) || FVisibleArea.Contains(X2, Y2));
 		}*/
-		
+
 		private void DrawLine(Graphics gfx, int x1, int y1, int x2, int y2)
 		{
 			//if (!LineIsVisible(X1, Y1, X2, Y2)) return;
@@ -945,6 +1112,12 @@ namespace GKUI.Charts
 			}
 		}
 
+		private ExtRect GetExpanderRect(ExtRect personRect)
+		{
+			ExtRect expRt = ExtRect.Create(personRect.Left, personRect.Top - 18, personRect.Left + 16 - 1, personRect.Top - 2);
+			return expRt;
+		}
+
 		private void DrawPerson(Graphics gfx, int spx, int spy, TreeChartPerson person, DrawMode drawMode)
 		{
 			ExtRect rt = person.Rect;
@@ -998,7 +1171,8 @@ namespace GKUI.Charts
 				gfx.DrawImage(fExpPic, expRt.Left, expRt.Top);
 			}
 
-			if (this.fCertaintyIndex) {
+			// draw CI only for existing individuals
+			if (this.fCertaintyIndex && person.Rec != null) {
 				string cas = string.Format("{0:0.00}", person.CertaintyAssessment);
 				gfx.DrawString(cas, this.DrawFont, fSolidBlack, rt.Left, rt.Bottom);
 			}
@@ -1030,11 +1204,176 @@ namespace GKUI.Charts
 			}
 		}
 
-		private ExtRect GetExpanderRect(ExtRect personRect)
+		private void DrawAncestors(Graphics gfx, TreeChartPerson person, DrawMode drawMode)
 		{
-			ExtRect expRt = ExtRect.Create(personRect.Left, personRect.Top - 18, personRect.Left + 16 - 1, personRect.Top - 2);
-			return expRt;
+			this.Draw(gfx, person.Father, ChartKind.ckAncestors, drawMode);
+			this.Draw(gfx, person.Mother, ChartKind.ckAncestors, drawMode);
+			int crY = person.PtY - this.fLevelDistance / 2;
+
+			if (person.Father != null) {
+				this.DrawLine(gfx, person.Father.PtX, crY, person.PtX, crY);
+				this.DrawLine(gfx, person.Father.PtX, person.Father.PtY + person.Father.Height, person.Father.PtX, crY);
+			}
+
+			if (person.Mother != null) {
+				this.DrawLine(gfx, person.PtX, crY, person.Mother.PtX, crY);
+				this.DrawLine(gfx, person.Mother.PtX, person.Mother.PtY + person.Mother.Height, person.Mother.PtX, crY);
+			}
+
+			if (person.Father != null || person.Mother != null) {
+				this.DrawLine(gfx, person.PtX, crY, person.PtX, person.PtY);
+			}
 		}
+
+		private void DrawDescendants(Graphics gfx, TreeChartPerson person, DrawMode drawMode)
+		{
+			int num = person.GetChildsCount();
+			for (int i = 0; i < num; i++) {
+				this.Draw(gfx, person.GetChild(i), ChartKind.ckDescendants, drawMode);
+			}
+
+			int spbOfs = (person.Height - 10) / (person.GetSpousesCount() + 1);
+			int spbBeg = person.PtY + (person.Height - spbOfs * (person.GetSpousesCount() - 1)) / 2;
+
+			switch (person.Sex) {
+				case GEDCOMSex.svMale:
+					int num3 = person.GetSpousesCount();
+					for (int i = 0; i < num3; i++) {
+						int spbV = spbBeg + spbOfs * i;
+						this.DrawLine(gfx, person.Rect.Right + 1, spbV, person.GetSpouse(i).Rect.Left, spbV);
+					}
+					break;
+
+				case GEDCOMSex.svFemale:
+					int num2 = person.GetSpousesCount();
+					for (int i = 0; i < num2; i++) {
+						int spbV = spbBeg + spbOfs * i;
+						this.DrawLine(gfx, person.GetSpouse(i).Rect.Right + 1, spbV, person.Rect.Left, spbV);
+					}
+					break;
+			}
+
+			int num4 = person.GetSpousesCount();
+			for (int i = 0; i < num4; i++) {
+				this.Draw(gfx, person.GetSpouse(i), ChartKind.ckDescendants, drawMode);
+			}
+
+			int crY = person.PtY + person.Height + this.fLevelDistance / 2;
+			int cx = 0;
+			if (person.BaseSpouse == null || (person.BaseSpouse != null && person.BaseSpouse.GetSpousesCount() > 1))
+			{
+				cx = person.PtX;
+				spbBeg = person.PtY + person.Height - 1;
+			}
+			else
+			{
+				switch (person.Sex) {
+					case GEDCOMSex.svMale:
+						cx = (person.Rect.Right + person.BaseSpouse.Rect.Left) / 2;
+						break;
+
+					case GEDCOMSex.svFemale:
+						cx = (person.BaseSpouse.Rect.Right + person.Rect.Left) / 2;
+						break;
+				}
+
+				spbBeg -= spbOfs / 2;
+			}
+
+			if (person.GetChildsCount() != 0)
+			{
+				this.DrawLine(gfx, cx, spbBeg, cx, crY);
+				if (person.GetChildsCount() == 1)
+				{
+					TreeChartPerson child = person.GetChild(0);
+					this.DrawLine(gfx, child.PtX, crY, child.PtX, child.PtY);
+				}
+				else
+				{
+					int bpx = person.GetChild(0).PtX;
+					int epx = person.GetChild(person.GetChildsCount() - 1).PtX;
+					this.DrawLine(gfx, bpx, crY, epx, crY);
+					int num5 = person.GetChildsCount();
+					for (int i = 0; i < num5; i++) {
+						TreeChartPerson child = person.GetChild(i);
+						this.DrawLine(gfx, child.PtX, crY, child.PtX, child.PtY);
+					}
+				}
+			}
+		}
+
+		private void InternalDraw(Graphics gfx, DrawMode drawMode)
+		{
+			Rectangle imgRect = new Rectangle(0, 0, fImageWidth, fImageHeight);
+			if (this.BackgroundImage == null) {
+				using (Brush brush = new SolidBrush(this.BackColor)) {
+					gfx.FillRectangle(brush, imgRect);
+				}
+			} else {
+				using (TextureBrush textureBrush = new TextureBrush(this.BackgroundImage, WrapMode.Tile)) {
+					gfx.FillRectangle(textureBrush, imgRect);
+				}
+			}
+
+			this.fSPX = 0;
+			this.fSPY = 0;
+
+			if (drawMode == DrawMode.dmScreen) {
+				this.fSPX += this.fBorderWidth - this.fLeftPos;
+				this.fSPY += this.fBorderWidth - this.fTopPos;
+
+				Size sz = this.ClientSize;
+
+				if (this.fImageWidth < sz.Width) {
+					this.fSPX += (sz.Width - this.fImageWidth) / 2;
+				}
+
+				if (this.fImageHeight < sz.Height) {
+					this.fSPY += (sz.Height - this.fImageHeight) / 2;
+				}
+			} else {
+				this.fSPX += 0;
+				this.fSPY += 0;
+			}
+
+			if (DEBUG_IMAGE) {
+				Rectangle irt = new Rectangle(this.fSPX, this.fSPY, this.fImageWidth - 1, this.fImageHeight - 1);
+				using (Pen pen = new Pen(Color.Red)) {
+					gfx.DrawRectangle(pen, irt);
+				}
+			}
+			
+			this.Draw(gfx, this.fRoot, this.fKind, drawMode);
+
+			if (fScaleControl.Visible) fScaleControl.Draw(gfx);
+			//if (fPersonControl.Visible) fPersonControl.Draw(gfx);
+		}
+
+		protected void Draw(Graphics gfx, TreeChartPerson person, ChartKind dirKind, DrawMode drawMode)
+		{
+			if (person != null) {
+				switch (this.fKind) {
+					case ChartKind.ckAncestors:
+						this.DrawAncestors(gfx, person, drawMode);
+						break;
+
+					case ChartKind.ckDescendants:
+						this.DrawDescendants(gfx, person, drawMode);
+						break;
+
+					case ChartKind.ckBoth:
+						if (person == this.fRoot || dirKind == ChartKind.ckAncestors) this.DrawAncestors(gfx, person, drawMode);
+						if (person == this.fRoot || dirKind == ChartKind.ckDescendants) this.DrawDescendants(gfx, person, drawMode);
+						break;
+				}
+
+				this.DrawPerson(gfx, this.fSPX, this.fSPY, person, drawMode);
+			}
+		}
+
+		#endregion
+
+		#region Sizes and adjustment routines
 
 		private void Predef()
 		{
@@ -1226,6 +1565,11 @@ namespace GKUI.Charts
 			}
 		}
 
+		private static void InitEdges(ref int[] edges)
+		{
+			for (int i = 0; i <= 255; i++) edges[i] = 0;
+		}
+
 		private void RecalcAncestorsChart()
 		{
 			int[] edges = new int[256];
@@ -1392,104 +1736,6 @@ namespace GKUI.Charts
 			this.RecalcDesc(ref edges, this.fRoot, new Point(this.fMargins, this.fMargins), predef);
 		}
 
-		private void DrawAncestors(Graphics gfx, TreeChartPerson person, DrawMode drawMode)
-		{
-			this.Draw(gfx, person.Father, ChartKind.ckAncestors, drawMode);
-			this.Draw(gfx, person.Mother, ChartKind.ckAncestors, drawMode);
-			int crY = person.PtY - this.fLevelDistance / 2;
-
-			if (person.Father != null) {
-				this.DrawLine(gfx, person.Father.PtX, crY, person.PtX, crY);
-				this.DrawLine(gfx, person.Father.PtX, person.Father.PtY + person.Father.Height, person.Father.PtX, crY);
-			}
-
-			if (person.Mother != null) {
-				this.DrawLine(gfx, person.PtX, crY, person.Mother.PtX, crY);
-				this.DrawLine(gfx, person.Mother.PtX, person.Mother.PtY + person.Mother.Height, person.Mother.PtX, crY);
-			}
-
-			if (person.Father != null || person.Mother != null) {
-				this.DrawLine(gfx, person.PtX, crY, person.PtX, person.PtY);
-			}
-		}
-
-		private void DrawDescendants(Graphics gfx, TreeChartPerson person, DrawMode drawMode)
-		{
-			int num = person.GetChildsCount();
-			for (int i = 0; i < num; i++) {
-				this.Draw(gfx, person.GetChild(i), ChartKind.ckDescendants, drawMode);
-			}
-
-			int spbOfs = (person.Height - 10) / (person.GetSpousesCount() + 1);
-			int spbBeg = person.PtY + (person.Height - spbOfs * (person.GetSpousesCount() - 1)) / 2;
-
-			switch (person.Sex) {
-				case GEDCOMSex.svMale:
-					int num3 = person.GetSpousesCount();
-					for (int i = 0; i < num3; i++) {
-						int spbV = spbBeg + spbOfs * i;
-						this.DrawLine(gfx, person.Rect.Right + 1, spbV, person.GetSpouse(i).Rect.Left, spbV);
-					}
-					break;
-
-				case GEDCOMSex.svFemale:
-					int num2 = person.GetSpousesCount();
-					for (int i = 0; i < num2; i++) {
-						int spbV = spbBeg + spbOfs * i;
-						this.DrawLine(gfx, person.GetSpouse(i).Rect.Right + 1, spbV, person.Rect.Left, spbV);
-					}
-					break;
-			}
-
-			int num4 = person.GetSpousesCount();
-			for (int i = 0; i < num4; i++) {
-				this.Draw(gfx, person.GetSpouse(i), ChartKind.ckDescendants, drawMode);
-			}
-
-			int crY = person.PtY + person.Height + this.fLevelDistance / 2;
-			int cx = 0;
-			if (person.BaseSpouse == null || (person.BaseSpouse != null && person.BaseSpouse.GetSpousesCount() > 1))
-			{
-				cx = person.PtX;
-				spbBeg = person.PtY + person.Height - 1;
-			}
-			else
-			{
-				switch (person.Sex) {
-					case GEDCOMSex.svMale:
-						cx = (person.Rect.Right + person.BaseSpouse.Rect.Left) / 2;
-						break;
-
-					case GEDCOMSex.svFemale:
-						cx = (person.BaseSpouse.Rect.Right + person.Rect.Left) / 2;
-						break;
-				}
-
-				spbBeg -= spbOfs / 2;
-			}
-
-			if (person.GetChildsCount() != 0)
-			{
-				this.DrawLine(gfx, cx, spbBeg, cx, crY);
-				if (person.GetChildsCount() == 1)
-				{
-					TreeChartPerson child = person.GetChild(0);
-					this.DrawLine(gfx, child.PtX, crY, child.PtX, child.PtY);
-				}
-				else
-				{
-					int bpx = person.GetChild(0).PtX;
-					int epx = person.GetChild(person.GetChildsCount() - 1).PtX;
-					this.DrawLine(gfx, bpx, crY, epx, crY);
-					int num5 = person.GetChildsCount();
-					for (int i = 0; i < num5; i++) {
-						TreeChartPerson child = person.GetChild(i);
-						this.DrawLine(gfx, child.PtX, crY, child.PtX, child.PtY);
-					}
-				}
-			}
-		}
-
 		private void SetScrollRange(bool noRedraw = false)
 		{
 			Size client = base.ClientSize;
@@ -1508,8 +1754,8 @@ namespace GKUI.Charts
 				this.fScrollRange.Height = this.fImageHeight - client.Height;
 			}
 
-            Win32Native.SetScrollRange(this.Handle, Win32Native.SB_HORZ, 0, this.fScrollRange.Width, false);
-            Win32Native.SetScrollRange(this.Handle, Win32Native.SB_VERT, 0, this.fScrollRange.Height, false);
+            NativeMethods.SetScrollRange(this.Handle, NativeMethods.SB_HORZ, 0, this.fScrollRange.Width, false);
+            NativeMethods.SetScrollRange(this.Handle, NativeMethods.SB_VERT, 0, this.fScrollRange.Height, false);
 
             if (!noRedraw) this.Invalidate();
 		}
@@ -1530,8 +1776,8 @@ namespace GKUI.Charts
 			if (this.fLeftPos != value) {
 				ExtRect dummy = ExtRect.Empty();
 				ExtRect rt;
-                Win32Native.ScrollWindowEx(this.Handle, this.fLeftPos - value, 0, ref dummy, ref dummy, 0, out rt, 0u);
-                Win32Native.SetScrollPos(this.Handle, 0, this.fLeftPos, true);
+                NativeMethods.ScrollWindowEx(this.Handle, this.fLeftPos - value, 0, ref dummy, ref dummy, 0, out rt, 0u);
+                NativeMethods.SetScrollPos(this.Handle, 0, this.fLeftPos, true);
 
                 this.fLeftPos = value;
 				this.ResetView();
@@ -1547,8 +1793,8 @@ namespace GKUI.Charts
 			if (this.fTopPos != value) {
 				ExtRect dummy = ExtRect.Empty();
 				ExtRect rt;
-                Win32Native.ScrollWindowEx(this.Handle, 0, this.fTopPos - value, ref dummy, ref dummy, 0, out rt, 0u);
-                Win32Native.SetScrollPos(this.Handle, 1, this.fTopPos, true);
+                NativeMethods.ScrollWindowEx(this.Handle, 0, this.fTopPos - value, ref dummy, ref dummy, 0, out rt, 0u);
+                NativeMethods.SetScrollPos(this.Handle, 1, this.fTopPos, true);
 
 				this.fTopPos = value;
 				this.ResetView();
@@ -1561,333 +1807,10 @@ namespace GKUI.Charts
 			Size sz = this.ClientSize;
 			this.fVisibleArea = ExtRect.Bounds(this.fLeftPos, this.fTopPos, sz.Width, sz.Height);
 		}
-		
-		private void InternalDraw(Graphics gfx, DrawMode drawMode)
-		{
-			Rectangle imgRect = new Rectangle(0, 0, fImageWidth, fImageHeight);
-			if (this.BackgroundImage == null) {
-				using (Brush brush = new SolidBrush(this.BackColor)) {
-					gfx.FillRectangle(brush, imgRect);
-				}
-			} else {
-				using (TextureBrush textureBrush = new TextureBrush(this.BackgroundImage, WrapMode.Tile)) {
-					gfx.FillRectangle(textureBrush, imgRect);
-				}
-			}
 
-			this.fSPX = 0;
-			this.fSPY = 0;
+		#endregion
 
-			if (drawMode == DrawMode.dmScreen) {
-				this.fSPX += this.fBorderWidth - this.fLeftPos;
-				this.fSPY += this.fBorderWidth - this.fTopPos;
-
-				Size sz = this.ClientSize;
-
-				if (this.fImageWidth < sz.Width) {
-					this.fSPX += (sz.Width - this.fImageWidth) / 2;
-				}
-
-				if (this.fImageHeight < sz.Height) {
-					this.fSPY += (sz.Height - this.fImageHeight) / 2;
-				}
-			} else {
-				this.fSPX += 0;
-				this.fSPY += 0;
-			}
-
-			if (DEBUG_IMAGE) {
-				Rectangle irt = new Rectangle(this.fSPX, this.fSPY, this.fImageWidth - 1, this.fImageHeight - 1);
-				using (Pen pen = new Pen(Color.Red)) {
-					gfx.DrawRectangle(pen, irt);
-				}
-			}
-			
-			this.Draw(gfx, this.fRoot, this.fKind, drawMode);
-
-			if (fScaleControl.Visible) fScaleControl.Draw(gfx);
-			//if (fPersonControl.Visible) fPersonControl.Draw(gfx);
-		}
-
-		protected void Draw(Graphics gfx, TreeChartPerson person, ChartKind dirKind, DrawMode drawMode)
-		{
-			if (person != null) {
-				switch (this.fKind) {
-					case ChartKind.ckAncestors:
-						this.DrawAncestors(gfx, person, drawMode);
-						break;
-
-					case ChartKind.ckDescendants:
-						this.DrawDescendants(gfx, person, drawMode);
-						break;
-
-					case ChartKind.ckBoth:
-						if (person == this.fRoot || dirKind == ChartKind.ckAncestors) this.DrawAncestors(gfx, person, drawMode);
-						if (person == this.fRoot || dirKind == ChartKind.ckDescendants) this.DrawDescendants(gfx, person, drawMode);
-						break;
-				}
-
-				this.DrawPerson(gfx, this.fSPX, this.fSPY, person, drawMode);
-			}
-		}
-
-		public void GenChart(GEDCOMIndividualRecord iRec, ChartKind kind, bool center)
-		{
-			if (iRec == null) return;
-			
-			try
-			{
-				this.Predef();
-
-				this.fKind = kind;
-				this.fSelected = null;
-				this.fPersons.Clear();
-				this.fGraph.Clear();
-				this.DoFilter(iRec);
-				this.fRoot = null;
-				this.fPreparedIndividuals.Clear();
-
-				switch (this.fKind) {
-					case ChartKind.ckAncestors:
-						this.fPreparedFamilies.Clear();
-						this.fRoot = this.DoAncestorsStep(null, iRec, 1, false);
-						break;
-						
-					case ChartKind.ckDescendants:
-						this.fPreparedFamilies.Clear();
-						this.fRoot = this.DoDescendantsStep(null, iRec, 1);
-						break;
-
-					case ChartKind.ckBoth:
-						this.fPreparedFamilies.Clear();
-						this.fRoot = this.DoAncestorsStep(null, iRec, 1, false);
-						this.fPreparedFamilies.Clear();
-						this.DoDescendantsStep(null, iRec, 1);
-						break;
-				}
-
-				this.fKinRoot = this.fRoot;
-
-				this.RecalcChart();
-
-				if (center) this.CenterPerson(this.fRoot);
-			}
-			catch (Exception ex)
-			{
-				this.fBase.Host.LogWrite("TreeChartBox.GenChart(): " + ex.Message);
-			}
-		}
-
-		public void RefreshTree()
-		{
-			try {
-				if (this.fRoot == null) return;
-
-				GEDCOMIndividualRecord rootRec = this.fRoot.Rec;
-				
-				this.SaveSelection();
-				this.GenChart(rootRec, this.fKind, false);
-				this.RestoreSelection();
-			}
-			catch (Exception ex)
-			{
-				this.fBase.Host.LogWrite("TreeChartBox.RefreshTree(): " + ex.Message);
-			}
-		}
-
-		public void SaveSelection()
-		{
-			this.fSaveSelection = (this.fSelected == null) ? null : this.fSelected.Rec;
-		}
-		
-		public void RestoreSelection()
-		{
-			this.SelectByRec(this.fSaveSelection);
-		}
-		
-		public void DoFilter(GEDCOMIndividualRecord root)
-		{
-			if (this.fFilter.BranchCut != ChartFilter.TBranchCut.bcNone) {
-				TreeStats.InitExtCounts(this.fTree, 0);
-				this.DoDescendantsFilter(root);
-				root.ExtData = true;
-			}
-		}
-
-		public void RebuildKinships(bool noRedraw = false)
-		{
-			try
-			{
-				if (this.fOptions.Kinship) {
-					TreeChartPerson p = this.fSelected;
-					if (p != null) {
-						this.fKinRoot = p;
-						this.RecalcChart(noRedraw);
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				this.fBase.Host.LogWrite("TreeChartBox.RebuildKinships(): " + ex.Message);
-			}
-		}
-
-		public void SaveSnapshot(string fileName)
-		{
-			string ext = Path.GetExtension(fileName).ToLowerInvariant();
-
-			if ((ext == ".bmp" || ext == ".jpg") && this.fImageWidth >= 65535)
-			{
-				GKUtils.ShowError(LangMan.LS(LSID.LSID_TooMuchWidth));
-			}
-			else
-			{
-				ImageFormat imFmt = ImageFormat.Png;
-				if (ext == ".bmp") { imFmt = ImageFormat.Bmp; }
-				else
-					if (ext == ".emf") { imFmt = ImageFormat.Emf; }
-				else
-					if (ext == ".png") { imFmt = ImageFormat.Png; }
-				else
-					if (ext == ".gif") { imFmt = ImageFormat.Gif; }
-				else
-					if (ext == ".jpg") { imFmt = ImageFormat.Jpeg; }
-
-				Image pic;
-				if (imFmt == ImageFormat.Emf) {
-					pic = new Metafile(fileName, this.CreateGraphics().GetHdc());
-				} else {
-					pic = new Bitmap(this.fImageWidth, this.fImageHeight, PixelFormat.Format24bppRgb);
-				}
-				
-				try
-				{
-					using (Graphics gfx = Graphics.FromImage(pic)) {
-						this.Predef();
-						this.InternalDraw(gfx, DrawMode.dmFile);
-					}
-
-					pic.Save(fileName, imFmt);
-				}
-				finally
-				{
-					SysUtils.Free(pic);
-				}
-			}
-		}
-
-		private void SetSelected(TreeChartPerson value)
-		{
-			if (this.fSelected != null) this.fSelected.Selected = false;
-			this.fSelected = value;
-			if (this.fSelected != null) this.fSelected.Selected = true;
-
-			this.Invalidate();
-		}
-
-		private TreeChartPerson FindPersonByCoords(int aX, int aY)
-		{
-			TreeChartPerson result = null;
-			
-			aX -= this.fSPX;
-			aY -= this.fSPY;
-			int num = this.fPersons.Count;
-			for (int i = 0; i < num; i++) {
-				TreeChartPerson p = this.fPersons[i];
-				if (p.Rect.Contains(aX, aY)) {
-					result = p;
-					break;
-				}
-			}
-
-			return result;
-		}
-
-		private void SelectBy(int aX, int aY, bool needCenter)
-		{
-			TreeChartPerson p = this.FindPersonByCoords(aX, aY);
-			this.SetSelected(p);
-
-			//if (this.FTraceKinships && this.fOptions.Kinship) this.RebuildKinships(true);
-
-			if (p != null && needCenter && this.fTraceSelected) CenterPerson(p);
-		}
-
-		public void SelectByRec(GEDCOMIndividualRecord iRec)
-		{
-			if (iRec == null) return;
-			
-			int num = this.fPersons.Count;
-			for (int i = 0; i < num; i++) {
-				TreeChartPerson p = this.fPersons[i];
-				if (p.Rec == iRec) {
-					this.SetSelected(p);
-
-					if (this.fTraceSelected) CenterPerson(p);
-
-					return;
-				}
-			}
-
-			this.SetSelected(null);
-		}
-
-		private void CenterPerson(TreeChartPerson person, bool animation = true)
-		{
-		    if (person == null) return;
-
-			int dstX = (person.PtX) - (this.ClientSize.Width / 2);
-			int dstY = (person.PtY + (person.Height / 2)) - (this.ClientSize.Height / 2);
-
-			if (dstX < 0) dstX = dstX + (0 - dstX);
-			if (dstY < 0) dstY = dstY + (0 - dstY);
-
-			if ((this.fLeftPos == dstX) && (this.fTopPos == dstY)) return;
-
-			if (animation) {
-					TweenLibrary tween = new TweenLibrary();
-					tween.StartTween(delegate(int newX, int newY) { this.SetLeftPos(newX); this.SetTopPos(newY); },
-                                          this.fLeftPos, this.fTopPos, dstX, dstY, TweenAnimation.EaseInOutQuad, 20);
-			} else {
-				this.SetLeftPos(dstX);
-				this.SetTopPos(dstY);
-			}
-		}
-
-		private bool DoDescendantsFilter(GEDCOMIndividualRecord person)
-		{
-			bool result = false;
-			if (person != null)
-			{
-				ChartFilter.TBranchCut branchCut = this.fFilter.BranchCut;
-				switch (branchCut) {
-					case ChartFilter.TBranchCut.bcYears:
-						int year = GKUtils.GetIndependentYear(person, "BIRT");
-						result = (year >= this.fFilter.BranchYear);
-						break;
-
-					case ChartFilter.TBranchCut.bcPersons:
-						result = (this.fFilter.BranchPersons.IndexOf(person.XRef + ";") >= 0);
-						break;
-				}
-
-				int num = person.SpouseToFamilyLinks.Count;
-				for (int i = 0; i < num; i++)
-				{
-					GEDCOMFamilyRecord family = person.SpouseToFamilyLinks[i].Family;
-
-					int num2 = family.Childrens.Count;
-					for (int j = 0; j < num2; j++)
-					{
-						GEDCOMIndividualRecord child = family.Childrens[j].Value as GEDCOMIndividualRecord;
-						bool resChild = DoDescendantsFilter(child);
-						result |= resChild;
-					}
-				}
-				person.ExtData = result;
-			}
-			return result;
-		}
+		#region Event processing
 		
         private void DoPersonModify(PersonModifyEventArgs eArgs)
         {
@@ -1913,26 +1836,29 @@ namespace GKUI.Charts
             eventHandler(this, eArgs);
         }
 
+        #endregion
+
 		#region Protected methods
-		
-		protected override void WndProc(ref Message m)
+
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode), SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+        protected override void WndProc(ref Message m)
 		{
 			base.WndProc(ref m);
 
-			if (m.Msg == Win32Native.WM_GETDLGCODE)
+			if (m.Msg == NativeMethods.WM_GETDLGCODE)
 			{
 				m.Result = (IntPtr)(m.Result.ToInt32() | 
-				                    Win32Native.DLGC_WANTARROWS | Win32Native.DLGC_WANTTAB | 
-				                    Win32Native.DLGC_WANTCHARS | Win32Native.DLGC_WANTALLKEYS);
+				                    NativeMethods.DLGC_WANTARROWS | NativeMethods.DLGC_WANTTAB | 
+				                    NativeMethods.DLGC_WANTCHARS | NativeMethods.DLGC_WANTALLKEYS);
 			}
-			else if (m.Msg == Win32Native.WM_HSCROLL)
+			else if (m.Msg == NativeMethods.WM_HSCROLL)
 			{
 				int page = this.ClientSize.Width / 10;
 				uint wParam = (uint)m.WParam.ToInt32();
 				int newPos = SysUtils.DoScroll(this.Handle, wParam, 0, this.fLeftPos, 0, this.fScrollRange.Width, 1, page);
 				this.SetLeftPos(newPos);
 			}
-			else if (m.Msg == Win32Native.WM_VSCROLL)
+			else if (m.Msg == NativeMethods.WM_VSCROLL)
 			{
 				int page = this.ClientSize.Height / 10;
 				uint wParam = (uint)m.WParam.ToInt32();
@@ -1982,10 +1908,10 @@ namespace GKUI.Charts
 				if (newScale < 0.5 || newScale > 1.5) return;
 				this.Scale = newScale;
 			} else {
-				var direction = e.Delta > 0 ? Win32Native.SB_PAGELEFT : Win32Native.SB_PAGERIGHT;
-				uint msg = (ModifierKeys == Keys.Shift) ? Win32Native.WM_HSCROLL : Win32Native.WM_VSCROLL;
+				var direction = e.Delta > 0 ? NativeMethods.SB_PAGELEFT : NativeMethods.SB_PAGERIGHT;
+				uint msg = (ModifierKeys == Keys.Shift) ? NativeMethods.WM_HSCROLL : NativeMethods.WM_VSCROLL;
 
-				Win32Native.SendMessage(this.Handle, msg, (IntPtr)direction, IntPtr.Zero);
+				NativeMethods.SendMessage(this.Handle, msg, (IntPtr)direction, IntPtr.Zero);
 			}
 		}
 
@@ -2143,8 +2069,6 @@ namespace GKUI.Charts
 			}
 		}
 
-		#endregion
-
 		/*protected override CreateParams CreateParams
 		{ 
 			get {
@@ -2154,31 +2078,136 @@ namespace GKUI.Charts
 			}
 		}*/
 
-		private void InitTimer()
-		{
-			/*this.fComponents = new System.ComponentModel.Container();
-			this.fTimer = new System.Windows.Forms.Timer(this.fComponents);
-			this.fTimer.Interval = 1;
-			this.fTimer.Tick += this.timer_Tick;
-            this.fTimer.Stop();
-            this.fTimer.Enabled = false;
-            this.fTimer.Enabled = true;*/
-		}
-		
-		private void timer_Tick(object sender, System.EventArgs e)
-		{
-			/*if (this.fHighlightedPerson != null) {
-				DateTime st = DateTime.FromBinary(this.fHighlightedStart);
-				DateTime cur = DateTime.Now;
-				TimeSpan d = cur - st;
+		#endregion
 
-				if (d.Seconds >= 1 && !this.fPersonControl.Visible) {
-					this.fPersonControl.Visible = true;
-					this.Invalidate();
-				}
-			}*/
-		}
+		#region Navigation
 		
+		private void SetSelected(TreeChartPerson value)
+		{
+			if (this.fSelected != null) this.fSelected.Selected = false;
+			this.fSelected = value;
+			if (this.fSelected != null) this.fSelected.Selected = true;
+
+			this.Invalidate();
+		}
+
+		private TreeChartPerson FindPersonByCoords(int aX, int aY)
+		{
+			TreeChartPerson result = null;
+			
+			aX -= this.fSPX;
+			aY -= this.fSPY;
+			int num = this.fPersons.Count;
+			for (int i = 0; i < num; i++) {
+				TreeChartPerson p = this.fPersons[i];
+				if (p.Rect.Contains(aX, aY)) {
+					result = p;
+					break;
+				}
+			}
+
+			return result;
+		}
+
+		private void SelectBy(int aX, int aY, bool needCenter)
+		{
+			TreeChartPerson p = this.FindPersonByCoords(aX, aY);
+			this.SetSelected(p);
+
+			//if (this.FTraceKinships && this.fOptions.Kinship) this.RebuildKinships(true);
+
+			if (p != null && needCenter && this.fTraceSelected) CenterPerson(p);
+		}
+
+		public void SelectByRec(GEDCOMIndividualRecord iRec)
+		{
+			if (iRec == null) return;
+			
+			int num = this.fPersons.Count;
+			for (int i = 0; i < num; i++) {
+				TreeChartPerson p = this.fPersons[i];
+				if (p.Rec == iRec) {
+					this.SetSelected(p);
+
+					if (this.fTraceSelected) CenterPerson(p);
+
+					return;
+				}
+			}
+
+			this.SetSelected(null);
+		}
+
+		private void CenterPerson(TreeChartPerson person, bool animation = true)
+		{
+		    if (person == null) return;
+
+			int dstX = (person.PtX) - (this.ClientSize.Width / 2);
+			int dstY = (person.PtY + (person.Height / 2)) - (this.ClientSize.Height / 2);
+
+			if (dstX < 0) dstX = dstX + (0 - dstX);
+			if (dstY < 0) dstY = dstY + (0 - dstY);
+
+			if ((this.fLeftPos == dstX) && (this.fTopPos == dstY)) return;
+
+			if (animation) {
+					TweenLibrary tween = new TweenLibrary();
+					tween.StartTween(delegate(int newX, int newY) { this.SetLeftPos(newX); this.SetTopPos(newY); },
+                                          this.fLeftPos, this.fTopPos, dstX, dstY, TweenAnimation.EaseInOutQuad, 20);
+			} else {
+				this.SetLeftPos(dstX);
+				this.SetTopPos(dstY);
+			}
+		}
+
+		#endregion
+
+		#region Filtering and search
+
+		public void DoFilter(GEDCOMIndividualRecord root)
+		{
+			if (this.fFilter.BranchCut != ChartFilter.TBranchCut.bcNone) {
+				TreeStats.InitExtCounts(this.fTree, 0);
+				this.DoDescendantsFilter(root);
+				root.ExtData = true;
+			}
+		}
+
+		private bool DoDescendantsFilter(GEDCOMIndividualRecord person)
+		{
+			bool result = false;
+			if (person != null)
+			{
+				ChartFilter.TBranchCut branchCut = this.fFilter.BranchCut;
+				switch (branchCut) {
+					case ChartFilter.TBranchCut.bcYears:
+						int year = GKUtils.GetIndependentYear(person, "BIRT");
+						result = (year >= this.fFilter.BranchYear);
+						break;
+
+					case ChartFilter.TBranchCut.bcPersons:
+						result = (this.fFilter.BranchPersons.IndexOf(person.XRef + ";") >= 0);
+						break;
+				}
+
+				int num = person.SpouseToFamilyLinks.Count;
+				for (int i = 0; i < num; i++)
+				{
+					GEDCOMFamilyRecord family = person.SpouseToFamilyLinks[i].Family;
+
+					int num2 = family.Childrens.Count;
+					for (int j = 0; j < num2; j++)
+					{
+						GEDCOMIndividualRecord child = family.Childrens[j].Value as GEDCOMIndividualRecord;
+						bool resChild = DoDescendantsFilter(child);
+						result |= resChild;
+					}
+				}
+				person.ExtData = result;
+			}
+			return result;
+		}
+
 		public IList<ISearchResult> FindAll(String searchPattern)
 		{
 			List<ISearchResult> result = new List<ISearchResult>();
@@ -2191,7 +2220,7 @@ namespace GKUI.Charts
 				GEDCOMIndividualRecord iRec = person.Rec;
 				if (iRec == null) continue;
 				
-				string fullname = iRec.aux_GetNameStr(true, false);
+				string fullname = iRec.GetNameString(true, false);
 				if (GKUtils.MatchesRegex(fullname, regex)) {
 					//yield return new SearchResult(iRec);
 					result.Add(new SearchResult(iRec));
@@ -2200,5 +2229,7 @@ namespace GKUI.Charts
 			
 			return result;
 		}
+		
+		#endregion
 	}
 }

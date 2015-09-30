@@ -1,6 +1,6 @@
 namespace GKCore.Types
 {
-    public enum NodeType
+    public enum PGNodeType
     {
         ntDefault,
         ntPatriarch,

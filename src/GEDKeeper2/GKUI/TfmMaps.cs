@@ -93,7 +93,7 @@ namespace GKUI
 						}
 
 						if (p_cnt > 0) {
-							this.ComboPersons.Items.Add(new GKComboItem(ind.aux_GetNameStr(true, false) + " [" + p_cnt.ToString() + "]", ind));
+							this.ComboPersons.Items.Add(new GKComboItem(ind.GetNameString(true, false) + " [" + p_cnt.ToString() + "]", ind));
 						}
 					}
 
@@ -263,58 +263,61 @@ namespace GKUI
 
 		private TreeNode FindTreeNode(string place)
 		{
-			for (int i = 0; i < this.fBaseRoot.Nodes.Count; i++) {
+			int num = this.fBaseRoot.Nodes.Count;
+			for (int i = 0; i < num; i++) {
 				TreeNode node = this.fBaseRoot.Nodes[i];
+
 				if (node.Text == place) {
 					return node;
 				}
 			}
+
 			return null;
 		}
 
-		private void AddPlace(GEDCOMPlace aPlace, GEDCOMCustomEvent aRef)
+		private void AddPlace(GEDCOMPlace place, GEDCOMCustomEvent placeEvent)
 		{
-			GEDCOMLocationRecord locRec = aPlace.Location.Value as GEDCOMLocationRecord;
+			GEDCOMLocationRecord locRec = place.Location.Value as GEDCOMLocationRecord;
 
-            string placeName = (locRec != null) ? locRec.LocationName : aPlace.StringValue;
+            string placeName = (locRec != null) ? locRec.LocationName : place.StringValue;
 
 			TreeNode node = this.FindTreeNode(placeName);
-            MapPlace place;
+            MapPlace mapPlace;
 
 			if (node == null) {
-                place = new MapPlace();
-				place.Name = placeName;
-				this.fPlaces.Add(place);
+                mapPlace = new MapPlace();
+				mapPlace.Name = placeName;
+				this.fPlaces.Add(mapPlace);
 
-				node = new GKTreeNode(placeName, place);
+				node = new GKTreeNode(placeName, mapPlace);
 				this.fBaseRoot.Nodes.Add(node);
 
 				if (locRec == null) {
-					GKMapBrowser.RequestGeoCoords(placeName, place.Points);
+					GKMapBrowser.RequestGeoCoords(placeName, mapPlace.Points);
 
-					int num = place.Points.Count;
+					int num = mapPlace.Points.Count;
 					for (int i = 0; i < num; i++) {
-						if (place.Points[i] is GKMapBrowser.GMapPoint) {
-							GKMapBrowser.GMapPoint pt = place.Points[i] as GKMapBrowser.GMapPoint;
+						if (mapPlace.Points[i] is GKMapBrowser.GMapPoint) {
+							GKMapBrowser.GMapPoint pt = mapPlace.Points[i] as GKMapBrowser.GMapPoint;
 							string ptTitle = pt.Hint + string.Format(" [{0:0.000000}, {1:0.000000}]", pt.Latitude, pt.Longitude);
 							node.Nodes.Add(new GKTreeNode(ptTitle, pt));
 						}
 					}
 				} else {
 					GKMapBrowser.GMapPoint pt = new GKMapBrowser.GMapPoint(locRec.Map.Lati, locRec.Map.Long, placeName);
-					place.Points.Add(pt);
+					mapPlace.Points.Add(pt);
 
                     string ptTitle = pt.Hint + string.Format(" [{0:0.000000}, {1:0.000000}]", pt.Latitude, pt.Longitude);
 					node.Nodes.Add(new GKTreeNode(ptTitle, pt));
 				}
 			} else {
-                place = ((node as GKTreeNode).Data as MapPlace);
+                mapPlace = ((node as GKTreeNode).Data as MapPlace);
 			}
 
 			TPlaceRef pRef = new TPlaceRef();
-			pRef.Date = GKUtils.GEDCOMDateToDate(aRef.Detail.Date);
-			pRef.Event = aRef;
-			place.PlaceRefs.Add(pRef);
+			pRef.Date = placeEvent.GetIndependentDate();
+			pRef.Event = placeEvent;
+			mapPlace.PlaceRefs.Add(pRef);
 		}
 
 		private void CopyPoint(GKMapBrowser.GMapPoint aPt, TPlaceRef aRef)

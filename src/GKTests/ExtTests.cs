@@ -1,8 +1,5 @@
 ﻿using System;
-
-using ExtUtils;
 using GKCommon;
-using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
 using NUnit.Framework;
 
@@ -180,9 +177,15 @@ namespace GKTests
 		[Test]
 		public void Calculator_Tests()
 		{
-			/*ExtCalculator calc = new ExtCalculator();
+			ExpCalculator calc = new ExpCalculator();
 			Assert.IsNotNull(calc);
+			
+			calc.OnGetVar += this.GetVarEventHandler;
 
+			Assert.Throws(typeof(CalculateException), () => { calc.Calc("12+"); }); // syntax error
+			Assert.Throws(typeof(CalculateException), () => { calc.Calc("(12+"); }); // syntax error
+			//Assert.Throws(typeof(CalculateException), () => { calc.Calc("5 + 0x"); }); // syntax error
+			
 			double val = calc.Calc("2 + 7.703 - 3");
 			Assert.AreEqual(Math.Round(val, 3), 6.703);
 			
@@ -204,6 +207,9 @@ namespace GKTests
 			val = calc.Calc("-2");
 			Assert.AreEqual(val, -2.0);
 			
+			// variables
+			calc.ClearVars();
+			
 			calc.SetVar("a", 10);
 			Assert.AreEqual(10, calc.GetVar("a"));
 			calc.SetVar("b", 2);
@@ -212,9 +218,135 @@ namespace GKTests
 			Assert.AreEqual(0.75, calc.GetVar("c"));
 			
 			val = calc.Calc("a+b+c");
-			Assert.AreEqual(12.75, val);*/
+			Assert.AreEqual(12.75, val);
+			
+			val = calc.Calc("15 / ((a+b)-c)");
+			Assert.AreEqual(1.333, Math.Round(val, 3));
+			
+			calc.SetVar("a", 20);
+			Assert.AreEqual(20, calc.GetVar("a"));
+			
+			val = calc.Calc("a+b+c");
+			Assert.AreEqual(22.75, val);
+			
+			val = calc.Calc("d=a+b+c");
+			Assert.AreEqual(22.75, calc.GetVar("d"));
+			
+			val = calc.Calc("d = a + b + c; e = d * 2");
+			Assert.AreEqual(22.75, calc.GetVar("d"));
+			Assert.AreEqual(45.5, calc.GetVar("e"));
+			
+			// functions
+			val = calc.Calc("round(12.378)");
+			Assert.AreEqual(12.0, val);
+			
+			val = calc.Calc("round(12.578)");
+			Assert.AreEqual(13.0, val);
+			
+			val = calc.Calc("trunc(12.578)");
+			Assert.AreEqual(12.0, val);
+			
+			val = calc.Calc("int(12.578)");
+			Assert.AreEqual(12.0, val);
+			
+			val = calc.Calc("frac(12.578)");
+			Assert.AreEqual(0.578, Math.Round(val, 3));
+			
+			val = calc.Calc("sin(30`)");
+			Assert.AreEqual(0.500, Math.Round(val, 3));
+			
+			val = calc.Calc("cos(30`)");
+			Assert.AreEqual(0.866, Math.Round(val, 3));
+			
+			val = calc.Calc("tan(30`)");
+			Assert.AreEqual(0.577, Math.Round(val, 3));
+			
+			val = calc.Calc("atan(30`)");
+			Assert.AreEqual(0.482, Math.Round(val, 3));
+			
+			val = calc.Calc("exp(5)");
+			Assert.AreEqual(148.413, Math.Round(val, 3));
+			
+			val = calc.Calc("ln(117)");
+			Assert.AreEqual(4.762, Math.Round(val, 3));
+			
+			val = calc.Calc("sign(-15)");
+			Assert.AreEqual(-1, Math.Round(val, 3));
+			
+			val = calc.Calc("sign(2)");
+			Assert.AreEqual(+1, Math.Round(val, 3));
+
+			val = calc.Calc("pi * 2");
+			Assert.AreEqual(6.283, Math.Round(val, 3));
+
+			val = calc.Calc("e");
+			Assert.AreEqual(2.718, Math.Round(val, 3));
+			
+			// logic
+			val = calc.Calc("2 < 3");
+			Assert.AreEqual(1, Math.Round(val, 0));
+			val = calc.Calc("2 > 3");
+			Assert.AreEqual(0, Math.Round(val, 0));
+			val = calc.Calc("3 <= 3");
+			Assert.AreEqual(1, Math.Round(val, 0));
+			val = calc.Calc("2 >= 3");
+			Assert.AreEqual(0, Math.Round(val, 0));
+			val = calc.Calc("3 == 3");
+			Assert.AreEqual(1, Math.Round(val, 0));
+			val = calc.Calc("2 != 3");
+			Assert.AreEqual(1, Math.Round(val, 0));
+			
+			// misc
+			val = calc.Calc("2 ^ 3"); // xor
+			Assert.AreEqual(1, Math.Round(val, 0));
+			val = calc.Calc("5 | 2"); // or
+			Assert.AreEqual(7, Math.Round(val, 0));
+			val = calc.Calc("9 & 5"); // and
+			Assert.AreEqual(1, Math.Round(val, 0));
+			val = calc.Calc("~15"); // inv
+			Assert.AreEqual(-16, Math.Round(val, 0));
+			val = calc.Calc("!-15"); // not
+			Assert.AreEqual(1, Math.Round(val, 0));
+
+			// vars
+			val = calc.Calc("15 - alpha"); 
+			Assert.AreEqual(0, Math.Round(val, 0));
+
+			Assert.Throws(typeof(CalculateException), () => { calc.Calc("15 - beta"); });
+			
+			calc.OnGetVar -= this.GetVarEventHandler;
+			
+			// numbers
+			val = calc.Calc("1537");
+			Assert.AreEqual(1537, Math.Round(val, 0));
+			val = calc.Calc("0b11000000001");
+			Assert.AreEqual(1537, Math.Round(val, 0));
+			val = calc.Calc("0x601");
+			Assert.AreEqual(1537, Math.Round(val, 0));
+			val = calc.Calc("$601");
+			Assert.AreEqual(1537, Math.Round(val, 0));
+			val = calc.Calc("601h");
+			Assert.AreEqual(1537, Math.Round(val, 0));
+			//val = calc.Calc("5.25e+2");
+			//Assert.AreEqual(525, Math.Round(val, 0));
+
+			val = calc.Calc("if(3 == 3; 2; 3)");
+			Assert.AreEqual(2, Math.Round(val, 0));
+
+			val = calc.Calc("if(2 == 3; 2; 3)");
+			Assert.AreEqual(3, Math.Round(val, 0));
+			
+			Assert.Throws(typeof(CalculateException), () => { calc.Calc("if(2 == 3)"); }); // syntax error
 		}
 
+		private bool GetVarEventHandler(object sender, string varName, ref double varValue)
+		{
+			if (varName.Equals("alpha")) {
+				varValue = 15.0;
+				return true;
+			} else return false;
+		}
+		
 		[Test]
 		public void TList_Tests()
 		{

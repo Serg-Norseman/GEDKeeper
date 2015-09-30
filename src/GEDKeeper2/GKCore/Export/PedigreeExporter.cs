@@ -55,7 +55,7 @@ namespace GKCore.Export
 
 			public DateTime GetDate()
 			{
-				DateTime result = ((this.Event == null) ? new DateTime(0) : GKUtils.GEDCOMDateToDate(this.Event.Detail.Date));
+				DateTime result = ((this.Event == null) ? new DateTime(0) : this.Event.GetIndependentDate());
 				return result;
 			}
 		}
@@ -104,12 +104,13 @@ namespace GKCore.Export
 
             PedigreePerson res = null;
 
-			int num = this.fPersonList.Count - 1;
-			for (int i = 0; i <= num; i++)
+			int num = this.fPersonList.Count;
+			for (int i = 0; i < num; i++)
 			{
-				if (this.fPersonList[i].IRec == iRec)
-				{
-					res = this.fPersonList[i];
+				PedigreePerson item = this.fPersonList[i];
+				
+				if (item.IRec == iRec) {
+					res = item;
 					break;
 				}
 			}
@@ -123,14 +124,15 @@ namespace GKCore.Export
 			p.Alignment = Element.ALIGN_JUSTIFIED;
 			p.SpacingBefore = 6f;
 			p.SpacingAfter = 6f;
-			p.Add(new Chunk(this.GetIdStr(person) + ". " + person.IRec.aux_GetNameStr(true, false), fPersonFont).SetLocalDestination(person.Id));
+			p.Add(new Chunk(this.GetIdStr(person) + ". " + person.IRec.GetNameString(true, false), fPersonFont).SetLocalDestination(person.Id));
 			p.Add(new Chunk(GKUtils.GetPedigreeLifeStr(person.IRec, this.fOptions.PedigreeOptions.Format), fTextFont));
 
 			if (this.fOptions.PedigreeOptions.IncludeSources && person.Sources.Count > 0)
 			{
 				p.Add(new Chunk(" ", fTextFont));
 
-				for (int i = 0; i < person.Sources.Count; i++) {
+				int num = person.Sources.Count;
+				for (int i = 0; i < num; i++) {
 					string lnk = person.Sources[i];
 					
 					if (i > 0) {
@@ -198,13 +200,13 @@ namespace GKCore.Export
 			person.IRec.GetParents(out father, out mother);
 			if (father != null) {
 				Paragraph p = new Paragraph();
-				p.Add(new Chunk(LangMan.LS(LSID.LSID_Father) + ": " + father.aux_GetNameStr(true, false) + " ", fTextFont));
+				p.Add(new Chunk(LangMan.LS(LSID.LSID_Father) + ": " + father.GetNameString(true, false) + " ", fTextFont));
 				p.Add(this.idLink(this.FindPerson(father)));
 				fDocument.Add(p);
 			}
 			if (mother != null) {
 				Paragraph p = new Paragraph();
-				p.Add(new Chunk(LangMan.LS(LSID.LSID_Mother) + ": " + mother.aux_GetNameStr(true, false) + " ", fTextFont));
+				p.Add(new Chunk(LangMan.LS(LSID.LSID_Mother) + ": " + mother.GetNameString(true, false) + " ", fTextFont));
 				p.Add(this.idLink(this.FindPerson(mother)));
 				fDocument.Add(p);
 			}
@@ -217,8 +219,8 @@ namespace GKCore.Export
 				{
 					fDocument.Add(new Paragraph(LangMan.LS(LSID.LSID_Events) + ":", fTextFont));
 
-					int num = person.IRec.IndividualEvents.Count - 1;
-					for (i = 0; i <= num; i++)
+					int num = person.IRec.IndividualEvents.Count;
+					for (i = 0; i < num; i++)
 					{
 						GEDCOMCustomEvent evt = person.IRec.IndividualEvents[i];
 						if (!(evt is GEDCOMIndividualAttribute) || (evt is GEDCOMIndividualAttribute && this.fOptions.PedigreeOptions.IncludeAttributes))
@@ -229,8 +231,8 @@ namespace GKCore.Export
 					this.WriteEventList(person, evList);
 				}
 
-				int num2 = person.IRec.SpouseToFamilyLinks.Count - 1;
-				for (i = 0; i <= num2; i++)
+				int num2 = person.IRec.SpouseToFamilyLinks.Count;
+				for (i = 0; i < num2; i++)
 				{
 					GEDCOMFamilyRecord family = person.IRec.SpouseToFamilyLinks[i].Family;
 					if (GKUtils.IsRecordAccess(family.Restriction, this.fShieldState))
@@ -250,7 +252,7 @@ namespace GKCore.Export
 						GEDCOMIndividualRecord irec = sp.Value as GEDCOMIndividualRecord;
 						string sps;
 						if (irec != null) {
-							sps = st + irec.aux_GetNameStr(true, false) + GKUtils.GetPedigreeLifeStr(irec, this.fOptions.PedigreeOptions.Format) + this.idLink(this.FindPerson(irec));
+							sps = st + irec.GetNameString(true, false) + GKUtils.GetPedigreeLifeStr(irec, this.fOptions.PedigreeOptions.Format) + this.idLink(this.FindPerson(irec));
 						} else {
 							sps = st + unk;
 						}
@@ -258,8 +260,8 @@ namespace GKCore.Export
 						fDocument.Add(new Paragraph(sps, fTextFont));
 
 						evList.Clear();
-						int num3 = family.Childrens.Count - 1;
-						for (int j = 0; j <= num3; j++)
+						int num3 = family.Childrens.Count;
+						for (int j = 0; j < num3; j++)
 						{
 							irec = (family.Childrens[j].Value as GEDCOMIndividualRecord);
 							evList.Add(new PedigreeEvent(irec.GetIndividualEvent("BIRT"), irec));
@@ -281,11 +283,11 @@ namespace GKCore.Export
 				list.SetListSymbol("\u2022");
 				list.IndentationLeft = 10f;
 
-				int num4 = person.IRec.Notes.Count - 1;
-				for (int i = 0; i <= num4; i++)
+				int num4 = person.IRec.Notes.Count;
+				for (int i = 0; i < num4; i++)
 				{
 					GEDCOMNotes note = person.IRec.Notes[i];
-					list.Add(new it.ListItem(new Chunk(" " + GKUtils.ConStrings(note.Notes), fTextFont)));
+					list.Add(new it.ListItem(new Chunk(" " + GKUtils.MergeStrings(note.Notes), fTextFont)));
 				}
 				fDocument.Add(list);
 			}
@@ -295,11 +297,11 @@ namespace GKCore.Export
 		{
 			if (this.fOptions.PedigreeOptions.IncludeNotes && person.IRec.Notes.Count != 0)
 			{
-				int num = person.IRec.Notes.Count - 1;
-				for (int i = 0; i <= num; i++)
+				int num = person.IRec.Notes.Count;
+				for (int i = 0; i < num; i++)
 				{
 					GEDCOMNotes note = person.IRec.Notes[i];
-					fDocument.Add(new Paragraph(GKUtils.ConStrings(note.Notes), fTextFont));
+					fDocument.Add(new Paragraph(GKUtils.MergeStrings(note.Notes), fTextFont));
 				}
 			}
 
@@ -307,8 +309,8 @@ namespace GKCore.Export
 			{
 				bool spIndex = person.IRec.SpouseToFamilyLinks.Count > 1;
 
-				int num2 = person.IRec.SpouseToFamilyLinks.Count - 1;
-				for (int i = 0; i <= num2; i++)
+				int num2 = person.IRec.SpouseToFamilyLinks.Count;
+				for (int i = 0; i < num2; i++)
 				{
 					GEDCOMFamilyRecord family = person.IRec.SpouseToFamilyLinks[i].Family;
 					if (GKUtils.IsRecordAccess(family.Restriction, this.fShieldState))
@@ -338,7 +340,7 @@ namespace GKCore.Export
 						GEDCOMIndividualRecord irec = sp.Value as GEDCOMIndividualRecord;
 						if (irec != null)
 						{
-							st = st + irec.aux_GetNameStr(true, false) + GKUtils.GetPedigreeLifeStr(irec, this.fOptions.PedigreeOptions.Format) + this.idLink(this.FindPerson(irec));
+							st = st + irec.GetNameString(true, false) + GKUtils.GetPedigreeLifeStr(irec, this.fOptions.PedigreeOptions.Format) + this.idLink(this.FindPerson(irec));
 						}
 						else
 						{
@@ -356,11 +358,10 @@ namespace GKCore.Export
 
 		private void WriteEventList(PedigreePerson person, ExtList<PedigreeEvent> evList)
 		{
-			int num = evList.Count - 1;
-			for (int i = 0; i <= num; i++)
+			int num = evList.Count;
+			for (int i = 0; i < num; i++)
 			{
-				int num2 = evList.Count - 1;
-				for (int j = i + 1; j <= num2; j++)
+				for (int j = i + 1; j < num; j++)
 				{
 					if (evList[i].GetDate() > evList[j].GetDate())
 					{
@@ -369,8 +370,8 @@ namespace GKCore.Export
 				}
 			}
 
-			int num3 = evList.Count - 1;
-			for (int i = 0; i <= num3; i++)
+			int num3 = evList.Count;
+			for (int i = 0; i < num3; i++)
 			{
 				GEDCOMCustomEvent evt = evList[i].Event;
 				if (evt != null && object.Equals(evList[i].IRec, person.IRec))
@@ -387,8 +388,8 @@ namespace GKCore.Export
 			list.SetListSymbol("\u2022");
 			list.IndentationLeft = 10f;
 
-			int num4 = evList.Count - 1;
-			for (int i = 0; i <= num4; i++)
+			int num4 = evList.Count;
+			for (int i = 0; i < num4; i++)
 			{
 				PedigreeEvent evObj = evList[i];
 				GEDCOMCustomEvent evt = evObj.Event;
@@ -423,7 +424,7 @@ namespace GKCore.Export
 
 				    string st = (evObj.IRec.Sex == GEDCOMSex.svMale) ? ": Родился " : ": Родилась ";
 
-					li = dt + st + evObj.IRec.aux_GetNameStr(true, false);
+					li = dt + st + evObj.IRec.GetNameString(true, false);
 					p.Add(new Chunk(" " + li + " ", fTextFont));
 					p.Add(this.idLink(this.FindPerson(evObj.IRec)));
 				}
@@ -446,7 +447,7 @@ namespace GKCore.Export
 				}
 				else
 				{
-					string title = LangMan.LS(LSID.LSID_ExpPedigree) + ": " + this.fAncestor.aux_GetNameStr(true, false);
+					string title = LangMan.LS(LSID.LSID_ExpPedigree) + ": " + this.fAncestor.GetNameString(true, false);
 
 					fDocument.AddTitle("Pedigree");
 					fDocument.AddSubject("Pedigree");
@@ -472,8 +473,8 @@ namespace GKCore.Export
 						this.ReIndex();
 
 						int curLevel = 0;
-						int num = this.fPersonList.Count - 1;
-						for (int i = 0; i <= num; i++)
+						int num = this.fPersonList.Count;
+						for (int i = 0; i < num; i++)
 						{
 							PedigreePerson person = this.fPersonList[i];
 							if (curLevel != person.Level)
@@ -490,8 +491,8 @@ namespace GKCore.Export
 						{
 							fDocument.Add(new Paragraph(LangMan.LS(LSID.LSID_RPSources), fChapFont) { Alignment = Element.ALIGN_CENTER });
 
-							int num2 = this.fSourceList.Count - 1;
-							for (int j = 0; j <= num2; j++)
+							int num2 = this.fSourceList.Count;
+							for (int j = 0; j < num2; j++)
 							{
 								string sn = (j + 1).ToString();
 								Chunk chunk = new Chunk(sn + ". " + this.fSourceList[j], fTextFont);
@@ -540,7 +541,7 @@ namespace GKCore.Export
 						GEDCOMSourceRecord sourceRec = iRec.SourceCitations[i].Value as GEDCOMSourceRecord;
 
 						if (sourceRec != null) {
-							string srcName = GKUtils.ConStrings(sourceRec.Title);
+							string srcName = GKUtils.MergeStrings(sourceRec.Title);
 							if (srcName == "") {
 								srcName = sourceRec.FiledByEntry;
 							}
@@ -561,7 +562,7 @@ namespace GKCore.Export
 					GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[j].Family;
 					if (GKUtils.IsRecordAccess(family.Restriction, this.fShieldState))
 					{
-						family.aux_SortChilds();
+						family.SortChilds();
 
 						int num3 = family.Childrens.Count;
 						for (int i = 0; i < num3; i++)
@@ -576,14 +577,14 @@ namespace GKCore.Export
 
 		private void ReIndex()
 		{
-			int num = this.fPersonList.Count - 1;
-			for (int i = 0; i <= num; i++)
+			int num = this.fPersonList.Count;
+			for (int i = 0; i < num; i++)
 			{
-				int num2 = this.fPersonList.Count - 1;
-				for (int j = i + 1; j <= num2; j++)
+				for (int j = i + 1; j < num; j++)
 				{
 					PedigreePerson obj = this.fPersonList[i];
 					PedigreePerson obj2 = this.fPersonList[j];
+
 					string i_str = SysUtils.NumUpdate(obj.Level, 2) + obj.GetOrderStr();
 					string k_str = SysUtils.NumUpdate(obj2.Level, 2) + obj2.GetOrderStr();
 					if (string.Compare(i_str, k_str, false) > 0)

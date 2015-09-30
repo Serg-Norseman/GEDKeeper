@@ -10,7 +10,7 @@ using GKCore.Types;
 
 namespace GKUI.Lists
 {
-	public enum GroupColumnType : byte
+	public enum GroupColumnType
 	{
 		gctName,
 		gctChangeDate

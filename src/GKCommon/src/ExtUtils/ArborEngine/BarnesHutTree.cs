@@ -12,7 +12,6 @@ using GKCommon;
 
 namespace ExtUtils.ArborEngine
 {
-
 	public class Branch
 	{
 		public ArborPoint origin = null;

@@ -34,7 +34,9 @@ namespace GKCore.Options
 
 		public void LoadFromFile(IniFile iniFile)
 		{
-            if (iniFile == null) return;
+            if (iniFile == null) {
+                throw new ArgumentNullException("iniFile");
+            }
 
             try
             {
@@ -51,7 +53,9 @@ namespace GKCore.Options
 
 		public void SaveToFile(IniFile iniFile)
 		{
-            if (iniFile == null) return;
+            if (iniFile == null) {
+                throw new ArgumentNullException("iniFile");
+            }
 
 			iniFile.WriteBool("Pedigree", "IncludeAttributes", this.IncludeAttributes);
 			iniFile.WriteBool("Pedigree", "IncludeNotes", this.IncludeNotes);

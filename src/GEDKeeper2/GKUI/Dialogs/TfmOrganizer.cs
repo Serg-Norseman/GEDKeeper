@@ -28,17 +28,17 @@ namespace GKUI.Dialogs
 			this.fMailsList.List.Items.Clear();
 			this.fWebsList.List.Items.Clear();
 
-			int num = this.fBase.Tree.RecordsCount - 1;
-			for (int i = 0; i <= num; i++)
+			int num = this.fBase.Tree.RecordsCount;
+			for (int i = 0; i < num; i++)
 			{
 				GEDCOMRecord rec = this.fBase.Tree[i];
 			    if (rec.RecordType != GEDCOMRecordType.rtIndividual) continue;
 			    
                 GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
-			    string nm = iRec.aux_GetNameStr(true, false);
+			    string nm = iRec.GetNameString(true, false);
 
-			    int num2 = iRec.IndividualEvents.Count - 1;
-			    for (int j = 0; j <= num2; j++) {
+			    int num2 = iRec.IndividualEvents.Count;
+			    for (int j = 0; j < num2; j++) {
 			        this.PrepareEvent(nm, iRec.IndividualEvents[j]);
 			    }
 			}
@@ -103,19 +103,16 @@ namespace GKUI.Dialogs
 		        AddItem(this.fAdrList.List, iName, addrStr);
 		    }
 
-		    int num = addr.PhoneNumbers.Count - 1;
-		    for (int i = 0; i <= num; i++) {
-		        AddItem(this.fPhonesList.List, iName, addr.PhoneNumbers[i].StringValue);
+		    foreach (GEDCOMTag tag in addr.PhoneNumbers) {
+		        AddItem(this.fPhonesList.List, iName, tag.StringValue);
 		    }
 
-		    int num2 = addr.EmailAddresses.Count - 1;
-		    for (int i = 0; i <= num2; i++) {
-		        AddItem(this.fMailsList.List, iName, addr.EmailAddresses[i].StringValue);
+		    foreach (GEDCOMTag tag in addr.EmailAddresses) {
+		        AddItem(this.fMailsList.List, iName, tag.StringValue);
 		    }
 
-		    int num3 = addr.WebPages.Count - 1;
-		    for (int i = 0; i <= num3; i++) {
-		        AddItem(this.fWebsList.List, iName, addr.WebPages[i].StringValue);
+		    foreach (GEDCOMTag tag in addr.WebPages) {
+		        AddItem(this.fWebsList.List, iName, tag.StringValue);
 		    }
 		}
 	}

@@ -8,17 +8,17 @@ using GKCore.Interfaces;
 
 namespace GKUI.Lists
 {
-	public class TColumnProps
+	public sealed class ColumnProps
 	{
 		public byte colType;
 		public bool colActive;
 		public int colWidth;
 
-		public TColumnProps()
+		public ColumnProps()
 		{
 		}
 
-		public TColumnProps(byte colType, bool colActive, int colWidth)
+		public ColumnProps(byte colType, bool colActive, int colWidth)
 		{
 			this.colType = colType;
 			this.colActive = colActive;
@@ -26,7 +26,7 @@ namespace GKUI.Lists
 		}
 	}
 
-	public struct TColumnStatic
+	public sealed class ColumnStatic
 	{
 		//public byte colType;
 		public LSID colName;
@@ -42,17 +42,17 @@ namespace GKUI.Lists
     /// </summary>
     public abstract class ListColumns
 	{
-		private List<TColumnProps> fColumns;
+		private List<ColumnProps> fColumns;
         private Type fColumnEnum;
 
-		public List<TColumnStatic> ColumnStatics;
+		public List<ColumnStatic> ColumnStatics;
 		
 		public int Count
 		{
 			get { return fColumns.Count; }
 		}
 
-		public TColumnProps this[int index]
+		public ColumnProps this[int index]
 		{
 			get { return fColumns[index]; }
 			set { fColumns[index] = value; }
@@ -67,7 +67,7 @@ namespace GKUI.Lists
 
 	    protected ListColumns()
 		{
-			this.ColumnStatics = new List<TColumnStatic>();
+			this.ColumnStatics = new List<ColumnStatic>();
 		}
 
 		protected void InitData(Type colEnum)
@@ -76,10 +76,10 @@ namespace GKUI.Lists
 
 			InitColumnStatics();
 
-			this.fColumns = new List<TColumnProps>();
+			this.fColumns = new List<ColumnProps>();
             foreach (Enum e in Enum.GetValues(this.fColumnEnum))
 			{
-				this.fColumns.Add(new TColumnProps());
+				this.fColumns.Add(new ColumnProps());
 			}
 		}
 
@@ -89,9 +89,9 @@ namespace GKUI.Lists
 			{
 				byte i = (e as IConvertible).ToByte(null);
 
-				TColumnStatic cs = ColumnStatics[i];
+				ColumnStatic cs = ColumnStatics[i];
 
-				fColumns[i] = new TColumnProps(i, cs.active, cs.width);
+				fColumns[i] = new ColumnProps(i, cs.active, cs.width);
 			}
 		}
 
@@ -102,7 +102,7 @@ namespace GKUI.Lists
 
 		public void AddStatic(/*Enum colType*/ LSID colName, TDataType dataType, int defWidth, bool defActive)
 		{
-			TColumnStatic cs = new TColumnStatic();
+			ColumnStatic cs = new ColumnStatic();
 
 			//cs.colType = ((IConvertible)colType).ToByte(null);
 			cs.colName = colName;
@@ -117,7 +117,7 @@ namespace GKUI.Lists
 
 		public void AddStatic(/*Enum colType*/ LSID colName, TDataType dataType, int defWidth, bool defActive, string format, NumberFormatInfo nfi)
 		{
-			TColumnStatic cs = new TColumnStatic();
+			ColumnStatic cs = new ColumnStatic();
 
 			//cs.colType = ((IConvertible)colType).ToByte(null);
 			cs.colName = colName;
@@ -132,11 +132,15 @@ namespace GKUI.Lists
 
 		public void CopyTo(ListColumns columns)
 		{
+            if (columns == null) {
+                throw new ArgumentNullException("columns");
+            }
+
             foreach (Enum e in Enum.GetValues(this.fColumnEnum))
 			{
 				byte i = (e as IConvertible).ToByte(null);
 
-				TColumnProps col = this.fColumns[i];
+				ColumnProps col = this.fColumns[i];
 				columns[i] = col;
 			}
 		}
@@ -149,9 +153,9 @@ namespace GKUI.Lists
 			{
 				byte i = (e as IConvertible).ToByte(null);
 
-				TColumnStatic defCol = ColumnStatics[i];
+				ColumnStatic defCol = ColumnStatics[i];
 
-				TColumnProps col = this.fColumns[i];
+				ColumnProps col = this.fColumns[i];
 				col.colType = (byte)iniFile.ReadInteger(section, "ColType_" + i.ToString(), i);
 				col.colActive = iniFile.ReadBool(section, "ColActive_" + i.ToString(), defCol.active);
 				col.colWidth = iniFile.ReadInteger(section, "ColWidth_" + i.ToString(), defCol.width);
@@ -179,10 +183,15 @@ namespace GKUI.Lists
 			}
 		}
 		
-		public TColumnProps GetActiveColumnByIndex(int index)
+		public ColumnProps GetActiveColumnByIndex(int index)
 		{
 			int activeIndex = -1;
-			foreach (TColumnProps colProps in this.fColumns) {
+			
+			int num = this.fColumns.Count;
+			for (int i = 0; i < num; i++)
+			{
+				ColumnProps colProps = this.fColumns[i];
+				
 				if (colProps.colActive) {
 					activeIndex++;
 					
@@ -197,7 +206,7 @@ namespace GKUI.Lists
 		
 		public void WidthChanged(int colIndex, int colWidth)
 		{
-			TColumnProps colProps = this.GetActiveColumnByIndex(colIndex - 1); // since column "Num" excluded
+			ColumnProps colProps = this.GetActiveColumnByIndex(colIndex - 1); // since column "Num" excluded
 			if (colProps != null) {
 				colProps.colWidth = colWidth;
 			}
@@ -207,7 +216,7 @@ namespace GKUI.Lists
 		{
 			if (up) {
 				if (idx > 0) {
-					TColumnProps temp = this.fColumns[idx - 1];
+					ColumnProps temp = this.fColumns[idx - 1];
 					this.fColumns[idx - 1] = this.fColumns[idx];
 					this.fColumns[idx] = temp;
 
@@ -215,7 +224,7 @@ namespace GKUI.Lists
 				}
 			} else {
 				if (idx >= 0 && idx < this.fColumns.Count - 1) {
-					TColumnProps temp = this.fColumns[idx + 1];
+					ColumnProps temp = this.fColumns[idx + 1];
 					this.fColumns[idx + 1] = this.fColumns[idx];
 					this.fColumns[idx] = temp;
 

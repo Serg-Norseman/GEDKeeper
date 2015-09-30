@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Text;
 
 namespace GKCommon
@@ -10,7 +9,7 @@ namespace GKCommon
     public static class SCCrypt
 	{
 
-		private static byte[] LStrConcat2([In] byte[] L, [In] byte[] R)
+		private static byte[] LStrConcat2(byte[] L, byte[] R)
 		{
 			byte[] result = null;
 			int num = ((L != null) ? L.Length : 0);
@@ -24,47 +23,47 @@ namespace GKCommon
 			return result;
 		}
 
-		private static byte[] LStrCopy([In] byte[] S, int Index1, int Count)
+		private static byte[] LStrCopy(byte[] S, int index1, int count)
 		{
 			byte[] result = null;
-			if (Count > 0)
+			if (count > 0)
 			{
 				int num = ((S != null) ? S.Length : 0);
-				if (num > 0 && Index1 <= num)
+				if (num > 0 && index1 <= num)
 				{
-					int idx = ((Index1 <= 0) ? 0 : Index1 - 1);
+					int idx = ((index1 <= 0) ? 0 : index1 - 1);
 
-					if (Count > num - idx)
+					if (count > num - idx)
 					{
-						Count = num - idx;
+						count = num - idx;
 					}
 
-					if (Count > 0)
+					if (count > 0)
 					{
-						result = new byte[Count];
-						Array.Copy(S, idx, result, 0, Count);
+						result = new byte[count];
+						Array.Copy(S, idx, result, 0, count);
 					}
 				}
 			}
 			return result;
 		}
 
-		private static void LStrDelete(ref byte[] Dest, int Index1, int Count)
+		private static void LStrDelete(ref byte[] dest, int index1, int count)
 		{
-			if (Count > 0)
+			if (count > 0)
 			{
-				int num = ((Dest != null) ? Dest.Length : 0);
-				if (num > 0 && Index1 <= num)
+				int num = ((dest != null) ? dest.Length : 0);
+				if (num > 0 && index1 <= num)
 				{
-					int num2 = ((Index1 <= 0) ? 0 : Index1 - 1);
+					int num2 = ((index1 <= 0) ? 0 : index1 - 1);
 
-					if (Count > num - num2)
+					if (count > num - num2)
 					{
-						Count = num - num2;
+						count = num - num2;
 					}
-					if (Count > 0)
+					if (count > 0)
 					{
-						int num3 = num - Count;
+						int num3 = num - count;
 						if (num3 < 0)
 						{
 							num3 = 0;
@@ -73,26 +72,26 @@ namespace GKCommon
 						byte[] array = new byte[num3];
 						if (num2 > 0)
 						{
-							Array.Copy(Dest, 0, array, 0, num2);
+							Array.Copy(dest, 0, array, 0, num2);
 						}
-						if (num2 + Count < num)
+						if (num2 + count < num)
 						{
-							Array.Copy(Dest, num2 + Count, array, num2, num - Count - num2);
+							Array.Copy(dest, num2 + count, array, num2, num - count - num2);
 						}
-						Dest = array;
+						dest = array;
 					}
 				}
 			}
 		}
 
-		private static void MoveL2S([In] uint Source, ref byte[] Dest, int count)
+		private static void MoveL2S(uint source, ref byte[] dest, int count)
 		{
 			byte[] bytes = new byte[4];
 
 			unchecked
 			{
-				ushort wl = (ushort)(Source);
-				ushort wh = (ushort)(Source >> 16);
+				ushort wl = (ushort)(source);
+				ushort wh = (ushort)(source >> 16);
 
 				bytes[0] = (byte)wl;
 				bytes[1] = (byte)(wl >> 8);
@@ -100,12 +99,12 @@ namespace GKCommon
 				bytes[3] = (byte)(wh >> 8);
 			}
 
-			if (Dest != null) {
-				for (int I = 0; I < count; I++) Dest[I] = bytes[I];
+			if (dest != null) {
+				for (int I = 0; I < count; I++) dest[I] = bytes[I];
 			}
 		}
 
-		private static void MoveS2L([In] byte[] source, out int dest, int count)
+		private static void MoveS2L(byte[] source, out int dest, int count)
 		{
 			byte[] bytes = new byte[4];
 			for (int I = 1; I <= 4; I++) {
@@ -119,7 +118,7 @@ namespace GKCommon
 			dest = (int)((bytes[0] | bytes[1] << 8) | (bytes[2] | bytes[3] << 8) << 16);
 		}
 
-		private static byte[] Decode([In] byte[] data)
+		private static byte[] Decode(byte[] data)
 		{
 			int num = (data != null) ? data.Length : 0;
 			byte[] result = null;
@@ -146,7 +145,7 @@ namespace GKCommon
 			return result;
 		}
 
-		private static byte[] Encode([In] byte[] data)
+		private static byte[] Encode(byte[] data)
 		{
 			int I = 0;
 			int num = (data != null) ? data.Length : 0;
@@ -175,7 +174,7 @@ namespace GKCommon
 			return res;
 		}
 
-		public static string scDecrypt([In] string St, ushort Key)
+		public static string scDecrypt(string St, ushort Key)
 		{
 			string res = "";
 
@@ -192,11 +191,11 @@ namespace GKCommon
 
 				byte[] tmp = (byte[])ppd.Clone();
 
-				ushort Seed = Key;
-				for (int I = 1; I <= ppd.Length; I++)
+				uint seed = Key;
+				for (int i = 0; i < ppd.Length; i++)
 				{
-					tmp[I - 1] = (byte)((uint)tmp[I - 1] ^ (uint)Seed >> 8);
-					Seed = unchecked((ushort)(((uint)ppd[I - 1] + (uint)Seed) * 28732u + 28446u));
+					tmp[i] = (byte)((uint)tmp[i] ^ seed >> 8);
+					seed = unchecked((ushort)(((uint)ppd[i] + seed) * 28732u + 28446u));
 				}
 				res = Encoding.ASCII.GetString(tmp);
 			}
@@ -204,18 +203,18 @@ namespace GKCommon
 			return res;
 		}
 
-		public static string scEncrypt([In] string St, ushort Key)
+		public static string scEncrypt(string St, ushort Key)
 		{
 			string res = "";
 
 			if (!string.IsNullOrEmpty(St))
 			{
-				ushort Seed = Key;
+				uint seed = Key;
 				byte[] idata = Encoding.ASCII.GetBytes(St);
-				for (int I = 1; I <= idata.Length; I++)
+				for (int i = 0; i < idata.Length; i++)
 				{
-					idata[I - 1] = (byte)((uint)idata[I - 1] ^ (uint)Seed >> 8);
-					Seed = unchecked((ushort)(((uint)idata[I - 1] + (uint)Seed) * 28732u + 28446u));
+					idata[i] = (byte)((uint)idata[i] ^ seed >> 8);
+					seed = unchecked((ushort)(((uint)idata[i] + seed) * 28732u + 28446u));
 				}
 
 				byte[] res_data = null;

@@ -68,7 +68,7 @@ namespace GKUI.Sheets
 
                         if (relPerson != null)
                         {
-                            relName = relPerson.aux_GetNameStr(true, false);
+                            relName = relPerson.GetNameString(true, false);
                         }
 
                         ListViewItem item = this.List.AddItem(idx.ToString(), family);
@@ -110,7 +110,7 @@ namespace GKUI.Sheets
                 case RecordAction.raDelete:
                     if (family != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachSpouseQuery)) != DialogResult.No)
                     {
-                        family.aux_RemoveSpouse(person);
+                        family.RemoveSpouse(person);
                         result = true;
                     }
                     break;

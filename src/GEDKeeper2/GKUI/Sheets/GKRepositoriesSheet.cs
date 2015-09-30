@@ -67,7 +67,7 @@ namespace GKUI.Sheets
                 case RecordAction.raAdd:
                     GEDCOMRepositoryRecord rep = aBase.SelectRecord(GEDCOMRecordType.rtRepository, null) as GEDCOMRepositoryRecord;
                     if (rep != null) {
-                        sourceRecord.aux_AddRepository(rep);
+                        sourceRecord.AddRepository(rep);
                         result = true;
                     }
                     break;

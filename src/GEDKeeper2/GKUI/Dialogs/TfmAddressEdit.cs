@@ -161,7 +161,7 @@ namespace GKUI.Dialogs
 				this.fAddress.AddressCity = this.edCity.Text;
 				this.fAddress.AddressPostalCode = this.edPostalCode.Text;
 
-				this.fAddress.aux_SetAddressValue(this.edAddress.Text);
+				this.fAddress.SetAddressText(this.edAddress.Text);
 
 				base.DialogResult = DialogResult.OK;
 			}

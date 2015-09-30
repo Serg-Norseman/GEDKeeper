@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKUI.Controls;
@@ -8,9 +9,9 @@ namespace GKUI.Sheets
     public abstract class GKCustomSheet : GKSheetList
 	{
     	private readonly IBaseEditor fBaseEditor;
-        private IGEDCOMListEnumerator<GEDCOMObject> fDataList;
+        private IGEDCOMListEnumerator fDataList;
 
-        public IGEDCOMListEnumerator<GEDCOMObject> DataList
+        public IGEDCOMListEnumerator DataList
         {
             get { return this.fDataList; }
             set { 

@@ -15,11 +15,6 @@ namespace GKCommon.GEDCOM
 			set { base.SetTagStrings(this, value); }
 		}
 
-		public void SetAddressArray(string[] value)
-		{
-			base.SetTagStrings(this, value);
-		}
-
 
 		public string AddressLine1
 		{
@@ -219,7 +214,7 @@ namespace GKCommon.GEDCOM
         
         #region Auxiliary
 
-		public void aux_SetAddressValue(string value)
+		public void SetAddressText(string value)
 		{
 			StringList sl = new StringList(value);
 			try
@@ -230,6 +225,11 @@ namespace GKCommon.GEDCOM
 			{
                 sl.Dispose();
 			}
+		}
+
+		public void SetAddressArray(string[] value)
+		{
+			base.SetTagStrings(this, value);
 		}
 
         #endregion

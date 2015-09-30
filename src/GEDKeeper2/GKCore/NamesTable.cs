@@ -155,8 +155,7 @@ namespace GKCore
 
 			if (aPatronymic != "")
 			{
-				ICollection valueColl = this.fNames.Values;
-				foreach (NameEntry nm in valueColl)
+				foreach (NameEntry nm in this.fNames.Values)
 				{
 					if (nm.F_Patronymic == aPatronymic || nm.M_Patronymic == aPatronymic)
 					{
@@ -336,7 +335,12 @@ namespace GKCore
 
 		public static string[] GetSurnames(GEDCOMIndividualRecord iRec)
 		{
-			string fam, nam, pat;
+            if (iRec == null)
+            {
+                throw new ArgumentNullException("iRec");
+            }
+
+            string fam, nam, pat;
 			iRec.GetNameParts(out fam, out nam, out pat);
 			bool female = (iRec.Sex == GEDCOMSex.svFemale);
 

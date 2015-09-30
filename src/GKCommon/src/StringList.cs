@@ -15,14 +15,17 @@ namespace GKCommon
 		}
 	}
 
-	public delegate void NotifyEventHandler(object sender);
+    /*
+     * I.e. EventHandler
+     */
+    public delegate void NotifyEventHandler(object sender /*, EventArgs e*/);
 
     /// <summary>
     /// 
     /// </summary>
-    public class StringList : BaseObject
+    public sealed class StringList : BaseObject
 	{
-		private struct StringItem
+		private sealed class StringItem
 		{
 			public string FString;
 			public object FObject;
@@ -59,27 +62,24 @@ namespace GKCommon
 		public string this[int index]
 		{
 			get {
-				if (index < 0 || index >= this.fList.Count)
-				{
+				if (index < 0 || index >= this.fList.Count) {
 					RaiseError("List index out of bounds ({0})", index);
 				}
 
 				return this.fList[index].FString;
 			}
+
 			set {
-				if (this.Sorted)
-				{
+				if (this.Sorted) {
 					RaiseError("Operation not allowed on sorted list", 0);
 				}
-				if (index < 0 || index >= this.fList.Count)
-				{
+
+				if (index < 0 || index >= this.fList.Count) {
 					RaiseError("List index out of bounds ({0})", index);
 				}
 
 				this.Changing();
-				StringItem item = this.fList[index];
-				item.FString = value;
-				this.fList[index] = item;
+				this.fList[index].FString = value;
 				this.Changed();
 			}
 		}
@@ -168,23 +168,21 @@ namespace GKCommon
 
 		public object GetObject(int index)
 		{
-			if (index < 0 || index >= this.fList.Count)
-			{
+			if (index < 0 || index >= this.fList.Count) {
 				RaiseError("List index out of bounds ({0})", index);
 			}
+
 			return this.fList[index].FObject;
 		}
 
 		public void SetObject(int index, object obj)
 		{
-			if (index < 0 || index >= this.fList.Count)
-			{
+			if (index < 0 || index >= this.fList.Count) {
 				RaiseError("List index out of bounds ({0})", index);
 			}
+
 			this.Changing();
-			StringItem item = this.fList[index];
-			item.FObject = obj;
-			this.fList[index] = item;
+			this.fList[index].FObject = obj;
 			this.Changed();
 		}
 
@@ -276,10 +274,9 @@ namespace GKCommon
 			this.BeginUpdate();
 			try
 			{
-				int num = strList.Count - 1;
-				for (int I = 0; I <= num; I++)
-				{
-					this.AddObject(strList[I], strList.GetObject(I));
+				int num = strList.Count;
+				for (int i = 0; i < num; i++) {
+					this.AddObject(strList[i], strList.GetObject(i));
 				}
 			}
 			finally
@@ -430,32 +427,20 @@ namespace GKCommon
 
 		#region Search
 
-		public int xIndexOf(string str)
-		{
-			int num = this.fList.Count - 1;
-			for (int res = 0; res <= num; res++)
-			{
-				if (this.CompareStrings(this.fList[res].FString, str) == 0)
-				{
-					return res;
-				}
-			}
-
-			return -1;
-		}
-
 		public int IndexOf(string str)
 		{
 			int result = -1;
 
-			if (!this.Sorted)
-			{
-				result = xIndexOf(str);
-			}
-			else
-			{
-				if (!this.Find(str, ref result))
-				{
+			if (!this.Sorted) {
+				int num = this.fList.Count;
+				for (int i = 0; i < num; i++) {
+					if (this.CompareStrings(this.fList[i].FString, str) == 0) {
+						result = i;
+						break;
+					}
+				}
+			} else {
+				if (!this.Find(str, ref result)) {
 					result = -1;
 				}
 			}
@@ -465,11 +450,9 @@ namespace GKCommon
 
 		public int IndexOfObject(object obj)
 		{
-			int num = this.fList.Count - 1;
-			for (int i = 0; i <= num; i++)
-			{
-				if (this.fList[i].FObject == obj)
-				{
+			int num = this.fList.Count;
+			for (int i = 0; i < num; i++) {
+				if (this.fList[i].FObject == obj) {
 					return i;
 				}
 			}

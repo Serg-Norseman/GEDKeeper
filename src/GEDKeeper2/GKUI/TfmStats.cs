@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -65,6 +66,7 @@ namespace GKUI
 				case TChartStyle.csBar:
 					gPane.AddBar("-", ppList, Color.Green);
 					break;
+
 				case TChartStyle.csPoint:
 					gPane.AddCurve("-", ppList, Color.Green, SymbolType.Diamond).Symbol.Size = 3;
 					break;
@@ -82,14 +84,14 @@ namespace GKUI
 			this.fListStats.BeginUpdate();
 			this.fListStats.Items.Clear();
 			
-			List<TreeStats.TListVal> vals = new List<TreeStats.TListVal>();
+			List<StatsItem> vals = new List<StatsItem>();
 			try
 			{
 				fTreeStats.GetSpecStats(mode, vals);
 				ListViewItem[] items = new ListViewItem[vals.Count];
 
 				int i = 0;
-				foreach (TreeStats.TListVal lv in vals)
+				foreach (StatsItem lv in vals)
 				{
 					ListViewItem item = new ListViewItem();
 					item.Text = lv.Item;
@@ -103,8 +105,6 @@ namespace GKUI
 			}
 			finally
 			{
-				//items.Dispose();
-				//vals.Dispose();
 				this.fListStats.EndUpdate();
 			}
 
@@ -167,6 +167,12 @@ namespace GKUI
 
 					case TreeStats.TStatMode.smCertaintyIndex:
 						this.fChartXTitle = LangMan.LS(LSID.LSID_CertaintyIndex);
+						this.fChartYTitle = LangMan.LS(LSID.LSID_People);
+						this.PrepareArray(gPane, TChartStyle.csBar, true);
+						break;
+
+					case TreeStats.TStatMode.smBirthByMonth:
+						this.fChartXTitle = LangMan.LS(LSID.LSID_Month);
 						this.fChartYTitle = LangMan.LS(LSID.LSID_People);
 						this.PrepareArray(gPane, TChartStyle.csBar, true);
 						break;
@@ -283,7 +289,7 @@ namespace GKUI
 
 			for (TreeStats.TStatMode i = TreeStats.TStatMode.smAncestors; i <= TreeStats.TStatMode.smLast; i++)
 			{
-				GKData.TStatsTitleStruct tr = GKData.StatsTitles[(int)i];
+				GKData.StatsTitleStruct tr = GKData.StatsTitles[(int)i];
 				this.cbType.Items.Add(LangMan.LS(tr.Title));
 			}
 

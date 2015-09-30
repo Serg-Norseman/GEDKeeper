@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
+using System.Collections;
 using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
 using GKCore;
+using GKCore.Kinships;
 using GKCore.Types;
 using NUnit.Framework;
 
@@ -60,13 +62,15 @@ namespace GKTests
 			Assert.AreEqual(GEDCOMSex.svMale, iRec.Sex);
 
 			this.PersonalName_Tests(iRec);
-						
+
+			Assert.AreEqual(false, context.IsChildless(iRec));
+
 			//
 			
 			GEDCOMCustomEvent evt = context.CreateEventEx(null, "BIRT", "28 DEC 1990", "Ivanovo");
 			Assert.IsNull(evt);
 			
-			GEDCOMNoteRecord note = tree.aux_CreateNote();
+			GEDCOMNoteRecord note = tree.CreateNote();
 			evt = context.CreateEventEx(note, "BIRT", "28 DEC 1990", "Ivanovo");
 			Assert.IsNull(evt);
 			
@@ -74,6 +78,10 @@ namespace GKTests
 			
 			evt = context.CreateEventEx(iRec, "BIRT", "28 DEC 1990", "Ivanovo");
 			Assert.IsNotNull(evt);
+			
+			//Assert.AreEqual(1990, context.FindBirthYear(iRec));
+			//Assert.AreEqual(-1, context.FindDeathYear(iRec));
+
 			GEDCOMCustomEventTest(evt, "28.12.1990");
 			
 			string ds = GKUtils.GEDCOMCustomDateToStr(evt.Detail.Date, DateFormat.dfDD_MM_YYYY, false);
@@ -91,7 +99,7 @@ namespace GKTests
 			string dst = GKUtils.CompactDate("__.__.2013");
 			Assert.AreEqual("2013", dst);
 			
-			GEDCOMFamilyRecord fRec = tree.aux_CreateFamily();
+			GEDCOMFamilyRecord fRec = tree.CreateFamily();
 			Assert.IsNotNull(fRec);
 			
 			evt = context.CreateEventEx(fRec, "MARR", "28 DEC 2013", "Ivanovo");
@@ -136,6 +144,8 @@ namespace GKTests
 			res = GKUtils.MatchesMask("abrakadabra", "*test*");
 			Assert.IsFalse(res);
 
+			GEDCOMListTests(iRec);
+			
 			// access tests
 			Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnNone, ShieldState.ssNone));
 			Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnConfidential, ShieldState.ssNone));
@@ -150,6 +160,80 @@ namespace GKTests
 			Assert.IsFalse(GKUtils.IsRecordAccess(GEDCOMRestriction.rnPrivacy, ShieldState.ssMaximum));
 		}
 
+		private const int rep_count = 1000; // 1000000; // for profile tests
+
+		private void GEDCOMListTests(GEDCOMIndividualRecord iRec)
+		{
+			//GEDCOMListTest_Hot(iRec);
+			
+			for (int k = 0; k < rep_count; k++) {
+				GEDCOMListTest11(iRec);
+				GEDCOMListTest12(iRec);
+				GEDCOMListTest21(iRec);
+				GEDCOMListTest22(iRec);
+				GEDCOMListTest23(iRec);
+				GEDCOMListTest3(iRec);
+			}
+		}
+
+		/*private void GEDCOMListTest_Hot(GEDCOMIndividualRecord iRec)
+		{
+			for (int k = 0; k < 100000; k++) {
+				GEDCOMListTest11(iRec);
+				GEDCOMListTest12(iRec);
+				GEDCOMListTest21(iRec);
+				GEDCOMListTest22(iRec);
+				GEDCOMListTest23(iRec);
+				GEDCOMListTest3(iRec);
+			}
+		}*/
+
+		private void GEDCOMListTest11(GEDCOMIndividualRecord iRec)
+		{
+			foreach (GEDCOMCustomEvent evt1 in iRec.IndividualEvents) {
+				evt1.GetHashCode();
+			}
+		}
+
+		private void GEDCOMListTest12(GEDCOMIndividualRecord iRec)
+		{
+			IGEDCOMListEnumerator enumer = iRec.IndividualEvents.GetEnumerator();
+			while (enumer.MoveNext()) {
+				GEDCOMCustomEvent evt1 = (GEDCOMCustomEvent)enumer.Current;
+				evt1.GetHashCode();
+			}
+		}
+
+		private void GEDCOMListTest21(GEDCOMIndividualRecord iRec)
+		{
+			for (int i = 0; i < iRec.IndividualEvents.Count; i++) {
+				GEDCOMCustomEvent evt1 = iRec.IndividualEvents[i];
+				evt1.GetHashCode();
+			}
+		}
+
+		private void GEDCOMListTest22(GEDCOMIndividualRecord iRec)
+		{
+			for (int i = 0, num = iRec.IndividualEvents.Count; i < num; i++) {
+				GEDCOMCustomEvent evt1 = iRec.IndividualEvents[i];
+				evt1.GetHashCode();
+			}
+		}
+
+		private void GEDCOMListTest23(GEDCOMIndividualRecord iRec)
+		{
+			GEDCOMList<GEDCOMCustomEvent> events = iRec.IndividualEvents;
+			for (int i = 0, num = events.Count; i < num; i++) {
+				GEDCOMCustomEvent evt1 = events[i];
+				evt1.GetHashCode();
+			}
+		}
+
+		private void GEDCOMListTest3(GEDCOMIndividualRecord iRec)
+		{
+			iRec.IndividualEvents.ForEach(x => { x.GetHashCode(); });
+		}
+		
 		private void GEDCOMCustomEventTest(GEDCOMCustomEvent evt, string dateTest)
 		{
 			GEDCOMEventDetailTest(evt.Detail, dateTest);
@@ -253,6 +337,19 @@ namespace GKTests
 
 			sx = NamesTable.GetSex("Иван", "Петрович", false);
 			Assert.AreEqual(GEDCOMSex.svMale, sx);
+		}
+
+		[Test]
+		public void Kinships_Tests()
+		{
+			RelationKind rel;
+			int great, level;
+			
+			rel = KinshipsMan.FindKinship(RelationKind.rkFather, RelationKind.rkSon, out great, out level);
+			Assert.AreEqual(RelationKind.rkBrother, rel);
+			
+			rel = KinshipsMan.FindKinship(RelationKind.rkNone, RelationKind.rkSon, out great, out level);
+			Assert.AreEqual(RelationKind.rkSon, rel);
 		}
 	}
 }

@@ -10,7 +10,7 @@ using GKCore.Types;
 
 namespace GKUI.Lists
 {
-	public enum MultimediaColumnType : byte
+	public enum MultimediaColumnType
 	{
 		mctTitle,
 		mctMediaType,

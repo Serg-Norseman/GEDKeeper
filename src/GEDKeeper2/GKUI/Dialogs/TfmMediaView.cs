@@ -15,135 +15,128 @@ namespace GKUI.Dialogs
     /// 
     /// </summary>
     public partial class TfmMediaView : Form, ILocalization
-	{
-		private readonly IBase fBase;
+    {
+        private readonly IBase fBase;
 
         private GEDCOMFileReferenceWithTitle fFileRef;
-		private bool fExtern;
-		private ImageView fImageCtl;
+        private bool fExtern;
+        private ImageView fImageCtl;
 
-		public bool Extern
-		{
-			get { return this.fExtern; }
-		}
+        public bool Extern
+        {
+            get { return this.fExtern; }
+        }
 
-		public GEDCOMFileReferenceWithTitle FileRef
-		{
-			get { return this.fFileRef; }
-			set { this.SetFileRef(value); }
-		}
+        public GEDCOMFileReferenceWithTitle FileRef
+        {
+            get { return this.fFileRef; }
+            set { this.SetFileRef(value); }
+        }
 
-		private void SetFileRef(GEDCOMFileReferenceWithTitle value)
-		{
-			this.fFileRef = value;
-			this.fExtern = false;
-			this.Text = this.fFileRef.Title;
-			Control ctl = null;
+        private void SetFileRef(GEDCOMFileReferenceWithTitle value)
+        {
+            this.fFileRef = value;
+            this.fExtern = false;
+            this.Text = this.fFileRef.Title;
+            Control ctl = null;
 
-			this.SuspendLayout();
-			switch (this.fFileRef.MultimediaFormat)
-			{
-				case GEDCOMMultimediaFormat.mfBMP:
-				case GEDCOMMultimediaFormat.mfGIF:
-				case GEDCOMMultimediaFormat.mfJPG:
-				case GEDCOMMultimediaFormat.mfPCX:
-				case GEDCOMMultimediaFormat.mfTIF:
-				case GEDCOMMultimediaFormat.mfTGA:
-				case GEDCOMMultimediaFormat.mfPNG:
-				{
-					Image img = this.fBase.BitmapLoad(this.fFileRef, -1, -1, false);
+            this.SuspendLayout();
+            switch (this.fFileRef.MultimediaFormat) {
+                case GEDCOMMultimediaFormat.mfBMP:
+                case GEDCOMMultimediaFormat.mfGIF:
+                case GEDCOMMultimediaFormat.mfJPG:
+                case GEDCOMMultimediaFormat.mfPCX:
+                case GEDCOMMultimediaFormat.mfTIF:
+                case GEDCOMMultimediaFormat.mfTGA:
+                case GEDCOMMultimediaFormat.mfPNG: {
+                        Image img = this.fBase.BitmapLoad(this.fFileRef, -1, -1, false);
 
-					this.fImageCtl = new ImageView();
-					this.fImageCtl.OpenImage(img);
-					ctl = this.fImageCtl;
-					break;
-				}
+                        this.fImageCtl = new ImageView();
+                        this.fImageCtl.OpenImage(img);
+                        ctl = this.fImageCtl;
+                        break;
+                    }
 
-				case GEDCOMMultimediaFormat.mfWAV:
-				case GEDCOMMultimediaFormat.mfAVI:
-				case GEDCOMMultimediaFormat.mfMPG:
-				{
-					this.fExtern = true;
-					string targetFile = "";
-                    this.fBase.MediaLoad(this.fFileRef, ref targetFile);
-                    SysUtils.LoadExtFile(targetFile);
-					break;
-				}
+                case GEDCOMMultimediaFormat.mfWAV:
+                case GEDCOMMultimediaFormat.mfAVI:
+                case GEDCOMMultimediaFormat.mfMPG: {
+                        this.fExtern = true;
+                        string targetFile = "";
+                        this.fBase.MediaLoad(this.fFileRef, ref targetFile);
+                        SysUtils.LoadExtFile(targetFile);
+                        break;
+                    }
 
-				case GEDCOMMultimediaFormat.mfTXT:
-				{
-					Stream fs;
-					this.fBase.MediaLoad(this.fFileRef, out fs, false);
-					using (StreamReader strd = new StreamReader(fs, Encoding.GetEncoding(1251)))
-					{
-					    TextBox txtBox = new TextBox();
-                        txtBox.Multiline = true;
-                        txtBox.ReadOnly = true;
-                        txtBox.ScrollBars = ScrollBars.Both;
-                        txtBox.Text = strd.ReadToEnd();
-                        ctl = txtBox;
-					}
-					break;
-				}
+                case GEDCOMMultimediaFormat.mfTXT: {
+                        Stream fs;
+                        this.fBase.MediaLoad(this.fFileRef, out fs, false);
+                        using (StreamReader strd = new StreamReader(fs, Encoding.GetEncoding(1251))) {
+                            TextBox txtBox = new TextBox();
+                            txtBox.Multiline = true;
+                            txtBox.ReadOnly = true;
+                            txtBox.ScrollBars = ScrollBars.Both;
+                            txtBox.Text = strd.ReadToEnd();
+                            ctl = txtBox;
+                        }
+                        break;
+                    }
 
-				case GEDCOMMultimediaFormat.mfRTF:
-				{
-					Stream fs;
-					this.fBase.MediaLoad(this.fFileRef, out fs, false);
-					using (StreamReader strd = new StreamReader(fs))
-					{
-					    RichTextBox txtBox = new RichTextBox();
-                        txtBox.ReadOnly = true;
-                        txtBox.Text = strd.ReadToEnd();
-                        ctl = txtBox;
-					}
-					break;
-				}
+                case GEDCOMMultimediaFormat.mfRTF: {
+                        Stream fs;
+                        this.fBase.MediaLoad(this.fFileRef, out fs, false);
+                        using (StreamReader strd = new StreamReader(fs)) {
+                            RichTextBox txtBox = new RichTextBox();
+                            txtBox.ReadOnly = true;
+                            txtBox.Text = strd.ReadToEnd();
+                            ctl = txtBox;
+                        }
+                        break;
+                    }
 
-				case GEDCOMMultimediaFormat.mfHTM:
-				{
-					Stream fs;
-					this.fBase.MediaLoad(this.fFileRef, out fs, false);
+                case GEDCOMMultimediaFormat.mfHTM: {
+                        Stream fs;
+                        this.fBase.MediaLoad(this.fFileRef, out fs, false);
 
-					ctl = new WebBrowser();
-					(ctl as WebBrowser).DocumentStream = fs;
+                        ctl = new WebBrowser();
+                        (ctl as WebBrowser).DocumentStream = fs;
 
-					break;
-				}
-			}
+                        break;
+                    }
+            }
 
-			if (ctl != null) {
-				ctl.Dock = DockStyle.Fill;
-				ctl.Location = new Point(0, 0);
-				ctl.Size = new Size(100, 100);
-				base.Controls.Add(ctl);
-				base.Controls.SetChildIndex(ctl, 0);
-			}
+            if (ctl != null) {
+                ctl.Dock = DockStyle.Fill;
+                ctl.Location = new Point(0, 0);
+                ctl.Size = new Size(100, 100);
+                base.Controls.Add(ctl);
+                base.Controls.SetChildIndex(ctl, 0);
+            }
 
-			this.ResumeLayout(false);
-		}
+            this.ResumeLayout(false);
+        }
 
-		private void TfmMediaView_KeyDown(object sender, KeyEventArgs e)
-		{
-			if (e.KeyCode == Keys.Escape)
-			{
-				base.Close();
-			}
-		}
+        private void TfmMediaView_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape) {
+                base.Close();
+            }
+        }
 
-		public TfmMediaView(IBase aBase)
-		{
-			this.InitializeComponent();
-			this.fBase = aBase;
-		}
-		
-		void ILocalization.SetLang()
-		{
-			if (this.fImageCtl != null) {
-        		this.fImageCtl.btnSizeToFit.Text = LangMan.LS(LSID.LSID_SizeToFit);
-				this.fImageCtl.btnZoomIn.Text = LangMan.LS(LSID.LSID_ZoomIn);
-				this.fImageCtl.btnZoomOut.Text = LangMan.LS(LSID.LSID_ZoomOut);
-			}
-		}
-	}
+        public TfmMediaView(IBase aBase)
+        {
+            this.InitializeComponent();
+            this.fBase = aBase;
+
+            this.SetLang();
+        }
+
+        public void SetLang()
+        {
+            if (this.fImageCtl != null) {
+                this.fImageCtl.btnSizeToFit.Text = LangMan.LS(LSID.LSID_SizeToFit);
+                this.fImageCtl.btnZoomIn.Text = LangMan.LS(LSID.LSID_ZoomIn);
+                this.fImageCtl.btnZoomOut.Text = LangMan.LS(LSID.LSID_ZoomOut);
+            }
+        }
+    }
 }

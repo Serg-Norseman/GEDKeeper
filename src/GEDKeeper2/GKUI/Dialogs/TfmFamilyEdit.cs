@@ -44,7 +44,7 @@ namespace GKUI.Dialogs
 			string stat = GKData.MarriageStatus[this.EditMarriageStatus.SelectedIndex].StatSign;
 			this.fFamily.SetTagStringValue("_STAT", stat);
 			this.fFamily.Restriction = (GEDCOMRestriction)this.cbRestriction.SelectedIndex;
-			this.fFamily.aux_SortChilds();
+			this.fFamily.SortChilds();
 			this.fBase.ChangeRecord(this.fFamily);
 		}
 
@@ -91,14 +91,14 @@ namespace GKUI.Dialogs
 		private void ControlsRefresh()
 		{
 			GEDCOMIndividualRecord spouse = this.GetHusband();
-			this.EditHusband.Text = (spouse != null) ? spouse.aux_GetNameStr(true, false) : LangMan.LS(LSID.LSID_UnkMale);
+			this.EditHusband.Text = (spouse != null) ? spouse.GetNameString(true, false) : LangMan.LS(LSID.LSID_UnkMale);
 
             this.btnHusbandAdd.Enabled = (spouse == null);
 			this.btnHusbandDelete.Enabled = (spouse != null);
 			this.btnHusbandSel.Enabled = (spouse != null);
 
 			spouse = this.GetWife();
-			this.EditWife.Text = (spouse != null) ? spouse.aux_GetNameStr(true, false) : LangMan.LS(LSID.LSID_UnkFemale);
+			this.EditWife.Text = (spouse != null) ? spouse.GetNameString(true, false) : LangMan.LS(LSID.LSID_UnkFemale);
 
             this.btnWifeAdd.Enabled = (spouse == null);
 			this.btnWifeDelete.Enabled = (spouse != null);
@@ -147,7 +147,7 @@ namespace GKUI.Dialogs
 			GEDCOMIndividualRecord husband = this.fBase.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svMale);
 			if (husband != null && this.fFamily.Husband.StringValue == "")
 			{
-				this.fFamily.aux_AddSpouse(husband);
+				this.fFamily.AddSpouse(husband);
 				this.ControlsRefresh();
 			}
 		}
@@ -156,7 +156,7 @@ namespace GKUI.Dialogs
 		{
 			if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachHusbandQuery)) != DialogResult.No)
 			{
-				this.fFamily.aux_RemoveSpouse(this.GetHusband());
+				this.fFamily.RemoveSpouse(this.GetHusband());
 				this.ControlsRefresh();
 			}
 		}
@@ -177,7 +177,7 @@ namespace GKUI.Dialogs
 			GEDCOMIndividualRecord wife = this.fBase.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svFemale);
 			if (wife != null && this.fFamily.Wife.StringValue == "")
 			{
-				this.fFamily.aux_AddSpouse(wife);
+				this.fFamily.AddSpouse(wife);
 				this.ControlsRefresh();
 			}
 		}
@@ -186,7 +186,7 @@ namespace GKUI.Dialogs
 		{
 			if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachWifeQuery)) != DialogResult.No)
 			{
-				this.fFamily.aux_RemoveSpouse(this.GetWife());
+				this.fFamily.RemoveSpouse(this.GetWife());
 				this.ControlsRefresh();
 			}
 		}

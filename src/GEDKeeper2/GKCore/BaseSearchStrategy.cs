@@ -12,7 +12,7 @@ namespace GKCore
 		private IList<ISearchResult> currentResults;
 		private ISearchResult curResult;
 		
-		public BaseSearchStrategy(IWorkWindow workWindow, String searchPattern)
+		protected BaseSearchStrategy(IWorkWindow workWindow, String searchPattern)
 		{
 			if (searchPattern == null)
 				throw new ArgumentNullException("searchPattern");

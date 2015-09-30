@@ -301,7 +301,7 @@ namespace GKCore
 		public string gt_get_person_name(object recPtr)
 		{
 			GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
-			return ((rec == null) ? "" : rec.aux_GetNameStr(true, false));
+			return ((rec == null) ? "" : rec.GetNameString(true, false));
 		}
 
 		public int gt_get_person_associations_count(object recPtr)
@@ -322,7 +322,7 @@ namespace GKCore
 		{
 			GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
 			GEDCOMIndividualRecord a_rec = a_ptr as GEDCOMIndividualRecord;
-			GEDCOMAssociation asso = rec.aux_AddAssociation(rel, a_rec);
+			GEDCOMAssociation asso = rec.AddAssociation(rel, a_rec);
 			return asso;
 		}
 
@@ -373,7 +373,7 @@ namespace GKCore
 
 			int year;
 			ushort month, day;
-			evt.Detail.Date.aux_GetIndependentDate(out year, out month, out day);
+			evt.Detail.Date.GetIndependentDate(out year, out month, out day);
 			return year;
 		}
 
@@ -446,26 +446,26 @@ namespace GKCore
 
 		public object gt_create_family()
 		{
-			GEDCOMFamilyRecord fRec = fBase.Tree.aux_CreateFamily();
+			GEDCOMFamilyRecord fRec = fBase.Tree.CreateFamily();
 			return fRec;
 		}
 
 		public object gt_create_note()
 		{
-			GEDCOMNoteRecord nRec = fBase.Tree.aux_CreateNote();
+			GEDCOMNoteRecord nRec = fBase.Tree.CreateNote();
 			return nRec;
 		}
 
 		public object gt_create_source(string name)
 		{
-			GEDCOMSourceRecord srcRec = fBase.Tree.aux_CreateSource();
+			GEDCOMSourceRecord srcRec = fBase.Tree.CreateSource();
 			srcRec.FiledByEntry = name;
 			return srcRec;
 		}
 
 		public object gt_create_group(string name)
 		{
-			GEDCOMGroupRecord grpRec = fBase.Tree.aux_CreateGroup();
+			GEDCOMGroupRecord grpRec = fBase.Tree.CreateGroup();
 			grpRec.GroupName = name;
 			return grpRec;
 		}
@@ -474,13 +474,13 @@ namespace GKCore
 		{
 			GEDCOMGroupRecord grp = groupPtr as GEDCOMGroupRecord;
 			GEDCOMIndividualRecord person = personPtr as GEDCOMIndividualRecord;
-			grp.aux_AddMember(person);
+			grp.AddMember(person);
 		}
 
 		public void gt_add_note_text(object notePtr, string txt)
 		{
 			GEDCOMNoteRecord nRec = notePtr as GEDCOMNoteRecord;
-			nRec.aux_AddNoteText(txt);
+			nRec.AddNoteText(txt);
 		}
 
 		public void gt_bind_record_note(object recPtr, object notePtr)
@@ -504,7 +504,7 @@ namespace GKCore
 			GEDCOMFamilyRecord fRec = familyPtr as GEDCOMFamilyRecord;
 			GEDCOMIndividualRecord spRec = spousePtr as GEDCOMIndividualRecord;
 
-			fRec.aux_AddSpouse(spRec);
+			fRec.AddSpouse(spRec);
 		}
 
 		public void gt_bind_family_child(object familyPtr, object childPtr)
@@ -512,7 +512,7 @@ namespace GKCore
 			GEDCOMFamilyRecord fRec = familyPtr as GEDCOMFamilyRecord;
 			GEDCOMIndividualRecord chRec = childPtr as GEDCOMIndividualRecord;
 
-			fRec.aux_AddChild(chRec);
+			fRec.AddChild(chRec);
 		}
 
 		public string gt_define_sex(string name, string patr)
@@ -524,7 +524,7 @@ namespace GKCore
 
 		public object gt_find_source(string name)
 		{
-			GEDCOMSourceRecord srcRec = this.fBase.Context.aux_FindSource(name);
+			GEDCOMSourceRecord srcRec = this.fBase.Context.FindSource(name);
 			return srcRec;
 		}
 
@@ -691,173 +691,51 @@ namespace GKCore
 
 		public object ado_open(string constr)
 		{
-			/*try
-  {
-    TADOConnection con;
-    con := TADOConnection.Create(nil);
-    con.ConnectionString := constr;
-    con.Mode := cmRead;
-    con.LoginPrompt := False;
-    con.Connected := True;
-
-    lua_pushptr(LVM, con);
-  }
-  catch
-  {
-    on E: Exception do lua_DoError(LVM, "ADOFail: " + E.Message);
-  }*/
 			return null;
 		}
 
 		public bool ado_close(object conptr)
 		{
-			/*try
-  {
-    TADOConnection(conptr).Free;
-    lua_pushboolean(LVM, True);
-  }
-  catch
-  {
-    on E: Exception do lua_DoError(LVM, "ADOFail: " + E.Message);
-  }*/
 			return false;
 		}
 
 		public object ado_query_open(object conptr, string query)
 		{
-			/*try
-  {
-    q_obj: TADOQuery;
-    q_obj := TADOQuery.Create(nil);
-    q_obj.Connection := TADOConnection(conptr);
-    q_obj.SQL.Text := query;
-    q_obj.Open;
-
-    lua_pushptr(LVM, q_obj);
-  }
-  catch
-  {
-    on E: Exception do lua_DoError(LVM, "ADOFail: " + E.Message);
-  }*/
 			return null;
 		}
 
 		public bool ado_query_close(object qptr)
 		{
-			/*try
-  {
-    TADOQuery(qptr).Free;
-    lua_pushboolean(LVM, True);
-  }
-  catch
-  {
-    on E: Exception do lua_DoError(LVM, "ADOFail: " + E.Message);
-  }*/
 			return false;
 		}
 
 		public bool ado_query_first(object qptr)
 		{
-			/*try
-  {
-    TADOQuery(qptr).First;
-    lua_pushboolean(LVM, True);
-  }
-  catch
-  {
-    on E: Exception do lua_DoError(LVM, "ADOFail: " + E.Message);
-  }*/
 			return false;
 		}
 
 		public bool ado_query_prev(object qptr)
 		{
-			/*try
-  {
-    TADOQuery(qptr).Prior;
-    lua_pushboolean(LVM, True);
-  }
-  catch
-  {
-    on E: Exception do lua_DoError(LVM, "ADOFail: " + E.Message);
-  }*/
 			return false;
 		}
 
 		public bool ado_query_next(object qptr)
 		{
-			/*try
-  {
-    TADOQuery(qptr).Next;
-    lua_pushboolean(LVM, True);
-  }
-  catch
-  {
-    on E: Exception do lua_DoError(LVM, "ADOFail: " + E.Message);
-  }*/
 			return false;
 		}
 
 		public bool ado_query_last(object qptr)
 		{
-			/*try
-  {
-    TADOQuery(qptr).Last;
-    lua_pushboolean(LVM, True);
-  }
-  catch
-  {
-    on E: Exception do lua_DoError(LVM, "ADOFail: " + E.Message);
-  }*/
 			return false;
 		}
 
 		public string ado_get_query_field(object qptr, string fname)
 		{
-			/*try
-  {
-    string fval = TADOQuery(qptr).FieldByName(fname).AsString;
-    lua_pushstring(LVM, PChar(fval));
-  }
-  catch
-  {
-    on E: Exception do lua_DoError(LVM, "ADOFail: " + E.Message);
-  }*/
 			return "";
 		}
 
 		public void ado_dump(object conptr)
 		{
-			//string query;
-			//StringList tables, fields;
-
-			try
-			{
-				/*TADOConnection con = TADOConnection(conptr);
-
-		    tables = StringList.Create;
-		    fields = StringList.Create;
-    		try
-      			con.GetTableNames(tables, False);
-
-      			lua_print("Tables:");
-      			for (i = 0; i <= tables.Count - 1; i++) {
-        			lua_print("  [ " + tables[i] + " ]");
-
-        			con.GetFieldNames(tables[i], fields);
-        			for (k = 0; k <= fields.Count - 1; k++) {
-          				lua_print("    - " + fields[k]);
-        			}
-      			}
-    		finally
-      			fields.Free;
-      			tables.Free;
-    		}*/
-			}
-			catch (Exception /*E*/)
-			{
-				//lua_DoError(LVM, "ADOFail: " + E.Message);
-			}
 		}
 
 	}

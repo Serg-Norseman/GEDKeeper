@@ -121,7 +121,7 @@ namespace ExtUtils
 		/// </summary>
 		private void _ShowMail(object ignore)
 		{
-            Win32Native.MapiMessage message = new Win32Native.MapiMessage();
+            NativeMethods.MapiMessage message = new NativeMethods.MapiMessage();
 
 			using (RecipientCollection.InteropRecipientCollection interopRecipients
 			       = _recipientCollection.GetInteropRepresentation())
@@ -146,7 +146,7 @@ namespace ExtUtils
 				const int MAPI_DIALOG = 0x8;
 				//const int MAPI_LOGON_UI = 0x1;
 				const int SUCCESS_SUCCESS = 0;
-                uint error = Win32Native.MAPISendMail(IntPtr.Zero, IntPtr.Zero, message, MAPI_DIALOG, 0);
+                uint error = NativeMethods.MAPISendMail(IntPtr.Zero, IntPtr.Zero, message, MAPI_DIALOG, 0);
 
 				if (_files.Count > 0)
 				{
@@ -166,11 +166,11 @@ namespace ExtUtils
 		/// Deallocates the files in a message.
 		/// </summary>
 		/// <param name="message">The message to deallocate the files from.</param>
-        private void _DeallocFiles(Win32Native.MapiMessage message)
+        private void _DeallocFiles(NativeMethods.MapiMessage message)
 		{
 			if (message.Files != IntPtr.Zero)
 			{
-                Type fileDescType = typeof(Win32Native.MapiFileDescriptor);
+                Type fileDescType = typeof(NativeMethods.MapiFileDescriptor);
 				int fsize = Marshal.SizeOf(fileDescType);
 
 				// Get the ptr to the files
@@ -203,11 +203,11 @@ namespace ExtUtils
 				return IntPtr.Zero;
 			}
 
-            Type atype = typeof(Win32Native.MapiFileDescriptor);
+            Type atype = typeof(NativeMethods.MapiFileDescriptor);
 			int asize = Marshal.SizeOf(atype);
 			IntPtr ptra = Marshal.AllocHGlobal(_files.Count * asize);
 
-            Win32Native.MapiFileDescriptor mfd = new Win32Native.MapiFileDescriptor();
+            NativeMethods.MapiFileDescriptor mfd = new NativeMethods.MapiFileDescriptor();
 			mfd.position = -1;
 			int runptr = (int)ptra;
 			for (int i = 0; i < _files.Count; i++)
@@ -416,9 +416,9 @@ namespace ExtUtils
 		/// Returns an interop representation of a recepient.
 		/// </summary>
 		/// <returns></returns>
-        internal Win32Native.MapiRecipDesc GetInteropRepresentation()
+        internal NativeMethods.MapiRecipDesc GetInteropRepresentation()
 		{
-            Win32Native.MapiRecipDesc interop = new Win32Native.MapiRecipDesc();
+            NativeMethods.MapiRecipDesc interop = new NativeMethods.MapiRecipDesc();
 
 			if (DisplayName == null)
 			{
@@ -498,7 +498,7 @@ namespace ExtUtils
 		}
 
 		/// <summary>
-		/// Struct which contains an interop representation of a colleciton of recipients.
+		/// Structure which contains an interop representation of a colleciton of recipients.
 		/// </summary>
 		internal struct InteropRecipientCollection : IDisposable
 		{
@@ -520,14 +520,14 @@ namespace ExtUtils
 				}
 
 				// allocate enough memory to hold all recipients
-				int size = Marshal.SizeOf(typeof(Win32Native.MapiRecipDesc));
+				int size = Marshal.SizeOf(typeof(NativeMethods.MapiRecipDesc));
 				_handle = Marshal.AllocHGlobal(_count * size);
 
 				// place all interop recipients into the memory just allocated
 				int ptr = (int)_handle;
 				foreach (Recipient native in outer)
 				{
-					Win32Native.MapiRecipDesc interop = native.GetInteropRepresentation();
+					NativeMethods.MapiRecipDesc interop = native.GetInteropRepresentation();
 
 					// stick it in the memory block
 					Marshal.StructureToPtr(interop, (IntPtr)ptr, false);
@@ -547,7 +547,7 @@ namespace ExtUtils
 			{
 				if (_handle != IntPtr.Zero)
 				{
-					Type type = typeof(Win32Native.MapiRecipDesc);
+					Type type = typeof(NativeMethods.MapiRecipDesc);
 					int size = Marshal.SizeOf(type);
 
 					// destroy all the structures in the memory area

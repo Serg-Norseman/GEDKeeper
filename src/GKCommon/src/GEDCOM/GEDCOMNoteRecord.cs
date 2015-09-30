@@ -1,4 +1,3 @@
-using ExtUtils;
 using GKCommon.GEDCOM.Enums;
 
 namespace GKCommon.GEDCOM
@@ -74,13 +73,13 @@ namespace GKCommon.GEDCOM
 
         #region Auxiliary
 
-		public void aux_AddNoteText(string aText)
+		public void AddNoteText(string text)
 		{
 			StringList strData = new StringList();
 			try
 			{
 				strData.Text = this.Note.Text.Trim();
-				strData.Add(aText);
+				strData.Add(text);
 				this.Note = strData;
 			}
 			finally

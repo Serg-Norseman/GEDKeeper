@@ -64,11 +64,10 @@ namespace GKCommon.GEDCOM
 		{
 			TagProperties result;
 
-			int num = TagBase.Length - 1;
-			for (int i = 1; i <= num; i++)
+			int num = TagBase.Length;
+			for (int i = 1; i < num; i++)
 			{
-				if (TagBase[i].Name == tagName)
-				{
+				if (TagBase[i].Name == tagName) {
 					result = TagBase[i];
 					return result;
 				}

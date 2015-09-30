@@ -92,7 +92,7 @@ namespace GKCommon.GEDCOM
 
         #region Auxiliary
 
-        public string aux_GetTitle()
+        public string GetFileTitle()
         {
         	if (this.fFileReferences.Count > 0) {
         		GEDCOMFileReferenceWithTitle fileRef = this.fFileReferences[0];

@@ -11,7 +11,6 @@ using System.Drawing;
 
 namespace ExtUtils.ArborEngine
 {
-
 	public class ArborNode
     { 
 		public string Sign;
@@ -46,5 +45,4 @@ namespace ExtUtils.ArborEngine
     		this.f = this.f.add(a.div(this.Mass));
     	}
     }
-
 }

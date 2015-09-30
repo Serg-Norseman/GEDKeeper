@@ -10,7 +10,7 @@ using GKCore.Types;
 
 namespace GKUI.Lists
 {
-	public enum NoteColumnType : byte
+	public enum NoteColumnType
 	{
 		nctText,
 		nctChangeDate

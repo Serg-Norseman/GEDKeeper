@@ -22,15 +22,8 @@ namespace GKImageViewerPlugin
 		{
 			this.InitializeComponent();
 			//this.fBase = aBase;
-		}
-		
-		void ILocalization.SetLang()
-		{
-			/*if (this.fImageCtl != null) {
-        		this.fImageCtl.btnSizeToFit.Text = LangMan.LS(LSID.LSID_SizeToFit);
-				this.fImageCtl.btnZoomIn.Text = LangMan.LS(LSID.LSID_ZoomIn);
-				this.fImageCtl.btnZoomOut.Text = LangMan.LS(LSID.LSID_ZoomOut);
-			}*/
+
+            this.SetLang();
 		}
 
 		private void TfmMediaView_KeyDown(object sender, KeyEventArgs e)
@@ -138,5 +131,18 @@ namespace GKImageViewerPlugin
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
-	}
+
+        #region ILocalization support
+
+        public void SetLang()
+        {
+            /*if (this.fImageCtl != null) {
+                this.fImageCtl.btnSizeToFit.Text = LangMan.LS(LSID.LSID_SizeToFit);
+                this.fImageCtl.btnZoomIn.Text = LangMan.LS(LSID.LSID_ZoomIn);
+                this.fImageCtl.btnZoomOut.Text = LangMan.LS(LSID.LSID_ZoomOut);
+            }*/
+        }
+
+        #endregion
+    }
 }

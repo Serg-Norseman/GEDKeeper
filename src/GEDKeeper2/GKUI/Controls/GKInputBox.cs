@@ -9,7 +9,7 @@ namespace GKUI.Controls
 {
 	public partial class GKInputBox : Form
 	{
-		private bool fNumbersMode;
+		private readonly bool fNumbersMode;
 
 		public string Value
 		{

@@ -70,11 +70,11 @@ namespace GKUI.Sheets
             {
                 case RecordAction.raAdd:
                     groupRec = aBase.SelectRecord(GEDCOMRecordType.rtGroup, null) as GEDCOMGroupRecord;
-                    result = (groupRec != null && groupRec.aux_AddMember(iRec));
+                    result = (groupRec != null && groupRec.AddMember(iRec));
                     break;
 
                 case RecordAction.raDelete:
-                    result = (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachGroupQuery)) != DialogResult.No && groupRec.aux_RemoveMember(iRec));
+                    result = (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachGroupQuery)) != DialogResult.No && groupRec.RemoveMember(iRec));
                     break;
             }
 

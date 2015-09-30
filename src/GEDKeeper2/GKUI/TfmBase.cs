@@ -562,7 +562,7 @@ namespace GKUI
 					GEDCOMIndividualRecord wife = fam.Wife.Value as GEDCOMIndividualRecord;
 					if (husb == aNewParent || wife == aNewParent)
 					{
-						string msg = string.Format(LangMan.LS(LSID.LSID_ParentsQuery), GKUtils.aux_GetFamilyStr(fam));
+						string msg = string.Format(LangMan.LS(LSID.LSID_ParentsQuery), GKUtils.GetFamilyString(fam));
 						if (GKUtils.ShowQuestion(msg) == DialogResult.Yes)
 						{
 							result = fam;
@@ -592,9 +592,9 @@ namespace GKUI
 						GEDCOMFamilyRecord fam = this.GetFamilyBySpouse(aNewParent);
 						if (fam == null)
 						{
-							fam = this.fTree.aux_CreateFamily();
+							fam = this.fTree.CreateFamily();
 						}
-						fam.aux_AddChild(iChild);
+						fam.AddChild(iChild);
 						result = fam;
 					}
 				}
@@ -791,7 +791,11 @@ namespace GKUI
 
 		public void ShowMedia(GEDCOMMultimediaRecord mediaRec, bool modal)
 		{
-			TfmMediaView fmMediaView = new TfmMediaView(this);
+            if (mediaRec == null) {
+                throw new ArgumentNullException("mediaRec");
+            }
+
+            TfmMediaView fmMediaView = new TfmMediaView(this);
 			try
 			{
 				fmMediaView.FileRef = mediaRec.FileReferences[0];
@@ -826,7 +830,7 @@ namespace GKUI
 							GEDCOMRecord rec = this.fTree[i];
 							if (rec is GEDCOMIndividualRecord) {
 								GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
-								string nm = iRec.aux_GetNameStr(true, false);
+								string nm = iRec.GetNameString(true, false);
 								string days = GKUtils.GetDaysForBirth(iRec);
 
 								if (days != "" && int.Parse(days) < 3) {
@@ -935,7 +939,11 @@ namespace GKUI
 
 		public void CheckPersonSex(GEDCOMIndividualRecord iRec)
 		{
-			if (iRec.Sex == GEDCOMSex.svNone || iRec.Sex == GEDCOMSex.svUndetermined)
+            if (iRec == null) {
+                throw new ArgumentNullException("iRec");
+            }
+
+            if (iRec.Sex == GEDCOMSex.svNone || iRec.Sex == GEDCOMSex.svUndetermined)
 			{
 				string fFam, fName, fPatr;
 				iRec.GetNameParts(out fFam, out fName, out fPatr);
@@ -1051,6 +1059,49 @@ namespace GKUI
 		{
 			return this.fNavman.CanForward();
 		}
+
+		IList<ISearchResult> IWorkWindow.FindAll(string searchPattern)
+		{
+			List<ISearchResult> result = new List<ISearchResult>();
+			
+			Regex regex = GKUtils.InitMaskRegex(searchPattern);
+			
+			int num = this.fTree.RecordsCount;
+			for (int i = 0; i < num; i++) {
+				GEDCOMRecord rec = this.fTree[i];
+				if (rec.RecordType == GEDCOMRecordType.rtIndividual) {
+					GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
+					
+					string fullname = iRec.GetNameString(true, false);
+					if (GKUtils.MatchesRegex(fullname, regex)) {
+						//yield return new SearchResult(iRec);
+						result.Add(new SearchResult(iRec));
+					}
+				}
+			}
+			
+			return result;
+		}
+
+		void IWorkWindow.SelectByRec(GEDCOMIndividualRecord iRec)
+		{
+            if (iRec == null) {
+                throw new ArgumentNullException("iRec");
+            }
+
+            this.SelectRecordByXRef(iRec.XRef);
+		}
+
+		void IWorkWindow.QuickFind()
+		{
+			SearchPanel panel = new SearchPanel(this);
+			
+			Rectangle client = this.ClientRectangle;
+			Point pt = this.PointToScreen(new Point(client.Left, client.Bottom - panel.Height));
+			panel.Location = pt;
+
+			panel.Show();
+		}
 		
 		#endregion
 		
@@ -1158,11 +1209,11 @@ namespace GKUI
 				switch (record.RecordType)
 				{
 					case GEDCOMRecordType.rtIndividual:
-						msg = string.Format(LangMan.LS(LSID.LSID_PersonDeleteQuery), (record as GEDCOMIndividualRecord).aux_GetNameStr(true, false));
+						msg = string.Format(LangMan.LS(LSID.LSID_PersonDeleteQuery), (record as GEDCOMIndividualRecord).GetNameString(true, false));
 						break;
 
 					case GEDCOMRecordType.rtFamily:
-						msg = string.Format(LangMan.LS(LSID.LSID_FamilyDeleteQuery), GKUtils.aux_GetFamilyStr(record as GEDCOMFamilyRecord));
+						msg = string.Format(LangMan.LS(LSID.LSID_FamilyDeleteQuery), GKUtils.GetFamilyString(record as GEDCOMFamilyRecord));
 						break;
 
 					case GEDCOMRecordType.rtNote:
@@ -1170,7 +1221,7 @@ namespace GKUI
 						break;
 
 					case GEDCOMRecordType.rtMultimedia:
-						msg = string.Format(LangMan.LS(LSID.LSID_MediaDeleteQuery), (record as GEDCOMMultimediaRecord).aux_GetTitle());
+						msg = string.Format(LangMan.LS(LSID.LSID_MediaDeleteQuery), (record as GEDCOMMultimediaRecord).GetFileTitle());
 						break;
 
 					case GEDCOMRecordType.rtSource:
@@ -1208,47 +1259,47 @@ namespace GKUI
 				switch (record.RecordType)
 				{
 					case GEDCOMRecordType.rtIndividual:
-						result = this.fTree.aux_DeleteIndividualRecord(record as GEDCOMIndividualRecord);
+						result = this.fTree.DeleteIndividualRecord(record as GEDCOMIndividualRecord);
 						break;
 
 					case GEDCOMRecordType.rtFamily:
-						result = this.fTree.aux_DeleteFamilyRecord(record as GEDCOMFamilyRecord);
+						result = this.fTree.DeleteFamilyRecord(record as GEDCOMFamilyRecord);
 						break;
 
 					case GEDCOMRecordType.rtNote:
-						result = this.fTree.aux_DeleteNoteRecord(record as GEDCOMNoteRecord);
+						result = this.fTree.DeleteNoteRecord(record as GEDCOMNoteRecord);
 						break;
 
 					case GEDCOMRecordType.rtMultimedia:
-						result = this.fTree.aux_DeleteMediaRecord(record as GEDCOMMultimediaRecord);
+						result = this.fTree.DeleteMediaRecord(record as GEDCOMMultimediaRecord);
 						break;
 
 					case GEDCOMRecordType.rtSource:
-						result = this.fTree.aux_DeleteSourceRecord(record as GEDCOMSourceRecord);
+						result = this.fTree.DeleteSourceRecord(record as GEDCOMSourceRecord);
 						break;
 
 					case GEDCOMRecordType.rtRepository:
-						result = this.fTree.aux_DeleteRepositoryRecord(record as GEDCOMRepositoryRecord);
+						result = this.fTree.DeleteRepositoryRecord(record as GEDCOMRepositoryRecord);
 						break;
 
 					case GEDCOMRecordType.rtGroup:
-						result = this.fTree.aux_DeleteGroupRecord(record as GEDCOMGroupRecord);
+						result = this.fTree.DeleteGroupRecord(record as GEDCOMGroupRecord);
 						break;
 
 					case GEDCOMRecordType.rtResearch:
-						result = this.fTree.aux_DeleteResearchRecord(record as GEDCOMResearchRecord);
+						result = this.fTree.DeleteResearchRecord(record as GEDCOMResearchRecord);
 						break;
 
 					case GEDCOMRecordType.rtTask:
-						result = this.fTree.aux_DeleteTaskRecord(record as GEDCOMTaskRecord);
+						result = this.fTree.DeleteTaskRecord(record as GEDCOMTaskRecord);
 						break;
 
 					case GEDCOMRecordType.rtCommunication:
-						result = this.fTree.aux_DeleteCommunicationRecord(record as GEDCOMCommunicationRecord);
+						result = this.fTree.DeleteCommunicationRecord(record as GEDCOMCommunicationRecord);
 						break;
 
 					case GEDCOMRecordType.rtLocation:
-						result = this.fTree.aux_DeleteLocationRecord(record as GEDCOMLocationRecord);
+						result = this.fTree.DeleteLocationRecord(record as GEDCOMLocationRecord);
 						break;
 				}
 
@@ -1344,9 +1395,9 @@ namespace GKUI
 			}
 		}
 
-		public void SelectRecordByXRef(string XRef)
+		public void SelectRecordByXRef(string xref)
 		{
-			GEDCOMRecord record = this.fTree.XRefIndex_Find(XRef);
+            GEDCOMRecord record = this.fTree.XRefIndex_Find(xref);
 			if (record == null) return;
 
 			GKRecordsView rView = this.GetRecordsViewByType(record.RecordType);
@@ -1491,45 +1542,6 @@ namespace GKUI
 				result = (rView.ContentList.IndexOf(record) >= 0);
 			}
 			return result;
-		}
-
-		public IList<ISearchResult> FindAll(string searchPattern)
-		{
-			List<ISearchResult> result = new List<ISearchResult>();
-			
-			Regex regex = GKUtils.InitMaskRegex(searchPattern);
-			
-			int num = this.fTree.RecordsCount;
-			for (int i = 0; i < num; i++) {
-				GEDCOMRecord rec = this.fTree[i];
-				if (rec.RecordType == GEDCOMRecordType.rtIndividual) {
-					GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
-					
-					string fullname = iRec.aux_GetNameStr(true, false);
-					if (GKUtils.MatchesRegex(fullname, regex)) {
-						//yield return new SearchResult(iRec);
-						result.Add(new SearchResult(iRec));
-					}
-				}
-			}
-			
-			return result;
-		}
-
-		public void SelectByRec(GEDCOMIndividualRecord iRec)
-		{
-			this.SelectRecordByXRef(iRec.XRef);
-		}
-
-		public void QuickFind()
-		{
-			SearchPanel panel = new SearchPanel(this);
-			
-			Rectangle client = this.ClientRectangle;
-			Point pt = this.PointToScreen(new Point(client.Left, client.Bottom - panel.Height));
-			panel.Location = pt;
-
-			panel.Show();
 		}
 
 		#endregion
@@ -1855,7 +1867,7 @@ namespace GKUI
 						GEDCOMGroupRecord grp = this.fTree.XRefIndex_Find(iFilter.GroupRef) as GEDCOMGroupRecord;
                         if (grp != null && GKUtils.ShowQuestion("Установлен фильтр по группе. Внести группу в новую персональную запись?") == DialogResult.Yes)
                         {
-							grp.aux_AddMember(result);
+							grp.AddMember(result);
 						}
  					}
 				}
@@ -1899,10 +1911,10 @@ namespace GKUI
 
 				if (target == FamilyTarget.ftSpouse) {
 					if (person != null)
-						familyRec.aux_AddSpouse(person);
+						familyRec.AddSpouse(person);
 				} else if (target == FamilyTarget.ftChild) {
 					if (person != null)
-						familyRec.aux_AddChild(person);
+						familyRec.AddChild(person);
 				}
 
 				dlg.Family = familyRec;
@@ -1914,7 +1926,7 @@ namespace GKUI
 					}
 				} else {
 					if (!exists) {
-						this.fTree.aux_CleanFamily(familyRec);
+						this.fTree.CleanFamily(familyRec);
 						familyRec.Dispose();
 						familyRec = null;
 					}
@@ -2036,7 +2048,11 @@ namespace GKUI
 
 		public MediaStoreType GetStoreType(GEDCOMFileReference fileReference, ref string fileName)
 		{
-			string fileRef = fileReference.StringValue;
+            if (fileReference == null) {
+                throw new ArgumentNullException("fileReference");
+            }
+
+            string fileRef = fileReference.StringValue;
 			
 			fileName = fileRef;
 			MediaStoreType result;
@@ -2062,9 +2078,9 @@ namespace GKUI
 			return result;
 		}
 
-		public void MediaLoad(GEDCOMFileReference fileReference, out Stream aStream, bool throwException)
+		public void MediaLoad(GEDCOMFileReference fileReference, out Stream stream, bool throwException)
 		{
-			aStream = null;
+			stream = null;
 			if (fileReference == null) return;
 			
 			string targetFn = "";
@@ -2082,12 +2098,12 @@ namespace GKUI
                         GKUtils.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
 					}
 					else {
-						aStream = new FileStream(targetFn, FileMode.Open);
+						stream = new FileStream(targetFn, FileMode.Open);
 					}
 					break;
 
 				case MediaStoreType.mstArchive:
-					aStream = new MemoryStream();
+					stream = new MemoryStream();
 					if (!File.Exists(this.GetArcFileName()))
 					{
 					    if (throwException) {
@@ -2097,13 +2113,13 @@ namespace GKUI
                         GKUtils.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
 					}
 					else {
-						this.ArcFileLoad(targetFn, aStream);
-						aStream.Seek((long)0, SeekOrigin.Begin);
+						this.ArcFileLoad(targetFn, stream);
+						stream.Seek((long)0, SeekOrigin.Begin);
 					}
 					break;
 
 				case MediaStoreType.mstReference:
-					aStream = new FileStream(targetFn, FileMode.Open);
+					stream = new FileStream(targetFn, FileMode.Open);
 					break;
 			}
 		}
@@ -2296,7 +2312,7 @@ namespace GKUI
 			Bitmap result = null;
 			try
 			{
-				GEDCOMMultimediaLink mmLink = iRec.aux_GetPrimaryMultimediaLink();
+				GEDCOMMultimediaLink mmLink = iRec.GetPrimaryMultimediaLink();
                 if (mmLink != null && mmLink.Value != null)
 				{
 					GEDCOMMultimediaRecord mmRec = mmLink.Value as GEDCOMMultimediaRecord;

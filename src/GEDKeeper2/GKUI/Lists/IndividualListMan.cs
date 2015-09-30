@@ -14,7 +14,7 @@ using GKUI.Controls;
 namespace GKUI.Lists
 {
 
-	public enum PersonColumnType : byte
+	public enum PersonColumnType
 	{
 		pctPatriarch,
 		pctName,
@@ -157,8 +157,9 @@ namespace GKUI.Lists
 
 			IndividualListFilter iFilter = fFilter as IndividualListFilter;
 			bool addr = TfmGEDKeeper.Instance.Options.PlacesWithAddress;
-			int num = this.fRec.IndividualEvents.Count - 1;
-			for (int i = 0; i <= num; i++)
+
+			int num = this.fRec.IndividualEvents.Count;
+			for (int i = 0; i < num; i++)
 			{
 				string place = GKUtils.GetPlaceStr(this.fRec.IndividualEvents[i], addr);
 				res = IsMatchesMask(place, iFilter.Residence);
@@ -173,8 +174,9 @@ namespace GKUI.Lists
 			bool result = false;
 			
 			IndividualListFilter iFilter = fFilter as IndividualListFilter;
-			int num = this.fRec.IndividualEvents.Count - 1;
-			for (int i = 0; i <= num; i++)
+
+			int num = this.fRec.IndividualEvents.Count;
+			for (int i = 0; i < num; i++)
 			{
 				result = IsMatchesMask(this.fRec.IndividualEvents[i].StringValue, iFilter.EventVal);
 				if (result) break;
@@ -189,7 +191,7 @@ namespace GKUI.Lists
 
 			IndividualListFilter iFilter = fFilter as IndividualListFilter;
 
-			string fullname = this.fRec.aux_GetNameStr(true, false);
+			string fullname = this.fRec.GetNameString(true, false);
 
 			if ((this.fRec.Restriction != GEDCOMRestriction.rnPrivacy || aShieldState == ShieldState.ssNone)
 			    && (iFilter.Sex == GEDCOMSex.svNone || this.fRec.Sex == iFilter.Sex)
@@ -211,8 +213,8 @@ namespace GKUI.Lists
 						break;
 
 					case FilterLifeMode.lmAliveBefore:
-                        DateTime bdt = ((buf_bd == null) ? new DateTime(0) : GKUtils.GEDCOMDateToDate(buf_bd.Detail.Date));
-                        DateTime ddt = ((buf_dd == null) ? new DateTime(0) : GKUtils.GEDCOMDateToDate(buf_dd.Detail.Date));
+                        DateTime bdt = ((buf_bd == null) ? new DateTime(0) : buf_bd.GetIndependentDate());
+                        DateTime ddt = ((buf_dd == null) ? new DateTime(0) : buf_dd.GetIndependentDate());
 						if ((bdt > this.filter_abd) || (ddt < this.filter_abd)) return result;
 						break;
 
@@ -256,7 +258,7 @@ namespace GKUI.Lists
 
 		public override bool CheckFilter(ShieldState aShieldState)
 		{
-			string fullname = this.fRec.aux_GetNameStr(true, false);
+			string fullname = this.fRec.GetNameString(true, false);
 			bool res = (this.QuickFilter == "*" || IsMatchesMask(fullname, this.QuickFilter));
 
 			res = res && base.CheckNewFilter() && this.CheckSpecificFilter(aShieldState);
@@ -282,14 +284,14 @@ namespace GKUI.Lists
 				case PersonColumnType.pctName:
 				{
 					if (colSubtype == -1) {
-						result = this.fRec.aux_GetNameStr(true, false);
+						result = this.fRec.GetNameString(true, false);
 					} else {
 						NameFormat defNameFormat = TfmGEDKeeper.Instance.Options.DefNameFormat;
 						string f, i, p;
 
 						switch (defNameFormat) {
 							case NameFormat.nfFNP:
-								result = this.fRec.aux_GetNameStr(true, false);
+								result = this.fRec.GetNameString(true, false);
 								break;
 
 							case NameFormat.nfF_NP:
@@ -325,7 +327,7 @@ namespace GKUI.Lists
 				}
 
 				case PersonColumnType.pctNick:
-					result = this.fRec.aux_GetNickStr();
+					result = this.fRec.GetNickString();
 					break;
 
 				case PersonColumnType.pctSex:
@@ -474,8 +476,9 @@ namespace GKUI.Lists
 			buf_title = "";
 
 			GlobalOptions gOptions = TfmGEDKeeper.Instance.Options;
-			int num = this.fRec.IndividualEvents.Count - 1;
-			for (int i = 0; i <= num; i++)
+
+			int num = this.fRec.IndividualEvents.Count;
+			for (int i = 0; i < num; i++)
 			{
 				GEDCOMCustomEvent ev = this.fRec.IndividualEvents[i];
 
@@ -550,15 +553,16 @@ namespace GKUI.Lists
 			}
 		}
 
-		public override void UpdateColumns(GKListView aList, bool isMain)
+		public override void UpdateColumns(GKListView listView, bool isMain)
 		{
 			IndividualListColumns columns = TfmGEDKeeper.Instance.Options.IndividualListColumns;
 			NameFormat defNameFormat = TfmGEDKeeper.Instance.Options.DefNameFormat;
 
 			this.ColumnsMap_Clear();
-			this.AddListColumn(aList, "№", 50, false, 0, 0);
+			this.AddListColumn(listView, "№", 50, false, 0, 0);
 
-			for (int i = 0; i < columns.Count; i++)
+			int num = columns.Count;
+			for (int i = 0; i < num; i++)
 			{
 				if (columns[i].colActive) {
 					byte bColType = columns[i].colType;
@@ -570,23 +574,23 @@ namespace GKUI.Lists
 
 					    switch (defNameFormat) {
 							case NameFormat.nfF_N_P:
-					    		this.AddListColumn(aList, LangMan.LS(LSID.LSID_Surname), 150, asz, bColType, 0);
-					    		this.AddListColumn(aList, LangMan.LS(LSID.LSID_Name), 100, asz, bColType, 1);
-					    		this.AddListColumn(aList, LangMan.LS(LSID.LSID_Patronymic), 150, asz, bColType, 2);
+					    		this.AddListColumn(listView, LangMan.LS(LSID.LSID_Surname), 150, asz, bColType, 0);
+					    		this.AddListColumn(listView, LangMan.LS(LSID.LSID_Name), 100, asz, bColType, 1);
+					    		this.AddListColumn(listView, LangMan.LS(LSID.LSID_Patronymic), 150, asz, bColType, 2);
 								break;
 
 							case NameFormat.nfF_NP:
-								this.AddListColumn(aList, LangMan.LS(LSID.LSID_Surname), 150, asz, bColType, 0);
-								this.AddListColumn(aList, LangMan.LS(LSID.LSID_Name) + "," + LangMan.LS(LSID.LSID_Patronymic), 150, asz, bColType, 1);
+								this.AddListColumn(listView, LangMan.LS(LSID.LSID_Surname), 150, asz, bColType, 0);
+								this.AddListColumn(listView, LangMan.LS(LSID.LSID_Name) + "," + LangMan.LS(LSID.LSID_Patronymic), 150, asz, bColType, 1);
 								break;
 
 							case NameFormat.nfFNP:
-								this.AddListColumn(aList, LangMan.LS(LSID.LSID_FullName), colWidth, asz, bColType, 0);
+								this.AddListColumn(listView, LangMan.LS(LSID.LSID_FullName), colWidth, asz, bColType, 0);
 								break;
 						}
 					} else {
 						string colName = LangMan.LS(columns.ColumnStatics[bColType].colName);
-						this.AddListColumn(aList, colName, colWidth, false, bColType, 0);
+						this.AddListColumn(listView, colName, colWidth, false, bColType, 0);
 					}
 				}
 			}

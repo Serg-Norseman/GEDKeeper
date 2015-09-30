@@ -7,7 +7,7 @@ using ExtUtils;
 namespace GKCommon
 {
     [SecurityCritical, SuppressUnmanagedCodeSecurity]
-    public static class Win32Native
+    public static class NativeMethods
     {
     	public const uint WM_SIZE			= 0x0005;
     	public const uint WM_GETDLGCODE		= 0x0087;
@@ -85,7 +85,7 @@ namespace GKCommon
 
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        public struct TScrollInfo
+        public struct ScrollInfo
         {
         	public uint cbSize;
         	public uint fMask;
@@ -103,7 +103,7 @@ namespace GKCommon
 
         [DllImport("user32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool GetScrollInfo(IntPtr hWnd, int barFlag, ref TScrollInfo scrollInfo);
+        public static extern bool GetScrollInfo(IntPtr hWnd, int barFlag, ref ScrollInfo scrollInfo);
 
         [DllImport("user32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int ScrollWindowEx(IntPtr hWnd, int dx, int dy, [In] ref ExtRect prcScroll, [In] ref ExtRect prcClip, uint hrgnUpdate, out ExtRect prcUpdate, uint flags);

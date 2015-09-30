@@ -58,7 +58,6 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CalendarConverter.cs" />
     <Compile Include="GKCalendarPlugin.cs" />
     <Compile Include="TfmCalendar.cs">
       <SubType>Form</SubType>

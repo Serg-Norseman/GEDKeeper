@@ -58,11 +58,11 @@ namespace GKUI.Dialogs
             base.Dispose(disposing);
         }
 
-        private TConditionKind GetCondByName(string aName)
+        private ConditionKind GetCondByName(string aName)
 		{
-			TConditionKind res = TConditionKind.ck_NotEq;
+			ConditionKind res = ConditionKind.ck_NotEq;
 
-			for (TConditionKind pl = TConditionKind.ck_NotEq; pl <= TConditionKind.ck_NotContains; pl++)
+			for (ConditionKind pl = ConditionKind.ck_NotEq; pl <= ConditionKind.ck_NotContains; pl++)
 			{
 				if (fCondSigns[(int)pl] == aName)
 				{
@@ -108,8 +108,11 @@ namespace GKUI.Dialogs
 		private void UpdateGrid()
 		{
 			this.dataGridView1.Rows.Clear();
-			for (int i = 0; i < fListMan.Filter.ColumnsFilter.Count; i++) {
-				TFilterCondition fcond = fListMan.Filter.ColumnsFilter[i];
+
+			int num = fListMan.Filter.ColumnsFilter.Count;
+			for (int i = 0; i < num; i++) {
+				FilterCondition fcond = fListMan.Filter.ColumnsFilter[i];
+
 				int r = this.dataGridView1.Rows.Add();
 				DataGridViewRow row = dataGridView1.Rows[r];
 
@@ -125,7 +128,8 @@ namespace GKUI.Dialogs
 		{
 			fListMan.Filter.Clear();
 
-			for (int r = 0; r <= dataGridView1.Rows.Count - 1; r++)
+			int num = dataGridView1.Rows.Count;
+			for (int r = 0; r < num; r++)
 			{
 				DataGridViewRow row = dataGridView1.Rows[r];
 
@@ -134,7 +138,7 @@ namespace GKUI.Dialogs
 				string val = (string)row.Cells[2].Value;
 
 				if (!string.IsNullOrEmpty(fld)) {
-					TConditionKind cond = GetCondByName(cnd);
+					ConditionKind cond = GetCondByName(cnd);
 					Enum column = GetFieldColumn(fld);
 					fListMan.AddCondition(column, cond, val);
 				}

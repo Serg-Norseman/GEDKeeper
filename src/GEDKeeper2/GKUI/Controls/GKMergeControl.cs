@@ -145,7 +145,7 @@ namespace GKUI.Controls
 					case GEDCOMRecordType.rtIndividual:
 						{
 							GEDCOMIndividualRecord iRec = (this.fRec1 as GEDCOMIndividualRecord);
-							this.Edit1.Text = iRec.aux_GetNameStr(true, false);
+							this.Edit1.Text = iRec.GetNameString(true, false);
 							GKUtils.ShowPersonInfo(iRec, this.Memo1.Lines, this.fBase.ShieldState);
 							break;
 						}
@@ -159,7 +159,7 @@ namespace GKUI.Controls
 					case GEDCOMRecordType.rtFamily:
 						{
 							GEDCOMFamilyRecord famRec = (this.fRec1 as GEDCOMFamilyRecord);
-							this.Edit1.Text = GKUtils.aux_GetFamilyStr(famRec);
+							this.Edit1.Text = GKUtils.GetFamilyString(famRec);
                             GKUtils.ShowFamilyInfo(famRec, this.Memo1.Lines, this.fBase.ShieldState);
 							break;
 						}
@@ -193,7 +193,7 @@ namespace GKUI.Controls
 					case GEDCOMRecordType.rtIndividual:
 						{
 							GEDCOMIndividualRecord iRec = (this.fRec2 as GEDCOMIndividualRecord);
-							this.Edit2.Text = iRec.aux_GetNameStr(true, false);
+							this.Edit2.Text = iRec.GetNameString(true, false);
                             GKUtils.ShowPersonInfo(iRec, this.Memo2.Lines, this.fBase.ShieldState);
 							break;
 						}
@@ -207,7 +207,7 @@ namespace GKUI.Controls
 					case GEDCOMRecordType.rtFamily:
 						{
 							GEDCOMFamilyRecord famRec = (this.fRec2 as GEDCOMFamilyRecord);
-							this.Edit2.Text = GKUtils.aux_GetFamilyStr(famRec);
+							this.Edit2.Text = GKUtils.GetFamilyString(famRec);
                             GKUtils.ShowFamilyInfo(famRec, this.Memo2.Lines, this.fBase.ShieldState);
 							break;
 						}

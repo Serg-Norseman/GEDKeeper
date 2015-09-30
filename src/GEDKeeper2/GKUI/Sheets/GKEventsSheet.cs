@@ -122,18 +122,12 @@ namespace GKUI.Sheets
                         using (TfmEventEdit fmEventEdit = new TfmEventEdit(aBase))
                         {
                             GEDCOMCustomEvent newEvent;
-                            if (aEvent != null)
-                            {
+                            if (aEvent != null) {
                                 newEvent = aEvent;
-                            }
-                            else
-                            {
-                                if (record is GEDCOMIndividualRecord)
-                                {
+                            } else {
+                                if (record is GEDCOMIndividualRecord) {
                                     newEvent = new GEDCOMIndividualEvent(aBase.Tree, record, "", "");
-                                }
-                                else
-                                {
+                                } else {
                                     newEvent = new GEDCOMFamilyEvent(aBase.Tree, record, "", "");
                                 }
                             }
@@ -143,12 +137,8 @@ namespace GKUI.Sheets
 
                             if (dialogResult != DialogResult.OK)
                             {
-                                if (dialogResult == DialogResult.Cancel)
-                                {
-                                    if (aEvent == null)
-                                    {
-                                        newEvent.Dispose();
-                                    }
+                                if (dialogResult == DialogResult.Cancel && aEvent == null) {
+                                    newEvent.Dispose();
                                 }
                             }
                             else

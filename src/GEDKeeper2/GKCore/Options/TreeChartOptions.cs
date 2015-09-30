@@ -21,6 +21,7 @@ namespace GKCore.Options
         public bool Kinship;
         public bool PortraitsVisible;
         public bool SignsVisible;
+        public bool CertaintyIndexVisible;
 
         public Color MaleColor;
         public Color FemaleColor;
@@ -48,11 +49,14 @@ namespace GKCore.Options
 			this.Kinship = false;
 			this.PortraitsVisible = true;
 			this.SignsVisible = false;
+			this.CertaintyIndexVisible = false;
+			
 			this.MaleColor = Color.FromArgb(-3750145);
 			this.FemaleColor = Color.FromArgb(-14650);
 			this.UnkSexColor = Color.FromArgb(-14593);
 			this.UnHusbandColor = Color.FromArgb(-2631681);
 			this.UnWifeColor = Color.FromArgb(-10281);
+			
 			this.DefFontName = "Verdana";
 			this.DefFontSize = 8;
 			this.DefFontColor = Color.Black;
@@ -76,11 +80,14 @@ namespace GKCore.Options
 			this.Kinship = iniFile.ReadBool("Chart", "Kinship", false);
 			this.SignsVisible = iniFile.ReadBool("Chart", "SignsVisible", false);
 			this.PortraitsVisible = iniFile.ReadBool("Chart", "PortraitsVisible", true);
+			this.CertaintyIndexVisible = iniFile.ReadBool("Chart", "CertaintyIndexVisible", false);
+			
 			this.MaleColor = Color.FromArgb(iniFile.ReadInteger("Chart", "MaleColor", -3750145));
 			this.FemaleColor = Color.FromArgb(iniFile.ReadInteger("Chart", "FemaleColor", -14650));
 			this.UnkSexColor = Color.FromArgb(iniFile.ReadInteger("Chart", "UnkSexColor", -14593));
 			this.UnHusbandColor = Color.FromArgb(iniFile.ReadInteger("Chart", "UnHusbandColor", -2631681));
 			this.UnWifeColor = Color.FromArgb(iniFile.ReadInteger("Chart", "UnWifeColor", -10281));
+			
 			this.DefFontName = iniFile.ReadString("Chart", "FontName", "Verdana");
 			this.DefFontSize = iniFile.ReadInteger("Chart", "FontSize", 8);
 			this.DefFontColor = Color.FromArgb(iniFile.ReadInteger("Chart", "FontColor", Color.Black.ToArgb()));
@@ -104,11 +111,14 @@ namespace GKCore.Options
 			iniFile.WriteBool("Chart", "Kinship", this.Kinship);
 			iniFile.WriteBool("Chart", "SignsVisible", this.SignsVisible);
 			iniFile.WriteBool("Chart", "PortraitsVisible", this.PortraitsVisible);
+			iniFile.WriteBool("Chart", "CertaintyIndexVisible", this.CertaintyIndexVisible);
+			
 			iniFile.WriteInteger("Chart", "MaleColor", this.MaleColor.ToArgb());
 			iniFile.WriteInteger("Chart", "FemaleColor", this.FemaleColor.ToArgb());
 			iniFile.WriteInteger("Chart", "UnkSexColor", this.UnkSexColor.ToArgb());
 			iniFile.WriteInteger("Chart", "UnHusbandColor", this.UnHusbandColor.ToArgb());
 			iniFile.WriteInteger("Chart", "UnWifeColor", this.UnWifeColor.ToArgb());
+			
 			iniFile.WriteString("Chart", "FontName", this.DefFontName);
 			iniFile.WriteInteger("Chart", "FontSize", this.DefFontSize);
 			iniFile.WriteInteger("Chart", "FontColor", this.DefFontColor.ToArgb());

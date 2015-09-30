@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Security.Permissions;
 
 // Original ScrollControl code by Scott Crawford (http://sukiware.com/)
 
@@ -262,9 +263,10 @@ namespace Cyotek.Windows.Forms
 		/// <returns>
 		///   A <see cref="T:System.Windows.Forms.CreateParams" /> that contains the required creation parameters when the handle to the control is created.
 		/// </returns>
-		protected override CreateParams CreateParams
+        protected override CreateParams CreateParams
 		{
-			get
+            [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode), SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+            get
 			{
 				CreateParams createParams;
 
@@ -768,6 +770,7 @@ namespace Cyotek.Windows.Forms
 		///   The Windows <see cref="T:System.Windows.Forms.Message" /> to process.
 		/// </param>
 		[DebuggerStepThrough]
+		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode), SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
 		protected override void WndProc(ref Message msg)
 		{
 			switch (msg.Msg)

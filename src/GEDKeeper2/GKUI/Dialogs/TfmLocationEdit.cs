@@ -110,8 +110,8 @@ namespace GKUI.Dialogs
 				this.ListGeoCoords.Items.Clear();
 				this.fMapBrowser.ClearPoints();
 
-				int num = this.fSearchPoints.Count - 1;
-				for (int i = 0; i <= num; i++)
+				int num = this.fSearchPoints.Count;
+				for (int i = 0; i < num; i++)
 				{
 					if (this.fSearchPoints[i] is GKMapBrowser.GMapPoint)
 					{

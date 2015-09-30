@@ -97,9 +97,9 @@ namespace GKTimeLinePlugin
         	return result;
         }
 
-    	#region IWidget common
+        #region IWidget support
 
-    	void IWidget.WidgetInit(IHost host) {}
+        void IWidget.WidgetInit(IHost host) {}
 
         void IWidget.BaseChanged(IBase aBase)
         {

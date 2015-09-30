@@ -63,6 +63,7 @@
     <Compile Include="src\AssemblyInfo.cs" />
     <Compile Include="src\GKConsts.cs" />
     <Compile Include="src\Interfaces\ISearchStrategy.cs" />
+    <Compile Include="src\Types\DateFormat.cs" />
     <Compile Include="src\Types\FamilyTarget.cs" />
     <Compile Include="src\Types\MediaFileNotFoundException.cs" />
     <Compile Include="src\Interfaces\IBase.cs" />
@@ -80,8 +81,9 @@
     <Compile Include="src\Interfaces\IWidget.cs" />
     <Compile Include="src\Interfaces\IWorkWindow.cs" />
     <Compile Include="src\Types\MediaStoreType.cs" />
-    <Compile Include="src\Types\NodeType.cs" />
-    <Compile Include="src\Types\PatriarchsGraphNode.cs" />
+    <Compile Include="src\Types\NameFormat.cs" />
+    <Compile Include="src\Types\PGNodeType.cs" />
+    <Compile Include="src\Types\PGNode.cs" />
     <Compile Include="src\Types\PedigreeFormat.cs" />
     <Compile Include="src\Types\RecordAction.cs" />
     <Compile Include="src\Types\ShieldState.cs" />
@@ -93,6 +95,7 @@
     <Compile Include="src\Types\PersonEventKind.cs" />
     <Compile Include="src\Types\RelationKind.cs" />
     <Compile Include="src\Types\TUserRef.cs" />
+    <Compile Include="src\Types\WomanSurnameFormat.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GKCommon\GKCommon.csproj">

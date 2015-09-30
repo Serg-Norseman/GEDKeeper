@@ -163,8 +163,8 @@ namespace GKFlowInputPlugin
 			}
 			else
 			{
-				result = fBase.Tree.aux_CreateFamily();
-				result.aux_AddChild(iRec);
+				result = fBase.Tree.CreateFamily();
+				result.AddChild(iRec);
 			}
 			return result;
 		}
@@ -179,8 +179,8 @@ namespace GKFlowInputPlugin
 			}
 			else
 			{
-				result = fBase.Tree.aux_CreateFamily();
-				result.aux_AddSpouse(iRec);
+				result = fBase.Tree.CreateFamily();
+				result.AddSpouse(iRec);
 			}
 
 			return result;
@@ -234,9 +234,14 @@ namespace GKFlowInputPlugin
 
 		private void InitSourceControls()
 		{
-			this.fBase.Context.aux_GetSourcesList(this.fSourcesList);
+			this.fBase.Context.GetSourcesList(this.fSourcesList);
+
 			cbSource.Items.Clear();
-			for (int i = 0; i <= fSourcesList.Count - 1; i++) cbSource.Items.Add(fSourcesList[i]);
+
+			int num = fSourcesList.Count;
+			for (int i = 0; i < num; i++) {
+				cbSource.Items.Add(fSourcesList[i]);
+			}
 
 			this.edPage.Text = "";
 			this.edSourceYear.Text = "";
@@ -248,8 +253,9 @@ namespace GKFlowInputPlugin
 
 		private void InitGrid(DataGridView dgv)
 		{
-			object[] linksList = new object[PersonLinks.Length];
-			for (int i = 0; i <= PersonLinks.Length - 1; i++) linksList[i] = this.fLangMan.LS(PersonLinks[i]);
+			int num = PersonLinks.Length;
+			object[] linksList = new object[num];
+			for (int i = 0; i < num; i++) linksList[i] = this.fLangMan.LS(PersonLinks[i]);
 
 			((System.ComponentModel.ISupportInitialize)(dgv)).BeginInit();
 			dgv.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -288,7 +294,7 @@ namespace GKFlowInputPlugin
 					this.fBase.Context.CreateEventEx(iRec, "DEAT", GEDCOMUtils.StrToGEDCOMDate(this.EditDeathDate.Text, true), this.EditDeathPlace.Text);
 				}
 				if (this.MemoNote.Text != "") {
-  					fBase.Tree.aux_CreateNoteEx(iRec, MemoNote.Text);
+  					fBase.Tree.CreateNoteEx(iRec, MemoNote.Text);
 				}
 				this.fBase.ChangeRecord(iRec);
 
@@ -312,7 +318,8 @@ namespace GKFlowInputPlugin
 				GEDCOMIndividualRecord iMain = null;
 				try
 				{
-					for (int r = 0; r <= dataGridView1.Rows.Count - 1; r++)
+					int num = dataGridView1.Rows.Count;
+					for (int r = 0; r < num; r++)
 					{
 						DataGridViewRow row = dataGridView1.Rows[r];
 
@@ -341,13 +348,13 @@ namespace GKFlowInputPlugin
 
 							if (!string.IsNullOrEmpty(comment)) {
 								/*GEDCOMNoteRecord note = */
-                                fBase.Tree.aux_CreateNoteEx(iRec, comment);
+                                fBase.Tree.CreateNoteEx(iRec, comment);
 							}
 
 							if (!string.IsNullOrEmpty(srcName)) {
-								GEDCOMSourceRecord srcRec = this.fBase.Context.aux_FindSource(srcName);
+								GEDCOMSourceRecord srcRec = this.fBase.Context.FindSource(srcName);
 								if (srcRec == null) {
-									srcRec = fBase.Tree.aux_CreateSource();
+									srcRec = fBase.Tree.CreateSource();
 									srcRec.FiledByEntry = srcName;
 								}
 								iRec.AddSource(srcRec, srcPage, 0);
@@ -389,24 +396,24 @@ namespace GKFlowInputPlugin
 								case TPersonLink.plMother:
 									CheckMain(iMain);
 									family = _ParseSource_GetParentsFamily(iMain);
-									family.aux_AddSpouse(iRec);
+									family.AddSpouse(iRec);
 									break;
 
 								case TPersonLink.plGodparent:
 									CheckMain(iMain);
-									iMain.aux_AddAssociation(fLangMan.LS(FLS.LSID_PLGodparent), iRec);
+									iMain.AddAssociation(fLangMan.LS(FLS.LSID_PLGodparent), iRec);
 									break;
 
 								case TPersonLink.plSpouse:
 									CheckMain(iMain);
 									family = _ParseSource_GetMarriageFamily(iMain);
-									family.aux_AddSpouse(iRec);
+									family.AddSpouse(iRec);
 									break;
 
 								case TPersonLink.plChild:
 									CheckMain(iMain);
 									family = _ParseSource_GetMarriageFamily(iMain);
-									family.aux_AddChild(iRec);
+									family.AddChild(iRec);
 									break;
 							}
 						}

@@ -52,16 +52,16 @@ namespace GKUI.Dialogs
 					this.EditStopDate.Text = GKUtils.GEDCOMDateToStr(this.fTask.StopDate, DateFormat.dfDD_MM_YYYY);
 
                     GKGoalType gt;
-                    this.fTask.aux_GetTaskGoal(out gt, out this.fTempRec);
+                    this.fTask.GetTaskGoal(out gt, out this.fTempRec);
 					this.cbGoalType.SelectedIndex = (sbyte)gt;
 
 					switch (gt) {
 						case GKGoalType.gtIndividual:
-                            string st = ((this.fTempRec == null) ? "" : (this.fTempRec as GEDCOMIndividualRecord).aux_GetNameStr(true, false));
+                            string st = ((this.fTempRec == null) ? "" : (this.fTempRec as GEDCOMIndividualRecord).GetNameString(true, false));
 							this.EditGoal.Text = st;
 							break;
 						case GKGoalType.gtFamily:
-							this.EditGoal.Text = GKUtils.aux_GetFamilyStr(this.fTempRec as GEDCOMFamilyRecord);
+							this.EditGoal.Text = GKUtils.GetFamilyString(this.fTempRec as GEDCOMFamilyRecord);
 							break;
 						case GKGoalType.gtSource:
 							this.EditGoal.Text = (this.fTempRec as GEDCOMSourceRecord).FiledByEntry;
@@ -116,11 +116,11 @@ namespace GKUI.Dialogs
 			switch (gt) {
 				case GKGoalType.gtIndividual:
 					this.fTempRec = this.Base.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
-					this.EditGoal.Text = ((this.fTempRec == null) ? "" : (this.fTempRec as GEDCOMIndividualRecord).aux_GetNameStr(true, false));
+					this.EditGoal.Text = ((this.fTempRec == null) ? "" : (this.fTempRec as GEDCOMIndividualRecord).GetNameString(true, false));
 					break;
 				case GKGoalType.gtFamily:
 					this.fTempRec = this.Base.SelectRecord(GEDCOMRecordType.rtFamily, new object[0]);
-					this.EditGoal.Text = GKUtils.aux_GetFamilyStr(this.fTempRec as GEDCOMFamilyRecord);
+					this.EditGoal.Text = GKUtils.GetFamilyString(this.fTempRec as GEDCOMFamilyRecord);
 					break;
 				case GKGoalType.gtSource:
 					this.fTempRec = this.Base.SelectRecord(GEDCOMRecordType.rtSource, new object[0]);

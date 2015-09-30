@@ -4,7 +4,7 @@ using System.Drawing.Drawing2D;
 
 namespace GKUI.Charts
 {
-	public interface ITreeControl
+	public interface ITreeControl : IDisposable
 	{
 		void Update();
 		void Draw(Graphics gfx);

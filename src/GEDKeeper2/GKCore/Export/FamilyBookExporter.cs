@@ -34,23 +34,25 @@ namespace GKCore.Export
 		private struct CatalogProps {
 			public readonly string Sign;
 			public readonly string Title;
+			public StringList Index;
 			
 			public CatalogProps(string sign, string title)
 			{
 				this.Sign = sign;
 				this.Title = title;
+				this.Index = null;
 			}
 		}
 		
 		private readonly CatalogProps[] BookCatalogs = { 
-			new CatalogProps("Catalog_BirthYears", "2.1. Годы рождения"),
-			new CatalogProps("Catalog_DeathYears", "2.2. Годы смерти"),
-			new CatalogProps("Catalog_BirthPlaces", "2.3. Места рождения"),
-			new CatalogProps("Catalog_DeathPlaces", "2.4. Места смерти"),
-			new CatalogProps("Catalog_DeathCauses", "2.5. Причины смерти"),
-			new CatalogProps("Catalog_Occupations", "2.6. Профессии"),
-			new CatalogProps("Catalog_Religion", "2.7. Вероисповедание"),
-			new CatalogProps("Catalog_Sources", "2.8. Источники")
+			new CatalogProps("Catalog_BirthYears", "Годы рождения"),
+			new CatalogProps("Catalog_DeathYears", "Годы смерти"),
+			new CatalogProps("Catalog_BirthPlaces", "Места рождения"),
+			new CatalogProps("Catalog_DeathPlaces", "Места смерти"),
+			new CatalogProps("Catalog_DeathCauses", "Причины смерти"),
+			new CatalogProps("Catalog_Occupations", "Профессии"),
+			new CatalogProps("Catalog_Religion", "Вероисповедание"),
+			new CatalogProps("Catalog_Sources", "Источники")
 		};
 		
 		private Font fTitleFont;
@@ -65,6 +67,13 @@ namespace GKCore.Export
 		private StringList byIndex, dyIndex, bpIndex, dpIndex;
 		private StringList deathCauses, occuIndex, reliIndex, sourcesIndex;
 
+		// temp options
+		public bool SkipEmptyCatalogs = true;
+		public bool CatalogNewPages = false;
+		public bool IncludeEvents = true;
+		public bool IncludeNotes = true;
+		
+		
 		public FamilyBookExporter(IBase aBase) : base(aBase)
 		{
 			this.fAlbumPage = true;
@@ -91,6 +100,8 @@ namespace GKCore.Export
 		{
 			try
 			{
+				this.PrepareData();
+
 				fDocument.AddTitle("FamilyBook");
 				fDocument.AddSubject("FamilyBook");
 				fDocument.AddAuthor("");
@@ -104,7 +115,7 @@ namespace GKCore.Export
 				fLinkFont = new Font(base_font, 8f, Font.UNDERLINE, BaseColor.BLUE);
 				fTextFont = new Font(base_font, 8f, Font.NORMAL, BaseColor.BLACK);
 				fBoldFont = new Font(base_font, 8f, Font.BOLD, BaseColor.BLACK);
-				fSymFont = new Font(base_font, 14f, Font.BOLD, BaseColor.BLACK);
+				fSymFont = new Font(base_font, 12f, Font.BOLD, BaseColor.BLACK);
 
 				base_font = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Calibri.ttf"), "CP1251", BaseFont.EMBEDDED);
 				Font page_font = new Font(base_font, 9f, Font.NORMAL);
@@ -134,11 +145,19 @@ namespace GKCore.Export
 				chap_chunk = new Chunk(pgSize.Height.ToString() + " / " + pgSize.Width.ToString(), fChapFont);
 				fDocument.Add(new Paragraph(chap_chunk) { Alignment = 1 });*/
 				
+				int catNum = 0;
 				for (BookCatalog cat = BookCatalog.Catalog_First; cat <= BookCatalog.Catalog_Last; cat++)
 				{
-					chap_chunk = new Chunk(BookCatalogs[(int)cat].Title, fLinkFont);
-					chap_chunk.SetLocalGoto(BookCatalogs[(int)cat].Sign);
-					fDocument.Add(new Paragraph(chap_chunk) { IndentationLeft = 1f });
+					CatalogProps catProps = BookCatalogs[(int)cat];
+					
+					if (!this.SkipEmptyCatalogs || catProps.Index.Count > 0) {
+						catNum++;
+						string title = "2." + catNum.ToString() + ". " + catProps.Title;
+						
+						chap_chunk = new Chunk(title, fLinkFont);
+						chap_chunk.SetLocalGoto(catProps.Sign);
+						fDocument.Add(new Paragraph(chap_chunk) { IndentationLeft = 1f });
+					}
 				}
 
 				fDocument.NewPage();
@@ -152,11 +171,9 @@ namespace GKCore.Export
 				float pageWidth = fDocument.PageSize.Width - fDocument.LeftMargin - fDocument.RightMargin;
 				float colWidth = (pageWidth - (10f * 2)) / 3;
 
-				this.PrepareData();
-
 				char sym = '!';
-				int num = mainIndex.Count - 1;
-				for (int i = 0; i <= num; i++)
+				int num = mainIndex.Count;
+				for (int i = 0; i < num; i++)
 				{
 					string text = mainIndex[i];
 					GEDCOMIndividualRecord iRec = mainIndex.GetObject(i) as GEDCOMIndividualRecord;
@@ -184,29 +201,24 @@ namespace GKCore.Export
 				fDocument.Add(new Paragraph(chap_chunk) { Alignment = 1 });
 				fDocument.Add(new Paragraph(Chunk.NEWLINE));
 
-				fDocument.NewPage();
-				this.ExposeCatalog(fDocument, byIndex, BookCatalog.Catalog_BirthYears);
+				//SimpleColumnText columnText;
+				if (!this.CatalogNewPages) {
+					columnText = new SimpleColumnText(fDocument, fWriter.DirectContent, 3, 10f);
+				}
 
-				fDocument.NewPage();
-				this.ExposeCatalog(fDocument, dyIndex, BookCatalog.Catalog_DeathYears);
+				for (BookCatalog cat = BookCatalog.Catalog_First; cat <= BookCatalog.Catalog_Last; cat++)
+				{
+					CatalogProps catProps = BookCatalogs[(int)cat];
+					
+					if (!this.SkipEmptyCatalogs || catProps.Index.Count > 0) {
+						if (this.CatalogNewPages) {
+							fDocument.NewPage();
+							columnText = new SimpleColumnText(fDocument, fWriter.DirectContent, 3, 10f);
+						}
 
-				fDocument.NewPage();
-				this.ExposeCatalog(fDocument, bpIndex, BookCatalog.Catalog_BirthPlaces);
-
-				fDocument.NewPage();
-				this.ExposeCatalog(fDocument, dpIndex, BookCatalog.Catalog_DeathPlaces);
-
-				fDocument.NewPage();
-				this.ExposeCatalog(fDocument, deathCauses, BookCatalog.Catalog_DeathCauses);
-
-				fDocument.NewPage();
-				this.ExposeCatalog(fDocument, occuIndex, BookCatalog.Catalog_Occupations);
-
-				fDocument.NewPage();
-				this.ExposeCatalog(fDocument, reliIndex, BookCatalog.Catalog_Religion);
-
-				fDocument.NewPage();
-				this.ExposeCatalog(fDocument, sourcesIndex, BookCatalog.Catalog_Sources);
+						this.ExposeCatalog(fDocument, columnText, catProps);
+					}
+				}
 			}
 			catch (Exception ex)
 			{
@@ -235,19 +247,20 @@ namespace GKCore.Export
 			while (iEnum.MoveNext(out rec))
 			{
 				GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
-				string text = iRec.aux_GetNameStr(true, false);
+				string text = iRec.GetNameString(true, false);
                 string st;
 
 				mainIndex.AddObject(text, iRec);
 
-				int ev_num = iRec.IndividualEvents.Count - 1;
-				for (int k = 0; k <= ev_num; k++) 
+				int ev_num = iRec.IndividualEvents.Count;
+				for (int k = 0; k < ev_num; k++)
 				{
                     GEDCOMCustomEvent evt = iRec.IndividualEvents[k];
-					if (evt != null)
+
+                    if (evt != null)
 					{
-						int src_num2 = evt.Detail.SourceCitations.Count - 1;
-						for (int m = 0; m <= src_num2; m++)
+						int src_num2 = evt.Detail.SourceCitations.Count;
+						for (int m = 0; m < src_num2; m++)
 						{
 							GEDCOMSourceRecord src = evt.Detail.SourceCitations[m].Value as GEDCOMSourceRecord;
 							if (src != null)
@@ -293,12 +306,12 @@ namespace GKCore.Export
 					}
 				}
 
-				int src_num = iRec.SourceCitations.Count - 1;
-				for (int k = 0; k <= src_num; k++)
+				int src_num = iRec.SourceCitations.Count;
+				for (int k = 0; k < src_num; k++)
 				{
 					GEDCOMSourceRecord src = iRec.SourceCitations[k].Value as GEDCOMSourceRecord;
-					if (src != null)
-					{
+
+					if (src != null) {
 						st = src.FiledByEntry;
 						if (string.IsNullOrEmpty(st)) st = src.Title.Text;
 						PrepareSpecIndex(sourcesIndex, st, iRec);
@@ -307,14 +320,15 @@ namespace GKCore.Export
 			}
 
 			mainIndex.Sort();
-			byIndex.Sort();
-			dyIndex.Sort();
-			bpIndex.Sort();
-			dpIndex.Sort();
-			deathCauses.Sort();
-			occuIndex.Sort();
-			reliIndex.Sort();
-			sourcesIndex.Sort();
+			
+			BookCatalogs[(int)BookCatalog.Catalog_BirthYears].Index = byIndex;
+			BookCatalogs[(int)BookCatalog.Catalog_DeathYears].Index = dyIndex;
+			BookCatalogs[(int)BookCatalog.Catalog_BirthPlaces].Index = bpIndex;
+			BookCatalogs[(int)BookCatalog.Catalog_DeathPlaces].Index = dpIndex;
+			BookCatalogs[(int)BookCatalog.Catalog_DeathCauses].Index = deathCauses;
+			BookCatalogs[(int)BookCatalog.Catalog_Occupations].Index = occuIndex;
+			BookCatalogs[(int)BookCatalog.Catalog_Religion].Index = reliIndex;
+			BookCatalogs[(int)BookCatalog.Catalog_Sources].Index = sourcesIndex;
 		}
 
 		private void ExposePerson(ColumnText mct, GEDCOMIndividualRecord iRec, string iName, float colWidth)
@@ -351,11 +365,10 @@ namespace GKCore.Export
 
 			GEDCOMIndividualRecord father, mother;
 			iRec.GetParents(out father, out mother);
-			//string text;
 
 			if (father != null) {
 				pg = new Paragraph();
-				chunk = new Chunk(father.aux_GetNameStr(true, false), fLinkFont);
+				chunk = new Chunk(father.GetNameString(true, false), fLinkFont);
 				chunk.SetLocalGoto(father.XRef);
 				pg.Add(new Chunk("Отец: ", fTextFont)); pg.Add(chunk);
 				mct.AddElement(pg);
@@ -363,51 +376,75 @@ namespace GKCore.Export
 
 			if (mother != null) {
 				pg = new Paragraph();
-				chunk = new Chunk(mother.aux_GetNameStr(true, false), fLinkFont);
+				chunk = new Chunk(mother.GetNameString(true, false), fLinkFont);
 				chunk.SetLocalGoto(mother.XRef);
 				pg.Add(new Chunk("Мать: ", fTextFont)); pg.Add(chunk);
 				mct.AddElement(pg);
 			}
 
-			//string st;
+			if (this.IncludeEvents && iRec.IndividualEvents.Count != 0)
+			{
+				int num = iRec.IndividualEvents.Count;
+				for (int i = 0; i < num; i++)
+				{
+					GEDCOMCustomEvent evt = iRec.IndividualEvents[i];
+					if (evt.Name == "BIRT" || evt.Name == "DEAT") continue;
+					
+					string evtName = GKUtils.GetIndividualEventName(evt);
+					string evtVal = evt.StringValue;
+					string evtDesc = GKUtils.GetEventDesc(evt.Detail, false);
 
-			/*GEDCOMCustomEvent evt = iRec.GetIndividualEvent("BIRT");
-			if (evt != null) {
-				mct.AddElement(new Paragraph("Родился: " + st));
+					string tmp = evtName + ": " + evtVal;
+					if (evtVal != "") tmp += ", ";
+					tmp += evtDesc;
+
+					mct.AddElement(new Paragraph(new Chunk(tmp, fTextFont)));
+				}
 			}
 
-			mct.AddElement(new Paragraph("Date of Birth: " + p.BirthDate));
-			mct.AddElement(new Paragraph("Place of Birth: " + p.BirthPlace));
-			mct.AddElement(new Paragraph("Date of Death: " + p.DeathDate));
-			mct.AddElement(new Paragraph("Place of Death: " + p.DeathPlace));
-			mct.AddElement(new Paragraph("Address: " + p.Address));
-			mct.AddElement(new Paragraph("Occupation: " + p.Occupation));
-			mct.AddElement(new Paragraph("Photo: " + p.Photo));*/
+			if (this.IncludeNotes && iRec.Notes.Count != 0)
+			{
+				int num = iRec.Notes.Count;
+				for (int i = 0; i < num; i++)
+				{
+					GEDCOMNotes note = iRec.Notes[i];
+					mct.AddElement(new Paragraph(GKUtils.MergeStrings(note.Notes), fTextFont));
+				}
+			}
 		}
 
-		private void ExposeCatalog(Document document, StringList index, BookCatalog catalog)
+		private void ExposeCatalog(Document document, SimpleColumnText columnText, CatalogProps catProps)
 		{
-			Chunk chunk = new Chunk(BookCatalogs[(int)catalog].Title, fSubchapFont);
-			chunk.SetLocalDestination(BookCatalogs[(int)catalog].Sign);
-			document.Add(new Paragraph(chunk));
-			document.Add(new Paragraph(Chunk.NEWLINE));
-
+			StringList index = catProps.Index;
 			if (index == null) return;
 
-			SimpleColumnText columnText = new SimpleColumnText(fDocument, fWriter.DirectContent, 3, 10f);
-			for (int i = 0; i < index.Count; i++)
+			Chunk chunk = new Chunk(catProps.Title, fSubchapFont);
+			chunk.SetLocalDestination(catProps.Sign);
+			
+			if (this.CatalogNewPages) {
+				document.Add(new Paragraph(chunk));
+				document.Add(new Paragraph(Chunk.NEWLINE));
+			} else {
+				columnText.AddElement(new Paragraph(chunk) { Alignment = 1 });
+				columnText.AddElement(new Paragraph(Chunk.NEWLINE));
+			}
+
+			index.Sort();
+			int num = index.Count;
+			for (int i = 0; i < num; i++)
 			{
 				Paragraph ps = new Paragraph(new Chunk(index[i], fSymFont));
 				ps.SpacingBefore = 0f;
 				ps.SpacingAfter = 20f;
-				ps.Alignment = 1;
+				//ps.Alignment = 1;
 				ps.Add(Chunk.NEWLINE);
 				columnText.AddElement(ps);
 
 				StringList persons = index.GetObject(i) as StringList;
-				persons.Sort();
 
-				for (int k = 0; k < persons.Count; k++)
+				persons.Sort();
+				int num2 = persons.Count;
+				for (int k = 0; k < num2; k++)
 				{
 					GEDCOMIndividualRecord iRec = persons.GetObject(k) as GEDCOMIndividualRecord;
 
@@ -491,7 +528,7 @@ namespace GKCore.Export
 			float columnHeight = (fDocument.PageSize.Height - fDocument.TopMargin - fDocument.BottomMargin);
 			float columnWidth = ((fDocument.PageSize.Width - fDocument.LeftMargin - fDocument.RightMargin) - (columnSpacing * (columnCount - 1))) / columnCount;
 
-			for (int x = 0; x <= columnCount - 1; x++)
+			for (int x = 0; x < columnCount; x++)
 			{
 				float llx = ((columnWidth + columnSpacing) * x) + fDocument.LeftMargin;
 				float lly = fDocument.BottomMargin;

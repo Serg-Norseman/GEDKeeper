@@ -57,6 +57,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\ExpCalculator.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="src\ExtUtils\ArborEngine\ArborEdge.cs" />
     <Compile Include="src\ExtUtils\ArborEngine\ArborNode.cs" />
     <Compile Include="src\ExtUtils\ArborEngine\ArborPoint.cs" />
@@ -82,13 +85,11 @@
     <Compile Include="src\Controls\HyperView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="src\ExtUtils\CalendarConverter.cs" />
     <Compile Include="src\ExtUtils\CSV\CSVReader.cs" />
     <Compile Include="src\ExtUtils\CSV\StringConverter.cs" />
     <Compile Include="src\ExtUtils\ListTimSort.cs" />
     <Compile Include="src\ExtUtils\ZipStorer.cs" />
-    <Compile Include="src\Format\DateFormat.cs" />
-    <Compile Include="src\Format\NameFormat.cs" />
-    <Compile Include="src\Format\WomanSurnameFormat.cs" />
     <Compile Include="src\GEDCOM\AnselEncoding.cs" />
     <Compile Include="src\GEDCOM\EGEDCOMException.cs" />
     <Compile Include="src\GEDCOM\Enums\GEDCOMApproximated.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="src\GEDCOM\Enums\GKGoalType.cs" />
     <Compile Include="src\GEDCOM\Enums\GKResearchPriority.cs" />
     <Compile Include="src\GEDCOM\Enums\GKResearchStatus.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMDelegates.cs" />
     <Compile Include="src\GEDCOM\GEDCOMFactory.cs" />
     <Compile Include="src\GEDCOM\Enums\GEDCOMFormat.cs" />
     <Compile Include="src\GEDCOM\GEDCOMList.cs" />
@@ -121,7 +123,7 @@
     <Compile Include="src\GEDCOM\Enums\GEDCOMRecordType.cs" />
     <Compile Include="src\GEDCOM\Enums\GEDCOMState.cs" />
     <Compile Include="src\GEDCOM\GEDCOMUtils.cs" />
-    <Compile Include="src\GEDCOM\IGEDCOMStructWithLists.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMInterfaces.cs" />
     <Compile Include="src\GEDCOM\GEDCOMAddress.cs" />
     <Compile Include="src\GEDCOM\GEDCOMAlias.cs" />
     <Compile Include="src\GEDCOM\GEDCOMAssociation.cs" />
@@ -218,10 +220,7 @@
     <Compile Include="src\SysUtils.cs" />
     <Compile Include="src\Tween.cs" />
     <Compile Include="src\ValuesCollection.cs" />
-    <Compile Include="src\Win32Native.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src\Format" />
+    <Compile Include="src\NativeMethods.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="src\Controls\ExtResources.resx">

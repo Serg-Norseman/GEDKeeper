@@ -10,7 +10,7 @@ using GKCore.Types;
 
 namespace GKUI.Lists
 {
-	public enum SourceColumnType : byte
+	public enum SourceColumnType
 	{
 		sctShortName,
 		sctAuthor,

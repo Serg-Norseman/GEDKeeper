@@ -81,8 +81,8 @@ namespace GKTimeLinePlugin
         {
             GEDCOMTree tree = this.fBase.Tree;
 
-            int num = tree.RecordsCount - 1;
-            for (int i = 0; i <= num; i++)
+            int num = tree.RecordsCount;
+            for (int i = 0; i < num; i++)
             {
                 GEDCOMRecord rec = tree[i];
 
@@ -90,8 +90,8 @@ namespace GKTimeLinePlugin
                 {
                     GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
 
-                    int num2 = iRec.IndividualEvents.Count - 1;
-                    for (int k = 0; k <= num2; k++)
+                    int num2 = iRec.IndividualEvents.Count;
+                    for (int k = 0; k < num2; k++)
                     {
                         GEDCOMCustomEvent ev = iRec.IndividualEvents[k];
 
@@ -99,7 +99,7 @@ namespace GKTimeLinePlugin
                         {
                             ushort j, d;
                             int year;
-                            ev.Detail.Date.aux_GetIndependentDate(out year, out j, out d);
+                            ev.Detail.Date.GetIndependentDate(out year, out j, out d);
                             if (year > 0)
                             {
                                 if (this.fYearMin > year) this.fYearMin = year;
@@ -167,10 +167,10 @@ namespace GKTimeLinePlugin
                 ushort j, d;
 
                 int bdy = -1;
-                if (buf_bd != null) buf_bd.Detail.Date.aux_GetIndependentDate(out bdy, out j, out d);
+                if (buf_bd != null) buf_bd.Detail.Date.GetIndependentDate(out bdy, out j, out d);
 
                 int ddy = -1;
-                if (buf_dd != null) buf_dd.Detail.Date.aux_GetIndependentDate(out ddy, out j, out d);
+                if (buf_dd != null) buf_dd.Detail.Date.GetIndependentDate(out ddy, out j, out d);
 
                 if (bdy > 0 && ddy <= 0) {
                     ddy = bdy + GKConsts.ProvedLifeLength;

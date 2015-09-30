@@ -2,6 +2,8 @@
 using System.Drawing;
 using System.Windows.Forms;
 
+using GKCommon;
+
 /// <summary>
 /// 
 /// </summary>
@@ -11,7 +13,7 @@ namespace GKCalculatorPlugin
 	public partial class TfmCalcWidget : Form
 	{
     	private Plugin fPlugin;
-		private readonly ExtCalculator fCalc;
+		private readonly ExpCalculator fCalc;
 
 		public TfmCalcWidget(Plugin plugin) : base()
 		{
@@ -25,7 +27,7 @@ namespace GKCalculatorPlugin
 			this.Text = this.fPlugin.LangMan.LS(PLS.LSID_MICalc);
 			this.chkPutToClipboard.Text = this.fPlugin.LangMan.LS(PLS.LSID_CopyResultToClipboard);
 
-			this.fCalc = new ExtCalculator();
+			this.fCalc = new ExpCalculator();
 			this.lbOutput.Items.Clear();
 		}
 

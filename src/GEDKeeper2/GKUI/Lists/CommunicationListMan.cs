@@ -10,7 +10,7 @@ using GKCore.Types;
 
 namespace GKUI.Lists
 {
-	public enum CommunicationColumnType : byte
+	public enum CommunicationColumnType
 	{
 		cctCommName,
 		cctCorresponder,

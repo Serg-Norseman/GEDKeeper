@@ -216,47 +216,41 @@ namespace GKUI.Dialogs
 
 		    this.fNotesList.DataList = this.fResearch.Notes.GetEnumerator();
 
-			GKListView list = this.fTasksList.List;
-			list.BeginUpdate();
-			list.Items.Clear();
-
-			int num = this.fResearch.Tasks.Count - 1;
-			for (int i = 0; i <= num; i++)
+			this.fTasksList.List.BeginUpdate();
+			this.fTasksList.List.Items.Clear();
+			foreach (GEDCOMPointer taskPtr in this.fResearch.Tasks)
 			{
-				GEDCOMTaskRecord task = this.fResearch.Tasks[i].Value as GEDCOMTaskRecord;
-				GKListItem item = list.AddItem(GKUtils.GetTaskGoalStr(task), task);
+				GEDCOMTaskRecord task = taskPtr.Value as GEDCOMTaskRecord;
+
+				GKListItem item = this.fTasksList.List.AddItem(GKUtils.GetTaskGoalStr(task), task);
 				item.SubItems.Add(LangMan.LS(GKData.PriorityNames[(int)task.Priority]));
                 item.SubItems.Add(GKUtils.GEDCOMDateToStr(task.StartDate, defaultDateFormat));
                 item.SubItems.Add(GKUtils.GEDCOMDateToStr(task.StopDate, defaultDateFormat));
 			}
-			list.EndUpdate();
+			this.fTasksList.List.EndUpdate();
 
-			GKListView list2 = this.fCommunicationsList.List;
-			list2.BeginUpdate();
-			list2.Items.Clear();
-
-			int num2 = this.fResearch.Communications.Count - 1;
-			for (int i = 0; i <= num2; i++)
+			this.fCommunicationsList.List.BeginUpdate();
+			this.fCommunicationsList.List.Items.Clear();
+			foreach (GEDCOMPointer commPtr in this.fResearch.Communications)
 			{
-				GEDCOMCommunicationRecord corr = this.fResearch.Communications[i].Value as GEDCOMCommunicationRecord;
-				GKListItem item = list2.AddItem(corr.CommName, corr);
+				GEDCOMCommunicationRecord corr = commPtr.Value as GEDCOMCommunicationRecord;
+
+				GKListItem item = this.fCommunicationsList.List.AddItem(corr.CommName, corr);
 				item.SubItems.Add(GKUtils.GetCorresponderStr(this.fBase.Tree, corr, false));
 				item.SubItems.Add(LangMan.LS(GKData.CommunicationNames[(int)corr.CommunicationType]));
                 item.SubItems.Add(GKUtils.GEDCOMDateToStr(corr.Date, defaultDateFormat));
 			}
-			list2.EndUpdate();
+			this.fCommunicationsList.List.EndUpdate();
 
-			GKListView list3 = this.fGroupsList.List;
-			list3.BeginUpdate();
-			list3.Items.Clear();
-
-			int num3 = this.fResearch.Groups.Count - 1;
-			for (int i = 0; i <= num3; i++)
+			this.fGroupsList.List.BeginUpdate();
+			this.fGroupsList.List.Items.Clear();
+			foreach (GEDCOMPointer groupPtr in this.fResearch.Groups)
 			{
-				GEDCOMGroupRecord grp = this.fResearch.Groups[i].Value as GEDCOMGroupRecord;
-				list3.AddItem(grp.GroupName, grp);
+				GEDCOMGroupRecord grp = groupPtr.Value as GEDCOMGroupRecord;
+
+				this.fGroupsList.List.AddItem(grp.GroupName, grp);
 			}
-			list3.EndUpdate();
+			this.fGroupsList.List.EndUpdate();
 		}
 
 		private void btnAccept_Click(object sender, EventArgs e)

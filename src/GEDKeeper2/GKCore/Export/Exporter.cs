@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
@@ -76,7 +77,15 @@ namespace GKCore.Export
 
 		protected static void PrepareSpecIndex(StringList index, string val, GEDCOMIndividualRecord iRec)
 		{
-			StringList persons;
+            if (index == null) {
+                throw new ArgumentNullException("index");
+            }
+
+            if (iRec == null) {
+                throw new ArgumentNullException("iRec");
+            }
+
+            StringList persons;
 
 			int idx = index.IndexOf(val);
 			if (idx < 0) {
@@ -87,7 +96,7 @@ namespace GKCore.Export
 			}
 
 			if (persons.IndexOfObject(iRec) < 0) {
-				persons.AddObject(iRec.aux_GetNameStr(true, false), iRec);
+				persons.AddObject(iRec.GetNameString(true, false), iRec);
 			}
 		}
 
@@ -98,7 +107,7 @@ namespace GKCore.Export
 				year = -1;
 			} else {
 				ushort m, d;
-				evt.Detail.Date.aux_GetIndependentDate(out year, out m, out d);
+				evt.Detail.Date.GetIndependentDate(out year, out m, out d);
 				if (year == 0) year = -1;
 			}
 

@@ -84,7 +84,7 @@ namespace GKCommon
 
 			// Try The Windows QueryPerformanceCounter.
 			try {
-                test = Win32Native.QueryPerformanceFrequency(ref fFrequency);
+                test = NativeMethods.QueryPerformanceFrequency(ref fFrequency);
 			}
 			catch(DllNotFoundException e) {
 				Console.WriteLine(e.ToString());
@@ -101,7 +101,7 @@ namespace GKCommon
 			else {
 				try {
 					test = true;
-                    testTime = Win32Native.timeGetTime();
+                    testTime = NativeMethods.timeGetTime();
 				}
 				catch(DllNotFoundException e) {
 					Console.WriteLine(e.ToString());
@@ -124,11 +124,11 @@ namespace GKCommon
 			ulong tmp = 0;
 
 			if (fType == TimerType.QueryPerformanceCounter) {
-                Win32Native.QueryPerformanceCounter(ref tmp);
+                NativeMethods.QueryPerformanceCounter(ref tmp);
 				return tmp;
 			}
 			else if (fType == TimerType.TimeGetTime) {
-                tmp = Win32Native.timeGetTime();
+                tmp = NativeMethods.timeGetTime();
 				return tmp;
 			}
 			else {

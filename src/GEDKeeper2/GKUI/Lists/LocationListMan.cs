@@ -11,7 +11,7 @@ using GKCore.Types;
 
 namespace GKUI.Lists
 {
-	public enum LocationColumnType : byte
+	public enum LocationColumnType
 	{
 		lctName,
 		lctLati,

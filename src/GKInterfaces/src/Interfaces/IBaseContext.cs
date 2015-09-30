@@ -11,8 +11,8 @@ namespace GKCore.Interfaces
 		GEDCOMTree Tree { get; }
 
 		// Data search
-		GEDCOMSourceRecord aux_FindSource(string sourceName);
-		void aux_GetSourcesList(StringList aSources);
+		GEDCOMSourceRecord FindSource(string sourceName);
+		void GetSourcesList(StringList sources);
 
 		// Data Manipulation
 		GEDCOMCustomEvent CreateEventEx(GEDCOMRecord aRec, string evSign, string evDate, string evPlace);

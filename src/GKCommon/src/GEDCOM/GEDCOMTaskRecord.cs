@@ -60,26 +60,26 @@ namespace GKCommon.GEDCOM
 
 		#region Auxiliary
 
-        public void aux_GetTaskGoal(out GKGoalType aType, out GEDCOMRecord aGoalRec)
+        public void GetTaskGoal(out GKGoalType goalType, out GEDCOMRecord goalRec)
         {
             GEDCOMTree tree = this.Owner;
-            aGoalRec = tree.XRefIndex_Find(GEDCOMUtils.CleanXRef(this.Goal));
+            goalRec = tree.XRefIndex_Find(GEDCOMUtils.CleanXRef(this.Goal));
 
-            if (aGoalRec is GEDCOMIndividualRecord)
+            if (goalRec is GEDCOMIndividualRecord)
             {
-            	aType = GKGoalType.gtIndividual;
+            	goalType = GKGoalType.gtIndividual;
             }
-            else if (aGoalRec is GEDCOMFamilyRecord)
+            else if (goalRec is GEDCOMFamilyRecord)
             {
-            	aType = GKGoalType.gtFamily;
+            	goalType = GKGoalType.gtFamily;
             }
-            else if (aGoalRec is GEDCOMSourceRecord)
+            else if (goalRec is GEDCOMSourceRecord)
             {
-            	aType = GKGoalType.gtSource;
+            	goalType = GKGoalType.gtSource;
             }
             else
             {
-            	aType = GKGoalType.gtOther;
+            	goalType = GKGoalType.gtOther;
             }
         }
 

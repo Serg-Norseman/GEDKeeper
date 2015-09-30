@@ -209,9 +209,11 @@ namespace GKUI.Controls
 
 		public void SelectItem(object data)
 		{
-			for (int i = 0; i < this.Items.Count; i++) {
+			int num = this.Items.Count;
+			for (int i = 0; i < num; i++) {
                 GKListItem item = this.Items[i] as GKListItem;
-				if (item.Data == data) {
+
+                if (item.Data == data) {
 					this.SelectItem(item);
 					return;
 				}

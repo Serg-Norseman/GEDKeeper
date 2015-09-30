@@ -9,7 +9,7 @@ using GKCore.Types;
 
 namespace GKUI.Charts
 {
-	public enum PersonFlag : byte
+	public enum PersonFlag
 	{
 		pfDivorced, pfIsDead, pfSelected, pfIsDup, 
 		pfDescByFather, pfDescByMother,
@@ -17,7 +17,7 @@ namespace GKUI.Charts
 		pfHasInvAnc, pfHasInvDesc
 	}
 
-	public enum PersonKind : byte
+	public enum PersonKind
 	{
 		pkDefault, pkSpouse
 	}
@@ -339,7 +339,7 @@ namespace GKUI.Charts
                     this.fSurname = fam;
                     this.fName = nam;
                     this.fPatronymic = pat;
-                    this.fNick = iRec.aux_GetNickStr();
+                    this.fNick = iRec.GetNickString();
                     this.fBirthDate = GKUtils.GetBirthDate(iRec, DateFormat.dfDD_MM_YYYY, false);
                     this.fDeathDate = GKUtils.GetDeathDate(iRec, DateFormat.dfDD_MM_YYYY, false);
                     this.IsDead = !iRec.IsLive();

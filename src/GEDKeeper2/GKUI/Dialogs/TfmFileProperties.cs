@@ -37,7 +37,7 @@ namespace GKUI.Dialogs
 
 		private void UpdateControls()
 		{
-			GEDCOMSubmitterRecord submitter = this.fBase.Tree.aux_GetSubmitter();
+			GEDCOMSubmitterRecord submitter = this.fBase.Tree.GetSubmitter();
 			this.EditName.Text = submitter.Name.FullName;
 			this.MemoAddress.Text = submitter.Address.Address.Text;
 
@@ -50,7 +50,7 @@ namespace GKUI.Dialogs
 		{
 			try
 			{
-				GEDCOMSubmitterRecord submitter = this.fBase.Tree.aux_GetSubmitter();
+				GEDCOMSubmitterRecord submitter = this.fBase.Tree.GetSubmitter();
 				submitter.Name.StringValue = this.EditName.Text;
 				submitter.Address.SetAddressArray(this.MemoAddress.Lines);
 

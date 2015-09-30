@@ -105,7 +105,7 @@ namespace GKCalculatorPlugin
         void IWidget.WidgetEnable()
         {
         	if (frm != null) {
-        		Win32Native.EnableWindow(this.frm.Handle, true);
+        		NativeMethods.EnableWindow(this.frm.Handle, true);
         	}
         }
 

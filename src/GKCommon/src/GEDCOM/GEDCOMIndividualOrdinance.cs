@@ -2,7 +2,7 @@ using GKCommon.GEDCOM.Enums;
 
 namespace GKCommon.GEDCOM
 {
-	// TODO: возможны многочисленные нарушения стандарта, перепроверить вложенность тэгов
+	// FIXME: возможны многочисленные нарушения стандарта, перепроверить вложенность тэгов
 	public sealed class GEDCOMIndividualOrdinance : GEDCOMTagWithLists
 	{
 		public GEDCOMDateValue Date

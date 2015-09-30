@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GKCore.Types
+﻿namespace GKCore.Types
 {
 	public enum WomanSurnameFormat
 	{

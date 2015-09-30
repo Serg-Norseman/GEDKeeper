@@ -43,7 +43,7 @@ namespace GKUI.Sheets
                     GEDCOMAssociation ast = this.DataList.Current as GEDCOMAssociation;
                     if (ast == null) continue;
 
-                    string nm = ((ast.Individual == null) ? "" : ast.Individual.aux_GetNameStr(true, false));
+                    string nm = ((ast.Individual == null) ? "" : ast.Individual.GetNameString(true, false));
 
                     GKListItem item = this.List.AddItem(ast.Relation, ast);
                     item.SubItems.Add(nm);

@@ -5,7 +5,6 @@ using System.Net;
 using System.Windows.Forms;
 using System.Xml;
 
-using ExtUtils;
 using GKCommon;
 using GKCore.Options;
 
@@ -33,7 +32,7 @@ namespace GKUI.Controls
 		}
 
 
-		private struct TCoordsRect
+		private struct CoordsRect
 		{
 			public double MinLon;
 			public double MinLat;
@@ -106,9 +105,9 @@ namespace GKUI.Controls
 		}
 
 
-		private TCoordsRect GetPointsFrame()
+		private CoordsRect GetPointsFrame()
 		{
-			TCoordsRect result = new TCoordsRect();
+			CoordsRect result = new CoordsRect();
 			if (this.fMapPoints.Count > 0)
 			{
 				GMapPoint pt = this.fMapPoints[0] as GMapPoint;
@@ -116,6 +115,7 @@ namespace GKUI.Controls
 				result.MaxLon = pt.Longitude;
 				result.MinLat = pt.Latitude;
 				result.MaxLat = pt.Latitude;
+
 				if (this.fMapPoints.Count == 1)
 				{
 					result.MinLon = (result.MinLon - 20.0);
@@ -125,8 +125,8 @@ namespace GKUI.Controls
 				}
 				else
 				{
-					int num = this.fMapPoints.Count - 1;
-					for (int i = 0; i <= num; i++)
+					int num = this.fMapPoints.Count;
+					for (int i = 0; i < num; i++)
 					{
 						pt = (this.fMapPoints[i] as GMapPoint);
 
@@ -229,7 +229,8 @@ namespace GKUI.Controls
 				string pointsScript = "";
 				string polylineScript = "";
 
-				for (int i = 0; i <= this.fMapPoints.Count - 1; i++)
+				int num = this.fMapPoints.Count;
+				for (int i = 0; i < num; i++)
 				{
 					GMapPoint pt = this.fMapPoints[i] as GMapPoint;
 					pointsScript += string.Format("addMarker({0}, {1}, \"{2}\");", new object[]
@@ -285,7 +286,7 @@ namespace GKUI.Controls
 
 		public void ZoomToBounds()
 		{
-			TCoordsRect rt = this.GetPointsFrame();
+			CoordsRect rt = this.GetPointsFrame();
 
 			if (rt.MinLon != rt.MaxLon && rt.MinLat != rt.MaxLat)
 			{
@@ -353,8 +354,8 @@ namespace GKUI.Controls
 
                         if (node != null && node.ChildNodes.Count > 0)
 						{
-							int num = node.ChildNodes.Count - 1;
-							for (int i = 0; i <= num; i++)
+							int num = node.ChildNodes.Count;
+							for (int i = 0; i < num; i++)
 							{
 								XmlNode xNode = node.ChildNodes[i];
 								if (xNode.Name == "result")

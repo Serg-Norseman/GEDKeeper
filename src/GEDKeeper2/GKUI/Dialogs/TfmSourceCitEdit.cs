@@ -61,7 +61,7 @@ namespace GKUI.Dialogs
 			GEDCOMSourceRecord src = fBase.SelectRecord(GEDCOMRecordType.rtSource, anArgs) as GEDCOMSourceRecord;
 		    if (src == null) return;
 		    
-            this.fBase.Context.aux_GetSourcesList(this.fSourcesList);
+            this.fBase.Context.GetSourcesList(this.fSourcesList);
 		    this.RefreshSourcesList("");
 		    this.cbSource.Text = src.FiledByEntry;
 		}
@@ -86,9 +86,11 @@ namespace GKUI.Dialogs
 				this.cbSource.Items.Clear();
 
 				string flt = "*" + filter + "*";
-				int num = this.fSourcesList.Count - 1;
-				for (int i = 0; i <= num; i++) {
+
+				int num = this.fSourcesList.Count;
+				for (int i = 0; i < num; i++) {
 					string st = this.fSourcesList[i];
+
 					if (filter == "" || GKUtils.MatchesMask(st, flt))
 					{
 						this.cbSource.Items.Add(new GKComboItem(st, this.fSourcesList.GetObject(i)));
@@ -140,7 +142,7 @@ namespace GKUI.Dialogs
 			this.Label1.Text = LangMan.LS(LSID.LSID_Page);
 			this.Label3.Text = LangMan.LS(LSID.LSID_Certainty);
 
-			this.fBase.Context.aux_GetSourcesList(this.fSourcesList);
+			this.fBase.Context.GetSourcesList(this.fSourcesList);
 			this.RefreshSourcesList("");
 		}
 		

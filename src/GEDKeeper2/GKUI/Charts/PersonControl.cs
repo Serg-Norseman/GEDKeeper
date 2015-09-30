@@ -5,7 +5,7 @@ using GKCommon;
 
 namespace GKUI.Charts
 {
-	public class PersonControl : ITreeControl
+    public sealed class PersonControl : ITreeControl
 	{
 		private readonly TreeChartBox fChart;
 		private bool fVisible;
@@ -28,6 +28,12 @@ namespace GKUI.Charts
             this.fChart = chart;
             this.fCtlPen = new Pen(Color.Black, 2.0f);
             this.fCtlBrush = new SolidBrush(Color.FromArgb(128, 128, 128, 128));
+        }
+
+        public void Dispose()
+        {
+            this.fCtlPen.Dispose();
+            this.fCtlBrush.Dispose();
         }
 
         public void SetPerson(TreeChartPerson person)

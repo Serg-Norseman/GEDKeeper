@@ -103,6 +103,17 @@ namespace GKCommon.GEDCOM
 			if (this.fValue != null) this.fValue.ResetOwner(newOwner);
 		}
 
+		public GEDCOMDateValue(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
+		{
+		}
+
+        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+		{
+			return new GEDCOMDateValue(owner, parent, tagName, tagValue);
+		}
+        
+        #region Auxiliary
+
 		public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
 		{
 			if (tag == null) return 0.0f;
@@ -112,8 +123,8 @@ namespace GKCommon.GEDCOM
 
 			int year1, year2;
 			ushort month1, day1, month2, day2;
-			this.aux_GetIndependentDate(out year1, out month1, out day1);
-			date.aux_GetIndependentDate(out year2, out month2, out day2);
+			this.GetIndependentDate(out year1, out month1, out day1);
+			date.GetIndependentDate(out year2, out month2, out day2);
 
 			float match = 0.0f;
 			float matches = 0.0f;
@@ -129,48 +140,49 @@ namespace GKCommon.GEDCOM
 			return match;
 		}
 
-		public void aux_GetIndependentDate(out int AYear, out ushort AMonth, out ushort ADay)
+		public void GetIndependentDate(out int year, out ushort month, out ushort day)
 		{
 			bool BC;
-			this.aux_GetIndependentDate(out AYear, out AMonth, out ADay, out BC);
+			this.GetIndependentDate(out year, out month, out day, out BC);
 		}
 
-		public void aux_GetIndependentDate(out int AYear, out ushort AMonth, out ushort ADay, out bool YearBC)
+		public void GetIndependentDate(out int year, out ushort month, out ushort day, out bool yearBC)
 		{
-			AYear = -1;
-			AMonth = 0;
-			ADay = 0;
-			YearBC = false;
+			year = -1;
+			month = 0;
+			day = 0;
+			yearBC = false;
 
 			if (fValue is GEDCOMDateApproximated)
 			{
 				GEDCOMDate dt = (fValue as GEDCOMDate);
-				dt.GetDate(out AYear, out AMonth, out ADay);
-				YearBC = dt.YearBC;
+				dt.GetDate(out year, out month, out day);
+				yearBC = dt.YearBC;
 			}
 			else
 			{
 				if (fValue is GEDCOMDateRange)
 				{
-					GEDCOMDateRange dt_range = fValue as GEDCOMDateRange;
-					if (dt_range.After.StringValue == "" && dt_range.Before.StringValue != "")
+					GEDCOMDateRange range = fValue as GEDCOMDateRange;
+
+					if (range.After.StringValue == "" && range.Before.StringValue != "")
 					{
-						dt_range.Before.GetDate(out AYear, out AMonth, out ADay);
-						YearBC = dt_range.Before.YearBC;
+						range.Before.GetDate(out year, out month, out day);
+						yearBC = range.Before.YearBC;
 					}
 					else
 					{
-						if (dt_range.After.StringValue != "" && dt_range.Before.StringValue == "")
+						if (range.After.StringValue != "" && range.Before.StringValue == "")
 						{
-							dt_range.After.GetDate(out AYear, out AMonth, out ADay);
-							YearBC = dt_range.After.YearBC;
+							range.After.GetDate(out year, out month, out day);
+							yearBC = range.After.YearBC;
 						}
 						else
 						{
-							if (dt_range.After.StringValue != "" && dt_range.Before.StringValue != "")
+							if (range.After.StringValue != "" && range.Before.StringValue != "")
 							{
-								dt_range.After.GetDate(out AYear, out AMonth, out ADay);
-								YearBC = dt_range.After.YearBC;
+								range.After.GetDate(out year, out month, out day);
+								yearBC = range.After.YearBC;
 							}
 						}
 					}
@@ -179,25 +191,26 @@ namespace GKCommon.GEDCOM
 				{
 					if (fValue is GEDCOMDatePeriod)
 					{
-						GEDCOMDatePeriod dt_period = fValue as GEDCOMDatePeriod;
-						if (dt_period.DateFrom.StringValue != "" && dt_period.DateTo.StringValue == "")
+						GEDCOMDatePeriod period = fValue as GEDCOMDatePeriod;
+
+						if (period.DateFrom.StringValue != "" && period.DateTo.StringValue == "")
 						{
-							dt_period.DateFrom.GetDate(out AYear, out AMonth, out ADay);
-							YearBC = dt_period.DateFrom.YearBC;
+							period.DateFrom.GetDate(out year, out month, out day);
+							yearBC = period.DateFrom.YearBC;
 						}
 						else
 						{
-							if (dt_period.DateFrom.StringValue == "" && dt_period.DateTo.StringValue != "")
+							if (period.DateFrom.StringValue == "" && period.DateTo.StringValue != "")
 							{
-								dt_period.DateTo.GetDate(out AYear, out AMonth, out ADay);
-								YearBC = dt_period.DateTo.YearBC;
+								period.DateTo.GetDate(out year, out month, out day);
+								yearBC = period.DateTo.YearBC;
 							}
 							else
 							{
-								if (dt_period.DateFrom.StringValue != "" && dt_period.DateTo.StringValue != "")
+								if (period.DateFrom.StringValue != "" && period.DateTo.StringValue != "")
 								{
-									dt_period.DateFrom.GetDate(out AYear, out AMonth, out ADay);
-									YearBC = dt_period.DateFrom.YearBC;
+									period.DateFrom.GetDate(out year, out month, out day);
+									yearBC = period.DateFrom.YearBC;
 								}
 							}
 						}
@@ -206,45 +219,15 @@ namespace GKCommon.GEDCOM
 					{
 						if (fValue is GEDCOMDate)
 						{
-							GEDCOMDate dt = (fValue as GEDCOMDate);
-							dt.GetDate(out AYear, out AMonth, out ADay);
-							YearBC = dt.YearBC;
+							GEDCOMDate date = (fValue as GEDCOMDate);
+							date.GetDate(out year, out month, out day);
+							yearBC = date.YearBC;
 						}
 					}
 				}
 			}
 		}
 
-		public DateTime aux_GetDate()
-		{
-			DateTime res;
-
-			try
-			{
-				int year;
-				ushort month, day;
-				this.aux_GetIndependentDate(out year, out month, out day);
-				if (day == 0) day = 1;
-				if (month == 0) month = 1;
-
-				res = ((year <= 0) ? new DateTime(0) : new DateTime(year, (int)month, (int)day));
-			}
-			catch (Exception ex)
-			{
-				SysUtils.LogWrite("GEDCOMDateValue.aux_GetDate(" + this.StringValue + "): " + ex.Message);
-				res = new DateTime(0);
-			}
-
-			return res;
-		}
-
-		public GEDCOMDateValue(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-		{
-		}
-
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-		{
-			return new GEDCOMDateValue(owner, parent, tagName, tagValue);
-		}
+        #endregion
 	}
 }
