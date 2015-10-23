@@ -147,5 +147,15 @@ namespace ConwayLife
 			this.tbRandomise.Text = Viewer.Options.LS_Random;
 			this.tbOptions.Text = Viewer.Options.LS_Options;
 		}
+        
+        void tbOptions_Click(object sender, EventArgs e)
+        {
+        	OptionsForm optsForm = new OptionsForm(cmpLife.Options, cmpLife.Rules);
+        	if (optsForm.ShowDialog() == DialogResult.OK) {
+        		tmrNextGeneration.Interval = cmpLife.Options.AnimationDelay;
+        		
+        		cmpLife.SetGridSize(cmpLife.Options.GridWidth, cmpLife.Options.GridHeight);
+        	}
+        }
     }
 }

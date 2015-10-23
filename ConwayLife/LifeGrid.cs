@@ -17,7 +17,7 @@ using System;
 
 namespace ConwayLife
 {
-    public sealed class LifeGrid
+	public sealed class LifeGrid : IDisposable
     {
         private bool[] fGrid;
         private int fGridHeight;
@@ -53,14 +53,14 @@ namespace ConwayLife
         {
         }
 
-        public LifeGrid(int GridWidth, int GridHeight)
+        public LifeGrid(int gridWidth, int gridHeight)
         {
-            this.fGridHeight = GridHeight;
-            this.fGridWidth = GridWidth;
+            this.fGridHeight = gridHeight;
+            this.fGridWidth = gridWidth;
             this.AllocGrid();
         }
 
-        public void Destroy()
+        public void Dispose()
         {
             this.FreeGrid();
         }
@@ -142,11 +142,11 @@ namespace ConwayLife
             return result;
         }
 
-        public void SetGridSize(int NewGridWidth, int NewGridHeight)
+        public void SetGridSize(int newGridWidth, int newGridHeight)
         {
             this.FreeGrid();
-            this.fGridWidth = NewGridWidth;
-            this.fGridHeight = NewGridHeight;
+            this.fGridWidth = newGridWidth;
+            this.fGridHeight = newGridHeight;
             this.AllocGrid();
         }
 

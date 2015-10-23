@@ -13,11 +13,12 @@
  *  Converted to C#: 20/07/2011, Serg V. Zhdanovskih
  */
 
+using System;
 using System.Collections.Generic;
 
 namespace ConwayLife
 {
-    public sealed class LifeHistory
+    public sealed class LifeHistory : IDisposable
     {
         private List<LifeGrid> fList;
         private int fMostRecent;
@@ -50,7 +51,7 @@ namespace ConwayLife
             this.fList.Capacity = maxLevels;
         }
 
-        public void Destroy()
+        public void Dispose()
         {
             this.Clear();
             this.fList = null;
@@ -72,7 +73,7 @@ namespace ConwayLife
 		
         public void Clear()
         {
-            for (int i = 0; i < this.fList.Count; i++) this.fList[i].Destroy();
+            for (int i = 0; i < this.fList.Count; i++) this.fList[i].Dispose();
             this.fList.Clear();
         }
 

@@ -25,27 +25,23 @@ namespace ConwayLife
 	public static class LifeConsts
 	{
 		public const int MinGridHeight = 5;
-		public const int MaxGridHeight = 250; // 46000
+		public const int MaxGridHeight = 1000;
 		public const int MinGridWidth = 5;
-		public const int MaxGridWidth = 250; // 46000
+		public const int MaxGridWidth = 1000;
 		public const int AbsoluteMaxNumberOfHistoryLevels = int.MaxValue;
 
 		public static Color DefaultCellColor = Color.LimeGreen;
 		public static Color DefaultGridLineColor = SystemColors.WindowText;
 
 		public const DashStyle DefaultGridLineStyle = DashStyle.Dot;
-		public const int DefaultGridHeight = 100;
-		public const int DefaultGridWidth = 100;
+		public const int DefaultGridHeight = 200;
+		public const int DefaultGridWidth = 300;
 		public const int DefaultMaxNumberOfHistoryLevels = 10;
 
-		public const int DefaultAnimationDelay = 750;
-
-		public const bool DefaultDisplayGeneration = true;
-		public const bool DefaultDisplayLivingCells = true;
+		public const int DefaultAnimationDelay = 100;
 
 		public static Color DefaultBackgroundColor = Color.Black;
 		public static Color DefaultLivingCellColor = Color.Lime;
-		public static Color DefaultDisplayedInformationColor = Color.Yellow;
 
 		public static bool[] DefaultDeadCells = new bool[] {false, false, false, true, false, false, false, false, false};
 		public static bool[] DefaultLiveCells = new bool[] {false, false, true, true, false, false, false, false, false};

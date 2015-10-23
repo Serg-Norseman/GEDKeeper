@@ -48,11 +48,18 @@
     <Compile Include="LifeOptions.cs" />
     <Compile Include="LifeRules.cs" />
     <Compile Include="LifeViewer.cs" />
+    <Compile Include="OptionsForm.cs" />
+    <Compile Include="OptionsForm.Designer.cs">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="LifeForm.resx">
       <DependentUpon>LifeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OptionsForm.resx">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

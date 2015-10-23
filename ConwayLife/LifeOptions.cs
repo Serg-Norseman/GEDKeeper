@@ -21,9 +21,6 @@ namespace ConwayLife
     {
         private int fAnimationDelay;
         private Color fBackgroundColor;
-        private Color fDisplayedInformationColor;
-        private bool fDisplayGeneration;
-        private bool fDisplayLivingCells;
         private int fGridHeight;
         private int fGridWidth;
         private Color fLivingCellColor;
@@ -55,39 +52,6 @@ namespace ConwayLife
             set {
                 if (value != this.fBackgroundColor) {
                     this.fBackgroundColor = value;
-                    this.fModified = true;
-                }
-            }
-        }
-		
-        public Color DisplayedInformationColor
-        {
-            get { return this.fDisplayedInformationColor; }
-            set {
-                if (value != this.fDisplayedInformationColor) {
-                    this.fDisplayedInformationColor = value;
-                    this.fModified = true;
-                }
-            }
-        }
-		
-        public bool DisplayGeneration
-        {
-            get { return this.fDisplayGeneration; }
-            set {
-                if (value != fDisplayGeneration) {
-                    fDisplayGeneration = value;
-                    fModified = true;
-                }
-            }
-        }
-		
-        public bool DisplayLivingCells
-        {
-            get { return this.fDisplayLivingCells; }
-            set {
-                if (value != this.fDisplayLivingCells) {
-                    this.fDisplayLivingCells = value;
                     this.fModified = true;
                 }
             }
@@ -150,9 +114,6 @@ namespace ConwayLife
         {
             this.AnimationDelay = LifeConsts.DefaultAnimationDelay;
             this.BackgroundColor = LifeConsts.DefaultBackgroundColor;
-            this.DisplayedInformationColor = LifeConsts.DefaultDisplayedInformationColor;
-            this.DisplayGeneration = LifeConsts.DefaultDisplayGeneration;
-            this.DisplayLivingCells = LifeConsts.DefaultDisplayLivingCells;
             this.GridHeight = LifeConsts.DefaultGridHeight;
             this.GridWidth = LifeConsts.DefaultGridWidth;
             this.LivingCellColor = LifeConsts.DefaultLivingCellColor;

@@ -65,17 +65,17 @@
         	// ToolBar1
         	// 
         	this.ToolBar1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.tbStep,
-			this.tbStart,
-			this.toolStripSeparator1,
-			this.btnSetCells,
-			this.tbClear,
-			this.tbRandomise,
-			this.toolStripSeparator2,
-			this.tbOptions});
+        	        	        	this.tbStep,
+        	        	        	this.tbStart,
+        	        	        	this.toolStripSeparator1,
+        	        	        	this.btnSetCells,
+        	        	        	this.tbClear,
+        	        	        	this.tbRandomise,
+        	        	        	this.toolStripSeparator2,
+        	        	        	this.tbOptions});
         	this.ToolBar1.Location = new System.Drawing.Point(0, 0);
         	this.ToolBar1.Name = "ToolBar1";
-        	this.ToolBar1.Size = new System.Drawing.Size(692, 25);
+        	this.ToolBar1.Size = new System.Drawing.Size(923, 27);
         	this.ToolBar1.TabIndex = 0;
         	this.ToolBar1.Text = "toolStrip1";
         	// 
@@ -85,7 +85,7 @@
         	this.tbStep.Image = ((System.Drawing.Image)(resources.GetObject("tbStep.Image")));
         	this.tbStep.ImageTransparentColor = System.Drawing.Color.Magenta;
         	this.tbStep.Name = "tbStep";
-        	this.tbStep.Size = new System.Drawing.Size(34, 22);
+        	this.tbStep.Size = new System.Drawing.Size(43, 24);
         	this.tbStep.Text = "Step";
         	this.tbStep.Click += new System.EventHandler(this.tbStep_Click);
         	// 
@@ -96,14 +96,14 @@
         	this.tbStart.Image = ((System.Drawing.Image)(resources.GetObject("tbStart.Image")));
         	this.tbStart.ImageTransparentColor = System.Drawing.Color.Magenta;
         	this.tbStart.Name = "tbStart";
-        	this.tbStart.Size = new System.Drawing.Size(35, 22);
+        	this.tbStart.Size = new System.Drawing.Size(44, 24);
         	this.tbStart.Text = "Start";
         	this.tbStart.Click += new System.EventHandler(this.tbStart_Click);
         	// 
         	// toolStripSeparator1
         	// 
         	this.toolStripSeparator1.Name = "toolStripSeparator1";
-        	this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+        	this.toolStripSeparator1.Size = new System.Drawing.Size(6, 27);
         	// 
         	// btnSetCells
         	// 
@@ -112,7 +112,7 @@
         	this.btnSetCells.Image = ((System.Drawing.Image)(resources.GetObject("btnSetCells.Image")));
         	this.btnSetCells.ImageTransparentColor = System.Drawing.Color.Magenta;
         	this.btnSetCells.Name = "btnSetCells";
-        	this.btnSetCells.Size = new System.Drawing.Size(52, 22);
+        	this.btnSetCells.Size = new System.Drawing.Size(65, 24);
         	this.btnSetCells.Text = "SetCells";
         	this.btnSetCells.Click += new System.EventHandler(this.tbSetCells_Click);
         	// 
@@ -122,7 +122,7 @@
         	this.tbClear.Image = ((System.Drawing.Image)(resources.GetObject("tbClear.Image")));
         	this.tbClear.ImageTransparentColor = System.Drawing.Color.Magenta;
         	this.tbClear.Name = "tbClear";
-        	this.tbClear.Size = new System.Drawing.Size(38, 22);
+        	this.tbClear.Size = new System.Drawing.Size(47, 24);
         	this.tbClear.Text = "Clear";
         	this.tbClear.Click += new System.EventHandler(this.tbClear_Click);
         	// 
@@ -132,14 +132,14 @@
         	this.tbRandomise.Image = ((System.Drawing.Image)(resources.GetObject("tbRandomise.Image")));
         	this.tbRandomise.ImageTransparentColor = System.Drawing.Color.Magenta;
         	this.tbRandomise.Name = "tbRandomise";
-        	this.tbRandomise.Size = new System.Drawing.Size(70, 22);
+        	this.tbRandomise.Size = new System.Drawing.Size(87, 24);
         	this.tbRandomise.Text = "Randomise";
         	this.tbRandomise.Click += new System.EventHandler(this.tbRandomise_Click);
         	// 
         	// toolStripSeparator2
         	// 
         	this.toolStripSeparator2.Name = "toolStripSeparator2";
-        	this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+        	this.toolStripSeparator2.Size = new System.Drawing.Size(6, 27);
         	// 
         	// tbOptions
         	// 
@@ -147,17 +147,19 @@
         	this.tbOptions.Image = ((System.Drawing.Image)(resources.GetObject("tbOptions.Image")));
         	this.tbOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
         	this.tbOptions.Name = "tbOptions";
-        	this.tbOptions.Size = new System.Drawing.Size(53, 22);
+        	this.tbOptions.Size = new System.Drawing.Size(65, 24);
         	this.tbOptions.Text = "Options";
+        	this.tbOptions.Click += new System.EventHandler(this.tbOptions_Click);
         	// 
         	// barStatusLine
         	// 
         	this.barStatusLine.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.stlGeneration,
-			this.stlLivingCells});
-        	this.barStatusLine.Location = new System.Drawing.Point(0, 281);
+        	        	        	this.stlGeneration,
+        	        	        	this.stlLivingCells});
+        	this.barStatusLine.Location = new System.Drawing.Point(0, 351);
         	this.barStatusLine.Name = "barStatusLine";
-        	this.barStatusLine.Size = new System.Drawing.Size(692, 22);
+        	this.barStatusLine.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
+        	this.barStatusLine.Size = new System.Drawing.Size(923, 22);
         	this.barStatusLine.TabIndex = 1;
         	this.barStatusLine.Text = "statusStrip1";
         	// 
@@ -184,25 +186,27 @@
         	this.cmpLife.GridLineColor = System.Drawing.SystemColors.WindowText;
         	this.cmpLife.GridLineStyle = System.Drawing.Drawing2D.DashStyle.Dot;
         	this.cmpLife.GridWidth = 300;
-        	this.cmpLife.Location = new System.Drawing.Point(0, 25);
+        	this.cmpLife.Location = new System.Drawing.Point(0, 27);
+        	this.cmpLife.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
         	this.cmpLife.MaxNumberOfHistoryLevels = 10;
         	this.cmpLife.Name = "cmpLife";
         	this.cmpLife.OnChange = null;
         	this.cmpLife.OnDoesCellLive = null;
         	this.cmpLife.ShowGridLines = false;
-        	this.cmpLife.Size = new System.Drawing.Size(692, 256);
+        	this.cmpLife.Size = new System.Drawing.Size(923, 324);
         	this.cmpLife.TabIndex = 2;
         	// 
-        	// PluginForm
+        	// LifeForm
         	// 
-        	this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+        	this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
         	this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-        	this.ClientSize = new System.Drawing.Size(692, 303);
+        	this.ClientSize = new System.Drawing.Size(923, 373);
         	this.Controls.Add(this.cmpLife);
         	this.Controls.Add(this.barStatusLine);
         	this.Controls.Add(this.ToolBar1);
+        	this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
         	this.MinimizeBox = false;
-        	this.Name = "PluginForm";
+        	this.Name = "LifeForm";
         	this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
         	this.Text = "frmP1Main";
         	this.Load += new System.EventHandler(this.PluginForm_Load);
@@ -213,7 +217,6 @@
         	this.barStatusLine.PerformLayout();
         	this.ResumeLayout(false);
         	this.PerformLayout();
-
         }
 
         #endregion

@@ -166,6 +166,28 @@ namespace ConwayLife
         {
             get { return this.fRules; }
         }
+		
+        public LifeViewer()
+        {
+            this.DoubleBuffered = true;
+			
+            this.fOptions = new LifeOptions();
+            this.fRules = new LifeRules();
+            this.fGrid = new LifeGrid(LifeConsts.DefaultGridWidth, LifeConsts.DefaultGridHeight);
+            this.fHistory = new LifeHistory(LifeConsts.DefaultMaxNumberOfHistoryLevels);
+            this.fCellColor = LifeConsts.DefaultCellColor;
+            this.fGridLineColor = LifeConsts.DefaultGridLineColor;
+            this.fGridLineStyle = LifeConsts.DefaultGridLineStyle;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+        	if (disposing) {
+        		this.fGrid.Dispose();
+        		this.fHistory.Dispose();
+        	}
+        	base.Dispose(disposing);
+        }
 
         protected Point CellAtPos(int X, int Y)
         {
@@ -240,9 +262,9 @@ namespace ConwayLife
 
         protected bool DoesCellLive(int X, int Y, LifeGrid grid)
         {
-            bool Result = grid.DoesCellLive(X, Y);
-            if (fOnDoesCellLive != null) fOnDoesCellLive(this, X, Y, grid, ref Result);
-            return Result;
+            bool result = grid.DoesCellLive(X, Y);
+            if (fOnDoesCellLive != null) fOnDoesCellLive(this, X, Y, grid, ref result);
+            return result;
         }
 
         protected void InvalidateCell(int X, int Y)
@@ -296,7 +318,6 @@ namespace ConwayLife
 		protected override void OnResize(EventArgs e)
 		{
 			this.Invalidate();
-
 			base.OnResize(e);
 		}
 
@@ -341,19 +362,6 @@ namespace ConwayLife
                 this.InvalidateCell(X, Y);
             }
         }
-		
-        public LifeViewer()
-        {
-            this.DoubleBuffered = true;
-			
-            this.fOptions = new LifeOptions();
-            this.fRules = new LifeRules();
-            this.fGrid = new LifeGrid(LifeConsts.DefaultGridWidth, LifeConsts.DefaultGridHeight);
-            this.fHistory = new LifeHistory(LifeConsts.DefaultMaxNumberOfHistoryLevels);
-            this.fCellColor = LifeConsts.DefaultCellColor;
-            this.fGridLineColor = LifeConsts.DefaultGridLineColor;
-            this.fGridLineStyle = LifeConsts.DefaultGridLineStyle;
-        }
 
         private void cmpLifeDoesCellLive(int X, int Y, LifeGrid grid, ref bool result)
         {
@@ -377,7 +385,7 @@ namespace ConwayLife
 			
             for (int x = 0; x < this.GridWidth; x++) {
                 for (int y = 0; y < this.GridHeight; y++) {
-                    this[x, y] = (rnd.NextDouble() < 0.5) ? true : false;
+                    this[x, y] = (rnd.NextDouble() < 0.4) ? true : false;
                 }
             }
 
@@ -399,20 +407,14 @@ namespace ConwayLife
             return result;
         }
 
-        public void SetGridSize(int NewGridWidth, int NewGridHeight)
+        public void SetGridSize(int newGridWidth, int newGridHeight)
         {
-            if (NewGridWidth != GridWidth || NewGridHeight != GridHeight) {
+            if (newGridWidth != GridWidth || newGridHeight != GridHeight) {
                 this.fHistory.Clear();
-                this.fGrid.SetGridSize(NewGridWidth, NewGridHeight);
+                this.fGrid.SetGridSize(newGridWidth, newGridHeight);
 
                 this.Change();
             }
-        }
-
-        public void Destroy()
-        {
-            this.fGrid.Destroy();
-            this.fHistory.Destroy();
         }
 
         public void ResetGeneration()
