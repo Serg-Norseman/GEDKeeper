@@ -63,15 +63,5 @@ namespace ConwayLife
             this.fLiveCells = (bool[])LifeConsts.DefaultLiveCells.Clone();
             this.fModified = true;
         }
-		
-        public void Load()
-        {
-			
-        }
-		
-        public void Save()
-        {
-			
-        }
     }
 }

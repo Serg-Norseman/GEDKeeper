@@ -45,8 +45,8 @@ namespace ConwayLife
 		{
 			fOptions.GridHeight = (int)edtGridHeight.Value;
 			fOptions.GridWidth = (int)edtGridWidth.Value;
-			fOptions.BackgroundColor = Color.Black;//btnColourBackground.Color;
-			fOptions.LivingCellColor = Color.Lime;//btnColourLivingCells.Color;
+			fOptions.BackgroundColor = lblColourBackground.BackColor;
+			fOptions.LivingCellColor = lblColourLivingCells.BackColor;
 			fOptions.AnimationDelay = (int)edtAnimationDelay.Value;
 
 			/*if Modified then SaveToRegistry*/

@@ -116,17 +116,8 @@ namespace ConwayLife
             this.BackgroundColor = LifeConsts.DefaultBackgroundColor;
             this.GridHeight = LifeConsts.DefaultGridHeight;
             this.GridWidth = LifeConsts.DefaultGridWidth;
-            this.LivingCellColor = LifeConsts.DefaultLivingCellColor;
-        }
-		
-        public void Load()
-        {
-			
-        }
-		
-        public void Save()
-        {
-			
+            this.LivingCellColor = LifeConsts.DefaultCellColor;
+            this.fModified = true;
         }
     }
 }

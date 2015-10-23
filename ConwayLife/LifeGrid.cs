@@ -76,6 +76,12 @@ namespace ConwayLife
             Array.Clear(this.fGrid, 0, this.fGridWidth * this.fGridHeight);
         }
 		
+        /// <summary>
+        /// Conway's default rule.
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="Y"></param>
+        /// <returns></returns>
         public bool DoesCellLive(int X, int Y)
         {
             if (X >= fGridWidth) throw new IndexOutOfRangeException("X parameter out of range");

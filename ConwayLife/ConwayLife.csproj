@@ -38,6 +38,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ColorUtils.cs" />
     <Compile Include="LifeConsts.cs" />
     <Compile Include="LifeForm.cs" />
     <Compile Include="LifeForm.Designer.cs">

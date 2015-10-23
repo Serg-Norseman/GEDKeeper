@@ -23,7 +23,6 @@ namespace ConwayLife
     public class LifeViewer : UserControl
     {
         private bool fAcceptMouseClicks;
-        private Color fCellColor;
         private int fGeneration;
         private LifeGrid fGrid;
         private Color fGridLineColor;
@@ -75,17 +74,6 @@ namespace ConwayLife
                 }
             }
         }
-		
-        public Color CellColor
-        {
-            get { return this.fCellColor; }
-            set {
-                if (value != this.fCellColor) {
-                    this.fCellColor = value;
-                    this.Invalidate();
-                }
-            }
-        }
 
         public int GridHeight
         {
@@ -127,8 +115,8 @@ namespace ConwayLife
             set {
                 if (value < 1)
                     throw new IndexOutOfRangeException("MaxNumberOfHistoryLevels must be greater than 0");
-                if (value > LifeConsts.AbsoluteMaxNumberOfHistoryLevels)
-                    throw new IndexOutOfRangeException(string.Format("MaxNumberOfHistoryLevels must be greater than {0}", LifeConsts.AbsoluteMaxNumberOfHistoryLevels));
+                if (value > LifeConsts.MaxNumberOfHistoryLevels)
+                    throw new IndexOutOfRangeException(string.Format("MaxNumberOfHistoryLevels must be greater than {0}", LifeConsts.MaxNumberOfHistoryLevels));
 
                 this.fHistory.MaxLevels = value;
             }
@@ -174,8 +162,7 @@ namespace ConwayLife
             this.fOptions = new LifeOptions();
             this.fRules = new LifeRules();
             this.fGrid = new LifeGrid(LifeConsts.DefaultGridWidth, LifeConsts.DefaultGridHeight);
-            this.fHistory = new LifeHistory(LifeConsts.DefaultMaxNumberOfHistoryLevels);
-            this.fCellColor = LifeConsts.DefaultCellColor;
+            this.fHistory = new LifeHistory(LifeConsts.DefaultNumberOfHistoryLevels);
             this.fGridLineColor = LifeConsts.DefaultGridLineColor;
             this.fGridLineStyle = LifeConsts.DefaultGridLineStyle;
         }
@@ -292,26 +279,58 @@ namespace ConwayLife
 
         private void DrawGridLines(Graphics gfx, Pen pen)
         {
-            int Coordinate, i;
-
             /*Brush.Color = Color;
 			Pen.Color = GridLineColor;
 			Pen.Mode = pmMask;
 			Pen.Style = GridLineStyle;*/
 
-            int ClientWidth = this.Width;
-            int ClientHeight = this.Height;
+            int clientWidth = this.Width;
+            int clientHeight = this.Height;
 			
-            for (i = 1; i <= GridWidth - 1; i++)
+            int coord, i;
+
+            for (i = 1; i < GridWidth; i++)
             {
-                Coordinate = CellEdge(i, ClientWidth, GridWidth);
-                gfx.DrawLine(pen, Coordinate, 0, Coordinate, ClientHeight);
+                coord = CellEdge(i, clientWidth, GridWidth);
+                gfx.DrawLine(pen, coord, 0, coord, clientHeight);
             }
 
-            for (i = 1; i <= GridHeight - 1; i++)
+            for (i = 1; i < GridHeight; i++)
             {
-                Coordinate = CellEdge(i, ClientHeight, GridHeight);
-                gfx.DrawLine(pen, 0, Coordinate, ClientWidth, Coordinate);
+                coord = CellEdge(i, clientHeight, GridHeight);
+                gfx.DrawLine(pen, 0, coord, clientWidth, coord);
+            }
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            Graphics gfx = e.Graphics;
+			
+            if (this.fShowGridLines) {
+                using (Pen pen = new Pen(Color.Black)) {
+                    this.DrawGridLines(gfx, pen);
+                }
+            }
+
+            Color cellColor = this.fOptions.LivingCellColor;
+            Color bordColor = ColorUtils.lighter(cellColor, 0.5f);
+
+            // Draw all the live cells
+            using (Brush brush = new SolidBrush(cellColor))
+            {
+            	using (Pen pen = new Pen(bordColor))
+            	{
+            		for (int y = 0; y < this.GridHeight; y++) {
+            			for (int x = 0; x < this.GridWidth; x++) {
+            				if (this[x, y]) {
+            					Rectangle r = this.CellCoords(x, y);
+            					r.Inflate(-1, -1);
+            					gfx.FillEllipse(brush, r);
+            					gfx.DrawEllipse(pen, r);
+            				}
+            			}
+            		}
+            	}
             }
         }
 
@@ -321,41 +340,7 @@ namespace ConwayLife
 			base.OnResize(e);
 		}
 
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            Graphics gfx = e.Graphics;
-			
-            Brush brush = new SolidBrush(this.fCellColor);
-
-            if (this.fShowGridLines) {
-                using (Pen pen = new Pen(Color.Black)) {
-                    this.DrawGridLines(gfx, pen);
-                }
-            }
-
-            // Draw all the live cells
-            using (Pen pen = new Pen(Color.Green)) {
-                for (int y = 0; y < this.GridHeight; y++) {
-                    for (int x = 0; x < this.GridWidth; x++) {
-                        if (this[x, y]) {
-                            Rectangle r = this.CellCoords(x, y);
-                            r.Inflate(-1, -1);
-                            gfx.FillEllipse(brush, r);
-                            gfx.DrawEllipse(pen, r /*r.Left + 2, r.Top + 1, r.Right + 1, r.Bottom*/);
-                        }
-                    }
-                }
-            }
-
-            // At design-time, draw a dashed line around the component
-            /*if (csDesigning in ComponentState) {
-        	Brush.Color = Color;
-        	Brush.Style = bsCross;
-        	FrameRect(Rect(0, 0, Width, Height))
-        	}*/
-        }
-
-        protected void SetCell(int X, int Y, bool value)
+		protected void SetCell(int X, int Y, bool value)
         {
             if (this[X, Y] != value) {
                 this.fGrid[X, Y] = value;

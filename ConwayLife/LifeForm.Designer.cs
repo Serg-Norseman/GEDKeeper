@@ -179,20 +179,10 @@
         	// 
         	// cmpLife
         	// 
-        	this.cmpLife.AcceptMouseClicks = false;
-        	this.cmpLife.CellColor = System.Drawing.SystemColors.WindowText;
         	this.cmpLife.Dock = System.Windows.Forms.DockStyle.Fill;
-        	this.cmpLife.GridHeight = 200;
-        	this.cmpLife.GridLineColor = System.Drawing.SystemColors.WindowText;
-        	this.cmpLife.GridLineStyle = System.Drawing.Drawing2D.DashStyle.Dot;
-        	this.cmpLife.GridWidth = 300;
         	this.cmpLife.Location = new System.Drawing.Point(0, 27);
         	this.cmpLife.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-        	this.cmpLife.MaxNumberOfHistoryLevels = 10;
         	this.cmpLife.Name = "cmpLife";
-        	this.cmpLife.OnChange = null;
-        	this.cmpLife.OnDoesCellLive = null;
-        	this.cmpLife.ShowGridLines = false;
         	this.cmpLife.Size = new System.Drawing.Size(923, 324);
         	this.cmpLife.TabIndex = 2;
         	// 

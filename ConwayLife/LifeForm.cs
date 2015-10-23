@@ -37,7 +37,11 @@ namespace ConwayLife
         {
             InitializeComponent();
 
-            //cmpLife.ShowGridLines = true;
+        	this.cmpLife.AcceptMouseClicks = false;
+        	this.cmpLife.MaxNumberOfHistoryLevels = 10;
+        	this.cmpLife.GridHeight = LifeConsts.DefaultGridHeight;
+        	this.cmpLife.GridWidth = LifeConsts.DefaultGridWidth;
+        	this.cmpLife.ShowGridLines = false;
         }
 
         private void tbRandomise_Click(object sender, EventArgs e)
