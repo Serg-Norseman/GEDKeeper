@@ -35,7 +35,7 @@ namespace ConwayLife
         private LifeRules fRules;
 
 
-        public bool this[int X, int Y]
+        public short this[int X, int Y]
         {
             get {
                 return this.fGrid[X, Y];
@@ -269,7 +269,8 @@ namespace ConwayLife
         {
             if (this.AcceptMouseClicks && (e.Button == MouseButtons.Left)) {
                 Point pt = this.CellAtPos(e.X, e.Y);
-                this[pt.X, pt.Y] = !this[pt.X, pt.Y];
+                short val = this[pt.X, pt.Y];
+                this[pt.X, pt.Y] = (short)((val > 0) ? 0 : 1);
             }
         }
 
@@ -322,7 +323,7 @@ namespace ConwayLife
             	{
             		for (int y = 0; y < this.GridHeight; y++) {
             			for (int x = 0; x < this.GridWidth; x++) {
-            				if (this[x, y]) {
+            				if (this[x, y] > 0) {
             					Rectangle r = this.CellCoords(x, y);
             					r.Inflate(-1, -1);
             					gfx.FillEllipse(brush, r);
@@ -340,7 +341,7 @@ namespace ConwayLife
 			base.OnResize(e);
 		}
 
-		protected void SetCell(int X, int Y, bool value)
+		protected void SetCell(int X, int Y, short value)
         {
             if (this[X, Y] != value) {
                 this.fGrid[X, Y] = value;
@@ -350,7 +351,7 @@ namespace ConwayLife
 
         private void cmpLifeDoesCellLive(int X, int Y, LifeGrid grid, ref bool result)
         {
-            if (grid[X, Y]) {
+            if (grid[X, Y] > 0) {
                 result = this.fRules.GetLiveCells(grid.NumberOfNeighbours(X, Y));
             } else {
                 result = this.fRules.GetDeadCells(grid.NumberOfNeighbours(X, Y));
@@ -370,7 +371,7 @@ namespace ConwayLife
 			
             for (int x = 0; x < this.GridWidth; x++) {
                 for (int y = 0; y < this.GridHeight; y++) {
-                    this[x, y] = (rnd.NextDouble() < 0.4) ? true : false;
+            		this[x, y] = (byte)((rnd.NextDouble() < 0.4) ? 1 : 0);
                 }
             }
 
@@ -381,9 +382,13 @@ namespace ConwayLife
         {
             LifeGrid MostRecentGrid = this.fHistory.Add(this.fGrid);
 
-            for (int y = 0; y < GridHeight; y++)
-                for (int x = 0; x < GridWidth; x++)
-                    this.SetCell(x, y, this.DoesCellLive(x, y, MostRecentGrid));
+            for (int y = 0; y < GridHeight; y++) {
+            	for (int x = 0; x < GridWidth; x++) {
+            		bool live = this.DoesCellLive(x, y, MostRecentGrid);
+            		short val = this.fGrid[x, y];
+            		this.SetCell(x, y, (short)((live) ? 1 : 0));
+            	}
+            }
 
             this.fGeneration++;
             this.Change();

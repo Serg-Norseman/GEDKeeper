@@ -19,11 +19,11 @@ namespace ConwayLife
 {
 	public sealed class LifeGrid : IDisposable
     {
-        private bool[] fGrid;
+        private short[] fGrid;
         private int fGridHeight;
         private int fGridWidth;
 
-        public bool this[int X, int Y]
+        public short this[int X, int Y]
         {
             get { return this.fGrid[this.CellCoordToGridOffset(X, Y)]; }
             set { this.fGrid[this.CellCoordToGridOffset(X, Y)] = value; }
@@ -90,7 +90,7 @@ namespace ConwayLife
             bool result;
             switch (NumberOfNeighbours(X, Y)) {
                 case 2:
-                    result = this[X, Y];
+                    result = this[X, Y] > 0;
                     break;
                 case 3:
                     result = true;
@@ -112,7 +112,7 @@ namespace ConwayLife
             if (source.fGridWidth != this.fGridWidth || source.fGridHeight != this.fGridHeight) {
                 return false;
             } else {
-        		bool[] sourceGrid = source.fGrid;
+        		short[] sourceGrid = source.fGrid;
         		for (int i = 0; i < this.fGridHeight * this.fGridWidth; i++) {
         			if (this.fGrid[i] != sourceGrid[i]) {
         				return false;
@@ -136,14 +136,14 @@ namespace ConwayLife
             /* Count the number of live neighbours that this cell has */
             int result = 0;
 
-            if (this[xMinus1, yMinus1]) result++;
-            if (this[X, yMinus1]) result++;
-            if (this[xPlus1, yMinus1]) result++;
-            if (this[xMinus1, Y]) result++;
-            if (this[xPlus1, Y]) result++;
-            if (this[xMinus1, yPlus1]) result++;
-            if (this[X, yPlus1]) result++;
-            if (this[xPlus1, yPlus1]) result++;
+            if (this[xMinus1, yMinus1] > 0) result++;
+            if (this[X, yMinus1] > 0) result++;
+            if (this[xPlus1, yMinus1] > 0) result++;
+            if (this[xMinus1, Y] > 0) result++;
+            if (this[xPlus1, Y] > 0) result++;
+            if (this[xMinus1, yPlus1] > 0) result++;
+            if (this[X, yPlus1] > 0) result++;
+            if (this[xPlus1, yPlus1] > 0) result++;
 			
             return result;
         }
@@ -158,7 +158,7 @@ namespace ConwayLife
 
         private void AllocGrid()
         {
-            this.fGrid = new bool[this.fGridWidth * this.fGridHeight];
+            this.fGrid = new short[this.fGridWidth * this.fGridHeight];
         }
 
         private void FreeGrid()
@@ -174,9 +174,9 @@ namespace ConwayLife
             return Y * fGridWidth + X;
         }
 
-        private static int bool2int(bool B)
+        private static int bool2int(short B)
         {
-            return ((B) ? 1 : 0);
+            return ((B > 0) ? 1 : 0);
         }
     }
 }
