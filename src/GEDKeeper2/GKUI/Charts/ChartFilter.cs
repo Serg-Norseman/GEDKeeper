@@ -4,6 +4,9 @@ using GKCore.Types;
 
 namespace GKUI.Charts
 {
+	/// <summary>
+	/// 
+	/// </summary>
     public class ChartFilter : BaseObject, ICustomFilter
     {
         public enum TBranchCut

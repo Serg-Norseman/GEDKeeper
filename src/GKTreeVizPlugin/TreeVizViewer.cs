@@ -17,7 +17,7 @@ namespace GKTreeVizPlugin
 	{
 		private delegate void RenderDelegate();
 
-        private readonly IBase fBase;
+        private readonly IBaseWindow fBase;
         private readonly int fMinGens;
 
 		private StatusBar statusBar;
@@ -33,7 +33,7 @@ namespace GKTreeVizPlugin
 		private ulong fFramesDrawn;
 		private double fCurrentFramerate;
 
-		public TreeVizViewer(IBase aBase, int minGens)
+		public TreeVizViewer(IBaseWindow aBase, int minGens)
 		{
 			statusBar = new StatusBar();
 			sbpCurrentFps = new StatusBarPanel();

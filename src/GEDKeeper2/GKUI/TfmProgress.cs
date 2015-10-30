@@ -7,12 +7,11 @@ using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKUI
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public partial class TfmProgress : Form, IProgressController
 	{
 		private static TfmProgress form;

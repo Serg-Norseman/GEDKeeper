@@ -32,7 +32,7 @@ namespace GKUI.Dialogs
             this.btnAccept.TabIndex = 1;
             this.btnAccept.Text = "Принять";
             this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnAccept.Click += new System.EventHandler(this.btnAcceptClick);
+            this.btnAccept.Click += new System.EventHandler(this.btnAccept_Click);
             // 
             // btnCancel
             // 
@@ -82,7 +82,7 @@ namespace GKUI.Dialogs
             this.btnReset.Size = new System.Drawing.Size(81, 25);
             this.btnReset.TabIndex = 3;
             this.btnReset.Text = "Сбросить";
-            this.btnReset.Click += new System.EventHandler(this.BtnResetClick);
+            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
             // TfmComFilter
             // 

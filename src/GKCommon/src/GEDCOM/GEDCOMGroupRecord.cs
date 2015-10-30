@@ -146,8 +146,8 @@ namespace GKCommon.GEDCOM
 
 			try
 			{
-				this.Members.Delete(this.IndexOfMember(member));
-				member.Groups.Delete(member.IndexOfGroup(this));
+				this.Members.DeleteAt(this.IndexOfMember(member));
+				member.Groups.DeleteAt(member.IndexOfGroup(this));
 
 				result = true;
 			}

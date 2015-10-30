@@ -152,14 +152,6 @@ SectionGroup /e "Плагины"
   		File ".\plugins\GKTextSearchPlugin.ukr"
 	SectionEnd
 
-	Section "Круг предков"
-  		SetOutPath "$INSTDIR\plugins"
-  		File ".\plugins\GKAncestorsCirclePlugin.dll"
-  		File ".\plugins\GKAncestorsCirclePlugin.rus"
-  		File ".\plugins\GKAncestorsCirclePlugin.eng"
-  		File ".\plugins\GKAncestorsCirclePlugin.ukr"
-	SectionEnd
-
 	Section "3D визуализация"
   		SetOutPath "$INSTDIR\plugins"
   		File ".\plugins\csgl.dll"
@@ -170,6 +162,18 @@ SectionGroup /e "Плагины"
 	Section "Просмотр изображений"
   		SetOutPath "$INSTDIR\plugins"
 		File ".\plugins\GKImageViewerPlugin.dll"
+  		File ".\plugins\GKImageViewerPlugin.rus"
+  		File ".\plugins\GKImageViewerPlugin.eng"
+  		File ".\plugins\GKImageViewerPlugin.ukr"
+	SectionEnd
+
+	Section "Игра 'Жизнь Конвея'"
+  		SetOutPath "$INSTDIR\plugins"
+  		File ".\plugins\ConwayLife.dll"
+  		File ".\plugins\GKLifePlugin.dll"
+  		File ".\plugins\GKLifePlugin.rus"
+  		File ".\plugins\GKLifePlugin.eng"
+  		File ".\plugins\GKLifePlugin.ukr"
 	SectionEnd
 SectionGroupEnd
 

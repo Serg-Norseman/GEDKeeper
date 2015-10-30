@@ -5,7 +5,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using ExtUtils;
+
+using ExtUtils.MapiMail;
 
 namespace GKCommon
 {
@@ -20,6 +21,11 @@ namespace GKCommon
 			{
 				(self as IDisposable).Dispose();
 			}
+		}
+
+		public static double SafeDiv(double dividend, double divisor)
+		{
+			return ((divisor == (double)0f) ? 0.0 : (dividend / divisor));
 		}
 
 		public static long Trunc(double value)
@@ -101,11 +107,11 @@ namespace GKCommon
 			}
 		}
 
-		public static void LogSend()
+		public static void LogSend(string email, string subject, string body)
 		{
 			if (File.Exists(LogFilename)) {
-				MapiMailMessage message = new MapiMailMessage("GEDKeeper: error notification", "This automatic notification of error.");
-				message.Recipients.Add("serg.zhdanovskih@gmail.com");
+				MapiMailMessage message = new MapiMailMessage(subject, body);
+				message.Recipients.Add(email);
 				message.Files.Add(LogFilename);
 				message.ShowDialog();
 			}
@@ -253,7 +259,7 @@ namespace GKCommon
 
 		public static ExtRect GetFormRect(Form aForm)
 		{
-            if (aForm == null) return ExtRect.Empty();
+            if (aForm == null) return ExtRect.CreateEmpty();
 
 		    int x = aForm.Left;
 		    int y = aForm.Top;
@@ -282,6 +288,10 @@ namespace GKCommon
                 aForm.WindowState = winState;
             }
         }
-
-	}
+        
+        public static bool IsSetBit(uint val, int pos)
+        {
+        	return (val & (1 << pos)) != 0;
+        }
+    }
 }

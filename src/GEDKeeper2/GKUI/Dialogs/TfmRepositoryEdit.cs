@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Windows.Forms;
+
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKUI.Sheets;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKUI.Dialogs
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public partial class TfmRepositoryEdit : Form, IBaseEditor
 	{
-		private readonly IBase fBase;
+		private readonly IBaseWindow fBase;
         private readonly GKNotesSheet fNotesList;
 
         private GEDCOMRepositoryRecord fRepository;
@@ -24,7 +24,7 @@ namespace GKUI.Dialogs
 			set { this.SetRepository(value); }
 		}
 
-		public IBase Base
+		public IBaseWindow Base
 		{
 			get { return this.fBase; }
 		}
@@ -52,18 +52,19 @@ namespace GKUI.Dialogs
 			}
 			catch (Exception ex)
 			{
-				this.fBase.Host.LogWrite("TfmRepositoryEdit.Accept(): " + ex.Message);
+				this.fBase.Host.LogWrite("TfmRepositoryEdit.btnAccept_Click(): " + ex.Message);
 				base.DialogResult = DialogResult.None;
 			}
 		}
 
-		public TfmRepositoryEdit(IBase aBase)
+		public TfmRepositoryEdit(IBaseWindow aBase)
 		{
 			this.InitializeComponent();
 			this.fBase = aBase;
 
             this.fNotesList = new GKNotesSheet(this, this.SheetNotes);
 
+            // SetLang()
             this.Text = LangMan.LS(LSID.LSID_Repository);
 			this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
 			this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);

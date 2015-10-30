@@ -11,14 +11,14 @@ namespace GKUI.Dialogs
     /// </summary>
     public partial class TfmFileProperties : Form, IBaseEditor
 	{
-		private readonly IBase fBase;
+		private readonly IBaseWindow fBase;
 
-		public IBase Base
+		public IBaseWindow Base
 		{
 			get { return this.fBase; }
 		}
 
-        public TfmFileProperties(IBase aBase)
+        public TfmFileProperties(IBaseWindow aBase)
         {
             this.InitializeComponent();
 
@@ -26,6 +26,7 @@ namespace GKUI.Dialogs
 
             this.UpdateControls();
 
+            // SetLang()
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             this.SheetAuthor.Text = LangMan.LS(LSID.LSID_Author);
@@ -66,7 +67,7 @@ namespace GKUI.Dialogs
 			}
 			catch (Exception ex)
 			{
-				this.fBase.Host.LogWrite("TfmFileProperties.Accept(): " + ex.Message);
+				this.fBase.Host.LogWrite("TfmFileProperties.btnAccept_Click(): " + ex.Message);
 				base.DialogResult = DialogResult.None;
 			}
 		}

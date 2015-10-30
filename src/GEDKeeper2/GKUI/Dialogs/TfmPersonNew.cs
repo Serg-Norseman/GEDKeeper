@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Windows.Forms;
+
 using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKUI.Dialogs
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public partial class TfmPersonNew : Form, IBaseEditor
 	{
-		private readonly IBase fBase;
+		private readonly IBaseWindow fBase;
 		private GEDCOMIndividualRecord fTarget;
 		private TargetMode fTargetMode;
 
-        public IBase Base
+        public IBaseWindow Base
 		{
 			get { return this.fBase; }
 		}
@@ -46,13 +46,13 @@ namespace GKUI.Dialogs
 					string iFamily, iName, iPatronymic;
 					this.fTarget.GetNameParts(out iFamily, out iName, out iPatronymic);
 					this.edFamily.Text = iFamily;
-					NamesTable names = TfmGEDKeeper.Instance.NamesTable;
+					INamesTable names = TfmGEDKeeper.Instance.NamesTable;
 					GEDCOMSex sx = (GEDCOMSex)this.EditSex.SelectedIndex;
 
 					switch (this.fTargetMode) {
 						case TargetMode.tmParent:
 							if (sx == GEDCOMSex.svFemale) {
-								this.edFamily.Text = NamesTable.GetRusWifeSurname(iFamily);
+								this.edFamily.Text = GKUtils.GetRusWifeSurname(iFamily);
 							}
 							this.edPatronymic.Items.Add(names.GetPatronymicByName(iName, GEDCOMSex.svMale));
 							this.edPatronymic.Items.Add(names.GetPatronymicByName(iName, GEDCOMSex.svFemale));
@@ -65,13 +65,13 @@ namespace GKUI.Dialogs
 									this.edName.Text = names.GetNameByPatronymic(iPatronymic);
 									break;
 								case GEDCOMSex.svFemale:
-									this.edFamily.Text = "(" + NamesTable.GetRusWifeSurname(iFamily) + ")";
+									this.edFamily.Text = "(" + GKUtils.GetRusWifeSurname(iFamily) + ")";
 									break;
 							}
 							break;
 							
 						case TargetMode.tmWife:
-							this.edFamily.Text = "(" + NamesTable.GetRusWifeSurname(iFamily) + ")";
+							this.edFamily.Text = "(" + GKUtils.GetRusWifeSurname(iFamily) + ")";
 							break;
 					}
 				}
@@ -104,9 +104,10 @@ namespace GKUI.Dialogs
 			}
 		}
 
-		public TfmPersonNew(IBase aBase)
+		public TfmPersonNew(IBaseWindow aBase)
 		{
 			this.InitializeComponent();
+
 			this.fBase = aBase;
 
 			for (GEDCOMSex sx = GEDCOMSex.svNone; sx <= GEDCOMSex.svUndetermined; sx++)
@@ -114,6 +115,7 @@ namespace GKUI.Dialogs
 				this.EditSex.Items.Add(GKUtils.SexStr(sx));
 			}
 
+			// SetLang()
 			this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
 			this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
 			this.Text = LangMan.LS(LSID.LSID_WinPersonNew);

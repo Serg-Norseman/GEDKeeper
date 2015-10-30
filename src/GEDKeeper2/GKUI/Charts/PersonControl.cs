@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+
 using GKCommon;
 
 namespace GKUI.Charts
 {
+	/// <summary>
+	/// 
+	/// </summary>
     public sealed class PersonControl : ITreeControl
 	{
 		private readonly TreeChartBox fChart;
@@ -41,7 +45,7 @@ namespace GKUI.Charts
         	this.fPerson = person;
         	
             ExtRect rt = this.fPerson.Rect;
-            rt = rt.GetOffset(this.fChart.fSPX, this.fChart.fSPY);
+            rt = rt.GetShift(this.fChart.fSPX, this.fChart.fSPY);
             Rectangle rect = rt.ToRectangle();
             
             rect.X = rect.Right;

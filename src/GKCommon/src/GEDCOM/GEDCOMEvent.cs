@@ -38,5 +38,10 @@ namespace GKCommon.GEDCOM
 		public GEDCOMEvent(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
+
+        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
+		{
+			return new GEDCOMEvent(owner, parent, tagName, tagValue);
+		}
 	}
 }

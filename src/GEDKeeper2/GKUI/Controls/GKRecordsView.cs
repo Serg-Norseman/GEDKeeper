@@ -6,8 +6,8 @@ using ExtUtils;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
+using GKCore.Lists;
 using GKCore.Types;
-using GKUI.Lists;
 
 namespace GKUI.Controls
 {
@@ -91,7 +91,7 @@ namespace GKUI.Controls
 			base.RetrieveVirtualItem += this.List_RetrieveVirtualItem;
 			base.CacheVirtualItems += this.List_CacheVirtualItems;
 			base.VirtualMode = true;
-			base.ColumnWidthChanged += this.List_ColumnWidthChanged;
+			//base.ColumnWidthChanged += this.List_ColumnWidthChanged;
 		}
 
 		protected override void Dispose(bool disposing)
@@ -109,12 +109,25 @@ namespace GKUI.Controls
 			base.Dispose(disposing);
 		}
 
+		public override void BeginUpdates()
+		{
+			base.ColumnWidthChanged -= this.List_ColumnWidthChanged;
+			base.BeginUpdates();
+		}
+
+		public override void EndUpdates()
+		{
+			base.EndUpdates();
+			base.ColumnWidthChanged += this.List_ColumnWidthChanged;
+		}
+
 		private void List_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
 		{
 			switch (this.fRecordType) {
 				case GEDCOMRecordType.rtIndividual:
-					IndividualListColumns columns = TfmGEDKeeper.Instance.Options.IndividualListColumns;
-					columns.WidthChanged(e.ColumnIndex, this.Columns[e.ColumnIndex].Width);
+					if (this.fListMan != null) {
+						this.fListMan.WidthChanged(e.ColumnIndex, this.Columns[e.ColumnIndex].Width);
+					}
 					break;
 					
 				default:
@@ -164,7 +177,7 @@ namespace GKUI.Controls
 					columnValue = rec.GetId();
 				} else {
 					fListMan.Fetch(rec);
-					columnValue = fListMan.GetColumnValue(fXSortColumn);
+					columnValue = fListMan.GetColumnInternalValue(fXSortColumn);
 				}
 
                 buffer.Add(new ValItem(columnValue, rec));
@@ -312,7 +325,7 @@ namespace GKUI.Controls
 		{
             if (this.fListMan == null) return;
 
-			this.BeginUpdate();
+			this.BeginUpdates();
 			try
 			{
 				this.Columns.Clear();
@@ -320,7 +333,7 @@ namespace GKUI.Controls
 			}
 			finally
 			{
-				this.EndUpdate();
+				this.EndUpdates();
 			}
 		}
 
@@ -339,7 +352,7 @@ namespace GKUI.Controls
 					this.UpdateTitles();
 				}
 
-				base.BeginUpdate();
+				this.BeginUpdates();
 				try
 				{
 					this.fListMan.InitFilter();
@@ -367,7 +380,7 @@ namespace GKUI.Controls
 				}
 				finally
 				{
-					base.EndUpdate();
+					this.EndUpdates();
 				}
 
 				if (tempRec != null) this.SelectItemByRec(tempRec);

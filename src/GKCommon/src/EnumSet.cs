@@ -175,7 +175,8 @@ namespace GKCommon
 			return (this == setObj);
 		}
 
-		object ICloneable.Clone()
+		// ICloneable
+		public object Clone()
 		{
 			EnumSet<T> result = new EnumSet<T>();
 			result.data = new byte[32];

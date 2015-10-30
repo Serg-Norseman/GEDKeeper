@@ -228,7 +228,7 @@ namespace GKCommon.GEDCOM
 		{
             if (taskRecord == null) return;
 
-			this.fTasks.Delete(this.IndexOfTask(taskRecord));
+			this.fTasks.DeleteAt(this.IndexOfTask(taskRecord));
 		}
 
 		public bool AddGroup(GEDCOMGroupRecord groupRecord)
@@ -250,7 +250,7 @@ namespace GKCommon.GEDCOM
 		{
 		    if (groupRecord == null) return;
 
-			this.fGroups.Delete(this.IndexOfGroup(groupRecord));
+			this.fGroups.DeleteAt(this.IndexOfGroup(groupRecord));
 		}
 
 		public bool AddCommunication(GEDCOMCommunicationRecord commRecord)
@@ -272,7 +272,7 @@ namespace GKCommon.GEDCOM
 		{
 		    if (commRecord == null) return;
 
-			this.fCommunications.Delete(this.IndexOfCommunication(commRecord));
+			this.fCommunications.DeleteAt(this.IndexOfCommunication(commRecord));
 		}
 
 		#endregion

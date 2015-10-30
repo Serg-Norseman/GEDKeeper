@@ -1,32 +1,32 @@
 ﻿using System;
 using System.Windows.Forms;
 
+using GKCore;
 using GKCore.Interfaces;
-using GKUI.Lists;
+using GKCore.Lists;
 
 namespace GKUI.Dialogs
 {
     /// <summary>
-    /// Localization: dirty
+    /// 
     /// </summary>
     public partial class TfmComFilter : Form
 	{
-        private readonly IBase fBase;
-        private readonly string[] fCondSigns;
+        private readonly IBaseWindow fBase;
 		private readonly string[] fFields;
 		private readonly ListManager fListMan;
 
-		public IBase Base
+		public IBaseWindow Base
 		{
 			get { return this.fBase; }
 		}
 
-        public TfmComFilter(IBase aBase, ListManager aListMan)
+        public TfmComFilter(IBaseWindow aBase, ListManager listMan)
         {
             this.InitializeComponent();
 
             this.fBase = aBase;
-            this.fListMan = aListMan;
+            this.fListMan = listMan;
 
             Type colEnum = fListMan.GetColumnsEnum();
             Array enums = Enum.GetValues(colEnum);
@@ -38,11 +38,6 @@ namespace GKUI.Dialogs
                 this.fFields[idx] = fListMan.GetColumnName(e);
                 idx++;
             }
-
-            fCondSigns = new string[]
-			{
-				"!=", "<", "<=", "==", "=>", ">", "содержит", "не содержит"
-			};
 
             this.InitGrid();
             this.UpdateGrid();
@@ -58,13 +53,13 @@ namespace GKUI.Dialogs
             base.Dispose(disposing);
         }
 
-        private ConditionKind GetCondByName(string aName)
+        private ConditionKind GetCondByName(string condName)
 		{
 			ConditionKind res = ConditionKind.ck_NotEq;
 
 			for (ConditionKind pl = ConditionKind.ck_NotEq; pl <= ConditionKind.ck_NotContains; pl++)
 			{
-				if (fCondSigns[(int)pl] == aName)
+				if (GKData.CondSigns[(int)pl] == condName)
 				{
 					res = pl;
 					break;
@@ -74,12 +69,12 @@ namespace GKUI.Dialogs
 			return res;
 		}
 
-		private Enum GetFieldColumn(string aField)
+		private Enum GetFieldColumn(string fieldName)
 		{
 			int idx = -1;
 			for (int i = 0; i < fFields.Length; i++)
 			{
-				if (fFields[i] == aField)
+				if (fFields[i] == fieldName)
 				{
 					idx = i;
 					break;
@@ -95,13 +90,11 @@ namespace GKUI.Dialogs
 		private void InitGrid()
 		{
 			this.dataGridView1.Rows.Clear();
-
-			//LangMan.LS(LSID.LSID_Join)
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-			                     	AddComboColumn("FField", "Поле", this.fFields, 200),
-			                     	AddComboColumn("FCondition", "Условие", fCondSigns, 150),
-			                     	AddTextColumn("FValue", "Значение", 300)});
+			                     	AddComboColumn("FField", LangMan.LS(LSID.LSID_Field), this.fFields, 200),
+			                     	AddComboColumn("FCondition", LangMan.LS(LSID.LSID_Condition), GKData.CondSigns, 150),
+			                     	AddTextColumn("FValue", LangMan.LS(LSID.LSID_Value), 300)});
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
 		}
 
@@ -119,7 +112,7 @@ namespace GKUI.Dialogs
 				int condIndex = ((IConvertible)fcond.condition).ToByte(null);
 
 				row.Cells[0].Value = this.fFields[fcond.col_index + 1];
-				row.Cells[1].Value = this.fCondSigns[condIndex];
+				row.Cells[1].Value = GKData.CondSigns[condIndex];
 				row.Cells[2].Value = fcond.value.ToString();
 			}
 		}
@@ -147,7 +140,7 @@ namespace GKUI.Dialogs
 			DialogResult = DialogResult.OK;
 		}
 		
-		void btnAcceptClick(object sender, EventArgs e)
+		void btnAccept_Click(object sender, EventArgs e)
 		{
 			try
 			{
@@ -156,39 +149,16 @@ namespace GKUI.Dialogs
 			}
 			catch (Exception ex)
 			{
-				this.fBase.Host.LogWrite("TfmComFilter.btnAcceptClick(): " + ex.Message);
+				this.fBase.Host.LogWrite("TfmComFilter.btnAccept_Click(): " + ex.Message);
 				base.DialogResult = DialogResult.None;
 			}
 		}
 
         public void SetLang()
 		{
-			/*this.btnParse.Text = LangMan.LS(LSID.101];
-			this.btnClose.Text = LangMan.LS(LSID.99];
-			this.Text = LangMan.LS(LSID.22];
-			this.tsSimpleInput.Text = LangMan.LS(LSID.485];
-			this.btnMale.Text = new string(LangMan.LS(LSID.66][0], 1);
-			//this.btnFemale.Text = new string(LangMan.LS(LSID.67][0], 1);
-			this.Label1.Text = LangMan.LS(LSID.301];
-			this.CheckBirth.Text = LangMan.LS(LSID.321];
-			this.Label3.Text = LangMan.LS(LSID.122];
-			this.Label5.Text = LangMan.LS(LSID.302];
-			this.CheckDeath.Text = LangMan.LS(LSID.332];
-			this.Label6.Text = LangMan.LS(LSID.123];
-			this.Label7.Text = LangMan.LS(LSID.303];
-			this.Label2.Text = LangMan.LS(LSID.108];
-			this.tsSourceInput.Text = LangMan.LS(LSID.486];
-			this.rgSourceKind.Text = LangMan.LS(LSID.487];
-			this.Label4.Text = LangMan.LS(LSID.109];
-			this.Label8.Text = LangMan.LS(LSID.110];
-			this.Label9.Text = LangMan.LS(LSID.490];
-			this.Label10.Text = LangMan.LS(LSID.491];
-			this.gbMetrics.Text = LangMan.LS(LSID.489];
-			this.Label11.Text = LangMan.LS(LSID.492];
-			this.Label12.Text = LangMan.LS(LSID.493];
-			
-			radioButton1.Text = LangMan.LS(LSID.LSID_SK_Rev);
-			radioButton2.Text = LangMan.LS(LSID.LSID_SK_Met);*/
+            this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
+            this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
+            this.btnReset.Text = LangMan.LS(LSID.LSID_DlgReset);
 		}
 
 		private static DataGridViewColumn AddTextColumn(string colName, string headerText, int width)
@@ -216,7 +186,7 @@ namespace GKUI.Dialogs
 			this.UpdateGrid();
 		}
 		
-		void BtnResetClick(object sender, EventArgs e)
+		private void btnReset_Click(object sender, EventArgs e)
 		{
 			this.DoReset();
 		}

@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using GKCommon;
 
-namespace ExtUtils
+namespace ExtUtils.MapiMail
 {
 	/// <summary>
 	/// Represents an email message to be sent through MAPI.
@@ -486,10 +486,7 @@ namespace ExtUtils
 		/// </summary>
 		public Recipient this[int index]
 		{
-			get
-			{
-				return (Recipient)List[index];
-			}
+			get { return (Recipient)List[index]; }
 		}
 
 		internal InteropRecipientCollection GetInteropRepresentation()

@@ -8,6 +8,7 @@ using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Tools;
 using GKCore.Types;
 using GKUI.Controls;
 
@@ -21,7 +22,7 @@ namespace GKUI
 		private static readonly string[] fHelpTopics;
 
 		// runtime
-		private readonly IBase fBase;
+		private readonly IBaseWindow fBase;
 		private readonly GEDCOMTree fTree;
 
         private readonly List<GEDCOMRecord> fSplitList;
@@ -37,7 +38,7 @@ namespace GKUI
 		private GKListView ListPatriarchs;
 
 
-		public IBase Base
+		public IBaseWindow Base
 		{
 			get	{ return this.fBase; }
 		}
@@ -55,7 +56,7 @@ namespace GKUI
 			base.Dispose(disposing);
 		}
 
-		public TfmTreeTools(IBase aBase)
+		public TfmTreeTools(IBaseWindow aBase)
 		{
 			this.InitializeComponent();
 
@@ -136,21 +137,21 @@ namespace GKUI
 		{
 			fHelpTopics = new string[]
 			{
-				"::/gkhTools_TreeCompare.htm", 
-				"::/gkhTools_TreeMerge.htm", 
-				"::/gkhTools_TreeSplit.htm", 
-				"::/gkhTools_DubsMerge.htm", 
-				"::/gkhTools_TreeImport.htm", 
-				"::/gkhTools_FamiliesConnectivity.htm", 
-				"::/gkhTools_TreeCheck.htm", 
-				"::/gkhTools_PatSearch.htm", 
-				"::/gkhTools_PlacesManage.htm"
+				"::/gkhTools_TreeCompare.html", 
+				"::/gkhTools_TreeMerge.html", 
+				"::/gkhTools_TreeSplit.html", 
+				"::/gkhTools_DubsMerge.html", 
+				//"::/gkhTools_TreeImport.html", 
+				"::/gkhTools_FamiliesConnectivity.html", 
+				"::/gkhTools_TreeCheck.html", 
+				"::/gkhTools_PatSearch.html", 
+				"::/gkhTools_PlacesManage.html"
 			};
 		}
 
 		void btnHelp_Click(object sender, EventArgs e)
 		{
-			TfmGEDKeeper.Instance.ShowHelpTopic(fHelpTopics[this.PageControl.TabIndex]);
+			TfmGEDKeeper.Instance.ShowHelpTopic(fHelpTopics[this.PageControl.SelectedIndex]);
 		}
 
 		void PageControl_SelectedIndexChanged(object sender, EventArgs e)
@@ -353,7 +354,7 @@ namespace GKUI
 
 		private void PrepareChecksList()
 		{
-			GKUtils.CreateListView(this.Panel1, out this.ListChecks);
+			this.ListChecks = GKUtils.CreateListView(this.Panel1);
 			this.ListChecks.CheckBoxes = true;
 			this.ListChecks.DoubleClick += this.ListChecksDblClick;
 			this.ListChecks.AddListColumn(LangMan.LS(LSID.LSID_Record), 400, false);
@@ -422,7 +423,7 @@ namespace GKUI
 
 		private void PreparePlacesList()
 		{
-			GKUtils.CreateListView(this.Panel4, out this.ListPlaces);
+			this.ListPlaces = GKUtils.CreateListView(this.Panel4);
 			this.ListPlaces.DoubleClick += this.ListPlacesDblClick;
 			this.ListPlaces.AddListColumn(LangMan.LS(LSID.LSID_Place), 400, false);
 			this.ListPlaces.AddListColumn(LangMan.LS(LSID.LSID_LinksCount), 100, false);
@@ -440,7 +441,7 @@ namespace GKUI
 				int num4 = this.fPlaces.Count;
 				for (int i = 0; i < num4; i++)
 				{
-					TPlaceObj place_obj = this.fPlaces.GetObject(i) as TPlaceObj;
+					PlaceObj place_obj = this.fPlaces.GetObject(i) as PlaceObj;
 
 					GKListItem item = this.ListPlaces.AddItem(this.fPlaces[i], place_obj);
 					item.SubItems.Add(place_obj.Facts.Count.ToString());
@@ -462,7 +463,7 @@ namespace GKUI
 			GKListItem item = this.ListPlaces.SelectedItem();
 			if (item != null)
 			{
-				TPlaceObj p_obj = item.Data as TPlaceObj;
+				PlaceObj p_obj = item.Data as PlaceObj;
 				if (p_obj != null)
 				{
 					if (p_obj.Name.IndexOf("[*]") == 0)
@@ -539,27 +540,27 @@ namespace GKUI
 			this.UpdateSplitLists();
 		}
 
-		void btnSelectFamily_Click(object sender, EventArgs e)
+		private void btnSelectFamily_Click(object sender, EventArgs e)
 		{
 			this.Select(this.Base.GetSelectedPerson(), TreeTools.TreeWalkMode.twmFamily);
 		}
 
-		void btnSelectAncestors_Click(object sender, EventArgs e)
+		private void btnSelectAncestors_Click(object sender, EventArgs e)
 		{
 			this.Select(this.Base.GetSelectedPerson(), TreeTools.TreeWalkMode.twmAncestors);
 		}
 
-		void btnSelectDescendants_Click(object sender, EventArgs e)
+		private void btnSelectDescendants_Click(object sender, EventArgs e)
 		{
 			this.Select(this.Base.GetSelectedPerson(), TreeTools.TreeWalkMode.twmDescendants);
 		}
 
-		void btnSelectAll_Click(object sender, EventArgs e)
+		private void btnSelectAll_Click(object sender, EventArgs e)
 		{
 			this.Select(this.Base.GetSelectedPerson(), TreeTools.TreeWalkMode.twmAll);
 		}
 
-		void btnDelete_Click(object sender, EventArgs e)
+		private void btnDelete_Click(object sender, EventArgs e)
 		{
 			int num = this.fSplitList.Count;
 			for (int i = 0; i < num; i++)
@@ -579,11 +580,13 @@ namespace GKUI
 			this.Base.RefreshLists(false);
 		}
 
-		void btnSave_Click(object sender, EventArgs e)
+		private void btnSave_Click(object sender, EventArgs e)
 		{
 			if (this.SaveDialog1.ShowDialog() == DialogResult.OK)
 			{
 				TreeTools.CheckRelations(fSplitList);
+
+				string fileName = this.SaveDialog1.FileName;
 
 				string subm = this.fTree.Header.GetTagStringValue("SUBM");
 				this.fTree.Header.Clear();
@@ -593,33 +596,17 @@ namespace GKUI
 				this.fTree.Header.Language = "Russian";
 				this.fTree.Header.GEDCOMVersion = "5.5";
 				this.fTree.Header.GEDCOMForm = "LINEAGE-LINKED";
-				this.fTree.Header.FileName = Path.GetFileName(this.SaveDialog1.FileName);
+				this.fTree.Header.FileName = Path.GetFileName(fileName);
 				this.fTree.Header.TransmissionDate.Date = DateTime.Now;
 
-				if (subm != "")
-				{
+				if (subm != "") {
 					this.fTree.Header.SetTagStringValue("SUBM", subm);
 				}
 
-				StreamWriter fs = new StreamWriter(this.SaveDialog1.FileName, false, GEDCOMUtils.GetEncodingByCharacterSet(this.fTree.Header.CharacterSet));
-				try
+				using (StreamWriter fs = new StreamWriter(fileName, false, GEDCOMUtils.GetEncodingByCharacterSet(this.fTree.Header.CharacterSet)))
 				{
-					this.fTree.SaveHeaderToStream(fs);
-					int num = this.fTree.RecordsCount - 1;
-					for (int i = 0; i <= num; i++)
-					{
-						GEDCOMRecord rec = this.fTree[i];
-						if (this.fSplitList.IndexOf(rec) >= 0)
-						{
-							rec.SaveToStream(fs);
-						}
-					}
-					this.fTree.SaveFooterToStream(fs);
+					this.fTree.SaveToStream(fs, this.fSplitList);
 					this.fTree.Header.CharacterSet = GEDCOMCharacterSet.csASCII;
-				}
-				finally
-				{
-					SysUtils.Free(fs);
 				}
 			}
 		}
@@ -630,7 +617,7 @@ namespace GKUI
 
 		private void PreparePatriarchsList()
 		{
-			GKUtils.CreateListView(this.Panel3, out this.ListPatriarchs);
+			this.ListPatriarchs = GKUtils.CreateListView(this.Panel3);
 			this.ListPatriarchs.DoubleClick += this.ListPatriarchsDblClick;
 			this.ListPatriarchs.AddListColumn(LangMan.LS(LSID.LSID_Patriarch), 400, false);
 			this.ListPatriarchs.AddListColumn(LangMan.LS(LSID.LSID_Birth), 90, false);

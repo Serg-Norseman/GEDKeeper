@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
 using GKCore;
@@ -15,7 +17,7 @@ namespace GKUI.Dialogs
     /// </summary>
     public partial class TfmEventEdit : Form, IBaseEditor
 	{
-        private readonly IBase fBase;
+        private readonly IBaseWindow fBase;
         private readonly GKNotesSheet fNotesList;
         private readonly GKMediaSheet fMediaList;
 		private readonly GKSourcesSheet fSourcesList;
@@ -23,7 +25,7 @@ namespace GKUI.Dialogs
 		private GEDCOMCustomEvent fEvent;
 		private GEDCOMLocationRecord fLocation;
 
-		public IBase Base
+		public IBaseWindow Base
 		{
 			get { return this.fBase; }
 		}
@@ -328,7 +330,7 @@ namespace GKUI.Dialogs
 			}
 			catch (Exception ex)
 			{
-				this.fBase.Host.LogWrite("TfmEventEdit.Accept(): " + ex.Message);
+				this.fBase.Host.LogWrite("TfmEventEdit.btnAccept_Click(): " + ex.Message);
 				base.DialogResult = DialogResult.None;
 			}
 		}
@@ -439,10 +441,9 @@ namespace GKUI.Dialogs
 			int idx = this.EditEventDateType.SelectedIndex;
 			if (idx < 0 || idx >= GKData.DateKinds.Length) return;
 
-			GKData.TDateControlsRange dates = GKData.DateKinds[idx].Dates;
-
-			this.EditEventDate1.Enabled = ((dates & (GKData.TDateControlsRange)2) > (GKData.TDateControlsRange)0);
-			this.EditEventDate2.Enabled = ((dates & (GKData.TDateControlsRange)4) > (GKData.TDateControlsRange)0);
+			byte dates = GKData.DateKinds[idx].Dates;
+			this.EditEventDate1.Enabled = SysUtils.IsSetBit(dates, 0);
+			this.EditEventDate2.Enabled = SysUtils.IsSetBit(dates, 1);
 
 			this.cbDate1Calendar.Enabled = this.EditEventDate1.Enabled;
 			this.cbDate2Calendar.Enabled = this.EditEventDate2.Enabled;
@@ -451,7 +452,7 @@ namespace GKUI.Dialogs
 			this.btnBC2.Enabled = this.EditEventDate2.Enabled;
 		}
 
-		public TfmEventEdit(IBase aBase)
+		public TfmEventEdit(IBaseWindow aBase)
 		{
 			this.InitializeComponent();
 			this.fBase = aBase;
@@ -477,6 +478,7 @@ namespace GKUI.Dialogs
             this.fMediaList = new GKMediaSheet(this, this.SheetMultimedia);
 			this.fSourcesList = new GKSourcesSheet(this, this.SheetSources);
 
+			// SetLang()
 			this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
 			this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
 			this.btnAddress.Text = LangMan.LS(LSID.LSID_Address) + "...";

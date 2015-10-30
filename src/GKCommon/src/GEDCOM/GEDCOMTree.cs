@@ -1,8 +1,9 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text;
-
 using GKCommon.GEDCOM.Enums;
 
 namespace GKCommon.GEDCOM
@@ -289,13 +290,13 @@ namespace GKCommon.GEDCOM
 		public void Delete(int index)
 		{
 			this.XRefIndex_DeleteRecord(this.fRecords[index]);
-			this.fRecords.Delete(index);
+			this.fRecords.DeleteAt(index);
 		}
 
 		public void DeleteRecord(GEDCOMRecord sender)
 		{
 			this.XRefIndex_DeleteRecord(sender);
-			this.fRecords.DeleteObject(sender);
+			this.fRecords.Delete(sender);
 		}
 
 		public GEDCOMRecord Extract(int index)
@@ -306,7 +307,7 @@ namespace GKCommon.GEDCOM
 
 		public int IndexOfRecord(GEDCOMRecord record)
 		{
-			return this.fRecords.IndexOfObject(record);
+			return this.fRecords.IndexOf(record);
 		}
 
 		public void Pack()
@@ -343,16 +344,78 @@ namespace GKCommon.GEDCOM
 
 		public void LoadFromFile(string fileName)
 		{
-			this.fFileName = fileName;
-
-			using (StreamReader fs = new StreamReader(fileName, Encoding.GetEncoding(1251))) {
-				this.Clear();
-				this.LoadFromStream(fs);
-				this.fHeader.CharacterSet = GEDCOMCharacterSet.csASCII;
+			using (FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
+				this.LoadFromStreamExt(fileStream, fileStream, fileName);
 			}
 		}
 
 		public void SaveToFile(string fileName, GEDCOMCharacterSet charSet)
+		{
+			using (FileStream fileStream = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write))
+			{
+				this.SaveToStreamExt(fileStream, fileName, charSet);
+			}
+		}
+
+		public void LoadFromFile(string fileName, string password)
+		{
+			using (FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+			{
+				DESCryptoServiceProvider cryptic = new DESCryptoServiceProvider();
+
+				byte[] pwd = Encoding.Unicode.GetBytes(password);
+				byte[] salt = SCCrypt.CreateRandomSalt(7);
+
+				PasswordDeriveBytes pdb = new PasswordDeriveBytes(pwd, salt);
+				cryptic.Key = pdb.CryptDeriveKey("DES", "SHA1", cryptic.KeySize, cryptic.IV);
+
+				using (CryptoStream crStream = new CryptoStream(fileStream, cryptic.CreateDecryptor(), CryptoStreamMode.Read))
+				{
+					this.LoadFromStreamExt(fileStream, crStream, fileName);
+				}
+
+				SCCrypt.ClearBytes(pwd);
+				SCCrypt.ClearBytes(salt);
+				cryptic.Clear();
+			}
+		}
+
+		public void SaveToFile(string fileName, GEDCOMCharacterSet charSet, string password)
+		{
+			using (FileStream fileStream = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write))
+			{
+				DESCryptoServiceProvider cryptic = new DESCryptoServiceProvider();
+
+				byte[] pwd = Encoding.Unicode.GetBytes(password);
+				byte[] salt = SCCrypt.CreateRandomSalt(7);
+
+				PasswordDeriveBytes pdb = new PasswordDeriveBytes(pwd, salt);
+				cryptic.Key = pdb.CryptDeriveKey("DES", "SHA1", cryptic.KeySize, cryptic.IV);
+
+				using (CryptoStream crStream = new CryptoStream(fileStream, cryptic.CreateEncryptor(), CryptoStreamMode.Write))
+				{
+					this.SaveToStreamExt(crStream, fileName, charSet);
+					crStream.Flush();
+				}
+
+				SCCrypt.ClearBytes(pwd);
+				SCCrypt.ClearBytes(salt);
+				cryptic.Clear();
+			}
+		}
+
+		private void LoadFromStreamExt(Stream fileStream, Stream inputStream, string fileName)
+		{
+			this.fFileName = fileName;
+
+			using (StreamReader reader = new StreamReader(inputStream, Encoding.GetEncoding(1251))) {
+				this.Clear();
+				this.LoadFromStream(fileStream, reader);
+				this.fHeader.CharacterSet = GEDCOMCharacterSet.csASCII;
+			}
+		}
+
+		private void SaveToStreamExt(Stream outputStream, string fileName, GEDCOMCharacterSet charSet)
 		{
 			this.fFileName = fileName;
 
@@ -370,20 +433,21 @@ namespace GKCommon.GEDCOM
 			this.fHeader.TransmissionDateTime = DateTime.Now;
 			this.fHeader.FileRevision = rev + 1;
 
-			if (subm != "")
-			{
+			if (subm != "") {
 				this.fHeader.SetTagStringValue("SUBM", subm);
 			}
 
 			this.Pack();
 
-			using (StreamWriter fs = new StreamWriter(fileName, false, GEDCOMUtils.GetEncodingByCharacterSet(charSet))) {
-				this.SaveToStream(fs);
-				this.fHeader.CharacterSet = GEDCOMCharacterSet.csASCII;
+			using (StreamWriter writer = new StreamWriter(outputStream, GEDCOMUtils.GetEncodingByCharacterSet(charSet))) {
+				this.SaveToStream(writer);
+				writer.Flush();
 			}
+
+			this.fHeader.CharacterSet = GEDCOMCharacterSet.csASCII;
 		}
 
-        private static void CorrectLine(GEDCOMCustomRecord curRecord, GEDCOMTag curTag, int lineNum, string S)
+		private static void CorrectLine(GEDCOMCustomRecord curRecord, GEDCOMTag curTag, int lineNum, string S)
 		{
 			try
 			{
@@ -397,14 +461,13 @@ namespace GKCommon.GEDCOM
 			}
 			catch (Exception ex)
 			{
-                SysUtils.LogWrite("GEDCOMTree.LoadFromStream().CorrectLine(): Line " + lineNum.ToString() + " failed correct: " + ex.Message);
+                SysUtils.LogWrite("GEDCOMTree.CorrectLine(): Line " + lineNum.ToString() + " failed correct: " + ex.Message);
 			}
 		}
 
-		public void LoadFromStream(StreamReader stream)
+		private void LoadFromStream(Stream fileStream, StreamReader reader)
 		{
-			long fileSize = stream.BaseStream.Length;
-			long filePos = 0;
+			long fileSize = fileStream.Length;
 			int progress = 0;
 
 			this.fState = GEDCOMState.osLoading;
@@ -414,39 +477,40 @@ namespace GKCommon.GEDCOM
 				GEDCOMTag curTag = null;
 				GEDCOMCharacterSet charSet = GEDCOMCharacterSet.csASCII;
 
-				int I = -1;
-				while (stream.Peek() != -1)
+				int lineNum = 0;
+				while (reader.Peek() != -1)
 				{
-					I++;
-					string srcLine = stream.ReadLine();
+					lineNum++;
+					string srcLine = reader.ReadLine();
 					string S = SysUtils.TrimLeft(srcLine);
 
 					if (S.Length != 0)
 					{
 						if (!GEDCOMUtils.IsDigit(S[0]))
 						{
-							GEDCOMTree.CorrectLine(curRecord, curTag, I + 1, S.Trim());
+							GEDCOMTree.CorrectLine(curRecord, curTag, lineNum, S.Trim());
 						}
 						else
 						{
-							int ALevel;
-							string AXRef;
-							string ATag;
-							string AValue;
+							int tagLevel;
+							string tagXRef;
+							string tagName;
+							string tagValue;
+
 							try
 							{
-								S = GEDCOMUtils.ExtractNumber(S, out ALevel, false, 0);
+								S = GEDCOMUtils.ExtractNumber(S, out tagLevel, false, 0);
 								S = GEDCOMUtils.ExtractDelimiter(S, 0);
-								S = GEDCOMUtils.ExtractXRef(S, out AXRef, true, "");
+								S = GEDCOMUtils.ExtractXRef(S, out tagXRef, true, "");
 								S = GEDCOMUtils.ExtractDelimiter(S, 0);
-								S = GEDCOMUtils.ExtractString(S, out ATag, "");
-								ATag = ATag.ToUpperInvariant();
+								S = GEDCOMUtils.ExtractString(S, out tagName, "");
+								tagName = tagName.ToUpperInvariant();
 								S = GEDCOMUtils.ExtractDelimiter(S, 1);
-								AValue = S;
+								tagValue = S;
 							}
-							catch (EGEDCOMException E)
+							catch (EGEDCOMException ex)
 							{
-								throw new EGEDCOMException("Syntax error in line " + Convert.ToString(I + 1) + ".\r" + E.Message);
+								throw new EGEDCOMException("Syntax error in line " + Convert.ToString(lineNum) + ".\r" + ex.Message);
 							}
 							catch (Exception)
 							{
@@ -454,73 +518,73 @@ namespace GKCommon.GEDCOM
 							}
 
 							// temp hack
-							if (AValue != null && AValue.Length != 0 && charSet == GEDCOMCharacterSet.csUTF8)
+							if (tagValue != null && tagValue.Length != 0 && charSet == GEDCOMCharacterSet.csUTF8)
 							{
-								if (stream.CurrentEncoding != Encoding.UTF8) {
-									AValue = StrToUtf8(AValue);
+								if (reader.CurrentEncoding != Encoding.UTF8) {
+									tagValue = StrToUtf8(tagValue);
 								}
 							}
 							// end
 
-							if (ALevel == 0)
+							if (tagLevel == 0)
 							{
-								if (ATag == "INDI")
+								if (tagName == "INDI")
 								{
 									curRecord = this.AddRecord(new GEDCOMIndividualRecord(this, this, "", ""));
 								}
-								else if (ATag == "FAM")
+								else if (tagName == "FAM")
 								{
 									curRecord = this.AddRecord(new GEDCOMFamilyRecord(this, this, "", ""));
 								}
-								else if (ATag == "OBJE")
+								else if (tagName == "OBJE")
 								{
 									curRecord = this.AddRecord(new GEDCOMMultimediaRecord(this, this, "", ""));
 								}
-								else if (ATag == "NOTE")
+								else if (tagName == "NOTE")
 								{
 									curRecord = this.AddRecord(new GEDCOMNoteRecord(this, this, "", ""));
 								}
-								else if (ATag == "REPO")
+								else if (tagName == "REPO")
 								{
 									curRecord = this.AddRecord(new GEDCOMRepositoryRecord(this, this, "", ""));
 								}
-								else if (ATag == "SOUR")
+								else if (tagName == "SOUR")
 								{
 									curRecord = this.AddRecord(new GEDCOMSourceRecord(this, this, "", ""));
 								}
-								else if (ATag == "SUBN")
+								else if (tagName == "SUBN")
 								{
 									curRecord = this.AddRecord(new GEDCOMSubmissionRecord(this, this, "", ""));
 								}
-								else if (ATag == "SUBM")
+								else if (tagName == "SUBM")
 								{
 									curRecord = this.AddRecord(new GEDCOMSubmitterRecord(this, this, "", ""));
 								}
-								else if (ATag == "_GROUP")
+								else if (tagName == "_GROUP")
 								{
 									curRecord = this.AddRecord(new GEDCOMGroupRecord(this, this, "", ""));
 								}
-								else if (ATag == "_RESEARCH")
+								else if (tagName == "_RESEARCH")
 								{
 									curRecord = this.AddRecord(new GEDCOMResearchRecord(this, this, "", ""));
 								}
-								else if (ATag == "_TASK")
+								else if (tagName == "_TASK")
 								{
 									curRecord = this.AddRecord(new GEDCOMTaskRecord(this, this, "", ""));
 								}
-								else if (ATag == "_COMM")
+								else if (tagName == "_COMM")
 								{
 									curRecord = this.AddRecord(new GEDCOMCommunicationRecord(this, this, "", ""));
 								}
-								else if (ATag == "_LOC")
+								else if (tagName == "_LOC")
 								{
 									curRecord = this.AddRecord(new GEDCOMLocationRecord(this, this, "", ""));
 								}
-								else if (ATag == "HEAD")
+								else if (tagName == "HEAD")
 								{
 									curRecord = this.fHeader;
 								}
-								else if (ATag == "TRLR")
+								else if (tagName == "TRLR")
 								{
 									break;
 								}
@@ -529,33 +593,33 @@ namespace GKCommon.GEDCOM
 									curRecord = null;
 								}
 
-								if (curRecord != null && AXRef != "")
+								if (curRecord != null && tagXRef != "")
 								{
-									curRecord.XRef = AXRef;
+									curRecord.XRef = tagXRef;
 								}
 								curTag = null;
 							}
 							else
 							{
 								// temp hack
-								if (ATag == "CHAR") {
-									charSet = GEDCOMUtils.GetCharacterSetVal(AValue);
+								if (tagName == "CHAR") {
+									charSet = GEDCOMUtils.GetCharacterSetVal(tagValue);
 								}
 								// end
 
 								if (curRecord != null)
 								{
-									if (curTag == null || ALevel == 1)
+									if (curTag == null || tagLevel == 1)
 									{
-										curTag = curRecord.AddTag(ATag, AValue, null);
+										curTag = curRecord.AddTag(tagName, tagValue, null);
 									}
 									else
 									{
-										while (ALevel <= curTag.Level)
+										while (tagLevel <= curTag.Level)
 										{
 											curTag = (curTag.Parent as GEDCOMTag);
 										}
-										curTag = curTag.AddTag(ATag, AValue, null);
+										curTag = curTag.AddTag(tagName, tagValue, null);
 									}
 								}
 							}
@@ -563,13 +627,11 @@ namespace GKCommon.GEDCOM
 					}
 
 					if (fOnProgressEvent != null) {
-						filePos += Encoding.UTF8.GetByteCount(srcLine) + Environment.NewLine.Length;
-
-						int newProgress = (int)Math.Min(100, (filePos * 100.0F) / fileSize);
+						int newProgress = (int)Math.Min(100, (fileStream.Position * 100.0f) / fileSize);
 
 						if (progress != newProgress) {
-							fOnProgressEvent(this, progress);
 							progress = newProgress;
+							fOnProgressEvent(this, progress);
 						}
 					}
 				}
@@ -580,25 +642,37 @@ namespace GKCommon.GEDCOM
 			}
 		}
 
-		public void SaveToStream(StreamWriter stream)
+		private void SaveToStream(StreamWriter writer)
 		{
-			this.SaveHeaderToStream(stream);
+			this.SaveHeaderToStream(writer);
 
 			int num = this.fRecords.Count;
 			for (int i = 0; i < num; i++)
 			{
-				this.fRecords[i].SaveToStream(stream);
+				this.fRecords[i].SaveToStream(writer);
 			}
 
-			this.SaveFooterToStream(stream);
+			this.SaveFooterToStream(writer);
 		}
 
-		public void SaveHeaderToStream(StreamWriter stream)
+		public void SaveToStream(StreamWriter writer, List<GEDCOMRecord> list)
+		{
+			this.SaveHeaderToStream(writer);
+
+			int num = list.Count;
+			for (int i = 0; i < num; i++) {
+				list[i].SaveToStream(writer);
+			}
+
+			this.SaveFooterToStream(writer);
+		}
+
+		private void SaveHeaderToStream(StreamWriter stream)
 		{
 			this.fHeader.SaveToStream(stream);
 		}
 
-		public void SaveFooterToStream(StreamWriter stream)
+		private void SaveFooterToStream(StreamWriter stream)
 		{
 		    const string S = "0 TRLR";
 		    stream.WriteLine(S);
@@ -607,6 +681,21 @@ namespace GKCommon.GEDCOM
 	    #endregion
 
 		#region Auxiliary
+
+		public GEDCOMFormat GetGEDCOMFormat()
+		{
+			string sour = this.fHeader.Source;
+
+			for (GEDCOMFormat gf = GEDCOMFormat.gf_Native; gf <= GEDCOMFormat.gf_Last; gf++)
+			{
+				if (GEDCOMConsts.GEDCOMFormats[(int)gf].Sign == sour)
+				{
+					return gf;
+				}
+			}
+			
+			return GEDCOMFormat.gf_Unknown;
+		}
 
 		public GEDCOMSubmitterRecord GetSubmitter()
 		{
@@ -732,10 +821,10 @@ namespace GKCommon.GEDCOM
 
 				GEDCOMIndividualRecord spouse;
 
-				spouse = family.Husband.Value as GEDCOMIndividualRecord;
+				spouse = family.GetHusband();
 				family.RemoveSpouse(spouse);
 
-				spouse = (family.Wife.Value as GEDCOMIndividualRecord);
+				spouse = family.GetWife();
 				family.RemoveSpouse(spouse);
 			}
 		}
@@ -813,7 +902,7 @@ namespace GKCommon.GEDCOM
 					{
 						if (rec.MultimediaLinks[j].Value == mRec)
 						{
-							rec.MultimediaLinks.Delete(j);
+							rec.MultimediaLinks.DeleteAt(j);
 						}
 					}
 				}
@@ -836,7 +925,7 @@ namespace GKCommon.GEDCOM
 					for (int j = rec.Notes.Count - 1; j >= 0; j--)
 					{
 						if (rec.Notes[j].Value == nRec)
-							rec.Notes.Delete(j);
+							rec.Notes.DeleteAt(j);
 					}
 				}
 
@@ -862,7 +951,7 @@ namespace GKCommon.GEDCOM
 						{
 							if (srcRec.RepositoryCitations[j].Value == repRec)
 							{
-								srcRec.RepositoryCitations.DeleteObject(srcRec.RepositoryCitations[j]);
+								srcRec.RepositoryCitations.Delete(srcRec.RepositoryCitations[j]);
 							}
 						}
 					}
@@ -898,7 +987,7 @@ namespace GKCommon.GEDCOM
 					{
 						if (rec.SourceCitations[j].Value == srcRec)
 						{
-							rec.SourceCitations.Delete(j);
+							rec.SourceCitations.DeleteAt(j);
 						}
 					}
 				}
@@ -925,7 +1014,7 @@ namespace GKCommon.GEDCOM
 						{
 							if (resRec.Tasks[j].Value == taskRec)
 							{
-								resRec.Tasks.Delete(j);
+								resRec.Tasks.DeleteAt(j);
 							}
 						}
 					}
@@ -953,7 +1042,7 @@ namespace GKCommon.GEDCOM
 						{
 							if (resRec.Communications[j].Value == commRec)
 							{
-								resRec.Communications.Delete(j);
+								resRec.Communications.DeleteAt(j);
 							}
 						}
 					}
@@ -974,30 +1063,17 @@ namespace GKCommon.GEDCOM
 				for (int i = 0; i < num; i++)
 				{
 					GEDCOMRecord rec = this[i];
-					if (rec is GEDCOMIndividualRecord)
+
+					if (rec is GEDCOMRecordWithEvents)
 					{
-						GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
-						for (int j = iRec.IndividualEvents.Count - 1; j >= 0; j--)
+						GEDCOMRecordWithEvents evsRec = rec as GEDCOMRecordWithEvents;
+
+						for (int j = evsRec.Events.Count - 1; j >= 0; j--)
 						{
-							GEDCOMCustomEvent ev = iRec.IndividualEvents[j];
-							if (ev.Detail.Place.Location.Value == locRec)
-							{
+							GEDCOMCustomEvent ev = evsRec.Events[j];
+
+							if (ev.Detail.Place.Location.Value == locRec) {
 								ev.Detail.Place.DeleteTag("_LOC");
-							}
-						}
-					}
-					else
-					{
-						if (rec is GEDCOMFamilyRecord)
-						{
-							GEDCOMFamilyRecord fRec = rec as GEDCOMFamilyRecord;
-							for (int j = fRec.FamilyEvents.Count - 1; j >= 0; j--)
-							{
-								GEDCOMCustomEvent ev = fRec.FamilyEvents[j];
-								if (ev.Detail.Place.Location.Value == locRec)
-								{
-									ev.Detail.Place.DeleteTag("_LOC");
-								}
 							}
 						}
 					}

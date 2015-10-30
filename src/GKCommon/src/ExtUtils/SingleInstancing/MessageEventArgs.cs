@@ -1,0 +1,34 @@
+using System;
+
+namespace ExtUtils.SingleInstancing
+{
+	/// <summary>
+	/// Provides data for the SingleInstancing.ISingleInstanceEnforcer.OnMessageReceived method.
+	/// </summary>
+	[Serializable]
+	public class MessageEventArgs : EventArgs
+	{
+		private object message;
+
+		/// <summary>
+		/// Gets the message sent to the first instance of the application.
+		/// </summary>
+		public object Message
+		{
+			get { return message; }
+		}
+
+		/// <summary>
+		/// Instantiates a new MessageEventArgs object.
+		/// </summary>
+		/// <param name="message">The message to pass to the first running instance of the application.</param>
+		/// <exception cref="System.ArgumentNullException">message is null.</exception>
+		public MessageEventArgs(object message)
+		{
+			if (message == null)
+				throw new ArgumentNullException("message", "message cannot be null.");
+
+			this.message = message;
+		}
+	}
+}

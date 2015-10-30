@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -12,7 +13,7 @@ namespace GKUI.Dialogs
     /// </summary>
     public partial class TfmUserRefEdit : Form, IBaseEditor
 	{
-		private readonly IBase fBase;
+		private readonly IBaseWindow fBase;
 
         private GEDCOMUserReference fUserRef;
 
@@ -22,7 +23,7 @@ namespace GKUI.Dialogs
 			set { this.SetUserRef(value); }
 		}
 
-		public IBase Base
+		public IBaseWindow Base
 		{
 			get { return this.fBase; }
 		}
@@ -44,21 +45,22 @@ namespace GKUI.Dialogs
 			}
 			catch (Exception ex)
 			{
-				this.fBase.Host.LogWrite("TfmUserRefEdit.Accept(): " + ex.Message);
+				this.fBase.Host.LogWrite("TfmUserRefEdit.btnAccept_Click(): " + ex.Message);
 				base.DialogResult = DialogResult.None;
 			}
 		}
 
-		public TfmUserRefEdit(IBase aBase)
+		public TfmUserRefEdit(IBaseWindow aBase)
 		{
 			this.InitializeComponent();
 			this.fBase = aBase;
 
-			for (TUserRef ur = TUserRef.urCustom; ur <= TUserRef.urLast; ur++)
+			for (SpecialUserRef ur = SpecialUserRef.urCustom; ur <= SpecialUserRef.urLast; ur++)
 			{
-				this.EditRef.Items.Add(GKData.UserRefs[(int)ur]);
+				this.EditRef.Items.Add(GKData.SpecialUserRefs[(int)ur]);
 			}
 
+			// SetLang()
 			this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
 			this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
 			this.Text = LangMan.LS(LSID.LSID_WinUserRefEdit);

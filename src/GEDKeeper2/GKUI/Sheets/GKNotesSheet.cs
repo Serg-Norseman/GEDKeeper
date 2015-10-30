@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 
-using ExtUtils;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
@@ -29,12 +28,12 @@ namespace GKUI.Sheets
         	
             try
             {
-                this.List.Items.Clear();
+                this.ClearItems();
 
                 this.DataList.Reset();
                 while (this.DataList.MoveNext()) {
                 	GEDCOMNotes note = this.DataList.Current as GEDCOMNotes;
-                	this.List.AddItem(note.Notes.Text.Trim(), note);
+                	this.AddItem(note.Notes.Text.Trim(), note);
                 }
             }
             catch (Exception ex)
@@ -47,7 +46,7 @@ namespace GKUI.Sheets
         {
         	if (this.DataList == null) return;
         	
-            IBase aBase = this.Editor.Base;
+            IBaseWindow aBase = this.Editor.Base;
             if (aBase == null) return;
 
             IGEDCOMStructWithLists _struct = this.DataList.Owner as IGEDCOMStructWithLists;
@@ -80,14 +79,16 @@ namespace GKUI.Sheets
                 case RecordAction.raDelete:
                     if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachNoteQuery)) != DialogResult.No)
                     {
-                        _struct.Notes.DeleteObject(aNote);
+                        _struct.Notes.Delete(aNote);
                         result = true;
-                        aBase.Modified = true;
                     }
                     break;
             }
             
-            if (result) this.UpdateSheet();
+            if (result) {
+            	aBase.Modified = true;
+            	this.UpdateSheet();
+            }
         }
 
     }

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+
 using GKCommon;
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
@@ -16,7 +17,7 @@ namespace GKUI.Dialogs
     /// </summary>
     public partial class TfmMediaView : Form, ILocalization
     {
-        private readonly IBase fBase;
+        private readonly IBaseWindow fBase;
 
         private GEDCOMFileReferenceWithTitle fFileRef;
         private bool fExtern;
@@ -49,7 +50,7 @@ namespace GKUI.Dialogs
                 case GEDCOMMultimediaFormat.mfTIF:
                 case GEDCOMMultimediaFormat.mfTGA:
                 case GEDCOMMultimediaFormat.mfPNG: {
-                        Image img = this.fBase.BitmapLoad(this.fFileRef, -1, -1, false);
+                        Image img = this.fBase.Context.BitmapLoad(this.fFileRef, -1, -1, false);
 
                         this.fImageCtl = new ImageView();
                         this.fImageCtl.OpenImage(img);
@@ -62,14 +63,14 @@ namespace GKUI.Dialogs
                 case GEDCOMMultimediaFormat.mfMPG: {
                         this.fExtern = true;
                         string targetFile = "";
-                        this.fBase.MediaLoad(this.fFileRef, ref targetFile);
+                        this.fBase.Context.MediaLoad(this.fFileRef, ref targetFile);
                         SysUtils.LoadExtFile(targetFile);
                         break;
                     }
 
                 case GEDCOMMultimediaFormat.mfTXT: {
                         Stream fs;
-                        this.fBase.MediaLoad(this.fFileRef, out fs, false);
+                        this.fBase.Context.MediaLoad(this.fFileRef, out fs, false);
                         using (StreamReader strd = new StreamReader(fs, Encoding.GetEncoding(1251))) {
                             TextBox txtBox = new TextBox();
                             txtBox.Multiline = true;
@@ -83,7 +84,7 @@ namespace GKUI.Dialogs
 
                 case GEDCOMMultimediaFormat.mfRTF: {
                         Stream fs;
-                        this.fBase.MediaLoad(this.fFileRef, out fs, false);
+                        this.fBase.Context.MediaLoad(this.fFileRef, out fs, false);
                         using (StreamReader strd = new StreamReader(fs)) {
                             RichTextBox txtBox = new RichTextBox();
                             txtBox.ReadOnly = true;
@@ -95,7 +96,7 @@ namespace GKUI.Dialogs
 
                 case GEDCOMMultimediaFormat.mfHTM: {
                         Stream fs;
-                        this.fBase.MediaLoad(this.fFileRef, out fs, false);
+                        this.fBase.Context.MediaLoad(this.fFileRef, out fs, false);
 
                         ctl = new WebBrowser();
                         (ctl as WebBrowser).DocumentStream = fs;
@@ -122,7 +123,7 @@ namespace GKUI.Dialogs
             }
         }
 
-        public TfmMediaView(IBase aBase)
+        public TfmMediaView(IBaseWindow aBase)
         {
             this.InitializeComponent();
             this.fBase = aBase;

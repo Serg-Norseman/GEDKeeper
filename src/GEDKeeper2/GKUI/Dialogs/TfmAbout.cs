@@ -1,27 +1,22 @@
 ﻿using System;
-using System.Reflection;
 using System.Windows.Forms;
 
-using ExtUtils;
 using GKCommon;
 using GKCore;
 
-/// <summary>
-/// Localization: dirty
-/// </summary>
-
 namespace GKUI.Dialogs
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public partial class TfmAbout : Form
 	{
 		public TfmAbout()
 		{
 			this.InitializeComponent();
-			this.LabelCite.Text = "«История рода - это есть история Отечества»\r\n«Неуважение к предкам - есть первый признак дикости и безнравственности»\r\n(Александр Сергеевич Пушкин)";
+			this.LabelCite.Text = GKData.AppCites;
 			this.Text = LangMan.LS(LSID.LSID_MIAbout);
 			this.btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-
-			//this.familyComboBox1.Doc = TfmGEDKeeper.Instance.GetCurrentFile().Tree;
 		}
 
 		private void LabelMail_Click(object sender, EventArgs e)
@@ -29,20 +24,15 @@ namespace GKUI.Dialogs
 			SysUtils.LoadExtFile(this.LabelMail.Text);
 		}
 
-		public static void ShowAbout(string AppName)
+		public static void ShowAbout()
 		{
-			Assembly assembly = Assembly.GetExecutingAssembly();
-
-			string copyright = "";
-			object[] attributes = assembly.GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
-			if (attributes.Length != 0) copyright = ((AssemblyCopyrightAttribute)attributes[0]).Copyright;
-
-			string version = assembly.GetName().Version.ToString();
+			string copyright, version;
+			GKUtils.GetAssemblyVersion(out copyright, out version);
 
 			TfmAbout dlg = new TfmAbout();
 			try
 			{
-				dlg.LabelProduct.Text = AppName;
+				dlg.LabelProduct.Text = GKData.AppTitle;
 				dlg.LabelVersion.Text = "Version " + version;
 				dlg.LabelCopyright.Text = copyright;
 				dlg.ShowDialog();
@@ -52,6 +42,5 @@ namespace GKUI.Dialogs
 				dlg.Dispose();
 			}
 		}
-
 	}
 }

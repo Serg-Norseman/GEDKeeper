@@ -19,6 +19,11 @@ using GKCore.Interfaces;
 
 namespace GKImageViewerPlugin
 {
+	public enum IVLS
+	{
+		/* 000 */ LSID_ImgViewer
+	}
+
     public class Plugin : IPlugin
     {
         private string fDisplayName = "ImageViewer";
@@ -51,6 +56,7 @@ namespace GKImageViewerPlugin
         	try
         	{
         		this.fLangMan = this.fHost.CreateLangMan(this);
+        		this.fDisplayName = this.fLangMan.LS(IVLS.LSID_ImgViewer);
         	}
         	catch (Exception ex)
         	{

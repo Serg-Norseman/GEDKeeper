@@ -144,7 +144,12 @@ namespace GKCommon.GEDCOM
 			this.fDataList.Clear();
 		}
 
-		public void Delete(int index)
+		public int IndexOf(T item)
+		{
+			return (this.fDataList == null) ? -1 : this.fDataList.IndexOf(item);
+		}
+
+		public void DeleteAt(int index)
 		{
 		    if (this.fDataList == null) return;
 		    
@@ -152,13 +157,14 @@ namespace GKCommon.GEDCOM
 		    this.fDataList.RemoveAt(index);
 		}
 
-		public void DeleteObject(T item)
+		public void Delete(T item)
 		{
 			if (this.fDataList == null) return;
 
-			int idx = this.fDataList.IndexOf(item);
-			if (idx >= 0) {
-				this.Delete(idx);
+			int index = this.fDataList.IndexOf(item);
+			if (index >= 0) {
+				this.fDataList[index].Dispose();
+				this.fDataList.RemoveAt(index);
 			}
 		}
 
@@ -183,11 +189,6 @@ namespace GKCommon.GEDCOM
 			} else {
 				return default(T);
 			}
-		}
-
-		public int IndexOfObject(T item)
-		{
-			return (this.fDataList == null) ? -1 : this.fDataList.IndexOf(item);
 		}
 
 		public void SaveToStream(StreamWriter stream)
@@ -238,7 +239,7 @@ namespace GKCommon.GEDCOM
 					GEDCOMTag tag = item as GEDCOMTag;
 					tag.Pack();
 					if (tag.IsEmpty() && tag.IsEmptySkip()) {
-						this.Delete(i);
+						this.DeleteAt(i);
 					}
 				}
 			}

@@ -49,31 +49,15 @@
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ConwayLife">
+      <HintPath>ConwayLife.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LifeConsts.cs" />
-    <Compile Include="LifeGrid.cs" />
-    <Compile Include="LifeHistory.cs" />
-    <Compile Include="LifeOptions.cs" />
-    <Compile Include="LifeRules.cs" />
-    <Compile Include="LifeViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="PluginForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PluginForm.Designer.cs">
-      <DependentUpon>PluginForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="GKLifePlugin.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="PluginForm.resx">
-      <DependentUpon>PluginForm.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GKCommon\GKCommon.csproj">
@@ -84,6 +68,17 @@
       <Project>{B86F8B3B-E1CD-4A00-A73B-2D454924B8D2}</Project>
       <Name>GKInterfaces</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GKLifePlugin.eng">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="GKLifePlugin.rus">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="GKLifePlugin.ukr">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

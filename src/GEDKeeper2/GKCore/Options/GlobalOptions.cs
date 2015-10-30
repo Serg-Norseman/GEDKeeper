@@ -6,8 +6,8 @@ using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM.Enums;
+using GKCore.Lists;
 using GKCore.Types;
-using GKUI.Lists;
 
 namespace GKCore.Options
 {
@@ -16,6 +16,8 @@ namespace GKCore.Options
     /// </summary>
     public sealed class GlobalOptions : BaseObject
 	{
+    	private static GlobalOptions fInstance = null;
+    	
 		private readonly TreeChartOptions fChartOptions;
 		private GEDCOMCharacterSet fDefCharacterSet;
 		private DateFormat fDefDateFormat;
@@ -39,6 +41,18 @@ namespace GKCore.Options
 		private FormWindowState fMWinState;
 		private readonly StringList fLastBases;
 		private bool fRevisionsBackup;
+
+
+		public static GlobalOptions Instance
+		{
+			get {
+				if (fInstance == null) {
+					fInstance = new GlobalOptions();
+				}
+
+				return fInstance;
+			}
+		}
 
 
 		public TreeChartOptions ChartOptions
@@ -224,7 +238,7 @@ namespace GKCore.Options
 			return -1;
 		}
 
-		public GlobalOptions()
+		private GlobalOptions()
 		{
 			this.fChartOptions = new TreeChartOptions();
 			this.fEventFilters = new StringList();
@@ -433,9 +447,9 @@ namespace GKCore.Options
 			}
 		}
 
-		public void AddLastBase(string aFileName)
+		public void AddLastBase(string fileName)
 		{
-			this.fLastBases.Add(aFileName);
+			this.fLastBases.Add(fileName);
 		}
 
 		public void ClearLastBases()

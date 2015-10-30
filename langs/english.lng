@@ -13,15 +13,15 @@ Close
 Properties...
 Export
 Export to Web...
-Export to Excel...
+<?>
 Export to Excel-file...
 Exit
-Undo
-Redo
+<?>
+<?>
 Add record
 Edit record
 Delete record
-Stream input...
+<?>
 Ancestors tree
 Descendants tree
 Both tree
@@ -35,7 +35,7 @@ Calendar
 Time line
 Organizer
 Scripts...
-DB import...
+<?>
 Tools...
 Filter...
 Options
@@ -69,18 +69,18 @@ Male
 Female
 Undetermined
 The file is modified. Save?
-Found the specified parent family "%s". Attach to it a child?
-Remove personal record "%s"?
-Remove family record "%s"?
-Remove note record "%s"?
-Remove source record "%s"?
-Remove multimedia record "%s"?
-Remove repository record "%s"?
-Remove group record "%s"?
-Remove research record "%s"?
-Remove task record "%s"?
-Remove communication record "%s"?
-Remove location record "%s"?
+Found the specified parent family "{0}". Attach to it a child?
+Remove personal record "{0}"?
+Remove family record "{0}"?
+Remove note record "{0}"?
+Remove source record "{0}"?
+Remove multimedia record "{0}"?
+Remove repository record "{0}"?
+Remove group record "{0}"?
+Remove research record "{0}"?
+Remove task record "{0}"?
+Remove communication record "{0}"?
+Remove location record "{0}"?
 Address
 Events
 Surname
@@ -166,9 +166,9 @@ French
 Roman
 Unknown
 Copy result to clipboard
-Advanced project
-Enable extension (archive and store)
-Extension name (archive and store folder)
+Others
+<?>
+<?>
 Location
 Latitude
 Longitude
@@ -211,8 +211,8 @@ Male
 Not selected a personal record
 For this person is not defined the sex.
 For this person is not families.
-Estimated number of ancestors %s more than permissible limits.
-Estimated number of descendants %s more than permissible limits.
+Estimated number of ancestors {0} more than permissible limits.
+Estimated number of descendants {0} more than permissible limits.
 Generations visible:
 unlimited
 Spouse
@@ -247,21 +247,21 @@ Remove the user reference?
 Loading of gedcom failed.
 Check gedcom format failed.
 Birth days
-Before the day of birth "%s" remained %s day(s)
+Before the day of birth "{0}" remained {1} day(s)
 Interface
 Trees
 Pedigrees
 Coding of save
-Work mode
-Simple
-Expert
+<?>
+<?>
+<?>
 Internet
 Use proxy
 Server
 Port
 Login
 Password
-Tips
+<?>
 Show on startup
 Language
 All lists
@@ -370,19 +370,19 @@ nephew
 niece
 cousin
 cousin
-<reserved>
-<reserved>
-<reserved>
-<reserved>
-<reserved>
-<reserved>
-<reserved>
-<reserved>
-<reserved>
+<?>
+<?>
+<?>
+<?>
+<?>
+<?>
+<?>
+<?>
+<?>
 The width of the image more than 65 thousand points. Save impossible
 Back
 Next
-<reserved>
+<?>
 Next
 You know what ...
 Load and search for places
@@ -396,11 +396,11 @@ Only the chosen
 Save image...
 The format is not supported
 Error loading data.
-Parse error: number of records contain the gap.
-Recognized personal record
+<?>
+<?>
 Generation
-Parsing error: not found in the list of ancestors with a number
-Parse Error: date
+<?>
+<?>
 Exact
 Before
 After
@@ -471,7 +471,7 @@ Correspondence
 Correction IDs
 Check format
 Requires correction of identity records, continue?
-Number of objects in the master database: %s
+Number of objects in the master database: {0}
 Synchronization is complete.
 Search the patriarchs
 Search links
@@ -581,13 +581,52 @@ Selected personal records removed
 Record
 Problem
 Solve
-Perhaps died (age %s)
+Perhaps died (age {0})
 Not determine the sex
 Year of birth more than a year of death
-The first marriage at the age of %s years?
-The first child was born at the age of %s years?
+The first marriage at the age of {0} years?
+The first child was born at the age of {0} years?
 Descendants
 Generations
 Number of links
 Preparing places
 The place is already in the locations list
+DNA markers
+Ср.возр.рождения первенца на ДР родителя
+Ср.возр.рождения первенца на ДР ребенка
+Empty family record
+Revisions backup
+Loading
+File saving error "{0}"{1}.
+Background color...
+Background image...
+Persons in tree: {0}
+View the error log
+Ancestors Circle
+Circle
+Text color
+Back color
+Lines color
+None
+Locked
+Confidential
+Privacy
+Send the error log
+Charts
+The size of the window
+Zoom in
+Zoom out
+To setup the fact of death
+To determine the sex
+Plugins
+Auto-trace relationships
+No matches found
+Find previous
+Find next
+The certainty index
+Monthes of birth
+Month
+Reset
+Field
+Condition
+Not specified the source

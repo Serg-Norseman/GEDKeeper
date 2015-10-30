@@ -24,7 +24,7 @@ namespace GKNamesBookPlugin
 		/* 032 */ LSID_MINamesBook
     }
     
-    public class Plugin : IPlugin, IWidget
+    public sealed class Plugin : IPlugin, IWidget
     {
         private string fDisplayName = "GKNamesBookPlugin";
         private IHost fHost;
@@ -97,8 +97,8 @@ namespace GKNamesBookPlugin
         #region IWidget support
 
         void IWidget.WidgetInit(IHost host) {}
-        void IWidget.BaseChanged(IBase aBase) {}
-        void IWidget.BaseClosed(IBase aBase) {}
+        void IWidget.BaseChanged(IBaseWindow aBase) {}
+        void IWidget.BaseClosed(IBaseWindow aBase) {}
         void IWidget.WidgetEnable() {}
 
         #endregion

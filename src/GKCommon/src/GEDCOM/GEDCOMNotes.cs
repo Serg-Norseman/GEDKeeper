@@ -54,14 +54,6 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing)
-			{
-			}
-			base.Dispose(disposing);
-		}
-
 		public override void Clear()
 		{
 			base.Clear();

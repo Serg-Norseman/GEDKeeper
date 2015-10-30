@@ -26,7 +26,7 @@ namespace GKCore.Export
 			set { this.fSelectedRecords = value; }
 		}
 
-        public ExcelExporter(IBase aBase) : base(aBase)
+        public ExcelExporter(IBaseWindow aBase) : base(aBase)
         {
         }
 

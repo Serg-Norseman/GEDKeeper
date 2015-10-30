@@ -26,7 +26,7 @@ namespace GKTimeLinePlugin
 		/* 131 */ LSID_CurrentYear,
     }
     
-    public class Plugin : IPlugin, IWidget
+    public sealed class Plugin : IPlugin, IWidget
     {
         private string fDisplayName = "GKTimeLinePlugin";
         private IHost fHost;
@@ -101,14 +101,14 @@ namespace GKTimeLinePlugin
 
         void IWidget.WidgetInit(IHost host) {}
 
-        void IWidget.BaseChanged(IBase aBase)
+        void IWidget.BaseChanged(IBaseWindow aBase)
         {
         	if (frm != null) {
         		frm.BaseChanged(aBase);
         	}
     	}
         
-        void IWidget.BaseClosed(IBase aBase)
+        void IWidget.BaseClosed(IBaseWindow aBase)
         {
         	if (frm != null) {
         		frm.BaseChanged(null);

@@ -5,6 +5,9 @@ using System.Windows.Forms;
 
 namespace GKUI.Controls
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public sealed class GKLogChart : Panel
 	{
 		private class Fragment

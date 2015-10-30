@@ -2,6 +2,9 @@
 
 namespace GKUI.Charts
 {
+	/// <summary>
+	/// 
+	/// </summary>
     public class PersonModifyEventArgs : EventArgs
     {
         public TreeChartPerson Person { get; set; }

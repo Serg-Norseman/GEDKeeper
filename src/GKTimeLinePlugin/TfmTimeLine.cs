@@ -16,7 +16,7 @@ namespace GKTimeLinePlugin
     public partial class TfmTimeLine : Form
 	{
     	private Plugin fPlugin;
-		private IBase fBase;
+		private IBaseWindow fBase;
         private int fYearMin;
         private int fYearMax;
         private int fYearCurrent;
@@ -44,7 +44,7 @@ namespace GKTimeLinePlugin
             this.fPlugin.Host.WidgetClose(this.fPlugin);
         }
 
-        public void BaseChanged(IBase aBase)
+        public void BaseChanged(IBaseWindow aBase)
         {
             if (this.fBase != aBase && this.fBase != null)
             {
@@ -90,10 +90,10 @@ namespace GKTimeLinePlugin
                 {
                     GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
 
-                    int num2 = iRec.IndividualEvents.Count;
+                    int num2 = iRec.Events.Count;
                     for (int k = 0; k < num2; k++)
                     {
-                        GEDCOMCustomEvent ev = iRec.IndividualEvents[k];
+                        GEDCOMCustomEvent ev = iRec.Events[k];
 
                         if (ev.Name == "BIRT" || ev.Name == "DEAT")
                         {
@@ -161,8 +161,8 @@ namespace GKTimeLinePlugin
             try
             {               
             	GEDCOMIndividualRecord iRec = record as GEDCOMIndividualRecord;
-            	GEDCOMCustomEvent buf_bd = iRec.GetIndividualEvent("BIRT");
-                GEDCOMCustomEvent buf_dd = iRec.GetIndividualEvent("DEAT");
+            	GEDCOMCustomEvent buf_bd = iRec.FindEvent("BIRT");
+                GEDCOMCustomEvent buf_dd = iRec.FindEvent("DEAT");
 
                 ushort j, d;
 

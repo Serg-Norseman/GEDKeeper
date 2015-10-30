@@ -21,31 +21,14 @@ namespace GKCommon
 			return result;
 		}
 
-		public static ExtRect Bounds(int left, int top, int width, int height)
+		public static ExtRect CreateBounds(int left, int top, int width, int height)
 		{
 			return ExtRect.Create(left, top, left + width - 1, top + height - 1);
 		}
 
-		public static ExtRect Empty()
+		public static ExtRect CreateEmpty()
 		{
 			return ExtRect.Create(0, 0, 0, 0);
-		}
-
-		public override string ToString()
-		{
-			return string.Concat(new string[]
-			{
-				"{X=", this.Left.ToString(), 
-				",Y=", this.Top.ToString(), 
-				",Width=", this.GetWidth().ToString(), 
-				",Height=", this.GetHeight().ToString(), 
-				"}"
-			});
-		}
-
-		public Rectangle ToRectangle()
-		{
-			return new Rectangle(this.Left, this.Top, this.Right - this.Left + 1, this.Bottom - this.Top + 1);
 		}
 
 		public int GetWidth()
@@ -68,12 +51,12 @@ namespace GKCommon
 			return X >= this.Left && Y >= this.Top && X < this.Right && Y < this.Bottom;
 		}
 
-		public ExtRect GetOffset(int X, int Y)
+		public ExtRect GetShift(int X, int Y)
 		{
 			return ExtRect.Create(this.Left + X, this.Top + Y, this.Right + X, this.Bottom + Y);
 		}
-		
-		public void OffsetEx(int DX, int DY)
+
+		public void Offset(int DX, int DY)
 		{
 			this.Left += DX;
 			this.Right -= DX;
@@ -81,6 +64,17 @@ namespace GKCommon
 			this.Bottom -= DY;
 		}
 
-	}
+		public override string ToString()
+		{
+			return string.Concat(new string[] {
+				"{X=", this.Left.ToString(), ",Y=", this.Top.ToString(), 
+				",Width=", this.GetWidth().ToString(), ",Height=", this.GetHeight().ToString(), "}"
+			});
+		}
 
+		public Rectangle ToRectangle()
+		{
+			return new Rectangle(this.Left, this.Top, this.Right - this.Left + 1, this.Bottom - this.Top + 1);
+		}
+	}
 }

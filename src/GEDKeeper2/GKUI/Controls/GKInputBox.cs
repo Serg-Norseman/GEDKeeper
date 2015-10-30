@@ -1,12 +1,11 @@
 using System;
 using System.Windows.Forms;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKUI.Controls
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public partial class GKInputBox : Form
 	{
 		private readonly bool fNumbersMode;

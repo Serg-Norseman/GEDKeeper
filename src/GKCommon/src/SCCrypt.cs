@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace GKCommon
@@ -8,114 +9,95 @@ namespace GKCommon
     /// </summary>
     public static class SCCrypt
 	{
-
-		private static byte[] LStrConcat2(byte[] L, byte[] R)
+		public static byte[] CreateRandomSalt(int length)
 		{
-			byte[] result = null;
+			// Create a buffer
+			byte[] randBytes;
+
+			if (length >= 1)
+			{
+				randBytes = new byte[length];
+			}
+			else
+			{
+				randBytes = new byte[1];
+			}
+
+			// Create a new RNGCryptoServiceProvider.
+			RNGCryptoServiceProvider rand = new RNGCryptoServiceProvider();
+
+			// Fill the buffer with random bytes.
+			rand.GetBytes(randBytes);
+
+			// return the bytes.
+			return randBytes;
+		}
+
+		public static void ClearBytes(byte[] buffer)
+		{
+			// Check arguments.
+			if (buffer == null)
+			{
+				throw new ArgumentException("buffer");
+			}
+
+			// Set each byte in the buffer to 0.
+			for (int x = 0; x < buffer.Length; x++)
+			{
+				buffer[x] = 0;
+			}
+		}
+		
+		private static byte[] ArrConcat(byte[] L, byte[] R)
+		{
 			int num = ((L != null) ? L.Length : 0);
 			int num2 = ((R != null) ? R.Length : 0);
-			if (num + num2 > 0)
-			{
-				result = new byte[num + num2];
-				if (num > 0) Array.Copy(L, 0, result, 0, num);
-				if (num2 > 0) Array.Copy(R, 0, result, num, num2);
-			}
+
+			byte[] result = new byte[num + num2];
+			if (num > 0) Array.Copy(L, 0, result, 0, num);
+			if (num2 > 0) Array.Copy(R, 0, result, num, num2);
 			return result;
 		}
 
-		private static byte[] LStrCopy(byte[] S, int index1, int count)
+		private static byte[] ArrCopy(byte[] src, int index, int count)
 		{
 			byte[] result = null;
 			if (count > 0)
 			{
-				int num = ((S != null) ? S.Length : 0);
-				if (num > 0 && index1 <= num)
-				{
-					int idx = ((index1 <= 0) ? 0 : index1 - 1);
+				int srcLen = ((src != null) ? src.Length : 0);
+				index = (index < 0) ? 0 : index;
 
-					if (count > num - idx)
-					{
-						count = num - idx;
+				if (srcLen > 0 && index < srcLen)
+				{
+					if (count > srcLen - index) {
+						count = srcLen - index;
 					}
 
-					if (count > 0)
-					{
+					if (count > 0) {
 						result = new byte[count];
-						Array.Copy(S, idx, result, 0, count);
+						Array.Copy(src, index, result, 0, count);
 					}
 				}
 			}
 			return result;
 		}
 
-		private static void LStrDelete(ref byte[] dest, int index1, int count)
+		private static byte[] MoveL2S(uint source, int count)
 		{
-			if (count > 0)
-			{
-				int num = ((dest != null) ? dest.Length : 0);
-				if (num > 0 && index1 <= num)
-				{
-					int num2 = ((index1 <= 0) ? 0 : index1 - 1);
-
-					if (count > num - num2)
-					{
-						count = num - num2;
-					}
-					if (count > 0)
-					{
-						int num3 = num - count;
-						if (num3 < 0)
-						{
-							num3 = 0;
-						}
-
-						byte[] array = new byte[num3];
-						if (num2 > 0)
-						{
-							Array.Copy(dest, 0, array, 0, num2);
-						}
-						if (num2 + count < num)
-						{
-							Array.Copy(dest, num2 + count, array, num2, num - count - num2);
-						}
-						dest = array;
-					}
-				}
-			}
-		}
-
-		private static void MoveL2S(uint source, ref byte[] dest, int count)
-		{
-			byte[] bytes = new byte[4];
+			byte[] dest = new byte[count];
 
 			unchecked
 			{
 				ushort wl = (ushort)(source);
 				ushort wh = (ushort)(source >> 16);
 
-				bytes[0] = (byte)wl;
-				bytes[1] = (byte)(wl >> 8);
-				bytes[2] = (byte)wh;
-				bytes[3] = (byte)(wh >> 8);
+				if (count >= 1) dest[0] = (byte)wl;
+				if (count >= 2) dest[1] = (byte)(wl >> 8);
+				if (count >= 3) dest[2] = (byte)wh;
+				if (count >= 4) dest[3] = (byte)(wh >> 8);
 			}
 
-			if (dest != null) {
-				for (int I = 0; I < count; I++) dest[I] = bytes[I];
-			}
-		}
-
-		private static void MoveS2L(byte[] source, out int dest, int count)
-		{
-			byte[] bytes = new byte[4];
-			for (int I = 1; I <= 4; I++) {
-				if (I <= count) {
-					bytes[I - 1] = source[I - 1];
-				} else {
-					bytes[I - 1] = 0;
-				}
-			}
-
-			dest = (int)((bytes[0] | bytes[1] << 8) | (bytes[2] | bytes[3] << 8) << 16);
+			return dest;
 		}
 
 		private static byte[] Decode(byte[] data)
@@ -127,29 +109,40 @@ namespace GKCommon
 			switch (num) {
 				case 2:
 					I = (uint)(_Unnamed1_Map[data[0]] + (_Unnamed1_Map[data[1]] << 6));
-					result = new byte[1];
-					MoveL2S(I, ref result, 1);
+					result = MoveL2S(I, 1);
 					break;
+
 				case 3:
 					I = (uint)(_Unnamed1_Map[data[0]] + (_Unnamed1_Map[data[1]] << 6) + (_Unnamed1_Map[data[2]] << 12));
-					result = new byte[2];
-					MoveL2S(I, ref result, 2);
+					result = MoveL2S(I, 2);
 					break;
+
 				case 4:
 					I = (uint)(_Unnamed1_Map[data[0]] + (_Unnamed1_Map[data[1]] << 6) + (_Unnamed1_Map[data[2]] << 12) + (_Unnamed1_Map[data[3]] << 18));
-					result = new byte[3];
-					MoveL2S(I, ref result, 3);
+					result = MoveL2S(I, 3);
 					break;
 			}
 			
 			return result;
 		}
 
+		private static int MoveS2L(byte[] source, int count)
+		{
+			byte[] bytes = new byte[4];
+			bytes[0] = (byte)((count >= 1) ? source[0] : 0);
+			bytes[1] = (byte)((count >= 2) ? source[1] : 0);
+			bytes[2] = (byte)((count >= 3) ? source[2] : 0);
+			bytes[3] = (byte)((count >= 4) ? source[3] : 0);
+			
+			int dest;
+			dest = (int)((bytes[0] | bytes[1] << 8) | (bytes[2] | bytes[3] << 8) << 16);
+			return dest;
+		}
+
 		private static byte[] Encode(byte[] data)
 		{
-			int I = 0;
 			int num = (data != null) ? data.Length : 0;
-            MoveS2L(data, out I, num);
+            int I = MoveS2L(data, num);
 
 			byte[] res = new byte[num + 1];
 
@@ -174,24 +167,26 @@ namespace GKCommon
 			return res;
 		}
 
-		public static string scDecrypt(string St, ushort Key)
+		public static string scDecrypt(string str, ushort key)
 		{
 			string res = "";
 
-			if (!string.IsNullOrEmpty(St))
+			if (!string.IsNullOrEmpty(str))
 			{
-				byte[] SSD = Encoding.ASCII.GetBytes(St);
+				byte[] SSD = Encoding.ASCII.GetBytes(str);
 				byte[] ppd = null;
-				while (SSD.Length != 0)
+				
+				int idx = 0;
+				while (idx < SSD.Length)
 				{
-					byte[] sd = LStrCopy(SSD, 1, 4);
-					ppd = LStrConcat2(ppd, Decode(sd));
-					LStrDelete(ref SSD, 1, 4);
+					byte[] sd = ArrCopy(SSD, idx, 4);
+					ppd = ArrConcat(ppd, Decode(sd));
+					idx += sd.Length;
 				}
 
 				byte[] tmp = (byte[])ppd.Clone();
 
-				uint seed = Key;
+				uint seed = key;
 				for (int i = 0; i < ppd.Length; i++)
 				{
 					tmp[i] = (byte)((uint)tmp[i] ^ seed >> 8);
@@ -203,14 +198,14 @@ namespace GKCommon
 			return res;
 		}
 
-		public static string scEncrypt(string St, ushort Key)
+		public static string scEncrypt(string str, ushort key)
 		{
 			string res = "";
 
-			if (!string.IsNullOrEmpty(St))
+			if (!string.IsNullOrEmpty(str))
 			{
-				uint seed = Key;
-				byte[] idata = Encoding.ASCII.GetBytes(St);
+				uint seed = key;
+				byte[] idata = Encoding.ASCII.GetBytes(str);
 				for (int i = 0; i < idata.Length; i++)
 				{
 					idata[i] = (byte)((uint)idata[i] ^ seed >> 8);
@@ -219,11 +214,12 @@ namespace GKCommon
 
 				byte[] res_data = null;
 
-				while (idata.Length != 0)
+				int idx = 0;
+				while (idx < idata.Length)
 				{
-					byte[] sd = LStrCopy(idata, 1, 3);
-					res_data = LStrConcat2(res_data, Encode(sd));
-					LStrDelete(ref idata, 1, 3);
+					byte[] sd = ArrCopy(idata, idx, 3);
+					res_data = ArrConcat(res_data, Encode(sd));
+					idx += sd.Length;
 				}
 				res = Encoding.ASCII.GetString(res_data);
 			}

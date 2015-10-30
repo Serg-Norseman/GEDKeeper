@@ -17,7 +17,7 @@ namespace GKCore.Export
 	{
 		protected GlobalOptions fOptions;
 		protected string fPath;
-		protected readonly IBase fBase;
+		protected readonly IBaseWindow fBase;
 		protected GEDCOMTree fTree;
 
 		public GlobalOptions Options
@@ -26,10 +26,15 @@ namespace GKCore.Export
 			set { this.fOptions = value; }
 		}
 
-	    protected Exporter(IBase aBase)
+	    protected Exporter(IBaseWindow baseWin)
 		{
-	    	this.fBase = aBase;
-			this.fTree = aBase.Tree;
+            if (baseWin == null)
+            {
+                throw new ArgumentNullException("baseWin");
+            }
+
+            this.fBase = baseWin;
+            this.fTree = baseWin.Tree;
 
 			//if (!Directory.Exists(this.FPath)) Directory.CreateDirectory(this.FPath);
 		}

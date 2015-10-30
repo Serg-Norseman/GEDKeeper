@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Windows.Forms;
-using GKCommon.GEDCOM;
+
 using GKCommon.GEDCOM.Enums;
 using GKCore;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKUI.Dialogs
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public partial class TfmSexCheck : Form
 	{
 		public TfmSexCheck()
 		{
 			this.InitializeComponent();
 
+			// SetLang()
 			this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
 			this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
 			this.Text = LangMan.LS(LSID.LSID_WinCheckSex);

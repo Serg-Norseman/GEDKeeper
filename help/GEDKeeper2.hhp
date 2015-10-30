@@ -3,7 +3,7 @@ Auto Index=Yes
 Compatibility=1.1 or later
 Compiled file=GEDKeeper2.chm
 Contents file=GEDKeeper2.hhc
-Default topic=gkhAbout.htm
+Default topic=gkhAbout.html
 Display compile progress=Yes
 Full-text search=Yes
 Index file=GEDKeeper2.hhk
@@ -12,40 +12,69 @@ Title=GEDKeeper
 
 
 [FILES]
-gkhAbout.htm
-gkhAuthors.htm
-gkhFAQ.htm
-gkhTools_TreeImport.htm
-gkhTools_DubsMerge.htm
-gkhTools_PatSearch.htm
-gkhNav_Filters.htm
-gkhRelations.htm
-gkhGenRes.htm
-gkhTools_PlacesManage.htm
-gkhTools_TreeCheck.htm
-gkhTools_FamiliesConnectivity.htm
-gkhTools_TreeCompare.htm
-gkhTools_TreeMerge.htm
-gkhTools_TreeSplit.htm
-gkhSvc_Calc.htm
-gkhSvc_Calendar.htm
-gkhSvc_NamesBook.htm
-gkhSvc_Organizer.htm
-gkhSvc_TimeLine.htm
-gkhTreeChart.htm
-gkhStats.htm
-gkhMaps.htm
-gkhPedigrees.htm
-gkhMasks.htm
-gkhOptions.htm
-gkhWorkBeginning.htm
-gkhWorkNavigation.htm
-gkhRestrictions.htm
-gkhMediaStore.htm
-gkhPlugins.htm
-gkhHistory.htm
-gkhScripts.htm
-gkhWorkOperations.htm
+gkhAbout.html
+gkhAuthors.html
+gkhFAQ.html
+gkhTools_TreeImport.html
+gkhTools_DubsMerge.html
+gkhTools_PatSearch.html
+gkhNav_Filters.html
+gkhRelations.html
+gkhGenRes.html
+gkhTools_PlacesManage.html
+gkhTools_TreeCheck.html
+gkhTools_FamiliesConnectivity.html
+gkhTools_TreeCompare.html
+gkhTools_TreeMerge.html
+gkhTools_TreeSplit.html
+gkhSvc_Calc.html
+gkhSvc_Calendar.html
+gkhSvc_NamesBook.html
+gkhSvc_Organizer.html
+gkhSvc_TimeLine.html
+gkhTreeChart.html
+gkhStats.html
+gkhMaps.html
+gkhPedigrees.html
+gkhMasks.html
+gkhOptions.html
+gkhWorkBeginning.html
+gkhWorkNavigation.html
+gkhRestrictions.html
+gkhMediaStore.html
+gkhPlugins.html
+gkhHistory.html
+gkhScripts.html
+gkhWorkOperations.html
+gkhWorkToolbar.html
+gkhRecordTypes.html
+gkhLangs.html
+gkhNav_Labels.html
+gkhNav_QuickSearch.html
+gkhFeatures.html
+gkhRec_UserRefs.html
+gkhHotKeys.html
+gkhRec_Individual.html
+gkhRec_Family.html
+gkhRec_Note.html
+gkhRec_Media.html
+gkhRec_Group.html
+gkhRec_Place.html
+gkhRec_Source.html
+gkhRec_Repo.html
+gkhRec_Research.html
+gkhRec_Task.html
+gkhRec_Comm.html
+gkhRec_Address.html
+gkhRec_Asso.html
+gkhRec_Event.html
+gkhRec_SrcLink.html
+gkhCAIndex.html
+gkhRecordSelect.html
+gkhWorkAdv.html
+gkhPluginStd.html
+gkhAncestorsCircle.html
+gkhIntro.html
 
 [ALIAS]
 Auto Index=Yes

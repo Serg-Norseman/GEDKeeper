@@ -17,7 +17,7 @@ namespace GKUI.Dialogs
     /// </summary>
     public partial class TfmResearchEdit : Form, IBaseEditor
 	{
-		private readonly IBase fBase;
+		private readonly IBaseWindow fBase;
 
 		private readonly GKSheetList fTasksList;
 		private readonly GKSheetList fCommunicationsList;
@@ -32,7 +32,7 @@ namespace GKUI.Dialogs
 			set { this.SetResearch(value); }
 		}
 
-		public IBase Base
+		public IBaseWindow Base
 		{
 			get { return this.fBase; }
 		}
@@ -72,7 +72,7 @@ namespace GKUI.Dialogs
 					this.EditPercent.Text = this.fResearch.Percent.ToString();
 				}
 
-				this.RefreshLists();
+				this.UpdateLists();
 			}
 			catch (Exception ex)
 			{
@@ -207,50 +207,50 @@ namespace GKUI.Dialogs
                 res = this.ListGroupsModify(sender, eArgs);
             }
 
-            if (res) this.RefreshLists();
+            if (res) this.UpdateLists();
 		}
 
-		private void RefreshLists()
+		private void UpdateLists()
 		{
 		    DateFormat defaultDateFormat = TfmGEDKeeper.Instance.Options.DefDateFormat;
 
 		    this.fNotesList.DataList = this.fResearch.Notes.GetEnumerator();
 
-			this.fTasksList.List.BeginUpdate();
-			this.fTasksList.List.Items.Clear();
+			this.fTasksList.BeginUpdate();
+			this.fTasksList.ClearItems();
 			foreach (GEDCOMPointer taskPtr in this.fResearch.Tasks)
 			{
 				GEDCOMTaskRecord task = taskPtr.Value as GEDCOMTaskRecord;
 
-				GKListItem item = this.fTasksList.List.AddItem(GKUtils.GetTaskGoalStr(task), task);
+				GKListItem item = this.fTasksList.AddItem(GKUtils.GetTaskGoalStr(task), task);
 				item.SubItems.Add(LangMan.LS(GKData.PriorityNames[(int)task.Priority]));
                 item.SubItems.Add(GKUtils.GEDCOMDateToStr(task.StartDate, defaultDateFormat));
                 item.SubItems.Add(GKUtils.GEDCOMDateToStr(task.StopDate, defaultDateFormat));
 			}
-			this.fTasksList.List.EndUpdate();
+			this.fTasksList.EndUpdate();
 
-			this.fCommunicationsList.List.BeginUpdate();
-			this.fCommunicationsList.List.Items.Clear();
+			this.fCommunicationsList.BeginUpdate();
+			this.fCommunicationsList.ClearItems();
 			foreach (GEDCOMPointer commPtr in this.fResearch.Communications)
 			{
 				GEDCOMCommunicationRecord corr = commPtr.Value as GEDCOMCommunicationRecord;
 
-				GKListItem item = this.fCommunicationsList.List.AddItem(corr.CommName, corr);
+				GKListItem item = this.fCommunicationsList.AddItem(corr.CommName, corr);
 				item.SubItems.Add(GKUtils.GetCorresponderStr(this.fBase.Tree, corr, false));
 				item.SubItems.Add(LangMan.LS(GKData.CommunicationNames[(int)corr.CommunicationType]));
                 item.SubItems.Add(GKUtils.GEDCOMDateToStr(corr.Date, defaultDateFormat));
 			}
-			this.fCommunicationsList.List.EndUpdate();
+			this.fCommunicationsList.EndUpdate();
 
-			this.fGroupsList.List.BeginUpdate();
-			this.fGroupsList.List.Items.Clear();
+			this.fGroupsList.BeginUpdate();
+			this.fGroupsList.ClearItems();
 			foreach (GEDCOMPointer groupPtr in this.fResearch.Groups)
 			{
 				GEDCOMGroupRecord grp = groupPtr.Value as GEDCOMGroupRecord;
 
-				this.fGroupsList.List.AddItem(grp.GroupName, grp);
+				this.fGroupsList.AddItem(grp.GroupName, grp);
 			}
-			this.fGroupsList.List.EndUpdate();
+			this.fGroupsList.EndUpdate();
 		}
 
 		private void btnAccept_Click(object sender, EventArgs e)
@@ -262,12 +262,12 @@ namespace GKUI.Dialogs
 			}
 			catch (Exception ex)
 			{
-				this.fBase.Host.LogWrite("TfmResearchEdit.Accept(): " + ex.Message);
+				this.fBase.Host.LogWrite("TfmResearchEdit.btnAccept_Click(): " + ex.Message);
 				base.DialogResult = DialogResult.None;
 			}
 		}
 
-		public TfmResearchEdit(IBase aBase)
+		public TfmResearchEdit(IBaseWindow aBase)
 		{
 			this.InitializeComponent();
 
@@ -285,39 +285,30 @@ namespace GKUI.Dialogs
 
 			this.fTasksList = new GKSheetList(this.SheetTasks);
 			this.fTasksList.OnModify += this.ListModify;
-			this.fTasksList.Buttons = EnumSet<GKSheetList.SheetButton>.Create(
-				GKSheetList.SheetButton.lbAdd, 
-				GKSheetList.SheetButton.lbEdit, 
-				GKSheetList.SheetButton.lbDelete, 
-				GKSheetList.SheetButton.lbJump
+			this.fTasksList.Buttons = EnumSet<SheetButton>.Create(
+				SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, SheetButton.lbJump
 			);
-			this.fTasksList.List.AddListColumn(LangMan.LS(LSID.LSID_Goal), 250, false);
-			this.fTasksList.List.AddListColumn(LangMan.LS(LSID.LSID_Priority), 90, false);
-			this.fTasksList.List.AddListColumn(LangMan.LS(LSID.LSID_StartDate), 90, false);
-			this.fTasksList.List.AddListColumn(LangMan.LS(LSID.LSID_StopDate), 90, false);
+			this.fTasksList.AddColumn(LangMan.LS(LSID.LSID_Goal), 250, false);
+			this.fTasksList.AddColumn(LangMan.LS(LSID.LSID_Priority), 90, false);
+			this.fTasksList.AddColumn(LangMan.LS(LSID.LSID_StartDate), 90, false);
+			this.fTasksList.AddColumn(LangMan.LS(LSID.LSID_StopDate), 90, false);
 
 			this.fCommunicationsList = new GKSheetList(this.SheetCommunications);
 			this.fCommunicationsList.OnModify += this.ListModify;
-			this.fCommunicationsList.Buttons = EnumSet<GKSheetList.SheetButton>.Create(
-				GKSheetList.SheetButton.lbAdd, 
-				GKSheetList.SheetButton.lbEdit, 
-				GKSheetList.SheetButton.lbDelete, 
-				GKSheetList.SheetButton.lbJump
+			this.fCommunicationsList.Buttons = EnumSet<SheetButton>.Create(
+				SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, SheetButton.lbJump
 			);
-			this.fCommunicationsList.List.AddListColumn(LangMan.LS(LSID.LSID_Theme), 150, false);
-			this.fCommunicationsList.List.AddListColumn(LangMan.LS(LSID.LSID_Corresponder), 150, false);
-			this.fCommunicationsList.List.AddListColumn(LangMan.LS(LSID.LSID_Type), 90, false);
-			this.fCommunicationsList.List.AddListColumn(LangMan.LS(LSID.LSID_Date), 90, false);
+			this.fCommunicationsList.AddColumn(LangMan.LS(LSID.LSID_Theme), 150, false);
+			this.fCommunicationsList.AddColumn(LangMan.LS(LSID.LSID_Corresponder), 150, false);
+			this.fCommunicationsList.AddColumn(LangMan.LS(LSID.LSID_Type), 90, false);
+			this.fCommunicationsList.AddColumn(LangMan.LS(LSID.LSID_Date), 90, false);
 
 			this.fGroupsList = new GKSheetList(this.SheetGroups);
 			this.fGroupsList.OnModify += this.ListModify;
-			this.fGroupsList.Buttons = EnumSet<GKSheetList.SheetButton>.Create(
-				GKSheetList.SheetButton.lbAdd, 
-				GKSheetList.SheetButton.lbEdit, 
-				GKSheetList.SheetButton.lbDelete, 
-				GKSheetList.SheetButton.lbJump
+			this.fGroupsList.Buttons = EnumSet<SheetButton>.Create(
+				SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, SheetButton.lbJump
 			);
-			this.fGroupsList.List.AddListColumn(LangMan.LS(LSID.LSID_Group), 350, false);
+			this.fGroupsList.AddColumn(LangMan.LS(LSID.LSID_Group), 350, false);
 
 			this.fNotesList = new GKNotesSheet(this, this.SheetNotes);
 

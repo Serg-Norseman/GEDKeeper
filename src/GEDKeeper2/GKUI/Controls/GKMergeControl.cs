@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
@@ -9,6 +10,9 @@ using GKCore.Interfaces;
 
 namespace GKUI.Controls
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public partial class GKMergeControl : UserControl
 	{
 		private GEDCOMRecord fRec1;
@@ -17,11 +21,11 @@ namespace GKUI.Controls
 		private readonly HyperView Memo1;
 		private readonly HyperView Memo2;
 
-		private IBase fBase;
+		private IBaseWindow fBase;
 		private GEDCOMTree fTree;
 		private GEDCOMRecordType fMergeMode;
 
-		public IBase Base
+		public IBaseWindow Base
 		{
 			get	{
 				return this.fBase;

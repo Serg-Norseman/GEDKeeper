@@ -6,24 +6,25 @@ using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Types;
 using GKUI.Controls;
-using GKUI.Lists;
 
 namespace GKUI.Dialogs
 {
     /// <summary>
-    /// Localization: dirty
+    /// 
     /// </summary>
     public partial class TfmPersonsFilter : TfmComFilter
     {
     	private readonly IndividualListMan fListMan;
     	
-        public TfmPersonsFilter(IBase aBase, ListManager aListMan) : base(aBase, aListMan)
+        public TfmPersonsFilter(IBaseWindow aBase, ListManager aListMan) : base(aBase, aListMan)
         {
             InitializeComponent();
-			this.SetSpecificLang();
+
+            this.SetSpecificLang();
 
             fListMan = (IndividualListMan)aListMan;
             UpdateSpecific();

@@ -10,10 +10,10 @@ namespace GKCommon.GEDCOM
 			public readonly string OldXRef;
 			public readonly string NewXRef;
 
-			public XRefEntry(GEDCOMRecord aRec, string aOldXRef, string aNewXRef) {
-				this.Rec = aRec;
-				this.OldXRef = aOldXRef;
-				this.NewXRef = aNewXRef;
+			public XRefEntry(GEDCOMRecord rec, string oldXRef, string newXRef) {
+				this.Rec = rec;
+				this.OldXRef = oldXRef;
+				this.NewXRef = newXRef;
 			}
 		}
 

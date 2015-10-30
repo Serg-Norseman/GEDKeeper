@@ -258,7 +258,8 @@ namespace GKCommon.GEDCOM
 		
 		public static Encoding GetEncodingByCharacterSet(GEDCOMCharacterSet cs)
 		{
-			Encoding res;
+			Encoding res = Encoding.Default;
+
 			switch (cs) {
 				case GEDCOMCharacterSet.csASCII:
 					res = Encoding.GetEncoding(1251);
@@ -272,10 +273,8 @@ namespace GKCommon.GEDCOM
 				case GEDCOMCharacterSet.csUTF8:
 					res = Encoding.UTF8;
 					break;
-				default:
-					res = Encoding.Default;
-					break;
 			}
+
 			return res;
 		}
 
@@ -1122,6 +1121,245 @@ namespace GKCommon.GEDCOM
 			return str;
 		}
 		
+		//
+		//
+		//
+		
+		public static GEDCOMBaptismDateStatus GetBaptismDateStatusVal(string str)
+		{
+			string S = str.Trim().ToUpperInvariant();
+
+            GEDCOMBaptismDateStatus result;
+			if (S == "CHILD")
+			{
+				result = GEDCOMBaptismDateStatus.bdsChild;
+			}
+			else if (S == "COMPLETED")
+			{
+				result = GEDCOMBaptismDateStatus.bdsCompleted;
+			}
+			else if (S == "EXCLUDED")
+			{
+				result = GEDCOMBaptismDateStatus.bdsExcluded;
+			}
+			else if (S == "PRE-1970")
+			{
+				result = GEDCOMBaptismDateStatus.bdsPre1970;
+			}
+			else if (S == "STILLBORN")
+			{
+				result = GEDCOMBaptismDateStatus.bdsStillborn;
+			}
+			else if (S == "SUBMITTED")
+			{
+				result = GEDCOMBaptismDateStatus.bdsSubmitted;
+			}
+			else if (S == "UNCLEARED")
+			{
+				result = GEDCOMBaptismDateStatus.bdsUncleared;
+			}
+			else
+			{
+				result = GEDCOMBaptismDateStatus.bdsNone;
+			}
+			return result;
+		}
+
+		public static string GetBaptismDateStatusStr(GEDCOMBaptismDateStatus value)
+		{
+			string S = "";
+			switch (value)
+			{
+				case GEDCOMBaptismDateStatus.bdsChild:
+					S = "CHILD";
+					break;
+
+				case GEDCOMBaptismDateStatus.bdsCompleted:
+					S = "COMPLETED";
+					break;
+
+				case GEDCOMBaptismDateStatus.bdsExcluded:
+					S = "EXCLUDED";
+					break;
+
+				case GEDCOMBaptismDateStatus.bdsPre1970:
+					S = "PRE-1970";
+					break;
+
+				case GEDCOMBaptismDateStatus.bdsStillborn:
+					S = "STILLBORN";
+					break;
+
+				case GEDCOMBaptismDateStatus.bdsSubmitted:
+					S = "SUBMITTED";
+					break;
+
+				case GEDCOMBaptismDateStatus.bdsUncleared:
+					S = "UNCLEARED";
+					break;
+			}
+
+			return S;
+		}
+
+		public static GEDCOMEndowmentDateStatus GetEndowmentDateStatusVal(string str)
+		{
+			string S = str.Trim().ToUpperInvariant();
+			
+			GEDCOMEndowmentDateStatus result;
+			if (S == "CHILD")
+			{
+				result = GEDCOMEndowmentDateStatus.edsChild;
+			}
+			else if (S == "COMPLETED")
+			{
+				result = GEDCOMEndowmentDateStatus.edsCompleted;
+			}
+			else if (S == "EXCLUDED")
+			{
+				result = GEDCOMEndowmentDateStatus.edsExcluded;
+			}
+			else if (S == "INFANT")
+			{
+				result = GEDCOMEndowmentDateStatus.edsInfant;
+			}
+			else if (S == "PRE-1970")
+			{
+				result = GEDCOMEndowmentDateStatus.edsPre1970;
+			}
+			else if (S == "STILLBORN")
+			{
+				result = GEDCOMEndowmentDateStatus.edsStillborn;
+			}
+			else if (S == "SUBMITTED")
+			{
+				result = GEDCOMEndowmentDateStatus.edsSubmitted;
+			}
+			else if (S == "UNCLEARED")
+			{
+				result = GEDCOMEndowmentDateStatus.edsUncleared;
+			}
+			else
+			{
+				result = GEDCOMEndowmentDateStatus.edsNone;
+			}
+			return result;
+		}
+
+		public static string GetEndowmentDateStatusStr(GEDCOMEndowmentDateStatus value)
+		{
+			string S = "";
+			
+			switch (value)
+			{
+				case GEDCOMEndowmentDateStatus.edsChild:
+					S = "CHILD";
+					break;
+
+				case GEDCOMEndowmentDateStatus.edsCompleted:
+					S = "COMPLETED";
+					break;
+
+				case GEDCOMEndowmentDateStatus.edsExcluded:
+					S = "EXCLUDED";
+					break;
+
+				case GEDCOMEndowmentDateStatus.edsInfant:
+					S = "INFANT";
+					break;
+
+				case GEDCOMEndowmentDateStatus.edsPre1970:
+					S = "PRE-1970";
+					break;
+
+				case GEDCOMEndowmentDateStatus.edsStillborn:
+					S = "STILLBORN";
+					break;
+
+				case GEDCOMEndowmentDateStatus.edsSubmitted:
+					S = "SUBMITTED";
+					break;
+
+				case GEDCOMEndowmentDateStatus.edsUncleared:
+					S = "UNCLEARED";
+					break;
+			}
+
+			return S;
+		}
+
+		public static GEDCOMChildSealingDateStatus GetChildSealingDateStatusVal(string str)
+		{
+			string S = str.Trim().ToUpperInvariant();
+			
+			GEDCOMChildSealingDateStatus result;
+
+			if (S == "BIC")
+			{
+				result = GEDCOMChildSealingDateStatus.cdsBIC;
+			}
+			else if (S == "EXCLUDED")
+			{
+				result = GEDCOMChildSealingDateStatus.cdsExcluded;
+			}
+			else if (S == "PRE-1970")
+			{
+				result = GEDCOMChildSealingDateStatus.cdsPre1970;
+			}
+			else if (S == "STILLBORN")
+			{
+				result = GEDCOMChildSealingDateStatus.cdsStillborn;
+			}
+			else if (S == "SUBMITTED")
+			{
+				result = GEDCOMChildSealingDateStatus.cdsSubmitted;
+			}
+			else if (S == "UNCLEARED")
+			{
+				result = GEDCOMChildSealingDateStatus.cdsUncleared;
+			}
+			else
+			{
+				result = GEDCOMChildSealingDateStatus.cdsNone;
+			}
+
+			return result;
+		}
+
+		public static string GetChildSealingDateStatusStr(GEDCOMChildSealingDateStatus value)
+		{
+			string S = "";
+
+			switch (value)
+			{
+				case GEDCOMChildSealingDateStatus.cdsBIC:
+					S = "BIC";
+					break;
+
+				case GEDCOMChildSealingDateStatus.cdsExcluded:
+					S = "EXCLUDED";
+					break;
+
+				case GEDCOMChildSealingDateStatus.cdsPre1970:
+					S = "PRE-1970";
+					break;
+
+				case GEDCOMChildSealingDateStatus.cdsStillborn:
+					S = "STILLBORN";
+					break;
+
+				case GEDCOMChildSealingDateStatus.cdsSubmitted:
+					S = "SUBMITTED";
+					break;
+
+				case GEDCOMChildSealingDateStatus.cdsUncleared:
+					S = "UNCLEARED";
+					break;
+			}
+
+			return S;
+		}
+		
 		#endregion
 		
 		#region Other
@@ -1138,30 +1376,116 @@ namespace GKCommon.GEDCOM
 
 		public static string StrToGEDCOMDate(string aDate, bool aException)
 		{
-			string result = "";
-
 			if (aDate.IndexOf("/") >= 0) aDate = aDate.Replace("/", ".");
 			if (aDate.IndexOf("_") >= 0) aDate = aDate.Replace("_", " ");
 
 			string[] dt_parts = aDate.Split('.');
 			if (dt_parts.Length < 3)
 			{
-				if (aException)
-				{
+				if (aException) {
                     throw new GEDCOMDateException(string.Format("GKUtils.StrToGEDCOMDate(): date format is invalid {0}", aDate));
 				}
+
+				return "";
+			}
+
+			string result = "";
+
+			string pd = dt_parts[0].Trim();
+			string pm = dt_parts[1].Trim();
+			string py = dt_parts[2].Trim();
+
+			if (pd != "") result = result + pd + " ";
+			if (pm != "") result = result + GEDCOMCustomDate.GEDCOMMonthArray[SysUtils.ParseInt(pm, 1) - 1] + " ";
+			if (py != "") result += py;
+
+			return result;
+		}
+
+		#endregion
+
+		#region Date utils
+
+		public static void GetDateParts(GEDCOMCustomDate customDate, out int year, out ushort month, out ushort day, out bool yearBC)
+		{
+			year = -1;
+			month = 0;
+			day = 0;
+			yearBC = false;
+
+			if (customDate is GEDCOMDateApproximated)
+			{
+				GEDCOMDate dt = (customDate as GEDCOMDate);
+				dt.GetDate(out year, out month, out day);
+				yearBC = dt.YearBC;
 			}
 			else
 			{
-				string pd = dt_parts[0].Trim();
-				string pm = dt_parts[1].Trim();
-				string py = dt_parts[2].Trim();
+				if (customDate is GEDCOMDateRange)
+				{
+					GEDCOMDateRange range = customDate as GEDCOMDateRange;
 
-				if (pd != "") result = result + pd + " ";
-				if (pm != "") result = result + GEDCOMCustomDate.GEDCOMMonthArray[SysUtils.ParseInt(pm, 1) - 1] + " ";
-				if (py != "") result += py;
+					if (range.After.StringValue == "" && range.Before.StringValue != "")
+					{
+						range.Before.GetDate(out year, out month, out day);
+						yearBC = range.Before.YearBC;
+					}
+					else
+					{
+						if (range.After.StringValue != "" && range.Before.StringValue == "")
+						{
+							range.After.GetDate(out year, out month, out day);
+							yearBC = range.After.YearBC;
+						}
+						else
+						{
+							if (range.After.StringValue != "" && range.Before.StringValue != "")
+							{
+								range.After.GetDate(out year, out month, out day);
+								yearBC = range.After.YearBC;
+							}
+						}
+					}
+				}
+				else
+				{
+					if (customDate is GEDCOMDatePeriod)
+					{
+						GEDCOMDatePeriod period = customDate as GEDCOMDatePeriod;
+
+						if (period.DateFrom.StringValue != "" && period.DateTo.StringValue == "")
+						{
+							period.DateFrom.GetDate(out year, out month, out day);
+							yearBC = period.DateFrom.YearBC;
+						}
+						else
+						{
+							if (period.DateFrom.StringValue == "" && period.DateTo.StringValue != "")
+							{
+								period.DateTo.GetDate(out year, out month, out day);
+								yearBC = period.DateTo.YearBC;
+							}
+							else
+							{
+								if (period.DateFrom.StringValue != "" && period.DateTo.StringValue != "")
+								{
+									period.DateFrom.GetDate(out year, out month, out day);
+									yearBC = period.DateFrom.YearBC;
+								}
+							}
+						}
+					}
+					else
+					{
+						if (customDate is GEDCOMDate)
+						{
+							GEDCOMDate date = (customDate as GEDCOMDate);
+							date.GetDate(out year, out month, out day);
+							yearBC = date.YearBC;
+						}
+					}
+				}
 			}
-			return result;
 		}
 
 		#endregion

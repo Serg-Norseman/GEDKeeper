@@ -140,92 +140,17 @@ namespace GKCommon.GEDCOM
 			return match;
 		}
 
+		// FIXME
 		public void GetIndependentDate(out int year, out ushort month, out ushort day)
 		{
-			bool BC;
-			this.GetIndependentDate(out year, out month, out day, out BC);
+			bool yearBC;
+			GetIndependentDate(out year, out month, out day, out yearBC);
 		}
 
+		// FIXME
 		public void GetIndependentDate(out int year, out ushort month, out ushort day, out bool yearBC)
 		{
-			year = -1;
-			month = 0;
-			day = 0;
-			yearBC = false;
-
-			if (fValue is GEDCOMDateApproximated)
-			{
-				GEDCOMDate dt = (fValue as GEDCOMDate);
-				dt.GetDate(out year, out month, out day);
-				yearBC = dt.YearBC;
-			}
-			else
-			{
-				if (fValue is GEDCOMDateRange)
-				{
-					GEDCOMDateRange range = fValue as GEDCOMDateRange;
-
-					if (range.After.StringValue == "" && range.Before.StringValue != "")
-					{
-						range.Before.GetDate(out year, out month, out day);
-						yearBC = range.Before.YearBC;
-					}
-					else
-					{
-						if (range.After.StringValue != "" && range.Before.StringValue == "")
-						{
-							range.After.GetDate(out year, out month, out day);
-							yearBC = range.After.YearBC;
-						}
-						else
-						{
-							if (range.After.StringValue != "" && range.Before.StringValue != "")
-							{
-								range.After.GetDate(out year, out month, out day);
-								yearBC = range.After.YearBC;
-							}
-						}
-					}
-				}
-				else
-				{
-					if (fValue is GEDCOMDatePeriod)
-					{
-						GEDCOMDatePeriod period = fValue as GEDCOMDatePeriod;
-
-						if (period.DateFrom.StringValue != "" && period.DateTo.StringValue == "")
-						{
-							period.DateFrom.GetDate(out year, out month, out day);
-							yearBC = period.DateFrom.YearBC;
-						}
-						else
-						{
-							if (period.DateFrom.StringValue == "" && period.DateTo.StringValue != "")
-							{
-								period.DateTo.GetDate(out year, out month, out day);
-								yearBC = period.DateTo.YearBC;
-							}
-							else
-							{
-								if (period.DateFrom.StringValue != "" && period.DateTo.StringValue != "")
-								{
-									period.DateFrom.GetDate(out year, out month, out day);
-									yearBC = period.DateFrom.YearBC;
-								}
-							}
-						}
-					}
-					else
-					{
-						if (fValue is GEDCOMDate)
-						{
-							GEDCOMDate date = (fValue as GEDCOMDate);
-							date.GetDate(out year, out month, out day);
-							yearBC = date.YearBC;
-						}
-					}
-				}
-			}
+			GEDCOMUtils.GetDateParts(this.Value, out year, out month, out day, out yearBC);
 		}
 
         #endregion

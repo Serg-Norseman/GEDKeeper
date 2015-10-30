@@ -21,11 +21,11 @@ namespace GKUI.Dialogs
 		private System.Windows.Forms.Label Label2;
 		private System.Windows.Forms.Label Label3;
 		private System.Windows.Forms.Label Label4;
-		private System.Windows.Forms.TextBox EditFamily;
-		private System.Windows.Forms.TextBox EditName;
-		private System.Windows.Forms.TextBox EditPatronymic;
-		private System.Windows.Forms.ComboBox EditSex;
-		private System.Windows.Forms.CheckBox CheckPatriarch;
+		private System.Windows.Forms.TextBox edSurname;
+		private System.Windows.Forms.TextBox edName;
+		private System.Windows.Forms.TextBox edPatronymic;
+		private System.Windows.Forms.ComboBox edSex;
+		private System.Windows.Forms.CheckBox chkPatriarch;
 		private System.Windows.Forms.TabPage SheetUserRefs;
 		private System.Windows.Forms.Panel PageCtlParents;
 		private System.Windows.Forms.Label Label12;
@@ -72,11 +72,11 @@ namespace GKUI.Dialogs
 			this.Label7 = new System.Windows.Forms.Label();
 			this.btnPortraitAdd = new System.Windows.Forms.Button();
 			this.btnPortraitDelete = new System.Windows.Forms.Button();
-			this.EditFamily = new System.Windows.Forms.TextBox();
-			this.EditName = new System.Windows.Forms.TextBox();
-			this.EditPatronymic = new System.Windows.Forms.TextBox();
-			this.EditSex = new System.Windows.Forms.ComboBox();
-			this.CheckPatriarch = new System.Windows.Forms.CheckBox();
+			this.edSurname = new System.Windows.Forms.TextBox();
+			this.edName = new System.Windows.Forms.TextBox();
+			this.edPatronymic = new System.Windows.Forms.TextBox();
+			this.edSex = new System.Windows.Forms.ComboBox();
+			this.chkPatriarch = new System.Windows.Forms.CheckBox();
 			this.PageCtlParents = new System.Windows.Forms.Panel();
 			this.EditMother = new System.Windows.Forms.TextBox();
 			this.Label12 = new System.Windows.Forms.Label();
@@ -167,11 +167,11 @@ namespace GKUI.Dialogs
 			this.GroupBox1.Controls.Add(this.Label7);
 			this.GroupBox1.Controls.Add(this.btnPortraitAdd);
 			this.GroupBox1.Controls.Add(this.btnPortraitDelete);
-			this.GroupBox1.Controls.Add(this.EditFamily);
-			this.GroupBox1.Controls.Add(this.EditName);
-			this.GroupBox1.Controls.Add(this.EditPatronymic);
-			this.GroupBox1.Controls.Add(this.EditSex);
-			this.GroupBox1.Controls.Add(this.CheckPatriarch);
+			this.GroupBox1.Controls.Add(this.edSurname);
+			this.GroupBox1.Controls.Add(this.edName);
+			this.GroupBox1.Controls.Add(this.edPatronymic);
+			this.GroupBox1.Controls.Add(this.edSex);
+			this.GroupBox1.Controls.Add(this.chkPatriarch);
 			this.GroupBox1.Controls.Add(this.PageCtlParents);
 			this.GroupBox1.Controls.Add(this.chkBookmark);
 			this.GroupBox1.Controls.Add(this.edPieceSurnamePrefix);
@@ -212,7 +212,7 @@ namespace GKUI.Dialogs
 			// 
 			// Label4
 			// 
-			this.Label4.Location = new System.Drawing.Point(184, 136);
+			this.Label4.Location = new System.Drawing.Point(8, 136);
 			this.Label4.Name = "Label4";
 			this.Label4.Size = new System.Drawing.Size(35, 13);
 			this.Label4.TabIndex = 14;
@@ -244,7 +244,7 @@ namespace GKUI.Dialogs
 			// 
 			// Label7
 			// 
-			this.Label7.Location = new System.Drawing.Point(8, 136);
+			this.Label7.Location = new System.Drawing.Point(184, 136);
 			this.Label7.Name = "Label7";
 			this.Label7.Size = new System.Drawing.Size(60, 13);
 			this.Label7.TabIndex = 6;
@@ -272,46 +272,46 @@ namespace GKUI.Dialogs
 			// 
 			// EditFamily
 			// 
-			this.EditFamily.Location = new System.Drawing.Point(8, 32);
-			this.EditFamily.Name = "EditFamily";
-			this.EditFamily.Size = new System.Drawing.Size(161, 21);
-			this.EditFamily.TabIndex = 1;
-			this.EditFamily.TextChanged += new System.EventHandler(this.EditFamily_TextChanged);
-			this.EditFamily.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.EditFamily_KeyPress);
+			this.edSurname.Location = new System.Drawing.Point(8, 32);
+			this.edSurname.Name = "EditFamily";
+			this.edSurname.Size = new System.Drawing.Size(161, 21);
+			this.edSurname.TabIndex = 1;
+			this.edSurname.TextChanged += new System.EventHandler(this.EditFamily_TextChanged);
+			this.edSurname.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.EditFamily_KeyPress);
 			// 
 			// EditName
 			// 
-			this.EditName.Location = new System.Drawing.Point(8, 72);
-			this.EditName.Name = "EditName";
-			this.EditName.Size = new System.Drawing.Size(161, 21);
-			this.EditName.TabIndex = 3;
-			this.EditName.TextChanged += new System.EventHandler(this.EditName_TextChanged);
-			this.EditName.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.EditFamily_KeyPress);
+			this.edName.Location = new System.Drawing.Point(8, 72);
+			this.edName.Name = "EditName";
+			this.edName.Size = new System.Drawing.Size(161, 21);
+			this.edName.TabIndex = 3;
+			this.edName.TextChanged += new System.EventHandler(this.EditName_TextChanged);
+			this.edName.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.EditFamily_KeyPress);
 			// 
 			// EditPatronymic
 			// 
-			this.EditPatronymic.Location = new System.Drawing.Point(8, 112);
-			this.EditPatronymic.Name = "EditPatronymic";
-			this.EditPatronymic.Size = new System.Drawing.Size(161, 21);
-			this.EditPatronymic.TabIndex = 5;
-			this.EditPatronymic.TextChanged += new System.EventHandler(this.EditPatronymic_TextChanged);
-			this.EditPatronymic.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.EditFamily_KeyPress);
+			this.edPatronymic.Location = new System.Drawing.Point(8, 112);
+			this.edPatronymic.Name = "EditPatronymic";
+			this.edPatronymic.Size = new System.Drawing.Size(161, 21);
+			this.edPatronymic.TabIndex = 5;
+			this.edPatronymic.TextChanged += new System.EventHandler(this.EditPatronymic_TextChanged);
+			this.edPatronymic.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.EditFamily_KeyPress);
 			// 
 			// EditSex
 			// 
-			this.EditSex.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.EditSex.Location = new System.Drawing.Point(184, 152);
-			this.EditSex.Name = "EditSex";
-			this.EditSex.Size = new System.Drawing.Size(121, 21);
-			this.EditSex.TabIndex = 15;
+			this.edSex.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.edSex.Location = new System.Drawing.Point(8, 152);
+			this.edSex.Name = "EditSex";
+			this.edSex.Size = new System.Drawing.Size(161, 21);
+			this.edSex.TabIndex = 15;
 			// 
 			// CheckPatriarch
 			// 
-			this.CheckPatriarch.Location = new System.Drawing.Point(320, 144);
-			this.CheckPatriarch.Name = "CheckPatriarch";
-			this.CheckPatriarch.Size = new System.Drawing.Size(153, 17);
-			this.CheckPatriarch.TabIndex = 16;
-			this.CheckPatriarch.Text = "Патриарх (глава семьи)";
+			this.chkPatriarch.Location = new System.Drawing.Point(320, 144);
+			this.chkPatriarch.Name = "CheckPatriarch";
+			this.chkPatriarch.Size = new System.Drawing.Size(153, 17);
+			this.chkPatriarch.TabIndex = 16;
+			this.chkPatriarch.Text = "Патриарх (глава семьи)";
 			// 
 			// PageCtlParents
 			// 
@@ -480,9 +480,9 @@ namespace GKUI.Dialogs
 			// 
 			// edPieceNickname
 			// 
-			this.edPieceNickname.Location = new System.Drawing.Point(8, 152);
+			this.edPieceNickname.Location = new System.Drawing.Point(184, 152);
 			this.edPieceNickname.Name = "edPieceNickname";
-			this.edPieceNickname.Size = new System.Drawing.Size(161, 21);
+			this.edPieceNickname.Size = new System.Drawing.Size(121, 21);
 			this.edPieceNickname.TabIndex = 7;
 			// 
 			// panPortrait

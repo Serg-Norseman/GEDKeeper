@@ -5,22 +5,16 @@ using GKCommon.GEDCOM.Enums;
 
 namespace GKCommon.GEDCOM
 {
-	public sealed class GEDCOMFamilyRecord : GEDCOMRecord
+	public sealed class GEDCOMFamilyRecord : GEDCOMRecordWithEvents
 	{
         private static readonly GEDCOMFactory fTagsFactory;
         
-        private GEDCOMList<GEDCOMFamilyEvent> fFamilyEvents;
 		private GEDCOMList<GEDCOMPointer> fChildrens;
 		private GEDCOMList<GEDCOMSpouseSealing> fSpouseSealings;
 
 		public GEDCOMList<GEDCOMPointer> Childrens
 		{
 			get { return this.fChildrens; }
-		}
-
-		public GEDCOMList<GEDCOMFamilyEvent> FamilyEvents
-		{
-			get { return this.fFamilyEvents; }
 		}
 
 		public GEDCOMPointer Husband
@@ -55,7 +49,6 @@ namespace GKCommon.GEDCOM
 			this.fRecordType = GEDCOMRecordType.rtFamily;
 			this.fName = "FAM";
 
-			this.fFamilyEvents = new GEDCOMList<GEDCOMFamilyEvent>(this);
 			this.fChildrens = new GEDCOMList<GEDCOMPointer>(this);
 			this.fSpouseSealings = new GEDCOMList<GEDCOMSpouseSealing>(this);
 		}
@@ -64,11 +57,20 @@ namespace GKCommon.GEDCOM
 		{
 			if (disposing)
 			{
-				this.fFamilyEvents.Dispose();
 				this.fChildrens.Dispose();
 				this.fSpouseSealings.Dispose();
 			}
 			base.Dispose(disposing);
+		}
+
+		public GEDCOMIndividualRecord GetHusband()
+		{
+			return this.Husband.Value as GEDCOMIndividualRecord;
+		}
+
+		public GEDCOMIndividualRecord GetWife()
+		{
+			return this.Wife.Value as GEDCOMIndividualRecord;
 		}
 
 		static GEDCOMFamilyRecord()
@@ -111,7 +113,7 @@ namespace GKCommon.GEDCOM
 				if (result != null)
 				{
 					if (result is GEDCOMFamilyEvent) {
-						result = this.fFamilyEvents.Add(result as GEDCOMFamilyEvent);
+						result = this.AddEvent(result as GEDCOMFamilyEvent);
 					} else if (result is GEDCOMSpouseSealing) {
 						result = this.fSpouseSealings.Add(result as GEDCOMSpouseSealing);
 					}
@@ -123,18 +125,32 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
+		public override GEDCOMCustomEvent AddEvent(GEDCOMCustomEvent evt)
+		{
+			if (evt != null) {
+				if (evt is GEDCOMFamilyEvent) {
+					// SetLevel need for events created outside!
+					evt.SetLevel(this.Level + 1);
+					this.Events.Add(evt);
+				} else {
+					throw new ArgumentException("Event has the invalid type", "evt");
+				}
+			}
+
+			return evt;
+		}
+
 		public override void Clear()
 		{
 			base.Clear();
 
-			this.fFamilyEvents.Clear();
 			this.fChildrens.Clear();
 			this.fSpouseSealings.Clear();
 		}
 
 		public override bool IsEmpty()
 		{
-			return base.IsEmpty() && this.fFamilyEvents.Count == 0 && this.fChildrens.Count == 0 && this.fSpouseSealings.Count == 0;
+			return base.IsEmpty() && this.fChildrens.Count == 0 && this.fSpouseSealings.Count == 0;
 		}
 
 		public void DeleteChild(GEDCOMRecord childRec)
@@ -143,7 +159,7 @@ namespace GKCommon.GEDCOM
 			{
 				if (this.fChildrens[i].Value == childRec)
 				{
-					this.fChildrens.Delete(i);
+					this.fChildrens.DeleteAt(i);
 					break;
 				}
 			}
@@ -171,13 +187,6 @@ namespace GKCommon.GEDCOM
 
 			GEDCOMFamilyRecord targetFamily = targetRecord as GEDCOMFamilyRecord;
 
-			while (this.fFamilyEvents.Count > 0)
-			{
-                GEDCOMFamilyEvent obj = this.fFamilyEvents.Extract(0);
-                obj.ResetParent(targetFamily);
-				targetFamily.FamilyEvents.Add(obj);
-			}
-
 			while (this.fChildrens.Count > 0)
 			{
                 GEDCOMPointer obj = this.fChildrens.Extract(0);
@@ -198,7 +207,6 @@ namespace GKCommon.GEDCOM
 			base.Pack();
 
 			this.fChildrens.Pack();
-			this.fFamilyEvents.Pack();
 			this.fSpouseSealings.Pack();
 		}
 
@@ -206,17 +214,15 @@ namespace GKCommon.GEDCOM
 		{
             base.ReplaceXRefs(map);
 
-			if (this.Husband != null)
-			{
+			if (this.Husband != null) {
                 this.Husband.StringValue = GEDCOMUtils.EncloseXRef(map.FindNewXRef(this.Husband.StringValue));
 			}
-			if (this.Wife != null)
-			{
+
+            if (this.Wife != null) {
                 this.Wife.StringValue = GEDCOMUtils.EncloseXRef(map.FindNewXRef(this.Wife.StringValue));
 			}
 
             this.fChildrens.ReplaceXRefs(map);
-            this.fFamilyEvents.ReplaceXRefs(map);
             this.fSpouseSealings.ReplaceXRefs(map);
 		}
 
@@ -225,7 +231,6 @@ namespace GKCommon.GEDCOM
 			base.ResetOwner(newOwner);
 
 			this.fChildrens.ResetOwner(newOwner);
-			this.fFamilyEvents.ResetOwner(newOwner);
 			this.fSpouseSealings.ResetOwner(newOwner);
 		}
 
@@ -234,7 +239,7 @@ namespace GKCommon.GEDCOM
 			base.SaveToStream(stream);
 
 			this.fChildrens.SaveToStream(stream);
-			this.fFamilyEvents.SaveToStream(stream);
+			this.Events.SaveToStream(stream); // for files content compatibility
 			this.fSpouseSealings.SaveToStream(stream);
 		}
 
@@ -272,11 +277,11 @@ namespace GKCommon.GEDCOM
 				for (int j = i + 1; j < num; j++)
 				{
 					GEDCOMIndividualRecord iChild = this.fChildrens[i].Value as GEDCOMIndividualRecord;
-					GEDCOMCustomEvent iEv = iChild.GetIndividualEvent("BIRT");
+					GEDCOMCustomEvent iEv = iChild.FindEvent("BIRT");
 					DateTime iDate = ((iEv != null) ? iEv.GetIndependentDate() : new DateTime(0));
 
 					GEDCOMIndividualRecord kChild = this.fChildrens[j].Value as GEDCOMIndividualRecord;
-					GEDCOMCustomEvent kEv = kChild.GetIndividualEvent("BIRT");
+					GEDCOMCustomEvent kEv = kChild.FindEvent("BIRT");
 					DateTime kDate = ((kEv != null) ? kEv.GetIndependentDate() : new DateTime(0));
 
 					if (iDate > kDate) this.fChildrens.Exchange(i, j);
@@ -284,29 +289,11 @@ namespace GKCommon.GEDCOM
 			}
 		}
 
-		public GEDCOMFamilyEvent GetFamilyEvent(string eventName)
-		{
-			GEDCOMFamilyEvent result = null;
-
-			int num = this.fFamilyEvents.Count;
-			for (int i = 0; i < num; i++)
-			{
-				GEDCOMFamilyEvent evt = this.fFamilyEvents[i];
-
-				if (evt.Name == eventName) {
-					result = evt;
-					break;
-				}
-			}
-
-			return result;
-		}
-
 		public string GetFamilyString(string unkHusband, string unkWife)
 		{
 			string result = "";
 
-			GEDCOMIndividualRecord spouse = this.Husband.Value as GEDCOMIndividualRecord;
+			GEDCOMIndividualRecord spouse = this.GetHusband();
 			if (spouse == null)
 			{
 				if (unkHusband == null) unkHusband = "?";
@@ -319,7 +306,7 @@ namespace GKCommon.GEDCOM
 
 			result += " - ";
 
-			spouse = (this.Wife.Value as GEDCOMIndividualRecord);
+			spouse = this.GetWife();
 			if (spouse == null)
 			{
 				if (unkWife == null) unkWife = "?";
@@ -335,8 +322,8 @@ namespace GKCommon.GEDCOM
 
 		public GEDCOMIndividualRecord GetSpouseBy(GEDCOMIndividualRecord spouse)
 		{
-			GEDCOMIndividualRecord husb = this.Husband.Value as GEDCOMIndividualRecord;
-			GEDCOMIndividualRecord wife = this.Wife.Value as GEDCOMIndividualRecord;
+			GEDCOMIndividualRecord husb = this.GetHusband();
+			GEDCOMIndividualRecord wife = this.GetWife();
 
 			if (spouse == husb) {
 				return wife;

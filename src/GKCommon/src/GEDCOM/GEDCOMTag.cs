@@ -187,20 +187,18 @@ namespace GKCommon.GEDCOM
 
 		public void Delete(int index)
 		{
-			this.fTags.Delete(index);
+			this.fTags.DeleteAt(index);
 		}
 
 		public void DeleteTag(string tagName)
 		{
 			GEDCOMTag tag = this.FindTag(tagName, 0);
-			if (tag != null) {
-				do
-				{
-					int idx = this.fTags.IndexOfObject(tag);
-					this.fTags.Delete(idx);
-					tag = this.FindTag(tagName, idx);
-				}
-				while (tag != null);
+			while (tag != null)
+			{
+				int idx = this.fTags.IndexOf(tag);
+				this.fTags.DeleteAt(idx);
+
+				tag = this.FindTag(tagName, idx);
 			}
 		}
 
@@ -258,7 +256,7 @@ namespace GKCommon.GEDCOM
 
 		public int IndexOfTag(GEDCOMTag tag)
 		{
-			return this.fTags.IndexOfObject(tag);
+			return this.fTags.IndexOf(tag);
 		}
 
 		public virtual bool IsEmpty()
@@ -381,20 +379,20 @@ namespace GKCommon.GEDCOM
 		}
 
 
-		public StringList GetTagStrings(GEDCOMTag ATag)
+		public StringList GetTagStrings(GEDCOMTag strTag)
 		{
 			StringList strings = new StringList();
 
-			if (ATag != null)
+			if (strTag != null)
 			{
-				if (ATag.StringValue != "") {
-					strings.Add(ATag.StringValue);
+				if (strTag.StringValue != "") {
+					strings.Add(strTag.StringValue);
 				}
 
-				int num = ATag.Count;
+				int num = strTag.Count;
 				for (int i = 0; i < num; i++)
 				{
-					GEDCOMTag tag = ATag[i];
+					GEDCOMTag tag = strTag[i];
 
 					if (tag.Name == "CONC") {
 						strings[strings.Count - 1] = strings[strings.Count - 1] + tag.StringValue;
@@ -409,85 +407,85 @@ namespace GKCommon.GEDCOM
 			return strings;
 		}
 
-		public void SetTagStrings(GEDCOMTag tag, StringList value)
+		public void SetTagStrings(GEDCOMTag tag, StringList strings)
 		{
-			if (tag != null)
+			if (tag == null) return;
+
+			tag.StringValue = "";
+			for (int i = tag.Count - 1; i >= 0; i--)
 			{
-				tag.StringValue = "";
-				for (int i = tag.Count - 1; i >= 0; i--)
+				if (tag[i].Name == "CONT" || tag[i].Name == "CONC")
 				{
-					if (tag[i].Name == "CONT" || tag[i].Name == "CONC")
-					{
-						tag.Delete(i);
-					}
+					tag.Delete(i);
 				}
+			}
 
-				if (value != null)
+			if (strings != null)
+			{
+				int num = strings.Count;
+				for (int i = 0; i < num; i++)
 				{
-					int num = value.Count;
-					for (int i = 0; i < num; i++)
+					string S = strings[i];
+
+					int len = ((S.Length > 248) ? 248 : S.Length) /*248*/;
+					string sub = S.Substring(0, len);
+					S = S.Remove(0, len);
+
+					if (i == 0 && !(tag is GEDCOMRecord)) {
+						tag.StringValue = sub;
+					} else {
+						tag.AddTag("CONT", sub, null);
+					}
+
+					while (((S != null) ? S.Length : 0) > 0)
 					{
-						string S = value[i];
-
-						int len = ((S.Length > 248) ? 248 : S.Length) /*248*/;
-						string sub = S.Substring(0, len);
+						len = ((S.Length > 248) ? 248 : S.Length) /*248*/;
+						tag.AddTag("CONC", S.Substring(0, len), null);
 						S = S.Remove(0, len);
-
-						if (i == 0 && !(tag is GEDCOMRecord)) {
-							tag.StringValue = sub;
-						} else {
-							tag.AddTag("CONT", sub, null);
-						}
-
-						while (((S != null) ? S.Length : 0) > 0)
-						{
-							len = ((S.Length > 248) ? 248 : S.Length) /*248*/;
-							tag.AddTag("CONC", S.Substring(0, len), null);
-							S = S.Remove(0, len);
-						}
 					}
 				}
 			}
 		}
 
-        public void SetTagStrings(GEDCOMTag tag, string[] strings)
+		public void SetTagStrings(GEDCOMTag tag, string[] strings)
 		{
-        	if (tag == null || strings == null) return;
-        	
-        	tag.StringValue = "";
-        	for (int i = tag.Count - 1; i >= 0; i--)
-        	{
-        		if (tag[i].Name == "CONT" || tag[i].Name == "CONC")
-        		{
-        			tag.Delete(i);
-        		}
-        	}
+			if (tag == null) return;
 
-        	for (int i = 0; i < strings.Length; i++)
-        	{
-        		string S = strings[i];
+			tag.StringValue = "";
+			for (int i = tag.Count - 1; i >= 0; i--)
+			{
+				if (tag[i].Name == "CONT" || tag[i].Name == "CONC")
+				{
+					tag.Delete(i);
+				}
+			}
 
-        		int len = ((S.Length > 248) ? 248 : S.Length) /*248*/;
-        		string sub = S.Substring(0, len);
-        		S = S.Remove(0, len);
+			if (strings != null)
+			{
+				int num = strings.Length;
+				for (int i = 0; i < num; i++)
+				{
+					string S = strings[i];
 
-        		if (i == 0 && !(tag is GEDCOMRecord))
-        		{
-        			tag.StringValue = sub;
-        		}
-        		else
-        		{
-        			tag.AddTag("CONT", sub, null);
-        		}
+					int len = ((S.Length > 248) ? 248 : S.Length) /*248*/;
+					string sub = S.Substring(0, len);
+					S = S.Remove(0, len);
 
-        		while (((S != null) ? S.Length : 0) > 0)
-        		{
-        			len = ((S.Length > 248) ? 248 : S.Length) /*248*/;
-        			tag.AddTag("CONC", S.Substring(0, len), null);
-        			S = S.Remove(0, len);
-        		}
-        	}
-        }
+					if (i == 0 && !(tag is GEDCOMRecord)) {
+						tag.StringValue = sub;
+					} else {
+						tag.AddTag("CONT", sub, null);
+					}
+
+					while (((S != null) ? S.Length : 0) > 0)
+					{
+						len = ((S.Length > 248) ? 248 : S.Length) /*248*/;
+						tag.AddTag("CONC", S.Substring(0, len), null);
+						S = S.Remove(0, len);
+					}
+				}
+			}
+		}
 
         #endregion
 

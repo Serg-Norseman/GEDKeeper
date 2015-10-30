@@ -1,14 +1,14 @@
+using System;
 using System.IO;
 using GKCommon.GEDCOM.Enums;
 
 namespace GKCommon.GEDCOM
 {
-	public sealed class GEDCOMIndividualRecord : GEDCOMRecord
+	public sealed class GEDCOMIndividualRecord : GEDCOMRecordWithEvents
 	{
         private static readonly GEDCOMFactory fTagsFactory;
         
         private GEDCOMList<GEDCOMPersonalName> fPersonalNames;
-		private GEDCOMList<GEDCOMCustomEvent> fIndividualEvents;
 		private GEDCOMList<GEDCOMIndividualOrdinance> fIndividualOrdinances;
 		private GEDCOMList<GEDCOMChildToFamilyLink> fChildToFamilyLinks;
 		private GEDCOMList<GEDCOMSpouseToFamilyLink> fSpouseToFamilyLinks;
@@ -30,11 +30,6 @@ namespace GKCommon.GEDCOM
 		{
 			get { return base.GetTagStringValue("RFN"); }
 			set { base.SetTagStringValue("RFN", value); }
-		}
-
-		public GEDCOMList<GEDCOMCustomEvent> IndividualEvents
-		{
-			get { return this.fIndividualEvents; }
 		}
 
 		public GEDCOMList<GEDCOMIndividualOrdinance> IndividualOrdinances
@@ -111,7 +106,7 @@ namespace GKCommon.GEDCOM
 			get { return this.fAssociations; }
 		}
 
-		public GEDCOMList<GEDCOMAlias> Aliasses
+		public GEDCOMList<GEDCOMAlias> Aliases
 		{
 			get { return this.fAliasses; }
 		}
@@ -138,7 +133,6 @@ namespace GKCommon.GEDCOM
 			this.fName = "INDI";
 
 			this.fPersonalNames = new GEDCOMList<GEDCOMPersonalName>(this);
-			this.fIndividualEvents = new GEDCOMList<GEDCOMCustomEvent>(this);
 			this.fIndividualOrdinances = new GEDCOMList<GEDCOMIndividualOrdinance>(this);
 			this.fChildToFamilyLinks = new GEDCOMList<GEDCOMChildToFamilyLink>(this);
 			this.fSpouseToFamilyLinks = new GEDCOMList<GEDCOMSpouseToFamilyLink>(this);
@@ -155,7 +149,6 @@ namespace GKCommon.GEDCOM
 			if (disposing)
 			{
 				this.fPersonalNames.Dispose();
-				this.fIndividualEvents.Dispose();
 				this.fIndividualOrdinances.Dispose();
 				this.fChildToFamilyLinks.Dispose();
 				this.fSpouseToFamilyLinks.Dispose();
@@ -282,11 +275,11 @@ namespace GKCommon.GEDCOM
 					} else if (result is GEDCOMAssociation) {
 						result = this.Associations.Add(result as GEDCOMAssociation);
 					} else if (result is GEDCOMIndividualEvent) {
-						result = this.AddIndividualEvent(result as GEDCOMCustomEvent);
+						result = this.AddEvent(result as GEDCOMCustomEvent);
 					} else if (result is GEDCOMIndividualAttribute) {
-						result = this.AddIndividualEvent(result as GEDCOMCustomEvent);
+						result = this.AddEvent(result as GEDCOMCustomEvent);
 					} else if (result is GEDCOMAlias) {
-						result = this.Aliasses.Add(result as GEDCOMAlias);
+						result = this.Aliases.Add(result as GEDCOMAlias);
 					}
 				} else {
 					result = base.AddTag(tagName, tagValue, tagConstructor);
@@ -296,12 +289,36 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
+		public override GEDCOMCustomEvent AddEvent(GEDCOMCustomEvent evt)
+		{
+			if (evt != null) {
+				if (evt is GEDCOMIndividualEvent || evt is GEDCOMIndividualAttribute) {
+					// SetLevel need for events created outside!
+					evt.SetLevel(this.Level + 1);
+					this.Events.Add(evt);
+				} else {
+					throw new ArgumentException("Event has the invalid type", "evt");
+				}
+			}
+
+			return evt;
+		}
+
+		public GEDCOMPersonalName AddPersonalName(GEDCOMPersonalName value)
+		{
+			if (value != null)
+			{
+				value.SetLevel(base.Level + 1);
+				this.fPersonalNames.Add(value);
+			}
+			return value;
+		}
+
 		public override void Clear()
 		{
 			base.Clear();
 
 			this.fPersonalNames.Clear();
-			this.fIndividualEvents.Clear();
 			this.fIndividualOrdinances.Clear();
 			this.fChildToFamilyLinks.Clear();
 			this.fSpouseToFamilyLinks.Clear();
@@ -315,33 +332,12 @@ namespace GKCommon.GEDCOM
 
 		public override bool IsEmpty()
 		{
-			return base.IsEmpty() && this.fPersonalNames.Count == 0 && this.fIndividualEvents.Count == 0 
+			return base.IsEmpty() && this.fPersonalNames.Count == 0  
 				&& this.fIndividualOrdinances.Count == 0 && this.fChildToFamilyLinks.Count == 0 
 				&& this.fSpouseToFamilyLinks.Count == 0 && this.fSubmittors.Count == 0 
 				&& this.fAssociations.Count == 0 && this.fAliasses.Count == 0 
 				&& this.fAncestorsInterest.Count == 0 && this.fDescendantsInterest.Count == 0 
 				&& this.fGroups.Count == 0;
-		}
-
-		public GEDCOMCustomEvent AddIndividualEvent(GEDCOMCustomEvent value)
-		{
-			if (value != null)
-			{
-				value.SetLevel(base.Level + 1);
-				this.fIndividualEvents.Add(value);
-			}
-
-			return value;
-		}
-
-		public GEDCOMPersonalName AddPersonalName(GEDCOMPersonalName value)
-		{
-			if (value != null)
-			{
-				value.SetLevel(base.Level + 1);
-				this.fPersonalNames.Add(value);
-			}
-			return value;
 		}
 
 		public int IndexOfGroup(GEDCOMGroupRecord groupRec)
@@ -380,7 +376,7 @@ namespace GKCommon.GEDCOM
 			for (int i = 0; i < num; i++)
 			{
 				if (this.fSpouseToFamilyLinks[i].Family == familyRec) {
-					this.fSpouseToFamilyLinks.Delete(i);
+					this.fSpouseToFamilyLinks.DeleteAt(i);
 					break;
 				}
 			}
@@ -392,7 +388,7 @@ namespace GKCommon.GEDCOM
 			for (int i = 0; i < num; i++)
 			{
 				if (this.fChildToFamilyLinks[i].Family == familyRec) {
-					this.fChildToFamilyLinks.Delete(i);
+					this.fChildToFamilyLinks.DeleteAt(i);
 					break;
 				}
 			}
@@ -403,27 +399,9 @@ namespace GKCommon.GEDCOM
 			this.fSpouseToFamilyLinks.Exchange(index1, index2);
 		}
 
-		public GEDCOMCustomEvent GetIndividualEvent(string eventName)
-		{
-			GEDCOMCustomEvent result = null;
-
-			int num = this.fIndividualEvents.Count;
-			for (int i = 0; i < num; i++)
-			{
-				GEDCOMCustomEvent evt = this.fIndividualEvents[i];
-
-				if (evt.Name == eventName) {
-					result = evt;
-					break;
-				}
-			}
-
-			return result;
-		}
-
 		public bool IsLive()
 		{
-			return this.GetIndividualEvent("DEAT") == null;
+			return this.FindEvent("DEAT") == null;
 		}
 
 		public override void MoveTo(GEDCOMRecord targetRecord, bool clearDest)
@@ -483,13 +461,6 @@ namespace GKCommon.GEDCOM
 				toRec.SpouseToFamilyLinks.Add(stf_link);
 			}
 
-			while (this.fIndividualEvents.Count > 0)
-			{
-				GEDCOMCustomEvent evt = this.fIndividualEvents.Extract(0);
-				evt.ResetParent(toRec);
-				toRec.AddIndividualEvent(evt);
-			}
-
 			while (this.fIndividualOrdinances.Count > 0)
 			{
 				GEDCOMIndividualOrdinance ord = this.fIndividualOrdinances.Extract(0);
@@ -515,7 +486,7 @@ namespace GKCommon.GEDCOM
 			{
                 GEDCOMAlias obj = this.fAliasses.Extract(0);
                 obj.ResetParent(toRec);
-				toRec.Aliasses.Add(obj);
+				toRec.Aliases.Add(obj);
 			}
 
 			while (this.fAncestorsInterest.Count > 0)
@@ -547,7 +518,6 @@ namespace GKCommon.GEDCOM
 			this.fPersonalNames.Pack();
 			this.fChildToFamilyLinks.Pack();
 			this.fSpouseToFamilyLinks.Pack();
-			this.fIndividualEvents.Pack();
 			this.fIndividualOrdinances.Pack();
 			this.fSubmittors.Pack();
 			this.fAssociations.Pack();
@@ -564,7 +534,6 @@ namespace GKCommon.GEDCOM
             this.fPersonalNames.ReplaceXRefs(map);
             this.fChildToFamilyLinks.ReplaceXRefs(map);
             this.fSpouseToFamilyLinks.ReplaceXRefs(map);
-            this.fIndividualEvents.ReplaceXRefs(map);
             this.fIndividualOrdinances.ReplaceXRefs(map);
             this.fSubmittors.ReplaceXRefs(map);
             this.fAssociations.ReplaceXRefs(map);
@@ -581,7 +550,6 @@ namespace GKCommon.GEDCOM
 			this.fPersonalNames.ResetOwner(newOwner);
 			this.fChildToFamilyLinks.ResetOwner(newOwner);
 			this.fSpouseToFamilyLinks.ResetOwner(newOwner);
-			this.fIndividualEvents.ResetOwner(newOwner);
 			this.fIndividualOrdinances.ResetOwner(newOwner);
 			this.fSubmittors.ResetOwner(newOwner);
 			this.fAssociations.ResetOwner(newOwner);
@@ -598,7 +566,7 @@ namespace GKCommon.GEDCOM
 			this.fPersonalNames.SaveToStream(stream);
 			this.fChildToFamilyLinks.SaveToStream(stream);
 			this.fSpouseToFamilyLinks.SaveToStream(stream);
-			this.fIndividualEvents.SaveToStream(stream);
+			this.Events.SaveToStream(stream); // for files content compatibility
 			this.fIndividualOrdinances.SaveToStream(stream);
 			this.fSubmittors.SaveToStream(stream);
 			this.fAssociations.SaveToStream(stream);
@@ -624,10 +592,10 @@ namespace GKCommon.GEDCOM
 			birthEvent = null;
 			deathEvent = null;
 
-			int num = this.fIndividualEvents.Count;
+			int num = this.Events.Count;
 			for (int i = 0; i < num; i++)
 			{
-				GEDCOMCustomEvent evt = this.fIndividualEvents[i];
+				GEDCOMCustomEvent evt = this.Events[i];
 
 				if (evt.Name == "BIRT" && birthEvent == null) {
 					birthEvent = evt;
@@ -670,8 +638,8 @@ namespace GKCommon.GEDCOM
 				father = null;
 				mother = null;
 			} else {
-				father = fam.Husband.Value as GEDCOMIndividualRecord;
-				mother = fam.Wife.Value as GEDCOMIndividualRecord;
+				father = fam.GetHusband();
+				mother = fam.GetWife();
 			}
 		}
 
@@ -881,49 +849,6 @@ namespace GKCommon.GEDCOM
 				result += family.Childrens.Count;
 			}
 
-			return result;
-		}
-
-		static float[] CA_Values = new float[] { 0.25f, 0.5f, 0.75f, 1.0f };
-
-		public float GetCertaintyAssessment()
-		{
-			float result = 0;
-			float wsum = 0;
-
-			int num1 = this.fIndividualEvents.Count;
-			for (int i = 0; i < num1; i++) {
-				GEDCOMCustomEvent evt = this.fIndividualEvents[i];
-
-				int num2 = evt.Detail.SourceCitations.Count;
-				for (int k = 0; k < num2; k++) {
-					GEDCOMSourceCitation cit = evt.Detail.SourceCitations[k];
-
-					int ca = cit.CertaintyAssessment;
-					int weight = (ca + 1);
-					
-					result += (CA_Values[ca] * weight);
-					wsum += weight;
-				}
-			}
-			
-			int num3 = this.SourceCitations.Count;
-			for (int i = 0; i < num3; i++) {
-				GEDCOMSourceCitation cit = this.SourceCitations[i];
-
-				int ca = cit.CertaintyAssessment;
-				int weight = (ca + 1);
-				
-				result += (CA_Values[ca] * weight);
-				wsum += weight;
-			}
-
-			if (wsum != 0.0f) {
-				result /= wsum;
-			} else {
-				result = 0.0f;
-			}
-			
 			return result;
 		}
 		

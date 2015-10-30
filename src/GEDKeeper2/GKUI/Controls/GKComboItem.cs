@@ -1,13 +1,10 @@
 using System;
 
-using ExtUtils;
-
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKUI.Controls
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public class GKComboItem
 	{
 		public readonly string Caption;

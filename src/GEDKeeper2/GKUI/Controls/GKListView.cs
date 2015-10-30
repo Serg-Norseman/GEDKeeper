@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Windows.Forms;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKUI.Controls
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public class GKListView : ListView
 	{
 		private class TListViewColumnSorter : IComparer
@@ -92,17 +91,17 @@ namespace GKUI.Controls
 			}
 		}
 
-		/*public override void BeginUpdate()
+		public virtual void BeginUpdates()
 		{
 			base.BeginUpdate();
-			this.SwitchSorter();
+			//this.SwitchSorter();
 		}
 
-		public override void EndUpdate()
+		public virtual void EndUpdates()
 		{
-			this.SwitchSorter();
+			//this.SwitchSorter();
 			base.EndUpdate();
-		}*/
+		}
 
 		private void lvColumnClick(object sender, ColumnClickEventArgs e)
 		{

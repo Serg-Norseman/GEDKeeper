@@ -31,13 +31,8 @@ namespace GKUI.Sheets
             this.AddColumn(LangMan.LS(LSID.LSID_Cause), 130, false);
             this.Columns_EndUpdate();
 
-            this.Buttons = EnumSet<GKSheetList.SheetButton>.Create(
-				GKSheetList.SheetButton.lbAdd, 
-				GKSheetList.SheetButton.lbEdit, 
-				GKSheetList.SheetButton.lbDelete, 
-				GKSheetList.SheetButton.lbMoveUp, 
-				GKSheetList.SheetButton.lbMoveDown
-			);
+            this.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, 
+				SheetButton.lbMoveUp, SheetButton.lbMoveDown);
 
             this.OnModify += this.ListModify;
         }
@@ -48,7 +43,7 @@ namespace GKUI.Sheets
         	
             try
             {
-                this.List.Items.Clear();
+                this.ClearItems();
 
                 int idx = 0;
                 this.DataList.Reset();
@@ -60,9 +55,9 @@ namespace GKUI.Sheets
                     {
                         string st = GKUtils.GetIndividualEventName(evt);
 
-                        GKListItem item = this.List.AddItem(idx.ToString(), evt);
+                        GKListItem item = this.AddItem(idx.ToString(), evt);
                         item.SubItems.Add(st);
-                        item.SubItems.Add(GKUtils.GEDCOMCustomDateToStr(evt.Detail.Date, TfmGEDKeeper.Instance.Options.DefDateFormat, false));
+                        item.SubItems.Add(GKUtils.GEDCOMEventToDateStr(evt, TfmGEDKeeper.Instance.Options.DefDateFormat, false));
                         st = evt.Detail.Place.StringValue;
                         if (evt.StringValue != "")
                         {
@@ -75,17 +70,17 @@ namespace GKUI.Sheets
                     {
                         string st = GKUtils.GetFamilyEventName(evt as GEDCOMFamilyEvent);
 
-                        GKListItem item = this.List.AddItem(idx.ToString(), evt);
+                        GKListItem item = this.AddItem(idx.ToString(), evt);
                         item.SubItems.Add(st);
-                        item.SubItems.Add(GKUtils.GEDCOMCustomDateToStr(evt.Detail.Date, TfmGEDKeeper.Instance.Options.DefDateFormat, false));
+                        item.SubItems.Add(GKUtils.GEDCOMEventToDateStr(evt, TfmGEDKeeper.Instance.Options.DefDateFormat, false));
                         item.SubItems.Add(evt.Detail.Place.StringValue);
                         item.SubItems.Add(GKUtils.GetEventCause(evt.Detail));
                     }
                 }
 
-                this.List.ResizeColumn(1);
-                this.List.ResizeColumn(2);
-                this.List.ResizeColumn(3);
+                this.ResizeColumn(1);
+                this.ResizeColumn(2);
+                this.ResizeColumn(3);
             }
             catch (Exception ex)
             {
@@ -97,19 +92,23 @@ namespace GKUI.Sheets
         {
         	if (this.DataList == null) return;
 
-            IBase aBase = this.Editor.Base;
+            IBaseWindow aBase = this.Editor.Base;
             if (aBase == null) return;
 
             GEDCOMCustomEvent evt = eArgs.ItemData as GEDCOMCustomEvent;
 
-            bool result = this.ModifyRecEvent(aBase, this.DataList.Owner as GEDCOMRecord, ref evt, eArgs.Action);
+            bool result = this.ModifyRecEvent(aBase, this.DataList.Owner as GEDCOMRecordWithEvents, ref evt, eArgs.Action);
+
             if (result && eArgs.Action == RecordAction.raAdd) eArgs.ItemData = evt;
 
-            if (result) this.UpdateSheet();
+            if (result) {
+            	aBase.Modified = true;
+            	this.UpdateSheet();
+            }
         }
 
         // FIXME
-        private bool ModifyRecEvent(IBase aBase, GEDCOMRecord record, ref GEDCOMCustomEvent aEvent, RecordAction action)
+        private bool ModifyRecEvent(IBaseWindow aBase, GEDCOMRecordWithEvents record, ref GEDCOMCustomEvent aEvent, RecordAction action)
         {
             bool result = false;
 
@@ -145,23 +144,12 @@ namespace GKUI.Sheets
                             {
                                 newEvent = fmEventEdit.Event;
 
-                                if (aEvent == null)
-                                {
-                                    if (record is GEDCOMIndividualRecord)
-                                    {
-                                        (record as GEDCOMIndividualRecord).AddIndividualEvent(newEvent);
-                                    }
-                                    else
-                                    {
-                                        (record as GEDCOMFamilyRecord).FamilyEvents.Add(newEvent as GEDCOMFamilyEvent);
-                                    }
-                                }
-                                else
-                                {
-                                    if (record is GEDCOMIndividualRecord && newEvent != aEvent)
-                                    {
-                                        (record as GEDCOMIndividualRecord).IndividualEvents.DeleteObject(aEvent);
-                                        (record as GEDCOMIndividualRecord).AddIndividualEvent(newEvent);
+                                if (aEvent == null) {
+                                	record.AddEvent(newEvent);
+                                } else {
+                                    if (record is GEDCOMIndividualRecord && newEvent != aEvent) {
+                                        record.Events.Delete(aEvent);
+                                        record.AddEvent(newEvent);
                                     }
                                 }
 
@@ -173,55 +161,30 @@ namespace GKUI.Sheets
 
                     case RecordAction.raDelete:
                         if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_RemoveEventQuery)) != DialogResult.No) {
-                            if (record is GEDCOMIndividualRecord) {
-                                (record as GEDCOMIndividualRecord).IndividualEvents.DeleteObject(aEvent);
-                            } else {
-                                (record as GEDCOMFamilyRecord).FamilyEvents.DeleteObject(aEvent as GEDCOMFamilyEvent);
-                            }
-
-                            aEvent = null;
+                        	record.Events.Delete(aEvent);
+                        	aEvent = null;
                             result = true;
                         }
                         break;
 
                     case RecordAction.raMoveUp:
                     case RecordAction.raMoveDown:
-                        if (record is GEDCOMIndividualRecord)
                         {
-                            GEDCOMIndividualRecord iRec = record as GEDCOMIndividualRecord;
-                            int idx = iRec.IndividualEvents.IndexOfObject(aEvent);
+                            int idx = record.Events.IndexOf(aEvent);
                             switch (action)
                             {
                                 case RecordAction.raMoveUp:
-                                    iRec.IndividualEvents.Exchange(idx - 1, idx);
+                                    record.Events.Exchange(idx - 1, idx);
                                     break;
 
                                 case RecordAction.raMoveDown:
-                                    iRec.IndividualEvents.Exchange(idx, idx + 1);
-                                    break;
-                            }
-                            result = true;
-                        }
-                        else
-                        {
-                            GEDCOMFamilyRecord fRec = record as GEDCOMFamilyRecord;
-                            int idx = fRec.FamilyEvents.IndexOfObject(aEvent as GEDCOMFamilyEvent);
-                            switch (action)
-                            {
-                                case RecordAction.raMoveUp:
-                                    fRec.FamilyEvents.Exchange(idx - 1, idx);
-                                    break;
-
-                                case RecordAction.raMoveDown:
-                                    fRec.FamilyEvents.Exchange(idx, idx + 1);
+                                    record.Events.Exchange(idx, idx + 1);
                                     break;
                             }
                             result = true;
                         }
                         break;
                 }
-
-                if (result) aBase.Modified = true;
             }
             catch (Exception ex)
             {

@@ -96,7 +96,7 @@ namespace GKTreeVizPlugin
 		private bool fFreeRotate;
 
 		// runtime
-		private IBase fBase;
+		private IBaseWindow fBase;
 		private ArborSystem fSys;
 		private readonly List<TVPerson> fPersons;
 		private readonly Dictionary<string, TVPerson> fPersonsIndex;
@@ -579,7 +579,7 @@ namespace GKTreeVizPlugin
 
 		#region TreeViz
 
-        public void CreateArborGraph(IBase aBase, int minGens, bool loneSuppress)
+        public void CreateArborGraph(IBaseWindow aBase, int minGens, bool loneSuppress)
         {
         	this.fBase = aBase;
 
@@ -787,6 +787,7 @@ namespace GKTreeVizPlugin
 		private void RecalcDescendants()
 		{
 			return;
+			
 			for (int i = 0, count = fPersons.Count; i < count; i++)
 			{
 				TVPerson prs = fPersons[i];

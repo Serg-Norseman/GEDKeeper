@@ -7,15 +7,14 @@ using System.Windows.Forms;
 using GKCore;
 using GKCore.Interfaces;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKUI
 {
-    public sealed partial class TfmScriptDaemon : Form, ILocalization
+	/// <summary>
+	/// 
+	/// </summary>
+	public sealed partial class TfmScriptDaemon : Form, ILocalization
 	{
-		private readonly IBase fBase;
+		private readonly IBaseWindow fBase;
 
         private string fFileName;
 		private bool fModified;
@@ -151,7 +150,7 @@ namespace GKUI
 			}
 		}
 
-		public TfmScriptDaemon(IBase aBase)
+		public TfmScriptDaemon(IBaseWindow aBase)
 		{
 			this.InitializeComponent();
 			this.fBase = aBase;
@@ -161,10 +160,10 @@ namespace GKUI
 			
             this.NewScript();
 
-			(this as ILocalization).SetLang();
+			this.SetLang();
 		}
 
-		void ILocalization.SetLang()
+		public void SetLang()
 		{
 		}
 	}

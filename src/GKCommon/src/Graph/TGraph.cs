@@ -122,10 +122,12 @@ namespace GKCommon.Graph
 			return result;
 		}
 
-		public void AddUndirectedEdge(IVertex source, IVertex target, int cost, object srcValue, object tgtValue)
+		public bool AddUndirectedEdge(IVertex source, IVertex target, int cost, object srcValue, object tgtValue)
 		{
-			this.AddDirectedEdge(source, target, cost, srcValue);
-			this.AddDirectedEdge(target, source, cost, tgtValue);
+			IEdge edge1 = this.AddDirectedEdge(source, target, cost, srcValue);
+			IEdge edge2 = this.AddDirectedEdge(target, source, cost, tgtValue);
+			
+			return (edge1 != null && edge2 != null);
 		}
 
 		public IEdge AddDirectedEdge(string sourceSign, string targetSign, int cost, object edgeValue)

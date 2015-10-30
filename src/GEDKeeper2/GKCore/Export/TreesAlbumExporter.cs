@@ -32,7 +32,7 @@ namespace GKCore.Export
 			set { this.fShieldState = value; }
 		}
 
-		public TreesAlbumExporter(IBase aBase) : base(aBase)
+		public TreesAlbumExporter(IBaseWindow aBase) : base(aBase)
 		{
 			this.fAlbumPage = true;
 			this.fPatList = new StringList();

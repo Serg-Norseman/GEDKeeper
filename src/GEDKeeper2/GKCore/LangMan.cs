@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Xml;
 
 using GKCore.Interfaces;
 
@@ -232,6 +233,7 @@ namespace GKCore
 		/* 198 */ LSID_AdCity,
 		/* 199 */ LSID_AdPostalCode,
 		/* 200 */ LSID_Telephones,
+
 		/* 201 */ LSID_EMails,
 		/* 202 */ LSID_WebSites,
 		/* 203 */ LSID_Value,
@@ -657,17 +659,18 @@ namespace GKCore
 		/* 600 */ LSID_FillColor,
 		/* 601 */ LSID_FillImage,
 		/* 602 */ LSID_TreeIndividualsCount,
+		/* 603 */ LSID_LogView,
 
-		/* 603 */ LSID_ExportToPDFFile, // deprecated
-		/* 604 */ LSID_AncestorsCircle, // deprecated
-		/* 605 */ LSID_Circle, // deprecated
-		/* 606 */ LSID_TextColor, // deprecated
-		/* 607 */ LSID_BackColor, // deprecated
-		/* 608 */ LSID_LinesColor, // deprecated
-		/* 609 */ LSID_ShowCircLines, // deprecated
-		/* 610 */ LSID_SearchIndexRefreshing, // deprecated
-		/* 611 */ LSID_FullTextSearch, // deprecated
-		/* 612 */ LSID_SearchResults, // deprecated
+		/* 604 */ LSID_AncestorsCircle,
+		/* 605 */ LSID_Circle,
+		/* 606 */ LSID_TextColor,
+		/* 607 */ LSID_BackColor,
+		/* 608 */ LSID_LinesColor,
+
+		/* 609 */ LSID_RestrictNone,
+		/* 610 */ LSID_RestrictLocked,
+		/* 611 */ LSID_RestrictConfidential,
+		/* 612 */ LSID_RestrictPrivacy,
 
 		/* 613 */ LSID_LogSend,
 		/* 614 */ LSID_Charts,
@@ -685,8 +688,14 @@ namespace GKCore
 		/* 625 */ LSID_CertaintyIndex,
 		/* 626 */ LSID_BirthByMonth,
 		/* 627 */ LSID_Month,
+		
+		/* 628 */ LSID_DlgReset,
+		/* 629 */ LSID_Field,
+		/* 630 */ LSID_Condition,
+		
+		/* 631 */ LSID_DoNotSetSource,
 
-		/* 000 */ LSID_Last = LSID_Month
+		/* 000 */ LSID_Last = LSID_DoNotSetSource
 	}
 
 	public static class LangMan
@@ -710,19 +719,19 @@ namespace GKCore
 			/* 013 */ "Экспорт",
 			/* 014 */ "Фамильная книга...",
 
-			/* 015 */ "<->",
+			/* 015 */ "<?>",
 
 			/* 016 */ "Экспорт в Excel-файл...",
 			/* 017 */ "Выход",
 
-			/* 018 */ "<->",
-			/* 019 */ "<->",
+			/* 018 */ "<?>",
+			/* 019 */ "<?>",
 
 			/* 020 */ "Добавить запись",
 			/* 021 */ "Изменить запись",
 			/* 022 */ "Удалить запись",
 
-			/* 023 */ "<->",
+			/* 023 */ "<?>",
 
 			/* 024 */ "Древо предков",
 			/* 025 */ "Древо потомков",
@@ -738,7 +747,7 @@ namespace GKCore
 			/* 035 */ "Органайзер",
 			/* 036 */ "Скрипты...",
 
-			/* 037 */ "<->",
+			/* 037 */ "<?>",
 
 			/* 038 */ "Инструменты...",
 			/* 039 */ "Фильтр",
@@ -872,8 +881,8 @@ namespace GKCore
 			/* 167 */ "Поместить результат в буфер обмена",
 			/* 168 */ "Прочее",
 
-			/* 169 */ "<->",
-			/* 170 */ "<->",
+			/* 169 */ "<?>",
+			/* 170 */ "<?>",
 
 			/* 171 */ "Местоположение",
 			/* 172 */ "Широта",
@@ -959,9 +968,9 @@ namespace GKCore
 			/* 252 */ "Росписи",
 			/* 253 */ "Кодировка сохранения файлов",
 
-			/* 254 */ "<->",
-			/* 255 */ "<->",
-			/* 256 */ "<->",
+			/* 254 */ "<?>",
+			/* 255 */ "<?>",
+			/* 256 */ "<?>",
 
 			/* 257 */ "Загрузка из Интернета",
 			/* 258 */ "Использовать прокси-сервер",
@@ -970,7 +979,7 @@ namespace GKCore
 			/* 261 */ "Логин",
 			/* 262 */ "Пароль",
 
-			/* 263 */ "<->",
+			/* 263 */ "<?>",
 
 			/* 264 */ "Показывать при старте подсказки",
 			/* 265 */ "Язык",
@@ -1080,19 +1089,19 @@ namespace GKCore
 			/* 369 */ "племянница",
 			/* 370 */ "кузен",
 			/* 371 */ "кузина",
-			/* 372 */ "<reserved>",
-			/* 373 */ "<reserved>",
-			/* 374 */ "<reserved>",
-			/* 375 */ "<reserved>",
-			/* 376 */ "<reserved>",
-			/* 377 */ "<reserved>",
-			/* 378 */ "<reserved>",
-			/* 379 */ "<reserved>",
-			/* 380 */ "<reserved>",
+			/* 372 */ "<?>",
+			/* 373 */ "<?>",
+			/* 374 */ "<?>",
+			/* 375 */ "<?>",
+			/* 376 */ "<?>",
+			/* 377 */ "<?>",
+			/* 378 */ "<?>",
+			/* 379 */ "<?>",
+			/* 380 */ "<?>",
 			/* 381 */ "Ширина изображения более 65 тыс. точек. Сохранить невозможно",
 			/* 382 */ "Назад",
 			/* 383 */ "Вперед",
-			/* 384 */ "<reserved>",
+			/* 384 */ "<?>",
 			/* 385 */ "Далее",
 			/* 386 */ "Вы знаете что...",
 			/* 387 */ "Загрузка и поиск мест",
@@ -1107,13 +1116,13 @@ namespace GKCore
 			/* 396 */ "Формат не поддерживается",
 			/* 397 */ "Ошибка загрузки данных.",
 
-			/* 398 */ "<->",
-			/* 399 */ "<->",
+			/* 398 */ "<?>",
+			/* 399 */ "<?>",
 
 			/* 400 */ "Поколение",
 
-			/* 401 */ "<->",
-			/* 402 */ "<->",
+			/* 401 */ "<?>",
+			/* 402 */ "<?>",
 
 			/* 403 */ "Точно",
 			/* 404 */ "Ранее",
@@ -1320,17 +1329,18 @@ namespace GKCore
 			/* 600 */ "Цвет фона...",
 			/* 601 */ "Изображение фона...",
 			/* 602 */ "Персон в древе: {0}",
+			/* 603 */ "Просмотреть журнал ошибок",
 
-			/* 603 */ "<->",
-			/* 604 */ "<->",
-			/* 605 */ "<->",
-			/* 606 */ "<->",
-			/* 607 */ "<->",
-			/* 608 */ "<->",
-			/* 609 */ "<->",
-			/* 610 */ "<->",
-			/* 611 */ "<->",
-			/* 612 */ "<->",
+			/* 604 */ "Круг предков",
+			/* 605 */ "Круг",
+			/* 606 */ "Цвет текста",
+			/* 607 */ "Цвет фона",
+			/* 608 */ "Цвет линии",
+
+			/* 609 */ "нет",
+			/* 610 */ "заперто",
+			/* 611 */ "конфиденциально",
+			/* 612 */ "секретно",
 
 			/* 613 */ "Отправить журнал ошибок",
 			/* 614 */ "Диаграммы",
@@ -1347,7 +1357,13 @@ namespace GKCore
 			/* 624 */ "Найти следующее",
 			/* 625 */ "Индекс достоверности",
 			/* 626 */ "Месяца рождений",
-			/* 627 */ "Месяц"
+			/* 627 */ "Месяц",
+
+			/* 628 */ "Сбросить",
+			/* 629 */ "Поле",
+			/* 630 */ "Условие",
+
+			/* 631 */ "Не задан источник"
 		};
 
 		private static string[] LSList = new string[(int)LSID.LSID_Last + 1];
@@ -1444,6 +1460,58 @@ namespace GKCore
 						this.fList.Add(i, st);
 						i++;
 					}
+					result = true;
+				}
+				finally
+				{
+					lngFile.Close();
+				}
+			}
+
+			return result;
+		}
+
+		public bool LoadFromXMLFile(string fileName)
+		{
+			bool result = false;
+
+			if (File.Exists(fileName))
+			{
+				StreamReader lngFile = new StreamReader(fileName, Encoding.UTF8);
+				try
+				{
+					XmlDocument xmlDocument = new XmlDocument();
+					xmlDocument.Load(lngFile);
+					XmlNode nodeDoc = xmlDocument.DocumentElement;
+
+					if (nodeDoc != null && nodeDoc.ChildNodes.Count > 0)
+					{
+						int num = nodeDoc.ChildNodes.Count;
+						for (int i = 0; i < num; i++)
+						{
+							XmlNode xNode = nodeDoc.ChildNodes[i];
+							if (xNode.Name == "resource")
+							{
+								XmlAttribute nodeLangName = xNode.Attributes["Language"]; // skipped
+								XmlAttribute nodeLangId = xNode.Attributes["LANGID"]; // skipped
+
+								int num2 = xNode.ChildNodes.Count;
+								for (int k = 0; k < num2; k++)
+								{
+									XmlNode strNode = xNode.ChildNodes[k];
+									if (strNode.Name == "string")
+									{
+										XmlAttribute nodeStrId = strNode.Attributes["id"];
+										XmlAttribute nodeStrVal = strNode.Attributes["value"];
+
+										int id = int.Parse(nodeStrId.InnerText);
+										this.fList.Add(i, nodeStrVal.InnerText);
+									}
+								}
+							}
+						}
+					}
+
 					result = true;
 				}
 				finally

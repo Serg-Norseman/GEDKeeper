@@ -2,7 +2,6 @@
 using System.IO;
 using System.Windows.Forms;
 
-using ExtUtils;
 using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
 using GKCore;
@@ -10,18 +9,17 @@ using GKCore.Interfaces;
 using GKCore.Types;
 using GKUI.Sheets;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKUI.Dialogs
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public partial class TfmMediaEdit : Form, IBaseEditor
 	{
 		private bool fIsNew;
 		private GEDCOMMultimediaRecord fMediaRec;
 
-        private readonly IBase fBase;
+        private readonly IBaseWindow fBase;
 		private readonly GKNotesSheet fNotesList;
 		private readonly GKSourcesSheet fSourcesList;
 
@@ -31,7 +29,7 @@ namespace GKUI.Dialogs
 			set { this.SetMediaRec(value); }
 		}
 
-		public IBase Base
+		public IBaseWindow Base
 		{
 			get { return this.fBase; }
 		}
@@ -45,12 +43,12 @@ namespace GKUI.Dialogs
 			if (this.fIsNew)
 			{
 				MediaStoreType gst = (MediaStoreType)this.cbStoreType.SelectedIndex;
-				if ((gst == MediaStoreType.mstArchive || gst == MediaStoreType.mstStorage) && !this.fBase.CheckBasePath())
+				if ((gst == MediaStoreType.mstArchive || gst == MediaStoreType.mstStorage) && !this.fBase.Context.CheckBasePath())
 				{
 					return false;
 				}
 
-				result = this.fBase.MediaSave(fileRef, this.edFile.Text, gst);
+				result = this.fBase.Context.MediaSave(fileRef, this.edFile.Text, gst);
 
 				if (!result) {
 					return false;
@@ -80,7 +78,7 @@ namespace GKUI.Dialogs
 				this.StoreTypesRefresh(true, MediaStoreType.mstReference);
 			} else {
 				string dummy = "";
-				MediaStoreType gst = this.fBase.GetStoreType(fileRef, ref dummy);
+				MediaStoreType gst = this.fBase.Context.GetStoreType(fileRef, ref dummy);
 				this.StoreTypesRefresh((gst == MediaStoreType.mstArchive), gst);
 			}
 
@@ -113,7 +111,7 @@ namespace GKUI.Dialogs
 			}
 			catch (Exception ex)
 			{
-				this.fBase.Host.LogWrite("TfmMediaEdit.Accept(): " + ex.Message);
+				this.fBase.Host.LogWrite("TfmMediaEdit.btnAccept_Click(): " + ex.Message);
 				base.DialogResult = DialogResult.None;
 			}
 		}
@@ -171,7 +169,7 @@ namespace GKUI.Dialogs
 			this.cbStoreType.SelectedIndex = (int)select;
 		}
 
-		public TfmMediaEdit(IBase aBase)
+		public TfmMediaEdit(IBaseWindow aBase)
 		{
 			this.InitializeComponent();
 			this.fBase = aBase;
@@ -184,6 +182,7 @@ namespace GKUI.Dialogs
 			this.fNotesList = new GKNotesSheet(this, this.SheetNotes);
 			this.fSourcesList = new GKSourcesSheet(this, this.SheetSources);
 
+			// SetLang()
 			this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
 			this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
 			this.SheetCommon.Text = LangMan.LS(LSID.LSID_Common);

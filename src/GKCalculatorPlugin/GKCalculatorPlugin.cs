@@ -26,7 +26,7 @@ namespace GKCalculatorPlugin
 		/* 167 */ LSID_CopyResultToClipboard,
     }
     
-    public class Plugin : IPlugin, IWidget
+    public sealed class Plugin : IPlugin, IWidget
     {
         private string fDisplayName = "GKCalculatorPlugin";
         private IHost fHost;
@@ -99,8 +99,8 @@ namespace GKCalculatorPlugin
     	#region IWidget common
 
     	void IWidget.WidgetInit(IHost host) {}
-        void IWidget.BaseChanged(IBase aBase) {}
-        void IWidget.BaseClosed(IBase aBase) {}
+        void IWidget.BaseChanged(IBaseWindow aBase) {}
+        void IWidget.BaseClosed(IBaseWindow aBase) {}
 
         void IWidget.WidgetEnable()
         {

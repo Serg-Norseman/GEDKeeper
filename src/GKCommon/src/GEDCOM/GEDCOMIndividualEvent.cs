@@ -2,10 +2,10 @@ namespace GKCommon.GEDCOM
 {
 	public sealed class GEDCOMIndividualEvent : GEDCOMCustomEvent
 	{
-		public GEDCOMPointer Family
+		/*public GEDCOMPointer Family
 		{
 			get	{ return base.TagClass("FAMC", GEDCOMPointer.Create) as GEDCOMPointer; }
-		}
+		}*/
 
 		public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
 		{

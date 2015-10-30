@@ -3,6 +3,9 @@ using GKCore.Types;
 
 namespace GKUI.Controls
 {
+	/// <summary>
+	/// 
+	/// </summary>
     public class ModifyEventArgs : EventArgs
     {
         public RecordAction Action { get; private set; }

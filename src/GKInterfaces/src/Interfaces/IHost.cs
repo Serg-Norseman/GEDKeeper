@@ -3,25 +3,33 @@ using GKCore.Types;
 
 namespace GKCore.Interfaces
 {
-    public interface IHost
+	public interface IHost : ILocalization
     {
-		ILangMan CreateLangMan(object sender);
-    	IBase GetCurrentFile(bool extMode = false);
+		INamesTable NamesTable { get; }
+
+		IBaseWindow GetCurrentFile(bool extMode = false);
     	IWorkWindow GetWorkWindow();
 
-    	void BaseChanged(IBase aBase);
-    	void BaseClosed(IBase aBase);
-    	void NotifyRecord(IBase aBase, object record, RecordAction action);
-    	
+		IBaseWindow CreateBase(string fileName);
+		IBaseWindow FindBase(string fileName);
+    	void BaseChanged(IBaseWindow aBase);
+    	void BaseClosed(IBaseWindow aBase);
+    	void NotifyRecord(IBaseWindow aBase, object record, RecordAction action);
+
     	string GetAppDataPath();
 
-        bool Register(IPlugin plugin);
         void LogWrite(string msg);
 
         bool IsWidgetActive(IWidget widget);
         void WidgetShow(IWidget widget);
         void WidgetClose(IWidget widget);
-        
+
         void ShowMDI(Form form);
-    }
+
+		ILangMan CreateLangMan(object sender);
+		void LoadLanguage(int langCode);
+		void UpdateNavControls();
+		void UpdateControls(bool forceDeactivate);
+		void ShowHelpTopic(string topic);
+	}
 }

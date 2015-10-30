@@ -23,7 +23,7 @@ namespace GKPedigreeImporterPlugin
 
 		void btnImportFileChoose_Click(object sender, EventArgs e)
 		{
-			IBase curBase = plugin.Host.GetCurrentFile(false);
+			IBaseWindow curBase = plugin.Host.GetCurrentFile(false);
 			
 			if (this.OpenDialog2.ShowDialog() == DialogResult.OK)
 			{

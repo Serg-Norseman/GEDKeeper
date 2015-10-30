@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Windows.Forms;
 
-using ExtUtils;
 using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKUI.Dialogs
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public partial class TfmAssociationEdit : Form, IBaseEditor
 	{
-		private readonly IBase fBase;
+		private readonly IBaseWindow fBase;
 		private GEDCOMAssociation fAssociation;
 		private GEDCOMIndividualRecord fTempInd;
 
@@ -26,7 +24,7 @@ namespace GKUI.Dialogs
 			set { this.SetAssociation(value); }
 		}
 
-		public IBase Base
+		public IBaseWindow Base
 		{
 			get { return this.fBase; }
 		}
@@ -55,7 +53,7 @@ namespace GKUI.Dialogs
 			}
 			catch (Exception ex)
 			{
-				this.fBase.Host.LogWrite("TfmAssociationEdit.Accept(): " + ex.Message);
+				this.fBase.Host.LogWrite("TfmAssociationEdit.btnAccept_Click(): " + ex.Message);
 				base.DialogResult = DialogResult.None;
 			}
 		}
@@ -66,7 +64,7 @@ namespace GKUI.Dialogs
 			this.EditPerson.Text = ((this.fTempInd == null) ? "" : this.fTempInd.GetNameString(true, false));
 		}
 
-		public TfmAssociationEdit(IBase aBase)
+		public TfmAssociationEdit(IBaseWindow aBase)
 		{
 			this.InitializeComponent();
 			this.fBase = aBase;
@@ -77,6 +75,7 @@ namespace GKUI.Dialogs
 				this.EditRelation.Items.Add(TfmGEDKeeper.Instance.Options.Relations[i]);
 			}
 
+			// SetLang()
 			this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
 			this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
 			this.Text = LangMan.LS(LSID.LSID_Association);

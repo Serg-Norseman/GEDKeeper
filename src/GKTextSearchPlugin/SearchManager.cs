@@ -27,7 +27,7 @@ namespace GKTextSearchPlugin
 
 		#region Private methods
 		
-		private static string GetSign(IBase aBase)
+		private static string GetSign(IBaseWindow aBase)
 		{
 			return Path.GetFileNameWithoutExtension(aBase.Tree.FileName);
 		}
@@ -37,7 +37,7 @@ namespace GKTextSearchPlugin
 			return !((rec is GEDCOMLocationRecord || rec is GEDCOMGroupRecord));
 		}
 
-		private static void SetDBLastChange(IBase aBase, WritableDatabase database)
+		private static void SetDBLastChange(IBaseWindow aBase, WritableDatabase database)
 		{
 			string db_lastchange = aBase.Tree.Header.TransmissionDateTime.ToString("yyyy.MM.dd HH:mm:ss", null);
 			database.SetMetadata(GetSign(aBase), db_lastchange);
@@ -50,7 +50,7 @@ namespace GKTextSearchPlugin
 			return xdb_dir;
 		}
 
-		private static uint FindDocId(IBase aBase, WritableDatabase database, string xref)
+		private static uint FindDocId(IBaseWindow aBase, WritableDatabase database, string xref)
 		{
 			uint result;
 
@@ -66,7 +66,7 @@ namespace GKTextSearchPlugin
 			return result;
 		}
 
-		private static void SetDocumentContext(IBase aBase, Document doc, TermGenerator indexer, GEDCOMRecord rec)
+		private static void SetDocumentContext(IBaseWindow aBase, Document doc, TermGenerator indexer, GEDCOMRecord rec)
 		{
 			StringList ctx = aBase.GetRecordContent(rec);
 			string rec_lastchange = rec.ChangeDate.ToString();
@@ -81,7 +81,7 @@ namespace GKTextSearchPlugin
 			indexer.IndexText(ctx.Text);
 		}
 
-		private static void ReindexRecord(IBase aBase, WritableDatabase database, TermGenerator indexer, GEDCOMRecord record)
+		private static void ReindexRecord(IBaseWindow aBase, WritableDatabase database, TermGenerator indexer, GEDCOMRecord record)
 		{
 			uint docid = FindDocId(aBase, database, record.XRef);
 
@@ -112,7 +112,7 @@ namespace GKTextSearchPlugin
 
 		#endregion
 
-		public void ReindexBase(IBase aBase)
+		public void ReindexBase(IBaseWindow aBase)
 		{
 		    if (aBase == null) return;
 
@@ -147,7 +147,7 @@ namespace GKTextSearchPlugin
 			}
 		}
 
-		public void UpdateRecord(IBase aBase, GEDCOMRecord record)
+		public void UpdateRecord(IBaseWindow aBase, GEDCOMRecord record)
 		{
 			if (record == null || !IsIndexedRecord(record)) return;
 
@@ -172,7 +172,7 @@ namespace GKTextSearchPlugin
 			}
 		}
 
-		public void DeleteRecord(IBase aBase, string xref)
+		public void DeleteRecord(IBaseWindow aBase, string xref)
 		{
 			try
 			{
@@ -201,7 +201,7 @@ namespace GKTextSearchPlugin
 			public int Percent;
 		}
 
-		public List<SearchEntry> Search(IBase aBase, string searchText)
+		public List<SearchEntry> Search(IBaseWindow aBase, string searchText)
 		{
             const uint flags = (uint)(QueryParser.feature_flag.FLAG_PARTIAL | QueryParser.feature_flag.FLAG_WILDCARD |
                                       QueryParser.feature_flag.FLAG_PHRASE | QueryParser.feature_flag.FLAG_BOOLEAN |

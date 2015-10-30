@@ -4,10 +4,10 @@ using System.Windows.Forms;
 using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Types;
 using GKUI.Controls;
-using GKUI.Lists;
 
 namespace GKUI.Dialogs
 {
@@ -226,7 +226,7 @@ namespace GKUI.Dialogs
 			}
 			catch (Exception ex)
 			{
-				this.fHost.LogWrite("TfmOptions.Accept(): " + ex.Message);
+				this.fHost.LogWrite("TfmOptions.btnAccept_Click(): " + ex.Message);
 				base.DialogResult = DialogResult.None;
 			}
 		}
@@ -370,7 +370,7 @@ namespace GKUI.Dialogs
 			}
 		}
 
-		void ILocalization.SetLang()
+		public void SetLang()
 		{
 			this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
 			this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);

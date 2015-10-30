@@ -3,8 +3,8 @@ namespace GKCommon.GEDCOM.Enums
     public enum GEDCOMRestriction
     {
         rnNone,
-        rnConfidential,
         rnLocked,
+        rnConfidential,
         rnPrivacy,
 
         rnLast = rnPrivacy

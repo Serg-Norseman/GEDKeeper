@@ -50,41 +50,6 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		public void GetCorresponder(ref GKCommunicationDir aDir, ref GEDCOMIndividualRecord aCorresponder)
-		{
-			aCorresponder = null;
-
-            GEDCOMTag cr_tag = base.FindTag("FROM", 0);
-			if (cr_tag == null)
-			{
-				cr_tag = base.FindTag("TO", 0);
-			}
-
-            if (cr_tag != null)
-			{
-				aCorresponder = (this.fOwner.XRefIndex_Find(GEDCOMUtils.CleanXRef(cr_tag.StringValue)) as GEDCOMIndividualRecord);
-				if (cr_tag.Name == "FROM")
-				{
-					aDir = GKCommunicationDir.cdFrom;
-				}
-				else if (cr_tag.Name == "TO")
-				{
-					aDir = GKCommunicationDir.cdTo;
-				}
-			}
-		}
-
-		public void SetCorresponder(GKCommunicationDir aDir, GEDCOMIndividualRecord aCorresponder)
-		{
-			base.DeleteTag("FROM");
-			base.DeleteTag("TO");
-
-            if (aCorresponder != null)
-			{
-				this.AddTag(GEDCOMCommunicationRecord.CommunicationTags[(int)aDir], GEDCOMUtils.EncloseXRef(aCorresponder.XRef), null);
-			}
-		}
-
 		public GEDCOMCommunicationRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
@@ -93,5 +58,39 @@ namespace GKCommon.GEDCOM
 		{
 			return new GEDCOMCommunicationRecord(owner, parent, tagName, tagValue);
 		}
+        
+        #region Auxiliary
+
+		public void GetCorresponder(ref GKCommunicationDir commDir, ref GEDCOMIndividualRecord corresponder)
+		{
+			corresponder = null;
+
+            GEDCOMTag corrTag = base.FindTag("FROM", 0);
+			if (corrTag == null) {
+				corrTag = base.FindTag("TO", 0);
+			}
+
+            if (corrTag != null) {
+				corresponder = (this.fOwner.XRefIndex_Find(GEDCOMUtils.CleanXRef(corrTag.StringValue)) as GEDCOMIndividualRecord);
+
+				if (corrTag.Name == "FROM") {
+					commDir = GKCommunicationDir.cdFrom;
+				} else if (corrTag.Name == "TO") {
+					commDir = GKCommunicationDir.cdTo;
+				}
+			}
+		}
+
+		public void SetCorresponder(GKCommunicationDir commDir, GEDCOMIndividualRecord corresponder)
+		{
+			base.DeleteTag("FROM");
+			base.DeleteTag("TO");
+
+            if (corresponder != null) {
+				this.AddTag(GEDCOMCommunicationRecord.CommunicationTags[(int)commDir], GEDCOMUtils.EncloseXRef(corresponder.XRef), null);
+			}
+		}
+
+		#endregion
 	}
 }

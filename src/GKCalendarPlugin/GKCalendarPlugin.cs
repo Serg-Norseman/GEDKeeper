@@ -32,7 +32,7 @@ namespace GKCalendarPlugin
 		/* 163 */ LSID_Cal_Bahai,
     }
     
-    public class Plugin : IPlugin, IWidget
+    public sealed class Plugin : IPlugin, IWidget
     {
         private string fDisplayName = "GKCalendarPlugin";
         private IHost fHost;
@@ -105,8 +105,8 @@ namespace GKCalendarPlugin
     	#region IWidget common
 
     	void IWidget.WidgetInit(IHost host) {}
-        void IWidget.BaseChanged(IBase aBase) {}
-        void IWidget.BaseClosed(IBase aBase) {}
+        void IWidget.BaseChanged(IBaseWindow aBase) {}
+        void IWidget.BaseClosed(IBaseWindow aBase) {}
         void IWidget.WidgetEnable() {}
 
         #endregion

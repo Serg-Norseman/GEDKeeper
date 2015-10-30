@@ -75,7 +75,7 @@ namespace GKUI.Dialogs
 			this.LabelMail.Name = "LabelMail";
 			this.LabelMail.Size = new System.Drawing.Size(136, 13);
 			this.LabelMail.TabIndex = 2;
-			this.LabelMail.Text = "http://gedkeeper.ucoz.ru/";
+			this.LabelMail.Text = "http://vk.com/gedkeeper";
 			this.LabelMail.Click += new System.EventHandler(this.LabelMail_Click);
 			// 
 			// LabelCite

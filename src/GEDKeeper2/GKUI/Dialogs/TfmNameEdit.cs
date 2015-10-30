@@ -1,33 +1,33 @@
 ﻿using System;
 using System.Windows.Forms;
-using GKCommon.GEDCOM;
+
 using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
-
-/// <summary>
-/// 
-/// </summary>
+using GKCore.Types;
 
 namespace GKUI.Dialogs
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public partial class TfmNameEdit : Form
 	{
-		private readonly IBase fBase;
-		private NamesTable.NameEntry fNameEntry;
+		private readonly IBaseWindow fBase;
+		private NameEntry fNameEntry;
 
-		public IBase Base
+		public IBaseWindow Base
 		{
 			get { return this.fBase; }
 		}
 
-		public NamesTable.NameEntry IName
+		public NameEntry IName
 		{
 			get { return this.fNameEntry; }
 			set { this.SetIName(value); }
 		}
 
-		private void SetIName(NamesTable.NameEntry value)
+		private void SetIName(NameEntry value)
 		{
 			this.fNameEntry = value;
 			if (this.fNameEntry == null)
@@ -58,7 +58,7 @@ namespace GKUI.Dialogs
 			}
 			catch (Exception ex)
 			{
-				this.fBase.Host.LogWrite("TfmNameEdit.Accept(): " + ex.Message);
+				this.fBase.Host.LogWrite("TfmNameEdit.btnAccept_Click(): " + ex.Message);
 				base.DialogResult = DialogResult.None;
 			}
 		}
@@ -71,7 +71,7 @@ namespace GKUI.Dialogs
 			}
 		}
 
-		public TfmNameEdit(IBase aBase)
+		public TfmNameEdit(IBaseWindow aBase)
 		{
 			this.InitializeComponent();
 			this.fBase = aBase;
@@ -81,6 +81,7 @@ namespace GKUI.Dialogs
 				this.edSex.Items.Add(GKUtils.SexStr(sx));
 			}
 
+			// SetLang()
 			this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
 			this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
 			this.Text = LangMan.LS(LSID.LSID_Name);

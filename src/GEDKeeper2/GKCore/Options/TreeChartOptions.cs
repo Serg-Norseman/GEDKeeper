@@ -22,6 +22,7 @@ namespace GKCore.Options
         public bool PortraitsVisible;
         public bool SignsVisible;
         public bool CertaintyIndexVisible;
+        public bool TraceSelected;
 
         public Color MaleColor;
         public Color FemaleColor;
@@ -50,6 +51,7 @@ namespace GKCore.Options
 			this.PortraitsVisible = true;
 			this.SignsVisible = false;
 			this.CertaintyIndexVisible = false;
+			this.TraceSelected = true;
 			
 			this.MaleColor = Color.FromArgb(-3750145);
 			this.FemaleColor = Color.FromArgb(-14650);
@@ -81,6 +83,7 @@ namespace GKCore.Options
 			this.SignsVisible = iniFile.ReadBool("Chart", "SignsVisible", false);
 			this.PortraitsVisible = iniFile.ReadBool("Chart", "PortraitsVisible", true);
 			this.CertaintyIndexVisible = iniFile.ReadBool("Chart", "CertaintyIndexVisible", false);
+			this.TraceSelected = iniFile.ReadBool("Chart", "TraceSelected", true);
 			
 			this.MaleColor = Color.FromArgb(iniFile.ReadInteger("Chart", "MaleColor", -3750145));
 			this.FemaleColor = Color.FromArgb(iniFile.ReadInteger("Chart", "FemaleColor", -14650));
@@ -112,6 +115,7 @@ namespace GKCore.Options
 			iniFile.WriteBool("Chart", "SignsVisible", this.SignsVisible);
 			iniFile.WriteBool("Chart", "PortraitsVisible", this.PortraitsVisible);
 			iniFile.WriteBool("Chart", "CertaintyIndexVisible", this.CertaintyIndexVisible);
+			iniFile.WriteBool("Chart", "TraceSelected", this.TraceSelected);
 			
 			iniFile.WriteInteger("Chart", "MaleColor", this.MaleColor.ToArgb());
 			iniFile.WriteInteger("Chart", "FemaleColor", this.FemaleColor.ToArgb());

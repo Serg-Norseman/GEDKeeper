@@ -5,7 +5,7 @@ using System.Security.Permissions;
 using System.Threading;
 using System.Windows.Forms;
 
-using ExtUtils;
+using ExtUtils.SingleInstancing;
 using GKCommon;
 using GKCore;
 using GKUI;
@@ -18,57 +18,66 @@ using GKUI;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyTitle("GEDKeeper2")]
-[assembly: AssemblyVersion("2.2.0.0")]
-
+[assembly: AssemblyVersion("2.4.0.0")]
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyFile("")]
 [assembly: AssemblyKeyName("")]
-
 [assembly: ComVisible(false)]
-
-/// <summary>
-/// 
-/// </summary>
 
 namespace GK2
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	internal sealed class Program
 	{
 		[STAThread]
 		[SecurityPermission(SecurityAction.Demand, Flags=SecurityPermissionFlag.ControlAppDomain)]
 		private static void Main(string[] args)
 		{
-			bool isFirstInstance;
-			using (Mutex mtx = new Mutex(true, GKData.AppTitle, out isFirstInstance)) {
-				if (isFirstInstance) {
-					Application.ThreadException += ExExceptionHandler;
-					Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException, true);
-					AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionsHandler;
+			Application.ThreadException += ExExceptionHandler;
+			Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException, true);
+			AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionsHandler;
+			Application.EnableVisualStyles();
+			Application.SetCompatibleTextRenderingDefault(false);
 
-					Application.EnableVisualStyles();
-					Application.SetCompatibleTextRenderingDefault(false);
-					Application.Run(new TfmGEDKeeper(args));
+			SingleInstanceTracker tracker = null;
+			try
+			{
+				tracker = new SingleInstanceTracker(GKData.AppTitle, new SingleInstanceEnforcerRetriever(GetSingleInstanceEnforcer));
+
+				if (tracker.IsFirstInstance) {
+					TfmGEDKeeper fmMain = (TfmGEDKeeper)tracker.Enforcer;
+					fmMain.SetArgs(args);
+					Application.Run(fmMain);
 				} else {
-					// The application is already running
-					// TODO: Display message box or change focus to existing application instance
+					tracker.SendMessageToFirstInstance(args);
 				}
+			}
+			finally
+			{
+				if (tracker != null) tracker.Dispose();
 			}
 		}
 
+		private static ISingleInstanceEnforcer GetSingleInstanceEnforcer()
+		{
+			return new TfmGEDKeeper();
+		}
+
 		static void ExExceptionHandler(object sender, ThreadExceptionEventArgs args)
-	    {
-      		SysUtils.LogWrite("GK.ExExceptionHandler(): " + args.Exception.Message);
-      		SysUtils.LogWrite("GK.ExExceptionHandler(): " + args.Exception.StackTrace.ToString());
-	    }
+		{
+			SysUtils.LogWrite("GK.ExExceptionHandler(): " + args.Exception.Message);
+			SysUtils.LogWrite("GK.ExExceptionHandler(): " + args.Exception.StackTrace.ToString());
+		}
 
 		static void UnhandledExceptionsHandler(object sender, UnhandledExceptionEventArgs args) {
 			// saving restore copies
 			TfmGEDKeeper.Instance.CriticalSave();
 
 			Exception e = (Exception) args.ExceptionObject;
-      		SysUtils.LogWrite("GK.UnhandledExceptionsHandler(): " + e.Message);
-      		SysUtils.LogWrite("GK.ExExceptionHandler(): " + e.StackTrace.ToString());
+			SysUtils.LogWrite("GK.UnhandledExceptionsHandler(): " + e.Message);
+			SysUtils.LogWrite("GK.ExExceptionHandler(): " + e.StackTrace.ToString());
 		}
-
 	}
 }

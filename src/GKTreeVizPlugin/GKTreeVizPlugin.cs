@@ -19,7 +19,7 @@ using GKCore.Interfaces;
 
 namespace GKTreeVizPlugin
 {
-    public class Plugin : IPlugin
+    public sealed class Plugin : IPlugin
     {
         private string fDisplayName = "3D Визуализатор деревьев";
         private IHost fHost;
@@ -34,7 +34,7 @@ namespace GKTreeVizPlugin
             //frmP2Main frm = new frmP2Main(this);
             //frm.ShowDialog();
             
-        	IBase curBase = this.fHost.GetCurrentFile(true);
+        	IBaseWindow curBase = this.fHost.GetCurrentFile(true);
 			using (TreeVizViewer viewer = new TreeVizViewer(curBase, 2/*decimal.ToInt32(this.edMinGens.Value)*/))
 			{
 				viewer.ShowDialog();

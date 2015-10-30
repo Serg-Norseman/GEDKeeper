@@ -7,8 +7,7 @@ namespace GKUI
 		private System.Windows.Forms.SaveFileDialog SaveDialog1;
 		private System.Windows.Forms.ToolBar ToolBar1;
 		private System.Windows.Forms.ToolBarButton tbImageSave;
-		private System.Windows.Forms.ToolBarButton tbPrev;
-		private System.Windows.Forms.ToolBarButton tbNext;
+		private System.Windows.Forms.ToolBarButton tbImagePrint;
 		private System.Windows.Forms.ContextMenu MenuPerson;
 		private System.Windows.Forms.MenuItem miEdit;
 		private System.Windows.Forms.MenuItem N1;
@@ -20,7 +19,6 @@ namespace GKUI
 		private System.Windows.Forms.MenuItem miDelete;
 		private System.Windows.Forms.MenuItem N3;
 		private System.Windows.Forms.MenuItem miRebuildKinships;
-		private System.Windows.Forms.ToolBarButton tbFilter;
 		private System.Windows.Forms.ToolBarButton tbModes;
 		private System.Windows.Forms.ContextMenu MenuModes;
 		private System.Windows.Forms.MenuItem miModeBoth;
@@ -47,6 +45,12 @@ namespace GKUI
 		private System.Windows.Forms.MenuItem miFillColor;
 		private System.Windows.Forms.MenuItem miFillImage;
 		private System.Windows.Forms.MenuItem N9;
+		private System.ComponentModel.IContainer components;
+		private System.Windows.Forms.ToolTip toolTip1;
+		private System.Windows.Forms.OpenFileDialog OpenDialog1;
+		private System.Windows.Forms.ColorDialog colorDialog1;
+		private System.Windows.Forms.ToolBarButton tbs2;
+		private System.Windows.Forms.ToolBarButton tbs1;
 
 		private void InitializeComponent()
 		{
@@ -54,6 +58,7 @@ namespace GKUI
 			this.SaveDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.ToolBar1 = new System.Windows.Forms.ToolBar();
 			this.tbImageSave = new System.Windows.Forms.ToolBarButton();
+			this.tbImagePrint = new System.Windows.Forms.ToolBarButton();
 			this.tbs1 = new System.Windows.Forms.ToolBarButton();
 			this.tbGens = new System.Windows.Forms.ToolBarButton();
 			this.MenuGens = new System.Windows.Forms.ContextMenu();
@@ -68,11 +73,6 @@ namespace GKUI
 			this.miGens8 = new System.Windows.Forms.MenuItem();
 			this.miGens9 = new System.Windows.Forms.MenuItem();
 			this.tbs2 = new System.Windows.Forms.ToolBarButton();
-			this.tbPrev = new System.Windows.Forms.ToolBarButton();
-			this.tbNext = new System.Windows.Forms.ToolBarButton();
-			this.tbs3 = new System.Windows.Forms.ToolBarButton();
-			this.tbFilter = new System.Windows.Forms.ToolBarButton();
-			this.tbs5 = new System.Windows.Forms.ToolBarButton();
 			this.tbModes = new System.Windows.Forms.ToolBarButton();
 			this.MenuModes = new System.Windows.Forms.ContextMenu();
 			this.miModeBoth = new System.Windows.Forms.MenuItem();
@@ -115,14 +115,10 @@ namespace GKUI
 			this.ToolBar1.Appearance = System.Windows.Forms.ToolBarAppearance.Flat;
 			this.ToolBar1.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] {
 									this.tbImageSave,
+									this.tbImagePrint,
 									this.tbs1,
 									this.tbGens,
 									this.tbs2,
-									this.tbPrev,
-									this.tbNext,
-									this.tbs3,
-									this.tbFilter,
-									this.tbs5,
 									this.tbModes});
 			this.ToolBar1.DropDownArrows = true;
 			this.ToolBar1.Location = new System.Drawing.Point(0, 0);
@@ -138,6 +134,12 @@ namespace GKUI
 			this.tbImageSave.ImageIndex = 6;
 			this.tbImageSave.Name = "tbImageSave";
 			this.tbImageSave.ToolTipText = "Сохранить изображение";
+			// 
+			// tbImagePrint
+			// 
+			this.tbImagePrint.ImageIndex = 7;
+			this.tbImagePrint.Name = "tbImagePrint";
+			this.tbImagePrint.ToolTipText = "Печать изображения";
 			// 
 			// tbs1
 			// 
@@ -232,36 +234,6 @@ namespace GKUI
 			this.tbs2.ImageIndex = 8;
 			this.tbs2.Name = "tbs2";
 			this.tbs2.Style = System.Windows.Forms.ToolBarButtonStyle.Separator;
-			// 
-			// tbPrev
-			// 
-			this.tbPrev.Enabled = false;
-			this.tbPrev.ImageIndex = 22;
-			this.tbPrev.Name = "tbPrev";
-			// 
-			// tbNext
-			// 
-			this.tbNext.Enabled = false;
-			this.tbNext.ImageIndex = 23;
-			this.tbNext.Name = "tbNext";
-			// 
-			// tbs3
-			// 
-			this.tbs3.ImageIndex = 24;
-			this.tbs3.Name = "tbs3";
-			this.tbs3.Style = System.Windows.Forms.ToolBarButtonStyle.Separator;
-			// 
-			// tbFilter
-			// 
-			this.tbFilter.ImageIndex = 16;
-			this.tbFilter.Name = "tbFilter";
-			this.tbFilter.ToolTipText = "Фильтрация древа";
-			// 
-			// tbs5
-			// 
-			this.tbs5.ImageIndex = 17;
-			this.tbs5.Name = "tbs5";
-			this.tbs5.Style = System.Windows.Forms.ToolBarButtonStyle.Separator;
 			// 
 			// tbModes
 			// 
@@ -446,13 +418,5 @@ namespace GKUI
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
-		private System.ComponentModel.IContainer components;
-		private System.Windows.Forms.ToolTip toolTip1;
-		private System.Windows.Forms.OpenFileDialog OpenDialog1;
-		private System.Windows.Forms.ColorDialog colorDialog1;
-		private System.Windows.Forms.ToolBarButton tbs5;
-		private System.Windows.Forms.ToolBarButton tbs3;
-		private System.Windows.Forms.ToolBarButton tbs2;
-		private System.Windows.Forms.ToolBarButton tbs1;
 	}
 }

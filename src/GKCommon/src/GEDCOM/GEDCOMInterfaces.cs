@@ -26,4 +26,12 @@ namespace GKCommon.GEDCOM
         GEDCOMSourceCitation AddSource(GEDCOMSourceRecord sourceRec, string page, int quality);
         GEDCOMMultimediaLink AddMultimedia(GEDCOMMultimediaRecord mediaRec);
     }
+    
+    public interface IGEDCOMRecordWithEvents
+    {
+    	GEDCOMList<GEDCOMCustomEvent> Events { get; }
+    	
+    	GEDCOMCustomEvent AddEvent(GEDCOMCustomEvent evt);
+    	GEDCOMCustomEvent FindEvent(string eventName);
+    }
 }

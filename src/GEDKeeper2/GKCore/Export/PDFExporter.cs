@@ -19,7 +19,7 @@ namespace GKCore.Export
 		protected PdfWriter fWriter;
 		protected bool fAlbumPage;
 
-	    protected PDFExporter(IBase aBase) : base(aBase)
+	    protected PDFExporter(IBaseWindow aBase) : base(aBase)
 		{
 			this.fMargins.Left = 20;
 			this.fMargins.Top = 20;

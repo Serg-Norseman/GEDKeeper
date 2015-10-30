@@ -1,12 +1,11 @@
 using System;
 using System.Windows.Forms;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKUI.Controls
 {
+	/// <summary>
+	/// 
+	/// </summary>
     [Serializable]
 	public class GKTreeNode : TreeNode
 	{

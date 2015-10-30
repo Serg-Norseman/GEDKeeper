@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Security.Permissions;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Security.Permissions;
 
 using GKCommon;
 using GKCommon.GEDCOM;
@@ -30,7 +29,7 @@ namespace GKUI.Charts
     /// <summary>
     /// Localization: dirty
     /// </summary>
-    public class TreeChartBox : Panel
+    public class TreeChartBox : CustomChart
 	{
     	public const int DefMargins = 24;
 		public const int DefSpouseDistance = 10;
@@ -72,7 +71,7 @@ namespace GKUI.Charts
 
 		#region Private fields
 		
-		private IBase fBase;
+		private IBaseWindow fBase;
 		private int fBranchDistance;
 		private bool fCertaintyIndex;
 		private int fDepthLimit;
@@ -132,8 +131,8 @@ namespace GKUI.Charts
         private static readonly object EventRootChanged;
         private static readonly object EventPersonProperties;
 
-        private IContainer fComponents;
-        private System.Windows.Forms.Timer fTimer;
+        //private IContainer fComponents;
+        //private System.Windows.Forms.Timer fTimer;
         
 		#endregion
 
@@ -157,10 +156,13 @@ namespace GKUI.Charts
 			remove { base.Events.RemoveHandler(TreeChartBox.EventPersonProperties, value); }
 		}
 
-		public IBase Base
+		public IBaseWindow Base
 		{
 			get { return this.fBase; }
-			set { this.fBase = value; }
+			set {
+				this.fBase = value;
+				this.fTree = this.fBase.Tree;
+			}
 		}
 
 		public int BorderWidth
@@ -280,12 +282,6 @@ namespace GKUI.Charts
 			set { this.fTraceKinships = value; }
 		}
 
-		public GEDCOMTree Tree
-		{
-			get { return this.fTree; }
-			set { this.fTree = value; }
-		}
-
 		#endregion
 
 		#region Instance control
@@ -355,7 +351,7 @@ namespace GKUI.Charts
 		{
 			//FSignsData = new string[] { "GEORGE_CROSS", "SOLDIER", "SOLDIER_FALL", "VETERAN_REAR" };
 
-			fSignsPic = new Bitmap[5];
+			fSignsPic = new Bitmap[9];
 
 			fSignsPic[0] = GKResources.iTGGeorgeCross;
 			fSignsPic[0].MakeTransparent(this.fSignsPic[0].GetPixel(0, 0));
@@ -371,6 +367,18 @@ namespace GKUI.Charts
 
 			fSignsPic[4] = GKResources.iTGBarbedWire;
 			fSignsPic[4].MakeTransparent(this.fSignsPic[4].GetPixel(0, 0));
+
+			fSignsPic[5] = GKResources.iTGIslamSym;
+			//fSignsPic[5].MakeTransparent(this.fSignsPic[4].GetPixel(0, 0));
+
+			fSignsPic[6] = GKResources.iTGLatinCross;
+			//fSignsPic[6].MakeTransparent(this.fSignsPic[4].GetPixel(0, 0));
+
+			fSignsPic[7] = GKResources.iTGOrthodoxCross;
+			//fSignsPic[7].MakeTransparent(this.fSignsPic[4].GetPixel(0, 0));
+
+			fSignsPic[8] = GKResources.iTGOldRitualCross;
+			//fSignsPic[8].MakeTransparent(this.fSignsPic[4].GetPixel(0, 0));
 			
 			fExpPic = GKResources.iExpand;
 			fExpPic.MakeTransparent(this.fExpPic.GetPixel(0, 0));
@@ -393,9 +401,9 @@ namespace GKUI.Charts
             this.fTimer.Enabled = true;*/
 		}
 		
-		private void timer_Tick(object sender, System.EventArgs e)
+		/*private void timer_Tick(object sender, System.EventArgs e)
 		{
-			/*if (this.fHighlightedPerson != null) {
+			if (this.fHighlightedPerson != null) {
 				DateTime st = DateTime.FromBinary(this.fHighlightedStart);
 				DateTime cur = DateTime.Now;
 				TimeSpan d = cur - st;
@@ -404,8 +412,8 @@ namespace GKUI.Charts
 					this.fPersonControl.Visible = true;
 					this.Invalidate();
 				}
-			}*/
-		}
+			}
+		}*/
 
 		public void GenChart(GEDCOMIndividualRecord iRec, ChartKind kind, bool center)
 		{
@@ -447,6 +455,9 @@ namespace GKUI.Charts
 				this.RecalcChart();
 
 				if (center) this.CenterPerson(this.fRoot);
+				
+				this.NavAdd(iRec);
+				this.DoRootChanged(this.fRoot);
 			}
 			catch (Exception ex)
 			{
@@ -496,50 +507,6 @@ namespace GKUI.Charts
 			catch (Exception ex)
 			{
 				this.fBase.Host.LogWrite("TreeChartBox.RebuildKinships(): " + ex.Message);
-			}
-		}
-
-		public void SaveSnapshot(string fileName)
-		{
-			string ext = Path.GetExtension(fileName).ToLowerInvariant();
-
-			if ((ext == ".bmp" || ext == ".jpg") && this.fImageWidth >= 65535)
-			{
-				GKUtils.ShowError(LangMan.LS(LSID.LSID_TooMuchWidth));
-			}
-			else
-			{
-				ImageFormat imFmt = ImageFormat.Png;
-				if (ext == ".bmp") { imFmt = ImageFormat.Bmp; }
-				else
-					if (ext == ".emf") { imFmt = ImageFormat.Emf; }
-				else
-					if (ext == ".png") { imFmt = ImageFormat.Png; }
-				else
-					if (ext == ".gif") { imFmt = ImageFormat.Gif; }
-				else
-					if (ext == ".jpg") { imFmt = ImageFormat.Jpeg; }
-
-				Image pic;
-				if (imFmt == ImageFormat.Emf) {
-					pic = new Metafile(fileName, this.CreateGraphics().GetHdc());
-				} else {
-					pic = new Bitmap(this.fImageWidth, this.fImageHeight, PixelFormat.Format24bppRgb);
-				}
-				
-				try
-				{
-					using (Graphics gfx = Graphics.FromImage(pic)) {
-						this.Predef();
-						this.InternalDraw(gfx, DrawMode.dmFile);
-					}
-
-					pic.Save(fileName, imFmt);
-				}
-				finally
-				{
-					SysUtils.Free(pic);
-				}
 			}
 		}
 
@@ -617,8 +584,9 @@ namespace GKUI.Charts
 
 						if (GKUtils.IsRecordAccess(family.Restriction, this.fShieldState))
 						{
-							GEDCOMIndividualRecord iFather = family.Husband.Value as GEDCOMIndividualRecord;
-							GEDCOMIndividualRecord iMother = family.Wife.Value as GEDCOMIndividualRecord;
+							GEDCOMIndividualRecord iFather = family.GetHusband();
+							GEDCOMIndividualRecord iMother = family.GetWife();
+
 							bool divorced = (family.GetTagStringValue("_STAT") == "NOTMARR");
 
 							if (iFather != null && GKUtils.IsRecordAccess(iFather.Restriction, this.fShieldState))
@@ -748,7 +716,7 @@ namespace GKUI.Charts
 							switch (sex) {
 								case GEDCOMSex.svFemale:
 									{
-										GEDCOMIndividualRecord sp = family.Husband.Value as GEDCOMIndividualRecord;
+										GEDCOMIndividualRecord sp = family.GetHusband();
 										resParent = this.AddDescPerson(null, sp, PersonKind.pkSpouse, level);
 										resParent.Sex = GEDCOMSex.svMale;
 										ft = resParent;
@@ -759,7 +727,7 @@ namespace GKUI.Charts
 
 								case GEDCOMSex.svMale:
 									{
-										GEDCOMIndividualRecord sp = family.Wife.Value as GEDCOMIndividualRecord;
+										GEDCOMIndividualRecord sp = family.GetWife();
 										resParent = this.AddDescPerson(null, sp, PersonKind.pkSpouse, level);
 										resParent.Sex = GEDCOMSex.svFemale;
 										ft = res;
@@ -1072,7 +1040,7 @@ namespace GKUI.Charts
 						bColor = Color.Black;
 					}
 					
-					if (highlighted) bColor = GKUtils.lighter(bColor, 0.2f);
+					if (highlighted) bColor = ColorUtils.lighter(bColor, 0.2f);
 					gfx.FillRectangle(new SolidBrush(bColor), rect.Left, rect.Top, rect.Width, rect.Height);
 					gfx.DrawRectangle(xpen, rect.Left, rect.Top, rect.Width, rect.Height);
 					break;
@@ -1090,7 +1058,7 @@ namespace GKUI.Charts
 						bColor = Color.Black;
 					}
 
-					if (highlighted) bColor = GKUtils.lighter(bColor, 0.2f);
+					if (highlighted) bColor = ColorUtils.lighter(bColor, 0.2f);
 					GraphicsPath path = GKUtils.CreateRoundedRectangle(rect.Left, rect.Top, rect.Width, rect.Height, 6);
 					
 					/*gfx.TranslateTransform(3, 3);
@@ -1123,14 +1091,14 @@ namespace GKUI.Charts
 			ExtRect rt = person.Rect;
 			if (drawMode == DrawMode.dmScreen && !this.PersonIsVisible(rt)) return;
 
-			rt = rt.GetOffset(spx, spy);
+			rt = rt.GetShift(spx, spy);
 
 			int h = gfx.MeasureString("A", this.DrawFont).ToSize().Height;
 			bool hasPort = this.Options.PortraitsVisible && person.Portrait != null;
 
 			if (person.IsDead) {
 				ExtRect dt = rt;
-				dt = dt.GetOffset(-2, -2);
+				dt = dt.GetShift(-2, -2);
 				this.DrawBorder(gfx, fLinePen, dt, true, person);
 			}
 
@@ -1180,7 +1148,7 @@ namespace GKUI.Charts
 			if (hasPort) {
 				ExtRect portRt = rt;
 				portRt.Right = portRt.Left + person.PortraitWidth;
-				portRt.OffsetEx(3, 3);
+				portRt.Offset(3, 3);
 				gfx.DrawImage(person.Portrait, person.GetDestRect(portRt, person.Portrait));
 				rt.Left += person.PortraitWidth;
 			}
@@ -1193,7 +1161,7 @@ namespace GKUI.Charts
 			if (this.Options.SignsVisible && !person.Signs.IsEmpty())
 			{
 				int i = 0;
-				for (ChartPersonSign cps = ChartPersonSign.urRI_StGeorgeCross; cps <= ChartPersonSign.urLast; cps++)
+				for (SpecialUserRef cps = SpecialUserRef.urRI_StGeorgeCross; cps <= SpecialUserRef.urLast; cps++)
 				{
 					if (person.Signs.Contains(cps)) {
 						Bitmap pic = this.fSignsPic[(int)cps - 1];
@@ -1774,7 +1742,7 @@ namespace GKUI.Charts
 			if (value > this.fScrollRange.Width) value = this.fScrollRange.Width;
 
 			if (this.fLeftPos != value) {
-				ExtRect dummy = ExtRect.Empty();
+				ExtRect dummy = ExtRect.CreateEmpty();
 				ExtRect rt;
                 NativeMethods.ScrollWindowEx(this.Handle, this.fLeftPos - value, 0, ref dummy, ref dummy, 0, out rt, 0u);
                 NativeMethods.SetScrollPos(this.Handle, 0, this.fLeftPos, true);
@@ -1791,7 +1759,7 @@ namespace GKUI.Charts
 			if (value > this.fScrollRange.Height) value = this.fScrollRange.Height;
 
 			if (this.fTopPos != value) {
-				ExtRect dummy = ExtRect.Empty();
+				ExtRect dummy = ExtRect.CreateEmpty();
 				ExtRect rt;
                 NativeMethods.ScrollWindowEx(this.Handle, 0, this.fTopPos - value, ref dummy, ref dummy, 0, out rt, 0u);
                 NativeMethods.SetScrollPos(this.Handle, 1, this.fTopPos, true);
@@ -1805,7 +1773,7 @@ namespace GKUI.Charts
 		private void ResetView()
 		{
 			Size sz = this.ClientSize;
-			this.fVisibleArea = ExtRect.Bounds(this.fLeftPos, this.fTopPos, sz.Width, sz.Height);
+			this.fVisibleArea = ExtRect.CreateBounds(this.fLeftPos, this.fTopPos, sz.Width, sz.Height);
 		}
 
 		#endregion
@@ -2081,6 +2049,12 @@ namespace GKUI.Charts
 		#endregion
 
 		#region Navigation
+
+        protected override void SetNavObject(object obj)
+        {
+        	GEDCOMIndividualRecord iRec = obj as GEDCOMIndividualRecord;
+        	this.GenChart(iRec, TreeChartBox.ChartKind.ckBoth, true);
+        }
 		
 		private void SetSelected(TreeChartPerson value)
 		{
@@ -2167,7 +2141,7 @@ namespace GKUI.Charts
 		public void DoFilter(GEDCOMIndividualRecord root)
 		{
 			if (this.fFilter.BranchCut != ChartFilter.TBranchCut.bcNone) {
-				TreeStats.InitExtCounts(this.fTree, 0);
+				GKUtils.InitExtCounts(this.fTree, 0);
 				this.DoDescendantsFilter(root);
 				root.ExtData = true;
 			}
@@ -2230,6 +2204,77 @@ namespace GKUI.Charts
 			return result;
 		}
 		
+		#endregion
+
+		#region Print support
+
+		public void SaveSnapshot(string fileName)
+		{
+			string ext = Path.GetExtension(fileName).ToLowerInvariant();
+
+			if ((ext == ".bmp" || ext == ".jpg") && this.fImageWidth >= 65535)
+			{
+				GKUtils.ShowError(LangMan.LS(LSID.LSID_TooMuchWidth));
+			}
+			else
+			{
+				ImageFormat imFmt = ImageFormat.Png;
+				if (ext == ".bmp") { imFmt = ImageFormat.Bmp; }
+				else
+					if (ext == ".emf") { imFmt = ImageFormat.Emf; }
+				else
+					if (ext == ".png") { imFmt = ImageFormat.Png; }
+				else
+					if (ext == ".gif") { imFmt = ImageFormat.Gif; }
+				else
+					if (ext == ".jpg") { imFmt = ImageFormat.Jpeg; }
+
+				Image pic;
+				if (imFmt == ImageFormat.Emf) {
+					pic = new Metafile(fileName, this.CreateGraphics().GetHdc());
+				} else {
+					pic = new Bitmap(this.fImageWidth, this.fImageHeight, PixelFormat.Format24bppRgb);
+				}
+				
+				try
+				{
+					using (Graphics gfx = Graphics.FromImage(pic)) {
+						this.Predef();
+						this.InternalDraw(gfx, DrawMode.dmFile);
+					}
+
+					pic.Save(fileName, imFmt);
+				}
+				finally
+				{
+					SysUtils.Free(pic);
+				}
+			}
+		}
+
+		public bool IsLandscape()
+		{
+			return (this.fImageHeight < this.fImageWidth);
+		}
+
+		public Image GetPrintableImage()
+		{
+			Image pic = new Metafile(this.CreateGraphics().GetHdc(), EmfType.EmfOnly);
+			
+			try
+			{
+				using (Graphics gfx = Graphics.FromImage(pic)) {
+					this.Predef();
+					this.InternalDraw(gfx, DrawMode.dmFile);
+				}
+
+				return pic;
+			}
+			finally
+			{
+			}
+		}
+
 		#endregion
 	}
 }

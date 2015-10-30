@@ -36,7 +36,7 @@ namespace GKUI
 			this.GroupBox1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.GroupBox1.Location = new System.Drawing.Point(0, 0);
 			this.GroupBox1.Name = "GroupBox1";
-			this.GroupBox1.Size = new System.Drawing.Size(893, 210);
+			this.GroupBox1.Size = new System.Drawing.Size(893, 220);
 			this.GroupBox1.TabIndex = 0;
 			this.GroupBox1.TabStop = false;
 			this.GroupBox1.Text = "Сводка";

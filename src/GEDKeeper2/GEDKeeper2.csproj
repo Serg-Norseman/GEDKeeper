@@ -109,6 +109,7 @@
     <Compile Include="GKCore\GKData.cs" />
     <Compile Include="GKCore\Kinships\KinshipRec.cs" />
     <Compile Include="GKCore\LangMan.cs" />
+    <Compile Include="GKCore\Maps\GMapPoint.cs" />
     <Compile Include="GKCore\Options\GlobalOptions.cs" />
     <Compile Include="GKCore\Options\LangRecord.cs" />
     <Compile Include="GKCore\Options\MRUFile.cs" />
@@ -117,23 +118,29 @@
     <Compile Include="GKCore\Options\TreeChartOptions.cs" />
     <Compile Include="GKCore\GKUtils.cs" />
     <Compile Include="GKCore\ScriptEngine.cs" />
-    <Compile Include="GKCore\TreeStats.cs" />
-    <Compile Include="GKCore\TreeTools.cs" />
-    <Compile Include="GKCore\WeightedMean.cs" />
+    <Compile Include="GKCore\Stats\CommonStats.cs" />
+    <Compile Include="GKCore\Stats\CompositeItem.cs" />
+    <Compile Include="GKCore\Stats\StatMode.cs" />
+    <Compile Include="GKCore\Stats\StatsItem.cs" />
+    <Compile Include="GKCore\Stats\TreeStats.cs" />
+    <Compile Include="GKCore\Tools\PlaceObj.cs" />
+    <Compile Include="GKCore\Tools\TreeTools.cs" />
     <Compile Include="GKResources.Designer.cs">
       <DependentUpon>GKResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\ACOptionsDialog.cs" />
+    <Compile Include="GKUI\ACOptionsDialog.Designer.cs">
+      <DependentUpon>ACOptionsDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Charts\AncestorsCircle.cs" />
     <Compile Include="GKUI\Charts\ChartFilter.cs" />
     <Compile Include="GKCore\Kinships\KinshipsMan.cs" />
+    <Compile Include="GKUI\Charts\CustomChart.cs" />
     <Compile Include="GKUI\Charts\ITreeControl.cs" />
     <Compile Include="GKUI\Charts\PersonControl.cs" />
     <Compile Include="GKUI\Charts\PersonModifyEventArgs.cs" />
     <Compile Include="GKUI\Charts\ScaleControl.cs" />
-    <Compile Include="GKUI\Charts\SearchPanel.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="GKUI\Charts\TreeChartPerson.cs" />
-    <Compile Include="GKUI\Charts\TreeSearchStrategy.cs" />
     <Compile Include="GKUI\Controls\GKLogChart.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -168,6 +175,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Controls\ModifyEventArgs.cs" />
+    <Compile Include="GKUI\Controls\SearchPanel.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmAbout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -342,36 +352,15 @@
     <Compile Include="GKUI\Dialogs\TfmUserRefEdit.Designer.cs">
       <DependentUpon>TfmUserRefEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Lists\ListFilter.cs" />
-    <Compile Include="GKUI\Lists\ListColumns.cs" />
+    <Compile Include="GKCore\Lists\ListFilter.cs" />
+    <Compile Include="GKCore\Lists\ListColumns.cs" />
     <Compile Include="GKUI\PatriarchsViewer.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GKUI\PatriarchsViewer.Designer.cs">
       <DependentUpon>PatriarchsViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Sheets\GKChildsSheet.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKUI\Sheets\GKSpousesSheet.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKUI\Sheets\GKGroupsSheet.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="GKUI\Sheets\GKEventsSheet.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKUI\Sheets\GKAssociationsSheet.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKUI\Sheets\GKMembersSheet.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKUI\Sheets\GKRepositoriesSheet.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKUI\Sheets\GKUserRefsSheet.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Sheets\GKMediaSheet.cs">
@@ -385,6 +374,10 @@
     </Compile>
     <Compile Include="GKUI\Sheets\GKSourcesSheet.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GKUI\TfmAncestorsCircle.cs" />
+    <Compile Include="GKUI\TfmAncestorsCircle.Designer.cs">
+      <DependentUpon>TfmAncestorsCircle.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\TfmBase.Designer.cs">
       <DependentUpon>TfmBase.cs</DependentUpon>
@@ -409,18 +402,18 @@
     </Compile>
     <Compile Include="GKUI\Charts\PersonList.cs" />
     <Compile Include="GKCore\NamesTable.cs" />
-    <Compile Include="GKUI\Lists\CommunicationListMan.cs" />
-    <Compile Include="GKUI\Lists\FamilyListMan.cs" />
-    <Compile Include="GKUI\Lists\GroupListMan.cs" />
-    <Compile Include="GKUI\Lists\IndividualListMan.cs" />
-    <Compile Include="GKUI\Lists\ListManager.cs" />
-    <Compile Include="GKUI\Lists\LocationListMan.cs" />
-    <Compile Include="GKUI\Lists\MultimediaListMan.cs" />
-    <Compile Include="GKUI\Lists\NoteListMan.cs" />
-    <Compile Include="GKUI\Lists\RepositoryListMan.cs" />
-    <Compile Include="GKUI\Lists\ResearchListMan.cs" />
-    <Compile Include="GKUI\Lists\SourceListMan.cs" />
-    <Compile Include="GKUI\Lists\TaskListMan.cs" />
+    <Compile Include="GKCore\Lists\CommunicationListMan.cs" />
+    <Compile Include="GKCore\Lists\FamilyListMan.cs" />
+    <Compile Include="GKCore\Lists\GroupListMan.cs" />
+    <Compile Include="GKCore\Lists\IndividualListMan.cs" />
+    <Compile Include="GKCore\Lists\ListManager.cs" />
+    <Compile Include="GKCore\Lists\LocationListMan.cs" />
+    <Compile Include="GKCore\Lists\MultimediaListMan.cs" />
+    <Compile Include="GKCore\Lists\NoteListMan.cs" />
+    <Compile Include="GKCore\Lists\RepositoryListMan.cs" />
+    <Compile Include="GKCore\Lists\ResearchListMan.cs" />
+    <Compile Include="GKCore\Lists\SourceListMan.cs" />
+    <Compile Include="GKCore\Lists\TaskListMan.cs" />
     <Compile Include="GKUI\TfmBase.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -453,6 +446,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="GKUI\ACOptionsDialog.resx">
+      <DependentUpon>ACOptionsDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Controls\GKMergeControl.resx">
       <DependentUpon>GKMergeControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -546,6 +542,9 @@
     <EmbeddedResource Include="GKUI\PatriarchsViewer.resx">
       <DependentUpon>PatriarchsViewer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\TfmAncestorsCircle.resx">
+      <DependentUpon>TfmAncestorsCircle.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\TfmBase.resx">
       <DependentUpon>TfmBase.cs</DependentUpon>
     </EmbeddedResource>
@@ -618,6 +617,11 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GKCore\Maps" />
+    <Folder Include="GKCore\Tools" />
+    <Folder Include="GKCore\Stats" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

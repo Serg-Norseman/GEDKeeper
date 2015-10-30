@@ -18,10 +18,14 @@ namespace GKImageViewerPlugin
 	{
 		private ImageView fImageCtl;
 
-		public ImageViewer(IPlugin plugin)
+    	private ILangMan fLangMan;
+
+    	public ImageViewer(IPlugin plugin)
 		{
 			this.InitializeComponent();
 			//this.fBase = aBase;
+
+            this.fLangMan = plugin.LangMan;
 
             this.SetLang();
 		}
@@ -136,6 +140,8 @@ namespace GKImageViewerPlugin
 
         public void SetLang()
         {
+        	this.Text = this.fLangMan.LS(IVLS.LSID_ImgViewer);
+        	
             /*if (this.fImageCtl != null) {
                 this.fImageCtl.btnSizeToFit.Text = LangMan.LS(LSID.LSID_SizeToFit);
                 this.fImageCtl.btnZoomIn.Text = LangMan.LS(LSID.LSID_ZoomIn);

@@ -22,14 +22,8 @@ namespace GKUI.Sheets
             this.AddColumn(LangMan.LS(LSID.LSID_Certainty), 220, false);
             this.Columns_EndUpdate();
 
-            this.Buttons = EnumSet<SheetButton>.Create(
-				SheetButton.lbAdd, 
-				SheetButton.lbEdit, 
-				SheetButton.lbDelete, 
-				SheetButton.lbMoveUp, 
-				SheetButton.lbMoveDown
-			);
-
+            this.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, 
+				SheetButton.lbMoveUp, SheetButton.lbMoveDown);
             this.OnModify += this.ListModify;
         }
 
@@ -39,7 +33,7 @@ namespace GKUI.Sheets
         	
             try
             {
-                this.List.Items.Clear();
+                this.ClearItems();
 
                 this.DataList.Reset();
                 while (this.DataList.MoveNext()) {
@@ -48,7 +42,7 @@ namespace GKUI.Sheets
 
                 	if (sourceRec != null)
                 	{
-                		GKListItem item = this.List.AddItem(sourceRec.Originator.Text.Trim(), cit);
+                		GKListItem item = this.AddItem(sourceRec.Originator.Text.Trim(), cit);
                 		item.SubItems.Add(sourceRec.FiledByEntry);
                 		item.SubItems.Add(cit.Page);
                 		
@@ -57,7 +51,7 @@ namespace GKUI.Sheets
                 	}
                 }
 
-				this.List.ResizeColumn(1);
+				this.ResizeColumn(1);
             }
             catch (Exception ex)
             {
@@ -69,7 +63,7 @@ namespace GKUI.Sheets
         {
         	if (this.DataList == null) return;
 
-            IBase aBase = this.Editor.Base;
+            IBaseWindow aBase = this.Editor.Base;
             if (aBase == null) return;
 
             IGEDCOMStructWithLists _struct = this.DataList.Owner as IGEDCOMStructWithLists;
@@ -117,16 +111,15 @@ namespace GKUI.Sheets
             	case RecordAction.raDelete:
             		if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachSourceQuery)) != DialogResult.No)
             		{
-            			_struct.SourceCitations.DeleteObject(aCit);
+            			_struct.SourceCitations.Delete(aCit);
             			result = true;
-            			aBase.Modified = true;
             		}
             		break;
 
             	case RecordAction.raMoveUp:
             	case RecordAction.raMoveDown:
             		{
-            			int idx = _struct.SourceCitations.IndexOfObject(aCit);
+            			int idx = _struct.SourceCitations.IndexOf(aCit);
 
             			switch (eArgs.Action)
             			{
@@ -140,13 +133,14 @@ namespace GKUI.Sheets
             			}
 
             			result = true;
-            			aBase.Modified = true;
             		}
             		break;
             }
 
-            if (result) this.UpdateSheet();
+            if (result) {
+            	aBase.Modified = true;
+            	this.UpdateSheet();
+            }
         }
-
     }
 }

@@ -1,10 +1,6 @@
 ﻿using System;
 using GKCore.Types;
 
-/// <summary>
-/// Localization: dirty
-/// </summary>
-
 namespace GKCore
 {
 	public struct PluginInfo
@@ -15,18 +11,23 @@ namespace GKCore
 		public string Version;
 	}
 	
+	/// <summary>
+	/// Localization: dirty
+	/// </summary>
 	public static class GKData
 	{
 		public const string AppTitle = "GEDKeeper2";
+		public const string AppMail = "gedkeeper@yandex.ru";
+		public const string AppCites = "«История рода - это есть история Отечества»\r\n«Неуважение к предкам - есть первый признак дикости и безнравственности»\r\n(Александр Сергеевич Пушкин)";
 
 		public struct SexStruct
 		{
 			public LSID NameId;
 			public string Sign;
 
-			public SexStruct(LSID aName, string aSign) {
-				this.NameId = aName;
-				this.Sign = aSign;
+			public SexStruct(LSID name, string sign) {
+				this.NameId = name;
+				this.Sign = sign;
 			}
 		}
 
@@ -35,9 +36,9 @@ namespace GKCore
 			public LSID Name;
 			public string StatSign;
 			
-			public MarStatusStruct(LSID aName, string aStatSign) {
-				this.Name = aName;
-				this.StatSign = aStatSign;
+			public MarStatusStruct(LSID name, string sign) {
+				this.Name = name;
+				this.StatSign = sign;
 			}
 		}
 
@@ -47,26 +48,21 @@ namespace GKCore
 			public string Sign;
 			public PersonEventKind Kind;
 			
-			public PersonEventStruct(LSID aName, string aSign, PersonEventKind aKind) {
-				this.Name = aName;
-				this.Sign = aSign;
-				this.Kind = aKind;
+			public PersonEventStruct(LSID name, string sign, PersonEventKind kind) {
+				this.Name = name;
+				this.Sign = sign;
+				this.Kind = kind;
 			}
-		}
-
-		[Flags]
-		public enum TDateControlsRange : byte
-		{
 		}
 
 		public struct DateKindStruct
 		{
 			public LSID Name;
-			public TDateControlsRange Dates;
+			public byte Dates;
 			
-			public DateKindStruct(LSID aName, TDateControlsRange aDates) {
-				this.Name = aName;
-				this.Dates = aDates;
+			public DateKindStruct(LSID name, byte dates) {
+				this.Name = name;
+				this.Dates = dates;
 			}
 		}
 
@@ -75,9 +71,9 @@ namespace GKCore
 			public LSID Name;
 			public string Sign;
 			
-			public FamilyEventStruct(LSID aName, string aSign) {
-				this.Name = aName;
-				this.Sign = aSign;
+			public FamilyEventStruct(LSID name, string sign) {
+				this.Name = name;
+				this.Sign = sign;
 			}
 		}
 
@@ -86,20 +82,9 @@ namespace GKCore
 			public LSID Name;
 			public string Sign;
 			
-			public StoreTypeRec(LSID aName, string aSign) {
-				this.Name = aName;
-				this.Sign = aSign;
-			}
-		}
-
-		public struct GEDCOMAppFormat
-		{
-			public string Sign;
-			public string Name;
-			
-			public GEDCOMAppFormat(string aSign, string aName) {
-				this.Sign = aSign;
-				this.Name = aName;
+			public StoreTypeRec(LSID name, string sign) {
+				this.Name = name;
+				this.Sign = sign;
 			}
 		}
 
@@ -115,37 +100,32 @@ namespace GKCore
 		}
 
 
-		public static string[] Restrictions;
-		public static LSID[] RecordTypes;
-		public static SexStruct[] SexData;
-		public static MarStatusStruct[] MarriageStatus;
-		public static PersonEventStruct[] PersonEvents;
-		public static DateKindStruct[] DateKinds;
-		public static LSID[] DateCalendars;
-		public static FamilyEventStruct[] FamilyEvents;
-		public static StoreTypeRec[] GKStoreTypes;
-		public static LSID[] MediaTypes;
-		public static LSID[] PriorityNames;
-		public static LSID[] StatusNames;
-		public static LSID[] CommunicationNames;
-		public static LSID[] CommunicationDirs;
-		public static LSID[] GoalNames;
-		public static LSID[] CertaintyAssessments;
-		public static string[] UserRefs;
-		public static GEDCOMAppFormat[] GEDCOMFormats;
-		public static LSID[] RelationKinds;
-		public static string[] RelationSigns;
-		public static string[] Numerals;
-		public static string[] NumKinship;
-		public static StatsTitleStruct[] StatsTitles;
-		public static LSID[] CheckSolveNames;
+		public static readonly LSID[] Restrictions;
+		public static readonly LSID[] RecordTypes;
+		public static readonly SexStruct[] SexData;
+		public static readonly MarStatusStruct[] MarriageStatus;
+		public static readonly PersonEventStruct[] PersonEvents;
+		public static readonly DateKindStruct[] DateKinds;
+		public static readonly LSID[] DateCalendars;
+		public static readonly FamilyEventStruct[] FamilyEvents;
+		public static readonly StoreTypeRec[] GKStoreTypes;
+		public static readonly LSID[] MediaTypes;
+		public static readonly LSID[] PriorityNames;
+		public static readonly LSID[] StatusNames;
+		public static readonly LSID[] CommunicationNames;
+		public static readonly LSID[] CommunicationDirs;
+		public static readonly LSID[] GoalNames;
+		public static readonly LSID[] CertaintyAssessments;
+		public static readonly string[] SpecialUserRefs;
+		public static readonly LSID[] RelationKinds;
+		public static readonly string[] RelationSigns;
+		public static readonly string[] Numerals;
+		public static readonly string[] NumKinship;
+		public static readonly StatsTitleStruct[] StatsTitles;
+		public static readonly LSID[] CheckSolveNames;
+		public static readonly string[] CondSigns;
 
 		static GKData()
-		{
-			DataSetup();
-		}
-
-		public static void DataSetup()
 		{
 			NumKinship = new string[]
 			{
@@ -236,23 +216,18 @@ namespace GKCore
 				LSID.LSID_RK_Unk
 			};
 
-			GEDCOMFormats = new GEDCOMAppFormat[6] {
-				new GEDCOMAppFormat("", ""),
-				new GEDCOMAppFormat("GEDKeeper", ""),
-				new GEDCOMAppFormat("GENBOX", "Genbox Family History"),
-				new GEDCOMAppFormat("ALTREE", "Agelong Tree"),
-				new GEDCOMAppFormat("AGES", "Ages!"),
-				new GEDCOMAppFormat("PAF", "Personal Ancestral File")
-			};
 
-
-			UserRefs = new string[6] {
+			SpecialUserRefs = new string[10] {
 				"",
 				"РИ:Георгиевский кавалер",
 				"СССР:ВОВ:Участник боевых действий",
 				"СССР:ВОВ:Погиб в бою",
 				"СССР:ВОВ:Труженик тыла",
-				"СССР:Репрессирован"
+				"СССР:Репрессирован",
+				"Вероисповедание:Ислам",
+				"Вероисповедание:Католицизм",
+				"Вероисповедание:Православие",
+				"Вероисповедание:Старообрядчество"
 			};
 
 
@@ -366,16 +341,16 @@ namespace GKCore
 
 			
 			DateKindStruct[] array5 = new DateKindStruct[10];
-			array5[0] = new DateKindStruct(LSID.LSID_DK_0,  (TDateControlsRange)2);
-			array5[1] = new DateKindStruct(LSID.LSID_DK_1,  (TDateControlsRange)4);
-			array5[2] = new DateKindStruct(LSID.LSID_DK_2,  (TDateControlsRange)2);
-			array5[3] = new DateKindStruct(LSID.LSID_DK_3,  (TDateControlsRange)6);
-			array5[4] = new DateKindStruct(LSID.LSID_DK_4,  (TDateControlsRange)2);
-			array5[5] = new DateKindStruct(LSID.LSID_DK_5,  (TDateControlsRange)4);
-			array5[6] = new DateKindStruct(LSID.LSID_DK_6,  (TDateControlsRange)6);
-			array5[7] = new DateKindStruct(LSID.LSID_DK_7,  (TDateControlsRange)2);
-			array5[8] = new DateKindStruct(LSID.LSID_DK_8,  (TDateControlsRange)2);
-			array5[9] = new DateKindStruct(LSID.LSID_DK_9,  (TDateControlsRange)2);
+			array5[0] = new DateKindStruct(LSID.LSID_DK_0, 1); // 1
+			array5[1] = new DateKindStruct(LSID.LSID_DK_1, 2); // 2
+			array5[2] = new DateKindStruct(LSID.LSID_DK_2, 1); // 1
+			array5[3] = new DateKindStruct(LSID.LSID_DK_3, 3); // 1,2
+			array5[4] = new DateKindStruct(LSID.LSID_DK_4, 1); // 1
+			array5[5] = new DateKindStruct(LSID.LSID_DK_5, 2); // 2
+			array5[6] = new DateKindStruct(LSID.LSID_DK_6, 3); // 1,2
+			array5[7] = new DateKindStruct(LSID.LSID_DK_7, 1); // 1
+			array5[8] = new DateKindStruct(LSID.LSID_DK_8, 1); // 1
+			array5[9] = new DateKindStruct(LSID.LSID_DK_9, 1); // 1
 			DateKinds = array5;
 
 
@@ -456,12 +431,12 @@ namespace GKCore
 			};
 
 
-			Restrictions = new string[]
+			Restrictions = new LSID[]
 			{
-				"нет", 
-				"конфиденциально", 
-				"заперто", 
-				"секретно"
+				LSID.LSID_RestrictNone, 
+				LSID.LSID_RestrictLocked, 
+				LSID.LSID_RestrictConfidential, 
+				LSID.LSID_RestrictPrivacy
 			};
 
 
@@ -508,6 +483,11 @@ namespace GKCore
 			CheckSolveNames[1] = LSID.LSID_SetIsDead;
 			CheckSolveNames[2] = LSID.LSID_DefineSex;
 			CheckSolveNames[3] = LSID.LSID_DoDelete;
+			
+			CondSigns = new string[]
+			{
+				"!=", "<", "<=", "==", "=>", ">", "содержит", "не содержит"
+			};
 		}
 	}
 }

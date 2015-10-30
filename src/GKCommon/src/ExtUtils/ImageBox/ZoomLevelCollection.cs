@@ -4,36 +4,11 @@ using System.Collections.Generic;
 
 namespace Cyotek.Windows.Forms
 {
-	//[TypeConverter(typeof(ZoomLevelCollectionConverter))]
-	public class ZoomLevelCollection : IList<int>
+	public class ZoomLevelCollection
 	{
-		#region Constructors
-
-		public ZoomLevelCollection()
-		{
-			this.List = new SortedList<int, int>();
-		}
-
-		public ZoomLevelCollection(IEnumerable<int> collection) : this()
-		{
-			if (collection == null)
-				throw new ArgumentNullException("collection");
-
-			this.AddRange(collection);
-		}
-
-		#endregion
-
-		#region Class Properties
-
-		public static ZoomLevelCollection Default
-		{
-			get { return new ZoomLevelCollection(new[] {7, 10, 15, 20, 25, 30, 50, 70, 100, 150, 200, 300, 400, 500, 600, 700, 800, 1200, 1600}); }
-		}
-
-		#endregion
-
 		#region Properties
+
+		private SortedList<int, int> List;
 
 		public int Count
 		{
@@ -55,11 +30,24 @@ namespace Cyotek.Windows.Forms
 			}
 		}
 
-		protected SortedList<int, int> List { get; set; }
+		public static ZoomLevelCollection Default
+		{
+			get { return new ZoomLevelCollection(new[] {7, 10, 15, 20, 25, 30, 50, 70, 100, 150, 200, 300, 400, 500, 600, 700, 800, 1200, 1600}); }
+		}
 
 		#endregion
 
 		#region Members
+
+		public ZoomLevelCollection(IEnumerable<int> collection)
+		{
+			if (collection == null)
+				throw new ArgumentNullException("collection");
+
+			this.List = new SortedList<int, int>();
+
+			this.AddRange(collection);
+		}
 
 		public void Add(int item)
 		{
@@ -85,6 +73,16 @@ namespace Cyotek.Windows.Forms
 			return this.List.ContainsKey(item);
 		}
 
+		public IEnumerator<int> GetEnumerator()
+		{
+			return this.List.Values.GetEnumerator();
+		}
+
+		public int IndexOf(int item)
+		{
+			return this.List.IndexOfKey(item);
+		}
+
 		public int FindNearest(int zoomLevel)
 		{
 			int min = int.MaxValue;
@@ -104,21 +102,6 @@ namespace Cyotek.Windows.Forms
 			}			
 			
 			return minVal;
-		}
-
-		public IEnumerator<int> GetEnumerator()
-		{
-			return this.List.Values.GetEnumerator();
-		}
-
-		public int IndexOf(int item)
-		{
-			return this.List.IndexOfKey(item);
-		}
-
-		public void Insert(int index, int item)
-		{
-			throw new NotImplementedException();
 		}
 
 		public int NextZoom(int zoomLevel)
@@ -151,36 +134,6 @@ namespace Cyotek.Windows.Forms
 		public void RemoveAt(int index)
 		{
 			this.List.RemoveAt(index);
-		}
-
-		public int[] ToArray()
-		{
-			int[] results;
-
-			results = new int[this.Count];
-			this.CopyTo(results, 0);
-
-			return results;
-		}
-
-		public void CopyTo(int[] array, int arrayIndex)
-		{
-			int size = this.Count;
-			
-			if (size != 0) {
-				for (int i = 0; i < size; i++) {
-					array[arrayIndex + i] = this.List.Values[i];
-				}
-			}
-		}
-
-		#endregion
-
-		#region IList<int> Members
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return this.GetEnumerator();
 		}
 
 		#endregion

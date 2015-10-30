@@ -24,7 +24,7 @@ namespace GKUI.Dialogs
 		private System.Windows.Forms.TextBox EditWife;
 		private System.Windows.Forms.Label Label2;
 		private System.Windows.Forms.Label Label6;
-		private System.Windows.Forms.ComboBox EditMarriageStatus;
+		private System.Windows.Forms.ComboBox edMarriageStatus;
 		private System.Windows.Forms.Label Label5;
 		private System.Windows.Forms.ComboBox cbRestriction;
 
@@ -44,7 +44,7 @@ namespace GKUI.Dialogs
 			this.Label6 = new System.Windows.Forms.Label();
 			this.EditHusband = new System.Windows.Forms.TextBox();
 			this.EditWife = new System.Windows.Forms.TextBox();
-			this.EditMarriageStatus = new System.Windows.Forms.ComboBox();
+			this.edMarriageStatus = new System.Windows.Forms.ComboBox();
 			this.Label5 = new System.Windows.Forms.Label();
 			this.cbRestriction = new System.Windows.Forms.ComboBox();
 			this.PagesFamilyData = new System.Windows.Forms.TabControl();
@@ -94,7 +94,7 @@ namespace GKUI.Dialogs
 			this.GroupBox1.Controls.Add(this.Label6);
 			this.GroupBox1.Controls.Add(this.EditHusband);
 			this.GroupBox1.Controls.Add(this.EditWife);
-			this.GroupBox1.Controls.Add(this.EditMarriageStatus);
+			this.GroupBox1.Controls.Add(this.edMarriageStatus);
 			this.GroupBox1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.GroupBox1.Location = new System.Drawing.Point(0, 0);
 			this.GroupBox1.Name = "GroupBox1";
@@ -213,11 +213,11 @@ namespace GKUI.Dialogs
 			// 
 			// EditMarriageStatus
 			// 
-			this.EditMarriageStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.EditMarriageStatus.Location = new System.Drawing.Point(64, 88);
-			this.EditMarriageStatus.Name = "EditMarriageStatus";
-			this.EditMarriageStatus.Size = new System.Drawing.Size(145, 21);
-			this.EditMarriageStatus.TabIndex = 11;
+			this.edMarriageStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.edMarriageStatus.Location = new System.Drawing.Point(64, 88);
+			this.edMarriageStatus.Name = "EditMarriageStatus";
+			this.edMarriageStatus.Size = new System.Drawing.Size(145, 21);
+			this.edMarriageStatus.TabIndex = 11;
 			// 
 			// Label5
 			// 

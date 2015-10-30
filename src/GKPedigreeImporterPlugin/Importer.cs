@@ -29,13 +29,13 @@ namespace GKPedigreeImporterPlugin
 
     public class Importer : BaseObject
 	{
-    	private readonly IBase fBase;
+    	private readonly IBaseWindow fBase;
 		private readonly GEDCOMTree fTree;
 		private readonly ListBox.ObjectCollection fLog;
 		private StringList fPersonsList;
 		private ILangMan fLangMan;
 
-        public Importer(IBase aBase, ILangMan langMan, ListBox.ObjectCollection aLog)
+        public Importer(IBaseWindow aBase, ILangMan langMan, ListBox.ObjectCollection aLog)
         {
         	this.fBase = aBase;
             this.fTree = aBase.Tree;

@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.IO;
 using System.Windows.Forms;
 
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKUI.Charts;
+using GKUI.Controls;
 using GKUI.Dialogs;
 
 namespace GKUI
@@ -18,18 +19,16 @@ namespace GKUI
     /// <summary>
     /// Localization: dirty
     /// </summary>
-    public partial class TfmChart : Form, ILocalization, IWorkWindow
+    public partial class TfmChart : Form, IChartWindow
 	{
-        private readonly IBase fBase;
-        private readonly NavigationStack fNavman;
-        private readonly GEDCOMTree fTree;
+        private readonly IBaseWindow fBase;
         private readonly TreeChartBox fTreeBox;
 
         private TreeChartBox.ChartKind fChartKind;
 		private int fGensLimit;
 		private GEDCOMIndividualRecord fPerson;
 
-		public IBase Base
+		public IBaseWindow Base
 		{
 			get { return this.fBase; }
 		}
@@ -43,7 +42,7 @@ namespace GKUI
 			}
 		}
 
-		public TfmChart(IBase aBase, GEDCOMIndividualRecord startPerson)
+		public TfmChart(IBaseWindow aBase, GEDCOMIndividualRecord startPerson)
 		{
 			this.InitializeComponent();
 			base.MdiParent = TfmGEDKeeper.Instance;
@@ -55,33 +54,30 @@ namespace GKUI
 			this.miModeDescendants.Tag = TreeChartBox.ChartKind.ckDescendants;
 
 			this.fBase = aBase;
-			this.fTree = aBase.Tree;
 			this.fPerson = startPerson;
-			
+
 			this.fTreeBox = new TreeChartBox();
 			this.fTreeBox.Base = this.fBase;
-			this.fTreeBox.Tree = this.fTree;
 			this.fTreeBox.Dock = DockStyle.Fill;
-			//this.fTreeBox.MouseClick += this.ImageTree_MouseClick;
 			this.fTreeBox.DragOver += this.ImageTree_DragOver;
 			this.fTreeBox.PersonModify += this.ImageTree_PersonModify;
 			this.fTreeBox.RootChanged += ImageTree_RootChanged;
 			this.fTreeBox.PersonProperties += this.ImageTree_PersonProperties;
 			this.fTreeBox.Options = TfmGEDKeeper.Instance.Options.ChartOptions;
+			this.fTreeBox.NavRefresh += this.ImageTree_NavRefresh;
 
 			base.Controls.Add(this.fTreeBox);
 			base.Controls.SetChildIndex(this.fTreeBox, 0);
 			base.Controls.SetChildIndex(this.ToolBar1, 1);
 
-			this.fNavman = new NavigationStack();
-			this.NavRefresh();
 			this.fGensLimit = -1;
 			this.SetLang();
 
 			this.miCertaintyIndex.Checked = this.fTreeBox.Options.CertaintyIndexVisible;
 			this.fTreeBox.CertaintyIndex = this.fTreeBox.Options.CertaintyIndexVisible;
-			
-			this.miTraceSelected.Checked = this.fTreeBox.TraceSelected;
+
+			this.miTraceSelected.Checked = this.fTreeBox.Options.TraceSelected;
+			this.fTreeBox.TraceSelected = this.fTreeBox.Options.TraceSelected;
 
 			this.miTraceKinships.Checked = this.fTreeBox.TraceKinships;
 			this.miTraceKinships.Visible = false;
@@ -91,22 +87,9 @@ namespace GKUI
 		{
 			if (disposing)
 			{
-                if (this.fNavman != null) this.fNavman.Dispose();
                 if (components != null) components.Dispose();
 			}
 			base.Dispose(disposing);
-		}
-
-		private void DoFilter()
-		{
-			using (TfmTreeFilter dlgFilter = new TfmTreeFilter(this.fBase)) {
-				dlgFilter.Filter = this.fTreeBox.Filter;
-
-				if (dlgFilter.ShowDialog() == DialogResult.OK)
-				{
-					this.GenChart(true);
-				}
-			}
 		}
 
 		private void DoImageSave()
@@ -116,18 +99,38 @@ namespace GKUI
 			}
 		}
 
-		private void NavRefresh()
+		private void DoImagePrint()
 		{
-			this.tbPrev.Enabled = this.fNavman.CanBackward();
-			this.tbNext.Enabled = this.fNavman.CanForward();
+			PrintPreviewDialog previewDlg = new PrintPreviewDialog();
+			previewDlg.WindowState = FormWindowState.Maximized;
+
+			PrintDocument printDoc = new PrintDocument();
+			printDoc.PrintPage += new PrintPageEventHandler(printDocument1_PrintPage);
+			printDoc.DefaultPageSettings.Landscape = this.fTreeBox.IsLandscape();
+			printDoc.DocumentName = this.Text;
+			
+			previewDlg.Document = printDoc;
+			previewDlg.ShowDialog();
 		}
 
-		private void NavAdd(GEDCOMIndividualRecord aRec)
+		private void printDocument1_PrintPage(object sender, PrintPageEventArgs e)
 		{
-			if (aRec != null && !this.fNavman.Busy) {
-				this.fNavman.Current = aRec;
-				this.NavRefresh();
+			Image pic = this.fTreeBox.GetPrintableImage();
+
+			Rectangle m = e.MarginBounds;
+
+			if ((double)pic.Width / (double)pic.Height > (double)m.Width / (double)m.Height)
+			{
+				m.Height = (int)((double)pic.Height / (double)pic.Width * (double)m.Width);
 			}
+			else
+			{
+				m.Width = (int)((double)pic.Width / (double)pic.Height * (double)m.Height);
+			}
+			
+			e.Graphics.DrawImage(pic, m);
+
+			e.HasMorePages = false;
 		}
 
 		private void UpdateModesMenu()
@@ -158,8 +161,8 @@ namespace GKUI
 
 			if (chartKind == TreeChartBox.ChartKind.ckAncestors || chartKind == TreeChartBox.ChartKind.ckBoth)
 			{
-				TreeStats.InitExtCounts(tree, -1);
-				int ancCount = TreeStats.GetAncestorsCount(iRec);
+				GKUtils.InitExtCounts(tree, -1);
+				int ancCount = GKUtils.GetAncestorsCount(iRec);
 				if (ancCount > 2048)
 				{
 					GKUtils.ShowMessage(string.Format(LangMan.LS(LSID.LSID_AncestorsNumberIsInvalid), ancCount.ToString()));
@@ -169,8 +172,8 @@ namespace GKUI
 
 			if (chartKind >= TreeChartBox.ChartKind.ckDescendants && chartKind < (TreeChartBox.ChartKind)3)
 			{
-				TreeStats.InitExtCounts(tree, -1);
-				int descCount = TreeStats.GetDescendantsCount(iRec);
+				GKUtils.InitExtCounts(tree, -1);
+				int descCount = GKUtils.GetDescendantsCount(iRec);
 				if (descCount > 2048)
 				{
 					GKUtils.ShowMessage(string.Format(LangMan.LS(LSID.LSID_DescendantsNumberIsInvalid), descCount.ToString()));
@@ -191,7 +194,6 @@ namespace GKUI
 				}
 				else
 				{
-					this.NavAdd(this.fPerson);
 					this.fTreeBox.DepthLimit = this.fGensLimit;
 					this.fTreeBox.ShieldState = this.fBase.ShieldState;
 
@@ -258,37 +260,63 @@ namespace GKUI
 			return result;
 		}
 
+		private GEDCOMFamilyRecord InternalFamilyAdd(GEDCOMIndividualRecord spouse)
+		{
+			if (spouse == null) {
+				throw new ArgumentNullException("spouse");
+			}
+			
+			GEDCOMSex sex = spouse.Sex;
+			if (sex < GEDCOMSex.svMale || sex >= GEDCOMSex.svUndetermined)
+			{
+				GKUtils.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
+				return null;
+			}
+			else
+			{
+				GEDCOMFamilyRecord family = this.fBase.Tree.CreateFamily();
+				family.AddSpouse(spouse);
+				return family;
+			}
+		}
+		
 		private void InternalChildAdd(GEDCOMSex needSex)
 		{
 			TreeChartPerson p = this.fTreeBox.Selected;
 			if (p != null && p.Rec != null)
 			{
-				GEDCOMIndividualRecord iRec = p.Rec;
+				GEDCOMIndividualRecord parent = p.Rec;
 
-                if (iRec.SpouseToFamilyLinks.Count == 0)
+				if (parent.SpouseToFamilyLinks.Count > 1)
 				{
-                	GKUtils.ShowError(LangMan.LS(LSID.LSID_IsNotFamilies));
+					GKUtils.ShowError("У данной персоны несколько семей. Детей следует добавлять через супругов.");
 				}
 				else
 				{
-					if (iRec.SpouseToFamilyLinks.Count > 1)
+					GEDCOMFamilyRecord family;
+					
+					if (parent.SpouseToFamilyLinks.Count == 0)
 					{
-						GKUtils.ShowError("У данной персоны несколько семей. Детей следует добавлять через супругов.");
-					}
-					else
-					{
-						GEDCOMFamilyRecord fam = iRec.SpouseToFamilyLinks[0].Family;
-						GEDCOMIndividualRecord iChild = this.fBase.SelectPerson(fam.Husband.Value as GEDCOMIndividualRecord, TargetMode.tmParent, needSex);
+						//GKUtils.ShowError(LangMan.LS(LSID.LSID_IsNotFamilies));
 
-						if (iChild != null && fam.AddChild(iChild))
-						{
-							// данный повтор необходим, т.к. этот вызов в CreatePersonDialog срабатывает только,
-							// если уже установлен отец, чего до вызова AddChild() - нет;
-							// всё это необходимо для того, чтобы в справочник попали корректные отчества.
-							TfmGEDKeeper.Instance.NamesTable.ImportNames(iChild);
-							
-							this.UpdateChart();
+						family = this.InternalFamilyAdd(parent);
+						if (family == null) {
+							return;
 						}
+					} else {
+						family = parent.SpouseToFamilyLinks[0].Family;
+					}
+
+					GEDCOMIndividualRecord child = this.fBase.SelectPerson(family.GetHusband(), TargetMode.tmParent, needSex);
+
+					if (child != null && family.AddChild(child))
+					{
+						// данный повтор необходим, т.к. этот вызов в CreatePersonDialog срабатывает только,
+						// если уже установлен отец, чего до вызова AddChild() - нет;
+						// всё это необходимо для того, чтобы в справочник попали корректные отчества.
+						TfmGEDKeeper.Instance.NamesTable.ImportNames(child);
+						
+						this.UpdateChart();
 					}
 				}
 			}
@@ -302,7 +330,6 @@ namespace GKUI
 			{
 				case Keys.F5:
 					this.GenChart(true);
-					this.NavRefresh();
 					break;
 
 				case Keys.F6:
@@ -329,12 +356,8 @@ namespace GKUI
 		{
 			if (e.Button == this.tbImageSave) {
 				this.DoImageSave();
-			} else if (e.Button == this.tbPrev) {
-				this.NavPrev();
-			} else if (e.Button == this.tbNext) {
-				this.NavNext();
-			} else if (e.Button == this.tbFilter) {
-				this.DoFilter();
+			} else if (e.Button == this.tbImagePrint) {
+				this.DoImagePrint();
 			}
 		}
 
@@ -360,6 +383,13 @@ namespace GKUI
 			if (person == null || person.Rec == null) return;
 
 			this.fPerson = person.Rec;
+
+			TfmGEDKeeper.Instance.UpdateControls(false);
+		}
+
+		private void ImageTree_NavRefresh(object sender, EventArgs e)
+		{
+			TfmGEDKeeper.Instance.UpdateControls(false);
 		}
 
 		private void ImageTree_PersonModify(object sender, PersonModifyEventArgs eArgs)
@@ -439,7 +469,7 @@ namespace GKUI
 				GEDCOMIndividualRecord iSpouse = this.SelectSpouseFor(iRec);
 
 				if (iSpouse != null) {
-					GEDCOMFamilyRecord fam = this.fTree.CreateFamily();
+					GEDCOMFamilyRecord fam = this.fBase.Tree.CreateFamily();
 					fam.AddSpouse(iRec);
 					fam.AddSpouse(iSpouse);
 					this.UpdateChart();
@@ -462,15 +492,9 @@ namespace GKUI
 			TreeChartPerson p = this.fTreeBox.Selected;
 			if (p != null && p.Rec != null)
 			{
-				GEDCOMSex sex = p.Rec.Sex;
-				if (sex < GEDCOMSex.svMale || sex >= GEDCOMSex.svUndetermined)
-				{
-					GKUtils.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
-				}
-				else
-				{
-					GEDCOMFamilyRecord fam = this.fTree.CreateFamily();
-					fam.AddSpouse(p.Rec);
+				GEDCOMFamilyRecord fam = this.InternalFamilyAdd(p.Rec);
+				
+				if (fam != null) {
 					this.UpdateChart();
 				}
 			}
@@ -483,7 +507,6 @@ namespace GKUI
 			{
 				this.fBase.RecordDelete(p.Rec, true);
 				this.GenChart(true);
-				this.NavRefresh();
 			}
 		}
 
@@ -495,6 +518,8 @@ namespace GKUI
 		private void miTraceSelected_Click(object sender, EventArgs e)
 		{
 			this.miTraceSelected.Checked = !this.miTraceSelected.Checked;
+			
+			this.fTreeBox.Options.TraceSelected = this.miTraceSelected.Checked;
 			this.fTreeBox.TraceSelected = this.miTraceSelected.Checked;
 		}
 
@@ -554,7 +579,6 @@ namespace GKUI
 				{
 					this.fPerson = p.Rec;
 					this.GenChart(true);
-					this.NavRefresh();
 				}
 			}
 			catch (Exception ex)
@@ -605,42 +629,22 @@ namespace GKUI
 
 		public void NavNext()
 		{
-			this.fNavman.BeginNav();
-			try
-			{
-				this.fPerson = (this.fNavman.Next() as GEDCOMIndividualRecord);
-				this.GenChart(true);
-				this.NavRefresh();
-			}
-			finally
-			{
-				this.fNavman.EndNav();
-			}
+			this.fTreeBox.NavNext();
 		}
 
 		public void NavPrev()
 		{
-			this.fNavman.BeginNav();
-			try
-			{
-				this.fPerson = (this.fNavman.Back() as GEDCOMIndividualRecord);
-				this.GenChart(true);
-				this.NavRefresh();
-			}
-			finally
-			{
-				this.fNavman.EndNav();
-			}
+			this.fTreeBox.NavPrev();
 		}
 
 		public bool NavCanBackward()
 		{
-			return this.fNavman.CanBackward();
+			return this.fTreeBox.NavCanBackward();
 		}
 
 		public bool NavCanForward()
 		{
-			return this.fNavman.CanForward();
+			return this.fTreeBox.NavCanForward();
 		}
 
 		public IList<ISearchResult> FindAll(string searchPattern)
@@ -666,6 +670,18 @@ namespace GKUI
 			panel.Location = pt;
 
 			panel.Show();
+		}
+
+		public void SetFilter()
+		{
+			using (TfmTreeFilter dlgFilter = new TfmTreeFilter(this.fBase)) {
+				dlgFilter.Filter = this.fTreeBox.Filter;
+
+				if (dlgFilter.ShowDialog() == DialogResult.OK)
+				{
+					this.GenChart(true);
+				}
+			}
 		}
 
 		#endregion

@@ -53,10 +53,14 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\CalendarConverter.cs" />
+    <Compile Include="src\ColorUtils.cs" />
+    <Compile Include="src\Controls\SlideList.cs" />
     <Compile Include="src\ExpCalculator.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -85,10 +89,15 @@
     <Compile Include="src\Controls\HyperView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="src\ExtUtils\CalendarConverter.cs" />
     <Compile Include="src\ExtUtils\CSV\CSVReader.cs" />
     <Compile Include="src\ExtUtils\CSV\StringConverter.cs" />
     <Compile Include="src\ExtUtils\ListTimSort.cs" />
+    <Compile Include="src\ExtUtils\SingleInstancing\Global Delegates.cs" />
+    <Compile Include="src\ExtUtils\SingleInstancing\ISingleInstanceEnforcer.cs" />
+    <Compile Include="src\ExtUtils\SingleInstancing\MessageEventArgs.cs" />
+    <Compile Include="src\ExtUtils\SingleInstancing\SingleInstanceException.cs" />
+    <Compile Include="src\ExtUtils\SingleInstancing\SingleInstanceProxy.cs" />
+    <Compile Include="src\ExtUtils\SingleInstancing\SingleInstanceTracker.cs" />
     <Compile Include="src\ExtUtils\ZipStorer.cs" />
     <Compile Include="src\GEDCOM\AnselEncoding.cs" />
     <Compile Include="src\GEDCOM\EGEDCOMException.cs" />
@@ -115,6 +124,7 @@
     <Compile Include="src\GEDCOM\Enums\GKGoalType.cs" />
     <Compile Include="src\GEDCOM\Enums\GKResearchPriority.cs" />
     <Compile Include="src\GEDCOM\Enums\GKResearchStatus.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMConsts.cs" />
     <Compile Include="src\GEDCOM\GEDCOMDelegates.cs" />
     <Compile Include="src\GEDCOM\GEDCOMFactory.cs" />
     <Compile Include="src\GEDCOM\Enums\GEDCOMFormat.cs" />
@@ -122,6 +132,7 @@
     <Compile Include="src\GEDCOM\GEDCOMObject.cs" />
     <Compile Include="src\GEDCOM\Enums\GEDCOMRecordType.cs" />
     <Compile Include="src\GEDCOM\Enums\GEDCOMState.cs" />
+    <Compile Include="src\GEDCOM\GEDCOMRecordWithEvents.cs" />
     <Compile Include="src\GEDCOM\GEDCOMUtils.cs" />
     <Compile Include="src\GEDCOM\GEDCOMInterfaces.cs" />
     <Compile Include="src\GEDCOM\GEDCOMAddress.cs" />
@@ -221,6 +232,7 @@
     <Compile Include="src\Tween.cs" />
     <Compile Include="src\ValuesCollection.cs" />
     <Compile Include="src\NativeMethods.cs" />
+    <Compile Include="src\WeightedMean.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="src\Controls\ExtResources.resx">
@@ -230,6 +242,12 @@
     <EmbeddedResource Include="src\Controls\GKImageControl.resx">
       <DependentUpon>ImageView.Designer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="src\Controls\SlideList.resx">
+      <DependentUpon>SlideList.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\ExtUtils\SingleInstancing" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 
 namespace GKUI.Charts
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public interface ITreeControl : IDisposable
 	{
 		void Update();

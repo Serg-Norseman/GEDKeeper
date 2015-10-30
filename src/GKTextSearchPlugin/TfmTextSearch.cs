@@ -19,10 +19,10 @@ namespace GKTextSearchPlugin
     public sealed partial class TfmTextSearch : Form, ILocalization
 	{
     	private readonly Plugin fPlugin;
-		private readonly IBase fBase;
+		private readonly IBaseWindow fBase;
 		private readonly HyperView fResultsText;
 
-		public TfmTextSearch(Plugin plugin, IBase aBase)
+		public TfmTextSearch(Plugin plugin, IBaseWindow aBase)
 		{
 			InitializeComponent();
 

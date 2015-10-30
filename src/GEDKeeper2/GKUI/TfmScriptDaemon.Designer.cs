@@ -30,9 +30,8 @@ namespace GKUI
 			this.OpenDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.SaveDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-			this.mmDebugOutput = new System.Windows.Forms.TextBox();
 			this.mmScriptText = new System.Windows.Forms.TextBox();
-			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+			this.mmDebugOutput = new System.Windows.Forms.TextBox();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
 			this.splitContainer1.SuspendLayout();
@@ -108,8 +107,18 @@ namespace GKUI
 			// 
 			this.splitContainer1.Panel2.Controls.Add(this.mmDebugOutput);
 			this.splitContainer1.Size = new System.Drawing.Size(712, 406);
-			this.splitContainer1.SplitterDistance = 238;
+			this.splitContainer1.SplitterDistance = 240;
 			this.splitContainer1.TabIndex = 3;
+			// 
+			// mmScriptText
+			// 
+			this.mmScriptText.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.mmScriptText.Location = new System.Drawing.Point(0, 0);
+			this.mmScriptText.Multiline = true;
+			this.mmScriptText.Name = "mmScriptText";
+			this.mmScriptText.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+			this.mmScriptText.Size = new System.Drawing.Size(712, 240);
+			this.mmScriptText.TabIndex = 2;
 			// 
 			// mmDebugOutput
 			// 
@@ -119,22 +128,12 @@ namespace GKUI
 			this.mmDebugOutput.Name = "mmDebugOutput";
 			this.mmDebugOutput.ReadOnly = true;
 			this.mmDebugOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.mmDebugOutput.Size = new System.Drawing.Size(712, 164);
+			this.mmDebugOutput.Size = new System.Drawing.Size(712, 162);
 			this.mmDebugOutput.TabIndex = 3;
-			// 
-			// mmScriptText
-			// 
-			this.mmScriptText.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.mmScriptText.Location = new System.Drawing.Point(0, 0);
-			this.mmScriptText.Multiline = true;
-			this.mmScriptText.Name = "mmScriptText";
-			this.mmScriptText.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.mmScriptText.Size = new System.Drawing.Size(712, 238);
-			this.mmScriptText.TabIndex = 2;
 			// 
 			// TfmScriptDaemon
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
+			this.AutoScaleBaseSize = new System.Drawing.Size(7, 17);
 			this.ClientSize = new System.Drawing.Size(712, 434);
 			this.Controls.Add(this.splitContainer1);
 			this.Controls.Add(this.ToolBar1);
@@ -148,7 +147,6 @@ namespace GKUI
 			this.splitContainer1.Panel1.PerformLayout();
 			this.splitContainer1.Panel2.ResumeLayout(false);
 			this.splitContainer1.Panel2.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
 			this.splitContainer1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();

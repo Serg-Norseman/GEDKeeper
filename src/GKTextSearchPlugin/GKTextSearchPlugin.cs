@@ -58,7 +58,7 @@ namespace GKTextSearchPlugin
         {
             //PluginForm frm = new PluginForm(this);
             //frm.ShowDialog();
-			IBase curBase = fHost.GetCurrentFile();
+			IBaseWindow curBase = fHost.GetCurrentFile();
 		    if (curBase == null) return;
 
 		    TfmTextSearch ts_dlg = new TfmTextSearch(this, curBase);
@@ -66,7 +66,7 @@ namespace GKTextSearchPlugin
 		    ts_dlg.Show();
         }
 
-        public void NotifyRecord(IBase aBase, object record, RecordAction action)
+        public void NotifyRecord(IBaseWindow aBase, object record, RecordAction action)
         {
         	if (aBase == null || record == null || this.fSearchMan == null) return;
         	

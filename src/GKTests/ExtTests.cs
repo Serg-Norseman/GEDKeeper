@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Drawing;
 using GKCommon;
 using GKCommon.GEDCOM.Enums;
+using GKCommon.Graph;
 using NUnit.Framework;
 
 namespace GKTests
@@ -35,11 +37,14 @@ namespace GKTests
 		}
 
 		[Test]
-		public void TSet_Tests()
+		public void EnumSet_Tests()
 		{
 			EnumSet<GEDCOMRestriction> es = EnumSet<GEDCOMRestriction>.Create();
 			Assert.IsTrue(es.IsEmpty());
 
+			es.Include(null);
+			Assert.IsTrue(es.IsEmpty());
+			
 			es.Include(GEDCOMRestriction.rnPrivacy, GEDCOMRestriction.rnLocked);
 			Assert.IsTrue(es.Contains(GEDCOMRestriction.rnPrivacy));
 			Assert.IsFalse(es.Contains(GEDCOMRestriction.rnNone));
@@ -54,8 +59,18 @@ namespace GKTests
 			Assert.IsTrue(es.Contains(GEDCOMRestriction.rnLocked));
 			
 			string test = es.ByteToStr((int)0);
-			Assert.AreEqual("00000101", test);
+			Assert.AreEqual("00000011", test);
 			
+			// clone test
+			EnumSet<GEDCOMRestriction> copy = (EnumSet<GEDCOMRestriction>)es.Clone();
+			test = copy.ByteToStr((int)0);
+			Assert.AreEqual("00000011", test);
+			
+			// clear test
+			copy.Clear();
+			Assert.IsTrue(copy.IsEmpty());
+			
+			//
 			EnumSet<GEDCOMRestriction> es2 = EnumSet<GEDCOMRestriction>.Create(GEDCOMRestriction.rnNone, GEDCOMRestriction.rnLocked);
 
 			Assert.IsTrue(es.Equals(es2));
@@ -148,6 +163,13 @@ namespace GKTests
 		[Test]
 		public void SysUtils_Tests()
 		{
+			Assert.AreEqual(3.0f, SysUtils.SafeDiv(9.0f, 3.0f));
+			Assert.AreEqual(0.0f, SysUtils.SafeDiv(9.0f, 0.0f));
+			
+			Assert.AreEqual(true, SysUtils.IsSetBit(3, 0));
+			Assert.AreEqual(true, SysUtils.IsSetBit(3, 1));
+			Assert.AreEqual(false, SysUtils.IsSetBit(3, 4));
+
 			long val = SysUtils.Trunc(495.575);
 			Assert.AreEqual(val, 495);
 
@@ -175,10 +197,13 @@ namespace GKTests
 		}
 
 		[Test]
-		public void Calculator_Tests()
+		public void ExpCalculator_Tests()
 		{
 			ExpCalculator calc = new ExpCalculator();
 			Assert.IsNotNull(calc);
+			
+			calc.CaseSensitive = false;
+			Assert.AreEqual(false, calc.CaseSensitive);
 			
 			calc.OnGetVar += this.GetVarEventHandler;
 
@@ -346,11 +371,157 @@ namespace GKTests
 				return true;
 			} else return false;
 		}
-		
+
 		[Test]
 		public void TList_Tests()
 		{
 			
+		}
+
+		[Test]
+		public void Calendar_Tests()
+		{
+			DateTime gdt = new DateTime(1990, 10, 10);
+			string s;
+
+			double jd = CalendarConverter.gregorian_to_jd(gdt.Year, gdt.Month, gdt.Day);
+			int year = 0;
+			int month = 0;
+			int day = 0;
+			CalendarConverter.jd_to_julian(jd, ref year, ref month, ref day);
+			s = CalendarConverter.date_to_str(year, month, day, CalendarConverter.TDateEra.AD);
+			Assert.AreEqual("27 сен 1990", s); // +
+
+			CalendarConverter.jd_to_hebrew(jd, ref year, ref month, ref day);
+			s = day.ToString() + " ";
+			s += CalendarConverter.HebrewMonths[month - 1];
+			s = s + " " + year.ToString() + ", " + CalendarConverter.HebrewWeekdays[CalendarConverter.jwday(jd)];
+			Assert.AreEqual("21 Тишрей 5751, далет", s); // +
+
+			CalendarConverter.jd_to_islamic(jd, ref year, ref month, ref day);
+			s = day.ToString() + " ";
+			s += CalendarConverter.IslamicMonths[month - 1];
+			s = s + " " + year.ToString() + ", йаум " + CalendarConverter.IslamicWeekdays[CalendarConverter.jwday(jd)];
+			Assert.AreEqual("20 рабии`у ль-авваль 1411, йаум аль-арба'а", s); // +
+
+			CalendarConverter.jd_to_persian(jd, ref year, ref month, ref day);
+			s = day.ToString() + " ";
+			s += CalendarConverter.PersianMonths[month - 1];
+			s = s + " " + year.ToString() + ", " + CalendarConverter.PersianWeekdays[CalendarConverter.jwday(jd)];
+			Assert.AreEqual("18 Мехр 1369, чахаршанбе", s); // +
+
+			CalendarConverter.jd_to_indian_civil(jd, ref year, ref month, ref day);
+			s = day.ToString() + " ";
+			s += CalendarConverter.IndianCivilMonths[month - 1];
+			s = s + " " + year.ToString() + ", " + CalendarConverter.IndianCivilWeekdays[CalendarConverter.jwday(jd)];
+			Assert.AreEqual("18 Азвина 1912, будхвар", s); // +
+
+			int major = 0;
+			int cycle = 0;
+			CalendarConverter.jd_to_bahai(jd, ref major, ref cycle, ref year, ref month, ref day);
+			s = "Кулл-и Шай' " + major.ToString() + ", Вахид " + cycle.ToString() + ", ";
+			s = s + day.ToString() + " ";
+			s += CalendarConverter.BahaiMonths[month - 1];
+			s = s + " " + year.ToString() + ", " + CalendarConverter.BahaiWeekdays[CalendarConverter.jwday(jd)];
+			Assert.AreEqual("Кулл-и Шай' 1, Вахид 8, 14 Машиййат 14, Идаль", s); // ???
+		}
+
+		[Test]
+		public void Graph_Tests()
+		{
+			Vertex vertex = new Vertex();
+			Assert.IsNotNull(vertex);
+			
+			Vertex vertex2 = new Vertex();
+			Assert.AreNotEqual(0, vertex.CompareTo(vertex2));
+			Assert.Throws(typeof(ArgumentException), () => { vertex.CompareTo(null); });
+			
+			Assert.Throws(typeof(ArgumentNullException), () => { new Edge(null, vertex2, 1, null); });
+			Assert.Throws(typeof(ArgumentNullException), () => { new Edge(vertex, null, 1, null); });
+			
+			Edge edge = new Edge(vertex, vertex2, 1, null);
+			Assert.IsNotNull(edge);
+			Assert.AreEqual(1, edge.Cost);
+			Assert.AreEqual(vertex, edge.Source);
+			Assert.AreEqual(vertex2, edge.Target);
+
+			Assert.AreNotEqual(0, edge.CompareTo(new Edge(vertex, vertex2, 1, null)));
+			Assert.Throws(typeof(ArgumentException), () => { edge.CompareTo(null); });
+			
+			IVertex vert1 = ((IEdge)edge).Source;
+			Assert.AreEqual(vertex, vert1);
+			IVertex vert2 = ((IEdge)edge).Target;
+			Assert.AreEqual(vertex2, vert2);
+			
+			using (TGraph graph = new TGraph())
+			{
+				Assert.IsNotNull(graph);
+				
+				vert1 = graph.AddVertex(null);
+				Assert.IsNotNull(vert1);
+				graph.DeleteVertex(vert1);
+				
+				vert1 = graph.AddVertex("test", null);
+				Assert.IsNotNull(vert1);
+				
+				vert2 = graph.FindVertex("test");
+				Assert.AreEqual(vert1, vert2);
+				
+				graph.DeleteVertex(vert1);
+				
+				vert1 = graph.AddVertex("src", null);
+				vert2 = graph.AddVertex("tgt", null);
+				IEdge edge3 = graph.AddDirectedEdge("src", "tgt", 1, null);
+				Assert.IsNotNull(edge3);
+				graph.DeleteEdge(edge3);
+				
+				edge3 = graph.AddDirectedEdge("1", "2", 1, null);
+				Assert.IsNull(edge3);
+				
+				bool res = graph.AddUndirectedEdge(vert1, vert2, 1, null, null);
+				Assert.AreEqual(true, res);
+				
+				graph.Clear();
+			}
+		}
+
+		[Test]
+		public void ExtRect_Tests()
+		{
+			ExtRect rt = ExtRect.Create(0, 0, 9, 9);
+
+			Assert.AreEqual(0, rt.Left);
+			Assert.AreEqual(0, rt.Top);
+			Assert.AreEqual(9, rt.Right);
+			Assert.AreEqual(9, rt.Bottom);
+			Assert.AreEqual(10, rt.GetHeight());
+			Assert.AreEqual(10, rt.GetWidth());
+
+			rt = ExtRect.CreateBounds(0, 0, 10, 10);
+
+			Assert.AreEqual(0, rt.Left);
+			Assert.AreEqual(0, rt.Top);
+			Assert.AreEqual(9, rt.Right);
+			Assert.AreEqual(9, rt.Bottom);
+			Assert.AreEqual(10, rt.GetHeight());
+			Assert.AreEqual(10, rt.GetWidth());
+
+			Assert.AreEqual("{X=0,Y=0,Width=10,Height=10}", rt.ToString());
+
+			Assert.IsTrue(rt.Contains(5, 5));
+			
+			rt.Offset(3, -2);
+			Assert.AreEqual("{X=3,Y=-2,Width=4,Height=14}", rt.ToString());
+			
+			ExtRect rt1 = rt.GetShift(2, 5);
+			Assert.AreEqual("{X=5,Y=3,Width=4,Height=14}", rt1.ToString());
+			
+			rt = ExtRect.CreateEmpty();
+			Assert.IsTrue(rt.IsEmpty());
+
+			Assert.IsFalse(rt.Contains(5, 5));
+			
+			Rectangle rect = rt.ToRectangle();
 		}
 
 //		public void MyTestFunc1(

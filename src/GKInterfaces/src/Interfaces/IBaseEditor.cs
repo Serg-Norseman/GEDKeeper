@@ -2,6 +2,6 @@
 {
 	public interface IBaseEditor
 	{
-		IBase Base { get; }
+		IBaseWindow Base { get; }
 	}
 }

@@ -2,31 +2,28 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-using ExtUtils;
 using GKCommon;
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Lists;
+using GKCore.Tools;
 using GKCore.Types;
-using GKUI.Charts;
 using GKUI.Controls;
 using GKUI.Dialogs;
-using GKUI.Lists;
 
 namespace GKUI
 {
     /// <summary>
     /// Localization: dirty
     /// </summary>
-    public sealed partial class TfmBase : Form, IBase, ILocalization
+    public sealed partial class TfmBase : Form, IBaseWindow
 	{
     	#region Private fields
     	
@@ -108,10 +105,8 @@ namespace GKUI
 				return this.fShieldState;
 			}
 			set {
-				bool up = (this.fShieldState != ShieldState.ssNone && value == ShieldState.ssNone) || (this.fShieldState == ShieldState.ssNone && value != ShieldState.ssNone);
-				this.fShieldState = value;
-				if (up)
-				{
+				if (this.fShieldState != value) {
+					this.fShieldState = value;
 					this.RefreshLists(false);
 				}
 			}
@@ -237,12 +232,6 @@ namespace GKUI
         
         #region Basic function
         
-		private void ChangeFileName()
-		{
-			this.SetMainTitle();
-			TfmGEDKeeper.Instance.Options.LastDir = Path.GetDirectoryName(this.fTree.FileName);
-		}
-
 		public GEDCOMRecordType GetSelectedRecordType()
 		{
 			return (GEDCOMRecordType)(this.PageRecords.SelectedIndex + 1);
@@ -385,14 +374,6 @@ namespace GKUI
 			}
 		}
 
-		public void ChangesClear()
-		{
-			/*for (GEDCOMRecordType rt = GEDCOMRecordType.rtNone; rt != GEDCOMRecordType.rtLast; rt++)
-			{
-				this.fChangedRecords[(int)rt].Clear();
-			}*/
-		}
-
 		public bool CheckModified()
 		{
 			bool result = true;
@@ -414,12 +395,6 @@ namespace GKUI
 			}
 
 			return result;
-		}
-
-		public void Clear()
-		{
-			this.fTree.Clear();
-			this.fNavman.Clear();
 		}
 
 		private void CreatePage(string pageText, GEDCOMRecordType recType, out GKRecordsView recView, out HyperView summary)
@@ -446,7 +421,7 @@ namespace GKUI
 			sheet.Controls.Add(summary);
 			sheet.Controls.Add(spl);
 
-			GKUtils.CreateRecordsView(sheet, this.fTree, recType, out recView);
+			recView = GKUtils.CreateRecordsView(sheet, this.fTree, recType);
 			recView.IsMainList = true;
 			recView.DoubleClick += this.RecordEdit;
 			recView.SelectedIndexChanged += this.List_SelectedIndexChanged;
@@ -456,15 +431,36 @@ namespace GKUI
 			sheet.Controls.SetChildIndex(summary, 2);
 		}
 
-        // FIXME
 		private void LoadProgress(object sender, int progress)
 		{
 			TfmProgress.ProgressStep(progress);
 		}
 
-		public void FileNew()
+		private void ChangeFileName()
+		{
+			this.SetMainTitle();
+			TfmGEDKeeper.Instance.Options.LastDir = Path.GetDirectoryName(this.fTree.FileName);
+			TfmGEDKeeper.Instance.AddMRU(this.fTree.FileName);
+		}
+
+		public void ChangesClear()
+		{
+			/*for (GEDCOMRecordType rt = GEDCOMRecordType.rtNone; rt != GEDCOMRecordType.rtLast; rt++)
+			{
+				this.fChangedRecords[(int)rt].Clear();
+			}*/
+		}
+
+		public void Clear()
 		{
 			this.ChangesClear();
+			this.fNavman.Clear();
+
+			this.fContext.Clear();
+		}
+
+		public void FileNew()
+		{
 			this.Clear();
 			this.RefreshLists(false);
             GKUtils.ShowPersonInfo(null, this.mPersonSummary.Lines, this.fShieldState);
@@ -474,36 +470,41 @@ namespace GKUI
 
 		public void FileLoad(string fileName)
 		{
-			this.ChangesClear();
 			this.Clear();
 
-			//try
-			//{
-			TfmProgress.ProgressInit(LangMan.LS(LSID.LSID_Loading), 100);
+			string pw = null;
+			string ext = Path.GetExtension(fileName).ToLower();
+			if (ext == ".geds") {
+				if (!GKUtils.GetInput("password", ref pw)) {
+					GKUtils.ShowError("Пароль не задан");
+					return;
+				}
+			}
+
 			try
 			{
+				TfmProgress.ProgressInit(LangMan.LS(LSID.LSID_Loading), 100);
 				this.fTree.OnProgress += LoadProgress;
-				this.fTree.LoadFromFile(fileName);
-				this.fTree.OnProgress -= LoadProgress;
-			}
-			finally
-			{
-				TfmProgress.ProgressDone();
-			}
-			//}
-			//catch (Exception ex)
-			//{
-			//	this.Host.LogWrite("TfmBase.FileLoad().TreeLoad(): " + E.Message);
-			//	.ShowError(LangMan.LS(LSID.245]);
-			//}
+				try
+				{
+					this.fContext.FileLoad(fileName, pw);
+				}
+				finally
+				{
+					this.fTree.OnProgress -= LoadProgress;
+					TfmProgress.ProgressDone();
+				}
 
-			TreeTools.CheckGEDCOMFormat(this.fTree, this.fValuesCollection, this);
+				TreeTools.CheckGEDCOMFormat(this.fTree, this.fValuesCollection, this);
+				this.Modified = false;
+			}
+			catch (Exception ex)
+			{
+				this.Host.LogWrite("TfmBase.FileLoad(): " + ex.Message);
+				GKUtils.ShowError(LangMan.LS(LSID.LSID_LoadGedComFailed));
+			}
 
 			this.ChangeFileName();
-			this.Modified = false;
-
-			TfmGEDKeeper.Instance.AddMRU(fileName);
-
 			this.RefreshLists(false);
 			this.ShowTips();
 		}
@@ -512,28 +513,19 @@ namespace GKUI
 		{
 			try
 			{
-				if (TfmGEDKeeper.Instance.Options.RevisionsBackup)
-				{
-					int rev = this.Tree.Header.FileRevision;
-					if (File.Exists(fileName)) 
-					{
-						string bakPath = Path.GetDirectoryName(fileName) + "\\__history\\";
-						string bakFile = Path.GetFileName(fileName) + "." + SysUtils.NumUpdate(rev, 3);
-
-						if (!Directory.Exists(bakPath)) Directory.CreateDirectory(bakPath);
-						File.Move(fileName, bakPath + bakFile);
+				string pw = null;
+				string ext = Path.GetExtension(fileName).ToLower();
+				if (ext == ".geds") {
+					if (!GKUtils.GetInput("password", ref pw)) {
+						GKUtils.ShowError("Пароль не задан");
+						return;
 					}
 				}
 
-				// проверка наличия архива и хранилища, перемещение их, если файл изменил местоположение
-				this.MoveMediaContainers(this.Tree.FileName, fileName);
-
-				this.fTree.SaveToFile(fileName, TfmGEDKeeper.Instance.Options.DefCharacterSet);
+				this.fContext.FileSave(fileName, pw);
+				this.Modified = false;
 
 				this.ChangeFileName();
-
-				TfmGEDKeeper.Instance.AddMRU(fileName);
-				this.Modified = false;
 			}
 			catch (UnauthorizedAccessException)
 			{
@@ -546,7 +538,7 @@ namespace GKUI
 			}
 		}
 
-		private GEDCOMFamilyRecord GetFamilyBySpouse(GEDCOMIndividualRecord aNewParent)
+		private GEDCOMFamilyRecord GetFamilyBySpouse(GEDCOMIndividualRecord newParent)
 		{
 			GEDCOMFamilyRecord result = null;
 
@@ -558,9 +550,9 @@ namespace GKUI
 				if (rec is GEDCOMFamilyRecord)
 				{
 					GEDCOMFamilyRecord fam = rec as GEDCOMFamilyRecord;
-					GEDCOMIndividualRecord husb = fam.Husband.Value as GEDCOMIndividualRecord;
-					GEDCOMIndividualRecord wife = fam.Wife.Value as GEDCOMIndividualRecord;
-					if (husb == aNewParent || wife == aNewParent)
+					GEDCOMIndividualRecord husb = fam.GetHusband();
+					GEDCOMIndividualRecord wife = fam.GetWife();
+					if (husb == newParent || wife == newParent)
 					{
 						string msg = string.Format(LangMan.LS(LSID.LSID_ParentsQuery), GKUtils.GetFamilyString(fam));
 						if (GKUtils.ShowQuestion(msg) == DialogResult.Yes)
@@ -575,7 +567,7 @@ namespace GKUI
 			return result;
 		}
 
-		public GEDCOMFamilyRecord GetChildFamily(GEDCOMIndividualRecord iChild, bool aCanCreate, GEDCOMIndividualRecord aNewParent)
+		public GEDCOMFamilyRecord GetChildFamily(GEDCOMIndividualRecord iChild, bool canCreate, GEDCOMIndividualRecord newParent)
 		{
 			GEDCOMFamilyRecord result = null;
 
@@ -587,9 +579,9 @@ namespace GKUI
 				}
 				else
 				{
-					if (aCanCreate)
+					if (canCreate)
 					{
-						GEDCOMFamilyRecord fam = this.GetFamilyBySpouse(aNewParent);
+						GEDCOMFamilyRecord fam = this.GetFamilyBySpouse(newParent);
 						if (fam == null)
 						{
 							fam = this.fTree.CreateFamily();
@@ -863,7 +855,7 @@ namespace GKUI
 		{
 			string result = "";
 
-			NamesTable.NameEntry n = TfmGEDKeeper.Instance.NamesTable.FindName(name);
+			NameEntry n = TfmGEDKeeper.Instance.NamesTable.FindName(name);
 			if (n == null) {
 			    if (!confirm) {
 					return result;
@@ -906,7 +898,7 @@ namespace GKUI
 
 		public GEDCOMSex DefineSex(string iName, string iPatr)
 		{
-			NamesTable namesTable = TfmGEDKeeper.Instance.NamesTable;
+			INamesTable namesTable = TfmGEDKeeper.Instance.NamesTable;
 			GEDCOMSex result = namesTable.GetSexByName(iName);
 
 			if (result == GEDCOMSex.svNone)
@@ -915,7 +907,7 @@ namespace GKUI
 				try
 				{
 					dlg.IndividualName = iName + " " + iPatr;
-					result = NamesTable.GetSex(iName, iPatr, false);
+					result = GKUtils.GetSex(iName, iPatr, false);
 
 					dlg.Sex = result;
 					if (dlg.ShowDialog() == DialogResult.OK)
@@ -1683,7 +1675,9 @@ namespace GKUI
 					groupRec = new GEDCOMGroupRecord(this.fTree, this.fTree, "", "");
 					groupRec.InitNew();
 				}
+
 				fmGrpEdit.Group = groupRec;
+
 				if (TfmGEDKeeper.Instance.ShowModalEx(fmGrpEdit, false) == DialogResult.OK) {
 					if (!exists) {
 						this.fTree.AddRecord(groupRec);
@@ -1822,7 +1816,7 @@ namespace GKUI
 			return result;
 		}
 
-		public bool ModifyName(ref NamesTable.NameEntry aName)
+		public bool ModifyName(ref NameEntry aName)
 		{
 			bool result;
 
@@ -1948,389 +1942,6 @@ namespace GKUI
 			return result;
 		}
 
-		#endregion
-
-		#region Private media support
-
-		private string GetArcFileName()
-		{
-			string treeName = this.fTree.FileName;
-			string result = Path.GetDirectoryName(treeName) + "\\" + Path.GetFileNameWithoutExtension(treeName) + ".zip";
-			return result;
-		}
-
-		private string GetStgFolder(bool create)
-		{
-			string treeName = this.fTree.FileName;
-			string result = Path.GetDirectoryName(treeName) + "\\" + Path.GetFileNameWithoutExtension(treeName) + "\\";
-			if (!Directory.Exists(result) && create) Directory.CreateDirectory(result);
-			return result;
-		}
-
-		private void ArcFileLoad(string targetFn, Stream toStream)
-		{
-			// http://www.icsharpcode.net/OpenSource/SharpZipLib/ - slow, but high compression ratio
-			// http://dotnetzip.codeplex.com/ - fast, but low compression ratio
-
-			targetFn = targetFn.Replace('\\', '/');
-
-			using (ZipStorer zip = ZipStorer.Open(this.GetArcFileName(), FileAccess.Read))
-			{
-				List<ZipStorer.ZipFileEntry> dir = zip.ReadCentralDir();
-				foreach (ZipStorer.ZipFileEntry entry in dir)
-				{
-					if (entry.FilenameInZip.Equals(targetFn)) {
-						zip.ExtractFile(entry, toStream);
-						break;
-					}
-				}
-			}
-		}
-
-		private void ArcFileSave(string fileName, string sfn)
-		{
-			string arcFn = this.GetArcFileName();
-			ZipStorer zip = null;
-
-			try
-			{
-				if (File.Exists(arcFn)) {
-					zip = ZipStorer.Open(arcFn, FileAccess.ReadWrite);
-				} else {
-					zip = ZipStorer.Create(arcFn, "");
-				}
-				zip.AddFile(ZipStorer.Compression.Deflate, fileName, sfn, null);
-			}
-			finally
-			{
-				if (zip != null) zip.Dispose();
-			}
-		}
-
-		private void MoveMediaContainers(string oldFileName, string newFileName)
-		{
-			// ничего не делать, если имя файла не изменилось
-			if (string.Equals(oldFileName, newFileName)) return;
-
-			bool hasArc = File.Exists(this.GetArcFileName());
-			bool hasStg = Directory.Exists(this.GetStgFolder(false));
-
-			string newPath = Path.GetDirectoryName(newFileName);
-			string newName = Path.GetFileName(newFileName);
-
-			// переместить архив и хранилище
-			if (hasArc) {
-				string newArc = newPath + "\\" + GKUtils.GetContainerName(newName, true);
-				File.Move(this.GetArcFileName(), newArc);
-			}
-
-			if (hasStg) {
-				string newStg = newPath + "\\" + GKUtils.GetContainerName(newName, false);
-				Directory.Move(this.GetStgFolder(false), newStg);
-			}
-		}
-
-		#endregion
-
-		#region Public media support
-		
-		public bool CheckBasePath()
-		{
-			string path = Path.GetDirectoryName(this.fTree.FileName);
-
-			bool result = (!string.IsNullOrEmpty(path));
-			if (!result)
-			{
-				GKUtils.ShowError("Для типов хранения \"архив\" и \"хранилище\" новый файл БД нужно предварительно сохранить");
-			}
-			return result;
-		}
-
-		public MediaStoreType GetStoreType(GEDCOMFileReference fileReference, ref string fileName)
-		{
-            if (fileReference == null) {
-                throw new ArgumentNullException("fileReference");
-            }
-
-            string fileRef = fileReference.StringValue;
-			
-			fileName = fileRef;
-			MediaStoreType result;
-
-			if (fileRef.IndexOf(GKData.GKStoreTypes[2].Sign) == 0)
-			{
-				result = MediaStoreType.mstArchive;
-				fileName = fileName.Remove(0, 4);
-			}
-			else
-			{
-				if (fileRef.IndexOf(GKData.GKStoreTypes[1].Sign) == 0)
-				{
-					result = MediaStoreType.mstStorage;
-					fileName = fileName.Remove(0, 4);
-				}
-				else
-				{
-					result = MediaStoreType.mstReference;
-				}
-			}
-
-			return result;
-		}
-
-		public void MediaLoad(GEDCOMFileReference fileReference, out Stream stream, bool throwException)
-		{
-			stream = null;
-			if (fileReference == null) return;
-			
-			string targetFn = "";
-			MediaStoreType gst = this.GetStoreType(fileReference, ref targetFn);
-
-			switch (gst) {
-				case MediaStoreType.mstStorage:
-					targetFn = this.GetStgFolder(false) + targetFn;
-					if (!File.Exists(targetFn))
-					{
-					    if (throwException) {
-							throw new MediaFileNotFoundException();
-						}
-
-                        GKUtils.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
-					}
-					else {
-						stream = new FileStream(targetFn, FileMode.Open);
-					}
-					break;
-
-				case MediaStoreType.mstArchive:
-					stream = new MemoryStream();
-					if (!File.Exists(this.GetArcFileName()))
-					{
-					    if (throwException) {
-							throw new MediaFileNotFoundException();
-						}
-
-                        GKUtils.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
-					}
-					else {
-						this.ArcFileLoad(targetFn, stream);
-						stream.Seek((long)0, SeekOrigin.Begin);
-					}
-					break;
-
-				case MediaStoreType.mstReference:
-					stream = new FileStream(targetFn, FileMode.Open);
-					break;
-			}
-		}
-
-		public void MediaLoad(GEDCOMFileReference fileReference, ref string fileName)
-		{
-			if (fileReference == null) return;
-			
-			try
-			{
-				string targetFn = "";
-				MediaStoreType gst = this.GetStoreType(fileReference, ref targetFn);
-
-				switch (gst) {
-					case MediaStoreType.mstStorage:
-						fileName = this.GetStgFolder(false) + targetFn;
-						break;
-
-					case MediaStoreType.mstArchive:
-						fileName = GKUtils.GetTempDir() + "\\" + Path.GetFileName(targetFn);
-						FileStream fs = new FileStream(fileName, FileMode.Create);
-						try
-						{
-							if (!File.Exists(this.GetArcFileName())) {
-								GKUtils.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
-							} else {
-								targetFn = targetFn.Replace("\\", "/");
-								this.ArcFileLoad(targetFn, fs);
-							}
-						}
-						finally
-						{
-							fs.Close();
-							fs.Dispose();
-						}
-						break;
-
-					case MediaStoreType.mstReference:
-						fileName = targetFn;
-						break;
-				}
-			}
-			catch (Exception ex)
-			{
-                this.Host.LogWrite("TfmBase.MediaLoad_fn(): " + ex.Message);
-				fileName = "";
-			}
-		}
-
-		public bool MediaSave(GEDCOMFileReference fileReference, string fileName, MediaStoreType storeType)
-		{
-			if (fileReference == null) return false;
-
-			bool result = true;
-
-			string storeFile = Path.GetFileName(fileName);
-			string storePath = "";
-			string refPath = "";
-
-			switch (GEDCOMFileReference.RecognizeFormat(fileName))
-			{
-				case GEDCOMMultimediaFormat.mfNone:
-				case GEDCOMMultimediaFormat.mfOLE:
-				case GEDCOMMultimediaFormat.mfUnknown:
-					storePath = "unknown\\";
-					break;
-
-				case GEDCOMMultimediaFormat.mfBMP:
-				case GEDCOMMultimediaFormat.mfGIF:
-				case GEDCOMMultimediaFormat.mfJPG:
-				case GEDCOMMultimediaFormat.mfPCX:
-				case GEDCOMMultimediaFormat.mfTIF:
-				case GEDCOMMultimediaFormat.mfTGA:
-				case GEDCOMMultimediaFormat.mfPNG:
-					storePath = "images\\";
-					break;
-
-				case GEDCOMMultimediaFormat.mfWAV:
-					storePath = "audio\\";
-					break;
-
-				case GEDCOMMultimediaFormat.mfTXT:
-				case GEDCOMMultimediaFormat.mfRTF:
-				case GEDCOMMultimediaFormat.mfHTM:
-					storePath = "texts\\";
-					break;
-
-				case GEDCOMMultimediaFormat.mfAVI:
-				case GEDCOMMultimediaFormat.mfMPG:
-					storePath = "video\\";
-					break;
-			}
-
-			switch (storeType) {
-				case MediaStoreType.mstReference:
-					refPath = fileName;
-					break;
-
-				case MediaStoreType.mstArchive:
-					refPath = GKData.GKStoreTypes[(int)storeType].Sign + storePath + storeFile;
-					this.ArcFileSave(fileName, storePath + storeFile);
-					break;
-
-				case MediaStoreType.mstStorage:
-					refPath = GKData.GKStoreTypes[(int)storeType].Sign + storePath + storeFile;
-					try
-					{
-						string targetDir = this.GetStgFolder(true) + storePath;
-						if (!Directory.Exists(targetDir)) Directory.CreateDirectory(targetDir);
-
-						string targetFn = targetDir + storeFile;
-						File.Copy(fileName, targetFn, false);
-					}
-					catch (IOException)
-					{
-						GKUtils.ShowError("Файл с таким именем уже есть в хранилище");
-						result = false;
-					}
-					break;
-			}
-
-			if (result) {
-				fileReference.LinkFile(refPath);
-			}
-
-			return result;
-		}
-
-		public Bitmap BitmapLoad(GEDCOMFileReference fileReference, int thumbWidth, int thumbHeight, bool throwException)
-		{
-			if (fileReference == null) return null;
-			
-			Bitmap result = null;
-			try
-			{
-				Stream stm;
-
-				this.MediaLoad(fileReference, out stm, throwException);
-
-				if (stm != null)
-				{
-					if (stm.Length != 0) {
-						using (Bitmap bmp = new Bitmap(stm))
-						{
-							int newWidth;
-							int newHeight;
-
-							if (thumbWidth > 0 && thumbHeight > 0)
-							{
-								int maxSizeSrc = ((bmp.Height > bmp.Width) ? bmp.Height : bmp.Width);
-								int minSizeDst = ((thumbHeight < thumbWidth) ? thumbHeight : thumbWidth);
-								double ratio = (double)minSizeDst / maxSizeSrc;
-								newWidth = (int)(bmp.Width * ratio);
-								newHeight = (int)(bmp.Height * ratio);
-							} else {
-								newWidth = bmp.Width;
-								newHeight = bmp.Height;
-							}
-
-							Bitmap newImage = new Bitmap(newWidth, newHeight, PixelFormat.Format24bppRgb);
-							Graphics graphic = Graphics.FromImage(newImage);
-							graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
-							graphic.SmoothingMode = SmoothingMode.HighQuality;
-							graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
-							graphic.CompositingQuality = CompositingQuality.HighQuality;
-							graphic.DrawImage(bmp, 0, 0, newWidth, newHeight);
-
-							result = newImage;
-						}
-					}
-					stm.Dispose();
-				}
-			}
-			catch (MediaFileNotFoundException)
-			{
-				throw;
-			}
-			catch (Exception ex)
-			{
-                this.Host.LogWrite("TfmBase.BitmapLoad(): " + ex.Message);
-				result = null;
-			}
-			return result;
-		}
-
-		public Bitmap GetPrimaryBitmap(GEDCOMIndividualRecord iRec, int thumbWidth, int thumbHeight, bool throwException)
-		{
-		    if (iRec == null) return null;
-
-			Bitmap result = null;
-			try
-			{
-				GEDCOMMultimediaLink mmLink = iRec.GetPrimaryMultimediaLink();
-                if (mmLink != null && mmLink.Value != null)
-				{
-					GEDCOMMultimediaRecord mmRec = mmLink.Value as GEDCOMMultimediaRecord;
-					result = this.BitmapLoad(mmRec.FileReferences[0], thumbWidth, thumbHeight, throwException);
-				}
-			}
-			catch (MediaFileNotFoundException)
-			{
-				throw;
-			}
-			catch (Exception ex)
-			{
-                this.Host.LogWrite("TfmBase.GetPrimaryBitmap(): " + ex.Message);
-				result = null;
-			}
-			return result;
-		}
-		
 		#endregion
 
     }

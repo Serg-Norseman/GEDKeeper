@@ -22,6 +22,9 @@ namespace GKUI.Charts
 		pkDefault, pkSpouse
 	}
 
+	/// <summary>
+	/// 
+	/// </summary>
 	public class TreeChartPerson : BaseObject
     {
         protected TreeChartBox fChart;
@@ -29,7 +32,7 @@ namespace GKUI.Charts
         // base fields
         private EnumSet<PersonFlag> fFlags;
         private GEDCOMIndividualRecord fRec;
-        private EnumSet<ChartPersonSign> fSigns;
+        private EnumSet<SpecialUserRef> fSigns;
 
         // strictly private
         private string fBirthDate;
@@ -179,7 +182,7 @@ namespace GKUI.Charts
             set { this.fSex = value; }
         }
 
-        public EnumSet<ChartPersonSign> Signs
+        public EnumSet<SpecialUserRef> Signs
         {
             get { return this.fSigns; }
         }
@@ -306,17 +309,17 @@ namespace GKUI.Charts
             this.fSpouses.Add(spouse);
         }
 
-		private EnumSet<ChartPersonSign> GetPersonSigns()
+		private EnumSet<SpecialUserRef> GetPersonSigns()
 		{
-			EnumSet<ChartPersonSign> result = EnumSet<ChartPersonSign>.Create();
+			EnumSet<SpecialUserRef> result = EnumSet<SpecialUserRef>.Create();
 			
 			int num = this.fRec.UserReferences.Count;
 			for (int i = 0; i < num; i++)
 			{
 				string rs = this.fRec.UserReferences[i].StringValue;
-				for (ChartPersonSign cps = ChartPersonSign.urRI_StGeorgeCross; cps <= ChartPersonSign.urLast; cps++)
+				for (SpecialUserRef cps = SpecialUserRef.urRI_StGeorgeCross; cps <= SpecialUserRef.urLast; cps++)
 				{
-					if (rs == GKData.UserRefs[(int)cps]) result.Include(cps);
+					if (rs == GKData.SpecialUserRefs[(int)cps]) result.Include(cps);
 				}
 			}
 			
@@ -351,7 +354,7 @@ namespace GKUI.Charts
                     if (this.fChart.Options.PortraitsVisible) {
                         try
                         {
-                            this.fPortrait = this.fChart.Base.GetPrimaryBitmap(iRec, -1, -1, true);
+                            this.fPortrait = this.fChart.Base.Context.GetPrimaryBitmap(iRec, -1, -1, true);
                         }
                         catch (MediaFileNotFoundException)
                         {
@@ -372,7 +375,7 @@ namespace GKUI.Charts
                     this.fDeathDate = "";
                     this.IsDead = false;
                     this.fSex = GEDCOMSex.svNone;
-                    this.fSigns = EnumSet<ChartPersonSign>.Create();
+                    this.fSigns = EnumSet<SpecialUserRef>.Create();
 
                     this.CertaintyAssessment = 0.0f;
                 }

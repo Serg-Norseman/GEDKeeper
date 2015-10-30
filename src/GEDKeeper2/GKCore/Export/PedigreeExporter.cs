@@ -98,6 +98,10 @@ namespace GKCore.Export
 			set { this.fShieldState = value; }
 		}
 
+		public PedigreeExporter(IBaseWindow aBase) : base(aBase)
+		{
+		}
+
 		private PedigreePerson FindPerson(GEDCOMIndividualRecord iRec)
 		{
             if (iRec == null) return null;
@@ -215,14 +219,14 @@ namespace GKCore.Export
 			try
 			{
 				int i;
-				if (person.IRec.IndividualEvents.Count > 0)
+				if (person.IRec.Events.Count > 0)
 				{
 					fDocument.Add(new Paragraph(LangMan.LS(LSID.LSID_Events) + ":", fTextFont));
 
-					int num = person.IRec.IndividualEvents.Count;
+					int num = person.IRec.Events.Count;
 					for (i = 0; i < num; i++)
 					{
-						GEDCOMCustomEvent evt = person.IRec.IndividualEvents[i];
+						GEDCOMCustomEvent evt = person.IRec.Events[i];
 						if (!(evt is GEDCOMIndividualAttribute) || (evt is GEDCOMIndividualAttribute && this.fOptions.PedigreeOptions.IncludeAttributes))
 						{
 							evList.Add(new PedigreeEvent(evt, person.IRec));
@@ -264,7 +268,7 @@ namespace GKCore.Export
 						for (int j = 0; j < num3; j++)
 						{
 							irec = (family.Childrens[j].Value as GEDCOMIndividualRecord);
-							evList.Add(new PedigreeEvent(irec.GetIndividualEvent("BIRT"), irec));
+							evList.Add(new PedigreeEvent(irec.FindEvent("BIRT"), irec));
 						}
 						this.WriteEventList(person, evList);
 					}
@@ -409,7 +413,7 @@ namespace GKCore.Export
 						}
 					}
 
-					string dt = GKUtils.GEDCOMCustomDateToStr(evt.Detail.Date, DateFormat.dfDD_MM_YYYY, false);
+					string dt = GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false);
 					li = dt + ": " + st + ".";
 					if (evt.Detail.Place.StringValue != "")
 					{
@@ -420,7 +424,7 @@ namespace GKCore.Export
 				}
 				else
 				{
-					string dt = (evt == null) ? "?" : GKUtils.GEDCOMCustomDateToStr(evt.Detail.Date, DateFormat.dfDD_MM_YYYY, false);
+					string dt = (evt == null) ? "?" : GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false);
 
 				    string st = (evObj.IRec.Sex == GEDCOMSex.svMale) ? ": Родился " : ": Родилась ";
 
@@ -512,10 +516,6 @@ namespace GKCore.Export
 			{
 				throw;
 			}
-		}
-
-		public PedigreeExporter(IBase aBase) : base(aBase)
-		{
 		}
 
 		private void GenStep(PedigreePerson parent, GEDCOMIndividualRecord iRec, int level, int familyOrder)

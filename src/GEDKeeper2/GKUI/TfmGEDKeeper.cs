@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 
+using ExtUtils.SingleInstancing;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
@@ -20,93 +21,99 @@ using GKUI.Dialogs;
 
 namespace GKUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed partial class TfmGEDKeeper : Form, ILocalization, IHost
+	/// <summary>
+	/// 
+	/// </summary>
+	public partial class TfmGEDKeeper : Form, IHost, ISingleInstanceEnforcer
 	{
-    	private class WidgetInfo
-    	{
-    		public IWidget Widget;
-    		public MenuItem MenuItem;
-    	}
-    	
+		private delegate void OnMessageReceivedInvoker(MessageEventArgs e);
+
+		private class WidgetInfo
+		{
+			public IWidget Widget;
+			public MenuItem MenuItem;
+		}
+
 		private NamesTable fNamesTable;
 		private GlobalOptions fOptions;
-        private List<IPlugin> fPlugins;
+		private List<IPlugin> fPlugins;
 
-        private readonly List<WidgetInfo> fActiveWidgets;
-        private readonly string[] fCommandArgs;
+		private readonly List<WidgetInfo> fActiveWidgets;
+		private string[] fCommandArgs;
 
 		private static TfmGEDKeeper fInstance = null;
 
-		public static TfmGEDKeeper Instance
-		{
+		public static TfmGEDKeeper Instance {
 			get { return fInstance; }
 		}
 
-		public NamesTable NamesTable
-		{
+		public INamesTable NamesTable {
 			get { return this.fNamesTable; }
 		}
 
-		public GlobalOptions Options
-		{
+		public GlobalOptions Options {
 			get { return this.fOptions; }
 		}
 
-		public List<IPlugin> Plugins
-		{
+		public List<IPlugin> Plugins {
 			get { return this.fPlugins; }
 		}
-		
+
 		#region Instance control
 
-		public TfmGEDKeeper(string[] args)
+		public TfmGEDKeeper()
 		{
 			this.InitializeComponent();
 
-            fInstance = this;
+			fInstance = this;
 
-            this.fCommandArgs = (string[])args.Clone();
-            this.fActiveWidgets = new List<WidgetInfo>();
-            
-            //LangMan.SaveDefaultLanguage();
+			this.fActiveWidgets = new List<WidgetInfo>();
+
+			//LangMan.SaveDefaultLanguage();
 		}
 
 		protected override void Dispose(bool disposing)
 		{
-			if (disposing)
-			{
-                fNamesTable.Dispose();
-                fOptions.Dispose();
+			if (disposing) {
+				fNamesTable.Dispose();
+				fOptions.Dispose();
 
-                if (components != null) components.Dispose();
-            }
+				if (components != null)
+					components.Dispose();
+			}
 			base.Dispose(disposing);
 		}
 
 		#endregion
 
 		#region Event handlers
-		
+
+		public void SetArgs(string[] args)
+		{
+			this.fCommandArgs = (string[])args.Clone();
+		}
+
+		private void LoadArgs()
+		{
+			if (fCommandArgs != null && fCommandArgs.Length > 0) {
+				this.CreateBase(fCommandArgs[0]);
+			}
+		}
+
 		private void Form_Load(object sender, EventArgs e)
 		{
 			SysUtils.LogInit(this.GetAppDataPath() + "GEDKeeper2.log");
 
-			this.fOptions = new GlobalOptions();
+			this.fOptions = GlobalOptions.Instance;
 			this.fOptions.LoadFromFile(this.GetAppDataPath() + "GEDKeeper2.ini");
 			this.fOptions.FindLanguages();
 
-			if (this.fOptions.MWinRect.Left != -1 && this.fOptions.MWinRect.Top != -1 && this.fOptions.MWinRect.Right != -1 && this.fOptions.MWinRect.Bottom != -1)
-			{
+			if (this.fOptions.MWinRect.Left != -1 && this.fOptions.MWinRect.Top != -1 && this.fOptions.MWinRect.Right != -1 && this.fOptions.MWinRect.Bottom != -1) {
 				base.Left = this.fOptions.MWinRect.Left;
 				base.Top = this.fOptions.MWinRect.Top;
 				base.Width = this.fOptions.MWinRect.Right;
 				base.Height = this.fOptions.MWinRect.Bottom;
-			}
-			else
-			{
+			} else {
 				base.Left = (Screen.PrimaryScreen.WorkingArea.Width - 800) / 2;
 				base.Top = (Screen.PrimaryScreen.WorkingArea.Height - 600) / 2;
 				base.Width = 800;
@@ -118,16 +125,14 @@ namespace GKUI
 			this.fNamesTable.LoadFromFile(this.GetAppDataPath() + "GEDKeeper2.nms");
 
 			this.LoadPlugins(GKUtils.GetAppPath() + "\\plugins\\");
-            this.UpdatePluginsItems();
+			this.UpdatePluginsItems();
 
 			this.LoadLanguage(this.fOptions.InterfaceLang);
 
 			this.UpdateMRU();
 			this.UpdateControls(false);
 
-			if (fCommandArgs.Length > 0) {
-				this.CreateBase(fCommandArgs[0]);
-			}
+			this.LoadArgs();
 		}
 
 		private void Form_Closed(object sender, FormClosedEventArgs e)
@@ -137,7 +142,7 @@ namespace GKUI
 			this.fOptions.MWinRect = SysUtils.GetFormRect(this);
 			this.fOptions.MWinState = base.WindowState;
 
-            NativeMethods.HtmlHelp(IntPtr.Zero, null, 18u, 0u);
+			NativeMethods.HtmlHelp(IntPtr.Zero, null, 18u, 0u);
 
 			this.fNamesTable.SaveToFile(this.GetAppDataPath() + "GEDKeeper2.nms");
 			this.fNamesTable.Dispose();
@@ -148,14 +153,13 @@ namespace GKUI
 
 		private void Form_KeyDown(object sender, KeyEventArgs e)
 		{
-			if (e.KeyCode == Keys.F12)
-			{
+			if (e.KeyCode == Keys.F12) {
 				// dummy
-				IBase curBase = this.GetCurrentFile();
-				if (curBase == null) return;
+				IBaseWindow curBase = this.GetCurrentFile();
+				if (curBase == null)
+					return;
 
-				using (TreesAlbumExporter p = new TreesAlbumExporter(curBase))
-				{
+				using (TreesAlbumExporter p = new TreesAlbumExporter(curBase)) {
 					p.Ancestor = curBase.GetSelectedPerson();
 					p.Options = this.fOptions;
 					p.ShieldState = curBase.ShieldState;
@@ -170,7 +174,7 @@ namespace GKUI
 			for (int i = 0; i < num; i++) {
 				string lb = this.fOptions.GetLastBase(i);
 				if (File.Exists(lb)) {
-                    this.CreateBase(lb);
+					this.CreateBase(lb);
 				}
 			}
 		}
@@ -183,36 +187,30 @@ namespace GKUI
 		private void Form_Closing(object sender, FormClosingEventArgs e)
 		{
 			this.fOptions.ClearLastBases();
-			for (int i = base.MdiChildren.Length - 1; i >= 0; i--)
-			{
+			for (int i = base.MdiChildren.Length - 1; i >= 0; i--) {
 				Form mdiChild = base.MdiChildren[i];
-				if (mdiChild is TfmBase)
-				{
-					this.fOptions.AddLastBase((mdiChild as TfmBase).Tree.FileName);
+				if (mdiChild is IBaseWindow) {
+					this.fOptions.AddLastBase((mdiChild as IBaseWindow).Tree.FileName);
 				}
 			}
 		}
 
 		private void Form_DragEnter(object sender, DragEventArgs e)
 		{
-		    e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Copy : DragDropEffects.None;
+			e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Copy : DragDropEffects.None;
 		}
 
-	    private void Form_DragDrop(object sender, DragEventArgs e)
+		private void Form_DragDrop(object sender, DragEventArgs e)
 		{
-			try
-			{
+			try {
 				Array a = e.Data.GetData(DataFormats.FileDrop) as Array;
-				if (a != null)
-				{
+				if (a != null) {
 					for (int i = 0; i < a.Length; i++) {
 						string fn = a.GetValue(i).ToString();
 						this.CreateBase(fn);
 					}
 				}
-			}
-			catch (Exception ex)
-			{
+			} catch (Exception ex) {
 				SysUtils.LogWrite("TfmGEDKeeper.Form_DragDrop(): " + ex.Message);
 			}
 		}
@@ -221,10 +219,8 @@ namespace GKUI
 		{
 			base.WndProc(ref m);
 
-			if (m.Msg == NativeMethods.WM_KEEPMODELESS)
-			{
-				foreach (WidgetInfo widgetInfo in this.fActiveWidgets)
-				{
+			if (m.Msg == NativeMethods.WM_KEEPMODELESS) {
+				foreach (WidgetInfo widgetInfo in this.fActiveWidgets) {
 					widgetInfo.Widget.WidgetEnable();
 				}
 			}
@@ -232,42 +228,44 @@ namespace GKUI
 
 		private void StatusBar_DrawItem(object sender, StatusBarDrawItemEventArgs sbdevent)
 		{
-			IBase curBase = this.GetCurrentFile();
-		    if (curBase == null) return;
+			IBaseWindow curBase = this.GetCurrentFile();
+			if (curBase == null)
+				return;
 
-		    Bitmap pic = null;
-		    switch (curBase.ShieldState) {
-		        case ShieldState.ssNone:
-		            pic = (Bitmap)GKResources.iRGShieldNone.Clone();
-		            break;
-		        case ShieldState.ssMiddle:
-		            pic = (Bitmap)GKResources.iRGShieldMid.Clone();
-		            break;
-		        case ShieldState.ssMaximum:
-		            pic = (Bitmap)GKResources.iRGShieldMax.Clone();
-		            break;
-		    }
+			Bitmap pic = null;
+			switch (curBase.ShieldState) {
+				case ShieldState.ssNone:
+					pic = (Bitmap)GKResources.iRGShieldNone.Clone();
+					break;
+				case ShieldState.ssMiddle:
+					pic = (Bitmap)GKResources.iRGShieldMid.Clone();
+					break;
+				case ShieldState.ssMaximum:
+					pic = (Bitmap)GKResources.iRGShieldMax.Clone();
+					break;
+			}
 
-		    if (pic != null) {
-		        pic.MakeTransparent(pic.GetPixel(0, 0));
-		        sbdevent.Graphics.DrawImage(pic, sbdevent.Bounds.Left, sbdevent.Bounds.Top);
-		    }
+			if (pic != null) {
+				pic.MakeTransparent(pic.GetPixel(0, 0));
+				sbdevent.Graphics.DrawImage(pic, sbdevent.Bounds.Left, sbdevent.Bounds.Top);
+			}
 		}
 
 		private void StatusBar_PanelClick(object sender, StatusBarPanelClickEventArgs e)
 		{
 			if (e.StatusBarPanel == StatusBarPanel2 && e.Clicks == 2) {
-				IBase curBase = this.GetCurrentFile();
-				if (curBase == null) return;
+				IBaseWindow curBase = this.GetCurrentFile();
+				if (curBase == null)
+					return;
 
-                ShieldState ss = curBase.ShieldState;
+				ShieldState ss = curBase.ShieldState;
 				if (ss == ShieldState.ssNone) {
 					ss = ShieldState.ssMaximum;
 				} else {
 					ss = (ShieldState)((int)ss + 1);
 				}
 
-                curBase.ShieldState = ss;
+				curBase.ShieldState = ss;
 				StatusBar.Invalidate();
 			}
 		}
@@ -308,14 +306,13 @@ namespace GKUI
 			base.Close();
 		}
 
-	    #endregion
+		#endregion
 
-	    #region Misc functions
-	    
+		#region Misc functions
+
 		public void LoadLanguage(int langCode)
 		{
-			if (langCode != LangMan.LSDefCode)
-			{
+			if (langCode != LangMan.LSDefCode) {
 				bool loaded = false;
 
 				int num = this.fOptions.GetLangsCount();
@@ -326,44 +323,46 @@ namespace GKUI
 					}
 				}
 
-				if (!loaded) langCode = LangMan.LSDefCode;
+				if (!loaded)
+					langCode = LangMan.LSDefCode;
 			}
 
 			if (langCode == LangMan.LSDefCode) {
 				LangMan.DefInit();
 			}
 
-			GKData.DataSetup();
+			//GKData.DataSetup();
 
 			int num2 = base.MdiChildren.Length;
 			for (int i = 0; i < num2; i++) {
 				Form child = base.MdiChildren[i];
-				if (child is ILocalization) (child as ILocalization).SetLang();
+				if (child is ILocalization)
+					(child as ILocalization).SetLang();
 			}
 
 			(this as ILocalization).SetLang();
 
 			this.fOptions.InterfaceLang = (ushort)langCode;
-			
+
 			this.UpdatePluginsLanguage();
 		}
 
 		public DialogResult ShowModalEx(Form form, bool keepModeless)
 		{
-            if (form == null) return DialogResult.None;
+			if (form == null)
+				return DialogResult.None;
 
-			if (keepModeless)
-			{
-                NativeMethods.PostMessage(this.Handle, NativeMethods.WM_KEEPMODELESS, 0, 0);
+			if (keepModeless) {
+				NativeMethods.PostMessage(this.Handle, NativeMethods.WM_KEEPMODELESS, 0, 0);
 			}
 
 			return form.ShowDialog();
 		}
 
 		#endregion
-		
+
 		#region MRU functions
-		
+
 		private void MRUFileClick(object sender, EventArgs e)
 		{
 			int idx = ((GKMenuItem)sender).Tag;
@@ -393,14 +392,11 @@ namespace GKUI
 		public void AddMRU(string fileName)
 		{
 			int idx = this.fOptions.MRUFiles_IndexOf(fileName);
-			if (idx >= 0)
-			{
+			if (idx >= 0) {
 				MRUFile tmp_mf = this.fOptions.MRUFiles[0];
 				this.fOptions.MRUFiles[0] = this.fOptions.MRUFiles[idx];
 				this.fOptions.MRUFiles[idx] = tmp_mf;
-			}
-			else
-			{
+			} else {
 				MRUFile new_mf = new MRUFile();
 				new_mf.FileName = fileName;
 				this.fOptions.MRUFiles.Insert(0, new_mf);
@@ -412,38 +408,47 @@ namespace GKUI
 		public void CheckMRUWin(string fileName, Form frm)
 		{
 			int idx = this.fOptions.MRUFiles_IndexOf(fileName);
-			if (idx >= 0)
-			{
+			if (idx >= 0) {
 				MRUFile mf = this.fOptions.MRUFiles[idx];
-				
+
 				mf.WinRect = SysUtils.GetFormRect(frm);
 				mf.WinState = frm.WindowState;
 			}
 		}
 
-		public void RestoreMRU(IBase aBase, string fileName)
+		public void RestoreMRU(IBaseWindow aBase, string fileName)
 		{
 			int idx = this.fOptions.MRUFiles_IndexOf(fileName);
-			if (idx >= 0)
-			{
+			if (idx >= 0) {
 				MRUFile mf = this.fOptions.MRUFiles[idx];
 				SysUtils.SetFormRect(aBase as Form, mf.WinRect, mf.WinState);
 			}
 		}
-		
+
 		#endregion
 
 		#region Base Management
-	    
+
+		public void UpdateNavControls()
+		{
+			try {
+				IWorkWindow workWin = this.GetWorkWindow();
+
+				this.tbPrev.Enabled = (workWin != null && workWin.NavCanBackward());
+				this.tbNext.Enabled = (workWin != null && workWin.NavCanForward());
+			} catch (Exception ex) {
+				SysUtils.LogWrite("TfmGEDKeeper.UpdateNavControls(): " + ex.Message);
+			}
+		}
+
 		public void UpdateControls(bool forceDeactivate)
 		{
-			try
-			{
-				IBase curBase = ((forceDeactivate) ? null : this.GetCurrentFile());
-				TfmChart curChart = ((this.ActiveMdiChild is TfmChart) ? (this.ActiveMdiChild as TfmChart) : null);
+			try {
+				IBaseWindow curBase = ((forceDeactivate) ? null : this.GetCurrentFile());
+				IChartWindow curChart = ((this.ActiveMdiChild is IChartWindow) ? (this.ActiveMdiChild as IChartWindow) : null);
 
 				IWorkWindow workWin = this.GetWorkWindow();
-				
+
 				GEDCOMRecordType rt = (curBase == null) ? GEDCOMRecordType.rtNone : curBase.GetSelectedRecordType();
 				bool baseEn = (rt != GEDCOMRecordType.rtNone);
 
@@ -457,11 +462,12 @@ namespace GKUI
 				this.tbRecordDelete.Enabled = this.miRecordDelete.Enabled;
 				this.miStats.Enabled = baseEn;
 				this.tbStats.Enabled = this.miStats.Enabled;
-				this.miFilter.Enabled = baseEn;
+
+				this.miFilter.Enabled = (workWin != null);
 				this.tbFilter.Enabled = this.miFilter.Enabled;
 
 				this.miSearch.Enabled = (workWin != null);
-				
+
 				this.miTreeTools.Enabled = baseEn;
 				this.miExportToFamilyBook.Enabled = baseEn;
 				this.miExportToExcelFile.Enabled = baseEn;
@@ -469,9 +475,9 @@ namespace GKUI
 				this.miFileProperties.Enabled = baseEn;
 				this.miOrganizer.Enabled = baseEn;
 				this.miScripts.Enabled = baseEn;
-				
+
 				bool indivEn = baseEn && rt == GEDCOMRecordType.rtIndividual;
-				
+
 				this.miTreeAncestors.Enabled = indivEn;
 				this.tbTreeAncestors.Enabled = this.miTreeAncestors.Enabled;
 				this.miTreeDescendants.Enabled = indivEn;
@@ -483,31 +489,55 @@ namespace GKUI
 				this.miPedigree_dAboville.Enabled = indivEn;
 				this.miPedigree_Konovalov.Enabled = indivEn;
 
-				this.tbPrev.Enabled = (curBase != null && curBase.NavCanBackward());
-				this.tbNext.Enabled = (curBase != null && curBase.NavCanForward());
-
 				if (workWin != null) {
 					this.StatusBar.Panels[0].Text = workWin.GetStatusString();
 				}
 
+				this.UpdateNavControls();
+
 				this.StatusBar.Invalidate();
-			}
-			catch (Exception ex)
-			{
+			} catch (Exception ex) {
 				SysUtils.LogWrite("TfmGEDKeeper.UpdateControls(): " + ex.Message);
 			}
 		}
 
 		public string GetCurrentFileName()
 		{
-			IBase cb = this.GetCurrentFile();
+			IBaseWindow cb = this.GetCurrentFile();
 			string result = ((cb == null) ? "" : cb.Tree.FileName);
 			return result;
 		}
 
-		public IBase CreateBase(string fileName)
+		public IBaseWindow FindBase(string fileName)
 		{
-			IBase result = new TfmBase();
+			IBaseWindow result = null;
+
+			int num = base.MdiChildren.Length;
+			for (int i = 0; i < num; i++) {
+				Form child = base.MdiChildren[i];
+
+				if (child is IBaseWindow) {
+					IBaseWindow baseWin = (child as IBaseWindow);
+
+					if (string.Equals(baseWin.Tree.FileName, fileName)) {
+						result = baseWin;
+						break;
+					}
+				}
+			}
+
+			return result;
+		}
+
+		public IBaseWindow CreateBase(string fileName)
+		{
+			IBaseWindow result = this.FindBase(fileName);
+			if (result != null) {
+				(result as TfmBase).Activate();
+				return result;
+			}
+
+			result = new TfmBase();
 			result.Show();
 
 			if (fileName != "" && File.Exists(fileName)) {
@@ -523,45 +553,41 @@ namespace GKUI
 
 		public void CriticalSave()
 		{
-			try
-			{
+			try {
 				int num = base.MdiChildren.Length;
-				for (int i = 0; i < num; i++)
-				{
+				for (int i = 0; i < num; i++) {
 					Form child = base.MdiChildren[i];
 
-					if (child is TfmBase) {
-						GEDCOMTree tree = (child as TfmBase).Tree;
-						
+					if (child is IBaseWindow) {
+						GEDCOMTree tree = (child as IBaseWindow).Tree;
+
 						string rfn = Path.ChangeExtension(tree.FileName, ".restore");
 						tree.SaveToFile(rfn, this.fOptions.DefCharacterSet);
 					}
 				}
-			}
-			catch (Exception ex)
-			{
+			} catch (Exception ex) {
 				SysUtils.LogWrite("TfmGEDKeeper.CriticalSave(): " + ex.Message);
 			}
 		}
 
 		private void miExportToFamilyBookClick(object sender, EventArgs e)
 		{
-			IBase curBase = this.GetCurrentFile();
-		    if (curBase == null) return;
+			IBaseWindow curBase = this.GetCurrentFile();
+			if (curBase == null)
+				return;
 
-			using (FamilyBookExporter fb = new FamilyBookExporter(curBase))
-			{
+			using (FamilyBookExporter fb = new FamilyBookExporter(curBase)) {
 				fb.Generate(true);
 			}
 		}
 
 		private void miExportToExcelFileClick(object sender, EventArgs e)
 		{
-			IBase curBase = this.GetCurrentFile();
-		    if (curBase == null) return;
+			IBaseWindow curBase = this.GetCurrentFile();
+			if (curBase == null)
+				return;
 
-			using (ExcelExporter exExp = new ExcelExporter(curBase))
-			{
+			using (ExcelExporter exExp = new ExcelExporter(curBase)) {
 				exExp.Options = this.fOptions;
 				exExp.SelectedRecords = curBase.GetContentList(GEDCOMRecordType.rtIndividual);
 				exExp.AppMode = false;
@@ -571,33 +597,33 @@ namespace GKUI
 
 		private void miFilePropertiesClick(object sender, EventArgs e)
 		{
-			IBase curBase = this.GetCurrentFile();
-		    if (curBase == null) return;
+			IBaseWindow curBase = this.GetCurrentFile();
+			if (curBase == null)
+				return;
 
-			using (TfmFileProperties dlgFileProps = new TfmFileProperties(curBase))
-			{
+			using (TfmFileProperties dlgFileProps = new TfmFileProperties(curBase)) {
 				TfmGEDKeeper.Instance.ShowModalEx(dlgFileProps, false);
 			}
 		}
 
 		private void miScriptsClick(object sender, EventArgs e)
 		{
-			IBase curBase = this.GetCurrentFile();
-		    if (curBase == null) return;
+			IBaseWindow curBase = this.GetCurrentFile();
+			if (curBase == null)
+				return;
 
-			using (TfmScriptDaemon dmn = new TfmScriptDaemon(curBase))
-			{
+			using (TfmScriptDaemon dmn = new TfmScriptDaemon(curBase)) {
 				TfmGEDKeeper.Instance.ShowModalEx(dmn, false);
 			}
 		}
 
 		private void miTreeToolsClick(object sender, EventArgs e)
 		{
-			IBase curBase = this.GetCurrentFile();
-		    if (curBase == null) return;
+			IBaseWindow curBase = this.GetCurrentFile();
+			if (curBase == null)
+				return;
 
-			using (TfmTreeTools fmTreeTools = new TfmTreeTools(curBase))
-			{
+			using (TfmTreeTools fmTreeTools = new TfmTreeTools(curBase)) {
 				TfmGEDKeeper.Instance.ShowModalEx(fmTreeTools, false);
 			}
 		}
@@ -605,63 +631,45 @@ namespace GKUI
 		private void miOptionsClick(object sender, EventArgs e)
 		{
 			TfmOptions fmOptions = new TfmOptions(this);
-			try
-			{
-				Form activeForm = this.ActiveMdiChild;
-				if (activeForm is TfmBase) fmOptions.SetPage(OptionsPage.opInterface);
-				if (activeForm is TfmChart) fmOptions.SetPage(OptionsPage.opTreeChart);
+			try {
+				/*GlobalOptions options = TfmGEDKeeper.Instance.Options;
+				
+				IBase xbase = this.GetCurrentFile();
+				if (xbase != null) {
+					IListManager listman = xbase.GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
+					listman.ListColumns.CopyTo(options.IndividualListColumns);
+				}*/
 
-				if (fmOptions.ShowDialog() == DialogResult.OK)
-				{
+				Form activeForm = this.ActiveMdiChild;
+				if (activeForm is IBaseWindow)
+					fmOptions.SetPage(OptionsPage.opInterface);
+				if (activeForm is IChartWindow)
+					fmOptions.SetPage(OptionsPage.opTreeChart);
+
+				if (fmOptions.ShowDialog() == DialogResult.OK) {
 					int num = base.MdiChildren.Length;
-					for (int i = 0; i < num; i++)
-					{
+					for (int i = 0; i < num; i++) {
 						Form child = base.MdiChildren[i];
 
-						if (child is TfmBase) {
-							(child as TfmBase).RefreshLists(true);
-						} else if (child is TfmChart) {
-							(child as TfmChart).GenChart(false);
+						if (child is IBaseWindow) {
+							(child as IBaseWindow).RefreshLists(true);
+						} else if (child is IChartWindow) {
+							(child as IChartWindow).GenChart(false);
 						}
 					}
 				}
-			}
-			finally
-			{
+			} finally {
 				fmOptions.Dispose();
 			}
 		}
 
 		private void miFileCloseClick(object sender, EventArgs e)
 		{
-			IBase curBase = this.GetCurrentFile();
-		    if (curBase == null) return;
+			IBaseWindow curBase = this.GetCurrentFile();
+			if (curBase == null)
+				return;
 
-		    curBase.Close();
-		}
-
-		private void miFilterClick(object sender, EventArgs e)
-		{
-			IBase curBase = this.GetCurrentFile();
-		    if (curBase == null) return;
-
-		    curBase.SetFilter();
-		}
-
-		private void tbPrevClick(object sender, EventArgs e)
-		{
-			IBase curBase = this.GetCurrentFile();
-		    if (curBase == null) return;
-
-		    curBase.NavPrev();
-		}
-
-		private void tbNextClick(object sender, EventArgs e)
-		{
-			IBase curBase = this.GetCurrentFile();
-		    if (curBase == null) return;
-
-		    curBase.NavNext();
+			curBase.Close();
 		}
 
 		private void miFileNewClick(object sender, EventArgs e)
@@ -672,83 +680,115 @@ namespace GKUI
 		private void miFileLoadClick(object sender, EventArgs e)
 		{
 			this.OpenDialog1.InitialDirectory = this.fOptions.LastDir;
-			if (this.OpenDialog1.ShowDialog() == DialogResult.OK)
-			{
+			if (this.OpenDialog1.ShowDialog() == DialogResult.OK) {
 				this.CreateBase(this.OpenDialog1.FileName);
 			}
 		}
 
 		public void miFileSaveClick(object sender, EventArgs e)
 		{
-			IBase curBase = this.GetCurrentFile(true);
-		    if (curBase == null) return;
+			IBaseWindow curBase = this.GetCurrentFile(true);
+			if (curBase == null)
+				return;
 
-		    this.SaveDialog1.FileName = curBase.Tree.FileName;
-		    if (this.SaveDialog1.ShowDialog() == DialogResult.OK)
-		    {
-		        curBase.FileSave(this.SaveDialog1.FileName);
-		    }
+			this.SaveDialog1.FileName = curBase.Tree.FileName;
+			if (this.SaveDialog1.ShowDialog() == DialogResult.OK) {
+				curBase.FileSave(this.SaveDialog1.FileName);
+			}
 		}
 
 		private void miRecordAddClick(object sender, EventArgs e)
 		{
-			IBase curBase = this.GetCurrentFile();
-		    if (curBase == null) return;
+			IBaseWindow curBase = this.GetCurrentFile();
+			if (curBase == null)
+				return;
 
-		    curBase.RecordAdd();
+			curBase.RecordAdd();
 		}
 
 		private void miRecordEditClick(object sender, EventArgs e)
 		{
-			IBase curBase = this.GetCurrentFile();
-		    if (curBase == null) return;
+			IBaseWindow curBase = this.GetCurrentFile();
+			if (curBase == null)
+				return;
 
-		    curBase.RecordEdit(sender, e);
+			curBase.RecordEdit(sender, e);
 		}
 
 		private void miRecordDeleteClick(object sender, EventArgs e)
 		{
-			IBase curBase = this.GetCurrentFile();
-		    if (curBase == null) return;
+			IBaseWindow curBase = this.GetCurrentFile();
+			if (curBase == null)
+				return;
 
-		    curBase.RecordDelete();
+			curBase.RecordDelete();
 		}
 
 		private void miSearchClick(object sender, EventArgs e)
 		{
 			IWorkWindow win = this.GetWorkWindow();
-		    if (win == null) return;
+			if (win == null)
+				return;
 
 			win.QuickFind();
 		}
 
+		private void miFilterClick(object sender, EventArgs e)
+		{
+			IWorkWindow win = this.GetWorkWindow();
+			if (win == null)
+				return;
+
+			win.SetFilter();
+		}
+
+		private void tbPrevClick(object sender, EventArgs e)
+		{
+			IWorkWindow win = this.GetWorkWindow();
+			if (win == null)
+				return;
+
+			win.NavPrev();
+		}
+
+		private void tbNextClick(object sender, EventArgs e)
+		{
+			IWorkWindow win = this.GetWorkWindow();
+			if (win == null)
+				return;
+
+			win.NavNext();
+		}
+
 		private void miMapClick(object sender, EventArgs e)
 		{
-			IBase curBase = this.GetCurrentFile();
-		    if (curBase == null) return;
+			IBaseWindow curBase = this.GetCurrentFile();
+			if (curBase == null)
+				return;
 
-		    TfmMaps frm_maps = new TfmMaps(curBase);
+			TfmMaps frm_maps = new TfmMaps(curBase);
 			frm_maps.MdiParent = this;
 			frm_maps.Show();
 		}
 
 		private void miOrganizerClick(object sender, EventArgs e)
 		{
-			IBase curBase = this.GetCurrentFile();
-		    if (curBase == null) return;
+			IBaseWindow curBase = this.GetCurrentFile();
+			if (curBase == null)
+				return;
 
-			using (TfmOrganizer dlg = new TfmOrganizer(curBase))
-			{
+			using (TfmOrganizer dlg = new TfmOrganizer(curBase)) {
 				TfmGEDKeeper.Instance.ShowModalEx(dlg, false);
 			}
 		}
 
 		private void miStatsClick(object sender, EventArgs e)
 		{
-			IBase curBase = this.GetCurrentFile();
-		    if (curBase == null) return;
+			IBaseWindow curBase = this.GetCurrentFile();
+			if (curBase == null)
+				return;
 
-		    List<GEDCOMRecord> selectedRecords = curBase.GetContentList(GEDCOMRecordType.rtIndividual);
+			List<GEDCOMRecord> selectedRecords = curBase.GetContentList(GEDCOMRecordType.rtIndividual);
 
 			TfmStats fmStats = new TfmStats(curBase, selectedRecords);
 			fmStats.Show();
@@ -756,11 +796,11 @@ namespace GKUI
 
 		private void miPedigree_dAbovilleClick(object sender, EventArgs e)
 		{
-			IBase curBase = this.GetCurrentFile();
-		    if (curBase == null) return;
+			IBaseWindow curBase = this.GetCurrentFile();
+			if (curBase == null)
+				return;
 
-			using (PedigreeExporter p = new PedigreeExporter(curBase))
-			{
+			using (PedigreeExporter p = new PedigreeExporter(curBase)) {
 				p.Ancestor = curBase.GetSelectedPerson();
 				p.Options = this.fOptions;
 				p.ShieldState = curBase.ShieldState;
@@ -771,11 +811,11 @@ namespace GKUI
 
 		private void miPedigree_KonovalovClick(object sender, EventArgs e)
 		{
-			IBase curBase = this.GetCurrentFile();
-		    if (curBase == null) return;
+			IBaseWindow curBase = this.GetCurrentFile();
+			if (curBase == null)
+				return;
 
-			using (PedigreeExporter p = new PedigreeExporter(curBase))
-			{
+			using (PedigreeExporter p = new PedigreeExporter(curBase)) {
 				p.Ancestor = curBase.GetSelectedPerson();
 				p.Options = this.fOptions;
 				p.ShieldState = curBase.ShieldState;
@@ -786,11 +826,11 @@ namespace GKUI
 
 		private void miTreeAncestorsClick(object sender, EventArgs e)
 		{
-			IBase curBase = this.GetCurrentFile();
-		    if (curBase == null) return;
+			IBaseWindow curBase = this.GetCurrentFile();
+			if (curBase == null)
+				return;
 
-			if (TfmChart.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartBox.ChartKind.ckAncestors))
-			{
+			if (TfmChart.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartBox.ChartKind.ckAncestors)) {
 				TfmChart fmChart = new TfmChart(curBase, curBase.GetSelectedPerson());
 				fmChart.ChartKind = TreeChartBox.ChartKind.ckAncestors;
 				fmChart.GenChart(true);
@@ -799,11 +839,11 @@ namespace GKUI
 
 		private void miTreeDescendantsClick(object sender, EventArgs e)
 		{
-			IBase curBase = this.GetCurrentFile();
-		    if (curBase == null) return;
+			IBaseWindow curBase = this.GetCurrentFile();
+			if (curBase == null)
+				return;
 
-			if (TfmChart.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartBox.ChartKind.ckDescendants))
-			{
+			if (TfmChart.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartBox.ChartKind.ckDescendants)) {
 				TfmChart fmChart = new TfmChart(curBase, curBase.GetSelectedPerson());
 				fmChart.ChartKind = TreeChartBox.ChartKind.ckDescendants;
 				fmChart.GenChart(true);
@@ -812,24 +852,34 @@ namespace GKUI
 
 		private void miTreeBothClick(object sender, EventArgs e)
 		{
-			IBase curBase = this.GetCurrentFile();
-		    if (curBase == null) return;
+			IBaseWindow curBase = this.GetCurrentFile();
+			if (curBase == null)
+				return;
 
-			if (TfmChart.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartBox.ChartKind.ckBoth))
-			{
+			if (TfmChart.CheckData(curBase.Tree, curBase.GetSelectedPerson(), TreeChartBox.ChartKind.ckBoth)) {
 				TfmChart fmChart = new TfmChart(curBase, curBase.GetSelectedPerson());
 				fmChart.ChartKind = TreeChartBox.ChartKind.ckBoth;
 				fmChart.GenChart(true);
 			}
 		}
 
+		private void miAncestorsCircleClick(object sender, EventArgs e)
+		{
+			IBaseWindow curBase = this.GetCurrentFile();
+			if (curBase == null)
+				return;
+
+			TfmAncestorsCircle fmChart = new TfmAncestorsCircle(curBase, curBase.GetSelectedPerson());
+			fmChart.GenChart(true);
+		}
+
 		#endregion
-		
+
 		#region Help and Windows
-		
+
 		private void miLogSendClick(object sender, EventArgs e)
 		{
-			SysUtils.LogSend();
+			SysUtils.LogSend(GKData.AppMail, "GEDKeeper: error notification", "This automatic notification of error.");
 		}
 
 		private void miLogViewClick(object sender, EventArgs e)
@@ -839,28 +889,28 @@ namespace GKUI
 
 		private void miAboutClick(object sender, EventArgs e)
 		{
-			TfmAbout.ShowAbout("GEDKeeper");
+			TfmAbout.ShowAbout();
 		}
 
 		public void ShowHelpTopic(string topic)
 		{
 			string fns = GKUtils.GetAppPath() + "GEDKeeper2.chm" + topic;
-            NativeMethods.HtmlHelp(this.Handle, fns, 0u, 0u);
+			NativeMethods.HtmlHelp(this.Handle, fns, 0u, 0u);
 		}
 
 		private void miGenResourcesClick(object sender, EventArgs e)
 		{
-			this.ShowHelpTopic("::/gkhGenRes.htm");
+			this.ShowHelpTopic("::/gkhGenRes.html");
 		}
 
 		private void miKinshipTermsClick(object sender, EventArgs e)
 		{
-			this.ShowHelpTopic("::/gkhRelations.htm");
+			this.ShowHelpTopic("::/gkhRelations.html");
 		}
 
 		private void miFAQClick(object sender, EventArgs e)
 		{
-			this.ShowHelpTopic("::/gkhFAQ.htm");
+			this.ShowHelpTopic("::/gkhFAQ.html");
 		}
 
 		private void miContextClick(object sender, EventArgs e)
@@ -885,8 +935,7 @@ namespace GKUI
 
 		private void miWinMinimizeClick(object sender, EventArgs e)
 		{
-			for (int i = base.MdiChildren.Length - 1; i >= 0; i--)
-			{
+			for (int i = base.MdiChildren.Length - 1; i >= 0; i--) {
 				base.MdiChildren[i].WindowState = FormWindowState.Minimized;
 			}
 		}
@@ -951,9 +1000,11 @@ namespace GKUI
 			this.miAbout.Text = LangMan.LS(LSID.LSID_MIAbout) + "...";
 
 			this.miLogSend.Text = LangMan.LS(LSID.LSID_LogSend);
+			this.miLogView.Text = LangMan.LS(LSID.LSID_LogView);
 			this.miPlugins.Text = LangMan.LS(LSID.LSID_Plugins);
-			
+
 			this.miSearch.Text = LangMan.LS(LSID.LSID_Search);
+			this.miAncestorsCircle.Text = LangMan.LS(LSID.LSID_AncestorsCircle);
 		}
 
 		#endregion
@@ -962,33 +1013,38 @@ namespace GKUI
 
 		public PluginInfo GetPluginAttributes(IPlugin plugin)
 		{
-            if (plugin == null) {
-                throw new ArgumentNullException("plugin");
-            }
+			if (plugin == null) {
+				throw new ArgumentNullException("plugin");
+			}
 
-            PluginInfo info = new PluginInfo();
+			PluginInfo info = new PluginInfo();
 
 			Assembly asm = plugin.GetType().Assembly;
-			
+
 			var attr1 = GKUtils.GetAssemblyAttribute<AssemblyTitleAttribute>(asm);
-			if (attr1 != null) info.Title = attr1.Title;
-			
+			if (attr1 != null)
+				info.Title = attr1.Title;
+
 			var attr2 = GKUtils.GetAssemblyAttribute<AssemblyDescriptionAttribute>(asm);
-			if (attr2 != null) info.Description = attr2.Description;
-			
+			if (attr2 != null)
+				info.Description = attr2.Description;
+
 			var attr3 = GKUtils.GetAssemblyAttribute<AssemblyCopyrightAttribute>(asm);
-			if (attr3 != null) info.Copyright = attr3.Copyright;
-			
+			if (attr3 != null)
+				info.Copyright = attr3.Copyright;
+
 			var attr4 = GKUtils.GetAssemblyAttribute<AssemblyFileVersionAttribute>(asm);
-			if (attr4 != null) info.Version = attr4.Version;
-			
+			if (attr4 != null)
+				info.Version = attr4.Version;
+
 			return info;
 		}
-		
+
 		private void UpdatePluginsLanguage()
 		{
-			if (this.fPlugins == null) return;
-			
+			if (this.fPlugins == null)
+				return;
+
 			int num = this.fPlugins.Count;
 			for (int i = 0; i < num; i++) {
 				IPlugin plugin = this.fPlugins[i];
@@ -1002,28 +1058,29 @@ namespace GKUI
 				mi.Text = plugin.DisplayName;
 			}
 		}
-		
-        private void Plugin_Click(object sender, EventArgs e)
-        {
-        	MenuItem item = sender as MenuItem;
-        	if (item == null) return;
 
-        	IPlugin plugin = item.Tag as IPlugin;
-        	if (plugin == null) return;
+		private void Plugin_Click(object sender, EventArgs e)
+		{
+			MenuItem item = sender as MenuItem;
+			if (item == null)
+				return;
 
-            plugin.Execute();
-        }
+			IPlugin plugin = item.Tag as IPlugin;
+			if (plugin == null)
+				return;
 
-        private void UpdatePluginsItems()
-        {
+			plugin.Execute();
+		}
+
+		private void UpdatePluginsItems()
+		{
 			this.miPlugins.Visible = (this.fPlugins.Count > 0);
 			this.miPlugins.MenuItems.Clear();
 
 			this.fActiveWidgets.Clear();
-			
+
 			int num = this.fPlugins.Count;
-			for (int i = 0; i < num; i++)
-			{
+			for (int i = 0; i < num; i++) {
 				IPlugin plugin = this.fPlugins[i];
 				string dispName = plugin.DisplayName;
 
@@ -1031,7 +1088,7 @@ namespace GKUI
 				mi.Click += this.Plugin_Click;
 				mi.Tag = plugin;
 				this.miPlugins.MenuItems.Add(mi);
-				
+
 				if (plugin is IWidget) {
 					WidgetInfo widInfo = new WidgetInfo();
 					widInfo.Widget = (plugin as IWidget);
@@ -1041,68 +1098,71 @@ namespace GKUI
 					(plugin as IWidget).WidgetInit(this);
 				}
 			}
-        }
+		}
 
-        private void UnloadPlugins()
-        {
-			if (this.fPlugins == null) return;
-			
+		private void UnloadPlugins()
+		{
+			if (this.fPlugins == null)
+				return;
+
 			int num = this.fPlugins.Count;
-			for (int i = 0; i < num; i++)
-			{
+			for (int i = 0; i < num; i++) {
 				IPlugin plugin = this.fPlugins[i];
 				plugin.Shutdown();
 			}
-        }
+		}
 
-        private void LoadPlugins(string path)
-        {
-        	AppDomain.CurrentDomain.AppendPrivatePath(path);
-        	//AppDomain.CurrentDomain.SetupInformation.PrivateBinPath = path;
-        	
-            this.fPlugins = new List<IPlugin>();
+		private void LoadPlugins(string path)
+		{
+			AppDomain.CurrentDomain.AppendPrivatePath(path);
+			//AppDomain.CurrentDomain.SetupInformation.PrivateBinPath = path;
 
-            Type pluginType = typeof(IPlugin);
-            string[] pluginFiles = Directory.GetFiles(path, "*.dll");
+			this.fPlugins = new List<IPlugin>();
 
-            foreach (string pfn in pluginFiles)
-            {
-                try
-                {
-                    Assembly asm;
+			Type pluginType = typeof(IPlugin);
+			string[] pluginFiles = Directory.GetFiles(path, "*.dll");
 
-                    try {
-                        asm = Assembly.LoadFile(pfn);
-                    } catch {
-                        asm = null; // block exceptions for bad or non-dotnet assemblies
-                    }
+			foreach (string pfn in pluginFiles) {
+				try {
+					Assembly asm;
 
-                    if (asm == null) continue;
+					try {
+						asm = Assembly.LoadFile(pfn);
+					} catch {
+						asm = null;
+						// block exceptions for bad or non-dotnet assemblies
+					}
 
-                    Type[] types = asm.GetTypes();
-                    foreach (Type type in types)
-                    {
-                        if (type.IsInterface || type.IsAbstract) continue;
-                        if (type.GetInterface(pluginType.FullName) == null) continue;
+					if (asm == null)
+						continue;
 
-                        IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
-                        plugin.Startup(this);
-                        this.fPlugins.Add(plugin);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    SysUtils.LogWrite("TfmGEDKeeper.LoadPlugins(" +pfn+ "): " + ex.Message);
-                }
-            }
-        }
+					Type[] types = asm.GetTypes();
+					foreach (Type type in types) {
+						if (type.IsInterface || type.IsAbstract)
+							continue;
+						if (type.GetInterface(pluginType.FullName) == null)
+							continue;
 
-        #endregion
+						IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
+						plugin.Startup(this);
+						this.fPlugins.Add(plugin);
+					}
+				} catch (Exception ex) {
+					SysUtils.LogWrite("TfmGEDKeeper.LoadPlugins(" + pfn + "): " + ex.Message);
+				}
+			}
+		}
 
-        #region IHost implementation
+		#endregion
 
-        public ILangMan CreateLangMan(object sender)
-        {
+		#region IHost implementation
+
+		public ILangMan CreateLangMan(object sender)
+		{
+			if (sender == null) {
+				return null;
+			}
+
 			CultureInfo cultInfo = new CultureInfo(this.fOptions.InterfaceLang);
 			string ext = cultInfo.ThreeLetterISOLanguageName;
 
@@ -1112,19 +1172,19 @@ namespace GKUI
 			string langFile = Path.ChangeExtension(asmFile, "." + ext);
 
 			LangManager langMan = new LangManager();
-        	bool res = langMan.LoadFromFile(langFile);
-        	return langMan;
-        }
+			bool res = langMan.LoadFromFile(langFile);
+			return langMan;
+		}
 
-		public IBase GetCurrentFile(bool extMode = false)
+		public IBaseWindow GetCurrentFile(bool extMode = false)
 		{
-			TfmChart curChart = ((this.ActiveMdiChild is TfmChart) ? (this.ActiveMdiChild as TfmChart) : null);
-			IBase result;
+			IChartWindow curChart = ((this.ActiveMdiChild is IChartWindow) ? (this.ActiveMdiChild as IChartWindow) : null);
+			IBaseWindow result;
 
 			if (extMode && curChart != null) {
 				result = curChart.Base;
 			} else {
-				result = ((base.ActiveMdiChild is TfmBase) ? (base.ActiveMdiChild as TfmBase) : null);
+				result = ((base.ActiveMdiChild is IBaseWindow) ? (base.ActiveMdiChild as IBaseWindow) : null);
 			}
 
 			return result;
@@ -1136,101 +1196,134 @@ namespace GKUI
 			return (activeForm is IWorkWindow) ? activeForm as IWorkWindow : null;
 		}
 
-        public bool Register(IPlugin plugin)
-        {
-            return true;
-        }
+		public void LogWrite(string msg)
+		{
+			SysUtils.LogWrite(msg);
+		}
 
-        public void LogWrite(string msg)
-        {
-        	SysUtils.LogWrite(msg);
-        }
+		public void NotifyRecord(IBaseWindow aBase, object record, RecordAction action)
+		{
+			if (this.fPlugins == null)
+				return;
+			if (aBase == null || record == null)
+				return;
 
-        public void NotifyRecord(IBase aBase, object record, RecordAction action)
-        {
-        	if (this.fPlugins == null) return;
-        	if (aBase == null || record == null) return;
-			
 			int num = this.fPlugins.Count;
-			for (int i = 0; i < num; i++)
-			{
+			for (int i = 0; i < num; i++) {
 				IPlugin plugin = this.fPlugins[i];
-				
+
 				if (plugin is ISubscriber) {
 					(plugin as ISubscriber).NotifyRecord(aBase, record, action);
 				}
 			}
-        }
+		}
 
 		public string GetAppDataPath()
 		{
 			string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\" + GKData.AppTitle + "\\";
-			if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+			if (!Directory.Exists(path))
+				Directory.CreateDirectory(path);
 			return path;
 		}
 
 		private WidgetInfo FindWidgetInfo(IWidget widget)
 		{
-			foreach (WidgetInfo widgetInfo in this.fActiveWidgets)
-            {
+			foreach (WidgetInfo widgetInfo in this.fActiveWidgets) {
 				if (widgetInfo.Widget == widget) {
 					return widgetInfo;
 				}
-            }
-			
+			}
+
 			return null;
 		}
-		
-        public void WidgetShow(IWidget widget)
-        {
-        	WidgetInfo widInfo = this.FindWidgetInfo(widget);
-            if (widInfo == null) return;
-            
-	    	if (widInfo.MenuItem != null) widInfo.MenuItem.Checked = true;
-        }
 
-        public void WidgetClose(IWidget widget)
-        {
-        	WidgetInfo widInfo = this.FindWidgetInfo(widget);
-            if (widInfo == null) return;
-            
-            if (widInfo.MenuItem != null) widInfo.MenuItem.Checked = false;
-        }
+		public void WidgetShow(IWidget widget)
+		{
+			WidgetInfo widInfo = this.FindWidgetInfo(widget);
+			if (widInfo == null)
+				return;
 
-        public bool IsWidgetActive(IWidget widget)
-        {
-        	WidgetInfo widInfo = this.FindWidgetInfo(widget);
-        	if (widInfo == null || widInfo.MenuItem == null) {
-        		return false;
-        	} else {
-        		return widInfo.MenuItem.Checked;
-        	}
-        }
-        
-        public void BaseChanged(IBase aBase)
-        {
-            foreach (WidgetInfo widgetInfo in this.fActiveWidgets)
-            {
-                widgetInfo.Widget.BaseChanged(aBase);
-            }
-        }
-        
-        public void BaseClosed(IBase aBase)
-        {
-        	foreach (WidgetInfo widgetInfo in this.fActiveWidgets)
-            {
-                widgetInfo.Widget.BaseClosed(aBase);
-            }
-        }
-        
-        public void ShowMDI(Form form)
-        {
-        	if (form != null) {
-        		form.MdiParent = this;
-        		form.Show();
-        	}
-        }
+			if (widInfo.MenuItem != null)
+				widInfo.MenuItem.Checked = true;
+		}
+
+		public void WidgetClose(IWidget widget)
+		{
+			WidgetInfo widInfo = this.FindWidgetInfo(widget);
+			if (widInfo == null)
+				return;
+
+			if (widInfo.MenuItem != null)
+				widInfo.MenuItem.Checked = false;
+		}
+
+		public bool IsWidgetActive(IWidget widget)
+		{
+			WidgetInfo widInfo = this.FindWidgetInfo(widget);
+			if (widInfo == null || widInfo.MenuItem == null) {
+				return false;
+			} else {
+				return widInfo.MenuItem.Checked;
+			}
+		}
+
+		public void BaseChanged(IBaseWindow aBase)
+		{
+			foreach (WidgetInfo widgetInfo in this.fActiveWidgets) {
+				widgetInfo.Widget.BaseChanged(aBase);
+			}
+		}
+
+		public void BaseClosed(IBaseWindow aBase)
+		{
+			foreach (WidgetInfo widgetInfo in this.fActiveWidgets) {
+				widgetInfo.Widget.BaseClosed(aBase);
+			}
+		}
+
+		public void ShowMDI(Form form)
+		{
+			if (form != null) {
+				form.MdiParent = this;
+				form.Show();
+			}
+		}
 
 		#endregion
-    }
+
+		#region ISingleInstanceEnforcer implementation
+
+		void ISingleInstanceEnforcer.OnMessageReceived(MessageEventArgs e)
+		{
+			OnMessageReceivedInvoker invoker = delegate(MessageEventArgs eventArgs) {
+				string msg = eventArgs.Message as string;
+
+				if (!string.IsNullOrEmpty(msg)) {
+					MessageBox.Show(msg, "Message from new instance", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				} else {
+					//MessageBox.Show("A non-textual message has been received.", "Message From New Instance", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+					string[] args = eventArgs.Message as string[];
+
+					if (args != null) {
+						this.SetArgs(args);
+						this.LoadArgs();
+					}
+				}
+			};
+
+			if (InvokeRequired) {
+				Invoke(invoker, e);
+			} else {
+				invoker(e);
+			}
+		}
+
+		void ISingleInstanceEnforcer.OnNewInstanceCreated(EventArgs e)
+		{
+			//MessageBox.Show("New instance of the program has been created.", "Notification from new instance", MessageBoxButtons.OK, MessageBoxIcon.Information);
+		}
+
+		#endregion
+	}
 }

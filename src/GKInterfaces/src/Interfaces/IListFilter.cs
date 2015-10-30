@@ -37,4 +37,9 @@ namespace GKCore.Interfaces
 	{
 		FilterLifeMode FilterLifeMode { get; set; }
 	}
+	
+	public interface IListColumns
+	{
+		void CopyTo(IListColumns columns);
+	}
 }

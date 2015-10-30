@@ -74,7 +74,7 @@ namespace GKCore.Export
 		public bool IncludeNotes = true;
 		
 		
-		public FamilyBookExporter(IBase aBase) : base(aBase)
+		public FamilyBookExporter(IBaseWindow aBase) : base(aBase)
 		{
 			this.fAlbumPage = true;
 		}
@@ -118,7 +118,7 @@ namespace GKCore.Export
 				fSymFont = new Font(base_font, 12f, Font.BOLD, BaseColor.BLACK);
 
 				base_font = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Calibri.ttf"), "CP1251", BaseFont.EMBEDDED);
-				Font page_font = new Font(base_font, 9f, Font.NORMAL);
+				//Font page_font = new Font(base_font, 9f, Font.NORMAL);
 				
 				fWriter.PageEvent = new PDFWriterEvents(base_font, "Страница: ");
 
@@ -252,10 +252,10 @@ namespace GKCore.Export
 
 				mainIndex.AddObject(text, iRec);
 
-				int ev_num = iRec.IndividualEvents.Count;
+				int ev_num = iRec.Events.Count;
 				for (int k = 0; k < ev_num; k++)
 				{
-                    GEDCOMCustomEvent evt = iRec.IndividualEvents[k];
+                    GEDCOMCustomEvent evt = iRec.Events[k];
 
                     if (evt != null)
 					{
@@ -342,7 +342,7 @@ namespace GKCore.Export
 			pg.KeepTogether = true;
 			mct.AddElement(pg);
 
-			var bmp = this.fBase.GetPrimaryBitmap(iRec, 0, 0, false);
+			var bmp = this.fBase.Context.GetPrimaryBitmap(iRec, 0, 0, false);
 			if (bmp != null)
 			{
 				iTextSharp.text.Image img = iTextSharp.text.Image.GetInstance(bmp, System.Drawing.Imaging.ImageFormat.Bmp);
@@ -382,17 +382,17 @@ namespace GKCore.Export
 				mct.AddElement(pg);
 			}
 
-			if (this.IncludeEvents && iRec.IndividualEvents.Count != 0)
+			if (this.IncludeEvents && iRec.Events.Count != 0)
 			{
-				int num = iRec.IndividualEvents.Count;
+				int num = iRec.Events.Count;
 				for (int i = 0; i < num; i++)
 				{
-					GEDCOMCustomEvent evt = iRec.IndividualEvents[i];
+					GEDCOMCustomEvent evt = iRec.Events[i];
 					if (evt.Name == "BIRT" || evt.Name == "DEAT") continue;
 					
 					string evtName = GKUtils.GetIndividualEventName(evt);
 					string evtVal = evt.StringValue;
-					string evtDesc = GKUtils.GetEventDesc(evt.Detail, false);
+					string evtDesc = GKUtils.GetEventDesc(evt, false);
 
 					string tmp = evtName + ": " + evtVal;
 					if (evtVal != "") tmp += ", ";

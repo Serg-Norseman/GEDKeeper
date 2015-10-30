@@ -6,32 +6,16 @@ using System.Windows.Forms;
 using System.Xml;
 
 using GKCommon;
+using GKCore.Maps;
 using GKCore.Options;
-
-/// <summary>
-/// 
-/// </summary>
 
 namespace GKUI.Controls
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public class GKMapBrowser : WebBrowser
 	{
-		public class GMapPoint
-		{
-		    public DateTime Date { get; set; }
-		    public double Latitude { get; set; }
-		    public double Longitude { get; set; }
-		    public string Hint { get; set; }
-
-			public GMapPoint(double latitude, double longitude, string hint)
-			{
-				this.Latitude = latitude;
-				this.Longitude = longitude;
-				this.Hint = hint;
-			}
-		}
-
-
 		private struct CoordsRect
 		{
 			public double MinLon;
@@ -39,7 +23,6 @@ namespace GKUI.Controls
 			public double MaxLon;
 			public double MaxLat;
 		}
-
 
 		private readonly ExtList<GMapPoint> fMapPoints;
 		private bool fShowPoints;
@@ -334,58 +317,60 @@ namespace GKUI.Controls
 			return result;
 		}
 
-		public static void RequestGeoCoords(string searchValue, ExtList<GKMapBrowser.GMapPoint> aPoints)
+		public static void RequestGeoCoords(string searchValue, ExtList<GMapPoint> pointsList)
 		{
-			if (aPoints != null)
-			{
-				Stream stm = null;
-				try
-				{
-					searchValue = searchValue.Trim().Replace(" ", "+");
+            if (pointsList == null)
+            {
+                throw new ArgumentNullException("pointsList");
+            }
 
-					string netQuery = "http://maps.googleapis.com/maps/api/geocode/xml?address={0}&sensor=false&language=ru";
-					netQuery = string.Format(netQuery, new object[] { searchValue });
+            Stream stm = null;
+            try
+            {
+            	searchValue = searchValue.Trim().Replace(" ", "+");
 
-                    if (GKMapBrowser.GetInetFile(netQuery, ref stm))
-					{
-                    	XmlDocument xmlDocument = new XmlDocument();
-						xmlDocument.Load(stm);
-						XmlNode node = xmlDocument.DocumentElement;
+            	string netQuery = "http://maps.googleapis.com/maps/api/geocode/xml?address={0}&sensor=false&language=ru";
+            	netQuery = string.Format(netQuery, new object[] { searchValue });
 
-                        if (node != null && node.ChildNodes.Count > 0)
-						{
-							int num = node.ChildNodes.Count;
-							for (int i = 0; i < num; i++)
-							{
-								XmlNode xNode = node.ChildNodes[i];
-								if (xNode.Name == "result")
-								{
-									XmlNode addressNode = xNode["formatted_address"];
-									XmlNode geometry = xNode["geometry"];
-									XmlNode pointNode = geometry["location"];
+            	if (GKMapBrowser.GetInetFile(netQuery, ref stm))
+            	{
+            		XmlDocument xmlDocument = new XmlDocument();
+            		xmlDocument.Load(stm);
+            		XmlNode node = xmlDocument.DocumentElement;
 
-                                    if (addressNode != null && pointNode != null)
-									{
-										string ptHint = addressNode.InnerText;
-										double ptLongitude = SysUtils.ParseFloat(pointNode["lng"].InnerText, -1.0);
-										double ptLatitude = SysUtils.ParseFloat(pointNode["lat"].InnerText, -1.0);
+            		if (node != null && node.ChildNodes.Count > 0)
+            		{
+            			int num = node.ChildNodes.Count;
+            			for (int i = 0; i < num; i++)
+            			{
+            				XmlNode xNode = node.ChildNodes[i];
+            				if (xNode.Name == "result")
+            				{
+            					XmlNode addressNode = xNode["formatted_address"];
+            					XmlNode geometry = xNode["geometry"];
+            					XmlNode pointNode = geometry["location"];
 
-										if (ptLatitude != -1.0 && ptLongitude != -1.0)
-										{
-											GMapPoint pt = new GMapPoint(ptLatitude, ptLongitude, ptHint);
-											aPoints.Add(pt);
-										}
-                                    }
-								}
-							}
-						}
-					}
-				}
-				finally
-				{
-					if (stm != null) stm.Dispose();
-				}
-			}
+            					if (addressNode != null && pointNode != null)
+            					{
+            						string ptHint = addressNode.InnerText;
+            						double ptLongitude = SysUtils.ParseFloat(pointNode["lng"].InnerText, -1.0);
+            						double ptLatitude = SysUtils.ParseFloat(pointNode["lat"].InnerText, -1.0);
+
+            						if (ptLatitude != -1.0 && ptLongitude != -1.0)
+            						{
+            							GMapPoint pt = new GMapPoint(ptLatitude, ptLongitude, ptHint);
+            							pointsList.Add(pt);
+            						}
+            					}
+            				}
+            			}
+            		}
+            	}
+            }
+            finally
+            {
+            	if (stm != null) stm.Dispose();
+            }
 		}
 
 		#region Google-specific

@@ -20,30 +20,22 @@ namespace GKCommon.Graph
 
 		public Vertex Source
 		{
-			get {
-				return fSource;
-			}
+			get { return this.fSource; }
 		}
 
 		IVertex IEdge.Source
 		{
-			get {
-				return (IVertex)this.Source;
-			}
+			get { return (IVertex)this.fSource; }
 		}
 
 		public Vertex Target
 		{
-			get {
-				return fTarget;
-			}
+			get { return this.fTarget; }
 		}
 
 		IVertex IEdge.Target
 		{
-			get {
-				return (IVertex)this.Target;
-			}
+			get { return (IVertex)this.fTarget; }
 		}
 
 		#endregion

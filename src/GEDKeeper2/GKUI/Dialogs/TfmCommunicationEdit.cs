@@ -15,14 +15,14 @@ namespace GKUI.Dialogs
     /// </summary>
     public partial class TfmCommunicationEdit : Form, IBaseEditor
 	{
-		private readonly IBase fBase;
+		private readonly IBaseWindow fBase;
         private readonly GKNotesSheet fNotesList;
         private readonly GKMediaSheet fMediaList;
         
         private GEDCOMCommunicationRecord fCommunication;
 		private GEDCOMIndividualRecord fTempInd;
 
-		public IBase Base
+		public IBaseWindow Base
 		{
 			get { return this.fBase; }
 		}
@@ -87,7 +87,7 @@ namespace GKUI.Dialogs
 			}
 			catch (Exception ex)
 			{
-				this.fBase.Host.LogWrite("TfmCommunicationEdit.Accept(): " + ex.Message);
+				this.fBase.Host.LogWrite("TfmCommunicationEdit.btnAccept_Click(): " + ex.Message);
 				base.DialogResult = DialogResult.None;
 			}
 		}
@@ -98,10 +98,12 @@ namespace GKUI.Dialogs
 			this.EditCorresponder.Text = ((this.fTempInd == null) ? "" : this.fTempInd.GetNameString(true, false));
 		}
 
-		public TfmCommunicationEdit(IBase aBase)
+		public TfmCommunicationEdit(IBaseWindow aBase)
 		{
 			this.InitializeComponent();
+
 			this.fBase = aBase;
+			this.fTempInd = null;
 
 			for (GKCommunicationType ct = GKCommunicationType.ctCall; ct <= GKCommunicationType.ctLast; ct++)
 			{
@@ -111,7 +113,7 @@ namespace GKUI.Dialogs
 			this.fNotesList = new GKNotesSheet(this, this.SheetNotes);
             this.fMediaList = new GKMediaSheet(this, this.SheetMultimedia);
 
-			this.fTempInd = null;
+			// SetLang()
 			this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
 			this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
 			this.Text = LangMan.LS(LSID.LSID_WinCommunicationEdit);

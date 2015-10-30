@@ -5,8 +5,8 @@ namespace GKCore.Interfaces
 	{
 		IHost Host { get; } // ссылка на главную форму
 
-		void BaseChanged(IBase aBase);
-		void BaseClosed(IBase aBase);
+		void BaseChanged(IBaseWindow aBase);
+		void BaseClosed(IBaseWindow aBase);
 
 		void WidgetInit(IHost host);
 		void WidgetEnable();

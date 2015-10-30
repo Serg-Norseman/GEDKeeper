@@ -12,11 +12,11 @@ namespace GKUI
 {
 	public partial class PatriarchsViewer : Form
 	{
-        private readonly IBase fBase;
+        private readonly IBaseWindow fBase;
         private readonly ToolTip fTip;
         private bool fTipShow;
 
-        public PatriarchsViewer(IBase aBase, int minGens)
+        public PatriarchsViewer(IBaseWindow aBase, int minGens)
 		{
 			InitializeComponent();
 
@@ -48,7 +48,7 @@ namespace GKUI
 					GEDCOMFamilyRecord famRec = this.fBase.Tree.XRefIndex_Find(xref) as GEDCOMFamilyRecord;
 					string txt = GKUtils.GetFamilyString(famRec) + " [" + xref + "]";
 
-					fTip.Show(txt, arborViewer1, new Point(e.X + 24, e.Y));
+					fTip.Show(txt, arborViewer1, e.X + 24, e.Y);
 					fTipShow = true;
 				}
 			}

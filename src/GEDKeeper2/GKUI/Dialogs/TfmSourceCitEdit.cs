@@ -11,11 +11,11 @@ using GKUI.Controls;
 namespace GKUI.Dialogs
 {
     /// <summary>
-    /// Localization: dirty
+    /// 
     /// </summary>
     public partial class TfmSourceCitEdit : Form, IBaseEditor
 	{
-		private readonly IBase fBase;
+		private readonly IBaseWindow fBase;
         private readonly StringList fSourcesList;
 
         private GEDCOMSourceCitation fSourceCitation;
@@ -26,12 +26,12 @@ namespace GKUI.Dialogs
 			set { this.SetSourceCitation(value); }
 		}
 
-        public IBase Base
+        public IBaseWindow Base
 		{
 			get { return this.fBase; }
 		}
 
-		void btnAccept_Click(object sender, EventArgs e)
+		private void btnAccept_Click(object sender, EventArgs e)
 		{
 			try
 			{
@@ -39,7 +39,7 @@ namespace GKUI.Dialogs
 				GEDCOMSourceRecord src = ((idx < 0) ? null : (this.fSourcesList.GetObject(idx) as GEDCOMSourceRecord));
 
 				if (src == null) {
-					GKUtils.ShowError("Не задан источник");
+					GKUtils.ShowError(LangMan.LS(LSID.LSID_DoNotSetSource));
 					base.DialogResult = DialogResult.None;
 				} else {
 					this.fSourceCitation.Value = src;
@@ -50,12 +50,12 @@ namespace GKUI.Dialogs
 			}
 			catch (Exception ex)
 			{
-				this.fBase.Host.LogWrite("TfmSourceCitEdit.Accept(): " + ex.Message);
+				this.fBase.Host.LogWrite("TfmSourceCitEdit.btnAccept_Click(): " + ex.Message);
 				base.DialogResult = DialogResult.None;
 			}
 		}
 
-		void btnSourceAdd_Click(object sender, EventArgs e)
+		private void btnSourceAdd_Click(object sender, EventArgs e)
 		{
 			object[] anArgs = new object[0];
 			GEDCOMSourceRecord src = fBase.SelectRecord(GEDCOMRecordType.rtSource, anArgs) as GEDCOMSourceRecord;
@@ -67,12 +67,12 @@ namespace GKUI.Dialogs
 		}
 
         // FIXME
-		void cbSource_KeyDown(object sender, KeyEventArgs e)
+		private void cbSource_KeyDown(object sender, KeyEventArgs e)
 		{
 			//
 		}
 
-		void cbSource_KeyUp(object sender, KeyEventArgs e)
+		private void cbSource_KeyUp(object sender, KeyEventArgs e)
 		{
 			this.RefreshSourcesList(this.cbSource.Text);
 			this.cbSource.SelectionStart = this.cbSource.Text.Length;
@@ -123,9 +123,10 @@ namespace GKUI.Dialogs
 			base.Dispose(disposing);
 		}
 
-		public TfmSourceCitEdit(IBase aBase)
+		public TfmSourceCitEdit(IBaseWindow aBase)
 		{
 			this.InitializeComponent();
+
 			this.fBase = aBase;
 
 			for (int i = 0; i < GKData.CertaintyAssessments.Length; i++)
@@ -134,17 +135,16 @@ namespace GKUI.Dialogs
 			}
 
 			this.fSourcesList = new StringList();
+			this.fBase.Context.GetSourcesList(this.fSourcesList);
+			this.RefreshSourcesList("");
 
+			// SetLang()
 			this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
 			this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
 			this.Text = LangMan.LS(LSID.LSID_WinSourceCitEdit);
 			this.Label2.Text = LangMan.LS(LSID.LSID_Source);
 			this.Label1.Text = LangMan.LS(LSID.LSID_Page);
 			this.Label3.Text = LangMan.LS(LSID.LSID_Certainty);
-
-			this.fBase.Context.GetSourcesList(this.fSourcesList);
-			this.RefreshSourcesList("");
 		}
-		
 	}
 }

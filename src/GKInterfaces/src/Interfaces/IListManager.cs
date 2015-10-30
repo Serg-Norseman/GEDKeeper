@@ -8,5 +8,6 @@ namespace GKCore.Interfaces
 	{
 		ExternalFilterHandler ExternalFilter { get; set; }
 		IListFilter Filter { get; }
+		IListColumns ListColumns { get; }
 	}
 }

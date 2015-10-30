@@ -375,6 +375,16 @@ namespace GKCommon
 			this.fList[index2] = temp;
 		}
 
+		public string[] ToArray()
+		{
+			int len = this.Count;
+			string[] result = new string[len];
+			for (int i = 0; i < len; i++) {
+				result[i] = this[i];
+			}
+			return result;
+		}
+
 		#region Updating
 
 		private void SetUpdateState(bool updating)
@@ -573,16 +583,6 @@ namespace GKCommon
 		}
 
 		#endregion
-
-		public object[] ToArray()
-		{
-			int len = this.Count;
-			object[] result = new object[len];
-			for (int i = 0; i < len; i++) {
-				result[i] = this[i];
-			}
-			return result;
-		}
 
 	}
 }

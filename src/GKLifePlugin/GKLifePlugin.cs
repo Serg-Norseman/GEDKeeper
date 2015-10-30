@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 
+using ConwayLife;
 using GKCore.Interfaces;
 
 [assembly: AssemblyTitle("GKLifePlugin")]
@@ -19,7 +20,19 @@ using GKCore.Interfaces;
 
 namespace GKLifePlugin
 {
-    public class Plugin : IPlugin
+	public enum LLS
+	{
+		/* 000 */ LSID_LifeGame,
+		/* 001 */ LSID_Step,
+		/* 002 */ LSID_Start,
+		/* 003 */ LSID_Stop,
+		/* 004 */ LSID_SetCells,
+		/* 005 */ LSID_Clear,
+		/* 006 */ LSID_Random,
+		/* 007 */ LSID_Options,
+	}
+
+	public class Plugin : IPlugin
     {
         private string fDisplayName = "Conway's Game of Life";
         private IHost fHost;
@@ -31,8 +44,18 @@ namespace GKLifePlugin
 
         public void Execute()
         {
-            PluginForm frm = new PluginForm(this);
-            frm.ShowDialog();
+            LifeForm frm = new LifeForm();
+
+			frm.Viewer.Options.LS_LifeGame = fLangMan.LS(LLS.LSID_LifeGame);
+			frm.Viewer.Options.LS_Step = fLangMan.LS(LLS.LSID_Step);
+			frm.Viewer.Options.LS_Start = fLangMan.LS(LLS.LSID_Start);
+			frm.Viewer.Options.LS_Stop = fLangMan.LS(LLS.LSID_Stop);
+			frm.Viewer.Options.LS_SetCells = fLangMan.LS(LLS.LSID_SetCells);
+			frm.Viewer.Options.LS_Clear = fLangMan.LS(LLS.LSID_Clear);
+			frm.Viewer.Options.LS_Random = fLangMan.LS(LLS.LSID_Random);
+			frm.Viewer.Options.LS_Options = fLangMan.LS(LLS.LSID_Options);
+
+			frm.ShowDialog();
         }
 
         public void OnHostClosing(ref bool cancelClosing) {}
@@ -44,6 +67,7 @@ namespace GKLifePlugin
         	try
         	{
         		this.fLangMan = this.fHost.CreateLangMan(this);
+        		this.fDisplayName = this.fLangMan.LS(LLS.LSID_LifeGame);
         	}
         	catch (Exception ex)
         	{

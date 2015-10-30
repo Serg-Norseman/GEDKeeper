@@ -71,7 +71,6 @@ namespace GKUI
 		private System.Windows.Forms.MenuItem miGenResources;
 		private System.Windows.Forms.MenuItem miKinshipTerms;
 		private System.Windows.Forms.MenuItem miContext;
-		private System.Windows.Forms.MenuItem N11;
 		private System.Windows.Forms.MenuItem miLogSend;
 		private System.Windows.Forms.MenuItem miLogView;
 		private System.Windows.Forms.MenuItem N13;
@@ -91,6 +90,7 @@ namespace GKUI
 		private System.Windows.Forms.MenuItem miScripts;
 		private System.Windows.Forms.MenuItem miExport;
 		private System.Windows.Forms.MenuItem miTreeBoth;
+		private System.Windows.Forms.MenuItem miAncestorsCircle;
 		private System.Windows.Forms.ToolBarButton tbTreeBoth;
 		private System.Windows.Forms.StatusBarPanel StatusBarPanel1;
 		private System.Windows.Forms.StatusBarPanel StatusBarPanel2;
@@ -143,7 +143,6 @@ namespace GKUI
 			this.N2 = new System.Windows.Forms.MenuItem();
 			this.miExport = new System.Windows.Forms.MenuItem();
 			this.miExportToExcelFile = new System.Windows.Forms.MenuItem();
-			this.miExportToFamilyBook = new System.Windows.Forms.MenuItem();
 			this.N3 = new System.Windows.Forms.MenuItem();
 			this.miExit = new System.Windows.Forms.MenuItem();
 			this.miEdit = new System.Windows.Forms.MenuItem();
@@ -156,9 +155,11 @@ namespace GKUI
 			this.miTreeAncestors = new System.Windows.Forms.MenuItem();
 			this.miTreeDescendants = new System.Windows.Forms.MenuItem();
 			this.miTreeBoth = new System.Windows.Forms.MenuItem();
+			this.miAncestorsCircle = new System.Windows.Forms.MenuItem();
 			this.N6 = new System.Windows.Forms.MenuItem();
 			this.miPedigree_dAboville = new System.Windows.Forms.MenuItem();
 			this.miPedigree_Konovalov = new System.Windows.Forms.MenuItem();
+			this.miExportToFamilyBook = new System.Windows.Forms.MenuItem();
 			this.N7 = new System.Windows.Forms.MenuItem();
 			this.miMap = new System.Windows.Forms.MenuItem();
 			this.N8 = new System.Windows.Forms.MenuItem();
@@ -170,8 +171,8 @@ namespace GKUI
 			this.miTreeTools = new System.Windows.Forms.MenuItem();
 			this.N10 = new System.Windows.Forms.MenuItem();
 			this.miFilter = new System.Windows.Forms.MenuItem();
-			this.N11 = new System.Windows.Forms.MenuItem();
 			this.miOptions = new System.Windows.Forms.MenuItem();
+			this.miPlugins = new System.Windows.Forms.MenuItem();
 			this.miWindow = new System.Windows.Forms.MenuItem();
 			this.miWinCascade = new System.Windows.Forms.MenuItem();
 			this.miWinHTile = new System.Windows.Forms.MenuItem();
@@ -188,7 +189,6 @@ namespace GKUI
 			this.miLogView = new System.Windows.Forms.MenuItem();
 			this.N13 = new System.Windows.Forms.MenuItem();
 			this.miAbout = new System.Windows.Forms.MenuItem();
-			this.miPlugins = new System.Windows.Forms.MenuItem();
 			this.OpenDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.SaveDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.ImageList_Shields = new System.Windows.Forms.ImageList(this.components);
@@ -200,7 +200,7 @@ namespace GKUI
 			// StatusBar
 			// 
 			this.StatusBar.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.StatusBar.Location = new System.Drawing.Point(0, 730);
+			this.StatusBar.Location = new System.Drawing.Point(0, 750);
 			this.StatusBar.Name = "StatusBar";
 			this.StatusBar.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
 									this.StatusBarPanel1,
@@ -262,6 +262,7 @@ namespace GKUI
 			this.ImageList_Buttons.Images.SetKeyName(33, "");
 			this.ImageList_Buttons.Images.SetKeyName(34, "");
 			this.ImageList_Buttons.Images.SetKeyName(35, "");
+			this.ImageList_Buttons.Images.SetKeyName(36, "iFilter");
 			// 
 			// ToolBar1
 			// 
@@ -348,7 +349,7 @@ namespace GKUI
 			// 
 			// tbFilter
 			// 
-			this.tbFilter.ImageIndex = 16;
+			this.tbFilter.ImageIndex = 36;
 			this.tbFilter.Name = "tbFilter";
 			this.tbFilter.ToolTipText = "Фильтрация списка персон";
 			// 
@@ -546,8 +547,9 @@ namespace GKUI
 									this.miRecordAdd,
 									this.miRecordEdit,
 									this.miRecordDelete,
-			                        this.N15,
-			                        this.miSearch});
+									this.N15,
+									this.miSearch,
+									this.miFilter});
 			this.miEdit.Text = "Правка";
 			// 
 			// miRecordAdd
@@ -581,6 +583,13 @@ namespace GKUI
 			this.miSearch.Text = "miSearch";
 			this.miSearch.Click += new System.EventHandler(this.miSearchClick);
 			// 
+			// miFilter
+			// 
+			this.miFilter.Index = 5;
+			this.miFilter.Shortcut = System.Windows.Forms.Shortcut.CtrlF;
+			this.miFilter.Text = "Фильтр...";
+			this.miFilter.Click += new System.EventHandler(this.miFilterClick);
+			// 
 			// miPedigree
 			// 
 			this.miPedigree.Index = 2;
@@ -588,10 +597,11 @@ namespace GKUI
 									this.miTreeAncestors,
 									this.miTreeDescendants,
 									this.miTreeBoth,
+									this.miAncestorsCircle,
 									this.N6,
 									this.miPedigree_dAboville,
 									this.miPedigree_Konovalov,
-			                        this.miExportToFamilyBook,
+									this.miExportToFamilyBook,
 									this.N7,
 									this.miMap,
 									this.N8,
@@ -618,51 +628,57 @@ namespace GKUI
 			this.miTreeBoth.Text = "Древо полное";
 			this.miTreeBoth.Click += new System.EventHandler(this.miTreeBothClick);
 			// 
+			// miAncestorsCircle
+			// 
+			this.miAncestorsCircle.Index = 3;
+			this.miAncestorsCircle.Text = "Круг предков";
+			this.miAncestorsCircle.Click += new System.EventHandler(this.miAncestorsCircleClick);
+			// 
 			// N6
 			// 
-			this.N6.Index = 3;
+			this.N6.Index = 4;
 			this.N6.Text = "-";
 			// 
 			// miPedigree_dAboville
 			// 
-			this.miPedigree_dAboville.Index = 4;
+			this.miPedigree_dAboville.Index = 5;
 			this.miPedigree_dAboville.Shortcut = System.Windows.Forms.Shortcut.CtrlP;
 			this.miPedigree_dAboville.Text = "Роспись по д\'Абовиллю";
 			this.miPedigree_dAboville.Click += new System.EventHandler(this.miPedigree_dAbovilleClick);
 			// 
 			// miPedigree_Konovalov
 			// 
-			this.miPedigree_Konovalov.Index = 5;
+			this.miPedigree_Konovalov.Index = 6;
 			this.miPedigree_Konovalov.Shortcut = System.Windows.Forms.Shortcut.CtrlK;
 			this.miPedigree_Konovalov.Text = "Роспись по Коновалову";
 			this.miPedigree_Konovalov.Click += new System.EventHandler(this.miPedigree_KonovalovClick);
 			// 
 			// miExportToFamilyBook
 			// 
-			this.miExportToFamilyBook.Index = 6;
+			this.miExportToFamilyBook.Index = 7;
 			this.miExportToFamilyBook.Text = "miExportToFamilyBook";
 			this.miExportToFamilyBook.Click += new System.EventHandler(this.miExportToFamilyBookClick);
 			// 
 			// N7
 			// 
-			this.N7.Index = 7;
+			this.N7.Index = 8;
 			this.N7.Text = "-";
 			// 
 			// miMap
 			// 
-			this.miMap.Index = 8;
+			this.miMap.Index = 9;
 			this.miMap.Shortcut = System.Windows.Forms.Shortcut.CtrlM;
 			this.miMap.Text = "Карты...";
 			this.miMap.Click += new System.EventHandler(this.miMapClick);
 			// 
 			// N8
 			// 
-			this.N8.Index = 9;
+			this.N8.Index = 10;
 			this.N8.Text = "-";
 			// 
 			// miStats
 			// 
-			this.miStats.Index = 10;
+			this.miStats.Index = 11;
 			this.miStats.Shortcut = System.Windows.Forms.Shortcut.CtrlT;
 			this.miStats.Text = "Статистика...";
 			this.miStats.Click += new System.EventHandler(this.miStatsClick);
@@ -676,8 +692,6 @@ namespace GKUI
 									this.miScripts,
 									this.miTreeTools,
 									this.N10,
-									this.miFilter,
-									this.N11,
 									this.miOptions});
 			this.miService.Text = "Сервис";
 			// 
@@ -710,21 +724,9 @@ namespace GKUI
 			this.N10.Index = 4;
 			this.N10.Text = "-";
 			// 
-			// miFilter
-			// 
-			this.miFilter.Index = 5;
-			this.miFilter.Shortcut = System.Windows.Forms.Shortcut.CtrlF;
-			this.miFilter.Text = "Фильтр...";
-			this.miFilter.Click += new System.EventHandler(this.miFilterClick);
-			// 
-			// N11
-			// 
-			this.N11.Index = 6;
-			this.N11.Text = "-";
-			// 
 			// miOptions
 			// 
-			this.miOptions.Index = 7;
+			this.miOptions.Index = 5;
 			this.miOptions.Text = "Настройки...";
 			this.miOptions.Click += new System.EventHandler(this.miOptionsClick);
 			// 
@@ -844,12 +846,12 @@ namespace GKUI
 			// 
 			// OpenDialog1
 			// 
-			this.OpenDialog1.Filter = "GEDCOM|*.ged|Все файлы (*.*)|*.*\'";
+			this.OpenDialog1.Filter = "GEDCOM файлы (*.ged)|*.ged|GEDKeeper шифрованные GEDCOM файлы (*.geds)|*.geds|Все файлы (*.*)|*.*";
 			// 
 			// SaveDialog1
 			// 
 			this.SaveDialog1.DefaultExt = "ged";
-			this.SaveDialog1.Filter = "GEDCOM|*.ged";
+			this.SaveDialog1.Filter = "GEDKeeper GEDCOM файлы (*.ged)|*.ged|GEDKeeper шифрованные GEDCOM файлы (*.geds)|*.geds";
 			this.SaveDialog1.OverwritePrompt = false;
 			// 
 			// ImageList_Shields
@@ -864,7 +866,7 @@ namespace GKUI
 			// 
 			this.AllowDrop = true;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-			this.ClientSize = new System.Drawing.Size(896, 750);
+			this.ClientSize = new System.Drawing.Size(896, 770);
 			this.Controls.Add(this.StatusBar);
 			this.Controls.Add(this.ToolBar1);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F);

@@ -43,14 +43,14 @@ namespace GKFlowInputPlugin
 		private readonly FLS[] PersonLinks;
 		private readonly Plugin fPlugin;
 		private readonly ILangMan fLangMan;
-        private readonly IBase fBase;
+        private readonly IBaseWindow fBase;
 		private readonly StringList fSourcesList;
 		
         private GEDCOMSex fSimpleTempSex = GEDCOMSex.svMale;
 
         #region Instance control
         
-		public TfmFlowInput(Plugin plugin, IBase aBase)
+		public TfmFlowInput(Plugin plugin, IBaseWindow aBase)
 		{
 			this.InitializeComponent();
 

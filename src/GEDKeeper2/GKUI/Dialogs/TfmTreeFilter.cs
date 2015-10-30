@@ -17,13 +17,13 @@ namespace GKUI.Dialogs
     /// </summary>
     public partial class TfmTreeFilter : Form
 	{
-		private readonly IBase fBase;
+		private readonly IBaseWindow fBase;
         private readonly GKSheetList fPersonsList;
         
         private ChartFilter fFilter;
 		private string fTemp;
 
-		public IBase Base
+		public IBaseWindow Base
 		{
 			get	{ return this.fBase; }
 		}
@@ -79,7 +79,7 @@ namespace GKUI.Dialogs
 			this.edYear.Enabled = (this.fFilter.BranchCut == ChartFilter.TBranchCut.bcYears);
 			this.fPersonsList.Enabled = (this.fFilter.BranchCut == ChartFilter.TBranchCut.bcPersons);
 			this.edYear.Text = this.fFilter.BranchYear.ToString();
-			this.fPersonsList.List.Items.Clear();
+			this.fPersonsList.ClearItems();
 
 			if (!string.IsNullOrEmpty(this.fTemp)) {
 				string[] tmp_refs = this.fTemp.Split(';');
@@ -89,7 +89,7 @@ namespace GKUI.Dialogs
 				{
 					string xref = tmp_refs[i];
 					GEDCOMIndividualRecord p = this.Base.Tree.XRefIndex_Find(xref) as GEDCOMIndividualRecord;
-					if (p != null) this.fPersonsList.List.AddItem(p.GetNameString(true, false), p);
+					if (p != null) this.fPersonsList.AddItem(p.GetNameString(true, false), p);
 				}
 			}
 
@@ -179,7 +179,7 @@ namespace GKUI.Dialogs
 			}
 			catch (Exception ex)
 			{
-				this.fBase.Host.LogWrite("TfmTreeFilter.Accept(): " + ex.Message);
+				this.fBase.Host.LogWrite("TfmTreeFilter.btnAccept_Click(): " + ex.Message);
 				base.DialogResult = DialogResult.None;
 			}
 		}
@@ -211,19 +211,17 @@ namespace GKUI.Dialogs
 			this.UpdateControls();
 		}
 
-		public TfmTreeFilter(IBase aBase)
+		public TfmTreeFilter(IBaseWindow aBase)
 		{
 			this.InitializeComponent();
 
             this.fBase = aBase;
 			this.fPersonsList = new GKSheetList(this.Panel1);
-			this.fPersonsList.Buttons = EnumSet<GKSheetList.SheetButton>.Create(
-				GKSheetList.SheetButton.lbAdd, 
-				GKSheetList.SheetButton.lbDelete
-			);
+			this.fPersonsList.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbDelete);
 			this.fPersonsList.OnModify += this.ListModify;
-			this.fPersonsList.List.AddListColumn(LangMan.LS(LSID.LSID_RPIndividuals), 350, false);
+			this.fPersonsList.AddColumn(LangMan.LS(LSID.LSID_RPIndividuals), 350, false);
 
+			// SetLang()
 			this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
 			this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
 			this.Text = LangMan.LS(LSID.LSID_MIFilter);

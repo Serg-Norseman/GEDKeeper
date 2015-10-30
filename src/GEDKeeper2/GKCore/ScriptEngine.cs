@@ -34,7 +34,7 @@ namespace GKCore
     public class ScriptEngine : BaseObject
 	{
 		private TextBox fDebugOutput;
-		private IBase fBase;
+		private IBaseWindow fBase;
 
 		protected override void Dispose(bool disposing)
 		{
@@ -62,132 +62,132 @@ namespace GKCore
 			}
 		}
 
-		private void lua_init(Lua LVM)
+		private void lua_init(Lua lvm)
 		{
-			lua_register(LVM, "gk_print");
-			lua_register(LVM, "gk_progress_init");
-			lua_register(LVM, "gk_progress_done");
-			lua_register(LVM, "gk_progress_step");
+			lua_register(lvm, "gk_print");
+			lua_register(lvm, "gk_progress_init");
+			lua_register(lvm, "gk_progress_done");
+			lua_register(lvm, "gk_progress_step");
 
-			lua_register(LVM, "gk_strpos");
-			lua_register(LVM, "gk_update_view");
-			lua_register(LVM, "gk_select_file");
+			lua_register(lvm, "gk_strpos");
+			lua_register(lvm, "gk_update_view");
+			lua_register(lvm, "gk_select_file");
 
-			LVM["rtNone"] = (int)GEDCOMRecordType.rtNone;
-			LVM["rtIndividual"] = (int)GEDCOMRecordType.rtIndividual;
-			LVM["rtFamily"] = (int)GEDCOMRecordType.rtFamily;
-			LVM["rtNote"] = (int)GEDCOMRecordType.rtNote;
-			LVM["rtMultimedia"] = (int)GEDCOMRecordType.rtMultimedia;
-			LVM["rtSource"] = (int)GEDCOMRecordType.rtSource;
-			LVM["rtRepository"] = (int)GEDCOMRecordType.rtRepository;
-			LVM["rtGroup"] = (int)GEDCOMRecordType.rtGroup;
-			LVM["rtResearch"] = (int)GEDCOMRecordType.rtResearch;
-			LVM["rtTask"] = (int)GEDCOMRecordType.rtTask;
-			LVM["rtCommunication"] = (int)GEDCOMRecordType.rtCommunication;
-			LVM["rtLocation"] = (int)GEDCOMRecordType.rtLocation;
-			LVM["rtSubmission"] = (int)GEDCOMRecordType.rtSubmission;
-			LVM["rtSubmitter"] = (int)GEDCOMRecordType.rtSubmitter;
+			lvm["rtNone"] = (int)GEDCOMRecordType.rtNone;
+			lvm["rtIndividual"] = (int)GEDCOMRecordType.rtIndividual;
+			lvm["rtFamily"] = (int)GEDCOMRecordType.rtFamily;
+			lvm["rtNote"] = (int)GEDCOMRecordType.rtNote;
+			lvm["rtMultimedia"] = (int)GEDCOMRecordType.rtMultimedia;
+			lvm["rtSource"] = (int)GEDCOMRecordType.rtSource;
+			lvm["rtRepository"] = (int)GEDCOMRecordType.rtRepository;
+			lvm["rtGroup"] = (int)GEDCOMRecordType.rtGroup;
+			lvm["rtResearch"] = (int)GEDCOMRecordType.rtResearch;
+			lvm["rtTask"] = (int)GEDCOMRecordType.rtTask;
+			lvm["rtCommunication"] = (int)GEDCOMRecordType.rtCommunication;
+			lvm["rtLocation"] = (int)GEDCOMRecordType.rtLocation;
+			lvm["rtSubmission"] = (int)GEDCOMRecordType.rtSubmission;
+			lvm["rtSubmitter"] = (int)GEDCOMRecordType.rtSubmitter;
 
-			lua_register(LVM, "gt_get_records_count");
-			lua_register(LVM, "gt_get_record");
-			lua_register(LVM, "gt_get_record_type");
-			lua_register(LVM, "gt_get_record_type_name");
-			lua_register(LVM, "gt_get_record_xref");
-			lua_register(LVM, "gt_get_record_uid");
+			lua_register(lvm, "gt_get_records_count");
+			lua_register(lvm, "gt_get_record");
+			lua_register(lvm, "gt_get_record_type");
+			lua_register(lvm, "gt_get_record_type_name");
+			lua_register(lvm, "gt_get_record_xref");
+			lua_register(lvm, "gt_get_record_uid");
 
-			lua_register(LVM, "gt_delete_record");
-			lua_register(LVM, "gt_record_is_filtered");
-			lua_register(LVM, "gt_select_record");
+			lua_register(lvm, "gt_delete_record");
+			lua_register(lvm, "gt_record_is_filtered");
+			lua_register(lvm, "gt_select_record");
 
-			lua_register(LVM, "gt_create_person");
-			lua_register(LVM, "gt_create_family");
-			lua_register(LVM, "gt_create_note");
+			lua_register(lvm, "gt_create_person");
+			lua_register(lvm, "gt_create_family");
+			lua_register(lvm, "gt_create_note");
 
-			lua_register(LVM, "gt_get_person_name");
-			lua_register(LVM, "gt_define_sex");
+			lua_register(lvm, "gt_get_person_name");
+			lua_register(lvm, "gt_define_sex");
 
-			lua_register(LVM, "gt_get_person_associations_count");
-			lua_register(LVM, "gt_get_person_association");
-			lua_register(LVM, "gt_delete_person_association");
+			lua_register(lvm, "gt_get_person_associations_count");
+			lua_register(lvm, "gt_get_person_association");
+			lua_register(lvm, "gt_delete_person_association");
 
-			lua_register(LVM, "gt_get_person_events_count");
-			lua_register(LVM, "gt_get_person_event");
-			lua_register(LVM, "gt_delete_person_event");
+			lua_register(lvm, "gt_get_person_events_count");
+			lua_register(lvm, "gt_get_person_event");
+			lua_register(lvm, "gt_delete_person_event");
 
-			lua_register(LVM, "gt_bind_record_note");
-			lua_register(LVM, "gt_bind_record_source");
+			lua_register(lvm, "gt_bind_record_note");
+			lua_register(lvm, "gt_bind_record_source");
 
-			lua_register(LVM, "gt_bind_family_spouse");
-			lua_register(LVM, "gt_bind_family_child");
+			lua_register(lvm, "gt_bind_family_spouse");
+			lua_register(lvm, "gt_bind_family_child");
 
-			lua_register(LVM, "gt_add_note_text");
+			lua_register(lvm, "gt_add_note_text");
 
-			lua_register(LVM, "gt_create_event");
+			lua_register(lvm, "gt_create_event");
 
-			lua_register(LVM, "gt_get_event_value");
-			lua_register(LVM, "gt_get_event_place");
-			lua_register(LVM, "gt_get_event_date");
-			lua_register(LVM, "gt_get_event_name");
+			lua_register(lvm, "gt_get_event_value");
+			lua_register(lvm, "gt_get_event_place");
+			lua_register(lvm, "gt_get_event_date");
+			lua_register(lvm, "gt_get_event_name");
 
-			lua_register(LVM, "gt_set_event_value");
-			lua_register(LVM, "gt_set_event_place");
-			lua_register(LVM, "gt_set_event_date");
+			lua_register(lvm, "gt_set_event_value");
+			lua_register(lvm, "gt_set_event_place");
+			lua_register(lvm, "gt_set_event_date");
 
-			lua_register(LVM, "gt_create_source");
-			lua_register(LVM, "gt_find_source");
+			lua_register(lvm, "gt_create_source");
+			lua_register(lvm, "gt_find_source");
 
-			lua_register(LVM, "gt_create_group");
-			lua_register(LVM, "gt_bind_group_member");
-
-			//
-
-			lua_register(LVM, "gt_get_person_event_ex");
-			lua_register(LVM, "gt_get_event_year");
+			lua_register(lvm, "gt_create_group");
+			lua_register(lvm, "gt_bind_group_member");
 
 			//
 
-			lua_register(LVM, "csv_load");
-			lua_register(LVM, "csv_close");
-			lua_register(LVM, "csv_get_cols");
-			lua_register(LVM, "csv_get_rows");
-			lua_register(LVM, "csv_get_cell");
+			lua_register(lvm, "gt_get_person_event_ex");
+			lua_register(lvm, "gt_get_event_year");
 
 			//
 
-			lua_register(LVM, "gt_add_person_association");
-			lua_register(LVM, "gt_define_patronymic");
-			lua_register(LVM, "gt_get_person_parents_family");
-			lua_register(LVM, "gt_get_person_spouses_count");
-			lua_register(LVM, "gt_get_person_spouse_family");
-			lua_register(LVM, "gt_get_family_husband");
-			lua_register(LVM, "gt_get_family_wife");
-			lua_register(LVM, "gt_get_family_childs_count");
-			lua_register(LVM, "gt_get_family_child");
+			lua_register(lvm, "csv_load");
+			lua_register(lvm, "csv_close");
+			lua_register(lvm, "csv_get_cols");
+			lua_register(lvm, "csv_get_rows");
+			lua_register(lvm, "csv_get_cell");
 
-			lua_register(LVM, "gt_get_location_usages");
-			lua_register(LVM, "gt_get_record_notes_count");
-			lua_register(LVM, "gt_get_person_sex");
-			lua_register(LVM, "gt_set_person_sex");
+			//
 
-			lua_register(LVM, "gt_get_person_groups_count");
-			lua_register(LVM, "gt_get_person_group");
-			lua_register(LVM, "gt_get_group_name");
+			lua_register(lvm, "gt_add_person_association");
+			lua_register(lvm, "gt_define_patronymic");
+			lua_register(lvm, "gt_get_person_parents_family");
+			lua_register(lvm, "gt_get_person_spouses_count");
+			lua_register(lvm, "gt_get_person_spouse_family");
+			lua_register(lvm, "gt_get_family_husband");
+			lua_register(lvm, "gt_get_family_wife");
+			lua_register(lvm, "gt_get_family_childs_count");
+			lua_register(lvm, "gt_get_family_child");
+
+			lua_register(lvm, "gt_get_location_usages");
+			lua_register(lvm, "gt_get_record_notes_count");
+			lua_register(lvm, "gt_get_person_sex");
+			lua_register(lvm, "gt_set_person_sex");
+
+			lua_register(lvm, "gt_get_person_groups_count");
+			lua_register(lvm, "gt_get_person_group");
+			lua_register(lvm, "gt_get_group_name");
 
 			// experimentals
 
-			lua_register(LVM, "ado_open");
-			lua_register(LVM, "ado_close");
-			lua_register(LVM, "ado_query_open");
-			lua_register(LVM, "ado_query_close");
-			lua_register(LVM, "ado_query_first");
-			lua_register(LVM, "ado_query_prev");
-			lua_register(LVM, "ado_query_next");
-			lua_register(LVM, "ado_query_last");
-			lua_register(LVM, "ado_get_query_field");
-			lua_register(LVM, "ado_dump");
+			lua_register(lvm, "ado_open");
+			lua_register(lvm, "ado_close");
+			lua_register(lvm, "ado_query_open");
+			lua_register(lvm, "ado_query_close");
+			lua_register(lvm, "ado_query_first");
+			lua_register(lvm, "ado_query_prev");
+			lua_register(lvm, "ado_query_next");
+			lua_register(lvm, "ado_query_last");
+			lua_register(lvm, "ado_get_query_field");
+			lua_register(lvm, "ado_dump");
 		}
 
-		public void lua_run(string script, IBase aBase, TextBox aDebugOutput)
+		public void lua_run(string script, IBaseWindow aBase, TextBox aDebugOutput)
 		{
 			this.fDebugOutput = aDebugOutput;
             this.fBase = aBase;
@@ -329,33 +329,33 @@ namespace GKCore
 		public void gt_delete_person_association(object recPtr, int idx)
 		{
 			GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
-			rec.Associations.Delete(idx);
+			rec.Associations.DeleteAt(idx);
 		}
 
 		public int gt_get_person_events_count(object recPtr)
 		{
 			GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
-			return rec.IndividualEvents.Count;
+			return rec.Events.Count;
 		}
 
 		public object gt_get_person_event(object recPtr, int idx)
 		{
 			GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
-			GEDCOMCustomEvent evt = rec.IndividualEvents[idx];
+			GEDCOMCustomEvent evt = rec.Events[idx];
 			return evt;
 		}
 
 		public object gt_get_person_event_ex(object recPtr, string sign)
 		{
 			GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
-			GEDCOMCustomEvent evt = rec.GetIndividualEvent(sign);
+			GEDCOMCustomEvent evt = rec.FindEvent(sign);
 			return evt;
 		}
 
 		public void gt_delete_person_event(object recPtr, int idx)
 		{
 			GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
-			rec.IndividualEvents.Delete(idx);
+			rec.Events.DeleteAt(idx);
 		}
 
 		public string gt_get_event_date(object evPtr)
@@ -530,7 +530,7 @@ namespace GKCore
 
 		public object gt_create_event(object recPtr, string sign)
 		{
-			GEDCOMRecord rec = recPtr as GEDCOMIndividualRecord;
+			GEDCOMRecordWithEvents rec = recPtr as GEDCOMRecordWithEvents;
 			GEDCOMCustomEvent evt = this.fBase.Context.CreateEventEx(rec, sign, "", "");
 
 			return evt;

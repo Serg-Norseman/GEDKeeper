@@ -1,3 +1,27 @@
+/*
+ *  An HyperText (readonly) Memo for Delphi
+ *    from TJumpMemo by Alexander Kuznetsov (sanhome@hotmail.com)
+ *  Copyright (C) 1997 Paul Toth (TothPaul@Mygale.org)
+ *  http://www.mygale.org/~tothpaul
+ *  
+ *  This program is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU General Public License
+ *  as published by the Free Software Foundation; either version 2
+ *  of the License, or (at your option) any later version.
+ *  
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *  
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ *  C# implementation:
+ *  Copyright (C) 2011 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
+ */
+
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -39,7 +63,7 @@ namespace GKCommon.Controls
 			rsRaised
 		}*/
 
-		private bool fAcceptFontChange;
+		//private bool fAcceptFontChange;
 		private int fBorderWidth;
 		private Color fColor;
 		private SolidBrush fDefBrush;
@@ -100,7 +124,7 @@ namespace GKCommon.Controls
 		public StringList Lines
 		{
 			get { return this.fLines; }
-			set { this.SetLines(value); }
+			set { this.fLines.Assign(value); }
 		}
 
 		/*public TRuleStyle RuleStyle
@@ -113,9 +137,10 @@ namespace GKCommon.Controls
 		{
 			base.TabStop = true;
 			base.BorderStyle = BorderStyle.Fixed3D;
+			base.DoubleBuffered = true;
 
 			this.fHeightCount = 0;
-			this.fAcceptFontChange = false;
+			//this.fAcceptFontChange = false;
 			this.fLines = new StringList();
 			this.fLines.OnChange += this.LinesChanged;
 			this.fHeights = new int[0];
@@ -154,14 +179,6 @@ namespace GKCommon.Controls
 			}
 		}*/
 
-        private void LinesChanged(object sender)
-		{
-			this.ArrangeText();
-			this.TopPos = 0;
-			this.LeftPos = 0;
-			base.Invalidate();
-		}
-
 		private void SetBorderWidth(int value)
 		{
 			if (this.fBorderWidth != value)
@@ -178,17 +195,6 @@ namespace GKCommon.Controls
 				this.fColor = value;
 				base.Invalidate();
 			}
-		}
-
-		/*private void SetFont(Font value)
-		{
-			this.ArrangeText();
-			base.Invalidate();
-		}*/
-
-		private void SetLines(StringList value)
-		{
-			this.fLines.Assign(value);
 		}
 
 		/*private void SetRuleStyle(TRuleStyle value)
@@ -210,15 +216,22 @@ namespace GKCommon.Controls
 			}
 		}*/
 
+        private void LinesChanged(object sender)
+		{
+			this.TopPos = 0;
+			this.LeftPos = 0;
+			this.ArrangeText();
+		}
+
 		private void ArrangeText()
 		{
 			this.fTextFont = (base.Parent.Font.Clone() as Font);
 			this.fDefBrush = new SolidBrush(Color.Black);
 
 			this.PrepareText();
-			this.DoPaint();
-
 			this.ScrollRange();
+
+			this.Invalidate();
 		}
 
 		private void ClearLinks()
@@ -280,8 +293,8 @@ namespace GKCommon.Controls
 			this.fHeightCount = this.fLines.Count;
 			this.fHeights = new int[this.fHeightCount];
 
-			this.fAcceptFontChange = false;
-			Graphics grx = base.CreateGraphics();
+			//this.fAcceptFontChange = false;
+			Graphics gfx = base.CreateGraphics();
 			try
 			{
 				this.ClearLinks();
@@ -293,7 +306,7 @@ namespace GKCommon.Controls
 				for (int line = 0; line < num; line++)
 				{
 					int x_pos = 0;
-					int line_height = grx.MeasureString("A", this.fTextFont).ToSize().Height;
+					int line_height = gfx.MeasureString("A", this.fTextFont).ToSize().Height;
 
 					string s = this.fLines[line];
 
@@ -307,7 +320,7 @@ namespace GKCommon.Controls
 								ss += "~";
 							}
 
-							this.MeasureText(grx, ss, ref x_pos, ref y_pos, ref line_height, ref xMax);
+							this.MeasureText(gfx, ss, ref x_pos, ref y_pos, ref line_height, ref xMax);
 							i++;
 
 							while (s[i - 1] != '~')
@@ -362,9 +375,9 @@ namespace GKCommon.Controls
 												ss += s[i - 1];
 											}
 
-											int ss_width = grx.MeasureString(ss, this.fTextFont).ToSize().Width;
+											int ss_width = gfx.MeasureString(ss, this.fTextFont).ToSize().Width;
 											this.fLinks.Add(new HyperLink(sn, x_pos, y_pos, ss_width, line_height));
-											this.MeasureText(grx, ss, ref x_pos, ref y_pos, ref line_height, ref xMax);
+											this.MeasureText(gfx, ss, ref x_pos, ref y_pos, ref line_height, ref xMax);
 
 											break;
 										}
@@ -386,7 +399,7 @@ namespace GKCommon.Controls
 						i++;
 					}
 
-					this.MeasureText(grx, ss, ref x_pos, ref y_pos, ref line_height, ref xMax);
+					this.MeasureText(gfx, ss, ref x_pos, ref y_pos, ref line_height, ref xMax);
 					y_pos += line_height;
 					this.fHeights[line] = line_height;
 				}
@@ -396,20 +409,19 @@ namespace GKCommon.Controls
 			}
 			finally
 			{
-				grx.Dispose();
-				this.fAcceptFontChange = true;
+				gfx.Dispose();
+				//this.fAcceptFontChange = true;
 			}
 		}
 
-		private void DoPaint()
+		private void DoPaint(Graphics gfx)
 		{
 			if (fHeights.Length != fLines.Count) return;
 
-			this.fAcceptFontChange = false;
-			Graphics grx = base.CreateGraphics();
+			//this.fAcceptFontChange = false;
 			try
 			{
-				grx.FillRectangle(new SolidBrush(SystemColors.Control), base.ClientRectangle);
+				gfx.FillRectangle(new SolidBrush(SystemColors.Control), base.ClientRectangle);
 
 				int y_pos = this.fBorderWidth - this.fTopPos;
 
@@ -431,7 +443,7 @@ namespace GKCommon.Controls
 								ss += "~";
 							}
 
-							this.OutText(grx, ss, ref x_pos, ref y_pos, ref line_height);
+							this.OutText(gfx, ss, ref x_pos, ref y_pos, ref line_height);
 							i++;
 
 							while (s[i - 1] != '~')
@@ -490,7 +502,7 @@ namespace GKCommon.Controls
 											this.fDefBrush.Color = this.fLinkColor;
 											this.SetFontStyle(FontStyle.Underline);
 
-											this.OutText(grx, ss, ref x_pos, ref y_pos, ref line_height);
+											this.OutText(gfx, ss, ref x_pos, ref y_pos, ref line_height);
 
 											this.fDefBrush.Color = save_color;
 											this.SetFontStyle(FontStyle.Underline);
@@ -515,14 +527,13 @@ namespace GKCommon.Controls
 						i++;
 					}
 
-					this.OutText(grx, ss, ref x_pos, ref y_pos, ref line_height);
+					this.OutText(gfx, ss, ref x_pos, ref y_pos, ref line_height);
 					y_pos += line_height;
 				}
 			}
 			finally
 			{
-				grx.Dispose();
-				this.fAcceptFontChange = true;
+				//this.fAcceptFontChange = true;
 			}
 		}
 
@@ -601,7 +612,7 @@ namespace GKCommon.Controls
 
 			if (this.fLeftPos != value)
 			{
-				ExtRect dummy = ExtRect.Empty();
+				ExtRect dummy = ExtRect.CreateEmpty();
 				ExtRect R;
 				NativeMethods.ScrollWindowEx(this.Handle, this.fLeftPos - value, 0, ref dummy, ref dummy, 0, out R, 0u);
 				NativeMethods.SetScrollPos(this.Handle, 0, this.fLeftPos, true);
@@ -617,7 +628,7 @@ namespace GKCommon.Controls
 
 			if (this.fTopPos != value)
 			{
-				ExtRect dummy = ExtRect.Empty();
+				ExtRect dummy = ExtRect.CreateEmpty();
 				ExtRect R;
 				NativeMethods.ScrollWindowEx(this.Handle, 0, this.fTopPos - value, ref dummy, ref dummy, 0, out R, 0u);
 				NativeMethods.SetScrollPos(this.Handle, 1, this.fTopPos, true);
@@ -628,9 +639,17 @@ namespace GKCommon.Controls
 
 		#region Protected methods
 
+		protected override void OnFontChanged(EventArgs e)
+		{
+			this.ArrangeText();
+
+			base.OnFontChanged(e);
+		}
+		
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
 			base.OnKeyDown(e);
+
 			switch (e.KeyCode)
 			{
 				case Keys.Prior:
@@ -721,7 +740,7 @@ namespace GKCommon.Controls
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			this.DoPaint();
+			this.DoPaint(e.Graphics);
 		}
 
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode), SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]

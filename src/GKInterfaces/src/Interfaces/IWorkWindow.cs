@@ -15,5 +15,7 @@ namespace GKCore.Interfaces
 		IList<ISearchResult> FindAll(string searchPattern);
 		void QuickFind();
 		void SelectByRec(GEDCOMIndividualRecord iRec);
+		
+		void SetFilter();
 	}
 }

@@ -90,7 +90,7 @@ namespace GKFlowInputPlugin
 
         public void Execute()
         {
-			IBase curBase = fHost.GetCurrentFile();
+			IBaseWindow curBase = fHost.GetCurrentFile();
 		    if (curBase == null) return;
 
 		    using (TfmFlowInput frm = new TfmFlowInput(this, curBase))

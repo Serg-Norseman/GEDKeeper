@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Windows.Forms;
+
 using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.Types;
 using GKUI.Controls;
-using GKUI.Lists;
 
 namespace GKUI.Dialogs
 {
@@ -15,7 +16,7 @@ namespace GKUI.Dialogs
     /// </summary>
     public partial class TfmRecordSelect : Form
 	{
-		private readonly IBase fBase;
+		private readonly IBaseWindow fBase;
 
         private GEDCOMRecordType fMode;
 		private string fFilter;
@@ -49,11 +50,14 @@ namespace GKUI.Dialogs
 		}
 
 
-        public TfmRecordSelect(IBase aBase)
+        public TfmRecordSelect(IBaseWindow aBase)
         {
             this.InitializeComponent();
+            
             this.fBase = aBase;
             this.fFilter = "*";
+            
+            // SetLang()
             this.Text = LangMan.LS(LSID.LSID_WinRecordSelect);
             this.btnCreate.Text = LangMan.LS(LSID.LSID_DlgAppend);
             this.btnSelect.Text = LangMan.LS(LSID.LSID_DlgSelect);
@@ -75,8 +79,8 @@ namespace GKUI.Dialogs
 				this.fListRecords.Dispose();
 				this.fListRecords = null;
 			}
-			GKUtils.CreateRecordsView(this.panList, this.fBase.Tree, this.fMode, out this.fListRecords);
-
+			
+			this.fListRecords = GKUtils.CreateRecordsView(this.panList, this.fBase.Tree, this.fMode);
 			this.fListRecords.ListMan.Filter.Clear();
 			this.fListRecords.ListMan.QuickFilter = this.fFilter;
 
@@ -119,7 +123,7 @@ namespace GKUI.Dialogs
 			}
 			catch (Exception ex)
 			{
-				this.fBase.Host.LogWrite("TfmRecordSelect.Select(): " + ex.Message);
+				this.fBase.Host.LogWrite("TfmRecordSelect.btnSelect_Click(): " + ex.Message);
 				this.ResultRecord = null;
 				base.DialogResult = DialogResult.None;
 			}
@@ -247,7 +251,7 @@ namespace GKUI.Dialogs
 			}
 			catch (Exception ex)
 			{
-				this.fBase.Host.LogWrite("TfmRecordSelect.Create(): " + ex.Message);
+				this.fBase.Host.LogWrite("TfmRecordSelect.btnCreate_Click(): " + ex.Message);
 				this.ResultRecord = null;
 				base.DialogResult = DialogResult.None;
 			}
@@ -257,6 +261,5 @@ namespace GKUI.Dialogs
 		{
 			this.SetFilter(this.edFastFilter.Text);
 		}
-
     }
 }

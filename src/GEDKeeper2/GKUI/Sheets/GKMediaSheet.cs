@@ -20,14 +20,8 @@ namespace GKUI.Sheets
             this.AddColumn(LangMan.LS(LSID.LSID_Type), 300, false);
             this.Columns_EndUpdate();
 
-            this.Buttons = EnumSet<SheetButton>.Create(
-				SheetButton.lbAdd, 
-				SheetButton.lbEdit, 
-				SheetButton.lbDelete, 
-				SheetButton.lbMoveUp, 
-				SheetButton.lbMoveDown
-			);
-
+            this.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, 
+				SheetButton.lbMoveUp, SheetButton.lbMoveDown);
             this.OnModify += this.ListModify;
         }
 
@@ -37,7 +31,7 @@ namespace GKUI.Sheets
         	
             try
             {
-                this.List.Items.Clear();
+                this.ClearItems();
 
                 this.DataList.Reset();
                 while (this.DataList.MoveNext()) {
@@ -49,7 +43,7 @@ namespace GKUI.Sheets
                     {
                         GEDCOMFileReferenceWithTitle fileRef = mmRec.FileReferences[0];
 
-                        GKListItem item = this.List.AddItem(fileRef.Title, mmLink);
+                        GKListItem item = this.AddItem(fileRef.Title, mmLink);
                         item.SubItems.Add(LangMan.LS(GKData.MediaTypes[(int) fileRef.MediaType]));
                     }
                 }
@@ -64,7 +58,7 @@ namespace GKUI.Sheets
         {
         	if (this.DataList == null) return;
 
-            IBase aBase = this.Editor.Base;
+            IBaseWindow aBase = this.Editor.Base;
             if (aBase == null) return;
 
             IGEDCOMStructWithLists _struct = this.DataList.Owner as IGEDCOMStructWithLists;
@@ -91,7 +85,7 @@ namespace GKUI.Sheets
                 case RecordAction.raDelete:
                     if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_DetachMultimediaQuery)) != DialogResult.No)
                     {
-                        _struct.MultimediaLinks.DeleteObject(mmLink);
+                        _struct.MultimediaLinks.Delete(mmLink);
                         result = true;
                     }
                     break;
@@ -99,7 +93,7 @@ namespace GKUI.Sheets
                 case RecordAction.raMoveUp:
                 case RecordAction.raMoveDown:
                     {
-                        int idx = _struct.MultimediaLinks.IndexOfObject(mmLink);
+                        int idx = _struct.MultimediaLinks.IndexOf(mmLink);
 
                         switch (eArgs.Action)
                         {
@@ -117,8 +111,10 @@ namespace GKUI.Sheets
                     break;
             }
 
-            if (result) aBase.Modified = true;
-            if (result) this.UpdateSheet();
+            if (result) {
+            	aBase.Modified = true;
+            	this.UpdateSheet();
+            }
         }
 
     }

@@ -5,17 +5,18 @@ using GKCore.Interfaces;
 
 namespace GKCore
 {
-	public abstract class BaseSearchStrategy : ISearchStrategy
+	public class BaseSearchStrategy : ISearchStrategy
 	{
 		private String searchPattern;
 		private IWorkWindow workWindow;
 		private IList<ISearchResult> currentResults;
 		private ISearchResult curResult;
 		
-		protected BaseSearchStrategy(IWorkWindow workWindow, String searchPattern)
+		public BaseSearchStrategy(IWorkWindow workWindow, String searchPattern)
 		{
 			if (searchPattern == null)
 				throw new ArgumentNullException("searchPattern");
+
 			this.searchPattern = searchPattern;
 			this.workWindow = workWindow;
 			this.currentResults = this.FindAll();

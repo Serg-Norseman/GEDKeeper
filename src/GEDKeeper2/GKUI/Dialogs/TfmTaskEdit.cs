@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+
 using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
 using GKCore;
@@ -15,7 +16,7 @@ namespace GKUI.Dialogs
     /// </summary>
     public partial class TfmTaskEdit : Form, IBaseEditor
 	{
-		private readonly IBase fBase;
+		private readonly IBaseWindow fBase;
         private readonly GKNotesSheet fNotesList;
         
         private GEDCOMTaskRecord fTask;
@@ -27,7 +28,7 @@ namespace GKUI.Dialogs
 			set { this.SetTask(value); }
 		}
 
-		public IBase Base
+		public IBaseWindow Base
 		{
 			get { return this.fBase; }
 		}
@@ -105,7 +106,7 @@ namespace GKUI.Dialogs
 			}
 			catch (Exception ex)
 			{
-				this.fBase.Host.LogWrite("TfmTaskEdit.Accept(): " + ex.Message);
+				this.fBase.Host.LogWrite("TfmTaskEdit.btnAccept_Click(): " + ex.Message);
 				base.DialogResult = DialogResult.None;
 			}
 		}
@@ -158,10 +159,12 @@ namespace GKUI.Dialogs
 			}
 		}
 
-		public TfmTaskEdit(IBase aBase)
+		public TfmTaskEdit(IBaseWindow aBase)
 		{
 			this.InitializeComponent();
+
 			this.fBase = aBase;
+			this.fTempRec = null;
 
 			for (GKResearchPriority rp = GKResearchPriority.rpNone; rp <= GKResearchPriority.rpTop; rp++)
 			{
@@ -175,7 +178,7 @@ namespace GKUI.Dialogs
 
 			this.fNotesList = new GKNotesSheet(this, this.SheetNotes);
 
-			this.fTempRec = null;
+			// SetLang()
 			this.Text = LangMan.LS(LSID.LSID_WinTaskEdit);
 			this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
 			this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);

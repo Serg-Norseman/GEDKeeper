@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Windows.Forms;
 
-using ExtUtils;
 using GKCommon;
 using GKCore;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKUI.Dialogs
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public partial class TfmTipsDialog : Form
 	{
 		private readonly StringList fTips;
@@ -21,6 +19,7 @@ namespace GKUI.Dialogs
 
             this.fTips = new StringList();
 
+            // SetLang()
             this.btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
             this.ShowCheck.Text = LangMan.LS(LSID.LSID_StartupTips);
             this.NextTipBtn.Text = LangMan.LS(LSID.LSID_Next);
