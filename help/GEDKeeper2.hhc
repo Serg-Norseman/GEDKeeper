@@ -49,6 +49,10 @@
 			<param name="Local" value="gkhRecordSelect.html">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="&Icirc;&ntilde;&icirc;&aacute;&aring;&iacute;&iacute;&icirc;&ntilde;&ograve;&egrave; &eth;&agrave;&aacute;&icirc;&ograve;&ucirc; &ntilde; &auml;&agrave;&ograve;&agrave;&igrave;&egrave;">
+			<param name="Local" value="gkhDateSpecials.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="&Acirc;&egrave;&auml;&ucirc; &ccedil;&agrave;&iuml;&egrave;&ntilde;&aring;&eacute; &aacute;&agrave;&ccedil;&ucirc; &auml;&agrave;&iacute;&iacute;&ucirc;&otilde;">
 			<param name="Local" value="gkhRecordTypes.html">
 			</OBJECT>
@@ -194,6 +198,10 @@
 			<param name="Name" value="&Ntilde;&ograve;&agrave;&iacute;&auml;&agrave;&eth;&ograve;&iacute;&ucirc;&aring; &iuml;&euml;&agrave;&atilde;&egrave;&iacute;&ucirc;">
 			<param name="Local" value="gkhPluginStd.html">
 			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="&Oslash;&egrave;&ocirc;&eth;&icirc;&acirc;&agrave;&iacute;&egrave;&aring; &ocirc;&agrave;&eacute;&euml;&icirc;&acirc;">
+			<param name="Local" value="gkhSecure.html">
+			</OBJECT>
 	</UL>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="&Ntilde;&aring;&eth;&acirc;&egrave;&ntilde;&ucirc;">
@@ -295,7 +303,7 @@
 		<param name="Local" value="gkhLangs.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="&Agrave;&acirc;&ograve;&icirc;&eth;&ucirc;">
+		<param name="Name" value="&Agrave;&acirc;&ograve;&icirc;&eth;">
 		<param name="Local" value="gkhAuthors.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">

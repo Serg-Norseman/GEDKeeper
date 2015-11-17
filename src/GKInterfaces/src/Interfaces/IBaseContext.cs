@@ -27,8 +27,8 @@ namespace GKCore.Interfaces
 
 		// Individual utils
 		bool IsChildless(GEDCOMIndividualRecord iRec);
-		int FindBirthYear(GEDCOMIndividualRecord iRec);
-		int FindDeathYear(GEDCOMIndividualRecord iRec);
+		AbsDate FindBirthYear(GEDCOMIndividualRecord iRec);
+		AbsDate FindDeathYear(GEDCOMIndividualRecord iRec);
 		
 		// Patriarchs search
 		void GetPatriarchsList(ExtList<PatriarchObj> patList, int gensMin, bool datesCheck);

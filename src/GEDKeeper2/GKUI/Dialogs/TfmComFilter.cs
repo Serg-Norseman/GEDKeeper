@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 using GKCore;
@@ -15,6 +16,7 @@ namespace GKUI.Dialogs
         private readonly IBaseWindow fBase;
 		private readonly string[] fFields;
 		private readonly ListManager fListMan;
+		private MaskedTextBox maskedTextBox;
 
 		public IBaseWindow Base
 		{
@@ -53,6 +55,8 @@ namespace GKUI.Dialogs
             base.Dispose(disposing);
         }
 
+        #region Private functions
+
         private ConditionKind GetCondByName(string condName)
 		{
 			ConditionKind res = ConditionKind.ck_NotEq;
@@ -87,24 +91,113 @@ namespace GKUI.Dialogs
 			return (Enum)enums.GetValue(idx);
 		}
 
+		private static DataGridViewColumn AddTextColumn(string colName, string headerText, int width)
+		{
+			DataGridViewColumn col = new DataGridViewTextBoxColumn();
+			col.HeaderText = headerText;
+			col.Name = colName;
+			col.Width = width;
+			return col;
+		}
+
+		private static DataGridViewColumn AddComboColumn(string colName, string headerText, object[] items, int width)
+		{
+			DataGridViewComboBoxColumn col = new DataGridViewComboBoxColumn();
+			col.HeaderText = headerText;
+			col.Name = colName;
+			col.Width = width;
+			col.Items.AddRange(items);
+			return col;
+		}
+
 		private void InitGrid()
 		{
+			this.maskedTextBox = new MaskedTextBox();
+            this.maskedTextBox.Visible = false;
+            this.maskedTextBox.Mask = "00/00/0000";
+            this.maskedTextBox.TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
+            this.dataGridView1.Controls.Add(this.maskedTextBox);
+
 			this.dataGridView1.Rows.Clear();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
 			                     	AddComboColumn("FField", LangMan.LS(LSID.LSID_Field), this.fFields, 200),
 			                     	AddComboColumn("FCondition", LangMan.LS(LSID.LSID_Condition), GKData.CondSigns, 150),
 			                     	AddTextColumn("FValue", LangMan.LS(LSID.LSID_Value), 300)});
+
+			this.dataGridView1.CellBeginEdit += dataGridView1_CellBeginEdit;
+			this.dataGridView1.CellEndEdit += dataGridView1_CellEndEdit;
+			this.dataGridView1.Scroll += dataGridView1_Scroll;
+
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+		}
+
+		private bool IsGEDCOMDateCell(int rowIndex)
+		{
+			DataGridViewRow row = dataGridView1.Rows[rowIndex];
+
+			string fld = (string)row.Cells[0].Value;
+			if (!string.IsNullOrEmpty(fld)) {
+				Enum column = GetFieldColumn(fld);
+				int col = (column as IConvertible).ToByte(null);
+				DataType dataType = fListMan.GetColumnDataType(col);
+				
+				if (dataType == DataType.dtGEDCOMDate) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		}
+
+		private void dataGridView1_Scroll(object sender, ScrollEventArgs e)
+		{
+			if (this.maskedTextBox.Visible)
+			{
+				DataGridViewCell cell = this.dataGridView1.CurrentCell;
+				Rectangle rect = this.dataGridView1.GetCellDisplayRectangle(cell.ColumnIndex, cell.RowIndex, true);
+				this.maskedTextBox.Location = rect.Location;
+			}
+		}
+
+		private void dataGridView1_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+		{
+			if (e.ColumnIndex == 2 && e.RowIndex < this.dataGridView1.NewRowIndex) {
+				if (this.IsGEDCOMDateCell(e.RowIndex)) {
+					Rectangle rect = this.dataGridView1.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, true);
+
+					if (this.dataGridView1[e.ColumnIndex, e.RowIndex].Value != null) {
+						this.maskedTextBox.Text = this.dataGridView1[e.ColumnIndex, e.RowIndex].Value.ToString();
+					} else {
+						this.maskedTextBox.Text = "";
+					}
+
+					this.maskedTextBox.Location = rect.Location;
+					this.maskedTextBox.Size = rect.Size;					
+					this.maskedTextBox.Visible = true;
+					this.maskedTextBox.Focus();
+				}
+			}
+		}
+
+		private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+		{
+			if (this.maskedTextBox.Visible) {
+				this.dataGridView1.CurrentCell.Value = this.maskedTextBox.Text;
+				this.maskedTextBox.Visible = false;
+				this.dataGridView1.Focus();
+			}
 		}
 
 		private void UpdateGrid()
 		{
 			this.dataGridView1.Rows.Clear();
 
-			int num = fListMan.Filter.ColumnsFilter.Count;
+			int num = fListMan.Filter.Conditions.Count;
 			for (int i = 0; i < num; i++) {
-				FilterCondition fcond = fListMan.Filter.ColumnsFilter[i];
+				FilterCondition fcond = fListMan.Filter.Conditions[i];
 
 				int r = this.dataGridView1.Rows.Add();
 				DataGridViewRow row = dataGridView1.Rows[r];
@@ -115,9 +208,35 @@ namespace GKUI.Dialogs
 				row.Cells[1].Value = GKData.CondSigns[condIndex];
 				row.Cells[2].Value = fcond.value.ToString();
 			}
+
+			//this.dataGridView1.AutoResizeColumns();
+			this.dataGridView1.Columns[0].Width = 150;
+			this.dataGridView1.Columns[1].Width = 150;
+			this.dataGridView1.Columns[2].Width = 150;
 		}
 
-		public virtual void AcceptChanges()
+		private void btnAccept_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				this.AcceptChanges();
+				base.DialogResult = DialogResult.OK;
+			}
+			catch (Exception ex)
+			{
+				this.fBase.Host.LogWrite("TfmComFilter.btnAccept_Click(): " + ex.Message);
+				base.DialogResult = DialogResult.None;
+			}
+		}
+
+		private void btnReset_Click(object sender, EventArgs e)
+		{
+			this.DoReset();
+		}
+
+        #endregion
+
+        public virtual void AcceptChanges()
 		{
 			fListMan.Filter.Clear();
 
@@ -139,20 +258,6 @@ namespace GKUI.Dialogs
 
 			DialogResult = DialogResult.OK;
 		}
-		
-		void btnAccept_Click(object sender, EventArgs e)
-		{
-			try
-			{
-				this.AcceptChanges();
-				base.DialogResult = DialogResult.OK;
-			}
-			catch (Exception ex)
-			{
-				this.fBase.Host.LogWrite("TfmComFilter.btnAccept_Click(): " + ex.Message);
-				base.DialogResult = DialogResult.None;
-			}
-		}
 
         public void SetLang()
 		{
@@ -161,34 +266,10 @@ namespace GKUI.Dialogs
             this.btnReset.Text = LangMan.LS(LSID.LSID_DlgReset);
 		}
 
-		private static DataGridViewColumn AddTextColumn(string colName, string headerText, int width)
-		{
-			DataGridViewColumn col = new DataGridViewTextBoxColumn();
-			col.HeaderText = headerText;
-			col.Name = colName;
-			col.Width = width;
-			return col;
-		}
-
-		private static DataGridViewColumn AddComboColumn(string colName, string headerText, object[] items, int width)
-		{
-			DataGridViewComboBoxColumn col = new DataGridViewComboBoxColumn();
-			col.HeaderText = headerText;
-			col.Name = colName;
-			col.Width = width;
-			col.Items.AddRange(items);
-			return col;
-		}
-
 		public virtual void DoReset()
 		{
 			fListMan.Filter.Clear();
 			this.UpdateGrid();
-		}
-		
-		private void btnReset_Click(object sender, EventArgs e)
-		{
-			this.DoReset();
 		}
 	}
 }

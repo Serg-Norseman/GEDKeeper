@@ -108,14 +108,13 @@ namespace GKCore.Lists
 			return result;
 		}
 
-		public abstract bool CheckFilter(ShieldState aShieldState);
+		public abstract bool CheckFilter(ShieldState shieldState);
 		public abstract void Fetch(GEDCOMRecord aRec);
 
 		protected static object GetDateValue(GEDCOMCustomEvent evt, bool isVisible)
 		{
 			if (evt == null) {
-				object val = 0.0d;
-				return (isVisible) ? null : val;
+				return (isVisible) ? null : (object)AbsDate.Empty();
 			} else {
 				return GetDateValue(evt.Detail.Date.Value, isVisible);
 			}
@@ -126,20 +125,19 @@ namespace GKCore.Lists
 			object result;
 
 			if (date == null) {
-				object val = 0.0d;
-				result = (isVisible) ? null : val;
+				result = (isVisible) ? null : (object)AbsDate.Empty();
 			} else {
 				if (isVisible) {
-					result = GKUtils.GEDCOMCustomDateToStrEx(date, GlobalOptions.Instance.DefDateFormat, false);
+					GlobalOptions glob = GlobalOptions.Instance;
+					result = GKUtils.GetCustomDateFmtString(date, glob.DefDateFormat, glob.DefDateSigns);
 				} else {
-					double val = GKUtils.GetAbstractDate(date);
-					result = val;
+					result = date.GetAbstractDate();
 				}
 			}
 
 			return result;
 		}
-		
+
 		public object GetColumnInternalValue(int colIndex)
 		{
 			// col_index - from 1
@@ -200,15 +198,15 @@ namespace GKCore.Lists
             return "<?>";
 		}
 
-		public TDataType GetColumnDataType(int index)
+		public DataType GetColumnDataType(int index)
 		{
-			int col = index - 1;
+			int col = index/* - 1*/;
 
             if (col >= 0 && col < fListColumns.ColumnStatics.Count) {
 				return fListColumns.ColumnStatics[col].dataType;
 			}
 
-            return TDataType.dtString;
+            return DataType.dtString;
 		}
 
 		protected abstract ListColumns GetDefaultListColumns();
@@ -223,6 +221,7 @@ namespace GKCore.Lists
 			return this.fListColumns.ColumnEnum;
 		}*/
 
+		// used only in UpdateItem
 		private static string ConvertColumnValue(object val, ColumnStatic cs)
 		{
 			if (val == null) {
@@ -230,40 +229,46 @@ namespace GKCore.Lists
 			}
 
 			switch (cs.dataType) {
-				case TDataType.dtString:
+				case DataType.dtString:
 					return val.ToString();
 
-				case TDataType.dtInteger:
+				case DataType.dtInteger:
 					return val.ToString();
 
-				case TDataType.dtDate:
-					return val.ToString();
+				case DataType.dtFloat:
+					return ((double)val).ToString(cs.format, cs.nfi);
 
-				case TDataType.dtDateTime:
+				case DataType.dtDateTime:
 					DateTime dtx = ((DateTime)val);
 					return ((dtx.Ticks == 0) ? "" : dtx.ToString("yyyy.MM.dd HH:mm:ss", null));
 
-				case TDataType.dtFloat:
-					return ((double)val).ToString(cs.format, cs.nfi);
+				case DataType.dtGEDCOMDate:
+					return val.ToString();
 					
 				default:
 					return val.ToString();
 			}
 		}
 
-		private static object ConvertColumnStr(string val, TDataType type)
+		private static object ConvertColumnStr(string val, DataType type)
 		{
 			switch (type) {
-				case TDataType.dtString:
+				case DataType.dtString:
 					return val;
-				case TDataType.dtInteger:
+
+				case DataType.dtInteger:
 					return SysUtils.ParseInt(val, 0);
-				case TDataType.dtFloat:
+
+				case DataType.dtFloat:
 					return SysUtils.ParseFloat(val, 0.0);
-				case TDataType.dtDate:
-				case TDataType.dtDateTime:
+
+				case DataType.dtDateTime:
 					return DateTime.Parse(val);
+
+				case DataType.dtGEDCOMDate:
+					return GEDCOMUtils.GetAbstractDate(val);
 			}
+
 			return val;
 		}
 
@@ -276,63 +281,87 @@ namespace GKCore.Lists
 			fltCond.col_index = col;
 			fltCond.condition = condition;
 			fltCond.value = ConvertColumnStr(value, this.GetColumnDataType(col));
-			this.Filter.ColumnsFilter.Add(fltCond);
+			this.Filter.Conditions.Add(fltCond);
 		}
 
 		private bool CheckCondition(FilterCondition fcond)
 		{
-			object dataval = this.GetColumnValueEx(fcond.col_index, -1, false);
-		    if (dataval == null) return true;
-
             bool res = true;
 
-            int compRes = 0;
-			if (fcond.condition != ConditionKind.ck_Contains) {
-				compRes = (dataval as IComparable).CompareTo(fcond.value);
-			}
+            try
+            {
+            	object dataval = this.GetColumnValueEx(fcond.col_index, -1, false);
+            	if (dataval == null) return true;
 
-			switch (fcond.condition) {
-				case ConditionKind.ck_NotEq:
-					res = compRes != 0;
-					break;
-				case ConditionKind.ck_LT:
-					res = compRes < 0;
-					break;
-				case ConditionKind.ck_LET:
-					res = compRes <= 0;
-					break;
-				case ConditionKind.ck_Eq:
-					res = compRes == 0;
-					break;
-				case ConditionKind.ck_GET:
-					res = compRes >= 0;
-					break;
-				case ConditionKind.ck_GT:
-					res = compRes > 0;
-					break;
-				case ConditionKind.ck_Contains:
-					res = GKUtils.MatchesMask(dataval.ToString(), "*" + fcond.value.ToString() + "*");
-					break;
-				case ConditionKind.ck_NotContains:
-					res = !GKUtils.MatchesMask(dataval.ToString(), "*" + fcond.value.ToString() + "*");
-					break;
-			}
-			return res;
+            	int compRes = 0;
+            	if (fcond.condition != ConditionKind.ck_Contains) {
+            		compRes = (dataval as IComparable).CompareTo(fcond.value);
+            	}
+
+            	switch (fcond.condition) {
+            		case ConditionKind.ck_NotEq:
+            			res = compRes != 0;
+            			break;
+
+            		case ConditionKind.ck_LT:
+            			res = compRes < 0;
+            			break;
+
+            		case ConditionKind.ck_LET:
+            			res = compRes <= 0;
+            			break;
+
+            		case ConditionKind.ck_Eq:
+            			res = compRes == 0;
+            			break;
+
+            		case ConditionKind.ck_GET:
+            			res = compRes >= 0;
+            			break;
+
+            		case ConditionKind.ck_GT:
+            			res = compRes > 0;
+            			break;
+
+            		case ConditionKind.ck_Contains:
+            			res = GKUtils.MatchesMask(dataval.ToString(), "*" + fcond.value.ToString() + "*");
+            			break;
+
+            		case ConditionKind.ck_NotContains:
+            			res = !GKUtils.MatchesMask(dataval.ToString(), "*" + fcond.value.ToString() + "*");
+            			break;
+            	}
+            }
+            catch (Exception ex)
+            {
+            	SysUtils.LogWrite("ListManager.CheckCondition(): " + ex.Message);
+            	res = true;
+            }
+
+            return res;
 		}
 
 		protected bool CheckCommonFilter()
 		{
 			bool res = true;
 
-			int num = this.Filter.ColumnsFilter.Count;
-			for (int i = 0; i < num; i++) {
-				FilterCondition fcond = this.Filter.ColumnsFilter[i];
-				res = res && this.CheckCondition(fcond);
+			try
+			{
+				int num = this.Filter.Conditions.Count;
+				for (int i = 0; i < num; i++) {
+					FilterCondition fcond = this.Filter.Conditions[i];
+					res = res && this.CheckCondition(fcond);
+				}
+			}
+			catch (Exception ex)
+			{
+				SysUtils.LogWrite("ListManager.CheckCommonFilter(): " + ex.Message);
+				res = true;
 			}
 
 			return res;
 		}
-		
+
 		private ColumnProps FindColumnProps(int colType)
 		{
 			int num = this.fListColumns.Count;

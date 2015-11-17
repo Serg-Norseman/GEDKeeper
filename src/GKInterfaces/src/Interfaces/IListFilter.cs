@@ -4,13 +4,13 @@ using GKCore.Types;
 
 namespace GKCore.Interfaces
 {
-	public enum TDataType
+	public enum DataType
 	{
 		dtString,
 		dtInteger,
 		dtFloat,
-		dtDate,
-		dtDateTime
+		dtDateTime,
+		dtGEDCOMDate
 	}
 
 	public enum ConditionKind
@@ -18,7 +18,6 @@ namespace GKCore.Interfaces
 		ck_NotEq, ck_LT, ck_LET, ck_Eq, ck_GET, ck_GT, ck_Contains, ck_NotContains
 	}
 
-	// TODO: refactoring!
 	public sealed class FilterCondition
 	{
 		public int col_index;
@@ -29,17 +28,20 @@ namespace GKCore.Interfaces
 
 	public interface IListFilter
 	{
-		List<FilterCondition> ColumnsFilter { get; }
+		List<FilterCondition> Conditions { get; }
 		void Clear();
 	}
-	
+
 	public interface IIndividualListFilter : IListFilter
 	{
 		FilterLifeMode FilterLifeMode { get; set; }
 	}
-	
+
 	public interface IListColumns
 	{
+		void Clear();
 		void CopyTo(IListColumns columns);
+		bool MoveColumn(int idx, bool up);
+		void ResetDefaults();
 	}
 }

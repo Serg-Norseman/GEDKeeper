@@ -277,12 +277,10 @@ namespace GKCommon.GEDCOM
 				for (int j = i + 1; j < num; j++)
 				{
 					GEDCOMIndividualRecord iChild = this.fChildrens[i].Value as GEDCOMIndividualRecord;
-					GEDCOMCustomEvent iEv = iChild.FindEvent("BIRT");
-					DateTime iDate = ((iEv != null) ? iEv.GetIndependentDate() : new DateTime(0));
+					AbsDate iDate = GEDCOMUtils.GetAbstractDate(iChild, "BIRT");
 
 					GEDCOMIndividualRecord kChild = this.fChildrens[j].Value as GEDCOMIndividualRecord;
-					GEDCOMCustomEvent kEv = kChild.FindEvent("BIRT");
-					DateTime kDate = ((kEv != null) ? kEv.GetIndependentDate() : new DateTime(0));
+					AbsDate kDate = GEDCOMUtils.GetAbstractDate(kChild, "BIRT");
 
 					if (iDate > kDate) this.fChildrens.Exchange(i, j);
 				}

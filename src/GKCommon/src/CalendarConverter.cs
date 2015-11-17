@@ -20,7 +20,7 @@ namespace GKCommon
 {
 	public static class CalendarConverter
 	{
-		public enum TDateEra : byte
+		public enum DateEra : byte
 		{
 			AD,
 			BC
@@ -430,7 +430,7 @@ namespace GKCommon
 			day = iFloor((jd + 1.0 - bahai_to_jd(major, cycle, year, month, 1)));
 		}
 
-		public static string date_to_str(int aYear, int aMonth, int aDay, CalendarConverter.TDateEra aEra)
+		public static string date_to_str(int aYear, int aMonth, int aDay, CalendarConverter.DateEra aEra)
 		{
 			DateTimeFormatInfo DateTimeInfo = Thread.CurrentThread.CurrentCulture.DateTimeFormat;
 			string Result = string.Concat(new string[]
@@ -441,7 +441,7 @@ namespace GKCommon
 				" ", 
 				aYear.ToString()
 			});
-			if (aEra != CalendarConverter.TDateEra.AD)
+			if (aEra != CalendarConverter.DateEra.AD)
 			{
 				Result += " до н.э.";
 			}

@@ -24,7 +24,7 @@ namespace GKUI.Charts
             CustomChart.EventNavRefresh = new object();
         }
 
-		public CustomChart()
+		protected CustomChart()
 		{
 			this.fNavman = new NavigationStack();
 		}

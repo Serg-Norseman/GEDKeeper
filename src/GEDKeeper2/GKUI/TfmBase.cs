@@ -313,10 +313,8 @@ namespace GKUI
 
 		public List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType)
 		{
-			GKRecordsView rView = this.GetRecordsViewByType(recType);
-			if (rView == null) return null;
-			
-			return rView.ContentList;
+			GKRecordsView recsView = this.GetRecordsViewByType(recType);
+			return (recsView == null) ? null : recsView.GetContentList();
 		}
 
 		private void SetMainTitle()
@@ -475,7 +473,7 @@ namespace GKUI
 			string pw = null;
 			string ext = Path.GetExtension(fileName).ToLower();
 			if (ext == ".geds") {
-				if (!GKUtils.GetInput("password", ref pw)) {
+				if (!GKUtils.GetPassword("Пароль", ref pw)) {
 					GKUtils.ShowError("Пароль не задан");
 					return;
 				}
@@ -516,7 +514,7 @@ namespace GKUI
 				string pw = null;
 				string ext = Path.GetExtension(fileName).ToLower();
 				if (ext == ".geds") {
-					if (!GKUtils.GetInput("password", ref pw)) {
+					if (!GKUtils.GetPassword("Пароль", ref pw)) {
 						GKUtils.ShowError("Пароль не задан");
 						return;
 					}
@@ -740,6 +738,11 @@ namespace GKUI
 			}
 
 			return result;
+		}
+
+		public bool AllowFilter()
+		{
+			return true;
 		}
 
 		public void SetFilter()
@@ -1050,6 +1053,11 @@ namespace GKUI
 		bool IWorkWindow.NavCanForward()
 		{
 			return this.fNavman.CanForward();
+		}
+
+		public bool AllowQuickFind()
+		{
+			return true;
 		}
 
 		IList<ISearchResult> IWorkWindow.FindAll(string searchPattern)
@@ -1531,7 +1539,7 @@ namespace GKUI
 			if (record != null)
 			{
 				GKRecordsView rView = this.GetRecordsViewByType(record.RecordType);
-				result = (rView.ContentList.IndexOf(record) >= 0);
+				result = (rView.IndexOfRecord(record) >= 0);
 			}
 			return result;
 		}
@@ -1842,9 +1850,9 @@ namespace GKUI
 				{
 					result = this.fContext.CreatePersonEx(dlg.edName.Text, dlg.edPatronymic.Text, dlg.edFamily.Text, (GEDCOMSex)dlg.EditSex.SelectedIndex, true);
 					this.ChangeRecord(result);
-					
+
 					TfmGEDKeeper.Instance.NamesTable.ImportNames(result);
-					
+
 					IndividualListFilter iFilter = (IndividualListFilter)this.ListPersons.ListMan.Filter;
 
 					if (iFilter.SourceMode == FilterGroupMode.gmSelected)
@@ -1920,7 +1928,7 @@ namespace GKUI
 					}
 				} else {
 					if (!exists) {
-						this.fTree.CleanFamily(familyRec);
+						GEDCOMUtils.CleanFamily(familyRec);
 						familyRec.Dispose();
 						familyRec = null;
 					}

@@ -371,9 +371,7 @@ namespace GKCore
 				return 0;
 			}
 
-			int year;
-			ushort month, day;
-			evt.Detail.Date.GetIndependentDate(out year, out month, out day);
+			int year = GEDCOMUtils.GetAbstractDate(evt).Year;
 			return year;
 		}
 

@@ -53,28 +53,23 @@ namespace GKUI.Sheets
                 	
                     if (this.fPersonsMode)
                     {
-                        string st = GKUtils.GetIndividualEventName(evt);
-
-                        GKListItem item = this.AddItem(idx.ToString(), evt);
-                        item.SubItems.Add(st);
-                        item.SubItems.Add(GKUtils.GEDCOMEventToDateStr(evt, TfmGEDKeeper.Instance.Options.DefDateFormat, false));
-                        st = evt.Detail.Place.StringValue;
-                        if (evt.StringValue != "")
-                        {
+                        GKListItem item = this.AddItem(idx, evt);
+                        item.AddSubItem(GKUtils.GetIndividualEventName(evt));
+                        item.AddSubItem(evt.Detail.Date.Value);
+                        string st = evt.Detail.Place.StringValue;
+                        if (evt.StringValue != "") {
                             st = st + " [" + evt.StringValue + "]";
                         }
-                        item.SubItems.Add(st);
-                        item.SubItems.Add(GKUtils.GetEventCause(evt.Detail));
+                        item.AddSubItem(st);
+                        item.AddSubItem(GKUtils.GetEventCause(evt.Detail));
                     }
                     else
                     {
-                        string st = GKUtils.GetFamilyEventName(evt as GEDCOMFamilyEvent);
-
-                        GKListItem item = this.AddItem(idx.ToString(), evt);
-                        item.SubItems.Add(st);
-                        item.SubItems.Add(GKUtils.GEDCOMEventToDateStr(evt, TfmGEDKeeper.Instance.Options.DefDateFormat, false));
-                        item.SubItems.Add(evt.Detail.Place.StringValue);
-                        item.SubItems.Add(GKUtils.GetEventCause(evt.Detail));
+                        GKListItem item = this.AddItem(idx, evt);
+                        item.AddSubItem(GKUtils.GetFamilyEventName(evt as GEDCOMFamilyEvent));
+                        item.AddSubItem(evt.Detail.Date.Value);
+                        item.AddSubItem(evt.Detail.Place.StringValue);
+                        item.AddSubItem(GKUtils.GetEventCause(evt.Detail));
                     }
                 }
 

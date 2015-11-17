@@ -52,20 +52,9 @@ namespace GKUI.Controls
 			}
 		}
 
-
-		public GMapPoint GetMapPoint(int index)
+		public ExtList<GMapPoint> MapPoints
 		{
-			GMapPoint result = null;
-			if (index >= 0 && index < this.fMapPoints.Count)
-			{
-				result = (this.fMapPoints[index] as GMapPoint);
-			}
-			return result;
-		}
-
-		public int GetMapPointsCount()
-		{
-			return this.fMapPoints.Count;
+			get { return this.fMapPoints; }
 		}
 
 
@@ -93,7 +82,7 @@ namespace GKUI.Controls
 			CoordsRect result = new CoordsRect();
 			if (this.fMapPoints.Count > 0)
 			{
-				GMapPoint pt = this.fMapPoints[0] as GMapPoint;
+				GMapPoint pt = this.fMapPoints[0];
 				result.MinLon = pt.Longitude;
 				result.MaxLon = pt.Longitude;
 				result.MinLat = pt.Latitude;
@@ -111,7 +100,7 @@ namespace GKUI.Controls
 					int num = this.fMapPoints.Count;
 					for (int i = 0; i < num; i++)
 					{
-						pt = (this.fMapPoints[i] as GMapPoint);
+						pt = this.fMapPoints[i];
 
 						if (result.MinLon > pt.Longitude) result.MinLon = pt.Longitude;
 						else if (result.MaxLon < pt.Longitude) result.MaxLon = pt.Longitude;
@@ -215,7 +204,7 @@ namespace GKUI.Controls
 				int num = this.fMapPoints.Count;
 				for (int i = 0; i < num; i++)
 				{
-					GMapPoint pt = this.fMapPoints[i] as GMapPoint;
+					GMapPoint pt = this.fMapPoints[i];
 					pointsScript += string.Format("addMarker({0}, {1}, \"{2}\");", new object[]
 					{ CoordToStr(pt.Latitude), CoordToStr(pt.Longitude), pt.Hint });
 
@@ -319,6 +308,11 @@ namespace GKUI.Controls
 
 		public static void RequestGeoCoords(string searchValue, ExtList<GMapPoint> pointsList)
 		{
+            if (string.IsNullOrEmpty(searchValue))
+            {
+                throw new ArgumentNullException("searchValue");
+            }
+
             if (pointsList == null)
             {
                 throw new ArgumentNullException("pointsList");

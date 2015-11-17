@@ -133,12 +133,12 @@ namespace GKUI.Dialogs
 				for (int i = 0; i < num; i++)
 				{
 					GMapPoint pt = this.fSearchPoints[i];
-					GKListItem item = new GKListItem();
-					item.Text = pt.Hint;
-					item.Data = pt;
-					item.SubItems.Add(GKMapBrowser.CoordToStr(pt.Latitude));
-					item.SubItems.Add(GKMapBrowser.CoordToStr(pt.Longitude));
+
+					GKListItem item = new GKListItem(pt.Hint, pt);
+					item.AddSubItem(GKMapBrowser.CoordToStr(pt.Latitude));
+					item.AddSubItem(GKMapBrowser.CoordToStr(pt.Longitude));
 					this.ListGeoCoords.Items.Add(item);
+
 					this.fMapBrowser.AddPoint(pt.Latitude, pt.Longitude, pt.Hint);
 				}
 

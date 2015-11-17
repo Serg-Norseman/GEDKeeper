@@ -67,8 +67,8 @@ namespace GKUI.Dialogs
 					this.EditName.Text = this.fResearch.ResearchName;
 					this.EditPriority.SelectedIndex = (int)this.fResearch.Priority;
 					this.EditStatus.SelectedIndex = (int)this.fResearch.Status;
-					this.EditStartDate.Text = GKUtils.GEDCOMDateToStr(this.fResearch.StartDate, DateFormat.dfDD_MM_YYYY);
-					this.EditStopDate.Text = GKUtils.GEDCOMDateToStr(this.fResearch.StopDate, DateFormat.dfDD_MM_YYYY);
+					this.EditStartDate.Text = GKUtils.GetDateFmtString(this.fResearch.StartDate, DateFormat.dfDD_MM_YYYY);
+					this.EditStopDate.Text = GKUtils.GetDateFmtString(this.fResearch.StopDate, DateFormat.dfDD_MM_YYYY);
 					this.EditPercent.Text = this.fResearch.Percent.ToString();
 				}
 
@@ -223,9 +223,9 @@ namespace GKUI.Dialogs
 				GEDCOMTaskRecord task = taskPtr.Value as GEDCOMTaskRecord;
 
 				GKListItem item = this.fTasksList.AddItem(GKUtils.GetTaskGoalStr(task), task);
-				item.SubItems.Add(LangMan.LS(GKData.PriorityNames[(int)task.Priority]));
-                item.SubItems.Add(GKUtils.GEDCOMDateToStr(task.StartDate, defaultDateFormat));
-                item.SubItems.Add(GKUtils.GEDCOMDateToStr(task.StopDate, defaultDateFormat));
+				item.AddSubItem(LangMan.LS(GKData.PriorityNames[(int)task.Priority]));
+                item.AddSubItem(task.StartDate);
+                item.AddSubItem(task.StopDate);
 			}
 			this.fTasksList.EndUpdate();
 
@@ -236,9 +236,9 @@ namespace GKUI.Dialogs
 				GEDCOMCommunicationRecord corr = commPtr.Value as GEDCOMCommunicationRecord;
 
 				GKListItem item = this.fCommunicationsList.AddItem(corr.CommName, corr);
-				item.SubItems.Add(GKUtils.GetCorresponderStr(this.fBase.Tree, corr, false));
-				item.SubItems.Add(LangMan.LS(GKData.CommunicationNames[(int)corr.CommunicationType]));
-                item.SubItems.Add(GKUtils.GEDCOMDateToStr(corr.Date, defaultDateFormat));
+				item.AddSubItem(GKUtils.GetCorresponderStr(this.fBase.Tree, corr, false));
+				item.AddSubItem(LangMan.LS(GKData.CommunicationNames[(int)corr.CommunicationType]));
+                item.AddSubItem(corr.Date);
 			}
 			this.fCommunicationsList.EndUpdate();
 

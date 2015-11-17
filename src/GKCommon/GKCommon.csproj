@@ -49,6 +49,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -58,9 +61,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="src\CalendarConverter.cs" />
-    <Compile Include="src\ColorUtils.cs" />
-    <Compile Include="src\Controls\SlideList.cs" />
+    <Compile Include="src\GfxUtils.cs" />
+    <Compile Include="src\Controls\SlideList.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="src\ExpCalculator.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -74,7 +80,6 @@
     <Compile Include="src\ExtUtils\ArborEngine\BarnesHutTree.cs" />
     <Compile Include="src\ExtUtils\ArborEngine\IArborRenderer.cs" />
     <Compile Include="src\AssemblyInfo.cs" />
-    <Compile Include="src\Controls\ControlExtensions.cs" />
     <Compile Include="src\Controls\ExtResources.Designer.cs">
       <DependentUpon>ExtResources.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -246,8 +251,6 @@
       <DependentUpon>SlideList.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src\ExtUtils\SingleInstancing" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

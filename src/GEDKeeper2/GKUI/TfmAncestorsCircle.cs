@@ -46,13 +46,13 @@ namespace GKUI
 
 		private void miOptions_Click(object sender, EventArgs e)
 		{
-			using (ACOptionsDialog dlg = new ACOptionsDialog()) {
+			/*using (ACOptionsControl dlg = new ACOptionsControl()) {
 				dlg.Options = this.fAncestorsCircle.Options;
 
 				if (dlg.ShowDialog() == DialogResult.OK) {
 					this.fAncestorsCircle.Invalidate();
 				}
-			}
+			}*/
 		}
 
 		private void Chart_NavRefresh(object sender, EventArgs e)
@@ -63,6 +63,16 @@ namespace GKUI
 		private void Chart_RootChanged(object sender, GEDCOMIndividualRecord person)
 		{
 			TfmGEDKeeper.Instance.UpdateControls(false);
+		}
+
+		private void TfmAncestors_KeyDown(object sender, KeyEventArgs e)
+		{
+			switch (e.KeyCode)
+			{
+				case Keys.Escape:
+					base.Close();
+					break;
+			}
 		}
 
 		#region ILocalization implementation
@@ -82,7 +92,22 @@ namespace GKUI
 
 			TfmGEDKeeper.Instance.UpdateControls(false);
 		}
-		
+
+		public bool AllowPrint()
+		{
+			return false;
+		}
+
+		public void DoPrint()
+		{
+			// dummy
+		}
+
+		public void DoPrintPreview()
+		{
+			// dummy
+		}
+
 		#endregion
 
 		#region IWorkWindow implementation
@@ -112,6 +137,11 @@ namespace GKUI
 			this.fAncestorsCircle.NavPrev();
 		}
 
+		public bool AllowQuickFind()
+		{
+			return false;
+		}
+
 		public IList<ISearchResult> FindAll(string searchPattern)
 		{
 			return null;
@@ -123,6 +153,11 @@ namespace GKUI
 
 		public void SelectByRec(GEDCOMIndividualRecord iRec)
 		{
+		}
+
+		public bool AllowFilter()
+		{
+			return false;
 		}
 
 		public void SetFilter()

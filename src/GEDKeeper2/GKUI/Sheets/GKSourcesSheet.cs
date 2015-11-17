@@ -43,11 +43,9 @@ namespace GKUI.Sheets
                 	if (sourceRec != null)
                 	{
                 		GKListItem item = this.AddItem(sourceRec.Originator.Text.Trim(), cit);
-                		item.SubItems.Add(sourceRec.FiledByEntry);
-                		item.SubItems.Add(cit.Page);
-                		
-                		int ca = cit.CertaintyAssessment;
-                		item.SubItems.Add(LangMan.LS(GKData.CertaintyAssessments[ca]));
+                		item.AddSubItem(sourceRec.FiledByEntry);
+                		item.AddSubItem(cit.Page);
+                		item.AddSubItem(LangMan.LS(GKData.CertaintyAssessments[cit.CertaintyAssessment]));
                 	}
                 }
 

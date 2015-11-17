@@ -47,31 +47,31 @@ namespace GKCore.Lists
 	{
 		protected override void InitColumnStatics()
 		{
-			this.AddStatic(LSID.LSID_Patriarch, TDataType.dtString, 25, true);
-			this.AddStatic(LSID.LSID_FullName, TDataType.dtString, 300, true);
-			this.AddStatic(LSID.LSID_Nickname, TDataType.dtString, 75, false);
-			this.AddStatic(LSID.LSID_Sex, TDataType.dtString, 45, true);
-			this.AddStatic(LSID.LSID_BirthDate, TDataType.dtString, 100, true);
-			this.AddStatic(LSID.LSID_DeathDate, TDataType.dtString, 100, true);
-			this.AddStatic(LSID.LSID_BirthPlace, TDataType.dtString, 100, true);
-			this.AddStatic(LSID.LSID_DeathPlace, TDataType.dtString, 100, true);
-			this.AddStatic(LSID.LSID_Residence, TDataType.dtString, 100, true);
-			this.AddStatic(LSID.LSID_Age, TDataType.dtString, 100, false);
-			this.AddStatic(LSID.LSID_LifeExpectancy, TDataType.dtString, 100, false);
-			this.AddStatic(LSID.LSID_DaysForBirth, TDataType.dtString, 100, false);
-			this.AddStatic(LSID.LSID_RPGroups, TDataType.dtString, 200, false);
-			this.AddStatic(LSID.LSID_Religion, TDataType.dtString, 200, false);
-			this.AddStatic(LSID.LSID_Nationality, TDataType.dtString, 200, false);
-			this.AddStatic(LSID.LSID_Education, TDataType.dtString, 200, false);
-			this.AddStatic(LSID.LSID_Occupation, TDataType.dtString, 200, false);
-			this.AddStatic(LSID.LSID_Caste, TDataType.dtString, 200, false);
-			this.AddStatic(LSID.LSID_Mili, TDataType.dtString, 200, false);
-			this.AddStatic(LSID.LSID_MiliInd, TDataType.dtString, 200, false);
-			this.AddStatic(LSID.LSID_MiliDis, TDataType.dtString, 200, false);
-			this.AddStatic(LSID.LSID_MiliRank, TDataType.dtString, 200, false);
-			this.AddStatic(LSID.LSID_Changed, TDataType.dtDateTime, 150, true);
-			this.AddStatic(LSID.LSID_Bookmark, TDataType.dtString, 25, true);
-			this.AddStatic(LSID.LSID_NobilityTitle, TDataType.dtString, 200, false);
+			this.AddStatic(LSID.LSID_Patriarch, DataType.dtString, 25, true);
+			this.AddStatic(LSID.LSID_FullName, DataType.dtString, 300, true);
+			this.AddStatic(LSID.LSID_Nickname, DataType.dtString, 75, false);
+			this.AddStatic(LSID.LSID_Sex, DataType.dtString, 45, true);
+			this.AddStatic(LSID.LSID_BirthDate, DataType.dtGEDCOMDate, 100, true);
+			this.AddStatic(LSID.LSID_DeathDate, DataType.dtGEDCOMDate, 100, true);
+			this.AddStatic(LSID.LSID_BirthPlace, DataType.dtString, 100, true);
+			this.AddStatic(LSID.LSID_DeathPlace, DataType.dtString, 100, true);
+			this.AddStatic(LSID.LSID_Residence, DataType.dtString, 100, true);
+			this.AddStatic(LSID.LSID_Age, DataType.dtInteger, 100, false);
+			this.AddStatic(LSID.LSID_LifeExpectancy, DataType.dtInteger, 100, false);
+			this.AddStatic(LSID.LSID_DaysForBirth, DataType.dtString, 100, false);
+			this.AddStatic(LSID.LSID_RPGroups, DataType.dtString, 200, false);
+			this.AddStatic(LSID.LSID_Religion, DataType.dtString, 200, false);
+			this.AddStatic(LSID.LSID_Nationality, DataType.dtString, 200, false);
+			this.AddStatic(LSID.LSID_Education, DataType.dtString, 200, false);
+			this.AddStatic(LSID.LSID_Occupation, DataType.dtString, 200, false);
+			this.AddStatic(LSID.LSID_Caste, DataType.dtString, 200, false);
+			this.AddStatic(LSID.LSID_Mili, DataType.dtString, 200, false);
+			this.AddStatic(LSID.LSID_MiliInd, DataType.dtString, 200, false);
+			this.AddStatic(LSID.LSID_MiliDis, DataType.dtString, 200, false);
+			this.AddStatic(LSID.LSID_MiliRank, DataType.dtString, 200, false);
+			this.AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+			this.AddStatic(LSID.LSID_Bookmark, DataType.dtString, 25, true);
+			this.AddStatic(LSID.LSID_NobilityTitle, DataType.dtString, 200, false);
 		}
 
 		public IndividualListColumns()
@@ -102,7 +102,7 @@ namespace GKCore.Lists
 		{
 			this.Clear();
 		}
-		
+
 		public override void Clear()
 		{
 			base.Clear();
@@ -128,7 +128,7 @@ namespace GKCore.Lists
 	{
 		private GEDCOMIndividualRecord fRec;
 		private GEDCOMGroupRecord filter_grp;
-		private DateTime filter_abd;
+		private AbsDate filter_abd;
 		private GEDCOMSourceRecord filter_source;
 
 		protected override void CreateFilter()
@@ -175,7 +175,7 @@ namespace GKCore.Lists
 		private bool HasEventVal()
 		{
 			bool result = false;
-			
+
 			IndividualListFilter iFilter = fFilter as IndividualListFilter;
 
 			int num = this.fRec.Events.Count;
@@ -212,8 +212,8 @@ namespace GKCore.Lists
 						break;
 
 					case FilterLifeMode.lmAliveBefore:
-                        DateTime bdt = ((buf_bd == null) ? new DateTime(0) : buf_bd.GetIndependentDate());
-                        DateTime ddt = ((buf_dd == null) ? new DateTime(0) : buf_dd.GetIndependentDate());
+                        AbsDate bdt = GEDCOMUtils.GetAbstractDate(buf_bd);
+                        AbsDate ddt = GEDCOMUtils.GetAbstractDate(buf_dd);
 						if ((bdt > this.filter_abd) || (ddt < this.filter_abd)) return result;
 						break;
 
@@ -354,11 +354,11 @@ namespace GKCore.Lists
 					break;
 
 				case PersonColumnType.pctAge:
-					result = GKUtils.GetAge(this.fRec, -1);
+					result = (isVisible) ? (object)GKUtils.GetAgeStr(this.fRec, -1) : GKUtils.GetAge(this.fRec, -1);
 					break;
 
 				case PersonColumnType.pctLifeExpectancy:
-					result = GKUtils.GetLifeExpectancy(this.fRec);
+					result = (isVisible) ? (object)GKUtils.GetLifeExpectancyStr(this.fRec) : GKUtils.GetLifeExpectancy(this.fRec);
 					break;
 
 				case PersonColumnType.pctDaysForBirth:
@@ -423,10 +423,8 @@ namespace GKCore.Lists
 		public override void InitFilter()
 		{
 			IndividualListFilter iFilter = (IndividualListFilter)fFilter;
-			
-			if (!DateTime.TryParse(iFilter.AliveBeforeDate, out this.filter_abd)) {
-				this.filter_abd = new DateTime(0);
-			}
+
+			this.filter_abd = GEDCOMUtils.GetAbstractDate(iFilter.AliveBeforeDate);
 
 			if (iFilter.GroupRef == "") {
 				this.filter_grp = null;

@@ -25,11 +25,11 @@ namespace GKCore.Lists
 	{
 		protected override void InitColumnStatics()
 		{
-			this.AddStatic(LSID.LSID_Goal, TDataType.dtString, 300, true);
-			this.AddStatic(LSID.LSID_Priority, TDataType.dtString, 90, true);
-			this.AddStatic(LSID.LSID_StartDate, TDataType.dtString, 90, true);
-			this.AddStatic(LSID.LSID_StopDate, TDataType.dtString, 90, true);
-			this.AddStatic(LSID.LSID_Changed, TDataType.dtDateTime, 150, true);
+			this.AddStatic(LSID.LSID_Goal, DataType.dtString, 300, true);
+			this.AddStatic(LSID.LSID_Priority, DataType.dtString, 90, true);
+			this.AddStatic(LSID.LSID_StartDate, DataType.dtString, 90, true);
+			this.AddStatic(LSID.LSID_StopDate, DataType.dtString, 90, true);
+			this.AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
 		}
 
 		public TaskListColumns() : base()

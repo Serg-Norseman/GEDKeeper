@@ -5,12 +5,10 @@ using System.Drawing.Imaging;
 using System.Windows.Forms;
 
 using CsGL.OpenGL;
-using ExtUtils;
 using ExtUtils.ArborEngine;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
-using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
 
@@ -855,11 +853,14 @@ namespace GKTreeVizPlugin
 				this.fPersons.Add(result);
 				this.fPersonsIndex.Add(iRec.XRef, result);
 
-				result.BirthYear = fBase.Context.FindBirthYear(iRec);
-				result.DeathYear = fBase.Context.FindDeathYear(iRec);
+				AbsDate bYear = fBase.Context.FindBirthYear(iRec);
+				AbsDate dYear = fBase.Context.FindDeathYear(iRec);
+				
+				result.BirthYear = bYear.Year;
+				result.DeathYear = dYear.Year;
 
 				// FIXME переделать на предварительно статистически определенную продолжительность жизни.
-				if (result.DeathYear <= 0) result.DeathYear = result.BirthYear + 75;
+				if (result.DeathYear == 0) result.DeathYear = result.BirthYear + 75;
 			//}
 
 			return result;

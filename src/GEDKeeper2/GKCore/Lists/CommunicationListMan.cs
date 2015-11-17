@@ -25,11 +25,11 @@ namespace GKCore.Lists
 	{
 		protected override void InitColumnStatics()
 		{
-			this.AddStatic(LSID.LSID_Theme, TDataType.dtString, 300, true);
-			this.AddStatic(LSID.LSID_Corresponder, TDataType.dtString, 200, true);
-			this.AddStatic(LSID.LSID_Type, TDataType.dtString, 90, true);
-			this.AddStatic(LSID.LSID_Date, TDataType.dtString, 90, true);
-			this.AddStatic(LSID.LSID_Changed, TDataType.dtDateTime, 150, true);
+			this.AddStatic(LSID.LSID_Theme, DataType.dtString, 300, true);
+			this.AddStatic(LSID.LSID_Corresponder, DataType.dtString, 200, true);
+			this.AddStatic(LSID.LSID_Type, DataType.dtString, 90, true);
+			this.AddStatic(LSID.LSID_Date, DataType.dtString, 90, true);
+			this.AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
 		}
 
 		public CommunicationListColumns() : base()

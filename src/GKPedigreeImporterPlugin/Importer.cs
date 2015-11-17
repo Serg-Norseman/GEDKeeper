@@ -1,17 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using System.Windows.Forms;
 
-using ExtUtils;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
 using GKCore.Interfaces;
-
-/// <summary>
-/// Localization: dirty
-/// </summary>
+using MSOExcel = Microsoft.Office.Interop.Excel;
+using MSOWord = Microsoft.Office.Interop.Word;
 
 namespace GKPedigreeImporterPlugin
 {
@@ -27,15 +23,18 @@ namespace GKPedigreeImporterPlugin
         }
     }
 
+    /// <summary>
+    /// Localization: dirty
+    /// </summary>
     public class Importer : BaseObject
 	{
     	private readonly IBaseWindow fBase;
 		private readonly GEDCOMTree fTree;
-		private readonly ListBox.ObjectCollection fLog;
+		private readonly System.Windows.Forms.ListBox.ObjectCollection fLog;
 		private StringList fPersonsList;
 		private ILangMan fLangMan;
 
-        public Importer(IBaseWindow aBase, ILangMan langMan, ListBox.ObjectCollection aLog)
+        public Importer(IBaseWindow aBase, ILangMan langMan, System.Windows.Forms.ListBox.ObjectCollection aLog)
         {
         	this.fBase = aBase;
             this.fTree = aBase.Tree;
@@ -379,6 +378,7 @@ namespace GKPedigreeImporterPlugin
 						content.Add(ns);
 					}
 					content.Add("");
+
 					this.Import_StringList(content);
 				}
 				finally
@@ -394,10 +394,107 @@ namespace GKPedigreeImporterPlugin
 			}
 		}
 
+		private const bool DEBUG_EXCEL = true;
+		private const bool DEBUG_WORD = true;
+
 		public void Import_Excel(string fileName)
 		{
 			try
 			{
+				fLog.Clear();
+
+				MSOExcel.Application excel;
+				try
+				{
+					excel = new MSOExcel.Application();
+				}
+				catch (Exception ex)
+				{
+					return;
+				}
+
+				excel.Visible = DEBUG_EXCEL;
+				excel.DisplayAlerts = false;
+				excel.WindowState = MSOExcel.XlWindowState.xlMaximized;
+				excel.Workbooks.Open(fileName);
+				MSOExcel.Worksheet sheet = excel.Worksheets[1] as MSOExcel.Worksheet;
+				sheet.Activate();
+
+				StringList buf = new StringList();
+				StringList FPersonsList = new StringList();
+				try
+				{
+					// получаем используемое количество строк и столбцов
+					int rows_count = sheet.UsedRange.Rows.Count;
+					int cols_count = sheet.UsedRange.Columns.Count;
+
+					int prev_id = 0;
+					GEDCOMIndividualRecord i_rec = null;
+
+					for (int row = 1; row <= rows_count; row++)
+					{
+						string c1 = sheet.Cells[row, 1].ToString().Trim(); // номер позиции
+						string c2 = sheet.Cells[row, 2].ToString().Trim(); // номер предка
+						string c3 = sheet.Cells[row, 3].ToString().Trim(); // имя, может начинаться с номера брака
+						string c4 = sheet.Cells[row, 4].ToString().Trim(); // дата рождения
+						string c5 = sheet.Cells[row, 5].ToString().Trim(); // дата смерти
+						string c6 = sheet.Cells[row, 6].ToString().Trim(); // место рождения или проживания
+
+						string rome, s, p_id = "";
+						int self_id = 0;
+
+						if (c1 == "" && c3 == "") {
+							CheckBuf(buf, i_rec);
+							i_rec = null;
+						} else {
+							if (IsRomeLine(c2)) {
+								rome = c2;
+							} else if (IsRomeLine(c3)) {
+								rome = c3;
+							} else {
+								rome = "";
+							}
+
+							if (rome != "") {
+								fLog.Add("> " + fLangMan.LS(ILS.LSID_Generation) + " " + rome);
+								i_rec = null;
+							} else {
+								if (c3[1] == '/') {
+									s = c1 + c2 + c3 + " " + c4 + " " + c5;
+								} else {
+									s = c1 + c2 + ". " + c3 + " " + c4 + " " + c5;
+								}
+
+								if (c6 != "") {
+									s = s + ". " + c6 + ".";
+								}
+
+								if (!IsPersonLine(s, ref p_id)) {
+									buf.Add(s);
+								} else {
+									CheckBuf(buf, i_rec);
+									i_rec = ParsePerson(buf, s, p_id, ref self_id);
+
+									fLog.Add("> "+fLangMan.LS(ILS.LSID_PersonParsed) + " " + p_id + ".");
+
+									if (self_id - prev_id > 1) {
+										fLog.Add(">>>> "+fLangMan.LS(ILS.LSID_ParseError_LineSeq));
+									}
+
+									prev_id = self_id;
+								}
+							}
+						}
+					}
+				}
+				finally
+				{
+					fPersonsList.Dispose();
+					buf.Dispose();
+
+					excel.Quit();
+					excel = null;
+				}
 			}
 			catch (Exception ex)
 			{
@@ -410,6 +507,41 @@ namespace GKPedigreeImporterPlugin
 		{
 			try
 			{
+				MSOWord.Application wordApp;
+				try
+				{
+					wordApp = new MSOWord.Application();
+				}
+				catch
+				{
+					return;
+				}
+
+				StringList content = new StringList();
+				try
+				{
+					wordApp.Visible = DEBUG_WORD;
+					wordApp.WindowState = MSOWord.WdWindowState.wdWindowStateMaximize;
+
+					MSOWord.Document doc = wordApp.Documents.Open(fileName);
+					for (int i = 0; i < doc.Paragraphs.Count; i++)
+					{
+						string txt = doc.Paragraphs[i+1].Range.Text.ToString();
+						content.Add(txt);
+					}					
+					content.Add("");
+
+					Import_StringList(content);
+
+					doc.Close();
+				}
+				finally
+				{
+					content.Dispose();
+
+					wordApp.Quit();
+					wordApp = null;
+				}
 			}
 			catch (Exception ex)
 			{
@@ -519,9 +651,10 @@ namespace GKPedigreeImporterPlugin
 			}
 		}
 
-		private void Import_StringList(StringList aContent)
+		private void Import_StringList(StringList content)
 		{
 			this.fLog.Clear();
+
 			StringList buf = new StringList();
 			this.fPersonsList = new StringList();
 			try
@@ -529,10 +662,11 @@ namespace GKPedigreeImporterPlugin
 				int prev_id = 0;
 				GEDCOMIndividualRecord i_rec = null;
 
-				int num = aContent.Count;
+				int num = content.Count;
 				for (int i = 0; i < num; i++)
 				{
-					string s = aContent[i].Trim();
+					string s = content[i].Trim();
+
 					if (s == "")
 					{
 						this.CheckBuf(buf, i_rec);
@@ -578,33 +712,26 @@ namespace GKPedigreeImporterPlugin
 			}
 		}
 
-		public void TreeImportEx(string aFileName)
+		public void TreeImportEx(string fileName)
 		{
-			string ext = Path.GetExtension(aFileName).ToLower();
+			string ext = Path.GetExtension(fileName).ToLower();
 
 			if (ext == ".txt")
 			{
-				this.Import_PlainText(aFileName);
+				this.Import_PlainText(fileName);
+			}
+			else if (ext == ".doc")
+			{
+				this.Import_Word(fileName);
+			}
+			else if (ext == ".xls")
+			{
+				this.Import_Excel(fileName);
 			}
 			else
 			{
-				if (ext == ".doc")
-				{
-					this.Import_Word(aFileName);
-				}
-				else
-				{
-                    if (ext == ".xls")
-                    {
-                        this.Import_Excel(aFileName);
-                    }
-                    else
-                    {
-                    	throw new ImporterException(fLangMan.LS(ILS.LSID_FormatUnsupported));
-                    }
-				}
+				throw new ImporterException(fLangMan.LS(ILS.LSID_FormatUnsupported));
 			}
 		}
-
 	}
 }

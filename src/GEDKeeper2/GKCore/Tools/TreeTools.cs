@@ -792,19 +792,15 @@ namespace GKCore.Tools
 
 		private static void CheckIndividualRecord(GEDCOMIndividualRecord iRec, ExtList<TCheckObj> aChecksList)
 		{
-			int iAge;
 			if (iRec.FindEvent("DEAT") == null)
 			{
-				string age = GKUtils.GetAge(iRec, -1);
-				if (age != "" && age != "?")
+				int age = GKUtils.GetAge(iRec, -1);
+
+				if (age != -1 && age >= GKConsts.ProvedLifeLength)
 				{
-					iAge = int.Parse(age);
-                    if (iAge >= GKConsts.ProvedLifeLength)
-					{
-						TCheckObj checkObj = new TCheckObj(iRec, TCheckDiag.cdPersonLonglived, TCheckSolve.csSetIsDead);
-						checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_PersonLonglived), age);
-						aChecksList.Add(checkObj);
-					}
+					TCheckObj checkObj = new TCheckObj(iRec, TCheckDiag.cdPersonLonglived, TCheckSolve.csSetIsDead);
+					checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_PersonLonglived), age);
+					aChecksList.Add(checkObj);
 				}
 			}
 
@@ -816,18 +812,19 @@ namespace GKCore.Tools
 				aChecksList.Add(checkObj);
 			}
 
-			bool yBC1, yBC2;
-			int y_birth = GKUtils.GetIndependentYear(iRec, "BIRT", out yBC1);
-			int y_death = GKUtils.GetIndependentYear(iRec, "DEAT", out yBC2);
-			int delta = (y_death - y_birth);
-			if (y_birth > -1 && y_death > -1 && delta < 0 && !yBC2)
+			AbsDate y_birth = GEDCOMUtils.GetAbstractDate(iRec, "BIRT");
+			AbsDate y_death = GEDCOMUtils.GetAbstractDate(iRec, "DEAT");
+			if (y_birth.IsValid() && y_death.IsValid())
 			{
-				TCheckObj checkObj = new TCheckObj(iRec, TCheckDiag.cdLiveYearsInvalid, TCheckSolve.csSkip);
-				checkObj.Comment = LangMan.LS(LSID.LSID_LiveYearsInvalid);
-				aChecksList.Add(checkObj);
+				int delta = (y_death.Year - y_birth.Year);
+				if (delta < 0) {
+					TCheckObj checkObj = new TCheckObj(iRec, TCheckDiag.cdLiveYearsInvalid, TCheckSolve.csSkip);
+					checkObj.Comment = LangMan.LS(LSID.LSID_LiveYearsInvalid);
+					aChecksList.Add(checkObj);
+				}
 			}
 
-			iAge = GKUtils.GetMarriageAge(iRec);
+			int iAge = GKUtils.GetMarriageAge(iRec);
 			if (iAge > 0 && (iAge <= 13 || iAge >= 50))
 			{
 				TCheckObj checkObj = new TCheckObj(iRec, TCheckDiag.cdStrangeSpouse, TCheckSolve.csSkip);

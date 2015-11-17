@@ -1,5 +1,4 @@
 using System;
-using ExtUtils;
 
 namespace GKCommon.GEDCOM
 {
@@ -121,36 +120,34 @@ namespace GKCommon.GEDCOM
 
 			if (this.IsEmpty() || date.IsEmpty()) return 0.0f;
 
-			int year1, year2;
-			ushort month1, day1, month2, day2;
-			this.GetIndependentDate(out year1, out month1, out day1);
-			date.GetIndependentDate(out year2, out month2, out day2);
+			AbsDate absVal1 = this.GetAbstractDate();
+			AbsDate absVal2 = date.GetAbstractDate();
 
 			float match = 0.0f;
 			float matches = 0.0f;
-			if (year1 >= 0 && year2 >= 0) {
-				matches++;
-				if (Math.Abs(year1 - year2) <= matchParams.YearsInaccuracy) match = 100.0f;
+			if (absVal1.IsValid() && absVal2.IsValid()) {
+				matches += 1.0f;
+				if (Math.Abs(absVal1.Year - absVal2.Year) <= matchParams.YearsInaccuracy) match += 100.0f;
 			}
 
-			/*if (month1 == month2) matches++;
-			if (day1 == day2) matches++;*/
-
-			match = (match / matches);
-			return match;
+			return (match / matches);
 		}
 
-		// FIXME
-		public void GetIndependentDate(out int year, out ushort month, out ushort day)
+		public override void GetDateParts(out int year, out ushort month, out ushort day, out bool yearBC)
 		{
-			bool yearBC;
-			GetIndependentDate(out year, out month, out day, out yearBC);
+			if (this.fValue == null) {
+				year = -1;
+				month = 0;
+				day = 0;
+				yearBC = false;
+			} else {
+				this.fValue.GetDateParts(out year, out month, out day, out yearBC);
+			}
 		}
 
-		// FIXME
-		public void GetIndependentDate(out int year, out ushort month, out ushort day, out bool yearBC)
+		public override AbsDate GetAbstractDate()
 		{
-			GEDCOMUtils.GetDateParts(this.Value, out year, out month, out day, out yearBC);
+			return (this.fValue == null) ? AbsDate.Empty() : this.fValue.GetAbstractDate();
 		}
 
         #endregion

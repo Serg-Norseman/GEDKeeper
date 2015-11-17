@@ -26,6 +26,9 @@ namespace GKUI
 		private System.Windows.Forms.ToolBarButton TBS5;
 		private System.Windows.Forms.ToolBarButton tbPrev;
 		private System.Windows.Forms.ToolBarButton tbNext;
+		private System.Windows.Forms.ToolBarButton TBS8;
+		private System.Windows.Forms.ToolBarButton tbDocPrint;
+		private System.Windows.Forms.ToolBarButton tbDocPreview;
 		private System.Windows.Forms.MainMenu MainMenu1;
 		private System.Windows.Forms.MenuItem miFile;
 		private System.Windows.Forms.MenuItem miFileNew;
@@ -131,6 +134,9 @@ namespace GKUI
 			this.TBS7 = new System.Windows.Forms.ToolBarButton();
 			this.tbPrev = new System.Windows.Forms.ToolBarButton();
 			this.tbNext = new System.Windows.Forms.ToolBarButton();
+			this.TBS8 = new System.Windows.Forms.ToolBarButton();
+			this.tbDocPrint = new System.Windows.Forms.ToolBarButton();
+			this.tbDocPreview = new System.Windows.Forms.ToolBarButton();
 			this.MainMenu1 = new System.Windows.Forms.MainMenu(this.components);
 			this.miFile = new System.Windows.Forms.MenuItem();
 			this.miFileNew = new System.Windows.Forms.MenuItem();
@@ -151,6 +157,7 @@ namespace GKUI
 			this.miRecordDelete = new System.Windows.Forms.MenuItem();
 			this.N15 = new System.Windows.Forms.MenuItem();
 			this.miSearch = new System.Windows.Forms.MenuItem();
+			this.miFilter = new System.Windows.Forms.MenuItem();
 			this.miPedigree = new System.Windows.Forms.MenuItem();
 			this.miTreeAncestors = new System.Windows.Forms.MenuItem();
 			this.miTreeDescendants = new System.Windows.Forms.MenuItem();
@@ -170,7 +177,6 @@ namespace GKUI
 			this.miScripts = new System.Windows.Forms.MenuItem();
 			this.miTreeTools = new System.Windows.Forms.MenuItem();
 			this.N10 = new System.Windows.Forms.MenuItem();
-			this.miFilter = new System.Windows.Forms.MenuItem();
 			this.miOptions = new System.Windows.Forms.MenuItem();
 			this.miPlugins = new System.Windows.Forms.MenuItem();
 			this.miWindow = new System.Windows.Forms.MenuItem();
@@ -200,7 +206,7 @@ namespace GKUI
 			// StatusBar
 			// 
 			this.StatusBar.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.StatusBar.Location = new System.Drawing.Point(0, 750);
+			this.StatusBar.Location = new System.Drawing.Point(0, 770);
 			this.StatusBar.Name = "StatusBar";
 			this.StatusBar.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
 									this.StatusBarPanel1,
@@ -263,6 +269,7 @@ namespace GKUI
 			this.ImageList_Buttons.Images.SetKeyName(34, "");
 			this.ImageList_Buttons.Images.SetKeyName(35, "");
 			this.ImageList_Buttons.Images.SetKeyName(36, "iFilter");
+			this.ImageList_Buttons.Images.SetKeyName(37, "iPreview");
 			// 
 			// ToolBar1
 			// 
@@ -287,7 +294,10 @@ namespace GKUI
 									this.tbStats,
 									this.TBS7,
 									this.tbPrev,
-									this.tbNext});
+									this.tbNext,
+									this.TBS8,
+									this.tbDocPreview,
+									this.tbDocPrint});
 			this.ToolBar1.ButtonSize = new System.Drawing.Size(27, 26);
 			this.ToolBar1.DropDownArrows = true;
 			this.ToolBar1.ImageList = this.ImageList_Buttons;
@@ -436,6 +446,21 @@ namespace GKUI
 			this.tbNext.ImageIndex = 23;
 			this.tbNext.Name = "tbNext";
 			this.tbNext.ToolTipText = "Следующая запись";
+			// 
+			// TBS8
+			// 
+			this.TBS8.Name = "TBS8";
+			this.TBS8.Style = System.Windows.Forms.ToolBarButtonStyle.Separator;
+			// 
+			// tbDocPrint
+			// 
+			this.tbDocPrint.ImageIndex = 7;
+			this.tbDocPrint.Name = "tbDocPrint";
+			// 
+			// tbDocPreview
+			// 
+			this.tbDocPreview.ImageIndex = 37;
+			this.tbDocPreview.Name = "tbDocPreview";
 			// 
 			// MainMenu1
 			// 
@@ -846,12 +871,14 @@ namespace GKUI
 			// 
 			// OpenDialog1
 			// 
-			this.OpenDialog1.Filter = "GEDCOM файлы (*.ged)|*.ged|GEDKeeper шифрованные GEDCOM файлы (*.geds)|*.geds|Все файлы (*.*)|*.*";
+			this.OpenDialog1.Filter = "GEDCOM файлы (*.ged)|*.ged|GEDKeeper шифрованные GEDCOM файлы (*.geds)|*.geds|Все" +
+			" файлы (*.*)|*.*";
 			// 
 			// SaveDialog1
 			// 
 			this.SaveDialog1.DefaultExt = "ged";
-			this.SaveDialog1.Filter = "GEDKeeper GEDCOM файлы (*.ged)|*.ged|GEDKeeper шифрованные GEDCOM файлы (*.geds)|*.geds";
+			this.SaveDialog1.Filter = "GEDKeeper GEDCOM файлы (*.ged)|*.ged|GEDKeeper шифрованные GEDCOM файлы (*.geds)|" +
+			"*.geds";
 			this.SaveDialog1.OverwritePrompt = false;
 			// 
 			// ImageList_Shields
@@ -866,7 +893,7 @@ namespace GKUI
 			// 
 			this.AllowDrop = true;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-			this.ClientSize = new System.Drawing.Size(896, 770);
+			this.ClientSize = new System.Drawing.Size(896, 790);
 			this.Controls.Add(this.StatusBar);
 			this.Controls.Add(this.ToolBar1);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F);

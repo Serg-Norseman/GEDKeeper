@@ -16,6 +16,9 @@ namespace GKCore
 	/// </summary>
 	public static class GKData
 	{
+		public const bool DEBUG_IMAGE = false;
+		public const bool DEBUG_PRINT = false;
+
 		public const string AppTitle = "GEDKeeper2";
 		public const string AppMail = "gedkeeper@yandex.ru";
 		public const string AppCites = "«История рода - это есть история Отечества»\r\n«Неуважение к предкам - есть первый признак дикости и безнравственности»\r\n(Александр Сергеевич Пушкин)";

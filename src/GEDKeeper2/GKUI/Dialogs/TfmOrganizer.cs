@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
 using GKCore;
@@ -27,22 +27,22 @@ namespace GKUI.Dialogs
             this.fBase = aBase;
 			
             this.fAdrList = new GKSheetList(this.SheetAddresses);
-            this.fAdrList.Buttons.Clear();
+            this.fAdrList.Buttons = EnumSet<SheetButton>.Create();
 			this.fAdrList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
 			this.fAdrList.AddColumn(LangMan.LS(LSID.LSID_Address), 100, false);
 			
             this.fPhonesList = new GKSheetList(this.SheetTelephones);
-			this.fPhonesList.Buttons.Clear();
+			this.fPhonesList.Buttons = EnumSet<SheetButton>.Create();
 			this.fPhonesList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
 			this.fPhonesList.AddColumn(LangMan.LS(LSID.LSID_Telephone), 100, false);
 			
             this.fMailsList = new GKSheetList(this.SheetEMails);
-			this.fMailsList.Buttons.Clear();
+			this.fMailsList.Buttons = EnumSet<SheetButton>.Create();
 			this.fMailsList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
 			this.fMailsList.AddColumn(LangMan.LS(LSID.LSID_Mail), 100, false);
 			
             this.fWebsList = new GKSheetList(this.SheetWebs);
-			this.fWebsList.Buttons.Clear();
+			this.fWebsList.Buttons = EnumSet<SheetButton>.Create();
 			this.fWebsList.AddColumn(LangMan.LS(LSID.LSID_Person), 350, false);
 			this.fWebsList.AddColumn(LangMan.LS(LSID.LSID_WebSite), 100, false);
 			
@@ -89,7 +89,7 @@ namespace GKUI.Dialogs
 		private static void AddItem(GKSheetList list, string name, string value)
 		{
 			GKListItem item = list.AddItem(name, null);
-			item.SubItems.Add(value);
+			item.AddSubItem(value);
 		}
 
 		private void PrepareEvent(string iName, GEDCOMCustomEvent ev)

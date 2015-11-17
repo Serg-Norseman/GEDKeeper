@@ -199,6 +199,11 @@ namespace GKUI.Dialogs
 			this.fUserRefList.ReadOnly = locked;
 		}
 
+		private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			this.LockEditor(this.cbRestriction.SelectedIndex == (int)GEDCOMRestriction.rnLocked);
+		}
+
 		private void AcceptChanges()
 		{
 			GEDCOMPersonalName np = this.fPerson.PersonalNames[0];
@@ -262,7 +267,7 @@ namespace GKUI.Dialogs
                     string nm = ((ast.Individual == null) ? "" : ast.Individual.GetNameString(true, false));
 
                     GKListItem item = fAssociationsList.AddItem(ast.Relation, ast);
-                    item.SubItems.Add(nm);
+                    item.AddSubItem(nm);
                 }
             }
             catch (Exception ex)
@@ -349,8 +354,8 @@ namespace GKUI.Dialogs
                 this.fUserRefList.ClearItems();
 
                 foreach (GEDCOMUserReference uref in this.fPerson.UserReferences) {
-                    ListViewItem item = this.fUserRefList.AddItem(uref.StringValue, uref);
-                    item.SubItems.Add(uref.ReferenceType);
+                    GKListItem item = this.fUserRefList.AddItem(uref.StringValue, uref);
+                    item.AddSubItem(uref.ReferenceType);
                 }
             }
             catch (Exception ex)
@@ -410,7 +415,7 @@ namespace GKUI.Dialogs
 		private GKSheetList CreateSpousesSheet(Control owner)
 		{
 			GKSheetList sheet = new GKSheetList(owner);
-			
+
             sheet.Columns_BeginUpdate();
             sheet.AddColumn("№", 25, false);
             sheet.AddColumn(LangMan.LS(LSID.LSID_Spouse), 300, false);
@@ -423,7 +428,7 @@ namespace GKUI.Dialogs
 			
 			return sheet;
 		}
-		
+
 		private void UpdateSpousesSheet()
 		{
             try
@@ -452,9 +457,9 @@ namespace GKUI.Dialogs
                             relName = relPerson.GetNameString(true, false);
                         }
 
-                        ListViewItem item = this.fSpousesList.AddItem(idx.ToString(), family);
-                        item.SubItems.Add(relName);
-                        item.SubItems.Add(GKUtils.GetMarriageDateStr(family, TfmGEDKeeper.Instance.Options.DefDateFormat));
+                        GKListItem item = this.fSpousesList.AddItem(idx, family);
+                        item.AddSubItem(relName);
+                        item.AddSubItem(GKUtils.GetMarriageDate(family));
                     }
 
                 }
@@ -548,7 +553,7 @@ namespace GKUI.Dialogs
 			
 			return sheet;
 		}
-		
+
 		private void UpdateGroupsSheet()
 		{
             try
@@ -604,7 +609,7 @@ namespace GKUI.Dialogs
 				" " + this.edPatronymic.Text + "\" [" + this.fPerson.GetXRefNum() + "]";
 		}
 
-		private void EditFamily_TextChanged(object sender, EventArgs e)
+		private void edSurname_TextChanged(object sender, EventArgs e)
 		{
 			this.SetTitle();
 		}
@@ -757,18 +762,21 @@ namespace GKUI.Dialogs
 		    this.UpdatePortrait();
 		}
 
-		private void EditFamily_KeyPress(object sender, KeyPressEventArgs e)
+		private void edSurname_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Down && e.Control)
+			{
+				TextBox tb = (sender as TextBox);
+				tb.Text = GEDCOMUtils.NormalizeName(tb.Text);
+			}
+		}
+
+		private void edSurname_KeyPress(object sender, KeyPressEventArgs e)
 		{
 			if (e.KeyChar == '/')
 			{
 				e.Handled = true;
 			}
-		}
-
-		private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			// FIXME: здесь надо бы блокировать интерфейс, а не обновлять его
-			// this.ControlsRefresh();
 		}
 
 		public TfmPersonEdit(IBaseWindow aBase)
@@ -820,6 +828,7 @@ namespace GKUI.Dialogs
 			this.btnParentsEdit.ImageIndex = 4;
 			this.btnParentsDelete.ImageList = TfmGEDKeeper.Instance.ImageList_Buttons;
 			this.btnParentsDelete.ImageIndex = 5;
+
 			this.SetLang();
 		}
 

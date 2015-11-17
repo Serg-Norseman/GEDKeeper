@@ -44,7 +44,7 @@ namespace GKUI.Sheets
                         GEDCOMFileReferenceWithTitle fileRef = mmRec.FileReferences[0];
 
                         GKListItem item = this.AddItem(fileRef.Title, mmLink);
-                        item.SubItems.Add(LangMan.LS(GKData.MediaTypes[(int) fileRef.MediaType]));
+                        item.AddSubItem(LangMan.LS(GKData.MediaTypes[(int) fileRef.MediaType]));
                     }
                 }
             }

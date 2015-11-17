@@ -1,7 +1,7 @@
 !include "MUI2.nsh"
 
 Name "GEDKeeper2"
-OutFile "GEDKeeper2-Installer.exe"
+OutFile "GEDKeeper2-v2.4.1.exe"
 InstallDir $PROGRAMFILES\GEDKeeper2
 XPStyle on
 ;ShowInstDetails show

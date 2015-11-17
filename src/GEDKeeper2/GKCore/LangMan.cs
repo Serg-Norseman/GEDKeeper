@@ -434,12 +434,12 @@ namespace GKCore
 		/* 393 */ LSID_MSResiPlace,
 		/* 394 */ LSID_MapSelOnSelected,
 		/* 395 */ LSID_SaveImage,
+
 		/* 396 */ LSID_FormatUnsupported, // may be deprecated
 		/* 397 */ LSID_DataLoadError, // may be deprecated
 
-		/* 398 */ LSID_Deprecated_11,
-		/* 399 */ LSID_Deprecated_12,
-
+		/* 398 */ LSID_DocPrint,
+		/* 399 */ LSID_DocPreview,
 		/* 400 */ LSID_Generation,
 
 		/* 401 */ LSID_Deprecated_13,
@@ -1115,9 +1115,8 @@ namespace GKCore
 			/* 395 */ "Сохранить снимок...",
 			/* 396 */ "Формат не поддерживается",
 			/* 397 */ "Ошибка загрузки данных.",
-
-			/* 398 */ "<?>",
-			/* 399 */ "<?>",
+			/* 398 */ "Печать",
+			/* 399 */ "Предварительный просмотр",
 
 			/* 400 */ "Поколение",
 

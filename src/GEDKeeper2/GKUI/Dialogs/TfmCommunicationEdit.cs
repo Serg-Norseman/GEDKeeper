@@ -50,7 +50,7 @@ namespace GKUI.Dialogs
 				{
 					this.EditName.Text = this.fCommunication.CommName;
 					this.EditCorrType.SelectedIndex = (int)this.fCommunication.CommunicationType;
-					this.EditDate.Text = GKUtils.GEDCOMDateToStr(this.fCommunication.Date, DateFormat.dfDD_MM_YYYY);
+					this.EditDate.Text = GKUtils.GetDateFmtString(this.fCommunication.Date, DateFormat.dfDD_MM_YYYY);
 					GKCommunicationDir dir = GKCommunicationDir.cdFrom;
 					this.fCommunication.GetCorresponder(ref dir, ref this.fTempInd);
 					if (this.fTempInd != null)

@@ -29,9 +29,6 @@ rmdir .\src\GKSamplePlugin\obj /s /q
 
 rem <<< Plugins cleaning >>>
 
-rmdir .\src\GKAncestorsCirclePlugin\bin /s /q
-rmdir .\src\GKAncestorsCirclePlugin\obj /s /q
-
 rmdir .\src\GKCalculatorPlugin\bin /s /q
 rmdir .\src\GKCalculatorPlugin\obj /s /q
 

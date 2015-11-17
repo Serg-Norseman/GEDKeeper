@@ -5,6 +5,7 @@ using System.Drawing.Printing;
 using System.IO;
 using System.Windows.Forms;
 
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
 using GKCore;
@@ -23,6 +24,7 @@ namespace GKUI
 	{
         private readonly IBaseWindow fBase;
         private readonly TreeChartBox fTreeBox;
+        private PrintDocument fPrintDoc;
 
         private TreeChartBox.ChartKind fChartKind;
 		private int fGensLimit;
@@ -81,6 +83,8 @@ namespace GKUI
 
 			this.miTraceKinships.Checked = this.fTreeBox.TraceKinships;
 			this.miTraceKinships.Visible = false;
+			
+			this.InitPrintDoc();
 		}
 
 		protected override void Dispose(bool disposing)
@@ -92,69 +96,6 @@ namespace GKUI
 			base.Dispose(disposing);
 		}
 
-		private void DoImageSave()
-		{
-			if (this.SaveDialog1.ShowDialog() == DialogResult.OK) {
-				this.fTreeBox.SaveSnapshot(this.SaveDialog1.FileName);
-			}
-		}
-
-		private void DoImagePrint()
-		{
-			PrintPreviewDialog previewDlg = new PrintPreviewDialog();
-			previewDlg.WindowState = FormWindowState.Maximized;
-
-			PrintDocument printDoc = new PrintDocument();
-			printDoc.PrintPage += new PrintPageEventHandler(printDocument1_PrintPage);
-			printDoc.DefaultPageSettings.Landscape = this.fTreeBox.IsLandscape();
-			printDoc.DocumentName = this.Text;
-			
-			previewDlg.Document = printDoc;
-			previewDlg.ShowDialog();
-		}
-
-		private void printDocument1_PrintPage(object sender, PrintPageEventArgs e)
-		{
-			Image pic = this.fTreeBox.GetPrintableImage();
-
-			Rectangle m = e.MarginBounds;
-
-			if ((double)pic.Width / (double)pic.Height > (double)m.Width / (double)m.Height)
-			{
-				m.Height = (int)((double)pic.Height / (double)pic.Width * (double)m.Width);
-			}
-			else
-			{
-				m.Width = (int)((double)pic.Width / (double)pic.Height * (double)m.Height);
-			}
-			
-			e.Graphics.DrawImage(pic, m);
-
-			e.HasMorePages = false;
-		}
-
-		private void UpdateModesMenu()
-		{
-			this.miModeBoth.Checked = false;
-			this.miModeAncestors.Checked = false;
-			this.miModeDescendants.Checked = false;
-
-			switch (this.fChartKind)
-			{
-				case TreeChartBox.ChartKind.ckAncestors:
-					this.miModeAncestors.Checked = true;
-					break;
-
-				case TreeChartBox.ChartKind.ckDescendants:
-					this.miModeDescendants.Checked = true;
-					break;
-
-				case TreeChartBox.ChartKind.ckBoth:
-					this.miModeBoth.Checked = true;
-					break;
-			}
-		}
-		
 		public static bool CheckData(GEDCOMTree tree, GEDCOMIndividualRecord iRec, TreeChartBox.ChartKind chartKind)
 		{
 			bool result = true;
@@ -184,55 +125,7 @@ namespace GKUI
 			return result;
 		}
 
-		public void GenChart(bool show)
-		{
-			try
-			{
-				if (this.fPerson == null)
-				{
-					GKUtils.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
-				}
-				else
-				{
-					this.fTreeBox.DepthLimit = this.fGensLimit;
-					this.fTreeBox.ShieldState = this.fBase.ShieldState;
-
-					this.fTreeBox.GenChart(this.fPerson, this.fChartKind, true);
-
-					switch (this.fChartKind)
-					{
-						case TreeChartBox.ChartKind.ckAncestors:
-							this.Text = LangMan.LS(LSID.LSID_MITreeAncestors);
-							break;
-						case TreeChartBox.ChartKind.ckDescendants:
-							this.Text = LangMan.LS(LSID.LSID_MITreeDescendants);
-							break;
-						case TreeChartBox.ChartKind.ckBoth:
-							this.Text = LangMan.LS(LSID.LSID_MITreeBoth);
-							break;
-					}
-
-					this.Text = this.Text + " \"" + Path.GetFileName(fBase.Tree.FileName) + "\"";
-
-					if (show) base.Show();
-
-					TfmGEDKeeper.Instance.UpdateControls(false);
-				}
-			}
-			catch (Exception ex)
-			{
-				this.fBase.Host.LogWrite("TfmChart.GenChart(): " + ex.Message);
-			}
-		}
-
-		private void UpdateChart()
-		{
-			if (this.fBase != null) {
-				this.fBase.RefreshLists(false);
-			}
-
-			this.fTreeBox.RefreshTree();
-		}
+		#region Data manipulations
 
 		private GEDCOMIndividualRecord SelectSpouseFor(GEDCOMIndividualRecord iRec)
 		{
@@ -322,8 +215,41 @@ namespace GKUI
 			}
 		}
 
+		#endregion
+
 		#region Interface handlers
-		
+
+		private void UpdateChart()
+		{
+			if (this.fBase != null) {
+				this.fBase.RefreshLists(false);
+			}
+
+			this.fTreeBox.RefreshTree();
+		}
+
+		private void UpdateModesMenu()
+		{
+			this.miModeBoth.Checked = false;
+			this.miModeAncestors.Checked = false;
+			this.miModeDescendants.Checked = false;
+
+			switch (this.fChartKind)
+			{
+				case TreeChartBox.ChartKind.ckAncestors:
+					this.miModeAncestors.Checked = true;
+					break;
+
+				case TreeChartBox.ChartKind.ckDescendants:
+					this.miModeDescendants.Checked = true;
+					break;
+
+				case TreeChartBox.ChartKind.ckBoth:
+					this.miModeBoth.Checked = true;
+					break;
+			}
+		}
+
 		private void TfmChart_KeyDown(object sender, KeyEventArgs e)
 		{
 			switch (e.KeyCode)
@@ -343,7 +269,7 @@ namespace GKUI
 				case Keys.Escape:
 					base.Close();
 					break;
-					
+
 				case Keys.F:
 					if (e.Control) {
 						this.QuickFind();
@@ -355,9 +281,14 @@ namespace GKUI
 		private void ToolBar1_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
 		{
 			if (e.Button == this.tbImageSave) {
-				this.DoImageSave();
-			} else if (e.Button == this.tbImagePrint) {
-				this.DoImagePrint();
+				this.tbImageSaveClick();
+			}
+		}
+
+		private void tbImageSaveClick()
+		{
+			if (this.SaveDialog1.ShowDialog() == DialogResult.OK) {
+				this.fTreeBox.SaveSnapshot(this.SaveDialog1.FileName);
 			}
 		}
 
@@ -459,7 +390,7 @@ namespace GKUI
 				}
 			}
 		}
-		
+
 		private void miSpouseAddClick(object sender, EventArgs e)
 		{
 			TreeChartPerson p = this.fTreeBox.Selected;
@@ -589,6 +520,137 @@ namespace GKUI
 
 		#endregion
 
+		#region Print support
+
+		private void InitPrintDoc()
+		{
+			this.fPrintDoc = new PrintDocument();
+			this.fPrintDoc.QueryPageSettings += printDocument1_QueryPageSettings;
+			this.fPrintDoc.BeginPrint += printDocument1_BeginPrint;
+			this.fPrintDoc.PrintPage += printDocument1_PrintPage;
+		}
+
+		private void InitCurDoc()
+		{
+			this.fPrintDoc.DocumentName = this.Text;
+			this.fPrintDoc.DefaultPageSettings.Landscape = this.fTreeBox.IsLandscape();
+			this.fPrintDoc.DefaultPageSettings.Margins = new Margins(25, 25, 25, 25);
+		}
+
+		private void printDocument1_BeginPrint(object sender, PrintEventArgs e)
+		{
+		}
+
+		private void printDocument1_QueryPageSettings(object sender, QueryPageSettingsEventArgs e)
+		{
+			e.PageSettings.Landscape = this.fTreeBox.IsLandscape();
+			e.PageSettings.Margins = new Margins(25, 25, 25, 25);
+		}
+
+		private void printDocument1_PrintPage(object sender, PrintPageEventArgs e)
+		{
+			Graphics gfx = e.Graphics;
+
+			//PrinterBounds objBounds = new PrinterBounds(e);
+			//Rectangle realMarginBounds = objBounds.Bounds;  // Get the REAL Margin Bounds !
+
+			Rectangle marginBounds = e.MarginBounds;
+			Rectangle pageBounds = e.PageBounds;
+
+			if (GKData.DEBUG_PRINT) {
+				gfx.DrawRectangle(Pens.Gray, marginBounds);
+			}
+
+			Image img = this.fTreeBox.GetPrintableImage();
+
+			int imgW = img.Width;
+			int imgH = img.Height;
+			float factor = GfxUtils.ZoomToFit(imgW, imgH, marginBounds.Width, marginBounds.Height);
+			imgW = (int)(imgW * factor);
+			imgH = (int)(imgH * factor);
+			int x = (pageBounds.Width - imgW) / 2;
+			int y = (pageBounds.Height - imgH) / 2;
+
+			gfx.DrawImage(img, x, y, imgW, imgH);
+
+			e.HasMorePages = false;
+		}
+
+		#endregion
+
+		#region IChartWindow implementation
+
+		public bool AllowPrint()
+		{
+			return true;
+		}
+
+		public void DoPrint()
+		{
+			this.InitCurDoc();
+
+			PrintDialog printDlg = new PrintDialog();
+			printDlg.Document = this.fPrintDoc;
+
+			if (printDlg.ShowDialog() == DialogResult.OK) {
+				this.fPrintDoc.PrinterSettings = printDlg.PrinterSettings;
+				this.fPrintDoc.Print();
+			}
+		}
+
+		public void DoPrintPreview()
+		{
+			this.InitCurDoc();
+
+			PrintPreviewDialog previewDlg = new PrintPreviewDialog();
+			previewDlg.WindowState = FormWindowState.Maximized;
+			previewDlg.Document = this.fPrintDoc;
+			previewDlg.ShowDialog();
+		}
+
+		public void GenChart(bool show)
+		{
+			try
+			{
+				if (this.fPerson == null)
+				{
+					GKUtils.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
+				}
+				else
+				{
+					this.fTreeBox.DepthLimit = this.fGensLimit;
+					this.fTreeBox.ShieldState = this.fBase.ShieldState;
+
+					this.fTreeBox.GenChart(this.fPerson, this.fChartKind, true);
+
+					switch (this.fChartKind)
+					{
+						case TreeChartBox.ChartKind.ckAncestors:
+							this.Text = LangMan.LS(LSID.LSID_MITreeAncestors);
+							break;
+						case TreeChartBox.ChartKind.ckDescendants:
+							this.Text = LangMan.LS(LSID.LSID_MITreeDescendants);
+							break;
+						case TreeChartBox.ChartKind.ckBoth:
+							this.Text = LangMan.LS(LSID.LSID_MITreeBoth);
+							break;
+					}
+
+					this.Text = this.Text + " \"" + Path.GetFileName(fBase.Tree.FileName) + "\"";
+
+					if (show) base.Show();
+
+					TfmGEDKeeper.Instance.UpdateControls(false);
+				}
+			}
+			catch (Exception ex)
+			{
+				this.fBase.Host.LogWrite("TfmChart.GenChart(): " + ex.Message);
+			}
+		}
+
+		#endregion
+
 		#region ILocalization implementation
 		
 		public void SetLang()
@@ -647,6 +709,11 @@ namespace GKUI
 			return this.fTreeBox.NavCanForward();
 		}
 
+		public bool AllowQuickFind()
+		{
+			return true;
+		}
+
 		public IList<ISearchResult> FindAll(string searchPattern)
 		{
 			return this.fTreeBox.FindAll(searchPattern);
@@ -670,6 +737,11 @@ namespace GKUI
 			panel.Location = pt;
 
 			panel.Show();
+		}
+
+		public bool AllowFilter()
+		{
+			return true;
 		}
 
 		public void SetFilter()

@@ -6,16 +6,15 @@ using System.Windows.Forms;
 
 using GKCommon;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKCalendarPlugin
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public partial class TfmCalendar : Form
 	{
     	private Plugin fPlugin;
-    	
+
 		public TfmCalendar(Plugin plugin) : base()
 		{
 			this.InitializeComponent();
@@ -51,14 +50,14 @@ namespace GKCalendarPlugin
 			{
 				this.lvDates.Items.Clear();
 				DateTime gdt = this.qtc.SelectionStart;
-				string s = CalendarConverter.date_to_str(gdt.Year, gdt.Month, gdt.Day, CalendarConverter.TDateEra.AD) + ", " + DateTimeInfo.DayNames[(int)gdt.DayOfWeek];
+				string s = CalendarConverter.date_to_str(gdt.Year, gdt.Month, gdt.Day, CalendarConverter.DateEra.AD) + ", " + DateTimeInfo.DayNames[(int)gdt.DayOfWeek];
 				this.AddItem(this.fPlugin.LangMan.LS(PLS.LSID_Cal_Gregorian), s);
 				double jd = CalendarConverter.gregorian_to_jd(gdt.Year, gdt.Month, gdt.Day);
 				int year = 0;
 				int month = 0;
 				int day = 0;
 				CalendarConverter.jd_to_julian(jd, ref year, ref month, ref day);
-				this.AddItem(this.fPlugin.LangMan.LS(PLS.LSID_Cal_Julian), CalendarConverter.date_to_str(year, month, day, CalendarConverter.TDateEra.AD));
+				this.AddItem(this.fPlugin.LangMan.LS(PLS.LSID_Cal_Julian), CalendarConverter.date_to_str(year, month, day, CalendarConverter.DateEra.AD));
 
 				CalendarConverter.jd_to_hebrew(jd, ref year, ref month, ref day);
 				s = day.ToString() + " ";

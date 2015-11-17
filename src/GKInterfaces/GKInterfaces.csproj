@@ -64,6 +64,8 @@
     <Compile Include="src\GKConsts.cs" />
     <Compile Include="src\Interfaces\IChartWindow.cs" />
     <Compile Include="src\Interfaces\INamesTable.cs" />
+    <Compile Include="src\Interfaces\IOptions.cs" />
+    <Compile Include="src\Interfaces\IOptionsControl.cs" />
     <Compile Include="src\Interfaces\ISearchStrategy.cs" />
     <Compile Include="src\Types\DateFormat.cs" />
     <Compile Include="src\Types\FamilyTarget.cs" />

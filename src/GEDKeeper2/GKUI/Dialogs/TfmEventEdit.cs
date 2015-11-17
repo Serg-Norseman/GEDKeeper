@@ -225,7 +225,7 @@ namespace GKUI.Dialogs
 						break;
 				}
 
-				this.EditEventDate1.Text = GKUtils.GEDCOMDateToStr(date as GEDCOMDate, DateFormat.dfDD_MM_YYYY);
+				this.EditEventDate1.Text = GKUtils.GetDateFmtString(date as GEDCOMDate, DateFormat.dfDD_MM_YYYY);
 				this.cbDate1Calendar.SelectedIndex = (int)(date as GEDCOMDate).DateCalendar;
 				this.btnBC1.Checked = (date as GEDCOMDate).YearBC;
 			}
@@ -253,8 +253,8 @@ namespace GKUI.Dialogs
 						}
 					}
 
-					this.EditEventDate1.Text = GKUtils.GEDCOMDateToStr(dtRange.After, DateFormat.dfDD_MM_YYYY);
-					this.EditEventDate2.Text = GKUtils.GEDCOMDateToStr(dtRange.Before, DateFormat.dfDD_MM_YYYY);
+					this.EditEventDate1.Text = GKUtils.GetDateFmtString(dtRange.After, DateFormat.dfDD_MM_YYYY);
+					this.EditEventDate2.Text = GKUtils.GetDateFmtString(dtRange.Before, DateFormat.dfDD_MM_YYYY);
 					this.cbDate1Calendar.SelectedIndex = (int)dtRange.After.DateCalendar;
 					this.cbDate2Calendar.SelectedIndex = (int)dtRange.Before.DateCalendar;
 					this.btnBC1.Checked = dtRange.After.YearBC;
@@ -284,8 +284,8 @@ namespace GKUI.Dialogs
 							}
 						}
 
-						this.EditEventDate1.Text = GKUtils.GEDCOMDateToStr(dtPeriod.DateFrom, DateFormat.dfDD_MM_YYYY);
-						this.EditEventDate2.Text = GKUtils.GEDCOMDateToStr(dtPeriod.DateTo, DateFormat.dfDD_MM_YYYY);
+						this.EditEventDate1.Text = GKUtils.GetDateFmtString(dtPeriod.DateFrom, DateFormat.dfDD_MM_YYYY);
+						this.EditEventDate2.Text = GKUtils.GetDateFmtString(dtPeriod.DateTo, DateFormat.dfDD_MM_YYYY);
 						this.cbDate1Calendar.SelectedIndex = (int)dtPeriod.DateFrom.DateCalendar;
 						this.cbDate2Calendar.SelectedIndex = (int)dtPeriod.DateTo.DateCalendar;
 						this.btnBC1.Checked = dtPeriod.DateFrom.YearBC;
@@ -296,7 +296,7 @@ namespace GKUI.Dialogs
 						if (date is GEDCOMDate)
 						{
 							this.EditEventDateType.SelectedIndex = 0;
-							this.EditEventDate1.Text = GKUtils.GEDCOMDateToStr(date as GEDCOMDate, DateFormat.dfDD_MM_YYYY);
+							this.EditEventDate1.Text = GKUtils.GetDateFmtString(date as GEDCOMDate, DateFormat.dfDD_MM_YYYY);
 							this.cbDate1Calendar.SelectedIndex = (int)(date as GEDCOMDate).DateCalendar;
 							this.btnBC1.Checked = (date as GEDCOMDate).YearBC;
 						}

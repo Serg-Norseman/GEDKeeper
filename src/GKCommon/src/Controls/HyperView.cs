@@ -138,6 +138,7 @@ namespace GKCommon.Controls
 			base.TabStop = true;
 			base.BorderStyle = BorderStyle.Fixed3D;
 			base.DoubleBuffered = true;
+			//base.SetStyle(ControlStyles.OptimizedDoubleBuffer, true); // for some reason it doesn't work
 
 			this.fHeightCount = 0;
 			//this.fAcceptFontChange = false;
@@ -614,7 +615,7 @@ namespace GKCommon.Controls
 			{
 				ExtRect dummy = ExtRect.CreateEmpty();
 				ExtRect R;
-				NativeMethods.ScrollWindowEx(this.Handle, this.fLeftPos - value, 0, ref dummy, ref dummy, 0, out R, 0u);
+				NativeMethods.ScrollWindowEx(this.Handle, this.fLeftPos - value, 0, ref dummy, ref dummy, IntPtr.Zero, out R, 0u);
 				NativeMethods.SetScrollPos(this.Handle, 0, this.fLeftPos, true);
 				base.Invalidate();
 				this.fLeftPos = value;
@@ -630,7 +631,7 @@ namespace GKCommon.Controls
 			{
 				ExtRect dummy = ExtRect.CreateEmpty();
 				ExtRect R;
-				NativeMethods.ScrollWindowEx(this.Handle, 0, this.fTopPos - value, ref dummy, ref dummy, 0, out R, 0u);
+				NativeMethods.ScrollWindowEx(this.Handle, 0, this.fTopPos - value, ref dummy, ref dummy, IntPtr.Zero, out R, 0u);
 				NativeMethods.SetScrollPos(this.Handle, 1, this.fTopPos, true);
 				base.Invalidate();
 				this.fTopPos = value;

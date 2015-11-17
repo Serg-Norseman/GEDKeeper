@@ -24,9 +24,9 @@ namespace GKCore.Lists
 	{
 		protected override void InitColumnStatics()
 		{
-			this.AddStatic(LSID.LSID_Spouses, TDataType.dtString, 300, true);
-			this.AddStatic(LSID.LSID_MarriageDate, TDataType.dtString, 100, true);
-			this.AddStatic(LSID.LSID_Changed, TDataType.dtDateTime, 150, true);
+			this.AddStatic(LSID.LSID_Spouses, DataType.dtString, 300, true);
+			this.AddStatic(LSID.LSID_MarriageDate, DataType.dtString, 100, true);
+			this.AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
 		}
 
 		public FamilyListColumns() : base()

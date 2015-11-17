@@ -49,8 +49,8 @@ namespace GKUI.Dialogs
 				else
 				{
 					this.EditPriority.SelectedIndex = (sbyte)this.fTask.Priority;
-					this.EditStartDate.Text = GKUtils.GEDCOMDateToStr(this.fTask.StartDate, DateFormat.dfDD_MM_YYYY);
-					this.EditStopDate.Text = GKUtils.GEDCOMDateToStr(this.fTask.StopDate, DateFormat.dfDD_MM_YYYY);
+					this.EditStartDate.Text = GKUtils.GetDateFmtString(this.fTask.StartDate, DateFormat.dfDD_MM_YYYY);
+					this.EditStopDate.Text = GKUtils.GetDateFmtString(this.fTask.StopDate, DateFormat.dfDD_MM_YYYY);
 
                     GKGoalType gt;
                     this.fTask.GetTaskGoal(out gt, out this.fTempRec);

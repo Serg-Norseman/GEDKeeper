@@ -57,13 +57,13 @@ namespace GKTests
 			// individual record tests
 			Assert.IsNotNull(iRec);
 
-			string age = GKUtils.GetAge(null, 0);
+			string age = GKUtils.GetAgeStr(null, 0);
 			Assert.AreEqual("", age);
 			
-			age = GKUtils.GetAge(iRec, -1);
+			age = GKUtils.GetAgeStr(iRec, -1);
 			Assert.AreEqual("20", age);
 			
-			age = GKUtils.GetAge(iRec, 2005);
+			age = GKUtils.GetAgeStr(iRec, 2005);
 			Assert.AreEqual("15", age);
 			
 			//

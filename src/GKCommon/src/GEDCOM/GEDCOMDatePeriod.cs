@@ -168,5 +168,50 @@ namespace GKCommon.GEDCOM
 		{
 			return new GEDCOMDatePeriod(owner, parent, tagName, tagValue);
 		}
+
+		public override void GetDateParts(out int year, out ushort month, out ushort day, out bool yearBC)
+		{
+			year = -1;
+			month = 0;
+			day = 0;
+			yearBC = false;
+
+			if (this.fDateFrom.StringValue != "" && this.fDateTo.StringValue == "")
+			{
+				this.fDateFrom.GetDateParts(out year, out month, out day, out yearBC);
+			}
+			else if (this.fDateFrom.StringValue == "" && this.fDateTo.StringValue != "")
+			{
+				this.fDateTo.GetDateParts(out year, out month, out day, out yearBC);
+			}
+			else if (this.fDateFrom.StringValue != "" && this.fDateTo.StringValue != "")
+			{
+				this.fDateFrom.GetDateParts(out year, out month, out day, out yearBC);
+			}
+		}
+
+		public override AbsDate GetAbstractDate()
+		{
+			AbsDate result;
+
+			if (this.fDateFrom.StringValue != "" && this.fDateTo.StringValue == "")
+			{
+				result = this.fDateFrom.GetAbstractDate().After();
+			}
+			else if (this.fDateFrom.StringValue == "" && this.fDateTo.StringValue != "")
+			{
+				result = this.fDateTo.GetAbstractDate().Before();
+			}
+			else if (this.fDateFrom.StringValue != "" && this.fDateTo.StringValue != "")
+			{
+				result = AbsDate.Between(this.fDateFrom.GetAbstractDate(), this.fDateTo.GetAbstractDate());
+			}
+			else
+			{
+				result = AbsDate.Empty();
+			}
+
+			return result;
+		}
 	}
 }

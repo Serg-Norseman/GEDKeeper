@@ -389,7 +389,7 @@ namespace GKTests
 			int month = 0;
 			int day = 0;
 			CalendarConverter.jd_to_julian(jd, ref year, ref month, ref day);
-			s = CalendarConverter.date_to_str(year, month, day, CalendarConverter.TDateEra.AD);
+			s = CalendarConverter.date_to_str(year, month, day, CalendarConverter.DateEra.AD);
 			Assert.AreEqual("27 сен 1990", s); // +
 
 			CalendarConverter.jd_to_hebrew(jd, ref year, ref month, ref day);
@@ -424,6 +424,10 @@ namespace GKTests
 			s += CalendarConverter.BahaiMonths[month - 1];
 			s = s + " " + year.ToString() + ", " + CalendarConverter.BahaiWeekdays[CalendarConverter.jwday(jd)];
 			Assert.AreEqual("Кулл-и Шай' 1, Вахид 8, 14 Машиййат 14, Идаль", s); // ???
+
+			// bad result! needs 0.0f!
+			jd = CalendarConverter.gregorian_to_jd(-4713, 11, 24);
+			Assert.AreEqual(-0.5, jd);
 		}
 
 		[Test]
@@ -510,11 +514,11 @@ namespace GKTests
 
 			Assert.IsTrue(rt.Contains(5, 5));
 			
-			rt.Offset(3, -2);
+			rt.Inflate(3, -2);
 			Assert.AreEqual("{X=3,Y=-2,Width=4,Height=14}", rt.ToString());
 			
-			ExtRect rt1 = rt.GetShift(2, 5);
-			Assert.AreEqual("{X=5,Y=3,Width=4,Height=14}", rt1.ToString());
+			rt.Offset(2, 5);
+			Assert.AreEqual("{X=5,Y=3,Width=4,Height=14}", rt.ToString());
 			
 			rt = ExtRect.CreateEmpty();
 			Assert.IsTrue(rt.IsEmpty());

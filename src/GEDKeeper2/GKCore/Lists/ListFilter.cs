@@ -8,16 +8,21 @@ namespace GKCore.Lists
 	/// </summary>
     public class ListFilter : IListFilter
     {
-        public List<FilterCondition> ColumnsFilter { get; private set; }
-		
+    	private List<FilterCondition> fConditions;
+
+        public List<FilterCondition> Conditions
+        {
+        	get { return this.fConditions; }
+        }
+
         public ListFilter()
         {
-            this.ColumnsFilter = new List<FilterCondition>();
+            this.fConditions = new List<FilterCondition>();
         }
-		
+
         public virtual void Clear()
         {
-            this.ColumnsFilter.Clear();
+            this.fConditions.Clear();
         }
     }
 }

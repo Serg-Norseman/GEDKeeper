@@ -6,7 +6,6 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
 using GKCore;
-
 using NUnit.Framework;
 
 namespace GKTests
@@ -584,6 +583,21 @@ namespace GKTests
 		}
 
 		[Test]
+		public void AbsDate_Tests()
+		{
+			AbsDate dtx = new AbsDate(1700, 0, 0, false);
+			Assert.AreEqual("00/00/1700", dtx.ToString());
+
+			AbsDate dtx1 = new AbsDate(1702, 2, 12, false);
+			Assert.AreEqual("12/02/1702", dtx1.ToString());
+
+			AbsDate dtx2d = AbsDate.Between(dtx, dtx1);
+			Assert.AreEqual(1701, dtx2d.Year);
+			Assert.AreEqual(1, dtx2d.Month);
+			Assert.AreEqual(6, dtx2d.Day);
+		}
+
+		[Test]
 		public void GEDCOMTagWithLists_Tests()
 		{
 			// GEDCOMTagWithLists protected class, derived - GEDCOMEventDetail
@@ -678,10 +692,10 @@ namespace GKTests
 				dtx1.SetJulian(1, "JAN", 1980, false);
 				Assert.AreEqual(GEDCOMCalendar.dcJulian, dtx1.DateCalendar);
 				
-				dtx1.SetHebrew(1, 1, 1980);
+				dtx1.SetHebrew(1, "TSH", 1980, false);
 				Assert.AreEqual(GEDCOMCalendar.dcHebrew, dtx1.DateCalendar);
 				
-				dtx1.SetFrench(1, 1, 1980);
+				dtx1.SetFrench(1, "VEND", 1980, false);
 				Assert.AreEqual(GEDCOMCalendar.dcFrench, dtx1.DateCalendar);
 				
 				dtx1.SetRoman(1, "JAN", 1980, false);
@@ -1190,7 +1204,7 @@ namespace GKTests
 		{
 			GEDCOMEventDetailTest(evt.Detail, dateTest);
 			
-			Assert.AreEqual(evt.GetIndependentDate(), DateTime.Parse(dateTest));
+			Assert.AreEqual(evt.Detail.Date.GetDateTime(), DateTime.Parse(dateTest));
 		}
 		
 		private static void GEDCOMPlaceTest(GEDCOMPlace place)

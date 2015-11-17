@@ -16,7 +16,7 @@ namespace GKUI.Controls
 			set { this.textBox1.Text = value; }
 		}
 
-		public GKInputBox(string caption, string prompt, string value, bool fNumbersMode)
+		public GKInputBox(string caption, string prompt, string value, bool fNumbersMode, bool pwMode = false)
 		{
 			this.InitializeComponent();
 
@@ -24,6 +24,10 @@ namespace GKUI.Controls
 			this.label1.Text = prompt;
 			this.Value = value;
 			this.fNumbersMode = fNumbersMode;
+
+			if (pwMode) {
+				this.textBox1.PasswordChar = '*';
+			}
 
 			base.AcceptButton = this.btnAccept;
 			base.CancelButton = this.btnCancel;
@@ -97,6 +101,22 @@ namespace GKUI.Controls
             bool result = false;
 
             using (GKInputBox inputBox = new GKInputBox(caption, prompt, value, false))
+            {
+                if (inputBox.ShowDialog() == DialogResult.OK)
+                {
+                    value = inputBox.Value.Trim();
+                    result = true;
+                }
+            }
+
+            return result;
+		}
+
+		public static bool QueryPassword(string caption, string prompt, ref string value)
+		{
+            bool result = false;
+
+            using (GKInputBox inputBox = new GKInputBox(caption, prompt, value, false, true))
             {
                 if (inputBox.ShowDialog() == DialogResult.OK)
                 {

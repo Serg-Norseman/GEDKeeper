@@ -9,6 +9,8 @@ namespace GKCommon
     [SecurityCritical, SuppressUnmanagedCodeSecurity]
     public static class NativeMethods
     {
+    	public const uint WM_ERASEBKGND		= 0x14;
+
     	public const uint WM_SIZE			= 0x0005;
     	public const uint WM_GETDLGCODE		= 0x0087;
     	public const uint WM_HSCROLL     	= 0x0114;
@@ -37,8 +39,12 @@ namespace GKCommon
         
         public const int ESB_ENABLE_BOTH = 0;
 		
-		[DllImport("user32.dll", CharSet = CharSet.Auto)]
-		public static extern int SendMessage(IntPtr hWnd, uint wMsg, IntPtr wParam, IntPtr lParam);
+		[DllImport("user32.dll")]
+		public static extern IntPtr SendMessage(IntPtr hWnd, uint wMsg, IntPtr wParam, IntPtr lParam);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool PostMessage(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
 
         public enum ShowCommands
         {
@@ -59,25 +65,20 @@ namespace GKCommon
             SW_MAX = 11
         }
 
-        [DllImport("shell32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("shell32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern IntPtr ShellExecute(IntPtr hWnd, string lpOperation, string lpFile, string lpParameters, string lpDirectory, ShowCommands nShowCmd);
 
-        [DllImport("user32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
-        public static extern uint GetKeyboardLayout(uint dwLayout);
-
-        [DllImport("user32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
-        public static extern uint ActivateKeyboardLayout(uint hkl, uint flags);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool PostMessage(IntPtr hWnd, uint msg, int wParam, int lParam);
-
-        [DllImport("user32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool EnableWindow(IntPtr hWnd, 
-            [MarshalAs(UnmanagedType.Bool)]bool bEnable);
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr GetKeyboardLayout(uint dwLayout);
 
         [DllImport("user32.dll", SetLastError = true)]
+        public static extern uint ActivateKeyboardLayout(uint hkl, uint flags);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool EnableWindow(IntPtr hWnd, [MarshalAs(UnmanagedType.Bool)]bool bEnable);
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
         [DllImport("hhctrl.ocx", CharSet = CharSet.Unicode, EntryPoint = "HtmlHelpW", SetLastError = true)]
@@ -106,44 +107,43 @@ namespace GKCommon
         public static extern bool GetScrollInfo(IntPtr hWnd, int barFlag, ref ScrollInfo scrollInfo);
 
         [DllImport("user32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
-        public static extern int ScrollWindowEx(IntPtr hWnd, int dx, int dy, [In] ref ExtRect prcScroll, [In] ref ExtRect prcClip, uint hrgnUpdate, out ExtRect prcUpdate, uint flags);
+        public static extern int ScrollWindowEx(IntPtr hWnd, int dx, int dy, [In] ref ExtRect prcScroll, [In] ref ExtRect prcClip, IntPtr hrgnUpdate, out ExtRect prcUpdate, uint flags);
 
         [DllImport("user32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool SetScrollRange(IntPtr hWnd, int nBar, int nMinPos, int nMaxPos, 
-            [MarshalAs(UnmanagedType.Bool)]bool bRedraw);
+        public static extern bool SetScrollRange(IntPtr hWnd, int nBar, int nMinPos, int nMaxPos, [MarshalAs(UnmanagedType.Bool)]bool bRedraw);
 
         [DllImport("user32.dll", CharSet = CharSet.Ansi, SetLastError = true)]
-        public static extern int SetScrollPos(IntPtr hWnd, int nBar, int nPos, 
-            [MarshalAs(UnmanagedType.Bool)]bool bRedraw);
+        public static extern int SetScrollPos(IntPtr hWnd, int nBar, int nPos, [MarshalAs(UnmanagedType.Bool)]bool bRedraw);
 
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern uint GetPrivateProfileString(string lpAppName, string lpKeyName, string lpDefault, StringBuilder lpReturnedString, uint nSize, string lpFileName);
 
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern uint GetPrivateProfileString(string lpAppName, IntPtr lpKeyName, IntPtr lpDefault, [Out] byte[] lpReturnedString, uint nSize, string lpFileName);
 
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern uint GetPrivateProfileString(IntPtr lpAppName, IntPtr lpKeyName, IntPtr lpDefault, [Out] byte[] lpReturnedString, uint nSize, string lpFileName);
 
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool WritePrivateProfileString(string lpAppName, string lpKeyName, string lpString, string lpFileName);
 
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool WritePrivateProfileString(string lpAppName, string lpKeyName, IntPtr lpString, string lpFileName);
 
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool WritePrivateProfileString(string lpAppName, IntPtr lpKeyName, IntPtr lpString, string lpFileName);
 
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool WritePrivateProfileString(IntPtr lpAppName, IntPtr lpKeyName, IntPtr lpString, string lpFileName);
 
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         public class MapiFileDescriptor
         {
             public int reserved = 0;
@@ -156,10 +156,10 @@ namespace GKCommon
 
         public const int MAPI_LOGON_UI = 0x1;
 
-        [DllImport("MAPI32.DLL", CharSet = CharSet.Ansi)]
+        [DllImport("MAPI32.DLL", CharSet = CharSet.Unicode)]
         public static extern int MAPILogon(IntPtr hwnd, string prf, string pw, int flg, int rsv, ref IntPtr sess);
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         public class MapiMessage
         {
             public int Reserved = 0;
@@ -176,7 +176,7 @@ namespace GKCommon
             public IntPtr Files = IntPtr.Zero;
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         public class MapiRecipDesc
         {
             public int Reserved = 0;
@@ -187,7 +187,7 @@ namespace GKCommon
             public IntPtr EntryID = IntPtr.Zero;
         }
 
-        [DllImport("MAPI32.DLL", CharSet = CharSet.Ansi)]
+        [DllImport("MAPI32.DLL", CharSet = CharSet.Unicode)]
         public static extern uint MAPISendMail(IntPtr lhSession, IntPtr ulUIParam, MapiMessage lpMessage, uint flFlags, uint ulReserved);
 
         [DllImport("wininet.dll", EntryPoint = "InternetGetConnectedState")]
@@ -204,6 +204,6 @@ namespace GKCommon
         public static extern bool QueryPerformanceCounter(ref ulong performanceCount);
 
         [DllImport("winmm.dll")]
-        public static extern ulong timeGetTime();
+        public static extern /*ulong*/uint timeGetTime();
     }
 }

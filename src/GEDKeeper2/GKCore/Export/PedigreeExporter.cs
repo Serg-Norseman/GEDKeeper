@@ -46,17 +46,13 @@ namespace GKCore.Export
 		{
 			public readonly GEDCOMCustomEvent Event;
 			public readonly GEDCOMIndividualRecord IRec;
+			public readonly AbsDate Date;
 
-			public PedigreeEvent(GEDCOMCustomEvent aEvent, GEDCOMIndividualRecord aRec)
+			public PedigreeEvent(GEDCOMCustomEvent evt, GEDCOMIndividualRecord iRec)
 			{
-				this.Event = aEvent;
-				this.IRec = aRec;
-			}
-
-			public DateTime GetDate()
-			{
-				DateTime result = ((this.Event == null) ? new DateTime(0) : this.Event.GetIndependentDate());
-				return result;
+				this.Event = evt;
+				this.IRec = iRec;
+				this.Date = GEDCOMUtils.GetAbstractDate(evt); // FIXME: rewrite sorting
 			}
 		}
 
@@ -195,7 +191,7 @@ namespace GKCore.Export
 		{
 			fDocument.Add(new Paragraph(LangMan.LS(LSID.LSID_Sex) + ": " + GKUtils.SexStr(person.IRec.Sex), fTextFont));
 
-			string st = GKUtils.GetLifeExpectancy(person.IRec);
+			string st = GKUtils.GetLifeExpectancyStr(person.IRec);
 			if (st != "?" && st != "") {
 				fDocument.Add(new Paragraph(LangMan.LS(LSID.LSID_LifeExpectancy) + ": " + st, fTextFont));
 			}
@@ -367,7 +363,7 @@ namespace GKCore.Export
 			{
 				for (int j = i + 1; j < num; j++)
 				{
-					if (evList[i].GetDate() > evList[j].GetDate())
+					if (evList[i].Date > evList[j].Date)
 					{
 						evList.Exchange(i, j);
 					}

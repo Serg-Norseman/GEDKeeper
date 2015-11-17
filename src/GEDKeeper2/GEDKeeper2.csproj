@@ -117,6 +117,7 @@
     <Compile Include="GKCore\Options\ProxyOptions.cs" />
     <Compile Include="GKCore\Options\TreeChartOptions.cs" />
     <Compile Include="GKCore\GKUtils.cs" />
+    <Compile Include="GKCore\PrinterBounds.cs" />
     <Compile Include="GKCore\ScriptEngine.cs" />
     <Compile Include="GKCore\Stats\CommonStats.cs" />
     <Compile Include="GKCore\Stats\CompositeItem.cs" />
@@ -128,14 +129,20 @@
     <Compile Include="GKResources.Designer.cs">
       <DependentUpon>GKResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\ACOptionsDialog.cs" />
-    <Compile Include="GKUI\ACOptionsDialog.Designer.cs">
-      <DependentUpon>ACOptionsDialog.cs</DependentUpon>
+    <Compile Include="GKUI\Charts\ACOptionsControl.cs">
+      <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\Charts\AncestorsCircle.cs" />
+    <Compile Include="GKUI\Charts\ACOptionsControl.Designer.cs">
+      <DependentUpon>ACOptionsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Charts\AncestorsCircle.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="GKUI\Charts\ChartFilter.cs" />
     <Compile Include="GKCore\Kinships\KinshipsMan.cs" />
-    <Compile Include="GKUI\Charts\CustomChart.cs" />
+    <Compile Include="GKUI\Charts\CustomChart.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="GKUI\Charts\ITreeControl.cs" />
     <Compile Include="GKUI\Charts\PersonControl.cs" />
     <Compile Include="GKUI\Charts\PersonModifyEventArgs.cs" />
@@ -375,7 +382,9 @@
     <Compile Include="GKUI\Sheets\GKSourcesSheet.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\TfmAncestorsCircle.cs" />
+    <Compile Include="GKUI\TfmAncestorsCircle.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\TfmAncestorsCircle.Designer.cs">
       <DependentUpon>TfmAncestorsCircle.cs</DependentUpon>
     </Compile>
@@ -398,7 +407,7 @@
       <DependentUpon>TfmScriptDaemon.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Charts\TreeChartBox.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="GKUI\Charts\PersonList.cs" />
     <Compile Include="GKCore\NamesTable.cs" />
@@ -444,10 +453,11 @@
     <Compile Include="GKUI\TfmTreeTools.Designer.cs">
       <DependentUpon>TfmTreeTools.cs</DependentUpon>
     </Compile>
+    <Compile Include="GlobalSuppressions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GKUI\ACOptionsDialog.resx">
-      <DependentUpon>ACOptionsDialog.cs</DependentUpon>
+    <EmbeddedResource Include="GKUI\Charts\ACOptionsControl.resx">
+      <DependentUpon>ACOptionsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Controls\GKMergeControl.resx">
       <DependentUpon>GKMergeControl.cs</DependentUpon>
@@ -564,6 +574,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>GKResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\TfmStats.resx">
+      <DependentUpon>TfmStats.Designer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\TfmTreeTools.resx">
       <DependentUpon>TfmTreeTools.cs</DependentUpon>
     </EmbeddedResource>
@@ -618,10 +631,6 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GKCore\Maps" />
-    <Folder Include="GKCore\Tools" />
-    <Folder Include="GKCore\Stats" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -276,8 +276,9 @@ namespace GKUI.Dialogs
 			this.edSurname.Name = "EditFamily";
 			this.edSurname.Size = new System.Drawing.Size(161, 21);
 			this.edSurname.TabIndex = 1;
-			this.edSurname.TextChanged += new System.EventHandler(this.EditFamily_TextChanged);
-			this.edSurname.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.EditFamily_KeyPress);
+			this.edSurname.TextChanged += new System.EventHandler(this.edSurname_TextChanged);
+			this.edSurname.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.edSurname_KeyPress);
+			this.edSurname.KeyDown += new System.Windows.Forms.KeyEventHandler(this.edSurname_KeyDown);
 			// 
 			// EditName
 			// 
@@ -286,7 +287,8 @@ namespace GKUI.Dialogs
 			this.edName.Size = new System.Drawing.Size(161, 21);
 			this.edName.TabIndex = 3;
 			this.edName.TextChanged += new System.EventHandler(this.EditName_TextChanged);
-			this.edName.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.EditFamily_KeyPress);
+			this.edName.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.edSurname_KeyPress);
+			this.edName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.edSurname_KeyDown);
 			// 
 			// EditPatronymic
 			// 
@@ -295,7 +297,8 @@ namespace GKUI.Dialogs
 			this.edPatronymic.Size = new System.Drawing.Size(161, 21);
 			this.edPatronymic.TabIndex = 5;
 			this.edPatronymic.TextChanged += new System.EventHandler(this.EditPatronymic_TextChanged);
-			this.edPatronymic.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.EditFamily_KeyPress);
+			this.edPatronymic.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.edSurname_KeyPress);
+			this.edPatronymic.KeyDown += new System.Windows.Forms.KeyEventHandler(this.edSurname_KeyDown);
 			// 
 			// EditSex
 			// 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Threading;
+
 using GKCommon.GEDCOM.Enums;
 
 namespace GKCommon.GEDCOM
@@ -539,7 +540,7 @@ namespace GKCommon.GEDCOM
 			}
 		}
 
-		public void GetDate(out int year, out ushort month, out ushort day)
+		public override void GetDateParts(out int year, out ushort month, out ushort day, out bool yearBC)
 		{
 			year = this.fYear;
 
@@ -558,81 +559,77 @@ namespace GKCommon.GEDCOM
 			}
 
 			day = this.fDay;
+			yearBC = this.fYearBC;
 		}
 
-		public void SetGregorian(ushort ADay, ushort AMonth, ushort AYear)
+		public void SetGregorian(ushort day, ushort month, ushort year)
 		{
-			this.SetGregorian(ADay, IntToGEDCOMMonth(AMonth), AYear, "", false);
+			this.SetGregorian(day, IntToGEDCOMMonth(month), year, "", false);
 		}
 
-		public void SetGregorian(ushort ADay, string AMonth, int AYear, string AYearModifier, bool BC)
+		public void SetGregorian(ushort day, string month, int year, string yearModifier, bool yearBC)
 		{
 			this.fDateCalendar = GEDCOMCalendar.dcGregorian;
-			this.fDay = ADay;
-			this.fMonth = CheckGEDCOMMonth(AMonth);
-			this.fYear = AYear;
-			this.fYearModifier = AYearModifier;
-			this.fYearBC = BC;
+			this.fYear = year;
+			this.fYearBC = yearBC;
+			this.fYearModifier = yearModifier;
+			this.fDay = day;
+			this.fMonth = CheckGEDCOMMonth(month);
 		}
 
-		public void SetJulian(ushort ADay, string AMonth, ushort AYear, bool BC)
+		public void SetJulian(ushort day, string month, ushort year, bool yearBC)
 		{
 			this.fDateCalendar = GEDCOMCalendar.dcJulian;
-			this.fYear = AYear;
-			this.fYearBC = BC;
+			this.fYear = year;
+			this.fYearBC = yearBC;
 			this.fYearModifier = "";
-			this.fDay = ADay;
-			this.fMonth = CheckGEDCOMMonth(AMonth);
+			this.fDay = day;
+			this.fMonth = CheckGEDCOMMonth(month);
 		}
 
-		public void SetHebrew(ushort ADay, ushort AMonth, int AYear)
+		public void SetHebrew(ushort day, ushort month, int year)
 		{
-			this.SetHebrew(ADay, IntToGEDCOMMonthHebrew(AMonth), AYear, false);
+			this.SetHebrew(day, IntToGEDCOMMonthHebrew(month), year, false);
 		}
 
-		public void SetHebrew(ushort ADay, string AMonth, int AYear, bool BC)
+		public void SetHebrew(ushort day, string month, int year, bool yearBC)
 		{
 			this.fDateCalendar = GEDCOMCalendar.dcHebrew;
-			this.fYear = AYear;
-			this.fYearBC = BC;
+			this.fYear = year;
+			this.fYearBC = yearBC;
 			this.fYearModifier = "";
-			this.fMonth = CheckGEDCOMMonthHebrew(AMonth);
-			this.fDay = ADay;
+			this.fDay = day;
+			this.fMonth = CheckGEDCOMMonthHebrew(month);
 		}
 
-		public void SetFrench(ushort ADay, ushort AMonth, ushort AYear)
-		{
-			this.SetFrench(ADay, IntToGEDCOMMonthFrench(AMonth), AYear, false);
-		}
-
-		public void SetFrench(ushort ADay, string AMonth, ushort AYear, bool BC)
+		public void SetFrench(ushort day, string month, ushort year, bool yearBC)
 		{
 			this.fDateCalendar = GEDCOMCalendar.dcFrench;
-			this.fYear = AYear;
-			this.fYearBC = BC;
+			this.fYear = year;
+			this.fYearBC = yearBC;
 			this.fYearModifier = "";
-			this.fMonth = CheckGEDCOMMonthFrench(AMonth);
-			this.fDay = ADay;
+			this.fDay = day;
+			this.fMonth = CheckGEDCOMMonthFrench(month);
 		}
 
-		public void SetRoman(ushort ADay, string AMonth, ushort AYear, bool BC)
+		public void SetRoman(ushort day, string month, ushort year, bool yearBC)
 		{
 			this.fDateCalendar = GEDCOMCalendar.dcRoman;
-			this.fYear = AYear;
-			this.fYearBC = BC;
+			this.fYear = year;
+			this.fYearBC = yearBC;
 			this.fYearModifier = "";
-			this.fDay = ADay;
-			this.fMonth = CheckGEDCOMMonth(AMonth);
+			this.fDay = day;
+			this.fMonth = CheckGEDCOMMonth(month);
 		}
 
-		public void SetUnknown(ushort ADay, string AMonth, ushort AYear, bool BC)
+		public void SetUnknown(ushort day, string month, ushort year, bool yearBC)
 		{
 			this.fDateCalendar = GEDCOMCalendar.dcUnknown;
-			this.fYear = AYear;
-			this.fYearBC = BC;
+			this.fYear = year;
+			this.fYearBC = yearBC;
 			this.fYearModifier = "";
-			this.fDay = ADay;
-			this.fMonth = CheckGEDCOMMonth(AMonth);
+			this.fDay = day;
+			this.fMonth = CheckGEDCOMMonth(month);
 		}
 
 		public override void Clear()
@@ -694,6 +691,24 @@ namespace GKCommon.GEDCOM
 
 		public GEDCOMDate(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
+		}
+
+		public override AbsDate GetAbstractDate()
+		{
+			int year;
+			ushort month, day;
+			bool yearBC;
+			this.GetDateParts(out year, out month, out day, out yearBC);
+
+			AbsDate result;
+
+			if (year == -1) {
+				result = AbsDate.Empty(); // it's empty date, as negative dates has yearBC-attribute
+			} else {
+				result = new AbsDate(year, month, day, yearBC);
+			}
+
+			return result;
 		}
 	}
 }

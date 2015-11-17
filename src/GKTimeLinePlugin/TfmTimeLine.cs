@@ -97,11 +97,10 @@ namespace GKTimeLinePlugin
 
                         if (ev.Name == "BIRT" || ev.Name == "DEAT")
                         {
-                            ushort j, d;
-                            int year;
-                            ev.Detail.Date.GetIndependentDate(out year, out j, out d);
-                            if (year > 0)
+                            AbsDate evDate = GEDCOMUtils.GetAbstractDate(ev);
+                            if (evDate.IsValid())
                             {
+                            	int year = evDate.Year;
                                 if (this.fYearMin > year) this.fYearMin = year;
                                 if (this.fYearMax < year) this.fYearMax = year;
                             }
@@ -164,19 +163,17 @@ namespace GKTimeLinePlugin
             	GEDCOMCustomEvent buf_bd = iRec.FindEvent("BIRT");
                 GEDCOMCustomEvent buf_dd = iRec.FindEvent("DEAT");
 
-                ushort j, d;
+                AbsDate birthDate = GEDCOMUtils.GetAbstractDate(buf_bd);
+                AbsDate deathDate = GEDCOMUtils.GetAbstractDate(buf_dd);
+                
+                int bdy = birthDate.Year;
+                int ddy = deathDate.Year;
 
-                int bdy = -1;
-                if (buf_bd != null) buf_bd.Detail.Date.GetIndependentDate(out bdy, out j, out d);
-
-                int ddy = -1;
-                if (buf_dd != null) buf_dd.Detail.Date.GetIndependentDate(out ddy, out j, out d);
-
-                if (bdy > 0 && ddy <= 0) {
+                if (birthDate.IsValid() && !deathDate.IsValid()) {
                     ddy = bdy + GKConsts.ProvedLifeLength;
                 }
 
-                if (bdy <= 0 && ddy > 0) {
+                if (!birthDate.IsValid() && deathDate.IsValid()) {
                     bdy = ddy - GKConsts.ProvedLifeLength;
                 }
 

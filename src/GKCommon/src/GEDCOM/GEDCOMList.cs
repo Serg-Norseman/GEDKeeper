@@ -11,7 +11,7 @@ namespace GKCommon.GEDCOM
 
 		private struct GEDCOMListEnumerator : IGEDCOMListEnumerator
 		{
-			private readonly GEDCOMList<T> fOwnList;
+			private GEDCOMList<T> fOwnList;
 			private int fIndex;
 			private int fSize;
 

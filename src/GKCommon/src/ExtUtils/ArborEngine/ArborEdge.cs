@@ -17,7 +17,7 @@ namespace ExtUtils.ArborEngine
 
     	public double Length;
     	public bool Directed;
-    	public double Stiffness { get; private set; }
+    	public double Stiffness;
 
     	public ArborEdge(ArborNode src, ArborNode tgt, double len, double stiffness)
     	{

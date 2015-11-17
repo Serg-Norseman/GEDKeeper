@@ -2,6 +2,6 @@
 {
 	public static class GKConsts
 	{
-        public const int ProvedLifeLength = 130;
+        public const int ProvedLifeLength = 122;
 	}
 }

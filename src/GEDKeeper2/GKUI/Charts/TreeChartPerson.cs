@@ -12,14 +12,9 @@ namespace GKUI.Charts
 	public enum PersonFlag
 	{
 		pfDivorced, pfIsDead, pfSelected, pfIsDup, 
-		pfDescByFather, pfDescByMother,
-		pfAncWalk, pfDescWalk,
-		pfHasInvAnc, pfHasInvDesc
-	}
-
-	public enum PersonKind
-	{
-		pkDefault, pkSpouse
+		pfDescByFather, pfDescByMother, // descending flags
+		pfAncWalk, pfDescWalk, // walk flags
+		pfHasInvAnc, pfHasInvDesc // invisible flags
 	}
 
 	/// <summary>
@@ -29,20 +24,16 @@ namespace GKUI.Charts
     {
         protected TreeChartBox fChart;
 
-        // base fields
-        private EnumSet<PersonFlag> fFlags;
-        private GEDCOMIndividualRecord fRec;
-        private EnumSet<SpecialUserRef> fSigns;
-
         // strictly private
         private string fBirthDate;
-        private string fBirthYear;
         private string fDeathDate;
-        private string fDeathYear;
+        private EnumSet<PersonFlag> fFlags;
         private string fName;
         private string fNick;
         private string fPatronymic;
         private string fSurname;
+        private GEDCOMIndividualRecord fRec;
+        private EnumSet<SpecialUserRef> fSigns;
         private GEDCOMSex fSex;
         private PersonList fChilds;
         private PersonList fSpouses;
@@ -58,23 +49,19 @@ namespace GKUI.Charts
         // without property controlling
         public GEDCOMFamilyRecord BaseFamily;
         public TreeChartPerson BaseSpouse;
+        public float CertaintyAssessment;
         public TreeChartPerson Father;
         public TreeChartPerson Mother;
         public TreeChartPerson Parent;
         public bool CanExpand;
         public int Generation;
-        public PersonKind Kind;
+        public bool OutsideKin;
         public string Kinship;
         public string[] Lines;
         public IVertex Node;
         public string PathDebug;
+        public ExtRect PortraitArea;
 
-        public float CertaintyAssessment;
-
-        public EnumSet<PersonFlag> Flags
-        {
-            get { return this.fFlags; }
-        }
 
         public Bitmap Portrait
         {
@@ -212,59 +199,14 @@ namespace GKUI.Charts
             base.Dispose(disposing);
         }
 
-        protected int TextWidth(Graphics gfx, string st)
+        public bool HasFlag(PersonFlag flag)
         {
-            return gfx.MeasureString(st, this.fChart.DrawFont).ToSize().Width;
+        	return this.fFlags.Contains(flag);
         }
 
-        public Rectangle GetDestRect(ExtRect rt, Bitmap portrait)
+        public void SetFlag(PersonFlag flag)
         {
-            int w = portrait.Width;
-            int h = portrait.Height;
-            int cw = rt.GetWidth();
-            int ch = rt.GetHeight();
-
-            float xyaspect = (w / (float)h);
-            if (w > h) {
-                w = cw;
-                h = (int)(cw / xyaspect);
-                if (h > ch) {
-                    h = ch;
-                    w = (int)(ch * xyaspect);
-                }
-            } else {
-                h = ch;
-                w = (int)(ch * xyaspect);
-                if (w > cw) {
-                    w = cw;
-                    h = (int)(cw / xyaspect);
-                }
-            }
-
-            Rectangle result = new Rectangle(rt.Left, rt.Top, w, h);
-            result.Offset((cw - w) / 2, (ch - h) / 2);
-            return result;
-        }
-
-        private string GetLifeYears()
-        {
-            string result;
-
-            if (this.fBirthYear == "") {
-                result = "?";
-            } else {
-                result = this.fBirthYear;
-            }
-
-            if (this.IsDead) {
-                if (this.fDeathYear == "") {
-                    result += " - ?";
-                } else {
-                    result = result + " - " + this.fDeathYear;
-                }
-            }
-            result = "[ " + result + " ]";
-            return result;
+        	this.fFlags.Include(flag);
         }
 
         public TreeChartPerson GetChild(int index)
@@ -309,23 +251,6 @@ namespace GKUI.Charts
             this.fSpouses.Add(spouse);
         }
 
-		private EnumSet<SpecialUserRef> GetPersonSigns()
-		{
-			EnumSet<SpecialUserRef> result = EnumSet<SpecialUserRef>.Create();
-			
-			int num = this.fRec.UserReferences.Count;
-			for (int i = 0; i < num; i++)
-			{
-				string rs = this.fRec.UserReferences[i].StringValue;
-				for (SpecialUserRef cps = SpecialUserRef.urRI_StGeorgeCross; cps <= SpecialUserRef.urLast; cps++)
-				{
-					if (rs == GKData.SpecialUserRefs[(int)cps]) result.Include(cps);
-				}
-			}
-			
-			return result;
-		}
-
         public void BuildBy(GEDCOMIndividualRecord iRec, ref bool hasMediaFail)
         {
             try
@@ -343,13 +268,33 @@ namespace GKUI.Charts
                     this.fName = nam;
                     this.fPatronymic = pat;
                     this.fNick = iRec.GetNickString();
-                    this.fBirthDate = GKUtils.GetBirthDate(iRec, DateFormat.dfDD_MM_YYYY, false);
-                    this.fDeathDate = GKUtils.GetDeathDate(iRec, DateFormat.dfDD_MM_YYYY, false);
-                    this.IsDead = !iRec.IsLive();
                     this.fSex = iRec.Sex;
-                    this.fSigns = this.GetPersonSigns();
-                    this.fBirthYear = GKUtils.GetBirthDate(iRec, DateFormat.dfYYYY, false);
-                    this.fDeathYear = GKUtils.GetDeathDate(iRec, DateFormat.dfYYYY, false);
+
+                    GEDCOMCustomEvent birthEvent, deathEvent;
+                    iRec.GetLifeDates(out birthEvent, out deathEvent);
+                    DateFormat dateFormat = (this.fChart.Options.OnlyYears) ? DateFormat.dfYYYY : DateFormat.dfDD_MM_YYYY;
+
+                    this.IsDead = (deathEvent != null);
+                    this.fBirthDate = GKUtils.GEDCOMEventToDateStr(birthEvent, dateFormat, false);
+                    this.fDeathDate = GKUtils.GEDCOMEventToDateStr(deathEvent, dateFormat, false);
+
+                    if (this.fChart.Options.SignsVisible) {
+                    	EnumSet<SpecialUserRef> signs = EnumSet<SpecialUserRef>.Create();
+                    	
+                    	int num = this.fRec.UserReferences.Count;
+                    	for (int i = 0; i < num; i++)
+                    	{
+                    		string rs = this.fRec.UserReferences[i].StringValue;
+                    		for (SpecialUserRef cps = SpecialUserRef.urRI_StGeorgeCross; cps <= SpecialUserRef.urLast; cps++)
+                    		{
+                    			if (rs == GKData.SpecialUserRefs[(int)cps]) signs.Include(cps);
+                    		}
+                    	}
+                    	
+                    	this.fSigns = signs;
+                    } else {
+                    	this.fSigns = EnumSet<SpecialUserRef>.Create();
+                    }
 
                     if (this.fChart.Options.PortraitsVisible) {
                         try
@@ -387,19 +332,19 @@ namespace GKUI.Charts
             }
         }
 
-        private string GetName()
-        {
-        	string st = this.fName;
-        	if (this.fChart.Options.NickVisible && !string.IsNullOrEmpty(this.fNick)) st = st + " \"" + this.fNick + "\"";
-        	return st;
-        }
-
         private void InitInfo(int lines)
         {
         	this.Lines = new string[lines];
 
             try
             {
+            	// prepare
+            	string nameLine = this.fName;
+            	if (this.fChart.Options.NickVisible && !string.IsNullOrEmpty(this.fNick)) {
+            		nameLine += " \"" + this.fNick + "\"";
+            	}
+
+            	// create lines
                 int idx = 0;
 
                 if (this.fChart.Options.FamilyVisible) {
@@ -408,10 +353,10 @@ namespace GKUI.Charts
                 }
 
                 if (!this.fChart.Options.DiffLines) {
-                	this.Lines[idx] = this.GetName() + " " + this.fPatronymic; // attention: "Name" is combined property
+                	this.Lines[idx] = nameLine + " " + this.fPatronymic; // attention: "Name" is combined property
                     idx++;
                 } else {
-                	this.Lines[idx] = this.GetName();
+                	this.Lines[idx] = nameLine;
                     idx++;
 
                     this.Lines[idx] = this.fPatronymic;
@@ -429,7 +374,14 @@ namespace GKUI.Charts
                         idx++;
                     }
                 } else {
-                    this.Lines[idx] = this.GetLifeYears();
+                	string lifeYears = "[ ";
+                	lifeYears += (this.fBirthDate == "") ? "?" : this.fBirthDate;
+                	if (this.IsDead) {
+                		lifeYears += (this.fDeathDate == "") ? " - ?" : " - " + this.fDeathDate;
+                	}
+                	lifeYears += " ]";
+
+                	this.Lines[idx] = lifeYears;
                     idx++;
                 }
 
@@ -448,35 +400,8 @@ namespace GKUI.Charts
                 this.fChart.Base.Host.LogWrite("TreeChartPerson.InitInfo(): " + ex.Message);
             }
         }
-        
-        public void CalcBounds(int lines, Graphics gfx)
-        {
-            try
-            {
-            	this.InitInfo(lines);
-            	
-                int maxwid = 0;
-                for (int k = 0; k < lines; k++) {
-                	int wt = this.TextWidth(gfx, this.Lines[k]);
-                    if (maxwid < wt) maxwid = wt;
-                }
 
-                this.fWidth = maxwid + 20;
-                this.fHeight = gfx.MeasureString("A", this.fChart.DrawFont).ToSize().Height * lines + 20;
-
-                if (this.fChart.Options.PortraitsVisible && this.fPortrait != null) {
-                    Rectangle prt = this.GetDestRect(ExtRect.Create(0, 0, this.fHeight - 1, this.fHeight - 1), this.fPortrait);
-                    this.fPortraitWidth = prt.Right - prt.Left + 1;
-                    this.fWidth += this.fPortraitWidth;
-                }
-            }
-            catch (Exception ex)
-            {
-                this.fChart.Base.Host.LogWrite("TreeChartPerson.CalcBounds(): " + ex.Message);
-            }
-        }
-
-		public void DefineExpands()
+		private void DefineExpands()
 		{
 			if (this.fFlags.Contains(PersonFlag.pfAncWalk) && this.fFlags.Contains(PersonFlag.pfDescWalk)
 			    && this.fFlags.Contains(PersonFlag.pfHasInvDesc))
@@ -493,6 +418,51 @@ namespace GKUI.Charts
 				this.CanExpand = true;
 			}
 		}
+
+        private int TextWidth(Graphics gfx, string st)
+        {
+            return gfx.MeasureString(st, this.fChart.DrawFont).ToSize().Width;
+        }
+
+        public void CalcBounds(int lines, Graphics gfx)
+        {
+            try
+            {
+            	this.InitInfo(lines);
+            	this.DefineExpands();
+            	
+                int maxwid = 0;
+                for (int k = 0; k < lines; k++) {
+                	int wt = this.TextWidth(gfx, this.Lines[k]);
+                    if (maxwid < wt) maxwid = wt;
+                }
+
+                this.fWidth = maxwid + 20;
+                this.fHeight = gfx.MeasureString("A", this.fChart.DrawFont).ToSize().Height * lines + 20;
+
+                if (this.fPortrait != null) {
+                	ExtRect portRt = ExtRect.Create(0, 0, this.fHeight - 1, this.fHeight - 1);
+                	portRt.Inflate(3, 3);
+
+                    int rtW = portRt.GetWidth();
+                    int rtH = portRt.GetHeight();
+                    int imgW = fPortrait.Width;
+                    int imgH = fPortrait.Height;
+                    float ratio = GfxUtils.ZoomToFit(imgW, imgH, rtW, rtH);
+                    imgW = (int)Math.Round(imgW * ratio);
+                    imgH = (int)Math.Round(imgH * ratio);
+
+                    this.PortraitArea = ExtRect.CreateBounds(portRt.Left, portRt.Top, imgW, imgH);
+                    this.fPortraitWidth = imgW;
+
+                    this.fWidth += imgW;
+                }
+            }
+            catch (Exception ex)
+            {
+                this.fChart.Base.Host.LogWrite("TreeChartPerson.CalcBounds(): " + ex.Message);
+            }
+        }
 
     }
 }

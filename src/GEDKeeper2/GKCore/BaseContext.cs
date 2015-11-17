@@ -24,6 +24,8 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 
 using ExtUtils;
 using GKCommon;
@@ -37,6 +39,9 @@ using GKCore.Types;
 
 namespace GKCore
 {
+    /// <summary>
+    /// Localization: dirty
+    /// </summary>
 	public class BaseContext : IBaseContext
 	{
 		#region Private fields
@@ -156,16 +161,16 @@ namespace GKCore
 
 		public bool IsChildless(GEDCOMIndividualRecord iRec)
 		{
-			string exp = GKUtils.GetLifeExpectancy(iRec);
-			return (exp != "" && exp != "?" && int.Parse(exp) < 15);
+			int exp = GKUtils.GetLifeExpectancy(iRec);
+			return (exp != -1 && exp < 15);
 		}
 
-		public int FindBirthYear(GEDCOMIndividualRecord iRec)
+		public AbsDate FindBirthYear(GEDCOMIndividualRecord iRec)
 		{
 			if (iRec != null) {
-				int year = GKUtils.GetIndependentYear(iRec, "BIRT");
-				if (year > 0) {
-					return year;
+				AbsDate birthDate = GEDCOMUtils.GetAbstractDate(iRec, "BIRT");
+				if (birthDate.IsValid()) {
+					return birthDate;
 				}
 
 				int num = iRec.SpouseToFamilyLinks.Count;
@@ -177,26 +182,26 @@ namespace GKCore
 					for (int j = 0; j < num2; j++)
 					{
 						GEDCOMIndividualRecord child = family.Childrens[j].Value as GEDCOMIndividualRecord;
-						year = FindBirthYear(child);
-						if (year > 0) {
-							return (year - 20);
+						birthDate = FindBirthYear(child);
+						if (birthDate.IsValid()) {
+							return birthDate.IncYear(-20);
 						}
 					}
 				}
 			}
 
-			return -1;
+			return AbsDate.Empty();
 		}
 
-		public int FindDeathYear(GEDCOMIndividualRecord iRec)
+		public AbsDate FindDeathYear(GEDCOMIndividualRecord iRec)
 		{
 			if (iRec != null) {
-				int year = GKUtils.GetIndependentYear(iRec, "DEAT");
-				if (year > 0) {
-					return year;
+				AbsDate deathDate = GEDCOMUtils.GetAbstractDate(iRec, "DEAT");
+				if (deathDate.IsValid()) {
+					return deathDate;
 				}
 
-				int max = 0;
+				AbsDate maxBirth = AbsDate.Empty();
 				int num = iRec.SpouseToFamilyLinks.Count;
 				for (int i = 0; i < num; i++)
 				{
@@ -207,19 +212,19 @@ namespace GKCore
 					{
 						GEDCOMIndividualRecord child = family.Childrens[j].Value as GEDCOMIndividualRecord;
 
-						int y = FindBirthYear(child);
-						if (y > 0) {
-							if (max < y) max = y;
+						AbsDate chbDate = FindBirthYear(child);
+						if (chbDate.IsValid()) {
+							if (maxBirth < chbDate) maxBirth = chbDate;
 						}
 					}
 				}
 
-				if (max > 0) {
-					return max + 1;
+				if (maxBirth.IsValid()) {
+					return maxBirth.IncYear(+1);
 				}
 			}
 
-			return -1;
+			return AbsDate.Empty();
 		}
 
 		#endregion
@@ -256,7 +261,7 @@ namespace GKCore
 						string nf, nn, np;
 						i_rec.GetNameParts(out nf, out nn, out np);
 
-						int bYear = this.FindBirthYear(i_rec);
+						AbsDate birthDate = this.FindBirthYear(i_rec);
 						int descGens = GKUtils.GetDescGenerations(i_rec);
 
 						bool res = (i_rec.ChildToFamilyLinks.Count == 0);
@@ -265,13 +270,13 @@ namespace GKCore
 						res = (res && descGens >= gensMin);
 
 						if (datesCheck) {
-							res = (res && bYear > 0);
+							res = (res && birthDate.IsValid());
 						}
 
 						if (res) {
 							PatriarchObj pObj = new PatriarchObj();
 							pObj.IRec = i_rec;
-							pObj.BirthYear = bYear;
+							pObj.BirthYear = birthDate.Year;
 							pObj.DescendantsCount = GKUtils.GetDescendantsCount(i_rec) - 1;
 							pObj.DescGenerations = descGens;
 							patList.Add(pObj);
@@ -771,28 +776,22 @@ namespace GKCore
 					if (stm.Length != 0) {
 						using (Bitmap bmp = new Bitmap(stm))
 						{
-							int newWidth;
-							int newHeight;
+							int imgWidth = bmp.Width;
+							int imgHeight = bmp.Height;
 
-							if (thumbWidth > 0 && thumbHeight > 0)
-							{
-								int maxSizeSrc = ((bmp.Height > bmp.Width) ? bmp.Height : bmp.Width);
-								int minSizeDst = ((thumbHeight < thumbWidth) ? thumbHeight : thumbWidth);
-								double ratio = (double)minSizeDst / maxSizeSrc;
-								newWidth = (int)(bmp.Width * ratio);
-								newHeight = (int)(bmp.Height * ratio);
-							} else {
-								newWidth = bmp.Width;
-								newHeight = bmp.Height;
+							if (thumbWidth > 0 && thumbHeight > 0) {
+								float ratio = GfxUtils.ZoomToFit(imgWidth, imgHeight, thumbWidth, thumbHeight);
+								imgWidth = (int)(imgWidth * ratio);
+								imgHeight = (int)(imgHeight * ratio);
 							}
 
-							Bitmap newImage = new Bitmap(newWidth, newHeight, PixelFormat.Format24bppRgb);
+							Bitmap newImage = new Bitmap(imgWidth, imgHeight, PixelFormat.Format24bppRgb);
 							Graphics graphic = Graphics.FromImage(newImage);
 							graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
 							graphic.SmoothingMode = SmoothingMode.HighQuality;
 							graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
 							graphic.CompositingQuality = CompositingQuality.HighQuality;
-							graphic.DrawImage(bmp, 0, 0, newWidth, newHeight);
+							graphic.DrawImage(bmp, 0, 0, imgWidth, imgHeight);
 
 							result = newImage;
 						}
@@ -852,7 +851,7 @@ namespace GKCore
 			if (string.IsNullOrEmpty(password)) {
 				this.fTree.LoadFromFile(fileName);
 			} else {
-				this.fTree.LoadFromFile(fileName, password);
+				this.LoadFromSecFile(fileName, password);
 			}
 		}
 
@@ -877,7 +876,77 @@ namespace GKCore
 			if (string.IsNullOrEmpty(password)) {
 				this.fTree.SaveToFile(fileName, GlobalOptions.Instance.DefCharacterSet);
 			} else {
-				this.fTree.SaveToFile(fileName, GlobalOptions.Instance.DefCharacterSet, password);
+				this.SaveToSecFile(fileName, GlobalOptions.Instance.DefCharacterSet, password);
+			}
+		}
+
+		private const string GEDSECHeader = "GEDSECAA";
+		private const byte GS_MajVer = 1;
+		private const byte GS_MinVer = 1;
+
+		private void LoadFromSecFile(string fileName, string password)
+		{
+			using (FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+			{
+				byte gsMajVer, gsMinVer;
+				
+				byte[] gsHeader = new byte[8];
+				fileStream.Read(gsHeader, 0, 8);
+				gsMajVer = gsHeader[6];
+				gsMinVer = gsHeader[7];
+				gsHeader[6] = 65;
+				gsHeader[7] = 65;
+				string gsh = Encoding.ASCII.GetString(gsHeader);
+
+				if (!string.Equals(gsh, GEDSECHeader)) {
+					throw new Exception("Это не GEDSEC-совместимый файл");
+				}
+
+				DESCryptoServiceProvider cryptic = new DESCryptoServiceProvider();
+
+				byte[] pwd = Encoding.Unicode.GetBytes(password);
+				byte[] salt = SCCrypt.CreateRandomSalt(7);
+
+				PasswordDeriveBytes pdb = new PasswordDeriveBytes(pwd, salt);
+				cryptic.Key = pdb.CryptDeriveKey("DES", "SHA1", cryptic.KeySize, cryptic.IV);
+
+				using (CryptoStream crStream = new CryptoStream(fileStream, cryptic.CreateDecryptor(), CryptoStreamMode.Read))
+				{
+					this.fTree.LoadFromStreamExt(fileStream, crStream, fileName);
+				}
+
+				SCCrypt.ClearBytes(pwd);
+				SCCrypt.ClearBytes(salt);
+				cryptic.Clear();
+			}
+		}
+
+		private void SaveToSecFile(string fileName, GEDCOMCharacterSet charSet, string password)
+		{
+			using (FileStream fileStream = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write))
+			{
+				byte[] gsHeader = Encoding.ASCII.GetBytes(GEDSECHeader);
+				gsHeader[6] = GS_MajVer;
+				gsHeader[7] = GS_MinVer;
+				fileStream.Write(gsHeader, 0, 8);
+
+				DESCryptoServiceProvider cryptic = new DESCryptoServiceProvider();
+
+				byte[] pwd = Encoding.Unicode.GetBytes(password);
+				byte[] salt = SCCrypt.CreateRandomSalt(7);
+
+				PasswordDeriveBytes pdb = new PasswordDeriveBytes(pwd, salt);
+				cryptic.Key = pdb.CryptDeriveKey("DES", "SHA1", cryptic.KeySize, cryptic.IV);
+
+				using (CryptoStream crStream = new CryptoStream(fileStream, cryptic.CreateEncryptor(), CryptoStreamMode.Write))
+				{
+					this.fTree.SaveToStreamExt(crStream, fileName, charSet);
+					crStream.Flush();
+				}
+
+				SCCrypt.ClearBytes(pwd);
+				SCCrypt.ClearBytes(salt);
+				cryptic.Clear();
 			}
 		}
 

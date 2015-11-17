@@ -21,6 +21,7 @@ namespace GKCore.Options
 		private readonly TreeChartOptions fChartOptions;
 		private GEDCOMCharacterSet fDefCharacterSet;
 		private DateFormat fDefDateFormat;
+		private bool fDefDateSigns;
 		private NameFormat fDefNameFormat;
 		private readonly StringList fEventFilters;
 		private ushort fInterfaceLang;
@@ -70,6 +71,12 @@ namespace GKCore.Options
 		{
 			get { return this.fDefDateFormat; }
 			set { this.fDefDateFormat = value; }
+		}
+
+		public bool DefDateSigns
+		{
+			get { return this.fDefDateSigns; }
+			set { this.fDefDateSigns = value; }
 		}
 
 		public NameFormat DefNameFormat

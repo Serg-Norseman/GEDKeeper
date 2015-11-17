@@ -1,10 +1,175 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Text;
-using ExtUtils;
+
 using GKCommon.GEDCOM.Enums;
 
 namespace GKCommon.GEDCOM
 {
+	/// <summary>
+	/// This is an structure for the abstract date to be used as a simple substitute of GEDCOMDate, and the standard DateTime. 
+	/// Substitution is used to obtain the date in reduced format, when no or a month, or a day, or both.
+	/// </summary>
+	[Serializable]
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+	public struct AbsDate : ICloneable, IComparable
+	{
+		private const double ABS_DATE_DELTA = 0.5d;
+
+		private readonly double fValue;
+
+		public int Year
+		{
+			get { return this.IsValid() ? getYear((int)this.fValue) : 0; }
+		}
+
+		public int Month
+		{
+			get { return this.IsValid() ? getMonth((int)this.fValue) : 0; }
+		}
+
+		public int Day
+		{
+			get { return this.IsValid() ? getDay((int)this.fValue) : 0; }
+		}
+
+		private AbsDate(double value)
+		{
+			this.fValue = value;
+		}
+
+		public AbsDate(int year, int month, int day, bool yearBC)
+		{
+			int result = createVal(year, month, day);
+			if (yearBC) result = -result;
+
+			this.fValue = result;
+		}
+
+		#region Private static methods
+
+		private static int createVal(int year, int month, int day)
+		{
+			return ((short)year << 16) | ((byte)month << 8) | ((byte)day);
+		}
+
+		private static int getYear(int dtx)
+		{
+			return (short)((dtx >> 16) & 0xFFFF);
+		}
+
+		private static int getMonth(int dtx)
+		{
+			return (byte)((dtx >> 8) & 0xFF);
+		}
+
+		private static int getDay(int dtx)
+		{
+			return (byte)((dtx) & 0xFF);
+		}
+
+		#endregion
+
+		public static AbsDate Empty()
+		{
+			return new AbsDate(double.NaN);
+		}
+
+		public static AbsDate Between(AbsDate dtx1, AbsDate dtx2)
+		{
+			return new AbsDate((dtx1.fValue + dtx2.fValue) / 2);
+		}
+
+		public bool IsValid()
+		{
+			return !double.IsNaN(this.fValue);
+		}
+
+		public AbsDate IncYear(int yearDelta)
+		{
+			int dtx = (int)this.fValue;
+			return new AbsDate(createVal(getYear(dtx) + yearDelta, getMonth(dtx), getDay(dtx)));
+		}
+
+		public override string ToString()
+		{
+			string result;
+
+			if (this.IsValid()) {
+				int dtx = (int)this.fValue;
+				result = string.Format("{0}/{1}/{2}", SysUtils.NumUpdate(getDay(dtx), 2), SysUtils.NumUpdate(getMonth(dtx), 2), SysUtils.NumUpdate(getYear(dtx), 4));
+			} else {
+				result = "00.00.0000";
+			}
+
+			return result;
+		}
+
+		public static bool operator ==(AbsDate left, AbsDate right)
+		{
+			return (left.fValue == right.fValue);
+		}
+
+		public static bool operator !=(AbsDate left, AbsDate right)
+		{
+			return (left.fValue != right.fValue);
+		}
+
+		public static bool operator <(AbsDate left, AbsDate right)
+		{
+			return left.fValue < right.fValue;
+		}
+
+		public static bool operator <=(AbsDate left, AbsDate right)
+		{
+			return left.fValue <= right.fValue;
+		}
+
+		public static bool operator >(AbsDate left, AbsDate right)
+		{
+			return left.fValue > right.fValue;
+		}
+
+		public static bool operator >=(AbsDate left, AbsDate right)
+		{
+			return left.fValue >= right.fValue;
+		}
+
+		public override bool Equals(object obj)
+		{
+			return (obj is AbsDate && this.fValue == ((AbsDate)obj).fValue);
+		}
+
+		public int CompareTo(object obj)
+		{
+			if (obj is AbsDate) {
+				return this.fValue.CompareTo(((AbsDate)obj).fValue);
+			} else {
+				return -1;
+			}
+		}
+
+		public object Clone()
+		{
+			return new AbsDate(this.fValue);
+		}
+
+		public override int GetHashCode()
+		{
+			return this.fValue.GetHashCode();
+		}
+
+		public AbsDate After()
+		{
+			return new AbsDate(this.fValue + ABS_DATE_DELTA);
+		}
+
+		public AbsDate Before()
+		{
+			return new AbsDate(this.fValue - ABS_DATE_DELTA);
+		}
+	}
+	
     /// <summary>
     /// 
     /// </summary>
@@ -264,12 +429,15 @@ namespace GKCommon.GEDCOM
 				case GEDCOMCharacterSet.csASCII:
 					res = Encoding.GetEncoding(1251);
 					break;
+
 				case GEDCOMCharacterSet.csANSEL:
 					res = new AnselEncoding();
 					break;
+
 				case GEDCOMCharacterSet.csUNICODE:
 					res = Encoding.Unicode;
 					break;
+
 				case GEDCOMCharacterSet.csUTF8:
 					res = Encoding.UTF8;
 					break;
@@ -305,20 +473,25 @@ namespace GKCommon.GEDCOM
 		public static string GetRestrictionStr(GEDCOMRestriction value)
 		{
 			string s;
+
 			switch (value) {
 				case GEDCOMRestriction.rnConfidential:
 					s = "confidential";
 					break;
+
 				case GEDCOMRestriction.rnLocked:
 					s = "locked";
 					break;
+
 				case GEDCOMRestriction.rnPrivacy:
 					s = "privacy";
 					break;
+
 				default:
 					s = "";
 					break;
 			}
+
 			return s;
 		}
 
@@ -1120,11 +1293,8 @@ namespace GKCommon.GEDCOM
 			
 			return str;
 		}
-		
-		//
-		//
-		//
-		
+
+
 		public static GEDCOMBaptismDateStatus GetBaptismDateStatusVal(string str)
 		{
 			string S = str.Trim().ToUpperInvariant();
@@ -1404,86 +1574,89 @@ namespace GKCommon.GEDCOM
 
 		#endregion
 
-		#region Date utils
+		#region AbstractDate utils
 
-		public static void GetDateParts(GEDCOMCustomDate customDate, out int year, out ushort month, out ushort day, out bool yearBC)
+		public static AbsDate GetAbstractDate(GEDCOMCustomEvent evt)
 		{
-			year = -1;
-			month = 0;
-			day = 0;
-			yearBC = false;
+			return (evt == null) ? AbsDate.Empty() : evt.Detail.Date.GetAbstractDate();
+		}
 
-			if (customDate is GEDCOMDateApproximated)
-			{
-				GEDCOMDate dt = (customDate as GEDCOMDate);
-				dt.GetDate(out year, out month, out day);
-				yearBC = dt.YearBC;
+		public static AbsDate GetAbstractDate(GEDCOMRecordWithEvents evsRec, string evSign)
+		{
+			AbsDate result;
+
+			if (evsRec == null) {
+				result = AbsDate.Empty();
+			} else {
+				GEDCOMCustomEvent evt = evsRec.FindEvent(evSign);
+				result = GEDCOMUtils.GetAbstractDate(evt);
 			}
-			else
+
+			return result;
+		}
+
+		public static AbsDate GetAbstractDate(string dateStr)
+		{
+			try
 			{
-				if (customDate is GEDCOMDateRange)
-				{
-					GEDCOMDateRange range = customDate as GEDCOMDateRange;
+				dateStr = StrToGEDCOMDate(dateStr, false);
 
-					if (range.After.StringValue == "" && range.Before.StringValue != "")
-					{
-						range.Before.GetDate(out year, out month, out day);
-						yearBC = range.Before.YearBC;
-					}
-					else
-					{
-						if (range.After.StringValue != "" && range.Before.StringValue == "")
-						{
-							range.After.GetDate(out year, out month, out day);
-							yearBC = range.After.YearBC;
-						}
-						else
-						{
-							if (range.After.StringValue != "" && range.Before.StringValue != "")
-							{
-								range.After.GetDate(out year, out month, out day);
-								yearBC = range.After.YearBC;
-							}
-						}
-					}
+				GEDCOMDateExact dtx = GEDCOMDateExact.Create(null, null, "", "") as GEDCOMDateExact;
+				dtx.ParseString(dateStr);
+				return dtx.GetAbstractDate();
+			}
+			catch
+			{
+				return AbsDate.Empty();
+			}
+		}
+
+		#endregion
+
+		#region Clean utils
+
+		public static void CleanFamily(GEDCOMFamilyRecord famRec)
+		{
+			if (famRec != null)
+			{
+				int num = famRec.Childrens.Count;
+				for (int i = 0; i < num; i++)
+				{
+					GEDCOMIndividualRecord child = famRec.Childrens[i].Value as GEDCOMIndividualRecord;
+					child.DeleteChildToFamilyLink(famRec);
 				}
-				else
-				{
-					if (customDate is GEDCOMDatePeriod)
-					{
-						GEDCOMDatePeriod period = customDate as GEDCOMDatePeriod;
 
-						if (period.DateFrom.StringValue != "" && period.DateTo.StringValue == "")
-						{
-							period.DateFrom.GetDate(out year, out month, out day);
-							yearBC = period.DateFrom.YearBC;
-						}
-						else
-						{
-							if (period.DateFrom.StringValue == "" && period.DateTo.StringValue != "")
-							{
-								period.DateTo.GetDate(out year, out month, out day);
-								yearBC = period.DateTo.YearBC;
-							}
-							else
-							{
-								if (period.DateFrom.StringValue != "" && period.DateTo.StringValue != "")
-								{
-									period.DateFrom.GetDate(out year, out month, out day);
-									yearBC = period.DateFrom.YearBC;
-								}
-							}
-						}
-					}
-					else
-					{
-						if (customDate is GEDCOMDate)
-						{
-							GEDCOMDate date = (customDate as GEDCOMDate);
-							date.GetDate(out year, out month, out day);
-							yearBC = date.YearBC;
-						}
-					}
+				GEDCOMIndividualRecord spouse;
+
+				spouse = famRec.GetHusband();
+				famRec.RemoveSpouse(spouse);
+
+				spouse = famRec.GetWife();
+				famRec.RemoveSpouse(spouse);
+			}
+		}
+
+		public static void CleanIndividual(GEDCOMIndividualRecord indRec)
+		{
+			if (indRec != null)
+			{
+				for (int i = indRec.ChildToFamilyLinks.Count - 1; i >= 0; i--)
+				{
+					GEDCOMFamilyRecord family = indRec.ChildToFamilyLinks[i].Family;
+					family.DeleteChild(indRec);
+				}
+
+				for (int i = indRec.SpouseToFamilyLinks.Count - 1; i >= 0; i--)
+				{
+					GEDCOMFamilyRecord family = indRec.SpouseToFamilyLinks[i].Family;
+					family.RemoveSpouse(indRec);
+				}
+
+				for (int i = indRec.Groups.Count - 1; i >= 0; i--)
+				{
+					GEDCOMPointer ptr = indRec.Groups[i];
+					GEDCOMGroupRecord group = ptr.Value as GEDCOMGroupRecord;
+					group.RemoveMember(indRec);
 				}
 			}
 		}

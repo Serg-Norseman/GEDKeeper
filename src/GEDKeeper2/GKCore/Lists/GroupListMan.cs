@@ -21,8 +21,8 @@ namespace GKCore.Lists
 	{
 		protected override void InitColumnStatics()
 		{
-			this.AddStatic(LSID.LSID_Group, TDataType.dtString, 400, true);
-			this.AddStatic(LSID.LSID_Changed, TDataType.dtDateTime, 150, true);
+			this.AddStatic(LSID.LSID_Group, DataType.dtString, 400, true);
+			this.AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
 		}
 
 		public GroupListColumns() : base()

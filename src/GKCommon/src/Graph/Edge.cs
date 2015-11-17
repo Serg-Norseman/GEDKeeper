@@ -6,17 +6,24 @@ namespace GKCommon.Graph
 	{
 		#region Private fields
 
-		//private int fCost;
-		private readonly Vertex fSource;
-		private readonly Vertex fTarget;
-		//private object fValue;
+		private int fCost;
+		private Vertex fSource;
+		private Vertex fTarget;
+		private object fValue;
 
 		#endregion
 
 		#region Properties
 
-		public int Cost { get; private set; }
-		public object Value { get; private set; }
+		public int Cost
+		{
+			get { return this.fCost; }
+		}
+
+		public object Value
+		{
+			get { return this.fValue; }
+		}
 
 		public Vertex Source
 		{
@@ -49,9 +56,8 @@ namespace GKCommon.Graph
 
 			this.fSource = source;
 			this.fTarget = target;
-
-			this.Cost = cost;
-			this.Value = value;
+			this.fCost = cost;
+			this.fValue = value;
 		}
 
 		public int CompareTo(object obj)

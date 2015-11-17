@@ -18,8 +18,19 @@ namespace GKUI.Controls
 	{
 		#region Private fields
 
-		private List<GEDCOMRecord> fContentList;
+		private class ValItem
+		{
+			public readonly GEDCOMRecord Record;
+			public object ColumnValue;
 
+            public ValItem(GEDCOMRecord record)
+            {
+                this.Record = record;
+                this.ColumnValue = null;
+            }
+		}
+
+		private List<ValItem> fContentList;
 		private int fFilteredCount;
 		private bool fIsMainList;
 		private ListManager fListMan;
@@ -28,8 +39,8 @@ namespace GKUI.Controls
 		private GEDCOMTree fTree;
 
 		private int fXSortColumn;
-		private SortOrder fXSortOrder;
 		private int fXSortFactor;
+		private SortOrder fXSortOrder;
 
 		private GKListItem[] fCache;
 		private int fCacheFirstItem;
@@ -37,11 +48,6 @@ namespace GKUI.Controls
 		#endregion
 
 		#region Public properties
-
-		public List<GEDCOMRecord> ContentList
-		{
-			get { return this.fContentList; }
-		}
 
 		public int FilteredCount
 		{
@@ -80,7 +86,7 @@ namespace GKUI.Controls
 
 		public GKRecordsView() : base()
 		{
-			this.fContentList = new List<GEDCOMRecord>();
+			this.fContentList = new List<ValItem>();
 			this.fListMan = null;
 			this.fRecordType = GEDCOMRecordType.rtNone;
             this.fXSortColumn = 0;
@@ -103,7 +109,7 @@ namespace GKUI.Controls
 					this.fListMan.Dispose();
 					this.fListMan = null;
 				}
-				//this.fContentList.Dispose();
+
 			    this.fContentList = null;
 			}
 			base.Dispose(disposing);
@@ -152,61 +158,51 @@ namespace GKUI.Controls
 			base.Invalidate();
 		}
 
-		private class ValItem
-		{
-			public readonly object ColumnValue;
-			public readonly GEDCOMRecord Record;
-
-            public ValItem(object columnValue, GEDCOMRecord record)
-            {
-                this.ColumnValue = columnValue;
-                this.Record = record;
-            }
-		}
-
 		private void SortContents()
 		{
-			List<ValItem> buffer = new List<ValItem>();
+			int num = this.fContentList.Count;
+			for (int i = 0; i < num; i++) {
+				ValItem valItem = this.fContentList[i];
+				GEDCOMRecord rec = valItem.Record;
 
-			int count = fContentList.Count;
-			for (int i = 0; i < count; i++) {
-				GEDCOMRecord rec = fContentList[i];
-
-			    object columnValue;
-				if (fXSortColumn == 0) {
-					columnValue = rec.GetId();
+				if (this.fXSortColumn == 0) {
+					valItem.ColumnValue = rec.GetId();
 				} else {
-					fListMan.Fetch(rec);
-					columnValue = fListMan.GetColumnInternalValue(fXSortColumn);
+					this.fListMan.Fetch(rec);
+					valItem.ColumnValue = this.fListMan.GetColumnInternalValue(this.fXSortColumn);
 				}
-
-                buffer.Add(new ValItem(columnValue, rec));
 			}
 
-			fXSortFactor = (fXSortOrder == SortOrder.Ascending ? 1 : -1);
-			ListTimSort<ValItem>.Sort(buffer, XCompare);
+			this.fXSortFactor = (this.fXSortOrder == SortOrder.Ascending ? 1 : -1);
+			ListTimSort<ValItem>.Sort(this.fContentList, CompareItems);
 
-			for (int i = 0; i < count; i++) fContentList[i] = buffer[i].Record;
-
-			this.ClearCache();
+			// clear cache
+			this.fCache = null;
 		}
 
-		private int XCompare(ValItem item1, ValItem item2)
+		private int CompareItems(ValItem item1, ValItem item2)
 		{
-			int compRes = ((IComparable)item1.ColumnValue).CompareTo(item2.ColumnValue);
+			int compRes;
+			object cv1 = item1.ColumnValue;
+			object cv2 = item2.ColumnValue;
 
-			if (item1.ColumnValue is string && item2.ColumnValue is string) {
-				string str1 = (string)item1.ColumnValue;
-				string str2 = (string)item2.ColumnValue;
-
-				if (str1 != "" && str2 == "") compRes = -1;
-				if (str1 == "" && str2 != "") compRes = 1;
-			} else {
-				if (item1.ColumnValue != null && item2.ColumnValue == null) compRes = -1;
-				if (item1.ColumnValue == null && item2.ColumnValue != null) compRes = 1;
+			if (cv1 != null && cv2 != null)
+			{
+				compRes = ((IComparable)cv1).CompareTo(cv2);
+			}
+			else if (cv1 != null && cv2 == null)
+			{
+				compRes = -1;
+			}
+			else if (cv1 == null && cv2 != null)
+			{
+				compRes = 1;
+			}
+			else {
+				compRes = 0;
 			}
 
-			return compRes * fXSortFactor;
+			return compRes * this.fXSortFactor;
 		}
 
 		private GKListItem GetListItem(int itemIndex)
@@ -216,7 +212,7 @@ namespace GKUI.Controls
 			if (itemIndex < 0 || itemIndex >= this.fContentList.Count) {
 				newItem = null;
 			} else {
-				GEDCOMRecord rec = this.fContentList[itemIndex];
+				GEDCOMRecord rec = this.fContentList[itemIndex].Record;
 
 				newItem = new GKListItem(rec.GetXRefNum(), rec);
 
@@ -250,11 +246,6 @@ namespace GKUI.Controls
 			} else {
 				e.Item = GetListItem(e.ItemIndex);
 			}
-		}
-
-		private void ClearCache()
-		{
-			fCache = null;
 		}
 
 		private void SetRecordType(GEDCOMRecordType value)
@@ -357,23 +348,26 @@ namespace GKUI.Controls
 				{
 					this.fListMan.InitFilter();
 
+					int contentSize = this.fTree.RecordsCount;
+
 					this.fContentList.Clear();
-					int num = this.fTree.RecordsCount;
-					for (int i = 0; i < num; i++) {
+					this.fContentList.Capacity = contentSize;
+
+					for (int i = 0; i < contentSize; i++) {
 						GEDCOMRecord rec = this.fTree[i];
 
 						if (rec.RecordType == this.fRecordType) {
 							this.fTotalCount++;
+
 							this.fListMan.Fetch(rec);
-							if (this.fListMan.CheckFilter(shieldState))
-							{
-								this.fContentList.Add(rec);
+							if (this.fListMan.CheckFilter(shieldState)) {
+								this.fContentList.Add(new ValItem(rec));
 							}
 						}
 					}
 
 					this.fFilteredCount = this.fContentList.Count;
-					VirtualListSize = this.fContentList.Count;
+					this.VirtualListSize = this.fContentList.Count;
 
 					this.SortContents();
 					base.ResizeColumn(autosizeColumn);
@@ -391,16 +385,56 @@ namespace GKUI.Controls
 			}
 		}
 
+		public List<GEDCOMRecord> GetContentList()
+		{
+			int size = this.fContentList.Count;
+			List<GEDCOMRecord> result = new List<GEDCOMRecord>(size);
+
+			for (int i = 0; i < size; i++) {
+				ValItem vi = this.fContentList[i];
+				result.Add(vi.Record);
+			}
+
+			return result;
+		}
+
+		public int IndexOfRecord(GEDCOMRecord record)
+		{
+			int result = -1;
+
+			int num = this.fContentList.Count;
+			for (int i = 0; i < num; i++) {
+				ValItem vi = this.fContentList[i];
+				if (vi.Record == record) {
+					result = i;
+					break;
+				}
+			}
+
+			return result;
+		}
+
 		public void DeleteRecord(GEDCOMRecord record)
 		{
 			// защита от сбоев: при удалении в режиме диаграмм, между фактическим удалением записи и 
 			// обновлением списка успевает пройти несколько запросов на обновление пунктов списка
 			// которые могут быть уже удалены
-		    int recIndex = this.fContentList.IndexOf(record);
-			if (recIndex >= 0) {
-                this.fContentList.RemoveAt(recIndex);
+		    int idx = this.IndexOfRecord(record);
+			if (idx >= 0) {
+                this.fContentList.RemoveAt(idx);
                 this.fFilteredCount = this.fContentList.Count;
 				base.VirtualListSize = this.fContentList.Count;
+			}
+		}
+
+		public void SelectItemByRec(GEDCOMRecord record)
+		{
+			int idx = this.IndexOfRecord(record);
+			if (idx >= 0) {
+				ListViewItem item = this.Items[idx];
+				this.SelectedIndices.Clear();
+				item.Selected = true;
+				item.EnsureVisible();
 			}
 		}
 
@@ -415,23 +449,12 @@ namespace GKUI.Controls
 				if (base.SelectedIndices.Count > 0) {
 					int index = base.SelectedIndices[0];
 					if (index >= 0 && index < fContentList.Count) {
-						result = fContentList[index];
+						result = this.fContentList[index].Record;
 					}					
 				}
 			}
 
 			return result;
-		}
-
-		public void SelectItemByRec(GEDCOMRecord aRec)
-		{
-			int idx = this.fContentList.IndexOf(aRec);
-			if (idx >= 0) {
-				ListViewItem item = this.Items[idx];
-				this.SelectedIndices.Clear();
-				item.Selected = true;
-				item.EnsureVisible();
-			}
 		}
 	}
 }

@@ -27,10 +27,10 @@ namespace GKCore.Lists
 			NumberFormatInfo nfi = new NumberFormatInfo();
 			nfi.NumberDecimalSeparator = ".";
 
-			this.AddStatic(LSID.LSID_Title, TDataType.dtString, 300, true);
-			this.AddStatic(LSID.LSID_Latitude, TDataType.dtFloat, 120, true, "0.000000", nfi);
-			this.AddStatic(LSID.LSID_Longitude, TDataType.dtFloat, 120, true, "0.000000", nfi);
-			this.AddStatic(LSID.LSID_Changed, TDataType.dtDateTime, 150, true);
+			this.AddStatic(LSID.LSID_Title, DataType.dtString, 300, true);
+			this.AddStatic(LSID.LSID_Latitude, DataType.dtFloat, 120, true, "0.000000", nfi);
+			this.AddStatic(LSID.LSID_Longitude, DataType.dtFloat, 120, true, "0.000000", nfi);
+			this.AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
 		}
 
 		public LocationListColumns()

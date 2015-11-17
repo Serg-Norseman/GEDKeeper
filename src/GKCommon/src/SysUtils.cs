@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.Security.Permissions;
 
 using ExtUtils.MapiMail;
 
@@ -180,6 +181,7 @@ namespace GKCommon
             return NativeMethods.InternetGetConnectedState(out iDesc, 0);
         }
 
+        [EnvironmentPermissionAttribute(SecurityAction.LinkDemand, Unrestricted=true)]
         public static int DoScroll(IntPtr handle, uint wParam, int nBar, int oldPos, int min, int max, int smallPiece, int bigPiece)
 		{
 			ScrollEventType scrType = SysUtils.GetScrollEventType(wParam & 65535u);
@@ -293,5 +295,34 @@ namespace GKCommon
         {
         	return (val & (1 << pos)) != 0;
         }
+
+		public static int agCompare(string str1, string str2)
+		{
+			double val1, val2;
+			bool v1 = double.TryParse(str1, out val1);
+			bool v2 = double.TryParse(str2, out val2);
+
+			int result;
+			if (v1 && v2)
+			{
+				if (val1 < val2) {
+					result = -1;
+				} else if (val1 > val2) {
+					result = +1;
+				} else {
+					result = 0;
+				}
+			}
+			else
+			{
+				result = string.Compare(str1, str2, false);
+				if (str1 != "" && str2 == "") {
+					result = -1;
+				} else if (str1 == "" && str2 != "") {
+					result = +1;
+				}
+			}
+			return result;
+		}
     }
 }

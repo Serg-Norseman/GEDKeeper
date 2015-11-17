@@ -21,13 +21,14 @@ namespace GKPedigreeImporterPlugin
             this.btnImportFileChoose.Text = fLangMan.LS(ILS.LSID_DlgSelect) + "...";
         }
 
-		void btnImportFileChoose_Click(object sender, EventArgs e)
+		private void btnImportFileChoose_Click(object sender, EventArgs e)
 		{
 			IBaseWindow curBase = plugin.Host.GetCurrentFile(false);
 			
 			if (this.OpenDialog2.ShowDialog() == DialogResult.OK)
 			{
 				this.edImportFile.Text = this.OpenDialog2.FileName;
+
 				Importer imp = new Importer(curBase, this.fLangMan, this.ListBox1.Items);
 				try
 				{

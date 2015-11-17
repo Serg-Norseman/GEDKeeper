@@ -42,7 +42,7 @@ namespace GKCore.Lists
 	{
 		//public byte colType;
 		public LSID colName;
-		public TDataType dataType;
+		public DataType dataType;
 		public NumberFormatInfo nfi;
 		public string format;
 		public int width;
@@ -112,7 +112,7 @@ namespace GKCore.Lists
 			this.fColumns.Clear();
 		}
 
-		public void AddStatic(/*Enum colType*/ LSID colName, TDataType dataType, int defWidth, bool defActive)
+		public void AddStatic(/*Enum colType*/ LSID colName, DataType dataType, int defWidth, bool defActive)
 		{
 			ColumnStatic cs = new ColumnStatic();
 
@@ -127,7 +127,7 @@ namespace GKCore.Lists
 			this.ColumnStatics.Add(cs);
 		}
 
-		public void AddStatic(/*Enum colType*/ LSID colName, TDataType dataType, int defWidth, bool defActive, string format, NumberFormatInfo nfi)
+		public void AddStatic(/*Enum colType*/ LSID colName, DataType dataType, int defWidth, bool defActive, string format, NumberFormatInfo nfi)
 		{
 			ColumnStatic cs = new ColumnStatic();
 

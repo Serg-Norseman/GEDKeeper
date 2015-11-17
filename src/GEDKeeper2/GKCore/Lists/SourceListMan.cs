@@ -23,10 +23,10 @@ namespace GKCore.Lists
 	{
 		protected override void InitColumnStatics()
 		{
-			this.AddStatic(LSID.LSID_ShortTitle, TDataType.dtString, 120, true);
-			this.AddStatic(LSID.LSID_Author, TDataType.dtString, 200, true);
-			this.AddStatic(LSID.LSID_Title, TDataType.dtString, 200, true);
-			this.AddStatic(LSID.LSID_Changed, TDataType.dtDateTime, 150, true);
+			this.AddStatic(LSID.LSID_ShortTitle, DataType.dtString, 120, true);
+			this.AddStatic(LSID.LSID_Author, DataType.dtString, 200, true);
+			this.AddStatic(LSID.LSID_Title, DataType.dtString, 200, true);
+			this.AddStatic(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
 		}
 
 		public SourceListColumns() : base()

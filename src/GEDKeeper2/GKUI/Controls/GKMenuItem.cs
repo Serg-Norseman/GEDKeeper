@@ -15,4 +15,17 @@ namespace GKUI.Controls
 			this.Tag = tag;
 		}
 	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public class GKToolStripMenuItem : ToolStripMenuItem
+	{
+		public new int Tag;
+
+		public GKToolStripMenuItem(string text, int tag) : base(text)
+		{
+			this.Tag = tag;
+		}
+	}
 }

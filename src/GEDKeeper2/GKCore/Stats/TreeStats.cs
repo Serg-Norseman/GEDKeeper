@@ -52,10 +52,10 @@ namespace GKCore.Stats
 							break;
 					}
 
-					string v_age = GKUtils.GetAge(ind, -1);
+					string v_age = GKUtils.GetAgeStr(ind, -1);
 					stats.age.TakeVal(v_age, ind.Sex, true);
 
-					string v_life = GKUtils.GetLifeExpectancy(ind);
+					string v_life = GKUtils.GetLifeExpectancyStr(ind);
 					stats.life.TakeVal(v_life, ind.Sex, true);
 
 					int ch_cnt = ind.GetTotalChildsCount();
@@ -154,11 +154,11 @@ namespace GKCore.Stats
 					}
 
                 case StatsMode.smAge:
-						CheckVal(values, GKUtils.GetAge(iRec, -1));
+						CheckVal(values, GKUtils.GetAgeStr(iRec, -1));
 						break;
 
 				case StatsMode.smLifeExpectancy:
-						CheckVal(values, GKUtils.GetLifeExpectancy(iRec));
+						CheckVal(values, GKUtils.GetLifeExpectancyStr(iRec));
 						break;
 
 				case StatsMode.smBirthYears:
@@ -174,23 +174,17 @@ namespace GKCore.Stats
 						for (int j = 0; j < num2; j++)
 						{
 							GEDCOMCustomEvent evt = iRec.Events[j];
-
-							int year;
-							ushort k, d;
-							evt.Detail.Date.GetIndependentDate(out year, out k, out d);
-							if (Math.Abs(year) > 3000)
-							{
-								GKUtils.ShowMessage(evt.Detail.Date.StringValue + "/" + iName);
-							}
+							AbsDate dtx = GEDCOMUtils.GetAbstractDate(evt);
+							if (!dtx.IsValid() && (mode != StatsMode.smBirthPlaces && mode != StatsMode.smDeathPlaces)) continue;
 
 							if (evt.Name == "BIRT")
 							{
 								switch (mode) {
 									case StatsMode.smBirthYears:
-										V = Convert.ToString(year);
+										V = Convert.ToString(dtx.Year);
 										break;
 									case StatsMode.smBirthTenYears:
-										V = Convert.ToString(year / 10 * 10);
+										V = Convert.ToString(dtx.Year / 10 * 10);
 										break;
 									case StatsMode.smBirthPlaces:
 										V = evt.Detail.Place.StringValue;
@@ -203,10 +197,10 @@ namespace GKCore.Stats
 								{
 									switch (mode) {
 										case StatsMode.smDeathYears:
-											V = Convert.ToString(year);
+											V = Convert.ToString(dtx.Year);
 											break;
 										case StatsMode.smDeathTenYears:
-											V = Convert.ToString(year / 10 * 10);
+											V = Convert.ToString(dtx.Year / 10 * 10);
 											break;
 										case StatsMode.smDeathPlaces:
 											V = evt.Detail.Place.StringValue;
@@ -276,8 +270,17 @@ namespace GKCore.Stats
 						break;
 
 				case StatsMode.smBirthByMonth:
-						int month = GKUtils.GetIndependentMonth(iRec, "BIRT");
-						if (month > 0) CheckVal(values, month.ToString());
+						GEDCOMCustomEvent ev = iRec.FindEvent("BIRT");
+						if (ev != null) {
+							GEDCOMCustomDate dtx = ev.Detail.Date.Value;
+							if (dtx != null) {
+								int ay;
+								ushort month, ad;
+								bool ybc;
+								dtx.GetDateParts(out ay, out month,out ad, out ybc);
+								if (month > 0) CheckVal(values, month.ToString());
+							}
+						}
 						break;
 			}
 		}
@@ -321,26 +324,32 @@ namespace GKCore.Stats
 
 								switch (mode) {
 									case StatsMode.smAAF_1:
-										key = SysUtils.Trunc(GKUtils.GetIndependentYear(iRec, "BIRT") / 10 * 10).ToString();
+										AbsDate dtx1 = GEDCOMUtils.GetAbstractDate(iRec, "BIRT");
+										if (dtx1.IsValid()) {
+											key = SysUtils.Trunc(dtx1.Year / 10 * 10).ToString();
 
-										if (!xvals.TryGetValue(key, out valsList))
-										{
-											valsList = new List<int>();
-											xvals.Add(key, valsList);
+											if (!xvals.TryGetValue(key, out valsList))
+											{
+												valsList = new List<int>();
+												xvals.Add(key, valsList);
+											}
+											valsList.Add(fba);
 										}
-										valsList.Add(fba);
 
 										break;
 
 									case StatsMode.smAAF_2:
-										key = SysUtils.Trunc(GKUtils.GetIndependentYear(iChild, "BIRT") / 10 * 10).ToString();
+										AbsDate dtx2 = GEDCOMUtils.GetAbstractDate(iChild, "BIRT");
+										if (dtx2.IsValid()) {
+											key = SysUtils.Trunc(dtx2.Year / 10 * 10).ToString();
 
-										if (!xvals.TryGetValue(key, out valsList))
-										{
-											valsList = new List<int>();
-											xvals.Add(key, valsList);
+											if (!xvals.TryGetValue(key, out valsList))
+											{
+												valsList = new List<int>();
+												xvals.Add(key, valsList);
+											}
+											valsList.Add(fba);
 										}
-										valsList.Add(fba);
 
 										break;
 								}
@@ -352,7 +361,11 @@ namespace GKCore.Stats
 						if (rec is GEDCOMFamilyRecord && mode == StatsMode.smSpousesDiff)
 						{
 							GEDCOMFamilyRecord fRec = rec as GEDCOMFamilyRecord;
-							values.Add(new StatsItem(GKUtils.GetFamilyString(fRec), GKUtils.GetSpousesDiff(fRec)));
+
+							int diff = GKUtils.GetSpousesDiff(fRec);
+							if (diff != -1) {
+								values.Add(new StatsItem(GKUtils.GetFamilyString(fRec), diff));
+							}
 						}
 					}
 				}

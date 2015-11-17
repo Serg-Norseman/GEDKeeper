@@ -107,21 +107,12 @@ namespace GKCore.Export
 
 		protected static void PrepareEventYear(StringList index, GEDCOMCustomEvent evt, GEDCOMIndividualRecord iRec)
 		{
-			int year = -1;
-			if (evt == null) {
-				year = -1;
-			} else {
-				ushort m, d;
-				evt.Detail.Date.GetIndependentDate(out year, out m, out d);
-				if (year == 0) year = -1;
+			if (evt != null) {
+				AbsDate dtx = GEDCOMUtils.GetAbstractDate(evt);
+				if (dtx.IsValid()) {
+					PrepareSpecIndex(index, dtx.Year.ToString(), iRec);
+				}
 			}
-
-			if (year < 0) {
-				return;
-			}
-
-			PrepareSpecIndex(index, year.ToString(), iRec);
 		}
-
 	}
 }

@@ -7,10 +7,11 @@ using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
+using GKCore.Interfaces;
 
 namespace GKUI.Charts
 {
-	public class AncestorsCircleOptions
+	public class AncestorsCircleOptions : IOptions
 	{
 		private AncestorsCircle fOwner;
 
@@ -135,7 +136,7 @@ namespace GKUI.Charts
             AncestorsCircle.EventRootChanged = new object();
         }
 
-		public AncestorsCircle(GEDCOMTree tree)
+		public AncestorsCircle(GEDCOMTree tree) : base()
 		{
 			this.components = new System.ComponentModel.Container();
 
@@ -159,9 +160,8 @@ namespace GKUI.Charts
 		protected override void Dispose(bool disposing)
 		{
 			if (disposing) {
-				if (components != null) {
-					components.Dispose();
-				}
+				if (components != null) components.Dispose();
+                if (this.fFont != null) this.fFont.Dispose();
 			}
 			base.Dispose(disposing);
 		}
@@ -188,7 +188,7 @@ namespace GKUI.Charts
 				Color col = this.fOptions.BrushColor[i];
 
 				this.fCircleBrushes[i] = new SolidBrush(col);
-				this.fDarkBrushes[i] = new SolidBrush(ColorUtils.darker(col, 0.2f));
+				this.fDarkBrushes[i] = new SolidBrush(GfxUtils.Darker(col, 0.2f));
 			}
 		}
 

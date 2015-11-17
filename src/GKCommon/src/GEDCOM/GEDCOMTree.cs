@@ -2,8 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography;
 using System.Text;
+
 using GKCommon.GEDCOM.Enums;
 
 namespace GKCommon.GEDCOM
@@ -17,71 +17,72 @@ namespace GKCommon.GEDCOM
 
 		private struct TreeEnumerator : IGEDCOMTreeEnumerator
 		{
-			private readonly GEDCOMTree tree;
-            private readonly GEDCOMRecordType rec_type;
-            private readonly int endIndex;
-            private int index;
+			private GEDCOMTree fTree;
+            private GEDCOMRecordType fRecType;
+            private int fEndIndex;
+            private int fIndex;
 
 			public TreeEnumerator(GEDCOMTree tree)
 			{
-				this.tree = tree;
-				this.index = -1;
-				this.endIndex = tree.RecordsCount - 1;
-				this.rec_type = GEDCOMRecordType.rtNone;
+				this.fTree = tree;
+				this.fIndex = -1;
+				this.fEndIndex = tree.RecordsCount - 1;
+				this.fRecType = GEDCOMRecordType.rtNone;
 			}
 
 			public TreeEnumerator(GEDCOMTree tree, GEDCOMRecordType rec_type)
 			{
-				this.tree = tree;
-				this.index = -1;
-				this.endIndex = tree.RecordsCount - 1;
-				this.rec_type = rec_type;
+				this.fTree = tree;
+				this.fIndex = -1;
+				this.fEndIndex = tree.RecordsCount - 1;
+				this.fRecType = rec_type;
 			}
 
 			public bool MoveNext(out GEDCOMRecord current)
 			{
-				if (this.rec_type == GEDCOMRecordType.rtNone)
+				if (this.fRecType == GEDCOMRecordType.rtNone)
 				{
-					if (this.index < this.endIndex)
+					if (this.fIndex < this.fEndIndex)
 					{
-						this.index++;
-						current = this.tree[this.index];
+						this.fIndex++;
+						current = this.fTree[this.fIndex];
 						return true;
 					}
 				} else {
-					while (this.index < this.endIndex)
+					while (this.fIndex < this.fEndIndex)
 					{
-						this.index++;
-						GEDCOMRecord rec = this.tree[this.index];
-						if (rec.RecordType == this.rec_type) {
+						this.fIndex++;
+						GEDCOMRecord rec = this.fTree[this.fIndex];
+						if (rec.RecordType == this.fRecType) {
 							current = rec;
 							return true;
 						}
 					}
 				}
 
-				this.index = this.endIndex + 1;
+				this.fIndex = this.fEndIndex + 1;
 				current = null;
 				return false;
 			}
 
 			public void Reset()
 			{
-				this.index = -1;
+				this.fIndex = -1;
 			}
 		}
 
 		#endregion
 
-		private readonly GEDCOMHeader fHeader;
-        private readonly GEDCOMList<GEDCOMRecord> fRecords;
-        private readonly Hashtable fXRefIndex;
 
-        private GEDCOMState fState;
 		private string fFileName;
+		private GEDCOMHeader fHeader;
 		private ProgressEventHandler fOnProgressEvent;
+        private GEDCOMList<GEDCOMRecord> fRecords;
+        private GEDCOMState fState;
+        private Hashtable fXRefIndex;
 
-		public string FileName
+
+        public string FileName
 		{
 			get { return this.fFileName; }
 			//set { this.fFileName = value; }
@@ -357,54 +358,7 @@ namespace GKCommon.GEDCOM
 			}
 		}
 
-		public void LoadFromFile(string fileName, string password)
-		{
-			using (FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
-			{
-				DESCryptoServiceProvider cryptic = new DESCryptoServiceProvider();
-
-				byte[] pwd = Encoding.Unicode.GetBytes(password);
-				byte[] salt = SCCrypt.CreateRandomSalt(7);
-
-				PasswordDeriveBytes pdb = new PasswordDeriveBytes(pwd, salt);
-				cryptic.Key = pdb.CryptDeriveKey("DES", "SHA1", cryptic.KeySize, cryptic.IV);
-
-				using (CryptoStream crStream = new CryptoStream(fileStream, cryptic.CreateDecryptor(), CryptoStreamMode.Read))
-				{
-					this.LoadFromStreamExt(fileStream, crStream, fileName);
-				}
-
-				SCCrypt.ClearBytes(pwd);
-				SCCrypt.ClearBytes(salt);
-				cryptic.Clear();
-			}
-		}
-
-		public void SaveToFile(string fileName, GEDCOMCharacterSet charSet, string password)
-		{
-			using (FileStream fileStream = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write))
-			{
-				DESCryptoServiceProvider cryptic = new DESCryptoServiceProvider();
-
-				byte[] pwd = Encoding.Unicode.GetBytes(password);
-				byte[] salt = SCCrypt.CreateRandomSalt(7);
-
-				PasswordDeriveBytes pdb = new PasswordDeriveBytes(pwd, salt);
-				cryptic.Key = pdb.CryptDeriveKey("DES", "SHA1", cryptic.KeySize, cryptic.IV);
-
-				using (CryptoStream crStream = new CryptoStream(fileStream, cryptic.CreateEncryptor(), CryptoStreamMode.Write))
-				{
-					this.SaveToStreamExt(crStream, fileName, charSet);
-					crStream.Flush();
-				}
-
-				SCCrypt.ClearBytes(pwd);
-				SCCrypt.ClearBytes(salt);
-				cryptic.Clear();
-			}
-		}
-
-		private void LoadFromStreamExt(Stream fileStream, Stream inputStream, string fileName)
+		public void LoadFromStreamExt(Stream fileStream, Stream inputStream, string fileName)
 		{
 			this.fFileName = fileName;
 
@@ -415,7 +369,7 @@ namespace GKCommon.GEDCOM
 			}
 		}
 
-		private void SaveToStreamExt(Stream outputStream, string fileName, GEDCOMCharacterSet charSet)
+		public void SaveToStreamExt(Stream outputStream, string fileName, GEDCOMCharacterSet charSet)
 		{
 			this.fFileName = fileName;
 
@@ -807,36 +761,28 @@ namespace GKCommon.GEDCOM
 		}
 
 		//
-		
-		public void CleanFamily(GEDCOMFamilyRecord family)
-		{
-			if (family != null)
-			{
-				int num = family.Childrens.Count;
-				for (int i = 0; i < num; i++)
-				{
-					GEDCOMIndividualRecord child = family.Childrens[i].Value as GEDCOMIndividualRecord;
-					child.DeleteChildToFamilyLink(family);
-				}
 
-				GEDCOMIndividualRecord spouse;
-
-				spouse = family.GetHusband();
-				family.RemoveSpouse(spouse);
-
-				spouse = family.GetWife();
-				family.RemoveSpouse(spouse);
-			}
-		}
-		
-		public bool DeleteFamilyRecord(GEDCOMFamilyRecord family)
+		public bool DeleteIndividualRecord(GEDCOMIndividualRecord iRec)
 		{
 			bool result = false;
-			if (family != null)
+			if (iRec != null)
 			{
-				this.CleanFamily(family);
+				GEDCOMUtils.CleanIndividual(iRec);
 
-				this.Delete(this.IndexOfRecord(family));
+				this.Delete(this.IndexOfRecord(iRec));
+				result = true;
+			}
+			return result;
+		}
+
+		public bool DeleteFamilyRecord(GEDCOMFamilyRecord famRec)
+		{
+			bool result = false;
+			if (famRec != null)
+			{
+				GEDCOMUtils.CleanFamily(famRec);
+
+				this.Delete(this.IndexOfRecord(famRec));
 				result = true;
 			}
 			return result;
@@ -854,36 +800,6 @@ namespace GKCommon.GEDCOM
 				}
 
 				this.Delete(this.IndexOfRecord(groupRec));
-				result = true;
-			}
-			return result;
-		}
-
-		public bool DeleteIndividualRecord(GEDCOMIndividualRecord iRec)
-		{
-			bool result = false;
-			if (iRec != null)
-			{
-				for (int i = iRec.ChildToFamilyLinks.Count - 1; i >= 0; i--)
-				{
-					GEDCOMFamilyRecord family = iRec.ChildToFamilyLinks[i].Family;
-					family.DeleteChild(iRec);
-				}
-
-				for (int i = iRec.SpouseToFamilyLinks.Count - 1; i >= 0; i--)
-				{
-					GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[i].Family;
-					family.RemoveSpouse(iRec);
-				}
-
-				for (int i = iRec.Groups.Count - 1; i >= 0; i--)
-				{
-					GEDCOMPointer ptr = iRec.Groups[i];
-					GEDCOMGroupRecord group = ptr.Value as GEDCOMGroupRecord;
-					group.RemoveMember(iRec);
-				}
-
-				this.Delete(this.IndexOfRecord(iRec));
 				result = true;
 			}
 			return result;

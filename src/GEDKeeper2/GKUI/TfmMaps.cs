@@ -19,8 +19,14 @@ namespace GKUI
 	{
 		private class TPlaceRef
 		{
-			public DateTime Date;
+			public readonly DateTime Date;
 			public GEDCOMCustomEvent Event;
+
+			public TPlaceRef(GEDCOMCustomEvent evt)
+			{
+				this.Event = evt;
+				this.Date = (evt == null) ? new DateTime(0) : evt.Detail.Date.GetDateTime();
+			}
 		}
 
 		private class MapPlace : IDisposable
@@ -298,11 +304,9 @@ namespace GKUI
 
 					int num = mapPlace.Points.Count;
 					for (int i = 0; i < num; i++) {
-						if (mapPlace.Points[i] is GMapPoint) {
-							GMapPoint pt = mapPlace.Points[i] as GMapPoint;
-							string ptTitle = pt.Hint + string.Format(" [{0:0.000000}, {1:0.000000}]", pt.Latitude, pt.Longitude);
-							node.Nodes.Add(new GKTreeNode(ptTitle, pt));
-						}
+						GMapPoint pt = mapPlace.Points[i];
+						string ptTitle = pt.Hint + string.Format(" [{0:0.000000}, {1:0.000000}]", pt.Latitude, pt.Longitude);
+						node.Nodes.Add(new GKTreeNode(ptTitle, pt));
 					}
 				} else {
 					GMapPoint pt = new GMapPoint(locRec.Map.Lati, locRec.Map.Long, placeName);
@@ -315,10 +319,7 @@ namespace GKUI
                 mapPlace = ((node as GKTreeNode).Data as MapPlace);
 			}
 
-			TPlaceRef pRef = new TPlaceRef();
-			pRef.Date = placeEvent.GetIndependentDate();
-			pRef.Event = placeEvent;
-			mapPlace.PlaceRefs.Add(pRef);
+			mapPlace.PlaceRefs.Add(new TPlaceRef(placeEvent));
 		}
 
 		private void CopyPoint(GMapPoint aPt, TPlaceRef aRef)

@@ -2,7 +2,7 @@ using System;
 
 namespace GKCommon.GEDCOM
 {
-	public abstract class GEDCOMCustomDate : GEDCOMTag
+	public abstract class GEDCOMCustomDate : GEDCOMTag, IComparable
 	{
 		public static readonly string[] GEDCOMDateApproximatedArray;
 		public static readonly string[] GEDCOMDateRangeArray;
@@ -18,9 +18,6 @@ namespace GKCommon.GEDCOM
 			get { return this.GetDateTime(); }
 			set { this.SetDateTime(value); }
 		}
-
-		public abstract DateTime GetDateTime();
-		public abstract void SetDateTime(DateTime value);
 
 		static GEDCOMCustomDate()
 		{
@@ -71,6 +68,25 @@ namespace GKCommon.GEDCOM
 
 	    protected GEDCOMCustomDate(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
+		}
+
+		public abstract DateTime GetDateTime();
+		public abstract void SetDateTime(DateTime value);
+
+		public abstract AbsDate GetAbstractDate();
+		public abstract void GetDateParts(out int year, out ushort month, out ushort day, out bool yearBC);
+
+		public int CompareTo(object obj)
+		{
+			GEDCOMCustomDate otherDate = obj as GEDCOMCustomDate;
+
+			if (otherDate != null) {
+				AbsDate abs1 = this.GetAbstractDate();
+				AbsDate abs2 = otherDate.GetAbstractDate();
+				return abs1.CompareTo(abs2);
+			} else {
+				return -1;
+			}
 		}
 	}
 }

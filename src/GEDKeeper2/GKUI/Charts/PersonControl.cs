@@ -44,8 +44,7 @@ namespace GKUI.Charts
         {
         	this.fPerson = person;
         	
-            ExtRect rt = this.fPerson.Rect;
-            rt = rt.GetShift(this.fChart.fSPX, this.fChart.fSPY);
+            ExtRect rt = this.fPerson.Rect.GetOffset(this.fChart.fSPX, this.fChart.fSPY);
             Rectangle rect = rt.ToRectangle();
             
             rect.X = rect.Right;

@@ -373,9 +373,9 @@ namespace GKUI
 			{
 				TreeTools.TCheckObj checkObj = this.fChecksList[i] as TreeTools.TCheckObj;
 
-				ListViewItem item = this.ListChecks.AddItem(checkObj.GetRecordName(), checkObj);
-				item.SubItems.Add(checkObj.Comment);
-				item.SubItems.Add(LangMan.LS(GKData.CheckSolveNames[(int)checkObj.Solve]));
+				GKListItem item = this.ListChecks.AddItem(checkObj.GetRecordName(), checkObj);
+				item.AddSubItem(checkObj.Comment);
+				item.AddSubItem(LangMan.LS(GKData.CheckSolveNames[(int)checkObj.Solve]));
 			}
 
 			this.ListChecks.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
@@ -444,7 +444,7 @@ namespace GKUI
 					PlaceObj place_obj = this.fPlaces.GetObject(i) as PlaceObj;
 
 					GKListItem item = this.ListPlaces.AddItem(this.fPlaces[i], place_obj);
-					item.SubItems.Add(place_obj.Facts.Count.ToString());
+					item.AddSubItem(place_obj.Facts.Count);
 				}
 			}
 			finally
@@ -655,9 +655,9 @@ namespace GKUI
 					string p_sign = ((p_obj.IRec.Patriarch) ? "[*] " : "");
 
 					GKListItem item = this.ListPatriarchs.AddItem(p_sign + p_obj.IRec.GetNameString(true, false), p_obj.IRec);
-					item.SubItems.Add(p_obj.BirthYear.ToString());
-					item.SubItems.Add(p_obj.DescendantsCount.ToString());
-					item.SubItems.Add(p_obj.DescGenerations.ToString());
+					item.AddSubItem(p_obj.BirthYear);
+					item.AddSubItem(p_obj.DescendantsCount);
+					item.AddSubItem(p_obj.DescGenerations);
 				}
 			}
 			finally

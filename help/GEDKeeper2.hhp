@@ -3,12 +3,16 @@ Auto Index=Yes
 Compatibility=1.1 or later
 Compiled file=GEDKeeper2.chm
 Contents file=GEDKeeper2.hhc
+Default Window=NavigationPane
 Default topic=gkhAbout.html
 Display compile progress=Yes
 Full-text search=Yes
 Index file=GEDKeeper2.hhk
 Language=0x419 Русский (Россия)
 Title=GEDKeeper
+
+[WINDOWS]
+NavigationPane=,"GEDKeeper2.hhc","GEDKeeper2.hhk","gkhAbout.html","gkhAbout.html",,,,,0x63520,,0x304c,[20,20,820,620],,,,,,,0
 
 
 [FILES]
@@ -75,6 +79,8 @@ gkhWorkAdv.html
 gkhPluginStd.html
 gkhAncestorsCircle.html
 gkhIntro.html
+gkhDateSpecials.html
+gkhSecure.html
 
 [ALIAS]
 Auto Index=Yes

@@ -7,7 +7,6 @@ namespace GKUI
 		private System.Windows.Forms.SaveFileDialog SaveDialog1;
 		private System.Windows.Forms.ToolBar ToolBar1;
 		private System.Windows.Forms.ToolBarButton tbImageSave;
-		private System.Windows.Forms.ToolBarButton tbImagePrint;
 		private System.Windows.Forms.ContextMenu MenuPerson;
 		private System.Windows.Forms.MenuItem miEdit;
 		private System.Windows.Forms.MenuItem N1;
@@ -58,7 +57,6 @@ namespace GKUI
 			this.SaveDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.ToolBar1 = new System.Windows.Forms.ToolBar();
 			this.tbImageSave = new System.Windows.Forms.ToolBarButton();
-			this.tbImagePrint = new System.Windows.Forms.ToolBarButton();
 			this.tbs1 = new System.Windows.Forms.ToolBarButton();
 			this.tbGens = new System.Windows.Forms.ToolBarButton();
 			this.MenuGens = new System.Windows.Forms.ContextMenu();
@@ -115,7 +113,6 @@ namespace GKUI
 			this.ToolBar1.Appearance = System.Windows.Forms.ToolBarAppearance.Flat;
 			this.ToolBar1.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] {
 									this.tbImageSave,
-									this.tbImagePrint,
 									this.tbs1,
 									this.tbGens,
 									this.tbs2,
@@ -134,12 +131,6 @@ namespace GKUI
 			this.tbImageSave.ImageIndex = 6;
 			this.tbImageSave.Name = "tbImageSave";
 			this.tbImageSave.ToolTipText = "Сохранить изображение";
-			// 
-			// tbImagePrint
-			// 
-			this.tbImagePrint.ImageIndex = 7;
-			this.tbImagePrint.Name = "tbImagePrint";
-			this.tbImagePrint.ToolTipText = "Печать изображения";
 			// 
 			// tbs1
 			// 

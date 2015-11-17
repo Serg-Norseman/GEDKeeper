@@ -7,5 +7,9 @@ namespace GKCore.Interfaces
 		IBaseWindow Base { get; }
 		
 		void GenChart(bool show);
+
+		bool AllowPrint();
+		void DoPrint();
+		void DoPrintPreview();
 	}
 }

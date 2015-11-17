@@ -51,17 +51,25 @@ namespace GKCommon
 			return X >= this.Left && Y >= this.Top && X < this.Right && Y < this.Bottom;
 		}
 
-		public ExtRect GetShift(int X, int Y)
+		public ExtRect GetOffset(int dX, int dY)
 		{
-			return ExtRect.Create(this.Left + X, this.Top + Y, this.Right + X, this.Bottom + Y);
+			return ExtRect.Create(this.Left + dX, this.Top + dY, this.Right + dX, this.Bottom + dY);
 		}
 
-		public void Offset(int DX, int DY)
+		public void Offset(int dX, int dY)
 		{
-			this.Left += DX;
-			this.Right -= DX;
-			this.Top += DY;
-			this.Bottom -= DY;
+			this.Left += dX;
+			this.Right += dX;
+			this.Top += dY;
+			this.Bottom += dY;
+		}
+
+		public void Inflate(int dX, int dY)
+		{
+			this.Left += dX;
+			this.Right -= dX;
+			this.Top += dY;
+			this.Bottom -= dY;
 		}
 
 		public override string ToString()

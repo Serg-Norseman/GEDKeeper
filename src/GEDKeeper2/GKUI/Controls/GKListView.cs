@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using System.Windows.Forms;
+
+using GKCommon;
 
 namespace GKUI.Controls
 {
@@ -8,7 +11,7 @@ namespace GKUI.Controls
 	/// </summary>
 	public class GKListView : ListView
 	{
-		private class TListViewColumnSorter : IComparer
+		private class LVColumnSorter : IComparer
 		{
 			private int fSortColumn;
 			private SortOrder fSortOrder;
@@ -25,31 +28,45 @@ namespace GKUI.Controls
 				set { this.fSortOrder = value; }
 			}
 
-			public TListViewColumnSorter()
+			public LVColumnSorter()
 			{
 				this.fSortColumn = 0;
 				this.fSortOrder = SortOrder.None;
 			}
 
-			int IComparer.Compare(object x, object y)
+			public int Compare(object x, object y)
 			{
 				int result = 0;
 
 				int sortColumn = this.fSortColumn;
-
 				if (this.fSortOrder != SortOrder.None && sortColumn >= 0) {
-					ListViewItem item = x as ListViewItem;
+					ListViewItem item1 = x as ListViewItem;
 					ListViewItem item2 = y as ListViewItem;
 
-					if (sortColumn < item.SubItems.Count && sortColumn < item2.SubItems.Count)
-					{					
-						int compRes = agCompare(item.SubItems[sortColumn].Text, item2.SubItems[sortColumn].Text);
+					int compRes = 0;
+					if (item1 is GKListItem && item2 is GKListItem) {
+						GKListItem eitem1 = x as GKListItem;
+						GKListItem eitem2 = y as GKListItem;
 
-						if (this.fSortOrder == SortOrder.Ascending) {
-							result = compRes;
-						} else if (this.fSortOrder == SortOrder.Descending) {
-							result = -compRes;
+						if (sortColumn == 0) {
+							compRes = eitem1.CompareTo(eitem2);
+						} else {
+							GKListSubItem sub1 = item1.SubItems[sortColumn] as GKListSubItem;
+							GKListSubItem sub2 = item2.SubItems[sortColumn] as GKListSubItem;
+
+							compRes = sub1.CompareTo(sub2);
 						}
+					} else {
+						if (sortColumn < item1.SubItems.Count && sortColumn < item2.SubItems.Count)
+						{
+							compRes = SysUtils.agCompare(item1.SubItems[sortColumn].Text, item2.SubItems[sortColumn].Text);
+						}
+					}
+
+					if (this.fSortOrder == SortOrder.Ascending) {
+						result = compRes;
+					} else if (this.fSortOrder == SortOrder.Descending) {
+						result = -compRes;
 					}
 				}
 
@@ -57,21 +74,24 @@ namespace GKUI.Controls
 			}
 		}
 
-		private readonly TListViewColumnSorter lvwColumnSorter;
-		private SortOrder old_SortOrder = SortOrder.None;
+		private readonly LVColumnSorter fColumnSorter;
+		private SortOrder fOldSortOrder;
 
 		public int SortColumn
 		{
-			get { return this.lvwColumnSorter.SortColumn; }
-			set { this.lvwColumnSorter.SortColumn = value; }
+			get { return this.fColumnSorter.SortColumn; }
+			set { this.fColumnSorter.SortColumn = value; }
 		}
 
 		public GKListView()
 		{
-			this.lvwColumnSorter = new TListViewColumnSorter();
-			base.ListViewItemSorter = this.lvwColumnSorter;
+			base.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+
+			this.fOldSortOrder = SortOrder.None;
+			this.fColumnSorter = new LVColumnSorter();
+
+			base.ListViewItemSorter = this.fColumnSorter;
 			base.ColumnClick += this.lvColumnClick;
-			//this.DoubleBuffered = true;
 		}
 
 		public void UnsetSorter()
@@ -81,12 +101,12 @@ namespace GKUI.Controls
 
 		public void SwitchSorter()
 		{
-			if (old_SortOrder == SortOrder.None) {
-				old_SortOrder = this.lvwColumnSorter.Order;
-				this.lvwColumnSorter.Order = SortOrder.None;
+			if (fOldSortOrder == SortOrder.None) {
+				fOldSortOrder = this.fColumnSorter.Order;
+				this.fColumnSorter.Order = SortOrder.None;
 			} else {
-				this.lvwColumnSorter.Order = old_SortOrder;
-				old_SortOrder = SortOrder.None;
+				this.fColumnSorter.Order = fOldSortOrder;
+				fOldSortOrder = SortOrder.None;
 				base.Sort();
 			}
 		}
@@ -105,17 +125,18 @@ namespace GKUI.Controls
 
 		private void lvColumnClick(object sender, ColumnClickEventArgs e)
 		{
-			if (e.Column == this.lvwColumnSorter.SortColumn)
+			if (e.Column == this.fColumnSorter.SortColumn)
 			{
-				if (this.lvwColumnSorter.Order == SortOrder.Ascending) {
-					this.lvwColumnSorter.Order = SortOrder.Descending;
+				if (this.fColumnSorter.Order == SortOrder.Ascending) {
+					this.fColumnSorter.Order = SortOrder.Descending;
 				} else {
-					this.lvwColumnSorter.Order = SortOrder.Ascending;
+					this.fColumnSorter.Order = SortOrder.Ascending;
 				}
 			} else {
-				this.lvwColumnSorter.SortColumn = e.Column;
-				this.lvwColumnSorter.Order = SortOrder.Ascending;
+				this.fColumnSorter.SortColumn = e.Column;
+				this.fColumnSorter.Order = SortOrder.Ascending;
 			}
+
 			base.Sort();
 		}
 
@@ -125,10 +146,9 @@ namespace GKUI.Controls
 			base.Columns.Add(caption, width, HorizontalAlignment.Left);
 		}
 
-		public GKListItem AddItem(string title, object data)
+		public GKListItem AddItem(object itemValue, object data)
 		{
-			GKListItem result = new GKListItem(title);
-			result.Data = data;
+			GKListItem result = new GKListItem(itemValue, data);
 			base.Items.Add(result);
 			return result;
 		}
@@ -155,38 +175,6 @@ namespace GKUI.Controls
 					this.AutoResizeColumn(columnIndex, ColumnHeaderAutoResizeStyle.HeaderSize);
 				}
 			}
-		}
-
-		protected static int agCompare(string str1, string str2)
-		{
-			double Val, Val2;
-			bool v = double.TryParse(str1, out Val);
-			bool v2 = double.TryParse(str2, out Val2);
-
-			int result;
-			if (v && v2)
-			{
-				if (Val < Val2) {
-					result = -1;
-				} else if (Val > Val2) {
-					result = 1;
-				} else {
-					result = 0;
-				}
-			}
-			else
-			{
-				result = string.Compare(str1, str2, false);
-				if (str1 != "" && str2 == "")
-				{
-					result = -1;
-				}
-				if (str1 == "" && str2 != "")
-				{
-					result = 1;
-				}
-			}
-			return result;
 		}
 
 		public void SelectItem(ListViewItem item)

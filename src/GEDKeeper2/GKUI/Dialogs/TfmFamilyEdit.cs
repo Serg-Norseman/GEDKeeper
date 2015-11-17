@@ -145,6 +145,11 @@ namespace GKUI.Dialogs
 			this.fSourcesList.ReadOnly = locked;
 		}
 
+		private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			this.LockEditor(this.cbRestriction.SelectedIndex == (int)GEDCOMRestriction.rnLocked);
+		}
+
 		private GKSheetList CreateChildsSheet(Control owner)
 		{
 			GKSheetList sheet = new GKSheetList(owner);
@@ -175,9 +180,9 @@ namespace GKUI.Dialogs
 
                     GEDCOMIndividualRecord child = ptr.Value as GEDCOMIndividualRecord;
 
-                    ListViewItem item = this.fChildsList.AddItem(idx.ToString(), child);
-                    item.SubItems.Add(child.GetNameString(true, false));
-                    item.SubItems.Add(GKUtils.GetBirthDate(child, TfmGEDKeeper.Instance.Options.DefDateFormat, false));
+                    GKListItem item = this.fChildsList.AddItem(idx, child);
+                    item.AddSubItem(child.GetNameString(true, false));
+                    item.AddSubItem(GKUtils.GetBirthDate(child));
                 }
 
                 this.fChildsList.EndUpdate();
@@ -321,11 +326,6 @@ namespace GKUI.Dialogs
 		private void EditWife_TextChanged(object sender, EventArgs e)
 		{
 			this.SetTitle();
-		}
-
-		private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			this.UpdateControls();
 		}
 	}
 }

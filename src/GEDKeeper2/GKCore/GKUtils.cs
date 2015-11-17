@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -509,7 +507,7 @@ namespace GKCore
 		{
             if (evt == null)
             {
-                throw new ArgumentNullException("eventDetail");
+                throw new ArgumentNullException("evt");
             }
 
             string dt = GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false);
@@ -627,18 +625,19 @@ namespace GKCore
 
 		#region Date functions
 
-		public static string GEDCOMDateToStr(GEDCOMDate date, DateFormat format)
+		public static string GetDateFmtString(GEDCOMDate date, DateFormat format, bool includeBC = false)
 		{
-            if (date == null)
-            {
-                throw new ArgumentNullException("date");
-            }
+			if (date == null)
+			{
+				throw new ArgumentNullException("date");
+			}
 
-            string result = "";
+			string result = "";
 			int year;
 			ushort month;
 			ushort day;
-			date.GetDate(out year, out month, out day);
+			bool ybc;
+			date.GetDateParts(out year, out month, out day, out ybc);
 
 			if (year > 0 || month > 0 || day > 0)
 			{
@@ -663,113 +662,7 @@ namespace GKCore
 				}
 			}
 
-			return result;
-		}
-
-		public static string GEDCOMEventToDateStr(GEDCOMCustomEvent evt, DateFormat format, bool sign)
-		{
-		    if (evt == null) return string.Empty;
-
-			return GEDCOMCustomDateToStrEx(evt.Detail.Date.Value, format, sign);
-		}
-
-		public static string GEDCOMCustomDateToStrEx(GEDCOMCustomDate date, DateFormat format, bool sign)
-		{
-			string result = "";
-
-			if (date == null)
-			{
-				result = "";
-			}
-			else
-			{
-				if (date is GEDCOMDateApproximated)
-				{
-				    GEDCOMDateApproximated appDate = date as GEDCOMDateApproximated;
-
-                    result = GKUtils.GEDCOMDateToStr(appDate, format);
-                    if (sign && appDate.Approximated != GEDCOMApproximated.daExact)
-					{
-						result = "~ " + result;
-					}
-				}
-				else
-				{
-					if (date is GEDCOMDateRange)
-					{
-						GEDCOMDateRange range = date as GEDCOMDateRange;
-
-                        if (range.After.StringValue == "" && range.Before.StringValue != "")
-						{
-							result = GKUtils.GEDCOMDateToStr(range.Before, format);
-							if (sign)
-							{
-								result = "< " + result;
-							}
-						}
-						else
-						{
-							if (range.After.StringValue != "" && range.Before.StringValue == "")
-							{
-								result = GKUtils.GEDCOMDateToStr(range.After, format);
-								if (sign)
-								{
-									result += " >";
-								}
-							}
-							else
-							{
-								if (range.After.StringValue != "" && range.Before.StringValue != "")
-								{
-									result = GKUtils.GEDCOMDateToStr(range.After, format) + " - " + GKUtils.GEDCOMDateToStr(range.Before, format);
-								}
-							}
-						}
-					}
-					else
-					{
-						if (date is GEDCOMDatePeriod)
-						{
-							GEDCOMDatePeriod period = date as GEDCOMDatePeriod;
-							if (period.DateFrom.StringValue != "" && period.DateTo.StringValue == "")
-							{
-								result = GKUtils.GEDCOMDateToStr(period.DateFrom, format);
-								if (sign)
-								{
-									result += " >";
-								}
-							}
-							else
-							{
-								if (period.DateFrom.StringValue == "" && period.DateTo.StringValue != "")
-								{
-									result = GKUtils.GEDCOMDateToStr(period.DateTo, format);
-									if (sign)
-									{
-										result = "< " + result;
-									}
-								}
-								else
-								{
-									if (period.DateFrom.StringValue != "" && period.DateTo.StringValue != "")
-									{
-										result = GKUtils.GEDCOMDateToStr(period.DateFrom, format) + " - " + GKUtils.GEDCOMDateToStr(period.DateTo, format);
-									}
-								}
-							}
-						}
-						else
-						{
-							if (date is GEDCOMDate)
-							{
-								result = GKUtils.GEDCOMDateToStr(date as GEDCOMDate, format);
-							}
-						}
-					}
-				}
-			}
-
-			if ((date is GEDCOMDate) && (date as GEDCOMDate).YearBC) {
+			if (includeBC && ybc) {
 				switch (format) {
 					case DateFormat.dfDD_MM_YYYY:
 						result = result + " BC";
@@ -786,10 +679,85 @@ namespace GKCore
 			return result;
 		}
 
+		public static string GetCustomDateFmtString(GEDCOMCustomDate date, DateFormat format, bool sign)
+		{
+			string result = "";
+
+			if (date != null)
+			{
+				if (date is GEDCOMDate)
+				{
+					GEDCOMDate dtx = date as GEDCOMDate;
+					result = GKUtils.GetDateFmtString(dtx, format, true);
+
+					if (dtx is GEDCOMDateApproximated)
+					{
+						if (sign && (dtx as GEDCOMDateApproximated).Approximated != GEDCOMApproximated.daExact) {
+							result = "~ " + result;
+						}
+					}
+				}
+				else if (date is GEDCOMDateRange)
+				{
+					GEDCOMDateRange range = date as GEDCOMDateRange;
+
+					if (range.After.StringValue == "" && range.Before.StringValue != "")
+					{
+						result = GKUtils.GetDateFmtString(range.Before, format, true);
+						if (sign) result = "< " + result;
+					}
+					else if (range.After.StringValue != "" && range.Before.StringValue == "")
+					{
+						result = GKUtils.GetDateFmtString(range.After, format, true);
+						if (sign) result += " >";
+					}
+					else if (range.After.StringValue != "" && range.Before.StringValue != "")
+					{
+						result = GKUtils.GetDateFmtString(range.After, format, true) + " - " + GKUtils.GetDateFmtString(range.Before, format, true);
+					}
+				}
+				else if (date is GEDCOMDatePeriod)
+				{
+					GEDCOMDatePeriod period = date as GEDCOMDatePeriod;
+
+					if (period.DateFrom.StringValue != "" && period.DateTo.StringValue == "")
+					{
+						result = GKUtils.GetDateFmtString(period.DateFrom, format, true);
+						if (sign) result += " >";
+					}
+					else if (period.DateFrom.StringValue == "" && period.DateTo.StringValue != "")
+					{
+						result = GKUtils.GetDateFmtString(period.DateTo, format, true);
+						if (sign) result = "< " + result;
+					}
+					else if (period.DateFrom.StringValue != "" && period.DateTo.StringValue != "")
+					{
+						result = GKUtils.GetDateFmtString(period.DateFrom, format, true) + " - " + GKUtils.GetDateFmtString(period.DateTo, format, true);
+					}
+				}
+			}
+
+			return result;
+		}
+
+		public static string GEDCOMEventToDateStr(GEDCOMCustomEvent evt, DateFormat format, bool sign)
+		{
+			return (evt == null) ? string.Empty : GetCustomDateFmtString(evt.Detail.Date.Value, format, sign);
+		}
+
 		public static string CompactDate(string date)
 		{
 			string result = date;
 			while (result.IndexOf("__.") == 0) result = result.Remove(0, 3);
+			return result;
+		}
+
+		public static GEDCOMCustomDate GetBirthDate(GEDCOMIndividualRecord iRec)
+		{
+			if (iRec == null) return null;
+
+			GEDCOMCustomEvent evt = iRec.FindEvent("BIRT");
+			GEDCOMCustomDate result = ((evt == null) ? null : evt.Detail.Date.Value);
 			return result;
 		}
 
@@ -929,114 +897,22 @@ namespace GKCore
 			return result;
 		}
 
-		public static int GetIndependentYear(GEDCOMIndividualRecord iRec, string evSign)
-		{
-			bool dummy;
-			return GetIndependentYear(iRec, evSign, out dummy);
-		}
-
-		public static int GetIndependentYear(GEDCOMIndividualRecord iRec, string evSign, out bool YearBC)
+		public static int GetEventsYearsDiff(GEDCOMCustomEvent ev1, GEDCOMCustomEvent ev2, bool currentEnd)
 		{
 			int result = -1;
-            YearBC = false;
-            if (iRec == null) return result;
-
-			GEDCOMCustomEvent ev = iRec.FindEvent(evSign);
-			if (ev != null)
-			{
-				int year;
-				ushort am, ad;
-				ev.Detail.Date.GetIndependentDate(out year, out am, out ad, out YearBC);
-				result = year;
-			}
-			return result;
-		}
-
-		public static int GetIndependentMonth(GEDCOMIndividualRecord iRec, string evSign)
-		{
-			int result = -1;
-            if (iRec == null) return result;
-
-			GEDCOMCustomEvent ev = iRec.FindEvent(evSign);
-			if (ev != null)
-			{
-				int ay;
-				ushort month, ad;
-	            bool YearBC;
-				ev.Detail.Date.GetIndependentDate(out ay, out month, out ad, out YearBC);
-				result = month;
-			}
-			return result;
-		}
-
-		public static double GetAbstractDate(GEDCOMCustomEvent evt)
-		{
-			double result;
-
-			if (evt == null) {
-				result = double.NaN;
-			} else {
-				result = GetAbstractDate(evt.Detail.Date.Value);
-			}
-
-			return result;
-		}
-
-		public static double GetAbstractDate(GEDCOMCustomDate customDate)
-		{
-			double result;
-
-			if (customDate == null) {
-				result = double.NaN;
-			} else {
-				int year;
-				ushort month, day;
-				bool yearBC;
-				GEDCOMUtils.GetDateParts(customDate, out year, out month, out day, out yearBC);
-
-				if (year == -1) {
-					result = double.NaN; // it's empty date, as negative dates has yearBC-attribute
-				} else {
-					result = (double)year; // ####.0000
-					result += (month / 100.0f); // 0.##000
-					result += (day / 10000.0f); // 0.00##
-
-					if (yearBC) result = -result;
-				}
-			}
-
-			return result;
-		}
-
-		public static string GetEventsYearsDiff(GEDCOMCustomEvent ev1, GEDCOMCustomEvent ev2, bool currentEnd)
-		{
-			string result = "?";
 
 			try
 			{
-				double y1 = GKUtils.GetAbstractDate(ev1);
-				double y2 = GKUtils.GetAbstractDate(ev2);
+				AbsDate dt1 = GEDCOMUtils.GetAbstractDate(ev1);
+				AbsDate dt2 = GEDCOMUtils.GetAbstractDate(ev2);
 
-				if (currentEnd && double.IsNaN(y2))
-				{
-					y2 = ((double)DateTime.Now.Year + (double)DateTime.Now.Month / 12.0);
+				if (currentEnd && !dt2.IsValid()) {
+					DateTime now = DateTime.Now;
+					dt2 = new AbsDate(now.Year, (ushort)now.Month, (ushort)now.Day, false);
 				}
 
-				if (double.IsNaN(y1) || double.IsNaN(y2))
-				{
-					result = "";
-				}
-				else
-				{
-					if (y1 == (double)0f || y2 == (double)0f)
-					{
-						result = "?";
-					}
-					else
-					{
-						long delta = SysUtils.Trunc(y2 - y1);
-						result = delta.ToString();
-					}
+				if (dt1.IsValid() && dt2.IsValid()) {
+					result = Math.Abs(dt2.Year - dt1.Year);
 				}
 			}
 			catch (Exception ex)
@@ -1047,9 +923,19 @@ namespace GKCore
 			return result;
 		}
 
-		public static string GetLifeExpectancy(GEDCOMIndividualRecord iRec)
+		public static string GetLifeExpectancyStr(GEDCOMIndividualRecord iRec)
 		{
-			string result = "";
+			int result = GetLifeExpectancy(iRec);
+			if (result == -1) {
+				return "";
+			} else {
+				return result.ToString();
+			}
+		}
+
+		public static int GetLifeExpectancy(GEDCOMIndividualRecord iRec)
+		{
+			int result = -1;
             if (iRec == null) return result;
 
 			try
@@ -1057,7 +943,7 @@ namespace GKCore
 				GEDCOMCustomEvent bd;
 				GEDCOMCustomEvent dd;
 				iRec.GetLifeDates(out bd, out dd);
-
+ 
 				result = GKUtils.GetEventsYearsDiff(bd, dd, false);
 			}
 			catch (Exception ex)
@@ -1068,9 +954,19 @@ namespace GKCore
 			return result;
 		}
 
-		public static string GetAge(GEDCOMIndividualRecord iRec, int toYear)
+		public static string GetAgeStr(GEDCOMIndividualRecord iRec, int toYear)
 		{
-			string result = "";
+			int result = GetAge(iRec, toYear);
+			if (result == -1) {
+				return "";
+			} else {
+				return result.ToString();
+			}
+		}
+
+		public static int GetAge(GEDCOMIndividualRecord iRec, int toYear)
+		{
+			int result = -1;
             if (iRec == null) return result;
 
 			try
@@ -1082,13 +978,9 @@ namespace GKCore
 				if (toYear == -1) {
 					result = GKUtils.GetEventsYearsDiff(bd, dd, dd == null);
 				} else {
-					if (bd == null) {
-						result = "";
-					} else {
-						ushort dummy;
-						int i;
-						bd.Detail.Date.GetIndependentDate(out i, out dummy, out dummy);
-						result = Convert.ToString(toYear - i);
+					AbsDate birthDate = GEDCOMUtils.GetAbstractDate(bd);
+					if (birthDate.IsValid()) {
+						result = toYear - birthDate.Year;
 					}
 				}
 			}
@@ -1117,7 +1009,7 @@ namespace GKCore
 				return string.Empty;
 			}
 
-			return GKUtils.GEDCOMCustomDateToStrEx(date, dateFormat, false);
+			return GKUtils.GetCustomDateFmtString(date, dateFormat, false);
 		}
 
 		public static string GetDaysForBirth(GEDCOMIndividualRecord iRec)
@@ -1142,8 +1034,9 @@ namespace GKCore
 							int bd_y;
 							ushort bd_m;
 							ushort bd_d;
+							bool ybc;
 
-							dt.GetDate(out bd_y, out bd_m, out bd_d);
+							dt.GetDateParts(out bd_y, out bd_m, out bd_d, out ybc);
 							if (bd_m <= 0 || bd_d <= 0)
 							{
 							}
@@ -1343,7 +1236,7 @@ namespace GKCore
 
 		public static int GetSpousesDiff(GEDCOMFamilyRecord fRec)
 		{
-			int result = 0;
+			int result = -1;
 
 			try
 			{
@@ -1356,10 +1249,7 @@ namespace GKCore
 						GEDCOMCustomEvent evH = husb.FindEvent("BIRT");
 						GEDCOMCustomEvent evW = wife.FindEvent("BIRT");
 
-						string res = GetEventsYearsDiff(evH, evW, false);
-						if (res != "" && res != "?") {
-							result = Math.Abs(int.Parse(res));
-						}
+						result = GetEventsYearsDiff(evH, evW, false);
 					}
 				}
 			}
@@ -1379,12 +1269,12 @@ namespace GKCore
 
 			try
 			{
-				double firstYear = double.NaN;
+				AbsDate firstYear = AbsDate.Empty();
 
 				GEDCOMCustomEvent evt = iRec.FindEvent("BIRT");
 				if (evt != null)
 				{
-					double parentYear = GKUtils.GetAbstractDate(evt);
+					AbsDate parentYear = GEDCOMUtils.GetAbstractDate(evt);
 
 					int num = iRec.SpouseToFamilyLinks.Count;
 					for (int i = 0; i < num; i++)
@@ -1398,17 +1288,13 @@ namespace GKCore
 							evt = child.FindEvent("BIRT");
 							if (evt != null)
 							{
-								double childYear = GKUtils.GetAbstractDate(evt);
+								AbsDate childYear = GEDCOMUtils.GetAbstractDate(evt);
 
-								if (double.IsNaN(firstYear))
-								{
+								if (!firstYear.IsValid()) {
 									firstYear = childYear;
 									iChild = child;
-								}
-								else
-								{
-									if (firstYear > childYear)
-									{
+								} else {
+									if (firstYear > childYear) {
 										firstYear = childYear;
 										iChild = child;
 									}
@@ -1417,8 +1303,8 @@ namespace GKCore
 						}
 					}
 
-					if (!double.IsNaN(parentYear) && !double.IsNaN(firstYear)) {
-						result = (int)SysUtils.Trunc(firstYear - parentYear);
+					if (parentYear.IsValid() && firstYear.IsValid()) {
+						result = (firstYear.Year - parentYear.Year);
 					} else {
 						iChild = null;
 					}
@@ -1438,12 +1324,12 @@ namespace GKCore
 
 			try
 			{
-				double firstYear = double.NaN;
+				AbsDate firstYear = AbsDate.Empty();
 
 				GEDCOMCustomEvent evt = iRec.FindEvent("BIRT");
 				if (evt != null)
 				{
-					double mainYear = GKUtils.GetAbstractDate(evt);
+					AbsDate mainYear = GEDCOMUtils.GetAbstractDate(evt);
 
 					int num = iRec.SpouseToFamilyLinks.Count;
 					for (int i = 0; i < num; i++)
@@ -1453,9 +1339,9 @@ namespace GKCore
 						GEDCOMCustomEvent fEvent = family.FindEvent("MARR");
 						if (fEvent != null)
 						{
-							double spouseYear = GKUtils.GetAbstractDate(fEvent);
+							AbsDate spouseYear = GEDCOMUtils.GetAbstractDate(fEvent);
 
-							if (double.IsNaN(firstYear)) {
+							if (!firstYear.IsValid()) {
 								firstYear = spouseYear;
 							} else {
 								if (firstYear > spouseYear) {
@@ -1465,9 +1351,8 @@ namespace GKCore
 						}
 					}
 
-					if (!double.IsNaN(mainYear) && !double.IsNaN(firstYear))
-					{
-						result = (int)SysUtils.Trunc(firstYear - mainYear);
+					if (mainYear.IsValid() && firstYear.IsValid()) {
+						result = (firstYear.Year - mainYear.Year);
 					}
 				}
 			}
@@ -1607,6 +1492,21 @@ namespace GKCore
 			return MessageBox.Show(msg, GKData.AppTitle, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 		}
 
+		public static string RequireFilename(string filter)
+		{
+			string result = null;
+
+			using (SaveFileDialog dlg = new SaveFileDialog())
+			{
+				dlg.Filter = filter;
+				if (dlg.ShowDialog() == DialogResult.OK) {
+					result = dlg.FileName;
+				}
+			}
+
+			return result;
+		}
+
 		public static GKListView CreateListView(Control parent)
 		{
             if (parent == null)
@@ -1656,9 +1556,15 @@ namespace GKCore
 			return recView;
 		}
 
-		public static bool GetInput(string title, ref string value)
+		public static bool GetInput(string prompt, ref string value)
 		{
-            bool res = GKInputBox.QueryText(title, LangMan.LS(LSID.LSID_Value), ref value);
+            bool res = GKInputBox.QueryText(GKData.AppTitle, prompt, ref value);
+            return res && !string.IsNullOrEmpty(value);
+		}
+
+		public static bool GetPassword(string prompt, ref string value)
+		{
+            bool res = GKInputBox.QueryPassword(GKData.AppTitle, prompt, ref value);
             return res && !string.IsNullOrEmpty(value);
 		}
 
@@ -2596,8 +2502,8 @@ namespace GKCore
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Priority) + ": " + LangMan.LS(GKData.PriorityNames[(int)researchRec.Priority]));
                         summary.Add(LangMan.LS(LSID.LSID_Status) + ": " + LangMan.LS(GKData.StatusNames[(int)researchRec.Status]) + " (" + researchRec.Percent.ToString() + "%)");
-                        summary.Add(LangMan.LS(LSID.LSID_StartDate) + ": " + GKUtils.GEDCOMDateToStr(researchRec.StartDate, DateFormat.dfDD_MM_YYYY));
-                        summary.Add(LangMan.LS(LSID.LSID_StopDate) + ": " + GKUtils.GEDCOMDateToStr(researchRec.StopDate, DateFormat.dfDD_MM_YYYY));
+                        summary.Add(LangMan.LS(LSID.LSID_StartDate) + ": " + GKUtils.GetDateFmtString(researchRec.StartDate, DateFormat.dfDD_MM_YYYY));
+                        summary.Add(LangMan.LS(LSID.LSID_StopDate) + ": " + GKUtils.GetDateFmtString(researchRec.StopDate, DateFormat.dfDD_MM_YYYY));
 
                         if (researchRec.Tasks.Count > 0)
                         {
@@ -2668,8 +2574,8 @@ namespace GKCore
                         summary.Add(LangMan.LS(LSID.LSID_Goal) + ": ~ub+1~" + GKUtils.GetTaskGoalStr(taskRec) + "~bu-1~");
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Priority) + ": " + LangMan.LS(GKData.PriorityNames[(int)taskRec.Priority]));
-                        summary.Add(LangMan.LS(LSID.LSID_StartDate) + ": " + GKUtils.GEDCOMDateToStr(taskRec.StartDate, DateFormat.dfDD_MM_YYYY));
-                        summary.Add(LangMan.LS(LSID.LSID_StopDate) + ": " + GKUtils.GEDCOMDateToStr(taskRec.StopDate, DateFormat.dfDD_MM_YYYY));
+                        summary.Add(LangMan.LS(LSID.LSID_StartDate) + ": " + GKUtils.GetDateFmtString(taskRec.StartDate, DateFormat.dfDD_MM_YYYY));
+                        summary.Add(LangMan.LS(LSID.LSID_StopDate) + ": " + GKUtils.GetDateFmtString(taskRec.StopDate, DateFormat.dfDD_MM_YYYY));
 
                         GKUtils.RecListNotesRefresh(taskRec, summary);
                     }
@@ -2704,7 +2610,7 @@ namespace GKCore
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.LSID_Corresponder) + ": " + GKUtils.GetCorresponderStr(tree, commRec, true));
                         summary.Add(LangMan.LS(LSID.LSID_Type) + ": " + LangMan.LS(GKData.CommunicationNames[(int)commRec.CommunicationType]));
-                        summary.Add(LangMan.LS(LSID.LSID_Date) + ": " + GKUtils.GEDCOMDateToStr(commRec.Date, DateFormat.dfDD_MM_YYYY));
+                        summary.Add(LangMan.LS(LSID.LSID_Date) + ": " + GKUtils.GetDateFmtString(commRec.Date, DateFormat.dfDD_MM_YYYY));
 
                         GKUtils.RecListNotesRefresh(commRec, summary);
                         GKUtils.RecListMediaRefresh(commRec, summary);
@@ -2791,59 +2697,6 @@ namespace GKCore
 
         
         #endregion
-
-		#region Graphics primitives
-		
-		public static GraphicsPath CreateRoundedRectangle(int x, int y, int width, int height, int radius)
-	    {
-			int xw = x + width;
-			int yh = y + height;
-			int xwr = xw - radius;
-			int yhr = yh - radius;
-			int xr = x + radius;
-			int yr = y + radius;
-			int r2 = radius * 2;
-			int xwr2 = xw - r2;
-			int yhr2 = yh - r2;
-
-			GraphicsPath p = new GraphicsPath();
-			p.StartFigure();
-
-			p.AddArc(x, y, r2, r2, 180, 90); // Top Left Corner
-			p.AddLine(xr, y, xwr, y); // Top Edge
-			p.AddArc(xwr2, y, r2, r2, 270, 90); // Top Right Corner
-			p.AddLine(xw, yr, xw, yhr); // Right Edge
-			p.AddArc(xwr2, yhr2, r2, r2, 0, 90); // Bottom Right Corner
-			p.AddLine(xwr, yh, xr, yh); // Bottom Edge
-			p.AddArc(x, yhr2, r2, r2, 90, 90); // Bottom Left Corner
-			p.AddLine(x, yhr, x, yr); // Left Edge
-
-			p.CloseFigure();
-			return p;
-		}
-
-		public static void DrawPathWithFuzzyLine(GraphicsPath path, Graphics gfx, Color base_color, int max_opacity, int width, int opaque_width)
-		{
-            int num_steps = width - opaque_width + 1;       // Number of pens we will use.
-			float delta = (float)max_opacity / num_steps / num_steps;   // Change in alpha between pens.
-			float alpha = delta;                            // Initial alpha.
-
-			for (int thickness = width; thickness >= opaque_width; thickness--)
-			{
-				Color color = Color.FromArgb((int)alpha, base_color.R, base_color.G, base_color.B);
-
-				using (Pen pen = new Pen(color, thickness))
-				{
-					pen.EndCap = LineCap.Round;
-					pen.StartCap = LineCap.Round;
-					gfx.DrawPath(pen, path);
-				}
-
-				alpha += delta;
-			}
-		}
-		
-		#endregion
 		
 		#region Names processing
 

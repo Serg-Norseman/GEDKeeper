@@ -64,6 +64,11 @@ namespace GKUI.Controls
 
 		public GKSheetList(Control owner)
 		{
+            if (owner == null)
+            {
+                throw new ArgumentNullException("owner");
+            }
+
 			owner.SuspendLayout();
 			this.Dock = DockStyle.Fill;
 			owner.Controls.Add(this);
@@ -340,9 +345,9 @@ namespace GKUI.Controls
 			this.fList.EndUpdate();
 		}
 
-		public GKListItem AddItem(string title, object data)
+		public GKListItem AddItem(object itemValue, object data)
 		{
-			return this.fList.AddItem(title, data);
+			return this.fList.AddItem(itemValue, data);
 		}
 
 		public void ClearItems()

@@ -34,8 +34,8 @@ namespace GKCommon.Graph
 
 		private class PathCandidate
 		{
-			public IVertex Node { get; private set; }
-			public PathCandidate Next { get; private set; }
+			public IVertex Node;
+			public PathCandidate Next;
 			
 			public PathCandidate(IVertex node, PathCandidate next)
 			{
