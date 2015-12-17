@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
 using GKCore.Interfaces;
+using Microsoft.Office.Interop.Excel;
 using MSOExcel = Microsoft.Office.Interop.Excel;
 using MSOWord = Microsoft.Office.Interop.Word;
 
@@ -23,16 +24,86 @@ namespace GKPedigreeImporterPlugin
         }
     }
 
+    public enum SourceType
+    {
+    	stText,
+    	stTable
+    }
+
+    public enum PersonNumbersType
+    {
+    	pnUndefined,
+    	pnDAboville,
+    	pnKonovalov
+    }
+
+    public enum CellType
+    {
+    	ct
+    }
+
+    public enum NameFormat
+    {
+    	nfIOF,
+    	nfFIO
+    }
+
+    public enum GenerationFormat
+    {
+    	gfRome,
+    	gfGenWord
+    }
+
+    public enum RawLineType
+    {
+    	rltComment,
+    	rltPerson,
+    	rltRomeGeneration,
+    	rltEOF
+    }
+
+    public class RawLine
+    {
+    	public int SourceNum;
+    	public RawLineType Type;
+    	public PersonNumbersType NumbersType;
+    	
+    	public RawLine(int sourceNum)
+    	{
+    		this.SourceNum = sourceNum;
+    	}
+    }
+
     /// <summary>
     /// Localization: dirty
     /// </summary>
     public class Importer : BaseObject
 	{
+		private const bool DEBUG_EXCEL = true;
+		private const bool DEBUG_WORD = true;
+
     	private readonly IBaseWindow fBase;
 		private readonly GEDCOMTree fTree;
 		private readonly System.Windows.Forms.ListBox.ObjectCollection fLog;
-		private StringList fPersonsList;
+		private Dictionary<string, GEDCOMIndividualRecord> fPersonsList;
 		private ILangMan fLangMan;
+		private string fFileName;
+
+		private StringList fRawContents;
+
+		// settings
+		public PersonNumbersType NumbersType;
+		public PersonNumbersType CanNumbersType;
+		public char PersonLineSeparator;
+		public SourceType SourceType;
+		public NameFormat NameFormat;
+		public GenerationFormat GenerationFormat;
+		public bool SurnamesNormalize;
+
+		public StringList RawContents
+		{
+			get { return this.fRawContents; }
+		}
 
         public Importer(IBaseWindow aBase, ILangMan langMan, System.Windows.Forms.ListBox.ObjectCollection aLog)
         {
@@ -40,50 +111,25 @@ namespace GKPedigreeImporterPlugin
             this.fTree = aBase.Tree;
             this.fLog = aLog;
             this.fLangMan = langMan;
+
+            this.NumbersType = PersonNumbersType.pnKonovalov;
+            this.CanNumbersType = PersonNumbersType.pnUndefined;
+            this.PersonLineSeparator = (char)0;
+            this.SurnamesNormalize = false;
+            
+            this.fPersonsList = new Dictionary<string, GEDCOMIndividualRecord>();
+            this.fRawContents = new StringList();
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                if (fPersonsList != null) fPersonsList.Dispose();
+            	if (this.fRawContents != null) this.fRawContents.Dispose();
+                if (this.fPersonsList != null) this.fPersonsList = null;
             }
             base.Dispose(disposing);
         }
-
-        private void AddChild(GEDCOMIndividualRecord parent, GEDCOMIndividualRecord child, int mar_id)
-		{
-			if (mar_id < 0)
-			{
-				mar_id = 1;
-			}
-
-			if (mar_id > 1)
-			{
-				// ???
-			}
-
-			GEDCOMSex sex = parent.Sex;
-			if (sex == GEDCOMSex.svNone || sex == GEDCOMSex.svUndetermined)
-			{
-				parent.Sex = GEDCOMSex.svMale;
-			}
-
-			while (parent.SpouseToFamilyLinks.Count < mar_id)
-			{
-				this.AddFamily(parent);
-			}
-			mar_id--;
-
-			GEDCOMFamilyRecord family = parent.SpouseToFamilyLinks[mar_id].Family;
-			GEDCOMPointer ptr = new GEDCOMPointer(this.fTree, family, "", "");
-			ptr.SetNamedValue("CHIL", child);
-			family.Childrens.Add(ptr);
-
-			GEDCOMChildToFamilyLink chLink = new GEDCOMChildToFamilyLink(this.fTree, child, "", "");
-			chLink.Family = family;
-			child.ChildToFamilyLinks.Add(chLink);
-		}
 
 		private GEDCOMFamilyRecord AddFamily(GEDCOMIndividualRecord parent)
 		{
@@ -92,148 +138,130 @@ namespace GKPedigreeImporterPlugin
 			return result;
 		}
 
-		private static string CheckDot(string aStr)
+        private void AddChild(GEDCOMIndividualRecord parent, int marNum, GEDCOMIndividualRecord child)
 		{
-			if (!string.IsNullOrEmpty(aStr))
+        	if (marNum <= 0)
+        	{
+        		marNum = 1;
+        	}
+
+			GEDCOMSex sex = parent.Sex;
+			if (sex == GEDCOMSex.svNone || sex == GEDCOMSex.svUndetermined)
 			{
-				if (aStr[aStr.Length - 1] == '.')
-				{
-					aStr = aStr.Substring(0, aStr.Length - 1);
-				}
+				parent.Sex = GEDCOMSex.svMale;
 			}
-			return aStr.Trim();
+
+			while (parent.SpouseToFamilyLinks.Count < marNum)
+			{
+				this.AddFamily(parent);
+			}
+
+			GEDCOMFamilyRecord family = parent.SpouseToFamilyLinks[marNum - 1].Family;
+			family.AddChild(child);
 		}
 
-		private void DefinePersonName(string aStr, string p_id, ref string f_name, ref string f_pat, ref string f_fam, ref string bd, ref string dd)
+		private static string RemoveDot(string str)
+		{
+			if (!string.IsNullOrEmpty(str))
+			{
+				if (str[str.Length - 1] == '.')
+				{
+					str = str.Substring(0, str.Length - 1);
+				}
+			}
+			return str.Trim();
+		}
+
+		private bool DefinePersonName(string str, out string f_name, out string f_pat, out string f_fam, out string bd, out string dd)
 		{
 			f_name = "";
 			f_pat = "";
 			f_fam = "";
 			bd = "";
 			dd = "";
-			string tmp = aStr;
-			int num = ((p_id != null) ? p_id.Length : 0) + 2;
-			tmp = tmp.Remove(0, num);
-			tmp = CheckDot(tmp);
+			string tmp = str;
 
 			int b_pos = tmp.IndexOf("*");
 			int d_pos = tmp.IndexOf("+");
-			if (d_pos >= 0 && d_pos > b_pos)
-			{
+
+			if (d_pos >= 0 && d_pos > b_pos) {
 				dd = tmp.Substring(d_pos + 1, tmp.Length - d_pos - 1);
 				int num2 = ((dd != null) ? dd.Length : 0) + 1;
 				tmp = tmp.Remove(d_pos, num2);
 				tmp = tmp.Trim();
 			}
 
-			if (b_pos >= 0)
-			{
+			if (b_pos >= 0) {
 				bd = tmp.Substring(b_pos + 1, tmp.Length - b_pos - 1);
 				int num3 = ((bd != null) ? bd.Length : 0) + 1;
 				tmp = tmp.Remove(b_pos, num3);
 				tmp = tmp.Trim();
 			}
 
-			string[] tokens = tmp.Trim().Split(' ');
-			if (tokens.Length > 0) f_name = CheckDot(tokens[0]);
-			if (tokens.Length > 1) f_pat = CheckDot(tokens[1]);
-			if (tokens.Length > 2) f_fam = CheckDot(tokens[2]);
-		}
+			string[] tokens = tmp.Trim().Split(new char[] { ' ' }, 3);
 
-		private static string DeleteBlanks(string S)
-		{
-			string result = S;
-			if (result != null)
-			{
-				int I = 1;
-				while (I <= result.Length)
-				{
-					if (result[I - 1] == ' ')
-					{
-						result = result.Remove(I - 1, 1);
-					}
-					else
-					{
-						I++;
-					}
-				}
-			}
-			return result;
-		}
+			switch (this.NameFormat) {
+				case NameFormat.nfIOF:
+					if (tokens.Length > 0) f_name = RemoveDot(tokens[0]);
+					if (tokens.Length > 1) f_pat = RemoveDot(tokens[1]);
+					if (tokens.Length > 2) f_fam = RemoveDot(tokens[2]);
+					break;
 
-		private static string ExtractNumComment(string S, ref string Comment, bool NoException)
-		{
-			string result = S;
-
-			if (!string.IsNullOrEmpty(result))
-			{
-				Comment = "";
-				result = result.Remove(0, 1);
-				int I = 0;
-				while (I < result.Length && result[I] != ')')
-				{
-					I++;
-				}
-				if (I > 0)
-				{
-					Comment = result.Substring(0, I);
-					result = result.Remove(0, I);
-				}
-				result = result.Remove(0, 1);
+				case NameFormat.nfFIO:
+					if (tokens.Length > 0) f_fam = RemoveDot(tokens[0]);
+					if (tokens.Length > 1) f_name = RemoveDot(tokens[1]);
+					if (tokens.Length > 2) f_pat = RemoveDot(tokens[2]);
+					break;
 			}
 
-			return result;
-		}
-
-		private const string PersonIdChars = "0123456789- ()/?";
-
-		private static bool IsPersonLine(string aStr, ref string p_id)
-		{
-			p_id = "";
-
-			int i = 1;
-			while (i <= aStr.Length)
-			{
-				char c = aStr[i - 1];
-				if (PersonIdChars.IndexOf(c) < 0) break;
-
-				p_id += aStr[i - 1];
-				i++;
-
-				if (aStr[i - 1] == '(')
-				{
-					while (i <= aStr.Length && aStr[i - 1] != ')')
-					{
-						p_id += aStr[i - 1];
-						i++;
-					}
-				}
+			if (this.SurnamesNormalize) {
+				f_fam = GEDCOMUtils.NormalizeName(f_fam);
 			}
 
-			return (p_id != "" && aStr[i - 1] == '.' && aStr[i] == ' ');
+			bd = RemoveDot(bd);
+			dd = RemoveDot(dd);
+
+			return true;
 		}
 
-		private static bool IsRomeChar(char c)
+		private bool IsPersonLine(string str, ref string p_id)
 		{
-			return (c == 'I' || c == 'V' || c == 'X' || c == 'L' || c == 'C' || c == 'D' || c == 'M');
-		}
+			switch (this.NumbersType) {
+				case PersonNumbersType.pnDAboville:
+					return ImpUtils.IsPersonLine_DAboville(str, ref p_id);
 
-		private static bool IsRomeLine(string aStr)
-		{
-			int i = 1;
-			string rs = "";
-			while (i <= ((aStr != null) ? aStr.Length : 0) && IsRomeChar(aStr[i - 1]))
-			{
-				rs += aStr[i - 1];
-				i++;
+				case PersonNumbersType.pnKonovalov:
+					return ImpUtils.IsPersonLine_Konovalov(str, ref p_id);
+
+				default:
+					return false;
 			}
-			return (rs != "" && rs == aStr);
 		}
 
-		private void SetEvent(GEDCOMIndividualRecord iRec, string evName, string date)
+		private bool ParsePersonLine(string str, out string persId, out string parentId, out string marNum, 
+		                             out string extData, out int pos)
+		{
+			switch (this.NumbersType) {
+				case PersonNumbersType.pnDAboville:
+					return ImpUtils.ParsePersonLine_DAboville(str, out persId, out parentId, out marNum, out extData, out pos);
+
+				case PersonNumbersType.pnKonovalov:
+					return ImpUtils.ParsePersonLine_Konovalov(str, out persId, out parentId, out marNum, out extData, out pos);
+
+				default:
+					persId = "";
+					parentId = "";
+					marNum = "";
+					extData = "";
+					pos = 0;
+					return false;
+			}
+		}
+
+		private void SetEvent(GEDCOMRecordWithEvents record, string evName, string date)
 		{
 			int[] val = new int[3];
-			GEDCOMCustomEvent ev = this.fBase.Context.CreateEventEx(iRec, evName, "", "");
+			GEDCOMCustomEvent evt = this.fBase.Context.CreateEventEx(record, evName, "", "");
 			try
 			{
 				string prefix = "";
@@ -297,107 +325,384 @@ namespace GKPedigreeImporterPlugin
 				{
 					tmp = tmp + "/" + ym;
 				}
-				ev.Detail.Date.ParseString(tmp);
+
+				evt.Detail.Date.ParseString(tmp);
 			}
 			catch (Exception ex)
 			{
 				this.fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_ParseError_DateInvalid) + " \"" + date + "\"");
-				this.fBase.Host.LogWrite("Importer.SetEvent(" + date + "): " + ex.Message);
 			}
 		}
 
-		private GEDCOMIndividualRecord ParsePerson(StringList buf, string aStr, string p_id, ref int self_id)
+		private GEDCOMIndividualRecord DefinePerson(string str, GEDCOMSex proposeSex)
 		{
-			self_id = -1;
-			int parent_id = -1;
-			int mar_id = -1;
+			GEDCOMIndividualRecord result;
 
-			string S = DeleteBlanks(p_id);
-			S = GEDCOMUtils.ExtractNumber(S, out self_id, true, -1);
+			string iName, iPatr, iSurname, bd, dd;
+			this.DefinePersonName(str, out iName, out iPatr, out iSurname, out bd, out dd);
 
-			if (S != "" && S[0] == '-')
-			{
-				S = S.Remove(0, 1);
-				S = GEDCOMUtils.ExtractNumber(S, out parent_id, true, -1);
+			result = this.fBase.Context.CreatePersonEx(iName, iPatr, iSurname, proposeSex, false);
 
-				if (S != "" && S[0] == '(')
-				{
-					string com = "";
-					S = ExtractNumComment(S, ref com, true);
-				}
-
-				if (S != "" && S[0] == '/')
-				{
-					S = S.Remove(0, 1);
-					S = GEDCOMUtils.ExtractNumber(S, out mar_id, true, -1);
-				}
+			if (proposeSex == GEDCOMSex.svNone || proposeSex == GEDCOMSex.svUndetermined) {
+				this.fBase.CheckPersonSex(result);
 			}
-
-			string f_name = "";
-			string f_pat = "";
-			string f_fam = "";
-			string bd = "";
-			string dd = "";
-
-			this.DefinePersonName(aStr, p_id, ref f_name, ref f_pat, ref f_fam, ref bd, ref dd);
-			GEDCOMIndividualRecord result = this.fBase.Context.CreatePersonEx(f_name, f_pat, f_fam, GEDCOMSex.svNone, false);
-			this.fBase.CheckPersonSex(result);
-			this.fPersonsList.AddObject(self_id.ToString(), result);
-
-			buf.Add(aStr);
 
 			if (bd != "") this.SetEvent(result, "BIRT", bd);
 			if (dd != "") this.SetEvent(result, "DEAT", dd);
 
-			if (parent_id > 0)
-			{
-				int x = this.fPersonsList.IndexOf(parent_id.ToString());
-				if (x >= 0)
-				{
-					GEDCOMIndividualRecord parent = this.fPersonsList.GetObject(x) as GEDCOMIndividualRecord;
-					this.AddChild(parent, result, mar_id);
-				}
-				else
-				{
-					this.fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_ParseError_AncNotFound) + " \"" + parent_id.ToString() + "\".");
-				}
-			}
 			return result;
 		}
 
-		public void Import_PlainText(string fileName)
+		private GEDCOMIndividualRecord ParsePerson(StringList buf, string str, string p_id, ref int self_id)
 		{
 			try
 			{
-				StreamReader strd = new StreamReader(fileName, Encoding.GetEncoding(1251));
-				StringList content = new StringList();
-				try
-				{
-					while (strd.Peek() != -1) {
-						string ns = strd.ReadLine().Trim();
-						content.Add(ns);
-					}
-					content.Add("");
+				self_id = -1;
+				int mar_id = -1;
+				int pid_end = 0;
 
-					this.Import_StringList(content);
+				string persId, parentId, marNum, extData;
+				bool res = this.ParsePersonLine(str, out persId, out parentId, out marNum, out extData, out pid_end);
+				// extData - (в/б)
+
+				if (this.NumbersType == PersonNumbersType.pnKonovalov) {
+					self_id = int.Parse(persId);
+					int.TryParse(marNum, out mar_id);
 				}
-				finally
+
+				str = str.Substring(pid_end).Trim();
+
+				GEDCOMSex proposeSex = this.GetProposeSex(buf);
+
+				GEDCOMIndividualRecord result = this.DefinePerson(str, proposeSex);
+
+				this.fPersonsList.Add(persId, result);
+
+				if (buf != null) {
+					buf.Add(str);
+				}
+
+				if (!string.IsNullOrEmpty(parentId))
 				{
-					strd.Close();
-                    content.Dispose();
+					GEDCOMIndividualRecord parent;
+					if (this.fPersonsList.TryGetValue(parentId, out parent)) {
+						this.AddChild(parent, mar_id, result);
+					} else {
+						this.fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_ParseError_AncNotFound) + " \"" + parentId + "\".");
+					}
+				}
+
+				return result;
+			}
+			catch (Exception ex)
+			{
+				this.fBase.Host.LogWrite("Importer.ParsePerson(): " + ex.Message);
+				throw ex;
+			}
+		}
+
+		private GEDCOMSex GetProposeSex(StringList buffer)
+		{
+			GEDCOMSex result = GEDCOMSex.svNone;
+
+			try
+			{
+				int num = buffer.Count;
+				for (int i = 0; i < num; i++)
+				{
+					string line = buffer[i];
+
+					if (line.Length > 2) {
+						char c1 = line[0];
+						char c2 = line[1];
+						if ((c1 == 'М' || c1 == 'Ж') && ((c2 == ' ') || (c2 >= '1' && c2 <= '9'))) {
+							// define sex (if spouse is male, then result = female, else result = male)
+							GEDCOMSex res = (c1 == 'М') ? GEDCOMSex.svFemale : GEDCOMSex.svMale;
+
+							if (result == GEDCOMSex.svNone) {
+								result = res;
+							} else {
+								if (result != res) {
+									this.fLog.Add(">>>> Противоречивая информация о супругах");
+									return GEDCOMSex.svNone;
+								} else {
+									// matched, checked
+								}
+							}
+						}
+					}
 				}
 			}
 			catch (Exception ex)
 			{
-				this.fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
-				this.fBase.Host.LogWrite("Import_PlainText(): " + ex.Message);
+				this.fBase.Host.LogWrite("Importer.GetProposeSex(): " + ex.Message);
+			}
+
+			return result;
+		}
+
+		private void CheckSpouses(StringList buffer, GEDCOMIndividualRecord curPerson)
+		{
+			int num2 = buffer.Count;
+			for (int i = 0; i < num2; i++)
+			{
+				string line = buffer[i];
+				if (string.IsNullOrEmpty(line)) continue;
+
+				try
+				{
+					string spouse, marNum, extData;
+					int pos;
+					if (ImpUtils.ParseSpouseLine(line, out spouse, out marNum, out extData, out pos))
+					{
+						// define sex
+						GEDCOMSex sx = (spouse[0] == 'М') ? GEDCOMSex.svMale : GEDCOMSex.svFemale;
+
+						// number of spouse, not used
+						int num = int.Parse(marNum);
+
+						// extract name
+						line = line.Substring(pos).Trim();
+
+						if (!string.IsNullOrEmpty(line))
+						{
+							GEDCOMFamilyRecord fam = this.AddFamily(curPerson);
+							GEDCOMIndividualRecord sp = this.DefinePerson(line, sx);
+							fam.AddSpouse(sp);
+
+							// extract marriage date
+							if (!string.IsNullOrEmpty(extData)) {
+								string mar_date = extData.Substring(1, extData.Length - 2).Trim();
+
+								if (mar_date != "") this.SetEvent(fam, "MARR", mar_date);
+							}
+						}
+					}
+				}
+				catch (Exception ex)
+				{
+					this.fBase.Host.LogWrite("Importer.CheckSpouses(): " + ex.Message);
+				}
 			}
 		}
 
-		private const bool DEBUG_EXCEL = true;
-		private const bool DEBUG_WORD = true;
+		private void CheckBuffer(StringList buffer, GEDCOMIndividualRecord curPerson)
+		{
+			if (!buffer.IsEmpty())
+			{
+				if (curPerson != null)
+				{
+					this.CheckSpouses(buffer, curPerson);
+				}
 
-		public void Import_Excel(string fileName)
+				this.fTree.CreateNoteEx(curPerson, buffer);
+
+				buffer.Clear();
+			}
+		}
+
+		private void ParseBuffer(StringList buffer, ref int prev_id)
+		{
+			try
+			{
+				if (buffer.IsEmpty()) {
+					return;
+				}
+
+				string p_id = "";
+				string s = buffer[0];
+				if (this.IsPersonLine(s, ref p_id))
+				{
+					this.fLog.Add("> " + fLangMan.LS(ILS.LSID_PersonParsed) + " \"" + p_id + "\"");
+
+					int self_id = 0;
+					GEDCOMIndividualRecord curPerson = this.ParsePerson(null, s, p_id, ref self_id);
+
+					if (this.NumbersType == PersonNumbersType.pnKonovalov && self_id - prev_id > 1)
+					{
+						this.fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_ParseError_LineSeq));
+					}
+
+					prev_id = self_id;
+
+					this.CheckBuffer(buffer, curPerson);
+				}
+			}
+			catch (Exception ex)
+			{
+				this.fBase.Host.LogWrite("Importer.ParseBuffer(): " + ex.Message);
+				throw ex;
+			}
+		}
+
+		private bool IsGenerationLine(string str)
+		{
+			switch (this.GenerationFormat)
+			{
+				case GenerationFormat.gfRome:
+					return ImpUtils.IsRomeLine(str);
+
+				case GenerationFormat.gfGenWord:
+					return str.StartsWith("Поколение ", StringComparison.InvariantCultureIgnoreCase);
+
+				default:
+					return false;
+			}
+		}
+
+		private string PrepareLine(string line)
+		{
+			string result;
+			result = line.Replace('–', '-').Trim();
+			return result;
+		}
+
+		#region Integral loading
+
+		private void AnalyseRaw()
+		{
+			if (this.SourceType == SourceType.stTable) {
+				return;
+			}
+
+			try
+			{
+				int[] numberStats = new int[3];
+
+				int num = this.fRawContents.Count;
+				this.fBase.ProgressInit("Анализ", num);
+
+				for (int i = 0; i < num; i++) {
+					string txt = this.fRawContents[i].Trim();
+					RawLine rawLine = this.fRawContents.GetObject(i) as RawLine;
+
+					if (!string.IsNullOrEmpty(txt)) {
+						if (this.IsGenerationLine(txt)) {
+							rawLine.Type = RawLineType.rltRomeGeneration;
+						} else {
+							PersonNumbersType numbType = PersonNumbersType.pnUndefined;
+							string dummy = "";
+							
+							if (ImpUtils.IsPersonLine_DAboville(txt, ref dummy)) {
+								rawLine.Type = RawLineType.rltPerson;
+								numbType = PersonNumbersType.pnDAboville;
+								numberStats[1]++;
+							} else if (ImpUtils.IsPersonLine_Konovalov(txt, ref dummy)) {
+								rawLine.Type = RawLineType.rltPerson;
+								numbType = PersonNumbersType.pnKonovalov;
+								numberStats[2]++;
+							}
+
+							rawLine.NumbersType = numbType;
+						}
+					} else {
+						rawLine.Type = RawLineType.rltEOF;
+					}
+
+					this.fBase.ProgressStep(i + 1);
+				}
+
+				if (numberStats[1] > numberStats[2]) {
+					this.CanNumbersType = PersonNumbersType.pnDAboville;
+				} else {
+					this.CanNumbersType = PersonNumbersType.pnKonovalov;
+				}
+			}
+			finally
+			{
+				this.fBase.ProgressDone();
+			}
+		}
+
+		public bool ImportContent()
+		{
+			this.AnalyseRaw();
+
+			switch (this.SourceType)
+			{
+				case SourceType.stText:
+					return this.ImportTextContent();
+
+				case SourceType.stTable:
+					return this.ImportTableContent();
+			
+				default:
+					return false;
+			}
+		}
+
+		private bool ImportTextContent()
+		{
+			try
+			{
+				this.fLog.Clear();
+
+				StringList buffer = new StringList();
+				try
+				{
+					int prev_id = 0;
+
+					int num = this.fRawContents.Count;
+					for (int i = 0; i < num; i++)
+					{
+						string line = this.PrepareLine(this.fRawContents[i]);
+						RawLine rawLine = this.fRawContents.GetObject(i) as RawLine;
+
+						switch (rawLine.Type) {
+							case RawLineType.rltComment:
+								buffer.Add(line);
+								break;
+
+							case RawLineType.rltPerson:
+							case RawLineType.rltRomeGeneration:
+							case RawLineType.rltEOF:
+								{
+									this.ParseBuffer(buffer, ref prev_id);
+									buffer.Clear();
+
+									switch (rawLine.Type) {
+										case RawLineType.rltPerson:
+											buffer.Add(line);
+											break;
+										case RawLineType.rltRomeGeneration:
+											this.fLog.Add("> " + fLangMan.LS(ILS.LSID_Generation) + " \"" + line + "\"");
+											break;
+										case RawLineType.rltEOF:
+											this.fLog.Add("> EOF.");
+											break;
+									}
+								}
+								break;
+						}
+					}
+
+					return true;
+				}
+				finally
+				{
+					buffer.Dispose();
+				}
+			}
+			catch (Exception ex)
+			{
+				this.fBase.Host.LogWrite("Importer.ImportTextContent(): " + ex.Message);
+				throw ex;
+			}
+		}
+
+		private static string GetCell(object[,] values, int row, int col)
+		{
+			object obj = values[row, col];
+			if (obj == null) {
+				return "";
+			}/* else if (obj.GetType() is string) {
+				return (string)obj;
+			}*/ else {
+				return obj.ToString();
+			}
+		}
+
+		private bool ImportTableContent()
 		{
 			try
 			{
@@ -410,69 +715,71 @@ namespace GKPedigreeImporterPlugin
 				}
 				catch (Exception ex)
 				{
-					return;
+					return false;
 				}
 
 				excel.Visible = DEBUG_EXCEL;
 				excel.DisplayAlerts = false;
 				excel.WindowState = MSOExcel.XlWindowState.xlMaximized;
-				excel.Workbooks.Open(fileName);
+				excel.Workbooks.Open(this.fFileName);
 				MSOExcel.Worksheet sheet = excel.Worksheets[1] as MSOExcel.Worksheet;
-				sheet.Activate();
+				//sheet.Activate();
 
 				StringList buf = new StringList();
-				StringList FPersonsList = new StringList();
 				try
 				{
 					// получаем используемое количество строк и столбцов
 					int rows_count = sheet.UsedRange.Rows.Count;
 					int cols_count = sheet.UsedRange.Columns.Count;
 
+					this.fBase.ProgressInit("Загрузка", rows_count);
+
+					MSOExcel.Range excelRange = sheet.UsedRange;
+					object[,] valueArray = (object[,])excelRange.get_Value(XlRangeValueDataType.xlRangeValueDefault);
+					
 					int prev_id = 0;
 					GEDCOMIndividualRecord i_rec = null;
 
 					for (int row = 1; row <= rows_count; row++)
 					{
-						string c1 = sheet.Cells[row, 1].ToString().Trim(); // номер позиции
-						string c2 = sheet.Cells[row, 2].ToString().Trim(); // номер предка
-						string c3 = sheet.Cells[row, 3].ToString().Trim(); // имя, может начинаться с номера брака
-						string c4 = sheet.Cells[row, 4].ToString().Trim(); // дата рождения
-						string c5 = sheet.Cells[row, 5].ToString().Trim(); // дата смерти
-						string c6 = sheet.Cells[row, 6].ToString().Trim(); // место рождения или проживания
+						string c1 = GetCell(valueArray, row, 1).Trim(); // номер позиции
+						string c2 = GetCell(valueArray, row, 2).Trim(); // номер предка
+						string c3 = GetCell(valueArray, row, 3).Trim(); // имя, может начинаться с номера брака
+						string c4 = GetCell(valueArray, row, 4).Trim(); // дата рождения
+						string c5 = GetCell(valueArray, row, 5).Trim(); // дата смерти
+						string c6 = GetCell(valueArray, row, 6).Trim(); // место рождения или проживания
 
-						string rome, s, p_id = "";
+						string s123 = c1 + c2;
+						if (s123 != "" && !string.IsNullOrEmpty(c3) && c3[0] != '/') {
+							s123 += ". " + c3;
+						} else {
+							s123 += c3;
+						}
+
+						string s, p_id = "";
 						int self_id = 0;
 
-						if (c1 == "" && c3 == "") {
-							CheckBuf(buf, i_rec);
+						if (s123 == "") {
+							CheckBuffer(buf, i_rec);
 							i_rec = null;
 						} else {
-							if (IsRomeLine(c2)) {
-								rome = c2;
-							} else if (IsRomeLine(c3)) {
-								rome = c3;
-							} else {
-								rome = "";
-							}
-
-							if (rome != "") {
-								fLog.Add("> " + fLangMan.LS(ILS.LSID_Generation) + " " + rome);
+							if (this.IsGenerationLine(s123)) {
+								CheckBuffer(buf, i_rec);
 								i_rec = null;
-							} else {
-								if (c3[1] == '/') {
-									s = c1 + c2 + c3 + " " + c4 + " " + c5;
-								} else {
-									s = c1 + c2 + ". " + c3 + " " + c4 + " " + c5;
-								}
 
+								fLog.Add("> " + fLangMan.LS(ILS.LSID_Generation) + " " + s123);
+							} else {
+								s = s123 + " " + c4 + " " + c5;
 								if (c6 != "") {
 									s = s + ". " + c6 + ".";
 								}
 
+								s = s.Trim();
+
 								if (!IsPersonLine(s, ref p_id)) {
 									buf.Add(s);
 								} else {
-									CheckBuf(buf, i_rec);
+									CheckBuffer(buf, i_rec);
 									i_rec = ParsePerson(buf, s, p_id, ref self_id);
 
 									fLog.Add("> "+fLangMan.LS(ILS.LSID_PersonParsed) + " " + p_id + ".");
@@ -485,11 +792,16 @@ namespace GKPedigreeImporterPlugin
 								}
 							}
 						}
+
+						this.fBase.ProgressStep(row);
 					}
+
+					return true;
 				}
 				finally
 				{
-					fPersonsList.Dispose();
+					this.fBase.ProgressDone();
+
 					buf.Dispose();
 
 					excel.Quit();
@@ -499,12 +811,66 @@ namespace GKPedigreeImporterPlugin
 			catch (Exception ex)
 			{
 				this.fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
-				this.fBase.Host.LogWrite("Import_Excel(): " + ex.Message);
+				this.fBase.Host.LogWrite("Importer.ImportExcel(): " + ex.Message);
+				return false;
 			}
 		}
 
-		public void Import_Word(string fileName)
+		private bool LoadRawExcel(string fileName)
 		{
+			this.SourceType = SourceType.stTable;
+
+			this.AnalyseRaw();
+
+			return true;
+		}
+
+		private bool LoadRawText(string fileName)
+		{
+			this.SourceType = SourceType.stText;
+
+			try
+			{
+				StreamReader strd = new StreamReader(fileName, Encoding.GetEncoding(1251));
+				try
+				{
+					this.fBase.ProgressInit("Загрузка", (int)strd.BaseStream.Length);
+
+					int lineNum = 0;
+					while (strd.Peek() != -1) {
+						string txt = strd.ReadLine().Trim();
+
+						if (!string.IsNullOrEmpty(txt)) {
+							this.fRawContents.AddObject(txt, new RawLine(lineNum));
+						}
+
+						this.fBase.ProgressStep((int)strd.BaseStream.Position);
+						lineNum++;
+					}
+					this.fRawContents.AddObject("", new RawLine(lineNum));
+
+					this.AnalyseRaw();
+
+					return true;
+				}
+				finally
+				{
+					this.fBase.ProgressDone();
+					strd.Close();
+				}
+			}
+			catch (Exception ex)
+			{
+				this.fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
+				this.fBase.Host.LogWrite("Importer.ImportPlainText(): " + ex.Message);
+				return false;
+			}
+		}
+
+		private bool LoadRawWord(string fileName)
+		{
+			this.SourceType = SourceType.stText;
+
 			try
 			{
 				MSOWord.Application wordApp;
@@ -514,31 +880,40 @@ namespace GKPedigreeImporterPlugin
 				}
 				catch
 				{
-					return;
+					return false;
 				}
 
-				StringList content = new StringList();
 				try
 				{
 					wordApp.Visible = DEBUG_WORD;
 					wordApp.WindowState = MSOWord.WdWindowState.wdWindowStateMaximize;
 
 					MSOWord.Document doc = wordApp.Documents.Open(fileName);
+
+					this.fBase.ProgressInit("Загрузка", doc.Paragraphs.Count);
+
+					int lineNum = 0;
 					for (int i = 0; i < doc.Paragraphs.Count; i++)
 					{
-						string txt = doc.Paragraphs[i+1].Range.Text.ToString();
-						content.Add(txt);
+						string txt = doc.Paragraphs[i+1].Range.Text;
+						txt = txt.Trim();
+
+						if (!string.IsNullOrEmpty(txt)) {
+							this.fRawContents.AddObject(txt, new RawLine(lineNum));
+						}
+
+						this.fBase.ProgressStep(i + 1);
+						lineNum++;
 					}					
-					content.Add("");
+					this.fRawContents.AddObject("", new RawLine(lineNum));
 
-					Import_StringList(content);
+					this.AnalyseRaw();
 
-					doc.Close();
+					return true;
 				}
 				finally
 				{
-					content.Dispose();
-
+					this.fBase.ProgressDone();
 					wordApp.Quit();
 					wordApp = null;
 				}
@@ -546,192 +921,36 @@ namespace GKPedigreeImporterPlugin
 			catch (Exception ex)
 			{
 				this.fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
-				this.fBase.Host.LogWrite("Import_Word(): " + ex.Message);
+				this.fBase.Host.LogWrite("Importer.ImportWord(): " + ex.Message);
+				return false;
 			}
 		}
 
-		private void CheckBuf(StringList buf, GEDCOMIndividualRecord iRec)
+		public bool LoadRawData(string fileName)
 		{
-			if (buf.Text != "")
-			{
-				if (iRec != null)
-				{
-					this.CheckSpouses(buf, iRec);
-				}
-				this.fTree.CreateNoteEx(iRec, buf);
-				buf.Clear();
-			}
-		}
+			this.fRawContents.Clear();
 
-		private void CheckSpouses(StringList buf, GEDCOMIndividualRecord iRec)
-		{
-			int num2 = buf.Count;
-			for (int i = 0; i < num2; i++)
-			{
-				string s = buf[i];
-				if (string.IsNullOrEmpty(s)) continue;
-
-                // skip blanks
-                s = SysUtils.TrimChars(s, new char[] { ' ', '.' });
-
-				if (s.Length > 2)
-				{
-					char c2 = s[0];
-					char c3 = s[1];
-					if ((c2 == 'М' || c2 == 'Ж') && ((c3 == ' ') || (c3 >= '1' && c3 <= '9')))
-					{
-						try
-						{
-							// define sex
-							GEDCOMSex sx = (s[0] == 'М') ? GEDCOMSex.svMale : GEDCOMSex.svFemale;
-                            s = s.Remove(0, 1);
-
-							// number of spouse
-							int num;
-							s = GEDCOMUtils.ExtractNumber(s, out num, true, 1);
-
-							// skip blanks
-                            s = SysUtils.TrimChars(s, ' ');
-
-							// extract date of marriage
-							int p;
-							if (s[0] == '(')
-							{
-								p = 0;
-								while (p < s.Length && s[p] != ')')
-								{
-									p++;
-								}
-								if (p > 0)
-								{
-									p++;
-									string mar_date = s.Substring(0, p);
-									mar_date = mar_date.Trim();
-									s = s.Remove(0, p);
-								}
-							}
-
-							// skip interval before name
-                            s = SysUtils.TrimChars(s, new char[] { '–', ' ', '-' });
-
-							// extract name
-							p = 0;
-							while (p < s.Length && (s[p] != '*' && s[p] != '+' && s[p] != '.')) p++;
-
-							string name = "";
-							if (p > 0)
-							{
-								name = s.Substring(0, p);
-								name = name.Trim();
-								s = s.Remove(0, p);
-							}
-
-							if (name != "")
-							{
-								GEDCOMFamilyRecord fam = this.AddFamily(iRec);
-
-								string f_name = "";
-								string f_pat = "";
-								string f_fam = "";
-								string[] nm_parts = name.Trim().Split(' ');
-								if (nm_parts.Length > 0) f_name = CheckDot(nm_parts[0]);
-								if (nm_parts.Length > 1) f_pat = CheckDot(nm_parts[1]);
-								if (nm_parts.Length > 2) f_fam = CheckDot(nm_parts[2]);
-
-								GEDCOMIndividualRecord sp = this.fBase.Context.CreatePersonEx(f_name, f_pat, f_fam, sx, false);
-								fam.AddSpouse(sp);
-							}
-						}
-						catch (Exception ex)
-						{
-							this.fBase.Host.LogWrite("Importer.CheckSpouses(): " + ex.Message);
-						}
-					}
-				}
-			}
-		}
-
-		private void Import_StringList(StringList content)
-		{
-			this.fLog.Clear();
-
-			StringList buf = new StringList();
-			this.fPersonsList = new StringList();
-			try
-			{
-				int prev_id = 0;
-				GEDCOMIndividualRecord i_rec = null;
-
-				int num = content.Count;
-				for (int i = 0; i < num; i++)
-				{
-					string s = content[i].Trim();
-
-					if (s == "")
-					{
-						this.CheckBuf(buf, i_rec);
-						i_rec = null;
-					}
-					else
-					{
-						if (IsRomeLine(s))
-						{
-							this.fLog.Add("> " + fLangMan.LS(ILS.LSID_Generation) + " \"" + s + "\"");
-							i_rec = null;
-						}
-						else
-						{
-							string p_id = "";
-							if (!IsPersonLine(s, ref p_id))
-							{
-								buf.Add(s);
-							}
-							else
-							{
-								this.CheckBuf(buf, i_rec);
-								int self_id = 0;
-								i_rec = this.ParsePerson(buf, s, p_id, ref self_id);
-
-								this.fLog.Add("> " + fLangMan.LS(ILS.LSID_PersonParsed) + " \"" + p_id + "\".");
-
-								if (self_id - prev_id > 1)
-								{
-									this.fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_ParseError_LineSeq));
-								}
-
-								prev_id = self_id;
-							}
-						}
-					}
-				}
-			}
-			finally
-			{
-                this.fPersonsList.Dispose();
-                buf.Dispose();
-			}
-		}
-
-		public void TreeImportEx(string fileName)
-		{
+			this.fFileName = fileName;
 			string ext = Path.GetExtension(fileName).ToLower();
 
 			if (ext == ".txt")
 			{
-				this.Import_PlainText(fileName);
+				return this.LoadRawText(fileName);
 			}
 			else if (ext == ".doc")
 			{
-				this.Import_Word(fileName);
+				return this.LoadRawWord(fileName);
 			}
 			else if (ext == ".xls")
 			{
-				this.Import_Excel(fileName);
+				return this.LoadRawExcel(fileName);
 			}
 			else
 			{
 				throw new ImporterException(fLangMan.LS(ILS.LSID_FormatUnsupported));
 			}
 		}
+
+		#endregion
 	}
 }

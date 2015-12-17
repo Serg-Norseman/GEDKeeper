@@ -55,6 +55,7 @@
     <Compile Include="CoreTests.cs" />
     <Compile Include="ExtTests.cs" />
     <Compile Include="GedcomTests.cs" />
+    <Compile Include="PIPTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestStubs.cs" />
   </ItemGroup>
@@ -74,6 +75,10 @@
     <ProjectReference Include="..\GKInterfaces\GKInterfaces.csproj">
       <Project>{B86F8B3B-E1CD-4A00-A73B-2D454924B8D2}</Project>
       <Name>GKInterfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GKPedigreeImporterPlugin\GKPedigreeImporterPlugin.csproj">
+      <Project>{859C2F5B-FBF1-4D3B-8442-CF8E44E8B74B}</Project>
+      <Name>GKPedigreeImporterPlugin</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />

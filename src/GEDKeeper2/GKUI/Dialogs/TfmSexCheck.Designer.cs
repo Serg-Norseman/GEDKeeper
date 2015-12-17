@@ -109,6 +109,7 @@ namespace GKUI.Dialogs
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Name = "TfmSexCheck";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+			this.TopMost = true;
 			this.Text = "Проверка пола";
 			this.GroupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);

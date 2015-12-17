@@ -1,12 +1,23 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+
 using Cyotek.Windows.Forms;
 
 namespace GKCommon.Controls
 {
     public partial class ImageView : UserControl
     {
+    	public bool ShowToolbar
+    	{
+    		get {
+    			return this.toolStrip.Visible;
+    		}
+    		set {
+    			this.toolStrip.Visible = value;
+    		}
+    	}
+
         public ImageView()
         {
             InitializeComponent();
@@ -18,6 +29,14 @@ namespace GKCommon.Controls
             //imageBox.ShowPixelGrid = true;
         }
 
+        public void OpenImage(Image image)
+        {
+            imageBox.Image = image;
+            imageBox.ZoomToFit();
+
+            this.UpdateZoomLevels();
+        }
+
         private void FillZoomLevels()
         {
             zoomLevelsToolStripComboBox.Items.Clear();
@@ -26,15 +45,7 @@ namespace GKCommon.Controls
                 zoomLevelsToolStripComboBox.Items.Add(string.Format("{0}%", zoom));
         }
 
-        public void OpenImage(Image image)
-        {
-            imageBox.Image = image;
-            imageBox.ZoomToFit();
-
-            this.UpdateStatusBar();
-        }
-
-        private void UpdateStatusBar()
+        private void UpdateZoomLevels()
         {
             zoomLevelsToolStripComboBox.Text = string.Format("{0}%", imageBox.Zoom);
         }
@@ -42,12 +53,12 @@ namespace GKCommon.Controls
         private void btnSizeToFit_Click(object sender, EventArgs e)
         {
             imageBox.ZoomToFit();
-            this.UpdateStatusBar();
+            this.UpdateZoomLevels();
         }
 
         private void imageBox_ZoomChanged(object sender, EventArgs e)
         {
-            this.UpdateStatusBar();
+            this.UpdateZoomLevels();
         }
 
         private void imageBox_ZoomLevelsChanged(object sender, EventArgs e)
@@ -69,9 +80,6 @@ namespace GKCommon.Controls
         private void btnZoomOut_Click(object sender, EventArgs e)
         {
             imageBox.ZoomOut();
-            //this.btnSizeToFit.Image = global::ImageView.iSizeToFit2;
-            //this.btnZoomIn.Image = global::GKResources.iZoomIn2;
-            //this.btnZoomOut.Image = global::GKResources.iZoomOut2;
         }
     }
 }

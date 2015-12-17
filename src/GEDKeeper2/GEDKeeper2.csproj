@@ -65,7 +65,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <UseVSHostingProcess>false</UseVSHostingProcess>
-    <CodeAnalysisRuleSet>..\gk2rules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
   </PropertyGroup>
   <ItemGroup>
@@ -130,7 +130,7 @@
       <DependentUpon>GKResources.resx</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Charts\ACOptionsControl.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="GKUI\Charts\ACOptionsControl.Designer.cs">
       <DependentUpon>ACOptionsControl.cs</DependentUpon>
@@ -441,6 +441,12 @@
     <Compile Include="GKUI\TfmScriptDaemon.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="GKUI\TfmSlideshow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\TfmSlideshow.Designer.cs">
+      <DependentUpon>TfmSlideshow.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\TfmStats.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -574,8 +580,11 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>GKResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\TfmSlideshow.resx">
+      <DependentUpon>TfmSlideshow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\TfmStats.resx">
-      <DependentUpon>TfmStats.Designer.cs</DependentUpon>
+      <DependentUpon>TfmStats.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\TfmTreeTools.resx">
       <DependentUpon>TfmTreeTools.cs</DependentUpon>

@@ -42,6 +42,9 @@ namespace GKUI.Dialogs
             Control ctl = null;
 
             this.SuspendLayout();
+
+            //MultimediaKind mmKind = GKUtils.GetMultimediaKind(this.fFileRef.MultimediaFormat);
+
             switch (this.fFileRef.MultimediaFormat) {
                 case GEDCOMMultimediaFormat.mfBMP:
                 case GEDCOMMultimediaFormat.mfGIF:

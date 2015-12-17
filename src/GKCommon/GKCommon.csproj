@@ -61,8 +61,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="src\CalendarConverter.cs" />
+    <Compile Include="src\Controls\WizardPages.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="src\ExtUtils\StringTokenizer.cs" />
     <Compile Include="src\GfxUtils.cs" />
     <Compile Include="src\Controls\SlideList.cs">
       <SubType>Component</SubType>

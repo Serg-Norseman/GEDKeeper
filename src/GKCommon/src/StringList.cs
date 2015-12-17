@@ -117,6 +117,11 @@ namespace GKCommon
             base.Dispose(disposing);
         }
 
+		public bool IsEmpty()
+		{
+			return (this.fList.Count <= 0);
+		}
+
 		public event NotifyEventHandler OnChange
 		{
 			add { this.fOnChange = value; }

@@ -100,6 +100,7 @@ namespace GKUI
 		private System.Windows.Forms.ToolTip ToolTip1;
 		public System.Windows.Forms.ImageList ImageList_Buttons;
 		private System.Windows.Forms.MenuItem miPlugins;
+		private System.Windows.Forms.MenuItem miSlideshow;
 
 		private void InitializeComponent()
 		{
@@ -195,6 +196,7 @@ namespace GKUI
 			this.miLogView = new System.Windows.Forms.MenuItem();
 			this.N13 = new System.Windows.Forms.MenuItem();
 			this.miAbout = new System.Windows.Forms.MenuItem();
+			this.miSlideshow = new System.Windows.Forms.MenuItem();
 			this.OpenDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.SaveDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.ImageList_Shields = new System.Windows.Forms.ImageList(this.components);
@@ -713,6 +715,7 @@ namespace GKUI
 			this.miService.Index = 3;
 			this.miService.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
 									this.miOrganizer,
+									this.miSlideshow,
 									this.N9,
 									this.miScripts,
 									this.miTreeTools,
@@ -726,32 +729,38 @@ namespace GKUI
 			this.miOrganizer.Text = "Органайзер...";
 			this.miOrganizer.Click += new System.EventHandler(this.miOrganizerClick);
 			// 
+			// miSlideshow
+			// 
+			this.miSlideshow.Index = 1;
+			this.miSlideshow.Text = "Slideshow";
+			this.miSlideshow.Click += new System.EventHandler(this.miSlideshowClick);
+			// 
 			// N9
 			// 
-			this.N9.Index = 1;
+			this.N9.Index = 2;
 			this.N9.Text = "-";
 			// 
 			// miScripts
 			// 
-			this.miScripts.Index = 2;
+			this.miScripts.Index = 3;
 			this.miScripts.Shortcut = System.Windows.Forms.Shortcut.CtrlF11;
 			this.miScripts.Text = "Скрипты...";
 			this.miScripts.Click += new System.EventHandler(this.miScriptsClick);
 			// 
 			// miTreeTools
 			// 
-			this.miTreeTools.Index = 3;
+			this.miTreeTools.Index = 4;
 			this.miTreeTools.Text = "Инструменты...";
 			this.miTreeTools.Click += new System.EventHandler(this.miTreeToolsClick);
 			// 
 			// N10
 			// 
-			this.N10.Index = 4;
+			this.N10.Index = 5;
 			this.N10.Text = "-";
 			// 
 			// miOptions
 			// 
-			this.miOptions.Index = 5;
+			this.miOptions.Index = 6;
 			this.miOptions.Text = "Настройки...";
 			this.miOptions.Click += new System.EventHandler(this.miOptionsClick);
 			// 

@@ -263,6 +263,26 @@ internal class GKResources {
 	/// <summary>
 	///   Looks up a localized resource of type System.Drawing.Bitmap.
 	/// </summary>
+	internal static System.Drawing.Bitmap iStart {
+		get {
+			object obj = ResourceManager.GetObject("iStart", resourceCulture);
+			return ((System.Drawing.Bitmap)(obj));
+		}
+	}
+	
+	/// <summary>
+	///   Looks up a localized resource of type System.Drawing.Bitmap.
+	/// </summary>
+	internal static System.Drawing.Bitmap iStop {
+		get {
+			object obj = ResourceManager.GetObject("iStop", resourceCulture);
+			return ((System.Drawing.Bitmap)(obj));
+		}
+	}
+	
+	/// <summary>
+	///   Looks up a localized resource of type System.Drawing.Bitmap.
+	/// </summary>
 	internal static System.Drawing.Bitmap iTGBarbedWire {
 		get {
 			object obj = ResourceManager.GetObject("iTGBarbedWire", resourceCulture);

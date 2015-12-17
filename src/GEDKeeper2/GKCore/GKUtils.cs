@@ -1020,10 +1020,7 @@ namespace GKCore
 			try
 			{
 				GEDCOMCustomEvent evt = iRec.FindEvent("DEAT");
-				if (evt != null)
-				{
-				}
-				else
+				if (evt == null)
 				{
 					evt = iRec.FindEvent("BIRT");
 					if (evt != null)
@@ -1037,15 +1034,12 @@ namespace GKCore
 							bool ybc;
 
 							dt.GetDateParts(out bd_y, out bd_m, out bd_d, out ybc);
-							if (bd_m <= 0 || bd_d <= 0)
+							if (bd_m > 0 && bd_d > 0)
 							{
-							}
-							else
-							{
-								DateTime dtx = DateTime.Now;
-								ushort cur_y = (ushort)dtx.Year;
-								ushort cur_m = (ushort)dtx.Month;
-								ushort cur_d = (ushort)dtx.Day;
+								DateTime dtNow = DateTime.Now.Date;
+								ushort cur_y = (ushort)dtNow.Year;
+								ushort cur_m = (ushort)dtNow.Month;
+								ushort cur_d = (ushort)dtNow.Day;
 								double dt2 = (cur_y + bd_m / 12.0 + bd_d / 12.0 / 31.0);
 								double dt3 = (cur_y + cur_m / 12.0 + cur_d / 12.0 / 31.0);
 								if (dt2 < dt3)
@@ -1056,7 +1050,7 @@ namespace GKCore
 								{
 									bd_y = (int)cur_y;
 								}
-								result = Convert.ToString(SysUtils.DaysBetween(new DateTime((int)cur_y, (int)cur_m, (int)cur_d), new DateTime(bd_y, (int)bd_m, (int)bd_d)));
+								result = Convert.ToString(SysUtils.DaysBetween(dtNow, new DateTime(bd_y, (int)bd_m, (int)bd_d)));
 							}
 						}
 					}
@@ -2841,5 +2835,43 @@ namespace GKCore
 		}
 
 		#endregion
+		
+		public static MultimediaKind GetMultimediaKind(GEDCOMMultimediaFormat format)
+		{
+			switch (format)
+			{
+				case GEDCOMMultimediaFormat.mfNone:
+					return MultimediaKind.mkNone;
+
+				case GEDCOMMultimediaFormat.mfBMP:
+				case GEDCOMMultimediaFormat.mfGIF:
+				case GEDCOMMultimediaFormat.mfJPG:
+				case GEDCOMMultimediaFormat.mfPCX:
+				case GEDCOMMultimediaFormat.mfTIF:
+				case GEDCOMMultimediaFormat.mfTGA:
+				case GEDCOMMultimediaFormat.mfPNG:
+				case GEDCOMMultimediaFormat.mfRAW:
+					return MultimediaKind.mkImage;
+
+				case GEDCOMMultimediaFormat.mfTXT:
+				case GEDCOMMultimediaFormat.mfRTF:
+				case GEDCOMMultimediaFormat.mfHTM:
+					return MultimediaKind.mkText;
+
+				case GEDCOMMultimediaFormat.mfWAV:
+				case GEDCOMMultimediaFormat.mfMP3:
+					return MultimediaKind.mkAudio;
+
+				case GEDCOMMultimediaFormat.mfAVI:
+				case GEDCOMMultimediaFormat.mfMPG:
+				case GEDCOMMultimediaFormat.mfWMA:
+					return MultimediaKind.mkVideo;
+
+				case GEDCOMMultimediaFormat.mfOLE:
+				case GEDCOMMultimediaFormat.mfUnknown:
+				default:
+					return MultimediaKind.mkNone;
+			}
+		}
 	}
 }

@@ -85,6 +85,7 @@
     <Compile Include="src\Interfaces\IWidget.cs" />
     <Compile Include="src\Interfaces\IWorkWindow.cs" />
     <Compile Include="src\Types\MediaStoreType.cs" />
+    <Compile Include="src\Types\MultimediaKind.cs" />
     <Compile Include="src\Types\NameEntry.cs" />
     <Compile Include="src\Types\NameFormat.cs" />
     <Compile Include="src\Types\PGNodeType.cs" />

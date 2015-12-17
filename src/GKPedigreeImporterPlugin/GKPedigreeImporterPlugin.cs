@@ -54,7 +54,7 @@ namespace GKPedigreeImporterPlugin
 
         public void Execute()
         {
-            frmP2Main frm = new frmP2Main(this);
+            frmPedigreeImporter frm = new frmPedigreeImporter(this);
             frm.ShowDialog();
         }
 

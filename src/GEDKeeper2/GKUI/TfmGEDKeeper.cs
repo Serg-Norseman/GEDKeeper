@@ -483,6 +483,7 @@ namespace GKUI
 				this.miFileClose.Enabled = baseEn;
 				this.miFileProperties.Enabled = baseEn;
 				this.miOrganizer.Enabled = baseEn;
+				this.miSlideshow.Enabled = baseEn;
 				this.miScripts.Enabled = baseEn;
 
 				bool indivEn = baseEn && rt == GEDCOMRecordType.rtIndividual;
@@ -791,6 +792,16 @@ namespace GKUI
 			}
 		}
 
+		private void miSlideshowClick(object sender, EventArgs e)
+		{
+			IBaseWindow curBase = this.GetCurrentFile();
+			if (curBase == null) return;
+
+			TfmSlideshow dlg = new TfmSlideshow(curBase);
+			dlg.MdiParent = this;
+			dlg.Show();
+		}
+
 		private void miStatsClick(object sender, EventArgs e)
 		{
 			IBaseWindow curBase = this.GetCurrentFile();
@@ -984,6 +995,7 @@ namespace GKUI
 			this.miStats.Text = LangMan.LS(LSID.LSID_MIStats) + "...";
 
 			this.miOrganizer.Text = LangMan.LS(LSID.LSID_MIOrganizer) + "...";
+			this.miSlideshow.Text = LangMan.LS(LSID.LSID_Slideshow) + "...";
 			this.miScripts.Text = LangMan.LS(LSID.LSID_MIScripts);
 			this.miTreeTools.Text = LangMan.LS(LSID.LSID_MITreeTools);
 			this.miFilter.Text = LangMan.LS(LSID.LSID_MIFilter) + "...";
@@ -1010,6 +1022,9 @@ namespace GKUI
 
 			this.tbDocPrint.ToolTipText = LangMan.LS(LSID.LSID_DocPrint);
 			this.tbDocPreview.ToolTipText = LangMan.LS(LSID.LSID_DocPreview);
+
+        	this.tbPrev.ToolTipText = LangMan.LS(LSID.LSID_PrevRec);
+        	this.tbNext.ToolTipText = LangMan.LS(LSID.LSID_NextRec);
 		}
 
 		#endregion

@@ -1537,11 +1537,10 @@ namespace GKCommon.GEDCOM
 		public static string NormalizeName(string s)
 		{
 			if (string.IsNullOrEmpty(s)) return "";
-			
-			string st = s.Trim().ToLower();
-			char f = Char.ToUpper(st[0]);
-			st = f + st.Substring(1);
-			return st;
+
+			StringBuilder stb = new StringBuilder(s.Trim().ToLowerInvariant());
+			stb[0] = Char.ToUpperInvariant(stb[0]);
+			return stb.ToString();
 		}
 
 		public static string StrToGEDCOMDate(string aDate, bool aException)

@@ -694,8 +694,11 @@ namespace GKCore
 		/* 630 */ LSID_Condition,
 		
 		/* 631 */ LSID_DoNotSetSource,
+		/* 632 */ LSID_Slideshow,
+		/* 633 */ LSID_PrevRec,
+		/* 634 */ LSID_NextRec,
 
-		/* 000 */ LSID_Last = LSID_DoNotSetSource
+		/* 000 */ LSID_Last = LSID_NextRec
 	}
 
 	public static class LangMan
@@ -1362,7 +1365,10 @@ namespace GKCore
 			/* 629 */ "Поле",
 			/* 630 */ "Условие",
 
-			/* 631 */ "Не задан источник"
+			/* 631 */ "Не задан источник",
+			/* 632 */ "Слайдшоу",
+			/* 633 */ "Предыдущая запись",
+			/* 634 */ "Следующая запись"
 		};
 
 		private static string[] LSList = new string[(int)LSID.LSID_Last + 1];
