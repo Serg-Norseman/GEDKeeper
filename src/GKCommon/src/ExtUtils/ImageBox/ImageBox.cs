@@ -4,6 +4,8 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
+using ExtUtils.ScrollableControls;
+
 namespace Cyotek.Windows.Forms
 {
     // Cyotek ImageBox v1.1.2.0
@@ -1609,6 +1611,17 @@ namespace Cyotek.Windows.Forms
 		}
 
 		/// <summary>
+		///   Updates the scroll position.
+		/// </summary>
+		/// <param name="position">The position.</param>
+		protected virtual void UpdateScrollPosition(Point position)
+		{
+			this.AutoScrollPosition = position;
+			this.Invalidate();
+			this.OnScroll(new ScrollEventArgs(ScrollEventType.EndScroll, 0));
+		}
+
+		/// <summary>
 		///   Adjusts the size.
 		/// </summary>
 		protected virtual void AdjustSize()
@@ -2759,17 +2772,6 @@ namespace Cyotek.Windows.Forms
 					this.SelectionRegion = selection;
 				}
 			}
-		}
-
-		/// <summary>
-		///   Updates the scroll position.
-		/// </summary>
-		/// <param name="position">The position.</param>
-		protected virtual void UpdateScrollPosition(Point position)
-		{
-			this.AutoScrollPosition = position;
-			this.Invalidate();
-			this.OnScroll(new ScrollEventArgs(ScrollEventType.EndScroll, 0));
 		}
 
 		#endregion

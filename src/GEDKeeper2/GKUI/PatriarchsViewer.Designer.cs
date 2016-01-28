@@ -1,12 +1,4 @@
-﻿/*
- * Created by SharpDevelop.
- * User: Norseman
- * Date: 22.04.2012
- * Time: 19:05
- * 
- * To change this template use Tools | Options | Coding | Edit Standard Headers.
- */
-namespace GKUI
+﻿namespace GKUI
 {
 	partial class PatriarchsViewer
 	{
@@ -36,7 +28,7 @@ namespace GKUI
 		/// </summary>
 		private void InitializeComponent()
 		{
-            this.arborViewer1 = new ExtUtils.ArborEngine.ArborViewer();
+            this.arborViewer1 = new ArborGVT.ArborViewer();
 			this.SuspendLayout();
 			// 
 			// arborViewer1
@@ -62,6 +54,6 @@ namespace GKUI
 			this.Text = "PatriarchsViewer";
 			this.ResumeLayout(false);
 		}
-        private ExtUtils.ArborEngine.ArborViewer arborViewer1;
+        private ArborGVT.ArborViewer arborViewer1;
 	}
 }

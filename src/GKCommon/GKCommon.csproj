@@ -62,7 +62,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\CalendarConverter.cs" />
+    <Compile Include="src\CalendarData.cs" />
     <Compile Include="src\Controls\WizardPages.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="src\ExtUtils\ScrollableControls\ImageBoxNativeMethods.cs" />
+    <Compile Include="src\ExtUtils\ScrollableControls\ScrollControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="src\ExtUtils\ScrollableControls\VirtualScrollableControl.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="src\ExtUtils\StringTokenizer.cs" />
@@ -73,15 +81,6 @@
     <Compile Include="src\ExpCalculator.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="src\ExtUtils\ArborEngine\ArborEdge.cs" />
-    <Compile Include="src\ExtUtils\ArborEngine\ArborNode.cs" />
-    <Compile Include="src\ExtUtils\ArborEngine\ArborPoint.cs" />
-    <Compile Include="src\ExtUtils\ArborEngine\ArborSystem.cs" />
-    <Compile Include="src\ExtUtils\ArborEngine\ArborViewer.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="src\ExtUtils\ArborEngine\BarnesHutTree.cs" />
-    <Compile Include="src\ExtUtils\ArborEngine\IArborRenderer.cs" />
     <Compile Include="src\AssemblyInfo.cs" />
     <Compile Include="src\Controls\ExtResources.Designer.cs">
       <DependentUpon>ExtResources.resx</DependentUpon>
@@ -202,26 +201,19 @@
     <Compile Include="src\GEDCOM\GEDCOMUserReference.cs" />
     <Compile Include="src\GEDCOM\MatchParams.cs" />
     <Compile Include="src\GEDCOM\XRefReplacer.cs" />
-    <Compile Include="src\Graph\Edge.cs" />
-    <Compile Include="src\Graph\GraphvizWriter.cs" />
-    <Compile Include="src\Graph\IEdge.cs" />
-    <Compile Include="src\Graph\IGraph.cs" />
-    <Compile Include="src\Graph\IVertex.cs" />
-    <Compile Include="src\Graph\IDataProvider.cs" />
-    <Compile Include="src\Graph\TGraph.cs" />
-    <Compile Include="src\Graph\Vertex.cs" />
+    <Compile Include="src\SmartGraph\Edge.cs" />
+    <Compile Include="src\SmartGraph\GraphvizWriter.cs" />
+    <Compile Include="src\SmartGraph\IEdge.cs" />
+    <Compile Include="src\SmartGraph\IGraph.cs" />
+    <Compile Include="src\SmartGraph\IVertex.cs" />
+    <Compile Include="src\SmartGraph\IDataProvider.cs" />
+    <Compile Include="src\SmartGraph\Graph.cs" />
+    <Compile Include="src\SmartGraph\Vertex.cs" />
     <Compile Include="src\ExtUtils\ImageBox\ImageBox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="src\ExtUtils\ImageBox\ImageBoxBorderStyle.cs" />
-    <Compile Include="src\ExtUtils\ImageBox\ImageBoxNativeMethods.cs" />
     <Compile Include="src\ExtUtils\ImageBox\ImageBoxSelectionMode.cs" />
-    <Compile Include="src\ExtUtils\ImageBox\ScrollControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="src\ExtUtils\ImageBox\VirtualScrollableControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="src\ExtUtils\ImageBox\ZoomLevelCollection.cs" />
     <Compile Include="src\BaseObject.cs" />
     <Compile Include="src\CRC32.cs" />
@@ -254,6 +246,8 @@
       <DependentUpon>SlideList.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="src\ExtUtils\ScrollableControls" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -125,6 +125,24 @@ namespace GKUI
 			return result;
 		}
 
+		private void UpdateTitle()
+		{
+		    switch (this.fChartKind)
+		    {
+		        case TreeChartBox.ChartKind.ckAncestors:
+		            this.Text = LangMan.LS(LSID.LSID_MITreeAncestors);
+		            break;
+		        case TreeChartBox.ChartKind.ckDescendants:
+		            this.Text = LangMan.LS(LSID.LSID_MITreeDescendants);
+		            break;
+		        case TreeChartBox.ChartKind.ckBoth:
+		            this.Text = LangMan.LS(LSID.LSID_MITreeBoth);
+		            break;
+		    }
+
+		    this.Text = this.Text + " \"" + Path.GetFileName(fBase.Tree.FileName) + "\"";
+		}
+
 		#region Data manipulations
 
 		private GEDCOMIndividualRecord SelectSpouseFor(GEDCOMIndividualRecord iRec)
@@ -618,27 +636,12 @@ namespace GKUI
 				}
 				else
 				{
+					this.UpdateTitle();
+					if (show) base.Show();
+
 					this.fTreeBox.DepthLimit = this.fGensLimit;
 					this.fTreeBox.ShieldState = this.fBase.ShieldState;
-
 					this.fTreeBox.GenChart(this.fPerson, this.fChartKind, true);
-
-					switch (this.fChartKind)
-					{
-						case TreeChartBox.ChartKind.ckAncestors:
-							this.Text = LangMan.LS(LSID.LSID_MITreeAncestors);
-							break;
-						case TreeChartBox.ChartKind.ckDescendants:
-							this.Text = LangMan.LS(LSID.LSID_MITreeDescendants);
-							break;
-						case TreeChartBox.ChartKind.ckBoth:
-							this.Text = LangMan.LS(LSID.LSID_MITreeBoth);
-							break;
-					}
-
-					this.Text = this.Text + " \"" + Path.GetFileName(fBase.Tree.FileName) + "\"";
-
-					if (show) base.Show();
 
 					TfmGEDKeeper.Instance.UpdateControls(false);
 				}

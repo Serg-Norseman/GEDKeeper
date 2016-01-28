@@ -8,41 +8,25 @@
  */
 
 using System;
-using System.Globalization;
-using System.Threading;
-using GKCommon;
-
-/// <summary>
-/// Localization: dirty
-/// </summary>
 
 namespace GKCommon
 {
 	public static class CalendarConverter
 	{
-		public enum DateEra : byte
+		public enum DateEra
 		{
 			AD,
 			BC
 		}
 
-		public static readonly string[] HebrewMonths;
-		public static readonly string[] HebrewWeekdays;
-		public static readonly string[] IslamicMonths;
-		public static readonly string[] IslamicWeekdays;
-		public static readonly string[] PersianMonths;
-		public static readonly string[] PersianWeekdays;
-		public static readonly string[] IndianCivilMonths;
-		public static readonly string[] IndianCivilWeekdays;
-		public static readonly string[] BahaiMonths;
-		public static readonly string[] BahaiWeekdays;
+		#region Aux functions
 
-		public static int iFloor(double X)
+		private static int iFloor(double X)
 		{
 			return (int)Math.Floor(X);
 		}
 
-		public static int iCeil(double X)
+		private static int iCeil(double X)
 		{
 			return (int)Math.Ceiling(X);
 		}
@@ -54,23 +38,124 @@ namespace GKCommon
 
 		private static int _modi(double a, double b)
 		{
-			return (int)SysUtils.Trunc(a - b * Math.Floor((a / b)));
+			return (int)Math.Truncate(a - b * Math.Floor((a / b)));
 		}
 
-		private static int _if(bool aCond, int aThen, int aElse)
+		private static int _if(bool cond, int thenVal, int elseVal)
 		{
-			int result = aCond ? aThen : aElse;
-			return result;
+			return (cond) ? thenVal : elseVal;
 		}
 
-		public static bool hebrew_leap(int year)
+		#endregion
+
+		#region Common leap
+
+		public static bool leap_gregorian(int year)
+		{
+			return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
+		}
+
+		public static bool leap_julian(int year)
+		{
+			return _modf((double)year, 4.0) == (double)_if(year > 0, 0, 3);
+		}
+
+		public static bool leap_hebrew(int year)
 		{
 			return _modf((double)(year * 7 + 1), 19.0) < (double)7f;
 		}
 
+		public static bool leap_islamic(int year)
+		{
+			return (year * 11 + 14) % 30 < 11;
+		}
+
+		public static bool leap_persian(int year)
+		{
+			return ((year - _if(year > 0, 474, 473)) % 2820 + 474 + 38) * 682 % 2816 < 682;
+		}
+
+		#endregion
+		
+		#region Julian day specific
+		
+		public static int jwday(double j)
+		{
+			return _modi(Math.Floor((j + 1.5)), 7.0);
+		}
+		
+		#endregion
+
+		#region Gregorian calendar
+		
+		public static double gregorian_to_jd(int year, int month, int day)
+		{
+			return (1721424.5 + (double)(365 * (year - 1)) + Math.Floor(((double)(year - 1) / 4.0)) + -Math.Floor(((double)(year - 1) / 100.0)) + Math.Floor(((double)(year - 1) / 400.0)) + Math.Floor(((double)(367 * month - 362) / 12.0 + (double)_if(month <= 2, 0, _if(leap_gregorian(year), -1, -2)) + (double)day)));
+		}
+
+        public static void jd_to_gregorian(double jd, out int year, out int month, out int day)
+		{
+			double wjd = (Math.Floor((jd - 0.5)) + 0.5);
+			double depoch = (wjd - 1721425.5);
+			int quadricent = iFloor((depoch / 146097.0));
+			double dqc = _modf(depoch, 146097.0);
+			int cent = iFloor((dqc / 36524.0));
+			double dcent = _modf(dqc, 36524.0);
+			int quad = iFloor((dcent / 1461.0));
+			double dquad = _modf(dcent, 1461.0);
+			int yindex = iFloor((dquad / 365.0));
+			year = quadricent * 400 + cent * 100 + (quad << 2) + yindex;
+			if (cent != 4 && yindex != 4)
+			{
+				year++;
+			}
+			double yearday = (wjd - gregorian_to_jd(year, 1, 1));
+			int leapadj = _if(wjd < gregorian_to_jd(year, 3, 1), 0, _if(leap_gregorian(year), 1, 2));
+			month = iFloor((((yearday + (double)leapadj) * 12.0 + 373.0) / 367.0));
+			day = (int)(Math.Truncate(wjd - gregorian_to_jd(year, month, 1)) + 1);
+		}
+
+		#endregion
+        
+		#region Julian calendar
+		
+		public static double julian_to_jd(int year, int month, int day)
+		{
+			if (year < 1)
+			{
+				year++;
+			}
+			if (month <= 2)
+			{
+				year--;
+				month += 12;
+			}
+			return (Math.Floor((365.25 * (double)(year + 4716))) + Math.Floor((30.6001 * (double)(month + 1))) + (double)day - 1524.5);
+		}
+
+		public static void jd_to_julian(double jd, ref int year, ref int month, ref int day)
+		{
+			jd = (jd + 0.5);
+			int b = iFloor(jd) + 1524;
+			int c = iFloor((((double)b - 122.1) / 365.25));
+			int d = iFloor((365.25 * (double)c));
+			int e = iFloor(((double)(b - d) / 30.6001));
+			month = iFloor((double)_if(e < 14, e - 1, e - 13));
+			year = iFloor((double)_if(month > 2, c - 4716, c - 4715));
+			day = b - d - iFloor((30.6001 * (double)e));
+			if (year < 1)
+			{
+				year--;
+			}
+		}
+
+		#endregion
+		
+		#region Hebrew calendar
+		
 		private static int hebrew_year_months(int year)
 		{
-			return _if(hebrew_leap(year), 13, 12);
+			return _if(leap_hebrew(year), 13, 12);
 		}
 
 		private static int hebrew_delay_1(int year)
@@ -107,7 +192,7 @@ namespace GKCommon
 			}
 			else
 			{
-				if (month == 12 && !hebrew_leap(year))
+				if (month == 12 && !leap_hebrew(year))
 				{
 					Result = 29;
 				}
@@ -132,89 +217,7 @@ namespace GKCommon
 			}
 			return Result;
 		}
-
-		public static bool leap_gregorian(int year)
-		{
-			return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
-		}
-
-		public static bool leap_julian(int year)
-		{
-			return _modf((double)year, 4.0) == (double)_if(year > 0, 0, 3);
-		}
-
-		public static bool leap_islamic(int year)
-		{
-			return (year * 11 + 14) % 30 < 11;
-		}
-
-		public static bool leap_persian(int year)
-		{
-			return ((year - _if(year > 0, 474, 473)) % 2820 + 474 + 38) * 682 % 2816 < 682;
-		}
-
-		public static int jwday(double j)
-		{
-			return _modi(Math.Floor((j + 1.5)), 7.0);
-		}
-
-		public static double gregorian_to_jd(int year, int month, int day)
-		{
-			return (1721424.5 + (double)(365 * (year - 1)) + Math.Floor(((double)(year - 1) / 4.0)) + -Math.Floor(((double)(year - 1) / 100.0)) + Math.Floor(((double)(year - 1) / 400.0)) + Math.Floor(((double)(367 * month - 362) / 12.0 + (double)_if(month <= 2, 0, _if(leap_gregorian(year), -1, -2)) + (double)day)));
-		}
-
-        public static void jd_to_gregorian(double jd, out int year, out int month, out int day)
-		{
-			double wjd = (Math.Floor((jd - 0.5)) + 0.5);
-			double depoch = (wjd - 1721425.5);
-			int quadricent = iFloor((depoch / 146097.0));
-			double dqc = _modf(depoch, 146097.0);
-			int cent = iFloor((dqc / 36524.0));
-			double dcent = _modf(dqc, 36524.0);
-			int quad = iFloor((dcent / 1461.0));
-			double dquad = _modf(dcent, 1461.0);
-			int yindex = iFloor((dquad / 365.0));
-			year = quadricent * 400 + cent * 100 + (quad << 2) + yindex;
-			if (cent != 4 && yindex != 4)
-			{
-				year++;
-			}
-			double yearday = (wjd - gregorian_to_jd(year, 1, 1));
-			int leapadj = _if(wjd < gregorian_to_jd(year, 3, 1), 0, _if(leap_gregorian(year), 1, 2));
-			month = iFloor((((yearday + (double)leapadj) * 12.0 + 373.0) / 367.0));
-			day = (int)(Math.Truncate(wjd - gregorian_to_jd(year, month, 1)) + 1);
-		}
-
-		public static double julian_to_jd(int year, int month, int day)
-		{
-			if (year < 1)
-			{
-				year++;
-			}
-			if (month <= 2)
-			{
-				year--;
-				month += 12;
-			}
-			return (Math.Floor((365.25 * (double)(year + 4716))) + Math.Floor((30.6001 * (double)(month + 1))) + (double)day - 1524.5);
-		}
-
-		public static void jd_to_julian(double jd, ref int year, ref int month, ref int day)
-		{
-			jd = (jd + 0.5);
-			int b = iFloor(jd) + 1524;
-			int c = iFloor((((double)b - 122.1) / 365.25));
-			int d = iFloor((365.25 * (double)c));
-			int e = iFloor(((double)(b - d) / 30.6001));
-			month = iFloor((double)_if(e < 14, e - 1, e - 13));
-			year = iFloor((double)_if(month > 2, c - 4716, c - 4715));
-			day = b - d - iFloor((30.6001 * (double)e));
-			if (year < 1)
-			{
-				year--;
-			}
-		}
-
+		
 		public static double hebrew_to_jd(int year, int month, int day)
 		{
 			int months = hebrew_year_months(year);
@@ -287,6 +290,10 @@ namespace GKCommon
 			day = (int)Math.Truncate(jd - hebrew_to_jd(year, month, 1) + 1.0);
 		}
 
+		#endregion
+		
+		#region Islamic calendar
+		
 		public static double islamic_to_jd(int year, int month, int day)
 		{
 			return ((double)(day + Math.Ceiling((29.5 * (double)(month - 1))) + (year - 1) * 354 + Math.Floor(((double)(3 + 11 * year) / 30.0))) + 1948439.5 - 1.0);
@@ -300,7 +307,11 @@ namespace GKCommon
 			day = (int)Math.Truncate(jd - islamic_to_jd(year, month, 1) + 1.0);
 		}
 
-		public static double persian_to_jd(int year, int month, int day)
+		#endregion
+
+		#region Persian calendar
+		
+        public static double persian_to_jd(int year, int month, int day)
 		{
 			double epbase = (double)(year - _if(year >= 0, 474, 473));
 			double epyear = (474.0 + _modf(epbase, 2820.0));
@@ -334,6 +345,10 @@ namespace GKCommon
 			day = (int)Math.Truncate(jd - persian_to_jd(year, month, 1) + 1.0);
 		}
 
+		#endregion
+
+		#region Indian civil calendar
+		
 		public static double indian_civil_to_jd(int year, int month, int day)
 		{
 			int gyear = year + 78;
@@ -403,6 +418,10 @@ namespace GKCommon
 			}
 		}
 
+		#endregion
+		
+		#region Bahai calendar
+		
 		public static double bahai_to_jd(int major, int cycle, int year, int month, int day)
 		{
 			int by = 0;
@@ -430,169 +449,6 @@ namespace GKCommon
 			day = iFloor((jd + 1.0 - bahai_to_jd(major, cycle, year, month, 1)));
 		}
 
-		public static string date_to_str(int aYear, int aMonth, int aDay, CalendarConverter.DateEra aEra)
-		{
-			DateTimeFormatInfo DateTimeInfo = Thread.CurrentThread.CurrentCulture.DateTimeFormat;
-			string Result = string.Concat(new string[]
-			{
-				aDay.ToString(), 
-				" ", 
-				DateTimeInfo.AbbreviatedMonthNames[aMonth - 1], 
-				" ", 
-				aYear.ToString()
-			});
-			if (aEra != CalendarConverter.DateEra.AD)
-			{
-				Result += " до н.э.";
-			}
-			return Result;
-		}
-
-		static CalendarConverter()
-		{
-			CalendarConverter.BahaiWeekdays = new string[]
-			{
-				"Джамаль", 
-				"Камаль", 
-				"Фидаль", 
-				"Идаль", 
-				"Истиджлаль", 
-				"Истиклаль", 
-				"Джалаль"
-			};
-
-			CalendarConverter.BahaiMonths = new string[]
-			{
-				"Бахa", 
-				"Джалaл", 
-				"Джамaл", 
-				"Азамат", 
-				"Нур", 
-				"Рахмат", 
-				"Калимaт", 
-				"Камaл", 
-				"Асмa", 
-				"Иззат", 
-				"Машиййат", 
-				"Ильм", 
-				"Кудрат", 
-				"Каул", 
-				"Масa’иль", 
-				"Шараф", 
-				"Султан", 
-				"Мульк", 
-				"Аййaм-и Хa", 
-				"Алa"
-			};
-
-			CalendarConverter.IndianCivilWeekdays = new string[]
-			{
-				"равивар", 
-				"сомвар", 
-				"мангалвар", 
-				"будхвар", 
-				"брихаспативар", 
-				"шукрвар", 
-				"шанивар"
-			};
-
-			CalendarConverter.IndianCivilMonths = new string[]
-			{
-				"Чайтра", 
-				"Ваисакха", 
-				"Джанштха", 
-				"Асадха", 
-				"Сравана", 
-				"Бхадра", 
-				"Азвина", 
-				"Картика", 
-				"Аграхайана", 
-				"Пауза", 
-				"Магха", 
-				"Пхалгуна"
-			};
-
-			CalendarConverter.PersianWeekdays = new string[]
-			{
-				"йекшанбе", 
-				"душанбе", 
-				"сешанбе", 
-				"чахаршанбе", 
-				"панджшанбе", 
-				"джоме", 
-				"шанбе"
-			};
-
-			CalendarConverter.PersianMonths = new string[]
-			{
-				"Фарвардин", 
-				"Ордибехешт", 
-				"Хордад", 
-				"Тир", 
-				"Мордад", 
-				"Шахривар", 
-				"Мехр", 
-				"Абан", 
-				"Азар", 
-				"Дей", 
-				"Бахман", 
-				"Эсфанд"
-			};
-
-			CalendarConverter.IslamicWeekdays = new string[]
-			{
-				"аль-ахад", 
-				"аль-иснайн", 
-				"ас-саласа'", 
-				"аль-арба'а", 
-				"аль-хамис", 
-				"аль-джум'а", 
-				"ас-сабт"
-			};
-
-			CalendarConverter.IslamicMonths = new string[]
-			{
-				"мухаррам", 
-				"сафар", 
-				"рабии`у ль-авваль", 
-				"рабии`у с-саании", 
-				"джумаада ль-ууля", 
-				"джумаада ль-аахыр", 
-				"раджаб", 
-				"шаабан", 
-				"рамадан", 
-				"шавваль", 
-				"зуль-ка`да", 
-				"зульхиджа"
-			};
-
-			CalendarConverter.HebrewWeekdays = new string[]
-			{
-				"алеф", 
-				"бейт", 
-				"гимел", 
-				"далет", 
-				"хей", 
-				"вав", 
-				"зайин"
-			};
-
-			CalendarConverter.HebrewMonths = new string[]
-			{
-				"Нисан", 
-				"Ияр", 
-				"Сиван", 
-				"Тамуз", 
-				"Ав", 
-				"Элул", 
-				"Тишрей", 
-				"Хешван", 
-				"Кислев", 
-				"Тевет", 
-				"Шват", 
-				"Адар", 
-				"Адар бет"
-			};
-		}
+		#endregion
 	}
 }

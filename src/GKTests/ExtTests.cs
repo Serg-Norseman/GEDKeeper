@@ -2,7 +2,7 @@
 using System.Drawing;
 using GKCommon;
 using GKCommon.GEDCOM.Enums;
-using GKCommon.Graph;
+using SmartGraph;
 using NUnit.Framework;
 
 namespace GKTests
@@ -389,31 +389,31 @@ namespace GKTests
 			int month = 0;
 			int day = 0;
 			CalendarConverter.jd_to_julian(jd, ref year, ref month, ref day);
-			s = CalendarConverter.date_to_str(year, month, day, CalendarConverter.DateEra.AD);
+			s = CalendarData.date_to_str(year, month, day, CalendarConverter.DateEra.AD);
 			Assert.AreEqual("27 сен 1990", s); // +
 
 			CalendarConverter.jd_to_hebrew(jd, ref year, ref month, ref day);
 			s = day.ToString() + " ";
-			s += CalendarConverter.HebrewMonths[month - 1];
-			s = s + " " + year.ToString() + ", " + CalendarConverter.HebrewWeekdays[CalendarConverter.jwday(jd)];
+			s += CalendarData.HebrewMonths[month - 1];
+			s = s + " " + year.ToString() + ", " + CalendarData.HebrewWeekdays[CalendarConverter.jwday(jd)];
 			Assert.AreEqual("21 Тишрей 5751, далет", s); // +
 
 			CalendarConverter.jd_to_islamic(jd, ref year, ref month, ref day);
 			s = day.ToString() + " ";
-			s += CalendarConverter.IslamicMonths[month - 1];
-			s = s + " " + year.ToString() + ", йаум " + CalendarConverter.IslamicWeekdays[CalendarConverter.jwday(jd)];
+			s += CalendarData.IslamicMonths[month - 1];
+			s = s + " " + year.ToString() + ", йаум " + CalendarData.IslamicWeekdays[CalendarConverter.jwday(jd)];
 			Assert.AreEqual("20 рабии`у ль-авваль 1411, йаум аль-арба'а", s); // +
 
 			CalendarConverter.jd_to_persian(jd, ref year, ref month, ref day);
 			s = day.ToString() + " ";
-			s += CalendarConverter.PersianMonths[month - 1];
-			s = s + " " + year.ToString() + ", " + CalendarConverter.PersianWeekdays[CalendarConverter.jwday(jd)];
+			s += CalendarData.PersianMonths[month - 1];
+			s = s + " " + year.ToString() + ", " + CalendarData.PersianWeekdays[CalendarConverter.jwday(jd)];
 			Assert.AreEqual("18 Мехр 1369, чахаршанбе", s); // +
 
 			CalendarConverter.jd_to_indian_civil(jd, ref year, ref month, ref day);
 			s = day.ToString() + " ";
-			s += CalendarConverter.IndianCivilMonths[month - 1];
-			s = s + " " + year.ToString() + ", " + CalendarConverter.IndianCivilWeekdays[CalendarConverter.jwday(jd)];
+			s += CalendarData.IndianCivilMonths[month - 1];
+			s = s + " " + year.ToString() + ", " + CalendarData.IndianCivilWeekdays[CalendarConverter.jwday(jd)];
 			Assert.AreEqual("18 Азвина 1912, будхвар", s); // +
 
 			int major = 0;
@@ -421,8 +421,8 @@ namespace GKTests
 			CalendarConverter.jd_to_bahai(jd, ref major, ref cycle, ref year, ref month, ref day);
 			s = "Кулл-и Шай' " + major.ToString() + ", Вахид " + cycle.ToString() + ", ";
 			s = s + day.ToString() + " ";
-			s += CalendarConverter.BahaiMonths[month - 1];
-			s = s + " " + year.ToString() + ", " + CalendarConverter.BahaiWeekdays[CalendarConverter.jwday(jd)];
+			s += CalendarData.BahaiMonths[month - 1];
+			s = s + " " + year.ToString() + ", " + CalendarData.BahaiWeekdays[CalendarConverter.jwday(jd)];
 			Assert.AreEqual("Кулл-и Шай' 1, Вахид 8, 14 Машиййат 14, Идаль", s); // ???
 
 			// bad result! needs 0.0f!
@@ -457,7 +457,7 @@ namespace GKTests
 			IVertex vert2 = ((IEdge)edge).Target;
 			Assert.AreEqual(vertex2, vert2);
 			
-			using (TGraph graph = new TGraph())
+			using (Graph graph = new Graph())
 			{
 				Assert.IsNotNull(graph);
 				

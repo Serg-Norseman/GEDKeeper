@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 // Original VirtualScrollableControl code by Scott Crawford (http://sukiware.com/)
 
-namespace Cyotek.Windows.Forms
+namespace ExtUtils.ScrollableControls
 {
 	[ToolboxItem(false)]
 	public class VirtualScrollableControl : ScrollControl

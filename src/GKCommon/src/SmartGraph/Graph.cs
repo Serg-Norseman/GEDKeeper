@@ -1,11 +1,32 @@
+/*
+ *  "SmartGraph", the small library for store and manipulations over graphs.
+ *  Copyright (C) 2011-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
+ *
+ *  This file is part of "GEDKeeper".
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+using System;
 using System.Collections.Generic;
 
-namespace GKCommon.Graph
+namespace SmartGraph
 {
     /// <summary>
     /// 
     /// </summary>
-    public class TGraph : BaseObject, IGraph
+    public class Graph : BaseObject, IGraph
 	{
 		#region Private members
 
@@ -67,11 +88,11 @@ namespace GKCommon.Graph
 
 		#region Instance control
 
-		public TGraph() : this(new DefaultDataProvider())
+		public Graph() : this(new DefaultDataProvider())
 		{
 		}
 
-		public TGraph(IDataProvider provider)
+		public Graph(IDataProvider provider)
 		{
 			this.fProvider = provider;
 			this.fVerticesList = new List<IVertex>();

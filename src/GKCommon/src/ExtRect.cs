@@ -6,6 +6,8 @@ namespace GKCommon
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public struct ExtRect
 	{
+	    public static readonly ExtRect Empty = default(ExtRect);
+	    
 		public int Left;
 		public int Top;
 		public int Right;
@@ -70,6 +72,11 @@ namespace GKCommon
 			this.Right -= dX;
 			this.Top += dY;
 			this.Bottom -= dY;
+		}
+
+		public bool IntersectsWith(ExtRect rect)
+		{
+			return rect.Left < this.Right && this.Left < rect.Right && rect.Top < this.Bottom && this.Top < rect.Bottom;
 		}
 
 		public override string ToString()

@@ -31,11 +31,11 @@ using ExtUtils;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
-using GKCommon.Graph;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Tools;
 using GKCore.Types;
+using SmartGraph;
 
 namespace GKCore
 {
@@ -255,7 +255,8 @@ namespace GKCore
 				{
 					GEDCOMRecord rec = tree[i];
 
-					if (rec is GEDCOMIndividualRecord) {
+					if (rec is GEDCOMIndividualRecord)
+					{
 						GEDCOMIndividualRecord i_rec = rec as GEDCOMIndividualRecord;
 
 						string nf, nn, np;
@@ -269,11 +270,13 @@ namespace GKCore
 						res = (res && /*nf != "" && nf != "?" &&*/ nn != "" && nn != "?");
 						res = (res && descGens >= gensMin);
 
-						if (datesCheck) {
+						if (datesCheck)
+						{
 							res = (res && birthDate.IsValid());
 						}
 
-						if (res) {
+						if (res)
+						{
 							PatriarchObj pObj = new PatriarchObj();
 							pObj.IRec = i_rec;
 							pObj.BirthYear = birthDate.Year;
@@ -319,7 +322,8 @@ namespace GKCore
 						GEDCOMIndividualRecord cross;
 						bool res = TreeTools.PL_SearchDesc(patr.IRec, patr2.IRec, out cross);
 
-						if (res) {
+						if (res)
+						{
 							patr.HasLinks = true;
 							patr2.HasLinks = true;
 
@@ -350,7 +354,7 @@ namespace GKCore
 			}
 		}
 
-		private static void PL_WalkDescLinks(TGraph graph, PGNode prevNode, GEDCOMIndividualRecord ancestor)
+		private static void PL_WalkDescLinks(Graph graph, PGNode prevNode, GEDCOMIndividualRecord ancestor)
 		{
 			for (int i = 0, count = ancestor.SpouseToFamilyLinks.Count; i < count; i++)
 			{
@@ -378,9 +382,9 @@ namespace GKCore
 			}
 		}
 
-		public TGraph GetPatriarchsGraph(int gensMin, bool datesCheck, bool loneSuppress = true)
+		public Graph GetPatriarchsGraph(int gensMin, bool datesCheck, bool loneSuppress = true)
 		{
-			TGraph graph = new TGraph();
+			Graph graph = new Graph();
 
 			using (ExtList<PatriarchObj> patList = new ExtList<PatriarchObj>(true))
 			{
@@ -394,14 +398,16 @@ namespace GKCore
 
 				// prepare
 				int count = patList.Count;
-				for (int i = 0; i < count; i++) {
+				for (int i = 0; i < count; i++)
+				{
 					PatriarchObj patNode = patList[i] as PatriarchObj;
 					GEDCOMIndividualRecord iRec = patNode.IRec;
 
 					int count2 = iRec.SpouseToFamilyLinks.Count;
-					for (int k = 0; k < count2; k++) {
+					for (int k = 0; k < count2; k++)
+					{
 						GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[k].Family;
-						family.ExtData = new PGNode(family.XRef, PGNodeType.ntPatriarch);
+						family.ExtData = new PGNode(family.XRef, PGNodeType.ntPatriarch, patNode.DescGenerations);
 					}
 				}
 
@@ -426,7 +432,9 @@ namespace GKCore
 								if (node != null && node.Type == PGNodeType.ntPatriarch) {
 									// dummy
 								} else {
-									cross.ExtData = new PGNode(cross.XRef, PGNodeType.ntIntersection);
+								    int size = GKUtils.GetDescGenerations(cross.GetHusband());
+								    if (size == 0) size = 1;
+									cross.ExtData = new PGNode(cross.XRef, PGNodeType.ntIntersection, size);
 								}
 							}
 						}
@@ -441,7 +449,8 @@ namespace GKCore
 
 				// create graph
 				int count3 = patList.Count;
-				for (int i = 0; i < count3; i++) {
+				for (int i = 0; i < count3; i++)
+				{
 					PatriarchObj patNode = patList[i] as PatriarchObj;
 					PL_WalkDescLinks(graph, null, patNode.IRec);
 				}

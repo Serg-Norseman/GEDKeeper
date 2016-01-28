@@ -1,3 +1,4 @@
+using System;
 using GKCommon;
 
 namespace GKCore.Options

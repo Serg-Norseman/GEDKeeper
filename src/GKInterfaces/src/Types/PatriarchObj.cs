@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using GKCommon;
 using GKCommon.GEDCOM;
 
 namespace GKCore.Types

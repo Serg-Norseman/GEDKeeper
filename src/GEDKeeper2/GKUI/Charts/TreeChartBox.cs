@@ -11,12 +11,12 @@ using System.Windows.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
-using GKCommon.Graph;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Kinships;
 using GKCore.Options;
 using GKCore.Types;
+using SmartGraph;
 
 namespace GKUI.Charts
 {
@@ -75,7 +75,7 @@ namespace GKUI.Charts
 		private int fDepthLimit;
 		private Font fDrawFont;
 		private ChartFilter fFilter;
-		private TGraph fGraph;
+		private Graph fGraph;
 		private ChartKind fKind;
 		private TreeChartPerson fKinRoot;
 		private int fLevelDistance;
@@ -100,16 +100,14 @@ namespace GKUI.Charts
 		private ToolTip fToolTip;
 		
 		private int fBorderWidth;
-		private int fLeftPos; // scroll position inside the tree
-		private int fTopPos;
-		private Size fScrollRange;
 		private ExtRect fTreeBounds;
 
 		protected int fImageHeight;
 		protected int fImageWidth;
+		private Size fImageSize;
 		internal int fSPX; // drawing relative offset of tree on graphics
 		internal int fSPY;
-		protected ExtRect fVisibleArea;
+		protected Rectangle fVisibleArea;
 
 		private Pen fLinePen;
 		private Pen fDecorativeLinePen;
@@ -300,8 +298,6 @@ namespace GKUI.Charts
 
 			this.InitSigns();
 
-			this.fLeftPos = 0;
-			this.fTopPos = 0;
 			this.fPersons = new PersonList(true);
 			this.fFilter = new ChartFilter();
 			this.fSpouseDistance = DefSpouseDistance;
@@ -312,18 +308,13 @@ namespace GKUI.Charts
 			this.fSelected = null;
 			this.fScale = 1.0f;
 			this.fTraceSelected = true;
-			this.fGraph = new TGraph();
+			this.fGraph = new Graph();
 
 			this.fScaleControl = new ScaleControl(this);
 			//this.fPersonControl = new PersonControl(this);
 			this.fToolTip = new ToolTip();
 
-			//this.AutoScroll = false;
-			//this.HorizontalScroll.Visible = true;
-			//this.VerticalScroll.Visible = true;
-
-			//Win32Native.EnableScrollBar(this.Handle, Win32Native.SB_HORZ, Win32Native.ESB_ENABLE_BOTH);
-			//Win32Native.EnableScrollBar(this.Handle, Win32Native.SB_VERT, Win32Native.ESB_ENABLE_BOTH);
+			this.WheelScrollsControl = false;
 
 			this.InitTimer();
 			this.InitGraphics();
@@ -963,25 +954,20 @@ namespace GKUI.Charts
 
 		#region Drawing routines
 
-		private bool PersonIsVisible(ExtRect pnRect)
+		private bool IsPersonVisible(ExtRect pnRect)
 		{
-		    int pL = pnRect.Left;
-			int pR = pnRect.Right;
-			int pT = pnRect.Top;
-			int pB = pnRect.Bottom;
-
-			return (fVisibleArea.Contains(pL, pT) || fVisibleArea.Contains(pR, pT) ||
-			        fVisibleArea.Contains(pL, pB) || fVisibleArea.Contains(pR, pB));
+		    return this.fVisibleArea.IntersectsWith(pnRect.ToRectangle());
 		}
 
-		/*private bool LineIsVisible(int X1, int Y1, int X2, int Y2)
+		private bool IsLineVisible(int X1, int Y1, int X2, int Y2)
 		{
-			return (FVisibleArea.Contains(X1, Y1) || FVisibleArea.Contains(X2, Y2));
-		}*/
+		    //return this.fVisibleArea.Contains(X1, Y1) || this.fVisibleArea.Contains(X2, Y2);
+		    return true;
+		}
 
 		private void DrawLine(Graphics gfx, int x1, int y1, int x2, int y2)
 		{
-			//if (!LineIsVisible(X1, Y1, X2, Y2)) return;
+			if (!IsLineVisible(x1, y1, x2, y2)) return;
 			
 			int sX = this.fSPX + x1;
 			int sX2 = this.fSPX + x2;
@@ -1090,7 +1076,7 @@ namespace GKUI.Charts
 		private void DrawPerson(Graphics gfx, int spx, int spy, TreeChartPerson person, DrawMode drawMode)
 		{
 			ExtRect rt = person.Rect;
-			if (drawMode == DrawMode.dmScreen && !this.PersonIsVisible(rt)) return;
+			if (drawMode == DrawMode.dmScreen && !this.IsPersonVisible(rt)) return;
 
 			rt.Offset(spx, spy);
 			int h = gfx.MeasureString("A", this.DrawFont).ToSize().Height;
@@ -1284,8 +1270,13 @@ namespace GKUI.Charts
 			this.fSPY = 0;
 
 			if (drawMode == DrawMode.dmScreen) {
-				this.fSPX += this.fBorderWidth - this.fLeftPos;
-				this.fSPY += this.fBorderWidth - this.fTopPos;
+			    /*Rectangle viewPort = this.GetImageViewPort();
+			    
+				this.fSPX = -viewPort.Left;
+				this.fSPY = -viewPort.Top;*/
+
+				this.fSPX += this.fBorderWidth - -this.AutoScrollPosition.X;
+				this.fSPY += this.fBorderWidth - -this.AutoScrollPosition.Y;
 
 				Size sz = this.ClientSize;
 
@@ -1296,9 +1287,10 @@ namespace GKUI.Charts
 				if (this.fImageHeight < sz.Height) {
 					this.fSPY += (sz.Height - this.fImageHeight) / 2;
 				}
+
+				this.fVisibleArea = this.GetSourceImageRegion();
 			} else {
-				this.fSPX += 0;
-				this.fSPY += 0;
+			    this.fVisibleArea = new Rectangle(0, 0, this.fImageWidth, this.fImageHeight);
 			}
 
 			if (GKData.DEBUG_IMAGE) {
@@ -1448,6 +1440,7 @@ namespace GKUI.Charts
 
 			this.fImageHeight = this.fTreeBounds.GetHeight() + this.fMargins * 2;
 			this.fImageWidth = this.fTreeBounds.GetWidth() + this.fMargins * 2;
+			this.fImageSize = new Size(this.fImageWidth, this.fImageHeight);
 
 			this.SetScrollRange(noRedraw);
 		}
@@ -1702,24 +1695,9 @@ namespace GKUI.Charts
 
 		private void SetScrollRange(bool noRedraw = false)
 		{
-			Size client = base.ClientSize;
-			
-			if (this.fImageWidth < client.Width) {
-				this.fScrollRange.Width = 0;
-				this.SetLeftPos(0);
-			} else {
-				this.fScrollRange.Width = this.fImageWidth - client.Width;
-			}
-
-			if (this.fImageHeight < client.Height) {
-				this.fScrollRange.Height = 0;
-				this.SetTopPos(0);
-			} else {
-				this.fScrollRange.Height = this.fImageHeight - client.Height;
-			}
-
-            NativeMethods.SetScrollRange(this.Handle, NativeMethods.SB_HORZ, 0, this.fScrollRange.Width, false);
-            NativeMethods.SetScrollRange(this.Handle, NativeMethods.SB_VERT, 0, this.fScrollRange.Height, false);
+		    if (this.AutoScroll && !this.fImageSize.IsEmpty) {
+				this.AutoScrollMinSize = new Size(this.fImageSize.Width + this.Padding.Horizontal, this.fImageSize.Height + this.Padding.Vertical);
+		    }
 
             if (!noRedraw) this.Invalidate();
 		}
@@ -1732,44 +1710,71 @@ namespace GKUI.Charts
 			}
 		}
 
-		private void SetLeftPos(int value)
+		private void SetScroll(int x, int y)
 		{
-			if (value < 0) value = 0;
-			if (value > this.fScrollRange.Width) value = this.fScrollRange.Width;
-
-			if (this.fLeftPos != value) {
-				ExtRect dummy = ExtRect.CreateEmpty();
-				ExtRect rt;
-                NativeMethods.ScrollWindowEx(this.Handle, this.fLeftPos - value, 0, ref dummy, ref dummy, IntPtr.Zero, out rt, 0u);
-                NativeMethods.SetScrollPos(this.Handle, 0, this.fLeftPos, true);
-
-                this.fLeftPos = value;
-				this.ResetView();
-				this.Invalidate();
-			}
+			this.AutoScrollPosition = new Point(x, y);
+			this.Invalidate();
+			this.OnScroll(new ScrollEventArgs(ScrollEventType.EndScroll, 0));
 		}
 
-		private void SetTopPos(int value)
+		private void AdjustScroll(int x, int y)
 		{
-			if (value < 0) value = 0;
-			if (value > this.fScrollRange.Height) value = this.fScrollRange.Height;
-
-			if (this.fTopPos != value) {
-				ExtRect dummy = ExtRect.CreateEmpty();
-				ExtRect rt;
-                NativeMethods.ScrollWindowEx(this.Handle, 0, this.fTopPos - value, ref dummy, ref dummy, IntPtr.Zero, out rt, 0u);
-                NativeMethods.SetScrollPos(this.Handle, 1, this.fTopPos, true);
-
-				this.fTopPos = value;
-				this.ResetView();
-                this.Invalidate();
-			}
+			this.AutoScrollPosition = new Point(this.HorizontalScroll.Value + x, this.VerticalScroll.Value + y);
+			this.Invalidate();
+			this.OnScroll(new ScrollEventArgs(ScrollEventType.EndScroll, 0));
 		}
 
-		private void ResetView()
+		private Rectangle GetInsideViewPort(bool includePadding)
 		{
-			Size sz = this.ClientSize;
-			this.fVisibleArea = ExtRect.CreateBounds(this.fLeftPos, this.fTopPos, sz.Width, sz.Height);
+			int left = 0;
+			int top = 0;
+			int width = this.ClientSize.Width;
+			int height = this.ClientSize.Height;
+
+			if (includePadding)
+			{
+				left += this.Padding.Left;
+				top += this.Padding.Top;
+				width -= this.Padding.Horizontal;
+				height -= this.Padding.Vertical;
+			}
+
+			return new Rectangle(left, top, width, height);
+		}
+
+		private Rectangle GetImageViewPort()
+		{
+			Rectangle viewPort;
+
+			if (!this.fImageSize.IsEmpty) {
+				Rectangle innerRectangle = this.GetInsideViewPort(true);
+
+				int x = !this.HScroll ? (innerRectangle.Width - (this.fImageSize.Width + this.Padding.Horizontal)) / 2 : 0;
+				int y = !this.VScroll ? (innerRectangle.Height - (this.fImageSize.Height + this.Padding.Vertical)) / 2 : 0;
+
+				int width = Math.Min(this.fImageSize.Width - Math.Abs(this.AutoScrollPosition.X), innerRectangle.Width);
+				int height = Math.Min(this.fImageSize.Height - Math.Abs(this.AutoScrollPosition.Y), innerRectangle.Height);
+
+				viewPort = new Rectangle(x + innerRectangle.Left, y + innerRectangle.Top, width, height);
+			} else {
+				viewPort = Rectangle.Empty;
+			}
+
+			return viewPort;
+		}
+
+		private Rectangle GetSourceImageRegion()
+		{
+			Rectangle region;
+
+			if (!this.fImageSize.IsEmpty) {
+			    Rectangle viewPort = this.GetImageViewPort();
+			    region = new Rectangle(-this.AutoScrollPosition.X, -this.AutoScrollPosition.Y, viewPort.Width, viewPort.Height);
+			} else {
+			    region = Rectangle.Empty;
+			}
+
+			return region;
 		}
 
 		#endregion
@@ -1815,20 +1820,6 @@ namespace GKUI.Charts
 				                    NativeMethods.DLGC_WANTARROWS | NativeMethods.DLGC_WANTTAB | 
 				                    NativeMethods.DLGC_WANTCHARS | NativeMethods.DLGC_WANTALLKEYS);
 			}
-			else if (m.Msg == NativeMethods.WM_HSCROLL)
-			{
-				int page = this.ClientSize.Width / 10;
-				uint wParam = (uint)m.WParam.ToInt32();
-				int newPos = SysUtils.DoScroll(this.Handle, wParam, 0, this.fLeftPos, 0, this.fScrollRange.Width, 1, page);
-				this.SetLeftPos(newPos);
-			}
-			else if (m.Msg == NativeMethods.WM_VSCROLL)
-			{
-				int page = this.ClientSize.Height / 10;
-				uint wParam = (uint)m.WParam.ToInt32();
-				int newPos = SysUtils.DoScroll(this.Handle, wParam, 1, this.fTopPos, 0, this.fScrollRange.Height, 1, page);
-				this.SetTopPos(newPos);
-			}
 		}
 
 		protected override void OnResize(EventArgs e)
@@ -1836,7 +1827,6 @@ namespace GKUI.Charts
 			this.SaveSelection();
 			
 			this.SetScrollRange();
-			this.ResetView();
 			this.fScaleControl.Update();
 
 			this.RestoreSelection();
@@ -1872,10 +1862,13 @@ namespace GKUI.Charts
 				if (newScale < 0.5 || newScale > 1.5) return;
 				this.Scale = newScale;
 			} else {
-				var direction = e.Delta > 0 ? NativeMethods.SB_PAGELEFT : NativeMethods.SB_PAGERIGHT;
-				uint msg = (ModifierKeys == Keys.Shift) ? NativeMethods.WM_HSCROLL : NativeMethods.WM_VSCROLL;
-
-				NativeMethods.SendMessage(this.Handle, msg, (IntPtr)direction, IntPtr.Zero);
+				int dx = 0, dy = 0;
+				if (ModifierKeys == Keys.Shift) {
+				    dx = -e.Delta;
+				} else {
+				    dy = -e.Delta;
+				}
+				this.AdjustScroll(dx, dy);
 			}
 		}
 
@@ -1974,8 +1967,7 @@ namespace GKUI.Charts
 					break;
 
 				case ChartControlMode.ccmDragImage:
-					this.SetLeftPos(this.fLeftPos - (e.X - this.fMouseX));
-					this.SetTopPos(this.fTopPos - (e.Y - this.fMouseY));
+					this.AdjustScroll(-(e.X - this.fMouseX), -(e.Y - this.fMouseY));
 					this.fMouseX = e.X;
 					this.fMouseY = e.Y;
 					break;
@@ -2032,15 +2024,6 @@ namespace GKUI.Charts
 					break;
 			}
 		}
-
-		/*protected override CreateParams CreateParams
-		{ 
-			get {
-				CreateParams cp = base.CreateParams;
-				cp.Style |= Win32Native.WS_HSCROLL | Win32Native.WS_VSCROLL;
-				return cp;
-			}
-		}*/
 
 		#endregion
 
@@ -2112,22 +2095,24 @@ namespace GKUI.Charts
 		{
 		    if (person == null) return;
 
-			int dstX = (person.PtX) - (this.ClientSize.Width / 2);
-			int dstY = (person.PtY + (person.Height / 2)) - (this.ClientSize.Height / 2);
+		    int dstX = ((person.PtX) - (this.ClientSize.Width / 2));
+		    int dstY = ((person.PtY + (person.Height / 2)) - (this.ClientSize.Height / 2));
 
-			if (dstX < 0) dstX = dstX + (0 - dstX);
-			if (dstY < 0) dstY = dstY + (0 - dstY);
+		    if (dstX < 0) dstX = dstX + (0 - dstX);
+		    if (dstY < 0) dstY = dstY + (0 - dstY);
 
-			if ((this.fLeftPos == dstX) && (this.fTopPos == dstY)) return;
+		    int oldX = Math.Abs(this.AutoScrollPosition.X);
+		    int oldY = Math.Abs(this.AutoScrollPosition.Y);
 
-			if (animation) {
-					TweenLibrary tween = new TweenLibrary();
-					tween.StartTween(delegate(int newX, int newY) { this.SetLeftPos(newX); this.SetTopPos(newY); },
-                                          this.fLeftPos, this.fTopPos, dstX, dstY, TweenAnimation.EaseInOutQuad, 20);
-			} else {
-				this.SetLeftPos(dstX);
-				this.SetTopPos(dstY);
-			}
+		    if ((oldX == dstX) && (oldY == dstY)) return;
+
+		    if (animation) {
+		        TweenLibrary tween = new TweenLibrary();
+		        tween.StartTween(delegate(int newX, int newY) { this.SetScroll(newX, newY); },
+		                         oldX, oldY, dstX, dstY, TweenAnimation.EaseInOutQuad, 20);
+		    } else {
+		        this.SetScroll(dstX, dstY);
+		    }
 		}
 
 		#endregion

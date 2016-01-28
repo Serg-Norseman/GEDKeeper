@@ -80,7 +80,9 @@ namespace GKPedigreeImporterPlugin
 				}
 			} while (token.Kind != TokenKind.EOF);
 
-			if (token.Kind != TokenKind.WhiteSpace || token.Value != " ") {
+			// TODO: testing and transfer to parse!
+			if ((prev == null || prev.Kind != TokenKind.Symbol || prev.Value != ".") || (token.Kind != TokenKind.WhiteSpace || token.Value != " "))
+			{
 				return false;
 			}
 
@@ -296,12 +298,12 @@ namespace GKPedigreeImporterPlugin
 
 		////////////////////
 
-		public static bool ParseSpouseLine(string str, out string spouse, out string marrNum, out string extData, out int pos)
+		public static bool ParseSpouseLine(string str, out string spouse, out int marrNum, out string extData, out int pos)
 		{
 			// "М/Ж[N]{": " | " - "}name"
 
 			spouse = "";
-			marrNum = "";
+			marrNum = 1;
 			extData = "";
 			pos = 0;
 
@@ -320,10 +322,10 @@ namespace GKPedigreeImporterPlugin
 			}
 
 			if (token.Kind == TokenKind.Number) {
-				marrNum = token.Value;
+				marrNum = int.Parse(token.Value);
 				token = strTok.Next();
 			} else {
-				marrNum = "1";
+				marrNum = 1;
 			}
 
 			if (token.Kind == TokenKind.WhiteSpace && token.Value == " ") {

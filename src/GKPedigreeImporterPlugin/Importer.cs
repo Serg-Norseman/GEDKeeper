@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
 using GKCore.Interfaces;
+using GKCore.Types;
 using Microsoft.Office.Interop.Excel;
 using MSOExcel = Microsoft.Office.Interop.Excel;
 using MSOWord = Microsoft.Office.Interop.Word;
@@ -99,7 +101,11 @@ namespace GKPedigreeImporterPlugin
 		public NameFormat NameFormat;
 		public GenerationFormat GenerationFormat;
 		public bool SurnamesNormalize;
+		public DateFormat DateFormat;
+		public char DateSeparator;
 
+		public bool SpecialFormat_1;
+		
 		public StringList RawContents
 		{
 			get { return this.fRawContents; }
@@ -131,32 +137,33 @@ namespace GKPedigreeImporterPlugin
             base.Dispose(disposing);
         }
 
-		private GEDCOMFamilyRecord AddFamily(GEDCOMIndividualRecord parent)
+		private GEDCOMFamilyRecord GetFamilyByNum(GEDCOMIndividualRecord parent, int marrNum)
 		{
-			GEDCOMFamilyRecord result = this.fTree.CreateFamily();
-			result.AddSpouse(parent);
-			return result;
-		}
-
-        private void AddChild(GEDCOMIndividualRecord parent, int marNum, GEDCOMIndividualRecord child)
-		{
-        	if (marNum <= 0)
-        	{
-        		marNum = 1;
-        	}
-
+			// it's source of ERRORS! but without this - bad! (AddSpouse() not linking parent to family)
 			GEDCOMSex sex = parent.Sex;
 			if (sex == GEDCOMSex.svNone || sex == GEDCOMSex.svUndetermined)
 			{
 				parent.Sex = GEDCOMSex.svMale;
 			}
 
-			while (parent.SpouseToFamilyLinks.Count < marNum)
+			while (parent.SpouseToFamilyLinks.Count < marrNum)
 			{
-				this.AddFamily(parent);
+				GEDCOMFamilyRecord fam = this.fTree.CreateFamily();
+				fam.AddSpouse(parent);
 			}
 
-			GEDCOMFamilyRecord family = parent.SpouseToFamilyLinks[marNum - 1].Family;
+			GEDCOMFamilyRecord family = parent.SpouseToFamilyLinks[marrNum - 1].Family;
+			return family;
+		}
+
+        private void AddChild(GEDCOMIndividualRecord parent, int marrNum, GEDCOMIndividualRecord child)
+		{
+        	if (marrNum <= 0)
+        	{
+        		marrNum = 1;
+        	}
+
+			GEDCOMFamilyRecord family = GetFamilyByNum(parent, marrNum);
 			family.AddChild(child);
 		}
 
@@ -172,14 +179,23 @@ namespace GKPedigreeImporterPlugin
 			return str.Trim();
 		}
 
-		private bool DefinePersonName(string str, out string f_name, out string f_pat, out string f_fam, out string bd, out string dd)
+		private static string RemoveCommaDot(string str)
 		{
-			f_name = "";
-			f_pat = "";
-			f_fam = "";
+			if (!string.IsNullOrEmpty(str))
+			{
+			    char last = str[str.Length - 1];
+				if (last == ',' || last == '.')
+				{
+					str = str.Substring(0, str.Length - 1);
+				}
+			}
+			return str.Trim();
+		}
+
+		private void ParseDatesLine(string tmp, out string bd, out string dd)
+		{
 			bd = "";
 			dd = "";
-			string tmp = str;
 
 			int b_pos = tmp.IndexOf("*");
 			int d_pos = tmp.IndexOf("+");
@@ -198,7 +214,55 @@ namespace GKPedigreeImporterPlugin
 				tmp = tmp.Trim();
 			}
 
-			string[] tokens = tmp.Trim().Split(new char[] { ' ' }, 3);
+			bd = RemoveDot(bd);
+			dd = RemoveDot(dd);
+		}
+		
+		private bool DefinePersonName(string str, out string f_name, out string f_pat, out string f_fam, out string bd, out string dd)
+		{
+			f_name = "";
+			f_pat = "";
+			f_fam = "";
+
+			string tmp = str;
+			tmp = tmp.Replace('', '+'); // some formats of the death date prefix
+
+			string dates = "";
+			if (this.SpecialFormat_1) {
+			    int ob_pos = tmp.IndexOf("(*");
+			    if (ob_pos >= 0) {
+			        int cb_pos = tmp.IndexOf(")", ob_pos);
+			        if (ob_pos >= 0 && cb_pos > ob_pos) {
+			            dates = tmp.Substring(ob_pos + 1, cb_pos - ob_pos - 1).Trim();
+			            tmp = tmp.Remove(ob_pos, dates.Length + 2);
+			        }
+			    }
+			}
+
+			// if not Special or SpecialNotFound, then classic
+			if (string.IsNullOrEmpty(dates))
+			{
+			    int bd_pos = tmp.IndexOf("*");
+				int dd_pos = tmp.IndexOf("+");
+				
+				int dates_pos = -1;
+				if (bd_pos >= 0 && (dd_pos < 0 || dd_pos > bd_pos)) {
+					dates_pos = bd_pos;
+				} else {
+					dates_pos = dd_pos;
+				}
+				
+			    if (dates_pos >= 0) {
+			        dates = tmp.Substring(dates_pos, tmp.Length - dates_pos);
+			        tmp = tmp.Remove(dates_pos, dates.Length).Trim(); // can be blanks at end
+			    }
+			}
+
+			this.ParseDatesLine(dates, out bd, out dd);
+
+			tmp = RemoveCommaDot(tmp); // &Trim()
+
+			string[] tokens = tmp.Split(new char[] { ' ' }, 3);
 
 			switch (this.NameFormat) {
 				case NameFormat.nfIOF:
@@ -217,9 +281,6 @@ namespace GKPedigreeImporterPlugin
 			if (this.SurnamesNormalize) {
 				f_fam = GEDCOMUtils.NormalizeName(f_fam);
 			}
-
-			bd = RemoveDot(bd);
-			dd = RemoveDot(dd);
 
 			return true;
 		}
@@ -268,17 +329,31 @@ namespace GKPedigreeImporterPlugin
 				if (date.IndexOf("п.") == 0)
 				{
 					prefix = "AFT ";
-					date = date.Remove(0, 2).Trim();
+					date = date.Remove(0, 2);
 				}
-				else
+				else if (date.IndexOf("после") == 0)
 				{
-					if (date.IndexOf("до") == 0)
-					{
-						prefix = "BEF ";
-						date = date.Remove(0, 3).Trim();
-					}
+				    prefix = "AFT ";
+				    date = date.Remove(0, 5);
+				}
+				else if (date.IndexOf("до") == 0)
+				{
+				    prefix = "BEF ";
+				    date = date.Remove(0, 2);
+				}
+				else if (date.IndexOf("ок.") == 0)
+				{
+				    prefix = "ABT ";
+				    date = date.Remove(0, 3);
+				}
+				else if (date.IndexOf("около") == 0)
+				{
+				    prefix = "ABT ";
+				    date = date.Remove(0, 5);
 				}
 
+				date = date.Trim();
+				
 				string tmp = "";
 				string[] toks = date.Split('.');
 				if (toks.Length > 3)
@@ -451,30 +526,29 @@ namespace GKPedigreeImporterPlugin
 
 				try
 				{
-					string spouse, marNum, extData;
+					string spSex, extData;
+					int marrNum;
 					int pos;
-					if (ImpUtils.ParseSpouseLine(line, out spouse, out marNum, out extData, out pos))
+					if (ImpUtils.ParseSpouseLine(line, out spSex, out marrNum, out extData, out pos))
 					{
 						// define sex
-						GEDCOMSex sx = (spouse[0] == 'М') ? GEDCOMSex.svMale : GEDCOMSex.svFemale;
-
-						// number of spouse, not used
-						int num = int.Parse(marNum);
+						GEDCOMSex sx = (spSex[0] == 'М') ? GEDCOMSex.svMale : GEDCOMSex.svFemale;
 
 						// extract name
 						line = line.Substring(pos).Trim();
 
 						if (!string.IsNullOrEmpty(line))
 						{
-							GEDCOMFamilyRecord fam = this.AddFamily(curPerson);
-							GEDCOMIndividualRecord sp = this.DefinePerson(line, sx);
-							fam.AddSpouse(sp);
+							GEDCOMIndividualRecord spouse = this.DefinePerson(line, sx);
+
+							GEDCOMFamilyRecord family = GetFamilyByNum(curPerson, marrNum);
+							family.AddSpouse(spouse);
 
 							// extract marriage date
 							if (!string.IsNullOrEmpty(extData)) {
 								string mar_date = extData.Substring(1, extData.Length - 2).Trim();
 
-								if (mar_date != "") this.SetEvent(fam, "MARR", mar_date);
+								if (mar_date != "") this.SetEvent(family, "MARR", mar_date);
 							}
 						}
 					}
@@ -725,7 +799,7 @@ namespace GKPedigreeImporterPlugin
 				MSOExcel.Worksheet sheet = excel.Worksheets[1] as MSOExcel.Worksheet;
 				//sheet.Activate();
 
-				StringList buf = new StringList();
+				StringList buffer = new StringList();
 				try
 				{
 					// получаем используемое количество строк и столбцов
@@ -756,40 +830,39 @@ namespace GKPedigreeImporterPlugin
 							s123 += c3;
 						}
 
+						if (s123 == "") {
+							continue;
+						}
+
 						string s, p_id = "";
 						int self_id = 0;
 
-						if (s123 == "") {
-							CheckBuffer(buf, i_rec);
+						if (this.IsGenerationLine(s123)) {
+							CheckBuffer(buffer, i_rec);
 							i_rec = null;
+
+							fLog.Add("> " + fLangMan.LS(ILS.LSID_Generation) + " " + s123);
 						} else {
-							if (this.IsGenerationLine(s123)) {
-								CheckBuffer(buf, i_rec);
-								i_rec = null;
+							s = s123 + " " + c4 + " " + c5;
+							if (c6 != "") {
+								s = s + ". " + c6 + ".";
+							}
 
-								fLog.Add("> " + fLangMan.LS(ILS.LSID_Generation) + " " + s123);
+							s = s.Trim();
+
+							if (!IsPersonLine(s, ref p_id)) {
+								buffer.Add(s);
 							} else {
-								s = s123 + " " + c4 + " " + c5;
-								if (c6 != "") {
-									s = s + ". " + c6 + ".";
+								CheckBuffer(buffer, i_rec);
+								i_rec = ParsePerson(buffer, s, p_id, ref self_id);
+
+								fLog.Add("> "+fLangMan.LS(ILS.LSID_PersonParsed) + " " + p_id + ".");
+
+								if (self_id - prev_id > 1) {
+									fLog.Add(">>>> "+fLangMan.LS(ILS.LSID_ParseError_LineSeq));
 								}
 
-								s = s.Trim();
-
-								if (!IsPersonLine(s, ref p_id)) {
-									buf.Add(s);
-								} else {
-									CheckBuffer(buf, i_rec);
-									i_rec = ParsePerson(buf, s, p_id, ref self_id);
-
-									fLog.Add("> "+fLangMan.LS(ILS.LSID_PersonParsed) + " " + p_id + ".");
-
-									if (self_id - prev_id > 1) {
-										fLog.Add(">>>> "+fLangMan.LS(ILS.LSID_ParseError_LineSeq));
-									}
-
-									prev_id = self_id;
-								}
+								prev_id = self_id;
 							}
 						}
 
@@ -802,7 +875,7 @@ namespace GKPedigreeImporterPlugin
 				{
 					this.fBase.ProgressDone();
 
-					buf.Dispose();
+					buffer.Dispose();
 
 					excel.Quit();
 					excel = null;

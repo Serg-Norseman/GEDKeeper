@@ -6,10 +6,10 @@ using System.Windows.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
-using GKCommon.Graph;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKUI;
+using SmartGraph;
 
 namespace GKCore.Tools
 {

@@ -91,28 +91,29 @@ namespace GKTests
 
 
 
+			int marrNum;
 			string spouse;
-			res = ImpUtils.ParseSpouseLine("Ж: Ivanova", out spouse, out marNum, out extData, out pos);
+			res = ImpUtils.ParseSpouseLine("Ж: Ivanova", out spouse, out marrNum, out extData, out pos);
 			Assert.AreEqual("Ж", spouse, "[v3-1]");
-			Assert.AreEqual("1", marNum, "[v3-1]");
+			Assert.AreEqual(1, marrNum, "[v3-1]");
 			Assert.AreEqual("", extData);
 			Assert.AreEqual(true, res, "[v3-1]");
 
-			res = ImpUtils.ParseSpouseLine("Ж2 (test): Ivanova", out spouse, out marNum, out extData, out pos);
+			res = ImpUtils.ParseSpouseLine("Ж2 (test): Ivanova", out spouse, out marrNum, out extData, out pos);
 			Assert.AreEqual("Ж", spouse, "[v3-2]");
-			Assert.AreEqual("2", marNum, "[v3-2]");
+			Assert.AreEqual(2, marrNum, "[v3-2]");
 			Assert.AreEqual("(test)", extData, "[v3-2]");
 			Assert.AreEqual(true, res, "[v3-2]");
 
-			res = ImpUtils.ParseSpouseLine("Ж - Ivanova", out spouse, out marNum, out extData, out pos);
+			res = ImpUtils.ParseSpouseLine("Ж - Ivanova", out spouse, out marrNum, out extData, out pos);
 			Assert.AreEqual("Ж", spouse, "[v3-3]");
-			Assert.AreEqual("1", marNum, "[v3-3]");
+			Assert.AreEqual(1, marrNum, "[v3-3]");
 			Assert.AreEqual("", extData);
 			Assert.AreEqual(true, res, "[v3-3]");
 
-			res = ImpUtils.ParseSpouseLine("Ж3 (test2) - Ivanova", out spouse, out marNum, out extData, out pos);
+			res = ImpUtils.ParseSpouseLine("Ж3 (test2) - Ivanova", out spouse, out marrNum, out extData, out pos);
 			Assert.AreEqual("Ж", spouse, "[v3-4]");
-			Assert.AreEqual("3", marNum, "[v3-4]");
+			Assert.AreEqual(3, marrNum, "[v3-4]");
 			Assert.AreEqual("(test2)", extData, "[v3-4]");
 			Assert.AreEqual(true, res, "[v3-4]");
 		}
@@ -164,20 +165,24 @@ namespace GKTests
 			res = ImpUtils.IsPersonLine_DAboville(".1. Ivan", ref pid);
 			Assert.AreEqual(false, res, "[i2-3]");
 
+			res = ImpUtils.IsPersonLine_DAboville("1710 (80), 1727 (80).", ref pid);
+			Assert.AreEqual(false, res, "[i2-4]");
 
 
-			string spouse, marNum, extData;
+
+			string spouse, extData;
+			int marrNum;
 			int pos;
-			res = ImpUtils.ParseSpouseLine("Жена Ivanova", out spouse, out marNum, out extData, out pos);
+			res = ImpUtils.ParseSpouseLine("Жена Ivanova", out spouse, out marrNum, out extData, out pos);
 			Assert.AreEqual(false, res, "[i3-1]");
 
-			res = ImpUtils.ParseSpouseLine("Ж2 Ivanova", out spouse, out marNum, out extData, out pos);
+			res = ImpUtils.ParseSpouseLine("Ж2 Ivanova", out spouse, out marrNum, out extData, out pos);
 			Assert.AreEqual(false, res, "[i3-2]");
 
-			res = ImpUtils.ParseSpouseLine("Ж Ivanova", out spouse, out marNum, out extData, out pos);
+			res = ImpUtils.ParseSpouseLine("Ж Ivanova", out spouse, out marrNum, out extData, out pos);
 			Assert.AreEqual(false, res, "[i3-3]");
 
-			res = ImpUtils.ParseSpouseLine("Ж3 (test2 - Ivanova", out spouse, out marNum, out extData, out pos);
+			res = ImpUtils.ParseSpouseLine("Ж3 (test2 - Ivanova", out spouse, out marrNum, out extData, out pos);
 			Assert.AreEqual(false, res, "[i3-4]");
 		}
 	}

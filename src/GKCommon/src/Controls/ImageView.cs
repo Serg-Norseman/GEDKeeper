@@ -26,7 +26,7 @@ namespace GKCommon.Controls
             imageBox.ImageBorderStyle = ImageBoxBorderStyle.FixedSingleGlowShadow;
             imageBox.ImageBorderColor = Color.AliceBlue;
             imageBox.SelectionMode = ImageBoxSelectionMode.Zoom;
-            //imageBox.ShowPixelGrid = true;
+            imageBox.ShowPixelGrid = true;
         }
 
         public void OpenImage(Image image)

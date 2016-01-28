@@ -330,29 +330,36 @@ namespace GKCommon.GEDCOM
 			}
 		}
 
-        public void AddSpouse(GEDCOMIndividualRecord spouse)
+        public bool AddSpouse(GEDCOMIndividualRecord spouse)
 		{
-            if (spouse == null) return;
+        	if (spouse == null)
+        	{
+        		return false;
+        	}
 
             GEDCOMSex sex = spouse.Sex;
-            if (sex != GEDCOMSex.svNone && sex != GEDCOMSex.svUndetermined)
+            if (sex == GEDCOMSex.svNone || sex == GEDCOMSex.svUndetermined)
 			{
-                switch (sex)
-                {
-                    case GEDCOMSex.svMale:
-                        this.Husband.Value = spouse;
-                        break;
+            	return false;
+            }
 
-                       case GEDCOMSex.svFemale:
-                        this.Wife.Value = spouse;
-                        break;
-                }
+            switch (sex)
+            {
+            	case GEDCOMSex.svMale:
+            		this.Husband.Value = spouse;
+            		break;
 
-                GEDCOMSpouseToFamilyLink spLink = new GEDCOMSpouseToFamilyLink(this.Owner, spouse, "", "");
-				spLink.Family = this;
-                spouse.SpouseToFamilyLinks.Add(spLink);
-			}
-		}
+            	case GEDCOMSex.svFemale:
+            		this.Wife.Value = spouse;
+            		break;
+            }
+
+            GEDCOMSpouseToFamilyLink spLink = new GEDCOMSpouseToFamilyLink(this.Owner, spouse, "", "");
+            spLink.Family = this;
+            spouse.SpouseToFamilyLinks.Add(spLink);
+
+            return true;
+        }
 
 		public void RemoveSpouse(GEDCOMIndividualRecord spouse)
 		{

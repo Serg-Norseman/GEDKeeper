@@ -7,7 +7,7 @@ using System.Security.Permissions;
 
 // Original ScrollControl code by Scott Crawford (http://sukiware.com/)
 
-namespace Cyotek.Windows.Forms
+namespace ExtUtils.ScrollableControls
 {
 	[ToolboxItem(false)]
 	public partial class ScrollControl : Control

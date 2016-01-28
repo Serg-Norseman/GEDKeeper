@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Drawing;
+
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
-using GKCommon.Graph;
 using GKCore;
 using GKCore.Types;
+using SmartGraph;
 
 namespace GKUI.Charts
 {

@@ -26,7 +26,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Security.Permissions;
+
+using ExtUtils.ScrollableControls;
 
 namespace GKCommon.Controls
 {
@@ -35,7 +36,7 @@ namespace GKCommon.Controls
 	/// <summary>
 	/// 
 	/// </summary>
-	public class HyperView : Panel
+	public class HyperView : VirtualScrollableControl
 	{
 		private sealed class HyperLink
 		{
@@ -67,19 +68,14 @@ namespace GKCommon.Controls
 		private int fBorderWidth;
 		private Color fColor;
 		private SolidBrush fDefBrush;
-		private int fHeightCount;
 		private int[] fHeights;
-		private int fLeftPos;
+		private Size fTextSize;
 		private readonly StringList fLines;
 		private readonly List<HyperLink> fLinks;
 		private int fLink;
 		private Color fLinkColor;
-		private int fPageHeight;
-		private int fPageWidth;
-		private Point fRange;
 		private Font fTextFont;
-		private int fTopPos;
-
+		
 		private static readonly object EventLink;
 
 		//private TRuleStyle FRuleStyle;
@@ -95,18 +91,6 @@ namespace GKCommon.Controls
 		{
 			add { base.Events.AddHandler(HyperView.EventLink, value); }
 			remove { base.Events.RemoveHandler(HyperView.EventLink, value); }
-		}
-
-		public int LeftPos
-		{
-			get { return this.fLeftPos; }
-			set { this.SetLeftPos(value); }
-		}
-
-		public int TopPos
-		{
-			get { return this.fTopPos; }
-			set { this.SetTopPos(value); }
 		}
 
 		public int BorderWidth
@@ -140,17 +124,17 @@ namespace GKCommon.Controls
 			base.DoubleBuffered = true;
 			//base.SetStyle(ControlStyles.OptimizedDoubleBuffer, true); // for some reason it doesn't work
 
-			this.fHeightCount = 0;
 			//this.fAcceptFontChange = false;
 			this.fLines = new StringList();
 			this.fLines.OnChange += this.LinesChanged;
 			this.fHeights = new int[0];
-			this.fTopPos = 0;
-			this.fLeftPos = 0;
 			this.fColor = SystemColors.Control;
 			this.fLinks = new List<HyperLink>();
 			this.fLinkColor = Color.Blue;
 			this.fLink = -1;
+			
+			this.fTextSize = Size.Empty;
+			this.WheelScrollsControl = true;
 			
 			//this.FUpColor = Color.Gray;
 			//this.FDwnColor = Color.White;
@@ -170,15 +154,6 @@ namespace GKCommon.Controls
 			}
 			base.Dispose(disposing);
 		}
-
-		/*private new void FontChanged(object sender)
-		{
-			if (this.FAcceptFontChange)
-			{
-				this.ArrangeText();
-				base.Invalidate();
-			}
-		}*/
 
 		private void SetBorderWidth(int value)
 		{
@@ -219,8 +194,7 @@ namespace GKCommon.Controls
 
         private void LinesChanged(object sender)
 		{
-			this.TopPos = 0;
-			this.LeftPos = 0;
+            this.ScrollTo(0, 0);
 			this.ArrangeText();
 		}
 
@@ -230,9 +204,15 @@ namespace GKCommon.Controls
 			this.fDefBrush = new SolidBrush(Color.Black);
 
 			this.PrepareText();
-			this.ScrollRange();
+			this.AdjustViewPort();
 
 			this.Invalidate();
+		}
+
+		private void AdjustViewPort()
+		{
+			if (this.AutoScroll && !this.fTextSize.IsEmpty)
+				this.AutoScrollMinSize = new Size(this.fTextSize.Width + this.Padding.Horizontal, this.fTextSize.Height + this.Padding.Vertical);
 		}
 
 		private void ClearLinks()
@@ -279,21 +259,20 @@ namespace GKCommon.Controls
 			}
 		}
 
-		private void OutText(Graphics grx, string ss, ref int xPos, ref int yPos, ref int hMax)
+		private void OutText(Graphics gfx, string ss, ref int xPos, ref int yPos, ref int hMax)
 		{
 			if (yPos >= -hMax && ss != "") {
-				grx.DrawString(ss, this.fTextFont, this.fDefBrush, (float)xPos, (float)yPos);
+				gfx.DrawString(ss, this.fTextFont, this.fDefBrush, (float)xPos, (float)yPos);
 
-				Size str_size = grx.MeasureString(ss, this.fTextFont).ToSize();
+				Size str_size = gfx.MeasureString(ss, this.fTextFont).ToSize();
 				xPos += str_size.Width;
 			}
 		}
 
 		private void PrepareText()
 		{
-			this.fHeightCount = this.fLines.Count;
-			this.fHeights = new int[this.fHeightCount];
-
+			this.fHeights = new int[this.fLines.Count];
+			
 			//this.fAcceptFontChange = false;
 			Graphics gfx = base.CreateGraphics();
 			try
@@ -405,8 +384,9 @@ namespace GKCommon.Controls
 					this.fHeights[line] = line_height;
 				}
 
-				this.fPageWidth = xMax + 2 * this.fBorderWidth;
-				this.fPageHeight = y_pos + 2 * this.fBorderWidth;
+				int textWidth = xMax + 2 * this.fBorderWidth;
+				int textHeight = y_pos + 2 * this.fBorderWidth;
+				this.fTextSize = new Size(textWidth, textHeight);
 			}
 			finally
 			{
@@ -424,12 +404,12 @@ namespace GKCommon.Controls
 			{
 				gfx.FillRectangle(new SolidBrush(SystemColors.Control), base.ClientRectangle);
 
-				int y_pos = this.fBorderWidth - this.fTopPos;
+				int y_pos = this.fBorderWidth - -this.AutoScrollPosition.Y;
 
 				int num = this.fLines.Count;
 				for (int line = 0; line < num; line++)
 				{
-					int x_pos = this.fBorderWidth - this.fLeftPos;
+					int x_pos = this.fBorderWidth - -this.AutoScrollPosition.X;
 					int line_height = this.fHeights[line];
 
 					string s = this.fLines[line];
@@ -566,7 +546,7 @@ namespace GKCommon.Controls
 			int num = this.fLines.Count;
 			for (int j = 0; j < num; j++) {
 				if (this.fLines[j].IndexOf(lnk) >= 0) {
-					this.TopPos = h;
+			        this.ScrollTo(0, h);
 					return;
 				}
 
@@ -583,59 +563,14 @@ namespace GKCommon.Controls
 
 			eventHandler(this, linkName);
 		}
-		
-		private void ScrollRange()
+
+		private void AdjustScroll(int x, int y)
 		{
-			Rectangle CR = base.ClientRectangle;
+			this.AutoScrollPosition = new Point(this.HorizontalScroll.Value + x, this.VerticalScroll.Value + y);
 
-			if (this.fPageWidth < CR.Width) {
-				this.fRange.X = 0;
-				this.LeftPos = 0;
-			} else {
-				this.fRange.X = (this.fPageWidth - CR.Width);
-			}
+			this.Invalidate();
 
-			if (this.fPageHeight < CR.Height) {
-				this.fRange.Y = 0;
-				this.TopPos = 0;
-			} else {
-				this.fRange.Y = (this.fPageHeight - CR.Height);
-			}
-
-			NativeMethods.SetScrollRange(this.Handle, NativeMethods.SB_HORZ, 0, this.fRange.X, false);
-			NativeMethods.SetScrollRange(this.Handle, NativeMethods.SB_VERT, 0, this.fRange.Y, false);
-		}
-
-		private void SetLeftPos(int value)
-		{
-			if (value < 0) value = 0;
-			if (value > this.fRange.X) value = this.fRange.X;
-
-			if (this.fLeftPos != value)
-			{
-				ExtRect dummy = ExtRect.CreateEmpty();
-				ExtRect R;
-				NativeMethods.ScrollWindowEx(this.Handle, this.fLeftPos - value, 0, ref dummy, ref dummy, IntPtr.Zero, out R, 0u);
-				NativeMethods.SetScrollPos(this.Handle, 0, this.fLeftPos, true);
-				base.Invalidate();
-				this.fLeftPos = value;
-			}
-		}
-
-		private void SetTopPos(int value)
-		{
-			if (value < 0) value = 0;
-			if (value > this.fRange.Y) value = this.fRange.Y;
-
-			if (this.fTopPos != value)
-			{
-				ExtRect dummy = ExtRect.CreateEmpty();
-				ExtRect R;
-				NativeMethods.ScrollWindowEx(this.Handle, 0, this.fTopPos - value, ref dummy, ref dummy, IntPtr.Zero, out R, 0u);
-				NativeMethods.SetScrollPos(this.Handle, 1, this.fTopPos, true);
-				base.Invalidate();
-				this.fTopPos = value;
-			}
+			this.OnScroll(new ScrollEventArgs(ScrollEventType.EndScroll, 0));
 		}
 
 		#region Protected methods
@@ -643,10 +578,9 @@ namespace GKCommon.Controls
 		protected override void OnFontChanged(EventArgs e)
 		{
 			this.ArrangeText();
-
 			base.OnFontChanged(e);
 		}
-		
+
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
 			base.OnKeyDown(e);
@@ -654,46 +588,55 @@ namespace GKCommon.Controls
 			switch (e.KeyCode)
 			{
 				case Keys.Prior:
-					this.TopPos -= base.ClientRectangle.Height / 2;
+					this.AdjustScroll(0, -this.VerticalScroll.LargeChange);
 					break;
 
 				case Keys.Next:
-					this.TopPos += base.ClientRectangle.Height / 2;
-					break;
-
-				case Keys.End:
-					this.TopPos = this.fPageHeight - base.ClientRectangle.Height + 2 * this.fBorderWidth;
-					this.LeftPos = this.fPageWidth - base.ClientRectangle.Width;
+					this.AdjustScroll(0, this.VerticalScroll.LargeChange);
 					break;
 
 				case Keys.Home:
-					this.TopPos = 0;
-					this.LeftPos = 0;
+					this.AdjustScroll(-this.HorizontalScroll.Maximum, -this.VerticalScroll.Maximum);
+					break;
+
+				case Keys.End:
+					this.AdjustScroll(-this.HorizontalScroll.Maximum, this.VerticalScroll.Maximum);
 					break;
 
 				case Keys.Left:
-					this.LeftPos -= base.ClientRectangle.Width / 20;
-					break;
-
-				case Keys.Up:
-					this.TopPos -= base.ClientRectangle.Height / 20;
+					this.AdjustScroll(-(e.Modifiers == Keys.None ? this.HorizontalScroll.SmallChange : this.HorizontalScroll.LargeChange), 0);
 					break;
 
 				case Keys.Right:
-					this.LeftPos += base.ClientRectangle.Width / 20;
+					this.AdjustScroll(e.Modifiers == Keys.None ? this.HorizontalScroll.SmallChange : this.HorizontalScroll.LargeChange, 0);
+					break;
+
+				case Keys.Up:
+					this.AdjustScroll(0, -(e.Modifiers == Keys.None ? this.VerticalScroll.SmallChange : this.VerticalScroll.LargeChange));
 					break;
 
 				case Keys.Down:
-					this.TopPos += base.ClientRectangle.Height / 20;
+					this.AdjustScroll(0, e.Modifiers == Keys.None ? this.VerticalScroll.SmallChange : this.VerticalScroll.LargeChange);
 					break;
 			}
+		}
+
+		protected override bool IsInputKey(Keys keyData)
+		{
+			bool result;
+
+			if ((keyData & Keys.Right) == Keys.Right | (keyData & Keys.Left) == Keys.Left | (keyData & Keys.Up) == Keys.Up | (keyData & Keys.Down) == Keys.Down
+			   | (keyData & Keys.Prior) == Keys.Prior | (keyData & Keys.Next) == Keys.Next | (keyData & Keys.End) == Keys.End | (keyData & Keys.Home) == Keys.Home)
+				result = true;
+			else
+				result = base.IsInputKey(keyData);
+
+			return result;
 		}
 
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 			base.OnMouseDown(e);
-
-			if (!this.Focused) base.Focus();
 
 			if (this.fLink >= 0) this.GotoLink(this.fLink);
 		}
@@ -702,7 +645,7 @@ namespace GKCommon.Controls
 		{
 			base.OnMouseMove(e);
 
-			int y_offset = (this.fBorderWidth - this.fTopPos);
+			int y_offset = (this.fBorderWidth - -this.AutoScrollPosition.Y);
 			
 			int num = this.fLinks.Count;
 			for (int i = 0; i < num; i++)
@@ -722,55 +665,9 @@ namespace GKCommon.Controls
 			}
 		}
 
-		protected override void OnMouseWheel(MouseEventArgs e)
-		{
-			base.OnMouseWheel(e);
-
-			if (fHeights.Length > 0)
-			{
-				if (e.Delta > 0)
-				{
-					this.TopPos -= fHeights[0];
-				}
-				else
-				{
-					this.TopPos += fHeights[0];
-				}
-			}
-		}
-
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			this.DoPaint(e.Graphics);
-		}
-
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode), SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
-        protected override void WndProc(ref Message m)
-		{
-			base.WndProc(ref m);
-
-			if (m.Msg == NativeMethods.WM_SIZE)
-			{
-				this.ScrollRange();
-			}
-			else if (m.Msg == NativeMethods.WM_GETDLGCODE)
-			{
-				m.Result = (IntPtr)(m.Result.ToInt32() | NativeMethods.DLGC_WANTARROWS | NativeMethods.DLGC_WANTTAB | NativeMethods.DLGC_WANTCHARS);
-			}
-			else if (m.Msg == NativeMethods.WM_HSCROLL)
-			{
-				uint wParam = (uint)m.WParam.ToInt32();
-				int new_pos = SysUtils.DoScroll(this.Handle, wParam, 0, this.LeftPos, 0, this.fPageWidth,
-				                                base.ClientRectangle.Width / 20, base.ClientRectangle.Width / 2);
-				this.SetLeftPos(new_pos);
-			}
-			else if (m.Msg == NativeMethods.WM_VSCROLL)
-			{
-				uint wParam = (uint)m.WParam.ToInt32();
-				int new_pos = SysUtils.DoScroll(this.Handle, wParam, 1, this.TopPos, 0, this.fPageHeight,
-				                                base.ClientRectangle.Height / 20, base.ClientRectangle.Height / 2);
-				this.SetTopPos(new_pos);
-			}
 		}
 
 		#endregion

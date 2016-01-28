@@ -1,4 +1,4 @@
-using GKCommon;
+using System;
 using GKCore.Interfaces;
 using GKCore.Types;
 

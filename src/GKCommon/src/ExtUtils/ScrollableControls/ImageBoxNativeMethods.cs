@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Cyotek.Windows.Forms
+namespace ExtUtils.ScrollableControls
 {
 	internal class NativeMethods
 	{

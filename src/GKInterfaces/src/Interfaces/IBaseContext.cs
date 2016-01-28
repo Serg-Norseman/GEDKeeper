@@ -4,8 +4,8 @@ using System.IO;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
-using GKCommon.Graph;
 using GKCore.Types;
+using SmartGraph;
 
 namespace GKCore.Interfaces
 {
@@ -33,7 +33,7 @@ namespace GKCore.Interfaces
 		// Patriarchs search
 		void GetPatriarchsList(ExtList<PatriarchObj> patList, int gensMin, bool datesCheck);
 		void GetPatriarchsLinks(ExtList<PatriarchObj> patList, int gensMin, bool datesCheck, bool loneSuppress);
-		TGraph GetPatriarchsGraph(int gensMin, bool datesCheck, bool loneSuppress = true);
+		Graph GetPatriarchsGraph(int gensMin, bool datesCheck, bool loneSuppress = true);
 		
 		// Multimedia support
 		bool CheckBasePath();

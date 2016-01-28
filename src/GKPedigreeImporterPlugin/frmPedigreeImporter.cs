@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
-using GKCommon;
+
 using GKCore.Interfaces;
+using GKCore.Types;
 
 namespace GKPedigreeImporterPlugin
 {
@@ -29,6 +30,8 @@ namespace GKPedigreeImporterPlugin
             this.cbPersonSeparator.SelectedIndex = 0;
             this.cbNameFormat.SelectedIndex = 0;
             this.cbGenerationFormat.SelectedIndex = 0;
+            this.cbDatesFormat.SelectedIndex = 0;
+            this.cbDateSeparator.SelectedIndex = 0;
 
             // SetLang()
             this.Text = fLangMan.LS(ILS.LSID_PluginTitle);
@@ -94,8 +97,12 @@ namespace GKPedigreeImporterPlugin
 
 						this.fImporter.NameFormat = (NameFormat)cbNameFormat.SelectedIndex;
 						this.fImporter.GenerationFormat = (GenerationFormat)cbGenerationFormat.SelectedIndex;
+						this.fImporter.DateFormat = (DateFormat)cbDatesFormat.SelectedIndex;
+						this.fImporter.PersonLineSeparator = cbDateSeparator.Text[0];
 
 						this.fImporter.SurnamesNormalize = chkSurnamesNormalize.Checked;
+
+						this.fImporter.SpecialFormat_1 = chkSpecial_1.Checked;
 
 						this.fImporter.ImportContent();
 

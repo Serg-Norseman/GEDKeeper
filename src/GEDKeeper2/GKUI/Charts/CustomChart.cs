@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Windows.Forms;
+using ExtUtils.ScrollableControls;
 using GKCommon;
 
 namespace GKUI.Charts
 {
-	public abstract class CustomChart : UserControl
+	public abstract class CustomChart : VirtualScrollableControl
 	{
 		private static readonly object EventNavRefresh;
 

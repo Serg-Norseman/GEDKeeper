@@ -49,6 +49,9 @@
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ArborGVT">
+      <HintPath>ArborGVT.dll</HintPath>
+    </Reference>
     <Reference Include="csgl">
       <HintPath>csgl.dll</HintPath>
     </Reference>

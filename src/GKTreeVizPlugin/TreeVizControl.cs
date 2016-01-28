@@ -4,8 +4,8 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 
+using ArborGVT;
 using CsGL.OpenGL;
-using ExtUtils.ArborEngine;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.GEDCOM.Enums;
@@ -639,7 +639,7 @@ namespace GKTreeVizPlugin
 					int descGens = (node.Data as PatriarchObj).DescGenerations;
 
 					TVPerson patr = this.PreparePerson(null, iRec);
-					patr.Pt = new PointF((float)node.Pt.x * MAGIC_SCALE, (float)node.Pt.y * MAGIC_SCALE);
+					patr.Pt = new PointF((float)node.Pt.X * MAGIC_SCALE, (float)node.Pt.Y * MAGIC_SCALE);
 					patr.DescGenerations = descGens;
 					//patr.IsPatriarch = true;
 					patr.Type = TVPersonType.ptPatriarch;
@@ -971,7 +971,7 @@ namespace GKTreeVizPlugin
 					ArborPoint pt = node.Pt;
 
 					GL.glPushMatrix();
-					GL.glTranslatef((float)pt.x * MAGIC_SCALE, (float)pt.y * MAGIC_SCALE, 0);
+					GL.glTranslatef((float)pt.X * MAGIC_SCALE, (float)pt.Y * MAGIC_SCALE, 0);
 					GL.glColor3f(0.9F, 0.3F, 0.3F);
 					DrawCircle(0.1F);
 					GL.glPopMatrix();
@@ -987,8 +987,8 @@ namespace GKTreeVizPlugin
 					GL.glPushMatrix();
 					GL.glColor3f(0.9F, 0.3F, 0.3F);
 					GL.glBegin(GL.GL_LINES);
-					GL.glVertex3f((float)pt1.x * MAGIC_SCALE, (float)pt1.y * MAGIC_SCALE, 0);
-					GL.glVertex3f((float)pt2.x * MAGIC_SCALE, (float)pt2.y * MAGIC_SCALE, 0);
+					GL.glVertex3f((float)pt1.X * MAGIC_SCALE, (float)pt1.Y * MAGIC_SCALE, 0);
+					GL.glVertex3f((float)pt2.X * MAGIC_SCALE, (float)pt2.Y * MAGIC_SCALE, 0);
 					GL.glEnd();
 					GL.glPopMatrix();
 				}

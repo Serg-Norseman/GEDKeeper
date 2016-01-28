@@ -1,6 +1,6 @@
 using System;
 
-namespace GKCommon
+namespace System
 {
     /// <summary>
     /// 
