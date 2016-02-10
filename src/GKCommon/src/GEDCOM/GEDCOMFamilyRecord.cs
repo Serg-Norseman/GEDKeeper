@@ -1,7 +1,5 @@
 using System;
 using System.IO;
-using ExtUtils;
-using GKCommon.GEDCOM.Enums;
 
 namespace GKCommon.GEDCOM
 {
@@ -183,9 +181,13 @@ namespace GKCommon.GEDCOM
 
         public override void MoveTo(GEDCOMRecord targetRecord, bool clearDest)
 		{
-            base.MoveTo(targetRecord, clearDest);
+            GEDCOMFamilyRecord targetFamily = targetRecord as GEDCOMFamilyRecord;
+            if (targetFamily == null)
+            {
+                throw new ArgumentException("argument is null or wrong type", "targetRecord");
+            }
 
-			GEDCOMFamilyRecord targetFamily = targetRecord as GEDCOMFamilyRecord;
+            base.MoveTo(targetRecord, clearDest);
 
 			while (this.fChildrens.Count > 0)
 			{
@@ -254,10 +256,11 @@ namespace GKCommon.GEDCOM
 
 		public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
 		{
-			if (tag == null) return 0.0f;
-			float match = 0.0f;
+            GEDCOMFamilyRecord fam = tag as GEDCOMFamilyRecord;
+            if (fam == null) return 0.0f;
+			
+            float match = 0.0f;
 
-			GEDCOMFamilyRecord fam = tag as GEDCOMFamilyRecord;
 			string title1 = this.GetFamilyString(null, null);
 			string title2 = fam.GetFamilyString(null, null);
 			if (string.Compare(title1, title2, true) == 0) {
@@ -323,11 +326,7 @@ namespace GKCommon.GEDCOM
 			GEDCOMIndividualRecord husb = this.GetHusband();
 			GEDCOMIndividualRecord wife = this.GetWife();
 
-			if (spouse == husb) {
-				return wife;
-			} else {
-				return husb;
-			}
+			return (spouse == husb) ? wife : husb;
 		}
 
         public bool AddSpouse(GEDCOMIndividualRecord spouse)
@@ -398,7 +397,7 @@ namespace GKCommon.GEDCOM
 			}
 			catch (Exception ex)
 			{
-                SysUtils.LogWrite("GEDCOMFamilyRecord.AddChild(): " + ex.Message);
+                Logger.LogWrite("GEDCOMFamilyRecord.AddChild(): " + ex.Message);
 				result = false;
 			}
 			return result;
@@ -417,7 +416,7 @@ namespace GKCommon.GEDCOM
 			}
 			catch (Exception ex)
 			{
-                SysUtils.LogWrite("GEDCOMFamilyRecord.RemoveChild(): " + ex.Message);
+                Logger.LogWrite("GEDCOMFamilyRecord.RemoveChild(): " + ex.Message);
                 result = false;
 			}
 			return result;

@@ -1,6 +1,5 @@
 ﻿using System;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 
 namespace GKUI
 {

@@ -18,10 +18,11 @@ using GKUI;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyTitle("GEDKeeper2")]
-[assembly: AssemblyVersion("2.4.1.0")]
+[assembly: AssemblyVersion("2.5.0.0")]
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyFile("")]
 [assembly: AssemblyKeyName("")]
+[assembly: CLSCompliant(false)]
 [assembly: ComVisible(false)]
 
 namespace GK2
@@ -44,7 +45,7 @@ namespace GK2
 			SingleInstanceTracker tracker = null;
 			try
 			{
-				tracker = new SingleInstanceTracker(GKData.AppTitle, new SingleInstanceEnforcerRetriever(GetSingleInstanceEnforcer));
+				tracker = new SingleInstanceTracker(GKData.AppTitle, GetSingleInstanceEnforcer);
 
 				if (tracker.IsFirstInstance) {
 					TfmGEDKeeper fmMain = (TfmGEDKeeper)tracker.Enforcer;
@@ -67,8 +68,8 @@ namespace GK2
 
 		static void ExExceptionHandler(object sender, ThreadExceptionEventArgs args)
 		{
-			SysUtils.LogWrite("GK.ExExceptionHandler(): " + args.Exception.Message);
-			SysUtils.LogWrite("GK.ExExceptionHandler(): " + args.Exception.StackTrace.ToString());
+			Logger.LogWrite("GK.ExExceptionHandler(): " + args.Exception.Message);
+			Logger.LogWrite("GK.ExExceptionHandler(): " + args.Exception.StackTrace.ToString());
 		}
 
 		static void UnhandledExceptionsHandler(object sender, UnhandledExceptionEventArgs args) {
@@ -76,8 +77,8 @@ namespace GK2
 			TfmGEDKeeper.Instance.CriticalSave();
 
 			Exception e = (Exception) args.ExceptionObject;
-			SysUtils.LogWrite("GK.UnhandledExceptionsHandler(): " + e.Message);
-			SysUtils.LogWrite("GK.ExExceptionHandler(): " + e.StackTrace.ToString());
+			Logger.LogWrite("GK.UnhandledExceptionsHandler(): " + e.Message);
+			Logger.LogWrite("GK.ExExceptionHandler(): " + e.StackTrace.ToString());
 		}
 	}
 }

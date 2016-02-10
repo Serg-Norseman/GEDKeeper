@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+
+using BSLib;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
@@ -257,10 +259,10 @@ namespace GKCore.Lists
 					return val;
 
 				case DataType.dtInteger:
-					return SysUtils.ParseInt(val, 0);
+					return ConvHelper.ParseInt(val, 0);
 
 				case DataType.dtFloat:
-					return SysUtils.ParseFloat(val, 0.0);
+					return ConvHelper.ParseFloat(val, 0.0);
 
 				case DataType.dtDateTime:
 					return DateTime.Parse(val);
@@ -275,12 +277,9 @@ namespace GKCore.Lists
 		public void AddCondition(Enum column, ConditionKind condition, string value)
 		{
 			int col = (column as IConvertible).ToByte(null);
+			object condValue = ConvertColumnStr(value, this.GetColumnDataType(col));
 
-			FilterCondition fltCond = new FilterCondition();
-			fltCond.column = column;
-			fltCond.col_index = col;
-			fltCond.condition = condition;
-			fltCond.value = ConvertColumnStr(value, this.GetColumnDataType(col));
+			FilterCondition fltCond = new FilterCondition(col, condition, condValue);
 			this.Filter.Conditions.Add(fltCond);
 		}
 
@@ -290,15 +289,15 @@ namespace GKCore.Lists
 
             try
             {
-            	object dataval = this.GetColumnValueEx(fcond.col_index, -1, false);
+            	object dataval = this.GetColumnValueEx(fcond.ColumnIndex, -1, false);
             	if (dataval == null) return true;
 
             	int compRes = 0;
-            	if (fcond.condition != ConditionKind.ck_Contains) {
-            		compRes = (dataval as IComparable).CompareTo(fcond.value);
+            	if (fcond.Condition != ConditionKind.ck_Contains) {
+            		compRes = (dataval as IComparable).CompareTo(fcond.Value);
             	}
 
-            	switch (fcond.condition) {
+            	switch (fcond.Condition) {
             		case ConditionKind.ck_NotEq:
             			res = compRes != 0;
             			break;
@@ -324,17 +323,17 @@ namespace GKCore.Lists
             			break;
 
             		case ConditionKind.ck_Contains:
-            			res = GKUtils.MatchesMask(dataval.ToString(), "*" + fcond.value.ToString() + "*");
+            			res = GKUtils.MatchesMask(dataval.ToString(), "*" + fcond.Value.ToString() + "*");
             			break;
 
             		case ConditionKind.ck_NotContains:
-            			res = !GKUtils.MatchesMask(dataval.ToString(), "*" + fcond.value.ToString() + "*");
+            			res = !GKUtils.MatchesMask(dataval.ToString(), "*" + fcond.Value.ToString() + "*");
             			break;
             	}
             }
             catch (Exception ex)
             {
-            	SysUtils.LogWrite("ListManager.CheckCondition(): " + ex.Message);
+            	Logger.LogWrite("ListManager.CheckCondition(): " + ex.Message);
             	res = true;
             }
 
@@ -355,7 +354,7 @@ namespace GKCore.Lists
 			}
 			catch (Exception ex)
 			{
-				SysUtils.LogWrite("ListManager.CheckCommonFilter(): " + ex.Message);
+				Logger.LogWrite("ListManager.CheckCommonFilter(): " + ex.Message);
 				res = true;
 			}
 

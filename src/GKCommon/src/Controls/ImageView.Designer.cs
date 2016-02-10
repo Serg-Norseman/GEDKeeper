@@ -35,7 +35,7 @@
         	this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
         	this.zoomLevelsToolStripComboBox = new System.Windows.Forms.ToolStripComboBox();
         	this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-        	this.imageBox = new Cyotek.Windows.Forms.ImageBox();
+        	this.imageBox = new GKCommon.Controls.ImageBox();
         	this.toolStrip.SuspendLayout();
         	this.SuspendLayout();
         	// 
@@ -129,7 +129,7 @@
 
         #endregion
 
-        private Cyotek.Windows.Forms.ImageBox imageBox;
+        private GKCommon.Controls.ImageBox imageBox;
         private System.Windows.Forms.ToolStrip toolStrip;
         public System.Windows.Forms.ToolStripButton btnSizeToFit;
         public System.Windows.Forms.ToolStripButton btnZoomIn;

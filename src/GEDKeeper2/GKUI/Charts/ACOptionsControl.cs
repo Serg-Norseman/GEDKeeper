@@ -95,6 +95,10 @@ namespace GKUI
 		private void lblColorClick(object sender, MouseEventArgs e)
 		{
 			Label lbl = sender as Label;
+            if (lbl == null)
+            {
+                return;
+            }
 
 			this.ColorDialog1.Color = lbl.BackColor;
 

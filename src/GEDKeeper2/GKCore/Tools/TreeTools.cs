@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
+using BSLib;
+using BSLib.SmartGraph;
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKUI;
-using SmartGraph;
 
 namespace GKCore.Tools
 {
@@ -127,16 +127,16 @@ namespace GKCore.Tools
 
 				int num = patList.Count;
 				for (int i = 0; i < num; i++) {
-					PatriarchObj p_obj = patList[i] as PatriarchObj;
+					PatriarchObj pObj = patList[i];
 
-					if ((!loneSuppress) || (loneSuppress && p_obj.HasLinks)) {
-						string color = (p_obj.IRec.Sex == GEDCOMSex.svFemale) ? "pink" : "blue";
-						GVW.ListNode(p_obj.IRec.XRef, p_obj.IRec.GetNameString(true, false), "filled", color, "box");
+					if ((!loneSuppress) || (loneSuppress && pObj.HasLinks)) {
+						string color = (pObj.IRec.Sex == GEDCOMSex.svFemale) ? "pink" : "blue";
+						GVW.ListNode(pObj.IRec.XRef, pObj.IRec.GetNameString(true, false), "filled", color, "box");
 					}
 				}
 
 				for (int i = 0; i < num; i++) {
-					PatriarchObj pat1 = patList[i] as PatriarchObj;
+					PatriarchObj pat1 = patList[i];
 
 					int num2 = pat1.Links.Count;
 					for (int k = 0; k < num2; k++) {
@@ -592,7 +592,7 @@ namespace GKCore.Tools
 			}
 			catch (Exception ex)
 			{
-				SysUtils.LogWrite("TreeTools.CheckGEDCOMFormat(): " + ex.Message);
+				Logger.LogWrite("TreeTools.CheckGEDCOMFormat(): " + ex.Message);
 				GKUtils.ShowError(LangMan.LS(LSID.LSID_CheckGedComFailed));
 			}
 
@@ -734,7 +734,7 @@ namespace GKCore.Tools
 
 		#region Base Checks
 
-		public enum TCheckDiag
+		public enum CheckDiag
 		{
 			cdPersonLonglived,
 			cdPersonSexless,
@@ -744,7 +744,7 @@ namespace GKCore.Tools
 			cdEmptyFamily
 		}
 
-		public enum TCheckSolve
+		public enum CheckSolve
 		{
 			csSkip,
 			csSetIsDead,
@@ -752,14 +752,14 @@ namespace GKCore.Tools
 			csRemove
 		}
 
-		public sealed class TCheckObj
+		public sealed class CheckObj
 		{
 			public string Comment;
-			public TCheckDiag Diag;
+			public CheckDiag Diag;
 			public GEDCOMRecord Rec;
-			public TCheckSolve Solve;
+			public CheckSolve Solve;
 
-			public TCheckObj(GEDCOMRecord rec, TCheckDiag diag, TCheckSolve solve)
+			public CheckObj(GEDCOMRecord rec, CheckDiag diag, CheckSolve solve)
 			{
 				this.Rec = rec;
 				this.Diag = diag;
@@ -783,14 +783,9 @@ namespace GKCore.Tools
 
 				return result;
 			}
-
-			public void Free()
-			{
-				SysUtils.Free(this);
-			}
 		}
 
-		private static void CheckIndividualRecord(GEDCOMIndividualRecord iRec, ExtList<TCheckObj> aChecksList)
+		private static void CheckIndividualRecord(GEDCOMIndividualRecord iRec, ExtList<CheckObj> aChecksList)
 		{
 			if (iRec.FindEvent("DEAT") == null)
 			{
@@ -798,7 +793,7 @@ namespace GKCore.Tools
 
 				if (age != -1 && age >= GKConsts.ProvedLifeLength)
 				{
-					TCheckObj checkObj = new TCheckObj(iRec, TCheckDiag.cdPersonLonglived, TCheckSolve.csSetIsDead);
+					CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdPersonLonglived, CheckSolve.csSetIsDead);
 					checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_PersonLonglived), age);
 					aChecksList.Add(checkObj);
 				}
@@ -807,7 +802,7 @@ namespace GKCore.Tools
 			GEDCOMSex sex = iRec.Sex;
 			if (sex < GEDCOMSex.svMale || sex >= GEDCOMSex.svUndetermined)
 			{
-				TCheckObj checkObj = new TCheckObj(iRec, TCheckDiag.cdPersonSexless, TCheckSolve.csDefineSex);
+				CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdPersonSexless, CheckSolve.csDefineSex);
 				checkObj.Comment = LangMan.LS(LSID.LSID_PersonSexless);
 				aChecksList.Add(checkObj);
 			}
@@ -818,7 +813,7 @@ namespace GKCore.Tools
 			{
 				int delta = (y_death.Year - y_birth.Year);
 				if (delta < 0) {
-					TCheckObj checkObj = new TCheckObj(iRec, TCheckDiag.cdLiveYearsInvalid, TCheckSolve.csSkip);
+					CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdLiveYearsInvalid, CheckSolve.csSkip);
 					checkObj.Comment = LangMan.LS(LSID.LSID_LiveYearsInvalid);
 					aChecksList.Add(checkObj);
 				}
@@ -827,7 +822,7 @@ namespace GKCore.Tools
 			int iAge = GKUtils.GetMarriageAge(iRec);
 			if (iAge > 0 && (iAge <= 13 || iAge >= 50))
 			{
-				TCheckObj checkObj = new TCheckObj(iRec, TCheckDiag.cdStrangeSpouse, TCheckSolve.csSkip);
+				CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdStrangeSpouse, CheckSolve.csSkip);
 				checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_StrangeSpouse), iAge.ToString());
 				aChecksList.Add(checkObj);
 			}
@@ -836,26 +831,26 @@ namespace GKCore.Tools
 			iAge = GKUtils.GetFirstbornAge(iRec, out iDummy);
 			if (iAge > 0 && (iAge <= 13 || iAge >= 50))
 			{
-				TCheckObj checkObj = new TCheckObj(iRec, TCheckDiag.cdStrangeParent, TCheckSolve.csSkip);
+				CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdStrangeParent, CheckSolve.csSkip);
 				checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_StrangeParent), iAge.ToString());
 				aChecksList.Add(checkObj);
 			}
 		}
 
-		private static void CheckFamilyRecord(GEDCOMFamilyRecord fRec, ExtList<TCheckObj> aChecksList)
+		private static void CheckFamilyRecord(GEDCOMFamilyRecord fRec, ExtList<CheckObj> aChecksList)
 		{
 			bool empty = (fRec.Notes.Count == 0 && fRec.SourceCitations.Count == 0 && fRec.MultimediaLinks.Count == 0 && fRec.UserReferences.Count == 0);
 			empty = empty && (fRec.Events.Count == 0 && fRec.Childrens.Count == 0 && fRec.SpouseSealings.Count == 0);
 			empty = empty && (fRec.Husband.Value == null && fRec.Wife.Value == null);
 
             if (empty) {
-                TCheckObj checkObj = new TCheckObj(fRec, TCheckDiag.cdEmptyFamily, TCheckSolve.csRemove);
+                CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdEmptyFamily, CheckSolve.csRemove);
                 checkObj.Comment = LangMan.LS(LSID.LSID_EmptyFamily);
                 aChecksList.Add(checkObj);
             }
 		}
 
-		public static void CheckBase(IBaseWindow aBase, ExtList<TCheckObj> checksList)
+		public static void CheckBase(IBaseWindow aBase, ExtList<CheckObj> checksList)
 		{
             if (aBase == null) {
                 throw new ArgumentNullException("aBase");
@@ -895,7 +890,7 @@ namespace GKCore.Tools
 			}
 		}
 
-		public static void RepairProblem(IBaseWindow aBase, TCheckObj checkObj)
+		public static void RepairProblem(IBaseWindow aBase, CheckObj checkObj)
 		{
             if (aBase == null) {
                 throw new ArgumentNullException("aBase");
@@ -910,19 +905,19 @@ namespace GKCore.Tools
 
 			switch (checkObj.Diag)
 			{
-                case TreeTools.TCheckDiag.cdPersonLonglived:
+                case TreeTools.CheckDiag.cdPersonLonglived:
                     iRec = checkObj.Rec as GEDCOMIndividualRecord;
                     aBase.Context.CreateEventEx(iRec, "DEAT", "", "");
                     //this.Base.ChangeRecord(iRec);
                     break;
 
-                case TreeTools.TCheckDiag.cdPersonSexless:
+                case TreeTools.CheckDiag.cdPersonSexless:
                     iRec = checkObj.Rec as GEDCOMIndividualRecord;
                     aBase.CheckPersonSex(iRec);
                     //this.Base.ChangeRecord(iRec);
                     break;
 
-                case TreeTools.TCheckDiag.cdEmptyFamily:
+                case TreeTools.CheckDiag.cdEmptyFamily:
                     tree.DeleteRecord(checkObj.Rec);
                     break;
 			}
@@ -1398,7 +1393,8 @@ namespace GKCore.Tools
 				int num6 = names.Count;
 				for (int i = 0; i < num6; i++)
 				{
-					SysUtils.Free(names.GetObject(i));
+					IDisposable inst = names.GetObject(i) as IDisposable;
+					if (inst != null) inst.Dispose();
 				}
 
                 names.Dispose();

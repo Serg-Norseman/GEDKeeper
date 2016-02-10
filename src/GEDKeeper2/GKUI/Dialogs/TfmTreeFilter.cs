@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
 
-using GKCommon;
+using BSLib;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -82,12 +81,12 @@ namespace GKUI.Dialogs
 			this.fPersonsList.ClearItems();
 
 			if (!string.IsNullOrEmpty(this.fTemp)) {
-				string[] tmp_refs = this.fTemp.Split(';');
+				string[] tmpRefs = this.fTemp.Split(';');
 
-				int num = tmp_refs.Length;
+				int num = tmpRefs.Length;
 				for (int i = 0; i < num; i++)
 				{
-					string xref = tmp_refs[i];
+					string xref = tmpRefs[i];
 					GEDCOMIndividualRecord p = this.Base.Tree.XRefIndex_Find(xref) as GEDCOMIndividualRecord;
 					if (p != null) this.fPersonsList.AddItem(p.GetNameString(true, false), p);
 				}

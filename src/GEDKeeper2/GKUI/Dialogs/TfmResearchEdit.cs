@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
 
-using GKCommon;
+using BSLib;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -212,8 +211,6 @@ namespace GKUI.Dialogs
 
 		private void UpdateLists()
 		{
-		    DateFormat defaultDateFormat = TfmGEDKeeper.Instance.Options.DefDateFormat;
-
 		    this.fNotesList.DataList = this.fResearch.Notes.GetEnumerator();
 
 			this.fTasksList.BeginUpdate();
@@ -221,6 +218,7 @@ namespace GKUI.Dialogs
 			foreach (GEDCOMPointer taskPtr in this.fResearch.Tasks)
 			{
 				GEDCOMTaskRecord task = taskPtr.Value as GEDCOMTaskRecord;
+                if (task == null) continue;
 
 				GKListItem item = this.fTasksList.AddItem(GKUtils.GetTaskGoalStr(task), task);
 				item.AddSubItem(LangMan.LS(GKData.PriorityNames[(int)task.Priority]));
@@ -234,6 +232,7 @@ namespace GKUI.Dialogs
 			foreach (GEDCOMPointer commPtr in this.fResearch.Communications)
 			{
 				GEDCOMCommunicationRecord corr = commPtr.Value as GEDCOMCommunicationRecord;
+                if (corr == null) continue;
 
 				GKListItem item = this.fCommunicationsList.AddItem(corr.CommName, corr);
 				item.AddSubItem(GKUtils.GetCorresponderStr(this.fBase.Tree, corr, false));
@@ -247,6 +246,7 @@ namespace GKUI.Dialogs
 			foreach (GEDCOMPointer groupPtr in this.fResearch.Groups)
 			{
 				GEDCOMGroupRecord grp = groupPtr.Value as GEDCOMGroupRecord;
+                if (grp == null) continue;
 
 				this.fGroupsList.AddItem(grp.GroupName, grp);
 			}

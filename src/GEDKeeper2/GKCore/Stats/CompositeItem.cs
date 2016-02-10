@@ -1,6 +1,5 @@
 ﻿using System;
-using GKCommon;
-using GKCommon.GEDCOM.Enums;
+using GKCommon.GEDCOM;
 
 namespace GKCore.Stats
 {
@@ -17,9 +16,9 @@ namespace GKCore.Stats
 		private int MaleCount;
 		private int FemaleCount;
 
-		public double CommonVal { get { return SysUtils.SafeDiv(CommonSum, CommonCount); } }
-		public double MaleVal { get { return SysUtils.SafeDiv(MaleSum, MaleCount); } }
-		public double FemaleVal { get { return SysUtils.SafeDiv(FemaleSum, FemaleCount); } }
+		public double CommonVal { get { return GKUtils.SafeDiv(CommonSum, CommonCount); } }
+		public double MaleVal { get { return GKUtils.SafeDiv(MaleSum, MaleCount); } }
+		public double FemaleVal { get { return GKUtils.SafeDiv(FemaleSum, FemaleCount); } }
 
 		public CompositeItem()
 		{

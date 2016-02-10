@@ -1,4 +1,4 @@
-using GKCommon;
+using BSLib;
 using GKCore.Types;
 
 namespace GKCore.Kinships

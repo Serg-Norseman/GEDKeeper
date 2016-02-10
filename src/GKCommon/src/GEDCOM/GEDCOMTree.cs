@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-using GKCommon.GEDCOM.Enums;
+using BSLib;
 
 namespace GKCommon.GEDCOM
 {
@@ -17,25 +17,17 @@ namespace GKCommon.GEDCOM
 
 		private struct TreeEnumerator : IGEDCOMTreeEnumerator
 		{
-			private GEDCOMTree fTree;
-            private GEDCOMRecordType fRecType;
-            private int fEndIndex;
+			private readonly GEDCOMTree fTree;
+            private readonly GEDCOMRecordType fRecType;
+            private readonly int fEndIndex;
             private int fIndex;
 
-			public TreeEnumerator(GEDCOMTree tree)
+			public TreeEnumerator(GEDCOMTree tree, GEDCOMRecordType recType)
 			{
 				this.fTree = tree;
 				this.fIndex = -1;
 				this.fEndIndex = tree.RecordsCount - 1;
-				this.fRecType = GEDCOMRecordType.rtNone;
-			}
-
-			public TreeEnumerator(GEDCOMTree tree, GEDCOMRecordType rec_type)
-			{
-				this.fTree = tree;
-				this.fIndex = -1;
-				this.fEndIndex = tree.RecordsCount - 1;
-				this.fRecType = rec_type;
+				this.fRecType = recType;
 			}
 
 			public bool MoveNext(out GEDCOMRecord current)
@@ -74,12 +66,13 @@ namespace GKCommon.GEDCOM
 		#endregion
 
 
-		private string fFileName;
-		private GEDCOMHeader fHeader;
-		private ProgressEventHandler fOnProgressEvent;
-        private GEDCOMList<GEDCOMRecord> fRecords;
+        private readonly GEDCOMHeader fHeader;
+        private readonly GEDCOMList<GEDCOMRecord> fRecords;
+        private readonly Hashtable fXRefIndex;
+        
+        private string fFileName;
+        private ProgressEventHandler fOnProgressEvent;
         private GEDCOMState fState;
-        private Hashtable fXRefIndex;
 
 
         public string FileName
@@ -156,9 +149,9 @@ namespace GKCommon.GEDCOM
 			//f.RegisterTag("xxxx", xxxx.Create);
 		}
 
-		private static string StrToUtf8(string S)
+		private static string StrToUtf8(string str)
 		{
-			byte[] src = Encoding.GetEncoding(1251).GetBytes(S);
+			byte[] src = Encoding.GetEncoding(1251).GetBytes(str);
 			return Encoding.UTF8.GetString(src);
 		}
 
@@ -249,9 +242,9 @@ namespace GKCommon.GEDCOM
 			if (exists) this.fXRefIndex.Remove(record.XRef);
 		}
 
-		public GEDCOMRecord XRefIndex_Find(string XRef)
+		public GEDCOMRecord XRefIndex_Find(string xref)
 		{
-			return (this.fXRefIndex[XRef] as GEDCOMRecord);
+			return (this.fXRefIndex[xref] as GEDCOMRecord);
 		}
 
 		public string XRefIndex_NewXRef(GEDCOMRecord sender)
@@ -320,13 +313,13 @@ namespace GKCommon.GEDCOM
 			}
 		}
 
-		public GEDCOMRecord FindUID(string UID)
+		public GEDCOMRecord FindUID(string uid)
 		{
 			int num = this.fRecords.Count;
 			for (int i = 0; i < num; i++)
 			{
 				GEDCOMRecord rec = this.fRecords[i];
-				if (rec.UID == UID) {
+				if (rec.UID == uid) {
 					return rec;
 				}
 			}
@@ -401,21 +394,21 @@ namespace GKCommon.GEDCOM
 			this.fHeader.CharacterSet = GEDCOMCharacterSet.csASCII;
 		}
 
-		private static void CorrectLine(GEDCOMCustomRecord curRecord, GEDCOMTag curTag, int lineNum, string S)
+		private static void CorrectLine(GEDCOMCustomRecord curRecord, GEDCOMTag curTag, int lineNum, string str)
 		{
 			try
 			{
-				if (curTag != null && curTag is GEDCOMNotes) {
-					curTag.AddTag("CONT", S, null);
+				if (curTag is GEDCOMNotes) {
+					curTag.AddTag("CONT", str, null);
 				} else {
 					if (curRecord != null) {
-						curRecord.AddTag("NOTE", S, null);
+						curRecord.AddTag("NOTE", str, null);
 					}
 				}
 			}
 			catch (Exception ex)
 			{
-                SysUtils.LogWrite("GEDCOMTree.CorrectLine(): Line " + lineNum.ToString() + " failed correct: " + ex.Message);
+                Logger.LogWrite("GEDCOMTree.CorrectLine(): Line " + lineNum.ToString() + " failed correct: " + ex.Message);
 			}
 		}
 
@@ -436,7 +429,7 @@ namespace GKCommon.GEDCOM
 				{
 					lineNum++;
 					string srcLine = reader.ReadLine();
-					string S = SysUtils.TrimLeft(srcLine);
+					string S = GEDCOMUtils.TrimLeft(srcLine);
 
 					if (S.Length != 0)
 					{
@@ -466,15 +459,11 @@ namespace GKCommon.GEDCOM
 							{
 								throw new EGEDCOMException("Syntax error in line " + Convert.ToString(lineNum) + ".\r" + ex.Message);
 							}
-							catch (Exception)
-							{
-								throw;
-							}
 
 							// temp hack
-							if (tagValue != null && tagValue.Length != 0 && charSet == GEDCOMCharacterSet.csUTF8)
+							if (!string.IsNullOrEmpty(tagValue) && charSet == GEDCOMCharacterSet.csUTF8)
 							{
-								if (reader.CurrentEncoding != Encoding.UTF8) {
+								if (!Equals(reader.CurrentEncoding, Encoding.UTF8)) {
 									tagValue = StrToUtf8(tagValue);
 								}
 							}
@@ -606,19 +595,23 @@ namespace GKCommon.GEDCOM
 				this.fRecords[i].SaveToStream(writer);
 			}
 
-			this.SaveFooterToStream(writer);
+			SaveFooterToStream(writer);
 		}
 
 		public void SaveToStream(StreamWriter writer, List<GEDCOMRecord> list)
 		{
 			this.SaveHeaderToStream(writer);
 
-			int num = list.Count;
-			for (int i = 0; i < num; i++) {
-				list[i].SaveToStream(writer);
-			}
+            if (list != null)
+            {
+                int num = list.Count;
+                for (int i = 0; i < num; i++)
+                {
+                    list[i].SaveToStream(writer);
+                }
+            }
 
-			this.SaveFooterToStream(writer);
+			SaveFooterToStream(writer);
 		}
 
 		private void SaveHeaderToStream(StreamWriter stream)
@@ -626,10 +619,10 @@ namespace GKCommon.GEDCOM
 			this.fHeader.SaveToStream(stream);
 		}
 
-		private void SaveFooterToStream(StreamWriter stream)
+		private static void SaveFooterToStream(StreamWriter stream)
 		{
-		    const string S = "0 TRLR";
-		    stream.WriteLine(S);
+		    const string str = "0 TRLR";
+		    stream.WriteLine(str);
 		}
 
 	    #endregion

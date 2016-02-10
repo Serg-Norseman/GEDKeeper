@@ -8,21 +8,21 @@ namespace GKPedigreeImporterPlugin
 {
     public partial class frmPedigreeImporter : Form
     {
-        private readonly IPlugin plugin;
+        private readonly IPlugin fPlugin;
         private readonly ILangMan fLangMan;
         private readonly IBaseWindow fBase;
         private readonly Importer fImporter;
         private int fCurrentStage;
         private int fAvailableStage;
 
-        public frmPedigreeImporter(IPlugin plugin)
+        public frmPedigreeImporter(IPlugin fPlugin)
         {
             InitializeComponent();
 
-			this.plugin = plugin;
-            this.fLangMan = plugin.LangMan;
+			this.fPlugin = fPlugin;
+            this.fLangMan = fPlugin.LangMan;
 
-			this.fBase = plugin.Host.GetCurrentFile(false);
+			this.fBase = fPlugin.Host.GetCurrentFile(false);
 			this.fImporter = new Importer(fBase, this.fLangMan, this.lbLog.Items);
             this.fCurrentStage = 0;
             this.fAvailableStage = 0;

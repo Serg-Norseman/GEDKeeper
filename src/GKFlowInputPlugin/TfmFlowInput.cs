@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
 
-using ExtUtils;
-using GKCommon;
+using BSLib;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore.Interfaces;
 
 /// <summary>

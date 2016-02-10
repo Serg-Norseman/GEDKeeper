@@ -2,7 +2,6 @@
 using System.Windows.Forms;
 
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -89,9 +88,10 @@ namespace GKUI.Dialogs
 
 		private void edFamily_KeyDown(object sender, KeyEventArgs e)
 		{
-			if (e.KeyCode == Keys.Down && e.Control)
+            TextBox tb = (sender as TextBox);
+            
+            if (tb != null && e.KeyCode == Keys.Down && e.Control)
 			{
-				TextBox tb = (sender as TextBox);
 				tb.Text = GEDCOMUtils.NormalizeName(tb.Text);
 			}
 		}

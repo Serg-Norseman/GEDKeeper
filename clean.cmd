@@ -5,6 +5,7 @@ cls
 del /q .\plugins\*.*
 del /q .\GEDKeeper2-Installer.exe
 
+del .\BSLib.*
 del .\GKCommon.*
 del .\GKInterfaces.*
 

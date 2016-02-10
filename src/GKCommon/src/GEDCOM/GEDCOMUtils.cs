@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-using GKCommon.GEDCOM.Enums;
+using BSLib;
 
 namespace GKCommon.GEDCOM
 {
@@ -97,7 +97,7 @@ namespace GKCommon.GEDCOM
 
 			if (this.IsValid()) {
 				int dtx = (int)this.fValue;
-				result = string.Format("{0}/{1}/{2}", SysUtils.NumUpdate(getDay(dtx), 2), SysUtils.NumUpdate(getMonth(dtx), 2), SysUtils.NumUpdate(getYear(dtx), 4));
+				result = string.Format("{0}/{1}/{2}", ConvHelper.AdjustNum(getDay(dtx), 2), ConvHelper.AdjustNum(getMonth(dtx), 2), ConvHelper.AdjustNum(getYear(dtx), 4));
 			} else {
 				result = "00.00.0000";
 			}
@@ -334,9 +334,9 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		public static string CleanXRef(string XRef)
+		public static string CleanXRef(string xref)
 		{
-			string result = XRef;
+			string result = xref;
 
 			if (!string.IsNullOrEmpty(result)) {
 				if (result[0] == '@') {
@@ -351,18 +351,18 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		public static string EncloseXRef(string XRef)
+		public static string EncloseXRef(string xref)
 		{
-			if (!string.IsNullOrEmpty(XRef)) {
-				if (XRef[0] != '@') {
-					XRef = "@" + XRef;
+			if (!string.IsNullOrEmpty(xref)) {
+				if (xref[0] != '@') {
+					xref = "@" + xref;
 				}
 
-				if (XRef[XRef.Length - 1] != '@') {
-					XRef += "@";
+				if (xref[xref.Length - 1] != '@') {
+					xref += "@";
 				}
 			}
-			return XRef;
+			return xref;
 		}
 
 		public static string ExtractNumber(string str, out int value, bool noException, int defValue)
@@ -448,7 +448,9 @@ namespace GKCommon.GEDCOM
 
 		public static GEDCOMRestriction GetRestrictionVal(string str)
 		{
-			GEDCOMRestriction res;
+            if (string.IsNullOrEmpty(str)) return GEDCOMRestriction.rnNone;
+
+            GEDCOMRestriction res;
 			str = str.Trim().ToLowerInvariant();
 			
 			if (str == "confidential")
@@ -497,7 +499,9 @@ namespace GKCommon.GEDCOM
 
 		public static GEDCOMPedigreeLinkageType GetPedigreeLinkageTypeVal(string str)
 		{
-			GEDCOMPedigreeLinkageType result;
+            if (string.IsNullOrEmpty(str)) return GEDCOMPedigreeLinkageType.plNone;
+
+            GEDCOMPedigreeLinkageType result;
 			str = str.Trim().ToLowerInvariant();
 			
 			if (str == "adopted")
@@ -548,7 +552,9 @@ namespace GKCommon.GEDCOM
 
 		public static GEDCOMChildLinkageStatus GetChildLinkageStatusVal(string str)
 		{
-			GEDCOMChildLinkageStatus result;
+            if (string.IsNullOrEmpty(str)) return GEDCOMChildLinkageStatus.clNone;
+
+            GEDCOMChildLinkageStatus result;
 			str = str.Trim().ToLowerInvariant();
 			
 			if (str == "challenged")
@@ -654,14 +660,12 @@ namespace GKCommon.GEDCOM
 
 		public static GEDCOMMultimediaFormat GetMultimediaFormatVal(string str)
 		{
-			GEDCOMMultimediaFormat result;
+            if (string.IsNullOrEmpty(str)) return GEDCOMMultimediaFormat.mfNone;
+
+            GEDCOMMultimediaFormat result;
 			str = str.Trim().ToUpperInvariant();
 			
-			if (str == "")
-			{
-				result = GEDCOMMultimediaFormat.mfNone;
-			}
-			else if (str == "BMP")
+			if (str == "BMP")
 			{
 				result = GEDCOMMultimediaFormat.mfBMP;
 			}
@@ -800,14 +804,12 @@ namespace GKCommon.GEDCOM
 
 		public static GEDCOMMediaType GetMediaTypeVal(string str)
 		{
-			GEDCOMMediaType result;
+            if (string.IsNullOrEmpty(str)) return GEDCOMMediaType.mtNone;
+
+            GEDCOMMediaType result;
 			str = str.Trim().ToLowerInvariant();
 			
-			if (str == "")
-			{
-				result = GEDCOMMediaType.mtNone;
-			}
-			else if (str == "audio")
+			if (str == "audio")
 			{
 				result = GEDCOMMediaType.mtAudio;
 			}
@@ -918,7 +920,9 @@ namespace GKCommon.GEDCOM
 
 		public static GEDCOMNameType GetNameTypeVal(string str)
 		{
-			GEDCOMNameType result;
+            if (string.IsNullOrEmpty(str)) return GEDCOMNameType.ntNone;
+
+            GEDCOMNameType result;
 			str = str.Trim().ToLowerInvariant();
 			
 			if (str == "aka")
@@ -976,7 +980,9 @@ namespace GKCommon.GEDCOM
 
 		public static GKResearchStatus GetStatusVal(string str)
 		{
-			GKResearchStatus result;
+            if (string.IsNullOrEmpty(str)) return GKResearchStatus.rsDefined;
+
+            GKResearchStatus result;
 			str = str.Trim().ToLowerInvariant();
 			
 			if (str == "inprogress")
@@ -1034,7 +1040,9 @@ namespace GKCommon.GEDCOM
 
 		public static GEDCOMSpouseSealingDateStatus GetSpouseSealingDateStatusVal(string str)
 		{
-			GEDCOMSpouseSealingDateStatus result;
+            if (string.IsNullOrEmpty(str)) return GEDCOMSpouseSealingDateStatus.sdsNone;
+
+            GEDCOMSpouseSealingDateStatus result;
 			str = str.Trim().ToUpperInvariant();
 			
 			if (str == "CANCELED")
@@ -1111,16 +1119,18 @@ namespace GKCommon.GEDCOM
 			return str;
 		}
 
-		public static GEDCOMOrdinanceProcessFlag GetOrdinanceProcessFlagVal(string str)
+		public static GEDCOMOrdinanceProcessFlag GetOrdinanceProcessFlagVal(string su)
 		{
-			GEDCOMOrdinanceProcessFlag result;
-			str = str.Trim().ToUpperInvariant(); // FIXME
+            if (string.IsNullOrEmpty(su)) return GEDCOMOrdinanceProcessFlag.opNone;
+
+            GEDCOMOrdinanceProcessFlag result;
+			su = su.Trim().ToUpperInvariant(); // FIXME
 			
-			if (str == "YES")
+			if (su == "YES")
 			{
 				result = GEDCOMOrdinanceProcessFlag.opYes;
 			}
-			else if (str == "NO")
+			else if (su == "NO")
 			{
 				result = GEDCOMOrdinanceProcessFlag.opNo;
 			}
@@ -1173,22 +1183,24 @@ namespace GKCommon.GEDCOM
 
 		public static GKResearchPriority GetPriorityVal(string str)
 		{
-			GKResearchPriority result;
-			string SU = str.Trim().ToLowerInvariant();
+            if (string.IsNullOrEmpty(str)) return GKResearchPriority.rpNone;
 
-			if (SU == "low")
+            string su = str.Trim().ToLowerInvariant();
+            GKResearchPriority result;
+
+			if (su == "low")
 			{
 				result = GKResearchPriority.rpLow;
 			}
-			else if (SU == "normal")
+			else if (su == "normal")
 			{
 				result = GKResearchPriority.rpNormal;
 			}
-			else if (SU == "high")
+			else if (su == "high")
 			{
 				result = GKResearchPriority.rpHigh;
 			}
-			else if (SU == "top")
+			else if (su == "top")
 			{
 				result = GKResearchPriority.rpTop;
 			}
@@ -1222,22 +1234,24 @@ namespace GKCommon.GEDCOM
 
 		public static GEDCOMCharacterSet GetCharacterSetVal(string str)
 		{
-			GEDCOMCharacterSet result;
-			string SU = str.ToUpperInvariant();
+            if (string.IsNullOrEmpty(str)) return GEDCOMCharacterSet.csASCII;
 
-			if (SU == "ASCII" || SU == "ANSI" || SU == "IBMPC")
+            string su = str.ToUpperInvariant();
+            GEDCOMCharacterSet result;
+
+			if (su == "ASCII" || su == "ANSI" || su == "IBMPC")
 			{
 				result = GEDCOMCharacterSet.csASCII;
 			}
-			else if (SU == "ANSEL")
+			else if (su == "ANSEL")
 			{
 				result = GEDCOMCharacterSet.csANSEL;
 			}
-			else if (SU == "UNICODE")
+			else if (su == "UNICODE")
 			{
 				result = GEDCOMCharacterSet.csUNICODE;
 			}
-			else if (SU == "UTF8" || SU == "UTF-8")
+			else if (su == "UTF8" || su == "UTF-8")
 			{
 				result = GEDCOMCharacterSet.csUTF8;
 			}
@@ -1251,10 +1265,12 @@ namespace GKCommon.GEDCOM
 
 		public static GEDCOMSex GetSexVal(string str)
 		{
-			GEDCOMSex result;
-			string SU = str.Trim().ToUpperInvariant();
+            if (string.IsNullOrEmpty(str)) return GEDCOMSex.svNone;
 
-			switch (SU) {
+            string su = str.Trim().ToUpperInvariant();
+            GEDCOMSex result;
+
+			switch (su) {
 				case "M":
 					result = GEDCOMSex.svMale;
 					break;
@@ -1297,34 +1313,36 @@ namespace GKCommon.GEDCOM
 
 		public static GEDCOMBaptismDateStatus GetBaptismDateStatusVal(string str)
 		{
-			string S = str.Trim().ToUpperInvariant();
+            if (string.IsNullOrEmpty(str)) return GEDCOMBaptismDateStatus.bdsNone;
 
+            string su = str.Trim().ToUpperInvariant();
             GEDCOMBaptismDateStatus result;
-			if (S == "CHILD")
+
+			if (su == "CHILD")
 			{
 				result = GEDCOMBaptismDateStatus.bdsChild;
 			}
-			else if (S == "COMPLETED")
+			else if (su == "COMPLETED")
 			{
 				result = GEDCOMBaptismDateStatus.bdsCompleted;
 			}
-			else if (S == "EXCLUDED")
+			else if (su == "EXCLUDED")
 			{
 				result = GEDCOMBaptismDateStatus.bdsExcluded;
 			}
-			else if (S == "PRE-1970")
+			else if (su == "PRE-1970")
 			{
 				result = GEDCOMBaptismDateStatus.bdsPre1970;
 			}
-			else if (S == "STILLBORN")
+			else if (su == "STILLBORN")
 			{
 				result = GEDCOMBaptismDateStatus.bdsStillborn;
 			}
-			else if (S == "SUBMITTED")
+			else if (su == "SUBMITTED")
 			{
 				result = GEDCOMBaptismDateStatus.bdsSubmitted;
 			}
-			else if (S == "UNCLEARED")
+			else if (su == "UNCLEARED")
 			{
 				result = GEDCOMBaptismDateStatus.bdsUncleared;
 			}
@@ -1337,75 +1355,77 @@ namespace GKCommon.GEDCOM
 
 		public static string GetBaptismDateStatusStr(GEDCOMBaptismDateStatus value)
 		{
-			string S = "";
+			string str = "";
 			switch (value)
 			{
 				case GEDCOMBaptismDateStatus.bdsChild:
-					S = "CHILD";
+					str = "CHILD";
 					break;
 
 				case GEDCOMBaptismDateStatus.bdsCompleted:
-					S = "COMPLETED";
+					str = "COMPLETED";
 					break;
 
 				case GEDCOMBaptismDateStatus.bdsExcluded:
-					S = "EXCLUDED";
+					str = "EXCLUDED";
 					break;
 
 				case GEDCOMBaptismDateStatus.bdsPre1970:
-					S = "PRE-1970";
+					str = "PRE-1970";
 					break;
 
 				case GEDCOMBaptismDateStatus.bdsStillborn:
-					S = "STILLBORN";
+					str = "STILLBORN";
 					break;
 
 				case GEDCOMBaptismDateStatus.bdsSubmitted:
-					S = "SUBMITTED";
+					str = "SUBMITTED";
 					break;
 
 				case GEDCOMBaptismDateStatus.bdsUncleared:
-					S = "UNCLEARED";
+					str = "UNCLEARED";
 					break;
 			}
 
-			return S;
+			return str;
 		}
 
 		public static GEDCOMEndowmentDateStatus GetEndowmentDateStatusVal(string str)
 		{
-			string S = str.Trim().ToUpperInvariant();
-			
+            if (string.IsNullOrEmpty(str)) return GEDCOMEndowmentDateStatus.edsNone;
+
+            string su = str.Trim().ToUpperInvariant();
 			GEDCOMEndowmentDateStatus result;
-			if (S == "CHILD")
+
+			if (su == "CHILD")
 			{
 				result = GEDCOMEndowmentDateStatus.edsChild;
 			}
-			else if (S == "COMPLETED")
+			else if (su == "COMPLETED")
 			{
 				result = GEDCOMEndowmentDateStatus.edsCompleted;
 			}
-			else if (S == "EXCLUDED")
+			else if (su == "EXCLUDED")
 			{
 				result = GEDCOMEndowmentDateStatus.edsExcluded;
 			}
-			else if (S == "INFANT")
+			else if (su == "INFANT")
 			{
 				result = GEDCOMEndowmentDateStatus.edsInfant;
 			}
-			else if (S == "PRE-1970")
+			else if (su == "PRE-1970")
 			{
 				result = GEDCOMEndowmentDateStatus.edsPre1970;
 			}
-			else if (S == "STILLBORN")
+			else if (su == "STILLBORN")
 			{
 				result = GEDCOMEndowmentDateStatus.edsStillborn;
 			}
-			else if (S == "SUBMITTED")
+			else if (su == "SUBMITTED")
 			{
 				result = GEDCOMEndowmentDateStatus.edsSubmitted;
 			}
-			else if (S == "UNCLEARED")
+			else if (su == "UNCLEARED")
 			{
 				result = GEDCOMEndowmentDateStatus.edsUncleared;
 			}
@@ -1418,73 +1438,74 @@ namespace GKCommon.GEDCOM
 
 		public static string GetEndowmentDateStatusStr(GEDCOMEndowmentDateStatus value)
 		{
-			string S = "";
+			string str = "";
 			
 			switch (value)
 			{
 				case GEDCOMEndowmentDateStatus.edsChild:
-					S = "CHILD";
+					str = "CHILD";
 					break;
 
 				case GEDCOMEndowmentDateStatus.edsCompleted:
-					S = "COMPLETED";
+					str = "COMPLETED";
 					break;
 
 				case GEDCOMEndowmentDateStatus.edsExcluded:
-					S = "EXCLUDED";
+					str = "EXCLUDED";
 					break;
 
 				case GEDCOMEndowmentDateStatus.edsInfant:
-					S = "INFANT";
+					str = "INFANT";
 					break;
 
 				case GEDCOMEndowmentDateStatus.edsPre1970:
-					S = "PRE-1970";
+					str = "PRE-1970";
 					break;
 
 				case GEDCOMEndowmentDateStatus.edsStillborn:
-					S = "STILLBORN";
+					str = "STILLBORN";
 					break;
 
 				case GEDCOMEndowmentDateStatus.edsSubmitted:
-					S = "SUBMITTED";
+					str = "SUBMITTED";
 					break;
 
 				case GEDCOMEndowmentDateStatus.edsUncleared:
-					S = "UNCLEARED";
+					str = "UNCLEARED";
 					break;
 			}
 
-			return S;
+			return str;
 		}
 
 		public static GEDCOMChildSealingDateStatus GetChildSealingDateStatusVal(string str)
 		{
-			string S = str.Trim().ToUpperInvariant();
-			
+            if (string.IsNullOrEmpty(str)) return GEDCOMChildSealingDateStatus.cdsNone;
+
+            string su = str.Trim().ToUpperInvariant();
 			GEDCOMChildSealingDateStatus result;
 
-			if (S == "BIC")
+			if (su == "BIC")
 			{
 				result = GEDCOMChildSealingDateStatus.cdsBIC;
 			}
-			else if (S == "EXCLUDED")
+			else if (su == "EXCLUDED")
 			{
 				result = GEDCOMChildSealingDateStatus.cdsExcluded;
 			}
-			else if (S == "PRE-1970")
+			else if (su == "PRE-1970")
 			{
 				result = GEDCOMChildSealingDateStatus.cdsPre1970;
 			}
-			else if (S == "STILLBORN")
+			else if (su == "STILLBORN")
 			{
 				result = GEDCOMChildSealingDateStatus.cdsStillborn;
 			}
-			else if (S == "SUBMITTED")
+			else if (su == "SUBMITTED")
 			{
 				result = GEDCOMChildSealingDateStatus.cdsSubmitted;
 			}
-			else if (S == "UNCLEARED")
+			else if (su == "UNCLEARED")
 			{
 				result = GEDCOMChildSealingDateStatus.cdsUncleared;
 			}
@@ -1498,36 +1519,36 @@ namespace GKCommon.GEDCOM
 
 		public static string GetChildSealingDateStatusStr(GEDCOMChildSealingDateStatus value)
 		{
-			string S = "";
+			string str = "";
 
 			switch (value)
 			{
 				case GEDCOMChildSealingDateStatus.cdsBIC:
-					S = "BIC";
+					str = "BIC";
 					break;
 
 				case GEDCOMChildSealingDateStatus.cdsExcluded:
-					S = "EXCLUDED";
+					str = "EXCLUDED";
 					break;
 
 				case GEDCOMChildSealingDateStatus.cdsPre1970:
-					S = "PRE-1970";
+					str = "PRE-1970";
 					break;
 
 				case GEDCOMChildSealingDateStatus.cdsStillborn:
-					S = "STILLBORN";
+					str = "STILLBORN";
 					break;
 
 				case GEDCOMChildSealingDateStatus.cdsSubmitted:
-					S = "SUBMITTED";
+					str = "SUBMITTED";
 					break;
 
 				case GEDCOMChildSealingDateStatus.cdsUncleared:
-					S = "UNCLEARED";
+					str = "UNCLEARED";
 					break;
 			}
 
-			return S;
+			return str;
 		}
 		
 		#endregion
@@ -1543,16 +1564,18 @@ namespace GKCommon.GEDCOM
 			return stb.ToString();
 		}
 
-		public static string StrToGEDCOMDate(string aDate, bool aException)
+		public static string StrToGEDCOMDate(string strDate, bool aException)
 		{
-			if (aDate.IndexOf("/") >= 0) aDate = aDate.Replace("/", ".");
-			if (aDate.IndexOf("_") >= 0) aDate = aDate.Replace("_", " ");
+            if (string.IsNullOrEmpty(strDate)) return "";
 
-			string[] dt_parts = aDate.Split('.');
-			if (dt_parts.Length < 3)
+			if (strDate.IndexOf("/") >= 0) strDate = strDate.Replace("/", ".");
+			if (strDate.IndexOf("_") >= 0) strDate = strDate.Replace("_", " ");
+
+			string[] dtParts = strDate.Split('.');
+			if (dtParts.Length < 3)
 			{
 				if (aException) {
-                    throw new GEDCOMDateException(string.Format("GKUtils.StrToGEDCOMDate(): date format is invalid {0}", aDate));
+                    throw new GEDCOMDateException(string.Format("GKUtils.StrToGEDCOMDate(): date format is invalid {0}", strDate));
 				}
 
 				return "";
@@ -1560,14 +1583,43 @@ namespace GKCommon.GEDCOM
 
 			string result = "";
 
-			string pd = dt_parts[0].Trim();
-			string pm = dt_parts[1].Trim();
-			string py = dt_parts[2].Trim();
+			string pd = dtParts[0].Trim();
+			string pm = dtParts[1].Trim();
+			string py = dtParts[2].Trim();
 
 			if (pd != "") result = result + pd + " ";
-			if (pm != "") result = result + GEDCOMCustomDate.GEDCOMMonthArray[SysUtils.ParseInt(pm, 1) - 1] + " ";
+			if (pm != "") result = result + GEDCOMCustomDate.GEDCOMMonthArray[ConvHelper.ParseInt(pm, 1) - 1] + " ";
 			if (py != "") result += py;
 
+			return result;
+		}
+
+		public static string TrimLeft(string str)
+		{
+            if (string.IsNullOrEmpty(str)) return "";
+
+            int len = str.Length;
+			int i = 1;
+			while (i <= len && str[i - 1] <= ' ') i++;
+
+			string result;
+			if (i > len) {
+				result = "";
+			} else {
+				result = ((i != 1) ? str.Substring(i - 1) : str);
+			}
+			return result;
+		}
+
+		public static string TrimRight(string str)
+		{
+		    if (string.IsNullOrEmpty(str)) return "";
+
+			int len = str.Length;
+			int i = len;
+			while (i > 0 && str[i - 1] <= ' ') i--;
+
+			string result = ((i != len) ? str.Substring(0, i) : str);
 			return result;
 		}
 

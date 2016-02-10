@@ -8,7 +8,7 @@ namespace GKCore.Lists
 	/// </summary>
     public class ListFilter : IListFilter
     {
-    	private List<FilterCondition> fConditions;
+    	private readonly List<FilterCondition> fConditions;
 
         public List<FilterCondition> Conditions
         {

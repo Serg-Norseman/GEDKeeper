@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
+using BSLib;
 using ExtUtils.ScrollableControls;
 
 namespace GKCommon.Controls
@@ -40,21 +41,20 @@ namespace GKCommon.Controls
 	{
 		private sealed class HyperLink
 		{
-			public readonly string Name;
-			public readonly ExtRect Rect;
+            private readonly ExtRect fRect;
+
+            public readonly string Name;
 
 			public HyperLink(string name, int x, int y, int w, int h)
 			{
 				this.Name = name;
-				this.Rect.Left = x;
-				this.Rect.Top = y;
-				this.Rect.Right = x + w;
-				this.Rect.Bottom = y + h;
+				this.fRect = ExtRect.CreateBounds(x, y, w, h);
 			}
 
-			public bool HasCoord(int x, int y, int y_offset)
+            public bool HasCoord(int x, int y, int xOffset, int yOffset)
 			{
-				return x >= this.Rect.Left && x <= this.Rect.Right && y >= this.Rect.Top + y_offset && y <= this.Rect.Bottom + y_offset;
+                return x >= this.fRect.Left + xOffset && x <= this.fRect.Right + xOffset 
+                    && y >= this.fRect.Top + yOffset && y <= this.fRect.Bottom + yOffset;
 			}
 		}
 
@@ -220,7 +220,7 @@ namespace GKCommon.Controls
 			this.fLinks.Clear();
 		}
 
-		private int GetFontSize(string s, ref int i)
+		private static int GetFontSize(string s, ref int i)
 		{
 			int result = 0;
 
@@ -310,11 +310,11 @@ namespace GKCommon.Controls
 								switch (c)
 								{
 									case '+':
-										this.SetFontSize(((double)this.fTextFont.Size + (double)this.GetFontSize(s, ref i)));
+										this.SetFontSize((this.fTextFont.Size + GetFontSize(s, ref i)));
 										break;
 
 									case '-':
-										this.SetFontSize(((double)this.fTextFont.Size - (double)this.GetFontSize(s, ref i)));
+                                        this.SetFontSize((this.fTextFont.Size - GetFontSize(s, ref i)));
 										break;
 
 									case '0':
@@ -404,13 +404,13 @@ namespace GKCommon.Controls
 			{
 				gfx.FillRectangle(new SolidBrush(SystemColors.Control), base.ClientRectangle);
 
-				int y_pos = this.fBorderWidth - -this.AutoScrollPosition.Y;
+				int yOffset = this.fBorderWidth - -this.AutoScrollPosition.Y;
 
 				int num = this.fLines.Count;
 				for (int line = 0; line < num; line++)
 				{
-					int x_pos = this.fBorderWidth - -this.AutoScrollPosition.X;
-					int line_height = this.fHeights[line];
+                    int xOffset = this.fBorderWidth - -this.AutoScrollPosition.X;
+                    int lineHeight = this.fHeights[line];
 
 					string s = this.fLines[line];
 
@@ -424,7 +424,7 @@ namespace GKCommon.Controls
 								ss += "~";
 							}
 
-							this.OutText(gfx, ss, ref x_pos, ref y_pos, ref line_height);
+							this.OutText(gfx, ss, ref xOffset, ref yOffset, ref lineHeight);
 							i++;
 
 							while (s[i - 1] != '~')
@@ -434,11 +434,11 @@ namespace GKCommon.Controls
 								switch (c)
 								{
 									case '+':
-										this.SetFontSize(((double)this.fTextFont.Size + (double)this.GetFontSize(s, ref i)));
+                                        this.SetFontSize((this.fTextFont.Size + GetFontSize(s, ref i)));
 										break;
 
 									case '-':
-										this.SetFontSize(((double)this.fTextFont.Size - (double)this.GetFontSize(s, ref i)));
+                                        this.SetFontSize((this.fTextFont.Size - GetFontSize(s, ref i)));
 										break;
 
 									case '0':
@@ -479,13 +479,13 @@ namespace GKCommon.Controls
 												ss += s[i - 1];
 											}
 
-											Color save_color = this.fDefBrush.Color;
+											Color saveColor = this.fDefBrush.Color;
 											this.fDefBrush.Color = this.fLinkColor;
 											this.SetFontStyle(FontStyle.Underline);
 
-											this.OutText(gfx, ss, ref x_pos, ref y_pos, ref line_height);
+											this.OutText(gfx, ss, ref xOffset, ref yOffset, ref lineHeight);
 
-											this.fDefBrush.Color = save_color;
+											this.fDefBrush.Color = saveColor;
 											this.SetFontStyle(FontStyle.Underline);
 
 											break;
@@ -508,8 +508,8 @@ namespace GKCommon.Controls
 						i++;
 					}
 
-					this.OutText(gfx, ss, ref x_pos, ref y_pos, ref line_height);
-					y_pos += line_height;
+					this.OutText(gfx, ss, ref xOffset, ref yOffset, ref lineHeight);
+					yOffset += lineHeight;
 				}
 			}
 			finally
@@ -518,9 +518,9 @@ namespace GKCommon.Controls
 			}
 		}
 
-		private void SetFontSize(double size)
+        private void SetFontSize(float size)
 		{
-			this.fTextFont = new Font(this.fTextFont.Name, ((float)size), this.fTextFont.Style, this.fTextFont.Unit, this.fTextFont.GdiCharSet, this.fTextFont.GdiVerticalFont);
+			this.fTextFont = new Font(this.fTextFont.Name, size, this.fTextFont.Style, this.fTextFont.Unit, this.fTextFont.GdiCharSet, this.fTextFont.GdiVerticalFont);
 		}
 
 		private void SetFontStyle(FontStyle style)
@@ -645,12 +645,13 @@ namespace GKCommon.Controls
 		{
 			base.OnMouseMove(e);
 
-			int y_offset = (this.fBorderWidth - -this.AutoScrollPosition.Y);
+			int yOffset = (this.fBorderWidth - -this.AutoScrollPosition.Y);
+            int xOffset = (this.fBorderWidth - -this.AutoScrollPosition.X);
 			
 			int num = this.fLinks.Count;
 			for (int i = 0; i < num; i++)
 			{
-				if (this.fLinks[i].HasCoord(e.X, e.Y, y_offset))
+                if (this.fLinks[i].HasCoord(e.X, e.Y, xOffset, yOffset))
 				{
 					this.fLink = i;
 					this.Cursor = Cursors.Hand;

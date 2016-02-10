@@ -43,7 +43,7 @@ namespace Com.StellmanGreene.CSVReader
     /// <summary>
     /// Read CSV-formatted data from a file or TextReader
     /// </summary>
-    public class CSVReader : IDisposable
+    public sealed class CSVReader : IDisposable
     {
         public const string NEWLINE = "\r\n";
 
@@ -184,8 +184,7 @@ namespace Com.StellmanGreene.CSVReader
             }
             else
             {
-                object convertedValue;
-                StringConverter.ConvertString(nextObjectString, out convertedValue);
+                object convertedValue = StringConverter.ConvertString(nextObjectString);
                 return convertedValue;
             }
         }

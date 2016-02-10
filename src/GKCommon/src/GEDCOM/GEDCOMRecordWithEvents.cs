@@ -10,8 +10,8 @@ namespace GKCommon.GEDCOM
 		{
 			get { return this.fEvents; }
 		}
-		
-		public GEDCOMRecordWithEvents(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
+
+	    protected GEDCOMRecordWithEvents(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 
@@ -42,9 +42,13 @@ namespace GKCommon.GEDCOM
 
         public override void MoveTo(GEDCOMRecord targetRecord, bool clearDest)
 		{
-            base.MoveTo(targetRecord, clearDest);
+            GEDCOMRecordWithEvents target = targetRecord as GEDCOMRecordWithEvents;
+            if (target == null)
+            {
+                throw new ArgumentException("argument is null or wrong type", "targetRecord");
+            }
 
-			GEDCOMRecordWithEvents target = targetRecord as GEDCOMRecordWithEvents;
+            base.MoveTo(targetRecord, clearDest);
 
 			while (this.fEvents.Count > 0)
 			{
@@ -94,7 +98,7 @@ namespace GKCommon.GEDCOM
 		
 		#region Auxiliary
 
-		static float[] CA_Values = new float[] { 0.25f, 0.5f, 0.75f, 1.0f };
+		private static readonly float[] CA_Values = new float[] { 0.25f, 0.5f, 0.75f, 1.0f };
 
 		public float GetCertaintyAssessment()
 		{

@@ -42,43 +42,38 @@ namespace Com.StellmanGreene.CSVReader
     /// </summary>
     public static class StringConverter
     {
-        public static Type ConvertString(string value, out object convertedValue)
+        public static object ConvertString(string value)
         {
             // First check the whole number types, because floating point types will always parse whole numbers
             // Start with the smallest types
             byte byteResult;
             if (byte.TryParse(value, out byteResult))
             {
-                convertedValue = byteResult;
-                return typeof(byte);
+                return byteResult;
             }
 
             short shortResult;
             if (short.TryParse(value, out shortResult))
             {
-                convertedValue = shortResult;
-                return typeof(short);
+                return shortResult;
             }
 
             int intResult;
             if (int.TryParse(value, out intResult))
             {
-                convertedValue = intResult;
-                return typeof(int);
+                return intResult;
             }
 
             long longResult;
             if (long.TryParse(value, out longResult))
             {
-                convertedValue = longResult;
-                return typeof(long);
+                return longResult;
             }
 
             ulong ulongResult;
             if (ulong.TryParse(value, out ulongResult))
             {
-                convertedValue = ulongResult;
-                return typeof(ulong);
+                return ulongResult;
             }
 
             // No need to check the rest of the unsigned types, which will fit into the signed whole number types
@@ -87,8 +82,7 @@ namespace Com.StellmanGreene.CSVReader
             float floatResult;
             if (float.TryParse(value, out floatResult))
             {
-                convertedValue = floatResult;
-                return typeof(float);
+                return floatResult;
             }
 
 
@@ -97,34 +91,29 @@ namespace Com.StellmanGreene.CSVReader
             double doubleResult;
             if (double.TryParse(value, out doubleResult))
             {
-                convertedValue = doubleResult;
-                return typeof(double);
+                return doubleResult;
             }
 
             decimal decimalResult;
             if (decimal.TryParse(value, out decimalResult))
             {
-                convertedValue = decimalResult;
-                return typeof(decimal);
+                return decimalResult;
             }
 
             // It's not a number, so it's either a bool, char or string
             bool boolResult;
             if (bool.TryParse(value, out boolResult))
             {
-                convertedValue = boolResult;
-                return typeof(bool);
+                return boolResult;
             }
 
             char charResult;
             if (char.TryParse(value, out charResult))
             {
-                convertedValue = charResult;
-                return typeof(char);
+                return charResult;
             }
 
-            convertedValue = value;
-            return typeof(string);
+            return value;
         }
 
         /// <summary>

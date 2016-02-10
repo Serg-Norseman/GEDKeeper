@@ -2,7 +2,6 @@
 using System.Windows.Forms;
 
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -51,9 +50,11 @@ namespace GKUI.Dialogs
 					this.EditName.Text = this.fCommunication.CommName;
 					this.EditCorrType.SelectedIndex = (int)this.fCommunication.CommunicationType;
 					this.EditDate.Text = GKUtils.GetDateFmtString(this.fCommunication.Date, DateFormat.dfDD_MM_YYYY);
-					GKCommunicationDir dir = GKCommunicationDir.cdFrom;
-					this.fCommunication.GetCorresponder(ref dir, ref this.fTempInd);
-					if (this.fTempInd != null)
+
+                    GKCommunicationDir dir;
+					this.fCommunication.GetCorresponder(out dir, out this.fTempInd);
+
+                    if (this.fTempInd != null)
 					{
 						this.EditDir.SelectedIndex = (int)dir;
 						this.EditCorresponder.Text = this.fTempInd.GetNameString(true, false);

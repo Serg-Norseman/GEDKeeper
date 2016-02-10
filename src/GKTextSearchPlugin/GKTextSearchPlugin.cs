@@ -14,8 +14,8 @@ using GKCore.Types;
 [assembly: AssemblyCopyright("Copyright © 2014, Serg V. Zhdanovskih")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+[assembly: CLSCompliant(false)]
 [assembly: ComVisible(false)]
-// The assembly version has following format: Major.Minor.Build.Revision
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
@@ -30,7 +30,8 @@ namespace GKTextSearchPlugin
 
     public class Plugin : IPlugin, ISubscriber
     {
-        private string fDisplayName = "Полнотекстовый поиск";
+        private const string fDisplayName = "GKTextSearchPlugin";
+
         private IHost fHost;
         private ILangMan fLangMan;
         
@@ -38,11 +39,7 @@ namespace GKTextSearchPlugin
 
         public string DisplayName {
         	get {
-        		if (fLangMan == null) {
-        			return this.fDisplayName;
-        		} else {
-        			return this.fLangMan.LS(TLS.LSID_PluginTitle);
-        		}
+        	    return (fLangMan == null) ? fDisplayName : this.fLangMan.LS(TLS.LSID_PluginTitle);
         	}
         }
         
@@ -61,9 +58,9 @@ namespace GKTextSearchPlugin
 			IBaseWindow curBase = fHost.GetCurrentFile();
 		    if (curBase == null) return;
 
-		    TfmTextSearch ts_dlg = new TfmTextSearch(this, curBase);
+		    TfmTextSearch tsDlg = new TfmTextSearch(this, curBase);
 		    //ts_dlg.MdiParent = this;
-		    ts_dlg.Show();
+		    tsDlg.Show();
         }
 
         public void NotifyRecord(IBaseWindow aBase, object record, RecordAction action)
@@ -72,11 +69,11 @@ namespace GKTextSearchPlugin
         	
         	switch (action) {
         		case RecordAction.raEdit:
-        			this.fSearchMan.UpdateRecord(aBase, record as GEDCOMRecord);
+                    this.fSearchMan.UpdateRecord(aBase, (GEDCOMRecord)record);
         			break;
 
         		case RecordAction.raDelete:
-        			this.fSearchMan.DeleteRecord(aBase, (record as GEDCOMRecord).XRef);
+                    this.fSearchMan.DeleteRecord(aBase, ((GEDCOMRecord)record).XRef);
         			break;
         	}
         }

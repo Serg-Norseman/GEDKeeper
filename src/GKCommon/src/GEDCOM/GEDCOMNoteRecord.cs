@@ -1,4 +1,5 @@
-using GKCommon.GEDCOM.Enums;
+using System;
+using BSLib;
 
 namespace GKCommon.GEDCOM
 {
@@ -32,13 +33,15 @@ namespace GKCommon.GEDCOM
 
         public override void MoveTo(GEDCOMRecord targetRecord, bool clearDest)
         {
-            if (targetRecord == null) return;
+            GEDCOMNoteRecord targetNote = (targetRecord as GEDCOMNoteRecord);
+            if (targetNote == null)
+            {
+                throw new ArgumentException("argument is null or wrong type", "targetRecord");
+            }
 
 			StringList cont = new StringList();
 			try
 			{
-				GEDCOMNoteRecord targetNote = (targetRecord as GEDCOMNoteRecord);
-				
 				cont.Text = targetNote.Note.Text;
                 base.MoveTo(targetRecord, clearDest);
 				targetNote.Note = cont;
@@ -60,10 +63,11 @@ namespace GKCommon.GEDCOM
 
         public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
 		{
-        	if (tag == null) return 0.0f;
-			float match = 0.0f;
+            GEDCOMNoteRecord note = tag as GEDCOMNoteRecord;
+            if (note == null) return 0.0f;
+			
+            float match = 0.0f;
 
-			GEDCOMNoteRecord note = tag as GEDCOMNoteRecord;
 			if (string.Compare(this.Note.Text, note.Note.Text, true) == 0) {
 				match = 100.0f;
 			}

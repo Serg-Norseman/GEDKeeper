@@ -13,12 +13,13 @@ namespace GKCommon
 
         private static string[] GetAsStringArray(ArrayList list)
 		{
-			int num = (list != null) ? list.Count : 0;
-			if (num == 0)
+            if (list == null)
 			{
 				return null;
 			}
-			string[] array = new string[num];
+            
+            int num = list.Count;
+            string[] array = new string[num];
 			list.CopyTo(0, array, 0, num);
 			return array;
 		}
@@ -42,17 +43,16 @@ namespace GKCommon
 				base.BaseAdd(name, arrayList);
 			}
 
-            if (value != null)
-			{
-                if (!excludeDuplicates)
-                {
-                    arrayList.Add(value);
-                }
-                else
-                {
-                	if (!arrayList.Contains(value)) arrayList.Add(value);
-                }
-			}
+            if (value == null) return;
+
+            if (!excludeDuplicates)
+            {
+                arrayList.Add(value);
+            }
+            else
+            {
+                if (!arrayList.Contains(value)) arrayList.Add(value);
+            }
 		}
 
         public string[] GetValues(string name)

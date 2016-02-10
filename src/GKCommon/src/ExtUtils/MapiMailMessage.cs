@@ -2,8 +2,8 @@
 using System.Collections;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Security;
 using System.Threading;
-using GKCommon;
 
 namespace ExtUtils.MapiMail
 {
@@ -564,4 +564,55 @@ namespace ExtUtils.MapiMail
 			}
 		}
 	}
+	
+	[SecurityCritical, SuppressUnmanagedCodeSecurity]
+    internal static class NativeMethods
+    {
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public class MapiFileDescriptor
+        {
+            public int reserved = 0;
+            public int flags = 0;
+            public int position = 0;
+            public string path = null;
+            public string name = null;
+            public IntPtr type = IntPtr.Zero;
+        }
+
+        public const int MAPI_LOGON_UI = 0x1;
+
+        [DllImport("MAPI32.DLL", CharSet = CharSet.Unicode)]
+        public static extern int MAPILogon(IntPtr hwnd, string prf, string pw, int flg, int rsv, ref IntPtr sess);
+
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public class MapiMessage
+        {
+            public int Reserved = 0;
+            public string Subject = null;
+            public string NoteText = null;
+            public string MessageType = null;
+            public string DateReceived = null;
+            public string ConversationID = null;
+            public int Flags = 0;
+            public IntPtr Originator = IntPtr.Zero;
+            public int RecipientCount = 0;
+            public IntPtr Recipients = IntPtr.Zero;
+            public int FileCount = 0;
+            public IntPtr Files = IntPtr.Zero;
+        }
+
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public class MapiRecipDesc
+        {
+            public int Reserved = 0;
+            public int RecipientClass = 0;
+            public string Name = null;
+            public string Address = null;
+            public int eIDSize = 0;
+            public IntPtr EntryID = IntPtr.Zero;
+        }
+
+        [DllImport("MAPI32.DLL", CharSet = CharSet.Unicode)]
+        public static extern uint MAPISendMail(IntPtr lhSession, IntPtr ulUIParam, MapiMessage lpMessage, uint flFlags, uint ulReserved);
+    }
 }

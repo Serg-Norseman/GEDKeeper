@@ -2,22 +2,20 @@
 using System.Collections.Generic;
 using System.IO;
 
-using ExtUtils;
-using GKCommon;
+using BSLib;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using Xapian;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKTextSearchPlugin
 {
-	public class SearchManager
+    /// <summary>
+    /// 
+    /// </summary>
+    public class SearchManager
 	{
 		private readonly object xdb_lock;
-		private Plugin fPlugin;
+		private readonly Plugin fPlugin;
 
 		public SearchManager(Plugin plugin)
 		{

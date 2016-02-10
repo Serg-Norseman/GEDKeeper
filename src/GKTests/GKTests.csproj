@@ -42,6 +42,9 @@
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <CodeAnalysisRuleSet>..\gk2rules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework">
       <HintPath>nunit.framework.dll</HintPath>
@@ -60,6 +63,10 @@
     <Compile Include="TestStubs.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BSLib\BSLib.csproj">
+      <Project>{30D11BCB-EAAE-44B7-BFBB-78BAA3963362}</Project>
+      <Name>BSLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GEDKeeper2\GEDKeeper2.csproj">
       <Project>{19B7D80A-37FD-4E49-9F59-87FA41B677E2}</Project>
       <Name>GEDKeeper2</Name>
@@ -72,14 +79,19 @@
       <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
       <Name>GKCommon</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GKInterfaces\GKInterfaces.csproj">
-      <Project>{B86F8B3B-E1CD-4A00-A73B-2D454924B8D2}</Project>
-      <Name>GKInterfaces</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GKPedigreeImporterPlugin\GKPedigreeImporterPlugin.csproj">
       <Project>{859C2F5B-FBF1-4D3B-8442-CF8E44E8B74B}</Project>
       <Name>GKPedigreeImporterPlugin</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ProfilingSessions\Session20160209_172904.sdps" />
+    <Content Include="ProfilingSessions\Session20160209_173025.sdps" />
+    <Content Include="ProfilingSessions\Session20160209_173110.sdps" />
+    <Content Include="ProfilingSessions\Session20160209_173729.sdps" />
+    <Content Include="ProfilingSessions\Session20160209_175421.sdps" />
+    <Content Include="ProfilingSessions\Session20160209_210228.sdps" />
+    <Content Include="ProfilingSessions\Session20160209_215453.sdps" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>

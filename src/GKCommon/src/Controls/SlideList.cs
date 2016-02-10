@@ -7,12 +7,13 @@ namespace GKCommon.Controls
 {
 	public class SlideList : ListBox
 	{
-		private Bitmap fCollapseIcon;
-		private Bitmap fExpandIcon;
-		private bool fProcessing;
+		private readonly Bitmap fCollapseIcon;
+		private readonly Bitmap fExpandIcon;
+
+        private bool fProcessing;
 		private int fItemHeight;
 		
-		public int ItemHeight
+		public new int ItemHeight
 		{
 			get {
 				return this.fItemHeight;
@@ -27,9 +28,9 @@ namespace GKCommon.Controls
 		{
 			this.DrawMode = DrawMode.OwnerDrawVariable;
 
-			System.ComponentModel.ComponentResourceManager resources = new ComponentResourceManager(typeof(SlideList));
-        	fCollapseIcon = (System.Drawing.Bitmap)(resources.GetObject("CollapseIcon"));
-        	fExpandIcon = (System.Drawing.Bitmap)(resources.GetObject("ExpandIcon"));
+			ComponentResourceManager resources = new ComponentResourceManager(typeof(SlideList));
+        	fCollapseIcon = (Bitmap)(resources.GetObject("CollapseIcon"));
+        	fExpandIcon = (Bitmap)(resources.GetObject("ExpandIcon"));
 
         	base.DoubleBuffered = true;
         	base.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
@@ -71,7 +72,7 @@ namespace GKCommon.Controls
             
             int num = this.Items.Count;
         	for (int i = 0; i < num; i++) {
-        		SlideListItem itm = this.Items[i] as SlideListItem;
+                SlideListItem itm = (SlideListItem)this.Items[i];
 
         		if (itm.IsGroup) {
         			if (itm.Text == group) {
@@ -105,17 +106,17 @@ namespace GKCommon.Controls
         		SetItemsExpanded(0, count - 1, false);
         		SetItemsVisible(0, count - 1, false);
 
-        		int next_idx = count - 1;
+        		int nextIdx = count - 1;
         		for (int i = index + 1; i < count; i++) {
-        			SlideListItem itm = this.Items[i] as SlideListItem;
+                    SlideListItem itm = (SlideListItem)this.Items[i];
         			if (itm.IsGroup) {
-        				next_idx = i - 1;
+        				nextIdx = i - 1;
         				break;
         			}
         		}
 
         		item.IsExpanded = true;
-        		SetItemsVisible(index + 1, next_idx, true);
+        		SetItemsVisible(index + 1, nextIdx, true);
 
         		this.RefreshItems();
         		this.SelectedIndex = index + 1;
@@ -133,7 +134,7 @@ namespace GKCommon.Controls
         private void SetItemsVisible(int startIndex, int endIndex, bool val)
         {
         	for (int i = startIndex; i <= endIndex; i++) {
-        		SlideListItem item = this.Items[i] as SlideListItem;
+                SlideListItem item = (SlideListItem)this.Items[i];
         		if (!item.IsGroup) item.IsVisible = val;
         	}
         }
@@ -141,7 +142,7 @@ namespace GKCommon.Controls
         private void SetItemsExpanded(int startIndex, int endIndex, bool val)
         {
         	for (int i = startIndex; i <= endIndex; i++) {
-        		SlideListItem item = this.Items[i] as SlideListItem;
+                SlideListItem item = (SlideListItem)this.Items[i];
         		if (item.IsGroup) item.IsExpanded = val;
         	}
         }
@@ -156,11 +157,7 @@ namespace GKCommon.Controls
         	
         	SlideListItem itm = (SlideListItem)this.Items[e.Index];
 
-        	if (!itm.IsVisible) {
-        		e.ItemHeight = 0;
-        	} else {
-        		e.ItemHeight = this.fItemHeight;
-        	}
+        	e.ItemHeight = (!itm.IsVisible) ? 0 : this.fItemHeight;
         }
 
         protected override void OnDrawItem(DrawItemEventArgs e)
@@ -183,19 +180,19 @@ namespace GKCommon.Controls
         		rt1.Width -= 1;
         		rt1.Height -= 1;
         		e.Graphics.DrawRectangle(SystemPens.WindowFrame, rt1);
-        	} else {
-        		if ((e.State & DrawItemState.Selected) == DrawItemState.Selected) {
-        			e.Graphics.FillRectangle(SystemBrushes.GradientActiveCaption, rt);
-        		} else {
-        			e.Graphics.FillRectangle(SystemBrushes.Control, rt);
-        		}
+        	}
+            else
+        	{
+        	    Brush sysBrush;
+        		sysBrush = ((e.State & DrawItemState.Selected) == DrawItemState.Selected) ? SystemBrushes.GradientActiveCaption : SystemBrushes.Control;
+                e.Graphics.FillRectangle(sysBrush, rt);
         	}
 
         	rt.Inflate(-5, -2);
         	
-        	System.Drawing.Font fnt = this.Font;
+        	Font fnt = this.Font;
         	if (item.IsGroup) {
-        		fnt = new System.Drawing.Font(fnt, FontStyle.Bold);
+        		fnt = new Font(fnt, FontStyle.Bold);
         	}
         	
         	StringFormat fmt = new StringFormat();

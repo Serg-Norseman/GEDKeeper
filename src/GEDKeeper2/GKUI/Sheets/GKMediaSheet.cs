@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
 
+using BSLib;
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -36,21 +36,21 @@ namespace GKUI.Sheets
                 this.DataList.Reset();
                 while (this.DataList.MoveNext()) {
                     GEDCOMMultimediaLink mmLink = this.DataList.Current as GEDCOMMultimediaLink;
+                    if (mmLink == null) continue;
+
                     GEDCOMMultimediaRecord mmRec = mmLink.Value as GEDCOMMultimediaRecord;
                     if (mmRec == null) continue;
 
-                    if (mmRec.FileReferences.Count != 0)
-                    {
-                        GEDCOMFileReferenceWithTitle fileRef = mmRec.FileReferences[0];
+                    if (mmRec.FileReferences.Count == 0) continue;
 
-                        GKListItem item = this.AddItem(fileRef.Title, mmLink);
-                        item.AddSubItem(LangMan.LS(GKData.MediaTypes[(int) fileRef.MediaType]));
-                    }
+                    GEDCOMFileReferenceWithTitle fileRef = mmRec.FileReferences[0];
+                    GKListItem item = this.AddItem(fileRef.Title, mmLink);
+                    item.AddSubItem(LangMan.LS(GKData.MediaTypes[(int) fileRef.MediaType]));
                 }
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("GKMediaSheet.UpdateSheet(): " + ex.Message);
+                Logger.LogWrite("GKMediaSheet.UpdateSheet(): " + ex.Message);
             }
         }
 
@@ -62,6 +62,8 @@ namespace GKUI.Sheets
             if (aBase == null) return;
 
             IGEDCOMStructWithLists _struct = this.DataList.Owner as IGEDCOMStructWithLists;
+            if (_struct == null) return;
+
             GEDCOMMultimediaLink mmLink = eArgs.ItemData as GEDCOMMultimediaLink;
             
             bool result = false;

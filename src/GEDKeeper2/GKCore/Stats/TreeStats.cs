@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
-using GKCommon;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 
 namespace GKCore.Stats
 {
@@ -326,7 +323,7 @@ namespace GKCore.Stats
 									case StatsMode.smAAF_1:
 										AbsDate dtx1 = GEDCOMUtils.GetAbstractDate(iRec, "BIRT");
 										if (dtx1.IsValid()) {
-											key = SysUtils.Trunc(dtx1.Year / 10 * 10).ToString();
+											key = GKUtils.Trunc(dtx1.Year / 10 * 10).ToString();
 
 											if (!xvals.TryGetValue(key, out valsList))
 											{
@@ -341,7 +338,7 @@ namespace GKCore.Stats
 									case StatsMode.smAAF_2:
 										AbsDate dtx2 = GEDCOMUtils.GetAbstractDate(iChild, "BIRT");
 										if (dtx2.IsValid()) {
-											key = SysUtils.Trunc(dtx2.Year / 10 * 10).ToString();
+											key = GKUtils.Trunc(dtx2.Year / 10 * 10).ToString();
 
 											if (!xvals.TryGetValue(key, out valsList))
 											{

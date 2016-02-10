@@ -4,19 +4,18 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Security.Permissions;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-using GKCommon;
+using BSLib;
+using BSLib.Graphics;
+using BSLib.SmartGraph;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Kinships;
 using GKCore.Options;
 using GKCore.Types;
-using SmartGraph;
 
 namespace GKUI.Charts
 {
@@ -68,23 +67,25 @@ namespace GKUI.Charts
 		#endregion
 
 		#region Private fields
-		
-		private IBaseWindow fBase;
+
+        private readonly ChartFilter fFilter;
+        private readonly Graph fGraph;
+        private readonly PersonList fPersons;
+        private readonly List<string> fPreparedFamilies;
+        internal readonly List<string> fPreparedIndividuals;
+        private readonly ToolTip fToolTip;
+        
+        private IBaseWindow fBase;
 		private int fBranchDistance;
 		private bool fCertaintyIndex;
 		private int fDepthLimit;
 		private Font fDrawFont;
-		private ChartFilter fFilter;
-		private Graph fGraph;
-		private ChartKind fKind;
+        private ChartKind fKind;
 		private TreeChartPerson fKinRoot;
 		private int fLevelDistance;
 		private int fMargins;
 		private TreeChartOptions fOptions;
 		private bool fPathDebug;
-		private PersonList fPersons;
-		private List<string> fPreparedFamilies = new List<string>();
-		internal List<string> fPreparedIndividuals = new List<string>(); // FIXME
 		private TreeChartPerson fRoot;
 		private float fScale;
 		private ScaleControl fScaleControl;
@@ -97,7 +98,6 @@ namespace GKUI.Charts
 		private bool fTraceKinships;
 		private bool fTraceSelected;
 		private GEDCOMTree fTree;
-		private ToolTip fToolTip;
 		
 		private int fBorderWidth;
 		private ExtRect fTreeBounds;
@@ -310,7 +310,10 @@ namespace GKUI.Charts
 			this.fTraceSelected = true;
 			this.fGraph = new Graph();
 
-			this.fScaleControl = new ScaleControl(this);
+        	this.fPreparedFamilies = new List<string>();
+            this.fPreparedIndividuals = new List<string>();
+
+            this.fScaleControl = new ScaleControl(this);
 			//this.fPersonControl = new PersonControl(this);
 			this.fToolTip = new ToolTip();
 
@@ -763,10 +766,10 @@ namespace GKUI.Charts
 								int num2 = family.Childrens.Count;
 								for (int j = 0; j < num2; j++)
 								{
-									GEDCOMIndividualRecord child_rec = family.Childrens[j].Value as GEDCOMIndividualRecord;
-									if (GKUtils.IsRecordAccess(child_rec.Restriction, this.fShieldState))
+                                    GEDCOMIndividualRecord childRec = (GEDCOMIndividualRecord)family.Childrens[j].Value;
+									if (GKUtils.IsRecordAccess(childRec.Restriction, this.fShieldState))
 									{
-										TreeChartPerson child = this.DoDescendantsStep(resParent, child_rec, level + 1);
+										TreeChartPerson child = this.DoDescendantsStep(resParent, childRec, level + 1);
 										if (child != null)
 										{
 											child.Father = ft;
@@ -1067,7 +1070,7 @@ namespace GKUI.Charts
 			}
 		}
 
-		private ExtRect GetExpanderRect(ExtRect personRect)
+		private static ExtRect GetExpanderRect(ExtRect personRect)
 		{
 			ExtRect expRt = ExtRect.Create(personRect.Left, personRect.Top - 18, personRect.Left + 16 - 1, personRect.Top - 2);
 			return expRt;
@@ -1090,7 +1093,7 @@ namespace GKUI.Charts
 			try
 			{
 				if (drawMode == DrawMode.dmScreen && person.Selected) {
-					const int penWidth = 2;
+					const float penWidth = 2.0f;
 
                     Color penColor;
 					switch (person.Sex) {
@@ -1106,7 +1109,7 @@ namespace GKUI.Charts
 							penColor = Color.Black;
 							break;
 					}
-					xpen = new Pen(penColor, (float)penWidth);
+					xpen = new Pen(penColor, penWidth);
 				} else {
 					xpen = new Pen(Color.Black, 1f);
 				}
@@ -1115,11 +1118,11 @@ namespace GKUI.Charts
 			}
 			finally
 			{
-				xpen.Dispose();
+                if (xpen != null) xpen.Dispose();
 			}
  
 			if (drawMode == DrawMode.dmScreen && person.CanExpand) {
-				ExtRect expRt = this.GetExpanderRect(rt);
+				ExtRect expRt = GetExpanderRect(rt);
 				gfx.DrawImage(fExpPic, expRt.Left, expRt.Top);
 			}
 
@@ -1457,7 +1460,7 @@ namespace GKUI.Charts
 			if (this.fTreeBounds.Bottom < prt.Bottom) this.fTreeBounds.Bottom = prt.Bottom;
 		}
 		
-		private void ShiftAnc(ref int[] edges, TreeChartPerson person, int offset)
+		private static void ShiftAnc(ref int[] edges, TreeChartPerson person, int offset)
 		{
 			TreeChartPerson pp = person;
 			if (pp == null) return;
@@ -1484,7 +1487,7 @@ namespace GKUI.Charts
 			int offset = (edges[gen] > 0) ? this.fBranchDistance : this.fMargins;
 			int bound = edges[gen] + offset;
 			if (person.Rect.Left <= bound) {
-				this.ShiftAnc(ref edges, person, bound - person.Rect.Left);
+				ShiftAnc(ref edges, person, bound - person.Rect.Left);
 			}
 
 			edges[gen] = person.Rect.Right;
@@ -1809,16 +1812,39 @@ namespace GKUI.Charts
 
 		#region Protected methods
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode), SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
-        protected override void WndProc(ref Message m)
+		protected override bool IsInputKey(Keys keyData)
 		{
-			base.WndProc(ref m);
+			switch (keyData) {
+				case Keys.Add:
+				case Keys.Subtract:
+				case Keys.Back:
+					return true;
+			}
 
-			if (m.Msg == NativeMethods.WM_GETDLGCODE)
-			{
-				m.Result = (IntPtr)(m.Result.ToInt32() | 
-				                    NativeMethods.DLGC_WANTARROWS | NativeMethods.DLGC_WANTTAB | 
-				                    NativeMethods.DLGC_WANTCHARS | NativeMethods.DLGC_WANTALLKEYS);
+			return base.IsInputKey(keyData);
+		}
+
+		protected override void OnKeyDown(KeyEventArgs e)
+		{
+			base.OnKeyDown(e);
+
+			e.Handled = false;
+			switch (e.KeyCode) {
+				case Keys.Add:
+					this.Scale += 0.05f;
+					break;
+
+				case Keys.Subtract:
+					this.Scale -= 0.05f;
+					break;
+
+				case Keys.Back:
+					this.NavPrev();
+					return;
+
+				default:
+					e.Handled = true;
+					break;
 			}
 		}
 
@@ -1890,7 +1916,7 @@ namespace GKUI.Charts
 					break;
 				}
 				
-				ExtRect expRt = this.GetExpanderRect(persRt);
+				ExtRect expRt = GetExpanderRect(persRt);
 				if ((e.Button == MouseButtons.Left) && expRt.Contains(aX, aY)) {
 					person = p;
 					result = MouseAction.maExpand;
@@ -2009,7 +2035,7 @@ namespace GKUI.Charts
 
 						case MouseAction.maExpand:
 							this.DoRootChanged(mPers);
-							this.GenChart(mPers.Rec, TreeChartBox.ChartKind.ckBoth, true);
+							this.GenChart(mPers.Rec, ChartKind.ckBoth, true);
 							break;
 					}
 					break;
@@ -2032,7 +2058,7 @@ namespace GKUI.Charts
         protected override void SetNavObject(object obj)
         {
         	GEDCOMIndividualRecord iRec = obj as GEDCOMIndividualRecord;
-        	this.GenChart(iRec, TreeChartBox.ChartKind.ckBoth, true);
+        	this.GenChart(iRec, ChartKind.ckBoth, true);
         }
 		
 		private void SetSelected(TreeChartPerson value)
@@ -2108,8 +2134,7 @@ namespace GKUI.Charts
 
 		    if (animation) {
 		        TweenLibrary tween = new TweenLibrary();
-		        tween.StartTween(delegate(int newX, int newY) { this.SetScroll(newX, newY); },
-		                         oldX, oldY, dstX, dstY, TweenAnimation.EaseInOutQuad, 20);
+		        tween.StartTween(this.SetScroll, oldX, oldY, dstX, dstY, TweenAnimation.EaseInOutQuad, 20);
 		    } else {
 		        this.SetScroll(dstX, dstY);
 		    }
@@ -2228,7 +2253,7 @@ namespace GKUI.Charts
 				}
 				finally
 				{
-					SysUtils.Free(pic);
+					pic.Dispose();
 				}
 			}
 		}

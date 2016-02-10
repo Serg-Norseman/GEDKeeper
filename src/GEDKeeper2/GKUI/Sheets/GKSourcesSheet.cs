@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
+using BSLib;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -38,22 +39,22 @@ namespace GKUI.Sheets
                 this.DataList.Reset();
                 while (this.DataList.MoveNext()) {
                 	GEDCOMSourceCitation cit = this.DataList.Current as GEDCOMSourceCitation;
-                	GEDCOMSourceRecord sourceRec = cit.Value as GEDCOMSourceRecord;
+                    if (cit == null) continue;
+                	
+                    GEDCOMSourceRecord sourceRec = cit.Value as GEDCOMSourceRecord;
+                    if (sourceRec == null) continue;
 
-                	if (sourceRec != null)
-                	{
-                		GKListItem item = this.AddItem(sourceRec.Originator.Text.Trim(), cit);
-                		item.AddSubItem(sourceRec.FiledByEntry);
-                		item.AddSubItem(cit.Page);
-                		item.AddSubItem(LangMan.LS(GKData.CertaintyAssessments[cit.CertaintyAssessment]));
-                	}
+                    GKListItem item = this.AddItem(sourceRec.Originator.Text.Trim(), cit);
+                    item.AddSubItem(sourceRec.FiledByEntry);
+                    item.AddSubItem(cit.Page);
+                    item.AddSubItem(LangMan.LS(GKData.CertaintyAssessments[cit.CertaintyAssessment]));
                 }
 
 				this.ResizeColumn(1);
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("GKSourcesSheet.UpdateSheet(): " + ex.Message);
+                Logger.LogWrite("GKSourcesSheet.UpdateSheet(): " + ex.Message);
             }
         }
 
@@ -65,6 +66,8 @@ namespace GKUI.Sheets
             if (aBase == null) return;
 
             IGEDCOMStructWithLists _struct = this.DataList.Owner as IGEDCOMStructWithLists;
+            if (_struct == null) return;
+
             GEDCOMSourceCitation aCit = eArgs.ItemData as GEDCOMSourceCitation;
             
 			bool result = false;

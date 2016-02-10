@@ -3,10 +3,8 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
-using GKCommon;
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 

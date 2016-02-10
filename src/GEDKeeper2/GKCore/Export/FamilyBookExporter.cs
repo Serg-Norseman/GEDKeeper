@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using GKCommon;
+
+using BSLib;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore.Interfaces;
 using GKCore.Types;
 using iTextSharp.text;
@@ -246,7 +246,7 @@ namespace GKCore.Export
 			var iEnum = this.fTree.GetEnumerator(GEDCOMRecordType.rtIndividual);
 			while (iEnum.MoveNext(out rec))
 			{
-				GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
+                GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)rec;
 				string text = iRec.GetNameString(true, false);
                 string st;
 

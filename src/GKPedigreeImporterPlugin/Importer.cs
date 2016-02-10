@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-using GKCommon;
+using BSLib;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore.Interfaces;
 using GKCore.Types;
 using Microsoft.Office.Interop.Excel;
@@ -81,17 +80,17 @@ namespace GKPedigreeImporterPlugin
     /// </summary>
     public class Importer : BaseObject
 	{
-		private const bool DEBUG_EXCEL = true;
-		private const bool DEBUG_WORD = true;
+		private const bool DEBUG_EXCEL = false;
+		private const bool DEBUG_WORD = false;
 
     	private readonly IBaseWindow fBase;
-		private readonly GEDCOMTree fTree;
-		private readonly System.Windows.Forms.ListBox.ObjectCollection fLog;
-		private Dictionary<string, GEDCOMIndividualRecord> fPersonsList;
-		private ILangMan fLangMan;
-		private string fFileName;
-
-		private StringList fRawContents;
+		private readonly ILangMan fLangMan;
+        private readonly System.Windows.Forms.ListBox.ObjectCollection fLog;
+        private readonly StringList fRawContents;
+        private readonly GEDCOMTree fTree;
+        
+        private Dictionary<string, GEDCOMIndividualRecord> fPersonsList;
+        private string fFileName;
 
 		// settings
 		public PersonNumbersType NumbersType;
@@ -132,7 +131,7 @@ namespace GKPedigreeImporterPlugin
             if (disposing)
             {
             	if (this.fRawContents != null) this.fRawContents.Dispose();
-                if (this.fPersonsList != null) this.fPersonsList = null;
+                this.fPersonsList = null;
             }
             base.Dispose(disposing);
         }
@@ -192,7 +191,7 @@ namespace GKPedigreeImporterPlugin
 			return str.Trim();
 		}
 
-		private void ParseDatesLine(string tmp, out string bd, out string dd)
+		private static void ParseDatesLine(string tmp, out string bd, out string dd)
 		{
 			bd = "";
 			dd = "";
@@ -225,7 +224,6 @@ namespace GKPedigreeImporterPlugin
 			f_fam = "";
 
 			string tmp = str;
-			tmp = tmp.Replace('', '+'); // some formats of the death date prefix
 
 			string dates = "";
 			if (this.SpecialFormat_1) {
@@ -258,7 +256,7 @@ namespace GKPedigreeImporterPlugin
 			    }
 			}
 
-			this.ParseDatesLine(dates, out bd, out dd);
+			ParseDatesLine(dates, out bd, out dd);
 
 			tmp = RemoveCommaDot(tmp); // &Trim()
 
@@ -403,7 +401,7 @@ namespace GKPedigreeImporterPlugin
 
 				evt.Detail.Date.ParseString(tmp);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				this.fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_ParseError_DateInvalid) + " \"" + date + "\"");
 			}
@@ -428,40 +426,45 @@ namespace GKPedigreeImporterPlugin
 			return result;
 		}
 
-		private GEDCOMIndividualRecord ParsePerson(StringList buf, string str, string p_id, ref int self_id)
+		private GEDCOMIndividualRecord ParsePerson(StringList buffer, string str, ref int selfId)
 		{
 			try
 			{
-				self_id = -1;
-				int mar_id = -1;
+				selfId = -1;
+				int marrNum = -1;
 				int pid_end = 0;
 
 				string persId, parentId, marNum, extData;
 				bool res = this.ParsePersonLine(str, out persId, out parentId, out marNum, out extData, out pid_end);
 				// extData - (в/б)
 
+				if (!res) {
+					return null;
+				}
+
+				if (this.fPersonsList.ContainsKey(persId)) {
+					this.fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_ParseError_NumDuplicate) + " \"" + persId + "\".");
+					return null;
+				}
+
 				if (this.NumbersType == PersonNumbersType.pnKonovalov) {
-					self_id = int.Parse(persId);
-					int.TryParse(marNum, out mar_id);
+					selfId = int.Parse(persId);
+					int.TryParse(marNum, out marrNum);
 				}
 
 				str = str.Substring(pid_end).Trim();
 
-				GEDCOMSex proposeSex = this.GetProposeSex(buf);
+				GEDCOMSex proposeSex = this.GetProposeSex(buffer);
 
 				GEDCOMIndividualRecord result = this.DefinePerson(str, proposeSex);
 
 				this.fPersonsList.Add(persId, result);
 
-				if (buf != null) {
-					buf.Add(str);
-				}
-
 				if (!string.IsNullOrEmpty(parentId))
 				{
 					GEDCOMIndividualRecord parent;
 					if (this.fPersonsList.TryGetValue(parentId, out parent)) {
-						this.AddChild(parent, mar_id, result);
+						this.AddChild(parent, marrNum, result);
 					} else {
 						this.fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_ParseError_AncNotFound) + " \"" + parentId + "\".");
 					}
@@ -472,13 +475,14 @@ namespace GKPedigreeImporterPlugin
 			catch (Exception ex)
 			{
 				this.fBase.Host.LogWrite("Importer.ParsePerson(): " + ex.Message);
-				throw ex;
+				throw;
 			}
 		}
 
 		private GEDCOMSex GetProposeSex(StringList buffer)
 		{
 			GEDCOMSex result = GEDCOMSex.svNone;
+			if (buffer == null) return result;
 
 			try
 			{
@@ -575,7 +579,7 @@ namespace GKPedigreeImporterPlugin
 			}
 		}
 
-		private void ParseBuffer(StringList buffer, ref int prev_id)
+		private void ParseBuffer(StringList buffer, ref int prevId)
 		{
 			try
 			{
@@ -583,21 +587,21 @@ namespace GKPedigreeImporterPlugin
 					return;
 				}
 
-				string p_id = "";
+				string personId = "";
 				string s = buffer[0];
-				if (this.IsPersonLine(s, ref p_id))
+				if (this.IsPersonLine(s, ref personId))
 				{
-					this.fLog.Add("> " + fLangMan.LS(ILS.LSID_PersonParsed) + " \"" + p_id + "\"");
+					this.fLog.Add("> " + fLangMan.LS(ILS.LSID_PersonParsed) + " \"" + personId + "\"");
 
-					int self_id = 0;
-					GEDCOMIndividualRecord curPerson = this.ParsePerson(null, s, p_id, ref self_id);
+					int selfId = 0;
+					GEDCOMIndividualRecord curPerson = this.ParsePerson(buffer, s, ref selfId);
 
-					if (this.NumbersType == PersonNumbersType.pnKonovalov && self_id - prev_id > 1)
+					if (this.NumbersType == PersonNumbersType.pnKonovalov && selfId - prevId > 1)
 					{
 						this.fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_ParseError_LineSeq));
 					}
 
-					prev_id = self_id;
+					prevId = selfId;
 
 					this.CheckBuffer(buffer, curPerson);
 				}
@@ -605,7 +609,7 @@ namespace GKPedigreeImporterPlugin
 			catch (Exception ex)
 			{
 				this.fBase.Host.LogWrite("Importer.ParseBuffer(): " + ex.Message);
-				throw ex;
+				throw;
 			}
 		}
 
@@ -624,11 +628,14 @@ namespace GKPedigreeImporterPlugin
 			}
 		}
 
-		private string PrepareLine(string line)
+		private static string PrepareLine(string line)
 		{
 			string result;
-			result = line.Replace('–', '-').Trim();
-			return result;
+
+			result = line.Replace('–', '-');
+			result = result.Replace('', '+'); // some formats of the death date prefix
+
+			return result.Trim();
 		}
 
 		#region Integral loading
@@ -719,7 +726,7 @@ namespace GKPedigreeImporterPlugin
 					int num = this.fRawContents.Count;
 					for (int i = 0; i < num; i++)
 					{
-						string line = this.PrepareLine(this.fRawContents[i]);
+						string line = PrepareLine(this.fRawContents[i]);
 						RawLine rawLine = this.fRawContents.GetObject(i) as RawLine;
 
 						switch (rawLine.Type) {
@@ -760,7 +767,7 @@ namespace GKPedigreeImporterPlugin
 			catch (Exception ex)
 			{
 				this.fBase.Host.LogWrite("Importer.ImportTextContent(): " + ex.Message);
-				throw ex;
+				throw;
 			}
 		}
 
@@ -787,7 +794,7 @@ namespace GKPedigreeImporterPlugin
 				{
 					excel = new MSOExcel.Application();
 				}
-				catch (Exception ex)
+				catch (Exception)
 				{
 					return false;
 				}
@@ -803,18 +810,17 @@ namespace GKPedigreeImporterPlugin
 				try
 				{
 					// получаем используемое количество строк и столбцов
-					int rows_count = sheet.UsedRange.Rows.Count;
-					int cols_count = sheet.UsedRange.Columns.Count;
+					int rowsCount = sheet.UsedRange.Rows.Count;
+					//int colsCount = sheet.UsedRange.Columns.Count;
 
-					this.fBase.ProgressInit("Загрузка", rows_count);
+					this.fBase.ProgressInit("Загрузка", rowsCount);
 
 					MSOExcel.Range excelRange = sheet.UsedRange;
 					object[,] valueArray = (object[,])excelRange.get_Value(XlRangeValueDataType.xlRangeValueDefault);
 					
-					int prev_id = 0;
-					GEDCOMIndividualRecord i_rec = null;
+					int prevId = 0;
 
-					for (int row = 1; row <= rows_count; row++)
+					for (int row = 1; row <= rowsCount; row++)
 					{
 						string c1 = GetCell(valueArray, row, 1).Trim(); // номер позиции
 						string c2 = GetCell(valueArray, row, 2).Trim(); // номер предка
@@ -834,40 +840,58 @@ namespace GKPedigreeImporterPlugin
 							continue;
 						}
 
-						string s, p_id = "";
-						int self_id = 0;
+						string line, p_id = "";
+						RawLineType lineType = RawLineType.rltComment;
 
 						if (this.IsGenerationLine(s123)) {
-							CheckBuffer(buffer, i_rec);
-							i_rec = null;
-
-							fLog.Add("> " + fLangMan.LS(ILS.LSID_Generation) + " " + s123);
+							line = s123;
+							lineType = RawLineType.rltRomeGeneration;
 						} else {
-							s = s123 + " " + c4 + " " + c5;
+							line = s123 + " " + c4 + " " + c5;
 							if (c6 != "") {
-								s = s + ". " + c6 + ".";
+								line = line + ". " + c6 + ".";
 							}
 
-							s = s.Trim();
+							line = line.Trim();
 
-							if (!IsPersonLine(s, ref p_id)) {
-								buffer.Add(s);
-							} else {
-								CheckBuffer(buffer, i_rec);
-								i_rec = ParsePerson(buffer, s, p_id, ref self_id);
+							if (IsPersonLine(line, ref p_id)) {
+								lineType = RawLineType.rltPerson;
+							}
+						}
 
-								fLog.Add("> "+fLangMan.LS(ILS.LSID_PersonParsed) + " " + p_id + ".");
+						switch (lineType)
+						{
+							case RawLineType.rltComment:
+								buffer.Add(line);
+								break;
 
-								if (self_id - prev_id > 1) {
-									fLog.Add(">>>> "+fLangMan.LS(ILS.LSID_ParseError_LineSeq));
+							case RawLineType.rltPerson:
+							case RawLineType.rltRomeGeneration:
+							case RawLineType.rltEOF:
+								{
+									this.ParseBuffer(buffer, ref prevId);
+									buffer.Clear();
+
+									switch (lineType) {
+										case RawLineType.rltPerson:
+											buffer.Add(line);
+											break;
+										case RawLineType.rltRomeGeneration:
+											this.fLog.Add("> " + fLangMan.LS(ILS.LSID_Generation) + " \"" + line + "\"");
+											break;
+										case RawLineType.rltEOF:
+											this.fLog.Add("> EOF.");
+											break;
+									}
 								}
-
-								prev_id = self_id;
-							}
+								break;
 						}
 
 						this.fBase.ProgressStep(row);
 					}
+
+					// hack: processing last items before end
+					this.ParseBuffer(buffer, ref prevId);
 
 					return true;
 				}
@@ -987,7 +1011,9 @@ namespace GKPedigreeImporterPlugin
 				finally
 				{
 					this.fBase.ProgressDone();
-					wordApp.Quit();
+
+                    object saveOptionsObject = MSOWord.WdSaveOptions.wdDoNotSaveChanges;
+                    wordApp.Quit(ref saveOptionsObject);
 					wordApp = null;
 				}
 			}

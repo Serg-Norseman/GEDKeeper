@@ -1,4 +1,4 @@
-using ExtUtils;
+using BSLib;
 
 namespace GKCommon.GEDCOM
 {
@@ -26,7 +26,7 @@ namespace GKCommon.GEDCOM
 			else
 			{
 				GEDCOMRecord notesRecord = base.Value;
-				if (notesRecord != null && notesRecord is GEDCOMNoteRecord) {
+				if (notesRecord is GEDCOMNoteRecord) {
 					notes = ((notesRecord as GEDCOMNoteRecord).Note);
 				} else {
 					notes = new StringList();
@@ -52,11 +52,6 @@ namespace GKCommon.GEDCOM
 		{
 			string result = this.IsPointer ? base.GetStringValue() : this.fStringValue;
 			return result;
-		}
-
-		public override void Clear()
-		{
-			base.Clear();
 		}
 
 		public override bool IsEmpty()

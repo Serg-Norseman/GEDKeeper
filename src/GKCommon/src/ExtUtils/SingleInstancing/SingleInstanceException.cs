@@ -1,3 +1,7 @@
+/**
+ * Original SingleInstancingWithIpc code by Shy Agam
+ * (http://www.codeproject.com/Articles/19682/A-Pure-NET-Single-Instance-Application-Solution)
+ */
 using System;
 using System.Runtime.Serialization;
 

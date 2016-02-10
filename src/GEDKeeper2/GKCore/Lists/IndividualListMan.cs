@@ -1,6 +1,5 @@
 ﻿using System;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
@@ -192,7 +191,7 @@ namespace GKCore.Lists
 		{
 			bool result = false;
 
-			IndividualListFilter iFilter = fFilter as IndividualListFilter;
+            IndividualListFilter iFilter = (IndividualListFilter)fFilter;
 
 			if ((iFilter.Sex == GEDCOMSex.svNone || this.fRec.Sex == iFilter.Sex)
 			    && (iFilter.Name == "*" || IsMatchesMask(buf_fullname, iFilter.Name))
@@ -204,17 +203,17 @@ namespace GKCore.Lists
 
 				switch (iFilter.FilterLifeMode) {
 					case FilterLifeMode.lmOnlyAlive:
-						if (!isLive) return result;
+						if (!isLive) return false;
 						break;
 
 					case FilterLifeMode.lmOnlyDead:
-						if (isLive) return result;
+						if (isLive) return false;
 						break;
 
 					case FilterLifeMode.lmAliveBefore:
                         AbsDate bdt = GEDCOMUtils.GetAbstractDate(buf_bd);
                         AbsDate ddt = GEDCOMUtils.GetAbstractDate(buf_dd);
-						if ((bdt > this.filter_abd) || (ddt < this.filter_abd)) return result;
+						if ((bdt > this.filter_abd) || (ddt < this.filter_abd)) return false;
 						break;
 
 					case FilterLifeMode.lmTimeLocked:
@@ -225,13 +224,13 @@ namespace GKCore.Lists
 					case FilterGroupMode.gmAll:
 						break;
 					case FilterGroupMode.gmNone:
-						if (this.fRec.Groups.Count != 0) return result;
+						if (this.fRec.Groups.Count != 0) return false;
 						break;
 					case FilterGroupMode.gmAny:
-						if (this.fRec.Groups.Count == 0) return result;
+						if (this.fRec.Groups.Count == 0) return false;
 						break;
 					case FilterGroupMode.gmSelected:
-						if (this.fRec.IndexOfGroup(this.filter_grp) < 0) return result;
+						if (this.fRec.IndexOfGroup(this.filter_grp) < 0) return false;
 						break;
 				}
 
@@ -239,13 +238,13 @@ namespace GKCore.Lists
 					case FilterGroupMode.gmAll:
 						break;
 					case FilterGroupMode.gmNone:
-						if (this.fRec.SourceCitations.Count != 0) return result;
+						if (this.fRec.SourceCitations.Count != 0) return false;
 						break;
 					case FilterGroupMode.gmAny:
-						if (this.fRec.SourceCitations.Count == 0) return result;
+						if (this.fRec.SourceCitations.Count == 0) return false;
 						break;
 					case FilterGroupMode.gmSelected:
-						if (this.fRec.IndexOfSource(this.filter_source) < 0) return result;
+						if (this.fRec.IndexOfSource(this.filter_source) < 0) return false;
 						break;
 				}
 

@@ -1,6 +1,4 @@
 using System.IO;
-using ExtUtils;
-using GKCommon.GEDCOM.Enums;
 
 namespace GKCommon.GEDCOM
 {
@@ -57,7 +55,7 @@ namespace GKCommon.GEDCOM
 					firstPart = "";
 				} else {
 					firstPart = sv.Substring(0, p);
-					firstPart = SysUtils.TrimRight(firstPart);
+					firstPart = GEDCOMUtils.TrimRight(firstPart);
 				}
 
 				int p2 = ((p < 0) ? -1 : sv.IndexOf('/', p + 1));
@@ -75,7 +73,7 @@ namespace GKCommon.GEDCOM
 
 		public void SetNameParts(string firstPart, string surname, string lastPart)
 		{
-			base.StringValue = SysUtils.TrimLeft(firstPart + " ") + "/" + surname + "/" + SysUtils.TrimRight(" " + lastPart);
+			base.StringValue = GEDCOMUtils.TrimLeft(firstPart + " ") + "/" + surname + "/" + GEDCOMUtils.TrimRight(" " + lastPart);
 		}
 
 		private string GetFirstPart()
@@ -91,7 +89,7 @@ namespace GKCommon.GEDCOM
 					result = "";
 				} else {
 					result = sv.Substring(0, p);
-					result = SysUtils.TrimRight(result);
+					result = GEDCOMUtils.TrimRight(result);
 				}
 			}
 
@@ -131,7 +129,7 @@ namespace GKCommon.GEDCOM
 				p = sv.IndexOf('/', p + 1);
 				if (p >= 0)
 				{
-					result = SysUtils.TrimLeft(sv.Substring(p + 1));
+					result = GEDCOMUtils.TrimLeft(sv.Substring(p + 1));
 				}
 			}
 
@@ -152,7 +150,7 @@ namespace GKCommon.GEDCOM
 		{
 			base.StringValue = string.Concat(new string[]
 			{
-				SysUtils.TrimLeft(this.FirstPart + " "), "/", value, "/", SysUtils.TrimRight(" " + this.LastPart)
+				GEDCOMUtils.TrimLeft(this.FirstPart + " "), "/", value, "/", GEDCOMUtils.TrimRight(" " + this.LastPart)
 			});
 		}
 

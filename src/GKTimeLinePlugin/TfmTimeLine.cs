@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKTimeLinePlugin
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public partial class TfmTimeLine : Form
 	{
-    	private Plugin fPlugin;
-		private IBaseWindow fBase;
+    	private readonly Plugin fPlugin;
+
+        private IBaseWindow fBase;
         private int fYearMin;
         private int fYearMax;
         private int fYearCurrent;
@@ -51,7 +51,7 @@ namespace GKTimeLinePlugin
             	IListManager listMan = this.fBase.GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
             	
                 listMan.ExternalFilter = null;
-                (listMan.Filter as IIndividualListFilter).FilterLifeMode = FilterLifeMode.lmAll;
+                ((IIndividualListFilter)listMan.Filter).FilterLifeMode = FilterLifeMode.lmAll;
                 
                 this.fBase.ApplyFilter();
             }
@@ -66,7 +66,7 @@ namespace GKTimeLinePlugin
             {
             	IListManager listMan = this.fBase.GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
 
-                (listMan.Filter as IIndividualListFilter).FilterLifeMode = FilterLifeMode.lmTimeLocked;
+                ((IIndividualListFilter)listMan.Filter).FilterLifeMode = FilterLifeMode.lmTimeLocked;
                 listMan.ExternalFilter = this.FilterHandler;
 
                 this.CollectData();
@@ -88,7 +88,7 @@ namespace GKTimeLinePlugin
 
                 if (rec.RecordType == GEDCOMRecordType.rtIndividual)
                 {
-                    GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
+                    GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)rec;
 
                     int num2 = iRec.Events.Count;
                     for (int k = 0; k < num2; k++)
@@ -158,13 +158,13 @@ namespace GKTimeLinePlugin
             bool result = true;
 
             try
-            {               
-            	GEDCOMIndividualRecord iRec = record as GEDCOMIndividualRecord;
-            	GEDCOMCustomEvent buf_bd = iRec.FindEvent("BIRT");
-                GEDCOMCustomEvent buf_dd = iRec.FindEvent("DEAT");
+            {
+                GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)record;
+            	GEDCOMCustomEvent evtBd = iRec.FindEvent("BIRT");
+                GEDCOMCustomEvent evtDd = iRec.FindEvent("DEAT");
 
-                AbsDate birthDate = GEDCOMUtils.GetAbstractDate(buf_bd);
-                AbsDate deathDate = GEDCOMUtils.GetAbstractDate(buf_dd);
+                AbsDate birthDate = GEDCOMUtils.GetAbstractDate(evtBd);
+                AbsDate deathDate = GEDCOMUtils.GetAbstractDate(evtDd);
                 
                 int bdy = birthDate.Year;
                 int ddy = deathDate.Year;
@@ -179,8 +179,6 @@ namespace GKTimeLinePlugin
 
                 if (this.fYearCurrent > 0) {
                     result = (this.fYearCurrent >= bdy && this.fYearCurrent <= ddy);
-                } else {
-                    result = true;
                 }
             }
             catch (Exception ex)

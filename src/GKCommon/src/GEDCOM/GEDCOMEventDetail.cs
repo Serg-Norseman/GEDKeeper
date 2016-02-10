@@ -1,5 +1,4 @@
 using System.IO;
-using GKCommon.GEDCOM.Enums;
 
 namespace GKCommon.GEDCOM
 {
@@ -53,7 +52,7 @@ namespace GKCommon.GEDCOM
 		protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
 		{
 			base.CreateObj(owner, parent);
-			this.fLevel = (parent as GEDCOMTag).Level;
+            this.fLevel = ((GEDCOMTag)parent).Level;
 		}
 
 		public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)

@@ -25,7 +25,7 @@ namespace GKCommon
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class ExpCalculator : Control, IDisposable
+	public sealed class ExpCalculator : Control
 	{
 		#region Private members
 

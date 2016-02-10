@@ -1,5 +1,3 @@
-using GKCommon.GEDCOM.Enums;
-
 namespace GKCommon.GEDCOM
 {
 	public sealed class GEDCOMTaskRecord : GEDCOMRecord

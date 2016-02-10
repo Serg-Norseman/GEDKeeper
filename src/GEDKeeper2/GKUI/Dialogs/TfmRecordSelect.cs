@@ -2,7 +2,6 @@
 using System.Windows.Forms;
 
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -89,14 +88,14 @@ namespace GKUI.Dialogs
 				iFilter.Sex = this.NeedSex;
 				
 				if (this.fTargetMode == TargetMode.tmParent) {
-					this.fListRecords.ListMan.ExternalFilter = this.ChildSelectorHandler;
+					this.fListRecords.ListMan.ExternalFilter = ChildSelectorHandler;
 				}
 			}
 
 			this.fListRecords.UpdateContents(this.fBase.ShieldState, true, 1);
 		}
 
-        private bool ChildSelectorHandler(GEDCOMRecord record)
+        private static bool ChildSelectorHandler(GEDCOMRecord record)
         {
         	GEDCOMIndividualRecord iRec = record as GEDCOMIndividualRecord;
         	bool result = (iRec.ChildToFamilyLinks.Count == 0);

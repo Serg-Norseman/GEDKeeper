@@ -5,13 +5,14 @@ using System.Drawing.Imaging;
 using System.Windows.Forms;
 
 using ArborGVT;
+using BSLib;
 using CsGL.OpenGL;
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore.Interfaces;
 using GKCore.Types;
 
+// ReSharper disable AccessToStaticMemberViaDerivedType
 namespace GKTreeVizPlugin
 {
 	public sealed class TreeVizControl : OpenGLControl
@@ -27,7 +28,8 @@ namespace GKTreeVizPlugin
 		private const float BaseScale = 10.0f;
 		
 
-		private enum TVPersonType {
+		private enum TVPersonType
+        {
 			ptStem, 
 			ptSpouse,
 			ptPatriarch,
@@ -64,8 +66,16 @@ namespace GKTreeVizPlugin
 				this.BeautyChilds = random.Next(0, 360);
 			}
 		}
-		
-		// unused
+
+        private const byte accumDepth = 0; // OpenGL's Accumulation Buffer Depth, In Bits Per Pixel.
+        private const byte stencilDepth = 0; // OpenGL's Stencil Buffer Depth, In Bits Per Pixel.
+        private const byte zDepth = 16; // OpenGL's Z-Buffer Depth, In Bits Per Pixel.
+        private const byte colorDepth = 16; // The Current Color Depth, In Bits Per Pixel.
+        private const double nearClippingPlane = 0.1f; // GLU's Distance From The Viewer To The Near Clipping Plane (Always Positive).
+        private const double farClippingPlane = 100.0f; // GLU's Distance From The Viewer To The Far Clipping Plane (Always Positive).
+        private const double fovY = 45.0f; // GLU's Field Of View Angle, In Degrees, In The Y Direction.
+        
+        // unused
 		//private float[] LightAmbient = {0.5f, 0.5f, 0.5f, 1.0f};
 		//private float[] LightDiffuse = {1.0f, 1.0f, 1.0f, 1.0f};
 		//private float[] LightPosition = {0.0f, 0.0f, 2.0f, 1.0f};
@@ -73,17 +83,10 @@ namespace GKTreeVizPlugin
 		//private uint[] texture = new uint[3];									// Storage For 3 Textures
 
 		// rendering
-		private byte accumDepth = 0;												// OpenGL's Accumulation Buffer Depth, In Bits Per Pixel.
-		private byte stencilDepth = 0;											// OpenGL's Stencil Buffer Depth, In Bits Per Pixel.
-		private byte zDepth = 16;												// OpenGL's Z-Buffer Depth, In Bits Per Pixel.
-		private byte colorDepth = 16;											// The Current Color Depth, In Bits Per Pixel.
-		private double nearClippingPlane = 0.1f;									// GLU's Distance From The Viewer To The Near Clipping Plane (Always Positive).
-		private double farClippingPlane = 100.0f;								// GLU's Distance From The Viewer To The Far Clipping Plane (Always Positive).
-		private double fovY = 45.0f;												// GLU's Field Of View Angle, In Degrees, In The Y Direction.
-		private float xrot = 0;
-		private float yrot = 0;
-		private float zrot = 0;
-		private float z = -5.0f;
+	    private float xrot;
+		private float yrot;
+		private float zrot;
+		private float z;
 
 		// control
 		private int fHeight;
@@ -102,7 +105,7 @@ namespace GKTreeVizPlugin
 		private float fYearSize;
 
 		// animation
-		private System.Timers.Timer fAnimTimer = null;
+		private System.Timers.Timer fAnimTimer;
 		private bool fBusy;
 		private int fCurYear;
 		private uint fTick;
@@ -123,7 +126,6 @@ namespace GKTreeVizPlugin
 				if (!value) {
 					this.xrot = -75;
 					this.yrot = 0.0F;
-				} else {
 				}
 			}
 		}
@@ -131,7 +133,11 @@ namespace GKTreeVizPlugin
 
 		public TreeVizControl()
 		{
-			this.Dock = DockStyle.Fill;
+            this.xrot = 0;
+            this.yrot = 0;
+            this.zrot = 0;
+            this.z = -5.0f;
+            this.Dock = DockStyle.Fill;
 
 			GL.glShadeModel(GL.GL_SMOOTH);
 			GL.glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
@@ -231,14 +237,14 @@ namespace GKTreeVizPlugin
 			}
 			catch (Exception ex)
 			{
-				SysUtils.LogWrite("TreeVizControl.glDraw(): " + ex.Message);
+				Logger.LogWrite("TreeVizControl.glDraw(): " + ex.Message);
 			}
 		}
 		
 		protected override OpenGLContext CreateContext()
 		{
 			ControlGLContext context = new ControlGLContext(this);
-			DisplayType displayType = new DisplayType(this.colorDepth, this.zDepth, this.stencilDepth, this.accumDepth);
+			DisplayType displayType = new DisplayType(colorDepth, zDepth, stencilDepth, accumDepth);
 			context.Create(displayType, null);
 			return context;
 		}
@@ -260,7 +266,7 @@ namespace GKTreeVizPlugin
 				GL.glMatrixMode(GL.GL_PROJECTION);
 				GL.glLoadIdentity();
 				
-				GL.gluPerspective(this.fovY, (float)this.fWidth / (float)this.fHeight, this.nearClippingPlane, this.farClippingPlane);
+				GL.gluPerspective(fovY, (float)this.fWidth / (float)this.fHeight, nearClippingPlane, farClippingPlane);
 
 				GL.glMatrixMode(GL.GL_MODELVIEW);
 				GL.glLoadIdentity();
@@ -271,7 +277,6 @@ namespace GKTreeVizPlugin
 
 		private uint RetrieveObjectID(int x, int y)
 		{
-			int objectsFound = 0;
 			int[] viewportCoords = {0, 0, 0, 0};    // Массив для хранения экранных координат
 
 			// Переменная для хранения ID обьектов, на которые мы кликнули.
@@ -316,7 +321,7 @@ namespace GKTreeVizPlugin
 
 			// Далее просто вызываем нашу нормальную функцию gluPerspective, точно так же, как
 			// делали при инициализации.
-			GL.gluPerspective(this.fovY, (float) fWidth / (float) fHeight, this.nearClippingPlane, this.farClippingPlane);
+			GL.gluPerspective(fovY, (float) fWidth / (float) fHeight, nearClippingPlane, farClippingPlane);
 
 			GL.glMatrixMode(GL.GL_MODELVIEW); // Возвращаемся в матрицу GL_MODELVIEW
 
@@ -325,7 +330,7 @@ namespace GKTreeVizPlugin
 			// Если мы вернёмся в нормальный режим рендеринга из режима выбора, glRenderMode
 			// возвратит число обьектов, найденных в указанном регионе (в gluPickMatrix()).
 
-			objectsFound = GL.glRenderMode(GL.GL_RENDER); // Вернемся в режим отрисовки и получим число обьектов
+            int objectsFound = GL.glRenderMode(GL.GL_RENDER); // Вернемся в режим отрисовки и получим число обьектов
 
 			GL.glMatrixMode(GL.GL_PROJECTION);    // Вернемся в привычную матрицу проекции
 			GL.glPopMatrix();              // Выходим из матрицы
@@ -607,7 +612,7 @@ namespace GKTreeVizPlugin
         				for (int k = 0; k < num2; k++) {
         					PatriarchObj pat2 = pat1.Links[k];
 
-        					fSys.addEdge(pat1.IRec.XRef, pat2.IRec.XRef, 1);
+        					fSys.addEdge(pat1.IRec.XRef, pat2.IRec.XRef);
         				}
         			}
         		}
@@ -618,7 +623,7 @@ namespace GKTreeVizPlugin
         	}
         	catch (Exception ex)
         	{
-        		SysUtils.LogWrite("TreeVizControl.CreateArborGraph(): " + ex.Message);
+        		Logger.LogWrite("TreeVizControl.CreateArborGraph(): " + ex.Message);
         	}
         }
 
@@ -681,7 +686,7 @@ namespace GKTreeVizPlugin
 			}
 			catch (Exception ex)
 			{
-				SysUtils.LogWrite("TreeVizControl.Arbor_OnStop(): " + ex.Message);
+				Logger.LogWrite("TreeVizControl.Arbor_OnStop(): " + ex.Message);
 			}
 		}
 
@@ -743,7 +748,7 @@ namespace GKTreeVizPlugin
 			}
 			catch (Exception ex)
 			{
-				SysUtils.LogWrite("TreeVizControl.PrepareDescendants(): " + ex.Message);
+				Logger.LogWrite("TreeVizControl.PrepareDescendants(): " + ex.Message);
 			}
 		}
 
@@ -922,7 +927,7 @@ namespace GKTreeVizPlugin
 			}
 			catch (Exception ex)
 			{
-				SysUtils.LogWrite("TreeVizControl.TV_Update(): " + ex.Message);
+				Logger.LogWrite("TreeVizControl.TV_Update(): " + ex.Message);
 			}
 			this.fBusy = false;
 		}
@@ -953,7 +958,7 @@ namespace GKTreeVizPlugin
 			}
 			catch (Exception ex)
 			{
-				SysUtils.LogWrite("TreeVizControl.DrawScene(): " + ex.Message);
+				Logger.LogWrite("TreeVizControl.DrawScene(): " + ex.Message);
 			}
 		}
 
@@ -995,7 +1000,7 @@ namespace GKTreeVizPlugin
 			}
 			catch (Exception ex)
 			{
-				SysUtils.LogWrite("TreeVizControl.DrawArborSystem(): " + ex.Message);
+				Logger.LogWrite("TreeVizControl.DrawArborSystem(): " + ex.Message);
 			}
 		}
 
@@ -1069,7 +1074,7 @@ namespace GKTreeVizPlugin
 			}
 			catch (Exception ex)
 			{
-				SysUtils.LogWrite("TreeVizControl.DrawPerson(): " + ex.Message);
+				Logger.LogWrite("TreeVizControl.DrawPerson(): " + ex.Message);
 			}
 		}
 
@@ -1164,3 +1169,4 @@ namespace GKTreeVizPlugin
 		
 	}
 }
+// ReSharper restore AccessToStaticMemberViaDerivedType

@@ -2,11 +2,11 @@
 using System.Windows.Forms;
 
 using ArborGVT;
+using BSLib.SmartGraph;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
-using SmartGraph;
 
 namespace GKUI
 {
@@ -25,7 +25,7 @@ namespace GKUI
             this.fTipShow = false;
 
         	Graph graph = this.fBase.Context.GetPatriarchsGraph(minGens, false);
-        	this.PL_ConvertGraphToArborSystem(graph, arborViewer1.Sys);
+        	PL_ConvertGraphToArborSystem(graph, arborViewer1.Sys);
 
         	arborViewer1.NodesDragging = true;
         	arborViewer1.start();
@@ -55,7 +55,7 @@ namespace GKUI
 			}
 		}
 
-		private void PL_ConvertGraphToArborSystem(IGraph graph, ArborSystem sys)
+		private static void PL_ConvertGraphToArborSystem(IGraph graph, ArborSystem sys)
 		{
 			foreach (IVertex vtx in graph.Vertices) {
 				ArborNode arbNode = sys.addNode(vtx.Sign);
@@ -66,7 +66,7 @@ namespace GKUI
 			}
 
 			foreach (IEdge edge in graph.Edges) {
-				sys.addEdge(edge.Source.Sign, edge.Target.Sign, 1);
+				sys.addEdge(edge.Source.Sign, edge.Target.Sign);
 			}
 		}
 

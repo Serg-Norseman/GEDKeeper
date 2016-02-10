@@ -7,8 +7,9 @@ namespace GKCore
 {
 	public class BaseSearchStrategy : ISearchStrategy
 	{
-		private String searchPattern;
-		private IWorkWindow workWindow;
+		private readonly String searchPattern;
+		private readonly IWorkWindow workWindow;
+
 		private IList<ISearchResult> currentResults;
 		private ISearchResult curResult;
 		

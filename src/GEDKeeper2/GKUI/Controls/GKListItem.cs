@@ -30,9 +30,9 @@ namespace GKUI.Controls
             return strVal;
         }
 
-        public int CompareTo(object other) 
+        public int CompareTo(object obj) 
         {
-        	GKListItem otherItem = other as GKListItem;
+        	GKListItem otherItem = obj as GKListItem;
         	if (otherItem == null) {
         		return -1;
         	}
@@ -45,11 +45,11 @@ namespace GKUI.Controls
 			{
 				compRes = cv1.CompareTo(cv2);
 			}
-			else if (cv1 != null && cv2 == null)
+			else if (cv1 != null)
 			{
 				compRes = -1;
 			}
-			else if (cv1 == null && cv2 != null)
+			else if (cv2 != null)
 			{
 				compRes = 1;
 			}
@@ -94,9 +94,9 @@ namespace GKUI.Controls
             return strVal;
         }
 
-        public int CompareTo(object other) 
+        public int CompareTo(object obj) 
         {
-        	GKListSubItem otherItem = other as GKListSubItem;
+            GKListSubItem otherItem = obj as GKListSubItem;
         	if (otherItem == null) {
         		return -1;
         	}
@@ -109,11 +109,11 @@ namespace GKUI.Controls
 			{
 				compRes = cv1.CompareTo(cv2);
 			}
-			else if (cv1 != null && cv2 == null)
+			else if (cv1 != null)
 			{
 				compRes = -1;
 			}
-			else if (cv1 == null && cv2 != null)
+			else if (cv2 != null)
 			{
 				compRes = 1;
 			}

@@ -7,14 +7,14 @@ namespace GKTreeVizPlugin
 {
     public partial class frmP2Main : Form
     {
-        private readonly IPlugin plugin;
+        private readonly IPlugin fPlugin;
 
-        public frmP2Main(IPlugin plugin)
+        public frmP2Main(IPlugin fPlugin)
         {
             InitializeComponent();
             
-            this.plugin = plugin;
-            this.Text = plugin.DisplayName;
+            this.fPlugin = fPlugin;
+            this.Text = fPlugin.DisplayName;
         }
 
         private void button1_Click(object sender, EventArgs e)

@@ -1,7 +1,7 @@
 !include "MUI2.nsh"
 
 Name "GEDKeeper2"
-OutFile "GEDKeeper2-v2.4.1.exe"
+OutFile "GEDKeeper2-v2.5.0.exe"
 InstallDir $PROGRAMFILES\GEDKeeper2
 XPStyle on
 ;ShowInstDetails show
@@ -30,8 +30,9 @@ Section "GEDKeeper2 (необходимо)"
   File "GEDKeeper2.exe"
   File "GEDKeeper2.chm"
   File "GKCommon.dll"
-  File "GKInterfaces.dll"
+  File "BSLib.dll"
 
+  File "ArborGVT.dll"
   File "ExcelLibrary.dll"
   File "itextsharp.dll"
   File "lua51.dll"
@@ -47,6 +48,11 @@ Section "GEDKeeper2 (необходимо)"
   SetOutPath "$INSTDIR\langs"
   File ".\langs\readme.txt"
   File ".\langs\russian.sample"
+
+  CreateDirectory "$INSTDIR\plugins"
+  SetOutPath "$INSTDIR\plugins"
+  File ".\plugins\GKCommon.dll"
+  File ".\plugins\BSLib.dll"
 
   ; Write the installation path into the registry
   WriteRegStr HKLM SOFTWARE\GEDKeeper2 "Install_Dir" "$INSTDIR"
@@ -157,6 +163,7 @@ SectionGroup /e "Плагины"
   		File ".\plugins\csgl.dll"
   		File ".\plugins\csgl.native.dll"
 		File ".\plugins\GKTreeVizPlugin.dll"
+		File ".\plugins\ArborGVT.dll"
 	SectionEnd
 
 	Section "Просмотр изображений"
@@ -190,7 +197,9 @@ Section "Uninstall"
   Delete $INSTDIR\GEDKeeper2.exe
   Delete $INSTDIR\GEDKeeper2.chm
   Delete $INSTDIR\GKCommon.dll
-  Delete $INSTDIR\GKInterfaces.dll
+
+  Delete $INSTDIR\ArborGVT.dll
+  Delete $INSTDIR\BSLib.dll
 
   Delete $INSTDIR\ExcelLibrary.dll
   Delete $INSTDIR\itextsharp.dll

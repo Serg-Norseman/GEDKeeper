@@ -4,10 +4,9 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 
+using BSLib;
 using Com.StellmanGreene.CSVReader;
-using GKCommon;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore.Interfaces;
 using GKCore.Types;
 using LuaInterface;

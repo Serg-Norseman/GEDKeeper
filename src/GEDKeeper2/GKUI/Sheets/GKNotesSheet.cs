@@ -3,7 +3,6 @@ using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -33,12 +32,14 @@ namespace GKUI.Sheets
                 this.DataList.Reset();
                 while (this.DataList.MoveNext()) {
                 	GEDCOMNotes note = this.DataList.Current as GEDCOMNotes;
+                    if (note == null) continue;
+
                 	this.AddItem(note.Notes.Text.Trim(), note);
                 }
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("GKNotesSheet.UpdateSheet(): " + ex.Message);
+                Logger.LogWrite("GKNotesSheet.UpdateSheet(): " + ex.Message);
             }
         }
 
@@ -50,6 +51,8 @@ namespace GKUI.Sheets
             if (aBase == null) return;
 
             IGEDCOMStructWithLists _struct = this.DataList.Owner as IGEDCOMStructWithLists;
+            if (_struct == null) return;
+
             GEDCOMNotes aNote = eArgs.ItemData as GEDCOMNotes;
             
             bool result = false;

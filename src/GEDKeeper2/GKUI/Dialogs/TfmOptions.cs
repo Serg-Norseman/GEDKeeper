@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-using GKCommon.GEDCOM.Enums;
+using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -195,6 +195,7 @@ namespace GKUI.Dialogs
         private void PanColor_Click(object sender, EventArgs e)
 		{
             Label pan = (sender as Label);
+            if (pan == null) return;
 
             this.ColorDialog1.FullOpen = true;
             this.ColorDialog1.Color = pan.BackColor;

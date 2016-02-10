@@ -13,8 +13,8 @@ using GKCore.Interfaces;
 [assembly: AssemblyCopyright("Copyright © 2009, Serg V. Zhdanovskih")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+[assembly: CLSCompliant(false)]
 [assembly: ComVisible(false)]
-// The assembly version has following format: Major.Minor.Build.Revision
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 

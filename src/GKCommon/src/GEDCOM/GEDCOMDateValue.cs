@@ -91,7 +91,7 @@ namespace GKCommon.GEDCOM
 			}
 			catch (Exception ex)
 			{
-				SysUtils.LogWrite("GEDCOMDateValue.ParseString(\"" + strValue + "\"): " + ex.Message);
+				Logger.LogWrite("GEDCOMDateValue.ParseString(\"" + strValue + "\"): " + ex.Message);
 				return strValue;
 			}
 		}

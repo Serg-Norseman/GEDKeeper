@@ -11,7 +11,7 @@ namespace GKCommon.GEDCOM
 
 		private struct GEDCOMListEnumerator : IGEDCOMListEnumerator
 		{
-			private GEDCOMList<T> fOwnList;
+			private readonly GEDCOMList<T> fOwnList;
 			private int fIndex;
 			private int fSize;
 
@@ -182,13 +182,11 @@ namespace GKCommon.GEDCOM
 
 		public T Extract(int index)
 		{
-			if (this.fDataList != null) {
-				T result = this.fDataList[index];
-				this.fDataList.RemoveAt(index);
-				return result;
-			} else {
-				return default(T);
-			}
+			if (this.fDataList == null) return default(T);
+
+            T result = this.fDataList[index];
+			this.fDataList.RemoveAt(index);
+			return result;
 		}
 
 		public void SaveToStream(StreamWriter stream)
@@ -222,8 +220,13 @@ namespace GKCommon.GEDCOM
 			if (this.fDataList == null) return;
 
 			int num = this.fDataList.Count;
-			for (int i = 0; i < num; i++) {
-				(this.fDataList[i] as GEDCOMTag).ResetOwner(newOwner);
+			for (int i = 0; i < num; i++)
+			{
+			    GEDCOMTag item = this.fDataList[i] as GEDCOMTag;
+                if (item != null)
+                {
+                    item.ResetOwner(newOwner);
+                }
 			}
 
 			//this._owner = newOwner;

@@ -36,7 +36,7 @@ namespace GKCommon.GEDCOM
 			stream.WriteLine(S);
 		}
 
-		public GEDCOMCustomRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
+	    protected GEDCOMCustomRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
 		{
 		}
 	}

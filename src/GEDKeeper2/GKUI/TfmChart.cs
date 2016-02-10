@@ -5,9 +5,8 @@ using System.Drawing.Printing;
 using System.IO;
 using System.Windows.Forms;
 
-using GKCommon;
+using BSLib.Graphics;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -183,12 +182,10 @@ namespace GKUI
 				GKUtils.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
 				return null;
 			}
-			else
-			{
-				GEDCOMFamilyRecord family = this.fBase.Tree.CreateFamily();
-				family.AddSpouse(spouse);
-				return family;
-			}
+		    
+            GEDCOMFamilyRecord family = this.fBase.Tree.CreateFamily();
+		    family.AddSpouse(spouse);
+		    return family;
 		}
 		
 		private void InternalChildAdd(GEDCOMSex needSex)

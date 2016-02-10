@@ -13,7 +13,7 @@ namespace GKCalendarPlugin
 	/// </summary>
 	public partial class TfmCalendar : Form
 	{
-    	private Plugin fPlugin;
+    	private readonly Plugin fPlugin;
 
 		public TfmCalendar(Plugin plugin) : base()
 		{
@@ -56,28 +56,28 @@ namespace GKCalendarPlugin
 				int year = 0;
 				int month = 0;
 				int day = 0;
-				CalendarConverter.jd_to_julian(jd, ref year, ref month, ref day);
+                CalendarConverter.jd_to_julian(jd, out year, out month, out day);
 				this.AddItem(this.fPlugin.LangMan.LS(PLS.LSID_Cal_Julian), CalendarData.date_to_str(year, month, day, CalendarConverter.DateEra.AD));
 
-				CalendarConverter.jd_to_hebrew(jd, ref year, ref month, ref day);
+                CalendarConverter.jd_to_hebrew(jd, out year, out month, out day);
 				s = day.ToString() + " ";
 				s += CalendarData.HebrewMonths[month - 1];
 				s = s + " " + year.ToString() + ", " + CalendarData.HebrewWeekdays[CalendarConverter.jwday(jd)];
 				this.AddItem(this.fPlugin.LangMan.LS(PLS.LSID_Cal_Hebrew), s);
 
-				CalendarConverter.jd_to_islamic(jd, ref year, ref month, ref day);
+                CalendarConverter.jd_to_islamic(jd, out year, out month, out day);
 				s = day.ToString() + " ";
 				s += CalendarData.IslamicMonths[month - 1];
 				s = s + " " + year.ToString() + ", йаум " + CalendarData.IslamicWeekdays[CalendarConverter.jwday(jd)];
 				this.AddItem(this.fPlugin.LangMan.LS(PLS.LSID_Cal_Islamic), s);
 
-				CalendarConverter.jd_to_persian(jd, ref year, ref month, ref day);
+                CalendarConverter.jd_to_persian(jd, out year, out month, out day);
 				s = day.ToString() + " ";
 				s += CalendarData.PersianMonths[month - 1];
 				s = s + " " + year.ToString() + ", " + CalendarData.PersianWeekdays[CalendarConverter.jwday(jd)];
 				this.AddItem(this.fPlugin.LangMan.LS(PLS.LSID_Cal_Persian), s);
 
-				CalendarConverter.jd_to_indian_civil(jd, ref year, ref month, ref day);
+                CalendarConverter.jd_to_indian_civil(jd, out year, out month, out day);
 				s = day.ToString() + " ";
 				s += CalendarData.IndianCivilMonths[month - 1];
 				s = s + " " + year.ToString() + ", " + CalendarData.IndianCivilWeekdays[CalendarConverter.jwday(jd)];
@@ -85,7 +85,7 @@ namespace GKCalendarPlugin
 
 				int major = 0;
 				int cycle = 0;
-				CalendarConverter.jd_to_bahai(jd, ref major, ref cycle, ref year, ref month, ref day);
+                CalendarConverter.jd_to_bahai(jd, out major, out cycle, out year, out month, out day);
 				s = "Кулл-и Шай' " + major.ToString() + ", Вахид " + cycle.ToString() + ", ";
 				s = s + day.ToString() + " ";
 				s += CalendarData.BahaiMonths[month - 1];

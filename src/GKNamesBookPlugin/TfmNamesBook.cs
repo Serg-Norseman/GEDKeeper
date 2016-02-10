@@ -5,12 +5,8 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
-using ExtUtils;
-using GKCommon;
+using BSLib;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
-using GKCore;
-using GKCore.Interfaces;
 
 /// <summary>
 /// 
@@ -95,7 +91,7 @@ namespace GKNamesBookPlugin
 			int idx = this.cbNames.SelectedIndex;
 			if (idx >= 0 && idx < this.cbNames.Items.Count)
 			{
-			    GKComboItem item = (this.cbNames.Items[idx] as GKComboItem);
+                GKComboItem item = (GKComboItem)this.cbNames.Items[idx];
 				NameRecord rec = item.Data as NameRecord;
 
 				this.mmDesc.Text = "";

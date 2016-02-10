@@ -2,7 +2,6 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-using GKCommon;
 using GKCore.Interfaces;
 
 [assembly: AssemblyTitle("GKCalculatorPlugin")]
@@ -13,8 +12,8 @@ using GKCore.Interfaces;
 [assembly: AssemblyCopyright("Copyright © 2014, Serg V. Zhdanovskih")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+[assembly: CLSCompliant(false)]
 [assembly: ComVisible(false)]
-// The assembly version has following format: Major.Minor.Build.Revision
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
@@ -105,7 +104,7 @@ namespace GKCalculatorPlugin
         void IWidget.WidgetEnable()
         {
         	if (frm != null) {
-        		NativeMethods.EnableWindow(this.frm.Handle, true);
+        		fHost.EnableWindow(this.frm, true);
         	}
         }
 

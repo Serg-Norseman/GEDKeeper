@@ -1371,7 +1371,7 @@ namespace GKCore
 			/* 634 */ "Следующая запись"
 		};
 
-		private static string[] LSList = new string[(int)LSID.LSID_Last + 1];
+		private static readonly string[] LSList = new string[(int)LSID.LSID_Last + 1];
 
 		public static string LS(LSID lsid)
 		{
@@ -1510,7 +1510,7 @@ namespace GKCore
 										XmlAttribute nodeStrVal = strNode.Attributes["value"];
 
 										int id = int.Parse(nodeStrId.InnerText);
-										this.fList.Add(i, nodeStrVal.InnerText);
+										this.fList.Add(id, nodeStrVal.InnerText);
 									}
 								}
 							}

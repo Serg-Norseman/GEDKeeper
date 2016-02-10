@@ -2,9 +2,9 @@
 using System.Drawing;
 using System.Windows.Forms;
 
+using BSLib;
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -272,7 +272,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("TfmPersonEdit.UpdateAssociationsSheet(): " + ex.Message);
+                Logger.LogWrite("TfmPersonEdit.UpdateAssociationsSheet(): " + ex.Message);
             }
 		}
 		
@@ -360,7 +360,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("TfmPersonEdit.UpdateURefsSheet(): " + ex.Message);
+                Logger.LogWrite("TfmPersonEdit.UpdateURefsSheet(): " + ex.Message);
             }
 		}
 		
@@ -466,7 +466,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("TfmPersonEdit.UpdateSpousesSheet(): " + ex.Message);
+                Logger.LogWrite("TfmPersonEdit.UpdateSpousesSheet(): " + ex.Message);
             }
 		}
 		
@@ -529,10 +529,13 @@ namespace GKUI.Dialogs
             					break;
             			}
 
-            			GEDCOMIndividualRecord spouse = sp.Value as GEDCOMIndividualRecord;
-            			this.AcceptChanges();
-            			this.fBase.SelectRecordByXRef(spouse.XRef);
-            			base.Close();
+                        if (sp != null)
+                        {
+                            GEDCOMIndividualRecord spouse = (GEDCOMIndividualRecord)sp.Value;
+                            this.AcceptChanges();
+                            this.fBase.SelectRecordByXRef(spouse.XRef);
+                            base.Close();
+                        }
             		}
             		break;
             }
@@ -570,7 +573,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("TfmPersonEdit.UpdateGroupsSheet(): " + ex.Message);
+                Logger.LogWrite("TfmPersonEdit.UpdateGroupsSheet(): " + ex.Message);
             }
 		}
 		
@@ -764,9 +767,10 @@ namespace GKUI.Dialogs
 
 		private void edSurname_KeyDown(object sender, KeyEventArgs e)
 		{
-			if (e.KeyCode == Keys.Down && e.Control)
+            TextBox tb = (sender as TextBox);
+            
+            if (tb != null && e.KeyCode == Keys.Down && e.Control)
 			{
-				TextBox tb = (sender as TextBox);
 				tb.Text = GEDCOMUtils.NormalizeName(tb.Text);
 			}
 		}

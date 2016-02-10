@@ -1,6 +1,5 @@
 using System;
-using ExtUtils;
-using GKCommon.GEDCOM.Enums;
+using BSLib;
 
 namespace GKCommon.GEDCOM
 {
@@ -144,19 +143,6 @@ namespace GKCommon.GEDCOM
 		{
 			base.CreateObj(owner, parent);
 			this.fName = "HEAD";
-		}
-
-        protected override void Dispose(bool disposing)
-		{
-			if (disposing)
-			{
-			}
-            base.Dispose(disposing);
-		}
-
-		public override void Clear()
-		{
-			base.Clear();
 		}
 
 		public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)

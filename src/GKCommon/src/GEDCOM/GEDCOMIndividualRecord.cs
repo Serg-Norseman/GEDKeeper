@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using GKCommon.GEDCOM.Enums;
+using BSLib;
 
 namespace GKCommon.GEDCOM
 {
@@ -406,15 +406,19 @@ namespace GKCommon.GEDCOM
 
 		public override void MoveTo(GEDCOMRecord targetRecord, bool clearDest)
 		{
-			if (!clearDest)
+            GEDCOMIndividualRecord toRec = targetRecord as GEDCOMIndividualRecord;
+            if (toRec == null)
+            {
+                throw new ArgumentException("argument is null or wrong type", "targetRecord");
+            }
+
+            if (!clearDest)
 			{
 				base.DeleteTag("SEX");
 				base.DeleteTag("_UID");
 			}
 
 			base.MoveTo(targetRecord, clearDest);
-
-			GEDCOMIndividualRecord toRec = targetRecord as GEDCOMIndividualRecord;
 
 			if (this.fPersonalNames != null && clearDest)
 			{
@@ -710,9 +714,9 @@ namespace GKCommon.GEDCOM
 
 		public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
 		{
-			if (tag == null) return 0.0f;
+            GEDCOMIndividualRecord indi = tag as GEDCOMIndividualRecord;
+            if (indi == null) return 0.0f;
 
-			GEDCOMIndividualRecord indi = tag as GEDCOMIndividualRecord;
 			if (this.Sex != indi.Sex) return 0.0f;
 
 			float match = 0.0f;
@@ -754,10 +758,7 @@ namespace GKCommon.GEDCOM
 				float birthMatch = 0.0f;
 				float deathMatch = 0.0f;
 
-				GEDCOMCustomEvent birth = null;
-				GEDCOMCustomEvent death = null;
-				GEDCOMCustomEvent indiBirth = null;
-				GEDCOMCustomEvent indiDeath = null;
+				GEDCOMCustomEvent birth, death, indiBirth, indiDeath;
 
 				this.GetLifeDates(out birth, out death);
 				indi.GetLifeDates(out indiBirth, out indiDeath);

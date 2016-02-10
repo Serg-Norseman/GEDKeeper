@@ -2,8 +2,6 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-using Cyotek.Windows.Forms;
-
 namespace GKCommon.Controls
 {
     public partial class ImageView : UserControl
@@ -26,7 +24,7 @@ namespace GKCommon.Controls
             imageBox.ImageBorderStyle = ImageBoxBorderStyle.FixedSingleGlowShadow;
             imageBox.ImageBorderColor = Color.AliceBlue;
             imageBox.SelectionMode = ImageBoxSelectionMode.Zoom;
-            imageBox.ShowPixelGrid = true;
+            //imageBox.InvertMouse = false;
         }
 
         public void OpenImage(Image image)

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using BSLib;
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore.Interfaces;
 using GKCore.Types;
 using iTextSharp.text;
@@ -36,7 +36,7 @@ namespace GKCore.Export
 
 			public string GetOrderStr()
 			{
-				string order = SysUtils.NumUpdate(this.FamilyOrder, 2);
+				string order = ConvHelper.AdjustNum(this.FamilyOrder, 2);
 				string result = ((this.Parent == null) ? order : this.Parent.GetOrderStr() + order);
 				return result;
 			}
@@ -581,8 +581,8 @@ namespace GKCore.Export
 					PedigreePerson obj = this.fPersonList[i];
 					PedigreePerson obj2 = this.fPersonList[j];
 
-					string i_str = SysUtils.NumUpdate(obj.Level, 2) + obj.GetOrderStr();
-					string k_str = SysUtils.NumUpdate(obj2.Level, 2) + obj2.GetOrderStr();
+					string i_str = ConvHelper.AdjustNum(obj.Level, 2) + obj.GetOrderStr();
+					string k_str = ConvHelper.AdjustNum(obj2.Level, 2) + obj2.GetOrderStr();
 					if (string.Compare(i_str, k_str, false) > 0)
 					{
 						this.fPersonList.Exchange(i, j);

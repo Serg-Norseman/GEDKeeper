@@ -6,19 +6,18 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
+using BSLib;
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore.Types;
 using GKUI.Controls;
 
-/// <summary>
-/// Localization: dirty
-/// </summary>
-
 namespace GKCore
 {
-	public static class GKUtils
+    /// <summary>
+    /// Localization: dirty
+    /// </summary>
+    public static class GKUtils
 	{
 		#region System functions
 		
@@ -131,6 +130,16 @@ namespace GKCore
 
 		#region Aux functions
 
+		public static long Trunc(double value)
+		{
+			return (long)Math.Truncate(value);
+		}
+
+		public static double SafeDiv(double dividend, double divisor)
+		{
+			return ((divisor == (double)0f) ? 0.0 : (dividend / divisor));
+		}
+
 		public static string SexStr(GEDCOMSex sex)
 		{
 			return LangMan.LS(GKData.SexData[(int)sex].NameId);
@@ -235,12 +244,12 @@ namespace GKCore
 			}
 		}
 
-		public static string HyperLink(string XRef, string Text, int Num)
+		public static string HyperLink(string xref, string text, int num)
 		{
-			string result = "~^" + XRef;
-			if (Text != "")
+			string result = "~^" + xref;
+			if (text != "")
 			{
-				result = result + ":" + Text;
+				result = result + ":" + text;
 			}
 			result += "~";
 			return result;
@@ -268,34 +277,34 @@ namespace GKCore
                 string st;
 				switch (record.RecordType) {
 					case GEDCOMRecordType.rtIndividual:
-						st = (record as GEDCOMIndividualRecord).GetNameString(true, false);
+                        st = ((GEDCOMIndividualRecord)record).GetNameString(true, false);
 						break;
 					case GEDCOMRecordType.rtFamily:
-						st = GKUtils.GetFamilyString(record as GEDCOMFamilyRecord);
+                        st = GKUtils.GetFamilyString((GEDCOMFamilyRecord)record);
 						break;
 					case GEDCOMRecordType.rtMultimedia:
-						st = (record as GEDCOMMultimediaRecord).FileReferences[0].Title;
+                        st = ((GEDCOMMultimediaRecord)record).FileReferences[0].Title;
 						break;
 					case GEDCOMRecordType.rtSource:
-						st = (record as GEDCOMSourceRecord).FiledByEntry;
+                        st = ((GEDCOMSourceRecord)record).FiledByEntry;
 						break;
 					case GEDCOMRecordType.rtRepository:
-						st = (record as GEDCOMRepositoryRecord).RepositoryName;
+                        st = ((GEDCOMRepositoryRecord)record).RepositoryName;
 						break;
 					case GEDCOMRecordType.rtGroup:
-						st = (record as GEDCOMGroupRecord).GroupName;
+                        st = ((GEDCOMGroupRecord)record).GroupName;
 						break;
 					case GEDCOMRecordType.rtResearch:
-						st = (record as GEDCOMResearchRecord).ResearchName;
+                        st = ((GEDCOMResearchRecord)record).ResearchName;
 						break;
 					case GEDCOMRecordType.rtTask:
-						st = GKUtils.GetTaskGoalStr(record as GEDCOMTaskRecord);
+                        st = GKUtils.GetTaskGoalStr((GEDCOMTaskRecord)record);
 						break;
 					case GEDCOMRecordType.rtCommunication:
-						st = (record as GEDCOMCommunicationRecord).CommName;
+                        st = ((GEDCOMCommunicationRecord)record).CommName;
 						break;
 					case GEDCOMRecordType.rtLocation:
-						st = (record as GEDCOMLocationRecord).LocationName;
+                        st = ((GEDCOMLocationRecord)record).LocationName;
 						break;
 					default:
 						st = record.XRef;
@@ -310,11 +319,22 @@ namespace GKCore
 
 		public static string GetCorresponderStr(GEDCOMTree tree, GEDCOMCommunicationRecord commRec, bool aLink)
 		{
-			string result = "";
-			GKCommunicationDir dir = GKCommunicationDir.cdFrom;
-			GEDCOMIndividualRecord corresponder = null;
-			commRec.GetCorresponder(ref dir, ref corresponder);
-			if (corresponder != null)
+            if (tree == null)
+            {
+                throw new ArgumentNullException("tree");
+            }
+
+            if (commRec == null)
+            {
+                throw new ArgumentNullException("commRec");
+            }
+
+            string result = "";
+            GKCommunicationDir dir;
+			GEDCOMIndividualRecord corresponder;
+			commRec.GetCorresponder(out dir, out corresponder);
+
+            if (corresponder != null)
 			{
 				string nm = corresponder.GetNameString(true, false);
 				if (aLink)
@@ -643,15 +663,15 @@ namespace GKCore
 			{
 				switch (format) {
 					case DateFormat.dfDD_MM_YYYY:
-						result += day > 0 ? SysUtils.NumUpdate(day, 2) + "." : "__.";
-						result += month > 0 ? SysUtils.NumUpdate(month, 2) + "." : "__.";
+						result += day > 0 ? ConvHelper.AdjustNum(day, 2) + "." : "__.";
+						result += month > 0 ? ConvHelper.AdjustNum(month, 2) + "." : "__.";
 						result += year > 0 ? year.ToString().PadLeft(4, '_') : "____";
 						break;
 
 					case DateFormat.dfYYYY_MM_DD:
 						result += year > 0 ? year.ToString().PadLeft(4, '_') + "." : "____.";
-						result += month > 0 ? SysUtils.NumUpdate(month, 2) + "." : "__.";
-						result += day > 0 ? SysUtils.NumUpdate(day, 2) : "__";
+						result += month > 0 ? ConvHelper.AdjustNum(month, 2) + "." : "__.";
+						result += day > 0 ? ConvHelper.AdjustNum(day, 2) : "__";
 						break;
 
 					case DateFormat.dfYYYY:
@@ -917,7 +937,7 @@ namespace GKCore
 			}
 			catch (Exception ex)
 			{
-				SysUtils.LogWrite("GKUtils.GetEventsYearsDiff(): " + ex.Message);
+				Logger.LogWrite("GKUtils.GetEventsYearsDiff(): " + ex.Message);
 			}
 
 			return result;
@@ -925,15 +945,11 @@ namespace GKCore
 
 		public static string GetLifeExpectancyStr(GEDCOMIndividualRecord iRec)
 		{
-			int result = GetLifeExpectancy(iRec);
-			if (result == -1) {
-				return "";
-			} else {
-				return result.ToString();
-			}
+		    int result = GetLifeExpectancy(iRec);
+		    return (result == -1) ? "" : result.ToString();
 		}
 
-		public static int GetLifeExpectancy(GEDCOMIndividualRecord iRec)
+	    public static int GetLifeExpectancy(GEDCOMIndividualRecord iRec)
 		{
 			int result = -1;
             if (iRec == null) return result;
@@ -948,7 +964,7 @@ namespace GKCore
 			}
 			catch (Exception ex)
 			{
-				SysUtils.LogWrite("GKUtils.GetLifeExpectancy(): " + ex.Message);
+				Logger.LogWrite("GKUtils.GetLifeExpectancy(): " + ex.Message);
 			}
 
 			return result;
@@ -956,15 +972,11 @@ namespace GKCore
 
 		public static string GetAgeStr(GEDCOMIndividualRecord iRec, int toYear)
 		{
-			int result = GetAge(iRec, toYear);
-			if (result == -1) {
-				return "";
-			} else {
-				return result.ToString();
-			}
+		    int result = GetAge(iRec, toYear);
+		    return (result == -1) ? "" : result.ToString();
 		}
 
-		public static int GetAge(GEDCOMIndividualRecord iRec, int toYear)
+	    public static int GetAge(GEDCOMIndividualRecord iRec, int toYear)
 		{
 			int result = -1;
             if (iRec == null) return result;
@@ -986,7 +998,7 @@ namespace GKCore
 			}
 			catch (Exception ex)
 			{
-				SysUtils.LogWrite("GKUtils.GetAge(): " + ex.Message);
+				Logger.LogWrite("GKUtils.GetAge(): " + ex.Message);
 			}
 
 			return result;
@@ -1058,7 +1070,7 @@ namespace GKCore
 			}
 			catch (Exception ex)
 			{
-				SysUtils.LogWrite("GKUtils.GetDaysForBirth(): " + ex.Message);
+				Logger.LogWrite("GKUtils.GetDaysForBirth(): " + ex.Message);
 			}
 			return result;
 		}
@@ -1249,7 +1261,7 @@ namespace GKCore
 			}
 			catch (Exception ex)
 			{
-				SysUtils.LogWrite("GKUtils.GetSpousesDiff(): " + ex.Message);
+				Logger.LogWrite("GKUtils.GetSpousesDiff(): " + ex.Message);
 			}
 
 			return result;
@@ -1306,7 +1318,7 @@ namespace GKCore
 			}
 			catch (Exception ex)
 			{
-				SysUtils.LogWrite("GKUtils.GetFirstbornAge(): " + ex.Message);
+				Logger.LogWrite("GKUtils.GetFirstbornAge(): " + ex.Message);
 			}
 			return result;
 		}
@@ -1352,7 +1364,7 @@ namespace GKCore
 			}
 			catch (Exception ex)
 			{
-				SysUtils.LogWrite("GKUtils.GetMarriageAge(): " + ex.Message);
+				Logger.LogWrite("GKUtils.GetMarriageAge(): " + ex.Message);
 			}
 			return result;
 		}
@@ -1470,6 +1482,38 @@ namespace GKCore
 		#endregion
 
 		#region UI functions
+
+		public static ExtRect GetFormRect(Form form)
+		{
+            if (form == null) return ExtRect.CreateEmpty();
+
+		    int x = form.Left;
+		    int y = form.Top;
+		    int w = form.Width;
+		    int h = form.Height;
+		    Screen scr = Screen.PrimaryScreen;
+		    int mw = scr.WorkingArea.Width;
+		    int mh = scr.WorkingArea.Height;
+		    if (x < 0) x = 0;
+		    if (y < 0) y = 0;
+		    if (w > mw) w = mw;
+		    if (h > mh) h = mh;
+		    return ExtRect.Create(x, y, x + w - 1, y + h - 1);
+		}
+
+        public static void SetFormRect(Form form, ExtRect rt, FormWindowState winState)
+        {
+            // check for new and empty struct
+            if (form != null && !rt.IsEmpty())
+            {
+                form.Left = rt.Left;
+                form.Top = rt.Top;
+                form.Width = rt.GetWidth();
+                form.Height = rt.GetHeight();
+
+                form.WindowState = winState;
+            }
+        }
 
 		public static void ShowMessage(string msg)
 		{
@@ -1701,7 +1745,7 @@ namespace GKCore
 			}
 
 			string suffix;
-			if (aTag != null && aTag is GEDCOMCustomEvent) {
+			if (aTag is GEDCOMCustomEvent) {
 				suffix = ", " + GKUtils.GetEventName(aTag as GEDCOMCustomEvent).ToLower();
 			} else {
 				suffix = "";
@@ -1771,7 +1815,7 @@ namespace GKCore
                 }
             }
             catch (Exception ex) {
-                SysUtils.LogWrite("GKUtils.ShowPersonNamesakes(): " + ex.Message);
+                Logger.LogWrite("GKUtils.ShowPersonNamesakes(): " + ex.Message);
             }
         }
 
@@ -1815,7 +1859,7 @@ namespace GKCore
 			}
 			catch (Exception ex)
 			{
-				SysUtils.LogWrite("GKUtils.ShowSubjectLinks(): " + ex.Message);
+				Logger.LogWrite("GKUtils.ShowSubjectLinks(): " + ex.Message);
 			}
         }
 
@@ -1847,7 +1891,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("GKUtils.RecListMediaRefresh(): " + ex.Message);
+                Logger.LogWrite("GKUtils.RecListMediaRefresh(): " + ex.Message);
             }
         }
 
@@ -1882,7 +1926,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("GKUtils.RecListNotesRefresh(): " + ex.Message);
+                Logger.LogWrite("GKUtils.RecListNotesRefresh(): " + ex.Message);
             }
         }
 
@@ -1918,7 +1962,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("GKUtils.RecListSourcesRefresh(): " + ex.Message);
+                Logger.LogWrite("GKUtils.RecListSourcesRefresh(): " + ex.Message);
             }
         }
 
@@ -1945,7 +1989,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("GKUtils.RecListAssociationsRefresh(): " + ex.Message);
+                Logger.LogWrite("GKUtils.RecListAssociationsRefresh(): " + ex.Message);
             }
         }
 
@@ -1981,7 +2025,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("GKUtils.RecListIndividualEventsRefresh(): " + ex.Message);
+                Logger.LogWrite("GKUtils.RecListIndividualEventsRefresh(): " + ex.Message);
             }
         }
 
@@ -2010,7 +2054,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("GKUtils.RecListFamilyEventsRefresh(): " + ex.Message);
+                Logger.LogWrite("GKUtils.RecListFamilyEventsRefresh(): " + ex.Message);
             }
         }
 
@@ -2039,7 +2083,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("GKUtils.RecListGroupsRefresh(): " + ex.Message);
+                Logger.LogWrite("GKUtils.RecListGroupsRefresh(): " + ex.Message);
             }
         }
 
@@ -2094,7 +2138,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("GKUtils.ShowFamilyInfo(): " + ex.Message);
+                Logger.LogWrite("GKUtils.ShowFamilyInfo(): " + ex.Message);
             }
         }
         
@@ -2144,7 +2188,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("GKUtils.ShowGroupInfo(): " + ex.Message);
+                Logger.LogWrite("GKUtils.ShowGroupInfo(): " + ex.Message);
             }
         }
 
@@ -2185,7 +2229,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("GKUtils.ShowMultimediaInfo(): " + ex.Message);
+                Logger.LogWrite("GKUtils.ShowMultimediaInfo(): " + ex.Message);
             }
         }
 
@@ -2221,7 +2265,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("GKUtils.ShowNoteInfo(): " + ex.Message);
+                Logger.LogWrite("GKUtils.ShowNoteInfo(): " + ex.Message);
             }
         }
 
@@ -2263,7 +2307,7 @@ namespace GKCore
                         }
                         catch (Exception ex)
                         {
-                            SysUtils.LogWrite("GKUtils.ShowPersonInfo().Parents(): " + ex.Message);
+                            Logger.LogWrite("GKUtils.ShowPersonInfo().Parents(): " + ex.Message);
                         }
 
                         try
@@ -2329,7 +2373,7 @@ namespace GKCore
                         }
                         catch (Exception ex)
                         {
-                            SysUtils.LogWrite("GKUtils.ShowPersonInfo().Families(): " + ex.Message);
+                            Logger.LogWrite("GKUtils.ShowPersonInfo().Families(): " + ex.Message);
                         }
 
                         GKUtils.RecListIndividualEventsRefresh(iRec, summary);
@@ -2350,7 +2394,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("GKUtils.ShowPersonInfo(): " + ex.Message);
+                Logger.LogWrite("GKUtils.ShowPersonInfo(): " + ex.Message);
             }
         }
 
@@ -2418,7 +2462,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("GKUtils.ShowSourceInfo(): " + ex.Message);
+                Logger.LogWrite("GKUtils.ShowSourceInfo(): " + ex.Message);
             }
         }
 
@@ -2475,7 +2519,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("GKUtils.ShowRepositoryInfo(): " + ex.Message);
+                Logger.LogWrite("GKUtils.ShowRepositoryInfo(): " + ex.Message);
             }
         }
 
@@ -2548,7 +2592,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("GKUtils.ShowResearchInfo(): " + ex.Message);
+                Logger.LogWrite("GKUtils.ShowResearchInfo(): " + ex.Message);
             }
         }
 
@@ -2581,7 +2625,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("GKUtils.ShowTaskInfo(): " + ex.Message);
+                Logger.LogWrite("GKUtils.ShowTaskInfo(): " + ex.Message);
             }
         }
 
@@ -2617,7 +2661,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("GKUtils.ShowCommunicationInfo(): " + ex.Message);
+                Logger.LogWrite("GKUtils.ShowCommunicationInfo(): " + ex.Message);
             }
         }
 
@@ -2670,7 +2714,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("GKUtils.ShowLocationInfo(): " + ex.Message);
+                Logger.LogWrite("GKUtils.ShowLocationInfo(): " + ex.Message);
             }
         }
 

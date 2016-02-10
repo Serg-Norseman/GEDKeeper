@@ -1,6 +1,6 @@
 ﻿using System;
 using ExtUtils.ScrollableControls;
-using GKCommon;
+using GKCore;
 
 namespace GKUI.Charts
 {

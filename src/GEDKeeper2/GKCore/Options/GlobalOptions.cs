@@ -4,8 +4,9 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
+using BSLib;
 using GKCommon;
-using GKCommon.GEDCOM.Enums;
+using GKCommon.GEDCOM;
 using GKCore.Lists;
 using GKCore.Types;
 
@@ -202,7 +203,7 @@ namespace GKCore.Options
 					}
 					catch (Exception ex)
 					{
-						SysUtils.LogWrite("GlobalOptions.LngPrepareProc(): " + ex.Message);
+						Logger.LogWrite("GlobalOptions.LngPrepareProc(): " + ex.Message);
 						throw;
 					}
 				}

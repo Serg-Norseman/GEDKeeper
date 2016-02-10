@@ -1,5 +1,4 @@
 using System.IO;
-using GKCommon.GEDCOM.Enums;
 
 namespace GKCommon.GEDCOM
 {

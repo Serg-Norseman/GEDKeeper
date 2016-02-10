@@ -2,7 +2,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-using GKCommon;
+using BSLib;
 using GKCore;
 using GKCore.Types;
 
@@ -133,14 +133,14 @@ namespace GKUI.Controls
 		{
 			if (disposing)
 			{
-				SysUtils.Free(this.fList);
-				SysUtils.Free(this.fBtnLinkJump);
-				SysUtils.Free(this.fBtnMoveUp);
-				SysUtils.Free(this.fBtnMoveDown);
-				SysUtils.Free(this.fBtnDelete);
-				SysUtils.Free(this.fBtnEdit);
-				SysUtils.Free(this.fBtnAdd);
-				SysUtils.Free(this.fToolBar);
+				this.fList.Dispose();
+				this.fBtnLinkJump.Dispose();
+				this.fBtnMoveUp.Dispose();
+				this.fBtnMoveDown.Dispose();
+				this.fBtnDelete.Dispose();
+				this.fBtnEdit.Dispose();
+				this.fBtnAdd.Dispose();
+				this.fToolBar.Dispose();
 			}
 			base.Dispose(disposing);
 		}

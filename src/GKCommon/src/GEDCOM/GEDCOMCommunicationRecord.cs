@@ -1,5 +1,3 @@
-using GKCommon.GEDCOM.Enums;
-
 namespace GKCommon.GEDCOM
 {
 	public sealed class GEDCOMCommunicationRecord : GEDCOMRecord
@@ -61,8 +59,9 @@ namespace GKCommon.GEDCOM
         
         #region Auxiliary
 
-		public void GetCorresponder(ref GKCommunicationDir commDir, ref GEDCOMIndividualRecord corresponder)
+		public void GetCorresponder(out GKCommunicationDir commDir, out GEDCOMIndividualRecord corresponder)
 		{
+			commDir = GKCommunicationDir.cdFrom;
 			corresponder = null;
 
             GEDCOMTag corrTag = base.FindTag("FROM", 0);

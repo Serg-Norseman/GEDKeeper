@@ -2,11 +2,9 @@
 using System.IO;
 
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Kinships;
 using GKCore.Types;
-
 using NUnit.Framework;
 
 namespace GKTests
@@ -187,6 +185,14 @@ namespace GKTests
 			Assert.IsFalse(res);
 
 			GEDCOMListTests(iRec);
+
+			//
+
+			long val = GKUtils.Trunc(495.575);
+			Assert.AreEqual(val, 495);
+
+			Assert.AreEqual(3.0f, GKUtils.SafeDiv(9.0f, 3.0f));
+			Assert.AreEqual(0.0f, GKUtils.SafeDiv(9.0f, 0.0f));
 			
 			// access tests
 			Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnNone, ShieldState.ssNone));

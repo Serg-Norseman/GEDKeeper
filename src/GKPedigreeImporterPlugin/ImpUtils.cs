@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Text.RegularExpressions;
-using ExtUtils;
+using BSLib;
 
 namespace GKPedigreeImporterPlugin
 {
@@ -360,34 +359,5 @@ namespace GKPedigreeImporterPlugin
 
 			return true;
 		}
-
-		/*private static Regex PersonId_DAb_RE = new Regex(@"^([0-9]+\.)+");
-		private static Regex PersonId_Kon_RE = new Regex(@"^([0-9]+(\-[0-9]+(\/[0-9]+)?)?\.){1}");
-
-		//private static Regex PersonId_Kon_RE = new Regex(@"^(([0-9]+\-[0-9]+(\/[0-9]+)?)\.){1}");
-
-		public static bool IsPersonLine_DAboville(string str, ref string p_id)
-		{
-			bool result = PersonId_DAb_RE.IsMatch(str);
-
-			if (result) {
-				System.Text.RegularExpressions.Match match = PersonId_DAb_RE.Match(str);
-				p_id = match.Value;
-			}
-
-			return result;
-		}
-
-		public static bool IsPersonLine_Konovalov(string str, ref string p_id)
-		{
-			bool result = PersonId_Kon_RE.IsMatch(str);
-
-			if (result) {
-				System.Text.RegularExpressions.Match match = PersonId_Kon_RE.Match(str);
-				p_id = match.Value;
-			}
-
-			return result;
-		}*/
 	}
 }

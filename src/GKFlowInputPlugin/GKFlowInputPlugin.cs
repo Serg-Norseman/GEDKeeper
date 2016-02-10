@@ -12,8 +12,8 @@ using GKCore.Interfaces;
 [assembly: AssemblyCopyright("Copyright © 2014, Serg V. Zhdanovskih")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+[assembly: CLSCompliant(false)]
 [assembly: ComVisible(false)]
-// The assembly version has following format: Major.Minor.Build.Revision
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
@@ -71,17 +71,14 @@ namespace GKFlowInputPlugin
 
     public class Plugin : IPlugin
     {
-        private string fDisplayName = "GKFlowInputPlugin";
+        private const string DISPLAY_NAME = "GKFlowInputPlugin";
+
         private IHost fHost;
         private ILangMan fLangMan;
 
         public string DisplayName {
         	get {
-        		if (fLangMan == null) {
-        			return this.fDisplayName;
-        		} else {
-        			return this.fLangMan.LS(FLS.LSID_PluginTitle);
-        		}
+                return (fLangMan == null) ? DISPLAY_NAME : this.fLangMan.LS(FLS.LSID_PluginTitle);
         	}
         }
 

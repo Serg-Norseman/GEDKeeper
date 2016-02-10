@@ -64,7 +64,7 @@ namespace GKUI.Controls
 		}
 
 
-		public static bool QueryDouble(string caption, string prompt, ref double value)
+		public static bool QueryDouble(string caption, string prompt, out double value)
 		{
             bool result = false;
             value = 0.0;
@@ -80,7 +80,7 @@ namespace GKUI.Controls
             return result;
         }
 
-		public static bool QueryInt(string caption, string prompt, ref int value)
+        public static bool QueryInt(string caption, string prompt, out int value)
 		{
             bool result = false;
             value = 0;

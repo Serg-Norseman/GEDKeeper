@@ -6,10 +6,10 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
+using BSLib;
 using GKCommon;
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -1070,7 +1070,7 @@ namespace GKUI
 			for (int i = 0; i < num; i++) {
 				GEDCOMRecord rec = this.fTree[i];
 				if (rec.RecordType == GEDCOMRecordType.rtIndividual) {
-					GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
+                    GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)rec;
 					
 					string fullname = iRec.GetNameString(true, false);
 					if (GKUtils.MatchesRegex(fullname, regex)) {
@@ -1209,11 +1209,11 @@ namespace GKUI
 				switch (record.RecordType)
 				{
 					case GEDCOMRecordType.rtIndividual:
-						msg = string.Format(LangMan.LS(LSID.LSID_PersonDeleteQuery), (record as GEDCOMIndividualRecord).GetNameString(true, false));
+                        msg = string.Format(LangMan.LS(LSID.LSID_PersonDeleteQuery), ((GEDCOMIndividualRecord)record).GetNameString(true, false));
 						break;
 
 					case GEDCOMRecordType.rtFamily:
-						msg = string.Format(LangMan.LS(LSID.LSID_FamilyDeleteQuery), GKUtils.GetFamilyString(record as GEDCOMFamilyRecord));
+                        msg = string.Format(LangMan.LS(LSID.LSID_FamilyDeleteQuery), GKUtils.GetFamilyString((GEDCOMFamilyRecord)record));
 						break;
 
 					case GEDCOMRecordType.rtNote:
@@ -1221,35 +1221,35 @@ namespace GKUI
 						break;
 
 					case GEDCOMRecordType.rtMultimedia:
-						msg = string.Format(LangMan.LS(LSID.LSID_MediaDeleteQuery), (record as GEDCOMMultimediaRecord).GetFileTitle());
+                        msg = string.Format(LangMan.LS(LSID.LSID_MediaDeleteQuery), ((GEDCOMMultimediaRecord)record).GetFileTitle());
 						break;
 
 					case GEDCOMRecordType.rtSource:
-						msg = string.Format(LangMan.LS(LSID.LSID_SourceDeleteQuery), (record as GEDCOMSourceRecord).FiledByEntry);
+                        msg = string.Format(LangMan.LS(LSID.LSID_SourceDeleteQuery), ((GEDCOMSourceRecord)record).FiledByEntry);
 						break;
 
 					case GEDCOMRecordType.rtRepository:
-						msg = string.Format(LangMan.LS(LSID.LSID_RepositoryDeleteQuery), (record as GEDCOMRepositoryRecord).RepositoryName);
+                        msg = string.Format(LangMan.LS(LSID.LSID_RepositoryDeleteQuery), ((GEDCOMRepositoryRecord)record).RepositoryName);
 						break;
 
 					case GEDCOMRecordType.rtGroup:
-						msg = string.Format(LangMan.LS(LSID.LSID_GroupDeleteQuery), (record as GEDCOMGroupRecord).GroupName);
+                        msg = string.Format(LangMan.LS(LSID.LSID_GroupDeleteQuery), ((GEDCOMGroupRecord)record).GroupName);
 						break;
 
 					case GEDCOMRecordType.rtResearch:
-						msg = string.Format(LangMan.LS(LSID.LSID_ResearchDeleteQuery), (record as GEDCOMResearchRecord).ResearchName);
+                        msg = string.Format(LangMan.LS(LSID.LSID_ResearchDeleteQuery), ((GEDCOMResearchRecord)record).ResearchName);
 						break;
 
 					case GEDCOMRecordType.rtTask:
-						msg = string.Format(LangMan.LS(LSID.LSID_TaskDeleteQuery), GKUtils.GetTaskGoalStr(record as GEDCOMTaskRecord));
+                        msg = string.Format(LangMan.LS(LSID.LSID_TaskDeleteQuery), GKUtils.GetTaskGoalStr((GEDCOMTaskRecord)record));
 						break;
 
 					case GEDCOMRecordType.rtCommunication:
-						msg = string.Format(LangMan.LS(LSID.LSID_CommunicationDeleteQuery), (record as GEDCOMCommunicationRecord).CommName);
+                        msg = string.Format(LangMan.LS(LSID.LSID_CommunicationDeleteQuery), ((GEDCOMCommunicationRecord)record).CommName);
 						break;
 
 					case GEDCOMRecordType.rtLocation:
-						msg = string.Format(LangMan.LS(LSID.LSID_LocationDeleteQuery), (record as GEDCOMLocationRecord).LocationName);
+                        msg = string.Format(LangMan.LS(LSID.LSID_LocationDeleteQuery), ((GEDCOMLocationRecord)record).LocationName);
 						break;
 				}
 

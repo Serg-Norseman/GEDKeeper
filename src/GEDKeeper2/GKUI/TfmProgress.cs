@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Threading;
 using System.Windows.Forms;
 
-using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
 
@@ -158,7 +157,7 @@ namespace GKUI
 			if (pos == 0) pos = 1;
 
 			TimeSpan pass_time = DateTime.Now - this.StartTime;
-			TimeSpan rest_time = new TimeSpan(SysUtils.Trunc((pass_time.Ticks / pos) * (max - pos)));
+			TimeSpan rest_time = new TimeSpan((long)Math.Truncate((pass_time.Ticks / pos) * (max - pos)));
 			TimeSpan sum_time = pass_time + rest_time;
 
 			this.Label7.Text = TimeSpanToString(pass_time);

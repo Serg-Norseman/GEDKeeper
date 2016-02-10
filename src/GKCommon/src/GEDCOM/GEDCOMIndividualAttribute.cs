@@ -1,4 +1,4 @@
-using ExtUtils;
+using BSLib;
 
 namespace GKCommon.GEDCOM
 {

@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 
-using GKCommon;
+using BSLib;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Options;
@@ -75,9 +75,7 @@ namespace GKCore.Export
 
 		protected void ShowResult()
 		{
-			if (File.Exists(this.fPath)) {
-				Process.Start(this.fPath);
-			}
+            SysUtils.LoadExtFile(this.fPath);
 		}
 
 		protected static void PrepareSpecIndex(StringList index, string val, GEDCOMIndividualRecord iRec)

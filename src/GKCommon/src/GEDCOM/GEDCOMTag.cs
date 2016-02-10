@@ -2,6 +2,8 @@ using System;
 using System.Globalization;
 using System.IO;
 
+using BSLib;
+
 namespace GKCommon.GEDCOM
 {
 	public class GEDCOMTag : GEDCOMObject
@@ -67,7 +69,7 @@ namespace GKCommon.GEDCOM
 			this.fTags = new GEDCOMList<GEDCOMTag>(this);
 			this.fStringValue = "";
 
-			if (parent != null && parent is GEDCOMTag) {
+			if (parent is GEDCOMTag) {
 				this.fLevel = (parent as GEDCOMTag).Level + 1;
 			} else {
 				this.fLevel = 0;
@@ -145,7 +147,7 @@ namespace GKCommon.GEDCOM
 			}
 			catch (Exception ex)
 			{
-				SysUtils.LogWrite("GEDCOMTag.InternalCreateTag(): " + ex.Message);
+				Logger.LogWrite("GEDCOMTag.InternalCreateTag(): " + ex.Message);
 			}
 			return tag;
 		}
@@ -210,7 +212,6 @@ namespace GKCommon.GEDCOM
 			string S = ((pos >= 0) ? SU.Substring(0, pos) : SU);
 
 			GEDCOMTag tempTag = this;
-			GEDCOMTag resultTag;
 
 			while (true)
 			{
@@ -220,7 +221,7 @@ namespace GKCommon.GEDCOM
 
 				if (index >= tempTag.Count) break;
 
-				resultTag = tempTag[index];
+                GEDCOMTag resultTag = tempTag[index];
 				tempTag = resultTag;
 
 				pos = SU.IndexOf('\\');
@@ -239,8 +240,7 @@ namespace GKCommon.GEDCOM
 				if (SU == "") return resultTag;
 			}
 
-			resultTag = null;
-			return resultTag;
+			return null;
 		}
 
 		public GEDCOMTag TagClass(string tagName, TagConstructor tagConstructor)
@@ -292,8 +292,8 @@ namespace GKCommon.GEDCOM
 
 		public int GetTagIntegerValue(string tagName, int defValue)
 		{
-			string S = this.GetTagStringValue(tagName);
-			int result = ((S == "") ? defValue : SysUtils.ParseInt(S, defValue));
+			string str = this.GetTagStringValue(tagName);
+			int result = ((str == "") ? defValue : ConvHelper.ParseInt(str, defValue));
 			return result;
 		}
 
@@ -305,8 +305,8 @@ namespace GKCommon.GEDCOM
 
 		public double GetTagFloatValue(string tagName, double defValue)
 		{
-			string S = this.GetTagStringValue(tagName);
-			double result = ((S == "") ? defValue : SysUtils.ParseFloat(S, defValue));
+			string str = this.GetTagStringValue(tagName);
+			double result = ((str == "") ? defValue : ConvHelper.ParseFloat(str, defValue));
 			return result;
 		}
 
@@ -327,9 +327,9 @@ namespace GKCommon.GEDCOM
 
 		public void SetTagStringValue(string tagName, string value)
 		{
-			string SU = tagName;
+			string su = tagName;
 
-			GEDCOMTag P = this.FindTag(SU, 0);
+			GEDCOMTag P = this.FindTag(su, 0);
 
 			if (P != null)
 			{
@@ -338,26 +338,26 @@ namespace GKCommon.GEDCOM
 			else
 			{
 				GEDCOMTag O = this;
-				while (SU != "")
+				while (su != "")
 				{
 					string S;
 
-					int Index = SU.IndexOf('\\');
-					if (Index >= 0)
+					int index = su.IndexOf('\\');
+					if (index >= 0)
 					{
-						S = SU.Substring(0, Index);
-						SU = SU.Substring(Index + 1);
+						S = su.Substring(0, index);
+						su = su.Substring(index + 1);
 					}
 					else
 					{
-						S = SU;
-						SU = "";
+						S = su;
+						su = "";
 					}
 
 					P = O.FindTag(S, 0);
 					if (P == null)
 					{
-						if (SU == "")
+						if (su == "")
 						{
 							P = O.AddTag(S, value, null);
 						}
@@ -368,7 +368,7 @@ namespace GKCommon.GEDCOM
 					}
 					else
 					{
-						if (SU == "")
+						if (su == "")
 						{
 							P.StringValue = value;
 						}
@@ -573,14 +573,14 @@ namespace GKCommon.GEDCOM
 
 		protected virtual void SaveValueToStream(StreamWriter stream)
 		{
-			string S = this.fLevel.ToString() + " " + this.fName;
+			string str = this.fLevel.ToString() + " " + this.fName;
 
-			string Val = this.StringValue;
-			if (!string.IsNullOrEmpty(Val)) {
-				S = S + " " + Val;
+			string val = this.StringValue;
+			if (!string.IsNullOrEmpty(val)) {
+				str = str + " " + val;
 			}
 
-			stream.WriteLine(S);
+			stream.WriteLine(str);
 		}
 
 		public virtual void SaveToStream(StreamWriter stream)

@@ -1,4 +1,6 @@
 ﻿using System;
+
+using BSLib;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
@@ -73,7 +75,7 @@ namespace GKCore.Export
 					int num = this.fPatList.Count;
 					for (int i = 0; i < num; i++) {
 						String iName = this.fPatList[i];
-						GEDCOMIndividualRecord iRec = this.fPatList.GetObject(i) as GEDCOMIndividualRecord;
+						//GEDCOMIndividualRecord iRec = this.fPatList.GetObject(i) as GEDCOMIndividualRecord;
 						fDocument.Add(new Paragraph(iName, fTextFont) { Alignment = Element.ALIGN_LEFT, SpacingBefore = 2f, SpacingAfter = 2f });
 					}
 					

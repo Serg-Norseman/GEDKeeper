@@ -2,9 +2,8 @@
 using System.IO;
 using System.Text;
 
-using GKCommon;
+using BSLib;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore;
 using NUnit.Framework;
 
@@ -60,7 +59,19 @@ namespace GKTests
 			GEDCOMObject obj = new GEDCOMObject();
 			obj.ExtData = this;
 			Assert.AreEqual(obj.ExtData, this);
-			SysUtils.Free(obj);
+			obj.Dispose();
+
+			//
+
+			string str;
+			str = GEDCOMUtils.TrimLeft("	test1");
+			Assert.AreEqual(str, "test1");
+
+			str = GEDCOMUtils.TrimLeft(null);
+			Assert.AreEqual(str, "");
+
+			str = GEDCOMUtils.TrimRight("test2		");
+			Assert.AreEqual(str, "test2");
 			
 			//
 			string gcStr = GEDCOMUtils.StrToGEDCOMDate("20/12/1980", false);
@@ -1762,12 +1773,12 @@ namespace GKTests
 			GEDCOMIndividualRecord corr = null;
 
 			comRec.SetCorresponder(GKCommunicationDir.cdFrom, iRec);
-			comRec.GetCorresponder(ref dir, ref corr);
+			comRec.GetCorresponder(out dir, out corr);
 			Assert.AreEqual(GKCommunicationDir.cdFrom, dir);
 			Assert.AreEqual(iRec, corr);
 			
 			comRec.SetCorresponder(GKCommunicationDir.cdTo, iRec);
-			comRec.GetCorresponder(ref dir, ref corr);
+			comRec.GetCorresponder(out dir, out corr);
 			Assert.AreEqual(GKCommunicationDir.cdTo, dir);
 			Assert.AreEqual(iRec, corr);
 			

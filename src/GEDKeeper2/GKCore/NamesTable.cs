@@ -3,9 +3,9 @@ using System.Collections;
 using System.IO;
 using System.Text;
 
+using BSLib;
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore.Interfaces;
 using GKCore.Types;
 
@@ -213,7 +213,7 @@ namespace GKCore
 					}
 				}
 			} catch (Exception ex) {
-				SysUtils.LogWrite("NamesTable.ImportName(): " + ex.Message);
+				Logger.LogWrite("NamesTable.ImportName(): " + ex.Message);
 			}
 		}
 	}

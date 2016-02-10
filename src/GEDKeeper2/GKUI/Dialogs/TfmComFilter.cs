@@ -57,7 +57,7 @@ namespace GKUI.Dialogs
 
         #region Private functions
 
-        private ConditionKind GetCondByName(string condName)
+        private static ConditionKind GetCondByName(string condName)
 		{
 			ConditionKind res = ConditionKind.ck_NotEq;
 
@@ -120,7 +120,7 @@ namespace GKUI.Dialogs
 
 			this.dataGridView1.Rows.Clear();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-			this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+			this.dataGridView1.Columns.AddRange(new DataGridViewColumn[] {
 			                     	AddComboColumn("FField", LangMan.LS(LSID.LSID_Field), this.fFields, 200),
 			                     	AddComboColumn("FCondition", LangMan.LS(LSID.LSID_Condition), GKData.CondSigns, 150),
 			                     	AddTextColumn("FValue", LangMan.LS(LSID.LSID_Value), 300)});
@@ -142,11 +142,7 @@ namespace GKUI.Dialogs
 				int col = (column as IConvertible).ToByte(null);
 				DataType dataType = fListMan.GetColumnDataType(col);
 				
-				if (dataType == DataType.dtGEDCOMDate) {
-					return true;
-				} else {
-					return false;
-				}
+				return (dataType == DataType.dtGEDCOMDate);
 			} else {
 				return false;
 			}
@@ -202,11 +198,11 @@ namespace GKUI.Dialogs
 				int r = this.dataGridView1.Rows.Add();
 				DataGridViewRow row = dataGridView1.Rows[r];
 
-				int condIndex = ((IConvertible)fcond.condition).ToByte(null);
+				int condIndex = ((IConvertible)fcond.Condition).ToByte(null);
 
-				row.Cells[0].Value = this.fFields[fcond.col_index + 1];
+				row.Cells[0].Value = this.fFields[fcond.ColumnIndex + 1];
 				row.Cells[1].Value = GKData.CondSigns[condIndex];
-				row.Cells[2].Value = fcond.value.ToString();
+				row.Cells[2].Value = fcond.Value.ToString();
 			}
 
 			//this.dataGridView1.AutoResizeColumns();

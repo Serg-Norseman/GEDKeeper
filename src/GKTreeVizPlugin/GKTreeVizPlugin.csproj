@@ -7,7 +7,7 @@
     <ProjectGuid>{29156CC1-79B1-473D-93F4-62340686FFC3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GKSamplePlugin2</RootNamespace>
+    <RootNamespace>GKTreeVizPlugin</RootNamespace>
     <AssemblyName>GKTreeVizPlugin</AssemblyName>
     <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
     <FileAlignment>4096</FileAlignment>
@@ -29,6 +29,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>..\gk2rules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -67,6 +68,7 @@
       <DependentUpon>frmP2Main.cs</DependentUpon>
     </Compile>
     <Compile Include="GKTreeVizPlugin.cs" />
+    <Compile Include="HighResolutionTimer.cs" />
     <Compile Include="TreeVizControl.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -80,13 +82,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BSLib\BSLib.csproj">
+      <Project>{30D11BCB-EAAE-44B7-BFBB-78BAA3963362}</Project>
+      <Name>BSLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GKCommon\GKCommon.csproj">
       <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
       <Name>GKCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GKInterfaces\GKInterfaces.csproj">
-      <Project>{B86F8B3B-E1CD-4A00-A73B-2D454924B8D2}</Project>
-      <Name>GKInterfaces</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

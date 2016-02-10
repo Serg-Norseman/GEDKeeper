@@ -11,7 +11,7 @@ namespace GKUI.Controls
 	/// </summary>
 	public sealed class SearchPanel : Form, ILocalization
 	{
-		private IWorkWindow fWorkWindow;
+		private readonly IWorkWindow fWorkWindow;
 		private ISearchStrategy fStrategy;
 
 		private TextBox txtSearchPattern;

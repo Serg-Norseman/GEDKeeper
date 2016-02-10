@@ -7,7 +7,7 @@ namespace GKSamplePlugin
 {
     public partial class PluginForm : Form
     {
-        IPlugin plugin;
+        private readonly IPlugin plugin;
 
         public PluginForm(IPlugin plugin)
         {

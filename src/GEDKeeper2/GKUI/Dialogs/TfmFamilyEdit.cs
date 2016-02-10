@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
 
+using BSLib;
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -178,7 +178,7 @@ namespace GKUI.Dialogs
                 foreach (GEDCOMPointer ptr in this.fFamily.Childrens) {
                     idx += 1;
 
-                    GEDCOMIndividualRecord child = ptr.Value as GEDCOMIndividualRecord;
+                    GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)ptr.Value;
 
                     GKListItem item = this.fChildsList.AddItem(idx, child);
                     item.AddSubItem(child.GetNameString(true, false));
@@ -190,7 +190,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("TfmFamilyEdit.UpdateChildsSheet(): " + ex.Message);
+                Logger.LogWrite("TfmFamilyEdit.UpdateChildsSheet(): " + ex.Message);
             }
 		}
 

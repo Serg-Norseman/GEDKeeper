@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-using GKCommon;
+using BSLib;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Maps;
@@ -20,7 +19,7 @@ namespace GKUI
 		private class TPlaceRef
 		{
 			public readonly DateTime Date;
-			public GEDCOMCustomEvent Event;
+			public readonly GEDCOMCustomEvent Event;
 
 			public TPlaceRef(GEDCOMCustomEvent evt)
 			{

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
-using GKCommon;
+
+using BSLib;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 using GKUI.Controls;
@@ -66,8 +66,8 @@ namespace GKUI.Dialogs
 			{
 				GEDCOMRecord rec = this.fBase.Tree[i];
 			    if (rec.RecordType != GEDCOMRecordType.rtIndividual) continue;
-			    
-                GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
+
+                GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)rec;
 			    string nm = iRec.GetNameString(true, false);
 
 			    int num2 = iRec.Events.Count;

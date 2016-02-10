@@ -3,17 +3,14 @@ using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 
-using ExtUtils;
-using GKCommon;
 using GKCore.Interfaces;
-
-/// <summary>
-/// Localization: dirty
-/// </summary>
 
 namespace GKTreeVizPlugin
 {
-	public sealed class TreeVizViewer : Form
+    /// <summary>
+    /// Localization: dirty
+    /// </summary>
+    public sealed class TreeVizViewer : Form
 	{
 		private delegate void RenderDelegate();
 
@@ -71,7 +68,7 @@ namespace GKTreeVizPlugin
 			this.ResumeLayout();
 
 			this.fHighresTimer = new HighResolutionTimer();
-			this.fBackThread = new System.Threading.Thread(DoRenderThread);
+			this.fBackThread = new Thread(DoRenderThread);
 			this.fBackThread.IsBackground = true;
 
 			this.fBase = aBase;

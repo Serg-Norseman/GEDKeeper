@@ -1,5 +1,3 @@
-using GKCommon.GEDCOM.Enums;
-
 namespace GKCommon.GEDCOM
 {
 	// FIXME: возможны многочисленные нарушения стандарта, перепроверить вложенность тэгов

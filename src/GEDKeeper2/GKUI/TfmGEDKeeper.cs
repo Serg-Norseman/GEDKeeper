@@ -7,10 +7,10 @@ using System.Reflection;
 using System.Security.Permissions;
 using System.Windows.Forms;
 
+using ExtUtils.MapiMail;
 using ExtUtils.SingleInstancing;
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Export;
 using GKCore.Interfaces;
@@ -25,7 +25,7 @@ namespace GKUI
 	/// <summary>
 	/// 
 	/// </summary>
-	public partial class TfmGEDKeeper : Form, IHost, ISingleInstanceEnforcer
+    public sealed partial class TfmGEDKeeper : Form, IHost, ISingleInstanceEnforcer
 	{
 		private delegate void OnMessageReceivedInvoker(MessageEventArgs e);
 
@@ -41,6 +41,7 @@ namespace GKUI
 
 		private readonly List<WidgetInfo> fActiveWidgets;
 		private string[] fCommandArgs;
+		private string fLogFilename;
 
 		private static TfmGEDKeeper fInstance = null;
 
@@ -108,7 +109,8 @@ namespace GKUI
 
 		private void Form_Load(object sender, EventArgs e)
 		{
-			SysUtils.LogInit(this.GetAppDataPath() + "GEDKeeper2.log");
+			this.fLogFilename = this.GetAppDataPath() + "GEDKeeper2.log"; 
+			Logger.LogInit(this.fLogFilename);
 
 			this.fOptions = GlobalOptions.Instance;
 			this.fOptions.LoadFromFile(this.GetAppDataPath() + "GEDKeeper2.ini");
@@ -145,10 +147,10 @@ namespace GKUI
 		{
 			this.UnloadPlugins();
 
-			this.fOptions.MWinRect = SysUtils.GetFormRect(this);
+			this.fOptions.MWinRect = GKUtils.GetFormRect(this);
 			this.fOptions.MWinState = base.WindowState;
 
-			NativeMethods.HtmlHelp(IntPtr.Zero, null, 18u, 0u);
+			SysUtils.HtmlHelp(IntPtr.Zero, null, 18u, 0u);
 
 			this.fNamesTable.SaveToFile(this.GetAppDataPath() + "GEDKeeper2.nms");
 			this.fNamesTable.Dispose();
@@ -216,7 +218,7 @@ namespace GKUI
 					}
 				}
 			} catch (Exception ex) {
-				SysUtils.LogWrite("TfmGEDKeeper.Form_DragDrop(): " + ex.Message);
+				this.LogWrite("TfmGEDKeeper.Form_DragDrop(): " + ex.Message);
 			}
 		}
 
@@ -225,7 +227,7 @@ namespace GKUI
 		{
 			base.WndProc(ref m);
 
-			if (m.Msg == NativeMethods.WM_KEEPMODELESS) {
+			if (m.Msg == SysUtils.WM_KEEPMODELESS) {
 				foreach (WidgetInfo widgetInfo in this.fActiveWidgets) {
 					widgetInfo.Widget.WidgetEnable();
 				}
@@ -357,7 +359,7 @@ namespace GKUI
 			if (form == null) return DialogResult.None;
 
 			if (keepModeless) {
-				NativeMethods.PostMessage(this.Handle, NativeMethods.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
+				SysUtils.PostMessage(this.Handle, SysUtils.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
 			}
 
 			return form.ShowDialog();
@@ -415,7 +417,7 @@ namespace GKUI
 			if (idx >= 0) {
 				MRUFile mf = this.fOptions.MRUFiles[idx];
 
-				mf.WinRect = SysUtils.GetFormRect(frm);
+				mf.WinRect = GKUtils.GetFormRect(frm);
 				mf.WinState = frm.WindowState;
 			}
 		}
@@ -425,7 +427,7 @@ namespace GKUI
 			int idx = this.fOptions.MRUFiles_IndexOf(fileName);
 			if (idx >= 0) {
 				MRUFile mf = this.fOptions.MRUFiles[idx];
-				SysUtils.SetFormRect(aBase as Form, mf.WinRect, mf.WinState);
+				GKUtils.SetFormRect(aBase as Form, mf.WinRect, mf.WinState);
 			}
 		}
 
@@ -442,7 +444,7 @@ namespace GKUI
 				this.tbPrev.Enabled = (workWin != null && workWin.NavCanBackward());
 				this.tbNext.Enabled = (workWin != null && workWin.NavCanForward());
 			} catch (Exception ex) {
-				SysUtils.LogWrite("TfmGEDKeeper.UpdateNavControls(): " + ex.Message);
+				this.LogWrite("TfmGEDKeeper.UpdateNavControls(): " + ex.Message);
 			}
 		}
 
@@ -507,7 +509,7 @@ namespace GKUI
 
 				this.StatusBar.Invalidate();
 			} catch (Exception ex) {
-				SysUtils.LogWrite("TfmGEDKeeper.UpdateControls(): " + ex.Message);
+				this.LogWrite("TfmGEDKeeper.UpdateControls(): " + ex.Message);
 			}
 		}
 
@@ -577,7 +579,7 @@ namespace GKUI
 					}
 				}
 			} catch (Exception ex) {
-				SysUtils.LogWrite("TfmGEDKeeper.CriticalSave(): " + ex.Message);
+				this.LogWrite("TfmGEDKeeper.CriticalSave(): " + ex.Message);
 			}
 		}
 
@@ -892,12 +894,17 @@ namespace GKUI
 
 		private void miLogSendClick(object sender, EventArgs e)
 		{
-			SysUtils.LogSend(GKData.AppMail, "GEDKeeper: error notification", "This automatic notification of error.");
+			if (File.Exists(this.fLogFilename)) {
+				MapiMailMessage message = new MapiMailMessage("GEDKeeper: error notification", "This automatic notification of error.");
+				message.Recipients.Add(GKData.AppMail);
+				message.Files.Add(this.fLogFilename);
+				message.ShowDialog();
+			}
 		}
 
 		private void miLogViewClick(object sender, EventArgs e)
 		{
-			SysUtils.LogView();
+			SysUtils.LoadExtFile(this.fLogFilename);
 		}
 
 		private void miAboutClick(object sender, EventArgs e)
@@ -908,7 +915,7 @@ namespace GKUI
 		public void ShowHelpTopic(string topic)
 		{
 			string fns = GKUtils.GetAppPath() + "GEDKeeper2.chm" + topic;
-			NativeMethods.HtmlHelp(this.Handle, fns, 0u, 0u);
+			SysUtils.HtmlHelp(this.Handle, fns, 0u, 0u);
 		}
 
 		private void miGenResourcesClick(object sender, EventArgs e)
@@ -1126,8 +1133,7 @@ namespace GKUI
 
 		private void LoadPlugins(string path)
 		{
-			AppDomain.CurrentDomain.AppendPrivatePath(path);
-			//AppDomain.CurrentDomain.SetupInformation.PrivateBinPath = path;
+			AppDomain.CurrentDomain.SetupInformation.PrivateBinPath = path;
 
 			this.fPlugins = new List<IPlugin>();
 
@@ -1142,7 +1148,8 @@ namespace GKUI
 
 					try
 					{
-						asm = Assembly.LoadFile(pfn);
+                        AssemblyName assemblyName = AssemblyName.GetAssemblyName(pfn);
+                        asm = Assembly.Load(assemblyName);
 					} catch {
 						asm = null;
 						// block exceptions for bad or non-dotnet assemblies
@@ -1161,7 +1168,7 @@ namespace GKUI
 						this.fPlugins.Add(plugin);
 					}
 				} catch (Exception ex) {
-					SysUtils.LogWrite("TfmGEDKeeper.LoadPlugins(" + pfn + "): " + ex.Message);
+					this.LogWrite("TfmGEDKeeper.LoadPlugins(" + pfn + "): " + ex.Message);
 				}
 			}
 		}
@@ -1211,7 +1218,7 @@ namespace GKUI
 
 		public void LogWrite(string msg)
 		{
-			SysUtils.LogWrite(msg);
+			Logger.LogWrite(msg);
 		}
 
 		public void NotifyRecord(IBaseWindow aBase, object record, RecordAction action)
@@ -1294,6 +1301,13 @@ namespace GKUI
 				form.MdiParent = this;
 				form.Show();
 			}
+		}
+
+		public void EnableWindow(Form form, bool value)
+		{
+			if (form != null) {
+        		SysUtils.EnableWindow(form.Handle, value);
+        	}
 		}
 
 		#endregion

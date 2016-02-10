@@ -1,5 +1,6 @@
+using System;
 using System.IO;
-using GKCommon.GEDCOM.Enums;
+using BSLib;
 
 namespace GKCommon.GEDCOM
 {
@@ -98,9 +99,11 @@ namespace GKCommon.GEDCOM
 
         public override void MoveTo(GEDCOMRecord targetRecord, bool clearDest)
 		{
-            if (targetRecord == null) return;
-
-			GEDCOMSourceRecord targetSource = targetRecord as GEDCOMSourceRecord;
+            GEDCOMSourceRecord targetSource = targetRecord as GEDCOMSourceRecord;
+            if (targetSource == null)
+            {
+                throw new ArgumentException("argument is null or wrong type", "targetRecord");
+            }
 
             StringList titl = new StringList();
 			StringList orig = new StringList();
@@ -199,11 +202,13 @@ namespace GKCommon.GEDCOM
 
         public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
 		{
-        	if (tag == null) return 0.0f;
-        	float match = 0.0f;
+            GEDCOMSourceRecord source = tag as GEDCOMSourceRecord;
+            if (source == null) return 0.0f;
 
-        	GEDCOMSourceRecord source = tag as GEDCOMSourceRecord;
-        	if (string.Compare(this.FiledByEntry, source.FiledByEntry, true) == 0) {
+            float match = 0.0f;
+
+        	if (string.Compare(this.FiledByEntry, source.FiledByEntry, true) == 0)
+            {
         		match = 100.0f;
         	}
 

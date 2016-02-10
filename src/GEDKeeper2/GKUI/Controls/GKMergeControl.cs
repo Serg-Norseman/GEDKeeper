@@ -4,7 +4,6 @@ using System.Windows.Forms;
 
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 
@@ -75,12 +74,22 @@ namespace GKUI.Controls
 		}
 
 
-		private void RecordMerge(GEDCOMRecord targetRec, GEDCOMRecord aRecCopy)
+		private void RecordMerge(GEDCOMRecord targetRec, GEDCOMRecord sourceRec)
 		{
-			XRefReplacer repMap = new XRefReplacer();
+            if (targetRec == null)
+            {
+                throw new ArgumentNullException("targetRec");
+            }
+
+            if (sourceRec == null)
+            {
+                throw new ArgumentNullException("sourceRec");
+            }
+
+            XRefReplacer repMap = new XRefReplacer();
 			try
 			{
-				repMap.AddXRef(aRecCopy, aRecCopy.XRef, targetRec.XRef);
+				repMap.AddXRef(sourceRec, sourceRec.XRef, targetRec.XRef);
 
 				int num = this.fTree.RecordsCount;
 				for (int i = 0; i < num; i++) {
@@ -90,25 +99,25 @@ namespace GKUI.Controls
 				switch (targetRec.RecordType)
 				{
 					case GEDCOMRecordType.rtIndividual:
-                        GEDCOMIndividualRecord indRec = (aRecCopy as GEDCOMIndividualRecord);
+                        GEDCOMIndividualRecord indRec = (GEDCOMIndividualRecord)sourceRec;
                         indRec.MoveTo(targetRec, false);
                         this.Base.RecordDelete(indRec, false);
 						break;
 
 					case GEDCOMRecordType.rtNote:
-                        GEDCOMNoteRecord noteRec = (aRecCopy as GEDCOMNoteRecord);
+                        GEDCOMNoteRecord noteRec = (GEDCOMNoteRecord)sourceRec;
                         noteRec.MoveTo(targetRec, false);
                         this.Base.RecordDelete(noteRec, false);
 						break;
 
 					case GEDCOMRecordType.rtFamily:
-                        GEDCOMFamilyRecord famRec = (aRecCopy as GEDCOMFamilyRecord);
+                        GEDCOMFamilyRecord famRec = (GEDCOMFamilyRecord)sourceRec;
                         famRec.MoveTo(targetRec, false);
                         this.Base.RecordDelete(famRec, false);
 						break;
 
 					case GEDCOMRecordType.rtSource:
-                        GEDCOMSourceRecord srcRec = (aRecCopy as GEDCOMSourceRecord);
+                        GEDCOMSourceRecord srcRec = (GEDCOMSourceRecord)sourceRec;
                         srcRec.MoveTo(targetRec, false);
                         this.Base.RecordDelete(srcRec, false);
 						break;
@@ -145,31 +154,32 @@ namespace GKUI.Controls
 			{
 				this.Lab1.Text = this.fRec1.XRef;
 
-				switch (this.fMergeMode) {
+				switch (this.fMergeMode)
+                {
 					case GEDCOMRecordType.rtIndividual:
 						{
-							GEDCOMIndividualRecord iRec = (this.fRec1 as GEDCOMIndividualRecord);
+                            GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)this.fRec1;
 							this.Edit1.Text = iRec.GetNameString(true, false);
 							GKUtils.ShowPersonInfo(iRec, this.Memo1.Lines, this.fBase.ShieldState);
 							break;
 						}
 					case GEDCOMRecordType.rtNote:
 						{
-							GEDCOMNoteRecord nRec = (this.fRec1 as GEDCOMNoteRecord);
+                            GEDCOMNoteRecord nRec = (GEDCOMNoteRecord)this.fRec1;
 							this.Edit1.Text = nRec.Note[0];
                             GKUtils.ShowNoteInfo(nRec, this.Memo1.Lines);
 							break;
 						}
 					case GEDCOMRecordType.rtFamily:
 						{
-							GEDCOMFamilyRecord famRec = (this.fRec1 as GEDCOMFamilyRecord);
+                            GEDCOMFamilyRecord famRec = (GEDCOMFamilyRecord)this.fRec1;
 							this.Edit1.Text = GKUtils.GetFamilyString(famRec);
                             GKUtils.ShowFamilyInfo(famRec, this.Memo1.Lines, this.fBase.ShieldState);
 							break;
 						}
 					case GEDCOMRecordType.rtSource:
 						{
-							GEDCOMSourceRecord srcRec = (this.fRec1 as GEDCOMSourceRecord);
+                            GEDCOMSourceRecord srcRec = (GEDCOMSourceRecord)this.fRec1;
 							this.Edit1.Text = srcRec.FiledByEntry;
                             GKUtils.ShowSourceInfo(srcRec, this.Memo1.Lines);
 							break;
@@ -193,31 +203,32 @@ namespace GKUI.Controls
 			{
 				this.Lab2.Text = this.fRec2.XRef;
 
-				switch (this.fMergeMode) {
+				switch (this.fMergeMode)
+                {
 					case GEDCOMRecordType.rtIndividual:
 						{
-							GEDCOMIndividualRecord iRec = (this.fRec2 as GEDCOMIndividualRecord);
+                            GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)this.fRec2;
 							this.Edit2.Text = iRec.GetNameString(true, false);
                             GKUtils.ShowPersonInfo(iRec, this.Memo2.Lines, this.fBase.ShieldState);
 							break;
 						}
 					case GEDCOMRecordType.rtNote:
 						{
-							GEDCOMNoteRecord nRec = (this.fRec2 as GEDCOMNoteRecord);
+                            GEDCOMNoteRecord nRec = (GEDCOMNoteRecord)this.fRec2;
 							this.Edit2.Text = nRec.Note[0];
                             GKUtils.ShowNoteInfo(nRec, this.Memo2.Lines);
 							break;
 						}
 					case GEDCOMRecordType.rtFamily:
 						{
-							GEDCOMFamilyRecord famRec = (this.fRec2 as GEDCOMFamilyRecord);
+                            GEDCOMFamilyRecord famRec = (GEDCOMFamilyRecord)this.fRec2;
 							this.Edit2.Text = GKUtils.GetFamilyString(famRec);
                             GKUtils.ShowFamilyInfo(famRec, this.Memo2.Lines, this.fBase.ShieldState);
 							break;
 						}
 					case GEDCOMRecordType.rtSource:
 						{
-							GEDCOMSourceRecord srcRec = (this.fRec2 as GEDCOMSourceRecord);
+                            GEDCOMSourceRecord srcRec = (GEDCOMSourceRecord)this.fRec2;
 							this.Edit2.Text = srcRec.FiledByEntry;
                             GKUtils.ShowSourceInfo(srcRec, this.Memo2.Lines);
 							break;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
+using BSLib;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -104,8 +105,8 @@ namespace GKUI.Dialogs
 			try
 			{
 				this.fLocationRecord.LocationName = this.EditName.Text;
-				this.fLocationRecord.Map.Lati = SysUtils.ParseFloat(this.EditLatitude.Text, 0.0);
-				this.fLocationRecord.Map.Long = SysUtils.ParseFloat(this.EditLongitude.Text, 0.0);
+				this.fLocationRecord.Map.Lati = ConvHelper.ParseFloat(this.EditLatitude.Text, 0.0);
+				this.fLocationRecord.Map.Long = ConvHelper.ParseFloat(this.EditLongitude.Text, 0.0);
 				this.fBase.ChangeRecord(this.fLocationRecord);
 				base.DialogResult = DialogResult.OK;
 			}
@@ -151,23 +152,41 @@ namespace GKUI.Dialogs
 			}
 		}
 
+        private GKListItem GetSelectedGeoItem()
+        {
+            if (this.ListGeoCoords.SelectedItems.Count <= 0) return null;
+
+            GKListItem item = (GKListItem)this.ListGeoCoords.SelectedItems[0];
+            return item;
+        }
+
 		private void btnSelect_Click(object sender, EventArgs e)
 		{
-			if (this.ListGeoCoords.SelectedItems.Count > 0)
-			{
-				GKListItem item = this.ListGeoCoords.SelectedItems[0] as GKListItem;
-				this.EditLatitude.Text = item.SubItems[1].Text;
-				this.EditLongitude.Text = item.SubItems[2].Text;
-			}
+		    GKListItem item = this.GetSelectedGeoItem();
+		    if (item == null) return;
+
+            this.EditLatitude.Text = item.SubItems[1].Text;
+		    this.EditLongitude.Text = item.SubItems[2].Text;
 		}
 
 		private void btnSelectName_Click(object sender, EventArgs e)
 		{
-			if (this.ListGeoCoords.SelectedItems.Count > 0)
-			{
-				this.EditName.Text = (this.ListGeoCoords.SelectedItems[0] as GKListItem).Text;
-			}
+            GKListItem item = this.GetSelectedGeoItem();
+            if (item == null) return;
+
+            this.EditName.Text = item.Text;
 		}
+
+        private void ListGeoCoords_Click(object sender, EventArgs e)
+        {
+            GKListItem item = this.GetSelectedGeoItem();
+            if (item == null) return;
+
+            GMapPoint pt = item.Data as GMapPoint;
+            if (pt == null) return;
+
+            this.fMapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
+        }
 
 		private void EditName_TextChanged(object sender, EventArgs e)
 		{
@@ -178,20 +197,7 @@ namespace GKUI.Dialogs
 		{
 			if (this.EditLatitude.Text != "" && this.EditLongitude.Text != "")
 			{
-				this.fMapBrowser.SetCenter(SysUtils.ParseFloat(this.EditLatitude.Text, 0), SysUtils.ParseFloat(this.EditLongitude.Text, 0), -1);
-			}
-		}
-
-		private void ListGeoCoords_Click(object sender, EventArgs e)
-		{
-			if (this.ListGeoCoords.SelectedItems.Count > 0)
-			{
-				GKListItem item = this.ListGeoCoords.SelectedItems[0] as GKListItem;
-				GMapPoint pt = item.Data as GMapPoint;
-				if (pt != null)
-				{
-					this.fMapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
-				}
+				this.fMapBrowser.SetCenter(ConvHelper.ParseFloat(this.EditLatitude.Text, 0), ConvHelper.ParseFloat(this.EditLongitude.Text, 0), -1);
 			}
 		}
 	}

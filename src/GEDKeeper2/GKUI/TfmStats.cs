@@ -5,8 +5,8 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
+using BSLib;
 using ExcelLibrary.SpreadSheet;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -27,15 +27,51 @@ namespace GKUI
 		private readonly List<GEDCOMRecord> fSelectedRecords;
 		private readonly ZedGraphControl fGraph;
 		private readonly GKListView fListStats;
+        private readonly TreeStats fTreeStats;
 
 		private string fChartTitle;
 		private string fChartXTitle;
 		private string fChartYTitle;
-		private TreeStats fTreeStats;
+
+        public TfmStats(IBaseWindow aBase, List<GEDCOMRecord> selectedRecords)
+        {
+            this.InitializeComponent();
+            base.MdiParent = TfmGEDKeeper.Instance;
+
+            this.fGraph = new ZedGraphControl();
+            this.fGraph.IsShowPointValues = true;
+            this.fGraph.Dock = DockStyle.Right;
+            this.fGraph.Size = new Size(400, 200);
+
+            Splitter spl = new Splitter();
+            spl.Dock = DockStyle.Right;
+            spl.Size = new Size(4, 290);
+            spl.MinExtra = 100;
+            spl.MinSize = 100;
+            this.Panel1.Controls.Add(this.fGraph);
+            this.Panel1.Controls.Add(spl);
+
+            this.fListStats = GKUtils.CreateListView(this.Panel1);
+            this.fListStats.AddListColumn("-", 250, false);
+            this.fListStats.AddListColumn("-", 150, false);
+
+            this.Panel1.Controls.SetChildIndex(this.fListStats, 0);
+            this.Panel1.Controls.SetChildIndex(spl, 2);
+            this.Panel1.Controls.SetChildIndex(this.fGraph, 3);
+            this.Panel1.Controls.SetChildIndex(this.ToolBar1, 4);
+
+            this.fBase = aBase;
+            this.fSelectedRecords = selectedRecords;
+            this.fTreeStats = new TreeStats(this.fBase.Tree, this.fSelectedRecords);
+
+            this.UpdateStatsTypes();
+
+            this.SetLang();
+        }
 
 		private static string GetPercent(int dividend, int divisor)
 		{
-			double val = ((divisor == 0) ? 0.0 : ((double)dividend / (double)divisor * 100.0));
+			double val = ((divisor == 0) ? 0.0d : (dividend / (double)divisor * 100.0d));
 			return string.Format(" ({0:0.00}%)", val);
 		}
 
@@ -52,7 +88,7 @@ namespace GKUI
 				ListViewItem item = this.fListStats.Items[i];
 
 				string s = item.Text;
-				double lab = (s == "?") ? 0.0f : SysUtils.ParseFloat(s, 0.0f, true);
+				double lab = (s == "?") ? 0.0f : ConvHelper.ParseFloat(s, 0.0f, true);
 
 				if (lab != 0 || !excludeUnknowns)
 				{
@@ -240,42 +276,6 @@ namespace GKUI
 				GKData.StatsTitleStruct tr = GKData.StatsTitles[(int)i];
 				this.cbType.Items.Add(LangMan.LS(tr.Title));
 			}
-		}
-		
-		public TfmStats(IBaseWindow aBase, List<GEDCOMRecord> selectedRecords)
-		{
-			this.InitializeComponent();
-			base.MdiParent = TfmGEDKeeper.Instance;
-
-			this.fGraph = new ZedGraphControl();
-			this.fGraph.IsShowPointValues = true;
-			this.fGraph.Dock = DockStyle.Right;
-			this.fGraph.Size = new Size(400, 200);
-
-			Splitter spl = new Splitter();
-			spl.Dock = DockStyle.Right;
-			spl.Size = new Size(4, 290);
-			spl.MinExtra = 100;
-			spl.MinSize = 100;
-			this.Panel1.Controls.Add(this.fGraph);
-			this.Panel1.Controls.Add(spl);
-
-			this.fListStats = GKUtils.CreateListView(this.Panel1);
-			this.fListStats.AddListColumn("-", 250, false);
-			this.fListStats.AddListColumn("-", 150, false);
-
-			this.Panel1.Controls.SetChildIndex(this.fListStats, 0);
-			this.Panel1.Controls.SetChildIndex(spl, 2);
-			this.Panel1.Controls.SetChildIndex(this.fGraph, 3);
-			this.Panel1.Controls.SetChildIndex(this.ToolBar1, 4);
-
-			this.fBase = aBase;
-			this.fSelectedRecords = selectedRecords;
-			this.fTreeStats = new TreeStats(this.fBase.Tree, this.fSelectedRecords);
-
-			this.UpdateStatsTypes();
-
-			this.SetLang();
 		}
 
 		private void TfmStats_Load(object sender, EventArgs e)

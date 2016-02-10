@@ -2,8 +2,6 @@
 using System.Globalization;
 using System.Threading;
 
-using GKCommon.GEDCOM.Enums;
-
 namespace GKCommon.GEDCOM
 {
     [Serializable]
@@ -189,9 +187,9 @@ namespace GKCommon.GEDCOM
             return result;
 		}
 
-		private string ExtractEscape(string st)
+		private string ExtractEscape(string str)
 		{
-			string result = st;
+			string result = str;
 
             if (result.StartsWith("@#"))
 			{
@@ -215,9 +213,9 @@ namespace GKCommon.GEDCOM
             return result;
 		}
 
-		private string ExtractDay(string S)
+		private string ExtractDay(string str)
 		{
-			string result = S;
+			string result = str;
 
 			int I = 0;
 			int num = ((result != null) ? result.Length : 0);
@@ -235,15 +233,15 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		private string ExtractDelimiterEx(string st)
+		private string ExtractDelimiterEx(string str)
 		{
-		    string result = (this.fDateFormat == GEDCOMDateFormat.dfSystem) ? GEDCOMUtils.ExtractDotDelimiter(st, 0) : GEDCOMUtils.ExtractDelimiter(st, 0);
+		    string result = (this.fDateFormat == GEDCOMDateFormat.dfSystem) ? GEDCOMUtils.ExtractDotDelimiter(str, 0) : GEDCOMUtils.ExtractDelimiter(str, 0);
 		    return result;
 		}
 
-        private string ExtractMonth(string st)
+        private string ExtractMonth(string str)
 		{
-			string result = st;
+			string result = str;
 			if (!string.IsNullOrEmpty(result))
 			{
 				switch (this.fDateCalendar)
@@ -319,9 +317,9 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		private string ExtractYear(string st)
+		private string ExtractYear(string str)
 		{
-			string result = st;
+			string result = str;
 
 			int I = 0;
 			int num = ((result != null) ? result.Length : 0);
@@ -389,58 +387,58 @@ namespace GKCommon.GEDCOM
             this.SetGregorian((ushort)value.Day, GEDCOMCustomDate.GEDCOMMonthArray[value.Month - 1], value.Year, "", false);
 		}
 
-		private static string CheckGEDCOMMonth(string st)
+		private static string CheckGEDCOMMonth(string str)
 		{
-            if (st != null && st.Length == 3)
+            if (str != null && str.Length == 3)
             {
-                st = st.ToUpperInvariant();
+                str = str.ToUpperInvariant();
 
                 for (int m = 1; m <= 12; m++)
                 {
-                    if (GEDCOMCustomDate.GEDCOMMonthArray[m - 1] == st)
+                    if (GEDCOMCustomDate.GEDCOMMonthArray[m - 1] == str)
                     {
                         return GEDCOMCustomDate.GEDCOMMonthArray[m - 1];
                     }
                 }
             }
 
-            throw new GEDCOMDateException(string.Format("The string {0} is not a valid month identifier", st));
+            throw new GEDCOMDateException(string.Format("The string {0} is not a valid month identifier", str));
 		}
 
-		private static string CheckGEDCOMMonthFrench(string st)
+		private static string CheckGEDCOMMonthFrench(string str)
 		{
-            if (st != null && st.Length == 4)
+            if (str != null && str.Length == 4)
             {
-                st = st.ToUpperInvariant();
+                str = str.ToUpperInvariant();
 
                 for (int m = 1; m <= 13; m++)
                 {
-                    if (GEDCOMCustomDate.GEDCOMMonthFrenchArray[m - 1] == st)
+                    if (GEDCOMCustomDate.GEDCOMMonthFrenchArray[m - 1] == str)
                     {
                         return GEDCOMCustomDate.GEDCOMMonthFrenchArray[m - 1];
                     }
                 }
             }
 
-            throw new GEDCOMDateException(string.Format("The string {0} is not a valid French month identifier", st));
+            throw new GEDCOMDateException(string.Format("The string {0} is not a valid French month identifier", str));
 		}
 
-		private static string CheckGEDCOMMonthHebrew(string st)
+		private static string CheckGEDCOMMonthHebrew(string str)
 		{
-            if (st != null && st.Length == 3)
+            if (str != null && str.Length == 3)
             {
-                st = st.ToUpperInvariant();
+                str = str.ToUpperInvariant();
 
                 for (int m = 1; m <= 13; m++)
                 {
-                    if (GEDCOMCustomDate.GEDCOMMonthHebrewArray[m - 1] == st)
+                    if (GEDCOMCustomDate.GEDCOMMonthHebrewArray[m - 1] == str)
                     {
                         return GEDCOMCustomDate.GEDCOMMonthHebrewArray[m - 1];
                     }
                 }
             }
 
-            throw new GEDCOMDateException(string.Format("The string {0} is not a valid Hebrew month identifier", st));
+            throw new GEDCOMDateException(string.Format("The string {0} is not a valid Hebrew month identifier", str));
 		}
 
 		private static string IntToGEDCOMMonth(ushort m)
@@ -479,17 +477,17 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		private static ushort GEDCOMMonthFrenchToInt(string st)
+		private static ushort GEDCOMMonthFrenchToInt(string str)
 		{
 			ushort result = 0;
 
-			if (st != null)
+			if (str != null)
 			{
-				st = st.ToUpperInvariant();
+				str = str.ToUpperInvariant();
 
 				for (ushort m = 1; m <= 13; m++)
 				{
-					if (GEDCOMCustomDate.GEDCOMMonthFrenchArray[m - 1] == st)
+					if (GEDCOMCustomDate.GEDCOMMonthFrenchArray[m - 1] == str)
 					{
 						result = m;
 						break;
@@ -500,17 +498,17 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		private static ushort GEDCOMMonthHebrewToInt(string st)
+		private static ushort GEDCOMMonthHebrewToInt(string str)
 		{
 			ushort result = 0;
 
-			if (st != null)
+			if (str != null)
 			{
-				st = st.ToUpperInvariant();
+				str = str.ToUpperInvariant();
 
 				for (ushort m = 1; m <= 13; m++)
 				{
-					if (GEDCOMCustomDate.GEDCOMMonthHebrewArray[m - 1] == st)
+					if (GEDCOMCustomDate.GEDCOMMonthHebrewArray[m - 1] == str)
 					{
 						result = m;
 						break;
@@ -523,7 +521,7 @@ namespace GKCommon.GEDCOM
 
         public override void Assign(GEDCOMTag source)
 		{
-			if (source != null && source is GEDCOMDate)
+			if (source is GEDCOMDate)
 			{
 				GEDCOMDate srcDate = (source as GEDCOMDate);
 

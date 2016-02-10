@@ -2,8 +2,9 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Windows.Forms;
+using System.Runtime.InteropServices;
 using System.Security.Permissions;
+using System.Windows.Forms;
 
 // Original ScrollControl code by Scott Crawford (http://sukiware.com/)
 
@@ -263,10 +264,10 @@ namespace ExtUtils.ScrollableControls
 		/// <returns>
 		///   A <see cref="T:System.Windows.Forms.CreateParams" /> that contains the required creation parameters when the handle to the control is created.
 		/// </returns>
-        protected override CreateParams CreateParams
+		protected override CreateParams CreateParams
 		{
-            [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode), SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
-            get
+			[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode), SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+			get
 			{
 				CreateParams createParams;
 
@@ -766,21 +767,21 @@ namespace ExtUtils.ScrollableControls
 		/// <summary>
 		///   Processes Windows messages.
 		/// </summary>
-		/// <param name="msg">
+		/// <param name="m">
 		///   The Windows <see cref="T:System.Windows.Forms.Message" /> to process.
 		/// </param>
 		[DebuggerStepThrough]
 		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode), SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
-		protected override void WndProc(ref Message msg)
+		protected override void WndProc(ref Message m)
 		{
-			switch (msg.Msg)
+			switch (m.Msg)
 			{
 				case NativeMethods.WM_HSCROLL:
 				case NativeMethods.WM_VSCROLL:
-					this.WmScroll(ref msg);
+					this.WmScroll(ref m);
 					break;
 				default:
-					base.WndProc(ref msg);
+					base.WndProc(ref m);
 					break;
 			}
 		}
@@ -821,33 +822,14 @@ namespace ExtUtils.ScrollableControls
 
 		#region Nested Types
 
-		public class HScrollProperties : ScrollProperties
-		{
-			#region Constructors
-
-			public HScrollProperties(ScrollControl container)
-				: base(container)
-			{ }
-
-			#endregion
-		}
-
 		public abstract class ScrollProperties
 		{
-			#region Instance Fields
-
 			private readonly ScrollControl _container;
-
-			#endregion
-
-			#region Constructors
 
 			protected ScrollProperties(ScrollControl container)
 			{
 				_container = container;
 			}
-
-			#endregion
 
 			#region Properties
 
@@ -880,15 +862,94 @@ namespace ExtUtils.ScrollableControls
 			#endregion
 		}
 
+		public class HScrollProperties : ScrollProperties
+		{
+			public HScrollProperties(ScrollControl container)
+				: base(container)
+			{ }
+		}
+
 		public class VScrollProperties : ScrollProperties
 		{
-			#region Constructors
-
 			public VScrollProperties(ScrollControl container)
 				: base(container)
 			{ }
+		}
 
-			#endregion
+		private static class NativeMethods
+		{
+			[Flags]
+			public enum SIF
+			{
+				SIF_RANGE = 0x0001,
+				SIF_PAGE = 0x0002,
+				SIF_POS = 0x0004,
+				SIF_DISABLENOSCROLL = 0x0008,
+				SIF_TRACKPOS = 0x0010,
+				SIF_ALL = SIF_PAGE | SIF_POS | SIF_RANGE | SIF_TRACKPOS
+			}
+
+			[StructLayout(LayoutKind.Sequential, Pack = 1)]
+			public class SCROLLINFO
+			{
+				public int cbSize;
+				public SIF fMask;
+				public int nMin;
+				public int nMax;
+				public int nPage;
+				public int nPos;
+				public int nTrackPos;
+
+				public SCROLLINFO()
+				{
+					cbSize = Marshal.SizeOf(this);
+					nPage = 0;
+					nMin = 0;
+					nMax = 0;
+					nPos = 0;
+					nTrackPos = 0;
+					fMask = 0;
+				}
+			}
+
+			public const int GWL_STYLE = (-16);
+			public const int SB_BOTH = 3;
+			public const int SB_BOTTOM = 7;
+			public const int SB_CTL = 2;
+			public const int SB_ENDSCROLL = 8;
+			public const int SB_HORZ = 0;
+			public const int SB_LEFT = 6;
+			public const int SB_LINEDOWN = 1;
+			public const int SB_LINELEFT = 0;
+			public const int SB_LINERIGHT = 1;
+			public const int SB_LINEUP = 0;
+			public const int SB_PAGEDOWN = 3;
+			public const int SB_PAGELEFT = 2;
+			public const int SB_PAGERIGHT = 3;
+			public const int SB_PAGEUP = 2;
+			public const int SB_RIGHT = 7;
+			public const int SB_THUMBPOSITION = 4;
+			public const int SB_THUMBTRACK = 5;
+			public const int SB_TOP = 6;
+			public const int SB_VERT = 1;
+			public const int WM_HSCROLL = 0x00000114;
+			public const int WM_VSCROLL = 0x00000115;
+			public const int WS_BORDER = 0x00800000;
+			public const int WS_EX_CLIENTEDGE = 0x200;
+			public const int WS_HSCROLL = 0x00100000;
+			public const int WS_VSCROLL = 0x00200000;
+
+			[DllImport("user32.dll", SetLastError = true)]
+			public static extern int GetScrollInfo(IntPtr hwnd, int bar, [MarshalAs(UnmanagedType.LPStruct)] SCROLLINFO scrollInfo);
+
+			[DllImport("user32.dll", SetLastError = true)]
+			public static extern uint GetWindowLong(IntPtr hwnd, int index);
+
+			[DllImport("user32.dll")]
+			public static extern int SetScrollInfo(IntPtr hwnd, int bar, [MarshalAs(UnmanagedType.LPStruct)] SCROLLINFO scrollInfo, bool redraw);
+
+			[DllImport("user32.dll")]
+			public static extern int SetWindowLong(IntPtr hwnd, int index, UInt32 newLong);
 		}
 
 		#endregion

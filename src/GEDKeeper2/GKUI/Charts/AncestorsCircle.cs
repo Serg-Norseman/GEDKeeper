@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Security.Permissions;
 using System.Windows.Forms;
 
-using GKCommon;
+using BSLib;
+using BSLib.Graphics;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 
@@ -15,7 +15,7 @@ namespace GKUI.Charts
 	{
 		public const int MAX_BRUSHES = 12;
 		
-		private AncestorsCircle fOwner;
+		private readonly AncestorsCircle fOwner;
 
 		public Color[] BrushColor = new Color[MAX_BRUSHES];
 
@@ -87,11 +87,15 @@ namespace GKUI.Charts
 		private const int CenterRad = 90;
 		private const int DefaultGenWidth = 60;
 
-		private System.ComponentModel.IContainer components = null;
-		private int fCenterX;
+		private readonly System.ComponentModel.IContainer components;
+        private readonly SolidBrush[] fCircleBrushes;
+        private readonly SolidBrush[] fDarkBrushes;
+        private readonly AncestorsCircleOptions fOptions;
+        private readonly List<PersonSegment> fSegments;
+        private readonly ToolTip fToolTip;
+        
+        private int fCenterX;
 		private int fCenterY;
-		private SolidBrush[] fCircleBrushes = new SolidBrush[AncestorsCircleOptions.MAX_BRUSHES];
-		private SolidBrush[] fDarkBrushes = new SolidBrush[AncestorsCircleOptions.MAX_BRUSHES];
 		private Font fFont;
 		private int fGenWidth;
 		private int fGroupCount;
@@ -101,11 +105,8 @@ namespace GKUI.Charts
 		private int fMaxGenerations;
 		private int fOffsetX = 0;
 		private int fOffsetY = 0;
-		private AncestorsCircleOptions fOptions;
 		private GEDCOMIndividualRecord fRootPerson;
-		private List<PersonSegment> fSegments;
-		private PersonSegment fSelected;
-		private ToolTip fToolTip;
+        private PersonSegment fSelected;
 		private GEDCOMTree fTree;
 
 
@@ -181,8 +182,10 @@ namespace GKUI.Charts
 
 			this.fTree = tree;
 			this.fOptions = new AncestorsCircleOptions(this);
+            this.fCircleBrushes = new SolidBrush[AncestorsCircleOptions.MAX_BRUSHES];
+            this.fDarkBrushes = new SolidBrush[AncestorsCircleOptions.MAX_BRUSHES];
 
-			this.DoubleBuffered = true;
+            this.DoubleBuffered = true;
 			this.BackColor = this.fOptions.BrushColor[9];
 			this.fFont = new Font("Arial", 10f);
 			this.fSegments = new List<PersonSegment>();
@@ -190,7 +193,7 @@ namespace GKUI.Charts
 			this.fGenWidth = DefaultGenWidth;
 			this.fMaxGenerations = 8;
 
-			this.fToolTip = new System.Windows.Forms.ToolTip(components);
+			this.fToolTip = new ToolTip(components);
 			this.fToolTip.AutoPopDelay = 5000;
 			this.fToolTip.InitialDelay = 250;
 			this.fToolTip.ReshowDelay = 50;
@@ -567,6 +570,20 @@ namespace GKUI.Charts
 			this.GroupsMode = !this.GroupsMode;
 		}
 
+		protected override bool IsInputKey(Keys keyData)
+		{
+			switch (keyData) {
+				case Keys.Add:
+				case Keys.Subtract:
+				case Keys.Left:
+				case Keys.Right:
+				case Keys.Back:
+					return true;
+			}
+
+			return base.IsInputKey(keyData);
+		}
+
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
 			base.OnKeyDown(e);
@@ -667,19 +684,6 @@ namespace GKUI.Charts
 				} else {
 					//fToolTip.Hide(this);
 				}
-			}
-		}
-
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode), SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
-        protected override void WndProc(ref Message m)
-		{
-			base.WndProc(ref m);
-
-			if (m.Msg == NativeMethods.WM_GETDLGCODE)
-			{
-				m.Result = (IntPtr)(m.Result.ToInt32() | 
-				                    NativeMethods.DLGC_WANTARROWS | NativeMethods.DLGC_WANTTAB | 
-				                    NativeMethods.DLGC_WANTCHARS | NativeMethods.DLGC_WANTALLKEYS);
 			}
 		}
 

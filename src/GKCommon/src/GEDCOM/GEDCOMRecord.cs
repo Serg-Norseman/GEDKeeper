@@ -1,7 +1,6 @@
 using System;
 using System.IO;
-using ExtUtils;
-using GKCommon.GEDCOM.Enums;
+using BSLib;
 
 namespace GKCommon.GEDCOM
 {
@@ -300,7 +299,7 @@ namespace GKCommon.GEDCOM
 			try
 			{
 				string xref = this.GetXRefNum();
-				result = SysUtils.ParseInt(xref, 0);
+				result = ConvHelper.ParseInt(xref, 0);
 			}
 			catch (Exception)
 			{

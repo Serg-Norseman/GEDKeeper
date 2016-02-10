@@ -27,15 +27,16 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
+using BSLib;
+using BSLib.Graphics;
+using BSLib.SmartGraph;
 using ExtUtils;
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Tools;
 using GKCore.Types;
-using SmartGraph;
 
 namespace GKCore
 {
@@ -233,7 +234,7 @@ namespace GKCore
 
 		private static int PatriarchsCompare(object item1, object item2)
 		{
-			return (item1 as PatriarchObj).BirthYear - (item2 as PatriarchObj).BirthYear;
+            return ((PatriarchObj)item1).BirthYear - ((PatriarchObj)item2).BirthYear;
 		}
 
 		public void GetPatriarchsList(ExtList<PatriarchObj> patList, int gensMin, bool datesCheck)
@@ -257,16 +258,16 @@ namespace GKCore
 
 					if (rec is GEDCOMIndividualRecord)
 					{
-						GEDCOMIndividualRecord i_rec = rec as GEDCOMIndividualRecord;
+						GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
 
 						string nf, nn, np;
-						i_rec.GetNameParts(out nf, out nn, out np);
+						iRec.GetNameParts(out nf, out nn, out np);
 
-						AbsDate birthDate = this.FindBirthYear(i_rec);
-						int descGens = GKUtils.GetDescGenerations(i_rec);
+						AbsDate birthDate = this.FindBirthYear(iRec);
+						int descGens = GKUtils.GetDescGenerations(iRec);
 
-						bool res = (i_rec.ChildToFamilyLinks.Count == 0);
-						res = (res && i_rec.Sex == GEDCOMSex.svMale);
+						bool res = (iRec.ChildToFamilyLinks.Count == 0);
+						res = (res && iRec.Sex == GEDCOMSex.svMale);
 						res = (res && /*nf != "" && nf != "?" &&*/ nn != "" && nn != "?");
 						res = (res && descGens >= gensMin);
 
@@ -278,9 +279,9 @@ namespace GKCore
 						if (res)
 						{
 							PatriarchObj pObj = new PatriarchObj();
-							pObj.IRec = i_rec;
+							pObj.IRec = iRec;
 							pObj.BirthYear = birthDate.Year;
-							pObj.DescendantsCount = GKUtils.GetDescendantsCount(i_rec) - 1;
+							pObj.DescendantsCount = GKUtils.GetDescendantsCount(iRec) - 1;
 							pObj.DescGenerations = descGens;
 							patList.Add(pObj);
 						}
@@ -830,7 +831,7 @@ namespace GKCore
 				GEDCOMMultimediaLink mmLink = iRec.GetPrimaryMultimediaLink();
                 if (mmLink != null && mmLink.Value != null)
 				{
-					GEDCOMMultimediaRecord mmRec = mmLink.Value as GEDCOMMultimediaRecord;
+                    GEDCOMMultimediaRecord mmRec = (GEDCOMMultimediaRecord)mmLink.Value;
 					result = this.BitmapLoad(mmRec.FileReferences[0], thumbWidth, thumbHeight, throwException);
 				}
 			}
@@ -872,7 +873,7 @@ namespace GKCore
 				if (File.Exists(fileName))
 				{
 					string bakPath = Path.GetDirectoryName(fileName) + "\\__history\\";
-					string bakFile = Path.GetFileName(fileName) + "." + SysUtils.NumUpdate(rev, 3);
+					string bakFile = Path.GetFileName(fileName) + "." + ConvHelper.AdjustNum(rev, 3);
 
 					if (!Directory.Exists(bakPath)) Directory.CreateDirectory(bakPath);
 					File.Move(fileName, bakPath + bakFile);
@@ -910,6 +911,11 @@ namespace GKCore
 				if (!string.Equals(gsh, GEDSECHeader)) {
 					throw new Exception("Это не GEDSEC-совместимый файл");
 				}
+
+                if (gsMajVer < GS_MajVer || gsMinVer < GS_MinVer)
+                {
+                    // dummy for future
+                }
 
 				DESCryptoServiceProvider cryptic = new DESCryptoServiceProvider();
 

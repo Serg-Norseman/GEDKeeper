@@ -102,7 +102,7 @@ namespace ExtUtils.ScrollableControls
 			{
 				if (value.Width < 0)
 					throw new ArgumentOutOfRangeException("value", "Width must be a positive integer.");
-				else if (value.Height < 0)
+				if (value.Height < 0)
 					throw new ArgumentOutOfRangeException("value", "Height must be a positive integer.");
 
 				if (this.AutoScrollMargin != value)
@@ -341,7 +341,7 @@ namespace ExtUtils.ScrollableControls
 		}
 
 		/// <summary>
-		///   Raises the <see cref="Scroll" /> event.
+        ///   Raises the <see cref="OnScroll" /> event.
 		/// </summary>
 		/// <param name="e">
 		///   The <see cref="ScrollEventArgs" /> instance containing the event data.

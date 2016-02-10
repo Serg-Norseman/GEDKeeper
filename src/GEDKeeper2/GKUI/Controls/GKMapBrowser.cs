@@ -5,6 +5,7 @@ using System.Net;
 using System.Windows.Forms;
 using System.Xml;
 
+using BSLib;
 using GKCommon;
 using GKCore.Maps;
 using GKCore.Options;
@@ -278,7 +279,7 @@ namespace GKUI.Controls
 			}
 		}
 
-		private static bool GetInetFile(string fileURL, ref Stream stream)
+		private static bool GetInetFile(string fileURL, out Stream stream)
 		{
 			bool result;
 			try
@@ -299,7 +300,7 @@ namespace GKUI.Controls
 			}
 			catch (Exception ex)
 			{
-                SysUtils.LogWrite("GKMapBrowser.GetInetFile(): " + ex.Message);
+                Logger.LogWrite("GKMapBrowser.GetInetFile(): " + ex.Message);
 				stream = null;
 				result = false;
 			}
@@ -326,40 +327,39 @@ namespace GKUI.Controls
             	string netQuery = "http://maps.googleapis.com/maps/api/geocode/xml?address={0}&sensor=false&language=ru";
             	netQuery = string.Format(netQuery, new object[] { searchValue });
 
-            	if (GKMapBrowser.GetInetFile(netQuery, ref stm))
-            	{
-            		XmlDocument xmlDocument = new XmlDocument();
-            		xmlDocument.Load(stm);
-            		XmlNode node = xmlDocument.DocumentElement;
+                if (!GKMapBrowser.GetInetFile(netQuery, out stm)) return;
 
-            		if (node != null && node.ChildNodes.Count > 0)
-            		{
-            			int num = node.ChildNodes.Count;
-            			for (int i = 0; i < num; i++)
-            			{
-            				XmlNode xNode = node.ChildNodes[i];
-            				if (xNode.Name == "result")
-            				{
-            					XmlNode addressNode = xNode["formatted_address"];
-            					XmlNode geometry = xNode["geometry"];
-            					XmlNode pointNode = geometry["location"];
+                XmlDocument xmlDocument = new XmlDocument();
+                xmlDocument.Load(stm);
+                XmlNode node = xmlDocument.DocumentElement;
 
-            					if (addressNode != null && pointNode != null)
-            					{
-            						string ptHint = addressNode.InnerText;
-            						double ptLongitude = SysUtils.ParseFloat(pointNode["lng"].InnerText, -1.0);
-            						double ptLatitude = SysUtils.ParseFloat(pointNode["lat"].InnerText, -1.0);
+                if (node != null && node.ChildNodes.Count > 0)
+                {
+                    int num = node.ChildNodes.Count;
+                    for (int i = 0; i < num; i++)
+                    {
+                        XmlNode xNode = node.ChildNodes[i];
+                        if (xNode.Name == "result")
+                        {
+                            XmlNode addressNode = xNode["formatted_address"];
+                            XmlNode geometry = xNode["geometry"];
+                            XmlNode pointNode = geometry["location"];
 
-            						if (ptLatitude != -1.0 && ptLongitude != -1.0)
-            						{
-            							GMapPoint pt = new GMapPoint(ptLatitude, ptLongitude, ptHint);
-            							pointsList.Add(pt);
-            						}
-            					}
-            				}
-            			}
-            		}
-            	}
+                            if (addressNode != null && pointNode != null)
+                            {
+                                string ptHint = addressNode.InnerText;
+                                double ptLongitude = ConvHelper.ParseFloat(pointNode["lng"].InnerText, -1.0);
+                                double ptLatitude = ConvHelper.ParseFloat(pointNode["lat"].InnerText, -1.0);
+
+                                if (ptLatitude != -1.0 && ptLongitude != -1.0)
+                                {
+                                    GMapPoint pt = new GMapPoint(ptLatitude, ptLongitude, ptHint);
+                                    pointsList.Add(pt);
+                                }
+                            }
+                        }
+                    }
+                }
             }
             finally
             {
@@ -376,20 +376,20 @@ namespace GKUI.Controls
 
 		private void gm_ExecScript(string script)
 		{
-			if (script.Trim() != "")
-			{
-				try
-				{
-					mshtml.IHTMLWindow2 win = (mshtml.IHTMLWindow2)this.Document.Window.DomWindow;
-                    if (win != null) {
-                        win.execScript(script, "JavaScript");
-                    }
-				}
-				catch (Exception ex)
-				{
-                    SysUtils.LogWrite("GKMapBrowser.gm_ExecScript(): " + ex.Message);
-				}
-			}
+		    script = script.Trim();
+		    if (string.IsNullOrEmpty(script)) return;
+
+            try
+		    {
+		        mshtml.IHTMLWindow2 win = (mshtml.IHTMLWindow2)this.Document.Window.DomWindow;
+		        if (win != null) {
+		            win.execScript(script, "JavaScript");
+		        }
+		    }
+		    catch (Exception ex)
+		    {
+		        Logger.LogWrite("GKMapBrowser.gm_ExecScript(): " + ex.Message);
+		    }
 		}
 		
 		#endregion

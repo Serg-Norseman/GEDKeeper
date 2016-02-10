@@ -3,27 +3,24 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore.Interfaces;
-
-/// <summary>
-/// 
-/// </summary>
 
 namespace GKImageViewerPlugin
 {
-	public partial class ImageViewer : Form, ILocalization
+    /// <summary>
+    /// 
+    /// </summary>
+    public partial class ImageViewer : Form, ILocalization
 	{
 		private ImageView fImageCtl;
-
-    	private ILangMan fLangMan;
+    	private readonly ILangMan fLangMan;
 
     	public ImageViewer(IPlugin plugin)
 		{
 			this.InitializeComponent();
-			//this.fBase = aBase;
 
             this.fLangMan = plugin.LangMan;
 

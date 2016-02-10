@@ -12,7 +12,7 @@ namespace GKCalculatorPlugin
 {
 	public partial class TfmCalcWidget : Form
 	{
-    	private Plugin fPlugin;
+    	private readonly Plugin fPlugin;
 		private readonly ExpCalculator fCalc;
 
 		public TfmCalcWidget(Plugin plugin) : base()

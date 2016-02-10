@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 
-using GKCommon;
+using BSLib;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Tools;
@@ -30,7 +29,7 @@ namespace GKUI
 		private readonly StringList fRMSkip;
 		private int fRMIndex;
 		private readonly StringList fPlaces;
-		private readonly ExtList<TreeTools.TCheckObj> fChecksList;
+		private readonly ExtList<TreeTools.CheckObj> fChecksList;
 
 		// UI
 		private GKListView ListPlaces;
@@ -74,7 +73,7 @@ namespace GKUI
 
 			this.fPlaces = new StringList();
 			this.fPlaces.Sorted = true;
-			this.fChecksList = new ExtList<TreeTools.TCheckObj>(true);
+			this.fChecksList = new ExtList<TreeTools.CheckObj>(true);
 
 			this.PrepareChecksList();
 			this.PreparePatriarchsList();
@@ -149,12 +148,12 @@ namespace GKUI
 			};
 		}
 
-		void btnHelp_Click(object sender, EventArgs e)
+        private void btnHelp_Click(object sender, EventArgs e)
 		{
 			TfmGEDKeeper.Instance.ShowHelpTopic(fHelpTopics[this.PageControl.SelectedIndex]);
 		}
 
-		void PageControl_SelectedIndexChanged(object sender, EventArgs e)
+        private void PageControl_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.PageControl.SelectedTab == this.SheetFamilyGroups)
 			{
@@ -172,15 +171,13 @@ namespace GKUI
 
 		#region TreeMerge
 
-		void btnTreeMerge_Click(object sender, EventArgs e)
+        private void btnTreeMerge_Click(object sender, EventArgs e)
 		{
-			if (this.OpenDialog1.ShowDialog() == DialogResult.OK) {
-				this.edUpdateBase.Text = this.OpenDialog1.FileName;
-
-				TreeTools.TreeMerge(this.Base.Tree, this.edUpdateBase.Text, this.mSyncRes);
-
-				this.Base.RefreshLists(false);
-			}
+            if (this.OpenDialog1.ShowDialog() != DialogResult.OK) return;
+            
+            this.edUpdateBase.Text = this.OpenDialog1.FileName;
+            TreeTools.TreeMerge(this.Base.Tree, this.edUpdateBase.Text, this.mSyncRes);
+            this.Base.RefreshLists(false);
 		}
 
 		#endregion
@@ -247,7 +244,7 @@ namespace GKUI
 			}
 		}
 
-		void RadioButton8_Click(object sender, EventArgs e)
+        private void RadioButton8_Click(object sender, EventArgs e)
 		{
 			if (this.RadioButton5.Checked) this.fRMMode = GEDCOMRecordType.rtIndividual;
 			if (this.RadioButton6.Checked) this.fRMMode = GEDCOMRecordType.rtNote;
@@ -257,7 +254,7 @@ namespace GKUI
 			this.MergeCtl.MergeMode = this.fRMMode;
 		}
 
-		void btnSkip_Click(object sender, EventArgs e)
+        private void btnSkip_Click(object sender, EventArgs e)
 		{
 			if (this.MergeCtl.Rec1 != null && this.MergeCtl.Rec2 != null)
 			{
@@ -266,7 +263,7 @@ namespace GKUI
 			this.SearchDups();
 		}
 
-		void btnSearch_Click(object sender, EventArgs e)
+        private void btnSearch_Click(object sender, EventArgs e)
 		{
 			this.fRMIndex = 0;
 			this.fRMSkip.Clear();
@@ -336,7 +333,7 @@ namespace GKUI
 			}
 		}
 
-		void TreeView1_DoubleClick(object sender, EventArgs e)
+        private void TreeView1_DoubleClick(object sender, EventArgs e)
 		{
 			GKTreeNode node = this.TreeView1.SelectedNode as GKTreeNode;
 		    if (node == null) return;
@@ -371,7 +368,7 @@ namespace GKUI
 			int num2 = this.fChecksList.Count;
 			for (int i = 0; i < num2; i++)
 			{
-				TreeTools.TCheckObj checkObj = this.fChecksList[i] as TreeTools.TCheckObj;
+				TreeTools.CheckObj checkObj = this.fChecksList[i];
 
 				GKListItem item = this.ListChecks.AddItem(checkObj.GetRecordName(), checkObj);
 				item.AddSubItem(checkObj.Comment);
@@ -381,19 +378,18 @@ namespace GKUI
 			this.ListChecks.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
 		}
 
-		void btnBaseRepair_Click(object sender, EventArgs e)
+        private void btnBaseRepair_Click(object sender, EventArgs e)
 		{
 			try
 			{
 				int num = this.ListChecks.Items.Count;
 				for (int i = 0; i < num; i++)
 				{
-					GKListItem item = this.ListChecks.Items[i] as GKListItem;
+                    GKListItem item = (GKListItem)this.ListChecks.Items[i];
+				    if (!item.Checked) continue;
 
-					if (item.Checked) {
-						TreeTools.TCheckObj checkObj = item.Data as TreeTools.TCheckObj;
-						TreeTools.RepairProblem(this.fBase, checkObj);
-					}
+				    TreeTools.CheckObj checkObj = item.Data as TreeTools.CheckObj;
+				    TreeTools.RepairProblem(this.fBase, checkObj);
 				}
 			}
 			finally
@@ -403,18 +399,16 @@ namespace GKUI
 			}
 		}
 
-		void ListChecksDblClick(object sender, EventArgs e)
+		private void ListChecksDblClick(object sender, EventArgs e)
 		{
 			GKListItem item = this.ListChecks.SelectedItem();
-			if (item != null)
-			{
-				GEDCOMIndividualRecord i_rec = (item.Data as TreeTools.TCheckObj).Rec as GEDCOMIndividualRecord;
-				if (i_rec != null)
-				{
-					this.Base.SelectRecordByXRef(i_rec.XRef);
-					this.Close();
-				}
-			}
+		    if (item == null) return;
+
+		    GEDCOMIndividualRecord iRec = (item.Data as TreeTools.CheckObj).Rec as GEDCOMIndividualRecord;
+		    if (iRec == null) return;
+
+		    this.Base.SelectRecordByXRef(iRec.XRef);
+		    this.Close();
 		}
 
 		#endregion
@@ -441,10 +435,10 @@ namespace GKUI
 				int num4 = this.fPlaces.Count;
 				for (int i = 0; i < num4; i++)
 				{
-					PlaceObj place_obj = this.fPlaces.GetObject(i) as PlaceObj;
+                    PlaceObj placeObj = (PlaceObj)this.fPlaces.GetObject(i);
 
-					GKListItem item = this.ListPlaces.AddItem(this.fPlaces[i], place_obj);
-					item.AddSubItem(place_obj.Facts.Count);
+					GKListItem item = this.ListPlaces.AddItem(this.fPlaces[i], placeObj);
+					item.AddSubItem(placeObj.Facts.Count);
 				}
 			}
 			finally
@@ -453,44 +447,42 @@ namespace GKUI
 			}
 		}
 
-		void btnIntoList_Click(object sender, EventArgs e)
+        private void btnIntoList_Click(object sender, EventArgs e)
 		{
 			this.ListPlacesDblClick(null, null);
 		}
 
-		void ListPlacesDblClick(object sender, EventArgs e)
+		private void ListPlacesDblClick(object sender, EventArgs e)
 		{
 			GKListItem item = this.ListPlaces.SelectedItem();
-			if (item != null)
-			{
-				PlaceObj p_obj = item.Data as PlaceObj;
-				if (p_obj != null)
-				{
-					if (p_obj.Name.IndexOf("[*]") == 0)
-					{
-						GKUtils.ShowMessage(LangMan.LS(LSID.LSID_PlaceAlreadyInBook));
-					}
-					else
-					{
-						GEDCOMLocationRecord loc = this.Base.SelectRecord(GEDCOMRecordType.rtLocation, new object[] { p_obj.Name }) as GEDCOMLocationRecord;
+		    if (item == null) return;
+		    
+            PlaceObj pObj = item.Data as PlaceObj;
+		    if (pObj == null) return;
+		    
+            if (pObj.Name.IndexOf("[*]") == 0)
+		    {
+		        GKUtils.ShowMessage(LangMan.LS(LSID.LSID_PlaceAlreadyInBook));
+		    }
+		    else
+		    {
+		        GEDCOMLocationRecord loc = this.Base.SelectRecord(GEDCOMRecordType.rtLocation, new object[] { pObj.Name }) as GEDCOMLocationRecord;
 
-						if (loc != null)
-						{
-							int num = p_obj.Facts.Count;
-							for (int i = 0; i < num; i++)
-							{
-								GEDCOMCustomEvent evt = p_obj.Facts[i] as GEDCOMCustomEvent;
-								evt.Detail.Place.StringValue = loc.LocationName;
-								evt.Detail.Place.Location.Value = loc;
-							}
+		        if (loc != null)
+		        {
+		            int num = pObj.Facts.Count;
+		            for (int i = 0; i < num; i++)
+		            {
+		                GEDCOMCustomEvent evt = pObj.Facts[i];
+		                evt.Detail.Place.StringValue = loc.LocationName;
+		                evt.Detail.Place.Location.Value = loc;
+		            }
 
-							this.CheckPlaces();
+		            this.CheckPlaces();
 
-							this.Base.RefreshLists(false);
-						}
-					}
-				}
-			}
+		            this.Base.RefreshLists(false);
+		        }
+		    }
 		}
 
 		#endregion
@@ -514,10 +506,10 @@ namespace GKUI
 					if (rec is GEDCOMIndividualRecord)
 					{
 						cnt++;
-						GEDCOMIndividualRecord i_rec = rec as GEDCOMIndividualRecord;
-						string st = i_rec.XRef + " / " + i_rec.GetNameString(true, false);
+						GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
+						string st = iRec.XRef + " / " + iRec.GetNameString(true, false);
 
-						if (this.fSplitList.IndexOf(i_rec) < 0) {
+						if (this.fSplitList.IndexOf(iRec) < 0) {
 							this.ListSkipped.Items.Add(st);
 						} else {
 							this.ListSelected.Items.Add(st);
@@ -625,21 +617,19 @@ namespace GKUI
 			this.ListPatriarchs.AddListColumn(LangMan.LS(LSID.LSID_Generations), 90, false);
 		}
 
-		void ListPatriarchsDblClick(object sender, EventArgs e)
+        private void ListPatriarchsDblClick(object sender, EventArgs e)
 		{
 			GKListItem item = this.ListPatriarchs.SelectedItem();
-			if (item != null)
-			{
-				GEDCOMIndividualRecord i_rec = item.Data as GEDCOMIndividualRecord;
-				if (i_rec != null)
-				{
-					this.Base.SelectRecordByXRef(i_rec.XRef);
-					this.Close();
-				}
-			}
+		    if (item == null) return;
+
+		    GEDCOMIndividualRecord iRec = item.Data as GEDCOMIndividualRecord;
+		    if (iRec == null) return;
+
+		    this.Base.SelectRecordByXRef(iRec.XRef);
+		    this.Close();
 		}
 
-		void btnPatSearch_Click(object sender, EventArgs e)
+		private void btnPatSearch_Click(object sender, EventArgs e)
 		{
 			this.ListPatriarchs.BeginUpdate();
 			ExtList<PatriarchObj> lst = new ExtList<PatriarchObj>(true);
@@ -651,13 +641,13 @@ namespace GKUI
 				int num = lst.Count;
 				for (int i = 0; i < num; i++)
 				{
-					PatriarchObj p_obj = lst[i];
-					string p_sign = ((p_obj.IRec.Patriarch) ? "[*] " : "");
+					PatriarchObj pObj = lst[i];
+					string pSign = ((pObj.IRec.Patriarch) ? "[*] " : "");
 
-					GKListItem item = this.ListPatriarchs.AddItem(p_sign + p_obj.IRec.GetNameString(true, false), p_obj.IRec);
-					item.AddSubItem(p_obj.BirthYear);
-					item.AddSubItem(p_obj.DescendantsCount);
-					item.AddSubItem(p_obj.DescGenerations);
+					GKListItem item = this.ListPatriarchs.AddItem(pSign + pObj.IRec.GetNameString(true, false), pObj.IRec);
+					item.AddSubItem(pObj.BirthYear);
+					item.AddSubItem(pObj.DescendantsCount);
+					item.AddSubItem(pObj.DescGenerations);
 				}
 			}
 			finally
@@ -667,21 +657,20 @@ namespace GKUI
 			}
 		}
 
-		void btnSetPatriarch_Click(object sender, EventArgs e)
+		private void btnSetPatriarch_Click(object sender, EventArgs e)
 		{
 			try
 			{
 				GKListItem item = this.ListPatriarchs.SelectedItem();
-				if (item != null)
-				{
-					GEDCOMIndividualRecord i_rec = item.Data as GEDCOMIndividualRecord;
-					if (i_rec != null)
-					{
-						i_rec.Patriarch = true;
-					}
+			    if (item == null) return;
 
-					this.Base.RefreshLists(false);
-				}
+			    GEDCOMIndividualRecord iRec = item.Data as GEDCOMIndividualRecord;
+			    if (iRec != null)
+			    {
+			        iRec.Patriarch = true;
+			    }
+
+			    this.Base.RefreshLists(false);
 			}
 			finally
 			{
@@ -689,7 +678,7 @@ namespace GKUI
 			}
 		}
 
-		void BtnPatriarchsDiagramClick(object sender, EventArgs e)
+        private void BtnPatriarchsDiagramClick(object sender, EventArgs e)
 		{
 			PatriarchsViewer wnd = new PatriarchsViewer(this.fBase, decimal.ToInt32(this.edMinGens.Value));
 			wnd.Show();
@@ -704,7 +693,7 @@ namespace GKUI
 		private string external_match_db;
 		private enum TreeMatchType { tmtInternal, tmtExternal, tmtAnalysis }
 
-		void btnFileChoose_Click(object sender, EventArgs e)
+        private void btnFileChoose_Click(object sender, EventArgs e)
 		{
 			if (this.OpenDialog1.ShowDialog() == DialogResult.OK)
 			{
@@ -730,7 +719,7 @@ namespace GKUI
 			return type;
 		}
 
-		void btnMatch_Click(object sender, EventArgs e)
+        private void btnMatch_Click(object sender, EventArgs e)
 		{
 			TreeMatchType type = GetTreeMatchType();
 
@@ -768,7 +757,7 @@ namespace GKUI
 			}
 		}
 
-		void rbtnMatch_CheckedChanged(object sender, EventArgs e)
+        private void rbtnMatch_CheckedChanged(object sender, EventArgs e)
 		{
 			TreeMatchType type = GetTreeMatchType();
 

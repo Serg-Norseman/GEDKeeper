@@ -2,9 +2,8 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-using Cyotek.Windows.Forms;
+using GKCommon.Controls;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -17,10 +16,10 @@ namespace GKUI.Dialogs
     public partial class TfmSlideshow : Form, ILocalization, IWorkWindow
     {
         private readonly IBaseWindow fBase;
+        private readonly List<GEDCOMFileReferenceWithTitle> fFileRefs;
+        private readonly ImageBox fImageCtl;
 
-        private List<GEDCOMFileReferenceWithTitle> fFileRefs;
         private int fCurrentIndex;
-        private Cyotek.Windows.Forms.ImageBox fImageCtl;
         private string fCurrentText;
 
         public TfmSlideshow(IBaseWindow aBase)
@@ -28,7 +27,7 @@ namespace GKUI.Dialogs
             this.InitializeComponent();
 
             this.SuspendLayout();
-            this.fImageCtl = new Cyotek.Windows.Forms.ImageBox();
+            this.fImageCtl = new ImageBox();
             this.fImageCtl.Dock = DockStyle.Fill;
             this.fImageCtl.Location = new Point(0, 0);
             this.fImageCtl.Size = new Size(100, 100);
@@ -75,7 +74,7 @@ namespace GKUI.Dialogs
         	GEDCOMRecord record;
         	var enumerator = this.fBase.Tree.GetEnumerator(GEDCOMRecordType.rtMultimedia);
         	while (enumerator.MoveNext(out record)) {
-				GEDCOMMultimediaRecord mediaRec = record as GEDCOMMultimediaRecord;
+                GEDCOMMultimediaRecord mediaRec = (GEDCOMMultimediaRecord)record;
 				GEDCOMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
 
         		MultimediaKind mmKind = GKUtils.GetMultimediaKind(fileRef.MultimediaFormat);

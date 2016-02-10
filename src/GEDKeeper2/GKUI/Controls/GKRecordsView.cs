@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using ExtUtils;
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore.Lists;
 using GKCore.Types;
 
@@ -381,7 +380,7 @@ namespace GKUI.Controls
 			}
 			catch (Exception ex)
 			{
-                SysUtils.LogWrite("GKRecordsView.UpdateContents(): " + ex.Message);
+                Logger.LogWrite("GKRecordsView.UpdateContents(): " + ex.Message);
 			}
 		}
 

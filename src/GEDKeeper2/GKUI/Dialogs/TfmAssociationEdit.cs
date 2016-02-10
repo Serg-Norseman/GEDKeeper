@@ -2,7 +2,6 @@
 using System.Windows.Forms;
 
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;

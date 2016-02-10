@@ -59,7 +59,7 @@ namespace GKUI.Controls
 					} else {
 						if (sortColumn < item1.SubItems.Count && sortColumn < item2.SubItems.Count)
 						{
-							compRes = SysUtils.agCompare(item1.SubItems[sortColumn].Text, item2.SubItems[sortColumn].Text);
+							compRes = agCompare(item1.SubItems[sortColumn].Text, item2.SubItems[sortColumn].Text);
 						}
 					}
 
@@ -72,6 +72,39 @@ namespace GKUI.Controls
 
 				return result;
 			}
+			
+			#region Private methods
+
+			private static int agCompare(string str1, string str2)
+			{
+				double val1, val2;
+				bool v1 = double.TryParse(str1, out val1);
+				bool v2 = double.TryParse(str2, out val2);
+
+				int result;
+				if (v1 && v2)
+				{
+					if (val1 < val2) {
+						result = -1;
+					} else if (val1 > val2) {
+						result = +1;
+					} else {
+						result = 0;
+					}
+				}
+				else
+				{
+					result = string.Compare(str1, str2, false);
+					if (str1 != "" && str2 == "") {
+						result = -1;
+					} else if (str1 == "" && str2 != "") {
+						result = +1;
+					}
+				}
+				return result;
+			}
+
+			#endregion
 		}
 
 		private readonly LVColumnSorter fColumnSorter;
@@ -198,7 +231,7 @@ namespace GKUI.Controls
 		{
 			int num = this.Items.Count;
 			for (int i = 0; i < num; i++) {
-                GKListItem item = this.Items[i] as GKListItem;
+                GKListItem item = (GKListItem)this.Items[i];
 
                 if (item.Data == data) {
 					this.SelectItem(item);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
+using BSLib;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -49,6 +50,8 @@ namespace GKUI.Sheets
                 this.DataList.Reset();
                 while (this.DataList.MoveNext()) {
                     GEDCOMCustomEvent evt = this.DataList.Current as GEDCOMCustomEvent;
+                    if (evt == null) continue;
+
                     idx += 1;
                 	
                     if (this.fPersonsMode)
@@ -79,7 +82,7 @@ namespace GKUI.Sheets
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("GKEventsSheet.UpdateSheet(): " + ex.Message);
+                Logger.LogWrite("GKEventsSheet.UpdateSheet(): " + ex.Message);
             }
         }
 
@@ -92,7 +95,7 @@ namespace GKUI.Sheets
 
             GEDCOMCustomEvent evt = eArgs.ItemData as GEDCOMCustomEvent;
 
-            bool result = this.ModifyRecEvent(aBase, this.DataList.Owner as GEDCOMRecordWithEvents, ref evt, eArgs.Action);
+            bool result = ModifyRecEvent(aBase, this.DataList.Owner as GEDCOMRecordWithEvents, ref evt, eArgs.Action);
 
             if (result && eArgs.Action == RecordAction.raAdd) eArgs.ItemData = evt;
 
@@ -103,7 +106,7 @@ namespace GKUI.Sheets
         }
 
         // FIXME
-        private bool ModifyRecEvent(IBaseWindow aBase, GEDCOMRecordWithEvents record, ref GEDCOMCustomEvent aEvent, RecordAction action)
+        private static bool ModifyRecEvent(IBaseWindow aBase, GEDCOMRecordWithEvents record, ref GEDCOMCustomEvent aEvent, RecordAction action)
         {
             bool result = false;
 
@@ -183,7 +186,7 @@ namespace GKUI.Sheets
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("GKEventsSheet.ModifyRecEvent(): " + ex.Message);
+                Logger.LogWrite("GKEventsSheet.ModifyRecEvent(): " + ex.Message);
                 return false;
             }
 

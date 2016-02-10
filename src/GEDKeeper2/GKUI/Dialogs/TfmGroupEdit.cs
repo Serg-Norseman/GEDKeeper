@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
 
+using BSLib;
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -94,12 +94,14 @@ namespace GKUI.Dialogs
 
                 foreach (GEDCOMPointer ptrMember in this.fGroup.Members) {
                     GEDCOMIndividualRecord member = ptrMember.Value as GEDCOMIndividualRecord;
+                    if (member == null) continue;
+
                     this.fMembersList.AddItem(member.GetNameString(true, false), member);
                 }
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("TfmGroupEdit.UpdateMembersSheet(): " + ex.Message);
+                Logger.LogWrite("TfmGroupEdit.UpdateMembersSheet(): " + ex.Message);
             }
 		}
 

@@ -1,7 +1,6 @@
 ﻿using System;
 
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore;
 
 using NUnit.Framework;

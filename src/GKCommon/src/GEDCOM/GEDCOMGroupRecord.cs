@@ -1,7 +1,5 @@
 using System;
 using System.IO;
-using ExtUtils;
-using GKCommon.GEDCOM.Enums;
 
 namespace GKCommon.GEDCOM
 {
@@ -132,7 +130,7 @@ namespace GKCommon.GEDCOM
 			}
 			catch (Exception ex)
 			{
-				SysUtils.LogWrite("GEDCOMGroupRecord.AddMember(): " + ex.Message);
+				Logger.LogWrite("GEDCOMGroupRecord.AddMember(): " + ex.Message);
 				result = false;
 			}
 
@@ -153,7 +151,7 @@ namespace GKCommon.GEDCOM
 			}
 			catch (Exception ex)
 			{
-				SysUtils.LogWrite("GEDCOMGroupRecord.RemoveMember(): " + ex.Message);
+				Logger.LogWrite("GEDCOMGroupRecord.RemoveMember(): " + ex.Message);
 				result = false;
 			}
 

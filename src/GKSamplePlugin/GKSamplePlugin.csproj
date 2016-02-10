@@ -29,6 +29,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>..\gk2rules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -68,9 +69,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GKInterfaces\GKInterfaces.csproj">
-      <Project>{B86F8B3B-E1CD-4A00-A73B-2D454924B8D2}</Project>
-      <Name>GKInterfaces</Name>
+    <ProjectReference Include="..\GKCommon\GKCommon.csproj">
+      <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
+      <Name>GKCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

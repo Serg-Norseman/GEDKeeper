@@ -5,17 +5,17 @@ using System.Runtime.InteropServices;
 using GKCore.Interfaces;
 
 [assembly: AssemblyTitle("GKPedigreeImporterPlugin")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("GEDKeeper2 PedigreeImporter plugin")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("GEDKeeper2")]
-[assembly: AssemblyCopyright("Copyright © 2014, Serg V. Zhdanovskih")]
+[assembly: AssemblyCopyright("Copyright © 2014,2016, Serg V. Zhdanovskih")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+[assembly: CLSCompliant(false)]
 [assembly: ComVisible(false)]
-// The assembly version has following format: Major.Minor.Build.Revision
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.2.0.0")]
+[assembly: AssemblyFileVersion("1.2.0.0")]
 
 namespace GKPedigreeImporterPlugin
 {
@@ -30,22 +30,20 @@ namespace GKPedigreeImporterPlugin
 		LSID_PersonParsed, 
 		LSID_Generation, 
 		LSID_ParseError_AncNotFound, 
-		LSID_ParseError_DateInvalid
+		LSID_ParseError_DateInvalid,
+		LSID_ParseError_NumDuplicate
     }
     
     public class PlugIn : IPlugin
     {
-        private string fDisplayName = "Импорт росписей";
+        private const string DISPLAY_NAME = "GKPedigreeImporterPlugin";
+
         private IHost fHost;
         private ILangMan fLangMan;
 
         public string DisplayName {
         	get {
-        		if (fLangMan == null) {
-        			return this.fDisplayName;
-        		} else {
-        			return this.fLangMan.LS(ILS.LSID_PluginTitle);
-        		}
+                return (fLangMan == null) ? DISPLAY_NAME : this.fLangMan.LS(ILS.LSID_PluginTitle);
         	}
         }
 

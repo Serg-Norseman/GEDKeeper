@@ -11,8 +11,8 @@ namespace GKUI
 {
 	public partial class TfmAncestorsCircle : Form, IChartWindow
 	{
-		private AncestorsCircle fAncestorsCircle;
-		private IBaseWindow fBase;
+		private readonly AncestorsCircle fAncestorsCircle;
+		private readonly IBaseWindow fBase;
 
 		public IBaseWindow Base
 		{

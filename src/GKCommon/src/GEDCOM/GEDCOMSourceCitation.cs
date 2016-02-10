@@ -1,4 +1,4 @@
-using ExtUtils;
+using BSLib;
 
 namespace GKCommon.GEDCOM
 {
@@ -38,7 +38,7 @@ namespace GKCommon.GEDCOM
 			else
 			{
 				GEDCOMRecord sourceRecord = base.Value;
-				if (sourceRecord != null && sourceRecord is GEDCOMSourceRecord) {
+				if (sourceRecord is GEDCOMSourceRecord) {
 					description = ((sourceRecord as GEDCOMSourceRecord).Title);
 				} else {
 					description = new StringList();
@@ -64,19 +64,6 @@ namespace GKCommon.GEDCOM
 		{
 			string result = this.IsPointer ? base.GetStringValue() : this.fStringValue;
 			return result;
-		}
-
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing)
-			{
-			}
-			base.Dispose(disposing);
-		}
-
-		public override void Clear()
-		{
-			base.Clear();
 		}
 
 		public override bool IsEmpty()

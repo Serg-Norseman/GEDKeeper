@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
 
+using BSLib;
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCommon.GEDCOM.Enums;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -97,13 +97,14 @@ namespace GKUI.Dialogs
 
                 foreach (GEDCOMRepositoryCitation repCit in this.fSourceRecord.RepositoryCitations) {
                     GEDCOMRepositoryRecord rep = repCit.Value as GEDCOMRepositoryRecord;
+                    if (rep == null) continue;
 
                     this.fRepositoriesList.AddItem(rep.RepositoryName, repCit);
                 }
             }
             catch (Exception ex)
             {
-                SysUtils.LogWrite("TfmSourceEdit.UpdateReposSheet(): " + ex.Message);
+                Logger.LogWrite("TfmSourceEdit.UpdateReposSheet(): " + ex.Message);
             }
 		}
 		

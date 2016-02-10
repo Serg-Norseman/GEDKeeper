@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Drawing;
+
+using BSLib;
+using BSLib.SmartGraph;
 using GKCommon;
-using GKCommon.GEDCOM.Enums;
-using SmartGraph;
+using GKCommon.GEDCOM;
+using GKCore;
 using NUnit.Framework;
 
 namespace GKTests
@@ -81,7 +84,7 @@ namespace GKTests
 
 			EnumSet<GEDCOMRestriction> es3 = EnumSet<GEDCOMRestriction>.Create(GEDCOMRestriction.rnLocked);
 			EnumSet<GEDCOMRestriction> es4 = es * es3;
-			Assert.IsTrue(es.Contains(GEDCOMRestriction.rnLocked));
+            Assert.IsTrue(es4.Contains(GEDCOMRestriction.rnLocked));
 			
 			es = EnumSet<GEDCOMRestriction>.Create(GEDCOMRestriction.rnNone);
 			es2 = EnumSet<GEDCOMRestriction>.Create(GEDCOMRestriction.rnLocked);
@@ -142,6 +145,51 @@ namespace GKTests
 			}
 		}
 
+		
+		/*[Test]
+		public void Sort_PerfTest()
+		{
+			Random rnd = new Random();
+			
+			ExtList<ValItem> listQS = new ExtList<ExtTests.ValItem>();
+			ExtList<ValItem> listMS = new ExtList<ExtTests.ValItem>();
+			System.Collections.Generic.List<ValItem> listTS = new System.Collections.Generic.List<ValItem>();
+			System.Collections.Generic.List<ValItem> listCS = new System.Collections.Generic.List<ValItem>();
+			
+			for (int i = 0; i < 100000; i++) {
+				double val = rnd.NextDouble();
+				
+				listTS.Add(new ValItem(val));
+				listQS.Add(new ValItem(val));
+				listMS.Add(new ValItem(val));
+				listCS.Add(new ValItem(val));
+			}
+			
+			listQS.QuickSort(CompareItems);
+			
+			listMS.MergeSort(CompareItems);
+			
+			ExtUtils.ListTimSort<ValItem>.Sort(listTS, CompareItems);
+			
+			listCS.Sort(CompareItems);
+		}
+
+		private class ValItem
+		{
+			public double Value;
+			
+			public ValItem(double value)
+			{
+				this.Value = value;
+			}
+		}
+		
+		private int CompareItems(ValItem item1, ValItem item2)
+		{
+			return item1.Value.CompareTo(item2.Value);
+		}*/
+		
+		
 		[Test]
 		public void StringList_Tests()
 		{
@@ -163,36 +211,17 @@ namespace GKTests
 		[Test]
 		public void SysUtils_Tests()
 		{
-			Assert.AreEqual(3.0f, SysUtils.SafeDiv(9.0f, 3.0f));
-			Assert.AreEqual(0.0f, SysUtils.SafeDiv(9.0f, 0.0f));
-			
 			Assert.AreEqual(true, SysUtils.IsSetBit(3, 0));
 			Assert.AreEqual(true, SysUtils.IsSetBit(3, 1));
 			Assert.AreEqual(false, SysUtils.IsSetBit(3, 4));
 
-			long val = SysUtils.Trunc(495.575);
-			Assert.AreEqual(val, 495);
-
-			int ival = SysUtils.ParseInt("495", 0);
+			int ival = ConvHelper.ParseInt("495", 0);
 			Assert.AreEqual(ival, 495);
 
-			double fval = SysUtils.ParseFloat("495.575", 0);
+			double fval = ConvHelper.ParseFloat("495.575", 0);
 			Assert.AreEqual(fval, 495.575);
 
-			string str;
-			str = SysUtils.TrimLeft("	test1");
-			Assert.AreEqual(str, "test1");
-
-			str = SysUtils.TrimLeft(null);
-			Assert.AreEqual(str, "");
-
-			str = SysUtils.TrimRight("test2		");
-			Assert.AreEqual(str, "test2");
-
-			str = SysUtils.TrimChars("xyxyx test3", new char[] {'x', 'y'});
-			Assert.AreEqual(str, " test3");
-
-			string st = SysUtils.NumUpdate(9, 3);
+			string st = ConvHelper.AdjustNum(9, 3);
 			Assert.AreEqual(st, "009");
 		}
 
@@ -379,38 +408,58 @@ namespace GKTests
 		}
 
 		[Test]
+		public void Calendar_PerfTest()
+		{
+			int y = 1990, m = 10, d = 10;
+			double jd;
+
+			for (int i = 0; i < 10000000; i++) {
+				jd = CalendarConverter.gregorian_to_jd(y, m, d);
+				jd = CalendarConverter.gregorian_to_jd2(y, m, d);
+			}
+		}
+		
+		[Test]
 		public void Calendar_Tests()
 		{
 			DateTime gdt = new DateTime(1990, 10, 10);
 			string s;
 
-			double jd = CalendarConverter.gregorian_to_jd(gdt.Year, gdt.Month, gdt.Day);
+			double jd = CalendarConverter.gregorian_to_jd2(gdt.Year, gdt.Month, gdt.Day);
+			Assert.AreEqual(2448175, jd); // 
+
+			jd = CalendarConverter.gregorian_to_jd(-4713, 11, 24);
+			Assert.AreEqual(0.5, jd); // bad result! needs 0.0f!
+			
+			jd = CalendarConverter.gregorian_to_jd(gdt.Year, gdt.Month, gdt.Day);
+			Assert.AreEqual(2448174.5, jd); // not checked!
+			
 			int year = 0;
 			int month = 0;
 			int day = 0;
-			CalendarConverter.jd_to_julian(jd, ref year, ref month, ref day);
+            CalendarConverter.jd_to_julian(jd, out year, out month, out day);
 			s = CalendarData.date_to_str(year, month, day, CalendarConverter.DateEra.AD);
 			Assert.AreEqual("27 сен 1990", s); // +
 
-			CalendarConverter.jd_to_hebrew(jd, ref year, ref month, ref day);
+            CalendarConverter.jd_to_hebrew(jd, out year, out month, out day);
 			s = day.ToString() + " ";
 			s += CalendarData.HebrewMonths[month - 1];
 			s = s + " " + year.ToString() + ", " + CalendarData.HebrewWeekdays[CalendarConverter.jwday(jd)];
 			Assert.AreEqual("21 Тишрей 5751, далет", s); // +
 
-			CalendarConverter.jd_to_islamic(jd, ref year, ref month, ref day);
+            CalendarConverter.jd_to_islamic(jd, out year, out month, out day);
 			s = day.ToString() + " ";
 			s += CalendarData.IslamicMonths[month - 1];
 			s = s + " " + year.ToString() + ", йаум " + CalendarData.IslamicWeekdays[CalendarConverter.jwday(jd)];
 			Assert.AreEqual("20 рабии`у ль-авваль 1411, йаум аль-арба'а", s); // +
 
-			CalendarConverter.jd_to_persian(jd, ref year, ref month, ref day);
+            CalendarConverter.jd_to_persian(jd, out year, out month, out day);
 			s = day.ToString() + " ";
 			s += CalendarData.PersianMonths[month - 1];
 			s = s + " " + year.ToString() + ", " + CalendarData.PersianWeekdays[CalendarConverter.jwday(jd)];
 			Assert.AreEqual("18 Мехр 1369, чахаршанбе", s); // +
 
-			CalendarConverter.jd_to_indian_civil(jd, ref year, ref month, ref day);
+            CalendarConverter.jd_to_indian_civil(jd, out year, out month, out day);
 			s = day.ToString() + " ";
 			s += CalendarData.IndianCivilMonths[month - 1];
 			s = s + " " + year.ToString() + ", " + CalendarData.IndianCivilWeekdays[CalendarConverter.jwday(jd)];
@@ -418,16 +467,12 @@ namespace GKTests
 
 			int major = 0;
 			int cycle = 0;
-			CalendarConverter.jd_to_bahai(jd, ref major, ref cycle, ref year, ref month, ref day);
+            CalendarConverter.jd_to_bahai(jd, out major, out cycle, out year, out month, out day);
 			s = "Кулл-и Шай' " + major.ToString() + ", Вахид " + cycle.ToString() + ", ";
 			s = s + day.ToString() + " ";
 			s += CalendarData.BahaiMonths[month - 1];
 			s = s + " " + year.ToString() + ", " + CalendarData.BahaiWeekdays[CalendarConverter.jwday(jd)];
 			Assert.AreEqual("Кулл-и Шай' 1, Вахид 8, 14 Машиййат 14, Идаль", s); // ???
-
-			// bad result! needs 0.0f!
-			jd = CalendarConverter.gregorian_to_jd(-4713, 11, 24);
-			Assert.AreEqual(-0.5, jd);
 		}
 
 		[Test]

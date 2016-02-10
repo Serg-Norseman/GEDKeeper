@@ -12,8 +12,8 @@ using GKCore.Interfaces;
 [assembly: AssemblyCopyright("Copyright © 2014, Serg V. Zhdanovskih")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+[assembly: CLSCompliant(false)]
 [assembly: ComVisible(false)]
-// The assembly version has following format: Major.Minor.Build.Revision
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
@@ -21,11 +21,12 @@ namespace GKSamplePlugin
 {
     public class Plugin : IPlugin
     {
-        private string fDisplayName = "Тестовый плагин";
+        private const string DISPLAY_NAME = "GKSamplePlugin";
+
         private IHost fHost;
         private ILangMan fLangMan;
 
-        public string DisplayName { get { return this.fDisplayName; } }
+        public string DisplayName { get { return DISPLAY_NAME; } }
         public IHost Host { get { return fHost; } }
         public ILangMan LangMan { get { return fLangMan; } }
 
