@@ -16,12 +16,12 @@ namespace GKUI
     /// </summary>
     public sealed partial class TfmMaps : Form, ILocalization
 	{
-		private class TPlaceRef
+		private class PlaceRef
 		{
 			public readonly DateTime Date;
 			public readonly GEDCOMCustomEvent Event;
 
-			public TPlaceRef(GEDCOMCustomEvent evt)
+			public PlaceRef(GEDCOMCustomEvent evt)
 			{
 				this.Event = evt;
 				this.Date = (evt == null) ? new DateTime(0) : evt.Detail.Date.GetDateTime();
@@ -32,14 +32,14 @@ namespace GKUI
 		{
 			public string Name;
 			public readonly ExtList<GMapPoint> Points;
-			public readonly ExtList<TPlaceRef> PlaceRefs;
+			public readonly ExtList<PlaceRef> PlaceRefs;
 
             private bool fDisposed;
 
             public MapPlace()
 			{
 				this.Points = new ExtList<GMapPoint>(true);
-				this.PlaceRefs = new ExtList<TPlaceRef>(false);
+				this.PlaceRefs = new ExtList<PlaceRef>(false);
 			}
 
 			public void Dispose()
@@ -86,7 +86,7 @@ namespace GKUI
 
 					if (res) {
 						GEDCOMIndividualRecord ind = rec as GEDCOMIndividualRecord;
-						int p_cnt = 0;
+						int pCnt = 0;
 
 						int num2 = ind.Events.Count;
 						for (int j = 0; j < num2; j++)
@@ -94,12 +94,12 @@ namespace GKUI
 							GEDCOMCustomEvent ev = ind.Events[j];
 							if (ev.Detail.Place.StringValue != "") {
 								AddPlace(ev.Detail.Place, ev);
-								p_cnt++;
+								pCnt++;
 							}
 						}
 
-						if (p_cnt > 0) {
-							this.ComboPersons.Items.Add(new GKComboItem(ind.GetNameString(true, false) + " [" + p_cnt.ToString() + "]", ind));
+						if (pCnt > 0) {
+							this.ComboPersons.Items.Add(new GKComboItem(ind.GetNameString(true, false) + " [" + pCnt.ToString() + "]", ind));
 						}
 					}
 
@@ -180,7 +180,8 @@ namespace GKUI
 			} else if (this.radSelected.Checked) {
 				if (this.ComboPersons.SelectedIndex >= 0)
 				{
-					ind = ((this.ComboPersons.Items[this.ComboPersons.SelectedIndex] as GKComboItem).Data as GEDCOMIndividualRecord);
+                    GKComboItem item = (GKComboItem)this.ComboPersons.Items[this.ComboPersons.SelectedIndex];
+					ind = (item.Data as GEDCOMIndividualRecord);
 				}
 			}
 
@@ -315,13 +316,13 @@ namespace GKUI
 					node.Nodes.Add(new GKTreeNode(ptTitle, pt));
 				}
 			} else {
-                mapPlace = ((node as GKTreeNode).Data as MapPlace);
+                mapPlace = (((GKTreeNode) node).Data as MapPlace);
 			}
 
-			mapPlace.PlaceRefs.Add(new TPlaceRef(placeEvent));
+			mapPlace.PlaceRefs.Add(new PlaceRef(placeEvent));
 		}
 
-		private void CopyPoint(GMapPoint aPt, TPlaceRef aRef)
+		private void CopyPoint(GMapPoint aPt, PlaceRef aRef)
 		{
 			GMapPoint pt;
 			int num = this.fMapPoints.Count;

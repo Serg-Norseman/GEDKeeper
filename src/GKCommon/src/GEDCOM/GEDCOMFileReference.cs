@@ -1,5 +1,3 @@
-using System.IO;
-
 namespace GKCommon.GEDCOM
 {
 	public class GEDCOMFileReference : GEDCOMTag
@@ -19,7 +17,7 @@ namespace GKCommon.GEDCOM
 		protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
 		{
 			base.CreateObj(owner, parent);
-			this.fName = "FILE";
+			this.SetName("FILE");
 		}
 
 		protected virtual string MediaTypeTagName()
@@ -37,7 +35,7 @@ namespace GKCommon.GEDCOM
 		{
             if (string.IsNullOrEmpty(fileName)) return GEDCOMMultimediaFormat.mfUnknown;
 
-            string ext = Path.GetExtension(fileName).ToLower();
+            string ext = AuxUtils.GetFileExtension(fileName);
 
 			GEDCOMMultimediaFormat result;
 			if (ext == ".bmp")

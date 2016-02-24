@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GKCommon.GEDCOM
+﻿namespace GKCommon.GEDCOM
 {
 	/// <summary>
 	/// GEDCOMConsts.
@@ -12,9 +10,10 @@ namespace GKCommon.GEDCOM
 			public string Sign;
 			public string Name;
 			
-			public GEDCOMAppFormat(string aSign, string aName) {
-				this.Sign = aSign;
-				this.Name = aName;
+			public GEDCOMAppFormat(string sign, string name)
+            {
+				this.Sign = sign;
+				this.Name = name;
 			}
 		}
 
@@ -22,7 +21,7 @@ namespace GKCommon.GEDCOM
 
 		static GEDCOMConsts()
 		{
-			GEDCOMFormats = new GEDCOMAppFormat[6] {
+			GEDCOMFormats = new GEDCOMAppFormat[] {
 				new GEDCOMAppFormat("", ""),
 				new GEDCOMAppFormat("GEDKeeper", ""),
 				new GEDCOMAppFormat("GENBOX", "Genbox Family History"),

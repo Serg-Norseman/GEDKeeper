@@ -33,7 +33,7 @@ namespace GKCore
 
 		#region Internal functions
 
-		private static bool Comparable(string name, string patronymic)
+		private static bool IsComparable(string name, string patronymic)
 		{
 			if (name == null || patronymic == null) {
 				return false;
@@ -62,41 +62,39 @@ namespace GKCore
 
 		public void LoadFromFile(string fileName)
 		{
-			if (File.Exists(fileName)) {
-				StreamReader strd = new StreamReader(fileName, Encoding.GetEncoding(1251));
-				try {
-					while (strd.Peek() != -1) {
-						string line = strd.ReadLine();
-						if (string.IsNullOrEmpty(line))
-							continue;
+		    if (!File.Exists(fileName)) return;
+		    
+            using (StreamReader strd = new StreamReader(fileName, Encoding.GetEncoding(1251)))
+		    {
+		        while (strd.Peek() != -1)
+                {
+		            string line = strd.ReadLine();
+		            if (string.IsNullOrEmpty(line))
+		                continue;
 
-						string[] data = line.Trim().Split(new char[] { ';' });
-						NameEntry nm = new NameEntry();
-						nm.Name = data[0];
-						nm.F_Patronymic = data[1];
-						nm.M_Patronymic = data[2];
-						if (data[3] != "") {
-							nm.Sex = GKUtils.GetSexBySign(data[3][0]);
-						}
-						this.fNames.Add(nm.Name, nm);
-					}
-				} finally {
-					strd.Close();
-				}
-			}
+		            string[] data = line.Trim().Split(';');
+		            NameEntry nm = new NameEntry();
+		            nm.Name = data[0];
+		            nm.F_Patronymic = data[1];
+		            nm.M_Patronymic = data[2];
+		            if (data[3] != "") {
+		                nm.Sex = GKUtils.GetSexBySign(data[3][0]);
+		            }
+		            this.fNames.Add(nm.Name, nm);
+		        }
+		    }
 		}
 
 		public void SaveToFile(string fileName)
 		{
-			StreamWriter strd = new StreamWriter(fileName, false, Encoding.GetEncoding(1251));
-			try {
-				foreach (DictionaryEntry de in this.fNames) {
-					NameEntry nm = (de.Value as NameEntry);
+			using (StreamWriter strd = new StreamWriter(fileName, false, Encoding.GetEncoding(1251)))
+			{
+				foreach (DictionaryEntry de in this.fNames)
+                {
+					NameEntry nm = (NameEntry)de.Value;
 					string st = nm.Name + ";" + nm.F_Patronymic + ";" + nm.M_Patronymic + ";" + GKData.SexData[(int)nm.Sex].Sign;
 					strd.WriteLine(st);
 				}
-			} finally {
-				strd.Close();
 			}
 		}
 
@@ -120,12 +118,15 @@ namespace GKCore
 			string result = "";
 
 			NameEntry nm = this.FindName(name);
-			if (nm != null) {
-				switch (sex) {
+			if (nm != null)
+            {
+				switch (sex)
+                {
 					case GEDCOMSex.svMale:
 						result = nm.M_Patronymic;
 						break;
-					case GEDCOMSex.svFemale:
+
+                    case GEDCOMSex.svFemale:
 						result = nm.F_Patronymic;
 						break;
 				}
@@ -138,9 +139,12 @@ namespace GKCore
 		{
 			string result = "";
 
-			if (patronymic != "") {
-				foreach (NameEntry nm in this.fNames.Values) {
-					if (nm.F_Patronymic == patronymic || nm.M_Patronymic == patronymic) {
+			if (patronymic != "")
+            {
+				foreach (NameEntry nm in this.fNames.Values)
+                {
+					if (nm.F_Patronymic == patronymic || nm.M_Patronymic == patronymic)
+                    {
 						result = nm.Name;
 						break;
 					}
@@ -158,35 +162,37 @@ namespace GKCore
 
 		public void SetName(string name, string patronymic, GEDCOMSex sex)
 		{
-			if (name != "") {
-				NameEntry nm = this.FindName(name);
-				if (nm == null)
-					nm = this.AddName(name);
+		    if (string.IsNullOrEmpty(name)) return;
 
-				switch (sex) {
-					case GEDCOMSex.svMale:
-						if (string.IsNullOrEmpty(nm.M_Patronymic))
-							nm.M_Patronymic = patronymic;
-						break;
-					case GEDCOMSex.svFemale:
-						if (string.IsNullOrEmpty(nm.F_Patronymic))
-							nm.F_Patronymic = patronymic;
-						break;
-				}
-			}
+            NameEntry nm = this.FindName(name);
+		    if (nm == null)
+		        nm = this.AddName(name);
+
+		    switch (sex)
+            {
+		        case GEDCOMSex.svMale:
+		            if (string.IsNullOrEmpty(nm.M_Patronymic))
+		                nm.M_Patronymic = patronymic;
+		            break;
+		        case GEDCOMSex.svFemale:
+		            if (string.IsNullOrEmpty(nm.F_Patronymic))
+		                nm.F_Patronymic = patronymic;
+		            break;
+		    }
 		}
 
 		public void SetNameSex(string name, GEDCOMSex sex)
 		{
-			if (name != "") {
-				NameEntry nm = this.FindName(name);
-				if (nm == null)
-					nm = this.AddName(name);
+		    if (string.IsNullOrEmpty(name)) return;
+		    
+            NameEntry nm = this.FindName(name);
+		    if (nm == null)
+		        nm = this.AddName(name);
 
-				if (nm.Sex == GEDCOMSex.svNone && sex >= GEDCOMSex.svMale && sex < GEDCOMSex.svUndetermined) {
-					nm.Sex = sex;
-				}
-			}
+		    if (nm.Sex == GEDCOMSex.svNone && sex >= GEDCOMSex.svMale && sex < GEDCOMSex.svUndetermined)
+            {
+		        nm.Sex = sex;
+		    }
 		}
 
 		public void ImportNames(GEDCOMIndividualRecord iRec)
@@ -194,25 +200,30 @@ namespace GKCore
 			if (iRec == null)
 				return;
 
-			try {
-				string dummy, ch_name, ch_pat;
-				iRec.GetNameParts(out dummy, out ch_name, out ch_pat);
+			try
+            {
+				string dummy, childName, childPat;
+				iRec.GetNameParts(out dummy, out childName, out childPat);
 
 				GEDCOMSex iSex = iRec.Sex;
-				this.SetNameSex(ch_name, iSex);
+				this.SetNameSex(childName, iSex);
 
 				GEDCOMIndividualRecord iFather, iMother;
 				iRec.GetParents(out iFather, out iMother);
 
-				if (iFather != null) {
-					string fat_nam;
-					iFather.GetNameParts(out dummy, out fat_nam, out dummy);
+				if (iFather != null)
+                {
+					string fatherNam;
+					iFather.GetNameParts(out dummy, out fatherNam, out dummy);
 
-					if (NamesTable.Comparable(fat_nam, ch_pat)) {
-						this.SetName(fat_nam, ch_pat, iSex);
+					if (IsComparable(fatherNam, childPat))
+                    {
+						this.SetName(fatherNam, childPat, iSex);
 					}
 				}
-			} catch (Exception ex) {
+			}
+            catch (Exception ex)
+            {
 				Logger.LogWrite("NamesTable.ImportName(): " + ex.Message);
 			}
 		}

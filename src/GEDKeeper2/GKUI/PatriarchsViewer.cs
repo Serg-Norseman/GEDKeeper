@@ -61,7 +61,7 @@ namespace GKUI
 				ArborNode arbNode = sys.addNode(vtx.Sign);
 				PGNode pgNode = (PGNode)vtx.Value;
 
-				arbNode.Color = (pgNode.Type == PGNodeType.ntIntersection) ? Color.BlueViolet : Color.Navy;
+				arbNode.Color = (pgNode.Type == PGNodeType.Intersection) ? Color.BlueViolet : Color.Navy;
 				arbNode.Mass = pgNode.Size;
 			}
 

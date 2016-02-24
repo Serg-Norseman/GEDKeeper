@@ -7,10 +7,10 @@ namespace GKCommon.GEDCOM
     /// </summary>
     public class GEDCOMObject : IDisposable
 	{
-		public const char GEDCOMDelimiter = ' ';
-		public const char GEDCOMYearModifierSeparator = '/';
-		public const string GEDCOMYearBC = "B.C."; // const restored
-		public const char GEDCOMPointerDelimiter = '@';
+		public const char GEDCOM_DELIMITER = ' ';
+		public const char GEDCOM_YEAR_MODIFIER_SEPARATOR = '/';
+		public const string GEDCOM_YEAR_BC = "B.C.";
+		public const char GEDCOM_POINTER_DELIMITER = '@';
 
 		// deprecated
 		//public const string GEDCOMNewLine = "#13#10";

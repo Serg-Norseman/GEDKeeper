@@ -3,7 +3,6 @@ using System.IO;
 
 using BSLib;
 using BSLib.SmartGraph;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Types;
 
@@ -31,8 +30,8 @@ namespace GKCore.Interfaces
 		AbsDate FindDeathYear(GEDCOMIndividualRecord iRec);
 		
 		// Patriarchs search
-		void GetPatriarchsList(ExtList<PatriarchObj> patList, int gensMin, bool datesCheck);
-		void GetPatriarchsLinks(ExtList<PatriarchObj> patList, int gensMin, bool datesCheck, bool loneSuppress);
+		ExtList<PatriarchObj> GetPatriarchsList(int gensMin, bool datesCheck);
+		ExtList<PatriarchObj> GetPatriarchsLinks(int gensMin, bool datesCheck, bool loneSuppress);
 		Graph GetPatriarchsGraph(int gensMin, bool datesCheck, bool loneSuppress = true);
 		
 		// Multimedia support

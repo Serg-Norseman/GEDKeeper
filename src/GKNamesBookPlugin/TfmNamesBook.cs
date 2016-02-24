@@ -8,10 +8,6 @@ using System.Windows.Forms;
 using BSLib;
 using GKCommon.GEDCOM;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKNamesBookPlugin
 {
 	public class GKComboItem
@@ -31,7 +27,10 @@ namespace GKNamesBookPlugin
 		}
 	}
 
-	public partial class TfmNamesBook : Form
+    /// <summary>
+    /// 
+    /// </summary>
+    public partial class TfmNamesBook : Form
 	{
 		private class NameRecord
 		{
@@ -89,46 +88,44 @@ namespace GKNamesBookPlugin
 		private void cbNames_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			int idx = this.cbNames.SelectedIndex;
-			if (idx >= 0 && idx < this.cbNames.Items.Count)
-			{
-                GKComboItem item = (GKComboItem)this.cbNames.Items[idx];
-				NameRecord rec = item.Data as NameRecord;
+		    if (idx < 0 || idx >= this.cbNames.Items.Count) return;
 
-				this.mmDesc.Text = "";
-				this.mmDesc.AppendText(rec.Name + "\r\n");
-				this.mmDesc.AppendText(rec.Desc + "\r\n");
+            GKComboItem item = (GKComboItem)this.cbNames.Items[idx];
+		    NameRecord rec = (NameRecord)item.Data;
 
-                if (rec.ChIndex >= 0)
-				{
-					this.mmDesc.AppendText("\r\n");
-					this.mmDesc.AppendText("Святцы:\r\n");
-					
-                    StringList lst = null;
-					if (rec.Sex == GEDCOMSex.svMale)
-					{
-						lst = this.fChurchMNames;
-					}
-					else
-					{
-						if (rec.Sex == GEDCOMSex.svFemale)
-						{
-							lst = this.fChurchFNames;
-						}
-					}
+		    this.mmDesc.Text = "";
+		    this.mmDesc.AppendText(rec.Name + "\r\n");
+		    this.mmDesc.AppendText(rec.Desc + "\r\n");
 
-					int num = lst.Count;
-					for (int i = rec.ChIndex + 1; i < num; i++)
-					{
-						string st = lst[i].Trim();
-						if (st[0] == '-')
-						{
-							break;
-						}
-						st = st.Remove(0, 1);
-						this.mmDesc.AppendText(st + "\r\n");
-					}
-				}
-			}
+		    if (rec.ChIndex < 0) return;
+
+            this.mmDesc.AppendText("\r\n");
+		    this.mmDesc.AppendText("Святцы:\r\n");
+
+		    StringList lst;
+		    switch (rec.Sex)
+		    {
+		        case GEDCOMSex.svMale:
+		            lst = this.fChurchMNames;
+		            break;
+		        case GEDCOMSex.svFemale:
+		            lst = this.fChurchFNames;
+		            break;
+		        default:
+		            return;
+		    }
+
+		    int num = lst.Count;
+		    for (int i = rec.ChIndex + 1; i < num; i++)
+		    {
+		        string st = lst[i].Trim();
+		        if (st[0] == '-')
+		        {
+		            break;
+		        }
+		        st = st.Remove(0, 1);
+		        this.mmDesc.AppendText(st + "\r\n");
+		    }
 		}
 
 		private static bool ExtractFlags(ref string st)
@@ -256,11 +253,17 @@ namespace GKNamesBookPlugin
                     rec.ChIndex = -1;
                     ns = ns.ToUpper();
 
-                    StringList lst = null;
-                    if (rec.Sex == GEDCOMSex.svMale) {
-                    	lst = this.fChurchMNames;
-                    } else if (rec.Sex == GEDCOMSex.svFemale) {
-                    	lst = this.fChurchFNames;
+                    StringList lst;
+                    switch (rec.Sex)
+                    {
+                        case GEDCOMSex.svMale:
+                            lst = this.fChurchMNames;
+                            break;
+                        case GEDCOMSex.svFemale:
+                            lst = this.fChurchFNames;
+                            break;
+                        default:
+                            return;
                     }
 
                     int num2 = lst.Count;

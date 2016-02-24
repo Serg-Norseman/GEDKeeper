@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2015 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
+ *  Copyright (C) 2009-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
  *
  *  This file is part of "GEDKeeper".
  *
@@ -31,7 +31,6 @@ using BSLib;
 using BSLib.Graphics;
 using BSLib.SmartGraph;
 using ExtUtils;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Options;
@@ -96,20 +95,19 @@ namespace GKCore
 
 		public void GetSourcesList(StringList sources)
 		{
-            if (sources != null)
-			{
-				sources.Clear();
+		    if (sources == null) return;
 
-				int num = this.fTree.RecordsCount;
-				for (int i = 0; i < num; i++)
-				{
-					GEDCOMRecord rec = this.fTree[i];
-					if (rec is GEDCOMSourceRecord)
-					{
-						sources.AddObject((rec as GEDCOMSourceRecord).FiledByEntry, rec);
-					}
-				}
-			}
+            sources.Clear();
+
+		    int num = this.fTree.RecordsCount;
+		    for (int i = 0; i < num; i++)
+		    {
+		        GEDCOMRecord rec = this.fTree[i];
+		        if (rec is GEDCOMSourceRecord)
+		        {
+		            sources.AddObject((rec as GEDCOMSourceRecord).FiledByEntry, rec);
+		        }
+		    }
 		}
 		
 		#endregion
@@ -136,7 +134,7 @@ namespace GKCore
 
 			aRec.AddEvent(result);
 
-			result.Name = evSign;
+			result.SetName(evSign);
 
 			if (evDate != "") {
 				result.Detail.Date.ParseString(evDate);
@@ -237,14 +235,12 @@ namespace GKCore
             return ((PatriarchObj)item1).BirthYear - ((PatriarchObj)item2).BirthYear;
 		}
 
-		public void GetPatriarchsList(ExtList<PatriarchObj> patList, int gensMin, bool datesCheck)
+		public ExtList<PatriarchObj> GetPatriarchsList(int gensMin, bool datesCheck)
 		{
-            if (patList == null) {
-                throw new ArgumentNullException("patList");
-            }
+			ExtList<PatriarchObj> patList = new ExtList<PatriarchObj>(true);
 
             GEDCOMTree tree = this.fTree;
-			IProgressController pctl = this.fViewer as IProgressController;
+			IProgressController pctl = this.fViewer;
 			
 			pctl.ProgressInit(LangMan.LS(LSID.LSID_PatSearch), tree.RecordsCount);
 
@@ -296,17 +292,15 @@ namespace GKCore
 			{
 				pctl.ProgressDone();
 			}
+			
+			return patList;
 		}
 
-		public void GetPatriarchsLinks(ExtList<PatriarchObj> patList, int gensMin, bool datesCheck, bool loneSuppress)
+		public ExtList<PatriarchObj> GetPatriarchsLinks(int gensMin, bool datesCheck, bool loneSuppress)
 		{
-            if (patList == null) {
-                throw new ArgumentNullException("patList");
-            }
+            ExtList<PatriarchObj> patList = GetPatriarchsList(gensMin, datesCheck);
 
-			GetPatriarchsList(patList, gensMin, datesCheck);
-
-			IProgressController pctl = this.fViewer as IProgressController;
+			IProgressController pctl = this.fViewer;
 
 			pctl.ProgressInit(LangMan.LS(LSID.LSID_LinksSearch), patList.Count);
 			try
@@ -314,11 +308,11 @@ namespace GKCore
 				int num2 = patList.Count;
 				for (int i = 0; i < num2; i++)
 				{
-					PatriarchObj patr = patList[i] as PatriarchObj;
+					PatriarchObj patr = patList[i];
 
 					for (int j = i + 1; j < num2; j++)
 					{
-						PatriarchObj patr2 = patList[j] as PatriarchObj;
+						PatriarchObj patr2 = patList[j];
 
 						GEDCOMIndividualRecord cross;
 						bool res = TreeTools.PL_SearchDesc(patr.IRec, patr2.IRec, out cross);
@@ -348,11 +342,13 @@ namespace GKCore
 			{
 				for (int i = patList.Count - 1; i >= 0; i--)
 				{
-					PatriarchObj patr = patList[i] as PatriarchObj;
+					PatriarchObj patr = patList[i];
 					if (!patr.HasLinks) patList.Delete(i);
 				}
 				patList.Pack();
 			}
+			
+			return patList;
 		}
 
 		private static void PL_WalkDescLinks(Graph graph, PGNode prevNode, GEDCOMIndividualRecord ancestor)
@@ -362,13 +358,16 @@ namespace GKCore
 				GEDCOMFamilyRecord family = ancestor.SpouseToFamilyLinks[i].Family;
 				PGNode node = family.ExtData as PGNode;
 
-				if (node != null && node.Type != PGNodeType.ntDefault) {
+				if (node != null && node.Type != PGNodeType.Default)
+				{
 					IVertex vtx = graph.FindVertex(node.FamilyXRef);
-					if (vtx == null) {
+					if (vtx == null)
+					{
 						vtx = graph.AddVertex(node.FamilyXRef, node);
 					}
 
-					if (prevNode != null) {
+					if (prevNode != null)
+					{
 						graph.AddDirectedEdge(prevNode.FamilyXRef, node.FamilyXRef, 1, null);
 					}
 
@@ -387,12 +386,10 @@ namespace GKCore
 		{
 			Graph graph = new Graph();
 
-			using (ExtList<PatriarchObj> patList = new ExtList<PatriarchObj>(true))
+			using (ExtList<PatriarchObj> patList = this.GetPatriarchsList(gensMin, datesCheck))
 			{
 				GEDCOMTree tree = this.fTree;
-				IProgressController pctl = this.fViewer as IProgressController;
-
-				this.GetPatriarchsList(patList, gensMin, datesCheck);
+				IProgressController pctl = this.fViewer;
 
 				// init
 				GKUtils.InitExtData(tree);
@@ -401,14 +398,14 @@ namespace GKCore
 				int count = patList.Count;
 				for (int i = 0; i < count; i++)
 				{
-					PatriarchObj patNode = patList[i] as PatriarchObj;
+					PatriarchObj patNode = patList[i];
 					GEDCOMIndividualRecord iRec = patNode.IRec;
 
 					int count2 = iRec.SpouseToFamilyLinks.Count;
 					for (int k = 0; k < count2; k++)
 					{
 						GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[k].Family;
-						family.ExtData = new PGNode(family.XRef, PGNodeType.ntPatriarch, patNode.DescGenerations);
+						family.ExtData = new PGNode(family.XRef, PGNodeType.Patriarch, patNode.DescGenerations);
 					}
 				}
 
@@ -418,24 +415,24 @@ namespace GKCore
 					int num2 = patList.Count;
 					for (int i = 0; i < num2; i++)
 					{
-						PatriarchObj patr = patList[i] as PatriarchObj;
+						PatriarchObj patr = patList[i];
 
 						for (int j = i + 1; j < num2; j++)
 						{
-							PatriarchObj patr2 = patList[j] as PatriarchObj;
+							PatriarchObj patr2 = patList[j];
 
 							GEDCOMFamilyRecord cross = TreeTools.PL_SearchIntersection(patr.IRec, patr2.IRec);
 
 							if (cross != null)
 							{
-								PGNode node = cross.ExtData as PGNode;
+								PGNode node = (PGNode)cross.ExtData;
 
-								if (node != null && node.Type == PGNodeType.ntPatriarch) {
+								if (node != null && node.Type == PGNodeType.Patriarch) {
 									// dummy
 								} else {
 								    int size = GKUtils.GetDescGenerations(cross.GetHusband());
 								    if (size == 0) size = 1;
-									cross.ExtData = new PGNode(cross.XRef, PGNodeType.ntIntersection, size);
+									cross.ExtData = new PGNode(cross.XRef, PGNodeType.Intersection, size);
 								}
 							}
 						}
@@ -452,7 +449,7 @@ namespace GKCore
 				int count3 = patList.Count;
 				for (int i = 0; i < count3; i++)
 				{
-					PatriarchObj patNode = patList[i] as PatriarchObj;
+					PatriarchObj patNode = patList[i];
 					PL_WalkDescLinks(graph, null, patNode.IRec);
 				}
 
@@ -636,7 +633,7 @@ namespace GKCore
 					}
 					else {
 						this.ArcFileLoad(targetFn, stream);
-						stream.Seek((long)0, SeekOrigin.Begin);
+						stream.Seek(0, SeekOrigin.Begin);
 					}
 					break;
 
@@ -890,9 +887,9 @@ namespace GKCore
 			}
 		}
 
-		private const string GEDSECHeader = "GEDSECAA";
-		private const byte GS_MajVer = 1;
-		private const byte GS_MinVer = 1;
+		private const string GEDSEC_HEADER = "GEDSECAA";
+		private const byte GS_MAJOR_VER = 1;
+		private const byte GS_MINOR_VER = 1;
 
 		private void LoadFromSecFile(string fileName, string password)
 		{
@@ -908,11 +905,11 @@ namespace GKCore
 				gsHeader[7] = 65;
 				string gsh = Encoding.ASCII.GetString(gsHeader);
 
-				if (!string.Equals(gsh, GEDSECHeader)) {
+				if (!string.Equals(gsh, GEDSEC_HEADER)) {
 					throw new Exception("Это не GEDSEC-совместимый файл");
 				}
 
-                if (gsMajVer < GS_MajVer || gsMinVer < GS_MinVer)
+                if (gsMajVer < GS_MAJOR_VER || gsMinVer < GS_MINOR_VER)
                 {
                     // dummy for future
                 }
@@ -940,9 +937,9 @@ namespace GKCore
 		{
 			using (FileStream fileStream = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write))
 			{
-				byte[] gsHeader = Encoding.ASCII.GetBytes(GEDSECHeader);
-				gsHeader[6] = GS_MajVer;
-				gsHeader[7] = GS_MinVer;
+				byte[] gsHeader = Encoding.ASCII.GetBytes(GEDSEC_HEADER);
+				gsHeader[6] = GS_MAJOR_VER;
+				gsHeader[7] = GS_MINOR_VER;
 				fileStream.Write(gsHeader, 0, 8);
 
 				DESCryptoServiceProvider cryptic = new DESCryptoServiceProvider();

@@ -698,12 +698,17 @@ namespace GKCore
 		/* 633 */ LSID_PrevRec,
 		/* 634 */ LSID_NextRec,
 
-		/* 000 */ LSID_Last = LSID_NextRec
+        /* 635 */ LSID_GenerationFailed,
+        /* 636 */ LSID_Start,
+        /* 637 */ LSID_Stop,
+        /* 638 */ LSID_Demography,
+
+		/* 000 */ LSID_Last = LSID_Demography
 	}
 
 	public static class LangMan
 	{
-		public const int LSDefCode = 1049;
+		public const int LS_DEF_CODE = 1049;
 
 		private static readonly string[] LSDefList = new string[]
 		{
@@ -1368,7 +1373,12 @@ namespace GKCore
 			/* 631 */ "Не задан источник",
 			/* 632 */ "Слайдшоу",
 			/* 633 */ "Предыдущая запись",
-			/* 634 */ "Следующая запись"
+			/* 634 */ "Следующая запись",
+
+            /* 635 */ "Генерация не удалась",
+            /* 636 */ "Старт",
+            /* 637 */ "Стоп",
+            /* 638 */ "Демография"
 		};
 
 		private static readonly string[] LSList = new string[(int)LSID.LSID_Last + 1];
@@ -1378,14 +1388,13 @@ namespace GKCore
 			return LSList[(int)lsid - 1];
 		}
 
-		public static bool LoadFromFile(string aFileName)
+		public static bool LoadFromFile(string fileName)
 		{
 			bool result = false;
 
-			if (File.Exists(aFileName))
+			if (File.Exists(fileName))
 			{
-				StreamReader lngFile = new StreamReader(aFileName, Encoding.UTF8);
-				try
+				using (StreamReader lngFile = new StreamReader(fileName, Encoding.UTF8))
 				{
 					lngFile.ReadLine();
 					int i = 0;
@@ -1396,10 +1405,6 @@ namespace GKCore
 						i++;
 					}
 					result = true;
-				}
-				finally
-				{
-					lngFile.Close();
 				}
 			}
 
@@ -1419,7 +1424,7 @@ namespace GKCore
 			StreamWriter lf = new StreamWriter(GKUtils.GetAppPath() + "langs\\russian.sample", false, Encoding.UTF8);
 			try
 			{
-				lf.WriteLine(";" + LSDefCode.ToString() + "," + "Русский");
+				lf.WriteLine(";" + LS_DEF_CODE.ToString() + "," + "Русский");
 				for (LSID i = LSID.LSID_First; i <= LSID.LSID_Last; i++)
 				{
 					lf.WriteLine(LSDefList[(int)i - 1]);

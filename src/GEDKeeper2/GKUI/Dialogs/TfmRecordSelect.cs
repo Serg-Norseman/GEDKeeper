@@ -98,8 +98,9 @@ namespace GKUI.Dialogs
         private static bool ChildSelectorHandler(GEDCOMRecord record)
         {
         	GEDCOMIndividualRecord iRec = record as GEDCOMIndividualRecord;
-        	bool result = (iRec.ChildToFamilyLinks.Count == 0);
-            return result;
+            if (iRec == null) return false;
+
+            return (iRec.ChildToFamilyLinks.Count == 0);
         }
 
 		private void SetFilter(string value)
@@ -149,7 +150,7 @@ namespace GKUI.Dialogs
 							GEDCOMFamilyRecord famRec = null;
 
                             FamilyTarget famTarget;
-							famTarget = (this.fTargetMode == TargetMode.tmChildToFamily) ? FamilyTarget.ftChild : FamilyTarget.ftNone;
+							famTarget = (this.fTargetMode == TargetMode.tmChildToFamily) ? FamilyTarget.Child : FamilyTarget.None;
 
                             if (this.fBase.ModifyFamily(ref famRec, famTarget, this.Target))
 							{

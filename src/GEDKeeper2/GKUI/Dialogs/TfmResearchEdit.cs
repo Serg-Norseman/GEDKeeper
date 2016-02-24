@@ -59,7 +59,7 @@ namespace GKUI.Dialogs
 					this.EditStatus.SelectedIndex = -1;
 					this.EditStartDate.Text = "";
 					this.EditStopDate.Text = "";
-					this.EditPercent.Text = "0";
+					this.EditPercent.Text = @"0";
 				}
 				else
 				{

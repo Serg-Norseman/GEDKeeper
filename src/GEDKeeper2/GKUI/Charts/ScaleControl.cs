@@ -10,11 +10,11 @@ namespace GKUI.Charts
     {
         #region Private fields
 		
-        private static Rectangle ControlsScaleRect = new Rectangle(0, 0, 26, 320);
-        private static Rectangle ControlsThumbRect = new Rectangle(0, 322, 26, 11);
+        private static readonly Rectangle ControlsScaleRect = new Rectangle(0, 0, 26, 320);
+        private static readonly Rectangle ControlsThumbRect = new Rectangle(0, 322, 26, 11);
 
-        private const int ScaleY1 = 22;
-        private const int ScaleY2 = 297;
+        private const int SCALE_Y1 = 22;
+        private const int SCALE_Y2 = 297;
 
         private readonly Bitmap fControlsImage;
         private readonly TreeChartBox fChart;
@@ -102,28 +102,28 @@ namespace GKUI.Charts
 
         private Rectangle GetDRect(int d)
         {
-            int dH = ((ScaleY2 - ScaleY1) - ControlsThumbRect.Height) / (this.fDCount - 1);
-            int thumbY = fDestRect.Top + ScaleY1 + (d - 1) * dH;
+            int dH = ((SCALE_Y2 - SCALE_Y1) - ControlsThumbRect.Height) / (this.fDCount - 1);
+            int thumbY = fDestRect.Top + SCALE_Y1 + (d - 1) * dH;
             return new Rectangle(fDestRect.Left, thumbY, fDestRect.Width, ControlsThumbRect.Height);
         }
 
-        public bool Contains(int X, int Y)
+        public bool Contains(int x, int y)
         {
-            return fDestRect.Contains(X, Y);
+            return fDestRect.Contains(x, y);
         }
 
-        public void MouseDown(int X, int Y)
+        public void MouseDown(int x, int y)
         {
-            fThumbCaptured = (this.GetDRect(fThumbPos).Contains(X, Y) && !fThumbCaptured);
+            fThumbCaptured = (this.GetDRect(fThumbPos).Contains(x, y) && !fThumbCaptured);
         }
 
-        public void MouseMove(int X, int Y, ThumbMoved thumbMoved)
+        public void MouseMove(int x, int y, ThumbMoved thumbMoved)
         {
             if (!fThumbCaptured) return;
 			
             for (int i = 1; i <= fDCount; i++) {
                 Rectangle r = GetDRect(i);
-                if (r.Contains(X, Y)) {
+                if (r.Contains(x, y)) {
                     fThumbPos = i;
                     fChart.Invalidate();
                     if (thumbMoved != null) thumbMoved(i);
@@ -132,7 +132,7 @@ namespace GKUI.Charts
             }
         }
 
-        public void MouseUp(int X, int Y)
+        public void MouseUp(int x, int y)
         {
             if (fThumbCaptured) fThumbCaptured = false;
         }

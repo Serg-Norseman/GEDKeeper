@@ -4,12 +4,11 @@ using System.Windows.Forms;
 
 using GKCommon;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKCalculatorPlugin
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public partial class TfmCalcWidget : Form
 	{
     	private readonly Plugin fPlugin;

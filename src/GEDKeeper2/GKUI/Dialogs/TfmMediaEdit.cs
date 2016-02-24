@@ -35,9 +35,7 @@ namespace GKUI.Dialogs
 
 		private bool AcceptChanges()
 		{
-			bool result = true;
-
-			GEDCOMFileReferenceWithTitle fileRef = this.fMediaRec.FileReferences[0];
+		    GEDCOMFileReferenceWithTitle fileRef = this.fMediaRec.FileReferences[0];
 
 			if (this.fIsNew)
 			{
@@ -47,7 +45,7 @@ namespace GKUI.Dialogs
 					return false;
 				}
 
-				result = this.fBase.Context.MediaSave(fileRef, this.edFile.Text, gst);
+				bool result = this.fBase.Context.MediaSave(fileRef, this.edFile.Text, gst);
 
 				if (!result) {
 					return false;
@@ -60,7 +58,7 @@ namespace GKUI.Dialogs
 			this.ControlsRefresh();
 			this.fBase.ChangeRecord(this.fMediaRec);
 
-			return result;
+			return true;
 		}
 
 		private void ControlsRefresh()
@@ -154,15 +152,15 @@ namespace GKUI.Dialogs
 
 		private void edName_TextChanged(object sender, EventArgs e)
 		{
-			this.Text = LangMan.LS(LSID.LSID_RPMultimedia) + " \"" + this.edName.Text + "\"";
+            this.Text = string.Format("{0} \"{1}\"", LangMan.LS(LSID.LSID_RPMultimedia), this.edName.Text);
 		}
 
-		private void StoreTypesRefresh(bool allow_arc, MediaStoreType select)
+		private void StoreTypesRefresh(bool allowArc, MediaStoreType select)
 		{
 			this.cbStoreType.Items.Clear();
 			this.cbStoreType.Items.Add(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstReference].Name));
 			this.cbStoreType.Items.Add(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstStorage].Name));
-			if (allow_arc) {
+			if (allowArc) {
 				this.cbStoreType.Items.Add(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstArchive].Name));
 			}
 			this.cbStoreType.SelectedIndex = (int)select;
@@ -191,7 +189,7 @@ namespace GKUI.Dialogs
 			this.Label2.Text = LangMan.LS(LSID.LSID_Type);
 			this.Label4.Text = LangMan.LS(LSID.LSID_StoreType);
 			this.Label3.Text = LangMan.LS(LSID.LSID_File);
-			this.btnView.Text = LangMan.LS(LSID.LSID_View) + "...";
+			this.btnView.Text = LangMan.LS(LSID.LSID_View) + @"...";
 		}
 	}
 }

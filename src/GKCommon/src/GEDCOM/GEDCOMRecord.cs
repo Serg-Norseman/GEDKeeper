@@ -9,7 +9,7 @@ namespace GKCommon.GEDCOM
     /// </summary>
     public abstract class GEDCOMRecord : GEDCOMCustomRecord, IGEDCOMStructWithLists
 	{
-		protected GEDCOMRecordType fRecordType;
+		private GEDCOMRecordType fRecordType;
 
 		private GEDCOMList<GEDCOMMultimediaLink> fMultimediaLinks;
 		private GEDCOMList<GEDCOMNotes> fNotes;
@@ -102,6 +102,11 @@ namespace GKCommon.GEDCOM
 			base.Dispose(disposing);
 		}
 
+        protected void SetRecordType(GEDCOMRecordType type)
+        {
+            this.fRecordType = type;
+        }
+
 		public int IndexOfSource(GEDCOMSourceRecord sourceRec)
 		{
 			if (sourceRec != null) {
@@ -143,28 +148,28 @@ namespace GKCommon.GEDCOM
 
 			while (this.fNotes.Count > 0)
 			{
-				GEDCOMTag tag = this.fNotes.Extract(0) as GEDCOMTag;
+				GEDCOMTag tag = this.fNotes.Extract(0);
 				tag.ResetParent(targetRecord);
 				targetRecord.Notes.Add(tag as GEDCOMNotes);
 			}
 
 			while (this.fMultimediaLinks.Count > 0)
 			{
-				GEDCOMTag tag = this.fMultimediaLinks.Extract(0) as GEDCOMTag;
+				GEDCOMTag tag = this.fMultimediaLinks.Extract(0);
 				tag.ResetParent(targetRecord);
 				targetRecord.MultimediaLinks.Add(tag as GEDCOMMultimediaLink);
 			}
 
 			while (this.fSourceCitations.Count > 0)
 			{
-				GEDCOMTag tag = this.fSourceCitations.Extract(0) as GEDCOMTag;
+				GEDCOMTag tag = this.fSourceCitations.Extract(0);
 				tag.ResetParent(targetRecord);
 				targetRecord.SourceCitations.Add(tag as GEDCOMSourceCitation);
 			}
 
 			while (this.fUserReferences.Count > 0)
 			{
-				GEDCOMTag tag = this.fUserReferences.Extract(0) as GEDCOMTag;
+				GEDCOMTag tag = this.fUserReferences.Extract(0);
 				tag.ResetParent(targetRecord);
 				targetRecord.UserReferences.Add(tag as GEDCOMUserReference);
 			}
@@ -257,12 +262,12 @@ namespace GKCommon.GEDCOM
 
 		public string NewXRef()
 		{
-			if (this.fOwner != null)
+			if (this.Owner != null)
 			{
-				string new_xref = this.fOwner.XRefIndex_NewXRef(this);
-				this.XRef = new_xref;
+				string newXRef = this.Owner.XRefIndex_NewXRef(this);
+				this.XRef = newXRef;
 			}
-			return this.FXRef;
+			return this.XRef;
 		}
 
 		public void NewUID()
@@ -284,12 +289,12 @@ namespace GKCommon.GEDCOM
 
 		public string GetXRefNum()
 		{
-			string xref = this.FXRef;
+			string xref = this.XRef;
 
-			int I = 0;
-			int L = xref.Length - 1;
-			while (I <= L && (xref[I] < '0' || xref[I] > '9')) I++;
-			xref = ((I <= L) ? xref.Substring(I) : "");
+			int i = 0;
+			int last = xref.Length - 1;
+			while (i <= last && (xref[i] < '0' || xref[i] > '9')) i++;
+			xref = ((i <= last) ? xref.Substring(i) : "");
 			return xref;
 		}
 

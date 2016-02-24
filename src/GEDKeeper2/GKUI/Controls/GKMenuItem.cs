@@ -1,4 +1,3 @@
-using System;
 using System.Windows.Forms;
 
 namespace GKUI.Controls

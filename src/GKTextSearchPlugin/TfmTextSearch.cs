@@ -9,12 +9,11 @@ using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 
-/// <summary>
-/// 
-/// </summary>
-
 namespace GKTextSearchPlugin
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed partial class TfmTextSearch : Form, ILocalization
 	{
     	private readonly Plugin fPlugin;
@@ -47,9 +46,11 @@ namespace GKTextSearchPlugin
 			fResultsText.Lines.Add(text);
 		}
 
-		private void mTextLink(object sender, string LinkName)
+		private void mTextLink(object sender, string linkName)
 		{
-			fBase.SelectRecordByXRef(LinkName);
+		    if (string.IsNullOrEmpty(linkName)) return;
+
+			fBase.SelectRecordByXRef(linkName);
 		}
 
 		void btnSearch_Click(object sender, EventArgs e)
@@ -59,17 +60,17 @@ namespace GKTextSearchPlugin
 			try
 			{
 				fResultsText.Lines.Clear();
-				List<SearchManager.SearchEntry> search_results = fPlugin.SearchMan.Search(fBase, textBox2.Text);
+				List<SearchManager.SearchEntry> searchResults = fPlugin.SearchMan.Search(fBase, textBox2.Text);
 
-				Write(string.Format(fPlugin.LangMan.LS(TLS.LSID_SearchResults) + "\r\n", search_results.Count));
+				Write(string.Format(fPlugin.LangMan.LS(TLS.LSID_SearchResults) + "\r\n", searchResults.Count));
 
-				int num = search_results.Count;
+				int num = searchResults.Count;
 				for (int i = 0; i < num; i++)
 				{
 					Write("__________________________________________________________________________________________");
 					Write("");
 
-					SearchManager.SearchEntry entry = search_results[i];
+					SearchManager.SearchEntry entry = searchResults[i];
 					Write(String.Format("~bu+1~{0}: {1}%~u~ ~^{2}:[{2}]~", entry.Rank, entry.Percent, entry.XRef) + "~b-1~");
 
 					GEDCOMRecord rec = fBase.Tree.XRefIndex_Find(entry.XRef);

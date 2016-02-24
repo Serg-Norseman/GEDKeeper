@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Threading;
 
 namespace GKCommon
@@ -35,7 +34,7 @@ namespace GKCommon
 
 		static CalendarData()
 		{
-			CalendarData.BahaiWeekdays = new string[]
+			BahaiWeekdays = new string[]
 			{
 				"Джамаль", 
 				"Камаль", 
@@ -46,7 +45,7 @@ namespace GKCommon
 				"Джалаль"
 			};
 
-			CalendarData.BahaiMonths = new string[]
+			BahaiMonths = new string[]
 			{
 				"Бахa", 
 				"Джалaл", 
@@ -70,7 +69,7 @@ namespace GKCommon
 				"Алa"
 			};
 
-			CalendarData.IndianCivilWeekdays = new string[]
+			IndianCivilWeekdays = new string[]
 			{
 				"равивар", 
 				"сомвар", 
@@ -81,7 +80,7 @@ namespace GKCommon
 				"шанивар"
 			};
 
-			CalendarData.IndianCivilMonths = new string[]
+			IndianCivilMonths = new string[]
 			{
 				"Чайтра", 
 				"Ваисакха", 
@@ -97,7 +96,7 @@ namespace GKCommon
 				"Пхалгуна"
 			};
 
-			CalendarData.PersianWeekdays = new string[]
+			PersianWeekdays = new string[]
 			{
 				"йекшанбе", 
 				"душанбе", 
@@ -108,7 +107,7 @@ namespace GKCommon
 				"шанбе"
 			};
 
-			CalendarData.PersianMonths = new string[]
+			PersianMonths = new string[]
 			{
 				"Фарвардин", 
 				"Ордибехешт", 
@@ -124,7 +123,7 @@ namespace GKCommon
 				"Эсфанд"
 			};
 
-			CalendarData.IslamicWeekdays = new string[]
+			IslamicWeekdays = new string[]
 			{
 				"аль-ахад", 
 				"аль-иснайн", 
@@ -135,7 +134,7 @@ namespace GKCommon
 				"ас-сабт"
 			};
 
-			CalendarData.IslamicMonths = new string[]
+			IslamicMonths = new string[]
 			{
 				"мухаррам", 
 				"сафар", 
@@ -151,7 +150,7 @@ namespace GKCommon
 				"зульхиджа"
 			};
 
-			CalendarData.HebrewWeekdays = new string[]
+			HebrewWeekdays = new string[]
 			{
 				"алеф", 
 				"бейт", 
@@ -162,7 +161,7 @@ namespace GKCommon
 				"зайин"
 			};
 
-			CalendarData.HebrewMonths = new string[]
+			HebrewMonths = new string[]
 			{
 				"Нисан", 
 				"Ияр", 

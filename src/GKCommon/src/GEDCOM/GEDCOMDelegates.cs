@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GKCommon.GEDCOM
+﻿namespace GKCommon.GEDCOM
 {
     public delegate GEDCOMTag TagConstructor(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue);
 

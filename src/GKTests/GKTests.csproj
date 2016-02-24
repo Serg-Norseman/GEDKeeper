@@ -71,10 +71,6 @@
       <Project>{19B7D80A-37FD-4E49-9F59-87FA41B677E2}</Project>
       <Name>GEDKeeper2</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GKCalculatorPlugin\GKCalculatorPlugin.csproj">
-      <Project>{782E9338-ECA7-4095-9157-6CA003801F05}</Project>
-      <Name>GKCalculatorPlugin</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GKCommon\GKCommon.csproj">
       <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
       <Name>GKCommon</Name>
@@ -83,15 +79,6 @@
       <Project>{859C2F5B-FBF1-4D3B-8442-CF8E44E8B74B}</Project>
       <Name>GKPedigreeImporterPlugin</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="ProfilingSessions\Session20160209_172904.sdps" />
-    <Content Include="ProfilingSessions\Session20160209_173025.sdps" />
-    <Content Include="ProfilingSessions\Session20160209_173110.sdps" />
-    <Content Include="ProfilingSessions\Session20160209_173729.sdps" />
-    <Content Include="ProfilingSessions\Session20160209_175421.sdps" />
-    <Content Include="ProfilingSessions\Session20160209_210228.sdps" />
-    <Content Include="ProfilingSessions\Session20160209_215453.sdps" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>

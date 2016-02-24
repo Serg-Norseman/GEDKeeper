@@ -242,13 +242,13 @@ namespace GKUI
 			Bitmap pic = null;
 			switch (curBase.ShieldState)
 			{
-				case ShieldState.ssNone:
+				case ShieldState.None:
 					pic = (Bitmap)GKResources.iRGShieldNone.Clone();
 					break;
-				case ShieldState.ssMiddle:
+				case ShieldState.Middle:
 					pic = (Bitmap)GKResources.iRGShieldMid.Clone();
 					break;
-				case ShieldState.ssMaximum:
+				case ShieldState.Maximum:
 					pic = (Bitmap)GKResources.iRGShieldMax.Clone();
 					break;
 			}
@@ -266,8 +266,8 @@ namespace GKUI
 				if (curBase == null) return;
 
 				ShieldState ss = curBase.ShieldState;
-				if (ss == ShieldState.ssNone) {
-					ss = ShieldState.ssMaximum;
+				if (ss == ShieldState.None) {
+					ss = ShieldState.Maximum;
 				} else {
 					ss = (ShieldState)((int)ss + 1);
 				}
@@ -323,7 +323,7 @@ namespace GKUI
 
 		public void LoadLanguage(int langCode)
 		{
-			if (langCode != LangMan.LSDefCode) {
+			if (langCode != LangMan.LS_DEF_CODE) {
 				bool loaded = false;
 
 				int num = this.fOptions.GetLangsCount();
@@ -334,10 +334,10 @@ namespace GKUI
 					}
 				}
 
-				if (!loaded) langCode = LangMan.LSDefCode;
+				if (!loaded) langCode = LangMan.LS_DEF_CODE;
 			}
 
-			if (langCode == LangMan.LSDefCode) {
+			if (langCode == LangMan.LS_DEF_CODE) {
 				LangMan.DefInit();
 			}
 
@@ -347,7 +347,7 @@ namespace GKUI
 				if (child is ILocalization) (child as ILocalization).SetLang();
 			}
 
-			(this as ILocalization).SetLang();
+			this.SetLang();
 
 			this.fOptions.InterfaceLang = (ushort)langCode;
 
@@ -545,7 +545,7 @@ namespace GKUI
 		{
 			IBaseWindow result = this.FindBase(fileName);
 			if (result != null) {
-				(result as TfmBase).Activate();
+				result.Activate();
 				return result;
 			}
 
@@ -612,7 +612,7 @@ namespace GKUI
 			if (curBase == null) return;
 
 			using (TfmFileProperties dlgFileProps = new TfmFileProperties(curBase)) {
-				TfmGEDKeeper.Instance.ShowModalEx(dlgFileProps, false);
+				this.ShowModalEx(dlgFileProps, false);
 			}
 		}
 
@@ -622,7 +622,7 @@ namespace GKUI
 			if (curBase == null) return;
 
 			using (TfmScriptDaemon dmn = new TfmScriptDaemon(curBase)) {
-				TfmGEDKeeper.Instance.ShowModalEx(dmn, false);
+                this.ShowModalEx(dmn, false);
 			}
 		}
 
@@ -632,7 +632,7 @@ namespace GKUI
 			if (curBase == null) return;
 
 			using (TfmTreeTools fmTreeTools = new TfmTreeTools(curBase)) {
-				TfmGEDKeeper.Instance.ShowModalEx(fmTreeTools, false);
+                this.ShowModalEx(fmTreeTools, false);
 			}
 		}
 
@@ -779,9 +779,9 @@ namespace GKUI
 			IBaseWindow curBase = this.GetCurrentFile();
 			if (curBase == null) return;
 			
-			TfmMaps frm_maps = new TfmMaps(curBase);
-			frm_maps.MdiParent = this;
-			frm_maps.Show();
+			TfmMaps mapsWin = new TfmMaps(curBase);
+            mapsWin.MdiParent = this;
+            mapsWin.Show();
 		}
 
 		private void miOrganizerClick(object sender, EventArgs e)
@@ -790,7 +790,7 @@ namespace GKUI
 			if (curBase == null) return;
 
 			using (TfmOrganizer dlg = new TfmOrganizer(curBase)) {
-				TfmGEDKeeper.Instance.ShowModalEx(dlg, false);
+                this.ShowModalEx(dlg, false);
 			}
 		}
 
@@ -896,7 +896,7 @@ namespace GKUI
 		{
 			if (File.Exists(this.fLogFilename)) {
 				MapiMailMessage message = new MapiMailMessage("GEDKeeper: error notification", "This automatic notification of error.");
-				message.Recipients.Add(GKData.AppMail);
+				message.Recipients.Add(GKData.APP_MAIL);
 				message.Files.Add(this.fLogFilename);
 				message.ShowDialog();
 			}
@@ -998,15 +998,15 @@ namespace GKUI
 			this.miTreeBoth.Text = LangMan.LS(LSID.LSID_MITreeBoth);
 			this.miPedigree_dAboville.Text = LangMan.LS(LSID.LSID_MIPedigree_dAboville);
 			this.miPedigree_Konovalov.Text = LangMan.LS(LSID.LSID_MIPedigree_Konovalov);
-			this.miMap.Text = LangMan.LS(LSID.LSID_MIMap) + "...";
-			this.miStats.Text = LangMan.LS(LSID.LSID_MIStats) + "...";
+			this.miMap.Text = LangMan.LS(LSID.LSID_MIMap) + @"...";
+			this.miStats.Text = LangMan.LS(LSID.LSID_MIStats) + @"...";
 
-			this.miOrganizer.Text = LangMan.LS(LSID.LSID_MIOrganizer) + "...";
-			this.miSlideshow.Text = LangMan.LS(LSID.LSID_Slideshow) + "...";
+			this.miOrganizer.Text = LangMan.LS(LSID.LSID_MIOrganizer) + @"...";
+			this.miSlideshow.Text = LangMan.LS(LSID.LSID_Slideshow) + @"...";
 			this.miScripts.Text = LangMan.LS(LSID.LSID_MIScripts);
 			this.miTreeTools.Text = LangMan.LS(LSID.LSID_MITreeTools);
-			this.miFilter.Text = LangMan.LS(LSID.LSID_MIFilter) + "...";
-			this.miOptions.Text = LangMan.LS(LSID.LSID_MIOptions) + "...";
+			this.miFilter.Text = LangMan.LS(LSID.LSID_MIFilter) + @"...";
+			this.miOptions.Text = LangMan.LS(LSID.LSID_MIOptions) + @"...";
 
 			this.miWinCascade.Text = LangMan.LS(LSID.LSID_MIWinCascade);
 			this.miWinHTile.Text = LangMan.LS(LSID.LSID_MIWinHTile);
@@ -1018,7 +1018,7 @@ namespace GKUI
 			this.miKinshipTerms.Text = LangMan.LS(LSID.LSID_MIKinshipTerms);
 			this.miFAQ.Text = LangMan.LS(LSID.LSID_MIFAQ);
 			this.miContext.Text = LangMan.LS(LSID.LSID_MIContext);
-			this.miAbout.Text = LangMan.LS(LSID.LSID_MIAbout) + "...";
+			this.miAbout.Text = LangMan.LS(LSID.LSID_MIAbout) + @"...";
 
 			this.miLogSend.Text = LangMan.LS(LSID.LSID_LogSend);
 			this.miLogView.Text = LangMan.LS(LSID.LSID_LogView);
@@ -1076,12 +1076,12 @@ namespace GKUI
 			num = this.miPlugins.MenuItems.Count;
 			for (int i = 0; i < num; i++) {
 				MenuItem mi = this.miPlugins.MenuItems[i];
-				IPlugin plugin = mi.Tag as IPlugin;
+                IPlugin plugin = (IPlugin)mi.Tag;
 				mi.Text = plugin.DisplayName;
 			}
 		}
 
-		private void Plugin_Click(object sender, EventArgs e)
+		private static void Plugin_Click(object sender, EventArgs e)
 		{
 			MenuItem item = sender as MenuItem;
 			if (item == null) return;
@@ -1105,7 +1105,7 @@ namespace GKUI
 				string dispName = plugin.DisplayName;
 
 				MenuItem mi = new GKMenuItem(dispName, i);
-				mi.Click += this.Plugin_Click;
+				mi.Click += Plugin_Click;
 				mi.Tag = plugin;
 				this.miPlugins.MenuItems.Add(mi);
 
@@ -1193,7 +1193,7 @@ namespace GKUI
 
 			LangManager langMan = new LangManager();
 			bool res = langMan.LoadFromFile(langFile);
-			return langMan;
+			return (res) ? langMan : null;
 		}
 
 		public IBaseWindow GetCurrentFile(bool extMode = false)
@@ -1239,7 +1239,7 @@ namespace GKUI
 
 		public string GetAppDataPath()
 		{
-			string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\" + GKData.AppTitle + "\\";
+			string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\" + GKData.APP_TITLE + "\\";
 			if (!Directory.Exists(path)) Directory.CreateDirectory(path);
 			return path;
 		}
@@ -1320,7 +1320,7 @@ namespace GKUI
 				string msg = eventArgs.Message as string;
 
 				if (!string.IsNullOrEmpty(msg)) {
-					MessageBox.Show(msg, "Message from new instance", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					MessageBox.Show(msg, @"Message from new instance", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				} else {
 					//MessageBox.Show("A non-textual message has been received.", "Message From New Instance", MessageBoxButtons.OK, MessageBoxIcon.Information);
 

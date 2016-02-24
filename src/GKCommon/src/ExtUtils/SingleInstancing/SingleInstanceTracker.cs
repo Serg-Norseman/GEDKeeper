@@ -81,7 +81,7 @@ namespace ExtUtils.SingleInstancing
 		public SingleInstanceTracker(string name, SingleInstanceEnforcerRetriever enforcerRetriever)
 		{
 			if (string.IsNullOrEmpty(name))
-				throw new ArgumentNullException("name", "name cannot be null or empty.");
+				throw new ArgumentNullException("name", @"name cannot be null or empty.");
 
 			try
 			{

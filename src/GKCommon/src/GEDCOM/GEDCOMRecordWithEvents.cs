@@ -45,7 +45,7 @@ namespace GKCommon.GEDCOM
             GEDCOMRecordWithEvents target = targetRecord as GEDCOMRecordWithEvents;
             if (target == null)
             {
-                throw new ArgumentException("argument is null or wrong type", "targetRecord");
+                throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
             }
 
             base.MoveTo(targetRecord, clearDest);
@@ -98,7 +98,7 @@ namespace GKCommon.GEDCOM
 		
 		#region Auxiliary
 
-		private static readonly float[] CA_Values = new float[] { 0.25f, 0.5f, 0.75f, 1.0f };
+		private static readonly float[] CA_VALUES = new float[] { 0.25f, 0.5f, 0.75f, 1.0f };
 
 		public float GetCertaintyAssessment()
 		{
@@ -116,7 +116,7 @@ namespace GKCommon.GEDCOM
 					int ca = cit.CertaintyAssessment;
 					int weight = (ca + 1);
 					
-					result += (CA_Values[ca] * weight);
+					result += (CA_VALUES[ca] * weight);
 					wsum += weight;
 				}
 			}
@@ -128,7 +128,7 @@ namespace GKCommon.GEDCOM
 				int ca = cit.CertaintyAssessment;
 				int weight = (ca + 1);
 				
-				result += (CA_Values[ca] * weight);
+				result += (CA_VALUES[ca] * weight);
 				wsum += weight;
 			}
 

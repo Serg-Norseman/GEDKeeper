@@ -31,11 +31,11 @@ namespace GKCommon.GEDCOM
 			{
 				result = string.Concat(new string[]
 				{
-					GEDCOMCustomDate.GEDCOMDateRangeArray[2], 
+					GEDCOMDateRangeArray[2], 
 					" ", 
 					this.fDateAfter.StringValue, 
 					" ", 
-					GEDCOMCustomDate.GEDCOMDateRangeArray[3], 
+					GEDCOMDateRangeArray[3], 
 					" ", 
 					this.fDateBefore.StringValue
 				});
@@ -44,13 +44,13 @@ namespace GKCommon.GEDCOM
 			{
 				if (!this.fDateAfter.IsEmpty())
 				{
-                    result = GEDCOMCustomDate.GEDCOMDateRangeArray[0] + " " + this.fDateAfter.StringValue;
+                    result = GEDCOMDateRangeArray[0] + " " + this.fDateAfter.StringValue;
 				}
 				else
 				{
 					if (!this.fDateBefore.IsEmpty())
 					{
-                        result = GEDCOMCustomDate.GEDCOMDateRangeArray[1] + " " + this.fDateBefore.StringValue;
+                        result = GEDCOMDateRangeArray[1] + " " + this.fDateBefore.StringValue;
 					}
 					else
 					{
@@ -131,9 +131,9 @@ namespace GKCommon.GEDCOM
 			string result = strValue;
 			if (!string.IsNullOrEmpty(result))
 			{
-				string SU = result.Substring(0, 3).ToUpperInvariant();
+				string su = result.Substring(0, 3).ToUpperInvariant();
 
-                if (SU == GEDCOMCustomDate.GEDCOMDateRangeArray[0])
+                if (su == GEDCOMDateRangeArray[0])
 				{
 					result = result.Remove(0, 3);
 					result = GEDCOMUtils.ExtractDelimiter(result, 0);
@@ -141,7 +141,7 @@ namespace GKCommon.GEDCOM
 				}
 				else
 				{
-                    if (SU == GEDCOMCustomDate.GEDCOMDateRangeArray[1])
+                    if (su == GEDCOMDateRangeArray[1])
 					{
 						result = result.Remove(0, 3);
 						result = GEDCOMUtils.ExtractDelimiter(result, 0);
@@ -149,23 +149,23 @@ namespace GKCommon.GEDCOM
 					}
 					else
 					{
-                        if (SU == GEDCOMCustomDate.GEDCOMDateRangeArray[2])
+                        if (su == GEDCOMDateRangeArray[2])
 						{
 							result = result.Remove(0, 3);
 							result = GEDCOMUtils.ExtractDelimiter(result, 0);
 
-							result = GEDCOMDateRange._ParseString_FixFTB(result);
+							result = _ParseString_FixFTB(result);
 
 							result = this.fDateAfter.ParseString(result);
 							result = GEDCOMUtils.ExtractDelimiter(result, 0);
 
-							SU = result.Substring(0, 3).ToUpper();
+							su = result.Substring(0, 3).ToUpper();
 
-                            if (SU == GEDCOMCustomDate.GEDCOMDateRangeArray[3])
+                            if (su == GEDCOMDateRangeArray[3])
 							{
 								result = result.Remove(0, 3);
 								result = GEDCOMUtils.ExtractDelimiter(result, 0);
-								result = GEDCOMDateRange._ParseString_FixFTB(result);
+								result = _ParseString_FixFTB(result);
 								result = this.fDateBefore.ParseString(result);
 							}
 						}
@@ -186,16 +186,16 @@ namespace GKCommon.GEDCOM
 		{
 		}
 
-		private static string _ParseString_FixFTB(string S)
+		private static string _ParseString_FixFTB(string str)
 		{
-			string result = S;
-			string SU = result.Substring(0, 3).ToUpperInvariant();
+			string result = str;
+			string su = result.Substring(0, 3).ToUpperInvariant();
 
-            if (SU == GEDCOMCustomDate.GEDCOMDateRangeArray[0] ||
-                SU == GEDCOMCustomDate.GEDCOMDateRangeArray[1] ||
-                SU == GEDCOMCustomDate.GEDCOMDateApproximatedArray[1] ||
-                SU == GEDCOMCustomDate.GEDCOMDateApproximatedArray[2] ||
-                SU == GEDCOMCustomDate.GEDCOMDateApproximatedArray[3])
+            if (su == GEDCOMDateRangeArray[0] ||
+                su == GEDCOMDateRangeArray[1] ||
+                su == GEDCOMDateApproximatedArray[1] ||
+                su == GEDCOMDateApproximatedArray[2] ||
+                su == GEDCOMDateApproximatedArray[3])
 			{
 				result = result.Remove(0, 4);
 			}

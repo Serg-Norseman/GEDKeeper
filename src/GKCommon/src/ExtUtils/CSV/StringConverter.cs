@@ -139,10 +139,10 @@ namespace Com.StellmanGreene.CSVReader
 
 
         // Dictionary to map two types to a common type that can hold both of them
-        private static Dictionary<Type, Dictionary<Type, Type>> typeMap = null;
+        private static Dictionary<Type, Dictionary<Type, Type>> typeMap;
 
         // Locker object to build the singleton typeMap in a typesafe manner
-        private static object locker = new object();
+        private static readonly object locker = new object();
 
         /// <summary>
         /// Build the singleton type map in a typesafe manner.

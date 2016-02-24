@@ -16,8 +16,8 @@ namespace GKCommon.GEDCOM
 		protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
 		{
 			base.CreateObj(owner, parent);
-			this.fRecordType = GEDCOMRecordType.rtRepository;
-			this.fName = "REPO";
+			base.SetRecordType(GEDCOMRecordType.rtRepository);
+			base.SetName("REPO");
 		}
 
 		public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)

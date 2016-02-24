@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
 
-namespace GKUI.Dialogs
+namespace GKUI
 {
     /// <summary>
     /// 
@@ -35,8 +34,8 @@ namespace GKUI.Dialogs
             base.Controls.SetChildIndex(this.fImageCtl, 0);
             this.ResumeLayout(false);
 
-        	this.fImageCtl.BackColor = System.Drawing.SystemColors.ControlDark;
-        	this.fImageCtl.Margin = new System.Windows.Forms.Padding(4);
+        	this.fImageCtl.BackColor = SystemColors.ControlDark;
+        	this.fImageCtl.Margin = new Padding(4);
             this.fImageCtl.ImageBorderStyle = ImageBoxBorderStyle.FixedSingleGlowShadow;
             this.fImageCtl.ImageBorderColor = Color.AliceBlue;
             this.fImageCtl.SelectionMode = ImageBoxSelectionMode.Zoom;
@@ -123,13 +122,13 @@ namespace GKUI.Dialogs
 
 		private void tsbStart_Click(object sender, System.EventArgs e)
 		{
-			if (tsbStart.Text == "Старт") {
-				tsbStart.Text = "Стоп";
-				tsbStart.Image = global::GKResources.iStop;
+			if (tsbStart.Text == LangMan.LS(LSID.LSID_Start)) {
+                tsbStart.Text = LangMan.LS(LSID.LSID_Stop);
+				tsbStart.Image = GKResources.iStop;
 				timer1.Enabled = true;
 			} else {
-				tsbStart.Text = "Старт";
-				tsbStart.Image = global::GKResources.iStart;
+				tsbStart.Text = LangMan.LS(LSID.LSID_Start);
+				tsbStart.Image = GKResources.iStart;
 				timer1.Enabled = false;
 			}
 		}

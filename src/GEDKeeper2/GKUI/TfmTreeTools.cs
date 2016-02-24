@@ -102,8 +102,8 @@ namespace GKUI
 			this.btnHelp.Text = LangMan.LS(LSID.LSID_MIHelp);
 			this.Label1.Text = LangMan.LS(LSID.LSID_MIFile);
 			
-			this.btnFileChoose.Text = LangMan.LS(LSID.LSID_DlgSelect) + "...";
-			this.btnTreeMerge.Text = LangMan.LS(LSID.LSID_DlgSelect) + "...";
+			this.btnFileChoose.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
+			this.btnTreeMerge.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
 			
 			this.btnSelectAll.Text = LangMan.LS(LSID.LSID_SelAll);
 			this.btnSelectFamily.Text = LangMan.LS(LSID.LSID_SelFamily);
@@ -306,9 +306,10 @@ namespace GKUI
 							int num2 = cnt - 1;
 							for (int j = 0; j <= num2; j++)
 							{
-								iRec = this.fSplitList[j] as GEDCOMIndividualRecord;
+                                iRec = (GEDCOMIndividualRecord)this.fSplitList[j];
 								prepared.Add(iRec);
-								string pn = iRec.GetNameString(true, false);
+
+                                string pn = iRec.GetNameString(true, false);
 								if (iRec.Patriarch)
 								{
 									pn = "(*) " + pn;
@@ -404,7 +405,7 @@ namespace GKUI
 			GKListItem item = this.ListChecks.SelectedItem();
 		    if (item == null) return;
 
-		    GEDCOMIndividualRecord iRec = (item.Data as TreeTools.CheckObj).Rec as GEDCOMIndividualRecord;
+            GEDCOMIndividualRecord iRec = ((TreeTools.CheckObj)item.Data).Rec as GEDCOMIndividualRecord;
 		    if (iRec == null) return;
 
 		    this.Base.SelectRecordByXRef(iRec.XRef);
@@ -516,7 +517,7 @@ namespace GKUI
 						}
 					}
 				}
-				this.Text = this.fSplitList.Count.ToString() + " / " + cnt.ToString();
+				this.Text = this.fSplitList.Count.ToString() + @" / " + cnt.ToString();
 			}
 			finally
 			{
@@ -632,11 +633,11 @@ namespace GKUI
 		private void btnPatSearch_Click(object sender, EventArgs e)
 		{
 			this.ListPatriarchs.BeginUpdate();
-			ExtList<PatriarchObj> lst = new ExtList<PatriarchObj>(true);
+			ExtList<PatriarchObj> lst = null;
 			try
 			{
 				this.ListPatriarchs.Items.Clear();
-				this.fBase.Context.GetPatriarchsList(lst, decimal.ToInt32(this.edMinGens.Value), !chkWithoutDates.Checked);
+				lst = this.fBase.Context.GetPatriarchsList(decimal.ToInt32(this.edMinGens.Value), !chkWithoutDates.Checked);
 
 				int num = lst.Count;
 				for (int i = 0; i < num; i++)
@@ -652,7 +653,7 @@ namespace GKUI
 			}
 			finally
 			{
-				lst.Dispose();
+				if (lst != null) lst.Dispose();
 				this.ListPatriarchs.EndUpdate();
 			}
 		}
@@ -745,7 +746,7 @@ namespace GKUI
 							for (int i = 0; i < num; i++)
 							{
 								TreeTools.ULIndividual indiv = uln[i];
-								this.ListCompare.AppendText("    - [" + indiv.Family + "] " + indiv.iRec.GetNameString(true, false) + "\r\n");
+								this.ListCompare.AppendText("    - [" + indiv.Family + "] " + indiv.IRec.GetNameString(true, false) + "\r\n");
 							}
 						}
 						else

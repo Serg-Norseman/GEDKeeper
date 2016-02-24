@@ -44,8 +44,8 @@ namespace GKCommon.GEDCOM
 		protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
 		{
 			base.CreateObj(owner, parent);
-			this.fRecordType = GEDCOMRecordType.rtFamily;
-			this.fName = "FAM";
+			base.SetRecordType(GEDCOMRecordType.rtFamily);
+			base.SetName("FAM");
 
 			this.fChildrens = new GEDCOMList<GEDCOMPointer>(this);
 			this.fSpouseSealings = new GEDCOMList<GEDCOMSpouseSealing>(this);
@@ -131,7 +131,7 @@ namespace GKCommon.GEDCOM
 					evt.SetLevel(this.Level + 1);
 					this.Events.Add(evt);
 				} else {
-					throw new ArgumentException("Event has the invalid type", "evt");
+					throw new ArgumentException(@"Event has the invalid type", "evt");
 				}
 			}
 
@@ -184,7 +184,7 @@ namespace GKCommon.GEDCOM
             GEDCOMFamilyRecord targetFamily = targetRecord as GEDCOMFamilyRecord;
             if (targetFamily == null)
             {
-                throw new ArgumentException("argument is null or wrong type", "targetRecord");
+                throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
             }
 
             base.MoveTo(targetRecord, clearDest);

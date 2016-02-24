@@ -21,7 +21,7 @@ namespace GKUI
 	/// </summary>
 	public sealed partial class TfmStats : Form, ILocalization
 	{
-		private enum ChartStyle : byte { csBar, csPoint }
+		private enum ChartStyle { Bar, Point, ClusterBar }
 
 		private readonly IBaseWindow fBase;
 		private readonly List<GEDCOMRecord> fSelectedRecords;
@@ -75,37 +75,70 @@ namespace GKUI
 			return string.Format(" ({0:0.00}%)", val);
 		}
 
-		private void PrepareArray(GraphPane gPane, ChartStyle style, bool excludeUnknowns)
+		private void PrepareArray(GraphPane gPane, ChartStyle style, bool excludeUnknowns, List<StatsItem> vals = null)
 		{
 			gPane.Title.Text = fChartTitle;
 			gPane.XAxis.Title.Text = fChartXTitle;
 			gPane.YAxis.Title.Text = fChartYTitle;
-			PointPairList ppList = new PointPairList();
 
-			int num = this.fListStats.Items.Count;
-			for (int i = 0; i < num; i++)
+			if (style != ChartStyle.ClusterBar)
 			{
-				ListViewItem item = this.fListStats.Items[i];
-
-				string s = item.Text;
-				double lab = (s == "?") ? 0.0f : ConvHelper.ParseFloat(s, 0.0f, true);
-
-				if (lab != 0 || !excludeUnknowns)
+				PointPairList ppList = new PointPairList();
+				int num = this.fListStats.Items.Count;
+				for (int i = 0; i < num; i++)
 				{
-					int val = int.Parse(item.SubItems[1].Text);
-					ppList.Add(lab, val);
+					ListViewItem item = this.fListStats.Items[i];
+
+					string s = item.Text;
+					double lab = (s == "?") ? 0.0f : ConvHelper.ParseFloat(s, 0.0f, true);
+
+					if (lab != 0 || !excludeUnknowns)
+					{
+						int val = int.Parse(item.SubItems[1].Text);
+						ppList.Add(lab, val);
+					}
+				}
+				ppList.Sort();
+
+				switch (style)
+				{
+					case ChartStyle.Bar:
+						gPane.AddBar("-", ppList, Color.Green);
+						break;
+
+					case ChartStyle.Point:
+						gPane.AddCurve("-", ppList, Color.Green, SymbolType.Diamond).Symbol.Size = 3;
+						break;
 				}
 			}
-			ppList.Sort();
+			else
+			{
+				gPane.CurveList.Clear();
+				
+				int itemscount = vals.Count;
+				double[] YValuesF = new double[itemscount];
+				double[] YValuesM = new double[itemscount];
+				double[] XValues = new double[itemscount];
 
-			switch (style) {
-				case ChartStyle.csBar:
-					gPane.AddBar("-", ppList, Color.Green);
-					break;
+				for (int i = 0; i < itemscount; i++)
+				{
+					StatsItem sti = vals[i];
+					XValues[i] = ConvHelper.ParseInt(sti.Caption, 0);
+					YValuesF[i] = sti.ValF;
+					YValuesM[i] = sti.ValM;
+				}
 
-				case ChartStyle.csPoint:
-					gPane.AddCurve("-", ppList, Color.Green, SymbolType.Diamond).Symbol.Size = 3;
-					break;
+				BarItem bar1 = gPane.AddBar("F", XValues, YValuesF, Color.Red);
+				BarItem bar2 = gPane.AddBar("M", XValues, YValuesM, Color.Blue);
+
+				gPane.BarSettings.MinBarGap = 0.0f;
+				gPane.BarSettings.MinClusterGap = 2.5f;
+				
+				// expand the range of the Y axis slightly to accommodate the labels
+				//gPane.YAxis.Scale.Max += gPane.YAxis.Scale.MajorStep;
+
+				// Create TextObj's to provide labels for each bar
+				BarItem.CreateBarLabels(gPane, false, "f0");
 			}
 		}
 
@@ -130,7 +163,9 @@ namespace GKUI
 				foreach (StatsItem lv in vals)
 				{
 					ListViewItem item = new ListViewItem(lv.Caption);
-					item.SubItems.Add(lv.Value.ToString());
+					
+					string stVal = (!lv.IsCombo) ? lv.Value.ToString() : lv.ValF.ToString() + " | " + lv.ValM.ToString();
+					item.SubItems.Add(stVal);
 
 					items[i] = item;
 					i++;
@@ -153,13 +188,13 @@ namespace GKUI
 					case StatsMode.smAge:
 						this.fChartXTitle = LangMan.LS(LSID.LSID_Age);
 						this.fChartYTitle = LangMan.LS(LSID.LSID_People);
-						this.PrepareArray(gPane, ChartStyle.csPoint, true);
+						this.PrepareArray(gPane, ChartStyle.Point, true);
 						break;
 
 					case StatsMode.smLifeExpectancy:
 						this.fChartXTitle = LangMan.LS(LSID.LSID_LifeExpectancy);
 						this.fChartYTitle = LangMan.LS(LSID.LSID_People);
-						this.PrepareArray(gPane, ChartStyle.csPoint, true);
+						this.PrepareArray(gPane, ChartStyle.Point, true);
 						break;
 
 					case StatsMode.smBirthYears:
@@ -190,26 +225,32 @@ namespace GKUI
 									break;
 							}
 
-							this.PrepareArray(gPane, ChartStyle.csPoint, true);
+							this.PrepareArray(gPane, ChartStyle.Point, true);
 							break;
 						}
 
 					case StatsMode.smChildsDistribution:
 						this.fChartXTitle = LangMan.LS(LSID.LSID_Childs);
 						this.fChartYTitle = LangMan.LS(LSID.LSID_Parents);
-						this.PrepareArray(gPane, ChartStyle.csBar, true);
+						this.PrepareArray(gPane, ChartStyle.Bar, true);
 						break;
 
 					case StatsMode.smCertaintyIndex:
 						this.fChartXTitle = LangMan.LS(LSID.LSID_CertaintyIndex);
 						this.fChartYTitle = LangMan.LS(LSID.LSID_People);
-						this.PrepareArray(gPane, ChartStyle.csBar, true);
+						this.PrepareArray(gPane, ChartStyle.Bar, true);
 						break;
 
 					case StatsMode.smBirthByMonth:
 						this.fChartXTitle = LangMan.LS(LSID.LSID_Month);
 						this.fChartYTitle = LangMan.LS(LSID.LSID_People);
-						this.PrepareArray(gPane, ChartStyle.csBar, true);
+						this.PrepareArray(gPane, ChartStyle.Bar, true);
+						break;
+
+					case StatsMode.smDemography:
+						this.fChartXTitle = LangMan.LS(LSID.LSID_LifeExpectancy);
+						this.fChartYTitle = LangMan.LS(LSID.LSID_People);
+						this.PrepareArray(gPane, ChartStyle.ClusterBar, true, vals);
 						break;
 				}
 			}
@@ -228,8 +269,8 @@ namespace GKUI
 
 			ListViewItem item = this.ListCommon.Items.Add(LangMan.LS(LSID.LSID_People));
 			item.SubItems.Add(stats.persons.ToString());
-			item.SubItems.Add(stats.persons_m.ToString() + TfmStats.GetPercent(stats.persons_m, stats.persons));
-			item.SubItems.Add(stats.persons_f.ToString() + TfmStats.GetPercent(stats.persons_f, stats.persons));
+			item.SubItems.Add(stats.persons_m.ToString() + GetPercent(stats.persons_m, stats.persons));
+			item.SubItems.Add(stats.persons_f.ToString() + GetPercent(stats.persons_f, stats.persons));
 
 			item = this.ListCommon.Items.Add(LangMan.LS(LSID.LSID_Living));
 			item.SubItems.Add(stats.lives.ToString());

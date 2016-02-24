@@ -60,8 +60,8 @@ namespace GKCommon.GEDCOM
 		protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
 		{
 			base.CreateObj(owner, parent);
-			this.fRecordType = GEDCOMRecordType.rtResearch;
-			this.fName = "_RESEARCH";
+			base.SetRecordType(GEDCOMRecordType.rtResearch);
+			base.SetName("_RESEARCH");
 
 			this.fTasks = new GEDCOMList<GEDCOMPointer>(this);
 			this.fCommunications = new GEDCOMList<GEDCOMPointer>(this);

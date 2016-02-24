@@ -10,11 +10,12 @@ namespace GKCommon.GEDCOM
 	{
 		#region Protected fields
 
-		protected int fLevel;
-		protected GEDCOMTree fOwner;
-		protected string fName;
-		protected GEDCOMObject fParent;
-		protected string fStringValue;
+		private int fLevel;
+		private GEDCOMTree fOwner;
+        private string fName;
+		private GEDCOMObject fParent;
+
+        protected string fStringValue;
 		protected GEDCOMList<GEDCOMTag> fTags;
 
 		#endregion
@@ -39,7 +40,6 @@ namespace GKCommon.GEDCOM
 		public string Name
 		{
 			get { return this.fName; }
-			set { this.fName = value; }
 		}
 
 		public GEDCOMTree Owner
@@ -82,7 +82,7 @@ namespace GKCommon.GEDCOM
 
 			if (tagName != "" || tagValue != "")
 			{
-				this.Name = tagName;
+				this.SetName(tagName);
 				this.SetStringValue(tagValue);
 			}
 		}
@@ -126,8 +126,13 @@ namespace GKCommon.GEDCOM
 
 		public void SetLevel(int value)
 		{
-			this.fLevel = value;
+            this.fLevel = value;
 		}
+
+        public void SetName(string value)
+        {
+            this.fName = value;
+        }
 
 		public virtual GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
 		{
@@ -156,14 +161,14 @@ namespace GKCommon.GEDCOM
 		{
 			if (source == null) return;
 			
-			this.Name = source.Name;
+			this.SetName(source.Name);
 			this.StringValue = source.StringValue;
 
 			int num = source.Count;
 			for (int i = 0; i < num; i++)
 			{
 				GEDCOMTag sourceTag = source[i];
-				GEDCOMTag copy = Activator.CreateInstance(sourceTag.GetType(), new object[] { this.Owner, this, "", "" }) as GEDCOMTag;
+                GEDCOMTag copy = (GEDCOMTag)Activator.CreateInstance(sourceTag.GetType(), new object[] { this.Owner, this, "", "" });
 				copy.Assign(sourceTag);
 				this.InsertTag(copy);
 			}
@@ -175,7 +180,7 @@ namespace GKCommon.GEDCOM
 			for (int i = 0; i < num; i++)
 			{
 				GEDCOMTag sourceTag = srcList[i];
-				GEDCOMTag copy = Activator.CreateInstance(sourceTag.GetType(), new object[] { this.Owner, this, "", "" }) as GEDCOMTag;
+                GEDCOMTag copy = (GEDCOMTag)Activator.CreateInstance(sourceTag.GetType(), new object[] { this.Owner, this, "", "" });
 				copy.Assign(sourceTag);
 				destList.Add(copy);
 			}
@@ -206,16 +211,16 @@ namespace GKCommon.GEDCOM
 
 		public GEDCOMTag FindTag(string tagName, int startIndex)
 		{
-			string SU = tagName.ToUpperInvariant();
+			string su = tagName.ToUpperInvariant();
 
-			int pos = SU.IndexOf('\\');
-			string S = ((pos >= 0) ? SU.Substring(0, pos) : SU);
+			int pos = su.IndexOf('\\');
+			string S = ((pos >= 0) ? su.Substring(0, pos) : su);
 
 			GEDCOMTag tempTag = this;
 
 			while (true)
 			{
-				int index = ((S == SU) ? startIndex : 0);
+				int index = ((S == su) ? startIndex : 0);
 
 				while (index < tempTag.Count && tempTag[index].Name != S) index++;
 
@@ -224,20 +229,20 @@ namespace GKCommon.GEDCOM
                 GEDCOMTag resultTag = tempTag[index];
 				tempTag = resultTag;
 
-				pos = SU.IndexOf('\\');
+				pos = su.IndexOf('\\');
 				if (pos >= 0)
 				{
-					SU = SU.Substring(pos + 1);
+					su = su.Substring(pos + 1);
 
-					pos = SU.IndexOf('\\');
-					S = ((pos >= 0) ? SU.Substring(0, pos) : SU);
+					pos = su.IndexOf('\\');
+					S = ((pos >= 0) ? su.Substring(0, pos) : su);
 				}
 				else
 				{
-					SU = "";
+					su = "";
 				}
 
-				if (SU == "") return resultTag;
+				if (su == "") return resultTag;
 			}
 
 			return null;
@@ -278,9 +283,9 @@ namespace GKCommon.GEDCOM
 			return this.fStringValue;
 		}
 
-		protected virtual void SetStringValue(string S)
+        protected virtual void SetStringValue(string strValue)
 		{
-			this.ParseString(S);
+            this.ParseString(strValue);
 		}
 
 		public virtual string ParseString(string strValue)
@@ -425,11 +430,11 @@ namespace GKCommon.GEDCOM
 				int num = strings.Count;
 				for (int i = 0; i < num; i++)
 				{
-					string S = strings[i];
+					string str = strings[i];
 
-					int len = ((S.Length > 248) ? 248 : S.Length) /*248*/;
-					string sub = S.Substring(0, len);
-					S = S.Remove(0, len);
+					int len = ((str.Length > 248) ? 248 : str.Length) /*248*/;
+					string sub = str.Substring(0, len);
+					str = str.Remove(0, len);
 
 					if (i == 0 && !(tag is GEDCOMRecord)) {
 						tag.StringValue = sub;
@@ -437,11 +442,11 @@ namespace GKCommon.GEDCOM
 						tag.AddTag("CONT", sub, null);
 					}
 
-					while (((S != null) ? S.Length : 0) > 0)
+					while (((str != null) ? str.Length : 0) > 0)
 					{
-						len = ((S.Length > 248) ? 248 : S.Length) /*248*/;
-						tag.AddTag("CONC", S.Substring(0, len), null);
-						S = S.Remove(0, len);
+						len = ((str.Length > 248) ? 248 : str.Length) /*248*/;
+						tag.AddTag("CONC", str.Substring(0, len), null);
+						str = str.Remove(0, len);
 					}
 				}
 			}
@@ -465,11 +470,11 @@ namespace GKCommon.GEDCOM
 				int num = strings.Length;
 				for (int i = 0; i < num; i++)
 				{
-					string S = strings[i];
+					string str = strings[i];
 
-					int len = ((S.Length > 248) ? 248 : S.Length) /*248*/;
-					string sub = S.Substring(0, len);
-					S = S.Remove(0, len);
+					int len = ((str.Length > 248) ? 248 : str.Length) /*248*/;
+					string sub = str.Substring(0, len);
+					str = str.Remove(0, len);
 
 					if (i == 0 && !(tag is GEDCOMRecord)) {
 						tag.StringValue = sub;
@@ -477,11 +482,11 @@ namespace GKCommon.GEDCOM
 						tag.AddTag("CONT", sub, null);
 					}
 
-					while (((S != null) ? S.Length : 0) > 0)
+					while (((str != null) ? str.Length : 0) > 0)
 					{
-						len = ((S.Length > 248) ? 248 : S.Length) /*248*/;
-						tag.AddTag("CONC", S.Substring(0, len), null);
-						S = S.Remove(0, len);
+						len = ((str.Length > 248) ? 248 : str.Length) /*248*/;
+						tag.AddTag("CONC", str.Substring(0, len), null);
+						str = str.Remove(0, len);
 					}
 				}
 			}
@@ -523,7 +528,7 @@ namespace GKCommon.GEDCOM
 				StringList savedTags = new StringList();
 				try
 				{
-					savedTags.Duplicates = StringList.TDuplicates.dupIgnore;
+					savedTags.DuplicateSolve = DuplicateSolve.Ignore;
 					savedTags.Sorted = true;
 
 					int num = this.Count;

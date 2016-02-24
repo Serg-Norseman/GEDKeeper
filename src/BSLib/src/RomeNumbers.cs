@@ -2,12 +2,12 @@
 {
 	public static class RomeNumbers
 	{
-		private static readonly int[] Rn_N;
-		private static readonly string[] Rn_S;
+		private static readonly int[] RN_N;
+		private static readonly string[] RN_S;
 
 		static RomeNumbers()
 		{
-			Rn_N = new int[]
+			RN_N = new int[]
 			{
 				1, 
 				4, 
@@ -24,7 +24,7 @@
 				1000
 			};
 
-			Rn_S = new string[]
+			RN_S = new string[]
 			{
 				"I", 
 				"IV", 
@@ -42,30 +42,30 @@
 			};
 		}
 
-		public static string GetRome(int N)
+		public static string GetRome(int num)
 		{
-			string S = "";
+			string rome = "";
 			int T = 12;
 
-			if (N > 0)
+			if (num > 0)
 			{
 				while (true)
 				{
-					int RN = RomeNumbers.Rn_N[T];
+					int rn = RN_N[T];
 					
-					if (N >= RN) {
-						while (N >= RN) {
-							N -= RN;
-							S += RomeNumbers.Rn_S[T];
+					if (num >= rn) {
+						while (num >= rn) {
+							num -= rn;
+							rome += RN_S[T];
 						}
 
-						if (N <= 0) break;
+						if (num <= 0) break;
 					} else {
 						T -= 1;
 					}
 				}
 			}
-			return S;
+			return rome;
 		}
 
 	}

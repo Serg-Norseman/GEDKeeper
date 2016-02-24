@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Drawing;
 
 using BSLib;
-using BSLib.SmartGraph;
 using GKCommon;
-using GKCommon.GEDCOM;
 using GKCore;
 using NUnit.Framework;
 
@@ -14,22 +11,6 @@ namespace GKTests
 	public class ExtTests
 	{
 		[Test]
-		public void RomeNumbers_Tests()
-		{
-			Assert.AreEqual("VI", RomeNumbers.GetRome(6), "RomeTest_00");
-			Assert.AreEqual("VIII", RomeNumbers.GetRome(8), "RomeTest_01");
-			Assert.AreEqual("IX", RomeNumbers.GetRome(9), "RomeTest_02");
-			Assert.AreEqual("XXXI", RomeNumbers.GetRome(31), "RomeTest_03");
-			Assert.AreEqual("XLVI", RomeNumbers.GetRome(46), "RomeTest_04");
-			Assert.AreEqual("XCIX", RomeNumbers.GetRome(99), "RomeTest_05");
-			Assert.AreEqual("DLXXXIII", RomeNumbers.GetRome(583), "RomeTest_06");
-			Assert.AreEqual("DCCCLXXXVIII", RomeNumbers.GetRome(888), "RomeTest_07");
-			Assert.AreEqual("MDCLXVIII", RomeNumbers.GetRome(1668), "RomeTest_08");
-			Assert.AreEqual("MCMLXXXIX", RomeNumbers.GetRome(1989), "RomeTest_09");
-			Assert.AreEqual("MMMCMXCIX", RomeNumbers.GetRome(3999), "RomeTest_10");
-		}
-
-		[Test]
 		public void SCCrypt_Tests()
 		{
 			const string pw = "test password";
@@ -37,112 +18,6 @@ namespace GKTests
 			string pw1 = SCCrypt.scDecrypt(crypt, unchecked((ushort)CRC32.CrcStr("test")));
 			
 			Assert.AreEqual(pw, pw1, "SCCrypt_Test");
-		}
-
-		[Test]
-		public void EnumSet_Tests()
-		{
-			EnumSet<GEDCOMRestriction> es = EnumSet<GEDCOMRestriction>.Create();
-			Assert.IsTrue(es.IsEmpty());
-
-			es.Include(null);
-			Assert.IsTrue(es.IsEmpty());
-			
-			es.Include(GEDCOMRestriction.rnPrivacy, GEDCOMRestriction.rnLocked);
-			Assert.IsTrue(es.Contains(GEDCOMRestriction.rnPrivacy));
-			Assert.IsFalse(es.Contains(GEDCOMRestriction.rnNone));
-			Assert.IsFalse(es.IsEmpty());
-
-			es.Exclude(GEDCOMRestriction.rnPrivacy);
-			Assert.IsFalse(es.Contains(GEDCOMRestriction.rnPrivacy));
-			Assert.IsTrue(es.Contains(GEDCOMRestriction.rnLocked));
-			
-			es = EnumSet<GEDCOMRestriction>.Create(GEDCOMRestriction.rnNone, GEDCOMRestriction.rnLocked);
-			Assert.IsTrue(es.Contains(GEDCOMRestriction.rnNone));
-			Assert.IsTrue(es.Contains(GEDCOMRestriction.rnLocked));
-			
-			string test = es.ByteToStr((int)0);
-			Assert.AreEqual("00000011", test);
-			
-			// clone test
-			EnumSet<GEDCOMRestriction> copy = (EnumSet<GEDCOMRestriction>)es.Clone();
-			test = copy.ByteToStr((int)0);
-			Assert.AreEqual("00000011", test);
-			
-			// clear test
-			copy.Clear();
-			Assert.IsTrue(copy.IsEmpty());
-			
-			//
-			EnumSet<GEDCOMRestriction> es2 = EnumSet<GEDCOMRestriction>.Create(GEDCOMRestriction.rnNone, GEDCOMRestriction.rnLocked);
-
-			Assert.IsTrue(es.Equals(es2));
-			Assert.IsFalse(es.Equals(null));
-			
-			Assert.IsTrue(es.Contains(GEDCOMRestriction.rnLocked));
-			Assert.IsFalse(es.Contains(GEDCOMRestriction.rnPrivacy));
-
-			EnumSet<GEDCOMRestriction> es3 = EnumSet<GEDCOMRestriction>.Create(GEDCOMRestriction.rnLocked);
-			EnumSet<GEDCOMRestriction> es4 = es * es3;
-            Assert.IsTrue(es4.Contains(GEDCOMRestriction.rnLocked));
-			
-			es = EnumSet<GEDCOMRestriction>.Create(GEDCOMRestriction.rnNone);
-			es2 = EnumSet<GEDCOMRestriction>.Create(GEDCOMRestriction.rnLocked);
-			Assert.IsTrue(es != es2);
-			
-			es = es + es2;
-			es3 = EnumSet<GEDCOMRestriction>.Create(GEDCOMRestriction.rnNone, GEDCOMRestriction.rnLocked);
-			Assert.IsTrue(es.Equals(es3));
-			
-			Assert.IsTrue(es3.ContainsAll(GEDCOMRestriction.rnNone, GEDCOMRestriction.rnLocked));
-			Assert.IsFalse(es3.ContainsAll(GEDCOMRestriction.rnNone, GEDCOMRestriction.rnPrivacy));
-			Assert.IsTrue(es3.HasIntersect(GEDCOMRestriction.rnNone, GEDCOMRestriction.rnPrivacy));
-			Assert.IsFalse(es3.HasIntersect(GEDCOMRestriction.rnPrivacy));
-			
-			es = es - es2;
-			es3 = EnumSet<GEDCOMRestriction>.Create(GEDCOMRestriction.rnNone);
-			Assert.IsTrue(es == es3);
-		}
-
-		[Test]
-		public void IndistinctMatching_Tests()
-		{
-			int res1, res2;
-
-			res1 = IndistinctMatching.LevenshteinDistance("Иванов", "Иванов");
-			Assert.AreEqual(0, res1);
-			res1 = IndistinctMatching.LevenshteinDistance("Иванво", "Иванов");
-			Assert.AreEqual(2, res1);
-
-			res2 = IndistinctMatching.DamerauLevenshteinDistance("Иванов", "Иванов");
-			Assert.AreEqual(0, res2);
-			res2 = IndistinctMatching.DamerauLevenshteinDistance("Иванво", "Иванов");
-			Assert.AreEqual(1, res2);
-			
-			double sim = IndistinctMatching.GetSimilarity("Иванво", "Иванов");
-			Assert.GreaterOrEqual(sim, 0.8333);
-		}
-
-		[Test]
-		public void IndistinctMatching_PerfTest1()
-		{
-			int res1, res2;
-
-			for (int i = 1; i < 10000; i++) {
-				res1 = IndistinctMatching.LevenshteinDistance("Иван", "Иванов");
-				res2 = IndistinctMatching.DamerauLevenshteinDistance("Иван", "Иванов");
-			}
-		}
-
-		[Test]
-		public void IndistinctMatching_PerfTest2()
-		{
-			int res1, res2;
-
-			for (int i = 1; i < 10000; i++) {
-				res1 = IndistinctMatching.LevenshteinDistance("Иванво", "Иванов");
-				res2 = IndistinctMatching.DamerauLevenshteinDistance("Иванво", "Иванов");
-			}
 		}
 
 		
@@ -191,38 +66,11 @@ namespace GKTests
 		
 		
 		[Test]
-		public void StringList_Tests()
-		{
-			string[] list = new string[4] { "The", "string", "list", "test" };
-			
-			StringList strList = new StringList(list);
-			Assert.AreEqual("The", strList[0]);
-			Assert.AreEqual("string", strList[1]);
-			Assert.AreEqual("list", strList[2]);
-			Assert.AreEqual("test", strList[3]);
-			
-			strList.Exchange(1, 2);
-			Assert.AreEqual("string", strList[2]);
-			Assert.AreEqual("list", strList[1]);
-			
-			strList.Clear();
-		}
-
-		[Test]
 		public void SysUtils_Tests()
 		{
 			Assert.AreEqual(true, SysUtils.IsSetBit(3, 0));
 			Assert.AreEqual(true, SysUtils.IsSetBit(3, 1));
 			Assert.AreEqual(false, SysUtils.IsSetBit(3, 4));
-
-			int ival = ConvHelper.ParseInt("495", 0);
-			Assert.AreEqual(ival, 495);
-
-			double fval = ConvHelper.ParseFloat("495.575", 0);
-			Assert.AreEqual(fval, 495.575);
-
-			string st = ConvHelper.AdjustNum(9, 3);
-			Assert.AreEqual(st, "009");
 		}
 
 		[Test]
@@ -234,7 +82,7 @@ namespace GKTests
 			calc.CaseSensitive = false;
 			Assert.AreEqual(false, calc.CaseSensitive);
 			
-			calc.OnGetVar += this.GetVarEventHandler;
+			calc.OnGetVar += GetVarEventHandler;
 
 			Assert.Throws(typeof(CalculateException), () => { calc.Calc("12+"); }); // syntax error
 			Assert.Throws(typeof(CalculateException), () => { calc.Calc("(12+"); }); // syntax error
@@ -368,7 +216,7 @@ namespace GKTests
 
 			Assert.Throws(typeof(CalculateException), () => { calc.Calc("15 - beta"); });
 			
-			calc.OnGetVar -= this.GetVarEventHandler;
+			calc.OnGetVar -= GetVarEventHandler;
 			
 			// numbers
 			val = calc.Calc("1537");
@@ -393,31 +241,28 @@ namespace GKTests
 			Assert.Throws(typeof(CalculateException), () => { calc.Calc("if(2 == 3)"); }); // syntax error
 		}
 
-		private bool GetVarEventHandler(object sender, string varName, ref double varValue)
+		private static bool GetVarEventHandler(object sender, string varName, ref double varValue)
 		{
-			if (varName.Equals("alpha")) {
+		    if (varName.Equals("alpha")) {
 				varValue = 15.0;
 				return true;
-			} else return false;
+			}
+
+            return false;
 		}
 
-		[Test]
-		public void TList_Tests()
-		{
-			
-		}
-
-		[Test]
+	    /*[Test]
 		public void Calendar_PerfTest()
 		{
 			int y = 1990, m = 10, d = 10;
 			double jd;
 
-			for (int i = 0; i < 10000000; i++) {
+			for (int i = 0; i < 1000000; i++) {
 				jd = CalendarConverter.gregorian_to_jd(y, m, d);
 				jd = CalendarConverter.gregorian_to_jd2(y, m, d);
+				jd = CalendarConverter.gregorian_to_jd3(y, m, d);
 			}
-		}
+		}*/
 		
 		[Test]
 		public void Calendar_Tests()
@@ -428,15 +273,18 @@ namespace GKTests
 			double jd = CalendarConverter.gregorian_to_jd2(gdt.Year, gdt.Month, gdt.Day);
 			Assert.AreEqual(2448175, jd); // 
 
+			jd = CalendarConverter.gregorian_to_jd2(-4713, 11, 24);
+			Assert.AreEqual(0.0, jd); // 
+
+			
 			jd = CalendarConverter.gregorian_to_jd(-4713, 11, 24);
 			Assert.AreEqual(0.5, jd); // bad result! needs 0.0f!
 			
 			jd = CalendarConverter.gregorian_to_jd(gdt.Year, gdt.Month, gdt.Day);
 			Assert.AreEqual(2448174.5, jd); // not checked!
 			
-			int year = 0;
-			int month = 0;
-			int day = 0;
+			
+			int year, month, day;
             CalendarConverter.jd_to_julian(jd, out year, out month, out day);
 			s = CalendarData.date_to_str(year, month, day, CalendarConverter.DateEra.AD);
 			Assert.AreEqual("27 сен 1990", s); // +
@@ -465,8 +313,7 @@ namespace GKTests
 			s = s + " " + year.ToString() + ", " + CalendarData.IndianCivilWeekdays[CalendarConverter.jwday(jd)];
 			Assert.AreEqual("18 Азвина 1912, будхвар", s); // +
 
-			int major = 0;
-			int cycle = 0;
+			int major, cycle;
             CalendarConverter.jd_to_bahai(jd, out major, out cycle, out year, out month, out day);
 			s = "Кулл-и Шай' " + major.ToString() + ", Вахид " + cycle.ToString() + ", ";
 			s = s + day.ToString() + " ";
@@ -474,103 +321,42 @@ namespace GKTests
 			s = s + " " + year.ToString() + ", " + CalendarData.BahaiWeekdays[CalendarConverter.jwday(jd)];
 			Assert.AreEqual("Кулл-и Шай' 1, Вахид 8, 14 Машиййат 14, Идаль", s); // ???
 		}
-
+		
 		[Test]
-		public void Graph_Tests()
+		public void CalendarGK_Tests()
 		{
-			Vertex vertex = new Vertex();
-			Assert.IsNotNull(vertex);
+			double jd;
+			int year, month, day;
 			
-			Vertex vertex2 = new Vertex();
-			Assert.AreNotEqual(0, vertex.CompareTo(vertex2));
-			Assert.Throws(typeof(ArgumentException), () => { vertex.CompareTo(null); });
+			const double needJD = 2448174.5; // 1990-10-10 [g], 1990-09-27 [j], 5751-07-21 [h]
 			
-			Assert.Throws(typeof(ArgumentNullException), () => { new Edge(null, vertex2, 1, null); });
-			Assert.Throws(typeof(ArgumentNullException), () => { new Edge(vertex, null, 1, null); });
-			
-			Edge edge = new Edge(vertex, vertex2, 1, null);
-			Assert.IsNotNull(edge);
-			Assert.AreEqual(1, edge.Cost);
-			Assert.AreEqual(vertex, edge.Source);
-			Assert.AreEqual(vertex2, edge.Target);
-
-			Assert.AreNotEqual(0, edge.CompareTo(new Edge(vertex, vertex2, 1, null)));
-			Assert.Throws(typeof(ArgumentException), () => { edge.CompareTo(null); });
-			
-			IVertex vert1 = ((IEdge)edge).Source;
-			Assert.AreEqual(vertex, vert1);
-			IVertex vert2 = ((IEdge)edge).Target;
-			Assert.AreEqual(vertex2, vert2);
-			
-			using (Graph graph = new Graph())
-			{
-				Assert.IsNotNull(graph);
+			//for (int i = 0; i < 1000000; i++) {
+				jd = CalendarConverter.gregorian_to_jd(-4713, 11, 24);
+				Assert.AreEqual(0.5, jd); // bad!
 				
-				vert1 = graph.AddVertex(null);
-				Assert.IsNotNull(vert1);
-				graph.DeleteVertex(vert1);
+				jd = CalendarConverter.gregorian_to_jd(1990, 10, 10);
+				Assert.AreEqual(needJD, jd);
 				
-				vert1 = graph.AddVertex("test", null);
-				Assert.IsNotNull(vert1);
-				
-				vert2 = graph.FindVertex("test");
-				Assert.AreEqual(vert1, vert2);
-				
-				graph.DeleteVertex(vert1);
-				
-				vert1 = graph.AddVertex("src", null);
-				vert2 = graph.AddVertex("tgt", null);
-				IEdge edge3 = graph.AddDirectedEdge("src", "tgt", 1, null);
-				Assert.IsNotNull(edge3);
-				graph.DeleteEdge(edge3);
-				
-				edge3 = graph.AddDirectedEdge("1", "2", 1, null);
-				Assert.IsNull(edge3);
-				
-				bool res = graph.AddUndirectedEdge(vert1, vert2, 1, null, null);
-				Assert.AreEqual(true, res);
-				
-				graph.Clear();
-			}
-		}
+				jd = CalendarConverter.julian_to_jd(1990, 09, 27);
+				Assert.AreEqual(needJD, jd);
 
-		[Test]
-		public void ExtRect_Tests()
-		{
-			ExtRect rt = ExtRect.Create(0, 0, 9, 9);
+				jd = CalendarConverter.hebrew_to_jd(5751, 07, 21);
+				Assert.AreEqual(needJD, jd);
+			//}
 
-			Assert.AreEqual(0, rt.Left);
-			Assert.AreEqual(0, rt.Top);
-			Assert.AreEqual(9, rt.Right);
-			Assert.AreEqual(9, rt.Bottom);
-			Assert.AreEqual(10, rt.GetHeight());
-			Assert.AreEqual(10, rt.GetWidth());
 
-			rt = ExtRect.CreateBounds(0, 0, 10, 10);
+			/*jd = CalendarConverter.julian_to_jd(1990, 09, 00);
+			CalendarConverter.jd_to_julian(jd, out year, out month, out day);
+			Assert.AreEqual(1990, year, "j2jd 1");
+			Assert.AreEqual(09, month, "j2jd 2");
+			Assert.AreEqual(00, day, "j2jd 3");*/
 
-			Assert.AreEqual(0, rt.Left);
-			Assert.AreEqual(0, rt.Top);
-			Assert.AreEqual(9, rt.Right);
-			Assert.AreEqual(9, rt.Bottom);
-			Assert.AreEqual(10, rt.GetHeight());
-			Assert.AreEqual(10, rt.GetWidth());
 
-			Assert.AreEqual("{X=0,Y=0,Width=10,Height=10}", rt.ToString());
-
-			Assert.IsTrue(rt.Contains(5, 5));
-			
-			rt.Inflate(3, -2);
-			Assert.AreEqual("{X=3,Y=-2,Width=4,Height=14}", rt.ToString());
-			
-			rt.Offset(2, 5);
-			Assert.AreEqual("{X=5,Y=3,Width=4,Height=14}", rt.ToString());
-			
-			rt = ExtRect.CreateEmpty();
-			Assert.IsTrue(rt.IsEmpty());
-
-			Assert.IsFalse(rt.Contains(5, 5));
-			
-			Rectangle rect = rt.ToRectangle();
+			jd = CalendarConverter.gregorian_to_jd2(1990, 10, 10);
+			CalendarConverter.jd_to_gregorian2(jd, out year, out month, out day);
+			Assert.AreEqual(1990, year, "g2jd 1");
+			Assert.AreEqual(10, month, "g2jd 2");
+			Assert.AreEqual(10, day, "g2jd 3");
 		}
 
 //		public void MyTestFunc1(

@@ -11,7 +11,7 @@ namespace GKCommon.GEDCOM
 		protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
 		{
 			base.CreateObj(owner, parent);
-			this.fName = "REFN";
+            base.SetName("REFN");
 		}
 
 		public GEDCOMUserReference(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

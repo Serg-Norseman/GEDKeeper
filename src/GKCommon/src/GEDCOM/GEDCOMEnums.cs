@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GKCommon.GEDCOM
+﻿namespace GKCommon.GEDCOM
 {
     public enum GEDCOMRecordType
     {

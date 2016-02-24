@@ -37,8 +37,8 @@ namespace GKCore.Options
 		private readonly StringList fResidenceFilters;
 		private bool fShowTips;
 		private readonly IndividualListColumns fIndividualListColumns;
-		private bool fListPersons_HighlightUnmarried;
-		private bool fListPersons_HighlightUnparented;
+		private bool fListHighlightUnmarriedPersons;
+		private bool fListHighlightUnparentedPersons;
 		private ExtRect fMWinRect;
 		private FormWindowState fMWinState;
 		private readonly StringList fLastBases;
@@ -163,16 +163,16 @@ namespace GKCore.Options
 			set { this.fShowTips = value; }
 		}
 
-		public bool ListPersons_HighlightUnmarried
+		public bool ListHighlightUnmarriedPersons
 		{
-			get { return this.fListPersons_HighlightUnmarried; }
-			set { this.fListPersons_HighlightUnmarried = value; }
+			get { return this.fListHighlightUnmarriedPersons; }
+			set { this.fListHighlightUnmarriedPersons = value; }
 		}
 
-		public bool ListPersons_HighlightUnparented
+		public bool ListHighlightUnparentedPersons
 		{
-			get { return this.fListPersons_HighlightUnparented; }
-			set { this.fListPersons_HighlightUnparented = value; }
+			get { return this.fListHighlightUnparentedPersons; }
+			set { this.fListHighlightUnparentedPersons = value; }
 		}
 
 		public IndividualListColumns IndividualListColumns
@@ -182,37 +182,30 @@ namespace GKCore.Options
 
 		private void LngPrepareProc(string fileName)
 		{
-			StreamReader lngFile = new StreamReader(fileName, Encoding.UTF8);
-			try
-			{
-				string st = lngFile.ReadLine();
+            try
+            {
+                using (StreamReader lngFile = new StreamReader(fileName, Encoding.UTF8))
+                {
+                    string st = lngFile.ReadLine();
 
-				if (st[0] == ';')
-				{
-					try
-					{
-						st = st.Remove(0, 1);
-						string[] lng_params = st.Split(',');
-						string lng_code = lng_params[0];
-						string lng_name = lng_params[1];
-						LangRecord lng_rec = new LangRecord();
-						lng_rec.Code = (ushort)int.Parse(lng_code);
-						lng_rec.Name = lng_name;
-						lng_rec.FileName = fileName;
-						this.fLanguages.Add(lng_rec);
-					}
-					catch (Exception ex)
-					{
-						Logger.LogWrite("GlobalOptions.LngPrepareProc(): " + ex.Message);
-						throw;
-					}
-				}
-			}
-			finally
-			{
-				lngFile.Close();
-			}
-		}
+                    if (!string.IsNullOrEmpty(st) && st[0] == ';')
+                    {
+                        st = st.Remove(0, 1);
+                        string[] lngParams = st.Split(',');
+                        string lngCode = lngParams[0];
+                        string lngName = lngParams[1];
+
+                        LangRecord lngRec = new LangRecord((ushort)int.Parse(lngCode), lngName, fileName);
+                        this.fLanguages.Add(lngRec);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWrite("GlobalOptions.LngPrepareProc(): " + ex.Message);
+                throw;
+            }
+        }
 
 		public int GetLangsCount()
 		{
@@ -221,7 +214,7 @@ namespace GKCore.Options
 
 		public LangRecord GetLang(int index)
 		{
-			return this.fLanguages[index] as LangRecord;
+			return this.fLanguages[index];
 		}
 
 		public string GetLastBase(int index)
@@ -353,8 +346,8 @@ namespace GKCore.Options
 
 				this.fIndividualListColumns.LoadFromFile(ini, "PersonsColumns");
 
-				this.fListPersons_HighlightUnmarried = ini.ReadBool("ListPersons", "HighlightUnmarried", false);
-				this.fListPersons_HighlightUnparented = ini.ReadBool("ListPersons", "HighlightUnparented", false);
+				this.fListHighlightUnmarriedPersons = ini.ReadBool("ListPersons", "HighlightUnmarried", false);
+				this.fListHighlightUnparentedPersons = ini.ReadBool("ListPersons", "HighlightUnparented", false);
 				
 				this.fMWinRect.Left = ini.ReadInteger("Common", "MWinL", -1);
 				this.fMWinRect.Top = ini.ReadInteger("Common", "MWinT", -1);
@@ -434,8 +427,8 @@ namespace GKCore.Options
 
 				this.fIndividualListColumns.SaveToFile(ini, "PersonsColumns");
 
-				ini.WriteBool("ListPersons", "HighlightUnmarried", this.fListPersons_HighlightUnmarried);
-				ini.WriteBool("ListPersons", "HighlightUnparented", this.fListPersons_HighlightUnparented);
+				ini.WriteBool("ListPersons", "HighlightUnmarried", this.fListHighlightUnmarriedPersons);
+				ini.WriteBool("ListPersons", "HighlightUnparented", this.fListHighlightUnparentedPersons);
 				ini.WriteInteger("Common", "MWinL", this.fMWinRect.Left);
 				ini.WriteInteger("Common", "MWinT", this.fMWinRect.Top);
 				ini.WriteInteger("Common", "MWinW", this.fMWinRect.Right);

@@ -40,8 +40,8 @@ namespace GKCommon.GEDCOM
 		protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
 		{
 			base.CreateObj(owner, parent);
-			this.fRecordType = GEDCOMRecordType.rtSubmitter;
-			this.fName = "SUBM";
+			base.SetRecordType(GEDCOMRecordType.rtSubmitter);
+            base.SetName("SUBM");
 
 			this.fLanguages = new GEDCOMList<GEDCOMTag>(this);
 		}

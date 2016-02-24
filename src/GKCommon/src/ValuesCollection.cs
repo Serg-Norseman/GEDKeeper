@@ -11,19 +11,6 @@ namespace GKCommon
 		{
 		}
 
-        private static string[] GetAsStringArray(ArrayList list)
-		{
-            if (list == null)
-			{
-				return null;
-			}
-            
-            int num = list.Count;
-            string[] array = new string[num];
-			list.CopyTo(0, array, 0, num);
-			return array;
-		}
-
         public void Clear()
 		{
 			base.BaseClear();
@@ -55,15 +42,28 @@ namespace GKCommon
             }
 		}
 
-        public string[] GetValues(string name)
-		{
-			ArrayList list = (ArrayList)base.BaseGet(name);
-			return ValuesCollection.GetAsStringArray(list);
-		}
-
         public void Remove(string name)
 		{
 			base.BaseRemove(name);
 		}
-	}
+
+        public string[] GetValues(string name)
+        {
+            ArrayList list = (ArrayList)base.BaseGet(name);
+            return GetAsStringArray(list);
+        }
+
+        private static string[] GetAsStringArray(ArrayList list)
+        {
+            if (list == null)
+            {
+                return null;
+            }
+
+            int num = list.Count;
+            string[] array = new string[num];
+            list.CopyTo(0, array, 0, num);
+            return array;
+        }
+    }
 }

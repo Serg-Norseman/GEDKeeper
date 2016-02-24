@@ -12,15 +12,10 @@ namespace ExtUtils.SingleInstancing
 	[Serializable]
 	public class MessageEventArgs : EventArgs
 	{
-		private object message;
-
-		/// <summary>
-		/// Gets the message sent to the first instance of the application.
-		/// </summary>
-		public object Message
-		{
-			get { return message; }
-		}
+        /// <summary>
+        /// Gets the message sent to the first instance of the application.
+        /// </summary>
+        public readonly object Message;
 
 		/// <summary>
 		/// Instantiates a new MessageEventArgs object.
@@ -30,9 +25,9 @@ namespace ExtUtils.SingleInstancing
 		public MessageEventArgs(object message)
 		{
 			if (message == null)
-				throw new ArgumentNullException("message", "message cannot be null.");
+				throw new ArgumentNullException("message", @"message cannot be null.");
 
-			this.message = message;
+			this.Message = message;
 		}
 	}
 }

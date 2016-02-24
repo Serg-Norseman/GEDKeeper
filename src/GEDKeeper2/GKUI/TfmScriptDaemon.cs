@@ -47,7 +47,7 @@ namespace GKUI
 
 			if (this.Modified)
 			{
-				DialogResult dialogResult = MessageBox.Show(LangMan.LS(LSID.LSID_FileSaveQuery), GKData.AppTitle, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+				DialogResult dialogResult = MessageBox.Show(LangMan.LS(LSID.LSID_FileSaveQuery), GKData.APP_TITLE, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
 
 				switch (dialogResult) {
 					case DialogResult.Yes:
@@ -69,7 +69,7 @@ namespace GKUI
 			this.Text = Path.GetFileName(this.fFileName);
 			if (this.fModified)
 			{
-				this.Text = "* " + this.Text;
+				this.Text = @"* " + this.Text;
 			}
 		}
 

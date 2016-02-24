@@ -16,8 +16,8 @@ namespace GKCommon.GEDCOM
 		protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
 		{
 			base.CreateObj(owner, parent);
-			this.fRecordType = GEDCOMRecordType.rtLocation;
-			this.fName = "_LOC";
+			base.SetRecordType(GEDCOMRecordType.rtLocation);
+			base.SetName("_LOC");
 		}
 
 		/*public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)

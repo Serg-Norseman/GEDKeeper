@@ -48,9 +48,9 @@ namespace BSLib
 			return this.Right <= this.Left || this.Bottom <= this.Top;
 		}
 
-		public bool Contains(int X, int Y)
+		public bool Contains(int x, int y)
 		{
-			return X >= this.Left && Y >= this.Top && X < this.Right && Y < this.Bottom;
+			return x >= this.Left && y >= this.Top && x <= this.Right && y <= this.Bottom;
 		}
 
 		public ExtRect GetOffset(int dX, int dY)

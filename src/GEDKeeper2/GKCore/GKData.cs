@@ -1,5 +1,4 @@
-﻿using System;
-using GKCore.Types;
+﻿using GKCore.Types;
 
 namespace GKCore
 {
@@ -19,9 +18,9 @@ namespace GKCore
 		public const bool DEBUG_IMAGE = false;
 		public const bool DEBUG_PRINT = false;
 
-		public const string AppTitle = "GEDKeeper2";
-		public const string AppMail = "gedkeeper@yandex.ru";
-		public const string AppCites = "«История рода - это есть история Отечества»\r\n«Неуважение к предкам - есть первый признак дикости и безнравственности»\r\n(Александр Сергеевич Пушкин)";
+		public const string APP_TITLE = "GEDKeeper2";
+		public const string APP_MAIL = "gedkeeper@yandex.ru";
+		public const string APP_CITES = "«История рода - это есть история Отечества»\r\n«Неуважение к предкам - есть первый признак дикости и безнравственности»\r\n(Александр Сергеевич Пушкин)";
 
 		public struct SexStruct
 		{
@@ -220,7 +219,7 @@ namespace GKCore
 			};
 
 
-			SpecialUserRefs = new string[10] {
+			SpecialUserRefs = new string[] {
 				"",
 				"РИ:Георгиевский кавалер",
 				"СССР:ВОВ:Участник боевых действий",
@@ -311,14 +310,14 @@ namespace GKCore
 			};
 
 
-			GKStoreTypes = new StoreTypeRec[3] {
+			GKStoreTypes = new StoreTypeRec[] {
 				new StoreTypeRec(LSID.LSID_STRef, ""),
 				new StoreTypeRec(LSID.LSID_STStg, "stg:"),
 				new StoreTypeRec(LSID.LSID_STArc, "arc:")
 			};
 
 
-			FamilyEvents = new FamilyEventStruct[10] {
+			FamilyEvents = new FamilyEventStruct[] {
 				new FamilyEventStruct(LSID.LSID_Event, "EVEN"),
 				new FamilyEventStruct(LSID.LSID_FEvt_1, "ENGA"),
 				new FamilyEventStruct(LSID.LSID_FEvt_2, "MARR"),
@@ -399,7 +398,7 @@ namespace GKCore
 			PersonEvents = array6;
 
 			
-			MarriageStatus = new MarStatusStruct[4] {
+			MarriageStatus = new MarStatusStruct[] {
 				new MarStatusStruct(LSID.LSID_Unknown, ""),
 				new MarStatusStruct(LSID.LSID_MarrRegistered, "MARRIED"),
 				new MarStatusStruct(LSID.LSID_MarrNotRegistered, "MARRNOTREG"),
@@ -407,7 +406,7 @@ namespace GKCore
 			};
 
 
-			SexData = new SexStruct[4] {
+			SexData = new SexStruct[] {
 				new SexStruct(LSID.LSID_SexN, "N"),
 				new SexStruct(LSID.LSID_SexM, "M"),
 				new SexStruct(LSID.LSID_SexF, "F"),
@@ -443,7 +442,7 @@ namespace GKCore
 			};
 
 
-			StatsTitles = new StatsTitleStruct[36];
+			StatsTitles = new StatsTitleStruct[37];
 			StatsTitles[0] = new StatsTitleStruct(LSID.LSID_AncestorsCount, LSID.LSID_Name);
 			StatsTitles[1] = new StatsTitleStruct(LSID.LSID_DescendantsCount, LSID.LSID_Name);
 			StatsTitles[2] = new StatsTitleStruct(LSID.LSID_GenerationsCount, LSID.LSID_Name);
@@ -480,6 +479,7 @@ namespace GKCore
 			StatsTitles[33] = new StatsTitleStruct(LSID.LSID_AAF_2, LSID.LSID_AAF_2);
 			StatsTitles[34] = new StatsTitleStruct(LSID.LSID_CertaintyIndex, LSID.LSID_CertaintyIndex);
 			StatsTitles[35] = new StatsTitleStruct(LSID.LSID_BirthByMonth, LSID.LSID_BirthByMonth);
+			StatsTitles[36] = new StatsTitleStruct(LSID.LSID_Demography, LSID.LSID_Demography);
 
 			CheckSolveNames = new LSID[4];
 			CheckSolveNames[0] = LSID.LSID_RM_Skip;

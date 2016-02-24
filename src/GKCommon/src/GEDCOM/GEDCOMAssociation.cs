@@ -24,7 +24,7 @@ namespace GKCommon.GEDCOM
 		protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
 		{
 			base.CreateObj(owner, parent);
-			this.fName = "ASSO";
+			this.SetName("ASSO");
 			this.fSourceCitations = new GEDCOMList<GEDCOMSourceCitation>(this);
 		}
 

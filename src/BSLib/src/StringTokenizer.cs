@@ -123,10 +123,7 @@ namespace BSLib
 
 		protected char LA(int count)
 		{
-			if (pos + count >= data.Length)
-				return EOF;
-			else
-				return data[pos+count];
+			return (pos + count >= data.Length) ? EOF : data[pos+count];
 		}
 
 		protected char Consume()
@@ -167,8 +164,7 @@ namespace BSLib
 						Consume();
 						goto ReadToken;
 					}
-					else
-						return ReadWhitespace();
+					return ReadWhitespace();
 				}
 				case '0':
 				case '1':

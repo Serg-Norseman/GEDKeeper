@@ -53,11 +53,11 @@ namespace GKUI.Dialogs
 			}
 
 			if (btnBC1.Checked) {
-				gcd = gcd + GEDCOMObject.GEDCOMYearBC;
+				gcd = gcd + GEDCOMObject.GEDCOM_YEAR_BC;
 			}
 
 			if (btnBC2.Checked) {
-				gcd2 = gcd2 + GEDCOMObject.GEDCOMYearBC;
+				gcd2 = gcd2 + GEDCOMObject.GEDCOM_YEAR_BC;
 			}
 
 			switch (this.EditEventDateType.SelectedIndex) {
@@ -118,12 +118,12 @@ namespace GKUI.Dialogs
 
 			if (this.fEvent is GEDCOMFamilyEvent)
 			{
-				this.fEvent.Name = GKData.FamilyEvents[this.EditEventType.SelectedIndex].Sign;
+				this.fEvent.SetName(GKData.FamilyEvents[this.EditEventType.SelectedIndex].Sign);
 			}
 			else
 			{
 				int id = this.EditEventType.SelectedIndex;
-				this.fEvent.Name = GKData.PersonEvents[id].Sign;
+				this.fEvent.SetName(GKData.PersonEvents[id].Sign);
 				if (GKData.PersonEvents[id].Kind == PersonEventKind.ekFact)
 				{
 					this.fEvent.StringValue = this.EditAttribute.Text;
@@ -371,7 +371,7 @@ namespace GKUI.Dialogs
 				{
 					string txt = e.Data.GetData(typeof(string)) as string;
 					string[] dt = ((MaskedTextBox)sender).Text.Split('.');
-					((MaskedTextBox)sender).Text = dt[0] + "." + dt[1] + "." + txt;
+					((MaskedTextBox)sender).Text = dt[0] + '.' + dt[1] + '.' + txt;
 				}
 			}
 			catch (Exception ex)
@@ -479,7 +479,7 @@ namespace GKUI.Dialogs
 			// SetLang()
 			this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
 			this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-			this.btnAddress.Text = LangMan.LS(LSID.LSID_Address) + "...";
+			this.btnAddress.Text = LangMan.LS(LSID.LSID_Address) + @"...";
 			this.SheetCommon.Text = LangMan.LS(LSID.LSID_Common);
 			this.SheetNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
 			this.SheetMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);

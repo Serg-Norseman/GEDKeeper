@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using System.Resources;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using System.Threading;
@@ -14,7 +15,7 @@ using GKUI;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("GEDKeeper2")]
-[assembly: AssemblyCopyright("Copyright © 2009-2015 Serg V. Zhdanovskih")]
+[assembly: AssemblyCopyright("Copyright © 2009-2016 Serg V. Zhdanovskih")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyTitle("GEDKeeper2")]
@@ -24,6 +25,7 @@ using GKUI;
 [assembly: AssemblyKeyName("")]
 [assembly: CLSCompliant(false)]
 [assembly: ComVisible(false)]
+[assembly: NeutralResourcesLanguage("en")]
 
 namespace GK2
 {
@@ -45,7 +47,7 @@ namespace GK2
 			SingleInstanceTracker tracker = null;
 			try
 			{
-				tracker = new SingleInstanceTracker(GKData.AppTitle, GetSingleInstanceEnforcer);
+				tracker = new SingleInstanceTracker(GKData.APP_TITLE, GetSingleInstanceEnforcer);
 
 				if (tracker.IsFirstInstance) {
 					TfmGEDKeeper fmMain = (TfmGEDKeeper)tracker.Enforcer;
@@ -69,7 +71,7 @@ namespace GK2
 		static void ExExceptionHandler(object sender, ThreadExceptionEventArgs args)
 		{
 			Logger.LogWrite("GK.ExExceptionHandler(): " + args.Exception.Message);
-			Logger.LogWrite("GK.ExExceptionHandler(): " + args.Exception.StackTrace.ToString());
+			Logger.LogWrite("GK.ExExceptionHandler(): " + args.Exception.StackTrace);
 		}
 
 		static void UnhandledExceptionsHandler(object sender, UnhandledExceptionEventArgs args) {
@@ -78,7 +80,7 @@ namespace GK2
 
 			Exception e = (Exception) args.ExceptionObject;
 			Logger.LogWrite("GK.UnhandledExceptionsHandler(): " + e.Message);
-			Logger.LogWrite("GK.ExExceptionHandler(): " + e.StackTrace.ToString());
+			Logger.LogWrite("GK.ExExceptionHandler(): " + e.StackTrace);
 		}
 	}
 }

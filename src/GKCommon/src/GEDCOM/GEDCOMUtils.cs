@@ -20,17 +20,17 @@ namespace GKCommon.GEDCOM
 
 		public int Year
 		{
-			get { return this.IsValid() ? getYear((int)this.fValue) : 0; }
+			get { return this.IsValid() ? GetYear((int)this.fValue) : 0; }
 		}
 
 		public int Month
 		{
-			get { return this.IsValid() ? getMonth((int)this.fValue) : 0; }
+			get { return this.IsValid() ? GetMonth((int)this.fValue) : 0; }
 		}
 
 		public int Day
 		{
-			get { return this.IsValid() ? getDay((int)this.fValue) : 0; }
+			get { return this.IsValid() ? GetDay((int)this.fValue) : 0; }
 		}
 
 		private AbsDate(double value)
@@ -40,7 +40,7 @@ namespace GKCommon.GEDCOM
 
 		public AbsDate(int year, int month, int day, bool yearBC)
 		{
-			int result = createVal(year, month, day);
+			int result = CreateVal(year, month, day);
 			if (yearBC) result = -result;
 
 			this.fValue = result;
@@ -48,22 +48,22 @@ namespace GKCommon.GEDCOM
 
 		#region Private static methods
 
-		private static int createVal(int year, int month, int day)
+		private static int CreateVal(int year, int month, int day)
 		{
 			return ((short)year << 16) | ((byte)month << 8) | ((byte)day);
 		}
 
-		private static int getYear(int dtx)
+		private static int GetYear(int dtx)
 		{
 			return (short)((dtx >> 16) & 0xFFFF);
 		}
 
-		private static int getMonth(int dtx)
+		private static int GetMonth(int dtx)
 		{
 			return (byte)((dtx >> 8) & 0xFF);
 		}
 
-		private static int getDay(int dtx)
+		private static int GetDay(int dtx)
 		{
 			return (byte)((dtx) & 0xFF);
 		}
@@ -88,7 +88,7 @@ namespace GKCommon.GEDCOM
 		public AbsDate IncYear(int yearDelta)
 		{
 			int dtx = (int)this.fValue;
-			return new AbsDate(createVal(getYear(dtx) + yearDelta, getMonth(dtx), getDay(dtx)));
+			return new AbsDate(CreateVal(GetYear(dtx) + yearDelta, GetMonth(dtx), GetDay(dtx)));
 		}
 
 		public override string ToString()
@@ -97,7 +97,7 @@ namespace GKCommon.GEDCOM
 
 			if (this.IsValid()) {
 				int dtx = (int)this.fValue;
-				result = string.Format("{0}/{1}/{2}", ConvHelper.AdjustNum(getDay(dtx), 2), ConvHelper.AdjustNum(getMonth(dtx), 2), ConvHelper.AdjustNum(getYear(dtx), 4));
+				result = string.Format("{0}/{1}/{2}", ConvHelper.AdjustNum(GetDay(dtx), 2), ConvHelper.AdjustNum(GetMonth(dtx), 2), ConvHelper.AdjustNum(GetYear(dtx), 4));
 			} else {
 				result = "00.00.0000";
 			}
@@ -142,14 +142,14 @@ namespace GKCommon.GEDCOM
 
 		public int CompareTo(object obj)
 		{
-			if (obj is AbsDate) {
+		    if (obj is AbsDate) {
 				return this.fValue.CompareTo(((AbsDate)obj).fValue);
-			} else {
-				return -1;
 			}
+
+            return -1;
 		}
 
-		public object Clone()
+	    public object Clone()
 		{
 			return new AbsDate(this.fValue);
 		}
@@ -188,7 +188,7 @@ namespace GKCommon.GEDCOM
 			}
 		}
 
-		private static readonly TagProperties[] TagBase;
+		private static readonly TagProperties[] TAGS_BASE;
 
 
 		static GEDCOMUtils()
@@ -222,23 +222,23 @@ namespace GKCommon.GEDCOM
 			array[24] = new TagProperties("NSFX", true);
 			array[25] = new TagProperties("_LOC", true);
 
-            GEDCOMUtils.TagBase = array;
+            GEDCOMUtils.TAGS_BASE = array;
 		}
 
 		public static TagProperties GetTagProps(string tagName)
 		{
 			TagProperties result;
 
-			int num = TagBase.Length;
+			int num = TAGS_BASE.Length;
 			for (int i = 1; i < num; i++)
 			{
-				if (TagBase[i].Name == tagName) {
-					result = TagBase[i];
+				if (TAGS_BASE[i].Name == tagName) {
+					result = TAGS_BASE[i];
 					return result;
 				}
 			}
 
-			result = TagBase[0];
+			result = TAGS_BASE[0];
 			return result;
 		}
 
@@ -598,6 +598,8 @@ namespace GKCommon.GEDCOM
 
 		public static GKCommunicationType GetCommunicationTypeVal(string str)
 		{
+            if (string.IsNullOrEmpty(str)) return GKCommunicationType.ctVisit;
+
 			GKCommunicationType result;
 			str = str.Trim().ToLowerInvariant();
 			
@@ -1640,7 +1642,7 @@ namespace GKCommon.GEDCOM
 				result = AbsDate.Empty();
 			} else {
 				GEDCOMCustomEvent evt = evsRec.FindEvent(evSign);
-				result = GEDCOMUtils.GetAbstractDate(evt);
+				result = GetAbstractDate(evt);
 			}
 
 			return result;
@@ -1652,7 +1654,7 @@ namespace GKCommon.GEDCOM
 			{
 				dateStr = StrToGEDCOMDate(dateStr, false);
 
-				GEDCOMDateExact dtx = GEDCOMDateExact.Create(null, null, "", "") as GEDCOMDateExact;
+                GEDCOMDateExact dtx = (GEDCOMDateExact)GEDCOMDateExact.Create(null, null, "", "");
 				dtx.ParseString(dateStr);
 				return dtx.GetAbstractDate();
 			}
@@ -1668,48 +1670,45 @@ namespace GKCommon.GEDCOM
 
 		public static void CleanFamily(GEDCOMFamilyRecord famRec)
 		{
-			if (famRec != null)
-			{
-				int num = famRec.Childrens.Count;
-				for (int i = 0; i < num; i++)
-				{
-					GEDCOMIndividualRecord child = famRec.Childrens[i].Value as GEDCOMIndividualRecord;
-					child.DeleteChildToFamilyLink(famRec);
-				}
+		    if (famRec == null) return;
 
-				GEDCOMIndividualRecord spouse;
+            int num = famRec.Childrens.Count;
+		    for (int i = 0; i < num; i++)
+		    {
+		        GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)famRec.Childrens[i].Value;
+		        child.DeleteChildToFamilyLink(famRec);
+		    }
 
-				spouse = famRec.GetHusband();
-				famRec.RemoveSpouse(spouse);
+		    GEDCOMIndividualRecord spouse;
 
-				spouse = famRec.GetWife();
-				famRec.RemoveSpouse(spouse);
-			}
+		    spouse = famRec.GetHusband();
+		    famRec.RemoveSpouse(spouse);
+
+		    spouse = famRec.GetWife();
+		    famRec.RemoveSpouse(spouse);
 		}
 
 		public static void CleanIndividual(GEDCOMIndividualRecord indRec)
 		{
-			if (indRec != null)
-			{
-				for (int i = indRec.ChildToFamilyLinks.Count - 1; i >= 0; i--)
-				{
-					GEDCOMFamilyRecord family = indRec.ChildToFamilyLinks[i].Family;
-					family.DeleteChild(indRec);
-				}
+		    if (indRec == null) return;
+		    
+            for (int i = indRec.ChildToFamilyLinks.Count - 1; i >= 0; i--)
+		    {
+		        GEDCOMFamilyRecord family = indRec.ChildToFamilyLinks[i].Family;
+		        family.DeleteChild(indRec);
+		    }
 
-				for (int i = indRec.SpouseToFamilyLinks.Count - 1; i >= 0; i--)
-				{
-					GEDCOMFamilyRecord family = indRec.SpouseToFamilyLinks[i].Family;
-					family.RemoveSpouse(indRec);
-				}
+		    for (int i = indRec.SpouseToFamilyLinks.Count - 1; i >= 0; i--)
+		    {
+		        GEDCOMFamilyRecord family = indRec.SpouseToFamilyLinks[i].Family;
+		        family.RemoveSpouse(indRec);
+		    }
 
-				for (int i = indRec.Groups.Count - 1; i >= 0; i--)
-				{
-					GEDCOMPointer ptr = indRec.Groups[i];
-					GEDCOMGroupRecord group = ptr.Value as GEDCOMGroupRecord;
-					group.RemoveMember(indRec);
-				}
-			}
+		    for (int i = indRec.Groups.Count - 1; i >= 0; i--)
+		    {
+		        GEDCOMGroupRecord group = (GEDCOMGroupRecord)indRec.Groups[i].Value;
+		        group.RemoveMember(indRec);
+		    }
 		}
 
 		#endregion

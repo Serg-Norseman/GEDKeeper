@@ -1,7 +1,6 @@
 ﻿using System;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
-using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore.Lists

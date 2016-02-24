@@ -30,7 +30,7 @@ namespace GKTextSearchPlugin
 
     public class Plugin : IPlugin, ISubscriber
     {
-        private const string fDisplayName = "GKTextSearchPlugin";
+        private const string DISPLAY_NAME = "GKTextSearchPlugin";
 
         private IHost fHost;
         private ILangMan fLangMan;
@@ -39,7 +39,7 @@ namespace GKTextSearchPlugin
 
         public string DisplayName {
         	get {
-        	    return (fLangMan == null) ? fDisplayName : this.fLangMan.LS(TLS.LSID_PluginTitle);
+        	    return (fLangMan == null) ? DISPLAY_NAME : this.fLangMan.LS(TLS.LSID_PluginTitle);
         	}
         }
         

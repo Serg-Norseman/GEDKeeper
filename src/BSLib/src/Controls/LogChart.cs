@@ -1,41 +1,58 @@
-﻿using System;
+﻿/*
+ *  "BSLib", Brainstorm Library.
+ *  Copyright (C) 2015-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace GKUI.Controls
+namespace BSLib.Controls
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class GKLogChart : Panel
+	public sealed class LogChart : Panel
 	{
 		private class Fragment
 		{
-			public int srcval;
+			public int SrcVal;
 
-			public double val;
-			public double log;
-			public double percent;
+			public double Val;
+			public double Log;
+			public double Percent;
 
-			public int x;
-			public int width;
+			public int X;
+			public int Width;
 			
-			public Rectangle rect;
+			public Rectangle Rect;
 		}
 
 		private readonly Brush FRAG_BRUSH = new SolidBrush(Color.Green);
 		private readonly Brush EMPTY_BRUSH = new SolidBrush(Color.Gray);
 		
 		private readonly List<Fragment> fList;
-		private readonly System.Windows.Forms.ToolTip fToolTip;
+		private readonly ToolTip fToolTip;
 		private string fHint;
 
-		public GKLogChart()
+		public LogChart()
 		{
             this.fList = new List<Fragment>();
 
-			this.fToolTip = new System.Windows.Forms.ToolTip();
+			this.fToolTip = new ToolTip();
 			this.fToolTip.AutoPopDelay = 5000;
 			this.fToolTip.InitialDelay = 250;
 			this.fToolTip.ReshowDelay = 50;
@@ -63,9 +80,9 @@ namespace GKUI.Controls
 			
 			Fragment frag = new Fragment();
 
-			frag.srcval = val;
+            frag.SrcVal = val;
 			if (val == 1) val++;
-			frag.val = (double)val;
+			frag.Val = val;
 
 			fList.Add(frag);
 
@@ -85,26 +102,26 @@ namespace GKUI.Controls
 			double sum = 0.0;
 			for (int i = 0; i < count; i++) {
 				frag = fList[i];
-				sum = sum + frag.val;
+				sum = sum + frag.Val;
 			}
 
 			// расчет логарифма величины фрагмента и суммы логарифмов
 			double logSum = 0.0;
 			for (int i = 0; i < count; i++) {
 				frag = fList[i];
-				frag.log = Math.Log(frag.val, sum);
+				frag.Log = Math.Log(frag.Val, sum);
 
-				logSum = logSum + frag.log;
+				logSum = logSum + frag.Log;
 			}
 
 			// расчет визуальной ширины фрагментов и их суммы
 			int resWidth = 0;
 			for (int i = 0; i < count; i++) {
 				frag = fList[i];
-				frag.percent = frag.log / logSum;
-				frag.width = (int)((double)wid * frag.percent);
+				frag.Percent = frag.Log / logSum;
+				frag.Width = (int)(wid * frag.Percent);
 
-				resWidth = resWidth + frag.width;
+				resWidth = resWidth + frag.Width;
 			}
 
 			// распределить разницу между реальной шириной компонента и суммой ширины фрагментов
@@ -117,7 +134,7 @@ namespace GKUI.Controls
 				int idx = 0;
 				while (d > 0) {
 					frag = ordList[idx];
-					frag.width = frag.width + 1;
+					frag.Width = frag.Width + 1;
 
 					if (idx == count - 1) {
 						idx = 0;
@@ -132,9 +149,9 @@ namespace GKUI.Controls
 			for (int i = 0; i < count; i++) {
 				frag = fList[i];
 
-				frag.x = x;
-				frag.rect = new Rectangle(x, 0, frag.width, this.Height);
-				x = x + (frag.width + 1);
+				frag.X = x;
+				frag.Rect = new Rectangle(x, 0, frag.Width, this.Height);
+				x = x + (frag.Width + 1);
 			}
 
 			base.Invalidate();
@@ -144,7 +161,7 @@ namespace GKUI.Controls
 		{
 			public int Compare(Fragment x, Fragment y)
 			{
-				return -x.width.CompareTo(y.width);
+				return -x.Width.CompareTo(y.Width);
 			}
 		}
 
@@ -154,20 +171,20 @@ namespace GKUI.Controls
 			
 			if (this.Width <= 0 || this.Height <= 0) return;
 
-			Graphics gfx = e.Graphics;
+			System.Drawing.Graphics gfx = e.Graphics;
 
 			int count = fList.Count;
 			if (count > 0) {
 				for (int i = 0; i < count; i++) {
 					Fragment frag = fList[i];
-					this.DrawRect(gfx, frag.x, frag.width, FRAG_BRUSH);
+					this.DrawRect(gfx, frag.X, frag.Width, FRAG_BRUSH);
 				}
 			} else {
 				this.DrawRect(gfx, 0, this.Width, EMPTY_BRUSH);
 			}
 		}
 
-		private void DrawRect(Graphics gfx, int x, int width, Brush lb)
+		private void DrawRect(System.Drawing.Graphics gfx, int x, int width, Brush lb)
 		{
 			gfx.FillRectangle(lb, x, 0, width, this.Height);
 		}
@@ -181,9 +198,9 @@ namespace GKUI.Controls
 			for (int i = 0; i < count; i++) {
 				Fragment frag = fList[i];
 
-				if (frag.rect.Contains(e.X, e.Y)) {
+				if (frag.Rect.Contains(e.X, e.Y)) {
 					string st = (i + 1).ToString();
-					hint = "Фрагмент: " + st + ", размер = " + frag.srcval.ToString();
+                    hint = "Фрагмент: " + st + ", размер = " + frag.SrcVal.ToString();
 					break;
 				}
 			}

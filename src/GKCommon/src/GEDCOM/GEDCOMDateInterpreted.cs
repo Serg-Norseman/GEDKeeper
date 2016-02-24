@@ -40,27 +40,27 @@ namespace GKCommon.GEDCOM
 			return ("INT " + base.GetStringValue() + " " + "(" + this.fDatePhrase + ")");
 		}
 
-		private string ExtractPhrase(string S)
+		private string ExtractPhrase(string str)
 		{
-			string result = S;
+			string result = str;
 			if (result.Length >= 2 && result[0] == '(')
 			{
 				result = result.Remove(0, 1);
 
-				int C = 0;
+				int c = 0;
 				int num = result.Length;
 				for (int I = 1; I <= num; I++)
 				{
 					if (result[I - 1] == '(')
 					{
-						C++;
+						c++;
 					}
 					else
 					{
 						if (result[I - 1] == ')' || I == result.Length)
 						{
-							C--;
-							if (C <= 0 || I == result.Length)
+							c--;
+							if (c <= 0 || I == result.Length)
 							{
 								if (result[I - 1] == ')')
 								{

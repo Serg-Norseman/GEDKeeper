@@ -429,13 +429,13 @@ namespace GKCommon.GEDCOM
 				{
 					lineNum++;
 					string srcLine = reader.ReadLine();
-					string S = GEDCOMUtils.TrimLeft(srcLine);
+					string str = GEDCOMUtils.TrimLeft(srcLine);
 
-					if (S.Length != 0)
+					if (str.Length != 0)
 					{
-						if (!GEDCOMUtils.IsDigit(S[0]))
+						if (!GEDCOMUtils.IsDigit(str[0]))
 						{
-							GEDCOMTree.CorrectLine(curRecord, curTag, lineNum, S.Trim());
+							CorrectLine(curRecord, curTag, lineNum, str);
 						}
 						else
 						{
@@ -446,14 +446,14 @@ namespace GKCommon.GEDCOM
 
 							try
 							{
-								S = GEDCOMUtils.ExtractNumber(S, out tagLevel, false, 0);
-								S = GEDCOMUtils.ExtractDelimiter(S, 0);
-								S = GEDCOMUtils.ExtractXRef(S, out tagXRef, true, "");
-								S = GEDCOMUtils.ExtractDelimiter(S, 0);
-								S = GEDCOMUtils.ExtractString(S, out tagName, "");
+								str = GEDCOMUtils.ExtractNumber(str, out tagLevel, false, 0);
+								str = GEDCOMUtils.ExtractDelimiter(str, 0);
+								str = GEDCOMUtils.ExtractXRef(str, out tagXRef, true, "");
+								str = GEDCOMUtils.ExtractDelimiter(str, 0);
+								str = GEDCOMUtils.ExtractString(str, out tagName, "");
 								tagName = tagName.ToUpperInvariant();
-								S = GEDCOMUtils.ExtractDelimiter(S, 1);
-								tagValue = S;
+								str = GEDCOMUtils.ExtractDelimiter(str, 1);
+								tagValue = str;
 							}
 							catch (EGEDCOMException ex)
 							{

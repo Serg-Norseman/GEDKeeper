@@ -157,7 +157,7 @@ namespace GKCommon.GEDCOM
 		protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
 		{
 			base.CreateObj(owner, parent);
-			this.fName = "NAME";
+			this.SetName("NAME");
 
 			this.fPieces = new GEDCOMPersonalNamePieces(owner, this, "", "");
 			this.fPieces.SetLevel(base.Level);
@@ -235,6 +235,8 @@ namespace GKCommon.GEDCOM
 
 		public float IsMatch(GEDCOMPersonalName name)
 		{
+            if (name == null) return 0.0f;
+
 			float match = 0.0f;
 			
 			int parts = 0;

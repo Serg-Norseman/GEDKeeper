@@ -17,8 +17,8 @@ namespace GKUI.Controls
 		private GEDCOMRecord fRec1;
 		private GEDCOMRecord fRec2;
 
-		private readonly HyperView Memo1;
-		private readonly HyperView Memo2;
+		private readonly HyperView fView1;
+		private readonly HyperView fView2;
 
 		private IBaseWindow fBase;
 		private GEDCOMTree fTree;
@@ -56,21 +56,21 @@ namespace GKUI.Controls
 		{
 			InitializeComponent();
 
-			this.Memo1 = new HyperView();
-			this.Memo1.Location = new Point(8, 56);
-			this.Memo1.Size = new Size(329, 248);
-			this.Controls.Add(this.Memo1);
+			this.fView1 = new HyperView();
+			this.fView1.Location = new Point(8, 56);
+			this.fView1.Size = new Size(329, 248);
+			this.Controls.Add(this.fView1);
 
-			this.Memo2 = new HyperView();
-			this.Memo2.Location = new Point(344, 56);
-			this.Memo2.Size = new Size(329, 248);
-			this.Controls.Add(this.Memo2);
+			this.fView2 = new HyperView();
+			this.fView2.Location = new Point(344, 56);
+			this.fView2.Size = new Size(329, 248);
+			this.Controls.Add(this.fView2);
 
 			this.SetRec1(null);
 			this.SetRec2(null);
 
-			this.btnRec1Select.Text = LangMan.LS(LSID.LSID_DlgSelect) + "...";
-			this.btnRec2Select.Text = LangMan.LS(LSID.LSID_DlgSelect) + "...";
+			this.btnRec1Select.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
+			this.btnRec2Select.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
 		}
 
 
@@ -146,9 +146,9 @@ namespace GKUI.Controls
 
 			if (this.fRec1 == null)
 			{
-				this.Lab1.Text = "XXX1";
+				this.Lab1.Text = @"XXX1";
 				this.Edit1.Text = "";
-				this.Memo1.Lines.Clear();
+				this.fView1.Lines.Clear();
 			}
 			else
 			{
@@ -160,28 +160,28 @@ namespace GKUI.Controls
 						{
                             GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)this.fRec1;
 							this.Edit1.Text = iRec.GetNameString(true, false);
-							GKUtils.ShowPersonInfo(iRec, this.Memo1.Lines, this.fBase.ShieldState);
+							GKUtils.ShowPersonInfo(iRec, this.fView1.Lines, this.fBase.ShieldState);
 							break;
 						}
 					case GEDCOMRecordType.rtNote:
 						{
                             GEDCOMNoteRecord nRec = (GEDCOMNoteRecord)this.fRec1;
 							this.Edit1.Text = nRec.Note[0];
-                            GKUtils.ShowNoteInfo(nRec, this.Memo1.Lines);
+                            GKUtils.ShowNoteInfo(nRec, this.fView1.Lines);
 							break;
 						}
 					case GEDCOMRecordType.rtFamily:
 						{
                             GEDCOMFamilyRecord famRec = (GEDCOMFamilyRecord)this.fRec1;
 							this.Edit1.Text = GKUtils.GetFamilyString(famRec);
-                            GKUtils.ShowFamilyInfo(famRec, this.Memo1.Lines, this.fBase.ShieldState);
+                            GKUtils.ShowFamilyInfo(famRec, this.fView1.Lines, this.fBase.ShieldState);
 							break;
 						}
 					case GEDCOMRecordType.rtSource:
 						{
                             GEDCOMSourceRecord srcRec = (GEDCOMSourceRecord)this.fRec1;
 							this.Edit1.Text = srcRec.FiledByEntry;
-                            GKUtils.ShowSourceInfo(srcRec, this.Memo1.Lines);
+                            GKUtils.ShowSourceInfo(srcRec, this.fView1.Lines);
 							break;
 						}
 				}
@@ -195,9 +195,9 @@ namespace GKUI.Controls
 
 			if (this.fRec2 == null)
 			{
-				this.Lab2.Text = "XXX2";
+				this.Lab2.Text = @"XXX2";
 				this.Edit2.Text = "";
-				this.Memo2.Lines.Clear();
+				this.fView2.Lines.Clear();
 			}
 			else
 			{
@@ -209,28 +209,28 @@ namespace GKUI.Controls
 						{
                             GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)this.fRec2;
 							this.Edit2.Text = iRec.GetNameString(true, false);
-                            GKUtils.ShowPersonInfo(iRec, this.Memo2.Lines, this.fBase.ShieldState);
+                            GKUtils.ShowPersonInfo(iRec, this.fView2.Lines, this.fBase.ShieldState);
 							break;
 						}
 					case GEDCOMRecordType.rtNote:
 						{
                             GEDCOMNoteRecord nRec = (GEDCOMNoteRecord)this.fRec2;
 							this.Edit2.Text = nRec.Note[0];
-                            GKUtils.ShowNoteInfo(nRec, this.Memo2.Lines);
+                            GKUtils.ShowNoteInfo(nRec, this.fView2.Lines);
 							break;
 						}
 					case GEDCOMRecordType.rtFamily:
 						{
                             GEDCOMFamilyRecord famRec = (GEDCOMFamilyRecord)this.fRec2;
 							this.Edit2.Text = GKUtils.GetFamilyString(famRec);
-                            GKUtils.ShowFamilyInfo(famRec, this.Memo2.Lines, this.fBase.ShieldState);
+                            GKUtils.ShowFamilyInfo(famRec, this.fView2.Lines, this.fBase.ShieldState);
 							break;
 						}
 					case GEDCOMRecordType.rtSource:
 						{
                             GEDCOMSourceRecord srcRec = (GEDCOMSourceRecord)this.fRec2;
 							this.Edit2.Text = srcRec.FiledByEntry;
-                            GKUtils.ShowSourceInfo(srcRec, this.Memo2.Lines);
+                            GKUtils.ShowSourceInfo(srcRec, this.fView2.Lines);
 							break;
 						}
 				}

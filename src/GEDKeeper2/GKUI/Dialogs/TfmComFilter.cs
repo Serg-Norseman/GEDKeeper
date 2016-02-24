@@ -114,7 +114,7 @@ namespace GKUI.Dialogs
 		{
 			this.maskedTextBox = new MaskedTextBox();
             this.maskedTextBox.Visible = false;
-            this.maskedTextBox.Mask = "00/00/0000";
+            this.maskedTextBox.Mask = @"00/00/0000";
             this.maskedTextBox.TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
             this.dataGridView1.Controls.Add(this.maskedTextBox);
 
@@ -143,9 +143,9 @@ namespace GKUI.Dialogs
 				DataType dataType = fListMan.GetColumnDataType(col);
 				
 				return (dataType == DataType.dtGEDCOMDate);
-			} else {
-				return false;
 			}
+
+		    return false;
 		}
 
 		private void dataGridView1_Scroll(object sender, ScrollEventArgs e)

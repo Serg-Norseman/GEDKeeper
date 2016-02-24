@@ -281,9 +281,7 @@ namespace GKUI
 		public IListManager GetRecordsListManByType(GEDCOMRecordType recType)
 		{
 			GKRecordsView rView = this.GetRecordsViewByType(recType);
-			if (rView == null) return null;
-
-			return rView.ListMan;
+			return (rView == null) ? null : rView.ListMan;
 		}
 
 		public GEDCOMRecord GetSelectedRecordEx()
@@ -322,7 +320,7 @@ namespace GKUI
 			this.Text = Path.GetFileName(this.Tree.FileName);
 			if (this.fModified)
 			{
-				this.Text = "* " + this.Text;
+				this.Text = @"* " + this.Text;
 			}
 		}
 
@@ -358,18 +356,17 @@ namespace GKUI
 
 		public void ChangeRecord(GEDCOMRecord record)
 		{
-			if (record != null)
-			{
-				/*int rt = (int)record.RecordType;
+		    if (record == null) return;
+
+            /*int rt = (int)record.RecordType;
 				this.fChangedRecords[rt].Add(record);*/
 
-				record.ChangeDate.ChangeDateTime = DateTime.Now;
+		    record.ChangeDate.ChangeDateTime = DateTime.Now;
 
-				this.Modified = true;
-				this.fTree.Header.TransmissionDateTime = DateTime.Now;
+		    this.Modified = true;
+		    this.fTree.Header.TransmissionDateTime = DateTime.Now;
 
-				TfmGEDKeeper.Instance.NotifyRecord(this, record, RecordAction.raEdit);
-			}
+		    TfmGEDKeeper.Instance.NotifyRecord(this, record, RecordAction.raEdit);
 		}
 
 		public bool CheckModified()
@@ -378,7 +375,7 @@ namespace GKUI
 
 			if (this.Modified)
 			{
-				DialogResult dialogResult = MessageBox.Show(LangMan.LS(LSID.LSID_FileSaveQuery), GKData.AppTitle, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+				DialogResult dialogResult = MessageBox.Show(LangMan.LS(LSID.LSID_FileSaveQuery), GKData.APP_TITLE, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
 
 				switch (dialogResult) {
 					case DialogResult.Yes:
@@ -471,7 +468,7 @@ namespace GKUI
 			this.Clear();
 
 			string pw = null;
-			string ext = Path.GetExtension(fileName).ToLower();
+            string ext = AuxUtils.GetFileExtension(fileName);
 			if (ext == ".geds") {
 				if (!GKUtils.GetPassword("Пароль", ref pw)) {
 					GKUtils.ShowError("Пароль не задан");
@@ -512,7 +509,7 @@ namespace GKUI
 			try
 			{
 				string pw = null;
-				string ext = Path.GetExtension(fileName).ToLower();
+                string ext = AuxUtils.GetFileExtension(fileName);
 				if (ext == ".geds") {
 					if (!GKUtils.GetPassword("Пароль", ref pw)) {
 						GKUtils.ShowError("Пароль не задан");
@@ -626,17 +623,16 @@ namespace GKUI
 		
 		public void RecordNotify(GEDCOMRecord record, RecordAction notify)
 		{
-			if (record != null)
-			{
-				GKRecordsView rView = GetRecordsViewByType(record.RecordType);
+		    if (record == null) return;
+		    
+            GKRecordsView rView = GetRecordsViewByType(record.RecordType);
 
-				if (rView != null && notify == RecordAction.raDelete)
-				{
-					rView.DeleteRecord(record);
-				}
+		    if (rView != null && notify == RecordAction.raDelete)
+		    {
+		        rView.DeleteRecord(record);
+		    }
 
-				TfmGEDKeeper.Instance.NotifyRecord(this, record, RecordAction.raDelete);
-			}
+		    TfmGEDKeeper.Instance.NotifyRecord(this, record, RecordAction.raDelete);
 		}
 
 		public GEDCOMFamilyRecord SelectFamily(GEDCOMIndividualRecord target)
@@ -1122,7 +1118,7 @@ namespace GKUI
 				case 1:
 				{
 					GEDCOMFamilyRecord fam = null;
-					result = this.ModifyFamily(ref fam, FamilyTarget.ftNone, null);
+					result = this.ModifyFamily(ref fam, FamilyTarget.None, null);
 					rec = fam;
 					break;
 				}
@@ -1339,7 +1335,7 @@ namespace GKUI
 
 				case GEDCOMRecordType.rtFamily:
 					GEDCOMFamilyRecord fam = rec as GEDCOMFamilyRecord;
-                    result = this.ModifyFamily(ref fam, FamilyTarget.ftNone, null);
+                    result = this.ModifyFamily(ref fam, FamilyTarget.None, null);
 					break;
 
 				case GEDCOMRecordType.rtNote:
@@ -1548,6 +1544,11 @@ namespace GKUI
 
 		#region Modify routines
 
+		public void CollectEventValues(GEDCOMCustomEvent evt)
+		{
+			TreeTools.CollectEventValues(evt, this.fValuesCollection);
+		}
+		
 		public bool ModifyMedia(ref GEDCOMMultimediaRecord mediaRec)
 		{
 			bool result = false;
@@ -1855,7 +1856,7 @@ namespace GKUI
 
 					IndividualListFilter iFilter = (IndividualListFilter)this.ListPersons.ListMan.Filter;
 
-					if (iFilter.SourceMode == FilterGroupMode.gmSelected)
+					if (iFilter.SourceMode == FilterGroupMode.Selected)
                     {
 						GEDCOMSourceRecord src = this.fTree.XRefIndex_Find(iFilter.SourceRef) as GEDCOMSourceRecord;
                         if (src != null && GKUtils.ShowQuestion("Установлен фильтр по источнику. Внести источник в новую персональную запись?") == DialogResult.Yes)
@@ -1864,7 +1865,7 @@ namespace GKUI
 						}
  					}
 
-					if (iFilter.FilterGroupMode == FilterGroupMode.gmSelected)
+					if (iFilter.FilterGroupMode == FilterGroupMode.Selected)
                     {
 						GEDCOMGroupRecord grp = this.fTree.XRefIndex_Find(iFilter.GroupRef) as GEDCOMGroupRecord;
                         if (grp != null && GKUtils.ShowQuestion("Установлен фильтр по группе. Внести группу в новую персональную запись?") == DialogResult.Yes)
@@ -1896,7 +1897,7 @@ namespace GKUI
 		{
 			bool result;
 
-			if (target == FamilyTarget.ftSpouse && person != null) {
+			if (target == FamilyTarget.Spouse && person != null) {
 				GEDCOMSex sex = person.Sex;
 				if (sex < GEDCOMSex.svMale || sex >= GEDCOMSex.svUndetermined) {
 					GKUtils.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
@@ -1911,10 +1912,10 @@ namespace GKUI
 					familyRec.InitNew();
 				}
 
-				if (target == FamilyTarget.ftSpouse) {
+				if (target == FamilyTarget.Spouse) {
 					if (person != null)
 						familyRec.AddSpouse(person);
-				} else if (target == FamilyTarget.ftChild) {
+				} else if (target == FamilyTarget.Child) {
 					if (person != null)
 						familyRec.AddChild(person);
 				}

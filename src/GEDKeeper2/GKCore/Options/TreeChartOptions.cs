@@ -1,8 +1,6 @@
-using System;
 using System.Drawing;
 
 using BSLib;
-using GKCommon;
 
 namespace GKCore.Options
 {

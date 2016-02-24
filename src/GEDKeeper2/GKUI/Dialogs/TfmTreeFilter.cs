@@ -61,22 +61,21 @@ namespace GKUI.Dialogs
 		private void UpdateControls()
 		{
 			switch (this.fFilter.BranchCut) {
-				case ChartFilter.TBranchCut.bcPersons: {
+				case ChartFilter.BranchCutType.Persons:
 					this.rbCutPersons.Checked = true;
 					break;
-				}
-				case ChartFilter.TBranchCut.bcYears: {
+
+				case ChartFilter.BranchCutType.Years:
 					this.rbCutYears.Checked = true;
 					break;
-				}
-				case ChartFilter.TBranchCut.bcNone: {
+
+				case ChartFilter.BranchCutType.None:
 					this.rbCutNone.Checked = true;
 					break;
-				}
 			}
 
-			this.edYear.Enabled = (this.fFilter.BranchCut == ChartFilter.TBranchCut.bcYears);
-			this.fPersonsList.Enabled = (this.fFilter.BranchCut == ChartFilter.TBranchCut.bcPersons);
+			this.edYear.Enabled = (this.fFilter.BranchCut == ChartFilter.BranchCutType.Years);
+			this.fPersonsList.Enabled = (this.fFilter.BranchCut == ChartFilter.BranchCutType.Persons);
 			this.edYear.Text = this.fFilter.BranchYear.ToString();
 			this.fPersonsList.ClearItems();
 
@@ -92,7 +91,7 @@ namespace GKUI.Dialogs
 				}
 			}
 
-			if (this.fFilter.SourceMode != FilterGroupMode.gmSelected) {
+			if (this.fFilter.SourceMode != FilterGroupMode.Selected) {
 				this.cbSource.SelectedIndex = (sbyte)this.fFilter.SourceMode;
 			} else {
 				GEDCOMSourceRecord srcRec = this.Base.Tree.XRefIndex_Find(this.fFilter.SourceRef) as GEDCOMSourceRecord;
@@ -104,19 +103,19 @@ namespace GKUI.Dialogs
 		{
 			if (this.rbCutNone.Checked)
 			{
-				this.fFilter.BranchCut = ChartFilter.TBranchCut.bcNone;
+				this.fFilter.BranchCut = ChartFilter.BranchCutType.None;
 			}
 			else
 			{
 				if (this.rbCutYears.Checked)
 				{
-					this.fFilter.BranchCut = ChartFilter.TBranchCut.bcYears;
+					this.fFilter.BranchCut = ChartFilter.BranchCutType.Years;
 				}
 				else
 				{
 					if (this.rbCutPersons.Checked)
 					{
-						this.fFilter.BranchCut = ChartFilter.TBranchCut.bcPersons;
+						this.fFilter.BranchCut = ChartFilter.BranchCutType.Persons;
 					}
 				}
 			}
@@ -127,20 +126,20 @@ namespace GKUI.Dialogs
 		{
 			if (this.rbCutNone.Checked)
 			{
-				this.fFilter.BranchCut = ChartFilter.TBranchCut.bcNone;
+				this.fFilter.BranchCut = ChartFilter.BranchCutType.None;
 			}
 			else
 			{
 				if (this.rbCutYears.Checked)
 				{
-					this.fFilter.BranchCut = ChartFilter.TBranchCut.bcYears;
+					this.fFilter.BranchCut = ChartFilter.BranchCutType.Years;
 					this.fFilter.BranchYear = int.Parse(this.edYear.Text);
 				}
 				else
 				{
 					if (this.rbCutPersons.Checked)
 					{
-						this.fFilter.BranchCut = ChartFilter.TBranchCut.bcPersons;
+						this.fFilter.BranchCut = ChartFilter.BranchCutType.Persons;
 						this.fFilter.BranchPersons = this.fTemp;
 					}
 				}
@@ -154,16 +153,16 @@ namespace GKUI.Dialogs
 			}
 			else
 			{
-			    GKComboItem item = this.cbSource.Items[this.cbSource.SelectedIndex] as GKComboItem;
+                GKComboItem item = (GKComboItem)this.cbSource.Items[this.cbSource.SelectedIndex];
 				GEDCOMRecord rec = item.Data as GEDCOMRecord;
 				if (rec != null)
 				{
-					this.fFilter.SourceMode = FilterGroupMode.gmSelected;
+					this.fFilter.SourceMode = FilterGroupMode.Selected;
 					this.fFilter.SourceRef = rec.XRef;
 				}
 				else
 				{
-					this.fFilter.SourceMode = FilterGroupMode.gmAll;
+					this.fFilter.SourceMode = FilterGroupMode.All;
 					this.fFilter.SourceRef = "";
 				}
 			}

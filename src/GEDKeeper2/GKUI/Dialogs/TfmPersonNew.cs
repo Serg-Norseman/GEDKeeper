@@ -64,13 +64,13 @@ namespace GKUI.Dialogs
 									this.edName.Text = names.GetNameByPatronymic(iPatronymic);
 									break;
 								case GEDCOMSex.svFemale:
-									this.edFamily.Text = "(" + GKUtils.GetRusWifeSurname(iFamily) + ")";
+									this.edFamily.Text = '(' + GKUtils.GetRusWifeSurname(iFamily) + ')';
 									break;
 							}
 							break;
 							
 						case TargetMode.tmWife:
-							this.edFamily.Text = "(" + GKUtils.GetRusWifeSurname(iFamily) + ")";
+							this.edFamily.Text = '(' + GKUtils.GetRusWifeSurname(iFamily) + ')';
 							break;
 					}
 				}

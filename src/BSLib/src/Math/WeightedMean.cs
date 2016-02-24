@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BSLib
+﻿namespace BSLib
 {
 	public sealed class WeightedMean
 	{

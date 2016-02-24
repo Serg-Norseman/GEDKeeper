@@ -101,9 +101,9 @@ namespace ExtUtils.ScrollableControls
 			set
 			{
 				if (value.Width < 0)
-					throw new ArgumentOutOfRangeException("value", "Width must be a positive integer.");
+					throw new ArgumentOutOfRangeException("value", @"Width must be a positive integer.");
 				if (value.Height < 0)
-					throw new ArgumentOutOfRangeException("value", "Height must be a positive integer.");
+					throw new ArgumentOutOfRangeException("value", @"Height must be a positive integer.");
 
 				if (this.AutoScrollMargin != value)
 				{
@@ -350,10 +350,15 @@ namespace ExtUtils.ScrollableControls
 		{
 			if (e.Type != ScrollEventType.EndScroll)
 			{
-				if (e.ScrollOrientation == ScrollOrientation.HorizontalScroll)
-					this.ScrollByOffset(new Size(e.NewValue + this.AutoScrollPosition.X, 0));
-				else if (e.ScrollOrientation == ScrollOrientation.VerticalScroll)
-					this.ScrollByOffset(new Size(0, e.NewValue + this.AutoScrollPosition.Y));
+				switch (e.ScrollOrientation)
+				{
+				    case ScrollOrientation.HorizontalScroll:
+				        this.ScrollByOffset(new Size(e.NewValue + this.AutoScrollPosition.X, 0));
+				        break;
+				    case ScrollOrientation.VerticalScroll:
+				        this.ScrollByOffset(new Size(0, e.NewValue + this.AutoScrollPosition.Y));
+				        break;
+				}
 			}
 
 			base.OnScroll(e);

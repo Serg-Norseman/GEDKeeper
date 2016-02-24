@@ -57,7 +57,7 @@ namespace GKCommon.GEDCOM
 		protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
 		{
 			base.CreateObj(owner, parent);
-			this.fName = "SOUR";
+			this.SetName("SOUR");
 		}
 
 		protected override string GetStringValue()

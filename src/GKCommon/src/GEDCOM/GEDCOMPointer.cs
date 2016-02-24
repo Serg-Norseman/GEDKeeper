@@ -2,7 +2,7 @@ namespace GKCommon.GEDCOM
 {
 	public class GEDCOMPointer : GEDCOMTag
 	{
-		protected string fXRef = "";
+		private string fXRef;
 
 		public GEDCOMRecord Value
 		{
@@ -70,10 +70,10 @@ namespace GKCommon.GEDCOM
             this.XRef = map.FindNewXRef(this.XRef);
 		}
 
-		public void SetNamedValue(string aName, GEDCOMRecord aValue)
+		public void SetNamedValue(string name, GEDCOMRecord record)
 		{
-			base.Name = aName;
-			this.Value = aValue;
+			base.SetName(name);
+			this.Value = record;
 		}
 
 		public GEDCOMPointer(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

@@ -63,7 +63,7 @@ namespace GKCommon.GEDCOM
 		protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
 		{
 			base.CreateObj(owner, parent);
-			this.fName = "DATE";
+			this.SetName("DATE");
 		}
 
 	    protected GEDCOMCustomDate(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
@@ -84,9 +84,9 @@ namespace GKCommon.GEDCOM
 				AbsDate abs1 = this.GetAbstractDate();
 				AbsDate abs2 = otherDate.GetAbstractDate();
 				return abs1.CompareTo(abs2);
-			} else {
-				return -1;
 			}
+
+		    return -1;
 		}
 	}
 }

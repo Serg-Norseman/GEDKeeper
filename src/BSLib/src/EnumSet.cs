@@ -8,13 +8,6 @@ namespace BSLib
 	{
 		private byte[] data;
 
-		public static EnumSet<T> Create()
-		{
-			EnumSet<T> result = new EnumSet<T>();
-			result.data = new byte[32];
-			return result;
-		}
-
 		public static EnumSet<T> Create(params T[] args)
 		{
 			EnumSet<T> result = new EnumSet<T>();
@@ -64,6 +57,8 @@ namespace BSLib
 
 		public bool HasIntersect(params T[] e)
 		{
+            if (e == null || e.Length == 0) return false;
+
 			for (int i = 0; i < e.Length; i++) {
 				if (this.Contains(e[i])) {
 					return true;

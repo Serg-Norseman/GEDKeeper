@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 
 using BSLib;
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -174,8 +175,9 @@ namespace GKPedigreeImporterPlugin
 				{
 					str = str.Substring(0, str.Length - 1);
 				}
+                str = str.Trim();
 			}
-			return str.Trim();
+			return str;
 		}
 
 		private static string RemoveCommaDot(string str)
@@ -187,8 +189,9 @@ namespace GKPedigreeImporterPlugin
 				{
 					str = str.Substring(0, str.Length - 1);
 				}
+                str = str.Trim();
 			}
-			return str.Trim();
+			return str;
 		}
 
 		private static void ParseDatesLine(string tmp, out string bd, out string dd)
@@ -287,10 +290,10 @@ namespace GKPedigreeImporterPlugin
 		{
 			switch (this.NumbersType) {
 				case PersonNumbersType.pnDAboville:
-					return ImpUtils.IsPersonLine_DAboville(str, ref p_id);
+                    return ImpUtils.IsPersonLine_DAboville(str, out p_id);
 
 				case PersonNumbersType.pnKonovalov:
-					return ImpUtils.IsPersonLine_Konovalov(str, ref p_id);
+                    return ImpUtils.IsPersonLine_Konovalov(str, out p_id);
 
 				default:
 					return false;
@@ -550,9 +553,9 @@ namespace GKPedigreeImporterPlugin
 
 							// extract marriage date
 							if (!string.IsNullOrEmpty(extData)) {
-								string mar_date = extData.Substring(1, extData.Length - 2).Trim();
+								string marrDate = extData.Substring(1, extData.Length - 2).Trim();
 
-								if (mar_date != "") this.SetEvent(family, "MARR", mar_date);
+								if (marrDate != "") this.SetEvent(family, "MARR", marrDate);
 							}
 						}
 					}
@@ -655,7 +658,7 @@ namespace GKPedigreeImporterPlugin
 
 				for (int i = 0; i < num; i++) {
 					string txt = this.fRawContents[i].Trim();
-					RawLine rawLine = this.fRawContents.GetObject(i) as RawLine;
+                    RawLine rawLine = (RawLine)this.fRawContents.GetObject(i);
 
 					if (!string.IsNullOrEmpty(txt)) {
 						if (this.IsGenerationLine(txt)) {
@@ -663,12 +666,15 @@ namespace GKPedigreeImporterPlugin
 						} else {
 							PersonNumbersType numbType = PersonNumbersType.pnUndefined;
 							string dummy = "";
-							
-							if (ImpUtils.IsPersonLine_DAboville(txt, ref dummy)) {
+
+                            if (ImpUtils.IsPersonLine_DAboville(txt, out dummy))
+                            {
 								rawLine.Type = RawLineType.rltPerson;
 								numbType = PersonNumbersType.pnDAboville;
 								numberStats[1]++;
-							} else if (ImpUtils.IsPersonLine_Konovalov(txt, ref dummy)) {
+                            }
+                            else if (ImpUtils.IsPersonLine_Konovalov(txt, out dummy))
+                            {
 								rawLine.Type = RawLineType.rltPerson;
 								numbType = PersonNumbersType.pnKonovalov;
 								numberStats[2]++;
@@ -727,7 +733,7 @@ namespace GKPedigreeImporterPlugin
 					for (int i = 0; i < num; i++)
 					{
 						string line = PrepareLine(this.fRawContents[i]);
-						RawLine rawLine = this.fRawContents.GetObject(i) as RawLine;
+                        RawLine rawLine = (RawLine)this.fRawContents.GetObject(i);
 
 						switch (rawLine.Type) {
 							case RawLineType.rltComment:
@@ -773,17 +779,11 @@ namespace GKPedigreeImporterPlugin
 
 		private static string GetCell(object[,] values, int row, int col)
 		{
-			object obj = values[row, col];
-			if (obj == null) {
-				return "";
-			}/* else if (obj.GetType() is string) {
-				return (string)obj;
-			}*/ else {
-				return obj.ToString();
-			}
+		    object obj = values[row, col];
+		    return (obj == null) ? "" : obj.ToString();
 		}
 
-		private bool ImportTableContent()
+        private bool ImportTableContent()
 		{
 			try
 			{
@@ -1030,7 +1030,7 @@ namespace GKPedigreeImporterPlugin
 			this.fRawContents.Clear();
 
 			this.fFileName = fileName;
-			string ext = Path.GetExtension(fileName).ToLower();
+            string ext = AuxUtils.GetFileExtension(fileName);
 
 			if (ext == ".txt")
 			{

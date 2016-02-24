@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 
@@ -60,7 +59,7 @@ namespace GKCore.Export
 
 		protected bool IsRequireFilename(string filter)
 		{
-			bool result = false;
+			bool result;
 
 			using (SaveFileDialog dlg = new SaveFileDialog())
 			{

@@ -255,7 +255,7 @@ namespace GKUI.Dialogs
 
 		private void SetTitle()
 		{
-			this.Text = LangMan.LS(LSID.LSID_Family) + " \"" + this.EditHusband.Text + " - " + this.EditWife.Text + "\"";
+            this.Text = string.Format("{0} \"{1} - {2}\"", LangMan.LS(LSID.LSID_Family), this.EditHusband.Text, this.EditWife.Text);
 		}
 
 		private void btnHusbandAddClick(object sender, EventArgs e)

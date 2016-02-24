@@ -19,8 +19,8 @@ namespace GKCommon.GEDCOM
 		protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
 		{
 			base.CreateObj(owner, parent);
-			this.fRecordType = GEDCOMRecordType.rtNote;
-			this.fName = "NOTE";
+			base.SetRecordType(GEDCOMRecordType.rtNote);
+			base.SetName("NOTE");
 		}
 
 		protected override void Dispose(bool disposing)
@@ -36,7 +36,7 @@ namespace GKCommon.GEDCOM
             GEDCOMNoteRecord targetNote = (targetRecord as GEDCOMNoteRecord);
             if (targetNote == null)
             {
-                throw new ArgumentException("argument is null or wrong type", "targetRecord");
+                throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
             }
 
 			StringList cont = new StringList();

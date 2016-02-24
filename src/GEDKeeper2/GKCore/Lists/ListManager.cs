@@ -16,12 +16,12 @@ namespace GKCore.Lists
     /// </summary>
     public abstract class ListManager : BaseObject, IListManager
 	{
-		protected sealed class TColMapRec
+		protected sealed class MapColumnRec
 		{
 			public byte ColType;
 			public byte ColSubtype;
 			
-			public TColMapRec(byte colType, byte colSubtype)
+			public MapColumnRec(byte colType, byte colSubtype)
 			{
 				this.ColType = colType;
 				this.ColSubtype = colSubtype;
@@ -33,7 +33,7 @@ namespace GKCore.Lists
 	    protected ExternalFilterHandler fExternalFilter;
 
 		private readonly ListColumns fListColumns;
-		private readonly List<TColMapRec> fColumnsMap;
+		private readonly List<MapColumnRec> fColumnsMap;
 
 		public string QuickFilter = "*";
 
@@ -57,7 +57,7 @@ namespace GKCore.Lists
 		{
 			this.fTree = tree;
 			this.fListColumns = GetDefaultListColumns();
-			this.fColumnsMap = new List<TColMapRec>();
+			this.fColumnsMap = new List<MapColumnRec>();
 
 			CreateFilter();
 		}
@@ -78,7 +78,7 @@ namespace GKCore.Lists
             }
 
             list.AddListColumn(caption, width, autoSize);
-			this.fColumnsMap.Add(new TColMapRec(colType, colSubtype));
+			this.fColumnsMap.Add(new MapColumnRec(colType, colSubtype));
 		}
 
 		protected void ColumnsMap_Clear()
@@ -98,7 +98,7 @@ namespace GKCore.Lists
 			if (str != null && mask != null && str != "" && mask != "")
 			{
 				string stx = str.ToLower();
-				string[] masks = mask.ToLower().Split(new char[] { '|' });
+				string[] masks = mask.ToLower().Split('|');
 
 				int num = masks.Length;
 				for (int i = 0; i < num; i++)
@@ -115,14 +115,14 @@ namespace GKCore.Lists
 
 		protected static object GetDateValue(GEDCOMCustomEvent evt, bool isVisible)
 		{
-			if (evt == null) {
+		    if (evt == null) {
 				return (isVisible) ? null : (object)AbsDate.Empty();
-			} else {
-				return GetDateValue(evt.Detail.Date.Value, isVisible);
 			}
+
+		    return GetDateValue(evt.Detail.Date.Value, isVisible);
 		}
 
-		protected static object GetDateValue(GEDCOMCustomDate date, bool isVisible)
+        protected static object GetDateValue(GEDCOMCustomDate date, bool isVisible)
 		{
 			object result;
 
@@ -143,7 +143,7 @@ namespace GKCore.Lists
 		public object GetColumnInternalValue(int colIndex)
 		{
 			// col_index - from 1
-			TColMapRec colrec = this.fColumnsMap[colIndex];
+			MapColumnRec colrec = this.fColumnsMap[colIndex];
 			return this.GetColumnValueEx(colrec.ColType, colrec.ColSubtype, false);
 		}
 
@@ -163,7 +163,7 @@ namespace GKCore.Lists
 			int num = this.fColumnsMap.Count;
 			for (int i = 1; i < num; i++)
 			{
-				TColMapRec colrec = this.fColumnsMap[i];
+				MapColumnRec colrec = this.fColumnsMap[i];
 
 				// aColIndex - from 1
 				ColumnStatic cs = this.fListColumns.ColumnStatics[colrec.ColType];
@@ -185,7 +185,7 @@ namespace GKCore.Lists
 			for (int i = 0; i < num; i++) {
 				ColumnStatic cs = this.fListColumns.ColumnStatics[i];
 
-				this.AddListColumn(listView, LangMan.LS(cs.colName), cs.width, false, (byte)i, 0);
+				this.AddListColumn(listView, LangMan.LS(cs.ColName), cs.Width, false, (byte)i, 0);
 			}
 		}
 
@@ -194,7 +194,7 @@ namespace GKCore.Lists
 			int col = (colType as IConvertible).ToByte(null);
 
             if (col >= 0 && col < fListColumns.ColumnStatics.Count) {
-				return LangMan.LS(fListColumns.ColumnStatics[col].colName);
+				return LangMan.LS(fListColumns.ColumnStatics[col].ColName);
 			}
 
             return "<?>";
@@ -205,7 +205,7 @@ namespace GKCore.Lists
 			int col = index/* - 1*/;
 
             if (col >= 0 && col < fListColumns.ColumnStatics.Count) {
-				return fListColumns.ColumnStatics[col].dataType;
+				return fListColumns.ColumnStatics[col].DataType;
 			}
 
             return DataType.dtString;
@@ -230,7 +230,7 @@ namespace GKCore.Lists
 				return string.Empty;
 			}
 
-			switch (cs.dataType) {
+			switch (cs.DataType) {
 				case DataType.dtString:
 					return val.ToString();
 
@@ -238,7 +238,7 @@ namespace GKCore.Lists
 					return val.ToString();
 
 				case DataType.dtFloat:
-					return ((double)val).ToString(cs.format, cs.nfi);
+					return ((double)val).ToString(cs.Format, cs.NumFmt);
 
 				case DataType.dtDateTime:
 					DateTime dtx = ((DateTime)val);
@@ -294,7 +294,7 @@ namespace GKCore.Lists
 
             	int compRes = 0;
             	if (fcond.Condition != ConditionKind.ck_Contains) {
-            		compRes = (dataval as IComparable).CompareTo(fcond.Value);
+                    compRes = ((IComparable)dataval).CompareTo(fcond.Value);
             	}
 
             	switch (fcond.Condition) {
@@ -367,7 +367,7 @@ namespace GKCore.Lists
 			for (int i = 0; i < num; i++) {
 				ColumnProps props = this.fListColumns[i];
 				
-				if (props.colType == colType) {
+				if (props.ColType == colType) {
 					return props;
 				}
 			}
@@ -377,14 +377,14 @@ namespace GKCore.Lists
 		
 		public void WidthChanged(int colIndex, int colWidth)
 		{
-			if (colIndex > 0) {
-				TColMapRec colrec = this.fColumnsMap[colIndex];
-				ColumnProps props = this.FindColumnProps(colrec.ColType);
+		    if (colIndex <= 0) return;
 
-				if (props != null) {
-					props.colWidth = colWidth;
-				}
-			}
+            MapColumnRec colrec = this.fColumnsMap[colIndex];
+		    ColumnProps props = this.FindColumnProps(colrec.ColType);
+
+		    if (props != null) {
+		        props.ColWidth = colWidth;
+		    }
 		}
 	}
 }

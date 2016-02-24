@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
-
 using GKCore;
 using GKCore.Interfaces;
-using GKUI.Charts;
 
-namespace GKUI
+namespace GKUI.Charts
 {
 	public partial class ACOptionsControl : UserControl, IOptionsControl
 	{
@@ -35,14 +33,14 @@ namespace GKUI
         	this.Text = LangMan.LS(LSID.LSID_MIOptions);
 
             //this.SheetAncCircle.Text = LangMan.LS(LSID.LSID_AncestorsCircle);
-            this.acb0.Text = LangMan.LS(LSID.LSID_Circle) + " 0";
-            this.acb1.Text = LangMan.LS(LSID.LSID_Circle) + " 1";
-            this.acb2.Text = LangMan.LS(LSID.LSID_Circle) + " 2";
-            this.acb3.Text = LangMan.LS(LSID.LSID_Circle) + " 3";
-            this.acb4.Text = LangMan.LS(LSID.LSID_Circle) + " 4";
-            this.acb5.Text = LangMan.LS(LSID.LSID_Circle) + " 5";
-            this.acb6.Text = LangMan.LS(LSID.LSID_Circle) + " 6";
-            this.acb7.Text = LangMan.LS(LSID.LSID_Circle) + " 7";
+            this.acb0.Text = LangMan.LS(LSID.LSID_Circle) + @" 0";
+            this.acb1.Text = LangMan.LS(LSID.LSID_Circle) + @" 1";
+            this.acb2.Text = LangMan.LS(LSID.LSID_Circle) + @" 2";
+            this.acb3.Text = LangMan.LS(LSID.LSID_Circle) + @" 3";
+            this.acb4.Text = LangMan.LS(LSID.LSID_Circle) + @" 4";
+            this.acb5.Text = LangMan.LS(LSID.LSID_Circle) + @" 5";
+            this.acb6.Text = LangMan.LS(LSID.LSID_Circle) + @" 6";
+            this.acb7.Text = LangMan.LS(LSID.LSID_Circle) + @" 7";
             this.acbText.Text = LangMan.LS(LSID.LSID_TextColor);
             this.acbBack.Text = LangMan.LS(LSID.LSID_BackColor);
             this.acbLine.Text = LangMan.LS(LSID.LSID_LinesColor);

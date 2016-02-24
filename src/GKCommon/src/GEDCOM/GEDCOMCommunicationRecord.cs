@@ -24,8 +24,8 @@ namespace GKCommon.GEDCOM
 		protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
 		{
 			base.CreateObj(owner, parent);
-			this.fRecordType = GEDCOMRecordType.rtCommunication;
-			this.fName = "_COMM";
+			base.SetRecordType(GEDCOMRecordType.rtCommunication);
+			base.SetName("_COMM");
 		}
 
 		public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)
@@ -70,7 +70,7 @@ namespace GKCommon.GEDCOM
 			}
 
             if (corrTag != null) {
-				corresponder = (this.fOwner.XRefIndex_Find(GEDCOMUtils.CleanXRef(corrTag.StringValue)) as GEDCOMIndividualRecord);
+				corresponder = (this.Owner.XRefIndex_Find(GEDCOMUtils.CleanXRef(corrTag.StringValue)) as GEDCOMIndividualRecord);
 
 				if (corrTag.Name == "FROM") {
 					commDir = GKCommunicationDir.cdFrom;
@@ -86,7 +86,7 @@ namespace GKCommon.GEDCOM
 			base.DeleteTag("TO");
 
             if (corresponder != null) {
-				this.AddTag(GEDCOMCommunicationRecord.CommunicationTags[(int)commDir], GEDCOMUtils.EncloseXRef(corresponder.XRef), null);
+				this.AddTag(CommunicationTags[(int)commDir], GEDCOMUtils.EncloseXRef(corresponder.XRef), null);
 			}
 		}
 

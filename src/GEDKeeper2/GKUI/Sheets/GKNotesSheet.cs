@@ -88,7 +88,8 @@ namespace GKUI.Sheets
                     break;
             }
             
-            if (result) {
+            if (result)
+            {
             	aBase.Modified = true;
             	this.UpdateSheet();
             }

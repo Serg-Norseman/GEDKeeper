@@ -1,8 +1,5 @@
-using System;
 using System.Collections;
 using System.Windows.Forms;
-
-using GKCommon;
 
 namespace GKUI.Controls
 {
@@ -40,34 +37,32 @@ namespace GKUI.Controls
 
 				int sortColumn = this.fSortColumn;
 				if (this.fSortOrder != SortOrder.None && sortColumn >= 0) {
-					ListViewItem item1 = x as ListViewItem;
-					ListViewItem item2 = y as ListViewItem;
+                    ListViewItem item1 = (ListViewItem)x;
+                    ListViewItem item2 = (ListViewItem)y;
 
-					int compRes = 0;
 					if (item1 is GKListItem && item2 is GKListItem) {
-						GKListItem eitem1 = x as GKListItem;
-						GKListItem eitem2 = y as GKListItem;
-
 						if (sortColumn == 0) {
-							compRes = eitem1.CompareTo(eitem2);
-						} else {
-							GKListSubItem sub1 = item1.SubItems[sortColumn] as GKListSubItem;
-							GKListSubItem sub2 = item2.SubItems[sortColumn] as GKListSubItem;
+                            GKListItem eitem1 = ((GKListItem)x);
+                            GKListItem eitem2 = ((GKListItem)y);
 
-							compRes = sub1.CompareTo(sub2);
+                            result = eitem1.CompareTo(eitem2);
+						} else {
+                            GKListSubItem sub1 = (GKListSubItem)item1.SubItems[sortColumn];
+                            GKListSubItem sub2 = (GKListSubItem)item2.SubItems[sortColumn];
+
+                            result = sub1.CompareTo(sub2);
 						}
 					} else {
 						if (sortColumn < item1.SubItems.Count && sortColumn < item2.SubItems.Count)
 						{
-							compRes = agCompare(item1.SubItems[sortColumn].Text, item2.SubItems[sortColumn].Text);
+                            result = agCompare(item1.SubItems[sortColumn].Text, item2.SubItems[sortColumn].Text);
 						}
 					}
 
-					if (this.fSortOrder == SortOrder.Ascending) {
-						result = compRes;
-					} else if (this.fSortOrder == SortOrder.Descending) {
-						result = -compRes;
-					}
+				    if (this.fSortOrder == SortOrder.Descending)
+				    {
+				        result = -result;
+				    }
 				}
 
 				return result;
@@ -124,12 +119,12 @@ namespace GKUI.Controls
 			this.fColumnSorter = new LVColumnSorter();
 
 			base.ListViewItemSorter = this.fColumnSorter;
-			base.ColumnClick += this.lvColumnClick;
+			base.ColumnClick += this.LVColumnClick;
 		}
 
 		public void UnsetSorter()
 		{
-			base.ColumnClick -= this.lvColumnClick;
+			base.ColumnClick -= this.LVColumnClick;
 		}
 
 		public void SwitchSorter()
@@ -156,7 +151,7 @@ namespace GKUI.Controls
 			base.EndUpdate();
 		}
 
-		private void lvColumnClick(object sender, ColumnClickEventArgs e)
+		private void LVColumnClick(object sender, ColumnClickEventArgs e)
 		{
 			if (e.Column == this.fColumnSorter.SortColumn)
 			{
@@ -212,11 +207,11 @@ namespace GKUI.Controls
 
 		public void SelectItem(ListViewItem item)
 		{
-			if (item != null) {
-				this.SelectedIndices.Clear();
-				item.Selected = true;
-				item.EnsureVisible();
-			}
+		    if (item == null) return;
+		    
+            this.SelectedIndices.Clear();
+		    item.Selected = true;
+		    item.EnsureVisible();
 		}
 
 		public void SelectItem(int index)

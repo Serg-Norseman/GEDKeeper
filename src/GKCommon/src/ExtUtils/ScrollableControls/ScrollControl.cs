@@ -11,7 +11,7 @@ using System.Windows.Forms;
 namespace ExtUtils.ScrollableControls
 {
 	[ToolboxItem(false)]
-	public partial class ScrollControl : Control
+	public class ScrollControl : Control
 	{
 		#region Instance Fields
 
@@ -184,10 +184,10 @@ namespace ExtUtils.ScrollableControls
 			set
 			{
 				if (value.Width < 0)
-					throw new ArgumentOutOfRangeException("value", "Width must be a positive integer.");
+					throw new ArgumentOutOfRangeException("value", @"Width must be a positive integer.");
 
 				if (value.Height < 0)
-					throw new ArgumentOutOfRangeException("value", "Height must be a positive integer.");
+					throw new ArgumentOutOfRangeException("value", @"Height must be a positive integer.");
 
 				if (this.PageSize != value)
 				{
@@ -210,10 +210,10 @@ namespace ExtUtils.ScrollableControls
 			set
 			{
 				if (value.Width < 0)
-					throw new ArgumentOutOfRangeException("value", "Width must be a positive integer.");
+					throw new ArgumentOutOfRangeException("value", @"Width must be a positive integer.");
 
 				if (value.Height < 0)
-					throw new ArgumentOutOfRangeException("value", "Height must be a positive integer.");
+					throw new ArgumentOutOfRangeException("value", @"Height must be a positive integer.");
 
 				if (this.ScrollSize != value)
 				{
@@ -236,10 +236,10 @@ namespace ExtUtils.ScrollableControls
 			set
 			{
 				if (value.Width < 0)
-					throw new ArgumentOutOfRangeException("value", "Width must be a positive integer.");
+					throw new ArgumentOutOfRangeException("value", @"Width must be a positive integer.");
 
 				if (value.Height < 0)
-					throw new ArgumentOutOfRangeException("value", "Height must be a positive integer.");
+					throw new ArgumentOutOfRangeException("value", @"Height must be a positive integer.");
 
 				if (this.StepSize != value)
 				{

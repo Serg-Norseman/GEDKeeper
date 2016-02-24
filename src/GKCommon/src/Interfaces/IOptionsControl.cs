@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GKCore.Interfaces
+﻿namespace GKCore.Interfaces
 {
 	/// <summary>
 	/// 

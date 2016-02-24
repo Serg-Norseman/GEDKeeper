@@ -22,21 +22,21 @@ namespace GKCommon.GEDCOM
 			if (this.fDateApproximated == GEDCOMApproximated.daExact) {
 				prefix = "";
 			} else {
-                prefix = GEDCOMCustomDate.GEDCOMDateApproximatedArray[(int)this.fDateApproximated];
+                prefix = GEDCOMDateApproximatedArray[(int)this.fDateApproximated];
 				prefix += " ";
 			}
 
 			return prefix + base.GetStringValue();
 		}
 
-		private string ExtractApproximated(string S)
+		private string ExtractApproximated(string str)
 		{
-			string result = S;
-			string SU = result.Substring(0, 3).ToUpperInvariant();
+			string result = str;
+			string su = result.Substring(0, 3).ToUpperInvariant();
 
 			for (GEDCOMApproximated i = GEDCOMApproximated.daAbout; i <= GEDCOMApproximated.daEstimated; i++)
 			{
-				if (SU == GEDCOMCustomDate.GEDCOMDateApproximatedArray[(int)i])
+				if (su == GEDCOMDateApproximatedArray[(int)i])
 				{
 					this.fDateApproximated = i;
 					result = result.Remove(0, 3);

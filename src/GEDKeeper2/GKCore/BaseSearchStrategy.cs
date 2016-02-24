@@ -48,17 +48,14 @@ namespace GKCore
 				if (currentResults == null) currentResults = this.FindAll();
 				
 				curResult = GKUtils.FirstOrDefault(currentResults);
-			} else {
-				int idx = currentResults.IndexOf(curResult) + 1;
-				
-				if (idx < currentResults.Count) {
-					curResult = currentResults[idx];
-				} else {
-					curResult = null;
-				}
+			} else
+			{
+			    int idx = currentResults.IndexOf(curResult) + 1;
+
+			    curResult = (idx < currentResults.Count) ? currentResults[idx] : null;
 			}
-			
-			return curResult;
+
+		    return curResult;
 		}
 		
 		public ISearchResult FindPrev()
@@ -67,17 +64,14 @@ namespace GKCore
 				if (currentResults == null) currentResults = this.FindAll();
 				
 				curResult = GKUtils.LastOrDefault(currentResults);
-			} else {
-				int idx = currentResults.IndexOf(curResult) - 1;
-				
-				if (idx >= 0) {
-					curResult = currentResults[idx];
-				} else {
-					curResult = null;
-				}
+			} else
+			{
+			    int idx = currentResults.IndexOf(curResult) - 1;
+
+			    curResult = (idx >= 0) ? currentResults[idx] : null;
 			}
-			
-			return curResult;
+
+		    return curResult;
 		}
 	}
 

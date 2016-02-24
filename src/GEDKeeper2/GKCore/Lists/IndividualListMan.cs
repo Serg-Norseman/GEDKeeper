@@ -106,7 +106,7 @@ namespace GKCore.Lists
 		{
 			base.Clear();
 
-			this.FilterGroupMode = FilterGroupMode.gmAll;
+			this.FilterGroupMode = FilterGroupMode.All;
 			this.GroupRef = "";
 			if (this.FilterLifeMode != FilterLifeMode.lmTimeLocked)
 			{
@@ -117,7 +117,7 @@ namespace GKCore.Lists
 			this.PatriarchOnly = false;
 			this.Residence = "*";
 			this.Sex = GEDCOMSex.svNone;
-			this.SourceMode = FilterGroupMode.gmAll;
+			this.SourceMode = FilterGroupMode.All;
 			this.SourceRef = "";
 			this.EventVal = "*";
 		}
@@ -155,12 +155,13 @@ namespace GKCore.Lists
 
 		private bool HasPlace()
 		{
-			bool res = false;
-
 			IndividualListFilter iFilter = fFilter as IndividualListFilter;
-			bool addr = GlobalOptions.Instance.PlacesWithAddress;
+		    if (iFilter == null) return false;
 
-			int num = this.fRec.Events.Count;
+            bool res = false;
+
+            bool addr = GlobalOptions.Instance.PlacesWithAddress;
+            int num = this.fRec.Events.Count;
 			for (int i = 0; i < num; i++)
 			{
 				string place = GKUtils.GetPlaceStr(this.fRec.Events[i], addr);
@@ -173,9 +174,10 @@ namespace GKCore.Lists
 
 		private bool HasEventVal()
 		{
-			bool result = false;
+            IndividualListFilter iFilter = fFilter as IndividualListFilter;
+            if (iFilter == null) return false;
 
-			IndividualListFilter iFilter = fFilter as IndividualListFilter;
+            bool result = false;
 
 			int num = this.fRec.Events.Count;
 			for (int i = 0; i < num; i++)
@@ -221,29 +223,29 @@ namespace GKCore.Lists
 				}
 
 				switch (iFilter.FilterGroupMode) {
-					case FilterGroupMode.gmAll:
+					case FilterGroupMode.All:
 						break;
-					case FilterGroupMode.gmNone:
+					case FilterGroupMode.None:
 						if (this.fRec.Groups.Count != 0) return false;
 						break;
-					case FilterGroupMode.gmAny:
+					case FilterGroupMode.Any:
 						if (this.fRec.Groups.Count == 0) return false;
 						break;
-					case FilterGroupMode.gmSelected:
+					case FilterGroupMode.Selected:
 						if (this.fRec.IndexOfGroup(this.filter_grp) < 0) return false;
 						break;
 				}
 
 				switch (iFilter.SourceMode) {
-					case FilterGroupMode.gmAll:
+					case FilterGroupMode.All:
 						break;
-					case FilterGroupMode.gmNone:
+					case FilterGroupMode.None:
 						if (this.fRec.SourceCitations.Count != 0) return false;
 						break;
-					case FilterGroupMode.gmAny:
+					case FilterGroupMode.Any:
 						if (this.fRec.SourceCitations.Count == 0) return false;
 						break;
-					case FilterGroupMode.gmSelected:
+					case FilterGroupMode.Selected:
 						if (this.fRec.IndexOfSource(this.filter_source) < 0) return false;
 						break;
 				}
@@ -541,11 +543,11 @@ namespace GKCore.Lists
 
 			GlobalOptions gOptions = GlobalOptions.Instance;
 
-			if ((fRec.ChildToFamilyLinks.Count == 0) && (gOptions.ListPersons_HighlightUnparented))
+			if ((fRec.ChildToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnparentedPersons))
 			{
 				item.BackColor = System.Drawing.Color.FromArgb(0xFFCACA);
 			}
-			else if ((fRec.SpouseToFamilyLinks.Count == 0) && (gOptions.ListPersons_HighlightUnmarried))
+			else if ((fRec.SpouseToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnmarriedPersons))
 			{
 				item.BackColor = System.Drawing.Color.FromArgb(0xFFFFCA);
 			}
@@ -562,10 +564,10 @@ namespace GKCore.Lists
 			int num = columns.Count;
 			for (int i = 0; i < num; i++)
 			{
-				if (columns[i].colActive) {
-					byte bColType = columns[i].colType;
+				if (columns[i].ColActive) {
+					byte bColType = columns[i].ColType;
 					PersonColumnType colType = (PersonColumnType)bColType;
-					int colWidth = columns[i].colWidth;
+					int colWidth = columns[i].ColWidth;
 
 					if (colType == PersonColumnType.pctName) {
 					    const bool asz = false;
@@ -587,7 +589,7 @@ namespace GKCore.Lists
 								break;
 						}
 					} else {
-						string colName = LangMan.LS(columns.ColumnStatics[bColType].colName);
+						string colName = LangMan.LS(columns.ColumnStatics[bColType].ColName);
 						this.AddListColumn(listView, colName, colWidth, false, bColType, 0);
 					}
 				}

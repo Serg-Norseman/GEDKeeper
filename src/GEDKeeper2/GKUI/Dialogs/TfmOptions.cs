@@ -39,7 +39,7 @@ namespace GKUI.Dialogs
             this.fOptions = TfmGEDKeeper.Instance.Options;
             this.fTempColumns = new IndividualListColumns();
 
-            (this as ILocalization).SetLang();
+            this.SetLang();
             this.UpdateForm();
         }
 
@@ -55,9 +55,9 @@ namespace GKUI.Dialogs
 				for (int i = 0; i < num; i++) {
 					ColumnProps colProps = fTempColumns[i];
 					
-					string colName = LangMan.LS(fTempColumns.ColumnStatics[colProps.colType].colName);
+					string colName = LangMan.LS(fTempColumns.ColumnStatics[colProps.ColType].ColName);
 
-					this.ListPersonColumns.Items.Add(colName, colProps.colActive);
+					this.ListPersonColumns.Items.Add(colName, colProps.ColActive);
 				}
 			}
 			finally
@@ -69,7 +69,7 @@ namespace GKUI.Dialogs
 
 		private void UpdateControls()
 		{
-			this.lblChartFont.Text = this.fOptions.ChartOptions.DefFontName + ", " + this.fOptions.ChartOptions.DefFontSize.ToString();
+			this.lblChartFont.Text = this.fOptions.ChartOptions.DefFontName + @", " + this.fOptions.ChartOptions.DefFontSize.ToString();
 		}
 
 	    private void UpdateLangs()
@@ -127,8 +127,8 @@ namespace GKUI.Dialogs
             }
 
 			this.chkPlacesWithAddress.Checked = this.fOptions.PlacesWithAddress;
-			this.chkHighlightUnparented.Checked = this.fOptions.ListPersons_HighlightUnparented;
-			this.chkHighlightUnmarried.Checked = this.fOptions.ListPersons_HighlightUnmarried;
+			this.chkHighlightUnparented.Checked = this.fOptions.ListHighlightUnparentedPersons;
+			this.chkHighlightUnmarried.Checked = this.fOptions.ListHighlightUnmarriedPersons;
 			this.chkFamily.Checked = this.fOptions.ChartOptions.FamilyVisible;
 			this.chkName.Checked = this.fOptions.ChartOptions.NameVisible;
 			this.chkPatronymic.Checked = this.fOptions.ChartOptions.PatronymicVisible;
@@ -157,10 +157,10 @@ namespace GKUI.Dialogs
 
             switch (this.fOptions.PedigreeOptions.Format)
             {
-                case PedigreeFormat.pfExcess:
+                case PedigreeFormat.Excess:
                     this.RButton10.Checked = true;
                     break;
-                case PedigreeFormat.pfCompact:
+                case PedigreeFormat.Compact:
                     this.RButton11.Checked = true;
                     break;
             }
@@ -268,8 +268,8 @@ namespace GKUI.Dialogs
 			}
 
 			this.fOptions.PlacesWithAddress = this.chkPlacesWithAddress.Checked;
-			this.fOptions.ListPersons_HighlightUnparented = this.chkHighlightUnparented.Checked;
-			this.fOptions.ListPersons_HighlightUnmarried = this.chkHighlightUnmarried.Checked;
+			this.fOptions.ListHighlightUnparentedPersons = this.chkHighlightUnparented.Checked;
+			this.fOptions.ListHighlightUnmarriedPersons = this.chkHighlightUnmarried.Checked;
 			this.fOptions.ChartOptions.FamilyVisible = this.chkFamily.Checked;
 			this.fOptions.ChartOptions.NameVisible = this.chkName.Checked;
 			this.fOptions.ChartOptions.PatronymicVisible = this.chkPatronymic.Checked;
@@ -298,11 +298,11 @@ namespace GKUI.Dialogs
 
 			if (this.RButton10.Checked)
 			{
-				this.fOptions.PedigreeOptions.Format = PedigreeFormat.pfExcess;
+				this.fOptions.PedigreeOptions.Format = PedigreeFormat.Excess;
 			}
 			else if (this.RButton11.Checked)
 			{
-				this.fOptions.PedigreeOptions.Format = PedigreeFormat.pfCompact;
+				this.fOptions.PedigreeOptions.Format = PedigreeFormat.Compact;
 			}
 
 			this.fOptions.ShowTips = this.chkShowOnStart.Checked;
@@ -344,7 +344,7 @@ namespace GKUI.Dialogs
 		{
 			bool cs = (e.NewValue == CheckState.Checked);
 			ColumnProps props = this.fTempColumns[e.Index];
-			props.colActive = cs;
+			props.ColActive = cs;
 			this.fTempColumns[e.Index] = props;
 		}
 

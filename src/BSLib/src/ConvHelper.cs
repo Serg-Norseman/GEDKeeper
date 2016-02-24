@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text;
 using System.Threading;
 
@@ -10,20 +9,20 @@ namespace BSLib
 	/// </summary>
 	public static class ConvHelper
 	{
-		public static int ParseInt(string S, int Default)
+		public static int ParseInt(string str, int Default)
 		{
 			int res;
-			if (!int.TryParse(S, out res)) res = Default;
+			if (!int.TryParse(str, out res)) res = Default;
 			return res;
 		}
 
-		public static double ParseFloat(string S, double Default, bool checkSeparator = false)
+		public static double ParseFloat(string str, double Default, bool checkSeparator = false)
 		{
-			if (string.IsNullOrEmpty(S)) return Default;
+			if (string.IsNullOrEmpty(str)) return Default;
 
 			string decSep;
 			if (checkSeparator) {
-				decSep = (S.Contains(",") ? "," : ".");
+				decSep = (str.Contains(",") ? "," : ".");
 			} else {
 				decSep = ".";
 			}
@@ -34,7 +33,7 @@ namespace BSLib
 
 			double value;
 			double result;
-			if (double.TryParse(S, NumberStyles.Float, formatInfo, out value)) {
+			if (double.TryParse(str, NumberStyles.Float, formatInfo, out value)) {
 				result = value;
 			} else {
 				result = Default;

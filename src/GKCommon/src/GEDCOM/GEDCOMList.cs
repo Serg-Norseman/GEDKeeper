@@ -139,7 +139,7 @@ namespace GKCommon.GEDCOM
 
 			for (int i = this.fDataList.Count - 1; i >= 0; i--)
 			{
-				(this.fDataList[i] as GEDCOMObject).Dispose();
+				this.fDataList[i].Dispose();
 			}
 			this.fDataList.Clear();
 		}

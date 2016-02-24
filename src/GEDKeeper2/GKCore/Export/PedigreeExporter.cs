@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 using BSLib;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -150,11 +149,11 @@ namespace GKCore.Export
 			fDocument.Add(p);
 
 			switch (fFormat) {
-				case PedigreeFormat.pfExcess:
+				case PedigreeFormat.Excess:
 					this.WriteExcessFmt(person);
 					break;
 
-				case PedigreeFormat.pfCompact:
+				case PedigreeFormat.Compact:
 					this.WriteCompactFmt(person);
 					break;
 			}
@@ -162,14 +161,10 @@ namespace GKCore.Export
 
 		private Chunk idLink(PedigreePerson person)
 		{
-			if (person != null) {
-				return new Chunk(person.Id, fLinkFont).SetLocalGoto(person.Id);
-			} else {
-				return new Chunk();
-			}
+		    return (person == null) ? new Chunk() : new Chunk(person.Id, fLinkFont).SetLocalGoto(person.Id);
 		}
 
-		private string GetIdStr(PedigreePerson person)
+        private string GetIdStr(PedigreePerson person)
 		{
 			string result = person.Id;
 
@@ -263,7 +258,7 @@ namespace GKCore.Export
 						int num3 = family.Childrens.Count;
 						for (int j = 0; j < num3; j++)
 						{
-							irec = (family.Childrens[j].Value as GEDCOMIndividualRecord);
+                            irec = (GEDCOMIndividualRecord)family.Childrens[j].Value;
 							evList.Add(new PedigreeEvent(irec.FindEvent("BIRT"), irec));
 						}
 						this.WriteEventList(person, evList);
@@ -402,11 +397,7 @@ namespace GKCore.Export
 					if (ev == 0) {
 						st = evt.Detail.Classification;
 					} else {
-						if (ev > 0) {
-							st = LangMan.LS(GKData.PersonEvents[ev].Name);
-						} else {
-							st = evt.Name;
-						}
+						st = (ev > 0) ? LangMan.LS(GKData.PersonEvents[ev].Name) : evt.Name;
 					}
 
 					string dt = GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false);
@@ -452,7 +443,7 @@ namespace GKCore.Export
 					fDocument.AddTitle("Pedigree");
 					fDocument.AddSubject("Pedigree");
 					fDocument.AddAuthor("");
-					fDocument.AddCreator(GKData.AppTitle);
+					fDocument.AddCreator(GKData.APP_TITLE);
 					fDocument.Open();
 
 					BaseFont baseFont = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Times.ttf"), BaseFont.IDENTITY_H, BaseFont.EMBEDDED);

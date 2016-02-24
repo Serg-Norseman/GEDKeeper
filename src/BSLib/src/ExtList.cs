@@ -16,9 +16,9 @@ namespace BSLib
 
 	public enum ListNotification
 	{
-		lnAdded,
-		lnExtracted,
-		lnDeleted
+		Added,
+		Extracted,
+		Deleted
 	}
 
     /// <summary>
@@ -63,12 +63,12 @@ namespace BSLib
 
 			    if (temp != null)
 			    {
-			        this.Notify(temp, ListNotification.lnDeleted);
+			        this.Notify(temp, ListNotification.Deleted);
 			    }
 
 			    if (value != null)
 			    {
-			        this.Notify(value, ListNotification.lnAdded);
+			        this.Notify(value, ListNotification.Added);
 			    }
 			}
 		}
@@ -97,7 +97,7 @@ namespace BSLib
 
 		private void Notify(object instance, ListNotification action)
 		{
-			if (this.fOwnsObjects && action == ListNotification.lnDeleted)
+			if (this.fOwnsObjects && action == ListNotification.Deleted)
 			{
 				if (instance is IDisposable)
 				{
@@ -112,14 +112,14 @@ namespace BSLib
 			this.fList.Add(item);
 			if (item != null)
 			{
-				this.Notify(item, ListNotification.lnAdded);
+				this.Notify(item, ListNotification.Added);
 			}
 			return result;
 		}
 
 		public void Clear()
 		{
-			for (int i = this.fList.Count - 1; i >= 0; i--) this.Notify(fList[i], ListNotification.lnDeleted);
+			for (int i = this.fList.Count - 1; i >= 0; i--) this.Notify(fList[i], ListNotification.Deleted);
 			this.fList.Clear();
 		}
 
@@ -131,7 +131,7 @@ namespace BSLib
 
 			if (temp != null)
 			{
-				this.Notify(temp, ListNotification.lnDeleted);
+				this.Notify(temp, ListNotification.Deleted);
 			}
 		}
 
@@ -155,7 +155,7 @@ namespace BSLib
 			{
 				result = item;
 				this.fList.RemoveAt(I);
-				this.Notify(result, ListNotification.lnExtracted);
+				this.Notify(result, ListNotification.Extracted);
 			}
 			return result;
 		}
@@ -170,7 +170,7 @@ namespace BSLib
 			this.fList.Insert(index, item);
 			if (item != null)
 			{
-				this.Notify(item, ListNotification.lnAdded);
+				this.Notify(item, ListNotification.Added);
 			}
 		}
 
@@ -193,19 +193,19 @@ namespace BSLib
 			}
 		}
 
-        private void QuickSort(Comparison<T> comparer, int L, int R)
+        private void QuickSort(Comparison<T> comparer, int left, int right)
 		{
-			int I;
+			int I, J;
 			do
 			{
-				I = L;
-				int J = R;
-				T P = fList[(int)((uint)(L + R) >> 1)];
+				I = left;
+				J = right;
+				T itm = fList[(int)((uint)(left + right) >> 1)];
 				while (true)
 				{
-                    if (comparer(fList[I], P) >= 0)
+                    if (comparer(fList[I], itm) >= 0)
 					{
-                        while (comparer(fList[J], P) > 0) J--;
+                        while (comparer(fList[J], itm) > 0) J--;
 
 						if (I <= J)
 						{
@@ -227,10 +227,10 @@ namespace BSLib
 						I++;
 					}
 				}
-                if (L < J) QuickSort(comparer, L, J);
-				L = I;
+                if (left < J) QuickSort(comparer, left, J);
+				left = I;
 			}
-			while (I < R);
+			while (I < right);
 		}
 
         public void QuickSort(Comparison<T> comparer)

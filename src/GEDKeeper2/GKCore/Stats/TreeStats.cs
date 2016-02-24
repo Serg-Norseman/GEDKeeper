@@ -49,47 +49,64 @@ namespace GKCore.Stats
 							break;
 					}
 
-					string v_age = GKUtils.GetAgeStr(ind, -1);
-					stats.age.TakeVal(v_age, ind.Sex, true);
+					string vAge = GKUtils.GetAgeStr(ind, -1);
+					stats.age.TakeVal(vAge, ind.Sex, true);
 
-					string v_life = GKUtils.GetLifeExpectancyStr(ind);
-					stats.life.TakeVal(v_life, ind.Sex, true);
+					string vLife = GKUtils.GetLifeExpectancyStr(ind);
+					stats.life.TakeVal(vLife, ind.Sex, true);
 
-					int ch_cnt = ind.GetTotalChildsCount();
-					stats.childs.TakeVal(ch_cnt, ind.Sex, true);
+					int chCnt = ind.GetTotalChildsCount();
+					stats.childs.TakeVal(chCnt, ind.Sex, true);
 
 					GEDCOMIndividualRecord iDummy;
-					int v_fba = GKUtils.GetFirstbornAge(ind, out iDummy);
-					stats.fba.TakeVal(v_fba, ind.Sex, true);
+					int vFba = GKUtils.GetFirstbornAge(ind, out iDummy);
+					stats.fba.TakeVal(vFba, ind.Sex, true);
 
-					int m_cnt = GKUtils.GetMarriagesCount(ind);
-					stats.marr.TakeVal(m_cnt, ind.Sex, true);
+					int mCnt = GKUtils.GetMarriagesCount(ind);
+					stats.marr.TakeVal(mCnt, ind.Sex, true);
 
-					int v_mage = GKUtils.GetMarriageAge(ind);
-					stats.mage.TakeVal(v_mage, ind.Sex, true);
+					int vMAge = GKUtils.GetMarriageAge(ind);
+					stats.mage.TakeVal(vMAge, ind.Sex, true);
 
-					float v_ci = ind.GetCertaintyAssessment();
-					stats.cIndex.TakeVal(v_ci, ind.Sex, false);
+					float vCI = ind.GetCertaintyAssessment();
+					stats.cIndex.TakeVal(vCI, ind.Sex, false);
 				}
 			}
 			
 			return stats;
 		}
 
-		private static void CheckVal(List<StatsItem> valsList, string val)
+		private static void CheckVal(List<StatsItem> valsList, string val, GEDCOMSex sex = GEDCOMSex.svUndetermined)
 		{
-			if (val == "-1" || val == "" || val == "0") {
-				val = "?";
+			if (sex == GEDCOMSex.svUndetermined) {
+				if (val == "-1" || val == "" || val == "0") {
+					val = "?";
+				}
 			}
 
 			int vIdx = valsList.FindIndex(delegate(StatsItem lv) { return (lv.Caption == val); });
 
+			StatsItem lvi;
 			if (vIdx == -1) {
-				valsList.Add(new StatsItem(val, 1));
+				lvi = new StatsItem(val, sex != GEDCOMSex.svUndetermined);
+				valsList.Add(lvi);
 			} else {
-				StatsItem lv = valsList[vIdx];
-				lv.Value = lv.Value + 1;
-				valsList[vIdx] = lv;
+				lvi = valsList[vIdx];
+			}
+			
+			switch (sex)
+			{
+				case GEDCOMSex.svFemale:
+					lvi.ValF = lvi.ValF + 1;
+					break;
+
+				case GEDCOMSex.svMale:
+					lvi.ValM = lvi.ValM + 1;
+					break;
+
+				case GEDCOMSex.svUndetermined:
+					lvi.Value = lvi.Value + 1;
+					break;
 			}
 		}
 
@@ -132,21 +149,21 @@ namespace GKCore.Stats
 				case StatsMode.smNames:
 				case StatsMode.smPatronymics:
 					{
-						string V = "";
+						string v = "";
 						string fam, nam, pat;
 						iRec.GetNameParts(out fam, out nam, out pat);
 						switch (mode) {
 							case StatsMode.smFamilies:
-								V = GKUtils.PrepareRusSurname(fam, iRec.Sex == GEDCOMSex.svFemale);
+								v = GKUtils.PrepareRusSurname(fam, iRec.Sex == GEDCOMSex.svFemale);
 								break;
 							case StatsMode.smNames:
-								V = nam;
+								v = nam;
 								break;
 							case StatsMode.smPatronymics:
-								V = pat;
+								v = pat;
 								break;
 						}
-						CheckVal(values, V);
+						CheckVal(values, v);
 						break;
 					}
 
@@ -165,7 +182,7 @@ namespace GKCore.Stats
 				case StatsMode.smBirthPlaces:
 				case StatsMode.smDeathPlaces:
 					{
-						string V = "?";
+						string v = "?";
 
 						int num2 = iRec.Events.Count;
 						for (int j = 0; j < num2; j++)
@@ -178,13 +195,13 @@ namespace GKCore.Stats
 							{
 								switch (mode) {
 									case StatsMode.smBirthYears:
-										V = Convert.ToString(dtx.Year);
+										v = Convert.ToString(dtx.Year);
 										break;
 									case StatsMode.smBirthTenYears:
-										V = Convert.ToString(dtx.Year / 10 * 10);
+										v = Convert.ToString(dtx.Year / 10 * 10);
 										break;
 									case StatsMode.smBirthPlaces:
-										V = evt.Detail.Place.StringValue;
+										v = evt.Detail.Place.StringValue;
 										break;
 								}
 							}
@@ -194,19 +211,19 @@ namespace GKCore.Stats
 								{
 									switch (mode) {
 										case StatsMode.smDeathYears:
-											V = Convert.ToString(dtx.Year);
+											v = Convert.ToString(dtx.Year);
 											break;
 										case StatsMode.smDeathTenYears:
-											V = Convert.ToString(dtx.Year / 10 * 10);
+											v = Convert.ToString(dtx.Year / 10 * 10);
 											break;
 										case StatsMode.smDeathPlaces:
-											V = evt.Detail.Place.StringValue;
+											v = evt.Detail.Place.StringValue;
 											break;
 									}
 								}
 							}
 						}
-						CheckVal(values, V);
+						CheckVal(values, v);
 						break;
 					}
 
@@ -279,6 +296,17 @@ namespace GKCore.Stats
 							}
 						}
 						break;
+
+					case StatsMode.smDemography:
+						{
+							int lifeExp = GKUtils.GetLifeExpectancy(iRec);
+							if (lifeExp > -1)
+							{
+								string v = Convert.ToString(lifeExp / 5 * 5);
+								CheckVal(values, v, iRec.Sex);
+							}
+							break;
+						}
 			}
 		}
 
@@ -317,7 +345,7 @@ namespace GKCore.Stats
 							int fba = GKUtils.GetFirstbornAge(iRec, out iChild);
 							if (fba > 0) {
 								string key;
-								List<int> valsList = null;
+								List<int> valsList;
 
 								switch (mode) {
 									case StatsMode.smAAF_1:
@@ -371,17 +399,17 @@ namespace GKCore.Stats
 				{
 					foreach (KeyValuePair<string, List<int>> kvp in xvals)
 					{
-						List<int> vals_list = kvp.Value;
+						List<int> valsList = kvp.Value;
 
 						int avg;
-						if (vals_list.Count == 0) {
+						if (valsList.Count == 0) {
 							avg = 0;
 						} else {
 							int sum = 0;
-							int num2 = vals_list.Count;
-							for (int i = 0; i < num2; i++) sum += vals_list[i];
+							int num2 = valsList.Count;
+							for (int i = 0; i < num2; i++) sum += valsList[i];
 
-							avg = (int)Math.Round((double)(sum / vals_list.Count));
+							avg = (int)Math.Round((double)(sum / valsList.Count));
 						}
 
 						values.Add(new StatsItem(kvp.Key, avg));

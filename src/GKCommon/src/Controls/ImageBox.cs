@@ -64,9 +64,9 @@ namespace GKCommon.Controls
 	{
 		#region Constants
 
-		private const int MaxZoom = 3500;
-		private const int MinZoom = 1;
-		private const int SelectionDeadZone = 5;
+		private const int MAX_ZOOM = 3500;
+		private const int MIN_ZOOM = 1;
+		private const int SELECTION_DEAD_ZONE = 5;
 
 		#endregion
 
@@ -78,7 +78,7 @@ namespace GKCommon.Controls
 		private bool _autoCenter;
 		private bool _autoPan;
 		private int _dropShadowSize;
-		private System.Drawing.Image _image;
+		private Image _image;
 		private Color _imageBorderColor;
 		private ImageBoxBorderStyle _imageBorderStyle;
 		private InterpolationMode _interpolationMode;
@@ -867,10 +867,10 @@ namespace GKCommon.Controls
 			get { return _zoom; }
 			set
 			{
-				if (value < ImageBox.MinZoom)
-					value = ImageBox.MinZoom;
-				else if (value > ImageBox.MaxZoom)
-					value = ImageBox.MaxZoom;
+				if (value < MIN_ZOOM)
+					value = MIN_ZOOM;
+				else if (value > MAX_ZOOM)
+					value = MAX_ZOOM;
 
 				if (_zoom != value)
 				{
@@ -2138,7 +2138,7 @@ namespace GKCommon.Controls
 		/// <param name="e">
 		///   An <see cref="T:System.EventArgs" /> that contains the event data.
 		/// </param>
-		protected override void OnPaddingChanged(System.EventArgs e)
+		protected override void OnPaddingChanged(EventArgs e)
 		{
 			base.OnPaddingChanged(e);
 			this.AdjustLayout();
@@ -2216,7 +2216,7 @@ namespace GKCommon.Controls
 		/// <param name="e">
 		///   An <see cref="T:System.EventArgs" /> that contains the event data.
 		/// </param>
-		protected override void OnParentChanged(System.EventArgs e)
+		protected override void OnParentChanged(EventArgs e)
 		{
 			base.OnParentChanged(e);
 			this.AdjustLayout();
@@ -2261,7 +2261,7 @@ namespace GKCommon.Controls
 			switch (this.SelectionMode)
 			{
 				case ImageBoxSelectionMode.Zoom:
-					if (this.SelectionRegion.Width > ImageBox.SelectionDeadZone && this.SelectionRegion.Height > ImageBox.SelectionDeadZone)
+					if (this.SelectionRegion.Width > SELECTION_DEAD_ZONE && this.SelectionRegion.Height > SELECTION_DEAD_ZONE)
 					{
 						this.ZoomToRegion(this.SelectionRegion);
 						this.SelectionRegion = RectangleF.Empty;

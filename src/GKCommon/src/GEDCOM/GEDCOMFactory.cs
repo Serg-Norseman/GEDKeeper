@@ -4,7 +4,7 @@ namespace GKCommon.GEDCOM
 {
 	public sealed class GEDCOMFactory
 	{
-		private static GEDCOMFactory fInstance = null;
+		private static GEDCOMFactory fInstance;
 		private readonly Dictionary<string, TagConstructor> fConstructors;
 
 		public static GEDCOMFactory GetInstance()
@@ -30,11 +30,12 @@ namespace GKCommon.GEDCOM
 		{
 			TagConstructor constructor;
 
-			if (fConstructors.TryGetValue(tagName, out constructor)) {
+			if (fConstructors.TryGetValue(tagName, out constructor))
+            {
 				return constructor(owner, parent, tagName, tagValue);
-			} else {
-				return null;
 			}
+
+            return null;
 		}
 	}
 }

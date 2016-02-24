@@ -50,7 +50,7 @@ namespace Com.StellmanGreene.CSVReader
         /// <summary>
         /// This reader will read all of the CSV data
         /// </summary>
-        private BinaryReader reader;
+        private readonly BinaryReader reader;
 
         /// <summary>
         /// The number of rows to scan for types when building a DataTable (0 to scan the whole file)
@@ -66,7 +66,7 @@ namespace Com.StellmanGreene.CSVReader
         public CSVReader(FileInfo csvFileInfo)
         {
             if (csvFileInfo == null)
-                throw new ArgumentNullException("csvFileInfo", "Null FileInfo passed to CSVReader");
+                throw new ArgumentNullException("csvFileInfo", @"Null FileInfo passed to CSVReader");
 
             this.reader = new BinaryReader(File.OpenRead(csvFileInfo.FullName));
         }
@@ -78,9 +78,9 @@ namespace Com.StellmanGreene.CSVReader
         public CSVReader(string csvData)
         {
             if (csvData == null)
-                throw new ArgumentNullException("csvData", "Null string passed to CSVReader");
+                throw new ArgumentNullException("csvData", @"Null string passed to CSVReader");
 
-            this.reader = new BinaryReader(new MemoryStream(System.Text.Encoding.UTF8.GetBytes(csvData)));
+            this.reader = new BinaryReader(new MemoryStream(Encoding.UTF8.GetBytes(csvData)));
         }
 
         /// <summary>
@@ -90,9 +90,9 @@ namespace Com.StellmanGreene.CSVReader
         public CSVReader(TextReader reader)
         {
             if (reader == null)
-                throw new ArgumentNullException("reader", "Null TextReader passed to CSVReader");
+                throw new ArgumentNullException("reader", @"Null TextReader passed to CSVReader");
 
-            this.reader = new BinaryReader(new MemoryStream(System.Text.Encoding.UTF8.GetBytes(reader.ReadToEnd())));
+            this.reader = new BinaryReader(new MemoryStream(Encoding.UTF8.GetBytes(reader.ReadToEnd())));
         }
 
         #endregion
@@ -140,12 +140,9 @@ namespace Com.StellmanGreene.CSVReader
                 return null;
 
             // Check to see if the next value is quoted
-            bool quoted = false;
-            if (currentLine.StartsWith("\""))
-                quoted = true;
+            bool quoted = currentLine.StartsWith("\"");
 
             // Find the end of the next value
-            string nextObjectString = "";
             int i = 0;
             int len = currentLine.Length;
             bool foundEnd = false;
@@ -167,12 +164,10 @@ namespace Com.StellmanGreene.CSVReader
                     throw new FormatException("Invalid CSV format: " + currentLine.Substring(0, i));
                 i++;
             }
-            nextObjectString = currentLine.Substring(0, i).Replace("\"\"", "\"");
 
-            if (i < len)
-                currentLine = currentLine.Substring(i + 1);
-            else
-                currentLine = "";
+            string nextObjectString = currentLine.Substring(0, i).Replace("\"\"", "\"");
+
+            currentLine = (i < len) ? currentLine.Substring(i + 1) : "";
 
             if (quoted)
             {
@@ -198,7 +193,8 @@ namespace Com.StellmanGreene.CSVReader
         {
             // Read the CSV data into rows
             List<List<object>> rows = new List<List<object>>();
-            List<object> readRow = null;
+
+            List<object> readRow;
             while ((readRow = ReadRow()) != null)
                 rows.Add(readRow);
 
@@ -285,15 +281,14 @@ namespace Com.StellmanGreene.CSVReader
 
         public void Dispose()
         {
-            if (reader != null)
+            if (reader == null) return;
+
+            try
             {
-                try
-                {
-                    // Can't call BinaryReader.Dispose due to its protection level
-                    reader.Close();
-                }
-                catch { }
+                // Can't call BinaryReader.Dispose due to its protection level
+                reader.Close();
             }
+            catch { }
         }
 
         #endregion

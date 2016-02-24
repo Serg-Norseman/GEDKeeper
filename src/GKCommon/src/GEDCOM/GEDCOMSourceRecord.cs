@@ -51,8 +51,8 @@ namespace GKCommon.GEDCOM
 		protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
 		{
 			base.CreateObj(owner, parent);
-			this.fRecordType = GEDCOMRecordType.rtSource;
-			this.fName = "SOUR";
+			base.SetRecordType(GEDCOMRecordType.rtSource);
+			base.SetName("SOUR");
 
 			this.fRepositoryCitations = new GEDCOMList<GEDCOMRepositoryCitation>(this);
 		}
@@ -102,7 +102,7 @@ namespace GKCommon.GEDCOM
             GEDCOMSourceRecord targetSource = targetRecord as GEDCOMSourceRecord;
             if (targetSource == null)
             {
-                throw new ArgumentException("argument is null or wrong type", "targetRecord");
+                throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
             }
 
             StringList titl = new StringList();

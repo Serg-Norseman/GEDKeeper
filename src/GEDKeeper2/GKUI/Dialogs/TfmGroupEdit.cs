@@ -42,10 +42,14 @@ namespace GKUI.Dialogs
 			{
 			    this.edName.Text = (this.fGroup == null) ? "" : this.fGroup.GroupName;
 
-                this.fNotesList.DataList = this.fGroup.Notes.GetEnumerator();
-                this.fMediaList.DataList = this.fGroup.MultimediaLinks.GetEnumerator();
+                if (this.fGroup != null)
+                {
+                    this.fNotesList.DataList = this.fGroup.Notes.GetEnumerator();
+                    this.fMediaList.DataList = this.fGroup.MultimediaLinks.GetEnumerator();
+                }
+
                 this.UpdateMembersSheet();
-			}
+            }
 			catch (Exception ex)
 			{
 				this.fBase.Host.LogWrite("TfmGroupEdit.SetGroup(): " + ex.Message);
@@ -91,6 +95,7 @@ namespace GKUI.Dialogs
             try
             {
                 this.fMembersList.ClearItems();
+                if (this.fGroup == null) return;
 
                 foreach (GEDCOMPointer ptrMember in this.fGroup.Members) {
                     GEDCOMIndividualRecord member = ptrMember.Value as GEDCOMIndividualRecord;

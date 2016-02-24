@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GKCore.Stats
+﻿namespace GKCore.Stats
 {
 	/// <summary>
 	/// 

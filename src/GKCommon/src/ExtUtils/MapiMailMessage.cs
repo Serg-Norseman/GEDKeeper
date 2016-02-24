@@ -106,7 +106,7 @@ namespace ExtUtils.MapiMail
 		public void ShowDialog()
 		{
 			// Create the mail message in an STA thread
-			Thread t = new Thread(new ThreadStart(_ShowMail));
+			Thread t = new Thread(new ThreadStart(ShowMail));
 			t.IsBackground = true;
 			t.SetApartmentState(ApartmentState.STA);
 			t.Start();
@@ -119,7 +119,7 @@ namespace ExtUtils.MapiMail
 		/// <summary>
 		/// Sends the mail message.
 		/// </summary>
-		private void _ShowMail(object ignore)
+		private void ShowMail(object ignore)
 		{
             NativeMethods.MapiMessage message = new NativeMethods.MapiMessage();
 
@@ -137,7 +137,7 @@ namespace ExtUtils.MapiMail
 				if (_files.Count > 0)
 				{
 					// Add attachments
-					message.Files = _AllocAttachments(out message.FileCount);
+					message.Files = AllocAttachments(out message.FileCount);
 				}
 
 				// Signal the creating thread (make the remaining code async)
@@ -151,13 +151,13 @@ namespace ExtUtils.MapiMail
 				if (_files.Count > 0)
 				{
 					// Deallocate the files
-					_DeallocFiles(message);
+					DeallocFiles(message);
 				}
 
 				// Check for error
 				if (error != SUCCESS_SUCCESS)
 				{
-					_LogErrorMapi(error);
+					LogErrorMapi(error);
 				}
 			}
 		}
@@ -166,7 +166,7 @@ namespace ExtUtils.MapiMail
 		/// Deallocates the files in a message.
 		/// </summary>
 		/// <param name="message">The message to deallocate the files from.</param>
-        private void _DeallocFiles(NativeMethods.MapiMessage message)
+        private static void DeallocFiles(NativeMethods.MapiMessage message)
 		{
 			if (message.Files != IntPtr.Zero)
 			{
@@ -191,7 +191,7 @@ namespace ExtUtils.MapiMail
 		/// </summary>
 		/// <param name="fileCount"></param>
 		/// <returns></returns>
-		private IntPtr _AllocAttachments(out int fileCount)
+		private IntPtr AllocAttachments(out int fileCount)
 		{
 			fileCount = 0;
 			if (_files == null)
@@ -226,16 +226,16 @@ namespace ExtUtils.MapiMail
 		/// <summary>
 		/// Sends the mail message.
 		/// </summary>
-		private void _ShowMail()
+		private void ShowMail()
 		{
-			_ShowMail(null);
+			ShowMail(null);
 		}
 
 
 		/// <summary>
 		/// Logs any Mapi errors.
 		/// </summary>
-		public string _LogErrorMapi(uint errorCode)
+		public string LogErrorMapi(uint errorCode)
 		{
 			const int MAPI_USER_ABORT = 1;
 			const int MAPI_E_FAILURE = 2;

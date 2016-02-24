@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GKCore.Stats
+﻿namespace GKCore.Stats
 {
 	/// <summary>
 	/// 
@@ -43,7 +41,8 @@ namespace GKCore.Stats
 		smAAF_2,
 		smCertaintyIndex,
 		smBirthByMonth,
+		smDemography,
 		
-		smLast = smBirthByMonth
+		smLast = smDemography
 	}
 }

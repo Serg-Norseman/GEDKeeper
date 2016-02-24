@@ -12,16 +12,7 @@ namespace GKCore
 		public static byte[] CreateRandomSalt(int length)
 		{
 			// Create a buffer
-			byte[] randBytes;
-
-			if (length >= 1)
-			{
-				randBytes = new byte[length];
-			}
-			else
-			{
-				randBytes = new byte[1];
-			}
+			byte[] randBytes = (length >= 1) ? new byte[length] : new byte[1];
 
 			// Create a new RNGCryptoServiceProvider.
 			RNGCryptoServiceProvider rand = new RNGCryptoServiceProvider();
@@ -108,17 +99,17 @@ namespace GKCore
 
 			switch (num) {
 				case 2:
-					I = (uint)(_Unnamed1_Map[data[0]] + (_Unnamed1_Map[data[1]] << 6));
+					I = (uint)(U1_MAP[data[0]] + (U1_MAP[data[1]] << 6));
 					result = MoveL2S(I, 1);
 					break;
 
 				case 3:
-					I = (uint)(_Unnamed1_Map[data[0]] + (_Unnamed1_Map[data[1]] << 6) + (_Unnamed1_Map[data[2]] << 12));
+					I = (uint)(U1_MAP[data[0]] + (U1_MAP[data[1]] << 6) + (U1_MAP[data[2]] << 12));
 					result = MoveL2S(I, 2);
 					break;
 
 				case 4:
-					I = (uint)(_Unnamed1_Map[data[0]] + (_Unnamed1_Map[data[1]] << 6) + (_Unnamed1_Map[data[2]] << 12) + (_Unnamed1_Map[data[3]] << 18));
+					I = (uint)(U1_MAP[data[0]] + (U1_MAP[data[1]] << 6) + (U1_MAP[data[2]] << 12) + (U1_MAP[data[3]] << 18));
 					result = MoveL2S(I, 3);
 					break;
 			}
@@ -135,7 +126,7 @@ namespace GKCore
 			bytes[3] = (byte)((count >= 4) ? source[3] : 0);
 			
 			int dest;
-			dest = (int)((bytes[0] | bytes[1] << 8) | (bytes[2] | bytes[3] << 8) << 16);
+			dest = (bytes[0] | bytes[1] << 8) | (bytes[2] | bytes[3] << 8) << 16;
 			return dest;
 		}
 
@@ -148,19 +139,19 @@ namespace GKCore
 
 			switch (num) {
 				case 1:
-					res[0] = (byte)_Unnamed2_Map[I % 64];
-					res[1] = (byte)_Unnamed2_Map[((uint)I >> 6) % 64];
+					res[0] = (byte)U2_MAP[I % 64];
+					res[1] = (byte)U2_MAP[((uint)I >> 6) % 64];
 					break;
 				case 2:
-					res[0] = (byte)_Unnamed2_Map[I % 64];
-					res[1] = (byte)_Unnamed2_Map[((uint)I >> 6) % 64];
-					res[2] = (byte)_Unnamed2_Map[((uint)I >> 12) % 64];
+					res[0] = (byte)U2_MAP[I % 64];
+					res[1] = (byte)U2_MAP[((uint)I >> 6) % 64];
+					res[2] = (byte)U2_MAP[((uint)I >> 12) % 64];
 					break;
 				case 3:
-					res[0] = (byte)_Unnamed2_Map[I % 64];
-					res[1] = (byte)_Unnamed2_Map[((uint)I >> 6) % 64];
-					res[2] = (byte)_Unnamed2_Map[((uint)I >> 12) % 64];
-					res[3] = (byte)_Unnamed2_Map[((uint)I >> 18) % 64];
+					res[0] = (byte)U2_MAP[I % 64];
+					res[1] = (byte)U2_MAP[((uint)I >> 6) % 64];
+					res[2] = (byte)U2_MAP[((uint)I >> 12) % 64];
+					res[3] = (byte)U2_MAP[((uint)I >> 18) % 64];
 					break;
 			}
 			
@@ -173,13 +164,13 @@ namespace GKCore
 
 			if (!string.IsNullOrEmpty(str))
 			{
-				byte[] SSD = Encoding.ASCII.GetBytes(str);
+				byte[] ssd = Encoding.ASCII.GetBytes(str);
 				byte[] ppd = null;
 				
 				int idx = 0;
-				while (idx < SSD.Length)
+				while (idx < ssd.Length)
 				{
-					byte[] sd = ArrCopy(SSD, idx, 4);
+					byte[] sd = ArrCopy(ssd, idx, 4);
 					ppd = ArrConcat(ppd, Decode(sd));
 					idx += sd.Length;
 				}
@@ -189,8 +180,8 @@ namespace GKCore
 				uint seed = key;
 				for (int i = 0; i < ppd.Length; i++)
 				{
-					tmp[i] = (byte)((uint)tmp[i] ^ seed >> 8);
-					seed = unchecked((ushort)(((uint)ppd[i] + seed) * 28732u + 28446u));
+					tmp[i] = (byte)(tmp[i] ^ seed >> 8);
+					seed = unchecked((ushort)((ppd[i] + seed) * 28732u + 28446u));
 				}
 				res = Encoding.ASCII.GetString(tmp);
 			}
@@ -208,31 +199,31 @@ namespace GKCore
 				byte[] idata = Encoding.ASCII.GetBytes(str);
 				for (int i = 0; i < idata.Length; i++)
 				{
-					idata[i] = (byte)((uint)idata[i] ^ seed >> 8);
-					seed = unchecked((ushort)(((uint)idata[i] + seed) * 28732u + 28446u));
+					idata[i] = (byte)(idata[i] ^ seed >> 8);
+					seed = unchecked((ushort)((idata[i] + seed) * 28732u + 28446u));
 				}
 
-				byte[] res_data = null;
+				byte[] resData = null;
 
 				int idx = 0;
 				while (idx < idata.Length)
 				{
 					byte[] sd = ArrCopy(idata, idx, 3);
-					res_data = ArrConcat(res_data, Encode(sd));
+					resData = ArrConcat(resData, Encode(sd));
 					idx += sd.Length;
 				}
-				res = Encoding.ASCII.GetString(res_data);
+				res = Encoding.ASCII.GetString(resData);
 			}
 
 			return res;
 		}
 
-		private static readonly byte[] _Unnamed1_Map;
-		private static readonly char[] _Unnamed2_Map;
+		private static readonly byte[] U1_MAP;
+		private static readonly char[] U2_MAP;
 
 		static SCCrypt()
 		{
-			_Unnamed1_Map = new byte[]
+			U1_MAP = new byte[]
 			{
 				0,
 				0,
@@ -492,7 +483,7 @@ namespace GKCore
 				0
 			};
 
-			_Unnamed2_Map = new char[]
+			U2_MAP = new char[]
 			{
 				'A',
 				'B',

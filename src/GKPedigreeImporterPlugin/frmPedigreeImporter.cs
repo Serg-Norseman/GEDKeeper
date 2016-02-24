@@ -22,7 +22,7 @@ namespace GKPedigreeImporterPlugin
 			this.fPlugin = fPlugin;
             this.fLangMan = fPlugin.LangMan;
 
-			this.fBase = fPlugin.Host.GetCurrentFile(false);
+			this.fBase = fPlugin.Host.GetCurrentFile();
 			this.fImporter = new Importer(fBase, this.fLangMan, this.lbLog.Items);
             this.fCurrentStage = 0;
             this.fAvailableStage = 0;
@@ -36,7 +36,7 @@ namespace GKPedigreeImporterPlugin
             // SetLang()
             this.Text = fLangMan.LS(ILS.LSID_PluginTitle);
             this.Label3.Text = fLangMan.LS(ILS.LSID_File);
-            this.btnImportFileChoose.Text = fLangMan.LS(ILS.LSID_DlgSelect) + "...";
+            this.btnImportFileChoose.Text = fLangMan.LS(ILS.LSID_DlgSelect) + @"...";
         }
 
 		private void btnImportFileChoose_Click(object sender, EventArgs e)

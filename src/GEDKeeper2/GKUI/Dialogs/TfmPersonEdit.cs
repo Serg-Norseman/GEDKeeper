@@ -479,12 +479,12 @@ namespace GKUI.Dialogs
             switch (eArgs.Action)
             {
             	case RecordAction.raAdd:
-            		result = (this.fBase.ModifyFamily(ref family, FamilyTarget.ftSpouse, this.fPerson));
+            		result = (this.fBase.ModifyFamily(ref family, FamilyTarget.Spouse, this.fPerson));
             		if (result) eArgs.ItemData = family;
             		break;
 
             	case RecordAction.raEdit:
-            		result = (this.fBase.ModifyFamily(ref family, FamilyTarget.ftNone, null));
+            		result = (this.fBase.ModifyFamily(ref family, FamilyTarget.None, null));
             		break;
 
             	case RecordAction.raDelete:
@@ -608,8 +608,8 @@ namespace GKUI.Dialogs
 
 		private void SetTitle()
 		{
-			this.Text = LangMan.LS(LSID.LSID_Person) + " \"" + this.edSurname.Text + " " + this.edName.Text +
-				" " + this.edPatronymic.Text + "\" [" + this.fPerson.GetXRefNum() + "]";
+            this.Text = string.Format("{0} \"{1} {2} {3}\" [{4}]", LangMan.LS(LSID.LSID_Person), this.edSurname.Text, this.edName.Text, 
+                this.edPatronymic.Text, this.fPerson.GetXRefNum());
 		}
 
 		private void edSurname_TextChanged(object sender, EventArgs e)
@@ -717,7 +717,7 @@ namespace GKUI.Dialogs
 		private void btnParentsEdit_Click(object sender, EventArgs e)
 		{
 			GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, false, null);
-			if (family != null && this.fBase.ModifyFamily(ref family, FamilyTarget.ftNone, null))
+			if (family != null && this.fBase.ModifyFamily(ref family, FamilyTarget.None, null))
 			{
 				this.UpdateControls();
 			}

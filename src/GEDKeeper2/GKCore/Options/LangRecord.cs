@@ -1,9 +1,16 @@
 namespace GKCore.Options
 {
-    public class LangRecord
+    public sealed class LangRecord
     {
-        public ushort Code;
-        public string Name;
-        public string FileName;
+        public readonly ushort Code;
+        public readonly string Name;
+        public readonly string FileName;
+
+        public LangRecord(ushort code, string name, string fileName)
+        {
+            this.Code = code;
+            this.Name = name;
+            this.FileName = fileName;
+        }
     }
 }

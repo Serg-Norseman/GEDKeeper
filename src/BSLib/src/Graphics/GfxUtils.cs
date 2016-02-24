@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Drawing2D;
 
 namespace BSLib.Graphics
@@ -114,17 +113,17 @@ namespace BSLib.Graphics
 			return p;
 		}
 
-        public static void DrawPathWithFuzzyLine(System.Drawing.Graphics gfx, GraphicsPath path, Color base_color, int max_opacity, int width, int opaque_width)
+        public static void DrawPathWithFuzzyLine(System.Drawing.Graphics gfx, GraphicsPath path, Color baseColor, int maxOpacity, int width, int opaqueWidth)
 		{
             if (gfx == null || path == null) return;
 
-            int num_steps = width - opaque_width + 1;       // Number of pens we will use.
-			float delta = (float)max_opacity / num_steps / num_steps;   // Change in alpha between pens.
-			float alpha = delta;                            // Initial alpha.
+            int numSteps = width - opaqueWidth + 1; // Number of pens we will use
+			float delta = (float)maxOpacity / numSteps / numSteps; // Change in alpha between pens
+			float alpha = delta; // Initial alpha
 
-			for (int thickness = width; thickness >= opaque_width; thickness--)
+			for (int thickness = width; thickness >= opaqueWidth; thickness--)
 			{
-				Color color = Color.FromArgb((int)alpha, base_color.R, base_color.G, base_color.B);
+				Color color = Color.FromArgb((int)alpha, baseColor.R, baseColor.G, baseColor.B);
 
 				using (Pen pen = new Pen(color, thickness))
 				{

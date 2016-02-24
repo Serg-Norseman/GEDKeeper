@@ -2,11 +2,11 @@
 {
 	public static class CRC32
 	{
-		private static readonly uint[] Ccitt32Table;
+		private static readonly uint[] CCITT32_TABLE;
 
         static CRC32()
         {
-            Ccitt32Table = new uint[256];
+            CCITT32_TABLE = new uint[256];
             BuildCRCTable();
         }
 
@@ -32,7 +32,7 @@
 						j += 1u;
 					}
 					while (j != 0u);
-					Ccitt32Table[(int)i] = val;
+					CCITT32_TABLE[(int)i] = val;
 					i += 1u;
 				}
 				while (i != 256u);
@@ -47,7 +47,7 @@
                 for (int i = 0; i < str.Length; i++)
                 {
                     byte c = (byte)str[i];
-                    crc = ((crc >> 8 & 16777215u) ^ Ccitt32Table[(int)((crc ^ (uint)c) & 255u)]);
+                    crc = ((crc >> 8 & 16777215u) ^ CCITT32_TABLE[(int)((crc ^ (uint)c) & 255u)]);
                 }
             }
 			return crc;

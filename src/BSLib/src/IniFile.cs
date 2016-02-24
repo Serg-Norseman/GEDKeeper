@@ -64,7 +64,7 @@ namespace BSLib
 
 		public bool ReadBool(string section, string ident, bool Default)
 		{
-			return this.ReadInteger(section, ident, (int)(Default ? 1 : 0)) > 0;
+			return this.ReadInteger(section, ident, (Default ? 1 : 0)) > 0;
 		}
 
 		public void WriteBool(string section, string ident, bool value)

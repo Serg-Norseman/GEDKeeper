@@ -63,11 +63,11 @@ namespace GKCore.Export
 			catch (Exception ex)
 			{
 				this.fBase.Host.LogWrite("PDFExporter.Generate(): " + ex.Message);
-				this.fBase.Host.LogWrite("PDFExporter.Generate(): " + ex.StackTrace.ToString());
+				this.fBase.Host.LogWrite("PDFExporter.Generate(): " + ex.StackTrace);
 			}
 
 			if (!success) {
-				MessageBox.Show("Генерация не удалась");
+				MessageBox.Show(LangMan.LS(LSID.LSID_GenerationFailed));
 			} else {
 				if (show) this.ShowResult();
 			}

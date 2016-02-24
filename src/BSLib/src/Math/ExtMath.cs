@@ -59,7 +59,7 @@ namespace BSLib
 		{
 			int result = numbers[first];
 			for (int i = first + 1; i < numbers.Length; i++) {
-				result = ExtMath.gcd(result, numbers[i]);
+				result = gcd(result, numbers[i]);
 			}
 			return result;
 		}
@@ -72,7 +72,7 @@ namespace BSLib
 		 */
 		public static int lcm(int a, int b)
 		{
-			return a * (b / ExtMath.gcd(a, b));
+			return a * (b / gcd(a, b));
 		}
 
 		/**
@@ -84,7 +84,7 @@ namespace BSLib
 		{
 			int result = ia[0];
 			for (int i = 1; i < ia.Length; i++) {
-				result = ExtMath.lcm(result, ia[i]);
+				result = lcm(result, ia[i]);
 			}
 
 			return result;

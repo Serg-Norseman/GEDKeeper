@@ -10,7 +10,7 @@ namespace GKCommon.GEDCOM
 		protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
 		{
 			base.CreateObj(owner, parent);
-			this.fName = "STAT";
+			this.SetName("STAT");
 		}
 
 		public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)

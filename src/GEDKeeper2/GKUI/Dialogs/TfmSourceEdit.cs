@@ -134,7 +134,7 @@ namespace GKUI.Dialogs
             	case RecordAction.raJump:
             		if (cit != null) {
             			this.AcceptChanges();
-            			this.Base.SelectRecordByXRef((cit.Value as GEDCOMRepositoryRecord).XRef);
+                        this.Base.SelectRecordByXRef(cit.Value.XRef);
             			base.Close();
             		}
             		break;
@@ -174,7 +174,7 @@ namespace GKUI.Dialogs
 
 		private void EditShortTitle_TextChanged(object sender, EventArgs e)
 		{
-			this.Text = LangMan.LS(LSID.LSID_Source) + " \"" + this.EditShortTitle.Text + "\"";
+            this.Text = string.Format("{0} \"{1}\"", LangMan.LS(LSID.LSID_Source), this.EditShortTitle.Text);
 		}
 	}
 }

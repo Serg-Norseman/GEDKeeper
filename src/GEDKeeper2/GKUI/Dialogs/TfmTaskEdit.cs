@@ -57,21 +57,18 @@ namespace GKUI.Dialogs
 
 					switch (gt) {
 						case GKGoalType.gtIndividual:
-                            string st = ((this.fTempRec == null) ? "" : (this.fTempRec as GEDCOMIndividualRecord).GetNameString(true, false));
-							this.EditGoal.Text = st;
+                        case GKGoalType.gtFamily:
+                        case GKGoalType.gtSource:
+                            this.EditGoal.Text = GKUtils.GetGoalStr(gt, this.fTempRec);
 							break;
-						case GKGoalType.gtFamily:
-							this.EditGoal.Text = GKUtils.GetFamilyString(this.fTempRec as GEDCOMFamilyRecord);
-							break;
-						case GKGoalType.gtSource:
-							this.EditGoal.Text = (this.fTempRec as GEDCOMSourceRecord).FiledByEntry;
-							break;
-						case GKGoalType.gtOther:
+
+                        case GKGoalType.gtOther:
 							this.EditGoal.Text = this.fTask.Goal;
 							break;
 					}
 				}
-				this.cbGoalType_SelectedIndexChanged(null, null);
+
+                this.cbGoalType_SelectedIndexChanged(null, null);
 				
 				this.fNotesList.DataList = this.fTask.Notes.GetEnumerator();
 			}
@@ -116,17 +113,20 @@ namespace GKUI.Dialogs
 			switch (gt) {
 				case GKGoalType.gtIndividual:
 					this.fTempRec = this.Base.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
-					this.EditGoal.Text = ((this.fTempRec == null) ? "" : (this.fTempRec as GEDCOMIndividualRecord).GetNameString(true, false));
+                    this.EditGoal.Text = GKUtils.GetGoalStr(gt, this.fTempRec);
 					break;
-				case GKGoalType.gtFamily:
+
+                case GKGoalType.gtFamily:
 					this.fTempRec = this.Base.SelectRecord(GEDCOMRecordType.rtFamily, new object[0]);
-					this.EditGoal.Text = GKUtils.GetFamilyString(this.fTempRec as GEDCOMFamilyRecord);
+                    this.EditGoal.Text = GKUtils.GetGoalStr(gt, this.fTempRec);
 					break;
-				case GKGoalType.gtSource:
+
+                case GKGoalType.gtSource:
 					this.fTempRec = this.Base.SelectRecord(GEDCOMRecordType.rtSource, new object[0]);
-					this.EditGoal.Text = (this.fTempRec as GEDCOMSourceRecord).FiledByEntry;
+                    this.EditGoal.Text = GKUtils.GetGoalStr(gt, this.fTempRec);
 					break;
-				case GKGoalType.gtOther:
+
+                case GKGoalType.gtOther:
 					break;
 			}
 		}

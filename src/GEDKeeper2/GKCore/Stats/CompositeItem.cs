@@ -1,5 +1,4 @@
-﻿using System;
-using GKCommon.GEDCOM;
+﻿using GKCommon.GEDCOM;
 
 namespace GKCore.Stats
 {

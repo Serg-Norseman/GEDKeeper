@@ -58,12 +58,11 @@ namespace GKUI.Controls
 			this.Controls.Add(this.btnPrev);
 			this.Controls.Add(this.btnNext);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25f, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 204);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+			this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
 			this.KeyPreview = true;
 			this.KeyDown += this.SearchPanel_KeyDown;
 			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-			this.Text = "TreeSearch";
+			this.StartPosition = FormStartPosition.Manual;
 			this.TopMost = true;
 
 			this.ResumeLayout(false);
@@ -131,9 +130,10 @@ namespace GKUI.Controls
 
 		public void SetLang()
 		{
-			//this.txtSearchPattern.Text = LangMan.LS(LSID.LSID_NoMatchesFound);
-			//this.btnPrev.Text = LangMan.LS(LSID.LSID_FindPrevious);
-			//this.btnNext.Text = LangMan.LS(LSID.LSID_FindNext);
+		    this.Text = LangMan.LS(LSID.LSID_Search);
+		    //this.txtSearchPattern.Text = LangMan.LS(LSID.LSID_NoMatchesFound);
+		    //this.btnPrev.Text = LangMan.LS(LSID.LSID_FindPrevious);
+		    //this.btnNext.Text = LangMan.LS(LSID.LSID_FindNext);
 		}
 	}
 }

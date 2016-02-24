@@ -134,10 +134,6 @@ namespace GKUI.Controls
 						this.fListMan.WidthChanged(e.ColumnIndex, this.Columns[e.ColumnIndex].Width);
 					}
 					break;
-					
-				default:
-					// dummy
-					break;
 			}
 		}
 

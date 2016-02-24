@@ -136,8 +136,8 @@ namespace ExtUtils
 		/// and keeping all the info explicit simplifies the code.
 		/// </summary>
 		private int m_StackSize; // = 0; // Number of pending runs on stack
-		private int[] m_RunBase;
-		private int[] m_RunLength;
+		private readonly int[] m_RunBase;
+		private readonly int[] m_RunLength;
 
 		/// <summary>
         /// Prevents a default instance of the <see cref="ListTimSort&lt;T&gt;"/> class from being created.
@@ -975,10 +975,7 @@ namespace ExtUtils
 				newSize |= newSize >> 16;
 				newSize++;
 
-				if (newSize < 0) // Not bloody likely!
-					newSize = minCapacity;
-				else
-					newSize = Math.Min(newSize, m_Array.Count >> 1);
+				newSize = (newSize < 0) ? minCapacity : Math.Min(newSize, m_Array.Count >> 1);
 
 				m_MergeBuffer = new T[newSize];
 			}

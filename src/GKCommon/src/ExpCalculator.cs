@@ -40,9 +40,9 @@ namespace GKCommon
 
 		private enum CallbackType
 		{
-			ctGetValue,
-			ctSetValue,
-			ctFunction
+			GetValue,
+			SetValue,
+			Function
 		}
 
 		private enum ExpToken
@@ -166,7 +166,7 @@ namespace GKCommon
 
 			if (name == "round")
 			{
-				val = (double)((long)Math.Round(val));
+				val = (long)Math.Round(val);
 			}
 			else if (name == "trunc")
 			{
@@ -236,7 +236,7 @@ namespace GKCommon
 			bool result = true;
 
 			switch (ctype) {
-				case CallbackType.ctGetValue:
+				case CallbackType.GetValue:
 					if (name == "pi") {
 						val = PI;
 					} else if (name == "e") {
@@ -249,11 +249,11 @@ namespace GKCommon
 					}
 					break;
 
-				case CallbackType.ctSetValue:
+				case CallbackType.SetValue:
 					this.SetVar(name, val);
 					break;
 
-				case CallbackType.ctFunction:
+				case CallbackType.Function:
 					result = DefaultFunction(name, ref val);
 					break;
 			}
@@ -266,38 +266,32 @@ namespace GKCommon
 		private bool DoGetVar(string varName, ref double varValue)
 		{
 			GetVarEventHandler eventHandler = (GetVarEventHandler)base.Events[ExpCalculator.EventGetVar];
-			if (eventHandler == null) return false;
-
-			return eventHandler(this, varName, ref varValue);
+			return (eventHandler != null) && eventHandler(this, varName, ref varValue);
 		}
 
 		private bool ConvertNumber(int first, int last, ushort numBase)
 		{
 			this.fvalue = 0.0;
 
-			if (first < last)
+			while (first < last)
 			{
-				do
-				{
-					char ch = this.fExpression[first];
-					byte c = (byte)((int)ch - 48);
-					if (c > 9)
-					{
-						c -= 7;
+			    char ch = this.fExpression[first];
+			    byte c = (byte)((int)ch - 48);
+			    if (c > 9)
+			    {
+			        c -= 7;
 
-						if (c > 15) {
-							c -= 32;
-						}
-					}
+			        if (c > 15) {
+			            c -= 32;
+			        }
+			    }
 
-					if (c >= numBase) {
-						break;
-					}
+			    if (c >= numBase) {
+			        break;
+			    }
 
-					this.fvalue = (this.fvalue * numBase + c);
-					first++;
-				}
-				while (first < last);
+			    this.fvalue = (this.fvalue * numBase + c);
+			    first++;
 			}
 
 			return (first == last);
@@ -448,7 +442,7 @@ namespace GKCommon
 											}
 											this.fvalue = (this.fvalue + frac * PI / 180.0 / 60.0 / 60.0);
 										}
-										this.fvalue = ExpCalculator.fmod(this.fvalue, 6.2831853071795862);
+										this.fvalue = fmod(this.fvalue, 6.2831853071795862);
 										return;
 									}
 
@@ -714,10 +708,10 @@ namespace GKCommon
 						    case ExpToken.tkLBRACE:
 						        this.lex();
 						        if (st == "if") {
-						            this.exprIf(ref R);
+                                    this.exprIf(out R);
 						        } else {
 						            this.expr6(ref R);
-						            this.DefaultCallback(CallbackType.ctFunction, st, ref R);
+						            this.DefaultCallback(CallbackType.Function, st, ref R);
 						        }
 						        this.checkToken(ExpToken.tkRBRACE);
 						        this.lex();
@@ -726,11 +720,11 @@ namespace GKCommon
                             case ExpToken.tkASSIGN:
 						        this.lex();
 						        this.expr6(ref R);
-						        this.DefaultCallback(CallbackType.ctSetValue, st, ref R);
+						        this.DefaultCallback(CallbackType.SetValue, st, ref R);
 						        break;
 
                             default:
-						        this.DefaultCallback(CallbackType.ctGetValue, st, ref R);
+						        this.DefaultCallback(CallbackType.GetValue, st, ref R);
 						        break;
 						}
 					}
@@ -742,7 +736,7 @@ namespace GKCommon
 			}
 		}
 
-		private void exprIf(ref double R)
+		private void exprIf(out double R)
 		{
 			double resCond = 0.0d, resThen = 0.0d, resElse = 0.0d;
 
@@ -786,7 +780,7 @@ namespace GKCommon
 						break;
 
 					case ExpToken.tkNOT:
-						R = ExpCalculator.bool2float(trunc(R) <= 0);
+						R = bool2float(trunc(R) <= 0);
 						break;
 
 					case ExpToken.tkSUB:
@@ -868,27 +862,27 @@ namespace GKCommon
 
 				switch (oldt) {
 					case ExpToken.tkLT:
-						R = ExpCalculator.bool2float(R < V);
+						R = bool2float(R < V);
 						break;
 
 					case ExpToken.tkLE:
-						R = ExpCalculator.bool2float(R <= V);
+						R = bool2float(R <= V);
 						break;
 
 					case ExpToken.tkEQ:
-						R = ExpCalculator.bool2float(R == V);
+						R = bool2float(R == V);
 						break;
 
 					case ExpToken.tkNE:
-						R = ExpCalculator.bool2float(R != V);
+						R = bool2float(R != V);
 						break;
 
 					case ExpToken.tkGE:
-						R = ExpCalculator.bool2float(R >= V);
+						R = bool2float(R >= V);
 						break;
 
 					case ExpToken.tkGT:
-						R = ExpCalculator.bool2float(R > V);
+						R = bool2float(R > V);
 						break;
 				}
 			}

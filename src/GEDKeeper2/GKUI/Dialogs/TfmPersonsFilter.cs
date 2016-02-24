@@ -40,7 +40,7 @@ namespace GKUI.Dialogs
 			this.RadioButton5.Text = LangMan.LS(LSID.LSID_All);
 			this.RadioButton6.Text = LangMan.LS(LSID.LSID_OnlyMans);
 			this.RadioButton7.Text = LangMan.LS(LSID.LSID_OnlyWomans);
-			this.Label2.Text = LangMan.LS(LSID.LSID_AliveBefore) + ":";
+			this.Label2.Text = LangMan.LS(LSID.LSID_AliveBefore) + ':';
 			this.Label1.Text = LangMan.LS(LSID.LSID_NameMask);
 			this.Label3.Text = LangMan.LS(LSID.LSID_PlaceMask);
 			this.Label6.Text = LangMan.LS(LSID.LSID_EventMask);
@@ -136,7 +136,7 @@ namespace GKUI.Dialogs
 			this.cbGroup.Items.Insert(0, new GKComboItem(LangMan.LS(LSID.LSID_SrcAll), null));
 			this.cbGroup.Items.Insert(1, new GKComboItem(LangMan.LS(LSID.LSID_SrcNot), null));
 			this.cbGroup.Items.Insert(2, new GKComboItem(LangMan.LS(LSID.LSID_SrcAny), null));
-			if (iFilter.FilterGroupMode != FilterGroupMode.gmSelected) {
+			if (iFilter.FilterGroupMode != FilterGroupMode.Selected) {
 				this.cbGroup.SelectedIndex = (int)iFilter.FilterGroupMode;
 			} else {
 			    GEDCOMGroupRecord groupRec = tree.XRefIndex_Find(iFilter.GroupRef) as GEDCOMGroupRecord;
@@ -155,7 +155,7 @@ namespace GKUI.Dialogs
 			this.cbSource.Items.Insert(0, new GKComboItem(LangMan.LS(LSID.LSID_SrcAll), null));
 			this.cbSource.Items.Insert(1, new GKComboItem(LangMan.LS(LSID.LSID_SrcNot), null));
 			this.cbSource.Items.Insert(2, new GKComboItem(LangMan.LS(LSID.LSID_SrcAny), null));
-			if (iFilter.SourceMode != FilterGroupMode.gmSelected) {
+			if (iFilter.SourceMode != FilterGroupMode.Selected) {
 				this.cbSource.SelectedIndex = (int)iFilter.SourceMode;
 			} else {
 			    GEDCOMSourceRecord sourceRec = tree.XRefIndex_Find(iFilter.SourceRef) as GEDCOMSourceRecord;
@@ -216,13 +216,13 @@ namespace GKUI.Dialogs
 			if (this.RadioButton7.Checked) sexSel = 2;
 			iFilter.Sex = (GEDCOMSex)sexSel;
 
-			if (this.edName.Text == "") this.edName.Text = "*";
+			if (this.edName.Text == "") this.edName.Text = @"*";
 			iFilter.Name = this.edName.Text;
 
-			if (this.cbResidence.Text == "") this.cbResidence.Text = "*";
+			if (this.cbResidence.Text == "") this.cbResidence.Text = @"*";
 			iFilter.Residence = this.cbResidence.Text;
 
-			if (this.cbEventVal.Text == "") this.cbEventVal.Text = "*";
+			if (this.cbEventVal.Text == "") this.cbEventVal.Text = @"*";
 			iFilter.EventVal = this.cbEventVal.Text;
 
 			int selectedIndex = this.cbGroup.SelectedIndex;
@@ -230,13 +230,13 @@ namespace GKUI.Dialogs
 				iFilter.FilterGroupMode = (FilterGroupMode)this.cbGroup.SelectedIndex;
 				iFilter.GroupRef = "";
 			} else {
-			    GKComboItem item = this.cbGroup.Items[this.cbGroup.SelectedIndex] as GKComboItem;
+                GKComboItem item = (GKComboItem)this.cbGroup.Items[this.cbGroup.SelectedIndex];
 				GEDCOMRecord rec = item.Data as GEDCOMRecord;
 				if (rec != null) {
-					iFilter.FilterGroupMode = FilterGroupMode.gmSelected;
+					iFilter.FilterGroupMode = FilterGroupMode.Selected;
 					iFilter.GroupRef = rec.XRef;
 				} else {
-					iFilter.FilterGroupMode = FilterGroupMode.gmAll;
+					iFilter.FilterGroupMode = FilterGroupMode.All;
 					iFilter.GroupRef = "";
 				}
 			}
@@ -246,13 +246,13 @@ namespace GKUI.Dialogs
 				iFilter.SourceMode = (FilterGroupMode)this.cbSource.SelectedIndex;
 				iFilter.SourceRef = "";
 			} else {
-			    GKComboItem item = this.cbSource.Items[this.cbSource.SelectedIndex] as GKComboItem;
+                GKComboItem item = (GKComboItem)this.cbSource.Items[this.cbSource.SelectedIndex];
 				GEDCOMRecord rec = item.Data as GEDCOMRecord;
 				if (rec != null) {
-					iFilter.SourceMode = FilterGroupMode.gmSelected;
+					iFilter.SourceMode = FilterGroupMode.Selected;
 					iFilter.SourceRef = rec.XRef;
 				} else {
-					iFilter.SourceMode = FilterGroupMode.gmAll;
+					iFilter.SourceMode = FilterGroupMode.All;
 					iFilter.SourceRef = "";
 				}
 			}

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
-
+using System.Windows.Forms;
 using GKCore.Interfaces;
 
 [assembly: AssemblyTitle("GKTreeVizPlugin")]
@@ -32,14 +32,18 @@ namespace GKTreeVizPlugin
 
         public void Execute()
         {
-            //frmP2Main frm = new frmP2Main(this);
-            //frm.ShowDialog();
-            
-        	IBaseWindow curBase = this.fHost.GetCurrentFile(true);
-			using (TreeVizViewer viewer = new TreeVizViewer(curBase, 2/*decimal.ToInt32(this.edMinGens.Value)*/))
-			{
-				viewer.ShowDialog();
-			}
+        	using (frmTVPSettings frm = new frmTVPSettings(this))
+        	{
+        		if (frm.ShowDialog() == DialogResult.OK)
+        		{
+        			IBaseWindow curBase = this.fHost.GetCurrentFile(true);
+
+        			using (TreeVizViewer viewer = new TreeVizViewer(curBase, frm.MinGens))
+        			{
+        				viewer.ShowDialog();
+        			}
+        		}
+        	}
         }
 
         public void OnHostClosing(ref bool cancelClosing) {}

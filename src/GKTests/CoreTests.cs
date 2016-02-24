@@ -12,32 +12,32 @@ namespace GKTests
 	[TestFixture]
 	public class CoreTests
 	{
-		BaseContext _context;
+		BaseContext fContext;
 		
 		[TestFixtureSetUp]
 		public void SetUp()
 		{
-			Console.WriteLine(">>> START CoreTests");
+			Console.WriteLine(@">>> START CoreTests");
 
-			_context = TestStubs.CreateContext();
-			GEDCOMTree tree = _context.Tree;
+			fContext = TestStubs.CreateContext();
+			GEDCOMTree tree = fContext.Tree;
 			
-			TestStubs.FillContext(_context);
+			TestStubs.FillContext(fContext);
 		}
 		
 		[TestFixtureTearDown]
 		public void TearDown()
 		{
-			Console.WriteLine(">>> END CoreTests");
+			Console.WriteLine(@">>> END CoreTests");
 		}
 		
 		[Test]
 		public void Context_Tests()
 		{
-			GEDCOMIndividualRecord iRec = _context.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+			GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
 			Assert.IsNotNull(iRec);
 
-			Assert.AreEqual(false, _context.IsChildless(iRec));
+			Assert.AreEqual(false, fContext.IsChildless(iRec));
 
 			/*GEDCOMSourceRecord srcRec = _context.FindSource("test source");
 			Assert.IsNull(srcRec);
@@ -50,7 +50,7 @@ namespace GKTests
 		[Test]
 		public void Utils_Tests()
 		{
-			GEDCOMIndividualRecord iRec = _context.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+			GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
 
 			// individual record tests
 			Assert.IsNotNull(iRec);
@@ -147,17 +147,17 @@ namespace GKTests
 			ds = GKUtils.GEDCOMEventToDateStr(null, DateFormat.dfYYYY, false);
 			Assert.AreEqual("", ds);
 			
-			evt = _context.CreateEventEx(iRec, "FACT", "17 JAN 2013", "Ivanovo");
+			evt = fContext.CreateEventEx(iRec, "FACT", "17 JAN 2013", "Ivanovo");
 			Assert.IsNotNull(evt);
 			GedcomTests.GEDCOMCustomEventTest(evt, "17.01.2013");
 			
 			string dst = GKUtils.CompactDate("__.__.2013");
 			Assert.AreEqual("2013", dst);
 			
-			GEDCOMFamilyRecord fRec = _context.Tree.CreateFamily();
+			GEDCOMFamilyRecord fRec = fContext.Tree.CreateFamily();
 			Assert.IsNotNull(fRec);
 			
-			evt = _context.CreateEventEx(fRec, "MARR", "28 DEC 2013", "Ivanovo");
+			evt = fContext.CreateEventEx(fRec, "MARR", "28 DEC 2013", "Ivanovo");
 			Assert.IsNotNull(evt);
 			GedcomTests.GEDCOMCustomEventTest(evt, "28.12.2013");
 			
@@ -195,29 +195,29 @@ namespace GKTests
 			Assert.AreEqual(0.0f, GKUtils.SafeDiv(9.0f, 0.0f));
 			
 			// access tests
-			Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnNone, ShieldState.ssNone));
-			Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnConfidential, ShieldState.ssNone));
-			Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnPrivacy, ShieldState.ssNone));
+			Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnNone, ShieldState.None));
+			Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnConfidential, ShieldState.None));
+			Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnPrivacy, ShieldState.None));
 
-			Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnNone, ShieldState.ssMiddle));
-			Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnConfidential, ShieldState.ssMiddle));
-			Assert.IsFalse(GKUtils.IsRecordAccess(GEDCOMRestriction.rnPrivacy, ShieldState.ssMiddle));
+			Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnNone, ShieldState.Middle));
+			Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnConfidential, ShieldState.Middle));
+			Assert.IsFalse(GKUtils.IsRecordAccess(GEDCOMRestriction.rnPrivacy, ShieldState.Middle));
 
-			Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnNone, ShieldState.ssMaximum));
-			Assert.IsFalse(GKUtils.IsRecordAccess(GEDCOMRestriction.rnConfidential, ShieldState.ssMaximum));
-			Assert.IsFalse(GKUtils.IsRecordAccess(GEDCOMRestriction.rnPrivacy, ShieldState.ssMaximum));
+			Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnNone, ShieldState.Maximum));
+			Assert.IsFalse(GKUtils.IsRecordAccess(GEDCOMRestriction.rnConfidential, ShieldState.Maximum));
+			Assert.IsFalse(GKUtils.IsRecordAccess(GEDCOMRestriction.rnPrivacy, ShieldState.Maximum));
 			
 			st1 = GKUtils.HyperLink("@X001@", "test", 0);
 			Assert.AreEqual("~^" + "@X001@" + ":" + "test" + "~", st1);
 		}
 		
-		private const int rep_count = 1000; // 1000000; // for profile tests
+		private const int REP_COUNT = 1000; // 1000000; // for profile tests
 
-		private void GEDCOMListTests(GEDCOMIndividualRecord iRec)
+		private static void GEDCOMListTests(GEDCOMIndividualRecord iRec)
 		{
 			//GEDCOMListTest_Hot(iRec);
 			
-			for (int k = 0; k < rep_count; k++) {
+			for (int k = 0; k < REP_COUNT; k++) {
 				GEDCOMListTest11(iRec);
 				GEDCOMListTest12(iRec);
 				GEDCOMListTest21(iRec);
@@ -239,14 +239,14 @@ namespace GKTests
 			}
 		}*/
 
-		private void GEDCOMListTest11(GEDCOMIndividualRecord iRec)
+		private static void GEDCOMListTest11(GEDCOMIndividualRecord iRec)
 		{
 			foreach (GEDCOMCustomEvent evt1 in iRec.Events) {
 				evt1.GetHashCode();
 			}
 		}
 
-		private void GEDCOMListTest12(GEDCOMIndividualRecord iRec)
+		private static void GEDCOMListTest12(GEDCOMIndividualRecord iRec)
 		{
 			IGEDCOMListEnumerator enumer = iRec.Events.GetEnumerator();
 			while (enumer.MoveNext()) {
@@ -255,7 +255,7 @@ namespace GKTests
 			}
 		}
 
-		private void GEDCOMListTest21(GEDCOMIndividualRecord iRec)
+		private static void GEDCOMListTest21(GEDCOMIndividualRecord iRec)
 		{
 			for (int i = 0; i < iRec.Events.Count; i++) {
 				GEDCOMCustomEvent evt1 = iRec.Events[i];
@@ -263,7 +263,7 @@ namespace GKTests
 			}
 		}
 
-		private void GEDCOMListTest22(GEDCOMIndividualRecord iRec)
+		private static void GEDCOMListTest22(GEDCOMIndividualRecord iRec)
 		{
 			for (int i = 0, num = iRec.Events.Count; i < num; i++) {
 				GEDCOMCustomEvent evt1 = iRec.Events[i];
@@ -271,7 +271,7 @@ namespace GKTests
 			}
 		}
 
-		private void GEDCOMListTest23(GEDCOMIndividualRecord iRec)
+		private static void GEDCOMListTest23(GEDCOMIndividualRecord iRec)
 		{
 			GEDCOMList<GEDCOMCustomEvent> events = iRec.Events;
 			for (int i = 0, num = events.Count; i < num; i++) {
@@ -280,7 +280,7 @@ namespace GKTests
 			}
 		}
 
-		private void GEDCOMListTest3(GEDCOMIndividualRecord iRec)
+		private static void GEDCOMListTest3(GEDCOMIndividualRecord iRec)
 		{
 			iRec.Events.ForEach(x => { x.GetHashCode(); });
 		}
@@ -343,7 +343,7 @@ namespace GKTests
 			Assert.AreEqual(1, snms.Length);
 			Assert.AreEqual("Бельский", snms[0]);
 
-			///
+			//
 
 			GEDCOMSex sx = GKUtils.GetSex("Мария", "Петровна", false);
 			Assert.AreEqual(GEDCOMSex.svFemale, sx);

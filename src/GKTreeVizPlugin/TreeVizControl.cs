@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Timers;
 using System.Windows.Forms;
 
 using ArborGVT;
@@ -17,6 +18,7 @@ namespace GKTreeVizPlugin
 {
 	public sealed class TreeVizControl : OpenGLControl
 	{
+		private const float BASE_SCALE = 10.0f;
 		private const bool EXCLUDE_CHILDLESS = true;	// исключение бездетных ветвей древа
 		private const float MAGIC_SCALE = 4;			// коэффициент масштабирования при переходе от Arbor к 3D
 		private const float DEG2RAD = 3.14159F / 180;
@@ -25,56 +27,14 @@ namespace GKTreeVizPlugin
 		private const uint OBJ_Z = 3;
 		private const uint OBJ_NODE = 100;
 
-		private const float BaseScale = 10.0f;
+        private const byte ACCUM_DEPTH = 0; // OpenGL's Accumulation Buffer Depth, In Bits Per Pixel.
+        private const byte STENCIL_DEPTH = 0; // OpenGL's Stencil Buffer Depth, In Bits Per Pixel.
+        private const byte Z_DEPTH = 16; // OpenGL's Z-Buffer Depth, In Bits Per Pixel.
+        private const byte COLOR_DEPTH = 16; // The Current Color Depth, In Bits Per Pixel.
+        private const double NEAR_CLIPPING_PLANE = 0.1f; // GLU's Distance From The Viewer To The Near Clipping Plane (Always Positive).
+        private const double FAR_CLIPPING_PLANE = 1000.0f; // GLU's Distance From The Viewer To The Far Clipping Plane (Always Positive).
+        private const double FOV_Y = 45.0f; // GLU's Field Of View Angle, In Degrees, In The Y Direction.
 		
-
-		private enum TVPersonType
-        {
-			ptStem, 
-			ptSpouse,
-			ptPatriarch,
-		}
-
-		private class TVPerson
-		{
-			private static int NextIdx = 1;
-			private static readonly Random random = new Random();
-			
-			public readonly int Idx;
-			public TVPerson Parent;
-			public GEDCOMIndividualRecord IRec;
-			public PointF Pt;
-			public int BirthYear, DeathYear;
-			public float BaseRadius;
-
-			public TVPersonType Type;
-
-			//public bool IsPatriarch;
-			public int DescGenerations;
-			public float GenSlice;
-			public int BeautySpouses, BeautyChilds;
-			
-			public List<TVPerson> Spouses { get; private set; }
-			public List<TVPerson> Childs { get; private set; }
-			
-			public TVPerson()
-			{
-				this.Idx = NextIdx++;
-				this.Spouses = new List<TVPerson>();
-				this.Childs = new List<TVPerson>();
-				this.BeautySpouses = random.Next(0, 360);
-				this.BeautyChilds = random.Next(0, 360);
-			}
-		}
-
-        private const byte accumDepth = 0; // OpenGL's Accumulation Buffer Depth, In Bits Per Pixel.
-        private const byte stencilDepth = 0; // OpenGL's Stencil Buffer Depth, In Bits Per Pixel.
-        private const byte zDepth = 16; // OpenGL's Z-Buffer Depth, In Bits Per Pixel.
-        private const byte colorDepth = 16; // The Current Color Depth, In Bits Per Pixel.
-        private const double nearClippingPlane = 0.1f; // GLU's Distance From The Viewer To The Near Clipping Plane (Always Positive).
-        private const double farClippingPlane = 100.0f; // GLU's Distance From The Viewer To The Far Clipping Plane (Always Positive).
-        private const double fovY = 45.0f; // GLU's Field Of View Angle, In Degrees, In The Y Direction.
-        
         // unused
 		//private float[] LightAmbient = {0.5f, 0.5f, 0.5f, 1.0f};
 		//private float[] LightDiffuse = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -101,8 +61,11 @@ namespace GKTreeVizPlugin
 		private ArborSystem fSys;
 		private readonly List<TVPerson> fPersons;
 		private readonly Dictionary<string, TVPerson> fPersonsIndex;
+		private readonly List<TVStem> fStems;
+		private int fMaxYear;
 		private int fMinYear;
 		private float fYearSize;
+		private bool fDebug;
 
 		// animation
 		private System.Timers.Timer fAnimTimer;
@@ -111,7 +74,17 @@ namespace GKTreeVizPlugin
 		private uint fTick;
 
 
-		public bool Debug { get; set; }
+		public int CurYear
+		{
+			get { return this.fCurYear; }
+		}
+
+		public bool Debug
+		{
+			get { return this.fDebug; } 
+			set { this.fDebug = value; }
+		}
+
 		public bool TimeStop { get; set; }
 		public string SelectedObject { get; private set; }
 		
@@ -140,7 +113,8 @@ namespace GKTreeVizPlugin
             this.Dock = DockStyle.Fill;
 
 			GL.glShadeModel(GL.GL_SMOOTH);
-			GL.glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
+			//GL.glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
+			GL.glClearColor(0.25f, 0.25f, 0.25f, 0.5f);
 			GL.glClearDepth(1.0f);
 			GL.glEnable(GL.GL_DEPTH_TEST);
 			GL.glDepthFunc(GL.GL_LEQUAL);
@@ -158,8 +132,9 @@ namespace GKTreeVizPlugin
 
 			this.fPersons = new List<TVPerson>();
 			this.fPersonsIndex = new Dictionary<string, TVPerson>();
+			this.fStems = new List<TVStem>();
 			
-			this.Debug = true;
+			this.fDebug = true;
 		}
 
 		protected override void Dispose(bool disposing)
@@ -169,115 +144,12 @@ namespace GKTreeVizPlugin
 			}
 			base.Dispose(disposing);
 		}
-
+		
 		#region Control routines
 
-		public void Redraw()
+		private uint retrieveObjectId(int x, int y)
 		{
-			OnPaint(null);
-		}
-
-		public override void glDraw()
-		{
-			try
-			{
-				GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
-				GL.glLoadIdentity();
-
-				GL.glInitNames();
-
-				GL.glTranslatef(0.0f, 0.0f, this.z);
-				GL.glRotatef(this.xrot, 1.0f, 0.0f, 0.0f);
-				GL.glRotatef(this.yrot, 0.0f, 1.0f, 0.0f);
-				GL.glRotatef(this.zrot, 0.0f, 0.0f, 1.0f);
-
-				/*glBindTexture(GL_TEXTURE_2D, texture[filter]);
-				glBegin(GL_QUADS);
-				// Front Face
-				glNormal3f(0.0f, 0.0f, 1.0f);
-				glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f,  1.0f);
-				glTexCoord2f(1.0f, 0.0f); glVertex3f( 1.0f, -1.0f,  1.0f);
-				glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f,  1.0f,  1.0f);
-				glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f,  1.0f,  1.0f);
-				// Back Face
-				glNormal3f(0.0f, 0.0f, -1.0f);
-				glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f);
-				glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f,  1.0f, -1.0f);
-				glTexCoord2f(0.0f, 1.0f); glVertex3f( 1.0f,  1.0f, -1.0f);
-				glTexCoord2f(0.0f, 0.0f); glVertex3f( 1.0f, -1.0f, -1.0f);
-				// Top Face
-				glNormal3f(0.0f, 1.0f, 0.0f);
-				glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f,  1.0f, -1.0f);
-				glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f,  1.0f,  1.0f);
-				glTexCoord2f(1.0f, 0.0f); glVertex3f( 1.0f,  1.0f,  1.0f);
-				glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f,  1.0f, -1.0f);
-				// Bottom Face
-				glNormal3f(0.0f, -1.0f, 0.0f);
-				glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f, -1.0f, -1.0f);
-				glTexCoord2f(0.0f, 1.0f); glVertex3f( 1.0f, -1.0f, -1.0f);
-				glTexCoord2f(0.0f, 0.0f); glVertex3f( 1.0f, -1.0f,  1.0f);
-				glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f,  1.0f);
-				// Right face
-				glNormal3f(1.0f, 0.0f, 0.0f);
-				glTexCoord2f(1.0f, 0.0f); glVertex3f( 1.0f, -1.0f, -1.0f);
-				glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f,  1.0f, -1.0f);
-				glTexCoord2f(0.0f, 1.0f); glVertex3f( 1.0f,  1.0f,  1.0f);
-				glTexCoord2f(0.0f, 0.0f); glVertex3f( 1.0f, -1.0f,  1.0f);
-				// Left Face
-				glNormal3f(-1.0f, 0.0f, 0.0f);
-				glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f);
-				glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f,  1.0f);
-				glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f,  1.0f,  1.0f);
-				glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f,  1.0f, -1.0f);
-				glEnd();*/
-				
-				this.DrawScene();
-				
-				//base.SwapBuffer();
-			}
-			catch (Exception ex)
-			{
-				Logger.LogWrite("TreeVizControl.glDraw(): " + ex.Message);
-			}
-		}
-		
-		protected override OpenGLContext CreateContext()
-		{
-			ControlGLContext context = new ControlGLContext(this);
-			DisplayType displayType = new DisplayType(colorDepth, zDepth, stencilDepth, accumDepth);
-			context.Create(displayType, null);
-			return context;
-		}
-
-		protected override void OnSizeChanged(EventArgs e)
-		{
-			Size sz = this.Size;
-
-			if (sz.Width != 0 && sz.Height != 0)
-			{
-				this.fHeight = sz.Height;
-				this.fWidth = sz.Width;
-				
-				if (this.fHeight == 0) {
-					this.fHeight = 1;
-				}
-
-				GL.glViewport(0, 0, this.fWidth, this.fHeight);
-				GL.glMatrixMode(GL.GL_PROJECTION);
-				GL.glLoadIdentity();
-				
-				GL.gluPerspective(fovY, (float)this.fWidth / (float)this.fHeight, nearClippingPlane, farClippingPlane);
-
-				GL.glMatrixMode(GL.GL_MODELVIEW);
-				GL.glLoadIdentity();
-			}
-
-			base.OnSizeChanged(e);
-		}
-
-		private uint RetrieveObjectID(int x, int y)
-		{
-			int[] viewportCoords = {0, 0, 0, 0};    // Массив для хранения экранных координат
+			/*int[] viewportCoords = {0, 0, 0, 0};    // Массив для хранения экранных координат
 
 			// Переменная для хранения ID обьектов, на которые мы кликнули.
 			// Мы делаем массив в 32 элемента, т.к. OpenGL также сохраняет другую
@@ -321,7 +193,7 @@ namespace GKTreeVizPlugin
 
 			// Далее просто вызываем нашу нормальную функцию gluPerspective, точно так же, как
 			// делали при инициализации.
-			GL.gluPerspective(fovY, (float) fWidth / (float) fHeight, nearClippingPlane, farClippingPlane);
+			GL.gluPerspective(FOV_Y, (float) fWidth / fHeight, NEAR_CLIPPING_PLANE, FAR_CLIPPING_PLANE);
 
 			GL.glMatrixMode(GL.GL_MODELVIEW); // Возвращаемся в матрицу GL_MODELVIEW
 
@@ -387,21 +259,9 @@ namespace GKTreeVizPlugin
 				}
 
 				return selectedObject;
-			}
+			}*/
 
 			return 0;
-		}
-
-		private void Screenshot()
-		{
-			try {
-				Image image = Context.ToImage();
-				image.Save(@"d:\screenshot.jpg", ImageFormat.Jpeg);
-				image.Dispose();
-			}
-			catch(Exception e) {
-				MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-			}
 		}
 
 		protected override bool IsInputKey(Keys key)
@@ -422,7 +282,7 @@ namespace GKTreeVizPlugin
 		{
 			switch (e.KeyCode) {
 				case Keys.F5: 
-					this.Screenshot();
+					this.screenshot();
 					break;
 
 				case Keys.PageDown:
@@ -438,7 +298,7 @@ namespace GKTreeVizPlugin
 					break;
 
 				case Keys.D:
-					/*if (e.Control)*/ this.Debug = !this.Debug;
+					/*if (e.Control)*/ this.fDebug = !this.fDebug;
 					break;
 					
 				case Keys.T:
@@ -487,9 +347,9 @@ namespace GKTreeVizPlugin
 					zrot += 0.001f * dx;
 				}
 			} else {
-				uint objectID = this.RetrieveObjectID(e.X, e.Y);
+				uint objectId = this.retrieveObjectId(e.X, e.Y);
 
-				switch (objectID) {
+				switch (objectId) {
 					case OBJ_X:
 						SelectedObject = "X-axis";
 						break;
@@ -500,10 +360,10 @@ namespace GKTreeVizPlugin
 						SelectedObject = "Z-axis";
 						break;
 					default:
-						if (objectID >= OBJ_NODE) {
-							int id = (int)(objectID - OBJ_NODE);
+						if (objectId >= OBJ_NODE) {
+							int id = (int)(objectId - OBJ_NODE);
 
-							TVPerson prs = this.FindPersonByIdx(id);
+							TVPerson prs = this.findPersonByIdx(id);
 							if (prs != null) {
 								SelectedObject = "["+prs.IRec.XRef+"] " + prs.IRec.GetNameString(true, false)+
 									", " + prs.BirthYear.ToString() + " - " + prs.DeathYear.ToString();
@@ -523,6 +383,40 @@ namespace GKTreeVizPlugin
 			if (e.Delta != 0) {
 				z += 0.01f * e.Delta;
 			}
+		}
+
+		protected override void OnSizeChanged(EventArgs e)
+		{
+			Size sz = this.Size;
+
+			if (sz.Width != 0 && sz.Height != 0)
+			{
+				this.fHeight = sz.Height;
+				this.fWidth = sz.Width;
+				
+				if (this.fHeight == 0) {
+					this.fHeight = 1;
+				}
+
+				GL.glViewport(0, 0, this.fWidth, this.fHeight);
+				GL.glMatrixMode(GL.GL_PROJECTION);
+				GL.glLoadIdentity();
+				
+				GL.gluPerspective(FOV_Y, (float)this.fWidth / this.fHeight, NEAR_CLIPPING_PLANE, FAR_CLIPPING_PLANE);
+
+				GL.glMatrixMode(GL.GL_MODELVIEW);
+				GL.glLoadIdentity();
+			}
+
+			base.OnSizeChanged(e);
+		}
+
+		protected override OpenGLContext CreateContext()
+		{
+			ControlGLContext context = new ControlGLContext(this);
+			DisplayType displayType = new DisplayType(COLOR_DEPTH, Z_DEPTH, STENCIL_DEPTH, ACCUM_DEPTH);
+			context.Create(displayType, null);
+			return context;
 		}
 
 		#endregion
@@ -576,13 +470,71 @@ namespace GKTreeVizPlugin
 					bitmap.Dispose();
 				}
 			}
+
+
+				glBindTexture(GL_TEXTURE_2D, texture[filter]);
+				glBegin(GL_QUADS);
+				// Front Face
+				glNormal3f(0.0f, 0.0f, 1.0f);
+				glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f,  1.0f);
+				glTexCoord2f(1.0f, 0.0f); glVertex3f( 1.0f, -1.0f,  1.0f);
+				glTexCoord2f(1.0f, 1.0f); glVertex3f( 1.0f,  1.0f,  1.0f);
+				glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f,  1.0f,  1.0f);
+				// Left Face
+				glNormal3f(-1.0f, 0.0f, 0.0f);
+				glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f);
+				glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f,  1.0f);
+				glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f,  1.0f,  1.0f);
+				glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f,  1.0f, -1.0f);
+				glEnd();
 		}*/
 
 		#endregion
 
 		#region TreeViz
 
-        public void CreateArborGraph(IBaseWindow aBase, int minGens, bool loneSuppress)
+		public override void glDraw()
+		{
+			try
+			{
+				GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
+				GL.glLoadIdentity();
+
+				GL.glInitNames();
+
+				GL.glTranslatef(0.0f, 0.0f, this.z);
+				GL.glRotatef(this.xrot, 1.0f, 0.0f, 0.0f);
+				GL.glRotatef(this.yrot, 0.0f, 1.0f, 0.0f);
+				GL.glRotatef(this.zrot, 0.0f, 0.0f, 1.0f);
+				
+				drawAxis();
+				
+				// FIXME: отметки веков выводятся от начала персонализированной шкалы времени,
+				// нужно переделать на вывод по хронологическим векам 
+				for (int i = 0; i <= 5; i++) {
+					GL.glPushMatrix();
+					GL.glTranslatef(0, 0, i * 100 * this.fYearSize);
+					GL.glColor3f(0.9F, 0.1F, 0.1F);
+					drawCircle(0.1F);
+					GL.glPopMatrix();
+				}
+
+				this.drawArborSystem();
+
+				int num = fPersons.Count;
+				for (int i = 0; i < num; i++)
+				{
+					TVPerson prs = fPersons[i];
+					this.drawPerson(prs);
+				}
+			}
+			catch (Exception ex)
+			{
+				Logger.LogWrite("TreeVizControl.glDraw(): " + ex.Message);
+			}
+		}
+
+        public void createArborGraph(IBaseWindow aBase, int minGens, bool loneSuppress)
         {
         	this.fBase = aBase;
 
@@ -590,28 +542,26 @@ namespace GKTreeVizPlugin
         	{
         		fSys = new ArborSystem(1000, 1000, 0.1, null); //(10000, 1000, 0.1, this);
         		fSys.setScreenSize(50, 50);
-        		fSys.OnStop += Arbor_OnStop;
+        		fSys.OnStop += OnArborStop;
 
-        		using (ExtList<PatriarchObj> patList = new ExtList<PatriarchObj>(false)) {
-        			aBase.Context.GetPatriarchsLinks(patList, minGens, false, loneSuppress);
-
+        		using (ExtList<PatriarchObj> patList = aBase.Context.GetPatriarchsLinks(minGens, false, loneSuppress))
+        		{
         			int num = patList.Count;
         			for (int i = 0; i < num; i++) {
-        				PatriarchObj p_obj = patList[i] as PatriarchObj;
+        				PatriarchObj pObj = patList[i];
 
-        				if ((!loneSuppress) || (loneSuppress && p_obj.HasLinks)) {
-        					ArborNode node = fSys.addNode(p_obj.IRec.XRef);
-        					node.Data = p_obj;
+        				if ((!loneSuppress) || (loneSuppress && pObj.HasLinks)) {
+        					ArborNode node = fSys.addNode(pObj.IRec.XRef);
+        					node.Data = pObj;
         				}
         			}
 
-        			for (int i = 0; i < num; i++) {
-        				PatriarchObj pat1 = patList[i] as PatriarchObj;
+        			for (int i = 0; i < num; i++)
+        			{
+        				PatriarchObj pat1 = patList[i];
 
-        				int num2 = pat1.Links.Count;
-        				for (int k = 0; k < num2; k++) {
-        					PatriarchObj pat2 = pat1.Links[k];
-
+        				foreach (PatriarchObj pat2 in pat1.Links)
+        				{
         					fSys.addEdge(pat1.IRec.XRef, pat2.IRec.XRef);
         				}
         			}
@@ -623,32 +573,32 @@ namespace GKTreeVizPlugin
         	}
         	catch (Exception ex)
         	{
-        		Logger.LogWrite("TreeVizControl.CreateArborGraph(): " + ex.Message);
+        		Logger.LogWrite("TreeVizControl.createArborGraph(): " + ex.Message);
         	}
         }
 
-		public void Arbor_OnStop(object sender, EventArgs eArgs)
+		public void OnArborStop(object sender, EventArgs eArgs)
 		{
 			this.FreeRotate = false;
-			
+
 			this.fMinYear = 0;
 
 			try
 			{
 				// загрузить из ArborSystem точки и сигнатуры патриархов
-				int num = fSys.Nodes.Count;
-				for (int i = 0; i < num; i++)
+				foreach (ArborNode node in fSys.Nodes)
 				{
-					ArborNode node = fSys.Nodes[i];
+					PatriarchObj patObj = (PatriarchObj)node.Data;
+					
 					GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)fBase.Tree.XRefIndex_Find(node.Sign);
-					int descGens = (node.Data as PatriarchObj).DescGenerations;
+                    int descGens = patObj.DescGenerations;
 
-					TVPerson patr = this.PreparePerson(null, iRec);
+					TVPerson patr = this.preparePerson(null, iRec, TVPersonType.Patriarch);
 					patr.Pt = new PointF((float)node.Pt.X * MAGIC_SCALE, (float)node.Pt.Y * MAGIC_SCALE);
 					patr.DescGenerations = descGens;
-					//patr.IsPatriarch = true;
-					patr.Type = TVPersonType.ptPatriarch;
 					patr.BaseRadius = 100;
+
+					this.processPersonStem(patr, null, TVPersonType.Patriarch);
 
 					if (this.fMinYear == 0) {
 						this.fMinYear = patr.BirthYear;
@@ -658,39 +608,46 @@ namespace GKTreeVizPlugin
 				}
 
 				// подготовить радиусы основания патриархов
-				int num2 = fSys.Edges.Count;
-				for (int i = 0; i < num2; i++) {
-					ArborEdge edge = fSys.Edges[i];
+				foreach (ArborEdge edge in fSys.Edges)
+				{
+					TVPerson srcPers = this.findPersonByXRef(edge.Source.Sign);
+					TVPerson tgtPers = this.findPersonByXRef(edge.Target.Sign);
 
-					TVPerson srcPers = this.FindPersonByXRef(edge.Source.Sign);
-					TVPerson tgtPers = this.FindPersonByXRef(edge.Target.Sign);
-
-					float rad = (float)Dist(srcPers.Pt, tgtPers.Pt) * 3/7;
+					float rad = (float)dist(srcPers.Pt, tgtPers.Pt) * 3/7;
 
 					if (srcPers.BaseRadius > rad) srcPers.BaseRadius = rad;
 					if (tgtPers.BaseRadius > rad) tgtPers.BaseRadius = rad;
 				}
 
 				// подготовить диапазон лет
-				int curYear = DateTime.Now.Year;
-				this.fYearSize = BaseScale / (curYear - fMinYear);
+				this.fMaxYear = DateTime.Now.Year;
+				this.fYearSize = BASE_SCALE / (this.fMaxYear - this.fMinYear);
 				this.fTick = 0;
 				this.fCurYear = this.fMinYear;
 
-				// обработать дерево
-				for (int i = 0, count = fPersons.Count; i < count; i++) {
-					this.PrepareDescendants(fPersons[i]);
+				// обработать дерево, базовое количество - только патриархи
+				int count = fPersons.Count;
+				for (int i = 0; i < count; i++)
+				{
+					TVPerson prs = fPersons[i];
+					this.prepareDescendants(prs);
+				}
+
+				for (int i = 0; i < this.fStems.Count; i++)
+				{
+					TVStem stem = fStems[i];
+					stem.update();
 				}
 
 				this.startTimer();
 			}
 			catch (Exception ex)
 			{
-				Logger.LogWrite("TreeVizControl.Arbor_OnStop(): " + ex.Message);
+				Logger.LogWrite("TreeVizControl.onArborStop(): " + ex.Message);
 			}
 		}
 
-		private void PrepareDescendants(TVPerson person)
+		private void prepareDescendants(TVPerson person)
 		{
 			if (person == null) return;
 
@@ -701,291 +658,231 @@ namespace GKTreeVizPlugin
 
 				GEDCOMIndividualRecord iRec = person.IRec;
 
-				if (iRec.SpouseToFamilyLinks.Count > 0)
+				foreach (GEDCOMSpouseToFamilyLink spLink in iRec.SpouseToFamilyLinks)
 				{
-					PointF[] pts = GetCirclePoints(person.BeautySpouses, person.Pt, iRec.SpouseToFamilyLinks.Count, person.GenSlice / 3);
+					GEDCOMFamilyRecord famRec = spLink.Family;
 
-					int num2 = iRec.SpouseToFamilyLinks.Count;
-					for (int k = 0; k < num2; k++)
-					{
-						GEDCOMFamilyRecord famRec = iRec.SpouseToFamilyLinks[k].Family;
+					bool alreadyPrepared = false;
+					
+					// обработать супруга текущей персоны
+					GEDCOMIndividualRecord spouse = famRec.GetSpouseBy(iRec);
+					if (spouse != null) {
+						TVPerson sps = this.preparePerson(null, spouse, TVPersonType.Spouse);
+						if (sps == null) {
+							// это может возникать только при обработке патриархов более поздних, чем те, что уже обработаны, 
+							// т.е. если сначала был уже обработан патриарх, родившийся в 1710 году, у него были обработаны дети,
+							// и у кого-то из них был супруг/супруга - являющиеся патриархом новой поздней ветви!
+							Logger.LogWrite("TreeVizControl.prepareDescendants(): an unexpected collision");
+							alreadyPrepared = true;
+						} else {
+							this.processPersonStem(sps, person, TVPersonType.Spouse);
 
-						// обработать супруга текущей персоны
-						GEDCOMIndividualRecord spouse = famRec.GetSpouseBy(iRec);
-						if (spouse != null) {
-							TVPerson sps = this.PreparePerson(null, spouse);
-							sps.Pt = pts[k];
 							person.Spouses.Add(sps);
 						}
+					}
 
+					if (!alreadyPrepared)
+					{
 						// обработать детей текущей семьи
-						int num3 = famRec.Childrens.Count;
-						for (int m = 0; m < num3; m++)
+						foreach (GEDCOMPointer childPtr in famRec.Childrens)
 						{
-							GEDCOMIndividualRecord child = famRec.Childrens[m].Value as GEDCOMIndividualRecord;
+							GEDCOMIndividualRecord child = (GEDCOMIndividualRecord)childPtr.Value;
 
 							// исключить бездетные ветви
 							if (EXCLUDE_CHILDLESS && (this.fBase.Context.IsChildless(child) || child.GetTotalChildsCount() < 1)) continue;
 
-							TVPerson chp = this.PreparePerson(person, child);
-							person.Childs.Add(chp);
+							TVPerson chp = this.preparePerson(person, child, TVPersonType.Child);
+							if (chp == null) {
+								// this is someone spouse and already prepared, intersection of branches
+								Logger.LogWrite("TreeVizControl.prepareDescendants(): intersection");
+							} else {
+								chp.BaseRadius = (float)((person.BaseRadius / 2) * 0.95);
+								chp.DescGenerations = person.DescGenerations - 1;
+
+								this.processPersonStem(chp, person, TVPersonType.Child);
+
+								person.Childs.Add(chp);
+								
+								this.prepareDescendants(chp);
+							}
 						}
 					}
+				}
+			}
+			catch (Exception ex)
+			{
+				Logger.LogWrite("TreeVizControl.prepareDescendants(): " + ex.Message);
+			}
+		}
 
-					pts = GetCirclePoints(person.BeautyChilds, person.Pt, person.Childs.Count, person.BaseRadius / 2);
+		private void recalcDescendants(TVPerson person)
+		{
+			try
+			{
+				// пересчитать координаты супругов, т.к. координаты данной персоны могли измениться
+				// "genSlice / 3" - it's radius of spouses
+				PointF[] pts = getCirclePoints(person.BeautySpouses, person.Pt, person.Spouses.Count, person.GenSlice / 3);
+				for (int i = 0, count = person.Spouses.Count; i < count; i++)
+				{
+					TVPerson spp = person.Spouses[i];
+					if (this.isVisible(spp)) {
+						spp.IsVisible = true;
+						person.Spouses[i].Pt = pts[i];
+					}
+				}
 
-					int num = person.Childs.Count;
-					for (int i = 0; i < num; i++)
+				// пересчет координат видимых детей
+				pts = getCirclePoints(person.BeautyChilds, person.Pt, person.Childs.Count, person.BaseRadius / 2);
+				for (int i = 0, count = person.Childs.Count; i < count; i++)
+				{
+					TVPerson chp = person.Childs[i];
+
+					if (!chp.IsVisible && this.isVisible(chp)) {
+						chp.IsVisible = true;
+					}
+
+					if (chp.IsVisible)
 					{
-						TVPerson chp = person.Childs[i];
 						chp.Pt = pts[i];
 						chp.BaseRadius = (float)((person.BaseRadius / 2) * 0.95);
 						chp.DescGenerations = person.DescGenerations - 1;
 						
-						this.PrepareDescendants(chp);
+						this.recalcDescendants(chp);
 					}
 				}
 			}
 			catch (Exception ex)
 			{
-				Logger.LogWrite("TreeVizControl.PrepareDescendants(): " + ex.Message);
+				Logger.LogWrite("TreeVizControl.recalcDescendants.2(): " + ex.Message);
 			}
 		}
 
-		private void RecalcDescendants(TVPerson person)
+		private void recalcDescendants()
 		{
-			// пересчитать координаты супругов, т.к. координаты данной персоны могли измениться
-			PointF[] pts = GetCirclePoints(person.BeautySpouses, person.Pt, person.Spouses.Count, person.GenSlice / 3);
-			for (int i = 0, count = person.Spouses.Count; i < count; i++)
+			try
 			{
-				person.Spouses[i].Pt = pts[i];
-			}
-
-			// счетчик детей, видимых на текущем шаге 
-			int visCount = 0;
-			for (int i = 0, count = person.Childs.Count; i < count; i++)
-			{
-				TVPerson chp = person.Childs[i];
-				if (this.IsVisible(chp)) {
-					visCount++;
+				foreach (TVPerson prs in fPersons)
+				{
+					if (prs.Type == TVPersonType.Patriarch && this.isVisible(prs))
+					{
+						prs.IsVisible = true;
+						this.recalcDescendants(prs);
+					}
 				}
 			}
-			
-			// пересчет координат видимых детей
-			pts = GetCirclePoints(person.BeautyChilds, person.Pt, visCount, person.BaseRadius / 2);
-			for (int i = 0, count = person.Childs.Count; i < count; i++)
+			catch (Exception ex)
 			{
-				TVPerson chp = person.Childs[i];
+				Logger.LogWrite("TreeVizControl.recalcDescendants.1(): " + ex.Message);
+			}
+		}
 
-				if (this.IsVisible(chp)) {
-					chp.Pt = pts[i];
-					chp.BaseRadius = (float)((person.BaseRadius / 2) * 0.95);
-					chp.DescGenerations = person.DescGenerations - 1;
+		private void processPersonStem(TVPerson person, TVPerson relative, TVPersonType type)
+		{
+			try
+			{
+				if (person == null) return;
+
+				if (person.Stem == null && (type == TVPersonType.Patriarch || type == TVPersonType.Child))
+				{
+					person.Stem = new TVStem();
+					this.fStems.Add(person.Stem);
+				}
+
+				switch (type)
+				{
+					case TVPersonType.Spouse:
+						relative.Stem.addSpouse(person);
+						break;
+
+					case TVPersonType.Child:
+						relative.Stem.addChild(person);
+						break;
+
+					case TVPersonType.Patriarch:
+						break;
+				}
+			}
+			catch (Exception ex)
+			{
+				Logger.LogWrite("TreeVizControl.processPersonStem(): " + ex.Message);
+			}
+		}
+
+		private TVPerson preparePerson(TVPerson parent, GEDCOMIndividualRecord iRec, TVPersonType type)
+		{
+			try
+			{
+				TVPerson result;
+
+				if (this.fPersonsIndex.TryGetValue(iRec.XRef, out result))
+				{
+					// персона уже есть в общем индексе; значит это чей-то супруг в другом древе, обработанном ранее
+
+					if (parent == null)
+					{
+						// parent == null, если это чей-то супруг без родителей или патриарх
+						// если это супруг, и уже есть в индексе, значит эта персона была жената/замужем за представителями
+						// двух разных родов, обрабатываемых через их патриархов?						
+					}
+					else
+					{
+						result.Parent = parent;
+						PointF prevPt = result.Stem.Pt;
+						PointF parentPt = parent.Pt;
+						PointF midpoint = getLineMidpoint(prevPt.X, prevPt.Y, parentPt.X, parentPt.Y);
+						result.Stem.Pt = midpoint;
+						result.Stem.update();
+					}
+
+					return null;
+				}
+				else
+				{
+					result = new TVPerson(parent, iRec);
+					result.Type = type;
+
+					this.fPersons.Add(result);
+					this.fPersonsIndex.Add(iRec.XRef, result);
+
+					AbsDate bYear = fBase.Context.FindBirthYear(iRec);
+					AbsDate dYear = fBase.Context.FindDeathYear(iRec);
 					
-					this.RecalcDescendants(chp);
-				}
-			}
-		}
+					result.BirthYear = bYear.Year;
+					result.DeathYear = dYear.Year;
 
-		private void RecalcDescendants()
-		{
-			return;
-			
-			for (int i = 0, count = fPersons.Count; i < count; i++)
-			{
-				TVPerson prs = fPersons[i];
-				
-				if (prs.Type == TVPersonType.ptPatriarch) {
-					this.RecalcDescendants(prs);
-				}
-			}
-		}
-		
-		// beauty - случайное смещение для "красоты", град
-		private static PointF[] GetCirclePoints(int beauty, PointF center, int count, float radius)
-		{
- 			PointF[] result = new PointF[count];
-
- 			if (count > 0)
- 			{
- 				// размер секции круга, град
- 				float degSection = 360 / count;
- 				
- 				for (int i = 0; i < count; i++)
- 				{
- 					float degInRad = (beauty + i * degSection) * DEG2RAD;
- 					float dx = (float)Math.Cos(degInRad) * radius;
- 					float dy = (float)Math.Sin(degInRad) * radius;
-
- 					result[i] = new PointF(center.X + dx, center.Y + dy);
- 				}
- 			}
-
- 			return result;
-		}
-
-		/*private TVPerson TryPreparePerson(TVPerson parent, GEDCOMIndividualRecord iRec)
-		{
-			TVPerson result;
-			
-			if (this.fPersonsIndex.TryGetValue(iRec.XRef, result))
-			{
-				// добавляемая персона была уже ранее обработана при проходе от другого патриарха
-				result.Parent = parent;
-				// FIXME: добавить логику
-				
-				return null; // для того, чтобы вызывающий метод прекратил обработку
-			} 
-			else 
-			{
-				// добавляемая персона ранее не обрабатывалась
-				return this.PreparePerson(parent, iRec);
-			}
-		}*/
-		
-		private TVPerson PreparePerson(TVPerson parent, GEDCOMIndividualRecord iRec)
-		{
-			TVPerson result;
-			
-			// FIXME: доработать
-			//if (this.fPersonsIndex.TryGetValue(iRec.XRef, out result)) {
-			//	return result;
-			//} else {
-				result = new TVPerson();
-				result.Parent = parent;
-				result.IRec = iRec;
-
-				this.fPersons.Add(result);
-				this.fPersonsIndex.Add(iRec.XRef, result);
-
-				AbsDate bYear = fBase.Context.FindBirthYear(iRec);
-				AbsDate dYear = fBase.Context.FindDeathYear(iRec);
-				
-				result.BirthYear = bYear.Year;
-				result.DeathYear = dYear.Year;
-
-				// FIXME переделать на предварительно статистически определенную продолжительность жизни.
-				if (result.DeathYear == 0) result.DeathYear = result.BirthYear + 75;
-			//}
-
-			return result;
-		}
-
-		private static double Dist(PointF pt1, PointF pt2)
-		{
-			double dx = pt2.X - pt1.X;
-			double dy = pt2.Y - pt1.Y;
-			return Math.Sqrt(dx * dx + dy * dy);
-		}
-		
-		private TVPerson FindPersonByXRef(string xref)
-		{
-			for (int i = 0, count = fPersons.Count; i < count; i++)
-			{
-				TVPerson prs = fPersons[i];
-
-				if (prs.IRec.XRef == xref) {
-					return prs;
-				}
-			}
-
-			return null;
-		}
-		
-		private TVPerson FindPersonByIdx(int idx)
-		{
-			for (int i = 0, count = fPersons.Count; i < count; i++)
-			{
-				TVPerson prs = fPersons[i];
-
-				if (prs.Idx == idx) {
-					return prs;
-				}
-			}
-
-			return null;
-		}
-
-		private void TV_Update(object sender, System.Timers.ElapsedEventArgs e)
-		{
-			if (this.fBusy) return;
-			this.fBusy = true;
-			try
-			{
-				//this.Redraw();
-				
-				if (!this.FreeRotate) {
-					this.zrot -= 0.3f;
+					// FIXME переделать на предварительно статистически определенную продолжительность жизни.
+					if (result.DeathYear == 0) result.DeathYear = result.BirthYear + 75;
 				}
 
-				this.fTick += 1;
-
-				if (!this.TimeStop && (this.fTick % 5 == 0)) {
-					this.fCurYear += 1;
-					this.RecalcDescendants();
-				}
+				return result;
 			}
 			catch (Exception ex)
 			{
-				Logger.LogWrite("TreeVizControl.TV_Update(): " + ex.Message);
-			}
-			this.fBusy = false;
-		}
-
-		private void DrawScene()
-		{
-			try
-			{
-				DrawAxis();
-				
-				// FIXME: отметки выводятся от начала персонализированной шкалы времени,
-				// нужно переделать на вывод по хронологическим векам
-				// отметки веков
-				for (int i = 0; i <= 5; i++) {
-					GL.glPushMatrix();
-					GL.glTranslatef(0, 0, i * 100 * this.fYearSize);
-					GL.glColor3f(0.9F, 0.1F, 0.1F);
-					DrawCircle(0.1F);
-					GL.glPopMatrix();
-				}
-
-				this.DrawArborSystem();
-
-				for (int i = 0, count = fPersons.Count; i < count; i++) {
-					TVPerson prs = fPersons[i];
-					this.DrawPerson(prs);
-				}
-			}
-			catch (Exception ex)
-			{
-				Logger.LogWrite("TreeVizControl.DrawScene(): " + ex.Message);
+				Logger.LogWrite("TreeVizControl.preparePerson(): " + ex.Message);
+				return null;
 			}
 		}
 
-		private void DrawArborSystem()
+		private void drawArborSystem()
 		{
 			if (this.fSys == null) return;
-			if (!this.Debug) return;
+			if (!this.fDebug) return;
 
 			try
 			{
-				int num = fSys.Nodes.Count;
-				for (int i = 0; i < num; i++)
+				foreach (ArborNode node in fSys.Nodes)
 				{
-					ArborNode node = fSys.Nodes[i];
 					ArborPoint pt = node.Pt;
 
 					GL.glPushMatrix();
 					GL.glTranslatef((float)pt.X * MAGIC_SCALE, (float)pt.Y * MAGIC_SCALE, 0);
 					GL.glColor3f(0.9F, 0.3F, 0.3F);
-					DrawCircle(0.1F);
+					drawCircle(0.1F);
 					GL.glPopMatrix();
 				}
 
-				int num2 = fSys.Edges.Count;
-				for (int i = 0; i < num2; i++)
+				foreach (ArborEdge edge in fSys.Edges)
 				{
-					ArborEdge edge = fSys.Edges[i];
 					ArborPoint pt1 = edge.Source.Pt;
 					ArborPoint pt2 = edge.Target.Pt;
 
@@ -1000,30 +897,22 @@ namespace GKTreeVizPlugin
 			}
 			catch (Exception ex)
 			{
-				Logger.LogWrite("TreeVizControl.DrawArborSystem(): " + ex.Message);
+				Logger.LogWrite("TreeVizControl.drawArborSystem(): " + ex.Message);
 			}
 		}
 
-		private bool IsVisible(TVPerson person)
+		private bool isVisible(TVPerson person)
 		{
 			if (person == null) return false;
 			if (person.BirthYear > this.fCurYear) return false;
 
-			if (person.BirthYear < this.fMinYear || person.DeathYear < this.fMinYear) {
-				// персоны, для которых авто-определение дат не дало результата; не отображать
-				return false;
-				//string st = result.IRec.GetNameString(true, false);
-				//Debug.WriteLine(st);
-				//Debug.WriteLine(result.BirthYear.ToString() + " / " + result.DeathYear.ToString());
-			}
-			
-			return true;
+			// персоны, для которых авто-определение дат не дало результата; не отображать
+			return (person.BirthYear >= this.fMinYear && person.DeathYear >= this.fMinYear);
 		}
-		
-		private void DrawPerson(TVPerson person)
+
+		private void drawPerson(TVPerson person)
 		{
-			if (person == null) return;
-			if (!this.IsVisible(person)) return;
+			if (person == null || !person.IsVisible) return;
 
 			try
 			{
@@ -1033,13 +922,12 @@ namespace GKTreeVizPlugin
 				zBirth = this.fYearSize * (person.BirthYear - this.fMinYear);
 				zDeath = this.fYearSize * (endYear - this.fMinYear);
 
-				GEDCOMSex sex = person.IRec.Sex;
 				PointF ppt = person.Pt;
 
 				GL.glPushName(OBJ_NODE + (uint)person.Idx);
 				GL.glPushMatrix();
 
-				SetLineColor(sex);
+				setLineColor(person.Sex);
 
 				GL.glBegin(GL.GL_LINES);
 				GL.glVertex3f(ppt.X, ppt.Y, zBirth);
@@ -1049,11 +937,11 @@ namespace GKTreeVizPlugin
 				GL.glPopMatrix();
 				GL.glPopName();
 
-				if (this.Debug && person.Type == TVPersonType.ptPatriarch) {
+				if (this.fDebug && person.Type == TVPersonType.Patriarch) {
 					GL.glPushMatrix();
-					GL.glTranslatef((float)ppt.X, (float)ppt.Y, 0);
+					GL.glTranslatef(ppt.X, ppt.Y, 0);
 					GL.glColor3f(0.9F, 0.1F, 0.1F);
-					DrawCircle(person.BaseRadius);
+					drawCircle(person.BaseRadius);
 					GL.glPopMatrix();
 				}
 
@@ -1062,7 +950,7 @@ namespace GKTreeVizPlugin
 
 					GL.glPushMatrix();
 
-					SetLineColor(sex);
+					setLineColor(person.Sex);
 
 					GL.glBegin(GL.GL_LINES);
 					GL.glVertex3f(parentPt.X, parentPt.Y, zBirth);
@@ -1074,11 +962,108 @@ namespace GKTreeVizPlugin
 			}
 			catch (Exception ex)
 			{
-				Logger.LogWrite("TreeVizControl.DrawPerson(): " + ex.Message);
+				Logger.LogWrite("TreeVizControl.drawPerson(): " + ex.Message);
 			}
 		}
 
-		private static void SetLineColor(GEDCOMSex sex)
+		private void updateTV(object sender, ElapsedEventArgs e)
+		{
+			if (this.fBusy) return;
+			this.fBusy = true;
+			try
+			{
+				if (!this.FreeRotate) {
+					this.zrot -= 0.3f;
+				}
+
+				this.fTick += 1;
+
+				if (!this.TimeStop && (this.fTick % 5 == 0) && this.fCurYear < this.fMaxYear)
+				{
+					this.fCurYear += 1;
+
+					this.recalcDescendants();
+				}
+			}
+			catch (Exception ex)
+			{
+				Logger.LogWrite("TreeVizControl.updateTV(): " + ex.Message);
+			}
+			this.fBusy = false;
+		}
+		
+		#region Utils
+		
+		private TVPerson findPersonByXRef(string xref)
+		{
+		    TVPerson result;
+		    return this.fPersonsIndex.TryGetValue(xref, out result) ? result : null;
+		}
+
+	    private TVPerson findPersonByIdx(int idx)
+		{
+			foreach (TVPerson prs in this.fPersons)
+			{
+				if (prs.Idx == idx) return prs;
+			}
+
+			return null;
+		}
+
+		private void screenshot()
+		{
+			try {
+				Image image = Context.ToImage();
+				image.Save(@"d:\screenshot.jpg", ImageFormat.Jpeg);
+				image.Dispose();
+			}
+			catch(Exception e) {
+				MessageBox.Show(e.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+			}
+		}
+
+		#endregion
+
+		#region Low-level draw methods
+		
+		private static PointF getLineMidpoint(float x1, float y1, float x2, float y2)
+		{
+			float mx = x1 + (x2 - x1) / 2;
+			float my = y1 + (y2 - y1) / 2;
+			return new PointF(mx, my);
+		}
+		
+		// beauty - случайное смещение для "красоты", град
+		internal static PointF[] getCirclePoints(int beauty, PointF center, int count, float radius)
+		{
+ 			PointF[] result = new PointF[count];
+
+ 			if (count > 0)
+ 			{
+ 				// размер секции круга, град
+ 				float degSection = 360.0f / count;
+ 				
+ 				for (int i = 0; i < count; i++)
+ 				{
+ 					float degInRad = (beauty + i * degSection) * DEG2RAD;
+ 					float dx = (float)Math.Cos(degInRad) * radius;
+ 					float dy = (float)Math.Sin(degInRad) * radius;
+
+ 					result[i] = new PointF(center.X + dx, center.Y + dy);
+ 				}
+ 			}
+
+ 			return result;
+		}
+
+		private static double dist(PointF pt1, PointF pt2)
+		{
+			double dx = pt2.X - pt1.X;
+			double dy = pt2.Y - pt1.Y;
+			return Math.Sqrt(dx * dx + dy * dy);
+		}
+		
+		private static void setLineColor(GEDCOMSex sex)
 		{
 			switch (sex) {
 				case GEDCOMSex.svMale:
@@ -1091,7 +1076,7 @@ namespace GKTreeVizPlugin
 			}
 		}
 
- 		private static void DrawCircle(float radius)
+ 		private static void drawCircle(float radius)
 		{
 			GL.glBegin(GL.GL_LINE_LOOP);
 			for (int i = 0; i <= 360; i++) {
@@ -1101,7 +1086,7 @@ namespace GKTreeVizPlugin
 			GL.glEnd();
 		}
 
-		private static void DrawAxis()
+		private static void drawAxis()
 		{
 			// draw z-axis
 			GL.glPushName(OBJ_Z);
@@ -1145,7 +1130,11 @@ namespace GKTreeVizPlugin
 			GL.glEnd();
 			GL.glPopName();
 		}
+		
+		#endregion
 
+		#region Timer control
+		
 		private void startTimer()
 		{
 			if (fAnimTimer != null) return;
@@ -1153,7 +1142,7 @@ namespace GKTreeVizPlugin
 			fAnimTimer = new System.Timers.Timer();
 			fAnimTimer.AutoReset = true;
 			fAnimTimer.Interval = 20; //50;
-			fAnimTimer.Elapsed += this.TV_Update;
+			fAnimTimer.Elapsed += this.updateTV;
 			fAnimTimer.Start();
 		}
 
@@ -1166,7 +1155,8 @@ namespace GKTreeVizPlugin
 		}
 
 		#endregion
-		
+
+		#endregion
 	}
 }
 // ReSharper restore AccessToStaticMemberViaDerivedType

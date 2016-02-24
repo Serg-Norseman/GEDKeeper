@@ -96,7 +96,7 @@ namespace GKUI.Controls
 
 			this.fToolBar = new ToolBar();
 			this.fToolBar.Appearance = ToolBarAppearance.Flat;
-			this.fToolBar.Buttons.AddRange(new ToolBarButton[6] {
+			this.fToolBar.Buttons.AddRange(new ToolBarButton[] {
 			                               	this.fBtnAdd,
 			                               	this.fBtnEdit,
 			                               	this.fBtnDelete,

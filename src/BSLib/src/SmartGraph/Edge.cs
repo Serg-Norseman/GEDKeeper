@@ -52,7 +52,7 @@ namespace BSLib.SmartGraph
 
 		IVertex IEdge.Source
 		{
-			get { return (IVertex)this.fSource; }
+			get { return this.fSource; }
 		}
 
 		public Vertex Target
@@ -62,7 +62,7 @@ namespace BSLib.SmartGraph
 
 		IVertex IEdge.Target
 		{
-			get { return (IVertex)this.fTarget; }
+			get { return this.fTarget; }
 		}
 
 		#endregion

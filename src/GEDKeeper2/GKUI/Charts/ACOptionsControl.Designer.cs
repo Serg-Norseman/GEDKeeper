@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GKUI
+﻿namespace GKUI.Charts
 {
 	partial class ACOptionsControl
 	{

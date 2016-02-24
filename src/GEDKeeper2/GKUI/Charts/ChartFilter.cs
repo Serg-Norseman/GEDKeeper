@@ -1,5 +1,3 @@
-using System;
-
 using BSLib;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -11,22 +9,22 @@ namespace GKUI.Charts
 	/// </summary>
     public class ChartFilter : BaseObject, ICustomFilter
     {
-        public enum TBranchCut
+        public enum BranchCutType
         {
-            bcNone,
-            bcYears,
-            bcPersons
+            None,
+            Years,
+            Persons
         }
 
         private FilterGroupMode fBackSourceMode;
         private string fBackSourceRef;
-        private TBranchCut fBackBranchCut;
+        private BranchCutType fBackBranchCut;
         private int fBackBranchYear;
         private string fBackBranchPersons;
 
         public FilterGroupMode SourceMode;
         public string SourceRef;
-        public TBranchCut BranchCut;
+        public BranchCutType BranchCut;
         public int BranchYear;
         public string BranchPersons;
 
@@ -37,8 +35,8 @@ namespace GKUI.Charts
 
         public void Reset()
         {
-            this.SourceMode = FilterGroupMode.gmAll;
-            this.BranchCut = TBranchCut.bcNone;
+            this.SourceMode = FilterGroupMode.All;
+            this.BranchCut = BranchCutType.None;
         }
 
         public void Backup()

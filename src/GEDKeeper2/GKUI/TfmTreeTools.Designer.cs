@@ -116,7 +116,7 @@ namespace GKUI
 			this.edYearInaccuracy = new System.Windows.Forms.NumericUpDown();
 			this.chkBirthYear = new System.Windows.Forms.CheckBox();
 			this.SheetFamilyGroups = new System.Windows.Forms.TabPage();
-			this.gkLogChart1 = new GKUI.Controls.GKLogChart();
+			this.gkLogChart1 = new BSLib.Controls.LogChart();
 			this.TreeView1 = new System.Windows.Forms.TreeView();
 			this.SheetTreeCheck = new System.Windows.Forms.TabPage();
 			this.btnBaseRepair = new System.Windows.Forms.Button();
@@ -464,7 +464,7 @@ namespace GKUI
 			this.MergeCtl.Dock = System.Windows.Forms.DockStyle.Top;
 			this.MergeCtl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.MergeCtl.Location = new System.Drawing.Point(0, 0);
-			this.MergeCtl.MergeMode = GEDCOMRecordType.rtNone;
+			//this.MergeCtl.MergeMode = GEDCOMRecordType.rtNone;
 			this.MergeCtl.Name = "MergeCtl";
 			this.MergeCtl.Size = new System.Drawing.Size(681, 340);
 			this.MergeCtl.TabIndex = 11;
@@ -858,7 +858,7 @@ namespace GKUI
 			this.SheetPlaceManage.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
-		private GKUI.Controls.GKLogChart gkLogChart1;
+		private BSLib.Controls.LogChart gkLogChart1;
 		private GKUI.Controls.GKMergeControl MergeCtl;
 		private System.Windows.Forms.Button btnPatriarchsDiagram;
 		private System.Windows.Forms.CheckBox chkIndistinctMatching;

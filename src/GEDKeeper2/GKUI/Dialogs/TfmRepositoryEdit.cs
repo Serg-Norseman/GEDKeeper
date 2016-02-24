@@ -70,7 +70,7 @@ namespace GKUI.Dialogs
 			this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
 			this.Label1.Text = LangMan.LS(LSID.LSID_Title);
 			this.SheetNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-			this.btnAddress.Text = LangMan.LS(LSID.LSID_Address) + "...";
+			this.btnAddress.Text = LangMan.LS(LSID.LSID_Address) + @"...";
 		}
 	}
 }

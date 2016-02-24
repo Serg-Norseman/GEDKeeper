@@ -64,17 +64,17 @@ namespace GKCommon.GEDCOM
 					return "";
 				}
 
-				string SU = strValue.Substring(0, 3).ToUpperInvariant();
+				string su = strValue.Substring(0, 3).ToUpperInvariant();
 
-				if (SU == GEDCOMDateApproximatedArray[1] || SU == GEDCOMDateApproximatedArray[2] || SU == GEDCOMDateApproximatedArray[3])
+				if (su == GEDCOMDateApproximatedArray[1] || su == GEDCOMDateApproximatedArray[2] || su == GEDCOMDateApproximatedArray[3])
 				{
 					this.fValue = new GEDCOMDateApproximated(base.Owner, this, "", "");
 				}
-				else if (SU == "INT")
+				else if (su == "INT")
 				{
 					this.fValue = new GEDCOMDateInterpreted(base.Owner, this, "", "");
 				}
-				else if (SU == GEDCOMDateRangeArray[0] || SU == GEDCOMDateRangeArray[1] || SU == GEDCOMDateRangeArray[2])
+				else if (su == GEDCOMDateRangeArray[0] || su == GEDCOMDateRangeArray[1] || su == GEDCOMDateRangeArray[2])
 				{
 					this.fValue = new GEDCOMDateRange(base.Owner, this, "", "");
 				}

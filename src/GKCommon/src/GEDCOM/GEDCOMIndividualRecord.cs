@@ -129,8 +129,8 @@ namespace GKCommon.GEDCOM
 		protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
 		{
 			base.CreateObj(owner, parent);
-			this.fRecordType = GEDCOMRecordType.rtIndividual;
-			this.fName = "INDI";
+			base.SetRecordType(GEDCOMRecordType.rtIndividual);
+			base.SetName("INDI");
 
 			this.fPersonalNames = new GEDCOMList<GEDCOMPersonalName>(this);
 			this.fIndividualOrdinances = new GEDCOMList<GEDCOMIndividualOrdinance>(this);
@@ -297,7 +297,7 @@ namespace GKCommon.GEDCOM
 					evt.SetLevel(this.Level + 1);
 					this.Events.Add(evt);
 				} else {
-					throw new ArgumentException("Event has the invalid type", "evt");
+					throw new ArgumentException(@"Event has the invalid type", "evt");
 				}
 			}
 
@@ -409,7 +409,7 @@ namespace GKCommon.GEDCOM
             GEDCOMIndividualRecord toRec = targetRecord as GEDCOMIndividualRecord;
             if (toRec == null)
             {
-                throw new ArgumentException("argument is null or wrong type", "targetRecord");
+                throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
             }
 
             if (!clearDest)
@@ -432,8 +432,8 @@ namespace GKCommon.GEDCOM
 
 			if (toRec.ChildToFamilyLinks.Count == 0 && this.ChildToFamilyLinks.Count != 0 && this.fChildToFamilyLinks != null)
 			{
-				GEDCOMChildToFamilyLink ctf_link = this.fChildToFamilyLinks.Extract(0);
-				GEDCOMFamilyRecord family = ctf_link.Family;
+				GEDCOMChildToFamilyLink ctfLink = this.fChildToFamilyLinks.Extract(0);
+				GEDCOMFamilyRecord family = ctfLink.Family;
 
 				int num = family.Childrens.Count;
 				for (int i = 0; i < num; i++)
@@ -445,14 +445,14 @@ namespace GKCommon.GEDCOM
 					}
 				}
 				
-				ctf_link.ResetParent(toRec);
-				toRec.ChildToFamilyLinks.Add(ctf_link);
+				ctfLink.ResetParent(toRec);
+				toRec.ChildToFamilyLinks.Add(ctfLink);
 			}
 
 			while (this.fSpouseToFamilyLinks.Count > 0)
 			{
-				GEDCOMSpouseToFamilyLink stf_link = this.fSpouseToFamilyLinks.Extract(0);
-				GEDCOMFamilyRecord family = stf_link.Family;
+				GEDCOMSpouseToFamilyLink stfLink = this.fSpouseToFamilyLinks.Extract(0);
+				GEDCOMFamilyRecord family = stfLink.Family;
 
 				if (family.Husband.StringValue == "@" + base.XRef + "@") {
 					family.Husband.StringValue = "@" + targetRecord.XRef + "@";
@@ -461,8 +461,8 @@ namespace GKCommon.GEDCOM
 						family.Wife.StringValue = "@" + targetRecord.XRef + "@";
 					}
 
-				stf_link.ResetParent(toRec);
-				toRec.SpouseToFamilyLinks.Add(stf_link);
+				stfLink.ResetParent(toRec);
+				toRec.SpouseToFamilyLinks.Add(stfLink);
 			}
 
 			while (this.fIndividualOrdinances.Count > 0)
@@ -694,7 +694,7 @@ namespace GKCommon.GEDCOM
 			return result;
 		}
 
-		private bool GetIndivName(bool rusNames, bool womanMode, ref string aName)
+		private bool GetIndivName(bool rusNames, bool womanMode, out string aName)
 		{
 			string firstPart, surname;
 			GEDCOMPersonalName np = this.fPersonalNames[0];
@@ -734,8 +734,8 @@ namespace GKCommon.GEDCOM
 			bool womanMode = (this.Sex == GEDCOMSex.svFemale);
 			string iName = "";
 			string kName = "";
-			bool res = this.GetIndivName(matchParams.RusNames, womanMode, ref iName);
-			res = res && indi.GetIndivName(matchParams.RusNames, womanMode, ref kName);
+            bool res = this.GetIndivName(matchParams.RusNames, womanMode, out iName);
+            res = res && indi.GetIndivName(matchParams.RusNames, womanMode, out kName);
 			if (res)
 			{
 				if (matchParams.NamesIndistinctThreshold >= 0.99f) {

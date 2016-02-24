@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using GKCore.Types;
 
 namespace GKCore.Interfaces

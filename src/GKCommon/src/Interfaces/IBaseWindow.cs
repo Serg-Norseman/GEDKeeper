@@ -18,6 +18,7 @@ namespace GKCore.Interfaces
 		GEDCOMTree Tree { get; }
 		ValuesCollection ValuesCollection { get; }
 
+	    void Activate();
 		void ApplyFilter();
 		void ChangeRecord(GEDCOMRecord record);
 		void Close();
@@ -25,6 +26,7 @@ namespace GKCore.Interfaces
 		string DefinePatronymic(string name, GEDCOMSex sex, bool confirm);
 		GEDCOMSex DefineSex(string iName, string iPatr);
 		void CheckPersonSex(GEDCOMIndividualRecord iRec);
+		void CollectEventValues(GEDCOMCustomEvent evt);
 
 		void FileNew();
 		void FileLoad(string fileName);

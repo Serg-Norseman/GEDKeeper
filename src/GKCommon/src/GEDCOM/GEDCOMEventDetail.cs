@@ -52,7 +52,7 @@ namespace GKCommon.GEDCOM
 		protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
 		{
 			base.CreateObj(owner, parent);
-            this.fLevel = ((GEDCOMTag)parent).Level;
+            base.SetLevel(((GEDCOMTag)parent).Level);
 		}
 
 		public override GEDCOMTag AddTag(string tagName, string tagValue, TagConstructor tagConstructor)

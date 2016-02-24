@@ -152,6 +152,9 @@ namespace GKUI.Sheets
                                 }
 
                                 aEvent = newEvent;
+
+                                aBase.CollectEventValues(aEvent);
+
                                 result = true;
                             }
                         }

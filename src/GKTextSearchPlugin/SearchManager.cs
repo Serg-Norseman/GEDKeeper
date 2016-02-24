@@ -14,13 +14,13 @@ namespace GKTextSearchPlugin
     /// </summary>
     public class SearchManager
 	{
-		private readonly object xdb_lock;
+		private readonly object xdbLock;
 		private readonly Plugin fPlugin;
 
 		public SearchManager(Plugin plugin)
 		{
 			this.fPlugin = plugin;
-            this.xdb_lock = new object();
+            this.xdbLock = new object();
 		}
 
 		#region Private methods
@@ -37,15 +37,15 @@ namespace GKTextSearchPlugin
 
 		private static void SetDBLastChange(IBaseWindow aBase, WritableDatabase database)
 		{
-			string db_lastchange = aBase.Tree.Header.TransmissionDateTime.ToString("yyyy.MM.dd HH:mm:ss", null);
-			database.SetMetadata(GetSign(aBase), db_lastchange);
+			string dbLastchange = aBase.Tree.Header.TransmissionDateTime.ToString("yyyy.MM.dd HH:mm:ss", null);
+			database.SetMetadata(GetSign(aBase), dbLastchange);
 		}
 
 		private string GetXDBFolder()
 		{
-			string xdb_dir = fPlugin.Host.GetAppDataPath() + "xdb";
-			if (!Directory.Exists(xdb_dir)) Directory.CreateDirectory(xdb_dir);
-			return xdb_dir;
+			string xdbDir = fPlugin.Host.GetAppDataPath() + "xdb";
+			if (!Directory.Exists(xdbDir)) Directory.CreateDirectory(xdbDir);
+			return xdbDir;
 		}
 
 		private static uint FindDocId(IBaseWindow aBase, WritableDatabase database, string xref)
@@ -67,13 +67,13 @@ namespace GKTextSearchPlugin
 		private static void SetDocumentContext(IBaseWindow aBase, Document doc, TermGenerator indexer, GEDCOMRecord rec)
 		{
 			StringList ctx = aBase.GetRecordContent(rec);
-			string rec_lastchange = rec.ChangeDate.ToString();
-			string base_sign = GetSign(aBase);
+			string recLastchange = rec.ChangeDate.ToString();
+			string baseSign = GetSign(aBase);
 
 			doc.SetData(rec.XRef);							// not edit: for link from search results to gedcom-base
-			doc.AddTerm("Q" + base_sign + "_" + rec.XRef);	// not edit: specific db_rec_id - for FindDocId()
-			doc.AddValue(0, rec_lastchange);				// not edit: for update check
-			doc.AddBooleanTerm("GDB" + base_sign);			// not edit: for filtering by database in Search()
+			doc.AddTerm("Q" + baseSign + "_" + rec.XRef);	// not edit: specific db_rec_id - for FindDocId()
+			doc.AddValue(0, recLastchange);				// not edit: for update check
+			doc.AddBooleanTerm("GDB" + baseSign);			// not edit: for filtering by database in Search()
 
 			indexer.SetDocument(doc);
 			indexer.IndexText(ctx.Text);
@@ -85,13 +85,13 @@ namespace GKTextSearchPlugin
 
 			if (docid != 0) {
 				// проверка на необходимость обновления
-				string rec_lastchange = record.ChangeDate.ToString();
+				string recLastchange = record.ChangeDate.ToString();
 
-				Document cur_doc = database.GetDocument(docid);
-				string doc_lastchange = cur_doc.GetValue(0);
+				Document curDoc = database.GetDocument(docid);
+				string docLastchange = curDoc.GetValue(0);
 
 				// обновление записи
-				if (!string.Equals(rec_lastchange, doc_lastchange)) {
+				if (!string.Equals(recLastchange, docLastchange)) {
 					using (Document doc = new Document())
 					{
 						SetDocumentContext(aBase, doc, indexer, record);
@@ -116,11 +116,11 @@ namespace GKTextSearchPlugin
 
 			try
 			{
-				lock (xdb_lock)
+				lock (xdbLock)
         		{
 					using (WritableDatabase database = new WritableDatabase(GetXDBFolder(), Xapian.Xapian.DB_CREATE_OR_OPEN))
 					using (TermGenerator indexer = new TermGenerator())
-					using (Stem stemmer = new Xapian.Stem("russian"))
+					using (Stem stemmer = new Stem("russian"))
 					{
 						indexer.SetStemmer(stemmer);
 
@@ -151,11 +151,11 @@ namespace GKTextSearchPlugin
 
 			try
 			{
-				lock (xdb_lock)
+				lock (xdbLock)
         		{
 					using (WritableDatabase database = new WritableDatabase(GetXDBFolder(), Xapian.Xapian.DB_CREATE_OR_OPEN))
 					using (TermGenerator indexer = new TermGenerator())
-					using (Stem stemmer = new Xapian.Stem("russian"))
+					using (Stem stemmer = new Stem("russian"))
 					{
 						indexer.SetStemmer(stemmer);
 
@@ -174,7 +174,7 @@ namespace GKTextSearchPlugin
 		{
 			try
 			{
-				lock (xdb_lock)
+				lock (xdbLock)
         		{
 					using (WritableDatabase database = new WritableDatabase(GetXDBFolder(), Xapian.Xapian.DB_CREATE_OR_OPEN))
 					{
@@ -209,7 +209,7 @@ namespace GKTextSearchPlugin
 
 			try
 			{
-				lock (xdb_lock)
+				lock (xdbLock)
 				{
 					using (Database database = new Database(GetXDBFolder()))
 					using (Enquire enquire = new Enquire(database))

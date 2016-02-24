@@ -1,5 +1,4 @@
-﻿using System;
-using GKCommon.GEDCOM;
+﻿using GKCommon.GEDCOM;
 using GKCore.Types;
 
 namespace GKCore.Interfaces

@@ -1,7 +1,7 @@
-﻿namespace GKCore
+﻿namespace GKCommon
 {
 	public static class GKConsts
 	{
-        public const int ProvedLifeLength = 122;
+        public const int PROVED_LIFE_LENGTH = 122;
 	}
 }

@@ -4,36 +4,36 @@ namespace GKCommon.GEDCOM
 {
 	public abstract class GEDCOMCustomRecord : GEDCOMTag
 	{
-		protected string FXRef;
+		private string fXRef;
 
 		public string XRef
 		{
-			get { return this.FXRef; }
+			get { return this.fXRef; }
 			set {
-				string oldXRef = this.FXRef;
-				this.FXRef = value;
-				if (this.fOwner != null) {
-					this.fOwner.SetXRef(oldXRef, this);
+				string oldXRef = this.fXRef;
+				this.fXRef = value;
+				if (this.Owner != null) {
+					this.Owner.SetXRef(oldXRef, this);
 				}
 			}
 		}
 
 		protected override void SaveValueToStream(StreamWriter stream)
 		{
-			string S = base.Level.ToString();
+			string str = base.Level.ToString();
 
-			if (!string.IsNullOrEmpty(this.FXRef))
+			if (!string.IsNullOrEmpty(this.fXRef))
 			{
-				S = S + " " + "@" + this.FXRef + "@";
+				str = str + " " + "@" + this.fXRef + "@";
 			}
-			S = S + " " + base.Name;
+			str = str + " " + base.Name;
 
 			if (base.StringValue != "")
 			{
-				S = S + " " + base.StringValue;
+				str = str + " " + base.StringValue;
 			}
 
-			stream.WriteLine(S);
+			stream.WriteLine(str);
 		}
 
 	    protected GEDCOMCustomRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

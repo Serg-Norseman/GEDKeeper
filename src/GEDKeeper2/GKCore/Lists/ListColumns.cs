@@ -12,9 +12,9 @@ namespace GKCore.Lists
 	/// </summary>
 	public sealed class ColumnProps
 	{
-		public byte colType;
-		public bool colActive;
-		public int colWidth;
+		public byte ColType;
+		public bool ColActive;
+		public int ColWidth;
 
 		public ColumnProps()
 		{
@@ -22,16 +22,18 @@ namespace GKCore.Lists
 
 		public ColumnProps(byte colType, bool colActive, int colWidth)
 		{
-			this.colType = colType;
-			this.colActive = colActive;
-			this.colWidth = colWidth;
+			this.ColType = colType;
+			this.ColActive = colActive;
+			this.ColWidth = colWidth;
 		}
 		
 		public void Assign(ColumnProps source)
 		{
-			this.colType = source.colType;
-			this.colActive = source.colActive;
-			this.colWidth = source.colWidth;
+            if (source == null) return;
+
+			this.ColType = source.ColType;
+			this.ColActive = source.ColActive;
+			this.ColWidth = source.ColWidth;
 		}
 	}
 
@@ -41,12 +43,12 @@ namespace GKCore.Lists
 	public sealed class ColumnStatic
 	{
 		//public byte colType;
-		public LSID colName;
-		public DataType dataType;
-		public NumberFormatInfo nfi;
-		public string format;
-		public int width;
-		public bool active;
+		public LSID ColName;
+		public DataType DataType;
+		public NumberFormatInfo NumFmt;
+		public string Format;
+		public int Width;
+		public bool Active;
 	}
 
     /// <summary>
@@ -68,11 +70,6 @@ namespace GKCore.Lists
 		{
 			get { return this.fColumns[index]; }
 			set { this.fColumns[index] = value; }
-		}
-
-		public Type ColumnEnum
-		{
-            get { return this.fColumnEnum; }
 		}
 
 		protected abstract void InitColumnStatics();
@@ -103,9 +100,14 @@ namespace GKCore.Lists
 
 				ColumnStatic cs = ColumnStatics[i];
 
-				this.fColumns[i] = new ColumnProps(i, cs.active, cs.width);
+				this.fColumns[i] = new ColumnProps(i, cs.Active, cs.Width);
 			}
 		}
+
+        public Type GetColumnEnum()
+        {
+            return this.fColumnEnum;
+        }
 
 		public void Clear()
 		{
@@ -117,12 +119,12 @@ namespace GKCore.Lists
 			ColumnStatic cs = new ColumnStatic();
 
 			//cs.colType = ((IConvertible)colType).ToByte(null);
-			cs.colName = colName;
-			cs.dataType = dataType;
-			cs.width = defWidth;
-			cs.nfi = null;
-			cs.format = null;
-			cs.active = defActive;
+			cs.ColName = colName;
+			cs.DataType = dataType;
+			cs.Width = defWidth;
+			cs.NumFmt = null;
+			cs.Format = null;
+			cs.Active = defActive;
 
 			this.ColumnStatics.Add(cs);
 		}
@@ -132,12 +134,12 @@ namespace GKCore.Lists
 			ColumnStatic cs = new ColumnStatic();
 
 			//cs.colType = ((IConvertible)colType).ToByte(null);
-			cs.colName = colName;
-			cs.dataType = dataType;
-			cs.width = defWidth;
-			cs.nfi = nfi;
-			cs.format = format;
-			cs.active = defActive;
+			cs.ColName = colName;
+			cs.DataType = dataType;
+			cs.Width = defWidth;
+			cs.NumFmt = nfi;
+			cs.Format = format;
+			cs.Active = defActive;
 
 			this.ColumnStatics.Add(cs);
 		}
@@ -170,13 +172,13 @@ namespace GKCore.Lists
 				ColumnStatic defCol = ColumnStatics[i];
 
 				ColumnProps col = this.fColumns[i];
-				col.colType = (byte)iniFile.ReadInteger(section, "ColType_" + i.ToString(), i);
-				col.colActive = iniFile.ReadBool(section, "ColActive_" + i.ToString(), defCol.active);
-				col.colWidth = iniFile.ReadInteger(section, "ColWidth_" + i.ToString(), defCol.width);
+				col.ColType = (byte)iniFile.ReadInteger(section, "ColType_" + i.ToString(), i);
+				col.ColActive = iniFile.ReadBool(section, "ColActive_" + i.ToString(), defCol.Active);
+				col.ColWidth = iniFile.ReadInteger(section, "ColWidth_" + i.ToString(), defCol.Width);
 				
 				// protection zero/hidden columns
-				if (col.colWidth <= 10) {
-					col.colWidth = defCol.width;
+				if (col.ColWidth <= 10) {
+					col.ColWidth = defCol.Width;
 				}
 				
 				this.fColumns[i] = col;
@@ -191,9 +193,9 @@ namespace GKCore.Lists
 			{
 				byte i = (e as IConvertible).ToByte(null);
 
-				iniFile.WriteInteger(section, "ColType_" + i.ToString(), this.fColumns[i].colType);
-				iniFile.WriteBool(section, "ColActive_" + i.ToString(), this.fColumns[i].colActive);
-				iniFile.WriteInteger(section, "ColWidth_" + i.ToString(), this.fColumns[i].colWidth);
+				iniFile.WriteInteger(section, "ColType_" + i.ToString(), this.fColumns[i].ColType);
+				iniFile.WriteBool(section, "ColActive_" + i.ToString(), this.fColumns[i].ColActive);
+				iniFile.WriteInteger(section, "ColWidth_" + i.ToString(), this.fColumns[i].ColWidth);
 			}
 		}
 		

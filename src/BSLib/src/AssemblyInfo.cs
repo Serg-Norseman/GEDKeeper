@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Resources;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("BSLib")]
@@ -14,3 +15,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("0.1.0.0")]
 [assembly: CLSCompliant(false)]
 [assembly: ComVisible(false)]
+[assembly: NeutralResourcesLanguage("en")]

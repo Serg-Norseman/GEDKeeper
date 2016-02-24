@@ -18,7 +18,7 @@ namespace ExtUtils
         /// <summary>
         /// Compression method enumeration
         /// </summary>
-        public enum Compression : ushort
+        public enum Compression
         {
             /// <summary>Uncompressed storage</summary> 
             Store = 0, 
@@ -74,6 +74,11 @@ namespace ExtUtils
 
         #region Private fields
 
+        // Static CRC32 Table
+        private static readonly UInt32[] fCrcTable = null;
+        // Default filename encoder
+        private static readonly Encoding fDefaultEncoding = Encoding.GetEncoding(/*437*/866);
+
         // List of files to store
         private readonly List<ZipFileEntry> fFiles = new List<ZipFileEntry>();
         // Filename of storage file
@@ -88,10 +93,6 @@ namespace ExtUtils
         private ushort fExistingFiles = 0;
         // File access for Open method
         private FileAccess fAccess;
-        // Static CRC32 Table
-        private static UInt32[] fCrcTable = null;
-        // Default filename encoder
-        private static Encoding fDefaultEncoding = Encoding.GetEncoding(/*437*/866);
 
         #endregion
 
@@ -387,12 +388,17 @@ namespace ExtUtils
 
             // Select input stream for inflating or just reading
             Stream inStream;
-            if (zfe.Method == Compression.Store)
-                inStream = this.fZipFileStream;
-            else if (zfe.Method == Compression.Deflate)
-                inStream = new DeflateStream(this.fZipFileStream, CompressionMode.Decompress, true);
-            else
-                return false;
+            switch (zfe.Method)
+            {
+                case Compression.Store:
+                    inStream = this.fZipFileStream;
+                    break;
+                case Compression.Deflate:
+                    inStream = new DeflateStream(this.fZipFileStream, CompressionMode.Decompress, true);
+                    break;
+                default:
+                    return false;
+            }
 
             // Buffered copy
             byte[] buffer = new byte[16384];

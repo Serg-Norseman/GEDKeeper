@@ -1,7 +1,6 @@
 ﻿using System;
 
 using BSLib;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -17,12 +16,13 @@ namespace GKCore.Export
 		private StringList fPatList;
 
 		private Font fTitleFont;
-		private Font fChapFont;
-		private Font fPersonFont;
-		private Font fLinkFont;
-		private Font fTextFont, fSupText;
+		//private Font fChapFont;
+		//private Font fPersonFont;
+		//private Font fLinkFont;
+		private Font fTextFont;
+	    //private Font fSupText;
 
-		public GEDCOMIndividualRecord Ancestor
+	    public GEDCOMIndividualRecord Ancestor
 		{
 			get { return this.fAncestor; }
 			set { this.fAncestor = value; }
@@ -57,16 +57,16 @@ namespace GKCore.Export
 					fDocument.AddTitle("Pedigree");
 					fDocument.AddSubject("Pedigree");
 					fDocument.AddAuthor("");
-					fDocument.AddCreator(GKData.AppTitle);
+					fDocument.AddCreator(GKData.APP_TITLE);
 					fDocument.Open();
 
 					BaseFont baseFont = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Times.ttf"), BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 					fTitleFont = new Font(baseFont, 20f, Font.BOLD);
-					fChapFont = new Font(baseFont, 16f, Font.BOLD, BaseColor.BLACK);
-					fPersonFont = new Font(baseFont, 10f, Font.BOLD, BaseColor.BLACK);
-					fLinkFont = new Font(baseFont, 8f, Font.UNDERLINE, BaseColor.BLUE);
+					//fChapFont = new Font(baseFont, 16f, Font.BOLD, BaseColor.BLACK);
+					//fPersonFont = new Font(baseFont, 10f, Font.BOLD, BaseColor.BLACK);
+					//fLinkFont = new Font(baseFont, 8f, Font.UNDERLINE, BaseColor.BLUE);
 					fTextFont = new Font(baseFont, 8f, Font.NORMAL, BaseColor.BLACK);
-					fSupText = new Font(baseFont, 5f, Font.NORMAL, BaseColor.BLUE);
+					//fSupText = new Font(baseFont, 5f, Font.NORMAL, BaseColor.BLUE);
 
 					fDocument.Add(new Paragraph(title, fTitleFont) { Alignment = Element.ALIGN_CENTER, SpacingAfter = 6f });
 
@@ -134,23 +134,16 @@ namespace GKCore.Export
 		
 		private void PreparePatriarchs()
 		{
-			ExtList<PatriarchObj> lst = new ExtList<PatriarchObj>(true);
-			try
+			using (ExtList<PatriarchObj> lst = this.fBase.Context.GetPatriarchsList(3, false))
 			{
-				this.fBase.Context.GetPatriarchsList(lst, 3, false);
-
 				int num = lst.Count;
 				for (int i = 0; i < num; i++) {
-					PatriarchObj p_obj = lst[i];
+					PatriarchObj pObj = lst[i];
 
-					this.fPatList.AddObject(p_obj.IRec.GetNameString(true, false), p_obj.IRec);
+					this.fPatList.AddObject(pObj.IRec.GetNameString(true, false), pObj.IRec);
 				}
-				
+
 				this.fPatList.Sort();
-			}
-			finally
-			{
-				lst.Dispose();
 			}
 		}
 	}

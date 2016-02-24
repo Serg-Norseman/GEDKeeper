@@ -21,8 +21,8 @@ namespace GKCommon.GEDCOM
 		protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
 		{
 			base.CreateObj(owner, parent);
-			this.fRecordType = GEDCOMRecordType.rtGroup;
-			this.fName = "_GROUP";
+			base.SetRecordType(GEDCOMRecordType.rtGroup);
+			base.SetName("_GROUP");
 
 			this.fMembers = new GEDCOMList<GEDCOMPointer>(this);
 		}

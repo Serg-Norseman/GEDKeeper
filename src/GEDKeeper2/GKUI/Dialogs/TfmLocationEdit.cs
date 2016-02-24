@@ -2,7 +2,6 @@
 using System.Windows.Forms;
 
 using BSLib;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -190,7 +189,7 @@ namespace GKUI.Dialogs
 
 		private void EditName_TextChanged(object sender, EventArgs e)
 		{
-			this.Text = LangMan.LS(LSID.LSID_Location) + " \"" + this.EditName.Text + "\"";
+            this.Text = string.Format("{0} \"{1}\"", LangMan.LS(LSID.LSID_Location), this.EditName.Text);
 		}
 
 		private void btnShowOnMap_Click(object sender, EventArgs e)

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Drawing2D;
 
 using BSLib;
@@ -12,11 +11,12 @@ namespace GKUI.Charts
     public sealed class PersonControl : ITreeControl
 	{
 		private readonly TreeChartBox fChart;
-		private bool fVisible;
+        private readonly Pen fCtlPen;
+        private readonly Brush fCtlBrush;
+
+        private Rectangle fDestRect;
 		private TreeChartPerson fPerson;
-		private Pen fCtlPen;
-		private Brush fCtlBrush;
-		private Rectangle fDestRect;
+        private bool fVisible;
 		
         public bool Visible
         {
@@ -79,20 +79,20 @@ namespace GKUI.Charts
             gfx.DrawRectangle(this.fCtlPen, this.fDestRect);
 		}
 
-        public bool Contains(int X, int Y)
+        public bool Contains(int x, int y)
 		{
-        	return fDestRect.Contains(X, Y);
+        	return fDestRect.Contains(x, y);
 		}
 
-        public void MouseDown(int X, int Y)
-		{
-		}
-
-        public void MouseMove(int X, int Y, ThumbMoved thumbMoved)
+        public void MouseDown(int x, int y)
 		{
 		}
 
-        public void MouseUp(int X, int Y)
+        public void MouseMove(int x, int y, ThumbMoved thumbMoved)
+		{
+		}
+
+        public void MouseUp(int x, int y)
 		{
 		}
 	}

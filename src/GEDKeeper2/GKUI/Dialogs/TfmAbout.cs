@@ -12,7 +12,7 @@ namespace GKUI.Dialogs
 		public TfmAbout()
 		{
 			this.InitializeComponent();
-			this.LabelCite.Text = GKData.AppCites;
+			this.LabelCite.Text = GKData.APP_CITES;
 			this.Text = LangMan.LS(LSID.LSID_MIAbout);
 			this.btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
 		}
@@ -30,8 +30,8 @@ namespace GKUI.Dialogs
 			TfmAbout dlg = new TfmAbout();
 			try
 			{
-				dlg.LabelProduct.Text = GKData.AppTitle;
-				dlg.LabelVersion.Text = "Version " + version;
+				dlg.LabelProduct.Text = GKData.APP_TITLE;
+				dlg.LabelVersion.Text = @"Version " + version;
 				dlg.LabelCopyright.Text = copyright;
 				dlg.ShowDialog();
 			}

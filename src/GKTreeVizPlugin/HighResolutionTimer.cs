@@ -2,11 +2,9 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-using BSLib;
-
 namespace GKTreeVizPlugin
 {
-    public sealed class HighResolutionTimer : BaseObject
+    public sealed class HighResolutionTimer
 	{
 		public enum TimerType { None, QueryPerformanceCounter, TimeGetTime, GetTimeOfDay }
 
@@ -29,7 +27,7 @@ namespace GKTreeVizPlugin
 
 		public double Elapsed
 		{
-			get { return (((double) fEndCount - (double) fStartCount) / (double) fFrequency); }
+			get { return ((fEndCount - fStartCount) / (double) fFrequency); }
 		}
 
 		public ulong EndCount
@@ -49,7 +47,7 @@ namespace GKTreeVizPlugin
 
 		public double Resolution
 		{
-			get { return ((double) 1.0 / (double) fFrequency); }
+			get { return (1.0d / fFrequency); }
 		}
 
 		public ulong StartCount

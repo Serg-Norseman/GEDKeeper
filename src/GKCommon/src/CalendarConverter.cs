@@ -48,48 +48,24 @@ namespace GKCommon
 
 		#endregion
 
-		#region Common leap
-
-		public static bool leap_gregorian(int year)
-		{
-			return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
-		}
-
-		public static bool leap_julian(int year)
-		{
-			return _modf(year, 4.0) == (year > 0 ? 0 : 3);
-		}
-
-		public static bool leap_hebrew(int year)
-		{
-			return _modf(year * 7 + 1, 19.0) < 7f;
-		}
-
-		public static bool leap_islamic(int year)
-		{
-			return (year * 11 + 14) % 30 < 11;
-		}
-
-		public static bool leap_persian(int year)
-		{
-			return ((year - (year > 0 ? 474 : 473)) % 2820 + 474 + 38) * 682 % 2816 < 682;
-		}
-
-		#endregion
-		
 		#region Julian day specific
 		
 		public static int jwday(double j)
 		{
-			return _modi(Math.Floor((j + 1.5)), 7.0);
+			return _modi(Math.Floor(j + 1.5), 7.0);
 		}
 		
 		#endregion
 
 		#region Gregorian calendar
-		
+
 		private const double GREGORIAN_EPOCH = 1721425.5;
-		
+
+		public static bool leap_gregorian(int year)
+		{
+			return (year % 4 == 0) && (year % 100 != 0 || year % 400 == 0);
+		}
+
 		public static double gregorian_to_jd(int year, int month, int day)
 		{
 			int y = year - 1;
@@ -97,16 +73,7 @@ namespace GKCommon
 			return (GREGORIAN_EPOCH - 1) + 365 * y + (y / 4) - (y / 100) + (y / 400) + (367 * month - 362) / 12 + (month <= 2 ? 0 : (leap_gregorian(year) ? -1 : -2)) + day;
 		}
 
-		public static double gregorian_to_jd2(int year, int month, int day)
-		{
-			int a = (14 - month) / 12;
-			int y = year + 4800 - a;
-			int m = month + 12 * a - 3;
-			
-			return day + (153 * m + 2) / 5 + 365 * y + y / 4 - y / 100 + y / 400 - 32045;
-		}
-
-        public static void jd_to_gregorian(double jd, out int year, out int month, out int day)
+		public static void jd_to_gregorian(double jd, out int year, out int month, out int day)
 		{
 			double wjd = (Math.Floor((jd - 0.5)) + 0.5);
 			double depoch = (wjd - GREGORIAN_EPOCH);
@@ -128,12 +95,40 @@ namespace GKCommon
 			day = (int)(Math.Truncate(wjd - gregorian_to_jd(year, month, 1)) + 1);
 		}
 
+		public static double gregorian_to_jd2(int year, int month, int day)
+		{
+			int a = (14 - month) / 12;
+			int y = year + 4800 - a;
+			int m = month + 12 * a - 3;
+			
+			return day + (153 * m + 2) / 5 + 365 * y + y / 4 - y / 100 + y / 400 - 32045;
+		}
+
+		public static void jd_to_gregorian2(double jd, out int year, out int month, out int day)
+		{
+			int a = (int)jd + 32044;
+			int b = (4 * a + 3) / 146097;
+			int c = a - (146097 * b) / 4;
+			int d = (4 * c + 3) / 1461;
+			int e = c - (1461 * d) / 4;
+			int m = (5 * e + 2) / 153;
+			
+			day = e - (153 * m + 2) / 5 + 1;
+			month = m + 3 - 12 * (m / 10);
+			year = 100 * b + d - 4800 + m / 10;
+		}
+
 		#endregion
         
 		#region Julian calendar
 		
 		private const double JULIAN_EPOCH = 1721423.5;
-		
+
+		public static bool leap_julian(int year)
+		{
+			return _modf(year, 4.0) == (year > 0 ? 0 : 3);
+		}
+
 		public static double julian_to_jd(int year, int month, int day)
 		{
 			if (year < 1)
@@ -168,6 +163,13 @@ namespace GKCommon
 		
 		#region Hebrew calendar
 		
+		private const double HEBREW_EPOCH = 347995.5;
+		
+		public static bool leap_hebrew(int year)
+		{
+			return _modf(year * 7 + 1, 19.0) < 7f;
+		}
+
 		private static int hebrew_year_months(int year)
 		{
 			return (leap_hebrew(year) ? 13 : 12);
@@ -236,7 +238,7 @@ namespace GKCommon
 		public static double hebrew_to_jd(int year, int month, int day)
 		{
 			int months = hebrew_year_months(year);
-			double jd = (347995.5 + hebrew_delay_1(year) + hebrew_delay_2(year) + day + 1.0);
+			double jd = (HEBREW_EPOCH + hebrew_delay_1(year) + hebrew_delay_2(year) + day + 1.0);
 			if (month < 7)
 			{
 				int num = months;
@@ -286,7 +288,7 @@ namespace GKCommon
         public static void jd_to_hebrew(double jd, out int year, out int month, out int day)
 		{
 			jd = (Math.Floor(jd) + 0.5);
-			int count = iFloor(((jd - 347995.5) * 98496.0 / 35975351.0));
+			int count = iFloor(((jd - HEBREW_EPOCH) * 98496.0 / 35975351.0));
 			year = count - 1;
 			int i = count;
 			while (jd >= hebrew_to_jd(i, 7, 1))
@@ -309,15 +311,22 @@ namespace GKCommon
 		
 		#region Islamic calendar
 		
+		private const double ISLAMIC_EPOCH = 1948439.5;
+		
+		public static bool leap_islamic(int year)
+		{
+			return (year * 11 + 14) % 30 < 11;
+		}
+
 		public static double islamic_to_jd(int year, int month, int day)
 		{
-			return (day + Math.Ceiling((29.5 * (month - 1))) + (year - 1) * 354 + Math.Floor(((3 + 11 * year) / 30.0)) + 1948439.5 - 1.0);
+			return (day + Math.Ceiling((29.5 * (month - 1))) + (year - 1) * 354 + Math.Floor(((3 + 11 * year) / 30.0)) + ISLAMIC_EPOCH - 1.0);
 		}
 
         public static void jd_to_islamic(double jd, out int year, out int month, out int day)
 		{
 			jd = (Math.Floor(jd) + 0.5);
-			year = iFloor(((30.0 * (jd - 1948439.5) + 10646.0) / 10631.0));
+			year = iFloor(((30.0 * (jd - ISLAMIC_EPOCH) + 10646.0) / 10631.0));
 			month = Math.Min(12, iCeil(((jd - (29.0 + islamic_to_jd(year, 1, 1))) / 29.5)) + 1);
 			day = (int)Math.Truncate(jd - islamic_to_jd(year, month, 1) + 1.0);
 		}
@@ -326,6 +335,13 @@ namespace GKCommon
 
 		#region Persian calendar
 		
+		private const double PERSIAN_EPOCH = 1948320.5;
+		
+		public static bool leap_persian(int year)
+		{
+			return ((year - (year > 0 ? 474 : 473)) % 2820 + 474 + 38) * 682 % 2816 < 682;
+		}
+
         public static double persian_to_jd(int year, int month, int day)
 		{
         	double epbase = year - (year >= 0 ? 474 : 473);

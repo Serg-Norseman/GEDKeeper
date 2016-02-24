@@ -327,7 +327,7 @@ namespace GKUI.Controls
             	string netQuery = "http://maps.googleapis.com/maps/api/geocode/xml?address={0}&sensor=false&language=ru";
             	netQuery = string.Format(netQuery, new object[] { searchValue });
 
-                if (!GKMapBrowser.GetInetFile(netQuery, out stm)) return;
+                if (!GetInetFile(netQuery, out stm)) return;
 
                 XmlDocument xmlDocument = new XmlDocument();
                 xmlDocument.Load(stm);

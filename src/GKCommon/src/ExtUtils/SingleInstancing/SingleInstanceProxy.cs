@@ -11,7 +11,7 @@ namespace ExtUtils.SingleInstancing
 	/// </summary>
 	internal class SingleInstanceProxy : MarshalByRefObject
 	{
-		private ISingleInstanceEnforcer enforcer;
+		private readonly ISingleInstanceEnforcer enforcer;
 
 		/// <summary>
 		/// Gets or sets the enforcer (first instance of the application) which will receive messages from the new instances of the application.
@@ -29,7 +29,7 @@ namespace ExtUtils.SingleInstancing
 		public SingleInstanceProxy(ISingleInstanceEnforcer enforcer)
 		{
 			if (enforcer == null)
-				throw new ArgumentNullException("enforcer", "enforcer cannot be null.");
+				throw new ArgumentNullException("enforcer", @"enforcer cannot be null.");
 
 			this.enforcer = enforcer;
 		}

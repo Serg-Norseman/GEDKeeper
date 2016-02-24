@@ -136,8 +136,8 @@ namespace GKUI
 			this.tbPrev = new System.Windows.Forms.ToolBarButton();
 			this.tbNext = new System.Windows.Forms.ToolBarButton();
 			this.TBS8 = new System.Windows.Forms.ToolBarButton();
-			this.tbDocPrint = new System.Windows.Forms.ToolBarButton();
 			this.tbDocPreview = new System.Windows.Forms.ToolBarButton();
+			this.tbDocPrint = new System.Windows.Forms.ToolBarButton();
 			this.MainMenu1 = new System.Windows.Forms.MainMenu(this.components);
 			this.miFile = new System.Windows.Forms.MenuItem();
 			this.miFileNew = new System.Windows.Forms.MenuItem();
@@ -174,6 +174,7 @@ namespace GKUI
 			this.miStats = new System.Windows.Forms.MenuItem();
 			this.miService = new System.Windows.Forms.MenuItem();
 			this.miOrganizer = new System.Windows.Forms.MenuItem();
+			this.miSlideshow = new System.Windows.Forms.MenuItem();
 			this.N9 = new System.Windows.Forms.MenuItem();
 			this.miScripts = new System.Windows.Forms.MenuItem();
 			this.miTreeTools = new System.Windows.Forms.MenuItem();
@@ -196,7 +197,6 @@ namespace GKUI
 			this.miLogView = new System.Windows.Forms.MenuItem();
 			this.N13 = new System.Windows.Forms.MenuItem();
 			this.miAbout = new System.Windows.Forms.MenuItem();
-			this.miSlideshow = new System.Windows.Forms.MenuItem();
 			this.OpenDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.SaveDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.ImageList_Shields = new System.Windows.Forms.ImageList(this.components);
@@ -208,13 +208,13 @@ namespace GKUI
 			// StatusBar
 			// 
 			this.StatusBar.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.StatusBar.Location = new System.Drawing.Point(0, 770);
+			this.StatusBar.Location = new System.Drawing.Point(0, 816);
 			this.StatusBar.Name = "StatusBar";
 			this.StatusBar.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
 									this.StatusBarPanel1,
 									this.StatusBarPanel2});
 			this.StatusBar.ShowPanels = true;
-			this.StatusBar.Size = new System.Drawing.Size(896, 20);
+			this.StatusBar.Size = new System.Drawing.Size(896, 24);
 			this.StatusBar.TabIndex = 0;
 			this.StatusBar.DrawItem += new System.Windows.Forms.StatusBarDrawItemEventHandler(this.StatusBar_DrawItem);
 			this.StatusBar.PanelClick += new System.Windows.Forms.StatusBarPanelClickEventHandler(this.StatusBar_PanelClick);
@@ -454,15 +454,15 @@ namespace GKUI
 			this.TBS8.Name = "TBS8";
 			this.TBS8.Style = System.Windows.Forms.ToolBarButtonStyle.Separator;
 			// 
-			// tbDocPrint
-			// 
-			this.tbDocPrint.ImageIndex = 7;
-			this.tbDocPrint.Name = "tbDocPrint";
-			// 
 			// tbDocPreview
 			// 
 			this.tbDocPreview.ImageIndex = 37;
 			this.tbDocPreview.Name = "tbDocPreview";
+			// 
+			// tbDocPrint
+			// 
+			this.tbDocPrint.ImageIndex = 7;
+			this.tbDocPrint.Name = "tbDocPrint";
 			// 
 			// MainMenu1
 			// 
@@ -772,6 +772,7 @@ namespace GKUI
 			// miWindow
 			// 
 			this.miWindow.Index = 5;
+			this.miWindow.MdiList = true;
 			this.miWindow.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
 									this.miWinCascade,
 									this.miWinHTile,
@@ -901,8 +902,8 @@ namespace GKUI
 			// TfmGEDKeeper
 			// 
 			this.AllowDrop = true;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-			this.ClientSize = new System.Drawing.Size(896, 790);
+			this.AutoScaleBaseSize = new System.Drawing.Size(7, 17);
+			this.ClientSize = new System.Drawing.Size(896, 840);
 			this.Controls.Add(this.StatusBar);
 			this.Controls.Add(this.ToolBar1);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F);

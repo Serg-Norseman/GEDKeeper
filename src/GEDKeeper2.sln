@@ -38,6 +38,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeper2", "GEDKeeper2\GE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKTests", "GKTests\GKTests.csproj", "{A8B53A6B-40A6-40BA-A671-03FC911BC37B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BSLibTests", "BSLibTests\BSLibTests.csproj", "{EAC59E01-3EB2-4710-BC95-D6AFDCBCFB59}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -143,6 +145,14 @@ Global
 		{30D11BCB-EAAE-44B7-BFBB-78BAA3963362}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30D11BCB-EAAE-44B7-BFBB-78BAA3963362}.Release|x86.Build.0 = Release|Any CPU
 		{30D11BCB-EAAE-44B7-BFBB-78BAA3963362}.Release|x86.ActiveCfg = Release|Any CPU
+		{EAC59E01-3EB2-4710-BC95-D6AFDCBCFB59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAC59E01-3EB2-4710-BC95-D6AFDCBCFB59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAC59E01-3EB2-4710-BC95-D6AFDCBCFB59}.Debug|x86.Build.0 = Debug|Any CPU
+		{EAC59E01-3EB2-4710-BC95-D6AFDCBCFB59}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EAC59E01-3EB2-4710-BC95-D6AFDCBCFB59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAC59E01-3EB2-4710-BC95-D6AFDCBCFB59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAC59E01-3EB2-4710-BC95-D6AFDCBCFB59}.Release|x86.Build.0 = Release|Any CPU
+		{EAC59E01-3EB2-4710-BC95-D6AFDCBCFB59}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

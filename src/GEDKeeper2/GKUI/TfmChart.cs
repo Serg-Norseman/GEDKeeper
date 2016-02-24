@@ -139,7 +139,7 @@ namespace GKUI
 		            break;
 		    }
 
-		    this.Text = this.Text + " \"" + Path.GetFileName(fBase.Tree.FileName) + "\"";
+            this.Text = string.Format("{0} \"{1}\"", this.Text, Path.GetFileName(fBase.Tree.FileName));
 		}
 
 		#region Data manipulations
@@ -378,7 +378,7 @@ namespace GKUI
 			this.miGens7.Checked = false;
 			this.miGens8.Checked = false;
 			this.miGens9.Checked = false;
-			(sender as MenuItem).Checked = true;
+            ((MenuItem)sender).Checked = true;
 
 			if (sender == this.miGensInf) this.fGensLimit = -1;
 			if (sender == this.miGens1) this.fGensLimit = 1;
@@ -507,13 +507,11 @@ namespace GKUI
 
 		private void miModeItem_Click(object sender, EventArgs e)
 		{
-			TreeChartBox.ChartKind newMode = (TreeChartBox.ChartKind)(sender as MenuItem).Tag;
+            TreeChartBox.ChartKind newMode = (TreeChartBox.ChartKind)((MenuItem)sender).Tag;
+		    if (this.fChartKind == newMode) return;
 
-			if (this.fChartKind != newMode)
-			{
-				this.ChartKind = newMode;
-				this.GenChart(true);
-			}
+            this.ChartKind = newMode;
+		    this.GenChart(true);
 		}
 
 		private void miRebuildTreeClick(object sender, EventArgs e)

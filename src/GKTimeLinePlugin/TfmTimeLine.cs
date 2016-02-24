@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-
+using GKCommon;
 using GKCommon.GEDCOM;
-using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
 
@@ -122,8 +121,8 @@ namespace GKTimeLinePlugin
 		private void StatusUpdate()
 		{
 			if (this.fBase != null) {
-				this.StatusBarPanel1.Text = this.fPlugin.LangMan.LS(PLS.LSID_TimeScale) + ": " + this.fYearMin.ToString() + " - " + this.fYearMax.ToString();
-				this.StatusBarPanel2.Text = this.fPlugin.LangMan.LS(PLS.LSID_CurrentYear) + ": " + this.fYearCurrent.ToString();
+				this.StatusBarPanel1.Text = string.Format(this.fPlugin.LangMan.LS(PLS.LSID_TimeScale), this.fYearMin.ToString(), this.fYearMax.ToString());
+				this.StatusBarPanel2.Text = string.Format(this.fPlugin.LangMan.LS(PLS.LSID_CurrentYear), this.fYearCurrent.ToString());
 			} else {
 				this.StatusBarPanel1.Text = "";
 				this.StatusBarPanel2.Text = "";
@@ -170,11 +169,11 @@ namespace GKTimeLinePlugin
                 int ddy = deathDate.Year;
 
                 if (birthDate.IsValid() && !deathDate.IsValid()) {
-                    ddy = bdy + GKConsts.ProvedLifeLength;
+                    ddy = bdy + GKConsts.PROVED_LIFE_LENGTH;
                 }
 
                 if (!birthDate.IsValid() && deathDate.IsValid()) {
-                    bdy = ddy - GKConsts.ProvedLifeLength;
+                    bdy = ddy - GKConsts.PROVED_LIFE_LENGTH;
                 }
 
                 if (this.fYearCurrent > 0) {

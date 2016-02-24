@@ -111,6 +111,12 @@ namespace GKCommon.Controls
 			set { this.fLines.Assign(value); }
 		}
 
+        public Color LinkColor
+        {
+            get { return this.fLinkColor; }
+            set { this.fLinkColor = value; }
+        }
+
 		/*public TRuleStyle RuleStyle
 		{
 			get { return this.FRuleStyle; }
@@ -250,11 +256,11 @@ namespace GKCommon.Controls
 		private void MeasureText(Graphics grx, string ss, ref int xPos, ref int yPos, ref int hMax, ref int xMax)
 		{
 			if (yPos >= -hMax && ss != "") {
-				Size str_size = grx.MeasureString(ss, this.fTextFont).ToSize();
-				xPos += str_size.Width;
+				Size strSize = grx.MeasureString(ss, this.fTextFont).ToSize();
+				xPos += strSize.Width;
 
 				if (xPos > xMax) xMax = xPos;
-				int h = str_size.Height;
+				int h = strSize.Height;
 				if (h > hMax) hMax = h;
 			}
 		}
@@ -262,10 +268,10 @@ namespace GKCommon.Controls
 		private void OutText(Graphics gfx, string ss, ref int xPos, ref int yPos, ref int hMax)
 		{
 			if (yPos >= -hMax && ss != "") {
-				gfx.DrawString(ss, this.fTextFont, this.fDefBrush, (float)xPos, (float)yPos);
+				gfx.DrawString(ss, this.fTextFont, this.fDefBrush, xPos, yPos);
 
-				Size str_size = gfx.MeasureString(ss, this.fTextFont).ToSize();
-				xPos += str_size.Width;
+				Size strSize = gfx.MeasureString(ss, this.fTextFont).ToSize();
+				xPos += strSize.Width;
 			}
 		}
 
@@ -279,14 +285,14 @@ namespace GKCommon.Controls
 			{
 				this.ClearLinks();
 
-				int y_pos = 0;
+				int yPos = 0;
 				int xMax = 0;
 
 				int num = this.fLines.Count;
 				for (int line = 0; line < num; line++)
 				{
-					int x_pos = 0;
-					int line_height = gfx.MeasureString("A", this.fTextFont).ToSize().Height;
+					int xPos = 0;
+					int lineHeight = gfx.MeasureString("A", this.fTextFont).ToSize().Height;
 
 					string s = this.fLines[line];
 
@@ -300,7 +306,7 @@ namespace GKCommon.Controls
 								ss += "~";
 							}
 
-							this.MeasureText(gfx, ss, ref x_pos, ref y_pos, ref line_height, ref xMax);
+							this.MeasureText(gfx, ss, ref xPos, ref yPos, ref lineHeight, ref xMax);
 							i++;
 
 							while (s[i - 1] != '~')
@@ -355,9 +361,9 @@ namespace GKCommon.Controls
 												ss += s[i - 1];
 											}
 
-											int ss_width = gfx.MeasureString(ss, this.fTextFont).ToSize().Width;
-											this.fLinks.Add(new HyperLink(sn, x_pos, y_pos, ss_width, line_height));
-											this.MeasureText(gfx, ss, ref x_pos, ref y_pos, ref line_height, ref xMax);
+											int ssWidth = gfx.MeasureString(ss, this.fTextFont).ToSize().Width;
+											this.fLinks.Add(new HyperLink(sn, xPos, yPos, ssWidth, lineHeight));
+											this.MeasureText(gfx, ss, ref xPos, ref yPos, ref lineHeight, ref xMax);
 
 											break;
 										}
@@ -379,13 +385,13 @@ namespace GKCommon.Controls
 						i++;
 					}
 
-					this.MeasureText(gfx, ss, ref x_pos, ref y_pos, ref line_height, ref xMax);
-					y_pos += line_height;
-					this.fHeights[line] = line_height;
+					this.MeasureText(gfx, ss, ref xPos, ref yPos, ref lineHeight, ref xMax);
+					yPos += lineHeight;
+					this.fHeights[line] = lineHeight;
 				}
 
 				int textWidth = xMax + 2 * this.fBorderWidth;
-				int textHeight = y_pos + 2 * this.fBorderWidth;
+				int textHeight = yPos + 2 * this.fBorderWidth;
 				this.fTextSize = new Size(textWidth, textHeight);
 			}
 			finally

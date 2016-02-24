@@ -20,6 +20,13 @@ namespace BSLib
      */
     public delegate void NotifyEventHandler(object sender /*, EventArgs e*/);
 
+    public enum DuplicateSolve
+    {
+        Ignore,
+        Accept,
+        Error
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -37,16 +44,9 @@ namespace BSLib
 			}
 		}
 
-		public enum TDuplicates
-		{
-			dupIgnore,
-			dupAccept,
-			dupError
-		}
-
         private readonly List<StringItem> fList;
         private bool fCaseSensitive;
-		private TDuplicates fDuplicates;
+		private DuplicateSolve fDuplicateSolve;
 		private NotifyEventHandler fOnChange;
 		private NotifyEventHandler fOnChanging;
 		private bool fSorted;
@@ -139,10 +139,10 @@ namespace BSLib
 			remove { if (this.fOnChanging == value) this.fOnChanging = null; }
 		}
 
-		public TDuplicates Duplicates
+		public DuplicateSolve DuplicateSolve
 		{
-			get { return this.fDuplicates; }
-			set { this.fDuplicates = value; }
+			get { return this.fDuplicateSolve; }
+			set { this.fDuplicateSolve = value; }
 		}
 
 		public bool Sorted
@@ -204,7 +204,7 @@ namespace BSLib
 			for (int i = 0; i < num; i++)
 			{
 				buffer.Append(this[i]);
-				buffer.Append(StringList.LINE_BREAK);
+				buffer.Append(LINE_BREAK);
 			}
 
 			return buffer.ToString();
@@ -217,24 +217,21 @@ namespace BSLib
 			{
 				this.Clear();
 
-				int Start = 0;
-				int L = StringList.LINE_BREAK.Length;
-				int P = value.IndexOf(StringList.LINE_BREAK);
-				if (P >= 0)
-				{
-					do
-					{
-						string s = value.Substring(Start, P - Start);
-						this.Add(s);
-						Start = P + L;
-						P = value.IndexOf(StringList.LINE_BREAK, Start);
-					}
-					while (P >= 0);
-				}
+				int start = 0;
+				int lbLen = LINE_BREAK.Length;
+				int pos = value.IndexOf(LINE_BREAK);
+				
+                while (pos >= 0)
+                {
+                    string s = value.Substring(start, pos - start);
+                    this.Add(s);
+                    start = pos + lbLen;
+                    pos = value.IndexOf(LINE_BREAK, start);
+                }
 
-				if (Start <= value.Length)
+				if (start <= value.Length)
 				{
-					string s = value.Substring(Start, (value.Length - Start));
+					string s = value.Substring(start, (value.Length - start));
 					this.Add(s);
 				}
 			}
@@ -251,7 +248,7 @@ namespace BSLib
 
 		public int AddObject(string str, object obj)
 		{
-			int result = -1;
+			int result;
 
             if (!this.Sorted)
 			{
@@ -259,20 +256,20 @@ namespace BSLib
 			}
 			else
 			{
-				if (this.Find(str, ref result))
+				if (this.Find(str, out result))
 				{
-					TDuplicates duplicates = this.Duplicates;
-					if (duplicates == TDuplicates.dupIgnore)
+                    if (this.fDuplicateSolve == DuplicateSolve.Ignore)
 					{
 						return result;
 					}
-					if (duplicates == TDuplicates.dupError)
+                    if (this.fDuplicateSolve == DuplicateSolve.Error)
 					{
 						RaiseError("String list does not allow duplicates", 0);
 					}
 				}
 			}
-			this.InsertItem(result, str, obj);
+
+            this.InsertItem(result, str, obj);
 
             return result;
 		}
@@ -297,29 +294,27 @@ namespace BSLib
 
 		public void Assign(StringList source)
 		{
-			if (source != null)
-			{
-				this.BeginUpdate();
-				try
-				{
-					this.Clear();
-					this.AddStrings(source);
-				}
-				finally
-				{
-					this.EndUpdate();
-				}
-			}
+		    if (source == null) return;
+
+            this.BeginUpdate();
+		    try
+		    {
+		        this.Clear();
+		        this.AddStrings(source);
+		    }
+		    finally
+		    {
+		        this.EndUpdate();
+		    }
 		}
 
 		public void Clear()
 		{
-			if (this.fList.Count != 0)
-			{
-				this.Changing();
-				this.fList.Clear();
-				this.Changed();
-			}
+		    if (this.fList.Count == 0) return;
+
+            this.Changing();
+		    this.fList.Clear();
+		    this.Changed();
 		}
 
 		public void Delete(int index)
@@ -460,7 +455,7 @@ namespace BSLib
 					}
 				}
 			} else {
-				if (!this.Find(str, ref result)) {
+				if (!this.Find(str, out result)) {
 					result = -1;
 				}
 			}
@@ -480,38 +475,36 @@ namespace BSLib
 			return -1;
 		}
 
-		public bool Find(string str, ref int index)
+		public bool Find(string str, out int index)
 		{
 			bool result = false;
 
-            int L = 0;
-			int H = this.fList.Count - 1;
-			if (L <= H)
-			{
-				do
-				{
-					int I = (int)((uint)(L + H) >> 1);
-					int C = this.CompareStrings(this.fList[I].FString, str);
-					if (C < 0)
-					{
-						L = I + 1;
-					}
-					else
-					{
-						H = I - 1;
-						if (C == 0)
-						{
-							result = true;
-							if (this.Duplicates != TDuplicates.dupAccept)
-							{
-								L = I;
-							}
-						}
-					}
-				}
-				while (L <= H);
-			}
-			index = L;
+            int low = 0;
+			int high = this.fList.Count - 1;
+			
+            while (low <= high)
+            {
+                int idx = (int)((uint)(low + high) >> 1);
+                int cmpRes = this.CompareStrings(this.fList[idx].FString, str);
+                if (cmpRes < 0)
+                {
+                    low = idx + 1;
+                }
+                else
+                {
+                    high = idx - 1;
+                    if (cmpRes == 0)
+                    {
+                        result = true;
+                        if (this.fDuplicateSolve != DuplicateSolve.Accept)
+                        {
+                            low = idx;
+                        }
+                    }
+                }
+            }
+			
+            index = low;
 
             return result;
 		}
@@ -520,34 +513,34 @@ namespace BSLib
 
 		#region Sorting
 
-		private void QuickSort(int L, int R)
+		private void QuickSort(int left, int right)
 		{
-			int I;
+			int I, J;
 			do
 			{
-				I = L;
-				int J = R;
-				int P = (int)((uint)(L + R) >> 1);
+				I = left;
+				J = right;
+				int mid = (int)((uint)(left + right) >> 1);
 				while (true)
 				{
-					if (SCompare(I, P) >= 0)
+					if (SCompare(I, mid) >= 0)
 					{
-						while (SCompare(J, P) > 0)
+						while (SCompare(J, mid) > 0)
 						{
 							J--;
 						}
 						if (I <= J)
 						{
 							this.ExchangeItems(I, J);
-							if (P == I)
+							if (mid == I)
 							{
-								P = J;
+								mid = J;
 							}
 							else
 							{
-								if (P == J)
+								if (mid == J)
 								{
-									P = I;
+									mid = I;
 								}
 							}
 							I++;
@@ -563,13 +556,13 @@ namespace BSLib
 						I++;
 					}
 				}
-				if (L < J)
+				if (left < J)
 				{
-					this.QuickSort(L, J);
+					this.QuickSort(left, J);
 				}
-				L = I;
+				left = I;
 			}
-			while (I < R);
+			while (I < right);
 		}
 
 		public int CompareStrings(string s1, string s2)

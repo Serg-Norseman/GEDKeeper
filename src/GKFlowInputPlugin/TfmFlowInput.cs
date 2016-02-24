@@ -5,10 +5,6 @@ using BSLib;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 
-/// <summary>
-/// Localization: dirty
-/// </summary>
-
 namespace GKFlowInputPlugin
 {
     [Serializable]
@@ -22,10 +18,13 @@ namespace GKFlowInputPlugin
         {
         }
     }
-    
+
+    /// <summary>
+    /// Localization: dirty
+    /// </summary>
     public partial class TfmFlowInput : Form
 	{
-		private enum TPersonLink : byte
+		private enum PersonLink
 		{
 			plNone,
 			plPerson,
@@ -79,7 +78,7 @@ namespace GKFlowInputPlugin
 			this.InitSimpleControls();
 			this.InitSourceControls();
 
-			for (TPersonLink pl = TPersonLink.plPerson; pl <= TPersonLink.plChild; pl++)
+			for (PersonLink pl = PersonLink.plPerson; pl <= PersonLink.plChild; pl++)
 			{
 				this.cbPersonLink.Items.Add(fLangMan.LS(this.PersonLinks[(int)pl]));
 			}
@@ -136,11 +135,11 @@ namespace GKFlowInputPlugin
 			MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Hand);
 		}
 
-        private TPersonLink GetLinkByName(string aName)
+        private PersonLink GetLinkByName(string aName)
 		{
-			TPersonLink res = TPersonLink.plNone;
+			PersonLink res = PersonLink.plNone;
 
-			for (TPersonLink pl = TPersonLink.plPerson; pl <= TPersonLink.plLast; pl++)
+			for (PersonLink pl = PersonLink.plPerson; pl <= PersonLink.plLast; pl++)
 			{
 				if (this.fLangMan.LS(PersonLinks[(int)pl]) == aName)
 				{
@@ -256,7 +255,7 @@ namespace GKFlowInputPlugin
 			for (int i = 0; i < num; i++) linksList[i] = this.fLangMan.LS(PersonLinks[i]);
 
 			((System.ComponentModel.ISupportInitialize)(dgv)).BeginInit();
-			dgv.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+			dgv.Columns.AddRange(new DataGridViewColumn[] {
 			                     	AddComboColumn("FLink", this.fLangMan.LS(FLS.LSID_Join), linksList),
 			                     	AddTextColumn("FName", this.fLangMan.LS(FLS.LSID_Name)),
 			                     	AddTextColumn("FPatronymic", this.fLangMan.LS(FLS.LSID_Patronymic)),
@@ -329,7 +328,7 @@ namespace GKFlowInputPlugin
 						string comment = (string)row.Cells[5].Value;
 
 						if (!string.IsNullOrEmpty(lnk)) {
-							TPersonLink link = GetLinkByName(lnk);
+							PersonLink link = GetLinkByName(lnk);
 
 							GEDCOMSex sx = this.fBase.DefineSex(nm, pt);
 							GEDCOMIndividualRecord iRec = this.fBase.Context.CreatePersonEx(nm, pt, fm, sx, false);
@@ -363,10 +362,10 @@ namespace GKFlowInputPlugin
 							GEDCOMFamilyRecord family = null;
 
 							switch (link) {
-								case TPersonLink.plNone:
+								case PersonLink.plNone:
 									break;
 
-								case TPersonLink.plPerson:
+								case PersonLink.plPerson:
 									{
 										iMain = iRec;
 										string evName = "";
@@ -390,25 +389,25 @@ namespace GKFlowInputPlugin
 									}
 									break;
 
-								case TPersonLink.plFather:
-								case TPersonLink.plMother:
+								case PersonLink.plFather:
+								case PersonLink.plMother:
 									CheckMain(iMain);
 									family = _ParseSource_GetParentsFamily(iMain);
 									family.AddSpouse(iRec);
 									break;
 
-								case TPersonLink.plGodparent:
+								case PersonLink.plGodparent:
 									CheckMain(iMain);
 									iMain.AddAssociation(fLangMan.LS(FLS.LSID_PLGodparent), iRec);
 									break;
 
-								case TPersonLink.plSpouse:
+								case PersonLink.plSpouse:
 									CheckMain(iMain);
 									family = _ParseSource_GetMarriageFamily(iMain);
 									family.AddSpouse(iRec);
 									break;
 
-								case TPersonLink.plChild:
+								case PersonLink.plChild:
 									CheckMain(iMain);
 									family = _ParseSource_GetMarriageFamily(iMain);
 									family.AddChild(iRec);

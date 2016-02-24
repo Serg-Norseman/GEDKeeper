@@ -61,11 +61,11 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="frmP2Main.cs">
+    <Compile Include="frmTVPSettings.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmP2Main.Designer.cs">
-      <DependentUpon>frmP2Main.cs</DependentUpon>
+    <Compile Include="frmTVPSettings.Designer.cs">
+      <DependentUpon>frmTVPSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="GKTreeVizPlugin.cs" />
     <Compile Include="HighResolutionTimer.cs" />
@@ -75,10 +75,11 @@
     <Compile Include="TreeVizViewer.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="TVPerson.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="frmP2Main.resx">
-      <DependentUpon>frmP2Main.cs</DependentUpon>
+    <EmbeddedResource Include="frmTVPSettings.resx">
+      <DependentUpon>frmTVPSettings.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -95,6 +96,10 @@
     <None Include="csgl.native.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ProfilingSessions\Session20160220_235528.sdps" />
+    <Content Include="ProfilingSessions\Session20160221_000617.sdps" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

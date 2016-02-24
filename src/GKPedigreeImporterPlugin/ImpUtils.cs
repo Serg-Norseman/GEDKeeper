@@ -1,5 +1,4 @@
-﻿using System;
-using BSLib;
+﻿using BSLib;
 
 namespace GKPedigreeImporterPlugin
 {
@@ -8,11 +7,11 @@ namespace GKPedigreeImporterPlugin
 	/// </summary>
 	public static class ImpUtils
 	{
-		private const string RomeChars = "IVXLCDM";
+		private const string ROME_CHARS = "IVXLCDM";
 
 		private static bool IsRomeChar(char c)
 		{
-			return (RomeChars.IndexOf(c) >= 0);
+			return (ROME_CHARS.IndexOf(c) >= 0);
 		}
 
 		public static bool IsRomeLine(string str)
@@ -50,11 +49,11 @@ namespace GKPedigreeImporterPlugin
 			return result;
 		}
 
-		public static bool IsPersonLine_DAboville(string str, ref string p_id)
+        public static bool IsPersonLine_DAboville(string str, out string pId)
 		{
 			// "11.21.31.11."
 
-			p_id = "";
+            pId = "";
 
 			StringTokenizer strTok = new StringTokenizer(str);
 			strTok.RecognizeDecimals = false;
@@ -66,13 +65,13 @@ namespace GKPedigreeImporterPlugin
 
 				if (token.Kind == TokenKind.Symbol && token.Value == ".") {
 					if (prev != null && prev.Kind == TokenKind.Number) {
-						p_id += token.Value;
+                        pId += token.Value;
 						prev = token;
 					} else {
 						break;
 					}
 				} else if (token.Kind == TokenKind.Number) {
-					p_id += token.Value;
+                    pId += token.Value;
 					prev = token;
 				} else {
 					break;
@@ -136,11 +135,11 @@ namespace GKPedigreeImporterPlugin
 			return true;
 		}
 
-		public static bool IsPersonLine_Konovalov(string str, ref string p_id)
+        public static bool IsPersonLine_Konovalov(string str, out string pId)
 		{
 			// "11-21/1 (test+2, test)."
 
-			p_id = "";
+            pId = "";
 
 			StringTokenizer strTok = new StringTokenizer(str);
 			strTok.RecognizeDecimals = false;
@@ -148,29 +147,29 @@ namespace GKPedigreeImporterPlugin
 
 			token = strTok.Next();
 			if (token.Kind == TokenKind.Number) {
-				p_id += token.Value;
+                pId += token.Value;
 			} else {
 				return false;
 			}
 
 			token = strTok.Next();
 			if (token.Kind == TokenKind.Symbol && token.Value == "-") {
-				p_id += token.Value;
+                pId += token.Value;
 
 				token = strTok.Next();
 				if (token.Kind == TokenKind.Number) {
-					p_id += token.Value;
+                    pId += token.Value;
 				} else {
 					return false;
 				}
 
 				token = strTok.Next();
 				if (token.Kind == TokenKind.Symbol && token.Value == "/") {
-					p_id += token.Value;
+                    pId += token.Value;
 
 					token = strTok.Next();
 					if (token.Kind == TokenKind.Number || (token.Kind == TokenKind.Symbol && token.Value == "?")) {
-						p_id += token.Value;
+                        pId += token.Value;
 					} else {
 						return false;
 					}
@@ -180,26 +179,26 @@ namespace GKPedigreeImporterPlugin
 			}
 
 			if (token.Kind == TokenKind.WhiteSpace && token.Value == " ") {
-				p_id += token.Value;
+                pId += token.Value;
 				token = strTok.Next();
 			}
 
 			if (token.Kind == TokenKind.Symbol && token.Value == "(") {
-				p_id += token.Value;
+                pId += token.Value;
 
 				do {
 					token = strTok.Next();
 					if (token.Kind == TokenKind.EOL || token.Kind == TokenKind.EOF) {
 						return false;
 					}
-					p_id += token.Value;
+                    pId += token.Value;
 				} while (token.Kind != TokenKind.Symbol || token.Value != ")");
 
 				token = strTok.Next();
 			}
 
 			if (token.Kind == TokenKind.Symbol && token.Value == ".") {
-				p_id += token.Value;
+                pId += token.Value;
 			} else {
 				return false;
 			}

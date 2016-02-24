@@ -53,9 +53,8 @@ namespace GKCalendarPlugin
 				string s = CalendarData.date_to_str(gdt.Year, gdt.Month, gdt.Day, CalendarConverter.DateEra.AD) + ", " + dtInfo.DayNames[(int)gdt.DayOfWeek];
 				this.AddItem(this.fPlugin.LangMan.LS(PLS.LSID_Cal_Gregorian), s);
 				double jd = CalendarConverter.gregorian_to_jd(gdt.Year, gdt.Month, gdt.Day);
-				int year = 0;
-				int month = 0;
-				int day = 0;
+
+                int year, month, day;
                 CalendarConverter.jd_to_julian(jd, out year, out month, out day);
 				this.AddItem(this.fPlugin.LangMan.LS(PLS.LSID_Cal_Julian), CalendarData.date_to_str(year, month, day, CalendarConverter.DateEra.AD));
 
@@ -83,8 +82,7 @@ namespace GKCalendarPlugin
 				s = s + " " + year.ToString() + ", " + CalendarData.IndianCivilWeekdays[CalendarConverter.jwday(jd)];
 				this.AddItem(this.fPlugin.LangMan.LS(PLS.LSID_Cal_Indian), s);
 
-				int major = 0;
-				int cycle = 0;
+				int major, cycle;
                 CalendarConverter.jd_to_bahai(jd, out major, out cycle, out year, out month, out day);
 				s = "Кулл-и Шай' " + major.ToString() + ", Вахид " + cycle.ToString() + ", ";
 				s = s + day.ToString() + " ";

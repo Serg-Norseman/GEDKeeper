@@ -84,8 +84,9 @@ namespace GKUI.Controls
         	if (this.fValue == null) {
         		strVal = "";
         	} else {
-        		if (this.fValue is GEDCOMCustomDate) {
-        			strVal = GKUtils.GetCustomDateFmtString((GEDCOMCustomDate)this.fValue, GlobalOptions.Instance.DefDateFormat, true);
+        	    GEDCOMCustomDate customDate = this.fValue as GEDCOMCustomDate;
+        	    if (customDate != null) {
+        			strVal = GKUtils.GetCustomDateFmtString(customDate, GlobalOptions.Instance.DefDateFormat, true);
         		} else {
         			strVal = this.fValue.ToString();
         		}

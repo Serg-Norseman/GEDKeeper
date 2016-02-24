@@ -4,7 +4,6 @@ using System.Drawing;
 using BSLib;
 using BSLib.Graphics;
 using BSLib.SmartGraph;
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Types;
@@ -394,7 +393,7 @@ namespace GKUI.Charts
 
                 if (this.fChart.PathDebug) {
                     this.Lines[idx] = this.PathDebug;
-                    idx++;
+                    //idx++;
                 }
             }
             catch (Exception ex)

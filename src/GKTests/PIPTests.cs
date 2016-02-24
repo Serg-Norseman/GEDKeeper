@@ -1,5 +1,4 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using GKPedigreeImporterPlugin;
 
 namespace GKTests
@@ -15,29 +14,29 @@ namespace GKTests
 		public void ImpUtils_Valid_Tests()
 		{
 			bool res;
-			string pid = "";
+			string pid;
 
-			res = ImpUtils.IsPersonLine_Konovalov("1. Ivan", ref pid);
+			res = ImpUtils.IsPersonLine_Konovalov("1. Ivan", out pid);
 			Assert.AreEqual("1.", pid, "[v1]");
 			Assert.AreEqual(true, res, "[v1]");
 
-			res = ImpUtils.IsPersonLine_Konovalov("2-1. Ivan", ref pid);
+            res = ImpUtils.IsPersonLine_Konovalov("2-1. Ivan", out pid);
 			Assert.AreEqual("2-1.", pid);
 			Assert.AreEqual(true, res);
 
-			res = ImpUtils.IsPersonLine_Konovalov("11-21. Ivan", ref pid);
+            res = ImpUtils.IsPersonLine_Konovalov("11-21. Ivan", out pid);
 			Assert.AreEqual("11-21.", pid);
 			Assert.AreEqual(true, res);
 
-			res = ImpUtils.IsPersonLine_Konovalov("11-21/1. Ivan", ref pid);
+            res = ImpUtils.IsPersonLine_Konovalov("11-21/1. Ivan", out pid);
 			Assert.AreEqual("11-21/1.", pid);
 			Assert.AreEqual(true, res);
 
-			res = ImpUtils.IsPersonLine_Konovalov("11-21/?. Ivan", ref pid);
+            res = ImpUtils.IsPersonLine_Konovalov("11-21/?. Ivan", out pid);
 			Assert.AreEqual("11-21/?.", pid, "[v2]");
 			Assert.AreEqual(true, res, "[v2]");
 
-			res = ImpUtils.IsPersonLine_Konovalov("11-21/1 (test+2, test). Ivan", ref pid);
+            res = ImpUtils.IsPersonLine_Konovalov("11-21/1 (test+2, test). Ivan", out pid);
 			Assert.AreEqual("11-21/1 (test+2, test).", pid);
 			Assert.AreEqual(true, res);
 
@@ -61,15 +60,15 @@ namespace GKTests
 
 
 
-			res = ImpUtils.IsPersonLine_DAboville("1. Ivan", ref pid);
+            res = ImpUtils.IsPersonLine_DAboville("1. Ivan", out pid);
 			Assert.AreEqual("1.", pid, "[v2-1]");
 			Assert.AreEqual(true, res, "[v2-1]");
 
-			res = ImpUtils.IsPersonLine_DAboville("1.1. Ivan", ref pid);
+            res = ImpUtils.IsPersonLine_DAboville("1.1. Ivan", out pid);
 			Assert.AreEqual("1.1.", pid, "[v2-2]");
 			Assert.AreEqual(true, res, "[v2-2]");
 
-			res = ImpUtils.IsPersonLine_DAboville("11.21.31.11. Ivan", ref pid);
+            res = ImpUtils.IsPersonLine_DAboville("11.21.31.11. Ivan", out pid);
 			Assert.AreEqual("11.21.31.11.", pid, "[v2-3]");
 			Assert.AreEqual(true, res, "[v2-3]");
 
@@ -122,50 +121,50 @@ namespace GKTests
 		public void ImpUtils_Invalid_Tests()
 		{
 			bool res;
-			string pid = "";
+			string pid;
 
-			res = ImpUtils.IsPersonLine_Konovalov("-1. Ivan", ref pid);
+            res = ImpUtils.IsPersonLine_Konovalov("-1. Ivan", out pid);
 			Assert.AreEqual(false, res);
 
-			res = ImpUtils.IsPersonLine_Konovalov("1 Ivan", ref pid);
+            res = ImpUtils.IsPersonLine_Konovalov("1 Ivan", out pid);
 			Assert.AreEqual(false, res);
 
-			res = ImpUtils.IsPersonLine_Konovalov("1-. Ivan", ref pid);
+            res = ImpUtils.IsPersonLine_Konovalov("1-. Ivan", out pid);
 			Assert.AreEqual(false, res);
 
-			res = ImpUtils.IsPersonLine_Konovalov("11-11 Ivan", ref pid);
+            res = ImpUtils.IsPersonLine_Konovalov("11-11 Ivan", out pid);
 			Assert.AreEqual(false, res);
 
-			res = ImpUtils.IsPersonLine_Konovalov("1.2. Ivan", ref pid);
+            res = ImpUtils.IsPersonLine_Konovalov("1.2. Ivan", out pid);
 			Assert.AreEqual(false, res, "[i1]");
 
-			res = ImpUtils.IsPersonLine_Konovalov("1.1.1. Ivan", ref pid);
+            res = ImpUtils.IsPersonLine_Konovalov("1.1.1. Ivan", out pid);
 			Assert.AreEqual(false, res, "[i2]");
 
-			res = ImpUtils.IsPersonLine_Konovalov("11-21/. Ivan", ref pid);
+            res = ImpUtils.IsPersonLine_Konovalov("11-21/. Ivan", out pid);
 			Assert.AreEqual(false, res);
 
-			res = ImpUtils.IsPersonLine_Konovalov("11-21-31. Ivan", ref pid);
+            res = ImpUtils.IsPersonLine_Konovalov("11-21-31. Ivan", out pid);
 			Assert.AreEqual(false, res);
 
-			res = ImpUtils.IsPersonLine_Konovalov("11-21-31 (. Ivan", ref pid);
+            res = ImpUtils.IsPersonLine_Konovalov("11-21-31 (. Ivan", out pid);
 			Assert.AreEqual(false, res);
 
-			res = ImpUtils.IsPersonLine_Konovalov("11-21-31 (test) Ivan", ref pid);
+            res = ImpUtils.IsPersonLine_Konovalov("11-21-31 (test) Ivan", out pid);
 			Assert.AreEqual(false, res);
 
 
 
-			res = ImpUtils.IsPersonLine_DAboville("-1. Ivan", ref pid);
+            res = ImpUtils.IsPersonLine_DAboville("-1. Ivan", out pid);
 			Assert.AreEqual(false, res, "[i2-1]");
 
-			res = ImpUtils.IsPersonLine_DAboville("1-1. Ivan", ref pid);
+            res = ImpUtils.IsPersonLine_DAboville("1-1. Ivan", out pid);
 			Assert.AreEqual(false, res, "[i2-2]");
 
-			res = ImpUtils.IsPersonLine_DAboville(".1. Ivan", ref pid);
+            res = ImpUtils.IsPersonLine_DAboville(".1. Ivan", out pid);
 			Assert.AreEqual(false, res, "[i2-3]");
 
-			res = ImpUtils.IsPersonLine_DAboville("1710 (80), 1727 (80).", ref pid);
+            res = ImpUtils.IsPersonLine_DAboville("1710 (80), 1727 (80).", out pid);
 			Assert.AreEqual(false, res, "[i2-4]");
 
 

@@ -147,11 +147,11 @@ namespace GKCommon.GEDCOM
 			}
 			if (index < 0 || index > chars.Length)
 			{
-				throw new ArgumentOutOfRangeException("index", "ArgRange_Array");	
+				throw new ArgumentOutOfRangeException("index");	
 			}
 			if (count < 0 || count > (chars.Length - index))
 			{
-				throw new ArgumentOutOfRangeException("count", "ArgRange_Array");
+				throw new ArgumentOutOfRangeException("count");
 			}
 			
 			int c = 0;
@@ -218,21 +218,21 @@ namespace GKCommon.GEDCOM
 			}
 			if (charIndex < 0 || charIndex > chars.Length)
 			{
-				throw new ArgumentOutOfRangeException("charIndex", "ArgRange_Array");
+				throw new ArgumentOutOfRangeException("charIndex");
 			}
 			if (byteIndex < 0 || byteIndex > bytes.Length)
 			{
-				throw new ArgumentOutOfRangeException("byteIndex", "ArgRange_Array");
+				throw new ArgumentOutOfRangeException("byteIndex");
 			}
 			if ((bytes.Length - byteIndex) < charCount)
 			{
 				throw new ArgumentException("Arg_InsufficientSpace");
 			}
 			int count = charCount;
-			char ch;
+
 			while (count -- > 0)
 			{
-				ch = chars[charIndex++];
+                char ch = chars[charIndex++];
 				if (ch < (char)0x80)
 				{
 					bytes[byteIndex ++] = (byte)ch;
@@ -266,21 +266,21 @@ namespace GKCommon.GEDCOM
 			}
 			if (charIndex < 0 || charIndex > s.Length)
 			{
-				throw new ArgumentOutOfRangeException("charIndex", "ArgRange_Array");
+				throw new ArgumentOutOfRangeException("charIndex");
 			}
 			if (byteIndex < 0 || byteIndex > bytes.Length)
 			{
-				throw new ArgumentOutOfRangeException("byteIndex", "ArgRange_Array");
+				throw new ArgumentOutOfRangeException("byteIndex");
 			}
 			if ((bytes.Length - byteIndex) < charCount)
 			{
 				throw new ArgumentException("Arg_InsufficientSpace");
 			}
 			int count = charCount;
-			char ch;
+
 			while (count -- > 0)
 			{
-				ch = s[charIndex++];
+                char ch = s[charIndex++];
 				if (ch < (char)0x80)
 				{
 					bytes[byteIndex ++] = (byte)ch;
@@ -321,11 +321,11 @@ namespace GKCommon.GEDCOM
 			}
 			if (index < 0 || index > bytes.Length) 
 			{
-				throw new ArgumentOutOfRangeException("index", "ArgRange_Array");
+				throw new ArgumentOutOfRangeException("index");
 			}
 			if (count < 0 || count > (bytes.Length - index)) 
 			{
-				throw new ArgumentOutOfRangeException ("count", "ArgRange_Array");
+				throw new ArgumentOutOfRangeException ("count");
 			}
 			
 			int c = 0;
@@ -337,7 +337,7 @@ namespace GKCommon.GEDCOM
 				
 				if (b > 0x7f)
 				{ 
-					int i = GetMarc8Index((int)b);
+					int i = GetMarc8Index(b);
 					
 					if (i >= marc8CombinerStart)
 					{
@@ -370,15 +370,15 @@ namespace GKCommon.GEDCOM
 			}
 			if (byteIndex < 0 || byteIndex > bytes.Length) 
 			{
-				throw new ArgumentOutOfRangeException("byteIndex", "ArgRange_Array");
+				throw new ArgumentOutOfRangeException("byteIndex");
 			}
 			if (byteCount < 0 || byteCount > (bytes.Length - byteIndex)) 
 			{
-				throw new ArgumentOutOfRangeException ("byteCount", "ArgRange_Array");
+				throw new ArgumentOutOfRangeException ("byteCount");
 			}
 			if (charIndex < 0 || charIndex > chars.Length) 
 			{
-				throw new ArgumentOutOfRangeException ("charIndex", "ArgRange_Array");
+				throw new ArgumentOutOfRangeException ("charIndex");
 			}
 			if ((chars.Length - charIndex) < byteCount) 
 			{
@@ -434,7 +434,7 @@ namespace GKCommon.GEDCOM
 		{
 			if (byteCount < 0) 
 			{
-				throw new ArgumentOutOfRangeException ("byteCount", "ArgRange_NonNegative");
+				throw new ArgumentOutOfRangeException ("byteCount", @"ArgRange_NonNegative");
 			}
 			
 			return byteCount;
@@ -445,7 +445,7 @@ namespace GKCommon.GEDCOM
 		{
 			if (charCount < 0) 
 			{
-				throw new ArgumentOutOfRangeException ("charCount", "ArgRange_NonNegative");
+				throw new ArgumentOutOfRangeException ("charCount", @"ArgRange_NonNegative");
 			}
 			
 			return (charCount * 2);
@@ -459,11 +459,11 @@ namespace GKCommon.GEDCOM
 			}
 			if (index < 0 || index > bytes.Length)
 			{
-				throw new ArgumentOutOfRangeException("index", "ArgRange_Array");
+				throw new ArgumentOutOfRangeException("index");
 			}
 			if (count < 0 || count > (bytes.Length - index))
 			{
-				throw new ArgumentOutOfRangeException("count", "ArgRange_Array");
+				throw new ArgumentOutOfRangeException("count");
 			}
 			if (count == 0)
 			{

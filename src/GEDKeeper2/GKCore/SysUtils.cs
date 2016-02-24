@@ -22,7 +22,7 @@ namespace GKCore
 
         public static void SetKeyLayout(ushort layout)
         {
-            ActivateKeyboardLayout((uint)layout, 0u);
+            ActivateKeyboardLayout(layout, 0u);
         }
 
         public static bool IsConnectedToInternet()  
@@ -37,7 +37,7 @@ namespace GKCore
 			return span.Days;
 		}
 
-		private static readonly ushort[][] MonthDays = new ushort[][]
+		private static readonly ushort[][] MONTH_DAYS = new ushort[][]
 		{
 			new ushort[] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }, 
 			new ushort[] { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
@@ -45,7 +45,7 @@ namespace GKCore
 
 		public static ushort DaysInAMonth(ushort year, ushort month)
 		{
-			return MonthDays[(month == 2 && DateTime.IsLeapYear((int)year)) ? 1 : 0][(int)month - 1];
+			return MONTH_DAYS[(month == 2 && DateTime.IsLeapYear(year)) ? 1 : 0][month - 1];
 		}
 
         public static bool IsSetBit(uint val, int pos)

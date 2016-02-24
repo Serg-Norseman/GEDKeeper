@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
@@ -88,7 +87,7 @@ namespace GKImageViewerPlugin
 								txtBox.Multiline = true;
 								txtBox.ReadOnly = true;
 								txtBox.ScrollBars = ScrollBars.Both;
-								txtBox.Text = strd.ReadToEnd().ToString();
+								txtBox.Text = strd.ReadToEnd();
 								ctl = txtBox;
 							}
 						}
@@ -103,7 +102,7 @@ namespace GKImageViewerPlugin
 							{
 								RichTextBox txtBox = new RichTextBox();
 								txtBox.ReadOnly = true;
-								txtBox.Text = strd.ReadToEnd().ToString();
+								txtBox.Text = strd.ReadToEnd();
 								ctl = txtBox;
 							}
 						}
