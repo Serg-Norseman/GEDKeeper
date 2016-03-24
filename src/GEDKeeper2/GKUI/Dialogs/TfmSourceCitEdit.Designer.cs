@@ -31,7 +31,7 @@ namespace GKUI.Dialogs
 			// 
 			this.btnAccept.Image = global::GKResources.iBtnAccept;
 			this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.btnAccept.Location = new System.Drawing.Point(176, 160);
+			this.btnAccept.Location = new System.Drawing.Point(173, 163);
 			this.btnAccept.Name = "btnAccept";
 			this.btnAccept.Size = new System.Drawing.Size(81, 25);
 			this.btnAccept.TabIndex = 7;
@@ -44,7 +44,7 @@ namespace GKUI.Dialogs
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.btnCancel.Image = global::GKResources.iBtnCancel;
 			this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.btnCancel.Location = new System.Drawing.Point(264, 160);
+			this.btnCancel.Location = new System.Drawing.Point(260, 163);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(81, 25);
 			this.btnCancel.TabIndex = 8;
@@ -53,7 +53,7 @@ namespace GKUI.Dialogs
 			// 
 			// Label1
 			// 
-			this.Label1.Location = new System.Drawing.Point(8, 56);
+			this.Label1.Location = new System.Drawing.Point(12, 56);
 			this.Label1.Name = "Label1";
 			this.Label1.Size = new System.Drawing.Size(90, 13);
 			this.Label1.TabIndex = 3;
@@ -61,14 +61,14 @@ namespace GKUI.Dialogs
 			// 
 			// EditPage
 			// 
-			this.EditPage.Location = new System.Drawing.Point(8, 72);
+			this.EditPage.Location = new System.Drawing.Point(12, 72);
 			this.EditPage.Name = "EditPage";
-			this.EditPage.Size = new System.Drawing.Size(337, 21);
+			this.EditPage.Size = new System.Drawing.Size(329, 21);
 			this.EditPage.TabIndex = 4;
 			// 
 			// Label2
 			// 
-			this.Label2.Location = new System.Drawing.Point(8, 8);
+			this.Label2.Location = new System.Drawing.Point(12, 8);
 			this.Label2.Name = "Label2";
 			this.Label2.Size = new System.Drawing.Size(60, 13);
 			this.Label2.TabIndex = 0;
@@ -78,7 +78,7 @@ namespace GKUI.Dialogs
 			// 
 			this.btnSourceAdd.AccessibleDescription = "Выбрать персональную запись";
 			this.btnSourceAdd.Image = global::GKResources.iRecNew;
-			this.btnSourceAdd.Location = new System.Drawing.Point(320, 21);
+			this.btnSourceAdd.Location = new System.Drawing.Point(313, 19);
 			this.btnSourceAdd.Name = "btnSourceAdd";
 			this.btnSourceAdd.Size = new System.Drawing.Size(28, 28);
 			this.btnSourceAdd.TabIndex = 2;
@@ -87,7 +87,7 @@ namespace GKUI.Dialogs
 			// 
 			// Label3
 			// 
-			this.Label3.Location = new System.Drawing.Point(8, 104);
+			this.Label3.Location = new System.Drawing.Point(12, 104);
 			this.Label3.Name = "Label3";
 			this.Label3.Size = new System.Drawing.Size(100, 13);
 			this.Label3.TabIndex = 5;
@@ -96,16 +96,16 @@ namespace GKUI.Dialogs
 			// EditCertainty
 			// 
 			this.EditCertainty.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.EditCertainty.Location = new System.Drawing.Point(8, 120);
+			this.EditCertainty.Location = new System.Drawing.Point(12, 120);
 			this.EditCertainty.Name = "EditCertainty";
-			this.EditCertainty.Size = new System.Drawing.Size(337, 21);
+			this.EditCertainty.Size = new System.Drawing.Size(329, 21);
 			this.EditCertainty.TabIndex = 6;
 			// 
 			// cbSource
 			// 
-			this.cbSource.Location = new System.Drawing.Point(8, 24);
+			this.cbSource.Location = new System.Drawing.Point(12, 24);
 			this.cbSource.Name = "cbSource";
-			this.cbSource.Size = new System.Drawing.Size(306, 21);
+			this.cbSource.Size = new System.Drawing.Size(295, 21);
 			this.cbSource.Sorted = true;
 			this.cbSource.TabIndex = 1;
 			this.cbSource.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbSource_KeyDown);
@@ -114,9 +114,10 @@ namespace GKUI.Dialogs
 			// TfmSourceCitEdit
 			// 
 			this.AcceptButton = this.btnAccept;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.CancelButton = this.btnCancel;
-			this.ClientSize = new System.Drawing.Size(353, 193);
+			this.ClientSize = new System.Drawing.Size(353, 200);
 			this.Controls.Add(this.btnAccept);
 			this.Controls.Add(this.btnCancel);
 			this.Controls.Add(this.Label1);

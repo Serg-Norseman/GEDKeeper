@@ -64,8 +64,8 @@ namespace GKUI.Dialogs
 			this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
 			this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
 			this.Text = LangMan.LS(LSID.LSID_WinUserRefEdit);
-			this.Label1.Text = LangMan.LS(LSID.LSID_Reference);
-			this.Label2.Text = LangMan.LS(LSID.LSID_Type);
+			this.lblReference.Text = LangMan.LS(LSID.LSID_Reference);
+			this.lblRefType.Text = LangMan.LS(LSID.LSID_Type);
 		}
 	}
 }

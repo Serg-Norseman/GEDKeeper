@@ -43,6 +43,7 @@ namespace GKCore.Options
 		private FormWindowState fMWinState;
 		private readonly StringList fLastBases;
 		private bool fRevisionsBackup;
+		private bool fShowDatesCalendar;
 
 
 		public static GlobalOptions Instance
@@ -180,6 +181,13 @@ namespace GKCore.Options
 			get { return this.fIndividualListColumns; }
 		}
 
+		public bool ShowDatesCalendar
+		{
+			get { return this.fShowDatesCalendar; }
+			set { this.fShowDatesCalendar = value; }
+		}
+
+
 		private void LngPrepareProc(string fileName)
 		{
             try
@@ -297,6 +305,7 @@ namespace GKCore.Options
 				this.fShowTips = ini.ReadBool("Common", "ShowTips", true);
 				this.fInterfaceLang = (ushort)ini.ReadInteger("Common", "InterfaceLang", 1049);
 				this.fRevisionsBackup = ini.ReadBool("Common", "RevisionsBackup", false);
+				this.fShowDatesCalendar = ini.ReadBool("Common", "ShowDatesCalendar", false);
 
 				ushort kl = (ushort)ini.ReadInteger("Common", "KeyLayout", SysUtils.GetKeyLayout());
                 SysUtils.SetKeyLayout(kl);
@@ -381,6 +390,8 @@ namespace GKCore.Options
 				ini.WriteBool("Common", "ShowTips", this.fShowTips);
 				ini.WriteInteger("Common", "InterfaceLang", this.fInterfaceLang);
 				ini.WriteBool("Common", "RevisionsBackup", this.fRevisionsBackup);
+				ini.WriteBool("Common", "ShowDatesCalendar", this.fShowDatesCalendar);
+				
 				ini.WriteInteger("Common", "KeyLayout", SysUtils.GetKeyLayout());
 
 				this.fChartOptions.SaveToFile(ini);

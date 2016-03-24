@@ -13,12 +13,6 @@ namespace GKCommon
 {
 	public static class CalendarConverter
 	{
-		public enum DateEra
-		{
-			AD,
-			BC
-		}
-
 		#region Aux functions
 
 		private static int iFloor(double X)

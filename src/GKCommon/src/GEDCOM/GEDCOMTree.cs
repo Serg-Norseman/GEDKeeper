@@ -345,7 +345,7 @@ namespace GKCommon.GEDCOM
 
 		public void SaveToFile(string fileName, GEDCOMCharacterSet charSet)
 		{
-			using (FileStream fileStream = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write))
+			using (FileStream fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write))
 			{
 				this.SaveToStreamExt(fileStream, fileName, charSet);
 			}

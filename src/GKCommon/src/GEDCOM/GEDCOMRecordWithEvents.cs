@@ -40,6 +40,24 @@ namespace GKCommon.GEDCOM
 			return base.IsEmpty() && (this.fEvents.Count == 0);
 		}
 
+        public override void Assign(GEDCOMTag source)
+		{
+            GEDCOMRecordWithEvents sourceRec = source as GEDCOMRecordWithEvents;
+            if (sourceRec == null)
+            {
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+            }
+
+			base.Assign(source);
+
+			foreach (GEDCOMCustomEvent sourceEvent in sourceRec.fEvents)
+			{
+                GEDCOMCustomEvent copy = (GEDCOMCustomEvent)Activator.CreateInstance(sourceEvent.GetType(), new object[] { this.Owner, this, "", "" });
+				copy.Assign(sourceEvent);
+				this.AddEvent(copy);
+			}
+        }
+
         public override void MoveTo(GEDCOMRecord targetRecord, bool clearDest)
 		{
             GEDCOMRecordWithEvents target = targetRecord as GEDCOMRecordWithEvents;

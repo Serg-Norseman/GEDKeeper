@@ -467,7 +467,7 @@ namespace GKCore
 		/* 422 */ LSID_STRef,
 		/* 423 */ LSID_STArc,
 		/* 424 */ LSID_STStg,
-		/* 425 */ LSID_MT_01,
+		/* 425 */ LSID_DefaultValue,
 		/* 426 */ LSID_MT_02,
 		/* 427 */ LSID_MT_03,
 		/* 428 */ LSID_MT_04,
@@ -702,8 +702,22 @@ namespace GKCore
         /* 636 */ LSID_Start,
         /* 637 */ LSID_Stop,
         /* 638 */ LSID_Demography,
+        /* 639 */ LSID_Names,
 
-		/* 000 */ LSID_Last = LSID_Demography
+        /* 640 */ LSID_NTAka,
+        /* 641 */ LSID_NTBirth,
+        /* 642 */ LSID_NTImmigrant,
+        /* 643 */ LSID_NTMaiden,
+        /* 644 */ LSID_NTMarried,
+        /* 645 */ LSID_RemoveNameQuery,
+        /* 646 */ LSID_RemoveNameFailed,
+        /* 647 */ LSID_Quote,
+        /* 648 */ LSID_BookmarkMerged,
+        /* 649 */ LSID_ShowDatesCalendar,
+        /* 650 */ LSID_RecordDuplicate,
+        /* 651 */ LSID_DuplicateWarning,
+
+        /* 000 */ LSID_Last = LSID_DuplicateWarning
 	}
 
 	public static class LangMan
@@ -1378,7 +1392,21 @@ namespace GKCore
             /* 635 */ "Генерация не удалась",
             /* 636 */ "Старт",
             /* 637 */ "Стоп",
-            /* 638 */ "Демография"
+            /* 638 */ "Демография",
+            /* 639 */ "Имена",
+
+            /* 640 */ "Имя-псевдоним",
+            /* 641 */ "Урожденное",
+            /* 642 */ "В иммиграции",
+            /* 643 */ "Девичье",
+            /* 644 */ "В замужестве",
+            /* 645 */ "Удалить имя?",
+            /* 646 */ "Нельзя удалить единственное имя",
+            /* 647 */ "Цитата",
+            /* 648 */ "Помечать закладкой объединенное",
+            /* 649 */ "Показывать у дат календарь",
+            /* 650 */ "Дублировать запись",
+            /* 651 */ "Внимание: при дублировании персональных записей, родственные связи и ассоциации не копируются"
 		};
 
 		private static readonly string[] LSList = new string[(int)LSID.LSID_Last + 1];

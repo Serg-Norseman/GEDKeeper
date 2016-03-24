@@ -75,6 +75,7 @@
     <Compile Include="src\SmartGraph\IGraph.cs" />
     <Compile Include="src\SmartGraph\IVertex.cs" />
     <Compile Include="src\SmartGraph\Vertex.cs" />
+    <Compile Include="src\SortHelper.cs" />
     <Compile Include="src\StringList.cs" />
     <Compile Include="src\StringTokenizer.cs" />
   </ItemGroup>

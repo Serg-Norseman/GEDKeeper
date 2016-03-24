@@ -130,6 +130,9 @@ namespace GKUI
 			this.btnSetPatriarch.Text = LangMan.LS(LSID.LSID_SetPatFlag);
 			this.btnPatSearch.Text = LangMan.LS(LSID.LSID_Search);
 			this.btnIntoList.Text = LangMan.LS(LSID.LSID_InsertIntoBook);
+			
+			this.gbMergeOther.Text = LangMan.LS(LSID.LSID_Other);
+			this.chkBookmarkMerged.Text = LangMan.LS(LSID.LSID_BookmarkMerged);
 		}
 
 		static TfmTreeTools()
@@ -184,6 +187,14 @@ namespace GKUI
 
 		#region Duplicates Search
 
+		private bool CheckPersonsEx(GEDCOMIndividualRecord rec1, GEDCOMIndividualRecord rec2)
+		{
+			GEDCOMFamilyRecord fam1 = rec1.GetParentsFamily();
+			GEDCOMFamilyRecord fam2 = rec2.GetParentsFamily();
+
+			return (!Equals(fam1, fam2));
+		}
+
 		private void SearchDups()
 		{
 			this.MergeCtl.Base = this.fBase;
@@ -228,7 +239,13 @@ namespace GKUI
 
 						res = iRec.IsMatch(kRec, mParams) >= 100.0f;
 
-						if (res) {
+						if (res && this.fRMMode == GEDCOMRecordType.rtIndividual)
+						{
+							res = this.CheckPersonsEx((GEDCOMIndividualRecord)iRec, (GEDCOMIndividualRecord)kRec);
+						}
+
+						if (res)
+						{
 							this.MergeCtl.SetRec1(iRec);
 							this.MergeCtl.SetRec2(kRec);
 							break;
@@ -252,6 +269,11 @@ namespace GKUI
 			if (this.RadioButton8.Checked) this.fRMMode = GEDCOMRecordType.rtSource;
 
 			this.MergeCtl.MergeMode = this.fRMMode;
+		}
+
+		private void chkBookmarkMerged_CheckedChanged(object sender, EventArgs e)
+		{
+			this.MergeCtl.Bookmark = chkBookmarkMerged.Checked;
 		}
 
         private void btnSkip_Click(object sender, EventArgs e)
@@ -768,6 +790,5 @@ namespace GKUI
 		}
 
 		#endregion
-
 	}
 }

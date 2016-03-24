@@ -50,13 +50,13 @@ namespace GKCalendarPlugin
 			{
 				this.lvDates.Items.Clear();
 				DateTime gdt = this.qtc.SelectionStart;
-				string s = CalendarData.date_to_str(gdt.Year, gdt.Month, gdt.Day, CalendarConverter.DateEra.AD) + ", " + dtInfo.DayNames[(int)gdt.DayOfWeek];
+				string s = CalendarData.date_to_str(gdt.Year, gdt.Month, gdt.Day, CalendarData.DateEra.AD) + ", " + dtInfo.DayNames[(int)gdt.DayOfWeek];
 				this.AddItem(this.fPlugin.LangMan.LS(PLS.LSID_Cal_Gregorian), s);
 				double jd = CalendarConverter.gregorian_to_jd(gdt.Year, gdt.Month, gdt.Day);
 
                 int year, month, day;
                 CalendarConverter.jd_to_julian(jd, out year, out month, out day);
-				this.AddItem(this.fPlugin.LangMan.LS(PLS.LSID_Cal_Julian), CalendarData.date_to_str(year, month, day, CalendarConverter.DateEra.AD));
+				this.AddItem(this.fPlugin.LangMan.LS(PLS.LSID_Cal_Julian), CalendarData.date_to_str(year, month, day, CalendarData.DateEra.AD));
 
                 CalendarConverter.jd_to_hebrew(jd, out year, out month, out day);
 				s = day.ToString() + " ";

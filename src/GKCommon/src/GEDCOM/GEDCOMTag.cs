@@ -121,7 +121,8 @@ namespace GKCommon.GEDCOM
 
 		public bool IsEmptySkip()
 		{
-			return GEDCOMUtils.GetTagProps(this.fName).EmptySkip;
+			GEDCOMUtils.TagProperties props = GEDCOMUtils.GetTagProps(this.fName);
+			return (props != null && props.EmptySkip);
 		}
 
 		public void SetLevel(int value)
@@ -157,33 +158,34 @@ namespace GKCommon.GEDCOM
 			return tag;
 		}
 
-		public virtual void Assign(GEDCOMTag source)
+		public virtual void Assign(GEDCOMTag source/*, string[] skipList = null*/)
 		{
 			if (source == null) return;
 			
 			this.SetName(source.Name);
 			this.StringValue = source.StringValue;
 
-			int num = source.Count;
-			for (int i = 0; i < num; i++)
+			foreach (GEDCOMTag sourceTag in source.fTags)
 			{
-				GEDCOMTag sourceTag = source[i];
-                GEDCOMTag copy = (GEDCOMTag)Activator.CreateInstance(sourceTag.GetType(), new object[] { this.Owner, this, "", "" });
-				copy.Assign(sourceTag);
+                GEDCOMTag copy = this.CreateCopy(sourceTag);
 				this.InsertTag(copy);
 			}
 		}
 
 		protected void AssignList(GEDCOMList<GEDCOMTag> srcList, GEDCOMList<GEDCOMTag> destList)
 		{
-			int num = srcList.Count;
-			for (int i = 0; i < num; i++)
+			foreach (GEDCOMTag sourceTag in srcList)
 			{
-				GEDCOMTag sourceTag = srcList[i];
-                GEDCOMTag copy = (GEDCOMTag)Activator.CreateInstance(sourceTag.GetType(), new object[] { this.Owner, this, "", "" });
-				copy.Assign(sourceTag);
+                GEDCOMTag copy = this.CreateCopy(sourceTag);
 				destList.Add(copy);
 			}
+		}
+
+		protected GEDCOMTag CreateCopy(GEDCOMTag sourceTag)
+		{
+			GEDCOMTag result = (GEDCOMTag)Activator.CreateInstance(sourceTag.GetType(), new object[] { this.Owner, this, "", "" });
+			result.Assign(sourceTag);
+			return result;
 		}
 
 		public virtual void Clear()

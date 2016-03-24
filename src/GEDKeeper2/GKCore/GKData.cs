@@ -126,6 +126,8 @@ namespace GKCore
 		public static readonly StatsTitleStruct[] StatsTitles;
 		public static readonly LSID[] CheckSolveNames;
 		public static readonly string[] CondSigns;
+		public static readonly LSID[] NameTypes;
+		public static readonly string[] Calendars;
 
 		static GKData()
 		{
@@ -292,7 +294,7 @@ namespace GKCore
 
 			MediaTypes = new LSID[]
 			{
-				LSID.LSID_MT_01, 
+				LSID.LSID_DefaultValue, 
 				LSID.LSID_MT_02, 
 				LSID.LSID_MT_03, 
 				LSID.LSID_MT_04, 
@@ -486,10 +488,30 @@ namespace GKCore
 			CheckSolveNames[1] = LSID.LSID_SetIsDead;
 			CheckSolveNames[2] = LSID.LSID_DefineSex;
 			CheckSolveNames[3] = LSID.LSID_DoDelete;
-			
+
 			CondSigns = new string[]
 			{
 				"!=", "<", "<=", "==", "=>", ">", "содержит", "не содержит"
+			};
+
+			NameTypes = new LSID[]
+			{
+				LSID.LSID_DefaultValue,
+				LSID.LSID_NTAka,
+				LSID.LSID_NTBirth,
+				LSID.LSID_NTImmigrant,
+				LSID.LSID_NTMaiden,
+				LSID.LSID_NTMarried
+			};
+
+			Calendars = new string[]
+			{
+				" [G]",
+				" [J]",
+				" [H]",
+				" [FR]",
+				" [R]",
+				""
 			};
 		}
 	}

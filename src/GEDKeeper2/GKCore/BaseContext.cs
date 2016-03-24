@@ -935,7 +935,7 @@ namespace GKCore
 
 		private void SaveToSecFile(string fileName, GEDCOMCharacterSet charSet, string password)
 		{
-			using (FileStream fileStream = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write))
+			using (FileStream fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write))
 			{
 				byte[] gsHeader = Encoding.ASCII.GetBytes(GEDSEC_HEADER);
 				gsHeader[6] = GS_MAJOR_VER;

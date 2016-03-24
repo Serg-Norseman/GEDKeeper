@@ -7,22 +7,29 @@ namespace GKCommon.GEDCOM
 		public static readonly string[] GEDCOMDateApproximatedArray;
 		public static readonly string[] GEDCOMDateRangeArray;
 		public static readonly string[] GEDCOMDateEscapeArray;
-		public static readonly string[] GEDCOMMonthRusArray;
-		public static readonly string[] GEDCOMMonthSysArray;
-		public static readonly string[] GEDCOMMonthArray;
-		public static readonly string[] GEDCOMMonthFrenchArray;
-		public static readonly string[] GEDCOMMonthHebrewArray;
 
-		public DateTime Date
-		{
-			get { return this.GetDateTime(); }
-			set { this.SetDateTime(value); }
-		}
+		public static readonly string[] GEDCOMMonthArray;
+		public static readonly string[] GEDCOMMonthHebrewArray;
+		public static readonly string[] GEDCOMMonthFrenchArray;
+
+		public static readonly string[] GEDCOMMonthSysArray;
+		public static readonly string[] GEDCOMMonthRusArray;
 
 		static GEDCOMCustomDate()
 		{
 			GEDCOMDateApproximatedArray = new string[] { "", "ABT", "CAL", "EST" };
 			GEDCOMDateRangeArray = new string[] { "AFT", "BEF", "BET", "AND" };
+
+			GEDCOMDateEscapeArray = new string[]
+			{
+				"@#DGREGORIAN@", "@#DJULIAN@", "@#DHEBREW@", "@#DFRENCH R@", "@#DROMAN@", "@#DUNKNOWN@"
+			};
+
+			GEDCOMMonthArray = new string[]
+			{
+				"JAN", "FEB", "MAR", "APR", "MAY", "JUN", 
+				"JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
+			};
 
 			GEDCOMMonthHebrewArray = new string[]
 			{
@@ -36,12 +43,6 @@ namespace GKCommon.GEDCOM
 				"GERM", "FLOR", "PRAI", "MESS", "THER", "FRUC", "COMP"
 			};
 
-			GEDCOMMonthArray = new string[]
-			{
-				"JAN", "FEB", "MAR", "APR", "MAY", "JUN", 
-				"JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
-			};
-
 			GEDCOMMonthSysArray = new string[]
 			{
 				"01.", "02.", "03.", "04.", "05.", "06.", 
@@ -53,11 +54,12 @@ namespace GKCommon.GEDCOM
 				"ﬂÕ¬", "‘≈¬", "Ã¿–", "¿œ–", "Ã¿…", "»ﬁÕ", 
 				"»ﬁÀ", "¿¬√", "—≈Õ", "Œ “", "ÕŒﬂ", "ƒ≈ "
 			};
+		}
 
-			GEDCOMDateEscapeArray = new string[]
-			{
-				"@#DGREGORIAN@", "@#DJULIAN@", "@#DHEBREW@", "@#DFRENCH R@", "@#DROMAN@", "@#DUNKNOWN@"
-			};
+		public DateTime Date
+		{
+			get { return this.GetDateTime(); }
+			set { this.SetDateTime(value); }
 		}
 
 		protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
@@ -72,6 +74,11 @@ namespace GKCommon.GEDCOM
 
 		public abstract DateTime GetDateTime();
 		public abstract void SetDateTime(DateTime value);
+
+		/**
+		 * Unified date number, as a temporary substitute of Julian date.
+		 */
+		public abstract double GetUDN();
 
 		public abstract AbsDate GetAbstractDate();
 		public abstract void GetDateParts(out int year, out ushort month, out ushort day, out bool yearBC);

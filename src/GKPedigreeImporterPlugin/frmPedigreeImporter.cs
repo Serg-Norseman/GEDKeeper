@@ -35,7 +35,7 @@ namespace GKPedigreeImporterPlugin
 
             // SetLang()
             this.Text = fLangMan.LS(ILS.LSID_PluginTitle);
-            this.Label3.Text = fLangMan.LS(ILS.LSID_File);
+            this.lblFile.Text = fLangMan.LS(ILS.LSID_File);
             this.btnImportFileChoose.Text = fLangMan.LS(ILS.LSID_DlgSelect) + @"...";
         }
 

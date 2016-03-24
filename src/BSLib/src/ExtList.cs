@@ -193,83 +193,14 @@ namespace BSLib
 			}
 		}
 
-        private void QuickSort(Comparison<T> comparer, int left, int right)
-		{
-			int I, J;
-			do
-			{
-				I = left;
-				J = right;
-				T itm = fList[(int)((uint)(left + right) >> 1)];
-				while (true)
-				{
-                    if (comparer(fList[I], itm) >= 0)
-					{
-                        while (comparer(fList[J], itm) > 0) J--;
-
-						if (I <= J)
-						{
-							T tmp = fList[I];
-							fList[I] = fList[J];
-							fList[J] = tmp;
-
-							I++;
-							J--;
-						}
-
-						if (I > J)
-						{
-							break;
-						}
-					}
-					else
-					{
-						I++;
-					}
-				}
-                if (left < J) QuickSort(comparer, left, J);
-				left = I;
-			}
-			while (I < right);
-		}
-
         public void QuickSort(Comparison<T> comparer)
 		{
-            if (this.Count > 0) {
-                QuickSort(comparer, 0, this.Count - 1);
-            }
+            SortHelper.QuickSort(fList, comparer);
 		}
 
 		public void MergeSort(Comparison<T> comparer)
 		{
-			MergeSort(new T[fList.Count], 0, fList.Count - 1, comparer);
+			SortHelper.MergeSort(fList, comparer);
 		}
-
-		private void MergeSort(T[] tmp, int left, int right, Comparison<T> comparer)
-		{
-			if (left >= right) return;
-
-			int mid = (left + right) / 2;
-			MergeSort(tmp, left, mid, comparer);
-			MergeSort(tmp, mid + 1, right, comparer);
-
-			int i = left, j = mid + 1, k = left;
-
-			while (i <= mid && j <= right)
-			{
-				if (comparer(fList[i], fList[j]) < 0)
-				{
-					tmp[k++] = fList[i++];
-				}
-				else
-				{
-					tmp[k++] = fList[j++];
-				}
-			}
-			while (i <= mid) tmp[k++] = fList[i++];
-			while (j <= right) tmp[k++] = fList[j++];
-			for (i = left; i <= right; ++i) fList[i] = tmp[i];
-		}
-
 	}
 }

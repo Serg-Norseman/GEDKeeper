@@ -310,5 +310,9 @@
 		<param name="Name" value="&Egrave;&ntilde;&ograve;&icirc;&eth;&egrave;&yuml; &acirc;&aring;&eth;&ntilde;&egrave;&eacute;">
 		<param name="Local" value="gkhHistory.html">
 		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="&Ccedil;&agrave;&ecirc;&icirc;&iacute;">
+		<param name="Local" value="gkhLaw.html">
+		</OBJECT>
 </UL>
 </BODY></HTML>

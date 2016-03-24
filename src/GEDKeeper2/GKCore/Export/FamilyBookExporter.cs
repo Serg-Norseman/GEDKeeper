@@ -440,13 +440,13 @@ namespace GKCore.Export
 				ps.Add(Chunk.NEWLINE);
 				columnText.AddElement(ps);
 
-				StringList persons = index.GetObject(i) as StringList;
+                StringList persons = (StringList)index.GetObject(i);
 
 				persons.Sort();
 				int num2 = persons.Count;
 				for (int k = 0; k < num2; k++)
 				{
-					GEDCOMIndividualRecord iRec = persons.GetObject(k) as GEDCOMIndividualRecord;
+                    GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)persons.GetObject(k);
 
 					chunk = new Chunk(persons[k], fTextFont);
 					chunk.SetLocalGoto(iRec.XRef);

@@ -43,14 +43,14 @@ namespace GKCore.Export
 
 		private class PedigreeEvent
 		{
-			public readonly GEDCOMCustomEvent Event;
 			public readonly GEDCOMIndividualRecord IRec;
+			public readonly GEDCOMCustomEvent Event;
 			public readonly AbsDate Date;
 
-			public PedigreeEvent(GEDCOMCustomEvent evt, GEDCOMIndividualRecord iRec)
+			public PedigreeEvent(GEDCOMIndividualRecord iRec, GEDCOMCustomEvent evt)
 			{
-				this.Event = evt;
 				this.IRec = iRec;
+				this.Event = evt;
 				this.Date = GEDCOMUtils.GetAbstractDate(evt); // FIXME: rewrite sorting
 			}
 		}
@@ -220,7 +220,7 @@ namespace GKCore.Export
 						GEDCOMCustomEvent evt = person.IRec.Events[i];
 						if (!(evt is GEDCOMIndividualAttribute) || (evt is GEDCOMIndividualAttribute && this.fOptions.PedigreeOptions.IncludeAttributes))
 						{
-							evList.Add(new PedigreeEvent(evt, person.IRec));
+							evList.Add(new PedigreeEvent(person.IRec, evt));
 						}
 					}
 					this.WriteEventList(person, evList);
@@ -259,7 +259,7 @@ namespace GKCore.Export
 						for (int j = 0; j < num3; j++)
 						{
                             irec = (GEDCOMIndividualRecord)family.Childrens[j].Value;
-							evList.Add(new PedigreeEvent(irec.FindEvent("BIRT"), irec));
+							evList.Add(new PedigreeEvent(irec, irec.FindEvent("BIRT")));
 						}
 						this.WriteEventList(person, evList);
 					}

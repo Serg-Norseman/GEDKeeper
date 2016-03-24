@@ -145,6 +145,11 @@ namespace GKCommon.GEDCOM
 			}
 		}
 
+		public override double GetUDN()
+		{
+			return (this.fValue == null) ? double.NaN : this.fValue.GetUDN();
+		}
+
 		public override AbsDate GetAbstractDate()
 		{
 			return (this.fValue == null) ? AbsDate.Empty() : this.fValue.GetAbstractDate();

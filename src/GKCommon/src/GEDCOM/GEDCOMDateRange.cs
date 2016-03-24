@@ -223,6 +223,30 @@ namespace GKCommon.GEDCOM
 			}
 		}
 
+		public override double GetUDN()
+		{
+			double result;
+
+			if (this.fDateAfter.StringValue == "" && this.fDateBefore.StringValue != "")
+			{
+				result = this.fDateBefore.GetUDN() - AbsDate.ABS_DATE_DELTA;
+			}
+			else if (this.fDateAfter.StringValue != "" && this.fDateBefore.StringValue == "")
+			{
+				result = this.fDateAfter.GetUDN() + AbsDate.ABS_DATE_DELTA;
+			}
+			else if (this.fDateAfter.StringValue != "" && this.fDateBefore.StringValue != "")
+			{
+				result = (this.fDateAfter.GetUDN() + this.fDateBefore.GetUDN()) / 2;
+			}
+			else
+			{
+				result = double.NaN;
+			}
+
+			return result;
+		}
+
 		public override AbsDate GetAbstractDate()
 		{
 			AbsDate result;

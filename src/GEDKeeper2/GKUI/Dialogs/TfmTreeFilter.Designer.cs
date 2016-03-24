@@ -6,13 +6,13 @@ namespace GKUI.Dialogs
 	{
 		private System.Windows.Forms.Button btnAccept;
 		private System.Windows.Forms.Button btnCancel;
-		private System.Windows.Forms.Label Label5;
+		private System.Windows.Forms.Label lblRPSources;
 		private System.Windows.Forms.ComboBox cbSource;
 		private System.Windows.Forms.GroupBox rgBranchCut;
 		private System.Windows.Forms.RadioButton rbCutNone;
 		private System.Windows.Forms.RadioButton rbCutYears;
 		private System.Windows.Forms.RadioButton rbCutPersons;
-		private System.Windows.Forms.Label Label1;
+		private System.Windows.Forms.Label lblYear;
 		private System.Windows.Forms.NumericUpDown edYear;
 		private System.Windows.Forms.Panel Panel1;
 
@@ -20,10 +20,10 @@ namespace GKUI.Dialogs
 		{
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
-			this.Label5 = new System.Windows.Forms.Label();
+			this.lblRPSources = new System.Windows.Forms.Label();
 			this.cbSource = new System.Windows.Forms.ComboBox();
 			this.rgBranchCut = new System.Windows.Forms.GroupBox();
-			this.Label1 = new System.Windows.Forms.Label();
+			this.lblYear = new System.Windows.Forms.Label();
 			this.rbCutNone = new System.Windows.Forms.RadioButton();
 			this.rbCutYears = new System.Windows.Forms.RadioButton();
 			this.rbCutPersons = new System.Windows.Forms.RadioButton();
@@ -61,11 +61,11 @@ namespace GKUI.Dialogs
 			// 
 			// Label5
 			// 
-			this.Label5.Location = new System.Drawing.Point(8, 280);
-			this.Label5.Name = "Label5";
-			this.Label5.Size = new System.Drawing.Size(60, 13);
-			this.Label5.TabIndex = 1;
-			this.Label5.Text = "Источники";
+			this.lblRPSources.Location = new System.Drawing.Point(8, 280);
+			this.lblRPSources.Name = "lblRPSources";
+			this.lblRPSources.Size = new System.Drawing.Size(60, 13);
+			this.lblRPSources.TabIndex = 1;
+			this.lblRPSources.Text = "Источники";
 			// 
 			// cbSource
 			// 
@@ -77,7 +77,7 @@ namespace GKUI.Dialogs
 			// 
 			// rgBranchCut
 			// 
-			this.rgBranchCut.Controls.Add(this.Label1);
+			this.rgBranchCut.Controls.Add(this.lblYear);
 			this.rgBranchCut.Controls.Add(this.rbCutNone);
 			this.rgBranchCut.Controls.Add(this.rbCutYears);
 			this.rgBranchCut.Controls.Add(this.rbCutPersons);
@@ -91,11 +91,11 @@ namespace GKUI.Dialogs
 			// 
 			// Label1
 			// 
-			this.Label1.Location = new System.Drawing.Point(32, 80);
-			this.Label1.Name = "Label1";
-			this.Label1.Size = new System.Drawing.Size(26, 13);
-			this.Label1.TabIndex = 2;
-			this.Label1.Text = "Год";
+			this.lblYear.Location = new System.Drawing.Point(32, 80);
+			this.lblYear.Name = "lblYear";
+			this.lblYear.Size = new System.Drawing.Size(26, 13);
+			this.lblYear.TabIndex = 2;
+			this.lblYear.Text = "Год";
 			// 
 			// rbCutNone
 			// 
@@ -157,7 +157,7 @@ namespace GKUI.Dialogs
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
 			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(393, 361);
-			this.Controls.Add(this.Label5);
+			this.Controls.Add(this.lblRPSources);
 			this.Controls.Add(this.cbSource);
 			this.Controls.Add(this.Panel1);
 			this.Controls.Add(this.rgBranchCut);

@@ -284,7 +284,7 @@ namespace GKUI.Controls
 			bool result;
 			try
 			{
-				HttpWebRequest request = WebRequest.CreateDefault(new Uri(fileURL)) as HttpWebRequest;
+                HttpWebRequest request = (HttpWebRequest)WebRequest.CreateDefault(new Uri(fileURL));
 				request.ContentType = "application/x-www-form-urlencoded";
 				ProxyOptions proxy = TfmGEDKeeper.Instance.Options.Proxy;
 				if (proxy.UseProxy)
@@ -294,7 +294,7 @@ namespace GKUI.Controls
 						Credentials = CredentialCache.DefaultCredentials
 					};
 				}
-				HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 				stream = response.GetResponseStream();
 				result = true;
 			}

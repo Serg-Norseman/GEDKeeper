@@ -9,27 +9,27 @@ namespace GKFlowInputPlugin
 		private System.Windows.Forms.TabControl PageControl1;
 		private System.Windows.Forms.TabPage tsSimpleInput;
 		private System.Windows.Forms.TabPage tsSourceInput;
-		private System.Windows.Forms.Label Label1;
-		private System.Windows.Forms.Label Label2;
+		private System.Windows.Forms.Label lblFullName;
+		private System.Windows.Forms.Label lblNote;
 		private System.Windows.Forms.Button btnMale;
 		private System.Windows.Forms.TextBox EditName;
 		private System.Windows.Forms.TextBox MemoNote;
 		private System.Windows.Forms.Panel Panel1;
-		private System.Windows.Forms.Label Label3;
-		private System.Windows.Forms.Label Label5;
+		private System.Windows.Forms.Label lblBirthDate;
+		private System.Windows.Forms.Label lblBirthPlace;
 		private System.Windows.Forms.MaskedTextBox EditBirthDate;
 		private System.Windows.Forms.TextBox EditBirthPlace;
 		private System.Windows.Forms.CheckBox CheckBirth;
 		private System.Windows.Forms.Panel Panel2;
-		private System.Windows.Forms.Label Label6;
-		private System.Windows.Forms.Label Label7;
+		private System.Windows.Forms.Label lblDeathDate;
+		private System.Windows.Forms.Label lblDeathPlace;
 		private System.Windows.Forms.CheckBox CheckDeath;
 		private System.Windows.Forms.MaskedTextBox EditDeathDate;
 		private System.Windows.Forms.TextBox EditDeathPlace;
-		private System.Windows.Forms.Label Label4;
-		private System.Windows.Forms.Label Label8;
-		private System.Windows.Forms.Label Label9;
-		private System.Windows.Forms.Label Label10;
+		private System.Windows.Forms.Label lblSource;
+		private System.Windows.Forms.Label lblPage;
+		private System.Windows.Forms.Label lblYear;
+		private System.Windows.Forms.Label lblSettlement;
 		private System.Windows.Forms.ComboBox cbSource;
 		private System.Windows.Forms.TextBox edPage;
 		private System.Windows.Forms.TextBox edSourceYear;
@@ -37,8 +37,8 @@ namespace GKFlowInputPlugin
 		private System.Windows.Forms.ComboBox cbPersonLink;
 		private System.Windows.Forms.GroupBox rgSourceKind;
 		private System.Windows.Forms.GroupBox gbMetrics;
-		private System.Windows.Forms.Label Label11;
-		private System.Windows.Forms.Label Label12;
+		private System.Windows.Forms.Label lblEventDate;
+		private System.Windows.Forms.Label lblEventType;
 		private System.Windows.Forms.MaskedTextBox edEventDate;
 		private System.Windows.Forms.ComboBox cbEventType;
 		private System.Windows.Forms.Panel sgData;
@@ -49,28 +49,28 @@ namespace GKFlowInputPlugin
 			this.btnClose = new System.Windows.Forms.Button();
 			this.PageControl1 = new System.Windows.Forms.TabControl();
 			this.tsSimpleInput = new System.Windows.Forms.TabPage();
-			this.Label1 = new System.Windows.Forms.Label();
-			this.Label2 = new System.Windows.Forms.Label();
+			this.lblFullName = new System.Windows.Forms.Label();
+			this.lblNote = new System.Windows.Forms.Label();
 			this.btnMale = new System.Windows.Forms.Button();
 			this.EditName = new System.Windows.Forms.TextBox();
 			this.MemoNote = new System.Windows.Forms.TextBox();
 			this.Panel1 = new System.Windows.Forms.Panel();
-			this.Label3 = new System.Windows.Forms.Label();
-			this.Label5 = new System.Windows.Forms.Label();
+			this.lblBirthDate = new System.Windows.Forms.Label();
+			this.lblBirthPlace = new System.Windows.Forms.Label();
 			this.EditBirthDate = new System.Windows.Forms.MaskedTextBox();
 			this.EditBirthPlace = new System.Windows.Forms.TextBox();
 			this.CheckBirth = new System.Windows.Forms.CheckBox();
 			this.Panel2 = new System.Windows.Forms.Panel();
-			this.Label6 = new System.Windows.Forms.Label();
-			this.Label7 = new System.Windows.Forms.Label();
+			this.lblDeathDate = new System.Windows.Forms.Label();
+			this.lblDeathPlace = new System.Windows.Forms.Label();
 			this.CheckDeath = new System.Windows.Forms.CheckBox();
 			this.EditDeathDate = new System.Windows.Forms.MaskedTextBox();
 			this.EditDeathPlace = new System.Windows.Forms.TextBox();
 			this.tsSourceInput = new System.Windows.Forms.TabPage();
-			this.Label4 = new System.Windows.Forms.Label();
-			this.Label8 = new System.Windows.Forms.Label();
-			this.Label9 = new System.Windows.Forms.Label();
-			this.Label10 = new System.Windows.Forms.Label();
+			this.lblSource = new System.Windows.Forms.Label();
+			this.lblPage = new System.Windows.Forms.Label();
+			this.lblYear = new System.Windows.Forms.Label();
+			this.lblSettlement = new System.Windows.Forms.Label();
 			this.cbSource = new System.Windows.Forms.ComboBox();
 			this.edPage = new System.Windows.Forms.TextBox();
 			this.edSourceYear = new System.Windows.Forms.TextBox();
@@ -79,11 +79,11 @@ namespace GKFlowInputPlugin
 			this.dataGridView1 = new System.Windows.Forms.DataGridView();
 			this.cbPersonLink = new System.Windows.Forms.ComboBox();
 			this.rgSourceKind = new System.Windows.Forms.GroupBox();
-			this.radioButton2 = new System.Windows.Forms.RadioButton();
-			this.radioButton1 = new System.Windows.Forms.RadioButton();
+			this.rbSK_Met = new System.Windows.Forms.RadioButton();
+			this.rbSK_Rev = new System.Windows.Forms.RadioButton();
 			this.gbMetrics = new System.Windows.Forms.GroupBox();
-			this.Label11 = new System.Windows.Forms.Label();
-			this.Label12 = new System.Windows.Forms.Label();
+			this.lblEventDate = new System.Windows.Forms.Label();
+			this.lblEventType = new System.Windows.Forms.Label();
 			this.edEventDate = new System.Windows.Forms.MaskedTextBox();
 			this.cbEventType = new System.Windows.Forms.ComboBox();
 			this.PageControl1.SuspendLayout();
@@ -129,8 +129,8 @@ namespace GKFlowInputPlugin
 			// 
 			// tsSimpleInput
 			// 
-			this.tsSimpleInput.Controls.Add(this.Label1);
-			this.tsSimpleInput.Controls.Add(this.Label2);
+			this.tsSimpleInput.Controls.Add(this.lblFullName);
+			this.tsSimpleInput.Controls.Add(this.lblNote);
 			this.tsSimpleInput.Controls.Add(this.btnMale);
 			this.tsSimpleInput.Controls.Add(this.EditName);
 			this.tsSimpleInput.Controls.Add(this.MemoNote);
@@ -144,19 +144,19 @@ namespace GKFlowInputPlugin
 			// 
 			// Label1
 			// 
-			this.Label1.Location = new System.Drawing.Point(8, 8);
-			this.Label1.Name = "Label1";
-			this.Label1.Size = new System.Drawing.Size(150, 13);
-			this.Label1.TabIndex = 0;
-			this.Label1.Text = "Полное имя (формат ФИО)";
+			this.lblFullName.Location = new System.Drawing.Point(8, 8);
+			this.lblFullName.Name = "lblFullName";
+			this.lblFullName.Size = new System.Drawing.Size(150, 13);
+			this.lblFullName.TabIndex = 0;
+			this.lblFullName.Text = "Полное имя (формат ФИО)";
 			// 
 			// Label2
 			// 
-			this.Label2.Location = new System.Drawing.Point(8, 232);
-			this.Label2.Name = "Label2";
-			this.Label2.Size = new System.Drawing.Size(50, 13);
-			this.Label2.TabIndex = 6;
-			this.Label2.Text = "Заметка";
+			this.lblNote.Location = new System.Drawing.Point(8, 232);
+			this.lblNote.Name = "lblNote";
+			this.lblNote.Size = new System.Drawing.Size(50, 13);
+			this.lblNote.TabIndex = 6;
+			this.lblNote.Text = "Заметка";
 			// 
 			// btnMale
 			// 
@@ -185,8 +185,8 @@ namespace GKFlowInputPlugin
 			// Panel1
 			// 
 			this.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.Panel1.Controls.Add(this.Label3);
-			this.Panel1.Controls.Add(this.Label5);
+			this.Panel1.Controls.Add(this.lblBirthDate);
+			this.Panel1.Controls.Add(this.lblBirthPlace);
 			this.Panel1.Controls.Add(this.EditBirthDate);
 			this.Panel1.Controls.Add(this.EditBirthPlace);
 			this.Panel1.Controls.Add(this.CheckBirth);
@@ -197,19 +197,19 @@ namespace GKFlowInputPlugin
 			// 
 			// Label3
 			// 
-			this.Label3.Location = new System.Drawing.Point(8, 32);
-			this.Label3.Name = "Label3";
-			this.Label3.Size = new System.Drawing.Size(90, 13);
-			this.Label3.TabIndex = 1;
-			this.Label3.Text = "Дата рождения";
+			this.lblBirthDate.Location = new System.Drawing.Point(8, 32);
+			this.lblBirthDate.Name = "lblBirthDate";
+			this.lblBirthDate.Size = new System.Drawing.Size(90, 13);
+			this.lblBirthDate.TabIndex = 1;
+			this.lblBirthDate.Text = "Дата рождения";
 			// 
 			// Label5
 			// 
-			this.Label5.Location = new System.Drawing.Point(112, 32);
-			this.Label5.Name = "Label5";
-			this.Label5.Size = new System.Drawing.Size(100, 13);
-			this.Label5.TabIndex = 3;
-			this.Label5.Text = "Место рождения";
+			this.lblBirthPlace.Location = new System.Drawing.Point(112, 32);
+			this.lblBirthPlace.Name = "lblBirthPlace";
+			this.lblBirthPlace.Size = new System.Drawing.Size(100, 13);
+			this.lblBirthPlace.TabIndex = 3;
+			this.lblBirthPlace.Text = "Место рождения";
 			// 
 			// EditBirthDate
 			// 
@@ -240,8 +240,8 @@ namespace GKFlowInputPlugin
 			// Panel2
 			// 
 			this.Panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.Panel2.Controls.Add(this.Label6);
-			this.Panel2.Controls.Add(this.Label7);
+			this.Panel2.Controls.Add(this.lblDeathDate);
+			this.Panel2.Controls.Add(this.lblDeathPlace);
 			this.Panel2.Controls.Add(this.CheckDeath);
 			this.Panel2.Controls.Add(this.EditDeathDate);
 			this.Panel2.Controls.Add(this.EditDeathPlace);
@@ -252,19 +252,19 @@ namespace GKFlowInputPlugin
 			// 
 			// Label6
 			// 
-			this.Label6.Location = new System.Drawing.Point(8, 32);
-			this.Label6.Name = "Label6";
-			this.Label6.Size = new System.Drawing.Size(90, 13);
-			this.Label6.TabIndex = 1;
-			this.Label6.Text = "Дата смерти";
+			this.lblDeathDate.Location = new System.Drawing.Point(8, 32);
+			this.lblDeathDate.Name = "lblDeathDate";
+			this.lblDeathDate.Size = new System.Drawing.Size(90, 13);
+			this.lblDeathDate.TabIndex = 1;
+			this.lblDeathDate.Text = "Дата смерти";
 			// 
 			// Label7
 			// 
-			this.Label7.Location = new System.Drawing.Point(112, 32);
-			this.Label7.Name = "Label7";
-			this.Label7.Size = new System.Drawing.Size(100, 13);
-			this.Label7.TabIndex = 3;
-			this.Label7.Text = "Место смерти";
+			this.lblDeathPlace.Location = new System.Drawing.Point(112, 32);
+			this.lblDeathPlace.Name = "lblDeathPlace";
+			this.lblDeathPlace.Size = new System.Drawing.Size(100, 13);
+			this.lblDeathPlace.TabIndex = 3;
+			this.lblDeathPlace.Text = "Место смерти";
 			// 
 			// CheckDeath
 			// 
@@ -294,10 +294,10 @@ namespace GKFlowInputPlugin
 			// 
 			// tsSourceInput
 			// 
-			this.tsSourceInput.Controls.Add(this.Label4);
-			this.tsSourceInput.Controls.Add(this.Label8);
-			this.tsSourceInput.Controls.Add(this.Label9);
-			this.tsSourceInput.Controls.Add(this.Label10);
+			this.tsSourceInput.Controls.Add(this.lblSource);
+			this.tsSourceInput.Controls.Add(this.lblPage);
+			this.tsSourceInput.Controls.Add(this.lblYear);
+			this.tsSourceInput.Controls.Add(this.lblSettlement);
 			this.tsSourceInput.Controls.Add(this.cbSource);
 			this.tsSourceInput.Controls.Add(this.edPage);
 			this.tsSourceInput.Controls.Add(this.edSourceYear);
@@ -314,35 +314,35 @@ namespace GKFlowInputPlugin
 			// 
 			// Label4
 			// 
-			this.Label4.Location = new System.Drawing.Point(8, 56);
-			this.Label4.Name = "Label4";
-			this.Label4.Size = new System.Drawing.Size(55, 13);
-			this.Label4.TabIndex = 0;
-			this.Label4.Text = "Источник";
+			this.lblSource.Location = new System.Drawing.Point(8, 56);
+			this.lblSource.Name = "lblSource";
+			this.lblSource.Size = new System.Drawing.Size(55, 13);
+			this.lblSource.TabIndex = 0;
+			this.lblSource.Text = "Источник";
 			// 
 			// Label8
 			// 
-			this.Label8.Location = new System.Drawing.Point(304, 56);
-			this.Label8.Name = "Label8";
-			this.Label8.Size = new System.Drawing.Size(85, 13);
-			this.Label8.TabIndex = 1;
-			this.Label8.Text = "Лист/страница";
+			this.lblPage.Location = new System.Drawing.Point(304, 56);
+			this.lblPage.Name = "lblPage";
+			this.lblPage.Size = new System.Drawing.Size(85, 13);
+			this.lblPage.TabIndex = 1;
+			this.lblPage.Text = "Лист/страница";
 			// 
 			// Label9
 			// 
-			this.Label9.Location = new System.Drawing.Point(520, 56);
-			this.Label9.Name = "Label9";
-			this.Label9.Size = new System.Drawing.Size(30, 13);
-			this.Label9.TabIndex = 2;
-			this.Label9.Text = "Год";
+			this.lblYear.Location = new System.Drawing.Point(520, 56);
+			this.lblYear.Name = "lblYear";
+			this.lblYear.Size = new System.Drawing.Size(30, 13);
+			this.lblYear.TabIndex = 2;
+			this.lblYear.Text = "Год";
 			// 
 			// Label10
 			// 
-			this.Label10.Location = new System.Drawing.Point(8, 88);
-			this.Label10.Name = "Label10";
-			this.Label10.Size = new System.Drawing.Size(105, 13);
-			this.Label10.TabIndex = 3;
-			this.Label10.Text = "Населенный пункт";
+			this.lblSettlement.Location = new System.Drawing.Point(8, 88);
+			this.lblSettlement.Name = "lblSettlement";
+			this.lblSettlement.Size = new System.Drawing.Size(105, 13);
+			this.lblSettlement.TabIndex = 3;
+			this.lblSettlement.Text = "Населенный пункт";
 			// 
 			// cbSource
 			// 
@@ -404,8 +404,8 @@ namespace GKFlowInputPlugin
 			// 
 			// rgSourceKind
 			// 
-			this.rgSourceKind.Controls.Add(this.radioButton2);
-			this.rgSourceKind.Controls.Add(this.radioButton1);
+			this.rgSourceKind.Controls.Add(this.rbSK_Met);
+			this.rgSourceKind.Controls.Add(this.rbSK_Rev);
 			this.rgSourceKind.Location = new System.Drawing.Point(8, 0);
 			this.rgSourceKind.Name = "rgSourceKind";
 			this.rgSourceKind.Size = new System.Drawing.Size(609, 38);
@@ -415,30 +415,30 @@ namespace GKFlowInputPlugin
 			// 
 			// radioButton2
 			// 
-			this.radioButton2.Location = new System.Drawing.Point(296, 14);
-			this.radioButton2.Name = "radioButton2";
-			this.radioButton2.Size = new System.Drawing.Size(273, 18);
-			this.radioButton2.TabIndex = 1;
-			this.radioButton2.Text = "radioButton2";
-			this.radioButton2.UseVisualStyleBackColor = true;
-			this.radioButton2.CheckedChanged += new System.EventHandler(this.RadioButton1CheckedChanged);
+			this.rbSK_Met.Location = new System.Drawing.Point(296, 14);
+			this.rbSK_Met.Name = "rbSK_Met";
+			this.rbSK_Met.Size = new System.Drawing.Size(273, 18);
+			this.rbSK_Met.TabIndex = 1;
+			this.rbSK_Met.Text = "rbSK_Met";
+			this.rbSK_Met.UseVisualStyleBackColor = true;
+			this.rbSK_Met.CheckedChanged += new System.EventHandler(this.RadioButton1CheckedChanged);
 			// 
 			// radioButton1
 			// 
-			this.radioButton1.Checked = true;
-			this.radioButton1.Location = new System.Drawing.Point(8, 14);
-			this.radioButton1.Name = "radioButton1";
-			this.radioButton1.Size = new System.Drawing.Size(273, 18);
-			this.radioButton1.TabIndex = 0;
-			this.radioButton1.TabStop = true;
-			this.radioButton1.Text = "radioButton1";
-			this.radioButton1.UseVisualStyleBackColor = true;
-			this.radioButton1.CheckedChanged += new System.EventHandler(this.RadioButton1CheckedChanged);
+			this.rbSK_Rev.Checked = true;
+			this.rbSK_Rev.Location = new System.Drawing.Point(8, 14);
+			this.rbSK_Rev.Name = "rbSK_Rev";
+			this.rbSK_Rev.Size = new System.Drawing.Size(273, 18);
+			this.rbSK_Rev.TabIndex = 0;
+			this.rbSK_Rev.TabStop = true;
+			this.rbSK_Rev.Text = "rbSK_Rev";
+			this.rbSK_Rev.UseVisualStyleBackColor = true;
+			this.rbSK_Rev.CheckedChanged += new System.EventHandler(this.RadioButton1CheckedChanged);
 			// 
 			// gbMetrics
 			// 
-			this.gbMetrics.Controls.Add(this.Label11);
-			this.gbMetrics.Controls.Add(this.Label12);
+			this.gbMetrics.Controls.Add(this.lblEventDate);
+			this.gbMetrics.Controls.Add(this.lblEventType);
 			this.gbMetrics.Controls.Add(this.edEventDate);
 			this.gbMetrics.Controls.Add(this.cbEventType);
 			this.gbMetrics.Enabled = false;
@@ -451,19 +451,19 @@ namespace GKFlowInputPlugin
 			// 
 			// Label11
 			// 
-			this.Label11.Location = new System.Drawing.Point(8, 24);
-			this.Label11.Name = "Label11";
-			this.Label11.Size = new System.Drawing.Size(80, 13);
-			this.Label11.TabIndex = 0;
-			this.Label11.Text = "Дата события";
+			this.lblEventDate.Location = new System.Drawing.Point(8, 24);
+			this.lblEventDate.Name = "lblEventDate";
+			this.lblEventDate.Size = new System.Drawing.Size(80, 13);
+			this.lblEventDate.TabIndex = 0;
+			this.lblEventDate.Text = "Дата события";
 			// 
 			// Label12
 			// 
-			this.Label12.Location = new System.Drawing.Point(248, 24);
-			this.Label12.Name = "Label12";
-			this.Label12.Size = new System.Drawing.Size(70, 13);
-			this.Label12.TabIndex = 1;
-			this.Label12.Text = "Тип события";
+			this.lblEventType.Location = new System.Drawing.Point(248, 24);
+			this.lblEventType.Name = "lblEventType";
+			this.lblEventType.Size = new System.Drawing.Size(70, 13);
+			this.lblEventType.TabIndex = 1;
+			this.lblEventType.Text = "Тип события";
 			// 
 			// edEventDate
 			// 
@@ -514,7 +514,7 @@ namespace GKFlowInputPlugin
 			this.ResumeLayout(false);
 		}
 		private System.Windows.Forms.DataGridView dataGridView1;
-		private System.Windows.Forms.RadioButton radioButton1;
-		private System.Windows.Forms.RadioButton radioButton2;
+		private System.Windows.Forms.RadioButton rbSK_Rev;
+		private System.Windows.Forms.RadioButton rbSK_Met;
 	}
 }

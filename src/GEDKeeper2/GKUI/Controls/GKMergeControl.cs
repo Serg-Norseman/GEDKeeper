@@ -23,6 +23,7 @@ namespace GKUI.Controls
 		private IBaseWindow fBase;
 		private GEDCOMTree fTree;
 		private GEDCOMRecordType fMergeMode;
+		private bool fBookmark;
 
 		public IBaseWindow Base
 		{
@@ -34,6 +35,12 @@ namespace GKUI.Controls
 			    this.fBase = value;
 			    this.fTree = (value != null) ? this.fBase.Tree : null;
 			}
+		}
+
+		public bool Bookmark
+		{
+			get { return this.fBookmark; }
+			set { this.fBookmark = value; }
 		}
 
 		public GEDCOMRecordType MergeMode
@@ -56,14 +63,18 @@ namespace GKUI.Controls
 		{
 			InitializeComponent();
 
+			int y = Edit1.Top + Edit1.Height + 8;
+			int h = btnMergeToLeft.Top - y - 8;
+			int w = (btnRec1Select.Left + btnRec1Select.Width) - Edit1.Left;
+			
 			this.fView1 = new HyperView();
-			this.fView1.Location = new Point(8, 56);
-			this.fView1.Size = new Size(329, 248);
+			this.fView1.Location = new Point(Edit1.Left, y);
+			this.fView1.Size = new Size(w, h);
 			this.Controls.Add(this.fView1);
 
 			this.fView2 = new HyperView();
-			this.fView2.Location = new Point(344, 56);
-			this.fView2.Size = new Size(329, 248);
+			this.fView2.Location = new Point(Edit2.Left, y);
+			this.fView2.Size = new Size(w, h);
 			this.Controls.Add(this.fView2);
 
 			this.SetRec1(null);
@@ -102,6 +113,9 @@ namespace GKUI.Controls
                         GEDCOMIndividualRecord indRec = (GEDCOMIndividualRecord)sourceRec;
                         indRec.MoveTo(targetRec, false);
                         this.Base.RecordDelete(indRec, false);
+                        if (this.fBookmark) {
+                        	((GEDCOMIndividualRecord)targetRec).Bookmark = true;
+                        }
 						break;
 
 					case GEDCOMRecordType.rtNote:

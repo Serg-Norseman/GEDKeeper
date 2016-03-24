@@ -4,6 +4,7 @@ using BSLib;
 using GKCommon;
 using GKCore;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace GKTests
 {
@@ -25,40 +26,41 @@ namespace GKTests
 		public void Sort_PerfTest()
 		{
 			Random rnd = new Random();
-			
-			ExtList<ValItem> listQS = new ExtList<ExtTests.ValItem>();
-			ExtList<ValItem> listMS = new ExtList<ExtTests.ValItem>();
-			System.Collections.Generic.List<ValItem> listTS = new System.Collections.Generic.List<ValItem>();
-			System.Collections.Generic.List<ValItem> listCS = new System.Collections.Generic.List<ValItem>();
-			
-			for (int i = 0; i < 100000; i++) {
+
+			List<ValItem> listQS = new List<ValItem>();
+			List<ValItem> listMS = new List<ValItem>();
+			List<ValItem> listTS = new List<ValItem>();
+			List<ValItem> listCS = new List<ValItem>();
+
+			for (int i = 0; i < 1000000; i++)
+			{
 				double val = rnd.NextDouble();
-				
+
 				listTS.Add(new ValItem(val));
 				listQS.Add(new ValItem(val));
 				listMS.Add(new ValItem(val));
 				listCS.Add(new ValItem(val));
 			}
-			
-			listQS.QuickSort(CompareItems);
-			
-			listMS.MergeSort(CompareItems);
-			
-			ExtUtils.ListTimSort<ValItem>.Sort(listTS, CompareItems);
-			
+
 			listCS.Sort(CompareItems);
+
+			SortHelper.QuickSort(listQS, CompareItems);
+
+			SortHelper.MergeSort(listMS, CompareItems);
+
+			ExtUtils.ListTimSort<ValItem>.Sort(listTS, CompareItems);
 		}
 
 		private class ValItem
 		{
 			public double Value;
-			
+
 			public ValItem(double value)
 			{
 				this.Value = value;
 			}
 		}
-		
+
 		private int CompareItems(ValItem item1, ValItem item2)
 		{
 			return item1.Value.CompareTo(item2.Value);
@@ -286,7 +288,7 @@ namespace GKTests
 			
 			int year, month, day;
             CalendarConverter.jd_to_julian(jd, out year, out month, out day);
-			s = CalendarData.date_to_str(year, month, day, CalendarConverter.DateEra.AD);
+			s = CalendarData.date_to_str(year, month, day, CalendarData.DateEra.AD);
 			Assert.AreEqual("27 сен 1990", s); // +
 
             CalendarConverter.jd_to_hebrew(jd, out year, out month, out day);

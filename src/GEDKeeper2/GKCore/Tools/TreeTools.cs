@@ -1311,12 +1311,13 @@ namespace GKCore.Tools
 				int num = mainTree.RecordsCount;
 				for (int i = 0; i < num; i++)
 				{
-					if (mainTree[i] is GEDCOMIndividualRecord)
+				    GEDCOMRecord rec = mainTree[i];
+					if (rec.RecordType == GEDCOMRecordType.rtIndividual)
 					{
-						GEDCOMIndividualRecord iRec = mainTree[i] as GEDCOMIndividualRecord;
+                        GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)rec;
 
 						int idx = names.AddObject(iRec.GetNameString(true, false), new ExtList<GEDCOMIndividualRecord>());
-						(names.GetObject(idx) as ExtList<GEDCOMIndividualRecord>).Add(iRec);
+                        ((ExtList<GEDCOMIndividualRecord>)names.GetObject(idx)).Add(iRec);
 
 						string fam, nam, pat;
 						iRec.GetNameParts(out fam, out nam, out pat);
@@ -1328,15 +1329,16 @@ namespace GKCore.Tools
 				int num2 = tempTree.RecordsCount;
 				for (int i = 0; i < num2; i++)
 				{
-					if (tempTree[i] is GEDCOMIndividualRecord)
+				    GEDCOMRecord rec = tempTree[i];
+					if (rec.RecordType == GEDCOMRecordType.rtIndividual)
 					{
-						GEDCOMIndividualRecord iRec = tempTree[i] as GEDCOMIndividualRecord;
+                        GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)tempTree[i];
 
 						string tm = iRec.GetNameString(true, false);
 						int idx = names.IndexOf(tm);
 						if (idx >= 0)
 						{
-							(names.GetObject(idx) as ExtList<GEDCOMIndividualRecord>).Add(iRec);
+                            ((ExtList<GEDCOMIndividualRecord>)names.GetObject(idx)).Add(iRec);
 						}
 
 						string fam, nam, pat;
@@ -1359,7 +1361,7 @@ namespace GKCore.Tools
 
 				for (int i = names.Count - 1; i >= 0; i--)
 				{
-				    ExtList<GEDCOMIndividualRecord> lst = names.GetObject(i) as ExtList<GEDCOMIndividualRecord>;
+                    ExtList<GEDCOMIndividualRecord> lst = (ExtList<GEDCOMIndividualRecord>)names.GetObject(i);
 
                     if (lst.Count == 1)
                     {
@@ -1387,7 +1389,7 @@ namespace GKCore.Tools
 					for (int i = 0; i < num4; i++)
 					{
 						logBox.AppendText("    " + names[i] + "\r\n");
-						ExtList<GEDCOMIndividualRecord> lst = names.GetObject(i) as ExtList<GEDCOMIndividualRecord>;
+                        ExtList<GEDCOMIndividualRecord> lst = (ExtList<GEDCOMIndividualRecord>)names.GetObject(i);
 
 						int num5 = lst.Count;
 						for (int j = 0; j < num5; j++)
@@ -1424,7 +1426,7 @@ namespace GKCore.Tools
                 throw new ArgumentNullException("placesList");
             }
 
-            for (int i = placesList.Count - 1; i >= 0; i--) (placesList.GetObject(i) as PlaceObj).Dispose();
+            for (int i = placesList.Count - 1; i >= 0; i--) ((PlaceObj)placesList.GetObject(i)).Dispose();
 			placesList.Clear();
 		}
 
@@ -1442,7 +1444,7 @@ namespace GKCore.Tools
 
 		    PlaceObj placeObj;
 		    if (idx >= 0) {
-		        placeObj = (placesList.GetObject(idx) as PlaceObj);
+                placeObj = (PlaceObj)placesList.GetObject(idx);
 		    } else {
 		        placeObj = new PlaceObj();
 		        placeObj.Name = placeStr;

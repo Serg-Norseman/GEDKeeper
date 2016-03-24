@@ -190,6 +190,30 @@ namespace GKCommon.GEDCOM
 			}
 		}
 
+		public override double GetUDN()
+		{
+			double result;
+
+			if (this.fDateFrom.StringValue != "" && this.fDateTo.StringValue == "")
+			{
+				result = this.fDateFrom.GetUDN() + AbsDate.ABS_DATE_DELTA;
+			}
+			else if (this.fDateFrom.StringValue == "" && this.fDateTo.StringValue != "")
+			{
+				result = this.fDateTo.GetUDN() - AbsDate.ABS_DATE_DELTA;
+			}
+			else if (this.fDateFrom.StringValue != "" && this.fDateTo.StringValue != "")
+			{
+				result = (this.fDateFrom.GetUDN() + this.fDateTo.GetUDN()) / 2;
+			}
+			else
+			{
+				result = double.NaN;
+			}
+
+			return result;
+		}
+
 		public override AbsDate GetAbstractDate()
 		{
 			AbsDate result;

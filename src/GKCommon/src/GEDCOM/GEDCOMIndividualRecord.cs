@@ -404,6 +404,24 @@ namespace GKCommon.GEDCOM
 			return this.FindEvent("DEAT") == null;
 		}
 
+        public override void Assign(GEDCOMTag source)
+		{
+            GEDCOMIndividualRecord sourceRec = source as GEDCOMIndividualRecord;
+            if (sourceRec == null)
+            {
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+            }
+
+            base.Assign(source);
+
+			foreach (GEDCOMPersonalName srcName in sourceRec.fPersonalNames)
+			{
+				GEDCOMPersonalName copyName = (GEDCOMPersonalName)GEDCOMPersonalName.Create(this.Owner, this, "", "");
+				copyName.Assign(srcName);
+				this.AddPersonalName(copyName);
+			}
+        }
+
 		public override void MoveTo(GEDCOMRecord targetRecord, bool clearDest)
 		{
             GEDCOMIndividualRecord toRec = targetRecord as GEDCOMIndividualRecord;
@@ -420,14 +438,11 @@ namespace GKCommon.GEDCOM
 
 			base.MoveTo(targetRecord, clearDest);
 
-			if (this.fPersonalNames != null && clearDest)
+			while (this.fPersonalNames.Count > 0)
 			{
-				while (this.fPersonalNames.Count > 0)
-				{
-                    GEDCOMPersonalName obj = this.fPersonalNames.Extract(0);
-                    obj.ResetParent(toRec);
-					toRec.AddPersonalName(obj);
-				}
+				GEDCOMPersonalName obj = this.fPersonalNames.Extract(0);
+				obj.ResetParent(toRec);
+				toRec.AddPersonalName(obj);
 			}
 
 			if (toRec.ChildToFamilyLinks.Count == 0 && this.ChildToFamilyLinks.Count != 0 && this.fChildToFamilyLinks != null)
@@ -611,22 +626,9 @@ namespace GKCommon.GEDCOM
 
 		public void GetNameParts(out string surname, out string name, out string patronymic)
 		{
-			if (this.fPersonalNames.Count > 0)
-			{
+			if (this.fPersonalNames.Count > 0) {
 				GEDCOMPersonalName np = this.fPersonalNames[0];
-
-				string firstPart /*, dummy*/;
-				np.GetNameParts(out firstPart, out surname /*, out dummy*/);
-
-				string[] parts = firstPart.Split(' ');
-				if (parts.Length > 1)
-				{
-					name = parts[0];
-					patronymic = parts[1];
-				} else {
-					name = firstPart;
-					patronymic = "";
-				}
+				np.GetRusNameParts(out surname, out name, out patronymic);
 			} else {
 				surname = "";
 				name = "";
@@ -634,9 +636,15 @@ namespace GKCommon.GEDCOM
 			}
 		}
 
+		public GEDCOMFamilyRecord GetParentsFamily()
+		{
+			GEDCOMFamilyRecord result = (this.fChildToFamilyLinks.Count < 1) ? null : this.fChildToFamilyLinks[0].Value as GEDCOMFamilyRecord;
+			return result;
+		}
+
 		public void GetParents(out GEDCOMIndividualRecord father, out GEDCOMIndividualRecord mother)
 		{
-			GEDCOMFamilyRecord fam = (this.fChildToFamilyLinks.Count < 1) ? null : this.fChildToFamilyLinks[0].Value as GEDCOMFamilyRecord;
+			GEDCOMFamilyRecord fam = this.GetParentsFamily();
 
 			if (fam == null) {
 				father = null;

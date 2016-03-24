@@ -139,7 +139,8 @@ namespace GKCommon.GEDCOM
 		{
 			base.Assign(source);
 
-			if (source is GEDCOMAddress) {
+			if (source is GEDCOMAddress)
+			{
 				GEDCOMAddress srcaddr = source as GEDCOMAddress;
 
 				base.AssignList(srcaddr.fPhoneList, this.fPhoneList);

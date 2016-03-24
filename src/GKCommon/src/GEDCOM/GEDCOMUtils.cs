@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
-
 using BSLib;
 
 namespace GKCommon.GEDCOM
@@ -9,12 +9,14 @@ namespace GKCommon.GEDCOM
 	/// <summary>
 	/// This is an structure for the abstract date to be used as a simple substitute of GEDCOMDate, and the standard DateTime. 
 	/// Substitution is used to obtain the date in reduced format, when no or a month, or a day, or both.
+	/// I tried to use "Julian day", he would be ideal and would allow to implement any sort of dates. 
+	/// But JD is not working with partial dates.
 	/// </summary>
 	[Serializable]
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public struct AbsDate : ICloneable, IComparable
 	{
-		private const double ABS_DATE_DELTA = 0.5d;
+		public const double ABS_DATE_DELTA = 0.5d;
 
 		private readonly double fValue;
 
@@ -177,68 +179,60 @@ namespace GKCommon.GEDCOM
 	{
 		#region Tag properties
 		
-		public struct TagProperties
+		public sealed class TagProperties
 		{
 			public readonly string Name;
 			public readonly bool EmptySkip;
+			public readonly bool GKExtend;
 
-			public TagProperties(string name, bool emptySkip) {
+			public TagProperties(string name, bool emptySkip, bool extend)
+			{
 				this.Name = name;
 				this.EmptySkip = emptySkip;
+				this.GKExtend = extend;
 			}
 		}
 
-		private static readonly TagProperties[] TAGS_BASE;
+		private static readonly Dictionary<string, TagProperties> TAGS_BASE;
 
 
 		static GEDCOMUtils()
 		{
-            TagProperties[] array = new TagProperties[26];
+			TAGS_BASE = new Dictionary<string, GEDCOMUtils.TagProperties>();
+			TAGS_BASE.Add("ADDR", new TagProperties("ADDR", true, false));
+			TAGS_BASE.Add("AGNC", new TagProperties("AGNC", true, false));
+			TAGS_BASE.Add("AUTH", new TagProperties("AUTH", true, false));
+			TAGS_BASE.Add("CAUS", new TagProperties("CAUS", true, false));
+			TAGS_BASE.Add("CHAN", new TagProperties("CHAN", true, false));
+			TAGS_BASE.Add("CITY", new TagProperties("CITY", true, false));
+			TAGS_BASE.Add("CTRY", new TagProperties("CTRY", true, false));
+			TAGS_BASE.Add("DATE", new TagProperties("DATE", true, false));
+			TAGS_BASE.Add("PAGE", new TagProperties("PAGE", true, false));
+			TAGS_BASE.Add("PLAC", new TagProperties("PLAC", true, false));
+			TAGS_BASE.Add("POST", new TagProperties("POST", true, false));
+			TAGS_BASE.Add("PUBL", new TagProperties("PUBL", true, false));
+			TAGS_BASE.Add("RESN", new TagProperties("RESN", true, false));
+			TAGS_BASE.Add("STAE", new TagProperties("STAE", true, false));
+			TAGS_BASE.Add("TEXT", new TagProperties("TEXT", true, false));
+			TAGS_BASE.Add("TIME", new TagProperties("TIME", true, false));
+			TAGS_BASE.Add("TYPE", new TagProperties("TYPE", true, false));
+			TAGS_BASE.Add("SUBM", new TagProperties("SUBM", true, false));
+			TAGS_BASE.Add("NPFX", new TagProperties("NPFX", true, false));
+			TAGS_BASE.Add("GIVN", new TagProperties("GIVN", true, false));
+			TAGS_BASE.Add("NICK", new TagProperties("NICK", true, false));
+			TAGS_BASE.Add("SPFX", new TagProperties("SPFX", true, false));
+			TAGS_BASE.Add("SURN", new TagProperties("SURN", true, false));
+			TAGS_BASE.Add("NSFX", new TagProperties("NSFX", true, false));
+			TAGS_BASE.Add("_LOC", new TagProperties("_LOC", true,  true));
 
-			array[0] = new TagProperties("", false);
-			array[1] = new TagProperties("ADDR", true);
-			array[2] = new TagProperties("AGNC", true);
-			array[3] = new TagProperties("AUTH", true);
-			array[4] = new TagProperties("CAUS", true);
-			array[5] = new TagProperties("CHAN", true);
-			array[6] = new TagProperties("CITY", true);
-			array[7] = new TagProperties("CTRY", true);
-			array[8] = new TagProperties("DATE", true);
-			array[9] = new TagProperties("PAGE", true);
-			array[10] = new TagProperties("PLAC", true);
-			array[11] = new TagProperties("POST", true);
-			array[12] = new TagProperties("PUBL", true);
-			array[13] = new TagProperties("RESN", true);
-			array[14] = new TagProperties("STAE", true);
-			array[15] = new TagProperties("TEXT", true);
-			array[16] = new TagProperties("TIME", true);
-			array[17] = new TagProperties("TYPE", true);
-			array[18] = new TagProperties("SUBM", true);
-			array[19] = new TagProperties("NPFX", true);
-			array[20] = new TagProperties("GIVN", true);
-			array[21] = new TagProperties("NICK", true);
-			array[22] = new TagProperties("SPFX", true);
-			array[23] = new TagProperties("SURN", true);
-			array[24] = new TagProperties("NSFX", true);
-			array[25] = new TagProperties("_LOC", true);
-
-            GEDCOMUtils.TAGS_BASE = array;
+			//new TagProperties("HUSB", true, false));
+			//new TagProperties("WIFE", true, false));
 		}
 
 		public static TagProperties GetTagProps(string tagName)
 		{
-			TagProperties result;
-
-			int num = TAGS_BASE.Length;
-			for (int i = 1; i < num; i++)
-			{
-				if (TAGS_BASE[i].Name == tagName) {
-					result = TAGS_BASE[i];
-					return result;
-				}
-			}
-
-			result = TAGS_BASE[0];
+			TagProperties result = null;
+			TAGS_BASE.TryGetValue(tagName, out result);
 			return result;
 		}
 
@@ -426,12 +420,13 @@ namespace GKCommon.GEDCOM
 			Encoding res = Encoding.Default;
 
 			switch (cs) {
+				case GEDCOMCharacterSet.csANSEL:
+					// [16/03/2016] not supported
+					//res = new AnselEncoding();
+					//break;
+
 				case GEDCOMCharacterSet.csASCII:
 					res = Encoding.GetEncoding(1251);
-					break;
-
-				case GEDCOMCharacterSet.csANSEL:
-					res = new AnselEncoding();
 					break;
 
 				case GEDCOMCharacterSet.csUNICODE:

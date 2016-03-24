@@ -29,13 +29,14 @@ namespace BSLib.SmartGraph
         //public int Idx;
 
         public string Sign { get; set; }
-		public List<IEdge> EdgesOut { get; private set; }
 		public object Value { get; set; }
 
 		// path-search runtime
 		public int Dist { get; set; }
 		public bool Visited { get; set; }
+
 		public IEdge EdgeIn { get; set; }
+		public List<IEdge> EdgesOut { get; private set; }
 
 		public Vertex()
 		{

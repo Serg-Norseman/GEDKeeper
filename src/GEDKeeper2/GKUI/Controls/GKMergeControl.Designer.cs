@@ -48,39 +48,41 @@ namespace GKUI.Controls
 			// 
 			// Lab1
 			// 
-			this.Lab1.Location = new System.Drawing.Point(8, 8);
+			this.Lab1.AutoSize = true;
+			this.Lab1.Location = new System.Drawing.Point(14, 13);
 			this.Lab1.Name = "Lab1";
-			this.Lab1.Size = new System.Drawing.Size(75, 13);
+			this.Lab1.Size = new System.Drawing.Size(40, 17);
 			this.Lab1.TabIndex = 9;
 			this.Lab1.Text = "XXX1";
 			// 
 			// Lab2
 			// 
-			this.Lab2.Location = new System.Drawing.Point(343, 8);
+			this.Lab2.AutoSize = true;
+			this.Lab2.Location = new System.Drawing.Point(482, 13);
 			this.Lab2.Name = "Lab2";
-			this.Lab2.Size = new System.Drawing.Size(75, 13);
+			this.Lab2.Size = new System.Drawing.Size(40, 17);
 			this.Lab2.TabIndex = 11;
 			this.Lab2.Text = "XXX2";
 			// 
 			// Edit1
 			// 
-			this.Edit1.Location = new System.Drawing.Point(8, 24);
+			this.Edit1.Location = new System.Drawing.Point(14, 33);
 			this.Edit1.Name = "Edit1";
 			this.Edit1.ReadOnly = true;
-			this.Edit1.Size = new System.Drawing.Size(241, 21);
+			this.Edit1.Size = new System.Drawing.Size(366, 24);
 			this.Edit1.TabIndex = 10;
 			// 
 			// Edit2
 			// 
-			this.Edit2.Location = new System.Drawing.Point(343, 24);
+			this.Edit2.Location = new System.Drawing.Point(482, 33);
 			this.Edit2.Name = "Edit2";
 			this.Edit2.ReadOnly = true;
-			this.Edit2.Size = new System.Drawing.Size(241, 21);
+			this.Edit2.Size = new System.Drawing.Size(373, 24);
 			this.Edit2.TabIndex = 12;
 			// 
 			// btnRec1Select
 			// 
-			this.btnRec1Select.Location = new System.Drawing.Point(255, 21);
+			this.btnRec1Select.Location = new System.Drawing.Point(386, 32);
 			this.btnRec1Select.Name = "btnRec1Select";
 			this.btnRec1Select.Size = new System.Drawing.Size(81, 25);
 			this.btnRec1Select.TabIndex = 13;
@@ -89,7 +91,7 @@ namespace GKUI.Controls
 			// 
 			// btnRec2Select
 			// 
-			this.btnRec2Select.Location = new System.Drawing.Point(590, 20);
+			this.btnRec2Select.Location = new System.Drawing.Point(861, 32);
 			this.btnRec2Select.Name = "btnRec2Select";
 			this.btnRec2Select.Size = new System.Drawing.Size(81, 25);
 			this.btnRec2Select.TabIndex = 14;
@@ -99,7 +101,7 @@ namespace GKUI.Controls
 			// btnMergeToLeft
 			// 
 			this.btnMergeToLeft.Enabled = false;
-			this.btnMergeToLeft.Location = new System.Drawing.Point(255, 312);
+			this.btnMergeToLeft.Location = new System.Drawing.Point(386, 371);
 			this.btnMergeToLeft.Name = "btnMergeToLeft";
 			this.btnMergeToLeft.Size = new System.Drawing.Size(81, 25);
 			this.btnMergeToLeft.TabIndex = 15;
@@ -109,7 +111,7 @@ namespace GKUI.Controls
 			// btnMergeToRight
 			// 
 			this.btnMergeToRight.Enabled = false;
-			this.btnMergeToRight.Location = new System.Drawing.Point(343, 312);
+			this.btnMergeToRight.Location = new System.Drawing.Point(482, 371);
 			this.btnMergeToRight.Name = "btnMergeToRight";
 			this.btnMergeToRight.Size = new System.Drawing.Size(81, 25);
 			this.btnMergeToRight.TabIndex = 16;
@@ -118,8 +120,8 @@ namespace GKUI.Controls
 			// 
 			// GKMergeControl
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.Controls.Add(this.Lab1);
 			this.Controls.Add(this.Lab2);
 			this.Controls.Add(this.Edit1);
@@ -130,7 +132,7 @@ namespace GKUI.Controls
 			this.Controls.Add(this.btnMergeToRight);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.Name = "GKMergeControl";
-			this.Size = new System.Drawing.Size(679, 348);
+			this.Size = new System.Drawing.Size(957, 402);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}

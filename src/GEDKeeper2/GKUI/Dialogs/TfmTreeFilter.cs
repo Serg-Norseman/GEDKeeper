@@ -226,9 +226,9 @@ namespace GKUI.Dialogs
 			this.rgBranchCut.Text = LangMan.LS(LSID.LSID_BranchCut);
 			this.rbCutNone.Text = LangMan.LS(LSID.LSID_Not);
 			this.rbCutYears.Text = LangMan.LS(LSID.LSID_BCut_Years);
-			this.Label1.Text = LangMan.LS(LSID.LSID_Year);
+			this.lblYear.Text = LangMan.LS(LSID.LSID_Year);
 			this.rbCutPersons.Text = LangMan.LS(LSID.LSID_BCut_Persons);
-			this.Label5.Text = LangMan.LS(LSID.LSID_RPSources);
+			this.lblRPSources.Text = LangMan.LS(LSID.LSID_RPSources);
 		}
 
 	}

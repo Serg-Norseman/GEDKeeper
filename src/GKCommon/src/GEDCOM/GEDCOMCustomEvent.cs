@@ -34,6 +34,7 @@ namespace GKCommon.GEDCOM
         public override void Assign(GEDCOMTag source)
 		{
 			base.Assign(source);
+
 			if (source is GEDCOMCustomEvent)
 			{
 				this.fDetail.Assign((source as GEDCOMCustomEvent).Detail);

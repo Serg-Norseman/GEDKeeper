@@ -71,6 +71,22 @@ namespace GKCommon.GEDCOM
 			//ALastPart = GetLastPart();
 		}
 
+		public void GetRusNameParts(out string surname, out string name, out string patronymic)
+		{
+			string firstPart /*, dummy*/;
+			this.GetNameParts(out firstPart, out surname /*, out dummy*/);
+
+			string[] parts = firstPart.Split(' ');
+			if (parts.Length > 1)
+			{
+				name = parts[0];
+				patronymic = parts[1];
+			} else {
+				name = firstPart;
+				patronymic = "";
+			}
+		}
+
 		public void SetNameParts(string firstPart, string surname, string lastPart)
 		{
 			base.StringValue = GEDCOMUtils.TrimLeft(firstPart + " ") + "/" + surname + "/" + GEDCOMUtils.TrimRight(" " + lastPart);

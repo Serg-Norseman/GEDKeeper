@@ -700,6 +700,17 @@ namespace GKCommon.GEDCOM
 		{
 		}
 
+		// TODO: temp implementation
+		public bool IsValid()
+		{
+			return (this.fYear > 0 && this.fMonth != "" && this.fDay > 0);
+		}
+
+		public override double GetUDN()
+		{
+			return double.NaN;
+		}
+
 		public override AbsDate GetAbstractDate()
 		{
 			int year;

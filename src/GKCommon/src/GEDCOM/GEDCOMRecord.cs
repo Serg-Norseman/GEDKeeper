@@ -122,6 +122,45 @@ namespace GKCommon.GEDCOM
 			return -1;
 		}
 
+        public override void Assign(GEDCOMTag source)
+		{
+            GEDCOMRecord sourceRec = source as GEDCOMRecord;
+            if (sourceRec == null)
+            {
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+            }
+
+			base.Assign(source);
+
+			foreach (GEDCOMNotes sourceNote in sourceRec.fNotes)
+			{
+                GEDCOMNotes copy = (GEDCOMNotes)GEDCOMNotes.Create(this.Owner, this, "", "");
+				copy.Assign(sourceNote);
+				this.Notes.Add(copy);
+			}
+
+			foreach (GEDCOMMultimediaLink sourceMediaLink in sourceRec.fMultimediaLinks)
+			{
+                GEDCOMMultimediaLink copy = (GEDCOMMultimediaLink)GEDCOMMultimediaLink.Create(this.Owner, this, "", "");
+				copy.Assign(sourceMediaLink);
+				this.MultimediaLinks.Add(copy);
+			}
+
+			foreach (GEDCOMSourceCitation sourceSrcCit in sourceRec.fSourceCitations)
+			{
+                GEDCOMSourceCitation copy = (GEDCOMSourceCitation)GEDCOMSourceCitation.Create(this.Owner, this, "", "");
+				copy.Assign(sourceSrcCit);
+				this.SourceCitations.Add(copy);
+			}
+
+			foreach (GEDCOMUserReference sourceUserRef in sourceRec.fUserReferences)
+			{
+                GEDCOMUserReference copy = (GEDCOMUserReference)GEDCOMUserReference.Create(this.Owner, this, "", "");
+				copy.Assign(sourceUserRef);
+				this.UserReferences.Add(copy);
+			}
+        }
+
         public virtual void MoveTo(GEDCOMRecord targetRecord, bool clearDest)
 		{
             if (clearDest)

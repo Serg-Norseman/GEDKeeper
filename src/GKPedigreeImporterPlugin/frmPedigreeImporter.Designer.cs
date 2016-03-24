@@ -30,7 +30,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPedigreeImporter));
-            this.Label3 = new System.Windows.Forms.Label();
+            this.lblFile = new System.Windows.Forms.Label();
             this.edImportFile = new System.Windows.Forms.TextBox();
             this.btnImportFileChoose = new System.Windows.Forms.Button();
             this.OpenDialog2 = new System.Windows.Forms.OpenFileDialog();
@@ -72,12 +72,12 @@
             // 
             // Label3
             // 
-            this.Label3.Location = new System.Drawing.Point(7, 19);
-            this.Label3.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.Label3.Name = "Label3";
-            this.Label3.Size = new System.Drawing.Size(55, 17);
-            this.Label3.TabIndex = 4;
-            this.Label3.Text = "Файл";
+            this.lblFile.Location = new System.Drawing.Point(7, 19);
+            this.lblFile.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lblFile.Name = "Label3";
+            this.lblFile.Size = new System.Drawing.Size(55, 17);
+            this.lblFile.TabIndex = 4;
+            this.lblFile.Text = "Файл";
             // 
             // edImportFile
             // 
@@ -119,7 +119,7 @@
             this.pageSelect.Controls.Add(this.groupBox3);
             this.pageSelect.Controls.Add(this.groupBox2);
             this.pageSelect.Controls.Add(this.groupBox1);
-            this.pageSelect.Controls.Add(this.Label3);
+            this.pageSelect.Controls.Add(this.lblFile);
             this.pageSelect.Controls.Add(this.edImportFile);
             this.pageSelect.Controls.Add(this.btnImportFileChoose);
             this.pageSelect.Location = new System.Drawing.Point(4, 26);
@@ -445,7 +445,7 @@
         private System.Windows.Forms.OpenFileDialog OpenDialog2;
         private System.Windows.Forms.Button btnImportFileChoose;
         private System.Windows.Forms.TextBox edImportFile;
-        private System.Windows.Forms.Label Label3;
+        private System.Windows.Forms.Label lblFile;
 
         #endregion
 

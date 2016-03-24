@@ -104,7 +104,8 @@ namespace BSLib.SmartGraph
 
 		public void Clear()
 		{
-			foreach (IVertex vertex in this.fVerticesList) {
+			foreach (IVertex vertex in this.fVerticesList)
+			{
 				vertex.EdgeIn = null;
 				vertex.EdgesOut.Clear();
 			}
@@ -245,11 +246,12 @@ namespace BSLib.SmartGraph
 			}
 		}
 
-		public List<IEdge> GetPath(IVertex target)
+		public IEnumerable<IEdge> GetPath(IVertex target)
 		{
 			List<IEdge> result = new List<IEdge>();
 
-			if (target != null) {
+			if (target != null)
+			{
 				IEdge edge = target.EdgeIn;
 				while (edge != null)
 				{

@@ -86,7 +86,8 @@ namespace GKUI.Controls
         	} else {
         	    GEDCOMCustomDate customDate = this.fValue as GEDCOMCustomDate;
         	    if (customDate != null) {
-        			strVal = GKUtils.GetCustomDateFmtString(customDate, GlobalOptions.Instance.DefDateFormat, true);
+        	    	GlobalOptions glob = GlobalOptions.Instance;
+        			strVal = GKUtils.GetCustomDateFmtString(customDate, glob.DefDateFormat, glob.DefDateSigns, glob.ShowDatesCalendar);
         		} else {
         			strVal = this.fValue.ToString();
         		}

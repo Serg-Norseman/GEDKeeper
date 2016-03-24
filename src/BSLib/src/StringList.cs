@@ -515,11 +515,11 @@ namespace BSLib
 
 		private void QuickSort(int left, int right)
 		{
-			int I, J;
+			int I;
 			do
 			{
 				I = left;
-				J = right;
+				int J = right;
 				int mid = (int)((uint)(left + right) >> 1);
 				while (true)
 				{

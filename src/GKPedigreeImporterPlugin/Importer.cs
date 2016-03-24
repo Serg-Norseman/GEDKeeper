@@ -220,7 +220,7 @@ namespace GKPedigreeImporterPlugin
 			dd = RemoveDot(dd);
 		}
 		
-		private bool DefinePersonName(string str, out string f_name, out string f_pat, out string f_fam, out string bd, out string dd)
+		private void DefinePersonName(string str, out string f_name, out string f_pat, out string f_fam, out string bd, out string dd)
 		{
 			f_name = "";
 			f_pat = "";
@@ -246,16 +246,16 @@ namespace GKPedigreeImporterPlugin
 			    int bd_pos = tmp.IndexOf("*");
 				int dd_pos = tmp.IndexOf("+");
 				
-				int dates_pos = -1;
+				int datesPos = -1;
 				if (bd_pos >= 0 && (dd_pos < 0 || dd_pos > bd_pos)) {
-					dates_pos = bd_pos;
+					datesPos = bd_pos;
 				} else {
-					dates_pos = dd_pos;
+					datesPos = dd_pos;
 				}
 				
-			    if (dates_pos >= 0) {
-			        dates = tmp.Substring(dates_pos, tmp.Length - dates_pos);
-			        tmp = tmp.Remove(dates_pos, dates.Length).Trim(); // can be blanks at end
+			    if (datesPos >= 0) {
+			        dates = tmp.Substring(datesPos, tmp.Length - datesPos);
+			        tmp = tmp.Remove(datesPos, dates.Length).Trim(); // can be blanks at end
 			    }
 			}
 
@@ -283,7 +283,7 @@ namespace GKPedigreeImporterPlugin
 				f_fam = GEDCOMUtils.NormalizeName(f_fam);
 			}
 
-			return true;
+			//return true;
 		}
 
 		private bool IsPersonLine(string str, ref string p_id)

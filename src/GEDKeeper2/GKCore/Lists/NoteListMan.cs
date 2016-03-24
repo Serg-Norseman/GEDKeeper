@@ -40,7 +40,10 @@ namespace GKCore.Lists
 
 		public override bool CheckFilter(ShieldState shieldState)
 		{
-			bool res = base.CheckCommonFilter();
+			bool res = (this.QuickFilter == "*" || IsMatchesMask(this.fRec.Note.Text, this.QuickFilter));
+
+			res = res && base.CheckCommonFilter();
+
 			return res;
 		}
 

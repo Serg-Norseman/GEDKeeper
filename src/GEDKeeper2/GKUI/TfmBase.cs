@@ -151,6 +151,8 @@ namespace GKUI
             this.CreatePage(LangMan.LS(LSID.LSID_RPCommunications), GEDCOMRecordType.rtCommunication, out this.ListCommunications, out this.mCommunicationSummary);
             this.CreatePage(LangMan.LS(LSID.LSID_RPLocations), GEDCOMRecordType.rtLocation, out this.ListLocations, out this.mLocationSummary);
             this.PageRecords.SelectedIndex = 0;
+
+            (this as ILocalization).SetLang();
         }
 
         protected override void Dispose(bool disposing)
@@ -227,6 +229,28 @@ namespace GKUI
         			break;*/
         	}
         }
+
+		private void contextMenu_Opening(object sender, CancelEventArgs e)
+		{
+			GKRecordsView recView = contextMenu.SourceControl as GKRecordsView;
+
+			this.miRecordDuplicate.Visible = (recView == this.ListPersons);
+		}
+
+		private void miRecordEdit_Click(object sender, EventArgs e)
+		{
+			this.RecordEdit(null, null);
+		}
+
+		private void miRecordDelete_Click(object sender, EventArgs e)
+		{
+			this.RecordDelete();
+		}
+
+		private void miRecordDuplicate_Click(object sender, EventArgs e)
+		{
+			this.RecordDuplicate();
+		}
 
         #endregion
         
@@ -421,6 +445,7 @@ namespace GKUI
 			recView.DoubleClick += this.RecordEdit;
 			recView.SelectedIndexChanged += this.List_SelectedIndexChanged;
 			recView.UpdateTitles();
+			recView.ContextMenuStrip = this.contextMenu;
 
 			sheet.Controls.SetChildIndex(spl, 1);
 			sheet.Controls.SetChildIndex(summary, 2);
@@ -632,7 +657,7 @@ namespace GKUI
 		        rView.DeleteRecord(record);
 		    }
 
-		    TfmGEDKeeper.Instance.NotifyRecord(this, record, RecordAction.raDelete);
+		    TfmGEDKeeper.Instance.NotifyRecord(this, record, notify);
 		}
 
 		public GEDCOMFamilyRecord SelectFamily(GEDCOMIndividualRecord target)
@@ -959,6 +984,10 @@ namespace GKUI
 			this.PageRecords.TabPages[ 8].Text = LangMan.LS(LSID.LSID_RPTasks);
 			this.PageRecords.TabPages[ 9].Text = LangMan.LS(LSID.LSID_RPCommunications);
 			this.PageRecords.TabPages[10].Text = LangMan.LS(LSID.LSID_RPLocations);
+
+			this.miRecordEdit.Text = LangMan.LS(LSID.LSID_MIRecordEdit);
+			this.miRecordDelete.Text = LangMan.LS(LSID.LSID_MIRecordDelete);
+			this.miRecordDuplicate.Text = LangMan.LS(LSID.LSID_RecordDuplicate);
 		}
         
         #endregion
@@ -1102,6 +1131,22 @@ namespace GKUI
 		#endregion
 		
 		#region Record Management
+
+		public void RecordDuplicate()
+		{
+			GEDCOMRecord source = this.GetSelectedRecordEx();
+			if (source == null) return;
+			if (source.RecordType != GEDCOMRecordType.rtIndividual) return;
+
+			GKUtils.ShowWarning(LangMan.LS(LSID.LSID_DuplicateWarning));
+
+			GEDCOMIndividualRecord target = this.fContext.Tree.CreateIndividual();
+			target.Assign(source);
+
+			this.ChangeRecord(target);
+			this.RefreshLists(false);
+			this.SelectRecordByXRef(target.XRef);
+		}
 
 		public void RecordAdd()
 		{
@@ -1952,6 +1997,5 @@ namespace GKUI
 		}
 
 		#endregion
-
     }
 }

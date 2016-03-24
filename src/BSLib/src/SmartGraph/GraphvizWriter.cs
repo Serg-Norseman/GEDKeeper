@@ -30,7 +30,7 @@ namespace BSLib.SmartGraph
 		public GraphvizWriter(string name)
 		{
             fBuffer = new StringBuilder();
-			fBuffer.AppendLine("digraph " + name.Trim().Replace(' ', '_')+"{");
+			fBuffer.AppendLine("digraph " + name.Trim().Replace(' ', '_') + "{");
 		}
 
 		public GraphvizWriter(string name, string[] options) : this(name)

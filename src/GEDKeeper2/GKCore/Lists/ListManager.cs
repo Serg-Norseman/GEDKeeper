@@ -131,7 +131,7 @@ namespace GKCore.Lists
 			} else {
 				if (isVisible) {
 					GlobalOptions glob = GlobalOptions.Instance;
-					result = GKUtils.GetCustomDateFmtString(date, glob.DefDateFormat, glob.DefDateSigns);
+					result = GKUtils.GetCustomDateFmtString(date, glob.DefDateFormat, glob.DefDateSigns, glob.ShowDatesCalendar);
 				} else {
 					result = date.GetAbstractDate();
 				}

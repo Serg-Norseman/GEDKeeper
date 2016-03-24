@@ -154,6 +154,7 @@ namespace GKUI.Dialogs
 			this.chkAttributes.Checked = this.fOptions.PedigreeOptions.IncludeAttributes;
 			this.chkNotes.Checked = this.fOptions.PedigreeOptions.IncludeNotes;
 			this.chkSources.Checked = this.fOptions.PedigreeOptions.IncludeSources;
+			this.chkShowDatesCalendar.Checked = this.fOptions.ShowDatesCalendar;
 
             switch (this.fOptions.PedigreeOptions.Format)
             {
@@ -295,6 +296,7 @@ namespace GKUI.Dialogs
 			this.fOptions.PedigreeOptions.IncludeAttributes = this.chkAttributes.Checked;
 			this.fOptions.PedigreeOptions.IncludeNotes = this.chkNotes.Checked;
 			this.fOptions.PedigreeOptions.IncludeSources = this.chkSources.Checked;
+			this.fOptions.ShowDatesCalendar = this.chkShowDatesCalendar.Checked;
 
 			if (this.RButton10.Checked)
 			{
@@ -434,6 +436,7 @@ namespace GKUI.Dialogs
 			this.chkRevisionsBackup.Text = LangMan.LS(LSID.LSID_RevisionsBackup);
 			this.SheetCharts.Text = LangMan.LS(LSID.LSID_Charts);
 			this.SheetPlugins.Text = LangMan.LS(LSID.LSID_Plugins);
+			this.chkShowDatesCalendar.Text = LangMan.LS(LSID.LSID_ShowDatesCalendar);
 		}
 	}
 }

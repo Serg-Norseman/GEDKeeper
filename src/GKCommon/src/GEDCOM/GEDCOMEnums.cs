@@ -76,7 +76,7 @@
         ntMarried
     }
 
-    public enum GEDCOMNamePieceType
+    /*public enum GEDCOMNamePieceType
     {
         nptPrefix,
         nptGiven,
@@ -84,7 +84,7 @@
         nptSurnamePrefix,
         nptSurname,
         nptSuffix
-    }
+    }*/
 
     public enum GEDCOMCalendar
     {

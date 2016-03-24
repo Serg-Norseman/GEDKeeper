@@ -283,6 +283,10 @@
     <Compile Include="GKUI\Dialogs\TfmOrganizer.Designer.cs">
       <DependentUpon>TfmOrganizer.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Dialogs\TfmPersonalNameEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmPersonalNameEdit.Designer.cs">
+      <DependentUpon>TfmPersonalNameEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmPersonEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -516,6 +520,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\TfmOptions.resx">
       <DependentUpon>TfmOptions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\TfmPersonalNameEdit.resx">
+      <DependentUpon>TfmPersonalNameEdit.Designer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\TfmPersonEdit.resx">
       <DependentUpon>TfmPersonEdit.cs</DependentUpon>

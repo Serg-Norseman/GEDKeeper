@@ -94,7 +94,7 @@ namespace GKCore.Export
 				persons = new StringList();
 				index.AddObject(val, persons);
 			} else {
-				persons = index.GetObject(idx) as StringList;
+                persons = (StringList)index.GetObject(idx);
 			}
 
 			if (persons.IndexOfObject(iRec) < 0) {

@@ -400,13 +400,13 @@ namespace GKCore
 			return result;
 		}
 
-		public static PersonEventKind GetPersonEventKindBySign(string aSign)
+		public static PersonEventKind GetPersonEventKindBySign(string sign)
 		{
 			PersonEventKind res = PersonEventKind.ekFact;
 
 			for (int i = 0; i < GKData.PersonEvents.Length; i++)
 			{
-				if (GKData.PersonEvents[i].Sign == aSign)
+				if (GKData.PersonEvents[i].Sign == sign)
 				{
 					res = GKData.PersonEvents[i].Kind;
 					break;
@@ -416,13 +416,13 @@ namespace GKCore
 			return res;
 		}
 
-		public static int GetPersonEventIndex(string aSign)
+		public static int GetPersonEventIndex(string sign)
 		{
 			int res = -1;
 
 			for (int i = 0; i < GKData.PersonEvents.Length; i++)
 			{
-				if (GKData.PersonEvents[i].Sign == aSign)
+				if (GKData.PersonEvents[i].Sign == sign)
 				{
 					res = i;
 					break;
@@ -432,13 +432,13 @@ namespace GKCore
 			return res;
 		}
 
-		public static int GetFamilyEventIndex(string aSign)
+		public static int GetFamilyEventIndex(string sign)
 		{
 			int res = -1;
 
 			for (int i = 0; i < GKData.FamilyEvents.Length; i++)
 			{
-				if (GKData.FamilyEvents[i].Sign == aSign)
+				if (GKData.FamilyEvents[i].Sign == sign)
 				{
 					res = i;
 					break;
@@ -448,13 +448,13 @@ namespace GKCore
 			return res;
 		}
 
-		public static int GetMarriageStatusIndex(string aSign)
+		public static int GetMarriageStatusIndex(string sign)
 		{
 			int res = 0;
 
 			for (int i = 0; i < GKData.MarriageStatus.Length; i++)
 			{
-				if (GKData.MarriageStatus[i].StatSign == aSign)
+				if (GKData.MarriageStatus[i].StatSign == sign)
 				{
 					res = i;
 					break;
@@ -678,7 +678,7 @@ namespace GKCore
 			return result;
 		}
 
-		public static string GetCustomDateFmtString(GEDCOMCustomDate date, DateFormat format, bool sign)
+		public static string GetCustomDateFmtString(GEDCOMCustomDate date, DateFormat format, bool sign, bool showCalendar)
 		{
 			string result = "";
 
@@ -694,6 +694,11 @@ namespace GKCore
 						if (sign && (dtx as GEDCOMDateApproximated).Approximated != GEDCOMApproximated.daExact) {
 							result = "~ " + result;
 						}
+					}
+
+					if (showCalendar)
+					{
+						result = result + GKData.Calendars[(int)dtx.DateCalendar];
 					}
 				}
 				else if (date is GEDCOMDateRange)
@@ -741,7 +746,7 @@ namespace GKCore
 
 		public static string GEDCOMEventToDateStr(GEDCOMCustomEvent evt, DateFormat format, bool sign)
 		{
-			return (evt == null) ? string.Empty : GetCustomDateFmtString(evt.Detail.Date.Value, format, sign);
+			return (evt == null) ? string.Empty : GetCustomDateFmtString(evt.Detail.Date.Value, format, sign, false);
 		}
 
 		public static string CompactDate(string date)
@@ -996,7 +1001,7 @@ namespace GKCore
 		public static string GetMarriageDateStr(GEDCOMFamilyRecord fRec, DateFormat dateFormat)
 		{
 			GEDCOMCustomDate date = GetMarriageDate(fRec);
-			return (date == null) ? string.Empty : GetCustomDateFmtString(date, dateFormat, false);
+			return (date == null) ? string.Empty : GetCustomDateFmtString(date, dateFormat, false, false);
 		}
 
 		public static string GetDaysForBirth(GEDCOMIndividualRecord iRec)
@@ -1501,6 +1506,11 @@ namespace GKCore
 			return MessageBox.Show(msg, GKData.APP_TITLE, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 		}
 
+		public static DialogResult ShowWarning(string msg)
+		{
+			return MessageBox.Show(msg, GKData.APP_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+		}
+
 		public static string RequireFilename(string filter)
 		{
 			string result = null;
@@ -1728,7 +1738,7 @@ namespace GKCore
 		{
 		    //if (tree == null || iRec == null || summary == null) return;
 
-        	summary.Add("");
+        	/*summary.Add("");
             int num = tree.RecordsCount;
             for (int i = 0; i < num; i++) {
         		GEDCOMRecord rec = tree[i];
@@ -1748,7 +1758,7 @@ namespace GKCore
                         summary.Add("    " + HyperLink(ir.XRef, ir.GetNameString(true, false), 0));
                     }
                 }
-            }
+            }*/
 		}
 
 		public static void ShowPersonNamesakes(GEDCOMTree tree, GEDCOMIndividualRecord iRec, StringList summary)

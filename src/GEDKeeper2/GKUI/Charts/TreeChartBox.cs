@@ -822,7 +822,7 @@ namespace GKUI.Charts
 
 		    try
 			{
-				List<IEdge> edgesPath = this.fGraph.GetPath(target.Node);
+				IEnumerable<IEdge> edgesPath = this.fGraph.GetPath(target.Node);
 
 				string tmp = "";
 				RelationKind prevRel = RelationKind.rkNone;
@@ -831,8 +831,8 @@ namespace GKUI.Charts
 
 				foreach (IEdge edge in edgesPath)
 				{
-					TreeChartPerson xFrom = edge.Source.Value as TreeChartPerson;
-					TreeChartPerson xTo = edge.Target.Value as TreeChartPerson;
+                    TreeChartPerson xFrom = (TreeChartPerson)edge.Source.Value;
+                    TreeChartPerson xTo = (TreeChartPerson)edge.Target.Value;
 					RelationKind curRel = FixLink(xFrom, xTo, (RelationKind)((int)edge.Value));
 
 					if (this.fPathDebug) {
@@ -966,10 +966,23 @@ namespace GKUI.Charts
 		    return this.fVisibleArea.IntersectsWith(pnRect.ToRectangle());
 		}
 
+		private static void CheckSwap(ref int val1, ref int val2)
+		{
+			if (val2 > val1) return;
+
+			int tmp = val1;
+			val1 = val2;
+			val2 = tmp;
+		}
+
 		private bool IsLineVisible(int x1, int y1, int x2, int y2)
 		{
             Range<int> rangeX = new Range<int>(this.fVisibleArea.Left, this.fVisibleArea.Right);
             Range<int> rangeY = new Range<int>(this.fVisibleArea.Top, this.fVisibleArea.Bottom);
+
+            CheckSwap(ref x1, ref x2);
+            CheckSwap(ref y1, ref y2);
+            
 		    return rangeX.IsOverlapped(new Range<int>(x1, x2)) && rangeY.IsOverlapped(new Range<int>(y1, y2));
 		}
 

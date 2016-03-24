@@ -35,27 +35,30 @@ namespace GKUI.Controls
 			{
 				int result = 0;
 
-				int sortColumn = this.fSortColumn;
-				if (this.fSortOrder != SortOrder.None && sortColumn >= 0) {
+				if (this.fSortOrder != SortOrder.None && this.fSortColumn >= 0)
+				{
                     ListViewItem item1 = (ListViewItem)x;
                     ListViewItem item2 = (ListViewItem)y;
 
 					if (item1 is GKListItem && item2 is GKListItem) {
-						if (sortColumn == 0) {
+						if (this.fSortColumn == 0) {
                             GKListItem eitem1 = ((GKListItem)x);
                             GKListItem eitem2 = ((GKListItem)y);
 
                             result = eitem1.CompareTo(eitem2);
 						} else {
-                            GKListSubItem sub1 = (GKListSubItem)item1.SubItems[sortColumn];
-                            GKListSubItem sub2 = (GKListSubItem)item2.SubItems[sortColumn];
+                    		if (this.fSortColumn < item1.SubItems.Count && this.fSortColumn < item2.SubItems.Count)
+                    		{
+                    			GKListSubItem sub1 = (GKListSubItem)item1.SubItems[this.fSortColumn];
+                    			GKListSubItem sub2 = (GKListSubItem)item2.SubItems[this.fSortColumn];
 
-                            result = sub1.CompareTo(sub2);
-						}
+                    			result = sub1.CompareTo(sub2);
+                    		}
+                    	}
 					} else {
-						if (sortColumn < item1.SubItems.Count && sortColumn < item2.SubItems.Count)
+						if (this.fSortColumn < item1.SubItems.Count && this.fSortColumn < item2.SubItems.Count)
 						{
-                            result = agCompare(item1.SubItems[sortColumn].Text, item2.SubItems[sortColumn].Text);
+                            result = agCompare(item1.SubItems[this.fSortColumn].Text, item2.SubItems[this.fSortColumn].Text);
 						}
 					}
 

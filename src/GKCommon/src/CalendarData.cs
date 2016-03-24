@@ -5,8 +5,13 @@ namespace GKCommon
 {
     public static class CalendarData
     {
+		public enum DateEra
+		{
+			AD,
+			BC
+		}
 
-        public static string date_to_str(int year, int month, int day, CalendarConverter.DateEra era)
+        public static string date_to_str(int year, int month, int day, CalendarData.DateEra era)
 		{
 			DateTimeFormatInfo dtInfo = Thread.CurrentThread.CurrentCulture.DateTimeFormat;
 
@@ -14,7 +19,7 @@ namespace GKCommon
 				day.ToString(),  " ",  dtInfo.AbbreviatedMonthNames[month - 1],  " ",  year.ToString()
 			});
 
-			if (era != CalendarConverter.DateEra.AD) {
+			if (era != CalendarData.DateEra.AD) {
 				result += " до н.э.";
 			}
 

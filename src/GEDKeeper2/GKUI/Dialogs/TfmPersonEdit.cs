@@ -28,6 +28,7 @@ namespace GKUI.Dialogs
         private readonly GKMediaSheet fMediaList;
 		private readonly GKSourcesSheet fSourcesList;
         private readonly GKSheetList fUserRefList;
+        private readonly GKSheetList fNamesList;
 
         private GEDCOMIndividualRecord fPerson;
 
@@ -156,6 +157,7 @@ namespace GKUI.Dialogs
 		    this.UpdateAssociationsSheet();
 		    this.UpdateGroupsSheet();
 		    this.UpdateURefsSheet();
+		    this.UpdateNamesSheet();
 
 			this.UpdatePortrait();
 
@@ -606,11 +608,117 @@ namespace GKUI.Dialogs
 			if (result) this.UpdateGroupsSheet();
 		}
 
+
+		private GKSheetList CreateNamesSheet(Control owner)
+		{
+			GKSheetList sheet = new GKSheetList(owner);
+			
+            sheet.Columns_BeginUpdate();
+            sheet.AddColumn(LangMan.LS(LSID.LSID_Name), 350, false);
+            sheet.AddColumn(LangMan.LS(LSID.LSID_Type), 100, false);
+            sheet.Columns_EndUpdate();
+
+            sheet.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, 
+                                                        SheetButton.lbMoveDown, SheetButton.lbMoveUp);
+            sheet.OnModify += this.ModifyNamesSheet;
+			
+			return sheet;
+		}
+
+
+		private void UpdateNamesSheet()
+		{
+            try
+            {
+                this.fNamesList.ClearItems();
+
+                foreach (GEDCOMPersonalName pn in this.fPerson.PersonalNames)
+                {
+                	GKListItem item = this.fNamesList.AddItem(pn.FullName, pn);
+                	item.AddSubItem(LangMan.LS(GKData.NameTypes[(int)pn.NameType]));
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWrite("TfmPersonEdit.UpdateNamesSheet(): " + ex.Message);
+            }
+		}
+
+
+		private void ModifyNamesSheet(object sender, ModifyEventArgs eArgs)
+		{
+			bool result = false;
+
+			GEDCOMPersonalName persName = eArgs.ItemData as GEDCOMPersonalName;
+
+			switch (eArgs.Action)
+			{
+				case RecordAction.raAdd:
+				case RecordAction.raEdit:
+            		TfmPersonalNameEdit dlg = new TfmPersonalNameEdit(this.fBase);
+            		try
+            		{
+            			if (eArgs.Action == RecordAction.raAdd) {
+            				persName = new GEDCOMPersonalName(this.fBase.Tree, this.fPerson, "", "");
+            			}
+
+            			dlg.PersonalName = persName;
+            			DialogResult res = TfmGEDKeeper.Instance.ShowModalEx(dlg, false);
+
+            			if (eArgs.Action == RecordAction.raAdd) {
+            				if (res == DialogResult.OK) {
+            					this.fPerson.PersonalNames.Add(persName);
+            				} else {
+            					persName.Dispose();
+            				}
+            			}
+
+            			result = (res == DialogResult.OK);
+            		}
+            		finally
+            		{
+            			dlg.Dispose();
+            		}
+            		break;
+
+				case RecordAction.raDelete:
+            		if (this.fPerson.PersonalNames.Count > 1) {
+						result = (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_RemoveNameQuery)) != DialogResult.No);
+						if (result) {
+							this.fPerson.PersonalNames.Delete(persName);
+						}
+            		} else {
+            			GKUtils.ShowError(LangMan.LS(LSID.LSID_RemoveNameFailed));
+            		}
+					break;
+
+				case RecordAction.raMoveUp:
+				case RecordAction.raMoveDown:
+					int idx = this.fPerson.PersonalNames.IndexOf(persName);
+					switch (eArgs.Action)
+					{
+						case RecordAction.raMoveUp:
+							this.fPerson.PersonalNames.Exchange(idx - 1, idx);
+							break;
+
+						case RecordAction.raMoveDown:
+							this.fPerson.PersonalNames.Exchange(idx, idx + 1);
+							break;
+					}
+					result = true;
+					break;
+			}
+
+			if (result) this.UpdateNamesSheet();
+		}
+		
+
 		private void SetTitle()
 		{
             this.Text = string.Format("{0} \"{1} {2} {3}\" [{4}]", LangMan.LS(LSID.LSID_Person), this.edSurname.Text, this.edName.Text, 
                 this.edPatronymic.Text, this.fPerson.GetXRefNum());
 		}
+
 
 		private void edSurname_TextChanged(object sender, EventArgs e)
 		{
@@ -809,6 +917,7 @@ namespace GKUI.Dialogs
 			this.fSourcesList = new GKSourcesSheet(this, this.SheetSources);
 
 			this.fUserRefList = this.CreateURefsSheet(this.SheetUserRefs);
+			this.fNamesList = this.CreateNamesSheet(this.SheetNames);
 
 			this.btnPortraitAdd.ImageList = TfmGEDKeeper.Instance.ImageList_Buttons;
 			this.btnPortraitAdd.ImageIndex = 3;
@@ -861,6 +970,7 @@ namespace GKUI.Dialogs
 			this.SheetSources.Text = LangMan.LS(LSID.LSID_RPSources);
 			this.SheetUserRefs.Text = LangMan.LS(LSID.LSID_UserRefs);
 			this.Label5.Text = LangMan.LS(LSID.LSID_Restriction);
+			this.SheetNames.Text = LangMan.LS(LSID.LSID_Names);
 		}
 	}
 }

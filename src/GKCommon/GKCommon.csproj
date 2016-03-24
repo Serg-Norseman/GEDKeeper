@@ -101,7 +101,6 @@
     <Compile Include="src\ExtUtils\SingleInstancing\SingleInstanceTracker.cs" />
     <Compile Include="src\ExtUtils\ZipStorer.cs" />
     <Compile Include="src\AuxUtils.cs" />
-    <Compile Include="src\GEDCOM\AnselEncoding.cs" />
     <Compile Include="src\GEDCOM\EGEDCOMException.cs" />
     <Compile Include="src\GEDCOM\GEDCOMConsts.cs" />
     <Compile Include="src\GEDCOM\GEDCOMDelegates.cs" />

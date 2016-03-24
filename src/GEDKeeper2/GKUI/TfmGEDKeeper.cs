@@ -341,10 +341,14 @@ namespace GKUI
 				LangMan.DefInit();
 			}
 
-			int num2 = base.MdiChildren.Length;
-			for (int i = 0; i < num2; i++) {
-				Form child = base.MdiChildren[i];
-				if (child is ILocalization) (child as ILocalization).SetLang();
+			foreach (Form child in base.MdiChildren)
+			{
+				ILocalization localChild = (child as ILocalization);
+
+				if (localChild != null)
+				{
+					localChild.SetLang();
+				}
 			}
 
 			this.SetLang();

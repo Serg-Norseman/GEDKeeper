@@ -2,11 +2,11 @@ rem @echo off
 
 cls
 
-del /q .\plugins\*.*
 del /q .\GEDKeeper2-Installer.exe
 
-del .\BSLib.*
-del .\GKCommon.*
+rem del /q .\plugins\*.*
+rem del .\BSLib.*
+rem del .\GKCommon.*
 
 rem <<< Main assemblies cleaning >>>
 
@@ -29,10 +29,10 @@ rmdir .\src\GKTests\obj /s /q
 rmdir .\src\GKTests\OpenCover /s /q
 rmdir .\src\GKTests\PartCover /s /q
 
+rem <<< Plugins cleaning >>>
+
 rmdir .\src\GKSamplePlugin\bin /s /q
 rmdir .\src\GKSamplePlugin\obj /s /q
-
-rem <<< Plugins cleaning >>>
 
 rmdir .\src\GKCalculatorPlugin\bin /s /q
 rmdir .\src\GKCalculatorPlugin\obj /s /q

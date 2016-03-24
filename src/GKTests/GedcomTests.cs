@@ -96,10 +96,11 @@ namespace GKTests
 			//
 			
 			GEDCOMUtils.TagProperties props = GEDCOMUtils.GetTagProps("ADDR");
+			Assert.IsNotNull(props);
 			Assert.IsTrue(props.EmptySkip);
 			
 			props = GEDCOMUtils.GetTagProps("test");
-			Assert.IsFalse(props.EmptySkip);
+			Assert.IsNull(props);
 			
 			//
 			
@@ -322,7 +323,8 @@ namespace GKTests
 			Assert.AreEqual(Encoding.GetEncoding(1251), GEDCOMUtils.GetEncodingByCharacterSet(GEDCOMCharacterSet.csASCII));
 			Assert.AreEqual(Encoding.Unicode, GEDCOMUtils.GetEncodingByCharacterSet(GEDCOMCharacterSet.csUNICODE));
 			Assert.AreEqual(Encoding.UTF8, GEDCOMUtils.GetEncodingByCharacterSet(GEDCOMCharacterSet.csUTF8));
-			Assert.IsInstanceOf(typeof(AnselEncoding), GEDCOMUtils.GetEncodingByCharacterSet(GEDCOMCharacterSet.csANSEL));
+			//Assert.IsInstanceOf(typeof(AnselEncoding), GEDCOMUtils.GetEncodingByCharacterSet(GEDCOMCharacterSet.csANSEL));
+			Assert.AreEqual(Encoding.GetEncoding(1251), GEDCOMUtils.GetEncodingByCharacterSet(GEDCOMCharacterSet.csANSEL));
 
 			//
 

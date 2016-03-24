@@ -107,26 +107,26 @@ namespace GKFlowInputPlugin
 			this.tsSimpleInput.Text = fLangMan.LS(FLS.LSID_InputSimple);
 			this.btnMale.Text = new string(fLangMan.LS(FLS.LSID_SexM)[0], 1);
 			//this.btnFemale.Text = new string(LangMan.LS(FLS.67][0], 1);
-			this.Label1.Text = fLangMan.LS(FLS.LSID_FullName);
+			this.lblFullName.Text = fLangMan.LS(FLS.LSID_FullName);
 			this.CheckBirth.Text = fLangMan.LS(FLS.LSID_Birth);
-			this.Label3.Text = fLangMan.LS(FLS.LSID_BirthDate);
-			this.Label5.Text = fLangMan.LS(FLS.LSID_BirthPlace);
+			this.lblBirthDate.Text = fLangMan.LS(FLS.LSID_BirthDate);
+			this.lblBirthPlace.Text = fLangMan.LS(FLS.LSID_BirthPlace);
 			this.CheckDeath.Text = fLangMan.LS(FLS.LSID_Death);
-			this.Label6.Text = fLangMan.LS(FLS.LSID_DeathDate);
-			this.Label7.Text = fLangMan.LS(FLS.LSID_DeathPlace);
-			this.Label2.Text = fLangMan.LS(FLS.LSID_Note);
+			this.lblDeathDate.Text = fLangMan.LS(FLS.LSID_DeathDate);
+			this.lblDeathPlace.Text = fLangMan.LS(FLS.LSID_DeathPlace);
+			this.lblNote.Text = fLangMan.LS(FLS.LSID_Note);
 			this.tsSourceInput.Text = fLangMan.LS(FLS.LSID_InputSource);
 			this.rgSourceKind.Text = fLangMan.LS(FLS.LSID_SourceKind);
-			this.Label4.Text = fLangMan.LS(FLS.LSID_Source);
-			this.Label8.Text = fLangMan.LS(FLS.LSID_Page);
-			this.Label9.Text = fLangMan.LS(FLS.LSID_Year);
-			this.Label10.Text = fLangMan.LS(FLS.LSID_Settlement);
+			this.lblSource.Text = fLangMan.LS(FLS.LSID_Source);
+			this.lblPage.Text = fLangMan.LS(FLS.LSID_Page);
+			this.lblYear.Text = fLangMan.LS(FLS.LSID_Year);
+			this.lblSettlement.Text = fLangMan.LS(FLS.LSID_Settlement);
 			this.gbMetrics.Text = fLangMan.LS(FLS.LSID_SK_Met);
-			this.Label11.Text = fLangMan.LS(FLS.LSID_EventDate);
-			this.Label12.Text = fLangMan.LS(FLS.LSID_EventType);
+			this.lblEventDate.Text = fLangMan.LS(FLS.LSID_EventDate);
+			this.lblEventType.Text = fLangMan.LS(FLS.LSID_EventType);
 			
-			this.radioButton1.Text = fLangMan.LS(FLS.LSID_SK_Rev);
-			this.radioButton2.Text = fLangMan.LS(FLS.LSID_SK_Met);
+			this.rbSK_Rev.Text = fLangMan.LS(FLS.LSID_SK_Rev);
+			this.rbSK_Met.Text = fLangMan.LS(FLS.LSID_SK_Met);
 		}
 		
 		private void ShowError(string msg)
@@ -183,14 +183,12 @@ namespace GKFlowInputPlugin
 			return result;
 		}
 
-		private bool CheckMain(GEDCOMIndividualRecord main)
+		private void CheckMain(GEDCOMIndividualRecord main)
 		{
-			bool result = (main != null);
-			if (!result)
+			if (main == null)
 			{
 				throw new PersonScanException(fLangMan.LS(FLS.LSID_BasePersonInvalid));
 			}
-			return result;
 		}
 
 		public DataGridViewColumn AddTextColumn(string colName, string headerText)
@@ -370,7 +368,7 @@ namespace GKFlowInputPlugin
 										iMain = iRec;
 										string evName = "";
 
-										if (radioButton2.Checked) {
+										if (rbSK_Met.Checked) {
 											switch (cbEventType.SelectedIndex) {
 												case  0: evName = "BIRT"; break;
 												case  1: evName = "DEAT"; break;
@@ -468,7 +466,7 @@ namespace GKFlowInputPlugin
 
 		void RadioButton1CheckedChanged(object sender, EventArgs e)
 		{
-			gbMetrics.Enabled = (radioButton2.Checked);
+			gbMetrics.Enabled = (rbSK_Met.Checked);
 		}
 
 		#endregion

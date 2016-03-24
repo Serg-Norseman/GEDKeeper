@@ -8,18 +8,18 @@ namespace GKUI.Dialogs
 	{
 		private System.Windows.Forms.Button btnAccept;
 		private System.Windows.Forms.Button btnCancel;
-		private System.Windows.Forms.Label Label1;
+		private System.Windows.Forms.Label lblReference;
 		private System.Windows.Forms.ComboBox EditRef;
-		private System.Windows.Forms.Label Label2;
+		private System.Windows.Forms.Label lblRefType;
 		private System.Windows.Forms.ComboBox EditType;
 
 		private void InitializeComponent()
 		{
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
-			this.Label1 = new System.Windows.Forms.Label();
+			this.lblReference = new System.Windows.Forms.Label();
 			this.EditRef = new System.Windows.Forms.ComboBox();
-			this.Label2 = new System.Windows.Forms.Label();
+			this.lblRefType = new System.Windows.Forms.Label();
 			this.EditType = new System.Windows.Forms.ComboBox();
 			this.SuspendLayout();
 			// 
@@ -49,11 +49,11 @@ namespace GKUI.Dialogs
 			// 
 			// Label1
 			// 
-			this.Label1.Location = new System.Drawing.Point(8, 8);
-			this.Label1.Name = "Label1";
-			this.Label1.Size = new System.Drawing.Size(205, 13);
-			this.Label1.TabIndex = 0;
-			this.Label1.Text = "Сноска/ссылка/пометка/комментарий";
+			this.lblReference.Location = new System.Drawing.Point(8, 8);
+			this.lblReference.Name = "lblReference";
+			this.lblReference.Size = new System.Drawing.Size(205, 13);
+			this.lblReference.TabIndex = 0;
+			this.lblReference.Text = "Сноска/ссылка/пометка/комментарий";
 			// 
 			// EditRef
 			// 
@@ -64,11 +64,11 @@ namespace GKUI.Dialogs
 			// 
 			// Label2
 			// 
-			this.Label2.Location = new System.Drawing.Point(8, 56);
-			this.Label2.Name = "Label2";
-			this.Label2.Size = new System.Drawing.Size(25, 13);
-			this.Label2.TabIndex = 2;
-			this.Label2.Text = "Тип";
+			this.lblRefType.Location = new System.Drawing.Point(8, 56);
+			this.lblRefType.Name = "lblRefType";
+			this.lblRefType.Size = new System.Drawing.Size(25, 13);
+			this.lblRefType.TabIndex = 2;
+			this.lblRefType.Text = "Тип";
 			// 
 			// EditType
 			// 
@@ -85,9 +85,9 @@ namespace GKUI.Dialogs
 			this.ClientSize = new System.Drawing.Size(353, 145);
 			this.Controls.Add(this.btnAccept);
 			this.Controls.Add(this.btnCancel);
-			this.Controls.Add(this.Label1);
+			this.Controls.Add(this.lblReference);
 			this.Controls.Add(this.EditRef);
-			this.Controls.Add(this.Label2);
+			this.Controls.Add(this.lblRefType);
 			this.Controls.Add(this.EditType);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
