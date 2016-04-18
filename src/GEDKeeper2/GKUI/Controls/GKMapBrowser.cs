@@ -5,7 +5,6 @@ using System.Net;
 using System.Windows.Forms;
 using System.Xml;
 
-using BSLib;
 using GKCommon;
 using GKCore.Maps;
 using GKCore.Options;
@@ -381,10 +380,28 @@ namespace GKUI.Controls
 
             try
 		    {
-		        mshtml.IHTMLWindow2 win = (mshtml.IHTMLWindow2)this.Document.Window.DomWindow;
-		        if (win != null) {
-		            win.execScript(script, "JavaScript");
-		        }
+            	HtmlElement script1 = this.Document.GetElementById("gkScript");
+
+            	if (script1 == null) {
+            		HtmlElement head = this.Document.GetElementsByTagName("head")[0];
+            		script1 = this.Document.CreateElement("script");
+            		script1.Id = "gkScript";
+            		head.AppendChild(script1);
+            	}
+
+            	script1.SetAttribute("text", "function gkFunc() { " + script + " }");
+            	this.Document.InvokeScript("gkFunc");
+
+            	//string jCode = "alert("Hello");"
+				//webBrowser1.Document.InvokeScript("eval", new object[] { jCode });
+            	
+				//var jsCode="alert('hello world from injected code');";
+				//WebBrowser.Document.InvokeScript("execScript", new Object[] { jsCode, "JavaScript" });
+            	
+		        //mshtml.IHTMLWindow2 win = (mshtml.IHTMLWindow2)this.Document.Window.DomWindow;
+		        //if (win != null) {
+		        //    win.execScript(script, "JavaScript");
+		        //}
 		    }
 		    catch (Exception ex)
 		    {

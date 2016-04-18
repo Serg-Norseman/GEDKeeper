@@ -1,4 +1,4 @@
-using BSLib;
+using GKCommon;
 
 namespace GKUI.Charts
 {

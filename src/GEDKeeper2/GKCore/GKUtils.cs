@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-using BSLib;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Types;
@@ -20,8 +20,49 @@ namespace GKCore
     public static class GKUtils
 	{
 		#region System functions
-		
-		public static T GetAssemblyAttribute<T>(Assembly assembly) where T : Attribute
+
+        public static bool IsSetBit(uint val, int pos)
+        {
+        	return (val & (1 << pos)) != 0;
+        }
+
+		public static void LoadExtFile(string fileName)
+		{
+			if (File.Exists(fileName))
+			{
+				Process.Start(fileName);
+			}
+		}
+
+        public static int GetKeyLayout()
+        {
+        	InputLanguage currentLang = InputLanguage.CurrentInputLanguage;
+        	//ShowMessage(currentLang.Culture.KeyboardLayoutId.ToString());
+        	return currentLang.Culture.KeyboardLayoutId;
+        }
+
+        public static void SetKeyLayout(int layout)
+        {
+        	try {
+        		InputLanguage currentLang = InputLanguage.FromCulture(new System.Globalization.CultureInfo(layout));
+        		InputLanguage.CurrentInputLanguage = currentLang;
+        	} catch (Exception ex) {
+        		Logger.LogWrite("GKUtils.SetKeyLayout(): " + ex.Message);
+        	}
+        }
+
+        public static void SendMail(string address, string subject, string body, string attach)
+        {
+        	//string mailto = string.Format("mailto:{0}?Subject={1}&Body={2}&Attach={3}", address, subject, body, "" + attach + ""); // Attach, Attachment
+         	//System.Diagnostics.Process.Start(mailto);
+        }
+
+        public static bool IsNetworkAvailable()
+        {  
+            return System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
+        }
+
+        public static T GetAssemblyAttribute<T>(Assembly assembly) where T : Attribute
 		{
             if (assembly == null)
             {
@@ -152,13 +193,8 @@ namespace GKCore
 					result = GEDCOMSex.svUndetermined;
 					break;
 			}
-			
-			return result;
-		}
 
-		public static bool IsDevComp()
-		{
-			return (Environment.MachineName == "VALHALLA" || Environment.UserName == "Zhdanovskih_SV");
+			return result;
 		}
 
 		public static bool IsRecordAccess(GEDCOMRestriction restriction, ShieldState shieldState)
@@ -624,6 +660,23 @@ namespace GKCore
 
 		#region Date functions
 
+		public static int DaysBetween(DateTime now, DateTime then)
+		{
+			TimeSpan span = ((now < then) ? then - now : now - then);
+			return span.Days;
+		}
+
+		private static readonly ushort[][] MONTH_DAYS = new ushort[][]
+		{
+			new ushort[] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }, 
+			new ushort[] { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
+		};
+
+		public static ushort DaysInAMonth(ushort year, ushort month)
+		{
+			return MONTH_DAYS[(month == 2 && DateTime.IsLeapYear(year)) ? 1 : 0][month - 1];
+		}
+
 		public static string GetDateFmtString(GEDCOMDate date, DateFormat format, bool includeBC = false)
 		{
 			if (date == null)
@@ -1042,7 +1095,7 @@ namespace GKCore
 								{
 									bdY = curY;
 								}
-								result = Convert.ToString(SysUtils.DaysBetween(dtNow, new DateTime(bdY, bdM, bdD)));
+								result = Convert.ToString(DaysBetween(dtNow, new DateTime(bdY, bdM, bdD)));
 							}
 						}
 					}
@@ -1445,14 +1498,32 @@ namespace GKCore
 
 		public static string GetTempDir()
 		{
-			return Environment.GetEnvironmentVariable("TEMP");
+			return Environment.GetEnvironmentVariable("TEMP") + Path.DirectorySeparatorChar;
 		}
 
 		public static string GetAppPath()
 		{
 			Module[] mods = Assembly.GetExecutingAssembly().GetModules();
 			string fn = mods[0].FullyQualifiedName;
-			return Path.GetDirectoryName(fn) + "\\";
+			return Path.GetDirectoryName(fn) + Path.DirectorySeparatorChar;
+		}
+
+		public static string GetPluginsPath()
+		{
+			string appPath = GetAppPath();
+			return appPath + "plugins" + Path.DirectorySeparatorChar;
+		}
+
+		public static string GetLangsPath()
+		{
+			string appPath = GetAppPath();
+			return appPath + "langs" + Path.DirectorySeparatorChar;
+		}
+
+		public static string GetBackgroundsPath()
+		{
+			string appPath = GetAppPath();
+			return appPath + "backgrounds" + Path.DirectorySeparatorChar;
 		}
 
 		#endregion
@@ -1559,7 +1630,6 @@ namespace GKCore
             }
 
             GKRecordsView recView;
-
 			recView = new GKRecordsView();
 			recView.HideSelection = false;
 			recView.LabelEdit = false;
@@ -2725,7 +2795,7 @@ namespace GKCore
 			if (arc) {
 				result += ".zip";
 			} else {
-				result += "\\";
+				result += Path.DirectorySeparatorChar;
 			}
 			return result;
 		}
@@ -2877,7 +2947,9 @@ namespace GKCore
 		}
 
 		#endregion
-		
+
+		#region Multimedia support
+
 		public static MultimediaKind GetMultimediaKind(GEDCOMMultimediaFormat format)
 		{
 			switch (format)
@@ -2915,5 +2987,7 @@ namespace GKCore
 					return MultimediaKind.mkNone;
 			}
 		}
+
+		#endregion
 	}
 }

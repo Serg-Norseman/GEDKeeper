@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using GKCommon;
 using GKCore;
 
 namespace GKUI.Dialogs
@@ -19,7 +20,7 @@ namespace GKUI.Dialogs
 
 		private void LabelMail_Click(object sender, EventArgs e)
 		{
-			SysUtils.LoadExtFile(this.LabelMail.Text);
+			GKUtils.LoadExtFile(this.LabelMail.Text);
 		}
 
 		public static void ShowAbout()
@@ -39,6 +40,13 @@ namespace GKUI.Dialogs
 			{
 				dlg.Dispose();
 			}
+		}
+
+		private void LabelProductClick(object sender, EventArgs e)
+		{
+			string msg = SysInfo.GetPlatformID().ToString() + "/" + SysInfo.GetDesktopType().ToString() + 
+				"/IsUnix:" + SysInfo.IsUnix().ToString();
+			GKUtils.ShowMessage(msg);
 		}
 	}
 }

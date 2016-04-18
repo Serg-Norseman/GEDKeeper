@@ -2,7 +2,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-using BSLib;
+using GKCommon;
 using GKCore;
 using GKCore.Types;
 
@@ -64,16 +64,9 @@ namespace GKUI.Controls
 
 		public GKSheetList(Control owner)
 		{
-            if (owner == null)
-            {
+            if (owner == null) {
                 throw new ArgumentNullException("owner");
             }
-
-			owner.SuspendLayout();
-			this.Dock = DockStyle.Fill;
-			owner.Controls.Add(this);
-			owner.ResumeLayout(false);
-			base.SuspendLayout();
 
 			this.fBtnMoveDown = new ToolBarButton();
 			this.fBtnMoveDown.ImageIndex = 30;
@@ -95,6 +88,7 @@ namespace GKUI.Controls
 			this.fBtnAdd.ToolTipText = LangMan.LS(LSID.LSID_MIRecordAdd);
 
 			this.fToolBar = new ToolBar();
+			this.fToolBar.Dock = DockStyle.Right;
 			this.fToolBar.Appearance = ToolBarAppearance.Flat;
 			this.fToolBar.Buttons.AddRange(new ToolBarButton[] {
 			                               	this.fBtnAdd,
@@ -108,6 +102,7 @@ namespace GKUI.Controls
 			this.fToolBar.ButtonClick += this.ButtonClick;
 
 			this.fList = new GKListView();
+			this.fList.Dock = DockStyle.Fill;
 			this.fList.Location = new Point(0, 0);
 			this.fList.Size = new Size(500, 290);
 			this.fList.HideSelection = false;
@@ -117,14 +112,18 @@ namespace GKUI.Controls
 			this.fList.DoubleClick += this.List_DoubleClick;
 			this.fList.KeyDown += this.List_KeyDown;
 
-			this.fToolBar.Dock = DockStyle.Right;
-			this.fList.Dock = DockStyle.Fill;
+			this.SuspendLayout();
+			this.Controls.Add(this.fList);
+			this.Controls.Add(this.fToolBar);
+			this.Controls.SetChildIndex(this.fList, 1);
+			this.Controls.SetChildIndex(this.fToolBar, 0);
+			this.ResumeLayout(false);
 
-			base.Controls.Add(this.fList);
-			base.Controls.Add(this.fToolBar);
-			base.Controls.SetChildIndex(this.fList, 0);
-			base.Controls.SetChildIndex(this.fToolBar, 1);
-			base.ResumeLayout(false);
+			this.Dock = DockStyle.Fill;
+
+			owner.SuspendLayout();
+			owner.Controls.Add(this);
+			owner.ResumeLayout(false);
 
 			this.SetButtons(EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete));
 		}

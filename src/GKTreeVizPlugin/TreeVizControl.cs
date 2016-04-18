@@ -6,7 +6,6 @@ using System.Timers;
 using System.Windows.Forms;
 
 using ArborGVT;
-using BSLib;
 using CsGL.OpenGL;
 using GKCommon;
 using GKCommon.GEDCOM;

@@ -34,7 +34,7 @@
             this.edImportFile = new System.Windows.Forms.TextBox();
             this.btnImportFileChoose = new System.Windows.Forms.Button();
             this.OpenDialog2 = new System.Windows.Forms.OpenFileDialog();
-            this.tabControl1 = new BSLib.Controls.WizardPages();
+            this.tabControl1 = new GKCommon.Controls.WizardPages();
             this.pageSelect = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.chkSurnamesNormalize = new System.Windows.Forms.CheckBox();
@@ -441,7 +441,7 @@
         private System.Windows.Forms.Button btnBack;
         private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.TabPage pageSelect;
-        private BSLib.Controls.WizardPages tabControl1;
+        private GKCommon.Controls.WizardPages tabControl1;
         private System.Windows.Forms.OpenFileDialog OpenDialog2;
         private System.Windows.Forms.Button btnImportFileChoose;
         private System.Windows.Forms.TextBox edImportFile;

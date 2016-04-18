@@ -1,6 +1,5 @@
 using System;
-
-using BSLib;
+using GKCommon;
 using GKCore.Types;
 
 namespace GKCore.Options

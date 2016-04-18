@@ -10,7 +10,7 @@ namespace GKCommon.GEDCOM
 
 		protected override string MediaTypeTagName()
 		{
-			return "FORM\\TYPE";
+			return @"FORM\TYPE";
 		}
 
 		public GEDCOMFileReferenceWithTitle(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

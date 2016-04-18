@@ -5,8 +5,8 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
-using BSLib;
 using ExcelLibrary.SpreadSheet;
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;

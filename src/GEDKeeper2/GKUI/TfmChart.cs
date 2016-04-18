@@ -5,7 +5,7 @@ using System.Drawing.Printing;
 using System.IO;
 using System.Windows.Forms;
 
-using BSLib.Graphics;
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -495,7 +495,8 @@ namespace GKUI
 
 		private void miFillImageClick(object sender, EventArgs e)
 		{
-			OpenDialog1.InitialDirectory = GKUtils.GetAppPath() + "\\backgrounds";
+			OpenDialog1.InitialDirectory = GKUtils.GetBackgroundsPath();
+
 			if (OpenDialog1.ShowDialog() == DialogResult.OK)
 			{
 				Image img = new Bitmap(OpenDialog1.FileName);
@@ -578,7 +579,7 @@ namespace GKUI
 
 			int imgW = img.Width;
 			int imgH = img.Height;
-			float factor = GfxUtils.ZoomToFit(imgW, imgH, marginBounds.Width, marginBounds.Height);
+			float factor = GfxHelper.ZoomToFit(imgW, imgH, marginBounds.Width, marginBounds.Height);
 			imgW = (int)(imgW * factor);
 			imgH = (int)(imgH * factor);
 			int x = (pageBounds.Width - imgW) / 2;

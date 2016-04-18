@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-using BSLib;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
@@ -1030,7 +1029,7 @@ namespace GKPedigreeImporterPlugin
 			this.fRawContents.Clear();
 
 			this.fFileName = fileName;
-            string ext = AuxUtils.GetFileExtension(fileName);
+            string ext = FileHelper.GetFileExtension(fileName);
 
 			if (ext == ".txt")
 			{

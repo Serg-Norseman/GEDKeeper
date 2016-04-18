@@ -5,7 +5,6 @@ cls
 del /q .\GEDKeeper2-Installer.exe
 
 rem del /q .\plugins\*.*
-rem del .\BSLib.*
 rem del .\GKCommon.*
 
 rem <<< Main assemblies cleaning >>>
@@ -15,14 +14,6 @@ rmdir .\src\GEDKeeper2\obj /s /q
 
 rmdir .\src\GKCommon\bin /s /q
 rmdir .\src\GKCommon\obj /s /q
-
-rmdir .\src\BSLib\bin /s /q
-rmdir .\src\BSLib\obj /s /q
-
-rmdir .\src\BSLibTests\bin /s /q
-rmdir .\src\BSLibTests\obj /s /q
-rmdir .\src\BSLibTests\OpenCover /s /q
-rmdir .\src\BSLibTests\PartCover /s /q
 
 rmdir .\src\GKTests\bin /s /q
 rmdir .\src\GKTests\obj /s /q

@@ -1,9 +1,29 @@
-﻿using System.Drawing;
+﻿/*
+ *  "GEDKeeper", the personal genealogical database editor.
+ *  Copyright (C) 2009-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
+ *
+ *  This file is part of "GEDKeeper".
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+using System.Drawing;
 using System.Windows.Forms;
 
 using ArborGVT;
-using BSLib.SmartGraph;
 using GKCommon.GEDCOM;
+using GKCommon.SmartGraph;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -55,9 +75,9 @@ namespace GKUI
 			}
 		}
 
-		private static void PL_ConvertGraphToArborSystem(IGraph graph, ArborSystem sys)
+		private static void PL_ConvertGraphToArborSystem(Graph graph, ArborSystem sys)
 		{
-			foreach (IVertex vtx in graph.Vertices) {
+			foreach (Vertex vtx in graph.Vertices) {
 				ArborNode arbNode = sys.addNode(vtx.Sign);
 				PGNode pgNode = (PGNode)vtx.Value;
 
@@ -65,10 +85,9 @@ namespace GKUI
 				arbNode.Mass = pgNode.Size;
 			}
 
-			foreach (IEdge edge in graph.Edges) {
+			foreach (Edge edge in graph.Edges) {
 				sys.addEdge(edge.Source.Sign, edge.Target.Sign);
 			}
 		}
-
 	}
 }

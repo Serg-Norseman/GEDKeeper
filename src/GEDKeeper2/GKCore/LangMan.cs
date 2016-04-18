@@ -804,7 +804,7 @@ namespace GKCore
 			/* 068 */ "Женский",
 			/* 069 */ "Неопределенный",
 			/* 070 */ "Файл изменен. Сохранить?",
-			/* 071 */ "У заданного родителя найдена семья \"{0}\". \\nВключить в неё ребенка?",
+			/* 071 */ "У заданного родителя найдена семья \"{0}\". Включить в неё ребенка?",
 			/* 072 */ "Удалить персональную запись \"{0}\"?",
 			/* 073 */ "Удалить семью \"{0}\"?",
 			/* 074 */ "Удалить заметку?",
@@ -1449,7 +1449,7 @@ namespace GKCore
 
 		public static void SaveDefaultLanguage()
 		{
-			StreamWriter lf = new StreamWriter(GKUtils.GetAppPath() + "langs\\russian.sample", false, Encoding.UTF8);
+			StreamWriter lf = new StreamWriter(GKUtils.GetLangsPath() + "russian.sample", false, Encoding.UTF8);
 			try
 			{
 				lf.WriteLine(";" + LS_DEF_CODE.ToString() + "," + "Русский");
@@ -1508,58 +1508,5 @@ namespace GKCore
 
 			return result;
 		}
-
-		public bool LoadFromXMLFile(string fileName)
-		{
-			bool result = false;
-
-			if (File.Exists(fileName))
-			{
-				StreamReader lngFile = new StreamReader(fileName, Encoding.UTF8);
-				try
-				{
-					XmlDocument xmlDocument = new XmlDocument();
-					xmlDocument.Load(lngFile);
-					XmlNode nodeDoc = xmlDocument.DocumentElement;
-
-					if (nodeDoc != null && nodeDoc.ChildNodes.Count > 0)
-					{
-						int num = nodeDoc.ChildNodes.Count;
-						for (int i = 0; i < num; i++)
-						{
-							XmlNode xNode = nodeDoc.ChildNodes[i];
-							if (xNode.Name == "resource")
-							{
-								XmlAttribute nodeLangName = xNode.Attributes["Language"]; // skipped
-								XmlAttribute nodeLangId = xNode.Attributes["LANGID"]; // skipped
-
-								int num2 = xNode.ChildNodes.Count;
-								for (int k = 0; k < num2; k++)
-								{
-									XmlNode strNode = xNode.ChildNodes[k];
-									if (strNode.Name == "string")
-									{
-										XmlAttribute nodeStrId = strNode.Attributes["id"];
-										XmlAttribute nodeStrVal = strNode.Attributes["value"];
-
-										int id = int.Parse(nodeStrId.InnerText);
-										this.fList.Add(id, nodeStrVal.InnerText);
-									}
-								}
-							}
-						}
-					}
-
-					result = true;
-				}
-				finally
-				{
-					lngFile.Close();
-				}
-			}
-
-			return result;
-		}
 	}
-
 }

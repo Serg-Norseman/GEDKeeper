@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 
-using BSLib;
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -18,8 +18,6 @@ namespace GKUI
     /// </summary>
     public sealed partial class TfmTreeTools : Form
 	{
-		private static readonly string[] fHelpTopics;
-
 		// runtime
 		private readonly IBaseWindow fBase;
 		private readonly GEDCOMTree fTree;
@@ -95,11 +93,7 @@ namespace GKUI
 			this.SheetPatSearch.Text = LangMan.LS(LSID.LSID_ToolOp_8);
 			this.SheetPlaceManage.Text = LangMan.LS(LSID.LSID_ToolOp_9);
 			
-			//this.SheetMerge.Text
-			//this.SheetOptions.Text
-
 			this.btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-			this.btnHelp.Text = LangMan.LS(LSID.LSID_MIHelp);
 			this.Label1.Text = LangMan.LS(LSID.LSID_MIFile);
 			
 			this.btnFileChoose.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
@@ -135,27 +129,6 @@ namespace GKUI
 			this.chkBookmarkMerged.Text = LangMan.LS(LSID.LSID_BookmarkMerged);
 		}
 
-		static TfmTreeTools()
-		{
-			fHelpTopics = new string[]
-			{
-				"::/gkhTools_TreeCompare.html", 
-				"::/gkhTools_TreeMerge.html", 
-				"::/gkhTools_TreeSplit.html", 
-				"::/gkhTools_DubsMerge.html", 
-				//"::/gkhTools_TreeImport.html", 
-				"::/gkhTools_FamiliesConnectivity.html", 
-				"::/gkhTools_TreeCheck.html", 
-				"::/gkhTools_PatSearch.html", 
-				"::/gkhTools_PlacesManage.html"
-			};
-		}
-
-        private void btnHelp_Click(object sender, EventArgs e)
-		{
-			TfmGEDKeeper.Instance.ShowHelpTopic(fHelpTopics[this.PageControl.SelectedIndex]);
-		}
-
         private void PageControl_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.PageControl.SelectedTab == this.SheetFamilyGroups)
@@ -187,7 +160,7 @@ namespace GKUI
 
 		#region Duplicates Search
 
-		private bool CheckPersonsEx(GEDCOMIndividualRecord rec1, GEDCOMIndividualRecord rec2)
+		private static bool CheckPersonsEx(GEDCOMIndividualRecord rec1, GEDCOMIndividualRecord rec2)
 		{
 			GEDCOMFamilyRecord fam1 = rec1.GetParentsFamily();
 			GEDCOMFamilyRecord fam2 = rec2.GetParentsFamily();
@@ -241,7 +214,7 @@ namespace GKUI
 
 						if (res && this.fRMMode == GEDCOMRecordType.rtIndividual)
 						{
-							res = this.CheckPersonsEx((GEDCOMIndividualRecord)iRec, (GEDCOMIndividualRecord)kRec);
+							res = CheckPersonsEx((GEDCOMIndividualRecord)iRec, (GEDCOMIndividualRecord)kRec);
 						}
 
 						if (res)

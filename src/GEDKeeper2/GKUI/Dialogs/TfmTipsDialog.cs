@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-using BSLib;
+using GKCommon;
 using GKCore;
 
 namespace GKUI.Dialogs

@@ -22,7 +22,7 @@ namespace GKCommon.GEDCOM
 
 		protected virtual string MediaTypeTagName()
 		{
-			return "FORM\\MEDI";
+			return @"FORM\MEDI";
 		}
 
 		public void LinkFile(string fileName)
@@ -35,7 +35,7 @@ namespace GKCommon.GEDCOM
 		{
             if (string.IsNullOrEmpty(fileName)) return GEDCOMMultimediaFormat.mfUnknown;
 
-            string ext = AuxUtils.GetFileExtension(fileName);
+            string ext = FileHelper.GetFileExtension(fileName);
 
 			GEDCOMMultimediaFormat result;
 			if (ext == ".bmp")

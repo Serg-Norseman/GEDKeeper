@@ -32,6 +32,11 @@ namespace GKTreeVizPlugin
 
         public void Execute()
         {
+			if (this.fHost.IsUnix()) {
+        		this.fHost.ShowWarning(@"This function is not supported in Linux");
+        		return;
+        	}
+
         	using (frmTVPSettings frm = new frmTVPSettings(this))
         	{
         		if (frm.ShowDialog() == DialogResult.OK)

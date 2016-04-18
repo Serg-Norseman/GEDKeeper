@@ -440,8 +440,8 @@ namespace GKUI.Dialogs
 			if (idx < 0 || idx >= GKData.DateKinds.Length) return;
 
 			byte dates = GKData.DateKinds[idx].Dates;
-			this.EditEventDate1.Enabled = SysUtils.IsSetBit(dates, 0);
-			this.EditEventDate2.Enabled = SysUtils.IsSetBit(dates, 1);
+			this.EditEventDate1.Enabled = GKUtils.IsSetBit(dates, 0);
+			this.EditEventDate2.Enabled = GKUtils.IsSetBit(dates, 1);
 
 			this.cbDate1Calendar.Enabled = this.EditEventDate1.Enabled;
 			this.cbDate2Calendar.Enabled = this.EditEventDate2.Enabled;

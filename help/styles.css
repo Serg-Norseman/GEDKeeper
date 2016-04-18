@@ -1,3 +1,10 @@
+.ctx
+  {
+  margin-top: 0em;   
+  margin-bottom: 0em;
+  margin-left: 0em;
+  }
+
 body
   {
   padding: 0px 0px 0px 26px;
@@ -230,3 +237,18 @@ span.filename
 {
   color: #F00000;
 }
+
+
+ol.ctx
+  {
+  margin-top: 0em;   
+  margin-bottom: 0em;
+  margin-left: 0em; 
+  }
+
+li.ctx
+  {
+  margin-top: 0em;   
+  margin-bottom: 0em;
+  margin-left: 0em; 
+  }

@@ -1,10 +1,10 @@
 ﻿using System;
-using ExtUtils.ScrollableControls;
+using GKCommon.Controls;
 using GKCore;
 
 namespace GKUI.Charts
 {
-	public abstract class CustomChart : VirtualScrollableControl
+	public abstract class CustomChart : GKScrollableControl
 	{
 		private static readonly object EventNavRefresh;
 
@@ -20,9 +20,9 @@ namespace GKUI.Charts
 
 
 		static CustomChart()
-        {
-            CustomChart.EventNavRefresh = new object();
-        }
+		{
+			CustomChart.EventNavRefresh = new object();
+		}
 
 		protected CustomChart()
 		{
@@ -33,24 +33,24 @@ namespace GKUI.Charts
 		{
 			if (disposing)
 			{
-                if (this.fNavman != null) this.fNavman.Dispose();
+				if (this.fNavman != null) this.fNavman.Dispose();
 			}
 			base.Dispose(disposing);
 		}
 
-        private void DoNavRefresh()
-        {
-            EventHandler eventHandler = (EventHandler)base.Events[CustomChart.EventNavRefresh];
-            if (eventHandler == null) return;
+		private void DoNavRefresh()
+		{
+			EventHandler eventHandler = (EventHandler)base.Events[CustomChart.EventNavRefresh];
+			if (eventHandler == null) return;
 
-            eventHandler(this, null);
-        }
-
-
-        protected abstract void SetNavObject(object obj);
+			eventHandler(this, null);
+		}
 
 
-        public bool NavAdd(object obj)
+		protected abstract void SetNavObject(object obj);
+
+
+		public bool NavAdd(object obj)
 		{
 			if (obj != null && !this.fNavman.Busy) {
 				this.fNavman.Current = obj;

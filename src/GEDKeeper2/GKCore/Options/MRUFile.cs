@@ -1,6 +1,5 @@
 using System.Windows.Forms;
-
-using BSLib;
+using GKCommon;
 
 namespace GKCore.Options
 {

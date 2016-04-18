@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-using ExtUtils;
+using Externals;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Lists;
@@ -122,8 +122,12 @@ namespace GKUI.Controls
 
 		public override void EndUpdates()
 		{
-			base.EndUpdates();
-			base.ColumnWidthChanged += this.List_ColumnWidthChanged;
+			try {
+				base.EndUpdates();
+				base.ColumnWidthChanged += this.List_ColumnWidthChanged;
+			} catch (Exception ex) {
+				Logger.LogWrite("GKRecordsView.EndUpdates(): " + ex.Message);
+			}
 		}
 
 		private void List_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
@@ -155,24 +159,28 @@ namespace GKUI.Controls
 
 		private void SortContents()
 		{
-			int num = this.fContentList.Count;
-			for (int i = 0; i < num; i++) {
-				ValItem valItem = this.fContentList[i];
-				GEDCOMRecord rec = valItem.Record;
+			try {
+				int num = this.fContentList.Count;
+				for (int i = 0; i < num; i++) {
+					ValItem valItem = this.fContentList[i];
+					GEDCOMRecord rec = valItem.Record;
 
-				if (this.fXSortColumn == 0) {
-					valItem.ColumnValue = rec.GetId();
-				} else {
-					this.fListMan.Fetch(rec);
-					valItem.ColumnValue = this.fListMan.GetColumnInternalValue(this.fXSortColumn);
+					if (this.fXSortColumn == 0) {
+						valItem.ColumnValue = rec.GetId();
+					} else {
+						this.fListMan.Fetch(rec);
+						valItem.ColumnValue = this.fListMan.GetColumnInternalValue(this.fXSortColumn);
+					}
 				}
+
+				this.fXSortFactor = (this.fXSortOrder == SortOrder.Ascending ? 1 : -1);
+				ListTimSort<ValItem>.Sort(this.fContentList, CompareItems);
+
+				// clear cache
+				this.fCache = null;
+			} catch (Exception ex) {
+				Logger.LogWrite("GKRecordsView.SortContents(): " + ex.Message);
 			}
-
-			this.fXSortFactor = (this.fXSortOrder == SortOrder.Ascending ? 1 : -1);
-			ListTimSort<ValItem>.Sort(this.fContentList, CompareItems);
-
-			// clear cache
-			this.fCache = null;
 		}
 
 		private int CompareItems(ValItem item1, ValItem item2)
@@ -309,24 +317,28 @@ namespace GKUI.Controls
 
 		public void UpdateTitles()
 		{
-            if (this.fListMan == null) return;
+			try {
+				if (this.fListMan == null) return;
 
-			this.BeginUpdates();
-			try
-			{
-				this.Columns.Clear();
-				this.fListMan.UpdateColumns(this, this.fIsMainList);
-			}
-			finally
-			{
-				this.EndUpdates();
+				this.BeginUpdates();
+				try
+				{
+					this.Columns.Clear();
+					this.fListMan.UpdateColumns(this, this.fIsMainList);
+				}
+				finally
+				{
+					this.EndUpdates();
+				}
+			} catch (Exception ex) {
+				Logger.LogWrite("GKRecordsView.UpdateTitles(): " + ex.Message);
 			}
 		}
 
 		public void UpdateContents(ShieldState shieldState, bool titles, int autosizeColumn)
 		{
 			if (this.fListMan == null) return;
-			
+
 			try
 			{
 				GEDCOMRecord tempRec = this.GetSelectedRecord();
@@ -424,32 +436,41 @@ namespace GKUI.Controls
 
 		public void SelectItemByRec(GEDCOMRecord record)
 		{
-			int idx = this.IndexOfRecord(record);
-			if (idx >= 0) {
-				ListViewItem item = this.Items[idx];
-				this.SelectedIndices.Clear();
-				item.Selected = true;
-				item.EnsureVisible();
+			try {
+				int idx = this.IndexOfRecord(record);
+				if (idx >= 0) {
+					ListViewItem item = this.Items[idx];
+					this.SelectedIndices.Clear();
+					item.Selected = true;
+					item.EnsureVisible();
+				}
+			} catch (Exception ex) {
+				Logger.LogWrite("GKRecordsView.SelectItemByRec(): " + ex.Message);
 			}
 		}
 
 		public GEDCOMRecord GetSelectedRecord()
 		{
-			GEDCOMRecord result = null;
+			try {
+				GEDCOMRecord result = null;
 
-			if (!this.VirtualMode) {
-				GKListItem item = base.SelectedItem();
-				if (item != null) result = (item.Data as GEDCOMRecord);
-			} else {
-				if (base.SelectedIndices.Count > 0) {
-					int index = base.SelectedIndices[0];
-					if (index >= 0 && index < fContentList.Count) {
-						result = this.fContentList[index].Record;
-					}					
+				if (!this.VirtualMode) {
+					GKListItem item = base.SelectedItem();
+					if (item != null) result = (item.Data as GEDCOMRecord);
+				} else {
+					if (base.SelectedIndices.Count > 0) {
+						int index = base.SelectedIndices[0];
+						if (index >= 0 && index < fContentList.Count) {
+							result = this.fContentList[index].Record;
+						}
+					}
 				}
-			}
 
-			return result;
+				return result;
+			} catch (Exception ex) {
+				Logger.LogWrite("GKRecordsView.GetSelectedRecord(): " + ex.Message);
+				return null;
+			}
 		}
 	}
 }

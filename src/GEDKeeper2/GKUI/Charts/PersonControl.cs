@@ -1,7 +1,6 @@
 ﻿using System.Drawing;
 using System.Drawing.Drawing2D;
-
-using BSLib;
+using GKCommon;
 
 namespace GKUI.Charts
 {

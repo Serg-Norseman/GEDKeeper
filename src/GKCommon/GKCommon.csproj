@@ -5,7 +5,6 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>Library</OutputType>
-    <RootNamespace>GKCommon</RootNamespace>
     <AssemblyName>GKCommon</AssemblyName>
     <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
@@ -52,55 +51,82 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <CodeAnalysisRuleSet>..\gk21.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Linux_Debug' ">
+    <OutputPath>bin\</OutputPath>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <DefineConstants>DEBUG;TRACE;GK_LINUX</DefineConstants>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <StartAction>Project</StartAction>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Linux_Debug|AnyCPU' ">
+    <CodeAnalysisRuleSet>..\gk21.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\CalendarConverter.cs" />
-    <Compile Include="src\CalendarData.cs" />
-    <Compile Include="src\Controls\ImageBox.cs">
+    <Compile Include="src\Externals\IniFiles\IniFileBlankLine.cs" />
+    <Compile Include="src\Externals\IniFiles\IniFileCommentary.cs" />
+    <Compile Include="src\Externals\IniFiles\IniFileReader.cs" />
+    <Compile Include="src\Externals\IniFiles\IniFileSection.cs" />
+    <Compile Include="src\Externals\IniFiles\IniFileSectionStart.cs" />
+    <Compile Include="src\Externals\IniFiles\IniFileSettings.cs" />
+    <Compile Include="src\Externals\IniFiles\IniFileValue.cs" />
+    <Compile Include="src\Externals\IniFiles\IniFileWriter.cs" />
+    <Compile Include="src\GKCommon\BaseObject.cs" />
+    <Compile Include="src\GKCommon\CalendarConverter.cs" />
+    <Compile Include="src\GKCommon\CalendarData.cs" />
+    <Compile Include="src\GKCommon\Controls\GKScrollableControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="src\ExpCalculator.cs">
+    <Compile Include="src\GKCommon\Controls\HyperView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="src\ExtUtils\ScrollableControls\ScrollControl.cs">
+    <Compile Include="src\GKCommon\Controls\ImageBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="src\ExtUtils\ScrollableControls\VirtualScrollableControl.cs">
+    <Compile Include="src\GKCommon\Controls\LogChart.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="src\GKCommon\Controls\SlideList.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="src\GKCommon\Controls\WizardPages.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="src\AssemblyInfo.cs" />
-    <Compile Include="src\Controls\ExtResources.Designer.cs">
+    <Compile Include="src\GKCommon\Controls\ExtResources.Designer.cs">
       <DependentUpon>ExtResources.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="src\Controls\ImageView.cs">
+    <Compile Include="src\GKCommon\Controls\ImageView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="src\Controls\ImageView.Designer.cs">
+    <Compile Include="src\GKCommon\Controls\ImageView.Designer.cs">
       <DependentUpon>ImageView.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\Controls\HyperView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="src\ExtUtils\CSV\CSVReader.cs" />
-    <Compile Include="src\ExtUtils\CSV\StringConverter.cs" />
-    <Compile Include="src\ExtUtils\ListTimSort.cs" />
-    <Compile Include="src\ExtUtils\SingleInstancing\Global Delegates.cs" />
-    <Compile Include="src\ExtUtils\SingleInstancing\ISingleInstanceEnforcer.cs" />
-    <Compile Include="src\ExtUtils\SingleInstancing\MessageEventArgs.cs" />
-    <Compile Include="src\ExtUtils\SingleInstancing\SingleInstanceException.cs" />
-    <Compile Include="src\ExtUtils\SingleInstancing\SingleInstanceProxy.cs" />
-    <Compile Include="src\ExtUtils\SingleInstancing\SingleInstanceTracker.cs" />
-    <Compile Include="src\ExtUtils\ZipStorer.cs" />
-    <Compile Include="src\AuxUtils.cs" />
+    <Compile Include="src\Externals\IniFiles\IniFileElement.cs" />
+    <Compile Include="src\Externals\IniFiles\IniFiles.cs" />
+    <Compile Include="src\Externals\CSV\CSVReader.cs" />
+    <Compile Include="src\Externals\CSV\StringConverter.cs" />
+    <Compile Include="src\Externals\ListTimSort.cs" />
+    <Compile Include="src\Externals\SingleInstancing\Global Delegates.cs" />
+    <Compile Include="src\Externals\SingleInstancing\ISingleInstanceEnforcer.cs" />
+    <Compile Include="src\Externals\SingleInstancing\MessageEventArgs.cs" />
+    <Compile Include="src\Externals\SingleInstancing\SingleInstanceException.cs" />
+    <Compile Include="src\Externals\SingleInstancing\SingleInstanceProxy.cs" />
+    <Compile Include="src\Externals\SingleInstancing\SingleInstanceTracker.cs" />
+    <Compile Include="src\Externals\ZipStorer.cs" />
     <Compile Include="src\GEDCOM\EGEDCOMException.cs" />
     <Compile Include="src\GEDCOM\GEDCOMConsts.cs" />
     <Compile Include="src\GEDCOM\GEDCOMDelegates.cs" />
@@ -170,64 +196,92 @@
     <Compile Include="src\GEDCOM\GEDCOMUserReference.cs" />
     <Compile Include="src\GEDCOM\MatchParams.cs" />
     <Compile Include="src\GEDCOM\XRefReplacer.cs" />
-    <Compile Include="src\ExtUtils\MapiMailMessage.cs" />
-    <Compile Include="src\GKConsts.cs" />
-    <Compile Include="src\Interfaces\IBaseContext.cs" />
-    <Compile Include="src\Interfaces\IBaseEditor.cs" />
-    <Compile Include="src\Interfaces\IBaseWindow.cs" />
-    <Compile Include="src\Interfaces\IChartWindow.cs" />
-    <Compile Include="src\Interfaces\ICustomFilter.cs" />
-    <Compile Include="src\Interfaces\IHost.cs" />
-    <Compile Include="src\Interfaces\ILangMan.cs" />
-    <Compile Include="src\Interfaces\IListFilter.cs" />
-    <Compile Include="src\Interfaces\IListManager.cs" />
-    <Compile Include="src\Interfaces\ILocalization.cs" />
-    <Compile Include="src\Interfaces\INamesTable.cs" />
-    <Compile Include="src\Interfaces\IOptions.cs" />
-    <Compile Include="src\Interfaces\IOptionsControl.cs" />
-    <Compile Include="src\Interfaces\IPlugin.cs" />
-    <Compile Include="src\Interfaces\IProgressController.cs" />
-    <Compile Include="src\Interfaces\ISearchStrategy.cs" />
-    <Compile Include="src\Interfaces\ISubscriber.cs" />
-    <Compile Include="src\Interfaces\IWidget.cs" />
-    <Compile Include="src\Interfaces\IWorkWindow.cs" />
-    <Compile Include="src\Logger.cs" />
-    <Compile Include="src\Types\DateFormat.cs" />
-    <Compile Include="src\Types\FamilyTarget.cs" />
-    <Compile Include="src\Types\FilterGroupMode.cs" />
-    <Compile Include="src\Types\FilterLifeMode.cs" />
-    <Compile Include="src\Types\MediaFileNotFoundException.cs" />
-    <Compile Include="src\Types\MediaStoreType.cs" />
-    <Compile Include="src\Types\MultimediaKind.cs" />
-    <Compile Include="src\Types\NameEntry.cs" />
-    <Compile Include="src\Types\NameFormat.cs" />
-    <Compile Include="src\Types\PatriarchObj.cs" />
-    <Compile Include="src\Types\PedigreeFormat.cs" />
-    <Compile Include="src\Types\PersonEventKind.cs" />
-    <Compile Include="src\Types\PGNode.cs" />
-    <Compile Include="src\Types\PGNodeType.cs" />
-    <Compile Include="src\Types\RecordAction.cs" />
-    <Compile Include="src\Types\RelationKind.cs" />
-    <Compile Include="src\Types\ShieldState.cs" />
-    <Compile Include="src\Types\SpecialUserRef.cs" />
-    <Compile Include="src\Types\TargetMode.cs" />
-    <Compile Include="src\Types\WomanSurnameFormat.cs" />
-    <Compile Include="src\ValuesCollection.cs" />
+    <Compile Include="src\Externals\MapiMailMessage.cs" />
+    <Compile Include="src\GKCommon\ConvHelper.cs" />
+    <Compile Include="src\GKCommon\CRC32.cs" />
+    <Compile Include="src\GKCommon\EnumSet.cs" />
+    <Compile Include="src\GKCommon\ExpCalculator.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="src\GKCommon\ExtList.cs" />
+    <Compile Include="src\GKCommon\ExtRect.cs" />
+    <Compile Include="src\GKCommon\FileHelper.cs" />
+    <Compile Include="src\GKCommon\GfxHelper.cs" />
+    <Compile Include="src\GKCommon\IndistinctMatching.cs" />
+    <Compile Include="src\GKCommon\IniFile.cs" />
+    <Compile Include="src\GKCommon\Logger.cs" />
+    <Compile Include="src\GKCommon\Range.cs" />
+    <Compile Include="src\GKCommon\SmartGraph\Edge.cs" />
+    <Compile Include="src\GKCommon\SmartGraph\Graph.cs" />
+    <Compile Include="src\GKCommon\SmartGraph\GraphvizWriter.cs" />
+    <Compile Include="src\GKCommon\SmartGraph\IDataProvider.cs" />
+    <Compile Include="src\GKCommon\SmartGraph\IEdge.cs" />
+    <Compile Include="src\GKCommon\SmartGraph\IGraph.cs" />
+    <Compile Include="src\GKCommon\SmartGraph\IVertex.cs" />
+    <Compile Include="src\GKCommon\SmartGraph\Vertex.cs" />
+    <Compile Include="src\GKCommon\SortHelper.cs" />
+    <Compile Include="src\GKCommon\StringList.cs" />
+    <Compile Include="src\GKCommon\StringTokenizer.cs" />
+    <Compile Include="src\GKCommon\SysInfo.cs" />
+    <Compile Include="src\GKCommon\Tween.cs" />
+    <Compile Include="src\GKCommon\ValuesCollection.cs" />
+    <Compile Include="src\GKCore\GKConsts.cs" />
+    <Compile Include="src\GKCore\Interfaces\IBaseContext.cs" />
+    <Compile Include="src\GKCore\Interfaces\IBaseEditor.cs" />
+    <Compile Include="src\GKCore\Interfaces\IBaseWindow.cs" />
+    <Compile Include="src\GKCore\Interfaces\IChartWindow.cs" />
+    <Compile Include="src\GKCore\Interfaces\ICustomFilter.cs" />
+    <Compile Include="src\GKCore\Interfaces\IHost.cs" />
+    <Compile Include="src\GKCore\Interfaces\ILangMan.cs" />
+    <Compile Include="src\GKCore\Interfaces\IListFilter.cs" />
+    <Compile Include="src\GKCore\Interfaces\IListManager.cs" />
+    <Compile Include="src\GKCore\Interfaces\ILocalization.cs" />
+    <Compile Include="src\GKCore\Interfaces\INamesTable.cs" />
+    <Compile Include="src\GKCore\Interfaces\IOptions.cs" />
+    <Compile Include="src\GKCore\Interfaces\IOptionsControl.cs" />
+    <Compile Include="src\GKCore\Interfaces\IPlugin.cs" />
+    <Compile Include="src\GKCore\Interfaces\IProgressController.cs" />
+    <Compile Include="src\GKCore\Interfaces\ISearchStrategy.cs" />
+    <Compile Include="src\GKCore\Interfaces\ISubscriber.cs" />
+    <Compile Include="src\GKCore\Interfaces\IWidget.cs" />
+    <Compile Include="src\GKCore\Interfaces\IWorkWindow.cs" />
+    <Compile Include="src\GKCore\Types\DateFormat.cs" />
+    <Compile Include="src\GKCore\Types\FamilyTarget.cs" />
+    <Compile Include="src\GKCore\Types\FilterGroupMode.cs" />
+    <Compile Include="src\GKCore\Types\FilterLifeMode.cs" />
+    <Compile Include="src\GKCore\Types\MediaFileNotFoundException.cs" />
+    <Compile Include="src\GKCore\Types\MediaStoreType.cs" />
+    <Compile Include="src\GKCore\Types\MultimediaKind.cs" />
+    <Compile Include="src\GKCore\Types\NameEntry.cs" />
+    <Compile Include="src\GKCore\Types\NameFormat.cs" />
+    <Compile Include="src\GKCore\Types\PatriarchObj.cs" />
+    <Compile Include="src\GKCore\Types\PedigreeFormat.cs" />
+    <Compile Include="src\GKCore\Types\PersonEventKind.cs" />
+    <Compile Include="src\GKCore\Types\PGNode.cs" />
+    <Compile Include="src\GKCore\Types\PGNodeType.cs" />
+    <Compile Include="src\GKCore\Types\RecordAction.cs" />
+    <Compile Include="src\GKCore\Types\RelationKind.cs" />
+    <Compile Include="src\GKCore\Types\ShieldState.cs" />
+    <Compile Include="src\GKCore\Types\SpecialUserRef.cs" />
+    <Compile Include="src\GKCore\Types\TargetMode.cs" />
+    <Compile Include="src\GKCore\Types\WomanSurnameFormat.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="src\Controls\ExtResources.resx">
+    <EmbeddedResource Include="src\GKCommon\Controls\ExtResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ExtResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\Controls\GKImageControl.resx">
-      <DependentUpon>ImageView.Designer.cs</DependentUpon>
+    <EmbeddedResource Include="src\GKCommon\Controls\SlideList.resx">
+      <DependentUpon>SlideList.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\BSLib\BSLib.csproj">
-      <Project>{30D11BCB-EAAE-44B7-BFBB-78BAA3963362}</Project>
-      <Name>BSLib</Name>
+    <Folder Include="src\GKCommon\SmartGraph" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\SmartGraph\BSLib.SmartGraph\BSLib.SmartGraph.csproj">
+      <Project>{DDC8F8CD-B876-4A0E-ABBD-861DB741EC1E}</Project>
+      <Name>BSLib.SmartGraph</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

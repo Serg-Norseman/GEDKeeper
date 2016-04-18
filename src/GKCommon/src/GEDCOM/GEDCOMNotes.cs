@@ -1,4 +1,3 @@
-using BSLib;
 
 namespace GKCommon.GEDCOM
 {

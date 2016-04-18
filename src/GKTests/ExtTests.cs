@@ -1,10 +1,7 @@
 ﻿using System;
-
-using BSLib;
 using GKCommon;
 using GKCore;
 using NUnit.Framework;
-using System.Collections.Generic;
 
 namespace GKTests
 {
@@ -70,9 +67,9 @@ namespace GKTests
 		[Test]
 		public void SysUtils_Tests()
 		{
-			Assert.AreEqual(true, SysUtils.IsSetBit(3, 0));
-			Assert.AreEqual(true, SysUtils.IsSetBit(3, 1));
-			Assert.AreEqual(false, SysUtils.IsSetBit(3, 4));
+			Assert.AreEqual(true, GKUtils.IsSetBit(3, 0));
+			Assert.AreEqual(true, GKUtils.IsSetBit(3, 1));
+			Assert.AreEqual(false, GKUtils.IsSetBit(3, 4));
 		}
 
 		[Test]

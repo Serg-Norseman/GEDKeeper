@@ -37,6 +37,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <NoWin32Manifest>False</NoWin32Manifest>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <StartupObject>GKUI.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -68,9 +69,24 @@
     <CodeAnalysisRuleSet>..\gk21.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Linux_Debug' ">
+    <OutputPath>..\..\</OutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <StartAction>Project</StartAction>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <DefineConstants>DEBUG;TRACE;GK_LINUX</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Linux_Debug|AnyCPU' ">
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <CodeAnalysisRuleSet>..\gk21.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ArborGVT">
-      <HintPath>..\..\ArborGVT.dll</HintPath>
+      <HintPath>ArborGVT.dll</HintPath>
     </Reference>
     <Reference Include="ExcelLibrary">
       <HintPath>ExcelLibrary.dll</HintPath>
@@ -81,26 +97,16 @@
     <Reference Include="LuaInterface">
       <HintPath>LuaInterface.dll</HintPath>
     </Reference>
-    <Reference Include="PresentationCore">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="PresentationFramework">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
     <Reference Include="ZedGraph">
       <HintPath>ZedGraph.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GEDKeeper2.cs" />
     <Compile Include="GKCore\BaseContext.cs" />
     <Compile Include="GKCore\BaseSearchStrategy.cs" />
     <Compile Include="GKCore\Export\ExcelExporter.cs" />
@@ -283,7 +289,9 @@
     <Compile Include="GKUI\Dialogs\TfmOrganizer.Designer.cs">
       <DependentUpon>TfmOrganizer.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\TfmPersonalNameEdit.cs" />
+    <Compile Include="GKUI\Dialogs\TfmPersonalNameEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\TfmPersonalNameEdit.Designer.cs">
       <DependentUpon>TfmPersonalNameEdit.cs</DependentUpon>
     </Compile>
@@ -367,6 +375,7 @@
     </Compile>
     <Compile Include="GKCore\Lists\ListFilter.cs" />
     <Compile Include="GKCore\Lists\ListColumns.cs" />
+    <Compile Include="GKUI\GEDKeeper2.cs" />
     <Compile Include="GKUI\PatriarchsViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -467,6 +476,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="GKResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GKResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Charts\ACOptionsControl.resx">
       <DependentUpon>ACOptionsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -584,10 +597,6 @@
     <EmbeddedResource Include="GKUI\TfmScriptDaemon.resx">
       <DependentUpon>TfmScriptDaemon.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GKResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>GKResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\TfmSlideshow.resx">
       <DependentUpon>TfmSlideshow.cs</DependentUpon>
     </EmbeddedResource>
@@ -628,25 +637,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BSLib\BSLib.csproj">
-      <Project>{30D11BCB-EAAE-44B7-BFBB-78BAA3963362}</Project>
-      <Name>BSLib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GKCommon\GKCommon.csproj">
       <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
       <Name>GKCommon</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="MSHTML">
-      <Guid>{3050F1C5-98B5-11CF-BB82-00AA00BDCE0B}</Guid>
-      <VersionMajor>4</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

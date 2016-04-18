@@ -32,7 +32,7 @@ namespace GKUI
 			this.ProgressBar1.Name = "ProgressBar1";
 			this.ProgressBar1.Size = new System.Drawing.Size(401, 16);
 			this.ProgressBar1.Step = 1;
-			this.ProgressBar1.Style = ProgressBarStyle.Continuous;
+			this.ProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
 			this.ProgressBar1.TabIndex = 0;
 			// 
 			// Label1
@@ -45,17 +45,19 @@ namespace GKUI
 			// 
 			// Label2
 			// 
+			this.Label2.AutoSize = true;
 			this.Label2.Location = new System.Drawing.Point(8, 48);
 			this.Label2.Name = "Label2";
-			this.Label2.Size = new System.Drawing.Size(96, 13);
+			this.Label2.Size = new System.Drawing.Size(90, 13);
 			this.Label2.TabIndex = 2;
 			this.Label2.Text = "Времени прошло";
 			// 
 			// Label3
 			// 
+			this.Label3.AutoSize = true;
 			this.Label3.Location = new System.Drawing.Point(8, 64);
 			this.Label3.Name = "Label3";
-			this.Label3.Size = new System.Drawing.Size(104, 13);
+			this.Label3.Size = new System.Drawing.Size(98, 13);
 			this.Label3.TabIndex = 3;
 			this.Label3.Text = "Времени осталось";
 			// 
@@ -81,9 +83,10 @@ namespace GKUI
 			// 
 			// Label4
 			// 
+			this.Label4.AutoSize = true;
 			this.Label4.Location = new System.Drawing.Point(8, 80);
 			this.Label4.Name = "Label4";
-			this.Label4.Size = new System.Drawing.Size(73, 13);
+			this.Label4.Size = new System.Drawing.Size(80, 13);
 			this.Label4.TabIndex = 6;
 			this.Label4.Text = "Времени всего";
 			// 
@@ -99,7 +102,8 @@ namespace GKUI
 			// 
 			// TfmProgress
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.ClientSize = new System.Drawing.Size(417, 105);
 			this.ControlBox = false;
 			this.Controls.Add(this.ProgressBar1);
@@ -120,6 +124,7 @@ namespace GKUI
 			this.Text = "Прогресс";
 			this.TopMost = true;
 			this.ResumeLayout(false);
+			this.PerformLayout();
 		}
 	}
 }

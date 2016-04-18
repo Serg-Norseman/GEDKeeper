@@ -7,8 +7,8 @@ using System.Reflection;
 using System.Security.Permissions;
 using System.Windows.Forms;
 
-using ExtUtils.MapiMail;
-using ExtUtils.SingleInstancing;
+using Externals.MapiMail;
+using Externals.SingleInstancing;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -132,7 +132,7 @@ namespace GKUI
 			this.fNamesTable = new NamesTable();
 			this.fNamesTable.LoadFromFile(this.GetAppDataPath() + "GEDKeeper2.nms");
 
-			this.LoadPlugins(GKUtils.GetAppPath() + "\\plugins\\");
+			this.LoadPlugins(GKUtils.GetPluginsPath());
 			this.UpdatePluginsItems();
 
 			this.LoadLanguage(this.fOptions.InterfaceLang);
@@ -145,18 +145,20 @@ namespace GKUI
 
 		private void Form_Closed(object sender, FormClosedEventArgs e)
 		{
-			this.UnloadPlugins();
+			try {
+				this.UnloadPlugins();
 
-			this.fOptions.MWinRect = GKUtils.GetFormRect(this);
-			this.fOptions.MWinState = base.WindowState;
+				this.fOptions.MWinRect = GKUtils.GetFormRect(this);
+				this.fOptions.MWinState = base.WindowState;
 
-			SysUtils.HtmlHelp(IntPtr.Zero, null, 18u, 0u);
+				this.fNamesTable.SaveToFile(this.GetAppDataPath() + "GEDKeeper2.nms");
+				this.fNamesTable.Dispose();
 
-			this.fNamesTable.SaveToFile(this.GetAppDataPath() + "GEDKeeper2.nms");
-			this.fNamesTable.Dispose();
-
-			this.fOptions.SaveToFile(this.GetAppDataPath() + "GEDKeeper2.ini");
-			this.fOptions.Dispose();
+				this.fOptions.SaveToFile(this.GetAppDataPath() + "GEDKeeper2.ini");
+				this.fOptions.Dispose();
+			} catch (Exception ex) {
+				this.LogWrite("TfmGEDKeeper.Form_Closed(): " + ex.Message);
+			}
 		}
 
 		private void Form_KeyDown(object sender, KeyEventArgs e)
@@ -903,12 +905,14 @@ namespace GKUI
 				message.Recipients.Add(GKData.APP_MAIL);
 				message.Files.Add(this.fLogFilename);
 				message.ShowDialog();
+
+				//GKUtils.SendMail(GKData.APP_MAIL, "GEDKeeper: error notification", "This automatic notification of error.", this.fLogFilename);
 			}
 		}
 
 		private void miLogViewClick(object sender, EventArgs e)
 		{
-			SysUtils.LoadExtFile(this.fLogFilename);
+			GKUtils.LoadExtFile(this.fLogFilename);
 		}
 
 		private void miAboutClick(object sender, EventArgs e)
@@ -918,23 +922,27 @@ namespace GKUI
 
 		public void ShowHelpTopic(string topic)
 		{
-			string fns = GKUtils.GetAppPath() + "GEDKeeper2.chm" + topic;
-			SysUtils.HtmlHelp(this.Handle, fns, 0u, 0u);
+			if (string.IsNullOrEmpty(topic)) {
+				topic = GKUtils.GetAppPath() + "help/GEDKeeper2.html";
+			} else {
+				topic = GKUtils.GetAppPath() + "help/" + topic;
+			}
+			GKUtils.LoadExtFile(topic);
 		}
 
 		private void miGenResourcesClick(object sender, EventArgs e)
 		{
-			this.ShowHelpTopic("::/gkhGenRes.html");
+			this.ShowHelpTopic("gkhGenRes.html");
 		}
 
 		private void miKinshipTermsClick(object sender, EventArgs e)
 		{
-			this.ShowHelpTopic("::/gkhRelations.html");
+			this.ShowHelpTopic("gkhRelations.html");
 		}
 
 		private void miFAQClick(object sender, EventArgs e)
 		{
-			this.ShowHelpTopic("::/gkhFAQ.html");
+			this.ShowHelpTopic("gkhFAQ.html");
 		}
 
 		private void miContextClick(object sender, EventArgs e)
@@ -1126,12 +1134,16 @@ namespace GKUI
 
 		private void UnloadPlugins()
 		{
-			if (this.fPlugins == null) return;
+			try {
+				if (this.fPlugins == null) return;
 
-			int num = this.fPlugins.Count;
-			for (int i = 0; i < num; i++) {
-				IPlugin plugin = this.fPlugins[i];
-				plugin.Shutdown();
+				int num = this.fPlugins.Count;
+				for (int i = 0; i < num; i++) {
+					IPlugin plugin = this.fPlugins[i];
+					plugin.Shutdown();
+				}
+			} catch (Exception ex) {
+				this.LogWrite("TfmGEDKeeper.UnloadPlugins(): " + ex.Message);
 			}
 		}
 
@@ -1180,6 +1192,16 @@ namespace GKUI
 		#endregion
 
 		#region IHost implementation
+
+		public bool IsUnix()
+		{
+			return SysInfo.IsUnix();
+		}
+
+		public void ShowWarning(string msg)
+		{
+			MessageBox.Show(msg, GKData.APP_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+		}
 
 		public ILangMan CreateLangMan(object sender)
 		{
@@ -1243,7 +1265,7 @@ namespace GKUI
 
 		public string GetAppDataPath()
 		{
-			string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\" + GKData.APP_TITLE + "\\";
+			string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + Path.DirectorySeparatorChar + GKData.APP_TITLE + Path.DirectorySeparatorChar;
 			if (!Directory.Exists(path)) Directory.CreateDirectory(path);
 			return path;
 		}

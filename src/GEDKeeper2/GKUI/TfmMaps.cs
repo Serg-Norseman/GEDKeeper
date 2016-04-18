@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-using BSLib;
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -210,10 +210,16 @@ namespace GKUI
 
 			if (ind != null)
 			{
-				this.SortPointsByDate();
+				// sort points by date
+				this.fMapPoints.QuickSort(MapPointsCompare);
 			}
 
 			this.PreparePointsList(this.fMapPoints, ind != null);
+		}
+
+		private static int MapPointsCompare(GMapPoint item1, GMapPoint item2)
+		{
+			return item1.Date.CompareTo(item2.Date);
 		}
 
 		private void TreePlaces_DoubleClick(object sender, EventArgs e)
@@ -336,21 +342,6 @@ namespace GKUI
 			pt = new GMapPoint(aPt.Latitude, aPt.Longitude, aPt.Hint);
 			pt.Date = aRef.Date;
 			this.fMapPoints.Add(pt);
-		}
-
-		private void SortPointsByDate()
-		{
-			int num = this.fMapPoints.Count;
-			for (int i = 0; i < num; i++) {
-				for (int j = i + 1; j < num; j++) {
-					GMapPoint pt = this.fMapPoints[i];
-					GMapPoint pt2 = this.fMapPoints[j];
-
-					if (pt.Date > pt2.Date) {
-						this.fMapPoints.Exchange(i, j);
-					}
-				}
-			}
 		}
 	}
 }

@@ -2,8 +2,6 @@ using System;
 using System.Globalization;
 using System.IO;
 
-using BSLib;
-
 namespace GKCommon.GEDCOM
 {
 	public class GEDCOMTag : GEDCOMObject

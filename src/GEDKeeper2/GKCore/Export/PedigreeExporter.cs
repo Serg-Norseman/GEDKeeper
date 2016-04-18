@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using BSLib;
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -33,11 +33,16 @@ namespace GKCore.Export
                 this.Sources = new List<string>();
             }
 
-			public string GetOrderStr()
+		    private string GetOrderStr()
 			{
 				string order = ConvHelper.AdjustNum(this.FamilyOrder, 2);
 				string result = ((this.Parent == null) ? order : this.Parent.GetOrderStr() + order);
 				return result;
+			}
+			
+			public string GetInternalStr()
+			{
+				return ConvHelper.AdjustNum(this.Level, 2) + this.GetOrderStr();
 			}
 		}
 
@@ -51,7 +56,7 @@ namespace GKCore.Export
 			{
 				this.IRec = iRec;
 				this.Event = evt;
-				this.Date = GEDCOMUtils.GetAbstractDate(evt); // FIXME: rewrite sorting
+				this.Date = GEDCOMUtils.GetAbstractDate(evt);
 			}
 		}
 
@@ -351,19 +356,14 @@ namespace GKCore.Export
 			}
 		}
 
+		private static int EventsCompare(PedigreeEvent item1, PedigreeEvent item2)
+		{
+			return item1.Date.CompareTo(item2.Date);
+		}
+
 		private void WriteEventList(PedigreePerson person, ExtList<PedigreeEvent> evList)
 		{
-			int num = evList.Count;
-			for (int i = 0; i < num; i++)
-			{
-				for (int j = i + 1; j < num; j++)
-				{
-					if (evList[i].Date > evList[j].Date)
-					{
-						evList.Exchange(i, j);
-					}
-				}
-			}
+			evList.QuickSort(EventsCompare);
 
 			int num3 = evList.Count;
 			for (int i = 0; i < num3; i++)
@@ -471,7 +471,7 @@ namespace GKCore.Export
 							if (curLevel != person.Level)
 							{
 								curLevel = person.Level;
-								string genTitle = LangMan.LS(LSID.LSID_Generation)+" "+RomeNumbers.GetRome(curLevel);
+								string genTitle = LangMan.LS(LSID.LSID_Generation) + " " + ConvHelper.GetRome(curLevel);
 								fDocument.Add(new Paragraph(genTitle, fChapFont) { Alignment = Element.ALIGN_LEFT, SpacingBefore = 2f, SpacingAfter = 2f });
 							}
 
@@ -562,24 +562,14 @@ namespace GKCore.Export
 			}
 		}
 
+		private static int PersonsCompare(PedigreePerson item1, PedigreePerson item2)
+		{
+			return item1.GetInternalStr().CompareTo(item2.GetInternalStr());
+		}
+
 		private void ReIndex()
 		{
-			int num = this.fPersonList.Count;
-			for (int i = 0; i < num; i++)
-			{
-				for (int j = i + 1; j < num; j++)
-				{
-					PedigreePerson obj = this.fPersonList[i];
-					PedigreePerson obj2 = this.fPersonList[j];
-
-					string i_str = ConvHelper.AdjustNum(obj.Level, 2) + obj.GetOrderStr();
-					string k_str = ConvHelper.AdjustNum(obj2.Level, 2) + obj2.GetOrderStr();
-					if (string.Compare(i_str, k_str, false) > 0)
-					{
-						this.fPersonList.Exchange(i, j);
-					}
-				}
-			}
+			fPersonList.QuickSort(PersonsCompare);
 
 			int num3 = this.fPersonList.Count;
 			for (int i = 0; i < num3; i++)

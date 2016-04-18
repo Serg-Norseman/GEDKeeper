@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-using BSLib;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -427,7 +426,7 @@ namespace GKUI.Dialogs
             sheet.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, 
 				SheetButton.lbJump, SheetButton.lbMoveUp, SheetButton.lbMoveDown);
             sheet.OnModify += this.ModifySpousesSheet;
-			
+
 			return sheet;
 		}
 
@@ -624,7 +623,6 @@ namespace GKUI.Dialogs
 			
 			return sheet;
 		}
-
 
 		private void UpdateNamesSheet()
 		{
@@ -909,6 +907,7 @@ namespace GKUI.Dialogs
             this.fEventsList = new GKEventsSheet(this, this.SheetEvents, true);
 
             this.fSpousesList = this.CreateSpousesSheet(this.SheetSpouses);
+			this.fNamesList = this.CreateNamesSheet(this.SheetNames);
             this.fAssociationsList = this.CreateAssociationsSheet(this.SheetAssociations);
             this.fGroupsList = this.CreateGroupsSheet(this.SheetGroups);
 
@@ -917,7 +916,6 @@ namespace GKUI.Dialogs
 			this.fSourcesList = new GKSourcesSheet(this, this.SheetSources);
 
 			this.fUserRefList = this.CreateURefsSheet(this.SheetUserRefs);
-			this.fNamesList = this.CreateNamesSheet(this.SheetNames);
 
 			this.btnPortraitAdd.ImageList = TfmGEDKeeper.Instance.ImageList_Buttons;
 			this.btnPortraitAdd.ImageIndex = 3;

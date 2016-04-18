@@ -4,7 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
-using BSLib;
+using GKCommon;
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;

@@ -1,4 +1,24 @@
-﻿using System;
+﻿/*
+ *  "GEDKeeper", the personal genealogical database editor.
+ *  Copyright (C) 2009-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
+ *
+ *  This file is part of "GEDKeeper".
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -7,11 +27,9 @@ using System.Drawing.Imaging;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-using BSLib;
-using BSLib.Graphics;
-using BSLib.SmartGraph;
 using GKCommon;
 using GKCommon.GEDCOM;
+using GKCommon.SmartGraph;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Kinships;
@@ -282,7 +300,7 @@ namespace GKUI.Charts
 		#endregion
 
 		#region Instance control
-		
+
         static TreeChartBox()
         {
             TreeChartBox.EventPersonModify = new object();
@@ -301,9 +319,9 @@ namespace GKUI.Charts
 
 			this.fPersons = new PersonList(true);
 			this.fFilter = new ChartFilter();
-			this.fSpouseDistance = DEF_SPOUSE_DISTANCE;
 			this.fBranchDistance = DEF_BRANCH_DISTANCE;
 			this.fLevelDistance = DEF_LEVEL_DISTANCE;
+			this.fSpouseDistance = DEF_SPOUSE_DISTANCE;
 			this.fMargins = DEF_MARGINS;
 			this.fDepthLimit = -1;
 			this.fSelected = null;
@@ -317,8 +335,6 @@ namespace GKUI.Charts
             this.fScaleControl = new ScaleControl(this);
 			//this.fPersonControl = new PersonControl(this);
 			this.fToolTip = new ToolTip();
-
-			this.WheelScrollsControl = false;
 
 			this.InitTimer();
 			this.InitGraphics();
@@ -340,7 +356,7 @@ namespace GKUI.Charts
 			}
 			base.Dispose(disposing);
 		}
-		
+
 		private void InitSigns()
 		{
 			//FSignsData = new string[] { "GEORGE_CROSS", "SOLDIER", "SOLDIER_FALL", "VETERAN_REAR" };
@@ -373,7 +389,7 @@ namespace GKUI.Charts
 
 			fSignsPic[8] = GKResources.iTGOldRitualCross;
 			//fSignsPic[8].MakeTransparent(this.fSignsPic[4].GetPixel(0, 0));
-			
+
 			fExpPic = GKResources.iExpand;
 			fExpPic.MakeTransparent(this.fExpPic.GetPixel(0, 0));
 		}
@@ -529,8 +545,8 @@ namespace GKUI.Charts
 					result.Parent = parent;
 					this.fPersons.Add(result);
 
-					if (this.fOptions.Kinship) {
-						result.Node = this.fGraph.AddVertex(result);
+					if (this.fOptions.Kinship && iRec != null) {
+						result.Node = this.fGraph.AddVertex(iRec.XRef, result);
 					}
 
 					if (!outsideKin && parent != null) {
@@ -569,9 +585,9 @@ namespace GKUI.Charts
 						result.AddChild(aChild);
 					}
 
-					if (this.fOptions.Kinship)
+					if (this.fOptions.Kinship && aPerson != null)
 					{
-						result.Node = this.fGraph.AddVertex(result);
+						result.Node = this.fGraph.AddVertex(aPerson.XRef, result);
 					}
 
 					if ((this.fDepthLimit <= -1 || aGeneration != this.fDepthLimit) && aPerson.ChildToFamilyLinks.Count > 0 && !dupFlag)
@@ -829,7 +845,7 @@ namespace GKUI.Charts
 				RelationKind finRel = RelationKind.rkNone;
 				int great = 0;
 
-				foreach (IEdge edge in edgesPath)
+				foreach (Edge edge in edgesPath)
 				{
                     TreeChartPerson xFrom = (TreeChartPerson)edge.Source.Value;
                     TreeChartPerson xTo = (TreeChartPerson)edge.Target.Value;
@@ -1050,7 +1066,7 @@ namespace GKUI.Charts
 						bColor = Color.Black;
 					}
 					
-					if (highlighted) bColor = GfxUtils.Lighter(bColor, HIGHLIGHTED_VAL);
+					if (highlighted) bColor = GfxHelper.Lighter(bColor, HIGHLIGHTED_VAL);
 					gfx.FillRectangle(new SolidBrush(bColor), rect.Left, rect.Top, rect.Width, rect.Height);
 					gfx.DrawRectangle(xpen, rect.Left, rect.Top, rect.Width, rect.Height);
 					break;
@@ -1068,8 +1084,8 @@ namespace GKUI.Charts
 						bColor = Color.Black;
 					}
 
-					if (highlighted) bColor = GfxUtils.Lighter(bColor, HIGHLIGHTED_VAL);
-					GraphicsPath path = GfxUtils.CreateRoundedRectangle(rect.Left, rect.Top, rect.Width, rect.Height, 6);
+					if (highlighted) bColor = GfxHelper.Lighter(bColor, HIGHLIGHTED_VAL);
+					GraphicsPath path = GfxHelper.CreateRoundedRectangle(rect.Left, rect.Top, rect.Width, rect.Height, 6);
 					
 					/*gfx.TranslateTransform(3, 3);
 					GKUtils.DrawPathWithFuzzyLine(path, gfx, Color.Black, 200, 20, 2);
@@ -1465,7 +1481,7 @@ namespace GKUI.Charts
 			this.fImageWidth = this.fTreeBounds.GetWidth() + this.fMargins * 2;
 			this.fImageSize = new Size(this.fImageWidth, this.fImageHeight);
 
-			this.SetScrollRange(noRedraw);
+			this.AdjustViewPort(this.fImageSize, noRedraw);
 		}
 
 		private void AdjustTreeBounds(TreeChartPerson person)
@@ -1716,15 +1732,6 @@ namespace GKUI.Charts
 			this.RecalcDesc(ref edges, this.fRoot, new Point(this.fMargins, this.fMargins), predef);
 		}
 
-		private void SetScrollRange(bool noRedraw = false)
-		{
-		    if (this.AutoScroll && !this.fImageSize.IsEmpty) {
-				this.AutoScrollMinSize = new Size(this.fImageSize.Width + this.Padding.Horizontal, this.fImageSize.Height + this.Padding.Vertical);
-		    }
-
-            if (!noRedraw) this.Invalidate();
-		}
-
 		private void SetBorderWidth(int value)
 		{
 			if (this.fBorderWidth != value) {
@@ -1736,13 +1743,6 @@ namespace GKUI.Charts
 		private void SetScroll(int x, int y)
 		{
 			this.AutoScrollPosition = new Point(x, y);
-			this.Invalidate();
-			this.OnScroll(new ScrollEventArgs(ScrollEventType.EndScroll, 0));
-		}
-
-		private void AdjustScroll(int x, int y)
-		{
-			this.AutoScrollPosition = new Point(this.HorizontalScroll.Value + x, this.VerticalScroll.Value + y);
 			this.Invalidate();
 			this.OnScroll(new ScrollEventArgs(ScrollEventType.EndScroll, 0));
 		}
@@ -1872,7 +1872,7 @@ namespace GKUI.Charts
 		{
 			this.SaveSelection();
 			
-			this.SetScrollRange();
+			this.AdjustViewPort(this.fImageSize);
 			this.fScaleControl.Update();
 
 			this.RestoreSelection();
@@ -1894,17 +1894,16 @@ namespace GKUI.Charts
 
 		protected override void OnMouseWheel(MouseEventArgs e)
 		{
-			base.OnMouseWheel(e);
-
+			//base.OnMouseWheel(e);
 			if (ModifierKeys == Keys.Control) {
 				float newScale = this.Scale;
-				
+
 				if (e.Delta > 0) {
 					newScale -= 0.05f;
 				} else {
 					newScale += 0.05f;
 				}
-				
+
 				if (newScale < 0.5 || newScale > 1.5) return;
 				this.Scale = newScale;
 			} else {
@@ -2237,7 +2236,7 @@ namespace GKUI.Charts
 
 		public void SaveSnapshot(string fileName)
 		{
-            string ext = AuxUtils.GetFileExtension(fileName);
+            string ext = FileHelper.GetFileExtension(fileName);
 
 			if ((ext == ".bmp" || ext == ".jpg") && this.fImageWidth >= 65535)
 			{

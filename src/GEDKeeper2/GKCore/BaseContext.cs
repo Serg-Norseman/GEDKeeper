@@ -27,11 +27,10 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-using BSLib;
-using BSLib.Graphics;
-using BSLib.SmartGraph;
-using ExtUtils;
+using Externals;
+using GKCommon;
 using GKCommon.GEDCOM;
+using GKCommon.SmartGraph;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Tools;
@@ -471,26 +470,28 @@ namespace GKCore
 
 		#region Private media support
 
+		private static string GetTreePath(string treeName)
+		{
+			return Path.GetDirectoryName(treeName) + Path.DirectorySeparatorChar;
+		}
+
 		private string GetArcFileName()
 		{
 			string treeName = this.fTree.FileName;
-			string result = Path.GetDirectoryName(treeName) + "\\" + Path.GetFileNameWithoutExtension(treeName) + ".zip";
+			string result = GetTreePath(treeName) + Path.GetFileNameWithoutExtension(treeName) + ".zip";
 			return result;
 		}
 
 		private string GetStgFolder(bool create)
 		{
 			string treeName = this.fTree.FileName;
-			string result = Path.GetDirectoryName(treeName) + "\\" + Path.GetFileNameWithoutExtension(treeName) + "\\";
+			string result = GetTreePath(treeName) + Path.GetFileNameWithoutExtension(treeName) + Path.DirectorySeparatorChar;
 			if (!Directory.Exists(result) && create) Directory.CreateDirectory(result);
 			return result;
 		}
 
 		private void ArcFileLoad(string targetFn, Stream toStream)
 		{
-			// http://www.icsharpcode.net/OpenSource/SharpZipLib/ - slow, but high compression ratio
-			// http://dotnetzip.codeplex.com/ - fast, but low compression ratio
-
 			targetFn = targetFn.Replace('\\', '/');
 
 			using (ZipStorer zip = ZipStorer.Open(this.GetArcFileName(), FileAccess.Read))
@@ -539,12 +540,12 @@ namespace GKCore
 
 			// переместить архив и хранилище
 			if (hasArc) {
-				string newArc = newPath + "\\" + GKUtils.GetContainerName(newName, true);
+				string newArc = newPath + Path.DirectorySeparatorChar + GKUtils.GetContainerName(newName, true);
 				File.Move(this.GetArcFileName(), newArc);
 			}
 
 			if (hasStg) {
-				string newStg = newPath + "\\" + GKUtils.GetContainerName(newName, false);
+				string newStg = newPath + Path.DirectorySeparatorChar + GKUtils.GetContainerName(newName, false);
 				Directory.Move(this.GetStgFolder(false), newStg);
 			}
 		}
@@ -652,20 +653,21 @@ namespace GKCore
 				string targetFn = "";
 				MediaStoreType gst = this.GetStoreType(fileReference, ref targetFn);
 
-				switch (gst) {
+				switch (gst)
+				{
 					case MediaStoreType.mstStorage:
 						fileName = this.GetStgFolder(false) + targetFn;
 						break;
 
 					case MediaStoreType.mstArchive:
-						fileName = GKUtils.GetTempDir() + "\\" + Path.GetFileName(targetFn);
+						fileName = GKUtils.GetTempDir() + Path.GetFileName(targetFn);
 						FileStream fs = new FileStream(fileName, FileMode.Create);
 						try
 						{
 							if (!File.Exists(this.GetArcFileName())) {
 								GKUtils.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
 							} else {
-								targetFn = targetFn.Replace("\\", "/");
+								targetFn = targetFn.Replace('\\', '/');
 								this.ArcFileLoad(targetFn, fs);
 							}
 						}
@@ -703,7 +705,7 @@ namespace GKCore
 				case GEDCOMMultimediaFormat.mfNone:
 				case GEDCOMMultimediaFormat.mfOLE:
 				case GEDCOMMultimediaFormat.mfUnknown:
-					storePath = "unknown\\";
+					storePath = "unknown";
 					break;
 
 				case GEDCOMMultimediaFormat.mfBMP:
@@ -713,26 +715,29 @@ namespace GKCore
 				case GEDCOMMultimediaFormat.mfTIF:
 				case GEDCOMMultimediaFormat.mfTGA:
 				case GEDCOMMultimediaFormat.mfPNG:
-					storePath = "images\\";
+					storePath = "images";
 					break;
 
 				case GEDCOMMultimediaFormat.mfWAV:
-					storePath = "audio\\";
+					storePath = "audio";
 					break;
 
 				case GEDCOMMultimediaFormat.mfTXT:
 				case GEDCOMMultimediaFormat.mfRTF:
 				case GEDCOMMultimediaFormat.mfHTM:
-					storePath = "texts\\";
+					storePath = "texts";
 					break;
 
 				case GEDCOMMultimediaFormat.mfAVI:
 				case GEDCOMMultimediaFormat.mfMPG:
-					storePath = "video\\";
+					storePath = "video";
 					break;
 			}
 
-			switch (storeType) {
+			storePath = storePath + Path.DirectorySeparatorChar;
+
+			switch (storeType)
+			{
 				case MediaStoreType.mstReference:
 					refPath = fileName;
 					break;
@@ -787,7 +792,7 @@ namespace GKCore
 							int imgHeight = bmp.Height;
 
 							if (thumbWidth > 0 && thumbHeight > 0) {
-								float ratio = GfxUtils.ZoomToFit(imgWidth, imgHeight, thumbWidth, thumbHeight);
+								float ratio = GfxHelper.ZoomToFit(imgWidth, imgHeight, thumbWidth, thumbHeight);
 								imgWidth = (int)(imgWidth * ratio);
 								imgHeight = (int)(imgHeight * ratio);
 							}
@@ -869,7 +874,7 @@ namespace GKCore
 				int rev = this.Tree.Header.FileRevision;
 				if (File.Exists(fileName))
 				{
-					string bakPath = Path.GetDirectoryName(fileName) + "\\__history\\";
+					string bakPath = Path.GetDirectoryName(fileName) + Path.DirectorySeparatorChar + "__history" + Path.DirectorySeparatorChar;
 					string bakFile = Path.GetFileName(fileName) + "." + ConvHelper.AdjustNum(rev, 3);
 
 					if (!Directory.Exists(bakPath)) Directory.CreateDirectory(bakPath);

@@ -68,7 +68,7 @@ namespace GKTreeVizPlugin
 		public PointF Pt;
 		public float BaseRadius;
 		public float GenSlice;
-		public bool IsFixedIntersection;
+		//public bool IsFixedIntersection;
 
 		public TVStem()
 		{

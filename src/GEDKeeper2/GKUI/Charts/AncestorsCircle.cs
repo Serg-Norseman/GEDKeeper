@@ -4,8 +4,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
-using BSLib;
-using BSLib.Graphics;
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 
@@ -228,7 +227,7 @@ namespace GKUI.Charts
 				Color col = this.fOptions.BrushColor[i];
 
 				this.fCircleBrushes[i] = new SolidBrush(col);
-				this.fDarkBrushes[i] = new SolidBrush(GfxUtils.Darker(col, 0.2f));
+				this.fDarkBrushes[i] = new SolidBrush(GfxHelper.Darker(col, 0.2f));
 			}
 		}
 

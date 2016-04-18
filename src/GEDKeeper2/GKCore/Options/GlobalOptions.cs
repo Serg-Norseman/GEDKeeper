@@ -4,7 +4,6 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
-using BSLib;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Lists;
@@ -287,175 +286,182 @@ namespace GKCore.Options
 
 		public void FindLanguages()
 		{
-			string path = GKUtils.GetAppPath() + "langs\\";
+			string path = GKUtils.GetLangsPath();
 			string[] langFiles = Directory.GetFiles(path, "*.lng", SearchOption.TopDirectoryOnly);
 			for (int i = 0; i < langFiles.Length; i++) this.LngPrepareProc(langFiles[i]);
 		}
 
 		public void LoadFromFile(string fileName)
 		{
-			IniFile ini = new IniFile(fileName);
 			try
 			{
-				this.fDefCharacterSet = (GEDCOMCharacterSet)ini.ReadInteger("Common", "DefCharacterSet", 3);
-				this.fDefNameFormat = (NameFormat)ini.ReadInteger("Common", "DefNameFormat", 0);
-				this.fDefDateFormat = (DateFormat)ini.ReadInteger("Common", "DefDateFormat", 0);
-				this.fLastDir = ini.ReadString("Common", "LastDir", "");
-				this.fPlacesWithAddress = ini.ReadBool("Common", "PlacesWithAddress", false);
-				this.fShowTips = ini.ReadBool("Common", "ShowTips", true);
-				this.fInterfaceLang = (ushort)ini.ReadInteger("Common", "InterfaceLang", 1049);
-				this.fRevisionsBackup = ini.ReadBool("Common", "RevisionsBackup", false);
-				this.fShowDatesCalendar = ini.ReadBool("Common", "ShowDatesCalendar", false);
-
-				ushort kl = (ushort)ini.ReadInteger("Common", "KeyLayout", SysUtils.GetKeyLayout());
-                SysUtils.SetKeyLayout(kl);
-
-				this.fChartOptions.LoadFromFile(ini);
-				this.fPedigreeOptions.LoadFromFile(ini);
-				this.fProxy.LoadFromFile(ini);
-
-				int cnt = ini.ReadInteger("NameFilters", "Count", 0);
-				for (int i = 0; i < cnt; i++)
+				IniFile ini = new IniFile(fileName);
+				try
 				{
-					string st = ini.ReadString("NameFilters", "Filter_" + i.ToString(), "");
-					if (st != "") this.fNameFilters.Add(st);
-				}
+					this.fDefCharacterSet = (GEDCOMCharacterSet)ini.ReadInteger("Common", "DefCharacterSet", 3);
+					this.fDefNameFormat = (NameFormat)ini.ReadInteger("Common", "DefNameFormat", 0);
+					this.fDefDateFormat = (DateFormat)ini.ReadInteger("Common", "DefDateFormat", 0);
+					this.fLastDir = ini.ReadString("Common", "LastDir", "");
+					this.fPlacesWithAddress = ini.ReadBool("Common", "PlacesWithAddress", false);
+					this.fShowTips = ini.ReadBool("Common", "ShowTips", true);
+					this.fInterfaceLang = (ushort)ini.ReadInteger("Common", "InterfaceLang", 1049);
+					this.fRevisionsBackup = ini.ReadBool("Common", "RevisionsBackup", false);
+					this.fShowDatesCalendar = ini.ReadBool("Common", "ShowDatesCalendar", false);
 
-				cnt = ini.ReadInteger("ResidenceFilters", "Count", 0);
-				for (int i = 0; i < cnt; i++)
-				{
-					this.fResidenceFilters.Add(ini.ReadString("ResidenceFilters", "Filter_" + i.ToString(), ""));
-				}
+					int kl = ini.ReadInteger("Common", "KeyLayout", GKUtils.GetKeyLayout());
+					GKUtils.SetKeyLayout(kl);
 
-				cnt = ini.ReadInteger("EventFilters", "Count", 0);
-				for (int i = 0; i < cnt; i++)
-				{
-					this.fEventFilters.Add(ini.ReadString("EventFilters", "EventVal_" + i.ToString(), ""));
-				}
+					this.fChartOptions.LoadFromFile(ini);
+					this.fPedigreeOptions.LoadFromFile(ini);
+					this.fProxy.LoadFromFile(ini);
 
-				cnt = ini.ReadInteger("Common", "MRUFiles_Count", 0);
-				for (int i = 0; i < cnt; i++)
-				{
-					string sect = "MRUFile_" + i.ToString();
-					string fn = ini.ReadString(sect, "FileName", "");
-					if (File.Exists(fn)) {
-						MRUFile mf = new MRUFile();
-						mf.Load(ini, sect);
-						this.fMRUFiles.Add(mf);
-					} else {
-						MRUFile.DeleteKeys(ini, sect);
+					int cnt = ini.ReadInteger("NameFilters", "Count", 0);
+					for (int i = 0; i < cnt; i++)
+					{
+						string st = ini.ReadString("NameFilters", "Filter_" + i.ToString(), "");
+						if (st != "") this.fNameFilters.Add(st);
 					}
+
+					cnt = ini.ReadInteger("ResidenceFilters", "Count", 0);
+					for (int i = 0; i < cnt; i++)
+					{
+						this.fResidenceFilters.Add(ini.ReadString("ResidenceFilters", "Filter_" + i.ToString(), ""));
+					}
+
+					cnt = ini.ReadInteger("EventFilters", "Count", 0);
+					for (int i = 0; i < cnt; i++)
+					{
+						this.fEventFilters.Add(ini.ReadString("EventFilters", "EventVal_" + i.ToString(), ""));
+					}
+
+					cnt = ini.ReadInteger("Common", "MRUFiles_Count", 0);
+					for (int i = 0; i < cnt; i++)
+					{
+						string sect = "MRUFile_" + i.ToString();
+						string fn = ini.ReadString(sect, "FileName", "");
+						if (File.Exists(fn)) {
+							MRUFile mf = new MRUFile();
+							mf.Load(ini, sect);
+							this.fMRUFiles.Add(mf);
+						} else {
+							MRUFile.DeleteKeys(ini, sect);
+						}
+					}
+
+					cnt = ini.ReadInteger("Relations", "Count", 0);
+					for (int i = 0; i < cnt; i++)
+					{
+						this.fRelations.Add(ini.ReadString("Relations", "Relation_" + i.ToString(), ""));
+					}
+
+					this.fIndividualListColumns.LoadFromFile(ini, "PersonsColumns");
+
+					this.fListHighlightUnmarriedPersons = ini.ReadBool("ListPersons", "HighlightUnmarried", false);
+					this.fListHighlightUnparentedPersons = ini.ReadBool("ListPersons", "HighlightUnparented", false);
+					
+					this.fMWinRect.Left = ini.ReadInteger("Common", "MWinL", -1);
+					this.fMWinRect.Top = ini.ReadInteger("Common", "MWinT", -1);
+					this.fMWinRect.Right = ini.ReadInteger("Common", "MWinW", -1);
+					this.fMWinRect.Bottom = ini.ReadInteger("Common", "MWinH", -1);
+					this.fMWinState = (FormWindowState)((uint)ini.ReadInteger("Common", "MWinState", 0));
+
+					cnt = ini.ReadInteger("LastBases", "Count", 0);
+					for (int i = 0; i < cnt; i++)
+					{
+						string st = ini.ReadString("LastBases", "LB" + i.ToString(), "");
+						this.AddLastBase(st);
+					}
+				} finally {
+					ini.Dispose();
 				}
-
-				cnt = ini.ReadInteger("Relations", "Count", 0);
-				for (int i = 0; i < cnt; i++)
-				{
-					this.fRelations.Add(ini.ReadString("Relations", "Relation_" + i.ToString(), ""));
-				}
-
-				this.fIndividualListColumns.LoadFromFile(ini, "PersonsColumns");
-
-				this.fListHighlightUnmarriedPersons = ini.ReadBool("ListPersons", "HighlightUnmarried", false);
-				this.fListHighlightUnparentedPersons = ini.ReadBool("ListPersons", "HighlightUnparented", false);
-				
-				this.fMWinRect.Left = ini.ReadInteger("Common", "MWinL", -1);
-				this.fMWinRect.Top = ini.ReadInteger("Common", "MWinT", -1);
-				this.fMWinRect.Right = ini.ReadInteger("Common", "MWinW", -1);
-				this.fMWinRect.Bottom = ini.ReadInteger("Common", "MWinH", -1);
-				this.fMWinState = (FormWindowState)((uint)ini.ReadInteger("Common", "MWinState", 0));
-
-				cnt = ini.ReadInteger("LastBases", "Count", 0);
-				for (int i = 0; i < cnt; i++)
-				{
-					string st = ini.ReadString("LastBases", "LB" + i.ToString(), "");
-					this.AddLastBase(st);
-				}
-			}
-			finally
-			{
-				ini.Dispose();
+			} catch (Exception ex) {
+				Logger.LogWrite("GlobalOptions.LoadFromFile(): " + ex.Message);
 			}
 		}
 
 		public void SaveToFile(string fileName)
 		{
-			IniFile ini = new IniFile(fileName);
-			try
-			{
-				ini.WriteInteger("Common", "DefCharacterSet", (int)this.fDefCharacterSet);
-				ini.WriteInteger("Common", "DefNameFormat", (int)this.fDefNameFormat);
-				ini.WriteInteger("Common", "DefDateFormat", (int)this.fDefDateFormat);
-				ini.WriteString("Common", "LastDir", this.fLastDir);
-				ini.WriteBool("Common", "PlacesWithAddress", this.fPlacesWithAddress);
-				ini.WriteBool("Common", "ShowTips", this.fShowTips);
-				ini.WriteInteger("Common", "InterfaceLang", this.fInterfaceLang);
-				ini.WriteBool("Common", "RevisionsBackup", this.fRevisionsBackup);
-				ini.WriteBool("Common", "ShowDatesCalendar", this.fShowDatesCalendar);
-				
-				ini.WriteInteger("Common", "KeyLayout", SysUtils.GetKeyLayout());
-
-				this.fChartOptions.SaveToFile(ini);
-				this.fPedigreeOptions.SaveToFile(ini);
-				this.fProxy.SaveToFile(ini);
-
-				this.fNameFilters.Sort();
-
-				int cnt = this.fNameFilters.Count;
-				ini.WriteInteger("NameFilters", "Count", cnt);
-				for (int i = 0; i < cnt; i++)
+			try {
+				IniFile ini = new IniFile(fileName);
+				try
 				{
-					ini.WriteString("NameFilters", "Filter_" + i.ToString(), this.fNameFilters[i]);
-				}
+					ini.WriteInteger("Common", "DefCharacterSet", (int)this.fDefCharacterSet);
+					ini.WriteInteger("Common", "DefNameFormat", (int)this.fDefNameFormat);
+					ini.WriteInteger("Common", "DefDateFormat", (int)this.fDefDateFormat);
+					ini.WriteString("Common", "LastDir", this.fLastDir);
+					ini.WriteBool("Common", "PlacesWithAddress", this.fPlacesWithAddress);
+					ini.WriteBool("Common", "ShowTips", this.fShowTips);
+					ini.WriteInteger("Common", "InterfaceLang", this.fInterfaceLang);
+					ini.WriteBool("Common", "RevisionsBackup", this.fRevisionsBackup);
+					ini.WriteBool("Common", "ShowDatesCalendar", this.fShowDatesCalendar);
+					
+					ini.WriteInteger("Common", "KeyLayout", GKUtils.GetKeyLayout());
 
-				cnt = this.fResidenceFilters.Count;
-				ini.WriteInteger("ResidenceFilters", "Count", cnt);
-				for (int i = 0; i < cnt; i++)
+					this.fChartOptions.SaveToFile(ini);
+					this.fPedigreeOptions.SaveToFile(ini);
+					this.fProxy.SaveToFile(ini);
+
+					this.fNameFilters.Sort();
+
+					int cnt = this.fNameFilters.Count;
+					ini.WriteInteger("NameFilters", "Count", cnt);
+					for (int i = 0; i < cnt; i++)
+					{
+						ini.WriteString("NameFilters", "Filter_" + i.ToString(), this.fNameFilters[i]);
+					}
+
+					cnt = this.fResidenceFilters.Count;
+					ini.WriteInteger("ResidenceFilters", "Count", cnt);
+					for (int i = 0; i < cnt; i++)
+					{
+						ini.WriteString("ResidenceFilters", "Filter_" + i.ToString(), this.fResidenceFilters[i]);
+					}
+
+					cnt = this.fEventFilters.Count;
+					ini.WriteInteger("EventFilters", "Count", cnt);
+					for (int i = 0; i < cnt; i++)
+					{
+						ini.WriteString("EventFilters", "EventVal_" + i.ToString(), this.fEventFilters[i]);
+					}
+
+					cnt = this.fMRUFiles.Count;
+					ini.WriteInteger("Common", "MRUFiles_Count", cnt);
+					for (int i = 0; i < cnt; i++)
+					{
+						this.fMRUFiles[i].Save(ini, "MRUFile_" + i.ToString());
+					}
+					//this.FMRUFiles.Sort();
+
+					cnt = this.fRelations.Count;
+					ini.WriteInteger("Relations", "Count", cnt);
+					for (int i = 0; i < cnt; i++)
+					{
+						ini.WriteString("Relations", "Relation_" + i.ToString(), this.fRelations[i]);
+					}
+
+					this.fIndividualListColumns.SaveToFile(ini, "PersonsColumns");
+
+					ini.WriteBool("ListPersons", "HighlightUnmarried", this.fListHighlightUnmarriedPersons);
+					ini.WriteBool("ListPersons", "HighlightUnparented", this.fListHighlightUnparentedPersons);
+					ini.WriteInteger("Common", "MWinL", this.fMWinRect.Left);
+					ini.WriteInteger("Common", "MWinT", this.fMWinRect.Top);
+					ini.WriteInteger("Common", "MWinW", this.fMWinRect.Right);
+					ini.WriteInteger("Common", "MWinH", this.fMWinRect.Bottom);
+					ini.WriteInteger("Common", "MWinState", (int)this.fMWinState);
+
+					cnt = this.fLastBases.Count;
+					ini.WriteInteger("LastBases", "Count", cnt);
+					for (int i = 0; i < cnt; i++)
+					{
+						ini.WriteString("LastBases", "LB" + i.ToString(), this.GetLastBase(i));
+					}
+				}
+				finally
 				{
-					ini.WriteString("ResidenceFilters", "Filter_" + i.ToString(), this.fResidenceFilters[i]);
+					ini.Dispose();
 				}
-
-				cnt = this.fEventFilters.Count;
-				ini.WriteInteger("EventFilters", "Count", cnt);
-				for (int i = 0; i < cnt; i++)
-				{
-					ini.WriteString("EventFilters", "EventVal_" + i.ToString(), this.fEventFilters[i]);
-				}
-
-				cnt = this.fMRUFiles.Count;
-				ini.WriteInteger("Common", "MRUFiles_Count", cnt);
-				for (int i = 0; i < cnt; i++)
-				{
-					this.fMRUFiles[i].Save(ini, "MRUFile_" + i.ToString());
-				}
-				//this.FMRUFiles.Sort();
-
-				cnt = this.fRelations.Count;
-				ini.WriteInteger("Relations", "Count", cnt);
-				for (int i = 0; i < cnt; i++)
-				{
-					ini.WriteString("Relations", "Relation_" + i.ToString(), this.fRelations[i]);
-				}
-
-				this.fIndividualListColumns.SaveToFile(ini, "PersonsColumns");
-
-				ini.WriteBool("ListPersons", "HighlightUnmarried", this.fListHighlightUnmarriedPersons);
-				ini.WriteBool("ListPersons", "HighlightUnparented", this.fListHighlightUnparentedPersons);
-				ini.WriteInteger("Common", "MWinL", this.fMWinRect.Left);
-				ini.WriteInteger("Common", "MWinT", this.fMWinRect.Top);
-				ini.WriteInteger("Common", "MWinW", this.fMWinRect.Right);
-				ini.WriteInteger("Common", "MWinH", this.fMWinRect.Bottom);
-				ini.WriteInteger("Common", "MWinState", (int)this.fMWinState);
-
-				cnt = this.fLastBases.Count;
-				ini.WriteInteger("LastBases", "Count", cnt);
-				for (int i = 0; i < cnt; i++)
-				{
-					ini.WriteString("LastBases", "LB" + i.ToString(), this.GetLastBase(i));
-				}
-			}
-			finally
-			{
-				ini.Dispose();
+			} catch (Exception ex) {
+				Logger.LogWrite("GlobalOptions.SaveToFile(): " + ex.Message);
 			}
 		}
 

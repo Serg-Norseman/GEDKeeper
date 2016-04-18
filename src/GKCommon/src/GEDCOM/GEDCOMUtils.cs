@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
-using BSLib;
 
 namespace GKCommon.GEDCOM
 {
@@ -198,7 +197,7 @@ namespace GKCommon.GEDCOM
 
 		static GEDCOMUtils()
 		{
-			TAGS_BASE = new Dictionary<string, GEDCOMUtils.TagProperties>();
+			TAGS_BASE = new Dictionary<string, TagProperties>();
 			TAGS_BASE.Add("ADDR", new TagProperties("ADDR", true, false));
 			TAGS_BASE.Add("AGNC", new TagProperties("AGNC", true, false));
 			TAGS_BASE.Add("AUTH", new TagProperties("AUTH", true, false));

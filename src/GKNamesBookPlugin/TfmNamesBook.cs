@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
-using BSLib;
+using GKCommon;
 using GKCommon.GEDCOM;
 
 namespace GKNamesBookPlugin

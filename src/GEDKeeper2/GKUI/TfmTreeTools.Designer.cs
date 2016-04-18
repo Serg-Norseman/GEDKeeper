@@ -57,7 +57,6 @@ namespace GKUI
 		private System.Windows.Forms.NumericUpDown edMinGens;
 		private System.Windows.Forms.TabPage SheetPlaceManage;
 		private System.Windows.Forms.Panel Panel4;
-		private System.Windows.Forms.Button btnHelp;
 		private System.Windows.Forms.Button btnSetPatriarch;
 		private System.Windows.Forms.Button btnIntoList;
 		private System.Windows.Forms.RadioButton RadioButton5;
@@ -118,7 +117,7 @@ namespace GKUI
 			this.edYearInaccuracy = new System.Windows.Forms.NumericUpDown();
 			this.chkBirthYear = new System.Windows.Forms.CheckBox();
 			this.SheetFamilyGroups = new System.Windows.Forms.TabPage();
-			this.gkLogChart1 = new BSLib.Controls.LogChart();
+			this.gkLogChart1 = new GKCommon.Controls.LogChart();
 			this.TreeView1 = new System.Windows.Forms.TreeView();
 			this.SheetTreeCheck = new System.Windows.Forms.TabPage();
 			this.btnBaseRepair = new System.Windows.Forms.Button();
@@ -138,7 +137,6 @@ namespace GKUI
 			this.OpenDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.SaveDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.OpenDialog2 = new System.Windows.Forms.OpenFileDialog();
-			this.btnHelp = new System.Windows.Forms.Button();
 			this.PageControl.SuspendLayout();
 			this.SheetTreeCompare.SuspendLayout();
 			this.gbMatchType.SuspendLayout();
@@ -214,9 +212,10 @@ namespace GKUI
 			// 
 			// rbtnAnalysis
 			// 
+			this.rbtnAnalysis.AutoSize = true;
 			this.rbtnAnalysis.Location = new System.Drawing.Point(22, 109);
 			this.rbtnAnalysis.Name = "rbtnAnalysis";
-			this.rbtnAnalysis.Size = new System.Drawing.Size(460, 21);
+			this.rbtnAnalysis.Size = new System.Drawing.Size(220, 21);
 			this.rbtnAnalysis.TabIndex = 7;
 			this.rbtnAnalysis.Text = "Анализ (экспериментальный)";
 			this.rbtnAnalysis.CheckedChanged += new System.EventHandler(this.rbtnMatch_CheckedChanged);
@@ -252,10 +251,11 @@ namespace GKUI
 			// 
 			// rbtnMatchInternal
 			// 
+			this.rbtnMatchInternal.AutoSize = true;
 			this.rbtnMatchInternal.Checked = true;
 			this.rbtnMatchInternal.Location = new System.Drawing.Point(22, 19);
 			this.rbtnMatchInternal.Name = "rbtnMatchInternal";
-			this.rbtnMatchInternal.Size = new System.Drawing.Size(460, 21);
+			this.rbtnMatchInternal.Size = new System.Drawing.Size(311, 21);
 			this.rbtnMatchInternal.TabIndex = 2;
 			this.rbtnMatchInternal.TabStop = true;
 			this.rbtnMatchInternal.Text = "Сравнение внутреннее (поиск дубликатов)";
@@ -263,9 +263,10 @@ namespace GKUI
 			// 
 			// rbtnMathExternal
 			// 
+			this.rbtnMathExternal.AutoSize = true;
 			this.rbtnMathExternal.Location = new System.Drawing.Point(22, 49);
 			this.rbtnMathExternal.Name = "rbtnMathExternal";
-			this.rbtnMathExternal.Size = new System.Drawing.Size(460, 20);
+			this.rbtnMathExternal.Size = new System.Drawing.Size(200, 21);
 			this.rbtnMathExternal.TabIndex = 3;
 			this.rbtnMathExternal.Text = "Сравнение с другой базой";
 			this.rbtnMathExternal.CheckedChanged += new System.EventHandler(this.rbtnMatch_CheckedChanged);
@@ -296,17 +297,19 @@ namespace GKUI
 			// 
 			// Label4
 			// 
+			this.Label4.AutoSize = true;
 			this.Label4.Location = new System.Drawing.Point(11, 10);
 			this.Label4.Name = "Label4";
-			this.Label4.Size = new System.Drawing.Size(112, 16);
+			this.Label4.Size = new System.Drawing.Size(88, 17);
 			this.Label4.TabIndex = 0;
 			this.Label4.Text = "Мастер-база";
 			// 
 			// Label7
 			// 
+			this.Label7.AutoSize = true;
 			this.Label7.Location = new System.Drawing.Point(11, 68);
 			this.Label7.Name = "Label7";
-			this.Label7.Size = new System.Drawing.Size(140, 16);
+			this.Label7.Size = new System.Drawing.Size(122, 17);
 			this.Label7.TabIndex = 1;
 			this.Label7.Text = "Обновление базы";
 			// 
@@ -733,19 +736,21 @@ namespace GKUI
 			// 
 			// chkWithoutDates
 			// 
+			this.chkWithoutDates.AutoSize = true;
 			this.chkWithoutDates.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.chkWithoutDates.Location = new System.Drawing.Point(346, 465);
+			this.chkWithoutDates.Location = new System.Drawing.Point(362, 467);
 			this.chkWithoutDates.Name = "chkWithoutDates";
-			this.chkWithoutDates.Size = new System.Drawing.Size(222, 29);
+			this.chkWithoutDates.Size = new System.Drawing.Size(158, 21);
 			this.chkWithoutDates.TabIndex = 5;
 			this.chkWithoutDates.Text = "Не учитывать даты";
 			this.chkWithoutDates.UseVisualStyleBackColor = true;
 			// 
 			// Label8
 			// 
-			this.Label8.Location = new System.Drawing.Point(17, 471);
+			this.Label8.AutoSize = true;
+			this.Label8.Location = new System.Drawing.Point(16, 468);
 			this.Label8.Name = "Label8";
-			this.Label8.Size = new System.Drawing.Size(232, 16);
+			this.Label8.Size = new System.Drawing.Size(207, 17);
 			this.Label8.TabIndex = 0;
 			this.Label8.Text = "Поколений потомков не менее";
 			// 
@@ -837,15 +842,6 @@ namespace GKUI
 			// 
 			this.OpenDialog2.Filter = resources.GetString("OpenDialog2.Filter");
 			// 
-			// btnHelp
-			// 
-			this.btnHelp.Location = new System.Drawing.Point(773, 583);
-			this.btnHelp.Name = "btnHelp";
-			this.btnHelp.Size = new System.Drawing.Size(113, 30);
-			this.btnHelp.TabIndex = 2;
-			this.btnHelp.Text = "Справка";
-			this.btnHelp.Click += new System.EventHandler(this.btnHelp_Click);
-			// 
 			// TfmTreeTools
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -854,7 +850,6 @@ namespace GKUI
 			this.ClientSize = new System.Drawing.Size(1034, 625);
 			this.Controls.Add(this.PageControl);
 			this.Controls.Add(this.btnClose);
-			this.Controls.Add(this.btnHelp);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.KeyPreview = true;
@@ -884,13 +879,14 @@ namespace GKUI
 			this.SheetFamilyGroups.ResumeLayout(false);
 			this.SheetTreeCheck.ResumeLayout(false);
 			this.SheetPatSearch.ResumeLayout(false);
+			this.SheetPatSearch.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.edMinGens)).EndInit();
 			this.SheetPlaceManage.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
 		private System.Windows.Forms.CheckBox chkBookmarkMerged;
 		private System.Windows.Forms.GroupBox gbMergeOther;
-		private BSLib.Controls.LogChart gkLogChart1;
+		private GKCommon.Controls.LogChart gkLogChart1;
 		private GKUI.Controls.GKMergeControl MergeCtl;
 		private System.Windows.Forms.Button btnPatriarchsDiagram;
 		private System.Windows.Forms.CheckBox chkIndistinctMatching;

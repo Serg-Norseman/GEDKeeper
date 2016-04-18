@@ -1,5 +1,4 @@
 using System;
-using BSLib;
 
 namespace GKCommon.GEDCOM
 {
@@ -29,26 +28,26 @@ namespace GKCommon.GEDCOM
 
 		public string SourceVersion
 		{
-			get { return base.GetTagStringValue("SOUR\\VERS"); }
-			set { base.SetTagStringValue("SOUR\\VERS", value); }
+			get { return base.GetTagStringValue(@"SOUR\VERS"); }
+			set { base.SetTagStringValue(@"SOUR\VERS", value); }
 		}
 
 		public string SourceProductName
 		{
-			get { return base.GetTagStringValue("SOUR\\NAME"); }
-			set { base.SetTagStringValue("SOUR\\NAME", value); }
+			get { return base.GetTagStringValue(@"SOUR\NAME"); }
+			set { base.SetTagStringValue(@"SOUR\NAME", value); }
 		}
 
 		public string SourceBusinessName
 		{
-			get { return base.GetTagStringValue("SOUR\\CORP"); }
-			set { base.SetTagStringValue("SOUR\\CORP", value); }
+			get { return base.GetTagStringValue(@"SOUR\CORP"); }
+			set { base.SetTagStringValue(@"SOUR\CORP", value); }
 		}
 
 		public GEDCOMAddress SourceBusinessAddress
 		{
 			get {
-				GEDCOMTag corpTag = base.TagClass("SOUR\\CORP", GEDCOMTag.Create);
+				GEDCOMTag corpTag = base.TagClass(@"SOUR\CORP", GEDCOMTag.Create);
 				return corpTag.TagClass("ADDR", GEDCOMAddress.Create) as GEDCOMAddress;
 			}
 		}
@@ -73,20 +72,20 @@ namespace GKCommon.GEDCOM
 
 		public string GEDCOMVersion
 		{
-			get { return base.GetTagStringValue("GEDC\\VERS"); }
-			set { base.SetTagStringValue("GEDC\\VERS", value); }
+			get { return base.GetTagStringValue(@"GEDC\VERS"); }
+			set { base.SetTagStringValue(@"GEDC\VERS", value); }
 		}
 
 		public string GEDCOMForm
 		{
-			get { return base.GetTagStringValue("GEDC\\FORM"); }
-			set { base.SetTagStringValue("GEDC\\FORM", value); }
+			get { return base.GetTagStringValue(@"GEDC\FORM"); }
+			set { base.SetTagStringValue(@"GEDC\FORM", value); }
 		}
 
 		public string CharacterSetVersion
 		{
-			get { return base.GetTagStringValue("CHAR\\VERS"); }
-			set { base.SetTagStringValue("CHAR\\VERS", value); }
+			get { return base.GetTagStringValue(@"CHAR\VERS"); }
+			set { base.SetTagStringValue(@"CHAR\VERS", value); }
 		}
 
 		public string Language
@@ -97,8 +96,8 @@ namespace GKCommon.GEDCOM
 
 		public string PlaceHierarchy
 		{
-			get { return base.GetTagStringValue("PLAC\\FORM"); }
-			set { base.SetTagStringValue("PLAC\\FORM", value); }
+			get { return base.GetTagStringValue(@"PLAC\FORM"); }
+			set { base.SetTagStringValue(@"PLAC\FORM", value); }
 		}
 
 		public GEDCOMPointer Submission
@@ -135,8 +134,8 @@ namespace GKCommon.GEDCOM
 		// new property (not standard)
 		public int FileRevision
 		{
-			get { return base.GetTagIntegerValue("FILE\\_REV", 0); }
-			set { base.SetTagIntegerValue("FILE\\_REV", value); }
+			get { return base.GetTagIntegerValue(@"FILE\_REV", 0); }
+			set { base.SetTagIntegerValue(@"FILE\_REV", value); }
 		}
 
 		protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)

@@ -6,7 +6,6 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-using BSLib;
 using GKCommon;
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
@@ -159,17 +158,20 @@ namespace GKUI
         {
             if (disposing)
             {
+                #if GK_LINUX
+                #else
                 this.fNavman.Dispose();
                 this.fLockedRecords.Dispose();
                 this.fTree.Dispose();
                 this.fTree = null;
-                
+
                 /*for (GEDCOMRecordType rt = GEDCOMRecordType.rtNone; rt != GEDCOMRecordType.rtLast; rt++)
                 {
                     this.fChangedRecords[(int)rt].Dispose();
                 }*/
 
                 if (components != null) components.Dispose();
+                #endif
             }
             base.Dispose(disposing);
         }
@@ -419,9 +421,7 @@ namespace GKUI
 		private void CreatePage(string pageText, GEDCOMRecordType recType, out GKRecordsView recView, out HyperView summary)
 		{
 			this.PageRecords.SuspendLayout();
-
-			TabPage sheet = new TabPage();
-			sheet.Text = pageText;
+			TabPage sheet = new TabPage(pageText);
 			this.PageRecords.Controls.Add(sheet);
 			this.PageRecords.ResumeLayout(false);
 
@@ -493,7 +493,7 @@ namespace GKUI
 			this.Clear();
 
 			string pw = null;
-            string ext = AuxUtils.GetFileExtension(fileName);
+            string ext = FileHelper.GetFileExtension(fileName);
 			if (ext == ".geds") {
 				if (!GKUtils.GetPassword("Пароль", ref pw)) {
 					GKUtils.ShowError("Пароль не задан");
@@ -534,7 +534,7 @@ namespace GKUI
 			try
 			{
 				string pw = null;
-                string ext = AuxUtils.GetFileExtension(fileName);
+                string ext = FileHelper.GetFileExtension(fileName);
 				if (ext == ".geds") {
 					if (!GKUtils.GetPassword("Пароль", ref pw)) {
 						GKUtils.ShowError("Пароль не задан");

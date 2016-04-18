@@ -65,7 +65,7 @@ namespace GKUI.Dialogs
                         this.fExtern = true;
                         string targetFile = "";
                         this.fBase.Context.MediaLoad(this.fFileRef, ref targetFile);
-                        SysUtils.LoadExtFile(targetFile);
+                        GKUtils.LoadExtFile(targetFile);
                         break;
                     }
 

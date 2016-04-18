@@ -53,18 +53,22 @@ namespace GKTextSearchPlugin
 
         public void Execute()
         {
-            //PluginForm frm = new PluginForm(this);
-            //frm.ShowDialog();
+			if (this.fHost.IsUnix()) {
+        		this.fHost.ShowWarning(@"This function is not supported in Linux");
+        		return;
+        	}
+
 			IBaseWindow curBase = fHost.GetCurrentFile();
 		    if (curBase == null) return;
 
-		    TfmTextSearch tsDlg = new TfmTextSearch(this, curBase);
-		    //ts_dlg.MdiParent = this;
-		    tsDlg.Show();
+		    TfmTextSearch tsWin = new TfmTextSearch(this, curBase);
+		    tsWin.Show();
         }
 
         public void NotifyRecord(IBaseWindow aBase, object record, RecordAction action)
         {
+        	#if GK_LINUX
+        	#else
         	if (aBase == null || record == null || this.fSearchMan == null) return;
         	
         	switch (action) {
@@ -76,6 +80,7 @@ namespace GKTextSearchPlugin
                     this.fSearchMan.DeleteRecord(aBase, ((GEDCOMRecord)record).XRef);
         			break;
         	}
+        	#endif
         }
         
         public void OnHostClosing(ref bool cancelClosing) {}

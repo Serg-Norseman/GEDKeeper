@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-
-using BSLib;
+using GKCommon;
 using GKCommon.GEDCOM;
 
 namespace GKCore.Tools

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Options;
@@ -459,6 +460,7 @@ namespace GKCore.Lists
 		public override void Fetch(GEDCOMRecord aRec)
 		{
 			this.fRec = (aRec as GEDCOMIndividualRecord);
+		    if (this.fRec == null) return;
 
 			buf_fullname = this.fRec.GetNameString(true, false);
 			buf_bd = null;
@@ -545,13 +547,21 @@ namespace GKCore.Lists
 
 			if ((fRec.ChildToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnparentedPersons))
 			{
-				item.BackColor = System.Drawing.Color.FromArgb(0xFFCACA);
+				item.BackColor = HighlightUnparentedColor;
 			}
 			else if ((fRec.SpouseToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnmarriedPersons))
 			{
-				item.BackColor = System.Drawing.Color.FromArgb(0xFFFFCA);
+				item.BackColor = HighlightUnmarriedColor;
 			}
 		}
+
+		#if GK_LINUX
+		private static readonly Color HighlightUnparentedColor = Color.FromArgb(unchecked((int)0xFFFFCACA));
+		private static readonly Color HighlightUnmarriedColor = Color.FromArgb(unchecked((int)0xFFFFFFA1));
+		#else
+		private static readonly Color HighlightUnparentedColor = Color.FromArgb(0xFFCACA);
+		private static readonly Color HighlightUnmarriedColor = Color.FromArgb(0xFFFFA1);
+		#endif
 
 		public override void UpdateColumns(GKListView listView, bool isMain)
 		{

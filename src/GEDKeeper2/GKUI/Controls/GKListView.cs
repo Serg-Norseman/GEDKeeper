@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using System.Windows.Forms;
+
+using GKCommon;
 
 namespace GKUI.Controls
 {
@@ -70,7 +73,7 @@ namespace GKUI.Controls
 
 				return result;
 			}
-			
+
 			#region Private methods
 
 			private static int agCompare(string str1, string str2)
@@ -117,6 +120,13 @@ namespace GKUI.Controls
 		public GKListView()
 		{
 			base.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+			base.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+
+            // Enable the OnNotifyMessage event so we get a chance to filter out 
+            // Windows messages before they get to the form's WndProc
+            base.SetStyle(ControlStyles.EnableNotifyMessage, true);
+
+            base.DoubleBuffered = true;
 
 			this.fOldSortOrder = SortOrder.None;
 			this.fColumnSorter = new LVColumnSorter();
@@ -124,6 +134,15 @@ namespace GKUI.Controls
 			base.ListViewItemSorter = this.fColumnSorter;
 			base.ColumnClick += this.LVColumnClick;
 		}
+
+        protected override void OnNotifyMessage(Message m)
+        {
+            ////Filter out the WM_ERASEBKGND message
+            //if(m.Msg != 0x14)
+            //{
+            //    base.OnNotifyMessage(m);
+            //}
+        }
 
 		public void UnsetSorter()
 		{
@@ -199,19 +218,25 @@ namespace GKUI.Controls
 
 		public void ResizeColumn(int columnIndex)
 		{
-			if (columnIndex >= 0) {
-				this.AutoResizeColumn(columnIndex, ColumnHeaderAutoResizeStyle.ColumnContent);
+			try {
+				if (columnIndex >= 0 && this.Items.Count > 0)
+				{
+					this.AutoResizeColumn(columnIndex, ColumnHeaderAutoResizeStyle.ColumnContent);
 
-				if (this.Columns[columnIndex].Width < 20) {
-					this.AutoResizeColumn(columnIndex, ColumnHeaderAutoResizeStyle.HeaderSize);
+					if (this.Columns[columnIndex].Width < 20)
+					{
+						this.AutoResizeColumn(columnIndex, ColumnHeaderAutoResizeStyle.HeaderSize);
+					}
 				}
+			} catch (Exception ex) {
+				Logger.LogWrite("GKListView.ResizeColumn(): " + ex.Message);
 			}
 		}
 
 		public void SelectItem(ListViewItem item)
 		{
 		    if (item == null) return;
-		    
+
             this.SelectedIndices.Clear();
 		    item.Selected = true;
 		    item.EnsureVisible();
