@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace GKCommon
+namespace GKCalculatorPlugin
 {
 	[Serializable]
 	public class CalculateException : Exception

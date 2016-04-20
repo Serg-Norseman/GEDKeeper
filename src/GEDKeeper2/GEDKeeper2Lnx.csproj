@@ -70,7 +70,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <CodeAnalysisRuleSet>..\gk21.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
-    <OutputPath>.</OutputPath>
+    <OutputPath>..\..</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Linux_Debug' ">
     <OutputPath>..\..\</OutputPath>
@@ -86,12 +86,15 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <CodeAnalysisRuleSet>..\gk21.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
-    <OutputPath>.</OutputPath>
+    <OutputPath>..\..</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>.</OutputPath>
+    <OutputPath>..\..</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ArborGVT">
+      <HintPath>ArborGVT.dll</HintPath>
+    </Reference>
     <Reference Include="ExcelLibrary">
       <HintPath>ExcelLibrary.dll</HintPath>
     </Reference>
@@ -644,10 +647,6 @@
     <ProjectReference Include="..\GKCommon\GKCommonLnx.csproj">
       <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
       <Name>GKCommonLnx</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\SmartGraph\BSLib.SmartGraph\BSLib.SmartGraph.Lnx.csproj">
-      <Project>{DDC8F8CD-B876-4A0E-ABBD-861DB741EC1E}</Project>
-      <Name>BSLib.SmartGraph.Lnx</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

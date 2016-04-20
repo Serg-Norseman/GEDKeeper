@@ -86,16 +86,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ArborGVT">
-      <HintPath>ArborGVT.dll</HintPath>
+      <HintPath>libs\ArborGVT.dll</HintPath>
     </Reference>
     <Reference Include="ExcelLibrary">
-      <HintPath>ExcelLibrary.dll</HintPath>
+      <HintPath>libs\ExcelLibrary.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp">
-      <HintPath>itextsharp.dll</HintPath>
+      <HintPath>libs\itextsharp.dll</HintPath>
     </Reference>
     <Reference Include="LuaInterface">
-      <HintPath>LuaInterface.dll</HintPath>
+      <HintPath>libs\LuaInterface.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -103,16 +103,19 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="ZedGraph">
-      <HintPath>ZedGraph.dll</HintPath>
+      <HintPath>libs\ZedGraph.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GKCore\BaseContext.cs" />
     <Compile Include="GKCore\BaseSearchStrategy.cs" />
+    <Compile Include="GKCore\Export\CustomWriter.cs" />
     <Compile Include="GKCore\Export\ExcelExporter.cs" />
     <Compile Include="GKCore\Export\Exporter.cs" />
     <Compile Include="GKCore\Export\FamilyBookExporter.cs" />
+    <Compile Include="GKCore\Export\HTMLWriter.cs" />
     <Compile Include="GKCore\Export\PDFExporter.cs" />
+    <Compile Include="GKCore\Export\PDFWriter.cs" />
     <Compile Include="GKCore\Export\PedigreeExporter.cs" />
     <Compile Include="GKCore\Export\TreesAlbumExporter.cs" />
     <Compile Include="GKCore\GKData.cs" />
@@ -609,10 +612,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <Content Include="lua51.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="app.manifest" />
+    <None Include="libs\lua51.dll">
+      <Link>lua51.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using it = iTextSharp.text;
+//using iTextSharp.text;
+//using iTextSharp.text.pdf;
 
 namespace GKCore.Export
 {
     /// <summary>
-    /// Localization: dirty
-    /// Code-Quality: dirty
+    /// 
     /// </summary>
-    public sealed class PedigreeExporter : PDFExporter
+    public sealed class PedigreeExporter : Exporter
 	{
 		private class PedigreePerson
 		{
@@ -39,7 +38,7 @@ namespace GKCore.Export
 				string result = ((this.Parent == null) ? order : this.Parent.GetOrderStr() + order);
 				return result;
 			}
-			
+
 			public string GetInternalStr()
 			{
 				return ConvHelper.AdjustNum(this.Level, 2) + this.GetOrderStr();
@@ -72,13 +71,14 @@ namespace GKCore.Export
 		private ShieldState fShieldState;
 		private StringList fSourceList;
 
-		private Font fTitleFont;
+		/*private Font fTitleFont;
 		private Font fChapFont;
 		private Font fPersonFont;
 		private Font fLinkFont;
-		private Font fTextFont, fSupText;
+		private Font fTextFont, fSupText;*/
 		
 		private PedigreeFormat fFormat;
+		private string fTitle;
 
 		public GEDCOMIndividualRecord Ancestor
 		{
@@ -124,34 +124,29 @@ namespace GKCore.Export
 
 		private void WritePerson(PedigreePerson person)
 		{
-			Paragraph p = new Paragraph();
-			p.Alignment = Element.ALIGN_JUSTIFIED;
-			p.SpacingBefore = 6f;
-			p.SpacingAfter = 6f;
-			p.Add(new Chunk(this.GetIdStr(person) + ". " + person.IRec.GetNameString(true, false), fPersonFont).SetLocalDestination(person.Id));
-			p.Add(new Chunk(GKUtils.GetPedigreeLifeStr(person.IRec, this.fOptions.PedigreeOptions.Format), fTextFont));
+			this.fWriter.beginParagraph(CustomWriter.TextAlignment.taJustify);
+			/*p.SpacingBefore = 6f;
+			p.SpacingAfter = 6f;*/
+			this.fWriter.addParagraphChunkAnchor(this.GetIdStr(person) + ". " + person.IRec.GetNameString(true, false), fPersonFont, person.Id);
+			this.fWriter.addParagraphChunk(GKUtils.GetPedigreeLifeStr(person.IRec, this.fOptions.PedigreeOptions.Format), fTextFont);
 
 			if (this.fOptions.PedigreeOptions.IncludeSources && person.Sources.Count > 0)
 			{
-				p.Add(new Chunk(" ", fTextFont));
+				this.fWriter.addParagraphChunk(" ", fTextFont);
 
 				int num = person.Sources.Count;
 				for (int i = 0; i < num; i++) {
 					string lnk = person.Sources[i];
-					
+
 					if (i > 0) {
-						p.Add(new Chunk(", ", fTextFont).SetTextRise(4));
+						this.fWriter.addParagraphChunkLink(", ", fTextFont, "", null, true);
 					}
 
-					Chunk lnkChunk = new Chunk(lnk, fSupText);
-					lnkChunk.SetTextRise(4);
-					lnkChunk.SetLocalGoto("src_" + lnk);
-					lnkChunk.SetUnderline(0.5f, 3f);
-					p.Add(lnkChunk);
+					this.fWriter.addParagraphChunkLink(lnk, fSupText, "src_" + lnk, fLinkFont, true);
 				}
 			}
 
-			fDocument.Add(p);
+			this.fWriter.endParagraph();
 
 			switch (fFormat) {
 				case PedigreeFormat.Excess:
@@ -164,10 +159,10 @@ namespace GKCore.Export
 			}
 		}
 
-		private Chunk idLink(PedigreePerson person)
+		/*private Chunk idLink(PedigreePerson person)
 		{
 		    return (person == null) ? new Chunk() : new Chunk(person.Id, fLinkFont).SetLocalGoto(person.Id);
-		}
+		}*/
 
         private string GetIdStr(PedigreePerson person)
 		{
@@ -189,26 +184,26 @@ namespace GKCore.Export
 
 		private void WriteExcessFmt(PedigreePerson person)
 		{
-			fDocument.Add(new Paragraph(LangMan.LS(LSID.LSID_Sex) + ": " + GKUtils.SexStr(person.IRec.Sex), fTextFont));
+			this.fWriter.addParagraph(LangMan.LS(LSID.LSID_Sex) + ": " + GKUtils.SexStr(person.IRec.Sex), fTextFont);
 
 			string st = GKUtils.GetLifeExpectancyStr(person.IRec);
 			if (st != "?" && st != "") {
-				fDocument.Add(new Paragraph(LangMan.LS(LSID.LSID_LifeExpectancy) + ": " + st, fTextFont));
+				this.fWriter.addParagraph(LangMan.LS(LSID.LSID_LifeExpectancy) + ": " + st, fTextFont);
 			}
 
 			GEDCOMIndividualRecord father, mother;
 			person.IRec.GetParents(out father, out mother);
+			PedigreePerson prs;
+			string id;
 			if (father != null) {
-				Paragraph p = new Paragraph();
-				p.Add(new Chunk(LangMan.LS(LSID.LSID_Father) + ": " + father.GetNameString(true, false) + " ", fTextFont));
-				p.Add(this.idLink(this.FindPerson(father)));
-				fDocument.Add(p);
+				prs = this.FindPerson(father);
+				id = (prs != null) ? prs.Id : "";
+				this.fWriter.addParagraphLink(LangMan.LS(LSID.LSID_Father) + ": " + father.GetNameString(true, false) + " ", fTextFont, id, fLinkFont);
 			}
 			if (mother != null) {
-				Paragraph p = new Paragraph();
-				p.Add(new Chunk(LangMan.LS(LSID.LSID_Mother) + ": " + mother.GetNameString(true, false) + " ", fTextFont));
-				p.Add(this.idLink(this.FindPerson(mother)));
-				fDocument.Add(p);
+				prs = this.FindPerson(mother);
+				id = (prs != null) ? prs.Id : "";
+				this.fWriter.addParagraphLink(LangMan.LS(LSID.LSID_Mother) + ": " + mother.GetNameString(true, false) + " ", fTextFont, id, fLinkFont);
 			}
 
 			ExtList<PedigreeEvent> evList = new ExtList<PedigreeEvent>(true);
@@ -217,7 +212,7 @@ namespace GKCore.Export
 				int i;
 				if (person.IRec.Events.Count > 0)
 				{
-					fDocument.Add(new Paragraph(LangMan.LS(LSID.LSID_Events) + ":", fTextFont));
+					this.fWriter.addParagraph(LangMan.LS(LSID.LSID_Events) + ":", fTextFont);
 
 					int num = person.IRec.Events.Count;
 					for (i = 0; i < num; i++)
@@ -257,7 +252,7 @@ namespace GKCore.Export
 							sps = st + unk;
 						}
 
-						fDocument.Add(new Paragraph(sps, fTextFont));
+						this.fWriter.addParagraph(sps, fTextFont);
 
 						evList.Clear();
 						int num3 = family.Childrens.Count;
@@ -277,19 +272,18 @@ namespace GKCore.Export
 
 			if (this.fOptions.PedigreeOptions.IncludeNotes && person.IRec.Notes.Count != 0)
 			{
-				fDocument.Add(new Paragraph(LangMan.LS(LSID.LSID_RPNotes) + ":", fTextFont));
-				
-				it.List list = new it.List(it.List.UNORDERED);
-				list.SetListSymbol("\u2022");
-				list.IndentationLeft = 10f;
+				this.fWriter.addParagraph(LangMan.LS(LSID.LSID_RPNotes) + ":", fTextFont);
+
+				this.fWriter.beginList();
 
 				int num4 = person.IRec.Notes.Count;
 				for (int i = 0; i < num4; i++)
 				{
 					GEDCOMNotes note = person.IRec.Notes[i];
-					list.Add(new it.ListItem(new Chunk(" " + GKUtils.MergeStrings(note.Notes), fTextFont)));
+					this.fWriter.addListItem(" " + GKUtils.MergeStrings(note.Notes), fTextFont);
 				}
-				fDocument.Add(list);
+				
+				this.fWriter.endList();
 			}
 		}
 
@@ -301,7 +295,7 @@ namespace GKCore.Export
 				for (int i = 0; i < num; i++)
 				{
 					GEDCOMNotes note = person.IRec.Notes[i];
-					fDocument.Add(new Paragraph(GKUtils.MergeStrings(note.Notes), fTextFont));
+					this.fWriter.addParagraph(GKUtils.MergeStrings(note.Notes), fTextFont);
 				}
 			}
 
@@ -347,7 +341,7 @@ namespace GKCore.Export
 							st += unk;
 						}
 
-						fDocument.Add(new Paragraph(st, fTextFont));
+						this.fWriter.addParagraph(st, fTextFont);
 					}
 				}
 			}
@@ -379,9 +373,7 @@ namespace GKCore.Export
 				}
 			}
 
-			it.List list = new it.List(it.List.UNORDERED);
-			list.SetListSymbol("\u2022");
-			list.IndentationLeft = 10f;
+			this.fWriter.beginList();
 
 			int num4 = evList.Count;
 			for (int i = 0; i < num4; i++)
@@ -389,7 +381,7 @@ namespace GKCore.Export
 				PedigreeEvent evObj = evList[i];
 				GEDCOMCustomEvent evt = evObj.Event;
 				string li;
-				Paragraph p = new Paragraph();
+
 				if (evObj.IRec == person.IRec)
 				{
 					int ev = GKUtils.GetPersonEventIndex(evt.Name);
@@ -407,7 +399,7 @@ namespace GKCore.Export
 						li = li + " " + LangMan.LS(LSID.LSID_Place) + ": " + evt.Detail.Place.StringValue;
 					}
 
-					p.Add(new Chunk(" " + li, fTextFont));
+					this.fWriter.addListItem(" " + li, fTextFont);
 				}
 				else
 				{
@@ -416,92 +408,132 @@ namespace GKCore.Export
 				    string st = (evObj.IRec.Sex == GEDCOMSex.svMale) ? ": Родился " : ": Родилась ";
 
 					li = dt + st + evObj.IRec.GetNameString(true, false);
-					p.Add(new Chunk(" " + li + " ", fTextFont));
-					p.Add(this.idLink(this.FindPerson(evObj.IRec)));
-				}
+					PedigreePerson prs;
+					string id;
+					prs = this.FindPerson(evObj.IRec);
+					id = (prs != null) ? prs.Id : "";
 
-				list.Add(new it.ListItem(p));
+					this.fWriter.addListItemLink(" " + li + " ", fTextFont, id, fLinkFont);
+				}
 			}
 
-			fDocument.Add(list);
+			this.fWriter.endList();
 		}
 
-		protected override void InternalGenerate()
+		private void InternalGenerate()
 		{
 			try
 			{
-				fFormat = this.fOptions.PedigreeOptions.Format;
+				BaseFont baseFont = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Times.ttf"), BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+				fTitleFont = new Font(baseFont, 20f, Font.BOLD);
+				fChapFont = new Font(baseFont, 16f, Font.BOLD, BaseColor.BLACK);
+				fPersonFont = new Font(baseFont, 10f, Font.BOLD, BaseColor.BLACK);
+				fLinkFont = new Font(baseFont, 8f, Font.UNDERLINE, BaseColor.BLUE);
+				fTextFont = new Font(baseFont, 8f, Font.NORMAL, BaseColor.BLACK);
+				fSupText = new Font(baseFont, 5f, Font.NORMAL, BaseColor.BLUE);
 
-				if (this.fAncestor == null)
+				this.fWriter.addParagraph(fTitle, fTitleFont, CustomWriter.TextAlignment.taCenter /*, SpacingAfter = 6f*/);
+
+				this.fPersonList = new ExtList<PedigreePerson>(true);
+				this.fSourceList = new StringList();
+				try
 				{
-					GKUtils.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
+					this.GenStep(null, this.fAncestor, 1, 1);
+					this.ReIndex();
+
+					int curLevel = 0;
+					int num = this.fPersonList.Count;
+					for (int i = 0; i < num; i++)
+					{
+						PedigreePerson person = this.fPersonList[i];
+						if (curLevel != person.Level)
+						{
+							curLevel = person.Level;
+							string genTitle = LangMan.LS(LSID.LSID_Generation) + " " + ConvHelper.GetRome(curLevel);
+
+							this.fWriter.addParagraph(genTitle, fChapFont, CustomWriter.TextAlignment.taLeft/*, SpacingBefore = 2f, SpacingAfter = 2f*/);
+						}
+
+						this.WritePerson(person);
+					}
+
+					if (this.fSourceList.Count > 0)
+					{
+						this.fWriter.addParagraph(LangMan.LS(LSID.LSID_RPSources), fChapFont, CustomWriter.TextAlignment.taCenter);
+
+						int num2 = this.fSourceList.Count;
+						for (int j = 0; j < num2; j++)
+						{
+							string sn = (j + 1).ToString();
+							string sst = sn + ". " + this.fSourceList[j];
+							string sanc = "src_" + sn;
+
+							this.fWriter.addParagraphAnchor(sst, fTextFont, sanc);
+						}
+					}
 				}
-				else
+				finally
 				{
-					string title = LangMan.LS(LSID.LSID_ExpPedigree) + ": " + this.fAncestor.GetNameString(true, false);
-
-					fDocument.AddTitle("Pedigree");
-					fDocument.AddSubject("Pedigree");
-					fDocument.AddAuthor("");
-					fDocument.AddCreator(GKData.APP_TITLE);
-					fDocument.Open();
-
-					BaseFont baseFont = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Times.ttf"), BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-					fTitleFont = new Font(baseFont, 20f, Font.BOLD);
-					fChapFont = new Font(baseFont, 16f, Font.BOLD, BaseColor.BLACK);
-					fPersonFont = new Font(baseFont, 10f, Font.BOLD, BaseColor.BLACK);
-					fLinkFont = new Font(baseFont, 8f, Font.UNDERLINE, BaseColor.BLUE);
-					fTextFont = new Font(baseFont, 8f, Font.NORMAL, BaseColor.BLACK);
-					fSupText = new Font(baseFont, 5f, Font.NORMAL, BaseColor.BLUE);
-
-					fDocument.Add(new Paragraph(title, fTitleFont) { Alignment = Element.ALIGN_CENTER, SpacingAfter = 6f });
-
-					this.fPersonList = new ExtList<PedigreePerson>(true);
-					this.fSourceList = new StringList();
-					try
-					{
-						this.GenStep(null, this.fAncestor, 1, 1);
-						this.ReIndex();
-
-						int curLevel = 0;
-						int num = this.fPersonList.Count;
-						for (int i = 0; i < num; i++)
-						{
-							PedigreePerson person = this.fPersonList[i];
-							if (curLevel != person.Level)
-							{
-								curLevel = person.Level;
-								string genTitle = LangMan.LS(LSID.LSID_Generation) + " " + ConvHelper.GetRome(curLevel);
-								fDocument.Add(new Paragraph(genTitle, fChapFont) { Alignment = Element.ALIGN_LEFT, SpacingBefore = 2f, SpacingAfter = 2f });
-							}
-
-							this.WritePerson(person);
-						}
-
-						if (this.fSourceList.Count > 0)
-						{
-							fDocument.Add(new Paragraph(LangMan.LS(LSID.LSID_RPSources), fChapFont) { Alignment = Element.ALIGN_CENTER });
-
-							int num2 = this.fSourceList.Count;
-							for (int j = 0; j < num2; j++)
-							{
-								string sn = (j + 1).ToString();
-								Chunk chunk = new Chunk(sn + ". " + this.fSourceList[j], fTextFont);
-								chunk.SetLocalDestination("src_" + sn);
-								fDocument.Add(new Paragraph(chunk));
-							}
-						}
-					}
-					finally
-					{
-                        this.fSourceList.Dispose();
-						this.fPersonList.Dispose();
-					}
+					this.fSourceList.Dispose();
+					this.fPersonList.Dispose();
 				}
 			}
 			catch (Exception)
 			{
 				throw;
+			}
+		}
+
+		public override void Generate(bool show)
+		{
+			this.fFormat = this.fOptions.PedigreeOptions.Format;
+
+			if (this.fAncestor == null)
+			{
+				GKUtils.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
+				return;
+			}
+
+			bool success = false;
+			if (!this.IsRequireFilename("HTML files (*.html)|*.html|PDF files (*.pdf)|*.pdf")) return;
+
+			string ext = FileHelper.GetFileExtension(this.fPath);
+
+			if (string.Equals(ext, ".html")) {
+				this.fWriter = new HTMLWriter();
+			} else {
+				this.fWriter = new PDFWriter();
+			}
+
+			this.fWriter.setAlbumPage(false);
+
+			try
+			{
+				this.fTitle = LangMan.LS(LSID.LSID_ExpPedigree) + ": " + this.fAncestor.GetNameString(true, false);
+				this.fWriter.setDocumentTitle(this.fTitle);
+				this.fWriter.setFileName(this.fPath);
+
+				this.fWriter.beginWrite();
+				try
+				{
+					this.InternalGenerate();
+					success = true;
+				}
+				finally
+				{
+					this.fWriter.endWrite();
+				}
+			}
+			catch (Exception ex)
+			{
+				this.fBase.Host.LogWrite("PDFExporter.Generate(): " + ex.Message);
+				this.fBase.Host.LogWrite("PDFExporter.Generate(): " + ex.StackTrace);
+			}
+
+			if (!success) {
+				MessageBox.Show(LangMan.LS(LSID.LSID_GenerationFailed));
+			} else {
+				if (show) this.ShowResult();
 			}
 		}
 

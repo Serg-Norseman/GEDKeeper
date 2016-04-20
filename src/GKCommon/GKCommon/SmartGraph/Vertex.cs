@@ -1,6 +1,6 @@
 /*
- *  "SmartGraph", the small library for store and manipulations over graphs.
- *  Copyright (C) 2011-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
+ *  "GEDKeeper", the personal genealogical database editor.
+ *  Copyright (C) 2009-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,15 +23,34 @@ using System.Collections.Generic;
 
 namespace GKCommon.SmartGraph
 {
-	public interface IVertex : IComparable
+	public class Vertex : IVertex
 	{
-		string Sign { get; set; }
-		object Value { get; set; }
+    	//private static int nextNodeIdx = 1;
+        //public int Idx;
 
-		int Dist { get; set; }
-		bool Visited { get; set; }
+        public string Sign { get; set; }
+		public object Value { get; set; }
 
-		IEdge EdgeIn { get; set; }
-		List<IEdge> EdgesOut { get; }
+		// path-search runtime
+		public int Dist { get; set; }
+		public bool Visited { get; set; }
+
+		public IEdge EdgeIn { get; set; }
+		public List<IEdge> EdgesOut { get; private set; }
+
+		public Vertex()
+		{
+			//this.Idx = nextNodeIdx++;
+
+			this.EdgesOut = new List<IEdge>();
+		}
+
+		public int CompareTo(object obj)
+		{
+			if (!(obj is Vertex))
+				throw new ArgumentException("Cannot compare two objects");
+
+			return GetHashCode().CompareTo(obj.GetHashCode());
+		}
 	}
 }

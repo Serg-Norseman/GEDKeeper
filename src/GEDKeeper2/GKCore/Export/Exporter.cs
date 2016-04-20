@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Windows.Forms;
 
 using GKCommon;
@@ -18,6 +17,7 @@ namespace GKCore.Export
 		protected string fPath;
 		protected readonly IBaseWindow fBase;
 		protected GEDCOMTree fTree;
+		protected CustomWriter fWriter;
 
 		public GlobalOptions Options
 		{
@@ -39,23 +39,6 @@ namespace GKCore.Export
 		}
 
 		public abstract void Generate(bool show);
-
-		protected void WriteHTMLHeader(StreamWriter stream, string title)
-		{
-			stream.WriteLine("<html>");
-			stream.WriteLine("<head>");
-			stream.WriteLine("<meta HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=windows-1251\">");
-			stream.WriteLine("<link rel=\"stylesheet\" href=\"style.css\" type=\"text/css\"/>");
-			stream.WriteLine("<title>" + title + "</title>");
-			stream.WriteLine("</head>");
-			stream.WriteLine("<body>");
-		}
-
-		protected void WriteHTMLFooter(StreamWriter stream)
-		{
-			stream.WriteLine("</body>");
-			stream.WriteLine("</html>");
-		}
 
 		protected bool IsRequireFilename(string filter)
 		{

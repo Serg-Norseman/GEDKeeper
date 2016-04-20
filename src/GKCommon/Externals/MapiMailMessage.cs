@@ -1,4 +1,7 @@
-﻿using System;
+﻿#if GK_LINUX
+#else
+
+using System;
 using System.Collections;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -616,3 +619,5 @@ namespace Externals.MapiMail
         public static extern uint MAPISendMail(IntPtr lhSession, IntPtr ulUIParam, MapiMessage lpMessage, uint flFlags, uint ulReserved);
     }
 }
+
+#endif

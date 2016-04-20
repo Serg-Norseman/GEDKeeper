@@ -73,6 +73,9 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExpCalculator.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GKCalculatorPlugin.cs" />
     <Compile Include="TfmCalcWidget.cs">
       <SubType>Form</SubType>

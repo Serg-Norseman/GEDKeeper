@@ -1,6 +1,7 @@
 ﻿using System;
 using GKCommon;
 using GKCore;
+using GKCalculatorPlugin;
 using NUnit.Framework;
 
 namespace GKTests

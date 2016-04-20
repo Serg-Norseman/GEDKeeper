@@ -359,39 +359,43 @@ namespace GKUI.Charts
 
 		private void InitSigns()
 		{
-			//FSignsData = new string[] { "GEORGE_CROSS", "SOLDIER", "SOLDIER_FALL", "VETERAN_REAR" };
+			try {
+				//FSignsData = new string[] { "GEORGE_CROSS", "SOLDIER", "SOLDIER_FALL", "VETERAN_REAR" };
 
-			fSignsPic = new Bitmap[9];
+				fSignsPic = new Bitmap[9];
 
-			fSignsPic[0] = GKResources.iTGGeorgeCross;
-			fSignsPic[0].MakeTransparent(this.fSignsPic[0].GetPixel(0, 0));
+				fSignsPic[0] = GKResources.iTGGeorgeCross;
+				fSignsPic[0].MakeTransparent(this.fSignsPic[0].GetPixel(0, 0));
 
-			fSignsPic[1] = GKResources.iTGSoldier;
-			fSignsPic[1].MakeTransparent(this.fSignsPic[1].GetPixel(0, 0));
+				fSignsPic[1] = GKResources.iTGSoldier;
+				fSignsPic[1].MakeTransparent(this.fSignsPic[1].GetPixel(0, 0));
 
-			fSignsPic[2] = GKResources.iTGSoldierFall;
-			fSignsPic[2].MakeTransparent(this.fSignsPic[2].GetPixel(0, 0));
+				fSignsPic[2] = GKResources.iTGSoldierFall;
+				fSignsPic[2].MakeTransparent(this.fSignsPic[2].GetPixel(0, 0));
 
-			fSignsPic[3] = GKResources.iTGVeteranRear;
-			fSignsPic[3].MakeTransparent(this.fSignsPic[3].GetPixel(0, 0));
+				fSignsPic[3] = GKResources.iTGVeteranRear;
+				fSignsPic[3].MakeTransparent(this.fSignsPic[3].GetPixel(0, 0));
 
-			fSignsPic[4] = GKResources.iTGBarbedWire;
-			fSignsPic[4].MakeTransparent(this.fSignsPic[4].GetPixel(0, 0));
+				fSignsPic[4] = GKResources.iTGBarbedWire;
+				fSignsPic[4].MakeTransparent(this.fSignsPic[4].GetPixel(0, 0));
 
-			fSignsPic[5] = GKResources.iTGIslamSym;
-			//fSignsPic[5].MakeTransparent(this.fSignsPic[4].GetPixel(0, 0));
+				fSignsPic[5] = GKResources.iTGIslamSym;
+				//fSignsPic[5].MakeTransparent(this.fSignsPic[4].GetPixel(0, 0));
 
-			fSignsPic[6] = GKResources.iTGLatinCross;
-			//fSignsPic[6].MakeTransparent(this.fSignsPic[4].GetPixel(0, 0));
+				fSignsPic[6] = GKResources.iTGLatinCross;
+				//fSignsPic[6].MakeTransparent(this.fSignsPic[4].GetPixel(0, 0));
 
-			fSignsPic[7] = GKResources.iTGOrthodoxCross;
-			//fSignsPic[7].MakeTransparent(this.fSignsPic[4].GetPixel(0, 0));
+				fSignsPic[7] = GKResources.iTGOrthodoxCross;
+				//fSignsPic[7].MakeTransparent(this.fSignsPic[4].GetPixel(0, 0));
 
-			fSignsPic[8] = GKResources.iTGOldRitualCross;
-			//fSignsPic[8].MakeTransparent(this.fSignsPic[4].GetPixel(0, 0));
+				fSignsPic[8] = GKResources.iTGOldRitualCross;
+				//fSignsPic[8].MakeTransparent(this.fSignsPic[4].GetPixel(0, 0));
 
-			fExpPic = GKResources.iExpand;
-			fExpPic.MakeTransparent(this.fExpPic.GetPixel(0, 0));
+				fExpPic = GKResources.iExpand;
+				fExpPic.MakeTransparent(this.fExpPic.GetPixel(0, 0));
+			} catch (Exception ex) {
+				Logger.LogWrite("TreeChartBox.InitSigns(): " + ex.Message);
+			}
 		}
 
         // FIXME

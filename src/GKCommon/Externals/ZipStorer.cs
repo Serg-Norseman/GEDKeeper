@@ -102,10 +102,10 @@ namespace Externals
         static ZipStorer()
         {
             // Generate CRC32 table
-            fCrcTable = new UInt32[256];
+            fCrcTable = new uint[256];
             for (int i = 0; i < fCrcTable.Length; i++)
             {
-                UInt32 c = (UInt32)i;
+                uint c = (uint)i;
                 for (int j = 0; j < 8; j++)
                 {
                     if ((c & 1) != 0)
@@ -743,7 +743,7 @@ namespace Externals
                 do
                 {
                     this.fZipFileStream.Seek(-5, SeekOrigin.Current);
-                    UInt32 sig = br.ReadUInt32();
+                    uint sig = br.ReadUInt32();
                     if (sig == 0x06054b50)
                     {
                         this.fZipFileStream.Seek(6, SeekOrigin.Current);

@@ -407,19 +407,6 @@ namespace GKCommon.Controls
 		}
 
 		/// <summary>
-		///   Gets or sets a value indicating whether the container enables the user to scroll to any content placed outside of its visible boundaries.
-		/// </summary>
-		/// <value>
-		///   <c>true</c> if the container enables auto-scrolling; otherwise, <c>false</c>.
-		/// </value>
-		[DefaultValue(true)]
-		public override bool AutoScroll
-		{
-			get { return base.AutoScroll; }
-			set { base.AutoScroll = value; }
-		}
-
-		/// <summary>
 		///   Gets or sets the minimum size of the auto-scroll.
 		/// </summary>
 		/// <value></value>
@@ -455,60 +442,6 @@ namespace GKCommon.Controls
 		}
 
 		/// <summary>
-		///   Gets or sets the background color for the control.
-		/// </summary>
-		/// <value></value>
-		/// <returns>
-		///   A <see cref="T:System.Drawing.Color" /> that represents the background color of the control. The default is the value of the
-		///   <see
-		///     cref="P:System.Windows.Forms.Control.DefaultBackColor" />
-		///   property.
-		/// </returns>
-		[DefaultValue(typeof(Color), "White")]
-		public override Color BackColor
-		{
-			get { return base.BackColor; }
-			set { base.BackColor = value; }
-		}
-
-		/// <summary>
-		///   Gets or sets the background image displayed in the control.
-		/// </summary>
-		/// <value></value>
-		/// <returns>
-		///   An <see cref="T:System.Drawing.Image" /> that represents the image to display in the background of the control.
-		/// </returns>
-		[Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public override Image BackgroundImage
-		{
-			get { return base.BackgroundImage; }
-			set { base.BackgroundImage = value; }
-		}
-
-		/// <summary>
-		///   Gets or sets the background image layout as defined in the <see cref="T:System.Windows.Forms.ImageLayout" /> enumeration.
-		/// </summary>
-		/// <value>The background image layout.</value>
-		/// <returns>
-		///   One of the values of <see cref="T:System.Windows.Forms.ImageLayout" /> (
-		///   <see
-		///     cref="F:System.Windows.Forms.ImageLayout.Center" />
-		///   , <see cref="F:System.Windows.Forms.ImageLayout.None" />,
-		///   <see
-		///     cref="F:System.Windows.Forms.ImageLayout.Stretch" />
-		///   , <see cref="F:System.Windows.Forms.ImageLayout.Tile" />, or
-		///   <see
-		///     cref="F:System.Windows.Forms.ImageLayout.Zoom" />
-		///   ). <see cref="F:System.Windows.Forms.ImageLayout.Tile" /> is the default value.
-		/// </returns>
-		[Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public override ImageLayout BackgroundImageLayout
-		{
-			get { return base.BackgroundImageLayout; }
-			set { base.BackgroundImageLayout = value; }
-		}
-
-		/// <summary>
 		///   Gets or sets the size of the drop shadow.
 		/// </summary>
 		/// <value>The size of the drop shadow.</value>
@@ -525,23 +458,6 @@ namespace GKCommon.Controls
 					this.OnDropShadowSizeChanged(EventArgs.Empty);
 				}
 			}
-		}
-
-		/// <summary>
-		///   Gets or sets the font of the text displayed by the control.
-		/// </summary>
-		/// <value></value>
-		/// <returns>
-		///   The <see cref="T:System.Drawing.Font" /> to apply to the text displayed by the control. The default is the value of the
-		///   <see
-		///     cref="P:System.Windows.Forms.Control.DefaultFont" />
-		///   property.
-		/// </returns>
-		[Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public override Font Font
-		{
-			get { return base.Font; }
-			set { base.Font = value; }
 		}
 
 		/// <summary>
@@ -816,20 +732,6 @@ namespace GKCommon.Controls
 						this.ActualSize();
 				}
 			}
-		}
-
-		/// <summary>
-		///   This property is not relevant for this class.
-		/// </summary>
-		/// <value></value>
-		/// <returns>
-		///   The text associated with this control.
-		/// </returns>
-		[Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public override string Text
-		{
-			get { return base.Text; }
-			set { base.Text = value; }
 		}
 
 		/// <summary>
@@ -1118,15 +1020,6 @@ namespace GKCommon.Controls
 		}
 
 		/// <summary>
-		///   Gets the inside view port, excluding any padding.
-		/// </summary>
-		/// <returns></returns>
-		public Rectangle GetInsideViewPort()
-		{
-			return this.GetInsideViewPort(false);
-		}
-
-		/// <summary>
 		///   Gets the inside view port.
 		/// </summary>
 		/// <param name="includePadding">
@@ -1154,20 +1047,6 @@ namespace GKCommon.Controls
 			}
 
 			return new Rectangle(left, top, width, height);
-		}
-
-		/// <summary>
-		///   Returns the source <see cref="T:System.Drawing.Point" /> repositioned to include the current image offset and scaled by the current zoom level
-		/// </summary>
-		/// <param name="source">The source.</param>
-		/// <returns>A Point which has been repositioned to match the current zoom level and image offset</returns>
-		public virtual Point GetOffsetPoint(Point source)
-		{
-			PointF offset;
-
-			offset = this.GetOffsetPoint(new PointF(source.X, source.Y));
-
-			return new Point((int)offset.X, (int)offset.Y);
 		}
 
 		/// <summary>
@@ -1247,16 +1126,6 @@ namespace GKCommon.Controls
 		}
 
 		/// <summary>
-		///   Returns the source <see cref="T:System.Drawing.Point" /> scaled according to the current zoom level
-		/// </summary>
-		/// <param name="source">The source.</param>
-		/// <returns>A Point which has been scaled to match the current zoom level</returns>
-		public virtual Point GetScaledPoint(Point source)
-		{
-			return new Point((int)(source.X * this.ZoomFactor), (int)(source.Y * this.ZoomFactor));
-		}
-
-		/// <summary>
 		///   Returns the source <see cref="T:System.Drawing.PointF" /> scaled according to the current zoom level
 		/// </summary>
 		/// <param name="source">The source.</param>
@@ -1264,16 +1133,6 @@ namespace GKCommon.Controls
 		public virtual PointF GetScaledPoint(PointF source)
 		{
 			return new PointF((float)(source.X * this.ZoomFactor), (float)(source.Y * this.ZoomFactor));
-		}
-
-		/// <summary>
-		///   Returns the source <see cref="T:System.Drawing.Rectangle" /> scaled according to the current zoom level
-		/// </summary>
-		/// <param name="source">The source.</param>
-		/// <returns>A Rectangle which has been resized to match the current zoom level</returns>
-		public virtual Rectangle GetScaledRectangle(Rectangle source)
-		{
-			return new Rectangle((int)(source.Left * this.ZoomFactor), (int)(source.Top * this.ZoomFactor), (int)(source.Width * this.ZoomFactor), (int)(source.Height * this.ZoomFactor));
 		}
 
 		/// <summary>
@@ -1297,16 +1156,6 @@ namespace GKCommon.Controls
 		}
 
 		/// <summary>
-		///   Returns the source <see cref="T:System.Drawing.Size" /> scaled according to the current zoom level
-		/// </summary>
-		/// <param name="source">The source.</param>
-		/// <returns>A Size which has been resized to match the current zoom level</returns>
-		public virtual Size GetScaledSize(Size source)
-		{
-			return new Size((int)(source.Width * this.ZoomFactor), (int)(source.Height * this.ZoomFactor));
-		}
-
-		/// <summary>
 		///   Creates an image based on the current selection region
 		/// </summary>
 		/// <returns>An image containing the selection contents if a selection if present, otherwise null</returns>
@@ -1317,9 +1166,7 @@ namespace GKCommon.Controls
 
 			if (!this.SelectionRegion.IsEmpty)
 			{
-				Rectangle rect;
-
-				rect = this.FitRectangle(new Rectangle((int)this.SelectionRegion.X, (int)this.SelectionRegion.Y, (int)this.SelectionRegion.Width, (int)this.SelectionRegion.Height));
+				Rectangle rect = this.FitRectangle(new Rectangle((int)this.SelectionRegion.X, (int)this.SelectionRegion.Y, (int)this.SelectionRegion.Width, (int)this.SelectionRegion.Height));
 
 				result = new Bitmap(rect.Width, rect.Height);
 
@@ -1378,17 +1225,6 @@ namespace GKCommon.Controls
 		///   Converts the given client size point to represent a coordinate on the source image.
 		/// </summary>
 		/// <param name="point">The source point.</param>
-		/// <returns>Point.Empty is the point could not be matched to the source image, otherwise the new translated point</returns>
-		/// <remarks>If a match is made, the return will be offset by 1</remarks>
-		public virtual Point PointToImage(Point point)
-		{
-			return this.PointToImage(point, false);
-		}
-
-		/// <summary>
-		///   Converts the given client size point to represent a coordinate on the source image.
-		/// </summary>
-		/// <param name="point">The source point.</param>
 		/// <param name="fitToBounds">
 		///   if set to <c>true</c> and the point is outside the bounds of the source image, it will be mapped to the nearest edge.
 		/// </param>
@@ -1396,11 +1232,10 @@ namespace GKCommon.Controls
 		/// <remarks>If a match is made, the return will be offset by 1</remarks>
 		public virtual Point PointToImage(Point point, bool fitToBounds)
 		{
-			Rectangle viewport;
 			int x;
 			int y;
 
-			viewport = this.GetImageViewPort();
+			Rectangle viewport = this.GetImageViewPort();
 
 			if (viewport.Contains(point) || fitToBounds)
 			{
@@ -1436,11 +1271,8 @@ namespace GKCommon.Controls
 		/// <param name="relativeDisplayPoint">The relative display point to offset scrolling by.</param>
 		public virtual void ScrollTo(Point imageLocation, Point relativeDisplayPoint)
 		{
-			int x;
-			int y;
-
-			x = (int)(imageLocation.X * this.ZoomFactor) - relativeDisplayPoint.X;
-			y = (int)(imageLocation.Y * this.ZoomFactor) - relativeDisplayPoint.Y;
+			int x = (int)(imageLocation.X * this.ZoomFactor) - relativeDisplayPoint.X;
+			int y = (int)(imageLocation.Y * this.ZoomFactor) - relativeDisplayPoint.Y;
 
 			this.AutoScrollPosition = new Point(x, y);
 		}
@@ -1638,18 +1470,14 @@ namespace GKCommon.Controls
 
 			using (GraphicsPath path = new GraphicsPath())
 			{
-				int glowSize;
-				int feather;
-
 				path.AddRectangle(viewPort);
-				glowSize = this.DropShadowSize * 3;
-				feather = 50;
+
+				int glowSize = this.DropShadowSize * 3;
+				int feather = 50;
 
 				for (int i = 1; i <= glowSize; i += 2)
 				{
-					int alpha;
-
-					alpha = feather - ((feather / glowSize) * i);
+					int alpha = feather - ((feather / glowSize) * i);
 
 					using (Pen pen = new Pen(Color.FromArgb(alpha, this.ImageBorderColor), i) { LineJoin = LineJoin.Round })
 						g.DrawPath(pen, path);
@@ -1691,7 +1519,7 @@ namespace GKCommon.Controls
 			{
 				Rectangle viewPort;
 
-				graphics.SetClip(this.GetInsideViewPort()); // make sure the image border doesn't overwrite the control border
+				graphics.SetClip(this.GetInsideViewPort(false)); // make sure the image border doesn't overwrite the control border
 
 				viewPort = this.GetImageViewPort();
 				viewPort = new Rectangle(viewPort.Left - 1, viewPort.Top - 1, viewPort.Width + 1, viewPort.Height + 1);
@@ -1879,19 +1707,6 @@ namespace GKCommon.Controls
 
 			this.Invalidate();
 		}
-
-		/// <summary>
-		///   Raises the <see cref="ScrollControl.BorderStyleChanged" /> event.
-		/// </summary>
-		/// <param name="e">
-		///   The <see cref="EventArgs" /> instance containing the event data.
-		/// </param>
-		/*protected override void OnBorderStyleChanged(EventArgs e)
-		{
-			base.OnBorderStyleChanged(e);
-
-			this.AdjustLayout();
-		}*/
 
 		/// <summary>
 		///   Raises the <see cref="System.Windows.Forms.Control.DockChanged" /> event.
@@ -2149,7 +1964,7 @@ namespace GKCommon.Controls
 			{
 				Rectangle innerRectangle;
 
-				innerRectangle = this.GetInsideViewPort();
+				innerRectangle = this.GetInsideViewPort(false);
 
 				// draw the background
 				using (SolidBrush brush = new SolidBrush(this.BackColor))
@@ -2231,14 +2046,14 @@ namespace GKCommon.Controls
 		/// <summary>
 		///   Raises the <see cref="System.Windows.Forms.ScrollableControl.Scroll" /> event.
 		/// </summary>
-		/// <param name="se">
+		/// <param name="e">
 		///   A <see cref="T:System.Windows.Forms.ScrollEventArgs" /> that contains the event data.
 		/// </param>
-		protected override void OnScroll(ScrollEventArgs se)
+		protected override void OnScroll(ScrollEventArgs e)
 		{
 			this.Invalidate();
 
-			base.OnScroll(se);
+			base.OnScroll(e);
 		}
 
 		/// <summary>
@@ -2483,11 +2298,8 @@ namespace GKCommon.Controls
 		/// <param name="cursorPosition">The cursor position.</param>
 		protected virtual void ProcessMouseZoom(bool isZoomIn, Point cursorPosition)
 		{
-			Point currentPixel;
-			int currentZoom;
-
-			currentPixel = this.PointToImage(cursorPosition);
-			currentZoom = this.Zoom;
+			Point currentPixel = this.PointToImage(cursorPosition, false);
+			int currentZoom = this.Zoom;
 
 			this.Zoom = isZoomIn ? this.NextZoom(this.Zoom) : this.PreviousZoom(this.Zoom);
 

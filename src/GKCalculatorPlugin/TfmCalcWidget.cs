@@ -2,8 +2,6 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-using GKCommon;
-
 namespace GKCalculatorPlugin
 {
 	/// <summary>
@@ -19,7 +17,7 @@ namespace GKCalculatorPlugin
 			this.InitializeComponent();
 
 			this.fPlugin = plugin;
-			
+
 			Screen scr = Screen.PrimaryScreen;
 			this.Location = new Point(scr.WorkingArea.Width - this.Width - 10, scr.WorkingArea.Height - this.Height - 10);
 

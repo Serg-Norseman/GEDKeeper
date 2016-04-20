@@ -1,6 +1,6 @@
-/*
- *  "SmartGraph", the small library for store and manipulations over graphs.
- *  Copyright (C) 2011-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
+﻿/*
+ *  "GEDKeeper", the personal genealogical database editor.
+ *  Copyright (C) 2009-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,15 +18,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
+using System.Collections.Generic;
 
 namespace GKCommon.SmartGraph
 {
-	public interface IEdge : IComparable
+	public interface IGraph
 	{
-		int Cost { get; }
-		IVertex Source { get; }
-		IVertex Target { get; }
-		object Value { get; }
+		IEnumerable<IVertex> Vertices { get; }
+		IEnumerable<IEdge> Edges { get; }
 	}
 }

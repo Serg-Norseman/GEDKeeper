@@ -128,11 +128,8 @@ namespace GKCommon
 
 		public string ByteToStr(int index)
 		{
-			return this.ByteToStr(this.data[index]);
-		}
+		    byte val = this.data[index];
 
-		public string ByteToStr(byte val)
-		{
 			uint bt = 1;
 			string res = "";
 
@@ -153,7 +150,7 @@ namespace GKCommon
 		{
 			string res = "";
 			for (int i = 0; i <= 31; i++) {
-				string bt = this.ByteToStr(this.data[i]);
+				string bt = this.ByteToStr(i);
 				res = bt + res;
 			}
 			return res;

@@ -76,13 +76,13 @@
     <Compile Include="TestStubs.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\SmartGraph\BSLib.SmartGraph\BSLib.SmartGraph.csproj">
-      <Project>{DDC8F8CD-B876-4A0E-ABBD-861DB741EC1E}</Project>
-      <Name>BSLib.SmartGraph</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GEDKeeper2\GEDKeeper2.csproj">
       <Project>{19B7D80A-37FD-4E49-9F59-87FA41B677E2}</Project>
       <Name>GEDKeeper2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GKCalculatorPlugin\GKCalculatorPlugin.csproj">
+      <Project>{782e9338-eca7-4095-9157-6ca003801f05}</Project>
+      <Name>GKCalculatorPlugin</Name>
     </ProjectReference>
     <ProjectReference Include="..\GKCommon\GKCommon.csproj">
       <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
