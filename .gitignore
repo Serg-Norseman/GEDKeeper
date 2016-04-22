@@ -1,0 +1,6 @@
+/files/
+/plugins/*.*
+/*.exe*
+/*.dll
+/*.pdb
+/*.xml
