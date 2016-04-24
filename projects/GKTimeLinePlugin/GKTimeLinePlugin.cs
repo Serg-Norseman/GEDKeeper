@@ -56,12 +56,12 @@ namespace GKTimeLinePlugin
         public IHost Host { get { return fHost; } }
         public ILangMan LangMan { get { return fLangMan; } }
 
-        private TfmTimeLine frm;
+        private TimeLineDlg frm;
         
         public void Execute()
         {
 			if (!this.fHost.IsWidgetActive(this)) {
-				frm = new TfmTimeLine(this);
+				frm = new TimeLineDlg(this);
 				frm.Show();
 			} else {
 				frm.Close();

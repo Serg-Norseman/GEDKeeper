@@ -70,11 +70,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GKTimeLinePlugin.cs" />
-    <Compile Include="TfmTimeLine.cs">
+    <Compile Include="TimeLineDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TfmTimeLine.Designer.cs">
-      <DependentUpon>TfmTimeLine.cs</DependentUpon>
+    <Compile Include="TimeLineDlg.Designer.cs">
+      <DependentUpon>TimeLineDlg.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

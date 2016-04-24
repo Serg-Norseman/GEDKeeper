@@ -2,7 +2,7 @@
 
 namespace GKCalendarPlugin
 {
-	partial class TfmCalendar
+	partial class CalendarDlg
 	{
 		private System.Windows.Forms.ListView lvDates;
 		private System.Windows.Forms.MonthCalendar qtc;

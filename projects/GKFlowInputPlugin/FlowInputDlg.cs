@@ -42,7 +42,7 @@ namespace GKFlowInputPlugin
     /// <summary>
     /// Localization: dirty
     /// </summary>
-    public partial class TfmFlowInput : Form
+    public partial class FlowInputDlg : Form
 	{
 		private enum PersonLink
 		{
@@ -67,7 +67,7 @@ namespace GKFlowInputPlugin
 
         #region Instance control
         
-		public TfmFlowInput(Plugin plugin, IBaseWindow aBase)
+		public FlowInputDlg(Plugin plugin, IBaseWindow aBase)
 		{
 			this.InitializeComponent();
 

@@ -32,7 +32,7 @@ namespace GKTimeLinePlugin
     /// <summary>
     /// 
     /// </summary>
-    public partial class TfmTimeLine : Form
+    public partial class TimeLineDlg : Form
 	{
     	private readonly Plugin fPlugin;
 
@@ -41,7 +41,7 @@ namespace GKTimeLinePlugin
         private int fYearMax;
         private int fYearCurrent;
 
-        public TfmTimeLine(Plugin plugin) : base()
+        public TimeLineDlg(Plugin plugin) : base()
 		{
 			this.InitializeComponent();
 			

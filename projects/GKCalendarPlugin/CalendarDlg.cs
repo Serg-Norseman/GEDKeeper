@@ -31,11 +31,11 @@ namespace GKCalendarPlugin
 	/// <summary>
 	/// 
 	/// </summary>
-	public partial class TfmCalendar : Form
+	public partial class CalendarDlg : Form
 	{
     	private readonly Plugin fPlugin;
 
-		public TfmCalendar(Plugin plugin) : base()
+		public CalendarDlg(Plugin plugin) : base()
 		{
 			this.InitializeComponent();
 

@@ -74,11 +74,11 @@
   <ItemGroup>
     <Compile Include="GKTextSearchPlugin.cs" />
     <Compile Include="SearchManager.cs" />
-    <Compile Include="TfmTextSearch.cs">
+    <Compile Include="TextSearchWin.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TfmTextSearch.Designer.cs">
-      <DependentUpon>TfmTextSearch.cs</DependentUpon>
+    <Compile Include="TextSearchWin.Designer.cs">
+      <DependentUpon>TextSearchWin.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -88,8 +88,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="TfmTextSearch.resx">
-      <DependentUpon>TfmTextSearch.cs</DependentUpon>
+    <EmbeddedResource Include="TextSearchWin.resx">
+      <DependentUpon>TextSearchWin.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

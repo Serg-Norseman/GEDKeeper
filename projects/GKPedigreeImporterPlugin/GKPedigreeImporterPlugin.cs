@@ -72,7 +72,7 @@ namespace GKPedigreeImporterPlugin
 
         public void Execute()
         {
-            frmPedigreeImporter frm = new frmPedigreeImporter(this);
+            PedigreeImporterDlg frm = new PedigreeImporterDlg(this);
             frm.ShowDialog();
         }
 

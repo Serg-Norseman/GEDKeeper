@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace GKTimeLinePlugin
 {
-	partial class TfmTimeLine
+	partial class TimeLineDlg
 	{
 		private System.Windows.Forms.StatusBarPanel StatusBarPanel1;
 		private System.Windows.Forms.StatusBarPanel StatusBarPanel2;

@@ -26,7 +26,7 @@ using GKCore.Types;
 
 namespace GKPedigreeImporterPlugin
 {
-    public partial class frmPedigreeImporter : Form
+    public partial class PedigreeImporterDlg : Form
     {
         private readonly IPlugin fPlugin;
         private readonly ILangMan fLangMan;
@@ -35,7 +35,7 @@ namespace GKPedigreeImporterPlugin
         private int fCurrentStage;
         private int fAvailableStage;
 
-        public frmPedigreeImporter(IPlugin fPlugin)
+        public PedigreeImporterDlg(IPlugin fPlugin)
         {
             InitializeComponent();
 

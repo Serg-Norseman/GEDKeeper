@@ -62,12 +62,12 @@ namespace GKCalendarPlugin
         public IHost Host { get { return fHost; } }
         public ILangMan LangMan { get { return fLangMan; } }
 
-        private TfmCalendar frm;
+        private CalendarDlg frm;
         
         public void Execute()
         {
 			if (!this.fHost.IsWidgetActive(this)) {
-				frm = new TfmCalendar(this);
+				frm = new CalendarDlg(this);
 				frm.Show();
 			} else {
 				frm.Close();

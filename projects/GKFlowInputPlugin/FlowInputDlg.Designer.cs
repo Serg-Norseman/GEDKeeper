@@ -2,7 +2,7 @@
 
 namespace GKFlowInputPlugin
 {
-	partial class TfmFlowInput
+	partial class FlowInputDlg
 	{
 		private System.Windows.Forms.Button btnParse;
 		private System.Windows.Forms.Button btnClose;

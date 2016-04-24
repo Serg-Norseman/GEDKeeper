@@ -57,13 +57,13 @@ namespace GKTreeVizPlugin
         		return;
         	}
 
-        	using (frmTVPSettings frm = new frmTVPSettings(this))
+        	using (TVSettingsDlg dlg = new TVSettingsDlg(this))
         	{
-        		if (frm.ShowDialog() == DialogResult.OK)
+        		if (dlg.ShowDialog() == DialogResult.OK)
         		{
         			IBaseWindow curBase = this.fHost.GetCurrentFile(true);
 
-        			using (TreeVizViewer viewer = new TreeVizViewer(curBase, frm.MinGens))
+        			using (TreeVizViewer viewer = new TreeVizViewer(curBase, dlg.MinGens))
         			{
         				viewer.ShowDialog();
         			}

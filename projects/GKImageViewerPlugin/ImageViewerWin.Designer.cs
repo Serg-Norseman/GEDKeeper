@@ -2,12 +2,12 @@
 
 namespace GKImageViewerPlugin
 {
-	partial class ImageViewer
+	partial class ImageViewerWin
 	{
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ImageViewer));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ImageViewerWin));
 			this.ToolBar1 = new System.Windows.Forms.ToolBar();
 			this.tbFileLoad = new System.Windows.Forms.ToolBarButton();
 			this.ImageList_Buttons = new System.Windows.Forms.ImageList(this.components);

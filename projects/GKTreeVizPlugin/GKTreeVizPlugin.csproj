@@ -75,11 +75,11 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="frmTVPSettings.cs">
+    <Compile Include="TVSettingsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmTVPSettings.Designer.cs">
-      <DependentUpon>frmTVPSettings.cs</DependentUpon>
+    <Compile Include="TVSettingsDlg.Designer.cs">
+      <DependentUpon>TVSettingsDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKTreeVizPlugin.cs" />
     <Compile Include="HighResolutionTimer.cs" />
@@ -92,8 +92,8 @@
     <Compile Include="TVPerson.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="frmTVPSettings.resx">
-      <DependentUpon>frmTVPSettings.cs</DependentUpon>
+    <EmbeddedResource Include="TVSettingsDlg.resx">
+      <DependentUpon>TVSettingsDlg.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

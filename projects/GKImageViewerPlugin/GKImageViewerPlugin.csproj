@@ -70,16 +70,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GKImageViewerPlugin.cs" />
-    <Compile Include="ImageViewer.cs">
+    <Compile Include="ImageViewerWin.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ImageViewer.Designer.cs">
-      <DependentUpon>ImageViewer.cs</DependentUpon>
+    <Compile Include="ImageViewerWin.Designer.cs">
+      <DependentUpon>ImageViewerWin.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ImageViewer.resx">
-      <DependentUpon>ImageViewer.cs</DependentUpon>
+    <EmbeddedResource Include="ImageViewerWin.resx">
+      <DependentUpon>ImageViewerWin.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

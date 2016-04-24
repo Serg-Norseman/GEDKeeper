@@ -32,12 +32,12 @@ namespace GKImageViewerPlugin
     /// <summary>
     /// 
     /// </summary>
-    public partial class ImageViewer : Form, ILocalization
+    public partial class ImageViewerWin : Form, ILocalization
 	{
 		private ImageView fImageCtl;
     	private readonly ILangMan fLangMan;
 
-    	public ImageViewer(IPlugin plugin)
+    	public ImageViewerWin(IPlugin plugin)
 		{
 			this.InitializeComponent();
 

@@ -74,11 +74,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GKCalendarPlugin.cs" />
-    <Compile Include="TfmCalendar.cs">
+    <Compile Include="CalendarDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TfmCalendar.Designer.cs">
-      <DependentUpon>TfmCalendar.cs</DependentUpon>
+    <Compile Include="CalendarDlg.Designer.cs">
+      <DependentUpon>CalendarDlg.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

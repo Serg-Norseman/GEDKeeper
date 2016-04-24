@@ -81,7 +81,7 @@ namespace GKTextSearchPlugin
 			IBaseWindow curBase = fHost.GetCurrentFile();
 		    if (curBase == null) return;
 
-		    TfmTextSearch tsWin = new TfmTextSearch(this, curBase);
+		    TextSearchWin tsWin = new TextSearchWin(this, curBase);
 		    tsWin.Show();
         }
 

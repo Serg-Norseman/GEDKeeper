@@ -110,7 +110,7 @@ namespace GKFlowInputPlugin
 			IBaseWindow curBase = fHost.GetCurrentFile();
 		    if (curBase == null) return;
 
-		    using (TfmFlowInput frm = new TfmFlowInput(this, curBase))
+		    using (FlowInputDlg frm = new FlowInputDlg(this, curBase))
 		    {
            		frm.ShowDialog();
 		    }

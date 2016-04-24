@@ -1,6 +1,6 @@
 ﻿namespace GKPedigreeImporterPlugin
 {
-    partial class frmPedigreeImporter
+    partial class PedigreeImporterDlg
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPedigreeImporter));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PedigreeImporterDlg));
             this.lblFile = new System.Windows.Forms.Label();
             this.edImportFile = new System.Windows.Forms.TextBox();
             this.btnImportFileChoose = new System.Windows.Forms.Button();

@@ -25,7 +25,7 @@ using GKCore.Interfaces;
 
 namespace GKTreeVizPlugin
 {
-    public partial class frmTVPSettings : Form
+    public partial class TVSettingsDlg : Form
     {
         private readonly IPlugin fPlugin;
 
@@ -34,7 +34,7 @@ namespace GKTreeVizPlugin
         	get { return decimal.ToInt32(this.edMinGens.Value); }
         }
         
-        public frmTVPSettings(IPlugin fPlugin)
+        public TVSettingsDlg(IPlugin fPlugin)
         {
             InitializeComponent();
             

@@ -1,6 +1,6 @@
 ﻿namespace GKTextSearchPlugin
 {
-	partial class TfmTextSearch
+	partial class TextSearchWin
 	{
 		private System.ComponentModel.IContainer components = null;
 

@@ -74,19 +74,19 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="frmPedigreeImporter.cs">
+    <Compile Include="PedigreeImporterDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmPedigreeImporter.Designer.cs">
-      <DependentUpon>frmPedigreeImporter.cs</DependentUpon>
+    <Compile Include="PedigreeImporterDlg.Designer.cs">
+      <DependentUpon>PedigreeImporterDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Importer.cs" />
     <Compile Include="GKPedigreeImporterPlugin.cs" />
     <Compile Include="ImpUtils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="frmPedigreeImporter.resx">
-      <DependentUpon>frmPedigreeImporter.cs</DependentUpon>
+    <EmbeddedResource Include="PedigreeImporterDlg.resx">
+      <DependentUpon>PedigreeImporterDlg.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

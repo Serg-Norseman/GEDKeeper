@@ -58,7 +58,7 @@ namespace GKImageViewerPlugin
         {
         	try
         	{
-        		ImageViewer frm = new ImageViewer(this);
+        		ImageViewerWin frm = new ImageViewerWin(this);
         		this.fHost.ShowMDI(frm);
         	}
         	catch (Exception ex)

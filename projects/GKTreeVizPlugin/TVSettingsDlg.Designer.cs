@@ -1,6 +1,6 @@
 ﻿namespace GKTreeVizPlugin
 {
-    partial class frmTVPSettings
+    partial class TVSettingsDlg
     {
         /// <summary>
         /// Required designer variable.
