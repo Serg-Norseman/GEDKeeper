@@ -1,0 +1,47 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+# SharpDevelop 5.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKCommonLnx", "GKCommon\GKCommonLnx.csproj", "{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeper2Lnx", "GEDKeeper2\GEDKeeper2Lnx.csproj", "{19B7D80A-37FD-4E49-9F59-87FA41B677E2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Linux_Debug|Any CPU = Linux_Debug|Any CPU
+		Linux_Debug|x86 = Linux_Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}.Debug|x86.Build.0 = Debug|Any CPU
+		{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}.Linux_Debug|Any CPU.ActiveCfg = Linux_Debug|Any CPU
+		{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}.Linux_Debug|Any CPU.Build.0 = Linux_Debug|Any CPU
+		{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}.Linux_Debug|x86.ActiveCfg = Linux_Debug|Any CPU
+		{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}.Linux_Debug|x86.Build.0 = Linux_Debug|Any CPU
+		{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}.Release|x86.ActiveCfg = Release|Any CPU
+		{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}.Release|x86.Build.0 = Release|Any CPU
+		{19B7D80A-37FD-4E49-9F59-87FA41B677E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19B7D80A-37FD-4E49-9F59-87FA41B677E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19B7D80A-37FD-4E49-9F59-87FA41B677E2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{19B7D80A-37FD-4E49-9F59-87FA41B677E2}.Debug|x86.Build.0 = Debug|Any CPU
+		{19B7D80A-37FD-4E49-9F59-87FA41B677E2}.Linux_Debug|Any CPU.ActiveCfg = Linux_Debug|Any CPU
+		{19B7D80A-37FD-4E49-9F59-87FA41B677E2}.Linux_Debug|Any CPU.Build.0 = Linux_Debug|Any CPU
+		{19B7D80A-37FD-4E49-9F59-87FA41B677E2}.Linux_Debug|x86.ActiveCfg = Linux_Debug|Any CPU
+		{19B7D80A-37FD-4E49-9F59-87FA41B677E2}.Linux_Debug|x86.Build.0 = Linux_Debug|Any CPU
+		{19B7D80A-37FD-4E49-9F59-87FA41B677E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19B7D80A-37FD-4E49-9F59-87FA41B677E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19B7D80A-37FD-4E49-9F59-87FA41B677E2}.Release|x86.ActiveCfg = Release|Any CPU
+		{19B7D80A-37FD-4E49-9F59-87FA41B677E2}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
