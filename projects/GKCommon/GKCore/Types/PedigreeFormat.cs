@@ -20,8 +20,8 @@
 
 namespace GKCore.Types
 {
-    public enum PedigreeFormat 
-    { 
+    public enum PedigreeFormat
+    {
         Excess,
         Compact
     }

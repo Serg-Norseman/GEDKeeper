@@ -22,9 +22,9 @@ using System;
 
 namespace GKCore.Types
 {
-	[Serializable]
-	public class MediaFileNotFoundException : Exception
-	{
-		
-	}
+    [Serializable]
+    public class MediaFileNotFoundException : Exception
+    {
+        
+    }
 }
