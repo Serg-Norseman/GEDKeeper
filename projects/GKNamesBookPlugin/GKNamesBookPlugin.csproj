@@ -74,11 +74,11 @@
       <DependentUpon>NBResources.resx</DependentUpon>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="NamesBookDlg.cs">
+    <Compile Include="NamesBookWidget.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="NamesBookDlg.Designer.cs">
-      <DependentUpon>NamesBookDlg.cs</DependentUpon>
+    <Compile Include="NamesBookWidget.Designer.cs">
+      <DependentUpon>NamesBookWidget.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

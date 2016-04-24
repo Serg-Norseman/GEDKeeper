@@ -2,7 +2,7 @@
 
 namespace GKCalendarPlugin
 {
-	partial class CalendarDlg
+	partial class CalendarWidget
 	{
 		private System.Windows.Forms.ListView lvDates;
 		private System.Windows.Forms.MonthCalendar qtc;

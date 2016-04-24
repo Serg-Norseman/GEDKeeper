@@ -31,11 +31,11 @@ namespace GKCalendarPlugin
 	/// <summary>
 	/// 
 	/// </summary>
-	public partial class CalendarDlg : Form
+	public partial class CalendarWidget : Form
 	{
     	private readonly Plugin fPlugin;
 
-		public CalendarDlg(Plugin plugin) : base()
+		public CalendarWidget(Plugin plugin) : base()
 		{
 			this.InitializeComponent();
 

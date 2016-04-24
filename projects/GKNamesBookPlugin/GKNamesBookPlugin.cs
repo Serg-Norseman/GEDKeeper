@@ -54,12 +54,12 @@ namespace GKNamesBookPlugin
         public IHost Host { get { return fHost; } }
         public ILangMan LangMan { get { return fLangMan; } }
 
-        private NamesBookDlg frm;
+        private NamesBookWidget frm;
         
         public void Execute()
         {
 			if (!this.fHost.IsWidgetActive(this)) {
-				frm = new NamesBookDlg(this);
+				frm = new NamesBookWidget(this);
 				frm.Show();
 			} else {
 				frm.Close();

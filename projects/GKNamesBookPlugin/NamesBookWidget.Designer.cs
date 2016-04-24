@@ -2,7 +2,7 @@
 
 namespace GKNamesBookPlugin
 {
-	partial class NamesBookDlg
+	partial class NamesBookWidget
 	{
 		private System.Windows.Forms.ComboBox cbNames;
 		private System.Windows.Forms.TextBox mmDesc;

@@ -50,7 +50,7 @@ namespace GKNamesBookPlugin
     /// <summary>
     /// 
     /// </summary>
-    public partial class NamesBookDlg : Form
+    public partial class NamesBookWidget : Form
 	{
 		private class NameRecord
 		{
@@ -65,7 +65,7 @@ namespace GKNamesBookPlugin
 		private readonly StringList fChurchFNames;
 		private readonly StringList fChurchMNames;
 
-        public NamesBookDlg(Plugin plugin) : base()
+        public NamesBookWidget(Plugin plugin) : base()
         {
             this.InitializeComponent();
 
