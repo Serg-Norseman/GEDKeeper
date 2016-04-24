@@ -137,6 +137,27 @@ namespace GKCommon
             return (Math.Floor((365.25 * (year + 4716))) + Math.Floor((30.6001 * (month + 1))) + day - 1524.5);
         }
 
+        public static double julian_to_jd2(int year, int month, int day)
+        {
+            int a = (14 - month) / 12;
+            int y = year + 4800 - a;
+            int m = month + 12 * a - 3;
+
+            return day + (153 * m + 2) / 5 + 365 * y + y / 4 - 32083;
+        }
+
+        public static void jd_to_julian2(double jd, out int year, out int month, out int day)
+        {
+            int c = (int) (jd) + 32082;
+            int d = (4 * c + 3) / 1461;
+            int e = c - (1461 * d) / 4;
+            int m = (5 * e + 2) / 153;
+
+            day = e - (153 * m + 2) / 5 + 1;
+            month = m + 3 - 12 * (m / 10);
+            year = d - 4800 + m / 10;
+        }
+
         public static void jd_to_julian(double jd, out int year, out int month, out int day)
         {
             jd = (jd + 0.5);
