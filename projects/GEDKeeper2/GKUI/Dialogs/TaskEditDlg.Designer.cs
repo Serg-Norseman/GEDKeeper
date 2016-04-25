@@ -100,7 +100,7 @@ namespace GKUI.Dialogs
 			// btnGoalSelect
 			// 
 			this.btnGoalSelect.AccessibleDescription = "Выбрать запись цели";
-			this.btnGoalSelect.Image = ((System.Drawing.Image)(resources.GetObject("btnGoalSelect.Image")));
+			this.btnGoalSelect.Image = global::GKResources.iRecNew;
 			this.btnGoalSelect.Location = new System.Drawing.Point(627, 16);
 			this.btnGoalSelect.Name = "btnGoalSelect";
 			this.btnGoalSelect.Size = new System.Drawing.Size(39, 34);

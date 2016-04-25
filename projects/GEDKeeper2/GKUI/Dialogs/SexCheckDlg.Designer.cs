@@ -17,7 +17,6 @@ namespace GKUI.Dialogs
 
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SexCheckDlg));
 			this.edName = new System.Windows.Forms.TextBox();
 			this.GroupBox1 = new System.Windows.Forms.GroupBox();
 			this.sbNone = new System.Windows.Forms.RadioButton();
@@ -78,7 +77,7 @@ namespace GKUI.Dialogs
 			// btnAccept
 			// 
 			this.btnAccept.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.btnAccept.Image = ((System.Drawing.Image)(resources.GetObject("btnAccept.Image")));
+			this.btnAccept.Image = global::GKResources.iBtnAccept;
 			this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.btnAccept.Location = new System.Drawing.Point(258, 117);
 			this.btnAccept.Name = "btnAccept";
@@ -90,7 +89,7 @@ namespace GKUI.Dialogs
 			// btnCancel
 			// 
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("btnCancel.Image")));
+			this.btnCancel.Image = global::GKResources.iBtnCancel;
 			this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.btnCancel.Location = new System.Drawing.Point(381, 117);
 			this.btnCancel.Name = "btnCancel";

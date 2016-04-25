@@ -50,7 +50,6 @@ namespace GKUI.Dialogs
 
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EventEditDlg));
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.PageEventData = new System.Windows.Forms.TabControl();
@@ -86,7 +85,7 @@ namespace GKUI.Dialogs
 			// 
 			// btnAccept
 			// 
-			this.btnAccept.Image = ((System.Drawing.Image)(resources.GetObject("btnAccept.Image")));
+			this.btnAccept.Image = global::GKResources.iBtnAccept;
 			this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.btnAccept.Location = new System.Drawing.Point(371, 447);
 			this.btnAccept.Name = "btnAccept";
@@ -99,7 +98,7 @@ namespace GKUI.Dialogs
 			// btnCancel
 			// 
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("btnCancel.Image")));
+			this.btnCancel.Image = global::GKResources.iBtnCancel;
 			this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.btnCancel.Location = new System.Drawing.Point(494, 447);
 			this.btnCancel.Name = "btnCancel";
@@ -230,7 +229,7 @@ namespace GKUI.Dialogs
 			// 
 			this.btnPlaceAdd.AccessibleDescription = "Выбрать или добавить место";
 			this.btnPlaceAdd.Enabled = false;
-			this.btnPlaceAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnPlaceAdd.Image")));
+			this.btnPlaceAdd.Image = global::GKResources.iRecNew;
 			this.btnPlaceAdd.Location = new System.Drawing.Point(511, 142);
 			this.btnPlaceAdd.Name = "btnPlaceAdd";
 			this.btnPlaceAdd.Size = new System.Drawing.Size(39, 34);
@@ -241,7 +240,7 @@ namespace GKUI.Dialogs
 			// 
 			this.btnPlaceDelete.AccessibleDescription = "Перейти на запись места";
 			this.btnPlaceDelete.Enabled = false;
-			this.btnPlaceDelete.Image = ((System.Drawing.Image)(resources.GetObject("btnPlaceDelete.Image")));
+			this.btnPlaceDelete.Image = global::GKResources.iRecDelete;
 			this.btnPlaceDelete.Location = new System.Drawing.Point(557, 142);
 			this.btnPlaceDelete.Name = "btnPlaceDelete";
 			this.btnPlaceDelete.Size = new System.Drawing.Size(39, 34);

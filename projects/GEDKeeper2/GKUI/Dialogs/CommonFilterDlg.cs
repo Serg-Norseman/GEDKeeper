@@ -43,6 +43,11 @@ namespace GKUI.Dialogs
             get { return this.fBase; }
         }
 
+        public CommonFilterDlg()
+        {
+            this.InitializeComponent();
+        }
+
         public CommonFilterDlg(IBaseWindow aBase, ListManager listMan)
         {
             this.InitializeComponent();

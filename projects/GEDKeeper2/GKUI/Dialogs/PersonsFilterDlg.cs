@@ -39,6 +39,11 @@ namespace GKUI.Dialogs
     {
         private readonly IndividualListMan fListMan;
         
+        public PersonsFilterDlg() : base()
+        {
+            InitializeComponent();
+        }
+
         public PersonsFilterDlg(IBaseWindow aBase, ListManager aListMan) : base(aBase, aListMan)
         {
             InitializeComponent();

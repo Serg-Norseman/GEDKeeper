@@ -13,7 +13,6 @@ namespace GKUI.Dialogs
 
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RecordSelectDlg));
 			this.btnSelect = new System.Windows.Forms.Button();
 			this.btnCreate = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
@@ -25,7 +24,7 @@ namespace GKUI.Dialogs
 			// 
 			// btnSelect
 			// 
-			this.btnSelect.Image = ((System.Drawing.Image)(resources.GetObject("btnSelect.Image")));
+			this.btnSelect.Image = global::GKResources.iBtnAccept;
 			this.btnSelect.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.btnSelect.Location = new System.Drawing.Point(280, 466);
 			this.btnSelect.Name = "btnSelect";
@@ -47,7 +46,7 @@ namespace GKUI.Dialogs
 			// btnCancel
 			// 
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("btnCancel.Image")));
+			this.btnCancel.Image = global::GKResources.iBtnCancel;
 			this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.btnCancel.Location = new System.Drawing.Point(414, 466);
 			this.btnCancel.Name = "btnCancel";

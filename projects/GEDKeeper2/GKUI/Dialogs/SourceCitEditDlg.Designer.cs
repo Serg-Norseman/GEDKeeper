@@ -30,10 +30,10 @@ namespace GKUI.Dialogs
 			// 
 			// btnAccept
 			// 
-			this.btnAccept.Image = ((System.Drawing.Image)(resources.GetObject("btnAccept.Image")));
+			this.btnAccept.Image = global::GKResources.iBtnAccept;
 			this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.btnAccept.Location = new System.Drawing.Point(216, 204);
-			this.btnAccept.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.btnAccept.Margin = new System.Windows.Forms.Padding(4);
 			this.btnAccept.Name = "btnAccept";
 			this.btnAccept.Size = new System.Drawing.Size(101, 31);
 			this.btnAccept.TabIndex = 7;
@@ -44,10 +44,10 @@ namespace GKUI.Dialogs
 			// btnCancel
 			// 
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("btnCancel.Image")));
+			this.btnCancel.Image = global::GKResources.iBtnCancel;
 			this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.btnCancel.Location = new System.Drawing.Point(325, 204);
-			this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(101, 31);
 			this.btnCancel.TabIndex = 8;
@@ -67,7 +67,7 @@ namespace GKUI.Dialogs
 			// EditPage
 			// 
 			this.EditPage.Location = new System.Drawing.Point(15, 90);
-			this.EditPage.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.EditPage.Margin = new System.Windows.Forms.Padding(4);
 			this.EditPage.Name = "EditPage";
 			this.EditPage.Size = new System.Drawing.Size(410, 24);
 			this.EditPage.TabIndex = 4;
@@ -87,7 +87,7 @@ namespace GKUI.Dialogs
 			this.btnSourceAdd.AccessibleDescription = "Выбрать персональную запись";
 			this.btnSourceAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnSourceAdd.Image")));
 			this.btnSourceAdd.Location = new System.Drawing.Point(391, 24);
-			this.btnSourceAdd.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.btnSourceAdd.Margin = new System.Windows.Forms.Padding(4);
 			this.btnSourceAdd.Name = "btnSourceAdd";
 			this.btnSourceAdd.Size = new System.Drawing.Size(35, 35);
 			this.btnSourceAdd.TabIndex = 2;
@@ -108,7 +108,7 @@ namespace GKUI.Dialogs
 			// 
 			this.EditCertainty.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.EditCertainty.Location = new System.Drawing.Point(15, 150);
-			this.EditCertainty.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.EditCertainty.Margin = new System.Windows.Forms.Padding(4);
 			this.EditCertainty.Name = "EditCertainty";
 			this.EditCertainty.Size = new System.Drawing.Size(410, 25);
 			this.EditCertainty.TabIndex = 6;
@@ -116,7 +116,7 @@ namespace GKUI.Dialogs
 			// cbSource
 			// 
 			this.cbSource.Location = new System.Drawing.Point(15, 30);
-			this.cbSource.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.cbSource.Margin = new System.Windows.Forms.Padding(4);
 			this.cbSource.Name = "cbSource";
 			this.cbSource.Size = new System.Drawing.Size(368, 25);
 			this.cbSource.Sorted = true;
@@ -142,7 +142,7 @@ namespace GKUI.Dialogs
 			this.Controls.Add(this.cbSource);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.Margin = new System.Windows.Forms.Padding(4);
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "SourceCitEditDlg";

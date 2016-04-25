@@ -30,7 +30,6 @@ namespace GKUI.Dialogs
 
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FamilyEditDlg));
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.GroupBox1 = new System.Windows.Forms.GroupBox();
@@ -60,7 +59,7 @@ namespace GKUI.Dialogs
 			// 
 			// btnAccept
 			// 
-			this.btnAccept.Image = ((System.Drawing.Image)(resources.GetObject("btnAccept.Image")));
+			this.btnAccept.Image = global::GKResources.iBtnAccept;
 			this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.btnAccept.Location = new System.Drawing.Point(462, 491);
 			this.btnAccept.Name = "btnAccept";
@@ -73,7 +72,7 @@ namespace GKUI.Dialogs
 			// btnCancel
 			// 
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("btnCancel.Image")));
+			this.btnCancel.Image = global::GKResources.iBtnCancel;
 			this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.btnCancel.Location = new System.Drawing.Point(582, 491);
 			this.btnCancel.Name = "btnCancel";
@@ -117,7 +116,7 @@ namespace GKUI.Dialogs
 			// 
 			this.btnHusbandAdd.AccessibleDescription = "Выбрать или добавить мужа";
 			this.btnHusbandAdd.Enabled = false;
-			this.btnHusbandAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnHusbandAdd.Image")));
+			this.btnHusbandAdd.Image = global::GKResources.iRecNew;
 			this.btnHusbandAdd.Location = new System.Drawing.Point(560, 26);
 			this.btnHusbandAdd.Name = "btnHusbandAdd";
 			this.btnHusbandAdd.Size = new System.Drawing.Size(39, 34);
@@ -128,7 +127,7 @@ namespace GKUI.Dialogs
 			// 
 			this.btnHusbandDelete.AccessibleDescription = "Отсоединить мужа";
 			this.btnHusbandDelete.Enabled = false;
-			this.btnHusbandDelete.Image = ((System.Drawing.Image)(resources.GetObject("btnHusbandDelete.Image")));
+			this.btnHusbandDelete.Image = global::GKResources.iRecDelete;
 			this.btnHusbandDelete.Location = new System.Drawing.Point(601, 26);
 			this.btnHusbandDelete.Name = "btnHusbandDelete";
 			this.btnHusbandDelete.Size = new System.Drawing.Size(39, 34);
@@ -138,7 +137,7 @@ namespace GKUI.Dialogs
 			// btnHusbandSel
 			// 
 			this.btnHusbandSel.AccessibleDescription = "Перейти на запись мужа";
-			this.btnHusbandSel.Image = ((System.Drawing.Image)(resources.GetObject("btnHusbandSel.Image")));
+			this.btnHusbandSel.Image = global::GKResources.iToMan;
 			this.btnHusbandSel.Location = new System.Drawing.Point(641, 26);
 			this.btnHusbandSel.Name = "btnHusbandSel";
 			this.btnHusbandSel.Size = new System.Drawing.Size(39, 34);
@@ -148,7 +147,7 @@ namespace GKUI.Dialogs
 			// btnWifeSel
 			// 
 			this.btnWifeSel.AccessibleDescription = "Перейти на запись жены";
-			this.btnWifeSel.Image = ((System.Drawing.Image)(resources.GetObject("btnWifeSel.Image")));
+			this.btnWifeSel.Image = global::GKResources.iToMan;
 			this.btnWifeSel.Location = new System.Drawing.Point(641, 64);
 			this.btnWifeSel.Name = "btnWifeSel";
 			this.btnWifeSel.Size = new System.Drawing.Size(39, 34);
@@ -159,7 +158,7 @@ namespace GKUI.Dialogs
 			// 
 			this.btnWifeDelete.AccessibleDescription = "Отсоединить жену";
 			this.btnWifeDelete.Enabled = false;
-			this.btnWifeDelete.Image = ((System.Drawing.Image)(resources.GetObject("btnWifeDelete.Image")));
+			this.btnWifeDelete.Image = global::GKResources.iRecDelete;
 			this.btnWifeDelete.Location = new System.Drawing.Point(601, 64);
 			this.btnWifeDelete.Name = "btnWifeDelete";
 			this.btnWifeDelete.Size = new System.Drawing.Size(39, 34);
@@ -170,7 +169,7 @@ namespace GKUI.Dialogs
 			// 
 			this.btnWifeAdd.AccessibleDescription = "Выбрать или добавить жену";
 			this.btnWifeAdd.Enabled = false;
-			this.btnWifeAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnWifeAdd.Image")));
+			this.btnWifeAdd.Image = global::GKResources.iRecNew;
 			this.btnWifeAdd.Location = new System.Drawing.Point(560, 64);
 			this.btnWifeAdd.Name = "btnWifeAdd";
 			this.btnWifeAdd.Size = new System.Drawing.Size(39, 34);

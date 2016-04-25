@@ -16,7 +16,6 @@ namespace GKUI.Dialogs
 
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AssociationEditDlg));
 			this.Label1 = new System.Windows.Forms.Label();
 			this.Label2 = new System.Windows.Forms.Label();
 			this.btnPersonAdd = new System.Windows.Forms.Button();
@@ -50,7 +49,7 @@ namespace GKUI.Dialogs
 			this.btnPersonAdd.AccessibleName = "";
 			this.btnPersonAdd.AccessibleRole = System.Windows.Forms.AccessibleRole.ToolTip;
 			this.btnPersonAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.btnPersonAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnPersonAdd.Image")));
+			this.btnPersonAdd.Image = global::GKResources.iRecNew;
 			this.btnPersonAdd.Location = new System.Drawing.Point(448, 84);
 			this.btnPersonAdd.Name = "btnPersonAdd";
 			this.btnPersonAdd.Size = new System.Drawing.Size(39, 34);
@@ -59,7 +58,7 @@ namespace GKUI.Dialogs
 			// 
 			// btnAccept
 			// 
-			this.btnAccept.Image = ((System.Drawing.Image)(resources.GetObject("btnAccept.Image")));
+			this.btnAccept.Image = global::GKResources.iBtnAccept;
 			this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.btnAccept.Location = new System.Drawing.Point(246, 136);
 			this.btnAccept.Name = "btnAccept";
@@ -72,7 +71,7 @@ namespace GKUI.Dialogs
 			// btnCancel
 			// 
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("btnCancel.Image")));
+			this.btnCancel.Image = global::GKResources.iBtnCancel;
 			this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.btnCancel.Location = new System.Drawing.Point(370, 136);
 			this.btnCancel.Name = "btnCancel";
