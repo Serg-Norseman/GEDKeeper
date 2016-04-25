@@ -15,6 +15,7 @@ namespace GKUI.Dialogs
 
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RepositoryEditDlg));
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.GroupBox1 = new System.Windows.Forms.GroupBox();
@@ -29,11 +30,11 @@ namespace GKUI.Dialogs
 			// 
 			// btnAccept
 			// 
-			this.btnAccept.Image = global::GKResources.iBtnAccept;
+			this.btnAccept.Image = ((System.Drawing.Image)(resources.GetObject("btnAccept.Image")));
 			this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.btnAccept.Location = new System.Drawing.Point(240, 336);
+			this.btnAccept.Location = new System.Drawing.Point(336, 408);
 			this.btnAccept.Name = "btnAccept";
-			this.btnAccept.Size = new System.Drawing.Size(81, 25);
+			this.btnAccept.Size = new System.Drawing.Size(113, 30);
 			this.btnAccept.TabIndex = 3;
 			this.btnAccept.Text = "Принять";
 			this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -42,11 +43,11 @@ namespace GKUI.Dialogs
 			// btnCancel
 			// 
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Image = global::GKResources.iBtnCancel;
+			this.btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("btnCancel.Image")));
 			this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.btnCancel.Location = new System.Drawing.Point(328, 336);
+			this.btnCancel.Location = new System.Drawing.Point(459, 408);
 			this.btnCancel.Name = "btnCancel";
-			this.btnCancel.Size = new System.Drawing.Size(81, 25);
+			this.btnCancel.Size = new System.Drawing.Size(114, 30);
 			this.btnCancel.TabIndex = 4;
 			this.btnCancel.Text = "Отменить";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -58,30 +59,31 @@ namespace GKUI.Dialogs
 			this.GroupBox1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.GroupBox1.Location = new System.Drawing.Point(0, 0);
 			this.GroupBox1.Name = "GroupBox1";
-			this.GroupBox1.Size = new System.Drawing.Size(417, 41);
+			this.GroupBox1.Size = new System.Drawing.Size(586, 50);
 			this.GroupBox1.TabIndex = 0;
 			this.GroupBox1.TabStop = false;
 			// 
 			// Label1
 			// 
-			this.Label1.Location = new System.Drawing.Point(8, 20);
+			this.Label1.AutoSize = true;
+			this.Label1.Location = new System.Drawing.Point(12, 18);
 			this.Label1.Name = "Label1";
-			this.Label1.Size = new System.Drawing.Size(60, 13);
+			this.Label1.Size = new System.Drawing.Size(67, 17);
 			this.Label1.TabIndex = 0;
 			this.Label1.Text = "Название";
 			// 
 			// edName
 			// 
-			this.edName.Location = new System.Drawing.Point(72, 12);
+			this.edName.Location = new System.Drawing.Point(101, 15);
 			this.edName.Name = "edName";
-			this.edName.Size = new System.Drawing.Size(337, 21);
+			this.edName.Size = new System.Drawing.Size(472, 24);
 			this.edName.TabIndex = 1;
 			// 
 			// btnAddress
 			// 
-			this.btnAddress.Location = new System.Drawing.Point(8, 336);
+			this.btnAddress.Location = new System.Drawing.Point(11, 408);
 			this.btnAddress.Name = "btnAddress";
-			this.btnAddress.Size = new System.Drawing.Size(81, 25);
+			this.btnAddress.Size = new System.Drawing.Size(114, 30);
 			this.btnAddress.TabIndex = 2;
 			this.btnAddress.Text = "Адрес...";
 			this.btnAddress.Click += new System.EventHandler(this.btnAddress_Click);
@@ -90,26 +92,27 @@ namespace GKUI.Dialogs
 			// 
 			this.PagesData.Controls.Add(this.SheetNotes);
 			this.PagesData.Dock = System.Windows.Forms.DockStyle.Top;
-			this.PagesData.Location = new System.Drawing.Point(0, 41);
+			this.PagesData.Location = new System.Drawing.Point(0, 50);
 			this.PagesData.Name = "PagesData";
 			this.PagesData.SelectedIndex = 0;
-			this.PagesData.Size = new System.Drawing.Size(417, 280);
+			this.PagesData.Size = new System.Drawing.Size(586, 340);
 			this.PagesData.TabIndex = 1;
 			// 
 			// SheetNotes
 			// 
-			this.SheetNotes.Location = new System.Drawing.Point(4, 22);
+			this.SheetNotes.Location = new System.Drawing.Point(4, 26);
 			this.SheetNotes.Name = "SheetNotes";
-			this.SheetNotes.Size = new System.Drawing.Size(409, 254);
+			this.SheetNotes.Size = new System.Drawing.Size(578, 310);
 			this.SheetNotes.TabIndex = 0;
 			this.SheetNotes.Text = "Заметки";
 			// 
-			// TfmRepositoryEdit
+			// RepositoryEditDlg
 			// 
 			this.AcceptButton = this.btnAccept;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.CancelButton = this.btnCancel;
-			this.ClientSize = new System.Drawing.Size(417, 369);
+			this.ClientSize = new System.Drawing.Size(586, 455);
 			this.Controls.Add(this.PagesData);
 			this.Controls.Add(this.btnAccept);
 			this.Controls.Add(this.btnCancel);
@@ -119,7 +122,7 @@ namespace GKUI.Dialogs
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "TfmRepositoryEdit";
+			this.Name = "RepositoryEditDlg";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Архив";

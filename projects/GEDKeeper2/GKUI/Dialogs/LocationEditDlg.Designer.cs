@@ -29,6 +29,7 @@ namespace GKUI.Dialogs
 
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LocationEditDlg));
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.PagesData = new System.Windows.Forms.TabControl();
@@ -58,11 +59,11 @@ namespace GKUI.Dialogs
 			// 
 			// btnAccept
 			// 
-			this.btnAccept.Image = global::GKResources.iBtnAccept;
+			this.btnAccept.Image = ((System.Drawing.Image)(resources.GetObject("btnAccept.Image")));
 			this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.btnAccept.Location = new System.Drawing.Point(384, 440);
+			this.btnAccept.Location = new System.Drawing.Point(538, 534);
 			this.btnAccept.Name = "btnAccept";
-			this.btnAccept.Size = new System.Drawing.Size(81, 25);
+			this.btnAccept.Size = new System.Drawing.Size(113, 31);
 			this.btnAccept.TabIndex = 1;
 			this.btnAccept.Text = "Принять";
 			this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -71,11 +72,11 @@ namespace GKUI.Dialogs
 			// btnCancel
 			// 
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Image = global::GKResources.iBtnCancel;
+			this.btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("btnCancel.Image")));
 			this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.btnCancel.Location = new System.Drawing.Point(472, 440);
+			this.btnCancel.Location = new System.Drawing.Point(661, 534);
 			this.btnCancel.Name = "btnCancel";
-			this.btnCancel.Size = new System.Drawing.Size(81, 25);
+			this.btnCancel.Size = new System.Drawing.Size(113, 31);
 			this.btnCancel.TabIndex = 2;
 			this.btnCancel.Text = "Отменить";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -88,7 +89,7 @@ namespace GKUI.Dialogs
 			this.PagesData.Location = new System.Drawing.Point(0, 0);
 			this.PagesData.Name = "PagesData";
 			this.PagesData.SelectedIndex = 0;
-			this.PagesData.Size = new System.Drawing.Size(561, 425);
+			this.PagesData.Size = new System.Drawing.Size(785, 516);
 			this.PagesData.TabIndex = 0;
 			// 
 			// SheetCommon
@@ -101,57 +102,60 @@ namespace GKUI.Dialogs
 			this.SheetCommon.Controls.Add(this.EditLongitude);
 			this.SheetCommon.Controls.Add(this.GroupBox1);
 			this.SheetCommon.Controls.Add(this.btnShowOnMap);
-			this.SheetCommon.Location = new System.Drawing.Point(4, 22);
+			this.SheetCommon.Location = new System.Drawing.Point(4, 26);
 			this.SheetCommon.Name = "SheetCommon";
-			this.SheetCommon.Size = new System.Drawing.Size(553, 399);
+			this.SheetCommon.Size = new System.Drawing.Size(777, 486);
 			this.SheetCommon.TabIndex = 0;
 			this.SheetCommon.Text = "Основное";
 			// 
 			// Label1
 			// 
-			this.Label1.Location = new System.Drawing.Point(16, 8);
+			this.Label1.AutoSize = true;
+			this.Label1.Location = new System.Drawing.Point(22, 10);
 			this.Label1.Name = "Label1";
-			this.Label1.Size = new System.Drawing.Size(60, 13);
+			this.Label1.Size = new System.Drawing.Size(67, 17);
 			this.Label1.TabIndex = 0;
 			this.Label1.Text = "Название";
 			// 
 			// Label2
 			// 
-			this.Label2.Location = new System.Drawing.Point(287, 8);
+			this.Label2.AutoSize = true;
+			this.Label2.Location = new System.Drawing.Point(402, 10);
 			this.Label2.Name = "Label2";
-			this.Label2.Size = new System.Drawing.Size(50, 13);
+			this.Label2.Size = new System.Drawing.Size(59, 17);
 			this.Label2.TabIndex = 2;
 			this.Label2.Text = "Широта";
 			// 
 			// Label3
 			// 
-			this.Label3.Location = new System.Drawing.Point(375, 8);
+			this.Label3.AutoSize = true;
+			this.Label3.Location = new System.Drawing.Point(525, 10);
 			this.Label3.Name = "Label3";
-			this.Label3.Size = new System.Drawing.Size(50, 13);
+			this.Label3.Size = new System.Drawing.Size(63, 17);
 			this.Label3.TabIndex = 4;
 			this.Label3.Text = "Долгота";
 			// 
 			// EditName
 			// 
-			this.EditName.Location = new System.Drawing.Point(16, 24);
+			this.EditName.Location = new System.Drawing.Point(22, 29);
 			this.EditName.Name = "EditName";
-			this.EditName.Size = new System.Drawing.Size(265, 21);
+			this.EditName.Size = new System.Drawing.Size(371, 24);
 			this.EditName.TabIndex = 1;
 			this.EditName.TextChanged += new System.EventHandler(this.EditName_TextChanged);
 			this.EditName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.EditName_KeyDown);
 			// 
 			// EditLatitude
 			// 
-			this.EditLatitude.Location = new System.Drawing.Point(287, 24);
+			this.EditLatitude.Location = new System.Drawing.Point(402, 29);
 			this.EditLatitude.Name = "EditLatitude";
-			this.EditLatitude.Size = new System.Drawing.Size(81, 21);
+			this.EditLatitude.Size = new System.Drawing.Size(113, 24);
 			this.EditLatitude.TabIndex = 3;
 			// 
 			// EditLongitude
 			// 
-			this.EditLongitude.Location = new System.Drawing.Point(375, 24);
+			this.EditLongitude.Location = new System.Drawing.Point(525, 29);
 			this.EditLongitude.Name = "EditLongitude";
-			this.EditLongitude.Size = new System.Drawing.Size(81, 21);
+			this.EditLongitude.Size = new System.Drawing.Size(113, 24);
 			this.EditLongitude.TabIndex = 5;
 			// 
 			// GroupBox1
@@ -161,9 +165,9 @@ namespace GKUI.Dialogs
 			this.GroupBox1.Controls.Add(this.btnSelect);
 			this.GroupBox1.Controls.Add(this.btnSelectName);
 			this.GroupBox1.Controls.Add(this.panMap);
-			this.GroupBox1.Location = new System.Drawing.Point(0, 51);
+			this.GroupBox1.Location = new System.Drawing.Point(0, 62);
 			this.GroupBox1.Name = "GroupBox1";
-			this.GroupBox1.Size = new System.Drawing.Size(553, 346);
+			this.GroupBox1.Size = new System.Drawing.Size(774, 420);
 			this.GroupBox1.TabIndex = 7;
 			this.GroupBox1.TabStop = false;
 			this.GroupBox1.Text = "Поиск координат (Google Maps)";
@@ -175,9 +179,9 @@ namespace GKUI.Dialogs
 									this.ColumnHeader2,
 									this.ColumnHeader3});
 			this.ListGeoCoords.FullRowSelect = true;
-			this.ListGeoCoords.Location = new System.Drawing.Point(16, 16);
+			this.ListGeoCoords.Location = new System.Drawing.Point(22, 19);
 			this.ListGeoCoords.Name = "ListGeoCoords";
-			this.ListGeoCoords.Size = new System.Drawing.Size(402, 89);
+			this.ListGeoCoords.Size = new System.Drawing.Size(563, 109);
 			this.ListGeoCoords.TabIndex = 1;
 			this.ListGeoCoords.UseCompatibleStateImageBehavior = false;
 			this.ListGeoCoords.View = System.Windows.Forms.View.Details;
@@ -200,70 +204,71 @@ namespace GKUI.Dialogs
 			// 
 			// btnSearch
 			// 
-			this.btnSearch.Location = new System.Drawing.Point(429, 16);
+			this.btnSearch.Location = new System.Drawing.Point(601, 19);
 			this.btnSearch.Name = "btnSearch";
-			this.btnSearch.Size = new System.Drawing.Size(105, 25);
+			this.btnSearch.Size = new System.Drawing.Size(147, 31);
 			this.btnSearch.TabIndex = 2;
 			this.btnSearch.Text = "Поиск";
 			this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
 			// 
 			// btnSelect
 			// 
-			this.btnSelect.Location = new System.Drawing.Point(429, 48);
+			this.btnSelect.Location = new System.Drawing.Point(601, 58);
 			this.btnSelect.Name = "btnSelect";
-			this.btnSelect.Size = new System.Drawing.Size(105, 25);
+			this.btnSelect.Size = new System.Drawing.Size(147, 31);
 			this.btnSelect.TabIndex = 3;
 			this.btnSelect.Text = "Выбрать коорд.";
 			this.btnSelect.Click += new System.EventHandler(this.btnSelect_Click);
 			// 
 			// btnSelectName
 			// 
-			this.btnSelectName.Location = new System.Drawing.Point(429, 80);
+			this.btnSelectName.Location = new System.Drawing.Point(601, 97);
 			this.btnSelectName.Name = "btnSelectName";
-			this.btnSelectName.Size = new System.Drawing.Size(105, 25);
+			this.btnSelectName.Size = new System.Drawing.Size(147, 31);
 			this.btnSelectName.TabIndex = 4;
 			this.btnSelectName.Text = "Выбрать название";
 			this.btnSelectName.Click += new System.EventHandler(this.btnSelectName_Click);
 			// 
 			// panMap
 			// 
-			this.panMap.Location = new System.Drawing.Point(2, 111);
+			this.panMap.Location = new System.Drawing.Point(3, 135);
 			this.panMap.Name = "panMap";
-			this.panMap.Size = new System.Drawing.Size(549, 233);
+			this.panMap.Size = new System.Drawing.Size(768, 283);
 			this.panMap.TabIndex = 0;
 			// 
 			// btnShowOnMap
 			// 
 			this.btnShowOnMap.AccessibleDescription = "Показать на карте";
-			this.btnShowOnMap.Location = new System.Drawing.Point(464, 24);
+			this.btnShowOnMap.Location = new System.Drawing.Point(650, 29);
 			this.btnShowOnMap.Name = "btnShowOnMap";
-			this.btnShowOnMap.Size = new System.Drawing.Size(70, 21);
+			this.btnShowOnMap.Size = new System.Drawing.Size(98, 26);
 			this.btnShowOnMap.TabIndex = 6;
 			this.btnShowOnMap.Text = "Показать";
 			this.btnShowOnMap.Click += new System.EventHandler(this.btnShowOnMap_Click);
 			// 
 			// SheetNotes
 			// 
-			this.SheetNotes.Location = new System.Drawing.Point(4, 22);
+			this.SheetNotes.Location = new System.Drawing.Point(4, 26);
 			this.SheetNotes.Name = "SheetNotes";
-			this.SheetNotes.Size = new System.Drawing.Size(553, 399);
+			this.SheetNotes.Size = new System.Drawing.Size(777, 486);
 			this.SheetNotes.TabIndex = 1;
 			this.SheetNotes.Text = "Заметки";
 			// 
 			// SheetMultimedia
 			// 
-			this.SheetMultimedia.Location = new System.Drawing.Point(4, 22);
+			this.SheetMultimedia.Location = new System.Drawing.Point(4, 26);
 			this.SheetMultimedia.Name = "SheetMultimedia";
-			this.SheetMultimedia.Size = new System.Drawing.Size(553, 399);
+			this.SheetMultimedia.Size = new System.Drawing.Size(777, 486);
 			this.SheetMultimedia.TabIndex = 2;
 			this.SheetMultimedia.Text = "Мультимедиа";
 			// 
-			// TfmLocationEdit
+			// LocationEditDlg
 			// 
 			this.AcceptButton = this.btnAccept;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.CancelButton = this.btnCancel;
-			this.ClientSize = new System.Drawing.Size(561, 473);
+			this.ClientSize = new System.Drawing.Size(784, 578);
 			this.Controls.Add(this.PagesData);
 			this.Controls.Add(this.btnAccept);
 			this.Controls.Add(this.btnCancel);
@@ -271,7 +276,7 @@ namespace GKUI.Dialogs
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "TfmLocationEdit";
+			this.Name = "LocationEditDlg";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Местоположение";

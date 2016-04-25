@@ -578,6 +578,12 @@
     <EmbeddedResource Include="GKUI\Dialogs\UserRefEditDlg.resx">
       <DependentUpon>UserRefEditDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\MapsViewerWin.resx">
+      <DependentUpon>MapsViewerWin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\OrganizerWin.resx">
+      <DependentUpon>OrganizerWin.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\PatriarchsViewerWin.resx">
       <DependentUpon>PatriarchsViewerWin.cs</DependentUpon>
     </EmbeddedResource>

@@ -35,7 +35,7 @@ namespace GKUI
 			this.PageRecords.Location = new System.Drawing.Point(0, 0);
 			this.PageRecords.Name = "PageRecords";
 			this.PageRecords.SelectedIndex = 0;
-			this.PageRecords.Size = new System.Drawing.Size(762, 290);
+			this.PageRecords.Size = new System.Drawing.Size(976, 462);
 			this.PageRecords.TabIndex = 0;
 			this.PageRecords.SelectedIndexChanged += new System.EventHandler(this.PageRecords_SelectedIndexChanged);
 			// 
@@ -46,7 +46,7 @@ namespace GKUI
 									this.miRecordDelete,
 									this.miRecordDuplicate});
 			this.contextMenu.Name = "contextMenu";
-			this.contextMenu.Size = new System.Drawing.Size(212, 98);
+			this.contextMenu.Size = new System.Drawing.Size(212, 76);
 			this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
 			// 
 			// miRecordEdit
@@ -70,14 +70,15 @@ namespace GKUI
 			this.miRecordDuplicate.Text = "toolStripMenuItem1";
 			this.miRecordDuplicate.Click += new System.EventHandler(this.miRecordDuplicate_Click);
 			// 
-			// TfmBase
+			// BaseWin
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(7, 17);
-			this.ClientSize = new System.Drawing.Size(762, 290);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+			this.ClientSize = new System.Drawing.Size(976, 462);
 			this.Controls.Add(this.PageRecords);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.KeyPreview = true;
-			this.Name = "TfmBase";
+			this.Name = "BaseWin";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "GEDKeeper2";
 			this.Activated += new System.EventHandler(this.Form_Activated);

@@ -202,7 +202,7 @@ namespace GKUI
 			// StatusBar
 			// 
 			this.StatusBar.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.StatusBar.Location = new System.Drawing.Point(0, 921);
+			this.StatusBar.Location = new System.Drawing.Point(0, 946);
 			this.StatusBar.Name = "StatusBar";
 			this.StatusBar.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
 									this.StatusBarPanel1,
@@ -302,7 +302,7 @@ namespace GKUI
 			this.ToolBar1.Location = new System.Drawing.Point(0, 0);
 			this.ToolBar1.Name = "ToolBar1";
 			this.ToolBar1.ShowToolTips = true;
-			this.ToolBar1.Size = new System.Drawing.Size(896, 40);
+			this.ToolBar1.Size = new System.Drawing.Size(896, 32);
 			this.ToolBar1.TabIndex = 0;
 			this.ToolBar1.ButtonClick += new System.Windows.Forms.ToolBarButtonClickEventHandler(this.ToolBar1_ButtonClick);
 			// 
@@ -873,11 +873,12 @@ namespace GKUI
 			this.ImageList_Shields.Images.SetKeyName(1, "shield_mid.bmp");
 			this.ImageList_Shields.Images.SetKeyName(2, "shield_none.bmp");
 			// 
-			// TfmGEDKeeper
+			// MainWin
 			// 
 			this.AllowDrop = true;
-			this.AutoScaleBaseSize = new System.Drawing.Size(7, 17);
-			this.ClientSize = new System.Drawing.Size(896, 945);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+			this.ClientSize = new System.Drawing.Size(896, 970);
 			this.Controls.Add(this.StatusBar);
 			this.Controls.Add(this.ToolBar1);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F);
@@ -885,7 +886,7 @@ namespace GKUI
 			this.KeyPreview = true;
 			this.Location = new System.Drawing.Point(337, 111);
 			this.Menu = this.MainMenu1;
-			this.Name = "TfmGEDKeeper";
+			this.Name = "MainWin";
 			this.Text = "GEDKeeper2";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_Closing);
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form_Closed);

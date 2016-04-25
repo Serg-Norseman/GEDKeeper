@@ -19,6 +19,7 @@ namespace GKUI
 
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StatisticsWin));
 			this.GroupBox1 = new System.Windows.Forms.GroupBox();
 			this.ListCommon = new System.Windows.Forms.ListView();
 			this.ColumnHeader1 = new System.Windows.Forms.ColumnHeader();
@@ -123,20 +124,21 @@ namespace GKUI
 			// 
 			// tbExcelExport
 			// 
-			this.tbExcelExport.Image = global::GKResources.iExcel;
+			this.tbExcelExport.Image = ((System.Drawing.Image)(resources.GetObject("tbExcelExport.Image")));
 			this.tbExcelExport.Name = "tbExcelExport";
 			this.tbExcelExport.Size = new System.Drawing.Size(23, 25);
 			this.tbExcelExport.Click += new System.EventHandler(this.tbExcelExport_Click);
 			// 
-			// TfmStats
+			// StatisticsWin
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(7, 17);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.ClientSize = new System.Drawing.Size(893, 574);
 			this.Controls.Add(this.Panel1);
 			this.Controls.Add(this.GroupBox1);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.KeyPreview = true;
-			this.Name = "TfmStats";
+			this.Name = "StatisticsWin";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Статистика";
 			this.Load += new System.EventHandler(this.TfmStats_Load);

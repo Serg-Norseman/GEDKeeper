@@ -27,6 +27,7 @@ namespace GKUI.Dialogs
 
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ResearchEditDlg));
 			this.GroupBox1 = new System.Windows.Forms.GroupBox();
 			this.Label1 = new System.Windows.Forms.Label();
 			this.Label2 = new System.Windows.Forms.Label();
@@ -69,96 +70,102 @@ namespace GKUI.Dialogs
 			this.GroupBox1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.GroupBox1.Location = new System.Drawing.Point(0, 0);
 			this.GroupBox1.Name = "GroupBox1";
-			this.GroupBox1.Size = new System.Drawing.Size(609, 97);
+			this.GroupBox1.Size = new System.Drawing.Size(852, 118);
 			this.GroupBox1.TabIndex = 0;
 			this.GroupBox1.TabStop = false;
 			// 
 			// Label1
 			// 
-			this.Label1.Location = new System.Drawing.Point(8, 24);
+			this.Label1.AutoSize = true;
+			this.Label1.Location = new System.Drawing.Point(11, 22);
 			this.Label1.Name = "Label1";
-			this.Label1.Size = new System.Drawing.Size(60, 13);
+			this.Label1.Size = new System.Drawing.Size(67, 17);
 			this.Label1.TabIndex = 0;
 			this.Label1.Text = "Название";
 			// 
 			// Label2
 			// 
-			this.Label2.Location = new System.Drawing.Point(8, 48);
+			this.Label2.AutoSize = true;
+			this.Label2.Location = new System.Drawing.Point(11, 51);
 			this.Label2.Name = "Label2";
-			this.Label2.Size = new System.Drawing.Size(62, 13);
+			this.Label2.Size = new System.Drawing.Size(80, 17);
 			this.Label2.TabIndex = 2;
 			this.Label2.Text = "Приоритет";
 			// 
 			// Label3
 			// 
-			this.Label3.Location = new System.Drawing.Point(248, 48);
+			this.Label3.AutoSize = true;
+			this.Label3.Location = new System.Drawing.Point(347, 52);
 			this.Label3.Name = "Label3";
-			this.Label3.Size = new System.Drawing.Size(62, 13);
+			this.Label3.Size = new System.Drawing.Size(78, 17);
 			this.Label3.TabIndex = 4;
 			this.Label3.Text = "Состояние";
 			// 
 			// Label4
 			// 
-			this.Label4.Location = new System.Drawing.Point(8, 72);
+			this.Label4.AutoSize = true;
+			this.Label4.Location = new System.Drawing.Point(11, 81);
 			this.Label4.Name = "Label4";
-			this.Label4.Size = new System.Drawing.Size(60, 13);
+			this.Label4.Size = new System.Drawing.Size(72, 17);
 			this.Label4.TabIndex = 8;
 			this.Label4.Text = "Запущено";
 			// 
 			// Label5
 			// 
-			this.Label5.Location = new System.Drawing.Point(248, 72);
+			this.Label5.AutoSize = true;
+			this.Label5.Location = new System.Drawing.Point(347, 81);
 			this.Label5.Name = "Label5";
-			this.Label5.Size = new System.Drawing.Size(64, 13);
+			this.Label5.Size = new System.Drawing.Size(77, 17);
 			this.Label5.TabIndex = 10;
 			this.Label5.Text = "Завершено";
 			// 
 			// Label6
 			// 
-			this.Label6.Location = new System.Drawing.Point(488, 48);
+			this.Label6.AutoSize = true;
+			this.Label6.Location = new System.Drawing.Point(683, 52);
 			this.Label6.Name = "Label6";
-			this.Label6.Size = new System.Drawing.Size(50, 13);
+			this.Label6.Size = new System.Drawing.Size(64, 17);
 			this.Label6.TabIndex = 6;
 			this.Label6.Text = "Процент";
 			// 
 			// EditName
 			// 
-			this.EditName.Location = new System.Drawing.Point(72, 16);
+			this.EditName.Location = new System.Drawing.Point(101, 19);
 			this.EditName.Name = "EditName";
-			this.EditName.Size = new System.Drawing.Size(529, 21);
+			this.EditName.Size = new System.Drawing.Size(740, 24);
 			this.EditName.TabIndex = 1;
 			// 
 			// EditPriority
 			// 
 			this.EditPriority.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.EditPriority.Location = new System.Drawing.Point(72, 40);
+			this.EditPriority.Location = new System.Drawing.Point(101, 49);
 			this.EditPriority.Name = "EditPriority";
-			this.EditPriority.Size = new System.Drawing.Size(161, 21);
+			this.EditPriority.Size = new System.Drawing.Size(225, 25);
 			this.EditPriority.TabIndex = 3;
 			// 
 			// EditStatus
 			// 
 			this.EditStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.EditStatus.Location = new System.Drawing.Point(312, 40);
+			this.EditStatus.Location = new System.Drawing.Point(437, 49);
 			this.EditStatus.Name = "EditStatus";
-			this.EditStatus.Size = new System.Drawing.Size(161, 21);
+			this.EditStatus.Size = new System.Drawing.Size(225, 25);
 			this.EditStatus.TabIndex = 5;
 			// 
 			// EditStartDate
 			// 
-			this.EditStartDate.Location = new System.Drawing.Point(72, 64);
+			this.EditStartDate.Location = new System.Drawing.Point(101, 78);
 			this.EditStartDate.Mask = "00/00/0000";
 			this.EditStartDate.Name = "EditStartDate";
-			this.EditStartDate.Size = new System.Drawing.Size(161, 21);
+			this.EditStartDate.Size = new System.Drawing.Size(225, 24);
 			this.EditStartDate.TabIndex = 9;
 			this.EditStartDate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
 			// 
 			// EditStopDate
 			// 
-			this.EditStopDate.Location = new System.Drawing.Point(312, 64);
+			this.EditStopDate.Location = new System.Drawing.Point(437, 78);
 			this.EditStopDate.Mask = "00/00/0000";
 			this.EditStopDate.Name = "EditStopDate";
-			this.EditStopDate.Size = new System.Drawing.Size(161, 21);
+			this.EditStopDate.Size = new System.Drawing.Size(225, 24);
 			this.EditStopDate.TabIndex = 11;
 			this.EditStopDate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
 			// 
@@ -169,18 +176,18 @@ namespace GKUI.Dialogs
 									0,
 									0,
 									0});
-			this.EditPercent.Location = new System.Drawing.Point(544, 40);
+			this.EditPercent.Location = new System.Drawing.Point(762, 49);
 			this.EditPercent.Name = "EditPercent";
-			this.EditPercent.Size = new System.Drawing.Size(41, 21);
+			this.EditPercent.Size = new System.Drawing.Size(57, 24);
 			this.EditPercent.TabIndex = 7;
 			// 
 			// btnAccept
 			// 
-			this.btnAccept.Image = global::GKResources.iBtnAccept;
+			this.btnAccept.Image = ((System.Drawing.Image)(resources.GetObject("btnAccept.Image")));
 			this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.btnAccept.Location = new System.Drawing.Point(432, 424);
+			this.btnAccept.Location = new System.Drawing.Point(605, 515);
 			this.btnAccept.Name = "btnAccept";
-			this.btnAccept.Size = new System.Drawing.Size(81, 25);
+			this.btnAccept.Size = new System.Drawing.Size(113, 30);
 			this.btnAccept.TabIndex = 2;
 			this.btnAccept.Text = "Принять";
 			this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -189,11 +196,11 @@ namespace GKUI.Dialogs
 			// btnCancel
 			// 
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Image = global::GKResources.iBtnCancel;
+			this.btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("btnCancel.Image")));
 			this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.btnCancel.Location = new System.Drawing.Point(520, 424);
+			this.btnCancel.Location = new System.Drawing.Point(728, 515);
 			this.btnCancel.Name = "btnCancel";
-			this.btnCancel.Size = new System.Drawing.Size(81, 25);
+			this.btnCancel.Size = new System.Drawing.Size(113, 30);
 			this.btnCancel.TabIndex = 3;
 			this.btnCancel.Text = "Отменить";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -205,50 +212,51 @@ namespace GKUI.Dialogs
 			this.PagesGroupData.Controls.Add(this.SheetGroups);
 			this.PagesGroupData.Controls.Add(this.SheetNotes);
 			this.PagesGroupData.Dock = System.Windows.Forms.DockStyle.Top;
-			this.PagesGroupData.Location = new System.Drawing.Point(0, 97);
+			this.PagesGroupData.Location = new System.Drawing.Point(0, 118);
 			this.PagesGroupData.Name = "PagesGroupData";
 			this.PagesGroupData.SelectedIndex = 0;
-			this.PagesGroupData.Size = new System.Drawing.Size(609, 312);
+			this.PagesGroupData.Size = new System.Drawing.Size(852, 379);
 			this.PagesGroupData.TabIndex = 1;
 			// 
 			// SheetTasks
 			// 
-			this.SheetTasks.Location = new System.Drawing.Point(4, 22);
+			this.SheetTasks.Location = new System.Drawing.Point(4, 26);
 			this.SheetTasks.Name = "SheetTasks";
-			this.SheetTasks.Size = new System.Drawing.Size(601, 286);
+			this.SheetTasks.Size = new System.Drawing.Size(844, 349);
 			this.SheetTasks.TabIndex = 0;
 			this.SheetTasks.Text = "Задачи";
 			// 
 			// SheetCommunications
 			// 
-			this.SheetCommunications.Location = new System.Drawing.Point(4, 22);
+			this.SheetCommunications.Location = new System.Drawing.Point(4, 26);
 			this.SheetCommunications.Name = "SheetCommunications";
-			this.SheetCommunications.Size = new System.Drawing.Size(601, 286);
+			this.SheetCommunications.Size = new System.Drawing.Size(844, 349);
 			this.SheetCommunications.TabIndex = 1;
 			this.SheetCommunications.Text = "Коммуникации";
 			// 
 			// SheetGroups
 			// 
-			this.SheetGroups.Location = new System.Drawing.Point(4, 22);
+			this.SheetGroups.Location = new System.Drawing.Point(4, 26);
 			this.SheetGroups.Name = "SheetGroups";
-			this.SheetGroups.Size = new System.Drawing.Size(601, 286);
+			this.SheetGroups.Size = new System.Drawing.Size(844, 349);
 			this.SheetGroups.TabIndex = 2;
 			this.SheetGroups.Text = "Группы";
 			// 
 			// SheetNotes
 			// 
-			this.SheetNotes.Location = new System.Drawing.Point(4, 22);
+			this.SheetNotes.Location = new System.Drawing.Point(4, 26);
 			this.SheetNotes.Name = "SheetNotes";
-			this.SheetNotes.Size = new System.Drawing.Size(601, 286);
+			this.SheetNotes.Size = new System.Drawing.Size(844, 349);
 			this.SheetNotes.TabIndex = 3;
 			this.SheetNotes.Text = "Заметки";
 			// 
-			// TfmResearchEdit
+			// ResearchEditDlg
 			// 
 			this.AcceptButton = this.btnAccept;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.CancelButton = this.btnCancel;
-			this.ClientSize = new System.Drawing.Size(609, 457);
+			this.ClientSize = new System.Drawing.Size(852, 557);
 			this.Controls.Add(this.PagesGroupData);
 			this.Controls.Add(this.GroupBox1);
 			this.Controls.Add(this.btnAccept);
@@ -257,7 +265,7 @@ namespace GKUI.Dialogs
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "TfmResearchEdit";
+			this.Name = "ResearchEditDlg";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Редактирование исследования";

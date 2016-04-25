@@ -5,6 +5,7 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SlideshowWin));
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.tsbStart = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -31,7 +32,7 @@
 			// tsbStart
 			// 
 			this.tsbStart.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.tsbStart.Image = global::GKResources.iStart;
+			this.tsbStart.Image = ((System.Drawing.Image)(resources.GetObject("tsbStart.Image")));
 			this.tsbStart.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.tsbStart.Name = "tsbStart";
 			this.tsbStart.Size = new System.Drawing.Size(24, 24);
@@ -46,7 +47,7 @@
 			// tsbPrev
 			// 
 			this.tsbPrev.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.tsbPrev.Image = global::GKResources.iLeft1;
+			this.tsbPrev.Image = ((System.Drawing.Image)(resources.GetObject("tsbPrev.Image")));
 			this.tsbPrev.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.tsbPrev.Name = "tsbPrev";
 			this.tsbPrev.Size = new System.Drawing.Size(24, 24);
@@ -56,7 +57,7 @@
 			// tsbNext
 			// 
 			this.tsbNext.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.tsbNext.Image = global::GKResources.iRight1;
+			this.tsbNext.Image = ((System.Drawing.Image)(resources.GetObject("tsbNext.Image")));
 			this.tsbNext.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.tsbNext.Name = "tsbNext";
 			this.tsbNext.Size = new System.Drawing.Size(24, 24);
@@ -68,14 +69,15 @@
 			this.timer1.Interval = 1000;
 			this.timer1.Tick += new System.EventHandler(this.Timer1Tick);
 			// 
-			// TfmSlideshow
+			// SlideshowWin
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(7, 17);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.ClientSize = new System.Drawing.Size(792, 573);
 			this.Controls.Add(this.toolStrip1);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.KeyPreview = true;
-			this.Name = "TfmSlideshow";
+			this.Name = "SlideshowWin";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Просмотр";

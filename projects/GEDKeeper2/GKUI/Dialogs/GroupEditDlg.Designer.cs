@@ -16,6 +16,7 @@ namespace GKUI.Dialogs
 
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GroupEditDlg));
 			this.GroupBox1 = new System.Windows.Forms.GroupBox();
 			this.Label1 = new System.Windows.Forms.Label();
 			this.edName = new System.Windows.Forms.TextBox();
@@ -36,32 +37,33 @@ namespace GKUI.Dialogs
 			this.GroupBox1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.GroupBox1.Location = new System.Drawing.Point(0, 0);
 			this.GroupBox1.Name = "GroupBox1";
-			this.GroupBox1.Size = new System.Drawing.Size(482, 49);
+			this.GroupBox1.Size = new System.Drawing.Size(673, 60);
 			this.GroupBox1.TabIndex = 0;
 			this.GroupBox1.TabStop = false;
 			// 
 			// Label1
 			// 
-			this.Label1.Location = new System.Drawing.Point(8, 24);
+			this.Label1.AutoSize = true;
+			this.Label1.Location = new System.Drawing.Point(12, 22);
 			this.Label1.Name = "Label1";
-			this.Label1.Size = new System.Drawing.Size(55, 13);
+			this.Label1.Size = new System.Drawing.Size(67, 17);
 			this.Label1.TabIndex = 0;
 			this.Label1.Text = "Название";
 			// 
 			// edName
 			// 
-			this.edName.Location = new System.Drawing.Point(72, 16);
+			this.edName.Location = new System.Drawing.Point(101, 19);
 			this.edName.Name = "edName";
-			this.edName.Size = new System.Drawing.Size(401, 21);
+			this.edName.Size = new System.Drawing.Size(561, 24);
 			this.edName.TabIndex = 0;
 			// 
 			// btnAccept
 			// 
-			this.btnAccept.Image = global::GKResources.iBtnAccept;
+			this.btnAccept.Image = ((System.Drawing.Image)(resources.GetObject("btnAccept.Image")));
 			this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.btnAccept.Location = new System.Drawing.Point(304, 424);
+			this.btnAccept.Location = new System.Drawing.Point(426, 515);
 			this.btnAccept.Name = "btnAccept";
-			this.btnAccept.Size = new System.Drawing.Size(81, 25);
+			this.btnAccept.Size = new System.Drawing.Size(113, 30);
 			this.btnAccept.TabIndex = 2;
 			this.btnAccept.Text = "Принять";
 			this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -70,11 +72,11 @@ namespace GKUI.Dialogs
 			// btnCancel
 			// 
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Image = global::GKResources.iBtnCancel;
+			this.btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("btnCancel.Image")));
 			this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.btnCancel.Location = new System.Drawing.Point(392, 424);
+			this.btnCancel.Location = new System.Drawing.Point(549, 515);
 			this.btnCancel.Name = "btnCancel";
-			this.btnCancel.Size = new System.Drawing.Size(81, 25);
+			this.btnCancel.Size = new System.Drawing.Size(113, 30);
 			this.btnCancel.TabIndex = 3;
 			this.btnCancel.Text = "Отменить";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -85,42 +87,43 @@ namespace GKUI.Dialogs
 			this.PagesGroupData.Controls.Add(this.SheetNotes);
 			this.PagesGroupData.Controls.Add(this.SheetMultimedia);
 			this.PagesGroupData.Dock = System.Windows.Forms.DockStyle.Top;
-			this.PagesGroupData.Location = new System.Drawing.Point(0, 49);
+			this.PagesGroupData.Location = new System.Drawing.Point(0, 60);
 			this.PagesGroupData.Name = "PagesGroupData";
 			this.PagesGroupData.SelectedIndex = 0;
-			this.PagesGroupData.Size = new System.Drawing.Size(482, 360);
+			this.PagesGroupData.Size = new System.Drawing.Size(673, 437);
 			this.PagesGroupData.TabIndex = 1;
 			// 
 			// SheetMembers
 			// 
-			this.SheetMembers.Location = new System.Drawing.Point(4, 22);
+			this.SheetMembers.Location = new System.Drawing.Point(4, 26);
 			this.SheetMembers.Name = "SheetMembers";
-			this.SheetMembers.Size = new System.Drawing.Size(474, 334);
+			this.SheetMembers.Size = new System.Drawing.Size(665, 407);
 			this.SheetMembers.TabIndex = 0;
 			this.SheetMembers.Text = "Участники";
 			// 
 			// SheetNotes
 			// 
-			this.SheetNotes.Location = new System.Drawing.Point(4, 22);
+			this.SheetNotes.Location = new System.Drawing.Point(4, 26);
 			this.SheetNotes.Name = "SheetNotes";
-			this.SheetNotes.Size = new System.Drawing.Size(474, 334);
+			this.SheetNotes.Size = new System.Drawing.Size(665, 407);
 			this.SheetNotes.TabIndex = 1;
 			this.SheetNotes.Text = "Заметки";
 			// 
 			// SheetMultimedia
 			// 
-			this.SheetMultimedia.Location = new System.Drawing.Point(4, 22);
+			this.SheetMultimedia.Location = new System.Drawing.Point(4, 26);
 			this.SheetMultimedia.Name = "SheetMultimedia";
-			this.SheetMultimedia.Size = new System.Drawing.Size(474, 334);
+			this.SheetMultimedia.Size = new System.Drawing.Size(665, 407);
 			this.SheetMultimedia.TabIndex = 2;
 			this.SheetMultimedia.Text = "Мультимедиа";
 			// 
-			// TfmGroupEdit
+			// GroupEditDlg
 			// 
 			this.AcceptButton = this.btnAccept;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.CancelButton = this.btnCancel;
-			this.ClientSize = new System.Drawing.Size(482, 457);
+			this.ClientSize = new System.Drawing.Size(673, 560);
 			this.Controls.Add(this.PagesGroupData);
 			this.Controls.Add(this.btnCancel);
 			this.Controls.Add(this.btnAccept);
@@ -129,7 +132,7 @@ namespace GKUI.Dialogs
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "TfmGroupEdit";
+			this.Name = "GroupEditDlg";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Правка группы";

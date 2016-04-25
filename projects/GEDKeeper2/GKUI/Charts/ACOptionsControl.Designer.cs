@@ -167,9 +167,10 @@
 			this.acb0.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.acb0.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lblColorClick);
 			// 
-			// ACOptionsDialog
+			// ACOptionsControl
 			// 
-			this.ClientSize = new System.Drawing.Size(690, 137);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.Controls.Add(this.acb0);
 			this.Controls.Add(this.acb1);
 			this.Controls.Add(this.acb2);
@@ -182,8 +183,8 @@
 			this.Controls.Add(this.acbBack);
 			this.Controls.Add(this.acbLine);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.Name = "ACOptionsDialog";
-			this.Text = "Настройки";
+			this.Name = "ACOptionsControl";
+			this.Size = new System.Drawing.Size(690, 137);
 			this.ResumeLayout(false);
 		}
 	}

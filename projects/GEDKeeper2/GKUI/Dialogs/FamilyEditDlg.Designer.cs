@@ -30,6 +30,7 @@ namespace GKUI.Dialogs
 
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FamilyEditDlg));
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.GroupBox1 = new System.Windows.Forms.GroupBox();
@@ -59,11 +60,11 @@ namespace GKUI.Dialogs
 			// 
 			// btnAccept
 			// 
-			this.btnAccept.Image = global::GKResources.iBtnAccept;
+			this.btnAccept.Image = ((System.Drawing.Image)(resources.GetObject("btnAccept.Image")));
 			this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.btnAccept.Location = new System.Drawing.Point(328, 408);
+			this.btnAccept.Location = new System.Drawing.Point(462, 491);
 			this.btnAccept.Name = "btnAccept";
-			this.btnAccept.Size = new System.Drawing.Size(81, 25);
+			this.btnAccept.Size = new System.Drawing.Size(114, 31);
 			this.btnAccept.TabIndex = 4;
 			this.btnAccept.Text = "Принять";
 			this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -72,11 +73,11 @@ namespace GKUI.Dialogs
 			// btnCancel
 			// 
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Image = global::GKResources.iBtnCancel;
+			this.btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("btnCancel.Image")));
 			this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.btnCancel.Location = new System.Drawing.Point(416, 408);
+			this.btnCancel.Location = new System.Drawing.Point(582, 491);
 			this.btnCancel.Name = "btnCancel";
-			this.btnCancel.Size = new System.Drawing.Size(81, 25);
+			this.btnCancel.Size = new System.Drawing.Size(114, 31);
 			this.btnCancel.TabIndex = 5;
 			this.btnCancel.Text = "Отменить";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -98,16 +99,17 @@ namespace GKUI.Dialogs
 			this.GroupBox1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.GroupBox1.Location = new System.Drawing.Point(0, 0);
 			this.GroupBox1.Name = "GroupBox1";
-			this.GroupBox1.Size = new System.Drawing.Size(505, 129);
+			this.GroupBox1.Size = new System.Drawing.Size(708, 157);
 			this.GroupBox1.TabIndex = 0;
 			this.GroupBox1.TabStop = false;
 			this.GroupBox1.Text = "Семья";
 			// 
 			// Label1
 			// 
-			this.Label1.Location = new System.Drawing.Point(16, 32);
+			this.Label1.AutoSize = true;
+			this.Label1.Location = new System.Drawing.Point(22, 32);
 			this.Label1.Name = "Label1";
-			this.Label1.Size = new System.Drawing.Size(35, 13);
+			this.Label1.Size = new System.Drawing.Size(36, 17);
 			this.Label1.TabIndex = 0;
 			this.Label1.Text = "Муж";
 			// 
@@ -115,10 +117,10 @@ namespace GKUI.Dialogs
 			// 
 			this.btnHusbandAdd.AccessibleDescription = "Выбрать или добавить мужа";
 			this.btnHusbandAdd.Enabled = false;
-			this.btnHusbandAdd.Image = global::GKResources.iRecNew;
-			this.btnHusbandAdd.Location = new System.Drawing.Point(400, 21);
+			this.btnHusbandAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnHusbandAdd.Image")));
+			this.btnHusbandAdd.Location = new System.Drawing.Point(560, 26);
 			this.btnHusbandAdd.Name = "btnHusbandAdd";
-			this.btnHusbandAdd.Size = new System.Drawing.Size(28, 28);
+			this.btnHusbandAdd.Size = new System.Drawing.Size(39, 34);
 			this.btnHusbandAdd.TabIndex = 2;
 			this.btnHusbandAdd.Click += new System.EventHandler(this.btnHusbandAddClick);
 			// 
@@ -126,30 +128,30 @@ namespace GKUI.Dialogs
 			// 
 			this.btnHusbandDelete.AccessibleDescription = "Отсоединить мужа";
 			this.btnHusbandDelete.Enabled = false;
-			this.btnHusbandDelete.Image = global::GKResources.iRecDelete;
-			this.btnHusbandDelete.Location = new System.Drawing.Point(429, 21);
+			this.btnHusbandDelete.Image = ((System.Drawing.Image)(resources.GetObject("btnHusbandDelete.Image")));
+			this.btnHusbandDelete.Location = new System.Drawing.Point(601, 26);
 			this.btnHusbandDelete.Name = "btnHusbandDelete";
-			this.btnHusbandDelete.Size = new System.Drawing.Size(28, 28);
+			this.btnHusbandDelete.Size = new System.Drawing.Size(39, 34);
 			this.btnHusbandDelete.TabIndex = 3;
 			this.btnHusbandDelete.Click += new System.EventHandler(this.btnHusbandDeleteClick);
 			// 
 			// btnHusbandSel
 			// 
 			this.btnHusbandSel.AccessibleDescription = "Перейти на запись мужа";
-			this.btnHusbandSel.Image = global::GKResources.iToMan;
-			this.btnHusbandSel.Location = new System.Drawing.Point(458, 21);
+			this.btnHusbandSel.Image = ((System.Drawing.Image)(resources.GetObject("btnHusbandSel.Image")));
+			this.btnHusbandSel.Location = new System.Drawing.Point(641, 26);
 			this.btnHusbandSel.Name = "btnHusbandSel";
-			this.btnHusbandSel.Size = new System.Drawing.Size(28, 28);
+			this.btnHusbandSel.Size = new System.Drawing.Size(39, 34);
 			this.btnHusbandSel.TabIndex = 4;
 			this.btnHusbandSel.Click += new System.EventHandler(this.btnHusbandSelClick);
 			// 
 			// btnWifeSel
 			// 
 			this.btnWifeSel.AccessibleDescription = "Перейти на запись жены";
-			this.btnWifeSel.Image = global::GKResources.iToMan;
-			this.btnWifeSel.Location = new System.Drawing.Point(458, 53);
+			this.btnWifeSel.Image = ((System.Drawing.Image)(resources.GetObject("btnWifeSel.Image")));
+			this.btnWifeSel.Location = new System.Drawing.Point(641, 64);
 			this.btnWifeSel.Name = "btnWifeSel";
-			this.btnWifeSel.Size = new System.Drawing.Size(28, 28);
+			this.btnWifeSel.Size = new System.Drawing.Size(39, 34);
 			this.btnWifeSel.TabIndex = 9;
 			this.btnWifeSel.Click += new System.EventHandler(this.btnWifeSelClick);
 			// 
@@ -157,10 +159,10 @@ namespace GKUI.Dialogs
 			// 
 			this.btnWifeDelete.AccessibleDescription = "Отсоединить жену";
 			this.btnWifeDelete.Enabled = false;
-			this.btnWifeDelete.Image = global::GKResources.iRecDelete;
-			this.btnWifeDelete.Location = new System.Drawing.Point(429, 53);
+			this.btnWifeDelete.Image = ((System.Drawing.Image)(resources.GetObject("btnWifeDelete.Image")));
+			this.btnWifeDelete.Location = new System.Drawing.Point(601, 64);
 			this.btnWifeDelete.Name = "btnWifeDelete";
-			this.btnWifeDelete.Size = new System.Drawing.Size(28, 28);
+			this.btnWifeDelete.Size = new System.Drawing.Size(39, 34);
 			this.btnWifeDelete.TabIndex = 8;
 			this.btnWifeDelete.Click += new System.EventHandler(this.btnWifeDeleteClick);
 			// 
@@ -168,71 +170,74 @@ namespace GKUI.Dialogs
 			// 
 			this.btnWifeAdd.AccessibleDescription = "Выбрать или добавить жену";
 			this.btnWifeAdd.Enabled = false;
-			this.btnWifeAdd.Image = global::GKResources.iRecNew;
-			this.btnWifeAdd.Location = new System.Drawing.Point(400, 53);
+			this.btnWifeAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnWifeAdd.Image")));
+			this.btnWifeAdd.Location = new System.Drawing.Point(560, 64);
 			this.btnWifeAdd.Name = "btnWifeAdd";
-			this.btnWifeAdd.Size = new System.Drawing.Size(28, 28);
+			this.btnWifeAdd.Size = new System.Drawing.Size(39, 34);
 			this.btnWifeAdd.TabIndex = 7;
 			this.btnWifeAdd.Click += new System.EventHandler(this.btnWifeAddClick);
 			// 
 			// Label2
 			// 
-			this.Label2.Location = new System.Drawing.Point(16, 64);
+			this.Label2.AutoSize = true;
+			this.Label2.Location = new System.Drawing.Point(22, 71);
 			this.Label2.Name = "Label2";
-			this.Label2.Size = new System.Drawing.Size(35, 13);
+			this.Label2.Size = new System.Drawing.Size(44, 17);
 			this.Label2.TabIndex = 5;
 			this.Label2.Text = "Жена";
 			// 
 			// Label6
 			// 
-			this.Label6.Location = new System.Drawing.Point(16, 96);
+			this.Label6.AutoSize = true;
+			this.Label6.Location = new System.Drawing.Point(22, 110);
 			this.Label6.Name = "Label6";
-			this.Label6.Size = new System.Drawing.Size(45, 13);
+			this.Label6.Size = new System.Drawing.Size(55, 17);
 			this.Label6.TabIndex = 10;
 			this.Label6.Text = "Статус";
 			// 
 			// EditHusband
 			// 
 			this.EditHusband.ForeColor = System.Drawing.SystemColors.Control;
-			this.EditHusband.Location = new System.Drawing.Point(64, 24);
+			this.EditHusband.Location = new System.Drawing.Point(90, 29);
 			this.EditHusband.Name = "EditHusband";
 			this.EditHusband.ReadOnly = true;
-			this.EditHusband.Size = new System.Drawing.Size(329, 21);
+			this.EditHusband.Size = new System.Drawing.Size(460, 24);
 			this.EditHusband.TabIndex = 1;
 			this.EditHusband.TextChanged += new System.EventHandler(this.EditHusband_TextChanged);
 			// 
 			// EditWife
 			// 
 			this.EditWife.ForeColor = System.Drawing.SystemColors.Control;
-			this.EditWife.Location = new System.Drawing.Point(64, 56);
+			this.EditWife.Location = new System.Drawing.Point(90, 68);
 			this.EditWife.Name = "EditWife";
 			this.EditWife.ReadOnly = true;
-			this.EditWife.Size = new System.Drawing.Size(329, 21);
+			this.EditWife.Size = new System.Drawing.Size(460, 24);
 			this.EditWife.TabIndex = 6;
 			this.EditWife.TextChanged += new System.EventHandler(this.EditWife_TextChanged);
 			// 
-			// EditMarriageStatus
+			// edMarriageStatus
 			// 
 			this.edMarriageStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.edMarriageStatus.Location = new System.Drawing.Point(64, 88);
-			this.edMarriageStatus.Name = "EditMarriageStatus";
-			this.edMarriageStatus.Size = new System.Drawing.Size(145, 21);
+			this.edMarriageStatus.Location = new System.Drawing.Point(90, 107);
+			this.edMarriageStatus.Name = "edMarriageStatus";
+			this.edMarriageStatus.Size = new System.Drawing.Size(203, 25);
 			this.edMarriageStatus.TabIndex = 11;
 			// 
 			// Label5
 			// 
-			this.Label5.Location = new System.Drawing.Point(8, 416);
+			this.Label5.AutoSize = true;
+			this.Label5.Location = new System.Drawing.Point(12, 498);
 			this.Label5.Name = "Label5";
-			this.Label5.Size = new System.Drawing.Size(150, 13);
+			this.Label5.Size = new System.Drawing.Size(187, 17);
 			this.Label5.TabIndex = 2;
 			this.Label5.Text = "Ограничение безопасности";
 			// 
 			// cbRestriction
 			// 
 			this.cbRestriction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cbRestriction.Location = new System.Drawing.Point(160, 408);
+			this.cbRestriction.Location = new System.Drawing.Point(224, 495);
 			this.cbRestriction.Name = "cbRestriction";
-			this.cbRestriction.Size = new System.Drawing.Size(145, 21);
+			this.cbRestriction.Size = new System.Drawing.Size(203, 25);
 			this.cbRestriction.TabIndex = 3;
 			this.cbRestriction.SelectedIndexChanged += new System.EventHandler(this.cbRestriction_SelectedIndexChanged);
 			// 
@@ -244,58 +249,59 @@ namespace GKUI.Dialogs
 			this.PagesFamilyData.Controls.Add(this.SheetMultimedia);
 			this.PagesFamilyData.Controls.Add(this.SheetSources);
 			this.PagesFamilyData.Dock = System.Windows.Forms.DockStyle.Top;
-			this.PagesFamilyData.Location = new System.Drawing.Point(0, 129);
+			this.PagesFamilyData.Location = new System.Drawing.Point(0, 157);
 			this.PagesFamilyData.Name = "PagesFamilyData";
 			this.PagesFamilyData.SelectedIndex = 0;
-			this.PagesFamilyData.Size = new System.Drawing.Size(505, 264);
+			this.PagesFamilyData.Size = new System.Drawing.Size(708, 320);
 			this.PagesFamilyData.TabIndex = 1;
 			// 
 			// SheetChilds
 			// 
-			this.SheetChilds.Location = new System.Drawing.Point(4, 22);
+			this.SheetChilds.Location = new System.Drawing.Point(4, 26);
 			this.SheetChilds.Name = "SheetChilds";
-			this.SheetChilds.Size = new System.Drawing.Size(497, 238);
+			this.SheetChilds.Size = new System.Drawing.Size(700, 290);
 			this.SheetChilds.TabIndex = 0;
 			this.SheetChilds.Text = "Дети";
 			// 
 			// SheetEvents
 			// 
-			this.SheetEvents.Location = new System.Drawing.Point(4, 22);
+			this.SheetEvents.Location = new System.Drawing.Point(4, 26);
 			this.SheetEvents.Name = "SheetEvents";
-			this.SheetEvents.Size = new System.Drawing.Size(497, 238);
+			this.SheetEvents.Size = new System.Drawing.Size(700, 290);
 			this.SheetEvents.TabIndex = 1;
 			this.SheetEvents.Text = "События";
 			// 
 			// SheetNotes
 			// 
-			this.SheetNotes.Location = new System.Drawing.Point(4, 22);
+			this.SheetNotes.Location = new System.Drawing.Point(4, 26);
 			this.SheetNotes.Name = "SheetNotes";
-			this.SheetNotes.Size = new System.Drawing.Size(497, 238);
+			this.SheetNotes.Size = new System.Drawing.Size(700, 290);
 			this.SheetNotes.TabIndex = 2;
 			this.SheetNotes.Text = "Заметки";
 			// 
 			// SheetMultimedia
 			// 
-			this.SheetMultimedia.Location = new System.Drawing.Point(4, 22);
+			this.SheetMultimedia.Location = new System.Drawing.Point(4, 26);
 			this.SheetMultimedia.Name = "SheetMultimedia";
-			this.SheetMultimedia.Size = new System.Drawing.Size(497, 238);
+			this.SheetMultimedia.Size = new System.Drawing.Size(700, 290);
 			this.SheetMultimedia.TabIndex = 3;
 			this.SheetMultimedia.Text = "Мультимедиа";
 			// 
 			// SheetSources
 			// 
-			this.SheetSources.Location = new System.Drawing.Point(4, 22);
+			this.SheetSources.Location = new System.Drawing.Point(4, 26);
 			this.SheetSources.Name = "SheetSources";
-			this.SheetSources.Size = new System.Drawing.Size(497, 238);
+			this.SheetSources.Size = new System.Drawing.Size(700, 290);
 			this.SheetSources.TabIndex = 4;
 			this.SheetSources.Text = "Источники";
 			// 
-			// TfmFamilyEdit
+			// FamilyEditDlg
 			// 
 			this.AcceptButton = this.btnAccept;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.CancelButton = this.btnCancel;
-			this.ClientSize = new System.Drawing.Size(505, 441);
+			this.ClientSize = new System.Drawing.Size(708, 541);
 			this.Controls.Add(this.PagesFamilyData);
 			this.Controls.Add(this.GroupBox1);
 			this.Controls.Add(this.btnAccept);
@@ -306,7 +312,7 @@ namespace GKUI.Dialogs
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "TfmFamilyEdit";
+			this.Name = "FamilyEditDlg";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Редактирование семьи";
@@ -314,6 +320,7 @@ namespace GKUI.Dialogs
 			this.GroupBox1.PerformLayout();
 			this.PagesFamilyData.ResumeLayout(false);
 			this.ResumeLayout(false);
+			this.PerformLayout();
 		}
 	}
 }

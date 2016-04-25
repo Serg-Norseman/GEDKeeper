@@ -83,6 +83,7 @@ namespace GKUI
 			this.N8 = new System.Windows.Forms.MenuItem();
 			this.miFillColor = new System.Windows.Forms.MenuItem();
 			this.miFillImage = new System.Windows.Forms.MenuItem();
+			this.N9 = new System.Windows.Forms.MenuItem();
 			this.MenuPerson = new System.Windows.Forms.ContextMenu();
 			this.miEdit = new System.Windows.Forms.MenuItem();
 			this.N1 = new System.Windows.Forms.MenuItem();
@@ -98,7 +99,6 @@ namespace GKUI
 			this.colorDialog1 = new System.Windows.Forms.ColorDialog();
 			this.OpenDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-			this.N9 = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// SaveDialog1
@@ -247,7 +247,7 @@ namespace GKUI
 									this.N8,
 									this.miFillColor,
 									this.miFillImage,
-			                        this.N9});
+									this.N9});
 			// 
 			// miModeBoth
 			// 
@@ -395,14 +395,15 @@ namespace GKUI
 			// 
 			this.OpenDialog1.Filter = "Image Files|*.bmp;*.gif;*.png;*.jpg";
 			// 
-			// TfmChart
+			// TreeChartWin
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(7, 17);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.ClientSize = new System.Drawing.Size(822, 453);
 			this.Controls.Add(this.ToolBar1);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.KeyPreview = true;
-			this.Name = "TfmChart";
+			this.Name = "TreeChartWin";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Диаграмма";
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TfmChart_KeyDown);

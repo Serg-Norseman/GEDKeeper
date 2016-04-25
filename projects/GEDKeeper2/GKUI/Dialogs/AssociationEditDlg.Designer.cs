@@ -16,6 +16,7 @@ namespace GKUI.Dialogs
 
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AssociationEditDlg));
 			this.Label1 = new System.Windows.Forms.Label();
 			this.Label2 = new System.Windows.Forms.Label();
 			this.btnPersonAdd = new System.Windows.Forms.Button();
@@ -27,17 +28,19 @@ namespace GKUI.Dialogs
 			// 
 			// Label1
 			// 
-			this.Label1.Location = new System.Drawing.Point(8, 8);
+			this.Label1.AutoSize = true;
+			this.Label1.Location = new System.Drawing.Point(11, 10);
 			this.Label1.Name = "Label1";
-			this.Label1.Size = new System.Drawing.Size(80, 13);
+			this.Label1.Size = new System.Drawing.Size(82, 17);
 			this.Label1.TabIndex = 0;
 			this.Label1.Text = "Отношение";
 			// 
 			// Label2
 			// 
-			this.Label2.Location = new System.Drawing.Point(8, 56);
+			this.Label2.AutoSize = true;
+			this.Label2.Location = new System.Drawing.Point(11, 68);
 			this.Label2.Name = "Label2";
-			this.Label2.Size = new System.Drawing.Size(80, 13);
+			this.Label2.Size = new System.Drawing.Size(62, 17);
 			this.Label2.TabIndex = 2;
 			this.Label2.Text = "Персона";
 			// 
@@ -47,20 +50,20 @@ namespace GKUI.Dialogs
 			this.btnPersonAdd.AccessibleName = "";
 			this.btnPersonAdd.AccessibleRole = System.Windows.Forms.AccessibleRole.ToolTip;
 			this.btnPersonAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.btnPersonAdd.Image = global::GKResources.iRecNew;
-			this.btnPersonAdd.Location = new System.Drawing.Point(320, 69);
+			this.btnPersonAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnPersonAdd.Image")));
+			this.btnPersonAdd.Location = new System.Drawing.Point(448, 84);
 			this.btnPersonAdd.Name = "btnPersonAdd";
-			this.btnPersonAdd.Size = new System.Drawing.Size(28, 28);
+			this.btnPersonAdd.Size = new System.Drawing.Size(39, 34);
 			this.btnPersonAdd.TabIndex = 4;
 			this.btnPersonAdd.Click += new System.EventHandler(this.btnPersonAdd_Click);
 			// 
 			// btnAccept
 			// 
-			this.btnAccept.Image = global::GKResources.iBtnAccept;
+			this.btnAccept.Image = ((System.Drawing.Image)(resources.GetObject("btnAccept.Image")));
 			this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.btnAccept.Location = new System.Drawing.Point(176, 112);
+			this.btnAccept.Location = new System.Drawing.Point(246, 136);
 			this.btnAccept.Name = "btnAccept";
-			this.btnAccept.Size = new System.Drawing.Size(81, 25);
+			this.btnAccept.Size = new System.Drawing.Size(114, 30);
 			this.btnAccept.TabIndex = 5;
 			this.btnAccept.Text = "Принять";
 			this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -69,38 +72,39 @@ namespace GKUI.Dialogs
 			// btnCancel
 			// 
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Image = global::GKResources.iBtnCancel;
+			this.btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("btnCancel.Image")));
 			this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.btnCancel.Location = new System.Drawing.Point(264, 112);
+			this.btnCancel.Location = new System.Drawing.Point(370, 136);
 			this.btnCancel.Name = "btnCancel";
-			this.btnCancel.Size = new System.Drawing.Size(81, 25);
+			this.btnCancel.Size = new System.Drawing.Size(113, 30);
 			this.btnCancel.TabIndex = 6;
 			this.btnCancel.Text = "Отменить";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// EditRelation
 			// 
-			this.EditRelation.Location = new System.Drawing.Point(8, 24);
+			this.EditRelation.Location = new System.Drawing.Point(11, 29);
 			this.EditRelation.Name = "EditRelation";
-			this.EditRelation.Size = new System.Drawing.Size(337, 21);
+			this.EditRelation.Size = new System.Drawing.Size(472, 25);
 			this.EditRelation.Sorted = true;
 			this.EditRelation.TabIndex = 1;
 			// 
 			// EditPerson
 			// 
 			this.EditPerson.BackColor = System.Drawing.SystemColors.Control;
-			this.EditPerson.Location = new System.Drawing.Point(8, 72);
+			this.EditPerson.Location = new System.Drawing.Point(11, 87);
 			this.EditPerson.Name = "EditPerson";
 			this.EditPerson.ReadOnly = true;
-			this.EditPerson.Size = new System.Drawing.Size(306, 21);
+			this.EditPerson.Size = new System.Drawing.Size(429, 24);
 			this.EditPerson.TabIndex = 3;
 			// 
-			// TfmAssociationEdit
+			// AssociationEditDlg
 			// 
 			this.AcceptButton = this.btnAccept;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.CancelButton = this.btnCancel;
-			this.ClientSize = new System.Drawing.Size(353, 145);
+			this.ClientSize = new System.Drawing.Size(496, 181);
 			this.Controls.Add(this.Label1);
 			this.Controls.Add(this.Label2);
 			this.Controls.Add(this.btnPersonAdd);
@@ -112,7 +116,7 @@ namespace GKUI.Dialogs
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "TfmAssociationEdit";
+			this.Name = "AssociationEditDlg";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Ассоциация";

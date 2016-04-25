@@ -21,14 +21,14 @@ namespace GKUI
 		{
 			this.SuspendLayout();
 			// 
-			// TfmAncestorsCircle
+			// AncestorsCircleWin
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1079, 722);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+			this.ClientSize = new System.Drawing.Size(1093, 579);
 			this.KeyPreview = true;
 			this.Margin = new System.Windows.Forms.Padding(4);
-			this.Name = "TfmAncestorsCircle";
+			this.Name = "AncestorsCircleWin";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Circle of Ancestors";

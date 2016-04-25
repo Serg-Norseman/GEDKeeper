@@ -131,14 +131,15 @@ namespace GKUI
 			this.mmDebugOutput.Size = new System.Drawing.Size(712, 162);
 			this.mmDebugOutput.TabIndex = 3;
 			// 
-			// TfmScriptDaemon
+			// ScriptEditWin
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(7, 17);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.ClientSize = new System.Drawing.Size(712, 434);
 			this.Controls.Add(this.splitContainer1);
 			this.Controls.Add(this.ToolBar1);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.Name = "TfmScriptDaemon";
+			this.Name = "ScriptEditWin";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "ScriptDaemon";

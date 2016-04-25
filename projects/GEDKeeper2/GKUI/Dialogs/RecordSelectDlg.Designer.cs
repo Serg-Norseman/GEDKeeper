@@ -13,6 +13,7 @@ namespace GKUI.Dialogs
 
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RecordSelectDlg));
 			this.btnSelect = new System.Windows.Forms.Button();
 			this.btnCreate = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
@@ -24,11 +25,11 @@ namespace GKUI.Dialogs
 			// 
 			// btnSelect
 			// 
-			this.btnSelect.Image = global::GKResources.iBtnAccept;
+			this.btnSelect.Image = ((System.Drawing.Image)(resources.GetObject("btnSelect.Image")));
 			this.btnSelect.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.btnSelect.Location = new System.Drawing.Point(200, 384);
+			this.btnSelect.Location = new System.Drawing.Point(280, 466);
 			this.btnSelect.Name = "btnSelect";
-			this.btnSelect.Size = new System.Drawing.Size(81, 25);
+			this.btnSelect.Size = new System.Drawing.Size(113, 31);
 			this.btnSelect.TabIndex = 3;
 			this.btnSelect.Text = "Выбрать";
 			this.btnSelect.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -36,9 +37,9 @@ namespace GKUI.Dialogs
 			// 
 			// btnCreate
 			// 
-			this.btnCreate.Location = new System.Drawing.Point(104, 384);
+			this.btnCreate.Location = new System.Drawing.Point(146, 466);
 			this.btnCreate.Name = "btnCreate";
-			this.btnCreate.Size = new System.Drawing.Size(81, 25);
+			this.btnCreate.Size = new System.Drawing.Size(113, 31);
 			this.btnCreate.TabIndex = 2;
 			this.btnCreate.Text = "Добавить";
 			this.btnCreate.Click += new System.EventHandler(this.btnCreate_Click);
@@ -46,11 +47,11 @@ namespace GKUI.Dialogs
 			// btnCancel
 			// 
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Image = global::GKResources.iBtnCancel;
+			this.btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("btnCancel.Image")));
 			this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.btnCancel.Location = new System.Drawing.Point(296, 384);
+			this.btnCancel.Location = new System.Drawing.Point(414, 466);
 			this.btnCancel.Name = "btnCancel";
-			this.btnCancel.Size = new System.Drawing.Size(81, 25);
+			this.btnCancel.Size = new System.Drawing.Size(114, 31);
 			this.btnCancel.TabIndex = 4;
 			this.btnCancel.Text = "Отменить";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -61,30 +62,31 @@ namespace GKUI.Dialogs
 			this.panFilter.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panFilter.Location = new System.Drawing.Point(0, 0);
 			this.panFilter.Name = "panFilter";
-			this.panFilter.Size = new System.Drawing.Size(385, 41);
+			this.panFilter.Size = new System.Drawing.Size(540, 50);
 			this.panFilter.TabIndex = 0;
 			// 
 			// edFastFilter
 			// 
-			this.edFastFilter.Location = new System.Drawing.Point(8, 8);
+			this.edFastFilter.Location = new System.Drawing.Point(11, 10);
 			this.edFastFilter.Name = "edFastFilter";
-			this.edFastFilter.Size = new System.Drawing.Size(361, 21);
+			this.edFastFilter.Size = new System.Drawing.Size(506, 24);
 			this.edFastFilter.TabIndex = 0;
 			this.edFastFilter.TextChanged += new System.EventHandler(this.edFastFilter_TextChanged);
 			// 
 			// panList
 			// 
 			this.panList.Dock = System.Windows.Forms.DockStyle.Top;
-			this.panList.Location = new System.Drawing.Point(0, 41);
+			this.panList.Location = new System.Drawing.Point(0, 50);
 			this.panList.Name = "panList";
-			this.panList.Size = new System.Drawing.Size(385, 329);
+			this.panList.Size = new System.Drawing.Size(540, 399);
 			this.panList.TabIndex = 1;
 			// 
-			// TfmRecordSelect
+			// RecordSelectDlg
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.CancelButton = this.btnCancel;
-			this.ClientSize = new System.Drawing.Size(385, 417);
+			this.ClientSize = new System.Drawing.Size(540, 511);
 			this.Controls.Add(this.panList);
 			this.Controls.Add(this.panFilter);
 			this.Controls.Add(this.btnSelect);
@@ -95,7 +97,7 @@ namespace GKUI.Dialogs
 			this.KeyPreview = true;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "TfmRecordSelect";
+			this.Name = "RecordSelectDlg";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Выбор записи";
