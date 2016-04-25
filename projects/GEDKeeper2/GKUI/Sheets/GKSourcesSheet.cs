@@ -96,7 +96,7 @@ namespace GKUI.Sheets
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
                     {
-                        TfmSourceCitEdit fmSrcCitEdit = new TfmSourceCitEdit(aBase);
+                        SourceCitEditDlg fmSrcCitEdit = new SourceCitEditDlg(aBase);
                         try
                         {
                             if (eArgs.Action == RecordAction.raAdd)
@@ -105,7 +105,7 @@ namespace GKUI.Sheets
                             }
 
                             fmSrcCitEdit.SourceCitation = aCit;
-                            DialogResult res = TfmGEDKeeper.Instance.ShowModalEx(fmSrcCitEdit, false);
+                            DialogResult res = MainWin.Instance.ShowModalEx(fmSrcCitEdit, false);
 
                             if (eArgs.Action == RecordAction.raAdd)
                             {

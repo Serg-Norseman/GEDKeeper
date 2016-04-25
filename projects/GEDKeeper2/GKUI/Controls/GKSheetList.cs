@@ -117,7 +117,7 @@ namespace GKUI.Controls
                                                this.fBtnLinkJump,
                                                this.fBtnMoveUp,
                                                this.fBtnMoveDown});
-            this.fToolBar.ImageList = TfmGEDKeeper.Instance.ImageList_Buttons;
+            this.fToolBar.ImageList = MainWin.Instance.ImageList_Buttons;
             this.fToolBar.ShowToolTips = true;
             this.fToolBar.ButtonClick += this.ButtonClick;
 

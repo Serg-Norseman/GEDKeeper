@@ -305,7 +305,7 @@ namespace GKUI.Controls
             {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.CreateDefault(new Uri(fileURL));
                 request.ContentType = "application/x-www-form-urlencoded";
-                ProxyOptions proxy = TfmGEDKeeper.Instance.Options.Proxy;
+                ProxyOptions proxy = MainWin.Instance.Options.Proxy;
                 if (proxy.UseProxy)
                 {
                     request.Proxy = new WebProxy(proxy.Server + ":" + proxy.Port, true)

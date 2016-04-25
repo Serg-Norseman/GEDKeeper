@@ -387,7 +387,7 @@ namespace GKCore.Tools
                     iRec.SpouseToFamilyLinks.DeleteAt(i);
             }
             
-            TfmGEDKeeper.Instance.NamesTable.ImportNames(iRec);
+            MainWin.Instance.NamesTable.ImportNames(iRec);
         }
 
         private static void CheckRecord_Family(GEDCOMTree tree, GEDCOMFormat format, GEDCOMFamilyRecord fam, ValuesCollection valuesCollection)

@@ -135,7 +135,7 @@ namespace GKUI.Sheets
                 {
                     case RecordAction.raAdd:
                     case RecordAction.raEdit:
-                        using (TfmEventEdit fmEventEdit = new TfmEventEdit(aBase))
+                        using (EventEditDlg fmEventEdit = new EventEditDlg(aBase))
                         {
                             GEDCOMCustomEvent newEvent;
                             if (aEvent != null) {
@@ -149,7 +149,7 @@ namespace GKUI.Sheets
                             }
 
                             fmEventEdit.Event = newEvent;
-                            DialogResult dialogResult = TfmGEDKeeper.Instance.ShowModalEx(fmEventEdit, true);
+                            DialogResult dialogResult = MainWin.Instance.ShowModalEx(fmEventEdit, true);
 
                             if (dialogResult != DialogResult.OK)
                             {
