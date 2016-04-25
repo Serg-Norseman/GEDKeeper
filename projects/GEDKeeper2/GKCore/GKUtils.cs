@@ -93,8 +93,8 @@ namespace GKCore
 
         public static void SendMail(string address, string subject, string body, string attach)
         {
-            //string mailto = string.Format("mailto:{0}?Subject={1}&Body={2}&Attach={3}", address, subject, body, "" + attach + ""); // Attach, Attachment
-            //System.Diagnostics.Process.Start(mailto);
+            string mailto = string.Format("mailto:{0}?Subject={1}&Body={2}&Attach={3}", address, subject, body, "" + attach + ""); // Attach, Attachment
+            Process.Start(mailto);
         }
 
         public static bool IsNetworkAvailable()

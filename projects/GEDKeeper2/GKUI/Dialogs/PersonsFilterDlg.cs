@@ -52,6 +52,12 @@ namespace GKUI.Dialogs
 
             fListMan = (IndividualListMan)aListMan;
             UpdateSpecific();
+
+            // platform: in Mono tsSpecificFilter has 0 index, somehow
+            if (SysInfo.IsUnix()) {
+                PageControl1.Controls.SetChildIndex(tsSpecificFilter, 1);
+            }
+
             PageControl1.SelectedIndex = 1;
         }
 

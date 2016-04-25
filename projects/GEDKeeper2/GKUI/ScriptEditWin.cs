@@ -157,15 +157,15 @@ namespace GKUI
             this.Modified = true;
         }
 
-        void ToolBar1_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
+        void ToolBar1_ButtonClick(object sender, EventArgs e)
         {
-            if (e.Button == this.btnNewScript) {
+            if (sender == this.btnNewScript) {
                 this.NewScript();
-            } else if (e.Button == this.btnLoadScript) {
+            } else if (sender == this.btnLoadScript) {
                 this.LoadScript();
-            } else if (e.Button == this.btnSaveScript) {
+            } else if (sender == this.btnSaveScript) {
                 this.SaveScript();
-            } else if (e.Button == this.btnRun) {
+            } else if (sender == this.btnRun) {
                 this.Run();
             }
         }
@@ -175,7 +175,6 @@ namespace GKUI
             this.InitializeComponent();
             this.fBase = aBase;
 
-            this.ToolBar1.ImageList = MainWin.Instance.ImageList_Buttons;
             this.mmScriptText.TextChanged += mmScriptText_TextChanged;
             
             this.NewScript();

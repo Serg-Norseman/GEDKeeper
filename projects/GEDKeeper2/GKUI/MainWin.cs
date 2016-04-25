@@ -56,7 +56,7 @@ namespace GKUI
         private class WidgetInfo
         {
             public IWidget Widget;
-            public MenuItem MenuItem;
+            public ToolStripMenuItem MenuItem;
         }
 
         private NamesTable fNamesTable;
@@ -293,37 +293,37 @@ namespace GKUI
             }
         }
 
-        private void ToolBar1_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
+        private void ToolBar1_ButtonClick(object sender, EventArgs e)
         {
-            if (e.Button == this.tbFileNew) {
+            if (sender == this.tbFileNew) {
                 this.miFileNewClick(null, null);
-            } else if (e.Button == this.tbFileLoad) {
+            } else if (sender == this.tbFileLoad) {
                 this.miFileLoadClick(null, null);
-            } else if (e.Button == this.tbFileSave) {
+            } else if (sender == this.tbFileSave) {
                 this.miFileSaveClick(null, null);
-            } else if (e.Button == this.tbRecordAdd) {
+            } else if (sender == this.tbRecordAdd) {
                 this.miRecordAddClick(null, null);
-            } else if (e.Button == this.tbRecordEdit) {
+            } else if (sender == this.tbRecordEdit) {
                 this.miRecordEditClick(null, null);
-            } else if (e.Button == this.tbRecordDelete) {
+            } else if (sender == this.tbRecordDelete) {
                 this.miRecordDeleteClick(null, null);
-            } else if (e.Button == this.tbFilter) {
+            } else if (sender == this.tbFilter) {
                 this.miFilterClick(null, null);
-            } else if (e.Button == this.tbTreeAncestors) {
+            } else if (sender == this.tbTreeAncestors) {
                 this.miTreeAncestorsClick(null, null);
-            } else if (e.Button == this.tbTreeDescendants) {
+            } else if (sender == this.tbTreeDescendants) {
                 this.miTreeDescendantsClick(null, null);
-            } else if (e.Button == this.tbTreeBoth) {
+            } else if (sender == this.tbTreeBoth) {
                 this.miTreeBothClick(null, null);
-            } else if (e.Button == this.tbStats) {
+            } else if (sender == this.tbStats) {
                 this.miStatsClick(null, null);
-            } else if (e.Button == this.tbPrev) {
+            } else if (sender == this.tbPrev) {
                 this.tbPrevClick(null, null);
-            } else if (e.Button == this.tbNext) {
+            } else if (sender == this.tbNext) {
                 this.tbNextClick(null, null);
-            } else if (e.Button == this.tbDocPrint) {
+            } else if (sender == this.tbDocPrint) {
                 this.tbDocPrintClick(null, null);
-            } else if (e.Button == this.tbDocPreview) {
+            } else if (sender == this.tbDocPreview) {
                 this.tbDocPreviewClick(null, null);
             }
         }
@@ -391,27 +391,27 @@ namespace GKUI
 
         private void MRUFileClick(object sender, EventArgs e)
         {
-            int idx = ((GKMenuItem)sender).Tag;
+            int idx = ((GKToolStripMenuItem)sender).Tag;
             this.CreateBase(this.fOptions.MRUFiles[idx].FileName);
         }
 
         private void UpdateMRU()
         {
             this.miMRUFiles.Enabled = (this.fOptions.MRUFiles.Count > 0);
-            this.miMRUFiles.MenuItems.Clear();
-            this.MenuMRU.MenuItems.Clear();
+            this.miMRUFiles.DropDownItems.Clear();
+            this.MenuMRU.Items.Clear();
 
             int num = this.fOptions.MRUFiles.Count;
             for (int i = 0; i < num; i++) {
                 string fn = this.fOptions.MRUFiles[i].FileName;
 
-                MenuItem mi = new GKMenuItem(fn, i);
+                GKToolStripMenuItem mi = new GKToolStripMenuItem(fn, i);
                 mi.Click += this.MRUFileClick;
-                this.miMRUFiles.MenuItems.Add(mi);
+                this.miMRUFiles.DropDownItems.Add(mi);
 
-                mi = new GKMenuItem(fn, i);
-                mi.Click += this.MRUFileClick;
-                this.MenuMRU.MenuItems.Add(mi);
+                GKToolStripMenuItem tsmi = new GKToolStripMenuItem(fn, i);
+                tsmi.Click += this.MRUFileClick;
+                this.MenuMRU.Items.Add(tsmi);
             }
         }
 
@@ -915,7 +915,7 @@ namespace GKUI
         private void miLogSendClick(object sender, EventArgs e)
         {
             #if GK_LINUX
-            this.ShowWarning(@"This function is not supported in Linux");
+            GKUtils.SendMail(GKData.APP_MAIL, "GEDKeeper: error notification", "This automatic notification of error.", this.fLogFilename);
             #else
             if (File.Exists(this.fLogFilename)) {
                 MapiMailMessage message = new MapiMailMessage("GEDKeeper: error notification", "This automatic notification of error.");
@@ -1000,6 +1000,20 @@ namespace GKUI
         {
             base.LayoutMdi(MdiLayout.ArrangeIcons);
         }
+
+		private void miWindowDropDownOpening(object sender, EventArgs e)
+		{
+		    Form activeChild = this.ActiveMdiChild;
+		    if (activeChild != null)
+		    {
+		        // platform: in Mono here is bug, but code works without this line
+		        if (!SysInfo.IsUnix()) {
+		          ActivateMdiChild(null);
+		        }
+
+		        ActivateMdiChild(activeChild);
+		    }
+		}
 
         #endregion
 
@@ -1109,9 +1123,9 @@ namespace GKUI
                 plugin.OnLanguageChange();
             }
 
-            num = this.miPlugins.MenuItems.Count;
+            num = this.miPlugins.DropDownItems.Count;
             for (int i = 0; i < num; i++) {
-                MenuItem mi = this.miPlugins.MenuItems[i];
+                ToolStripItem mi = this.miPlugins.DropDownItems[i];
                 IPlugin plugin = (IPlugin)mi.Tag;
                 mi.Text = plugin.DisplayName;
             }
@@ -1119,7 +1133,7 @@ namespace GKUI
 
         private static void Plugin_Click(object sender, EventArgs e)
         {
-            MenuItem item = sender as MenuItem;
+            ToolStripMenuItem item = sender as ToolStripMenuItem;
             if (item == null) return;
 
             IPlugin plugin = item.Tag as IPlugin;
@@ -1131,7 +1145,7 @@ namespace GKUI
         private void UpdatePluginsItems()
         {
             this.miPlugins.Visible = (this.fPlugins.Count > 0);
-            this.miPlugins.MenuItems.Clear();
+            this.miPlugins.DropDownItems.Clear();
 
             this.fActiveWidgets.Clear();
 
@@ -1140,10 +1154,10 @@ namespace GKUI
                 IPlugin plugin = this.fPlugins[i];
                 string dispName = plugin.DisplayName;
 
-                MenuItem mi = new GKMenuItem(dispName, i);
+                ToolStripMenuItem mi = new ToolStripMenuItem(dispName/*, i*/);
                 mi.Click += Plugin_Click;
                 mi.Tag = plugin;
-                this.miPlugins.MenuItems.Add(mi);
+                this.miPlugins.DropDownItems.Add(mi);
 
                 if (plugin is IWidget) {
                     WidgetInfo widInfo = new WidgetInfo();
