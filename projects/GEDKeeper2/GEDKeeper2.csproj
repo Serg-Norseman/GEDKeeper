@@ -536,7 +536,7 @@
     <EmbeddedResource Include="GKUI\Dialogs\ProgressDlg.resx">
       <DependentUpon>ProgressDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\Dialogs\TfmPersonalNameEdit.resx">
+    <EmbeddedResource Include="GKUI\Dialogs\PersonalNameEditDlg.resx">
       <DependentUpon>PersonalNameEditDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\PersonEditDlg.resx">
