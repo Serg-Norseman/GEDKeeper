@@ -313,9 +313,9 @@ namespace GKUI
             }
         }
 
-        private void ToolBar1_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
+        private void ToolBar1_ButtonClick(object sender, EventArgs e)
         {
-            if (e.Button == this.tbImageSave) {
+            if (sender == this.tbImageSave) {
                 this.tbImageSaveClick();
             }
         }
@@ -398,7 +398,7 @@ namespace GKUI
             this.miGens7.Checked = false;
             this.miGens8.Checked = false;
             this.miGens9.Checked = false;
-            ((MenuItem)sender).Checked = true;
+            ((ToolStripMenuItem)sender).Checked = true;
 
             if (sender == this.miGensInf) this.fGensLimit = -1;
             if (sender == this.miGens1) this.fGensLimit = 1;
@@ -528,7 +528,7 @@ namespace GKUI
 
         private void miModeItem_Click(object sender, EventArgs e)
         {
-            TreeChartBox.ChartKind newMode = (TreeChartBox.ChartKind)((MenuItem)sender).Tag;
+            TreeChartBox.ChartKind newMode = (TreeChartBox.ChartKind)((ToolStripMenuItem)sender).Tag;
             if (this.fChartKind == newMode) return;
 
             this.ChartKind = newMode;

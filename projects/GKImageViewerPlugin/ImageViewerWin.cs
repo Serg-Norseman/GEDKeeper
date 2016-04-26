@@ -18,11 +18,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
@@ -54,9 +54,9 @@ namespace GKImageViewerPlugin
 			}
 		}
 
-		private void ToolBar1_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
+		private void ToolBar1_ButtonClick(object sender, EventArgs e)
 		{
-			if (e.Button == this.tbFileLoad) {
+			if (sender == this.tbFileLoad) {
 				if (OpenDialog1.ShowDialog() == DialogResult.OK) {
 					this.SetFileRef(OpenDialog1.FileName);
 				}

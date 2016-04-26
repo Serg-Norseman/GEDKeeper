@@ -293,6 +293,16 @@ internal class GKResources {
     /// <summary>
     ///   Looks up a localized resource of type System.Drawing.Bitmap.
     /// </summary>
+    internal static System.Drawing.Bitmap iSaveImage {
+        get {
+            object obj = ResourceManager.GetObject("iSaveImage", resourceCulture);
+            return ((System.Drawing.Bitmap)(obj));
+        }
+    }
+    
+    /// <summary>
+    ///   Looks up a localized resource of type System.Drawing.Bitmap.
+    /// </summary>
     internal static System.Drawing.Bitmap iSizeToFit {
         get {
             object obj = ResourceManager.GetObject("iSizeToFit", resourceCulture);
@@ -436,6 +446,16 @@ internal class GKResources {
     internal static System.Drawing.Bitmap iToMan {
         get {
             object obj = ResourceManager.GetObject("iToMan", resourceCulture);
+            return ((System.Drawing.Bitmap)(obj));
+        }
+    }
+    
+    /// <summary>
+    ///   Looks up a localized resource of type System.Drawing.Bitmap.
+    /// </summary>
+    internal static System.Drawing.Bitmap iTools {
+        get {
+            object obj = ResourceManager.GetObject("iTools", resourceCulture);
             return ((System.Drawing.Bitmap)(obj));
         }
     }

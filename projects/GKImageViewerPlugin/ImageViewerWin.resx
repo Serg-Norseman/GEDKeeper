@@ -117,16 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="ImageList_Buttons.TrayLocation" type="System.Drawing.Point, System.Drawing">
+  <metadata name="ToolBar1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
-  </data>
+  </metadata>
+  <metadata name="ImageList_Buttons.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>123, 17</value>
+  </metadata>
   <data name="ImageList_Buttons.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>
-        AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj0yLjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABq
-        BAAAAk1TRnQBSQFMAwEBAAFkAQABZAEAARQBAAEUAQAE/wEZAQAI/wFCAU0BNgcAATYDAAEoAwABUAMA
+        BAAAAk1TRnQBSQFMAwEBAAFsAQABbAEAARQBAAEUAQAE/wEZAQAI/wFCAU0BNgcAATYDAAEoAwABUAMA
         ARQDAAEBAQABGAUAAcABEv8A9AACYAEAAmABAAGgAcABAAGgAcABAAKAAQABoAHAAQACgAEAAaABwAEA
         AoABAAGgAcABAAKAAQABoAHAAQACgMoAAmABgALgAQACYAEAAaABwAEAAaABwAEAAaABwAEAAaABwAEA
         AoABAAGgAcABAAKAAQABoAHAAQACgAEAAaABwAEAAoDHAAJgAYAC4AEAAcAB4AEAAmABAAGgAcABAAKA
@@ -147,7 +149,7 @@
         AYEB/wHwCQABwwH+CgAC/woAAv8BgAkAAf8BvwFACQAB/wHeAeAJAAH/AeEB8AkAAv8B8AkACw==
 </value>
   </data>
-  <data name="OpenDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing">
-    <value>176, 18</value>
-  </data>
+  <metadata name="OpenDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>286, 17</value>
+  </metadata>
 </root>

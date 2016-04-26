@@ -47,13 +47,13 @@ namespace GKUI.Controls
     {
         private static readonly object EventModify;
 
-        private readonly ToolBarButton fBtnAdd;
-        private readonly ToolBarButton fBtnDelete;
-        private readonly ToolBarButton fBtnEdit;
-        private readonly ToolBarButton fBtnLinkJump;
-        private readonly ToolBarButton fBtnMoveUp;
-        private readonly ToolBarButton fBtnMoveDown;
-        private readonly ToolBar fToolBar;
+        private readonly ToolStripButton fBtnAdd;
+        private readonly ToolStripButton fBtnDelete;
+        private readonly ToolStripButton fBtnEdit;
+        private readonly ToolStripButton fBtnLinkJump;
+        private readonly ToolStripButton fBtnMoveUp;
+        private readonly ToolStripButton fBtnMoveDown;
+        private readonly ToolStrip fToolBar;
         private readonly GKListView fList;
 
         private EnumSet<SheetButton> fButtons;
@@ -88,29 +88,40 @@ namespace GKUI.Controls
                 throw new ArgumentNullException("owner");
             }
 
-            this.fBtnMoveDown = new ToolBarButton();
+            this.fBtnMoveDown = new ToolStripButton();
             this.fBtnMoveDown.ImageIndex = 30;
             this.fBtnMoveDown.ToolTipText = LangMan.LS(LSID.LSID_RecordMoveDown);
-            this.fBtnMoveUp = new ToolBarButton();
+            this.fBtnMoveDown.Click += this.ButtonClick;
+
+            this.fBtnMoveUp = new ToolStripButton();
             this.fBtnMoveUp.ImageIndex = 29;
             this.fBtnMoveUp.ToolTipText = LangMan.LS(LSID.LSID_RecordMoveUp);
-            this.fBtnLinkJump = new ToolBarButton();
+            this.fBtnMoveUp.Click += this.ButtonClick;
+
+            this.fBtnLinkJump = new ToolStripButton();
             this.fBtnLinkJump.ImageIndex = 28;
             this.fBtnLinkJump.ToolTipText = LangMan.LS(LSID.LSID_RecordGoto);
-            this.fBtnDelete = new ToolBarButton();
+            this.fBtnLinkJump.Click += this.ButtonClick;
+
+            this.fBtnDelete = new ToolStripButton();
             this.fBtnDelete.ImageIndex = 5;
             this.fBtnDelete.ToolTipText = LangMan.LS(LSID.LSID_MIRecordDelete);
-            this.fBtnEdit = new ToolBarButton();
+            this.fBtnDelete.Click += this.ButtonClick;
+
+            this.fBtnEdit = new ToolStripButton();
             this.fBtnEdit.ImageIndex = 4;
             this.fBtnEdit.ToolTipText = LangMan.LS(LSID.LSID_MIRecordEdit);
-            this.fBtnAdd = new ToolBarButton();
+            this.fBtnEdit.Click += this.ButtonClick;
+
+            this.fBtnAdd = new ToolStripButton();
             this.fBtnAdd.ImageIndex = 3;
             this.fBtnAdd.ToolTipText = LangMan.LS(LSID.LSID_MIRecordAdd);
+            this.fBtnAdd.Click += this.ButtonClick;
 
-            this.fToolBar = new ToolBar();
+            this.fToolBar = new ToolStrip();
             this.fToolBar.Dock = DockStyle.Right;
-            this.fToolBar.Appearance = ToolBarAppearance.Flat;
-            this.fToolBar.Buttons.AddRange(new ToolBarButton[] {
+            //this.fToolBar.Appearance = ToolBarAppearance.Flat;
+            this.fToolBar.Items.AddRange(new ToolStripItem[] {
                                                this.fBtnAdd,
                                                this.fBtnEdit,
                                                this.fBtnDelete,
@@ -118,8 +129,11 @@ namespace GKUI.Controls
                                                this.fBtnMoveUp,
                                                this.fBtnMoveDown});
             this.fToolBar.ImageList = MainWin.Instance.ImageList_Buttons;
-            this.fToolBar.ShowToolTips = true;
-            this.fToolBar.ButtonClick += this.ButtonClick;
+            this.fToolBar.GripStyle = ToolStripGripStyle.Hidden;
+            this.fToolBar.ImageScalingSize = new System.Drawing.Size(24, 20);
+            //this.fToolBar.AutoSize = true;
+            //this.fToolBar.ShowToolTips = true;
+            //this.fToolBar.ButtonClick += this.ButtonClick;
 
             this.fList = new GKListView();
             this.fList.Dock = DockStyle.Fill;
@@ -135,8 +149,8 @@ namespace GKUI.Controls
             this.SuspendLayout();
             this.Controls.Add(this.fList);
             this.Controls.Add(this.fToolBar);
-            this.Controls.SetChildIndex(this.fList, 1);
-            this.Controls.SetChildIndex(this.fToolBar, 0);
+            //this.Controls.SetChildIndex(this.fList, 1);
+            //this.Controls.SetChildIndex(this.fToolBar, 0);
             this.ResumeLayout(false);
 
             this.Dock = DockStyle.Fill;
@@ -188,29 +202,29 @@ namespace GKUI.Controls
             this.fList.BackColor = (this.fReadOnly) ? SystemColors.Control : SystemColors.Window;
         }
 
-        private void ButtonClick(object sender, ToolBarButtonClickEventArgs e)
+        private void ButtonClick(object sender, EventArgs e)
         {
-            if (e.Button == this.fBtnAdd)
+            if (sender == this.fBtnAdd)
             {
                 this.ItemAdd();
             }
-            else if (e.Button == this.fBtnEdit)
+            else if (sender == this.fBtnEdit)
             {
                 this.ItemEdit();
             }
-            else if (e.Button == this.fBtnDelete)
+            else if (sender == this.fBtnDelete)
             {
                 this.ItemDelete();
             }
-            else if (e.Button == this.fBtnLinkJump)
+            else if (sender == this.fBtnLinkJump)
             {
                 this.ItemJump();
             }
-            else if (e.Button == this.fBtnMoveUp)
+            else if (sender == this.fBtnMoveUp)
             {
                 this.ItemMoveUp();
             }
-            else if (e.Button == this.fBtnMoveDown)
+            else if (sender == this.fBtnMoveDown)
             {
                 this.ItemMoveDown();
             }
