@@ -1,9 +1,9 @@
 ﻿# C# Compiler settings for Windows.
 
-windowscompilerdosany := C:\Program Files (x86)\MSBuild\14.0\bin\csc.exe
+windowscompilerdosany := /c/Program\ Files\ \(x86\)/MSBuild/14.0/bin/csc.exe
 windowscompilerdosx86-64 := $(windowscompilerdosany)
 windowscompilerdosx86 := $(windowscompilerdosany)
-windowsrcdosany := C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.6 Tools\resgen.exe
+windowsrcdosany := /c/Program\ Files\ \(x86\)/Microsoft\ SDKs/Windows/v10.0A/bin/NETFX\ 4.6\ Tools/ResGen.exe
 windowsrcdosx86-64 := $(windowsrcdosany)
 windowsrcdosx86 := $(windowsrcdosany)
 
