@@ -332,10 +332,10 @@ $(outdir)$(project)$(projectext): $(resources) buildcs
 .PHONY: buildcs
 buildcs: $(sources)
 ifeq ($(windows), $(softwareplatform))
-	"$(compiler)" //out:$(outdirdos)$(project)$(projectext) $(compilerflags) "Externals\\SingleInstancing\\Global Delegates.cs" $^
+	$(compiler) //out:$(outdirdos)$(project)$(projectext) $(compilerflags) "Externals\\SingleInstancing\\Global Delegates.cs" $^
 else
 	@echo "Not yet implemented"
 endif
 
 $(objdir)%.resources: %.resx
-	"$(rc)" $(rcflags) //compile $<,$@
+	$(rc) $(rcflags) //compile $<,$@
