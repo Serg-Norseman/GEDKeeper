@@ -1,10 +1,9 @@
 ﻿<Properties StartupItem="GEDKeeper2/GEDKeeper2Lnx.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Linux_Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="GEDKeeper2/GKUI/TfmGEDKeeper.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|Linux" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="GEDKeeper2/GKCore/GKUtils.cs">
     <Files>
-      <File FileName="GEDKeeper2/GKCore/GKUtils.cs" Line="1" Column="1" />
-      <File FileName="GEDKeeper2/GKUI/Charts/TreeChartBox.cs" Line="1" Column="1" />
-      <File FileName="GEDKeeper2/GKUI/TfmGEDKeeper.cs" Line="1283" Column="5" />
+      <File FileName="GEDKeeper2/GKCore/GKUtils.cs" Line="71" Column="58" />
+      <File FileName="GEDKeeper2/GKCore/LangMan.cs" Line="746" Column="45" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -19,7 +19,9 @@
  */
 
 using System;
+using System.Diagnostics;
 using System.Windows.Forms;
+
 using GKCommon;
 using GKCore;
 
@@ -40,7 +42,7 @@ namespace GKUI.Dialogs
 
         private void LabelMail_Click(object sender, EventArgs e)
         {
-            GKUtils.LoadExtFile(this.LabelMail.Text);
+            Process.Start(this.LabelMail.Text);
         }
 
         public static void ShowAbout()

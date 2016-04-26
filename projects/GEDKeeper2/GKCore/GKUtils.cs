@@ -66,18 +66,13 @@ namespace GKCore
 
         public static int GetKeyLayout()
         {
-            //FIXME: There is a bug in Mono: does not work this CurrentInputLanguage
-
-            #if GK_LINUX
-            //ulong monoVer = SysInfo.MonoVersion;
-            //IsRequired(monoVer);
-
-            InputLanguage currentLang = InputLanguage.CurrentInputLanguage;
-            return currentLang.Culture.KeyboardLayoutId;
-            #else
-            InputLanguage currentLang = InputLanguage.CurrentInputLanguage;
-            return currentLang.Culture.KeyboardLayoutId;
-            #endif
+			if (SysInfo.IsUnix()) {
+				// There is a bug in Mono: does not work this CurrentInputLanguage
+				return CultureInfo.CurrentUICulture.KeyboardLayoutId;
+			} else {
+				InputLanguage currentLang = InputLanguage.CurrentInputLanguage;
+				return currentLang.Culture.KeyboardLayoutId;
+			}
         }
 
         public static void SetKeyLayout(int layout)
