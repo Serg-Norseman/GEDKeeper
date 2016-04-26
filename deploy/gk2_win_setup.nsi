@@ -5,7 +5,7 @@
 !include "MUI2.nsh"
 
 Name "GEDKeeper2"
-OutFile "GEDKeeper2-v2.6.0.exe"
+OutFile "GEDKeeper2-v2.6.0-win-setup.exe"
 InstallDir $PROGRAMFILES\GEDKeeper2
 XPStyle on
 ;ShowInstDetails show
@@ -41,26 +41,26 @@ Section "GEDKeeper2 (необходимо)"
   File "..\LuaInterface.dll"
   File "..\ZedGraph.dll"
 
-  CreateDirectory "$INSTDIR\langs"
-  SetOutPath "$INSTDIR\langs"
-  File "..\langs\readme.txt"
-  File "..\langs\russian.sample"
+  CreateDirectory "$INSTDIR\locales"
+  SetOutPath "$INSTDIR\locales"
+  File "..\locales\readme_rus.txt"
+  File "..\locales\russian.sample"
 
   CreateDirectory "$INSTDIR\plugins"
   SetOutPath "$INSTDIR\plugins"
   File "..\plugins\GKCommon.dll"
 
-  CreateDirectory "$INSTDIR\help"
-  SetOutPath "$INSTDIR\help"
-  File "..\help\*.*"
+  CreateDirectory "$INSTDIR\locales\help_rus"
+  SetOutPath "$INSTDIR\locales\help_rus"
+  File "..\locales\help_rus\*.*"
 
-  CreateDirectory "$INSTDIR\help\images"
-  SetOutPath "$INSTDIR\help\images"
-  File "..\help\images\*.*"
+  CreateDirectory "$INSTDIR\locales\help_rus\images"
+  SetOutPath "$INSTDIR\locales\help_rus\images"
+  File "..\locales\help_rus\images\*.*"
 
   CreateDirectory "$SMPROGRAMS\GEDKeeper2"
   CreateShortCut "$SMPROGRAMS\GEDKeeper2\GEDKeeper2.lnk" "$INSTDIR\GEDKeeper2.exe" "" "$INSTDIR\GEDKeeper2.exe" 0
-  CreateShortCut "$SMPROGRAMS\GEDKeeper2\—правка.lnk" "$INSTDIR\help\GEDKeeper2.html" "" "$INSTDIR\help\GEDKeeper2.html" 0
+  CreateShortCut "$SMPROGRAMS\GEDKeeper2\—правка.lnk" "$INSTDIR\locales\help_rus\GEDKeeper2.html" "" "$INSTDIR\locales\help_rus\GEDKeeper2.html" 0
   CreateShortCut "$SMPROGRAMS\GEDKeeper2\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
 
   ; Write the installation path into the registry
@@ -97,13 +97,13 @@ SectionEnd
 
 SectionGroup /e "языки"
 	Section "English"
-  		SetOutPath "$INSTDIR\langs"
-  		File "..\langs\english.lng"
+  		SetOutPath "$INSTDIR\locales"
+  		File "..\locales\english.lng"
 	SectionEnd
 
 	Section "”крањнська"
-  		SetOutPath "$INSTDIR\langs"
-  		File "..\langs\ukrainian.lng"
+  		SetOutPath "$INSTDIR\locales"
+  		File "..\locales\ukrainian.lng"
 	SectionEnd
 SectionGroupEnd
 
@@ -215,17 +215,17 @@ Section "Uninstall"
 
   Delete $INSTDIR\uninstall.exe
 
-  Delete "$INSTDIR\help\images\*.*"
-  RMDir "$INSTDIR\help\images"
+  Delete "$INSTDIR\locales\help_rus\images\*.*"
+  RMDir "$INSTDIR\locales\help_rus\images"
 
-  Delete "$INSTDIR\help\*.*"
-  RMDir "$INSTDIR\help"
+  Delete "$INSTDIR\locales\help_rus\*.*"
+  RMDir "$INSTDIR\locales\help_rus"
+
+  Delete "$INSTDIR\locales\*.*"
+  RMDir "$INSTDIR\locales"
 
   Delete "$INSTDIR\scripts\*.lua"
   RMDir "$INSTDIR\scripts"
-
-  Delete "$INSTDIR\langs\*.*"
-  RMDir "$INSTDIR\langs"
 
   Delete "$INSTDIR\plugins\*.*"
   RMDir "$INSTDIR\plugins"
