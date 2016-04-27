@@ -47,7 +47,7 @@ namespace GKUI
 
         private static string TimeSpanToString(TimeSpan ts)
         {
-            return string.Format(null, "{0:00}:{1:00}:{2:00}", new object[] { ts.Hours, ts.Minutes, ts.Seconds });
+            return string.Format(null, "{0:00}:{1:00}:{2:00}", ts.Hours, ts.Minutes, ts.Seconds);
         }
 
         #region Old funcs
@@ -160,6 +160,8 @@ namespace GKUI
 
         private void DoStep(int value)
         {
+			if (this.fVal == value) return;
+
             this.fVal = value;
             this.ProgressBar1.Value = this.fVal;
 
@@ -176,12 +178,34 @@ namespace GKUI
             this.Label9.Text = TimeSpanToString(sumTime);
 
             this.Update();
-            //this.Refresh();
-            //this.Invalidate();
             //Application.DoEvents();
-            //System.Threading.Thread.Sleep(1);
         }
 
         #endregion
+    }
+
+    public class ProgressController
+    {
+        //private static int fVal;
+
+        public static void ProgressInit(string title, int max)
+        {
+            ProgressDlg.ProgressInit(title, max);
+        }
+
+        public static void ProgressDone()
+        {
+            ProgressDlg.ProgressDone();
+        }
+
+        public static void ProgressStep()
+        {
+            ProgressDlg.ProgressStep();
+        }
+
+        public static void ProgressStep(int value)
+        {
+            ProgressDlg.ProgressStep(value);
+        }
     }
 }

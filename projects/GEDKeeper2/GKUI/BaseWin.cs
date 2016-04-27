@@ -471,11 +471,6 @@ namespace GKUI
             sheet.Controls.SetChildIndex(summary, 2);
         }
 
-        private void LoadProgress(object sender, int progress)
-        {
-            ProgressDlg.ProgressStep(progress);
-        }
-
         private void ChangeFileName()
         {
             this.SetMainTitle();
@@ -523,7 +518,7 @@ namespace GKUI
 
             try
             {
-                ProgressDlg.ProgressInit(LangMan.LS(LSID.LSID_Loading), 100);
+                this.ProgressInit(LangMan.LS(LSID.LSID_Loading), 100);
                 this.fTree.OnProgress += LoadProgress;
                 try
                 {
@@ -532,7 +527,7 @@ namespace GKUI
                 finally
                 {
                     this.fTree.OnProgress -= LoadProgress;
-                    ProgressDlg.ProgressDone();
+                    this.ProgressDone();
                 }
 
                 TreeTools.CheckGEDCOMFormat(this.fTree, this.fValuesCollection, this);
@@ -1014,24 +1009,29 @@ namespace GKUI
 
         #region IProgressController implementation
         
-        void IProgressController.ProgressInit(string title, int max)
+        public void ProgressInit(string title, int max)
         {
-            ProgressDlg.ProgressInit(title, max);
+            ProgressController.ProgressInit(title, max);
         }
 
-        void IProgressController.ProgressDone()
+        public void ProgressDone()
         {
-            ProgressDlg.ProgressDone();
+            ProgressController.ProgressDone();
         }
 
-        void IProgressController.ProgressStep()
+        public void ProgressStep()
         {
-            ProgressDlg.ProgressStep();
+            ProgressController.ProgressStep();
         }
 
-        void IProgressController.ProgressStep(int value)
+        public void ProgressStep(int value)
         {
-            ProgressDlg.ProgressStep(value);
+            ProgressController.ProgressStep(value);
+        }
+
+        private void LoadProgress(object sender, int progress)
+        {
+            ProgressDlg.ProgressStep(progress);
         }
 
         #endregion

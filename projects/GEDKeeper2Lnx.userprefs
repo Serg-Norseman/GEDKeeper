@@ -1,9 +1,11 @@
 ﻿<Properties StartupItem="GEDKeeper2/GEDKeeper2Lnx.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|Linux" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="GEDKeeper2/GKCore/GKUtils.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="GEDKeeper2/GKCore/Tools/TreeTools.cs">
     <Files>
-      <File FileName="GEDKeeper2/GKCore/GKUtils.cs" Line="71" Column="58" />
-      <File FileName="GEDKeeper2/GKCore/LangMan.cs" Line="746" Column="45" />
+      <File FileName="GEDKeeper2/GKUI/TreeToolsWin.cs" Line="341" Column="44" />
+      <File FileName="GEDKeeper2/GKUI/Dialogs/ProgressDlg.cs" Line="179" Column="4" />
+      <File FileName="GEDKeeper2/GKUI/BaseWin.cs" Line="538" Column="36" />
+      <File FileName="GEDKeeper2/GKCore/Tools/TreeTools.cs" Line="606" Column="6" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
