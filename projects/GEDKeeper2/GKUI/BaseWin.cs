@@ -1031,7 +1031,7 @@ namespace GKUI
 
         private void LoadProgress(object sender, int progress)
         {
-            ProgressDlg.ProgressStep(progress);
+            ProgressController.ProgressStep(progress);
         }
 
         #endregion
@@ -1132,6 +1132,11 @@ namespace GKUI
         {
             if (iRec == null) {
                 throw new ArgumentNullException("iRec");
+            }
+
+            // platform: In Windows works without it
+            if (SysInfo.IsUnix()) {
+                this.Activate();
             }
 
             this.SelectRecordByXRef(iRec.XRef);

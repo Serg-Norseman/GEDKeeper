@@ -33,7 +33,6 @@ namespace GKUI
     /// </summary>
     public partial class ProgressDlg : Form, IProgressController
     {
-        private static ProgressDlg fInstance;
         private DateTime fStartTime;
 
         public ProgressDlg()
@@ -50,50 +49,12 @@ namespace GKUI
             return string.Format(null, "{0:00}:{1:00}:{2:00}", ts.Hours, ts.Minutes, ts.Seconds);
         }
 
-        #region Old funcs
-
-        public static void ProgressInit(string title, int max)
-        {
-            ProgressDone();
-
-            fInstance = new ProgressDlg();
-            fInstance.DoInit(title, max);
-            fInstance.Show();
-            fInstance.Update();
-        }
-
-        public static void ProgressDone()
-        {
-            if (fInstance == null) return;
-
-            fInstance.Hide();
-            fInstance.Dispose();
-            fInstance = null;
-        }
-
-        public static void ProgressStep()
-        {
-            if (fInstance == null) return;
-            fInstance.DoStep(fInstance.fVal + 1);
-        }
-        
-        public static void ProgressStep(int value)
-        {
-            if (fInstance == null) return;
-            fInstance.DoStep(value);
-        }
-
-        #endregion
-
-        #region New Funcs
+        #region Temp methods for future
 
         private readonly ManualResetEvent initEvent = new ManualResetEvent(false);
         private readonly ManualResetEvent abortEvent = new ManualResetEvent(false);
         private bool requiresClose;
         private int fVal;
-
-        public delegate void PInit(string title, int max);
-        public delegate void PStep(int value);
 
         protected override void OnLoad(EventArgs e)
         {
@@ -141,9 +102,9 @@ namespace GKUI
 
         #endregion
 
-        #region Common
+        #region Protected methods
 
-        private void DoInit(string title, int max)
+        internal void DoInit(string title, int max)
         {
             this.Label1.Text = title;
             this.ProgressBar1.Maximum = max;
@@ -153,14 +114,14 @@ namespace GKUI
             this.fVal = 0;
         }
 
-        private void DoDone()
+        internal void DoDone()
         {
             this.Close();
         }
 
-        private void DoStep(int value)
+        internal void DoStep(int value)
         {
-			if (this.fVal == value) return;
+            if (this.fVal == value) return;
 
             this.fVal = value;
             this.ProgressBar1.Value = this.fVal;
@@ -178,34 +139,121 @@ namespace GKUI
             this.Label9.Text = TimeSpanToString(sumTime);
 
             this.Update();
-            //Application.DoEvents();
         }
 
         #endregion
+
+        public delegate void PInit(string title, int max);
+        public delegate void PStep(int value);
     }
 
-    public class ProgressController
+    public sealed class ProgressController
     {
-        //private static int fVal;
+        private static ProgressProxy pfrm;
+        private static int fVal;
 
         public static void ProgressInit(string title, int max)
         {
-            ProgressDlg.ProgressInit(title, max);
+            if (pfrm != null)
+            {
+                pfrm.Close();
+            }
+
+            pfrm = new ProgressProxy(title, max);
+            fVal = 0;
         }
 
         public static void ProgressDone()
         {
-            ProgressDlg.ProgressDone();
+            pfrm.Close();
+            pfrm = null;
         }
 
         public static void ProgressStep()
         {
-            ProgressDlg.ProgressStep();
+            pfrm.UpdateProgress(fVal++);
+            //System.Threading.Thread.Sleep(0); // debug
         }
 
         public static void ProgressStep(int value)
         {
-            ProgressDlg.ProgressStep(value);
+            pfrm.UpdateProgress(value);
+            //System.Threading.Thread.Sleep(0); // debug
         }
+    }
+
+    internal sealed class ProgressProxy
+    {
+        private ProgressDlg fProgressForm;
+        private string fTitle;
+        private int fMax;
+        //private ManualResetEvent fMRE = new ManualResetEvent(false);
+        private bool fFormLoaded = false;
+        private Thread fThread;
+
+        public ProgressProxy(string title, int max)
+        {
+            this.fTitle = title;
+            this.fMax = max;
+
+            fThread = new Thread(ShowProgressForm);
+            fThread.SetApartmentState(ApartmentState.STA);
+            fThread.Start();
+
+            while (!fFormLoaded)
+            {
+                Thread.Sleep(100);
+            }
+            //fMRE.WaitOne();
+        }
+
+        private void ShowProgressForm()
+        {
+            fProgressForm = new ProgressDlg();
+            fProgressForm.StartPosition = FormStartPosition.CenterScreen;
+            fProgressForm.DoInit(fTitle, fMax);
+            fProgressForm.Load += new EventHandler(ProgressForm_Load);
+            fProgressForm.ShowDialog();
+            fProgressForm.Close();
+        }
+
+        private void ProgressForm_Load(object sender, EventArgs e)
+        {
+            //fMRE.Set();
+            fFormLoaded = true;
+        }
+
+        public void UpdateProgress(int percent)
+        {
+            try
+            {
+                if (fProgressForm.InvokeRequired)
+                {
+                    fProgressForm.Invoke(new DelUpdateProgress(UpdateProgress), new object[] { percent });
+                }
+                else
+                {
+                    fProgressForm.DoStep(percent);
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        public void Close()
+        {
+            if (fProgressForm.InvokeRequired)
+            {
+                fProgressForm.Invoke(new MethodInvoker(Close));
+            }
+            else
+            {
+                fProgressForm.DialogResult = System.Windows.Forms.DialogResult.OK;
+            }
+        }
+
+        delegate void DelUpdateProgress(int percent);
+        delegate void DelClose();
     }
 }

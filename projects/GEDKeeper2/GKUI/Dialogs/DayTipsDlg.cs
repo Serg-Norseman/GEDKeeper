@@ -80,6 +80,7 @@ namespace GKUI.Dialogs
                 dlg.TitleLabel.Text = caption;
                 dlg.fTips.Assign(tips);
                 dlg.GetNextTip();
+                dlg.StartPosition = FormStartPosition.CenterScreen;
                 dlg.ShowDialog();
 
                 result = dlg.ShowCheck.Checked;

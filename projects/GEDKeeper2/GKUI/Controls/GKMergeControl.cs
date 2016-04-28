@@ -83,19 +83,13 @@ namespace GKUI.Controls
         {
             InitializeComponent();
 
-            int y = Edit1.Top + Edit1.Height + 8;
-            int h = btnMergeToLeft.Top - y - 8;
-            int w = (btnRec1Select.Left + btnRec1Select.Width) - Edit1.Left;
-            
             this.fView1 = new HyperView();
-            this.fView1.Location = new Point(Edit1.Left, y);
-            this.fView1.Size = new Size(w, h);
             this.Controls.Add(this.fView1);
 
             this.fView2 = new HyperView();
-            this.fView2.Location = new Point(Edit2.Left, y);
-            this.fView2.Size = new Size(w, h);
             this.Controls.Add(this.fView2);
+
+            this.AdjustControls();
 
             this.SetRec1(null);
             this.SetRec2(null);
@@ -104,6 +98,27 @@ namespace GKUI.Controls
             this.btnRec2Select.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
         }
 
+        private void AdjustControls()
+        {
+            if (this.fView1 == null || this.fView2 == null) return;
+
+            int y = Edit1.Top + Edit1.Height + 8;
+            int h = btnMergeToLeft.Top - y - 8;
+            int w = (btnRec1Select.Left + btnRec1Select.Width) - Edit1.Left;
+
+            this.fView1.Location = new Point(Edit1.Left, y);
+            this.fView1.Size = new Size(w, h);
+
+            this.fView2.Location = new Point(Edit2.Left, y);
+            this.fView2.Size = new Size(w, h);
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            this.AdjustControls();
+
+            base.OnResize(e);
+        }
 
         private void RecordMerge(GEDCOMRecord targetRec, GEDCOMRecord sourceRec)
         {

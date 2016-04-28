@@ -460,9 +460,13 @@ namespace GKUI.Controls
                 int idx = this.IndexOfRecord(record);
                 if (idx >= 0) {
                     ListViewItem item = this.Items[idx];
+
                     this.SelectedIndices.Clear();
                     item.Selected = true;
-                    item.EnsureVisible();
+
+                    // platform: in Mono it doesn't work
+                    //item.EnsureVisible();
+                    this.EnsureVisible(idx);
                 }
             } catch (Exception ex) {
                 Logger.LogWrite("GKRecordsView.SelectItemByRec(): " + ex.Message);

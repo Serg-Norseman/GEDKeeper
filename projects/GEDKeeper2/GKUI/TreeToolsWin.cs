@@ -180,6 +180,11 @@ namespace GKUI
 
         #region Duplicates Search
 
+		void SheetMergeResize(object sender, EventArgs e)
+		{
+		    ///this.MergeCtl.Height = SheetMerge.Height - btnSearch.Top - 20;
+		}
+
         private static bool CheckPersonsEx(GEDCOMIndividualRecord rec1, GEDCOMIndividualRecord rec2)
         {
             GEDCOMFamilyRecord fam1 = rec1.GetParentsFamily();

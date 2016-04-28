@@ -1008,7 +1008,7 @@ namespace GKUI
 		    {
 		        // platform: in Mono here is bug, but code works without this line
 		        if (!SysInfo.IsUnix()) {
-		          ActivateMdiChild(null);
+		            ActivateMdiChild(null);
 		        }
 
 		        ActivateMdiChild(activeChild);
