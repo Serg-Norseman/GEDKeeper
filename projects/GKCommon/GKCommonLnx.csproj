@@ -21,6 +21,8 @@
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>False</RunCodeAnalysis>
     <SourceAnalysisOverrideSettingsFile>C:\Users\Norseman\AppData\Roaming\ICSharpCode/SharpDevelop4\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>bin\</OutputPath>
@@ -265,6 +267,8 @@
     <Compile Include="GKCore\Types\SpecialUserRef.cs" />
     <Compile Include="GKCore\Types\TargetMode.cs" />
     <Compile Include="GKCore\Types\WomanSurnameFormat.cs" />
+    <Compile Include="GKCommon\Controls\ReflectionHelper.cs" />
+    <Compile Include="GKCommon\Controls\EventHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GKCommon\Controls\ExtResources.resx">
@@ -276,7 +280,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="GKCommon\SmartGraph" />
+    <Folder Include="GKCommon\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

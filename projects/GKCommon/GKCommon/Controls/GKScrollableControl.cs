@@ -26,11 +26,47 @@ namespace GKCommon.Controls
 {
     public class GKScrollableControl : Panel
     {
+        private bool fValidEvent;
+
         public GKScrollableControl()
         {
             base.AutoScroll = true;
             base.ResizeRedraw = true;
+
+            #if GK_LINUX
+            ScrollBar obj = ReflectionHelper.GetFieldValue(this, "hscrollbar") as ScrollBar;
+            if (obj != null) {
+                //cEventHelper.RemoveEventHandler(obj, "Scroll");
+                obj.Scroll += new ScrollEventHandler (HandleHScrollEvent);
+            }
+
+            obj = ReflectionHelper.GetFieldValue(this, "vscrollbar") as ScrollBar;
+            if (obj != null) {
+                //cEventHelper.RemoveEventHandler(obj, "Scroll");
+                obj.Scroll += new ScrollEventHandler (HandleVScrollEvent);
+            }
+            #else
+            this.fValidEvent = true;
+            #endif
         }
+
+        #if GK_LINUX
+        private void HandleHScrollEvent (object sender, ScrollEventArgs args)
+        {
+            this.fValidEvent = true;
+            ScrollEventArgs newArgs = new ScrollEventArgs(args.Type, args.OldValue, args.NewValue, ScrollOrientation.HorizontalScroll);
+            this.OnScroll (newArgs);
+            this.fValidEvent = false;
+        }
+
+        private void HandleVScrollEvent (object sender, ScrollEventArgs args)
+        {
+            this.fValidEvent = true;
+            ScrollEventArgs newArgs = new ScrollEventArgs(args.Type, args.OldValue, args.NewValue, ScrollOrientation.VerticalScroll);
+            this.OnScroll (newArgs);
+            this.fValidEvent = false;
+        }
+        #endif
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
@@ -42,7 +78,7 @@ namespace GKCommon.Controls
 
         protected override void OnScroll(ScrollEventArgs e)
         {
-            if (e.Type != ScrollEventType.EndScroll)
+            if (e.Type != ScrollEventType.EndScroll && this.fValidEvent)
             {
                 switch (e.ScrollOrientation)
                 {

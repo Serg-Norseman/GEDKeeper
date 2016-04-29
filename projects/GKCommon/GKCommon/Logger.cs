@@ -35,7 +35,7 @@ namespace GKCommon
 
         public static void LogWrite(string msg)
         {
-            using (StreamWriter Log = new StreamWriter(LogFilename, true, Encoding.GetEncoding(1251)))
+            using (StreamWriter Log = new StreamWriter(LogFilename, true, Encoding.UTF8))
             {
                 Log.WriteLine("[" + DateTime.Now.ToString() + "] -> " + msg);
                 Log.Flush();
