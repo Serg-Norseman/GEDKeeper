@@ -225,7 +225,6 @@ namespace GKUI
 			this.Name = "MapsViewerWin";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Карты";
-			this.Load += new System.EventHandler(this.TfmMaps_Load);
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TfmMaps_KeyDown);
 			this.PageControl1.ResumeLayout(false);
 			this.tsPlaces.ResumeLayout(false);

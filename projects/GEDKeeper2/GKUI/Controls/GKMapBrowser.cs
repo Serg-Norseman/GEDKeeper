@@ -167,43 +167,70 @@ namespace GKUI.Controls
             }
         }
 
+        // KeePass
+		public static void SetWebBrowserDocument(WebBrowser wb, string strDocumentText)
+		{
+		    string strContent = (strDocumentText ?? string.Empty);
+
+		    wb.AllowNavigation = false;
+		    wb.DocumentText = strContent;
+
+		    // Wait for document being loaded
+		    for (int i = 0; i < 50; ++i)
+		    {
+		        if (wb.DocumentText == strContent) break;
+
+		        System.Threading.Thread.Sleep(20);
+		        Application.DoEvents();
+		    }
+		}
+
         public void InitMap()
         {
-            const string MapContent =
-                "<html>" +
-                "<head>" +
-                "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"/>" +
-                "<script src=\"http://maps.googleapis.com/maps/api/js?sensor=false&language=ru&key=AIzaSyCo57eNeJx7-ws2eei6QgAVUxOnS95IqQM\" type=\"text/javascript\"></script>" +
-                "<script type=\"text/javascript\">" +
-                "var map;" +
-                "var markersArray = [];" +
-                "function addMarker(latitude, longitude, hint) { " +
-                "	var latlng = new google.maps.LatLng(latitude,longitude); " +
-                "	var marker = new google.maps.Marker({ position: latlng, map: map, title: hint }); " +
-                "	markersArray.push(marker);" +
-                "} " +
-                "function clearOverlays() {" +
-                "	for (var i = 0; i < markersArray.length; i++ ) {" +
-                "		markersArray[i].setMap(null);" +
-                "	}" +
-                "	markersArray.length = 0;" +
-                "}" +
-                "function initialize() { " +
-                "	var mapOptions = {" +
-                "		center: new google.maps.LatLng(55.755786, 37.617633)," +
-                "		zoom: 8," +
-                "		mapTypeId: google.maps.MapTypeId.TERRAIN" +
-                "	};" +
-                "	map = new google.maps.Map(document.getElementById(\"map\"), mapOptions); " +
-                "}" +
-                "</script>" +
-                "</head>" +
-                "<body onload=\"initialize()\">" +
-                "<div id=\"map\" style=\"position:absolute; width: 100%; height: 100%; left: 0px; top: 0px;\"></div>" +
-                "<noscript>JavaScript must be switched on for use Google Maps.</noscript>" +
-                "</body></html>";
-            
-            this.DocumentText = MapContent;
+            try
+            {
+                const string MapContent =
+                    "<html>" +
+                    "<head>" +
+                    "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"/>" +
+                    "<script src=\"http://maps.googleapis.com/maps/api/js?sensor=false&language=ru&key=AIzaSyCo57eNeJx7-ws2eei6QgAVUxOnS95IqQM\" type=\"text/javascript\"></script>" +
+                    "<script type=\"text/javascript\">" +
+                    "var map;" +
+                    "var markersArray = [];" +
+                    "function addMarker(latitude, longitude, hint) { " +
+                    "	var latlng = new google.maps.LatLng(latitude,longitude); " +
+                    "	var marker = new google.maps.Marker({ position: latlng, map: map, title: hint }); " +
+                    "	markersArray.push(marker);" +
+                    "} " +
+                    "function clearOverlays() {" +
+                    "	for (var i = 0; i < markersArray.length; i++ ) {" +
+                    "		markersArray[i].setMap(null);" +
+                    "	}" +
+                    "	markersArray.length = 0;" +
+                    "}" +
+                    "function initialize() { " +
+                    "	var mapOptions = {" +
+                    "		center: new google.maps.LatLng(55.755786, 37.617633)," +
+                    "		zoom: 8," +
+                    "		mapTypeId: google.maps.MapTypeId.TERRAIN" +
+                    "	};" +
+                    "	map = new google.maps.Map(document.getElementById(\"map\"), mapOptions); " +
+                    "}" +
+                    "</script>" +
+                    "</head>" +
+                    "<body onload=\"initialize()\">" +
+                    "<div id=\"map\" style=\"position:absolute; width: 100%; height: 100%; left: 0px; top: 0px;\"></div>" +
+                    "<noscript>JavaScript must be switched on for use Google Maps.</noscript>" +
+                    "</body></html>";
+
+                SetWebBrowserDocument(this, MapContent);
+                //this.DocumentText = MapContent;
+                //this.Refresh();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWrite("GKMapBrowser.InitMap(): " + ex.Message);
+            }
         }
 
         public static string CoordToStr(double val) {

@@ -131,7 +131,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmLocationEdit.btnAccept_Click(): " + ex.Message);
+                this.fBase.Host.LogWrite("LocationEditDlg.btnAccept_Click(): " + ex.Message);
                 base.DialogResult = DialogResult.None;
             }
         }

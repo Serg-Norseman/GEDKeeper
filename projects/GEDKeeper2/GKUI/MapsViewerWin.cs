@@ -86,54 +86,65 @@ namespace GKUI
             bool res = (this.fSelectedPersons == null || (this.fSelectedPersons != null && this.fSelectedPersons.IndexOf(iRec) >= 0));
             return res;
         }
-        
+
         private void PlacesLoad()
         {
-            this.ComboPersons.BeginUpdate();
-            this.TreePlaces.BeginUpdate();
-            this.fBase.ProgressInit(LangMan.LS(LSID.LSID_LoadingLocations), this.fTree.RecordsCount);
             try
             {
-                this.fPlaces.Clear();
-                this.ComboPersons.Items.Clear();
-                this.ComboPersons.Sorted = false;
-                this.ComboPersons.Items.Add(new GKComboItem(LangMan.LS(LSID.LSID_NotSelected), null));
+                this.fMapBrowser.InitMap();
 
-                int num = this.fTree.RecordsCount;
-                for (int i = 0; i < num; i++) {
-                    GEDCOMRecord rec = this.fTree[i];
-                    bool res = rec is GEDCOMIndividualRecord && this.IsSelected(rec);
+                this.ComboPersons.BeginUpdate();
+                this.TreePlaces.BeginUpdate();
+                this.fBase.ProgressInit(LangMan.LS(LSID.LSID_LoadingLocations), this.fTree.RecordsCount);
+                try
+                {
+                    this.fPlaces.Clear();
+                    this.ComboPersons.Items.Clear();
+                    this.ComboPersons.Sorted = false;
+                    this.ComboPersons.Items.Add(new GKComboItem(LangMan.LS(LSID.LSID_NotSelected), null));
 
-                    if (res) {
-                        GEDCOMIndividualRecord ind = rec as GEDCOMIndividualRecord;
-                        int pCnt = 0;
+                    int num = this.fTree.RecordsCount;
+                    for (int i = 0; i < num; i++) {
+                        GEDCOMRecord rec = this.fTree[i];
+                        bool res = rec is GEDCOMIndividualRecord && this.IsSelected(rec);
 
-                        int num2 = ind.Events.Count;
-                        for (int j = 0; j < num2; j++)
-                        {
-                            GEDCOMCustomEvent ev = ind.Events[j];
-                            if (ev.Detail.Place.StringValue != "") {
-                                AddPlace(ev.Detail.Place, ev);
-                                pCnt++;
+                        if (res) {
+                            GEDCOMIndividualRecord ind = rec as GEDCOMIndividualRecord;
+                            int pCnt = 0;
+
+                            int num2 = ind.Events.Count;
+                            for (int j = 0; j < num2; j++)
+                            {
+                                GEDCOMCustomEvent ev = ind.Events[j];
+                                if (ev.Detail.Place.StringValue != "") {
+                                    AddPlace(ev.Detail.Place, ev);
+                                    pCnt++;
+                                }
+                            }
+
+                            if (pCnt > 0) {
+                                this.ComboPersons.Items.Add(new GKComboItem(ind.GetNameString(true, false) + " [" + pCnt.ToString() + "]", ind));
                             }
                         }
 
-                        if (pCnt > 0) {
-                            this.ComboPersons.Items.Add(new GKComboItem(ind.GetNameString(true, false) + " [" + pCnt.ToString() + "]", ind));
-                        }
+                        this.fBase.ProgressStep();
                     }
 
-                    this.fBase.ProgressStep();
-                }
+                    this.fBaseRoot.ExpandAll();
+                    this.ComboPersons.Sorted = true;
 
-                this.fBaseRoot.ExpandAll();
-                this.ComboPersons.Sorted = true;
+                    this.btnSelectPlaces.Enabled = true;
+                }
+                finally
+                {
+                    this.fBase.ProgressDone();
+                    this.TreePlaces.EndUpdate();
+                    this.ComboPersons.EndUpdate();
+                }
             }
-            finally
+            catch (Exception ex)
             {
-                this.fBase.ProgressDone();
-                this.TreePlaces.EndUpdate();
-                this.ComboPersons.EndUpdate();
+                Logger.LogWrite("MapsViewerWin.PlacesLoad(): " + ex.Message);
             }
         }
 
@@ -255,10 +266,10 @@ namespace GKUI
             }
         }
 
-        private void TfmMaps_Load(object sender, EventArgs e)
+        public void ProcessMap()
         {
+            this.Show();
             this.PlacesLoad();
-            this.btnSelectPlaces.Enabled = true;
         }
 
         public MapsViewerWin(IBaseWindow aBase)
@@ -270,7 +281,6 @@ namespace GKUI
             this.fSelectedPersons = aBase.GetContentList(GEDCOMRecordType.rtIndividual);
             this.fMapBrowser = new GKMapBrowser();
             this.fMapBrowser.Dock = DockStyle.Fill;
-            this.fMapBrowser.InitMap();
             this.Panel1.Controls.Add(this.fMapBrowser);
             this.fMapPoints = new ExtList<GMapPoint>(true);
             this.fPlaces = new ExtList<MapPlace>(true);

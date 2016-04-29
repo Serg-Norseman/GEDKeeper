@@ -801,7 +801,7 @@ namespace GKUI
             
             MapsViewerWin mapsWin = new MapsViewerWin(curBase);
             mapsWin.MdiParent = this;
-            mapsWin.Show();
+            mapsWin.ProcessMap();
         }
 
         private void miOrganizerClick(object sender, EventArgs e)
