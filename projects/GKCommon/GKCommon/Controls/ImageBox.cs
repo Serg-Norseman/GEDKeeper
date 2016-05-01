@@ -123,11 +123,11 @@ namespace GKCommon.Controls
         /// <summary>
         ///   Initializes a new instance of the <see cref="ImageBox" /> class.
         /// </summary>
-        public ImageBox()
+        public ImageBox() : base()
         {
-            this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
-            this.SetStyle(ControlStyles.StandardDoubleClick, false);
-            this.UpdateStyles();
+            base.SetStyle(ControlStyles.StandardDoubleClick, false);
+            base.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
+            base.UpdateStyles();
 
             //this.WheelScrollsControl = false;
             // ReSharper disable DoNotCallOverridableMethodsInConstructor
@@ -2041,19 +2041,6 @@ namespace GKCommon.Controls
             this.AdjustLayout();
 
             base.OnResize(e);
-        }
-
-        /// <summary>
-        ///   Raises the <see cref="System.Windows.Forms.ScrollableControl.Scroll" /> event.
-        /// </summary>
-        /// <param name="e">
-        ///   A <see cref="T:System.Windows.Forms.ScrollEventArgs" /> that contains the event data.
-        /// </param>
-        protected override void OnScroll(ScrollEventArgs e)
-        {
-            this.Invalidate();
-
-            base.OnScroll(e);
         }
 
         /// <summary>

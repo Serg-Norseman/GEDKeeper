@@ -310,6 +310,9 @@ namespace GKUI.Charts
 
         public TreeChartBox() : base()
         {
+            base.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
+            base.UpdateStyles();
+
             base.BorderStyle = BorderStyle.Fixed3D;
             base.DoubleBuffered = true;
             base.TabStop = true;

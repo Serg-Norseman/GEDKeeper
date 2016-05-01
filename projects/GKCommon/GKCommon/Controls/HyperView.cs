@@ -122,10 +122,12 @@ namespace GKCommon.Controls
 
         public HyperView() : base()
         {
+            base.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
+            base.UpdateStyles();
+
             base.BorderStyle = BorderStyle.Fixed3D;
             base.DoubleBuffered = true;
             base.TabStop = true;
-            //base.SetStyle(ControlStyles.OptimizedDoubleBuffer, true); // for some reason it doesn't work
 
             //this.fAcceptFontChange = false;
             this.fLines = new StringList();
