@@ -268,7 +268,6 @@
     <Compile Include="GKCore\Types\TargetMode.cs" />
     <Compile Include="GKCore\Types\WomanSurnameFormat.cs" />
     <Compile Include="GKCommon\Controls\ReflectionHelper.cs" />
-    <Compile Include="GKCommon\Controls\EventHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GKCommon\Controls\ExtResources.resx">

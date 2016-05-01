@@ -26,7 +26,7 @@ namespace GKCommon.Controls
 {
     public class GKScrollableControl : Panel
     {
-        private bool fValidEvent;
+        //private bool fValidEvent;
 
         public GKScrollableControl()
         {
@@ -36,35 +36,35 @@ namespace GKCommon.Controls
             #if GK_LINUX
             ScrollBar obj = ReflectionHelper.GetFieldValue(this, "hscrollbar") as ScrollBar;
             if (obj != null) {
-                //cEventHelper.RemoveEventHandler(obj, "Scroll");
-                obj.Scroll += new ScrollEventHandler (HandleHScrollEvent);
+                ReflectionHelper.RemoveControlStdEventHandlers(obj, "ScrollEvent");
+                obj.Scroll += new ScrollEventHandler(HandleHScrollEvent);
             }
 
             obj = ReflectionHelper.GetFieldValue(this, "vscrollbar") as ScrollBar;
             if (obj != null) {
-                //cEventHelper.RemoveEventHandler(obj, "Scroll");
-                obj.Scroll += new ScrollEventHandler (HandleVScrollEvent);
+                ReflectionHelper.RemoveControlStdEventHandlers(obj, "ScrollEvent");
+                obj.Scroll += new ScrollEventHandler(HandleVScrollEvent);
             }
             #else
-            this.fValidEvent = true;
+            //this.fValidEvent = true;
             #endif
         }
 
         #if GK_LINUX
         private void HandleHScrollEvent (object sender, ScrollEventArgs args)
         {
-            this.fValidEvent = true;
+            //this.fValidEvent = true;
             ScrollEventArgs newArgs = new ScrollEventArgs(args.Type, args.OldValue, args.NewValue, ScrollOrientation.HorizontalScroll);
-            this.OnScroll (newArgs);
-            this.fValidEvent = false;
+            this.OnScroll(newArgs);
+            //this.fValidEvent = false;
         }
 
         private void HandleVScrollEvent (object sender, ScrollEventArgs args)
         {
-            this.fValidEvent = true;
+            //this.fValidEvent = true;
             ScrollEventArgs newArgs = new ScrollEventArgs(args.Type, args.OldValue, args.NewValue, ScrollOrientation.VerticalScroll);
-            this.OnScroll (newArgs);
-            this.fValidEvent = false;
+            this.OnScroll(newArgs);
+            //this.fValidEvent = false;
         }
         #endif
 
@@ -76,9 +76,17 @@ namespace GKCommon.Controls
                 this.Focus();
         }
 
+        /// <summary>
+        ///   Raises the <see cref="System.Windows.Forms.ScrollableControl.Scroll" /> event.
+        /// </summary>
+        /// <param name="e">
+        ///   A <see cref="T:System.Windows.Forms.ScrollEventArgs" /> that contains the event data.
+        /// </param>
         protected override void OnScroll(ScrollEventArgs e)
         {
-            if (e.Type != ScrollEventType.EndScroll && this.fValidEvent)
+            this.Invalidate();
+
+            if (e.Type != ScrollEventType.EndScroll /*&& this.fValidEvent*/)
             {
                 switch (e.ScrollOrientation)
                 {
@@ -108,6 +116,8 @@ namespace GKCommon.Controls
 
                 this.ResumeLayout();
                 this.Invalidate();
+                //this.Update();
+                //this.Refresh();
             }
         }
 

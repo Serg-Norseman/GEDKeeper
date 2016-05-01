@@ -3,8 +3,10 @@
   <MonoDevelop.Ide.Workbench ActiveDocument="GKCommon/GKCommon/Controls/GKScrollableControl.cs">
     <Files>
       <File FileName="GKCommon/GKCommon/Controls/GKScrollableControl.cs" Line="42" Column="4" />
-      <File FileName="GKCommon/GKCommon/Controls/ReflectionHelper.cs" Line="1" Column="1" />
-      <File FileName="GKCommon/GKCommon/Controls/EventHelper.cs" Line="1" Column="1" />
+      <File FileName="GKCommon/GKCommon/Controls/ReflectionHelper.cs" Line="82" Column="43" />
+      <File FileName="GKCommon/GKCommon/Controls/HyperView.cs" Line="1" Column="1" />
+      <File FileName="GKCommon/GKCommon/Controls/ImageBox.cs" Line="16" Column="3" />
+      <File FileName="GEDKeeper2/GKUI/Charts/TreeChartBox.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

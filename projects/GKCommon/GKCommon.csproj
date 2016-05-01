@@ -89,7 +89,6 @@
     <Compile Include="GKCommon\BaseObject.cs" />
     <Compile Include="GKCommon\CalendarConverter.cs" />
     <Compile Include="GKCommon\CalendarData.cs" />
-    <Compile Include="GKCommon\Controls\EventHelper.cs" />
     <Compile Include="GKCommon\Controls\GKScrollableControl.cs">
       <SubType>Component</SubType>
     </Compile>
