@@ -125,12 +125,6 @@
     <Compile Include="Externals\CSV\CSVReader.cs" />
     <Compile Include="Externals\CSV\StringConverter.cs" />
     <Compile Include="Externals\ListTimSort.cs" />
-    <Compile Include="Externals\SingleInstancing\Global Delegates.cs" />
-    <Compile Include="Externals\SingleInstancing\ISingleInstanceEnforcer.cs" />
-    <Compile Include="Externals\SingleInstancing\MessageEventArgs.cs" />
-    <Compile Include="Externals\SingleInstancing\SingleInstanceException.cs" />
-    <Compile Include="Externals\SingleInstancing\SingleInstanceProxy.cs" />
-    <Compile Include="Externals\SingleInstancing\SingleInstanceTracker.cs" />
     <Compile Include="Externals\ZipStorer.cs" />
     <Compile Include="GEDCOM\EGEDCOMException.cs" />
     <Compile Include="GEDCOM\GEDCOMConsts.cs" />
@@ -280,6 +274,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GKCommon\" />
+    <Folder Include="Externals\SingleInstancing\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

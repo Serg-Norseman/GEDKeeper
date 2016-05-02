@@ -85,6 +85,11 @@
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
     <DefineConstants>DEBUG;TRACE;GK_LINUX</DefineConstants>
     <OutputPath>..\..</OutputPath>
+    <EnvironmentVariables>
+      <EnvironmentVariables>
+        <Variable name="MONO_ENABLE_SHM" value="1" />
+      </EnvironmentVariables>
+    </EnvironmentVariables>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Linux' ">
     <DefineConstants>GK_LINUX</DefineConstants>
@@ -114,6 +119,7 @@
     <Reference Include="ZedGraph">
       <HintPath>libs\ZedGraph.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Remoting" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GKCore\BaseContext.cs" />
@@ -485,6 +491,12 @@
     <Compile Include="GKUI\TreeToolsWin.Designer.cs">
       <DependentUpon>TreeToolsWin.cs</DependentUpon>
     </Compile>
+    <Compile Include="Externals\SingleInstancing\GlobalMutexPool.cs" />
+    <Compile Include="Externals\SingleInstancing\ISingleInstanceEnforcer.cs" />
+    <Compile Include="Externals\SingleInstancing\IpcBroadcast.cs" />
+    <Compile Include="Externals\SingleInstancing\SingleInstanceException.cs" />
+    <Compile Include="Externals\SingleInstancing\SingleInstanceProxy.cs" />
+    <Compile Include="Externals\SingleInstancing\SingleInstanceTracker.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GKResources.resx">

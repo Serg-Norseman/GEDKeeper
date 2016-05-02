@@ -100,6 +100,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
@@ -108,6 +109,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Externals\SingleInstancing\GlobalMutexPool.cs" />
+    <Compile Include="Externals\SingleInstancing\IpcBroadcast.cs" />
+    <Compile Include="Externals\SingleInstancing\ISingleInstanceEnforcer.cs" />
+    <Compile Include="Externals\SingleInstancing\SingleInstanceException.cs" />
+    <Compile Include="Externals\SingleInstancing\SingleInstanceProxy.cs" />
+    <Compile Include="Externals\SingleInstancing\SingleInstanceTracker.cs" />
     <Compile Include="GKCore\BaseContext.cs" />
     <Compile Include="GKCore\BaseSearchStrategy.cs" />
     <Compile Include="GKCore\Export\CustomWriter.cs" />
@@ -653,6 +660,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Externals" />
+    <Folder Include="Externals\SingleInstancing" />
     <Folder Include="Sandbox" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

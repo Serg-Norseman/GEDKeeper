@@ -18,6 +18,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#if __MonoCS__
+//#undef GK_LINUX
+#else
+//test
+#endif
+
 using System;
 using System.Reflection;
 using System.Resources;
@@ -53,6 +59,8 @@ namespace GKUI
     /// </summary>
     internal sealed class GKProgram
     {
+        private static MainWin fMainWin;
+
         [STAThread]
         [SecurityPermission(SecurityAction.Demand, Flags=SecurityPermissionFlag.ControlAppDomain)]
         private static void Main(string[] args)
@@ -64,7 +72,23 @@ namespace GKUI
             Application.SetCompatibleTextRenderingDefault(false);
 
             #if GK_LINUX
-            Application.Run(new MainWin());
+            
+            try {
+                bool firstInstance = GlobalMutexPool.CreateMutex(GKData.APP_TITLE, true);
+                if (!firstInstance) {
+                    ActivatePreviousInstance(args);
+                } else {
+                    IpcBroadcast.StartServer();
+                    fMainWin = new MainWin();
+                    fMainWin.SetArgs(args);
+                    Application.Run(fMainWin);
+                }
+
+                IpcBroadcast.StopServer();
+                GlobalMutexPool.ReleaseAll();
+            } finally {
+            }
+
             #else
             SingleInstanceTracker tracker = null;
             try
@@ -84,6 +108,36 @@ namespace GKUI
                 if (tracker != null) tracker.Dispose();
             }
             #endif
+        }
+
+        public static void ProcessMessage(IpcMessage msg)
+        {
+            if (msg.Message == AppMessage.RestoreWindow) {
+                fMainWin.WindowState = FormWindowState.Normal;
+            } else if (msg.Message == AppMessage.IpcByFile) {
+                fMainWin.WindowState = FormWindowState.Normal;
+                IpcBroadcast.ProcessGlobalMessage(msg.LParam, fMainWin);
+            }
+        }
+
+        private static void ActivatePreviousInstance(string[] args)
+        {
+            if (SysInfo.IsUnix())
+            {
+                try
+                {
+                    if (args.Length == 0 || string.IsNullOrEmpty(args[0]))
+                    {
+                        IpcBroadcast.Send(AppMessage.RestoreWindow, 0, false);
+                    }
+                    else
+                    {
+                        IpcParamEx ipcMsg = new IpcParamEx(IpcBroadcast.CmdOpenDatabase, IpcBroadcast.SafeSerialize(args));
+                        IpcBroadcast.SendGlobalMessage(ipcMsg);
+                    }
+                }
+                catch(Exception) { }
+            }
         }
 
         private static ISingleInstanceEnforcer GetSingleInstanceEnforcer()
