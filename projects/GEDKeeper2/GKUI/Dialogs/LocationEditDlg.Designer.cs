@@ -230,6 +230,7 @@ namespace GKUI.Dialogs
 			// 
 			// panMap
 			// 
+			this.panMap.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.panMap.Location = new System.Drawing.Point(3, 135);
 			this.panMap.Name = "panMap";
 			this.panMap.Size = new System.Drawing.Size(768, 283);

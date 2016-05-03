@@ -77,7 +77,6 @@ namespace GKUI.Controls
             get { return this.fMapPoints; }
         }
 
-
         public GKMapBrowser()
         {
             this.fMapPoints = new ExtList<GMapPoint>(true);
@@ -167,23 +166,30 @@ namespace GKUI.Controls
             }
         }
 
-        // KeePass
-		public static void SetWebBrowserDocument(WebBrowser wb, string strDocumentText)
-		{
-		    string strContent = (strDocumentText ?? string.Empty);
+        private void SetWebBrowserDocument(string documentText)
+        {
+            string strContent = (documentText ?? string.Empty);
 
-		    wb.AllowNavigation = false;
-		    wb.DocumentText = strContent;
+            this.AllowNavigation = false;
+            this.ScriptErrorsSuppressed = true;
+            this.AllowWebBrowserDrop = false;
 
-		    // Wait for document being loaded
-		    for (int i = 0; i < 50; ++i)
-		    {
-		        if (wb.DocumentText == strContent) break;
+            #if !GK_LINUX
+            this.DocumentText = strContent;
 
-		        System.Threading.Thread.Sleep(20);
-		        Application.DoEvents();
-		    }
-		}
+            // Wait for document being loaded
+            for (int i = 0; i < 50; ++i)
+            {
+                if (this.DocumentText == strContent) break;
+                System.Threading.Thread.Sleep(20);
+                Application.DoEvents();
+            }
+            //this.Refresh();
+            #else
+            this.DocumentText = strContent;
+            this.Refresh();
+            #endif
+        }
 
         public void InitMap()
         {
@@ -223,9 +229,7 @@ namespace GKUI.Controls
                     "<noscript>JavaScript must be switched on for use Google Maps.</noscript>" +
                     "</body></html>";
 
-                SetWebBrowserDocument(this, MapContent);
-                //this.DocumentText = MapContent;
-                //this.Refresh();
+                SetWebBrowserDocument(MapContent);
             }
             catch (Exception ex)
             {
@@ -233,7 +237,8 @@ namespace GKUI.Controls
             }
         }
 
-        public static string CoordToStr(double val) {
+        public static string CoordToStr(double val)
+        {
             NumberFormatInfo nfi = new NumberFormatInfo();
             nfi.NumberDecimalSeparator = ".";
             return val.ToString("0.000000", nfi);
@@ -425,6 +430,7 @@ namespace GKUI.Controls
             script = script.Trim();
             if (string.IsNullOrEmpty(script)) return;
 
+            #if !GK_LINUX
             try
             {
                 HtmlElement script1 = this.Document.GetElementById("gkScript");
@@ -454,6 +460,7 @@ namespace GKUI.Controls
             {
                 Logger.LogWrite("GKMapBrowser.gm_ExecScript(): " + ex.Message);
             }
+            #endif
         }
         
         #endregion

@@ -796,12 +796,16 @@ namespace GKUI
 
         private void miMapClick(object sender, EventArgs e)
         {
+            #if !GK_LINUX
             IBaseWindow curBase = this.GetCurrentFile();
             if (curBase == null) return;
             
             MapsViewerWin mapsWin = new MapsViewerWin(curBase);
             mapsWin.MdiParent = this;
             mapsWin.ProcessMap();
+            #else
+            this.ShowWarning(@"This function is not supported in Linux");
+            #endif
         }
 
         private void miOrganizerClick(object sender, EventArgs e)

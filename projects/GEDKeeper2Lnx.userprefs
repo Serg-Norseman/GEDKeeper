@@ -1,12 +1,6 @@
 ﻿<Properties StartupItem="GEDKeeper2/GEDKeeper2Lnx.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|Linux" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="GEDKeeper2/Externals/SingleInstancing/IpcBroadcast.cs">
-    <Files>
-      <File FileName="GEDKeeper2/GKProgram.cs" Line="1" Column="1" />
-      <File FileName="GEDKeeper2/Externals/SingleInstancing/GlobalMutexPool.cs" Line="1" Column="1" />
-      <File FileName="GEDKeeper2/Externals/SingleInstancing/IpcBroadcast.cs" Line="11" Column="1" />
-    </Files>
-  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
