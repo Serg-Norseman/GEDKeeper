@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GKUI.Dialogs
+﻿namespace GKUI
 {
 	partial class MediaViewerWin
 	{

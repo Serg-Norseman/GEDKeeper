@@ -30,21 +30,22 @@ namespace Externals.IniFiles
         {
             if (!IniFileSettings.PreserveFormatting)
                 element.FormatDefault();
-            // do not write if: 
+            // do not write if:
             if (!( // 1) element is a blank line AND blank lines are not allowed
-                     (element is IniFileBlankLine && !IniFileSettings.AllowBlankLines)
-                     // 2) element is an empty value AND empty values are not allowed
-                     || (!IniFileSettings.AllowEmptyValues && element is IniFileValue && ((IniFileValue)element).Value == "")))
+                  (element is IniFileBlankLine && !IniFileSettings.AllowBlankLines)
+                  // 2) element is an empty value AND empty values are not allowed
+                  || (!IniFileSettings.AllowEmptyValues && element is IniFileValue && ((IniFileValue)element).Value == "")))
                 base.WriteLine(element.Line);
         }
+
         /// <summary>Writes collection of INI file elements to the file.</summary>
         /// <param name="elements">Elements collection to write.</param>
         public void WriteElements(IEnumerable<IniFileElement> elements)
         {
-            lock (elements)
-                foreach (IniFileElement el in elements)
-                    WriteElement(el);
+            foreach (IniFileElement el in elements)
+                WriteElement(el);
         }
+
         /// <summary>Writes a whole INI to a file</summary>
         /// <param name="file">Section to write.</param>
         public void WriteIniFile(IniFileEx file)

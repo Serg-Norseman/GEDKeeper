@@ -92,13 +92,13 @@ namespace Externals.IniFiles
             bool beforeS = false;
             bool afterS = false;
             bool beforeEvery = true;
-            char currC;
             string comChar;
             string insideWhiteChars = "";
 
             StringBuilder form = new StringBuilder();
-            for (int i = 0; i < content.Length; i++) {
-                currC = content[i];
+            for (int i = 0; i < content.Length; i++)
+            {
+                char currC = content[i];
                 if (char.IsLetterOrDigit(currC) && beforeS) {
                     afterS = true; beforeS = false; form.Append('$');
                 }
@@ -143,10 +143,10 @@ namespace Externals.IniFiles
         /// <param name="formatting">Formatting template, where '['-open bracket, '$'-section name, ']'-close bracket, ';'-inline comments.</param>
         public void Format(string formatting)
         {
-            char currC;
             StringBuilder build = new StringBuilder();
-            for (int i = 0; i < formatting.Length; i++) {
-                currC = formatting[i];
+            for (int i = 0; i < formatting.Length; i++)
+            {
+                char currC = formatting[i];
                 if (currC == '$')
                     build.Append(sectionName);
                 else if (currC == '[')

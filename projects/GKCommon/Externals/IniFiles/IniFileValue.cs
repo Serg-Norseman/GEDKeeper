@@ -24,9 +24,9 @@ namespace Externals.IniFiles
             formatting = ExtractFormat(content);
             string split0 = split[0].Trim();
             string split1 = split.Length >= 1 ?
-                                split[1].Trim()
-                                : "";
-			
+                split[1].Trim()
+                : "";
+            
             if (split0.Length > 0) {
                 if (IniFileSettings.AllowInlineComments) {
                     IniFileSettings.IndexOfAnyResult result = IniFileSettings.IndexOfAny(split1, IniFileSettings.CommentChars);
@@ -47,11 +47,9 @@ namespace Externals.IniFiles
                         }
                         else
                             lastQuotePos = split1.Length - 1;
+
                         if (lastQuotePos > 0) {
-                            if (split1.Length == 2)
-                                split1 = "";
-                            else
-                                split1 = split1.Substring(1, lastQuotePos - 1);
+                            split1 = (split1.Length == 2) ? "" : split1.Substring(1, lastQuotePos - 1);
                         }
                     }
                 }
@@ -97,14 +95,12 @@ namespace Externals.IniFiles
             //bool afterKey = false; bool beforeVal = false; bool beforeEvery = true; bool afterVal = false;
             //return IniFileSettings.DefaultValueFormatting;
             FEState pos = FEState.BeforeEvery;
-            char currC;
             string comChar;
             string insideWhiteChars = "";
-            string theWhiteChar;
 
             StringBuilder form = new StringBuilder();
             for (int i = 0; i < content.Length; i++) {
-                currC = content[i];
+                char currC = content[i];
                 if (char.IsLetterOrDigit(currC)) {
                     if (pos == FEState.BeforeEvery) {
                         form.Append('?');
@@ -120,7 +116,7 @@ namespace Externals.IniFiles
                 else if (pos == FEState.AfterKey && content.Length - i >= IniFileSettings.EqualsString.Length && content.Substring(i, IniFileSettings.EqualsString.Length) == IniFileSettings.EqualsString) {
                     form.Append(insideWhiteChars);
                     pos = FEState.BeforeVal;
-                    //afterKey = false; beforeVal = true; 
+                    //afterKey = false; beforeVal = true;
                     form.Append('=');
                 }
                 else if ((comChar = IniFileSettings.OfAny(i, content, IniFileSettings.CommentChars)) != null) {
@@ -128,6 +124,7 @@ namespace Externals.IniFiles
                     form.Append(';');
                 }
                 else if (char.IsWhiteSpace(currC)) {
+                    string theWhiteChar;
                     if (currC == '\t' && IniFileSettings.TabReplacement != null)
                         theWhiteChar = IniFileSettings.TabReplacement;
                     else
@@ -162,10 +159,10 @@ namespace Externals.IniFiles
         /// <param name="formatting">Formatting template, where '?'-key, '='-equality sign, '$'-value, ';'-inline comments.</param>
         public void Format(string formatting)
         {
-            char currC;
             StringBuilder build = new StringBuilder();
-            for (int i = 0; i < formatting.Length; i++) {
-                currC = formatting[i];
+            for (int i = 0; i < formatting.Length; i++)
+            {
+                char currC = formatting[i];
                 if (currC == '?')
                     build.Append(key);
                 else if (currC == '$') {

@@ -24,7 +24,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 
-using Externals.CSVReader;
+using Externals.CSV;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;

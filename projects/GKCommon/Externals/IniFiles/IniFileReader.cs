@@ -56,10 +56,10 @@ namespace Externals.IniFiles
             if (text == null)
                 return null;
             List<IniFileElement> ret = new List<IniFileElement>();
-            IniFileElement currEl, lastEl = null;
+            IniFileElement lastEl = null;
             string[] lines = text.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
             for (int i = 0; i < lines.Length; i++) {
-                currEl = ParseLine(lines[i]);
+                IniFileElement currEl = ParseLine(lines[i]);
                 if (IniFileSettings.GroupElements) {
                     if (lastEl != null)
                     {
@@ -155,8 +155,11 @@ namespace Externals.IniFiles
             List<IniFileElement> elements = ReadSection();
             List<IniFileValue> ret = new List<IniFileValue>();
             for (int i = 0; i < elements.Count; i++)
-                if (elements[i] is IniFileValue)
-                    ret.Add((IniFileValue)elements[i]);
+            {
+                IniFileValue value = elements[i] as IniFileValue;
+                if (value != null)
+                    ret.Add(value);
+            }
             return ret;
         }
         /// <summary>Searches the current section for a value of specified key. If such key is not found,
@@ -186,7 +189,7 @@ namespace Externals.IniFiles
 
                 if (!searchWholeFile && IniFileSectionStart.IsLineValid(str.Trim()))
                     return null;
-				
+                
             }
         }
     }

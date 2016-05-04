@@ -607,7 +607,7 @@ namespace GKCore.Export
 
         private static int PersonsCompare(PedigreePerson item1, PedigreePerson item2)
         {
-            return item1.GetInternalStr().CompareTo(item2.GetInternalStr());
+            return string.CompareOrdinal(item1.GetInternalStr(), item2.GetInternalStr());
         }
 
         private void ReIndex()

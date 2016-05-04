@@ -27,7 +27,7 @@ using GKCore;
 using GKCore.Interfaces;
 using GKUI.Controls;
 
-namespace GKUI.Dialogs
+namespace GKUI
 {
     /// <summary>
     /// 

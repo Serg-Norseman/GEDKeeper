@@ -87,7 +87,7 @@ namespace GKCommon
                             {
                                 Match m = Regex.Match(strName, "\\d+(\\.\\d+)+");
                                 if(m.Success)
-                                    uVersion = SysInfo.ParseVersion(m.Value);
+                                    uVersion = ParseVersion(m.Value);
                                 else { Debug.Assert(false); }
                             }
                             else { Debug.Assert(false); }
@@ -282,7 +282,7 @@ namespace GKCommon
                     {
                         string strXdg = (Environment.GetEnvironmentVariable("XDG_CURRENT_DESKTOP") ?? string.Empty).Trim();
                         string strGdm = (Environment.GetEnvironmentVariable("GDMSESSION") ?? string.Empty).Trim();
-                        StringComparison sc = StringComparison.OrdinalIgnoreCase;
+                        const StringComparison sc = StringComparison.OrdinalIgnoreCase;
 
                         if(strXdg.Equals("Unity", sc))
                             t = DesktopType.Unity;
@@ -324,24 +324,24 @@ namespace GKCommon
             if((vVer == null) || (vVer.Length == 0)) { Debug.Assert(false); return 0; }
 
             ushort uPart;
-            SysInfo.TryParseUShort(vVer[0].Trim(), out uPart);
+            TryParseUShort(vVer[0].Trim(), out uPart);
             ulong uVer = ((ulong)uPart << 48);
 
             if(vVer.Length >= 2)
             {
-                SysInfo.TryParseUShort(vVer[1].Trim(), out uPart);
+                TryParseUShort(vVer[1].Trim(), out uPart);
                 uVer |= ((ulong)uPart << 32);
             }
 
             if(vVer.Length >= 3)
             {
-                SysInfo.TryParseUShort(vVer[2].Trim(), out uPart);
+                TryParseUShort(vVer[2].Trim(), out uPart);
                 uVer |= ((ulong)uPart << 16);
             }
 
             if(vVer.Length >= 4)
             {
-                SysInfo.TryParseUShort(vVer[3].Trim(), out uPart);
+                TryParseUShort(vVer[3].Trim(), out uPart);
                 uVer |= (ulong)uPart;
             }
 

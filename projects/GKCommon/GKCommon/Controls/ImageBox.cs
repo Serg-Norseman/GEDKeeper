@@ -1473,7 +1473,7 @@ namespace GKCommon.Controls
                 path.AddRectangle(viewPort);
 
                 int glowSize = this.DropShadowSize * 3;
-                int feather = 50;
+                const int feather = 50;
 
                 for (int i = 1; i <= glowSize; i += 2)
                 {

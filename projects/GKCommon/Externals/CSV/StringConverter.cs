@@ -35,7 +35,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Externals.CSVReader
+namespace Externals.CSV
 {
     /// <summary>
     /// Static class to convert strings to typed values
