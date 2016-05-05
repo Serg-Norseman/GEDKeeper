@@ -4,65 +4,65 @@ namespace GKCommon
 {
     public static class UDNHelper
     {
-        public const uint IGNORE_YEAR = 1u << 31;
-        public const uint IGNORE_MONTH = 1u << 30;
-        public const uint IGNORE_DAY = 1u << 29;
+        public const uint IgnoreYear = 1u << 31;
+        public const uint IgnoreMonth = 1u << 30;
+        public const uint IgnoreDay = 1u << 29;
 
-        public const uint YEAR_MASK = IGNORE_YEAR;
-        public const uint MONTH_MASK = IGNORE_MONTH;
-        public const uint DAY_MASK = IGNORE_DAY;
+        public const uint YearMask = IgnoreYear;
+        public const uint MonthMask = IgnoreMonth;
+        public const uint DayMask = IgnoreDay;
 
-        public const uint VALUE_MASK = 0x1fffffff;
+        public const uint ValueMask = 0x1fffffff;
 
-        public const int UNKNOWN_YEAR = -4713;
-        public const int UNKNOWN_MONTH = 0;
-        public const int UNKNOWN_DAY = 0;
-        
+        public const int UnknownYear = -4713;
+        public const int UnknownMonth = 0;
+        public const int UnknownDay = 0;
 
-        public static int compareUDN(uint l, uint r)
+
+        public static int CompareUDN(uint l, uint r)
         {
-            if ((UDNHelper.YEAR_MASK & l) != UDNHelper.IGNORE_YEAR)
+            if ((UDNHelper.YearMask & l) != UDNHelper.IgnoreYear)
             {
-                if ((UDNHelper.YEAR_MASK & r) != UDNHelper.IGNORE_YEAR)
+                if ((UDNHelper.YearMask & r) != UDNHelper.IgnoreYear)
                 {
-                    return ((int) (UDNHelper.VALUE_MASK & l)) - ((int) (UDNHelper.VALUE_MASK & r));
+                    return ((int) (UDNHelper.ValueMask & l)) - ((int) (UDNHelper.ValueMask & r));
                 }
                 else
                 {
                     return 1;
                 }
             }
-            else if ((UDNHelper.YEAR_MASK & r) != UDNHelper.IGNORE_YEAR)
+            else if ((UDNHelper.YearMask & r) != UDNHelper.IgnoreYear)
             {
                 return -1;
             }
-            else if ((UDNHelper.MONTH_MASK & l) != UDNHelper.IGNORE_MONTH)
+            else if ((UDNHelper.MonthMask & l) != UDNHelper.IgnoreMonth)
             {
-                if ((UDNHelper.MONTH_MASK & r) != UDNHelper.IGNORE_MONTH)
+                if ((UDNHelper.MonthMask & r) != UDNHelper.IgnoreMonth)
                 {
-                    return ((int) (UDNHelper.VALUE_MASK & l)) - ((int) (UDNHelper.VALUE_MASK & r));
+                    return ((int) (UDNHelper.ValueMask & l)) - ((int) (UDNHelper.ValueMask & r));
                 }
                 else
                 {
                     return 1;
                 }
             }
-            else if ((UDNHelper.MONTH_MASK & r) != UDNHelper.IGNORE_MONTH)
+            else if ((UDNHelper.MonthMask & r) != UDNHelper.IgnoreMonth)
             {
                 return -1;
             }
-            else if ((UDNHelper.DAY_MASK & l) != UDNHelper.IGNORE_DAY)
+            else if ((UDNHelper.DayMask & l) != UDNHelper.IgnoreDay)
             {
-                if ((UDNHelper.DAY_MASK & r) != UDNHelper.IGNORE_DAY)
+                if ((UDNHelper.DayMask & r) != UDNHelper.IgnoreDay)
                 {
-                    return ((int) (UDNHelper.VALUE_MASK & l)) - ((int) (UDNHelper.VALUE_MASK & r));
+                    return ((int) (UDNHelper.ValueMask & l)) - ((int) (UDNHelper.ValueMask & r));
                 }
                 else
                 {
                     return 1;
                 }
             }
-            else if ((UDNHelper.DAY_MASK & r) != UDNHelper.IGNORE_DAY)
+            else if ((UDNHelper.DayMask & r) != UDNHelper.IgnoreDay)
             {
                 return -1;
             }
@@ -72,46 +72,46 @@ namespace GKCommon
             }
         }
 
-        public static uint getGregorianUDN(int year, int month, int day)
+        public static uint GetGregorianUDN(int year, int month, int day)
         {
             uint result = (uint)CalendarConverter.gregorian_to_jd(
-                Math.Max(UNKNOWN_YEAR + 1, year),
-                Math.Max(UNKNOWN_MONTH + 1, month),
-                Math.Max(UNKNOWN_DAY + 1, day));
+                Math.Max(UnknownYear + 1, year),
+                Math.Max(UnknownMonth + 1, month),
+                Math.Max(UnknownDay + 1, day));
 
-            if (UNKNOWN_YEAR + 1 > year)
+            if (UnknownYear + 1 > year)
             {
-                result |= IGNORE_YEAR;
+                result |= IgnoreYear;
             }
-            if (UNKNOWN_MONTH + 1 > month)
+            if (UnknownMonth + 1 > month)
             {
-                result |= IGNORE_MONTH;
+                result |= IgnoreMonth;
             }
-            if (UNKNOWN_DAY + 1 > day)
+            if (UnknownDay + 1 > day)
             {
-                result |= IGNORE_DAY;
+                result |= IgnoreDay;
             }
             return result;
         }
 
-        public static uint getJulianUDN(int year, int month, int day)
+        public static uint GetJulianUDN(int year, int month, int day)
         {
             uint result = (uint) CalendarConverter.julian_to_jd(
-                Math.Max(UNKNOWN_YEAR + 1, year),
-                Math.Max(UNKNOWN_MONTH + 1, month),
-                Math.Max(UNKNOWN_DAY + 1, day));
+                Math.Max(UnknownYear + 1, year),
+                Math.Max(UnknownMonth + 1, month),
+                Math.Max(UnknownDay + 1, day));
 
-            if (UNKNOWN_YEAR + 1 > year)
+            if (UnknownYear + 1 > year)
             {
-                result |= IGNORE_YEAR;
+                result |= IgnoreYear;
             }
-            if (UNKNOWN_MONTH + 1 > month)
+            if (UnknownMonth + 1 > month)
             {
-                result |= IGNORE_MONTH;
+                result |= IgnoreMonth;
             }
-            if (UNKNOWN_DAY + 1 > day)
+            if (UnknownDay + 1 > day)
             {
-                result |= IGNORE_DAY;
+                result |= IgnoreDay;
             }
             return result;
         }
