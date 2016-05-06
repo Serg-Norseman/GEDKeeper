@@ -34,15 +34,15 @@ namespace GKCommon
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct UDN : ICloneable, IComparable
     {
-        public const uint IgnoreYear = 1u << 31;
-        public const uint IgnoreMonth = 1u << 30;
-        public const uint IgnoreDay = 1u << 29;
+        private const uint IgnoreYear = 1u << 31;
+        private const uint IgnoreMonth = 1u << 30;
+        private const uint IgnoreDay = 1u << 29;
 
-        public const uint YearMask = IgnoreYear;
-        public const uint MonthMask = IgnoreMonth;
-        public const uint DayMask = IgnoreDay;
+        private const uint YearMask = IgnoreYear;
+        private const uint MonthMask = IgnoreMonth;
+        private const uint DayMask = IgnoreDay;
 
-        public const uint ValueMask = 0x1fffffff;
+        private const uint ValueMask = 0x1fffffff;
 
         public const int UnknownYear = -4713;
         public const int UnknownMonth = 0;
