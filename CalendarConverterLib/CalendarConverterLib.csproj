@@ -39,7 +39,7 @@
     <Compile Include="CalendarConverter.cs" />
     <Compile Include="CalendarData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UDNHelper.cs" />
+    <Compile Include="UDN.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
