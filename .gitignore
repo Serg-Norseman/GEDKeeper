@@ -4,6 +4,9 @@
 /*.dll
 /*.pdb
 /*.xml
+*.suo
+*.userprefs
+*.DotSettings.user
 
 /projects/GEDKeeper2/bin/
 /projects/GEDKeeper2/obj/

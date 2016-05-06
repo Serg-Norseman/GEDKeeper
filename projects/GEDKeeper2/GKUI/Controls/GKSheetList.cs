@@ -89,32 +89,32 @@ namespace GKUI.Controls
             }
 
             this.fBtnMoveDown = new ToolStripButton();
-            this.fBtnMoveDown.ImageIndex = 30;
+            this.fBtnMoveDown.Image = global::GKResources.iDown;
             this.fBtnMoveDown.ToolTipText = LangMan.LS(LSID.LSID_RecordMoveDown);
             this.fBtnMoveDown.Click += this.ButtonClick;
 
             this.fBtnMoveUp = new ToolStripButton();
-            this.fBtnMoveUp.ImageIndex = 29;
+            this.fBtnMoveUp.Image = global::GKResources.iUp;
             this.fBtnMoveUp.ToolTipText = LangMan.LS(LSID.LSID_RecordMoveUp);
             this.fBtnMoveUp.Click += this.ButtonClick;
 
             this.fBtnLinkJump = new ToolStripButton();
-            this.fBtnLinkJump.ImageIndex = 28;
+            this.fBtnLinkJump.Image = global::GKResources.iToMan;
             this.fBtnLinkJump.ToolTipText = LangMan.LS(LSID.LSID_RecordGoto);
             this.fBtnLinkJump.Click += this.ButtonClick;
 
             this.fBtnDelete = new ToolStripButton();
-            this.fBtnDelete.ImageIndex = 5;
+            this.fBtnDelete.Image = global::GKResources.iRecDelete;
             this.fBtnDelete.ToolTipText = LangMan.LS(LSID.LSID_MIRecordDelete);
             this.fBtnDelete.Click += this.ButtonClick;
 
             this.fBtnEdit = new ToolStripButton();
-            this.fBtnEdit.ImageIndex = 4;
+            this.fBtnEdit.Image = global::GKResources.iRecEdit;
             this.fBtnEdit.ToolTipText = LangMan.LS(LSID.LSID_MIRecordEdit);
             this.fBtnEdit.Click += this.ButtonClick;
 
             this.fBtnAdd = new ToolStripButton();
-            this.fBtnAdd.ImageIndex = 3;
+            this.fBtnAdd.Image = global::GKResources.iRecNew;
             this.fBtnAdd.ToolTipText = LangMan.LS(LSID.LSID_MIRecordAdd);
             this.fBtnAdd.Click += this.ButtonClick;
 
@@ -128,7 +128,6 @@ namespace GKUI.Controls
                                                this.fBtnLinkJump,
                                                this.fBtnMoveUp,
                                                this.fBtnMoveDown});
-            this.fToolBar.ImageList = MainWin.Instance.ImageList_Buttons;
             this.fToolBar.GripStyle = ToolStripGripStyle.Hidden;
             this.fToolBar.ImageScalingSize = new System.Drawing.Size(24, 20);
             //this.fToolBar.AutoSize = true;

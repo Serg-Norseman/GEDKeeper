@@ -88,10 +88,18 @@
     <Compile Include="ImageViewerWin.Designer.cs">
       <DependentUpon>ImageViewerWin.cs</DependentUpon>
     </Compile>
+    <Compile Include="IVPResource.Designer.cs">
+      <DependentUpon>IVPResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ImageViewerWin.resx">
       <DependentUpon>ImageViewerWin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IVPResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>IVPResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
