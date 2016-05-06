@@ -57,7 +57,7 @@ namespace GKCommon.Controls
         }
 
 
-        private static readonly BindingFlags AllBindings = BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
+        private const BindingFlags AllBindings = BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
 
         public static FieldInfo FindFieldInfo(Type t, string fieldName)
         {
@@ -69,11 +69,7 @@ namespace GKCommon.Controls
                 }
             }
 
-			if (t.BaseType != null) {
-                return FindFieldInfo(t.BaseType, fieldName);
-            }
-
-			return null;
+            return t.BaseType != null ? FindFieldInfo(t.BaseType, fieldName) : null;
         }
 
         public static void RemoveControlStdEventHandlers(Control ctl, string privateEventObj)

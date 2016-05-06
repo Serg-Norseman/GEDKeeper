@@ -1,0 +1,9 @@
+/usr/bin
+/usr/share/appdata/
+/usr/share/applications (.desktop)
+/usr/share/doc/<app-name>/
+/usr/share/icons/
+/usr/share/locale/
+/usr/share/man/
+/usr/share/pixmaps/
+

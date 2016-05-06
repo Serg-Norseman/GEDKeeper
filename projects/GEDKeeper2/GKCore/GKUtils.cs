@@ -258,7 +258,7 @@ namespace GKCore
 
         public static double SafeDiv(double dividend, double divisor)
         {
-            return ((divisor == (double)0f) ? 0.0 : (dividend / divisor));
+            return (divisor == (double)0f) ? 0.0 : (dividend / divisor);
         }
 
         public static string SexStr(GEDCOMSex sex)

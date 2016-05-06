@@ -28,7 +28,7 @@ using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
 
-namespace GKUI.Dialogs
+namespace GKUI
 {
     /// <summary>
     /// 

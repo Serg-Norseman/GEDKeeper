@@ -47,7 +47,7 @@ namespace Externals.IniFiles
                     flags = flags & ~IniFlags.AllowEmptyValues;
             }
         }
-        /// <summary>If Quotes are on, then it in such situation: |KEY = "VALUE" blabla|, 'blabla' is 
+        /// <summary>If Quotes are on, then it in such situation: |KEY = "VALUE" blabla|, 'blabla' is
         /// a "text on the right". If this field is set to False, then such string will be ignored.</summary>
         public static bool AllowTextOnTheRight
         {
@@ -129,7 +129,7 @@ namespace Externals.IniFiles
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException("SectionCloseBracket");
+                    throw new ArgumentNullException("value", @"SectionCloseBracket");
                 IniFileSettings.sectionCloseBracket = value;
             }
         }
@@ -142,7 +142,7 @@ namespace Externals.IniFiles
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException(@"CommentChars", @"Use empty array to disable comments instead of null");
+                    throw new ArgumentNullException("value", @"Use empty array to disable comments instead of null");
                 IniFileSettings.commentChars = value;
             }
         }
@@ -162,7 +162,7 @@ namespace Externals.IniFiles
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException("DefaultSectionFormatting");
+                    throw new ArgumentNullException("value", @"DefaultSectionFormatting");
                 string test = value.Replace("$", "").Replace("[", "").Replace("]", "").Replace(";", "");
                 if (test.TrimStart().Length > 0)
                     throw new ArgumentException("DefaultValueFormatting property cannot contain other characters than [,$,] and white spaces.");
@@ -182,7 +182,7 @@ namespace Externals.IniFiles
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException("DefaultValueFormatting");
+                    throw new ArgumentNullException("value", @"DefaultValueFormatting");
                 string test = value.Replace("?", "").Replace("$", "").Replace("=", "").Replace(";", "");
                 if (test.TrimStart().Length > 0)
                     throw new ArgumentException("DefaultValueFormatting property cannot contain other characters than ?,$,= and white spaces.");
@@ -202,7 +202,7 @@ namespace Externals.IniFiles
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException("SectionCloseBracket");
+                    throw new ArgumentNullException("value", @"SectionCloseBracket");
                 IniFileSettings.sectionOpenBracket = value;
             }
         }
@@ -214,7 +214,7 @@ namespace Externals.IniFiles
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException("EqualsString");
+                    throw new ArgumentNullException("value", @"EqualsString");
                 IniFileSettings.equalsString = value;
             }
         }
@@ -277,7 +277,7 @@ namespace Externals.IniFiles
 
             public IndexOfAnyResult(int i, string any)
             {
-                Any = any; 
+                Any = any;
                 Index = i;
             }
         }

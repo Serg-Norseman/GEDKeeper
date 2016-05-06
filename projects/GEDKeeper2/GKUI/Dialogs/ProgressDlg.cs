@@ -26,7 +26,7 @@ using System.Windows.Forms;
 using GKCore;
 using GKCore.Interfaces;
 
-namespace GKUI
+namespace GKUI.Dialogs
 {
     /// <summary>
     /// 
@@ -185,11 +185,11 @@ namespace GKUI
     internal sealed class ProgressProxy
     {
         private ProgressDlg fProgressForm;
-        private string fTitle;
-        private int fMax;
+        private readonly string fTitle;
+        private readonly int fMax;
         //private ManualResetEvent fMRE = new ManualResetEvent(false);
         private bool fFormLoaded = false;
-        private Thread fThread;
+        private readonly Thread fThread;
 
         public ProgressProxy(string title, int max)
         {
@@ -249,7 +249,7 @@ namespace GKUI
             }
             else
             {
-                fProgressForm.DialogResult = System.Windows.Forms.DialogResult.OK;
+                fProgressForm.DialogResult = DialogResult.OK;
             }
         }
 

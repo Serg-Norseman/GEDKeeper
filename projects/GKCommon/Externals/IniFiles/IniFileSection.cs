@@ -69,15 +69,18 @@ namespace Externals.IniFiles
         IniFileValue GetValue(string key)
         {
             string lower = key.ToLowerInvariant();
-            IniFileValue val;
             for (int i = 0; i < elements.Count; i++)
-                if (elements[i] is IniFileValue) {
-                    val = (IniFileValue)elements[i];
-                    if (val.Key == key || (!IniFileSettings.CaseSensitive && val.Key.ToLowerInvariant() == lower))
-                        return val;
+            {
+                IniFileValue value = elements[i] as IniFileValue;
+                if (value != null)
+                {
+                    if (value.Key == key || (!IniFileSettings.CaseSensitive && value.Key.ToLowerInvariant() == lower))
+                        return value;
                 }
+            }
             return null;
         }
+
         /// <summary>Sets the comment for given key.</summary>
         public void SetComment(string key, string comment)
         {
@@ -92,27 +95,29 @@ namespace Externals.IniFiles
             if (val == null) return;
             val.InlineComment = comment;
         }
+
         /// <summary>Gets the inline comment for given key.</summary>
         public string GetInlineComment(string key)
         {
             IniFileValue val = GetValue(key);
-            if (val == null) return null;
-            return val.InlineComment;
+            return val == null ? null : val.InlineComment;
         }
+
         /// <summary>Gets or sets the inline for this section.</summary>
         public string InlineComment
         {
             get { return sectionStart.InlineComment; }
             set { sectionStart.InlineComment = value; }
         }
+
         /// <summary>Gets the comment associated to given key. If there is no comment, empty string is returned.
         /// If the key does not exist, NULL is returned.</summary>
         public string GetComment(string key)
         {
             IniFileValue val = GetValue(key);
-            if (val == null) return null;
-            return getComment(val);
+            return val == null ? null : getComment(val);
         }
+
         /// <summary>Renames a key.</summary>
         public void RenameKey(string key, string newName)
         {
@@ -155,6 +160,7 @@ namespace Externals.IniFiles
                 SetValue(key, value);
             }
         }
+
         /// <summary>Gets or sets value of a key.</summary>
         /// <param name="key">Name of the key.</param>
         /// <param name="defaultValue">A value to return if the requested key was not found.</param>
@@ -163,19 +169,18 @@ namespace Externals.IniFiles
             get
             {
                 string val = this[key];
-                if (string.IsNullOrEmpty(val))
-                    return defaultValue;
-                return val;
+                return string.IsNullOrEmpty(val) ? defaultValue : val;
             }
             set { this[key] = value; }
         }
+
         private void SetValue(string key, string value)
         {
             IniFileValue ret = null;
             IniFileValue prev = LastValue();
-			
+            
             if (IniFileSettings.PreserveFormatting) {
-                if (prev != null && prev.Intendation.Length >= sectionStart.Intendation.Length) 
+                if (prev != null && prev.Intendation.Length >= sectionStart.Intendation.Length)
                     ret = prev.CreateNew(key, value);
                 else {
                     bool valFound = false;
@@ -188,6 +193,7 @@ namespace Externals.IniFiles
                             break;
                         }
                     }
+
                     if (!valFound)
                         ret = IniFileValue.FromData(key, value);
                     if (ret.Intendation.Length < sectionStart.Intendation.Length)
@@ -205,45 +211,56 @@ namespace Externals.IniFiles
                 parent.elements.Insert(parent.elements.IndexOf(prev) + 1, ret);
             }
         }
+
         internal IniFileValue LastValue()
         {
-            for (int i = elements.Count - 1; i >= 0; i--) {
-                if (elements[i] is IniFileValue)
-                    return (IniFileValue)elements[i];
+            for (int i = elements.Count - 1; i >= 0; i--)
+            {
+                IniFileValue value = elements[i] as IniFileValue;
+                if (value != null)
+                    return value;
             }
             return null;
         }
+
         internal IniFileValue FirstValue()
         {
-            for (int i = 0; i < elements.Count; i++) {
-                if (elements[i] is IniFileValue)
-                    return (IniFileValue)elements[i];
+            for (int i = 0; i < elements.Count; i++)
+            {
+                IniFileValue value = elements[i] as IniFileValue;
+                if (value != null)
+                    return value;
             }
             return null;
         }
+
         /// <summary>Gets an array of names of values in this section.</summary>
         public System.Collections.ObjectModel.ReadOnlyCollection<string> GetKeys()
         {
             List<string> list = new List<string>(elements.Count);
             for (int i = 0; i < elements.Count; i++)
-                if (elements[i] is IniFileValue)
-                    list.Add(((IniFileValue)elements[i]).Key);
-            return new System.Collections.ObjectModel.ReadOnlyCollection<string>(list); ;
+            {
+                IniFileValue value = elements[i] as IniFileValue;
+                if (value != null)
+                    list.Add(value.Key);
+            }
+
+            return new System.Collections.ObjectModel.ReadOnlyCollection<string>(list);
         }
+
         /// <summary>Gets a string representation of this IniFileSectionReader object.</summary>
         public override string ToString()
         {
             return sectionStart.ToString() + " (" + elements.Count.ToString() + " elements)";
         }
+
         /// <summary>Formats whole section.</summary>
         /// <param name="preserveIntendation">Determines whether intendation should be preserved.</param>
         public void Format(bool preserveIntendation)
         {
-            IniFileElement el;
-            string lastIntend;
             for (int i = 0; i < elements.Count; i++) {
-                el = elements[i];
-                lastIntend = el.Intendation;
+                IniFileElement el = elements[i];
+                string lastIntend = el.Intendation;
                 el.FormatDefault();
                 if (preserveIntendation)
                     el.Intendation = lastIntend;

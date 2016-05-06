@@ -96,7 +96,7 @@ namespace Externals.SingleInstancing
 
                 try
                 {
-                    m_fsw = new FileSystemWatcher(IpcBroadcast.GetTempPath(), m_strMsgFileName);
+                    m_fsw = new FileSystemWatcher(GetTempPath(), m_strMsgFileName);
                 }
                 catch(Exception) { Debug.Assert(false); return; } // Access denied
 
@@ -141,8 +141,8 @@ namespace Externals.SingleInstancing
         {
             if (m_strMsgFilePath != null) return;
 
-            m_strMsgFileName = IpcBroadcast.IpcMsgFilePreID + GetUserID() + IpcBroadcast.IpcMsgFilePostID;
-            m_strMsgFilePath = IpcBroadcast.GetTempPath() + m_strMsgFileName;
+            m_strMsgFileName = IpcMsgFilePreID + GetUserID() + IpcMsgFilePostID;
+            m_strMsgFilePath = GetTempPath() + m_strMsgFileName;
         }
 
         public static void Send(AppMessage msg, int lParam, bool bWaitWithTimeout)
@@ -219,6 +219,7 @@ namespace Externals.SingleInstancing
 
         private static void ProcessIpcMessagesPriv()
         {
+            #if GK_LINUX
             List<IpcMessage> l = ReadMessagesPriv();
             CleanOldMessages(l);
 
@@ -235,6 +236,7 @@ namespace Externals.SingleInstancing
 
                 GKProgram.ProcessMessage(msg);
             }
+            #endif
         }
 
         private static List<IpcMessage> ReadMessagesPriv()
@@ -324,14 +326,14 @@ namespace Externals.SingleInstancing
             if (ipcMsg == null) throw new ArgumentNullException("ipcMsg");
 
             Random rnd = new Random();
-            int nId = (int)(rnd.Next() & 0x7FFFFFFF);
+            int nId = rnd.Next() & 0x7FFFFFFF;
 
             //Console.WriteLine("nId: " + nId.ToString());
             if (WriteIpcInfoFile(nId, ipcMsg) == false) return;
 
             try
             {
-                IpcBroadcast.Send(AppMessage.IpcByFile, nId, true);
+                Send(AppMessage.IpcByFile, nId, true);
             }
             catch (Exception) { Debug.Assert(false); }
 
@@ -353,7 +355,7 @@ namespace Externals.SingleInstancing
         {
             try
             {
-                return (IpcBroadcast.GetTempPath() + IpcMsgFilePreID + nId.ToString() + ".tmp");
+                return (GetTempPath() + IpcMsgFilePreID + nId.ToString() + ".tmp");
             }
             catch(Exception) { Debug.Assert(false); }
 
@@ -426,7 +428,7 @@ namespace Externals.SingleInstancing
 
             if (ipcMsg != null && ipcMsg.Message == CmdOpenDatabase)
             {
-                string[] vArgs = IpcBroadcast.SafeDeserialize(ipcMsg.Params);
+                string[] vArgs = SafeDeserialize(ipcMsg.Params);
 
                 if (vArgs != null) {
                     MessageEventArgs eArgs = new MessageEventArgs(vArgs);

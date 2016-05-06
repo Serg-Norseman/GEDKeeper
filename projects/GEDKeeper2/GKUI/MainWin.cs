@@ -97,6 +97,23 @@ namespace GKUI
 
             fInstance = this;
 
+            this.tbFileNew.Image = global::GKResources.iCreateNew;
+            this.tbFileLoad.Image = global::GKResources.iLoad;
+            this.tbFileSave.Image = global::GKResources.iSave;
+            this.tbRecordAdd.Image = global::GKResources.iRecNew;
+            this.tbRecordEdit.Image = global::GKResources.iRecEdit;
+            this.tbRecordDelete.Image = global::GKResources.iRecDelete;
+            this.tbFilter.Image = global::GKResources.iFilter;
+            this.tbTreeAncestors.Image = global::GKResources.iTreeAncestry;
+            this.tbTreeDescendants.Image = global::GKResources.iTreeDescendants;
+            this.tbTreeBoth.Image = global::GKResources.iTreeBoth;
+            this.tbPedigree.Image = global::GKResources.iScroll;
+            this.tbStats.Image = global::GKResources.iTable;
+            this.tbPrev.Image = global::GKResources.iLeft1;
+            this.tbNext.Image = global::GKResources.iRight1;
+            this.tbDocPreview.Image = global::GKResources.iPreview;
+            this.tbDocPrint.Image = global::GKResources.iPrint;
+
             this.fActiveWidgets = new List<WidgetInfo>();
 
             //LangMan.SaveDefaultLanguage();
@@ -1005,19 +1022,19 @@ namespace GKUI
             base.LayoutMdi(MdiLayout.ArrangeIcons);
         }
 
-		private void miWindowDropDownOpening(object sender, EventArgs e)
-		{
-		    Form activeChild = this.ActiveMdiChild;
-		    if (activeChild != null)
-		    {
-		        // platform: in Mono here is bug, but code works without this line
-		        if (!SysInfo.IsUnix()) {
-		            ActivateMdiChild(null);
-		        }
+        private void miWindowDropDownOpening(object sender, EventArgs e)
+        {
+            Form activeChild = this.ActiveMdiChild;
+            if (activeChild != null)
+            {
+                // platform: in Mono here is bug, but code works without this line
+                if (!SysInfo.IsUnix()) {
+                    ActivateMdiChild(null);
+                }
 
-		        ActivateMdiChild(activeChild);
-		    }
-		}
+                ActivateMdiChild(activeChild);
+            }
+        }
 
         #endregion
 

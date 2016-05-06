@@ -117,10 +117,10 @@ namespace GKCore.Export
 
         public override void addParagraphLink(string text, object font, string link, object linkFont)
         {
-            Paragraph p = new Paragraph();
-            p.Add(new Chunk(text, (iTextSharp.text.Font)font));
-            p.Add(new Chunk(link, (iTextSharp.text.Font)linkFont).SetLocalGoto(link));
-            fDocument.Add(p);
+            Paragraph pg = new Paragraph();
+            pg.Add(new Chunk(text, (iTextSharp.text.Font)font));
+            pg.Add(new Chunk(link, (iTextSharp.text.Font)linkFont).SetLocalGoto(link));
+            fDocument.Add(pg);
         }
 
         public override void beginList()

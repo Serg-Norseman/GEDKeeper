@@ -32,7 +32,7 @@ namespace GKCore.Export
     public class HTMLWriter : CustomWriter
     {
         private StreamWriter fStream;
-        private Dictionary<string, string> fStyles;
+        private readonly Dictionary<string, string> fStyles;
 
         public HTMLWriter()
         {
@@ -43,12 +43,12 @@ namespace GKCore.Export
         {
             this.fStream = new StreamWriter(new FileStream(this.fFileName, FileMode.Create), Encoding.UTF8);
 
-            this.WriteHTMLHeader(this.fStream);
+            this.WriteHTMLHeader();
         }
 
         public override void endWrite()
         {
-            this.WriteHTMLFooter(this.fStream);
+            this.WriteHTMLFooter();
 
             this.fStream.Flush();
             this.fStream.Close();
@@ -59,29 +59,29 @@ namespace GKCore.Export
             // dummy
         }
 
-        private void WriteHTMLHeader(StreamWriter stream)
+        private void WriteHTMLHeader()
         {
-            stream.WriteLine("<html>");
-            stream.WriteLine("<head>");
-            stream.WriteLine("<meta HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=utf-8\">");
-            stream.WriteLine("<link rel=\"stylesheet\" href=\"style.css\" type=\"text/css\"/>");
-            stream.WriteLine("<title>" + this.fDocumentTitle + "</title>");
-            
-            stream.WriteLine("<style type=\"text/css\">");
+            this.fStream.WriteLine("<html>");
+            this.fStream.WriteLine("<head>");
+            this.fStream.WriteLine("<meta HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=utf-8\">");
+            this.fStream.WriteLine("<link rel=\"stylesheet\" href=\"style.css\" type=\"text/css\"/>");
+            this.fStream.WriteLine("<title>" + this.fDocumentTitle + "</title>");
+
+            this.fStream.WriteLine("<style type=\"text/css\">");
             foreach (KeyValuePair<string, string> entry in this.fStyles)
             {
-                stream.WriteLine("." + entry.Key + " { " + entry.Value + " }");
+                this.fStream.WriteLine("." + entry.Key + " { " + entry.Value + " }");
             }
-            stream.WriteLine("</style>");
-            
-            stream.WriteLine("</head>");
-            stream.WriteLine("<body>");
+            this.fStream.WriteLine("</style>");
+
+            this.fStream.WriteLine("</head>");
+            this.fStream.WriteLine("<body>");
         }
 
-        private void WriteHTMLFooter(StreamWriter stream)
+        private void WriteHTMLFooter()
         {
-            stream.WriteLine("</body>");
-            stream.WriteLine("</html>");
+            this.fStream.WriteLine("</body>");
+            this.fStream.WriteLine("</html>");
         }
 
         public override void addParagraph(string text, object font, TextAlignment alignment)

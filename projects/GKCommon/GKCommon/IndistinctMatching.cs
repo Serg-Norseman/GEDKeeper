@@ -39,9 +39,9 @@ namespace GKCommon
             // Return trivial case - where they are equal
             if (value1.Equals(value2)) return 0;
 
-            if (string.IsNullOrEmpty(value1)) {
-                if (string.IsNullOrEmpty(value2)) return 0;
-                return value2.Length;
+            if (string.IsNullOrEmpty(value1))
+            {
+                return string.IsNullOrEmpty(value2) ? 0 : value2.Length;
             }
 
             if (string.IsNullOrEmpty(value2)) {

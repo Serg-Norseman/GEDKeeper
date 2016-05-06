@@ -937,28 +937,17 @@ namespace GKUI.Dialogs
 
             this.fUserRefList = this.CreateURefsSheet(this.SheetUserRefs);
 
-            this.btnPortraitAdd.ImageList = MainWin.Instance.ImageList_Buttons;
-            this.btnPortraitAdd.ImageIndex = 3;
-            this.btnPortraitDelete.ImageList = MainWin.Instance.ImageList_Buttons;
-            this.btnPortraitDelete.ImageIndex = 5;
-            this.btnFatherAdd.ImageList = MainWin.Instance.ImageList_Buttons;
-            this.btnFatherAdd.ImageIndex = 3;
-            this.btnFatherDelete.ImageList = MainWin.Instance.ImageList_Buttons;
-            this.btnFatherDelete.ImageIndex = 5;
-            this.btnFatherSel.ImageList = MainWin.Instance.ImageList_Buttons;
-            this.btnFatherSel.ImageIndex = 28;
-            this.btnMotherAdd.ImageList = MainWin.Instance.ImageList_Buttons;
-            this.btnMotherAdd.ImageIndex = 3;
-            this.btnMotherDelete.ImageList = MainWin.Instance.ImageList_Buttons;
-            this.btnMotherDelete.ImageIndex = 5;
-            this.btnMotherSel.ImageList = MainWin.Instance.ImageList_Buttons;
-            this.btnMotherSel.ImageIndex = 28;
-            this.btnParentsAdd.ImageList = MainWin.Instance.ImageList_Buttons;
-            this.btnParentsAdd.ImageIndex = 3;
-            this.btnParentsEdit.ImageList = MainWin.Instance.ImageList_Buttons;
-            this.btnParentsEdit.ImageIndex = 4;
-            this.btnParentsDelete.ImageList = MainWin.Instance.ImageList_Buttons;
-            this.btnParentsDelete.ImageIndex = 5;
+            this.btnPortraitAdd.Image = global::GKResources.iRecNew;
+            this.btnPortraitDelete.Image = global::GKResources.iRecDelete;
+            this.btnFatherAdd.Image = global::GKResources.iRecNew;
+            this.btnFatherDelete.Image = global::GKResources.iRecDelete;
+            this.btnFatherSel.Image = global::GKResources.iToMan;
+            this.btnMotherAdd.Image = global::GKResources.iRecNew;
+            this.btnMotherDelete.Image = global::GKResources.iRecDelete;
+            this.btnMotherSel.Image = global::GKResources.iToMan;
+            this.btnParentsAdd.Image = global::GKResources.iRecNew;
+            this.btnParentsEdit.Image = global::GKResources.iRecEdit;
+            this.btnParentsDelete.Image = global::GKResources.iRecDelete;
 
             this.SetLang();
         }

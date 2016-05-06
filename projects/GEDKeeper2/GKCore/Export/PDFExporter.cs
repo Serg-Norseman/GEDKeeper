@@ -35,7 +35,7 @@ namespace GKCore.Export
     {
         private Padding fMargins;
         protected Document fDocument;
-        protected PdfWriter fWriter;
+        protected PdfWriter fPdfWriter;
         protected bool fAlbumPage;
 
         protected PDFExporter(IBaseWindow aBase) : base(aBase)
@@ -70,7 +70,7 @@ namespace GKCore.Export
             {
                 try
                 {
-                    this.fWriter = PdfWriter.GetInstance(fDocument, new FileStream(this.fPath, FileMode.Create));
+                    this.fPdfWriter = PdfWriter.GetInstance(fDocument, new FileStream(this.fPath, FileMode.Create));
                     this.InternalGenerate();
                     success = true;
                 }

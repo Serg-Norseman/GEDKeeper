@@ -38,7 +38,7 @@ using System.Data;
 using System.IO;
 using System.Text;
 
-namespace Externals.CSVReader
+namespace Externals.CSV
 {
     /// <summary>
     /// Read CSV-formatted data from a file or TextReader

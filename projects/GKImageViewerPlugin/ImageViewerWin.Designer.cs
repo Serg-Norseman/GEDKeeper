@@ -6,7 +6,6 @@ namespace GKImageViewerPlugin
 	{
 		private System.Windows.Forms.OpenFileDialog OpenDialog1;
 		private System.ComponentModel.IContainer components;
-		public System.Windows.Forms.ImageList ImageList_Buttons;
 		private System.Windows.Forms.ToolStripButton tbFileLoad;
 		private System.Windows.Forms.ToolStrip ToolBar1;
 
@@ -16,7 +15,6 @@ namespace GKImageViewerPlugin
 		    System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ImageViewerWin));
 		    this.ToolBar1 = new System.Windows.Forms.ToolStrip();
 		    this.tbFileLoad = new System.Windows.Forms.ToolStripButton();
-		    this.ImageList_Buttons = new System.Windows.Forms.ImageList(this.components);
 		    this.OpenDialog1 = new System.Windows.Forms.OpenFileDialog();
 		    this.ToolBar1.SuspendLayout();
 		    this.SuspendLayout();
@@ -24,7 +22,6 @@ namespace GKImageViewerPlugin
 		    // ToolBar1
 		    // 
 		    this.ToolBar1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-		    this.ToolBar1.ImageList = this.ImageList_Buttons;
 		    this.ToolBar1.ImageScalingSize = new System.Drawing.Size(20, 20);
 		    this.ToolBar1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
 		    this.ToolBar1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -41,12 +38,6 @@ namespace GKImageViewerPlugin
 		    this.tbFileLoad.Size = new System.Drawing.Size(23, 22);
 		    this.tbFileLoad.ToolTipText = "Открыть файл";
 		    this.tbFileLoad.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
-		    // 
-		    // ImageList_Buttons
-		    // 
-		    this.ImageList_Buttons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("ImageList_Buttons.ImageStream")));
-		    this.ImageList_Buttons.TransparentColor = System.Drawing.Color.Transparent;
-		    this.ImageList_Buttons.Images.SetKeyName(0, "");
 		    // 
 		    // OpenDialog1
 		    // 

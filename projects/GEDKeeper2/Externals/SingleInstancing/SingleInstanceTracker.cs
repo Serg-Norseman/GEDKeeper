@@ -90,7 +90,7 @@ namespace Externals.SingleInstancing
 				// Do not attempt to construct the IPC channel if there is no need for messages
 				if (enforcerRetriever != null)
 				{
-					string proxyObjectName = "SingleInstanceProxy";
+					const string proxyObjectName = "SingleInstanceProxy";
 					string proxyUri = "ipc://" + name + "/" + proxyObjectName;
 
 					// If no previous instance was found, create a server channel which will provide the proxy to the first created instance

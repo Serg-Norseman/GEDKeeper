@@ -1,7 +1,4 @@
-﻿using System;
-using System.Windows.Forms;
-
-namespace GKUI
+﻿namespace GKUI.Dialogs
 {
 	partial class ProgressDlg
 	{

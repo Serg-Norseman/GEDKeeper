@@ -21,7 +21,7 @@ namespace Externals.IniFiles
             set
             {
                 if (value < 1)
-                    throw new ArgumentOutOfRangeException("Cannot set Amount to less than 1.");
+                    throw new ArgumentOutOfRangeException("value", @"Cannot set amount to less than 1.");
                 StringBuilder build = new StringBuilder();
                 for (int i = 1; i < value; i++)
                     build.Append(Environment.NewLine);

@@ -23,12 +23,7 @@ namespace Externals.SingleInstancing
 
         public static bool CreateMutex(string strName, bool bInitiallyOwned)
         {
-            if (!SysInfo.IsUnix()) {
-                // Windows
-                return CreateMutexWin(strName, bInitiallyOwned);
-            }
-
-            return CreateMutexUnix(strName, bInitiallyOwned);
+            return !SysInfo.IsUnix() ? CreateMutexWin(strName, bInitiallyOwned) : CreateMutexUnix(strName, bInitiallyOwned);
         }
 
         private static bool CreateMutexWin(string strName, bool bInitiallyOwned)
@@ -102,10 +97,7 @@ namespace Externals.SingleInstancing
 
         public static bool ReleaseMutex(string strName)
         {
-            if (!SysInfo.IsUnix()) // Windows
-                return ReleaseMutexWin(strName);
-
-            return ReleaseMutexUnix(strName);
+            return !SysInfo.IsUnix() ? ReleaseMutexWin(strName) : ReleaseMutexUnix(strName);
         }
 
         private static bool ReleaseMutexWin(string strName)

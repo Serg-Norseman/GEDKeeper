@@ -34,7 +34,7 @@ namespace GKCore.Export
         protected string fDocumentTitle;
         protected string fFileName;
 
-        public CustomWriter()
+        protected CustomWriter()
         {
         }
 

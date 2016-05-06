@@ -140,7 +140,7 @@ namespace GKCore.Export
                 baseFont = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Calibri.ttf"), "CP1251", BaseFont.EMBEDDED);
                 //Font page_font = new Font(base_font, 9f, Font.NORMAL);
                 
-                fWriter.PageEvent = new PDFWriterEvents(baseFont, "Страница: ");
+                fPdfWriter.PageEvent = new PDFWriterEvents(baseFont, "Страница: ");
 
                 float halfpage = (fDocument.Top - fDocument.Bottom - (fTitleFont.Size) * 4) / 2f;
                 fDocument.Add(new Paragraph(Chunk.NEWLINE) { SpacingAfter = halfpage });
@@ -187,7 +187,7 @@ namespace GKCore.Export
                 fDocument.Add(new Paragraph(chapChunk) { Alignment = 1, SpacingAfter = 20f });
                 fDocument.Add(new Paragraph(Chunk.NEWLINE));
 
-                SimpleColumnText columnText = new SimpleColumnText(fDocument, fWriter.DirectContent, 3, 10f);
+                SimpleColumnText columnText = new SimpleColumnText(fDocument, fPdfWriter.DirectContent, 3, 10f);
                 float pageWidth = fDocument.PageSize.Width - fDocument.LeftMargin - fDocument.RightMargin;
                 float colWidth = (pageWidth - (10f * 2)) / 3;
 
@@ -223,7 +223,7 @@ namespace GKCore.Export
 
                 //SimpleColumnText columnText;
                 if (!this.CatalogNewPages) {
-                    columnText = new SimpleColumnText(fDocument, fWriter.DirectContent, 3, 10f);
+                    columnText = new SimpleColumnText(fDocument, fPdfWriter.DirectContent, 3, 10f);
                 }
 
                 for (BookCatalog cat = BookCatalog.Catalog_First; cat <= BookCatalog.Catalog_Last; cat++)
@@ -233,7 +233,7 @@ namespace GKCore.Export
                     if (!this.SkipEmptyCatalogs || catProps.Index.Count > 0) {
                         if (this.CatalogNewPages) {
                             fDocument.NewPage();
-                            columnText = new SimpleColumnText(fDocument, fWriter.DirectContent, 3, 10f);
+                            columnText = new SimpleColumnText(fDocument, fPdfWriter.DirectContent, 3, 10f);
                         }
 
                         this.ExposeCatalog(fDocument, columnText, catProps);

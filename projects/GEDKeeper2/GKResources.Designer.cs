@@ -191,12 +191,12 @@ internal class GKResources {
     }
     
     /// <summary>
-    ///   Looks up a localized resource of type System.Windows.Forms.ImageListStreamer.
+    ///   Looks up a localized resource of type System.Drawing.Bitmap.
     /// </summary>
-    internal static System.Windows.Forms.ImageListStreamer ImageList_Buttons_ImageStream {
+    internal static System.Drawing.Bitmap iPreview {
         get {
-            object obj = ResourceManager.GetObject("ImageList_Buttons.ImageStream", resourceCulture);
-            return ((System.Windows.Forms.ImageListStreamer)(obj));
+            object obj = ResourceManager.GetObject("iPreview", resourceCulture);
+            return ((System.Drawing.Bitmap)(obj));
         }
     }
     
@@ -303,6 +303,16 @@ internal class GKResources {
     /// <summary>
     ///   Looks up a localized resource of type System.Drawing.Bitmap.
     /// </summary>
+    internal static System.Drawing.Bitmap iScroll {
+        get {
+            object obj = ResourceManager.GetObject("iScroll", resourceCulture);
+            return ((System.Drawing.Bitmap)(obj));
+        }
+    }
+    
+    /// <summary>
+    ///   Looks up a localized resource of type System.Drawing.Bitmap.
+    /// </summary>
     internal static System.Drawing.Bitmap iSizeToFit {
         get {
             object obj = ResourceManager.GetObject("iSizeToFit", resourceCulture);
@@ -336,6 +346,16 @@ internal class GKResources {
     internal static System.Drawing.Bitmap iStop {
         get {
             object obj = ResourceManager.GetObject("iStop", resourceCulture);
+            return ((System.Drawing.Bitmap)(obj));
+        }
+    }
+    
+    /// <summary>
+    ///   Looks up a localized resource of type System.Drawing.Bitmap.
+    /// </summary>
+    internal static System.Drawing.Bitmap iTable {
+        get {
+            object obj = ResourceManager.GetObject("iTable", resourceCulture);
             return ((System.Drawing.Bitmap)(obj));
         }
     }
@@ -456,6 +476,36 @@ internal class GKResources {
     internal static System.Drawing.Bitmap iTools {
         get {
             object obj = ResourceManager.GetObject("iTools", resourceCulture);
+            return ((System.Drawing.Bitmap)(obj));
+        }
+    }
+    
+    /// <summary>
+    ///   Looks up a localized resource of type System.Drawing.Bitmap.
+    /// </summary>
+    internal static System.Drawing.Bitmap iTreeAncestry {
+        get {
+            object obj = ResourceManager.GetObject("iTreeAncestry", resourceCulture);
+            return ((System.Drawing.Bitmap)(obj));
+        }
+    }
+    
+    /// <summary>
+    ///   Looks up a localized resource of type System.Drawing.Bitmap.
+    /// </summary>
+    internal static System.Drawing.Bitmap iTreeBoth {
+        get {
+            object obj = ResourceManager.GetObject("iTreeBoth", resourceCulture);
+            return ((System.Drawing.Bitmap)(obj));
+        }
+    }
+    
+    /// <summary>
+    ///   Looks up a localized resource of type System.Drawing.Bitmap.
+    /// </summary>
+    internal static System.Drawing.Bitmap iTreeDescendants {
+        get {
+            object obj = ResourceManager.GetObject("iTreeDescendants", resourceCulture);
             return ((System.Drawing.Bitmap)(obj));
         }
     }

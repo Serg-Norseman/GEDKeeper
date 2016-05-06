@@ -59,7 +59,9 @@ namespace GKUI
     /// </summary>
     internal sealed class GKProgram
     {
+        #if GK_LINUX
         private static MainWin fMainWin;
+        #endif
 
         [STAThread]
         [SecurityPermission(SecurityAction.Demand, Flags=SecurityPermissionFlag.ControlAppDomain)]
@@ -110,6 +112,7 @@ namespace GKUI
             #endif
         }
 
+        #if GK_LINUX
         public static void ProcessMessage(IpcMessage msg)
         {
             if (msg.Message == AppMessage.RestoreWindow) {
@@ -139,6 +142,7 @@ namespace GKUI
                 catch(Exception) { }
             }
         }
+        #endif
 
         private static ISingleInstanceEnforcer GetSingleInstanceEnforcer()
         {
