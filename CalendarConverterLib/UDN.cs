@@ -1,10 +1,35 @@
-﻿using System;
+﻿/*
+ *  "GEDKeeper", the personal genealogical database editor.
+ *  Copyright (C) 2016 by Serg V. Zhdanovskih, Ruslan Garipov.
+ *
+ *  This file is part of "GEDKeeper".
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+using System;
 using System.Runtime.InteropServices;
 
 namespace GKCommon
 {
-    public enum CalendarType { ctGregorian, ctJulian, ctHebrew, ctIslamic }
+    public enum UDNCalendarType { ctGregorian, ctJulian, ctHebrew, ctIslamic }
 
+    /// <summary>
+    /// The Unified numbers of dates.
+    /// Unification of any dates, given a calendar and unknown components for the needs of comparison and sorting.
+    /// Works on the basis of algorithms Julian day.
+    /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct UDN : ICloneable, IComparable
@@ -27,27 +52,51 @@ namespace GKCommon
         private readonly uint fValue;
 
 
+        /// <summary>
+        /// Private constructor for internal purposes.
+        /// </summary>
+        /// <param name="value"></param>
         private UDN(uint value)
         {
             this.fValue = value;
         }
 
-        public UDN(CalendarType calendar, int year, int month, int day)
+        /// <summary>
+        /// Public constructor.
+        /// </summary>
+        /// <param name="calendar"></param>
+        /// <param name="year"></param>
+        /// <param name="month"></param>
+        /// <param name="day"></param>
+        public UDN(UDNCalendarType calendar, int year, int month, int day)
         {
             uint result = CreateVal(calendar, year, month, day);
             this.fValue = result;
         }
 
+        /// <summary>
+        /// Utility function for debugging and testing.
+        /// </summary>
+        /// <returns></returns>
         public uint GetUnmaskedValue()
         {
             return (UDN.ValueMask & this.fValue);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public object Clone()
         {
             return new UDN(this.fValue);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public int CompareTo(object obj)
         {
             if (obj is UDN) {
@@ -57,6 +106,12 @@ namespace GKCommon
             return -1;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="l"></param>
+        /// <param name="r"></param>
+        /// <returns></returns>
         private static int CompareUDN(uint l, uint r)
         {
             if ((UDN.YearMask & l) != UDN.IgnoreYear)
@@ -110,7 +165,15 @@ namespace GKCommon
             }
         }
 
-        private static uint CreateVal(CalendarType calendar, int year, int month, int day)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="calendar"></param>
+        /// <param name="year"></param>
+        /// <param name="month"></param>
+        /// <param name="day"></param>
+        /// <returns></returns>
+        private static uint CreateVal(UDNCalendarType calendar, int year, int month, int day)
         {
             uint result = 0;
 
@@ -120,19 +183,19 @@ namespace GKCommon
 
             switch (calendar)
             {
-                case CalendarType.ctGregorian:
+                case UDNCalendarType.ctGregorian:
                     result = (uint)CalendarConverter.gregorian_to_jd(uYear, uMonth, uDay);
                     break;
 
-                case CalendarType.ctJulian:
+                case UDNCalendarType.ctJulian:
                     result = (uint)CalendarConverter.julian_to_jd(uYear, uMonth, uDay);
                     break;
 
-                case CalendarType.ctHebrew:
+                case UDNCalendarType.ctHebrew:
                     result = (uint)CalendarConverter.hebrew_to_jd(uYear, uMonth, uDay);
                     break;
 
-                case CalendarType.ctIslamic:
+                case UDNCalendarType.ctIslamic:
                     result = (uint)CalendarConverter.islamic_to_jd(uYear, uMonth, uDay);
                     break;
             }
