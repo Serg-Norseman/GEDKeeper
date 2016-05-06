@@ -92,6 +92,25 @@ namespace GKCommon
             return new UDN(this.fValue);
         }
 
+        public override string ToString()
+        {
+            string result;
+
+            int y, m, d;
+            CalendarConverter.jd_to_gregorian(this.GetUnmaskedValue() + 0.5, out y, out m, out d);
+            
+            string sy = ((UDN.YearMask & fValue) == UDN.IgnoreYear) ? "????" : y.ToString();
+            string sm = ((UDN.MonthMask & fValue) == UDN.IgnoreMonth) ? "??" : m.ToString();
+            string sd = ((UDN.DayMask & fValue) == UDN.IgnoreDay) ? "??" : d.ToString();
+
+            return result = string.Format("{0}/{1}/{2}", sy, sm, sd);
+        }
+
+        public override int GetHashCode()
+        {
+            return (int)this.fValue;
+        }
+
         /// <summary>
         /// 
         /// </summary>
