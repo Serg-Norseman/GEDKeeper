@@ -115,5 +115,49 @@ namespace GKCommon
             }
             return result;
         }
+
+        public static uint GetHebrewUDN(int year, int month, int day)
+        {
+            uint result = (uint) CalendarConverter.hebrew_to_jd(
+                Math.Max(UnknownYear + 1, year),
+                Math.Max(UnknownMonth + 1, month),
+                Math.Max(UnknownDay + 1, day));
+
+            if (UnknownYear + 1 > year)
+            {
+                result |= IgnoreYear;
+            }
+            if (UnknownMonth + 1 > month)
+            {
+                result |= IgnoreMonth;
+            }
+            if (UnknownDay + 1 > day)
+            {
+                result |= IgnoreDay;
+            }
+            return result;
+        }
+
+        public static uint GetIslamicUDN(int year, int month, int day)
+        {
+            uint result = (uint) CalendarConverter.islamic_to_jd(
+                Math.Max(UnknownYear + 1, year),
+                Math.Max(UnknownMonth + 1, month),
+                Math.Max(UnknownDay + 1, day));
+
+            if (UnknownYear + 1 > year)
+            {
+                result |= IgnoreYear;
+            }
+            if (UnknownMonth + 1 > month)
+            {
+                result |= IgnoreMonth;
+            }
+            if (UnknownDay + 1 > day)
+            {
+                result |= IgnoreDay;
+            }
+            return result;
+        }
     }
 }
