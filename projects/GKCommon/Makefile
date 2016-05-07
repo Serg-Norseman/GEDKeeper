@@ -2,23 +2,19 @@
 
 .DEFAULT_GOAL := all
 
-include ../variables.mk
-include ../windows.mk
-
-compiler := $($(softwareplatform)compilerdos$(hardwareplatform))
-rc := $($(softwareplatform)rcdos$(hardwareplatform))
+includemk := ../
+include $(includemk)toolchain.mk
 
 project := $(gkcommon)
 projectext := .dll
 
-vpath %.resx \
-GKCommon/Controls
+vpath %.resx GKCommon/Controls
 
 objdir := obj/$(releasetype)/
 objdirdos := obj\\$(releasetype)\\
 outdir := $(objdir)
 outdirdos := $(objdirdos)
-# Get `sources` via:
+# Get `sources` via (run from this directory):
 # find -regex '.+\.cs' | sed 's/\(.\+\)/\1 \\/'
 # Just do not forget to remove trailing " \" on the last line.
 sources := \
@@ -198,18 +194,18 @@ ifeq ($(release), $(releasetype))
 compilerflags := \
 //noconfig //unsafe- //checked- //nowarn:1701,1702,2008 //nostdlib+ //platform:x64 //warn:4 \
 //define:TRACE //errorendlocation //preferreduilang:en-US //highentropyva+ \
-$(patsubst //r:%,//reference:%,$(coreresgenref)) \
+$(patsubst //r:%,//reference:%,$(coreresgenref$(dotnet))) \
 //debug- //filealign:4096 //optimize+ \
-//ruleset:"C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\Team Tools\\Static Analysis Tools\\Rule Sets\\MinimumRecommendedRules.ruleset" //subsystemversion:6.00 \
+//ruleset:$(analysis$(releasetype)ruleset) \
 //target:library //warnaserror- //utf8output
 else
 # Settings for x86-64 debug, Windows.
 compilerflags := \
 //noconfig //unsafe- //checked+ //nowarn:1701,1702,2008 //nostdlib+ //platform:x64 //warn:4 \
 //define:DEBUG //define:TRACE //errorendlocation //preferreduilang:en-US //highentropyva+ \
-$(patsubst //r:%,//reference:%,$(coreresgenref)) \
+$(patsubst //r:%,//reference:%,$(coreresgenref$(dotnet))) \
 //debug+ //debug:Full //filealign:4096 //optimize- \
-//ruleset:..\\gk21.ruleset //subsystemversion:6.00 \
+//ruleset:$(analysis$(releasetype)ruleset) \
 //target:library //warnaserror- //utf8output
 endif
 else
@@ -220,18 +216,18 @@ ifeq ($(release), $(releasetype))
 compilerflags := \
 //noconfig //unsafe- //checked- //nowarn:1701,1702,2008 //nostdlib+ //platform:x86 //warn:4 /baseaddress:4194304 \
 //define:TRACE //errorendlocation //preferreduilang:en-US //highentropyva+ \
-$(patsubst //r:%,//reference:%,$(coreresgenref)) \
+$(patsubst //r:%,//reference:%,$(coreresgenref$(dotnet))) \
 //debug- //filealign:4096 //optimize+ \
-//ruleset:"C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\Team Tools\\Static Analysis Tools\\Rule Sets\\MinimumRecommendedRules.ruleset" //subsystemversion:6.00 \
+//ruleset:$(analysis$(releasetype)ruleset) \
 //target:library //warnaserror- //utf8output
 else
 # Settings for x86 debug, Windows.
 compilerflags := \
 //noconfig //unsafe- //checked+ //nowarn:1701,1702,2008 //nostdlib+ //platform:x86 //warn:4 /baseaddress:4194304 \
 //define:DEBUG //define:TRACE //errorendlocation //preferreduilang:en-US //highentropyva+ \
-$(patsubst //r:%,//reference:%,$(coreresgenref)) \
+$(patsubst //r:%,//reference:%,$(coreresgenref$(dotnet))) \
 //debug+ //debug:Full //filealign:4096 //optimize- \
-//ruleset:..\\gk21.ruleset //subsystemversion:6.00 \
+//ruleset:$(analysis$(releasetype)ruleset) \
 //target:library //warnaserror- //utf8output
 endif
 else
@@ -242,18 +238,18 @@ ifeq ($(release), $(releasetype))
 compilerflags := \
 //noconfig //unsafe- //checked- //nowarn:1701,1702,2008 //nostdlib+ //platform:x86 //warn:4 /baseaddress:4194304 \
 //define:TRACE //errorendlocation //preferreduilang:en-US //highentropyva+ \
-$(patsubst //r:%,//reference:%,$(coreresgenref)) \
+$(patsubst //r:%,//reference:%,$(coreresgenref$(dotnet))) \
 //debug- //filealign:4096 //optimize+ \
-//ruleset:"C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\Team Tools\\Static Analysis Tools\\Rule Sets\\MinimumRecommendedRules.ruleset" //subsystemversion:6.00 \
+//ruleset:$(analysis$(releasetype)ruleset) \
 //target:library //warnaserror- //utf8output
 else
 # Settings for any CPU debug, Windows.
 compilerflags := \
 //noconfig //unsafe- //checked+ //nowarn:1701,1702,2008 //nostdlib+ //platform:x86 //warn:4 /baseaddress:4194304 \
 //define:DEBUG //define:TRACE //errorendlocation //preferreduilang:en-US //highentropyva+ \
-$(patsubst //r:%,//reference:%,$(coreresgenref)) \
+$(patsubst //r:%,//reference:%,$(coreresgenref$(dotnet))) \
 //debug+ //debug:Full //filealign:4096 //optimize- \
-//ruleset:..\\gk21.ruleset //subsystemversion:6.00 \
+//ruleset:$(analysis$(releasetype)ruleset) \
 //target:library //warnaserror- //utf8output
 endif
 endif
@@ -262,7 +258,7 @@ endif
 endif
 rcflags := \
 //useSourcePath \
-$(coreresgenref)
+$(coreresgenref$(dotnet))
 
 .PHONY: all
 all: $(outdir)$(project)$(projectext)
@@ -281,7 +277,7 @@ $(outdir)$(project)$(projectext): $(resources) $(sources)
 ifeq ($(windows), $(softwareplatform))
 	$(compiler) //out:$(outdirdos)$(project)$(projectext) $(compilerflags) $(patsubst $(objdir)%,//resource:$(objdirdos)\\%,$(resources)) $(sources)
 else
-	@echo "Not yet implemented"
+	@echo "csc: not yet implemented for $(linux)"
 endif
 	@echo "**** $(project)$(projectext): build completed ($(releasetype) for $(hardwareplatform), $(softwareplatform))."
 
@@ -289,5 +285,5 @@ $(objdir)%.resources: %.resx
 ifeq ($(windows), $(softwareplatform))
 	$(rc) $(rcflags) //compile $<,$@
 else
-	@echo "Not yet implemented"
+	@echo "rc: not yet implemented for $(linux)"
 endif

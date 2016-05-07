@@ -8,5 +8,9 @@ linux := linux
 # Release types
 debug := debug
 release := release
+# .NET version
+dotnet20 := dotnet20
+dotnet46 := dotnet46
 # Projects
 gkcommon := GKCommon
+gedkeeper2 := GEDKeeper2

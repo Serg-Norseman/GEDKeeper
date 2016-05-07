@@ -3,19 +3,30 @@
 windowscompilerdosany := /c/Program\ Files\ \(x86\)/MSBuild/14.0/bin/csc.exe
 windowscompilerdosx86-64 := $(windowscompilerdosany)
 windowscompilerdosx86 := $(windowscompilerdosany)
-windowsrcdosany := /c/Program\ Files\ \(x86\)/Microsoft\ SDKs/Windows/v10.0A/bin/NETFX\ 4.6\ Tools/ResGen.exe
-windowsrcdosx86-64 := $(windowsrcdosany)
-windowsrcdosx86 := $(windowsrcdosany)
+windowsrcdosdotnet46 := /c/Program\ Files\ \(x86\)/Microsoft\ SDKs/Windows/v10.0A/bin/NETFX\ 4.6\ Tools/ResGen.exe
+windowsrcdosdotnet20 := /c/Program\ Files\ \(x86\)/Microsoft\ SDKs/Windows/v7.0A/bin/Resgen.exe
 
-refsdos := C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.5.2\\
-
-coreresgenref := \
+refsdosdotnet46 := C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.5.2\\
+refsdosdornet20 := C:\\Windows\\Microsoft.NET\\Framework\\v2.0.50727\\
+refsdos := $(refsdos$(dotnet))
+coreresgenrefdotnet46 := \
 //r:"$(refsdos)mscorlib.dll" \
-//r:"$(refsdos)System.Core.dll" \
 //r:"$(refsdos)System.Data.dll" \
 //r:"$(refsdos)System.dll" \
 //r:"$(refsdos)System.Drawing.dll" \
-//r:"$(refsdos)System.Management.dll" \
+//r:"$(refsdos)System.Runtime.Remoting.dll" \
+//r:"$(refsdos)System.Windows.Forms.dll" \
+//r:"$(refsdos)System.Xml.dll" \
+//r:"$(refsdos)System.Core.dll" \
+//r:"$(refsdos)System.Management.dll"
+coreresgenrefdotnet20 := \
+//r:"$(refsdos)mscorlib.dll" \
+//r:"$(refsdos)System.Data.dll" \
+//r:"$(refsdos)System.dll" \
+//r:"$(refsdos)System.Drawing.dll" \
 //r:"$(refsdos)System.Runtime.Remoting.dll" \
 //r:"$(refsdos)System.Windows.Forms.dll" \
 //r:"$(refsdos)System.Xml.dll"
+
+analysisreleaseruleset := "C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\Team Tools\\Static Analysis Tools\\Rule Sets\\MinimumRecommendedRules.ruleset"
+analysisdebugruleset := ..\\gk21.ruleset
