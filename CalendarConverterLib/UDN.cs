@@ -136,9 +136,9 @@ namespace GKCommon
         /// <returns></returns>
         private static int CompareUDN(uint l, uint r)
         {
-            if ((UDN.YearMask & l) != UDN.IgnoreYear)
+            if (0 == (UDN.IgnoreYear & l))
             {
-                if ((UDN.YearMask & r) != UDN.IgnoreYear)
+                if (0 == (UDN.IgnoreYear & r))
                 {
                     return ((int) (UDN.ValueMask & l)) - ((int) (UDN.ValueMask & r));
                 }
@@ -147,13 +147,13 @@ namespace GKCommon
                     return 1;
                 }
             }
-            else if ((UDN.YearMask & r) != UDN.IgnoreYear)
+            else if (0 == (UDN.IgnoreYear & r))
             {
                 return -1;
             }
-            else if ((UDN.MonthMask & l) != UDN.IgnoreMonth)
+            else if (0 == (UDN.IgnoreMonth & l))
             {
-                if ((UDN.MonthMask & r) != UDN.IgnoreMonth)
+                if (0 == (UDN.IgnoreMonth & r))
                 {
                     return ((int) (UDN.ValueMask & l)) - ((int) (UDN.ValueMask & r));
                 }
@@ -162,13 +162,13 @@ namespace GKCommon
                     return 1;
                 }
             }
-            else if ((UDN.MonthMask & r) != UDN.IgnoreMonth)
+            else if (0 == (UDN.IgnoreMonth & r))
             {
                 return -1;
             }
-            else if ((UDN.DayMask & l) != UDN.IgnoreDay)
+            else if (0 == (UDN.IgnoreDay & l))
             {
-                if ((UDN.DayMask & r) != UDN.IgnoreDay)
+                if (0 == (UDN.IgnoreDay & r))
                 {
                     return ((int) (UDN.ValueMask & l)) - ((int) (UDN.ValueMask & r));
                 }
@@ -177,7 +177,7 @@ namespace GKCommon
                     return 1;
                 }
             }
-            else if ((UDN.DayMask & r) != UDN.IgnoreDay)
+            else if (0 == (UDN.IgnoreDay & r))
             {
                 return -1;
             }
@@ -280,6 +280,60 @@ namespace GKCommon
             }
 
             return result;
+        }
+
+        /// <summary>Finds a date that lies in the middle between the two specified dates.</summary>
+        /// <param name="left">The first date. Must be a date with valid year.</param>
+        /// <param name="right">The second date. Must be a date with valid year.</param>
+        /// <returns>A date that is "average" of the <paramref name="left"/> amd <paramref name="right"/>.
+        /// Both the dates must have valid year parts (must not have `IgnoreYear` flag set). Otherwise this method
+        /// throws an exception.</returns>
+        public static UDN Between(UDN left, UDN right)
+        {
+            if ((0 != (IgnoreYear & left.fValue)) || (0 != (IgnoreYear & right.fValue)))
+            {
+                throw new Exception("`Between` member requires dates with valid years");
+            }
+            /*
+             * Wikipedia states that "Julian day is the continuous count of days since the beginning of the Julian
+             * Period" (https://en.wikipedia.org/wiki/Julian_day).
+             * Therefore, for two dates A and B we can state that 'JDN(A) - JDN(B)' is number of days beetween A and B.
+             *
+             * Now look on implementation of the `CreateVal` method: it uses the first month in a year and/or the first
+             * day of a month when month and/or day respectively is unknown.
+             *
+             * Thus we can assume that both `left` and `right` always have valid date parts even if some of those parts
+             * must be ignored.
+             *
+             * Next, if we found a month between an unknown month and a known one, result is a known month. If we found
+             * a month between two unknown monthes, result is an unknown month. The same stuff is applied to days.
+             */
+            uint value = (left.GetUnmaskedValue() + right.GetUnmaskedValue()) >> 1;
+            value |=
+                (IgnoreMonth & left.fValue) & (IgnoreMonth & right.fValue) |
+                (IgnoreDay & left.fValue) & (IgnoreDay & right.fValue);
+            return new UDN(value);
+        }
+
+        /// <summary>Checks year part of this date.</summary>
+        /// <returns>True if this date has valid year (`IgnoreYear` flag isn't set) and false otherwise.</returns>
+        public bool hasKnownYear()
+        {
+            return 0 == (IgnoreYear & fValue);
+        }
+
+        /// <summary>Checks month part of this date.</summary>
+        /// <returns>True if this date has valid month (`IgnoreMonth` flag isn't set) and false otherwise.</returns>
+        public bool hasKnownMonth()
+        {
+            return 0 == (IgnoreMonth & fValue);
+        }
+
+        /// <summary>Checks day part of this date.</summary>
+        /// <returns>True if this date has valid day (`IgnoreDay` flag isn't set) and false otherwise.</returns>
+        public bool hasKnownDay()
+        {
+            return 0 == (IgnoreDay & fValue);
         }
     }
 }
