@@ -281,7 +281,6 @@ namespace GKUI
 		    this.tbLoadMRU.AutoToolTip = false;
 		    this.tbLoadMRU.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.None;
 		    this.tbLoadMRU.DropDown = this.MenuMRU;
-		    this.tbLoadMRU.Image = ((System.Drawing.Image)(resources.GetObject("tbLoadMRU.Image")));
 		    this.tbLoadMRU.ImageTransparentColor = System.Drawing.Color.Magenta;
 		    this.tbLoadMRU.Name = "tbLoadMRU";
 		    this.tbLoadMRU.Size = new System.Drawing.Size(13, 22);
@@ -291,7 +290,7 @@ namespace GKUI
 		    // 
 		    this.MenuMRU.Name = "MenuMRU";
 		    this.MenuMRU.OwnerItem = this.tbLoadMRU;
-		    this.MenuMRU.Size = new System.Drawing.Size(61, 4);
+		    this.MenuMRU.Size = new System.Drawing.Size(153, 26);
 		    // 
 		    // tbFileSave
 		    // 
