@@ -37,14 +37,17 @@ namespace GKCommon
         private const uint IgnoreYear = 1u << 31;
         private const uint IgnoreMonth = 1u << 30;
         private const uint IgnoreDay = 1u << 29;
+        private const uint Reserved1 = 1u << 28;
+        private const uint Reserved2 = 1u << 27;
 
         private const uint YearMask = IgnoreYear;
         private const uint MonthMask = IgnoreMonth;
         private const uint DayMask = IgnoreDay;
+        private const uint ReservedMask = 0x18000000;
 
-        private const uint ValueMask = 0x1fffffff;
+        private const uint ValueMask = 0x7FFFFFF;
 
-        public const int UnknownYear = -4713;
+        public const int UnknownYear = 0;
         public const int UnknownMonth = 0;
         public const int UnknownDay = 0;
 
@@ -185,18 +188,62 @@ namespace GKCommon
         }
 
         /// <summary>
-        /// 
+        /// Calculates Julian day nubmer (JDN, https://en.wikipedia.org/wiki/Julian_day) using the specified date from
+        /// the specified <paramref name="calendar"/>.
+        /// Return value of this method ain't a usual JDN. See Returns section for more information.
         /// </summary>
-        /// <param name="calendar"></param>
-        /// <param name="year"></param>
-        /// <param name="month"></param>
-        /// <param name="day"></param>
-        /// <returns></returns>
+        /// <param name="calendar">Source calendar. The <paramref name="year"/>, <paramref name="month"/> and
+        /// <paramref name="day"/> are from this calendar.</param>
+        /// <param name="year">Year number. Pass `UnknownYear` constant when year is unknown.
+        /// This method DOES NOT check that `year` is inside a valid range. It's duty of a caller.</param>
+        /// <param name="month">Month number. Pass `UnknownMonth` constant when month is unknown.
+        /// This method DOES NOT check that `month` is inside a valid range. It's duty of a caller.</param>
+        /// <param name="day">Day number. Pass `UnknownDay` constant when day is unknown.
+        /// This method DOES NOT check that `day` is inside a valid range. It's duty of a caller.</param>
+        /// <returns>Masked Julian day nubmer. It's a usual JDN, having optional flags part.
+        /// The following is the result scheme:
+        /// +----+----+----+----+----+----------+
+        /// | 31 | 30 | 29 | 28 | 27 | 26 ... 0 | bits number
+        /// +----+----+----+----+----+----------+
+        /// Bits from 0 to 26 is JDN (masked by `ValueMask` member).
+        /// The 27th and the 28th bits are reserved for future use.
+        /// The 29th bit is unknown day flag (`DayMask` member masks this bit, `IgnoreDay` member is the flag itself).
+        /// The 30th bit is unknown month flag (`MonthMask` member masks this bit, `IgnoreMonth` member is the flag
+        /// itself).
+        /// The 31th bit is unknown year flag (`YearMask` member masks this bit, `IgnoreYear` member is the flag
+        /// itself).
+        /// </returns>
         private static uint CreateVal(UDNCalendarType calendar, int year, int month, int day)
         {
             uint result = 0;
 
-            int uYear = Math.Max(UnknownYear + 1, year);
+            /*
+             * @ruslangaripov:
+             *
+             * The next conversation assume that `UnknownYear` member is 0.
+             *
+             * If all the `CalendarConverter::{calendar type}_to_jd` functions guarantee valid JDN for 0th year, we can
+             * safely use the following code:
+             *
+             * int uYear = year;
+             *
+             * But if at least one of `CalendarConverter::{calendar type}_to_jd` functions fails on 0th year (read:
+             * gives incorrect JDN) we HAVE TO use code like this:
+             *
+             * int uYear = (UnknownYear != year) ? year : 1;
+             *
+             * Here `1` is the first valid year for an algorithm that calculates JDN. I believe any such calculation
+             * succeeds doing such calculation with 1st year.
+             *
+             * Wikipedia says that "For the year (Y) astronomical year numbering is used", and therefore I currently
+             * stick with "0th year always valid for calculation JDN". And therefore, a
+             * `CalendarConverter::{calendar type}_to_jd` succeeds with `UnknownYear`:
+             *
+             * uint result = (uint) (CalendarConverter::{calendar type}_to_jd(UnknownYear, uMonth, uDay));
+             *
+             * `result` after the code from above is a valid JDN.
+             */
+            int uYear = year;
             int uMonth = Math.Max(UnknownMonth + 1, month);
             int uDay = Math.Max(UnknownDay + 1, day);
 
@@ -219,7 +266,7 @@ namespace GKCommon
                     break;
             }
 
-            if (UnknownYear + 1 > year)
+            if (UnknownYear == year)
             {
                 result |= IgnoreYear;
             }
