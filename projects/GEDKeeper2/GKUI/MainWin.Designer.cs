@@ -83,7 +83,6 @@ namespace GKUI
 		private System.Windows.Forms.OpenFileDialog OpenDialog1;
 		private System.Windows.Forms.SaveFileDialog SaveDialog1;
 		private System.Windows.Forms.ToolStripSeparator TBS7;
-		private System.Windows.Forms.ImageList ImageList_Shields;
 		private System.Windows.Forms.ToolStripMenuItem miOrganizer;
 		private System.Windows.Forms.ToolStripMenuItem miService;
 		private System.Windows.Forms.ToolStripSeparator N12;
@@ -102,7 +101,6 @@ namespace GKUI
 		private void InitializeComponent()
 		{
 		    this.components = new System.ComponentModel.Container();
-		    System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWin));
 		    this.StatusBar = new System.Windows.Forms.StatusBar();
 		    this.StatusBarPanel1 = new System.Windows.Forms.StatusBarPanel();
 		    this.StatusBarPanel2 = new System.Windows.Forms.StatusBarPanel();
@@ -193,7 +191,6 @@ namespace GKUI
 		    this.miAbout = new System.Windows.Forms.ToolStripMenuItem();
 		    this.OpenDialog1 = new System.Windows.Forms.OpenFileDialog();
 		    this.SaveDialog1 = new System.Windows.Forms.SaveFileDialog();
-		    this.ImageList_Shields = new System.Windows.Forms.ImageList(this.components);
 		    this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
 		    ((System.ComponentModel.ISupportInitialize)(this.StatusBarPanel1)).BeginInit();
 		    ((System.ComponentModel.ISupportInitialize)(this.StatusBarPanel2)).BeginInit();
@@ -290,7 +287,7 @@ namespace GKUI
 		    // 
 		    this.MenuMRU.Name = "MenuMRU";
 		    this.MenuMRU.OwnerItem = this.tbLoadMRU;
-		    this.MenuMRU.Size = new System.Drawing.Size(153, 26);
+		    this.MenuMRU.Size = new System.Drawing.Size(61, 4);
 		    // 
 		    // tbFileSave
 		    // 
@@ -902,14 +899,6 @@ namespace GKUI
 		    this.SaveDialog1.Filter = "GEDKeeper GEDCOM файлы (*.ged)|*.ged|GEDKeeper шифрованные GEDCOM файлы (*.geds)|" +
 		    "*.geds";
 		    this.SaveDialog1.OverwritePrompt = false;
-		    // 
-		    // ImageList_Shields
-		    // 
-		    this.ImageList_Shields.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("ImageList_Shields.ImageStream")));
-		    this.ImageList_Shields.TransparentColor = System.Drawing.Color.Transparent;
-		    this.ImageList_Shields.Images.SetKeyName(0, "shield_max.bmp");
-		    this.ImageList_Shields.Images.SetKeyName(1, "shield_mid.bmp");
-		    this.ImageList_Shields.Images.SetKeyName(2, "shield_none.bmp");
 		    // 
 		    // MainWin
 		    // 
