@@ -37,13 +37,8 @@ namespace GKCommon
         private const uint IgnoreYear = 1u << 31;
         private const uint IgnoreMonth = 1u << 30;
         private const uint IgnoreDay = 1u << 29;
-        private const uint Reserved1 = 1u << 28;
-        private const uint Reserved2 = 1u << 27;
-
-        private const uint YearMask = IgnoreYear;
-        private const uint MonthMask = IgnoreMonth;
-        private const uint DayMask = IgnoreDay;
-        private const uint ReservedMask = 0x18000000;
+        private const uint DateAfter = 1u << 28;
+        private const uint DateBefore = 1u << 27;
 
         private const uint ValueMask = 0x7FFFFFF;
 
@@ -51,7 +46,21 @@ namespace GKCommon
         public const int UnknownMonth = 0;
         public const int UnknownDay = 0;
 
-
+        /// <summary>
+        /// `fValue` is masked Julian day nubmer (JDN, https://en.wikipedia.org/wiki/Julian_day).
+        /// It's a usual JDN, having optional flags part.
+        ///
+        /// The following is the scheme of `fValue` bits value:
+        /// +----+----+----+----+----+----------+
+        /// | 31 | 30 | 29 | 28 | 27 | 26 ... 0 | bits number
+        /// +----+----+----+----+----+----------+
+        /// Bits from 0 to 26 is JDN (masked by `ValueMask` member).
+        /// The 27th bit is date before flag (it's the `DateBefore`).
+        /// The 28th bit is date after flag (it's the `DateAfter` member).
+        /// The 29th bit is unknown day flag (it's the `IgnoreDay` member).
+        /// The 30th bit is unknown month flag (it's the `IgnoreMonth` member).
+        /// The 31th bit is unknown year flag (it's the `IgnoreYear` member).
+        /// </summary>
         private readonly uint fValue;
 
 
@@ -97,16 +106,14 @@ namespace GKCommon
 
         public override string ToString()
         {
-            string result;
-
             int y, m, d;
             CalendarConverter.jd_to_gregorian(this.GetUnmaskedValue() + 0.5, out y, out m, out d);
             
-            string sy = ((UDN.YearMask & fValue) == UDN.IgnoreYear) ? "????" : y.ToString();
-            string sm = ((UDN.MonthMask & fValue) == UDN.IgnoreMonth) ? "??" : m.ToString();
-            string sd = ((UDN.DayMask & fValue) == UDN.IgnoreDay) ? "??" : d.ToString();
+            string sy = hasKnownYear() ? y.ToString() : "????";
+            string sm = hasKnownMonth() ? m.ToString() : "??";
+            string sd = hasKnownDay() ? d.ToString() : "??";
 
-            return result = string.Format("{0}/{1}/{2}", sy, sm, sd);
+            return string.Format("{0}/{1}/{2}", sy, sm, sd);
         }
 
         public override int GetHashCode()
@@ -129,11 +136,12 @@ namespace GKCommon
         }
 
         /// <summary>
-        /// 
+        /// Compares two masked JDN.
         /// </summary>
-        /// <param name="l"></param>
-        /// <param name="r"></param>
-        /// <returns></returns>
+        /// <param name="l">The left value to compare.</param>
+        /// <param name="r">The right value to compare</param>
+        /// <returns>'-1' when the `l` is less than the `r`, '1' when the `l` is greater than the `r` and '0' when
+        /// the `l` and the `r` are equal.</returns>
         private static int CompareUDN(uint l, uint r)
         {
             if (0 == (UDN.IgnoreYear & l))
@@ -188,30 +196,22 @@ namespace GKCommon
         }
 
         /// <summary>
-        /// Calculates Julian day nubmer (JDN, https://en.wikipedia.org/wiki/Julian_day) using the specified date from
+        /// Calculates Julian day nubmer (JDN, https://en.wikipedia.org/wiki/Julian_day) using the specified date in
         /// the specified <paramref name="calendar"/>.
         /// Return value of this method ain't a usual JDN. See Returns section for more information.
         /// </summary>
         /// <param name="calendar">Source calendar. The <paramref name="year"/>, <paramref name="month"/> and
-        /// <paramref name="day"/> are from this calendar.</param>
+        /// <paramref name="day"/> are in this calendar.</param>
         /// <param name="year">Year number. Pass `UnknownYear` constant when year is unknown.
         /// This method DOES NOT check that `year` is inside a valid range. It's duty of a caller.</param>
         /// <param name="month">Month number. Pass `UnknownMonth` constant when month is unknown.
         /// This method DOES NOT check that `month` is inside a valid range. It's duty of a caller.</param>
         /// <param name="day">Day number. Pass `UnknownDay` constant when day is unknown.
         /// This method DOES NOT check that `day` is inside a valid range. It's duty of a caller.</param>
-        /// <returns>Masked Julian day nubmer. It's a usual JDN, having optional flags part.
-        /// The following is the result scheme:
-        /// +----+----+----+----+----+----------+
-        /// | 31 | 30 | 29 | 28 | 27 | 26 ... 0 | bits number
-        /// +----+----+----+----+----+----------+
-        /// Bits from 0 to 26 is JDN (masked by `ValueMask` member).
-        /// The 27th and the 28th bits are reserved for future use.
-        /// The 29th bit is unknown day flag (`DayMask` member masks this bit, `IgnoreDay` member is the flag itself).
-        /// The 30th bit is unknown month flag (`MonthMask` member masks this bit, `IgnoreMonth` member is the flag
-        /// itself).
-        /// The 31th bit is unknown year flag (`YearMask` member masks this bit, `IgnoreYear` member is the flag
-        /// itself).
+        /// <returns>Masked Julian day nubmer. See description of the <see cref="fValue"/> member for detailed
+        /// information about masked JDN value.
+        ///
+        /// This method doesn't change the 27th and 28th bit ("date before" and "date after").
         /// </returns>
         private static uint CreateVal(UDNCalendarType calendar, int year, int month, int day)
         {
@@ -282,6 +282,44 @@ namespace GKCommon
             return result;
         }
 
+        /// <summary>
+        /// Creates a new UDN instance that represents a date before the specified date in the specified
+        /// <paramref name="calendar"/>.</summary>
+        /// <param name="calendar">Source calendar. The <paramref name="year"/>, <paramref name="month"/> and
+        /// <paramref name="day"/> are in this calendar.</param>
+        /// <param name="year">Year number. Pass `UnknownYear` constant when year is unknown.
+        /// This method DOES NOT check that `year` is inside a valid range. It's duty of a caller.</param>
+        /// <param name="month">Month number. Pass `UnknownMonth` constant when month is unknown.
+        /// This method DOES NOT check that `month` is inside a valid range. It's duty of a caller.</param>
+        /// <param name="day">Day number. Pass `UnknownDay` constant when day is unknown.
+        /// This method DOES NOT check that `day` is inside a valid range. It's duty of a caller.</param>
+        /// <returns>UDN object representing a date before the specified one.
+        ///
+        /// This method sets "date before" flag on the new date.</returns>
+        public static UDN CreateBefore(UDNCalendarType calendar, int year, int month, int day)
+        {
+            return new UDN(CreateVal(calendar, year, month, day) | DateBefore);
+        }
+
+        /// <summary>
+        /// Creates a new UDN instance that represents a date after the specified date in the specified
+        /// <paramref name="calendar"/>.</summary>
+        /// <param name="calendar">Source calendar. The <paramref name="year"/>, <paramref name="month"/> and
+        /// <paramref name="day"/> are in this calendar.</param>
+        /// <param name="year">Year number. Pass `UnknownYear` constant when year is unknown.
+        /// This method DOES NOT check that `year` is inside a valid range. It's duty of a caller.</param>
+        /// <param name="month">Month number. Pass `UnknownMonth` constant when month is unknown.
+        /// This method DOES NOT check that `month` is inside a valid range. It's duty of a caller.</param>
+        /// <param name="day">Day number. Pass `UnknownDay` constant when day is unknown.
+        /// This method DOES NOT check that `day` is inside a valid range. It's duty of a caller.</param>
+        /// <returns>UDN object representing a date after the specified one.
+        ///
+        /// This method sets "date after" flag on the new date.</returns>
+        public static UDN CreateAfter(UDNCalendarType calendar, int year, int month, int day)
+        {
+            return new UDN(CreateVal(calendar, year, month, day) | DateAfter);
+        }
+
         /// <summary>Finds a date that lies in the middle between the two specified dates.</summary>
         /// <param name="left">The first date. Must be a date with valid year.</param>
         /// <param name="right">The second date. Must be a date with valid year.</param>
@@ -334,6 +372,20 @@ namespace GKCommon
         public bool hasKnownDay()
         {
             return 0 == (IgnoreDay & fValue);
+        }
+
+        /// <summary>Checks if this date defines a "date before".</summary>
+        /// <returns>True if this date is a "date before" (`DateBefore` flag is set) and false otherwise.</returns>
+        public bool isDateBefore()
+        {
+            return 0 == (DateBefore & fValue);
+        }
+
+        /// <summary>Checks if this date defines a "date after".</summary>
+        /// <returns>True if this date is a "date after" (`DateAfter` flag is set) and false otherwise.</returns>
+        public bool isDateAfter()
+        {
+            return 0 == (DateAfter & fValue);
         }
     }
 }
