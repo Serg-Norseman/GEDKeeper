@@ -45,7 +45,7 @@ namespace GKCommon
 
         public static ExtRect CreateBounds(int left, int top, int width, int height)
         {
-            return ExtRect.Create(left, top, left + width - 1, top + height - 1);
+            return ExtRect.Create(left, top, left + width, top + height);
         }
 
         public static ExtRect CreateEmpty()
@@ -55,12 +55,12 @@ namespace GKCommon
 
         public int GetWidth()
         {
-            return this.Right - this.Left + 1;
+            return this.Right - this.Left;
         }
 
         public int GetHeight()
         {
-            return this.Bottom - this.Top + 1;
+            return this.Bottom - this.Top;
         }
 
         public bool IsEmpty()
@@ -109,7 +109,7 @@ namespace GKCommon
 
         public Rectangle ToRectangle()
         {
-            return new Rectangle(this.Left, this.Top, this.Right - this.Left + 1, this.Bottom - this.Top + 1);
+            return new Rectangle(this.Left, this.Top, this.Right - this.Left, this.Bottom - this.Top);
         }
     }
 }
