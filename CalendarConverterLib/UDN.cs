@@ -60,6 +60,8 @@ namespace GKCommon
         /// The 29th bit is unknown day flag (it's the `IgnoreDay` member).
         /// The 30th bit is unknown month flag (it's the `IgnoreMonth` member).
         /// The 31th bit is unknown year flag (it's the `IgnoreYear` member).
+        ///
+        /// Bits `DateBefore` and `DateAfter` are mutually exclusive.
         /// </summary>
         private readonly uint fValue;
 
@@ -82,8 +84,7 @@ namespace GKCommon
         /// <param name="day"></param>
         public UDN(UDNCalendarType calendar, int year, int month, int day)
         {
-            uint result = CreateVal(calendar, year, month, day);
-            this.fValue = result;
+            this.fValue = CreateVal(calendar, year, month, day);
         }
 
         /// <summary>
@@ -144,55 +145,81 @@ namespace GKCommon
         /// the `l` and the `r` are equal.</returns>
         private static int CompareUDN(uint l, uint r)
         {
+            int result = 0;
             if (0 == (UDN.IgnoreYear & l))
             {
                 if (0 == (UDN.IgnoreYear & r))
                 {
-                    return ((int) (UDN.ValueMask & l)) - ((int) (UDN.ValueMask & r));
+                    result = ((int) (UDN.ValueMask & l)) - ((int) (UDN.ValueMask & r));
                 }
                 else
                 {
-                    return 1;
+                    result = 1;
                 }
             }
             else if (0 == (UDN.IgnoreYear & r))
             {
-                return -1;
+                result = - 1;
             }
             else if (0 == (UDN.IgnoreMonth & l))
             {
                 if (0 == (UDN.IgnoreMonth & r))
                 {
-                    return ((int) (UDN.ValueMask & l)) - ((int) (UDN.ValueMask & r));
+                    result = ((int) (UDN.ValueMask & l)) - ((int) (UDN.ValueMask & r));
                 }
                 else
                 {
-                    return 1;
+                    result = 1;
                 }
             }
             else if (0 == (UDN.IgnoreMonth & r))
             {
-                return -1;
+                result = -1;
             }
             else if (0 == (UDN.IgnoreDay & l))
             {
                 if (0 == (UDN.IgnoreDay & r))
                 {
-                    return ((int) (UDN.ValueMask & l)) - ((int) (UDN.ValueMask & r));
+                    result = ((int) (UDN.ValueMask & l)) - ((int) (UDN.ValueMask & r));
                 }
                 else
                 {
-                    return 1;
+                    result = 1;
                 }
             }
             else if (0 == (UDN.IgnoreDay & r))
             {
-                return -1;
+                result = -1;
             }
-            else
+            if (0 == result)
             {
-                return 0;
+                if (0 != (DateBefore & l))
+                {
+                    result = (0 != (DateBefore & r)) ? 0 : -1;
+                }
+                else if (0 != (DateAfter & l))
+                {
+                    result = (0 != (DateAfter & r)) ? 0 : 1;
+                }
+                else if (0 != (DateBefore & r))
+                {
+                    result = 1;
+                }
+                else if (0 != (DateAfter & r))
+                {
+                    result = -1;
+                }
+                else
+                {
+                    result = 0;
+                }
             }
+            return result;
+        }
+
+        public static UDN CreateEmpty()
+        {
+            return new UDN(0);
         }
 
         /// <summary>
@@ -301,6 +328,12 @@ namespace GKCommon
             return new UDN(CreateVal(calendar, year, month, day) | DateBefore);
         }
 
+        public static UDN CreateBefore(UDN udn)
+        {
+            // We must guarantee that result UDN won't have both `DateBefore` and `DateAfter`.
+            return new UDN((udn.fValue & ~DateAfter) | DateBefore);
+        }
+
         /// <summary>
         /// Creates a new UDN instance that represents a date after the specified date in the specified
         /// <paramref name="calendar"/>.</summary>
@@ -318,6 +351,12 @@ namespace GKCommon
         public static UDN CreateAfter(UDNCalendarType calendar, int year, int month, int day)
         {
             return new UDN(CreateVal(calendar, year, month, day) | DateAfter);
+        }
+
+        public static UDN CreateAfter(UDN udn)
+        {
+            // We must guarantee that result UDN won't have both `DateBefore` and `DateAfter`.
+            return new UDN((udn.fValue & ~DateBefore) | DateAfter);
         }
 
         /// <summary>Finds a date that lies in the middle between the two specified dates.</summary>
@@ -386,6 +425,11 @@ namespace GKCommon
         public bool isDateAfter()
         {
             return 0 == (DateAfter & fValue);
+        }
+
+        public bool isEmpty()
+        {
+            return this.fValue == 0;
         }
     }
 }
