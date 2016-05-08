@@ -160,8 +160,8 @@ namespace GKUI
             if (this.fOptions.MWinRect.Left != -1 && this.fOptions.MWinRect.Top != -1 && this.fOptions.MWinRect.Right != -1 && this.fOptions.MWinRect.Bottom != -1) {
                 base.Left = this.fOptions.MWinRect.Left;
                 base.Top = this.fOptions.MWinRect.Top;
-                base.Width = this.fOptions.MWinRect.Right;
-                base.Height = this.fOptions.MWinRect.Bottom;
+                base.Width = this.fOptions.MWinRect.Right - this.fOptions.MWinRect.Left + 1;
+                base.Height = this.fOptions.MWinRect.Bottom - this.fOptions.MWinRect.Top + 1;
             } else {
                 base.Left = (Screen.PrimaryScreen.WorkingArea.Width - 800) / 2;
                 base.Top = (Screen.PrimaryScreen.WorkingArea.Height - 600) / 2;
