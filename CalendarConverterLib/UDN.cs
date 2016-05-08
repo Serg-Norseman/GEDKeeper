@@ -388,7 +388,8 @@ namespace GKCommon
             uint value = (left.GetUnmaskedValue() + right.GetUnmaskedValue()) >> 1;
             value |=
                 (IgnoreMonth & left.fValue) & (IgnoreMonth & right.fValue) |
-                (IgnoreDay & left.fValue) & (IgnoreDay & right.fValue);
+                (IgnoreDay & left.fValue) & (IgnoreDay & right.fValue) &
+                ~(DateBefore | DateAfter);
             return new UDN(value);
         }
 
