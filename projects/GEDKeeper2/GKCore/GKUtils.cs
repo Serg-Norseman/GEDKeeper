@@ -1639,7 +1639,7 @@ namespace GKCore
             if (y < 0) y = 0;
             if (w > mw) w = mw;
             if (h > mh) h = mh;
-            return ExtRect.Create(x, y, x + w - 1, y + h - 1);
+            return ExtRect.Create(x, y, x + w, y + h);
         }
 
         public static void SetFormRect(Form form, ExtRect rt, FormWindowState winState)
