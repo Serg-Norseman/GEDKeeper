@@ -210,31 +210,31 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public override double GetUDN()
+        public override UDN GetUDN()
         {
-            double result;
+            UDN result;
 
             if (this.fDateFrom.StringValue != "" && this.fDateTo.StringValue == "")
             {
-                result = this.fDateFrom.GetUDN() + AbsDate.ABS_DATE_DELTA;
+                result = UDN.CreateAfter(this.fDateFrom.GetUDN());
             }
             else if (this.fDateFrom.StringValue == "" && this.fDateTo.StringValue != "")
             {
-                result = this.fDateTo.GetUDN() - AbsDate.ABS_DATE_DELTA;
+                result = UDN.CreateBefore(this.fDateTo.GetUDN());
             }
             else if (this.fDateFrom.StringValue != "" && this.fDateTo.StringValue != "")
             {
-                result = (this.fDateFrom.GetUDN() + this.fDateTo.GetUDN()) / 2;
+                result = UDN.Between(this.fDateFrom.GetUDN(), this.fDateTo.GetUDN());
             }
             else
             {
-                result = double.NaN;
+                result = UDN.CreateEmpty();
             }
 
             return result;
         }
 
-        public override AbsDate GetAbstractDate()
+        /*public override AbsDate GetAbstractDate()
         {
             AbsDate result;
 
@@ -256,6 +256,6 @@ namespace GKCommon.GEDCOM
             }
 
             return result;
-        }
+        }*/
     }
 }

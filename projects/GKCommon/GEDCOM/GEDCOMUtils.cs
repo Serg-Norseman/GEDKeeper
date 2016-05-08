@@ -31,28 +31,13 @@ namespace GKCommon.GEDCOM
     /// I tried to use "Julian day", he would be ideal and would allow to implement any sort of dates.
     /// But JD is not working with partial dates.
     /// </summary>
-    [Serializable]
+    /*[Serializable]
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct AbsDate : ICloneable, IComparable
     {
         public const double ABS_DATE_DELTA = 0.5d;
 
         private readonly double fValue;
-
-        public int Year
-        {
-            get { return this.IsValid() ? GetYear((int)this.fValue) : 0; }
-        }
-
-        public int Month
-        {
-            get { return this.IsValid() ? GetMonth((int)this.fValue) : 0; }
-        }
-
-        public int Day
-        {
-            get { return this.IsValid() ? GetDay((int)this.fValue) : 0; }
-        }
 
         private AbsDate(double value)
         {
@@ -189,7 +174,7 @@ namespace GKCommon.GEDCOM
         {
             return new AbsDate(this.fValue - ABS_DATE_DELTA);
         }
-    }
+    }*/
     
     /// <summary>
     /// 
@@ -1641,9 +1626,108 @@ namespace GKCommon.GEDCOM
 
         #endregion
 
+        #region RelativeYear utils
+
+        public static int GetRelativeYear(GEDCOMRecordWithEvents evsRec, string evSign)
+        {
+            int result;
+
+            if (evsRec == null) {
+                result = 0;
+            } else {
+                GEDCOMCustomEvent evt = evsRec.FindEvent(evSign);
+                result = GetRelativeYear(evt);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// In the historical chronology of the year 0 does not exist. 
+        /// Therefore, the digit 0 in the year value can be used as a sign of lack or error.
+        /// RelativeYear - introduced for the purposes of uniform chronology years in the Gregorian calendar. 
+        /// Is estimated from -4714 BC to 3268 AD.
+        /// </summary>
+        /// <param name="evt"></param>
+        /// <returns></returns>
+        public static int GetRelativeYear(GEDCOMCustomEvent evt)
+        {
+            return (evt == null) ? 0 : GetRelativeYear(evt.Detail.Date);
+        }
+
+        public static int GetRelativeYear(GEDCOMDateValue dateVal)
+        {
+            return (dateVal.Value == null) ? 0 : GetRelativeYear(dateVal.Value);
+        }
+
+        // TODO: all of years lead to the Gregorian calendar!
+        public static int GetRelativeYear(GEDCOMCustomDate customDate)
+        {
+            if (customDate == null) {
+                return 0;
+            } else {
+                GEDCOMDate date = customDate as GEDCOMDate;
+
+                if (date == null) {
+                    return 0;
+                } else {
+                    int year = date.Year;
+                    if (year <= 0) {
+                        return 0;
+                    } else {
+                        if (date.YearBC) year = -year;
+                        // TODO: calendars and other!
+                    }
+
+                    return year;
+                }
+            }
+        }
+
+        #endregion
+
+        #region UDN utils
+
+        public static UDN GetUDN(GEDCOMCustomEvent evt)
+        {
+            return (evt == null) ? UDN.CreateEmpty() : evt.Detail.Date.GetUDN();
+        }
+
+        public static UDN GetUDN(GEDCOMRecordWithEvents evsRec, string evSign)
+        {
+            UDN result;
+
+            if (evsRec == null) {
+                result = UDN.CreateEmpty();
+            } else {
+                GEDCOMCustomEvent evt = evsRec.FindEvent(evSign);
+                result = GetUDN(evt);
+            }
+
+            return result;
+        }
+
+        public static UDN GetUDN(string dateStr)
+        {
+            try
+            {
+                dateStr = StrToGEDCOMDate(dateStr, false);
+
+                GEDCOMDateExact dtx = (GEDCOMDateExact)GEDCOMDateExact.Create(null, null, "", "");
+                dtx.ParseString(dateStr);
+                return dtx.GetUDN();
+            }
+            catch
+            {
+                return UDN.CreateEmpty();
+            }
+        }
+
+        #endregion
+
         #region AbstractDate utils
 
-        public static AbsDate GetAbstractDate(GEDCOMCustomEvent evt)
+        /*public static AbsDate GetAbstractDate(GEDCOMCustomEvent evt)
         {
             return (evt == null) ? AbsDate.Empty() : evt.Detail.Date.GetAbstractDate();
         }
@@ -1676,7 +1760,7 @@ namespace GKCommon.GEDCOM
             {
                 return AbsDate.Empty();
             }
-        }
+        }*/
 
         #endregion
 

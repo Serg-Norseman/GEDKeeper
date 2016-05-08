@@ -208,17 +208,17 @@ namespace GKCore.Stats
                         for (int j = 0; j < num2; j++)
                         {
                             GEDCOMCustomEvent evt = iRec.Events[j];
-                            AbsDate dtx = GEDCOMUtils.GetAbstractDate(evt);
-                            if (!dtx.IsValid() && (mode != StatsMode.smBirthPlaces && mode != StatsMode.smDeathPlaces)) continue;
+                            int dtY = GEDCOMUtils.GetRelativeYear(evt);
+                            if (dtY == 0 && (mode != StatsMode.smBirthPlaces && mode != StatsMode.smDeathPlaces)) continue;
 
                             if (evt.Name == "BIRT")
                             {
                                 switch (mode) {
                                     case StatsMode.smBirthYears:
-                                        v = Convert.ToString(dtx.Year);
+                                        v = Convert.ToString(dtY);
                                         break;
                                     case StatsMode.smBirthTenYears:
-                                        v = Convert.ToString(dtx.Year / 10 * 10);
+                                        v = Convert.ToString(dtY / 10 * 10);
                                         break;
                                     case StatsMode.smBirthPlaces:
                                         v = evt.Detail.Place.StringValue;
@@ -231,10 +231,10 @@ namespace GKCore.Stats
                                 {
                                     switch (mode) {
                                         case StatsMode.smDeathYears:
-                                            v = Convert.ToString(dtx.Year);
+                                            v = Convert.ToString(dtY);
                                             break;
                                         case StatsMode.smDeathTenYears:
-                                            v = Convert.ToString(dtx.Year / 10 * 10);
+                                            v = Convert.ToString(dtY / 10 * 10);
                                             break;
                                         case StatsMode.smDeathPlaces:
                                             v = evt.Detail.Place.StringValue;
@@ -369,9 +369,9 @@ namespace GKCore.Stats
 
                                 switch (mode) {
                                     case StatsMode.smAAF_1:
-                                        AbsDate dtx1 = GEDCOMUtils.GetAbstractDate(iRec, "BIRT");
-                                        if (dtx1.IsValid()) {
-                                            key = GKUtils.Trunc(dtx1.Year / 10 * 10).ToString();
+                                        int dty1 = GEDCOMUtils.GetRelativeYear(iRec, "BIRT");
+                                        if (dty1 != 0) {
+                                            key = GKUtils.Trunc(dty1 / 10 * 10).ToString();
 
                                             if (!xvals.TryGetValue(key, out valsList))
                                             {
@@ -384,9 +384,9 @@ namespace GKCore.Stats
                                         break;
 
                                     case StatsMode.smAAF_2:
-                                        AbsDate dtx2 = GEDCOMUtils.GetAbstractDate(iChild, "BIRT");
-                                        if (dtx2.IsValid()) {
-                                            key = GKUtils.Trunc(dtx2.Year / 10 * 10).ToString();
+                                        int dty2 = GEDCOMUtils.GetRelativeYear(iChild, "BIRT");
+                                        if (dty2 != 0) {
+                                            key = GKUtils.Trunc(dty2 / 10 * 10).ToString();
 
                                             if (!xvals.TryGetValue(key, out valsList))
                                             {

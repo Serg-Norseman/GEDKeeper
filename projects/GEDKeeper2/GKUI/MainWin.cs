@@ -157,7 +157,7 @@ namespace GKUI
             this.fOptions.LoadFromFile(this.GetAppDataPath() + "GEDKeeper2.ini");
             this.fOptions.FindLanguages();
 
-            if (this.fOptions.MWinRect.Left != -1 && this.fOptions.MWinRect.Top != -1 && this.fOptions.MWinRect.Right != -1 && this.fOptions.MWinRect.Bottom != -1) {
+            if (!this.fOptions.MWinRect.IsEmpty()) {
                 base.Left = this.fOptions.MWinRect.Left;
                 base.Top = this.fOptions.MWinRect.Top;
                 base.Width = this.fOptions.MWinRect.Right - this.fOptions.MWinRect.Left + 1;

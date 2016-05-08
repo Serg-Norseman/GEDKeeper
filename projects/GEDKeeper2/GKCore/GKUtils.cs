@@ -765,7 +765,7 @@ namespace GKCore
             return MONTH_DAYS[(month == 2 && DateTime.IsLeapYear(year)) ? 1 : 0][month - 1];
         }
 
-        public static string GetDateFmtString(GEDCOMDate date, DateFormat format, bool includeBC = false)
+        public static string GetDateFmtString(GEDCOMDate date, DateFormat format, bool includeBC = false, bool showCalendar = false)
         {
             if (date == null)
             {
@@ -816,6 +816,11 @@ namespace GKCore
                 }
             }
 
+            if (showCalendar)
+            {
+                result = result + GKData.Calendars[(int)date.DateCalendar];
+            }
+
             return result;
         }
 
@@ -828,18 +833,13 @@ namespace GKCore
                 if (date is GEDCOMDate)
                 {
                     GEDCOMDate dtx = date as GEDCOMDate;
-                    result = GetDateFmtString(dtx, format, true);
+                    result = GetDateFmtString(dtx, format, true, showCalendar);
 
                     if (dtx is GEDCOMDateApproximated)
                     {
                         if (sign && (dtx as GEDCOMDateApproximated).Approximated != GEDCOMApproximated.daExact) {
                             result = "~ " + result;
                         }
-                    }
-
-                    if (showCalendar)
-                    {
-                        result = result + GKData.Calendars[(int)dtx.DateCalendar];
                     }
                 }
                 else if (date is GEDCOMDateRange)
@@ -848,17 +848,17 @@ namespace GKCore
 
                     if (range.After.StringValue == "" && range.Before.StringValue != "")
                     {
-                        result = GetDateFmtString(range.Before, format, true);
+                        result = GetDateFmtString(range.Before, format, true, showCalendar);
                         if (sign) result = "< " + result;
                     }
                     else if (range.After.StringValue != "" && range.Before.StringValue == "")
                     {
-                        result = GetDateFmtString(range.After, format, true);
+                        result = GetDateFmtString(range.After, format, true, showCalendar);
                         if (sign) result += " >";
                     }
                     else if (range.After.StringValue != "" && range.Before.StringValue != "")
                     {
-                        result = GetDateFmtString(range.After, format, true) + " - " + GetDateFmtString(range.Before, format, true);
+                        result = GetDateFmtString(range.After, format, true, showCalendar) + " - " + GetDateFmtString(range.Before, format, true, showCalendar);
                     }
                 }
                 else if (date is GEDCOMDatePeriod)
@@ -867,17 +867,17 @@ namespace GKCore
 
                     if (period.DateFrom.StringValue != "" && period.DateTo.StringValue == "")
                     {
-                        result = GetDateFmtString(period.DateFrom, format, true);
+                        result = GetDateFmtString(period.DateFrom, format, true, showCalendar);
                         if (sign) result += " >";
                     }
                     else if (period.DateFrom.StringValue == "" && period.DateTo.StringValue != "")
                     {
-                        result = GetDateFmtString(period.DateTo, format, true);
+                        result = GetDateFmtString(period.DateTo, format, true, showCalendar);
                         if (sign) result = "< " + result;
                     }
                     else if (period.DateFrom.StringValue != "" && period.DateTo.StringValue != "")
                     {
-                        result = GetDateFmtString(period.DateFrom, format, true) + " - " + GetDateFmtString(period.DateTo, format, true);
+                        result = GetDateFmtString(period.DateFrom, format, true, showCalendar) + " - " + GetDateFmtString(period.DateTo, format, true, showCalendar);
                     }
                 }
             }
@@ -1048,16 +1048,17 @@ namespace GKCore
 
             try
             {
-                AbsDate dt1 = GEDCOMUtils.GetAbstractDate(ev1);
-                AbsDate dt2 = GEDCOMUtils.GetAbstractDate(ev2);
+                int dt1 = GEDCOMUtils.GetRelativeYear(ev1);
+                int dt2 = GEDCOMUtils.GetRelativeYear(ev2);
 
-                if (currentEnd && !dt2.IsValid()) {
-                    DateTime now = DateTime.Now;
-                    dt2 = new AbsDate(now.Year, (ushort)now.Month, (ushort)now.Day, false);
+                if (currentEnd && dt2 == 0)
+                {
+                    dt2 = DateTime.Now.Year;
                 }
 
-                if (dt1.IsValid() && dt2.IsValid()) {
-                    result = Math.Abs(dt2.Year - dt1.Year);
+                if (dt1 != 0 && dt2 != 0)
+                {
+                    result = Math.Abs(dt2 - dt1);
                 }
             }
             catch (Exception ex)
@@ -1115,9 +1116,9 @@ namespace GKCore
                 if (toYear == -1) {
                     result = GetEventsYearsDiff(bd, dd, dd == null);
                 } else {
-                    AbsDate birthDate = GEDCOMUtils.GetAbstractDate(bd);
-                    if (birthDate.IsValid()) {
-                        result = toYear - birthDate.Year;
+                    int birthYear = GEDCOMUtils.GetRelativeYear(bd);
+                    if (birthYear != 0) {
+                        result = toYear - birthYear;
                     }
                 }
             }
@@ -1394,12 +1395,12 @@ namespace GKCore
 
             try
             {
-                AbsDate firstYear = AbsDate.Empty();
+                int firstYear = 0;
 
                 GEDCOMCustomEvent evt = iRec.FindEvent("BIRT");
                 if (evt != null)
                 {
-                    AbsDate parentYear = GEDCOMUtils.GetAbstractDate(evt);
+                    int parentYear = GEDCOMUtils.GetRelativeYear(evt);
 
                     int num = iRec.SpouseToFamilyLinks.Count;
                     for (int i = 0; i < num; i++)
@@ -1414,9 +1415,9 @@ namespace GKCore
                             evt = child.FindEvent("BIRT");
                             if (evt != null)
                             {
-                                AbsDate childYear = GEDCOMUtils.GetAbstractDate(evt);
+                                int childYear = GEDCOMUtils.GetRelativeYear(evt);
 
-                                if (!firstYear.IsValid()) {
+                                if (firstYear == 0) {
                                     firstYear = childYear;
                                     iChild = child;
                                 } else {
@@ -1429,8 +1430,8 @@ namespace GKCore
                         }
                     }
 
-                    if (parentYear.IsValid() && firstYear.IsValid()) {
-                        result = (firstYear.Year - parentYear.Year);
+                    if (parentYear != 0 && firstYear != 0) {
+                        result = (firstYear - parentYear);
                     } else {
                         iChild = null;
                     }
@@ -1450,12 +1451,12 @@ namespace GKCore
 
             try
             {
-                AbsDate firstYear = AbsDate.Empty();
+                int firstYear = 0;
 
                 GEDCOMCustomEvent evt = iRec.FindEvent("BIRT");
                 if (evt != null)
                 {
-                    AbsDate mainYear = GEDCOMUtils.GetAbstractDate(evt);
+                    int mainYear = GEDCOMUtils.GetRelativeYear(evt);
 
                     int num = iRec.SpouseToFamilyLinks.Count;
                     for (int i = 0; i < num; i++)
@@ -1465,9 +1466,9 @@ namespace GKCore
                         GEDCOMCustomEvent fEvent = family.FindEvent("MARR");
                         if (fEvent != null)
                         {
-                            AbsDate spouseYear = GEDCOMUtils.GetAbstractDate(fEvent);
+                            int spouseYear = GEDCOMUtils.GetRelativeYear(fEvent);
 
-                            if (!firstYear.IsValid()) {
+                            if (firstYear == 0) {
                                 firstYear = spouseYear;
                             } else {
                                 if (firstYear > spouseYear) {
@@ -1477,8 +1478,8 @@ namespace GKCore
                         }
                     }
 
-                    if (mainYear.IsValid() && firstYear.IsValid()) {
-                        result = (firstYear.Year - mainYear.Year);
+                    if (mainYear != 0 && firstYear != 0) {
+                        result = (firstYear - mainYear);
                     }
                 }
             }

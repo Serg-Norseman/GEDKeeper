@@ -41,7 +41,7 @@ namespace GKCore.Options
         private readonly TreeChartOptions fChartOptions;
         private GEDCOMCharacterSet fDefCharacterSet;
         private DateFormat fDefDateFormat;
-        private bool fDefDateSigns;
+        private bool fDefDateSigns = true;
         private NameFormat fDefNameFormat;
         private readonly StringList fEventFilters;
         private ushort fInterfaceLang;

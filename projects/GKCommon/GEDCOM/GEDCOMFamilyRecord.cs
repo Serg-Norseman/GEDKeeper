@@ -292,6 +292,7 @@ namespace GKCommon.GEDCOM
 
         #region Auxiliary
 
+        // TODO: replace this sort by standard sort + UDN
         public void SortChilds()
         {
             int num = this.fChildrens.Count;
@@ -300,12 +301,12 @@ namespace GKCommon.GEDCOM
                 for (int j = i + 1; j < num; j++)
                 {
                     GEDCOMIndividualRecord iChild = this.fChildrens[i].Value as GEDCOMIndividualRecord;
-                    AbsDate iDate = GEDCOMUtils.GetAbstractDate(iChild, "BIRT");
+                    UDN iDate = GEDCOMUtils.GetUDN(iChild, "BIRT");
 
                     GEDCOMIndividualRecord kChild = this.fChildrens[j].Value as GEDCOMIndividualRecord;
-                    AbsDate kDate = GEDCOMUtils.GetAbstractDate(kChild, "BIRT");
+                    UDN kDate = GEDCOMUtils.GetUDN(kChild, "BIRT");
 
-                    if (iDate > kDate) this.fChildrens.Exchange(i, j);
+                    if (iDate.CompareTo(kDate) > 0) this.fChildrens.Exchange(i, j);
                 }
             }
         }

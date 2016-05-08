@@ -20,6 +20,7 @@
 
 using System;
 using System.Drawing;
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Options;
@@ -148,7 +149,7 @@ namespace GKCore.Lists
     {
         private GEDCOMIndividualRecord fRec;
         private GEDCOMGroupRecord filter_grp;
-        private AbsDate filter_abd;
+        private UDN filter_abd;
         private GEDCOMSourceRecord filter_source;
 
         protected override void CreateFilter()
@@ -234,9 +235,9 @@ namespace GKCore.Lists
                         break;
 
                     case FilterLifeMode.lmAliveBefore:
-                        AbsDate bdt = GEDCOMUtils.GetAbstractDate(buf_bd);
-                        AbsDate ddt = GEDCOMUtils.GetAbstractDate(buf_dd);
-                        if ((bdt > this.filter_abd) || (ddt < this.filter_abd)) return false;
+                        UDN bdt = GEDCOMUtils.GetUDN(buf_bd);
+                        UDN ddt = GEDCOMUtils.GetUDN(buf_dd);
+                        if ((bdt.CompareTo(this.filter_abd) > 0) || (ddt.CompareTo(this.filter_abd) < 0)) return false;
                         break;
 
                     case FilterLifeMode.lmTimeLocked:
@@ -446,7 +447,7 @@ namespace GKCore.Lists
         {
             IndividualListFilter iFilter = (IndividualListFilter)fFilter;
 
-            this.filter_abd = GEDCOMUtils.GetAbstractDate(iFilter.AliveBeforeDate);
+            this.filter_abd = GEDCOMUtils.GetUDN(iFilter.AliveBeforeDate);
 
             if (iFilter.GroupRef == "") {
                 this.filter_grp = null;

@@ -163,11 +163,16 @@ namespace GKCore
             return (exp != -1 && exp < 15);
         }
 
-        public AbsDate FindBirthYear(GEDCOMIndividualRecord iRec)
+        public int GetRelativeYear(GEDCOMRecordWithEvents evsRec, string evSign)
+        {
+            return GEDCOMUtils.GetRelativeYear(evsRec, evSign);
+        }
+
+        public int FindBirthYear(GEDCOMIndividualRecord iRec)
         {
             if (iRec != null) {
-                AbsDate birthDate = GEDCOMUtils.GetAbstractDate(iRec, "BIRT");
-                if (birthDate.IsValid()) {
+                int birthDate = GEDCOMUtils.GetRelativeYear(iRec, "BIRT");
+                if (birthDate != 0) {
                     return birthDate;
                 }
 
@@ -181,25 +186,25 @@ namespace GKCore
                     {
                         GEDCOMIndividualRecord child = family.Childrens[j].Value as GEDCOMIndividualRecord;
                         birthDate = FindBirthYear(child);
-                        if (birthDate.IsValid()) {
-                            return birthDate.IncYear(-20);
+                        if (birthDate != 0) {
+                            return birthDate -= 20;
                         }
                     }
                 }
             }
 
-            return AbsDate.Empty();
+            return 0;
         }
 
-        public AbsDate FindDeathYear(GEDCOMIndividualRecord iRec)
+        public int FindDeathYear(GEDCOMIndividualRecord iRec)
         {
             if (iRec != null) {
-                AbsDate deathDate = GEDCOMUtils.GetAbstractDate(iRec, "DEAT");
-                if (deathDate.IsValid()) {
+                int deathDate = GEDCOMUtils.GetRelativeYear(iRec, "DEAT");
+                if (deathDate != 0) {
                     return deathDate;
                 }
 
-                AbsDate maxBirth = AbsDate.Empty();
+                int maxBirth = 0;
                 int num = iRec.SpouseToFamilyLinks.Count;
                 for (int i = 0; i < num; i++)
                 {
@@ -210,19 +215,19 @@ namespace GKCore
                     {
                         GEDCOMIndividualRecord child = family.Childrens[j].Value as GEDCOMIndividualRecord;
 
-                        AbsDate chbDate = FindBirthYear(child);
-                        if (chbDate.IsValid()) {
+                        int chbDate = FindBirthYear(child);
+                        if (chbDate != 0) {
                             if (maxBirth < chbDate) maxBirth = chbDate;
                         }
                     }
                 }
 
-                if (maxBirth.IsValid()) {
-                    return maxBirth.IncYear(+1);
+                if (maxBirth != 0) {
+                    return maxBirth += 1;
                 }
             }
 
-            return AbsDate.Empty();
+            return 0;
         }
 
         #endregion
@@ -258,7 +263,7 @@ namespace GKCore
                         string nf, nn, np;
                         iRec.GetNameParts(out nf, out nn, out np);
 
-                        AbsDate birthDate = this.FindBirthYear(iRec);
+                        int birthDate = this.FindBirthYear(iRec);
                         int descGens = GKUtils.GetDescGenerations(iRec);
 
                         bool res = (iRec.ChildToFamilyLinks.Count == 0);
@@ -268,14 +273,14 @@ namespace GKCore
 
                         if (datesCheck)
                         {
-                            res = (res && birthDate.IsValid());
+                            res = (res && birthDate != 0);
                         }
 
                         if (res)
                         {
                             PatriarchObj pObj = new PatriarchObj();
                             pObj.IRec = iRec;
-                            pObj.BirthYear = birthDate.Year;
+                            pObj.BirthYear = birthDate;
                             pObj.DescendantsCount = GKUtils.GetDescendantsCount(iRec) - 1;
                             pObj.DescGenerations = descGens;
                             patList.Add(pObj);

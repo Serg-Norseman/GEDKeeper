@@ -135,7 +135,7 @@ namespace GKCore.Lists
         protected static object GetDateValue(GEDCOMCustomEvent evt, bool isVisible)
         {
             if (evt == null) {
-                return (isVisible) ? null : (object)AbsDate.Empty();
+                return (isVisible) ? null : (object)UDN.CreateEmpty();
             }
 
             return GetDateValue(evt.Detail.Date.Value, isVisible);
@@ -146,13 +146,13 @@ namespace GKCore.Lists
             object result;
 
             if (date == null) {
-                result = (isVisible) ? null : (object)AbsDate.Empty();
+                result = (isVisible) ? null : (object)UDN.CreateEmpty();
             } else {
                 if (isVisible) {
                     GlobalOptions glob = GlobalOptions.Instance;
                     result = GKUtils.GetCustomDateFmtString(date, glob.DefDateFormat, glob.DefDateSigns, glob.ShowDatesCalendar);
                 } else {
-                    result = date.GetAbstractDate();
+                    result = date.GetUDN();
                 }
             }
 
@@ -287,7 +287,7 @@ namespace GKCore.Lists
                     return DateTime.Parse(val);
 
                 case DataType.dtGEDCOMDate:
-                    return GEDCOMUtils.GetAbstractDate(val);
+                    return GEDCOMUtils.GetUDN(val);
             }
 
             return val;
