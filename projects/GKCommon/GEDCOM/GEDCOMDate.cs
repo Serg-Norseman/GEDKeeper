@@ -131,6 +131,11 @@ namespace GKCommon.GEDCOM
             this.DateChanged();
         }
 
+        public bool IsValidDate()
+        {
+            return (this.fYear > 0 && this.fMonth != "" && this.fDay > 0);
+        }
+
         public override bool IsEmpty()
         {
             return base.IsEmpty() && this.fYear <= 0 && this.fMonth == "" && this.fDay <= 0;
@@ -801,29 +806,6 @@ namespace GKCommon.GEDCOM
         public override UDN GetUDN()
         {
             return this.fUDN;
-        }
-
-        /*public override AbsDate GetAbstractDate()
-        {
-            int year;
-            ushort month, day;
-            bool yearBC;
-            this.GetDateParts(out year, out month, out day, out yearBC);
-
-            AbsDate result;
-
-            if (year == -1) {
-                result = AbsDate.Empty(); // it's empty date, as negative dates has yearBC-attribute
-            } else {
-                result = new AbsDate(year, month, day, yearBC);
-            }
-
-            return result;
-        }*/
-
-        public bool IsValidDate()
-        {
-            return (this.fYear > 0 && this.fMonth != "" && this.fDay > 0);
         }
     }
 }

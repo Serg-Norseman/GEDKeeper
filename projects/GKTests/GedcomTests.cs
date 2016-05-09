@@ -616,11 +616,6 @@ namespace GKTests
         }
 
         [Test]
-        public void AbsDate_Tests()
-        {
-        }
-
-        [Test]
         public void GEDCOMTagWithLists_Tests()
         {
             // GEDCOMTagWithLists protected class, derived - GEDCOMEventDetail

@@ -20,162 +20,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System.Text;
 
 namespace GKCommon.GEDCOM
 {
-    /// <summary>
-    /// This is an structure for the abstract date to be used as a simple substitute of GEDCOMDate, and the standard DateTime.
-    /// Substitution is used to obtain the date in reduced format, when no or a month, or a day, or both.
-    /// I tried to use "Julian day", he would be ideal and would allow to implement any sort of dates.
-    /// But JD is not working with partial dates.
-    /// </summary>
-    /*[Serializable]
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct AbsDate : ICloneable, IComparable
-    {
-        public const double ABS_DATE_DELTA = 0.5d;
-
-        private readonly double fValue;
-
-        private AbsDate(double value)
-        {
-            this.fValue = value;
-        }
-
-        public AbsDate(int year, int month, int day, bool yearBC)
-        {
-            int result = CreateVal(year, month, day);
-            if (yearBC) result = -result;
-
-            this.fValue = result;
-        }
-
-        #region Private static methods
-
-        private static int CreateVal(int year, int month, int day)
-        {
-            return ((short)year << 16) | ((byte)month << 8) | ((byte)day);
-        }
-
-        private static int GetYear(int dtx)
-        {
-            return (short)((dtx >> 16) & 0xFFFF);
-        }
-
-        private static int GetMonth(int dtx)
-        {
-            return (byte)((dtx >> 8) & 0xFF);
-        }
-
-        private static int GetDay(int dtx)
-        {
-            return (byte)((dtx) & 0xFF);
-        }
-
-        #endregion
-
-        public static AbsDate Empty()
-        {
-            return new AbsDate(double.NaN);
-        }
-
-        public static AbsDate Between(AbsDate dtx1, AbsDate dtx2)
-        {
-            return new AbsDate((dtx1.fValue + dtx2.fValue) / 2);
-        }
-
-        public bool IsValid()
-        {
-            return !double.IsNaN(this.fValue);
-        }
-
-        public AbsDate IncYear(int yearDelta)
-        {
-            int dtx = (int)this.fValue;
-            return new AbsDate(CreateVal(GetYear(dtx) + yearDelta, GetMonth(dtx), GetDay(dtx)));
-        }
-
-        public override string ToString()
-        {
-            string result;
-
-            if (this.IsValid()) {
-                int dtx = (int)this.fValue;
-                result = string.Format("{0}/{1}/{2}", ConvHelper.AdjustNum(GetDay(dtx), 2), ConvHelper.AdjustNum(GetMonth(dtx), 2), ConvHelper.AdjustNum(GetYear(dtx), 4));
-            } else {
-                result = "00.00.0000";
-            }
-
-            return result;
-        }
-
-        public static bool operator ==(AbsDate left, AbsDate right)
-        {
-            return (left.fValue == right.fValue);
-        }
-
-        public static bool operator !=(AbsDate left, AbsDate right)
-        {
-            return (left.fValue != right.fValue);
-        }
-
-        public static bool operator <(AbsDate left, AbsDate right)
-        {
-            return left.fValue < right.fValue;
-        }
-
-        public static bool operator <=(AbsDate left, AbsDate right)
-        {
-            return left.fValue <= right.fValue;
-        }
-
-        public static bool operator >(AbsDate left, AbsDate right)
-        {
-            return left.fValue > right.fValue;
-        }
-
-        public static bool operator >=(AbsDate left, AbsDate right)
-        {
-            return left.fValue >= right.fValue;
-        }
-
-        public override bool Equals(object obj)
-        {
-            return (obj is AbsDate && this.fValue == ((AbsDate)obj).fValue);
-        }
-
-        public int CompareTo(object obj)
-        {
-            if (obj is AbsDate) {
-                return this.fValue.CompareTo(((AbsDate)obj).fValue);
-            }
-
-            return -1;
-        }
-
-        public object Clone()
-        {
-            return new AbsDate(this.fValue);
-        }
-
-        public override int GetHashCode()
-        {
-            return this.fValue.GetHashCode();
-        }
-
-        public AbsDate After()
-        {
-            return new AbsDate(this.fValue + ABS_DATE_DELTA);
-        }
-
-        public AbsDate Before()
-        {
-            return new AbsDate(this.fValue - ABS_DATE_DELTA);
-        }
-    }*/
-    
     /// <summary>
     /// 
     /// </summary>
@@ -241,7 +89,7 @@ namespace GKCommon.GEDCOM
         }
 
         #endregion
-        
+
         #region Parse functions
 
         public static string ExtractDelimiter(string str, int max)
@@ -416,7 +264,7 @@ namespace GKCommon.GEDCOM
         }
 
         #endregion
-        
+
         #region GEDCOM Enums processing
         
         public static Encoding GetEncodingByCharacterSet(GEDCOMCharacterSet cs)
@@ -1553,7 +1401,7 @@ namespace GKCommon.GEDCOM
         }
         
         #endregion
-        
+
         #region Other
 
         public static string NormalizeName(string s)
@@ -1722,45 +1570,6 @@ namespace GKCommon.GEDCOM
                 return UDN.CreateEmpty();
             }
         }
-
-        #endregion
-
-        #region AbstractDate utils
-
-        /*public static AbsDate GetAbstractDate(GEDCOMCustomEvent evt)
-        {
-            return (evt == null) ? AbsDate.Empty() : evt.Detail.Date.GetAbstractDate();
-        }
-
-        public static AbsDate GetAbstractDate(GEDCOMRecordWithEvents evsRec, string evSign)
-        {
-            AbsDate result;
-
-            if (evsRec == null) {
-                result = AbsDate.Empty();
-            } else {
-                GEDCOMCustomEvent evt = evsRec.FindEvent(evSign);
-                result = GetAbstractDate(evt);
-            }
-
-            return result;
-        }
-
-        public static AbsDate GetAbstractDate(string dateStr)
-        {
-            try
-            {
-                dateStr = StrToGEDCOMDate(dateStr, false);
-
-                GEDCOMDateExact dtx = (GEDCOMDateExact)GEDCOMDateExact.Create(null, null, "", "");
-                dtx.ParseString(dateStr);
-                return dtx.GetAbstractDate();
-            }
-            catch
-            {
-                return AbsDate.Empty();
-            }
-        }*/
 
         #endregion
 

@@ -266,29 +266,5 @@ namespace GKCommon.GEDCOM
 
             return result;
         }
-
-        /*public override AbsDate GetAbstractDate()
-        {
-            AbsDate result;
-
-            if (this.fDateAfter.StringValue == "" && this.fDateBefore.StringValue != "")
-            {
-                result = this.fDateBefore.GetAbstractDate().Before();
-            }
-            else if (this.fDateAfter.StringValue != "" && this.fDateBefore.StringValue == "")
-            {
-                result = this.fDateAfter.GetAbstractDate().After();
-            }
-            else if (this.fDateAfter.StringValue != "" && this.fDateBefore.StringValue != "")
-            {
-                result = AbsDate.Between(this.fDateAfter.GetAbstractDate(), this.fDateBefore.GetAbstractDate());
-            }
-            else
-            {
-                result = AbsDate.Empty();
-            }
-
-            return result;
-        }*/
     }
 }

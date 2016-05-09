@@ -172,11 +172,6 @@ namespace GKCommon.GEDCOM
             return (this.fValue == null) ? UDN.CreateEmpty() : this.fValue.GetUDN();
         }
 
-        /*public override AbsDate GetAbstractDate()
-        {
-            return (this.fValue == null) ? AbsDate.Empty() : this.fValue.GetAbstractDate();
-        }*/
-
         #endregion
     }
 }
