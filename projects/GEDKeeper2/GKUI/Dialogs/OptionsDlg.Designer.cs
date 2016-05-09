@@ -141,6 +141,7 @@ namespace GKUI.Dialogs
 		    this.RButton8 = new System.Windows.Forms.RadioButton();
 		    this.chkPlacesWithAddress = new System.Windows.Forms.CheckBox();
 		    this.chkHighlightUnparented = new System.Windows.Forms.CheckBox();
+		    this.chkShowDatesSigns = new System.Windows.Forms.CheckBox();
 		    this.chkShowDatesCalendar = new System.Windows.Forms.CheckBox();
 		    this.chkHighlightUnmarried = new System.Windows.Forms.CheckBox();
 		    this.SheetViewPersons = new System.Windows.Forms.TabPage();
@@ -166,7 +167,6 @@ namespace GKUI.Dialogs
 		    this.btnCancel = new System.Windows.Forms.Button();
 		    this.ColorDialog1 = new System.Windows.Forms.ColorDialog();
 		    this.FontDialog1 = new System.Windows.Forms.FontDialog();
-		    this.chkShowDatesSigns = new System.Windows.Forms.CheckBox();
 		    this.PageControl1.SuspendLayout();
 		    this.SheetCommon.SuspendLayout();
 		    this.rgCode.SuspendLayout();
@@ -802,6 +802,14 @@ namespace GKUI.Dialogs
 		    this.chkHighlightUnparented.TabIndex = 3;
 		    this.chkHighlightUnparented.Text = "Подсвечивать персоны без родителей";
 		    // 
+		    // chkShowDatesSigns
+		    // 
+		    this.chkShowDatesSigns.Location = new System.Drawing.Point(326, 134);
+		    this.chkShowDatesSigns.Name = "chkShowDatesSigns";
+		    this.chkShowDatesSigns.Size = new System.Drawing.Size(338, 21);
+		    this.chkShowDatesSigns.TabIndex = 4;
+		    this.chkShowDatesSigns.Text = "chkShowDatesSigns";
+		    // 
 		    // chkShowDatesCalendar
 		    // 
 		    this.chkShowDatesCalendar.Location = new System.Drawing.Point(326, 107);
@@ -1008,14 +1016,6 @@ namespace GKUI.Dialogs
 		    this.btnCancel.TabIndex = 2;
 		    this.btnCancel.Text = "Отменить";
 		    this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-		    // 
-		    // chkShowDatesSigns
-		    // 
-		    this.chkShowDatesSigns.Location = new System.Drawing.Point(326, 134);
-		    this.chkShowDatesSigns.Name = "chkShowDatesSigns";
-		    this.chkShowDatesSigns.Size = new System.Drawing.Size(338, 21);
-		    this.chkShowDatesSigns.TabIndex = 4;
-		    this.chkShowDatesSigns.Text = "chkShowDatesSigns";
 		    // 
 		    // OptionsDlg
 		    // 

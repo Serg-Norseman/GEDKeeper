@@ -267,5 +267,10 @@ namespace GKCommon.GEDCOM
                 }
             }
         }
+
+        public void Sort(Comparison<T> comparer)
+        {
+            SortHelper.MergeSort(this.fDataList, comparer);
+        }
     }
 }

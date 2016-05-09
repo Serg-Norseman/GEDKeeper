@@ -175,7 +175,7 @@ namespace GKUI.Dialogs
             this.chkNotes.Checked = this.fOptions.PedigreeOptions.IncludeNotes;
             this.chkSources.Checked = this.fOptions.PedigreeOptions.IncludeSources;
             this.chkShowDatesCalendar.Checked = this.fOptions.ShowDatesCalendar;
-            this.chkShowDatesSigns.Checked = this.fOptions.DefDateSigns;
+            this.chkShowDatesSigns.Checked = this.fOptions.ShowDatesSign;
 
             switch (this.fOptions.PedigreeOptions.Format)
             {
@@ -318,7 +318,7 @@ namespace GKUI.Dialogs
             this.fOptions.PedigreeOptions.IncludeNotes = this.chkNotes.Checked;
             this.fOptions.PedigreeOptions.IncludeSources = this.chkSources.Checked;
             this.fOptions.ShowDatesCalendar = this.chkShowDatesCalendar.Checked;
-            this.fOptions.DefDateSigns = this.chkShowDatesSigns.Checked;
+            this.fOptions.ShowDatesSign = this.chkShowDatesSigns.Checked;
 
             if (this.RButton10.Checked)
             {
