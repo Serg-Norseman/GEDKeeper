@@ -39,11 +39,6 @@ using GKUI.Charts;
 using GKUI.Controls;
 using GKUI.Dialogs;
 
-#if GK_LINUX
-#else
-using Externals.MapiMail;
-#endif
-
 namespace GKUI
 {
     /// <summary>
@@ -935,18 +930,7 @@ namespace GKUI
 
         private void miLogSendClick(object sender, EventArgs e)
         {
-            #if GK_LINUX
             GKUtils.SendMail(GKData.APP_MAIL, "GEDKeeper: error notification", "This automatic notification of error.", this.fLogFilename);
-            #else
-            if (File.Exists(this.fLogFilename)) {
-                MapiMailMessage message = new MapiMailMessage("GEDKeeper: error notification", "This automatic notification of error.");
-                message.Recipients.Add(GKData.APP_MAIL);
-                message.Files.Add(this.fLogFilename);
-                message.ShowDialog();
-
-                //GKUtils.SendMail(GKData.APP_MAIL, "GEDKeeper: error notification", "This automatic notification of error.", this.fLogFilename);
-            }
-            #endif
         }
 
         private void miLogViewClick(object sender, EventArgs e)
@@ -1028,9 +1012,9 @@ namespace GKUI
             if (activeChild != null)
             {
                 // platform: in Mono here is bug, but code works without this line
-                if (!SysInfo.IsUnix()) {
-                    ActivateMdiChild(null);
-                }
+                #if !GK_LINUX
+                ActivateMdiChild(null);
+                #endif
 
                 ActivateMdiChild(activeChild);
             }

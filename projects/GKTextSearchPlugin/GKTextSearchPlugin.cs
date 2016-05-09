@@ -87,8 +87,7 @@ namespace GKTextSearchPlugin
 
         public void NotifyRecord(IBaseWindow aBase, object record, RecordAction action)
         {
-        	#if GK_LINUX
-        	#else
+        	#if !GK_LINUX
         	if (aBase == null || record == null || this.fSearchMan == null) return;
         	
         	switch (action) {

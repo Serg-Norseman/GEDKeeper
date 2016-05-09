@@ -33,7 +33,6 @@ namespace GKUI.Dialogs
 			this.LabelProduct.Size = new System.Drawing.Size(28, 31);
 			this.LabelProduct.TabIndex = 0;
 			this.LabelProduct.Text = "?";
-			this.LabelProduct.Click += new System.EventHandler(this.LabelProductClick);
 			// 
 			// LabelVersion
 			// 

@@ -63,12 +63,5 @@ namespace GKUI.Dialogs
                 dlg.Dispose();
             }
         }
-
-        private void LabelProductClick(object sender, EventArgs e)
-        {
-            string msg = SysInfo.GetPlatformID().ToString() + "/" + SysInfo.GetDesktopType().ToString() +
-                "/IsUnix:" + SysInfo.IsUnix().ToString();
-            GKUtils.ShowMessage(msg);
-        }
     }
 }

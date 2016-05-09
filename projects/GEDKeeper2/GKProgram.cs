@@ -125,22 +125,19 @@ namespace GKUI
 
         private static void ActivatePreviousInstance(string[] args)
         {
-            if (SysInfo.IsUnix())
+            try
             {
-                try
+                if (args.Length == 0 || string.IsNullOrEmpty(args[0]))
                 {
-                    if (args.Length == 0 || string.IsNullOrEmpty(args[0]))
-                    {
-                        IpcBroadcast.Send(AppMessage.RestoreWindow, 0, false);
-                    }
-                    else
-                    {
-                        IpcParamEx ipcMsg = new IpcParamEx(IpcBroadcast.CmdOpenDatabase, IpcBroadcast.SafeSerialize(args));
-                        IpcBroadcast.SendGlobalMessage(ipcMsg);
-                    }
+                    IpcBroadcast.Send(AppMessage.RestoreWindow, 0, false);
                 }
-                catch(Exception) { }
+                else
+                {
+                    IpcParamEx ipcMsg = new IpcParamEx(IpcBroadcast.CmdOpenDatabase, IpcBroadcast.SafeSerialize(args));
+                    IpcBroadcast.SendGlobalMessage(ipcMsg);
+                }
             }
+            catch (Exception) { }
         }
         #endif
 

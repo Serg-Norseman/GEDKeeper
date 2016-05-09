@@ -33,6 +33,10 @@ using GKCommon.GEDCOM;
 using GKCore.Types;
 using GKUI.Controls;
 
+#if !GK_LINUX
+using Externals.MapiMail;
+#endif
+
 namespace GKCore
 {
     /// <summary>
@@ -59,20 +63,15 @@ namespace GKCore
             }
         }
 
-        private static void IsRequired(ulong ver)
-        {
-            //1125908496973824
-        }
-
         public static int GetKeyLayout()
         {
-			if (SysInfo.IsUnix()) {
-				// There is a bug in Mono: does not work this CurrentInputLanguage
-				return CultureInfo.CurrentUICulture.KeyboardLayoutId;
-			} else {
-				InputLanguage currentLang = InputLanguage.CurrentInputLanguage;
-				return currentLang.Culture.KeyboardLayoutId;
-			}
+            #if GK_LINUX
+            // There is a bug in Mono: does not work this CurrentInputLanguage
+            return CultureInfo.CurrentUICulture.KeyboardLayoutId;
+            #else
+            InputLanguage currentLang = InputLanguage.CurrentInputLanguage;
+            return currentLang.Culture.KeyboardLayoutId;
+            #endif
         }
 
         public static void SetKeyLayout(int layout)
@@ -88,8 +87,21 @@ namespace GKCore
 
         public static void SendMail(string address, string subject, string body, string attach)
         {
-            string mailto = string.Format("mailto:{0}?Subject={1}&Body={2}&Attach={3}", address, subject, body, "" + attach + ""); // Attach, Attachment
-            Process.Start(mailto);
+            if (File.Exists(attach)) {
+                #if GK_LINUX
+
+                string mailto = string.Format("mailto:{0}?Subject={1}&Body={2}&Attach={3}", address, subject, body, "" + attach + ""); // Attach, Attachment
+                Process.Start(mailto);
+
+                #else
+
+                MapiMailMessage message = new MapiMailMessage(subject, body);
+                message.Recipients.Add(GKData.APP_MAIL);
+                message.Files.Add(attach);
+                message.ShowDialog();
+
+                #endif
+            }
         }
 
         public static bool IsNetworkAvailable()

@@ -184,9 +184,8 @@ namespace GKCommon
 
         #region NativeMethods
 
-        #if GK_LINUX
+        #if !GK_LINUX
 
-        #else
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         private static extern uint GetPrivateProfileString(string lpAppName, string lpKeyName, string lpDefault, StringBuilder lpReturnedString, uint nSize, string lpFileName);
 
@@ -211,6 +210,7 @@ namespace GKCommon
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool WritePrivateProfileString(IntPtr lpAppName, IntPtr lpKeyName, IntPtr lpString, string lpFileName);
+
         #endif
         
         #endregion

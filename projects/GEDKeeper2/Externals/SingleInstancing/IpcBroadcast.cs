@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if GK_LINUX
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -91,37 +93,32 @@ namespace Externals.SingleInstancing
         {
             StopServer();
 
-            if (SysInfo.IsUnix()) {
-                FswEnsurePaths();
-
-                try
-                {
-                    m_fsw = new FileSystemWatcher(GetTempPath(), m_strMsgFileName);
-                }
-                catch(Exception) { Debug.Assert(false); return; } // Access denied
-
-                m_fsw.IncludeSubdirectories = false;
-                m_fsw.NotifyFilter = (NotifyFilters.CreationTime | NotifyFilters.LastWrite);
-                m_fsw.Created += OnFileEvents;
-                m_fsw.Changed += OnFileEvents;
-
-                m_fsw.EnableRaisingEvents = true;
+            FswEnsurePaths();
+            try
+            {
+                m_fsw = new FileSystemWatcher(GetTempPath(), m_strMsgFileName);
             }
+            catch(Exception) { Debug.Assert(false); return; } // Access denied
+
+            m_fsw.IncludeSubdirectories = false;
+            m_fsw.NotifyFilter = (NotifyFilters.CreationTime | NotifyFilters.LastWrite);
+            m_fsw.Created += OnFileEvents;
+            m_fsw.Changed += OnFileEvents;
+
+            m_fsw.EnableRaisingEvents = true;
         }
 
         public static void StopServer()
         {
-            if (SysInfo.IsUnix()) {
-                if (m_fsw != null)
-                {
-                    m_fsw.EnableRaisingEvents = false;
+            if (m_fsw != null)
+            {
+                m_fsw.EnableRaisingEvents = false;
 
-                    m_fsw.Changed -= OnFileEvents;
-                    m_fsw.Created -= OnFileEvents;
+                m_fsw.Changed -= OnFileEvents;
+                m_fsw.Created -= OnFileEvents;
 
-                    m_fsw.Dispose();
-                    m_fsw = null;
-                }
+                m_fsw.Dispose();
+                m_fsw = null;
             }
         }
 
@@ -147,49 +144,47 @@ namespace Externals.SingleInstancing
 
         public static void Send(AppMessage msg, int lParam, bool bWaitWithTimeout)
         {
-            if (SysInfo.IsUnix()) {
-                FswEnsurePaths();
+            FswEnsurePaths();
 
-                IpcMessage ipcMsg = new IpcMessage();
-                ipcMsg.ID = 0;
-                ipcMsg.Time = DateTime.UtcNow.ToBinary();
-                ipcMsg.Message = msg;
-                ipcMsg.LParam = lParam;
+            IpcMessage ipcMsg = new IpcMessage();
+            ipcMsg.ID = 0;
+            ipcMsg.Time = DateTime.UtcNow.ToBinary();
+            ipcMsg.Message = msg;
+            ipcMsg.LParam = lParam;
 
-                // Send just to others, not to own
-                m_vProcessedMsgs.Add(ipcMsg);
+            // Send just to others, not to own
+            m_vProcessedMsgs.Add(ipcMsg);
 
-                for (int r = 0; r < IpcComRetryCount; ++r)
+            for (int r = 0; r < IpcComRetryCount; ++r)
+            {
+                try
                 {
-                    try
-                    {
-                        List<IpcMessage> l = ReadMessagesPriv();
-                        CleanOldMessages(l);
-                        l.Add(ipcMsg);
+                    List<IpcMessage> l = ReadMessagesPriv();
+                    CleanOldMessages(l);
+                    l.Add(ipcMsg);
 
-                        MemoryStream ms = new MemoryStream();
-                        BinaryWriter bw = new BinaryWriter(ms);
-                        bw.Write(IpcFileSig);
-                        bw.Write((uint)l.Count);
-                        for(int j = 0; j < l.Count; ++j)
-                            IpcMessage.Serialize(bw, l[j]);
-                        byte[] pbPlain = ms.ToArray();
-                        bw.Close();
-                        ms.Close();
+                    MemoryStream ms = new MemoryStream();
+                    BinaryWriter bw = new BinaryWriter(ms);
+                    bw.Write(IpcFileSig);
+                    bw.Write((uint)l.Count);
+                    for (int j = 0; j < l.Count; ++j)
+                        IpcMessage.Serialize(bw, l[j]);
+                    byte[] pbPlain = ms.ToArray();
+                    bw.Close();
+                    ms.Close();
 
-                        FileStream fsWrite = new FileStream(m_strMsgFilePath, FileMode.Create, FileAccess.Write, FileShare.None);
-                        fsWrite.Write(pbPlain, 0, pbPlain.Length);
-                        fsWrite.Close();
+                    FileStream fsWrite = new FileStream(m_strMsgFilePath, FileMode.Create, FileAccess.Write, FileShare.None);
+                    fsWrite.Write(pbPlain, 0, pbPlain.Length);
+                    fsWrite.Close();
 
-                        break;
-                    }
-                    catch(Exception) { }
-
-                    Thread.Sleep(IpcComRetryDelay);
+                    break;
                 }
+                catch(Exception) { }
 
-                CleanOldMessages(m_vProcessedMsgs);
+                Thread.Sleep(IpcComRetryDelay);
             }
+
+            CleanOldMessages(m_vProcessedMsgs);
         }
 
         private static void OnFileEvents(object sender, FileSystemEventArgs e)
@@ -219,7 +214,6 @@ namespace Externals.SingleInstancing
 
         private static void ProcessIpcMessagesPriv()
         {
-            #if GK_LINUX
             List<IpcMessage> l = ReadMessagesPriv();
             CleanOldMessages(l);
 
@@ -236,7 +230,6 @@ namespace Externals.SingleInstancing
 
                 GKProgram.ProcessMessage(msg);
             }
-            #endif
         }
 
         private static List<IpcMessage> ReadMessagesPriv()
@@ -439,3 +432,5 @@ namespace Externals.SingleInstancing
         
     }
 }
+
+#endif
