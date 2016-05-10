@@ -737,8 +737,9 @@ namespace GKCore
         /* 649 */ LSID_ShowDatesCalendar,
         /* 650 */ LSID_RecordDuplicate,
         /* 651 */ LSID_DuplicateWarning,
+        /* 652 */ LSID_ShowDatesSigns,
 
-        /* 000 */ LSID_Last = LSID_DuplicateWarning
+        /* 000 */ LSID_Last = LSID_ShowDatesSigns
     }
 
     public static class LangMan
@@ -1430,7 +1431,8 @@ namespace GKCore
             /* 648 */ "Помечать закладкой объединенное",
             /* 649 */ "Показывать у дат календарь",
             /* 650 */ "Дублировать запись",
-            /* 651 */ "Внимание: при дублировании персональных записей, родственные связи и ассоциации не копируются"
+            /* 651 */ "Внимание: при дублировании персональных записей, родственные связи и ассоциации не копируются",
+            /* 652 */ "Показывать у дат обозначения типа"
         };
 
         private static readonly string[] LSList = new string[(int)LSID.LSID_Last + 1];

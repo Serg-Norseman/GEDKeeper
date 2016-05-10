@@ -616,21 +616,6 @@ namespace GKTests
         }
 
         [Test]
-        public void AbsDate_Tests()
-        {
-            AbsDate dtx = new AbsDate(1700, 0, 0, false);
-            Assert.AreEqual("00/00/1700", dtx.ToString());
-
-            AbsDate dtx1 = new AbsDate(1702, 2, 12, false);
-            Assert.AreEqual("12/02/1702", dtx1.ToString());
-
-            AbsDate dtx2d = AbsDate.Between(dtx, dtx1);
-            Assert.AreEqual(1701, dtx2d.Year);
-            Assert.AreEqual(1, dtx2d.Month);
-            Assert.AreEqual(6, dtx2d.Day);
-        }
-
-        [Test]
         public void GEDCOMTagWithLists_Tests()
         {
             // GEDCOMTagWithLists protected class, derived - GEDCOMEventDetail

@@ -94,22 +94,20 @@ namespace GKCommon.GEDCOM
 
         public abstract DateTime GetDateTime();
         public abstract void SetDateTime(DateTime value);
+        public abstract void GetDateParts(out int year, out ushort month, out ushort day, out bool yearBC);
 
         /**
-         * Unified date number, as a temporary substitute of Julian date.
+         * Obtaining UDN (Unified Date Number) for purposes of processing and sorting.
          */
-        public abstract double GetUDN();
-
-        public abstract AbsDate GetAbstractDate();
-        public abstract void GetDateParts(out int year, out ushort month, out ushort day, out bool yearBC);
+        public abstract UDN GetUDN();
 
         public int CompareTo(object obj)
         {
             GEDCOMCustomDate otherDate = obj as GEDCOMCustomDate;
 
             if (otherDate != null) {
-                AbsDate abs1 = this.GetAbstractDate();
-                AbsDate abs2 = otherDate.GetAbstractDate();
+                UDN abs1 = this.GetUDN();
+                UDN abs2 = otherDate.GetUDN();
                 return abs1.CompareTo(abs2);
             }
 

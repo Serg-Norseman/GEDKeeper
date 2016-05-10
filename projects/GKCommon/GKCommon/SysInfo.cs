@@ -137,11 +137,9 @@ namespace GKCommon
             return RunConsoleApp(strAppPath, strParams, null);
         }
 
-        public static string RunConsoleApp(string strAppPath, string strParams,
-                                           string strStdInput)
+        public static string RunConsoleApp(string strAppPath, string strParams, string strStdInput)
         {
-            return RunConsoleApp(strAppPath, strParams, strStdInput,
-                                 (AppRunFlags.GetStdOutput | AppRunFlags.WaitForExit));
+            return RunConsoleApp(strAppPath, strParams, strStdInput, (AppRunFlags.GetStdOutput | AppRunFlags.WaitForExit));
         }
 
         private delegate string RunProcessDelegate();

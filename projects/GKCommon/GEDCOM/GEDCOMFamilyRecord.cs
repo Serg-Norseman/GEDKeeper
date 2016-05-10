@@ -292,22 +292,16 @@ namespace GKCommon.GEDCOM
 
         #region Auxiliary
 
+        private static int EventsCompare(GEDCOMPointer cp1, GEDCOMPointer cp2)
+        {
+            UDN udn1 = GEDCOMUtils.GetUDN(cp1.Value as GEDCOMIndividualRecord, "BIRT");
+            UDN udn2 = GEDCOMUtils.GetUDN(cp2.Value as GEDCOMIndividualRecord, "BIRT");
+            return udn1.CompareTo(udn2);
+        }
+
         public void SortChilds()
         {
-            int num = this.fChildrens.Count;
-            for (int i = 0; i < num; i++)
-            {
-                for (int j = i + 1; j < num; j++)
-                {
-                    GEDCOMIndividualRecord iChild = this.fChildrens[i].Value as GEDCOMIndividualRecord;
-                    AbsDate iDate = GEDCOMUtils.GetAbstractDate(iChild, "BIRT");
-
-                    GEDCOMIndividualRecord kChild = this.fChildrens[j].Value as GEDCOMIndividualRecord;
-                    AbsDate kDate = GEDCOMUtils.GetAbstractDate(kChild, "BIRT");
-
-                    if (iDate > kDate) this.fChildrens.Exchange(i, j);
-                }
-            }
+            this.fChildrens.Sort(EventsCompare);
         }
 
         public string GetFamilyString(string unkHusband, string unkWife)

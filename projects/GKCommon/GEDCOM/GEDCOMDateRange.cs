@@ -243,49 +243,25 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public override double GetUDN()
+        public override UDN GetUDN()
         {
-            double result;
+            UDN result;
 
             if (this.fDateAfter.StringValue == "" && this.fDateBefore.StringValue != "")
             {
-                result = this.fDateBefore.GetUDN() - AbsDate.ABS_DATE_DELTA;
+                result = UDN.CreateBefore(this.fDateBefore.GetUDN());
             }
             else if (this.fDateAfter.StringValue != "" && this.fDateBefore.StringValue == "")
             {
-                result = this.fDateAfter.GetUDN() + AbsDate.ABS_DATE_DELTA;
+                result = UDN.CreateAfter(this.fDateAfter.GetUDN());
             }
             else if (this.fDateAfter.StringValue != "" && this.fDateBefore.StringValue != "")
             {
-                result = (this.fDateAfter.GetUDN() + this.fDateBefore.GetUDN()) / 2;
+                result = UDN.Between(this.fDateAfter.GetUDN(), this.fDateBefore.GetUDN());
             }
             else
             {
-                result = double.NaN;
-            }
-
-            return result;
-        }
-
-        public override AbsDate GetAbstractDate()
-        {
-            AbsDate result;
-
-            if (this.fDateAfter.StringValue == "" && this.fDateBefore.StringValue != "")
-            {
-                result = this.fDateBefore.GetAbstractDate().Before();
-            }
-            else if (this.fDateAfter.StringValue != "" && this.fDateBefore.StringValue == "")
-            {
-                result = this.fDateAfter.GetAbstractDate().After();
-            }
-            else if (this.fDateAfter.StringValue != "" && this.fDateBefore.StringValue != "")
-            {
-                result = AbsDate.Between(this.fDateAfter.GetAbstractDate(), this.fDateBefore.GetAbstractDate());
-            }
-            else
-            {
-                result = AbsDate.Empty();
+                result = UDN.CreateEmpty();
             }
 
             return result;

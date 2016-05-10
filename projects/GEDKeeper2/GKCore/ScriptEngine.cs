@@ -394,6 +394,7 @@ namespace GKCore
             return (GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false));
         }
 
+        // TODO: checking this function, its incorrect logic
         public int gt_get_event_year(object evPtr)
         {
             GEDCOMCustomEvent evt = evPtr as GEDCOMCustomEvent;
@@ -401,8 +402,12 @@ namespace GKCore
                 return 0;
             }
 
-            int year = GEDCOMUtils.GetAbstractDate(evt).Year;
-            return year;
+            GEDCOMDate date = evt.Detail.Date.Value as GEDCOMDate;
+            if (date == null) {
+                return 0;
+            } else {
+                return date.Year;
+            }
         }
 
         public void gt_set_event_date(object evPtr, string date)

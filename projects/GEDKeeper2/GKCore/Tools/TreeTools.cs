@@ -833,11 +833,11 @@ namespace GKCore.Tools
                 aChecksList.Add(checkObj);
             }
 
-            AbsDate yBirth = GEDCOMUtils.GetAbstractDate(iRec, "BIRT");
-            AbsDate yDeath = GEDCOMUtils.GetAbstractDate(iRec, "DEAT");
-            if (yBirth.IsValid() && yDeath.IsValid())
+            int yBirth = GEDCOMUtils.GetRelativeYear(iRec, "BIRT");
+            int yDeath = GEDCOMUtils.GetRelativeYear(iRec, "DEAT");
+            if (yBirth != 0 && yDeath != 0)
             {
-                int delta = (yDeath.Year - yBirth.Year);
+                int delta = (yDeath - yBirth);
                 if (delta < 0) {
                     CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdLiveYearsInvalid, CheckSolve.csSkip);
                     checkObj.Comment = LangMan.LS(LSID.LSID_LiveYearsInvalid);

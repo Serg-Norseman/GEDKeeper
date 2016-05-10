@@ -1,5 +1,4 @@
-﻿#if GK_LINUX
-#else
+﻿#if !GK_LINUX
 
 using System;
 using System.Collections;

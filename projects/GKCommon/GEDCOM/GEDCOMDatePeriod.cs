@@ -210,49 +210,25 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public override double GetUDN()
+        public override UDN GetUDN()
         {
-            double result;
+            UDN result;
 
             if (this.fDateFrom.StringValue != "" && this.fDateTo.StringValue == "")
             {
-                result = this.fDateFrom.GetUDN() + AbsDate.ABS_DATE_DELTA;
+                result = UDN.CreateAfter(this.fDateFrom.GetUDN());
             }
             else if (this.fDateFrom.StringValue == "" && this.fDateTo.StringValue != "")
             {
-                result = this.fDateTo.GetUDN() - AbsDate.ABS_DATE_DELTA;
+                result = UDN.CreateBefore(this.fDateTo.GetUDN());
             }
             else if (this.fDateFrom.StringValue != "" && this.fDateTo.StringValue != "")
             {
-                result = (this.fDateFrom.GetUDN() + this.fDateTo.GetUDN()) / 2;
+                result = UDN.Between(this.fDateFrom.GetUDN(), this.fDateTo.GetUDN());
             }
             else
             {
-                result = double.NaN;
-            }
-
-            return result;
-        }
-
-        public override AbsDate GetAbstractDate()
-        {
-            AbsDate result;
-
-            if (this.fDateFrom.StringValue != "" && this.fDateTo.StringValue == "")
-            {
-                result = this.fDateFrom.GetAbstractDate().After();
-            }
-            else if (this.fDateFrom.StringValue == "" && this.fDateTo.StringValue != "")
-            {
-                result = this.fDateTo.GetAbstractDate().Before();
-            }
-            else if (this.fDateFrom.StringValue != "" && this.fDateTo.StringValue != "")
-            {
-                result = AbsDate.Between(this.fDateFrom.GetAbstractDate(), this.fDateTo.GetAbstractDate());
-            }
-            else
-            {
-                result = AbsDate.Empty();
+                result = UDN.CreateEmpty();
             }
 
             return result;

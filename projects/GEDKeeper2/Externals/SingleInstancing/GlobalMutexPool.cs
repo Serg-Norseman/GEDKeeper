@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if GK_LINUX
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -187,3 +189,5 @@ namespace Externals.SingleInstancing
         }
     }
 }
+
+#endif

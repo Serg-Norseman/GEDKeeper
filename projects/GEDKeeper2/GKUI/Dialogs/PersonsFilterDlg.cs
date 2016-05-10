@@ -54,9 +54,9 @@ namespace GKUI.Dialogs
             UpdateSpecific();
 
             // platform: in Mono tsSpecificFilter has 0 index, somehow
-            if (SysInfo.IsUnix()) {
-                PageControl1.Controls.SetChildIndex(tsSpecificFilter, 1);
-            }
+            #if GK_LINUX
+            PageControl1.Controls.SetChildIndex(tsSpecificFilter, 1);
+            #endif
 
             PageControl1.SelectedIndex = 1;
         }

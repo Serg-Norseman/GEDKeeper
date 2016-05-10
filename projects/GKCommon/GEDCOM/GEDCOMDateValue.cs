@@ -130,7 +130,7 @@ namespace GKCommon.GEDCOM
         {
             return new GEDCOMDateValue(owner, parent, tagName, tagValue);
         }
-        
+
         #region Auxiliary
 
         public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
@@ -140,14 +140,16 @@ namespace GKCommon.GEDCOM
 
             if (this.IsEmpty() || date.IsEmpty()) return 0.0f;
 
-            AbsDate absVal1 = this.GetAbstractDate();
-            AbsDate absVal2 = date.GetAbstractDate();
+            int absVal1 = GEDCOMUtils.GetRelativeYear(this);
+            int absVal2 = GEDCOMUtils.GetRelativeYear(date);
 
             float match = 0.0f;
             float matches = 0.0f;
-            if (absVal1.IsValid() && absVal2.IsValid()) {
+
+            if (absVal1 != 0 && absVal2 != 0)
+            {
                 matches += 1.0f;
-                if (Math.Abs(absVal1.Year - absVal2.Year) <= matchParams.YearsInaccuracy) match += 100.0f;
+                if (Math.Abs(absVal1 - absVal2) <= matchParams.YearsInaccuracy) match += 100.0f;
             }
 
             return (match / matches);
@@ -165,14 +167,9 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public override double GetUDN()
+        public override UDN GetUDN()
         {
-            return (this.fValue == null) ? double.NaN : this.fValue.GetUDN();
-        }
-
-        public override AbsDate GetAbstractDate()
-        {
-            return (this.fValue == null) ? AbsDate.Empty() : this.fValue.GetAbstractDate();
+            return (this.fValue == null) ? UDN.CreateEmpty() : this.fValue.GetUDN();
         }
 
         #endregion

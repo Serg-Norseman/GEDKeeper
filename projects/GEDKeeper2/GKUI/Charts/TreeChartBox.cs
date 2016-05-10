@@ -2189,8 +2189,8 @@ namespace GKUI.Charts
                 ChartFilter.BranchCutType branchCut = this.fFilter.BranchCut;
                 switch (branchCut) {
                     case ChartFilter.BranchCutType.Years:
-                        AbsDate birthDate = GEDCOMUtils.GetAbstractDate(person, "BIRT");
-                        result = (birthDate.IsValid() && birthDate.Year >= this.fFilter.BranchYear);
+                        int birthYear = GEDCOMUtils.GetRelativeYear(person, "BIRT");
+                        result = (birthYear != 0 && birthYear >= this.fFilter.BranchYear);
                         break;
 
                     case ChartFilter.BranchCutType.Persons:

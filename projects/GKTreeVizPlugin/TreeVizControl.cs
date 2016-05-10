@@ -863,11 +863,8 @@ namespace GKTreeVizPlugin
 					this.fPersons.Add(result);
 					this.fPersonsIndex.Add(iRec.XRef, result);
 
-					AbsDate bYear = fBase.Context.FindBirthYear(iRec);
-					AbsDate dYear = fBase.Context.FindDeathYear(iRec);
-					
-					result.BirthYear = bYear.Year;
-					result.DeathYear = dYear.Year;
+					result.BirthYear = fBase.Context.FindBirthYear(iRec);
+					result.DeathYear = fBase.Context.FindDeathYear(iRec);
 
 					// FIXME переделать на предварительно статистически определенную продолжительность жизни.
 					if (result.DeathYear == 0) result.DeathYear = result.BirthYear + 75;

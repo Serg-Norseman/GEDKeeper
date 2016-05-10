@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
+ *  Copyright (C) 2014 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
  *
  *  This file is part of "GEDKeeper".
  *
@@ -36,8 +36,8 @@ namespace GKCommon
             DateTimeFormatInfo dtInfo = Thread.CurrentThread.CurrentCulture.DateTimeFormat;
 
             string result = string.Concat(new string[] {
-                                              day.ToString(),  " ",  dtInfo.AbbreviatedMonthNames[month - 1],  " ",  year.ToString()
-                                          });
+                day.ToString(),  " ",  dtInfo.AbbreviatedMonthNames[month - 1],  " ",  year.ToString()
+            });
 
             if (era != DateEra.AD) {
                 result += " до н.э.";

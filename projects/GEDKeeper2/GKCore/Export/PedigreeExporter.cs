@@ -68,13 +68,13 @@ namespace GKCore.Export
         {
             public readonly GEDCOMIndividualRecord IRec;
             public readonly GEDCOMCustomEvent Event;
-            public readonly AbsDate Date;
+            public readonly UDN Date;
 
             public PedigreeEvent(GEDCOMIndividualRecord iRec, GEDCOMCustomEvent evt)
             {
                 this.IRec = iRec;
                 this.Event = evt;
-                this.Date = GEDCOMUtils.GetAbstractDate(evt);
+                this.Date = GEDCOMUtils.GetUDN(evt);
             }
         }
 

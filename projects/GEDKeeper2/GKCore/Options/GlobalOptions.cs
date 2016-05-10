@@ -41,7 +41,7 @@ namespace GKCore.Options
         private readonly TreeChartOptions fChartOptions;
         private GEDCOMCharacterSet fDefCharacterSet;
         private DateFormat fDefDateFormat;
-        private bool fDefDateSigns;
+        private bool fShowDatesSign;
         private NameFormat fDefNameFormat;
         private readonly StringList fEventFilters;
         private ushort fInterfaceLang;
@@ -94,10 +94,10 @@ namespace GKCore.Options
             set { this.fDefDateFormat = value; }
         }
 
-        public bool DefDateSigns
+        public bool ShowDatesSign
         {
-            get { return this.fDefDateSigns; }
-            set { this.fDefDateSigns = value; }
+            get { return this.fShowDatesSign; }
+            set { this.fShowDatesSign = value; }
         }
 
         public NameFormat DefNameFormat
@@ -339,6 +339,7 @@ namespace GKCore.Options
                     this.fInterfaceLang = (ushort)ini.ReadInteger("Common", "InterfaceLang", 1049);
                     this.fRevisionsBackup = ini.ReadBool("Common", "RevisionsBackup", false);
                     this.fShowDatesCalendar = ini.ReadBool("Common", "ShowDatesCalendar", false);
+                    this.fShowDatesSign = ini.ReadBool("Common", "ShowDatesSigns", false);
 
                     int kl = ini.ReadInteger("Common", "KeyLayout", GKUtils.GetKeyLayout());
                     GKUtils.SetKeyLayout(kl);
@@ -426,6 +427,7 @@ namespace GKCore.Options
                     ini.WriteInteger("Common", "InterfaceLang", this.fInterfaceLang);
                     ini.WriteBool("Common", "RevisionsBackup", this.fRevisionsBackup);
                     ini.WriteBool("Common", "ShowDatesCalendar", this.fShowDatesCalendar);
+                    ini.WriteBool("Common", "ShowDatesSigns", this.fShowDatesSign);
                     
                     ini.WriteInteger("Common", "KeyLayout", GKUtils.GetKeyLayout());
 

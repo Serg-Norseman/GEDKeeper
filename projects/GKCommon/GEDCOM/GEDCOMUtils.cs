@@ -20,177 +20,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System.Text;
 
 namespace GKCommon.GEDCOM
 {
-    /// <summary>
-    /// This is an structure for the abstract date to be used as a simple substitute of GEDCOMDate, and the standard DateTime.
-    /// Substitution is used to obtain the date in reduced format, when no or a month, or a day, or both.
-    /// I tried to use "Julian day", he would be ideal and would allow to implement any sort of dates.
-    /// But JD is not working with partial dates.
-    /// </summary>
-    [Serializable]
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct AbsDate : ICloneable, IComparable
-    {
-        public const double ABS_DATE_DELTA = 0.5d;
-
-        private readonly double fValue;
-
-        public int Year
-        {
-            get { return this.IsValid() ? GetYear((int)this.fValue) : 0; }
-        }
-
-        public int Month
-        {
-            get { return this.IsValid() ? GetMonth((int)this.fValue) : 0; }
-        }
-
-        public int Day
-        {
-            get { return this.IsValid() ? GetDay((int)this.fValue) : 0; }
-        }
-
-        private AbsDate(double value)
-        {
-            this.fValue = value;
-        }
-
-        public AbsDate(int year, int month, int day, bool yearBC)
-        {
-            int result = CreateVal(year, month, day);
-            if (yearBC) result = -result;
-
-            this.fValue = result;
-        }
-
-        #region Private static methods
-
-        private static int CreateVal(int year, int month, int day)
-        {
-            return ((short)year << 16) | ((byte)month << 8) | ((byte)day);
-        }
-
-        private static int GetYear(int dtx)
-        {
-            return (short)((dtx >> 16) & 0xFFFF);
-        }
-
-        private static int GetMonth(int dtx)
-        {
-            return (byte)((dtx >> 8) & 0xFF);
-        }
-
-        private static int GetDay(int dtx)
-        {
-            return (byte)((dtx) & 0xFF);
-        }
-
-        #endregion
-
-        public static AbsDate Empty()
-        {
-            return new AbsDate(double.NaN);
-        }
-
-        public static AbsDate Between(AbsDate dtx1, AbsDate dtx2)
-        {
-            return new AbsDate((dtx1.fValue + dtx2.fValue) / 2);
-        }
-
-        public bool IsValid()
-        {
-            return !double.IsNaN(this.fValue);
-        }
-
-        public AbsDate IncYear(int yearDelta)
-        {
-            int dtx = (int)this.fValue;
-            return new AbsDate(CreateVal(GetYear(dtx) + yearDelta, GetMonth(dtx), GetDay(dtx)));
-        }
-
-        public override string ToString()
-        {
-            string result;
-
-            if (this.IsValid()) {
-                int dtx = (int)this.fValue;
-                result = string.Format("{0}/{1}/{2}", ConvHelper.AdjustNum(GetDay(dtx), 2), ConvHelper.AdjustNum(GetMonth(dtx), 2), ConvHelper.AdjustNum(GetYear(dtx), 4));
-            } else {
-                result = "00.00.0000";
-            }
-
-            return result;
-        }
-
-        public static bool operator ==(AbsDate left, AbsDate right)
-        {
-            return (left.fValue == right.fValue);
-        }
-
-        public static bool operator !=(AbsDate left, AbsDate right)
-        {
-            return (left.fValue != right.fValue);
-        }
-
-        public static bool operator <(AbsDate left, AbsDate right)
-        {
-            return left.fValue < right.fValue;
-        }
-
-        public static bool operator <=(AbsDate left, AbsDate right)
-        {
-            return left.fValue <= right.fValue;
-        }
-
-        public static bool operator >(AbsDate left, AbsDate right)
-        {
-            return left.fValue > right.fValue;
-        }
-
-        public static bool operator >=(AbsDate left, AbsDate right)
-        {
-            return left.fValue >= right.fValue;
-        }
-
-        public override bool Equals(object obj)
-        {
-            return (obj is AbsDate && this.fValue == ((AbsDate)obj).fValue);
-        }
-
-        public int CompareTo(object obj)
-        {
-            if (obj is AbsDate) {
-                return this.fValue.CompareTo(((AbsDate)obj).fValue);
-            }
-
-            return -1;
-        }
-
-        public object Clone()
-        {
-            return new AbsDate(this.fValue);
-        }
-
-        public override int GetHashCode()
-        {
-            return this.fValue.GetHashCode();
-        }
-
-        public AbsDate After()
-        {
-            return new AbsDate(this.fValue + ABS_DATE_DELTA);
-        }
-
-        public AbsDate Before()
-        {
-            return new AbsDate(this.fValue - ABS_DATE_DELTA);
-        }
-    }
-    
     /// <summary>
     /// 
     /// </summary>
@@ -256,7 +89,7 @@ namespace GKCommon.GEDCOM
         }
 
         #endregion
-        
+
         #region Parse functions
 
         public static string ExtractDelimiter(string str, int max)
@@ -431,7 +264,7 @@ namespace GKCommon.GEDCOM
         }
 
         #endregion
-        
+
         #region GEDCOM Enums processing
         
         public static Encoding GetEncodingByCharacterSet(GEDCOMCharacterSet cs)
@@ -1568,7 +1401,7 @@ namespace GKCommon.GEDCOM
         }
         
         #endregion
-        
+
         #region Other
 
         public static string NormalizeName(string s)
@@ -1641,28 +1474,88 @@ namespace GKCommon.GEDCOM
 
         #endregion
 
-        #region AbstractDate utils
+        #region RelativeYear utils
 
-        public static AbsDate GetAbstractDate(GEDCOMCustomEvent evt)
+        public static int GetRelativeYear(GEDCOMRecordWithEvents evsRec, string evSign)
         {
-            return (evt == null) ? AbsDate.Empty() : evt.Detail.Date.GetAbstractDate();
-        }
-
-        public static AbsDate GetAbstractDate(GEDCOMRecordWithEvents evsRec, string evSign)
-        {
-            AbsDate result;
+            int result;
 
             if (evsRec == null) {
-                result = AbsDate.Empty();
+                result = 0;
             } else {
                 GEDCOMCustomEvent evt = evsRec.FindEvent(evSign);
-                result = GetAbstractDate(evt);
+                result = GetRelativeYear(evt);
             }
 
             return result;
         }
 
-        public static AbsDate GetAbstractDate(string dateStr)
+        /// <summary>
+        /// In the historical chronology of the year 0 does not exist. 
+        /// Therefore, the digit 0 in the year value can be used as a sign of lack or error.
+        /// RelativeYear - introduced for the purposes of uniform chronology years in the Gregorian calendar. 
+        /// Is estimated from -4714 BC to 3268 AD.
+        /// </summary>
+        /// <param name="evt"></param>
+        /// <returns></returns>
+        public static int GetRelativeYear(GEDCOMCustomEvent evt)
+        {
+            return (evt == null) ? 0 : GetRelativeYear(evt.Detail.Date);
+        }
+
+        public static int GetRelativeYear(GEDCOMDateValue dateVal)
+        {
+            return (dateVal.Value == null) ? 0 : GetRelativeYear(dateVal.Value);
+        }
+
+        // TODO: all of years lead to the Gregorian calendar!
+        public static int GetRelativeYear(GEDCOMCustomDate customDate)
+        {
+            if (customDate == null) {
+                return 0;
+            } else {
+                GEDCOMDate date = customDate as GEDCOMDate;
+
+                if (date == null) {
+                    return 0;
+                } else {
+                    int year = date.Year;
+                    if (year <= 0) {
+                        return 0;
+                    } else {
+                        if (date.YearBC) year = -year;
+                        // TODO: calendars and other!
+                    }
+
+                    return year;
+                }
+            }
+        }
+
+        #endregion
+
+        #region UDN utils
+
+        public static UDN GetUDN(GEDCOMCustomEvent evt)
+        {
+            return (evt == null) ? UDN.CreateEmpty() : evt.Detail.Date.GetUDN();
+        }
+
+        public static UDN GetUDN(GEDCOMRecordWithEvents evsRec, string evSign)
+        {
+            UDN result;
+
+            if (evsRec == null) {
+                result = UDN.CreateEmpty();
+            } else {
+                GEDCOMCustomEvent evt = evsRec.FindEvent(evSign);
+                result = GetUDN(evt);
+            }
+
+            return result;
+        }
+
+        public static UDN GetUDN(string dateStr)
         {
             try
             {
@@ -1670,11 +1563,11 @@ namespace GKCommon.GEDCOM
 
                 GEDCOMDateExact dtx = (GEDCOMDateExact)GEDCOMDateExact.Create(null, null, "", "");
                 dtx.ParseString(dateStr);
-                return dtx.GetAbstractDate();
+                return dtx.GetUDN();
             }
             catch
             {
-                return AbsDate.Empty();
+                return UDN.CreateEmpty();
             }
         }
 

@@ -178,8 +178,7 @@ namespace GKUI
         {
             if (disposing)
             {
-                #if GK_LINUX
-                #else
+                #if !GK_LINUX
                 this.fNavman.Dispose();
                 this.fLockedRecords.Dispose();
                 this.fTree.Dispose();
@@ -1135,9 +1134,9 @@ namespace GKUI
             }
 
             // platform: In Windows works without it
-            if (SysInfo.IsUnix()) {
-                this.Activate();
-            }
+            #if GK_LINUX
+            this.Activate();
+            #endif
 
             this.SelectRecordByXRef(iRec.XRef);
         }

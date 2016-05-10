@@ -39,11 +39,6 @@ using GKUI.Charts;
 using GKUI.Controls;
 using GKUI.Dialogs;
 
-#if GK_LINUX
-#else
-using Externals.MapiMail;
-#endif
-
 namespace GKUI
 {
     /// <summary>
@@ -157,11 +152,11 @@ namespace GKUI
             this.fOptions.LoadFromFile(this.GetAppDataPath() + "GEDKeeper2.ini");
             this.fOptions.FindLanguages();
 
-            if (this.fOptions.MWinRect.Left != -1 && this.fOptions.MWinRect.Top != -1 && this.fOptions.MWinRect.Right != -1 && this.fOptions.MWinRect.Bottom != -1) {
+            if (!this.fOptions.MWinRect.IsEmpty()) {
                 base.Left = this.fOptions.MWinRect.Left;
                 base.Top = this.fOptions.MWinRect.Top;
-                base.Width = this.fOptions.MWinRect.Right;
-                base.Height = this.fOptions.MWinRect.Bottom;
+                base.Width = this.fOptions.MWinRect.Right - this.fOptions.MWinRect.Left + 1;
+                base.Height = this.fOptions.MWinRect.Bottom - this.fOptions.MWinRect.Top + 1;
             } else {
                 base.Left = (Screen.PrimaryScreen.WorkingArea.Width - 800) / 2;
                 base.Top = (Screen.PrimaryScreen.WorkingArea.Height - 600) / 2;
@@ -935,18 +930,7 @@ namespace GKUI
 
         private void miLogSendClick(object sender, EventArgs e)
         {
-            #if GK_LINUX
             GKUtils.SendMail(GKData.APP_MAIL, "GEDKeeper: error notification", "This automatic notification of error.", this.fLogFilename);
-            #else
-            if (File.Exists(this.fLogFilename)) {
-                MapiMailMessage message = new MapiMailMessage("GEDKeeper: error notification", "This automatic notification of error.");
-                message.Recipients.Add(GKData.APP_MAIL);
-                message.Files.Add(this.fLogFilename);
-                message.ShowDialog();
-
-                //GKUtils.SendMail(GKData.APP_MAIL, "GEDKeeper: error notification", "This automatic notification of error.", this.fLogFilename);
-            }
-            #endif
         }
 
         private void miLogViewClick(object sender, EventArgs e)
@@ -1028,9 +1012,9 @@ namespace GKUI
             if (activeChild != null)
             {
                 // platform: in Mono here is bug, but code works without this line
-                if (!SysInfo.IsUnix()) {
-                    ActivateMdiChild(null);
-                }
+                #if !GK_LINUX
+                ActivateMdiChild(null);
+                #endif
 
                 ActivateMdiChild(activeChild);
             }
