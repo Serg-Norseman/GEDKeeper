@@ -252,16 +252,6 @@ cscrefs := \
 //reference:"libs\\itextsharp.dll" \
 //reference:"libs\\LuaInterface.dll" \
 //reference:"libs\\ZedGraph.dll"
-depdlls := \
-$(addprefix $(outdir), \
-ArborGVT.dll \
-ExcelLibrary.dll \
-itextsharp.dll \
-lua51.dll \
-LuaInterface.dll \
-ZedGraph.dll \
-$(gkcommon).dll \
-)
 ifeq ($(windows), $(softwareplatform))
 # Settings for Windows.
 ifeq ($(x86-64), $(hardwareplatform))
@@ -339,11 +329,11 @@ $(coreresgenref$(dotnet)) \
 $(patsubst //reference:%,//r:%,$(cscrefs))
 
 .PHONY: all
-all: $(outdir)$(project)$(projectext) $(depdlls)
+all: $(outdir)$(project)$(projectext)
 
 .PHONY: clean
 clean:
-	cd ../$(gkcommon) && $(MAKE) --file=Makefile $@
+	@cd ../$(gkcommon) && $(MAKE) --file=Makefile $@
 	@rm -rf -- $(objdir)
 	@echo "$(objdir) removed"
 
@@ -367,13 +357,5 @@ else
 	@echo "rc: not yet implemented for $(linux)"
 endif
 
-$(outdir)%.dll: libs/%.dll
-	@cp -f $< $@
-	@echo "**** $< dependency was copied."
-
-$(outdir)$(gkcommon).dll: ../$(gkcommon)/obj/$(releasetype)/$(gkcommon).dll
-	@cp -f $< $@
-	@echo "**** $< dependency was copied."
-
 ../$(gkcommon)/obj/$(releasetype)/$(gkcommon).dll:
-	cd ../$(gkcommon) && $(MAKE) --file=Makefile
+	@cd ../$(gkcommon) && $(MAKE) --file=Makefile
