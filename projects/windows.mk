@@ -7,7 +7,7 @@ windowsrcdosdotnet46 := /c/Program\ Files\ \(x86\)/Microsoft\ SDKs/Windows/v10.0
 windowsrcdosdotnet20 := /c/Program\ Files\ \(x86\)/Microsoft\ SDKs/Windows/v7.0A/bin/Resgen.exe
 
 refsdosdotnet46 := C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.5.2\\
-refsdosdornet20 := C:\\Windows\\Microsoft.NET\\Framework\\v2.0.50727\\
+refsdosdotnet20 := C:\\Windows\\Microsoft.NET\\Framework\\v2.0.50727\\
 refsdos := $(refsdos$(dotnet))
 coreresgenrefdotnet46 := \
 //r:"$(refsdos)mscorlib.dll" \
