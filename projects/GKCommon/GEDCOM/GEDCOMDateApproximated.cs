@@ -78,5 +78,10 @@ namespace GKCommon.GEDCOM
         public GEDCOMDateApproximated(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
         {
         }
+
+        public override UDN GetUDN()
+        {
+            return UDN.CreateApproximate(base.GetUDN());
+        }
     }
 }
