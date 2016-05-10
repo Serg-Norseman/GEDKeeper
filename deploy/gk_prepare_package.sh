@@ -3,8 +3,9 @@ APP="GEDKeeper2"
 EXT="ged"
 COMMENT="Personal genealogical database editor"
 # APP_PATH=/usr/bin/
+APP_VER="2.7.0"
 DEV_PATH="/home/norseman/share/GEDKeeper"
-PACK_PATH="gedkeeper"
+PACK_PATH="gedkeeper-$APP_VER"
 LIB_PATH="$PACK_PATH/usr/lib/gedkeeper"
 BIN_PATH="$PACK_PATH/usr/bin"
 
@@ -14,6 +15,8 @@ mkdir -p $BIN_PATH
 mkdir -p $LIB_PATH
 mkdir -p $PACK_PATH/usr/share/applications
 mkdir -p $PACK_PATH/usr/share/pixmaps
+
+cp -r $DEV_PATH/deploy/DEBIAN/ ~/$PACK_PATH/
 
 cp $DEV_PATH/deploy/gk2_run.sh ~/$BIN_PATH
 chmod a+x ~/$BIN_PATH/gk2_run.sh
@@ -36,3 +39,6 @@ cp -r $DEV_PATH/locales/ ~/$LIB_PATH/
 #echo "..\plugins\" >> %lstfile%
 #echo "..\locales\" >> %lstfile%
 #echo "..\scripts\" >> %lstfile%
+
+dpkg -b ~/$PACK_PATH/
+#/home/norseman/gedkeeper-2.7.0
