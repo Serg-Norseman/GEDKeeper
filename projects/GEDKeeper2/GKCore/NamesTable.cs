@@ -83,24 +83,26 @@ namespace GKCore
         {
             if (!File.Exists(fileName)) return;
             
-            using (StreamReader strd = new StreamReader(fileName, Encoding.GetEncoding(1251)))
-            {
-                while (strd.Peek() != -1)
-                {
-                    string line = strd.ReadLine();
-                    if (string.IsNullOrEmpty(line))
-                        continue;
+            try {
+                using (StreamReader strd = new StreamReader(fileName, Encoding.GetEncoding(1251))) {
+                    while (strd.Peek() != -1) {
+                        string line = strd.ReadLine();
+                        if (string.IsNullOrEmpty(line))
+                            continue;
 
-                    string[] data = line.Trim().Split(';');
-                    NameEntry nm = new NameEntry();
-                    nm.Name = data[0];
-                    nm.F_Patronymic = data[1];
-                    nm.M_Patronymic = data[2];
-                    if (data[3] != "") {
-                        nm.Sex = GKUtils.GetSexBySign(data[3][0]);
+                        string[] data = line.Trim().Split(';');
+                        NameEntry nm = new NameEntry();
+                        nm.Name = data[0];
+                        nm.F_Patronymic = data[1];
+                        nm.M_Patronymic = data[2];
+                        if (data[3] != "") {
+                            nm.Sex = GKUtils.GetSexBySign(data[3][0]);
+                        }
+                        this.fNames.Add(nm.Name, nm);
                     }
-                    this.fNames.Add(nm.Name, nm);
                 }
+            } catch (Exception ex) {
+                Logger.LogWrite("NamesTable.LoadFromFile(): " + ex.Message);
             }
         }
 

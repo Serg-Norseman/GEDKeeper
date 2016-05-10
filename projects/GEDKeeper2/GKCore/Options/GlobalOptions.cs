@@ -318,9 +318,13 @@ namespace GKCore.Options
 
         public void FindLanguages()
         {
-            string path = GKUtils.GetLangsPath();
-            string[] langFiles = Directory.GetFiles(path, "*.lng", SearchOption.TopDirectoryOnly);
-            for (int i = 0; i < langFiles.Length; i++) this.LngPrepareProc(langFiles[i]);
+            try {
+                string path = GKUtils.GetLangsPath();
+                string[] langFiles = Directory.GetFiles(path, "*.lng", SearchOption.TopDirectoryOnly);
+                for (int i = 0; i < langFiles.Length; i++) this.LngPrepareProc(langFiles[i]);
+            } catch (Exception ex) {
+                Logger.LogWrite("GlobalOptions.FindLanguages(): " + ex.Message);
+            }
         }
 
         public void LoadFromFile(string fileName)

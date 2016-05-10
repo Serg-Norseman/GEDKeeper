@@ -329,6 +329,7 @@ namespace GKUI
 		    // 
 		    // tbFilter
 		    // 
+		    this.tbFilter.ImageTransparentColor = System.Drawing.Color.White;
 		    this.tbFilter.Name = "tbFilter";
 		    this.tbFilter.Size = new System.Drawing.Size(23, 22);
 		    this.tbFilter.ToolTipText = "Фильтрация списка персон";
