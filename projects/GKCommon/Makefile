@@ -140,6 +140,7 @@ sources := \
 ./GKCommon/StringTokenizer.cs \
 ./GKCommon/SysInfo.cs \
 ./GKCommon/Tween.cs \
+./GKCommon/UDN.cs \
 ./GKCommon/ValuesCollection.cs \
 ./GKCore/GKConsts.cs \
 ./GKCore/Interfaces/IBaseContext.cs \
