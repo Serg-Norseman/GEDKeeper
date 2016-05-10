@@ -26,7 +26,7 @@ namespace GKCommon
     public enum UDNCalendarType { ctGregorian, ctJulian, ctHebrew, ctIslamic }
 
     /// <summary>
-    /// The Unified numbers of dates.
+    /// The Unified number of dates.
     /// Unification of any dates, given a calendar and unknown components for the needs of comparison and sorting.
     /// Works on the basis of algorithms Julian day.
     /// </summary>
@@ -39,8 +39,9 @@ namespace GKCommon
         private const uint IgnoreDay = 1u << 29;
         private const uint DateAfter = 1u << 28;
         private const uint DateBefore = 1u << 27;
+        private const uint ApproximateDate = 1u << 26;
 
-        private const uint ValueMask = 0x7FFFFFF;
+        private const uint ValueMask = 0x3FFFFFF;
 
         public const int UnknownYear = 0;
         public const int UnknownMonth = 0;
@@ -51,17 +52,24 @@ namespace GKCommon
         /// It's a usual JDN, having optional flags part.
         ///
         /// The following is the scheme of `fValue` bits value:
-        /// +----+----+----+----+----+----------+
-        /// | 31 | 30 | 29 | 28 | 27 | 26 ... 0 | bits number
-        /// +----+----+----+----+----+----------+
-        /// Bits from 0 to 26 is JDN (masked by `ValueMask` member).
+        /// +----+----+----+----+----+----+----------+
+        /// | 31 | 30 | 29 | 28 | 27 | 26 | 25 ... 0 | bits number
+        /// +----+----+----+----+----+----+----------+
+        /// Bits from 0 to 25 is JDN (masked by `ValueMask` member).
+        /// The 26th bit is approximate date flag (it's the `ApproximateDate`).
         /// The 27th bit is date before flag (it's the `DateBefore`).
         /// The 28th bit is date after flag (it's the `DateAfter` member).
         /// The 29th bit is unknown day flag (it's the `IgnoreDay` member).
         /// The 30th bit is unknown month flag (it's the `IgnoreMonth` member).
         /// The 31th bit is unknown year flag (it's the `IgnoreYear` member).
         ///
-        /// Bits `DateBefore` and `DateAfter` are mutually exclusive.
+        /// Bits `ApproximateDate`, `DateBefore` and `DateAfter` are mutually exclusive.
+        ///
+        /// Why can we use the flags.
+        /// Because normal Julian day number is based on the Julian Period. Which size is 7980 years. The next Julian
+        /// Period begins in the year 3268 AD. Thus, JDN upper limit is 0x2c7986 (0b1011000111100110000110). We need at
+        /// least 22 bits available for JDN. But in .NET's uint (the current type for `fValue`) we have 32 bits -- isn't
+        /// a waste of resources, heh! Therefore, we use upper unused bits as flags.
         /// </summary>
         private readonly uint fValue;
 
@@ -193,6 +201,39 @@ namespace GKCommon
             }
             if (0 == result)
             {
+                /*
+                 * Here we got equal JDNs-UDNs. Now we need to do an additional processing of `ApproximateDate`,
+                 * `DateBefore` and `DateAfter` flags to implement the following ordering:
+                 * 1. Before date A.
+                 * 2. Near the date A.
+                 * 3. Exact date A.
+                 * 4. After date A.
+                 *
+                 * The following table describes how the code below implements such processing.
+                 * +-----+------------+-----+---------------------------------------------------+
+                 * | `l` | CMP result | `r` | Description                                       |
+                 * +-----+------------+-----+---------------------------------------------------+
+                 * | < A | -1         | A   | This is implemented by code inside                |
+                 * | < A | 0          | < A | `if (0 != (DateBefore & l))` statement.           |
+                 * | < A | -1         | > A |                                                   |
+                 * | < A | -1         | ~ A |                                                   |
+                 * |     |            |     |                                                   |
+                 * | > A | 1          | A   | This is implemented by code inside                |
+                 * | > A | 1          | < A | `else if (0 != (DateAfter & l))` statement.       |
+                 * | > A | 0          | > A |                                                   |
+                 * | > A | 1          | ~ A |                                                   |
+                 * |     |            |     |                                                   |
+                 * | ~ A | -1         | A   | This is implemented by code inside                |
+                 * | ~ A | 1          | < A | `else if (0 != (ApproximateDate & l))` statement. |
+                 * | ~ A | -1         | > A |                                                   |
+                 * | ~ A | 0          | ~ A |                                                   |
+                 * |     |            |     |                                                   |
+                 * | A   | 0          | A   | This is implemented by code inside                |
+                 * | A   | 1          | < A | `else if (0 != (DateAfter & r))` and              |
+                 * | A   | -1         | > A | `else` statements.                                |
+                 * | A   | 1          | ~ A |                                                   |
+                 * +-----+------------+-----+---------------------------------------------------+
+                 */
                 if (0 != (DateBefore & l))
                 {
                     result = (0 != (DateBefore & r)) ? 0 : -1;
@@ -201,9 +242,16 @@ namespace GKCommon
                 {
                     result = (0 != (DateAfter & r)) ? 0 : 1;
                 }
-                else if (0 != (DateBefore & r))
+                else if (0 != (ApproximateDate & l))
                 {
-                    result = 1;
+                    if (0 != (ApproximateDate & r))
+                    {
+                        result = 0;
+                    }
+                    else
+                    {
+                        result = (0 != (DateBefore & r)) ? 1 : -1;
+                    }
                 }
                 else if (0 != (DateAfter & r))
                 {
@@ -211,7 +259,7 @@ namespace GKCommon
                 }
                 else
                 {
-                    result = 0;
+                    result = (0 != ((DateBefore | ApproximateDate) & r)) ? 1 : 0;
                 }
             }
             return result;
@@ -320,18 +368,20 @@ namespace GKCommon
         /// This method DOES NOT check that `month` is inside a valid range. It's duty of a caller.</param>
         /// <param name="day">Day number. Pass `UnknownDay` constant when day is unknown.
         /// This method DOES NOT check that `day` is inside a valid range. It's duty of a caller.</param>
-        /// <returns>UDN object representing a date before the specified one.
-        ///
-        /// This method sets "date before" flag on the new date.</returns>
+        /// <returns>UDN object representing a date before the specified one.</returns>
         public static UDN CreateBefore(UDNCalendarType calendar, int year, int month, int day)
         {
             return new UDN(CreateVal(calendar, year, month, day) | DateBefore);
         }
 
+        /// <summary>
+        /// Creates a new UDN instance that represents a date before the specified universal date.</summary>
+        /// <param name="udn">Source date to be converted to "date before it".</param>
+        /// <returns>UDN object representing a date before the specified one.</returns>
         public static UDN CreateBefore(UDN udn)
         {
-            // We must guarantee that result UDN won't have both `DateBefore` and `DateAfter`.
-            return new UDN((udn.fValue & ~DateAfter) | DateBefore);
+            // We should guarantee that result UDN will have only `ApproximateDate`, `DateBefore` or `DateAfter`.
+            return new UDN((udn.fValue & ~(DateAfter | ApproximateDate)) | DateBefore);
         }
 
         /// <summary>
@@ -345,24 +395,52 @@ namespace GKCommon
         /// This method DOES NOT check that `month` is inside a valid range. It's duty of a caller.</param>
         /// <param name="day">Day number. Pass `UnknownDay` constant when day is unknown.
         /// This method DOES NOT check that `day` is inside a valid range. It's duty of a caller.</param>
-        /// <returns>UDN object representing a date after the specified one.
-        ///
-        /// This method sets "date after" flag on the new date.</returns>
+        /// <returns>UDN object representing a date after the specified one.</returns>
         public static UDN CreateAfter(UDNCalendarType calendar, int year, int month, int day)
         {
             return new UDN(CreateVal(calendar, year, month, day) | DateAfter);
         }
 
+        /// <summary>
+        /// Creates a new UDN instance that represents a date after the specified universal date.</summary>
+        /// <param name="udn">Source date to be converted to "date after it".</param>
+        /// <returns>UDN object representing a date after the specified one.</returns>
         public static UDN CreateAfter(UDN udn)
         {
-            // We must guarantee that result UDN won't have both `DateBefore` and `DateAfter`.
-            return new UDN((udn.fValue & ~DateBefore) | DateAfter);
+            // We should guarantee that result UDN will have only `ApproximateDate`, `DateBefore` or `DateAfter`.
+            return new UDN((udn.fValue & ~(DateBefore | ApproximateDate)) | DateAfter);
+        }
+
+        /// <summary>
+        /// Creates a new UDN instance that represents a date near the specified date in the specified
+        /// <paramref name="calendar"/>.</summary>
+        /// <param name="calendar">Source calendar. The <paramref name="year"/>, <paramref name="month"/> and
+        /// <paramref name="day"/> are in this calendar.</param>
+        /// <param name="year">Year number. Pass `UnknownYear` constant when year is unknown.
+        /// This method DOES NOT check that `year` is inside a valid range. It's duty of a caller.</param>
+        /// <param name="month">Month number. Pass `UnknownMonth` constant when month is unknown.
+        /// This method DOES NOT check that `month` is inside a valid range. It's duty of a caller.</param>
+        /// <param name="day">Day number. Pass `UnknownDay` constant when day is unknown.
+        /// This method DOES NOT check that `day` is inside a valid range. It's duty of a caller.</param>
+        /// <returns>UDN object representing a date near the specified one.</returns>
+        public static UDN CreateApproximate(UDNCalendarType calendar, int year, int month, int day)
+        {
+            return new UDN(CreateVal(calendar, year, month, day) | ApproximateDate);
+        }
+
+        /// <summary>
+        /// Creates a new UDN instance that represents a date near the specified universal date.</summary>
+        /// <param name="udn">Source date to be converted to "date near it".</param>
+        /// <returns>UDN object representing a date near the specified one.</returns>
+        public static UDN CreateApproximate(UDN udn)
+        {
+            return new UDN((udn.fValue & ~(DateBefore | DateAfter)) | ApproximateDate);
         }
 
         /// <summary>Finds a date that lies in the middle between the two specified dates.</summary>
         /// <param name="left">The first date. Must be a date with valid year.</param>
         /// <param name="right">The second date. Must be a date with valid year.</param>
-        /// <returns>A date that is "average" of the <paramref name="left"/> amd <paramref name="right"/>.
+        /// <returns>A date that is "average" of the <paramref name="left"/> and <paramref name="right"/>.
         /// Both the dates must have valid year parts (must not have `IgnoreYear` flag set). Otherwise this method
         /// throws an exception.</returns>
         public static UDN Between(UDN left, UDN right)
@@ -389,7 +467,7 @@ namespace GKCommon
             value |=
                 (IgnoreMonth & left.fValue) & (IgnoreMonth & right.fValue) |
                 (IgnoreDay & left.fValue) & (IgnoreDay & right.fValue) &
-                ~(DateBefore | DateAfter);
+                ~(ApproximateDate | DateBefore | DateAfter);
             return new UDN(value);
         }
 
@@ -414,18 +492,26 @@ namespace GKCommon
             return 0 == (IgnoreDay & fValue);
         }
 
+        /// <summary>Checks if this date defines an approximate date.</summary>
+        /// <returns>True if this date is approximate date (`ApproximateDate` flag is set) and false otherwise.
+        /// </returns>
+        public bool isApproximateDate()
+        {
+            return 0 != (ApproximateDate & fValue);
+        }
+
         /// <summary>Checks if this date defines a "date before".</summary>
         /// <returns>True if this date is a "date before" (`DateBefore` flag is set) and false otherwise.</returns>
         public bool isDateBefore()
         {
-            return 0 == (DateBefore & fValue);
+            return 0 != (DateBefore & fValue);
         }
 
         /// <summary>Checks if this date defines a "date after".</summary>
         /// <returns>True if this date is a "date after" (`DateAfter` flag is set) and false otherwise.</returns>
         public bool isDateAfter()
         {
-            return 0 == (DateAfter & fValue);
+            return 0 != (DateAfter & fValue);
         }
 
         public bool isEmpty()
