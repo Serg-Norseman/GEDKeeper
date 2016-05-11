@@ -23,6 +23,7 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using GKCommon;
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
@@ -41,7 +42,10 @@ namespace GKImageViewerPlugin
         {
             this.InitializeComponent();
 
-            this.tbFileLoad.Image = IVPResource.iLoad;
+            GKResourceManager resMgr = new GKResourceManager("IVPResource", typeof(ImageViewerWin).Assembly);
+            Bitmap iLoad = (Bitmap)resMgr.GetObjectEx("iLoad");
+
+            this.tbFileLoad.Image = /*IVPResource.*/iLoad;
             
             this.fLangMan = plugin.LangMan;
 

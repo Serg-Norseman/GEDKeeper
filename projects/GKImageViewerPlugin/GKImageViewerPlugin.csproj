@@ -7,7 +7,6 @@
     <ProjectGuid>{FFE7826E-C352-46F3-AAC9-67FCCD9F6987}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GKImageViewerPlugin</RootNamespace>
     <AssemblyName>GKImageViewerPlugin</AssemblyName>
     <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
     <FileAlignment>4096</FileAlignment>
@@ -89,8 +88,9 @@
       <DependentUpon>ImageViewerWin.cs</DependentUpon>
     </Compile>
     <Compile Include="IVPResource.Designer.cs">
-      <DependentUpon>IVPResource.resx</DependentUpon>
       <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IVPResource.resx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

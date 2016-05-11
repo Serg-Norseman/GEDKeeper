@@ -124,6 +124,7 @@ sources := \
 ./GKCommon/ExtRect.cs \
 ./GKCommon/FileHelper.cs \
 ./GKCommon/GfxHelper.cs \
+./GKCommon/GKResourceManager.cs \
 ./GKCommon/IndistinctMatching.cs \
 ./GKCommon/IniFile.cs \
 ./GKCommon/Logger.cs \

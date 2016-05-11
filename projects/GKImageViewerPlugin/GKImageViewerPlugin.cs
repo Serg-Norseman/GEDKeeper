@@ -20,6 +20,7 @@
 
 using System;
 using System.Reflection;
+using System.Resources;
 using System.Runtime.InteropServices;
 
 using GKCore.Interfaces;
@@ -36,13 +37,14 @@ using GKCore.Interfaces;
 [assembly: ComVisible(false)]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: NeutralResourcesLanguage("en")]
 
 namespace GKImageViewerPlugin
 {
-	public enum IVLS
-	{
-		/* 000 */ LSID_ImgViewer
-	}
+    public enum IVLS
+    {
+        /* 000 */ LSID_ImgViewer
+    }
 
     public class Plugin : IPlugin
     {
@@ -56,63 +58,63 @@ namespace GKImageViewerPlugin
 
         public void Execute()
         {
-        	try
-        	{
-        		ImageViewerWin frm = new ImageViewerWin(this);
-        		this.fHost.ShowMDI(frm);
-        	}
-        	catch (Exception ex)
-        	{
-        		fHost.LogWrite("GKImageViewerPlugin.Execute(): " + ex.Message);
-        	}
+            try
+            {
+                ImageViewerWin frm = new ImageViewerWin(this);
+                this.fHost.ShowMDI(frm);
+            }
+            catch (Exception ex)
+            {
+                fHost.LogWrite("GKImageViewerPlugin.Execute(): " + ex.Message);
+            }
         }
 
         public void OnHostClosing(ref bool cancelClosing) {}
-		public void OnHostActivate() {}
-		public void OnHostDeactivate() {}
+        public void OnHostActivate() {}
+        public void OnHostDeactivate() {}
 
-		public void OnLanguageChange()
+        public void OnLanguageChange()
         {
-        	try
-        	{
-        		this.fLangMan = this.fHost.CreateLangMan(this);
-        		this.fDisplayName = this.fLangMan.LS(IVLS.LSID_ImgViewer);
-        	}
-        	catch (Exception ex)
-        	{
-        		fHost.LogWrite("GKImageViewerPlugin.OnLanguageChange(): " + ex.Message);
-        	}
+            try
+            {
+                this.fLangMan = this.fHost.CreateLangMan(this);
+                this.fDisplayName = this.fLangMan.LS(IVLS.LSID_ImgViewer);
+            }
+            catch (Exception ex)
+            {
+                fHost.LogWrite("GKImageViewerPlugin.OnLanguageChange(): " + ex.Message);
+            }
         }
         
         public bool Startup(IHost host)
         {
-        	bool result = true;
-        	try
-        	{
-        		this.fHost = host;
-        		// Implement any startup code here
-        	}
-        	catch (Exception ex)
-        	{
-        		fHost.LogWrite("GKImageViewerPlugin.Startup(): " + ex.Message);
-        		result = false;
-        	}
-        	return result;
+            bool result = true;
+            try
+            {
+                this.fHost = host;
+                // Implement any startup code here
+            }
+            catch (Exception ex)
+            {
+                fHost.LogWrite("GKImageViewerPlugin.Startup(): " + ex.Message);
+                result = false;
+            }
+            return result;
         }
 
         public bool Shutdown()
         {
-        	bool result = true;
-        	try
-        	{
-        		// Implement any shutdown code here
-        	}
-        	catch (Exception ex)
-        	{
-        		fHost.LogWrite("GKImageViewerPlugin.Shutdown(): " + ex.Message);
-        		result = false;
-        	}
-        	return result;
+            bool result = true;
+            try
+            {
+                // Implement any shutdown code here
+            }
+            catch (Exception ex)
+            {
+                fHost.LogWrite("GKImageViewerPlugin.Shutdown(): " + ex.Message);
+                result = false;
+            }
+            return result;
         }
 
     }

@@ -201,6 +201,7 @@
     <Compile Include="GKCommon\ExtRect.cs" />
     <Compile Include="GKCommon\FileHelper.cs" />
     <Compile Include="GKCommon\GfxHelper.cs" />
+    <Compile Include="GKCommon\GKResourceManager.cs" />
     <Compile Include="GKCommon\IndistinctMatching.cs" />
     <Compile Include="GKCommon\IniFile.cs" />
     <Compile Include="GKCommon\Logger.cs" />
@@ -270,8 +271,6 @@
       <DependentUpon>SlideList.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GKCommon\SmartGraph" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
