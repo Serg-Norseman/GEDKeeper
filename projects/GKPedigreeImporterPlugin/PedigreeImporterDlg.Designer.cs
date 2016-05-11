@@ -98,10 +98,6 @@
             this.btnImportFileChoose.Text = "Выбрать...";
             this.btnImportFileChoose.Click += new System.EventHandler(this.btnImportFileChoose_Click);
             // 
-            // OpenDialog2
-            // 
-            this.OpenDialog2.Filter = resources.GetString("OpenDialog2.Filter");
-            // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.pageSelect);

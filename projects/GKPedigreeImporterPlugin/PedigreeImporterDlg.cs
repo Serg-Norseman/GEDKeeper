@@ -39,11 +39,11 @@ namespace GKPedigreeImporterPlugin
         {
             InitializeComponent();
 
-			this.fPlugin = fPlugin;
+            this.fPlugin = fPlugin;
             this.fLangMan = fPlugin.LangMan;
 
-			this.fBase = fPlugin.Host.GetCurrentFile();
-			this.fImporter = new Importer(fBase, this.fLangMan, this.lbLog.Items);
+            this.fBase = fPlugin.Host.GetCurrentFile();
+            this.fImporter = new Importer(fBase, this.fLangMan, this.lbLog.Items);
             this.fCurrentStage = 0;
             this.fAvailableStage = 0;
 
@@ -57,113 +57,114 @@ namespace GKPedigreeImporterPlugin
             this.Text = fLangMan.LS(ILS.LSID_PluginTitle);
             this.lblFile.Text = fLangMan.LS(ILS.LSID_File);
             this.btnImportFileChoose.Text = fLangMan.LS(ILS.LSID_DlgSelect) + @"...";
+            this.OpenDialog2.Filter = "Все поддерживаемые форматы (*.txt, *.csv, *.doc, *.xls)|*.txt;*.csv;*.doc;*.xls|Роспись в txt-формате (*.txt)|*.txt|Роспись в csv-формате (*.csv)|*.csv|Роспись в формате Word (*.doc)|*.doc|Роспись в формате Excel (*.xls)|*.xls";
         }
 
-		private void btnImportFileChoose_Click(object sender, EventArgs e)
-		{
-			if (this.OpenDialog2.ShowDialog() == DialogResult.OK)
-			{
-				this.edImportFile.Text = this.OpenDialog2.FileName;
+        private void btnImportFileChoose_Click(object sender, EventArgs e)
+        {
+            if (this.OpenDialog2.ShowDialog() == DialogResult.OK)
+            {
+                this.edImportFile.Text = this.OpenDialog2.FileName;
 
-				try
-				{
-					bool res = this.fImporter.LoadRawData(this.edImportFile.Text);
-					if (res) {
-						this.fAvailableStage++;
+                try
+                {
+                    bool res = this.fImporter.LoadRawData(this.edImportFile.Text);
+                    if (res) {
+                        this.fAvailableStage++;
 
-						switch (this.fImporter.CanNumbersType)
-						{
-							case PersonNumbersType.pnUndefined:
-								rbNumsUnknown.Checked = true;
-								break;
-							case PersonNumbersType.pnKonovalov:
-								rbNumsKonovalov.Checked = true;
-								break;
-							case PersonNumbersType.pnDAboville:
-								rbNumsDAboville.Checked = true;
-								break;
-						}
+                        switch (this.fImporter.CanNumbersType)
+                        {
+                            case PersonNumbersType.pnUndefined:
+                                rbNumsUnknown.Checked = true;
+                                break;
+                            case PersonNumbersType.pnKonovalov:
+                                rbNumsKonovalov.Checked = true;
+                                break;
+                            case PersonNumbersType.pnDAboville:
+                                rbNumsDAboville.Checked = true;
+                                break;
+                        }
 
-					}
+                    }
 
-					this.UpdateNavigation();
-				}
-				catch (Exception ex)
-				{
-					MessageBox.Show(ex.Message, fLangMan.LS(ILS.LSID_PluginTitle), MessageBoxButtons.OK, MessageBoxIcon.Error);
-				}
-			}
-		}
+                    this.UpdateNavigation();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, fLangMan.LS(ILS.LSID_PluginTitle), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
 
-		private void ChangeStage()
-		{
-			switch (this.fCurrentStage)
-			{
-				case 1:
-					{
-						if (rbNumsUnknown.Checked) {
-							this.fImporter.NumbersType = PersonNumbersType.pnUndefined;
-						} else if (rbNumsKonovalov.Checked) {
-							this.fImporter.NumbersType = PersonNumbersType.pnKonovalov;
-						} else if (rbNumsDAboville.Checked) {
-							this.fImporter.NumbersType = PersonNumbersType.pnDAboville;
-						}
+        private void ChangeStage()
+        {
+            switch (this.fCurrentStage)
+            {
+                case 1:
+                    {
+                        if (rbNumsUnknown.Checked) {
+                            this.fImporter.NumbersType = PersonNumbersType.pnUndefined;
+                        } else if (rbNumsKonovalov.Checked) {
+                            this.fImporter.NumbersType = PersonNumbersType.pnKonovalov;
+                        } else if (rbNumsDAboville.Checked) {
+                            this.fImporter.NumbersType = PersonNumbersType.pnDAboville;
+                        }
 
-						if (cbPersonSeparator.SelectedIndex == 0) {
-							this.fImporter.PersonLineSeparator = (char)0;
-						} else {
-							this.fImporter.PersonLineSeparator = cbPersonSeparator.Text[0];
-						}
+                        if (cbPersonSeparator.SelectedIndex == 0) {
+                            this.fImporter.PersonLineSeparator = (char)0;
+                        } else {
+                            this.fImporter.PersonLineSeparator = cbPersonSeparator.Text[0];
+                        }
 
-						this.fImporter.NameFormat = (NameFormat)cbNameFormat.SelectedIndex;
-						this.fImporter.GenerationFormat = (GenerationFormat)cbGenerationFormat.SelectedIndex;
-						this.fImporter.DateFormat = (DateFormat)cbDatesFormat.SelectedIndex;
-						this.fImporter.PersonLineSeparator = cbDateSeparator.Text[0];
+                        this.fImporter.NameFormat = (NameFormat)cbNameFormat.SelectedIndex;
+                        this.fImporter.GenerationFormat = (GenerationFormat)cbGenerationFormat.SelectedIndex;
+                        this.fImporter.DateFormat = (DateFormat)cbDatesFormat.SelectedIndex;
+                        this.fImporter.PersonLineSeparator = cbDateSeparator.Text[0];
 
-						this.fImporter.SurnamesNormalize = chkSurnamesNormalize.Checked;
+                        this.fImporter.SurnamesNormalize = chkSurnamesNormalize.Checked;
 
-						this.fImporter.SpecialFormat_1 = chkSpecial_1.Checked;
+                        this.fImporter.SpecialFormat_1 = chkSpecial_1.Checked;
 
-						this.fImporter.ImportContent();
+                        this.fImporter.ImportContent();
 
-						this.fBase.RefreshLists(false);
-					}
-					break;
-			}
-		}
+                        this.fBase.RefreshLists(false);
+                    }
+                    break;
+            }
+        }
 
-		private void UpdateNavigation()
-		{
-			btnBack.Enabled = (this.fCurrentStage > 0);
-			btnNext.Enabled = (this.fCurrentStage < this.fAvailableStage);
-		}
+        private void UpdateNavigation()
+        {
+            btnBack.Enabled = (this.fCurrentStage > 0);
+            btnNext.Enabled = (this.fCurrentStage < this.fAvailableStage);
+        }
 
         private void btnBack_Click(object sender, EventArgs e)
         {
-        	this.fCurrentStage--;
-        	this.tabControl1.SelectedTab = this.tabControl1.TabPages[this.fCurrentStage];
-        	this.UpdateNavigation();
+            this.fCurrentStage--;
+            this.tabControl1.SelectedTab = this.tabControl1.TabPages[this.fCurrentStage];
+            this.UpdateNavigation();
         }
 
         private void btnNext_Click(object sender, EventArgs e)
         {
-        	this.fCurrentStage++;
-        	this.tabControl1.SelectedTab = this.tabControl1.TabPages[this.fCurrentStage];
-        	this.UpdateNavigation();
-        	this.ChangeStage();
+            this.fCurrentStage++;
+            this.tabControl1.SelectedTab = this.tabControl1.TabPages[this.fCurrentStage];
+            this.UpdateNavigation();
+            this.ChangeStage();
         }
 
         private void rbNums_CheckedChanged(object sender, EventArgs e)
         {
-        	RadioButton rb = sender as RadioButton;
-        	if (rb == this.rbNumsUnknown && rb.Checked) {
-        		
-        	}
+            RadioButton rb = sender as RadioButton;
+            if (rb == this.rbNumsUnknown && rb.Checked) {
+                
+            }
         }
 
         private void btnClose_Click(object sender, EventArgs e)
         {
-        	this.Close();
+            this.Close();
         }
     }
 }
