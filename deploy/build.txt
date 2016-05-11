@@ -1,6 +1,6 @@
-﻿How to build `GEDKeeper' with make
+﻿    How to build `GEDKeeper' with make
 
-Windows
+    Windows
 
 Having the following toolchains is a prerequisite for building
 `GEDKeeper' on Windows host:
@@ -10,6 +10,12 @@ Having the following toolchains is a prerequisite for building
      didn't test that.
 
   2. GNU make package installed in the shell from above.
+
+    Linux
+
+Sorry, not yet implemented.
+
+    Make it!
 
 To begin change directory to one, where GEDKeeper project is located.
 
@@ -50,6 +56,16 @@ $ make
 $ make hardwareplatform=any softwareplatform=windows
   releasetype=release dotnet=dotnet20
 
-Linux
+Currently supported targets:
 
-Sorry, not yet implemented.
+  * `all`
+    Builds a project and all its dependencies. On the root makefile it
+    also installs GEDKeeper and all available plug-ins.
+
+  * `install`
+    Available only for a specific project. This goal builds, if
+    necessary, the project and its dependencies and then installs all
+    binaries into the GEDKeeper's directory.
+
+  * `clean`
+    Remove all files made by `all` or `install` target.
