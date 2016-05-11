@@ -8,5 +8,20 @@ linux := linux
 # Release types
 debug := debug
 release := release
+# .NET version
+dotnet20 := dotnet20
+dotnet46 := dotnet46
 # Projects
 gkcommon := GKCommon
+gedkeeper2 := GEDKeeper2
+gksampleplugin := GKSamplePlugin
+gkcalculatorplugin := GKCalculatorPlugin
+gkcalendarplugin := GKCalendarPlugin
+gkflowinputplugin := GKFlowInputPlugin
+gkimageviewerplugin := GKImageViewerPlugin
+gklifeplugin := GKLifePlugin
+gknamesbookplugin := GKNamesBookPlugin
+gkpedigreeimporterplugin := GKPedigreeImporterPlugin
+gktextsearchplugin := GKTextSearchPlugin
+gktimelineplugin := GKTimeLinePlugin
+gktreevizplugin := GKTreeVizPlugin
