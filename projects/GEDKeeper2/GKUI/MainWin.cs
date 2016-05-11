@@ -168,6 +168,7 @@ namespace GKUI
             this.fNamesTable = new NamesTable();
             this.fNamesTable.LoadFromFile(this.GetAppDataPath() + "GEDKeeper2.nms");
 
+            this.fPlugins = new List<IPlugin>();
             this.LoadPlugins(GKUtils.GetPluginsPath());
             this.UpdatePluginsItems();
 
@@ -351,39 +352,41 @@ namespace GKUI
 
         public void LoadLanguage(int langCode)
         {
-            if (langCode != LangMan.LS_DEF_CODE) {
-                bool loaded = false;
+            try {
+                if (langCode != LangMan.LS_DEF_CODE) {
+                    bool loaded = false;
 
-                int num = this.fOptions.GetLangsCount();
-                for (int i = 0; i < num; i++) {
-                    if (this.fOptions.GetLang(i).Code == langCode) {
-                        loaded = LangMan.LoadFromFile(this.fOptions.GetLang(i).FileName);
-                        break;
+                    int num = this.fOptions.GetLangsCount();
+                    for (int i = 0; i < num; i++) {
+                        if (this.fOptions.GetLang(i).Code == langCode) {
+                            loaded = LangMan.LoadFromFile(this.fOptions.GetLang(i).FileName);
+                            break;
+                        }
+                    }
+
+                    if (!loaded) langCode = LangMan.LS_DEF_CODE;
+                }
+
+                if (langCode == LangMan.LS_DEF_CODE) {
+                    LangMan.DefInit();
+                }
+
+                foreach (Form child in base.MdiChildren) {
+                    ILocalization localChild = (child as ILocalization);
+
+                    if (localChild != null) {
+                        localChild.SetLang();
                     }
                 }
 
-                if (!loaded) langCode = LangMan.LS_DEF_CODE;
+                this.SetLang();
+
+                this.fOptions.InterfaceLang = (ushort)langCode;
+
+                this.UpdatePluginsLanguage();
+            } catch (Exception ex) {
+                this.LogWrite("MainWin.LoadLanguage(): " + ex.Message);
             }
-
-            if (langCode == LangMan.LS_DEF_CODE) {
-                LangMan.DefInit();
-            }
-
-            foreach (Form child in base.MdiChildren)
-            {
-                ILocalization localChild = (child as ILocalization);
-
-                if (localChild != null)
-                {
-                    localChild.SetLang();
-                }
-            }
-
-            this.SetLang();
-
-            this.fOptions.InterfaceLang = (ushort)langCode;
-
-            this.UpdatePluginsLanguage();
         }
 
         public DialogResult ShowModalEx(Form form, bool keepModeless)
@@ -409,21 +412,25 @@ namespace GKUI
 
         private void UpdateMRU()
         {
-            this.miMRUFiles.Enabled = (this.fOptions.MRUFiles.Count > 0);
-            this.miMRUFiles.DropDownItems.Clear();
-            this.MenuMRU.Items.Clear();
+            try {
+                this.miMRUFiles.Enabled = (this.fOptions.MRUFiles.Count > 0);
+                this.miMRUFiles.DropDownItems.Clear();
+                this.MenuMRU.Items.Clear();
 
-            int num = this.fOptions.MRUFiles.Count;
-            for (int i = 0; i < num; i++) {
-                string fn = this.fOptions.MRUFiles[i].FileName;
+                int num = this.fOptions.MRUFiles.Count;
+                for (int i = 0; i < num; i++) {
+                    string fn = this.fOptions.MRUFiles[i].FileName;
 
-                GKToolStripMenuItem mi = new GKToolStripMenuItem(fn, i);
-                mi.Click += this.MRUFileClick;
-                this.miMRUFiles.DropDownItems.Add(mi);
+                    GKToolStripMenuItem mi = new GKToolStripMenuItem(fn, i);
+                    mi.Click += this.MRUFileClick;
+                    this.miMRUFiles.DropDownItems.Add(mi);
 
-                GKToolStripMenuItem tsmi = new GKToolStripMenuItem(fn, i);
-                tsmi.Click += this.MRUFileClick;
-                this.MenuMRU.Items.Add(tsmi);
+                    GKToolStripMenuItem tsmi = new GKToolStripMenuItem(fn, i);
+                    tsmi.Click += this.MRUFileClick;
+                    this.MenuMRU.Items.Add(tsmi);
+                }
+            } catch (Exception ex) {
+                this.LogWrite("MainWin.UpdateMRU(): " + ex.Message);
             }
         }
 
@@ -541,7 +548,7 @@ namespace GKUI
 
                 this.StatusBar.Invalidate();
             } catch (Exception ex) {
-                this.LogWrite("TfmGEDKeeper.UpdateControls(): " + ex.Message);
+                this.LogWrite("MainWin.UpdateControls(): " + ex.Message);
             }
         }
 
@@ -1149,29 +1156,33 @@ namespace GKUI
 
         private void UpdatePluginsItems()
         {
-            this.miPlugins.Visible = (this.fPlugins.Count > 0);
-            this.miPlugins.DropDownItems.Clear();
+            try {
+                this.miPlugins.Visible = (this.fPlugins.Count > 0);
+                this.miPlugins.DropDownItems.Clear();
 
-            this.fActiveWidgets.Clear();
+                this.fActiveWidgets.Clear();
 
-            int num = this.fPlugins.Count;
-            for (int i = 0; i < num; i++) {
-                IPlugin plugin = this.fPlugins[i];
-                string dispName = plugin.DisplayName;
+                int num = this.fPlugins.Count;
+                for (int i = 0; i < num; i++) {
+                    IPlugin plugin = this.fPlugins[i];
+                    string dispName = plugin.DisplayName;
 
-                ToolStripMenuItem mi = new ToolStripMenuItem(dispName/*, i*/);
-                mi.Click += Plugin_Click;
-                mi.Tag = plugin;
-                this.miPlugins.DropDownItems.Add(mi);
+                    ToolStripMenuItem mi = new ToolStripMenuItem(dispName/*, i*/);
+                    mi.Click += Plugin_Click;
+                    mi.Tag = plugin;
+                    this.miPlugins.DropDownItems.Add(mi);
 
-                if (plugin is IWidget) {
-                    WidgetInfo widInfo = new WidgetInfo();
-                    widInfo.Widget = (plugin as IWidget);
-                    widInfo.MenuItem = mi;
-                    this.fActiveWidgets.Add(widInfo);
+                    if (plugin is IWidget) {
+                        WidgetInfo widInfo = new WidgetInfo();
+                        widInfo.Widget = (plugin as IWidget);
+                        widInfo.MenuItem = mi;
+                        this.fActiveWidgets.Add(widInfo);
 
-                    (plugin as IWidget).WidgetInit(this);
+                        (plugin as IWidget).WidgetInit(this);
+                    }
                 }
+            } catch (Exception ex) {
+                this.LogWrite("MainWin.UpdatePluginsItems(): " + ex.Message);
             }
         }
 
@@ -1192,43 +1203,43 @@ namespace GKUI
 
         private void LoadPlugins(string path)
         {
-            AppDomain.CurrentDomain.SetupInformation.PrivateBinPath = path;
+            if (!Directory.Exists(path)) return;
 
-            this.fPlugins = new List<IPlugin>();
+            try {
+                AppDomain.CurrentDomain.SetupInformation.PrivateBinPath = path;
 
-            Type pluginType = typeof(IPlugin);
-            string[] pluginFiles = Directory.GetFiles(path, "*.dll");
+                Type pluginType = typeof(IPlugin);
+                string[] pluginFiles = Directory.GetFiles(path, "*.dll");
 
-            foreach (string pfn in pluginFiles)
-            {
-                try
-                {
-                    Assembly asm;
+                foreach (string pfn in pluginFiles) {
+                    try {
+                        Assembly asm;
 
-                    try
-                    {
-                        AssemblyName assemblyName = AssemblyName.GetAssemblyName(pfn);
-                        asm = Assembly.Load(assemblyName);
-                    } catch {
-                        asm = null;
-                        // block exceptions for bad or non-dotnet assemblies
+                        try {
+                            AssemblyName assemblyName = AssemblyName.GetAssemblyName(pfn);
+                            asm = Assembly.Load(assemblyName);
+                        } catch {
+                            asm = null;
+                            // block exceptions for bad or non-dotnet assemblies
+                        }
+
+                        if (asm == null) continue;
+
+                        Type[] types = asm.GetTypes();
+                        foreach (Type type in types) {
+                            if (type.IsInterface || type.IsAbstract) continue;
+                            if (type.GetInterface(pluginType.FullName) == null) continue;
+
+                            IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
+                            plugin.Startup(this);
+                            this.fPlugins.Add(plugin);
+                        }
+                    } catch (Exception ex) {
+                        this.LogWrite("TfmGEDKeeper.LoadPlugin(" + pfn + "): " + ex.Message);
                     }
-
-                    if (asm == null) continue;
-
-                    Type[] types = asm.GetTypes();
-                    foreach (Type type in types)
-                    {
-                        if (type.IsInterface || type.IsAbstract) continue;
-                        if (type.GetInterface(pluginType.FullName) == null) continue;
-
-                        IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
-                        plugin.Startup(this);
-                        this.fPlugins.Add(plugin);
-                    }
-                } catch (Exception ex) {
-                    this.LogWrite("TfmGEDKeeper.LoadPlugins(" + pfn + "): " + ex.Message);
                 }
+            } catch (Exception ex) {
+                this.LogWrite("TfmGEDKeeper.LoadPlugins(" + path + "): " + ex.Message);
             }
         }
 

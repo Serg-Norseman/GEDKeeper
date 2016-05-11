@@ -3,14 +3,14 @@ APP="GEDKeeper2"
 EXT="ged"
 COMMENT="Personal genealogical database editor"
 # APP_PATH=/usr/bin/
-APP_PATH="~/share/GEDKeeper/"
+APP_PATH="/home/norseman/share/GEDKeeper/"
 
 # Create directories if missing
 mkdir -p ~/.local/share/mime/packages
 mkdir -p ~/.local/share/applications
 mkdir -p ~/.local/share/pixmaps
 
-# copy associated icons to pixmaps
+# Copy associated icons to pixmaps
 cp ./$APP.png ~/.local/share/pixmaps
 
 # Create mime xml 
@@ -27,17 +27,22 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 echo "[Desktop Entry]
 Name=$APP
 Comment=$COMMENT
-Exec=mono $APP_PATH$APP.exe %U
-TryExec=mono $APP_PATH$APP.exe
+Comment[ru]=Редактор персональной генеалогической базы данных
+Comment[uk]=Редактор персональної генеалогічної бази даних
+Path=$APP_PATH
+Exec=mono $APP.exe %U
 MimeType=application/x-$APP
 Icon=$APP.png
 Terminal=false
 Type=Application
-Categories=Hobby
+Categories=Office;Hobby
 StartupNotify=true
 "> ~/.local/share/applications/$APP.desktop
 
-# update databases for both application and mime
+cp ~/.local/share/applications/$APP.desktop ~/Desktop/$APP.desktop
+chmod a+x ~/Desktop/$APP.desktop
+
+# Update databases for both application and mime
 update-desktop-database ~/.local/share/applications
 update-mime-database ~/.local/share/mime
 

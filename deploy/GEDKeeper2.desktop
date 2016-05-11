@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=GEDKeeper2
+Comment=Personal genealogical database editor
+Comment[ru]=Редактор персональной генеалогической базы данных
+Comment[uk]=Редактор персональної генеалогічної бази даних
+Path=/usr/lib/gedkeeper/
+Exec=mono GEDKeeper2.exe %U
+MimeType=application/x-GEDKeeper2
+Icon=/usr/share/pixmaps/GEDKeeper2.png
+Terminal=false
+Type=Application
+Categories=Office;Hobby
+StartupNotify=true
+
