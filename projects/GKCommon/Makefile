@@ -14,6 +14,7 @@ objdir := obj/$(releasetype)/
 objdirdos := obj\\$(releasetype)\\
 outdir := $(objdir)
 outdirdos := $(objdirdos)
+installdir := ../../
 # Get `sources` via (run from this directory):
 # find -regex '.+\.cs' | sed 's/\(.\+\)/\1 \\/'
 # Just do not forget to remove trailing " \" on the last line.
@@ -237,7 +238,7 @@ ifeq ($(any), $(hardwareplatform))
 ifeq ($(release), $(releasetype))
 # Settings for any CPU release, Windows.
 compilerflags := \
-//noconfig //unsafe- //checked- //nowarn:1701,1702,2008 //nostdlib+ //platform:x86 //warn:4 /baseaddress:4194304 \
+//noconfig //unsafe- //checked- //nowarn:1701,1702,2008 //nostdlib+ //platform:anycpu //warn:4 /baseaddress:4194304 \
 //define:TRACE //errorendlocation //preferreduilang:en-US //highentropyva+ \
 $(patsubst //r:%,//reference:%,$(coreresgenref$(dotnet))) \
 //debug- //filealign:4096 //optimize+ \
@@ -246,7 +247,7 @@ $(patsubst //r:%,//reference:%,$(coreresgenref$(dotnet))) \
 else
 # Settings for any CPU debug, Windows.
 compilerflags := \
-//noconfig //unsafe- //checked+ //nowarn:1701,1702,2008 //nostdlib+ //platform:x86 //warn:4 /baseaddress:4194304 \
+//noconfig //unsafe- //checked+ //nowarn:1701,1702,2008 //nostdlib+ //platform:anycpu //warn:4 /baseaddress:4194304 \
 //define:DEBUG //define:TRACE //errorendlocation //preferreduilang:en-US //highentropyva+ \
 $(patsubst //r:%,//reference:%,$(coreresgenref$(dotnet))) \
 //debug+ //debug:Full //filealign:4096 //optimize- \
@@ -264,10 +265,16 @@ $(coreresgenref$(dotnet))
 .PHONY: all
 all: $(outdir)$(project)$(projectext)
 
+.PHONY: install
+install: $(outdir)$(project)$(projectext)
+	@cp -f $< $(installdir)
+	@cp -f $< $(installdir)plugins/
+
 .PHONY: clean
 clean:
 	@rm -rf -- $(objdir)
-	@echo "$(objdir) removed"
+	@rm -f $(installdir)$(project)$(projectext)
+	@rm -f $(installdir)plugins/$(project)$(projectext)
 
 $(objdir):
 	@mkdir -p $(objdir)

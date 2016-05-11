@@ -22,6 +22,7 @@ objdir := obj/$(releasetype)/
 objdirdos := obj\\$(releasetype)\\
 outdir := $(objdir)
 outdirdos := $(objdirdos)
+installdir := ../../
 # Get `sources` via:
 # find -regex '.+\.cs' | sed 's/\(.\+\)/\1 \\/'
 # Just do not forget to remove trailing " \" on the last line.
@@ -303,7 +304,7 @@ ifeq ($(any), $(hardwareplatform))
 ifeq ($(release), $(releasetype))
 # Settings for any CPU release, Windows.
 compilerflags := \
-//noconfig //unsafe- //checked- //nowarn:1701,1702,2008 //nostdlib+ //platform:x86 //warn:4 //baseaddress:4194304 \
+//noconfig //unsafe- //checked- //nowarn:1701,1702,2008 //nostdlib+ //platform:anycpu //warn:4 //baseaddress:4194304 \
 //define:TRACE //main:GKUI.GKProgram //errorendlocation //preferreduilang:en-US //highentropyva- \
 $(patsubst //r:%,//reference:%,$(coreresgenref$(dotnet))) $(cscrefs) \
 //debug- //filealign:4096 //optimize+ \
@@ -312,7 +313,7 @@ $(patsubst //r:%,//reference:%,$(coreresgenref$(dotnet))) $(cscrefs) \
 else
 # Settings for any CPU debug, Windows.
 compilerflags := \
-//noconfig //unsafe- //checked+ //nowarn:1701,1702,2008 //nostdlib+ //platform:x86 //warn:4 //baseaddress:4194304 \
+//noconfig //unsafe- //checked+ //nowarn:1701,1702,2008 //nostdlib+ //platform:anycpu //warn:4 //baseaddress:4194304 \
 //define:DEBUG //define:TRACE //main:GKUI.GKProgram //errorendlocation //preferreduilang:en-US //highentropyva- \
 $(patsubst //r:%,//reference:%,$(coreresgenref$(dotnet))) $(cscrefs) \
 //debug+ //debug:Full //filealign:4096 //optimize- \
@@ -327,15 +328,30 @@ rcflags := \
 //useSourcePath \
 $(coreresgenref$(dotnet)) \
 $(patsubst //reference:%,//r:%,$(cscrefs))
+gkdepdlls := \
+$(addprefix $(installdir), \
+ArborGVT.dll \
+ExcelLibrary.dll \
+itextsharp.dll \
+lua51.dll \
+LuaInterface.dll \
+ZedGraph.dll \
+)
 
 .PHONY: all
-all: $(outdir)$(project)$(projectext)
+all: $(gkcommon) $(outdir)$(project)$(projectext)
+
+.PHONY: install
+install: all $(gkdepdlls)
+	@cp -f $(outdir)$(project)$(projectext) $(installdir)
+	@cd ../$(gkcommon) && $(MAKE) --file=Makefile $@
 
 .PHONY: clean
 clean:
 	@cd ../$(gkcommon) && $(MAKE) --file=Makefile $@
 	@rm -rf -- $(objdir)
-	@echo "$(objdir) removed"
+	@rm -f $(installdir)$(project)$(projectext)
+	@rm -f $(gkdepdlls)
 
 $(objdir):
 	@mkdir -p $(objdir)
@@ -357,5 +373,9 @@ else
 	@echo "rc: not yet implemented for $(linux)"
 endif
 
-../$(gkcommon)/obj/$(releasetype)/$(gkcommon).dll:
+.PHONY: $(gkcommon)
+$(gkcommon):
 	@cd ../$(gkcommon) && $(MAKE) --file=Makefile
+
+$(installdir)%.dll: libs/%.dll
+	@cp -f $< $@
