@@ -7,7 +7,6 @@
     <ProjectGuid>{182AFE98-D3A5-471A-B9D9-C1C53DD72829}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GKNamesBookPlugin</RootNamespace>
     <AssemblyName>GKNamesBookPlugin</AssemblyName>
     <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
     <FileAlignment>4096</FileAlignment>
@@ -82,15 +81,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GKNamesBookPlugin.cs" />
-    <Compile Include="NBResources.Designer.cs">
-      <DependentUpon>NBResources.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Include="NamesBookWidget.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="NamesBookWidget.Designer.cs">
       <DependentUpon>NamesBookWidget.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NBResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>NBResources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

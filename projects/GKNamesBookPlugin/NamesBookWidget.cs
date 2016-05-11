@@ -21,49 +21,34 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
+using System.Reflection;
+using System.Resources;
 using System.Text;
 using System.Windows.Forms;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 
 namespace GKNamesBookPlugin
 {
-	public class GKComboItem
-	{
-		public readonly string Caption;
-		public readonly object Data;
-
-		public GKComboItem(string caption, object data)
-		{
-			this.Caption = caption;
-			this.Data = data;
-		}
-
-		public override string ToString()
-		{
-			return this.Caption;
-		}
-	}
-
     /// <summary>
     /// 
     /// </summary>
     public partial class NamesBookWidget : Form
-	{
-		private class NameRecord
-		{
-			public string Name;
-			public string Desc;
-			public GEDCOMSex Sex;
-			public int ChIndex;
-		}
+    {
+        private class NameRecord
+        {
+            public string Name;
+            public string Desc;
+            public GEDCOMSex Sex;
+            public int ChIndex;
+        }
 
-		private readonly Plugin fPlugin;
-		private readonly List<NameRecord> fNames;
-		private readonly StringList fChurchFNames;
-		private readonly StringList fChurchMNames;
+        private readonly Plugin fPlugin;
+        private readonly List<NameRecord> fNames;
+        private readonly StringList fChurchFNames;
+        private readonly StringList fChurchMNames;
 
         public NamesBookWidget(Plugin plugin) : base()
         {
@@ -97,106 +82,77 @@ namespace GKNamesBookPlugin
 
         private void TfmNamesBook_Load(object sender, EventArgs e)
         {
-        	this.fPlugin.Host.WidgetShow(this.fPlugin);
+            this.fPlugin.Host.WidgetShow(this.fPlugin);
         }
 
-		private void TfmNamesBook_Closed(object sender, EventArgs e)
-		{
-			this.fPlugin.Host.WidgetClose(this.fPlugin);
-		}
+        private void TfmNamesBook_Closed(object sender, EventArgs e)
+        {
+            this.fPlugin.Host.WidgetClose(this.fPlugin);
+        }
 
-		private void cbNames_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			int idx = this.cbNames.SelectedIndex;
-		    if (idx < 0 || idx >= this.cbNames.Items.Count) return;
+        private void cbNames_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int idx = this.cbNames.SelectedIndex;
+            if (idx < 0 || idx >= this.cbNames.Items.Count) return;
 
             GKComboItem item = (GKComboItem)this.cbNames.Items[idx];
-		    NameRecord rec = (NameRecord)item.Data;
+            NameRecord rec = (NameRecord)item.Data;
 
-		    this.mmDesc.Text = "";
-		    this.mmDesc.AppendText(rec.Name + "\r\n");
-		    this.mmDesc.AppendText(rec.Desc + "\r\n");
+            this.mmDesc.Text = "";
+            this.mmDesc.AppendText(rec.Name + "\r\n");
+            this.mmDesc.AppendText(rec.Desc + "\r\n");
 
-		    if (rec.ChIndex < 0) return;
+            if (rec.ChIndex < 0) return;
 
             this.mmDesc.AppendText("\r\n");
-		    this.mmDesc.AppendText("Святцы:\r\n");
+            this.mmDesc.AppendText("Святцы:\r\n");
 
-		    StringList lst;
-		    switch (rec.Sex)
-		    {
-		        case GEDCOMSex.svMale:
-		            lst = this.fChurchMNames;
-		            break;
-		        case GEDCOMSex.svFemale:
-		            lst = this.fChurchFNames;
-		            break;
-		        default:
-		            return;
-		    }
+            StringList lst;
+            switch (rec.Sex)
+            {
+                case GEDCOMSex.svMale:
+                    lst = this.fChurchMNames;
+                    break;
+                case GEDCOMSex.svFemale:
+                    lst = this.fChurchFNames;
+                    break;
+                default:
+                    return;
+            }
 
-		    int num = lst.Count;
-		    for (int i = rec.ChIndex + 1; i < num; i++)
-		    {
-		        string st = lst[i].Trim();
-		        if (st[0] == '-')
-		        {
-		            break;
-		        }
-		        st = st.Remove(0, 1);
-		        this.mmDesc.AppendText(st + "\r\n");
-		    }
-		}
+            int num = lst.Count;
+            for (int i = rec.ChIndex + 1; i < num; i++)
+            {
+                string st = lst[i].Trim();
+                if (st[0] == '-')
+                {
+                    break;
+                }
+                st = st.Remove(0, 1);
+                this.mmDesc.AppendText(st + "\r\n");
+            }
+        }
 
-		private static bool ExtractFlags(ref string st)
-		{
-			bool res = (st != null);
-			if (res) {
-				res = (st.Length >= 2 && st[0] == '[' && st[st.Length - 1] == ']');
-				if (res) {
-					st = st.Substring(1, st.Length - 2);
-				}
-			}
-			return res;
-		}
+        private static bool ExtractFlags(ref string st)
+        {
+            bool res = (st != null);
+            if (res) {
+                res = (st.Length >= 2 && st[0] == '[' && st[st.Length - 1] == ']');
+                if (res) {
+                    st = st.Substring(1, st.Length - 2);
+                }
+            }
+            return res;
+        }
 
-		/*private static System.Resources.ResourceManager resourceMan;
-		
-		internal static System.Resources.ResourceManager ResourceManager {
-			get {
-				if (object.ReferenceEquals(resourceMan, null)) {
-					System.Resources.ResourceManager temp = new System.Resources.ResourceManager("GKResources", typeof(GKResources).Assembly);
-					resourceMan = temp;
-				}
-				return resourceMan;
-			}
-		}
-		
-		internal static byte[] book_names {
-			get {
-				object obj = ResourceManager.GetObject("book_names", resourceCulture);
-				return ((byte[])(obj));
-			}
-		}
-		
-		internal static byte[] book_names_cf {
-			get {
-				object obj = ResourceManager.GetObject("book_names_cf", resourceCulture);
-				return ((byte[])(obj));
-			}
-		}
-		
-		internal static byte[] book_names_cm {
-			get {
-				object obj = ResourceManager.GetObject("book_names_cm", resourceCulture);
-				return ((byte[])(obj));
-			}
-		}*/
+        private void PrepareList()
+        {
+            GKResourceManager resMgr = new GKResourceManager("NBResources", typeof(NamesBookWidget).Assembly);
 
-		private void PrepareList()
-		{
-		    using (MemoryStream memStream = new MemoryStream(NBResources.book_names))
-		    {
+            byte[] book_names = (byte[])resMgr.GetObjectEx("book_names");
+
+            using (MemoryStream memStream = new MemoryStream(/*NBResources.*/book_names))
+            {
                 using (StreamReader strd = new StreamReader(memStream, Encoding.GetEncoding(1251)))
                 {
                     while (strd.Peek() != -1)
@@ -234,19 +190,23 @@ namespace GKNamesBookPlugin
                 }
             }
 
-            using (MemoryStream memStream = new MemoryStream(NBResources.book_names_cf))
+            byte[] book_names_cf = (byte[])resMgr.GetObjectEx("book_names_cf");
+
+            using (MemoryStream memStream = new MemoryStream(/*NBResources.*/book_names_cf))
             {
                 using (StreamReader strd = new StreamReader(memStream, Encoding.GetEncoding(1251)))
-			    {
-				    while (strd.Peek() != -1) {
-					    string ns = strd.ReadLine().Trim();
-					    this.fChurchFNames.Add(ns);
-				    }
-			    }
+                {
+                    while (strd.Peek() != -1) {
+                        string ns = strd.ReadLine().Trim();
+                        this.fChurchFNames.Add(ns);
+                    }
+                }
             }
 
-            using (MemoryStream memStream = new MemoryStream(NBResources.book_names_cm))
-		    {
+            byte[] book_names_cm = (byte[])resMgr.GetObjectEx("book_names_cm");
+
+            using (MemoryStream memStream = new MemoryStream(/*NBResources.*/book_names_cm))
+            {
                 using (StreamReader strd = new StreamReader(memStream, Encoding.GetEncoding(1251)))
                 {
                     while (strd.Peek() != -1)
@@ -256,7 +216,7 @@ namespace GKNamesBookPlugin
                     }
                 }
             }
-		}
+        }
 
         private void UpdateList()
         {
@@ -303,5 +263,22 @@ namespace GKNamesBookPlugin
                 this.cbNames.EndUpdate();
             }
         }
-	}
+    }
+
+    public class GKComboItem
+    {
+        public readonly string Caption;
+        public readonly object Data;
+
+        public GKComboItem(string caption, object data)
+        {
+            this.Caption = caption;
+            this.Data = data;
+        }
+
+        public override string ToString()
+        {
+            return this.Caption;
+        }
+    }
 }

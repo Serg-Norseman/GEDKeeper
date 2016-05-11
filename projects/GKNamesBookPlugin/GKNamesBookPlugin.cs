@@ -20,6 +20,7 @@
 
 using System;
 using System.Reflection;
+using System.Resources;
 using System.Runtime.InteropServices;
 
 using GKCore.Interfaces;
@@ -36,12 +37,13 @@ using GKCore.Interfaces;
 [assembly: ComVisible(false)]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: NeutralResourcesLanguage("en")]
 
 namespace GKNamesBookPlugin
 {
     public enum NLS
     {
-		/* 032 */ LSID_MINamesBook
+        /* 032 */ LSID_MINamesBook
     }
     
     public sealed class Plugin : IPlugin, IWidget
@@ -58,60 +60,60 @@ namespace GKNamesBookPlugin
         
         public void Execute()
         {
-			if (!this.fHost.IsWidgetActive(this)) {
-				frm = new NamesBookWidget(this);
-				frm.Show();
-			} else {
-				frm.Close();
-			}
+            if (!this.fHost.IsWidgetActive(this)) {
+                frm = new NamesBookWidget(this);
+                frm.Show();
+            } else {
+                frm.Close();
+            }
         }
 
         public void OnHostClosing(ref bool cancelClosing) {}
-		public void OnHostActivate() {}
-		public void OnHostDeactivate() {}
+        public void OnHostActivate() {}
+        public void OnHostDeactivate() {}
 
-		public void OnLanguageChange()
+        public void OnLanguageChange()
         {
-        	try
-        	{
-        		this.fLangMan = this.fHost.CreateLangMan(this);
-        		this.fDisplayName = this.fLangMan.LS(NLS.LSID_MINamesBook);
-        	}
-        	catch (Exception ex)
-        	{
-        		fHost.LogWrite("GKNamesBookPlugin.OnLanguageChange(): " + ex.Message);
-        	}
+            try
+            {
+                this.fLangMan = this.fHost.CreateLangMan(this);
+                this.fDisplayName = this.fLangMan.LS(NLS.LSID_MINamesBook);
+            }
+            catch (Exception ex)
+            {
+                fHost.LogWrite("GKNamesBookPlugin.OnLanguageChange(): " + ex.Message);
+            }
         }
         
         public bool Startup(IHost host)
         {
-        	bool result = true;
-        	try
-        	{
-        		this.fHost = host;
-        		// Implement any startup code here
-        	}
-        	catch (Exception ex)
-        	{
-        		fHost.LogWrite("GKNamesBookPlugin.Startup(): " + ex.Message);
-        		result = false;
-        	}
-        	return result;
+            bool result = true;
+            try
+            {
+                this.fHost = host;
+                // Implement any startup code here
+            }
+            catch (Exception ex)
+            {
+                fHost.LogWrite("GKNamesBookPlugin.Startup(): " + ex.Message);
+                result = false;
+            }
+            return result;
         }
 
         public bool Shutdown()
         {
-        	bool result = true;
-        	try
-        	{
-        		// Implement any shutdown code here
-        	}
-        	catch (Exception ex)
-        	{
-        		fHost.LogWrite("GKNamesBookPlugin.Shutdown(): " + ex.Message);
-        		result = false;
-        	}
-        	return result;
+            bool result = true;
+            try
+            {
+                // Implement any shutdown code here
+            }
+            catch (Exception ex)
+            {
+                fHost.LogWrite("GKNamesBookPlugin.Shutdown(): " + ex.Message);
+                result = false;
+            }
+            return result;
         }
 
         #region IWidget support
