@@ -35,7 +35,6 @@ namespace GKUI.Dialogs
         public AboutDlg()
         {
             this.InitializeComponent();
-            this.LabelCite.Text = GKData.APP_CITES;
             this.Text = LangMan.LS(LSID.LSID_MIAbout);
             this.btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
         }

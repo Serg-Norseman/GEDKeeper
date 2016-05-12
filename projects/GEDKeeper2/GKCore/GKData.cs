@@ -40,7 +40,6 @@ namespace GKCore
 
         public const string APP_TITLE = "GEDKeeper2";
         public const string APP_MAIL = "gedkeeper@yandex.ru";
-        public const string APP_CITES = "«История рода - это есть история Отечества»\r\n«Неуважение к предкам - есть первый признак дикости и безнравственности»\r\n(Александр Сергеевич Пушкин)";
 
         public struct SexStruct
         {
