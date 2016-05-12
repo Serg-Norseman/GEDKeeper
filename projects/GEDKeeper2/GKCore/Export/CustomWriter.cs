@@ -65,7 +65,7 @@ namespace GKCore.Export
         public abstract void addListItemLink(string text, object font, string link, object linkFont);
         public abstract void endList();
 
-        public abstract void beginParagraph(TextAlignment alignment);
+        public abstract void beginParagraph(TextAlignment alignment, float spacingBefore, float spacingAfter);
         public abstract void addParagraphChunk(string text, object font);
         public abstract void addParagraphChunkAnchor(string text, object font, string anchor);
         public abstract void addParagraphChunkLink(string text, object font, string link, object linkFont, bool sup);

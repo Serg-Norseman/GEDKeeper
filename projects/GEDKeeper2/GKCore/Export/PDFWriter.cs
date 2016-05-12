@@ -148,7 +148,7 @@ namespace GKCore.Export
             fDocument.Add(list);
         }
 
-        public override void beginParagraph(TextAlignment alignment)
+        public override void beginParagraph(TextAlignment alignment, float spacingBefore, float spacingAfter)
         {
             int al = iAlignments[(int)alignment];
 

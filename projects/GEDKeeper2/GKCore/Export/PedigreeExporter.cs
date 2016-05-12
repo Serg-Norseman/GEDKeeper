@@ -143,9 +143,7 @@ namespace GKCore.Export
 
         private void WritePerson(PedigreePerson person)
         {
-            this.fWriter.beginParagraph(CustomWriter.TextAlignment.taJustify);
-            /*p.SpacingBefore = 6f;
-			p.SpacingAfter = 6f;*/
+            this.fWriter.beginParagraph(CustomWriter.TextAlignment.taJustify, 6f, 6f);
             this.fWriter.addParagraphChunkAnchor(this.GetIdStr(person) + ". " + person.IRec.GetNameString(true, false), fPersonFont, person.Id);
             this.fWriter.addParagraphChunk(GKUtils.GetPedigreeLifeStr(person.IRec, this.fOptions.PedigreeOptions.Format), fTextFont);
 
@@ -441,7 +439,7 @@ namespace GKCore.Export
 
         private void InternalGenerate()
         {
-            this.fWriter.addParagraph(fTitle, fTitleFont, CustomWriter.TextAlignment.taCenter /*, SpacingAfter = 6f*/);
+            this.fWriter.addParagraph(fTitle, fTitleFont, CustomWriter.TextAlignment.taCenter);
 
             this.fPersonList = new ExtList<PedigreePerson>(true);
             this.fSourceList = new StringList();
@@ -460,7 +458,9 @@ namespace GKCore.Export
                         curLevel = person.Level;
                         string genTitle = LangMan.LS(LSID.LSID_Generation) + " " + ConvHelper.GetRome(curLevel);
 
-                        this.fWriter.addParagraph(genTitle, fChapFont, CustomWriter.TextAlignment.taLeft/*, SpacingBefore = 2f, SpacingAfter = 2f*/);
+                        this.fWriter.beginParagraph(CustomWriter.TextAlignment.taLeft, 12f, 6f);
+                        this.fWriter.addParagraphChunk(genTitle, fChapFont);
+                        this.fWriter.endParagraph();
                     }
 
                     this.WritePerson(person);
@@ -499,12 +499,14 @@ namespace GKCore.Export
             }
 
             bool success = false;
-            if (!this.IsRequireFilename("HTML files (*.html)|*.html|PDF files (*.pdf)|*.pdf")) return;
+            if (!this.IsRequireFilename("HTML files (*.html)|*.html|PDF files (*.pdf)|*.pdf|RTF files (*.rtf)|*.rtf")) return;
 
             string ext = FileHelper.GetFileExtension(this.fPath);
 
             if (string.Equals(ext, ".html")) {
                 this.fWriter = new HTMLWriter();
+            } else if (string.Equals(ext, ".rtf")) {
+                this.fWriter = new RTFWriter();
             } else {
                 this.fWriter = new PDFWriter();
             }
@@ -522,7 +524,7 @@ namespace GKCore.Export
                 fPersonFont = this.fWriter.createFont("", 12f/*10f*/, true, false, Color.Black);
                 fLinkFont = this.fWriter.createFont("", 10f/*8f*/, false, true, Color.Blue);
                 fTextFont = this.fWriter.createFont("", 10f/*8f*/, false, false, Color.Black);
-                fSupText = this.fWriter.createFont("", 5f, false, false, Color.Blue);
+                fSupText = this.fWriter.createFont("", ((this.fWriter is RTFWriter) ? 12f : 5f) /*5f*/, false, false, Color.Blue);
 
                 this.fWriter.beginWrite();
                 try

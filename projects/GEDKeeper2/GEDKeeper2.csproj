@@ -89,6 +89,9 @@
     <Reference Include="ArborGVT">
       <HintPath>libs\ArborGVT.dll</HintPath>
     </Reference>
+    <Reference Include="DotNetRtfWriter">
+      <HintPath>libs\DotNetRtfWriter.dll</HintPath>
+    </Reference>
     <Reference Include="ExcelLibrary">
       <HintPath>libs\ExcelLibrary.dll</HintPath>
     </Reference>
@@ -125,6 +128,7 @@
     <Compile Include="GKCore\Export\PDFExporter.cs" />
     <Compile Include="GKCore\Export\PDFWriter.cs" />
     <Compile Include="GKCore\Export\PedigreeExporter.cs" />
+    <Compile Include="GKCore\Export\RTFWriter.cs" />
     <Compile Include="GKCore\GKData.cs" />
     <Compile Include="GKCore\Kinships\KinshipRec.cs" />
     <Compile Include="GKCore\LangMan.cs" />

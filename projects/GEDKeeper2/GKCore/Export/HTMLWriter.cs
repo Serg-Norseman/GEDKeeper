@@ -43,24 +43,6 @@ namespace GKCore.Export
         {
             this.fStream = new StreamWriter(new FileStream(this.fFileName, FileMode.Create), Encoding.UTF8);
 
-            this.WriteHTMLHeader();
-        }
-
-        public override void endWrite()
-        {
-            this.WriteHTMLFooter();
-
-            this.fStream.Flush();
-            this.fStream.Close();
-        }
-
-        public override void setAlbumPage(bool value)
-        {
-            // dummy
-        }
-
-        private void WriteHTMLHeader()
-        {
             this.fStream.WriteLine("<html>");
             this.fStream.WriteLine("<head>");
             this.fStream.WriteLine("<meta HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=utf-8\">");
@@ -78,10 +60,17 @@ namespace GKCore.Export
             this.fStream.WriteLine("<body>");
         }
 
-        private void WriteHTMLFooter()
+        public override void endWrite()
         {
             this.fStream.WriteLine("</body>");
             this.fStream.WriteLine("</html>");
+
+            this.fStream.Flush();
+            this.fStream.Close();
+        }
+
+        public override void setAlbumPage(bool value)
+        {
         }
 
         public override void addParagraph(string text, object font, TextAlignment alignment)
@@ -126,6 +115,11 @@ namespace GKCore.Export
             fStream.WriteLine("<ul>");
         }
 
+        public override void endList()
+        {
+            fStream.WriteLine("</ul>");
+        }
+
         public override void addListItem(string text, object font)
         {
             fStream.WriteLine("<li class=\""+font+"\">"+text+"</li>");
@@ -136,14 +130,14 @@ namespace GKCore.Export
             fStream.WriteLine("<li class=\""+font+"\"><a href=\"#"+link+"\">"+text+"</a></li>");
         }
 
-        public override void endList()
-        {
-            fStream.WriteLine("</ul>");
-        }
-
-        public override void beginParagraph(TextAlignment alignment)
+        public override void beginParagraph(TextAlignment alignment, float spacingBefore, float spacingAfter)
         {
             fStream.WriteLine("<p>");
+        }
+
+        public override void endParagraph()
+        {
+            fStream.WriteLine("</p>");
         }
 
         public override void addParagraphChunk(string text, object font)
@@ -161,11 +155,6 @@ namespace GKCore.Export
             if (sup) fStream.WriteLine("<sup>");
             fStream.WriteLine("<a href=\"#"+link+"\">"+text+"</a>");
             if (sup) fStream.WriteLine("</sup>");
-        }
-
-        public override void endParagraph()
-        {
-            fStream.WriteLine("</p>");
         }
     }
 }
