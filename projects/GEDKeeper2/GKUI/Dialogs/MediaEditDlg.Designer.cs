@@ -10,7 +10,6 @@ namespace GKUI.Dialogs
 		private System.Windows.Forms.TabPage pageSources;
 		private System.Windows.Forms.Button btnAccept;
 		private System.Windows.Forms.Button btnCancel;
-		private System.Windows.Forms.OpenFileDialog OpenDialog1;
 		private System.Windows.Forms.Button btnView;
 		private System.Windows.Forms.TabPage pageCommon;
 		private System.Windows.Forms.Label lblName;
@@ -51,7 +50,6 @@ namespace GKUI.Dialogs
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.btnView = new System.Windows.Forms.Button();
-			this.OpenDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.tabsData.SuspendLayout();
 			this.pageCommon.SuspendLayout();
 			this.SuspendLayout();

@@ -33,7 +33,6 @@
             this.lblFile = new System.Windows.Forms.Label();
             this.edImportFile = new System.Windows.Forms.TextBox();
             this.btnImportFileChoose = new System.Windows.Forms.Button();
-            this.OpenDialog2 = new System.Windows.Forms.OpenFileDialog();
             this.tabControl1 = new GKCommon.Controls.WizardPages();
             this.pageSelect = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -438,7 +437,6 @@
         private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.TabPage pageSelect;
         private GKCommon.Controls.WizardPages tabControl1;
-        private System.Windows.Forms.OpenFileDialog OpenDialog2;
         private System.Windows.Forms.Button btnImportFileChoose;
         private System.Windows.Forms.TextBox edImportFile;
         private System.Windows.Forms.Label lblFile;

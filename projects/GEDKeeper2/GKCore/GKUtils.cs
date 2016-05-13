@@ -206,59 +206,6 @@ namespace GKCore
             version = assembly.GetName().Version.ToString();
         }
 
-        public static OpenFileDialog CreateOpenFileDialog(string title, string context, string filter, int filterIndex, string defaultExt,
-                                                          bool multiSelect)
-        {
-            OpenFileDialog ofd = new OpenFileDialog();
-            
-            if (!string.IsNullOrEmpty(title))
-                ofd.Title = title;
-
-            if (!string.IsNullOrEmpty(context))
-                ofd.InitialDirectory = context;
-
-            if (!string.IsNullOrEmpty(filter))
-            {
-                ofd.Filter = filter;
-
-                if (filterIndex > 0) ofd.FilterIndex = filterIndex;
-            }
-
-            if (!string.IsNullOrEmpty(defaultExt))
-                ofd.DefaultExt = defaultExt;
-
-            ofd.Multiselect = multiSelect;
-
-            return ofd;
-        }
-
-        public static SaveFileDialog CreateSaveFileDialog(string title, string context, string filter, int filterIndex, string defaultExt,
-                                                          string suggestedFileName)
-        {
-            SaveFileDialog sfd = new SaveFileDialog();
-
-            if (!string.IsNullOrEmpty(title))
-                sfd.Title = title;
-
-            if (!string.IsNullOrEmpty(context))
-                sfd.InitialDirectory = context;
-
-            if (!string.IsNullOrEmpty(filter))
-            {
-                sfd.Filter = filter;
-
-                if(filterIndex > 0) sfd.FilterIndex = filterIndex;
-            }
-
-            if (!string.IsNullOrEmpty(defaultExt))
-                sfd.DefaultExt = defaultExt;
-
-            if (!string.IsNullOrEmpty(suggestedFileName))
-                sfd.FileName = suggestedFileName;
-
-            return sfd;
-        }
-
         #endregion
 
         #region Aux functions
@@ -1687,21 +1634,6 @@ namespace GKCore
         public static DialogResult ShowWarning(string msg)
         {
             return MessageBox.Show(msg, GKData.APP_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        }
-
-        public static string RequireFilename(string filter)
-        {
-            string result = null;
-
-            using (SaveFileDialog dlg = new SaveFileDialog())
-            {
-                dlg.Filter = filter;
-                if (dlg.ShowDialog() == DialogResult.OK) {
-                    result = dlg.FileName;
-                }
-            }
-
-            return result;
         }
 
         public static GKListView CreateListView(Control parent)

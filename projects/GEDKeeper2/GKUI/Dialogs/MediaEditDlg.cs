@@ -22,6 +22,7 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
@@ -116,7 +117,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmMediaEdit.SetMediaRec(): " + ex.Message);
+                this.fBase.Host.LogWrite("MediaEditDlg.SetMediaRec(): " + ex.Message);
             }
         }
 
@@ -128,19 +129,20 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmMediaEdit.btnAccept_Click(): " + ex.Message);
+                this.fBase.Host.LogWrite("MediaEditDlg.btnAccept_Click(): " + ex.Message);
                 base.DialogResult = DialogResult.None;
             }
         }
 
+        const string filter = "Все файлы (*.*)|*.*";
+
         // TODO: localize
         private void btnFileSelect_Click(object sender, EventArgs e)
         {
-            this.OpenDialog1.Filter = "Все файлы (*.*)|*.*";
-
-            if (this.OpenDialog1.ShowDialog() == DialogResult.OK)
+            string fn = UIHelper.GetOpenFile("", "", filter, 1, "*.*");
+            if (!string.IsNullOrEmpty(fn))
             {
-                string file = this.OpenDialog1.FileName;
+                string file = fn;
 
                 this.txtFile.Text = file;
                 GEDCOMMultimediaFormat fileFmt = GEDCOMFileReference.RecognizeFormat(file);

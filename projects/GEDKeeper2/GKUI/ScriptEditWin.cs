@@ -23,7 +23,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-
+using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
 
@@ -97,35 +97,42 @@ namespace GKUI
         {
             if (this.CheckModified())
             {
-                this.mmScriptText.Clear();
+                this.txtScriptText.Clear();
                 this.FileName = "unknown.lua";
                 this.Modified = false;
             }
         }
 
+        const string filter = "Скрипты|*.lua";
+        const string ext = "lua";
+
         private void LoadScript()
         {
-            if (this.CheckModified() && this.OpenDialog1.ShowDialog() == DialogResult.OK)
+            if (this.CheckModified())
             {
-                using (StreamReader strd = new StreamReader(File.OpenRead(this.OpenDialog1.FileName), Encoding.UTF8))
+                string fn = UIHelper.GetOpenFile("", "", filter, 1, ext);
+                if (!string.IsNullOrEmpty(fn))
                 {
-                    this.mmScriptText.Text = strd.ReadToEnd();
-                    this.FileName = this.OpenDialog1.FileName;
-                    this.Modified = false;
-                    strd.Close();
+                    using (StreamReader strd = new StreamReader(File.OpenRead(fn), Encoding.UTF8))
+                    {
+                        this.txtScriptText.Text = strd.ReadToEnd();
+                        this.FileName = fn;
+                        this.Modified = false;
+                        strd.Close();
+                    }
                 }
             }
         }
 
         private void SaveScript()
         {
-            this.SaveDialog1.FileName = this.FileName;
-            if (this.SaveDialog1.ShowDialog() == DialogResult.OK)
+            string fn = UIHelper.GetSaveFile("", "", filter, 1, ext, this.FileName);
+            if (!string.IsNullOrEmpty(fn))
             {
-                using (StreamWriter strd = new StreamWriter(this.SaveDialog1.FileName, false, Encoding.UTF8))
+                using (StreamWriter strd = new StreamWriter(fn, false, Encoding.UTF8))
                 {
-                    strd.Write(this.mmScriptText.Text);
-                    this.FileName = this.SaveDialog1.FileName;
+                    strd.Write(this.txtScriptText.Text);
+                    this.FileName = fn;
                     this.Modified = false;
                     strd.Close();
                 }
@@ -136,9 +143,9 @@ namespace GKUI
         {
             try
             {
-                this.mmDebugOutput.Clear();
+                this.txtDebugOutput.Clear();
                 using (ScriptEngine scrEngine = new ScriptEngine()) {
-                    scrEngine.lua_run(this.mmScriptText.Text, this.fBase, this.mmDebugOutput);
+                    scrEngine.lua_run(this.txtScriptText.Text, this.fBase, this.txtDebugOutput);
                 }
             }
             catch (Exception ex)
@@ -159,13 +166,13 @@ namespace GKUI
 
         void ToolBar1_ButtonClick(object sender, EventArgs e)
         {
-            if (sender == this.btnNewScript) {
+            if (sender == this.tbNewScript) {
                 this.NewScript();
-            } else if (sender == this.btnLoadScript) {
+            } else if (sender == this.tbLoadScript) {
                 this.LoadScript();
-            } else if (sender == this.btnSaveScript) {
+            } else if (sender == this.tbSaveScript) {
                 this.SaveScript();
-            } else if (sender == this.btnRun) {
+            } else if (sender == this.tbRun) {
                 this.Run();
             }
         }
@@ -175,7 +182,7 @@ namespace GKUI
             this.InitializeComponent();
             this.fBase = aBase;
 
-            this.mmScriptText.TextChanged += mmScriptText_TextChanged;
+            this.txtScriptText.TextChanged += mmScriptText_TextChanged;
             
             this.NewScript();
 

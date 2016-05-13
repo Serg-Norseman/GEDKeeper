@@ -4,11 +4,11 @@ namespace GKUI
 {
 	partial class StatisticsWin
 	{
-		private System.Windows.Forms.GroupBox GroupBox1;
+		private System.Windows.Forms.GroupBox grpSummary;
 		private System.Windows.Forms.Panel Panel1;
 		private System.Windows.Forms.ToolStrip ToolBar1;
 		private System.Windows.Forms.ToolStripComboBox cbType;
-		private System.Windows.Forms.ListView ListCommon;
+		private System.Windows.Forms.ListView lvSummary;
 		private System.Windows.Forms.ColumnHeader ColumnHeader1;
 		private System.Windows.Forms.ColumnHeader ColumnHeader2;
 		private System.Windows.Forms.ColumnHeader ColumnHeader3;
@@ -20,8 +20,8 @@ namespace GKUI
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StatisticsWin));
-			this.GroupBox1 = new System.Windows.Forms.GroupBox();
-			this.ListCommon = new System.Windows.Forms.ListView();
+			this.grpSummary = new System.Windows.Forms.GroupBox();
+			this.lvSummary = new System.Windows.Forms.ListView();
 			this.ColumnHeader1 = new System.Windows.Forms.ColumnHeader();
 			this.ColumnHeader2 = new System.Windows.Forms.ColumnHeader();
 			this.ColumnHeader3 = new System.Windows.Forms.ColumnHeader();
@@ -32,37 +32,37 @@ namespace GKUI
 			this.cbType = new System.Windows.Forms.ToolStripComboBox();
 			this.TBS2 = new System.Windows.Forms.ToolStripSeparator();
 			this.tbExcelExport = new System.Windows.Forms.ToolStripButton();
-			this.GroupBox1.SuspendLayout();
+			this.grpSummary.SuspendLayout();
 			this.Panel1.SuspendLayout();
 			this.ToolBar1.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// GroupBox1
+			// grpSummary
 			// 
-			this.GroupBox1.Controls.Add(this.ListCommon);
-			this.GroupBox1.Dock = System.Windows.Forms.DockStyle.Top;
-			this.GroupBox1.Location = new System.Drawing.Point(0, 0);
-			this.GroupBox1.Name = "GroupBox1";
-			this.GroupBox1.Size = new System.Drawing.Size(893, 267);
-			this.GroupBox1.TabIndex = 0;
-			this.GroupBox1.TabStop = false;
-			this.GroupBox1.Text = "Сводка";
+			this.grpSummary.Controls.Add(this.lvSummary);
+			this.grpSummary.Dock = System.Windows.Forms.DockStyle.Top;
+			this.grpSummary.Location = new System.Drawing.Point(0, 0);
+			this.grpSummary.Name = "grpSummary";
+			this.grpSummary.Size = new System.Drawing.Size(893, 267);
+			this.grpSummary.TabIndex = 0;
+			this.grpSummary.TabStop = false;
+			this.grpSummary.Text = "grpSummary";
 			// 
-			// ListCommon
+			// lvSummary
 			// 
-			this.ListCommon.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+			this.lvSummary.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
 									this.ColumnHeader1,
 									this.ColumnHeader2,
 									this.ColumnHeader3,
 									this.ColumnHeader4});
-			this.ListCommon.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ListCommon.FullRowSelect = true;
-			this.ListCommon.Location = new System.Drawing.Point(3, 20);
-			this.ListCommon.Name = "ListCommon";
-			this.ListCommon.Size = new System.Drawing.Size(887, 244);
-			this.ListCommon.TabIndex = 0;
-			this.ListCommon.UseCompatibleStateImageBehavior = false;
-			this.ListCommon.View = System.Windows.Forms.View.Details;
+			this.lvSummary.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.lvSummary.FullRowSelect = true;
+			this.lvSummary.Location = new System.Drawing.Point(3, 20);
+			this.lvSummary.Name = "lvSummary";
+			this.lvSummary.Size = new System.Drawing.Size(887, 244);
+			this.lvSummary.TabIndex = 0;
+			this.lvSummary.UseCompatibleStateImageBehavior = false;
+			this.lvSummary.View = System.Windows.Forms.View.Details;
 			// 
 			// ColumnHeader1
 			// 
@@ -135,15 +135,15 @@ namespace GKUI
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.ClientSize = new System.Drawing.Size(893, 574);
 			this.Controls.Add(this.Panel1);
-			this.Controls.Add(this.GroupBox1);
+			this.Controls.Add(this.grpSummary);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.KeyPreview = true;
 			this.Name = "StatisticsWin";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Статистика";
+			this.Text = "StatisticsWin";
 			this.Load += new System.EventHandler(this.TfmStats_Load);
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TfmStats_KeyDown);
-			this.GroupBox1.ResumeLayout(false);
+			this.grpSummary.ResumeLayout(false);
 			this.Panel1.ResumeLayout(false);
 			this.Panel1.PerformLayout();
 			this.ToolBar1.ResumeLayout(false);

@@ -20,7 +20,7 @@
 
 using System;
 using System.Windows.Forms;
-
+using GKCommon;
 using GKCore.Interfaces;
 using GKCore.Types;
 
@@ -34,6 +34,8 @@ namespace GKPedigreeImporterPlugin
         private readonly Importer fImporter;
         private int fCurrentStage;
         private int fAvailableStage;
+
+        private static string filter = "Все поддерживаемые форматы (*.txt, *.csv, *.doc, *.xls)|*.txt;*.csv;*.doc;*.xls|Роспись в txt-формате (*.txt)|*.txt|Роспись в csv-формате (*.csv)|*.csv|Роспись в формате Word (*.doc)|*.doc|Роспись в формате Excel (*.xls)|*.xls";
 
         public PedigreeImporterDlg(IPlugin fPlugin)
         {
@@ -57,14 +59,14 @@ namespace GKPedigreeImporterPlugin
             this.Text = fLangMan.LS(ILS.LSID_PluginTitle);
             this.lblFile.Text = fLangMan.LS(ILS.LSID_File);
             this.btnImportFileChoose.Text = fLangMan.LS(ILS.LSID_DlgSelect) + @"...";
-            this.OpenDialog2.Filter = "Все поддерживаемые форматы (*.txt, *.csv, *.doc, *.xls)|*.txt;*.csv;*.doc;*.xls|Роспись в txt-формате (*.txt)|*.txt|Роспись в csv-формате (*.csv)|*.csv|Роспись в формате Word (*.doc)|*.doc|Роспись в формате Excel (*.xls)|*.xls";
         }
 
         private void btnImportFileChoose_Click(object sender, EventArgs e)
         {
-            if (this.OpenDialog2.ShowDialog() == DialogResult.OK)
+            string fn = UIHelper.GetOpenFile("", "", filter, 1, "");
+            if (!string.IsNullOrEmpty(fn))
             {
-                this.edImportFile.Text = this.OpenDialog2.FileName;
+                this.edImportFile.Text = fn;
 
                 try
                 {

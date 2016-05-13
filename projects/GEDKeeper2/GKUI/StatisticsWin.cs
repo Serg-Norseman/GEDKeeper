@@ -285,19 +285,19 @@ namespace GKUI
         {
             CommonStats stats = fTreeStats.GetCommonStats();
 
-            this.ListCommon.Items.Clear();
+            this.lvSummary.Items.Clear();
 
-            ListViewItem item = this.ListCommon.Items.Add(LangMan.LS(LSID.LSID_People));
+            ListViewItem item = this.lvSummary.Items.Add(LangMan.LS(LSID.LSID_People));
             item.SubItems.Add(stats.persons.ToString());
             item.SubItems.Add(stats.persons_m.ToString() + GetPercent(stats.persons_m, stats.persons));
             item.SubItems.Add(stats.persons_f.ToString() + GetPercent(stats.persons_f, stats.persons));
 
-            item = this.ListCommon.Items.Add(LangMan.LS(LSID.LSID_Living));
+            item = this.lvSummary.Items.Add(LangMan.LS(LSID.LSID_Living));
             item.SubItems.Add(stats.lives.ToString());
             item.SubItems.Add(stats.lives_m.ToString());
             item.SubItems.Add(stats.lives_f.ToString());
 
-            item = this.ListCommon.Items.Add(LangMan.LS(LSID.LSID_Deads));
+            item = this.lvSummary.Items.Add(LangMan.LS(LSID.LSID_Deads));
             item.SubItems.Add((stats.persons - stats.lives).ToString());
             item.SubItems.Add((stats.persons_m - stats.lives_m).ToString());
             item.SubItems.Add((stats.persons_f - stats.lives_f).ToString());
@@ -313,7 +313,7 @@ namespace GKUI
         
         private void AddCompositeItem(LSID name, CompositeItem item)
         {
-            ListViewItem lvItem = this.ListCommon.Items.Add(LangMan.LS(name));
+            ListViewItem lvItem = this.lvSummary.Items.Add(LangMan.LS(name));
             lvItem.SubItems.Add(string.Format("{0:0.00}", item.CommonVal));
             lvItem.SubItems.Add(string.Format("{0:0.00}", item.MaleVal));
             lvItem.SubItems.Add(string.Format("{0:0.00}", item.FemaleVal));
@@ -357,7 +357,7 @@ namespace GKUI
 
         private void tbExcelExport_Click(object sender, EventArgs e)
         {
-            string xlsFilename = GKUtils.RequireFilename("Excel files (*.xls)|*.xls");
+            string xlsFilename = UIHelper.GetSaveFile("", "", "Excel files (*.xls)|*.xls", 1, "xls", "");
             if (string.IsNullOrEmpty(xlsFilename)) return;
 
             try

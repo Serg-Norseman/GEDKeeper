@@ -143,6 +143,7 @@ sources := \
 ./GKCommon/SysInfo.cs \
 ./GKCommon/Tween.cs \
 ./GKCommon/UDN.cs \
+./GKCommon/UIHelper.cs \
 ./GKCommon/ValuesCollection.cs \
 ./GKCore/GKConsts.cs \
 ./GKCore/Interfaces/IBaseContext.cs \

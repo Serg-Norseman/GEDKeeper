@@ -80,7 +80,7 @@ namespace GKUI
             this.fBase = aBase;
             this.fTree = this.Base.Tree;
 
-            this.PageControl.SelectedIndex = 0;
+            this.tabsTools.SelectedIndex = 0;
 
             this.fSplitList = new List<GEDCOMRecord>();
             this.fRMSkip = new StringList();
@@ -104,17 +104,17 @@ namespace GKUI
         {
             this.Text = LangMan.LS(LSID.LSID_MITreeTools);
 
-            this.SheetTreeCompare.Text = LangMan.LS(LSID.LSID_ToolOp_1);
-            this.SheetTreeMerge.Text = LangMan.LS(LSID.LSID_ToolOp_2);
-            this.SheetTreeSplit.Text = LangMan.LS(LSID.LSID_ToolOp_3);
-            this.SheetRecMerge.Text = LangMan.LS(LSID.LSID_ToolOp_4);
-            this.SheetFamilyGroups.Text = LangMan.LS(LSID.LSID_ToolOp_6);
-            this.SheetTreeCheck.Text = LangMan.LS(LSID.LSID_ToolOp_7);
-            this.SheetPatSearch.Text = LangMan.LS(LSID.LSID_ToolOp_8);
-            this.SheetPlaceManage.Text = LangMan.LS(LSID.LSID_ToolOp_9);
+            this.pageTreeCompare.Text = LangMan.LS(LSID.LSID_ToolOp_1);
+            this.pageTreeMerge.Text = LangMan.LS(LSID.LSID_ToolOp_2);
+            this.pageTreeSplit.Text = LangMan.LS(LSID.LSID_ToolOp_3);
+            this.pageRecMerge.Text = LangMan.LS(LSID.LSID_ToolOp_4);
+            this.pageFamilyGroups.Text = LangMan.LS(LSID.LSID_ToolOp_6);
+            this.pageTreeCheck.Text = LangMan.LS(LSID.LSID_ToolOp_7);
+            this.pagePatSearch.Text = LangMan.LS(LSID.LSID_ToolOp_8);
+            this.pagePlaceManage.Text = LangMan.LS(LSID.LSID_ToolOp_9);
             
             this.btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            this.Label1.Text = LangMan.LS(LSID.LSID_MIFile);
+            this.lblFile.Text = LangMan.LS(LSID.LSID_MIFile);
             
             this.btnFileChoose.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
             this.btnTreeMerge.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
@@ -125,9 +125,9 @@ namespace GKUI
             this.btnSelectDescendants.Text = LangMan.LS(LSID.LSID_SelDescendants);
             this.btnDelete.Text = LangMan.LS(LSID.LSID_DoDelete);
             this.btnSave.Text = LangMan.LS(LSID.LSID_MIFileSave);
-            this.SheetMerge.Text = LangMan.LS(LSID.LSID_RecMerge);
-            this.SheetOptions.Text = LangMan.LS(LSID.LSID_MIOptions);
-            this.btnSearch.Text = LangMan.LS(LSID.LSID_RM_Search);
+            this.pageMerge.Text = LangMan.LS(LSID.LSID_RecMerge);
+            this.pageMergeOptions.Text = LangMan.LS(LSID.LSID_MIOptions);
+            this.btnAutoSearch.Text = LangMan.LS(LSID.LSID_RM_Search);
             this.btnSkip.Text = LangMan.LS(LSID.LSID_RM_Skip);
             this.rgMode.Text = LangMan.LS(LSID.LSID_RM_Records);
             this.RadioButton5.Text = LangMan.LS(LSID.LSID_RPIndividuals);
@@ -137,29 +137,29 @@ namespace GKUI
             this.GroupBox1.Text = LangMan.LS(LSID.LSID_RM_SearchPersons);
             this.chkIndistinctMatching.Text = LangMan.LS(LSID.LSID_RM_IndistinctMatching);
             this.chkBirthYear.Text = LangMan.LS(LSID.LSID_RM_BirthYear);
-            this.Label5.Text = LangMan.LS(LSID.LSID_RM_NameAccuracy);
-            this.Label6.Text = LangMan.LS(LSID.LSID_RM_YearInaccuracy);
+            this.lblNameAccuracy.Text = LangMan.LS(LSID.LSID_RM_NameAccuracy);
+            this.lblYearInaccuracy.Text = LangMan.LS(LSID.LSID_RM_YearInaccuracy);
             this.btnBaseRepair.Text = LangMan.LS(LSID.LSID_Repair);
             this.Label8.Text = LangMan.LS(LSID.LSID_MinGenerations);
             this.btnSetPatriarch.Text = LangMan.LS(LSID.LSID_SetPatFlag);
             this.btnPatSearch.Text = LangMan.LS(LSID.LSID_Search);
             this.btnIntoList.Text = LangMan.LS(LSID.LSID_InsertIntoBook);
             
-            this.gbMergeOther.Text = LangMan.LS(LSID.LSID_Other);
+            this.grpMergeOther.Text = LangMan.LS(LSID.LSID_Other);
             this.chkBookmarkMerged.Text = LangMan.LS(LSID.LSID_BookmarkMerged);
         }
 
         private void PageControl_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (this.PageControl.SelectedTab == this.SheetFamilyGroups)
+            if (this.tabsTools.SelectedTab == this.pageFamilyGroups)
             {
                 this.CheckGroups();
             }
-            else if (this.PageControl.SelectedTab == this.SheetTreeCheck)
+            else if (this.tabsTools.SelectedTab == this.pageTreeCheck)
             {
                 this.CheckBase();
             }
-            else if (this.PageControl.SelectedTab == this.SheetPlaceManage)
+            else if (this.tabsTools.SelectedTab == this.pagePlaceManage)
             {
                 this.CheckPlaces();
             }
@@ -167,13 +167,20 @@ namespace GKUI
 
         #region TreeMerge
 
+        const string ged_filter = "GEDCOM|*.ged"; // |Все файлы (*.*)|*.*
+        const string ged_ext = "ged";
+        
+        //Все поддерживаемые форматы (*.txt, *.csv, *.doc, *.xls)|*.txt;*.csv;*.doc;*.xls|Роспись в txt-формате (*.txt)|*.txt|Роспись в csv-формате (*.csv)|*.csv|Роспись в формате Word (*.doc)|*.doc|Роспись в формате Excel (*.xls)|*.xls
+
         private void btnTreeMerge_Click(object sender, EventArgs e)
         {
-            if (this.OpenDialog1.ShowDialog() != DialogResult.OK) return;
-            
-            this.edUpdateBase.Text = this.OpenDialog1.FileName;
-            TreeTools.TreeMerge(this.Base.Tree, this.edUpdateBase.Text, this.mSyncRes);
-            this.Base.RefreshLists(false);
+            string fn = UIHelper.GetOpenFile("", "", ged_filter, 1, ged_ext);
+            if (!string.IsNullOrEmpty(fn))
+            {
+                this.edUpdateBase.Text = fn;
+                TreeTools.TreeMerge(this.Base.Tree, this.edUpdateBase.Text, this.mSyncRes);
+                this.Base.RefreshLists(false);
+            }
         }
 
         #endregion
@@ -595,11 +602,12 @@ namespace GKUI
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (this.SaveDialog1.ShowDialog() == DialogResult.OK)
+		    string fn = UIHelper.GetSaveFile("", "", ged_filter, 1, ged_ext, "");
+            if (!string.IsNullOrEmpty(fn))
             {
                 TreeTools.CheckRelations(fSplitList);
 
-                string fileName = this.SaveDialog1.FileName;
+                string fileName = fn;
 
                 string subm = this.fTree.Header.GetTagStringValue("SUBM");
                 this.fTree.Header.Clear();
@@ -716,10 +724,11 @@ namespace GKUI
 
         private void btnFileChoose_Click(object sender, EventArgs e)
         {
-            if (this.OpenDialog1.ShowDialog() == DialogResult.OK)
+            string fn = UIHelper.GetOpenFile("", "", ged_filter, 1, ged_ext);
+            if (!string.IsNullOrEmpty(fn))
             {
-                external_match_db = this.OpenDialog1.FileName;
-                this.edCompareFile.Text = Path.GetFileName(external_match_db);
+                external_match_db = fn;
+                this.txtCompareFile.Text = Path.GetFileName(external_match_db);
             }
         }
 
@@ -733,9 +742,9 @@ namespace GKUI
         private TreeMatchType GetTreeMatchType()
         {
             TreeMatchType type =
-                ((rbtnMatchInternal.Checked) ?
+                ((radMatchInternal.Checked) ?
                  TreeMatchType.tmtInternal :
-                 ((rbtnMathExternal.Checked) ? TreeMatchType.tmtExternal : TreeMatchType.tmtAnalysis));
+                 ((radMathExternal.Checked) ? TreeMatchType.tmtExternal : TreeMatchType.tmtAnalysis));
 
             return type;
         }
@@ -782,8 +791,8 @@ namespace GKUI
         {
             TreeMatchType type = GetTreeMatchType();
 
-            this.Label1.Enabled = (type == TreeMatchType.tmtExternal);
-            this.edCompareFile.Enabled = (type == TreeMatchType.tmtExternal);
+            this.lblFile.Enabled = (type == TreeMatchType.tmtExternal);
+            this.txtCompareFile.Enabled = (type == TreeMatchType.tmtExternal);
             this.btnFileChoose.Enabled = (type == TreeMatchType.tmtExternal);
         }
 

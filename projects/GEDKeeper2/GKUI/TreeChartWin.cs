@@ -323,8 +323,12 @@ namespace GKUI
 
         private void tbImageSaveClick()
         {
-            if (this.SaveDialog1.ShowDialog() == DialogResult.OK) {
-                this.fTreeBox.SaveSnapshot(this.SaveDialog1.FileName);
+		    string filter1 = "Файлы BMP (*.bmp)|*.bmp|Файлы JPEG (*.jpg)|*.jpg|Файлы EMF (*.emf)|*.emf|Файлы PNG (*.png)|*.png|Файлы GIF (*.gif)|*.gif";
+
+		    string fn = UIHelper.GetSaveFile("", "", filter1, 2, "jpg", "");
+            if (!string.IsNullOrEmpty(fn))
+            {
+                this.fTreeBox.SaveSnapshot(fn);
             }
         }
 
@@ -514,13 +518,15 @@ namespace GKUI
             }
         }
 
+        const string filter = "Image Files|*.bmp;*.gif;*.png;*.jpg";
+        const string ext = "";
+
         private void miFillImageClick(object sender, EventArgs e)
         {
-            OpenDialog1.InitialDirectory = GKUtils.GetBackgroundsPath();
-
-            if (OpenDialog1.ShowDialog() == DialogResult.OK)
+            string fn = UIHelper.GetOpenFile("", GKUtils.GetBackgroundsPath(), filter, 1, ext);
+            if (!string.IsNullOrEmpty(fn))
             {
-                Image img = new Bitmap(OpenDialog1.FileName);
+                Image img = new Bitmap(fn);
                 this.fTreeBox.BackgroundImage = img;
                 this.fTreeBox.BackgroundImageLayout = ImageLayout.Tile;
                 this.fTreeBox.Invalidate();

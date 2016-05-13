@@ -4,7 +4,6 @@ namespace GKImageViewerPlugin
 {
 	partial class ImageViewerWin
 	{
-		private System.Windows.Forms.OpenFileDialog OpenDialog1;
 		private System.ComponentModel.IContainer components;
 		private System.Windows.Forms.ToolStripButton tbFileLoad;
 		private System.Windows.Forms.ToolStrip ToolBar1;
@@ -15,7 +14,6 @@ namespace GKImageViewerPlugin
 		    System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ImageViewerWin));
 		    this.ToolBar1 = new System.Windows.Forms.ToolStrip();
 		    this.tbFileLoad = new System.Windows.Forms.ToolStripButton();
-		    this.OpenDialog1 = new System.Windows.Forms.OpenFileDialog();
 		    this.ToolBar1.SuspendLayout();
 		    this.SuspendLayout();
 		    // 
@@ -38,10 +36,6 @@ namespace GKImageViewerPlugin
 		    this.tbFileLoad.Size = new System.Drawing.Size(23, 22);
 		    this.tbFileLoad.ToolTipText = "Открыть файл";
 		    this.tbFileLoad.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
-		    // 
-		    // OpenDialog1
-		    // 
-		    this.OpenDialog1.Filter = "Все файлы (*.*)|*.*";
 		    // 
 		    // ImageViewerWin
 		    // 

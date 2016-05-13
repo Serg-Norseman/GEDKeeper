@@ -80,8 +80,6 @@ namespace GKUI
 		private System.Windows.Forms.ContextMenuStrip MenuPedigree;
 		private System.Windows.Forms.ToolStripMenuItem miPedigree_dAboville2;
 		private System.Windows.Forms.ToolStripMenuItem miPedigree_Konovalov2;
-		private System.Windows.Forms.OpenFileDialog OpenDialog1;
-		private System.Windows.Forms.SaveFileDialog SaveDialog1;
 		private System.Windows.Forms.ToolStripSeparator TBS7;
 		private System.Windows.Forms.ToolStripMenuItem miOrganizer;
 		private System.Windows.Forms.ToolStripMenuItem miService;
@@ -189,8 +187,6 @@ namespace GKUI
 		    this.miLogView = new System.Windows.Forms.ToolStripMenuItem();
 		    this.N13 = new System.Windows.Forms.ToolStripSeparator();
 		    this.miAbout = new System.Windows.Forms.ToolStripMenuItem();
-		    this.OpenDialog1 = new System.Windows.Forms.OpenFileDialog();
-		    this.SaveDialog1 = new System.Windows.Forms.SaveFileDialog();
 		    this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
 		    ((System.ComponentModel.ISupportInitialize)(this.StatusBarPanel1)).BeginInit();
 		    ((System.ComponentModel.ISupportInitialize)(this.StatusBarPanel2)).BeginInit();
@@ -281,7 +277,7 @@ namespace GKUI
 		    this.tbLoadMRU.ImageTransparentColor = System.Drawing.Color.Magenta;
 		    this.tbLoadMRU.Name = "tbLoadMRU";
 		    this.tbLoadMRU.Size = new System.Drawing.Size(13, 22);
-		    this.tbLoadMRU.Text = "toolStripDropDownButton1";
+		    this.tbLoadMRU.Text = "tbLoadMRU";
 		    // 
 		    // MenuMRU
 		    // 
@@ -479,14 +475,14 @@ namespace GKUI
 		    		    		    this.miExit});
 		    this.miFile.Name = "miFile";
 		    this.miFile.Size = new System.Drawing.Size(57, 24);
-		    this.miFile.Text = "Файл";
+		    this.miFile.Text = "miFile";
 		    // 
 		    // miFileNew
 		    // 
 		    this.miFileNew.Name = "miFileNew";
 		    this.miFileNew.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
 		    this.miFileNew.Size = new System.Drawing.Size(216, 24);
-		    this.miFileNew.Text = "Новый";
+		    this.miFileNew.Text = "miFileNew";
 		    this.miFileNew.Click += new System.EventHandler(this.miFileNewClick);
 		    // 
 		    // miFileLoad
@@ -494,7 +490,7 @@ namespace GKUI
 		    this.miFileLoad.Name = "miFileLoad";
 		    this.miFileLoad.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
 		    this.miFileLoad.Size = new System.Drawing.Size(216, 24);
-		    this.miFileLoad.Text = "Открыть...";
+		    this.miFileLoad.Text = "miFileLoad";
 		    this.miFileLoad.Click += new System.EventHandler(this.miFileLoadClick);
 		    // 
 		    // miMRUFiles
@@ -502,21 +498,21 @@ namespace GKUI
 		    this.miMRUFiles.Enabled = false;
 		    this.miMRUFiles.Name = "miMRUFiles";
 		    this.miMRUFiles.Size = new System.Drawing.Size(216, 24);
-		    this.miMRUFiles.Text = "Открыть последний";
+		    this.miMRUFiles.Text = "miMRUFiles";
 		    // 
 		    // miFileSave
 		    // 
 		    this.miFileSave.Name = "miFileSave";
 		    this.miFileSave.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
 		    this.miFileSave.Size = new System.Drawing.Size(216, 24);
-		    this.miFileSave.Text = "Сохранить...";
+		    this.miFileSave.Text = "miFileSave";
 		    this.miFileSave.Click += new System.EventHandler(this.miFileSaveClick);
 		    // 
 		    // miFileClose
 		    // 
 		    this.miFileClose.Name = "miFileClose";
 		    this.miFileClose.Size = new System.Drawing.Size(216, 24);
-		    this.miFileClose.Text = "Закрыть";
+		    this.miFileClose.Text = "miFileClose";
 		    this.miFileClose.Click += new System.EventHandler(this.miFileCloseClick);
 		    // 
 		    // N1
@@ -528,7 +524,7 @@ namespace GKUI
 		    // 
 		    this.miFileProperties.Name = "miFileProperties";
 		    this.miFileProperties.Size = new System.Drawing.Size(216, 24);
-		    this.miFileProperties.Text = "Свойства файла...";
+		    this.miFileProperties.Text = "miFileProperties";
 		    this.miFileProperties.Click += new System.EventHandler(this.miFilePropertiesClick);
 		    // 
 		    // N2
@@ -542,13 +538,13 @@ namespace GKUI
 		    		    		    this.miExportToExcelFile});
 		    this.miExport.Name = "miExport";
 		    this.miExport.Size = new System.Drawing.Size(216, 24);
-		    this.miExport.Text = "Экспорт";
+		    this.miExport.Text = "miExport";
 		    // 
 		    // miExportToExcelFile
 		    // 
 		    this.miExportToExcelFile.Name = "miExportToExcelFile";
 		    this.miExportToExcelFile.Size = new System.Drawing.Size(234, 24);
-		    this.miExportToExcelFile.Text = "Экспорт в Excel-файл...";
+		    this.miExportToExcelFile.Text = "miExportToExcelFile";
 		    this.miExportToExcelFile.Click += new System.EventHandler(this.miExportToExcelFileClick);
 		    // 
 		    // N3
@@ -561,7 +557,7 @@ namespace GKUI
 		    this.miExit.Name = "miExit";
 		    this.miExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
 		    this.miExit.Size = new System.Drawing.Size(216, 24);
-		    this.miExit.Text = "Выход";
+		    this.miExit.Text = "miExit";
 		    this.miExit.Click += new System.EventHandler(this.miExit_Click);
 		    // 
 		    // miEdit
@@ -575,21 +571,21 @@ namespace GKUI
 		    		    		    this.miFilter});
 		    this.miEdit.Name = "miEdit";
 		    this.miEdit.Size = new System.Drawing.Size(72, 24);
-		    this.miEdit.Text = "Правка";
+		    this.miEdit.Text = "miEdit";
 		    // 
 		    // miRecordAdd
 		    // 
 		    this.miRecordAdd.Name = "miRecordAdd";
 		    this.miRecordAdd.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
 		    this.miRecordAdd.Size = new System.Drawing.Size(243, 24);
-		    this.miRecordAdd.Text = "Добавить запись";
+		    this.miRecordAdd.Text = "miRecordAdd";
 		    this.miRecordAdd.Click += new System.EventHandler(this.miRecordAddClick);
 		    // 
 		    // miRecordEdit
 		    // 
 		    this.miRecordEdit.Name = "miRecordEdit";
 		    this.miRecordEdit.Size = new System.Drawing.Size(243, 24);
-		    this.miRecordEdit.Text = "Изменить запись";
+		    this.miRecordEdit.Text = "miRecordEdit";
 		    this.miRecordEdit.Click += new System.EventHandler(this.miRecordEditClick);
 		    // 
 		    // miRecordDelete
@@ -597,7 +593,7 @@ namespace GKUI
 		    this.miRecordDelete.Name = "miRecordDelete";
 		    this.miRecordDelete.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
 		    this.miRecordDelete.Size = new System.Drawing.Size(243, 24);
-		    this.miRecordDelete.Text = "Удалить запись";
+		    this.miRecordDelete.Text = "miRecordDelete";
 		    this.miRecordDelete.Click += new System.EventHandler(this.miRecordDeleteClick);
 		    // 
 		    // N15
@@ -617,7 +613,7 @@ namespace GKUI
 		    this.miFilter.Name = "miFilter";
 		    this.miFilter.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
 		    this.miFilter.Size = new System.Drawing.Size(243, 24);
-		    this.miFilter.Text = "Фильтр...";
+		    this.miFilter.Text = "miFilter";
 		    this.miFilter.Click += new System.EventHandler(this.miFilterClick);
 		    // 
 		    // miPedigree
@@ -637,14 +633,14 @@ namespace GKUI
 		    		    		    this.miStats});
 		    this.miPedigree.Name = "miPedigree";
 		    this.miPedigree.Size = new System.Drawing.Size(112, 24);
-		    this.miPedigree.Text = "Родословная";
+		    this.miPedigree.Text = "miPedigree";
 		    // 
 		    // miTreeAncestors
 		    // 
 		    this.miTreeAncestors.Name = "miTreeAncestors";
 		    this.miTreeAncestors.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
 		    this.miTreeAncestors.Size = new System.Drawing.Size(296, 24);
-		    this.miTreeAncestors.Text = "Древо предков";
+		    this.miTreeAncestors.Text = "miTreeAncestors";
 		    this.miTreeAncestors.Click += new System.EventHandler(this.miTreeAncestorsClick);
 		    // 
 		    // miTreeDescendants
@@ -652,21 +648,21 @@ namespace GKUI
 		    this.miTreeDescendants.Name = "miTreeDescendants";
 		    this.miTreeDescendants.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
 		    this.miTreeDescendants.Size = new System.Drawing.Size(296, 24);
-		    this.miTreeDescendants.Text = "Древо потомков";
+		    this.miTreeDescendants.Text = "miTreeDescendants";
 		    this.miTreeDescendants.Click += new System.EventHandler(this.miTreeDescendantsClick);
 		    // 
 		    // miTreeBoth
 		    // 
 		    this.miTreeBoth.Name = "miTreeBoth";
 		    this.miTreeBoth.Size = new System.Drawing.Size(296, 24);
-		    this.miTreeBoth.Text = "Древо полное";
+		    this.miTreeBoth.Text = "miTreeBoth";
 		    this.miTreeBoth.Click += new System.EventHandler(this.miTreeBothClick);
 		    // 
 		    // miAncestorsCircle
 		    // 
 		    this.miAncestorsCircle.Name = "miAncestorsCircle";
 		    this.miAncestorsCircle.Size = new System.Drawing.Size(296, 24);
-		    this.miAncestorsCircle.Text = "Круг предков";
+		    this.miAncestorsCircle.Text = "miAncestorsCircle";
 		    this.miAncestorsCircle.Click += new System.EventHandler(this.miAncestorsCircleClick);
 		    // 
 		    // N6
@@ -679,7 +675,7 @@ namespace GKUI
 		    this.miPedigree_dAboville.Name = "miPedigree_dAboville";
 		    this.miPedigree_dAboville.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
 		    this.miPedigree_dAboville.Size = new System.Drawing.Size(296, 24);
-		    this.miPedigree_dAboville.Text = "Роспись по д\'Абовиллю";
+		    this.miPedigree_dAboville.Text = "miPedigree_dAboville";
 		    this.miPedigree_dAboville.Click += new System.EventHandler(this.miPedigree_dAbovilleClick);
 		    // 
 		    // miPedigree_Konovalov
@@ -687,7 +683,7 @@ namespace GKUI
 		    this.miPedigree_Konovalov.Name = "miPedigree_Konovalov";
 		    this.miPedigree_Konovalov.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.K)));
 		    this.miPedigree_Konovalov.Size = new System.Drawing.Size(296, 24);
-		    this.miPedigree_Konovalov.Text = "Роспись по Коновалову";
+		    this.miPedigree_Konovalov.Text = "miPedigree_Konovalov";
 		    this.miPedigree_Konovalov.Click += new System.EventHandler(this.miPedigree_KonovalovClick);
 		    // 
 		    // miExportToFamilyBook
@@ -707,7 +703,7 @@ namespace GKUI
 		    this.miMap.Name = "miMap";
 		    this.miMap.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
 		    this.miMap.Size = new System.Drawing.Size(296, 24);
-		    this.miMap.Text = "Карты...";
+		    this.miMap.Text = "miMap";
 		    this.miMap.Click += new System.EventHandler(this.miMapClick);
 		    // 
 		    // N8
@@ -720,7 +716,7 @@ namespace GKUI
 		    this.miStats.Name = "miStats";
 		    this.miStats.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
 		    this.miStats.Size = new System.Drawing.Size(296, 24);
-		    this.miStats.Text = "Статистика...";
+		    this.miStats.Text = "miStats";
 		    this.miStats.Click += new System.EventHandler(this.miStatsClick);
 		    // 
 		    // miService
@@ -735,20 +731,20 @@ namespace GKUI
 		    		    		    this.miOptions});
 		    this.miService.Name = "miService";
 		    this.miService.Size = new System.Drawing.Size(71, 24);
-		    this.miService.Text = "Сервис";
+		    this.miService.Text = "miService";
 		    // 
 		    // miOrganizer
 		    // 
 		    this.miOrganizer.Name = "miOrganizer";
 		    this.miOrganizer.Size = new System.Drawing.Size(212, 24);
-		    this.miOrganizer.Text = "Органайзер...";
+		    this.miOrganizer.Text = "miOrganizer";
 		    this.miOrganizer.Click += new System.EventHandler(this.miOrganizerClick);
 		    // 
 		    // miSlideshow
 		    // 
 		    this.miSlideshow.Name = "miSlideshow";
 		    this.miSlideshow.Size = new System.Drawing.Size(212, 24);
-		    this.miSlideshow.Text = "Slideshow";
+		    this.miSlideshow.Text = "miSlideshow";
 		    this.miSlideshow.Click += new System.EventHandler(this.miSlideshowClick);
 		    // 
 		    // N9
@@ -761,14 +757,14 @@ namespace GKUI
 		    this.miScripts.Name = "miScripts";
 		    this.miScripts.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F11)));
 		    this.miScripts.Size = new System.Drawing.Size(212, 24);
-		    this.miScripts.Text = "Скрипты...";
+		    this.miScripts.Text = "miScripts";
 		    this.miScripts.Click += new System.EventHandler(this.miScriptsClick);
 		    // 
 		    // miTreeTools
 		    // 
 		    this.miTreeTools.Name = "miTreeTools";
 		    this.miTreeTools.Size = new System.Drawing.Size(212, 24);
-		    this.miTreeTools.Text = "Инструменты...";
+		    this.miTreeTools.Text = "miTreeTools";
 		    this.miTreeTools.Click += new System.EventHandler(this.miTreeToolsClick);
 		    // 
 		    // N10
@@ -780,14 +776,14 @@ namespace GKUI
 		    // 
 		    this.miOptions.Name = "miOptions";
 		    this.miOptions.Size = new System.Drawing.Size(212, 24);
-		    this.miOptions.Text = "Настройки...";
+		    this.miOptions.Text = "miOptions";
 		    this.miOptions.Click += new System.EventHandler(this.miOptionsClick);
 		    // 
 		    // miPlugins
 		    // 
 		    this.miPlugins.Name = "miPlugins";
 		    this.miPlugins.Size = new System.Drawing.Size(68, 24);
-		    this.miPlugins.Text = "Plugins";
+		    this.miPlugins.Text = "miPlugins";
 		    // 
 		    // miWindow
 		    // 
@@ -799,42 +795,42 @@ namespace GKUI
 		    		    		    this.miWinArrange});
 		    this.miWindow.Name = "miWindow";
 		    this.miWindow.Size = new System.Drawing.Size(56, 24);
-		    this.miWindow.Text = "&Окна";
+		    this.miWindow.Text = "miWindow";
 		    this.miWindow.DropDownOpening += new System.EventHandler(this.miWindowDropDownOpening);
 		    // 
 		    // miWinCascade
 		    // 
 		    this.miWinCascade.Name = "miWinCascade";
 		    this.miWinCascade.Size = new System.Drawing.Size(255, 24);
-		    this.miWinCascade.Text = "&Каскад";
+		    this.miWinCascade.Text = "miWinCascade";
 		    this.miWinCascade.Click += new System.EventHandler(this.miWinCascadeClick);
 		    // 
 		    // miWinHTile
 		    // 
 		    this.miWinHTile.Name = "miWinHTile";
 		    this.miWinHTile.Size = new System.Drawing.Size(255, 24);
-		    this.miWinHTile.Text = "&Горизонтальная мозаика";
+		    this.miWinHTile.Text = "miWinHTile";
 		    this.miWinHTile.Click += new System.EventHandler(this.miWinHTileClick);
 		    // 
 		    // miWinVTile
 		    // 
 		    this.miWinVTile.Name = "miWinVTile";
 		    this.miWinVTile.Size = new System.Drawing.Size(255, 24);
-		    this.miWinVTile.Text = "&Вертикальная мозаика";
+		    this.miWinVTile.Text = "miWinVTile";
 		    this.miWinVTile.Click += new System.EventHandler(this.miWinVTileClick);
 		    // 
 		    // miWinMinimize
 		    // 
 		    this.miWinMinimize.Name = "miWinMinimize";
 		    this.miWinMinimize.Size = new System.Drawing.Size(255, 24);
-		    this.miWinMinimize.Text = "&Свернуть все";
+		    this.miWinMinimize.Text = "miWinMinimize";
 		    this.miWinMinimize.Click += new System.EventHandler(this.miWinMinimizeClick);
 		    // 
 		    // miWinArrange
 		    // 
 		    this.miWinArrange.Name = "miWinArrange";
 		    this.miWinArrange.Size = new System.Drawing.Size(255, 24);
-		    this.miWinArrange.Text = "&Разместить все";
+		    this.miWinArrange.Text = "miWinArrange";
 		    this.miWinArrange.Click += new System.EventHandler(this.miWinArrangeClick);
 		    // 
 		    // miHelp
@@ -848,14 +844,14 @@ namespace GKUI
 		    		    		    this.miAbout});
 		    this.miHelp.Name = "miHelp";
 		    this.miHelp.Size = new System.Drawing.Size(79, 24);
-		    this.miHelp.Text = "Справка";
+		    this.miHelp.Text = "miHelp";
 		    // 
 		    // miContext
 		    // 
 		    this.miContext.Name = "miContext";
 		    this.miContext.ShortcutKeys = System.Windows.Forms.Keys.F1;
 		    this.miContext.Size = new System.Drawing.Size(286, 24);
-		    this.miContext.Text = "Содержание";
+		    this.miContext.Text = "miContext";
 		    this.miContext.Click += new System.EventHandler(this.miContextClick);
 		    // 
 		    // N12
@@ -867,14 +863,14 @@ namespace GKUI
 		    // 
 		    this.miLogSend.Name = "miLogSend";
 		    this.miLogSend.Size = new System.Drawing.Size(286, 24);
-		    this.miLogSend.Text = "Отправить журнал ошибок";
+		    this.miLogSend.Text = "miLogSend";
 		    this.miLogSend.Click += new System.EventHandler(this.miLogSendClick);
 		    // 
 		    // miLogView
 		    // 
 		    this.miLogView.Name = "miLogView";
 		    this.miLogView.Size = new System.Drawing.Size(286, 24);
-		    this.miLogView.Text = "Просмотреть журнал ошибок";
+		    this.miLogView.Text = "miLogView";
 		    this.miLogView.Click += new System.EventHandler(this.miLogViewClick);
 		    // 
 		    // N13
@@ -886,20 +882,8 @@ namespace GKUI
 		    // 
 		    this.miAbout.Name = "miAbout";
 		    this.miAbout.Size = new System.Drawing.Size(286, 24);
-		    this.miAbout.Text = "О программе...";
+		    this.miAbout.Text = "miAbout";
 		    this.miAbout.Click += new System.EventHandler(this.miAboutClick);
-		    // 
-		    // OpenDialog1
-		    // 
-		    this.OpenDialog1.Filter = "GEDCOM файлы (*.ged)|*.ged|GEDKeeper шифрованные GEDCOM файлы (*.geds)|*.geds|Все" +
-		    " файлы (*.*)|*.*";
-		    // 
-		    // SaveDialog1
-		    // 
-		    this.SaveDialog1.DefaultExt = "ged";
-		    this.SaveDialog1.Filter = "GEDKeeper GEDCOM файлы (*.ged)|*.ged|GEDKeeper шифрованные GEDCOM файлы (*.geds)|" +
-		    "*.geds";
-		    this.SaveDialog1.OverwritePrompt = false;
 		    // 
 		    // MainWin
 		    // 

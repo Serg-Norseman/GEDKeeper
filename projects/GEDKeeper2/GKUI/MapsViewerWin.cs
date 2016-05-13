@@ -93,15 +93,15 @@ namespace GKUI
             {
                 this.fMapBrowser.InitMap();
 
-                this.ComboPersons.BeginUpdate();
-                this.TreePlaces.BeginUpdate();
+                this.cmbPersons.BeginUpdate();
+                this.tvPlaces.BeginUpdate();
                 this.fBase.ProgressInit(LangMan.LS(LSID.LSID_LoadingLocations), this.fTree.RecordsCount);
                 try
                 {
                     this.fPlaces.Clear();
-                    this.ComboPersons.Items.Clear();
-                    this.ComboPersons.Sorted = false;
-                    this.ComboPersons.Items.Add(new GKComboItem(LangMan.LS(LSID.LSID_NotSelected), null));
+                    this.cmbPersons.Items.Clear();
+                    this.cmbPersons.Sorted = false;
+                    this.cmbPersons.Items.Add(new GKComboItem(LangMan.LS(LSID.LSID_NotSelected), null));
 
                     int num = this.fTree.RecordsCount;
                     for (int i = 0; i < num; i++) {
@@ -123,7 +123,7 @@ namespace GKUI
                             }
 
                             if (pCnt > 0) {
-                                this.ComboPersons.Items.Add(new GKComboItem(ind.GetNameString(true, false) + " [" + pCnt.ToString() + "]", ind));
+                                this.cmbPersons.Items.Add(new GKComboItem(ind.GetNameString(true, false) + " [" + pCnt.ToString() + "]", ind));
                             }
                         }
 
@@ -131,15 +131,15 @@ namespace GKUI
                     }
 
                     this.fBaseRoot.ExpandAll();
-                    this.ComboPersons.Sorted = true;
+                    this.cmbPersons.Sorted = true;
 
                     this.btnSelectPlaces.Enabled = true;
                 }
                 finally
                 {
                     this.fBase.ProgressDone();
-                    this.TreePlaces.EndUpdate();
-                    this.ComboPersons.EndUpdate();
+                    this.tvPlaces.EndUpdate();
+                    this.cmbPersons.EndUpdate();
                 }
             }
             catch (Exception ex)
@@ -179,7 +179,7 @@ namespace GKUI
             this.chkBirth.Enabled = this.radTotal.Checked;
             this.chkDeath.Enabled = this.radTotal.Checked;
             this.chkResidence.Enabled = this.radTotal.Checked;
-            this.ComboPersons.Enabled = this.radSelected.Checked;
+            this.cmbPersons.Enabled = this.radSelected.Checked;
             this.chkLinesVisible.Enabled = this.radSelected.Checked;
         }
 
@@ -190,9 +190,12 @@ namespace GKUI
 
         private void btnSaveImage_Click(object sender, EventArgs e)
         {
-            if (this.SaveDialog1.ShowDialog() == DialogResult.OK)
+			string filter1 = "Image files|*.jpg";
+
+		    string fn = UIHelper.GetSaveFile("", "", filter1, 2, "jpg", "");
+            if (!string.IsNullOrEmpty(fn))
             {
-                this.fMapBrowser.SaveSnapshot(this.SaveDialog1.FileName);
+                this.fMapBrowser.SaveSnapshot(fn);
             }
         }
 
@@ -209,9 +212,9 @@ namespace GKUI
                 condDeath = this.chkDeath.Checked;
                 condResidence = this.chkResidence.Checked;
             } else if (this.radSelected.Checked) {
-                if (this.ComboPersons.SelectedIndex >= 0)
+                if (this.cmbPersons.SelectedIndex >= 0)
                 {
-                    GKComboItem item = (GKComboItem)this.ComboPersons.Items[this.ComboPersons.SelectedIndex];
+                    GKComboItem item = (GKComboItem)this.cmbPersons.Items[this.cmbPersons.SelectedIndex];
                     ind = (item.Data as GEDCOMIndividualRecord);
                 }
             }
@@ -255,7 +258,7 @@ namespace GKUI
 
         private void TreePlaces_DoubleClick(object sender, EventArgs e)
         {
-            GKTreeNode node = this.TreePlaces.SelectedNode as GKTreeNode;
+            GKTreeNode node = this.tvPlaces.SelectedNode as GKTreeNode;
             if (node != null)
             {
                 GMapPoint pt = node.Data as GMapPoint;
@@ -284,7 +287,7 @@ namespace GKUI
             this.Panel1.Controls.Add(this.fMapBrowser);
             this.fMapPoints = new ExtList<GMapPoint>(true);
             this.fPlaces = new ExtList<MapPlace>(true);
-            this.fBaseRoot = this.TreePlaces.Nodes.Add(LangMan.LS(LSID.LSID_RPLocations));
+            this.fBaseRoot = this.tvPlaces.Nodes.Add(LangMan.LS(LSID.LSID_RPLocations));
             this.radTotal.Checked = true;
 
             this.SetLang();
@@ -293,7 +296,7 @@ namespace GKUI
         public void SetLang()
         {
             this.Text = LangMan.LS(LSID.LSID_MIMap);
-            this.tsPlaces.Text = LangMan.LS(LSID.LSID_RPLocations);
+            this.pagePlaces.Text = LangMan.LS(LSID.LSID_RPLocations);
             this.GroupBox2.Text = LangMan.LS(LSID.LSID_MapSelection);
             this.radTotal.Text = LangMan.LS(LSID.LSID_MapSelOnAll);
             this.chkBirth.Text = LangMan.LS(LSID.LSID_MSBirthPlaces);

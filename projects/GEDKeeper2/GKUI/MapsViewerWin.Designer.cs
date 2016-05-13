@@ -7,12 +7,11 @@ namespace GKUI
 		private System.ComponentModel.IContainer components = null;
 		private System.Windows.Forms.StatusBar StatusBar1;
 		private System.Windows.Forms.TabControl PageControl1;
-		private System.Windows.Forms.TabPage tsPlaces;
-		private System.Windows.Forms.TreeView TreePlaces;
-		private System.Windows.Forms.SaveFileDialog SaveDialog1;
+		private System.Windows.Forms.TabPage pagePlaces;
+		private System.Windows.Forms.TreeView tvPlaces;
 		private System.Windows.Forms.Panel Panel1;
 		private System.Windows.Forms.GroupBox GroupBox2;
-		private System.Windows.Forms.ComboBox ComboPersons;
+		private System.Windows.Forms.ComboBox cmbPersons;
 		private System.Windows.Forms.CheckBox chkResidence;
 		private System.Windows.Forms.CheckBox chkDeath;
 		private System.Windows.Forms.CheckBox chkBirth;
@@ -39,10 +38,10 @@ namespace GKUI
 		{
 			this.StatusBar1 = new System.Windows.Forms.StatusBar();
 			this.PageControl1 = new System.Windows.Forms.TabControl();
-			this.tsPlaces = new System.Windows.Forms.TabPage();
-			this.TreePlaces = new System.Windows.Forms.TreeView();
+			this.pagePlaces = new System.Windows.Forms.TabPage();
+			this.tvPlaces = new System.Windows.Forms.TreeView();
 			this.GroupBox2 = new System.Windows.Forms.GroupBox();
-			this.ComboPersons = new System.Windows.Forms.ComboBox();
+			this.cmbPersons = new System.Windows.Forms.ComboBox();
 			this.chkResidence = new System.Windows.Forms.CheckBox();
 			this.chkDeath = new System.Windows.Forms.CheckBox();
 			this.chkBirth = new System.Windows.Forms.CheckBox();
@@ -51,10 +50,9 @@ namespace GKUI
 			this.radTotal = new System.Windows.Forms.RadioButton();
 			this.radSelected = new System.Windows.Forms.RadioButton();
 			this.chkLinesVisible = new System.Windows.Forms.CheckBox();
-			this.SaveDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.Panel1 = new System.Windows.Forms.Panel();
 			this.PageControl1.SuspendLayout();
-			this.tsPlaces.SuspendLayout();
+			this.pagePlaces.SuspendLayout();
 			this.GroupBox2.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -67,7 +65,7 @@ namespace GKUI
 			// 
 			// PageControl1
 			// 
-			this.PageControl1.Controls.Add(this.tsPlaces);
+			this.PageControl1.Controls.Add(this.pagePlaces);
 			this.PageControl1.Dock = System.Windows.Forms.DockStyle.Left;
 			this.PageControl1.Location = new System.Drawing.Point(0, 0);
 			this.PageControl1.Name = "PageControl1";
@@ -75,28 +73,28 @@ namespace GKUI
 			this.PageControl1.Size = new System.Drawing.Size(405, 549);
 			this.PageControl1.TabIndex = 1;
 			// 
-			// tsPlaces
+			// pagePlaces
 			// 
-			this.tsPlaces.Controls.Add(this.TreePlaces);
-			this.tsPlaces.Controls.Add(this.GroupBox2);
-			this.tsPlaces.Location = new System.Drawing.Point(4, 26);
-			this.tsPlaces.Name = "tsPlaces";
-			this.tsPlaces.Size = new System.Drawing.Size(397, 519);
-			this.tsPlaces.TabIndex = 0;
-			this.tsPlaces.Text = "Места";
+			this.pagePlaces.Controls.Add(this.tvPlaces);
+			this.pagePlaces.Controls.Add(this.GroupBox2);
+			this.pagePlaces.Location = new System.Drawing.Point(4, 26);
+			this.pagePlaces.Name = "pagePlaces";
+			this.pagePlaces.Size = new System.Drawing.Size(397, 519);
+			this.pagePlaces.TabIndex = 0;
+			this.pagePlaces.Text = "pagePlaces";
 			// 
-			// TreePlaces
+			// tvPlaces
 			// 
-			this.TreePlaces.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.TreePlaces.Location = new System.Drawing.Point(0, 225);
-			this.TreePlaces.Name = "TreePlaces";
-			this.TreePlaces.Size = new System.Drawing.Size(397, 294);
-			this.TreePlaces.TabIndex = 0;
-			this.TreePlaces.DoubleClick += new System.EventHandler(this.TreePlaces_DoubleClick);
+			this.tvPlaces.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tvPlaces.Location = new System.Drawing.Point(0, 225);
+			this.tvPlaces.Name = "tvPlaces";
+			this.tvPlaces.Size = new System.Drawing.Size(397, 294);
+			this.tvPlaces.TabIndex = 0;
+			this.tvPlaces.DoubleClick += new System.EventHandler(this.TreePlaces_DoubleClick);
 			// 
 			// GroupBox2
 			// 
-			this.GroupBox2.Controls.Add(this.ComboPersons);
+			this.GroupBox2.Controls.Add(this.cmbPersons);
 			this.GroupBox2.Controls.Add(this.chkResidence);
 			this.GroupBox2.Controls.Add(this.chkDeath);
 			this.GroupBox2.Controls.Add(this.chkBirth);
@@ -113,13 +111,13 @@ namespace GKUI
 			this.GroupBox2.TabStop = false;
 			this.GroupBox2.Text = "Выборка";
 			// 
-			// ComboPersons
+			// cmbPersons
 			// 
-			this.ComboPersons.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.ComboPersons.Location = new System.Drawing.Point(11, 126);
-			this.ComboPersons.Name = "ComboPersons";
-			this.ComboPersons.Size = new System.Drawing.Size(371, 25);
-			this.ComboPersons.TabIndex = 5;
+			this.cmbPersons.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cmbPersons.Location = new System.Drawing.Point(11, 126);
+			this.cmbPersons.Name = "cmbPersons";
+			this.cmbPersons.Size = new System.Drawing.Size(371, 25);
+			this.cmbPersons.TabIndex = 5;
 			// 
 			// chkResidence
 			// 
@@ -128,7 +126,7 @@ namespace GKUI
 			this.chkResidence.Name = "chkResidence";
 			this.chkResidence.Size = new System.Drawing.Size(152, 21);
 			this.chkResidence.TabIndex = 3;
-			this.chkResidence.Text = "Места проживания";
+			this.chkResidence.Text = "chkResidence";
 			// 
 			// chkDeath
 			// 
@@ -137,7 +135,7 @@ namespace GKUI
 			this.chkDeath.Name = "chkDeath";
 			this.chkDeath.Size = new System.Drawing.Size(120, 21);
 			this.chkDeath.TabIndex = 2;
-			this.chkDeath.Text = "Места смерти";
+			this.chkDeath.Text = "chkDeath";
 			// 
 			// chkBirth
 			// 
@@ -146,7 +144,7 @@ namespace GKUI
 			this.chkBirth.Name = "chkBirth";
 			this.chkBirth.Size = new System.Drawing.Size(137, 21);
 			this.chkBirth.TabIndex = 1;
-			this.chkBirth.Text = "Места рождения";
+			this.chkBirth.Text = "chkBirth";
 			// 
 			// btnSelectPlaces
 			// 
@@ -155,7 +153,7 @@ namespace GKUI
 			this.btnSelectPlaces.Name = "btnSelectPlaces";
 			this.btnSelectPlaces.Size = new System.Drawing.Size(105, 30);
 			this.btnSelectPlaces.TabIndex = 6;
-			this.btnSelectPlaces.Text = "Показать";
+			this.btnSelectPlaces.Text = "btnSelectPlaces";
 			this.btnSelectPlaces.Click += new System.EventHandler(this.btnSelectPlaces_Click);
 			// 
 			// btnSaveImage
@@ -164,7 +162,7 @@ namespace GKUI
 			this.btnSaveImage.Name = "btnSaveImage";
 			this.btnSaveImage.Size = new System.Drawing.Size(170, 30);
 			this.btnSaveImage.TabIndex = 7;
-			this.btnSaveImage.Text = "Сохранить снимок...";
+			this.btnSaveImage.Text = "btnSaveImage";
 			this.btnSaveImage.Click += new System.EventHandler(this.btnSaveImage_Click);
 			// 
 			// radTotal
@@ -174,7 +172,7 @@ namespace GKUI
 			this.radTotal.Name = "radTotal";
 			this.radTotal.Size = new System.Drawing.Size(127, 21);
 			this.radTotal.TabIndex = 0;
-			this.radTotal.Text = "По всем людям";
+			this.radTotal.Text = "radTotal";
 			this.radTotal.Click += new System.EventHandler(this.radTotal_Click);
 			// 
 			// radSelected
@@ -184,7 +182,7 @@ namespace GKUI
 			this.radSelected.Name = "radSelected";
 			this.radSelected.Size = new System.Drawing.Size(180, 21);
 			this.radSelected.TabIndex = 4;
-			this.radSelected.Text = "Только по выбранному";
+			this.radSelected.Text = "radSelected";
 			this.radSelected.Click += new System.EventHandler(this.radTotal_Click);
 			// 
 			// chkLinesVisible
@@ -196,12 +194,7 @@ namespace GKUI
 			this.chkLinesVisible.Name = "chkLinesVisible";
 			this.chkLinesVisible.Size = new System.Drawing.Size(155, 21);
 			this.chkLinesVisible.TabIndex = 8;
-			this.chkLinesVisible.Text = "Отображать линии";
-			// 
-			// SaveDialog1
-			// 
-			this.SaveDialog1.DefaultExt = "jpg";
-			this.SaveDialog1.Filter = "Image files|*.jpg";
+			this.chkLinesVisible.Text = "chkLinesVisible";
 			// 
 			// Panel1
 			// 
@@ -224,10 +217,10 @@ namespace GKUI
 			this.KeyPreview = true;
 			this.Name = "MapsViewerWin";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Карты";
+			this.Text = "MapsViewerWin";
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TfmMaps_KeyDown);
 			this.PageControl1.ResumeLayout(false);
-			this.tsPlaces.ResumeLayout(false);
+			this.pagePlaces.ResumeLayout(false);
 			this.GroupBox2.ResumeLayout(false);
 			this.GroupBox2.PerformLayout();
 			this.ResumeLayout(false);

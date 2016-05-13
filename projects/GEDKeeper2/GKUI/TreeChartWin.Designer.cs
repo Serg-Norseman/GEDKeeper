@@ -4,7 +4,6 @@ namespace GKUI
 {
 	partial class TreeChartWin
 	{
-		private System.Windows.Forms.SaveFileDialog SaveDialog1;
 		private System.Windows.Forms.ToolStrip ToolBar1;
 		private System.Windows.Forms.ToolStripButton tbImageSave;
 		private System.Windows.Forms.ContextMenuStrip MenuPerson;
@@ -46,7 +45,6 @@ namespace GKUI
 		private System.Windows.Forms.ToolStripSeparator N9;
 		private System.ComponentModel.IContainer components;
 		private System.Windows.Forms.ToolTip toolTip1;
-		private System.Windows.Forms.OpenFileDialog OpenDialog1;
 		private System.Windows.Forms.ColorDialog colorDialog1;
 		private System.Windows.Forms.ToolStripSeparator tbs2;
 		private System.Windows.Forms.ToolStripSeparator tbs1;
@@ -54,7 +52,6 @@ namespace GKUI
 		private void InitializeComponent()
 		{
 		    this.components = new System.ComponentModel.Container();
-		    this.SaveDialog1 = new System.Windows.Forms.SaveFileDialog();
 		    this.ToolBar1 = new System.Windows.Forms.ToolStrip();
 		    this.tbImageSave = new System.Windows.Forms.ToolStripButton();
 		    this.tbs1 = new System.Windows.Forms.ToolStripSeparator();
@@ -97,20 +94,12 @@ namespace GKUI
 		    this.miRebuildTree = new System.Windows.Forms.ToolStripMenuItem();
 		    this.miRebuildKinships = new System.Windows.Forms.ToolStripMenuItem();
 		    this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-		    this.OpenDialog1 = new System.Windows.Forms.OpenFileDialog();
 		    this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 		    this.ToolBar1.SuspendLayout();
 		    this.MenuGens.SuspendLayout();
 		    this.MenuModes.SuspendLayout();
 		    this.MenuPerson.SuspendLayout();
 		    this.SuspendLayout();
-		    // 
-		    // SaveDialog1
-		    // 
-		    this.SaveDialog1.DefaultExt = "tga";
-		    this.SaveDialog1.Filter = "Файлы BMP (*.bmp)|*.bmp|Файлы JPEG (*.jpg)|*.jpg|Файлы EMF (*.emf)|*.emf|Файлы PN" +
-		    "G (*.png)|*.png|Файлы GIF (*.gif)|*.gif";
-		    this.SaveDialog1.FilterIndex = 2;
 		    // 
 		    // ToolBar1
 		    // 
@@ -145,7 +134,7 @@ namespace GKUI
 		    this.tbGens.DropDown = this.MenuGens;
 		    this.tbGens.Name = "tbGens";
 		    this.tbGens.Size = new System.Drawing.Size(100, 24);
-		    this.tbGens.Text = "Поколения";
+		    this.tbGens.Text = "tbGens";
 		    // 
 		    // MenuGens
 		    // 
@@ -426,10 +415,6 @@ namespace GKUI
 		    this.miRebuildKinships.Size = new System.Drawing.Size(200, 24);
 		    this.miRebuildKinships.Text = "miRebuildKinships";
 		    this.miRebuildKinships.Click += new System.EventHandler(this.miRebuildKinshipsClick);
-		    // 
-		    // OpenDialog1
-		    // 
-		    this.OpenDialog1.Filter = "Image Files|*.bmp;*.gif;*.png;*.jpg";
 		    // 
 		    // TreeChartWin
 		    // 

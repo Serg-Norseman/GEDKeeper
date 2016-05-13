@@ -483,7 +483,7 @@ namespace GKUI
                 this.tbPrev.Enabled = (workWin != null && workWin.NavCanBackward());
                 this.tbNext.Enabled = (workWin != null && workWin.NavCanForward());
             } catch (Exception ex) {
-                this.LogWrite("TfmGEDKeeper.UpdateNavControls(): " + ex.Message);
+                this.LogWrite("MainWin.UpdateNavControls(): " + ex.Message);
             }
         }
 
@@ -618,7 +618,7 @@ namespace GKUI
                     }
                 }
             } catch (Exception ex) {
-                this.LogWrite("TfmGEDKeeper.CriticalSave(): " + ex.Message);
+                this.LogWrite("MainWin.CriticalSave(): " + ex.Message);
             }
         }
 
@@ -722,22 +722,28 @@ namespace GKUI
             this.CreateBase("");
         }
 
+        // TODO: localize
         private void miFileLoadClick(object sender, EventArgs e)
         {
-            this.OpenDialog1.InitialDirectory = this.fOptions.LastDir;
-            if (this.OpenDialog1.ShowDialog() == DialogResult.OK) {
-                this.CreateBase(this.OpenDialog1.FileName);
+            const string filter = "GEDCOM файлы (*.ged)|*.ged|GEDKeeper шифрованные GEDCOM файлы (*.geds)|*.geds|Все файлы (*.*)|*.*";
+
+            string fn = UIHelper.GetOpenFile("", this.fOptions.LastDir, filter, 1, GKData.DEFAULT_EXT);
+            if (!string.IsNullOrEmpty(fn)) {
+                this.CreateBase(fn);
             }
         }
 
+        // TODO: localize
         public void miFileSaveClick(object sender, EventArgs e)
         {
+            const string filter = "GEDKeeper GEDCOM файлы (*.ged)|*.ged|GEDKeeper шифрованные GEDCOM файлы (*.geds)|*.geds";
+
             IBaseWindow curBase = this.GetCurrentFile(true);
             if (curBase == null) return;
 
-            this.SaveDialog1.FileName = curBase.Tree.FileName;
-            if (this.SaveDialog1.ShowDialog() == DialogResult.OK) {
-                curBase.FileSave(this.SaveDialog1.FileName);
+            string fn = UIHelper.GetSaveFile("", "", filter, 1, GKData.DEFAULT_EXT, curBase.Tree.FileName, false);
+            if (!string.IsNullOrEmpty(fn)) {
+                curBase.FileSave(fn);
             }
         }
 

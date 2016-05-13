@@ -23,6 +23,7 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+
 using GKCommon;
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
@@ -63,8 +64,10 @@ namespace GKImageViewerPlugin
         private void ToolBar1_ButtonClick(object sender, EventArgs e)
         {
             if (sender == this.tbFileLoad) {
-                if (OpenDialog1.ShowDialog() == DialogResult.OK) {
-                    this.SetFileRef(OpenDialog1.FileName);
+                string fn = UIHelper.GetOpenFile("", "", "Все файлы (*.*)|*.*", 1, "");
+                if (!string.IsNullOrEmpty(fn))
+                {
+                    this.SetFileRef(fn);
                 }
             }
         }

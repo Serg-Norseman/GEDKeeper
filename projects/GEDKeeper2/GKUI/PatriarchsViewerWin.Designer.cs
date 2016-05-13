@@ -6,6 +6,7 @@
 		/// Designer variable used to keep track of non-visual components.
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
+        private ArborGVT.ArborViewer arborViewer1;
 		
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -58,6 +59,5 @@
 			this.Text = "PatriarchsViewer";
 			this.ResumeLayout(false);
 		}
-        private ArborGVT.ArborViewer arborViewer1;
 	}
 }

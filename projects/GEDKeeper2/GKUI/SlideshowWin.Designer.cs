@@ -7,10 +7,10 @@
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SlideshowWin));
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-			this.tsbStart = new System.Windows.Forms.ToolStripButton();
+			this.tbStart = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-			this.tsbPrev = new System.Windows.Forms.ToolStripButton();
-			this.tsbNext = new System.Windows.Forms.ToolStripButton();
+			this.tbPrev = new System.Windows.Forms.ToolStripButton();
+			this.tbNext = new System.Windows.Forms.ToolStripButton();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -19,50 +19,50 @@
 			// 
 			this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-									this.tsbStart,
+									this.tbStart,
 									this.toolStripSeparator1,
-									this.tsbPrev,
-									this.tsbNext});
+									this.tbPrev,
+									this.tbNext});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.Size = new System.Drawing.Size(792, 27);
 			this.toolStrip1.TabIndex = 0;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
-			// tsbStart
+			// tbStart
 			// 
-			this.tsbStart.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.tsbStart.Image = ((System.Drawing.Image)(resources.GetObject("tsbStart.Image")));
-			this.tsbStart.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.tsbStart.Name = "tsbStart";
-			this.tsbStart.Size = new System.Drawing.Size(24, 24);
-			this.tsbStart.Text = "Старт";
-			this.tsbStart.Click += new System.EventHandler(this.tsbStart_Click);
+			this.tbStart.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.tbStart.Image = ((System.Drawing.Image)(resources.GetObject("tsbStart.Image")));
+			this.tbStart.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.tbStart.Name = "tbStart";
+			this.tbStart.Size = new System.Drawing.Size(24, 24);
+			this.tbStart.Text = "tbStart";
+			this.tbStart.Click += new System.EventHandler(this.tsbStart_Click);
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
 			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 27);
 			// 
-			// tsbPrev
+			// tbPrev
 			// 
-			this.tsbPrev.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.tsbPrev.Image = ((System.Drawing.Image)(resources.GetObject("tsbPrev.Image")));
-			this.tsbPrev.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.tsbPrev.Name = "tsbPrev";
-			this.tsbPrev.Size = new System.Drawing.Size(24, 24);
-			this.tsbPrev.Text = "toolStripButton2";
-			this.tsbPrev.Click += new System.EventHandler(this.tsbPrev_Click);
+			this.tbPrev.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.tbPrev.Image = ((System.Drawing.Image)(resources.GetObject("tsbPrev.Image")));
+			this.tbPrev.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.tbPrev.Name = "tbPrev";
+			this.tbPrev.Size = new System.Drawing.Size(24, 24);
+			this.tbPrev.Text = "tbPrev";
+			this.tbPrev.Click += new System.EventHandler(this.tsbPrev_Click);
 			// 
-			// tsbNext
+			// tbNext
 			// 
-			this.tsbNext.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.tsbNext.Image = ((System.Drawing.Image)(resources.GetObject("tsbNext.Image")));
-			this.tsbNext.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.tsbNext.Name = "tsbNext";
-			this.tsbNext.Size = new System.Drawing.Size(24, 24);
-			this.tsbNext.Text = "toolStripButton3";
-			this.tsbNext.Click += new System.EventHandler(this.tsbNext_Click);
+			this.tbNext.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.tbNext.Image = ((System.Drawing.Image)(resources.GetObject("tsbNext.Image")));
+			this.tbNext.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.tbNext.Name = "tbNext";
+			this.tbNext.Size = new System.Drawing.Size(24, 24);
+			this.tbNext.Text = "tbNext";
+			this.tbNext.Click += new System.EventHandler(this.tsbNext_Click);
 			// 
 			// timer1
 			// 
@@ -80,7 +80,7 @@
 			this.Name = "SlideshowWin";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Просмотр";
+			this.Text = "SlideshowWin";
 			this.Load += new System.EventHandler(this.TfmSlideshow_Load);
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TfmMediaView_KeyDown);
 			this.toolStrip1.ResumeLayout(false);
@@ -90,10 +90,10 @@
 		}
 		private System.ComponentModel.IContainer components;
 		private System.Windows.Forms.Timer timer1;
-		private System.Windows.Forms.ToolStripButton tsbNext;
-		private System.Windows.Forms.ToolStripButton tsbPrev;
+		private System.Windows.Forms.ToolStripButton tbNext;
+		private System.Windows.Forms.ToolStripButton tbPrev;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-		private System.Windows.Forms.ToolStripButton tsbStart;
+		private System.Windows.Forms.ToolStripButton tbStart;
 		private System.Windows.Forms.ToolStrip toolStrip1;
 	}
 }

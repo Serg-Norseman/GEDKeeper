@@ -107,8 +107,8 @@ namespace GKUI
         public void SetLang()
         {
             this.Text = LangMan.LS(LSID.LSID_Slideshow);
-            this.tsbPrev.ToolTipText = LangMan.LS(LSID.LSID_PrevRec);
-            this.tsbNext.ToolTipText = LangMan.LS(LSID.LSID_NextRec);
+            this.tbPrev.ToolTipText = LangMan.LS(LSID.LSID_PrevRec);
+            this.tbNext.ToolTipText = LangMan.LS(LSID.LSID_NextRec);
 
             //this.fImageCtl.btnSizeToFit.Text = LangMan.LS(LSID.LSID_SizeToFit);
             //this.fImageCtl.btnZoomIn.Text = LangMan.LS(LSID.LSID_ZoomIn);
@@ -143,13 +143,13 @@ namespace GKUI
 
         private void tsbStart_Click(object sender, System.EventArgs e)
         {
-            if (tsbStart.Text == LangMan.LS(LSID.LSID_Start)) {
-                tsbStart.Text = LangMan.LS(LSID.LSID_Stop);
-                tsbStart.Image = GKResources.iStop;
+            if (tbStart.Text == LangMan.LS(LSID.LSID_Start)) {
+                tbStart.Text = LangMan.LS(LSID.LSID_Stop);
+                tbStart.Image = GKResources.iStop;
                 timer1.Enabled = true;
             } else {
-                tsbStart.Text = LangMan.LS(LSID.LSID_Start);
-                tsbStart.Image = GKResources.iStart;
+                tbStart.Text = LangMan.LS(LSID.LSID_Start);
+                tbStart.Image = GKResources.iStart;
                 timer1.Enabled = false;
             }
         }
@@ -168,9 +168,9 @@ namespace GKUI
 
         private void UpdateControls()
         {
-            tsbStart.Enabled = (this.fFileRefs.Count > 0);
-            tsbPrev.Enabled = (this.fCurrentIndex > 0);
-            tsbNext.Enabled = (this.fCurrentIndex < this.fFileRefs.Count - 1);
+            tbStart.Enabled = (this.fFileRefs.Count > 0);
+            tbPrev.Enabled = (this.fCurrentIndex > 0);
+            tbNext.Enabled = (this.fCurrentIndex < this.fFileRefs.Count - 1);
 
             MainWin.Instance.UpdateControls(false);
         }

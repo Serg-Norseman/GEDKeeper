@@ -7,15 +7,17 @@ namespace GKUI
 {
 	partial class BaseWin
 	{
-		private System.Windows.Forms.ImageList ImageList1;
 		private System.ComponentModel.IContainer components;
-		private System.Windows.Forms.TabControl PageRecords;
+		private System.Windows.Forms.TabControl tabsRecords;
+		private System.Windows.Forms.ToolStripMenuItem miRecordDuplicate;
+		private System.Windows.Forms.ToolStripMenuItem miRecordDelete;
+		private System.Windows.Forms.ToolStripMenuItem miRecordEdit;
+		private System.Windows.Forms.ContextMenuStrip contextMenu;
 
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.ImageList1 = new System.Windows.Forms.ImageList(this.components);
-			this.PageRecords = new System.Windows.Forms.TabControl();
+			this.tabsRecords = new System.Windows.Forms.TabControl();
 			this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.miRecordEdit = new System.Windows.Forms.ToolStripMenuItem();
 			this.miRecordDelete = new System.Windows.Forms.ToolStripMenuItem();
@@ -23,21 +25,15 @@ namespace GKUI
 			this.contextMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// ImageList1
+			// tabsRecords
 			// 
-			this.ImageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-			this.ImageList1.ImageSize = new System.Drawing.Size(16, 16);
-			this.ImageList1.TransparentColor = System.Drawing.Color.Transparent;
-			// 
-			// PageRecords
-			// 
-			this.PageRecords.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.PageRecords.Location = new System.Drawing.Point(0, 0);
-			this.PageRecords.Name = "PageRecords";
-			this.PageRecords.SelectedIndex = 0;
-			this.PageRecords.Size = new System.Drawing.Size(976, 462);
-			this.PageRecords.TabIndex = 0;
-			this.PageRecords.SelectedIndexChanged += new System.EventHandler(this.PageRecords_SelectedIndexChanged);
+			this.tabsRecords.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tabsRecords.Location = new System.Drawing.Point(0, 0);
+			this.tabsRecords.Name = "tabsRecords";
+			this.tabsRecords.SelectedIndex = 0;
+			this.tabsRecords.Size = new System.Drawing.Size(976, 462);
+			this.tabsRecords.TabIndex = 0;
+			this.tabsRecords.SelectedIndexChanged += new System.EventHandler(this.PageRecords_SelectedIndexChanged);
 			// 
 			// contextMenu
 			// 
@@ -75,12 +71,12 @@ namespace GKUI
 			this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.ClientSize = new System.Drawing.Size(976, 462);
-			this.Controls.Add(this.PageRecords);
+			this.Controls.Add(this.tabsRecords);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.KeyPreview = true;
 			this.Name = "BaseWin";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "GEDKeeper2";
+			this.Text = "BaseWin";
 			this.Activated += new System.EventHandler(this.Form_Activated);
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.Form_Closing);
 			this.Deactivate += new System.EventHandler(this.Form_Deactivate);
@@ -89,9 +85,5 @@ namespace GKUI
 			this.contextMenu.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
-		private System.Windows.Forms.ToolStripMenuItem miRecordDuplicate;
-		private System.Windows.Forms.ToolStripMenuItem miRecordDelete;
-		private System.Windows.Forms.ToolStripMenuItem miRecordEdit;
-		private System.Windows.Forms.ContextMenuStrip contextMenu;
 	}
 }

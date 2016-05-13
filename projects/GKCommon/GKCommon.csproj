@@ -220,6 +220,7 @@
     <Compile Include="GKCommon\SysInfo.cs" />
     <Compile Include="GKCommon\Tween.cs" />
     <Compile Include="GKCommon\UDN.cs" />
+    <Compile Include="GKCommon\UIHelper.cs" />
     <Compile Include="GKCommon\ValuesCollection.cs" />
     <Compile Include="GKCore\GKConsts.cs" />
     <Compile Include="GKCore\Interfaces\IBaseContext.cs" />

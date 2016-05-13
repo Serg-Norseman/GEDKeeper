@@ -169,7 +169,7 @@ namespace GKUI
             this.CreatePage(LangMan.LS(LSID.LSID_RPTasks), GEDCOMRecordType.rtTask, out this.ListTasks, out this.mTaskSummary);
             this.CreatePage(LangMan.LS(LSID.LSID_RPCommunications), GEDCOMRecordType.rtCommunication, out this.ListCommunications, out this.mCommunicationSummary);
             this.CreatePage(LangMan.LS(LSID.LSID_RPLocations), GEDCOMRecordType.rtLocation, out this.ListLocations, out this.mLocationSummary);
-            this.PageRecords.SelectedIndex = 0;
+            this.tabsRecords.SelectedIndex = 0;
 
             (this as ILocalization).SetLang();
         }
@@ -279,7 +279,7 @@ namespace GKUI
         
         public GEDCOMRecordType GetSelectedRecordType()
         {
-            return (GEDCOMRecordType)(this.PageRecords.SelectedIndex + 1);
+            return (GEDCOMRecordType)(this.tabsRecords.SelectedIndex + 1);
         }
 
         public GKRecordsView GetRecordsViewByType(GEDCOMRecordType recType)
@@ -439,10 +439,10 @@ namespace GKUI
 
         private void CreatePage(string pageText, GEDCOMRecordType recType, out GKRecordsView recView, out HyperView summary)
         {
-            this.PageRecords.SuspendLayout();
+            this.tabsRecords.SuspendLayout();
             TabPage sheet = new TabPage(pageText);
-            this.PageRecords.Controls.Add(sheet);
-            this.PageRecords.ResumeLayout(false);
+            this.tabsRecords.Controls.Add(sheet);
+            this.tabsRecords.ResumeLayout(false);
 
             summary = new HyperView();
             summary.BorderWidth = 4;
@@ -987,17 +987,17 @@ namespace GKUI
         
         void ILocalization.SetLang()
         {
-            this.PageRecords.TabPages[ 0].Text = LangMan.LS(LSID.LSID_RPIndividuals);
-            this.PageRecords.TabPages[ 1].Text = LangMan.LS(LSID.LSID_RPFamilies);
-            this.PageRecords.TabPages[ 2].Text = LangMan.LS(LSID.LSID_RPNotes);
-            this.PageRecords.TabPages[ 3].Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            this.PageRecords.TabPages[ 4].Text = LangMan.LS(LSID.LSID_RPSources);
-            this.PageRecords.TabPages[ 5].Text = LangMan.LS(LSID.LSID_RPRepositories);
-            this.PageRecords.TabPages[ 6].Text = LangMan.LS(LSID.LSID_RPGroups);
-            this.PageRecords.TabPages[ 7].Text = LangMan.LS(LSID.LSID_RPResearches);
-            this.PageRecords.TabPages[ 8].Text = LangMan.LS(LSID.LSID_RPTasks);
-            this.PageRecords.TabPages[ 9].Text = LangMan.LS(LSID.LSID_RPCommunications);
-            this.PageRecords.TabPages[10].Text = LangMan.LS(LSID.LSID_RPLocations);
+            this.tabsRecords.TabPages[ 0].Text = LangMan.LS(LSID.LSID_RPIndividuals);
+            this.tabsRecords.TabPages[ 1].Text = LangMan.LS(LSID.LSID_RPFamilies);
+            this.tabsRecords.TabPages[ 2].Text = LangMan.LS(LSID.LSID_RPNotes);
+            this.tabsRecords.TabPages[ 3].Text = LangMan.LS(LSID.LSID_RPMultimedia);
+            this.tabsRecords.TabPages[ 4].Text = LangMan.LS(LSID.LSID_RPSources);
+            this.tabsRecords.TabPages[ 5].Text = LangMan.LS(LSID.LSID_RPRepositories);
+            this.tabsRecords.TabPages[ 6].Text = LangMan.LS(LSID.LSID_RPGroups);
+            this.tabsRecords.TabPages[ 7].Text = LangMan.LS(LSID.LSID_RPResearches);
+            this.tabsRecords.TabPages[ 8].Text = LangMan.LS(LSID.LSID_RPTasks);
+            this.tabsRecords.TabPages[ 9].Text = LangMan.LS(LSID.LSID_RPCommunications);
+            this.tabsRecords.TabPages[10].Text = LangMan.LS(LSID.LSID_RPLocations);
 
             this.miRecordEdit.Text = LangMan.LS(LSID.LSID_MIRecordEdit);
             this.miRecordDelete.Text = LangMan.LS(LSID.LSID_MIRecordDelete);
@@ -1176,7 +1176,7 @@ namespace GKUI
         {
             GEDCOMRecord rec = null;
             bool result = false;
-            switch (this.PageRecords.SelectedIndex)
+            switch (this.tabsRecords.SelectedIndex)
             {
                 case 0:
                     {
@@ -1468,7 +1468,7 @@ namespace GKUI
             GKRecordsView rView = this.GetRecordsViewByType(record.RecordType);
             if (rView == null) return;
 
-            this.PageRecords.SelectedIndex = (int)record.RecordType - 1;
+            this.tabsRecords.SelectedIndex = (int)record.RecordType - 1;
             this.PageRecords_SelectedIndexChanged(null, null);
             this.ActiveControl = rView;
             //aList.Focus();
