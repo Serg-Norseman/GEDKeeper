@@ -1,4 +1,4 @@
-## GEDKeeper contributors
+﻿## GEDKeeper contributors
 
 * **[Serg V. Zhdanovskih](https://github.com/Serg-Norseman)**
 
@@ -13,7 +13,7 @@
 
 ## External components
 
-
+```
 Arbor
     https://github.com/samizdatco/arbor
     (C) 2011 Samizdat Drafting Co.
@@ -116,3 +116,4 @@ ZipStorer
     https://zipstorer.codeplex.com
     https://github.com/jaime-olivares/zipstorer
     Licensed under The MIT License (MIT).
+```
