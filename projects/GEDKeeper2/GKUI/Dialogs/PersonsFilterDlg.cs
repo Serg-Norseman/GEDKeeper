@@ -55,34 +55,34 @@ namespace GKUI.Dialogs
 
             // platform: in Mono tsSpecificFilter has 0 index, somehow
             #if GK_LINUX
-            PageControl1.Controls.SetChildIndex(tsSpecificFilter, 1);
+            tabsFilters.Controls.SetChildIndex(pageSpecificFilter, 1);
             #endif
 
-            PageControl1.SelectedIndex = 1;
+            tabsFilters.SelectedIndex = 1;
         }
 
         public void SetSpecificLang()
         {
             this.Text = LangMan.LS(LSID.LSID_MIFilter);
-            this.RadioButton1.Text = LangMan.LS(LSID.LSID_All);
-            this.RadioButton2.Text = LangMan.LS(LSID.LSID_OnlyAlive);
-            this.RadioButton3.Text = LangMan.LS(LSID.LSID_OnlyDied);
-            this.RadioButton4.Text = LangMan.LS(LSID.LSID_AliveBefore).ToLower();
-            this.RadioButton5.Text = LangMan.LS(LSID.LSID_All);
-            this.RadioButton6.Text = LangMan.LS(LSID.LSID_OnlyMans);
-            this.RadioButton7.Text = LangMan.LS(LSID.LSID_OnlyWomans);
-            this.Label2.Text = LangMan.LS(LSID.LSID_AliveBefore) + ':';
-            this.Label1.Text = LangMan.LS(LSID.LSID_NameMask);
-            this.Label3.Text = LangMan.LS(LSID.LSID_PlaceMask);
-            this.Label6.Text = LangMan.LS(LSID.LSID_EventMask);
-            this.Label4.Text = LangMan.LS(LSID.LSID_RPGroups);
-            this.Label5.Text = LangMan.LS(LSID.LSID_RPSources);
-            this.CheckPatriarch.Text = LangMan.LS(LSID.LSID_OnlyPatriarchs);
+            this.rbAll.Text = LangMan.LS(LSID.LSID_All);
+            this.rbOnlyLive.Text = LangMan.LS(LSID.LSID_OnlyAlive);
+            this.rbOnlyDead.Text = LangMan.LS(LSID.LSID_OnlyDied);
+            this.rbAliveBefore.Text = LangMan.LS(LSID.LSID_AliveBefore).ToLower();
+            this.rbSexAll.Text = LangMan.LS(LSID.LSID_All);
+            this.rbSexMale.Text = LangMan.LS(LSID.LSID_OnlyMans);
+            this.rbSexFemale.Text = LangMan.LS(LSID.LSID_OnlyWomans);
+            this.lblAliveBefore.Text = LangMan.LS(LSID.LSID_AliveBefore) + ':';
+            this.lblNameMask.Text = LangMan.LS(LSID.LSID_NameMask);
+            this.lblPlaceMask.Text = LangMan.LS(LSID.LSID_PlaceMask);
+            this.lblEventsMask.Text = LangMan.LS(LSID.LSID_EventMask);
+            this.lblGroups.Text = LangMan.LS(LSID.LSID_RPGroups);
+            this.lblSources.Text = LangMan.LS(LSID.LSID_RPSources);
+            this.chkOnlyPatriarchs.Text = LangMan.LS(LSID.LSID_OnlyPatriarchs);
         }
 
         private void rgLifeClick(object sender, EventArgs e)
         {
-            this.edAliveBeforeDate.Enabled = this.RadioButton4.Checked;
+            this.txtAliveBeforeDate.Enabled = this.rbAliveBefore.Checked;
         }
 
         public override void DoReset()
@@ -96,101 +96,101 @@ namespace GKUI.Dialogs
             IndividualListFilter iFilter = (IndividualListFilter)fListMan.Filter;
             GlobalOptions options = MainWin.Instance.Options;
             
-            this.edName.Items.Clear();
-            this.edName.Items.AddRange(options.NameFilters.ToArray());
-            this.edName.Items.Insert(0, "*");
+            this.txtName.Items.Clear();
+            this.txtName.Items.AddRange(options.NameFilters.ToArray());
+            this.txtName.Items.Insert(0, "*");
 
-            this.cbResidence.Items.Clear();
-            this.cbResidence.Items.AddRange(options.ResidenceFilters.ToArray());
-            this.cbResidence.Items.Insert(0, "*");
+            this.cmbResidence.Items.Clear();
+            this.cmbResidence.Items.AddRange(options.ResidenceFilters.ToArray());
+            this.cmbResidence.Items.Insert(0, "*");
 
-            this.cbEventVal.Items.Clear();
-            this.cbEventVal.Items.AddRange(options.EventFilters.ToArray());
+            this.cmbEventVal.Items.Clear();
+            this.cmbEventVal.Items.AddRange(options.EventFilters.ToArray());
 
             int lifeSel;
             if (iFilter.FilterLifeMode != FilterLifeMode.lmTimeLocked)
             {
                 lifeSel = (int)iFilter.FilterLifeMode;
                 this.rgLife.Enabled = true;
-                this.edAliveBeforeDate.Text = iFilter.AliveBeforeDate;
+                this.txtAliveBeforeDate.Text = iFilter.AliveBeforeDate;
             } else {
                 lifeSel = -1;
                 this.rgLife.Enabled = false;
-                this.edAliveBeforeDate.Text = "";
+                this.txtAliveBeforeDate.Text = "";
             }
 
             switch (lifeSel) {
                 case 0:
-                    this.RadioButton1.Checked = true;
+                    this.rbAll.Checked = true;
                     break;
                 case 1:
-                    this.RadioButton2.Checked = true;
+                    this.rbOnlyLive.Checked = true;
                     break;
                 case 2:
-                    this.RadioButton3.Checked = true;
+                    this.rbOnlyDead.Checked = true;
                     break;
                 case 3:
-                    this.RadioButton4.Checked = true;
+                    this.rbAliveBefore.Checked = true;
                     break;
             }
 
             int sexSel = (int)iFilter.Sex;
             switch (sexSel) {
                 case 0:
-                    this.RadioButton5.Checked = true;
+                    this.rbSexAll.Checked = true;
                     break;
                 case 1:
-                    this.RadioButton6.Checked = true;
+                    this.rbSexMale.Checked = true;
                     break;
                 case 2:
-                    this.RadioButton7.Checked = true;
+                    this.rbSexFemale.Checked = true;
                     break;
             }
 
-            this.edName.Text = iFilter.Name;
-            this.cbResidence.Text = iFilter.Residence;
-            this.cbEventVal.Text = iFilter.EventVal;
-            this.CheckPatriarch.Checked = iFilter.PatriarchOnly;
+            this.txtName.Text = iFilter.Name;
+            this.cmbResidence.Text = iFilter.Residence;
+            this.cmbEventVal.Text = iFilter.EventVal;
+            this.chkOnlyPatriarchs.Checked = iFilter.PatriarchOnly;
 
             GEDCOMTree tree = this.Base.Tree;
 
-            this.cbGroup.Items.Clear();
-            this.cbGroup.Sorted = true;
+            this.cmbGroup.Items.Clear();
+            this.cmbGroup.Sorted = true;
             int num = tree.RecordsCount - 1;
             for (int i = 0; i <= num; i++) {
                 GEDCOMRecord rec = tree[i];
                 if (rec is GEDCOMGroupRecord) {
-                    this.cbGroup.Items.Add(new GKComboItem((rec as GEDCOMGroupRecord).GroupName, rec));
+                    this.cmbGroup.Items.Add(new GKComboItem((rec as GEDCOMGroupRecord).GroupName, rec));
                 }
             }
-            this.cbGroup.Sorted = false;
-            this.cbGroup.Items.Insert(0, new GKComboItem(LangMan.LS(LSID.LSID_SrcAll), null));
-            this.cbGroup.Items.Insert(1, new GKComboItem(LangMan.LS(LSID.LSID_SrcNot), null));
-            this.cbGroup.Items.Insert(2, new GKComboItem(LangMan.LS(LSID.LSID_SrcAny), null));
+            this.cmbGroup.Sorted = false;
+            this.cmbGroup.Items.Insert(0, new GKComboItem(LangMan.LS(LSID.LSID_SrcAll), null));
+            this.cmbGroup.Items.Insert(1, new GKComboItem(LangMan.LS(LSID.LSID_SrcNot), null));
+            this.cmbGroup.Items.Insert(2, new GKComboItem(LangMan.LS(LSID.LSID_SrcAny), null));
             if (iFilter.FilterGroupMode != FilterGroupMode.Selected) {
-                this.cbGroup.SelectedIndex = (int)iFilter.FilterGroupMode;
+                this.cmbGroup.SelectedIndex = (int)iFilter.FilterGroupMode;
             } else {
                 GEDCOMGroupRecord groupRec = tree.XRefIndex_Find(iFilter.GroupRef) as GEDCOMGroupRecord;
-                this.cbGroup.Text = groupRec.GroupName;
+                this.cmbGroup.Text = groupRec.GroupName;
             }
 
-            this.cbSource.Items.Clear();
-            this.cbSource.Sorted = true;
+            this.cmbSource.Items.Clear();
+            this.cmbSource.Sorted = true;
             for (int i = 0; i <= tree.RecordsCount - 1; i++) {
                 GEDCOMRecord rec = tree[i];
                 if (rec is GEDCOMSourceRecord) {
-                    this.cbSource.Items.Add(new GKComboItem((rec as GEDCOMSourceRecord).FiledByEntry, rec));
+                    this.cmbSource.Items.Add(new GKComboItem((rec as GEDCOMSourceRecord).FiledByEntry, rec));
                 }
             }
-            this.cbSource.Sorted = false;
-            this.cbSource.Items.Insert(0, new GKComboItem(LangMan.LS(LSID.LSID_SrcAll), null));
-            this.cbSource.Items.Insert(1, new GKComboItem(LangMan.LS(LSID.LSID_SrcNot), null));
-            this.cbSource.Items.Insert(2, new GKComboItem(LangMan.LS(LSID.LSID_SrcAny), null));
+            this.cmbSource.Sorted = false;
+            this.cmbSource.Items.Insert(0, new GKComboItem(LangMan.LS(LSID.LSID_SrcAll), null));
+            this.cmbSource.Items.Insert(1, new GKComboItem(LangMan.LS(LSID.LSID_SrcNot), null));
+            this.cmbSource.Items.Insert(2, new GKComboItem(LangMan.LS(LSID.LSID_SrcAny), null));
             if (iFilter.SourceMode != FilterGroupMode.Selected) {
-                this.cbSource.SelectedIndex = (int)iFilter.SourceMode;
+                this.cmbSource.SelectedIndex = (int)iFilter.SourceMode;
             } else {
                 GEDCOMSourceRecord sourceRec = tree.XRefIndex_Find(iFilter.SourceRef) as GEDCOMSourceRecord;
-                this.cbSource.Text = sourceRec.FiledByEntry;
+                this.cmbSource.Text = sourceRec.FiledByEntry;
             }
         }
         
@@ -205,32 +205,32 @@ namespace GKUI.Dialogs
 
             IndividualListFilter iFilter = (IndividualListFilter)fListMan.Filter;
             
-            string fs = this.edName.Text.Trim();
+            string fs = this.txtName.Text.Trim();
             SaveFilter(fs, MainWin.Instance.Options.NameFilters);
 
-            fs = this.cbResidence.Text.Trim();
+            fs = this.cmbResidence.Text.Trim();
             SaveFilter(fs, MainWin.Instance.Options.ResidenceFilters);
 
-            fs = this.cbEventVal.Text.Trim();
+            fs = this.cmbEventVal.Text.Trim();
             SaveFilter(fs, MainWin.Instance.Options.EventFilters);
 
-            iFilter.PatriarchOnly = this.CheckPatriarch.Checked;
+            iFilter.PatriarchOnly = this.chkOnlyPatriarchs.Checked;
 
             int lifeSel = 0;
-            if (this.RadioButton1.Checked) lifeSel = 0;
-            if (this.RadioButton2.Checked) lifeSel = 1;
-            if (this.RadioButton3.Checked) lifeSel = 2;
-            if (this.RadioButton4.Checked) lifeSel = 3;
+            if (this.rbAll.Checked) lifeSel = 0;
+            if (this.rbOnlyLive.Checked) lifeSel = 1;
+            if (this.rbOnlyDead.Checked) lifeSel = 2;
+            if (this.rbAliveBefore.Checked) lifeSel = 3;
 
             if (iFilter.FilterLifeMode != FilterLifeMode.lmTimeLocked)
             {
-                iFilter.AliveBeforeDate = this.edAliveBeforeDate.Text;
+                iFilter.AliveBeforeDate = this.txtAliveBeforeDate.Text;
                 if (lifeSel == 3)
                 {
                     try
                     {
                         /*DateTime dt = */
-                        DateTime.Parse(this.edAliveBeforeDate.Text);
+                        DateTime.Parse(this.txtAliveBeforeDate.Text);
                     }
                     catch
                     {
@@ -242,26 +242,26 @@ namespace GKUI.Dialogs
             }
 
             int sexSel = 0;
-            if (this.RadioButton5.Checked) sexSel = 0;
-            if (this.RadioButton6.Checked) sexSel = 1;
-            if (this.RadioButton7.Checked) sexSel = 2;
+            if (this.rbSexAll.Checked) sexSel = 0;
+            if (this.rbSexMale.Checked) sexSel = 1;
+            if (this.rbSexFemale.Checked) sexSel = 2;
             iFilter.Sex = (GEDCOMSex)sexSel;
 
-            if (this.edName.Text == "") this.edName.Text = @"*";
-            iFilter.Name = this.edName.Text;
+            if (this.txtName.Text == "") this.txtName.Text = @"*";
+            iFilter.Name = this.txtName.Text;
 
-            if (this.cbResidence.Text == "") this.cbResidence.Text = @"*";
-            iFilter.Residence = this.cbResidence.Text;
+            if (this.cmbResidence.Text == "") this.cmbResidence.Text = @"*";
+            iFilter.Residence = this.cmbResidence.Text;
 
-            if (this.cbEventVal.Text == "") this.cbEventVal.Text = @"*";
-            iFilter.EventVal = this.cbEventVal.Text;
+            if (this.cmbEventVal.Text == "") this.cmbEventVal.Text = @"*";
+            iFilter.EventVal = this.cmbEventVal.Text;
 
-            int selectedIndex = this.cbGroup.SelectedIndex;
+            int selectedIndex = this.cmbGroup.SelectedIndex;
             if (selectedIndex >= 0 && selectedIndex < 3) {
-                iFilter.FilterGroupMode = (FilterGroupMode)this.cbGroup.SelectedIndex;
+                iFilter.FilterGroupMode = (FilterGroupMode)this.cmbGroup.SelectedIndex;
                 iFilter.GroupRef = "";
             } else {
-                GKComboItem item = (GKComboItem)this.cbGroup.Items[this.cbGroup.SelectedIndex];
+                GKComboItem item = (GKComboItem)this.cmbGroup.Items[this.cmbGroup.SelectedIndex];
                 GEDCOMRecord rec = item.Data as GEDCOMRecord;
                 if (rec != null) {
                     iFilter.FilterGroupMode = FilterGroupMode.Selected;
@@ -272,12 +272,12 @@ namespace GKUI.Dialogs
                 }
             }
 
-            int selectedIndex2 = this.cbSource.SelectedIndex;
+            int selectedIndex2 = this.cmbSource.SelectedIndex;
             if (selectedIndex2 >= 0 && selectedIndex2 < 3) {
-                iFilter.SourceMode = (FilterGroupMode)this.cbSource.SelectedIndex;
+                iFilter.SourceMode = (FilterGroupMode)this.cmbSource.SelectedIndex;
                 iFilter.SourceRef = "";
             } else {
-                GKComboItem item = (GKComboItem)this.cbSource.Items[this.cbSource.SelectedIndex];
+                GKComboItem item = (GKComboItem)this.cmbSource.Items[this.cmbSource.SelectedIndex];
                 GEDCOMRecord rec = item.Data as GEDCOMRecord;
                 if (rec != null) {
                     iFilter.SourceMode = FilterGroupMode.Selected;

@@ -41,7 +41,7 @@ namespace GKUI.Dialogs
 
         private void LabelMail_Click(object sender, EventArgs e)
         {
-            Process.Start(this.LabelMail.Text);
+            Process.Start(this.lblMail.Text);
         }
 
         public static void ShowAbout()
@@ -52,9 +52,9 @@ namespace GKUI.Dialogs
             AboutDlg dlg = new AboutDlg();
             try
             {
-                dlg.LabelProduct.Text = GKData.APP_TITLE;
-                dlg.LabelVersion.Text = @"Version " + version;
-                dlg.LabelCopyright.Text = copyright;
+                dlg.lblProduct.Text = GKData.APP_TITLE;
+                dlg.lblVersion.Text = @"Version " + version;
+                dlg.lblCopyright.Text = copyright;
                 dlg.ShowDialog();
             }
             finally

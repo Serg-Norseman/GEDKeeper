@@ -81,18 +81,18 @@ namespace GKUI.Dialogs
             
             this.fBase = aBase;
 
-            this.fMembersList = CreateMembersSheet(this.SheetMembers);
-            this.fNotesList = new GKNotesSheet(this, this.SheetNotes);
-            this.fMediaList = new GKMediaSheet(this, this.SheetMultimedia);
+            this.fMembersList = CreateMembersSheet(this.pageMembers);
+            this.fNotesList = new GKNotesSheet(this, this.pageNotes);
+            this.fMediaList = new GKMediaSheet(this, this.pageMultimedia);
 
             // SetLang()
             this.Text = LangMan.LS(LSID.LSID_WinGroupEdit);
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            this.Label1.Text = LangMan.LS(LSID.LSID_Title);
-            this.SheetMembers.Text = LangMan.LS(LSID.LSID_Members);
-            this.SheetNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            this.SheetMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
+            this.lblName.Text = LangMan.LS(LSID.LSID_Title);
+            this.pageMembers.Text = LangMan.LS(LSID.LSID_Members);
+            this.pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
+            this.pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
         }
 
         private GKSheetList CreateMembersSheet(Control owner)

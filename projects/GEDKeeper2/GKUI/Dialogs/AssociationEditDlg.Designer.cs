@@ -8,40 +8,40 @@ namespace GKUI.Dialogs
 	{
 		private System.Windows.Forms.Button btnAccept;
 		private System.Windows.Forms.Button btnCancel;
-		private System.Windows.Forms.Label Label1;
-		private System.Windows.Forms.ComboBox EditRelation;
-		private System.Windows.Forms.Label Label2;
-		private System.Windows.Forms.TextBox EditPerson;
+		private System.Windows.Forms.Label lblRelation;
+		private System.Windows.Forms.ComboBox cmbRelation;
+		private System.Windows.Forms.Label lblPerson;
+		private System.Windows.Forms.TextBox txtPerson;
 		private System.Windows.Forms.Button btnPersonAdd;
 
 		private void InitializeComponent()
 		{
-			this.Label1 = new System.Windows.Forms.Label();
-			this.Label2 = new System.Windows.Forms.Label();
+			this.lblRelation = new System.Windows.Forms.Label();
+			this.lblPerson = new System.Windows.Forms.Label();
 			this.btnPersonAdd = new System.Windows.Forms.Button();
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
-			this.EditRelation = new System.Windows.Forms.ComboBox();
-			this.EditPerson = new System.Windows.Forms.TextBox();
+			this.cmbRelation = new System.Windows.Forms.ComboBox();
+			this.txtPerson = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
-			// Label1
+			// lblRelation
 			// 
-			this.Label1.AutoSize = true;
-			this.Label1.Location = new System.Drawing.Point(11, 10);
-			this.Label1.Name = "Label1";
-			this.Label1.Size = new System.Drawing.Size(82, 17);
-			this.Label1.TabIndex = 0;
-			this.Label1.Text = "Отношение";
+			this.lblRelation.AutoSize = true;
+			this.lblRelation.Location = new System.Drawing.Point(11, 10);
+			this.lblRelation.Name = "lblRelation";
+			this.lblRelation.Size = new System.Drawing.Size(82, 17);
+			this.lblRelation.TabIndex = 0;
+			this.lblRelation.Text = "lblRelation";
 			// 
-			// Label2
+			// lblPerson
 			// 
-			this.Label2.AutoSize = true;
-			this.Label2.Location = new System.Drawing.Point(11, 68);
-			this.Label2.Name = "Label2";
-			this.Label2.Size = new System.Drawing.Size(62, 17);
-			this.Label2.TabIndex = 2;
-			this.Label2.Text = "Персона";
+			this.lblPerson.AutoSize = true;
+			this.lblPerson.Location = new System.Drawing.Point(11, 68);
+			this.lblPerson.Name = "lblPerson";
+			this.lblPerson.Size = new System.Drawing.Size(62, 17);
+			this.lblPerson.TabIndex = 2;
+			this.lblPerson.Text = "lblPerson";
 			// 
 			// btnPersonAdd
 			// 
@@ -64,7 +64,7 @@ namespace GKUI.Dialogs
 			this.btnAccept.Name = "btnAccept";
 			this.btnAccept.Size = new System.Drawing.Size(114, 30);
 			this.btnAccept.TabIndex = 5;
-			this.btnAccept.Text = "Принять";
+			this.btnAccept.Text = "btnAccept";
 			this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.btnAccept.Click += new System.EventHandler(this.btnAccept_Click);
 			// 
@@ -77,25 +77,25 @@ namespace GKUI.Dialogs
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(113, 30);
 			this.btnCancel.TabIndex = 6;
-			this.btnCancel.Text = "Отменить";
+			this.btnCancel.Text = "btnCancel";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// EditRelation
+			// cmbRelation
 			// 
-			this.EditRelation.Location = new System.Drawing.Point(11, 29);
-			this.EditRelation.Name = "EditRelation";
-			this.EditRelation.Size = new System.Drawing.Size(472, 25);
-			this.EditRelation.Sorted = true;
-			this.EditRelation.TabIndex = 1;
+			this.cmbRelation.Location = new System.Drawing.Point(11, 29);
+			this.cmbRelation.Name = "cmbRelation";
+			this.cmbRelation.Size = new System.Drawing.Size(472, 25);
+			this.cmbRelation.Sorted = true;
+			this.cmbRelation.TabIndex = 1;
 			// 
-			// EditPerson
+			// txtPerson
 			// 
-			this.EditPerson.BackColor = System.Drawing.SystemColors.Control;
-			this.EditPerson.Location = new System.Drawing.Point(11, 87);
-			this.EditPerson.Name = "EditPerson";
-			this.EditPerson.ReadOnly = true;
-			this.EditPerson.Size = new System.Drawing.Size(429, 24);
-			this.EditPerson.TabIndex = 3;
+			this.txtPerson.BackColor = System.Drawing.SystemColors.Control;
+			this.txtPerson.Location = new System.Drawing.Point(11, 87);
+			this.txtPerson.Name = "txtPerson";
+			this.txtPerson.ReadOnly = true;
+			this.txtPerson.Size = new System.Drawing.Size(429, 24);
+			this.txtPerson.TabIndex = 3;
 			// 
 			// AssociationEditDlg
 			// 
@@ -104,13 +104,13 @@ namespace GKUI.Dialogs
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(496, 181);
-			this.Controls.Add(this.Label1);
-			this.Controls.Add(this.Label2);
+			this.Controls.Add(this.lblRelation);
+			this.Controls.Add(this.lblPerson);
 			this.Controls.Add(this.btnPersonAdd);
 			this.Controls.Add(this.btnAccept);
 			this.Controls.Add(this.btnCancel);
-			this.Controls.Add(this.EditRelation);
-			this.Controls.Add(this.EditPerson);
+			this.Controls.Add(this.cmbRelation);
+			this.Controls.Add(this.txtPerson);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
@@ -118,7 +118,7 @@ namespace GKUI.Dialogs
 			this.Name = "AssociationEditDlg";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "Ассоциация";
+			this.Text = "AssociationEditDlg";
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}

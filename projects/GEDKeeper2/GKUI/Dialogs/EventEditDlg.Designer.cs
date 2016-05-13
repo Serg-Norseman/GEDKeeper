@@ -10,31 +10,31 @@ namespace GKUI.Dialogs
 
 		private System.Windows.Forms.Button btnAccept;
 		private System.Windows.Forms.Button btnCancel;
-		private System.Windows.Forms.TabControl PageEventData;
-		private System.Windows.Forms.TabPage SheetNotes;
-		private System.Windows.Forms.TabPage SheetMultimedia;
-		private System.Windows.Forms.TabPage SheetSources;
+		private System.Windows.Forms.TabControl tabsData;
+		private System.Windows.Forms.TabPage pageNotes;
+		private System.Windows.Forms.TabPage pageMultimedia;
+		private System.Windows.Forms.TabPage pageSources;
 		private System.Windows.Forms.Button btnAddress;
-		private System.Windows.Forms.TabPage SheetCommon;
-		private System.Windows.Forms.Label Label1;
-		private System.Windows.Forms.Label Label2;
-		private System.Windows.Forms.Label Label3;
-		private System.Windows.Forms.Label Label4;
-		private System.Windows.Forms.Label Label5;
-		private System.Windows.Forms.Label LabelAttr;
-		private System.Windows.Forms.ComboBox EditEventType;
-		private System.Windows.Forms.TextBox EditEventName;
-		private System.Windows.Forms.TextBox EditEventPlace;
-		private System.Windows.Forms.ComboBox EditEventDateType;
-		private System.Windows.Forms.MaskedTextBox EditEventDate1;
-		private System.Windows.Forms.MaskedTextBox EditEventDate2;
-		private System.Windows.Forms.TextBox EditEventCause;
-		private System.Windows.Forms.TextBox EditEventOrg;
-		private System.Windows.Forms.ComboBox EditAttribute;
+		private System.Windows.Forms.TabPage pageCommon;
+		private System.Windows.Forms.Label lblEvent;
+		private System.Windows.Forms.Label lblPlace;
+		private System.Windows.Forms.Label lblDate;
+		private System.Windows.Forms.Label lblCause;
+		private System.Windows.Forms.Label lblOrg;
+		private System.Windows.Forms.Label lblAttrValue;
+		private System.Windows.Forms.ComboBox cmbEventType;
+		private System.Windows.Forms.TextBox txtEventName;
+		private System.Windows.Forms.TextBox txtEventPlace;
+		private System.Windows.Forms.ComboBox cmbEventDateType;
+		private System.Windows.Forms.MaskedTextBox txtEventDate1;
+		private System.Windows.Forms.MaskedTextBox txtEventDate2;
+		private System.Windows.Forms.TextBox txtEventCause;
+		private System.Windows.Forms.TextBox txtEventOrg;
+		private System.Windows.Forms.ComboBox txtAttribute;
 		private System.Windows.Forms.Button btnPlaceAdd;
 		private System.Windows.Forms.Button btnPlaceDelete;
-		private System.Windows.Forms.ComboBox cbDate1Calendar;
-		private System.Windows.Forms.ComboBox cbDate2Calendar;
+		private System.Windows.Forms.ComboBox cmbDate1Calendar;
+		private System.Windows.Forms.ComboBox cmbDate2Calendar;
 		private System.Windows.Forms.CheckBox btnBC1;
 		private System.Windows.Forms.CheckBox btnBC2;
 
@@ -52,35 +52,35 @@ namespace GKUI.Dialogs
 		{
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
-			this.PageEventData = new System.Windows.Forms.TabControl();
-			this.SheetCommon = new System.Windows.Forms.TabPage();
+			this.tabsData = new System.Windows.Forms.TabControl();
+			this.pageCommon = new System.Windows.Forms.TabPage();
 			this.btnBC2 = new System.Windows.Forms.CheckBox();
 			this.btnBC1 = new System.Windows.Forms.CheckBox();
-			this.Label1 = new System.Windows.Forms.Label();
-			this.Label2 = new System.Windows.Forms.Label();
-			this.Label3 = new System.Windows.Forms.Label();
-			this.Label4 = new System.Windows.Forms.Label();
-			this.Label5 = new System.Windows.Forms.Label();
-			this.LabelAttr = new System.Windows.Forms.Label();
+			this.lblEvent = new System.Windows.Forms.Label();
+			this.lblPlace = new System.Windows.Forms.Label();
+			this.lblDate = new System.Windows.Forms.Label();
+			this.lblCause = new System.Windows.Forms.Label();
+			this.lblOrg = new System.Windows.Forms.Label();
+			this.lblAttrValue = new System.Windows.Forms.Label();
 			this.btnPlaceAdd = new System.Windows.Forms.Button();
 			this.btnPlaceDelete = new System.Windows.Forms.Button();
-			this.EditEventType = new System.Windows.Forms.ComboBox();
-			this.EditEventName = new System.Windows.Forms.TextBox();
-			this.EditEventPlace = new System.Windows.Forms.TextBox();
-			this.EditEventDateType = new System.Windows.Forms.ComboBox();
-			this.EditEventDate1 = new System.Windows.Forms.MaskedTextBox();
-			this.EditEventDate2 = new System.Windows.Forms.MaskedTextBox();
-			this.EditEventCause = new System.Windows.Forms.TextBox();
-			this.EditEventOrg = new System.Windows.Forms.TextBox();
-			this.EditAttribute = new System.Windows.Forms.ComboBox();
-			this.cbDate1Calendar = new System.Windows.Forms.ComboBox();
-			this.cbDate2Calendar = new System.Windows.Forms.ComboBox();
-			this.SheetNotes = new System.Windows.Forms.TabPage();
-			this.SheetMultimedia = new System.Windows.Forms.TabPage();
-			this.SheetSources = new System.Windows.Forms.TabPage();
+			this.cmbEventType = new System.Windows.Forms.ComboBox();
+			this.txtEventName = new System.Windows.Forms.TextBox();
+			this.txtEventPlace = new System.Windows.Forms.TextBox();
+			this.cmbEventDateType = new System.Windows.Forms.ComboBox();
+			this.txtEventDate1 = new System.Windows.Forms.MaskedTextBox();
+			this.txtEventDate2 = new System.Windows.Forms.MaskedTextBox();
+			this.txtEventCause = new System.Windows.Forms.TextBox();
+			this.txtEventOrg = new System.Windows.Forms.TextBox();
+			this.txtAttribute = new System.Windows.Forms.ComboBox();
+			this.cmbDate1Calendar = new System.Windows.Forms.ComboBox();
+			this.cmbDate2Calendar = new System.Windows.Forms.ComboBox();
+			this.pageNotes = new System.Windows.Forms.TabPage();
+			this.pageMultimedia = new System.Windows.Forms.TabPage();
+			this.pageSources = new System.Windows.Forms.TabPage();
 			this.btnAddress = new System.Windows.Forms.Button();
-			this.PageEventData.SuspendLayout();
-			this.SheetCommon.SuspendLayout();
+			this.tabsData.SuspendLayout();
+			this.pageCommon.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btnAccept
@@ -91,7 +91,7 @@ namespace GKUI.Dialogs
 			this.btnAccept.Name = "btnAccept";
 			this.btnAccept.Size = new System.Drawing.Size(113, 30);
 			this.btnAccept.TabIndex = 2;
-			this.btnAccept.Text = "Принять";
+			this.btnAccept.Text = "btnAccept";
 			this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.btnAccept.Click += new System.EventHandler(this.btnAccept_Click);
 			// 
@@ -104,50 +104,50 @@ namespace GKUI.Dialogs
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(114, 30);
 			this.btnCancel.TabIndex = 3;
-			this.btnCancel.Text = "Отменить";
+			this.btnCancel.Text = "btnCancel";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// PageEventData
+			// tabsData
 			// 
-			this.PageEventData.Controls.Add(this.SheetCommon);
-			this.PageEventData.Controls.Add(this.SheetNotes);
-			this.PageEventData.Controls.Add(this.SheetMultimedia);
-			this.PageEventData.Controls.Add(this.SheetSources);
-			this.PageEventData.Dock = System.Windows.Forms.DockStyle.Top;
-			this.PageEventData.Location = new System.Drawing.Point(0, 0);
-			this.PageEventData.Name = "PageEventData";
-			this.PageEventData.SelectedIndex = 0;
-			this.PageEventData.Size = new System.Drawing.Size(620, 429);
-			this.PageEventData.TabIndex = 0;
+			this.tabsData.Controls.Add(this.pageCommon);
+			this.tabsData.Controls.Add(this.pageNotes);
+			this.tabsData.Controls.Add(this.pageMultimedia);
+			this.tabsData.Controls.Add(this.pageSources);
+			this.tabsData.Dock = System.Windows.Forms.DockStyle.Top;
+			this.tabsData.Location = new System.Drawing.Point(0, 0);
+			this.tabsData.Name = "tabsData";
+			this.tabsData.SelectedIndex = 0;
+			this.tabsData.Size = new System.Drawing.Size(620, 429);
+			this.tabsData.TabIndex = 0;
 			// 
-			// SheetCommon
+			// pageCommon
 			// 
-			this.SheetCommon.Controls.Add(this.btnBC2);
-			this.SheetCommon.Controls.Add(this.btnBC1);
-			this.SheetCommon.Controls.Add(this.Label1);
-			this.SheetCommon.Controls.Add(this.Label2);
-			this.SheetCommon.Controls.Add(this.Label3);
-			this.SheetCommon.Controls.Add(this.Label4);
-			this.SheetCommon.Controls.Add(this.Label5);
-			this.SheetCommon.Controls.Add(this.LabelAttr);
-			this.SheetCommon.Controls.Add(this.btnPlaceAdd);
-			this.SheetCommon.Controls.Add(this.btnPlaceDelete);
-			this.SheetCommon.Controls.Add(this.EditEventType);
-			this.SheetCommon.Controls.Add(this.EditEventName);
-			this.SheetCommon.Controls.Add(this.EditEventPlace);
-			this.SheetCommon.Controls.Add(this.EditEventDateType);
-			this.SheetCommon.Controls.Add(this.EditEventDate1);
-			this.SheetCommon.Controls.Add(this.EditEventDate2);
-			this.SheetCommon.Controls.Add(this.EditEventCause);
-			this.SheetCommon.Controls.Add(this.EditEventOrg);
-			this.SheetCommon.Controls.Add(this.EditAttribute);
-			this.SheetCommon.Controls.Add(this.cbDate1Calendar);
-			this.SheetCommon.Controls.Add(this.cbDate2Calendar);
-			this.SheetCommon.Location = new System.Drawing.Point(4, 26);
-			this.SheetCommon.Name = "SheetCommon";
-			this.SheetCommon.Size = new System.Drawing.Size(612, 399);
-			this.SheetCommon.TabIndex = 0;
-			this.SheetCommon.Text = "Общее";
+			this.pageCommon.Controls.Add(this.btnBC2);
+			this.pageCommon.Controls.Add(this.btnBC1);
+			this.pageCommon.Controls.Add(this.lblEvent);
+			this.pageCommon.Controls.Add(this.lblPlace);
+			this.pageCommon.Controls.Add(this.lblDate);
+			this.pageCommon.Controls.Add(this.lblCause);
+			this.pageCommon.Controls.Add(this.lblOrg);
+			this.pageCommon.Controls.Add(this.lblAttrValue);
+			this.pageCommon.Controls.Add(this.btnPlaceAdd);
+			this.pageCommon.Controls.Add(this.btnPlaceDelete);
+			this.pageCommon.Controls.Add(this.cmbEventType);
+			this.pageCommon.Controls.Add(this.txtEventName);
+			this.pageCommon.Controls.Add(this.txtEventPlace);
+			this.pageCommon.Controls.Add(this.cmbEventDateType);
+			this.pageCommon.Controls.Add(this.txtEventDate1);
+			this.pageCommon.Controls.Add(this.txtEventDate2);
+			this.pageCommon.Controls.Add(this.txtEventCause);
+			this.pageCommon.Controls.Add(this.txtEventOrg);
+			this.pageCommon.Controls.Add(this.txtAttribute);
+			this.pageCommon.Controls.Add(this.cmbDate1Calendar);
+			this.pageCommon.Controls.Add(this.cmbDate2Calendar);
+			this.pageCommon.Location = new System.Drawing.Point(4, 26);
+			this.pageCommon.Name = "pageCommon";
+			this.pageCommon.Size = new System.Drawing.Size(612, 399);
+			this.pageCommon.TabIndex = 0;
+			this.pageCommon.Text = "pageCommon";
 			// 
 			// btnBC2
 			// 
@@ -171,59 +171,59 @@ namespace GKUI.Dialogs
 			this.btnBC1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.btnBC1.UseVisualStyleBackColor = true;
 			// 
-			// Label1
+			// lblEvent
 			// 
-			this.Label1.AutoSize = true;
-			this.Label1.Location = new System.Drawing.Point(11, 10);
-			this.Label1.Name = "Label1";
-			this.Label1.Size = new System.Drawing.Size(66, 17);
-			this.Label1.TabIndex = 0;
-			this.Label1.Text = "Событие";
+			this.lblEvent.AutoSize = true;
+			this.lblEvent.Location = new System.Drawing.Point(11, 10);
+			this.lblEvent.Name = "lblEvent";
+			this.lblEvent.Size = new System.Drawing.Size(66, 17);
+			this.lblEvent.TabIndex = 0;
+			this.lblEvent.Text = "lblEvent";
 			// 
-			// Label2
+			// lblPlace
 			// 
-			this.Label2.AutoSize = true;
-			this.Label2.Location = new System.Drawing.Point(11, 126);
-			this.Label2.Name = "Label2";
-			this.Label2.Size = new System.Drawing.Size(48, 17);
-			this.Label2.TabIndex = 5;
-			this.Label2.Text = "Место";
+			this.lblPlace.AutoSize = true;
+			this.lblPlace.Location = new System.Drawing.Point(11, 126);
+			this.lblPlace.Name = "lblPlace";
+			this.lblPlace.Size = new System.Drawing.Size(48, 17);
+			this.lblPlace.TabIndex = 5;
+			this.lblPlace.Text = "lblPlace";
 			// 
-			// Label3
+			// lblDate
 			// 
-			this.Label3.AutoSize = true;
-			this.Label3.Location = new System.Drawing.Point(11, 185);
-			this.Label3.Name = "Label3";
-			this.Label3.Size = new System.Drawing.Size(40, 17);
-			this.Label3.TabIndex = 10;
-			this.Label3.Text = "Дата";
+			this.lblDate.AutoSize = true;
+			this.lblDate.Location = new System.Drawing.Point(11, 185);
+			this.lblDate.Name = "lblDate";
+			this.lblDate.Size = new System.Drawing.Size(40, 17);
+			this.lblDate.TabIndex = 10;
+			this.lblDate.Text = "lblDate";
 			// 
-			// Label4
+			// lblCause
 			// 
-			this.Label4.AutoSize = true;
-			this.Label4.Location = new System.Drawing.Point(11, 282);
-			this.Label4.Name = "Label4";
-			this.Label4.Size = new System.Drawing.Size(64, 17);
-			this.Label4.TabIndex = 18;
-			this.Label4.Text = "Причина";
+			this.lblCause.AutoSize = true;
+			this.lblCause.Location = new System.Drawing.Point(11, 282);
+			this.lblCause.Name = "lblCause";
+			this.lblCause.Size = new System.Drawing.Size(64, 17);
+			this.lblCause.TabIndex = 18;
+			this.lblCause.Text = "lblCause";
 			// 
-			// Label5
+			// lblOrg
 			// 
-			this.Label5.AutoSize = true;
-			this.Label5.Location = new System.Drawing.Point(11, 340);
-			this.Label5.Name = "Label5";
-			this.Label5.Size = new System.Drawing.Size(207, 17);
-			this.Label5.TabIndex = 20;
-			this.Label5.Text = "Засвидетельствовавший орган";
+			this.lblOrg.AutoSize = true;
+			this.lblOrg.Location = new System.Drawing.Point(11, 340);
+			this.lblOrg.Name = "lblOrg";
+			this.lblOrg.Size = new System.Drawing.Size(207, 17);
+			this.lblOrg.TabIndex = 20;
+			this.lblOrg.Text = "lblOrg";
 			// 
-			// LabelAttr
+			// lblAttrValue
 			// 
-			this.LabelAttr.AutoSize = true;
-			this.LabelAttr.Location = new System.Drawing.Point(11, 68);
-			this.LabelAttr.Name = "LabelAttr";
-			this.LabelAttr.Size = new System.Drawing.Size(134, 17);
-			this.LabelAttr.TabIndex = 3;
-			this.LabelAttr.Text = "Значение атрибута";
+			this.lblAttrValue.AutoSize = true;
+			this.lblAttrValue.Location = new System.Drawing.Point(11, 68);
+			this.lblAttrValue.Name = "lblAttrValue";
+			this.lblAttrValue.Size = new System.Drawing.Size(134, 17);
+			this.lblAttrValue.TabIndex = 3;
+			this.lblAttrValue.Text = "lblAttrValue";
 			// 
 			// btnPlaceAdd
 			// 
@@ -247,124 +247,124 @@ namespace GKUI.Dialogs
 			this.btnPlaceDelete.TabIndex = 9;
 			this.btnPlaceDelete.Click += new System.EventHandler(this.btnPlaceDelete_Click);
 			// 
-			// EditEventType
+			// cmbEventType
 			// 
-			this.EditEventType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.EditEventType.Location = new System.Drawing.Point(11, 29);
-			this.EditEventType.Name = "EditEventType";
-			this.EditEventType.Size = new System.Drawing.Size(259, 25);
-			this.EditEventType.TabIndex = 1;
-			this.EditEventType.SelectedIndexChanged += new System.EventHandler(this.EditEventType_SelectedIndexChanged);
+			this.cmbEventType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cmbEventType.Location = new System.Drawing.Point(11, 29);
+			this.cmbEventType.Name = "cmbEventType";
+			this.cmbEventType.Size = new System.Drawing.Size(259, 25);
+			this.cmbEventType.TabIndex = 1;
+			this.cmbEventType.SelectedIndexChanged += new System.EventHandler(this.EditEventType_SelectedIndexChanged);
 			// 
-			// EditEventName
+			// txtEventName
 			// 
-			this.EditEventName.Location = new System.Drawing.Point(280, 29);
-			this.EditEventName.Name = "EditEventName";
-			this.EditEventName.Size = new System.Drawing.Size(316, 24);
-			this.EditEventName.TabIndex = 2;
+			this.txtEventName.Location = new System.Drawing.Point(280, 29);
+			this.txtEventName.Name = "txtEventName";
+			this.txtEventName.Size = new System.Drawing.Size(316, 24);
+			this.txtEventName.TabIndex = 2;
 			// 
-			// EditEventPlace
+			// txtEventPlace
 			// 
-			this.EditEventPlace.Location = new System.Drawing.Point(11, 146);
-			this.EditEventPlace.Name = "EditEventPlace";
-			this.EditEventPlace.Size = new System.Drawing.Size(492, 24);
-			this.EditEventPlace.TabIndex = 6;
-			this.EditEventPlace.KeyDown += new System.Windows.Forms.KeyEventHandler(this.EditEventPlace_KeyDown);
+			this.txtEventPlace.Location = new System.Drawing.Point(11, 146);
+			this.txtEventPlace.Name = "txtEventPlace";
+			this.txtEventPlace.Size = new System.Drawing.Size(492, 24);
+			this.txtEventPlace.TabIndex = 6;
+			this.txtEventPlace.KeyDown += new System.Windows.Forms.KeyEventHandler(this.EditEventPlace_KeyDown);
 			// 
-			// EditEventDateType
+			// cmbEventDateType
 			// 
-			this.EditEventDateType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.EditEventDateType.Location = new System.Drawing.Point(11, 204);
-			this.EditEventDateType.Name = "EditEventDateType";
-			this.EditEventDateType.Size = new System.Drawing.Size(168, 25);
-			this.EditEventDateType.TabIndex = 11;
-			this.EditEventDateType.SelectedIndexChanged += new System.EventHandler(this.EditEventDateType_SelectedIndexChanged);
+			this.cmbEventDateType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cmbEventDateType.Location = new System.Drawing.Point(11, 204);
+			this.cmbEventDateType.Name = "cmbEventDateType";
+			this.cmbEventDateType.Size = new System.Drawing.Size(168, 25);
+			this.cmbEventDateType.TabIndex = 11;
+			this.cmbEventDateType.SelectedIndexChanged += new System.EventHandler(this.EditEventDateType_SelectedIndexChanged);
 			// 
-			// EditEventDate1
+			// txtEventDate1
 			// 
-			this.EditEventDate1.AllowDrop = true;
-			this.EditEventDate1.BackColor = System.Drawing.SystemColors.Window;
-			this.EditEventDate1.Location = new System.Drawing.Point(190, 204);
-			this.EditEventDate1.Mask = "00/00/0000";
-			this.EditEventDate1.Name = "EditEventDate1";
-			this.EditEventDate1.Size = new System.Drawing.Size(196, 24);
-			this.EditEventDate1.TabIndex = 12;
-			this.EditEventDate1.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-			this.EditEventDate1.DragDrop += new System.Windows.Forms.DragEventHandler(this.EditEventDate1_DragDrop);
-			this.EditEventDate1.DragOver += new System.Windows.Forms.DragEventHandler(this.EditEventDate1_DragOver);
+			this.txtEventDate1.AllowDrop = true;
+			this.txtEventDate1.BackColor = System.Drawing.SystemColors.Window;
+			this.txtEventDate1.Location = new System.Drawing.Point(190, 204);
+			this.txtEventDate1.Mask = "00/00/0000";
+			this.txtEventDate1.Name = "txtEventDate1";
+			this.txtEventDate1.Size = new System.Drawing.Size(196, 24);
+			this.txtEventDate1.TabIndex = 12;
+			this.txtEventDate1.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+			this.txtEventDate1.DragDrop += new System.Windows.Forms.DragEventHandler(this.EditEventDate1_DragDrop);
+			this.txtEventDate1.DragOver += new System.Windows.Forms.DragEventHandler(this.EditEventDate1_DragOver);
 			// 
-			// EditEventDate2
+			// txtEventDate2
 			// 
-			this.EditEventDate2.AllowDrop = true;
-			this.EditEventDate2.Location = new System.Drawing.Point(400, 204);
-			this.EditEventDate2.Mask = "00/00/0000";
-			this.EditEventDate2.Name = "EditEventDate2";
-			this.EditEventDate2.Size = new System.Drawing.Size(196, 24);
-			this.EditEventDate2.TabIndex = 15;
-			this.EditEventDate2.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-			this.EditEventDate2.DragDrop += new System.Windows.Forms.DragEventHandler(this.EditEventDate1_DragDrop);
-			this.EditEventDate2.DragOver += new System.Windows.Forms.DragEventHandler(this.EditEventDate1_DragOver);
+			this.txtEventDate2.AllowDrop = true;
+			this.txtEventDate2.Location = new System.Drawing.Point(400, 204);
+			this.txtEventDate2.Mask = "00/00/0000";
+			this.txtEventDate2.Name = "txtEventDate2";
+			this.txtEventDate2.Size = new System.Drawing.Size(196, 24);
+			this.txtEventDate2.TabIndex = 15;
+			this.txtEventDate2.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+			this.txtEventDate2.DragDrop += new System.Windows.Forms.DragEventHandler(this.EditEventDate1_DragDrop);
+			this.txtEventDate2.DragOver += new System.Windows.Forms.DragEventHandler(this.EditEventDate1_DragOver);
 			// 
-			// EditEventCause
+			// txtEventCause
 			// 
-			this.EditEventCause.Location = new System.Drawing.Point(11, 301);
-			this.EditEventCause.Name = "EditEventCause";
-			this.EditEventCause.Size = new System.Drawing.Size(585, 24);
-			this.EditEventCause.TabIndex = 19;
+			this.txtEventCause.Location = new System.Drawing.Point(11, 301);
+			this.txtEventCause.Name = "txtEventCause";
+			this.txtEventCause.Size = new System.Drawing.Size(585, 24);
+			this.txtEventCause.TabIndex = 19;
 			// 
-			// EditEventOrg
+			// txtEventOrg
 			// 
-			this.EditEventOrg.Location = new System.Drawing.Point(11, 359);
-			this.EditEventOrg.Name = "EditEventOrg";
-			this.EditEventOrg.Size = new System.Drawing.Size(585, 24);
-			this.EditEventOrg.TabIndex = 21;
+			this.txtEventOrg.Location = new System.Drawing.Point(11, 359);
+			this.txtEventOrg.Name = "txtEventOrg";
+			this.txtEventOrg.Size = new System.Drawing.Size(585, 24);
+			this.txtEventOrg.TabIndex = 21;
 			// 
-			// EditAttribute
+			// txtAttribute
 			// 
-			this.EditAttribute.Location = new System.Drawing.Point(11, 87);
-			this.EditAttribute.Name = "EditAttribute";
-			this.EditAttribute.Size = new System.Drawing.Size(585, 25);
-			this.EditAttribute.TabIndex = 4;
+			this.txtAttribute.Location = new System.Drawing.Point(11, 87);
+			this.txtAttribute.Name = "EditAttribute";
+			this.txtAttribute.Size = new System.Drawing.Size(585, 25);
+			this.txtAttribute.TabIndex = 4;
 			// 
-			// cbDate1Calendar
+			// cmbDate1Calendar
 			// 
-			this.cbDate1Calendar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cbDate1Calendar.Location = new System.Drawing.Point(190, 243);
-			this.cbDate1Calendar.Name = "cbDate1Calendar";
-			this.cbDate1Calendar.Size = new System.Drawing.Size(133, 25);
-			this.cbDate1Calendar.TabIndex = 13;
+			this.cmbDate1Calendar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cmbDate1Calendar.Location = new System.Drawing.Point(190, 243);
+			this.cmbDate1Calendar.Name = "cmbDate1Calendar";
+			this.cmbDate1Calendar.Size = new System.Drawing.Size(133, 25);
+			this.cmbDate1Calendar.TabIndex = 13;
 			// 
-			// cbDate2Calendar
+			// cmbDate2Calendar
 			// 
-			this.cbDate2Calendar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cbDate2Calendar.Location = new System.Drawing.Point(400, 242);
-			this.cbDate2Calendar.Name = "cbDate2Calendar";
-			this.cbDate2Calendar.Size = new System.Drawing.Size(133, 25);
-			this.cbDate2Calendar.TabIndex = 16;
+			this.cmbDate2Calendar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cmbDate2Calendar.Location = new System.Drawing.Point(400, 242);
+			this.cmbDate2Calendar.Name = "cmbDate2Calendar";
+			this.cmbDate2Calendar.Size = new System.Drawing.Size(133, 25);
+			this.cmbDate2Calendar.TabIndex = 16;
 			// 
-			// SheetNotes
+			// pageNotes
 			// 
-			this.SheetNotes.Location = new System.Drawing.Point(4, 26);
-			this.SheetNotes.Name = "SheetNotes";
-			this.SheetNotes.Size = new System.Drawing.Size(612, 399);
-			this.SheetNotes.TabIndex = 1;
-			this.SheetNotes.Text = "Заметки";
+			this.pageNotes.Location = new System.Drawing.Point(4, 26);
+			this.pageNotes.Name = "pageNotes";
+			this.pageNotes.Size = new System.Drawing.Size(612, 399);
+			this.pageNotes.TabIndex = 1;
+			this.pageNotes.Text = "pageNotes";
 			// 
-			// SheetMultimedia
+			// pageMultimedia
 			// 
-			this.SheetMultimedia.Location = new System.Drawing.Point(4, 26);
-			this.SheetMultimedia.Name = "SheetMultimedia";
-			this.SheetMultimedia.Size = new System.Drawing.Size(612, 399);
-			this.SheetMultimedia.TabIndex = 2;
-			this.SheetMultimedia.Text = "Мультимедиа";
+			this.pageMultimedia.Location = new System.Drawing.Point(4, 26);
+			this.pageMultimedia.Name = "pageMultimedia";
+			this.pageMultimedia.Size = new System.Drawing.Size(612, 399);
+			this.pageMultimedia.TabIndex = 2;
+			this.pageMultimedia.Text = "pageMultimedia";
 			// 
-			// SheetSources
+			// pageSources
 			// 
-			this.SheetSources.Location = new System.Drawing.Point(4, 26);
-			this.SheetSources.Name = "SheetSources";
-			this.SheetSources.Size = new System.Drawing.Size(612, 399);
-			this.SheetSources.TabIndex = 3;
-			this.SheetSources.Text = "Источники";
+			this.pageSources.Location = new System.Drawing.Point(4, 26);
+			this.pageSources.Name = "pageSources";
+			this.pageSources.Size = new System.Drawing.Size(612, 399);
+			this.pageSources.TabIndex = 3;
+			this.pageSources.Text = "pageSources";
 			// 
 			// btnAddress
 			// 
@@ -372,7 +372,7 @@ namespace GKUI.Dialogs
 			this.btnAddress.Name = "btnAddress";
 			this.btnAddress.Size = new System.Drawing.Size(114, 30);
 			this.btnAddress.TabIndex = 1;
-			this.btnAddress.Text = "Адрес...";
+			this.btnAddress.Text = "btnAddress";
 			this.btnAddress.Click += new System.EventHandler(this.btnAddress_Click);
 			// 
 			// EventEditDlg
@@ -384,7 +384,7 @@ namespace GKUI.Dialogs
 			this.ClientSize = new System.Drawing.Size(620, 492);
 			this.Controls.Add(this.btnAccept);
 			this.Controls.Add(this.btnCancel);
-			this.Controls.Add(this.PageEventData);
+			this.Controls.Add(this.tabsData);
 			this.Controls.Add(this.btnAddress);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -393,10 +393,10 @@ namespace GKUI.Dialogs
 			this.Name = "EventEditDlg";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "Событие";
-			this.PageEventData.ResumeLayout(false);
-			this.SheetCommon.ResumeLayout(false);
-			this.SheetCommon.PerformLayout();
+			this.Text = "EventEditDlg";
+			this.tabsData.ResumeLayout(false);
+			this.pageCommon.ResumeLayout(false);
+			this.pageCommon.PerformLayout();
 			this.ResumeLayout(false);
 		}
 	}

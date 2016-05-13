@@ -67,23 +67,23 @@ namespace GKUI.Dialogs
             this.fMapBrowser.Dock = DockStyle.Fill;
             this.panMap.Controls.Add(this.fMapBrowser);
 
-            this.fNotesList = new GKNotesSheet(this, this.SheetNotes);
-            this.fMediaList = new GKMediaSheet(this, this.SheetMultimedia);
+            this.fNotesList = new GKNotesSheet(this, this.pageNotes);
+            this.fMediaList = new GKMediaSheet(this, this.pageMultimedia);
 
             // SetLang()
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            this.SheetCommon.Text = LangMan.LS(LSID.LSID_Common);
-            this.SheetNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            this.SheetMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            this.Label1.Text = LangMan.LS(LSID.LSID_Title);
-            this.Label2.Text = LangMan.LS(LSID.LSID_Latitude);
-            this.Label3.Text = LangMan.LS(LSID.LSID_Longitude);
+            this.pageCommon.Text = LangMan.LS(LSID.LSID_Common);
+            this.pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
+            this.pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
+            this.lblName.Text = LangMan.LS(LSID.LSID_Title);
+            this.lblLatitude.Text = LangMan.LS(LSID.LSID_Latitude);
+            this.lblLongitude.Text = LangMan.LS(LSID.LSID_Longitude);
             this.ListGeoCoords.Columns[0].Text = LangMan.LS(LSID.LSID_Title);
             this.ListGeoCoords.Columns[1].Text = LangMan.LS(LSID.LSID_Latitude);
             this.ListGeoCoords.Columns[2].Text = LangMan.LS(LSID.LSID_Longitude);
             this.btnShowOnMap.Text = LangMan.LS(LSID.LSID_Show);
-            this.GroupBox1.Text = LangMan.LS(LSID.LSID_SearchCoords);
+            this.grpSearch.Text = LangMan.LS(LSID.LSID_SearchCoords);
             this.btnSearch.Text = LangMan.LS(LSID.LSID_Search);
             this.btnSelect.Text = LangMan.LS(LSID.LSID_SelectCoords);
             this.btnSelectName.Text = LangMan.LS(LSID.LSID_SelectName);
@@ -101,21 +101,21 @@ namespace GKUI.Dialogs
         private void SetLocationRecord(GEDCOMLocationRecord value)
         {
             this.fLocationRecord = value;
-            this.EditName.Text = this.fLocationRecord.LocationName;
-            this.EditLatitude.Text = GKMapBrowser.CoordToStr(this.fLocationRecord.Map.Lati);
-            this.EditLongitude.Text = GKMapBrowser.CoordToStr(this.fLocationRecord.Map.Long);
+            this.txtName.Text = this.fLocationRecord.LocationName;
+            this.txtLatitude.Text = GKMapBrowser.CoordToStr(this.fLocationRecord.Map.Lati);
+            this.txtLongitude.Text = GKMapBrowser.CoordToStr(this.fLocationRecord.Map.Long);
 
             this.fNotesList.DataList = this.fLocationRecord.Notes.GetEnumerator();
             this.fMediaList.DataList = this.fLocationRecord.MultimediaLinks.GetEnumerator();
 
-            this.ActiveControl = this.EditName;
+            this.ActiveControl = this.txtName;
         }
 
         private void EditName_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Down && e.Control)
             {
-                this.EditName.Text = this.EditName.Text.ToLower();
+                this.txtName.Text = this.txtName.Text.ToLower();
             }
         }
 
@@ -123,9 +123,9 @@ namespace GKUI.Dialogs
         {
             try
             {
-                this.fLocationRecord.LocationName = this.EditName.Text;
-                this.fLocationRecord.Map.Lati = ConvHelper.ParseFloat(this.EditLatitude.Text, 0.0);
-                this.fLocationRecord.Map.Long = ConvHelper.ParseFloat(this.EditLongitude.Text, 0.0);
+                this.fLocationRecord.LocationName = this.txtName.Text;
+                this.fLocationRecord.Map.Lati = ConvHelper.ParseFloat(this.txtLatitude.Text, 0.0);
+                this.fLocationRecord.Map.Long = ConvHelper.ParseFloat(this.txtLongitude.Text, 0.0);
                 this.fBase.ChangeRecord(this.fLocationRecord);
                 base.DialogResult = DialogResult.OK;
             }
@@ -145,7 +145,7 @@ namespace GKUI.Dialogs
             try
             {
                 this.fSearchPoints.Clear();
-                GKMapBrowser.RequestGeoCoords(this.EditName.Text, this.fSearchPoints);
+                GKMapBrowser.RequestGeoCoords(this.txtName.Text, this.fSearchPoints);
                 this.ListGeoCoords.Items.Clear();
                 this.fMapBrowser.ClearPoints();
 
@@ -184,8 +184,8 @@ namespace GKUI.Dialogs
             GKListItem item = this.GetSelectedGeoItem();
             if (item == null) return;
 
-            this.EditLatitude.Text = item.SubItems[1].Text;
-            this.EditLongitude.Text = item.SubItems[2].Text;
+            this.txtLatitude.Text = item.SubItems[1].Text;
+            this.txtLongitude.Text = item.SubItems[2].Text;
         }
 
         private void btnSelectName_Click(object sender, EventArgs e)
@@ -193,7 +193,7 @@ namespace GKUI.Dialogs
             GKListItem item = this.GetSelectedGeoItem();
             if (item == null) return;
 
-            this.EditName.Text = item.Text;
+            this.txtName.Text = item.Text;
         }
 
         private void ListGeoCoords_Click(object sender, EventArgs e)
@@ -209,14 +209,14 @@ namespace GKUI.Dialogs
 
         private void EditName_TextChanged(object sender, EventArgs e)
         {
-            this.Text = string.Format("{0} \"{1}\"", LangMan.LS(LSID.LSID_Location), this.EditName.Text);
+            this.Text = string.Format("{0} \"{1}\"", LangMan.LS(LSID.LSID_Location), this.txtName.Text);
         }
 
         private void btnShowOnMap_Click(object sender, EventArgs e)
         {
-            if (this.EditLatitude.Text != "" && this.EditLongitude.Text != "")
+            if (this.txtLatitude.Text != "" && this.txtLongitude.Text != "")
             {
-                this.fMapBrowser.SetCenter(ConvHelper.ParseFloat(this.EditLatitude.Text, 0), ConvHelper.ParseFloat(this.EditLongitude.Text, 0), -1);
+                this.fMapBrowser.SetCenter(ConvHelper.ParseFloat(this.txtLatitude.Text, 0), ConvHelper.ParseFloat(this.txtLongitude.Text, 0), -1);
             }
         }
     }

@@ -66,17 +66,17 @@ namespace GKUI.Dialogs
                 {
                     this.btnHusbandSel.Enabled = false;
                     this.btnWifeSel.Enabled = false;
-                    this.edMarriageStatus.Enabled = false;
-                    this.edMarriageStatus.SelectedIndex = 0;
-                    this.cbRestriction.SelectedIndex = 0;
+                    this.cmbMarriageStatus.Enabled = false;
+                    this.cmbMarriageStatus.SelectedIndex = 0;
+                    this.cmbRestriction.SelectedIndex = 0;
                 }
                 else
                 {
                     string stat = this.fFamily.GetTagStringValue("_STAT");
                     int statIdx = GKUtils.GetMarriageStatusIndex(stat);
-                    this.edMarriageStatus.Enabled = true;
-                    this.edMarriageStatus.SelectedIndex = statIdx;
-                    this.cbRestriction.SelectedIndex = (sbyte)this.fFamily.Restriction;
+                    this.cmbMarriageStatus.Enabled = true;
+                    this.cmbMarriageStatus.SelectedIndex = statIdx;
+                    this.cmbRestriction.SelectedIndex = (sbyte)this.fFamily.Restriction;
                     
                     this.UpdateControls();
                 }
@@ -94,46 +94,46 @@ namespace GKUI.Dialogs
 
             for (GEDCOMRestriction res = GEDCOMRestriction.rnNone; res <= GEDCOMRestriction.rnLast; res++)
             {
-                this.cbRestriction.Items.Add(LangMan.LS(GKData.Restrictions[(int)res]));
+                this.cmbRestriction.Items.Add(LangMan.LS(GKData.Restrictions[(int)res]));
             }
 
             for (int i = 0; i < GKData.MarriageStatus.Length; i++)
             {
-                this.edMarriageStatus.Items.Add(LangMan.LS(GKData.MarriageStatus[i].Name));
+                this.cmbMarriageStatus.Items.Add(LangMan.LS(GKData.MarriageStatus[i].Name));
             }
 
-            this.fChildsList = this.CreateChildsSheet(this.SheetChilds);
-            this.fEventsList = new GKEventsSheet(this, this.SheetEvents, false);
-            this.fNotesList = new GKNotesSheet(this, this.SheetNotes);
-            this.fMediaList = new GKMediaSheet(this, this.SheetMultimedia);
-            this.fSourcesList = new GKSourcesSheet(this, this.SheetSources);
+            this.fChildsList = this.CreateChildsSheet(this.pageChilds);
+            this.fEventsList = new GKEventsSheet(this, this.pageEvents, false);
+            this.fNotesList = new GKNotesSheet(this, this.pageNotes);
+            this.fMediaList = new GKMediaSheet(this, this.pageMultimedia);
+            this.fSourcesList = new GKSourcesSheet(this, this.pageSources);
 
             // SetLang()
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             this.GroupBox1.Text = LangMan.LS(LSID.LSID_Family);
-            this.Label1.Text = LangMan.LS(LSID.LSID_Husband);
-            this.Label2.Text = LangMan.LS(LSID.LSID_Wife);
-            this.Label6.Text = LangMan.LS(LSID.LSID_Status);
-            this.SheetChilds.Text = LangMan.LS(LSID.LSID_Childs);
-            this.SheetEvents.Text = LangMan.LS(LSID.LSID_Events);
-            this.SheetNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            this.SheetMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            this.SheetSources.Text = LangMan.LS(LSID.LSID_RPSources);
-            this.Label5.Text = LangMan.LS(LSID.LSID_Restriction);
+            this.lblHusband.Text = LangMan.LS(LSID.LSID_Husband);
+            this.lblWife.Text = LangMan.LS(LSID.LSID_Wife);
+            this.lblStatus.Text = LangMan.LS(LSID.LSID_Status);
+            this.pageChilds.Text = LangMan.LS(LSID.LSID_Childs);
+            this.pageEvents.Text = LangMan.LS(LSID.LSID_Events);
+            this.pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
+            this.pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
+            this.pageSources.Text = LangMan.LS(LSID.LSID_RPSources);
+            this.lblRestriction.Text = LangMan.LS(LSID.LSID_Restriction);
         }
 
         private void UpdateControls()
         {
             GEDCOMIndividualRecord husband = this.fFamily.GetHusband();
-            this.EditHusband.Text = (husband != null) ? husband.GetNameString(true, false) : LangMan.LS(LSID.LSID_UnkMale);
+            this.txtHusband.Text = (husband != null) ? husband.GetNameString(true, false) : LangMan.LS(LSID.LSID_UnkMale);
 
             this.btnHusbandAdd.Enabled = (husband == null);
             this.btnHusbandDelete.Enabled = (husband != null);
             this.btnHusbandSel.Enabled = (husband != null);
 
             GEDCOMIndividualRecord wife = this.fFamily.GetWife();
-            this.EditWife.Text = (wife != null) ? wife.GetNameString(true, false) : LangMan.LS(LSID.LSID_UnkFemale);
+            this.txtWife.Text = (wife != null) ? wife.GetNameString(true, false) : LangMan.LS(LSID.LSID_UnkFemale);
 
             this.btnWifeAdd.Enabled = (wife == null);
             this.btnWifeDelete.Enabled = (wife != null);
@@ -155,7 +155,7 @@ namespace GKUI.Dialogs
             this.btnWifeAdd.Enabled = (this.btnWifeAdd.Enabled && !locked);
             this.btnWifeDelete.Enabled = (this.btnWifeDelete.Enabled && !locked);
 
-            this.edMarriageStatus.Enabled = (this.edMarriageStatus.Enabled && !locked);
+            this.cmbMarriageStatus.Enabled = (this.cmbMarriageStatus.Enabled && !locked);
 
             this.fChildsList.ReadOnly = locked;
             this.fEventsList.ReadOnly = locked;
@@ -166,7 +166,7 @@ namespace GKUI.Dialogs
 
         private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.LockEditor(this.cbRestriction.SelectedIndex == (int)GEDCOMRestriction.rnLocked);
+            this.LockEditor(this.cmbRestriction.SelectedIndex == (int)GEDCOMRestriction.rnLocked);
         }
 
         private GKSheetList CreateChildsSheet(Control owner)
@@ -248,10 +248,10 @@ namespace GKUI.Dialogs
 
         private void AcceptChanges()
         {
-            string stat = GKData.MarriageStatus[this.edMarriageStatus.SelectedIndex].StatSign;
+            string stat = GKData.MarriageStatus[this.cmbMarriageStatus.SelectedIndex].StatSign;
             this.fFamily.SetTagStringValue("_STAT", stat);
 
-            this.fFamily.Restriction = (GEDCOMRestriction)this.cbRestriction.SelectedIndex;
+            this.fFamily.Restriction = (GEDCOMRestriction)this.cmbRestriction.SelectedIndex;
 
             this.fFamily.SortChilds();
 
@@ -274,7 +274,7 @@ namespace GKUI.Dialogs
 
         private void SetTitle()
         {
-            this.Text = string.Format("{0} \"{1} - {2}\"", LangMan.LS(LSID.LSID_Family), this.EditHusband.Text, this.EditWife.Text);
+            this.Text = string.Format("{0} \"{1} - {2}\"", LangMan.LS(LSID.LSID_Family), this.txtHusband.Text, this.txtWife.Text);
         }
 
         private void btnHusbandAddClick(object sender, EventArgs e)

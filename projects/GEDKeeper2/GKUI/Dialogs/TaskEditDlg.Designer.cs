@@ -5,55 +5,55 @@ namespace GKUI.Dialogs
 	partial class TaskEditDlg
 	{
 		private System.Windows.Forms.GroupBox GroupBox1;
-		private System.Windows.Forms.TabControl PagesGroupData;
-		private System.Windows.Forms.TabPage SheetNotes;
+		private System.Windows.Forms.TabControl tabsData;
+		private System.Windows.Forms.TabPage pageNotes;
 		private System.Windows.Forms.Button btnAccept;
 		private System.Windows.Forms.Button btnCancel;
-		private System.Windows.Forms.Label Label2;
-		private System.Windows.Forms.ComboBox EditPriority;
-		private System.Windows.Forms.Label Label4;
-		private System.Windows.Forms.MaskedTextBox EditStartDate;
-		private System.Windows.Forms.MaskedTextBox EditStopDate;
-		private System.Windows.Forms.Label Label5;
-		private System.Windows.Forms.Label Label1;
-		private System.Windows.Forms.ComboBox cbGoalType;
-		private System.Windows.Forms.TextBox EditGoal;
+		private System.Windows.Forms.Label lblPriority;
+		private System.Windows.Forms.ComboBox txtPriority;
+		private System.Windows.Forms.Label lblStartDate;
+		private System.Windows.Forms.MaskedTextBox txtStartDate;
+		private System.Windows.Forms.MaskedTextBox txtStopDate;
+		private System.Windows.Forms.Label lblStopDate;
+		private System.Windows.Forms.Label lblGoal;
+		private System.Windows.Forms.ComboBox cmbGoalType;
+		private System.Windows.Forms.TextBox txtGoal;
 		private System.Windows.Forms.Button btnGoalSelect;
 
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TaskEditDlg));
 			this.GroupBox1 = new System.Windows.Forms.GroupBox();
-			this.Label2 = new System.Windows.Forms.Label();
-			this.Label4 = new System.Windows.Forms.Label();
-			this.Label5 = new System.Windows.Forms.Label();
-			this.Label1 = new System.Windows.Forms.Label();
+			this.lblPriority = new System.Windows.Forms.Label();
+			this.lblStartDate = new System.Windows.Forms.Label();
+			this.lblStopDate = new System.Windows.Forms.Label();
+			this.lblGoal = new System.Windows.Forms.Label();
 			this.btnGoalSelect = new System.Windows.Forms.Button();
-			this.EditPriority = new System.Windows.Forms.ComboBox();
-			this.EditStartDate = new System.Windows.Forms.MaskedTextBox();
-			this.EditStopDate = new System.Windows.Forms.MaskedTextBox();
-			this.cbGoalType = new System.Windows.Forms.ComboBox();
-			this.EditGoal = new System.Windows.Forms.TextBox();
+			this.txtPriority = new System.Windows.Forms.ComboBox();
+			this.txtStartDate = new System.Windows.Forms.MaskedTextBox();
+			this.txtStopDate = new System.Windows.Forms.MaskedTextBox();
+			this.cmbGoalType = new System.Windows.Forms.ComboBox();
+			this.txtGoal = new System.Windows.Forms.TextBox();
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
-			this.PagesGroupData = new System.Windows.Forms.TabControl();
-			this.SheetNotes = new System.Windows.Forms.TabPage();
+			this.tabsData = new System.Windows.Forms.TabControl();
+			this.pageNotes = new System.Windows.Forms.TabPage();
 			this.GroupBox1.SuspendLayout();
-			this.PagesGroupData.SuspendLayout();
+			this.tabsData.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// GroupBox1
 			// 
-			this.GroupBox1.Controls.Add(this.Label2);
-			this.GroupBox1.Controls.Add(this.Label4);
-			this.GroupBox1.Controls.Add(this.Label5);
-			this.GroupBox1.Controls.Add(this.Label1);
+			this.GroupBox1.Controls.Add(this.lblPriority);
+			this.GroupBox1.Controls.Add(this.lblStartDate);
+			this.GroupBox1.Controls.Add(this.lblStopDate);
+			this.GroupBox1.Controls.Add(this.lblGoal);
 			this.GroupBox1.Controls.Add(this.btnGoalSelect);
-			this.GroupBox1.Controls.Add(this.EditPriority);
-			this.GroupBox1.Controls.Add(this.EditStartDate);
-			this.GroupBox1.Controls.Add(this.EditStopDate);
-			this.GroupBox1.Controls.Add(this.cbGoalType);
-			this.GroupBox1.Controls.Add(this.EditGoal);
+			this.GroupBox1.Controls.Add(this.txtPriority);
+			this.GroupBox1.Controls.Add(this.txtStartDate);
+			this.GroupBox1.Controls.Add(this.txtStopDate);
+			this.GroupBox1.Controls.Add(this.cmbGoalType);
+			this.GroupBox1.Controls.Add(this.txtGoal);
 			this.GroupBox1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.GroupBox1.Location = new System.Drawing.Point(0, 0);
 			this.GroupBox1.Name = "GroupBox1";
@@ -61,41 +61,41 @@ namespace GKUI.Dialogs
 			this.GroupBox1.TabIndex = 0;
 			this.GroupBox1.TabStop = false;
 			// 
-			// Label2
+			// lblPriority
 			// 
-			this.Label2.AutoSize = true;
-			this.Label2.Location = new System.Drawing.Point(11, 52);
-			this.Label2.Name = "Label2";
-			this.Label2.Size = new System.Drawing.Size(80, 17);
-			this.Label2.TabIndex = 4;
-			this.Label2.Text = "Приоритет";
+			this.lblPriority.AutoSize = true;
+			this.lblPriority.Location = new System.Drawing.Point(11, 52);
+			this.lblPriority.Name = "lblPriority";
+			this.lblPriority.Size = new System.Drawing.Size(80, 17);
+			this.lblPriority.TabIndex = 4;
+			this.lblPriority.Text = "lblPriority";
 			// 
-			// Label4
+			// lblStartDate
 			// 
-			this.Label4.AutoSize = true;
-			this.Label4.Location = new System.Drawing.Point(11, 81);
-			this.Label4.Name = "Label4";
-			this.Label4.Size = new System.Drawing.Size(72, 17);
-			this.Label4.TabIndex = 6;
-			this.Label4.Text = "Запущено";
+			this.lblStartDate.AutoSize = true;
+			this.lblStartDate.Location = new System.Drawing.Point(11, 81);
+			this.lblStartDate.Name = "lblStartDate";
+			this.lblStartDate.Size = new System.Drawing.Size(72, 17);
+			this.lblStartDate.TabIndex = 6;
+			this.lblStartDate.Text = "lblStartDate";
 			// 
-			// Label5
+			// lblStopDate
 			// 
-			this.Label5.AutoSize = true;
-			this.Label5.Location = new System.Drawing.Point(343, 81);
-			this.Label5.Name = "Label5";
-			this.Label5.Size = new System.Drawing.Size(77, 17);
-			this.Label5.TabIndex = 8;
-			this.Label5.Text = "Завершено";
+			this.lblStopDate.AutoSize = true;
+			this.lblStopDate.Location = new System.Drawing.Point(343, 81);
+			this.lblStopDate.Name = "lblStopDate";
+			this.lblStopDate.Size = new System.Drawing.Size(77, 17);
+			this.lblStopDate.TabIndex = 8;
+			this.lblStopDate.Text = "lblStopDate";
 			// 
-			// Label1
+			// lblGoal
 			// 
-			this.Label1.AutoSize = true;
-			this.Label1.Location = new System.Drawing.Point(11, 22);
-			this.Label1.Name = "Label1";
-			this.Label1.Size = new System.Drawing.Size(40, 17);
-			this.Label1.TabIndex = 0;
-			this.Label1.Text = "Цель";
+			this.lblGoal.AutoSize = true;
+			this.lblGoal.Location = new System.Drawing.Point(11, 22);
+			this.lblGoal.Name = "lblGoal";
+			this.lblGoal.Size = new System.Drawing.Size(40, 17);
+			this.lblGoal.TabIndex = 0;
+			this.lblGoal.Text = "lblGoal";
 			// 
 			// btnGoalSelect
 			// 
@@ -107,48 +107,48 @@ namespace GKUI.Dialogs
 			this.btnGoalSelect.TabIndex = 3;
 			this.btnGoalSelect.Click += new System.EventHandler(this.btnGoalSelect_Click);
 			// 
-			// EditPriority
+			// txtPriority
 			// 
-			this.EditPriority.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.EditPriority.Location = new System.Drawing.Point(101, 49);
-			this.EditPriority.Name = "EditPriority";
-			this.EditPriority.Size = new System.Drawing.Size(225, 25);
-			this.EditPriority.TabIndex = 5;
+			this.txtPriority.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.txtPriority.Location = new System.Drawing.Point(101, 49);
+			this.txtPriority.Name = "txtPriority";
+			this.txtPriority.Size = new System.Drawing.Size(225, 25);
+			this.txtPriority.TabIndex = 5;
 			// 
-			// EditStartDate
+			// txtStartDate
 			// 
-			this.EditStartDate.Location = new System.Drawing.Point(101, 78);
-			this.EditStartDate.Mask = "00/00/0000";
-			this.EditStartDate.Name = "EditStartDate";
-			this.EditStartDate.Size = new System.Drawing.Size(225, 24);
-			this.EditStartDate.TabIndex = 7;
-			this.EditStartDate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+			this.txtStartDate.Location = new System.Drawing.Point(101, 78);
+			this.txtStartDate.Mask = "00/00/0000";
+			this.txtStartDate.Name = "txtStartDate";
+			this.txtStartDate.Size = new System.Drawing.Size(225, 24);
+			this.txtStartDate.TabIndex = 7;
+			this.txtStartDate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
 			// 
-			// EditStopDate
+			// txtStopDate
 			// 
-			this.EditStopDate.Location = new System.Drawing.Point(437, 78);
-			this.EditStopDate.Mask = "00/00/0000";
-			this.EditStopDate.Name = "EditStopDate";
-			this.EditStopDate.Size = new System.Drawing.Size(225, 24);
-			this.EditStopDate.TabIndex = 9;
-			this.EditStopDate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+			this.txtStopDate.Location = new System.Drawing.Point(437, 78);
+			this.txtStopDate.Mask = "00/00/0000";
+			this.txtStopDate.Name = "txtStopDate";
+			this.txtStopDate.Size = new System.Drawing.Size(225, 24);
+			this.txtStopDate.TabIndex = 9;
+			this.txtStopDate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
 			// 
-			// cbGoalType
+			// cmbGoalType
 			// 
-			this.cbGoalType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cbGoalType.Location = new System.Drawing.Point(101, 19);
-			this.cbGoalType.Name = "cbGoalType";
-			this.cbGoalType.Size = new System.Drawing.Size(158, 25);
-			this.cbGoalType.TabIndex = 1;
-			this.cbGoalType.SelectedIndexChanged += new System.EventHandler(this.cbGoalType_SelectedIndexChanged);
+			this.cmbGoalType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cmbGoalType.Location = new System.Drawing.Point(101, 19);
+			this.cmbGoalType.Name = "cmbGoalType";
+			this.cmbGoalType.Size = new System.Drawing.Size(158, 25);
+			this.cmbGoalType.TabIndex = 1;
+			this.cmbGoalType.SelectedIndexChanged += new System.EventHandler(this.cbGoalType_SelectedIndexChanged);
 			// 
-			// EditGoal
+			// txtGoal
 			// 
-			this.EditGoal.Location = new System.Drawing.Point(269, 19);
-			this.EditGoal.Name = "EditGoal";
-			this.EditGoal.ReadOnly = true;
-			this.EditGoal.Size = new System.Drawing.Size(348, 24);
-			this.EditGoal.TabIndex = 2;
+			this.txtGoal.Location = new System.Drawing.Point(269, 19);
+			this.txtGoal.Name = "txtGoal";
+			this.txtGoal.ReadOnly = true;
+			this.txtGoal.Size = new System.Drawing.Size(348, 24);
+			this.txtGoal.TabIndex = 2;
 			// 
 			// btnAccept
 			// 
@@ -158,7 +158,7 @@ namespace GKUI.Dialogs
 			this.btnAccept.Name = "btnAccept";
 			this.btnAccept.Size = new System.Drawing.Size(113, 30);
 			this.btnAccept.TabIndex = 2;
-			this.btnAccept.Text = "Принять";
+			this.btnAccept.Text = "btnAccept";
 			this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.btnAccept.Click += new System.EventHandler(this.btnAccept_Click);
 			// 
@@ -171,26 +171,26 @@ namespace GKUI.Dialogs
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(113, 30);
 			this.btnCancel.TabIndex = 3;
-			this.btnCancel.Text = "Отменить";
+			this.btnCancel.Text = "btnCancel";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// PagesGroupData
+			// tabsData
 			// 
-			this.PagesGroupData.Controls.Add(this.SheetNotes);
-			this.PagesGroupData.Dock = System.Windows.Forms.DockStyle.Top;
-			this.PagesGroupData.Location = new System.Drawing.Point(0, 118);
-			this.PagesGroupData.Name = "PagesGroupData";
-			this.PagesGroupData.SelectedIndex = 0;
-			this.PagesGroupData.Size = new System.Drawing.Size(674, 311);
-			this.PagesGroupData.TabIndex = 1;
+			this.tabsData.Controls.Add(this.pageNotes);
+			this.tabsData.Dock = System.Windows.Forms.DockStyle.Top;
+			this.tabsData.Location = new System.Drawing.Point(0, 118);
+			this.tabsData.Name = "tabsData";
+			this.tabsData.SelectedIndex = 0;
+			this.tabsData.Size = new System.Drawing.Size(674, 311);
+			this.tabsData.TabIndex = 1;
 			// 
-			// SheetNotes
+			// pageNotes
 			// 
-			this.SheetNotes.Location = new System.Drawing.Point(4, 26);
-			this.SheetNotes.Name = "SheetNotes";
-			this.SheetNotes.Size = new System.Drawing.Size(666, 281);
-			this.SheetNotes.TabIndex = 0;
-			this.SheetNotes.Text = "Заметки";
+			this.pageNotes.Location = new System.Drawing.Point(4, 26);
+			this.pageNotes.Name = "pageNotes";
+			this.pageNotes.Size = new System.Drawing.Size(666, 281);
+			this.pageNotes.TabIndex = 0;
+			this.pageNotes.Text = "pageNotes";
 			// 
 			// TaskEditDlg
 			// 
@@ -199,7 +199,7 @@ namespace GKUI.Dialogs
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(674, 494);
-			this.Controls.Add(this.PagesGroupData);
+			this.Controls.Add(this.tabsData);
 			this.Controls.Add(this.GroupBox1);
 			this.Controls.Add(this.btnAccept);
 			this.Controls.Add(this.btnCancel);
@@ -210,10 +210,10 @@ namespace GKUI.Dialogs
 			this.Name = "TaskEditDlg";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "Редактирование задачи";
+			this.Text = "TaskEditDlg";
 			this.GroupBox1.ResumeLayout(false);
 			this.GroupBox1.PerformLayout();
-			this.PagesGroupData.ResumeLayout(false);
+			this.tabsData.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
 	}

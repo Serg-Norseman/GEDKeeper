@@ -279,7 +279,7 @@ namespace GKUI.Dialogs
 
         private void edFastFilter_TextChanged(object sender, EventArgs e)
         {
-            this.SetFilter(this.edFastFilter.Text);
+            this.SetFilter(this.txtFastFilter.Text);
         }
     }
 }

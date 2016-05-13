@@ -49,21 +49,21 @@ namespace GKUI.Dialogs
             // SetLang()
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            this.SheetAuthor.Text = LangMan.LS(LSID.LSID_Author);
-            this.Label1.Text = LangMan.LS(LSID.LSID_Name);
-            this.Label2.Text = LangMan.LS(LSID.LSID_Address);
-            this.Label3.Text = LangMan.LS(LSID.LSID_Telephone);
-            this.SheetAdvanced.Text = LangMan.LS(LSID.LSID_Other);
+            this.pageAuthor.Text = LangMan.LS(LSID.LSID_Author);
+            this.lblName.Text = LangMan.LS(LSID.LSID_Name);
+            this.lblAddress.Text = LangMan.LS(LSID.LSID_Address);
+            this.lblTelephone.Text = LangMan.LS(LSID.LSID_Telephone);
+            this.pageOther.Text = LangMan.LS(LSID.LSID_Other);
         }
 
         private void UpdateControls()
         {
             GEDCOMSubmitterRecord submitter = this.fBase.Tree.GetSubmitter();
-            this.EditName.Text = submitter.Name.FullName;
-            this.MemoAddress.Text = submitter.Address.Address.Text;
+            this.txtName.Text = submitter.Name.FullName;
+            this.txtAddress.Text = submitter.Address.Address.Text;
 
             if (submitter.Address.PhoneNumbers.Count > 0) {
-                this.EditTel.Text = submitter.Address.PhoneNumbers[0].StringValue;
+                this.txtTel.Text = submitter.Address.PhoneNumbers[0].StringValue;
             }
 
             this.UpdateStats();
@@ -94,13 +94,13 @@ namespace GKUI.Dialogs
             try
             {
                 GEDCOMSubmitterRecord submitter = this.fBase.Tree.GetSubmitter();
-                submitter.Name.StringValue = this.EditName.Text;
-                submitter.Address.SetAddressArray(this.MemoAddress.Lines);
+                submitter.Name.StringValue = this.txtName.Text;
+                submitter.Address.SetAddressArray(this.txtAddress.Lines);
 
                 if (submitter.Address.PhoneNumbers.Count > 0) {
-                    submitter.Address.PhoneNumbers[0].StringValue = this.EditTel.Text;
+                    submitter.Address.PhoneNumbers[0].StringValue = this.txtTel.Text;
                 } else {
-                    submitter.Address.AddPhoneNumber(this.EditTel.Text);
+                    submitter.Address.AddPhoneNumber(this.txtTel.Text);
                 }
 
                 submitter.ChangeDate.ChangeDateTime = DateTime.Now;

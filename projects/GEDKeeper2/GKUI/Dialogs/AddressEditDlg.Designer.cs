@@ -8,43 +8,43 @@ namespace GKUI.Dialogs
 	{
 		private System.Windows.Forms.Button btnAccept;
 		private System.Windows.Forms.Button btnCancel;
-		private System.Windows.Forms.TabControl PageAddrData;
-		private System.Windows.Forms.TabPage SheetPhones;
-		private System.Windows.Forms.TabPage SheetEmails;
-		private System.Windows.Forms.TabPage SheetCommon;
-		private System.Windows.Forms.TabPage SheetWebPages;
-		private System.Windows.Forms.Label Label1;
-		private System.Windows.Forms.Label Label2;
-		private System.Windows.Forms.Label Label3;
-		private System.Windows.Forms.Label Label4;
-		private System.Windows.Forms.Label Label5;
-		private System.Windows.Forms.TextBox edCountry;
-		private System.Windows.Forms.TextBox edState;
-		private System.Windows.Forms.TextBox edCity;
-		private System.Windows.Forms.TextBox edPostalCode;
-		private System.Windows.Forms.TextBox edAddress;
+		private System.Windows.Forms.TabControl tabsAddrData;
+		private System.Windows.Forms.TabPage pagePhones;
+		private System.Windows.Forms.TabPage pageEmails;
+		private System.Windows.Forms.TabPage pageCommon;
+		private System.Windows.Forms.TabPage pageWebPages;
+		private System.Windows.Forms.Label lblCountry;
+		private System.Windows.Forms.Label lblState;
+		private System.Windows.Forms.Label lblCity;
+		private System.Windows.Forms.Label lblPostalCode;
+		private System.Windows.Forms.Label lblAddress;
+		private System.Windows.Forms.TextBox txtCountry;
+		private System.Windows.Forms.TextBox txtState;
+		private System.Windows.Forms.TextBox txtCity;
+		private System.Windows.Forms.TextBox txtPostalCode;
+		private System.Windows.Forms.TextBox txtAddress;
 
 		private void InitializeComponent()
 		{
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
-			this.PageAddrData = new System.Windows.Forms.TabControl();
-			this.SheetCommon = new System.Windows.Forms.TabPage();
-			this.Label1 = new System.Windows.Forms.Label();
-			this.Label2 = new System.Windows.Forms.Label();
-			this.Label3 = new System.Windows.Forms.Label();
-			this.Label4 = new System.Windows.Forms.Label();
-			this.Label5 = new System.Windows.Forms.Label();
-			this.edCountry = new System.Windows.Forms.TextBox();
-			this.edState = new System.Windows.Forms.TextBox();
-			this.edCity = new System.Windows.Forms.TextBox();
-			this.edPostalCode = new System.Windows.Forms.TextBox();
-			this.edAddress = new System.Windows.Forms.TextBox();
-			this.SheetPhones = new System.Windows.Forms.TabPage();
-			this.SheetEmails = new System.Windows.Forms.TabPage();
-			this.SheetWebPages = new System.Windows.Forms.TabPage();
-			this.PageAddrData.SuspendLayout();
-			this.SheetCommon.SuspendLayout();
+			this.tabsAddrData = new System.Windows.Forms.TabControl();
+			this.pageCommon = new System.Windows.Forms.TabPage();
+			this.lblCountry = new System.Windows.Forms.Label();
+			this.lblState = new System.Windows.Forms.Label();
+			this.lblCity = new System.Windows.Forms.Label();
+			this.lblPostalCode = new System.Windows.Forms.Label();
+			this.lblAddress = new System.Windows.Forms.Label();
+			this.txtCountry = new System.Windows.Forms.TextBox();
+			this.txtState = new System.Windows.Forms.TextBox();
+			this.txtCity = new System.Windows.Forms.TextBox();
+			this.txtPostalCode = new System.Windows.Forms.TextBox();
+			this.txtAddress = new System.Windows.Forms.TextBox();
+			this.pagePhones = new System.Windows.Forms.TabPage();
+			this.pageEmails = new System.Windows.Forms.TabPage();
+			this.pageWebPages = new System.Windows.Forms.TabPage();
+			this.tabsAddrData.SuspendLayout();
+			this.pageCommon.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btnAccept
@@ -55,7 +55,7 @@ namespace GKUI.Dialogs
 			this.btnAccept.Name = "btnAccept";
 			this.btnAccept.Size = new System.Drawing.Size(113, 30);
 			this.btnAccept.TabIndex = 1;
-			this.btnAccept.Text = "Принять";
+			this.btnAccept.Text = "btnAccept";
 			this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.btnAccept.Click += new System.EventHandler(this.btnAccept_Click);
 			// 
@@ -68,143 +68,143 @@ namespace GKUI.Dialogs
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(113, 30);
 			this.btnCancel.TabIndex = 2;
-			this.btnCancel.Text = "Отменить";
+			this.btnCancel.Text = "btnCancel";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// PageAddrData
+			// tabsAddrData
 			// 
-			this.PageAddrData.Controls.Add(this.SheetCommon);
-			this.PageAddrData.Controls.Add(this.SheetPhones);
-			this.PageAddrData.Controls.Add(this.SheetEmails);
-			this.PageAddrData.Controls.Add(this.SheetWebPages);
-			this.PageAddrData.Dock = System.Windows.Forms.DockStyle.Top;
-			this.PageAddrData.Location = new System.Drawing.Point(0, 0);
-			this.PageAddrData.Name = "PageAddrData";
-			this.PageAddrData.SelectedIndex = 0;
-			this.PageAddrData.Size = new System.Drawing.Size(572, 321);
-			this.PageAddrData.TabIndex = 0;
+			this.tabsAddrData.Controls.Add(this.pageCommon);
+			this.tabsAddrData.Controls.Add(this.pagePhones);
+			this.tabsAddrData.Controls.Add(this.pageEmails);
+			this.tabsAddrData.Controls.Add(this.pageWebPages);
+			this.tabsAddrData.Dock = System.Windows.Forms.DockStyle.Top;
+			this.tabsAddrData.Location = new System.Drawing.Point(0, 0);
+			this.tabsAddrData.Name = "tabsAddrData";
+			this.tabsAddrData.SelectedIndex = 0;
+			this.tabsAddrData.Size = new System.Drawing.Size(572, 321);
+			this.tabsAddrData.TabIndex = 0;
 			// 
-			// SheetCommon
+			// pageCommon
 			// 
-			this.SheetCommon.Controls.Add(this.Label1);
-			this.SheetCommon.Controls.Add(this.Label2);
-			this.SheetCommon.Controls.Add(this.Label3);
-			this.SheetCommon.Controls.Add(this.Label4);
-			this.SheetCommon.Controls.Add(this.Label5);
-			this.SheetCommon.Controls.Add(this.edCountry);
-			this.SheetCommon.Controls.Add(this.edState);
-			this.SheetCommon.Controls.Add(this.edCity);
-			this.SheetCommon.Controls.Add(this.edPostalCode);
-			this.SheetCommon.Controls.Add(this.edAddress);
-			this.SheetCommon.Location = new System.Drawing.Point(4, 26);
-			this.SheetCommon.Name = "SheetCommon";
-			this.SheetCommon.Size = new System.Drawing.Size(564, 291);
-			this.SheetCommon.TabIndex = 0;
-			this.SheetCommon.Text = "Адрес";
+			this.pageCommon.Controls.Add(this.lblCountry);
+			this.pageCommon.Controls.Add(this.lblState);
+			this.pageCommon.Controls.Add(this.lblCity);
+			this.pageCommon.Controls.Add(this.lblPostalCode);
+			this.pageCommon.Controls.Add(this.lblAddress);
+			this.pageCommon.Controls.Add(this.txtCountry);
+			this.pageCommon.Controls.Add(this.txtState);
+			this.pageCommon.Controls.Add(this.txtCity);
+			this.pageCommon.Controls.Add(this.txtPostalCode);
+			this.pageCommon.Controls.Add(this.txtAddress);
+			this.pageCommon.Location = new System.Drawing.Point(4, 26);
+			this.pageCommon.Name = "pageCommon";
+			this.pageCommon.Size = new System.Drawing.Size(564, 291);
+			this.pageCommon.TabIndex = 0;
+			this.pageCommon.Text = "pageCommon";
 			// 
-			// Label1
+			// lblCountry
 			// 
-			this.Label1.AutoSize = true;
-			this.Label1.Location = new System.Drawing.Point(11, 10);
-			this.Label1.Name = "Label1";
-			this.Label1.Size = new System.Drawing.Size(55, 17);
-			this.Label1.TabIndex = 0;
-			this.Label1.Text = "Страна";
+			this.lblCountry.AutoSize = true;
+			this.lblCountry.Location = new System.Drawing.Point(11, 10);
+			this.lblCountry.Name = "lblCountry";
+			this.lblCountry.Size = new System.Drawing.Size(55, 17);
+			this.lblCountry.TabIndex = 0;
+			this.lblCountry.Text = "lblCountry";
 			// 
-			// Label2
+			// lblState
 			// 
-			this.Label2.AutoSize = true;
-			this.Label2.Location = new System.Drawing.Point(302, 10);
-			this.Label2.Name = "Label2";
-			this.Label2.Size = new System.Drawing.Size(103, 17);
-			this.Label2.TabIndex = 1;
-			this.Label2.Text = "Штат/Область";
+			this.lblState.AutoSize = true;
+			this.lblState.Location = new System.Drawing.Point(302, 10);
+			this.lblState.Name = "lblState";
+			this.lblState.Size = new System.Drawing.Size(103, 17);
+			this.lblState.TabIndex = 1;
+			this.lblState.Text = "lblState";
 			// 
-			// Label3
+			// lblCity
 			// 
-			this.Label3.AutoSize = true;
-			this.Label3.Location = new System.Drawing.Point(11, 68);
-			this.Label3.Name = "Label3";
-			this.Label3.Size = new System.Drawing.Size(47, 17);
-			this.Label3.TabIndex = 2;
-			this.Label3.Text = "Город";
+			this.lblCity.AutoSize = true;
+			this.lblCity.Location = new System.Drawing.Point(11, 68);
+			this.lblCity.Name = "lblCity";
+			this.lblCity.Size = new System.Drawing.Size(47, 17);
+			this.lblCity.TabIndex = 2;
+			this.lblCity.Text = "lblCity";
 			// 
-			// Label4
+			// lblPostalCode
 			// 
-			this.Label4.AutoSize = true;
-			this.Label4.Location = new System.Drawing.Point(302, 68);
-			this.Label4.Name = "Label4";
-			this.Label4.Size = new System.Drawing.Size(101, 17);
-			this.Label4.TabIndex = 3;
-			this.Label4.Text = "Почтовый код";
+			this.lblPostalCode.AutoSize = true;
+			this.lblPostalCode.Location = new System.Drawing.Point(302, 68);
+			this.lblPostalCode.Name = "lblPostalCode";
+			this.lblPostalCode.Size = new System.Drawing.Size(101, 17);
+			this.lblPostalCode.TabIndex = 3;
+			this.lblPostalCode.Text = "lblPostalCode";
 			// 
-			// Label5
+			// lblAddress
 			// 
-			this.Label5.AutoSize = true;
-			this.Label5.Location = new System.Drawing.Point(11, 126);
-			this.Label5.Name = "Label5";
-			this.Label5.Size = new System.Drawing.Size(46, 17);
-			this.Label5.TabIndex = 4;
-			this.Label5.Text = "Адрес";
+			this.lblAddress.AutoSize = true;
+			this.lblAddress.Location = new System.Drawing.Point(11, 126);
+			this.lblAddress.Name = "lblAddress";
+			this.lblAddress.Size = new System.Drawing.Size(46, 17);
+			this.lblAddress.TabIndex = 4;
+			this.lblAddress.Text = "lblAddress";
 			// 
-			// edCountry
+			// txtCountry
 			// 
-			this.edCountry.Location = new System.Drawing.Point(11, 29);
-			this.edCountry.Name = "edCountry";
-			this.edCountry.Size = new System.Drawing.Size(282, 24);
-			this.edCountry.TabIndex = 0;
+			this.txtCountry.Location = new System.Drawing.Point(11, 29);
+			this.txtCountry.Name = "txtCountry";
+			this.txtCountry.Size = new System.Drawing.Size(282, 24);
+			this.txtCountry.TabIndex = 0;
 			// 
-			// edState
+			// txtState
 			// 
-			this.edState.Location = new System.Drawing.Point(302, 29);
-			this.edState.Name = "edState";
-			this.edState.Size = new System.Drawing.Size(248, 24);
-			this.edState.TabIndex = 1;
+			this.txtState.Location = new System.Drawing.Point(302, 29);
+			this.txtState.Name = "txtState";
+			this.txtState.Size = new System.Drawing.Size(248, 24);
+			this.txtState.TabIndex = 1;
 			// 
-			// edCity
+			// txtCity
 			// 
-			this.edCity.Location = new System.Drawing.Point(11, 87);
-			this.edCity.Name = "edCity";
-			this.edCity.Size = new System.Drawing.Size(282, 24);
-			this.edCity.TabIndex = 2;
+			this.txtCity.Location = new System.Drawing.Point(11, 87);
+			this.txtCity.Name = "txtCity";
+			this.txtCity.Size = new System.Drawing.Size(282, 24);
+			this.txtCity.TabIndex = 2;
 			// 
-			// edPostalCode
+			// txtPostalCode
 			// 
-			this.edPostalCode.Location = new System.Drawing.Point(302, 87);
-			this.edPostalCode.Name = "edPostalCode";
-			this.edPostalCode.Size = new System.Drawing.Size(248, 24);
-			this.edPostalCode.TabIndex = 3;
+			this.txtPostalCode.Location = new System.Drawing.Point(302, 87);
+			this.txtPostalCode.Name = "txtPostalCode";
+			this.txtPostalCode.Size = new System.Drawing.Size(248, 24);
+			this.txtPostalCode.TabIndex = 3;
 			// 
-			// edAddress
+			// txtAddress
 			// 
-			this.edAddress.Location = new System.Drawing.Point(11, 146);
-			this.edAddress.Name = "edAddress";
-			this.edAddress.Size = new System.Drawing.Size(539, 24);
-			this.edAddress.TabIndex = 4;
+			this.txtAddress.Location = new System.Drawing.Point(11, 146);
+			this.txtAddress.Name = "txtAddress";
+			this.txtAddress.Size = new System.Drawing.Size(539, 24);
+			this.txtAddress.TabIndex = 4;
 			// 
-			// SheetPhones
+			// pagePhones
 			// 
-			this.SheetPhones.Location = new System.Drawing.Point(4, 26);
-			this.SheetPhones.Name = "SheetPhones";
-			this.SheetPhones.Size = new System.Drawing.Size(564, 291);
-			this.SheetPhones.TabIndex = 1;
-			this.SheetPhones.Text = "Телефоны";
+			this.pagePhones.Location = new System.Drawing.Point(4, 26);
+			this.pagePhones.Name = "pagePhones";
+			this.pagePhones.Size = new System.Drawing.Size(564, 291);
+			this.pagePhones.TabIndex = 1;
+			this.pagePhones.Text = "pagePhones";
 			// 
-			// SheetEmails
+			// pageEmails
 			// 
-			this.SheetEmails.Location = new System.Drawing.Point(4, 26);
-			this.SheetEmails.Name = "SheetEmails";
-			this.SheetEmails.Size = new System.Drawing.Size(564, 291);
-			this.SheetEmails.TabIndex = 2;
-			this.SheetEmails.Text = "Эл. почта";
+			this.pageEmails.Location = new System.Drawing.Point(4, 26);
+			this.pageEmails.Name = "pageEmails";
+			this.pageEmails.Size = new System.Drawing.Size(564, 291);
+			this.pageEmails.TabIndex = 2;
+			this.pageEmails.Text = "pageEmails";
 			// 
-			// SheetWebPages
+			// pageWebPages
 			// 
-			this.SheetWebPages.Location = new System.Drawing.Point(4, 26);
-			this.SheetWebPages.Name = "SheetWebPages";
-			this.SheetWebPages.Size = new System.Drawing.Size(564, 291);
-			this.SheetWebPages.TabIndex = 3;
-			this.SheetWebPages.Text = "Веб-страницы";
+			this.pageWebPages.Location = new System.Drawing.Point(4, 26);
+			this.pageWebPages.Name = "pageWebPages";
+			this.pageWebPages.Size = new System.Drawing.Size(564, 291);
+			this.pageWebPages.TabIndex = 3;
+			this.pageWebPages.Text = "pageWebPages";
 			// 
 			// AddressEditDlg
 			// 
@@ -215,7 +215,7 @@ namespace GKUI.Dialogs
 			this.ClientSize = new System.Drawing.Size(572, 385);
 			this.Controls.Add(this.btnAccept);
 			this.Controls.Add(this.btnCancel);
-			this.Controls.Add(this.PageAddrData);
+			this.Controls.Add(this.tabsAddrData);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
@@ -223,10 +223,10 @@ namespace GKUI.Dialogs
 			this.Name = "AddressEditDlg";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "Адрес";
-			this.PageAddrData.ResumeLayout(false);
-			this.SheetCommon.ResumeLayout(false);
-			this.SheetCommon.PerformLayout();
+			this.Text = "AddressEditDlg";
+			this.tabsAddrData.ResumeLayout(false);
+			this.pageCommon.ResumeLayout(false);
+			this.pageCommon.PerformLayout();
 			this.ResumeLayout(false);
 		}
 	}

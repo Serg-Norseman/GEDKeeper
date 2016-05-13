@@ -6,42 +6,42 @@ namespace GKUI.Dialogs
 {
 	partial class AboutDlg
 	{
-		private System.Windows.Forms.Label LabelProduct;
-		private System.Windows.Forms.Label LabelVersion;
-		private System.Windows.Forms.Label LabelCopyright;
-		private System.Windows.Forms.Label LabelMail;
+		private System.Windows.Forms.Label lblProduct;
+		private System.Windows.Forms.Label lblVersion;
+		private System.Windows.Forms.Label lblCopyright;
+		private System.Windows.Forms.Label lblMail;
 		private System.Windows.Forms.Button btnClose;
 
 		private void InitializeComponent()
 		{
-		    this.LabelProduct = new System.Windows.Forms.Label();
-		    this.LabelVersion = new System.Windows.Forms.Label();
+		    this.lblProduct = new System.Windows.Forms.Label();
+		    this.lblVersion = new System.Windows.Forms.Label();
 		    this.btnClose = new System.Windows.Forms.Button();
-		    this.LabelCopyright = new System.Windows.Forms.Label();
-		    this.LabelMail = new System.Windows.Forms.Label();
+		    this.lblCopyright = new System.Windows.Forms.Label();
+		    this.lblMail = new System.Windows.Forms.Label();
 		    this.SuspendLayout();
 		    // 
-		    // LabelProduct
+		    // lblProduct
 		    // 
-		    this.LabelProduct.AutoSize = true;
-		    this.LabelProduct.Font = new System.Drawing.Font("Times New Roman", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-		    this.LabelProduct.Location = new System.Drawing.Point(12, 9);
-		    this.LabelProduct.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-		    this.LabelProduct.Name = "LabelProduct";
-		    this.LabelProduct.Size = new System.Drawing.Size(34, 38);
-		    this.LabelProduct.TabIndex = 0;
-		    this.LabelProduct.Text = "?";
+		    this.lblProduct.AutoSize = true;
+		    this.lblProduct.Font = new System.Drawing.Font("Times New Roman", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+		    this.lblProduct.Location = new System.Drawing.Point(12, 9);
+		    this.lblProduct.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+		    this.lblProduct.Name = "lblProduct";
+		    this.lblProduct.Size = new System.Drawing.Size(34, 38);
+		    this.lblProduct.TabIndex = 0;
+		    this.lblProduct.Text = "lblProduct";
 		    // 
-		    // LabelVersion
+		    // lblVersion
 		    // 
-		    this.LabelVersion.AutoSize = true;
-		    this.LabelVersion.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-		    this.LabelVersion.Location = new System.Drawing.Point(15, 58);
-		    this.LabelVersion.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-		    this.LabelVersion.Name = "LabelVersion";
-		    this.LabelVersion.Size = new System.Drawing.Size(71, 22);
-		    this.LabelVersion.TabIndex = 1;
-		    this.LabelVersion.Text = "Version";
+		    this.lblVersion.AutoSize = true;
+		    this.lblVersion.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+		    this.lblVersion.Location = new System.Drawing.Point(15, 58);
+		    this.lblVersion.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+		    this.lblVersion.Name = "lblVersion";
+		    this.lblVersion.Size = new System.Drawing.Size(71, 22);
+		    this.lblVersion.TabIndex = 1;
+		    this.lblVersion.Text = "lblVersion";
 		    // 
 		    // btnClose
 		    // 
@@ -53,33 +53,33 @@ namespace GKUI.Dialogs
 		    this.btnClose.Name = "btnClose";
 		    this.btnClose.Size = new System.Drawing.Size(114, 30);
 		    this.btnClose.TabIndex = 0;
-		    this.btnClose.Text = "Закрыть";
+		    this.btnClose.Text = "btnClose";
 		    this.btnClose.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 		    // 
-		    // LabelCopyright
+		    // lblCopyright
 		    // 
-		    this.LabelCopyright.AutoSize = true;
-		    this.LabelCopyright.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-		    this.LabelCopyright.Location = new System.Drawing.Point(15, 91);
-		    this.LabelCopyright.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-		    this.LabelCopyright.Name = "LabelCopyright";
-		    this.LabelCopyright.Size = new System.Drawing.Size(285, 22);
-		    this.LabelCopyright.TabIndex = 1;
-		    this.LabelCopyright.Text = "Copyright © Serg V. Zhdanovskih";
+		    this.lblCopyright.AutoSize = true;
+		    this.lblCopyright.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+		    this.lblCopyright.Location = new System.Drawing.Point(15, 91);
+		    this.lblCopyright.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+		    this.lblCopyright.Name = "lblCopyright";
+		    this.lblCopyright.Size = new System.Drawing.Size(285, 22);
+		    this.lblCopyright.TabIndex = 1;
+		    this.lblCopyright.Text = "lblCopyright";
 		    // 
-		    // LabelMail
+		    // lblMail
 		    // 
-		    this.LabelMail.AutoSize = true;
-		    this.LabelMail.Cursor = System.Windows.Forms.Cursors.Hand;
-		    this.LabelMail.Font = new System.Drawing.Font("Times New Roman", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-		    this.LabelMail.ForeColor = System.Drawing.Color.Blue;
-		    this.LabelMail.Location = new System.Drawing.Point(15, 155);
-		    this.LabelMail.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-		    this.LabelMail.Name = "LabelMail";
-		    this.LabelMail.Size = new System.Drawing.Size(159, 17);
-		    this.LabelMail.TabIndex = 2;
-		    this.LabelMail.Text = "http://vk.com/gedkeeper";
-		    this.LabelMail.Click += new System.EventHandler(this.LabelMail_Click);
+		    this.lblMail.AutoSize = true;
+		    this.lblMail.Cursor = System.Windows.Forms.Cursors.Hand;
+		    this.lblMail.Font = new System.Drawing.Font("Times New Roman", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+		    this.lblMail.ForeColor = System.Drawing.Color.Blue;
+		    this.lblMail.Location = new System.Drawing.Point(15, 155);
+		    this.lblMail.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+		    this.lblMail.Name = "lblMail";
+		    this.lblMail.Size = new System.Drawing.Size(159, 17);
+		    this.lblMail.TabIndex = 2;
+		    this.lblMail.Text = "http://vk.com/gedkeeper";
+		    this.lblMail.Click += new System.EventHandler(this.LabelMail_Click);
 		    // 
 		    // AboutDlg
 		    // 
@@ -87,10 +87,10 @@ namespace GKUI.Dialogs
 		    this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 		    this.CancelButton = this.btnClose;
 		    this.ClientSize = new System.Drawing.Size(394, 238);
-		    this.Controls.Add(this.LabelProduct);
-		    this.Controls.Add(this.LabelVersion);
-		    this.Controls.Add(this.LabelCopyright);
-		    this.Controls.Add(this.LabelMail);
+		    this.Controls.Add(this.lblProduct);
+		    this.Controls.Add(this.lblVersion);
+		    this.Controls.Add(this.lblCopyright);
+		    this.Controls.Add(this.lblMail);
 		    this.Controls.Add(this.btnClose);
 		    this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 		    this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -100,7 +100,7 @@ namespace GKUI.Dialogs
 		    this.Name = "AboutDlg";
 		    this.ShowInTaskbar = false;
 		    this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-		    this.Text = "О программе";
+		    this.Text = "AboutDlg";
 		    this.ResumeLayout(false);
 		    this.PerformLayout();
 		}

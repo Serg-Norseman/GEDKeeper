@@ -51,22 +51,22 @@ namespace GKUI.Dialogs
         private void SetAssociation(GEDCOMAssociation value)
         {
             this.fAssociation = value;
-            this.EditRelation.Text = this.fAssociation.Relation;
+            this.cmbRelation.Text = this.fAssociation.Relation;
             string st = ((this.fAssociation.Individual == null) ? "" : this.fAssociation.Individual.GetNameString(true, false));
-            this.EditPerson.Text = st;
+            this.txtPerson.Text = st;
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
             try
             {
-                string rel = this.EditRelation.Text.Trim();
+                string rel = this.cmbRelation.Text.Trim();
                 if (rel != "" && MainWin.Instance.Options.Relations.IndexOf(rel) < 0)
                 {
                     MainWin.Instance.Options.Relations.Add(rel);
                 }
 
-                this.fAssociation.Relation = this.EditRelation.Text;
+                this.fAssociation.Relation = this.cmbRelation.Text;
                 this.fAssociation.Individual = this.fTempInd;
                 this.DialogResult = DialogResult.OK;
             }
@@ -80,7 +80,7 @@ namespace GKUI.Dialogs
         private void btnPersonAdd_Click(object sender, EventArgs e)
         {
             this.fTempInd = this.fBase.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
-            this.EditPerson.Text = ((this.fTempInd == null) ? "" : this.fTempInd.GetNameString(true, false));
+            this.txtPerson.Text = ((this.fTempInd == null) ? "" : this.fTempInd.GetNameString(true, false));
         }
 
         public AssociationEditDlg(IBaseWindow aBase)
@@ -91,15 +91,15 @@ namespace GKUI.Dialogs
             int num = MainWin.Instance.Options.Relations.Count;
             for (int i = 0; i < num; i++)
             {
-                this.EditRelation.Items.Add(MainWin.Instance.Options.Relations[i]);
+                this.cmbRelation.Items.Add(MainWin.Instance.Options.Relations[i]);
             }
 
             // SetLang()
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             this.Text = LangMan.LS(LSID.LSID_Association);
-            this.Label1.Text = LangMan.LS(LSID.LSID_Relation);
-            this.Label2.Text = LangMan.LS(LSID.LSID_Person);
+            this.lblRelation.Text = LangMan.LS(LSID.LSID_Relation);
+            this.lblPerson.Text = LangMan.LS(LSID.LSID_Person);
         }
     }
 }

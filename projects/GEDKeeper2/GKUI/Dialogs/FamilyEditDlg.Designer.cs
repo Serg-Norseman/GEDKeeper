@@ -4,57 +4,57 @@ namespace GKUI.Dialogs
 {
 	partial class FamilyEditDlg
 	{
-		private System.Windows.Forms.TabControl PagesFamilyData;
-		private System.Windows.Forms.TabPage SheetEvents;
-		private System.Windows.Forms.TabPage SheetNotes;
-		private System.Windows.Forms.TabPage SheetMultimedia;
-		private System.Windows.Forms.TabPage SheetSources;
-		private System.Windows.Forms.TabPage SheetChilds;
+		private System.Windows.Forms.TabControl tabsFamilyData;
+		private System.Windows.Forms.TabPage pageEvents;
+		private System.Windows.Forms.TabPage pageNotes;
+		private System.Windows.Forms.TabPage pageMultimedia;
+		private System.Windows.Forms.TabPage pageSources;
+		private System.Windows.Forms.TabPage pageChilds;
 		private System.Windows.Forms.Button btnAccept;
 		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.GroupBox GroupBox1;
-		private System.Windows.Forms.Label Label1;
-		private System.Windows.Forms.TextBox EditHusband;
+		private System.Windows.Forms.Label lblHusband;
+		private System.Windows.Forms.TextBox txtHusband;
 		private System.Windows.Forms.Button btnHusbandAdd;
 		private System.Windows.Forms.Button btnHusbandDelete;
 		private System.Windows.Forms.Button btnHusbandSel;
 		private System.Windows.Forms.Button btnWifeSel;
 		private System.Windows.Forms.Button btnWifeDelete;
 		private System.Windows.Forms.Button btnWifeAdd;
-		private System.Windows.Forms.TextBox EditWife;
-		private System.Windows.Forms.Label Label2;
-		private System.Windows.Forms.Label Label6;
-		private System.Windows.Forms.ComboBox edMarriageStatus;
-		private System.Windows.Forms.Label Label5;
-		private System.Windows.Forms.ComboBox cbRestriction;
+		private System.Windows.Forms.TextBox txtWife;
+		private System.Windows.Forms.Label lblWife;
+		private System.Windows.Forms.Label lblStatus;
+		private System.Windows.Forms.ComboBox cmbMarriageStatus;
+		private System.Windows.Forms.Label lblRestriction;
+		private System.Windows.Forms.ComboBox cmbRestriction;
 
 		private void InitializeComponent()
 		{
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.GroupBox1 = new System.Windows.Forms.GroupBox();
-			this.Label1 = new System.Windows.Forms.Label();
+			this.lblHusband = new System.Windows.Forms.Label();
 			this.btnHusbandAdd = new System.Windows.Forms.Button();
 			this.btnHusbandDelete = new System.Windows.Forms.Button();
 			this.btnHusbandSel = new System.Windows.Forms.Button();
 			this.btnWifeSel = new System.Windows.Forms.Button();
 			this.btnWifeDelete = new System.Windows.Forms.Button();
 			this.btnWifeAdd = new System.Windows.Forms.Button();
-			this.Label2 = new System.Windows.Forms.Label();
-			this.Label6 = new System.Windows.Forms.Label();
-			this.EditHusband = new System.Windows.Forms.TextBox();
-			this.EditWife = new System.Windows.Forms.TextBox();
-			this.edMarriageStatus = new System.Windows.Forms.ComboBox();
-			this.Label5 = new System.Windows.Forms.Label();
-			this.cbRestriction = new System.Windows.Forms.ComboBox();
-			this.PagesFamilyData = new System.Windows.Forms.TabControl();
-			this.SheetChilds = new System.Windows.Forms.TabPage();
-			this.SheetEvents = new System.Windows.Forms.TabPage();
-			this.SheetNotes = new System.Windows.Forms.TabPage();
-			this.SheetMultimedia = new System.Windows.Forms.TabPage();
-			this.SheetSources = new System.Windows.Forms.TabPage();
+			this.lblWife = new System.Windows.Forms.Label();
+			this.lblStatus = new System.Windows.Forms.Label();
+			this.txtHusband = new System.Windows.Forms.TextBox();
+			this.txtWife = new System.Windows.Forms.TextBox();
+			this.cmbMarriageStatus = new System.Windows.Forms.ComboBox();
+			this.lblRestriction = new System.Windows.Forms.Label();
+			this.cmbRestriction = new System.Windows.Forms.ComboBox();
+			this.tabsFamilyData = new System.Windows.Forms.TabControl();
+			this.pageChilds = new System.Windows.Forms.TabPage();
+			this.pageEvents = new System.Windows.Forms.TabPage();
+			this.pageNotes = new System.Windows.Forms.TabPage();
+			this.pageMultimedia = new System.Windows.Forms.TabPage();
+			this.pageSources = new System.Windows.Forms.TabPage();
 			this.GroupBox1.SuspendLayout();
-			this.PagesFamilyData.SuspendLayout();
+			this.tabsFamilyData.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btnAccept
@@ -65,7 +65,7 @@ namespace GKUI.Dialogs
 			this.btnAccept.Name = "btnAccept";
 			this.btnAccept.Size = new System.Drawing.Size(114, 31);
 			this.btnAccept.TabIndex = 4;
-			this.btnAccept.Text = "Принять";
+			this.btnAccept.Text = "btnAccept";
 			this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.btnAccept.Click += new System.EventHandler(this.btnAccept_Click);
 			// 
@@ -78,39 +78,39 @@ namespace GKUI.Dialogs
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(114, 31);
 			this.btnCancel.TabIndex = 5;
-			this.btnCancel.Text = "Отменить";
+			this.btnCancel.Text = "btnCancel";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// GroupBox1
 			// 
-			this.GroupBox1.Controls.Add(this.Label1);
+			this.GroupBox1.Controls.Add(this.lblHusband);
 			this.GroupBox1.Controls.Add(this.btnHusbandAdd);
 			this.GroupBox1.Controls.Add(this.btnHusbandDelete);
 			this.GroupBox1.Controls.Add(this.btnHusbandSel);
 			this.GroupBox1.Controls.Add(this.btnWifeSel);
 			this.GroupBox1.Controls.Add(this.btnWifeDelete);
 			this.GroupBox1.Controls.Add(this.btnWifeAdd);
-			this.GroupBox1.Controls.Add(this.Label2);
-			this.GroupBox1.Controls.Add(this.Label6);
-			this.GroupBox1.Controls.Add(this.EditHusband);
-			this.GroupBox1.Controls.Add(this.EditWife);
-			this.GroupBox1.Controls.Add(this.edMarriageStatus);
+			this.GroupBox1.Controls.Add(this.lblWife);
+			this.GroupBox1.Controls.Add(this.lblStatus);
+			this.GroupBox1.Controls.Add(this.txtHusband);
+			this.GroupBox1.Controls.Add(this.txtWife);
+			this.GroupBox1.Controls.Add(this.cmbMarriageStatus);
 			this.GroupBox1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.GroupBox1.Location = new System.Drawing.Point(0, 0);
 			this.GroupBox1.Name = "GroupBox1";
 			this.GroupBox1.Size = new System.Drawing.Size(708, 157);
 			this.GroupBox1.TabIndex = 0;
 			this.GroupBox1.TabStop = false;
-			this.GroupBox1.Text = "Семья";
+			this.GroupBox1.Text = "GroupBox1";
 			// 
-			// Label1
+			// lblHusband
 			// 
-			this.Label1.AutoSize = true;
-			this.Label1.Location = new System.Drawing.Point(22, 32);
-			this.Label1.Name = "Label1";
-			this.Label1.Size = new System.Drawing.Size(36, 17);
-			this.Label1.TabIndex = 0;
-			this.Label1.Text = "Муж";
+			this.lblHusband.AutoSize = true;
+			this.lblHusband.Location = new System.Drawing.Point(22, 32);
+			this.lblHusband.Name = "lblHusband";
+			this.lblHusband.Size = new System.Drawing.Size(36, 17);
+			this.lblHusband.TabIndex = 0;
+			this.lblHusband.Text = "lblHusband";
 			// 
 			// btnHusbandAdd
 			// 
@@ -176,123 +176,123 @@ namespace GKUI.Dialogs
 			this.btnWifeAdd.TabIndex = 7;
 			this.btnWifeAdd.Click += new System.EventHandler(this.btnWifeAddClick);
 			// 
-			// Label2
+			// lblWife
 			// 
-			this.Label2.AutoSize = true;
-			this.Label2.Location = new System.Drawing.Point(22, 71);
-			this.Label2.Name = "Label2";
-			this.Label2.Size = new System.Drawing.Size(44, 17);
-			this.Label2.TabIndex = 5;
-			this.Label2.Text = "Жена";
+			this.lblWife.AutoSize = true;
+			this.lblWife.Location = new System.Drawing.Point(22, 71);
+			this.lblWife.Name = "lblWife";
+			this.lblWife.Size = new System.Drawing.Size(44, 17);
+			this.lblWife.TabIndex = 5;
+			this.lblWife.Text = "lblWife";
 			// 
-			// Label6
+			// lblStatus
 			// 
-			this.Label6.AutoSize = true;
-			this.Label6.Location = new System.Drawing.Point(22, 110);
-			this.Label6.Name = "Label6";
-			this.Label6.Size = new System.Drawing.Size(55, 17);
-			this.Label6.TabIndex = 10;
-			this.Label6.Text = "Статус";
+			this.lblStatus.AutoSize = true;
+			this.lblStatus.Location = new System.Drawing.Point(22, 110);
+			this.lblStatus.Name = "lblStatus";
+			this.lblStatus.Size = new System.Drawing.Size(55, 17);
+			this.lblStatus.TabIndex = 10;
+			this.lblStatus.Text = "lblStatus";
 			// 
-			// EditHusband
+			// txtHusband
 			// 
-			this.EditHusband.ForeColor = System.Drawing.SystemColors.Control;
-			this.EditHusband.Location = new System.Drawing.Point(90, 29);
-			this.EditHusband.Name = "EditHusband";
-			this.EditHusband.ReadOnly = true;
-			this.EditHusband.Size = new System.Drawing.Size(460, 24);
-			this.EditHusband.TabIndex = 1;
-			this.EditHusband.TextChanged += new System.EventHandler(this.EditHusband_TextChanged);
+			this.txtHusband.ForeColor = System.Drawing.SystemColors.Control;
+			this.txtHusband.Location = new System.Drawing.Point(90, 29);
+			this.txtHusband.Name = "txtHusband";
+			this.txtHusband.ReadOnly = true;
+			this.txtHusband.Size = new System.Drawing.Size(460, 24);
+			this.txtHusband.TabIndex = 1;
+			this.txtHusband.TextChanged += new System.EventHandler(this.EditHusband_TextChanged);
 			// 
-			// EditWife
+			// txtWife
 			// 
-			this.EditWife.ForeColor = System.Drawing.SystemColors.Control;
-			this.EditWife.Location = new System.Drawing.Point(90, 68);
-			this.EditWife.Name = "EditWife";
-			this.EditWife.ReadOnly = true;
-			this.EditWife.Size = new System.Drawing.Size(460, 24);
-			this.EditWife.TabIndex = 6;
-			this.EditWife.TextChanged += new System.EventHandler(this.EditWife_TextChanged);
+			this.txtWife.ForeColor = System.Drawing.SystemColors.Control;
+			this.txtWife.Location = new System.Drawing.Point(90, 68);
+			this.txtWife.Name = "txtWife";
+			this.txtWife.ReadOnly = true;
+			this.txtWife.Size = new System.Drawing.Size(460, 24);
+			this.txtWife.TabIndex = 6;
+			this.txtWife.TextChanged += new System.EventHandler(this.EditWife_TextChanged);
 			// 
-			// edMarriageStatus
+			// cmbMarriageStatus
 			// 
-			this.edMarriageStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.edMarriageStatus.Location = new System.Drawing.Point(90, 107);
-			this.edMarriageStatus.Name = "edMarriageStatus";
-			this.edMarriageStatus.Size = new System.Drawing.Size(203, 25);
-			this.edMarriageStatus.TabIndex = 11;
+			this.cmbMarriageStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cmbMarriageStatus.Location = new System.Drawing.Point(90, 107);
+			this.cmbMarriageStatus.Name = "cmbMarriageStatus";
+			this.cmbMarriageStatus.Size = new System.Drawing.Size(203, 25);
+			this.cmbMarriageStatus.TabIndex = 11;
 			// 
-			// Label5
+			// lblRestriction
 			// 
-			this.Label5.AutoSize = true;
-			this.Label5.Location = new System.Drawing.Point(12, 498);
-			this.Label5.Name = "Label5";
-			this.Label5.Size = new System.Drawing.Size(187, 17);
-			this.Label5.TabIndex = 2;
-			this.Label5.Text = "Ограничение безопасности";
+			this.lblRestriction.AutoSize = true;
+			this.lblRestriction.Location = new System.Drawing.Point(12, 498);
+			this.lblRestriction.Name = "lblRestriction";
+			this.lblRestriction.Size = new System.Drawing.Size(187, 17);
+			this.lblRestriction.TabIndex = 2;
+			this.lblRestriction.Text = "lblRestriction";
 			// 
-			// cbRestriction
+			// cmbRestriction
 			// 
-			this.cbRestriction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cbRestriction.Location = new System.Drawing.Point(224, 495);
-			this.cbRestriction.Name = "cbRestriction";
-			this.cbRestriction.Size = new System.Drawing.Size(203, 25);
-			this.cbRestriction.TabIndex = 3;
-			this.cbRestriction.SelectedIndexChanged += new System.EventHandler(this.cbRestriction_SelectedIndexChanged);
+			this.cmbRestriction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cmbRestriction.Location = new System.Drawing.Point(224, 495);
+			this.cmbRestriction.Name = "cmbRestriction";
+			this.cmbRestriction.Size = new System.Drawing.Size(203, 25);
+			this.cmbRestriction.TabIndex = 3;
+			this.cmbRestriction.SelectedIndexChanged += new System.EventHandler(this.cbRestriction_SelectedIndexChanged);
 			// 
-			// PagesFamilyData
+			// tabsFamilyData
 			// 
-			this.PagesFamilyData.Controls.Add(this.SheetChilds);
-			this.PagesFamilyData.Controls.Add(this.SheetEvents);
-			this.PagesFamilyData.Controls.Add(this.SheetNotes);
-			this.PagesFamilyData.Controls.Add(this.SheetMultimedia);
-			this.PagesFamilyData.Controls.Add(this.SheetSources);
-			this.PagesFamilyData.Dock = System.Windows.Forms.DockStyle.Top;
-			this.PagesFamilyData.Location = new System.Drawing.Point(0, 157);
-			this.PagesFamilyData.Name = "PagesFamilyData";
-			this.PagesFamilyData.SelectedIndex = 0;
-			this.PagesFamilyData.Size = new System.Drawing.Size(708, 320);
-			this.PagesFamilyData.TabIndex = 1;
+			this.tabsFamilyData.Controls.Add(this.pageChilds);
+			this.tabsFamilyData.Controls.Add(this.pageEvents);
+			this.tabsFamilyData.Controls.Add(this.pageNotes);
+			this.tabsFamilyData.Controls.Add(this.pageMultimedia);
+			this.tabsFamilyData.Controls.Add(this.pageSources);
+			this.tabsFamilyData.Dock = System.Windows.Forms.DockStyle.Top;
+			this.tabsFamilyData.Location = new System.Drawing.Point(0, 157);
+			this.tabsFamilyData.Name = "tabsFamilyData";
+			this.tabsFamilyData.SelectedIndex = 0;
+			this.tabsFamilyData.Size = new System.Drawing.Size(708, 320);
+			this.tabsFamilyData.TabIndex = 1;
 			// 
-			// SheetChilds
+			// pageChilds
 			// 
-			this.SheetChilds.Location = new System.Drawing.Point(4, 26);
-			this.SheetChilds.Name = "SheetChilds";
-			this.SheetChilds.Size = new System.Drawing.Size(700, 290);
-			this.SheetChilds.TabIndex = 0;
-			this.SheetChilds.Text = "Дети";
+			this.pageChilds.Location = new System.Drawing.Point(4, 26);
+			this.pageChilds.Name = "pageChilds";
+			this.pageChilds.Size = new System.Drawing.Size(700, 290);
+			this.pageChilds.TabIndex = 0;
+			this.pageChilds.Text = "pageChilds";
 			// 
-			// SheetEvents
+			// pageEvents
 			// 
-			this.SheetEvents.Location = new System.Drawing.Point(4, 26);
-			this.SheetEvents.Name = "SheetEvents";
-			this.SheetEvents.Size = new System.Drawing.Size(700, 290);
-			this.SheetEvents.TabIndex = 1;
-			this.SheetEvents.Text = "События";
+			this.pageEvents.Location = new System.Drawing.Point(4, 26);
+			this.pageEvents.Name = "pageEvents";
+			this.pageEvents.Size = new System.Drawing.Size(700, 290);
+			this.pageEvents.TabIndex = 1;
+			this.pageEvents.Text = "pageEvents";
 			// 
-			// SheetNotes
+			// pageNotes
 			// 
-			this.SheetNotes.Location = new System.Drawing.Point(4, 26);
-			this.SheetNotes.Name = "SheetNotes";
-			this.SheetNotes.Size = new System.Drawing.Size(700, 290);
-			this.SheetNotes.TabIndex = 2;
-			this.SheetNotes.Text = "Заметки";
+			this.pageNotes.Location = new System.Drawing.Point(4, 26);
+			this.pageNotes.Name = "pageNotes";
+			this.pageNotes.Size = new System.Drawing.Size(700, 290);
+			this.pageNotes.TabIndex = 2;
+			this.pageNotes.Text = "pageNotes";
 			// 
-			// SheetMultimedia
+			// pageMultimedia
 			// 
-			this.SheetMultimedia.Location = new System.Drawing.Point(4, 26);
-			this.SheetMultimedia.Name = "SheetMultimedia";
-			this.SheetMultimedia.Size = new System.Drawing.Size(700, 290);
-			this.SheetMultimedia.TabIndex = 3;
-			this.SheetMultimedia.Text = "Мультимедиа";
+			this.pageMultimedia.Location = new System.Drawing.Point(4, 26);
+			this.pageMultimedia.Name = "pageMultimedia";
+			this.pageMultimedia.Size = new System.Drawing.Size(700, 290);
+			this.pageMultimedia.TabIndex = 3;
+			this.pageMultimedia.Text = "pageMultimedia";
 			// 
-			// SheetSources
+			// pageSources
 			// 
-			this.SheetSources.Location = new System.Drawing.Point(4, 26);
-			this.SheetSources.Name = "SheetSources";
-			this.SheetSources.Size = new System.Drawing.Size(700, 290);
-			this.SheetSources.TabIndex = 4;
-			this.SheetSources.Text = "Источники";
+			this.pageSources.Location = new System.Drawing.Point(4, 26);
+			this.pageSources.Name = "pageSources";
+			this.pageSources.Size = new System.Drawing.Size(700, 290);
+			this.pageSources.TabIndex = 4;
+			this.pageSources.Text = "pageSources";
 			// 
 			// FamilyEditDlg
 			// 
@@ -301,12 +301,12 @@ namespace GKUI.Dialogs
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(708, 541);
-			this.Controls.Add(this.PagesFamilyData);
+			this.Controls.Add(this.tabsFamilyData);
 			this.Controls.Add(this.GroupBox1);
 			this.Controls.Add(this.btnAccept);
 			this.Controls.Add(this.btnCancel);
-			this.Controls.Add(this.Label5);
-			this.Controls.Add(this.cbRestriction);
+			this.Controls.Add(this.lblRestriction);
+			this.Controls.Add(this.cmbRestriction);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
@@ -314,10 +314,10 @@ namespace GKUI.Dialogs
 			this.Name = "FamilyEditDlg";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "Редактирование семьи";
+			this.Text = "FamilyEditDlg";
 			this.GroupBox1.ResumeLayout(false);
 			this.GroupBox1.PerformLayout();
-			this.PagesFamilyData.ResumeLayout(false);
+			this.tabsFamilyData.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}

@@ -65,11 +65,11 @@ namespace GKUI.Dialogs
 
         private void UpdateColumnsList()
         {
-            this.ListPersonColumns.ItemCheck -= this.ListPersonColumns_ItemCheck;
-            this.ListPersonColumns.BeginUpdate();
+            this.lstPersonColumns.ItemCheck -= this.ListPersonColumns_ItemCheck;
+            this.lstPersonColumns.BeginUpdate();
             try
             {
-                this.ListPersonColumns.Items.Clear();
+                this.lstPersonColumns.Items.Clear();
 
                 int num = this.fTempColumns.Count;
                 for (int i = 0; i < num; i++) {
@@ -77,14 +77,14 @@ namespace GKUI.Dialogs
                     
                     string colName = LangMan.LS(fTempColumns.ColumnStatics[colProps.ColType].ColName);
 
-                    this.ListPersonColumns.Items.Add(colName, colProps.ColActive);
+                    this.lstPersonColumns.Items.Add(colName, colProps.ColActive);
                 }
             }
             finally
             {
-                this.ListPersonColumns.EndUpdate();
+                this.lstPersonColumns.EndUpdate();
             }
-            this.ListPersonColumns.ItemCheck += this.ListPersonColumns_ItemCheck;
+            this.lstPersonColumns.ItemCheck += this.ListPersonColumns_ItemCheck;
         }
 
         private void UpdateControls()
@@ -94,8 +94,8 @@ namespace GKUI.Dialogs
 
         private void UpdateLangs()
         {
-            this.cbLanguages.Items.Clear();
-            this.cbLanguages.Items.Add(new GKComboItem("Русский", 1049));
+            this.cmbLanguages.Items.Clear();
+            this.cmbLanguages.Items.Add(new GKComboItem("Русский", 1049));
 
             int idx = 0;
             int num = this.fOptions.GetLangsCount() - 1;
@@ -106,9 +106,9 @@ namespace GKUI.Dialogs
                 {
                     idx = i + 1;
                 }
-                this.cbLanguages.Items.Add(new GKComboItem(lngRec.Name, (int)lngRec.Code));
+                this.cmbLanguages.Items.Add(new GKComboItem(lngRec.Name, (int)lngRec.Code));
             }
-            this.cbLanguages.SelectedIndex = idx;
+            this.cmbLanguages.SelectedIndex = idx;
         }
 
         private void UpdateForm()
@@ -116,40 +116,40 @@ namespace GKUI.Dialogs
             switch (this.fOptions.DefCharacterSet)
             {
                 case GEDCOMCharacterSet.csASCII:
-                    this.RButton1.Checked = true;
+                    this.radASCII.Checked = true;
                     break;
                 case GEDCOMCharacterSet.csUTF8:
-                    this.RButton2.Checked = true;
+                    this.radUTF.Checked = true;
                     break;
             }
 
             switch (this.fOptions.DefNameFormat)
             {
                 case NameFormat.nfFNP:
-                    this.RButton5.Checked = true;
+                    this.radSNP.Checked = true;
                     break;
                 case NameFormat.nfF_NP:
-                    this.RButton6.Checked = true;
+                    this.radS_NP.Checked = true;
                     break;
                 case NameFormat.nfF_N_P:
-                    this.RButton7.Checked = true;
+                    this.radS_N_P.Checked = true;
                     break;
             }
 
             switch (this.fOptions.DefDateFormat)
             {
                 case DateFormat.dfDD_MM_YYYY:
-                    this.RButton8.Checked = true;
+                    this.radDMY.Checked = true;
                     break;
                 case DateFormat.dfYYYY_MM_DD:
-                    this.RButton9.Checked = true;
+                    this.radYMD.Checked = true;
                     break;
             }
 
             this.chkPlacesWithAddress.Checked = this.fOptions.PlacesWithAddress;
             this.chkHighlightUnparented.Checked = this.fOptions.ListHighlightUnparentedPersons;
             this.chkHighlightUnmarried.Checked = this.fOptions.ListHighlightUnmarriedPersons;
-            this.chkFamily.Checked = this.fOptions.ChartOptions.FamilyVisible;
+            this.chkSurname.Checked = this.fOptions.ChartOptions.FamilyVisible;
             this.chkName.Checked = this.fOptions.ChartOptions.NameVisible;
             this.chkPatronymic.Checked = this.fOptions.ChartOptions.PatronymicVisible;
             this.chkDiffLines.Checked = this.fOptions.ChartOptions.DiffLines;
@@ -166,11 +166,11 @@ namespace GKUI.Dialogs
             this.lblUnkSexColor.BackColor = this.fOptions.ChartOptions.UnkSexColor;
             this.lblUnHusbandColor.BackColor = this.fOptions.ChartOptions.UnHusbandColor;
             this.lblUnWifeColor.BackColor = this.fOptions.ChartOptions.UnWifeColor;
-            this.chkProxy.Checked = this.fOptions.Proxy.UseProxy;
-            this.edProxyServer.Text = this.fOptions.Proxy.Server;
-            this.edProxyPort.Text = this.fOptions.Proxy.Port;
-            this.edProxyLogin.Text = this.fOptions.Proxy.Login;
-            this.edProxyPass.Text = this.fOptions.Proxy.Password;
+            this.chkUseProxy.Checked = this.fOptions.Proxy.UseProxy;
+            this.txtProxyServer.Text = this.fOptions.Proxy.Server;
+            this.txtProxyPort.Text = this.fOptions.Proxy.Port;
+            this.txtProxyLogin.Text = this.fOptions.Proxy.Login;
+            this.txtProxyPass.Text = this.fOptions.Proxy.Password;
             this.chkAttributes.Checked = this.fOptions.PedigreeOptions.IncludeAttributes;
             this.chkNotes.Checked = this.fOptions.PedigreeOptions.IncludeNotes;
             this.chkSources.Checked = this.fOptions.PedigreeOptions.IncludeSources;
@@ -180,10 +180,10 @@ namespace GKUI.Dialogs
             switch (this.fOptions.PedigreeOptions.Format)
             {
                 case PedigreeFormat.Excess:
-                    this.RButton10.Checked = true;
+                    this.radExcess.Checked = true;
                     break;
                 case PedigreeFormat.Compact:
-                    this.RButton11.Checked = true;
+                    this.radCompact.Checked = true;
                     break;
             }
 
@@ -258,33 +258,33 @@ namespace GKUI.Dialogs
         {
             this.fTempColumns.CopyTo(this.fOptions.IndividualListColumns);
 
-            if (this.RButton1.Checked)
+            if (this.radASCII.Checked)
             {
                 this.fOptions.DefCharacterSet = GEDCOMCharacterSet.csASCII;
             }
-            else if (this.RButton2.Checked)
+            else if (this.radUTF.Checked)
             {
                 this.fOptions.DefCharacterSet = GEDCOMCharacterSet.csUTF8;
             }
 
-            if (this.RButton5.Checked)
+            if (this.radSNP.Checked)
             {
                 this.fOptions.DefNameFormat = NameFormat.nfFNP;
             }
-            else if (this.RButton6.Checked)
+            else if (this.radS_NP.Checked)
             {
                 this.fOptions.DefNameFormat = NameFormat.nfF_NP;
             }
-            else if (this.RButton7.Checked)
+            else if (this.radS_N_P.Checked)
             {
                 this.fOptions.DefNameFormat = NameFormat.nfF_N_P;
             }
 
-            if (this.RButton8.Checked)
+            if (this.radDMY.Checked)
             {
                 this.fOptions.DefDateFormat = DateFormat.dfDD_MM_YYYY;
             }
-            else if (this.RButton9.Checked)
+            else if (this.radYMD.Checked)
             {
                 this.fOptions.DefDateFormat = DateFormat.dfYYYY_MM_DD;
             }
@@ -292,7 +292,7 @@ namespace GKUI.Dialogs
             this.fOptions.PlacesWithAddress = this.chkPlacesWithAddress.Checked;
             this.fOptions.ListHighlightUnparentedPersons = this.chkHighlightUnparented.Checked;
             this.fOptions.ListHighlightUnmarriedPersons = this.chkHighlightUnmarried.Checked;
-            this.fOptions.ChartOptions.FamilyVisible = this.chkFamily.Checked;
+            this.fOptions.ChartOptions.FamilyVisible = this.chkSurname.Checked;
             this.fOptions.ChartOptions.NameVisible = this.chkName.Checked;
             this.fOptions.ChartOptions.PatronymicVisible = this.chkPatronymic.Checked;
             this.fOptions.ChartOptions.DiffLines = this.chkDiffLines.Checked;
@@ -309,22 +309,22 @@ namespace GKUI.Dialogs
             this.fOptions.ChartOptions.UnkSexColor = this.lblUnkSexColor.BackColor;
             this.fOptions.ChartOptions.UnHusbandColor = this.lblUnHusbandColor.BackColor;
             this.fOptions.ChartOptions.UnWifeColor = this.lblUnWifeColor.BackColor;
-            this.fOptions.Proxy.UseProxy = this.chkProxy.Checked;
-            this.fOptions.Proxy.Server = this.edProxyServer.Text;
-            this.fOptions.Proxy.Port = this.edProxyPort.Text;
-            this.fOptions.Proxy.Login = this.edProxyLogin.Text;
-            this.fOptions.Proxy.Password = this.edProxyPass.Text;
+            this.fOptions.Proxy.UseProxy = this.chkUseProxy.Checked;
+            this.fOptions.Proxy.Server = this.txtProxyServer.Text;
+            this.fOptions.Proxy.Port = this.txtProxyPort.Text;
+            this.fOptions.Proxy.Login = this.txtProxyLogin.Text;
+            this.fOptions.Proxy.Password = this.txtProxyPass.Text;
             this.fOptions.PedigreeOptions.IncludeAttributes = this.chkAttributes.Checked;
             this.fOptions.PedigreeOptions.IncludeNotes = this.chkNotes.Checked;
             this.fOptions.PedigreeOptions.IncludeSources = this.chkSources.Checked;
             this.fOptions.ShowDatesCalendar = this.chkShowDatesCalendar.Checked;
             this.fOptions.ShowDatesSign = this.chkShowDatesSigns.Checked;
 
-            if (this.RButton10.Checked)
+            if (this.radExcess.Checked)
             {
                 this.fOptions.PedigreeOptions.Format = PedigreeFormat.Excess;
             }
-            else if (this.RButton11.Checked)
+            else if (this.radCompact.Checked)
             {
                 this.fOptions.PedigreeOptions.Format = PedigreeFormat.Compact;
             }
@@ -332,7 +332,7 @@ namespace GKUI.Dialogs
             this.fOptions.ShowTips = this.chkShowOnStart.Checked;
             this.fOptions.RevisionsBackup = this.chkRevisionsBackup.Checked;
 
-            GKComboItem item = this.cbLanguages.Items[this.cbLanguages.SelectedIndex] as GKComboItem;
+            GKComboItem item = this.cmbLanguages.Items[this.cmbLanguages.SelectedIndex] as GKComboItem;
             if (item != null) {
                 MainWin.Instance.LoadLanguage((int)item.Data);
             }
@@ -342,19 +342,19 @@ namespace GKUI.Dialogs
 
         private void btnColumnUp_Click(object sender, EventArgs e)
         {
-            int idx = this.ListPersonColumns.SelectedIndex;
+            int idx = this.lstPersonColumns.SelectedIndex;
             if (this.fTempColumns.MoveColumn(idx, true)) {
                 this.UpdateColumnsList();
-                this.ListPersonColumns.SelectedIndex = idx - 1;
+                this.lstPersonColumns.SelectedIndex = idx - 1;
             }
         }
 
         private void btnColumnDown_Click(object sender, EventArgs e)
         {
-            int idx = this.ListPersonColumns.SelectedIndex;
+            int idx = this.lstPersonColumns.SelectedIndex;
             if (this.fTempColumns.MoveColumn(idx, false)) {
                 this.UpdateColumnsList();
-                this.ListPersonColumns.SelectedIndex = idx + 1;
+                this.lstPersonColumns.SelectedIndex = idx + 1;
             }
         }
 
@@ -380,11 +380,11 @@ namespace GKUI.Dialogs
                     break;
                 case OptionsPage.opTreeChart:
                     this.PageControl1.SelectTab(1);
-                    this.tabControl1.SelectTab(0);
+                    this.tabsCharts.SelectTab(0);
                     break;
                 case OptionsPage.opAncestorsCircle:
                     this.PageControl1.SelectTab(1);
-                    this.tabControl1.SelectTab(1);
+                    this.tabsCharts.SelectTab(1);
                     break;
                 case OptionsPage.opInterface:
                     this.PageControl1.SelectTab(2);
@@ -400,36 +400,36 @@ namespace GKUI.Dialogs
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             this.Text = LangMan.LS(LSID.LSID_MIOptions);
-            this.SheetCommon.Text = LangMan.LS(LSID.LSID_Common);
-            this.SheetView.Text = LangMan.LS(LSID.LSID_Interface);
-            this.SheetTree.Text = LangMan.LS(LSID.LSID_Trees);
-            this.SheetPedigree.Text = LangMan.LS(LSID.LSID_Pedigrees);
-            this.rgCode.Text = LangMan.LS(LSID.LSID_SaveCoding);
+            this.pageCommon.Text = LangMan.LS(LSID.LSID_Common);
+            this.pageUIView.Text = LangMan.LS(LSID.LSID_Interface);
+            this.pageTreeChart.Text = LangMan.LS(LSID.LSID_Trees);
+            this.pagePedigree.Text = LangMan.LS(LSID.LSID_Pedigrees);
+            this.grpEncoding.Text = LangMan.LS(LSID.LSID_SaveCoding);
 
-            this.GroupBox4.Text = LangMan.LS(LSID.LSID_Internet);
-            this.chkProxy.Text = LangMan.LS(LSID.LSID_ProxyUse);
-            this.Label1.Text = LangMan.LS(LSID.LSID_ProxyServer);
-            this.Label2.Text = LangMan.LS(LSID.LSID_ProxyPort);
-            this.Label3.Text = LangMan.LS(LSID.LSID_ProxyLogin);
-            this.Label4.Text = LangMan.LS(LSID.LSID_ProxyPassword);
+            this.grpInternet.Text = LangMan.LS(LSID.LSID_Internet);
+            this.chkUseProxy.Text = LangMan.LS(LSID.LSID_ProxyUse);
+            this.lblProxyServer.Text = LangMan.LS(LSID.LSID_ProxyServer);
+            this.lblProxyPort.Text = LangMan.LS(LSID.LSID_ProxyPort);
+            this.lblProxyLogin.Text = LangMan.LS(LSID.LSID_ProxyLogin);
+            this.lblProxyPassword.Text = LangMan.LS(LSID.LSID_ProxyPassword);
 
-            this.GroupBox7.Text = LangMan.LS(LSID.LSID_Other);
+            this.grpOther.Text = LangMan.LS(LSID.LSID_Other);
 
             this.chkShowOnStart.Text = LangMan.LS(LSID.LSID_StartupTips);
-            this.Label6.Text = LangMan.LS(LSID.LSID_Language);
-            this.SheetViewCommon.Text = LangMan.LS(LSID.LSID_ListsAll);
-            this.SheetViewPersons.Text = LangMan.LS(LSID.LSID_ListPersons);
+            this.lblLanguage.Text = LangMan.LS(LSID.LSID_Language);
+            this.pageViewCommon.Text = LangMan.LS(LSID.LSID_ListsAll);
+            this.pageViewPersons.Text = LangMan.LS(LSID.LSID_ListPersons);
             this.rgFNPFormat.Text = LangMan.LS(LSID.LSID_NamesFormat);
-            this.RButton5.Text = LangMan.LS(LSID.LSID_NF1);
-            this.RButton6.Text = LangMan.LS(LSID.LSID_NF2);
-            this.RButton7.Text = LangMan.LS(LSID.LSID_NF3);
-            this.rgDateFormat.Text = LangMan.LS(LSID.LSID_DateFormat);
+            this.radSNP.Text = LangMan.LS(LSID.LSID_NF1);
+            this.radS_NP.Text = LangMan.LS(LSID.LSID_NF2);
+            this.radS_N_P.Text = LangMan.LS(LSID.LSID_NF3);
+            this.grpDateFormat.Text = LangMan.LS(LSID.LSID_DateFormat);
             this.chkPlacesWithAddress.Text = LangMan.LS(LSID.LSID_PlacesWithAddress);
             this.chkHighlightUnparented.Text = LangMan.LS(LSID.LSID_HighlightUnparented);
             this.chkHighlightUnmarried.Text = LangMan.LS(LSID.LSID_HighlightUnmarried);
             this.btnDefList.Text = LangMan.LS(LSID.LSID_DefList);
-            this.GroupBox1.Text = LangMan.LS(LSID.LSID_ViewTree);
-            this.chkFamily.Text = LangMan.LS(LSID.LSID_Surname);
+            this.grpTreePersons.Text = LangMan.LS(LSID.LSID_ViewTree);
+            this.chkSurname.Text = LangMan.LS(LSID.LSID_Surname);
             this.chkName.Text = LangMan.LS(LSID.LSID_Name);
             this.chkPatronymic.Text = LangMan.LS(LSID.LSID_Patronymic);
             this.chkDiffLines.Text = LangMan.LS(LSID.LSID_DiffLines);
@@ -441,23 +441,23 @@ namespace GKUI.Dialogs
             this.chkTreeDecorative.Text = LangMan.LS(LSID.LSID_TreeDecorative);
             this.chkPortraitsVisible.Text = LangMan.LS(LSID.LSID_PortraitsVisible);
             this.chkChildlessExclude.Text = LangMan.LS(LSID.LSID_ChildlessExclude);
-            this.GroupBox2.Text = LangMan.LS(LSID.LSID_Decor);
+            this.grpTreeDecor.Text = LangMan.LS(LSID.LSID_Decor);
             this.lblMaleColor.Text = LangMan.LS(LSID.LSID_Man);
             this.lblFemaleColor.Text = LangMan.LS(LSID.LSID_Woman);
             this.lblUnkSexColor.Text = LangMan.LS(LSID.LSID_UnkSex);
             this.lblUnHusbandColor.Text = LangMan.LS(LSID.LSID_UnHusband);
             this.lblUnWifeColor.Text = LangMan.LS(LSID.LSID_UnWife);
-            this.Label5.Text = LangMan.LS(LSID.LSID_Font);
-            this.GroupBox5.Text = LangMan.LS(LSID.LSID_PedigreeGen);
+            this.lblFont.Text = LangMan.LS(LSID.LSID_Font);
+            this.grpPedigree.Text = LangMan.LS(LSID.LSID_PedigreeGen);
             this.chkAttributes.Text = LangMan.LS(LSID.LSID_IncludeAttributes);
             this.chkNotes.Text = LangMan.LS(LSID.LSID_IncludeNotes);
             this.chkSources.Text = LangMan.LS(LSID.LSID_IncludeSources);
-            this.EditPedigreeFormat.Text = LangMan.LS(LSID.LSID_PedigreeFormat);
-            this.RButton10.Text = LangMan.LS(LSID.LSID_PF1);
-            this.RButton11.Text = LangMan.LS(LSID.LSID_PF2);
+            this.grpPedigreeFormat.Text = LangMan.LS(LSID.LSID_PedigreeFormat);
+            this.radExcess.Text = LangMan.LS(LSID.LSID_PF1);
+            this.radCompact.Text = LangMan.LS(LSID.LSID_PF2);
             this.chkRevisionsBackup.Text = LangMan.LS(LSID.LSID_RevisionsBackup);
-            this.SheetCharts.Text = LangMan.LS(LSID.LSID_Charts);
-            this.SheetPlugins.Text = LangMan.LS(LSID.LSID_Plugins);
+            this.pageCharts.Text = LangMan.LS(LSID.LSID_Charts);
+            this.pagePlugins.Text = LangMan.LS(LSID.LSID_Plugins);
             this.chkShowDatesCalendar.Text = LangMan.LS(LSID.LSID_ShowDatesCalendar);
             this.chkShowDatesSigns.Text = LangMan.LS(LSID.LSID_ShowDatesSigns);
         }

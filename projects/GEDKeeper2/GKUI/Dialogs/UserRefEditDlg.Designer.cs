@@ -9,18 +9,18 @@ namespace GKUI.Dialogs
 		private System.Windows.Forms.Button btnAccept;
 		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.Label lblReference;
-		private System.Windows.Forms.ComboBox EditRef;
+		private System.Windows.Forms.ComboBox cmbRef;
 		private System.Windows.Forms.Label lblRefType;
-		private System.Windows.Forms.ComboBox EditType;
+		private System.Windows.Forms.ComboBox cmbRefType;
 
 		private void InitializeComponent()
 		{
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.lblReference = new System.Windows.Forms.Label();
-			this.EditRef = new System.Windows.Forms.ComboBox();
+			this.cmbRef = new System.Windows.Forms.ComboBox();
 			this.lblRefType = new System.Windows.Forms.Label();
-			this.EditType = new System.Windows.Forms.ComboBox();
+			this.cmbRefType = new System.Windows.Forms.ComboBox();
 			this.SuspendLayout();
 			// 
 			// btnAccept
@@ -31,7 +31,7 @@ namespace GKUI.Dialogs
 			this.btnAccept.Name = "btnAccept";
 			this.btnAccept.Size = new System.Drawing.Size(114, 30);
 			this.btnAccept.TabIndex = 4;
-			this.btnAccept.Text = "Принять";
+			this.btnAccept.Text = "btnAccept";
 			this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.btnAccept.Click += new System.EventHandler(this.btnAccept_Click);
 			// 
@@ -44,7 +44,7 @@ namespace GKUI.Dialogs
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(113, 30);
 			this.btnCancel.TabIndex = 5;
-			this.btnCancel.Text = "Отменить";
+			this.btnCancel.Text = "btnCancel";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// lblReference
@@ -54,14 +54,14 @@ namespace GKUI.Dialogs
 			this.lblReference.Name = "lblReference";
 			this.lblReference.Size = new System.Drawing.Size(256, 17);
 			this.lblReference.TabIndex = 0;
-			this.lblReference.Text = "Сноска/ссылка/пометка/комментарий";
+			this.lblReference.Text = "lblReference";
 			// 
 			// EditRef
 			// 
-			this.EditRef.Location = new System.Drawing.Point(11, 29);
-			this.EditRef.Name = "EditRef";
-			this.EditRef.Size = new System.Drawing.Size(472, 25);
-			this.EditRef.TabIndex = 1;
+			this.cmbRef.Location = new System.Drawing.Point(11, 29);
+			this.cmbRef.Name = "cmbRef";
+			this.cmbRef.Size = new System.Drawing.Size(472, 25);
+			this.cmbRef.TabIndex = 1;
 			// 
 			// lblRefType
 			// 
@@ -70,14 +70,14 @@ namespace GKUI.Dialogs
 			this.lblRefType.Name = "lblRefType";
 			this.lblRefType.Size = new System.Drawing.Size(32, 17);
 			this.lblRefType.TabIndex = 2;
-			this.lblRefType.Text = "Тип";
+			this.lblRefType.Text = "lblRefType";
 			// 
 			// EditType
 			// 
-			this.EditType.Location = new System.Drawing.Point(11, 87);
-			this.EditType.Name = "EditType";
-			this.EditType.Size = new System.Drawing.Size(472, 25);
-			this.EditType.TabIndex = 3;
+			this.cmbRefType.Location = new System.Drawing.Point(11, 87);
+			this.cmbRefType.Name = "cmbRefType";
+			this.cmbRefType.Size = new System.Drawing.Size(472, 25);
+			this.cmbRefType.TabIndex = 3;
 			// 
 			// UserRefEditDlg
 			// 
@@ -89,9 +89,9 @@ namespace GKUI.Dialogs
 			this.Controls.Add(this.btnAccept);
 			this.Controls.Add(this.btnCancel);
 			this.Controls.Add(this.lblReference);
-			this.Controls.Add(this.EditRef);
+			this.Controls.Add(this.cmbRef);
 			this.Controls.Add(this.lblRefType);
-			this.Controls.Add(this.EditType);
+			this.Controls.Add(this.cmbRefType);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
@@ -99,7 +99,7 @@ namespace GKUI.Dialogs
 			this.Name = "UserRefEditDlg";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "Пользовательская сноска";
+			this.Text = "UserRefEditDlg";
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}

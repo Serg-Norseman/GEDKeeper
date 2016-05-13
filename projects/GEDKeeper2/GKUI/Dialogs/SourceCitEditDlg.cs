@@ -54,7 +54,7 @@ namespace GKUI.Dialogs
         {
             try
             {
-                int idx = this.fSourcesList.IndexOf(this.cbSource.Text);
+                int idx = this.fSourcesList.IndexOf(this.cmbSource.Text);
                 GEDCOMSourceRecord src = ((idx < 0) ? null : (this.fSourcesList.GetObject(idx) as GEDCOMSourceRecord));
 
                 if (src == null) {
@@ -62,8 +62,8 @@ namespace GKUI.Dialogs
                     base.DialogResult = DialogResult.None;
                 } else {
                     this.fSourceCitation.Value = src;
-                    this.fSourceCitation.Page = this.EditPage.Text;
-                    this.fSourceCitation.CertaintyAssessment = this.EditCertainty.SelectedIndex;
+                    this.fSourceCitation.Page = this.txtPage.Text;
+                    this.fSourceCitation.CertaintyAssessment = this.txtCertainty.SelectedIndex;
                     base.DialogResult = DialogResult.OK;
                 }
             }
@@ -82,7 +82,7 @@ namespace GKUI.Dialogs
             
             this.fBase.Context.GetSourcesList(this.fSourcesList);
             this.RefreshSourcesList("");
-            this.cbSource.Text = src.FiledByEntry;
+            this.cmbSource.Text = src.FiledByEntry;
         }
 
         // FIXME
@@ -93,16 +93,16 @@ namespace GKUI.Dialogs
 
         private void cbSource_KeyUp(object sender, KeyEventArgs e)
         {
-            this.RefreshSourcesList(this.cbSource.Text);
-            this.cbSource.SelectionStart = this.cbSource.Text.Length;
+            this.RefreshSourcesList(this.cmbSource.Text);
+            this.cmbSource.SelectionStart = this.cmbSource.Text.Length;
         }
 
         private void RefreshSourcesList(string filter)
         {
-            this.cbSource.BeginUpdate();
+            this.cmbSource.BeginUpdate();
             try
             {
-                this.cbSource.Items.Clear();
+                this.cmbSource.Items.Clear();
 
                 string flt = "*" + filter + "*";
 
@@ -112,13 +112,13 @@ namespace GKUI.Dialogs
 
                     if (filter == "" || GKUtils.MatchesMask(st, flt))
                     {
-                        this.cbSource.Items.Add(new GKComboItem(st, this.fSourcesList.GetObject(i)));
+                        this.cmbSource.Items.Add(new GKComboItem(st, this.fSourcesList.GetObject(i)));
                     }
                 }
             }
             finally
             {
-                this.cbSource.EndUpdate();
+                this.cmbSource.EndUpdate();
             }
         }
 
@@ -127,10 +127,10 @@ namespace GKUI.Dialogs
             this.fSourceCitation = value;
 
             GEDCOMSourceRecord src = (this.fSourceCitation.Value as GEDCOMSourceRecord);
-            if (src != null) this.cbSource.Text = src.FiledByEntry;
+            if (src != null) this.cmbSource.Text = src.FiledByEntry;
 
-            this.EditPage.Text = this.fSourceCitation.Page;
-            this.EditCertainty.SelectedIndex = this.fSourceCitation.CertaintyAssessment;
+            this.txtPage.Text = this.fSourceCitation.Page;
+            this.txtCertainty.SelectedIndex = this.fSourceCitation.CertaintyAssessment;
         }
 
         protected override void Dispose(bool disposing)
@@ -150,7 +150,7 @@ namespace GKUI.Dialogs
 
             for (int i = 0; i < GKData.CertaintyAssessments.Length; i++)
             {
-                this.EditCertainty.Items.Add(LangMan.LS(GKData.CertaintyAssessments[i]));
+                this.txtCertainty.Items.Add(LangMan.LS(GKData.CertaintyAssessments[i]));
             }
 
             this.fSourcesList = new StringList();
@@ -161,9 +161,9 @@ namespace GKUI.Dialogs
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             this.Text = LangMan.LS(LSID.LSID_WinSourceCitEdit);
-            this.Label2.Text = LangMan.LS(LSID.LSID_Source);
-            this.Label1.Text = LangMan.LS(LSID.LSID_Page);
-            this.Label3.Text = LangMan.LS(LSID.LSID_Certainty);
+            this.lblSource.Text = LangMan.LS(LSID.LSID_Source);
+            this.lblPage.Text = LangMan.LS(LSID.LSID_Page);
+            this.lblCertainty.Text = LangMan.LS(LSID.LSID_Certainty);
         }
     }
 }

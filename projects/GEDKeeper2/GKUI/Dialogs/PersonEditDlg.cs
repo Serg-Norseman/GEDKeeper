@@ -70,13 +70,13 @@ namespace GKUI.Dialogs
             {
                 string fam, nam, pat;
                 this.fPerson.GetNameParts(out fam, out nam, out pat);
-                this.edSurname.Text = fam;
-                this.edName.Text = nam;
-                this.edPatronymic.Text = pat;
-                this.edSex.SelectedIndex = (sbyte)this.fPerson.Sex;
+                this.txtSurname.Text = fam;
+                this.txtName.Text = nam;
+                this.txtPatronymic.Text = pat;
+                this.cmbSex.SelectedIndex = (sbyte)this.fPerson.Sex;
                 this.chkPatriarch.Checked = this.fPerson.Patriarch;
                 this.chkBookmark.Checked = this.fPerson.Bookmark;
-                this.cbRestriction.SelectedIndex = (sbyte)this.fPerson.Restriction;
+                this.cmbRestriction.SelectedIndex = (sbyte)this.fPerson.Restriction;
 
                 this.UpdateControls();
             }
@@ -108,10 +108,10 @@ namespace GKUI.Dialogs
             if (this.fPerson.PersonalNames.Count > 0)
             {
                 GEDCOMPersonalName np = this.fPerson.PersonalNames[0];
-                this.edPiecePrefix.Text = np.Pieces.Prefix;
-                this.edPieceNickname.Text = np.Pieces.Nickname;
-                this.edPieceSurnamePrefix.Text = np.Pieces.SurnamePrefix;
-                this.edPieceSuffix.Text = np.Pieces.Suffix;
+                this.txtNamePrefix.Text = np.Pieces.Prefix;
+                this.txtNickname.Text = np.Pieces.Nickname;
+                this.txtSurnamePrefix.Text = np.Pieces.SurnamePrefix;
+                this.txtNameSuffix.Text = np.Pieces.Suffix;
             }
 
             if (this.fPerson.ChildToFamilyLinks.Count != 0)
@@ -127,14 +127,14 @@ namespace GKUI.Dialogs
                     this.btnFatherAdd.Enabled = false;
                     this.btnFatherDelete.Enabled = true;
                     this.btnFatherSel.Enabled = true;
-                    this.EditFather.Text = relPerson.GetNameString(true, false);
+                    this.txtFather.Text = relPerson.GetNameString(true, false);
                 }
                 else
                 {
                     this.btnFatherAdd.Enabled = true;
                     this.btnFatherDelete.Enabled = false;
                     this.btnFatherSel.Enabled = false;
-                    this.EditFather.Text = "";
+                    this.txtFather.Text = "";
                 }
 
                 relPerson = family.GetWife();
@@ -143,14 +143,14 @@ namespace GKUI.Dialogs
                     this.btnMotherAdd.Enabled = false;
                     this.btnMotherDelete.Enabled = true;
                     this.btnMotherSel.Enabled = true;
-                    this.EditMother.Text = relPerson.GetNameString(true, false);
+                    this.txtMother.Text = relPerson.GetNameString(true, false);
                 }
                 else
                 {
                     this.btnMotherAdd.Enabled = true;
                     this.btnMotherDelete.Enabled = false;
                     this.btnMotherSel.Enabled = false;
-                    this.EditMother.Text = "";
+                    this.txtMother.Text = "";
                 }
             }
             else
@@ -164,8 +164,8 @@ namespace GKUI.Dialogs
                 this.btnMotherAdd.Enabled = true;
                 this.btnMotherDelete.Enabled = false;
                 this.btnMotherSel.Enabled = false;
-                this.EditFather.Text = "";
-                this.EditMother.Text = "";
+                this.txtFather.Text = "";
+                this.txtMother.Text = "";
             }
 
             this.fEventsList.DataList = this.fPerson.Events.GetEnumerator();
@@ -185,18 +185,18 @@ namespace GKUI.Dialogs
 
         private void LockEditor(bool locked)
         {
-            this.edName.Enabled = !locked;
-            this.edPatronymic.Enabled = !locked;
-            this.edSurname.Enabled = !locked;
+            this.txtName.Enabled = !locked;
+            this.txtPatronymic.Enabled = !locked;
+            this.txtSurname.Enabled = !locked;
             
-            this.edSex.Enabled = !locked;
+            this.cmbSex.Enabled = !locked;
             this.chkPatriarch.Enabled = !locked;
             this.chkBookmark.Enabled = !locked;
 
-            this.edPiecePrefix.Enabled = !locked;
-            this.edPieceNickname.Enabled = !locked;
-            this.edPieceSurnamePrefix.Enabled = !locked;
-            this.edPieceSuffix.Enabled = !locked;
+            this.txtNamePrefix.Enabled = !locked;
+            this.txtNickname.Enabled = !locked;
+            this.txtSurnamePrefix.Enabled = !locked;
+            this.txtNameSuffix.Enabled = !locked;
 
             this.btnParentsAdd.Enabled = !locked;
             this.btnParentsEdit.Enabled = !locked;
@@ -222,24 +222,24 @@ namespace GKUI.Dialogs
 
         private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.LockEditor(this.cbRestriction.SelectedIndex == (int)GEDCOMRestriction.rnLocked);
+            this.LockEditor(this.cmbRestriction.SelectedIndex == (int)GEDCOMRestriction.rnLocked);
         }
 
         private void AcceptChanges()
         {
             GEDCOMPersonalName np = this.fPerson.PersonalNames[0];
-            np.SetNameParts(this.edName.Text.Trim() + " " + this.edPatronymic.Text.Trim(), this.edSurname.Text.Trim(), np.LastPart);
+            np.SetNameParts(this.txtName.Text.Trim() + " " + this.txtPatronymic.Text.Trim(), this.txtSurname.Text.Trim(), np.LastPart);
 
             GEDCOMPersonalNamePieces pieces = np.Pieces;
-            pieces.Nickname = this.edPieceNickname.Text;
-            pieces.Prefix = this.edPiecePrefix.Text;
-            pieces.SurnamePrefix = this.edPieceSurnamePrefix.Text;
-            pieces.Suffix = this.edPieceSuffix.Text;
+            pieces.Nickname = this.txtNickname.Text;
+            pieces.Prefix = this.txtNamePrefix.Text;
+            pieces.SurnamePrefix = this.txtSurnamePrefix.Text;
+            pieces.Suffix = this.txtNameSuffix.Text;
 
-            this.fPerson.Sex = (GEDCOMSex)this.edSex.SelectedIndex;
+            this.fPerson.Sex = (GEDCOMSex)this.cmbSex.SelectedIndex;
             this.fPerson.Patriarch = this.chkPatriarch.Checked;
             this.fPerson.Bookmark = this.chkBookmark.Checked;
-            this.fPerson.Restriction = (GEDCOMRestriction)this.cbRestriction.SelectedIndex;
+            this.fPerson.Restriction = (GEDCOMRestriction)this.cmbRestriction.SelectedIndex;
 
             if (this.fPerson.ChildToFamilyLinks.Count > 0)
             {
@@ -733,8 +733,8 @@ namespace GKUI.Dialogs
 
         private void SetTitle()
         {
-            this.Text = string.Format("{0} \"{1} {2} {3}\" [{4}]", LangMan.LS(LSID.LSID_Person), this.edSurname.Text, this.edName.Text,
-                                      this.edPatronymic.Text, this.fPerson.GetXRefNum());
+            this.Text = string.Format("{0} \"{1} {2} {3}\" [{4}]", LangMan.LS(LSID.LSID_Person), this.txtSurname.Text, this.txtName.Text,
+                                      this.txtPatronymic.Text, this.fPerson.GetXRefNum());
         }
 
 
@@ -916,26 +916,26 @@ namespace GKUI.Dialogs
 
             for (GEDCOMRestriction res = GEDCOMRestriction.rnNone; res <= GEDCOMRestriction.rnPrivacy; res++)
             {
-                this.cbRestriction.Items.Add(LangMan.LS(GKData.Restrictions[(int)res]));
+                this.cmbRestriction.Items.Add(LangMan.LS(GKData.Restrictions[(int)res]));
             }
 
             for (GEDCOMSex sx = GEDCOMSex.svNone; sx <= GEDCOMSex.svUndetermined; sx++)
             {
-                this.edSex.Items.Add(GKUtils.SexStr(sx));
+                this.cmbSex.Items.Add(GKUtils.SexStr(sx));
             }
 
-            this.fEventsList = new GKEventsSheet(this, this.SheetEvents, true);
+            this.fEventsList = new GKEventsSheet(this, this.pageEvents, true);
 
-            this.fSpousesList = this.CreateSpousesSheet(this.SheetSpouses);
-            this.fNamesList = this.CreateNamesSheet(this.SheetNames);
-            this.fAssociationsList = this.CreateAssociationsSheet(this.SheetAssociations);
-            this.fGroupsList = this.CreateGroupsSheet(this.SheetGroups);
+            this.fSpousesList = this.CreateSpousesSheet(this.pageSpouses);
+            this.fNamesList = this.CreateNamesSheet(this.pageNames);
+            this.fAssociationsList = this.CreateAssociationsSheet(this.pageAssociations);
+            this.fGroupsList = this.CreateGroupsSheet(this.pageGroups);
 
-            this.fNotesList = new GKNotesSheet(this, this.SheetNotes);
-            this.fMediaList = new GKMediaSheet(this, this.SheetMultimedia);
-            this.fSourcesList = new GKSourcesSheet(this, this.SheetSources);
+            this.fNotesList = new GKNotesSheet(this, this.pageNotes);
+            this.fMediaList = new GKMediaSheet(this, this.pageMultimedia);
+            this.fSourcesList = new GKSourcesSheet(this, this.pageSources);
 
-            this.fUserRefList = this.CreateURefsSheet(this.SheetUserRefs);
+            this.fUserRefList = this.CreateURefsSheet(this.pageUserRefs);
 
             this.btnPortraitAdd.Image = global::GKResources.iRecNew;
             this.btnPortraitDelete.Image = global::GKResources.iRecDelete;
@@ -957,27 +957,27 @@ namespace GKUI.Dialogs
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             this.Text = LangMan.LS(LSID.LSID_WinPersonEdit);
-            this.Label1.Text = LangMan.LS(LSID.LSID_Surname);
-            this.Label2.Text = LangMan.LS(LSID.LSID_Name);
-            this.Label3.Text = LangMan.LS(LSID.LSID_Patronymic);
-            this.Label4.Text = LangMan.LS(LSID.LSID_Sex);
-            this.Label7.Text = LangMan.LS(LSID.LSID_Nickname);
-            this.Label8.Text = LangMan.LS(LSID.LSID_SurnamePrefix);
-            this.Label6.Text = LangMan.LS(LSID.LSID_NamePrefix);
-            this.Label9.Text = LangMan.LS(LSID.LSID_NameSuffix);
+            this.lblSurname.Text = LangMan.LS(LSID.LSID_Surname);
+            this.lblName.Text = LangMan.LS(LSID.LSID_Name);
+            this.lblPatronymic.Text = LangMan.LS(LSID.LSID_Patronymic);
+            this.lblSex.Text = LangMan.LS(LSID.LSID_Sex);
+            this.lblNickname.Text = LangMan.LS(LSID.LSID_Nickname);
+            this.lblSurnamePrefix.Text = LangMan.LS(LSID.LSID_SurnamePrefix);
+            this.lblNamePrefix.Text = LangMan.LS(LSID.LSID_NamePrefix);
+            this.lblNameSuffix.Text = LangMan.LS(LSID.LSID_NameSuffix);
             this.chkPatriarch.Text = LangMan.LS(LSID.LSID_Patriarch);
             this.chkBookmark.Text = LangMan.LS(LSID.LSID_Bookmark);
-            this.Label12.Text = LangMan.LS(LSID.LSID_Parents);
-            this.SheetEvents.Text = LangMan.LS(LSID.LSID_Events);
-            this.SheetSpouses.Text = LangMan.LS(LSID.LSID_Spouses);
-            this.SheetAssociations.Text = LangMan.LS(LSID.LSID_Associations);
-            this.SheetGroups.Text = LangMan.LS(LSID.LSID_RPGroups);
-            this.SheetNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            this.SheetMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            this.SheetSources.Text = LangMan.LS(LSID.LSID_RPSources);
-            this.SheetUserRefs.Text = LangMan.LS(LSID.LSID_UserRefs);
-            this.Label5.Text = LangMan.LS(LSID.LSID_Restriction);
-            this.SheetNames.Text = LangMan.LS(LSID.LSID_Names);
+            this.lblParents.Text = LangMan.LS(LSID.LSID_Parents);
+            this.pageEvents.Text = LangMan.LS(LSID.LSID_Events);
+            this.pageSpouses.Text = LangMan.LS(LSID.LSID_Spouses);
+            this.pageAssociations.Text = LangMan.LS(LSID.LSID_Associations);
+            this.pageGroups.Text = LangMan.LS(LSID.LSID_RPGroups);
+            this.pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
+            this.pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
+            this.pageSources.Text = LangMan.LS(LSID.LSID_RPSources);
+            this.pageUserRefs.Text = LangMan.LS(LSID.LSID_UserRefs);
+            this.lblRestriction.Text = LangMan.LS(LSID.LSID_Restriction);
+            this.pageNames.Text = LangMan.LS(LSID.LSID_Names);
         }
     }
 }

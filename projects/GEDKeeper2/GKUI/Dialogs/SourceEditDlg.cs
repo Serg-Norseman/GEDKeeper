@@ -58,17 +58,17 @@ namespace GKUI.Dialogs
         {
             this.fSourceRecord = value;
             
-            this.EditShortTitle.Text = this.fSourceRecord.FiledByEntry;
-            this.EditAuthor.Text = this.fSourceRecord.Originator.Text.Trim();
-            this.EditTitle.Text = this.fSourceRecord.Title.Text.Trim();
-            this.EditPublication.Text = this.fSourceRecord.Publication.Text.Trim();
-            this.EditText.Text = this.fSourceRecord.Text.Text.Trim();
+            this.txtShortTitle.Text = this.fSourceRecord.FiledByEntry;
+            this.txtAuthor.Text = this.fSourceRecord.Originator.Text.Trim();
+            this.txtTitle.Text = this.fSourceRecord.Title.Text.Trim();
+            this.txtPublication.Text = this.fSourceRecord.Publication.Text.Trim();
+            this.txtText.Text = this.fSourceRecord.Text.Text.Trim();
 
             this.fNotesList.DataList = this.fSourceRecord.Notes.GetEnumerator();
             this.fMediaList.DataList = this.fSourceRecord.MultimediaLinks.GetEnumerator();
             this.UpdateReposSheet();
             
-            this.ActiveControl = this.EditShortTitle;
+            this.ActiveControl = this.txtShortTitle;
         }
 
         public SourceEditDlg(IBaseWindow aBase)
@@ -76,22 +76,22 @@ namespace GKUI.Dialogs
             this.InitializeComponent();
             this.fBase = aBase;
 
-            this.fNotesList = new GKNotesSheet(this, this.SheetNotes);
-            this.fMediaList = new GKMediaSheet(this, this.SheetMultimedia);
-            this.fRepositoriesList = this.CreateReposSheet(this.SheetRepositories);
+            this.fNotesList = new GKNotesSheet(this, this.pageNotes);
+            this.fMediaList = new GKMediaSheet(this, this.pageMultimedia);
+            this.fRepositoriesList = this.CreateReposSheet(this.pageRepositories);
 
             // SetLang()
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            this.Label1.Text = LangMan.LS(LSID.LSID_ShortTitle);
-            this.Label3.Text = LangMan.LS(LSID.LSID_Author);
-            this.Label2.Text = LangMan.LS(LSID.LSID_Title);
-            this.Label4.Text = LangMan.LS(LSID.LSID_Publication);
-            this.SheetCommon.Text = LangMan.LS(LSID.LSID_Common);
-            this.SheetText.Text = LangMan.LS(LSID.LSID_Text);
-            this.SheetRepositories.Text = LangMan.LS(LSID.LSID_RPRepositories);
-            this.SheetNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            this.SheetMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
+            this.lblShortTitle.Text = LangMan.LS(LSID.LSID_ShortTitle);
+            this.lblAuthor.Text = LangMan.LS(LSID.LSID_Author);
+            this.lblTitle.Text = LangMan.LS(LSID.LSID_Title);
+            this.lblPublication.Text = LangMan.LS(LSID.LSID_Publication);
+            this.pageCommon.Text = LangMan.LS(LSID.LSID_Common);
+            this.pageText.Text = LangMan.LS(LSID.LSID_Text);
+            this.pageRepositories.Text = LangMan.LS(LSID.LSID_RPRepositories);
+            this.pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
+            this.pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
         }
 
         private GKSheetList CreateReposSheet(Control owner)
@@ -164,15 +164,15 @@ namespace GKUI.Dialogs
 
         private void AcceptChanges()
         {
-            this.fSourceRecord.FiledByEntry = this.EditShortTitle.Text;
+            this.fSourceRecord.FiledByEntry = this.txtShortTitle.Text;
             this.fSourceRecord.Originator.Clear();
-            this.fSourceRecord.SetOriginatorArray(this.EditAuthor.Lines);
+            this.fSourceRecord.SetOriginatorArray(this.txtAuthor.Lines);
             this.fSourceRecord.Title.Clear();
-            this.fSourceRecord.SetTitleArray(this.EditTitle.Lines);
+            this.fSourceRecord.SetTitleArray(this.txtTitle.Lines);
             this.fSourceRecord.Publication.Clear();
-            this.fSourceRecord.SetPublicationArray(this.EditPublication.Lines);
+            this.fSourceRecord.SetPublicationArray(this.txtPublication.Lines);
             this.fSourceRecord.Text.Clear();
-            this.fSourceRecord.SetTextArray(this.EditText.Lines);
+            this.fSourceRecord.SetTextArray(this.txtText.Lines);
 
             this.Base.ChangeRecord(this.fSourceRecord);
         }
@@ -193,7 +193,7 @@ namespace GKUI.Dialogs
 
         private void EditShortTitle_TextChanged(object sender, EventArgs e)
         {
-            this.Text = string.Format("{0} \"{1}\"", LangMan.LS(LSID.LSID_Source), this.EditShortTitle.Text);
+            this.Text = string.Format("{0} \"{1}\"", LangMan.LS(LSID.LSID_Source), this.txtShortTitle.Text);
         }
     }
 }

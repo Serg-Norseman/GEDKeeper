@@ -6,35 +6,38 @@ namespace GKUI.Dialogs
 	{
 		private System.Windows.Forms.Button btnAccept;
 		private System.Windows.Forms.Button btnCancel;
-		private System.Windows.Forms.TabPage SheetAuthor;
-		private System.Windows.Forms.Label Label1;
-		private System.Windows.Forms.Label Label2;
-		private System.Windows.Forms.Label Label3;
-		private System.Windows.Forms.TextBox EditName;
-		private System.Windows.Forms.TextBox EditTel;
-		private System.Windows.Forms.TextBox MemoAddress;
-		private System.Windows.Forms.TabPage SheetAdvanced;
-		public System.Windows.Forms.TabControl PageControl1;
+		private System.Windows.Forms.TabPage pageAuthor;
+		private System.Windows.Forms.Label lblName;
+		private System.Windows.Forms.Label lblAddress;
+		private System.Windows.Forms.Label lblTelephone;
+		private System.Windows.Forms.TextBox txtName;
+		private System.Windows.Forms.TextBox txtTel;
+		private System.Windows.Forms.TextBox txtAddress;
+		private System.Windows.Forms.TabPage pageOther;
+		private System.Windows.Forms.TabControl PageControl1;
+		private System.Windows.Forms.ColumnHeader columnHeader2;
+		private System.Windows.Forms.ColumnHeader columnHeader1;
+		private System.Windows.Forms.ListView lvRecordStats;
 
 		private void InitializeComponent()
 		{
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.PageControl1 = new System.Windows.Forms.TabControl();
-			this.SheetAuthor = new System.Windows.Forms.TabPage();
-			this.Label1 = new System.Windows.Forms.Label();
-			this.Label2 = new System.Windows.Forms.Label();
-			this.Label3 = new System.Windows.Forms.Label();
-			this.EditName = new System.Windows.Forms.TextBox();
-			this.EditTel = new System.Windows.Forms.TextBox();
-			this.MemoAddress = new System.Windows.Forms.TextBox();
-			this.SheetAdvanced = new System.Windows.Forms.TabPage();
+			this.pageAuthor = new System.Windows.Forms.TabPage();
+			this.lblName = new System.Windows.Forms.Label();
+			this.lblAddress = new System.Windows.Forms.Label();
+			this.lblTelephone = new System.Windows.Forms.Label();
+			this.txtName = new System.Windows.Forms.TextBox();
+			this.txtTel = new System.Windows.Forms.TextBox();
+			this.txtAddress = new System.Windows.Forms.TextBox();
+			this.pageOther = new System.Windows.Forms.TabPage();
 			this.lvRecordStats = new System.Windows.Forms.ListView();
 			this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
 			this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
 			this.PageControl1.SuspendLayout();
-			this.SheetAuthor.SuspendLayout();
-			this.SheetAdvanced.SuspendLayout();
+			this.pageAuthor.SuspendLayout();
+			this.pageOther.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btnAccept
@@ -45,7 +48,7 @@ namespace GKUI.Dialogs
 			this.btnAccept.Name = "btnAccept";
 			this.btnAccept.Size = new System.Drawing.Size(113, 31);
 			this.btnAccept.TabIndex = 1;
-			this.btnAccept.Text = "Принять";
+			this.btnAccept.Text = "btnAccept";
 			this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.btnAccept.Click += new System.EventHandler(this.btnAccept_Click);
 			// 
@@ -58,90 +61,90 @@ namespace GKUI.Dialogs
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(113, 31);
 			this.btnCancel.TabIndex = 2;
-			this.btnCancel.Text = "Отменить";
+			this.btnCancel.Text = "btnCancel";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// PageControl1
 			// 
-			this.PageControl1.Controls.Add(this.SheetAuthor);
-			this.PageControl1.Controls.Add(this.SheetAdvanced);
+			this.PageControl1.Controls.Add(this.pageAuthor);
+			this.PageControl1.Controls.Add(this.pageOther);
 			this.PageControl1.Location = new System.Drawing.Point(11, 10);
 			this.PageControl1.Name = "PageControl1";
 			this.PageControl1.SelectedIndex = 0;
 			this.PageControl1.Size = new System.Drawing.Size(606, 331);
 			this.PageControl1.TabIndex = 0;
 			// 
-			// SheetAuthor
+			// pageAuthor
 			// 
-			this.SheetAuthor.Controls.Add(this.Label1);
-			this.SheetAuthor.Controls.Add(this.Label2);
-			this.SheetAuthor.Controls.Add(this.Label3);
-			this.SheetAuthor.Controls.Add(this.EditName);
-			this.SheetAuthor.Controls.Add(this.EditTel);
-			this.SheetAuthor.Controls.Add(this.MemoAddress);
-			this.SheetAuthor.Location = new System.Drawing.Point(4, 26);
-			this.SheetAuthor.Name = "SheetAuthor";
-			this.SheetAuthor.Size = new System.Drawing.Size(598, 301);
-			this.SheetAuthor.TabIndex = 0;
-			this.SheetAuthor.Text = "Автор";
+			this.pageAuthor.Controls.Add(this.lblName);
+			this.pageAuthor.Controls.Add(this.lblAddress);
+			this.pageAuthor.Controls.Add(this.lblTelephone);
+			this.pageAuthor.Controls.Add(this.txtName);
+			this.pageAuthor.Controls.Add(this.txtTel);
+			this.pageAuthor.Controls.Add(this.txtAddress);
+			this.pageAuthor.Location = new System.Drawing.Point(4, 26);
+			this.pageAuthor.Name = "pageAuthor";
+			this.pageAuthor.Size = new System.Drawing.Size(598, 301);
+			this.pageAuthor.TabIndex = 0;
+			this.pageAuthor.Text = "pageAuthor";
 			// 
-			// Label1
+			// lblName
 			// 
-			this.Label1.AutoSize = true;
-			this.Label1.Location = new System.Drawing.Point(11, 10);
-			this.Label1.Name = "Label1";
-			this.Label1.Size = new System.Drawing.Size(33, 17);
-			this.Label1.TabIndex = 0;
-			this.Label1.Text = "Имя";
+			this.lblName.AutoSize = true;
+			this.lblName.Location = new System.Drawing.Point(11, 10);
+			this.lblName.Name = "lblName";
+			this.lblName.Size = new System.Drawing.Size(33, 17);
+			this.lblName.TabIndex = 0;
+			this.lblName.Text = "lblName";
 			// 
-			// Label2
+			// lblAddress
 			// 
-			this.Label2.AutoSize = true;
-			this.Label2.Location = new System.Drawing.Point(11, 39);
-			this.Label2.Name = "Label2";
-			this.Label2.Size = new System.Drawing.Size(46, 17);
-			this.Label2.TabIndex = 2;
-			this.Label2.Text = "Адрес";
+			this.lblAddress.AutoSize = true;
+			this.lblAddress.Location = new System.Drawing.Point(11, 39);
+			this.lblAddress.Name = "lblAddress";
+			this.lblAddress.Size = new System.Drawing.Size(46, 17);
+			this.lblAddress.TabIndex = 2;
+			this.lblAddress.Text = "lblAddress";
 			// 
-			// Label3
+			// lblTelephone
 			// 
-			this.Label3.AutoSize = true;
-			this.Label3.Location = new System.Drawing.Point(11, 185);
-			this.Label3.Name = "Label3";
-			this.Label3.Size = new System.Drawing.Size(64, 17);
-			this.Label3.TabIndex = 4;
-			this.Label3.Text = "Телефон";
+			this.lblTelephone.AutoSize = true;
+			this.lblTelephone.Location = new System.Drawing.Point(11, 185);
+			this.lblTelephone.Name = "lblTelephone";
+			this.lblTelephone.Size = new System.Drawing.Size(64, 17);
+			this.lblTelephone.TabIndex = 4;
+			this.lblTelephone.Text = "lblTelephone";
 			// 
-			// EditName
+			// txtName
 			// 
-			this.EditName.Location = new System.Drawing.Point(90, 10);
-			this.EditName.Name = "EditName";
-			this.EditName.Size = new System.Drawing.Size(494, 24);
-			this.EditName.TabIndex = 1;
+			this.txtName.Location = new System.Drawing.Point(90, 10);
+			this.txtName.Name = "txtName";
+			this.txtName.Size = new System.Drawing.Size(494, 24);
+			this.txtName.TabIndex = 1;
 			// 
-			// EditTel
+			// txtTel
 			// 
-			this.EditTel.Location = new System.Drawing.Point(90, 185);
-			this.EditTel.Name = "EditTel";
-			this.EditTel.Size = new System.Drawing.Size(494, 24);
-			this.EditTel.TabIndex = 5;
+			this.txtTel.Location = new System.Drawing.Point(90, 185);
+			this.txtTel.Name = "txtTel";
+			this.txtTel.Size = new System.Drawing.Size(494, 24);
+			this.txtTel.TabIndex = 5;
 			// 
-			// MemoAddress
+			// txtAddress
 			// 
-			this.MemoAddress.Location = new System.Drawing.Point(90, 39);
-			this.MemoAddress.Multiline = true;
-			this.MemoAddress.Name = "MemoAddress";
-			this.MemoAddress.Size = new System.Drawing.Size(494, 137);
-			this.MemoAddress.TabIndex = 3;
+			this.txtAddress.Location = new System.Drawing.Point(90, 39);
+			this.txtAddress.Multiline = true;
+			this.txtAddress.Name = "txtAddress";
+			this.txtAddress.Size = new System.Drawing.Size(494, 137);
+			this.txtAddress.TabIndex = 3;
 			// 
 			// SheetAdvanced
 			// 
-			this.SheetAdvanced.Controls.Add(this.lvRecordStats);
-			this.SheetAdvanced.Location = new System.Drawing.Point(4, 26);
-			this.SheetAdvanced.Name = "SheetAdvanced";
-			this.SheetAdvanced.Size = new System.Drawing.Size(598, 301);
-			this.SheetAdvanced.TabIndex = 1;
-			this.SheetAdvanced.Text = "Прочие";
+			this.pageOther.Controls.Add(this.lvRecordStats);
+			this.pageOther.Location = new System.Drawing.Point(4, 26);
+			this.pageOther.Name = "pageOther";
+			this.pageOther.Size = new System.Drawing.Size(598, 301);
+			this.pageOther.TabIndex = 1;
+			this.pageOther.Text = "pageOther";
 			// 
 			// lvRecordStats
 			// 
@@ -160,12 +163,12 @@ namespace GKUI.Dialogs
 			// 
 			// columnHeader1
 			// 
-			this.columnHeader1.Text = "Записи";
+			this.columnHeader1.Text = "Records";
 			this.columnHeader1.Width = 300;
 			// 
 			// columnHeader2
 			// 
-			this.columnHeader2.Text = "Количество";
+			this.columnHeader2.Text = "Count";
 			this.columnHeader2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.columnHeader2.Width = 100;
 			// 
@@ -183,18 +186,15 @@ namespace GKUI.Dialogs
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "TfmFileProperties";
+			this.Name = "FilePropertiesDlg";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "Свойства файла";
+			this.Text = "FilePropertiesDlg";
 			this.PageControl1.ResumeLayout(false);
-			this.SheetAuthor.ResumeLayout(false);
-			this.SheetAuthor.PerformLayout();
-			this.SheetAdvanced.ResumeLayout(false);
+			this.pageAuthor.ResumeLayout(false);
+			this.pageAuthor.PerformLayout();
+			this.pageOther.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
-		private System.Windows.Forms.ColumnHeader columnHeader2;
-		private System.Windows.Forms.ColumnHeader columnHeader1;
-		private System.Windows.Forms.ListView lvRecordStats;
 	}
 }

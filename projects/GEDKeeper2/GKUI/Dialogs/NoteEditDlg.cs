@@ -49,14 +49,14 @@ namespace GKUI.Dialogs
         private void SetNoteRecord(GEDCOMNoteRecord value)
         {
             this.fNoteRecord = value;
-            this.mmNote.Text = this.fNoteRecord.Note.Text.Trim();
+            this.txtNote.Text = this.fNoteRecord.Note.Text.Trim();
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
             try
             {
-                this.fNoteRecord.SetNotesArray(this.mmNote.Lines);
+                this.fNoteRecord.SetNotesArray(this.txtNote.Lines);
                 this.fBase.ChangeRecord(this.fNoteRecord);
                 base.DialogResult = DialogResult.OK;
             }

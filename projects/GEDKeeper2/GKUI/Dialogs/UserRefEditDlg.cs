@@ -51,16 +51,16 @@ namespace GKUI.Dialogs
         private void SetUserRef(GEDCOMUserReference value)
         {
             this.fUserRef = value;
-            this.EditRef.Text = this.fUserRef.StringValue;
-            this.EditType.Text = this.fUserRef.ReferenceType;
+            this.cmbRef.Text = this.fUserRef.StringValue;
+            this.cmbRefType.Text = this.fUserRef.ReferenceType;
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
             try
             {
-                this.fUserRef.StringValue = this.EditRef.Text;
-                this.fUserRef.ReferenceType = this.EditType.Text;
+                this.fUserRef.StringValue = this.cmbRef.Text;
+                this.fUserRef.ReferenceType = this.cmbRefType.Text;
                 base.DialogResult = DialogResult.OK;
             }
             catch (Exception ex)
@@ -77,7 +77,7 @@ namespace GKUI.Dialogs
 
             for (SpecialUserRef ur = SpecialUserRef.urCustom; ur <= SpecialUserRef.urLast; ur++)
             {
-                this.EditRef.Items.Add(GKData.SpecialUserRefs[(int)ur]);
+                this.cmbRef.Items.Add(GKData.SpecialUserRefs[(int)ur]);
             }
 
             // SetLang()

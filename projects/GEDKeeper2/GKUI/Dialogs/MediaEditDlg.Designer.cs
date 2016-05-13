@@ -5,22 +5,22 @@ namespace GKUI.Dialogs
 	partial class MediaEditDlg
 	{
 		private System.ComponentModel.IContainer components = null;
-		private System.Windows.Forms.TabControl PagesData;
-		private System.Windows.Forms.TabPage SheetNotes;
-		private System.Windows.Forms.TabPage SheetSources;
+		private System.Windows.Forms.TabControl tabsData;
+		private System.Windows.Forms.TabPage pageNotes;
+		private System.Windows.Forms.TabPage pageSources;
 		private System.Windows.Forms.Button btnAccept;
 		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.OpenFileDialog OpenDialog1;
 		private System.Windows.Forms.Button btnView;
-		private System.Windows.Forms.TabPage SheetCommon;
-		private System.Windows.Forms.Label Label1;
-		private System.Windows.Forms.TextBox edName;
-		private System.Windows.Forms.Label Label2;
-		private System.Windows.Forms.ComboBox cbMediaType;
-		private System.Windows.Forms.Label Label4;
-		private System.Windows.Forms.ComboBox cbStoreType;
-		private System.Windows.Forms.Label Label3;
-		private System.Windows.Forms.TextBox edFile;
+		private System.Windows.Forms.TabPage pageCommon;
+		private System.Windows.Forms.Label lblName;
+		private System.Windows.Forms.TextBox txtName;
+		private System.Windows.Forms.Label lblType;
+		private System.Windows.Forms.ComboBox cmbMediaType;
+		private System.Windows.Forms.Label lblStoreType;
+		private System.Windows.Forms.ComboBox cmbStoreType;
+		private System.Windows.Forms.Label lblFile;
+		private System.Windows.Forms.TextBox txtFile;
 		private System.Windows.Forms.Button btnFileSelect;
 
 		protected override void Dispose(bool disposing)
@@ -35,124 +35,124 @@ namespace GKUI.Dialogs
 
 		private void InitializeComponent()
 		{
-			this.PagesData = new System.Windows.Forms.TabControl();
-			this.SheetCommon = new System.Windows.Forms.TabPage();
-			this.Label1 = new System.Windows.Forms.Label();
-			this.Label2 = new System.Windows.Forms.Label();
-			this.Label4 = new System.Windows.Forms.Label();
-			this.Label3 = new System.Windows.Forms.Label();
-			this.edName = new System.Windows.Forms.TextBox();
-			this.cbMediaType = new System.Windows.Forms.ComboBox();
-			this.cbStoreType = new System.Windows.Forms.ComboBox();
-			this.edFile = new System.Windows.Forms.TextBox();
+			this.tabsData = new System.Windows.Forms.TabControl();
+			this.pageCommon = new System.Windows.Forms.TabPage();
+			this.lblName = new System.Windows.Forms.Label();
+			this.lblType = new System.Windows.Forms.Label();
+			this.lblStoreType = new System.Windows.Forms.Label();
+			this.lblFile = new System.Windows.Forms.Label();
+			this.txtName = new System.Windows.Forms.TextBox();
+			this.cmbMediaType = new System.Windows.Forms.ComboBox();
+			this.cmbStoreType = new System.Windows.Forms.ComboBox();
+			this.txtFile = new System.Windows.Forms.TextBox();
 			this.btnFileSelect = new System.Windows.Forms.Button();
-			this.SheetNotes = new System.Windows.Forms.TabPage();
-			this.SheetSources = new System.Windows.Forms.TabPage();
+			this.pageNotes = new System.Windows.Forms.TabPage();
+			this.pageSources = new System.Windows.Forms.TabPage();
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.btnView = new System.Windows.Forms.Button();
 			this.OpenDialog1 = new System.Windows.Forms.OpenFileDialog();
-			this.PagesData.SuspendLayout();
-			this.SheetCommon.SuspendLayout();
+			this.tabsData.SuspendLayout();
+			this.pageCommon.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// PagesData
+			// tabsData
 			// 
-			this.PagesData.Controls.Add(this.SheetCommon);
-			this.PagesData.Controls.Add(this.SheetNotes);
-			this.PagesData.Controls.Add(this.SheetSources);
-			this.PagesData.Dock = System.Windows.Forms.DockStyle.Top;
-			this.PagesData.Location = new System.Drawing.Point(0, 0);
-			this.PagesData.Name = "PagesData";
-			this.PagesData.SelectedIndex = 0;
-			this.PagesData.Size = new System.Drawing.Size(728, 302);
-			this.PagesData.TabIndex = 0;
+			this.tabsData.Controls.Add(this.pageCommon);
+			this.tabsData.Controls.Add(this.pageNotes);
+			this.tabsData.Controls.Add(this.pageSources);
+			this.tabsData.Dock = System.Windows.Forms.DockStyle.Top;
+			this.tabsData.Location = new System.Drawing.Point(0, 0);
+			this.tabsData.Name = "tabsData";
+			this.tabsData.SelectedIndex = 0;
+			this.tabsData.Size = new System.Drawing.Size(728, 302);
+			this.tabsData.TabIndex = 0;
 			// 
-			// SheetCommon
+			// pageCommon
 			// 
-			this.SheetCommon.Controls.Add(this.Label1);
-			this.SheetCommon.Controls.Add(this.Label2);
-			this.SheetCommon.Controls.Add(this.Label4);
-			this.SheetCommon.Controls.Add(this.Label3);
-			this.SheetCommon.Controls.Add(this.edName);
-			this.SheetCommon.Controls.Add(this.cbMediaType);
-			this.SheetCommon.Controls.Add(this.cbStoreType);
-			this.SheetCommon.Controls.Add(this.edFile);
-			this.SheetCommon.Controls.Add(this.btnFileSelect);
-			this.SheetCommon.Location = new System.Drawing.Point(4, 26);
-			this.SheetCommon.Name = "SheetCommon";
-			this.SheetCommon.Size = new System.Drawing.Size(720, 272);
-			this.SheetCommon.TabIndex = 0;
-			this.SheetCommon.Text = "Общие данные";
+			this.pageCommon.Controls.Add(this.lblName);
+			this.pageCommon.Controls.Add(this.lblType);
+			this.pageCommon.Controls.Add(this.lblStoreType);
+			this.pageCommon.Controls.Add(this.lblFile);
+			this.pageCommon.Controls.Add(this.txtName);
+			this.pageCommon.Controls.Add(this.cmbMediaType);
+			this.pageCommon.Controls.Add(this.cmbStoreType);
+			this.pageCommon.Controls.Add(this.txtFile);
+			this.pageCommon.Controls.Add(this.btnFileSelect);
+			this.pageCommon.Location = new System.Drawing.Point(4, 26);
+			this.pageCommon.Name = "pageCommon";
+			this.pageCommon.Size = new System.Drawing.Size(720, 272);
+			this.pageCommon.TabIndex = 0;
+			this.pageCommon.Text = "pageCommon";
 			// 
-			// Label1
+			// lblName
 			// 
-			this.Label1.AutoSize = true;
-			this.Label1.Location = new System.Drawing.Point(11, 10);
-			this.Label1.Name = "Label1";
-			this.Label1.Size = new System.Drawing.Size(67, 17);
-			this.Label1.TabIndex = 0;
-			this.Label1.Text = "Название";
+			this.lblName.AutoSize = true;
+			this.lblName.Location = new System.Drawing.Point(11, 10);
+			this.lblName.Name = "lblName";
+			this.lblName.Size = new System.Drawing.Size(67, 17);
+			this.lblName.TabIndex = 0;
+			this.lblName.Text = "lblName";
 			// 
-			// Label2
+			// lblType
 			// 
-			this.Label2.AutoSize = true;
-			this.Label2.Location = new System.Drawing.Point(11, 68);
-			this.Label2.Name = "Label2";
-			this.Label2.Size = new System.Drawing.Size(32, 17);
-			this.Label2.TabIndex = 2;
-			this.Label2.Text = "Тип";
+			this.lblType.AutoSize = true;
+			this.lblType.Location = new System.Drawing.Point(11, 68);
+			this.lblType.Name = "lblType";
+			this.lblType.Size = new System.Drawing.Size(32, 17);
+			this.lblType.TabIndex = 2;
+			this.lblType.Text = "lblType";
 			// 
-			// Label4
+			// lblStoreType
 			// 
-			this.Label4.AutoSize = true;
-			this.Label4.Location = new System.Drawing.Point(269, 68);
-			this.Label4.Name = "Label4";
-			this.Label4.Size = new System.Drawing.Size(121, 17);
-			this.Label4.TabIndex = 4;
-			this.Label4.Text = "Способ хранения";
+			this.lblStoreType.AutoSize = true;
+			this.lblStoreType.Location = new System.Drawing.Point(269, 68);
+			this.lblStoreType.Name = "lblStoreType";
+			this.lblStoreType.Size = new System.Drawing.Size(121, 17);
+			this.lblStoreType.TabIndex = 4;
+			this.lblStoreType.Text = "lblStoreType";
 			// 
-			// Label3
+			// lblFile
 			// 
-			this.Label3.AutoSize = true;
-			this.Label3.Location = new System.Drawing.Point(11, 126);
-			this.Label3.Name = "Label3";
-			this.Label3.Size = new System.Drawing.Size(41, 17);
-			this.Label3.TabIndex = 6;
-			this.Label3.Text = "Файл";
+			this.lblFile.AutoSize = true;
+			this.lblFile.Location = new System.Drawing.Point(11, 126);
+			this.lblFile.Name = "lblFile";
+			this.lblFile.Size = new System.Drawing.Size(41, 17);
+			this.lblFile.TabIndex = 6;
+			this.lblFile.Text = "lblFile";
 			// 
-			// edName
+			// txtName
 			// 
-			this.edName.Location = new System.Drawing.Point(11, 29);
-			this.edName.Name = "edName";
-			this.edName.Size = new System.Drawing.Size(696, 24);
-			this.edName.TabIndex = 1;
-			this.edName.TextChanged += new System.EventHandler(this.edName_TextChanged);
+			this.txtName.Location = new System.Drawing.Point(11, 29);
+			this.txtName.Name = "txtName";
+			this.txtName.Size = new System.Drawing.Size(696, 24);
+			this.txtName.TabIndex = 1;
+			this.txtName.TextChanged += new System.EventHandler(this.edName_TextChanged);
 			// 
-			// cbMediaType
+			// cmbMediaType
 			// 
-			this.cbMediaType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cbMediaType.DropDownWidth = 15;
-			this.cbMediaType.Location = new System.Drawing.Point(11, 87);
-			this.cbMediaType.Name = "cbMediaType";
-			this.cbMediaType.Size = new System.Drawing.Size(237, 25);
-			this.cbMediaType.TabIndex = 3;
+			this.cmbMediaType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cmbMediaType.DropDownWidth = 15;
+			this.cmbMediaType.Location = new System.Drawing.Point(11, 87);
+			this.cmbMediaType.Name = "cmbMediaType";
+			this.cmbMediaType.Size = new System.Drawing.Size(237, 25);
+			this.cmbMediaType.TabIndex = 3;
 			// 
-			// cbStoreType
+			// cmbStoreType
 			// 
-			this.cbStoreType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cbStoreType.Location = new System.Drawing.Point(269, 87);
-			this.cbStoreType.Name = "cbStoreType";
-			this.cbStoreType.Size = new System.Drawing.Size(281, 25);
-			this.cbStoreType.TabIndex = 5;
+			this.cmbStoreType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cmbStoreType.Location = new System.Drawing.Point(269, 87);
+			this.cmbStoreType.Name = "cmbStoreType";
+			this.cmbStoreType.Size = new System.Drawing.Size(281, 25);
+			this.cmbStoreType.TabIndex = 5;
 			// 
-			// edFile
+			// txtFile
 			// 
-			this.edFile.Location = new System.Drawing.Point(11, 146);
-			this.edFile.Name = "edFile";
-			this.edFile.ReadOnly = true;
-			this.edFile.Size = new System.Drawing.Size(629, 24);
-			this.edFile.TabIndex = 7;
+			this.txtFile.Location = new System.Drawing.Point(11, 146);
+			this.txtFile.Name = "txtFile";
+			this.txtFile.ReadOnly = true;
+			this.txtFile.Size = new System.Drawing.Size(629, 24);
+			this.txtFile.TabIndex = 7;
 			// 
 			// btnFileSelect
 			// 
@@ -163,21 +163,21 @@ namespace GKUI.Dialogs
 			this.btnFileSelect.Text = "...";
 			this.btnFileSelect.Click += new System.EventHandler(this.btnFileSelect_Click);
 			// 
-			// SheetNotes
+			// pageNotes
 			// 
-			this.SheetNotes.Location = new System.Drawing.Point(4, 26);
-			this.SheetNotes.Name = "SheetNotes";
-			this.SheetNotes.Size = new System.Drawing.Size(720, 272);
-			this.SheetNotes.TabIndex = 1;
-			this.SheetNotes.Text = "Заметки";
+			this.pageNotes.Location = new System.Drawing.Point(4, 26);
+			this.pageNotes.Name = "pageNotes";
+			this.pageNotes.Size = new System.Drawing.Size(720, 272);
+			this.pageNotes.TabIndex = 1;
+			this.pageNotes.Text = "pageNotes";
 			// 
-			// SheetSources
+			// pageSources
 			// 
-			this.SheetSources.Location = new System.Drawing.Point(4, 26);
-			this.SheetSources.Name = "SheetSources";
-			this.SheetSources.Size = new System.Drawing.Size(720, 272);
-			this.SheetSources.TabIndex = 2;
-			this.SheetSources.Text = "Источники";
+			this.pageSources.Location = new System.Drawing.Point(4, 26);
+			this.pageSources.Name = "pageSources";
+			this.pageSources.Size = new System.Drawing.Size(720, 272);
+			this.pageSources.TabIndex = 2;
+			this.pageSources.Text = "pageSources";
 			// 
 			// btnAccept
 			// 
@@ -187,7 +187,7 @@ namespace GKUI.Dialogs
 			this.btnAccept.Name = "btnAccept";
 			this.btnAccept.Size = new System.Drawing.Size(113, 30);
 			this.btnAccept.TabIndex = 2;
-			this.btnAccept.Text = "Принять";
+			this.btnAccept.Text = "btnAccept";
 			this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.btnAccept.Click += new System.EventHandler(this.btnAccept_Click);
 			// 
@@ -200,7 +200,7 @@ namespace GKUI.Dialogs
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(113, 30);
 			this.btnCancel.TabIndex = 3;
-			this.btnCancel.Text = "Отменить";
+			this.btnCancel.Text = "btnCancel";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// btnView
@@ -209,12 +209,8 @@ namespace GKUI.Dialogs
 			this.btnView.Name = "btnView";
 			this.btnView.Size = new System.Drawing.Size(114, 30);
 			this.btnView.TabIndex = 1;
-			this.btnView.Text = "Просмотр...";
+			this.btnView.Text = "btnView";
 			this.btnView.Click += new System.EventHandler(this.btnView_Click);
-			// 
-			// OpenDialog1
-			// 
-			this.OpenDialog1.Filter = "Все файлы (*.*)|*.*";
 			// 
 			// MediaEditDlg
 			// 
@@ -223,7 +219,7 @@ namespace GKUI.Dialogs
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(728, 365);
-			this.Controls.Add(this.PagesData);
+			this.Controls.Add(this.tabsData);
 			this.Controls.Add(this.btnAccept);
 			this.Controls.Add(this.btnCancel);
 			this.Controls.Add(this.btnView);
@@ -234,10 +230,10 @@ namespace GKUI.Dialogs
 			this.Name = "MediaEditDlg";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "Редактирование мультимедиа объекта";
-			this.PagesData.ResumeLayout(false);
-			this.SheetCommon.ResumeLayout(false);
-			this.SheetCommon.PerformLayout();
+			this.Text = "MediaEditDlg";
+			this.tabsData.ResumeLayout(false);
+			this.pageCommon.ResumeLayout(false);
+			this.pageCommon.PerformLayout();
 			this.ResumeLayout(false);
 		}
 	}

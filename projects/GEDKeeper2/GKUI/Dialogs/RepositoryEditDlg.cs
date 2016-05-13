@@ -52,7 +52,7 @@ namespace GKUI.Dialogs
         private void SetRepository(GEDCOMRepositoryRecord value)
         {
             this.fRepository = value;
-            this.edName.Text = this.fRepository.RepositoryName;
+            this.txtName.Text = this.fRepository.RepositoryName;
 
             this.fNotesList.DataList = this.fRepository.Notes.GetEnumerator();
         }
@@ -66,7 +66,7 @@ namespace GKUI.Dialogs
         {
             try
             {
-                this.fRepository.RepositoryName = this.edName.Text;
+                this.fRepository.RepositoryName = this.txtName.Text;
                 this.fBase.ChangeRecord(this.fRepository);
                 base.DialogResult = DialogResult.OK;
             }
@@ -82,14 +82,14 @@ namespace GKUI.Dialogs
             this.InitializeComponent();
             this.fBase = aBase;
 
-            this.fNotesList = new GKNotesSheet(this, this.SheetNotes);
+            this.fNotesList = new GKNotesSheet(this, this.pageNotes);
 
             // SetLang()
             this.Text = LangMan.LS(LSID.LSID_Repository);
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            this.Label1.Text = LangMan.LS(LSID.LSID_Title);
-            this.SheetNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
+            this.lblName.Text = LangMan.LS(LSID.LSID_Title);
+            this.pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
             this.btnAddress.Text = LangMan.LS(LSID.LSID_Address) + @"...";
         }
     }

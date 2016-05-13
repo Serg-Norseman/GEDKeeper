@@ -5,67 +5,67 @@ namespace GKUI.Dialogs
 	partial class ResearchEditDlg
 	{
 		private System.Windows.Forms.GroupBox GroupBox1;
-		private System.Windows.Forms.TextBox EditName;
-		private System.Windows.Forms.Label Label1;
-		private System.Windows.Forms.TabControl PagesGroupData;
-		private System.Windows.Forms.TabPage SheetNotes;
-		private System.Windows.Forms.TabPage SheetTasks;
+		private System.Windows.Forms.TextBox txtName;
+		private System.Windows.Forms.Label lblName;
+		private System.Windows.Forms.TabControl tabsData;
+		private System.Windows.Forms.TabPage pageNotes;
+		private System.Windows.Forms.TabPage pageTasks;
 		private System.Windows.Forms.Button btnAccept;
 		private System.Windows.Forms.Button btnCancel;
-		private System.Windows.Forms.Label Label2;
-		private System.Windows.Forms.ComboBox EditPriority;
-		private System.Windows.Forms.TabPage SheetCommunications;
-		private System.Windows.Forms.Label Label3;
-		private System.Windows.Forms.ComboBox EditStatus;
-		private System.Windows.Forms.Label Label4;
-		private System.Windows.Forms.MaskedTextBox EditStartDate;
-		private System.Windows.Forms.Label Label5;
-		private System.Windows.Forms.MaskedTextBox EditStopDate;
-		private System.Windows.Forms.Label Label6;
-		private System.Windows.Forms.NumericUpDown EditPercent;
-		private System.Windows.Forms.TabPage SheetGroups;
+		private System.Windows.Forms.Label lblPriority;
+		private System.Windows.Forms.ComboBox cmbPriority;
+		private System.Windows.Forms.TabPage pageCommunications;
+		private System.Windows.Forms.Label lblStatus;
+		private System.Windows.Forms.ComboBox cmbStatus;
+		private System.Windows.Forms.Label lblStartDate;
+		private System.Windows.Forms.MaskedTextBox txtStartDate;
+		private System.Windows.Forms.Label lblStopDate;
+		private System.Windows.Forms.MaskedTextBox txtStopDate;
+		private System.Windows.Forms.Label lblPercent;
+		private System.Windows.Forms.NumericUpDown nudPercent;
+		private System.Windows.Forms.TabPage pageGroups;
 
 		private void InitializeComponent()
 		{
 			this.GroupBox1 = new System.Windows.Forms.GroupBox();
-			this.Label1 = new System.Windows.Forms.Label();
-			this.Label2 = new System.Windows.Forms.Label();
-			this.Label3 = new System.Windows.Forms.Label();
-			this.Label4 = new System.Windows.Forms.Label();
-			this.Label5 = new System.Windows.Forms.Label();
-			this.Label6 = new System.Windows.Forms.Label();
-			this.EditName = new System.Windows.Forms.TextBox();
-			this.EditPriority = new System.Windows.Forms.ComboBox();
-			this.EditStatus = new System.Windows.Forms.ComboBox();
-			this.EditStartDate = new System.Windows.Forms.MaskedTextBox();
-			this.EditStopDate = new System.Windows.Forms.MaskedTextBox();
-			this.EditPercent = new System.Windows.Forms.NumericUpDown();
+			this.lblName = new System.Windows.Forms.Label();
+			this.lblPriority = new System.Windows.Forms.Label();
+			this.lblStatus = new System.Windows.Forms.Label();
+			this.lblStartDate = new System.Windows.Forms.Label();
+			this.lblStopDate = new System.Windows.Forms.Label();
+			this.lblPercent = new System.Windows.Forms.Label();
+			this.txtName = new System.Windows.Forms.TextBox();
+			this.cmbPriority = new System.Windows.Forms.ComboBox();
+			this.cmbStatus = new System.Windows.Forms.ComboBox();
+			this.txtStartDate = new System.Windows.Forms.MaskedTextBox();
+			this.txtStopDate = new System.Windows.Forms.MaskedTextBox();
+			this.nudPercent = new System.Windows.Forms.NumericUpDown();
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
-			this.PagesGroupData = new System.Windows.Forms.TabControl();
-			this.SheetTasks = new System.Windows.Forms.TabPage();
-			this.SheetCommunications = new System.Windows.Forms.TabPage();
-			this.SheetGroups = new System.Windows.Forms.TabPage();
-			this.SheetNotes = new System.Windows.Forms.TabPage();
+			this.tabsData = new System.Windows.Forms.TabControl();
+			this.pageTasks = new System.Windows.Forms.TabPage();
+			this.pageCommunications = new System.Windows.Forms.TabPage();
+			this.pageGroups = new System.Windows.Forms.TabPage();
+			this.pageNotes = new System.Windows.Forms.TabPage();
 			this.GroupBox1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.EditPercent)).BeginInit();
-			this.PagesGroupData.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudPercent)).BeginInit();
+			this.tabsData.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// GroupBox1
 			// 
-			this.GroupBox1.Controls.Add(this.Label1);
-			this.GroupBox1.Controls.Add(this.Label2);
-			this.GroupBox1.Controls.Add(this.Label3);
-			this.GroupBox1.Controls.Add(this.Label4);
-			this.GroupBox1.Controls.Add(this.Label5);
-			this.GroupBox1.Controls.Add(this.Label6);
-			this.GroupBox1.Controls.Add(this.EditName);
-			this.GroupBox1.Controls.Add(this.EditPriority);
-			this.GroupBox1.Controls.Add(this.EditStatus);
-			this.GroupBox1.Controls.Add(this.EditStartDate);
-			this.GroupBox1.Controls.Add(this.EditStopDate);
-			this.GroupBox1.Controls.Add(this.EditPercent);
+			this.GroupBox1.Controls.Add(this.lblName);
+			this.GroupBox1.Controls.Add(this.lblPriority);
+			this.GroupBox1.Controls.Add(this.lblStatus);
+			this.GroupBox1.Controls.Add(this.lblStartDate);
+			this.GroupBox1.Controls.Add(this.lblStopDate);
+			this.GroupBox1.Controls.Add(this.lblPercent);
+			this.GroupBox1.Controls.Add(this.txtName);
+			this.GroupBox1.Controls.Add(this.cmbPriority);
+			this.GroupBox1.Controls.Add(this.cmbStatus);
+			this.GroupBox1.Controls.Add(this.txtStartDate);
+			this.GroupBox1.Controls.Add(this.txtStopDate);
+			this.GroupBox1.Controls.Add(this.nudPercent);
 			this.GroupBox1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.GroupBox1.Location = new System.Drawing.Point(0, 0);
 			this.GroupBox1.Name = "GroupBox1";
@@ -73,112 +73,112 @@ namespace GKUI.Dialogs
 			this.GroupBox1.TabIndex = 0;
 			this.GroupBox1.TabStop = false;
 			// 
-			// Label1
+			// lblName
 			// 
-			this.Label1.AutoSize = true;
-			this.Label1.Location = new System.Drawing.Point(11, 22);
-			this.Label1.Name = "Label1";
-			this.Label1.Size = new System.Drawing.Size(67, 17);
-			this.Label1.TabIndex = 0;
-			this.Label1.Text = "Название";
+			this.lblName.AutoSize = true;
+			this.lblName.Location = new System.Drawing.Point(11, 22);
+			this.lblName.Name = "lblName";
+			this.lblName.Size = new System.Drawing.Size(67, 17);
+			this.lblName.TabIndex = 0;
+			this.lblName.Text = "lblName";
 			// 
-			// Label2
+			// lblPriority
 			// 
-			this.Label2.AutoSize = true;
-			this.Label2.Location = new System.Drawing.Point(11, 51);
-			this.Label2.Name = "Label2";
-			this.Label2.Size = new System.Drawing.Size(80, 17);
-			this.Label2.TabIndex = 2;
-			this.Label2.Text = "Приоритет";
+			this.lblPriority.AutoSize = true;
+			this.lblPriority.Location = new System.Drawing.Point(11, 51);
+			this.lblPriority.Name = "lblPriority";
+			this.lblPriority.Size = new System.Drawing.Size(80, 17);
+			this.lblPriority.TabIndex = 2;
+			this.lblPriority.Text = "lblPriority";
 			// 
-			// Label3
+			// lblStatus
 			// 
-			this.Label3.AutoSize = true;
-			this.Label3.Location = new System.Drawing.Point(347, 52);
-			this.Label3.Name = "Label3";
-			this.Label3.Size = new System.Drawing.Size(78, 17);
-			this.Label3.TabIndex = 4;
-			this.Label3.Text = "Состояние";
+			this.lblStatus.AutoSize = true;
+			this.lblStatus.Location = new System.Drawing.Point(347, 52);
+			this.lblStatus.Name = "lblStatus";
+			this.lblStatus.Size = new System.Drawing.Size(78, 17);
+			this.lblStatus.TabIndex = 4;
+			this.lblStatus.Text = "lblStatus";
 			// 
-			// Label4
+			// lblStartDate
 			// 
-			this.Label4.AutoSize = true;
-			this.Label4.Location = new System.Drawing.Point(11, 81);
-			this.Label4.Name = "Label4";
-			this.Label4.Size = new System.Drawing.Size(72, 17);
-			this.Label4.TabIndex = 8;
-			this.Label4.Text = "Запущено";
+			this.lblStartDate.AutoSize = true;
+			this.lblStartDate.Location = new System.Drawing.Point(11, 81);
+			this.lblStartDate.Name = "lblStartDate";
+			this.lblStartDate.Size = new System.Drawing.Size(72, 17);
+			this.lblStartDate.TabIndex = 8;
+			this.lblStartDate.Text = "lblStartDate";
 			// 
-			// Label5
+			// lblStopDate
 			// 
-			this.Label5.AutoSize = true;
-			this.Label5.Location = new System.Drawing.Point(347, 81);
-			this.Label5.Name = "Label5";
-			this.Label5.Size = new System.Drawing.Size(77, 17);
-			this.Label5.TabIndex = 10;
-			this.Label5.Text = "Завершено";
+			this.lblStopDate.AutoSize = true;
+			this.lblStopDate.Location = new System.Drawing.Point(347, 81);
+			this.lblStopDate.Name = "lblStopDate";
+			this.lblStopDate.Size = new System.Drawing.Size(77, 17);
+			this.lblStopDate.TabIndex = 10;
+			this.lblStopDate.Text = "lblStopDate";
 			// 
-			// Label6
+			// lblPercent
 			// 
-			this.Label6.AutoSize = true;
-			this.Label6.Location = new System.Drawing.Point(683, 52);
-			this.Label6.Name = "Label6";
-			this.Label6.Size = new System.Drawing.Size(64, 17);
-			this.Label6.TabIndex = 6;
-			this.Label6.Text = "Процент";
+			this.lblPercent.AutoSize = true;
+			this.lblPercent.Location = new System.Drawing.Point(683, 52);
+			this.lblPercent.Name = "lblPercent";
+			this.lblPercent.Size = new System.Drawing.Size(64, 17);
+			this.lblPercent.TabIndex = 6;
+			this.lblPercent.Text = "lblPercent";
 			// 
-			// EditName
+			// txtName
 			// 
-			this.EditName.Location = new System.Drawing.Point(101, 19);
-			this.EditName.Name = "EditName";
-			this.EditName.Size = new System.Drawing.Size(740, 24);
-			this.EditName.TabIndex = 1;
+			this.txtName.Location = new System.Drawing.Point(101, 19);
+			this.txtName.Name = "txtName";
+			this.txtName.Size = new System.Drawing.Size(740, 24);
+			this.txtName.TabIndex = 1;
 			// 
-			// EditPriority
+			// cmbPriority
 			// 
-			this.EditPriority.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.EditPriority.Location = new System.Drawing.Point(101, 49);
-			this.EditPriority.Name = "EditPriority";
-			this.EditPriority.Size = new System.Drawing.Size(225, 25);
-			this.EditPriority.TabIndex = 3;
+			this.cmbPriority.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cmbPriority.Location = new System.Drawing.Point(101, 49);
+			this.cmbPriority.Name = "cmbPriority";
+			this.cmbPriority.Size = new System.Drawing.Size(225, 25);
+			this.cmbPriority.TabIndex = 3;
 			// 
-			// EditStatus
+			// cmbStatus
 			// 
-			this.EditStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.EditStatus.Location = new System.Drawing.Point(437, 49);
-			this.EditStatus.Name = "EditStatus";
-			this.EditStatus.Size = new System.Drawing.Size(225, 25);
-			this.EditStatus.TabIndex = 5;
+			this.cmbStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cmbStatus.Location = new System.Drawing.Point(437, 49);
+			this.cmbStatus.Name = "cmbStatus";
+			this.cmbStatus.Size = new System.Drawing.Size(225, 25);
+			this.cmbStatus.TabIndex = 5;
 			// 
-			// EditStartDate
+			// txtStartDate
 			// 
-			this.EditStartDate.Location = new System.Drawing.Point(101, 78);
-			this.EditStartDate.Mask = "00/00/0000";
-			this.EditStartDate.Name = "EditStartDate";
-			this.EditStartDate.Size = new System.Drawing.Size(225, 24);
-			this.EditStartDate.TabIndex = 9;
-			this.EditStartDate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+			this.txtStartDate.Location = new System.Drawing.Point(101, 78);
+			this.txtStartDate.Mask = "00/00/0000";
+			this.txtStartDate.Name = "txtStartDate";
+			this.txtStartDate.Size = new System.Drawing.Size(225, 24);
+			this.txtStartDate.TabIndex = 9;
+			this.txtStartDate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
 			// 
-			// EditStopDate
+			// txtStopDate
 			// 
-			this.EditStopDate.Location = new System.Drawing.Point(437, 78);
-			this.EditStopDate.Mask = "00/00/0000";
-			this.EditStopDate.Name = "EditStopDate";
-			this.EditStopDate.Size = new System.Drawing.Size(225, 24);
-			this.EditStopDate.TabIndex = 11;
-			this.EditStopDate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+			this.txtStopDate.Location = new System.Drawing.Point(437, 78);
+			this.txtStopDate.Mask = "00/00/0000";
+			this.txtStopDate.Name = "txtStopDate";
+			this.txtStopDate.Size = new System.Drawing.Size(225, 24);
+			this.txtStopDate.TabIndex = 11;
+			this.txtStopDate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
 			// 
-			// EditPercent
+			// nudPercent
 			// 
-			this.EditPercent.Increment = new decimal(new int[] {
+			this.nudPercent.Increment = new decimal(new int[] {
 									5,
 									0,
 									0,
 									0});
-			this.EditPercent.Location = new System.Drawing.Point(762, 49);
-			this.EditPercent.Name = "EditPercent";
-			this.EditPercent.Size = new System.Drawing.Size(57, 24);
-			this.EditPercent.TabIndex = 7;
+			this.nudPercent.Location = new System.Drawing.Point(762, 49);
+			this.nudPercent.Name = "nudPercent";
+			this.nudPercent.Size = new System.Drawing.Size(57, 24);
+			this.nudPercent.TabIndex = 7;
 			// 
 			// btnAccept
 			// 
@@ -188,7 +188,7 @@ namespace GKUI.Dialogs
 			this.btnAccept.Name = "btnAccept";
 			this.btnAccept.Size = new System.Drawing.Size(113, 30);
 			this.btnAccept.TabIndex = 2;
-			this.btnAccept.Text = "Принять";
+			this.btnAccept.Text = "btnAccept";
 			this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.btnAccept.Click += new System.EventHandler(this.btnAccept_Click);
 			// 
@@ -201,53 +201,53 @@ namespace GKUI.Dialogs
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(113, 30);
 			this.btnCancel.TabIndex = 3;
-			this.btnCancel.Text = "Отменить";
+			this.btnCancel.Text = "btnCancel";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// PagesGroupData
+			// tabsData
 			// 
-			this.PagesGroupData.Controls.Add(this.SheetTasks);
-			this.PagesGroupData.Controls.Add(this.SheetCommunications);
-			this.PagesGroupData.Controls.Add(this.SheetGroups);
-			this.PagesGroupData.Controls.Add(this.SheetNotes);
-			this.PagesGroupData.Dock = System.Windows.Forms.DockStyle.Top;
-			this.PagesGroupData.Location = new System.Drawing.Point(0, 118);
-			this.PagesGroupData.Name = "PagesGroupData";
-			this.PagesGroupData.SelectedIndex = 0;
-			this.PagesGroupData.Size = new System.Drawing.Size(852, 379);
-			this.PagesGroupData.TabIndex = 1;
+			this.tabsData.Controls.Add(this.pageTasks);
+			this.tabsData.Controls.Add(this.pageCommunications);
+			this.tabsData.Controls.Add(this.pageGroups);
+			this.tabsData.Controls.Add(this.pageNotes);
+			this.tabsData.Dock = System.Windows.Forms.DockStyle.Top;
+			this.tabsData.Location = new System.Drawing.Point(0, 118);
+			this.tabsData.Name = "tabsData";
+			this.tabsData.SelectedIndex = 0;
+			this.tabsData.Size = new System.Drawing.Size(852, 379);
+			this.tabsData.TabIndex = 1;
 			// 
-			// SheetTasks
+			// pageTasks
 			// 
-			this.SheetTasks.Location = new System.Drawing.Point(4, 26);
-			this.SheetTasks.Name = "SheetTasks";
-			this.SheetTasks.Size = new System.Drawing.Size(844, 349);
-			this.SheetTasks.TabIndex = 0;
-			this.SheetTasks.Text = "Задачи";
+			this.pageTasks.Location = new System.Drawing.Point(4, 26);
+			this.pageTasks.Name = "pageTasks";
+			this.pageTasks.Size = new System.Drawing.Size(844, 349);
+			this.pageTasks.TabIndex = 0;
+			this.pageTasks.Text = "pageTasks";
 			// 
-			// SheetCommunications
+			// pageCommunications
 			// 
-			this.SheetCommunications.Location = new System.Drawing.Point(4, 26);
-			this.SheetCommunications.Name = "SheetCommunications";
-			this.SheetCommunications.Size = new System.Drawing.Size(844, 349);
-			this.SheetCommunications.TabIndex = 1;
-			this.SheetCommunications.Text = "Коммуникации";
+			this.pageCommunications.Location = new System.Drawing.Point(4, 26);
+			this.pageCommunications.Name = "pageCommunications";
+			this.pageCommunications.Size = new System.Drawing.Size(844, 349);
+			this.pageCommunications.TabIndex = 1;
+			this.pageCommunications.Text = "pageCommunications";
 			// 
-			// SheetGroups
+			// pageGroups
 			// 
-			this.SheetGroups.Location = new System.Drawing.Point(4, 26);
-			this.SheetGroups.Name = "SheetGroups";
-			this.SheetGroups.Size = new System.Drawing.Size(844, 349);
-			this.SheetGroups.TabIndex = 2;
-			this.SheetGroups.Text = "Группы";
+			this.pageGroups.Location = new System.Drawing.Point(4, 26);
+			this.pageGroups.Name = "pageGroups";
+			this.pageGroups.Size = new System.Drawing.Size(844, 349);
+			this.pageGroups.TabIndex = 2;
+			this.pageGroups.Text = "pageGroups";
 			// 
-			// SheetNotes
+			// pageNotes
 			// 
-			this.SheetNotes.Location = new System.Drawing.Point(4, 26);
-			this.SheetNotes.Name = "SheetNotes";
-			this.SheetNotes.Size = new System.Drawing.Size(844, 349);
-			this.SheetNotes.TabIndex = 3;
-			this.SheetNotes.Text = "Заметки";
+			this.pageNotes.Location = new System.Drawing.Point(4, 26);
+			this.pageNotes.Name = "pageNotes";
+			this.pageNotes.Size = new System.Drawing.Size(844, 349);
+			this.pageNotes.TabIndex = 3;
+			this.pageNotes.Text = "pageNotes";
 			// 
 			// ResearchEditDlg
 			// 
@@ -256,7 +256,7 @@ namespace GKUI.Dialogs
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(852, 557);
-			this.Controls.Add(this.PagesGroupData);
+			this.Controls.Add(this.tabsData);
 			this.Controls.Add(this.GroupBox1);
 			this.Controls.Add(this.btnAccept);
 			this.Controls.Add(this.btnCancel);
@@ -267,11 +267,11 @@ namespace GKUI.Dialogs
 			this.Name = "ResearchEditDlg";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "Редактирование исследования";
+			this.Text = "ResearchEditDlg";
 			this.GroupBox1.ResumeLayout(false);
 			this.GroupBox1.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.EditPercent)).EndInit();
-			this.PagesGroupData.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.nudPercent)).EndInit();
+			this.tabsData.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
 	}

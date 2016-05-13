@@ -58,12 +58,12 @@ namespace GKUI.Dialogs
 
         private void AcceptChanges()
         {
-            this.fResearch.ResearchName = this.EditName.Text;
-            this.fResearch.Priority = (GKResearchPriority)this.EditPriority.SelectedIndex;
-            this.fResearch.Status = (GKResearchStatus)this.EditStatus.SelectedIndex;
-            this.fResearch.StartDate.ParseString(GEDCOMUtils.StrToGEDCOMDate(this.EditStartDate.Text, true));
-            this.fResearch.StopDate.ParseString(GEDCOMUtils.StrToGEDCOMDate(this.EditStopDate.Text, true));
-            this.fResearch.Percent = int.Parse(this.EditPercent.Text);
+            this.fResearch.ResearchName = this.txtName.Text;
+            this.fResearch.Priority = (GKResearchPriority)this.cmbPriority.SelectedIndex;
+            this.fResearch.Status = (GKResearchStatus)this.cmbStatus.SelectedIndex;
+            this.fResearch.StartDate.ParseString(GEDCOMUtils.StrToGEDCOMDate(this.txtStartDate.Text, true));
+            this.fResearch.StopDate.ParseString(GEDCOMUtils.StrToGEDCOMDate(this.txtStopDate.Text, true));
+            this.fResearch.Percent = int.Parse(this.nudPercent.Text);
             this.fBase.ChangeRecord(this.fResearch);
         }
 
@@ -74,21 +74,21 @@ namespace GKUI.Dialogs
             {
                 if (this.fResearch == null)
                 {
-                    this.EditName.Text = "";
-                    this.EditPriority.SelectedIndex = -1;
-                    this.EditStatus.SelectedIndex = -1;
-                    this.EditStartDate.Text = "";
-                    this.EditStopDate.Text = "";
-                    this.EditPercent.Text = @"0";
+                    this.txtName.Text = "";
+                    this.cmbPriority.SelectedIndex = -1;
+                    this.cmbStatus.SelectedIndex = -1;
+                    this.txtStartDate.Text = "";
+                    this.txtStopDate.Text = "";
+                    this.nudPercent.Text = @"0";
                 }
                 else
                 {
-                    this.EditName.Text = this.fResearch.ResearchName;
-                    this.EditPriority.SelectedIndex = (int)this.fResearch.Priority;
-                    this.EditStatus.SelectedIndex = (int)this.fResearch.Status;
-                    this.EditStartDate.Text = GKUtils.GetDateFmtString(this.fResearch.StartDate, DateFormat.dfDD_MM_YYYY);
-                    this.EditStopDate.Text = GKUtils.GetDateFmtString(this.fResearch.StopDate, DateFormat.dfDD_MM_YYYY);
-                    this.EditPercent.Text = this.fResearch.Percent.ToString();
+                    this.txtName.Text = this.fResearch.ResearchName;
+                    this.cmbPriority.SelectedIndex = (int)this.fResearch.Priority;
+                    this.cmbStatus.SelectedIndex = (int)this.fResearch.Status;
+                    this.txtStartDate.Text = GKUtils.GetDateFmtString(this.fResearch.StartDate, DateFormat.dfDD_MM_YYYY);
+                    this.txtStopDate.Text = GKUtils.GetDateFmtString(this.fResearch.StopDate, DateFormat.dfDD_MM_YYYY);
+                    this.nudPercent.Text = this.fResearch.Percent.ToString();
                 }
 
                 this.UpdateLists();
@@ -295,15 +295,15 @@ namespace GKUI.Dialogs
 
             for (GKResearchPriority rp = GKResearchPriority.rpNone; rp <= GKResearchPriority.rpTop; rp++)
             {
-                this.EditPriority.Items.Add(LangMan.LS(GKData.PriorityNames[(int)rp]));
+                this.cmbPriority.Items.Add(LangMan.LS(GKData.PriorityNames[(int)rp]));
             }
 
             for (GKResearchStatus rs = GKResearchStatus.rsDefined; rs <= GKResearchStatus.rsWithdrawn; rs++)
             {
-                this.EditStatus.Items.Add(LangMan.LS(GKData.StatusNames[(int)rs]));
+                this.cmbStatus.Items.Add(LangMan.LS(GKData.StatusNames[(int)rs]));
             }
 
-            this.fTasksList = new GKSheetList(this.SheetTasks);
+            this.fTasksList = new GKSheetList(this.pageTasks);
             this.fTasksList.OnModify += this.ListModify;
             this.fTasksList.Buttons = EnumSet<SheetButton>.Create(
                 SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, SheetButton.lbJump
@@ -313,7 +313,7 @@ namespace GKUI.Dialogs
             this.fTasksList.AddColumn(LangMan.LS(LSID.LSID_StartDate), 90, false);
             this.fTasksList.AddColumn(LangMan.LS(LSID.LSID_StopDate), 90, false);
 
-            this.fCommunicationsList = new GKSheetList(this.SheetCommunications);
+            this.fCommunicationsList = new GKSheetList(this.pageCommunications);
             this.fCommunicationsList.OnModify += this.ListModify;
             this.fCommunicationsList.Buttons = EnumSet<SheetButton>.Create(
                 SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, SheetButton.lbJump
@@ -323,14 +323,14 @@ namespace GKUI.Dialogs
             this.fCommunicationsList.AddColumn(LangMan.LS(LSID.LSID_Type), 90, false);
             this.fCommunicationsList.AddColumn(LangMan.LS(LSID.LSID_Date), 90, false);
 
-            this.fGroupsList = new GKSheetList(this.SheetGroups);
+            this.fGroupsList = new GKSheetList(this.pageGroups);
             this.fGroupsList.OnModify += this.ListModify;
             this.fGroupsList.Buttons = EnumSet<SheetButton>.Create(
                 SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, SheetButton.lbJump
                );
             this.fGroupsList.AddColumn(LangMan.LS(LSID.LSID_Group), 350, false);
 
-            this.fNotesList = new GKNotesSheet(this, this.SheetNotes);
+            this.fNotesList = new GKNotesSheet(this, this.pageNotes);
 
             this.SetLang();
         }
@@ -340,16 +340,16 @@ namespace GKUI.Dialogs
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             this.Text = LangMan.LS(LSID.LSID_WinResearchEdit);
-            this.SheetTasks.Text = LangMan.LS(LSID.LSID_RPTasks);
-            this.SheetCommunications.Text = LangMan.LS(LSID.LSID_RPCommunications);
-            this.SheetGroups.Text = LangMan.LS(LSID.LSID_RPGroups);
-            this.SheetNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            this.Label1.Text = LangMan.LS(LSID.LSID_Title);
-            this.Label2.Text = LangMan.LS(LSID.LSID_Priority);
-            this.Label3.Text = LangMan.LS(LSID.LSID_Status);
-            this.Label6.Text = LangMan.LS(LSID.LSID_Percent);
-            this.Label4.Text = LangMan.LS(LSID.LSID_StartDate);
-            this.Label5.Text = LangMan.LS(LSID.LSID_StopDate);
+            this.pageTasks.Text = LangMan.LS(LSID.LSID_RPTasks);
+            this.pageCommunications.Text = LangMan.LS(LSID.LSID_RPCommunications);
+            this.pageGroups.Text = LangMan.LS(LSID.LSID_RPGroups);
+            this.pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
+            this.lblName.Text = LangMan.LS(LSID.LSID_Title);
+            this.lblPriority.Text = LangMan.LS(LSID.LSID_Priority);
+            this.lblStatus.Text = LangMan.LS(LSID.LSID_Status);
+            this.lblPercent.Text = LangMan.LS(LSID.LSID_Percent);
+            this.lblStartDate.Text = LangMan.LS(LSID.LSID_StartDate);
+            this.lblStopDate.Text = LangMan.LS(LSID.LSID_StopDate);
         }
     }
 }

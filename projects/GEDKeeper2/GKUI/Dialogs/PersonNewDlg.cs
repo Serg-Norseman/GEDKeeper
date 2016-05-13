@@ -64,40 +64,40 @@ namespace GKUI.Dialogs
                 {
                     string iFamily, iName, iPatronymic;
                     this.fTarget.GetNameParts(out iFamily, out iName, out iPatronymic);
-                    this.edFamily.Text = iFamily;
+                    this.txtSurname.Text = iFamily;
                     INamesTable names = MainWin.Instance.NamesTable;
-                    GEDCOMSex sx = (GEDCOMSex)this.EditSex.SelectedIndex;
+                    GEDCOMSex sx = (GEDCOMSex)this.cmbSex.SelectedIndex;
 
                     switch (this.fTargetMode) {
                         case TargetMode.tmParent:
                             if (sx == GEDCOMSex.svFemale) {
-                                this.edFamily.Text = GKUtils.GetRusWifeSurname(iFamily);
+                                this.txtSurname.Text = GKUtils.GetRusWifeSurname(iFamily);
                             }
-                            this.edPatronymic.Items.Add(names.GetPatronymicByName(iName, GEDCOMSex.svMale));
-                            this.edPatronymic.Items.Add(names.GetPatronymicByName(iName, GEDCOMSex.svFemale));
-                            this.edPatronymic.Text = names.GetPatronymicByName(iName, sx);
+                            this.cmbPatronymic.Items.Add(names.GetPatronymicByName(iName, GEDCOMSex.svMale));
+                            this.cmbPatronymic.Items.Add(names.GetPatronymicByName(iName, GEDCOMSex.svFemale));
+                            this.cmbPatronymic.Text = names.GetPatronymicByName(iName, sx);
                             break;
 
                         case TargetMode.tmChild:
                             switch (sx) {
                                 case GEDCOMSex.svMale:
-                                    this.edName.Text = names.GetNameByPatronymic(iPatronymic);
+                                    this.txtName.Text = names.GetNameByPatronymic(iPatronymic);
                                     break;
                                 case GEDCOMSex.svFemale:
-                                    this.edFamily.Text = '(' + GKUtils.GetRusWifeSurname(iFamily) + ')';
+                                    this.txtSurname.Text = '(' + GKUtils.GetRusWifeSurname(iFamily) + ')';
                                     break;
                             }
                             break;
                             
                         case TargetMode.tmWife:
-                            this.edFamily.Text = '(' + GKUtils.GetRusWifeSurname(iFamily) + ')';
+                            this.txtSurname.Text = '(' + GKUtils.GetRusWifeSurname(iFamily) + ')';
                             break;
                     }
                 }
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmPersonNew.SetTarget("+this.fTargetMode.ToString()+"): " + ex.Message);
+                this.fBase.Host.LogWrite("PersonNewDlg.SetTarget("+this.fTargetMode.ToString()+"): " + ex.Message);
             }
         }
 
@@ -132,17 +132,17 @@ namespace GKUI.Dialogs
 
             for (GEDCOMSex sx = GEDCOMSex.svNone; sx <= GEDCOMSex.svUndetermined; sx++)
             {
-                this.EditSex.Items.Add(GKUtils.SexStr(sx));
+                this.cmbSex.Items.Add(GKUtils.SexStr(sx));
             }
 
             // SetLang()
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             this.Text = LangMan.LS(LSID.LSID_WinPersonNew);
-            this.Label1.Text = LangMan.LS(LSID.LSID_Surname);
-            this.Label2.Text = LangMan.LS(LSID.LSID_Name);
-            this.Label3.Text = LangMan.LS(LSID.LSID_Patronymic);
-            this.Label4.Text = LangMan.LS(LSID.LSID_Sex);
+            this.lblSurname.Text = LangMan.LS(LSID.LSID_Surname);
+            this.lblName.Text = LangMan.LS(LSID.LSID_Name);
+            this.lblPatronymic.Text = LangMan.LS(LSID.LSID_Patronymic);
+            this.lblSex.Text = LangMan.LS(LSID.LSID_Sex);
         }
     }
 }

@@ -112,10 +112,10 @@ namespace GKUI.Dialogs
             }
 
             if (this.fFilter.SourceMode != FilterGroupMode.Selected) {
-                this.cbSource.SelectedIndex = (sbyte)this.fFilter.SourceMode;
+                this.cmbSource.SelectedIndex = (sbyte)this.fFilter.SourceMode;
             } else {
                 GEDCOMSourceRecord srcRec = this.Base.Tree.XRefIndex_Find(this.fFilter.SourceRef) as GEDCOMSourceRecord;
-                this.cbSource.Text = srcRec.FiledByEntry;
+                this.cmbSource.Text = srcRec.FiledByEntry;
             }
         }
 
@@ -165,15 +165,15 @@ namespace GKUI.Dialogs
                 }
             }
 
-            int selectedIndex = this.cbSource.SelectedIndex;
+            int selectedIndex = this.cmbSource.SelectedIndex;
             if (selectedIndex >= 0 && selectedIndex < 3)
             {
-                this.fFilter.SourceMode = (FilterGroupMode)this.cbSource.SelectedIndex;
+                this.fFilter.SourceMode = (FilterGroupMode)this.cmbSource.SelectedIndex;
                 this.fFilter.SourceRef = "";
             }
             else
             {
-                GKComboItem item = (GKComboItem)this.cbSource.Items[this.cbSource.SelectedIndex];
+                GKComboItem item = (GKComboItem)this.cmbSource.Items[this.cmbSource.SelectedIndex];
                 GEDCOMRecord rec = item.Data as GEDCOMRecord;
                 if (rec != null)
                 {
@@ -212,19 +212,19 @@ namespace GKUI.Dialogs
             GEDCOMTree tree = this.Base.Tree;
             this.fTemp = this.fFilter.BranchPersons;
 
-            this.cbSource.Sorted = true;
+            this.cmbSource.Sorted = true;
             int num = tree.RecordsCount - 1;
             for (int i = 0; i <= num; i++) {
                 GEDCOMRecord rec = tree[i];
                 if (rec is GEDCOMSourceRecord) {
-                    this.cbSource.Items.Add(new GKComboItem((rec as GEDCOMSourceRecord).FiledByEntry, rec));
+                    this.cmbSource.Items.Add(new GKComboItem((rec as GEDCOMSourceRecord).FiledByEntry, rec));
                 }
             }
-            this.cbSource.Sorted = false;
+            this.cmbSource.Sorted = false;
 
-            this.cbSource.Items.Insert(0, LangMan.LS(LSID.LSID_SrcAll));
-            this.cbSource.Items.Insert(1, LangMan.LS(LSID.LSID_SrcNot));
-            this.cbSource.Items.Insert(2, LangMan.LS(LSID.LSID_SrcAny));
+            this.cmbSource.Items.Insert(0, LangMan.LS(LSID.LSID_SrcAll));
+            this.cmbSource.Items.Insert(1, LangMan.LS(LSID.LSID_SrcNot));
+            this.cmbSource.Items.Insert(2, LangMan.LS(LSID.LSID_SrcAny));
 
             this.UpdateControls();
         }

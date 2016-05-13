@@ -6,26 +6,26 @@ namespace GKUI.Dialogs
 	{
 		private System.Windows.Forms.Button btnAccept;
 		private System.Windows.Forms.Button btnCancel;
-		private System.Windows.Forms.Label Label1;
-		private System.Windows.Forms.TextBox EditPage;
-		private System.Windows.Forms.Label Label2;
+		private System.Windows.Forms.Label lblPage;
+		private System.Windows.Forms.TextBox txtPage;
+		private System.Windows.Forms.Label lblSource;
 		private System.Windows.Forms.Button btnSourceAdd;
-		private System.Windows.Forms.Label Label3;
-		private System.Windows.Forms.ComboBox EditCertainty;
-		private System.Windows.Forms.ComboBox cbSource;
+		private System.Windows.Forms.Label lblCertainty;
+		private System.Windows.Forms.ComboBox txtCertainty;
+		private System.Windows.Forms.ComboBox cmbSource;
 
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SourceCitEditDlg));
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
-			this.Label1 = new System.Windows.Forms.Label();
-			this.EditPage = new System.Windows.Forms.TextBox();
-			this.Label2 = new System.Windows.Forms.Label();
+			this.lblPage = new System.Windows.Forms.Label();
+			this.txtPage = new System.Windows.Forms.TextBox();
+			this.lblSource = new System.Windows.Forms.Label();
 			this.btnSourceAdd = new System.Windows.Forms.Button();
-			this.Label3 = new System.Windows.Forms.Label();
-			this.EditCertainty = new System.Windows.Forms.ComboBox();
-			this.cbSource = new System.Windows.Forms.ComboBox();
+			this.lblCertainty = new System.Windows.Forms.Label();
+			this.txtCertainty = new System.Windows.Forms.ComboBox();
+			this.cmbSource = new System.Windows.Forms.ComboBox();
 			this.SuspendLayout();
 			// 
 			// btnAccept
@@ -37,7 +37,7 @@ namespace GKUI.Dialogs
 			this.btnAccept.Name = "btnAccept";
 			this.btnAccept.Size = new System.Drawing.Size(101, 31);
 			this.btnAccept.TabIndex = 7;
-			this.btnAccept.Text = "Принять";
+			this.btnAccept.Text = "btnAccept";
 			this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.btnAccept.Click += new System.EventHandler(this.btnAccept_Click);
 			// 
@@ -51,36 +51,36 @@ namespace GKUI.Dialogs
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(101, 31);
 			this.btnCancel.TabIndex = 8;
-			this.btnCancel.Text = "Отменить";
+			this.btnCancel.Text = "btnCancel";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// Label1
+			// lblPage
 			// 
-			this.Label1.AutoSize = true;
-			this.Label1.Location = new System.Drawing.Point(15, 70);
-			this.Label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.Label1.Name = "Label1";
-			this.Label1.Size = new System.Drawing.Size(108, 17);
-			this.Label1.TabIndex = 3;
-			this.Label1.Text = "Лист/Страница";
+			this.lblPage.AutoSize = true;
+			this.lblPage.Location = new System.Drawing.Point(15, 70);
+			this.lblPage.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.lblPage.Name = "lblPage";
+			this.lblPage.Size = new System.Drawing.Size(108, 17);
+			this.lblPage.TabIndex = 3;
+			this.lblPage.Text = "lblPage";
 			// 
-			// EditPage
+			// txtPage
 			// 
-			this.EditPage.Location = new System.Drawing.Point(15, 90);
-			this.EditPage.Margin = new System.Windows.Forms.Padding(4);
-			this.EditPage.Name = "EditPage";
-			this.EditPage.Size = new System.Drawing.Size(410, 24);
-			this.EditPage.TabIndex = 4;
+			this.txtPage.Location = new System.Drawing.Point(15, 90);
+			this.txtPage.Margin = new System.Windows.Forms.Padding(4);
+			this.txtPage.Name = "txtPage";
+			this.txtPage.Size = new System.Drawing.Size(410, 24);
+			this.txtPage.TabIndex = 4;
 			// 
-			// Label2
+			// lblSource
 			// 
-			this.Label2.AutoSize = true;
-			this.Label2.Location = new System.Drawing.Point(15, 10);
-			this.Label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.Label2.Name = "Label2";
-			this.Label2.Size = new System.Drawing.Size(71, 17);
-			this.Label2.TabIndex = 0;
-			this.Label2.Text = "Источник";
+			this.lblSource.AutoSize = true;
+			this.lblSource.Location = new System.Drawing.Point(15, 10);
+			this.lblSource.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.lblSource.Name = "lblSource";
+			this.lblSource.Size = new System.Drawing.Size(71, 17);
+			this.lblSource.TabIndex = 0;
+			this.lblSource.Text = "lblSource";
 			// 
 			// btnSourceAdd
 			// 
@@ -94,35 +94,35 @@ namespace GKUI.Dialogs
 			this.btnSourceAdd.TabStop = false;
 			this.btnSourceAdd.Click += new System.EventHandler(this.btnSourceAdd_Click);
 			// 
-			// Label3
+			// lblCertainty
 			// 
-			this.Label3.AutoSize = true;
-			this.Label3.Location = new System.Drawing.Point(15, 130);
-			this.Label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.Label3.Name = "Label3";
-			this.Label3.Size = new System.Drawing.Size(117, 17);
-			this.Label3.TabIndex = 5;
-			this.Label3.Text = "Оценка качества";
+			this.lblCertainty.AutoSize = true;
+			this.lblCertainty.Location = new System.Drawing.Point(15, 130);
+			this.lblCertainty.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.lblCertainty.Name = "lblCertainty";
+			this.lblCertainty.Size = new System.Drawing.Size(117, 17);
+			this.lblCertainty.TabIndex = 5;
+			this.lblCertainty.Text = "lblCertainty";
 			// 
-			// EditCertainty
+			// txtCertainty
 			// 
-			this.EditCertainty.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.EditCertainty.Location = new System.Drawing.Point(15, 150);
-			this.EditCertainty.Margin = new System.Windows.Forms.Padding(4);
-			this.EditCertainty.Name = "EditCertainty";
-			this.EditCertainty.Size = new System.Drawing.Size(410, 25);
-			this.EditCertainty.TabIndex = 6;
+			this.txtCertainty.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.txtCertainty.Location = new System.Drawing.Point(15, 150);
+			this.txtCertainty.Margin = new System.Windows.Forms.Padding(4);
+			this.txtCertainty.Name = "txtCertainty";
+			this.txtCertainty.Size = new System.Drawing.Size(410, 25);
+			this.txtCertainty.TabIndex = 6;
 			// 
-			// cbSource
+			// cmbSource
 			// 
-			this.cbSource.Location = new System.Drawing.Point(15, 30);
-			this.cbSource.Margin = new System.Windows.Forms.Padding(4);
-			this.cbSource.Name = "cbSource";
-			this.cbSource.Size = new System.Drawing.Size(368, 25);
-			this.cbSource.Sorted = true;
-			this.cbSource.TabIndex = 1;
-			this.cbSource.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbSource_KeyDown);
-			this.cbSource.KeyUp += new System.Windows.Forms.KeyEventHandler(this.cbSource_KeyUp);
+			this.cmbSource.Location = new System.Drawing.Point(15, 30);
+			this.cmbSource.Margin = new System.Windows.Forms.Padding(4);
+			this.cmbSource.Name = "cmbSource";
+			this.cmbSource.Size = new System.Drawing.Size(368, 25);
+			this.cmbSource.Sorted = true;
+			this.cmbSource.TabIndex = 1;
+			this.cmbSource.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbSource_KeyDown);
+			this.cmbSource.KeyUp += new System.Windows.Forms.KeyEventHandler(this.cbSource_KeyUp);
 			// 
 			// SourceCitEditDlg
 			// 
@@ -133,13 +133,13 @@ namespace GKUI.Dialogs
 			this.ClientSize = new System.Drawing.Size(441, 250);
 			this.Controls.Add(this.btnAccept);
 			this.Controls.Add(this.btnCancel);
-			this.Controls.Add(this.Label1);
-			this.Controls.Add(this.EditPage);
-			this.Controls.Add(this.Label2);
+			this.Controls.Add(this.lblPage);
+			this.Controls.Add(this.txtPage);
+			this.Controls.Add(this.lblSource);
 			this.Controls.Add(this.btnSourceAdd);
-			this.Controls.Add(this.Label3);
-			this.Controls.Add(this.EditCertainty);
-			this.Controls.Add(this.cbSource);
+			this.Controls.Add(this.lblCertainty);
+			this.Controls.Add(this.txtCertainty);
+			this.Controls.Add(this.cmbSource);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.Margin = new System.Windows.Forms.Padding(4);
@@ -148,7 +148,7 @@ namespace GKUI.Dialogs
 			this.Name = "SourceCitEditDlg";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "SourceCitEdit";
+			this.Text = "SourceCitEditDlg";
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}

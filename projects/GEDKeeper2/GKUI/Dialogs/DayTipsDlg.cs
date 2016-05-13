@@ -41,9 +41,9 @@ namespace GKUI.Dialogs
 
             // SetLang()
             this.btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
-            this.ShowCheck.Text = LangMan.LS(LSID.LSID_StartupTips);
-            this.NextTipBtn.Text = LangMan.LS(LSID.LSID_Next);
-            this.TitleLabel.Text = LangMan.LS(LSID.LSID_YouKnowWhat);
+            this.chkShow.Text = LangMan.LS(LSID.LSID_StartupTips);
+            this.btnNextTip.Text = LangMan.LS(LSID.LSID_Next);
+            this.lblTitle.Text = LangMan.LS(LSID.LSID_YouKnowWhat);
         }
 
         protected override void Dispose(bool disposing)
@@ -59,10 +59,10 @@ namespace GKUI.Dialogs
         {
             if (this.fTips.Count > 0)
             {
-                this.TipWindow.Text = this.fTips[0];
+                this.txtTip.Text = this.fTips[0];
                 this.fTips.Delete(0);
             }
-            this.NextTipBtn.Enabled = (this.fTips.Count > 0);
+            this.btnNextTip.Enabled = (this.fTips.Count > 0);
         }
 
         private void NextTipBtn_Click(object sender, EventArgs e)
@@ -75,15 +75,15 @@ namespace GKUI.Dialogs
             bool result;
             using (DayTipsDlg dlg = new DayTipsDlg())
             {
-                dlg.ShowCheck.Checked = showTipsChecked;
+                dlg.chkShow.Checked = showTipsChecked;
                 dlg.Text = caption;
-                dlg.TitleLabel.Text = caption;
+                dlg.lblTitle.Text = caption;
                 dlg.fTips.Assign(tips);
                 dlg.GetNextTip();
                 dlg.StartPosition = FormStartPosition.CenterScreen;
                 dlg.ShowDialog();
 
-                result = dlg.ShowCheck.Checked;
+                result = dlg.chkShow.Checked;
             }
             return result;
         }

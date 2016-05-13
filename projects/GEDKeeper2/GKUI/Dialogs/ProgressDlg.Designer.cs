@@ -2,25 +2,25 @@
 {
 	partial class ProgressDlg
 	{
-		private System.Windows.Forms.Label Label2;
-		private System.Windows.Forms.Label Label3;
-		private System.Windows.Forms.Label Label7;
-		private System.Windows.Forms.Label Label8;
-		private System.Windows.Forms.Label Label4;
-		private System.Windows.Forms.Label Label9;
+		private System.Windows.Forms.Label lblTimePassed;
+		private System.Windows.Forms.Label lblTimeRemain;
+		private System.Windows.Forms.Label lblPassedVal;
+		private System.Windows.Forms.Label lblRemainVal;
+		private System.Windows.Forms.Label lblTimeTotal;
+		private System.Windows.Forms.Label lblTotalVal;
 		private System.Windows.Forms.ProgressBar ProgressBar1;
-		private System.Windows.Forms.Label Label1;
+		private System.Windows.Forms.Label lblTitle;
 
 		private void InitializeComponent()
 		{
 		    this.ProgressBar1 = new System.Windows.Forms.ProgressBar();
-		    this.Label1 = new System.Windows.Forms.Label();
-		    this.Label2 = new System.Windows.Forms.Label();
-		    this.Label3 = new System.Windows.Forms.Label();
-		    this.Label7 = new System.Windows.Forms.Label();
-		    this.Label8 = new System.Windows.Forms.Label();
-		    this.Label4 = new System.Windows.Forms.Label();
-		    this.Label9 = new System.Windows.Forms.Label();
+		    this.lblTitle = new System.Windows.Forms.Label();
+		    this.lblTimePassed = new System.Windows.Forms.Label();
+		    this.lblTimeRemain = new System.Windows.Forms.Label();
+		    this.lblPassedVal = new System.Windows.Forms.Label();
+		    this.lblRemainVal = new System.Windows.Forms.Label();
+		    this.lblTimeTotal = new System.Windows.Forms.Label();
+		    this.lblTotalVal = new System.Windows.Forms.Label();
 		    this.SuspendLayout();
 		    // 
 		    // ProgressBar1
@@ -33,78 +33,78 @@
 		    this.ProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
 		    this.ProgressBar1.TabIndex = 0;
 		    // 
-		    // Label1
+		    // lblTitle
 		    // 
-		    this.Label1.AutoSize = true;
-		    this.Label1.Location = new System.Drawing.Point(16, 16);
-		    this.Label1.Margin = new System.Windows.Forms.Padding(8, 8, 8, 0);
-		    this.Label1.Name = "Label1";
-		    this.Label1.Size = new System.Drawing.Size(47, 17);
-		    this.Label1.TabIndex = 1;
-		    this.Label1.Text = "Label1";
+		    this.lblTitle.AutoSize = true;
+		    this.lblTitle.Location = new System.Drawing.Point(16, 16);
+		    this.lblTitle.Margin = new System.Windows.Forms.Padding(8, 8, 8, 0);
+		    this.lblTitle.Name = "lblTitle";
+		    this.lblTitle.Size = new System.Drawing.Size(47, 17);
+		    this.lblTitle.TabIndex = 1;
+		    this.lblTitle.Text = "lblTitle";
 		    // 
-		    // Label2
+		    // lblTimePassed
 		    // 
-		    this.Label2.AutoSize = true;
-		    this.Label2.Location = new System.Drawing.Point(16, 69);
-		    this.Label2.Margin = new System.Windows.Forms.Padding(4);
-		    this.Label2.Name = "Label2";
-		    this.Label2.Size = new System.Drawing.Size(117, 17);
-		    this.Label2.TabIndex = 2;
-		    this.Label2.Text = "Времени прошло";
+		    this.lblTimePassed.AutoSize = true;
+		    this.lblTimePassed.Location = new System.Drawing.Point(16, 69);
+		    this.lblTimePassed.Margin = new System.Windows.Forms.Padding(4);
+		    this.lblTimePassed.Name = "lblTimePassed";
+		    this.lblTimePassed.Size = new System.Drawing.Size(117, 17);
+		    this.lblTimePassed.TabIndex = 2;
+		    this.lblTimePassed.Text = "lblTimePassed";
 		    // 
-		    // Label3
+		    // lblTimeRemain
 		    // 
-		    this.Label3.AutoSize = true;
-		    this.Label3.Location = new System.Drawing.Point(16, 94);
-		    this.Label3.Margin = new System.Windows.Forms.Padding(4);
-		    this.Label3.Name = "Label3";
-		    this.Label3.Size = new System.Drawing.Size(127, 17);
-		    this.Label3.TabIndex = 3;
-		    this.Label3.Text = "Времени осталось";
+		    this.lblTimeRemain.AutoSize = true;
+		    this.lblTimeRemain.Location = new System.Drawing.Point(16, 94);
+		    this.lblTimeRemain.Margin = new System.Windows.Forms.Padding(4);
+		    this.lblTimeRemain.Name = "lblTimeRemain";
+		    this.lblTimeRemain.Size = new System.Drawing.Size(127, 17);
+		    this.lblTimeRemain.TabIndex = 3;
+		    this.lblTimeRemain.Text = "lblTimeRemain";
 		    // 
-		    // Label7
+		    // lblPassedVal
 		    // 
-		    this.Label7.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-		    this.Label7.Location = new System.Drawing.Point(232, 69);
-		    this.Label7.Margin = new System.Windows.Forms.Padding(4);
-		    this.Label7.Name = "Label7";
-		    this.Label7.Size = new System.Drawing.Size(281, 20);
-		    this.Label7.TabIndex = 4;
-		    this.Label7.Text = "?";
-		    this.Label7.TextAlign = System.Drawing.ContentAlignment.TopRight;
+		    this.lblPassedVal.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+		    this.lblPassedVal.Location = new System.Drawing.Point(232, 69);
+		    this.lblPassedVal.Margin = new System.Windows.Forms.Padding(4);
+		    this.lblPassedVal.Name = "lblPassedVal";
+		    this.lblPassedVal.Size = new System.Drawing.Size(281, 20);
+		    this.lblPassedVal.TabIndex = 4;
+		    this.lblPassedVal.Text = "lblPassedVal";
+		    this.lblPassedVal.TextAlign = System.Drawing.ContentAlignment.TopRight;
 		    // 
-		    // Label8
+		    // lblRemainVal
 		    // 
-		    this.Label8.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-		    this.Label8.Location = new System.Drawing.Point(232, 94);
-		    this.Label8.Margin = new System.Windows.Forms.Padding(4);
-		    this.Label8.Name = "Label8";
-		    this.Label8.Size = new System.Drawing.Size(281, 20);
-		    this.Label8.TabIndex = 5;
-		    this.Label8.Text = "?";
-		    this.Label8.TextAlign = System.Drawing.ContentAlignment.TopRight;
+		    this.lblRemainVal.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+		    this.lblRemainVal.Location = new System.Drawing.Point(232, 94);
+		    this.lblRemainVal.Margin = new System.Windows.Forms.Padding(4);
+		    this.lblRemainVal.Name = "lblRemainVal";
+		    this.lblRemainVal.Size = new System.Drawing.Size(281, 20);
+		    this.lblRemainVal.TabIndex = 5;
+		    this.lblRemainVal.Text = "lblRemainVal";
+		    this.lblRemainVal.TextAlign = System.Drawing.ContentAlignment.TopRight;
 		    // 
-		    // Label4
+		    // lblTimeTotal
 		    // 
-		    this.Label4.AutoSize = true;
-		    this.Label4.Location = new System.Drawing.Point(16, 119);
-		    this.Label4.Margin = new System.Windows.Forms.Padding(4);
-		    this.Label4.Name = "Label4";
-		    this.Label4.Size = new System.Drawing.Size(102, 17);
-		    this.Label4.TabIndex = 6;
-		    this.Label4.Text = "Времени всего";
+		    this.lblTimeTotal.AutoSize = true;
+		    this.lblTimeTotal.Location = new System.Drawing.Point(16, 119);
+		    this.lblTimeTotal.Margin = new System.Windows.Forms.Padding(4);
+		    this.lblTimeTotal.Name = "lblTimeTotal";
+		    this.lblTimeTotal.Size = new System.Drawing.Size(102, 17);
+		    this.lblTimeTotal.TabIndex = 6;
+		    this.lblTimeTotal.Text = "lblTimeTotal";
 		    // 
-		    // Label9
+		    // lblTotalVal
 		    // 
-		    this.Label9.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-		    this.Label9.Location = new System.Drawing.Point(232, 119);
-		    this.Label9.Margin = new System.Windows.Forms.Padding(4);
-		    this.Label9.Name = "Label9";
-		    this.Label9.Size = new System.Drawing.Size(281, 20);
-		    this.Label9.TabIndex = 7;
-		    this.Label9.Text = "?";
-		    this.Label9.TextAlign = System.Drawing.ContentAlignment.TopRight;
+		    this.lblTotalVal.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+		    this.lblTotalVal.Location = new System.Drawing.Point(232, 119);
+		    this.lblTotalVal.Margin = new System.Windows.Forms.Padding(4);
+		    this.lblTotalVal.Name = "lblTotalVal";
+		    this.lblTotalVal.Size = new System.Drawing.Size(281, 20);
+		    this.lblTotalVal.TabIndex = 7;
+		    this.lblTotalVal.Text = "lblTotalVal";
+		    this.lblTotalVal.TextAlign = System.Drawing.ContentAlignment.TopRight;
 		    // 
 		    // TfmProgress
 		    // 
@@ -114,23 +114,23 @@
 		    this.ClientSize = new System.Drawing.Size(531, 152);
 		    this.ControlBox = false;
 		    this.Controls.Add(this.ProgressBar1);
-		    this.Controls.Add(this.Label1);
-		    this.Controls.Add(this.Label2);
-		    this.Controls.Add(this.Label3);
-		    this.Controls.Add(this.Label7);
-		    this.Controls.Add(this.Label8);
-		    this.Controls.Add(this.Label4);
-		    this.Controls.Add(this.Label9);
+		    this.Controls.Add(this.lblTitle);
+		    this.Controls.Add(this.lblTimePassed);
+		    this.Controls.Add(this.lblTimeRemain);
+		    this.Controls.Add(this.lblPassedVal);
+		    this.Controls.Add(this.lblRemainVal);
+		    this.Controls.Add(this.lblTimeTotal);
+		    this.Controls.Add(this.lblTotalVal);
 		    this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 		    this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 		    this.Margin = new System.Windows.Forms.Padding(4);
 		    this.MaximizeBox = false;
 		    this.MinimizeBox = false;
-		    this.Name = "TfmProgress";
+		    this.Name = "ProgressDlg";
 		    this.Padding = new System.Windows.Forms.Padding(8);
 		    this.ShowInTaskbar = false;
 		    this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-		    this.Text = "Прогресс";
+		    this.Text = "ProgressDlg";
 		    this.TopMost = true;
 		    this.ResumeLayout(false);
 		    this.PerformLayout();

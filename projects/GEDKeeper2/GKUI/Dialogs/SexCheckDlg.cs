@@ -39,24 +39,24 @@ namespace GKUI.Dialogs
             this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             this.Text = LangMan.LS(LSID.LSID_WinCheckSex);
             this.GroupBox1.Text = LangMan.LS(LSID.LSID_Sex);
-            this.sbMale.Text = LangMan.LS(LSID.LSID_SexM);
-            this.sbFemale.Text = LangMan.LS(LSID.LSID_SexF);
+            this.rbMale.Text = LangMan.LS(LSID.LSID_SexM);
+            this.rbFemale.Text = LangMan.LS(LSID.LSID_SexF);
         }
         
         public string IndividualName
         {
-            get { return this.edName.Text; }
-            set { this.edName.Text = value; }
+            get { return this.txtName.Text; }
+            set { this.txtName.Text = value; }
         }
         
         public GEDCOMSex Sex
         {
             get
             {
-                if (this.sbMale.Checked) {
+                if (this.rbMale.Checked) {
                     return GEDCOMSex.svMale;
                 }
-                if (this.sbFemale.Checked) {
+                if (this.rbFemale.Checked) {
                     return GEDCOMSex.svFemale;
                 }
                 return GEDCOMSex.svNone;
@@ -67,15 +67,15 @@ namespace GKUI.Dialogs
                 {
                     case GEDCOMSex.svNone:
                     case GEDCOMSex.svUndetermined:
-                        this.sbNone.Checked = true;
+                        this.rbNone.Checked = true;
                         break;
 
                     case GEDCOMSex.svMale:
-                        this.sbMale.Checked = true;
+                        this.rbMale.Checked = true;
                         break;
 
                     case GEDCOMSex.svFemale:
-                        this.sbFemale.Checked = true;
+                        this.rbFemale.Checked = true;
                         break;
                 }
             }

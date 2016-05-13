@@ -59,21 +59,21 @@ namespace GKUI.Dialogs
 
             if (this.fIsNew)
             {
-                MediaStoreType gst = (MediaStoreType)this.cbStoreType.SelectedIndex;
+                MediaStoreType gst = (MediaStoreType)this.cmbStoreType.SelectedIndex;
                 if ((gst == MediaStoreType.mstArchive || gst == MediaStoreType.mstStorage) && !this.fBase.Context.CheckBasePath())
                 {
                     return false;
                 }
 
-                bool result = this.fBase.Context.MediaSave(fileRef, this.edFile.Text, gst);
+                bool result = this.fBase.Context.MediaSave(fileRef, this.txtFile.Text, gst);
 
                 if (!result) {
                     return false;
                 }
             }
 
-            fileRef.MediaType = (GEDCOMMediaType)this.cbMediaType.SelectedIndex;
-            fileRef.Title = this.edName.Text;
+            fileRef.MediaType = (GEDCOMMediaType)this.cmbMediaType.SelectedIndex;
+            fileRef.Title = this.txtName.Text;
 
             this.ControlsRefresh();
             this.fBase.ChangeRecord(this.fMediaRec);
@@ -87,9 +87,9 @@ namespace GKUI.Dialogs
 
             this.fIsNew = (fileRef.StringValue == "");
 
-            this.edName.Text = fileRef.Title;
-            this.cbMediaType.SelectedIndex = (int)fileRef.MediaType;
-            this.edFile.Text = fileRef.StringValue;
+            this.txtName.Text = fileRef.Title;
+            this.cmbMediaType.SelectedIndex = (int)fileRef.MediaType;
+            this.txtFile.Text = fileRef.StringValue;
 
             if (this.fIsNew) {
                 this.StoreTypesRefresh(true, MediaStoreType.mstReference);
@@ -100,7 +100,7 @@ namespace GKUI.Dialogs
             }
 
             this.btnFileSelect.Enabled = this.fIsNew;
-            this.cbStoreType.Enabled = this.fIsNew;
+            this.cmbStoreType.Enabled = this.fIsNew;
 
             this.fNotesList.DataList = this.fMediaRec.Notes.GetEnumerator();
             this.fSourcesList.DataList = this.fMediaRec.SourceCitations.GetEnumerator();
@@ -112,7 +112,7 @@ namespace GKUI.Dialogs
             try
             {
                 this.ControlsRefresh();
-                this.ActiveControl = this.edName;
+                this.ActiveControl = this.txtName;
             }
             catch (Exception ex)
             {
@@ -133,13 +133,16 @@ namespace GKUI.Dialogs
             }
         }
 
+        // TODO: localize
         private void btnFileSelect_Click(object sender, EventArgs e)
         {
+            this.OpenDialog1.Filter = "Все файлы (*.*)|*.*";
+
             if (this.OpenDialog1.ShowDialog() == DialogResult.OK)
             {
                 string file = this.OpenDialog1.FileName;
 
-                this.edFile.Text = file;
+                this.txtFile.Text = file;
                 GEDCOMMultimediaFormat fileFmt = GEDCOMFileReference.RecognizeFormat(file);
 
                 FileInfo info = new FileInfo(file);
@@ -147,7 +150,7 @@ namespace GKUI.Dialogs
                 bool canArc = (CheckFormatArchived(fileFmt) && fileSize <= 2);
 
                 this.StoreTypesRefresh(canArc, MediaStoreType.mstReference);
-                this.cbStoreType.Enabled = true;
+                this.cmbStoreType.Enabled = true;
             }
         }
 
@@ -172,18 +175,18 @@ namespace GKUI.Dialogs
 
         private void edName_TextChanged(object sender, EventArgs e)
         {
-            this.Text = string.Format("{0} \"{1}\"", LangMan.LS(LSID.LSID_RPMultimedia), this.edName.Text);
+            this.Text = string.Format("{0} \"{1}\"", LangMan.LS(LSID.LSID_RPMultimedia), this.txtName.Text);
         }
 
         private void StoreTypesRefresh(bool allowArc, MediaStoreType select)
         {
-            this.cbStoreType.Items.Clear();
-            this.cbStoreType.Items.Add(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstReference].Name));
-            this.cbStoreType.Items.Add(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstStorage].Name));
+            this.cmbStoreType.Items.Clear();
+            this.cmbStoreType.Items.Add(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstReference].Name));
+            this.cmbStoreType.Items.Add(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstStorage].Name));
             if (allowArc) {
-                this.cbStoreType.Items.Add(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstArchive].Name));
+                this.cmbStoreType.Items.Add(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstArchive].Name));
             }
-            this.cbStoreType.SelectedIndex = (int)select;
+            this.cmbStoreType.SelectedIndex = (int)select;
         }
 
         public MediaEditDlg(IBaseWindow aBase)
@@ -193,22 +196,22 @@ namespace GKUI.Dialogs
 
             for (GEDCOMMediaType mt = GEDCOMMediaType.mtNone; mt <= GEDCOMMediaType.mtLast; mt++)
             {
-                this.cbMediaType.Items.Add(LangMan.LS(GKData.MediaTypes[(int)mt]));
+                this.cmbMediaType.Items.Add(LangMan.LS(GKData.MediaTypes[(int)mt]));
             }
 
-            this.fNotesList = new GKNotesSheet(this, this.SheetNotes);
-            this.fSourcesList = new GKSourcesSheet(this, this.SheetSources);
+            this.fNotesList = new GKNotesSheet(this, this.pageNotes);
+            this.fSourcesList = new GKSourcesSheet(this, this.pageSources);
 
             // SetLang()
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            this.SheetCommon.Text = LangMan.LS(LSID.LSID_Common);
-            this.SheetNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            this.SheetSources.Text = LangMan.LS(LSID.LSID_RPSources);
-            this.Label1.Text = LangMan.LS(LSID.LSID_Title);
-            this.Label2.Text = LangMan.LS(LSID.LSID_Type);
-            this.Label4.Text = LangMan.LS(LSID.LSID_StoreType);
-            this.Label3.Text = LangMan.LS(LSID.LSID_File);
+            this.pageCommon.Text = LangMan.LS(LSID.LSID_Common);
+            this.pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
+            this.pageSources.Text = LangMan.LS(LSID.LSID_RPSources);
+            this.lblName.Text = LangMan.LS(LSID.LSID_Title);
+            this.lblType.Text = LangMan.LS(LSID.LSID_Type);
+            this.lblStoreType.Text = LangMan.LS(LSID.LSID_StoreType);
+            this.lblFile.Text = LangMan.LS(LSID.LSID_File);
             this.btnView.Text = LangMan.LS(LSID.LSID_View) + @"...";
         }
     }

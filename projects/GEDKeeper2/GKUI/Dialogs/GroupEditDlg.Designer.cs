@@ -6,32 +6,32 @@ namespace GKUI.Dialogs
 	{
 		private System.Windows.Forms.GroupBox GroupBox1;
 		private System.Windows.Forms.TextBox edName;
-		private System.Windows.Forms.Label Label1;
-		private System.Windows.Forms.TabControl PagesGroupData;
-		private System.Windows.Forms.TabPage SheetNotes;
-		private System.Windows.Forms.TabPage SheetMultimedia;
-		private System.Windows.Forms.TabPage SheetMembers;
+		private System.Windows.Forms.Label lblName;
+		private System.Windows.Forms.TabControl tabsGroupData;
+		private System.Windows.Forms.TabPage pageNotes;
+		private System.Windows.Forms.TabPage pageMultimedia;
+		private System.Windows.Forms.TabPage pageMembers;
 		private System.Windows.Forms.Button btnAccept;
 		private System.Windows.Forms.Button btnCancel;
 
 		private void InitializeComponent()
 		{
 			this.GroupBox1 = new System.Windows.Forms.GroupBox();
-			this.Label1 = new System.Windows.Forms.Label();
+			this.lblName = new System.Windows.Forms.Label();
 			this.edName = new System.Windows.Forms.TextBox();
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
-			this.PagesGroupData = new System.Windows.Forms.TabControl();
-			this.SheetMembers = new System.Windows.Forms.TabPage();
-			this.SheetNotes = new System.Windows.Forms.TabPage();
-			this.SheetMultimedia = new System.Windows.Forms.TabPage();
+			this.tabsGroupData = new System.Windows.Forms.TabControl();
+			this.pageMembers = new System.Windows.Forms.TabPage();
+			this.pageNotes = new System.Windows.Forms.TabPage();
+			this.pageMultimedia = new System.Windows.Forms.TabPage();
 			this.GroupBox1.SuspendLayout();
-			this.PagesGroupData.SuspendLayout();
+			this.tabsGroupData.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// GroupBox1
 			// 
-			this.GroupBox1.Controls.Add(this.Label1);
+			this.GroupBox1.Controls.Add(this.lblName);
 			this.GroupBox1.Controls.Add(this.edName);
 			this.GroupBox1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.GroupBox1.Location = new System.Drawing.Point(0, 0);
@@ -42,12 +42,12 @@ namespace GKUI.Dialogs
 			// 
 			// Label1
 			// 
-			this.Label1.AutoSize = true;
-			this.Label1.Location = new System.Drawing.Point(12, 22);
-			this.Label1.Name = "Label1";
-			this.Label1.Size = new System.Drawing.Size(67, 17);
-			this.Label1.TabIndex = 0;
-			this.Label1.Text = "Название";
+			this.lblName.AutoSize = true;
+			this.lblName.Location = new System.Drawing.Point(12, 22);
+			this.lblName.Name = "lblName";
+			this.lblName.Size = new System.Drawing.Size(67, 17);
+			this.lblName.TabIndex = 0;
+			this.lblName.Text = "lblName";
 			// 
 			// edName
 			// 
@@ -64,7 +64,7 @@ namespace GKUI.Dialogs
 			this.btnAccept.Name = "btnAccept";
 			this.btnAccept.Size = new System.Drawing.Size(113, 30);
 			this.btnAccept.TabIndex = 2;
-			this.btnAccept.Text = "Принять";
+			this.btnAccept.Text = "btnAccept";
 			this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.btnAccept.Click += new System.EventHandler(this.btnAccept_Click);
 			// 
@@ -77,44 +77,44 @@ namespace GKUI.Dialogs
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(113, 30);
 			this.btnCancel.TabIndex = 3;
-			this.btnCancel.Text = "Отменить";
+			this.btnCancel.Text = "btnCancel";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// PagesGroupData
 			// 
-			this.PagesGroupData.Controls.Add(this.SheetMembers);
-			this.PagesGroupData.Controls.Add(this.SheetNotes);
-			this.PagesGroupData.Controls.Add(this.SheetMultimedia);
-			this.PagesGroupData.Dock = System.Windows.Forms.DockStyle.Top;
-			this.PagesGroupData.Location = new System.Drawing.Point(0, 60);
-			this.PagesGroupData.Name = "PagesGroupData";
-			this.PagesGroupData.SelectedIndex = 0;
-			this.PagesGroupData.Size = new System.Drawing.Size(673, 437);
-			this.PagesGroupData.TabIndex = 1;
+			this.tabsGroupData.Controls.Add(this.pageMembers);
+			this.tabsGroupData.Controls.Add(this.pageNotes);
+			this.tabsGroupData.Controls.Add(this.pageMultimedia);
+			this.tabsGroupData.Dock = System.Windows.Forms.DockStyle.Top;
+			this.tabsGroupData.Location = new System.Drawing.Point(0, 60);
+			this.tabsGroupData.Name = "PagesGroupData";
+			this.tabsGroupData.SelectedIndex = 0;
+			this.tabsGroupData.Size = new System.Drawing.Size(673, 437);
+			this.tabsGroupData.TabIndex = 1;
 			// 
-			// SheetMembers
+			// pageMembers
 			// 
-			this.SheetMembers.Location = new System.Drawing.Point(4, 26);
-			this.SheetMembers.Name = "SheetMembers";
-			this.SheetMembers.Size = new System.Drawing.Size(665, 407);
-			this.SheetMembers.TabIndex = 0;
-			this.SheetMembers.Text = "Участники";
+			this.pageMembers.Location = new System.Drawing.Point(4, 26);
+			this.pageMembers.Name = "pageMembers";
+			this.pageMembers.Size = new System.Drawing.Size(665, 407);
+			this.pageMembers.TabIndex = 0;
+			this.pageMembers.Text = "pageMembers";
 			// 
-			// SheetNotes
+			// pageNotes
 			// 
-			this.SheetNotes.Location = new System.Drawing.Point(4, 26);
-			this.SheetNotes.Name = "SheetNotes";
-			this.SheetNotes.Size = new System.Drawing.Size(665, 407);
-			this.SheetNotes.TabIndex = 1;
-			this.SheetNotes.Text = "Заметки";
+			this.pageNotes.Location = new System.Drawing.Point(4, 26);
+			this.pageNotes.Name = "pageNotes";
+			this.pageNotes.Size = new System.Drawing.Size(665, 407);
+			this.pageNotes.TabIndex = 1;
+			this.pageNotes.Text = "pageNotes";
 			// 
-			// SheetMultimedia
+			// pageMultimedia
 			// 
-			this.SheetMultimedia.Location = new System.Drawing.Point(4, 26);
-			this.SheetMultimedia.Name = "SheetMultimedia";
-			this.SheetMultimedia.Size = new System.Drawing.Size(665, 407);
-			this.SheetMultimedia.TabIndex = 2;
-			this.SheetMultimedia.Text = "Мультимедиа";
+			this.pageMultimedia.Location = new System.Drawing.Point(4, 26);
+			this.pageMultimedia.Name = "pageMultimedia";
+			this.pageMultimedia.Size = new System.Drawing.Size(665, 407);
+			this.pageMultimedia.TabIndex = 2;
+			this.pageMultimedia.Text = "pageMultimedia";
 			// 
 			// GroupEditDlg
 			// 
@@ -123,7 +123,7 @@ namespace GKUI.Dialogs
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(673, 560);
-			this.Controls.Add(this.PagesGroupData);
+			this.Controls.Add(this.tabsGroupData);
 			this.Controls.Add(this.btnCancel);
 			this.Controls.Add(this.btnAccept);
 			this.Controls.Add(this.GroupBox1);
@@ -134,10 +134,10 @@ namespace GKUI.Dialogs
 			this.Name = "GroupEditDlg";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "Правка группы";
+			this.Text = "GroupEditDlg";
 			this.GroupBox1.ResumeLayout(false);
 			this.GroupBox1.PerformLayout();
-			this.PagesGroupData.ResumeLayout(false);
+			this.tabsGroupData.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
 	}

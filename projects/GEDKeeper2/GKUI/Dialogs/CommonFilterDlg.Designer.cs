@@ -6,19 +6,21 @@ namespace GKUI.Dialogs
 	{
 		private System.Windows.Forms.Button btnAccept;
 		private System.Windows.Forms.Button btnCancel;
-		protected System.Windows.Forms.TabControl PageControl1;
+		protected System.Windows.Forms.TabControl tabsFilters;
 		private System.Windows.Forms.TabPage tsFieldsFilter;
+		private System.Windows.Forms.Button btnReset;
+		private System.Windows.Forms.DataGridView dataGridView1;
 
 		private void InitializeComponent()
 		{
 		    System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CommonFilterDlg));
 		    this.btnAccept = new System.Windows.Forms.Button();
 		    this.btnCancel = new System.Windows.Forms.Button();
-		    this.PageControl1 = new System.Windows.Forms.TabControl();
+		    this.tabsFilters = new System.Windows.Forms.TabControl();
 		    this.tsFieldsFilter = new System.Windows.Forms.TabPage();
 		    this.dataGridView1 = new System.Windows.Forms.DataGridView();
 		    this.btnReset = new System.Windows.Forms.Button();
-		    this.PageControl1.SuspendLayout();
+		    this.tabsFilters.SuspendLayout();
 		    this.tsFieldsFilter.SuspendLayout();
 		    ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 		    this.SuspendLayout();
@@ -31,7 +33,7 @@ namespace GKUI.Dialogs
 		    this.btnAccept.Name = "btnAccept";
 		    this.btnAccept.Size = new System.Drawing.Size(113, 30);
 		    this.btnAccept.TabIndex = 1;
-		    this.btnAccept.Text = "Принять";
+		    this.btnAccept.Text = "btnAccept";
 		    this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 		    this.btnAccept.Click += new System.EventHandler(this.btnAccept_Click);
 		    // 
@@ -44,17 +46,17 @@ namespace GKUI.Dialogs
 		    this.btnCancel.Name = "btnCancel";
 		    this.btnCancel.Size = new System.Drawing.Size(114, 30);
 		    this.btnCancel.TabIndex = 2;
-		    this.btnCancel.Text = "Закрыть";
+		    this.btnCancel.Text = "btnCancel";
 		    this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 		    // 
 		    // PageControl1
 		    // 
-		    this.PageControl1.Controls.Add(this.tsFieldsFilter);
-		    this.PageControl1.Location = new System.Drawing.Point(19, 19);
-		    this.PageControl1.Name = "PageControl1";
-		    this.PageControl1.SelectedIndex = 0;
-		    this.PageControl1.Size = new System.Drawing.Size(793, 487);
-		    this.PageControl1.TabIndex = 0;
+		    this.tabsFilters.Controls.Add(this.tsFieldsFilter);
+		    this.tabsFilters.Location = new System.Drawing.Point(19, 19);
+		    this.tabsFilters.Name = "PageControl1";
+		    this.tabsFilters.SelectedIndex = 0;
+		    this.tabsFilters.Size = new System.Drawing.Size(793, 487);
+		    this.tabsFilters.TabIndex = 0;
 		    // 
 		    // tsFieldsFilter
 		    // 
@@ -63,7 +65,7 @@ namespace GKUI.Dialogs
 		    this.tsFieldsFilter.Name = "tsFieldsFilter";
 		    this.tsFieldsFilter.Size = new System.Drawing.Size(785, 457);
 		    this.tsFieldsFilter.TabIndex = 1;
-		    this.tsFieldsFilter.Text = "Фильтр полей";
+		    this.tsFieldsFilter.Text = "tsFieldsFilter";
 		    // 
 		    // dataGridView1
 		    // 
@@ -82,7 +84,7 @@ namespace GKUI.Dialogs
 		    this.btnReset.Name = "btnReset";
 		    this.btnReset.Size = new System.Drawing.Size(114, 30);
 		    this.btnReset.TabIndex = 3;
-		    this.btnReset.Text = "Сбросить";
+		    this.btnReset.Text = "btnReset";
 		    this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
 		    // 
 		    // CommonFilterDlg
@@ -97,7 +99,7 @@ namespace GKUI.Dialogs
 		    this.Controls.Add(this.btnReset);
 		    this.Controls.Add(this.btnAccept);
 		    this.Controls.Add(this.btnCancel);
-		    this.Controls.Add(this.PageControl1);
+		    this.Controls.Add(this.tabsFilters);
 		    this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 		    this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 		    this.MaximizeBox = false;
@@ -105,13 +107,11 @@ namespace GKUI.Dialogs
 		    this.Name = "CommonFilterDlg";
 		    this.Padding = new System.Windows.Forms.Padding(16);
 		    this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-		    this.Text = "Фильтр";
-		    this.PageControl1.ResumeLayout(false);
+		    this.Text = "CommonFilterDlg";
+		    this.tabsFilters.ResumeLayout(false);
 		    this.tsFieldsFilter.ResumeLayout(false);
 		    ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
 		    this.ResumeLayout(false);
 		}
-		private System.Windows.Forms.Button btnReset;
-		private System.Windows.Forms.DataGridView dataGridView1;
 	}
 }

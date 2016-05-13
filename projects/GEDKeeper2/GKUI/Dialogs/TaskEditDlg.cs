@@ -59,31 +59,31 @@ namespace GKUI.Dialogs
             {
                 if (this.fTask == null)
                 {
-                    this.EditPriority.SelectedIndex = -1;
-                    this.EditStartDate.Text = "";
-                    this.EditStopDate.Text = "";
-                    this.cbGoalType.SelectedIndex = 0;
-                    this.EditGoal.Text = "";
+                    this.txtPriority.SelectedIndex = -1;
+                    this.txtStartDate.Text = "";
+                    this.txtStopDate.Text = "";
+                    this.cmbGoalType.SelectedIndex = 0;
+                    this.txtGoal.Text = "";
                 }
                 else
                 {
-                    this.EditPriority.SelectedIndex = (sbyte)this.fTask.Priority;
-                    this.EditStartDate.Text = GKUtils.GetDateFmtString(this.fTask.StartDate, DateFormat.dfDD_MM_YYYY);
-                    this.EditStopDate.Text = GKUtils.GetDateFmtString(this.fTask.StopDate, DateFormat.dfDD_MM_YYYY);
+                    this.txtPriority.SelectedIndex = (sbyte)this.fTask.Priority;
+                    this.txtStartDate.Text = GKUtils.GetDateFmtString(this.fTask.StartDate, DateFormat.dfDD_MM_YYYY);
+                    this.txtStopDate.Text = GKUtils.GetDateFmtString(this.fTask.StopDate, DateFormat.dfDD_MM_YYYY);
 
                     GKGoalType gt;
                     this.fTask.GetTaskGoal(out gt, out this.fTempRec);
-                    this.cbGoalType.SelectedIndex = (sbyte)gt;
+                    this.cmbGoalType.SelectedIndex = (sbyte)gt;
 
                     switch (gt) {
                         case GKGoalType.gtIndividual:
                         case GKGoalType.gtFamily:
                         case GKGoalType.gtSource:
-                            this.EditGoal.Text = GKUtils.GetGoalStr(gt, this.fTempRec);
+                            this.txtGoal.Text = GKUtils.GetGoalStr(gt, this.fTempRec);
                             break;
 
                         case GKGoalType.gtOther:
-                            this.EditGoal.Text = this.fTask.Goal;
+                            this.txtGoal.Text = this.fTask.Goal;
                             break;
                     }
                 }
@@ -102,10 +102,10 @@ namespace GKUI.Dialogs
         {
             try
             {
-                this.fTask.Priority = (GKResearchPriority)this.EditPriority.SelectedIndex;
-                this.fTask.StartDate.ParseString(GEDCOMUtils.StrToGEDCOMDate(this.EditStartDate.Text, true));
-                this.fTask.StopDate.ParseString(GEDCOMUtils.StrToGEDCOMDate(this.EditStopDate.Text, true));
-                GKGoalType gt = (GKGoalType)this.cbGoalType.SelectedIndex;
+                this.fTask.Priority = (GKResearchPriority)this.txtPriority.SelectedIndex;
+                this.fTask.StartDate.ParseString(GEDCOMUtils.StrToGEDCOMDate(this.txtStartDate.Text, true));
+                this.fTask.StopDate.ParseString(GEDCOMUtils.StrToGEDCOMDate(this.txtStopDate.Text, true));
+                GKGoalType gt = (GKGoalType)this.cmbGoalType.SelectedIndex;
                 switch (gt) {
                     case GKGoalType.gtIndividual:
                     case GKGoalType.gtFamily:
@@ -113,7 +113,7 @@ namespace GKUI.Dialogs
                         this.fTask.Goal = GEDCOMUtils.EncloseXRef(this.fTempRec.XRef);
                         break;
                     case GKGoalType.gtOther:
-                        this.fTask.Goal = this.EditGoal.Text;
+                        this.fTask.Goal = this.txtGoal.Text;
                         break;
                 }
 
@@ -129,21 +129,21 @@ namespace GKUI.Dialogs
 
         private void btnGoalSelect_Click(object sender, EventArgs e)
         {
-            GKGoalType gt = (GKGoalType)this.cbGoalType.SelectedIndex;
+            GKGoalType gt = (GKGoalType)this.cmbGoalType.SelectedIndex;
             switch (gt) {
                 case GKGoalType.gtIndividual:
                     this.fTempRec = this.Base.SelectPerson(null, TargetMode.tmNone, GEDCOMSex.svNone);
-                    this.EditGoal.Text = GKUtils.GetGoalStr(gt, this.fTempRec);
+                    this.txtGoal.Text = GKUtils.GetGoalStr(gt, this.fTempRec);
                     break;
 
                 case GKGoalType.gtFamily:
                     this.fTempRec = this.Base.SelectRecord(GEDCOMRecordType.rtFamily, new object[0]);
-                    this.EditGoal.Text = GKUtils.GetGoalStr(gt, this.fTempRec);
+                    this.txtGoal.Text = GKUtils.GetGoalStr(gt, this.fTempRec);
                     break;
 
                 case GKGoalType.gtSource:
                     this.fTempRec = this.Base.SelectRecord(GEDCOMRecordType.rtSource, new object[0]);
-                    this.EditGoal.Text = GKUtils.GetGoalStr(gt, this.fTempRec);
+                    this.txtGoal.Text = GKUtils.GetGoalStr(gt, this.fTempRec);
                     break;
 
                 case GKGoalType.gtOther:
@@ -153,27 +153,27 @@ namespace GKUI.Dialogs
 
         private void cbGoalType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            GKGoalType gt = (GKGoalType)this.cbGoalType.SelectedIndex;
+            GKGoalType gt = (GKGoalType)this.cmbGoalType.SelectedIndex;
             switch (gt) {
                 case GKGoalType.gtIndividual:
                     this.btnGoalSelect.Enabled = true;
-                    this.EditGoal.BackColor = SystemColors.Control;
-                    this.EditGoal.ReadOnly = true;
+                    this.txtGoal.BackColor = SystemColors.Control;
+                    this.txtGoal.ReadOnly = true;
                     break;
                 case GKGoalType.gtFamily:
                     this.btnGoalSelect.Enabled = true;
-                    this.EditGoal.BackColor = SystemColors.Control;
-                    this.EditGoal.ReadOnly = true;
+                    this.txtGoal.BackColor = SystemColors.Control;
+                    this.txtGoal.ReadOnly = true;
                     break;
                 case GKGoalType.gtSource:
                     this.btnGoalSelect.Enabled = true;
-                    this.EditGoal.BackColor = SystemColors.Control;
-                    this.EditGoal.ReadOnly = true;
+                    this.txtGoal.BackColor = SystemColors.Control;
+                    this.txtGoal.ReadOnly = true;
                     break;
                 case GKGoalType.gtOther:
                     this.btnGoalSelect.Enabled = false;
-                    this.EditGoal.BackColor = SystemColors.Window;
-                    this.EditGoal.ReadOnly = false;
+                    this.txtGoal.BackColor = SystemColors.Window;
+                    this.txtGoal.ReadOnly = false;
                     break;
             }
         }
@@ -187,25 +187,25 @@ namespace GKUI.Dialogs
 
             for (GKResearchPriority rp = GKResearchPriority.rpNone; rp <= GKResearchPriority.rpTop; rp++)
             {
-                this.EditPriority.Items.Add(LangMan.LS(GKData.PriorityNames[(int)rp]));
+                this.txtPriority.Items.Add(LangMan.LS(GKData.PriorityNames[(int)rp]));
             }
 
             for (GKGoalType gt = GKGoalType.gtIndividual; gt <= GKGoalType.gtOther; gt++)
             {
-                this.cbGoalType.Items.Add(LangMan.LS(GKData.GoalNames[(int)gt]));
+                this.cmbGoalType.Items.Add(LangMan.LS(GKData.GoalNames[(int)gt]));
             }
 
-            this.fNotesList = new GKNotesSheet(this, this.SheetNotes);
+            this.fNotesList = new GKNotesSheet(this, this.pageNotes);
 
             // SetLang()
             this.Text = LangMan.LS(LSID.LSID_WinTaskEdit);
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            this.SheetNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
-            this.Label1.Text = LangMan.LS(LSID.LSID_Goal);
-            this.Label2.Text = LangMan.LS(LSID.LSID_Priority);
-            this.Label4.Text = LangMan.LS(LSID.LSID_StartDate);
-            this.Label5.Text = LangMan.LS(LSID.LSID_StopDate);
+            this.pageNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
+            this.lblGoal.Text = LangMan.LS(LSID.LSID_Goal);
+            this.lblPriority.Text = LangMan.LS(LSID.LSID_Priority);
+            this.lblStartDate.Text = LangMan.LS(LSID.LSID_StartDate);
+            this.lblStopDate.Text = LangMan.LS(LSID.LSID_StopDate);
         }
     }
 }

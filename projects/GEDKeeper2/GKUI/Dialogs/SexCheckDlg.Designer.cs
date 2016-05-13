@@ -7,39 +7,39 @@ namespace GKUI.Dialogs
 {
 	partial class SexCheckDlg
 	{
-		private System.Windows.Forms.TextBox edName;
+		private System.Windows.Forms.TextBox txtName;
 		private System.Windows.Forms.GroupBox GroupBox1;
-		private System.Windows.Forms.RadioButton sbNone;
-		private System.Windows.Forms.RadioButton sbMale;
-		private System.Windows.Forms.RadioButton sbFemale;
+		private System.Windows.Forms.RadioButton rbNone;
+		private System.Windows.Forms.RadioButton rbMale;
+		private System.Windows.Forms.RadioButton rbFemale;
 		private System.Windows.Forms.Button btnAccept;
 		private System.Windows.Forms.Button btnCancel;
 
 		private void InitializeComponent()
 		{
-			this.edName = new System.Windows.Forms.TextBox();
+			this.txtName = new System.Windows.Forms.TextBox();
 			this.GroupBox1 = new System.Windows.Forms.GroupBox();
-			this.sbNone = new System.Windows.Forms.RadioButton();
-			this.sbMale = new System.Windows.Forms.RadioButton();
-			this.sbFemale = new System.Windows.Forms.RadioButton();
+			this.rbNone = new System.Windows.Forms.RadioButton();
+			this.rbMale = new System.Windows.Forms.RadioButton();
+			this.rbFemale = new System.Windows.Forms.RadioButton();
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.GroupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// edName
+			// txtName
 			// 
-			this.edName.Location = new System.Drawing.Point(11, 10);
-			this.edName.Name = "edName";
-			this.edName.ReadOnly = true;
-			this.edName.Size = new System.Drawing.Size(483, 24);
-			this.edName.TabIndex = 0;
+			this.txtName.Location = new System.Drawing.Point(11, 10);
+			this.txtName.Name = "txtName";
+			this.txtName.ReadOnly = true;
+			this.txtName.Size = new System.Drawing.Size(483, 24);
+			this.txtName.TabIndex = 0;
 			// 
 			// GroupBox1
 			// 
-			this.GroupBox1.Controls.Add(this.sbNone);
-			this.GroupBox1.Controls.Add(this.sbMale);
-			this.GroupBox1.Controls.Add(this.sbFemale);
+			this.GroupBox1.Controls.Add(this.rbNone);
+			this.GroupBox1.Controls.Add(this.rbMale);
+			this.GroupBox1.Controls.Add(this.rbFemale);
 			this.GroupBox1.Location = new System.Drawing.Point(11, 43);
 			this.GroupBox1.Name = "GroupBox1";
 			this.GroupBox1.Size = new System.Drawing.Size(483, 59);
@@ -47,32 +47,32 @@ namespace GKUI.Dialogs
 			this.GroupBox1.TabStop = false;
 			this.GroupBox1.Text = "Пол";
 			// 
-			// sbNone
+			// rbNone
 			// 
-			this.sbNone.AutoSize = true;
-			this.sbNone.Location = new System.Drawing.Point(11, 19);
-			this.sbNone.Name = "sbNone";
-			this.sbNone.Size = new System.Drawing.Size(36, 21);
-			this.sbNone.TabIndex = 0;
-			this.sbNone.Text = "?";
+			this.rbNone.AutoSize = true;
+			this.rbNone.Location = new System.Drawing.Point(11, 19);
+			this.rbNone.Name = "rbNone";
+			this.rbNone.Size = new System.Drawing.Size(36, 21);
+			this.rbNone.TabIndex = 0;
+			this.rbNone.Text = "?";
 			// 
-			// sbMale
+			// rbMale
 			// 
-			this.sbMale.AutoSize = true;
-			this.sbMale.Location = new System.Drawing.Point(167, 19);
-			this.sbMale.Name = "sbMale";
-			this.sbMale.Size = new System.Drawing.Size(87, 21);
-			this.sbMale.TabIndex = 1;
-			this.sbMale.Text = "Мужской";
+			this.rbMale.AutoSize = true;
+			this.rbMale.Location = new System.Drawing.Point(167, 19);
+			this.rbMale.Name = "rbMale";
+			this.rbMale.Size = new System.Drawing.Size(87, 21);
+			this.rbMale.TabIndex = 1;
+			this.rbMale.Text = "rbMale";
 			// 
-			// sbFemale
+			// rbFemale
 			// 
-			this.sbFemale.AutoSize = true;
-			this.sbFemale.Location = new System.Drawing.Point(323, 19);
-			this.sbFemale.Name = "sbFemale";
-			this.sbFemale.Size = new System.Drawing.Size(88, 21);
-			this.sbFemale.TabIndex = 2;
-			this.sbFemale.Text = "Женский";
+			this.rbFemale.AutoSize = true;
+			this.rbFemale.Location = new System.Drawing.Point(323, 19);
+			this.rbFemale.Name = "rbFemale";
+			this.rbFemale.Size = new System.Drawing.Size(88, 21);
+			this.rbFemale.TabIndex = 2;
+			this.rbFemale.Text = "rbFemale";
 			// 
 			// btnAccept
 			// 
@@ -83,7 +83,7 @@ namespace GKUI.Dialogs
 			this.btnAccept.Name = "btnAccept";
 			this.btnAccept.Size = new System.Drawing.Size(113, 30);
 			this.btnAccept.TabIndex = 2;
-			this.btnAccept.Text = "Принять";
+			this.btnAccept.Text = "btnAccept";
 			this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// btnCancel
@@ -95,7 +95,7 @@ namespace GKUI.Dialogs
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(113, 30);
 			this.btnCancel.TabIndex = 3;
-			this.btnCancel.Text = "Отменить";
+			this.btnCancel.Text = "btnCancel";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// SexCheckDlg
@@ -105,7 +105,7 @@ namespace GKUI.Dialogs
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(504, 158);
-			this.Controls.Add(this.edName);
+			this.Controls.Add(this.txtName);
 			this.Controls.Add(this.GroupBox1);
 			this.Controls.Add(this.btnAccept);
 			this.Controls.Add(this.btnCancel);
@@ -113,7 +113,7 @@ namespace GKUI.Dialogs
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Name = "SexCheckDlg";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "Проверка пола";
+			this.Text = "SexCheckDlg";
 			this.TopMost = true;
 			this.GroupBox1.ResumeLayout(false);
 			this.GroupBox1.PerformLayout();

@@ -52,17 +52,17 @@ namespace GKUI.Dialogs
             this.fNameEntry = value;
             if (this.fNameEntry == null)
             {
-                this.edName.Text = "";
-                this.edSex.SelectedIndex = 0;
-                this.edFPatr.Text = "";
-                this.edMPatr.Text = "";
+                this.txtName.Text = "";
+                this.cmbSex.SelectedIndex = 0;
+                this.txtFPatr.Text = "";
+                this.txtMPatr.Text = "";
             }
             else
             {
-                this.edName.Text = this.fNameEntry.Name;
-                this.edSex.SelectedIndex = (sbyte)this.fNameEntry.Sex;
-                this.edFPatr.Text = this.fNameEntry.F_Patronymic;
-                this.edMPatr.Text = this.fNameEntry.M_Patronymic;
+                this.txtName.Text = this.fNameEntry.Name;
+                this.cmbSex.SelectedIndex = (sbyte)this.fNameEntry.Sex;
+                this.txtFPatr.Text = this.fNameEntry.F_Patronymic;
+                this.txtMPatr.Text = this.fNameEntry.M_Patronymic;
             }
         }
 
@@ -70,10 +70,10 @@ namespace GKUI.Dialogs
         {
             try
             {
-                this.fNameEntry.Name = this.edName.Text;
-                this.fNameEntry.Sex = (GEDCOMSex)this.edSex.SelectedIndex;
-                this.fNameEntry.F_Patronymic = this.edFPatr.Text;
-                this.fNameEntry.M_Patronymic = this.edMPatr.Text;
+                this.fNameEntry.Name = this.txtName.Text;
+                this.fNameEntry.Sex = (GEDCOMSex)this.cmbSex.SelectedIndex;
+                this.fNameEntry.F_Patronymic = this.txtFPatr.Text;
+                this.fNameEntry.M_Patronymic = this.txtMPatr.Text;
                 base.DialogResult = DialogResult.OK;
             }
             catch (Exception ex)
@@ -98,18 +98,18 @@ namespace GKUI.Dialogs
 
             for (GEDCOMSex sx = GEDCOMSex.svNone; sx <= GEDCOMSex.svLast; sx++)
             {
-                this.edSex.Items.Add(GKUtils.SexStr(sx));
+                this.cmbSex.Items.Add(GKUtils.SexStr(sx));
             }
 
             // SetLang()
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             this.Text = LangMan.LS(LSID.LSID_Name);
-            this.Label2.Text = LangMan.LS(LSID.LSID_Name);
-            this.Label4.Text = LangMan.LS(LSID.LSID_Sex);
-            this.GroupBox1.Text = LangMan.LS(LSID.LSID_Patronymic);
-            this.Label3.Text = LangMan.LS(LSID.LSID_PatFemale);
-            this.Label1.Text = LangMan.LS(LSID.LSID_PatMale);
+            this.lblName.Text = LangMan.LS(LSID.LSID_Name);
+            this.lblSex.Text = LangMan.LS(LSID.LSID_Sex);
+            this.grpPatronymics.Text = LangMan.LS(LSID.LSID_Patronymic);
+            this.lblFemale.Text = LangMan.LS(LSID.LSID_PatFemale);
+            this.lblMale.Text = LangMan.LS(LSID.LSID_PatMale);
         }
     }
 }

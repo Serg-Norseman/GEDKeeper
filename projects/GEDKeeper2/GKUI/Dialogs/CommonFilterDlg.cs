@@ -36,7 +36,7 @@ namespace GKUI.Dialogs
         private readonly IBaseWindow fBase;
         private readonly string[] fFields;
         private readonly ListManager fListMan;
-        private MaskedTextBox maskedTextBox;
+        private MaskedTextBox fMaskedTextBox;
 
         public IBaseWindow Base
         {
@@ -137,11 +137,11 @@ namespace GKUI.Dialogs
 
         private void InitGrid()
         {
-            this.maskedTextBox = new MaskedTextBox();
-            this.maskedTextBox.Visible = false;
-            this.maskedTextBox.Mask = @"00/00/0000";
-            this.maskedTextBox.TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
-            this.dataGridView1.Controls.Add(this.maskedTextBox);
+            this.fMaskedTextBox = new MaskedTextBox();
+            this.fMaskedTextBox.Visible = false;
+            this.fMaskedTextBox.Mask = @"00/00/0000";
+            this.fMaskedTextBox.TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
+            this.dataGridView1.Controls.Add(this.fMaskedTextBox);
 
             this.dataGridView1.Rows.Clear();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -175,11 +175,11 @@ namespace GKUI.Dialogs
 
         private void dataGridView1_Scroll(object sender, ScrollEventArgs e)
         {
-            if (this.maskedTextBox.Visible)
+            if (this.fMaskedTextBox.Visible)
             {
                 DataGridViewCell cell = this.dataGridView1.CurrentCell;
                 Rectangle rect = this.dataGridView1.GetCellDisplayRectangle(cell.ColumnIndex, cell.RowIndex, true);
-                this.maskedTextBox.Location = rect.Location;
+                this.fMaskedTextBox.Location = rect.Location;
             }
         }
 
@@ -190,24 +190,24 @@ namespace GKUI.Dialogs
                     Rectangle rect = this.dataGridView1.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, true);
 
                     if (this.dataGridView1[e.ColumnIndex, e.RowIndex].Value != null) {
-                        this.maskedTextBox.Text = this.dataGridView1[e.ColumnIndex, e.RowIndex].Value.ToString();
+                        this.fMaskedTextBox.Text = this.dataGridView1[e.ColumnIndex, e.RowIndex].Value.ToString();
                     } else {
-                        this.maskedTextBox.Text = "";
+                        this.fMaskedTextBox.Text = "";
                     }
 
-                    this.maskedTextBox.Location = rect.Location;
-                    this.maskedTextBox.Size = rect.Size;
-                    this.maskedTextBox.Visible = true;
-                    this.maskedTextBox.Focus();
+                    this.fMaskedTextBox.Location = rect.Location;
+                    this.fMaskedTextBox.Size = rect.Size;
+                    this.fMaskedTextBox.Visible = true;
+                    this.fMaskedTextBox.Focus();
                 }
             }
         }
 
         private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            if (this.maskedTextBox.Visible) {
-                this.dataGridView1.CurrentCell.Value = this.maskedTextBox.Text;
-                this.maskedTextBox.Visible = false;
+            if (this.fMaskedTextBox.Visible) {
+                this.dataGridView1.CurrentCell.Value = this.fMaskedTextBox.Text;
+                this.fMaskedTextBox.Visible = false;
                 this.dataGridView1.Focus();
             }
         }

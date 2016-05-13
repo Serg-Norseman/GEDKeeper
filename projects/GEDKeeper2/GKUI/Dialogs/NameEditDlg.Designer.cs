@@ -4,67 +4,67 @@ namespace GKUI.Dialogs
 {
 	partial class NameEditDlg
 	{
-		private System.Windows.Forms.Label Label2;
-		private System.Windows.Forms.TextBox edName;
-		private System.Windows.Forms.Label Label4;
-		private System.Windows.Forms.ComboBox edSex;
+		private System.Windows.Forms.Label lblName;
+		private System.Windows.Forms.TextBox txtName;
+		private System.Windows.Forms.Label lblSex;
+		private System.Windows.Forms.ComboBox cmbSex;
 		private System.Windows.Forms.Button btnAccept;
 		private System.Windows.Forms.Button btnCancel;
-		private System.Windows.Forms.GroupBox GroupBox1;
-		private System.Windows.Forms.Label Label3;
-		private System.Windows.Forms.TextBox edFPatr;
-		private System.Windows.Forms.Label Label1;
-		private System.Windows.Forms.TextBox edMPatr;
+		private System.Windows.Forms.GroupBox grpPatronymics;
+		private System.Windows.Forms.Label lblFemale;
+		private System.Windows.Forms.TextBox txtFPatr;
+		private System.Windows.Forms.Label lblMale;
+		private System.Windows.Forms.TextBox txtMPatr;
 
 		private void InitializeComponent()
 		{
-			this.Label2 = new System.Windows.Forms.Label();
-			this.edName = new System.Windows.Forms.TextBox();
-			this.Label4 = new System.Windows.Forms.Label();
-			this.edSex = new System.Windows.Forms.ComboBox();
+			this.lblName = new System.Windows.Forms.Label();
+			this.txtName = new System.Windows.Forms.TextBox();
+			this.lblSex = new System.Windows.Forms.Label();
+			this.cmbSex = new System.Windows.Forms.ComboBox();
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
-			this.GroupBox1 = new System.Windows.Forms.GroupBox();
-			this.Label3 = new System.Windows.Forms.Label();
-			this.Label1 = new System.Windows.Forms.Label();
-			this.edFPatr = new System.Windows.Forms.TextBox();
-			this.edMPatr = new System.Windows.Forms.TextBox();
-			this.GroupBox1.SuspendLayout();
+			this.grpPatronymics = new System.Windows.Forms.GroupBox();
+			this.lblFemale = new System.Windows.Forms.Label();
+			this.lblMale = new System.Windows.Forms.Label();
+			this.txtFPatr = new System.Windows.Forms.TextBox();
+			this.txtMPatr = new System.Windows.Forms.TextBox();
+			this.grpPatronymics.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// Label2
+			// lblName
 			// 
-			this.Label2.AutoSize = true;
-			this.Label2.Location = new System.Drawing.Point(12, 13);
-			this.Label2.Name = "Label2";
-			this.Label2.Size = new System.Drawing.Size(33, 17);
-			this.Label2.TabIndex = 0;
-			this.Label2.Text = "Имя";
+			this.lblName.AutoSize = true;
+			this.lblName.Location = new System.Drawing.Point(12, 13);
+			this.lblName.Name = "lblName";
+			this.lblName.Size = new System.Drawing.Size(33, 17);
+			this.lblName.TabIndex = 0;
+			this.lblName.Text = "lblName";
 			// 
-			// edName
+			// txtName
 			// 
-			this.edName.Location = new System.Drawing.Point(101, 10);
-			this.edName.Name = "edName";
-			this.edName.Size = new System.Drawing.Size(270, 24);
-			this.edName.TabIndex = 1;
-			this.edName.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.edName_KeyPress);
+			this.txtName.Location = new System.Drawing.Point(101, 10);
+			this.txtName.Name = "txtName";
+			this.txtName.Size = new System.Drawing.Size(270, 24);
+			this.txtName.TabIndex = 1;
+			this.txtName.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.edName_KeyPress);
 			// 
-			// Label4
+			// lblSex
 			// 
-			this.Label4.AutoSize = true;
-			this.Label4.Location = new System.Drawing.Point(12, 52);
-			this.Label4.Name = "Label4";
-			this.Label4.Size = new System.Drawing.Size(33, 17);
-			this.Label4.TabIndex = 2;
-			this.Label4.Text = "Пол";
+			this.lblSex.AutoSize = true;
+			this.lblSex.Location = new System.Drawing.Point(12, 52);
+			this.lblSex.Name = "lblSex";
+			this.lblSex.Size = new System.Drawing.Size(33, 17);
+			this.lblSex.TabIndex = 2;
+			this.lblSex.Text = "lblSex";
 			// 
-			// edSex
+			// cmbSex
 			// 
-			this.edSex.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.edSex.Location = new System.Drawing.Point(101, 49);
-			this.edSex.Name = "edSex";
-			this.edSex.Size = new System.Drawing.Size(169, 25);
-			this.edSex.TabIndex = 3;
+			this.cmbSex.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cmbSex.Location = new System.Drawing.Point(101, 49);
+			this.cmbSex.Name = "cmbSex";
+			this.cmbSex.Size = new System.Drawing.Size(169, 25);
+			this.cmbSex.TabIndex = 3;
 			// 
 			// btnAccept
 			// 
@@ -74,7 +74,7 @@ namespace GKUI.Dialogs
 			this.btnAccept.Name = "btnAccept";
 			this.btnAccept.Size = new System.Drawing.Size(114, 30);
 			this.btnAccept.TabIndex = 5;
-			this.btnAccept.Text = "Принять";
+			this.btnAccept.Text = "btnAccept";
 			this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.btnAccept.Click += new System.EventHandler(this.btnAccept_Click);
 			// 
@@ -87,55 +87,55 @@ namespace GKUI.Dialogs
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(113, 30);
 			this.btnCancel.TabIndex = 6;
-			this.btnCancel.Text = "Отменить";
+			this.btnCancel.Text = "btnCancel";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// GroupBox1
+			// grpPatronymics
 			// 
-			this.GroupBox1.Controls.Add(this.Label3);
-			this.GroupBox1.Controls.Add(this.Label1);
-			this.GroupBox1.Controls.Add(this.edFPatr);
-			this.GroupBox1.Controls.Add(this.edMPatr);
-			this.GroupBox1.Location = new System.Drawing.Point(11, 87);
-			this.GroupBox1.Name = "GroupBox1";
-			this.GroupBox1.Size = new System.Drawing.Size(360, 95);
-			this.GroupBox1.TabIndex = 4;
-			this.GroupBox1.TabStop = false;
-			this.GroupBox1.Text = "Отчества";
+			this.grpPatronymics.Controls.Add(this.lblFemale);
+			this.grpPatronymics.Controls.Add(this.lblMale);
+			this.grpPatronymics.Controls.Add(this.txtFPatr);
+			this.grpPatronymics.Controls.Add(this.txtMPatr);
+			this.grpPatronymics.Location = new System.Drawing.Point(11, 87);
+			this.grpPatronymics.Name = "grpPatronymics";
+			this.grpPatronymics.Size = new System.Drawing.Size(360, 95);
+			this.grpPatronymics.TabIndex = 4;
+			this.grpPatronymics.TabStop = false;
+			this.grpPatronymics.Text = "grpPatronymics";
 			// 
-			// Label3
+			// lblFemale
 			// 
-			this.Label3.AutoSize = true;
-			this.Label3.Location = new System.Drawing.Point(11, 22);
-			this.Label3.Name = "Label3";
-			this.Label3.Size = new System.Drawing.Size(66, 17);
-			this.Label3.TabIndex = 0;
-			this.Label3.Text = "Женское";
+			this.lblFemale.AutoSize = true;
+			this.lblFemale.Location = new System.Drawing.Point(11, 22);
+			this.lblFemale.Name = "lblFemale";
+			this.lblFemale.Size = new System.Drawing.Size(66, 17);
+			this.lblFemale.TabIndex = 0;
+			this.lblFemale.Text = "lblFemale";
 			// 
-			// Label1
+			// lblMale
 			// 
-			this.Label1.AutoSize = true;
-			this.Label1.Location = new System.Drawing.Point(11, 61);
-			this.Label1.Name = "Label1";
-			this.Label1.Size = new System.Drawing.Size(65, 17);
-			this.Label1.TabIndex = 2;
-			this.Label1.Text = "Мужское";
+			this.lblMale.AutoSize = true;
+			this.lblMale.Location = new System.Drawing.Point(11, 61);
+			this.lblMale.Name = "lblMale";
+			this.lblMale.Size = new System.Drawing.Size(65, 17);
+			this.lblMale.TabIndex = 2;
+			this.lblMale.Text = "lblMale";
 			// 
-			// edFPatr
+			// txtFPatr
 			// 
-			this.edFPatr.Location = new System.Drawing.Point(90, 19);
-			this.edFPatr.Name = "edFPatr";
-			this.edFPatr.Size = new System.Drawing.Size(259, 24);
-			this.edFPatr.TabIndex = 1;
-			this.edFPatr.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.edName_KeyPress);
+			this.txtFPatr.Location = new System.Drawing.Point(90, 19);
+			this.txtFPatr.Name = "txtFPatr";
+			this.txtFPatr.Size = new System.Drawing.Size(259, 24);
+			this.txtFPatr.TabIndex = 1;
+			this.txtFPatr.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.edName_KeyPress);
 			// 
-			// edMPatr
+			// txtMPatr
 			// 
-			this.edMPatr.Location = new System.Drawing.Point(90, 58);
-			this.edMPatr.Name = "edMPatr";
-			this.edMPatr.Size = new System.Drawing.Size(259, 24);
-			this.edMPatr.TabIndex = 3;
-			this.edMPatr.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.edName_KeyPress);
+			this.txtMPatr.Location = new System.Drawing.Point(90, 58);
+			this.txtMPatr.Name = "txtMPatr";
+			this.txtMPatr.Size = new System.Drawing.Size(259, 24);
+			this.txtMPatr.TabIndex = 3;
+			this.txtMPatr.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.edName_KeyPress);
 			// 
 			// NameEditDlg
 			// 
@@ -144,13 +144,13 @@ namespace GKUI.Dialogs
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(385, 250);
-			this.Controls.Add(this.Label2);
-			this.Controls.Add(this.edName);
-			this.Controls.Add(this.Label4);
-			this.Controls.Add(this.edSex);
+			this.Controls.Add(this.lblName);
+			this.Controls.Add(this.txtName);
+			this.Controls.Add(this.lblSex);
+			this.Controls.Add(this.cmbSex);
 			this.Controls.Add(this.btnAccept);
 			this.Controls.Add(this.btnCancel);
-			this.Controls.Add(this.GroupBox1);
+			this.Controls.Add(this.grpPatronymics);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
@@ -158,9 +158,9 @@ namespace GKUI.Dialogs
 			this.Name = "NameEditDlg";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "Имя";
-			this.GroupBox1.ResumeLayout(false);
-			this.GroupBox1.PerformLayout();
+			this.Text = "NameEditDlg";
+			this.grpPatronymics.ResumeLayout(false);
+			this.grpPatronymics.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}

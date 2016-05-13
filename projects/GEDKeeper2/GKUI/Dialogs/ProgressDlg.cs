@@ -39,9 +39,9 @@ namespace GKUI.Dialogs
         {
             this.InitializeComponent();
             this.Text = LangMan.LS(LSID.LSID_Progress);
-            this.Label2.Text = LangMan.LS(LSID.LSID_TimePassed);
-            this.Label3.Text = LangMan.LS(LSID.LSID_TimeRemain);
-            this.Label4.Text = LangMan.LS(LSID.LSID_TimeTotal);
+            this.lblTimePassed.Text = LangMan.LS(LSID.LSID_TimePassed);
+            this.lblTimeRemain.Text = LangMan.LS(LSID.LSID_TimeRemain);
+            this.lblTimeTotal.Text = LangMan.LS(LSID.LSID_TimeTotal);
         }
 
         private static string TimeSpanToString(TimeSpan ts)
@@ -106,7 +106,7 @@ namespace GKUI.Dialogs
 
         internal void DoInit(string title, int max)
         {
-            this.Label1.Text = title;
+            this.lblTitle.Text = title;
             this.ProgressBar1.Maximum = max;
             this.ProgressBar1.Minimum = 0;
             this.ProgressBar1.Value = 0;
@@ -134,9 +134,9 @@ namespace GKUI.Dialogs
             TimeSpan restTime = new TimeSpan((long)Math.Truncate((passTime.Ticks / pos) * (max - pos)));
             TimeSpan sumTime = passTime + restTime;
 
-            this.Label7.Text = TimeSpanToString(passTime);
-            this.Label8.Text = TimeSpanToString(restTime);
-            this.Label9.Text = TimeSpanToString(sumTime);
+            this.lblPassedVal.Text = TimeSpanToString(passTime);
+            this.lblRemainVal.Text = TimeSpanToString(restTime);
+            this.lblTotalVal.Text = TimeSpanToString(sumTime);
 
             this.Update();
         }

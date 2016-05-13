@@ -130,11 +130,11 @@ namespace GKUI.Dialogs
         {
             this.fAddress = value;
 
-            this.edCountry.Text = this.fAddress.AddressCountry;
-            this.edState.Text = this.fAddress.AddressState;
-            this.edCity.Text = this.fAddress.AddressCity;
-            this.edPostalCode.Text = this.fAddress.AddressPostalCode;
-            this.edAddress.Text = this.fAddress.Address.Text.Trim();
+            this.txtCountry.Text = this.fAddress.AddressCountry;
+            this.txtState.Text = this.fAddress.AddressState;
+            this.txtCity.Text = this.fAddress.AddressCity;
+            this.txtPostalCode.Text = this.fAddress.AddressPostalCode;
+            this.txtAddress.Text = this.fAddress.Address.Text.Trim();
 
             this.UpdateLists();
         }
@@ -164,12 +164,12 @@ namespace GKUI.Dialogs
         {
             try
             {
-                this.fAddress.AddressCountry = this.edCountry.Text;
-                this.fAddress.AddressState = this.edState.Text;
-                this.fAddress.AddressCity = this.edCity.Text;
-                this.fAddress.AddressPostalCode = this.edPostalCode.Text;
+                this.fAddress.AddressCountry = this.txtCountry.Text;
+                this.fAddress.AddressState = this.txtState.Text;
+                this.fAddress.AddressCity = this.txtCity.Text;
+                this.fAddress.AddressPostalCode = this.txtPostalCode.Text;
 
-                this.fAddress.SetAddressText(this.edAddress.Text);
+                this.fAddress.SetAddressText(this.txtAddress.Text);
 
                 base.DialogResult = DialogResult.OK;
             }
@@ -185,15 +185,15 @@ namespace GKUI.Dialogs
             this.InitializeComponent();
             this.fBase = aBase;
 
-            this.fPhonesList = new GKSheetList(this.SheetPhones);
+            this.fPhonesList = new GKSheetList(this.pagePhones);
             this.fPhonesList.OnModify += this.ListModify;
             this.fPhonesList.AddColumn(LangMan.LS(LSID.LSID_Telephone), 350, false);
 
-            this.fMailsList = new GKSheetList(this.SheetEmails);
+            this.fMailsList = new GKSheetList(this.pageEmails);
             this.fMailsList.OnModify += this.ListModify;
             this.fMailsList.AddColumn(LangMan.LS(LSID.LSID_Mail), 350, false);
 
-            this.fWebsList = new GKSheetList(this.SheetWebPages);
+            this.fWebsList = new GKSheetList(this.pageWebPages);
             this.fWebsList.OnModify += this.ListModify;
             this.fWebsList.AddColumn(LangMan.LS(LSID.LSID_WebSite), 350, false);
 
@@ -201,15 +201,15 @@ namespace GKUI.Dialogs
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             this.Text = LangMan.LS(LSID.LSID_Address);
-            this.SheetCommon.Text = LangMan.LS(LSID.LSID_Address);
-            this.Label1.Text = LangMan.LS(LSID.LSID_AdCountry);
-            this.Label2.Text = LangMan.LS(LSID.LSID_AdState);
-            this.Label3.Text = LangMan.LS(LSID.LSID_AdCity);
-            this.Label4.Text = LangMan.LS(LSID.LSID_AdPostalCode);
-            this.Label5.Text = LangMan.LS(LSID.LSID_Address);
-            this.SheetPhones.Text = LangMan.LS(LSID.LSID_Telephones);
-            this.SheetEmails.Text = LangMan.LS(LSID.LSID_EMails);
-            this.SheetWebPages.Text = LangMan.LS(LSID.LSID_WebSites);
+            this.pageCommon.Text = LangMan.LS(LSID.LSID_Address);
+            this.lblCountry.Text = LangMan.LS(LSID.LSID_AdCountry);
+            this.lblState.Text = LangMan.LS(LSID.LSID_AdState);
+            this.lblCity.Text = LangMan.LS(LSID.LSID_AdCity);
+            this.lblPostalCode.Text = LangMan.LS(LSID.LSID_AdPostalCode);
+            this.lblAddress.Text = LangMan.LS(LSID.LSID_Address);
+            this.pagePhones.Text = LangMan.LS(LSID.LSID_Telephones);
+            this.pageEmails.Text = LangMan.LS(LSID.LSID_EMails);
+            this.pageWebPages.Text = LangMan.LS(LSID.LSID_WebSites);
         }
     }
 }

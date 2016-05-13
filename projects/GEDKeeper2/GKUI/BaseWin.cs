@@ -752,7 +752,7 @@ namespace GKUI
                     dlg.Mode = mode;
                     int argsCnt = ((args != null) ? args.Length : 0);
                     if (argsCnt > 0) {
-                        dlg.edFastFilter.Text = (args[0] as string);
+                        dlg.txtFastFilter.Text = (args[0] as string);
                     }
 
                     if (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK) {
@@ -1912,13 +1912,13 @@ namespace GKUI
 
             using (PersonNewDlg dlg = new PersonNewDlg(this))
             {
-                dlg.EditSex.SelectedIndex = (int)needSex;
+                dlg.cmbSex.SelectedIndex = (int)needSex;
                 dlg.TargetMode = targetMode;
                 dlg.Target = target;
 
                 if (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK)
                 {
-                    result = this.fContext.CreatePersonEx(dlg.edName.Text, dlg.edPatronymic.Text, dlg.edFamily.Text, (GEDCOMSex)dlg.EditSex.SelectedIndex, true);
+                    result = this.fContext.CreatePersonEx(dlg.txtName.Text, dlg.cmbPatronymic.Text, dlg.txtSurname.Text, (GEDCOMSex)dlg.cmbSex.SelectedIndex, true);
                     this.ChangeRecord(result);
 
                     MainWin.Instance.NamesTable.ImportNames(result);

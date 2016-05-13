@@ -5,56 +5,56 @@ namespace GKUI.Dialogs
 	partial class CommunicationEditDlg
 	{
 		private System.Windows.Forms.GroupBox GroupBox1;
-		private System.Windows.Forms.TabControl PagesGroupData;
-		private System.Windows.Forms.TabPage SheetNotes;
-		private System.Windows.Forms.TabPage SheetMultimedia;
+		private System.Windows.Forms.TabControl tabsData;
+		private System.Windows.Forms.TabPage pageNotes;
+		private System.Windows.Forms.TabPage pageMultimedia;
 		private System.Windows.Forms.Button btnAccept;
 		private System.Windows.Forms.Button btnCancel;
-		private System.Windows.Forms.Label Label1;
-		private System.Windows.Forms.TextBox EditName;
-		private System.Windows.Forms.Label Label4;
-		private System.Windows.Forms.MaskedTextBox EditDate;
-		private System.Windows.Forms.Label Label2;
-		private System.Windows.Forms.ComboBox EditCorrType;
-		private System.Windows.Forms.ComboBox EditDir;
-		private System.Windows.Forms.Label Label5;
-		private System.Windows.Forms.TextBox EditCorresponder;
+		private System.Windows.Forms.Label lblTheme;
+		private System.Windows.Forms.TextBox txtName;
+		private System.Windows.Forms.Label lblDate;
+		private System.Windows.Forms.MaskedTextBox txtDate;
+		private System.Windows.Forms.Label lblType;
+		private System.Windows.Forms.ComboBox cmbCorrType;
+		private System.Windows.Forms.ComboBox txtDir;
+		private System.Windows.Forms.Label lblCorresponder;
+		private System.Windows.Forms.TextBox txtCorresponder;
 		private System.Windows.Forms.Button btnPersonAdd;
 
 		private void InitializeComponent()
 		{
 			this.GroupBox1 = new System.Windows.Forms.GroupBox();
-			this.Label1 = new System.Windows.Forms.Label();
-			this.Label4 = new System.Windows.Forms.Label();
-			this.Label2 = new System.Windows.Forms.Label();
-			this.Label5 = new System.Windows.Forms.Label();
+			this.lblTheme = new System.Windows.Forms.Label();
+			this.lblDate = new System.Windows.Forms.Label();
+			this.lblType = new System.Windows.Forms.Label();
+			this.lblCorresponder = new System.Windows.Forms.Label();
 			this.btnPersonAdd = new System.Windows.Forms.Button();
-			this.EditName = new System.Windows.Forms.TextBox();
-			this.EditDate = new System.Windows.Forms.MaskedTextBox();
-			this.EditCorrType = new System.Windows.Forms.ComboBox();
-			this.EditDir = new System.Windows.Forms.ComboBox();
-			this.EditCorresponder = new System.Windows.Forms.TextBox();
+			this.txtName = new System.Windows.Forms.TextBox();
+			this.txtDate = new System.Windows.Forms.MaskedTextBox();
+			this.cmbCorrType = new System.Windows.Forms.ComboBox();
+			this.txtDir = new System.Windows.Forms.ComboBox();
+			this.txtCorresponder = new System.Windows.Forms.TextBox();
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
-			this.PagesGroupData = new System.Windows.Forms.TabControl();
-			this.SheetNotes = new System.Windows.Forms.TabPage();
-			this.SheetMultimedia = new System.Windows.Forms.TabPage();
+			this.tabsData = new System.Windows.Forms.TabControl();
+			this.pageNotes = new System.Windows.Forms.TabPage();
+			this.pageMultimedia = new System.Windows.Forms.TabPage();
 			this.GroupBox1.SuspendLayout();
-			this.PagesGroupData.SuspendLayout();
+			this.tabsData.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// GroupBox1
 			// 
-			this.GroupBox1.Controls.Add(this.Label1);
-			this.GroupBox1.Controls.Add(this.Label4);
-			this.GroupBox1.Controls.Add(this.Label2);
-			this.GroupBox1.Controls.Add(this.Label5);
+			this.GroupBox1.Controls.Add(this.lblTheme);
+			this.GroupBox1.Controls.Add(this.lblDate);
+			this.GroupBox1.Controls.Add(this.lblType);
+			this.GroupBox1.Controls.Add(this.lblCorresponder);
 			this.GroupBox1.Controls.Add(this.btnPersonAdd);
-			this.GroupBox1.Controls.Add(this.EditName);
-			this.GroupBox1.Controls.Add(this.EditDate);
-			this.GroupBox1.Controls.Add(this.EditCorrType);
-			this.GroupBox1.Controls.Add(this.EditDir);
-			this.GroupBox1.Controls.Add(this.EditCorresponder);
+			this.GroupBox1.Controls.Add(this.txtName);
+			this.GroupBox1.Controls.Add(this.txtDate);
+			this.GroupBox1.Controls.Add(this.cmbCorrType);
+			this.GroupBox1.Controls.Add(this.txtDir);
+			this.GroupBox1.Controls.Add(this.txtCorresponder);
 			this.GroupBox1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.GroupBox1.Location = new System.Drawing.Point(0, 0);
 			this.GroupBox1.Name = "GroupBox1";
@@ -62,41 +62,41 @@ namespace GKUI.Dialogs
 			this.GroupBox1.TabIndex = 0;
 			this.GroupBox1.TabStop = false;
 			// 
-			// Label1
+			// lblTheme
 			// 
-			this.Label1.AutoSize = true;
-			this.Label1.Location = new System.Drawing.Point(11, 22);
-			this.Label1.Name = "Label1";
-			this.Label1.Size = new System.Drawing.Size(39, 17);
-			this.Label1.TabIndex = 0;
-			this.Label1.Text = "Тема";
+			this.lblTheme.AutoSize = true;
+			this.lblTheme.Location = new System.Drawing.Point(11, 22);
+			this.lblTheme.Name = "lblTheme";
+			this.lblTheme.Size = new System.Drawing.Size(39, 17);
+			this.lblTheme.TabIndex = 0;
+			this.lblTheme.Text = "lblTheme";
 			// 
-			// Label4
+			// lblDate
 			// 
-			this.Label4.AutoSize = true;
-			this.Label4.Location = new System.Drawing.Point(322, 81);
-			this.Label4.Name = "Label4";
-			this.Label4.Size = new System.Drawing.Size(40, 17);
-			this.Label4.TabIndex = 8;
-			this.Label4.Text = "Дата";
+			this.lblDate.AutoSize = true;
+			this.lblDate.Location = new System.Drawing.Point(322, 81);
+			this.lblDate.Name = "lblDate";
+			this.lblDate.Size = new System.Drawing.Size(40, 17);
+			this.lblDate.TabIndex = 8;
+			this.lblDate.Text = "lblDate";
 			// 
-			// Label2
+			// lblType
 			// 
-			this.Label2.AutoSize = true;
-			this.Label2.Location = new System.Drawing.Point(11, 81);
-			this.Label2.Name = "Label2";
-			this.Label2.Size = new System.Drawing.Size(32, 17);
-			this.Label2.TabIndex = 6;
-			this.Label2.Text = "Тип";
+			this.lblType.AutoSize = true;
+			this.lblType.Location = new System.Drawing.Point(11, 81);
+			this.lblType.Name = "lblType";
+			this.lblType.Size = new System.Drawing.Size(32, 17);
+			this.lblType.TabIndex = 6;
+			this.lblType.Text = "lblType";
 			// 
-			// Label5
+			// lblCorresponder
 			// 
-			this.Label5.AutoSize = true;
-			this.Label5.Location = new System.Drawing.Point(11, 53);
-			this.Label5.Name = "Label5";
-			this.Label5.Size = new System.Drawing.Size(109, 17);
-			this.Label5.TabIndex = 2;
-			this.Label5.Text = "Корреспондент";
+			this.lblCorresponder.AutoSize = true;
+			this.lblCorresponder.Location = new System.Drawing.Point(11, 53);
+			this.lblCorresponder.Name = "lblCorresponder";
+			this.lblCorresponder.Size = new System.Drawing.Size(109, 17);
+			this.lblCorresponder.TabIndex = 2;
+			this.lblCorresponder.Text = "lblCorresponder";
 			// 
 			// btnPersonAdd
 			// 
@@ -108,49 +108,49 @@ namespace GKUI.Dialogs
 			this.btnPersonAdd.TabIndex = 5;
 			this.btnPersonAdd.Click += new System.EventHandler(this.btnPersonAdd_Click);
 			// 
-			// EditName
+			// txtName
 			// 
-			this.EditName.Location = new System.Drawing.Point(134, 19);
-			this.EditName.Name = "EditName";
-			this.EditName.Size = new System.Drawing.Size(528, 24);
-			this.EditName.TabIndex = 1;
+			this.txtName.Location = new System.Drawing.Point(134, 19);
+			this.txtName.Name = "txtName";
+			this.txtName.Size = new System.Drawing.Size(528, 24);
+			this.txtName.TabIndex = 1;
 			// 
-			// EditDate
+			// txtDate
 			// 
-			this.EditDate.Location = new System.Drawing.Point(392, 78);
-			this.EditDate.Mask = "00/00/0000";
-			this.EditDate.Name = "EditDate";
-			this.EditDate.Size = new System.Drawing.Size(225, 24);
-			this.EditDate.TabIndex = 9;
-			this.EditDate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+			this.txtDate.Location = new System.Drawing.Point(392, 78);
+			this.txtDate.Mask = "00/00/0000";
+			this.txtDate.Name = "txtDate";
+			this.txtDate.Size = new System.Drawing.Size(225, 24);
+			this.txtDate.TabIndex = 9;
+			this.txtDate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
 			// 
-			// EditCorrType
+			// cmbCorrType
 			// 
-			this.EditCorrType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.EditCorrType.Location = new System.Drawing.Point(134, 78);
-			this.EditCorrType.Name = "EditCorrType";
-			this.EditCorrType.Size = new System.Drawing.Size(147, 25);
-			this.EditCorrType.TabIndex = 7;
+			this.cmbCorrType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cmbCorrType.Location = new System.Drawing.Point(134, 78);
+			this.cmbCorrType.Name = "cmbCorrType";
+			this.cmbCorrType.Size = new System.Drawing.Size(147, 25);
+			this.cmbCorrType.TabIndex = 7;
 			// 
-			// EditDir
+			// txtDir
 			// 
-			this.EditDir.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.EditDir.Items.AddRange(new object[] {
+			this.txtDir.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.txtDir.Items.AddRange(new object[] {
 									"от",
 									"к"});
-			this.EditDir.Location = new System.Drawing.Point(134, 49);
-			this.EditDir.Name = "EditDir";
-			this.EditDir.Size = new System.Drawing.Size(91, 25);
-			this.EditDir.TabIndex = 3;
+			this.txtDir.Location = new System.Drawing.Point(134, 49);
+			this.txtDir.Name = "txtDir";
+			this.txtDir.Size = new System.Drawing.Size(91, 25);
+			this.txtDir.TabIndex = 3;
 			// 
-			// EditCorresponder
+			// txtCorresponder
 			// 
-			this.EditCorresponder.ForeColor = System.Drawing.SystemColors.Control;
-			this.EditCorresponder.Location = new System.Drawing.Point(235, 49);
-			this.EditCorresponder.Name = "EditCorresponder";
-			this.EditCorresponder.ReadOnly = true;
-			this.EditCorresponder.Size = new System.Drawing.Size(382, 24);
-			this.EditCorresponder.TabIndex = 4;
+			this.txtCorresponder.ForeColor = System.Drawing.SystemColors.Control;
+			this.txtCorresponder.Location = new System.Drawing.Point(235, 49);
+			this.txtCorresponder.Name = "txtCorresponder";
+			this.txtCorresponder.ReadOnly = true;
+			this.txtCorresponder.Size = new System.Drawing.Size(382, 24);
+			this.txtCorresponder.TabIndex = 4;
 			// 
 			// btnAccept
 			// 
@@ -160,7 +160,7 @@ namespace GKUI.Dialogs
 			this.btnAccept.Name = "btnAccept";
 			this.btnAccept.Size = new System.Drawing.Size(113, 31);
 			this.btnAccept.TabIndex = 2;
-			this.btnAccept.Text = "Принять";
+			this.btnAccept.Text = "btnAccept";
 			this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.btnAccept.Click += new System.EventHandler(this.btnAccept_Click);
 			// 
@@ -173,35 +173,35 @@ namespace GKUI.Dialogs
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(113, 31);
 			this.btnCancel.TabIndex = 3;
-			this.btnCancel.Text = "Отменить";
+			this.btnCancel.Text = "btnCancel";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// PagesGroupData
+			// tabsData
 			// 
-			this.PagesGroupData.Controls.Add(this.SheetNotes);
-			this.PagesGroupData.Controls.Add(this.SheetMultimedia);
-			this.PagesGroupData.Dock = System.Windows.Forms.DockStyle.Top;
-			this.PagesGroupData.Location = new System.Drawing.Point(0, 118);
-			this.PagesGroupData.Name = "PagesGroupData";
-			this.PagesGroupData.SelectedIndex = 0;
-			this.PagesGroupData.Size = new System.Drawing.Size(675, 330);
-			this.PagesGroupData.TabIndex = 1;
+			this.tabsData.Controls.Add(this.pageNotes);
+			this.tabsData.Controls.Add(this.pageMultimedia);
+			this.tabsData.Dock = System.Windows.Forms.DockStyle.Top;
+			this.tabsData.Location = new System.Drawing.Point(0, 118);
+			this.tabsData.Name = "tabsData";
+			this.tabsData.SelectedIndex = 0;
+			this.tabsData.Size = new System.Drawing.Size(675, 330);
+			this.tabsData.TabIndex = 1;
 			// 
-			// SheetNotes
+			// pageNotes
 			// 
-			this.SheetNotes.Location = new System.Drawing.Point(4, 26);
-			this.SheetNotes.Name = "SheetNotes";
-			this.SheetNotes.Size = new System.Drawing.Size(667, 300);
-			this.SheetNotes.TabIndex = 0;
-			this.SheetNotes.Text = "Заметки";
+			this.pageNotes.Location = new System.Drawing.Point(4, 26);
+			this.pageNotes.Name = "pageNotes";
+			this.pageNotes.Size = new System.Drawing.Size(667, 300);
+			this.pageNotes.TabIndex = 0;
+			this.pageNotes.Text = "pageNotes";
 			// 
-			// SheetMultimedia
+			// pageMultimedia
 			// 
-			this.SheetMultimedia.Location = new System.Drawing.Point(4, 26);
-			this.SheetMultimedia.Name = "SheetMultimedia";
-			this.SheetMultimedia.Size = new System.Drawing.Size(667, 300);
-			this.SheetMultimedia.TabIndex = 1;
-			this.SheetMultimedia.Text = "Мультимедиа";
+			this.pageMultimedia.Location = new System.Drawing.Point(4, 26);
+			this.pageMultimedia.Name = "pageMultimedia";
+			this.pageMultimedia.Size = new System.Drawing.Size(667, 300);
+			this.pageMultimedia.TabIndex = 1;
+			this.pageMultimedia.Text = "pageMultimedia";
 			// 
 			// CommunicationEditDlg
 			// 
@@ -210,7 +210,7 @@ namespace GKUI.Dialogs
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(675, 513);
-			this.Controls.Add(this.PagesGroupData);
+			this.Controls.Add(this.tabsData);
 			this.Controls.Add(this.GroupBox1);
 			this.Controls.Add(this.btnAccept);
 			this.Controls.Add(this.btnCancel);
@@ -221,10 +221,10 @@ namespace GKUI.Dialogs
 			this.Name = "CommunicationEditDlg";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "Редактирование коммуникации";
+			this.Text = "CommunicationEditDlg";
 			this.GroupBox1.ResumeLayout(false);
 			this.GroupBox1.PerformLayout();
-			this.PagesGroupData.ResumeLayout(false);
+			this.tabsData.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
 	}

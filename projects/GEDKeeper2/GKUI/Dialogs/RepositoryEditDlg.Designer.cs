@@ -7,10 +7,10 @@ namespace GKUI.Dialogs
 		private System.Windows.Forms.Button btnAccept;
 		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.GroupBox GroupBox1;
-		private System.Windows.Forms.Label Label1;
-		private System.Windows.Forms.TextBox edName;
-		private System.Windows.Forms.TabControl PagesData;
-		private System.Windows.Forms.TabPage SheetNotes;
+		private System.Windows.Forms.Label lblName;
+		private System.Windows.Forms.TextBox txtName;
+		private System.Windows.Forms.TabControl tabsData;
+		private System.Windows.Forms.TabPage pageNotes;
 		private System.Windows.Forms.Button btnAddress;
 
 		private void InitializeComponent()
@@ -18,13 +18,13 @@ namespace GKUI.Dialogs
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.GroupBox1 = new System.Windows.Forms.GroupBox();
-			this.Label1 = new System.Windows.Forms.Label();
-			this.edName = new System.Windows.Forms.TextBox();
+			this.lblName = new System.Windows.Forms.Label();
+			this.txtName = new System.Windows.Forms.TextBox();
 			this.btnAddress = new System.Windows.Forms.Button();
-			this.PagesData = new System.Windows.Forms.TabControl();
-			this.SheetNotes = new System.Windows.Forms.TabPage();
+			this.tabsData = new System.Windows.Forms.TabControl();
+			this.pageNotes = new System.Windows.Forms.TabPage();
 			this.GroupBox1.SuspendLayout();
-			this.PagesData.SuspendLayout();
+			this.tabsData.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btnAccept
@@ -35,7 +35,7 @@ namespace GKUI.Dialogs
 			this.btnAccept.Name = "btnAccept";
 			this.btnAccept.Size = new System.Drawing.Size(113, 30);
 			this.btnAccept.TabIndex = 3;
-			this.btnAccept.Text = "Принять";
+			this.btnAccept.Text = "btnAccept";
 			this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.btnAccept.Click += new System.EventHandler(this.btnAccept_Click);
 			// 
@@ -48,13 +48,13 @@ namespace GKUI.Dialogs
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(114, 30);
 			this.btnCancel.TabIndex = 4;
-			this.btnCancel.Text = "Отменить";
+			this.btnCancel.Text = "btnCancel";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// GroupBox1
 			// 
-			this.GroupBox1.Controls.Add(this.Label1);
-			this.GroupBox1.Controls.Add(this.edName);
+			this.GroupBox1.Controls.Add(this.lblName);
+			this.GroupBox1.Controls.Add(this.txtName);
 			this.GroupBox1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.GroupBox1.Location = new System.Drawing.Point(0, 0);
 			this.GroupBox1.Name = "GroupBox1";
@@ -62,21 +62,21 @@ namespace GKUI.Dialogs
 			this.GroupBox1.TabIndex = 0;
 			this.GroupBox1.TabStop = false;
 			// 
-			// Label1
+			// lblName
 			// 
-			this.Label1.AutoSize = true;
-			this.Label1.Location = new System.Drawing.Point(12, 18);
-			this.Label1.Name = "Label1";
-			this.Label1.Size = new System.Drawing.Size(67, 17);
-			this.Label1.TabIndex = 0;
-			this.Label1.Text = "Название";
+			this.lblName.AutoSize = true;
+			this.lblName.Location = new System.Drawing.Point(12, 18);
+			this.lblName.Name = "lblName";
+			this.lblName.Size = new System.Drawing.Size(67, 17);
+			this.lblName.TabIndex = 0;
+			this.lblName.Text = "lblName";
 			// 
-			// edName
+			// txtName
 			// 
-			this.edName.Location = new System.Drawing.Point(101, 15);
-			this.edName.Name = "edName";
-			this.edName.Size = new System.Drawing.Size(472, 24);
-			this.edName.TabIndex = 1;
+			this.txtName.Location = new System.Drawing.Point(101, 15);
+			this.txtName.Name = "txtName";
+			this.txtName.Size = new System.Drawing.Size(472, 24);
+			this.txtName.TabIndex = 1;
 			// 
 			// btnAddress
 			// 
@@ -84,26 +84,26 @@ namespace GKUI.Dialogs
 			this.btnAddress.Name = "btnAddress";
 			this.btnAddress.Size = new System.Drawing.Size(114, 30);
 			this.btnAddress.TabIndex = 2;
-			this.btnAddress.Text = "Адрес...";
+			this.btnAddress.Text = "btnAddress";
 			this.btnAddress.Click += new System.EventHandler(this.btnAddress_Click);
 			// 
 			// PagesData
 			// 
-			this.PagesData.Controls.Add(this.SheetNotes);
-			this.PagesData.Dock = System.Windows.Forms.DockStyle.Top;
-			this.PagesData.Location = new System.Drawing.Point(0, 50);
-			this.PagesData.Name = "PagesData";
-			this.PagesData.SelectedIndex = 0;
-			this.PagesData.Size = new System.Drawing.Size(586, 340);
-			this.PagesData.TabIndex = 1;
+			this.tabsData.Controls.Add(this.pageNotes);
+			this.tabsData.Dock = System.Windows.Forms.DockStyle.Top;
+			this.tabsData.Location = new System.Drawing.Point(0, 50);
+			this.tabsData.Name = "PagesData";
+			this.tabsData.SelectedIndex = 0;
+			this.tabsData.Size = new System.Drawing.Size(586, 340);
+			this.tabsData.TabIndex = 1;
 			// 
-			// SheetNotes
+			// pageNotes
 			// 
-			this.SheetNotes.Location = new System.Drawing.Point(4, 26);
-			this.SheetNotes.Name = "SheetNotes";
-			this.SheetNotes.Size = new System.Drawing.Size(578, 310);
-			this.SheetNotes.TabIndex = 0;
-			this.SheetNotes.Text = "Заметки";
+			this.pageNotes.Location = new System.Drawing.Point(4, 26);
+			this.pageNotes.Name = "pageNotes";
+			this.pageNotes.Size = new System.Drawing.Size(578, 310);
+			this.pageNotes.TabIndex = 0;
+			this.pageNotes.Text = "pageNotes";
 			// 
 			// RepositoryEditDlg
 			// 
@@ -112,7 +112,7 @@ namespace GKUI.Dialogs
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(586, 455);
-			this.Controls.Add(this.PagesData);
+			this.Controls.Add(this.tabsData);
 			this.Controls.Add(this.btnAccept);
 			this.Controls.Add(this.btnCancel);
 			this.Controls.Add(this.GroupBox1);
@@ -124,10 +124,10 @@ namespace GKUI.Dialogs
 			this.Name = "RepositoryEditDlg";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "Архив";
+			this.Text = "RepositoryEditDlg";
 			this.GroupBox1.ResumeLayout(false);
 			this.GroupBox1.PerformLayout();
-			this.PagesData.ResumeLayout(false);
+			this.tabsData.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
 	}

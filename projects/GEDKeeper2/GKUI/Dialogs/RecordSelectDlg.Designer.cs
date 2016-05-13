@@ -9,7 +9,7 @@ namespace GKUI.Dialogs
 		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.Panel panList;
 		private System.Windows.Forms.Panel panFilter;
-		public System.Windows.Forms.TextBox edFastFilter;
+		public System.Windows.Forms.TextBox txtFastFilter;
 
 		private void InitializeComponent()
 		{
@@ -17,7 +17,7 @@ namespace GKUI.Dialogs
 			this.btnCreate = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.panFilter = new System.Windows.Forms.Panel();
-			this.edFastFilter = new System.Windows.Forms.TextBox();
+			this.txtFastFilter = new System.Windows.Forms.TextBox();
 			this.panList = new System.Windows.Forms.Panel();
 			this.panFilter.SuspendLayout();
 			this.SuspendLayout();
@@ -30,7 +30,7 @@ namespace GKUI.Dialogs
 			this.btnSelect.Name = "btnSelect";
 			this.btnSelect.Size = new System.Drawing.Size(113, 31);
 			this.btnSelect.TabIndex = 3;
-			this.btnSelect.Text = "Выбрать";
+			this.btnSelect.Text = "btnSelect";
 			this.btnSelect.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.btnSelect.Click += new System.EventHandler(this.btnSelect_Click);
 			// 
@@ -40,7 +40,7 @@ namespace GKUI.Dialogs
 			this.btnCreate.Name = "btnCreate";
 			this.btnCreate.Size = new System.Drawing.Size(113, 31);
 			this.btnCreate.TabIndex = 2;
-			this.btnCreate.Text = "Добавить";
+			this.btnCreate.Text = "btnCreate";
 			this.btnCreate.Click += new System.EventHandler(this.btnCreate_Click);
 			// 
 			// btnCancel
@@ -52,25 +52,25 @@ namespace GKUI.Dialogs
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(114, 31);
 			this.btnCancel.TabIndex = 4;
-			this.btnCancel.Text = "Отменить";
+			this.btnCancel.Text = "btnCancel";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// panFilter
 			// 
-			this.panFilter.Controls.Add(this.edFastFilter);
+			this.panFilter.Controls.Add(this.txtFastFilter);
 			this.panFilter.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panFilter.Location = new System.Drawing.Point(0, 0);
 			this.panFilter.Name = "panFilter";
 			this.panFilter.Size = new System.Drawing.Size(540, 50);
 			this.panFilter.TabIndex = 0;
 			// 
-			// edFastFilter
+			// txtFastFilter
 			// 
-			this.edFastFilter.Location = new System.Drawing.Point(11, 10);
-			this.edFastFilter.Name = "edFastFilter";
-			this.edFastFilter.Size = new System.Drawing.Size(506, 24);
-			this.edFastFilter.TabIndex = 0;
-			this.edFastFilter.TextChanged += new System.EventHandler(this.edFastFilter_TextChanged);
+			this.txtFastFilter.Location = new System.Drawing.Point(11, 10);
+			this.txtFastFilter.Name = "txtFastFilter";
+			this.txtFastFilter.Size = new System.Drawing.Size(506, 24);
+			this.txtFastFilter.TabIndex = 0;
+			this.txtFastFilter.TextChanged += new System.EventHandler(this.edFastFilter_TextChanged);
 			// 
 			// panList
 			// 
@@ -99,7 +99,7 @@ namespace GKUI.Dialogs
 			this.Name = "RecordSelectDlg";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "Выбор записи";
+			this.Text = "RecordSelectDlg";
 			this.panFilter.ResumeLayout(false);
 			this.panFilter.PerformLayout();
 			this.ResumeLayout(false);

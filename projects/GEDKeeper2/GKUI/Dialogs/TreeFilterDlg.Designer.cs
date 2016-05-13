@@ -7,7 +7,7 @@ namespace GKUI.Dialogs
 		private System.Windows.Forms.Button btnAccept;
 		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.Label lblRPSources;
-		private System.Windows.Forms.ComboBox cbSource;
+		private System.Windows.Forms.ComboBox cmbSource;
 		private System.Windows.Forms.GroupBox rgBranchCut;
 		private System.Windows.Forms.RadioButton rbCutNone;
 		private System.Windows.Forms.RadioButton rbCutYears;
@@ -21,7 +21,7 @@ namespace GKUI.Dialogs
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.lblRPSources = new System.Windows.Forms.Label();
-			this.cbSource = new System.Windows.Forms.ComboBox();
+			this.cmbSource = new System.Windows.Forms.ComboBox();
 			this.rgBranchCut = new System.Windows.Forms.GroupBox();
 			this.lblYear = new System.Windows.Forms.Label();
 			this.rbCutNone = new System.Windows.Forms.RadioButton();
@@ -41,7 +41,7 @@ namespace GKUI.Dialogs
 			this.btnAccept.Name = "btnAccept";
 			this.btnAccept.Size = new System.Drawing.Size(114, 31);
 			this.btnAccept.TabIndex = 3;
-			this.btnAccept.Text = "Принять";
+			this.btnAccept.Text = "btnAccept";
 			this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.btnAccept.Click += new System.EventHandler(this.btnAccept_Click);
 			// 
@@ -55,7 +55,7 @@ namespace GKUI.Dialogs
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(113, 31);
 			this.btnCancel.TabIndex = 4;
-			this.btnCancel.Text = "Отменить";
+			this.btnCancel.Text = "btnCancel";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
 			// 
@@ -66,15 +66,15 @@ namespace GKUI.Dialogs
 			this.lblRPSources.Name = "lblRPSources";
 			this.lblRPSources.Size = new System.Drawing.Size(79, 17);
 			this.lblRPSources.TabIndex = 1;
-			this.lblRPSources.Text = "Источники";
+			this.lblRPSources.Text = "lblRPSources";
 			// 
-			// cbSource
+			// cmbSource
 			// 
-			this.cbSource.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cbSource.Location = new System.Drawing.Point(11, 359);
-			this.cbSource.Name = "cbSource";
-			this.cbSource.Size = new System.Drawing.Size(528, 25);
-			this.cbSource.TabIndex = 2;
+			this.cmbSource.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cmbSource.Location = new System.Drawing.Point(11, 359);
+			this.cmbSource.Name = "cmbSource";
+			this.cmbSource.Size = new System.Drawing.Size(528, 25);
+			this.cmbSource.TabIndex = 2;
 			// 
 			// rgBranchCut
 			// 
@@ -88,7 +88,7 @@ namespace GKUI.Dialogs
 			this.rgBranchCut.Size = new System.Drawing.Size(528, 322);
 			this.rgBranchCut.TabIndex = 0;
 			this.rgBranchCut.TabStop = false;
-			this.rgBranchCut.Text = "Отсечение ветвей";
+			this.rgBranchCut.Text = "rgBranchCut";
 			// 
 			// lblYear
 			// 
@@ -97,7 +97,7 @@ namespace GKUI.Dialogs
 			this.lblYear.Name = "lblYear";
 			this.lblYear.Size = new System.Drawing.Size(31, 17);
 			this.lblYear.TabIndex = 2;
-			this.lblYear.Text = "Год";
+			this.lblYear.Text = "lblYear";
 			// 
 			// rbCutNone
 			// 
@@ -108,7 +108,7 @@ namespace GKUI.Dialogs
 			this.rbCutNone.Size = new System.Drawing.Size(52, 21);
 			this.rbCutNone.TabIndex = 0;
 			this.rbCutNone.TabStop = true;
-			this.rbCutNone.Text = "нет";
+			this.rbCutNone.Text = "rbCutNone";
 			this.rbCutNone.Click += new System.EventHandler(this.rbCutNoneClick);
 			// 
 			// rbCutYears
@@ -118,7 +118,7 @@ namespace GKUI.Dialogs
 			this.rbCutYears.Name = "rbCutYears";
 			this.rbCutYears.Size = new System.Drawing.Size(128, 21);
 			this.rbCutYears.TabIndex = 1;
-			this.rbCutYears.Text = "по границе лет";
+			this.rbCutYears.Text = "rbCutYears";
 			this.rbCutYears.Click += new System.EventHandler(this.rbCutNoneClick);
 			// 
 			// rbCutPersons
@@ -128,7 +128,7 @@ namespace GKUI.Dialogs
 			this.rbCutPersons.Name = "rbCutPersons";
 			this.rbCutPersons.Size = new System.Drawing.Size(156, 21);
 			this.rbCutPersons.TabIndex = 4;
-			this.rbCutPersons.Text = "по заданным лицам";
+			this.rbCutPersons.Text = "rbCutPersons";
 			this.rbCutPersons.Click += new System.EventHandler(this.rbCutNoneClick);
 			// 
 			// edYear
@@ -164,7 +164,7 @@ namespace GKUI.Dialogs
 			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(553, 442);
 			this.Controls.Add(this.lblRPSources);
-			this.Controls.Add(this.cbSource);
+			this.Controls.Add(this.cmbSource);
 			this.Controls.Add(this.Panel1);
 			this.Controls.Add(this.rgBranchCut);
 			this.Controls.Add(this.btnAccept);
@@ -176,7 +176,7 @@ namespace GKUI.Dialogs
 			this.Name = "TreeFilterDlg";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "Фильтр";
+			this.Text = "TreeFilterDlg";
 			this.Load += new System.EventHandler(this.TfmTreeFilter_Load);
 			this.rgBranchCut.ResumeLayout(false);
 			this.rgBranchCut.PerformLayout();
