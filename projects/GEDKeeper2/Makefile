@@ -43,6 +43,7 @@ sources := \
 ./GKCore/Export/PDFExporter.cs \
 ./GKCore/Export/PDFWriter.cs \
 ./GKCore/Export/PedigreeExporter.cs \
+./GKCore/Export/RTFWriter.cs \
 ./GKCore/GKData.cs \
 ./GKCore/GKUtils.cs \
 ./GKCore/Kinships/KinshipRec.cs \
@@ -249,6 +250,7 @@ TreeToolsWin.resources \
 cscrefs := \
 //reference:"..\\$(gkcommon)\\obj\\$(releasetype)\\$(gkcommon).dll" \
 //reference:"libs\ArborGVT.dll" \
+//reference:"libs\DotNetRtfWriter.dll" \
 //reference:"libs\\ExcelLibrary.dll" \
 //reference:"libs\\itextsharp.dll" \
 //reference:"libs\\LuaInterface.dll" \
