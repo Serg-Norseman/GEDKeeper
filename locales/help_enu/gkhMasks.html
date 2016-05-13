@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
+<title>Filter masks</title>
+</head>
+<body>
+<h1>Filter masks</h1>
+<p>You use masks in GEDKeeper to select persons, events or locations
+having specific name. Text of a mask consists of general printable
+characters, allowed for object names, and two special symbols
+&#39;*&#39; and &#39;?&#39;.</p>
+<p><em>Mask</em> name is used because &#39;*&#39; and &#39;?&#39;
+symbols mask some arbitrary parts of a value.</p>
+<ul>
+<li>&#39;*&#39; inside a pattern matches any number of any characters;</li>
+<li>&#39;?&#39; matches one any character.</li>
+</ul>
+<p>If you want to specify several different masks, you can use
+&quot;|&quot; symbol to delimit each mask. For example, to get all
+persons with names Mitch and John you can use &quot;*Mitch*|*John*&quot;
+mask. &quot;|&quot; symbol acts as &quot;OR&quot; conjunction,
+therefore any person whose name matches one of the masks, matches
+entire &quot;Mitch*|John*&quot; mask.</p>
+<p>Any person's name, event or location always matches &#39;*&#39;
+mask. When you use such mask in a filter, it will show all objects.</p>
+<p>When you need to get all persons with &quot;Ivanovs&quot; as last
+name, you use &quot;Ivanov*&quot; masks in &quot;Name mask&quot; filter.
+Star symbol matches any characters after initial substring
+&quot;Ivanov&quot;. This way you get all persons with Ivanov,
+Ivanovskih and so on as their last name. If you want to filter out all
+persons with &quot;Vasiliy&quot; first name, you should use &quot;*
+Vasiliy *&quot; pattern; thus you are masking any last name and
+surname. To get all women with Vasilevna surname you use &quot;*
+Vasilevna&quot;, masking any first name and last name.</p>
+<p>Examples:<br />
+- Names &quot;Litvin Ivan Andreevich&quot; and &quot;Semenov Ivan
+Andreevich&quot; can be filtered out with &quot;*Ivan Andreevich&quot;
+mask;<br />
+- Any person with first name, last name or surname having
+&quot;Ivan&quot; inside, matches &quot;*Ivan*&quot; mask;<br />
+- Any woman with &quot;Natal<strong>i</strong>a&quot; or
+&quot;Natal<strong>y</strong>a&quot; name matches &quot;Natal?a*&quot;
+pattern.
+</p>
+</body>
+</html>
