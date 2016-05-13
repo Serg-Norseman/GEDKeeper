@@ -321,14 +321,15 @@ namespace GKUI
             }
         }
 
+        // TODO: localize
         private void tbImageSaveClick()
         {
-		    string filter1 = "Файлы BMP (*.bmp)|*.bmp|Файлы JPEG (*.jpg)|*.jpg|Файлы EMF (*.emf)|*.emf|Файлы PNG (*.png)|*.png|Файлы GIF (*.gif)|*.gif";
+            string filter1 = "Файлы BMP (*.bmp)|*.bmp|Файлы JPEG (*.jpg)|*.jpg|Файлы EMF (*.emf)|*.emf|Файлы PNG (*.png)|*.png|Файлы GIF (*.gif)|*.gif";
 
-		    string fn = UIHelper.GetSaveFile("", "", filter1, 2, "jpg", "");
-            if (!string.IsNullOrEmpty(fn))
+            string fileName = UIHelper.GetSaveFile("", "", filter1, 2, "jpg", "");
+            if (!string.IsNullOrEmpty(fileName))
             {
-                this.fTreeBox.SaveSnapshot(fn);
+                this.fTreeBox.SaveSnapshot(fileName);
             }
         }
 
@@ -518,15 +519,15 @@ namespace GKUI
             }
         }
 
+        // TODO: localize
         const string filter = "Image Files|*.bmp;*.gif;*.png;*.jpg";
-        const string ext = "";
 
         private void miFillImageClick(object sender, EventArgs e)
         {
-            string fn = UIHelper.GetOpenFile("", GKUtils.GetBackgroundsPath(), filter, 1, ext);
-            if (!string.IsNullOrEmpty(fn))
+            string fileName = UIHelper.GetOpenFile("", GKUtils.GetBackgroundsPath(), filter, 1, "");
+            if (!string.IsNullOrEmpty(fileName))
             {
-                Image img = new Bitmap(fn);
+                Image img = new Bitmap(fileName);
                 this.fTreeBox.BackgroundImage = img;
                 this.fTreeBox.BackgroundImageLayout = ImageLayout.Tile;
                 this.fTreeBox.Invalidate();

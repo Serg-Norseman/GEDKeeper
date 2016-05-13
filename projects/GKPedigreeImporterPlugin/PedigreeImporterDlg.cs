@@ -35,6 +35,7 @@ namespace GKPedigreeImporterPlugin
         private int fCurrentStage;
         private int fAvailableStage;
 
+        // TODO: localize
         private static string filter = "Все поддерживаемые форматы (*.txt, *.csv, *.doc, *.xls)|*.txt;*.csv;*.doc;*.xls|Роспись в txt-формате (*.txt)|*.txt|Роспись в csv-формате (*.csv)|*.csv|Роспись в формате Word (*.doc)|*.doc|Роспись в формате Excel (*.xls)|*.xls";
 
         public PedigreeImporterDlg(IPlugin fPlugin)
@@ -63,10 +64,10 @@ namespace GKPedigreeImporterPlugin
 
         private void btnImportFileChoose_Click(object sender, EventArgs e)
         {
-            string fn = UIHelper.GetOpenFile("", "", filter, 1, "");
-            if (!string.IsNullOrEmpty(fn))
+            string fileName = UIHelper.GetOpenFile("", "", filter, 1, "");
+            if (!string.IsNullOrEmpty(fileName))
             {
-                this.edImportFile.Text = fn;
+                this.edImportFile.Text = fileName;
 
                 try
                 {

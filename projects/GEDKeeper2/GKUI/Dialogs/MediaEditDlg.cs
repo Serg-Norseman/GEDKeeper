@@ -134,20 +134,18 @@ namespace GKUI.Dialogs
             }
         }
 
+        // TODO: localize
         const string filter = "Все файлы (*.*)|*.*";
 
-        // TODO: localize
         private void btnFileSelect_Click(object sender, EventArgs e)
         {
-            string fn = UIHelper.GetOpenFile("", "", filter, 1, "*.*");
-            if (!string.IsNullOrEmpty(fn))
+            string fileName = UIHelper.GetOpenFile("", "", filter, 1, "");
+            if (!string.IsNullOrEmpty(fileName))
             {
-                string file = fn;
+                this.txtFile.Text = fileName;
+                GEDCOMMultimediaFormat fileFmt = GEDCOMFileReference.RecognizeFormat(fileName);
 
-                this.txtFile.Text = file;
-                GEDCOMMultimediaFormat fileFmt = GEDCOMFileReference.RecognizeFormat(file);
-
-                FileInfo info = new FileInfo(file);
+                FileInfo info = new FileInfo(fileName);
                 double fileSize = (((double)info.Length / 1024) / 1024); // mb
                 bool canArc = (CheckFormatArchived(fileFmt) && fileSize <= 2);
 

@@ -103,20 +103,21 @@ namespace GKUI
             }
         }
 
-        const string filter = "Скрипты|*.lua";
+        // TODO: localize
+        const string filter = "Скрипты (*.lua)|*.lua";
         const string ext = "lua";
 
         private void LoadScript()
         {
             if (this.CheckModified())
             {
-                string fn = UIHelper.GetOpenFile("", "", filter, 1, ext);
-                if (!string.IsNullOrEmpty(fn))
+                string fileName = UIHelper.GetOpenFile("", "", filter, 1, ext);
+                if (!string.IsNullOrEmpty(fileName))
                 {
-                    using (StreamReader strd = new StreamReader(File.OpenRead(fn), Encoding.UTF8))
+                    using (StreamReader strd = new StreamReader(File.OpenRead(fileName), Encoding.UTF8))
                     {
                         this.txtScriptText.Text = strd.ReadToEnd();
-                        this.FileName = fn;
+                        this.FileName = fileName;
                         this.Modified = false;
                         strd.Close();
                     }
@@ -124,15 +125,16 @@ namespace GKUI
             }
         }
 
+        // TODO: localize
         private void SaveScript()
         {
-            string fn = UIHelper.GetSaveFile("", "", filter, 1, ext, this.FileName);
-            if (!string.IsNullOrEmpty(fn))
+            string fileName = UIHelper.GetSaveFile("", "", filter, 1, ext, this.FileName);
+            if (!string.IsNullOrEmpty(fileName))
             {
-                using (StreamWriter strd = new StreamWriter(fn, false, Encoding.UTF8))
+                using (StreamWriter strd = new StreamWriter(fileName, false, Encoding.UTF8))
                 {
                     strd.Write(this.txtScriptText.Text);
-                    this.FileName = fn;
+                    this.FileName = fileName;
                     this.Modified = false;
                     strd.Close();
                 }

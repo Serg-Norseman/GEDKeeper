@@ -723,27 +723,24 @@ namespace GKUI
         }
 
         // TODO: localize
+        const string filter = "GEDKeeper GEDCOM файлы (*.ged)|*.ged|GEDKeeper шифрованные GEDCOM файлы (*.geds)|*.geds";
+
         private void miFileLoadClick(object sender, EventArgs e)
         {
-            const string filter = "GEDCOM файлы (*.ged)|*.ged|GEDKeeper шифрованные GEDCOM файлы (*.geds)|*.geds|Все файлы (*.*)|*.*";
-
-            string fn = UIHelper.GetOpenFile("", this.fOptions.LastDir, filter, 1, GKData.DEFAULT_EXT);
-            if (!string.IsNullOrEmpty(fn)) {
-                this.CreateBase(fn);
+            string fileName = UIHelper.GetOpenFile("", this.fOptions.LastDir, filter, 1, GKData.DEFAULT_EXT);
+            if (!string.IsNullOrEmpty(fileName)) {
+                this.CreateBase(fileName);
             }
         }
 
-        // TODO: localize
         public void miFileSaveClick(object sender, EventArgs e)
         {
-            const string filter = "GEDKeeper GEDCOM файлы (*.ged)|*.ged|GEDKeeper шифрованные GEDCOM файлы (*.geds)|*.geds";
-
             IBaseWindow curBase = this.GetCurrentFile(true);
             if (curBase == null) return;
 
-            string fn = UIHelper.GetSaveFile("", "", filter, 1, GKData.DEFAULT_EXT, curBase.Tree.FileName, false);
-            if (!string.IsNullOrEmpty(fn)) {
-                curBase.FileSave(fn);
+            string fileName = UIHelper.GetSaveFile("", "", filter, 1, GKData.DEFAULT_EXT, curBase.Tree.FileName, false);
+            if (!string.IsNullOrEmpty(fileName)) {
+                curBase.FileSave(fileName);
             }
         }
 

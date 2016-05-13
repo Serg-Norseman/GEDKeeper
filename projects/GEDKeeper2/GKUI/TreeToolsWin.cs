@@ -167,17 +167,18 @@ namespace GKUI
 
         #region TreeMerge
 
+        // TODO: localize
         const string ged_filter = "GEDCOM|*.ged"; // |Все файлы (*.*)|*.*
         const string ged_ext = "ged";
-        
+
         //Все поддерживаемые форматы (*.txt, *.csv, *.doc, *.xls)|*.txt;*.csv;*.doc;*.xls|Роспись в txt-формате (*.txt)|*.txt|Роспись в csv-формате (*.csv)|*.csv|Роспись в формате Word (*.doc)|*.doc|Роспись в формате Excel (*.xls)|*.xls
 
         private void btnTreeMerge_Click(object sender, EventArgs e)
         {
-            string fn = UIHelper.GetOpenFile("", "", ged_filter, 1, ged_ext);
-            if (!string.IsNullOrEmpty(fn))
+            string fileName = UIHelper.GetOpenFile("", "", ged_filter, 1, ged_ext);
+            if (!string.IsNullOrEmpty(fileName))
             {
-                this.edUpdateBase.Text = fn;
+                this.edUpdateBase.Text = fileName;
                 TreeTools.TreeMerge(this.Base.Tree, this.edUpdateBase.Text, this.mSyncRes);
                 this.Base.RefreshLists(false);
             }
@@ -600,14 +601,13 @@ namespace GKUI
             this.Base.RefreshLists(false);
         }
 
+        // TODO: localize
         private void btnSave_Click(object sender, EventArgs e)
         {
-		    string fn = UIHelper.GetSaveFile("", "", ged_filter, 1, ged_ext, "");
-            if (!string.IsNullOrEmpty(fn))
+            string fileName = UIHelper.GetSaveFile("", "", ged_filter, 1, ged_ext, "");
+            if (!string.IsNullOrEmpty(fileName))
             {
                 TreeTools.CheckRelations(fSplitList);
-
-                string fileName = fn;
 
                 string subm = this.fTree.Header.GetTagStringValue("SUBM");
                 this.fTree.Header.Clear();
@@ -724,10 +724,10 @@ namespace GKUI
 
         private void btnFileChoose_Click(object sender, EventArgs e)
         {
-            string fn = UIHelper.GetOpenFile("", "", ged_filter, 1, ged_ext);
-            if (!string.IsNullOrEmpty(fn))
+            string fileName = UIHelper.GetOpenFile("", "", ged_filter, 1, ged_ext);
+            if (!string.IsNullOrEmpty(fileName))
             {
-                external_match_db = fn;
+                external_match_db = fileName;
                 this.txtCompareFile.Text = Path.GetFileName(external_match_db);
             }
         }

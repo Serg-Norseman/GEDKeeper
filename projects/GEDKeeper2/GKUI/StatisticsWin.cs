@@ -355,10 +355,11 @@ namespace GKUI
             this.cbType.SelectedIndex = oldIndex;
         }
 
+        // TODO: localize
         private void tbExcelExport_Click(object sender, EventArgs e)
         {
-            string xlsFilename = UIHelper.GetSaveFile("", "", "Excel files (*.xls)|*.xls", 1, "xls", "");
-            if (string.IsNullOrEmpty(xlsFilename)) return;
+            string fileName = UIHelper.GetSaveFile("", "", "Excel files (*.xls)|*.xls", 1, "xls", "");
+            if (string.IsNullOrEmpty(fileName)) return;
 
             try
             {
@@ -393,10 +394,10 @@ namespace GKUI
                     }
 
                     workbook.Worksheets.Add(worksheet);
-                    workbook.Save(xlsFilename);
+                    workbook.Save(fileName);
 
-                    if (File.Exists(xlsFilename)) {
-                        Process.Start(xlsFilename);
+                    if (File.Exists(fileName)) {
+                        Process.Start(fileName);
                     }
                 }
                 finally

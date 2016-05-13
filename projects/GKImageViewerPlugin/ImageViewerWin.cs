@@ -61,13 +61,14 @@ namespace GKImageViewerPlugin
             }
         }
 
+        // TODO: localize
         private void ToolBar1_ButtonClick(object sender, EventArgs e)
         {
             if (sender == this.tbFileLoad) {
-                string fn = UIHelper.GetOpenFile("", "", "Все файлы (*.*)|*.*", 1, "");
-                if (!string.IsNullOrEmpty(fn))
+                string fileName = UIHelper.GetOpenFile("", "", "Все файлы (*.*)|*.*", 1, "");
+                if (!string.IsNullOrEmpty(fileName))
                 {
-                    this.SetFileRef(fn);
+                    this.SetFileRef(fileName);
                 }
             }
         }

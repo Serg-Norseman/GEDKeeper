@@ -188,14 +188,15 @@ namespace GKUI
             if (e.KeyCode == Keys.Escape) base.Close();
         }
 
+        // TODO: localize
         private void btnSaveImage_Click(object sender, EventArgs e)
         {
-			string filter1 = "Image files|*.jpg";
+            string filter1 = "Image files|*.jpg";
 
-		    string fn = UIHelper.GetSaveFile("", "", filter1, 2, "jpg", "");
-            if (!string.IsNullOrEmpty(fn))
+            string fileName = UIHelper.GetSaveFile("", "", filter1, 2, "jpg", "");
+            if (!string.IsNullOrEmpty(fileName))
             {
-                this.fMapBrowser.SaveSnapshot(fn);
+                this.fMapBrowser.SaveSnapshot(fileName);
             }
         }
 
