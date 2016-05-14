@@ -101,14 +101,14 @@ namespace GKCommon.Controls
 
             Fragment frag;
 
-            // расчет простой суммы фрагментов
+            // this is a calculation of the simple sum of fragments
             double sum = 0.0;
             for (int i = 0; i < count; i++) {
                 frag = fList[i];
                 sum = sum + frag.Val;
             }
 
-            // расчет логарифма величины фрагмента и суммы логарифмов
+            // the calculation of the logarithm of the fragment and the sum of the logarithms
             double logSum = 0.0;
             for (int i = 0; i < count; i++) {
                 frag = fList[i];
@@ -117,7 +117,7 @@ namespace GKCommon.Controls
                 logSum = logSum + frag.Log;
             }
 
-            // расчет визуальной ширины фрагментов и их суммы
+            // calculate visual width of the fragments and their sum
             int resWidth = 0;
             for (int i = 0; i < count; i++) {
                 frag = fList[i];
@@ -127,10 +127,10 @@ namespace GKCommon.Controls
                 resWidth = resWidth + frag.Width;
             }
 
-            // распределить разницу между реальной шириной компонента и суммой ширины фрагментов
+            // to distribute the difference between the actual width of the component and the sum of the width of the fragments
             int d = wid - resWidth;
             if (d > 0) {
-                // разницу распределяем между наибольшими фрагментами
+                // the difference distribute between the highest allocated fragments
                 List<Fragment> ordList = new List<Fragment>(this.fList);
                 ordList.Sort(new FragmentComparer());
 
@@ -147,7 +147,7 @@ namespace GKCommon.Controls
                 }
             }
 
-            // подготовить области отрисовки фрагментов
+            // prepare the regions of rendering fragments
             int x = 0;
             for (int i = 0; i < count; i++) {
                 frag = fList[i];

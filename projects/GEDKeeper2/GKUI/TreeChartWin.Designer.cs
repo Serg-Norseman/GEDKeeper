@@ -121,7 +121,6 @@ namespace GKUI
 		    this.tbImageSave.Image = global::GKResources.iSaveImage;
 		    this.tbImageSave.Name = "tbImageSave";
 		    this.tbImageSave.Size = new System.Drawing.Size(24, 24);
-		    this.tbImageSave.ToolTipText = "Сохранить изображение";
 		    this.tbImageSave.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 		    // 
 		    // tbs1
@@ -236,7 +235,6 @@ namespace GKUI
 		    this.tbModes.Image = global::GKResources.iTools;
 		    this.tbModes.Name = "tbModes";
 		    this.tbModes.Size = new System.Drawing.Size(33, 24);
-		    this.tbModes.ToolTipText = "Режимы";
 		    // 
 		    // MenuModes
 		    // 

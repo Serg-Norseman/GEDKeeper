@@ -167,7 +167,8 @@ namespace GKImageViewerPlugin
         public void SetLang()
         {
             this.Text = this.fLangMan.LS(IVLS.LSID_ImgViewer);
-            
+            this.tbFileLoad.ToolTipText = "Открыть файл";
+
             /*if (this.fImageCtl != null) {
                 this.fImageCtl.btnSizeToFit.Text = LangMan.LS(LSID.LSID_SizeToFit);
                 this.fImageCtl.btnZoomIn.Text = LangMan.LS(LSID.LSID_ZoomIn);

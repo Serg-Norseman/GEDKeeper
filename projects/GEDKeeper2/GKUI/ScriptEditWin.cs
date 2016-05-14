@@ -188,6 +188,10 @@ namespace GKUI
 
         public void SetLang()
         {
+            this.tbNewScript.ToolTipText = LangMan.LS(LSID.LSID_NewScriptTip);
+            this.tbLoadScript.ToolTipText = LangMan.LS(LSID.LSID_LoadScriptTip);
+            this.tbSaveScript.ToolTipText = LangMan.LS(LSID.LSID_SaveScriptTip);
+            this.tbRun.ToolTipText = LangMan.LS(LSID.LSID_RunScriptTip);
         }
     }
 }

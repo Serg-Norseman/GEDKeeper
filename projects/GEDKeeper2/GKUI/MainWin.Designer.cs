@@ -259,14 +259,12 @@ namespace GKUI
 		    // 
 		    this.tbFileNew.Name = "tbFileNew";
 		    this.tbFileNew.Size = new System.Drawing.Size(23, 22);
-		    this.tbFileNew.ToolTipText = "Создать новый файл древа";
 		    this.tbFileNew.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 		    // 
 		    // tbFileLoad
 		    // 
 		    this.tbFileLoad.Name = "tbFileLoad";
 		    this.tbFileLoad.Size = new System.Drawing.Size(23, 22);
-		    this.tbFileLoad.ToolTipText = "Открыть файл древа";
 		    this.tbFileLoad.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 		    // 
 		    // tbLoadMRU
@@ -289,7 +287,6 @@ namespace GKUI
 		    // 
 		    this.tbFileSave.Name = "tbFileSave";
 		    this.tbFileSave.Size = new System.Drawing.Size(23, 22);
-		    this.tbFileSave.ToolTipText = "Сохранить файл древа";
 		    this.tbFileSave.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 		    // 
 		    // TBS1
@@ -301,21 +298,18 @@ namespace GKUI
 		    // 
 		    this.tbRecordAdd.Name = "tbRecordAdd";
 		    this.tbRecordAdd.Size = new System.Drawing.Size(23, 22);
-		    this.tbRecordAdd.ToolTipText = "Добавить запись (Ctrl+I)";
 		    this.tbRecordAdd.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 		    // 
 		    // tbRecordEdit
 		    // 
 		    this.tbRecordEdit.Name = "tbRecordEdit";
 		    this.tbRecordEdit.Size = new System.Drawing.Size(23, 22);
-		    this.tbRecordEdit.ToolTipText = "Изменить запись (Ctrl+Enter)";
 		    this.tbRecordEdit.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 		    // 
 		    // tbRecordDelete
 		    // 
 		    this.tbRecordDelete.Name = "tbRecordDelete";
 		    this.tbRecordDelete.Size = new System.Drawing.Size(23, 22);
-		    this.tbRecordDelete.ToolTipText = "Удалить запись (Ctrl+L)";
 		    this.tbRecordDelete.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 		    // 
 		    // TBS2
@@ -328,7 +322,6 @@ namespace GKUI
 		    this.tbFilter.ImageTransparentColor = System.Drawing.Color.White;
 		    this.tbFilter.Name = "tbFilter";
 		    this.tbFilter.Size = new System.Drawing.Size(23, 22);
-		    this.tbFilter.ToolTipText = "Фильтрация списка персон";
 		    this.tbFilter.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 		    // 
 		    // TBS4
@@ -340,21 +333,18 @@ namespace GKUI
 		    // 
 		    this.tbTreeAncestors.Name = "tbTreeAncestors";
 		    this.tbTreeAncestors.Size = new System.Drawing.Size(23, 22);
-		    this.tbTreeAncestors.ToolTipText = "Сформировать древо предков";
 		    this.tbTreeAncestors.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 		    // 
 		    // tbTreeDescendants
 		    // 
 		    this.tbTreeDescendants.Name = "tbTreeDescendants";
 		    this.tbTreeDescendants.Size = new System.Drawing.Size(23, 22);
-		    this.tbTreeDescendants.ToolTipText = "Сформировать древо потомков";
 		    this.tbTreeDescendants.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 		    // 
 		    // tbTreeBoth
 		    // 
 		    this.tbTreeBoth.Name = "tbTreeBoth";
 		    this.tbTreeBoth.Size = new System.Drawing.Size(23, 22);
-		    this.tbTreeBoth.ToolTipText = "Сформировать полное древо";
 		    this.tbTreeBoth.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 		    // 
 		    // TBS5
@@ -367,7 +357,6 @@ namespace GKUI
 		    this.tbPedigree.DropDown = this.MenuPedigree;
 		    this.tbPedigree.Name = "tbPedigree";
 		    this.tbPedigree.Size = new System.Drawing.Size(13, 22);
-		    this.tbPedigree.ToolTipText = "Родословная роспись";
 		    // 
 		    // MenuPedigree
 		    // 
@@ -382,14 +371,12 @@ namespace GKUI
 		    // 
 		    this.miPedigree_dAboville2.Name = "miPedigree_dAboville2";
 		    this.miPedigree_dAboville2.Size = new System.Drawing.Size(245, 24);
-		    this.miPedigree_dAboville2.Text = "Роспись по д\'Абовиллю";
 		    this.miPedigree_dAboville2.Click += new System.EventHandler(this.miPedigree_dAbovilleClick);
 		    // 
 		    // miPedigree_Konovalov2
 		    // 
 		    this.miPedigree_Konovalov2.Name = "miPedigree_Konovalov2";
 		    this.miPedigree_Konovalov2.Size = new System.Drawing.Size(245, 24);
-		    this.miPedigree_Konovalov2.Text = "Роспись по Коновалову";
 		    this.miPedigree_Konovalov2.Click += new System.EventHandler(this.miPedigree_KonovalovClick);
 		    // 
 		    // TBS6
@@ -401,7 +388,6 @@ namespace GKUI
 		    // 
 		    this.tbStats.Name = "tbStats";
 		    this.tbStats.Size = new System.Drawing.Size(23, 22);
-		    this.tbStats.ToolTipText = "Статистический анализ данных";
 		    this.tbStats.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 		    // 
 		    // TBS7
@@ -414,7 +400,6 @@ namespace GKUI
 		    this.tbPrev.Enabled = false;
 		    this.tbPrev.Name = "tbPrev";
 		    this.tbPrev.Size = new System.Drawing.Size(23, 22);
-		    this.tbPrev.ToolTipText = "Предыдущая запись";
 		    this.tbPrev.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 		    // 
 		    // tbNext
@@ -422,7 +407,6 @@ namespace GKUI
 		    this.tbNext.Enabled = false;
 		    this.tbNext.Name = "tbNext";
 		    this.tbNext.Size = new System.Drawing.Size(23, 22);
-		    this.tbNext.ToolTipText = "Следующая запись";
 		    this.tbNext.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 		    // 
 		    // TBS8

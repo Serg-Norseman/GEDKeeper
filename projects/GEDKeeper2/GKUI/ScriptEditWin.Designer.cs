@@ -55,7 +55,6 @@ namespace GKUI
 		    this.tbNewScript.Image = global::GKResources.iCreateNew;
 		    this.tbNewScript.Name = "tbNewScript";
 		    this.tbNewScript.Size = new System.Drawing.Size(24, 24);
-		    this.tbNewScript.ToolTipText = "tbNewScript";
 		    this.tbNewScript.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 		    // 
 		    // tbLoadScript
@@ -63,7 +62,6 @@ namespace GKUI
 		    this.tbLoadScript.Image = global::GKResources.iLoad;
 		    this.tbLoadScript.Name = "tbLoadScript";
 		    this.tbLoadScript.Size = new System.Drawing.Size(24, 24);
-		    this.tbLoadScript.ToolTipText = "tbLoadScript";
 		    this.tbLoadScript.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 		    // 
 		    // tbSaveScript
@@ -71,7 +69,6 @@ namespace GKUI
 		    this.tbSaveScript.Image = global::GKResources.iSave;
 		    this.tbSaveScript.Name = "tbSaveScript";
 		    this.tbSaveScript.Size = new System.Drawing.Size(24, 24);
-		    this.tbSaveScript.ToolTipText = "tbSaveScript";
 		    this.tbSaveScript.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 		    // 
 		    // ToolButton2
@@ -84,7 +81,6 @@ namespace GKUI
 		    this.tbRun.Image = ((System.Drawing.Image)(resources.GetObject("btnRun.Image")));
 		    this.tbRun.Name = "tbRun";
 		    this.tbRun.Size = new System.Drawing.Size(24, 24);
-		    this.tbRun.ToolTipText = "tbRun";
 		    this.tbRun.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 		    // 
 		    // splitContainer1

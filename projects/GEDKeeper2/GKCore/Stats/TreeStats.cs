@@ -343,7 +343,7 @@ namespace GKCore.Stats
 
             try
             {
-                // спецбуферы для сложных расчетов по усредненным возрастам
+                // special buffers for difficult calculations with averaged ages
                 Dictionary<string, List<int>> xvals = new Dictionary<string, List<int>>();
 
                 int num = this.fTree.RecordsCount;

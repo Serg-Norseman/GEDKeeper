@@ -46,9 +46,9 @@ namespace GKUI.Controls
 			this.btnAccept.Name = "btnAccept";
 			this.btnAccept.Size = new System.Drawing.Size(81, 25);
 			this.btnAccept.TabIndex = 4;
-			this.btnAccept.Text = "Принять";
+			this.btnAccept.Text = "btnAccept";
 			this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.btnAccept.Click += new System.EventHandler(this.BtnAcceptClick);
+			this.btnAccept.Click += new System.EventHandler(this.btnAccept_Click);
 			// 
 			// btnCancel
 			// 
@@ -59,9 +59,9 @@ namespace GKUI.Controls
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(81, 25);
 			this.btnCancel.TabIndex = 5;
-			this.btnCancel.Text = "Отменить";
+			this.btnCancel.Text = "btnCancel";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.btnCancel.Click += new System.EventHandler(this.BtnCancelClick);
+			this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
 			// 
 			// InputBox
 			// 

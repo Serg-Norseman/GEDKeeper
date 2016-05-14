@@ -1089,6 +1089,21 @@ namespace GKUI
             this.miSearch.Text = LangMan.LS(LSID.LSID_Search);
             this.miAncestorsCircle.Text = LangMan.LS(LSID.LSID_AncestorsCircle);
 
+            this.tbFileNew.ToolTipText = LangMan.LS(LSID.LSID_FileNewTip);
+            this.tbFileLoad.ToolTipText = LangMan.LS(LSID.LSID_FileLoadTip);
+            this.tbFileSave.ToolTipText = LangMan.LS(LSID.LSID_FileSaveTip);
+            this.tbRecordAdd.ToolTipText = LangMan.LS(LSID.LSID_RecordAddTip);
+            this.tbRecordEdit.ToolTipText = LangMan.LS(LSID.LSID_RecordEditTip);
+            this.tbRecordDelete.ToolTipText = LangMan.LS(LSID.LSID_RecordDeleteTip);
+            this.tbFilter.ToolTipText = LangMan.LS(LSID.LSID_FilterTip);
+            this.tbTreeAncestors.ToolTipText = LangMan.LS(LSID.LSID_TreeAncestorsTip);
+            this.tbTreeDescendants.ToolTipText = LangMan.LS(LSID.LSID_TreeDescendantsTip);
+            this.tbTreeBoth.ToolTipText = LangMan.LS(LSID.LSID_TreeBothTip);
+            this.tbPedigree.ToolTipText = LangMan.LS(LSID.LSID_PedigreeTip);
+            this.miPedigree_dAboville2.Text = LangMan.LS(LSID.LSID_Pedigree_dAbovilleTip);
+            this.miPedigree_Konovalov2.Text = LangMan.LS(LSID.LSID_Pedigree_KonovalovTip);
+            this.tbStats.ToolTipText = LangMan.LS(LSID.LSID_StatsTip);
+
             this.tbDocPrint.ToolTipText = LangMan.LS(LSID.LSID_DocPrint);
             this.tbDocPreview.ToolTipText = LangMan.LS(LSID.LSID_DocPreview);
 

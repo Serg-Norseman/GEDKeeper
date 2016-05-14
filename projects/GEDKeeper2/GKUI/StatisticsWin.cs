@@ -347,9 +347,11 @@ namespace GKUI
         public void SetLang()
         {
             this.Text = LangMan.LS(LSID.LSID_MIStats);
+            this.grpSummary.Text = LangMan.LS(LSID.LSID_Summary);
+            
             this.tbExcelExport.ToolTipText = LangMan.LS(LSID.LSID_MIExportToExcelFile);
             this.UpdateCommonStats();
-            
+
             int oldIndex = this.cbType.SelectedIndex;
             this.UpdateStatsTypes();
             this.cbType.SelectedIndex = oldIndex;

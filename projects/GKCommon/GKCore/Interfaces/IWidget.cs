@@ -22,7 +22,10 @@ namespace GKCore.Interfaces
 {
     public interface IWidget
     {
-        IHost Host { get; } // ссылка на главную форму
+        /// <summary>
+        /// Pointer to the main form of application.
+        /// </summary>
+        IHost Host { get; }
 
         void BaseChanged(IBaseWindow aBase);
         void BaseClosed(IBaseWindow aBase);

@@ -22,8 +22,16 @@ namespace GKCore.Interfaces
 {
     public interface IPlugin
     {
-        string DisplayName { get; } // отображаемое имя плагина
-        IHost Host { get; } // ссылка на главную форму
+        /// <summary>
+        /// The name of plugin, for display in the menu item.
+        /// </summary>
+        string DisplayName { get; }
+
+        /// <summary>
+        /// Pointer to the main form of application.
+        /// </summary>
+        IHost Host { get; }
+
         ILangMan LangMan { get; }
 
         void Execute();

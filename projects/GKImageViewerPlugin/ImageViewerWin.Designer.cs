@@ -34,7 +34,6 @@ namespace GKImageViewerPlugin
 		    this.tbFileLoad.ImageIndex = 0;
 		    this.tbFileLoad.Name = "tbFileLoad";
 		    this.tbFileLoad.Size = new System.Drawing.Size(23, 22);
-		    this.tbFileLoad.ToolTipText = "Открыть файл";
 		    this.tbFileLoad.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 		    // 
 		    // ImageViewerWin

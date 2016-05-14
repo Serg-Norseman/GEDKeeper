@@ -20,6 +20,7 @@
 
 using System;
 using System.Windows.Forms;
+using GKCore;
 
 namespace GKUI.Controls
 {
@@ -51,6 +52,9 @@ namespace GKUI.Controls
 
             base.AcceptButton = this.btnAccept;
             base.CancelButton = this.btnCancel;
+
+            this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
+            this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
         }
 
         /*void OnKeyDown(object sender, KeyEventArgs e)
@@ -73,12 +77,12 @@ namespace GKUI.Controls
 			}
 		}*/
 
-        void BtnCancelClick(object sender, EventArgs e)
+        private void btnCancel_Click(object sender, EventArgs e)
         {
             base.DialogResult = DialogResult.Cancel;
         }
 
-        void BtnAcceptClick(object sender, EventArgs e)
+        private void btnAccept_Click(object sender, EventArgs e)
         {
             base.DialogResult = DialogResult.OK;
         }
@@ -147,6 +151,5 @@ namespace GKUI.Controls
 
             return result;
         }
-
     }
 }

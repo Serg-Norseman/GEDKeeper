@@ -534,7 +534,7 @@ namespace GKCore
 
         private void MoveMediaContainers(string oldFileName, string newFileName)
         {
-            // ничего не делать, если имя файла не изменилось
+            // do nothing if file name is not changed
             if (string.Equals(oldFileName, newFileName)) return;
 
             bool hasArc = File.Exists(this.GetArcFileName());
@@ -543,7 +543,7 @@ namespace GKCore
             string newPath = Path.GetDirectoryName(newFileName);
             string newName = Path.GetFileName(newFileName);
 
-            // переместить архив и хранилище
+            // move the archive and the storage folder to a new location
             if (hasArc) {
                 string newArc = newPath + Path.DirectorySeparatorChar + GKUtils.GetContainerName(newName, true);
                 File.Move(this.GetArcFileName(), newArc);
@@ -887,7 +887,7 @@ namespace GKCore
                 }
             }
 
-            // проверка наличия архива и хранилища, перемещение их, если файл изменил местоположение
+            // check for archive and storage, move them if the file changes location
             this.MoveMediaContainers(this.Tree.FileName, fileName);
 
             if (string.IsNullOrEmpty(password)) {

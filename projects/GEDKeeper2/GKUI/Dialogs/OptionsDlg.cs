@@ -95,7 +95,7 @@ namespace GKUI.Dialogs
         private void UpdateLangs()
         {
             this.cmbLanguages.Items.Clear();
-            this.cmbLanguages.Items.Add(new GKComboItem("Русский", 1049));
+            this.cmbLanguages.Items.Add(new GKComboItem(LangMan.LS_DEF_NAME, LangMan.LS_DEF_CODE));
 
             int idx = 0;
             int num = this.fOptions.GetLangsCount() - 1;
@@ -411,7 +411,7 @@ namespace GKUI.Dialogs
             this.lblProxyServer.Text = LangMan.LS(LSID.LSID_ProxyServer);
             this.lblProxyPort.Text = LangMan.LS(LSID.LSID_ProxyPort);
             this.lblProxyLogin.Text = LangMan.LS(LSID.LSID_ProxyLogin);
-            this.lblProxyPassword.Text = LangMan.LS(LSID.LSID_ProxyPassword);
+            this.lblProxyPassword.Text = LangMan.LS(LSID.LSID_Password);
 
             this.grpOther.Text = LangMan.LS(LSID.LSID_Other);
 

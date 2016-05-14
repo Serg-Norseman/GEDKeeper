@@ -509,8 +509,8 @@ namespace GKUI
             string pw = null;
             string ext = FileHelper.GetFileExtension(fileName);
             if (ext == ".geds") {
-                if (!GKUtils.GetPassword("Пароль", ref pw)) {
-                    GKUtils.ShowError("Пароль не задан");
+                if (!GKUtils.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
+                    GKUtils.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));
                     return;
                 }
             }
@@ -550,8 +550,8 @@ namespace GKUI
                 string pw = null;
                 string ext = FileHelper.GetFileExtension(fileName);
                 if (ext == ".geds") {
-                    if (!GKUtils.GetPassword("Пароль", ref pw)) {
-                        GKUtils.ShowError("Пароль не задан");
+                    if (!GKUtils.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
+                        GKUtils.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));
                         return;
                     }
                 }

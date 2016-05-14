@@ -216,9 +216,7 @@ namespace GKCore
         /* 164 */ LSID_Cal_French,
         /* 165 */ LSID_Cal_Roman,
         /* 166 */ LSID_Unknown,
-
-        /* 167 */ LSID_Deprecated_05,
-
+        /* 167 */ LSID_Summary,
         /* 168 */ LSID_Other,
         /* 169 */ LSID_Submission,
         /* 170 */ LSID_Submitter,
@@ -316,10 +314,8 @@ namespace GKCore
         /* 259 */ LSID_ProxyServer,
         /* 260 */ LSID_ProxyPort,
         /* 261 */ LSID_ProxyLogin,
-        /* 262 */ LSID_ProxyPassword,
-
-        /* 263 */ LSID_Deprecated_10,
-
+        /* 262 */ LSID_Password,
+        /* 263 */ LSID_PasswordIsNotSpecified,
         /* 264 */ LSID_StartupTips,
         /* 265 */ LSID_Language,
         /* 266 */ LSID_ListsAll,
@@ -737,13 +733,35 @@ namespace GKCore
         /* 651 */ LSID_DuplicateWarning,
         /* 652 */ LSID_ShowDatesSigns,
 
-        /* 000 */ LSID_Last = LSID_ShowDatesSigns
+		/* 653 */ LSID_FileNewTip,
+		/* 654 */ LSID_FileLoadTip,
+		/* 655 */ LSID_FileSaveTip,
+		/* 656 */ LSID_RecordAddTip,
+		/* 657 */ LSID_RecordEditTip,
+		/* 658 */ LSID_RecordDeleteTip,
+		/* 659 */ LSID_FilterTip,
+		/* 660 */ LSID_TreeAncestorsTip,
+		/* 661 */ LSID_TreeDescendantsTip,
+		/* 662 */ LSID_TreeBothTip,
+		/* 663 */ LSID_PedigreeTip,
+		/* 664 */ LSID_Pedigree_dAbovilleTip,
+		/* 665 */ LSID_Pedigree_KonovalovTip,
+		/* 666 */ LSID_StatsTip,
+		/* 667 */ LSID_ImageSaveTip,
+		/* 668 */ LSID_ModesTip,
+		/* 669 */ LSID_NewScriptTip,
+		/* 670 */ LSID_LoadScriptTip,
+		/* 671 */ LSID_SaveScriptTip,
+		/* 672 */ LSID_RunScriptTip,
+
+		/* 000 */ LSID_Last = LSID_RunScriptTip
     }
 
     public static class LangMan
     {
         public const int LS_DEF_CODE = 1049;
         public const string LS_DEF_SIGN = "rus";
+        public const string LS_DEF_NAME = "Русский";
 
         private static readonly string[] LSDefList = new string[]
         {
@@ -923,9 +941,7 @@ namespace GKCore
             /* 164 */ "Французский",
             /* 165 */ "Римский",
             /* 166 */ "Неизвестно",
-
-            /* 167 */ "<?>",
-
+            /* 167 */ "Сводка",
             /* 168 */ "Прочее",
             /* 169 */ "Предоставление",
             /* 170 */ "Податель",
@@ -1023,9 +1039,7 @@ namespace GKCore
             /* 260 */ "Порт",
             /* 261 */ "Логин",
             /* 262 */ "Пароль",
-
-            /* 263 */ "<?>",
-
+            /* 263 */ "Пароль не задан",
             /* 264 */ "Показывать при старте подсказки",
             /* 265 */ "Язык",
             /* 266 */ "Все списки",
@@ -1430,7 +1444,28 @@ namespace GKCore
             /* 649 */ "Показывать у дат календарь",
             /* 650 */ "Дублировать запись",
             /* 651 */ "Внимание: при дублировании персональных записей, родственные связи и ассоциации не копируются",
-            /* 652 */ "Показывать у дат обозначения типа"
+            /* 652 */ "Показывать у дат обозначения типа",
+
+		    /* 653 */ "Создать новый файл древа",
+		    /* 654 */ "Открыть файл древа",
+		    /* 655 */ "Сохранить файл древа",
+		    /* 656 */ "Добавить запись (Ctrl+I)",
+		    /* 657 */ "Изменить запись (Ctrl+Enter)",
+		    /* 658 */ "Удалить запись (Ctrl+L)",
+		    /* 659 */ "Фильтрация списка записей",
+		    /* 660 */ "Показать древо предков",
+		    /* 661 */ "Показать древо потомков",
+		    /* 662 */ "Показать полное древо",
+		    /* 663 */ "Родословная роспись",
+		    /* 664 */ "Роспись по д\'Абовиллю",
+		    /* 665 */ "Роспись по Коновалову",
+		    /* 666 */ "Статистический анализ данных",
+		    /* 667 */ "Сохранить изображение",
+		    /* 668 */ "Режимы отображения",
+		    /* 669 */ "Создать новый скрипт",
+		    /* 670 */ "Открыть скрипт",
+		    /* 671 */ "Сохранить скрипт",
+		    /* 672 */ "Выполнить скрипт",
         };
 
         private static readonly string[] LSList = new string[(int)LSID.LSID_Last + 1];
@@ -1476,7 +1511,7 @@ namespace GKCore
             StreamWriter lf = new StreamWriter(GKUtils.GetLangsPath() + "russian.sample", false, Encoding.UTF8);
             try
             {
-                lf.WriteLine(";" + LS_DEF_CODE.ToString() + "," + LS_DEF_SIGN + "," + "Русский");
+                lf.WriteLine(";" + LS_DEF_CODE.ToString() + "," + LS_DEF_SIGN + "," + LS_DEF_NAME);
                 for (LSID i = LSID.LSID_First; i <= LSID.LSID_Last; i++)
                 {
                     lf.WriteLine(LSDefList[(int)i - 1]);
