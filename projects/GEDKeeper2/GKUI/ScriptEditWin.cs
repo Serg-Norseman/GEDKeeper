@@ -103,15 +103,11 @@ namespace GKUI
             }
         }
 
-        // TODO: localize
-        const string filter = "Скрипты (*.lua)|*.lua";
-        const string ext = "lua";
-
         private void LoadScript()
         {
             if (this.CheckModified())
             {
-                string fileName = UIHelper.GetOpenFile("", "", filter, 1, ext);
+                string fileName = UIHelper.GetOpenFile("", "", LangMan.LS(LSID.LSID_ScriptsFilter), 1, GKData.LUA_EXT);
                 if (!string.IsNullOrEmpty(fileName))
                 {
                     using (StreamReader strd = new StreamReader(File.OpenRead(fileName), Encoding.UTF8))
@@ -125,10 +121,9 @@ namespace GKUI
             }
         }
 
-        // TODO: localize
         private void SaveScript()
         {
-            string fileName = UIHelper.GetSaveFile("", "", filter, 1, ext, this.FileName);
+            string fileName = UIHelper.GetSaveFile("", "", LangMan.LS(LSID.LSID_ScriptsFilter), 1, GKData.LUA_EXT, this.FileName);
             if (!string.IsNullOrEmpty(fileName))
             {
                 using (StreamWriter strd = new StreamWriter(fileName, false, Encoding.UTF8))

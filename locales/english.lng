@@ -165,10 +165,10 @@ Bahai
 French
 Roman
 Unknown
-Copy result to clipboard
+<?>
 Others
-<?>
-<?>
+Submission
+Submitter
 Location
 Latitude
 Longitude
@@ -476,13 +476,13 @@ Synchronization is complete.
 Search the patriarchs
 Search links
 Archive not found, the data is not loaded
-Genealogical database
-Index
-Index of surnames
-Index of names
-Index of years of birth
-Index of years of death
-General statistics
+Scale
+GEDKeeper GEDCOM files (*.ged)|*.ged|GEDKeeper GEDCOM encrypted files (*.geds)|*.geds
+All files (*.*)|*.*
+Images (*.bmp;*.gif;*.png;*.jpg)|*.bmp;*.gif;*.png;*.jpg
+Scripts (*.lua)|*.lua
+BMP files (*.bmp)|*.bmp|JPEG files (*.jpg)|*.jpg|EMF files (*.emf)|*.emf|PNG files (*.png)|*.png|GIF files (*.gif)|*.gif
+<?>
 Pedigree
 Simple input
 Source input

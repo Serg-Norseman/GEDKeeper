@@ -321,12 +321,9 @@ namespace GKUI
             }
         }
 
-        // TODO: localize
         private void tbImageSaveClick()
         {
-            string filter1 = "Файлы BMP (*.bmp)|*.bmp|Файлы JPEG (*.jpg)|*.jpg|Файлы EMF (*.emf)|*.emf|Файлы PNG (*.png)|*.png|Файлы GIF (*.gif)|*.gif";
-
-            string fileName = UIHelper.GetSaveFile("", "", filter1, 2, "jpg", "");
+            string fileName = UIHelper.GetSaveFile("", "", LangMan.LS(LSID.LSID_TreeImagesFilter), 2, "jpg", "");
             if (!string.IsNullOrEmpty(fileName))
             {
                 this.fTreeBox.SaveSnapshot(fileName);
@@ -519,12 +516,9 @@ namespace GKUI
             }
         }
 
-        // TODO: localize
-        const string filter = "Image Files|*.bmp;*.gif;*.png;*.jpg";
-
         private void miFillImageClick(object sender, EventArgs e)
         {
-            string fileName = UIHelper.GetOpenFile("", GKUtils.GetBackgroundsPath(), filter, 1, "");
+            string fileName = UIHelper.GetOpenFile("", GKUtils.GetBackgroundsPath(), LangMan.LS(LSID.LSID_ImagesFilter), 1, "");
             if (!string.IsNullOrEmpty(fileName))
             {
                 Image img = new Bitmap(fileName);
@@ -682,6 +676,8 @@ namespace GKUI
         
         public void SetLang()
         {
+            this.tbGens.Text = LangMan.LS(LSID.LSID_Generations);
+
             this.miGensInf.Text = LangMan.LS(LSID.LSID_Unlimited);
             this.miGensInf.Checked = true;
             this.miModeBoth.Text = LangMan.LS(LSID.LSID_TM_Both);

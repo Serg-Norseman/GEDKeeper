@@ -355,7 +355,7 @@ namespace GKUI
             this.cbType.SelectedIndex = oldIndex;
         }
 
-        // TODO: localize
+        // TODO: localize?
         private void tbExcelExport_Click(object sender, EventArgs e)
         {
             string fileName = UIHelper.GetSaveFile("", "", "Excel files (*.xls)|*.xls", 1, "xls", "");

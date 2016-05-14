@@ -26,12 +26,8 @@ namespace GKCommon
     /// <summary>
     /// Description of UIHelper.
     /// </summary>
-    public class UIHelper
+    public static class UIHelper
     {
-        public UIHelper()
-        {
-        }
-
         public static string GetOpenFile(string title, string context, string filter, int filterIndex, string defaultExt)
         {
             using (OpenFileDialog ofd = CreateOpenFileDialog(title, context, filter, filterIndex, defaultExt, false)) {

@@ -722,12 +722,9 @@ namespace GKUI
             this.CreateBase("");
         }
 
-        // TODO: localize
-        const string filter = "GEDKeeper GEDCOM файлы (*.ged)|*.ged|GEDKeeper шифрованные GEDCOM файлы (*.geds)|*.geds";
-
         private void miFileLoadClick(object sender, EventArgs e)
         {
-            string fileName = UIHelper.GetOpenFile("", this.fOptions.LastDir, filter, 1, GKData.DEFAULT_EXT);
+            string fileName = UIHelper.GetOpenFile("", this.fOptions.LastDir, LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
             if (!string.IsNullOrEmpty(fileName)) {
                 this.CreateBase(fileName);
             }
@@ -738,7 +735,7 @@ namespace GKUI
             IBaseWindow curBase = this.GetCurrentFile(true);
             if (curBase == null) return;
 
-            string fileName = UIHelper.GetSaveFile("", "", filter, 1, GKData.DEFAULT_EXT, curBase.Tree.FileName, false);
+            string fileName = UIHelper.GetSaveFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, curBase.Tree.FileName, false);
             if (!string.IsNullOrEmpty(fileName)) {
                 curBase.FileSave(fileName);
             }

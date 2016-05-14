@@ -217,13 +217,11 @@ namespace GKCore
         /* 165 */ LSID_Cal_Roman,
         /* 166 */ LSID_Unknown,
 
-        /* 167 */ LSID_CopyResultToClipboard, // deprecated
+        /* 167 */ LSID_Deprecated_05,
 
         /* 168 */ LSID_Other,
-
-        /* 169 */ LSID_Submission, // replaced
-        /* 170 */ LSID_Submitter, // replaced
-
+        /* 169 */ LSID_Submission,
+        /* 170 */ LSID_Submitter,
         /* 171 */ LSID_Location,
         /* 172 */ LSID_Latitude,
         /* 173 */ LSID_Longitude,
@@ -542,12 +540,12 @@ namespace GKCore
         /* 476 */ LSID_LinksSearch,
         /* 477 */ LSID_ArcNotFound,
         /* 478 */ LSID_Scale,
+        /* 479 */ LSID_GEDCOMFilter,
+        /* 480 */ LSID_AllFilter,
+        /* 481 */ LSID_ImagesFilter,
+        /* 482 */ LSID_ScriptsFilter,
+        /* 483 */ LSID_TreeImagesFilter,
 
-        /* 479 */ LSID_GenIndex, // deprecated
-        /* 480 */ LSID_SurnamesIndex, // deprecated
-        /* 481 */ LSID_NamesIndex, // deprecated
-        /* 482 */ LSID_BirthIndex, // deprecated
-        /* 483 */ LSID_DeathIndex, // deprecated
         /* 484 */ LSID_CommonStats, // deprecated
 
         /* 485 */ LSID_ExpPedigree,
@@ -925,12 +923,12 @@ namespace GKCore
             /* 164 */ "Французский",
             /* 165 */ "Римский",
             /* 166 */ "Неизвестно",
-            /* 167 */ "Поместить результат в буфер обмена",
-            /* 168 */ "Прочее",
 
+            /* 167 */ "<?>",
+
+            /* 168 */ "Прочее",
             /* 169 */ "Предоставление",
             /* 170 */ "Податель",
-
             /* 171 */ "Местоположение",
             /* 172 */ "Широта",
             /* 173 */ "Долгота",
@@ -1246,13 +1244,13 @@ namespace GKCore
             /* 476 */ "Поиск взаимосвязей",
             /* 477 */ "Медиа-файл не загружен, т.к. отсутствует в медиа-контейнере (хранилище или архиве)",
             /* 478 */ "Масштаб",
+            /* 479 */ "GEDKeeper GEDCOM файлы (*.ged)|*.ged|GEDKeeper шифрованные GEDCOM файлы (*.geds)|*.geds",
+            /* 480 */ "Все файлы (*.*)|*.*",
+            /* 481 */ "Изображения (*.bmp;*.gif;*.png;*.jpg)|*.bmp;*.gif;*.png;*.jpg", //Image Files|
+            /* 482 */ "Скрипты (*.lua)|*.lua",
+            /* 483 */ "Файлы BMP (*.bmp)|*.bmp|Файлы JPEG (*.jpg)|*.jpg|Файлы EMF (*.emf)|*.emf|Файлы PNG (*.png)|*.png|Файлы GIF (*.gif)|*.gif",
 
-            /* 479 */ "Индекс",
-            /* 480 */ "Индекс фамилий",
-            /* 481 */ "Индекс имен",
-            /* 482 */ "Индекс годов рождения",
-            /* 483 */ "Индекс годов смерти",
-            /* 484 */ "Общая статистика",
+            /* 484 */ "<?>",
 
             /* 485 */ "Родословная роспись",
             /* 486 */ "Простой ввод",

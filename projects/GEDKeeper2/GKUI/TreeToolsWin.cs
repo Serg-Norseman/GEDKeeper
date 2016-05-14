@@ -167,15 +167,9 @@ namespace GKUI
 
         #region TreeMerge
 
-        // TODO: localize
-        const string ged_filter = "GEDCOM|*.ged"; // |Все файлы (*.*)|*.*
-        const string ged_ext = "ged";
-
-        //Все поддерживаемые форматы (*.txt, *.csv, *.doc, *.xls)|*.txt;*.csv;*.doc;*.xls|Роспись в txt-формате (*.txt)|*.txt|Роспись в csv-формате (*.csv)|*.csv|Роспись в формате Word (*.doc)|*.doc|Роспись в формате Excel (*.xls)|*.xls
-
         private void btnTreeMerge_Click(object sender, EventArgs e)
         {
-            string fileName = UIHelper.GetOpenFile("", "", ged_filter, 1, ged_ext);
+            string fileName = UIHelper.GetOpenFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
             if (!string.IsNullOrEmpty(fileName))
             {
                 this.edUpdateBase.Text = fileName;
@@ -601,10 +595,9 @@ namespace GKUI
             this.Base.RefreshLists(false);
         }
 
-        // TODO: localize
         private void btnSave_Click(object sender, EventArgs e)
         {
-            string fileName = UIHelper.GetSaveFile("", "", ged_filter, 1, ged_ext, "");
+            string fileName = UIHelper.GetSaveFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, "");
             if (!string.IsNullOrEmpty(fileName))
             {
                 TreeTools.CheckRelations(fSplitList);
@@ -724,7 +717,7 @@ namespace GKUI
 
         private void btnFileChoose_Click(object sender, EventArgs e)
         {
-            string fileName = UIHelper.GetOpenFile("", "", ged_filter, 1, ged_ext);
+            string fileName = UIHelper.GetOpenFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
             if (!string.IsNullOrEmpty(fileName))
             {
                 external_match_db = fileName;

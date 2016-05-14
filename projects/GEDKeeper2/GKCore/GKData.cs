@@ -41,7 +41,9 @@ namespace GKCore
         public const string APP_TITLE = "GEDKeeper2";
         public const string APP_MAIL = "gedkeeper@yandex.ru";
 
-        public const string DEFAULT_EXT = "ged";
+        public const string GEDCOM_EXT = "ged";
+        public const string GEDCOM_SEC_EXT = "geds";
+        public const string LUA_EXT = "lua";
 
         public struct SexStruct
         {

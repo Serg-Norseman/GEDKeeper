@@ -188,7 +188,7 @@ namespace GKUI
             if (e.KeyCode == Keys.Escape) base.Close();
         }
 
-        // TODO: localize
+        // TODO: localize?
         private void btnSaveImage_Click(object sender, EventArgs e)
         {
             string filter1 = "Image files|*.jpg";

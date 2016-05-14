@@ -134,12 +134,9 @@ namespace GKUI.Dialogs
             }
         }
 
-        // TODO: localize
-        const string filter = "Все файлы (*.*)|*.*";
-
         private void btnFileSelect_Click(object sender, EventArgs e)
         {
-            string fileName = UIHelper.GetOpenFile("", "", filter, 1, "");
+            string fileName = UIHelper.GetOpenFile("", "", LangMan.LS(LSID.LSID_AllFilter), 1, "");
             if (!string.IsNullOrEmpty(fileName))
             {
                 this.txtFile.Text = fileName;
