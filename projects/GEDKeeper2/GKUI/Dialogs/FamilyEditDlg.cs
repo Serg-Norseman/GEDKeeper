@@ -121,6 +121,13 @@ namespace GKUI.Dialogs
             this.pageMultimedia.Text = LangMan.LS(LSID.LSID_RPMultimedia);
             this.pageSources.Text = LangMan.LS(LSID.LSID_RPSources);
             this.lblRestriction.Text = LangMan.LS(LSID.LSID_Restriction);
+
+            this.toolTip1.SetToolTip(this.btnHusbandAdd, LangMan.LS(LSID.LSID_HusbandAddTip));
+            this.toolTip1.SetToolTip(this.btnHusbandDelete, LangMan.LS(LSID.LSID_HusbandDeleteTip));
+            this.toolTip1.SetToolTip(this.btnHusbandSel, LangMan.LS(LSID.LSID_HusbandSelTip));
+            this.toolTip1.SetToolTip(this.btnWifeAdd, LangMan.LS(LSID.LSID_WifeAddTip));
+            this.toolTip1.SetToolTip(this.btnWifeDelete, LangMan.LS(LSID.LSID_WifeDeleteTip));
+            this.toolTip1.SetToolTip(this.btnWifeSel, LangMan.LS(LSID.LSID_WifeSelTip));
         }
 
         private void UpdateControls()

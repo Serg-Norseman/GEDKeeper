@@ -87,6 +87,8 @@ namespace GKUI.Dialogs
             this.btnSearch.Text = LangMan.LS(LSID.LSID_Search);
             this.btnSelect.Text = LangMan.LS(LSID.LSID_SelectCoords);
             this.btnSelectName.Text = LangMan.LS(LSID.LSID_SelectName);
+
+            this.toolTip1.SetToolTip(this.btnShowOnMap, LangMan.LS(LSID.LSID_ShowOnMapTip));
         }
 
         protected override void Dispose(bool disposing)

@@ -397,9 +397,9 @@
             this.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "frmPedigreeImporter";
+            this.Name = "PedigreeImporterDlg";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "frmP2Main";
+            this.Text = "PedigreeImporterDlg";
             this.tabControl1.ResumeLayout(false);
             this.pageSelect.ResumeLayout(false);
             this.pageSelect.PerformLayout();

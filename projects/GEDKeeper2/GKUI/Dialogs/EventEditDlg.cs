@@ -510,6 +510,9 @@ namespace GKUI.Dialogs
             this.lblDate.Text = LangMan.LS(LSID.LSID_Date);
             this.lblCause.Text = LangMan.LS(LSID.LSID_Cause);
             this.lblOrg.Text = LangMan.LS(LSID.LSID_Agency);
+
+            this.toolTip1.SetToolTip(this.btnPlaceAdd, LangMan.LS(LSID.LSID_PlaceAddTip));
+            this.toolTip1.SetToolTip(this.btnPlaceDelete, LangMan.LS(LSID.LSID_PlaceDeleteTip));
         }
     }
 }

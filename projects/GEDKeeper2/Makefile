@@ -35,6 +35,7 @@ sources := \
 ./Externals/SingleInstancing/SingleInstanceTracker.cs \
 ./GKCore/BaseContext.cs \
 ./GKCore/BaseSearchStrategy.cs \
+./GKCore/Cultures/RussianCulture.cs \
 ./GKCore/Export/CustomWriter.cs \
 ./GKCore/Export/ExcelExporter.cs \
 ./GKCore/Export/Exporter.cs \

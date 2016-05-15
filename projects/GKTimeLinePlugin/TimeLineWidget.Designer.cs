@@ -58,7 +58,7 @@ namespace GKTimeLinePlugin
             this.StatusBarPanel2.Text = " ";
             this.StatusBarPanel2.Width = 250;
             // 
-            // TfmTimeLine
+            // TimeLineWidget
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
             this.ClientSize = new System.Drawing.Size(524, 61);
@@ -67,10 +67,10 @@ namespace GKTimeLinePlugin
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Load += new System.EventHandler(this.TfmTimeLine_Load);
-            this.Name = "TfmTimeLine";
+            this.Name = "TimeLineWidget";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "Линия времени";
+            this.Text = "TimeLineWidget";
             this.TopMost = true;
             this.Closed += new System.EventHandler(this.TfmTimeLine_Closed);
             ((System.ComponentModel.ISupportInitialize)(this.tbTimeLine)).EndInit();

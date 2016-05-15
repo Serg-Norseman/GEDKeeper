@@ -82,7 +82,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmPersonEdit.SetPerson(): " + ex.Message);
+                this.fBase.Host.LogWrite("PersonEditDlg.SetPerson(): " + ex.Message);
             }
         }
 
@@ -92,7 +92,7 @@ namespace GKUI.Dialogs
 
             if (img != null)
             {
-                this.imgPortrait.Image = img; // освобождать нельзя, изображение исчезает
+                this.imgPortrait.Image = img; // release impossible, the image disappears
                 this.imgPortrait.SizeMode = PictureBoxSizeMode.CenterImage;
 
                 this.imgPortrait.Visible = true;
@@ -258,7 +258,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmPersonEdit.btnAccept_Click(): " + ex.Message);
+                this.fBase.Host.LogWrite("PersonEditDlg.btnAccept_Click(): " + ex.Message);
                 base.DialogResult = DialogResult.None;
             }
         }
@@ -293,7 +293,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TfmPersonEdit.UpdateAssociationsSheet(): " + ex.Message);
+                Logger.LogWrite("PersonEditDlg.UpdateAssociationsSheet(): " + ex.Message);
             }
         }
         
@@ -381,7 +381,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TfmPersonEdit.UpdateURefsSheet(): " + ex.Message);
+                Logger.LogWrite("PersonEditDlg.UpdateURefsSheet(): " + ex.Message);
             }
         }
         
@@ -487,7 +487,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TfmPersonEdit.UpdateSpousesSheet(): " + ex.Message);
+                Logger.LogWrite("PersonEditDlg.UpdateSpousesSheet(): " + ex.Message);
             }
         }
         
@@ -594,7 +594,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TfmPersonEdit.UpdateGroupsSheet(): " + ex.Message);
+                Logger.LogWrite("PersonEditDlg.UpdateGroupsSheet(): " + ex.Message);
             }
         }
         
@@ -658,7 +658,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TfmPersonEdit.UpdateNamesSheet(): " + ex.Message);
+                Logger.LogWrite("PersonEditDlg.UpdateNamesSheet(): " + ex.Message);
             }
         }
 
@@ -978,6 +978,19 @@ namespace GKUI.Dialogs
             this.pageUserRefs.Text = LangMan.LS(LSID.LSID_UserRefs);
             this.lblRestriction.Text = LangMan.LS(LSID.LSID_Restriction);
             this.pageNames.Text = LangMan.LS(LSID.LSID_Names);
+
+            this.toolTip1.SetToolTip(this.btnPortraitAdd, LangMan.LS(LSID.LSID_PortraitAddTip));
+            this.toolTip1.SetToolTip(this.btnPortraitDelete, LangMan.LS(LSID.LSID_PortraitDeleteTip));
+            this.toolTip1.SetToolTip(this.btnParentsAdd, LangMan.LS(LSID.LSID_ParentsAddTip));
+            this.toolTip1.SetToolTip(this.btnParentsEdit, LangMan.LS(LSID.LSID_ParentsEditTip));
+			this.toolTip1.SetToolTip(this.btnParentsDelete, LangMan.LS(LSID.LSID_ParentsDeleteTip));
+			this.toolTip1.SetToolTip(this.btnFatherAdd, LangMan.LS(LSID.LSID_FatherAddTip));
+			this.toolTip1.SetToolTip(this.btnFatherDelete, LangMan.LS(LSID.LSID_FatherDeleteTip));
+			this.toolTip1.SetToolTip(this.btnFatherSel, LangMan.LS(LSID.LSID_FatherSelTip));
+			this.toolTip1.SetToolTip(this.btnMotherAdd, LangMan.LS(LSID.LSID_MotherAddTip));
+			this.toolTip1.SetToolTip(this.btnMotherDelete, LangMan.LS(LSID.LSID_MotherDeleteTip));
+			this.toolTip1.SetToolTip(this.btnMotherSel, LangMan.LS(LSID.LSID_MotherSelTip));
+			this.toolTip1.SetToolTip(this.btnNameCopy, LangMan.LS(LSID.LSID_NameCopyTip));
         }
     }
 }

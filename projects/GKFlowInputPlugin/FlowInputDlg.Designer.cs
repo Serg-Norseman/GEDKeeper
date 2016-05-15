@@ -103,7 +103,7 @@ namespace GKFlowInputPlugin
 			this.btnParse.Name = "btnParse";
 			this.btnParse.Size = new System.Drawing.Size(81, 25);
 			this.btnParse.TabIndex = 1;
-			this.btnParse.Text = "Добавить";
+			this.btnParse.Text = "btnParse";
 			this.btnParse.Click += new System.EventHandler(this.btnParseClick);
 			// 
 			// btnClose
@@ -114,7 +114,7 @@ namespace GKFlowInputPlugin
 			this.btnClose.Name = "btnClose";
 			this.btnClose.Size = new System.Drawing.Size(81, 25);
 			this.btnClose.TabIndex = 2;
-			this.btnClose.Text = "Закрыть";
+			this.btnClose.Text = "btnClose";
 			this.btnClose.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// PageControl1
@@ -140,7 +140,7 @@ namespace GKFlowInputPlugin
 			this.tsSimpleInput.Name = "tsSimpleInput";
 			this.tsSimpleInput.Size = new System.Drawing.Size(625, 375);
 			this.tsSimpleInput.TabIndex = 0;
-			this.tsSimpleInput.Text = "Простой ввод";
+			this.tsSimpleInput.Text = "tsSimpleInput";
 			// 
 			// Label1
 			// 
@@ -148,15 +148,15 @@ namespace GKFlowInputPlugin
 			this.lblFullName.Name = "lblFullName";
 			this.lblFullName.Size = new System.Drawing.Size(150, 13);
 			this.lblFullName.TabIndex = 0;
-			this.lblFullName.Text = "Полное имя (формат ФИО)";
+			this.lblFullName.Text = "lblFullName";
 			// 
-			// Label2
+			// lblNote
 			// 
 			this.lblNote.Location = new System.Drawing.Point(8, 232);
 			this.lblNote.Name = "lblNote";
 			this.lblNote.Size = new System.Drawing.Size(50, 13);
 			this.lblNote.TabIndex = 6;
-			this.lblNote.Text = "Заметка";
+			this.lblNote.Text = "lblNote";
 			// 
 			// btnMale
 			// 
@@ -164,7 +164,7 @@ namespace GKFlowInputPlugin
 			this.btnMale.Name = "btnMale";
 			this.btnMale.Size = new System.Drawing.Size(49, 21);
 			this.btnMale.TabIndex = 2;
-			this.btnMale.Text = "М";
+			this.btnMale.Text = "btnMale";
 			this.btnMale.Click += new System.EventHandler(this.BtnMaleClick);
 			// 
 			// EditName
@@ -201,15 +201,15 @@ namespace GKFlowInputPlugin
 			this.lblBirthDate.Name = "lblBirthDate";
 			this.lblBirthDate.Size = new System.Drawing.Size(90, 13);
 			this.lblBirthDate.TabIndex = 1;
-			this.lblBirthDate.Text = "Дата рождения";
+			this.lblBirthDate.Text = "lblBirthDate";
 			// 
-			// Label5
+			// lblBirthPlace
 			// 
 			this.lblBirthPlace.Location = new System.Drawing.Point(112, 32);
 			this.lblBirthPlace.Name = "lblBirthPlace";
 			this.lblBirthPlace.Size = new System.Drawing.Size(100, 13);
 			this.lblBirthPlace.TabIndex = 3;
-			this.lblBirthPlace.Text = "Место рождения";
+			this.lblBirthPlace.Text = "lblBirthPlace";
 			// 
 			// EditBirthDate
 			// 
@@ -235,7 +235,7 @@ namespace GKFlowInputPlugin
 			this.CheckBirth.Name = "CheckBirth";
 			this.CheckBirth.Size = new System.Drawing.Size(96, 17);
 			this.CheckBirth.TabIndex = 0;
-			this.CheckBirth.Text = "Родился";
+			this.CheckBirth.Text = "CheckBirth";
 			// 
 			// Panel2
 			// 
@@ -256,7 +256,7 @@ namespace GKFlowInputPlugin
 			this.lblDeathDate.Name = "lblDeathDate";
 			this.lblDeathDate.Size = new System.Drawing.Size(90, 13);
 			this.lblDeathDate.TabIndex = 1;
-			this.lblDeathDate.Text = "Дата смерти";
+			this.lblDeathDate.Text = "lblDeathDate";
 			// 
 			// Label7
 			// 
@@ -264,7 +264,7 @@ namespace GKFlowInputPlugin
 			this.lblDeathPlace.Name = "lblDeathPlace";
 			this.lblDeathPlace.Size = new System.Drawing.Size(100, 13);
 			this.lblDeathPlace.TabIndex = 3;
-			this.lblDeathPlace.Text = "Место смерти";
+			this.lblDeathPlace.Text = "lblDeathPlace";
 			// 
 			// CheckDeath
 			// 
@@ -272,7 +272,7 @@ namespace GKFlowInputPlugin
 			this.CheckDeath.Name = "CheckDeath";
 			this.CheckDeath.Size = new System.Drawing.Size(95, 17);
 			this.CheckDeath.TabIndex = 0;
-			this.CheckDeath.Text = "Умер";
+			this.CheckDeath.Text = "CheckDeath";
 			// 
 			// EditDeathDate
 			// 
@@ -310,39 +310,39 @@ namespace GKFlowInputPlugin
 			this.tsSourceInput.Name = "tsSourceInput";
 			this.tsSourceInput.Size = new System.Drawing.Size(625, 375);
 			this.tsSourceInput.TabIndex = 1;
-			this.tsSourceInput.Text = "Источник (метрики/ревизии)";
+			this.tsSourceInput.Text = "tsSourceInput";
 			// 
-			// Label4
+			// lblSource
 			// 
 			this.lblSource.Location = new System.Drawing.Point(8, 56);
 			this.lblSource.Name = "lblSource";
 			this.lblSource.Size = new System.Drawing.Size(55, 13);
 			this.lblSource.TabIndex = 0;
-			this.lblSource.Text = "Источник";
+			this.lblSource.Text = "lblSource";
 			// 
-			// Label8
+			// lblPage
 			// 
 			this.lblPage.Location = new System.Drawing.Point(304, 56);
 			this.lblPage.Name = "lblPage";
 			this.lblPage.Size = new System.Drawing.Size(85, 13);
 			this.lblPage.TabIndex = 1;
-			this.lblPage.Text = "Лист/страница";
+			this.lblPage.Text = "lblPage";
 			// 
-			// Label9
+			// lblYear
 			// 
 			this.lblYear.Location = new System.Drawing.Point(520, 56);
 			this.lblYear.Name = "lblYear";
 			this.lblYear.Size = new System.Drawing.Size(30, 13);
 			this.lblYear.TabIndex = 2;
-			this.lblYear.Text = "Год";
+			this.lblYear.Text = "lblYear";
 			// 
-			// Label10
+			// lblSettlement
 			// 
 			this.lblSettlement.Location = new System.Drawing.Point(8, 88);
 			this.lblSettlement.Name = "lblSettlement";
 			this.lblSettlement.Size = new System.Drawing.Size(105, 13);
 			this.lblSettlement.TabIndex = 3;
-			this.lblSettlement.Text = "Населенный пункт";
+			this.lblSettlement.Text = "lblSettlement";
 			// 
 			// cbSource
 			// 
@@ -411,7 +411,7 @@ namespace GKFlowInputPlugin
 			this.rgSourceKind.Size = new System.Drawing.Size(609, 38);
 			this.rgSourceKind.TabIndex = 6;
 			this.rgSourceKind.TabStop = false;
-			this.rgSourceKind.Text = "Тип источника";
+			this.rgSourceKind.Text = "rgSourceKind";
 			// 
 			// radioButton2
 			// 
@@ -447,7 +447,7 @@ namespace GKFlowInputPlugin
 			this.gbMetrics.Size = new System.Drawing.Size(609, 50);
 			this.gbMetrics.TabIndex = 7;
 			this.gbMetrics.TabStop = false;
-			this.gbMetrics.Text = "Метрическая книга";
+			this.gbMetrics.Text = "gbMetrics";
 			// 
 			// Label11
 			// 
@@ -455,7 +455,7 @@ namespace GKFlowInputPlugin
 			this.lblEventDate.Name = "lblEventDate";
 			this.lblEventDate.Size = new System.Drawing.Size(80, 13);
 			this.lblEventDate.TabIndex = 0;
-			this.lblEventDate.Text = "Дата события";
+			this.lblEventDate.Text = "lblEventDate";
 			// 
 			// Label12
 			// 
@@ -463,7 +463,7 @@ namespace GKFlowInputPlugin
 			this.lblEventType.Name = "lblEventType";
 			this.lblEventType.Size = new System.Drawing.Size(70, 13);
 			this.lblEventType.TabIndex = 1;
-			this.lblEventType.Text = "Тип события";
+			this.lblEventType.Text = "lblEventType";
 			// 
 			// edEventDate
 			// 
@@ -482,7 +482,7 @@ namespace GKFlowInputPlugin
 			this.cbEventType.Size = new System.Drawing.Size(145, 21);
 			this.cbEventType.TabIndex = 1;
 			// 
-			// TfmPersonScan
+			// FlowInputDlg
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
 			this.CancelButton = this.btnClose;
@@ -494,9 +494,9 @@ namespace GKFlowInputPlugin
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "TfmPersonScan";
+			this.Name = "FlowInputDlg";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "Добавление персон из источника";
+			this.Text = "FlowInputDlg";
 			this.PageControl1.ResumeLayout(false);
 			this.tsSimpleInput.ResumeLayout(false);
 			this.tsSimpleInput.PerformLayout();

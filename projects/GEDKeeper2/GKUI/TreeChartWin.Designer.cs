@@ -424,7 +424,7 @@ namespace GKUI
 		    this.KeyPreview = true;
 		    this.Name = "TreeChartWin";
 		    this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-		    this.Text = "Диаграмма";
+		    this.Text = "TreeChartWin";
 		    this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TfmChart_KeyDown);
 		    this.ToolBar1.ResumeLayout(false);
 		    this.ToolBar1.PerformLayout();

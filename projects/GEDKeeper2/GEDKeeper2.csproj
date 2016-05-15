@@ -120,6 +120,7 @@
     <Compile Include="Externals\SingleInstancing\SingleInstanceTracker.cs" />
     <Compile Include="GKCore\BaseContext.cs" />
     <Compile Include="GKCore\BaseSearchStrategy.cs" />
+    <Compile Include="GKCore\Cultures\RussianCulture.cs" />
     <Compile Include="GKCore\Export\CustomWriter.cs" />
     <Compile Include="GKCore\Export\ExcelExporter.cs" />
     <Compile Include="GKCore\Export\Exporter.cs" />
@@ -666,6 +667,7 @@
   <ItemGroup>
     <Folder Include="Externals" />
     <Folder Include="Externals\SingleInstancing" />
+    <Folder Include="GKCore\Cultures" />
     <Folder Include="Sandbox" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

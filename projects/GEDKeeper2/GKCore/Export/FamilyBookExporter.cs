@@ -291,19 +291,19 @@ namespace GKCore.Export
                             }
                         }
 
-                        // Анализ по местам
+                        // The analysis places
 //						st = ev.Detail.Place.StringValue;
 //						if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(places, st, iRec);
 
                         if (evt.Name == "BIRT") {
-                            // Анализ по рождениям
+                            // Analysis on births
                             Exporter.PrepareEventYear(byIndex, evt, iRec);
                             st = GKUtils.GetPlaceStr(evt, false);
                             if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(bpIndex, st, iRec);
                         }
                         else if (evt.Name == "DEAT")
                         {
-                            // Анализ по причинам смерти
+                            // Analysis by causes of death
                             Exporter.PrepareEventYear(dyIndex, evt, iRec);
                             st = GKUtils.GetPlaceStr(evt, false);
                             if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(dpIndex, st, iRec);
@@ -313,13 +313,13 @@ namespace GKCore.Export
                         }
                         else if (evt.Name == "OCCU")
                         {
-                            // Анализ по занятиям
+                            // Analysis by occupation
                             st = evt.StringValue;
                             if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(occuIndex, st, iRec);
                         }
                         else if (evt.Name == "RELI")
                         {
-                            // Анализ по вероисповеданию
+                            // Analysis by religion
                             st = evt.StringValue;
                             if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(reliIndex, st, iRec);
                         }
@@ -370,7 +370,7 @@ namespace GKCore.Export
                 float fitWidth = colWidth * 0.5f;
                 img.ScaleToFit(fitWidth, fitWidth);
 
-                // FIXME: перенос, если высоты страницы недостаточно для высоты изображения
+                // FIXME: the moving, if the page height is insufficient for the image height
 
                 //img.Alignment = Image.TEXTWRAP;
                 img.IndentationLeft = 5f;

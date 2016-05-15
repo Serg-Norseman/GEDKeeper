@@ -100,6 +100,8 @@ namespace GKUI.Dialogs
             this.Text = LangMan.LS(LSID.LSID_Association);
             this.lblRelation.Text = LangMan.LS(LSID.LSID_Relation);
             this.lblPerson.Text = LangMan.LS(LSID.LSID_Person);
+
+            this.toolTip1.SetToolTip(this.btnPersonAdd, LangMan.LS(LSID.LSID_PersonAttachTip));
         }
     }
 }

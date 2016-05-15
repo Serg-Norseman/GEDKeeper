@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using GKCommon.GEDCOM;
+using GKCore.Cultures;
 
 namespace GKCore.Stats
 {
@@ -174,7 +175,7 @@ namespace GKCore.Stats
                         iRec.GetNameParts(out fam, out nam, out pat);
                         switch (mode) {
                             case StatsMode.smFamilies:
-                                v = GKUtils.PrepareRusSurname(fam, iRec.Sex == GEDCOMSex.svFemale);
+                                v = RussianCulture.PrepareRusSurname(fam, iRec.Sex == GEDCOMSex.svFemale);
                                 break;
                             case StatsMode.smNames:
                                 v = nam;

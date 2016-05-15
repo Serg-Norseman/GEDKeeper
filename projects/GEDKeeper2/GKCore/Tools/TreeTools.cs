@@ -22,10 +22,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.SmartGraph;
+using GKCore.Cultures;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKUI;
@@ -1173,7 +1173,7 @@ namespace GKCore.Tools
 
             pc.ProgressInit("Этап 1", tree.RecordsCount);
 
-            // составить таблицу фамилий и персон, относящихся к этим фамилиям
+            // make a table of surnames and persons, related to these surnames
             int num = tree.RecordsCount;
             for (int i = 0; i < num; i++)
             {
@@ -1204,8 +1204,8 @@ namespace GKCore.Tools
             }
 
             pc.ProgressInit("Этап 2", families.Count);
-            
-            // найти всех персон одной фамилии, не связанных узами родства
+
+            // find all persons of one surname, not related by ties of kinship
             foreach (DictionaryEntry entry in families)
             {
                 string fam = (string)entry.Key;
@@ -1341,7 +1341,7 @@ namespace GKCore.Tools
                         string fam, nam, pat;
                         iRec.GetNameParts(out fam, out nam, out pat);
 
-                        fams.AddObject(GKUtils.PrepareRusSurname(fam, iRec.Sex == GEDCOMSex.svFemale), null);
+                        fams.AddObject(RussianCulture.PrepareRusSurname(fam, iRec.Sex == GEDCOMSex.svFemale), null);
                     }
                 }
 
@@ -1363,7 +1363,7 @@ namespace GKCore.Tools
                         string fam, nam, pat;
                         iRec.GetNameParts(out fam, out nam, out pat);
 
-                        tm = GKUtils.PrepareRusSurname(fam, iRec.Sex == GEDCOMSex.svFemale);
+                        tm = RussianCulture.PrepareRusSurname(fam, iRec.Sex == GEDCOMSex.svFemale);
                         idx = fams.IndexOf(tm);
                         if (idx >= 0)
                         {

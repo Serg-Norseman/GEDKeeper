@@ -30,6 +30,7 @@ using GKCommon;
 using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Cultures;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Tools;
@@ -945,7 +946,7 @@ namespace GKUI
                 try
                 {
                     dlg.IndividualName = iName + " " + iPatr;
-                    result = GKUtils.GetSex(iName, iPatr, false);
+                    result = RussianCulture.GetSex(iName, iPatr, false);
 
                     dlg.Sex = result;
                     if (dlg.ShowDialog() == DialogResult.OK)

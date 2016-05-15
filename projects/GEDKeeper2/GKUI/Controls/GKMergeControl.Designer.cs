@@ -1,12 +1,4 @@
-﻿/*
- * Created by SharpDevelop.
- * User: Norseman
- * Date: 29.12.2012
- * Time: 19:40
- * 
- * To change this template use Tools | Options | Coding | Edit Standard Headers.
- */
-namespace GKUI.Controls
+﻿namespace GKUI.Controls
 {
 	partial class GKMergeControl
 	{
@@ -86,7 +78,7 @@ namespace GKUI.Controls
 		    this.btnRec1Select.Name = "btnRec1Select";
 		    this.btnRec1Select.Size = new System.Drawing.Size(81, 25);
 		    this.btnRec1Select.TabIndex = 13;
-		    this.btnRec1Select.Text = "Выбрать...";
+		    this.btnRec1Select.Text = "btnRec1Select";
 		    this.btnRec1Select.Click += new System.EventHandler(this.btnRec1Select_Click);
 		    // 
 		    // btnRec2Select
@@ -95,7 +87,7 @@ namespace GKUI.Controls
 		    this.btnRec2Select.Name = "btnRec2Select";
 		    this.btnRec2Select.Size = new System.Drawing.Size(81, 25);
 		    this.btnRec2Select.TabIndex = 14;
-		    this.btnRec2Select.Text = "Выбрать...";
+		    this.btnRec2Select.Text = "btnRec2Select";
 		    this.btnRec2Select.Click += new System.EventHandler(this.btnRec2Select_Click);
 		    // 
 		    // btnMergeToLeft

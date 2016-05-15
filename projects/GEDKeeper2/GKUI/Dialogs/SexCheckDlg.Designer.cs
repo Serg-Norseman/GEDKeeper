@@ -8,7 +8,7 @@ namespace GKUI.Dialogs
 	partial class SexCheckDlg
 	{
 		private System.Windows.Forms.TextBox txtName;
-		private System.Windows.Forms.GroupBox GroupBox1;
+		private System.Windows.Forms.GroupBox grpSex;
 		private System.Windows.Forms.RadioButton rbNone;
 		private System.Windows.Forms.RadioButton rbMale;
 		private System.Windows.Forms.RadioButton rbFemale;
@@ -18,13 +18,13 @@ namespace GKUI.Dialogs
 		private void InitializeComponent()
 		{
 			this.txtName = new System.Windows.Forms.TextBox();
-			this.GroupBox1 = new System.Windows.Forms.GroupBox();
+			this.grpSex = new System.Windows.Forms.GroupBox();
 			this.rbNone = new System.Windows.Forms.RadioButton();
 			this.rbMale = new System.Windows.Forms.RadioButton();
 			this.rbFemale = new System.Windows.Forms.RadioButton();
 			this.btnAccept = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
-			this.GroupBox1.SuspendLayout();
+			this.grpSex.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// txtName
@@ -35,17 +35,17 @@ namespace GKUI.Dialogs
 			this.txtName.Size = new System.Drawing.Size(483, 24);
 			this.txtName.TabIndex = 0;
 			// 
-			// GroupBox1
+			// grpSex
 			// 
-			this.GroupBox1.Controls.Add(this.rbNone);
-			this.GroupBox1.Controls.Add(this.rbMale);
-			this.GroupBox1.Controls.Add(this.rbFemale);
-			this.GroupBox1.Location = new System.Drawing.Point(11, 43);
-			this.GroupBox1.Name = "GroupBox1";
-			this.GroupBox1.Size = new System.Drawing.Size(483, 59);
-			this.GroupBox1.TabIndex = 1;
-			this.GroupBox1.TabStop = false;
-			this.GroupBox1.Text = "Пол";
+			this.grpSex.Controls.Add(this.rbNone);
+			this.grpSex.Controls.Add(this.rbMale);
+			this.grpSex.Controls.Add(this.rbFemale);
+			this.grpSex.Location = new System.Drawing.Point(11, 43);
+			this.grpSex.Name = "grpSex";
+			this.grpSex.Size = new System.Drawing.Size(483, 59);
+			this.grpSex.TabIndex = 1;
+			this.grpSex.TabStop = false;
+			this.grpSex.Text = "grpSex";
 			// 
 			// rbNone
 			// 
@@ -106,7 +106,7 @@ namespace GKUI.Dialogs
 			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(504, 158);
 			this.Controls.Add(this.txtName);
-			this.Controls.Add(this.GroupBox1);
+			this.Controls.Add(this.grpSex);
 			this.Controls.Add(this.btnAccept);
 			this.Controls.Add(this.btnCancel);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -115,8 +115,8 @@ namespace GKUI.Dialogs
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "SexCheckDlg";
 			this.TopMost = true;
-			this.GroupBox1.ResumeLayout(false);
-			this.GroupBox1.PerformLayout();
+			this.grpSex.ResumeLayout(false);
+			this.grpSex.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}

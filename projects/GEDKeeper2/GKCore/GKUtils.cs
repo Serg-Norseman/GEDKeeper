@@ -27,9 +27,9 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-
 using GKCommon;
 using GKCommon.GEDCOM;
+using GKCore.Cultures;
 using GKCore.Types;
 using GKUI.Controls;
 
@@ -2853,56 +2853,6 @@ namespace GKCore
             return result;
         }
 
-        public static string PrepareRusSurname(string f, bool aFemale)
-        {
-            if (string.IsNullOrEmpty(f) || (f[0] == '(' && f[f.Length - 1] == ')'))
-            {
-                f = "?";
-            }
-            else
-            {
-                if (aFemale)
-                {
-                    f = ClearSurname(f);
-
-                    if (f.EndsWith("а")) {
-                        f = f.Substring(0, f.Length - 1);
-                    } else if (f.EndsWith("кая")) {
-                        f = f.Substring(0, f.Length - 3) + "кий";
-                    } else if (f.EndsWith("ная")) {
-                        f = f.Substring(0, f.Length - 3) + "ный";
-                    }
-                }
-            }
-
-            return f;
-        }
-
-        public static string GetRusWifeSurname(string husbSurname)
-        {
-            const string consonants = "бвгджзклмнпрстфхцчшщ";
-            //const string vowels = "абвгдежзиклмнопрстуфхцчшщьыъэюя";
-            
-            string res;
-            if (string.IsNullOrEmpty(husbSurname)) {
-                res = "?";
-            } else {
-                res = husbSurname;
-
-                char lastSym = res[res.Length - 1];
-
-                if (consonants.IndexOf(lastSym) >= 0) {
-                    res = res + "а";
-                } else if (res.EndsWith("кий")) {
-                    res = res.Substring(0, res.Length - 3) + "кая";
-                } else if (res.EndsWith("ный")) {
-                    res = res.Substring(0, res.Length - 3) + "ная";
-                }
-            }
-
-            return res;
-        }
-
         public static string[] GetSurnames(string surname, bool female)
         {
             string[] result = new string[1];
@@ -2912,7 +2862,7 @@ namespace GKCore
                 int p = surname.IndexOf('(');
                 if (p >= 0) {
                     string part = surname.Substring(0, p).Trim();
-                    result[0] = PrepareRusSurname(part, female);
+                    result[0] = RussianCulture.PrepareRusSurname(part, female);
                     part = surname.Substring(p).Trim();
                     part = part.Substring(1, part.Length-2);
 
@@ -2921,10 +2871,10 @@ namespace GKCore
                         string[] newres = new string[result.Length+1];
                         result.CopyTo(newres, 0);
                         result = newres;
-                        result[result.Length-1] = PrepareRusSurname(parts[i].Trim(), female);
+                        result[result.Length-1] = RussianCulture.PrepareRusSurname(parts[i].Trim(), female);
                     }
                 } else {
-                    result[0] = PrepareRusSurname(surname, female);
+                    result[0] = RussianCulture.PrepareRusSurname(surname, female);
                 }
             } else {
                 result[0] = surname;
@@ -2945,44 +2895,6 @@ namespace GKCore
             bool female = (iRec.Sex == GEDCOMSex.svFemale);
 
             return GetSurnames(fam, female);
-        }
-
-        private static bool StrContains(string str, char c)
-        {
-            return str.IndexOf(c) >= 0;
-        }
-
-        private const string FEM_ENDINGS = "ая";
-        private const string MALE_ENDINGS = "вгдйлмнопр";
-        
-        public static GEDCOMSex GetSex(string iName, string iPat, bool canQuery)
-        {
-            GEDCOMSex result = GEDCOMSex.svNone;
-            if (string.IsNullOrEmpty(iName)) return result;
-
-            char nc = iName[iName.Length - 1];
-
-            if (StrContains(FEM_ENDINGS, nc)) {
-                if (!string.IsNullOrEmpty(iPat)) {
-                    char pc = iPat[iPat.Length - 1];
-
-                    if (StrContains(FEM_ENDINGS, pc)) {
-                        result = GEDCOMSex.svFemale;
-                    } else if (StrContains(MALE_ENDINGS, pc)) {
-                        result = GEDCOMSex.svMale;
-                    }
-                }
-            } else if (StrContains(MALE_ENDINGS, nc)) {
-                result = GEDCOMSex.svMale;
-            }
-
-            if (result == GEDCOMSex.svNone && canQuery) {
-                string fn = iName + " " + iPat;
-                DialogResult res = ShowQuestion("Не определяется пол человека по имени \"" + fn + "\". Это мужской пол?");
-                result = (res == DialogResult.Yes) ? GEDCOMSex.svMale : GEDCOMSex.svFemale;
-            }
-
-            return result;
         }
 
         #endregion

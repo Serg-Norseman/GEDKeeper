@@ -121,7 +121,7 @@ namespace GKTreeVizPlugin
 
 		public void update()
 		{
-			// пересчитать координаты супругов, т.к. координаты данной персоны могли измениться
+			// to recalculate the coordinates of the spouses, because the coordinates of this person could change
 			// "genSlice / 3" - it's radius of spouses
 			PointF[] pts = TreeVizControl.getCirclePoints(this.BeautySpouses, this.Pt, this.Spouses.Count, this.GenSlice / 3);
 			for (int i = 0, count = this.Spouses.Count; i < count; i++)
@@ -130,7 +130,7 @@ namespace GKTreeVizPlugin
 				spp.Pt = pts[i];
 			}
 
-			// пересчет координат видимых детей
+			// recalculate coordinates of visible children
 			pts = TreeVizControl.getCirclePoints(this.BeautyChilds, this.Pt, this.Childs.Count, this.BaseRadius / 2);
 			for (int i = 0, count = this.Childs.Count; i < count; i++)
 			{

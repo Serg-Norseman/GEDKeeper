@@ -164,6 +164,8 @@ namespace GKUI.Dialogs
             this.lblSource.Text = LangMan.LS(LSID.LSID_Source);
             this.lblPage.Text = LangMan.LS(LSID.LSID_Page);
             this.lblCertainty.Text = LangMan.LS(LSID.LSID_Certainty);
+
+            this.toolTip1.SetToolTip(this.btnSourceAdd, LangMan.LS(LSID.LSID_SourceAddTip));
         }
     }
 }

@@ -206,6 +206,8 @@ namespace GKUI.Dialogs
             this.lblPriority.Text = LangMan.LS(LSID.LSID_Priority);
             this.lblStartDate.Text = LangMan.LS(LSID.LSID_StartDate);
             this.lblStopDate.Text = LangMan.LS(LSID.LSID_StopDate);
+
+            this.toolTip1.SetToolTip(this.btnGoalSelect, LangMan.LS(LSID.LSID_GoalSelectTip));
         }
     }
 }

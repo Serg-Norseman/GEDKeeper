@@ -20,9 +20,9 @@
 
 using System;
 using System.IO;
-
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Cultures;
 using GKCore.Kinships;
 using GKCore.Types;
 using NUnit.Framework;
@@ -318,36 +318,36 @@ namespace GKTests
             st = GKUtils.ClearSurname("Иванова (Петрова)");
             Assert.AreEqual("Иванова", st);
 
-            st = GKUtils.PrepareRusSurname("Иванова", true);
+            st = RussianCulture.PrepareRusSurname("Иванова", true);
             Assert.AreEqual("Иванов", st);
-            st = GKUtils.PrepareRusSurname("Бельская", true);
+            st = RussianCulture.PrepareRusSurname("Бельская", true);
             Assert.AreEqual("Бельский", st);
-            st = GKUtils.PrepareRusSurname("Грозная", true);
+            st = RussianCulture.PrepareRusSurname("Грозная", true);
             Assert.AreEqual("Грозный", st);
-            st = GKUtils.PrepareRusSurname("Иванов", false);
+            st = RussianCulture.PrepareRusSurname("Иванов", false);
             Assert.AreEqual("Иванов", st);
-            st = GKUtils.PrepareRusSurname("Бельский", false);
+            st = RussianCulture.PrepareRusSurname("Бельский", false);
             Assert.AreEqual("Бельский", st);
-            st = GKUtils.PrepareRusSurname("Грозный", false);
+            st = RussianCulture.PrepareRusSurname("Грозный", false);
             Assert.AreEqual("Грозный", st);
 
-            st = GKUtils.PrepareRusSurname(null, false);
+            st = RussianCulture.PrepareRusSurname(null, false);
             Assert.AreEqual("?", st);
-            st = GKUtils.PrepareRusSurname("", false);
+            st = RussianCulture.PrepareRusSurname("", false);
             Assert.AreEqual("?", st);
-            st = GKUtils.PrepareRusSurname("(Иванова)", false);
+            st = RussianCulture.PrepareRusSurname("(Иванова)", false);
             Assert.AreEqual("?", st);
 
-            st = GKUtils.GetRusWifeSurname("Иванов");
+            st = RussianCulture.GetRusWifeSurname("Иванов");
             Assert.AreEqual("Иванова", st);
-            st = GKUtils.GetRusWifeSurname("Бельский");
+            st = RussianCulture.GetRusWifeSurname("Бельский");
             Assert.AreEqual("Бельская", st);
-            st = GKUtils.GetRusWifeSurname("Грозный");
+            st = RussianCulture.GetRusWifeSurname("Грозный");
             Assert.AreEqual("Грозная", st);
 
-            st = GKUtils.GetRusWifeSurname("");
+            st = RussianCulture.GetRusWifeSurname("");
             Assert.AreEqual("?", st);
-            st = GKUtils.GetRusWifeSurname(null);
+            st = RussianCulture.GetRusWifeSurname(null);
             Assert.AreEqual("?", st);
             
             string[] snms = GKUtils.GetSurnames("Бельская (Иванова)", true);
@@ -365,10 +365,10 @@ namespace GKTests
 
             //
 
-            GEDCOMSex sx = GKUtils.GetSex("Мария", "Петровна", false);
+            GEDCOMSex sx = RussianCulture.GetSex("Мария", "Петровна", false);
             Assert.AreEqual(GEDCOMSex.svFemale, sx);
 
-            sx = GKUtils.GetSex("Иван", "Петрович", false);
+            sx = RussianCulture.GetSex("Иван", "Петрович", false);
             Assert.AreEqual(GEDCOMSex.svMale, sx);
         }
 

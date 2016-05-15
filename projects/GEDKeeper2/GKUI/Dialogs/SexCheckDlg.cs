@@ -38,7 +38,7 @@ namespace GKUI.Dialogs
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             this.Text = LangMan.LS(LSID.LSID_WinCheckSex);
-            this.GroupBox1.Text = LangMan.LS(LSID.LSID_Sex);
+            this.grpSex.Text = LangMan.LS(LSID.LSID_Sex);
             this.rbMale.Text = LangMan.LS(LSID.LSID_SexM);
             this.rbFemale.Text = LangMan.LS(LSID.LSID_SexF);
         }

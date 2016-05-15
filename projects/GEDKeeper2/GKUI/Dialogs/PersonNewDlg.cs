@@ -20,9 +20,9 @@
 
 using System;
 using System.Windows.Forms;
-
 using GKCommon.GEDCOM;
 using GKCore;
+using GKCore.Cultures;
 using GKCore.Interfaces;
 using GKCore.Types;
 
@@ -71,7 +71,7 @@ namespace GKUI.Dialogs
                     switch (this.fTargetMode) {
                         case TargetMode.tmParent:
                             if (sx == GEDCOMSex.svFemale) {
-                                this.txtSurname.Text = GKUtils.GetRusWifeSurname(iFamily);
+                                this.txtSurname.Text = RussianCulture.GetRusWifeSurname(iFamily);
                             }
                             this.cmbPatronymic.Items.Add(names.GetPatronymicByName(iName, GEDCOMSex.svMale));
                             this.cmbPatronymic.Items.Add(names.GetPatronymicByName(iName, GEDCOMSex.svFemale));
@@ -84,13 +84,13 @@ namespace GKUI.Dialogs
                                     this.txtName.Text = names.GetNameByPatronymic(iPatronymic);
                                     break;
                                 case GEDCOMSex.svFemale:
-                                    this.txtSurname.Text = '(' + GKUtils.GetRusWifeSurname(iFamily) + ')';
+                                    this.txtSurname.Text = '(' + RussianCulture.GetRusWifeSurname(iFamily) + ')';
                                     break;
                             }
                             break;
                             
                         case TargetMode.tmWife:
-                            this.txtSurname.Text = '(' + GKUtils.GetRusWifeSurname(iFamily) + ')';
+                            this.txtSurname.Text = '(' + RussianCulture.GetRusWifeSurname(iFamily) + ')';
                             break;
                     }
                 }

@@ -46,7 +46,7 @@ namespace GKImageViewerPlugin
 		    this.Name = "ImageViewerWin";
 		    this.ShowInTaskbar = false;
 		    this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-		    this.Text = "Просмотр";
+		    this.Text = "ImageViewerWin";
 		    this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TfmMediaView_KeyDown);
 		    this.ToolBar1.ResumeLayout(false);
 		    this.ToolBar1.PerformLayout();

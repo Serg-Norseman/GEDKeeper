@@ -92,7 +92,7 @@ namespace GKTextSearchPlugin
 
 			doc.SetData(rec.XRef);							// not edit: for link from search results to gedcom-base
 			doc.AddTerm("Q" + baseSign + "_" + rec.XRef);	// not edit: specific db_rec_id - for FindDocId()
-			doc.AddValue(0, recLastchange);				// not edit: for update check
+			doc.AddValue(0, recLastchange);				    // not edit: for update check
 			doc.AddBooleanTerm("GDB" + baseSign);			// not edit: for filtering by database in Search()
 
 			indexer.SetDocument(doc);
@@ -104,13 +104,13 @@ namespace GKTextSearchPlugin
 			uint docid = FindDocId(aBase, database, record.XRef);
 
 			if (docid != 0) {
-				// проверка на необходимость обновления
+				// checking for needed updates
 				string recLastchange = record.ChangeDate.ToString();
 
 				Document curDoc = database.GetDocument(docid);
 				string docLastchange = curDoc.GetValue(0);
 
-				// обновление записи
+				// updating a record
 				if (!string.Equals(recLastchange, docLastchange)) {
 					using (Document doc = new Document())
 					{
@@ -119,7 +119,7 @@ namespace GKTextSearchPlugin
 					}
 				}
 			} else {
-				// чистое добавление
+				// only adding
 				using (Document doc = new Document())
 				{
 					SetDocumentContext(aBase, doc, indexer, record);
