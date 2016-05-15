@@ -1171,7 +1171,7 @@ namespace GKCore.Tools
 
             Hashtable families = new Hashtable();
 
-            pc.ProgressInit("Этап 1", tree.RecordsCount);
+            pc.ProgressInit(LangMan.LS(LSID.LSID_Stage) + "1", tree.RecordsCount);
 
             // make a table of surnames and persons, related to these surnames
             int num = tree.RecordsCount;
@@ -1203,7 +1203,7 @@ namespace GKCore.Tools
                 pc.ProgressStep();
             }
 
-            pc.ProgressInit("Этап 2", families.Count);
+            pc.ProgressInit(LangMan.LS(LSID.LSID_Stage) + "2", families.Count);
 
             // find all persons of one surname, not related by ties of kinship
             foreach (DictionaryEntry entry in families)
@@ -1277,7 +1277,7 @@ namespace GKCore.Tools
             mParams.YearsInaccuracy = 3;
             mParams.RusNames = true;
 
-            pc.ProgressInit("Поиск дубликатов", treeA.RecordsCount);
+            pc.ProgressInit(LangMan.LS(LSID.LSID_DuplicatesSearch), treeA.RecordsCount);
             try
             {
                 for (int i = 0; i <= treeA.RecordsCount - 1; i++) {

@@ -130,23 +130,27 @@ namespace GKUI
             this.btnAutoSearch.Text = LangMan.LS(LSID.LSID_RM_Search);
             this.btnSkip.Text = LangMan.LS(LSID.LSID_RM_Skip);
             this.rgMode.Text = LangMan.LS(LSID.LSID_RM_Records);
-            this.RadioButton5.Text = LangMan.LS(LSID.LSID_RPIndividuals);
-            this.RadioButton6.Text = LangMan.LS(LSID.LSID_RPNotes);
-            this.RadioButton7.Text = LangMan.LS(LSID.LSID_RPFamilies);
-            this.RadioButton8.Text = LangMan.LS(LSID.LSID_RPSources);
-            this.GroupBox1.Text = LangMan.LS(LSID.LSID_RM_SearchPersons);
+            this.radPersons.Text = LangMan.LS(LSID.LSID_RPIndividuals);
+            this.radNotes.Text = LangMan.LS(LSID.LSID_RPNotes);
+            this.radFamilies.Text = LangMan.LS(LSID.LSID_RPFamilies);
+            this.radSources.Text = LangMan.LS(LSID.LSID_RPSources);
+            this.grpSearchPersons.Text = LangMan.LS(LSID.LSID_RM_SearchPersons);
             this.chkIndistinctMatching.Text = LangMan.LS(LSID.LSID_RM_IndistinctMatching);
             this.chkBirthYear.Text = LangMan.LS(LSID.LSID_RM_BirthYear);
             this.lblNameAccuracy.Text = LangMan.LS(LSID.LSID_RM_NameAccuracy);
             this.lblYearInaccuracy.Text = LangMan.LS(LSID.LSID_RM_YearInaccuracy);
             this.btnBaseRepair.Text = LangMan.LS(LSID.LSID_Repair);
-            this.Label8.Text = LangMan.LS(LSID.LSID_MinGenerations);
+            this.lblMinGenerations.Text = LangMan.LS(LSID.LSID_MinGenerations);
             this.btnSetPatriarch.Text = LangMan.LS(LSID.LSID_SetPatFlag);
             this.btnPatSearch.Text = LangMan.LS(LSID.LSID_Search);
             this.btnIntoList.Text = LangMan.LS(LSID.LSID_InsertIntoBook);
             
             this.grpMergeOther.Text = LangMan.LS(LSID.LSID_Other);
             this.chkBookmarkMerged.Text = LangMan.LS(LSID.LSID_BookmarkMerged);
+
+            this.lblMasterBase.Text = LangMan.LS(LSID.LSID_MasterBase);
+            this.lblOtherBase.Text = LangMan.LS(LSID.LSID_OtherBase);
+            this.edMasterBase.Text = LangMan.LS(LSID.LSID_CurrentBase);
         }
 
         private void PageControl_SelectedIndexChanged(object sender, EventArgs e)
@@ -263,10 +267,10 @@ namespace GKUI
 
         private void RadioButton8_Click(object sender, EventArgs e)
         {
-            if (this.RadioButton5.Checked) this.fRMMode = GEDCOMRecordType.rtIndividual;
-            if (this.RadioButton6.Checked) this.fRMMode = GEDCOMRecordType.rtNote;
-            if (this.RadioButton7.Checked) this.fRMMode = GEDCOMRecordType.rtFamily;
-            if (this.RadioButton8.Checked) this.fRMMode = GEDCOMRecordType.rtSource;
+            if (this.radPersons.Checked) this.fRMMode = GEDCOMRecordType.rtIndividual;
+            if (this.radNotes.Checked) this.fRMMode = GEDCOMRecordType.rtNote;
+            if (this.radFamilies.Checked) this.fRMMode = GEDCOMRecordType.rtFamily;
+            if (this.radSources.Checked) this.fRMMode = GEDCOMRecordType.rtSource;
 
             this.MergeCtl.MergeMode = this.fRMMode;
         }

@@ -1979,7 +1979,8 @@ namespace GKCore
                         {
                             string st = mmRec.FileReferences[0].Title;
 
-                            summary.Add("  " + HyperLink(mmRec.XRef, st, 0) + " (" + HyperLink("view_" + mmRec.XRef, "просмотр", 0) + ")");
+                            summary.Add("  " + HyperLink(mmRec.XRef, st, 0) + " (" + 
+                                        HyperLink("view_" + mmRec.XRef, LangMan.LS(LSID.LSID_MediaView), 0) + ")");
                         }
                     }
                 }

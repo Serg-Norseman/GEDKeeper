@@ -566,7 +566,7 @@ namespace GKCore
             bool result = (!string.IsNullOrEmpty(path));
             if (!result)
             {
-                GKUtils.ShowError("Для типов хранения \"архив\" и \"хранилище\" новый файл БД нужно предварительно сохранить");
+                GKUtils.ShowError(LangMan.LS(LSID.LSID_NewDBFileNeedToSave));
             }
             return result;
         }
@@ -764,7 +764,7 @@ namespace GKCore
                     }
                     catch (IOException)
                     {
-                        GKUtils.ShowError("Файл с таким именем уже есть в хранилище");
+                        GKUtils.ShowError(LangMan.LS(LSID.LSID_FileWithSameNameAlreadyExistsInStorage));
                         result = false;
                     }
                     break;
@@ -916,7 +916,7 @@ namespace GKCore
                 string gsh = Encoding.ASCII.GetString(gsHeader);
 
                 if (!string.Equals(gsh, GEDSEC_HEADER)) {
-                    throw new Exception("Это не GEDSEC-совместимый файл");
+                    throw new Exception(LangMan.LS(LSID.LSID_ItsNotGEDSECCompatibleFile));
                 }
 
                 if (gsMajVer < GS_MAJOR_VER || gsMinVer < GS_MINOR_VER)

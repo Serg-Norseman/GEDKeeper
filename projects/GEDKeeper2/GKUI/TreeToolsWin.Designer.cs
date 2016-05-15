@@ -30,7 +30,7 @@ namespace GKUI
 		private System.Windows.Forms.ProgressBar ProgressBar1;
 		private System.Windows.Forms.TabPage pageMergeOptions;
 		private System.Windows.Forms.GroupBox rgMode;
-		private System.Windows.Forms.GroupBox GroupBox1;
+		private System.Windows.Forms.GroupBox grpSearchPersons;
 		private System.Windows.Forms.Label lblNameAccuracy;
 		private System.Windows.Forms.Label lblYearInaccuracy;
 		private System.Windows.Forms.NumericUpDown edNameAccuracy;
@@ -41,25 +41,25 @@ namespace GKUI
 		private System.Windows.Forms.TabPage pageTreeCheck;
 		private System.Windows.Forms.Button btnBaseRepair;
 		private System.Windows.Forms.Panel Panel1;
-		private System.Windows.Forms.Label Label4;
+		private System.Windows.Forms.Label lblMasterBase;
 		private System.Windows.Forms.TextBox edMasterBase;
-		private System.Windows.Forms.Label Label7;
+		private System.Windows.Forms.Label lblOtherBase;
 		private System.Windows.Forms.TextBox edUpdateBase;
 		private System.Windows.Forms.Button btnTreeMerge;
 		private System.Windows.Forms.TextBox mSyncRes;
 		private System.Windows.Forms.TabPage pagePatSearch;
 		private System.Windows.Forms.Button btnPatSearch;
 		private System.Windows.Forms.Panel Panel3;
-		private System.Windows.Forms.Label Label8;
+		private System.Windows.Forms.Label lblMinGenerations;
 		private System.Windows.Forms.NumericUpDown edMinGens;
 		private System.Windows.Forms.TabPage pagePlaceManage;
 		private System.Windows.Forms.Panel Panel4;
 		private System.Windows.Forms.Button btnSetPatriarch;
 		private System.Windows.Forms.Button btnIntoList;
-		private System.Windows.Forms.RadioButton RadioButton5;
-		private System.Windows.Forms.RadioButton RadioButton6;
-		private System.Windows.Forms.RadioButton RadioButton7;
-		private System.Windows.Forms.RadioButton RadioButton8;
+		private System.Windows.Forms.RadioButton radPersons;
+		private System.Windows.Forms.RadioButton radNotes;
+		private System.Windows.Forms.RadioButton radFamilies;
+		private System.Windows.Forms.RadioButton radSources;
 		private System.Windows.Forms.CheckBox chkBookmarkMerged;
 		private System.Windows.Forms.GroupBox grpMergeOther;
 		private GKCommon.Controls.LogChart gkLogChart1;
@@ -88,8 +88,8 @@ namespace GKUI
 		    this.radMathExternal = new System.Windows.Forms.RadioButton();
 		    this.ListCompare = new System.Windows.Forms.TextBox();
 		    this.pageTreeMerge = new System.Windows.Forms.TabPage();
-		    this.Label4 = new System.Windows.Forms.Label();
-		    this.Label7 = new System.Windows.Forms.Label();
+		    this.lblMasterBase = new System.Windows.Forms.Label();
+		    this.lblOtherBase = new System.Windows.Forms.Label();
 		    this.edMasterBase = new System.Windows.Forms.TextBox();
 		    this.edUpdateBase = new System.Windows.Forms.TextBox();
 		    this.btnTreeMerge = new System.Windows.Forms.Button();
@@ -114,11 +114,11 @@ namespace GKUI
 		    this.grpMergeOther = new System.Windows.Forms.GroupBox();
 		    this.chkBookmarkMerged = new System.Windows.Forms.CheckBox();
 		    this.rgMode = new System.Windows.Forms.GroupBox();
-		    this.RadioButton8 = new System.Windows.Forms.RadioButton();
-		    this.RadioButton7 = new System.Windows.Forms.RadioButton();
-		    this.RadioButton6 = new System.Windows.Forms.RadioButton();
-		    this.RadioButton5 = new System.Windows.Forms.RadioButton();
-		    this.GroupBox1 = new System.Windows.Forms.GroupBox();
+		    this.radSources = new System.Windows.Forms.RadioButton();
+		    this.radFamilies = new System.Windows.Forms.RadioButton();
+		    this.radNotes = new System.Windows.Forms.RadioButton();
+		    this.radPersons = new System.Windows.Forms.RadioButton();
+		    this.grpSearchPersons = new System.Windows.Forms.GroupBox();
 		    this.lblNameAccuracy = new System.Windows.Forms.Label();
 		    this.lblYearInaccuracy = new System.Windows.Forms.Label();
 		    this.chkIndistinctMatching = new System.Windows.Forms.CheckBox();
@@ -134,7 +134,7 @@ namespace GKUI
 		    this.pagePatSearch = new System.Windows.Forms.TabPage();
 		    this.btnPatriarchsDiagram = new System.Windows.Forms.Button();
 		    this.chkWithoutDates = new System.Windows.Forms.CheckBox();
-		    this.Label8 = new System.Windows.Forms.Label();
+		    this.lblMinGenerations = new System.Windows.Forms.Label();
 		    this.btnPatSearch = new System.Windows.Forms.Button();
 		    this.Panel3 = new System.Windows.Forms.Panel();
 		    this.edMinGens = new System.Windows.Forms.NumericUpDown();
@@ -154,7 +154,7 @@ namespace GKUI
 		    this.pageMergeOptions.SuspendLayout();
 		    this.grpMergeOther.SuspendLayout();
 		    this.rgMode.SuspendLayout();
-		    this.GroupBox1.SuspendLayout();
+		    this.grpSearchPersons.SuspendLayout();
 		    ((System.ComponentModel.ISupportInitialize)(this.edNameAccuracy)).BeginInit();
 		    ((System.ComponentModel.ISupportInitialize)(this.edYearInaccuracy)).BeginInit();
 		    this.pageFamilyGroups.SuspendLayout();
@@ -289,8 +289,8 @@ namespace GKUI
 		    // 
 		    // pageTreeMerge
 		    // 
-		    this.pageTreeMerge.Controls.Add(this.Label4);
-		    this.pageTreeMerge.Controls.Add(this.Label7);
+		    this.pageTreeMerge.Controls.Add(this.lblMasterBase);
+		    this.pageTreeMerge.Controls.Add(this.lblOtherBase);
 		    this.pageTreeMerge.Controls.Add(this.edMasterBase);
 		    this.pageTreeMerge.Controls.Add(this.edUpdateBase);
 		    this.pageTreeMerge.Controls.Add(this.btnTreeMerge);
@@ -301,23 +301,23 @@ namespace GKUI
 		    this.pageTreeMerge.TabIndex = 1;
 		    this.pageTreeMerge.Text = "pageTreeMerge";
 		    // 
-		    // Label4
+		    // lblMasterBase
 		    // 
-		    this.Label4.AutoSize = true;
-		    this.Label4.Location = new System.Drawing.Point(11, 10);
-		    this.Label4.Name = "Label4";
-		    this.Label4.Size = new System.Drawing.Size(88, 17);
-		    this.Label4.TabIndex = 0;
-		    this.Label4.Text = "Мастер-база";
+		    this.lblMasterBase.AutoSize = true;
+		    this.lblMasterBase.Location = new System.Drawing.Point(11, 10);
+		    this.lblMasterBase.Name = "lblMasterBase";
+		    this.lblMasterBase.Size = new System.Drawing.Size(88, 17);
+		    this.lblMasterBase.TabIndex = 0;
+		    this.lblMasterBase.Text = "lblMasterBase";
 		    // 
-		    // Label7
+		    // lblOtherBase
 		    // 
-		    this.Label7.AutoSize = true;
-		    this.Label7.Location = new System.Drawing.Point(11, 68);
-		    this.Label7.Name = "Label7";
-		    this.Label7.Size = new System.Drawing.Size(122, 17);
-		    this.Label7.TabIndex = 1;
-		    this.Label7.Text = "Обновление базы";
+		    this.lblOtherBase.AutoSize = true;
+		    this.lblOtherBase.Location = new System.Drawing.Point(11, 68);
+		    this.lblOtherBase.Name = "lblOtherBase";
+		    this.lblOtherBase.Size = new System.Drawing.Size(122, 17);
+		    this.lblOtherBase.TabIndex = 1;
+		    this.lblOtherBase.Text = "lblOtherBase";
 		    // 
 		    // edMasterBase
 		    // 
@@ -327,7 +327,7 @@ namespace GKUI
 		    this.edMasterBase.ReadOnly = true;
 		    this.edMasterBase.Size = new System.Drawing.Size(853, 24);
 		    this.edMasterBase.TabIndex = 0;
-		    this.edMasterBase.Text = "[текущая база данных]";
+		    this.edMasterBase.Text = "edMasterBase";
 		    // 
 		    // edUpdateBase
 		    // 
@@ -516,7 +516,7 @@ namespace GKUI
 		    // 
 		    this.pageMergeOptions.Controls.Add(this.grpMergeOther);
 		    this.pageMergeOptions.Controls.Add(this.rgMode);
-		    this.pageMergeOptions.Controls.Add(this.GroupBox1);
+		    this.pageMergeOptions.Controls.Add(this.grpSearchPersons);
 		    this.pageMergeOptions.Location = new System.Drawing.Point(4, 26);
 		    this.pageMergeOptions.Name = "pageMergeOptions";
 		    this.pageMergeOptions.Size = new System.Drawing.Size(957, 463);
@@ -545,69 +545,69 @@ namespace GKUI
 		    // 
 		    // rgMode
 		    // 
-		    this.rgMode.Controls.Add(this.RadioButton8);
-		    this.rgMode.Controls.Add(this.RadioButton7);
-		    this.rgMode.Controls.Add(this.RadioButton6);
-		    this.rgMode.Controls.Add(this.RadioButton5);
+		    this.rgMode.Controls.Add(this.radSources);
+		    this.rgMode.Controls.Add(this.radFamilies);
+		    this.rgMode.Controls.Add(this.radNotes);
+		    this.rgMode.Controls.Add(this.radPersons);
 		    this.rgMode.Location = new System.Drawing.Point(11, 10);
 		    this.rgMode.Name = "rgMode";
 		    this.rgMode.Size = new System.Drawing.Size(315, 118);
 		    this.rgMode.TabIndex = 0;
 		    this.rgMode.TabStop = false;
-		    this.rgMode.Text = "Записи";
+		    this.rgMode.Text = "rgMode";
 		    // 
-		    // RadioButton8
+		    // radSources
 		    // 
-		    this.RadioButton8.Location = new System.Drawing.Point(22, 87);
-		    this.RadioButton8.Name = "RadioButton8";
-		    this.RadioButton8.Size = new System.Drawing.Size(269, 20);
-		    this.RadioButton8.TabIndex = 3;
-		    this.RadioButton8.Text = "Источники";
-		    this.RadioButton8.Click += new System.EventHandler(this.RadioButton8_Click);
+		    this.radSources.Location = new System.Drawing.Point(22, 87);
+		    this.radSources.Name = "radSources";
+		    this.radSources.Size = new System.Drawing.Size(269, 20);
+		    this.radSources.TabIndex = 3;
+		    this.radSources.Text = "radSources";
+		    this.radSources.Click += new System.EventHandler(this.RadioButton8_Click);
 		    // 
-		    // RadioButton7
+		    // radFamilies
 		    // 
-		    this.RadioButton7.Location = new System.Drawing.Point(22, 68);
-		    this.RadioButton7.Name = "RadioButton7";
-		    this.RadioButton7.Size = new System.Drawing.Size(269, 19);
-		    this.RadioButton7.TabIndex = 2;
-		    this.RadioButton7.Text = "Семьи";
-		    this.RadioButton7.Click += new System.EventHandler(this.RadioButton8_Click);
+		    this.radFamilies.Location = new System.Drawing.Point(22, 68);
+		    this.radFamilies.Name = "radFamilies";
+		    this.radFamilies.Size = new System.Drawing.Size(269, 19);
+		    this.radFamilies.TabIndex = 2;
+		    this.radFamilies.Text = "radFamilies";
+		    this.radFamilies.Click += new System.EventHandler(this.RadioButton8_Click);
 		    // 
-		    // RadioButton6
+		    // radNotes
 		    // 
-		    this.RadioButton6.Location = new System.Drawing.Point(22, 49);
-		    this.RadioButton6.Name = "RadioButton6";
-		    this.RadioButton6.Size = new System.Drawing.Size(269, 19);
-		    this.RadioButton6.TabIndex = 1;
-		    this.RadioButton6.Text = "Заметки";
-		    this.RadioButton6.Click += new System.EventHandler(this.RadioButton8_Click);
+		    this.radNotes.Location = new System.Drawing.Point(22, 49);
+		    this.radNotes.Name = "radNotes";
+		    this.radNotes.Size = new System.Drawing.Size(269, 19);
+		    this.radNotes.TabIndex = 1;
+		    this.radNotes.Text = "radNotes";
+		    this.radNotes.Click += new System.EventHandler(this.RadioButton8_Click);
 		    // 
-		    // RadioButton5
+		    // radPersons
 		    // 
-		    this.RadioButton5.Checked = true;
-		    this.RadioButton5.Location = new System.Drawing.Point(22, 29);
-		    this.RadioButton5.Name = "RadioButton5";
-		    this.RadioButton5.Size = new System.Drawing.Size(269, 20);
-		    this.RadioButton5.TabIndex = 0;
-		    this.RadioButton5.TabStop = true;
-		    this.RadioButton5.Text = "Персоны";
-		    this.RadioButton5.Click += new System.EventHandler(this.RadioButton8_Click);
+		    this.radPersons.Checked = true;
+		    this.radPersons.Location = new System.Drawing.Point(22, 29);
+		    this.radPersons.Name = "radPersons";
+		    this.radPersons.Size = new System.Drawing.Size(269, 20);
+		    this.radPersons.TabIndex = 0;
+		    this.radPersons.TabStop = true;
+		    this.radPersons.Text = "radPersons";
+		    this.radPersons.Click += new System.EventHandler(this.RadioButton8_Click);
 		    // 
-		    // GroupBox1
+		    // grpSearchPersons
 		    // 
-		    this.GroupBox1.Controls.Add(this.lblNameAccuracy);
-		    this.GroupBox1.Controls.Add(this.lblYearInaccuracy);
-		    this.GroupBox1.Controls.Add(this.chkIndistinctMatching);
-		    this.GroupBox1.Controls.Add(this.edNameAccuracy);
-		    this.GroupBox1.Controls.Add(this.edYearInaccuracy);
-		    this.GroupBox1.Controls.Add(this.chkBirthYear);
-		    this.GroupBox1.Location = new System.Drawing.Point(11, 136);
-		    this.GroupBox1.Name = "GroupBox1";
-		    this.GroupBox1.Size = new System.Drawing.Size(315, 193);
-		    this.GroupBox1.TabIndex = 1;
-		    this.GroupBox1.TabStop = false;
-		    this.GroupBox1.Text = "Поиск персон";
+		    this.grpSearchPersons.Controls.Add(this.lblNameAccuracy);
+		    this.grpSearchPersons.Controls.Add(this.lblYearInaccuracy);
+		    this.grpSearchPersons.Controls.Add(this.chkIndistinctMatching);
+		    this.grpSearchPersons.Controls.Add(this.edNameAccuracy);
+		    this.grpSearchPersons.Controls.Add(this.edYearInaccuracy);
+		    this.grpSearchPersons.Controls.Add(this.chkBirthYear);
+		    this.grpSearchPersons.Location = new System.Drawing.Point(11, 136);
+		    this.grpSearchPersons.Name = "grpSearchPersons";
+		    this.grpSearchPersons.Size = new System.Drawing.Size(315, 193);
+		    this.grpSearchPersons.TabIndex = 1;
+		    this.grpSearchPersons.TabStop = false;
+		    this.grpSearchPersons.Text = "grpSearchPersons";
 		    // 
 		    // lblNameAccuracy
 		    // 
@@ -721,7 +721,7 @@ namespace GKUI
 		    // 
 		    this.pagePatSearch.Controls.Add(this.btnPatriarchsDiagram);
 		    this.pagePatSearch.Controls.Add(this.chkWithoutDates);
-		    this.pagePatSearch.Controls.Add(this.Label8);
+		    this.pagePatSearch.Controls.Add(this.lblMinGenerations);
 		    this.pagePatSearch.Controls.Add(this.btnPatSearch);
 		    this.pagePatSearch.Controls.Add(this.Panel3);
 		    this.pagePatSearch.Controls.Add(this.edMinGens);
@@ -752,14 +752,14 @@ namespace GKUI
 		    this.chkWithoutDates.Text = "chkWithoutDates";
 		    this.chkWithoutDates.UseVisualStyleBackColor = true;
 		    // 
-		    // Label8
+		    // lblMinGenerations
 		    // 
-		    this.Label8.AutoSize = true;
-		    this.Label8.Location = new System.Drawing.Point(16, 468);
-		    this.Label8.Name = "Label8";
-		    this.Label8.Size = new System.Drawing.Size(207, 17);
-		    this.Label8.TabIndex = 0;
-		    this.Label8.Text = "Поколений потомков не менее";
+		    this.lblMinGenerations.AutoSize = true;
+		    this.lblMinGenerations.Location = new System.Drawing.Point(16, 468);
+		    this.lblMinGenerations.Name = "lblMinGenerations";
+		    this.lblMinGenerations.Size = new System.Drawing.Size(207, 17);
+		    this.lblMinGenerations.TabIndex = 0;
+		    this.lblMinGenerations.Text = "lblMinGenerations";
 		    // 
 		    // btnPatSearch
 		    // 
@@ -767,7 +767,7 @@ namespace GKUI
 		    this.btnPatSearch.Name = "btnPatSearch";
 		    this.btnPatSearch.Size = new System.Drawing.Size(105, 30);
 		    this.btnPatSearch.TabIndex = 0;
-		    this.btnPatSearch.Text = "Поиск";
+		    this.btnPatSearch.Text = "btnPatSearch";
 		    this.btnPatSearch.Click += new System.EventHandler(this.btnPatSearch_Click);
 		    // 
 		    // Panel3
@@ -852,7 +852,7 @@ namespace GKUI
 		    this.Name = "TreeToolsWin";
 		    this.ShowInTaskbar = false;
 		    this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-		    this.Text = "Инструменты";
+		    this.Text = "TreeToolsWin";
 		    this.tabsTools.ResumeLayout(false);
 		    this.pageTreeCompare.ResumeLayout(false);
 		    this.pageTreeCompare.PerformLayout();
@@ -867,7 +867,7 @@ namespace GKUI
 		    this.pageMergeOptions.ResumeLayout(false);
 		    this.grpMergeOther.ResumeLayout(false);
 		    this.rgMode.ResumeLayout(false);
-		    this.GroupBox1.ResumeLayout(false);
+		    this.grpSearchPersons.ResumeLayout(false);
 		    ((System.ComponentModel.ISupportInitialize)(this.edNameAccuracy)).EndInit();
 		    ((System.ComponentModel.ISupportInitialize)(this.edYearInaccuracy)).EndInit();
 		    this.pageFamilyGroups.ResumeLayout(false);

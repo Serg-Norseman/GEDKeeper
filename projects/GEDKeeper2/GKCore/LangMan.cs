@@ -177,10 +177,8 @@ namespace GKCore
         /* 127 */ LSID_Members,
         /* 128 */ LSID_WinGroupEdit,
         /* 129 */ LSID_DetachMemberQuery,
-
-        /* 130 */ LSID_TimeScale, // deprecated
-        /* 131 */ LSID_CurrentYear, // deprecated
-
+        /* 130 */ LSID_MediaView,
+        /* 131 */ LSID_Stage,
         /* 132 */ LSID_Telephone,
         /* 133 */ LSID_Mail,
         /* 134 */ LSID_WebSite,
@@ -566,14 +564,12 @@ namespace GKCore
         /* 502 */ LSID_SrcNot,
         /* 503 */ LSID_SrcAny,
 
-        /* 504 */ LSID_PLPerson, // deprecated?
-        /* 505 */ LSID_PLGodparent, // deprecated?
-        /* 506 */ LSID_Child, // deprecated?
-
-        /* 507 */ LSID_NameInvalid, // deprecated?
-        /* 508 */ LSID_BasePersonInvalid, // deprecated?
-        /* 509 */ LSID_SourceYearInvalid, // deprecated?
-
+        /* 504 */ LSID_MasterBase,
+        /* 505 */ LSID_OtherBase,
+        /* 506 */ LSID_CurrentBase,
+        /* 507 */ LSID_IncludedSourceFilter,
+        /* 508 */ LSID_IncludedGroupFilter,
+        /* 509 */ LSID_DuplicatesSearch,
         /* 510 */ LSID_ValueInvalid,
         /* 511 */ LSID_Operation,
         /* 512 */ LSID_ToolOp_1,
@@ -778,8 +774,11 @@ namespace GKCore
         /* 694 */ LSID_ShowOnMapTip,
         /* 695 */ LSID_SourceAddTip,
         /* 696 */ LSID_GoalSelectTip,
+        /* 697 */ LSID_NewDBFileNeedToSave,
+        /* 698 */ LSID_FileWithSameNameAlreadyExistsInStorage,
+        /* 699 */ LSID_ItsNotGEDSECCompatibleFile,
 
-        /* 000 */ LSID_Last = LSID_GoalSelectTip
+        /* 000 */ LSID_Last = LSID_ItsNotGEDSECCompatibleFile
     }
 
     public static class LangMan
@@ -929,8 +928,8 @@ namespace GKCore
             /* 127 */ "Участники",
             /* 128 */ "Редактирование группы",
             /* 129 */ "Удалить ссылку на участника группы?",
-            /* 130 */ "Шкала времени",
-            /* 131 */ "Текущий год",
+            /* 130 */ "просмотр",
+            /* 131 */ "Этап",
             /* 132 */ "Телефон",
             /* 133 */ "Эл. почта",
             /* 134 */ "Сайт",
@@ -1310,12 +1309,13 @@ namespace GKCore
             /* 501 */ "- всё -",
             /* 502 */ "- нет -",
             /* 503 */ "- любые -",
-            /* 504 */ "Лицо",
-            /* 505 */ "Крестный",
-            /* 506 */ "Ребенок",
-            /* 507 */ "Количество компонентов имени меньше трех.",
-            /* 508 */ "Базовая персона (\"Лицо\") не определена первой",
-            /* 509 */ "Год источника задан неверно",
+
+            /* 504 */ "Мастер-база",
+            /* 505 */ "Обновление базы",
+            /* 506 */ "[текущая база данных]",
+            /* 507 */ "Установлен фильтр по источнику. Внести источник в новую персональную запись?",
+            /* 508 */ "Установлен фильтр по группе. Внести группу в новую персональную запись?",
+            /* 509 */ "Поиск дубликатов",
             /* 510 */ "Значение неверно",
             /* 511 */ "Операция",
             /* 512 */ "Сравнить базы данных",
@@ -1401,7 +1401,6 @@ namespace GKCore
             /* 590 */ "Количество ссылок",
             /* 591 */ "Обработка мест",
             /* 592 */ "Место уже есть в справочнике",
-
             /* 593 */ "Маркеры ДНК",
             /* 594 */ "Ср.возр.рождения первенца на ДР родителя",
             /* 595 */ "Ср.возр.рождения первенца на ДР ребенка",
@@ -1517,7 +1516,10 @@ namespace GKCore
             /* 693 */ "Удалить ссылку на место",
             /* 694 */ "Показать на карте",
             /* 695 */ "Выбрать или добавить запись источника",
-            /* 696 */ "Выбрать запись цели"
+            /* 696 */ "Выбрать запись цели",
+            /* 697 */ "Для типов хранения \"архив\" и \"хранилище\" новый файл БД нужно предварительно сохранить",
+            /* 698 */ "Файл с таким именем уже есть в хранилище",
+            /* 699 */ "Это не GEDSEC-совместимый файл"
         };
 
         private static readonly string[] LSList = new string[(int)LSID.LSID_Last + 1];

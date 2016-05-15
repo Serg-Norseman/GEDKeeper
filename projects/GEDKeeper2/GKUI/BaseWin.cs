@@ -535,7 +535,7 @@ namespace GKUI
             }
             catch (Exception ex)
             {
-                this.Host.LogWrite("TfmBase.FileLoad(): " + ex.Message);
+                this.Host.LogWrite("BaseWin.FileLoad(): " + ex.Message);
                 GKUtils.ShowError(LangMan.LS(LSID.LSID_LoadGedComFailed));
             }
 
@@ -569,7 +569,7 @@ namespace GKUI
             catch (Exception ex)
             {
                 GKUtils.ShowError(string.Format(LangMan.LS(LSID.LSID_FileSaveError), new object[] { fileName, "" }));
-                this.Host.LogWrite("TfmBase.FileSave(): " + ex.Message);
+                this.Host.LogWrite("BaseWin.FileSave(): " + ex.Message);
             }
         }
 
@@ -701,7 +701,7 @@ namespace GKUI
             }
             catch (Exception ex)
             {
-                this.Host.LogWrite("TfmBase.SelectFamily(): " + ex.Message);
+                this.Host.LogWrite("BaseWin.SelectFamily(): " + ex.Message);
                 result = null;
             }
 
@@ -734,7 +734,7 @@ namespace GKUI
             }
             catch (Exception ex)
             {
-                this.Host.LogWrite("TfmBase.SelectPerson(): " + ex.Message);
+                this.Host.LogWrite("BaseWin.SelectPerson(): " + ex.Message);
                 result = null;
             }
 
@@ -769,7 +769,7 @@ namespace GKUI
             }
             catch (Exception ex)
             {
-                this.Host.LogWrite("TfmBase.SelectRecord(): " + ex.Message);
+                this.Host.LogWrite("BaseWin.SelectRecord(): " + ex.Message);
                 result = null;
             }
 
@@ -882,7 +882,7 @@ namespace GKUI
             }
             catch (Exception ex)
             {
-                this.Host.LogWrite("TfmBase.ShowTips(): " + ex.Message);
+                this.Host.LogWrite("BaseWin.ShowTips(): " + ex.Message);
             }
         }
 
@@ -1531,7 +1531,7 @@ namespace GKUI
             }
             catch (Exception ex)
             {
-                this.Host.LogWrite("TfmBase.ShowRecordInfo(): " + ex.Message);
+                this.Host.LogWrite("BaseWin.ShowRecordInfo(): " + ex.Message);
             }
         }
 
@@ -1592,7 +1592,7 @@ namespace GKUI
                 }
                 catch (Exception ex)
                 {
-                    this.Host.LogWrite("TfmBase.GetRecordContext(): " + ex.Message);
+                    this.Host.LogWrite("BaseWin.GetRecordContext(): " + ex.Message);
                 }
             }
 
@@ -1929,7 +1929,7 @@ namespace GKUI
                     if (iFilter.SourceMode == FilterGroupMode.Selected)
                     {
                         GEDCOMSourceRecord src = this.fTree.XRefIndex_Find(iFilter.SourceRef) as GEDCOMSourceRecord;
-                        if (src != null && GKUtils.ShowQuestion("Установлен фильтр по источнику. Внести источник в новую персональную запись?") == DialogResult.Yes)
+                        if (src != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_IncludedSourceFilter)) == DialogResult.Yes)
                         {
                             result.AddSource(src, "", 0);
                         }
@@ -1938,7 +1938,7 @@ namespace GKUI
                     if (iFilter.FilterGroupMode == FilterGroupMode.Selected)
                     {
                         GEDCOMGroupRecord grp = this.fTree.XRefIndex_Find(iFilter.GroupRef) as GEDCOMGroupRecord;
-                        if (grp != null && GKUtils.ShowQuestion("Установлен фильтр по группе. Внести группу в новую персональную запись?") == DialogResult.Yes)
+                        if (grp != null && GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_IncludedGroupFilter)) == DialogResult.Yes)
                         {
                             grp.AddMember(result);
                         }

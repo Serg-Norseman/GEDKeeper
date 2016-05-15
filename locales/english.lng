@@ -128,8 +128,8 @@ Title
 Members
 Group edit
 Detach link on member?
-Time scale
-Current year
+view
+Stage
 Telephone number
 eMail
 Web site
@@ -502,12 +502,12 @@ in selected persons
 - all -
 - not -
 - any -
-Person
-Godparent
-Child
-Number of name components is less than three.
-Basic person ("Person") is not defined by the first
-Year of the source is incorrect
+Master-base
+Other base
+[current base]
+There is a filter on the source. To make the source in a new personal record?
+There is a filter in the group. To make a group in a new personal record?
+Duplicates search
 Invalid value
 Operation
 Compare databases
