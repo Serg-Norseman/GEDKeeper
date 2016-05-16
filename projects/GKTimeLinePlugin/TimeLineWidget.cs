@@ -171,7 +171,7 @@ namespace GKTimeLinePlugin
 			this.StatusUpdate();
 		}
 
-        // FIXME: возможно необходимо определение максимального возраста по статистике
+        // FIXME: perhaps it is necessary to define the maximum age by statistics
         private bool FilterHandler(GEDCOMRecord record)
         {
             bool result = true;

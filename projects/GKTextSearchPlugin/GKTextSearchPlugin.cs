@@ -43,9 +43,10 @@ namespace GKTextSearchPlugin
 {
     public enum TLS
     {
-    	LSID_PluginTitle,
-    	LSID_SearchIndexRefreshing,
-    	LSID_SearchResults
+        LSID_PluginTitle,
+        LSID_SearchIndexRefreshing,
+        LSID_SearchResults,
+        LSID_Search
     }
 
     public class Plugin : IPlugin, ISubscriber
@@ -58,98 +59,97 @@ namespace GKTextSearchPlugin
         private SearchManager fSearchMan;
 
         public string DisplayName {
-        	get {
-        	    return (fLangMan == null) ? DISPLAY_NAME : this.fLangMan.LS(TLS.LSID_PluginTitle);
-        	}
+            get {
+                return (fLangMan == null) ? DISPLAY_NAME : this.fLangMan.LS(TLS.LSID_PluginTitle);
+            }
         }
         
         public IHost Host { get { return fHost; } }
         public ILangMan LangMan { get { return fLangMan; } }
 
-		public SearchManager SearchMan
-		{
-			get { return this.fSearchMan; }
-		}
+        public SearchManager SearchMan
+        {
+            get { return this.fSearchMan; }
+        }
 
         public void Execute()
         {
-			if (this.fHost.IsUnix()) {
-        		this.fHost.ShowWarning(@"This function is not supported in Linux");
-        		return;
-        	}
+            if (this.fHost.IsUnix()) {
+                this.fHost.ShowWarning(@"This function is not supported in Linux");
+                return;
+            }
 
-			IBaseWindow curBase = fHost.GetCurrentFile();
-		    if (curBase == null) return;
+            IBaseWindow curBase = fHost.GetCurrentFile();
+            if (curBase == null) return;
 
-		    TextSearchWin tsWin = new TextSearchWin(this, curBase);
-		    tsWin.Show();
+            TextSearchWin tsWin = new TextSearchWin(this, curBase);
+            tsWin.Show();
         }
 
         public void NotifyRecord(IBaseWindow aBase, object record, RecordAction action)
         {
-        	#if !GK_LINUX
-        	if (aBase == null || record == null || this.fSearchMan == null) return;
-        	
-        	switch (action) {
-        		case RecordAction.raEdit:
+            #if !GK_LINUX
+            if (aBase == null || record == null || this.fSearchMan == null) return;
+            
+            switch (action) {
+                case RecordAction.raEdit:
                     this.fSearchMan.UpdateRecord(aBase, (GEDCOMRecord)record);
-        			break;
+                    break;
 
-        		case RecordAction.raDelete:
+                case RecordAction.raDelete:
                     this.fSearchMan.DeleteRecord(aBase, ((GEDCOMRecord)record).XRef);
-        			break;
-        	}
-        	#endif
+                    break;
+            }
+            #endif
         }
         
         public void OnHostClosing(ref bool cancelClosing) {}
-		public void OnHostActivate() {}
-		public void OnHostDeactivate() {}
+        public void OnHostActivate() {}
+        public void OnHostDeactivate() {}
 
         public void OnLanguageChange()
         {
-        	try
-        	{
-        		this.fLangMan = this.fHost.CreateLangMan(this);
-        	}
-        	catch (Exception ex)
-        	{
-        		fHost.LogWrite("GKTextSearchPlugin.OnLanguageChange(): " + ex.Message);
-        	}
+            try
+            {
+                this.fLangMan = this.fHost.CreateLangMan(this);
+            }
+            catch (Exception ex)
+            {
+                fHost.LogWrite("GKTextSearchPlugin.OnLanguageChange(): " + ex.Message);
+            }
         }
         
         public bool Startup(IHost host)
         {
-        	bool result = true;
-        	try
-        	{
-        		this.fHost = host;
-        		this.fLangMan = this.fHost.CreateLangMan(this);
-        		this.fSearchMan = new SearchManager(this);
-        	}
-        	catch (Exception ex)
-        	{
-        		fHost.LogWrite("GKTextSearchPlugin.Startup(): " + ex.Message);
-        		result = false;
-        	}
-        	return result;
+            bool result = true;
+            try
+            {
+                this.fHost = host;
+                this.fLangMan = this.fHost.CreateLangMan(this);
+                this.fSearchMan = new SearchManager(this);
+            }
+            catch (Exception ex)
+            {
+                fHost.LogWrite("GKTextSearchPlugin.Startup(): " + ex.Message);
+                result = false;
+            }
+            return result;
         }
 
         public bool Shutdown()
         {
-        	bool result = true;
-        	try
-        	{
-        		// Implement any shutdown code here
-        		//if (this.fSearchMan != null) this.fSearchMan.Dispose();
-        	}
-        	catch (Exception ex)
-        	{
-        		fHost.LogWrite("GKTextSearchPlugin.Shutdown(): " + ex.Message);
-        		result = false;
-        	}
-        	return result;
+            bool result = true;
+            try
+            {
+                // Implement any shutdown code here
+                //if (this.fSearchMan != null) this.fSearchMan.Dispose();
+            }
+            catch (Exception ex)
+            {
+                fHost.LogWrite("GKTextSearchPlugin.Shutdown(): " + ex.Message);
+                result = false;
+            }
+            return result;
         }
-
     }
 }

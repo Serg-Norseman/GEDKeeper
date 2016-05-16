@@ -69,14 +69,14 @@
             this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
-            // Label3
+            // lblFile
             // 
             this.lblFile.Location = new System.Drawing.Point(7, 19);
             this.lblFile.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.lblFile.Name = "Label3";
+            this.lblFile.Name = "lblFile";
             this.lblFile.Size = new System.Drawing.Size(55, 17);
             this.lblFile.TabIndex = 4;
-            this.lblFile.Text = "Файл";
+            this.lblFile.Text = "lblFile";
             // 
             // edImportFile
             // 
@@ -94,7 +94,7 @@
             this.btnImportFileChoose.Name = "btnImportFileChoose";
             this.btnImportFileChoose.Size = new System.Drawing.Size(107, 33);
             this.btnImportFileChoose.TabIndex = 5;
-            this.btnImportFileChoose.Text = "Выбрать...";
+            this.btnImportFileChoose.Text = "btnImportFileChoose";
             this.btnImportFileChoose.Click += new System.EventHandler(this.btnImportFileChoose_Click);
             // 
             // tabControl1
@@ -132,7 +132,7 @@
             this.groupBox3.Size = new System.Drawing.Size(531, 58);
             this.groupBox3.TabIndex = 11;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Параметры преобразований";
+            this.groupBox3.Text = "groupBox3";
             // 
             // chkSurnamesNormalize
             // 
@@ -140,7 +140,7 @@
             this.chkSurnamesNormalize.Name = "chkSurnamesNormalize";
             this.chkSurnamesNormalize.Size = new System.Drawing.Size(519, 24);
             this.chkSurnamesNormalize.TabIndex = 0;
-            this.chkSurnamesNormalize.Text = "Нормализовать фамилии (ПЕТРОВ -> Петров)";
+            this.chkSurnamesNormalize.Text = "chkSurnamesNormalize";
             this.chkSurnamesNormalize.UseVisualStyleBackColor = true;
             // 
             // groupBox2
@@ -160,7 +160,7 @@
             this.groupBox2.Size = new System.Drawing.Size(531, 190);
             this.groupBox2.TabIndex = 10;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Параметры текстовых росписей";
+            this.groupBox2.Text = "groupBox2";
             // 
             // cbDateSeparator
             // 
@@ -182,16 +182,13 @@
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(333, 25);
             this.label6.TabIndex = 6;
-            this.label6.Text = "Разделитель в датах";
+            this.label6.Text = "label6";
             // 
             // cbDatesFormat
             // 
             this.cbDatesFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbDatesFormat.Enabled = false;
             this.cbDatesFormat.FormattingEnabled = true;
-            this.cbDatesFormat.Items.AddRange(new object[] {
-                                    "ДД/ММ/ГГГГ",
-                                    "ГГГГ/ММ/ДД"});
             this.cbDatesFormat.Location = new System.Drawing.Point(344, 122);
             this.cbDatesFormat.Name = "cbDatesFormat";
             this.cbDatesFormat.Size = new System.Drawing.Size(181, 25);
@@ -203,15 +200,12 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(333, 25);
             this.label5.TabIndex = 4;
-            this.label5.Text = "Формат дат";
+            this.label5.Text = "label5";
             // 
             // cbGenerationFormat
             // 
             this.cbGenerationFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbGenerationFormat.FormattingEnabled = true;
-            this.cbGenerationFormat.Items.AddRange(new object[] {
-                                    "I, II, III, IV...",
-                                    "Поколение N"});
             this.cbGenerationFormat.Location = new System.Drawing.Point(344, 91);
             this.cbGenerationFormat.Name = "cbGenerationFormat";
             this.cbGenerationFormat.Size = new System.Drawing.Size(181, 25);
@@ -223,15 +217,12 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(333, 25);
             this.label4.TabIndex = 2;
-            this.label4.Text = "Формат строки поколения";
+            this.label4.Text = "label4";
             // 
             // cbNameFormat
             // 
             this.cbNameFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbNameFormat.FormattingEnabled = true;
-            this.cbNameFormat.Items.AddRange(new object[] {
-                                    "Имя Отчество Фамилия",
-                                    "Фамилия Имя Отчество"});
             this.cbNameFormat.Location = new System.Drawing.Point(345, 60);
             this.cbNameFormat.Name = "cbNameFormat";
             this.cbNameFormat.Size = new System.Drawing.Size(181, 25);
@@ -243,17 +234,13 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(333, 25);
             this.label2.TabIndex = 0;
-            this.label2.Text = "Формат ФИО в персональной строке";
+            this.label2.Text = "label2";
             // 
             // cbPersonSeparator
             // 
             this.cbPersonSeparator.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbPersonSeparator.Enabled = false;
             this.cbPersonSeparator.FormattingEnabled = true;
-            this.cbPersonSeparator.Items.AddRange(new object[] {
-                                    "нет специального",
-                                    ";",
-                                    ","});
             this.cbPersonSeparator.Location = new System.Drawing.Point(345, 28);
             this.cbPersonSeparator.Name = "cbPersonSeparator";
             this.cbPersonSeparator.Size = new System.Drawing.Size(181, 25);
@@ -265,7 +252,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(333, 25);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Разделитель данных в персональной строке";
+            this.label1.Text = "label1";
             // 
             // groupBox1
             // 
@@ -277,7 +264,7 @@
             this.groupBox1.Size = new System.Drawing.Size(385, 129);
             this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Формат нумерации персон";
+            this.groupBox1.Text = "groupBox1";
             // 
             // rbNumsDAboville
             // 
@@ -287,7 +274,7 @@
             this.rbNumsDAboville.Size = new System.Drawing.Size(314, 25);
             this.rbNumsDAboville.TabIndex = 0;
             this.rbNumsDAboville.TabStop = true;
-            this.rbNumsDAboville.Text = "по Д\'Абовиллю (пока не поддерживается)";
+            this.rbNumsDAboville.Text = "rbNumsDAboville";
             this.rbNumsDAboville.UseVisualStyleBackColor = true;
             // 
             // rbNumsKonovalov
@@ -297,7 +284,7 @@
             this.rbNumsKonovalov.Size = new System.Drawing.Size(314, 25);
             this.rbNumsKonovalov.TabIndex = 0;
             this.rbNumsKonovalov.TabStop = true;
-            this.rbNumsKonovalov.Text = "по Коновалову";
+            this.rbNumsKonovalov.Text = "rbNumsKonovalov";
             this.rbNumsKonovalov.UseVisualStyleBackColor = true;
             // 
             // rbNumsUnknown
@@ -307,7 +294,7 @@
             this.rbNumsUnknown.Size = new System.Drawing.Size(314, 25);
             this.rbNumsUnknown.TabIndex = 0;
             this.rbNumsUnknown.TabStop = true;
-            this.rbNumsUnknown.Text = "неизвестно";
+            this.rbNumsUnknown.Text = "rbNumsUnknown";
             this.rbNumsUnknown.UseVisualStyleBackColor = true;
             // 
             // pageResult
@@ -342,7 +329,7 @@
             this.btnNext.Name = "btnNext";
             this.btnNext.Size = new System.Drawing.Size(107, 33);
             this.btnNext.TabIndex = 8;
-            this.btnNext.Text = "Вперед >";
+            this.btnNext.Text = "btnNext";
             this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
             // 
             // btnBack
@@ -352,7 +339,7 @@
             this.btnBack.Name = "btnBack";
             this.btnBack.Size = new System.Drawing.Size(107, 33);
             this.btnBack.TabIndex = 9;
-            this.btnBack.Text = "< Назад";
+            this.btnBack.Text = "btnBack";
             this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
             // 
             // btnClose
@@ -362,7 +349,7 @@
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(107, 33);
             this.btnClose.TabIndex = 10;
-            this.btnClose.Text = "Закрыть";
+            this.btnClose.Text = "btnClose";
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // groupBox4
@@ -373,7 +360,7 @@
             this.groupBox4.Size = new System.Drawing.Size(531, 58);
             this.groupBox4.TabIndex = 11;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Специальные настройки формата персональных строк";
+            this.groupBox4.Text = "groupBox4";
             // 
             // chkSpecial_1
             // 
@@ -381,10 +368,10 @@
             this.chkSpecial_1.Name = "chkSpecial_1";
             this.chkSpecial_1.Size = new System.Drawing.Size(519, 24);
             this.chkSpecial_1.TabIndex = 0;
-            this.chkSpecial_1.Text = "1) \"Номер. Имя (*рождение +смерть)\" - даты в скобках";
+            this.chkSpecial_1.Text = "chkSpecial_1";
             this.chkSpecial_1.UseVisualStyleBackColor = true;
             // 
-            // frmPedigreeImporter
+            // PedigreeImporterDlg
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(7, 17);
             this.ClientSize = new System.Drawing.Size(967, 580);

@@ -40,6 +40,12 @@ namespace GKTreeVizPlugin
             
             this.fPlugin = fPlugin;
             this.Text = fPlugin.DisplayName;
+            
+            // SetLang()
+        	this.chkWithoutDates.Text = "Не учитывать даты";
+        	this.lblMinGens.Text = "Поколений потомков не менее";
+        	this.btnAccept.Text = "Принять";
+        	this.btnCancel.Text = "Отменить";
         }
         
         private void BtnAcceptClick(object sender, EventArgs e)

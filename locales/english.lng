@@ -484,17 +484,17 @@ Scripts (*.lua)|*.lua
 BMP files (*.bmp)|*.bmp|JPEG files (*.jpg)|*.jpg|EMF files (*.emf)|*.emf|PNG files (*.png)|*.png|GIF files (*.gif)|*.gif
 <?>
 Pedigree
-Simple input
-Source input
-Source type
-Revision book
-Parish register
+Parameter
+Total
+Mans
+Womans
+<?>
 Year
-Settlement
-Event date
-Event type
-Link
-Comment
+<?>
+<?>
+<?>
+<?>
+<?>
 Cutting off the branches
 not
 on years

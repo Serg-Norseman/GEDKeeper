@@ -218,7 +218,7 @@ namespace GKUI
 
                 if (parent.SpouseToFamilyLinks.Count > 1)
                 {
-                    GKUtils.ShowError("У данной персоны несколько семей. Детей следует добавлять через супругов.");
+                    GKUtils.ShowError(LangMan.LS(LSID.LSID_ThisPersonHasSeveralFamilies));
                 }
                 else
                 {
@@ -240,9 +240,8 @@ namespace GKUI
 
                     if (child != null && family.AddChild(child))
                     {
-                        // данный повтор необходим, т.к. этот вызов в CreatePersonDialog срабатывает только,
-                        // если уже установлен отец, чего до вызова AddChild() - нет;
-                        // всё это необходимо для того, чтобы в справочник попали корректные отчества.
+                        // this repetition necessary, because the call of CreatePersonDialog only works if person already has a father, 
+                        // what to call AddChild () is no; all this is necessary in order to in the namebook were correct patronymics.
                         MainWin.Instance.NamesTable.ImportNames(child);
                         
                         this.UpdateChart();

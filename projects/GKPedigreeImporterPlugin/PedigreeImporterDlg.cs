@@ -56,10 +56,49 @@ namespace GKPedigreeImporterPlugin
             this.cbDatesFormat.SelectedIndex = 0;
             this.cbDateSeparator.SelectedIndex = 0;
 
+            this.cbDatesFormat.Items.Clear();
+            this.cbDatesFormat.Items.AddRange(new object[] {
+                                    "ДД/ММ/ГГГГ",
+                                    "ГГГГ/ММ/ДД"});
+
+            this.cbGenerationFormat.Items.Clear();
+            this.cbGenerationFormat.Items.AddRange(new object[] {
+                                    "I, II, III, IV...",
+                                    "Поколение N"});
+
+            this.cbNameFormat.Items.AddRange(new object[] {
+                                    "Имя Отчество Фамилия",
+                                    "Фамилия Имя Отчество"});
+
+            this.cbPersonSeparator.Items.AddRange(new object[] {
+                                    "нет специального",
+                                    ";",
+                                    ","});
+
             // SetLang()
             this.Text = fLangMan.LS(ILS.LSID_PluginTitle);
             this.lblFile.Text = fLangMan.LS(ILS.LSID_File);
             this.btnImportFileChoose.Text = fLangMan.LS(ILS.LSID_DlgSelect) + @"...";
+
+            this.lblFile.Text = "Файл";
+            this.btnImportFileChoose.Text = "Выбрать...";
+            this.groupBox3.Text = "Параметры преобразований";
+            this.chkSurnamesNormalize.Text = "Нормализовать фамилии (ПЕТРОВ -> Петров)";
+            this.groupBox2.Text = "Параметры текстовых росписей";
+            this.label6.Text = "Разделитель в датах";
+            this.label5.Text = "Формат дат";
+            this.label4.Text = "Формат строки поколения";
+            this.label2.Text = "Формат ФИО в персональной строке";
+            this.label1.Text = "Разделитель данных в персональной строке";
+            this.groupBox1.Text = "Формат нумерации персон";
+            this.rbNumsDAboville.Text = "по Д\'Абовиллю (пока не поддерживается)";
+            this.rbNumsKonovalov.Text = "по Коновалову";
+            this.rbNumsUnknown.Text = "неизвестно";
+            this.btnNext.Text = "Вперед >";
+            this.btnBack.Text = "< Назад";
+            this.btnClose.Text = "Закрыть";
+            this.groupBox4.Text = "Специальные настройки формата персональных строк";
+            this.chkSpecial_1.Text = "1) \"Номер. Имя (*рождение +смерть)\" - даты в скобках";
         }
 
         private void btnImportFileChoose_Click(object sender, EventArgs e)

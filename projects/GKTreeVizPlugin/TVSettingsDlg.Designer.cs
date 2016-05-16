@@ -6,6 +6,11 @@
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
+        private System.Windows.Forms.NumericUpDown edMinGens;
+        private System.Windows.Forms.Label lblMinGens;
+        private System.Windows.Forms.CheckBox chkWithoutDates;
+		private System.Windows.Forms.Button btnAccept;
+		private System.Windows.Forms.Button btnCancel;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -29,7 +34,7 @@
         private void InitializeComponent()
         {
         	this.chkWithoutDates = new System.Windows.Forms.CheckBox();
-        	this.Label8 = new System.Windows.Forms.Label();
+        	this.lblMinGens = new System.Windows.Forms.Label();
         	this.edMinGens = new System.Windows.Forms.NumericUpDown();
         	this.btnAccept = new System.Windows.Forms.Button();
         	this.btnCancel = new System.Windows.Forms.Button();
@@ -43,16 +48,16 @@
         	this.chkWithoutDates.Name = "chkWithoutDates";
         	this.chkWithoutDates.Size = new System.Drawing.Size(401, 38);
         	this.chkWithoutDates.TabIndex = 8;
-        	this.chkWithoutDates.Text = "Не учитывать даты";
+        	this.chkWithoutDates.Text = "chkWithoutDates";
         	this.chkWithoutDates.UseVisualStyleBackColor = true;
         	// 
-        	// Label8
+        	// lblMinGens
         	// 
-        	this.Label8.Location = new System.Drawing.Point(13, 18);
-        	this.Label8.Name = "Label8";
-        	this.Label8.Size = new System.Drawing.Size(286, 21);
-        	this.Label8.TabIndex = 6;
-        	this.Label8.Text = "Поколений потомков не менее";
+        	this.lblMinGens.Location = new System.Drawing.Point(13, 18);
+        	this.lblMinGens.Name = "lblMinGens";
+        	this.lblMinGens.Size = new System.Drawing.Size(286, 21);
+        	this.lblMinGens.TabIndex = 6;
+        	this.lblMinGens.Text = "lblMinGens";
         	// 
         	// edMinGens
         	// 
@@ -74,7 +79,7 @@
         	this.btnAccept.Name = "btnAccept";
         	this.btnAccept.Size = new System.Drawing.Size(113, 30);
         	this.btnAccept.TabIndex = 2;
-        	this.btnAccept.Text = "Принять";
+        	this.btnAccept.Text = "btnAccept";
         	this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
         	this.btnAccept.Click += new System.EventHandler(this.BtnAcceptClick);
         	// 
@@ -86,7 +91,7 @@
         	this.btnCancel.Name = "btnCancel";
         	this.btnCancel.Size = new System.Drawing.Size(113, 30);
         	this.btnCancel.TabIndex = 3;
-        	this.btnCancel.Text = "Отменить";
+        	this.btnCancel.Text = "btnCancel";
         	this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
         	// 
         	// frmTVPSettings
@@ -94,7 +99,7 @@
         	this.AutoScaleBaseSize = new System.Drawing.Size(7, 17);
         	this.ClientSize = new System.Drawing.Size(428, 131);
         	this.Controls.Add(this.chkWithoutDates);
-        	this.Controls.Add(this.Label8);
+        	this.Controls.Add(this.lblMinGens);
         	this.Controls.Add(this.edMinGens);
         	this.Controls.Add(this.btnAccept);
         	this.Controls.Add(this.btnCancel);
@@ -102,20 +107,14 @@
         	this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
         	this.MaximizeBox = false;
         	this.MinimizeBox = false;
-        	this.Name = "frmTVPSettings";
+        	this.Name = "TVSettingsDlg";
         	this.ShowInTaskbar = false;
         	this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-        	this.Text = "frmTVPSettings";
+        	this.Text = "TVSettingsDlg";
         	((System.ComponentModel.ISupportInitialize)(this.edMinGens)).EndInit();
         	this.ResumeLayout(false);
         }
 
         #endregion
-
-        private System.Windows.Forms.NumericUpDown edMinGens;
-        private System.Windows.Forms.Label Label8;
-        private System.Windows.Forms.CheckBox chkWithoutDates;
-		private System.Windows.Forms.Button btnAccept;
-		private System.Windows.Forms.Button btnCancel;
     }
 }

@@ -543,18 +543,20 @@ namespace GKCore
         /* 484 */ LSID_CommonStats, // deprecated
 
         /* 485 */ LSID_ExpPedigree,
+        /* 486 */ LSID_Parameter,
+        /* 487 */ LSID_Total,
+        /* 488 */ LSID_ManSum,
+        /* 489 */ LSID_WomanSum,
 
-        /* 486 */ LSID_InputSimple, // deprecated?
-        /* 487 */ LSID_InputSource, // deprecated?
-        /* 488 */ LSID_SourceKind, // deprecated?
-        /* 489 */ LSID_SK_Rev, // deprecated?
-        /* 490 */ LSID_SK_Met, // deprecated?
-        /* 491 */ LSID_Year, // deprecated?
-        /* 492 */ LSID_Settlement, // deprecated?
-        /* 493 */ LSID_EventDate, // deprecated?
-        /* 494 */ LSID_EventType, // deprecated?
-        /* 495 */ LSID_Join, // deprecated?
-        /* 496 */ LSID_Comment, // deprecated?
+        /* 490 */ LSID_SK_Met, // deprecated
+
+        /* 491 */ LSID_Year,
+
+        /* 492 */ LSID_Settlement, // deprecated
+        /* 493 */ LSID_EventDate, // deprecated
+        /* 494 */ LSID_EventType, // deprecated
+        /* 495 */ LSID_Join, // deprecated
+        /* 496 */ LSID_Comment, // deprecated
 
         /* 497 */ LSID_BranchCut,
         /* 498 */ LSID_Not,
@@ -777,8 +779,10 @@ namespace GKCore
         /* 697 */ LSID_NewDBFileNeedToSave,
         /* 698 */ LSID_FileWithSameNameAlreadyExistsInStorage,
         /* 699 */ LSID_ItsNotGEDSECCompatibleFile,
+        /* 700 */ LSID_ThisPersonHasSeveralFamilies,
+        /* 701 */ LSID_UploadErrorInExcel,
 
-        /* 000 */ LSID_Last = LSID_ItsNotGEDSECCompatibleFile
+        /* 000 */ LSID_Last = LSID_UploadErrorInExcel
     }
 
     public static class LangMan
@@ -1291,17 +1295,21 @@ namespace GKCore
             /* 484 */ "<?>",
 
             /* 485 */ "Родословная роспись",
-            /* 486 */ "Простой ввод",
-            /* 487 */ "Источник (метрики/ревизии)",
-            /* 488 */ "Тип источника",
-            /* 489 */ "Ревизская сказка",
-            /* 490 */ "Метрическая книга",
+            /* 486 */ "Параметр",
+            /* 487 */ "Всего",
+            /* 488 */ "Мужчины",
+            /* 489 */ "Женщины",
+
+            /* 490 */ "<?>",
+
             /* 491 */ "Год",
-            /* 492 */ "Населенный пункт",
-            /* 493 */ "Дата события",
-            /* 494 */ "Тип события",
-            /* 495 */ "Связь",
-            /* 496 */ "Примечание",
+
+            /* 492 */ "<?>",
+            /* 493 */ "<?>",
+            /* 494 */ "<?>",
+            /* 495 */ "<?>",
+            /* 496 */ "<?>",
+
             /* 497 */ "Отсечение ветвей",
             /* 498 */ "нет",
             /* 499 */ "по границе лет",
@@ -1519,7 +1527,9 @@ namespace GKCore
             /* 696 */ "Выбрать запись цели",
             /* 697 */ "Для типов хранения \"архив\" и \"хранилище\" новый файл БД нужно предварительно сохранить",
             /* 698 */ "Файл с таким именем уже есть в хранилище",
-            /* 699 */ "Это не GEDSEC-совместимый файл"
+            /* 699 */ "Это не GEDSEC-совместимый файл",
+            /* 700 */ "У данной персоны несколько семей. Детей следует добавлять через супругов.",
+            /* 701 */ "Ошибка выгрузки в Excel"
         };
 
         private static readonly string[] LSList = new string[(int)LSID.LSID_Last + 1];

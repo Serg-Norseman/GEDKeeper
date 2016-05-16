@@ -10,7 +10,7 @@ namespace GKUI
 		private System.Windows.Forms.TabPage pagePlaces;
 		private System.Windows.Forms.TreeView tvPlaces;
 		private System.Windows.Forms.Panel Panel1;
-		private System.Windows.Forms.GroupBox GroupBox2;
+		private System.Windows.Forms.GroupBox grpSelection;
 		private System.Windows.Forms.ComboBox cmbPersons;
 		private System.Windows.Forms.CheckBox chkResidence;
 		private System.Windows.Forms.CheckBox chkDeath;
@@ -40,7 +40,7 @@ namespace GKUI
 			this.PageControl1 = new System.Windows.Forms.TabControl();
 			this.pagePlaces = new System.Windows.Forms.TabPage();
 			this.tvPlaces = new System.Windows.Forms.TreeView();
-			this.GroupBox2 = new System.Windows.Forms.GroupBox();
+			this.grpSelection = new System.Windows.Forms.GroupBox();
 			this.cmbPersons = new System.Windows.Forms.ComboBox();
 			this.chkResidence = new System.Windows.Forms.CheckBox();
 			this.chkDeath = new System.Windows.Forms.CheckBox();
@@ -53,7 +53,7 @@ namespace GKUI
 			this.Panel1 = new System.Windows.Forms.Panel();
 			this.PageControl1.SuspendLayout();
 			this.pagePlaces.SuspendLayout();
-			this.GroupBox2.SuspendLayout();
+			this.grpSelection.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// StatusBar1
@@ -76,7 +76,7 @@ namespace GKUI
 			// pagePlaces
 			// 
 			this.pagePlaces.Controls.Add(this.tvPlaces);
-			this.pagePlaces.Controls.Add(this.GroupBox2);
+			this.pagePlaces.Controls.Add(this.grpSelection);
 			this.pagePlaces.Location = new System.Drawing.Point(4, 26);
 			this.pagePlaces.Name = "pagePlaces";
 			this.pagePlaces.Size = new System.Drawing.Size(397, 519);
@@ -92,24 +92,24 @@ namespace GKUI
 			this.tvPlaces.TabIndex = 0;
 			this.tvPlaces.DoubleClick += new System.EventHandler(this.TreePlaces_DoubleClick);
 			// 
-			// GroupBox2
+			// grpSelection
 			// 
-			this.GroupBox2.Controls.Add(this.cmbPersons);
-			this.GroupBox2.Controls.Add(this.chkResidence);
-			this.GroupBox2.Controls.Add(this.chkDeath);
-			this.GroupBox2.Controls.Add(this.chkBirth);
-			this.GroupBox2.Controls.Add(this.btnSelectPlaces);
-			this.GroupBox2.Controls.Add(this.btnSaveImage);
-			this.GroupBox2.Controls.Add(this.radTotal);
-			this.GroupBox2.Controls.Add(this.radSelected);
-			this.GroupBox2.Controls.Add(this.chkLinesVisible);
-			this.GroupBox2.Dock = System.Windows.Forms.DockStyle.Top;
-			this.GroupBox2.Location = new System.Drawing.Point(0, 0);
-			this.GroupBox2.Name = "GroupBox2";
-			this.GroupBox2.Size = new System.Drawing.Size(397, 225);
-			this.GroupBox2.TabIndex = 1;
-			this.GroupBox2.TabStop = false;
-			this.GroupBox2.Text = "Выборка";
+			this.grpSelection.Controls.Add(this.cmbPersons);
+			this.grpSelection.Controls.Add(this.chkResidence);
+			this.grpSelection.Controls.Add(this.chkDeath);
+			this.grpSelection.Controls.Add(this.chkBirth);
+			this.grpSelection.Controls.Add(this.btnSelectPlaces);
+			this.grpSelection.Controls.Add(this.btnSaveImage);
+			this.grpSelection.Controls.Add(this.radTotal);
+			this.grpSelection.Controls.Add(this.radSelected);
+			this.grpSelection.Controls.Add(this.chkLinesVisible);
+			this.grpSelection.Dock = System.Windows.Forms.DockStyle.Top;
+			this.grpSelection.Location = new System.Drawing.Point(0, 0);
+			this.grpSelection.Name = "grpSelection";
+			this.grpSelection.Size = new System.Drawing.Size(397, 225);
+			this.grpSelection.TabIndex = 1;
+			this.grpSelection.TabStop = false;
+			this.grpSelection.Text = "grpSelection";
 			// 
 			// cmbPersons
 			// 
@@ -221,8 +221,8 @@ namespace GKUI
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TfmMaps_KeyDown);
 			this.PageControl1.ResumeLayout(false);
 			this.pagePlaces.ResumeLayout(false);
-			this.GroupBox2.ResumeLayout(false);
-			this.GroupBox2.PerformLayout();
+			this.grpSelection.ResumeLayout(false);
+			this.grpSelection.PerformLayout();
 			this.ResumeLayout(false);
 		}
 	}

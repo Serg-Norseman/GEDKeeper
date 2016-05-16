@@ -348,7 +348,12 @@ namespace GKUI
         {
             this.Text = LangMan.LS(LSID.LSID_MIStats);
             this.grpSummary.Text = LangMan.LS(LSID.LSID_Summary);
-            
+
+            this.ColumnHeader1.Text = LangMan.LS(LSID.LSID_Parameter);
+            this.ColumnHeader2.Text = LangMan.LS(LSID.LSID_Total);
+            this.ColumnHeader3.Text = LangMan.LS(LSID.LSID_ManSum);
+            this.ColumnHeader4.Text = LangMan.LS(LSID.LSID_WomanSum);
+
             this.tbExcelExport.ToolTipText = LangMan.LS(LSID.LSID_MIExportToExcelFile);
             this.UpdateCommonStats();
 
@@ -409,8 +414,8 @@ namespace GKUI
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmStats.ExcelExport(): " + ex.Message);
-                GKUtils.ShowError("Ошибка выгрузки в Excel");
+                this.fBase.Host.LogWrite("StatisticsWin.ExcelExport(): " + ex.Message);
+                GKUtils.ShowError(LangMan.LS(LSID.LSID_UploadErrorInExcel));
             }
         }
     }

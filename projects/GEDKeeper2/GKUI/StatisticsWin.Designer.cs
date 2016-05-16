@@ -66,22 +66,22 @@ namespace GKUI
 			// 
 			// ColumnHeader1
 			// 
-			this.ColumnHeader1.Text = "Параметр";
+			this.ColumnHeader1.Text = "ColumnHeader1";
 			this.ColumnHeader1.Width = 300;
 			// 
 			// ColumnHeader2
 			// 
-			this.ColumnHeader2.Text = "Всего";
+			this.ColumnHeader2.Text = "ColumnHeader2";
 			this.ColumnHeader2.Width = 100;
 			// 
 			// ColumnHeader3
 			// 
-			this.ColumnHeader3.Text = "Мужчины";
+			this.ColumnHeader3.Text = "ColumnHeader3";
 			this.ColumnHeader3.Width = 100;
 			// 
 			// ColumnHeader4
 			// 
-			this.ColumnHeader4.Text = "Женщины";
+			this.ColumnHeader4.Text = "ColumnHeader4";
 			this.ColumnHeader4.Width = 100;
 			// 
 			// Panel1

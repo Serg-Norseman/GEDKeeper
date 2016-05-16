@@ -298,7 +298,7 @@ namespace GKUI
         {
             this.Text = LangMan.LS(LSID.LSID_MIMap);
             this.pagePlaces.Text = LangMan.LS(LSID.LSID_RPLocations);
-            this.GroupBox2.Text = LangMan.LS(LSID.LSID_MapSelection);
+            this.grpSelection.Text = LangMan.LS(LSID.LSID_MapSelection);
             this.radTotal.Text = LangMan.LS(LSID.LSID_MapSelOnAll);
             this.chkBirth.Text = LangMan.LS(LSID.LSID_MSBirthPlaces);
             this.chkDeath.Text = LangMan.LS(LSID.LSID_MSDeathPlaces);
