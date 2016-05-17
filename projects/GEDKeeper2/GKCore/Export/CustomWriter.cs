@@ -20,22 +20,30 @@
 
 using System;
 using System.Drawing;
+using System.Windows.Forms;
 using GKCommon;
 
 namespace GKCore.Export
 {
     /// <summary>
-    /// Description of CustomWriter.
+    /// 
     /// </summary>
     public abstract class CustomWriter : BaseObject
     {
         public enum TextAlignment { taLeft, taCenter, taRight, taJustify };
 
+        protected bool fAlbumPage;
         protected string fDocumentTitle;
         protected string fFileName;
+        protected Padding fMargins;
 
         protected CustomWriter()
         {
+            this.fMargins.Left = 20;
+            this.fMargins.Top = 20;
+            this.fMargins.Right = 20;
+            this.fMargins.Bottom = 20;
+            this.fAlbumPage = false;
         }
 
         public void setDocumentTitle(string title)
@@ -48,7 +56,10 @@ namespace GKCore.Export
             this.fFileName = fileName;
         }
 
-        public abstract void setAlbumPage(bool value);
+        public virtual void setAlbumPage(bool value)
+        {
+            this.fAlbumPage = value;
+        }
 
         public abstract void beginWrite();
         public abstract void endWrite();

@@ -123,6 +123,12 @@
     <Reference Include="DotNetRtfWriter">
       <HintPath>libs\DotNetRtfWriter.dll</HintPath>
     </Reference>
+    <Reference Include="PDFjet">
+      <HintPath>libs\pdfjet.dll</HintPath>
+    </Reference>
+    <Reference Include="PDFClown">
+      <HintPath>libs\PDFClown.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GKCore\BaseContext.cs" />
@@ -501,6 +507,9 @@
     <Compile Include="Externals\SingleInstancing\SingleInstanceProxy.cs" />
     <Compile Include="Externals\SingleInstancing\SingleInstanceTracker.cs" />
     <Compile Include="GKCore\Export\RTFWriter.cs" />
+    <Compile Include="GKCore\Cultures\RussianCulture.cs" />
+    <Compile Include="GKCore\Export\PDFJetWriter.cs" />
+    <Compile Include="GKCore\Export\PDFClownWriter.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GKResources.resx">

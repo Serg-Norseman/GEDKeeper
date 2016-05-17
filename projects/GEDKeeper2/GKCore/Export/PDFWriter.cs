@@ -33,23 +33,20 @@ namespace GKCore.Export
     {
         private int[] iAlignments = new int[] { Element.ALIGN_LEFT, Element.ALIGN_CENTER, Element.ALIGN_RIGHT, Element.ALIGN_JUSTIFIED };
         
-        private Padding fMargins;
-        protected Document fDocument;
-        protected PdfWriter fWriter;
-        protected bool fAlbumPage;
+        private Document fDocument;
+        private PdfWriter fWriter;
         private it.List list;
         private Paragraph p;
         private BaseFont baseFont;
 
         public PDFWriter()
         {
-            this.fMargins.Left = 20;
-            this.fMargins.Top = 20;
-            this.fMargins.Right = 20;
-            this.fMargins.Bottom = 20;
-            this.fAlbumPage = false;
-
-            this.baseFont = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Times.ttf"), BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            #if !GK_LINUX
+            this.baseFont = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Times.ttf"), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            #else
+            //BaseFont.TIMES_ROMAN, "Cp1251"
+            this.baseFont = BaseFont.CreateFont("/usr/share/fonts/truetype/abyssinica/AbyssinicaSIL-R.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            #endif
         }
 
         protected override void Dispose(bool disposing)
@@ -78,11 +75,6 @@ namespace GKCore.Export
         public override void endWrite()
         {
             this.fDocument.Close();
-        }
-
-        public override void setAlbumPage(bool value)
-        {
-            this.fAlbumPage = value;
         }
 
         public override object createFont(string name, float size, bool bold, bool underline, Color color)
@@ -130,6 +122,11 @@ namespace GKCore.Export
             list.IndentationLeft = 10f;
         }
 
+        public override void endList()
+        {
+            fDocument.Add(list);
+        }
+
         public override void addListItem(string text, object font)
         {
             list.Add(new it.ListItem(new Chunk(text, (iTextSharp.text.Font)font)));
@@ -143,17 +140,17 @@ namespace GKCore.Export
             list.Add(new it.ListItem(p1));
         }
 
-        public override void endList()
-        {
-            fDocument.Add(list);
-        }
-
         public override void beginParagraph(TextAlignment alignment, float spacingBefore, float spacingAfter)
         {
             int al = iAlignments[(int)alignment];
 
             p = new Paragraph();
             p.Alignment = al;
+        }
+
+        public override void endParagraph()
+        {
+            fDocument.Add(p);
         }
 
         public override void addParagraphChunk(string text, object font)
@@ -179,11 +176,6 @@ namespace GKCore.Export
             }
             
             p.Add(chunk);
-        }
-
-        public override void endParagraph()
-        {
-            fDocument.Add(p);
         }
 
         /*private void AddTableHeaderCell(string content, Font font, Table table, int alignment, int width)

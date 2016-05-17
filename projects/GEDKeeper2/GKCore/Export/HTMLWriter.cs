@@ -27,7 +27,7 @@ using System.Text;
 namespace GKCore.Export
 {
     /// <summary>
-    /// Description of HTMLWriter.
+    /// 
     /// </summary>
     public class HTMLWriter : CustomWriter
     {
@@ -67,10 +67,6 @@ namespace GKCore.Export
 
             this.fStream.Flush();
             this.fStream.Close();
-        }
-
-        public override void setAlbumPage(bool value)
-        {
         }
 
         public override void addParagraph(string text, object font, TextAlignment alignment)

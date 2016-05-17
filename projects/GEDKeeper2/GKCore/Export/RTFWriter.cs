@@ -41,7 +41,6 @@ namespace GKCore.Export
         private Align[] iAlignments = new Align[] { Align.Left, Align.Center, Align.Right, Align.FullyJustify };
 
         private RtfDocument fDocument;
-        protected bool fAlbumPage;
         private RtfParagraph fParagraph;
 
         public RTFWriter()
@@ -57,11 +56,6 @@ namespace GKCore.Export
         public override void endWrite()
         {
             this.fDocument.save(this.fFileName);
-        }
-
-        public override void setAlbumPage(bool value)
-        {
-            this.fAlbumPage = value;
         }
 
         private static RtfCharFormat addParagraphChunk(RtfParagraph par, string text, object font)

@@ -499,7 +499,7 @@ namespace GKCore.Export
             }
 
             bool success = false;
-            if (!this.IsRequireFilename("HTML files (*.html)|*.html|PDF files (*.pdf)|*.pdf|RTF files (*.rtf)|*.rtf")) return;
+            if (!this.IsRequireFilename("PDF files (*.pdf)|*.pdf|HTML files (*.html)|*.html|RTF files (*.rtf)|*.rtf")) return;
 
             string ext = FileHelper.GetFileExtension(this.fPath);
 
@@ -508,7 +508,11 @@ namespace GKCore.Export
             } else if (string.Equals(ext, ".rtf")) {
                 this.fWriter = new RTFWriter();
             } else {
+                #if !GK_LINUX
                 this.fWriter = new PDFWriter();
+                #else
+                this.fWriter = new PDFJetWriter();//PDFClownWriter();
+                #endif
             }
 
             this.fWriter.setAlbumPage(false);
