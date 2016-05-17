@@ -33,9 +33,9 @@ using PDFjet.NET;
 namespace GKCore.Export
 {
     /*
-     * Итого: файл формируется, включается только один странный шрифт, русский язык есть.
-     * Как сделать оформление - неясно, как формировать абзацы - неясно, как сделать многостраничный документ - неясно.
-     * Всё уродливо и по видимому всё необходимое нужно делать самому.
+     * Total: the file is generated, only one worked a strange font, the Russian language is.
+     * How to make arrangement - it is unclear; how to form paragraphs - it is unclear; how to make a multi-page document - is unclear.
+     * All the ugly and apparently all are necessary to do the most.
      */
 
     public class PDFJetWriter : CustomWriter

@@ -29,6 +29,10 @@ using it = iTextSharp.text;
 
 namespace GKCore.Export
 {
+    /*
+     * Total: worked, but unicode and russian text don't work in any way. Recipe not found.
+     */
+
     public class PDFWriter : CustomWriter
     {
         private int[] iAlignments = new int[] { Element.ALIGN_LEFT, Element.ALIGN_CENTER, Element.ALIGN_RIGHT, Element.ALIGN_JUSTIFIED };

@@ -40,6 +40,11 @@ using org.pdfclown.documents.contents.fonts;
 
 namespace GKCore.Export
 {
+    /*
+     * Total: not worked even the simplest example,
+     * the class system is such that it is impossible to find necessary neither in source code nor in the examples.
+     */
+
     public class PDFClownWriter : CustomWriter
     {
         private Padding fMargins;
