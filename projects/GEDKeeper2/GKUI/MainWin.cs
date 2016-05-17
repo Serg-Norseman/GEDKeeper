@@ -624,12 +624,16 @@ namespace GKUI
 
         private void miExportToFamilyBookClick(object sender, EventArgs e)
         {
+            #if GK_LINUX
+            this.ShowWarning(@"This function is not supported in Linux");
+            #else
             IBaseWindow curBase = this.GetCurrentFile();
             if (curBase == null) return;
 
             using (FamilyBookExporter fb = new FamilyBookExporter(curBase)) {
                 fb.Generate(true);
             }
+            #endif
         }
 
         private void miExportToExcelFileClick(object sender, EventArgs e)
@@ -815,15 +819,15 @@ namespace GKUI
 
         private void miMapClick(object sender, EventArgs e)
         {
-            #if !GK_LINUX
+            #if GK_LINUX
+            this.ShowWarning(@"This function is not supported in Linux");
+            #else
             IBaseWindow curBase = this.GetCurrentFile();
             if (curBase == null) return;
             
             MapsViewerWin mapsWin = new MapsViewerWin(curBase);
             mapsWin.MdiParent = this;
             mapsWin.ProcessMap();
-            #else
-            this.ShowWarning(@"This function is not supported in Linux");
             #endif
         }
 

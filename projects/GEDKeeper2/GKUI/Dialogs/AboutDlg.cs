@@ -22,7 +22,6 @@ using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 
-using GKCommon;
 using GKCore;
 
 namespace GKUI.Dialogs

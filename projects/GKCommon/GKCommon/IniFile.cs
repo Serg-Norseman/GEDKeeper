@@ -203,9 +203,9 @@ namespace GKCommon
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool WritePrivateProfileString(string lpAppName, string lpKeyName, IntPtr lpString, string lpFileName);
 
-        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool WritePrivateProfileString(string lpAppName, IntPtr lpKeyName, IntPtr lpString, string lpFileName);
+        //[DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        //[return: MarshalAs(UnmanagedType.Bool)]
+        //private static extern bool WritePrivateProfileString(string lpAppName, IntPtr lpKeyName, IntPtr lpString, string lpFileName);
 
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]

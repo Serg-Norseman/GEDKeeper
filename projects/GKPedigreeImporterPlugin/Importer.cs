@@ -27,9 +27,11 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
-using Microsoft.Office.Interop.Excel;
+
+#if !GK_LINUX
 using MSOExcel = Microsoft.Office.Interop.Excel;
 using MSOWord = Microsoft.Office.Interop.Word;
+#endif
 
 namespace GKPedigreeImporterPlugin
 {
@@ -835,7 +837,7 @@ namespace GKPedigreeImporterPlugin
                     this.fBase.ProgressInit("Загрузка", rowsCount);
 
                     MSOExcel.Range excelRange = sheet.UsedRange;
-                    object[,] valueArray = (object[,])excelRange.get_Value(XlRangeValueDataType.xlRangeValueDefault);
+                    object[,] valueArray = (object[,])excelRange.get_Value(MSOExcel.XlRangeValueDataType.xlRangeValueDefault);
                     
                     int prevId = 0;
 

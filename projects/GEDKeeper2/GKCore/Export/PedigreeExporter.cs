@@ -498,8 +498,13 @@ namespace GKCore.Export
                 return;
             }
 
+            string availableFormats = LangMan.LS(LSID.LSID_HTMLFilter) + "|" + LangMan.LS(LSID.LSID_RTFFilter);
+            #if !GK_LINUX
+            availableFormats += "|" + LangMan.LS(LSID.LSID_PDFFilter);
+            #endif
+            
             bool success = false;
-            if (!this.IsRequireFilename("PDF files (*.pdf)|*.pdf|HTML files (*.html)|*.html|RTF files (*.rtf)|*.rtf")) return;
+            if (!this.IsRequireFilename(availableFormats)) return;
 
             string ext = FileHelper.GetFileExtension(this.fPath);
 

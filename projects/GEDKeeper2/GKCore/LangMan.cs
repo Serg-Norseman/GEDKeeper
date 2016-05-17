@@ -551,10 +551,10 @@ namespace GKCore
         /* 490 */ LSID_SK_Met, // deprecated
 
         /* 491 */ LSID_Year,
+        /* 492 */ LSID_PDFFilter,
+        /* 493 */ LSID_RTFFilter,
+        /* 494 */ LSID_HTMLFilter,
 
-        /* 492 */ LSID_Settlement, // deprecated
-        /* 493 */ LSID_EventDate, // deprecated
-        /* 494 */ LSID_EventType, // deprecated
         /* 495 */ LSID_Join, // deprecated
         /* 496 */ LSID_Comment, // deprecated
 
@@ -1303,10 +1303,10 @@ namespace GKCore
             /* 490 */ "<?>",
 
             /* 491 */ "Год",
+            /* 492 */ "PDF файлы (*.pdf)|*.pdf",
+            /* 493 */ "RTF файлы (*.rtf)|*.rtf",
+            /* 494 */ "HTML файлы (*.html)|*.html",
 
-            /* 492 */ "<?>",
-            /* 493 */ "<?>",
-            /* 494 */ "<?>",
             /* 495 */ "<?>",
             /* 496 */ "<?>",
 

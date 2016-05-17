@@ -490,9 +490,9 @@ GEDKeeper GEDCOM файлы (*.ged)|*.ged|GEDKeeper шифрованные GEDCO
 Женщины
 <?>
 Год
-<?>
-<?>
-<?>
+PDF файлы (*.pdf)|*.pdf
+RTF файлы (*.rtf)|*.rtf
+HTML файлы (*.html)|*.html
 <?>
 <?>
 Отсечение ветвей

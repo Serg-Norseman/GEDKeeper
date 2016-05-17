@@ -36,8 +36,12 @@ namespace GKPedigreeImporterPlugin
         private int fAvailableStage;
 
         // TODO: localize
+        #if !GK_LINUX
         private static string filter = "Все поддерживаемые форматы (*.txt, *.csv, *.doc, *.xls)|*.txt;*.csv;*.doc;*.xls|Роспись в txt-формате (*.txt)|*.txt|Роспись в csv-формате (*.csv)|*.csv|Роспись в формате Word (*.doc)|*.doc|Роспись в формате Excel (*.xls)|*.xls";
-
+        #else
+        private static string filter = "Все поддерживаемые форматы (*.txt, *.csv)|*.txt;*.csv|Роспись в txt-формате (*.txt)|*.txt|Роспись в csv-формате (*.csv)|*.csv";
+        #endif
+        
         public PedigreeImporterDlg(IPlugin fPlugin)
         {
             InitializeComponent();
