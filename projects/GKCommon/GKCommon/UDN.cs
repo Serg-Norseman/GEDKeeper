@@ -138,7 +138,7 @@ namespace GKCommon
         public int CompareTo(object obj)
         {
             if (obj is UDN) {
-                return CompareUDN(this.fValue, ((UDN)obj).fValue);
+                return Math.Sign(CompareUDN(this.fValue, ((UDN)obj).fValue));
             }
 
             return -1;

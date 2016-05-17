@@ -22,6 +22,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Externals;
 
 namespace GKCommon.GEDCOM
 {
@@ -272,7 +273,7 @@ namespace GKCommon.GEDCOM
         {
             if (this.fDataList == null) return;
 
-            SortHelper.MergeSort(this.fDataList, comparer);
+            ListTimSort<T>.Sort(this.fDataList, comparer);
         }
     }
 }
