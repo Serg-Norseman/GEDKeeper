@@ -20,9 +20,11 @@
 
 using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+
 using GKCommon;
 using GKCore;
 using GKCore.Interfaces;
@@ -177,6 +179,9 @@ namespace GKUI
         public ScriptEditWin(IBaseWindow aBase)
         {
             this.InitializeComponent();
+
+            this.tbRun.Image = (Image)MainWin.ResourceManager.GetObjectEx("iStart");
+
             this.fBase = aBase;
 
             this.txtScriptText.TextChanged += mmScriptText_TextChanged;

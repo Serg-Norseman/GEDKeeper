@@ -64,6 +64,7 @@ namespace GKUI.Dialogs
         public void SetSpecificLang()
         {
             this.Text = LangMan.LS(LSID.LSID_MIFilter);
+            this.pageSpecificFilter.Text = LangMan.LS(LSID.LSID_PersonsFilter);
             this.rbAll.Text = LangMan.LS(LSID.LSID_All);
             this.rbOnlyLive.Text = LangMan.LS(LSID.LSID_OnlyAlive);
             this.rbOnlyDead.Text = LangMan.LS(LSID.LSID_OnlyDied);

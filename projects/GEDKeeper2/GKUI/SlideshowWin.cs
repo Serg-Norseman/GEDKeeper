@@ -46,6 +46,10 @@ namespace GKUI
         {
             this.InitializeComponent();
 
+            this.tbStart.Image = (Image)MainWin.ResourceManager.GetObjectEx("iStart");
+            this.tbPrev.Image = (Image)MainWin.ResourceManager.GetObjectEx("iLeft1");
+            this.tbNext.Image = (Image)MainWin.ResourceManager.GetObjectEx("iRight1");
+
             this.SuspendLayout();
             this.fImageCtl = new ImageBox();
             this.fImageCtl.Dock = DockStyle.Fill;

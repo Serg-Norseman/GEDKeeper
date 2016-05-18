@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
@@ -76,6 +77,8 @@ namespace GKUI
         public TreeToolsWin(IBaseWindow aBase)
         {
             this.InitializeComponent();
+
+            this.btnClose.Image = (Image)MainWin.ResourceManager.GetObjectEx("iBtnCancel");
 
             this.fBase = aBase;
             this.fTree = this.Base.Tree;
@@ -151,6 +154,14 @@ namespace GKUI
             this.lblMasterBase.Text = LangMan.LS(LSID.LSID_MasterBase);
             this.lblOtherBase.Text = LangMan.LS(LSID.LSID_OtherBase);
             this.edMasterBase.Text = LangMan.LS(LSID.LSID_CurrentBase);
+
+            this.grpMatchType.Text = LangMan.LS(LSID.LSID_MatchType);
+            this.radMatchInternal.Text = LangMan.LS(LSID.LSID_MatchInternal);
+            this.radMathExternal.Text = LangMan.LS(LSID.LSID_MathExternal);
+            this.radAnalysis.Text = LangMan.LS(LSID.LSID_Analysis);
+            this.btnMatch.Text = LangMan.LS(LSID.LSID_Match);
+            this.chkWithoutDates.Text = LangMan.LS(LSID.LSID_WithoutDates);
+            this.btnPatriarchsDiagram.Text = LangMan.LS(LSID.LSID_PatriarchsDiagram);
         }
 
         private void PageControl_SelectedIndexChanged(object sender, EventArgs e)

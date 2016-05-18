@@ -827,7 +827,6 @@ namespace GKUI
 		    // btnClose
 		    // 
 		    this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-		    this.btnClose.Image = ((System.Drawing.Image)(resources.GetObject("btnClose.Image")));
 		    this.btnClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 		    this.btnClose.Location = new System.Drawing.Point(907, 583);
 		    this.btnClose.Name = "btnClose";

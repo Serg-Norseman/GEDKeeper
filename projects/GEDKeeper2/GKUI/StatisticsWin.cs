@@ -58,6 +58,8 @@ namespace GKUI
             this.InitializeComponent();
             base.MdiParent = MainWin.Instance;
 
+            this.tbExcelExport.Image = (System.Drawing.Image)MainWin.ResourceManager.GetObjectEx("iExcel");
+
             this.fGraph = new ZedGraphControl();
             this.fGraph.IsShowPointValues = true;
             this.fGraph.Dock = DockStyle.Right;

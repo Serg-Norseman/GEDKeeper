@@ -252,9 +252,9 @@ Interface
 Trees
 Pedigrees
 Coding of save
-<?>
-<?>
-<?>
+Addresses
+Mails
+Webs
 Internet
 Use proxy
 Server
@@ -488,7 +488,7 @@ Parameter
 Total
 Mans
 Womans
-<?>
+Fields filter
 Year
 PDF files (*.pdf)|*.pdf
 RTF files (*.rtf)|*.rtf

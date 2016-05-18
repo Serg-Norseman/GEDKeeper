@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 using GKCommon;
@@ -36,6 +37,8 @@ namespace GKUI.Dialogs
         public DayTipsDlg()
         {
             this.InitializeComponent();
+
+            this.btnClose.Image = (Image)MainWin.ResourceManager.GetObjectEx("iBtnCancel");
 
             this.fTips = new StringList();
 

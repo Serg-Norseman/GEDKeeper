@@ -124,7 +124,6 @@ namespace GKUI
 			// 
 			// tbExcelExport
 			// 
-			this.tbExcelExport.Image = ((System.Drawing.Image)(resources.GetObject("tbExcelExport.Image")));
 			this.tbExcelExport.Name = "tbExcelExport";
 			this.tbExcelExport.Size = new System.Drawing.Size(23, 25);
 			this.tbExcelExport.Click += new System.EventHandler(this.tbExcelExport_Click);

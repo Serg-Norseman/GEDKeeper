@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 using GKCommon.GEDCOM;
@@ -54,6 +55,11 @@ namespace GKUI.Dialogs
         public OptionsDlg(IHost aHost)
         {
             this.InitializeComponent();
+
+            this.btnAccept.Image = (Image)MainWin.ResourceManager.GetObjectEx("iBtnAccept");
+            this.btnCancel.Image = (Image)MainWin.ResourceManager.GetObjectEx("iBtnCancel");
+            this.btnColumnUp.Image = (Image)MainWin.ResourceManager.GetObjectEx("iUp");
+            this.btnColumnDown.Image = (Image)MainWin.ResourceManager.GetObjectEx("iDown");
 
             this.fHost = aHost;
             this.fOptions = MainWin.Instance.Options;

@@ -78,7 +78,6 @@ namespace GKUI
 		    // 
 		    // tbRun
 		    // 
-		    this.tbRun.Image = ((System.Drawing.Image)(resources.GetObject("btnRun.Image")));
 		    this.tbRun.Name = "tbRun";
 		    this.tbRun.Size = new System.Drawing.Size(24, 24);
 		    this.tbRun.Click += new System.EventHandler(this.ToolBar1_ButtonClick);

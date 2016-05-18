@@ -63,10 +63,16 @@ namespace GKUI
         private string fLogFilename;
 
         private static MainWin fInstance = null;
+        private static GKResourceManager fResourceManager;
 
         public static MainWin Instance
         {
             get { return fInstance; }
+        }
+
+        public static GKResourceManager ResourceManager
+        {
+            get { return fResourceManager; }
         }
 
         public INamesTable NamesTable
@@ -91,6 +97,7 @@ namespace GKUI
             this.InitializeComponent();
 
             fInstance = this;
+            fResourceManager = new GKResourceManager("GKResources", typeof(MainWin).Assembly);
 
             this.tbFileNew.Image = global::GKResources.iCreateNew;
             this.tbFileLoad.Image = global::GKResources.iLoad;

@@ -306,6 +306,7 @@ namespace GKUI
             this.radSelected.Text = LangMan.LS(LSID.LSID_MapSelOnSelected);
             this.btnSaveImage.Text = LangMan.LS(LSID.LSID_SaveImage);
             this.btnSelectPlaces.Text = LangMan.LS(LSID.LSID_Show);
+            this.chkLinesVisible.Text = LangMan.LS(LSID.LSID_LinesVisible);
         }
 
         private TreeNode FindTreeNode(string place)

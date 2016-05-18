@@ -43,7 +43,7 @@ namespace GKUI
         public OrganizerWin(IBaseWindow aBase)
         {
             this.InitializeComponent();
-            
+
             this.fBase = aBase;
             
             this.fAdrList = new GKSheetList(this.pageAddresses);
@@ -67,6 +67,10 @@ namespace GKUI
             this.fWebsList.AddColumn(LangMan.LS(LSID.LSID_WebSite), 100, false);
             
             this.Text = LangMan.LS(LSID.LSID_MIOrganizer);
+            this.pageAddresses.Text = LangMan.LS(LSID.LSID_Addresses);
+            this.pageTelephones.Text = LangMan.LS(LSID.LSID_Telephones);
+            this.pageMails.Text = LangMan.LS(LSID.LSID_Mails);
+            this.pageWebs.Text = LangMan.LS(LSID.LSID_Webs);
         }
 
         private void TfmOrganizer_Load(object sender, EventArgs e)

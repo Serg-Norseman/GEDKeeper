@@ -32,7 +32,6 @@
 			// tbStart
 			// 
 			this.tbStart.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.tbStart.Image = ((System.Drawing.Image)(resources.GetObject("tsbStart.Image")));
 			this.tbStart.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.tbStart.Name = "tbStart";
 			this.tbStart.Size = new System.Drawing.Size(24, 24);
@@ -47,7 +46,6 @@
 			// tbPrev
 			// 
 			this.tbPrev.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.tbPrev.Image = ((System.Drawing.Image)(resources.GetObject("tsbPrev.Image")));
 			this.tbPrev.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.tbPrev.Name = "tbPrev";
 			this.tbPrev.Size = new System.Drawing.Size(24, 24);
@@ -57,7 +55,6 @@
 			// tbNext
 			// 
 			this.tbNext.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.tbNext.Image = ((System.Drawing.Image)(resources.GetObject("tsbNext.Image")));
 			this.tbNext.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.tbNext.Name = "tbNext";
 			this.tbNext.Size = new System.Drawing.Size(24, 24);

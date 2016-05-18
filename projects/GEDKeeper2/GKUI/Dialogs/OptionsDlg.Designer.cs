@@ -857,7 +857,6 @@ namespace GKUI.Dialogs
 		    // 
 		    // btnColumnUp
 		    // 
-		    this.btnColumnUp.Image = ((System.Drawing.Image)(resources.GetObject("btnColumnUp.Image")));
 		    this.btnColumnUp.Location = new System.Drawing.Point(493, 10);
 		    this.btnColumnUp.Name = "btnColumnUp";
 		    this.btnColumnUp.Size = new System.Drawing.Size(39, 34);
@@ -866,7 +865,6 @@ namespace GKUI.Dialogs
 		    // 
 		    // btnColumnDown
 		    // 
-		    this.btnColumnDown.Image = ((System.Drawing.Image)(resources.GetObject("btnColumnDown.Image")));
 		    this.btnColumnDown.Location = new System.Drawing.Point(493, 49);
 		    this.btnColumnDown.Name = "btnColumnDown";
 		    this.btnColumnDown.Size = new System.Drawing.Size(39, 34);
@@ -1012,7 +1010,6 @@ namespace GKUI.Dialogs
 		    // 
 		    // btnAccept
 		    // 
-		    this.btnAccept.Image = ((System.Drawing.Image)(resources.GetObject("btnAccept.Image")));
 		    this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 		    this.btnAccept.Location = new System.Drawing.Point(470, 476);
 		    this.btnAccept.Name = "btnAccept";
@@ -1025,7 +1022,6 @@ namespace GKUI.Dialogs
 		    // btnCancel
 		    // 
 		    this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-		    this.btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("btnCancel.Image")));
 		    this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 		    this.btnCancel.Location = new System.Drawing.Point(594, 476);
 		    this.btnCancel.Name = "btnCancel";

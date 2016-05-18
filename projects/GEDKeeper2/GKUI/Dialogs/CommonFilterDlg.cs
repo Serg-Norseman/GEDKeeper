@@ -52,6 +52,9 @@ namespace GKUI.Dialogs
         {
             this.InitializeComponent();
 
+            this.btnAccept.Image = (Image)MainWin.ResourceManager.GetObjectEx("iBtnAccept");
+            this.btnCancel.Image = (Image)MainWin.ResourceManager.GetObjectEx("iBtnCancel");
+
             this.fBase = aBase;
             this.fListMan = listMan;
 
@@ -285,6 +288,7 @@ namespace GKUI.Dialogs
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             this.btnReset.Text = LangMan.LS(LSID.LSID_DlgReset);
+            this.tsFieldsFilter.Text = LangMan.LS(LSID.LSID_FieldsFilter);
         }
 
         public virtual void DoReset()
