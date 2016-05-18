@@ -41,7 +41,9 @@ sources := \
 ./GKCore/Export/Exporter.cs \
 ./GKCore/Export/FamilyBookExporter.cs \
 ./GKCore/Export/HTMLWriter.cs \
+./GKCore/Export/PDFClownWriter.cs \
 ./GKCore/Export/PDFExporter.cs \
+./GKCore/Export/PDFJetWriter.cs \
 ./GKCore/Export/PDFWriter.cs \
 ./GKCore/Export/PedigreeExporter.cs \
 ./GKCore/Export/RTFWriter.cs \
@@ -334,6 +336,7 @@ $(patsubst //reference:%,//r:%,$(cscrefs))
 gkdepdlls := \
 $(addprefix $(installdir), \
 ArborGVT.dll \
+DotNetRtfWriter.dll \
 ExcelLibrary.dll \
 itextsharp.dll \
 lua51.dll \
