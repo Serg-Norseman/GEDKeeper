@@ -94,13 +94,15 @@ namespace GKCore.Export
         public override void addParagraphAnchor(string text, object font, string anchor)
         {
             RtfParagraph par = this.fDocument.addParagraph();
-            addParagraphChunk(par, text, font);
+            RtfCharFormat fmt = addParagraphChunk(par, text, font);
+            fmt.Bookmark = anchor;
         }
 
         public override void addParagraphLink(string text, object font, string link, object linkFont)
         {
             RtfParagraph par = this.fDocument.addParagraph();
-            addParagraphChunk(par, text, font);
+            RtfCharFormat fmt = addParagraphChunk(par, text, font);
+            fmt.LocalHyperlink = link;
         }
 
         public override object createFont(string name, float size, bool bold, bool underline, System.Drawing.Color color)
@@ -146,6 +148,8 @@ namespace GKCore.Export
 
             addParagraphChunk(par, "\t· ", symFont);
             addParagraphChunk(par, text, font);
+            RtfCharFormat fmt = addParagraphChunk(par, link, linkFont);
+            fmt.LocalHyperlink = link;
         }
 
         public override void beginParagraph(TextAlignment alignment, float spacingBefore, float spacingAfter)
@@ -169,13 +173,15 @@ namespace GKCore.Export
 
         public override void addParagraphChunkAnchor(string text, object font, string anchor)
         {
-            addParagraphChunk(this.fParagraph, text, font);
+            RtfCharFormat fmt = addParagraphChunk(this.fParagraph, text, font);
+            fmt.Bookmark = anchor;
         }
 
         public override void addParagraphChunkLink(string text, object font, string link, object linkFont, bool sup)
         {
             RtfCharFormat fmt = addParagraphChunk(this.fParagraph, text, font);
             if (sup) fmt.FontStyle.addStyle(FontStyleFlag.Super);
+            fmt.LocalHyperlink = link;
         }
     }
 }
