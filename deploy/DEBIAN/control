@@ -1,6 +1,5 @@
 Package: gedkeeper
 Version: 2.7.0-1
-Provides: GEDKeeper2
 Architecture: all
 Depends: mono-complete (>=3)
 Maintainer: Serg V. Zhdanovskih (aka Norseman) <norseman@mail.ru>

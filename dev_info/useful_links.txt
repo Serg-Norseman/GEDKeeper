@@ -1,3 +1,0 @@
-http://stackoverflow.com/questions/30931/register-file-extensions-mime-types-in-linux
-http://www.mzan.com/article/32062532-prevent-console-app-to-create-new-instance-while-running-on-linux-monodevelop-c.shtml
-http://wiki.debian.org/MimeTypesSupport
