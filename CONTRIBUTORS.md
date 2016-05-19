@@ -2,13 +2,14 @@
 
 * **[Serg V. Zhdanovskih](https://github.com/serg-norseman)**
 
-  * 
-  * 
+  * Lead developer, maintainer
 
 * **[Ruslan Garipov](https://github.com/ruslangaripov)**
 
-  * 
-  * 
+  * English help contents
+  * UDN format and sorter
+  * Makefiles
+  * Debugging and bug reports
 
 
 ## External components
