@@ -40,6 +40,4 @@ cp -r $DEV_PATH/locales/ ~/$LIB_PATH/
 cp -r $DEV_PATH/plugins/ ~/$LIB_PATH/
 cp -r $DEV_PATH/scripts/ ~/$LIB_PATH/
 
-dpkg -b ~/$PACK_PATH/
-
-lintian ~/$PACK_PATH/gedkeeper-$APP_VER-1_all.deb
+fakeroot dpkg-deb -b ~/$PACK_PATH/ .

@@ -264,6 +264,7 @@
     <Compile Include="GKCommon\Controls\ReflectionHelper.cs" />
     <Compile Include="GKCommon\UDN.cs" />
     <Compile Include="GKCommon\UIHelper.cs" />
+    <Compile Include="GKCommon\GKResourceManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GKCommon\Controls\ExtResources.resx">
