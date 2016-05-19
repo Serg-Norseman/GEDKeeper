@@ -108,9 +108,6 @@
     <Reference Include="itextsharp">
       <HintPath>libs\itextsharp.dll</HintPath>
     </Reference>
-    <Reference Include="LuaInterface">
-      <HintPath>libs\LuaInterface.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Forms" />
@@ -123,11 +120,17 @@
     <Reference Include="DotNetRtfWriter">
       <HintPath>libs\DotNetRtfWriter.dll</HintPath>
     </Reference>
-    <Reference Include="PDFjet">
-      <HintPath>libs\pdfjet.dll</HintPath>
+    <Reference Include="KopiLua">
+      <HintPath>libs\linux\KopiLua.dll</HintPath>
+    </Reference>
+    <Reference Include="NLua">
+      <HintPath>libs\linux\NLua.dll</HintPath>
     </Reference>
     <Reference Include="PDFClown">
-      <HintPath>libs\PDFClown.dll</HintPath>
+      <HintPath>libs\linux\PDFClown.dll</HintPath>
+    </Reference>
+    <Reference Include="PDFjet">
+      <HintPath>libs\linux\PDFjet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -652,10 +655,6 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="app.manifest" />
-    <None Include="libs\lua51.dll">
-      <Link>lua51.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

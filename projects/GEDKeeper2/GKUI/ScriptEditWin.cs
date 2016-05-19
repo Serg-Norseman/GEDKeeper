@@ -149,7 +149,8 @@ namespace GKUI
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmScriptDaemon.Run(): " + ex.Message);
+                this.fBase.Host.LogWrite("ScriptEditWin.Run(): " + ex.Message);
+                this.fBase.Host.LogWrite("ScriptEditWin.Run(): " + ex.StackTrace.ToString());
             }
         }
 

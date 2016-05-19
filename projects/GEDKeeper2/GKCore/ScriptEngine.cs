@@ -29,7 +29,12 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
+
+#if !GK_LINUX
 using LuaInterface;
+#else
+using NLua;
+#endif
 
 namespace GKCore
 {
@@ -62,9 +67,9 @@ namespace GKCore
             base.Dispose(disposing);
         }
 
-        private void lua_print(string s)
+        private void lua_print(object s)
         {
-            fDebugOutput.Text += (s + @"\r\n");
+            fDebugOutput.Text += (s.ToString() + "\r\n");
         }
 
         private void lua_register(Lua lvm, string funcName)
@@ -222,7 +227,7 @@ namespace GKCore
 
         /////
 
-        public void gk_print(string text)
+        public void gk_print(object text)
         {
             lua_print(text);
         }
