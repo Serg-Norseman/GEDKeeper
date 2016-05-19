@@ -497,6 +497,7 @@ namespace GKUI.Dialogs
             this.fSourcesList = new GKSourcesSheet(this, this.pageSources);
 
             // SetLang()
+            this.Text = LangMan.LS(LSID.LSID_Event);
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             this.btnAddress.Text = LangMan.LS(LSID.LSID_Address) + @"...";

@@ -53,7 +53,7 @@
         	// 
         	// lblMinGens
         	// 
-        	this.lblMinGens.Location = new System.Drawing.Point(13, 18);
+        	this.lblMinGens.Location = new System.Drawing.Point(15, 18);
         	this.lblMinGens.Name = "lblMinGens";
         	this.lblMinGens.Size = new System.Drawing.Size(286, 21);
         	this.lblMinGens.TabIndex = 6;
@@ -94,7 +94,7 @@
         	this.btnCancel.Text = "btnCancel";
         	this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
         	// 
-        	// frmTVPSettings
+        	// TVSettingsDlg
         	// 
         	this.AutoScaleBaseSize = new System.Drawing.Size(7, 17);
         	this.ClientSize = new System.Drawing.Size(428, 131);

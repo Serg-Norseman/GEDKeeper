@@ -139,17 +139,17 @@ namespace GKTests
         {
             int res1, res2;
 
-            res1 = IndistinctMatching.LevenshteinDistance("Иванов", "Иванов");
+            res1 = IndistinctMatching.LevenshteinDistance("Ivanov", "Ivanov");
             Assert.AreEqual(0, res1);
-            res1 = IndistinctMatching.LevenshteinDistance("Иванво", "Иванов");
+            res1 = IndistinctMatching.LevenshteinDistance("Ivanvo", "Ivanov");
             Assert.AreEqual(2, res1);
 
-            res2 = IndistinctMatching.DamerauLevenshteinDistance("Иванов", "Иванов");
+            res2 = IndistinctMatching.DamerauLevenshteinDistance("Ivanov", "Ivanov");
             Assert.AreEqual(0, res2);
-            res2 = IndistinctMatching.DamerauLevenshteinDistance("Иванво", "Иванов");
+            res2 = IndistinctMatching.DamerauLevenshteinDistance("Ivanvo", "Ivanov");
             Assert.AreEqual(1, res2);
             
-            double sim = IndistinctMatching.GetSimilarity("Иванво", "Иванов");
+            double sim = IndistinctMatching.GetSimilarity("Ivanvo", "Ivanov");
             Assert.GreaterOrEqual(sim, 0.8333);
         }
 
@@ -159,8 +159,8 @@ namespace GKTests
             int res1, res2;
 
             for (int i = 1; i < 10000; i++) {
-                res1 = IndistinctMatching.LevenshteinDistance("Иван", "Иванов");
-                res2 = IndistinctMatching.DamerauLevenshteinDistance("Иван", "Иванов");
+                res1 = IndistinctMatching.LevenshteinDistance("Ivan", "Ivanov");
+                res2 = IndistinctMatching.DamerauLevenshteinDistance("Ivan", "Ivanov");
             }
         }
 
@@ -170,8 +170,8 @@ namespace GKTests
             int res1, res2;
 
             for (int i = 1; i < 10000; i++) {
-                res1 = IndistinctMatching.LevenshteinDistance("Иванво", "Иванов");
-                res2 = IndistinctMatching.DamerauLevenshteinDistance("Иванво", "Иванов");
+                res1 = IndistinctMatching.LevenshteinDistance("Ivanvo", "Ivanov");
+                res2 = IndistinctMatching.DamerauLevenshteinDistance("Ivanvo", "Ivanov");
             }
         }
 

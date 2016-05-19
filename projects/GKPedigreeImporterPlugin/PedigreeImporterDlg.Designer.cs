@@ -35,20 +35,20 @@
             this.btnImportFileChoose = new System.Windows.Forms.Button();
             this.tabControl1 = new GKCommon.Controls.WizardPages();
             this.pageSelect = new System.Windows.Forms.TabPage();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.grpConversionParams = new System.Windows.Forms.GroupBox();
             this.chkSurnamesNormalize = new System.Windows.Forms.CheckBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.grpTextPedigreesParams = new System.Windows.Forms.GroupBox();
             this.cbDateSeparator = new System.Windows.Forms.ComboBox();
-            this.label6 = new System.Windows.Forms.Label();
+            this.lblDateSeparator = new System.Windows.Forms.Label();
             this.cbDatesFormat = new System.Windows.Forms.ComboBox();
-            this.label5 = new System.Windows.Forms.Label();
+            this.lblDateFormat = new System.Windows.Forms.Label();
             this.cbGenerationFormat = new System.Windows.Forms.ComboBox();
-            this.label4 = new System.Windows.Forms.Label();
+            this.lblGenerationFormat = new System.Windows.Forms.Label();
             this.cbNameFormat = new System.Windows.Forms.ComboBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.lblSurnameFormat = new System.Windows.Forms.Label();
             this.cbPersonSeparator = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lblPersonLineSeparator = new System.Windows.Forms.Label();
+            this.grpPersonIdFormat = new System.Windows.Forms.GroupBox();
             this.rbNumsDAboville = new System.Windows.Forms.RadioButton();
             this.rbNumsKonovalov = new System.Windows.Forms.RadioButton();
             this.rbNumsUnknown = new System.Windows.Forms.RadioButton();
@@ -58,15 +58,15 @@
             this.btnNext = new System.Windows.Forms.Button();
             this.btnBack = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.grpPersonLineSpecials = new System.Windows.Forms.GroupBox();
             this.chkSpecial_1 = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.pageSelect.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.grpConversionParams.SuspendLayout();
+            this.grpTextPedigreesParams.SuspendLayout();
+            this.grpPersonIdFormat.SuspendLayout();
             this.pageResult.SuspendLayout();
-            this.groupBox4.SuspendLayout();
+            this.grpPersonLineSpecials.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblFile
@@ -110,10 +110,10 @@
             // pageSelect
             // 
             this.pageSelect.BackColor = System.Drawing.SystemColors.Control;
-            this.pageSelect.Controls.Add(this.groupBox4);
-            this.pageSelect.Controls.Add(this.groupBox3);
-            this.pageSelect.Controls.Add(this.groupBox2);
-            this.pageSelect.Controls.Add(this.groupBox1);
+            this.pageSelect.Controls.Add(this.grpPersonLineSpecials);
+            this.pageSelect.Controls.Add(this.grpConversionParams);
+            this.pageSelect.Controls.Add(this.grpTextPedigreesParams);
+            this.pageSelect.Controls.Add(this.grpPersonIdFormat);
             this.pageSelect.Controls.Add(this.lblFile);
             this.pageSelect.Controls.Add(this.edImportFile);
             this.pageSelect.Controls.Add(this.btnImportFileChoose);
@@ -124,15 +124,15 @@
             this.pageSelect.TabIndex = 0;
             this.pageSelect.Text = "pageSelect";
             // 
-            // groupBox3
+            // grpConversionParams
             // 
-            this.groupBox3.Controls.Add(this.chkSurnamesNormalize);
-            this.groupBox3.Location = new System.Drawing.Point(397, 247);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(531, 58);
-            this.groupBox3.TabIndex = 11;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "groupBox3";
+            this.grpConversionParams.Controls.Add(this.chkSurnamesNormalize);
+            this.grpConversionParams.Location = new System.Drawing.Point(397, 247);
+            this.grpConversionParams.Name = "grpConversionParams";
+            this.grpConversionParams.Size = new System.Drawing.Size(531, 58);
+            this.grpConversionParams.TabIndex = 11;
+            this.grpConversionParams.TabStop = false;
+            this.grpConversionParams.Text = "grpConversionParams";
             // 
             // chkSurnamesNormalize
             // 
@@ -143,24 +143,24 @@
             this.chkSurnamesNormalize.Text = "chkSurnamesNormalize";
             this.chkSurnamesNormalize.UseVisualStyleBackColor = true;
             // 
-            // groupBox2
+            // grpTextPedigreesParams
             // 
-            this.groupBox2.Controls.Add(this.cbDateSeparator);
-            this.groupBox2.Controls.Add(this.label6);
-            this.groupBox2.Controls.Add(this.cbDatesFormat);
-            this.groupBox2.Controls.Add(this.label5);
-            this.groupBox2.Controls.Add(this.cbGenerationFormat);
-            this.groupBox2.Controls.Add(this.label4);
-            this.groupBox2.Controls.Add(this.cbNameFormat);
-            this.groupBox2.Controls.Add(this.label2);
-            this.groupBox2.Controls.Add(this.cbPersonSeparator);
-            this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Location = new System.Drawing.Point(397, 51);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(531, 190);
-            this.groupBox2.TabIndex = 10;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "groupBox2";
+            this.grpTextPedigreesParams.Controls.Add(this.cbDateSeparator);
+            this.grpTextPedigreesParams.Controls.Add(this.lblDateSeparator);
+            this.grpTextPedigreesParams.Controls.Add(this.cbDatesFormat);
+            this.grpTextPedigreesParams.Controls.Add(this.lblDateFormat);
+            this.grpTextPedigreesParams.Controls.Add(this.cbGenerationFormat);
+            this.grpTextPedigreesParams.Controls.Add(this.lblGenerationFormat);
+            this.grpTextPedigreesParams.Controls.Add(this.cbNameFormat);
+            this.grpTextPedigreesParams.Controls.Add(this.lblSurnameFormat);
+            this.grpTextPedigreesParams.Controls.Add(this.cbPersonSeparator);
+            this.grpTextPedigreesParams.Controls.Add(this.lblPersonLineSeparator);
+            this.grpTextPedigreesParams.Location = new System.Drawing.Point(397, 51);
+            this.grpTextPedigreesParams.Name = "grpTextPedigreesParams";
+            this.grpTextPedigreesParams.Size = new System.Drawing.Size(531, 190);
+            this.grpTextPedigreesParams.TabIndex = 10;
+            this.grpTextPedigreesParams.TabStop = false;
+            this.grpTextPedigreesParams.Text = "grpTextPedigreesParams";
             // 
             // cbDateSeparator
             // 
@@ -176,13 +176,13 @@
             this.cbDateSeparator.Size = new System.Drawing.Size(181, 25);
             this.cbDateSeparator.TabIndex = 7;
             // 
-            // label6
+            // lblDateSeparator
             // 
-            this.label6.Location = new System.Drawing.Point(6, 156);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(333, 25);
-            this.label6.TabIndex = 6;
-            this.label6.Text = "label6";
+            this.lblDateSeparator.Location = new System.Drawing.Point(6, 156);
+            this.lblDateSeparator.Name = "lblDateSeparator";
+            this.lblDateSeparator.Size = new System.Drawing.Size(333, 25);
+            this.lblDateSeparator.TabIndex = 6;
+            this.lblDateSeparator.Text = "lblDateSeparator";
             // 
             // cbDatesFormat
             // 
@@ -194,13 +194,13 @@
             this.cbDatesFormat.Size = new System.Drawing.Size(181, 25);
             this.cbDatesFormat.TabIndex = 5;
             // 
-            // label5
+            // lblDateFormat
             // 
-            this.label5.Location = new System.Drawing.Point(6, 125);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(333, 25);
-            this.label5.TabIndex = 4;
-            this.label5.Text = "label5";
+            this.lblDateFormat.Location = new System.Drawing.Point(6, 125);
+            this.lblDateFormat.Name = "lblDateFormat";
+            this.lblDateFormat.Size = new System.Drawing.Size(333, 25);
+            this.lblDateFormat.TabIndex = 4;
+            this.lblDateFormat.Text = "lblDateFormat";
             // 
             // cbGenerationFormat
             // 
@@ -211,13 +211,13 @@
             this.cbGenerationFormat.Size = new System.Drawing.Size(181, 25);
             this.cbGenerationFormat.TabIndex = 3;
             // 
-            // label4
+            // lblGenerationFormat
             // 
-            this.label4.Location = new System.Drawing.Point(6, 94);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(333, 25);
-            this.label4.TabIndex = 2;
-            this.label4.Text = "label4";
+            this.lblGenerationFormat.Location = new System.Drawing.Point(6, 94);
+            this.lblGenerationFormat.Name = "lblGenerationFormat";
+            this.lblGenerationFormat.Size = new System.Drawing.Size(333, 25);
+            this.lblGenerationFormat.TabIndex = 2;
+            this.lblGenerationFormat.Text = "lblGenerationFormat";
             // 
             // cbNameFormat
             // 
@@ -228,13 +228,13 @@
             this.cbNameFormat.Size = new System.Drawing.Size(181, 25);
             this.cbNameFormat.TabIndex = 1;
             // 
-            // label2
+            // lblSurnameFormat
             // 
-            this.label2.Location = new System.Drawing.Point(6, 64);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(333, 25);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "label2";
+            this.lblSurnameFormat.Location = new System.Drawing.Point(6, 64);
+            this.lblSurnameFormat.Name = "lblSurnameFormat";
+            this.lblSurnameFormat.Size = new System.Drawing.Size(333, 25);
+            this.lblSurnameFormat.TabIndex = 0;
+            this.lblSurnameFormat.Text = "lblSurnameFormat";
             // 
             // cbPersonSeparator
             // 
@@ -246,25 +246,25 @@
             this.cbPersonSeparator.Size = new System.Drawing.Size(181, 25);
             this.cbPersonSeparator.TabIndex = 1;
             // 
-            // label1
+            // lblPersonLineSeparator
             // 
-            this.label1.Location = new System.Drawing.Point(6, 32);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(333, 25);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "label1";
+            this.lblPersonLineSeparator.Location = new System.Drawing.Point(6, 32);
+            this.lblPersonLineSeparator.Name = "lblPersonLineSeparator";
+            this.lblPersonLineSeparator.Size = new System.Drawing.Size(333, 25);
+            this.lblPersonLineSeparator.TabIndex = 0;
+            this.lblPersonLineSeparator.Text = "lblPersonLineSeparator";
             // 
-            // groupBox1
+            // grpPersonIdFormat
             // 
-            this.groupBox1.Controls.Add(this.rbNumsDAboville);
-            this.groupBox1.Controls.Add(this.rbNumsKonovalov);
-            this.groupBox1.Controls.Add(this.rbNumsUnknown);
-            this.groupBox1.Location = new System.Drawing.Point(6, 51);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(385, 129);
-            this.groupBox1.TabIndex = 9;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "groupBox1";
+            this.grpPersonIdFormat.Controls.Add(this.rbNumsDAboville);
+            this.grpPersonIdFormat.Controls.Add(this.rbNumsKonovalov);
+            this.grpPersonIdFormat.Controls.Add(this.rbNumsUnknown);
+            this.grpPersonIdFormat.Location = new System.Drawing.Point(6, 51);
+            this.grpPersonIdFormat.Name = "grpPersonIdFormat";
+            this.grpPersonIdFormat.Size = new System.Drawing.Size(385, 129);
+            this.grpPersonIdFormat.TabIndex = 9;
+            this.grpPersonIdFormat.TabStop = false;
+            this.grpPersonIdFormat.Text = "grpPersonIdFormat";
             // 
             // rbNumsDAboville
             // 
@@ -352,15 +352,15 @@
             this.btnClose.Text = "btnClose";
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
-            // groupBox4
+            // grpPersonLineSpecials
             // 
-            this.groupBox4.Controls.Add(this.chkSpecial_1);
-            this.groupBox4.Location = new System.Drawing.Point(397, 311);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(531, 58);
-            this.groupBox4.TabIndex = 11;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "groupBox4";
+            this.grpPersonLineSpecials.Controls.Add(this.chkSpecial_1);
+            this.grpPersonLineSpecials.Location = new System.Drawing.Point(397, 311);
+            this.grpPersonLineSpecials.Name = "grpPersonLineSpecials";
+            this.grpPersonLineSpecials.Size = new System.Drawing.Size(531, 58);
+            this.grpPersonLineSpecials.TabIndex = 11;
+            this.grpPersonLineSpecials.TabStop = false;
+            this.grpPersonLineSpecials.Text = "grpPersonLineSpecials";
             // 
             // chkSpecial_1
             // 
@@ -390,36 +390,36 @@
             this.tabControl1.ResumeLayout(false);
             this.pageSelect.ResumeLayout(false);
             this.pageSelect.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
+            this.grpConversionParams.ResumeLayout(false);
+            this.grpTextPedigreesParams.ResumeLayout(false);
+            this.grpPersonIdFormat.ResumeLayout(false);
             this.pageResult.ResumeLayout(false);
-            this.groupBox4.ResumeLayout(false);
+            this.grpPersonLineSpecials.ResumeLayout(false);
             this.ResumeLayout(false);
         }
         private System.Windows.Forms.CheckBox chkSpecial_1;
-        private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.GroupBox grpPersonLineSpecials;
+        private System.Windows.Forms.Label lblDateFormat;
         private System.Windows.Forms.ComboBox cbDatesFormat;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label lblDateSeparator;
         private System.Windows.Forms.ComboBox cbDateSeparator;
         private System.Windows.Forms.CheckBox chkSurnamesNormalize;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.GroupBox grpConversionParams;
+        private System.Windows.Forms.Label lblGenerationFormat;
         private System.Windows.Forms.ComboBox cbGenerationFormat;
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.ListBox lbLog;
         private System.Windows.Forms.TabPage pageResult;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lblSurnameFormat;
         private System.Windows.Forms.ComboBox cbNameFormat;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblPersonLineSeparator;
         private System.Windows.Forms.ComboBox cbPersonSeparator;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox grpTextPedigreesParams;
         private System.Windows.Forms.RadioButton rbNumsUnknown;
         private System.Windows.Forms.RadioButton rbNumsKonovalov;
         private System.Windows.Forms.RadioButton rbNumsDAboville;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox grpPersonIdFormat;
         private System.Windows.Forms.Button btnBack;
         private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.TabPage pageSelect;

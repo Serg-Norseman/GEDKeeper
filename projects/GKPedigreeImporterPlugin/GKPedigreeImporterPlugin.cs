@@ -53,7 +53,25 @@ namespace GKPedigreeImporterPlugin
         LSID_Generation,
         LSID_ParseError_AncNotFound,
         LSID_ParseError_DateInvalid,
-        LSID_ParseError_NumDuplicate
+        LSID_ParseError_NumDuplicate,
+
+        LSID_PersonIdFormat,
+        LSID_NumsDAboville,
+        LSID_NumsKonovalov,
+        LSID_NumsUnknown,
+        LSID_TextPedigreesParams,
+        LSID_PersonLineSeparator,
+        LSID_SurnameFormat,
+        LSID_GenerationFormat,
+        LSID_DateSeparator,
+        LSID_DateFormat,
+        LSID_ConversionParams,
+        LSID_SurnamesNormalize,
+        LSID_Next,
+        LSID_Back,
+        LSID_Close,
+        LSID_PersonLineSpecials,
+        LSID_Special_1
     }
     
     public class PlugIn : IPlugin

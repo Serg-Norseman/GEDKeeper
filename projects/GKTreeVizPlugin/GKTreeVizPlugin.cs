@@ -39,83 +39,92 @@ using GKCore.Interfaces;
 
 namespace GKTreeVizPlugin
 {
+    public enum TVLS
+    {
+        LSID_DisplayName,
+        LSID_WithoutDates,
+        LSID_MinGens,
+        LSID_Accept,
+        LSID_Cancel
+    }
+    
     public sealed class Plugin : IPlugin
     {
-        private const string DISPLAY_NAME = "GKTreeVizPlugin";
-
+        private string fDisplayName = "GKTreeVizPlugin";
         private IHost fHost;
         private ILangMan fLangMan;
 
-        public string DisplayName { get { return DISPLAY_NAME; } }
+        public string DisplayName { get { return this.fDisplayName; } }
         public IHost Host { get { return this.fHost; } }
         public ILangMan LangMan { get { return fLangMan; } }
 
         public void Execute()
         {
-			if (this.fHost.IsUnix()) {
-        		this.fHost.ShowWarning(@"This function is not supported in Linux");
-        		return;
-        	}
+            if (this.fHost.IsUnix()) {
+                this.fHost.ShowWarning(@"This function is not supported in Linux");
+                return;
+            }
 
-        	using (TVSettingsDlg dlg = new TVSettingsDlg(this))
-        	{
-        		if (dlg.ShowDialog() == DialogResult.OK)
-        		{
-        			IBaseWindow curBase = this.fHost.GetCurrentFile(true);
+            using (TVSettingsDlg dlg = new TVSettingsDlg(this))
+            {
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+                    IBaseWindow curBase = this.fHost.GetCurrentFile(true);
 
-        			using (TreeVizViewer viewer = new TreeVizViewer(curBase, dlg.MinGens))
-        			{
-        				viewer.ShowDialog();
-        			}
-        		}
-        	}
+                    using (TreeVizViewer viewer = new TreeVizViewer(curBase, dlg.MinGens))
+                    {
+                        viewer.ShowDialog();
+                    }
+                }
+            }
         }
 
         public void OnHostClosing(ref bool cancelClosing) {}
-		public void OnHostActivate() {}
-		public void OnHostDeactivate() {}
+        public void OnHostActivate() {}
+        public void OnHostDeactivate() {}
 
         public void OnLanguageChange()
         {
-        	try
-        	{
-        		this.fLangMan = this.fHost.CreateLangMan(this);
-        	}
-        	catch (Exception ex)
-        	{
-        		fHost.LogWrite("GKTreeVizPlugin.OnLanguageChange(): " + ex.Message);
-        	}
+            try
+            {
+                this.fLangMan = this.fHost.CreateLangMan(this);
+                this.fDisplayName = this.fLangMan.LS(TVLS.LSID_DisplayName);
+            }
+            catch (Exception ex)
+            {
+                fHost.LogWrite("GKTreeVizPlugin.OnLanguageChange(): " + ex.Message);
+            }
         }
 
         public bool Startup(IHost host)
         {
-        	bool result = true;
-        	try
-        	{
-        		this.fHost = host;
-        		// Implement any startup code here
-        	}
-        	catch (Exception ex)
-        	{
-        		fHost.LogWrite("GKTreeVizPlugin.Startup(): " + ex.Message);
-        		result = false;
-        	}
-        	return result;
+            bool result = true;
+            try
+            {
+                this.fHost = host;
+                // Implement any startup code here
+            }
+            catch (Exception ex)
+            {
+                fHost.LogWrite("GKTreeVizPlugin.Startup(): " + ex.Message);
+                result = false;
+            }
+            return result;
         }
 
         public bool Shutdown()
         {
-        	bool result = true;
-        	try
-        	{
-        		// Implement any shutdown code here
-        	}
-        	catch (Exception ex)
-        	{
-        		fHost.LogWrite("GKTreeVizPlugin.Shutdown(): " + ex.Message);
-        		result = false;
-        	}
-        	return result;
+            bool result = true;
+            try
+            {
+                // Implement any shutdown code here
+            }
+            catch (Exception ex)
+            {
+                fHost.LogWrite("GKTreeVizPlugin.Shutdown(): " + ex.Message);
+                result = false;
+            }
+            return result;
         }
 
     }

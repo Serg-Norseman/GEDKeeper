@@ -10,3 +10,20 @@ Generation
 Parsing error: not found in the list of ancestors with a number
 Parse Error: date
 Parse Error: person number is duplicated
+Person numbers format
+by D'Aboville (not supported yet)
+by Konovalov
+unknown
+Text pedigrees params
+Person line delimiter
+Format names in person line
+Format line of generation
+Dates delimiter
+Dates format
+Transformation params
+Normalize the names (PETROV -> Petrov)
+Next >
+< Back
+Close
+Special settings of personal lines format
+1) "Number. Name (*birth +death)" - the dates in brackets

@@ -71,6 +71,7 @@ namespace GKUI.Dialogs
             this.fMediaList = new GKMediaSheet(this, this.pageMultimedia);
 
             // SetLang()
+            this.Text = LangMan.LS(LSID.LSID_Location);
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             this.pageCommon.Text = LangMan.LS(LSID.LSID_Common);

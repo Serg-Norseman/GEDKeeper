@@ -742,7 +742,7 @@ namespace GKTests
                 (dtx1.Value as GEDCOMDateInterpreted).DatePhrase = "(yesterday)";
                 Assert.AreEqual(dtx1.StringValue, "INT 20 JAN 2013 (yesterday)");
 
-                // TODO: не проходит
+                // TODO: not passed
                 //dtx1.ParseString("INT 20 JAN 2013 (today (yesterday))");
                 //Assert.AreEqual(dtx1.StringValue, "INT 20 JAN 2013 (yesterday)");
                 

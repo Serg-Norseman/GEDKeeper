@@ -84,25 +84,27 @@ namespace GKPedigreeImporterPlugin
             this.lblFile.Text = fLangMan.LS(ILS.LSID_File);
             this.btnImportFileChoose.Text = fLangMan.LS(ILS.LSID_DlgSelect) + @"...";
 
-            this.lblFile.Text = "Файл";
-            this.btnImportFileChoose.Text = "Выбрать...";
-            this.groupBox3.Text = "Параметры преобразований";
-            this.chkSurnamesNormalize.Text = "Нормализовать фамилии (ПЕТРОВ -> Петров)";
-            this.groupBox2.Text = "Параметры текстовых росписей";
-            this.label6.Text = "Разделитель в датах";
-            this.label5.Text = "Формат дат";
-            this.label4.Text = "Формат строки поколения";
-            this.label2.Text = "Формат ФИО в персональной строке";
-            this.label1.Text = "Разделитель данных в персональной строке";
-            this.groupBox1.Text = "Формат нумерации персон";
-            this.rbNumsDAboville.Text = "по Д\'Абовиллю (пока не поддерживается)";
-            this.rbNumsKonovalov.Text = "по Коновалову";
-            this.rbNumsUnknown.Text = "неизвестно";
-            this.btnNext.Text = "Вперед >";
-            this.btnBack.Text = "< Назад";
-            this.btnClose.Text = "Закрыть";
-            this.groupBox4.Text = "Специальные настройки формата персональных строк";
-            this.chkSpecial_1.Text = "1) \"Номер. Имя (*рождение +смерть)\" - даты в скобках";
+            this.grpPersonIdFormat.Text = fLangMan.LS(ILS.LSID_PersonIdFormat);
+            this.rbNumsDAboville.Text = fLangMan.LS(ILS.LSID_NumsDAboville);
+            this.rbNumsKonovalov.Text = fLangMan.LS(ILS.LSID_NumsKonovalov);
+            this.rbNumsUnknown.Text = fLangMan.LS(ILS.LSID_NumsUnknown);
+
+            this.grpTextPedigreesParams.Text = fLangMan.LS(ILS.LSID_TextPedigreesParams);
+            this.lblPersonLineSeparator.Text = fLangMan.LS(ILS.LSID_PersonLineSeparator);
+            this.lblSurnameFormat.Text = fLangMan.LS(ILS.LSID_SurnameFormat);
+            this.lblGenerationFormat.Text = fLangMan.LS(ILS.LSID_GenerationFormat);
+            this.lblDateSeparator.Text = fLangMan.LS(ILS.LSID_DateSeparator);
+            this.lblDateFormat.Text = fLangMan.LS(ILS.LSID_DateFormat);
+
+            this.grpConversionParams.Text = fLangMan.LS(ILS.LSID_ConversionParams);
+            this.chkSurnamesNormalize.Text = fLangMan.LS(ILS.LSID_SurnamesNormalize);
+
+            this.btnNext.Text = fLangMan.LS(ILS.LSID_Next);
+            this.btnBack.Text = fLangMan.LS(ILS.LSID_Back);
+            this.btnClose.Text = fLangMan.LS(ILS.LSID_Close);
+
+            this.grpPersonLineSpecials.Text = fLangMan.LS(ILS.LSID_PersonLineSpecials);
+            this.chkSpecial_1.Text = fLangMan.LS(ILS.LSID_Special_1);
         }
 
         private void btnImportFileChoose_Click(object sender, EventArgs e)
