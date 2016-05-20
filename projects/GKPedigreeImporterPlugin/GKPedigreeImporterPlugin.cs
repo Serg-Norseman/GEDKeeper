@@ -71,7 +71,14 @@ namespace GKPedigreeImporterPlugin
         LSID_Back,
         LSID_Close,
         LSID_PersonLineSpecials,
-        LSID_Special_1
+        LSID_Special_1,
+        LSID_Analysis,
+        LSID_Loading,
+        LSID_NPS,
+        LSID_SNP,
+        LSID_NoSpecial,
+        LSID_AllFiltersW,
+        LSID_AllFiltersL
     }
     
     public class PlugIn : IPlugin
@@ -145,6 +152,5 @@ namespace GKPedigreeImporterPlugin
             }
             return result;
         }
-
     }
 }

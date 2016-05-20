@@ -106,9 +106,9 @@ namespace GKTests
             Assert.AreEqual("", gcStr);
             
             // other
-            string st = "иван";
+            string st = "ivan";
             st = GEDCOMUtils.NormalizeName(st);
-            Assert.AreEqual("Иван", st);
+            Assert.AreEqual("Ivan", st);
             
             st = GEDCOMUtils.NormalizeName(null);
             Assert.AreEqual("", st);

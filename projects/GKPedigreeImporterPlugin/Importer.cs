@@ -675,7 +675,7 @@ namespace GKPedigreeImporterPlugin
                 int[] numberStats = new int[3];
 
                 int num = this.fRawContents.Count;
-                this.fBase.ProgressInit("Анализ", num);
+                this.fBase.ProgressInit(fLangMan.LS(ILS.LSID_Analysis), num);
 
                 for (int i = 0; i < num; i++) {
                     string txt = this.fRawContents[i].Trim();
@@ -830,11 +830,10 @@ namespace GKPedigreeImporterPlugin
                 StringList buffer = new StringList();
                 try
                 {
-                    // получаем используемое количество строк и столбцов
                     int rowsCount = sheet.UsedRange.Rows.Count;
                     //int colsCount = sheet.UsedRange.Columns.Count;
 
-                    this.fBase.ProgressInit("Загрузка", rowsCount);
+                    this.fBase.ProgressInit(fLangMan.LS(ILS.LSID_Loading), rowsCount);
 
                     MSOExcel.Range excelRange = sheet.UsedRange;
                     object[,] valueArray = (object[,])excelRange.get_Value(MSOExcel.XlRangeValueDataType.xlRangeValueDefault);
@@ -843,12 +842,12 @@ namespace GKPedigreeImporterPlugin
 
                     for (int row = 1; row <= rowsCount; row++)
                     {
-                        string c1 = GetCell(valueArray, row, 1).Trim(); // номер позиции
-                        string c2 = GetCell(valueArray, row, 2).Trim(); // номер предка
-                        string c3 = GetCell(valueArray, row, 3).Trim(); // имя, может начинаться с номера брака
-                        string c4 = GetCell(valueArray, row, 4).Trim(); // дата рождения
-                        string c5 = GetCell(valueArray, row, 5).Trim(); // дата смерти
-                        string c6 = GetCell(valueArray, row, 6).Trim(); // место рождения или проживания
+                        string c1 = GetCell(valueArray, row, 1).Trim(); // position number
+                        string c2 = GetCell(valueArray, row, 2).Trim(); // ancestor number
+                        string c3 = GetCell(valueArray, row, 3).Trim(); // name, maybe start with the number of marriage
+                        string c4 = GetCell(valueArray, row, 4).Trim(); // birth date
+                        string c5 = GetCell(valueArray, row, 5).Trim(); // death date
+                        string c6 = GetCell(valueArray, row, 6).Trim(); // birth or residence place
 
                         string s123 = c1 + c2;
                         if (s123 != "" && !string.IsNullOrEmpty(c3) && c3[0] != '/') {
@@ -952,7 +951,7 @@ namespace GKPedigreeImporterPlugin
                 StreamReader strd = new StreamReader(fileName, Encoding.GetEncoding(1251));
                 try
                 {
-                    this.fBase.ProgressInit("Загрузка", (int)strd.BaseStream.Length);
+                    this.fBase.ProgressInit(fLangMan.LS(ILS.LSID_Loading), (int)strd.BaseStream.Length);
 
                     int lineNum = 0;
                     while (strd.Peek() != -1) {
@@ -1008,7 +1007,7 @@ namespace GKPedigreeImporterPlugin
 
                     MSOWord.Document doc = wordApp.Documents.Open(fileName);
 
-                    this.fBase.ProgressInit("Загрузка", doc.Paragraphs.Count);
+                    this.fBase.ProgressInit(fLangMan.LS(ILS.LSID_Loading), doc.Paragraphs.Count);
 
                     int lineNum = 0;
                     for (int i = 0; i < doc.Paragraphs.Count; i++)

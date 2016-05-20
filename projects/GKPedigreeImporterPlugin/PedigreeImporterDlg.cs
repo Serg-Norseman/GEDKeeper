@@ -35,13 +35,6 @@ namespace GKPedigreeImporterPlugin
         private int fCurrentStage;
         private int fAvailableStage;
 
-        // TODO: localize
-        #if !GK_LINUX
-        private static string filter = "Все поддерживаемые форматы (*.txt, *.csv, *.doc, *.xls)|*.txt;*.csv;*.doc;*.xls|Роспись в txt-формате (*.txt)|*.txt|Роспись в csv-формате (*.csv)|*.csv|Роспись в формате Word (*.doc)|*.doc|Роспись в формате Excel (*.xls)|*.xls";
-        #else
-        private static string filter = "Все поддерживаемые форматы (*.txt, *.csv)|*.txt;*.csv|Роспись в txt-формате (*.txt)|*.txt|Роспись в csv-формате (*.csv)|*.csv";
-        #endif
-        
         public PedigreeImporterDlg(IPlugin fPlugin)
         {
             InitializeComponent();
@@ -61,23 +54,16 @@ namespace GKPedigreeImporterPlugin
             this.cbDateSeparator.SelectedIndex = 0;
 
             this.cbDatesFormat.Items.Clear();
-            this.cbDatesFormat.Items.AddRange(new object[] {
-                                    "ДД/ММ/ГГГГ",
-                                    "ГГГГ/ММ/ДД"});
+            this.cbDatesFormat.Items.AddRange(new object[] { "DD/MM/YYYY", "YYYY/MM/DD" });
 
             this.cbGenerationFormat.Items.Clear();
             this.cbGenerationFormat.Items.AddRange(new object[] {
-                                    "I, II, III, IV...",
-                                    "Поколение N"});
+                                                       "I, II, III, IV...",
+                                                       fLangMan.LS(ILS.LSID_Generation) + " N"});
 
-            this.cbNameFormat.Items.AddRange(new object[] {
-                                    "Имя Отчество Фамилия",
-                                    "Фамилия Имя Отчество"});
+            this.cbNameFormat.Items.AddRange(new object[] { fLangMan.LS(ILS.LSID_NPS), fLangMan.LS(ILS.LSID_SNP) });
 
-            this.cbPersonSeparator.Items.AddRange(new object[] {
-                                    "нет специального",
-                                    ";",
-                                    ","});
+            this.cbPersonSeparator.Items.AddRange(new object[] { fLangMan.LS(ILS.LSID_NoSpecial), ";", ","});
 
             // SetLang()
             this.Text = fLangMan.LS(ILS.LSID_PluginTitle);
@@ -109,6 +95,13 @@ namespace GKPedigreeImporterPlugin
 
         private void btnImportFileChoose_Click(object sender, EventArgs e)
         {
+            string filter;
+            #if !GK_LINUX
+            filter = fLangMan.LS(ILS.LSID_AllFiltersW);
+            #else
+            filter = fLangMan.LS(ILS.LSID_AllFiltersL);
+            #endif
+
             string fileName = UIHelper.GetOpenFile("", "", filter, 1, "");
             if (!string.IsNullOrEmpty(fileName))
             {

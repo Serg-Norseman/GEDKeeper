@@ -96,9 +96,7 @@ namespace GKCore.Export
                 32
                );
 
-            composer.ShowText("Привет, Мир!"/*,
-				new PointF(32,48)*/
-                             );
+            composer.ShowText("Hello World!"/*,new PointF(32,48)*/);
 
             composer.Flush();
         }

@@ -43,7 +43,9 @@ namespace GKImageViewerPlugin
 {
     public enum IVLS
     {
-        /* 000 */ LSID_ImgViewer
+        LSID_ImgViewer,
+        LSID_FilesFilter,
+        LSID_FileLoad
     }
 
     public class Plugin : IPlugin
@@ -116,6 +118,5 @@ namespace GKImageViewerPlugin
             }
             return result;
         }
-
     }
 }

@@ -27,3 +27,10 @@ Next >
 Close
 Special settings of personal lines format
 1) "Number. Name (*birth +death)" - the dates in brackets
+Analysis
+Loading
+Name Patronymic Surname
+Surname Name Patronymic
+no special
+All supported formats (*.txt, *.csv, *.doc, *.xls)|*.txt;*.csv;*.doc;*.xls|Pedigree in txt format (*.txt)|*.txt|Pedigree in the csv format (*.csv)|*.csv|Pedigree in MS Word format (*.doc)|*.doc|Pedigree in MS Excel format (*.xls)|*.xls
+All supported formats (*.txt, *.csv)|*.txt;*.csv|Pedigree in txt format (*.txt)|*.txt|Pedigree in the csv format (*.csv)|*.csv

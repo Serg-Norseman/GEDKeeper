@@ -61,11 +61,10 @@ namespace GKImageViewerPlugin
             }
         }
 
-        // TODO: localize
         private void ToolBar1_ButtonClick(object sender, EventArgs e)
         {
             if (sender == this.tbFileLoad) {
-                string fileName = UIHelper.GetOpenFile("", "", "Все файлы (*.*)|*.*", 1, "");
+                string fileName = UIHelper.GetOpenFile("", "", this.fLangMan.LS(IVLS.LSID_FilesFilter), 1, "");
                 if (!string.IsNullOrEmpty(fileName))
                 {
                     this.SetFileRef(fileName);
@@ -167,7 +166,7 @@ namespace GKImageViewerPlugin
         public void SetLang()
         {
             this.Text = this.fLangMan.LS(IVLS.LSID_ImgViewer);
-            this.tbFileLoad.ToolTipText = "Открыть файл";
+            this.tbFileLoad.ToolTipText = this.fLangMan.LS(IVLS.LSID_FileLoad);
 
             /*if (this.fImageCtl != null) {
                 this.fImageCtl.btnSizeToFit.Text = LangMan.LS(LSID.LSID_SizeToFit);
