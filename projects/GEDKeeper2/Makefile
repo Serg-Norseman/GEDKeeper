@@ -256,7 +256,7 @@ cscrefs := \
 //reference:"libs\DotNetRtfWriter.dll" \
 //reference:"libs\\ExcelLibrary.dll" \
 //reference:"libs\\itextsharp.dll" \
-//reference:"libs\\LuaInterface.dll" \
+//reference:"libs\\mswin\\LuaInterface.dll" \
 //reference:"libs\\ZedGraph.dll"
 ifeq ($(windows), $(softwareplatform))
 # Settings for Windows.
@@ -339,8 +339,8 @@ ArborGVT.dll \
 DotNetRtfWriter.dll \
 ExcelLibrary.dll \
 itextsharp.dll \
-lua51.dll \
-LuaInterface.dll \
+mswin/lua51.dll \
+mswin/LuaInterface.dll \
 ZedGraph.dll \
 )
 
@@ -384,4 +384,4 @@ $(gkcommon):
 	@cd ../$(gkcommon) && $(MAKE) --file=Makefile
 
 $(installdir)%.dll: libs/%.dll
-	@cp -f $< $@
+	@cp -f $< $(installdir)$(@F)
