@@ -114,7 +114,7 @@ namespace GKCore.Cultures
 
             if (result == GEDCOMSex.svNone && canQuery) {
                 string fn = iName + " " + iPat;
-                DialogResult res = GKUtils.ShowQuestion("Не определяется пол человека по имени \"" + fn + "\". Это мужской пол?");
+                DialogResult res = GKUtils.ShowQuestion(string.Format(LangMan.LS(LSID.LSID_NotDeterminedPersonSex), fn));
                 result = (res == DialogResult.Yes) ? GEDCOMSex.svMale : GEDCOMSex.svFemale;
             }
 

@@ -537,9 +537,7 @@ namespace GKCore
         /* 481 */ LSID_ImagesFilter,
         /* 482 */ LSID_ScriptsFilter,
         /* 483 */ LSID_TreeImagesFilter,
-
-        /* 484 */ LSID_CommonStats, // deprecated
-
+        /* 484 */ LSID_DeathCauses,
         /* 485 */ LSID_ExpPedigree,
         /* 486 */ LSID_Parameter,
         /* 487 */ LSID_Total,
@@ -787,7 +785,13 @@ namespace GKCore
         /* 709 */ LSID_WithoutDates,
         /* 710 */ LSID_PatriarchsDiagram,
 
-        /* 000 */ LSID_Last = LSID_PatriarchsDiagram
+        /* 711 */ LSID_FamilyBook,
+        /* 712 */ LSID_TableOfContents,
+        /* 713 */ LSID_PersonalRecords,
+        /* 714 */ LSID_Indexes,
+        /* 715 */ LSID_NotDeterminedPersonSex,
+
+        /* 000 */ LSID_Last = LSID_NotDeterminedPersonSex
     }
 
     public static class LangMan
@@ -1294,16 +1298,13 @@ namespace GKCore
             /* 481 */ "Изображения (*.bmp;*.gif;*.png;*.jpg)|*.bmp;*.gif;*.png;*.jpg", //Image Files|
             /* 482 */ "Скрипты (*.lua)|*.lua",
             /* 483 */ "Файлы BMP (*.bmp)|*.bmp|Файлы JPEG (*.jpg)|*.jpg|Файлы EMF (*.emf)|*.emf|Файлы PNG (*.png)|*.png|Файлы GIF (*.gif)|*.gif",
-
-            /* 484 */ "<?>",
-
+            /* 484 */ "Причины смерти",
             /* 485 */ "Родословная роспись",
             /* 486 */ "Параметр",
             /* 487 */ "Всего",
             /* 488 */ "Мужчины",
             /* 489 */ "Женщины",
             /* 490 */ "Фильтр полей",
-
             /* 491 */ "Год",
             /* 492 */ "PDF файлы (*.pdf)|*.pdf",
             /* 493 */ "RTF файлы (*.rtf)|*.rtf",
@@ -1528,7 +1529,13 @@ namespace GKCore
             /* 707 */ "Анализ (экспериментальный)",
             /* 708 */ "Сравнить",
             /* 709 */ "Не учитывать даты",
-            /* 710 */ "Диаграмма"
+            /* 710 */ "Диаграмма",
+
+            /* 711 */ "Фамильная книга",
+            /* 712 */ "Оглавление",
+            /* 713 */ "Персональные записи",
+            /* 714 */ "Каталоги",
+            /* 715 */ "Не определяется пол человека по имени \"{1}\". Это мужской пол?"
         };
 
         private static readonly string[] LSList = new string[(int)LSID.LSID_Last + 1];

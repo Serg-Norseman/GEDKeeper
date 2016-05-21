@@ -65,14 +65,14 @@ namespace GKCore.Export
         }
         
         private readonly CatalogProps[] BookCatalogs = {
-            new CatalogProps("Catalog_BirthYears", "Годы рождения"),
-            new CatalogProps("Catalog_DeathYears", "Годы смерти"),
-            new CatalogProps("Catalog_BirthPlaces", "Места рождения"),
-            new CatalogProps("Catalog_DeathPlaces", "Места смерти"),
-            new CatalogProps("Catalog_DeathCauses", "Причины смерти"),
-            new CatalogProps("Catalog_Occupations", "Профессии"),
-            new CatalogProps("Catalog_Religion", "Вероисповедание"),
-            new CatalogProps("Catalog_Sources", "Источники")
+            new CatalogProps("Catalog_BirthYears", LangMan.LS(LSID.LSID_BirthYears)),
+            new CatalogProps("Catalog_DeathYears", LangMan.LS(LSID.LSID_DeathYears)),
+            new CatalogProps("Catalog_BirthPlaces", LangMan.LS(LSID.LSID_MSBirthPlaces)),
+            new CatalogProps("Catalog_DeathPlaces", LangMan.LS(LSID.LSID_MSDeathPlaces)),
+            new CatalogProps("Catalog_DeathCauses", LangMan.LS(LSID.LSID_DeathCauses)),
+            new CatalogProps("Catalog_Occupations", LangMan.LS(LSID.LSID_Occupation)),
+            new CatalogProps("Catalog_Religion", LangMan.LS(LSID.LSID_Religion)),
+            new CatalogProps("Catalog_Sources", LangMan.LS(LSID.LSID_RPSources))
         };
         
         private Font fTitleFont;
@@ -144,18 +144,18 @@ namespace GKCore.Export
 
                 float halfpage = (fDocument.Top - fDocument.Bottom - (fTitleFont.Size) * 4) / 2f;
                 fDocument.Add(new Paragraph(Chunk.NEWLINE) { SpacingAfter = halfpage });
-                fDocument.Add(new Paragraph("Фамильная книга", fTitleFont) { Alignment = Element.ALIGN_CENTER });
+                fDocument.Add(new Paragraph(LangMan.LS(LSID.LSID_FamilyBook), fTitleFont) { Alignment = Element.ALIGN_CENTER });
                 fDocument.NewPage();
 
-                Chunk chapChunk = new Chunk("Оглавление", fChapFont);
+                Chunk chapChunk = new Chunk(LangMan.LS(LSID.LSID_TableOfContents), fChapFont);
                 fDocument.Add(new Paragraph(chapChunk));
                 fDocument.Add(new Paragraph(Chunk.NEWLINE));
 
-                chapChunk = new Chunk("1. Персональные записи", fLinkFont);
+                chapChunk = new Chunk("1. "+LangMan.LS(LSID.LSID_PersonalRecords), fLinkFont);
                 chapChunk.SetLocalGoto("IndividualRecords");
                 fDocument.Add(new Paragraph(chapChunk));
 
-                chapChunk = new Chunk("2. Каталоги", fLinkFont);
+                chapChunk = new Chunk("2. "+LangMan.LS(LSID.LSID_Indexes), fLinkFont);
                 chapChunk.SetLocalGoto("Catalogs");
                 fDocument.Add(new Paragraph(chapChunk));
 
@@ -182,7 +182,7 @@ namespace GKCore.Export
 
                 fDocument.NewPage();
 
-                chapChunk = new Chunk("Персональные записи", fChapFont);
+                chapChunk = new Chunk(LangMan.LS(LSID.LSID_PersonalRecords), fChapFont);
                 chapChunk.SetLocalDestination("IndividualRecords");
                 fDocument.Add(new Paragraph(chapChunk) { Alignment = 1, SpacingAfter = 20f });
                 fDocument.Add(new Paragraph(Chunk.NEWLINE));
@@ -216,7 +216,7 @@ namespace GKCore.Export
 
                 fDocument.NewPage();
 
-                chapChunk = new Chunk("Каталоги", fChapFont);
+                chapChunk = new Chunk(LangMan.LS(LSID.LSID_Indexes), fChapFont);
                 chapChunk.SetLocalDestination("Catalogs");
                 fDocument.Add(new Paragraph(chapChunk) { Alignment = 1 });
                 fDocument.Add(new Paragraph(Chunk.NEWLINE));
@@ -390,7 +390,7 @@ namespace GKCore.Export
                 pg = new Paragraph();
                 chunk = new Chunk(father.GetNameString(true, false), fLinkFont);
                 chunk.SetLocalGoto(father.XRef);
-                pg.Add(new Chunk("Отец: ", fTextFont)); pg.Add(chunk);
+                pg.Add(new Chunk(LangMan.LS(LSID.LSID_Father) + ": ", fTextFont)); pg.Add(chunk);
                 mct.AddElement(pg);
             }
 
@@ -398,7 +398,7 @@ namespace GKCore.Export
                 pg = new Paragraph();
                 chunk = new Chunk(mother.GetNameString(true, false), fLinkFont);
                 chunk.SetLocalGoto(mother.XRef);
-                pg.Add(new Chunk("Мать: ", fTextFont)); pg.Add(chunk);
+                pg.Add(new Chunk(LangMan.LS(LSID.LSID_Mother) + ": ", fTextFont)); pg.Add(chunk);
                 mct.AddElement(pg);
             }
 
