@@ -78,7 +78,8 @@ namespace GKPedigreeImporterPlugin
         LSID_SNP,
         LSID_NoSpecial,
         LSID_AllFiltersW,
-        LSID_AllFiltersL
+        LSID_AllFiltersL,
+        LSID_SpousesInfoConflict
     }
     
     public class PlugIn : IPlugin

@@ -526,7 +526,7 @@ namespace GKPedigreeImporterPlugin
                                 result = res;
                             } else {
                                 if (result != res) {
-                                    this.fLog.Add(">>>> Противоречивая информация о супругах");
+                                    this.fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_SpousesInfoConflict));
                                     return GEDCOMSex.svNone;
                                 } else {
                                     // matched, checked
