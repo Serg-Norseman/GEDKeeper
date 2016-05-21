@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
+<title>Person record</title>
+</head>
+<body>
+<h1>Person record</h1>
+<p>Person record is the most important record type in a genealogical
+database. Such record contains all information about a man. GEDKeeper
+allows you to store full name, nickname and sex in a person record. You
+can list all events and facts that relate to the person&#39;s life.
+Using GEDKeeper you easily investigate family and social relations of
+the person (associations with other people). GEDKeeper never restrict
+you in number of person&#39;s families and children. Also you can
+divide people by different social groups, add additional indicators to
+improve obviousness (references and footnotes), add unlimited number of
+notes, multimedia materials and sources, and add person&#39;s portraits
+to show them in trees.</p>
+<p>This is the list of dialog&#39;s tabs and respective data categories
+you can change:</p>
+<ul>
+<li><a href="gkhRec_Event.html">Event</a> represents an event or fact
+from person&#39;s life;</li>
+<li><a href="gkhRec_Family.html">Family</a> lists marriages of person
+or family relations; common children are specified in the dedicated
+dialog;</li>
+<li><a href="gkhRec_Asso.html">Association</a> lists person&#39;s
+social relations;</li>
+<li><a href="gkhRec_Group.html">Group</a> is a way to unite objects by
+social relations, which makes navigation and search more effective;</li>
+<li><a href="gkhRec_Note.html">Note</a> is an arbitrary text about
+person;</li>
+<li><a href="gkhRec_Media.html">Multimedia content</a> combines photos,
+scanned documents and portraits;</li>
+<li><a href="gkhRec_Source.html">Source</a> represents used documents,
+correspondences and other kinds of source of information about
+person;</li>
+<li><a href="gkhRec_UserRefs.html">Reference&#47;footnote</a> is an
+additional indicator for GEDKeeper itself or a way to create handy
+classification.</li>
+</ul>
+<p>GEDKeeper splits new person creation process on to the two phases:
+adding and changing details. The first stage is a small dialog for
+adding new person.</p>
+<p align="center"><img src="images/dlgPersonNew.gif"></p>
+<p>But the second stage is a big dialog where you change person
+detailed information. The creation process get split on to the two
+stages to simplify adding diverse information about person, which may
+affect huge number of database records and relations. Had the creation
+process implemented with single window object, it would be very hard to
+undo all changes made by user in the window if user has cancelled
+creation (user might have added bulk information about person, then
+user cancelled changes and here GEDKeeper would had to remove already
+saved information from database). But this problem goes away if
+two-steps creation is used.</p>
+<p align="center"><img src="images/dlgPersonEdit.gif"></p>
+<h2><a name="person_edit">Changing person information</a></h2>
+<ul>
+<li>You change person&#39;s parents using special dedicated panel with
+two fields -- for person&#39;s father and mother, and three groups of
+buttons. At first glance this looks too complex, but in action this
+gives flexible editing of object properties. Button group <img
+src="images/iRecNew.gif" align="absmiddle">, <img
+src="images/iRecEdit.gif" align="absmiddle"> and <img
+src="images/iRecDelete.gif" align="absmiddle"> to the right of parent
+names modifies parents&#39; family as a whole object. That is, you can
+use <img src="images/iRecNew.gif" align="absmiddle"> button to attach
+affected person to an existing family. You use <img
+src="images/iRecEdit.gif" align="absmiddle">, button to modify
+properties of already attached family without necessity to close
+currently opened person editing window. You use <img
+src="images/iRecDelete.gif" align="absmiddle"> to the right of parent
+names to detach person from the family.</li>
+<li>The same buttons: <img src="images/iRecNew.gif" align="absmiddle">,
+<img src="images/iRecDelete.gif" align="absmiddle"> and <img
+src="images/iToMan.gif" align="absmiddle"> located under the name of
+each parent perform other functions. <img src="images/iRecNew.gif"
+align="absmiddle"> button adds new family if one was not added already,
+and then adds to this family the concrete parent (father or mother).
+<img src="images/iRecDelete.gif" align="absmiddle"> button removes from
+a parent (father or mother) from person&#39;s family.</li>
+<li>To add a parent, you use <img src="images/iRecNew.gif"
+align="absmiddle"> button -- &quot;Select or add father (mother)&quot;
+in &quot;Father&quot; or &quot;Mother&quot; section, respectively. To
+remove a parent, you use<img src="images/iRecDelete.gif"
+align="absmiddle"> button -- &quot;Detach father (mother)&quot;. To
+quickly jump to a parent&#39;s person record you use <img
+src="images/iToMan.gif" align="absmiddle"> button.</li>
+<li>There are dedicated edit box to the right of person&#39;s full name
+and sex, where you can enter additional information about person name:
+nickname, pseudonym, status, name prefix and suffix.</li>
+<li>To modify an object of any type, that is related to the affected
+person, you use a specific tab and the following standard buttons: <img
+src="images/iRecNew.gif" align="absmiddle">, <img
+src="images/iRecEdit.gif" align="absmiddle"> and <img
+src="images/iRecDelete.gif" align="absmiddle">. You can add any number
+of events to the affected person, that are related to his/her life,
+various attributes, notes, photos or other multimedia content, source
+materials mention the person, marriages and groups. You use the special
+list of associations to add additional relations between people.</li>
+<li>You change information about married couple on the
+&quot;Spouses&quot; tab using <img src="images/iRecNew.gif"
+align="absmiddle">, <img src="images/iRecEdit.gif" align="absmiddle">
+and <img src="images/iRecDelete.gif" align="absmiddle"> buttons. When
+you add or change one of conjoints, family editor window appears. Using
+that window you do what you need: add a spouse, children or event.
+Using arrow buttons you can change order or marriages for the selected
+person.</li>
+</ul>
+<hr/>
+<p>There is a uniting table on the &quot;Persons&quot; tab of the main
+working window, which includes all persons available in database.
+Person summary to the right of the table shows all information about
+selected person and references to other records.</p>
+</body>
+</html>
