@@ -81,6 +81,7 @@ namespace GKUI.Dialogs
             this.fRepositoriesList = this.CreateReposSheet(this.pageRepositories);
 
             // SetLang()
+            this.Text = LangMan.LS(LSID.LSID_Source);
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             this.lblShortTitle.Text = LangMan.LS(LSID.LSID_ShortTitle);

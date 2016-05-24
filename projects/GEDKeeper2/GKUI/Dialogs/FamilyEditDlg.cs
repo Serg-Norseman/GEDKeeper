@@ -108,6 +108,15 @@ namespace GKUI.Dialogs
             this.fMediaList = new GKMediaSheet(this, this.pageMultimedia);
             this.fSourcesList = new GKSourcesSheet(this, this.pageSources);
 
+            this.btnAccept.Image = ((System.Drawing.Image)(MainWin.ResourceManager.GetObjectEx("iBtnAccept")));
+            this.btnCancel.Image = ((System.Drawing.Image)(MainWin.ResourceManager.GetObjectEx("iBtnCancel")));
+            this.btnHusbandAdd.Image = ((System.Drawing.Image)(MainWin.ResourceManager.GetObjectEx("iRecNew")));
+            this.btnHusbandDelete.Image = ((System.Drawing.Image)(MainWin.ResourceManager.GetObjectEx("iRecDelete")));
+            this.btnHusbandSel.Image = ((System.Drawing.Image)(MainWin.ResourceManager.GetObjectEx("iToMan")));
+            this.btnWifeAdd.Image = ((System.Drawing.Image)(MainWin.ResourceManager.GetObjectEx("iRecNew")));
+            this.btnWifeDelete.Image = ((System.Drawing.Image)(MainWin.ResourceManager.GetObjectEx("iRecDelete")));
+            this.btnWifeSel.Image = ((System.Drawing.Image)(MainWin.ResourceManager.GetObjectEx("iToMan")));
+
             // SetLang()
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
