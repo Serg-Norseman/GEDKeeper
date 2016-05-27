@@ -23,7 +23,13 @@ using System.IO;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Cultures;
+using GKCore.Interfaces;
 using GKCore.Kinships;
+using GKCore.Lists;
+using GKCore.Maps;
+using GKCore.Options;
+using GKCore.Stats;
+using GKCore.Tools;
 using GKCore.Types;
 using NUnit.Framework;
 
@@ -33,7 +39,7 @@ namespace GKTests
     public class CoreTests
     {
         BaseContext fContext;
-        
+
         [TestFixtureSetUp]
         public void SetUp()
         {
@@ -41,16 +47,16 @@ namespace GKTests
 
             fContext = TestStubs.CreateContext();
             GEDCOMTree tree = fContext.Tree;
-            
+
             TestStubs.FillContext(fContext);
         }
-        
+
         [TestFixtureTearDown]
         public void TearDown()
         {
             Console.WriteLine(@">>> END CoreTests");
         }
-        
+
         [Test]
         public void Context_Tests()
         {
@@ -306,7 +312,7 @@ namespace GKTests
         }
 
         [Test]
-        public void NamesTable_Tests()
+        public void RussianCulture_Tests()
         {
             Assert.AreEqual("", GKUtils.ClearSurname(null));
             Assert.AreEqual("", GKUtils.ClearSurname(""));
@@ -328,7 +334,7 @@ namespace GKTests
 
             Assert.AreEqual("?", RussianCulture.GetRusWifeSurname(""));
             Assert.AreEqual("?", RussianCulture.GetRusWifeSurname(null));
-            
+
             string[] snms = GKUtils.GetSurnames("Бельская (Иванова)", true);
             Assert.AreEqual(2, snms.Length);
             Assert.AreEqual("Бельский", snms[0]);
@@ -356,12 +362,220 @@ namespace GKTests
         {
             RelationKind rel;
             int great, level;
-            
+
             rel = KinshipsMan.FindKinship(RelationKind.rkFather, RelationKind.rkSon, out great, out level);
             Assert.AreEqual(RelationKind.rkBrother, rel);
-            
+
             rel = KinshipsMan.FindKinship(RelationKind.rkNone, RelationKind.rkSon, out great, out level);
             Assert.AreEqual(RelationKind.rkSon, rel);
+        }
+
+        [Test]
+        public void Lists_Tests()
+        {
+            ColumnProps colProps = new ColumnProps();
+            Assert.IsNotNull(colProps);
+
+            colProps = new ColumnProps(0, false, 10);
+            Assert.IsNotNull(colProps);
+
+            Assert.AreEqual(0, colProps.ColType);
+            Assert.AreEqual(false, colProps.ColActive);
+            Assert.AreEqual(10, colProps.ColWidth);
+
+            colProps.Assign(null);
+
+            ColumnStatic colStatic = new ColumnStatic();
+            Assert.IsNotNull(colStatic);
+
+            //ListColumns listColumns = new ListColumns();
+            //Assert.IsNotNull(listColumns);
+
+            ListFilter listFilter = new ListFilter();
+            Assert.IsNotNull(listFilter);
+            Assert.AreEqual(0, listFilter.Conditions.Count);
+            listFilter.Clear();
+            Assert.AreEqual(0, listFilter.Conditions.Count);
+
+            ListManager listManager;
+
+            listManager = new CommunicationListMan(this.fContext.Tree);
+            Assert.IsNotNull(listManager);
+            Assert.AreEqual(typeof(CommunicationColumnType), listManager.GetColumnsEnum());
+
+            listManager = new FamilyListMan(this.fContext.Tree);
+            Assert.IsNotNull(listManager);
+            Assert.AreEqual(typeof(FamilyColumnType), listManager.GetColumnsEnum());
+
+            listManager = new GroupListMan(this.fContext.Tree);
+            Assert.IsNotNull(listManager);
+            Assert.AreEqual(typeof(GroupColumnType), listManager.GetColumnsEnum());
+
+            //
+
+            listManager = new IndividualListMan(this.fContext.Tree);
+            Assert.IsNotNull(listManager);
+            Assert.AreEqual(typeof(PersonColumnType), listManager.GetColumnsEnum());
+            
+            IListFilter filter = listManager.Filter;
+            IListColumns listColumns = listManager.ListColumns;
+
+            //
+
+            listManager = new LocationListMan(this.fContext.Tree);
+            Assert.IsNotNull(listManager);
+            Assert.AreEqual(typeof(LocationColumnType), listManager.GetColumnsEnum());
+
+            listManager = new MultimediaListMan(this.fContext.Tree);
+            Assert.IsNotNull(listManager);
+            Assert.AreEqual(typeof(MultimediaColumnType), listManager.GetColumnsEnum());
+
+            listManager = new NoteListMan(this.fContext.Tree);
+            Assert.IsNotNull(listManager);
+            Assert.AreEqual(typeof(NoteColumnType), listManager.GetColumnsEnum());
+
+            listManager = new RepositoryListMan(this.fContext.Tree);
+            Assert.IsNotNull(listManager);
+            Assert.AreEqual(typeof(RepositoryColumnType), listManager.GetColumnsEnum());
+
+            listManager = new ResearchListMan(this.fContext.Tree);
+            Assert.IsNotNull(listManager);
+            Assert.AreEqual(typeof(ResearchColumnType), listManager.GetColumnsEnum());
+
+            listManager = new SourceListMan(this.fContext.Tree);
+            Assert.IsNotNull(listManager);
+            Assert.AreEqual(typeof(SourceColumnType), listManager.GetColumnsEnum());
+
+            listManager = new TaskListMan(this.fContext.Tree);
+            Assert.IsNotNull(listManager);
+            Assert.AreEqual(typeof(TaskColumnType), listManager.GetColumnsEnum());
+        }
+
+        [Test]
+        public void Maps_Tests()
+        {
+            GMapPoint mapPoint = new GMapPoint(0.5f, 0.5f, "test");
+            Assert.IsNotNull(mapPoint);
+            Assert.AreEqual(0.5f, mapPoint.Latitude);
+            Assert.AreEqual(0.5f, mapPoint.Longitude);
+            Assert.AreEqual("test", mapPoint.Hint);
+
+        }
+
+        [Test]
+        public void Locales_Tests()
+        {
+            LangRecord langRecord = new LangRecord(1049, "rus", "Russian", "filename.lng");
+            Assert.IsNotNull(langRecord);
+            Assert.AreEqual(1049, langRecord.Code);
+            Assert.AreEqual("rus", langRecord.Sign);
+            Assert.AreEqual("Russian", langRecord.Name);
+            Assert.AreEqual("filename.lng", langRecord.FileName);
+        }
+
+        [Test]
+        public void Options_Tests()
+        {
+            //GlobalOptions globalOptions = new GlobalOptions();
+            //Assert.IsNotNull(globalOptions);
+
+            MRUFile mruFile = new MRUFile();
+            Assert.IsNotNull(mruFile);
+
+            PedigreeOptions pedigreeOptions = new PedigreeOptions();
+            Assert.IsNotNull(pedigreeOptions);
+
+            ProxyOptions proxyOptions = new ProxyOptions();
+            Assert.IsNotNull(proxyOptions);
+
+            TreeChartOptions treeChartOptions = new TreeChartOptions();
+            Assert.IsNotNull(treeChartOptions);
+        }
+
+        [Test]
+        public void Stats_Tests()
+        {
+            CommonStats commonStats = new CommonStats();
+            Assert.IsNotNull(commonStats);
+
+            CompositeItem compositeItem = new CompositeItem();
+            Assert.IsNotNull(compositeItem);
+            compositeItem.TakeVal(0.0f, GEDCOMSex.svMale, true);
+            Assert.AreEqual(0, compositeItem.CommonVal);
+            Assert.AreEqual(0, compositeItem.MaleVal);
+            Assert.AreEqual(0, compositeItem.FemaleVal);
+            compositeItem.TakeVal(1f, GEDCOMSex.svFemale, true);
+            compositeItem.TakeVal(1f, GEDCOMSex.svMale, true);
+            Assert.AreEqual(1, compositeItem.CommonVal);
+            Assert.AreEqual(1, compositeItem.MaleVal);
+            Assert.AreEqual(1, compositeItem.FemaleVal);
+            compositeItem.TakeVal("1", GEDCOMSex.svFemale, true);
+            compositeItem.TakeVal("1", GEDCOMSex.svMale, true);
+            Assert.AreEqual(1, compositeItem.CommonVal);
+            Assert.AreEqual(1, compositeItem.MaleVal);
+            Assert.AreEqual(1, compositeItem.FemaleVal);
+
+            StatsItem statsItem = new StatsItem("test", false);
+            Assert.IsNotNull(statsItem);
+            Assert.AreEqual("test", statsItem.ToString());
+
+            statsItem = new StatsItem("test2", 0);
+            Assert.IsNotNull(statsItem);
+            Assert.AreEqual("test2", statsItem.ToString());
+
+            TreeStats treeStats = new TreeStats(null, null);
+            Assert.IsNotNull(treeStats);
+        }
+
+        [Test]
+        public void Tools_Tests()
+        {
+            PlaceObj placeObj = new PlaceObj();
+            Assert.IsNotNull(placeObj);
+            Assert.AreEqual(null, placeObj.Name);
+            Assert.IsNotNull(placeObj.Facts);
+
+            placeObj.Dispose();
+            Assert.IsNotNull(placeObj);
+        }
+
+        [Test]
+        public void Search_Tests()
+        {
+            SearchResult searchResult = new SearchResult(null);
+            Assert.IsNotNull(searchResult);
+
+            //BaseSearchStrategy searchStrategy = new BaseSearchStrategy(null, "");
+            //Assert.IsNotNull(searchStrategy);
+        }
+
+        [Test]
+        public void NavStack_Tests()
+        {
+            NavigationStack navStack = new NavigationStack();
+            Assert.IsNotNull(navStack);
+            Assert.AreEqual(false, navStack.Busy);
+            Assert.AreEqual(null, navStack.Current);
+            navStack.Clear();
+            Assert.AreEqual(null, navStack.Current);
+
+            navStack.BeginNav();
+            Assert.AreEqual(true, navStack.Busy);
+            navStack.EndNav();
+            Assert.AreEqual(false, navStack.Busy);
+
+            Assert.AreEqual(false, navStack.CanBackward());
+            Assert.AreEqual(false, navStack.CanForward());
+        }
+
+        [Test]
+        public void NamesTable_Tests()
+        {
+            NamesTable namesTable = new NamesTable();
+            Assert.IsNotNull(namesTable);
+
+            namesTable.Dispose();
+            Assert.IsNotNull(namesTable);
         }
     }
 }

@@ -504,7 +504,8 @@ namespace GKCore.Export
             #endif
             
             bool success = false;
-            if (!this.IsRequireFilename(availableFormats)) return;
+            this.fPath = UIHelper.GetSaveFile(availableFormats);
+            if (string.IsNullOrEmpty(this.fPath)) return;
 
             string ext = FileHelper.GetFileExtension(this.fPath);
 

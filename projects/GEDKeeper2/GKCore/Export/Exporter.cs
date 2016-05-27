@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
@@ -33,9 +32,9 @@ namespace GKCore.Export
     /// </summary>
     public abstract class Exporter : BaseObject
     {
+        protected readonly IBaseWindow fBase;
         protected GlobalOptions fOptions;
         protected string fPath;
-        protected readonly IBaseWindow fBase;
         protected GEDCOMTree fTree;
         protected CustomWriter fWriter;
 
@@ -60,59 +59,9 @@ namespace GKCore.Export
 
         public abstract void Generate(bool show);
 
-        protected bool IsRequireFilename(string filter)
-        {
-            bool result;
-
-            using (SaveFileDialog dlg = new SaveFileDialog())
-            {
-                dlg.Filter = filter;
-                result = (dlg.ShowDialog() == DialogResult.OK);
-
-                if (result) this.fPath = dlg.FileName;
-            }
-
-            return result;
-        }
-
         protected void ShowResult()
         {
             GKUtils.LoadExtFile(this.fPath);
-        }
-
-        protected static void PrepareSpecIndex(StringList index, string val, GEDCOMIndividualRecord iRec)
-        {
-            if (index == null) {
-                throw new ArgumentNullException("index");
-            }
-
-            if (iRec == null) {
-                throw new ArgumentNullException("iRec");
-            }
-
-            StringList persons;
-
-            int idx = index.IndexOf(val);
-            if (idx < 0) {
-                persons = new StringList();
-                index.AddObject(val, persons);
-            } else {
-                persons = (StringList)index.GetObject(idx);
-            }
-
-            if (persons.IndexOfObject(iRec) < 0) {
-                persons.AddObject(iRec.GetNameString(true, false), iRec);
-            }
-        }
-
-        protected static void PrepareEventYear(StringList index, GEDCOMCustomEvent evt, GEDCOMIndividualRecord iRec)
-        {
-            if (evt != null) {
-                int dtY = GEDCOMUtils.GetRelativeYear(evt);
-                if (dtY != 0) {
-                    PrepareSpecIndex(index, dtY.ToString(), iRec);
-                }
-            }
         }
     }
 }

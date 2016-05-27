@@ -20,6 +20,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
@@ -34,9 +36,10 @@ namespace GKCore.Export
     /// Localization: dirty
     /// CodeTransformation: need
     /// </summary>
-    public sealed class FamilyBookExporter : PDFExporter
+    public sealed class FamilyBookExporter : Exporter
     {
-        private enum BookCatalog {
+        private enum BookCatalog
+        {
             Catalog_First = 0,
             
             Catalog_BirthYears = Catalog_First,
@@ -51,7 +54,8 @@ namespace GKCore.Export
             Catalog_Last = Catalog_Sources
         }
 
-        private struct CatalogProps {
+        private struct CatalogProps
+        {
             public readonly string Sign;
             public readonly string Title;
             public StringList Index;
@@ -75,6 +79,11 @@ namespace GKCore.Export
             new CatalogProps("Catalog_Sources", LangMan.LS(LSID.LSID_RPSources))
         };
         
+        private Padding fMargins;
+        private Document fDocument;
+        private PdfWriter fPdfWriter;
+        private bool fAlbumPage;
+
         private Font fTitleFont;
         private Font fChapFont;
         private Font fSubchapFont;
@@ -96,6 +105,10 @@ namespace GKCore.Export
         
         public FamilyBookExporter(IBaseWindow aBase) : base(aBase)
         {
+            this.fMargins.Left = 20;
+            this.fMargins.Top = 20;
+            this.fMargins.Right = 20;
+            this.fMargins.Bottom = 20;
             this.fAlbumPage = true;
         }
 
@@ -112,11 +125,53 @@ namespace GKCore.Export
                 if (occuIndex != null) occuIndex.Dispose();
                 if (reliIndex != null) reliIndex.Dispose();
                 if (sourcesIndex != null) sourcesIndex.Dispose();
+
+                if (fDocument != null) fDocument.Dispose();
             }
             base.Dispose(disposing);
         }
 
-        protected override void InternalGenerate()
+        private void AddParagraph(Chunk chunk, int alignment = Element.ALIGN_LEFT)
+        {
+            fDocument.Add(new Paragraph(chunk) { Alignment = alignment });
+        }
+
+        public override void Generate(bool show)
+        {
+            bool success = false;
+            this.fPath = UIHelper.GetSaveFile("PDF files (*.pdf)|*.pdf");
+            if (string.IsNullOrEmpty(this.fPath)) return;
+
+            Rectangle pageSize = !this.fAlbumPage ? PageSize.A4 : PageSize.A4.Rotate();
+
+            fDocument = new Document(pageSize, this.fMargins.Left, this.fMargins.Right, this.fMargins.Top, this.fMargins.Bottom);
+            try
+            {
+                try
+                {
+                    this.fPdfWriter = PdfWriter.GetInstance(fDocument, new FileStream(this.fPath, FileMode.Create));
+                    this.InternalGenerate();
+                    success = true;
+                }
+                finally
+                {
+                    fDocument.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                this.fBase.Host.LogWrite("FamilyBookExporter.Generate(): " + ex.Message);
+                this.fBase.Host.LogWrite("FamilyBookExporter.Generate(): " + ex.StackTrace);
+            }
+
+            if (!success) {
+                MessageBox.Show(LangMan.LS(LSID.LSID_GenerationFailed));
+            } else {
+                if (show) this.ShowResult();
+            }
+        }
+
+        private void InternalGenerate()
         {
             try
             {
@@ -297,14 +352,14 @@ namespace GKCore.Export
 
                         if (evt.Name == "BIRT") {
                             // Analysis on births
-                            Exporter.PrepareEventYear(byIndex, evt, iRec);
+                            PrepareEventYear(byIndex, evt, iRec);
                             st = GKUtils.GetPlaceStr(evt, false);
                             if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(bpIndex, st, iRec);
                         }
                         else if (evt.Name == "DEAT")
                         {
                             // Analysis by causes of death
-                            Exporter.PrepareEventYear(dyIndex, evt, iRec);
+                            PrepareEventYear(dyIndex, evt, iRec);
                             st = GKUtils.GetPlaceStr(evt, false);
                             if (!string.IsNullOrEmpty(st)) PrepareSpecIndex(dpIndex, st, iRec);
 
@@ -475,6 +530,41 @@ namespace GKCore.Export
                 }
 
                 columnText.AddElement(new Paragraph(Chunk.NEWLINE) { SpacingAfter = 10f });
+            }
+        }
+
+        private static void PrepareSpecIndex(StringList index, string val, GEDCOMIndividualRecord iRec)
+        {
+            if (index == null) {
+                throw new ArgumentNullException("index");
+            }
+
+            if (iRec == null) {
+                throw new ArgumentNullException("iRec");
+            }
+
+            StringList persons;
+
+            int idx = index.IndexOf(val);
+            if (idx < 0) {
+                persons = new StringList();
+                index.AddObject(val, persons);
+            } else {
+                persons = (StringList)index.GetObject(idx);
+            }
+
+            if (persons.IndexOfObject(iRec) < 0) {
+                persons.AddObject(iRec.GetNameString(true, false), iRec);
+            }
+        }
+
+        private static void PrepareEventYear(StringList index, GEDCOMCustomEvent evt, GEDCOMIndividualRecord iRec)
+        {
+            if (evt != null) {
+                int dtY = GEDCOMUtils.GetRelativeYear(evt);
+                if (dtY != 0) {
+                    PrepareSpecIndex(index, dtY.ToString(), iRec);
+                }
             }
         }
     }

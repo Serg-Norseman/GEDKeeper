@@ -20,6 +20,7 @@
 
 using System.Collections.Generic;
 using ExcelLibrary.SpreadSheet;
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -52,7 +53,8 @@ namespace GKCore.Export
 
         public override void Generate(bool show)
         {
-            if (!this.IsRequireFilename("Excel files (*.xls)|*.xls")) return;
+            this.fPath = UIHelper.GetSaveFile("Excel files (*.xls)|*.xls");
+            if (string.IsNullOrEmpty(this.fPath)) return;
             
             Workbook workbook = new Workbook();
             Worksheet worksheet = new Worksheet("First Sheet");

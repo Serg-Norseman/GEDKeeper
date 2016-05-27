@@ -27,13 +27,13 @@ namespace GKCore
 {
     public class BaseSearchStrategy : ISearchStrategy
     {
-        private readonly String searchPattern;
+        private readonly string searchPattern;
         private readonly IWorkWindow workWindow;
 
         private IList<ISearchResult> currentResults;
         private ISearchResult curResult;
-        
-        public BaseSearchStrategy(IWorkWindow workWindow, String searchPattern)
+
+        public BaseSearchStrategy(IWorkWindow workWindow, string searchPattern)
         {
             if (searchPattern == null)
                 throw new ArgumentNullException("searchPattern");
@@ -42,11 +42,11 @@ namespace GKCore
             this.workWindow = workWindow;
             this.currentResults = this.FindAll();
         }
-        
+
         public IList<ISearchResult> FindAll()
         {
             return this.workWindow.FindAll(this.searchPattern);
-            
+
             /*foreach (Match result in searchPattern.Matches(document.Text)) {
 				int resultEndOffset = result.Length + result.Index;
 				if (offset > result.Index || endOffset < resultEndOffset)
@@ -56,20 +56,19 @@ namespace GKCore
 				yield return new SearchResult { StartOffset = result.Index, Length = result.Length, Data = result };
 			}*/
         }
-        
+
         public bool HasResults()
         {
             return (currentResults != null && currentResults.Count > 0);
         }
-        
+
         public ISearchResult FindNext()
         {
             if (curResult == null) {
                 if (currentResults == null) currentResults = this.FindAll();
                 
                 curResult = GKUtils.FirstOrDefault(currentResults);
-            } else
-            {
+            } else {
                 int idx = currentResults.IndexOf(curResult) + 1;
 
                 curResult = (idx < currentResults.Count) ? currentResults[idx] : null;
@@ -77,15 +76,14 @@ namespace GKCore
 
             return curResult;
         }
-        
+
         public ISearchResult FindPrev()
         {
             if (curResult == null) {
                 if (currentResults == null) currentResults = this.FindAll();
                 
                 curResult = GKUtils.LastOrDefault(currentResults);
-            } else
-            {
+            } else {
                 int idx = currentResults.IndexOf(curResult) - 1;
 
                 curResult = (idx >= 0) ? currentResults[idx] : null;
@@ -97,8 +95,8 @@ namespace GKCore
 
     public class SearchResult : ISearchResult
     {
-        public GEDCOMObject Result { get; private set; }
-        
+        public readonly GEDCOMObject Result;
+
         public SearchResult(GEDCOMObject result)
         {
             this.Result = result;

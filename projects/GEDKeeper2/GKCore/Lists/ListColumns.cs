@@ -46,7 +46,7 @@ namespace GKCore.Lists
             this.ColActive = colActive;
             this.ColWidth = colWidth;
         }
-        
+
         public void Assign(ColumnProps source)
         {
             if (source == null) return;
@@ -80,7 +80,7 @@ namespace GKCore.Lists
         private Type fColumnEnum;
 
         public List<ColumnStatic> ColumnStatics;
-        
+
         public int Count
         {
             get { return this.fColumns.Count; }
@@ -218,7 +218,7 @@ namespace GKCore.Lists
                 iniFile.WriteInteger(section, "ColWidth_" + i.ToString(), this.fColumns[i].ColWidth);
             }
         }
-        
+
         public bool MoveColumn(int idx, bool up)
         {
             if (up) {

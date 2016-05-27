@@ -83,7 +83,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmFamilyEdit.SetFamily(): " + ex.Message);
+                this.fBase.Host.LogWrite("FamilyEditDlg.SetFamily(): " + ex.Message);
             }
         }
 
@@ -225,7 +225,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TfmFamilyEdit.UpdateChildsSheet(): " + ex.Message);
+                Logger.LogWrite("FamilyEditDlg.UpdateChildsSheet(): " + ex.Message);
             }
         }
 
@@ -283,7 +283,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmFamilyEdit.btnAccept_Click(): " + ex.Message);
+                this.fBase.Host.LogWrite("FamilyEditDlg.btnAccept_Click(): " + ex.Message);
                 base.DialogResult = DialogResult.None;
             }
         }

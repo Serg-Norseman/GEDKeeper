@@ -65,6 +65,11 @@ namespace GKCommon
             return ofd;
         }
 
+        public static string GetSaveFile(string filter)
+        {
+            return GetSaveFile("", "", filter, 1, "", "", true);
+        }
+
         public static string GetSaveFile(string title, string context, string filter, int filterIndex, string defaultExt,
                                          string suggestedFileName, bool overwritePrompt = true)
         {
