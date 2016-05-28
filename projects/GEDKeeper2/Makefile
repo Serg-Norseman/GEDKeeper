@@ -42,7 +42,6 @@ sources := \
 ./GKCore/Export/FamilyBookExporter.cs \
 ./GKCore/Export/HTMLWriter.cs \
 ./GKCore/Export/PDFClownWriter.cs \
-./GKCore/Export/PDFExporter.cs \
 ./GKCore/Export/PDFJetWriter.cs \
 ./GKCore/Export/PDFWriter.cs \
 ./GKCore/Export/PedigreeExporter.cs \
