@@ -25,16 +25,16 @@ Follow class naming conventions, but add Exception to the end of the name.
 Follow class naming conventions, but start the name with I and capitalize the letter following the I. 
 Example: `IFoo` The I prefix helps to differentiate between Interfaces and classes and also to avoid name collisions.
 
-## Functions
+## Methods
 
 Pascal Case, no underscores except in the event handlers. Try to avoid abbreviations. 
 Many programmers have a nasty habit of overly abbreviating everything. This should be discouraged.
 
-## Properties and Public Member Variables
+## Properties and Public Fields
 
 Pascal Case, no underscores. Try to avoid abbreviations.
 
-## Parameters and Procedure-level Variables
+## Method arguments and local variables
 
 Camel Case (or `lowerCamelCase`). Try to avoid abbreviations. 
 Camel Case is the same as Pascal case, but the first letter of the first word is lowercased.
@@ -45,7 +45,7 @@ Pascal Case with a leading `f`-char. Always indicate protected or private in the
 The leading character helps to prevent name collisions in constructors (a parameter and a private field 
 having the same name).
 
-## Constants
+## Constants and readonly fields
 
 ALL_CAPS.
 
