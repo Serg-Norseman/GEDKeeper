@@ -19,7 +19,10 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Cultures;
@@ -46,8 +49,6 @@ namespace GKTests
             Console.WriteLine(@">>> START CoreTests");
 
             fContext = TestStubs.CreateContext();
-            GEDCOMTree tree = fContext.Tree;
-
             TestStubs.FillContext(fContext);
         }
 
@@ -60,17 +61,24 @@ namespace GKTests
         [Test]
         public void Context_Tests()
         {
+            GEDCOMSourceRecord srcRec = fContext.FindSource("test source");
+            Assert.IsNull(srcRec);
+
+            StringList sources = new StringList();
+            fContext.GetSourcesList(sources);
+            Assert.AreEqual(0, sources.Count);
+
             GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
             Assert.IsNotNull(iRec);
 
             Assert.AreEqual(false, fContext.IsChildless(iRec));
 
-            /*GEDCOMSourceRecord srcRec = _context.FindSource("test source");
-			Assert.IsNull(srcRec);
+            Assert.AreEqual(1990, fContext.GetRelativeYear(iRec, "BIRT"));
 
-			StringList sources = new StringList();
-			_context.GetSourcesList(sources);
-			Assert.AreEqual(0, sources.Count);*/
+            Assert.AreEqual(1990, fContext.FindBirthYear(iRec));
+            Assert.AreEqual(2010, fContext.FindDeathYear(iRec));
+            
+            //MediaStoreType GetStoreType(GEDCOMFileReference fileReference, ref string fileName)
         }
         
         [Test]
@@ -83,7 +91,7 @@ namespace GKTests
 
             string age = GKUtils.GetAgeStr(null, 0);
             Assert.AreEqual("", age);
-            
+
             age = GKUtils.GetAgeStr(iRec, -1);
             Assert.AreEqual("20", age);
             
@@ -495,9 +503,6 @@ namespace GKTests
         [Test]
         public void Stats_Tests()
         {
-            CommonStats commonStats = new CommonStats();
-            Assert.IsNotNull(commonStats);
-
             CompositeItem compositeItem = new CompositeItem();
             Assert.IsNotNull(compositeItem);
             compositeItem.TakeVal(0.0f, GEDCOMSex.svMale, true);
@@ -523,8 +528,61 @@ namespace GKTests
             Assert.IsNotNull(statsItem);
             Assert.AreEqual("test2", statsItem.ToString());
 
-            TreeStats treeStats = new TreeStats(null, null);
+            List<GEDCOMRecord> selectedRecords = new List<GEDCOMRecord>();
+            IGEDCOMTreeEnumerator iEnum = fContext.Tree.GetEnumerator(GEDCOMRecordType.rtIndividual);
+            GEDCOMRecord current;
+            while (iEnum.MoveNext(out current)) {
+                selectedRecords.Add(current);
+            }
+
+            TreeStats treeStats = new TreeStats(fContext.Tree, selectedRecords);
             Assert.IsNotNull(treeStats);
+
+            CommonStats commonStats = treeStats.GetCommonStats();
+            Assert.IsNotNull(commonStats);
+            Assert.AreEqual(4, commonStats.persons, "Stats.TotalPersons");
+            Assert.AreEqual(2, commonStats.persons_m, "Stats.SumM");
+            Assert.AreEqual(2, commonStats.persons_f, "Stats.SumF");
+
+            List<StatsItem> values = new List<StatsItem>();
+
+            treeStats.GetSpecStats(StatsMode.smAncestors, values);
+            treeStats.GetSpecStats(StatsMode.smDescendants, values);
+            treeStats.GetSpecStats(StatsMode.smDescGenerations, values);
+            treeStats.GetSpecStats(StatsMode.smFamilies, values);
+            treeStats.GetSpecStats(StatsMode.smNames, values);
+            treeStats.GetSpecStats(StatsMode.smPatronymics, values);
+            treeStats.GetSpecStats(StatsMode.smAge, values);
+            treeStats.GetSpecStats(StatsMode.smLifeExpectancy, values);
+            treeStats.GetSpecStats(StatsMode.smBirthYears, values);
+            treeStats.GetSpecStats(StatsMode.smBirthTenYears, values);
+            treeStats.GetSpecStats(StatsMode.smDeathYears, values);
+            treeStats.GetSpecStats(StatsMode.smDeathTenYears, values);
+            treeStats.GetSpecStats(StatsMode.smChildsCount, values);
+            treeStats.GetSpecStats(StatsMode.smChildsDistribution, values);
+            treeStats.GetSpecStats(StatsMode.smBirthPlaces, values);
+            treeStats.GetSpecStats(StatsMode.smDeathPlaces, values);
+            treeStats.GetSpecStats(StatsMode.smResidences, values);
+            treeStats.GetSpecStats(StatsMode.smOccupation, values);
+            treeStats.GetSpecStats(StatsMode.smReligious, values);
+            treeStats.GetSpecStats(StatsMode.smNational, values);
+            treeStats.GetSpecStats(StatsMode.smEducation, values);
+            treeStats.GetSpecStats(StatsMode.smCaste, values);
+            treeStats.GetSpecStats(StatsMode.smFirstbornAge, values);
+            treeStats.GetSpecStats(StatsMode.smMarriages, values);
+            treeStats.GetSpecStats(StatsMode.smMarriageAge, values);
+            treeStats.GetSpecStats(StatsMode.smSpousesDiff, values);
+            treeStats.GetSpecStats(StatsMode.smHobby, values);
+            treeStats.GetSpecStats(StatsMode.smAward, values);
+            treeStats.GetSpecStats(StatsMode.smMili, values);
+            treeStats.GetSpecStats(StatsMode.smMiliInd, values);
+            treeStats.GetSpecStats(StatsMode.smMiliDis, values);
+            treeStats.GetSpecStats(StatsMode.smMiliRank, values);
+            treeStats.GetSpecStats(StatsMode.smAAF_1, values);
+            treeStats.GetSpecStats(StatsMode.smAAF_2, values);
+            treeStats.GetSpecStats(StatsMode.smCertaintyIndex, values);
+            treeStats.GetSpecStats(StatsMode.smBirthByMonth, values);
+            treeStats.GetSpecStats(StatsMode.smDemography, values);
         }
 
         [Test]
@@ -537,8 +595,27 @@ namespace GKTests
 
             placeObj.Dispose();
             Assert.IsNotNull(placeObj);
+
+            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            Assert.IsNotNull(iRec);
+
+            List<GEDCOMRecord> walkList = new List<GEDCOMRecord>();
+            TreeTools.TreeWalk(iRec, TreeTools.TreeWalkMode.twmAll, walkList);
+            Assert.AreEqual(3, walkList.Count, "TreeTools.TreeWalk(twmAll)"); // 3 linked from 4 total
+
+            //ValuesCollection valuesCollection = new ValuesCollection();
+            //ProgressMock progress = new ProgressMock();
+            //TreeTools.CheckGEDCOMFormat(fContext.Tree, valuesCollection, progress);
         }
 
+        private class ProgressMock : IProgressController
+        {
+            public void ProgressInit(string title, int max) {}
+            public void ProgressDone() {}
+            public void ProgressStep() {}
+            public void ProgressStep(int value) {}
+        }
+        
         [Test]
         public void Search_Tests()
         {

@@ -1274,8 +1274,8 @@ namespace GKTests
             
             Assert.AreEqual(GEDCOMRecordType.rtIndividual, rec.RecordType);
             
-            Assert.AreEqual(3, rec.GetId());
-            Assert.AreEqual("3", rec.GetXRefNum());
+            Assert.AreEqual(4, rec.GetId());
+            Assert.AreEqual("4", rec.GetXRefNum());
         }
 
         [Test]
@@ -1364,8 +1364,8 @@ namespace GKTests
         [Test]
         public void GEDCOMIndividualRecord_Tests()
         {
-            GEDCOMIndividualRecord indiRec = _context.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
-            
+            GEDCOMIndividualRecord indiRec = _context.Tree.XRefIndex_Find("I4") as GEDCOMIndividualRecord;
+
             GEDCOMRecordTest(indiRec);
 
             Assert.IsNotNull(indiRec.Aliases);

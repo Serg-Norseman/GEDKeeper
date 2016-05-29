@@ -578,7 +578,7 @@ namespace GKCore
             }
 
             string fileRef = fileReference.StringValue;
-            
+
             fileName = fileRef;
             MediaStoreType result;
 

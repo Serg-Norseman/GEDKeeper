@@ -19,9 +19,9 @@
  */
 
 using System;
+using GKCalculatorPlugin;
 using GKCommon;
 using GKCore;
-using GKCalculatorPlugin;
 using NUnit.Framework;
 
 namespace GKTests
@@ -35,7 +35,7 @@ namespace GKTests
             const string pw = "test password";
             string crypt = SCCrypt.scEncrypt(pw, unchecked((ushort)CRC32.CrcStr("test")));
             string pw1 = SCCrypt.scDecrypt(crypt, unchecked((ushort)CRC32.CrcStr("test")));
-            
+
             Assert.AreEqual(pw, pw1, "SCCrypt_Test");
         }
 
