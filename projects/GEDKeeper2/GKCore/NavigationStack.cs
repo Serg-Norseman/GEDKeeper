@@ -46,14 +46,15 @@ namespace GKCore
 
         private void SetCurrent(object value)
         {
-            if (this.fCurrent == value) return;
-
-            if (this.fCurrent != null)
+            if (this.fCurrent != value)
             {
-                this.fStackBackward.Push(this.fCurrent);
+                if (this.fCurrent != null)
+                {
+                    this.fStackBackward.Push(this.fCurrent);
+                }
+                this.fCurrent = value;
+                this.fStackForward.Clear();
             }
-            this.fCurrent = value;
-            this.fStackForward.Clear();
         }
 
         public NavigationStack()

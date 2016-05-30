@@ -160,7 +160,7 @@ namespace GKCore
         {
             string result = "";
 
-            if (patronymic != "")
+            if (!string.IsNullOrEmpty(patronymic))
             {
                 foreach (NameEntry nm in this.fNames.Values)
                 {

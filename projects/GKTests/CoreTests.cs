@@ -629,30 +629,82 @@ namespace GKTests
         [Test]
         public void NavStack_Tests()
         {
-            NavigationStack navStack = new NavigationStack();
-            Assert.IsNotNull(navStack);
-            Assert.AreEqual(false, navStack.Busy);
-            Assert.AreEqual(null, navStack.Current);
-            navStack.Clear();
-            Assert.AreEqual(null, navStack.Current);
+            using (NavigationStack navStack = new NavigationStack())
+            {
+                Assert.IsNotNull(navStack);
+                Assert.AreEqual(false, navStack.Busy);
+                Assert.AreEqual(null, navStack.Current);
+                navStack.Clear();
+                Assert.AreEqual(null, navStack.Current);
 
-            navStack.BeginNav();
-            Assert.AreEqual(true, navStack.Busy);
-            navStack.EndNav();
-            Assert.AreEqual(false, navStack.Busy);
+                navStack.BeginNav();
+                Assert.AreEqual(true, navStack.Busy);
+                navStack.EndNav();
+                Assert.AreEqual(false, navStack.Busy);
 
-            Assert.AreEqual(false, navStack.CanBackward());
-            Assert.AreEqual(false, navStack.CanForward());
+                Assert.AreEqual(false, navStack.CanBackward());
+                Assert.AreEqual(false, navStack.CanForward());
+
+                object test = new object();
+                object test2 = new object();
+
+                navStack.Current = test;
+                navStack.Current = test2;
+                
+                Assert.AreEqual(test, navStack.Back());
+                Assert.AreEqual(test2, navStack.Next());
+            }
         }
 
         [Test]
         public void NamesTable_Tests()
         {
-            NamesTable namesTable = new NamesTable();
-            Assert.IsNotNull(namesTable);
+            using (NamesTable namesTable = new NamesTable())
+            {
+                Assert.IsNotNull(namesTable);
+                
+                NameEntry nameEntry = namesTable.AddName("Ivan");
+                Assert.IsNotNull(nameEntry);
+                Assert.AreEqual("Ivan", nameEntry.Name);
 
-            namesTable.Dispose();
-            Assert.IsNotNull(namesTable);
+                nameEntry = namesTable.FindName("Ivan");
+                Assert.IsNotNull(nameEntry);
+
+                string pat = namesTable.GetPatronymicByName("Ivan", GEDCOMSex.svMale);
+                Assert.IsNull(pat);
+
+                string name = namesTable.GetNameByPatronymic("Ivanovich");
+                Assert.AreEqual("", name);
+
+                GEDCOMSex sex = namesTable.GetSexByName("Ivan");
+                Assert.AreEqual(GEDCOMSex.svNone, sex);
+                
+                namesTable.SetName("Ivan", "Ivanovich", GEDCOMSex.svMale);
+                namesTable.SetName("Ivan", "Ivanovna", GEDCOMSex.svFemale);
+
+                pat = namesTable.GetPatronymicByName("Ivan", GEDCOMSex.svMale);
+                Assert.AreEqual("Ivanovich", pat);
+
+                pat = namesTable.GetPatronymicByName("Ivan", GEDCOMSex.svFemale);
+                Assert.AreEqual("Ivanovna", pat);
+
+                name = namesTable.GetNameByPatronymic("Ivanovich");
+                Assert.AreEqual("Ivan", name);
+
+                name = namesTable.GetNameByPatronymic("Ivanovna");
+                Assert.AreEqual("Ivan", name);
+
+                namesTable.SetNameSex("Maria", GEDCOMSex.svFemale);
+                sex = namesTable.GetSexByName("Maria");
+                Assert.AreEqual(GEDCOMSex.svFemale, sex);
+
+                GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
+                Assert.IsNotNull(iRec);
+                namesTable.ImportNames(iRec);
+
+                sex = namesTable.GetSexByName("Anna");
+                Assert.AreEqual(GEDCOMSex.svFemale, sex);
+            }
         }
     }
 }
