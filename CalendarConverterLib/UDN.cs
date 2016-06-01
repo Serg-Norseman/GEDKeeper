@@ -95,32 +95,16 @@ namespace GKCommon
             this.fValue = CreateVal(calendar, year, month, day);
         }
 
-        /// <summary>
-        /// Utility function for debugging and testing.
-        /// </summary>
-        /// <returns></returns>
-        public uint GetUnmaskedValue()
-        {
-            return (UDN.ValueMask & this.fValue);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public object Clone()
-        {
-            return new UDN(this.fValue);
-        }
+        #region Object overrides
 
         public override string ToString()
         {
             int y, m, d;
             CalendarConverter.jd_to_gregorian(this.GetUnmaskedValue() + 0.5, out y, out m, out d);
-            
-            string sy = hasKnownYear() ? y.ToString() : "????";
-            string sm = hasKnownMonth() ? m.ToString() : "??";
-            string sd = hasKnownDay() ? d.ToString() : "??";
+
+            string sy = HasKnownYear() ? y.ToString() : "????";
+            string sm = HasKnownMonth() ? m.ToString() : "??";
+            string sd = HasKnownDay() ? d.ToString() : "??";
 
             return string.Format("{0}/{1}/{2}", sy, sm, sd);
         }
@@ -130,6 +114,23 @@ namespace GKCommon
             return (int)this.fValue;
         }
 
+        #endregion
+
+        #region ICloneable implementation
+
+        /// <summary>
+        /// Create a copy of the current object.
+        /// </summary>
+        /// <returns></returns>
+        public object Clone()
+        {
+            return new UDN(this.fValue);
+        }
+
+        #endregion
+
+        #region IComparable implementation
+
         /// <summary>
         /// 
         /// </summary>
@@ -138,11 +139,15 @@ namespace GKCommon
         public int CompareTo(object obj)
         {
             if (obj is UDN) {
-                return CompareUDN(this.fValue, ((UDN)obj).fValue);
+                return CompareVal(this.fValue, ((UDN)obj).fValue);
             }
 
             return -1;
         }
+
+        #endregion
+
+        #region Private methods
 
         /// <summary>
         /// Compares two masked JDN.
@@ -151,14 +156,14 @@ namespace GKCommon
         /// <param name="r">The right value to compare</param>
         /// <returns>'-1' when the `l` is less than the `r`, '1' when the `l` is greater than the `r` and '0' when
         /// the `l` and the `r` are equal.</returns>
-        private static int CompareUDN(uint l, uint r)
+        private static int CompareVal(uint l, uint r)
         {
             int result = 0;
             if (0 == (UDN.IgnoreYear & l))
             {
                 if (0 == (UDN.IgnoreYear & r))
                 {
-                    result = ((int) (UDN.ValueMask & l)) - ((int) (UDN.ValueMask & r));
+                    result = Math.Sign(((int) (UDN.ValueMask & l)) - ((int) (UDN.ValueMask & r)));
                 }
                 else
                 {
@@ -167,13 +172,13 @@ namespace GKCommon
             }
             else if (0 == (UDN.IgnoreYear & r))
             {
-                result = - 1;
+                result = -1;
             }
             else if (0 == (UDN.IgnoreMonth & l))
             {
                 if (0 == (UDN.IgnoreMonth & r))
                 {
-                    result = ((int) (UDN.ValueMask & l)) - ((int) (UDN.ValueMask & r));
+                    result = Math.Sign(((int) (UDN.ValueMask & l)) - ((int) (UDN.ValueMask & r)));
                 }
                 else
                 {
@@ -188,7 +193,7 @@ namespace GKCommon
             {
                 if (0 == (UDN.IgnoreDay & r))
                 {
-                    result = ((int) (UDN.ValueMask & l)) - ((int) (UDN.ValueMask & r));
+                    result = Math.Sign(((int) (UDN.ValueMask & l)) - ((int) (UDN.ValueMask & r)));
                 }
                 else
                 {
@@ -263,11 +268,6 @@ namespace GKCommon
                 }
             }
             return result;
-        }
-
-        public static UDN CreateEmpty()
-        {
-            return new UDN(0);
         }
 
         /// <summary>
@@ -357,6 +357,10 @@ namespace GKCommon
             return result;
         }
 
+        #endregion
+
+        #region Static constructors
+
         /// <summary>
         /// Creates a new UDN instance that represents a date before the specified date in the specified
         /// <paramref name="calendar"/>.</summary>
@@ -443,7 +447,7 @@ namespace GKCommon
         /// <returns>A date that is "average" of the <paramref name="left"/> and <paramref name="right"/>.
         /// Both the dates must have valid year parts (must not have `IgnoreYear` flag set). Otherwise this method
         /// throws an exception.</returns>
-        public static UDN Between(UDN left, UDN right)
+        public static UDN CreateBetween(UDN left, UDN right)
         {
             if ((0 != (IgnoreYear & left.fValue)) || (0 != (IgnoreYear & right.fValue)))
             {
@@ -471,23 +475,30 @@ namespace GKCommon
             return new UDN(value);
         }
 
+        public static UDN CreateEmpty()
+        {
+            return new UDN(0);
+        }
+
+        #endregion
+
         /// <summary>Checks year part of this date.</summary>
         /// <returns>True if this date has valid year (`IgnoreYear` flag isn't set) and false otherwise.</returns>
-        public bool hasKnownYear()
+        public bool HasKnownYear()
         {
             return 0 == (IgnoreYear & fValue);
         }
 
         /// <summary>Checks month part of this date.</summary>
         /// <returns>True if this date has valid month (`IgnoreMonth` flag isn't set) and false otherwise.</returns>
-        public bool hasKnownMonth()
+        public bool HasKnownMonth()
         {
             return 0 == (IgnoreMonth & fValue);
         }
 
         /// <summary>Checks day part of this date.</summary>
         /// <returns>True if this date has valid day (`IgnoreDay` flag isn't set) and false otherwise.</returns>
-        public bool hasKnownDay()
+        public bool HasKnownDay()
         {
             return 0 == (IgnoreDay & fValue);
         }
@@ -495,28 +506,37 @@ namespace GKCommon
         /// <summary>Checks if this date defines an approximate date.</summary>
         /// <returns>True if this date is approximate date (`ApproximateDate` flag is set) and false otherwise.
         /// </returns>
-        public bool isApproximateDate()
+        public bool IsApproximateDate()
         {
             return 0 != (ApproximateDate & fValue);
         }
 
         /// <summary>Checks if this date defines a "date before".</summary>
         /// <returns>True if this date is a "date before" (`DateBefore` flag is set) and false otherwise.</returns>
-        public bool isDateBefore()
+        public bool IsDateBefore()
         {
             return 0 != (DateBefore & fValue);
         }
 
         /// <summary>Checks if this date defines a "date after".</summary>
         /// <returns>True if this date is a "date after" (`DateAfter` flag is set) and false otherwise.</returns>
-        public bool isDateAfter()
+        public bool IsDateAfter()
         {
             return 0 != (DateAfter & fValue);
         }
 
-        public bool isEmpty()
+        public bool IsEmpty()
         {
             return this.fValue == 0;
+        }
+
+        /// <summary>
+        /// Utility function for debugging and testing.
+        /// </summary>
+        /// <returns></returns>
+        public uint GetUnmaskedValue()
+        {
+            return (UDN.ValueMask & this.fValue);
         }
     }
 }

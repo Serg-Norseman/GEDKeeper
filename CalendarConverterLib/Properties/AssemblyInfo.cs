@@ -14,7 +14,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("CalendarConverterLib")]
-[assembly: AssemblyCopyright("Copyright 2016")]
+[assembly: AssemblyCopyright("Copyright 2016 by Serg V. Zhdanovskih, Ruslan Garipov")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -7,64 +7,6 @@ namespace CalendarConverterTests
     [TestFixture]
     public class ExtTests
     {
-        /*[Test]
-        public void Sort_PerfTest()
-        {
-            Random rnd = new Random();
-
-            List<ValItem> listQS = new List<ValItem>();
-            List<ValItem> listMS = new List<ValItem>();
-            List<ValItem> listTS = new List<ValItem>();
-            List<ValItem> listCS = new List<ValItem>();
-
-            for (int i = 0; i < 1000000; i++)
-            {
-                double val = rnd.NextDouble();
-
-                listTS.Add(new ValItem(val));
-                listQS.Add(new ValItem(val));
-                listMS.Add(new ValItem(val));
-                listCS.Add(new ValItem(val));
-            }
-
-            listCS.Sort(CompareItems);
-
-            SortHelper.QuickSort(listQS, CompareItems);
-
-            SortHelper.MergeSort(listMS, CompareItems);
-
-            ExtUtils.ListTimSort<ValItem>.Sort(listTS, CompareItems);
-        }
-
-        private class ValItem
-        {
-            public double Value;
-
-            public ValItem(double value)
-            {
-                this.Value = value;
-            }
-        }
-
-        private int CompareItems(ValItem item1, ValItem item2)
-        {
-            return item1.Value.CompareTo(item2.Value);
-        }*/
-
-
-        /*[Test]
-        public void Calendar_PerfTest()
-        {
-            int y = 1990, m = 10, d = 10;
-            double jd;
-
-            for (int i = 0; i < 1000000; i++) {
-                jd = CalendarConverter.gregorian_to_jd(y, m, d);
-                jd = CalendarConverter.gregorian_to_jd2(y, m, d);
-                jd = CalendarConverter.gregorian_to_jd3(y, m, d);
-            }
-        }*/
-
         [Test]
         public void Calendar_Tests()
         {
@@ -132,19 +74,18 @@ namespace CalendarConverterTests
             const double needJD = 2448174.5; // 1990-10-10 [g], 1990-09-27 [j], 5751-07-21 [h]
 
             //for (int i = 0; i < 1000000; i++) {
-                jd = CalendarConverter.gregorian_to_jd(-4713, 11, 24);
-                Assert.AreEqual(0.5, jd); // bad!
+            jd = CalendarConverter.gregorian_to_jd(-4713, 11, 24);
+            Assert.AreEqual(0.5, jd); // bad!
 
-                jd = CalendarConverter.gregorian_to_jd(1990, 10, 10);
-                Assert.AreEqual(needJD, jd);
+            jd = CalendarConverter.gregorian_to_jd(1990, 10, 10);
+            Assert.AreEqual(needJD, jd);
 
-                jd = CalendarConverter.julian_to_jd(1990, 09, 27);
-                Assert.AreEqual(needJD, jd);
+            jd = CalendarConverter.julian_to_jd(1990, 09, 27);
+            Assert.AreEqual(needJD, jd);
 
-                jd = CalendarConverter.hebrew_to_jd(5751, 07, 21);
-                Assert.AreEqual(needJD, jd);
+            jd = CalendarConverter.hebrew_to_jd(5751, 07, 21);
+            Assert.AreEqual(needJD, jd);
             //}
-
 
             /*jd = CalendarConverter.julian_to_jd(1990, 09, 00);
             CalendarConverter.jd_to_julian(jd, out year, out month, out day);
@@ -152,34 +93,11 @@ namespace CalendarConverterTests
             Assert.AreEqual(09, month, "j2jd 2");
             Assert.AreEqual(00, day, "j2jd 3");*/
 
-
             jd = CalendarConverter.gregorian_to_jd2(1990, 10, 10);
             CalendarConverter.jd_to_gregorian2(jd, out year, out month, out day);
             Assert.AreEqual(1990, year, "g2jd 1");
             Assert.AreEqual(10, month, "g2jd 2");
             Assert.AreEqual(10, day, "g2jd 3");
         }
-
-//        public void MyTestFunc1(
-//            [Values(1, 2, 5)]int x,
-//            [Values("hello", "buy")]string s)
-//        {
-//            Assert.IsTrue(x < 10);
-//        }
-//
-//        [Test]
-//        public void MyTestFunc2(
-//            [Range(1, 100, 2)]int x,
-//            [Values("hello", "buy")]string s)
-//        {
-//            Assert.IsTrue(x < 50);
-//        }
-//
-//        public void MyTestFunc3(
-//            [Random(100)]int x,
-//            [Values("hello", "buy")]string s)
-//        {
-//        }
-
     }
 }
