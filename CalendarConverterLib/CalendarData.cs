@@ -25,22 +25,14 @@ namespace GKCommon
 {
     public static class CalendarData
     {
-        public enum DateEra
-        {
-            AD,
-            BC
-        }
+        public enum DateEra { AD, BC }
 
         public static string date_to_str(int year, int month, int day, DateEra era)
         {
-            DateTimeFormatInfo dtInfo = Thread.CurrentThread.CurrentCulture.DateTimeFormat;
-
-            string result = string.Concat(new string[] {
-                day.ToString(),  " ",  dtInfo.AbbreviatedMonthNames[month - 1],  " ",  year.ToString()
-            });
+            string result = string.Format("{0} {1} {2}", day.ToString(), ClassicMonths[month - 1], year.ToString());
 
             if (era != DateEra.AD) {
-                result += " до н.э.";
+                result += " BC";
             }
 
             return result;
@@ -56,151 +48,68 @@ namespace GKCommon
         public static readonly string[] IndianCivilWeekdays;
         public static readonly string[] BahaiMonths;
         public static readonly string[] BahaiWeekdays;
+        public static readonly string[] ClassicMonths;
+        public static readonly string[] ClassicWeekdays;
 
         static CalendarData()
         {
-            BahaiWeekdays = new string[]
-            {
-                "Джамаль",
-                "Камаль",
-                "Фидаль",
-                "Идаль",
-                "Истиджлаль",
-                "Истиклаль",
-                "Джалаль"
+            BahaiWeekdays = new string[] {
+                "Jamál", "Kamál", "Fiḍál", "‘Idál", "Istijlál", "Istiqlál", "Jalál"
             };
 
-            BahaiMonths = new string[]
-            {
-                "Бахa",
-                "Джалaл",
-                "Джамaл",
-                "Азамат",
-                "Нур",
-                "Рахмат",
-                "Калимaт",
-                "Камaл",
-                "Асмa",
-                "Иззат",
-                "Машиййат",
-                "Ильм",
-                "Кудрат",
-                "Каул",
-                "Масa’иль",
-                "Шараф",
-                "Султан",
-                "Мульк",
-                "Аййaм-и Хa",
-                "Алa"
+            BahaiMonths = new string[] {
+                "Bahá", "Jalál", "Jamál", "‘Aẓamat", "Núr", "Raḥmat", "Kalimát", "Kamál", "Asmá’", "‘Izzat",
+                "Mashíyyat", "‘Ilm", "Qudrat", "Qawl", "Masá’il", "Sharaf", "Sulṭán", "Mulk", "Ayyám-i-Há", "‘Alá’"
             };
 
-            IndianCivilWeekdays = new string[]
-            {
-                "равивар",
-                "сомвар",
-                "мангалвар",
-                "будхвар",
-                "брихаспативар",
-                "шукрвар",
-                "шанивар"
+
+            IndianCivilWeekdays = new string[] {
+                "Ravivara", "Somavara", "Mangalavara", "Budhavara", "Brahaspativara", "Sukravara", "Sanivara"
             };
 
-            IndianCivilMonths = new string[]
-            {
-                "Чайтра",
-                "Ваисакха",
-                "Джанштха",
-                "Асадха",
-                "Сравана",
-                "Бхадра",
-                "Азвина",
-                "Картика",
-                "Аграхайана",
-                "Пауза",
-                "Магха",
-                "Пхалгуна"
+            IndianCivilMonths = new string[] {
+                "Caitra", "Vaisakha", "Jyaistha", "Asadha", "Sravana", "Bhadra",
+                "Asvina", "Kartika", "Agrahayana", "Pausa", "Magha", "Phalguna"
             };
 
-            PersianWeekdays = new string[]
-            {
-                "йекшанбе",
-                "душанбе",
-                "сешанбе",
-                "чахаршанбе",
-                "панджшанбе",
-                "джоме",
-                "шанбе"
+
+            PersianWeekdays = new string[] {
+                "Yekshanbeh", "Doshanbeh", "Seshhanbeh", "Chaharshanbeh", "Panjshanbeh", "Jomeh", "Shanbeh"
             };
 
-            PersianMonths = new string[]
-            {
-                "Фарвардин",
-                "Ордибехешт",
-                "Хордад",
-                "Тир",
-                "Мордад",
-                "Шахривар",
-                "Мехр",
-                "Абан",
-                "Азар",
-                "Дей",
-                "Бахман",
-                "Эсфанд"
+            PersianMonths = new string[] {
+                "Farvardin", "Ordibehesht", "Khordad", "Tir", "Mordad", "Shahrivar", 
+                "Mehr", "Aban", "Azar", "Dey", "Bahman", "Esfand",
             };
 
-            IslamicWeekdays = new string[]
-            {
-                "аль-ахад",
-                "аль-иснайн",
-                "ас-саласа'",
-                "аль-арба'а",
-                "аль-хамис",
-                "аль-джум'а",
-                "ас-сабт"
+
+            IslamicWeekdays = new string[] {
+                "Al-'ahad", "Al-'ithnayn", "Ath-thalatha'", "Al-'arb`a'", "Al-khamis", "Al-jum`a", "As-sabt"
             };
 
-            IslamicMonths = new string[]
-            {
-                "мухаррам",
-                "сафар",
-                "рабии`у ль-авваль",
-                "рабии`у с-саании",
-                "джумаада ль-ууля",
-                "джумаада ль-аахыр",
-                "раджаб",
-                "шаабан",
-                "рамадан",
-                "шавваль",
-                "зуль-ка`да",
-                "зульхиджа"
+            IslamicMonths = new string[] {
+                "Muharram", "Safar", "Rabi`al-Awwal", "Rabi`ath-Thani", "Jumada l-Ula", "Jumada t-Tania",
+                "Rajab", "Sha`ban", "Ramadan", "Shawwal", "Dhu l-Qa`da", "Dhu l-Hijja"
             };
 
-            HebrewWeekdays = new string[]
-            {
-                "алеф",
-                "бейт",
-                "гимел",
-                "далет",
-                "хей",
-                "вав",
-                "зайин"
+
+            HebrewWeekdays = new string[] {
+                "Alef", "Bet", "Gimel", "Dalet", "He", "Vav", "Zayin"
             };
 
-            HebrewMonths = new string[]
-            {
-                "Нисан",
-                "Ияр",
-                "Сиван",
-                "Тамуз",
-                "Ав",
-                "Элул",
-                "Тишрей",
-                "Хешван",
-                "Кислев",
-                "Тевет",
-                "Шват",
-                "Адар",
-                "Адар бет"
+            HebrewMonths = new string[] {
+                "Nisan", "Iyyar", "Sivan", "Tammuz", "Av", "Elul", 
+                "Tishri", "Heshvan", "Kislev", "Teveth", "Shevat", "Adar", "Veadar"
+            };
+
+
+            ClassicWeekdays = new string[] {
+                "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+            };
+
+            ClassicMonths = new string[] {
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
             };
         }
     }
