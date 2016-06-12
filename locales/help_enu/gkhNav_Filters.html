@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
+<title>Filter</title>
+</head>
+<body>
+<h1>Filtering person records</h1>
+<p>You use filtering to restrict number of persons you see at once.
+Database size grows eventually and one day you will find it very
+difficult to find a person you need. Here filters come in handy.</p>
+<p>To set up the filters you use <img src="images/iFilter.gif"
+align="absmiddle"> toolbar's button, or &quot;Edit\Filter&quot; menu,
+or use [Ctrl + F] hot key.</p>
+<p>There are two types of filters: standard and additional specific
+filters. Standard filters are used for any type of records in database;
+it is available on the &quot;Fields filter&quot; tab in filtering
+dialog. Additional specific filters are used for person records only
+and are available on the &quot;Specific filter&quot; tab, when you are
+filtering already opened person list.</p>
+<p>Fields filter works identically on any person records. User selects
+a target field (a column in the database's list) on which user is about
+to apply the filter, add filter condition and value. User can apply
+several selection criterions when it is necessary.</p>
+<p>For example, you want to select all men with Ivanov-like last name,
+who lived in Samara. To do this, open filtering dialog, go to the
+filter's first row and select &quot;Full name&quot; value in the
+&quotField&quot; drop-down list. Set condition to &quot;Contains&quot;,
+and value to &quot;Ivanov&quot;. Then go to the next filter's row and
+set field to &quot;Residence&quot;, condition to &quot;Contains&quot;,
+and value to &quot;Samara&quot;.</p>
+<p>Specific filtration is used to improve performance and work
+efficiency while handling person records. Such filter has the following
+selection criterions: sex, is a man alive, patriarch's bookmarks, all
+name parts, residence and events, and also groups and sources. There
+are <a href="gkhMasks.html">masks</a> available when one is filtering
+by name, life events and residence.</p>
+<p>When processing person records, user can use simple filters along
+with additional specific filters.</p>
+</body>
+</html>

@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
+<title>Pedigrees</title>
+</head>
+<body>
+<h1>Pedigrees</h1>
+<p>GEDKeeper has ability to generate pedigree for generations. There
+are two pedigree schemes available: d&#39;Aboville&#39;s and
+Konovalov&#39;s schemes. Both schemes make identical pedigrees with the
+only difference in persons numbering.</p>
+<p>d&#39;Aboville&#39;s scheme assigns #1 to the first man in the
+first generation; the man&#39;s first descendant in the next generation
+gets #1.1; grandson -- #1.1.1 and so on. This system is suitable when
+one has started to create tree draft on paper -- it is easy to add
+elements to any generation in the pedigree using d&#39;Aboville&#39;s
+scheme.</p>
+<p>Konovalov&#39;s scheme gives numbers like &quot;X-Y&quot; to all
+people, where &quot;X&quot; is sequence number for a man in the
+pedigree, and &quot;Y&quot; is number of the man&#39;s ancestor. This
+system provides an easy navigation but it is hard enough to manage
+Konovalov&#39;s scheme using paper medium -- adding new persons to
+existing generations will be a tough task; numbering get broken, the
+pedigree becomes a mess.</p>
+<p>GEDKeeper sees no big differences between those two schemes and
+allows you to create pedigrees using any of the schemes. Choosing a
+scheme is based on user preferences (appearance of pedigree, and how to
+view and manage pedigree).</p>
+<p>To create a pedigree using one of the scheme described above, select
+required entry in the person list, and find menu item with the scheme
+name in &quot;Pedigree&quot; menu. Or you can use <img
+src="images/iScroll.gif" align="absmiddle" title="Pedigree"> button on
+the toolbar.</p>
+<p>There are several file formats you can export pedigrees to: HTML,
+RTF and PDF. The exported file includes hyperlinks between persons in
+the tree. Once GEDKeeper has created a target file, it then opens the
+file in a program, that was registered in your system as default action
+for the target file type. You can use that program, for example, to
+print the pedigree.</p>
+<p>Unfortunately, PDF export currently is available on Windows
+platforms only. PDF export on Linux currently is under heavily
+development.</p>
+<p>You can find settings for pedigree generation in the
+&quot;Options&quot; dialog on the &quot;Pedigrees&quot; tab.</p>
+<ul>
+<li>When &quot;Include person attributes&quot; option is on, pedigree
+includes person&#39;s life events.</li>
+<li>When &quot;Include notes&quot; option is on, pedigree includes text
+notes from person&#39;s biography.</li>
+<li>When &quot;Include sources&quot; option is on, pedigree includes
+source&#39;s number that references a person. There is the source list
+at the bottom of pedigree.</li>
+<li>&quot;Format&quot; option has two possible values:
+&quot;Redundant&quot; and &quot;Conventional&quot;. This option
+controls level of details for person description printed in pedigree.
+Usually, you should prefer the conventional format, because the
+redundant one may contain too much unnecessary information.</li>
+</ul>
+</body>
+</html>
