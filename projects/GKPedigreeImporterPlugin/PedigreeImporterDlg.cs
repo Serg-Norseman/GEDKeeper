@@ -42,17 +42,6 @@ namespace GKPedigreeImporterPlugin
             this.fPlugin = fPlugin;
             this.fLangMan = fPlugin.LangMan;
 
-            this.fBase = fPlugin.Host.GetCurrentFile();
-            this.fImporter = new Importer(fBase, this.fLangMan, this.lbLog.Items);
-            this.fCurrentStage = 0;
-            this.fAvailableStage = 0;
-
-            this.cbPersonSeparator.SelectedIndex = 0;
-            this.cbNameFormat.SelectedIndex = 0;
-            this.cbGenerationFormat.SelectedIndex = 0;
-            this.cbDatesFormat.SelectedIndex = 0;
-            this.cbDateSeparator.SelectedIndex = 0;
-
             this.cbDatesFormat.Items.Clear();
             this.cbDatesFormat.Items.AddRange(new object[] { "DD/MM/YYYY", "YYYY/MM/DD" });
 
@@ -64,6 +53,17 @@ namespace GKPedigreeImporterPlugin
             this.cbNameFormat.Items.AddRange(new object[] { fLangMan.LS(ILS.LSID_NPS), fLangMan.LS(ILS.LSID_SNP) });
 
             this.cbPersonSeparator.Items.AddRange(new object[] { fLangMan.LS(ILS.LSID_NoSpecial), ";", ","});
+
+            this.fBase = fPlugin.Host.GetCurrentFile();
+            this.fImporter = new Importer(fBase, this.fLangMan, this.lbLog.Items);
+            this.fCurrentStage = 0;
+            this.fAvailableStage = 0;
+
+            this.cbPersonSeparator.SelectedIndex = 0;
+            this.cbNameFormat.SelectedIndex = 0;
+            this.cbGenerationFormat.SelectedIndex = 0;
+            this.cbDatesFormat.SelectedIndex = 0;
+            this.cbDateSeparator.SelectedIndex = 0;
 
             // SetLang()
             this.Text = fLangMan.LS(ILS.LSID_PluginTitle);
