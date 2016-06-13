@@ -99,6 +99,25 @@ namespace GKCommon
             return day + (153 * m + 2) / 5 + 365 * y + y / 4 - y / 100 + y / 400 - 32045;
         }
 
+        // Based on http://aa.quae.nl/en/reken/juliaansedag.html
+        public static uint gregorian_to_jd3(int year, int month, int day)
+        {
+            int c0 = month - 3;
+            if (0 <= c0)
+            {
+                c0 /= 12;
+            }
+            else
+            {
+                c0 = (int)(c0 / 12.0 - 1.0);
+            }
+            int x4 = year + c0;
+            int x3 = x4 / 100;
+            int x2 = x4 % 100;
+            int x1 = month - 12 * c0 - 3;
+            return (uint)((146097 * x3 / 4) + (36525 * x2 / 100) + ((153 * x1 + 2) / 5) + day + 1721119);
+        }
+
         public static void jd_to_gregorian2(double jd, out int year, out int month, out int day)
         {
             int a = (int)jd + 32044;
@@ -111,6 +130,21 @@ namespace GKCommon
             day = e - (153 * m + 2) / 5 + 1;
             month = m + 3 - 12 * (m / 10);
             year = 100 * b + d - 4800 + m / 10;
+        }
+
+        // Based on http://aa.quae.nl/en/reken/juliaansedag.html
+        public static void jd_to_gregorian3(uint jd, out int year, out int month, out int day)
+        {
+            int x3 = (int) ((4 * jd - 6884477) / 146097);
+            int r3 = (int) ((4 * jd - 6884477) % 146097);
+            int x2 = ((r3 / 4) * 100 + 99) / 36525;
+            int r2 = ((r3 / 4) * 100 + 99) % 36525;
+            int x1 = ((r2 / 100) * 5 + 2) / 153;
+            int r1 = ((r2 / 100) * 5 + 2) % 153;
+            day = r1 / 5 + 1;
+            int c0 = (x1 + 2) / 12;
+            month = x1 - 12 * c0 + 3;
+            year = 100 * x3 + x2 + c0;
         }
 
         #endregion
@@ -147,6 +181,31 @@ namespace GKCommon
             return day + (153 * m + 2) / 5 + 365 * y + y / 4 - 32083;
         }
 
+        // Based on http://aa.quae.nl/en/reken/juliaansedag.html
+        public static uint julian_to_jd3(int year, int month, int day)
+        {
+            int c0 = month - 3;
+            if (0 <= c0)
+            {
+                c0 /= 12;
+            }
+            else
+            {
+                c0 = (int)(c0 / 12.0 - 1.0);
+            }
+            int j1 = (1461 * (year + c0)) / 4;
+            int j2 = 153 * month - 1836 * c0 - 457;
+            if (0 <= j2)
+            {
+                j2 /= 5;
+            }
+            else
+            {
+                j2 = (int)(j2 / 5.0 - 1.0);
+            }
+            return (uint)(j1 + j2 + day + 1721117);
+        }
+
         public static void jd_to_julian2(double jd, out int year, out int month, out int day)
         {
             int c = (int) (jd) + 32082;
@@ -173,6 +232,19 @@ namespace GKCommon
             {
                 year--;
             }
+        }
+
+        // Based on http://aa.quae.nl/en/reken/juliaansedag.html
+        public static void jd_to_julian3(uint jd, out int year, out int month, out int day)
+        {
+            int y2 = ((int)(jd)) - 1721118;
+            int k2 = 4 * y2 + 3;
+            int k1 = ((k2 % 1461) / 4) * 5 + 2;
+            int x1 = k1 / 153;
+            int c0 = (x1 + 2) / 12;
+            year = k2 / 1461 + c0;
+            month = x1 - 12 * c0 + 3;
+            day = (k1 % 153) / 5 + 1;
         }
 
         #endregion
