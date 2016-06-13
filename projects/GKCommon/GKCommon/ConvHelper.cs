@@ -98,14 +98,10 @@ namespace GKCommon
 
         public static string AdjustNum(int val, int up)
         {
-            string result = val.ToString();
-            if (result.Length < up)
-            {
-                StringBuilder sb = new StringBuilder(result);
-                while (sb.Length < up) sb.Insert(0, '0');
-                result = sb.ToString();
-            }
-            return result;
+            StringBuilder res = new StringBuilder(up);
+            res.Append(val.ToString());
+            while (res.Length < up) res.Insert(0, '0');
+            return res.ToString();
         }
     }
 }

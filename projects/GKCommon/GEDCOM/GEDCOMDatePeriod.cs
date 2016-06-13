@@ -50,10 +50,7 @@ namespace GKCommon.GEDCOM
 
             if (!this.fDateFrom.IsEmpty() && !this.fDateTo.IsEmpty())
             {
-                result = string.Concat(new string[]
-                                       {
-                                           "FROM ", this.fDateFrom.StringValue, " ", "TO", " ", this.fDateTo.StringValue
-                                       });
+                result = string.Concat("FROM ", this.fDateFrom.StringValue, " TO ", this.fDateTo.StringValue);
             }
             else
             {

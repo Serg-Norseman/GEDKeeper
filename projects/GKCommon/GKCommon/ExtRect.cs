@@ -101,10 +101,8 @@ namespace GKCommon
 
         public override string ToString()
         {
-            return string.Concat(new string[] {
-                                     "{X=", this.Left.ToString(), ",Y=", this.Top.ToString(),
-                                     ",Width=", this.GetWidth().ToString(), ",Height=", this.GetHeight().ToString(), "}"
-                                 });
+            return string.Concat("{X=", this.Left.ToString(), ",Y=", this.Top.ToString(),
+                                 ",Width=", this.GetWidth().ToString(), ",Height=", this.GetHeight().ToString(), "}");
         }
 
         public Rectangle ToRectangle()

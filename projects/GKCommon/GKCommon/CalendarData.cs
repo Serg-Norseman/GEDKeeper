@@ -35,9 +35,7 @@ namespace GKCommon
         {
             DateTimeFormatInfo dtInfo = Thread.CurrentThread.CurrentCulture.DateTimeFormat;
 
-            string result = string.Concat(new string[] {
-                                              day.ToString(),  " ",  dtInfo.AbbreviatedMonthNames[month - 1],  " ",  year.ToString()
-                                          });
+            string result = string.Concat(day.ToString(),  " ",  dtInfo.AbbreviatedMonthNames[month - 1],  " ",  year.ToString());
 
             if (era != DateEra.AD) {
                 result += " до н.э.";

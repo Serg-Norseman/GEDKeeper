@@ -49,16 +49,7 @@ namespace GKCommon.GEDCOM
             string result;
             if (!this.fDateAfter.IsEmpty() && !this.fDateBefore.IsEmpty())
             {
-                result = string.Concat(new string[]
-                                       {
-                                           GEDCOMDateRangeArray[2],
-                                           " ",
-                                           this.fDateAfter.StringValue,
-                                           " ",
-                                           GEDCOMDateRangeArray[3],
-                                           " ",
-                                           this.fDateBefore.StringValue
-                                       });
+                result = string.Concat(GEDCOMDateRangeArray[2], " ", this.fDateAfter.StringValue, " ", GEDCOMDateRangeArray[3], " ", this.fDateBefore.StringValue);
             }
             else
             {

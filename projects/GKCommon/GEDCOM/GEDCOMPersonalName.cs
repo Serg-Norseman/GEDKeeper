@@ -184,10 +184,7 @@ namespace GKCommon.GEDCOM
 
         private void SetSurname(string value)
         {
-            base.StringValue = string.Concat(new string[]
-                                             {
-                                                 GEDCOMUtils.TrimLeft(this.FirstPart + " "), "/", value, "/", GEDCOMUtils.TrimRight(" " + this.LastPart)
-                                             });
+            base.StringValue = string.Concat(GEDCOMUtils.TrimLeft(this.FirstPart + " "), "/", value, "/", GEDCOMUtils.TrimRight(" " + this.LastPart));
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)

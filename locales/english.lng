@@ -650,3 +650,67 @@ To bookmark the merged records
 Show dates calendar
 Duplicate record
 Attention: when you duplicate personal records, family links and associations are not copied
+Show the signatures of date type
+Create a new tree file
+Open the tree file
+Save tree file
+Add record (Ctrl+I)
+Edit record (Ctrl+Enter)
+Delete record (Ctrl+L)
+Filtering list of records
+Show a tree of ancestors
+Show a tree of descendants
+Show full tree
+Pedigree
+Pedigree by d'Aboville
+Pedigree by Konovalov
+Statistical analysis of data
+Save the image
+Display modes
+Create a new script
+Open a script
+Save script
+Execute the script
+Attach the portrait
+Detach the portrait
+Join the family of parents
+Edit the family of the parents
+Disconnect family parents
+Select or add the father
+Disconnect father
+Go to the record of the father
+Select or add the mother
+Disconnect mother
+Go to the record of the mother
+Copy name to clipboard
+Select or add husband
+Disconnect husband
+Go to the record of the husband
+Select or add wife
+Disconnect wife
+Go to the record of the wife
+Choose a personal record
+Select or add a location
+Remove the link to the place
+Show the map
+Select or add a record of source
+Select the target record
+For storage types "file" and "store" the new DB file you need to save
+A file with the same name already exists in the repository
+It's not GEDSEC-compatible file
+This person have a few families. Children should be added via the spouses.
+An error of export to Excel
+Specific filter
+Display lines
+Type of comparison
+Internal comparing (search for duplicates)
+Comparing with another database
+Analysis (experimental)
+Compare
+Ignore the date
+Chart
+Family book
+Table of contents
+Personal records
+Directories
+Gender is not defined by a man named "{1}". It's male gender?

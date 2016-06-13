@@ -772,34 +772,23 @@ namespace GKCommon.GEDCOM
             this.DateChanged();
         }
 
+        #region UDN processing
+
+        // GEDCOMCalendar { dcGregorian, dcJulian, dcHebrew, dcFrench, dcRoman, dcUnknown }
+        private static UDNCalendarType[] UDNCalendars = new UDNCalendarType[] {
+            UDNCalendarType.ctGregorian, UDNCalendarType.ctJulian, UDNCalendarType.ctHebrew,
+            UDNCalendarType.ctGregorian, UDNCalendarType.ctGregorian, UDNCalendarType.ctGregorian
+        };
+
         private void DateChanged()
         {
             int year;
             ushort month, day;
             bool yearBC;
             this.GetDateParts(out year, out month, out day, out yearBC);
-
             if (yearBC) year = -year;
 
-            UDNCalendarType udnCalendar;
-            switch (this.fDateCalendar) {
-                case GEDCOMCalendar.dcGregorian:
-                    udnCalendar = UDNCalendarType.ctGregorian;
-                    break;
-
-                case GEDCOMCalendar.dcJulian:
-                    udnCalendar = UDNCalendarType.ctJulian;
-                    break;
-
-                case GEDCOMCalendar.dcHebrew:
-                    udnCalendar = UDNCalendarType.ctHebrew;
-                    break;
-
-                default:
-                    udnCalendar = UDNCalendarType.ctGregorian;
-                    break;
-            }
-
+            UDNCalendarType udnCalendar = UDNCalendars[(int)this.fDateCalendar];
             this.fUDN = new UDN(udnCalendar, year, month, day);
         }
 
@@ -807,5 +796,7 @@ namespace GKCommon.GEDCOM
         {
             return this.fUDN;
         }
+
+        #endregion
     }
 }
