@@ -2,6 +2,7 @@
  *  CalendarConverter, part of project "Fourmilab Calendar Converter"
  *  Partial copyright by John Walker
  *  http://www.fourmilab.ch/documents/calendar/
+ *  This program is in the public domain.
  *
  *  C# implementation:
  *  Copyright (C) 2011 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).

@@ -257,7 +257,7 @@ namespace GKCommon.GEDCOM
             }
             else if (this.fDateAfter.StringValue != "" && this.fDateBefore.StringValue != "")
             {
-                result = UDN.Between(this.fDateAfter.GetUDN(), this.fDateBefore.GetUDN());
+                result = UDN.CreateBetween(this.fDateAfter.GetUDN(), this.fDateBefore.GetUDN());
             }
             else
             {
