@@ -6,5 +6,5 @@ install:
   - nuget restore ./projects/GEDKeeper2.linux.sln
  
 script:
-  - xbuild ./projects/GEDKeeper2.linux.sln
-  - nunit-console ./projects/gktests/bin/debug/GKTests.dll
+  - xbuild /p:Configuration=Release ./projects/GEDKeeper2.linux.sln
+  - nunit-console ./projects/gktests/bin/release/GKTests.dll
