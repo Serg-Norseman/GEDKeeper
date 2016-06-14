@@ -7,4 +7,4 @@ install:
  
 script:
   - xbuild /p:Configuration=Release ./projects/GEDKeeper2.linux.sln
-  - nunit-console ./projects/gktests/bin/release/GKTests.dll
+  - nunit-console ./projects/GKTests/bin/Release/GKTests.dll

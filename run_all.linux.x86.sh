@@ -9,6 +9,6 @@
 cd projects/
 #erase gktests/bin/debug/*.dll
 ./compile.linux.sh
-cd gktests/bin/debug
+cd ./GKTests/bin/Release
 nunit-console GKTests.dll
 cd ../../..
