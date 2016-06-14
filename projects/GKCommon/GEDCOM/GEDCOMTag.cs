@@ -605,7 +605,12 @@ namespace GKCommon.GEDCOM
                 str = str + " " + val;
             }
 
+            #if !GK_LINUX
             stream.WriteLine(str);
+            #else
+            stream.Write(str);
+            stream.Write(GEDCOM_NEWLINE);
+            #endif
         }
 
         public virtual void SaveToStream(StreamWriter stream)

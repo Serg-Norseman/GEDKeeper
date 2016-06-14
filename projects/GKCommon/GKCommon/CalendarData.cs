@@ -33,9 +33,7 @@ namespace GKCommon
 
         public static string date_to_str(int year, int month, int day, DateEra era)
         {
-            DateTimeFormatInfo dtInfo = Thread.CurrentThread.CurrentCulture.DateTimeFormat;
-
-            string result = string.Concat(day.ToString(),  " ",  dtInfo.AbbreviatedMonthNames[month - 1],  " ",  year.ToString());
+			string result = string.Concat(ConvHelper.AdjustNum(day, 2),  " ",  ConvHelper.AdjustNum(month, 2),  " ",  year.ToString());
 
             if (era != DateEra.AD) {
                 result += " до н.э.";

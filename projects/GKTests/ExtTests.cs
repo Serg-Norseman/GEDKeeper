@@ -307,7 +307,7 @@ namespace GKTests
             int year, month, day;
             CalendarConverter.jd_to_julian(jd, out year, out month, out day);
             s = CalendarData.date_to_str(year, month, day, CalendarData.DateEra.AD);
-            Assert.AreEqual("27 сен 1990", s); // +
+            Assert.AreEqual("27 09 1990", s); // +
 
             CalendarConverter.jd_to_hebrew(jd, out year, out month, out day);
             s = day.ToString() + " ";

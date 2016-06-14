@@ -31,9 +31,9 @@ namespace GKCommon.GEDCOM
         public const char GEDCOM_YEAR_MODIFIER_SEPARATOR = '/';
         public const string GEDCOM_YEAR_BC = "B.C.";
         public const char GEDCOM_POINTER_DELIMITER = '@';
+        public const string GEDCOM_NEWLINE = "\r\n";
 
         // deprecated
-        //public const string GEDCOMNewLine = "#13#10";
         //public const byte GEDCOMMaxPhoneNumbers = 3;
         //public const byte GEDCOMMaxEmailAddresses = 3;
         //public const byte GEDCOMMaxFaxNumbers = 3;
