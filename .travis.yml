@@ -1,0 +1,10 @@
+language: csharp
+solution: projects/GEDKeeper2.linux.sln
+
+install:
+  - sudo apt-get install nunit-console
+  - nuget restore ./projects/GEDKeeper2.linux.sln
+ 
+script:
+  - xbuild ./src/projects/GEDKeeper2.linux.sln
+  - nunit-console ./projects/gktests/bin/debug/GKTests.dll
