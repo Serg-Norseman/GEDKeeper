@@ -53,12 +53,11 @@ namespace GKCommon.GEDCOM
                 str = str + " " + base.StringValue;
             }
 
-			#if !GK_LINUX
+            #if !GK_LINUX
             stream.WriteLine(str);
-			#else
-			stream.Write(str);
-			stream.Write(GEDCOM_NEWLINE);
-			#endif
+            #else
+            stream.Write(str + GEDCOM_NEWLINE);
+            #endif
         }
 
         protected GEDCOMCustomRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)

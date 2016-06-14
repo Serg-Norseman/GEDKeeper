@@ -608,8 +608,7 @@ namespace GKCommon.GEDCOM
             #if !GK_LINUX
             stream.WriteLine(str);
             #else
-            stream.Write(str);
-            stream.Write(GEDCOM_NEWLINE);
+            stream.Write(str + GEDCOM_NEWLINE);
             #endif
         }
 

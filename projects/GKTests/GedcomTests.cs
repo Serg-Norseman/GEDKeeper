@@ -684,7 +684,7 @@ namespace GKTests
             {
                 Assert.IsNotNull(dtx1, "dtx1 != null");
 
-				DateTime dt = ParseDT("20.01.2013");
+                DateTime dt = ParseDT("20.01.2013");
                 Assert.IsTrue(dtx1.Date.Equals(dt), "dtx1.DateTime.Equals(dt)");
                 
                 //dtx1.DateCalendar = GEDCOMCalendar.dcFrench;
@@ -732,7 +732,7 @@ namespace GKTests
             {
                 Assert.IsNotNull(dtx1, "dtx1 != null");
 
-				DateTime dt = ParseDT("20.01.2013");
+                DateTime dt = ParseDT("20.01.2013");
                 Assert.IsTrue(dtx1.Date.Equals(dt), "dtx1.DateTime.Equals(dt)");
                 
                 dtx1.ParseString("INT 20 JAN 2013 (today)");
@@ -763,7 +763,7 @@ namespace GKTests
                 
                 st = "EST 20 DEC 2013";
                 dtx1.ParseString(st);
-				Assert.AreEqual(dtx1.Date, ParseDT("20.12.2013"));
+                Assert.AreEqual(dtx1.Date, ParseDT("20.12.2013"));
                 Assert.AreEqual(st, dtx1.StringValue);
                 Assert.AreEqual(((GEDCOMDateApproximated)dtx1.Value).Approximated, GEDCOMApproximated.daEstimated);
 
@@ -792,12 +792,12 @@ namespace GKTests
 
                 dtx1.ParseString("BEF 20 JAN 2013");
                 Assert.IsFalse(dtx1.IsEmpty());
-				Assert.AreEqual(ParseDT("20.01.2013"), dtx1.Date);
+                Assert.AreEqual(ParseDT("20.01.2013"), dtx1.Date);
                 Assert.AreEqual("BEF 20 JAN 2013", dtx1.StringValue);
 
                 dtx1.ParseString("AFT 20 JAN 2013");
                 Assert.IsFalse(dtx1.IsEmpty());
-				Assert.AreEqual(ParseDT("20.01.2013"), dtx1.Date);
+                Assert.AreEqual(ParseDT("20.01.2013"), dtx1.Date);
                 Assert.AreEqual("AFT 20 JAN 2013", dtx1.StringValue);
 
                 dtx1.ParseString("BET 04 JAN 2013 AND 25 JAN 2013");
@@ -1232,7 +1232,7 @@ namespace GKTests
         {
             GEDCOMEventDetailTest(evt.Detail, dateTest);
             
-			Assert.AreEqual(evt.Detail.Date.GetDateTime(), ParseDT(dateTest));
+            Assert.AreEqual(evt.Detail.Date.GetDateTime(), ParseDT(dateTest));
         }
         
         private static void GEDCOMPlaceTest(GEDCOMPlace place)
@@ -1247,7 +1247,7 @@ namespace GKTests
 
         private static void GEDCOMEventDetailTest(GEDCOMEventDetail detail, string dateTest)
         {
-			Assert.AreEqual(ParseDT(dateTest), detail.Date.Date);
+            Assert.AreEqual(ParseDT(dateTest), detail.Date.Date);
             Assert.AreEqual("Ivanovo", detail.Place.StringValue);
             
             GEDCOMPlaceTest(detail.Place);
@@ -1589,11 +1589,11 @@ namespace GKTests
             resRec.Status = GKResearchStatus.rsOnHold;
             Assert.AreEqual(GKResearchStatus.rsOnHold, resRec.Status);
             
-			resRec.StartDate.Date = ParseDT("20.01.2013");
-			Assert.AreEqual(ParseDT("20.01.2013"), resRec.StartDate.Date);
+            resRec.StartDate.Date = ParseDT("20.01.2013");
+            Assert.AreEqual(ParseDT("20.01.2013"), resRec.StartDate.Date);
             
-			resRec.StopDate.Date = ParseDT("21.01.2013");
-			Assert.AreEqual(ParseDT("21.01.2013"), resRec.StopDate.Date);
+            resRec.StopDate.Date = ParseDT("21.01.2013");
+            Assert.AreEqual(ParseDT("21.01.2013"), resRec.StopDate.Date);
             
             resRec.Percent = 33;
             Assert.AreEqual(33, resRec.Percent);
@@ -1783,8 +1783,8 @@ namespace GKTests
             comRec.CommunicationType = GKCommunicationType.ctFax;
             Assert.AreEqual(GKCommunicationType.ctFax, comRec.CommunicationType);
             
-			comRec.Date.Date = ParseDT("23.01.2013");
-			Assert.AreEqual(ParseDT("23.01.2013"), comRec.Date.Date);
+            comRec.Date.Date = ParseDT("23.01.2013");
+            Assert.AreEqual(ParseDT("23.01.2013"), comRec.Date.Date);
             
             comRec.SetCorresponder(GKCommunicationDir.cdFrom, iRec);
 
@@ -1817,10 +1817,10 @@ namespace GKTests
             Assert.IsTrue(locRec.IsEmpty());
         }
 
-		private static DateTime ParseDT(string dtx)
-		{
-			return DateTime.ParseExact(dtx, "dd.MM.yyyy", CultureInfo.InvariantCulture);
-		}
+        private static DateTime ParseDT(string dtx)
+        {
+            return DateTime.ParseExact(dtx, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+        }
 
         private static void GEDCOMTaskRecordTest(GEDCOMTaskRecord taskRec, GEDCOMIndividualRecord indiv, GEDCOMFamilyRecord famRec, GEDCOMSourceRecord srcRec)
         {
@@ -1830,11 +1830,11 @@ namespace GKTests
             taskRec.Priority = GKResearchPriority.rpNormal;
             Assert.AreEqual(GKResearchPriority.rpNormal, taskRec.Priority);
             
-			taskRec.StartDate.Date = ParseDT("20.01.2013");
-			Assert.AreEqual(ParseDT("20.01.2013"), taskRec.StartDate.Date);
+            taskRec.StartDate.Date = ParseDT("20.01.2013");
+            Assert.AreEqual(ParseDT("20.01.2013"), taskRec.StartDate.Date);
             
-			taskRec.StopDate.Date = ParseDT("21.01.2013");
-			Assert.AreEqual(ParseDT("21.01.2013"), taskRec.StopDate.Date);
+            taskRec.StopDate.Date = ParseDT("21.01.2013");
+            Assert.AreEqual(ParseDT("21.01.2013"), taskRec.StopDate.Date);
 
             taskRec.Goal = "Test Goal";
             Assert.AreEqual("Test Goal", taskRec.Goal);

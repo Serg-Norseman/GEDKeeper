@@ -640,7 +640,12 @@ namespace GKCommon.GEDCOM
         private static void SaveFooterToStream(StreamWriter stream)
         {
             const string str = "0 TRLR";
+
+            #if !GK_LINUX
             stream.WriteLine(str);
+            #else
+            stream.Write(str + GEDCOM_NEWLINE);
+            #endif
         }
 
         #endregion
