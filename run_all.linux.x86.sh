@@ -10,5 +10,5 @@ cd projects/
 #erase gktests/bin/debug/*.dll
 ./compile.linux.sh
 cd gktests/bin/debug
-nunit3-console GKTests.dll
+nunit-console GKTests.dll
 cd ../../..
