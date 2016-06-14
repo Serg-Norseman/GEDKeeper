@@ -419,6 +419,34 @@ namespace GKCommon
             day = (int)Math.Truncate(jd - islamic_to_jd(year, month, 1) + 1.0);
         }
 
+        // Based on http://aa.quae.nl/en/reken/juliaansedag.html
+        public static uint islamic_to_jd3(int year, int month, int day)
+        {
+            year = 10631 * year - 10617;
+            if (0 <= year)
+            {
+                year /= 30;
+            }
+            else
+            {
+                year = (int)(year / 30.0 - 1.0);
+            }
+            // `325 * month - 320` is always greater than 0; therefore, I only use C#'s truncation rule (or C++ std:
+            // 4.9 Floating-integral conversions [conv.fpint]).
+            month = (325 * month - 320) / 11;
+            return (uint)(year + month + day + 1948439);
+        }
+
+        // Based on http://aa.quae.nl/en/reken/juliaansedag.html
+        public static void jd_to_islamic3(uint jd, out int year, out int month, out int day)
+        {
+            int k2 = 30 * (((int)(jd)) - 1948440) + 15;
+            int k1 = ((k2 % 10631) / 30) * 11 + 5;
+            year = k2 / 10631 + 1;
+            month = k1 / 325 + 1;
+            day = (k1 % 325) / 11 + 1;
+        }
+
         #endregion
 
         #region Persian calendar
