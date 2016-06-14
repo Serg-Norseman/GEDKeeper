@@ -3,7 +3,7 @@
   <PropertyGroup>
     <ProjectGuid>{A8B53A6B-40A6-40BA-A671-03FC911BC37B}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">MSWin_x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <OutputType>Library</OutputType>
     <RootNamespace>GKTests</RootNamespace>
     <AssemblyName>GKTests</AssemblyName>
@@ -18,7 +18,7 @@
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'MSWin_x86' ">
+  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
     <PlatformTarget>x86</PlatformTarget>
     <BaseAddress>4194304</BaseAddress>
     <RegisterForComInterop>False</RegisterForComInterop>
@@ -42,37 +42,17 @@
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|MSWin_x86' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <CodeAnalysisRuleSet>..\gk2rules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'Linux_x86' ">
-    <PlatformTarget>x86</PlatformTarget>
-    <BaseAddress>4194304</BaseAddress>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <FileAlignment>4096</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|Linux_x86' ">
-    <CodeAnalysisRuleSet>..\gk2rules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'MSWin_x64' ">
+  <PropertyGroup Condition=" '$(Platform)' == 'x64' ">
     <PlatformTarget>x64</PlatformTarget>
     <BaseAddress>4194304</BaseAddress>
     <RegisterForComInterop>False</RegisterForComInterop>
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <FileAlignment>4096</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|MSWin_x64' ">
-    <CodeAnalysisRuleSet>..\gk2rules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'Linux_x64' ">
-    <PlatformTarget>x64</PlatformTarget>
-    <BaseAddress>4194304</BaseAddress>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <FileAlignment>4096</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|Linux_x64' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <CodeAnalysisRuleSet>..\gk2rules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
@@ -94,19 +74,19 @@
     <Compile Include="TestStubs.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GEDKeeper2\GEDKeeper2.csproj">
+    <ProjectReference Include="..\GEDKeeper2\GEDKeeper2.mswin.csproj">
       <Project>{19B7D80A-37FD-4E49-9F59-87FA41B677E2}</Project>
       <Name>GEDKeeper2</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GKCalculatorPlugin\GKCalculatorPlugin.csproj">
+    <ProjectReference Include="..\GKCalculatorPlugin\GKCalculatorPlugin.mswin.csproj">
       <Project>{782e9338-eca7-4095-9157-6ca003801f05}</Project>
       <Name>GKCalculatorPlugin</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GKCommon\GKCommon.csproj">
+    <ProjectReference Include="..\GKCommon\GKCommon.mswin.csproj">
       <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
       <Name>GKCommon</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GKPedigreeImporterPlugin\GKPedigreeImporterPlugin.csproj">
+    <ProjectReference Include="..\GKPedigreeImporterPlugin\GKPedigreeImporterPlugin.mswin.csproj">
       <Project>{859C2F5B-FBF1-4D3B-8442-CF8E44E8B74B}</Project>
       <Name>GKPedigreeImporterPlugin</Name>
     </ProjectReference>

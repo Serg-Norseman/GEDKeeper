@@ -732,7 +732,11 @@ namespace GKPedigreeImporterPlugin
                     return this.ImportTextContent();
 
                 case SourceType.stTable:
+					#if !GK_LINUX
                     return this.ImportTableContent();
+					#else
+					return false;
+					#endif
                     
                 default:
                     return false;
@@ -804,6 +808,7 @@ namespace GKPedigreeImporterPlugin
             return (obj == null) ? "" : obj.ToString();
         }
 
+		#if !GK_LINUX
         private bool ImportTableContent()
         {
             try
@@ -932,6 +937,7 @@ namespace GKPedigreeImporterPlugin
                 return false;
             }
         }
+		#endif
 
         private bool LoadRawExcel(string fileName)
         {
@@ -984,6 +990,7 @@ namespace GKPedigreeImporterPlugin
             }
         }
 
+		#if !GK_LINUX
         private bool LoadRawWord(string fileName)
         {
             this.SourceType = SourceType.stText;
@@ -1044,6 +1051,7 @@ namespace GKPedigreeImporterPlugin
                 return false;
             }
         }
+		#endif
 
         public bool LoadRawData(string fileName)
         {
@@ -1058,7 +1066,11 @@ namespace GKPedigreeImporterPlugin
             }
             else if (ext == ".doc")
             {
+				#if !GK_LINUX
                 return this.LoadRawWord(fileName);
+				#else
+				return false;
+				#endif
             }
             else if (ext == ".xls")
             {
