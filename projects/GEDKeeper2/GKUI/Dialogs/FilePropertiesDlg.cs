@@ -44,6 +44,9 @@ namespace GKUI.Dialogs
 
             this.fBase = aBase;
 
+            this.btnAccept.Image = ((System.Drawing.Image)(MainWin.ResourceManager.GetObjectEx("iBtnAccept")));
+            this.btnCancel.Image = ((System.Drawing.Image)(MainWin.ResourceManager.GetObjectEx("iBtnCancel")));
+
             this.UpdateControls();
 
             // SetLang()
