@@ -36,6 +36,19 @@ namespace GKCommon
             return (int)Math.Truncate(a - b * Math.Floor(a / b));
         }
 
+        private static int downwardRounding(int dividend, int divisor)
+        {
+            if (0 <= dividend)
+            {
+                dividend /= divisor;
+            }
+            else
+            {
+                dividend = (int)(dividend / ((double) (divisor)) - 1.0);
+            }
+            return dividend;
+        }
+
         /*private static int _if(bool cond, int thenVal, int elseVal)
         {
             return (cond) ? thenVal : elseVal;
@@ -102,25 +115,17 @@ namespace GKCommon
         // Based on http://aa.quae.nl/en/reken/juliaansedag.html
         public static uint gregorian_to_jd3(int year, int month, int day)
         {
-            int c0 = month - 3;
-            if (0 <= c0)
-            {
-                c0 /= 12;
-            }
-            else
-            {
-                c0 = (int)(c0 / 12.0 - 1.0);
-            }
+            int c0 = downwardRounding(month - 3, 12);
             int x4 = year + c0;
             int x3 = x4 / 100;
             int x2 = x4 % 100;
             int x1 = month - 12 * c0 - 3;
-            return (uint)((146097 * x3 / 4) + (36525 * x2 / 100) + ((153 * x1 + 2) / 5) + day + 1721119);
+            return (uint) ((146097 * x3 / 4) + (36525 * x2 / 100) + ((153 * x1 + 2) / 5) + day + 1721119);
         }
 
         public static void jd_to_gregorian2(double jd, out int year, out int month, out int day)
         {
-            int a = (int)jd + 32044;
+            int a = ((int) (jd)) + 32044;
             int b = (4 * a + 3) / 146097;
             int c = a - (146097 * b) / 4;
             int d = (4 * c + 3) / 1461;
@@ -184,31 +189,15 @@ namespace GKCommon
         // Based on http://aa.quae.nl/en/reken/juliaansedag.html
         public static uint julian_to_jd3(int year, int month, int day)
         {
-            int c0 = month - 3;
-            if (0 <= c0)
-            {
-                c0 /= 12;
-            }
-            else
-            {
-                c0 = (int)(c0 / 12.0 - 1.0);
-            }
+            int c0 = downwardRounding(month - 3, 12);
             int j1 = (1461 * (year + c0)) / 4;
-            int j2 = 153 * month - 1836 * c0 - 457;
-            if (0 <= j2)
-            {
-                j2 /= 5;
-            }
-            else
-            {
-                j2 = (int)(j2 / 5.0 - 1.0);
-            }
-            return (uint)(j1 + j2 + day + 1721117);
+            int j2 = downwardRounding(153 * month - 1836 * c0 - 457, 5);
+            return (uint) (j1 + j2 + day + 1721117);
         }
 
         public static void jd_to_julian2(double jd, out int year, out int month, out int day)
         {
-            int c = (int) (jd) + 32082;
+            int c = ((int) (jd)) + 32082;
             int d = (4 * c + 3) / 1461;
             int e = c - (1461 * d) / 4;
             int m = (5 * e + 2) / 153;
@@ -395,6 +384,154 @@ namespace GKCommon
             day = (int)Math.Truncate(jd - hebrew_to_jd(year, month, 1) + 1.0);
         }
 
+        // Everything below is based on http://aa.quae.nl/en/reken/juliaansedag.html
+
+        private static int getRunningMonthNumberOfTheFirstMonth(int year)
+        {
+            // It's `c1(x1)`.
+            year = 235 * year + 1;
+            if (0 <= year)
+            {
+                year /= 19;
+            }
+            else
+            {
+                year = (int) (year / 19.0 - 1.0);
+            }
+            return year;
+        }
+
+        private static int getTheFirstDelay(int year)
+        {
+            // It's `v1(x1)`
+            int c1x1 = getRunningMonthNumberOfTheFirstMonth(year);
+            int qx1 = (0 <= c1x1) ? c1x1 / 1095 : (int) (c1x1 / 1095.0 - 1.0);
+            int rx1 = c1x1 % 1095;
+            int v1 = 15 * qx1 + 765433 * rx1 + 12084;
+            if (0 <= v1)
+            {
+                v1 /= 25920;
+            }
+            else
+            {
+                v1 = (int) (v1 / 25920.0 - 1.0);
+            }
+            return 32336 * qx1 + v1;
+        }
+
+        private static int getTheSecondDelay(int year)
+        {
+            // It's `v2(x1)`
+            int v1x1 = getTheFirstDelay(year);
+            return v1x1 + ((6 * (v1x1 % 7) / 7) % 2);
+        }
+
+        private static int getTheThirdDelay(int year)
+        {
+            // It's `v3(x1)`
+            int v3 = getLengthOfYear(year) + 19;
+            if (0 <= v3)
+            {
+                v3 /= 15;
+            }
+            else
+            {
+                v3 = (int) (v3 / 15.0 - 1.0);
+            }
+            return (v3 % 2) * 2;
+        }
+
+        private static int getTheFourthDelay(int year)
+        {
+            // It's `v4(x1)`
+            int v4 = getLengthOfYear(year) + 7;
+            if (0 <= v4)
+            {
+                v4 /= 15;
+            }
+            else
+            {
+                v4 = (int) (v4 / 15.0 - 1.0);
+            }
+            return v4 % 2;
+        }
+
+        private static int getRunningDayNumberOfNewYear(int year)
+        {
+            // It's `c2(x1)`.
+            return getTheSecondDelay(year) + getTheThirdDelay(year) + getTheFourthDelay(year - 1);
+        }
+
+        private static int getLengthOfYear(int year)
+        {
+            // It's `L2(x1)`
+            return getTheSecondDelay(year + 1) - getTheSecondDelay(year);
+        }
+
+        public static uint hebrew_to_jd3(int year, int month, int day)
+        {
+            int c0 = downwardRounding(13 - month, 7);
+            int x1 = year - 1 + c0;
+            int x3 = month - 1;
+            int z4 = day - 1;
+            int c2 = getRunningDayNumberOfNewYear(x1);
+            int L = getRunningDayNumberOfNewYear(x1 + 1) - c2;
+            int c8 = downwardRounding(L + 7, 2) % 15;
+            int c9 = downwardRounding(385 - L, 2);
+            c9 = -(c9 % 15);
+            int c3 =
+                downwardRounding(384 * x3 + 7, 13) +
+                c8 * downwardRounding(x3 + 4, 12) +
+                c9 * downwardRounding(x3 + 3, 12);
+            return (uint) (347821 + c2 + c3 + z4);
+        }
+
+        public static void jd_to_hebrew3(uint jd, out int year, out int month, out int day)
+        {
+            int y4 = ((int) (jd)) - 347821;
+            int q = downwardRounding(y4, 1447);
+            int r = y4 % 1447;
+            int gamma1 = 49 * q + downwardRounding(23 * q + 25920 * r + 13835, 765433) + 1;
+            int xi1 = downwardRounding(19 * gamma1 + 17, 235);
+            int mu1 = gamma1 - downwardRounding(235 * xi1 + 1, 19);
+            int c2 = getRunningDayNumberOfNewYear(xi1);
+            int L = getRunningDayNumberOfNewYear(xi1 + 1) - c2;
+            int c8 = downwardRounding(L + 7, 2) % 15;
+            int c9 = 385 - L;
+            int c3 =
+                downwardRounding(384 * mu1 + 7, 13) +
+                c8 * downwardRounding(mu1 + 4, 12) +
+                c9 * downwardRounding(mu1 + 3, 12);
+            int gamma2 = gamma1 + downwardRounding(y4 - (c2 + c3), 33);
+            int xi2 = downwardRounding(19 * gamma2 + 17, 235);
+            int mu2 = gamma2 - downwardRounding(235 * xi2 + 1, 19);
+            c2 = getRunningDayNumberOfNewYear(xi2);
+            L = getRunningDayNumberOfNewYear(xi2 + 1) - c2;
+            c8 = downwardRounding(L + 7, 2) % 15;
+            c9 = 385 - L;
+            c3 =
+                downwardRounding(384 * mu2 + 7, 13) +
+                c8 * downwardRounding(mu2 + 4, 12) +
+                c9 * downwardRounding(mu2 + 3, 12);
+            int gamma3 = gamma2 + downwardRounding(y4 - (c2 + c3), 33);
+            int xi3 = downwardRounding(19 * gamma3 + 17, 235);
+            int mu3 = gamma3 - downwardRounding(235 * xi3 + 1, 19);
+            c2 = getRunningDayNumberOfNewYear(xi3);
+            L = getRunningDayNumberOfNewYear(xi3 + 1) - c2;
+            c8 = downwardRounding(L + 7, 2) % 15;
+            c9 = 385 - L;
+            c3 =
+                downwardRounding(384 * mu3 + 7, 13) +
+                c8 * downwardRounding(mu3 + 4, 12) +
+                c9 * downwardRounding(mu3 + 3, 12);
+            int z4 = y4 - (c2 + c3);
+            int c = downwardRounding(12 - mu3, 7);
+            year = xi3 + 1 - c;
+            month = mu3 + 1;
+            day = z4 + 1;
+        }
+
+
         #endregion
 
         #region Islamic calendar
@@ -417,6 +554,26 @@ namespace GKCommon
             year = iFloor(((30.0 * (jd - ISLAMIC_EPOCH) + 10646.0) / 10631.0));
             month = Math.Min(12, iCeil(((jd - (29.0 + islamic_to_jd(year, 1, 1))) / 29.5)) + 1);
             day = (int)Math.Truncate(jd - islamic_to_jd(year, month, 1) + 1.0);
+        }
+
+        // Based on http://aa.quae.nl/en/reken/juliaansedag.html
+        public static uint islamic_to_jd3(int year, int month, int day)
+        {
+            year = downwardRounding(10631 * year - 10617, 30);
+            // `325 * month - 320` is always greater than 0; therefore, I only use C#'s truncation rule (or C++ std:
+            // 4.9 Floating-integral conversions [conv.fpint]).
+            month = (325 * month - 320) / 11;
+            return (uint) (year + month + day + 1948439);
+        }
+
+        // Based on http://aa.quae.nl/en/reken/juliaansedag.html
+        public static void jd_to_islamic3(uint jd, out int year, out int month, out int day)
+        {
+            int k2 = 30 * (((int) (jd)) - 1948440) + 15;
+            int k1 = ((k2 % 10631) / 30) * 11 + 5;
+            year = k2 / 10631 + 1;
+            month = k1 / 325 + 1;
+            day = (k1 % 325) / 11 + 1;
         }
 
         #endregion
