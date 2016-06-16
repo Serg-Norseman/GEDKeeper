@@ -72,7 +72,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmAssociationEdit.btnAccept_Click(): " + ex.Message);
+                this.fBase.Host.LogWrite("AssociationEditDlg.btnAccept_Click(): " + ex.Message);
                 base.DialogResult = DialogResult.None;
             }
         }

@@ -19,7 +19,6 @@ namespace GKUI
 
 		private void InitializeComponent()
 		{
-		    System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ScriptEditWin));
 		    this.ToolBar1 = new System.Windows.Forms.ToolStrip();
 		    this.tbNewScript = new System.Windows.Forms.ToolStripButton();
 		    this.tbLoadScript = new System.Windows.Forms.ToolStripButton();
@@ -47,45 +46,42 @@ namespace GKUI
 		    		    		    this.tbRun});
 		    this.ToolBar1.Location = new System.Drawing.Point(0, 0);
 		    this.ToolBar1.Name = "ToolBar1";
-		    this.ToolBar1.Size = new System.Drawing.Size(712, 27);
+		    this.ToolBar1.Size = new System.Drawing.Size(712, 25);
 		    this.ToolBar1.TabIndex = 0;
 		    // 
 		    // tbNewScript
 		    // 
-		    this.tbNewScript.Image = global::GKResources.iCreateNew;
 		    this.tbNewScript.Name = "tbNewScript";
-		    this.tbNewScript.Size = new System.Drawing.Size(24, 24);
+		    this.tbNewScript.Size = new System.Drawing.Size(23, 22);
 		    this.tbNewScript.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 		    // 
 		    // tbLoadScript
 		    // 
-		    this.tbLoadScript.Image = global::GKResources.iLoad;
 		    this.tbLoadScript.Name = "tbLoadScript";
-		    this.tbLoadScript.Size = new System.Drawing.Size(24, 24);
+		    this.tbLoadScript.Size = new System.Drawing.Size(23, 22);
 		    this.tbLoadScript.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 		    // 
 		    // tbSaveScript
 		    // 
-		    this.tbSaveScript.Image = global::GKResources.iSave;
 		    this.tbSaveScript.Name = "tbSaveScript";
-		    this.tbSaveScript.Size = new System.Drawing.Size(24, 24);
+		    this.tbSaveScript.Size = new System.Drawing.Size(23, 22);
 		    this.tbSaveScript.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 		    // 
 		    // ToolButton2
 		    // 
 		    this.ToolButton2.Name = "ToolButton2";
-		    this.ToolButton2.Size = new System.Drawing.Size(6, 27);
+		    this.ToolButton2.Size = new System.Drawing.Size(6, 25);
 		    // 
 		    // tbRun
 		    // 
 		    this.tbRun.Name = "tbRun";
-		    this.tbRun.Size = new System.Drawing.Size(24, 24);
+		    this.tbRun.Size = new System.Drawing.Size(23, 22);
 		    this.tbRun.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 		    // 
 		    // splitContainer1
 		    // 
 		    this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-		    this.splitContainer1.Location = new System.Drawing.Point(0, 27);
+		    this.splitContainer1.Location = new System.Drawing.Point(0, 25);
 		    this.splitContainer1.Name = "splitContainer1";
 		    this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
 		    // 
@@ -96,8 +92,8 @@ namespace GKUI
 		    // splitContainer1.Panel2
 		    // 
 		    this.splitContainer1.Panel2.Controls.Add(this.txtDebugOutput);
-		    this.splitContainer1.Size = new System.Drawing.Size(712, 407);
-		    this.splitContainer1.SplitterDistance = 239;
+		    this.splitContainer1.Size = new System.Drawing.Size(712, 409);
+		    this.splitContainer1.SplitterDistance = 240;
 		    this.splitContainer1.TabIndex = 3;
 		    // 
 		    // txtScriptText
@@ -107,7 +103,7 @@ namespace GKUI
 		    this.txtScriptText.Multiline = true;
 		    this.txtScriptText.Name = "txtScriptText";
 		    this.txtScriptText.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-		    this.txtScriptText.Size = new System.Drawing.Size(712, 239);
+		    this.txtScriptText.Size = new System.Drawing.Size(712, 240);
 		    this.txtScriptText.TabIndex = 2;
 		    // 
 		    // txtDebugOutput
@@ -118,7 +114,7 @@ namespace GKUI
 		    this.txtDebugOutput.Name = "txtDebugOutput";
 		    this.txtDebugOutput.ReadOnly = true;
 		    this.txtDebugOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-		    this.txtDebugOutput.Size = new System.Drawing.Size(712, 164);
+		    this.txtDebugOutput.Size = new System.Drawing.Size(712, 165);
 		    this.txtDebugOutput.TabIndex = 3;
 		    // 
 		    // ScriptEditWin
@@ -129,11 +125,13 @@ namespace GKUI
 		    this.Controls.Add(this.splitContainer1);
 		    this.Controls.Add(this.ToolBar1);
 		    this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+		    this.KeyPreview = true;
 		    this.Name = "ScriptEditWin";
 		    this.ShowInTaskbar = false;
 		    this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-		    this.Text = "ScriptDaemon";
-		    this.Closing += new System.ComponentModel.CancelEventHandler(this.TfmScriptDaemon_Closing);
+		    this.Text = "ScriptEditWin";
+		    this.Closing += new System.ComponentModel.CancelEventHandler(this.ScriptEditWin_Closing);
+		    this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ScriptEditWin_KeyDown);
 		    this.ToolBar1.ResumeLayout(false);
 		    this.ToolBar1.PerformLayout();
 		    this.splitContainer1.Panel1.ResumeLayout(false);

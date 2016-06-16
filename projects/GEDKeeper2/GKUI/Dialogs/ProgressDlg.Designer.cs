@@ -106,7 +106,7 @@
 		    this.lblTotalVal.Text = "lblTotalVal";
 		    this.lblTotalVal.TextAlign = System.Drawing.ContentAlignment.TopRight;
 		    // 
-		    // TfmProgress
+		    // ProgressDlg
 		    // 
 		    this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
 		    this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;

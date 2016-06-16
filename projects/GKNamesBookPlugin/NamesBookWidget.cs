@@ -77,12 +77,12 @@ namespace GKNamesBookPlugin
             base.Dispose(disposing);
         }
 
-        private void TfmNamesBook_Load(object sender, EventArgs e)
+        private void NamesBookWidget_Load(object sender, EventArgs e)
         {
             this.fPlugin.Host.WidgetShow(this.fPlugin);
         }
 
-        private void TfmNamesBook_Closed(object sender, EventArgs e)
+        private void NamesBookWidget_Closed(object sender, EventArgs e)
         {
             this.fPlugin.Host.WidgetClose(this.fPlugin);
         }

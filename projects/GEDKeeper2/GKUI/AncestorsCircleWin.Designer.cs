@@ -31,8 +31,8 @@ namespace GKUI
 			this.Name = "AncestorsCircleWin";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Circle of Ancestors";
-			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TfmAncestors_KeyDown);
+			this.Text = "AncestorsCircleWin";
+			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.AncestorsCircleWin_KeyDown);
 			this.ResumeLayout(false);
 		}
 	}

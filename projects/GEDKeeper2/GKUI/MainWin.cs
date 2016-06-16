@@ -201,7 +201,7 @@ namespace GKUI
                 this.fOptions.SaveToFile(this.GetAppDataPath() + "GEDKeeper2.ini");
                 this.fOptions.Dispose();
             } catch (Exception ex) {
-                this.LogWrite("TfmGEDKeeper.Form_Closed(): " + ex.Message);
+                this.LogWrite("MainWin.Form_Closed(): " + ex.Message);
             }
         }
 
@@ -254,7 +254,7 @@ namespace GKUI
                     }
                 }
             } catch (Exception ex) {
-                this.LogWrite("TfmGEDKeeper.Form_DragDrop(): " + ex.Message);
+                this.LogWrite("MainWin.Form_DragDrop(): " + ex.Message);
             }
         }
 
@@ -691,7 +691,7 @@ namespace GKUI
             OptionsDlg fmOptions = new OptionsDlg(this);
             try
             {
-                /*GlobalOptions options = TfmGEDKeeper.Instance.Options;
+                /*GlobalOptions options = MainWin.Instance.Options;
 				
 				IBase xbase = this.GetCurrentFile();
 				if (xbase != null) {
@@ -1223,7 +1223,7 @@ namespace GKUI
                     plugin.Shutdown();
                 }
             } catch (Exception ex) {
-                this.LogWrite("TfmGEDKeeper.UnloadPlugins(): " + ex.Message);
+                this.LogWrite("MainWin.UnloadPlugins(): " + ex.Message);
             }
         }
 
@@ -1261,11 +1261,11 @@ namespace GKUI
                             this.fPlugins.Add(plugin);
                         }
                     } catch (Exception ex) {
-                        this.LogWrite("TfmGEDKeeper.LoadPlugin(" + pfn + "): " + ex.Message);
+                        this.LogWrite("MainWin.LoadPlugin(" + pfn + "): " + ex.Message);
                     }
                 }
             } catch (Exception ex) {
-                this.LogWrite("TfmGEDKeeper.LoadPlugins(" + path + "): " + ex.Message);
+                this.LogWrite("MainWin.LoadPlugins(" + path + "): " + ex.Message);
             }
         }
 
@@ -1342,7 +1342,7 @@ namespace GKUI
                     try {
                         subscriber.NotifyRecord(aBase, record, action);
                     } catch (Exception ex) {
-                        Logger.LogWrite("TfmGEDKeeper.NotifyRecord(): " + ex.Message);
+                        Logger.LogWrite("MainWin.NotifyRecord(): " + ex.Message);
                     }
                 }
             }

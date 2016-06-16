@@ -240,7 +240,7 @@ namespace GKUI
 
                     if (child != null && family.AddChild(child))
                     {
-                        // this repetition necessary, because the call of CreatePersonDialog only works if person already has a father, 
+                        // this repetition necessary, because the call of CreatePersonDialog only works if person already has a father,
                         // what to call AddChild () is no; all this is necessary in order to in the namebook were correct patronymics.
                         MainWin.Instance.NamesTable.ImportNames(child);
                         
@@ -285,7 +285,7 @@ namespace GKUI
             }
         }
 
-        private void TfmChart_KeyDown(object sender, KeyEventArgs e)
+        private void TreeChartWin_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
             {
@@ -549,7 +549,7 @@ namespace GKUI
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmChart.RebuildTree(): " + ex.Message);
+                this.fBase.Host.LogWrite("TreeChartWin.RebuildTree(): " + ex.Message);
             }
         }
 
@@ -665,7 +665,7 @@ namespace GKUI
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmChart.GenChart(): " + ex.Message);
+                this.fBase.Host.LogWrite("TreeChartWin.GenChart(): " + ex.Message);
             }
         }
 

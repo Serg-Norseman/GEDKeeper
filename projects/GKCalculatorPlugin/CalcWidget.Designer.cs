@@ -48,13 +48,13 @@ namespace GKCalculatorPlugin
 			this.Controls.Add(this.edCalcResult);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25f, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 204);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-			this.Load += new System.EventHandler(this.TfmCalcWidget_Load);
-			this.Name = "TfmCalcWidget";
+			this.Load += new System.EventHandler(this.CalcWidget_Load);
+			this.Name = "CalcWidget";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "ExpCalc";
 			this.TopMost = true;
-			this.Closed += new System.EventHandler(this.TfmCalcWidget_Closed);
+			this.Closed += new System.EventHandler(this.CalcWidget_Closed);
 			this.ResumeLayout(false);
 		}
 	}

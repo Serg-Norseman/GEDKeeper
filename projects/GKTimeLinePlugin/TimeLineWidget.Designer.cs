@@ -66,13 +66,13 @@ namespace GKTimeLinePlugin
             this.Controls.Add(this.StatusBar1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Load += new System.EventHandler(this.TfmTimeLine_Load);
+            this.Load += new System.EventHandler(this.TimeLineWidget_Load);
             this.Name = "TimeLineWidget";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "TimeLineWidget";
             this.TopMost = true;
-            this.Closed += new System.EventHandler(this.TfmTimeLine_Closed);
+            this.Closed += new System.EventHandler(this.TimeLineWidget_Closed);
             ((System.ComponentModel.ISupportInitialize)(this.tbTimeLine)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.StatusBarPanel1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.StatusBarPanel2)).EndInit();

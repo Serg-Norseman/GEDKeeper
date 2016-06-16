@@ -76,7 +76,7 @@ namespace GKUI
             this.LoadList();
         }
 
-        private void TfmSlideshow_Load(object sender, System.EventArgs e)
+        private void SlideshowWin_Load(object sender, System.EventArgs e)
         {
             if (this.fFileRefs.Count > 0) {
                 this.fCurrentIndex = 0;
@@ -86,7 +86,7 @@ namespace GKUI
             }
         }
 
-        private void TfmMediaView_KeyDown(object sender, KeyEventArgs e)
+        private void SlideshowWin_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape) {
                 base.Close();

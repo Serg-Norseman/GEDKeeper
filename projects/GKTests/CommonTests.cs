@@ -189,8 +189,19 @@ namespace GKTests
             strList.Exchange(1, 2);
             Assert.AreEqual("string", strList[2]);
             Assert.AreEqual("list", strList[1]);
+
+            strList[2] = "string2";
+            Assert.AreEqual("string2", strList[2]);
+
+            object obj = new object();
+            strList.SetObject(2, obj);
+            Assert.AreEqual(obj, strList.GetObject(2));
+
+            strList.CaseSensitive = true;
+            Assert.IsTrue(strList.CaseSensitive);
             
             strList.Clear();
+            Assert.IsTrue(strList.IsEmpty());
         }
 
         [Test]

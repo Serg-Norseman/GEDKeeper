@@ -71,7 +71,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmGroupEdit.SetGroup(): " + ex.Message);
+                this.fBase.Host.LogWrite("GroupEditDlg.SetGroup(): " + ex.Message);
             }
         }
         
@@ -125,7 +125,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TfmGroupEdit.UpdateMembersSheet(): " + ex.Message);
+                Logger.LogWrite("GroupEditDlg.UpdateMembersSheet(): " + ex.Message);
             }
         }
 
@@ -174,7 +174,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmGroupEdit.btnAccept_Click(): " + ex.Message);
+                this.fBase.Host.LogWrite("GroupEditDlg.btnAccept_Click(): " + ex.Message);
                 base.DialogResult = DialogResult.None;
             }
         }

@@ -65,7 +65,7 @@
 			this.ShowInTaskbar = true;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "TextSearchWin";
-			this.Load += new System.EventHandler(this.TfmTextSearchLoad);
+			this.Load += new System.EventHandler(this.TextSearchWin_Load);
 			this.flowLayoutPanel1.ResumeLayout(false);
 			this.flowLayoutPanel1.PerformLayout();
 			this.ResumeLayout(false);

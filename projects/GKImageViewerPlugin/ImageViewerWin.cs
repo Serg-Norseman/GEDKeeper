@@ -53,7 +53,7 @@ namespace GKImageViewerPlugin
             this.SetLang();
         }
 
-        private void TfmMediaView_KeyDown(object sender, KeyEventArgs e)
+        private void ImageViewerWin_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
             {

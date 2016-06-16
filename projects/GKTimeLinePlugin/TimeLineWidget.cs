@@ -33,8 +33,8 @@ namespace GKTimeLinePlugin
     /// 
     /// </summary>
     public partial class TimeLineWidget : Form
-	{
-    	private readonly Plugin fPlugin;
+    {
+        private readonly Plugin fPlugin;
 
         private IBaseWindow fBase;
         private int fYearMin;
@@ -42,23 +42,23 @@ namespace GKTimeLinePlugin
         private int fYearCurrent;
 
         public TimeLineWidget(Plugin plugin) : base()
-		{
-			this.InitializeComponent();
-			
-			this.fPlugin = plugin;
-			
-			this.Text = this.fPlugin.LangMan.LS(PLS.LSID_MITimeLine);
-			
-            this.Location = new Point(10, Screen.PrimaryScreen.WorkingArea.Height - this.Height - 10);
-		}
-
-        private void TfmTimeLine_Load(object sender, EventArgs e)
         {
-        	this.fPlugin.Host.WidgetShow(this.fPlugin);
-        	this.BaseChanged(this.fPlugin.Host.GetCurrentFile());
+            this.InitializeComponent();
+            
+            this.fPlugin = plugin;
+            
+            this.Text = this.fPlugin.LangMan.LS(PLS.LSID_MITimeLine);
+            
+            this.Location = new Point(10, Screen.PrimaryScreen.WorkingArea.Height - this.Height - 10);
         }
 
-        private void TfmTimeLine_Closed(object sender, EventArgs e)
+        private void TimeLineWidget_Load(object sender, EventArgs e)
+        {
+            this.fPlugin.Host.WidgetShow(this.fPlugin);
+            this.BaseChanged(this.fPlugin.Host.GetCurrentFile());
+        }
+
+        private void TimeLineWidget_Closed(object sender, EventArgs e)
         {
             this.BaseChanged(null);
             this.fPlugin.Host.WidgetClose(this.fPlugin);
@@ -68,8 +68,8 @@ namespace GKTimeLinePlugin
         {
             if (this.fBase != aBase && this.fBase != null)
             {
-            	IListManager listMan = this.fBase.GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
-            	
+                IListManager listMan = this.fBase.GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
+                
                 listMan.ExternalFilter = null;
                 ((IIndividualListFilter)listMan.Filter).FilterLifeMode = FilterLifeMode.lmAll;
                 
@@ -84,7 +84,7 @@ namespace GKTimeLinePlugin
 
             if (this.fBase != null)
             {
-            	IListManager listMan = this.fBase.GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
+                IListManager listMan = this.fBase.GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
 
                 ((IIndividualListFilter)listMan.Filter).FilterLifeMode = FilterLifeMode.lmTimeLocked;
                 listMan.ExternalFilter = this.FilterHandler;
@@ -129,47 +129,47 @@ namespace GKTimeLinePlugin
             }
         }
 
-		private void tbTimeLine_ValueChanged(object sender, EventArgs e)
-		{
-			if (this.fBase != null) {
-			    this.fYearCurrent = this.tbTimeLine.Value;
+        private void tbTimeLine_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.fBase != null) {
+                this.fYearCurrent = this.tbTimeLine.Value;
                 this.fBase.ApplyFilter();
-			}
-			this.StatusUpdate();
-		}
+            }
+            this.StatusUpdate();
+        }
 
-		private void StatusUpdate()
-		{
-			if (this.fBase != null) {
-				this.StatusBarPanel1.Text = string.Format(this.fPlugin.LangMan.LS(PLS.LSID_TimeScale), this.fYearMin.ToString(), this.fYearMax.ToString());
-				this.StatusBarPanel2.Text = string.Format(this.fPlugin.LangMan.LS(PLS.LSID_CurrentYear), this.fYearCurrent.ToString());
-			} else {
-				this.StatusBarPanel1.Text = "";
-				this.StatusBarPanel2.Text = "";
-			}
-		}
+        private void StatusUpdate()
+        {
+            if (this.fBase != null) {
+                this.StatusBarPanel1.Text = string.Format(this.fPlugin.LangMan.LS(PLS.LSID_TimeScale), this.fYearMin.ToString(), this.fYearMax.ToString());
+                this.StatusBarPanel2.Text = string.Format(this.fPlugin.LangMan.LS(PLS.LSID_CurrentYear), this.fYearCurrent.ToString());
+            } else {
+                this.StatusBarPanel1.Text = "";
+                this.StatusBarPanel2.Text = "";
+            }
+        }
 
-		private void UpdateControls()
-		{
-			int max = this.fYearMax + 1;
+        private void UpdateControls()
+        {
+            int max = this.fYearMax + 1;
             int min = this.fYearMin - 1;
-			int cur = this.fYearCurrent;
-			if (min > max) {
-				int x = min;
-				min = max;
-				max = x;
-			}
-			if (cur < min) cur = min;
-			if (cur > max) cur = max;
+            int cur = this.fYearCurrent;
+            if (min > max) {
+                int x = min;
+                min = max;
+                max = x;
+            }
+            if (cur < min) cur = min;
+            if (cur > max) cur = max;
 
-			this.tbTimeLine.ValueChanged -= this.tbTimeLine_ValueChanged;
-			this.tbTimeLine.Maximum = max;
-			this.tbTimeLine.Minimum = min;
-			this.tbTimeLine.Value = cur;
-			this.tbTimeLine.ValueChanged += this.tbTimeLine_ValueChanged;
+            this.tbTimeLine.ValueChanged -= this.tbTimeLine_ValueChanged;
+            this.tbTimeLine.Maximum = max;
+            this.tbTimeLine.Minimum = min;
+            this.tbTimeLine.Value = cur;
+            this.tbTimeLine.ValueChanged += this.tbTimeLine_ValueChanged;
 
-			this.StatusUpdate();
-		}
+            this.StatusUpdate();
+        }
 
         // FIXME: perhaps it is necessary to define the maximum age by statistics
         private bool FilterHandler(GEDCOMRecord record)
@@ -196,10 +196,10 @@ namespace GKTimeLinePlugin
             }
             catch (Exception ex)
             {
-                this.fPlugin.Host.LogWrite("TfmTimeLine.FilterHandler(): " + ex.Message);
+                this.fPlugin.Host.LogWrite("TimeLineWidget.FilterHandler(): " + ex.Message);
             }
 
             return result;
         }
-	}
+    }
 }

@@ -17,7 +17,7 @@
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "MediaViewerWin";
-			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TfmMediaView_KeyDown);
+			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MediaViewerWin_KeyDown);
 			this.ResumeLayout(false);
 		}
 	}

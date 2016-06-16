@@ -197,7 +197,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmTreeFilter.btnAccept_Click(): " + ex.Message);
+                this.fBase.Host.LogWrite("TreeFilterDlg.btnAccept_Click(): " + ex.Message);
                 base.DialogResult = DialogResult.None;
             }
         }
@@ -207,7 +207,7 @@ namespace GKUI.Dialogs
             this.fFilter.Reset();
         }
 
-        private void TfmTreeFilter_Load(object sender, EventArgs e)
+        private void TreeFilterDlg_Load(object sender, EventArgs e)
         {
             GEDCOMTree tree = this.Base.Tree;
             this.fTemp = this.fFilter.BranchPersons;

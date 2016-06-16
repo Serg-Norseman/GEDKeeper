@@ -233,7 +233,7 @@ namespace GKCore.Lists
         protected abstract ListColumns GetDefaultListColumns();
 
         /// <summary>
-        /// Используется в блоке настройки общей фильтрации, TfmComFilter
+        /// Is used in dialog of common filters, CommonFilterDlg
         /// </summary>
         public abstract Type GetColumnsEnum();
 

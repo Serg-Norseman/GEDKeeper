@@ -124,7 +124,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("TfmSourceEdit.UpdateReposSheet(): " + ex.Message);
+                Logger.LogWrite("SourceEditDlg.UpdateReposSheet(): " + ex.Message);
             }
         }
         
@@ -187,7 +187,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmSourceEdit.btnAccept_Click(): " + ex.Message);
+                this.fBase.Host.LogWrite("SourceEditDlg.btnAccept_Click(): " + ex.Message);
                 base.DialogResult = DialogResult.None;
             }
         }

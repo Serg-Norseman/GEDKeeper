@@ -154,17 +154,17 @@ namespace GKUI
             }
         }
 
-        void TfmScriptDaemon_Closing(object sender, CancelEventArgs e)
+        private void ScriptEditWin_Closing(object sender, CancelEventArgs e)
         {
             e.Cancel = !this.CheckModified();
         }
 
-        void mmScriptText_TextChanged(object sender, EventArgs e)
+        private void mmScriptText_TextChanged(object sender, EventArgs e)
         {
             this.Modified = true;
         }
 
-        void ToolBar1_ButtonClick(object sender, EventArgs e)
+        private void ToolBar1_ButtonClick(object sender, EventArgs e)
         {
             if (sender == this.tbNewScript) {
                 this.NewScript();
@@ -181,6 +181,9 @@ namespace GKUI
         {
             this.InitializeComponent();
 
+            this.tbNewScript.Image = (Image)MainWin.ResourceManager.GetObjectEx("iCreateNew");
+            this.tbLoadScript.Image = (Image)MainWin.ResourceManager.GetObjectEx("iLoad");
+            this.tbSaveScript.Image = (Image)MainWin.ResourceManager.GetObjectEx("iSave");
             this.tbRun.Image = (Image)MainWin.ResourceManager.GetObjectEx("iStart");
 
             this.fBase = aBase;
@@ -198,6 +201,16 @@ namespace GKUI
             this.tbLoadScript.ToolTipText = LangMan.LS(LSID.LSID_LoadScriptTip);
             this.tbSaveScript.ToolTipText = LangMan.LS(LSID.LSID_SaveScriptTip);
             this.tbRun.ToolTipText = LangMan.LS(LSID.LSID_RunScriptTip);
+        }
+
+        private void ScriptEditWin_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Escape:
+                    base.Close();
+                    break;
+            }
         }
     }
 }

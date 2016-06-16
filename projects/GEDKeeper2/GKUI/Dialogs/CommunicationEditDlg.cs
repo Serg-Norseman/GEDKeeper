@@ -91,7 +91,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmCommunicationEdit.SetCommunication(): " + ex.Message);
+                this.fBase.Host.LogWrite("CommunicationEditDlg.SetCommunication(): " + ex.Message);
             }
         }
 
@@ -108,7 +108,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmCommunicationEdit.btnAccept_Click(): " + ex.Message);
+                this.fBase.Host.LogWrite("CommunicationEditDlg.btnAccept_Click(): " + ex.Message);
                 base.DialogResult = DialogResult.None;
             }
         }

@@ -348,7 +348,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmEventEdit.btnAccept_Click(): " + ex.Message);
+                this.fBase.Host.LogWrite("EventEditDlg.btnAccept_Click(): " + ex.Message);
                 base.DialogResult = DialogResult.None;
             }
         }
@@ -396,7 +396,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmEventEdit.DragDrop(): " + ex.Message);
+                this.fBase.Host.LogWrite("EventEditDlg.DragDrop(): " + ex.Message);
             }
         }
 

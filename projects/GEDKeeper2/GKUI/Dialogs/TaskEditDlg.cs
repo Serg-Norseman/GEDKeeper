@@ -94,7 +94,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmTaskEdit.SetTask(): " + ex.Message);
+                this.fBase.Host.LogWrite("TaskEditDlg.SetTask(): " + ex.Message);
             }
         }
 
@@ -122,7 +122,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmTaskEdit.btnAccept_Click(): " + ex.Message);
+                this.fBase.Host.LogWrite("TaskEditDlg.btnAccept_Click(): " + ex.Message);
                 base.DialogResult = DialogResult.None;
             }
         }

@@ -77,8 +77,9 @@ namespace GKTests
 
             Assert.AreEqual(1990, fContext.FindBirthYear(iRec));
             Assert.AreEqual(2010, fContext.FindDeathYear(iRec));
-            
-            //MediaStoreType GetStoreType(GEDCOMFileReference fileReference, ref string fileName)
+
+            //fContext.Clear();
+            //Assert.AreEqual(0, fContext.Tree.RecordsCount);
         }
         
         [Test]

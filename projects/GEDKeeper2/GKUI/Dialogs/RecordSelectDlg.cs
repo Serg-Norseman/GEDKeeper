@@ -143,7 +143,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmRecordSelect.btnSelect_Click(): " + ex.Message);
+                this.fBase.Host.LogWrite("RecordSelectDlg.btnSelect_Click(): " + ex.Message);
                 this.ResultRecord = null;
                 base.DialogResult = DialogResult.None;
             }
@@ -271,7 +271,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmRecordSelect.btnCreate_Click(): " + ex.Message);
+                this.fBase.Host.LogWrite("RecordSelectDlg.btnCreate_Click(): " + ex.Message);
                 this.ResultRecord = null;
                 base.DialogResult = DialogResult.None;
             }

@@ -73,7 +73,7 @@ namespace GKUI
             this.pageWebs.Text = LangMan.LS(LSID.LSID_Webs);
         }
 
-        private void TfmOrganizer_Load(object sender, EventArgs e)
+        private void OrganizerWin_Load(object sender, EventArgs e)
         {
             this.CollectData();
         }
@@ -136,6 +136,16 @@ namespace GKUI
 
             foreach (GEDCOMTag tag in addr.WebPages) {
                 AddItem(this.fWebsList, iName, tag.StringValue);
+            }
+        }
+
+        private void OrganizerWin_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Escape:
+                    base.Close();
+                    break;
             }
         }
     }

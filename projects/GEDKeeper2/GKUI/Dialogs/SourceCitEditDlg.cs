@@ -69,7 +69,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmSourceCitEdit.btnAccept_Click(): " + ex.Message);
+                this.fBase.Host.LogWrite("SourceCitEditDlg.btnAccept_Click(): " + ex.Message);
                 base.DialogResult = DialogResult.None;
             }
         }

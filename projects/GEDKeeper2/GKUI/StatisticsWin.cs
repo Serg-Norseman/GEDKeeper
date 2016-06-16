@@ -321,7 +321,7 @@ namespace GKUI
             lvItem.SubItems.Add(string.Format("{0:0.00}", item.FemaleVal));
         }
 
-        private void TfmStats_KeyDown(object sender, KeyEventArgs e)
+        private void StatisticsWin_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape) base.Close();
         }
@@ -341,7 +341,7 @@ namespace GKUI
             }
         }
 
-        private void TfmStats_Load(object sender, EventArgs e)
+        private void StatisticsWin_Load(object sender, EventArgs e)
         {
             this.UpdateCommonStats();
         }

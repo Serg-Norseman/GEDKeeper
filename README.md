@@ -4,6 +4,8 @@
 
 [![Build Status](https://travis-ci.org/Serg-Norseman/GEDKeeper.svg?branch=master)](https://travis-ci.org/Serg-Norseman/GEDKeeper)
 
+[GitHub Visualizer](http://ghv.artzub.com/#repo=GEDKeeper&climit=500&user=serg-norseman)
+
 ## English
 GEDKeeper program is developed for work with personal genealogical database.
 

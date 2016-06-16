@@ -95,7 +95,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmResearchEdit.SetResearch(): " + ex.Message);
+                this.fBase.Host.LogWrite("ResearchEditDlg.SetResearch(): " + ex.Message);
             }
         }
 
@@ -282,7 +282,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmResearchEdit.btnAccept_Click(): " + ex.Message);
+                this.fBase.Host.LogWrite("ResearchEditDlg.btnAccept_Click(): " + ex.Message);
                 base.DialogResult = DialogResult.None;
             }
         }

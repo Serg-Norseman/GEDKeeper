@@ -140,8 +140,8 @@ namespace GKUI
 			this.Name = "StatisticsWin";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "StatisticsWin";
-			this.Load += new System.EventHandler(this.TfmStats_Load);
-			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TfmStats_KeyDown);
+			this.Load += new System.EventHandler(this.StatisticsWin_Load);
+			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.StatisticsWin_KeyDown);
 			this.grpSummary.ResumeLayout(false);
 			this.Panel1.ResumeLayout(false);
 			this.Panel1.PerformLayout();

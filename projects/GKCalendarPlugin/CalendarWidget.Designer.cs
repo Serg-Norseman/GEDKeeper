@@ -39,13 +39,13 @@ namespace GKCalendarPlugin
 			base.Controls.Add(this.lvDates);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25f, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 204);
 			base.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-			this.Load += new System.EventHandler(this.TfmCalendar_Load);
+			this.Load += new System.EventHandler(this.CalendarWidget_Load);
 			base.Name = "CalendarWidget";
 			base.ShowInTaskbar = false;
 			base.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "CalendarWidget";
 			base.TopMost = true;
-			base.Closed += new System.EventHandler(this.TfmCalendar_Closed);
+			base.Closed += new System.EventHandler(this.CalendarWidget_Closed);
 			base.ResumeLayout(false);
 		}
 	}

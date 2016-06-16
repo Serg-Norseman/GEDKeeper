@@ -34,13 +34,13 @@ namespace GKNamesBookPlugin
 			this.Controls.Add(this.mmDesc);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25f, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 204);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-			this.Load += new System.EventHandler(this.TfmNamesBook_Load);
-			this.Name = "TfmNamesBook";
+			this.Load += new System.EventHandler(this.NamesBookWidget_Load);
+			this.Name = "NamesBookWidget";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-			this.Text = "TfmNamesBook";
+			this.Text = "NamesBookWidget";
 			this.TopMost = true;
-			this.Closed += new System.EventHandler(this.TfmNamesBook_Closed);
+			this.Closed += new System.EventHandler(this.NamesBookWidget_Closed);
 			this.ResumeLayout(false);
 		}
 	}

@@ -85,7 +85,7 @@ namespace GKUI
             MainWin.Instance.UpdateControls(false);
         }
 
-        private void TfmAncestors_KeyDown(object sender, KeyEventArgs e)
+        private void AncestorsCircleWin_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
             {

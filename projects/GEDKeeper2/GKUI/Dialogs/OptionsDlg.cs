@@ -255,7 +255,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fHost.LogWrite("TfmOptions.btnAccept_Click(): " + ex.Message);
+                this.fHost.LogWrite("OptionsDlg.btnAccept_Click(): " + ex.Message);
                 base.DialogResult = DialogResult.None;
             }
         }

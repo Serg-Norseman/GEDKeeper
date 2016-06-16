@@ -218,7 +218,7 @@ namespace GKUI
 			this.Name = "MapsViewerWin";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "MapsViewerWin";
-			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TfmMaps_KeyDown);
+			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MapsViewerWin_KeyDown);
 			this.PageControl1.ResumeLayout(false);
 			this.pagePlaces.ResumeLayout(false);
 			this.grpSelection.ResumeLayout(false);

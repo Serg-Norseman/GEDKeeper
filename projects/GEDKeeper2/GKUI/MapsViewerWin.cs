@@ -183,7 +183,7 @@ namespace GKUI
             this.chkLinesVisible.Enabled = this.radSelected.Checked;
         }
 
-        private void TfmMaps_KeyDown(object sender, KeyEventArgs e)
+        private void MapsViewerWin_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape) base.Close();
         }

@@ -177,7 +177,7 @@ namespace GKUI.Dialogs
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "TreeFilterDlg";
-			this.Load += new System.EventHandler(this.TfmTreeFilter_Load);
+			this.Load += new System.EventHandler(this.TreeFilterDlg_Load);
 			this.rgBranchCut.ResumeLayout(false);
 			this.rgBranchCut.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.edYear)).EndInit();

@@ -62,7 +62,7 @@ namespace GKUI.Dialogs
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TfmNoteEdit.btnAccept_Click(): " + ex.Message);
+                this.fBase.Host.LogWrite("NoteEditDlg.btnAccept_Click(): " + ex.Message);
                 base.DialogResult = DialogResult.None;
             }
         }

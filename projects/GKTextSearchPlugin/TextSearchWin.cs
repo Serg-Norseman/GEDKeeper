@@ -106,7 +106,7 @@ namespace GKTextSearchPlugin
             }
         }
 
-        void TfmTextSearchLoad(object sender, EventArgs e)
+        void TextSearchWin_Load(object sender, EventArgs e)
         {
             fPlugin.SearchMan.ReindexBase(fBase);
         }

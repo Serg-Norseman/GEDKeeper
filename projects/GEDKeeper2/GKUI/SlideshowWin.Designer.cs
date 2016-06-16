@@ -2,6 +2,14 @@
 {
 	partial class SlideshowWin
 	{
+		private System.ComponentModel.IContainer components;
+		private System.Windows.Forms.Timer timer1;
+		private System.Windows.Forms.ToolStripButton tbNext;
+		private System.Windows.Forms.ToolStripButton tbPrev;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+		private System.Windows.Forms.ToolStripButton tbStart;
+		private System.Windows.Forms.ToolStrip toolStrip1;
+
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
@@ -78,19 +86,12 @@
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "SlideshowWin";
-			this.Load += new System.EventHandler(this.TfmSlideshow_Load);
-			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TfmMediaView_KeyDown);
+			this.Load += new System.EventHandler(this.SlideshowWin_Load);
+			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SlideshowWin_KeyDown);
 			this.toolStrip1.ResumeLayout(false);
 			this.toolStrip1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
-		private System.ComponentModel.IContainer components;
-		private System.Windows.Forms.Timer timer1;
-		private System.Windows.Forms.ToolStripButton tbNext;
-		private System.Windows.Forms.ToolStripButton tbPrev;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-		private System.Windows.Forms.ToolStripButton tbStart;
-		private System.Windows.Forms.ToolStrip toolStrip1;
 	}
 }
