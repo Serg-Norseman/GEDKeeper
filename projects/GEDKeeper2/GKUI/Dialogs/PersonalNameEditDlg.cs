@@ -105,6 +105,10 @@ namespace GKUI.Dialogs
         public PersonalNameEditDlg(IBaseWindow aBase)
         {
             InitializeComponent();
+
+            this.btnAccept.Image = global::GKResources.iBtnAccept;
+            this.btnCancel.Image = global::GKResources.iBtnCancel;
+
             this.fBase = aBase;
 
             for (GEDCOMNameType nt = GEDCOMNameType.ntNone; nt <= GEDCOMNameType.ntMarried; nt++)

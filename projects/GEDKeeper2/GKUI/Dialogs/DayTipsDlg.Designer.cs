@@ -101,7 +101,6 @@ namespace GKUI.Dialogs
 			// Image1
 			// 
 			this.Image1.ErrorImage = null;
-			this.Image1.Image = global::GKResources.iTipsLight;
 			this.Image1.Location = new System.Drawing.Point(45, 29);
 			this.Image1.Name = "Image1";
 			this.Image1.Size = new System.Drawing.Size(57, 52);

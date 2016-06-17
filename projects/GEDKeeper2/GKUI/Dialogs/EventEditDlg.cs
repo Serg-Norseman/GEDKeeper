@@ -473,6 +473,12 @@ namespace GKUI.Dialogs
         public EventEditDlg(IBaseWindow aBase)
         {
             this.InitializeComponent();
+
+            this.btnAccept.Image = global::GKResources.iBtnAccept;
+            this.btnCancel.Image = global::GKResources.iBtnCancel;
+            this.btnPlaceAdd.Image = global::GKResources.iRecNew;
+            this.btnPlaceDelete.Image = global::GKResources.iRecDelete;
+
             this.fBase = aBase;
 
             int num = GKData.DateKinds.Length;

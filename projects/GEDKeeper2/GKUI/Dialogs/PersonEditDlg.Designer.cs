@@ -120,7 +120,6 @@ namespace GKUI.Dialogs
 		    // 
 		    // btnAccept
 		    // 
-		    this.btnAccept.Image = global::GKResources.iBtnAccept;
 		    this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 		    this.btnAccept.Location = new System.Drawing.Point(628, 661);
 		    this.btnAccept.Margin = new System.Windows.Forms.Padding(2);
@@ -134,7 +133,6 @@ namespace GKUI.Dialogs
 		    // btnCancel
 		    // 
 		    this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-		    this.btnCancel.Image = global::GKResources.iBtnCancel;
 		    this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 		    this.btnCancel.Location = new System.Drawing.Point(750, 661);
 		    this.btnCancel.Margin = new System.Windows.Forms.Padding(2);
@@ -279,7 +277,6 @@ namespace GKUI.Dialogs
 		    // 
 		    // btnPortraitAdd
 		    // 
-		    this.btnPortraitAdd.Image = global::GKResources.iRecNew;
 		    this.btnPortraitAdd.Location = new System.Drawing.Point(772, 185);
 		    this.btnPortraitAdd.Margin = new System.Windows.Forms.Padding(2);
 		    this.btnPortraitAdd.Name = "btnPortraitAdd";
@@ -289,7 +286,6 @@ namespace GKUI.Dialogs
 		    // 
 		    // btnPortraitDelete
 		    // 
-		    this.btnPortraitDelete.Image = global::GKResources.iRecDelete;
 		    this.btnPortraitDelete.Location = new System.Drawing.Point(818, 185);
 		    this.btnPortraitDelete.Margin = new System.Windows.Forms.Padding(2);
 		    this.btnPortraitDelete.Name = "btnPortraitDelete";
@@ -392,7 +388,6 @@ namespace GKUI.Dialogs
 		    // 
 		    // btnParentsAdd
 		    // 
-		    this.btnParentsAdd.Image = global::GKResources.iRecNew;
 		    this.btnParentsAdd.Location = new System.Drawing.Point(735, 6);
 		    this.btnParentsAdd.Margin = new System.Windows.Forms.Padding(2);
 		    this.btnParentsAdd.Name = "btnParentsAdd";
@@ -402,7 +397,6 @@ namespace GKUI.Dialogs
 		    // 
 		    // btnParentsEdit
 		    // 
-		    this.btnParentsEdit.Image = global::GKResources.iRecEdit;
 		    this.btnParentsEdit.Location = new System.Drawing.Point(776, 6);
 		    this.btnParentsEdit.Margin = new System.Windows.Forms.Padding(2);
 		    this.btnParentsEdit.Name = "btnParentsEdit";
@@ -412,7 +406,6 @@ namespace GKUI.Dialogs
 		    // 
 		    // btnParentsDelete
 		    // 
-		    this.btnParentsDelete.Image = global::GKResources.iRecDelete;
 		    this.btnParentsDelete.Location = new System.Drawing.Point(816, 6);
 		    this.btnParentsDelete.Margin = new System.Windows.Forms.Padding(2);
 		    this.btnParentsDelete.Name = "btnParentsDelete";
@@ -422,7 +415,6 @@ namespace GKUI.Dialogs
 		    // 
 		    // btnFatherAdd
 		    // 
-		    this.btnFatherAdd.Image = global::GKResources.iRecNew;
 		    this.btnFatherAdd.Location = new System.Drawing.Point(278, 42);
 		    this.btnFatherAdd.Margin = new System.Windows.Forms.Padding(2);
 		    this.btnFatherAdd.Name = "btnFatherAdd";
@@ -432,7 +424,6 @@ namespace GKUI.Dialogs
 		    // 
 		    // btnFatherDelete
 		    // 
-		    this.btnFatherDelete.Image = global::GKResources.iRecEdit;
 		    this.btnFatherDelete.Location = new System.Drawing.Point(322, 42);
 		    this.btnFatherDelete.Margin = new System.Windows.Forms.Padding(2);
 		    this.btnFatherDelete.Name = "btnFatherDelete";
@@ -442,7 +433,6 @@ namespace GKUI.Dialogs
 		    // 
 		    // btnFatherSel
 		    // 
-		    this.btnFatherSel.Image = global::GKResources.iRecDelete;
 		    this.btnFatherSel.Location = new System.Drawing.Point(368, 42);
 		    this.btnFatherSel.Margin = new System.Windows.Forms.Padding(2);
 		    this.btnFatherSel.Name = "btnFatherSel";
@@ -452,7 +442,6 @@ namespace GKUI.Dialogs
 		    // 
 		    // btnMotherAdd
 		    // 
-		    this.btnMotherAdd.Image = global::GKResources.iRecNew;
 		    this.btnMotherAdd.Location = new System.Drawing.Point(602, 42);
 		    this.btnMotherAdd.Margin = new System.Windows.Forms.Padding(2);
 		    this.btnMotherAdd.Name = "btnMotherAdd";
@@ -462,7 +451,6 @@ namespace GKUI.Dialogs
 		    // 
 		    // btnMotherDelete
 		    // 
-		    this.btnMotherDelete.Image = global::GKResources.iRecEdit;
 		    this.btnMotherDelete.Location = new System.Drawing.Point(648, 42);
 		    this.btnMotherDelete.Margin = new System.Windows.Forms.Padding(2);
 		    this.btnMotherDelete.Name = "btnMotherDelete";
@@ -472,7 +460,6 @@ namespace GKUI.Dialogs
 		    // 
 		    // btnMotherSel
 		    // 
-		    this.btnMotherSel.Image = global::GKResources.iRecDelete;
 		    this.btnMotherSel.Location = new System.Drawing.Point(692, 42);
 		    this.btnMotherSel.Margin = new System.Windows.Forms.Padding(2);
 		    this.btnMotherSel.Name = "btnMotherSel";
@@ -552,7 +539,6 @@ namespace GKUI.Dialogs
 		    // 
 		    // btnNameCopy
 		    // 
-		    this.btnNameCopy.Image = global::GKResources.iCopy;
 		    this.btnNameCopy.Location = new System.Drawing.Point(538, 661);
 		    this.btnNameCopy.Margin = new System.Windows.Forms.Padding(2);
 		    this.btnNameCopy.Name = "btnNameCopy";

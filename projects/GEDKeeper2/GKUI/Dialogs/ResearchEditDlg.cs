@@ -291,6 +291,9 @@ namespace GKUI.Dialogs
         {
             this.InitializeComponent();
 
+            this.btnAccept.Image = global::GKResources.iBtnAccept;
+            this.btnCancel.Image = global::GKResources.iBtnCancel;
+
             this.fBase = aBase;
 
             for (GKResearchPriority rp = GKResearchPriority.rpNone; rp <= GKResearchPriority.rpTop; rp++)

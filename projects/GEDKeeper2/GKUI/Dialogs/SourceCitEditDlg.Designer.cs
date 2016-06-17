@@ -31,7 +31,6 @@ namespace GKUI.Dialogs
 		    // 
 		    // btnAccept
 		    // 
-		    this.btnAccept.Image = global::GKResources.iBtnAccept;
 		    this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 		    this.btnAccept.Location = new System.Drawing.Point(216, 204);
 		    this.btnAccept.Margin = new System.Windows.Forms.Padding(4);
@@ -45,7 +44,6 @@ namespace GKUI.Dialogs
 		    // btnCancel
 		    // 
 		    this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-		    this.btnCancel.Image = global::GKResources.iBtnCancel;
 		    this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 		    this.btnCancel.Location = new System.Drawing.Point(325, 204);
 		    this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
@@ -85,7 +83,6 @@ namespace GKUI.Dialogs
 		    // 
 		    // btnSourceAdd
 		    // 
-		    this.btnSourceAdd.Image = global::GKResources.iRecNew;
 		    this.btnSourceAdd.Location = new System.Drawing.Point(391, 24);
 		    this.btnSourceAdd.Margin = new System.Windows.Forms.Padding(4);
 		    this.btnSourceAdd.Name = "btnSourceAdd";

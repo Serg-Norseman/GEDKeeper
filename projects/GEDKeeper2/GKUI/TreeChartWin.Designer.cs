@@ -118,7 +118,6 @@ namespace GKUI
 		    // 
 		    // tbImageSave
 		    // 
-		    this.tbImageSave.Image = global::GKResources.iSaveImage;
 		    this.tbImageSave.Name = "tbImageSave";
 		    this.tbImageSave.Size = new System.Drawing.Size(24, 24);
 		    this.tbImageSave.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
@@ -232,7 +231,6 @@ namespace GKUI
 		    // tbModes
 		    // 
 		    this.tbModes.DropDown = this.MenuModes;
-		    this.tbModes.Image = global::GKResources.iTools;
 		    this.tbModes.Name = "tbModes";
 		    this.tbModes.Size = new System.Drawing.Size(33, 24);
 		    // 

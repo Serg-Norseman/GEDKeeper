@@ -912,6 +912,22 @@ namespace GKUI.Dialogs
         public PersonEditDlg(IBaseWindow aBase)
         {
             this.InitializeComponent();
+
+            this.btnAccept.Image = global::GKResources.iBtnAccept;
+            this.btnCancel.Image = global::GKResources.iBtnCancel;
+            this.btnPortraitAdd.Image = global::GKResources.iRecNew;
+            this.btnPortraitDelete.Image = global::GKResources.iRecDelete;
+            this.btnParentsAdd.Image = global::GKResources.iRecNew;
+            this.btnParentsEdit.Image = global::GKResources.iRecEdit;
+            this.btnParentsDelete.Image = global::GKResources.iRecDelete;
+            this.btnFatherAdd.Image = global::GKResources.iRecNew;
+            this.btnFatherDelete.Image = global::GKResources.iRecEdit;
+            this.btnFatherSel.Image = global::GKResources.iRecDelete;
+            this.btnMotherAdd.Image = global::GKResources.iRecNew;
+            this.btnMotherDelete.Image = global::GKResources.iRecEdit;
+            this.btnMotherSel.Image = global::GKResources.iRecDelete;
+            this.btnNameCopy.Image = global::GKResources.iCopy;
+
             this.fBase = aBase;
 
             for (GEDCOMRestriction res = GEDCOMRestriction.rnNone; res <= GEDCOMRestriction.rnPrivacy; res++)
@@ -983,14 +999,14 @@ namespace GKUI.Dialogs
             this.toolTip1.SetToolTip(this.btnPortraitDelete, LangMan.LS(LSID.LSID_PortraitDeleteTip));
             this.toolTip1.SetToolTip(this.btnParentsAdd, LangMan.LS(LSID.LSID_ParentsAddTip));
             this.toolTip1.SetToolTip(this.btnParentsEdit, LangMan.LS(LSID.LSID_ParentsEditTip));
-			this.toolTip1.SetToolTip(this.btnParentsDelete, LangMan.LS(LSID.LSID_ParentsDeleteTip));
-			this.toolTip1.SetToolTip(this.btnFatherAdd, LangMan.LS(LSID.LSID_FatherAddTip));
-			this.toolTip1.SetToolTip(this.btnFatherDelete, LangMan.LS(LSID.LSID_FatherDeleteTip));
-			this.toolTip1.SetToolTip(this.btnFatherSel, LangMan.LS(LSID.LSID_FatherSelTip));
-			this.toolTip1.SetToolTip(this.btnMotherAdd, LangMan.LS(LSID.LSID_MotherAddTip));
-			this.toolTip1.SetToolTip(this.btnMotherDelete, LangMan.LS(LSID.LSID_MotherDeleteTip));
-			this.toolTip1.SetToolTip(this.btnMotherSel, LangMan.LS(LSID.LSID_MotherSelTip));
-			this.toolTip1.SetToolTip(this.btnNameCopy, LangMan.LS(LSID.LSID_NameCopyTip));
+            this.toolTip1.SetToolTip(this.btnParentsDelete, LangMan.LS(LSID.LSID_ParentsDeleteTip));
+            this.toolTip1.SetToolTip(this.btnFatherAdd, LangMan.LS(LSID.LSID_FatherAddTip));
+            this.toolTip1.SetToolTip(this.btnFatherDelete, LangMan.LS(LSID.LSID_FatherDeleteTip));
+            this.toolTip1.SetToolTip(this.btnFatherSel, LangMan.LS(LSID.LSID_FatherSelTip));
+            this.toolTip1.SetToolTip(this.btnMotherAdd, LangMan.LS(LSID.LSID_MotherAddTip));
+            this.toolTip1.SetToolTip(this.btnMotherDelete, LangMan.LS(LSID.LSID_MotherDeleteTip));
+            this.toolTip1.SetToolTip(this.btnMotherSel, LangMan.LS(LSID.LSID_MotherSelTip));
+            this.toolTip1.SetToolTip(this.btnNameCopy, LangMan.LS(LSID.LSID_NameCopyTip));
         }
     }
 }

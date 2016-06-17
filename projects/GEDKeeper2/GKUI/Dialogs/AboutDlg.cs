@@ -34,13 +34,17 @@ namespace GKUI.Dialogs
         public AboutDlg()
         {
             this.InitializeComponent();
+
+            this.btnClose.Image = global::GKResources.iBtnAccept;
+
             this.Text = LangMan.LS(LSID.LSID_MIAbout);
             this.btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
         }
 
         private void LabelMail_Click(object sender, EventArgs e)
         {
-            Process.Start(this.lblMail.Text);
+            Label lbl = sender as Label;
+            Process.Start(lbl.Text);
         }
 
         public static void ShowAbout()

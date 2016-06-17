@@ -146,6 +146,10 @@ namespace GKUI.Dialogs
         {
             this.InitializeComponent();
 
+            this.btnAccept.Image = global::GKResources.iBtnAccept;
+            this.btnCancel.Image = global::GKResources.iBtnCancel;
+            this.btnSourceAdd.Image = global::GKResources.iRecNew;
+
             this.fBase = aBase;
 
             for (int i = 0; i < GKData.CertaintyAssessments.Length; i++)

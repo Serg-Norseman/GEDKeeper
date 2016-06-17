@@ -72,7 +72,10 @@ namespace GKUI.Dialogs
         public RecordSelectDlg(IBaseWindow aBase)
         {
             this.InitializeComponent();
-            
+
+            this.btnSelect.Image = global::GKResources.iBtnAccept;
+            this.btnCancel.Image = global::GKResources.iBtnCancel;
+
             this.fBase = aBase;
             this.fFilter = "*";
             

@@ -94,6 +94,10 @@ namespace GKUI.Dialogs
         public NameEditDlg(IBaseWindow aBase)
         {
             this.InitializeComponent();
+
+            this.btnAccept.Image = global::GKResources.iBtnAccept;
+            this.btnCancel.Image = global::GKResources.iBtnCancel;
+
             this.fBase = aBase;
 
             for (GEDCOMSex sx = GEDCOMSex.svNone; sx <= GEDCOMSex.svLast; sx++)

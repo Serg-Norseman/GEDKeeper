@@ -87,7 +87,6 @@ namespace GKUI.Dialogs
 		    // 
 		    // btnAccept
 		    // 
-		    this.btnAccept.Image = global::GKResources.iBtnAccept;
 		    this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 		    this.btnAccept.Location = new System.Drawing.Point(371, 447);
 		    this.btnAccept.Name = "btnAccept";
@@ -100,7 +99,6 @@ namespace GKUI.Dialogs
 		    // btnCancel
 		    // 
 		    this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-		    this.btnCancel.Image = global::GKResources.iBtnCancel;
 		    this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 		    this.btnCancel.Location = new System.Drawing.Point(494, 447);
 		    this.btnCancel.Name = "btnCancel";
@@ -230,7 +228,6 @@ namespace GKUI.Dialogs
 		    // btnPlaceAdd
 		    // 
 		    this.btnPlaceAdd.Enabled = false;
-		    this.btnPlaceAdd.Image = global::GKResources.iRecNew;
 		    this.btnPlaceAdd.Location = new System.Drawing.Point(511, 142);
 		    this.btnPlaceAdd.Name = "btnPlaceAdd";
 		    this.btnPlaceAdd.Size = new System.Drawing.Size(39, 34);
@@ -240,7 +237,6 @@ namespace GKUI.Dialogs
 		    // btnPlaceDelete
 		    // 
 		    this.btnPlaceDelete.Enabled = false;
-		    this.btnPlaceDelete.Image = global::GKResources.iRecDelete;
 		    this.btnPlaceDelete.Location = new System.Drawing.Point(557, 142);
 		    this.btnPlaceDelete.Name = "btnPlaceDelete";
 		    this.btnPlaceDelete.Size = new System.Drawing.Size(39, 34);

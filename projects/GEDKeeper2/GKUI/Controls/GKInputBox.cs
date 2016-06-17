@@ -41,6 +41,9 @@ namespace GKUI.Controls
         {
             this.InitializeComponent();
 
+            this.btnAccept.Image = global::GKResources.iBtnAccept;
+            this.btnCancel.Image = global::GKResources.iBtnCancel;
+
             this.Text = caption;
             this.label1.Text = prompt;
             this.Value = value;

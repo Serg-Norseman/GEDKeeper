@@ -80,6 +80,10 @@ namespace GKUI.Dialogs
         public RepositoryEditDlg(IBaseWindow aBase)
         {
             this.InitializeComponent();
+
+            this.btnAccept.Image = global::GKResources.iBtnAccept;
+            this.btnCancel.Image = global::GKResources.iBtnCancel;
+
             this.fBase = aBase;
 
             this.fNotesList = new GKNotesSheet(this, this.pageNotes);

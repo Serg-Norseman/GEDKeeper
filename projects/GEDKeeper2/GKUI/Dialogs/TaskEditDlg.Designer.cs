@@ -102,7 +102,6 @@ namespace GKUI.Dialogs
 		    // 
 		    // btnGoalSelect
 		    // 
-		    this.btnGoalSelect.Image = global::GKResources.iRecNew;
 		    this.btnGoalSelect.Location = new System.Drawing.Point(627, 16);
 		    this.btnGoalSelect.Name = "btnGoalSelect";
 		    this.btnGoalSelect.Size = new System.Drawing.Size(39, 34);
@@ -154,7 +153,6 @@ namespace GKUI.Dialogs
 		    // 
 		    // btnAccept
 		    // 
-		    this.btnAccept.Image = global::GKResources.iBtnAccept;
 		    this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 		    this.btnAccept.Location = new System.Drawing.Point(426, 447);
 		    this.btnAccept.Name = "btnAccept";
@@ -167,7 +165,6 @@ namespace GKUI.Dialogs
 		    // btnCancel
 		    // 
 		    this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-		    this.btnCancel.Image = global::GKResources.iBtnCancel;
 		    this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 		    this.btnCancel.Location = new System.Drawing.Point(549, 447);
 		    this.btnCancel.Name = "btnCancel";

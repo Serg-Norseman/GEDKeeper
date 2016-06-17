@@ -189,6 +189,10 @@ namespace GKUI.Dialogs
         public MediaEditDlg(IBaseWindow aBase)
         {
             this.InitializeComponent();
+
+            this.btnAccept.Image = global::GKResources.iBtnAccept;
+            this.btnCancel.Image = global::GKResources.iBtnCancel;
+
             this.fBase = aBase;
 
             for (GEDCOMMediaType mt = GEDCOMMediaType.mtNone; mt <= GEDCOMMediaType.mtLast; mt++)

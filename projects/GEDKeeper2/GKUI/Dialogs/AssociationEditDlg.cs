@@ -86,6 +86,11 @@ namespace GKUI.Dialogs
         public AssociationEditDlg(IBaseWindow aBase)
         {
             this.InitializeComponent();
+
+            this.btnPersonAdd.Image = global::GKResources.iRecNew;
+            this.btnAccept.Image = global::GKResources.iBtnAccept;
+            this.btnCancel.Image = global::GKResources.iBtnCancel;
+
             this.fBase = aBase;
 
             int num = MainWin.Instance.Options.Relations.Count;
