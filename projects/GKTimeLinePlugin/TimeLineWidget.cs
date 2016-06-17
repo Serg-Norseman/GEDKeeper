@@ -73,7 +73,7 @@ namespace GKTimeLinePlugin
                 listMan.ExternalFilter = null;
                 ((IIndividualListFilter)listMan.Filter).FilterLifeMode = FilterLifeMode.lmAll;
                 
-                this.fBase.ApplyFilter();
+                this.fBase.ApplyFilter(GEDCOMRecordType.rtIndividual);
             }
 
             this.fBase = aBase;
@@ -91,7 +91,7 @@ namespace GKTimeLinePlugin
 
                 this.CollectData();
                 
-                this.fBase.ApplyFilter();
+                this.fBase.ApplyFilter(GEDCOMRecordType.rtIndividual);
             }
 
             this.UpdateControls();
@@ -133,7 +133,7 @@ namespace GKTimeLinePlugin
         {
             if (this.fBase != null) {
                 this.fYearCurrent = this.tbTimeLine.Value;
-                this.fBase.ApplyFilter();
+                this.fBase.ApplyFilter(GEDCOMRecordType.rtIndividual);
             }
             this.StatusUpdate();
         }

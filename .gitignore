@@ -3,6 +3,7 @@
 /*.exe*
 /*.dll
 *.pdb
+*.mdb
 /*.xml
 *.suo
 *.userprefs

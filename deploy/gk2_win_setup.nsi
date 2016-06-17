@@ -99,6 +99,10 @@ SectionGroup /e "языки"
 	Section "English"
   		SetOutPath "$INSTDIR\locales"
   		File "..\locales\english.lng"
+
+		CreateDirectory "$INSTDIR\locales\help_enu"
+		SetOutPath "$INSTDIR\locales\help_enu"
+		File "..\locales\help_enu\*.*"
 	SectionEnd
 
 	Section "”крањнська"

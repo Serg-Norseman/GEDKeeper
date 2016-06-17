@@ -4,7 +4,7 @@ EXT="ged"
 COMMENT="Personal genealogical database editor"
 # APP_PATH=/usr/bin/
 APP_VER="2.6.0"
-DEV_PATH="/home/norseman/share/GEDKeeper"
+DEV_PATH="/home/norseman/share/gkdev/GEDKeeper"
 PACK_PATH="gedkeeper-$APP_VER"
 LIB_PATH="$PACK_PATH/usr/lib/gedkeeper"
 BIN_PATH="$PACK_PATH/usr/bin"
@@ -29,13 +29,17 @@ cp $DEV_PATH/deploy/application-x-gedkeeper.xml ~/$PACK_PATH/usr/share/mime/pack
 
 cp $DEV_PATH/GEDKeeper2.exe ~/$LIB_PATH
 cp $DEV_PATH/GKCommon.dll ~/$LIB_PATH
+
 cp $DEV_PATH/ArborGVT.dll ~/$LIB_PATH
+cp $DEV_PATH/DotNetRtfWriter.dll ~/$LIB_PATH
 cp $DEV_PATH/ExcelLibrary.dll ~/$LIB_PATH
 cp $DEV_PATH/itextsharp.dll ~/$LIB_PATH
-cp $DEV_PATH/lua51.dll ~/$LIB_PATH
-cp $DEV_PATH/LuaInterface.dll ~/$LIB_PATH
+cp $DEV_PATH/KopiLua.dll ~/$LIB_PATH
+cp $DEV_PATH/NLua.dll ~/$LIB_PATH
 cp $DEV_PATH/ZedGraph.dll ~/$LIB_PATH
+
 cp $DEV_PATH/LICENSE ~/$LIB_PATH
+
 cp -r $DEV_PATH/locales/ ~/$LIB_PATH/
 cp -r $DEV_PATH/plugins/ ~/$LIB_PATH/
 cp -r $DEV_PATH/scripts/ ~/$LIB_PATH/

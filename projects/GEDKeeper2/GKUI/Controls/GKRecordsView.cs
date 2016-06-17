@@ -373,6 +373,9 @@ namespace GKUI.Controls
                 this.BeginUpdates();
                 try
                 {
+                    //this.SelectedIndices.Clear();
+                    //this.SelectedItems.Clear();
+
                     this.fListMan.InitFilter();
 
                     int contentSize = this.fTree.RecordsCount;
@@ -393,10 +396,18 @@ namespace GKUI.Controls
                         }
                     }
 
+                    this.SortContents();
+
                     this.fFilteredCount = this.fContentList.Count;
                     this.VirtualListSize = this.fContentList.Count;
 
-                    this.SortContents();
+                    #if __MonoCS__
+                    if (this.fContentList.Count != 0)
+                    {
+                        this.TopItem = this.Items[0];
+                    }
+                    #endif
+
                     base.ResizeColumn(autosizeColumn);
                 }
                 finally

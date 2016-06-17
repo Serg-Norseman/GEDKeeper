@@ -400,6 +400,14 @@ namespace GKUI
             }
         }
 
+        public void ApplyFilter(GEDCOMRecordType recType)
+        {
+            if (this.fTree.RecordsCount > 0)
+            {
+                this.RefreshRecordsView(recType);
+            }
+        }
+
         public void ChangeRecord(GEDCOMRecord record)
         {
             if (record == null) return;
@@ -653,13 +661,15 @@ namespace GKUI
             this.PageRecords_SelectedIndexChanged(null, null);
         }
 
-        /*public void RefreshRecordsView(GEDCOMRecordType recType)
-		{
-			GKRecordsView rView = this.GetRecordsViewByType(recType);
-			if (rView == null) return;
+        public void RefreshRecordsView(GEDCOMRecordType recType)
+        {
+            GKRecordsView rView = this.GetRecordsViewByType(recType);
+            if (rView == null) return;
 
-			rView.UpdateContents(this.fShieldState, false, -1);
-		}*/
+            rView.UpdateContents(this.fShieldState, false, -1);
+
+            this.PageRecords_SelectedIndexChanged(null, null);
+        }
         
         public void RecordNotify(GEDCOMRecord record, RecordAction notify)
         {
@@ -790,9 +800,10 @@ namespace GKUI
                 case GEDCOMRecordType.rtIndividual:
                     using (PersonsFilterDlg fmFilter = new PersonsFilterDlg(this, rView.ListMan)) {
                         DialogResult res = MainWin.Instance.ShowModalEx(fmFilter, false);
-                        if (res == DialogResult.OK) this.ApplyFilter();
+                        if (res == DialogResult.OK) this.ApplyFilter(rt);
                     }
                     break;
+
                 case GEDCOMRecordType.rtFamily:
                 case GEDCOMRecordType.rtNote:
                 case GEDCOMRecordType.rtMultimedia:
@@ -805,7 +816,7 @@ namespace GKUI
                 case GEDCOMRecordType.rtLocation:
                     using (CommonFilterDlg fmComFilter = new CommonFilterDlg(this, rView.ListMan)) {
                         DialogResult res = MainWin.Instance.ShowModalEx(fmComFilter, false);
-                        if (res == DialogResult.OK) this.ApplyFilter();
+                        if (res == DialogResult.OK) this.ApplyFilter(rt);
                     }
                     break;
             }

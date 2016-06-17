@@ -39,6 +39,7 @@ namespace GKCore.Interfaces
 
         void Activate();
         void ApplyFilter();
+        void ApplyFilter(GEDCOMRecordType recType);
         void ChangeRecord(GEDCOMRecord record);
         void Close();
 

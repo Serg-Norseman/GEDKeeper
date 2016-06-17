@@ -62,7 +62,7 @@
     <CodeAnalysisRuleSet>..\gk21.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
     <DefineConstants>DEBUG;TRACE;GK_LINUX</DefineConstants>
-    <OutputPath>.</OutputPath>
+    <OutputPath>..\..</OutputPath>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
