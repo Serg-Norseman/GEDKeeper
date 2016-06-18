@@ -35,6 +35,7 @@ Section "GEDKeeper2 (необходимо)"
   File "..\GKCommon.dll"
 
   File "..\ArborGVT.dll"
+  File "..\DotNetRtfWriter.dll"
   File "..\ExcelLibrary.dll"
   File "..\itextsharp.dll"
   File "..\lua51.dll"
@@ -224,6 +225,12 @@ Section "Uninstall"
 
   Delete "$INSTDIR\locales\help_rus\*.*"
   RMDir "$INSTDIR\locales\help_rus"
+
+  Delete "$INSTDIR\locales\help_enu\images\*.*"
+  RMDir "$INSTDIR\locales\help_enu\images"
+
+  Delete "$INSTDIR\locales\help_enu\*.*"
+  RMDir "$INSTDIR\locales\help_enu"
 
   Delete "$INSTDIR\locales\*.*"
   RMDir "$INSTDIR\locales"
