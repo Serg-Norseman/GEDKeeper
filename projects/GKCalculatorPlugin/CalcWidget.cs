@@ -52,7 +52,7 @@ namespace GKCalculatorPlugin
         {
             if (disposing)
             {
-                this.fCalc.Dispose();
+                //this.fCalc.Dispose();
             }
             base.Dispose(disposing);
         }

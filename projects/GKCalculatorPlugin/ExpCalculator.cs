@@ -9,8 +9,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using GKCommon;
 
 namespace GKCalculatorPlugin
 {
@@ -26,7 +24,7 @@ namespace GKCalculatorPlugin
     /// <summary>
     /// 
     /// </summary>
-    public sealed class ExpCalculator : BaseObject //Control
+    public sealed class ExpCalculator
     {
         #region Private members
 
@@ -113,14 +111,14 @@ namespace GKCalculatorPlugin
             this.fCaseSensitive = false;
         }
 
-        protected override void Dispose(bool disposing)
+        /*protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
                 this.ClearVars();
             }
             base.Dispose(disposing);
-        }
+        }*/
 
         public void ClearVars()
         {
@@ -951,7 +949,8 @@ namespace GKCalculatorPlugin
             for (int i = 0; i < num; i++) {
                 NamedVar nVar = this.fVars[i];
 
-                if (string.Compare(nVar.Name, name, false) == 0) {
+                if (string.Compare(nVar.Name, name, !this.fCaseSensitive) == 0)
+                {
                     return nVar.Value;
                 }
             }

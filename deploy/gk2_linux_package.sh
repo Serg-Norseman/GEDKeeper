@@ -44,4 +44,8 @@ cp -r $DEV_PATH/locales/ ~/$LIB_PATH/
 cp -r $DEV_PATH/plugins/ ~/$LIB_PATH/
 cp -r $DEV_PATH/scripts/ ~/$LIB_PATH/
 
+#cd ~/$PACK_PATH
+#md5deep -r usr > DEBIAN/md5sums
+#cd ..
+
 fakeroot dpkg-deb -b ~/$PACK_PATH/ .

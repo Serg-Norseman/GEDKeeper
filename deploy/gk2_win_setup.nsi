@@ -104,6 +104,10 @@ SectionGroup /e "языки"
 		CreateDirectory "$INSTDIR\locales\help_enu"
 		SetOutPath "$INSTDIR\locales\help_enu"
 		File "..\locales\help_enu\*.*"
+
+		CreateDirectory "$INSTDIR\locales\help_enu\images"
+		SetOutPath "$INSTDIR\locales\help_enu\images"
+		File "..\locales\help_enu\images\*.*"
 	SectionEnd
 
 	Section "”крањнська"
@@ -177,6 +181,9 @@ SectionGroup /e "ѕлагины"
   		File "..\plugins\csgl.dll"
   		File "..\plugins\csgl.native.dll"
 		File "..\plugins\GKTreeVizPlugin.dll"
+  		File "..\plugins\GKTreeVizPlugin.rus"
+  		File "..\plugins\GKTreeVizPlugin.eng"
+  		File "..\plugins\GKTreeVizPlugin.ukr"
 		File "..\plugins\ArborGVT.dll"
 	SectionEnd
 
@@ -212,6 +219,7 @@ Section "Uninstall"
   Delete $INSTDIR\GKCommon.dll
 
   Delete $INSTDIR\ArborGVT.dll
+  Delete $INSTDIR\DotNetRtfWriter.dll
   Delete $INSTDIR\ExcelLibrary.dll
   Delete $INSTDIR\itextsharp.dll
   Delete $INSTDIR\lua51.dll

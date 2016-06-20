@@ -517,7 +517,7 @@ namespace GKCore.Export
                 #if !GK_LINUX
                 this.fWriter = new PDFWriter();
                 #else
-                this.fWriter = new PDFJetWriter();//PDFClownWriter();
+                this.fWriter = new PDFWriter();//PDFJetWriter();//PDFClownWriter();
                 #endif
             }
 

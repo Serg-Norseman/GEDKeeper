@@ -243,7 +243,10 @@ namespace GKUI
                         this.RecordEdit(null, null);
                     }
                     break;
-                    
+
+                    /*case Keys.F12:
+                    throw new NotSupportedException(); // debug!*/
+
                     /*case Keys.F:
         			if (e.Control) {
         				this.QuickFind();
