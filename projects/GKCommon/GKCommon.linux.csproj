@@ -254,6 +254,7 @@
     <Compile Include="GKCommon\UDN.cs" />
     <Compile Include="GKCommon\UIHelper.cs" />
     <Compile Include="GKCommon\GKResourceManager.cs" />
+    <Compile Include="GKCore\Interfaces\ICulture.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GKCommon\Controls\ExtResources.resx">

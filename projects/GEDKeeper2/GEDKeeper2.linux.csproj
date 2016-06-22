@@ -502,6 +502,7 @@
     <Compile Include="GKCore\Cultures\RussianCulture.cs" />
     <Compile Include="GKCore\Export\PDFJetWriter.cs" />
     <Compile Include="GKCore\Export\PDFClownWriter.cs" />
+    <Compile Include="GKCore\Cultures\AncientCulture.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GKResources.resx">
