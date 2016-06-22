@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
  *  Copyright (C) 2009-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
  *
@@ -18,18 +18,16 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Windows.Forms;
+using System;
 
-namespace GKUI.Controls
+namespace GKCore.Interfaces
 {
     /// <summary>
-    /// 
+    /// Description of ICulture.
     /// </summary>
-    public class GKToolStripMenuItem : ToolStripMenuItem
+    public interface ICulture
     {
-        public GKToolStripMenuItem(string text, object tag) : base(text)
-        {
-            this.Tag = tag;
-        }
+        bool HasPatronymic();
+        bool HasSurname();
     }
 }

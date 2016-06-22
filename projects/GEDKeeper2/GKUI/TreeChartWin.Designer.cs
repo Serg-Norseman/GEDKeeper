@@ -158,70 +158,70 @@ namespace GKUI
 		    this.miGensInf.Name = "miGensInf";
 		    this.miGensInf.Size = new System.Drawing.Size(95, 24);
 		    this.miGensInf.Text = "Inf";
-		    this.miGensInf.Click += new System.EventHandler(this.miGens9Click);
+		    this.miGensInf.Click += new System.EventHandler(this.miGens9_Click);
 		    // 
 		    // miGens1
 		    // 
 		    this.miGens1.Name = "miGens1";
 		    this.miGens1.Size = new System.Drawing.Size(95, 24);
 		    this.miGens1.Text = "1";
-		    this.miGens1.Click += new System.EventHandler(this.miGens9Click);
+		    this.miGens1.Click += new System.EventHandler(this.miGens9_Click);
 		    // 
 		    // miGens2
 		    // 
 		    this.miGens2.Name = "miGens2";
 		    this.miGens2.Size = new System.Drawing.Size(95, 24);
 		    this.miGens2.Text = "2";
-		    this.miGens2.Click += new System.EventHandler(this.miGens9Click);
+		    this.miGens2.Click += new System.EventHandler(this.miGens9_Click);
 		    // 
 		    // miGens3
 		    // 
 		    this.miGens3.Name = "miGens3";
 		    this.miGens3.Size = new System.Drawing.Size(95, 24);
 		    this.miGens3.Text = "3";
-		    this.miGens3.Click += new System.EventHandler(this.miGens9Click);
+		    this.miGens3.Click += new System.EventHandler(this.miGens9_Click);
 		    // 
 		    // miGens4
 		    // 
 		    this.miGens4.Name = "miGens4";
 		    this.miGens4.Size = new System.Drawing.Size(95, 24);
 		    this.miGens4.Text = "4";
-		    this.miGens4.Click += new System.EventHandler(this.miGens9Click);
+		    this.miGens4.Click += new System.EventHandler(this.miGens9_Click);
 		    // 
 		    // miGens5
 		    // 
 		    this.miGens5.Name = "miGens5";
 		    this.miGens5.Size = new System.Drawing.Size(95, 24);
 		    this.miGens5.Text = "5";
-		    this.miGens5.Click += new System.EventHandler(this.miGens9Click);
+		    this.miGens5.Click += new System.EventHandler(this.miGens9_Click);
 		    // 
 		    // miGens6
 		    // 
 		    this.miGens6.Name = "miGens6";
 		    this.miGens6.Size = new System.Drawing.Size(95, 24);
 		    this.miGens6.Text = "6";
-		    this.miGens6.Click += new System.EventHandler(this.miGens9Click);
+		    this.miGens6.Click += new System.EventHandler(this.miGens9_Click);
 		    // 
 		    // miGens7
 		    // 
 		    this.miGens7.Name = "miGens7";
 		    this.miGens7.Size = new System.Drawing.Size(95, 24);
 		    this.miGens7.Text = "7";
-		    this.miGens7.Click += new System.EventHandler(this.miGens9Click);
+		    this.miGens7.Click += new System.EventHandler(this.miGens9_Click);
 		    // 
 		    // miGens8
 		    // 
 		    this.miGens8.Name = "miGens8";
 		    this.miGens8.Size = new System.Drawing.Size(95, 24);
 		    this.miGens8.Text = "8";
-		    this.miGens8.Click += new System.EventHandler(this.miGens9Click);
+		    this.miGens8.Click += new System.EventHandler(this.miGens9_Click);
 		    // 
 		    // miGens9
 		    // 
 		    this.miGens9.Name = "miGens9";
 		    this.miGens9.Size = new System.Drawing.Size(95, 24);
 		    this.miGens9.Text = "9";
-		    this.miGens9.Click += new System.EventHandler(this.miGens9Click);
+		    this.miGens9.Click += new System.EventHandler(this.miGens9_Click);
 		    // 
 		    // tbs2
 		    // 
@@ -309,14 +309,14 @@ namespace GKUI
 		    this.miFillColor.Name = "miFillColor";
 		    this.miFillColor.Size = new System.Drawing.Size(218, 24);
 		    this.miFillColor.Text = "miFillColor";
-		    this.miFillColor.Click += new System.EventHandler(this.miFillColorClick);
+		    this.miFillColor.Click += new System.EventHandler(this.miFillColor_Click);
 		    // 
 		    // miFillImage
 		    // 
 		    this.miFillImage.Name = "miFillImage";
 		    this.miFillImage.Size = new System.Drawing.Size(218, 24);
 		    this.miFillImage.Text = "miFillImage";
-		    this.miFillImage.Click += new System.EventHandler(this.miFillImageClick);
+		    this.miFillImage.Click += new System.EventHandler(this.miFillImage_Click);
 		    // 
 		    // N9
 		    // 
@@ -346,7 +346,7 @@ namespace GKUI
 		    this.miEdit.Name = "miEdit";
 		    this.miEdit.Size = new System.Drawing.Size(200, 24);
 		    this.miEdit.Text = "miEdit";
-		    this.miEdit.Click += new System.EventHandler(this.miEditClick);
+		    this.miEdit.Click += new System.EventHandler(this.miEdit_Click);
 		    // 
 		    // N1
 		    // 
@@ -358,28 +358,28 @@ namespace GKUI
 		    this.miFamilyAdd.Name = "miFamilyAdd";
 		    this.miFamilyAdd.Size = new System.Drawing.Size(200, 24);
 		    this.miFamilyAdd.Text = "miFamilyAdd";
-		    this.miFamilyAdd.Click += new System.EventHandler(this.miFamilyAddClick);
+		    this.miFamilyAdd.Click += new System.EventHandler(this.miFamilyAdd_Click);
 		    // 
 		    // miSpouseAdd
 		    // 
 		    this.miSpouseAdd.Name = "miSpouseAdd";
 		    this.miSpouseAdd.Size = new System.Drawing.Size(200, 24);
 		    this.miSpouseAdd.Text = "miSpouseAdd";
-		    this.miSpouseAdd.Click += new System.EventHandler(this.miSpouseAddClick);
+		    this.miSpouseAdd.Click += new System.EventHandler(this.miSpouseAdd_Click);
 		    // 
 		    // miSonAdd
 		    // 
 		    this.miSonAdd.Name = "miSonAdd";
 		    this.miSonAdd.Size = new System.Drawing.Size(200, 24);
 		    this.miSonAdd.Text = "miSonAdd";
-		    this.miSonAdd.Click += new System.EventHandler(this.miSonAddClick);
+		    this.miSonAdd.Click += new System.EventHandler(this.miSonAdd_Click);
 		    // 
 		    // miDaughterAdd
 		    // 
 		    this.miDaughterAdd.Name = "miDaughterAdd";
 		    this.miDaughterAdd.Size = new System.Drawing.Size(200, 24);
 		    this.miDaughterAdd.Text = "miDaughterAdd";
-		    this.miDaughterAdd.Click += new System.EventHandler(this.miDaughterAddClick);
+		    this.miDaughterAdd.Click += new System.EventHandler(this.miDaughterAdd_Click);
 		    // 
 		    // N2
 		    // 
@@ -391,7 +391,7 @@ namespace GKUI
 		    this.miDelete.Name = "miDelete";
 		    this.miDelete.Size = new System.Drawing.Size(200, 24);
 		    this.miDelete.Text = "miDelete";
-		    this.miDelete.Click += new System.EventHandler(this.miDeleteClick);
+		    this.miDelete.Click += new System.EventHandler(this.miDelete_Click);
 		    // 
 		    // N3
 		    // 
@@ -403,14 +403,14 @@ namespace GKUI
 		    this.miRebuildTree.Name = "miRebuildTree";
 		    this.miRebuildTree.Size = new System.Drawing.Size(200, 24);
 		    this.miRebuildTree.Text = "miRebuildTree";
-		    this.miRebuildTree.Click += new System.EventHandler(this.miRebuildTreeClick);
+		    this.miRebuildTree.Click += new System.EventHandler(this.miRebuildTree_Click);
 		    // 
 		    // miRebuildKinships
 		    // 
 		    this.miRebuildKinships.Name = "miRebuildKinships";
 		    this.miRebuildKinships.Size = new System.Drawing.Size(200, 24);
 		    this.miRebuildKinships.Text = "miRebuildKinships";
-		    this.miRebuildKinships.Click += new System.EventHandler(this.miRebuildKinshipsClick);
+		    this.miRebuildKinships.Click += new System.EventHandler(this.miRebuildKinships_Click);
 		    // 
 		    // TreeChartWin
 		    // 

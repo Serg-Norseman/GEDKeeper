@@ -413,7 +413,7 @@ namespace GKUI
 
         private void MRUFileClick(object sender, EventArgs e)
         {
-            int idx = ((GKToolStripMenuItem)sender).Tag;
+            int idx = (int)((GKToolStripMenuItem)sender).Tag;
             this.CreateBase(this.fOptions.MRUFiles[idx].FileName);
         }
 

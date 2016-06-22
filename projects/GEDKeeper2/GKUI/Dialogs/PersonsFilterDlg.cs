@@ -263,7 +263,7 @@ namespace GKUI.Dialogs
                 iFilter.GroupRef = "";
             } else {
                 GKComboItem item = (GKComboItem)this.cmbGroup.Items[this.cmbGroup.SelectedIndex];
-                GEDCOMRecord rec = item.Data as GEDCOMRecord;
+                GEDCOMRecord rec = item.Tag as GEDCOMRecord;
                 if (rec != null) {
                     iFilter.FilterGroupMode = FilterGroupMode.Selected;
                     iFilter.GroupRef = rec.XRef;
@@ -279,7 +279,7 @@ namespace GKUI.Dialogs
                 iFilter.SourceRef = "";
             } else {
                 GKComboItem item = (GKComboItem)this.cmbSource.Items[this.cmbSource.SelectedIndex];
-                GEDCOMRecord rec = item.Data as GEDCOMRecord;
+                GEDCOMRecord rec = item.Tag as GEDCOMRecord;
                 if (rec != null) {
                     iFilter.SourceMode = FilterGroupMode.Selected;
                     iFilter.SourceRef = rec.XRef;

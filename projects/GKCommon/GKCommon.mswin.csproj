@@ -227,6 +227,7 @@
     <Compile Include="GKCore\Interfaces\IBaseEditor.cs" />
     <Compile Include="GKCore\Interfaces\IBaseWindow.cs" />
     <Compile Include="GKCore\Interfaces\IChartWindow.cs" />
+    <Compile Include="GKCore\Interfaces\ICulture.cs" />
     <Compile Include="GKCore\Interfaces\ICustomFilter.cs" />
     <Compile Include="GKCore\Interfaces\IHost.cs" />
     <Compile Include="GKCore\Interfaces\ILangMan.cs" />

@@ -216,7 +216,7 @@ namespace GKUI
                 if (this.cmbPersons.SelectedIndex >= 0)
                 {
                     GKComboItem item = (GKComboItem)this.cmbPersons.Items[this.cmbPersons.SelectedIndex];
-                    ind = (item.Data as GEDCOMIndividualRecord);
+                    ind = (item.Tag as GEDCOMIndividualRecord);
                 }
             }
 
@@ -262,7 +262,7 @@ namespace GKUI
             GKTreeNode node = this.tvPlaces.SelectedNode as GKTreeNode;
             if (node != null)
             {
-                GMapPoint pt = node.Data as GMapPoint;
+                GMapPoint pt = node.Tag as GMapPoint;
                 if (pt != null)
                 {
                     this.fMapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
@@ -357,7 +357,7 @@ namespace GKUI
                     node.Nodes.Add(new GKTreeNode(ptTitle, pt));
                 }
             } else {
-                mapPlace = (((GKTreeNode) node).Data as MapPlace);
+                mapPlace = (((GKTreeNode) node).Tag as MapPlace);
             }
 
             mapPlace.PlaceRefs.Add(new PlaceRef(placeEvent));

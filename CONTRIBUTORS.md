@@ -79,9 +79,13 @@ Life
 
 
 Lua
+    LuaInterface, Licensed under MIT/X, Fábio Mascarenhas/Craig Presti
+    NLua, Licensed under MIT, Vinicius Jarina, https://github.com/NLua/NLua
 
 
-OpenGL
+CsGL for OpenGL
+    Licensed under BSD.
+    (C) 2001, Lloyd Dupont <lloyd@galador.net>
 
 
 SingleInstance
@@ -106,6 +110,8 @@ TimSort
 
 
 Xapian
+    Licensed under GPLv2
+    https://xapian.org/
 
 
 ZedGraph

@@ -316,10 +316,11 @@ namespace GKUI
             gkLogChart1.Clear();
             fBase.ProgressInit(LangMan.LS(LSID.LSID_CheckFamiliesConnection), this.fTree.RecordsCount);
             ExtList<GEDCOMIndividualRecord> prepared = new ExtList<GEDCOMIndividualRecord>();
+            List<GEDCOMRecord> groupRecords = new List<GEDCOMRecord>();
             try
             {
-                int group = 0;
-                this.TreeView1.Nodes.Clear();
+                int groupNum = 0;
+                this.tvGroups.Nodes.Clear();
 
                 int num = this.fTree.RecordsCount;
                 for (int i = 0; i < num; i++)
@@ -331,19 +332,19 @@ namespace GKUI
                         GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
                         if (prepared.IndexOf(iRec) < 0)
                         {
-                            group++;
-                            this.fSplitList.Clear();
+                            groupNum++;
+                            groupRecords.Clear();
 
-                            TreeTools.TreeWalk(iRec, TreeTools.TreeWalkMode.twmAll, this.fSplitList);
+                            TreeTools.TreeWalk(iRec, TreeTools.TreeWalkMode.twmAll, groupRecords);
 
-                            TreeNode root = this.TreeView1.Nodes.Add(
-                                group.ToString() + " " + LangMan.LS(LSID.LSID_Group).ToLower() + " (" + this.fSplitList.Count.ToString() + ")");
+                            int cnt = groupRecords.Count;
 
-                            int cnt = this.fSplitList.Count;
-                            int num2 = cnt - 1;
-                            for (int j = 0; j <= num2; j++)
+                            TreeNode root = this.tvGroups.Nodes.Add(
+                                groupNum.ToString() + " " + LangMan.LS(LSID.LSID_Group).ToLower() + " (" + cnt.ToString() + ")");
+
+                            for (int j = 0; j < cnt; j++)
                             {
-                                iRec = (GEDCOMIndividualRecord)this.fSplitList[j];
+                                iRec = (GEDCOMIndividualRecord)groupRecords[j];
                                 prepared.Add(iRec);
 
                                 string pn = iRec.GetNameString(true, false);
@@ -354,7 +355,7 @@ namespace GKUI
                                 root.Nodes.Add(new GKTreeNode(pn, iRec));
                             }
                             root.ExpandAll();
-                            
+
                             gkLogChart1.AddFragment(cnt);
                         }
                     }
@@ -365,7 +366,7 @@ namespace GKUI
             }
             finally
             {
-                this.fSplitList.Clear();
+                groupRecords.Clear();
                 prepared.Dispose();
                 fBase.ProgressDone();
             }
@@ -373,10 +374,10 @@ namespace GKUI
 
         private void TreeView1_DoubleClick(object sender, EventArgs e)
         {
-            GKTreeNode node = this.TreeView1.SelectedNode as GKTreeNode;
+            GKTreeNode node = this.tvGroups.SelectedNode as GKTreeNode;
             if (node == null) return;
             
-            GEDCOMIndividualRecord iRec = node.Data as GEDCOMIndividualRecord;
+            GEDCOMIndividualRecord iRec = node.Tag as GEDCOMIndividualRecord;
             if (iRec == null) return;
             
             this.Base.SelectRecordByXRef(iRec.XRef);
@@ -715,12 +716,10 @@ namespace GKUI
             }
         }
 
-        private void BtnPatriarchsDiagramClick(object sender, EventArgs e)
+        private void btnPatriarchsDiagram_Click(object sender, EventArgs e)
         {
             PatriarchsViewerWin wnd = new PatriarchsViewerWin(this.fBase, decimal.ToInt32(this.edMinGens.Value));
             wnd.Show();
-
-            //TreeTools.GenPatriarchsGraphviz(@"d:\document1.txt", this.Base.Tree, decimal.ToInt32(this.edMinGens.Value));
         }
 
         #endregion

@@ -37,7 +37,7 @@ namespace GKUI
 		private System.Windows.Forms.NumericUpDown edYearInaccuracy;
 		private System.Windows.Forms.CheckBox chkBirthYear;
 		private System.Windows.Forms.TabPage pageFamilyGroups;
-		private System.Windows.Forms.TreeView TreeView1;
+		private System.Windows.Forms.TreeView tvGroups;
 		private System.Windows.Forms.TabPage pageTreeCheck;
 		private System.Windows.Forms.Button btnBaseRepair;
 		private System.Windows.Forms.Panel Panel1;
@@ -127,7 +127,7 @@ namespace GKUI
 		    this.chkBirthYear = new System.Windows.Forms.CheckBox();
 		    this.pageFamilyGroups = new System.Windows.Forms.TabPage();
 		    this.gkLogChart1 = new GKCommon.Controls.LogChart();
-		    this.TreeView1 = new System.Windows.Forms.TreeView();
+		    this.tvGroups = new System.Windows.Forms.TreeView();
 		    this.pageTreeCheck = new System.Windows.Forms.TabPage();
 		    this.btnBaseRepair = new System.Windows.Forms.Button();
 		    this.Panel1 = new System.Windows.Forms.Panel();
@@ -668,7 +668,7 @@ namespace GKUI
 		    // pageFamilyGroups
 		    // 
 		    this.pageFamilyGroups.Controls.Add(this.gkLogChart1);
-		    this.pageFamilyGroups.Controls.Add(this.TreeView1);
+		    this.pageFamilyGroups.Controls.Add(this.tvGroups);
 		    this.pageFamilyGroups.Location = new System.Drawing.Point(4, 26);
 		    this.pageFamilyGroups.Name = "pageFamilyGroups";
 		    this.pageFamilyGroups.Size = new System.Drawing.Size(1002, 515);
@@ -685,11 +685,11 @@ namespace GKUI
 		    // 
 		    // TreeView1
 		    // 
-		    this.TreeView1.Location = new System.Drawing.Point(11, 10);
-		    this.TreeView1.Name = "TreeView1";
-		    this.TreeView1.Size = new System.Drawing.Size(976, 437);
-		    this.TreeView1.TabIndex = 0;
-		    this.TreeView1.DoubleClick += new System.EventHandler(this.TreeView1_DoubleClick);
+		    this.tvGroups.Location = new System.Drawing.Point(11, 10);
+		    this.tvGroups.Name = "TreeView1";
+		    this.tvGroups.Size = new System.Drawing.Size(976, 437);
+		    this.tvGroups.TabIndex = 0;
+		    this.tvGroups.DoubleClick += new System.EventHandler(this.TreeView1_DoubleClick);
 		    // 
 		    // pageTreeCheck
 		    // 
@@ -739,7 +739,7 @@ namespace GKUI
 		    this.btnPatriarchsDiagram.Size = new System.Drawing.Size(105, 30);
 		    this.btnPatriarchsDiagram.TabIndex = 6;
 		    this.btnPatriarchsDiagram.Text = "btnPatriarchsDiagram";
-		    this.btnPatriarchsDiagram.Click += new System.EventHandler(this.BtnPatriarchsDiagramClick);
+		    this.btnPatriarchsDiagram.Click += new System.EventHandler(this.btnPatriarchsDiagram_Click);
 		    // 
 		    // chkWithoutDates
 		    // 

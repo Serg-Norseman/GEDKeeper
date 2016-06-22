@@ -91,6 +91,7 @@ namespace GKCommon.GEDCOM
             //ALastPart = GetLastPart();
         }
 
+        // TODO: remove to cultures
         public void GetRusNameParts(out string surname, out string name, out string patronymic)
         {
             string firstPart /*, dummy*/;
@@ -109,7 +110,7 @@ namespace GKCommon.GEDCOM
 
         public void SetNameParts(string firstPart, string surname, string lastPart)
         {
-            base.StringValue = GEDCOMUtils.TrimLeft(firstPart + " ") + "/" + surname + "/" + GEDCOMUtils.TrimRight(" " + lastPart);
+            base.StringValue = GEDCOMUtils.TrimLeft(firstPart) + " /" + surname + "/ " + GEDCOMUtils.TrimRight(lastPart);
         }
 
         private string GetFirstPart()

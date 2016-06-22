@@ -21,16 +21,27 @@
 using System;
 using System.Windows.Forms;
 using GKCommon.GEDCOM;
+using GKCore.Interfaces;
 
 namespace GKCore.Cultures
 {
     /// <summary>
     /// 
     /// </summary>
-    public class RussianCulture
+    public class RussianCulture : ICulture
     {
         public RussianCulture()
         {
+        }
+
+        public bool HasPatronymic()
+        {
+            return true;
+        }
+
+        public bool HasSurname()
+        {
+            return true;
         }
 
         public static string PrepareRusSurname(string f, bool aFemale)

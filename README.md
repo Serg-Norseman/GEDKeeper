@@ -6,8 +6,6 @@
 
 [GitHub Visualizer](http://ghv.artzub.com/#repo=GEDKeeper&climit=500&user=serg-norseman)
 
-[Website: https://gedkeeper.github.io/index.html](https://gedkeeper.github.io/index.html)
-
 ## English
 GEDKeeper program is developed for work with personal genealogical database.
 

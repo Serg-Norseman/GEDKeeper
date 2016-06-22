@@ -26,12 +26,12 @@ namespace GKUI.Controls
     public class GKComboItem
     {
         public readonly string Caption;
-        public readonly object Data;
+        public readonly object Tag;
 
-        public GKComboItem(string caption, object data)
+        public GKComboItem(string caption, object tag)
         {
             this.Caption = caption;
-            this.Data = data;
+            this.Tag = tag;
         }
 
         public override string ToString()

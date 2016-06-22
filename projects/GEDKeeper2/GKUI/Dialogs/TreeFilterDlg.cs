@@ -174,7 +174,7 @@ namespace GKUI.Dialogs
             else
             {
                 GKComboItem item = (GKComboItem)this.cmbSource.Items[this.cmbSource.SelectedIndex];
-                GEDCOMRecord rec = item.Data as GEDCOMRecord;
+                GEDCOMRecord rec = item.Tag as GEDCOMRecord;
                 if (rec != null)
                 {
                     this.fFilter.SourceMode = FilterGroupMode.Selected;

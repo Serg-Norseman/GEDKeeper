@@ -23,9 +23,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-
 using GKCommon;
 using GKCommon.GEDCOM;
+using GKCore.Cultures;
+using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
 
@@ -37,7 +38,8 @@ namespace GKCore.Options
     public sealed class GlobalOptions : BaseObject
     {
         private static GlobalOptions fInstance = null;
-        
+        private static ICulture fCulture = null;
+
         private readonly TreeChartOptions fChartOptions;
         private GEDCOMCharacterSet fDefCharacterSet;
         private DateFormat fDefDateFormat;
@@ -73,6 +75,17 @@ namespace GKCore.Options
                 }
 
                 return fInstance;
+            }
+        }
+
+        public static ICulture CurrentCulture
+        {
+            get {
+                if (fCulture == null) {
+                    fCulture = new RussianCulture();
+                }
+
+                return fCulture;
             }
         }
 

@@ -364,6 +364,8 @@ namespace GKTests
 
             sx = RussianCulture.GetSex("Иван", "Петрович", false);
             Assert.AreEqual(GEDCOMSex.svMale, sx);
+
+            Assert.AreEqual(GEDCOMSex.svNone, RussianCulture.GetSex("", "", false));
         }
 
         [Test]

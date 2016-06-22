@@ -80,11 +80,11 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DefineConstants>GK_LINUX</DefineConstants>
-    <OutputPath>.</OutputPath>
+    <OutputPath>..\..</OutputPath>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
-    <OutputPath>.</OutputPath>
+    <OutputPath>..\..</OutputPath>
     <DefineConstants>GK_LINUX</DefineConstants>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>

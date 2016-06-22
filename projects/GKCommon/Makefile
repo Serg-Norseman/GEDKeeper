@@ -150,6 +150,7 @@ sources := \
 ./GKCore/Interfaces/IBaseEditor.cs \
 ./GKCore/Interfaces/IBaseWindow.cs \
 ./GKCore/Interfaces/IChartWindow.cs \
+./GKCore/Interfaces/ICulture.cs \
 ./GKCore/Interfaces/ICustomFilter.cs \
 ./GKCore/Interfaces/IHost.cs \
 ./GKCore/Interfaces/ILangMan.cs \

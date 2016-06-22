@@ -122,12 +122,12 @@ namespace GKUI.Controls
             this.fToolBar.Dock = DockStyle.Right;
             //this.fToolBar.Appearance = ToolBarAppearance.Flat;
             this.fToolBar.Items.AddRange(new ToolStripItem[] {
-                                               this.fBtnAdd,
-                                               this.fBtnEdit,
-                                               this.fBtnDelete,
-                                               this.fBtnLinkJump,
-                                               this.fBtnMoveUp,
-                                               this.fBtnMoveDown});
+                                             this.fBtnAdd,
+                                             this.fBtnEdit,
+                                             this.fBtnDelete,
+                                             this.fBtnLinkJump,
+                                             this.fBtnMoveUp,
+                                             this.fBtnMoveDown});
             this.fToolBar.GripStyle = ToolStripGripStyle.Hidden;
             this.fToolBar.ImageScalingSize = new System.Drawing.Size(24, 20);
             //this.fToolBar.AutoSize = true;

@@ -124,7 +124,6 @@ namespace GKUI.Sheets
             }
         }
 
-        // FIXME
         private static bool ModifyRecEvent(IBaseWindow aBase, GEDCOMRecordWithEvents record, ref GEDCOMCustomEvent aEvent, RecordAction action)
         {
             bool result = false;
@@ -135,7 +134,7 @@ namespace GKUI.Sheets
                 {
                     case RecordAction.raAdd:
                     case RecordAction.raEdit:
-                        using (EventEditDlg fmEventEdit = new EventEditDlg(aBase))
+                        using (EventEditDlg dlgEventEdit = new EventEditDlg(aBase))
                         {
                             GEDCOMCustomEvent newEvent;
                             if (aEvent != null) {
@@ -148,8 +147,8 @@ namespace GKUI.Sheets
                                 }
                             }
 
-                            fmEventEdit.Event = newEvent;
-                            DialogResult dialogResult = MainWin.Instance.ShowModalEx(fmEventEdit, true);
+                            dlgEventEdit.Event = newEvent;
+                            DialogResult dialogResult = MainWin.Instance.ShowModalEx(dlgEventEdit, true);
 
                             if (dialogResult != DialogResult.OK)
                             {
@@ -159,7 +158,7 @@ namespace GKUI.Sheets
                             }
                             else
                             {
-                                newEvent = fmEventEdit.Event;
+                                newEvent = dlgEventEdit.Event;
 
                                 if (aEvent == null) {
                                     record.AddEvent(newEvent);

@@ -294,7 +294,7 @@ namespace GKUI
                     break;
 
                 case Keys.F6:
-                    this.miRebuildTreeClick(null, null);
+                    this.miRebuildTree_Click(null, null);
                     break;
 
                 case Keys.F7:
@@ -388,7 +388,7 @@ namespace GKUI
             }
         }
 
-        private void miGens9Click(object sender, EventArgs e)
+        private void miGens9_Click(object sender, EventArgs e)
         {
             this.miGensInf.Checked = false;
             this.miGens1.Checked = false;
@@ -416,7 +416,7 @@ namespace GKUI
             this.GenChart(true);
         }
 
-        private void miEditClick(object sender, EventArgs e)
+        private void miEdit_Click(object sender, EventArgs e)
         {
             TreeChartPerson p = this.fTreeBox.Selected;
             if (p != null && p.Rec != null)
@@ -428,7 +428,7 @@ namespace GKUI
             }
         }
 
-        private void miSpouseAddClick(object sender, EventArgs e)
+        private void miSpouseAdd_Click(object sender, EventArgs e)
         {
             TreeChartPerson p = this.fTreeBox.Selected;
             if (p != null && p.Rec != null)
@@ -445,17 +445,17 @@ namespace GKUI
             }
         }
 
-        private void miSonAddClick(object sender, EventArgs e)
+        private void miSonAdd_Click(object sender, EventArgs e)
         {
             this.InternalChildAdd(GEDCOMSex.svMale);
         }
 
-        private void miDaughterAddClick(object sender, EventArgs e)
+        private void miDaughterAdd_Click(object sender, EventArgs e)
         {
             this.InternalChildAdd(GEDCOMSex.svFemale);
         }
 
-        private void miFamilyAddClick(object sender, EventArgs e)
+        private void miFamilyAdd_Click(object sender, EventArgs e)
         {
             TreeChartPerson p = this.fTreeBox.Selected;
             if (p != null && p.Rec != null)
@@ -468,7 +468,7 @@ namespace GKUI
             }
         }
 
-        private void miDeleteClick(object sender, EventArgs e)
+        private void miDelete_Click(object sender, EventArgs e)
         {
             TreeChartPerson p = this.fTreeBox.Selected;
             if (p != null && p.Rec != null && p != this.fTreeBox.Root)
@@ -478,7 +478,7 @@ namespace GKUI
             }
         }
 
-        private void miRebuildKinshipsClick(object sender, EventArgs e)
+        private void miRebuildKinships_Click(object sender, EventArgs e)
         {
             this.fTreeBox.RebuildKinships();
         }
@@ -505,7 +505,7 @@ namespace GKUI
             this.fTreeBox.CertaintyIndex = this.miCertaintyIndex.Checked;
         }
 
-        private void miFillColorClick(object sender, EventArgs e)
+        private void miFillColor_Click(object sender, EventArgs e)
         {
             if (colorDialog1.ShowDialog() == DialogResult.OK)
             {
@@ -515,7 +515,7 @@ namespace GKUI
             }
         }
 
-        private void miFillImageClick(object sender, EventArgs e)
+        private void miFillImage_Click(object sender, EventArgs e)
         {
             string fileName = UIHelper.GetOpenFile("", GKUtils.GetBackgroundsPath(), LangMan.LS(LSID.LSID_ImagesFilter), 1, "");
             if (!string.IsNullOrEmpty(fileName))
@@ -536,7 +536,7 @@ namespace GKUI
             this.GenChart(true);
         }
 
-        private void miRebuildTreeClick(object sender, EventArgs e)
+        private void miRebuildTree_Click(object sender, EventArgs e)
         {
             try
             {
@@ -549,7 +549,7 @@ namespace GKUI
             }
             catch (Exception ex)
             {
-                this.fBase.Host.LogWrite("TreeChartWin.RebuildTree(): " + ex.Message);
+                this.fBase.Host.LogWrite("TreeChartWin.miRebuildTree_Click(): " + ex.Message);
             }
         }
 

@@ -340,7 +340,7 @@ namespace GKUI.Dialogs
 
             GKComboItem item = this.cmbLanguages.Items[this.cmbLanguages.SelectedIndex] as GKComboItem;
             if (item != null) {
-                MainWin.Instance.LoadLanguage((int)item.Data);
+                MainWin.Instance.LoadLanguage((int)item.Tag);
             }
 
             base.DialogResult = DialogResult.OK;

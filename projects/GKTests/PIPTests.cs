@@ -204,5 +204,13 @@ namespace GKTests
             res = ImpUtils.ParseSpouseLine("Ж3 (test2 - Ivanova", out spouse, out marrNum, out extData, out pos);
             Assert.AreEqual(false, res, "[i3-4]");
         }
+
+        [Test]
+        public void Other_Tests()
+        {
+            Assert.IsTrue(ImpUtils.IsRomeLine("XIV"));
+            Assert.IsFalse(ImpUtils.IsRomeLine("XVA"));
+            Assert.IsFalse(ImpUtils.IsRomeLine(""));
+        }
     }
 }

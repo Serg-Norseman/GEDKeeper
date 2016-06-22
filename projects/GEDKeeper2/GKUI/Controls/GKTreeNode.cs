@@ -29,11 +29,9 @@ namespace GKUI.Controls
     [Serializable]
     public class GKTreeNode : TreeNode
     {
-        public object Data;
-
-        public GKTreeNode(string text, object data) : base(text)
+        public GKTreeNode(string text, object tag) : base(text)
         {
-            this.Data = data;
+            this.Tag = tag;
         }
     }
 }
