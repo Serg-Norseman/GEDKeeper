@@ -22,7 +22,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
-#if GK_LINUX
+#if __MonoCS__
 using Externals.IniFiles;
 #endif
 
@@ -48,7 +48,7 @@ namespace GKCommon
         private readonly string fFileName;
         private bool fDisposed;
 
-        #if GK_LINUX
+        #if __MonoCS__
         private readonly IniFileEx fHandler;
         #endif
 
@@ -60,7 +60,7 @@ namespace GKCommon
         public IniFile(string fileName)
         {
             this.fFileName = fileName;
-            #if GK_LINUX
+            #if __MonoCS__
             this.fHandler = IniFileEx.FromFile(fileName);
             #endif
         }
@@ -131,7 +131,7 @@ namespace GKCommon
 
         public string ReadString(string section, string ident, string Default)
         {
-            #if GK_LINUX
+            #if __MonoCS__
             string result = this.fHandler[section][ident];
             return result == null ? Default : result;
             #else
@@ -146,7 +146,7 @@ namespace GKCommon
 
         public void WriteString(string section, string ident, string value)
         {
-            #if GK_LINUX
+            #if __MonoCS__
             this.fHandler[section][ident] = value;
             #else
             if (WritePrivateProfileString(section, ident, value, this.FileName) == false)
@@ -166,7 +166,7 @@ namespace GKCommon
 
         public void DeleteKey(string section, string ident)
         {
-            #if GK_LINUX
+            #if __MonoCS__
             this.fHandler[section].DeleteKey(ident);
             #else
             WritePrivateProfileString(section, ident, IntPtr.Zero, this.FileName);
@@ -175,7 +175,7 @@ namespace GKCommon
 
         public void UpdateFile()
         {
-            #if GK_LINUX
+            #if __MonoCS__
             this.fHandler.Save(this.fFileName);
             #else
             WritePrivateProfileString(IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, this.FileName);
@@ -184,7 +184,7 @@ namespace GKCommon
 
         #region NativeMethods
 
-        #if !GK_LINUX
+        #if !__MonoCS__
 
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         private static extern uint GetPrivateProfileString(string lpAppName, string lpKeyName, string lpDefault, StringBuilder lpReturnedString, uint nSize, string lpFileName);

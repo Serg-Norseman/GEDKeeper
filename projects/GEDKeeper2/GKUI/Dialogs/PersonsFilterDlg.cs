@@ -54,7 +54,7 @@ namespace GKUI.Dialogs
             UpdateSpecific();
 
             // platform: in Mono tsSpecificFilter has 0 index, somehow
-            #if GK_LINUX
+            #if __MonoCS__
             tabsFilters.Controls.SetChildIndex(pageSpecificFilter, 1);
             #endif
 

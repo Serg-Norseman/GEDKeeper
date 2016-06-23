@@ -179,7 +179,7 @@ namespace GKUI
         {
             if (disposing)
             {
-                #if !GK_LINUX
+                #if !__MonoCS__
                 this.fNavman.Dispose();
                 this.fLockedRecords.Dispose();
                 this.fTree.Dispose();
@@ -1149,7 +1149,7 @@ namespace GKUI
             }
 
             // platform: In Windows works without it
-            #if GK_LINUX
+            #if __MonoCS__
             this.Activate();
             #endif
 

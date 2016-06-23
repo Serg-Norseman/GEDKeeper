@@ -499,7 +499,7 @@ namespace GKCore.Export
             }
 
             string availableFormats = LangMan.LS(LSID.LSID_HTMLFilter) + "|" + LangMan.LS(LSID.LSID_RTFFilter);
-            #if !GK_LINUX
+            #if !__MonoCS__
             availableFormats += "|" + LangMan.LS(LSID.LSID_PDFFilter);
             #endif
             
@@ -514,7 +514,7 @@ namespace GKCore.Export
             } else if (string.Equals(ext, ".rtf")) {
                 this.fWriter = new RTFWriter();
             } else {
-                #if !GK_LINUX
+                #if !__MonoCS__
                 this.fWriter = new PDFWriter();
                 #else
                 this.fWriter = new PDFWriter();//PDFJetWriter();//PDFClownWriter();

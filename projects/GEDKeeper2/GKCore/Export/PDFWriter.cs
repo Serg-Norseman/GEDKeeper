@@ -44,7 +44,7 @@ namespace GKCore.Export
 
         public PDFWriter()
         {
-            #if !GK_LINUX
+            #if !__MonoCS__
             this.baseFont = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Times.ttf"), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             #else
             //BaseFont.TIMES_ROMAN, "Cp1251"

@@ -21,7 +21,6 @@ namespace GKUI.Dialogs
 		private System.Windows.Forms.TextBox txtTitle;
 		private System.Windows.Forms.Label lblPublication;
 		private System.Windows.Forms.TextBox txtPublication;
-		private System.ComponentModel.IContainer components;
 
 		private void InitializeComponent()
 		{

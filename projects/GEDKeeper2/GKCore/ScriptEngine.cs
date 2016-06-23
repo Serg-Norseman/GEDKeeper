@@ -30,7 +30,7 @@ using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
 
-#if !GK_LINUX
+#if !__MonoCS__
 using LuaInterface;
 #else
 using NLua;

@@ -33,7 +33,7 @@ using GKCore.Cultures;
 using GKCore.Types;
 using GKUI.Controls;
 
-#if !GK_LINUX
+#if !__MonoCS__
 using Externals.MapiMail;
 #endif
 
@@ -55,7 +55,7 @@ namespace GKCore
         {
             if (File.Exists(fileName))
             {
-                #if GK_LINUX
+                #if __MonoCS__
                 Process.Start(new ProcessStartInfo("file://"+fileName) { UseShellExecute = true });
                 #else
                 Process.Start(fileName);
@@ -65,7 +65,7 @@ namespace GKCore
 
         public static int GetKeyLayout()
         {
-            #if GK_LINUX
+            #if __MonoCS__
             // There is a bug in Mono: does not work this CurrentInputLanguage
             return CultureInfo.CurrentUICulture.KeyboardLayoutId;
             #else
@@ -88,7 +88,7 @@ namespace GKCore
         public static void SendMail(string address, string subject, string body, string attach)
         {
             if (File.Exists(attach)) {
-                #if GK_LINUX
+                #if __MonoCS__
 
                 string mailto = string.Format("mailto:{0}?Subject={1}&Body={2}&Attach={3}", address, subject, body, "" + attach + ""); // Attach, Attachment
                 Process.Start(mailto);

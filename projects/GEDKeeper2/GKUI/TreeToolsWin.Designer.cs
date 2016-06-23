@@ -75,7 +75,6 @@ namespace GKUI
 
 		private void InitializeComponent()
 		{
-		    System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TreeToolsWin));
 		    this.tabsTools = new System.Windows.Forms.TabControl();
 		    this.pageTreeCompare = new System.Windows.Forms.TabPage();
 		    this.btnMatch = new System.Windows.Forms.Button();

@@ -367,7 +367,7 @@ namespace GKUI.Charts
             try {
                 Bitmap result = (Bitmap)source.Clone();
 
-                #if GK_LINUX
+                #if __MonoCS__
                 result.MakeTransparent(); // don't work
                 #else
                 result.MakeTransparent(source.GetPixel(0, 0));

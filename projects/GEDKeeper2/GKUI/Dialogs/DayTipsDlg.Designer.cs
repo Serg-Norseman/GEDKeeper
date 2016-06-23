@@ -16,7 +16,6 @@ namespace GKUI.Dialogs
 
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DayTipsDlg));
 			this.Shape1 = new System.Windows.Forms.Panel();
 			this.chkShow = new System.Windows.Forms.CheckBox();
 			this.btnNextTip = new System.Windows.Forms.Button();

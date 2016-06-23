@@ -576,7 +576,7 @@ namespace GKCore.Lists
             }
         }
 
-        #if GK_LINUX
+        #if __MonoCS__
         private static readonly Color HighlightUnparentedColor = Color.FromArgb(unchecked((int)0xFFFFCACA));
         private static readonly Color HighlightUnmarriedColor = Color.FromArgb(unchecked((int)0xFFFFFFA1));
         #else

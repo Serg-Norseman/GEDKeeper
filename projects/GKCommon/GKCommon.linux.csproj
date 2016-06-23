@@ -42,20 +42,20 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <CodeAnalysisRuleSet>..\gk21.ruleset</CodeAnalysisRuleSet>
-    <DefineConstants>DEBUG;TRACE;GK_LINUX</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <CodeAnalysisRuleSet>..\gk21.ruleset</CodeAnalysisRuleSet>
-    <DefineConstants>DEBUG;TRACE;GK_LINUX</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <DefineConstants>TRACE;GK_LINUX</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
-    <DefineConstants>TRACE;GK_LINUX</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>

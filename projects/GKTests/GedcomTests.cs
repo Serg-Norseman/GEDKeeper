@@ -34,24 +34,21 @@ namespace GKTests
     public class GedcomTests
     {
         BaseContext _context;
-        
+
         [TestFixtureSetUp]
         public void SetUp()
         {
-            Console.WriteLine(@">>> START GedcomTests");
-
             _context = TestStubs.CreateContext();
             GEDCOMTree tree = _context.Tree;
             
             TestStubs.FillContext(_context);
         }
-        
+
         [TestFixtureTearDown]
         public void TearDown()
         {
-            Console.WriteLine(@">>> END GedcomTests");
         }
-        
+
         #region True Tests
 
         [Test]

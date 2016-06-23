@@ -53,7 +53,7 @@ namespace GKCommon.GEDCOM
                 str = str + " " + base.StringValue;
             }
 
-            #if !GK_LINUX
+            #if !__MonoCS__
             stream.WriteLine(str);
             #else
             stream.Write(str + GEDCOM_NEWLINE);

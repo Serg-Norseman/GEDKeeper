@@ -4,14 +4,11 @@ namespace GKImageViewerPlugin
 {
 	partial class ImageViewerWin
 	{
-		private System.ComponentModel.IContainer components;
 		private System.Windows.Forms.ToolStripButton tbFileLoad;
 		private System.Windows.Forms.ToolStrip ToolBar1;
 
 		private void InitializeComponent()
 		{
-		    this.components = new System.ComponentModel.Container();
-		    System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ImageViewerWin));
 		    this.ToolBar1 = new System.Windows.Forms.ToolStrip();
 		    this.tbFileLoad = new System.Windows.Forms.ToolStripButton();
 		    this.ToolBar1.SuspendLayout();

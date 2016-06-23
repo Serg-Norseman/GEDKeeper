@@ -35,11 +35,11 @@ namespace GKPedigreeImporterPlugin
         private int fCurrentStage;
         private int fAvailableStage;
 
-        public PedigreeImporterDlg(IPlugin fPlugin)
+        public PedigreeImporterDlg(IPlugin plugin)
         {
             InitializeComponent();
 
-            this.fPlugin = fPlugin;
+            this.fPlugin = plugin;
             this.fLangMan = fPlugin.LangMan;
 
             this.cbDatesFormat.Items.Clear();
@@ -96,7 +96,7 @@ namespace GKPedigreeImporterPlugin
         private void btnImportFileChoose_Click(object sender, EventArgs e)
         {
             string filter;
-            #if !GK_LINUX
+            #if !__MonoCS__
             filter = fLangMan.LS(ILS.LSID_AllFiltersW);
             #else
             filter = fLangMan.LS(ILS.LSID_AllFiltersL);

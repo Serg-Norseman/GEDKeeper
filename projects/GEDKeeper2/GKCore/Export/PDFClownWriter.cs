@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if GK_LINUX
+#if __MonoCS__
 //#define USE_PDFCLOWN
 #endif
 

@@ -631,7 +631,7 @@ namespace GKUI
 
         private void miExportToFamilyBookClick(object sender, EventArgs e)
         {
-            #if GK_LINUX
+            #if __MonoCS__
             this.ShowWarning(@"This function is not supported in Linux");
             #else
             IBaseWindow curBase = this.GetCurrentFile();
@@ -826,7 +826,7 @@ namespace GKUI
 
         private void miMapClick(object sender, EventArgs e)
         {
-            #if GK_LINUX
+            #if __MonoCS__
             this.ShowWarning(@"This function is not supported in Linux");
             #else
             IBaseWindow curBase = this.GetCurrentFile();
@@ -1030,7 +1030,7 @@ namespace GKUI
             if (activeChild != null)
             {
                 // platform: in Mono here is bug, but code works without this line
-                #if !GK_LINUX
+                #if !__MonoCS__
                 ActivateMdiChild(null);
                 #endif
 

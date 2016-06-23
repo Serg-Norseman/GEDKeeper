@@ -18,12 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if __MonoCS__
-//#undef GK_LINUX
-#else
-//test
-#endif
-
 using System;
 using System.Reflection;
 using System.Resources;
@@ -59,7 +53,7 @@ namespace GKUI
     /// </summary>
     internal sealed class GKProgram
     {
-        #if GK_LINUX
+        #if __MonoCS__
         private static MainWin fMainWin;
         #endif
 
@@ -73,7 +67,7 @@ namespace GKUI
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            #if GK_LINUX
+            #if __MonoCS__
             
             try {
                 bool firstInstance = GlobalMutexPool.CreateMutex(GKData.APP_TITLE, true);
@@ -112,7 +106,7 @@ namespace GKUI
             #endif
         }
 
-        #if GK_LINUX
+        #if __MonoCS__
         public static void ProcessMessage(IpcMessage msg)
         {
             if (msg.Message == AppMessage.RestoreWindow) {

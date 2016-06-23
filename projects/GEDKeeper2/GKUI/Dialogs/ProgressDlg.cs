@@ -236,7 +236,7 @@ namespace GKUI.Dialogs
                     fProgressForm.DoStep(percent);
                 }
             }
-            catch (Exception ex)
+            catch
             {
             }
         }

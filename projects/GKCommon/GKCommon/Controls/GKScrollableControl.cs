@@ -33,7 +33,7 @@ namespace GKCommon.Controls
             base.AutoScroll = true;
             base.ResizeRedraw = true;
 
-            #if GK_LINUX
+            #if __MonoCS__
             ScrollBar obj = ReflectionHelper.GetFieldValue(this, "hscrollbar") as ScrollBar;
             if (obj != null) {
                 ReflectionHelper.RemoveControlStdEventHandlers(obj, "ScrollEvent");
@@ -50,7 +50,7 @@ namespace GKCommon.Controls
             #endif
         }
 
-        #if GK_LINUX
+        #if __MonoCS__
         private void HandleHScrollEvent (object sender, ScrollEventArgs args)
         {
             //this.fValidEvent = true;

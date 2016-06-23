@@ -641,7 +641,7 @@ namespace GKCommon.GEDCOM
         {
             const string str = "0 TRLR";
 
-            #if !GK_LINUX
+            #if !__MonoCS__
             stream.WriteLine(str);
             #else
             stream.Write(str + GEDCOM_NEWLINE);

@@ -174,7 +174,7 @@ namespace GKUI.Controls
             this.ScriptErrorsSuppressed = true;
             this.AllowWebBrowserDrop = false;
 
-            #if !GK_LINUX
+            #if !__MonoCS__
             this.DocumentText = strContent;
 
             // Wait for document being loaded
@@ -430,7 +430,7 @@ namespace GKUI.Controls
             script = script.Trim();
             if (string.IsNullOrEmpty(script)) return;
 
-            #if !GK_LINUX
+            #if !__MonoCS__
             try
             {
                 HtmlElement script1 = this.Document.GetElementById("gkScript");

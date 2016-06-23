@@ -34,11 +34,11 @@ namespace GKTreeVizPlugin
         	get { return decimal.ToInt32(this.edMinGens.Value); }
         }
         
-        public TVSettingsDlg(IPlugin fPlugin)
+        public TVSettingsDlg(IPlugin plugin)
         {
             InitializeComponent();
             
-            this.fPlugin = fPlugin;
+            this.fPlugin = plugin;
             this.Text = fPlugin.DisplayName;
             
             // SetLang()

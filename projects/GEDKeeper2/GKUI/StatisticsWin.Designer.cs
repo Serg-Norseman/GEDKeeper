@@ -19,7 +19,6 @@ namespace GKUI
 
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StatisticsWin));
 			this.grpSummary = new System.Windows.Forms.GroupBox();
 			this.lvSummary = new System.Windows.Forms.ListView();
 			this.ColumnHeader1 = new System.Windows.Forms.ColumnHeader();

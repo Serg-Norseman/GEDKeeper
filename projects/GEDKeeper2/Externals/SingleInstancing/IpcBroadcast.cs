@@ -1,4 +1,4 @@
-﻿#if GK_LINUX
+﻿#if __MonoCS__
 
 using System;
 using System.Collections.Generic;

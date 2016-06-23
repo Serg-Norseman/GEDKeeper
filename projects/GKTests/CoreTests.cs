@@ -46,8 +46,6 @@ namespace GKTests
         [TestFixtureSetUp]
         public void SetUp()
         {
-            Console.WriteLine(@">>> START CoreTests");
-
             fContext = TestStubs.CreateContext();
             TestStubs.FillContext(fContext);
         }
@@ -55,7 +53,6 @@ namespace GKTests
         [TestFixtureTearDown]
         public void TearDown()
         {
-            Console.WriteLine(@">>> END CoreTests");
         }
 
         [Test]
