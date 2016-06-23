@@ -19,19 +19,42 @@ objdirdos := obj\\$(releasetype)\\
 outdir := $(objdir)
 outdirdos := $(objdirdos)
 installdir := ../../plugins/
-# Get `sources` via:
-# find -regex '.+\.cs' | sed 's/\(.\+\)/\1 \\/'
+
+# Get `sources` via (run from this directory):
+# find -regex '.+\.cs' | sed 's/\(.\+\)/\1 \\/' | sort
 # Just do not forget to remove trailing " \" on the last line.
+# Or (this is more valid):
+# grep "[[:space:]]\+<Compile[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GKTreeVizPlugin.mswin.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<Compile[[:space:]]\+Include=\"\(.*\)\"\([[:space:]]\?\/\)\?>/.\/\1 \\\\/" | sort
+# grep "[[:space:]]\+<Compile[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GKTreeVizPlugin.linux.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<Compile[[:space:]]\+Include=\"\(.*\)\"\([[:space:]]\?\/\)\?>/.\/\1 \\\\/" | sort
+# Because `$(sources)` must (may) have different values for Windows and Linux targets.
+ifeq ($(windows), $(softwareplatform))
+
+# `$(sources)` for `$(windows)`
 sources := \
 ./GKTreeVizPlugin.cs \
 ./HighResolutionTimer.cs \
-./TreeVizControl.cs \
-./TreeVizViewer.cs \
 ./TVPerson.cs \
+./TVSettingsDlg.Designer.cs \
 ./TVSettingsDlg.cs \
-./TVSettingsDlg.Designer.cs
+./TreeVizControl.cs \
+./TreeVizViewer.cs
+
+else
+
+# `$(sources)` for `$(linux)`
+sources := \
+./GKTreeVizPlugin.cs \
+./HighResolutionTimer.cs \
+./TVPerson.cs \
+./TVSettingsDlg.Designer.cs \
+./TVSettingsDlg.cs \
+./TreeVizControl.cs \
+./TreeVizViewer.cs
+
+endif
+
 # Get files list for `resources` via (run from this directory):
-# find -regex '.+\.resx' | sed 's/.\+\/\(.\+\)\.resx/\1.resources \\/'
+# find -regex '.+\.resx' | sed 's/.\+\/\(.\+\)\.resx/\1.resources \\/' | sort
 resources := \
 $(addprefix $(objdir), \
 TVSettingsDlg.resources \

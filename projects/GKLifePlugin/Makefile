@@ -13,11 +13,26 @@ objdirdos := obj\\$(releasetype)\\
 outdir := $(objdir)
 outdirdos := $(objdirdos)
 installdir := ../../plugins/
-# Get `sources` via:
-# find -regex '.+\.cs' | sed 's/\(.\+\)/\1 \\/'
+
+# Get `sources` via (run from this directory):
+# find -regex '.+\.cs' | sed 's/\(.\+\)/\1 \\/' | sort
 # Just do not forget to remove trailing " \" on the last line.
-sources := \
-./GKLifePlugin.cs
+# Or (this is more valid):
+# grep "[[:space:]]\+<Compile[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GKLifePlugin.mswin.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<Compile[[:space:]]\+Include=\"\(.*\)\"\([[:space:]]\?\/\)\?>/.\/\1 \\\\/" | sort
+# grep "[[:space:]]\+<Compile[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GKLifePlugin.linux.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<Compile[[:space:]]\+Include=\"\(.*\)\"\([[:space:]]\?\/\)\?>/.\/\1 \\\\/" | sort
+# Because `$(sources)` must (may) have different values for Windows and Linux targets.
+ifeq ($(windows), $(softwareplatform))
+
+# `$(sources)` for `$(windows)`
+sources := ./GKLifePlugin.cs
+
+else
+
+# `$(sources)` for `$(linux)`
+sources := ./GKLifePlugin.cs
+
+endif
+
 cscrefs := \
 //reference:"..\\$(gkcommon)\\obj\\$(releasetype)\\$(gkcommon).dll" \
 //reference:"ConwayLife.dll"

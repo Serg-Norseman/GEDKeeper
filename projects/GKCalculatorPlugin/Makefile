@@ -13,14 +13,34 @@ objdirdos := obj\\$(releasetype)\\
 outdir := $(objdir)
 outdirdos := $(objdirdos)
 installdir := ../../plugins/
-# Get `sources` via:
-# find -regex '.+\.cs' | sed 's/\(.\+\)/\1 \\/'
+
+# Get `sources` via (run from this directory):
+# find -regex '.+\.cs' | sed 's/\(.\+\)/\1 \\/' | sort
 # Just do not forget to remove trailing " \" on the last line.
+# Or (this is more valid):
+# grep "[[:space:]]\+<Compile[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GKCalculatorPlugin.mswin.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<Compile[[:space:]]\+Include=\"\(.*\)\"\([[:space:]]\?\/\)\?>/.\/\1 \\\\/" | sort
+# grep "[[:space:]]\+<Compile[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GKCalculatorPlugin.linux.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<Compile[[:space:]]\+Include=\"\(.*\)\"\([[:space:]]\?\/\)\?>/.\/\1 \\\\/" | sort
+# Because `$(sources)` must (may) have different values for Windows and Linux targets.
+ifeq ($(windows), $(softwareplatform))
+
+# `$(sources)` for `$(windows)`
 sources := \
-./CalcWidget.cs \
 ./CalcWidget.Designer.cs \
+./CalcWidget.cs \
 ./ExpCalculator.cs \
 ./GKCalculatorPlugin.cs
+
+else
+
+# `$(sources)` for `$(linux)`
+sources := \
+./CalcWidget.Designer.cs \
+./CalcWidget.cs \
+./ExpCalculator.cs \
+./GKCalculatorPlugin.cs
+
+endif
+
 cscrefs := \
 //reference:"..\\$(gkcommon)\\obj\\$(releasetype)\\$(gkcommon).dll"
 ifeq ($(windows), $(softwareplatform))
