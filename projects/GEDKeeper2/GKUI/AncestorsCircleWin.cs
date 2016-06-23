@@ -137,6 +137,11 @@ namespace GKUI
             return string.Format(LangMan.LS(LSID.LSID_TreeIndividualsCount), fAncestorsCircle.IndividualsCount.ToString());
         }
 
+        public void UpdateView()
+        {
+            // TODO ???
+        }
+
         public bool NavCanBackward()
         {
             return this.fAncestorsCircle.NavCanBackward();

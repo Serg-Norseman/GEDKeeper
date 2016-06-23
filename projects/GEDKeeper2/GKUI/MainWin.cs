@@ -444,15 +444,16 @@ namespace GKUI
         public void AddMRU(string fileName)
         {
             int idx = this.fOptions.MRUFiles_IndexOf(fileName);
+
+            MRUFile tmp_mf;
             if (idx >= 0) {
-                MRUFile tmp_mf = this.fOptions.MRUFiles[0];
-                this.fOptions.MRUFiles[0] = this.fOptions.MRUFiles[idx];
-                this.fOptions.MRUFiles[idx] = tmp_mf;
+                tmp_mf = this.fOptions.MRUFiles[idx];
+                this.fOptions.MRUFiles.RemoveAt(idx);
             } else {
-                MRUFile new_mf = new MRUFile();
-                new_mf.FileName = fileName;
-                this.fOptions.MRUFiles.Insert(0, new_mf);
+                tmp_mf = new MRUFile(fileName);
             }
+
+            this.fOptions.MRUFiles.Insert(0, tmp_mf);
 
             this.UpdateMRU();
         }
@@ -688,35 +689,21 @@ namespace GKUI
 
         private void miOptionsClick(object sender, EventArgs e)
         {
-            OptionsDlg fmOptions = new OptionsDlg(this);
-            try
+            using (OptionsDlg dlgOptions = new OptionsDlg(this))
             {
-                /*GlobalOptions options = MainWin.Instance.Options;
-				
-				IBase xbase = this.GetCurrentFile();
-				if (xbase != null) {
-					IListManager listman = xbase.GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
-					listman.ListColumns.CopyTo(options.IndividualListColumns);
-				}*/
-
                 Form activeForm = this.ActiveMdiChild;
-                if (activeForm is IBaseWindow) fmOptions.SetPage(OptionsPage.opInterface);
-                if (activeForm is IChartWindow) fmOptions.SetPage(OptionsPage.opTreeChart);
+                if (activeForm is IBaseWindow) dlgOptions.SetPage(OptionsPage.opInterface);
+                if (activeForm is IChartWindow) dlgOptions.SetPage(OptionsPage.opTreeChart);
 
-                if (fmOptions.ShowDialog() == DialogResult.OK) {
-                    int num = base.MdiChildren.Length;
-                    for (int i = 0; i < num; i++) {
-                        Form child = base.MdiChildren[i];
-
-                        if (child is IBaseWindow) {
-                            (child as IBaseWindow).RefreshLists(true);
-                        } else if (child is IChartWindow) {
-                            (child as IChartWindow).GenChart(false);
+                if (dlgOptions.ShowDialog() == DialogResult.OK)
+                {
+                    foreach (Form child in base.MdiChildren)
+                    {
+                        if (child is IWorkWindow) {
+                            (child as IWorkWindow).UpdateView();
                         }
                     }
                 }
-            } finally {
-                fmOptions.Dispose();
             }
         }
 
@@ -1126,7 +1113,7 @@ namespace GKUI
 
         #region Plugins support
 
-        public PluginInfo GetPluginAttributes(IPlugin plugin)
+        public static PluginInfo GetPluginAttributes(IPlugin plugin)
         {
             if (plugin == null) {
                 throw new ArgumentNullException("plugin");
@@ -1155,13 +1142,11 @@ namespace GKUI
         {
             if (this.fPlugins == null) return;
 
-            int num = this.fPlugins.Count;
-            for (int i = 0; i < num; i++) {
-                IPlugin plugin = this.fPlugins[i];
+            foreach (IPlugin plugin in this.fPlugins) {
                 plugin.OnLanguageChange();
             }
 
-            num = this.miPlugins.DropDownItems.Count;
+            int num = this.miPlugins.DropDownItems.Count;
             for (int i = 0; i < num; i++) {
                 ToolStripItem mi = this.miPlugins.DropDownItems[i];
                 IPlugin plugin = (IPlugin)mi.Tag;
@@ -1188,9 +1173,7 @@ namespace GKUI
 
                 this.fActiveWidgets.Clear();
 
-                int num = this.fPlugins.Count;
-                for (int i = 0; i < num; i++) {
-                    IPlugin plugin = this.fPlugins[i];
+                foreach (IPlugin plugin in this.fPlugins) {
                     string dispName = plugin.DisplayName;
 
                     ToolStripMenuItem mi = new ToolStripMenuItem(dispName/*, i*/);
@@ -1217,9 +1200,7 @@ namespace GKUI
             try {
                 if (this.fPlugins == null) return;
 
-                int num = this.fPlugins.Count;
-                for (int i = 0; i < num; i++) {
-                    IPlugin plugin = this.fPlugins[i];
+                foreach (IPlugin plugin in this.fPlugins) {
                     plugin.Shutdown();
                 }
             } catch (Exception ex) {
@@ -1332,11 +1313,7 @@ namespace GKUI
             if (this.fPlugins == null) return;
             if (aBase == null || record == null) return;
 
-            int num = this.fPlugins.Count;
-            for (int i = 0; i < num; i++)
-            {
-                IPlugin plugin = this.fPlugins[i];
-
+            foreach (IPlugin plugin in this.fPlugins) {
                 ISubscriber subscriber = (plugin as ISubscriber);
                 if (subscriber != null) {
                     try {

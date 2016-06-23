@@ -711,6 +711,11 @@ namespace GKUI
             return string.Format(LangMan.LS(LSID.LSID_TreeIndividualsCount), fTreeBox.IndividualsCount.ToString());
         }
 
+        public void UpdateView()
+        {
+            this.GenChart(false);
+        }
+
         public void NavNext()
         {
             this.fTreeBox.NavNext();

@@ -23,11 +23,20 @@ using GKCommon;
 
 namespace GKCore.Options
 {
-    public class MRUFile
+    public sealed class MRUFile
     {
         public string FileName;
         public ExtRect WinRect;
         public FormWindowState WinState;
+
+        public MRUFile()
+        {
+        }
+
+        public MRUFile(string fileName)
+        {
+            this.FileName = fileName;
+        }
 
         public void Load(IniFile iniFile, string section)
         {

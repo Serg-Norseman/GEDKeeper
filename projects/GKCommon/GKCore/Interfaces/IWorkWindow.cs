@@ -27,6 +27,11 @@ namespace GKCore.Interfaces
     {
         string GetStatusString();
 
+        /// <summary>
+        /// Is called after changing the settings of the user interface.
+        /// </summary>
+        void UpdateView();
+
         bool NavCanBackward();
         bool NavCanForward();
         void NavNext();

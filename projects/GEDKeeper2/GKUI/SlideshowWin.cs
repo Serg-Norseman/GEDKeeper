@@ -197,6 +197,11 @@ namespace GKUI
             return string.Format("{0} / {1} [{2}]", this.fCurrentIndex + 1, this.fFileRefs.Count, this.fCurrentText);
         }
 
+        public void UpdateView()
+        {
+            // dummy
+        }
+
         public void NavNext()
         {
         }

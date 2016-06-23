@@ -211,7 +211,7 @@ namespace GKUI.Dialogs
             
             foreach (IPlugin plugin in MainWin.Instance.Plugins)
             {
-                PluginInfo pInfo = MainWin.Instance.GetPluginAttributes(plugin);
+                PluginInfo pInfo = MainWin.GetPluginAttributes(plugin);
                 
                 ListViewItem item = this.lvPlugins.Items.Add(pInfo.Title);
                 item.SubItems.Add(pInfo.Version);

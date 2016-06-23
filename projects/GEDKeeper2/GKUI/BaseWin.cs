@@ -956,8 +956,7 @@ namespace GKUI
 
             if (result == GEDCOMSex.svNone)
             {
-                SexCheckDlg dlg = new SexCheckDlg();
-                try
+                using (SexCheckDlg dlg = new SexCheckDlg())
                 {
                     dlg.IndividualName = iName + " " + iPatr;
                     result = RussianCulture.GetSex(iName, iPatr, false);
@@ -972,10 +971,6 @@ namespace GKUI
                             namesTable.SetNameSex(iName, result);
                         }
                     }
-                }
-                finally
-                {
-                    dlg.Dispose();
                 }
             }
 
@@ -1066,6 +1061,11 @@ namespace GKUI
             }
 
             return res;
+        }
+
+        void IWorkWindow.UpdateView()
+        {
+            this.RefreshLists(true);
         }
 
         void IWorkWindow.NavNext()
