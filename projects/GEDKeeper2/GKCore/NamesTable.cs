@@ -1,4 +1,4 @@
-/*
+п»ї/*
  *  "GEDKeeper", the personal genealogical database editor.
  *  Copyright (C) 2009-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
  *
@@ -72,7 +72,7 @@ namespace GKCore
             }
 
             return cmp >= (int)Math.Round(len * 0.5);
-            // [Пав]ел/Павлович (3/5), [Ил]ья/Ильич (2/4)
+            // [РџР°РІ]РµР»/РџР°РІР»РѕРІРёС‡ (3/5), [РР»]СЊСЏ/РР»СЊРёС‡ (2/4)
         }
 
         #endregion

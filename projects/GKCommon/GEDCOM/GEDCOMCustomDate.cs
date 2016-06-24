@@ -1,4 +1,4 @@
-/*
+Ôªø/*
  *  "GEDKeeper", the personal genealogical database editor.
  *  Copyright (C) 2009-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
  *
@@ -71,8 +71,8 @@ namespace GKCommon.GEDCOM
 
             GEDCOMMonthRusArray = new string[]
             {
-                "ﬂÕ¬", "‘≈¬", "Ã¿–", "¿œ–", "Ã¿…", "»ﬁÕ",
-                "»ﬁÀ", "¿¬√", "—≈Õ", "Œ “", "ÕŒﬂ", "ƒ≈ "
+                "–Ø–ù–í", "–§–ï–í", "–ú–ê–†", "–ê–ü–†", "–ú–ê–ô", "–ò–Æ–ù",
+                "–ò–Æ–õ", "–ê–í–ì", "–°–ï–ù", "–û–ö–¢", "–ù–û–Ø", "–î–ï–ö"
             };
         }
 

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * INI files.
  * 
  * Copyright by Gajatko a.d. 2007.

@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  ExpCalculator, simple calculator for standard expressions
  *  Author: Ivlev M.Dmitry (mailto:Dimon@Diogen.nstu.nsk.su)
  *  Patched: Sergey Pedora (mailto:Sergey@mail.fact400.ru)

@@ -1,4 +1,4 @@
-/*
+п»ї/*
  *  "GEDKeeper", the personal genealogical database editor.
  *  Copyright (C) 2009-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
  *
@@ -20,7 +20,7 @@
 
 namespace GKCommon.GEDCOM
 {
-    // FIXME: возможны многочисленные нарушения стандарта, перепроверить вложенность тэгов
+    // FIXME: РІРѕР·РјРѕР¶РЅС‹ РјРЅРѕРіРѕС‡РёСЃР»РµРЅРЅС‹Рµ РЅР°СЂСѓС€РµРЅРёСЏ СЃС‚Р°РЅРґР°СЂС‚Р°, РїРµСЂРµРїСЂРѕРІРµСЂРёС‚СЊ РІР»РѕР¶РµРЅРЅРѕСЃС‚СЊ С‚СЌРіРѕРІ
     public sealed class GEDCOMIndividualOrdinance : GEDCOMTagWithLists
     {
         public GEDCOMDateValue Date

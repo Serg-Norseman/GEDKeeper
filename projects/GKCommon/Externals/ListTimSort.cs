@@ -1,4 +1,4 @@
-#region Licence
+﻿#region Licence
 
 /*
  * Copyright (C) 2008 The Android Open Source Project

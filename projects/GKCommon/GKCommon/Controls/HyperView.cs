@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  An HyperText (readonly) Memo for Delphi
  *    from TJumpMemo by Alexander Kuznetsov (sanhome@hotmail.com)
  *  Copyright (C) 1997 Paul Toth (TothPaul@Mygale.org)

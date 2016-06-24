@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
  *  Copyright (C) 2009-2016 by Serg V. Zhdanovskih (aka Alchemist, aka Norseman).
  *
@@ -198,7 +198,7 @@ namespace GKCore.Lists
             if (listView == null) return;
 
             this.ColumnsMap_Clear();
-            this.AddListColumn(listView, "�", 50, false, 0, 0);
+            this.AddListColumn(listView, "№", 50, false, 0, 0);
 
             int num = this.fListColumns.ColumnStatics.Count;
             for (int i = 0; i < num; i++) {

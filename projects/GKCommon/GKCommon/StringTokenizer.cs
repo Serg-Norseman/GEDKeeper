@@ -1,4 +1,4 @@
-/**
+﻿/**
  *	Author: Andrew Deren
  *	Date: July, 2004
  *	http://www.adersoftware.com
