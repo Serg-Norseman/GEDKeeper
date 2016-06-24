@@ -37,7 +37,7 @@ using GKUI.Dialogs;
 namespace GKUI
 {
     /// <summary>
-    /// Localization: dirty
+    /// 
     /// </summary>
     public partial class TreeChartWin : Form, IChartWindow
     {

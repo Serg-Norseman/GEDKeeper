@@ -40,7 +40,7 @@ namespace GKFlowInputPlugin
     }
 
     /// <summary>
-    /// Localization: dirty
+    /// 
     /// </summary>
     public partial class FlowInputDlg : Form
     {

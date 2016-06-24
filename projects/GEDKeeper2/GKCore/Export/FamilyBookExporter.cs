@@ -33,7 +33,7 @@ using iTextSharp.text.pdf;
 namespace GKCore.Export
 {
     /// <summary>
-    /// Localization: dirty
+    /// 
     /// CodeTransformation: need
     /// </summary>
     public sealed class FamilyBookExporter : Exporter

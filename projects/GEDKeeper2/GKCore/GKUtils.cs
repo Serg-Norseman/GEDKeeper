@@ -40,7 +40,7 @@ using Externals.MapiMail;
 namespace GKCore
 {
     /// <summary>
-    /// Localization: dirty
+    /// 
     /// </summary>
     public static class GKUtils
     {
@@ -294,7 +294,7 @@ namespace GKCore
             return result.ToString();
         }
 
-        public static void GetLocationLinks(GEDCOMTree tree, GEDCOMLocationRecord locRec, ref StringList aList)
+        public static void GetLocationLinks(GEDCOMTree tree, GEDCOMLocationRecord locRec, ref StringList linksList)
         {
             int num = tree.RecordsCount;
             for (int i = 0; i < num; i++)
@@ -312,7 +312,7 @@ namespace GKCore
 
                         if (evt.Detail.Place.Location.Value == locRec)
                         {
-                            aList.Add(GenRecordLink(rec, true) + ", " + GetEventName(evt).ToLower());
+                            linksList.AddObject(GenRecordName(rec, true) + ", " + GetEventName(evt).ToLower(), rec);
                         }
                     }
                 }
@@ -330,7 +330,7 @@ namespace GKCore
             return result;
         }
 
-        public static string GenRecordLink(GEDCOMRecord record, bool signed)
+        public static string GenRecordName(GEDCOMRecord record, bool signed)
         {
             string result = "";
 
@@ -386,7 +386,18 @@ namespace GKCore
                         break;
                 }
 
-                result = HyperLink(record.XRef, sign + st, 0);
+                result = sign + st;
+            }
+
+            return result;
+        }
+
+        public static string GenRecordLink(GEDCOMRecord record, bool signed)
+        {
+            string result = "";
+
+            if (record != null) {
+                result = HyperLink(record.XRef, GenRecordName(record, signed), 0);
             }
 
             return result;
@@ -1979,7 +1990,7 @@ namespace GKCore
                         {
                             string st = mmRec.FileReferences[0].Title;
 
-                            summary.Add("  " + HyperLink(mmRec.XRef, st, 0) + " (" + 
+                            summary.Add("  " + HyperLink(mmRec.XRef, st, 0) + " (" +
                                         HyperLink("view_" + mmRec.XRef, LangMan.LS(LSID.LSID_MediaView), 0) + ")");
                         }
                     }
@@ -2805,7 +2816,8 @@ namespace GKCore
                             int num = linkList.Count;
                             for (int i = 0; i < num; i++)
                             {
-                                summary.Add("    " + linkList[i]);
+                                GEDCOMRecord rec = linkList.GetObject(i) as GEDCOMRecord;
+                                summary.Add("    " + HyperLink(rec.XRef, linkList[i], 0));
                             }
                         }
 

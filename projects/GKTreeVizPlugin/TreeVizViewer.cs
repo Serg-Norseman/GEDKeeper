@@ -28,7 +28,7 @@ using GKCore.Interfaces;
 namespace GKTreeVizPlugin
 {
     /// <summary>
-    /// Localization: dirty
+    /// 
     /// </summary>
     public sealed class TreeVizViewer : Form
 	{

@@ -31,7 +31,7 @@ namespace GKCore
     }
     
     /// <summary>
-    /// Localization: dirty
+    /// 
     /// </summary>
     public static class GKData
     {

@@ -41,7 +41,7 @@ using GKUI.Dialogs;
 namespace GKUI
 {
     /// <summary>
-    /// Localization: dirty
+    /// 
     /// </summary>
     public sealed partial class BaseWin : Form, IBaseWindow
     {

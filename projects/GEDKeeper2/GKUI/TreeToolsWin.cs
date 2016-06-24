@@ -35,7 +35,7 @@ using GKUI.Controls;
 namespace GKUI
 {
     /// <summary>
-    /// Localization: dirty
+    /// 
     /// </summary>
     public sealed partial class TreeToolsWin : Form
     {

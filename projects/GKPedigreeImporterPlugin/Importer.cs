@@ -98,7 +98,7 @@ namespace GKPedigreeImporterPlugin
     }
 
     /// <summary>
-    /// Localization: dirty
+    /// 
     /// </summary>
     public class Importer : BaseObject
     {

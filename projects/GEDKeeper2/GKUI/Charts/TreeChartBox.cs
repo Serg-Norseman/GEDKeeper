@@ -45,7 +45,7 @@ namespace GKUI.Charts
     public delegate void RootChangedEventHandler(object sender, TreeChartPerson person);
 
     /// <summary>
-    /// Localization: dirty
+    /// 
     /// </summary>
     public class TreeChartBox : CustomChart
     {

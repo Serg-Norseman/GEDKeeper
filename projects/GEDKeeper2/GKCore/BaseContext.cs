@@ -39,7 +39,7 @@ using GKCore.Types;
 namespace GKCore
 {
     /// <summary>
-    /// Localization: dirty
+    /// 
     /// </summary>
     public class BaseContext : IBaseContext
     {
