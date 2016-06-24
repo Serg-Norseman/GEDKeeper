@@ -15,9 +15,17 @@ objdirdos := obj\\$(releasetype)\\
 outdir := $(objdir)
 outdirdos := $(objdirdos)
 installdir := ../../
+
 # Get `sources` via (run from this directory):
-# find -regex '.+\.cs' | sed 's/\(.\+\)/\1 \\/'
+# find -regex '.+\.cs' | sed 's/\(.\+\)/\1 \\/' | sort
 # Just do not forget to remove trailing " \" on the last line.
+# Or (this is more valid):
+# grep "[[:space:]]\+<Compile[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GKCommon.mswin.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<Compile[[:space:]]\+Include=\"\(.*\)\"\([[:space:]]\?\/\)\?>/.\/\1 \\\\/" | sort
+# grep "[[:space:]]\+<Compile[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GKCommon.linux.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<Compile[[:space:]]\+Include=\"\(.*\)\"\([[:space:]]\?\/\)\?>/.\/\1 \\\\/" | sort
+# Because `$(sources)` must (may) have different values for Windows and Linux targets.
+ifeq ($(windows), $(softwareplatform))
+
+# `$(sources)` for `$(windows)`
 sources := \
 ./AssemblyInfo.cs \
 ./Externals/CSV/CSVReader.cs \
@@ -26,12 +34,12 @@ sources := \
 ./Externals/IniFiles/IniFileCommentary.cs \
 ./Externals/IniFiles/IniFileElement.cs \
 ./Externals/IniFiles/IniFileReader.cs \
-./Externals/IniFiles/IniFiles.cs \
 ./Externals/IniFiles/IniFileSection.cs \
 ./Externals/IniFiles/IniFileSectionStart.cs \
 ./Externals/IniFiles/IniFileSettings.cs \
 ./Externals/IniFiles/IniFileValue.cs \
 ./Externals/IniFiles/IniFileWriter.cs \
+./Externals/IniFiles/IniFiles.cs \
 ./Externals/ListTimSort.cs \
 ./Externals/MapiMailMessage.cs \
 ./Externals/ZipStorer.cs \
@@ -105,26 +113,26 @@ sources := \
 ./GEDCOM/MatchParams.cs \
 ./GEDCOM/XRefReplacer.cs \
 ./GKCommon/BaseObject.cs \
+./GKCommon/CRC32.cs \
 ./GKCommon/CalendarConverter.cs \
 ./GKCommon/CalendarData.cs \
 ./GKCommon/Controls/ExtResources.Designer.cs \
 ./GKCommon/Controls/GKScrollableControl.cs \
 ./GKCommon/Controls/HyperView.cs \
 ./GKCommon/Controls/ImageBox.cs \
-./GKCommon/Controls/ImageView.cs \
 ./GKCommon/Controls/ImageView.Designer.cs \
+./GKCommon/Controls/ImageView.cs \
 ./GKCommon/Controls/LogChart.cs \
 ./GKCommon/Controls/ReflectionHelper.cs \
 ./GKCommon/Controls/SlideList.cs \
 ./GKCommon/Controls/WizardPages.cs \
 ./GKCommon/ConvHelper.cs \
-./GKCommon/CRC32.cs \
 ./GKCommon/EnumSet.cs \
 ./GKCommon/ExtList.cs \
 ./GKCommon/ExtRect.cs \
 ./GKCommon/FileHelper.cs \
-./GKCommon/GfxHelper.cs \
 ./GKCommon/GKResourceManager.cs \
+./GKCommon/GfxHelper.cs \
 ./GKCommon/IndistinctMatching.cs \
 ./GKCommon/IniFile.cs \
 ./GKCommon/Logger.cs \
@@ -175,17 +183,192 @@ sources := \
 ./GKCore/Types/MultimediaKind.cs \
 ./GKCore/Types/NameEntry.cs \
 ./GKCore/Types/NameFormat.cs \
+./GKCore/Types/PGNode.cs \
+./GKCore/Types/PGNodeType.cs \
 ./GKCore/Types/PatriarchObj.cs \
 ./GKCore/Types/PedigreeFormat.cs \
 ./GKCore/Types/PersonEventKind.cs \
-./GKCore/Types/PGNode.cs \
-./GKCore/Types/PGNodeType.cs \
 ./GKCore/Types/RecordAction.cs \
 ./GKCore/Types/RelationKind.cs \
 ./GKCore/Types/ShieldState.cs \
 ./GKCore/Types/SpecialUserRef.cs \
 ./GKCore/Types/TargetMode.cs \
 ./GKCore/Types/WomanSurnameFormat.cs
+
+else
+
+# `$(sources)` for `$(linux)`
+sources := \
+./AssemblyInfo.cs \
+./Externals/CSV/CSVReader.cs \
+./Externals/CSV/StringConverter.cs \
+./Externals/IniFiles/IniFileBlankLine.cs \
+./Externals/IniFiles/IniFileCommentary.cs \
+./Externals/IniFiles/IniFileElement.cs \
+./Externals/IniFiles/IniFileReader.cs \
+./Externals/IniFiles/IniFileSection.cs \
+./Externals/IniFiles/IniFileSectionStart.cs \
+./Externals/IniFiles/IniFileSettings.cs \
+./Externals/IniFiles/IniFileValue.cs \
+./Externals/IniFiles/IniFileWriter.cs \
+./Externals/IniFiles/IniFiles.cs \
+./Externals/ListTimSort.cs \
+./Externals/MapiMailMessage.cs \
+./Externals/ZipStorer.cs \
+./GEDCOM/EGEDCOMException.cs \
+./GEDCOM/GEDCOMAddress.cs \
+./GEDCOM/GEDCOMAlias.cs \
+./GEDCOM/GEDCOMAssociation.cs \
+./GEDCOM/GEDCOMChangeDate.cs \
+./GEDCOM/GEDCOMChildToFamilyLink.cs \
+./GEDCOM/GEDCOMCommunicationRecord.cs \
+./GEDCOM/GEDCOMConsts.cs \
+./GEDCOM/GEDCOMCustomDate.cs \
+./GEDCOM/GEDCOMCustomEvent.cs \
+./GEDCOM/GEDCOMCustomRecord.cs \
+./GEDCOM/GEDCOMData.cs \
+./GEDCOM/GEDCOMDate.cs \
+./GEDCOM/GEDCOMDateApproximated.cs \
+./GEDCOM/GEDCOMDateExact.cs \
+./GEDCOM/GEDCOMDateInterpreted.cs \
+./GEDCOM/GEDCOMDatePeriod.cs \
+./GEDCOM/GEDCOMDateRange.cs \
+./GEDCOM/GEDCOMDateStatus.cs \
+./GEDCOM/GEDCOMDateValue.cs \
+./GEDCOM/GEDCOMDelegates.cs \
+./GEDCOM/GEDCOMEnums.cs \
+./GEDCOM/GEDCOMEvent.cs \
+./GEDCOM/GEDCOMEventDetail.cs \
+./GEDCOM/GEDCOMFactory.cs \
+./GEDCOM/GEDCOMFamilyEvent.cs \
+./GEDCOM/GEDCOMFamilyRecord.cs \
+./GEDCOM/GEDCOMFileReference.cs \
+./GEDCOM/GEDCOMFileReferenceWithTitle.cs \
+./GEDCOM/GEDCOMGroupRecord.cs \
+./GEDCOM/GEDCOMHeader.cs \
+./GEDCOM/GEDCOMIndividualAttribute.cs \
+./GEDCOM/GEDCOMIndividualEvent.cs \
+./GEDCOM/GEDCOMIndividualOrdinance.cs \
+./GEDCOM/GEDCOMIndividualRecord.cs \
+./GEDCOM/GEDCOMInterfaces.cs \
+./GEDCOM/GEDCOMList.cs \
+./GEDCOM/GEDCOMLocationRecord.cs \
+./GEDCOM/GEDCOMMap.cs \
+./GEDCOM/GEDCOMMultimediaLink.cs \
+./GEDCOM/GEDCOMMultimediaRecord.cs \
+./GEDCOM/GEDCOMNoteRecord.cs \
+./GEDCOM/GEDCOMNotes.cs \
+./GEDCOM/GEDCOMObject.cs \
+./GEDCOM/GEDCOMPersonalName.cs \
+./GEDCOM/GEDCOMPersonalNamePieces.cs \
+./GEDCOM/GEDCOMPlace.cs \
+./GEDCOM/GEDCOMPointer.cs \
+./GEDCOM/GEDCOMPointerWithNotes.cs \
+./GEDCOM/GEDCOMRecord.cs \
+./GEDCOM/GEDCOMRecordWithEvents.cs \
+./GEDCOM/GEDCOMRepositoryCitation.cs \
+./GEDCOM/GEDCOMRepositoryRecord.cs \
+./GEDCOM/GEDCOMResearchRecord.cs \
+./GEDCOM/GEDCOMSourceCitation.cs \
+./GEDCOM/GEDCOMSourceRecord.cs \
+./GEDCOM/GEDCOMSpouseSealing.cs \
+./GEDCOM/GEDCOMSpouseToFamilyLink.cs \
+./GEDCOM/GEDCOMSubmissionRecord.cs \
+./GEDCOM/GEDCOMSubmitterRecord.cs \
+./GEDCOM/GEDCOMTag.cs \
+./GEDCOM/GEDCOMTagWithLists.cs \
+./GEDCOM/GEDCOMTaskRecord.cs \
+./GEDCOM/GEDCOMTime.cs \
+./GEDCOM/GEDCOMTree.cs \
+./GEDCOM/GEDCOMUserReference.cs \
+./GEDCOM/GEDCOMUtils.cs \
+./GEDCOM/MatchParams.cs \
+./GEDCOM/XRefReplacer.cs \
+./GKCommon/BaseObject.cs \
+./GKCommon/CRC32.cs \
+./GKCommon/CalendarConverter.cs \
+./GKCommon/CalendarData.cs \
+./GKCommon/Controls/ExtResources.Designer.cs \
+./GKCommon/Controls/GKScrollableControl.cs \
+./GKCommon/Controls/HyperView.cs \
+./GKCommon/Controls/ImageBox.cs \
+./GKCommon/Controls/ImageView.Designer.cs \
+./GKCommon/Controls/ImageView.cs \
+./GKCommon/Controls/LogChart.cs \
+./GKCommon/Controls/ReflectionHelper.cs \
+./GKCommon/Controls/SlideList.cs \
+./GKCommon/Controls/WizardPages.cs \
+./GKCommon/ConvHelper.cs \
+./GKCommon/EnumSet.cs \
+./GKCommon/ExtList.cs \
+./GKCommon/ExtRect.cs \
+./GKCommon/FileHelper.cs \
+./GKCommon/GKResourceManager.cs \
+./GKCommon/GfxHelper.cs \
+./GKCommon/IndistinctMatching.cs \
+./GKCommon/IniFile.cs \
+./GKCommon/Logger.cs \
+./GKCommon/Range.cs \
+./GKCommon/SmartGraph/Edge.cs \
+./GKCommon/SmartGraph/Graph.cs \
+./GKCommon/SmartGraph/GraphvizWriter.cs \
+./GKCommon/SmartGraph/IDataProvider.cs \
+./GKCommon/SmartGraph/IEdge.cs \
+./GKCommon/SmartGraph/IGraph.cs \
+./GKCommon/SmartGraph/IVertex.cs \
+./GKCommon/SmartGraph/Vertex.cs \
+./GKCommon/SortHelper.cs \
+./GKCommon/StringList.cs \
+./GKCommon/StringTokenizer.cs \
+./GKCommon/SysInfo.cs \
+./GKCommon/Tween.cs \
+./GKCommon/UDN.cs \
+./GKCommon/UIHelper.cs \
+./GKCommon/ValuesCollection.cs \
+./GKCore/GKConsts.cs \
+./GKCore/Interfaces/IBaseContext.cs \
+./GKCore/Interfaces/IBaseEditor.cs \
+./GKCore/Interfaces/IBaseWindow.cs \
+./GKCore/Interfaces/IChartWindow.cs \
+./GKCore/Interfaces/ICulture.cs \
+./GKCore/Interfaces/ICustomFilter.cs \
+./GKCore/Interfaces/IHost.cs \
+./GKCore/Interfaces/ILangMan.cs \
+./GKCore/Interfaces/IListFilter.cs \
+./GKCore/Interfaces/IListManager.cs \
+./GKCore/Interfaces/ILocalization.cs \
+./GKCore/Interfaces/INamesTable.cs \
+./GKCore/Interfaces/IOptions.cs \
+./GKCore/Interfaces/IOptionsControl.cs \
+./GKCore/Interfaces/IPlugin.cs \
+./GKCore/Interfaces/IProgressController.cs \
+./GKCore/Interfaces/ISearchStrategy.cs \
+./GKCore/Interfaces/ISubscriber.cs \
+./GKCore/Interfaces/IWidget.cs \
+./GKCore/Interfaces/IWorkWindow.cs \
+./GKCore/Types/DateFormat.cs \
+./GKCore/Types/FamilyTarget.cs \
+./GKCore/Types/FilterGroupMode.cs \
+./GKCore/Types/FilterLifeMode.cs \
+./GKCore/Types/MediaFileNotFoundException.cs \
+./GKCore/Types/MediaStoreType.cs \
+./GKCore/Types/MultimediaKind.cs \
+./GKCore/Types/NameEntry.cs \
+./GKCore/Types/NameFormat.cs \
+./GKCore/Types/PGNode.cs \
+./GKCore/Types/PGNodeType.cs \
+./GKCore/Types/PatriarchObj.cs \
+./GKCore/Types/PedigreeFormat.cs \
+./GKCore/Types/PersonEventKind.cs \
+./GKCore/Types/RecordAction.cs \
+./GKCore/Types/RelationKind.cs \
+./GKCore/Types/ShieldState.cs \
+./GKCore/Types/SpecialUserRef.cs \
+./GKCore/Types/TargetMode.cs \
+./GKCore/Types/WomanSurnameFormat.cs
+
+endif
+
 resources := \
 $(addprefix $(objdir), \
 ExtResources.resources \

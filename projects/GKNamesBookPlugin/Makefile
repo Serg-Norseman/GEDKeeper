@@ -19,16 +19,36 @@ objdirdos := obj\\$(releasetype)\\
 outdir := $(objdir)
 outdirdos := $(objdirdos)
 installdir := ../../plugins/
-# Get `sources` via:
-# find -regex '.+\.cs' | sed 's/\(.\+\)/\1 \\/'
+
+# Get `sources` via (run from this directory):
+# find -regex '.+\.cs' | sed 's/\(.\+\)/\1 \\/' | sort
 # Just do not forget to remove trailing " \" on the last line.
+# Or (this is more valid):
+# grep "[[:space:]]\+<Compile[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GKNamesBookPlugin.mswin.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<Compile[[:space:]]\+Include=\"\(.*\)\"\([[:space:]]\?\/\)\?>/.\/\1 \\\\/" | sort
+# grep "[[:space:]]\+<Compile[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GKNamesBookPlugin.linux.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<Compile[[:space:]]\+Include=\"\(.*\)\"\([[:space:]]\?\/\)\?>/.\/\1 \\\\/" | sort
+# Because `$(sources)` must (may) have different values for Windows and Linux targets.
+ifeq ($(windows), $(softwareplatform))
+
+# `$(sources)` for `$(windows)`
 sources := \
 ./GKNamesBookPlugin.cs \
-./NamesBookWidget.cs \
+./NBResources.Designer.cs \
 ./NamesBookWidget.Designer.cs \
-./NBResources.Designer.cs
+./NamesBookWidget.cs
+
+else
+
+# `$(sources)` for `$(linux)`
+sources := \
+./GKNamesBookPlugin.cs \
+./NBResources.Designer.cs \
+./NamesBookWidget.Designer.cs \
+./NamesBookWidget.cs
+
+endif
+
 # Get files list for `resources` via (run from this directory):
-# find -regex '.+\.resx' | sed 's/.\+\/\(.\+\)\.resx/\1.resources \\/'
+# find -regex '.+\.resx' | sed 's/.\+\/\(.\+\)\.resx/\1.resources \\/' | sort
 resources := \
 $(addprefix $(objdir), \
 NBResources.resources \
