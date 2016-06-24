@@ -176,6 +176,7 @@ sources := \
 ./GKCore/Interfaces/IWorkWindow.cs \
 ./GKCore/Types/DateFormat.cs \
 ./GKCore/Types/FamilyTarget.cs \
+./GKCore/Types/FileBackup.cs \
 ./GKCore/Types/FilterGroupMode.cs \
 ./GKCore/Types/FilterLifeMode.cs \
 ./GKCore/Types/MediaFileNotFoundException.cs \
@@ -348,6 +349,7 @@ sources := \
 ./GKCore/Interfaces/IWorkWindow.cs \
 ./GKCore/Types/DateFormat.cs \
 ./GKCore/Types/FamilyTarget.cs \
+./GKCore/Types/FileBackup.cs \
 ./GKCore/Types/FilterGroupMode.cs \
 ./GKCore/Types/FilterLifeMode.cs \
 ./GKCore/Types/MediaFileNotFoundException.cs \

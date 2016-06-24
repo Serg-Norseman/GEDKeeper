@@ -86,18 +86,25 @@ namespace GKUI.Dialogs
         private System.Windows.Forms.Label lblChartFont;
         private System.Windows.Forms.TabControl tabsCharts;
         private System.Windows.Forms.TabPage pageCharts;
-        private System.Windows.Forms.CheckBox chkRevisionsBackup;
         private System.Windows.Forms.Label lblMaleColor;
         private System.Windows.Forms.Label lblFemaleColor;
         private System.Windows.Forms.Label lblUnkSexColor;
         private System.Windows.Forms.Label lblUnHusbandColor;
         private System.Windows.Forms.Label lblUnWifeColor;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.RadioButton radFBNone;
+        private System.Windows.Forms.RadioButton radFBOnlyPrev;
+        private System.Windows.Forms.RadioButton radFBEachRevision;
+        private System.Windows.Forms.GroupBox grpFileBackup;
 
         private void InitializeComponent()
         {
             this.PageControl1 = new System.Windows.Forms.TabControl();
             this.pageCommon = new System.Windows.Forms.TabPage();
+            this.grpFileBackup = new System.Windows.Forms.GroupBox();
+            this.radFBEachRevision = new System.Windows.Forms.RadioButton();
+            this.radFBOnlyPrev = new System.Windows.Forms.RadioButton();
+            this.radFBNone = new System.Windows.Forms.RadioButton();
             this.lblLanguage = new System.Windows.Forms.Label();
             this.grpEncoding = new System.Windows.Forms.GroupBox();
             this.radUTF = new System.Windows.Forms.RadioButton();
@@ -113,7 +120,6 @@ namespace GKUI.Dialogs
             this.txtProxyLogin = new System.Windows.Forms.TextBox();
             this.txtProxyPass = new System.Windows.Forms.TextBox();
             this.grpOther = new System.Windows.Forms.GroupBox();
-            this.chkRevisionsBackup = new System.Windows.Forms.CheckBox();
             this.chkShowOnStart = new System.Windows.Forms.CheckBox();
             this.cmbLanguages = new System.Windows.Forms.ComboBox();
             this.pageCharts = new System.Windows.Forms.TabPage();
@@ -187,6 +193,7 @@ namespace GKUI.Dialogs
             this.FontDialog1 = new System.Windows.Forms.FontDialog();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
+            this.grpFileBackup.SuspendLayout();
             this.grpEncoding.SuspendLayout();
             this.grpInternet.SuspendLayout();
             this.grpOther.SuspendLayout();
@@ -229,6 +236,7 @@ namespace GKUI.Dialogs
             // 
             // pageCommon
             // 
+            this.pageCommon.Controls.Add(this.grpFileBackup);
             this.pageCommon.Controls.Add(this.lblLanguage);
             this.pageCommon.Controls.Add(this.grpEncoding);
             this.pageCommon.Controls.Add(this.grpInternet);
@@ -239,6 +247,51 @@ namespace GKUI.Dialogs
             this.pageCommon.Size = new System.Drawing.Size(710, 428);
             this.pageCommon.TabIndex = 0;
             this.pageCommon.Text = "pageCommon";
+            // 
+            // grpFileBackup
+            // 
+            this.grpFileBackup.Controls.Add(this.radFBEachRevision);
+            this.grpFileBackup.Controls.Add(this.radFBOnlyPrev);
+            this.grpFileBackup.Controls.Add(this.radFBNone);
+            this.grpFileBackup.Location = new System.Drawing.Point(355, 10);
+            this.grpFileBackup.Name = "grpFileBackup";
+            this.grpFileBackup.Size = new System.Drawing.Size(336, 136);
+            this.grpFileBackup.TabIndex = 5;
+            this.grpFileBackup.TabStop = false;
+            this.grpFileBackup.Text = "grpFileBackup";
+            // 
+            // radFBEachRevision
+            // 
+            this.radFBEachRevision.Location = new System.Drawing.Point(13, 98);
+            this.radFBEachRevision.Margin = new System.Windows.Forms.Padding(10);
+            this.radFBEachRevision.Name = "radFBEachRevision";
+            this.radFBEachRevision.Size = new System.Drawing.Size(310, 24);
+            this.radFBEachRevision.TabIndex = 2;
+            this.radFBEachRevision.TabStop = true;
+            this.radFBEachRevision.Text = "radioButton3";
+            this.radFBEachRevision.UseVisualStyleBackColor = true;
+            // 
+            // radFBOnlyPrev
+            // 
+            this.radFBOnlyPrev.Location = new System.Drawing.Point(13, 64);
+            this.radFBOnlyPrev.Margin = new System.Windows.Forms.Padding(10, 10, 10, 0);
+            this.radFBOnlyPrev.Name = "radFBOnlyPrev";
+            this.radFBOnlyPrev.Size = new System.Drawing.Size(310, 24);
+            this.radFBOnlyPrev.TabIndex = 1;
+            this.radFBOnlyPrev.TabStop = true;
+            this.radFBOnlyPrev.Text = "radioButton2";
+            this.radFBOnlyPrev.UseVisualStyleBackColor = true;
+            // 
+            // radFBNone
+            // 
+            this.radFBNone.Location = new System.Drawing.Point(13, 30);
+            this.radFBNone.Margin = new System.Windows.Forms.Padding(10, 10, 10, 0);
+            this.radFBNone.Name = "radFBNone";
+            this.radFBNone.Size = new System.Drawing.Size(310, 24);
+            this.radFBNone.TabIndex = 0;
+            this.radFBNone.TabStop = true;
+            this.radFBNone.Text = "radioButton1";
+            this.radFBNone.UseVisualStyleBackColor = true;
             // 
             // lblLanguage
             // 
@@ -374,23 +427,13 @@ namespace GKUI.Dialogs
             // 
             // grpOther
             // 
-            this.grpOther.Controls.Add(this.chkRevisionsBackup);
             this.grpOther.Controls.Add(this.chkShowOnStart);
             this.grpOther.Location = new System.Drawing.Point(11, 279);
             this.grpOther.Name = "grpOther";
-            this.grpOther.Size = new System.Drawing.Size(324, 79);
+            this.grpOther.Size = new System.Drawing.Size(324, 60);
             this.grpOther.TabIndex = 2;
             this.grpOther.TabStop = false;
             this.grpOther.Text = "grpOther";
-            // 
-            // chkRevisionsBackup
-            // 
-            this.chkRevisionsBackup.AutoSize = true;
-            this.chkRevisionsBackup.Location = new System.Drawing.Point(11, 49);
-            this.chkRevisionsBackup.Name = "chkRevisionsBackup";
-            this.chkRevisionsBackup.Size = new System.Drawing.Size(153, 21);
-            this.chkRevisionsBackup.TabIndex = 1;
-            this.chkRevisionsBackup.Text = "chkRevisionsBackup";
             // 
             // chkShowOnStart
             // 
@@ -1091,6 +1134,7 @@ namespace GKUI.Dialogs
             this.PageControl1.ResumeLayout(false);
             this.pageCommon.ResumeLayout(false);
             this.pageCommon.PerformLayout();
+            this.grpFileBackup.ResumeLayout(false);
             this.grpEncoding.ResumeLayout(false);
             this.grpEncoding.PerformLayout();
             this.grpInternet.ResumeLayout(false);

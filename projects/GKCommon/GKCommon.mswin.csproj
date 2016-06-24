@@ -245,6 +245,7 @@
     <Compile Include="GKCore\Interfaces\IWorkWindow.cs" />
     <Compile Include="GKCore\Types\DateFormat.cs" />
     <Compile Include="GKCore\Types\FamilyTarget.cs" />
+    <Compile Include="GKCore\Types\FileBackup.cs" />
     <Compile Include="GKCore\Types\FilterGroupMode.cs" />
     <Compile Include="GKCore\Types\FilterLifeMode.cs" />
     <Compile Include="GKCore\Types\MediaFileNotFoundException.cs" />

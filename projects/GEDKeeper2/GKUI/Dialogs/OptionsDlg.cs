@@ -194,7 +194,19 @@ namespace GKUI.Dialogs
             }
 
             this.chkShowOnStart.Checked = this.fOptions.ShowTips;
-            this.chkRevisionsBackup.Checked = this.fOptions.RevisionsBackup;
+
+            switch (this.fOptions.FileBackup)
+            {
+                case FileBackup.fbNone:
+                    this.radFBNone.Checked = true;
+                    break;
+                case FileBackup.fbOnlyPrev:
+                    this.radFBOnlyPrev.Checked = true;
+                    break;
+                case FileBackup.fbEachRevision:
+                    this.radFBEachRevision.Checked = true;
+                    break;
+            }
 
             this.fOptions.IndividualListColumns.CopyTo(fTempColumns);
             this.UpdateColumnsList();
@@ -336,7 +348,14 @@ namespace GKUI.Dialogs
             }
 
             this.fOptions.ShowTips = this.chkShowOnStart.Checked;
-            this.fOptions.RevisionsBackup = this.chkRevisionsBackup.Checked;
+
+            if (this.radFBNone.Checked) {
+                this.fOptions.FileBackup = FileBackup.fbNone;
+            } else if (this.radFBOnlyPrev.Checked) {
+                this.fOptions.FileBackup = FileBackup.fbOnlyPrev;
+            } else if (this.radFBEachRevision.Checked) {
+                this.fOptions.FileBackup = FileBackup.fbEachRevision;
+            }
 
             GKComboItem item = this.cmbLanguages.Items[this.cmbLanguages.SelectedIndex] as GKComboItem;
             if (item != null) {
@@ -461,11 +480,15 @@ namespace GKUI.Dialogs
             this.grpPedigreeFormat.Text = LangMan.LS(LSID.LSID_PedigreeFormat);
             this.radExcess.Text = LangMan.LS(LSID.LSID_PF1);
             this.radCompact.Text = LangMan.LS(LSID.LSID_PF2);
-            this.chkRevisionsBackup.Text = LangMan.LS(LSID.LSID_RevisionsBackup);
             this.pageCharts.Text = LangMan.LS(LSID.LSID_Charts);
             this.pagePlugins.Text = LangMan.LS(LSID.LSID_Plugins);
             this.chkShowDatesCalendar.Text = LangMan.LS(LSID.LSID_ShowDatesCalendar);
             this.chkShowDatesSigns.Text = LangMan.LS(LSID.LSID_ShowDatesSigns);
+
+            this.grpFileBackup.Text = LangMan.LS(LSID.LSID_FileBackup);
+            this.radFBNone.Text = LangMan.LS(LSID.LSID_Not);
+            this.radFBOnlyPrev.Text = LangMan.LS(LSID.LSID_BackupOnlyPrev);
+            this.radFBEachRevision.Text = LangMan.LS(LSID.LSID_BackupEachRevision);
         }
     }
 }

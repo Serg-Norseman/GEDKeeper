@@ -549,10 +549,8 @@ namespace GKCore
         /* 492 */ LSID_PDFFilter,
         /* 493 */ LSID_RTFFilter,
         /* 494 */ LSID_HTMLFilter,
-
-        /* 495 */ LSID_Join, // deprecated
-        /* 496 */ LSID_Comment, // deprecated
-
+        /* 495 */ LSID_FileBackup,
+        /* 496 */ LSID_BackupOnlyPrev,
         /* 497 */ LSID_BranchCut,
         /* 498 */ LSID_Not,
         /* 499 */ LSID_BCut_Years,
@@ -659,7 +657,7 @@ namespace GKCore
         /* 594 */ LSID_AAF_1,
         /* 595 */ LSID_AAF_2,
         /* 596 */ LSID_EmptyFamily,
-        /* 597 */ LSID_RevisionsBackup,
+        /* 597 */ LSID_BackupEachRevision,
         /* 598 */ LSID_Loading,
         /* 599 */ LSID_FileSaveError,
         /* 600 */ LSID_FillColor,
@@ -1311,10 +1309,8 @@ namespace GKCore
             /* 492 */ "PDF файлы (*.pdf)|*.pdf",
             /* 493 */ "RTF файлы (*.rtf)|*.rtf",
             /* 494 */ "HTML файлы (*.html)|*.html",
-
-            /* 495 */ "<?>",
-            /* 496 */ "<?>",
-
+            /* 495 */ "Резервирование файлов (бэкап)",
+            /* 496 */ "только предыдущий файл",
             /* 497 */ "Отсечение ветвей",
             /* 498 */ "нет",
             /* 499 */ "по границе лет",
@@ -1416,7 +1412,7 @@ namespace GKCore
             /* 594 */ "Ср.возр.рождения первенца на ДР родителя",
             /* 595 */ "Ср.возр.рождения первенца на ДР ребенка",
             /* 596 */ "Пустая запись семьи",
-            /* 597 */ "Сохранять версии файлов",
+            /* 597 */ "сохранять каждую версию файлов",
             /* 598 */ "Загрузка",
             /* 599 */ "Ошибка сохранения файла \"{0}\"{1}.",
             /* 600 */ "Цвет фона...",

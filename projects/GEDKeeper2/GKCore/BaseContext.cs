@@ -874,21 +874,40 @@ namespace GKCore
 
         public void FileSave(string fileName, string password = null)
         {
-            if (GlobalOptions.Instance.RevisionsBackup)
-            {
-                int rev = this.Tree.Header.FileRevision;
-                if (File.Exists(fileName))
-                {
-                    string bakPath = Path.GetDirectoryName(fileName) + Path.DirectorySeparatorChar + "__history" + Path.DirectorySeparatorChar;
-                    string bakFile = Path.GetFileName(fileName) + "." + ConvHelper.AdjustNum(rev, 3);
+            string oldFileName = this.Tree.FileName;
 
-                    if (!Directory.Exists(bakPath)) Directory.CreateDirectory(bakPath);
-                    File.Move(fileName, bakPath + bakFile);
-                }
+            switch (GlobalOptions.Instance.FileBackup)
+            {
+                case FileBackup.fbNone:
+                    break;
+
+                case FileBackup.fbOnlyPrev:
+                    if (string.Equals(oldFileName, fileName) && File.Exists(oldFileName))
+                    {
+                        string bakFile = Path.GetFileName(fileName) + ".bak";
+                        if (File.Exists(bakFile)) {
+                            File.Delete(bakFile);
+                        }
+
+                        File.Move(oldFileName, bakFile);
+                    }
+                    break;
+
+                case FileBackup.fbEachRevision:
+                    if (File.Exists(fileName))
+                    {
+                        int rev = this.Tree.Header.FileRevision;
+                        string bakPath = Path.GetDirectoryName(fileName) + Path.DirectorySeparatorChar + "__history" + Path.DirectorySeparatorChar;
+                        string bakFile = Path.GetFileName(fileName) + "." + ConvHelper.AdjustNum(rev, 3);
+
+                        if (!Directory.Exists(bakPath)) Directory.CreateDirectory(bakPath);
+                        File.Move(fileName, bakPath + bakFile);
+                    }
+                    break;
             }
 
             // check for archive and storage, move them if the file changes location
-            this.MoveMediaContainers(this.Tree.FileName, fileName);
+            this.MoveMediaContainers(oldFileName, fileName);
 
             if (string.IsNullOrEmpty(password)) {
                 this.fTree.SaveToFile(fileName, GlobalOptions.Instance.DefCharacterSet);

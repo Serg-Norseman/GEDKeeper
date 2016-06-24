@@ -493,8 +493,8 @@ Year
 PDF files (*.pdf)|*.pdf
 RTF files (*.rtf)|*.rtf
 HTML files (*.html)|*.html
-<?>
-<?>
+Files backup
+only previous file
 Cutting off the branches
 not
 on years
@@ -595,7 +595,7 @@ DNA markers
 Ср.возр.рождения первенца на ДР родителя
 Ср.возр.рождения первенца на ДР ребенка
 Empty family record
-Revisions backup
+backup each file revision
 Loading
 File saving error "{0}"{1}.
 Background color...

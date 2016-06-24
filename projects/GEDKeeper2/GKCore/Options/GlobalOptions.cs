@@ -63,8 +63,8 @@ namespace GKCore.Options
         private ExtRect fMWinRect;
         private FormWindowState fMWinState;
         private readonly StringList fLastBases;
-        private bool fRevisionsBackup;
         private bool fShowDatesCalendar;
+        private FileBackup fFileBackup;
 
 
         public static GlobalOptions Instance
@@ -184,10 +184,10 @@ namespace GKCore.Options
             get { return this.fResidenceFilters; }
         }
 
-        public bool RevisionsBackup
+        public FileBackup FileBackup
         {
-            get { return this.fRevisionsBackup; }
-            set { this.fRevisionsBackup = value; }
+            get { return this.fFileBackup; }
+            set { this.fFileBackup = value; }
         }
 
         public bool ShowTips
@@ -354,7 +354,7 @@ namespace GKCore.Options
                     this.fPlacesWithAddress = ini.ReadBool("Common", "PlacesWithAddress", false);
                     this.fShowTips = ini.ReadBool("Common", "ShowTips", true);
                     this.fInterfaceLang = (ushort)ini.ReadInteger("Common", "InterfaceLang", 1049);
-                    this.fRevisionsBackup = ini.ReadBool("Common", "RevisionsBackup", false);
+                    this.fFileBackup = (FileBackup)ini.ReadInteger("Common", "FileBackup", 0);
                     this.fShowDatesCalendar = ini.ReadBool("Common", "ShowDatesCalendar", false);
                     this.fShowDatesSign = ini.ReadBool("Common", "ShowDatesSigns", false);
 
@@ -442,7 +442,7 @@ namespace GKCore.Options
                     ini.WriteBool("Common", "PlacesWithAddress", this.fPlacesWithAddress);
                     ini.WriteBool("Common", "ShowTips", this.fShowTips);
                     ini.WriteInteger("Common", "InterfaceLang", this.fInterfaceLang);
-                    ini.WriteBool("Common", "RevisionsBackup", this.fRevisionsBackup);
+                    ini.WriteInteger("Common", "FileBackup", (int)this.fFileBackup);
                     ini.WriteBool("Common", "ShowDatesCalendar", this.fShowDatesCalendar);
                     ini.WriteBool("Common", "ShowDatesSigns", this.fShowDatesSign);
                     
