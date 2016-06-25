@@ -57,6 +57,7 @@ namespace GKUI
         private NamesTable fNamesTable;
         private GlobalOptions fOptions;
         private List<IPlugin> fPlugins;
+        private Timer fAutosaveTimer;
 
         private readonly List<WidgetInfo> fActiveWidgets;
         private string[] fCommandArgs;
@@ -118,6 +119,12 @@ namespace GKUI
 
             this.fActiveWidgets = new List<WidgetInfo>();
 
+            this.fAutosaveTimer = new Timer(this.components);
+            this.fAutosaveTimer.Interval = 10;
+            this.fAutosaveTimer.Tick += this.AutosaveTimer_Tick;
+            this.fAutosaveTimer.Stop();
+            this.fAutosaveTimer.Enabled = false;
+
             //LangMan.SaveDefaultLanguage();
         }
 
@@ -130,6 +137,37 @@ namespace GKUI
                 if (components != null) components.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private void AutosaveTimer_Tick(object sender, EventArgs e)
+        {
+//            try
+//            {
+//                int num = base.MdiChildren.Length;
+//                for (int i = 0; i < num; i++) {
+//                    Form child = base.MdiChildren[i];
+//
+//                    if (child is IBaseWindow) {
+//                        IBaseWindow baseWin = child as IBaseWindow;
+//
+//                        string fileName = baseWin.Tree.FileName;
+//
+//                        if (baseWin.Modified && !string.IsNullOrEmpty(fileName)) {
+//                            // TODO: if file is new and not exists - don't save it, but hint to user
+//                            // TODO: if Tree is busy (editing) - don't save!!!
+//                            // -- baseWin.FileSave(fileName);
+//                        }
+//                    }
+//                }
+//            } catch (Exception ex) {
+//                this.LogWrite("MainWin.AutosaveTimer_Tick(): " + ex.Message);
+//            }
+        }
+
+        private void ApplyOptions()
+        {
+            this.fAutosaveTimer.Interval = this.fOptions.AutosaveInterval /* min */ * 60 * 1000;
+            this.fAutosaveTimer.Enabled = this.fOptions.Autosave;
         }
 
         #endregion
@@ -158,6 +196,7 @@ namespace GKUI
             this.fOptions = GlobalOptions.Instance;
             this.fOptions.LoadFromFile(this.GetAppDataPath() + "GEDKeeper2.ini");
             this.fOptions.FindLanguages();
+            this.ApplyOptions();
 
             if (!this.fOptions.MWinRect.IsEmpty()) {
                 base.Left = this.fOptions.MWinRect.Left;
@@ -697,6 +736,8 @@ namespace GKUI
 
                 if (dlgOptions.ShowDialog() == DialogResult.OK)
                 {
+                    this.ApplyOptions();
+
                     foreach (Form child in base.MdiChildren)
                     {
                         if (child is IWorkWindow) {

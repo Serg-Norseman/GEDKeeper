@@ -417,7 +417,7 @@ namespace GKUI.Charts
             this.fTimer.Enabled = false;
             this.fTimer.Enabled = true;
         }
-        
+
         private void timer_Tick(object sender, EventArgs e)
         {
             if (this.fHighlightedPerson != null)

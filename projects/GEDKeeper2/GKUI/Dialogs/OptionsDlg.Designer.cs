@@ -96,11 +96,19 @@ namespace GKUI.Dialogs
         private System.Windows.Forms.RadioButton radFBOnlyPrev;
         private System.Windows.Forms.RadioButton radFBEachRevision;
         private System.Windows.Forms.GroupBox grpFileBackup;
+        private System.Windows.Forms.CheckBox chkAutosave;
+        private System.Windows.Forms.NumericUpDown numASMin;
+        private System.Windows.Forms.Label lblMinutes;
+        private System.Windows.Forms.GroupBox groupBox1;
 
         private void InitializeComponent()
         {
             this.PageControl1 = new System.Windows.Forms.TabControl();
             this.pageCommon = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lblMinutes = new System.Windows.Forms.Label();
+            this.numASMin = new System.Windows.Forms.NumericUpDown();
+            this.chkAutosave = new System.Windows.Forms.CheckBox();
             this.grpFileBackup = new System.Windows.Forms.GroupBox();
             this.radFBEachRevision = new System.Windows.Forms.RadioButton();
             this.radFBOnlyPrev = new System.Windows.Forms.RadioButton();
@@ -193,6 +201,8 @@ namespace GKUI.Dialogs
             this.FontDialog1 = new System.Windows.Forms.FontDialog();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numASMin)).BeginInit();
             this.grpFileBackup.SuspendLayout();
             this.grpEncoding.SuspendLayout();
             this.grpInternet.SuspendLayout();
@@ -228,15 +238,16 @@ namespace GKUI.Dialogs
             this.PageControl1.Controls.Add(this.pageUIView);
             this.PageControl1.Controls.Add(this.pagePedigree);
             this.PageControl1.Controls.Add(this.pagePlugins);
+            this.PageControl1.Dock = System.Windows.Forms.DockStyle.Top;
             this.PageControl1.Location = new System.Drawing.Point(0, 0);
             this.PageControl1.Name = "PageControl1";
             this.PageControl1.SelectedIndex = 0;
-            this.PageControl1.Size = new System.Drawing.Size(718, 458);
+            this.PageControl1.Size = new System.Drawing.Size(749, 458);
             this.PageControl1.TabIndex = 0;
             // 
             // pageCommon
             // 
-            this.pageCommon.Controls.Add(this.grpFileBackup);
+            this.pageCommon.Controls.Add(this.groupBox1);
             this.pageCommon.Controls.Add(this.lblLanguage);
             this.pageCommon.Controls.Add(this.grpEncoding);
             this.pageCommon.Controls.Add(this.grpInternet);
@@ -244,19 +255,78 @@ namespace GKUI.Dialogs
             this.pageCommon.Controls.Add(this.cmbLanguages);
             this.pageCommon.Location = new System.Drawing.Point(4, 26);
             this.pageCommon.Name = "pageCommon";
-            this.pageCommon.Size = new System.Drawing.Size(710, 428);
+            this.pageCommon.Padding = new System.Windows.Forms.Padding(10);
+            this.pageCommon.Size = new System.Drawing.Size(741, 428);
             this.pageCommon.TabIndex = 0;
             this.pageCommon.Text = "pageCommon";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.lblMinutes);
+            this.groupBox1.Controls.Add(this.numASMin);
+            this.groupBox1.Controls.Add(this.chkAutosave);
+            this.groupBox1.Controls.Add(this.grpFileBackup);
+            this.groupBox1.Location = new System.Drawing.Point(348, 10);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(10);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(379, 312);
+            this.groupBox1.TabIndex = 6;
+            this.groupBox1.TabStop = false;
+            // 
+            // lblMinutes
+            // 
+            this.lblMinutes.AutoSize = true;
+            this.lblMinutes.Enabled = false;
+            this.lblMinutes.Location = new System.Drawing.Point(289, 187);
+            this.lblMinutes.Name = "lblMinutes";
+            this.lblMinutes.Size = new System.Drawing.Size(66, 17);
+            this.lblMinutes.TabIndex = 9;
+            this.lblMinutes.Text = "lblMinutes";
+            // 
+            // numASMin
+            // 
+            this.numASMin.Enabled = false;
+            this.numASMin.Location = new System.Drawing.Point(234, 183);
+            this.numASMin.Maximum = new decimal(new int[] {
+                                    120,
+                                    0,
+                                    0,
+                                    0});
+            this.numASMin.Minimum = new decimal(new int[] {
+                                    1,
+                                    0,
+                                    0,
+                                    0});
+            this.numASMin.Name = "numASMin";
+            this.numASMin.Size = new System.Drawing.Size(49, 24);
+            this.numASMin.TabIndex = 8;
+            this.numASMin.Value = new decimal(new int[] {
+                                    1,
+                                    0,
+                                    0,
+                                    0});
+            // 
+            // chkAutosave
+            // 
+            this.chkAutosave.AutoSize = true;
+            this.chkAutosave.Enabled = false;
+            this.chkAutosave.Location = new System.Drawing.Point(13, 184);
+            this.chkAutosave.Name = "chkAutosave";
+            this.chkAutosave.Size = new System.Drawing.Size(109, 21);
+            this.chkAutosave.TabIndex = 7;
+            this.chkAutosave.Text = "chkAutosave";
+            this.chkAutosave.UseVisualStyleBackColor = true;
             // 
             // grpFileBackup
             // 
             this.grpFileBackup.Controls.Add(this.radFBEachRevision);
             this.grpFileBackup.Controls.Add(this.radFBOnlyPrev);
             this.grpFileBackup.Controls.Add(this.radFBNone);
-            this.grpFileBackup.Location = new System.Drawing.Point(355, 10);
+            this.grpFileBackup.Location = new System.Drawing.Point(13, 30);
+            this.grpFileBackup.Margin = new System.Windows.Forms.Padding(10);
             this.grpFileBackup.Name = "grpFileBackup";
-            this.grpFileBackup.Size = new System.Drawing.Size(336, 136);
-            this.grpFileBackup.TabIndex = 5;
+            this.grpFileBackup.Size = new System.Drawing.Size(342, 136);
+            this.grpFileBackup.TabIndex = 6;
             this.grpFileBackup.TabStop = false;
             this.grpFileBackup.Text = "grpFileBackup";
             // 
@@ -265,7 +335,7 @@ namespace GKUI.Dialogs
             this.radFBEachRevision.Location = new System.Drawing.Point(13, 98);
             this.radFBEachRevision.Margin = new System.Windows.Forms.Padding(10);
             this.radFBEachRevision.Name = "radFBEachRevision";
-            this.radFBEachRevision.Size = new System.Drawing.Size(310, 24);
+            this.radFBEachRevision.Size = new System.Drawing.Size(294, 24);
             this.radFBEachRevision.TabIndex = 2;
             this.radFBEachRevision.TabStop = true;
             this.radFBEachRevision.Text = "radioButton3";
@@ -276,7 +346,7 @@ namespace GKUI.Dialogs
             this.radFBOnlyPrev.Location = new System.Drawing.Point(13, 64);
             this.radFBOnlyPrev.Margin = new System.Windows.Forms.Padding(10, 10, 10, 0);
             this.radFBOnlyPrev.Name = "radFBOnlyPrev";
-            this.radFBOnlyPrev.Size = new System.Drawing.Size(310, 24);
+            this.radFBOnlyPrev.Size = new System.Drawing.Size(294, 24);
             this.radFBOnlyPrev.TabIndex = 1;
             this.radFBOnlyPrev.TabStop = true;
             this.radFBOnlyPrev.Text = "radioButton2";
@@ -287,7 +357,7 @@ namespace GKUI.Dialogs
             this.radFBNone.Location = new System.Drawing.Point(13, 30);
             this.radFBNone.Margin = new System.Windows.Forms.Padding(10, 10, 10, 0);
             this.radFBNone.Name = "radFBNone";
-            this.radFBNone.Size = new System.Drawing.Size(310, 24);
+            this.radFBNone.Size = new System.Drawing.Size(294, 24);
             this.radFBNone.TabIndex = 0;
             this.radFBNone.TabStop = true;
             this.radFBNone.Text = "radioButton1";
@@ -296,7 +366,7 @@ namespace GKUI.Dialogs
             // lblLanguage
             // 
             this.lblLanguage.AutoSize = true;
-            this.lblLanguage.Location = new System.Drawing.Point(11, 386);
+            this.lblLanguage.Location = new System.Drawing.Point(21, 396);
             this.lblLanguage.Name = "lblLanguage";
             this.lblLanguage.Size = new System.Drawing.Size(80, 17);
             this.lblLanguage.TabIndex = 0;
@@ -458,7 +528,7 @@ namespace GKUI.Dialogs
             this.pageCharts.Location = new System.Drawing.Point(4, 26);
             this.pageCharts.Name = "pageCharts";
             this.pageCharts.Padding = new System.Windows.Forms.Padding(3);
-            this.pageCharts.Size = new System.Drawing.Size(710, 428);
+            this.pageCharts.Size = new System.Drawing.Size(741, 428);
             this.pageCharts.TabIndex = 4;
             this.pageCharts.Text = "pageCharts";
             this.pageCharts.UseVisualStyleBackColor = true;
@@ -470,7 +540,7 @@ namespace GKUI.Dialogs
             this.tabsCharts.Location = new System.Drawing.Point(3, 3);
             this.tabsCharts.Name = "tabsCharts";
             this.tabsCharts.SelectedIndex = 0;
-            this.tabsCharts.Size = new System.Drawing.Size(704, 422);
+            this.tabsCharts.Size = new System.Drawing.Size(735, 422);
             this.tabsCharts.TabIndex = 0;
             // 
             // pageTreeChart
@@ -479,7 +549,7 @@ namespace GKUI.Dialogs
             this.pageTreeChart.Controls.Add(this.grpTreeDecor);
             this.pageTreeChart.Location = new System.Drawing.Point(4, 26);
             this.pageTreeChart.Name = "pageTreeChart";
-            this.pageTreeChart.Size = new System.Drawing.Size(696, 392);
+            this.pageTreeChart.Size = new System.Drawing.Size(727, 392);
             this.pageTreeChart.TabIndex = 3;
             this.pageTreeChart.Text = "pageTreeChart";
             // 
@@ -779,7 +849,7 @@ namespace GKUI.Dialogs
             this.pageUIView.Controls.Add(this.PageControl2);
             this.pageUIView.Location = new System.Drawing.Point(4, 26);
             this.pageUIView.Name = "pageUIView";
-            this.pageUIView.Size = new System.Drawing.Size(710, 428);
+            this.pageUIView.Size = new System.Drawing.Size(741, 428);
             this.pageUIView.TabIndex = 1;
             this.pageUIView.Text = "pageUIView";
             // 
@@ -975,7 +1045,7 @@ namespace GKUI.Dialogs
             this.pagePedigree.Controls.Add(this.grpPedigree);
             this.pagePedigree.Location = new System.Drawing.Point(4, 26);
             this.pagePedigree.Name = "pagePedigree";
-            this.pagePedigree.Size = new System.Drawing.Size(710, 428);
+            this.pagePedigree.Size = new System.Drawing.Size(741, 428);
             this.pagePedigree.TabIndex = 3;
             this.pagePedigree.Text = "pagePedigree";
             // 
@@ -1051,7 +1121,7 @@ namespace GKUI.Dialogs
             this.pagePlugins.Margin = new System.Windows.Forms.Padding(0);
             this.pagePlugins.Name = "pagePlugins";
             this.pagePlugins.Padding = new System.Windows.Forms.Padding(10);
-            this.pagePlugins.Size = new System.Drawing.Size(710, 428);
+            this.pagePlugins.Size = new System.Drawing.Size(741, 428);
             this.pagePlugins.TabIndex = 5;
             this.pagePlugins.Text = "pagePlugins";
             // 
@@ -1067,7 +1137,7 @@ namespace GKUI.Dialogs
             this.lvPlugins.Location = new System.Drawing.Point(10, 10);
             this.lvPlugins.MultiSelect = false;
             this.lvPlugins.Name = "lvPlugins";
-            this.lvPlugins.Size = new System.Drawing.Size(690, 408);
+            this.lvPlugins.Size = new System.Drawing.Size(721, 408);
             this.lvPlugins.TabIndex = 0;
             this.lvPlugins.UseCompatibleStateImageBehavior = false;
             this.lvPlugins.View = System.Windows.Forms.View.Details;
@@ -1094,7 +1164,7 @@ namespace GKUI.Dialogs
             // btnAccept
             // 
             this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAccept.Location = new System.Drawing.Point(470, 476);
+            this.btnAccept.Location = new System.Drawing.Point(492, 478);
             this.btnAccept.Name = "btnAccept";
             this.btnAccept.Size = new System.Drawing.Size(114, 30);
             this.btnAccept.TabIndex = 1;
@@ -1106,7 +1176,7 @@ namespace GKUI.Dialogs
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCancel.Location = new System.Drawing.Point(594, 476);
+            this.btnCancel.Location = new System.Drawing.Point(623, 478);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(114, 30);
             this.btnCancel.TabIndex = 2;
@@ -1119,7 +1189,7 @@ namespace GKUI.Dialogs
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(716, 520);
+            this.ClientSize = new System.Drawing.Size(749, 520);
             this.Controls.Add(this.PageControl1);
             this.Controls.Add(this.btnAccept);
             this.Controls.Add(this.btnCancel);
@@ -1134,6 +1204,9 @@ namespace GKUI.Dialogs
             this.PageControl1.ResumeLayout(false);
             this.pageCommon.ResumeLayout(false);
             this.pageCommon.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numASMin)).EndInit();
             this.grpFileBackup.ResumeLayout(false);
             this.grpEncoding.ResumeLayout(false);
             this.grpEncoding.PerformLayout();

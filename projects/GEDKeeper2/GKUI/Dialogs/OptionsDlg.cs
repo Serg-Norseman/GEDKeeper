@@ -183,6 +183,9 @@ namespace GKUI.Dialogs
             this.chkShowDatesCalendar.Checked = this.fOptions.ShowDatesCalendar;
             this.chkShowDatesSigns.Checked = this.fOptions.ShowDatesSign;
 
+            this.chkAutosave.Checked = this.fOptions.Autosave;
+            this.numASMin.Value = this.fOptions.AutosaveInterval;
+
             switch (this.fOptions.PedigreeOptions.Format)
             {
                 case PedigreeFormat.Excess:
@@ -338,6 +341,9 @@ namespace GKUI.Dialogs
             this.fOptions.ShowDatesCalendar = this.chkShowDatesCalendar.Checked;
             this.fOptions.ShowDatesSign = this.chkShowDatesSigns.Checked;
 
+            this.fOptions.Autosave = this.chkAutosave.Checked;
+            this.fOptions.AutosaveInterval = (int)this.numASMin.Value;
+
             if (this.radExcess.Checked)
             {
                 this.fOptions.PedigreeOptions.Format = PedigreeFormat.Excess;
@@ -489,6 +495,9 @@ namespace GKUI.Dialogs
             this.radFBNone.Text = LangMan.LS(LSID.LSID_Not);
             this.radFBOnlyPrev.Text = LangMan.LS(LSID.LSID_BackupOnlyPrev);
             this.radFBEachRevision.Text = LangMan.LS(LSID.LSID_BackupEachRevision);
+
+            this.chkAutosave.Text = LangMan.LS(LSID.LSID_Autosave);
+            this.lblMinutes.Text = LangMan.LS(LSID.LSID_Minutes);
         }
     }
 }

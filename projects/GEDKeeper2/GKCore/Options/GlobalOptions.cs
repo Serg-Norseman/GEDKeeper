@@ -65,6 +65,8 @@ namespace GKCore.Options
         private readonly StringList fLastBases;
         private bool fShowDatesCalendar;
         private FileBackup fFileBackup;
+        private bool fAutosave;
+        private int fAutosaveInterval;
 
 
         public static GlobalOptions Instance
@@ -220,6 +222,20 @@ namespace GKCore.Options
         }
 
 
+
+        public bool Autosave
+        {
+            get { return this.fAutosave; }
+            set { this.fAutosave = value; }
+        }
+
+        public int AutosaveInterval
+        {
+            get { return this.fAutosaveInterval; }
+            set { this.fAutosaveInterval = value; }
+        }
+
+
         private void LngPrepareProc(string fileName)
         {
             try
@@ -307,6 +323,9 @@ namespace GKCore.Options
 
             this.fLanguages = new List<LangRecord>();
             this.fLastBases = new StringList();
+
+            this.fAutosave = false;
+            this.fAutosaveInterval = 10;
         }
 
         protected override void Dispose(bool disposing)
@@ -357,6 +376,9 @@ namespace GKCore.Options
                     this.fFileBackup = (FileBackup)ini.ReadInteger("Common", "FileBackup", 0);
                     this.fShowDatesCalendar = ini.ReadBool("Common", "ShowDatesCalendar", false);
                     this.fShowDatesSign = ini.ReadBool("Common", "ShowDatesSigns", false);
+
+                    this.fAutosave = ini.ReadBool("Common", "Autosave", false);
+                    this.fAutosaveInterval = ini.ReadInteger("Common", "AutosaveInterval", 10);
 
                     int kl = ini.ReadInteger("Common", "KeyLayout", GKUtils.GetKeyLayout());
                     GKUtils.SetKeyLayout(kl);
@@ -445,8 +467,11 @@ namespace GKCore.Options
                     ini.WriteInteger("Common", "FileBackup", (int)this.fFileBackup);
                     ini.WriteBool("Common", "ShowDatesCalendar", this.fShowDatesCalendar);
                     ini.WriteBool("Common", "ShowDatesSigns", this.fShowDatesSign);
-                    
+
                     ini.WriteInteger("Common", "KeyLayout", GKUtils.GetKeyLayout());
+
+                    ini.WriteBool("Common", "Autosave", this.fAutosave);
+                    ini.WriteInteger("Common", "AutosaveInterval", this.fAutosaveInterval);
 
                     this.fChartOptions.SaveToFile(ini);
                     this.fPedigreeOptions.SaveToFile(ini);

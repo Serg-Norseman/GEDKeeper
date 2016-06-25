@@ -44,11 +44,11 @@ namespace GKCore
     public class BaseContext : IBaseContext
     {
         #region Private fields
-        
+
         private readonly GEDCOMTree fTree;
         private readonly IBaseWindow fViewer;
         private readonly IHost fHost;
-        
+
         #endregion
         
         #region Public properties
@@ -925,7 +925,7 @@ namespace GKCore
             using (FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
             {
                 byte gsMajVer, gsMinVer;
-                
+
                 byte[] gsHeader = new byte[8];
                 fileStream.Read(gsHeader, 0, 8);
                 gsMajVer = gsHeader[6];

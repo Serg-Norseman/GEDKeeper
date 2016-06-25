@@ -774,7 +774,7 @@ namespace GKCore
         /* 701 */ LSID_UploadErrorInExcel,
         /* 702 */ LSID_PersonsFilter,
         /* 703 */ LSID_LinesVisible,
-        
+
         /* 704 */ LSID_MatchType,
         /* 705 */ LSID_MatchInternal,
         /* 706 */ LSID_MathExternal,
@@ -788,8 +788,10 @@ namespace GKCore
         /* 713 */ LSID_PersonalRecords,
         /* 714 */ LSID_Indexes,
         /* 715 */ LSID_NotDeterminedPersonSex,
+        /* 716 */ LSID_Autosave,
+        /* 717 */ LSID_Minutes,
 
-        /* 000 */ LSID_Last = LSID_NotDeterminedPersonSex
+        /* 000 */ LSID_Last = LSID_Minutes
     }
 
     public static class LangMan
@@ -1532,7 +1534,9 @@ namespace GKCore
             /* 712 */ "Оглавление",
             /* 713 */ "Персональные записи",
             /* 714 */ "Каталоги",
-            /* 715 */ "Не определяется пол человека по имени \"{1}\". Это мужской пол?"
+            /* 715 */ "Не определяется пол человека по имени \"{1}\". Это мужской пол?",
+            /* 716 */ "Автосохранение каждые",
+            /* 717 */ "минут",
         };
 
         private static readonly string[] LSList = new string[(int)LSID.LSID_Last + 1];
