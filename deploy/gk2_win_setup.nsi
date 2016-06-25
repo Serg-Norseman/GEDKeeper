@@ -11,6 +11,9 @@ XPStyle on
 ;ShowInstDetails show
 RequestExecutionLevel admin
 
+!insertmacro MUI_LANGUAGE "English"
+!insertmacro MUI_LANGUAGE "Russian"
+
 ; Registry key to check for directory (so if you install again, it will 
 ; overwrite the old one automatically)
 InstallDirRegKey HKLM "Software\GEDKeeper2" "Install_Dir"
@@ -20,13 +23,62 @@ Page components
 Page directory
 Page instfiles
 
-LoadLanguageFile "${NSISDIR}\Contrib\Language files\English.nlf"
-LoadLanguageFile "${NSISDIR}\Contrib\Language files\Russian.nlf"
+;LoadLanguageFile "${NSISDIR}\Contrib\Language files\English.nlf"
+;LoadLanguageFile "${NSISDIR}\Contrib\Language files\Russian.nlf"
+
+LangString gkreq ${LANG_ENGLISH} "GEDKeeper2 (required)"
+LangString gkreq ${LANG_RUSSIAN} "GEDKeeper2 (необходимо)"
+
+LangString gkscr ${LANG_ENGLISH} "Script samples"
+LangString gkscr ${LANG_RUSSIAN} "Примеры скриптов"
+
+LangString gkreg ${LANG_ENGLISH} "System registration"
+LangString gkreg ${LANG_RUSSIAN} "Регистрация в системе"
+
+LangString gklang ${LANG_ENGLISH} "Languages"
+LangString gklang ${LANG_RUSSIAN} "Языки"
+
+LangString gkplg ${LANG_ENGLISH} "Plugins"
+LangString gkplg ${LANG_RUSSIAN} "Плагины"
+
+LangString gkp_calc ${LANG_ENGLISH} "Expression calculator"
+LangString gkp_calc ${LANG_RUSSIAN} "Калькулятор выражений"
+
+LangString gkp_calendar ${LANG_ENGLISH} "Calendar"
+LangString gkp_calendar ${LANG_RUSSIAN} "Календарь"
+
+LangString gkp_nb ${LANG_ENGLISH} "Names book"
+LangString gkp_nb ${LANG_RUSSIAN} "Справочник имен"
+
+LangString gkp_timeline ${LANG_ENGLISH} "Time line"
+LangString gkp_timeline ${LANG_RUSSIAN} "Линия времени"
+
+LangString gkp_flowinput ${LANG_ENGLISH} "Flow input"
+LangString gkp_flowinput ${LANG_RUSSIAN} "Поточный ввод"
+
+LangString gkp_pi ${LANG_ENGLISH} "Pedigrees importer"
+LangString gkp_pi ${LANG_RUSSIAN} "Импорт росписей"
+
+LangString gkp_ts ${LANG_ENGLISH} "Text search"
+LangString gkp_ts ${LANG_RUSSIAN} "Полнотекстовый поиск"
+
+LangString gkp_tv ${LANG_ENGLISH} "3D TreeViz"
+LangString gkp_tv ${LANG_RUSSIAN} "3D визуализация"
+
+LangString gkp_iv ${LANG_ENGLISH} "Image viewer"
+LangString gkp_iv ${LANG_RUSSIAN} "Просмотр изображений"
+
+LangString gkp_cl ${LANG_ENGLISH} "Conway Life"
+LangString gkp_cl ${LANG_RUSSIAN} "Игра 'Жизнь Конвея'"
+
+function .onInit
+  !insertmacro MUI_LANGDLL_DISPLAY
+functionEnd
 
 UninstPage uninstConfirm
 UninstPage instfiles
 
-Section "GEDKeeper2 (необходимо)"
+Section "$(gkreq)"
   SectionIn RO
 
   SetOutPath $INSTDIR
@@ -75,14 +127,14 @@ Section "GEDKeeper2 (необходимо)"
   WriteUninstaller "uninstall.exe"
 SectionEnd
 
-Section "Примеры скриптов"
+Section "$(gkscr)"
   CreateDirectory "$INSTDIR\scripts"
   SetOutPath "$INSTDIR\scripts"
 
   File "..\scripts\*.lua"
 SectionEnd
 
-Section "Регистрация в системе"
+Section "$(gkreg)"
   CreateShortCut "$DESKTOP\GEDKeeper2.lnk" "$INSTDIR\GEDKeeper2.exe" "" "$INSTDIR\GEDKeeper2.exe" 0
 
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\App Paths\GEDKeeper2.exe" "" "$INSTDIR\GEDKeeper2.exe"
@@ -96,7 +148,7 @@ Section "Регистрация в системе"
   WriteRegStr HKCR "GEDCOM.File\shell\open\command" "" '$INSTDIR\GEDKeeper2.exe "%1"'
 SectionEnd
 
-SectionGroup /e "Языки"
+SectionGroup /e "$(gklang)"
 	Section "English"
   		SetOutPath "$INSTDIR\locales"
   		File "..\locales\english.lng"
@@ -116,8 +168,8 @@ SectionGroup /e "Языки"
 	SectionEnd
 SectionGroupEnd
 
-SectionGroup /e "Плагины"
-	Section "Калькулятор выражений"
+SectionGroup /e "$(gkplg)"
+	Section "$(gkp_calc)"
   		SetOutPath "$INSTDIR\plugins"
   		File "..\plugins\GKCalculatorPlugin.dll"
   		File "..\plugins\GKCalculatorPlugin.rus"
@@ -125,7 +177,7 @@ SectionGroup /e "Плагины"
   		File "..\plugins\GKCalculatorPlugin.ukr"
 	SectionEnd
 
-	Section "Календарь"
+	Section "$(gkp_calendar)"
   		SetOutPath "$INSTDIR\plugins"
   		File "..\plugins\GKCalendarPlugin.dll"
   		File "..\plugins\GKCalendarPlugin.rus"
@@ -133,7 +185,7 @@ SectionGroup /e "Плагины"
   		File "..\plugins\GKCalendarPlugin.ukr"
 	SectionEnd
 
-	Section "Справочник имен"
+	Section "$(gkp_nb)"
   		SetOutPath "$INSTDIR\plugins"
   		File "..\plugins\GKNamesBookPlugin.dll"
   		File "..\plugins\GKNamesBookPlugin.rus"
@@ -141,7 +193,7 @@ SectionGroup /e "Плагины"
   		File "..\plugins\GKNamesBookPlugin.ukr"
 	SectionEnd
 
-	Section "Линия времени"
+	Section "$(gkp_timeline)"
   		SetOutPath "$INSTDIR\plugins"
   		File "..\plugins\GKTimeLinePlugin.dll"
   		File "..\plugins\GKTimeLinePlugin.rus"
@@ -149,7 +201,7 @@ SectionGroup /e "Плагины"
   		File "..\plugins\GKTimeLinePlugin.ukr"
 	SectionEnd
 
-	Section "Поточный ввод"
+	Section "$(gkp_flowinput)"
   		SetOutPath "$INSTDIR\plugins"
   		File "..\plugins\GKFlowInputPlugin.dll"
   		File "..\plugins\GKFlowInputPlugin.rus"
@@ -157,7 +209,7 @@ SectionGroup /e "Плагины"
   		File "..\plugins\GKFlowInputPlugin.ukr"
 	SectionEnd
 
-	Section "Импорт росписей"
+	Section "$(gkp_pi)"
   		SetOutPath "$INSTDIR\plugins"
   		File "..\plugins\GKPedigreeImporterPlugin.dll"
   		File "..\plugins\GKPedigreeImporterPlugin.rus"
@@ -165,7 +217,7 @@ SectionGroup /e "Плагины"
   		File "..\plugins\GKPedigreeImporterPlugin.ukr"
 	SectionEnd
 
-	Section "Полнотекстовый поиск"
+	Section "$(gkp_ts)"
   		SetOutPath "$INSTDIR\plugins"
   		File "..\plugins\_XapianSharp.dll"
   		File "..\plugins\XapianCSharp.dll"
@@ -176,7 +228,7 @@ SectionGroup /e "Плагины"
   		File "..\plugins\GKTextSearchPlugin.ukr"
 	SectionEnd
 
-	Section "3D визуализация"
+	Section "$(gkp_tv)"
   		SetOutPath "$INSTDIR\plugins"
   		File "..\plugins\csgl.dll"
   		File "..\plugins\csgl.native.dll"
@@ -187,7 +239,7 @@ SectionGroup /e "Плагины"
 		File "..\plugins\ArborGVT.dll"
 	SectionEnd
 
-	Section "Просмотр изображений"
+	Section "$(gkp_iv)"
   		SetOutPath "$INSTDIR\plugins"
 		File "..\plugins\GKImageViewerPlugin.dll"
   		File "..\plugins\GKImageViewerPlugin.rus"
@@ -195,7 +247,7 @@ SectionGroup /e "Плагины"
   		File "..\plugins\GKImageViewerPlugin.ukr"
 	SectionEnd
 
-	Section "Игра 'Жизнь Конвея'"
+	Section "$(gkp_cl)"
   		SetOutPath "$INSTDIR\plugins"
   		File "..\plugins\ConwayLife.dll"
   		File "..\plugins\GKLifePlugin.dll"

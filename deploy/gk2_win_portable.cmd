@@ -13,7 +13,9 @@ echo Processing portable installation start
 
 echo "..\GEDKeeper2.exe" > %lstfile%
 echo "..\GKCommon.dll" >> %lstfile%
+
 echo "..\ArborGVT.dll" >> %lstfile%
+echo "..\DotNetRtfWriter.dll" >> %lstfile%
 echo "..\ExcelLibrary.dll" >> %lstfile%
 echo "..\itextsharp.dll" >> %lstfile%
 echo "..\lua51.dll" >> %lstfile%
