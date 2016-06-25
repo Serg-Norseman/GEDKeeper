@@ -262,6 +262,10 @@
     <Compile Include="GKUI\Dialogs\GroupEditDlg.Designer.cs">
       <DependentUpon>GroupEditDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Dialogs\LanguageSelectDlg.cs" />
+    <Compile Include="GKUI\Dialogs\LanguageSelectDlg.Designer.cs">
+      <DependentUpon>LanguageSelectDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Dialogs\LocationEditDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -529,6 +533,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\GroupEditDlg.resx">
       <DependentUpon>GroupEditDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\LanguageSelectDlg.resx">
+      <DependentUpon>LanguageSelectDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\LocationEditDlg.resx">
       <DependentUpon>LocationEditDlg.cs</DependentUpon>

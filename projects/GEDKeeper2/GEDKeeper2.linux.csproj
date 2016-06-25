@@ -79,13 +79,11 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <DefineConstants></DefineConstants>
     <OutputPath>..\..</OutputPath>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <OutputPath>..\..</OutputPath>
-    <DefineConstants></DefineConstants>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
@@ -503,6 +501,12 @@
     <Compile Include="GKCore\Export\PDFJetWriter.cs" />
     <Compile Include="GKCore\Export\PDFClownWriter.cs" />
     <Compile Include="GKCore\Cultures\AncientCulture.cs" />
+    <Compile Include="GKUI\Dialogs\LanguageSelectDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\LanguageSelectDlg.Designer.cs">
+      <DependentUpon>LanguageSelectDlg.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GKResources.resx">
@@ -544,6 +548,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\GroupEditDlg.resx">
       <DependentUpon>GroupEditDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\LanguageSelectDlg.resx">
+      <DependentUpon>LanguageSelectDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\LocationEditDlg.resx">
       <DependentUpon>LocationEditDlg.cs</DependentUpon>

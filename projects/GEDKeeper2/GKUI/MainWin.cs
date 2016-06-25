@@ -396,6 +396,19 @@ namespace GKUI
 
         #region Misc functions
 
+        public static ushort DetermineLanguage()
+        {
+            using (LanguageSelectDlg dlg = new LanguageSelectDlg())
+            {
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+                    return (ushort)dlg.SelectedLanguage;
+                }
+            }
+
+            return LangMan.LS_ENU_CODE;
+        }
+
         public void LoadLanguage(int langCode)
         {
             try {

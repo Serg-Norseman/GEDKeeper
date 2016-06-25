@@ -796,6 +796,8 @@ namespace GKCore
 
     public static class LangMan
     {
+        public const int LS_ENU_CODE = 1033;
+
         public const int LS_DEF_CODE = 1049;
         public const string LS_DEF_SIGN = "rus";
         public const string LS_DEF_NAME = "Русский";
