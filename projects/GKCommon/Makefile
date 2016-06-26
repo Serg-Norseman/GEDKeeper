@@ -8,6 +8,8 @@ include $(includemk)toolchain.mk
 project := $(gkcommon)
 projectext := .dll
 
+# Get directories list for `vpath %.resx` via (run from this directory):
+# find -regex '.+\.resx' | sed 's/\(.\+\)\/.\+/\1 \\/' | awk '!a[$0]++' | sed -n "x;/.\+/ p;g;$ s/\(.\+\) \\\\/\1/; $ p"
 vpath %.resx GKCommon/Controls
 
 objdir := obj/$(releasetype)/
@@ -17,11 +19,10 @@ outdirdos := $(objdirdos)
 installdir := ../../
 
 # Get `sources` via (run from this directory):
-# find -regex '.+\.cs' | sed 's/\(.\+\)/\1 \\/' | sort
-# Just do not forget to remove trailing " \" on the last line.
-# Or (this is more valid):
-# grep "[[:space:]]\+<Compile[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GKCommon.mswin.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<Compile[[:space:]]\+Include=\"\(.*\)\"\([[:space:]]\?\/\)\?>/.\/\1 \\\\/" | sort
-# grep "[[:space:]]\+<Compile[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GKCommon.linux.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<Compile[[:space:]]\+Include=\"\(.*\)\"\([[:space:]]\?\/\)\?>/.\/\1 \\\\/" | sort
+# find -regex '.+\.cs' | sed 's/\(.\+\)/\1 \\/' | sort | sed -n "x;/.\+/ p;g;$ s/\(.\+\) \\\\/\1/; $ p"
+# Or (this is more valid -- it takes data from a project file):
+# grep "[[:space:]]\+<Compile[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GEDKeeper2.mswin.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<Compile[[:space:]]\+Include=\"\(.*\)\"\([[:space:]]\?\/\)\?>/.\/\1 \\\\/" | sort | sed -n "x;/.\+/ p;g;$ s/\(.\+\) \\\\/\1/; $ p"
+# grep "[[:space:]]\+<Compile[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GEDKeeper2.linux.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<Compile[[:space:]]\+Include=\"\(.*\)\"\([[:space:]]\?\/\)\?>/.\/\1 \\\\/" | sort | sed -n "x;/.\+/ p;g;$ s/\(.\+\) \\\\/\1/; $ p"
 # Because `$(sources)` must (may) have different values for Windows and Linux targets.
 ifeq ($(windows), $(softwareplatform))
 
@@ -371,10 +372,32 @@ sources := \
 
 endif
 
+# Get files list for `resources` via (run from this directory):
+# find -regex '.+\.resx' | sed 's/.\+\/\(.\+\)\.resx/\1.resources \\/' | sort
+# Or (this is more valid -- it takes data from a project file):
+# grep "[[:space:]]\+<EmbeddedResource[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GKCommon.mswin.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<EmbeddedResource[[:space:]]\+Include=.*[\/|\"]\(.*\)\.resx\"\([[:space:]]\?\/\)\?>/\1.resources \\\\/" | sort
+# grep "[[:space:]]\+<EmbeddedResource[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GKCommon.linux.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<EmbeddedResource[[:space:]]\+Include=.*[\/|\"]\(.*\)\.resx\"\([[:space:]]\?\/\)\?>/\1.resources \\\\/" | sort
+# Because `$(resources)` must (may) have different values for Windows and Linux targets.
+ifeq ($(windows), $(softwareplatform))
+
+# `$(resources)` for `$(windows)`
 resources := \
 $(addprefix $(objdir), \
 ExtResources.resources \
-SlideList.resources)
+SlideList.resources \
+)
+
+else
+
+# `$(resources)` for `$(linux)`
+resources := \
+$(addprefix $(objdir), \
+ExtResources.resources \
+SlideList.resources \
+)
+
+endif
+
 ifeq ($(windows), $(softwareplatform))
 # Settings for Windows.
 ifeq ($(x86-64), $(hardwareplatform))
