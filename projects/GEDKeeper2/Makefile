@@ -9,8 +9,7 @@ project := $(gedkeeper2)
 projectext := .exe
 
 # Get directories list for `vpath %.resx` via (run from this directory):
-# find -regex '.+\.resx' | sed 's/\(.\+\)\/.\+/\1 \\/' | awk '!a[$0]++'
-# Just do not forget to remove trailing " \" on the last line.
+# find -regex '.+\.resx' | sed 's/\(.\+\)\/.\+/\1 \\/' | awk '!a[$0]++' | sed -n "x;/.\+/ p;g;$ s/\(.\+\) \\\\/\1/; $ p"
 vpath %.resx \
 . \
 ./GKUI \
@@ -25,19 +24,18 @@ outdirdos := $(objdirdos)
 installdir := ../../
 
 # Get `sources` via (run from this directory):
-# find -regex '.+\.cs' | sed 's/\(.\+\)/\1 \\/' | sort
-# Just do not forget to remove trailing " \" on the last line.
-# Or (this is more valid):
-# grep "[[:space:]]\+<Compile[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GEDKeeper2.mswin.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<Compile[[:space:]]\+Include=\"\(.*\)\"\([[:space:]]\?\/\)\?>/.\/\1 \\\\/" | sort
-# grep "[[:space:]]\+<Compile[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GEDKeeper2.linux.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<Compile[[:space:]]\+Include=\"\(.*\)\"\([[:space:]]\?\/\)\?>/.\/\1 \\\\/" | sort
+# find -regex '.+\.cs' | sed 's/\(.\+\)/\1 \\/' | sort | sed -n "x;/.\+/ p;g;$ s/\(.\+\) \\\\/\1/; $ p"
+# Or (this is more valid -- it takes data from a project file):
+# grep "[[:space:]]\+<Compile[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GEDKeeper2.mswin.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<Compile[[:space:]]\+Include=\"\(.*\)\"\([[:space:]]\?\/\)\?>/.\/\1 \\\\/" | sort | sed -n "x;/.\+/ p;g;$ s/\(.\+\) \\\\/\1/; $ p"
+# grep "[[:space:]]\+<Compile[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GEDKeeper2.linux.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<Compile[[:space:]]\+Include=\"\(.*\)\"\([[:space:]]\?\/\)\?>/.\/\1 \\\\/" | sort | sed -n "x;/.\+/ p;g;$ s/\(.\+\) \\\\/\1/; $ p"
 # Because `$(sources)` must (may) have different values for Windows and Linux targets.
 ifeq ($(windows), $(softwareplatform))
 
 # `$(sources)` for `$(windows)`
 sources := \
 ./Externals/SingleInstancing/GlobalMutexPool.cs \
-./Externals/SingleInstancing/ISingleInstanceEnforcer.cs \
 ./Externals/SingleInstancing/IpcBroadcast.cs \
+./Externals/SingleInstancing/ISingleInstanceEnforcer.cs \
 ./Externals/SingleInstancing/SingleInstanceException.cs \
 ./Externals/SingleInstancing/SingleInstanceProxy.cs \
 ./Externals/SingleInstancing/SingleInstanceTracker.cs \
@@ -95,12 +93,12 @@ sources := \
 ./GKCore/Tools/TreeTools.cs \
 ./GKProgram.cs \
 ./GKResources.Designer.cs \
-./GKUI/AncestorsCircleWin.Designer.cs \
 ./GKUI/AncestorsCircleWin.cs \
-./GKUI/BaseWin.Designer.cs \
+./GKUI/AncestorsCircleWin.Designer.cs \
 ./GKUI/BaseWin.cs \
-./GKUI/Charts/ACOptionsControl.Designer.cs \
+./GKUI/BaseWin.Designer.cs \
 ./GKUI/Charts/ACOptionsControl.cs \
+./GKUI/Charts/ACOptionsControl.Designer.cs \
 ./GKUI/Charts/AncestorsCircle.cs \
 ./GKUI/Charts/ChartFilter.cs \
 ./GKUI/Charts/CustomChart.cs \
@@ -112,110 +110,112 @@ sources := \
 ./GKUI/Charts/TreeChartBox.cs \
 ./GKUI/Charts/TreeChartPerson.cs \
 ./GKUI/Controls/GKComboItem.cs \
-./GKUI/Controls/GKInputBox.Designer.cs \
 ./GKUI/Controls/GKInputBox.cs \
+./GKUI/Controls/GKInputBox.Designer.cs \
 ./GKUI/Controls/GKListItem.cs \
 ./GKUI/Controls/GKListView.cs \
 ./GKUI/Controls/GKMapBrowser.cs \
 ./GKUI/Controls/GKMenuItem.cs \
-./GKUI/Controls/GKMergeControl.Designer.cs \
 ./GKUI/Controls/GKMergeControl.cs \
+./GKUI/Controls/GKMergeControl.Designer.cs \
 ./GKUI/Controls/GKRecordsView.cs \
 ./GKUI/Controls/GKSheetList.cs \
 ./GKUI/Controls/GKTreeNode.cs \
 ./GKUI/Controls/ModifyEventArgs.cs \
 ./GKUI/Controls/SearchPanel.cs \
-./GKUI/Dialogs/AboutDlg.Designer.cs \
 ./GKUI/Dialogs/AboutDlg.cs \
-./GKUI/Dialogs/AddressEditDlg.Designer.cs \
+./GKUI/Dialogs/AboutDlg.Designer.cs \
 ./GKUI/Dialogs/AddressEditDlg.cs \
-./GKUI/Dialogs/AssociationEditDlg.Designer.cs \
+./GKUI/Dialogs/AddressEditDlg.Designer.cs \
 ./GKUI/Dialogs/AssociationEditDlg.cs \
-./GKUI/Dialogs/CommonFilterDlg.Designer.cs \
+./GKUI/Dialogs/AssociationEditDlg.Designer.cs \
 ./GKUI/Dialogs/CommonFilterDlg.cs \
-./GKUI/Dialogs/CommunicationEditDlg.Designer.cs \
+./GKUI/Dialogs/CommonFilterDlg.Designer.cs \
 ./GKUI/Dialogs/CommunicationEditDlg.cs \
-./GKUI/Dialogs/DayTipsDlg.Designer.cs \
+./GKUI/Dialogs/CommunicationEditDlg.Designer.cs \
 ./GKUI/Dialogs/DayTipsDlg.cs \
-./GKUI/Dialogs/EventEditDlg.Designer.cs \
+./GKUI/Dialogs/DayTipsDlg.Designer.cs \
 ./GKUI/Dialogs/EventEditDlg.cs \
-./GKUI/Dialogs/FamilyEditDlg.Designer.cs \
+./GKUI/Dialogs/EventEditDlg.Designer.cs \
 ./GKUI/Dialogs/FamilyEditDlg.cs \
-./GKUI/Dialogs/FilePropertiesDlg.Designer.cs \
+./GKUI/Dialogs/FamilyEditDlg.Designer.cs \
 ./GKUI/Dialogs/FilePropertiesDlg.cs \
-./GKUI/Dialogs/GroupEditDlg.Designer.cs \
+./GKUI/Dialogs/FilePropertiesDlg.Designer.cs \
 ./GKUI/Dialogs/GroupEditDlg.cs \
-./GKUI/Dialogs/LocationEditDlg.Designer.cs \
+./GKUI/Dialogs/GroupEditDlg.Designer.cs \
+./GKUI/Dialogs/LanguageSelectDlg.cs \
+./GKUI/Dialogs/LanguageSelectDlg.Designer.cs \
 ./GKUI/Dialogs/LocationEditDlg.cs \
-./GKUI/Dialogs/MediaEditDlg.Designer.cs \
+./GKUI/Dialogs/LocationEditDlg.Designer.cs \
 ./GKUI/Dialogs/MediaEditDlg.cs \
-./GKUI/Dialogs/NameEditDlg.Designer.cs \
+./GKUI/Dialogs/MediaEditDlg.Designer.cs \
 ./GKUI/Dialogs/NameEditDlg.cs \
-./GKUI/Dialogs/NoteEditDlg.Designer.cs \
+./GKUI/Dialogs/NameEditDlg.Designer.cs \
 ./GKUI/Dialogs/NoteEditDlg.cs \
-./GKUI/Dialogs/OptionsDlg.Designer.cs \
+./GKUI/Dialogs/NoteEditDlg.Designer.cs \
 ./GKUI/Dialogs/OptionsDlg.cs \
-./GKUI/Dialogs/PersonEditDlg.Designer.cs \
-./GKUI/Dialogs/PersonEditDlg.cs \
-./GKUI/Dialogs/PersonNewDlg.Designer.cs \
-./GKUI/Dialogs/PersonNewDlg.cs \
-./GKUI/Dialogs/PersonalNameEditDlg.Designer.cs \
+./GKUI/Dialogs/OptionsDlg.Designer.cs \
 ./GKUI/Dialogs/PersonalNameEditDlg.cs \
-./GKUI/Dialogs/PersonsFilterDlg.Designer.cs \
+./GKUI/Dialogs/PersonalNameEditDlg.Designer.cs \
+./GKUI/Dialogs/PersonEditDlg.cs \
+./GKUI/Dialogs/PersonEditDlg.Designer.cs \
+./GKUI/Dialogs/PersonNewDlg.cs \
+./GKUI/Dialogs/PersonNewDlg.Designer.cs \
 ./GKUI/Dialogs/PersonsFilterDlg.cs \
-./GKUI/Dialogs/ProgressDlg.Designer.cs \
+./GKUI/Dialogs/PersonsFilterDlg.Designer.cs \
 ./GKUI/Dialogs/ProgressDlg.cs \
-./GKUI/Dialogs/RecordSelectDlg.Designer.cs \
+./GKUI/Dialogs/ProgressDlg.Designer.cs \
 ./GKUI/Dialogs/RecordSelectDlg.cs \
-./GKUI/Dialogs/RepositoryEditDlg.Designer.cs \
+./GKUI/Dialogs/RecordSelectDlg.Designer.cs \
 ./GKUI/Dialogs/RepositoryEditDlg.cs \
-./GKUI/Dialogs/ResearchEditDlg.Designer.cs \
+./GKUI/Dialogs/RepositoryEditDlg.Designer.cs \
 ./GKUI/Dialogs/ResearchEditDlg.cs \
-./GKUI/Dialogs/SexCheckDlg.Designer.cs \
+./GKUI/Dialogs/ResearchEditDlg.Designer.cs \
 ./GKUI/Dialogs/SexCheckDlg.cs \
-./GKUI/Dialogs/SourceCitEditDlg.Designer.cs \
+./GKUI/Dialogs/SexCheckDlg.Designer.cs \
 ./GKUI/Dialogs/SourceCitEditDlg.cs \
-./GKUI/Dialogs/SourceEditDlg.Designer.cs \
+./GKUI/Dialogs/SourceCitEditDlg.Designer.cs \
 ./GKUI/Dialogs/SourceEditDlg.cs \
-./GKUI/Dialogs/TaskEditDlg.Designer.cs \
+./GKUI/Dialogs/SourceEditDlg.Designer.cs \
 ./GKUI/Dialogs/TaskEditDlg.cs \
-./GKUI/Dialogs/TreeFilterDlg.Designer.cs \
+./GKUI/Dialogs/TaskEditDlg.Designer.cs \
 ./GKUI/Dialogs/TreeFilterDlg.cs \
-./GKUI/Dialogs/UserRefEditDlg.Designer.cs \
+./GKUI/Dialogs/TreeFilterDlg.Designer.cs \
 ./GKUI/Dialogs/UserRefEditDlg.cs \
-./GKUI/MainWin.Designer.cs \
+./GKUI/Dialogs/UserRefEditDlg.Designer.cs \
 ./GKUI/MainWin.cs \
-./GKUI/MapsViewerWin.Designer.cs \
+./GKUI/MainWin.Designer.cs \
 ./GKUI/MapsViewerWin.cs \
-./GKUI/MediaViewerWin.Designer.cs \
+./GKUI/MapsViewerWin.Designer.cs \
 ./GKUI/MediaViewerWin.cs \
-./GKUI/OrganizerWin.Designer.cs \
+./GKUI/MediaViewerWin.Designer.cs \
 ./GKUI/OrganizerWin.cs \
-./GKUI/PatriarchsViewerWin.Designer.cs \
+./GKUI/OrganizerWin.Designer.cs \
 ./GKUI/PatriarchsViewerWin.cs \
-./GKUI/ScriptEditWin.Designer.cs \
+./GKUI/PatriarchsViewerWin.Designer.cs \
 ./GKUI/ScriptEditWin.cs \
+./GKUI/ScriptEditWin.Designer.cs \
 ./GKUI/Sheets/GKCustomSheet.cs \
 ./GKUI/Sheets/GKEventsSheet.cs \
 ./GKUI/Sheets/GKMediaSheet.cs \
 ./GKUI/Sheets/GKNotesSheet.cs \
 ./GKUI/Sheets/GKSourcesSheet.cs \
-./GKUI/SlideshowWin.Designer.cs \
 ./GKUI/SlideshowWin.cs \
-./GKUI/StatisticsWin.Designer.cs \
+./GKUI/SlideshowWin.Designer.cs \
 ./GKUI/StatisticsWin.cs \
-./GKUI/TreeChartWin.Designer.cs \
+./GKUI/StatisticsWin.Designer.cs \
 ./GKUI/TreeChartWin.cs \
-./GKUI/TreeToolsWin.Designer.cs \
-./GKUI/TreeToolsWin.cs
+./GKUI/TreeChartWin.Designer.cs \
+./GKUI/TreeToolsWin.cs \
+./GKUI/TreeToolsWin.Designer.cs
 
 else
 
 # `$(sources)` for `$(linux)`
 sources := \
 ./Externals/SingleInstancing/GlobalMutexPool.cs \
-./Externals/SingleInstancing/ISingleInstanceEnforcer.cs \
 ./Externals/SingleInstancing/IpcBroadcast.cs \
+./Externals/SingleInstancing/ISingleInstanceEnforcer.cs \
 ./Externals/SingleInstancing/SingleInstanceException.cs \
 ./Externals/SingleInstancing/SingleInstanceProxy.cs \
 ./Externals/SingleInstancing/SingleInstanceTracker.cs \
@@ -273,12 +273,12 @@ sources := \
 ./GKCore/Tools/TreeTools.cs \
 ./GKProgram.cs \
 ./GKResources.Designer.cs \
-./GKUI/AncestorsCircleWin.Designer.cs \
 ./GKUI/AncestorsCircleWin.cs \
-./GKUI/BaseWin.Designer.cs \
+./GKUI/AncestorsCircleWin.Designer.cs \
 ./GKUI/BaseWin.cs \
-./GKUI/Charts/ACOptionsControl.Designer.cs \
+./GKUI/BaseWin.Designer.cs \
 ./GKUI/Charts/ACOptionsControl.cs \
+./GKUI/Charts/ACOptionsControl.Designer.cs \
 ./GKUI/Charts/AncestorsCircle.cs \
 ./GKUI/Charts/ChartFilter.cs \
 ./GKUI/Charts/CustomChart.cs \
@@ -290,111 +290,120 @@ sources := \
 ./GKUI/Charts/TreeChartBox.cs \
 ./GKUI/Charts/TreeChartPerson.cs \
 ./GKUI/Controls/GKComboItem.cs \
-./GKUI/Controls/GKInputBox.Designer.cs \
 ./GKUI/Controls/GKInputBox.cs \
+./GKUI/Controls/GKInputBox.Designer.cs \
 ./GKUI/Controls/GKListItem.cs \
 ./GKUI/Controls/GKListView.cs \
 ./GKUI/Controls/GKMapBrowser.cs \
 ./GKUI/Controls/GKMenuItem.cs \
-./GKUI/Controls/GKMergeControl.Designer.cs \
 ./GKUI/Controls/GKMergeControl.cs \
+./GKUI/Controls/GKMergeControl.Designer.cs \
 ./GKUI/Controls/GKRecordsView.cs \
 ./GKUI/Controls/GKSheetList.cs \
 ./GKUI/Controls/GKTreeNode.cs \
 ./GKUI/Controls/ModifyEventArgs.cs \
 ./GKUI/Controls/SearchPanel.cs \
-./GKUI/Dialogs/AboutDlg.Designer.cs \
 ./GKUI/Dialogs/AboutDlg.cs \
-./GKUI/Dialogs/AddressEditDlg.Designer.cs \
+./GKUI/Dialogs/AboutDlg.Designer.cs \
 ./GKUI/Dialogs/AddressEditDlg.cs \
-./GKUI/Dialogs/AssociationEditDlg.Designer.cs \
+./GKUI/Dialogs/AddressEditDlg.Designer.cs \
 ./GKUI/Dialogs/AssociationEditDlg.cs \
-./GKUI/Dialogs/CommonFilterDlg.Designer.cs \
+./GKUI/Dialogs/AssociationEditDlg.Designer.cs \
 ./GKUI/Dialogs/CommonFilterDlg.cs \
-./GKUI/Dialogs/CommunicationEditDlg.Designer.cs \
+./GKUI/Dialogs/CommonFilterDlg.Designer.cs \
 ./GKUI/Dialogs/CommunicationEditDlg.cs \
-./GKUI/Dialogs/DayTipsDlg.Designer.cs \
+./GKUI/Dialogs/CommunicationEditDlg.Designer.cs \
 ./GKUI/Dialogs/DayTipsDlg.cs \
-./GKUI/Dialogs/EventEditDlg.Designer.cs \
+./GKUI/Dialogs/DayTipsDlg.Designer.cs \
 ./GKUI/Dialogs/EventEditDlg.cs \
-./GKUI/Dialogs/FamilyEditDlg.Designer.cs \
+./GKUI/Dialogs/EventEditDlg.Designer.cs \
 ./GKUI/Dialogs/FamilyEditDlg.cs \
-./GKUI/Dialogs/FilePropertiesDlg.Designer.cs \
+./GKUI/Dialogs/FamilyEditDlg.Designer.cs \
 ./GKUI/Dialogs/FilePropertiesDlg.cs \
-./GKUI/Dialogs/GroupEditDlg.Designer.cs \
+./GKUI/Dialogs/FilePropertiesDlg.Designer.cs \
 ./GKUI/Dialogs/GroupEditDlg.cs \
-./GKUI/Dialogs/LocationEditDlg.Designer.cs \
+./GKUI/Dialogs/GroupEditDlg.Designer.cs \
+./GKUI/Dialogs/LanguageSelectDlg.cs \
+./GKUI/Dialogs/LanguageSelectDlg.Designer.cs \
 ./GKUI/Dialogs/LocationEditDlg.cs \
-./GKUI/Dialogs/MediaEditDlg.Designer.cs \
+./GKUI/Dialogs/LocationEditDlg.Designer.cs \
 ./GKUI/Dialogs/MediaEditDlg.cs \
-./GKUI/Dialogs/NameEditDlg.Designer.cs \
+./GKUI/Dialogs/MediaEditDlg.Designer.cs \
 ./GKUI/Dialogs/NameEditDlg.cs \
-./GKUI/Dialogs/NoteEditDlg.Designer.cs \
+./GKUI/Dialogs/NameEditDlg.Designer.cs \
 ./GKUI/Dialogs/NoteEditDlg.cs \
-./GKUI/Dialogs/OptionsDlg.Designer.cs \
+./GKUI/Dialogs/NoteEditDlg.Designer.cs \
 ./GKUI/Dialogs/OptionsDlg.cs \
-./GKUI/Dialogs/PersonEditDlg.Designer.cs \
-./GKUI/Dialogs/PersonEditDlg.cs \
-./GKUI/Dialogs/PersonNewDlg.Designer.cs \
-./GKUI/Dialogs/PersonNewDlg.cs \
-./GKUI/Dialogs/PersonalNameEditDlg.Designer.cs \
+./GKUI/Dialogs/OptionsDlg.Designer.cs \
 ./GKUI/Dialogs/PersonalNameEditDlg.cs \
-./GKUI/Dialogs/PersonsFilterDlg.Designer.cs \
+./GKUI/Dialogs/PersonalNameEditDlg.Designer.cs \
+./GKUI/Dialogs/PersonEditDlg.cs \
+./GKUI/Dialogs/PersonEditDlg.Designer.cs \
+./GKUI/Dialogs/PersonNewDlg.cs \
+./GKUI/Dialogs/PersonNewDlg.Designer.cs \
 ./GKUI/Dialogs/PersonsFilterDlg.cs \
-./GKUI/Dialogs/ProgressDlg.Designer.cs \
+./GKUI/Dialogs/PersonsFilterDlg.Designer.cs \
 ./GKUI/Dialogs/ProgressDlg.cs \
-./GKUI/Dialogs/RecordSelectDlg.Designer.cs \
+./GKUI/Dialogs/ProgressDlg.Designer.cs \
 ./GKUI/Dialogs/RecordSelectDlg.cs \
-./GKUI/Dialogs/RepositoryEditDlg.Designer.cs \
+./GKUI/Dialogs/RecordSelectDlg.Designer.cs \
 ./GKUI/Dialogs/RepositoryEditDlg.cs \
-./GKUI/Dialogs/ResearchEditDlg.Designer.cs \
+./GKUI/Dialogs/RepositoryEditDlg.Designer.cs \
 ./GKUI/Dialogs/ResearchEditDlg.cs \
-./GKUI/Dialogs/SexCheckDlg.Designer.cs \
+./GKUI/Dialogs/ResearchEditDlg.Designer.cs \
 ./GKUI/Dialogs/SexCheckDlg.cs \
-./GKUI/Dialogs/SourceCitEditDlg.Designer.cs \
+./GKUI/Dialogs/SexCheckDlg.Designer.cs \
 ./GKUI/Dialogs/SourceCitEditDlg.cs \
-./GKUI/Dialogs/SourceEditDlg.Designer.cs \
+./GKUI/Dialogs/SourceCitEditDlg.Designer.cs \
 ./GKUI/Dialogs/SourceEditDlg.cs \
-./GKUI/Dialogs/TaskEditDlg.Designer.cs \
+./GKUI/Dialogs/SourceEditDlg.Designer.cs \
 ./GKUI/Dialogs/TaskEditDlg.cs \
-./GKUI/Dialogs/TreeFilterDlg.Designer.cs \
+./GKUI/Dialogs/TaskEditDlg.Designer.cs \
 ./GKUI/Dialogs/TreeFilterDlg.cs \
-./GKUI/Dialogs/UserRefEditDlg.Designer.cs \
+./GKUI/Dialogs/TreeFilterDlg.Designer.cs \
 ./GKUI/Dialogs/UserRefEditDlg.cs \
-./GKUI/MainWin.Designer.cs \
+./GKUI/Dialogs/UserRefEditDlg.Designer.cs \
 ./GKUI/MainWin.cs \
-./GKUI/MapsViewerWin.Designer.cs \
+./GKUI/MainWin.Designer.cs \
 ./GKUI/MapsViewerWin.cs \
-./GKUI/MediaViewerWin.Designer.cs \
+./GKUI/MapsViewerWin.Designer.cs \
 ./GKUI/MediaViewerWin.cs \
-./GKUI/OrganizerWin.Designer.cs \
+./GKUI/MediaViewerWin.Designer.cs \
 ./GKUI/OrganizerWin.cs \
-./GKUI/PatriarchsViewerWin.Designer.cs \
+./GKUI/OrganizerWin.Designer.cs \
 ./GKUI/PatriarchsViewerWin.cs \
-./GKUI/ScriptEditWin.Designer.cs \
+./GKUI/PatriarchsViewerWin.Designer.cs \
 ./GKUI/ScriptEditWin.cs \
+./GKUI/ScriptEditWin.Designer.cs \
 ./GKUI/Sheets/GKCustomSheet.cs \
 ./GKUI/Sheets/GKEventsSheet.cs \
 ./GKUI/Sheets/GKMediaSheet.cs \
 ./GKUI/Sheets/GKNotesSheet.cs \
 ./GKUI/Sheets/GKSourcesSheet.cs \
-./GKUI/SlideshowWin.Designer.cs \
 ./GKUI/SlideshowWin.cs \
-./GKUI/StatisticsWin.Designer.cs \
+./GKUI/SlideshowWin.Designer.cs \
 ./GKUI/StatisticsWin.cs \
-./GKUI/TreeChartWin.Designer.cs \
+./GKUI/StatisticsWin.Designer.cs \
 ./GKUI/TreeChartWin.cs \
-./GKUI/TreeToolsWin.Designer.cs \
-./GKUI/TreeToolsWin.cs
+./GKUI/TreeChartWin.Designer.cs \
+./GKUI/TreeToolsWin.cs \
+./GKUI/TreeToolsWin.Designer.cs
 
 endif
 
 # Get files list for `resources` via (run from this directory):
 # find -regex '.+\.resx' | sed 's/.\+\/\(.\+\)\.resx/\1.resources \\/' | sort
+# Or (this is more valid -- it takes data from a project file):
+# grep "[[:space:]]\+<EmbeddedResource[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GEDKeeper2.mswin.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<EmbeddedResource[[:space:]]\+Include=.*[\/|\"]\(.*\)\.resx\"\([[:space:]]\?\/\)\?>/\1.resources \\\\/" | sort
+# grep "[[:space:]]\+<EmbeddedResource[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GEDKeeper2.linux.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<EmbeddedResource[[:space:]]\+Include=.*[\/|\"]\(.*\)\.resx\"\([[:space:]]\?\/\)\?>/\1.resources \\\\/" | sort
+# Because `$(resources)` must (may) have different values for Windows and Linux targets.
+ifeq ($(windows), $(softwareplatform))
+
+# `$(resources)` for `$(windows)`
 resources := \
 $(addprefix $(objdir), \
-ACOptionsControl.resources \
 AboutDlg.resources \
+ACOptionsControl.resources \
 AddressEditDlg.resources \
 AncestorsCircleWin.resources \
 AssociationEditDlg.resources \
@@ -409,6 +418,7 @@ GKInputBox.resources \
 GKMergeControl.resources \
 GKResources.resources \
 GroupEditDlg.resources \
+LanguageSelectDlg.resources \
 LocationEditDlg.resources \
 MainWin.resources \
 MapsViewerWin.resources \
@@ -419,9 +429,9 @@ NoteEditDlg.resources \
 OptionsDlg.resources \
 OrganizerWin.resources \
 PatriarchsViewerWin.resources \
+PersonalNameEditDlg.resources \
 PersonEditDlg.resources \
 PersonNewDlg.resources \
-PersonalNameEditDlg.resources \
 PersonsFilterDlg.resources \
 ProgressDlg.resources \
 RecordSelectDlg.resources \
@@ -439,6 +449,62 @@ TreeFilterDlg.resources \
 TreeToolsWin.resources \
 UserRefEditDlg.resources \
 )
+
+else
+
+# `$(resources)` for `$(linux)`
+resources := \
+$(addprefix $(objdir), \
+AboutDlg.resources \
+ACOptionsControl.resources \
+AddressEditDlg.resources \
+AncestorsCircleWin.resources \
+AssociationEditDlg.resources \
+BaseWin.resources \
+CommonFilterDlg.resources \
+CommunicationEditDlg.resources \
+DayTipsDlg.resources \
+EventEditDlg.resources \
+FamilyEditDlg.resources \
+FilePropertiesDlg.resources \
+GKInputBox.resources \
+GKMergeControl.resources \
+GKResources.resources \
+GroupEditDlg.resources \
+LanguageSelectDlg.resources \
+LocationEditDlg.resources \
+MainWin.resources \
+MapsViewerWin.resources \
+MediaEditDlg.resources \
+MediaViewerWin.resources \
+NameEditDlg.resources \
+NoteEditDlg.resources \
+OptionsDlg.resources \
+OrganizerWin.resources \
+PatriarchsViewerWin.resources \
+PersonalNameEditDlg.resources \
+PersonEditDlg.resources \
+PersonNewDlg.resources \
+PersonsFilterDlg.resources \
+ProgressDlg.resources \
+RecordSelectDlg.resources \
+RepositoryEditDlg.resources \
+ResearchEditDlg.resources \
+ScriptEditWin.resources \
+SexCheckDlg.resources \
+SlideshowWin.resources \
+SourceCitEditDlg.resources \
+SourceEditDlg.resources \
+StatisticsWin.resources \
+TaskEditDlg.resources \
+TreeChartWin.resources \
+TreeFilterDlg.resources \
+TreeToolsWin.resources \
+UserRefEditDlg.resources \
+)
+
+endif
+
 cscrefs := \
 //reference:"..\\$(gkcommon)\\obj\\$(releasetype)\\$(gkcommon).dll" \
 //reference:"libs\ArborGVT.dll" \
