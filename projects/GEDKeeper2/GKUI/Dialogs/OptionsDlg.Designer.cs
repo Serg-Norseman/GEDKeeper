@@ -276,7 +276,6 @@ namespace GKUI.Dialogs
             // lblMinutes
             // 
             this.lblMinutes.AutoSize = true;
-            this.lblMinutes.Enabled = false;
             this.lblMinutes.Location = new System.Drawing.Point(289, 187);
             this.lblMinutes.Name = "lblMinutes";
             this.lblMinutes.Size = new System.Drawing.Size(66, 17);
@@ -285,7 +284,6 @@ namespace GKUI.Dialogs
             // 
             // numASMin
             // 
-            this.numASMin.Enabled = false;
             this.numASMin.Location = new System.Drawing.Point(234, 183);
             this.numASMin.Maximum = new decimal(new int[] {
                                     120,
@@ -309,7 +307,6 @@ namespace GKUI.Dialogs
             // chkAutosave
             // 
             this.chkAutosave.AutoSize = true;
-            this.chkAutosave.Enabled = false;
             this.chkAutosave.Location = new System.Drawing.Point(13, 184);
             this.chkAutosave.Name = "chkAutosave";
             this.chkAutosave.Size = new System.Drawing.Size(109, 21);
@@ -366,7 +363,7 @@ namespace GKUI.Dialogs
             // lblLanguage
             // 
             this.lblLanguage.AutoSize = true;
-            this.lblLanguage.Location = new System.Drawing.Point(21, 396);
+            this.lblLanguage.Location = new System.Drawing.Point(13, 386);
             this.lblLanguage.Name = "lblLanguage";
             this.lblLanguage.Size = new System.Drawing.Size(80, 17);
             this.lblLanguage.TabIndex = 0;
@@ -423,7 +420,7 @@ namespace GKUI.Dialogs
             // lblProxyServer
             // 
             this.lblProxyServer.AutoSize = true;
-            this.lblProxyServer.Location = new System.Drawing.Point(22, 68);
+            this.lblProxyServer.Location = new System.Drawing.Point(13, 61);
             this.lblProxyServer.Name = "lblProxyServer";
             this.lblProxyServer.Size = new System.Drawing.Size(97, 17);
             this.lblProxyServer.TabIndex = 0;
@@ -432,7 +429,7 @@ namespace GKUI.Dialogs
             // lblProxyPort
             // 
             this.lblProxyPort.AutoSize = true;
-            this.lblProxyPort.Location = new System.Drawing.Point(22, 97);
+            this.lblProxyPort.Location = new System.Drawing.Point(13, 90);
             this.lblProxyPort.Name = "lblProxyPort";
             this.lblProxyPort.Size = new System.Drawing.Size(83, 17);
             this.lblProxyPort.TabIndex = 1;
@@ -441,7 +438,7 @@ namespace GKUI.Dialogs
             // lblProxyLogin
             // 
             this.lblProxyLogin.AutoSize = true;
-            this.lblProxyLogin.Location = new System.Drawing.Point(22, 126);
+            this.lblProxyLogin.Location = new System.Drawing.Point(13, 120);
             this.lblProxyLogin.Name = "lblProxyLogin";
             this.lblProxyLogin.Size = new System.Drawing.Size(90, 17);
             this.lblProxyLogin.TabIndex = 2;
@@ -450,7 +447,7 @@ namespace GKUI.Dialogs
             // lblProxyPassword
             // 
             this.lblProxyPassword.AutoSize = true;
-            this.lblProxyPassword.Location = new System.Drawing.Point(22, 155);
+            this.lblProxyPassword.Location = new System.Drawing.Point(13, 149);
             this.lblProxyPassword.Name = "lblProxyPassword";
             this.lblProxyPassword.Size = new System.Drawing.Size(115, 17);
             this.lblProxyPassword.TabIndex = 3;

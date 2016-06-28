@@ -141,27 +141,27 @@ namespace GKUI
 
         private void AutosaveTimer_Tick(object sender, EventArgs e)
         {
-//            try
-//            {
-//                int num = base.MdiChildren.Length;
-//                for (int i = 0; i < num; i++) {
-//                    Form child = base.MdiChildren[i];
-//
-//                    if (child is IBaseWindow) {
-//                        IBaseWindow baseWin = child as IBaseWindow;
-//
-//                        string fileName = baseWin.Tree.FileName;
-//
-//                        if (baseWin.Modified && !string.IsNullOrEmpty(fileName)) {
-//                            // TODO: if file is new and not exists - don't save it, but hint to user
-//                            // TODO: if Tree is busy (editing) - don't save!!!
-//                            // -- baseWin.FileSave(fileName);
-//                        }
-//                    }
-//                }
-//            } catch (Exception ex) {
-//                this.LogWrite("MainWin.AutosaveTimer_Tick(): " + ex.Message);
-//            }
+            try
+            {
+                int num = base.MdiChildren.Length;
+                for (int i = 0; i < num; i++) {
+                    Form child = base.MdiChildren[i];
+
+                    if (child is IBaseWindow) {
+                        IBaseWindow baseWin = child as IBaseWindow;
+
+                        string fileName = baseWin.Tree.FileName;
+
+                        // file is modified, isn't updated now, and isn't now created (exists)
+                        if (baseWin.Modified && !baseWin.Context.IsUpdated() && !baseWin.IsUnknown()) {
+                            // TODO: if file is new and not exists - don't save it, but hint to user
+                            baseWin.FileSave(fileName);
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                this.LogWrite("MainWin.AutosaveTimer_Tick(): " + ex.Message);
+            }
         }
 
         private void ApplyOptions()
@@ -714,8 +714,14 @@ namespace GKUI
             IBaseWindow curBase = this.GetCurrentFile();
             if (curBase == null) return;
 
-            using (FilePropertiesDlg dlgFileProps = new FilePropertiesDlg(curBase)) {
-                this.ShowModalEx(dlgFileProps, false);
+            try {
+                curBase.Context.BeginUpdate();
+
+                using (FilePropertiesDlg dlgFileProps = new FilePropertiesDlg(curBase)) {
+                    this.ShowModalEx(dlgFileProps, false);
+                }
+            } finally {
+                curBase.Context.EndUpdate();
             }
         }
 
@@ -724,8 +730,14 @@ namespace GKUI
             IBaseWindow curBase = this.GetCurrentFile();
             if (curBase == null) return;
 
-            using (ScriptEditWin dmn = new ScriptEditWin(curBase)) {
-                this.ShowModalEx(dmn, false);
+            try {
+                curBase.Context.BeginUpdate();
+
+                using (ScriptEditWin dmn = new ScriptEditWin(curBase)) {
+                    this.ShowModalEx(dmn, false);
+                }
+            } finally {
+                curBase.Context.EndUpdate();
             }
         }
 
@@ -734,8 +746,14 @@ namespace GKUI
             IBaseWindow curBase = this.GetCurrentFile();
             if (curBase == null) return;
 
-            using (TreeToolsWin fmTreeTools = new TreeToolsWin(curBase)) {
-                this.ShowModalEx(fmTreeTools, false);
+            try {
+                curBase.Context.BeginUpdate();
+
+                using (TreeToolsWin fmTreeTools = new TreeToolsWin(curBase)) {
+                    this.ShowModalEx(fmTreeTools, false);
+                }
+            } finally {
+                curBase.Context.EndUpdate();
             }
         }
 

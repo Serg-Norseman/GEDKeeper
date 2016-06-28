@@ -43,6 +43,7 @@ namespace GKCore.Interfaces
         // Data manipulation
         GEDCOMCustomEvent CreateEventEx(GEDCOMRecordWithEvents aRec, string evSign, string evDate, string evPlace);
         GEDCOMIndividualRecord CreatePersonEx(string iName, string iPatronymic, string iSurname, GEDCOMSex iSex, bool birthEvent);
+        bool DeleteRecord(GEDCOMRecord record);
 
         // Individual utils
         bool IsChildless(GEDCOMIndividualRecord iRec);
@@ -63,5 +64,9 @@ namespace GKCore.Interfaces
         bool MediaSave(GEDCOMFileReference fileReference, string fileName, MediaStoreType storeType);
         Bitmap BitmapLoad(GEDCOMFileReference fileReference, int thumbWidth, int thumbHeight, bool throwException);
         Bitmap GetPrimaryBitmap(GEDCOMIndividualRecord iRec, int thumbWidth, int thumbHeight, bool throwException);
+
+        bool IsUpdated();
+        void BeginUpdate();
+        void EndUpdate();
     }
 }

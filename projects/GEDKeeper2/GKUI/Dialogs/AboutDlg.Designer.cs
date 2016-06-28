@@ -72,26 +72,26 @@ namespace GKUI.Dialogs
 		    // 
 		    this.lblMail.AutoSize = true;
 		    this.lblMail.Cursor = System.Windows.Forms.Cursors.Hand;
-		    this.lblMail.Font = new System.Drawing.Font("Times New Roman", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+		    this.lblMail.Font = new System.Drawing.Font("Tahoma", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))));
 		    this.lblMail.ForeColor = System.Drawing.Color.Blue;
 		    this.lblMail.Location = new System.Drawing.Point(15, 155);
 		    this.lblMail.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
 		    this.lblMail.Name = "lblMail";
-		    this.lblMail.Size = new System.Drawing.Size(159, 17);
+		    this.lblMail.Size = new System.Drawing.Size(210, 17);
 		    this.lblMail.TabIndex = 2;
-		    this.lblMail.Text = "http://vk.com/gedkeeper";
+		    this.lblMail.Text = "mailto:gedkeeper@yandex.ru";
 		    this.lblMail.Click += new System.EventHandler(this.LabelMail_Click);
 		    // 
 		    // lblProjSite
 		    // 
 		    this.lblProjSite.AutoSize = true;
 		    this.lblProjSite.Cursor = System.Windows.Forms.Cursors.Hand;
-		    this.lblProjSite.Font = new System.Drawing.Font("Times New Roman", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+		    this.lblProjSite.Font = new System.Drawing.Font("Tahoma", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))));
 		    this.lblProjSite.ForeColor = System.Drawing.Color.Blue;
 		    this.lblProjSite.Location = new System.Drawing.Point(15, 188);
 		    this.lblProjSite.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-		    this.lblProjSite.Name = "label1";
-		    this.lblProjSite.Size = new System.Drawing.Size(177, 17);
+		    this.lblProjSite.Name = "lblProjSite";
+		    this.lblProjSite.Size = new System.Drawing.Size(212, 17);
 		    this.lblProjSite.TabIndex = 2;
 		    this.lblProjSite.Text = "https://gedkeeper.github.io/";
 		    this.lblProjSite.Click += new System.EventHandler(this.LabelMail_Click);

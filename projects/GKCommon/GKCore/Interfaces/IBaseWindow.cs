@@ -48,6 +48,7 @@ namespace GKCore.Interfaces
         void CheckPersonSex(GEDCOMIndividualRecord iRec);
         void CollectEventValues(GEDCOMCustomEvent evt);
 
+        bool IsUnknown();
         void FileNew();
         void FileLoad(string fileName);
         void FileSave(string fileName);

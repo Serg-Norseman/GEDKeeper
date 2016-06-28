@@ -153,6 +153,69 @@ namespace GKCore
             return iRec;
         }
 
+        public bool DeleteRecord(GEDCOMRecord record)
+        {
+            bool result = false;
+
+            if (record != null)
+            {
+                try {
+                    this.BeginUpdate();
+
+                    switch (record.RecordType)
+                    {
+                        case GEDCOMRecordType.rtIndividual:
+                            result = this.fTree.DeleteIndividualRecord(record as GEDCOMIndividualRecord);
+                            break;
+
+                        case GEDCOMRecordType.rtFamily:
+                            result = this.fTree.DeleteFamilyRecord(record as GEDCOMFamilyRecord);
+                            break;
+
+                        case GEDCOMRecordType.rtNote:
+                            result = this.fTree.DeleteNoteRecord(record as GEDCOMNoteRecord);
+                            break;
+
+                        case GEDCOMRecordType.rtMultimedia:
+                            result = this.fTree.DeleteMediaRecord(record as GEDCOMMultimediaRecord);
+                            break;
+
+                        case GEDCOMRecordType.rtSource:
+                            result = this.fTree.DeleteSourceRecord(record as GEDCOMSourceRecord);
+                            break;
+
+                        case GEDCOMRecordType.rtRepository:
+                            result = this.fTree.DeleteRepositoryRecord(record as GEDCOMRepositoryRecord);
+                            break;
+
+                        case GEDCOMRecordType.rtGroup:
+                            result = this.fTree.DeleteGroupRecord(record as GEDCOMGroupRecord);
+                            break;
+
+                        case GEDCOMRecordType.rtResearch:
+                            result = this.fTree.DeleteResearchRecord(record as GEDCOMResearchRecord);
+                            break;
+
+                        case GEDCOMRecordType.rtTask:
+                            result = this.fTree.DeleteTaskRecord(record as GEDCOMTaskRecord);
+                            break;
+
+                        case GEDCOMRecordType.rtCommunication:
+                            result = this.fTree.DeleteCommunicationRecord(record as GEDCOMCommunicationRecord);
+                            break;
+
+                        case GEDCOMRecordType.rtLocation:
+                            result = this.fTree.DeleteLocationRecord(record as GEDCOMLocationRecord);
+                            break;
+                    }
+                } finally {
+                    this.EndUpdate();
+                }
+            }
+
+            return result;
+        }
+
         #endregion
         
         #region Individual utils
@@ -989,6 +1052,25 @@ namespace GKCore
                 SCCrypt.ClearBytes(salt);
                 cryptic.Clear();
             }
+        }
+
+        #endregion
+
+        #region Updating
+
+        public bool IsUpdated()
+        {
+            return this.fTree.IsUpdated();
+        }
+
+        public void BeginUpdate()
+        {
+            this.fTree.BeginUpdate();
+        }
+
+        public void EndUpdate()
+        {
+            this.fTree.EndUpdate();
         }
 
         #endregion

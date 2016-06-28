@@ -92,6 +92,9 @@ namespace GKCommon.GEDCOM
         private ProgressEventHandler fOnProgressEvent;
         private GEDCOMState fState;
 
+        private EventHandler fOnChange;
+        private EventHandler fOnChanging;
+        private int fUpdateCount;
 
         public string FileName
         {
@@ -131,6 +134,20 @@ namespace GKCommon.GEDCOM
             get { return this.fState; }
             set { this.fState = value; }
         }
+
+
+        public event EventHandler OnChange
+        {
+            add { this.fOnChange = value; }
+            remove { if (this.fOnChange == value) this.fOnChange = null; }
+        }
+
+        public event EventHandler OnChanging
+        {
+            add { this.fOnChanging = value; }
+            remove { if (this.fOnChanging == value) this.fOnChanging = null; }
+        }
+
 
         public GEDCOMTree()
         {
@@ -305,10 +322,10 @@ namespace GKCommon.GEDCOM
             this.fRecords.DeleteAt(index);
         }
 
-        public void DeleteRecord(GEDCOMRecord sender)
+        public void DeleteRecord(GEDCOMRecord record)
         {
-            this.XRefIndex_DeleteRecord(sender);
-            this.fRecords.Delete(sender);
+            this.XRefIndex_DeleteRecord(record);
+            this.fRecords.Delete(record);
         }
 
         public GEDCOMRecord Extract(int index)
@@ -1015,6 +1032,61 @@ namespace GKCommon.GEDCOM
                 result = true;
             }
             return result;
+        }
+
+        #endregion
+
+        #region Updating
+
+        public bool IsUpdated()
+        {
+            return (this.fUpdateCount != 0);
+        }
+
+        public void BeginUpdate()
+        {
+            if (this.fUpdateCount == 0)
+            {
+                this.SetUpdateState(true);
+            }
+            this.fUpdateCount++;
+        }
+
+        public void EndUpdate()
+        {
+            this.fUpdateCount--;
+            if (this.fUpdateCount == 0)
+            {
+                this.SetUpdateState(false);
+            }
+        }
+
+        private void SetUpdateState(bool updating)
+        {
+            if (updating)
+            {
+                this.Changing();
+            }
+            else
+            {
+                this.Changed();
+            }
+        }
+
+        private void Changed()
+        {
+            if (this.fUpdateCount == 0 && this.fOnChange != null)
+            {
+                this.fOnChange(this, new EventArgs());
+            }
+        }
+
+        private void Changing()
+        {
+            if (this.fUpdateCount == 0 && this.fOnChanging != null)
+            {
+                this.fOnChanging(this, new EventArgs());
+            }
         }
 
         #endregion
