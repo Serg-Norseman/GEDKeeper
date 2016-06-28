@@ -1,0 +1,91 @@
+
+		private System.Windows.Forms.MenuItem miUndo;
+		private System.Windows.Forms.MenuItem miRedo;
+		private System.Windows.Forms.MenuItem N4;
+
+		private System.Windows.Forms.ToolBarButton tbUndo;
+		private System.Windows.Forms.ToolBarButton tbRedo;
+		private System.Windows.Forms.ToolBarButton TBS3;
+
+			this.tbUndo = new System.Windows.Forms.ToolBarButton();
+			this.tbRedo = new System.Windows.Forms.ToolBarButton();
+			this.TBS3 = new System.Windows.Forms.ToolBarButton();
+
+			this.miUndo = new System.Windows.Forms.MenuItem();
+			this.miRedo = new System.Windows.Forms.MenuItem();
+			this.N4 = new System.Windows.Forms.MenuItem();
+
+
+			// 
+			// tbUndo
+			// 
+			this.tbUndo.ImageIndex = 31;
+			this.tbUndo.Name = "tbUndo";
+			// 
+			// tbRedo
+			// 
+			this.tbRedo.ImageIndex = 32;
+			this.tbRedo.Name = "tbRedo";
+			// 
+			// TBS3
+			// 
+			this.TBS3.Name = "TBS3";
+			this.TBS3.Style = System.Windows.Forms.ToolBarButtonStyle.Separator;
+
+			// 
+			// miUndo
+			// 
+			this.miUndo.Index = 0;
+			this.miUndo.Shortcut = System.Windows.Forms.Shortcut.CtrlZ;
+			this.miUndo.Text = "Отменить";
+			this.miUndo.Click += new System.EventHandler(this.miUndoClick);
+			// 
+			// miRedo
+			// 
+			this.miRedo.Index = 1;
+			this.miRedo.Shortcut = System.Windows.Forms.Shortcut.CtrlY;
+			this.miRedo.Text = "Вернуть";
+			this.miRedo.Click += new System.EventHandler(this.miRedoClick);
+			// 
+			// N4
+			// 
+			this.N4.Index = 2;
+			this.N4.Text = "-";
+
+
+		private void miUndoClick(object sender, EventArgs e)
+		{
+			TfmBase cur_base = this.GetCurrentFile();
+			if (cur_base != null)
+			{
+				cur_base.DoUndo();
+			}
+		}
+
+		private void miRedoClick(object sender, EventArgs e)
+		{
+			TfmBase cur_base = this.GetCurrentFile();
+			if (cur_base != null)
+			{
+				cur_base.DoRedo();
+			}
+		}
+
+	//ToolBar1_ButtonClick()
+	 		else if (e.Button == this.tbUndo) {
+				this.miUndoClick(null, null);
+			} else if (e.Button == this.tbRedo) {
+				this.miRedoClick(null, null);
+			}
+
+	//UpdateControls()
+				bool test_funcs = true;//TGenEngine.IsDevComp();
+				this.miUndo.Enabled = (test_funcs && cur_base != null && cur_base.Undoman.CanUndo());
+				this.tbUndo.Enabled = this.miUndo.Enabled;
+				this.miRedo.Enabled = (test_funcs && cur_base != null && cur_base.Undoman.CanRedo());
+				this.tbRedo.Enabled = this.miRedo.Enabled;
+
+	//SetLang()
+			this.miUndo.Text = LangMan.LSList[17];
+			this.miRedo.Text = LangMan.LSList[18];
+
