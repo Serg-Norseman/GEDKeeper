@@ -507,6 +507,11 @@
     <Compile Include="GKUI\Dialogs\LanguageSelectDlg.Designer.cs">
       <DependentUpon>LanguageSelectDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKCore\UndoManager.cs" />
+    <Compile Include="GKCore\Operations\CustomOperation.cs" />
+    <Compile Include="GKCore\Operations\PersonBookmarkChange.cs" />
+    <Compile Include="GKCore\Operations\PersonPatriarchChange.cs" />
+    <Compile Include="GKCore\Operations\PersonSexChange.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GKResources.resx">

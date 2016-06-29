@@ -32,6 +32,7 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.SmartGraph;
 using GKCore.Interfaces;
+using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Tools;
 using GKCore.Types;
@@ -48,27 +49,34 @@ namespace GKCore
         private readonly GEDCOMTree fTree;
         private readonly IBaseWindow fViewer;
         private readonly IHost fHost;
+        private UndoManager fUndoman;
 
         #endregion
-        
+
         #region Public properties
-        
+
         public GEDCOMTree Tree
         {
             get { return this.fTree; }
         }
-        
+
+        public UndoManager Undoman
+        {
+            get { return this.fUndoman; }
+        }
+
         #endregion
-        
+
         #region Instance control
-        
+
         public BaseContext(GEDCOMTree tree, IBaseWindow viewer)
         {
             this.fTree = tree;
             this.fViewer = viewer;
             this.fHost = (viewer == null) ? null : viewer.Host;
+            this.fUndoman = new UndoManager(this.fTree, UndoCommitType.manualCommit);
         }
-        
+
         #endregion
 
         #region Data search
@@ -217,7 +225,7 @@ namespace GKCore
         }
 
         #endregion
-        
+
         #region Individual utils
 
         public bool IsChildless(GEDCOMIndividualRecord iRec)
@@ -294,7 +302,7 @@ namespace GKCore
         }
 
         #endregion
-        
+
         #region Patriarchs Search
 
         private static int PatriarchsCompare(object item1, object item2)
@@ -1071,6 +1079,51 @@ namespace GKCore
         public void EndUpdate()
         {
             this.fTree.EndUpdate();
+        }
+
+        #endregion
+
+        #region Undo/Redo
+
+        public void DoUndo()
+        {
+            this.fUndoman.Undo();
+            this.fViewer.RefreshLists(false);
+            this.fHost.UpdateControls(false);
+        }
+
+        public void DoRedo()
+        {
+            this.fUndoman.Redo();
+            this.fViewer.RefreshLists(false);
+            this.fHost.UpdateControls(false);
+        }
+
+        public void ChangePersonSex(GEDCOMIndividualRecord person, GEDCOMSex newSex)
+        {
+            if (person.Sex != newSex)
+            {
+                this.fUndoman.DoOperation(new PersonSexChange(this.fUndoman, person, newSex));
+                this.fUndoman.Commit();
+            }
+        }
+
+        public void ChangePersonPatriarch(GEDCOMIndividualRecord person, bool newValue)
+        {
+            if (person.Patriarch != newValue)
+            {
+                this.fUndoman.DoOperation(new PersonPatriarchChange(this.fUndoman, person, newValue));
+                this.fUndoman.Commit();
+            }
+        }
+
+        public void ChangePersonBookmark(GEDCOMIndividualRecord person, bool newValue)
+        {
+            if (person.Bookmark != newValue)
+            {
+                this.fUndoman.DoOperation(new PersonBookmarkChange(this.fUndoman, person, newValue));
+                this.fUndoman.Commit();
+            }
         }
 
         #endregion

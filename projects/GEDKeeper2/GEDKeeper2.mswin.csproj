@@ -134,6 +134,10 @@
     <Compile Include="GKCore\LangMan.cs" />
     <Compile Include="GKCore\Maps\GMapPoint.cs" />
     <Compile Include="GKCore\NavigationStack.cs" />
+    <Compile Include="GKCore\Operations\PersonBookmarkChange.cs" />
+    <Compile Include="GKCore\Operations\PersonPatriarchChange.cs" />
+    <Compile Include="GKCore\Operations\PersonSexChange.cs" />
+    <Compile Include="GKCore\Operations\CustomOperation.cs" />
     <Compile Include="GKCore\Options\GlobalOptions.cs" />
     <Compile Include="GKCore\Options\LangRecord.cs" />
     <Compile Include="GKCore\Options\MRUFile.cs" />
@@ -151,6 +155,7 @@
     <Compile Include="GKCore\SysUtils.cs" />
     <Compile Include="GKCore\Tools\PlaceObj.cs" />
     <Compile Include="GKCore\Tools\TreeTools.cs" />
+    <Compile Include="GKCore\UndoManager.cs" />
     <Compile Include="GKProgram.cs" />
     <Compile Include="GKResources.Designer.cs">
       <DependentUpon>GKResources.resx</DependentUpon>
@@ -674,6 +679,7 @@
     <Folder Include="Externals" />
     <Folder Include="Externals\SingleInstancing" />
     <Folder Include="GKCore\Cultures" />
+    <Folder Include="GKCore\Operations" />
     <Folder Include="Sandbox" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
