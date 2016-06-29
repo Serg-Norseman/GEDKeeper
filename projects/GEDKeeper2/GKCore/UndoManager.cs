@@ -19,7 +19,7 @@
  */
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using GKCommon.GEDCOM;
 using GKCore.Operations;
 
@@ -45,10 +45,10 @@ namespace GKCore
 
         private int fDepth;
         private UndoManager.TTransactionEvent fOnTransaction;
-        private Stack fStackUndo;
-        private Stack fStackRedo;
+        private Stack<CustomOperation> fStackUndo;
+        private Stack<CustomOperation> fStackRedo;
         private GEDCOMTree fTree;
-        private UndoCommitType fType;
+        private UndoCommitType fCommitType;
         protected bool fDisposed;
 
 
@@ -82,9 +82,9 @@ namespace GKCore
         {
             this.fDepth = 1000;
             this.fTree = tree;
-            this.fType = commitType;
-            this.fStackUndo = new Stack();
-            this.fStackRedo = new Stack();
+            this.fCommitType = commitType;
+            this.fStackUndo = new Stack<CustomOperation>();
+            this.fStackRedo = new Stack<CustomOperation>();
         }
 
         public void Dispose()
@@ -140,7 +140,7 @@ namespace GKCore
                 this.fStackRedo.Push(null);
                 while (this.fStackUndo.Peek() != null)
                 {
-                    CustomOperation cmd = this.fStackUndo.Pop() as CustomOperation;
+                    CustomOperation cmd = this.fStackUndo.Pop();
                     this.fStackRedo.Push(cmd);
                     cmd.Undo();
                 }
@@ -158,7 +158,7 @@ namespace GKCore
                 }
                 while (this.fStackRedo.Peek() != null)
                 {
-                    CustomOperation cmd = this.fStackRedo.Pop() as CustomOperation;
+                    CustomOperation cmd = this.fStackRedo.Pop();
                     this.fStackUndo.Push(cmd);
                     if (!cmd.Redo())
                     {
@@ -184,7 +184,7 @@ namespace GKCore
 
         public void Commit()
         {
-            CustomOperation cmd = this.fStackUndo.Peek() as CustomOperation;
+            CustomOperation cmd = this.fStackUndo.Peek();
             if (cmd != null)
             {
                 this.fStackUndo.Push(null);
@@ -196,7 +196,7 @@ namespace GKCore
         {
             while (this.fStackUndo.Peek() != null)
             {
-                CustomOperation cmd = this.fStackUndo.Pop() as CustomOperation;
+                CustomOperation cmd = this.fStackUndo.Pop();
                 cmd.Undo();
             }
             this.Transaction(TransactionType.taRollback);
