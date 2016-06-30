@@ -1048,4 +1048,20 @@
         k4WSBmwRJlAyeLCSEh0G8ODJuLHjhAEBADs=
 </value>
   </data>
+  <data name="iRedo" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        R0lGODlhFAAUAIIAACli/ynN/5T//////wAAAP///wAAAAAAACH/C05FVFNDQVBFMi4wAwEBAAAh+QQB
+        AAAFACwAAAAAFAAUAAAIcAALCBxIsKDBgwgTKkwIoGHDhQMBDBAwMcBDhRIFBNio0SKBgh8LZAxAoCQB
+        AR1DigwJQKNKkS1diiQpUCLNgjFJbmQp02DLjTtr9vTZ8ebPlxEppkx6MyJQoCqPEjRJtSRBqRCZIoVo
+        MqvXr2C/BgQAOw==
+</value>
+  </data>
+  <data name="iUndo" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        R0lGODlhFAAUAIIAACli/ynN/5T//83//////wAAAP///wAAACH/C05FVFNDQVBFMi4wAwEBAAAh+QQB
+        AAAGACwAAAAAFAAUAAAIcgANCBxIsKDBgwgTKlxYEIBDhwwNOBRAkWIBggAaAqAYoGMAAQEuCgQgUiLH
+        kAVSfgw5ksDFjSBTYow5csCAAhxLDtzIUqLNnAd5igQwAGhQmiYr9myIFIBHjzpNLk1JterMpQyFRtyJ
+        dCvVrWDDihUYEAA7
+</value>
+  </data>
 </root>

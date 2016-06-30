@@ -150,12 +150,10 @@ namespace GKUI
                     if (child is IBaseWindow) {
                         IBaseWindow baseWin = child as IBaseWindow;
 
-                        string fileName = baseWin.Tree.FileName;
-
                         // file is modified, isn't updated now, and isn't now created (exists)
                         if (baseWin.Modified && !baseWin.Context.IsUpdated() && !baseWin.IsUnknown()) {
                             // TODO: if file is new and not exists - don't save it, but hint to user
-                            baseWin.FileSave(fileName);
+                            baseWin.FileSave(baseWin.Tree.FileName);
                         }
                     }
                 }
@@ -679,6 +677,24 @@ namespace GKUI
                 }
             } catch (Exception ex) {
                 this.LogWrite("MainWin.CriticalSave(): " + ex.Message);
+            }
+        }
+
+        private void miUndoClick(object sender, EventArgs e)
+        {
+            IBaseWindow curBase = this.GetCurrentFile();
+            if (curBase != null)
+            {
+                curBase.Context.DoUndo();
+            }
+        }
+
+        private void miRedoClick(object sender, EventArgs e)
+        {
+            IBaseWindow curBase = this.GetCurrentFile();
+            if (curBase != null)
+            {
+                curBase.Context.DoRedo();
             }
         }
 

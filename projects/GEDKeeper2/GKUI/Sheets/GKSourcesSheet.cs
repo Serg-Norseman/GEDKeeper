@@ -27,7 +27,6 @@ using GKCore;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKUI.Controls;
-using GKUI.Dialogs;
 
 namespace GKUI.Sheets
 {
@@ -95,37 +94,7 @@ namespace GKUI.Sheets
             {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    {
-                        SourceCitEditDlg fmSrcCitEdit = new SourceCitEditDlg(aBase);
-                        try
-                        {
-                            if (eArgs.Action == RecordAction.raAdd)
-                            {
-                                aCit = new GEDCOMSourceCitation(aBase.Tree, _struct as GEDCOMObject, "", "");
-                            }
-
-                            fmSrcCitEdit.SourceCitation = aCit;
-                            DialogResult res = MainWin.Instance.ShowModalEx(fmSrcCitEdit, false);
-
-                            if (eArgs.Action == RecordAction.raAdd)
-                            {
-                                if (res == DialogResult.OK)
-                                {
-                                    _struct.SourceCitations.Add(aCit);
-                                }
-                                else
-                                {
-                                    aCit.Dispose();
-                                }
-                            }
-
-                            result = (res == DialogResult.OK);
-                        }
-                        finally
-                        {
-                            fmSrcCitEdit.Dispose();
-                        }
-                    }
+                    result = aBase.ModifySourceCitation(_struct, ref aCit);
                     break;
 
                 case RecordAction.raDelete:

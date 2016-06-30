@@ -1,5 +1,0 @@
-	// dispose
-	this.FUndoman.Dispose();
-
-	//clear
-	this.FUndoman.Clear();

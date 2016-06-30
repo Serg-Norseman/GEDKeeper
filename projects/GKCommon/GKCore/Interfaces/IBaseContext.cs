@@ -50,12 +50,12 @@ namespace GKCore.Interfaces
         int FindBirthYear(GEDCOMIndividualRecord iRec);
         int FindDeathYear(GEDCOMIndividualRecord iRec);
         int GetRelativeYear(GEDCOMRecordWithEvents evsRec, string evSign);
-        
+
         // Patriarchs search
         ExtList<PatriarchObj> GetPatriarchsList(int gensMin, bool datesCheck);
         ExtList<PatriarchObj> GetPatriarchsLinks(int gensMin, bool datesCheck, bool loneSuppress);
         Graph GetPatriarchsGraph(int gensMin, bool datesCheck, bool loneSuppress = true);
-        
+
         // Multimedia support
         bool CheckBasePath();
         MediaStoreType GetStoreType(GEDCOMFileReference fileReference, ref string fileName);
@@ -68,5 +68,8 @@ namespace GKCore.Interfaces
         bool IsUpdated();
         void BeginUpdate();
         void EndUpdate();
+
+        void DoUndo();
+        void DoRedo();
     }
 }

@@ -74,7 +74,7 @@ namespace GKCore
             this.fTree = tree;
             this.fViewer = viewer;
             this.fHost = (viewer == null) ? null : viewer.Host;
-            this.fUndoman = new UndoManager(this.fTree, UndoCommitType.manualCommit);
+            this.fUndoman = new UndoManager(this.fTree);
         }
 
         #endregion
@@ -932,6 +932,7 @@ namespace GKCore
         public void Clear()
         {
             this.fTree.Clear();
+            this.fUndoman.Clear();
         }
 
         public void FileLoad(string fileName, string password = null)
@@ -1104,7 +1105,7 @@ namespace GKCore
             if (person.Sex != newSex)
             {
                 this.fUndoman.DoOperation(new PersonSexChange(this.fUndoman, person, newSex));
-                this.fUndoman.Commit();
+                //this.fUndoman.Commit();
             }
         }
 
@@ -1113,7 +1114,7 @@ namespace GKCore
             if (person.Patriarch != newValue)
             {
                 this.fUndoman.DoOperation(new PersonPatriarchChange(this.fUndoman, person, newValue));
-                this.fUndoman.Commit();
+                //this.fUndoman.Commit();
             }
         }
 
@@ -1122,7 +1123,7 @@ namespace GKCore
             if (person.Bookmark != newValue)
             {
                 this.fUndoman.DoOperation(new PersonBookmarkChange(this.fUndoman, person, newValue));
-                this.fUndoman.Commit();
+                //this.fUndoman.Commit();
             }
         }
 

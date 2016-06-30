@@ -243,6 +243,16 @@ internal class GKResources {
     /// <summary>
     ///   Looks up a localized resource of type System.Drawing.Bitmap.
     /// </summary>
+    internal static System.Drawing.Bitmap iRedo {
+        get {
+            object obj = ResourceManager.GetObject("iRedo", resourceCulture);
+            return ((System.Drawing.Bitmap)(obj));
+        }
+    }
+    
+    /// <summary>
+    ///   Looks up a localized resource of type System.Drawing.Bitmap.
+    /// </summary>
     internal static System.Drawing.Bitmap iRGShieldMax {
         get {
             object obj = ResourceManager.GetObject("iRGShieldMax", resourceCulture);
@@ -506,6 +516,16 @@ internal class GKResources {
     internal static System.Drawing.Bitmap iTreeDescendants {
         get {
             object obj = ResourceManager.GetObject("iTreeDescendants", resourceCulture);
+            return ((System.Drawing.Bitmap)(obj));
+        }
+    }
+    
+    /// <summary>
+    ///   Looks up a localized resource of type System.Drawing.Bitmap.
+    /// </summary>
+    internal static System.Drawing.Bitmap iUndo {
+        get {
+            object obj = ResourceManager.GetObject("iUndo", resourceCulture);
             return ((System.Drawing.Bitmap)(obj));
         }
     }

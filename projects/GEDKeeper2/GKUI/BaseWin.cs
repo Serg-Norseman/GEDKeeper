@@ -648,7 +648,6 @@ namespace GKUI
             return result;
         }
 
-        // FIXME
         public GEDCOMIndividualRecord GetSelectedPerson()
         {
             return this.ListPersons.GetSelectedRecord() as GEDCOMIndividualRecord;
@@ -680,7 +679,7 @@ namespace GKUI
 
             this.PageRecords_SelectedIndexChanged(null, null);
         }
-        
+
         public void RecordNotify(GEDCOMRecord record, RecordAction notify)
         {
             if (record == null) return;
@@ -701,8 +700,7 @@ namespace GKUI
 
             try
             {
-                RecordSelectDlg dlg = new RecordSelectDlg(this);
-                try
+                using (RecordSelectDlg dlg = new RecordSelectDlg(this))
                 {
                     dlg.Target = target;
                     dlg.NeedSex = GEDCOMSex.svNone;
@@ -713,10 +711,6 @@ namespace GKUI
                     } else {
                         result = null;
                     }
-                }
-                finally
-                {
-                    dlg.Dispose();
                 }
             }
             catch (Exception ex)
@@ -734,8 +728,7 @@ namespace GKUI
 
             try
             {
-                RecordSelectDlg dlg = new RecordSelectDlg(this);
-                try
+                using (RecordSelectDlg dlg = new RecordSelectDlg(this))
                 {
                     dlg.Target = target;
                     dlg.NeedSex = needSex;
@@ -746,10 +739,6 @@ namespace GKUI
                     } else {
                         result = null;
                     }
-                }
-                finally
-                {
-                    dlg.Dispose();
                 }
             }
             catch (Exception ex)
@@ -767,8 +756,7 @@ namespace GKUI
 
             try
             {
-                RecordSelectDlg dlg = new RecordSelectDlg(this);
-                try
+                using (RecordSelectDlg dlg = new RecordSelectDlg(this))
                 {
                     dlg.Mode = mode;
                     int argsCnt = ((args != null) ? args.Length : 0);
@@ -781,10 +769,6 @@ namespace GKUI
                     } else {
                         result = null;
                     }
-                }
-                finally
-                {
-                    dlg.Dispose();
                 }
             }
             catch (Exception ex)
@@ -1610,7 +1594,7 @@ namespace GKUI
         {
             TreeTools.CollectEventValues(evt, this.fValuesCollection);
         }
-        
+
         public bool ModifyMedia(ref GEDCOMMultimediaRecord mediaRec)
         {
             bool result = false;
@@ -1628,6 +1612,7 @@ namespace GKUI
                     }
 
                     dlg.MediaRec = mediaRec;
+
                     if (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK) {
                         if (!exists) {
                             this.fTree.AddRecord(mediaRec);
@@ -1663,6 +1648,7 @@ namespace GKUI
                     }
 
                     dlg.NoteRecord = noteRec;
+
                     if (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK) {
                         if (!exists) {
                             this.fTree.AddRecord(noteRec);
@@ -1698,6 +1684,7 @@ namespace GKUI
                     }
 
                     fmSrcEdit.SourceRecord = sourceRec;
+
                     if (MainWin.Instance.ShowModalEx(fmSrcEdit, false) == DialogResult.OK) {
                         if (!exists) {
                             this.fTree.AddRecord(sourceRec);
@@ -1707,6 +1694,38 @@ namespace GKUI
                         if (!exists) {
                             sourceRec.Dispose();
                             sourceRec = null;
+                        }
+                    }
+                }
+            } finally {
+                this.fContext.EndUpdate();
+            }
+
+            return result;
+        }
+
+        public bool ModifySourceCitation(IGEDCOMStructWithLists _struct, ref GEDCOMSourceCitation cit)
+        {
+            bool result = false;
+
+            try {
+                this.fContext.BeginUpdate();
+
+                using (SourceCitEditDlg fmSrcCitEdit = new SourceCitEditDlg(this))
+                {
+                    bool exists = cit != null;
+                    if (!exists) {
+                        cit = new GEDCOMSourceCitation(this.Tree, _struct as GEDCOMObject, "", "");
+                    }
+
+                    fmSrcCitEdit.SourceCitation = cit;
+                    result = MainWin.Instance.ShowModalEx(fmSrcCitEdit, false) == DialogResult.OK;
+
+                    if (!exists) {
+                        if (result) {
+                            _struct.SourceCitations.Add(cit);
+                        } else {
+                            cit.Dispose();
                         }
                     }
                 }
@@ -1731,7 +1750,9 @@ namespace GKUI
                         repRec = new GEDCOMRepositoryRecord(this.fTree, this.fTree, "", "");
                         repRec.InitNew();
                     }
+
                     fmRepEdit.Repository = repRec;
+
                     if (MainWin.Instance.ShowModalEx(fmRepEdit, false) == DialogResult.OK) {
                         if (!exists) {
                             this.fTree.AddRecord(repRec);
@@ -1801,7 +1822,9 @@ namespace GKUI
                         researchRec = new GEDCOMResearchRecord(this.fTree, this.fTree, "", "");
                         researchRec.InitNew();
                     }
+
                     fmResEdit.Research = researchRec;
+
                     if (MainWin.Instance.ShowModalEx(fmResEdit, false) == DialogResult.OK) {
                         if (!exists) {
                             this.fTree.AddRecord(researchRec);
@@ -1835,7 +1858,9 @@ namespace GKUI
                         taskRec = new GEDCOMTaskRecord(this.fTree, this.fTree, "", "");
                         taskRec.InitNew();
                     }
+
                     fmTaskEdit.Task = taskRec;
+
                     if (MainWin.Instance.ShowModalEx(fmTaskEdit, false) == DialogResult.OK) {
                         if (!exists) {
                             this.fTree.AddRecord(taskRec);
@@ -1869,7 +1894,9 @@ namespace GKUI
                         commRec = new GEDCOMCommunicationRecord(this.fTree, this.fTree, "", "");
                         commRec.InitNew();
                     }
+
                     fmCorrEdit.Communication = commRec;
+
                     if (MainWin.Instance.ShowModalEx(fmCorrEdit, false) == DialogResult.OK) {
                         if (!exists) {
                             this.fTree.AddRecord(commRec);
@@ -1903,7 +1930,9 @@ namespace GKUI
                         locRec = new GEDCOMLocationRecord(this.fTree, this.fTree, "", "");
                         locRec.InitNew();
                     }
+
                     fmLocEdit.LocationRecord = locRec;
+
                     if (MainWin.Instance.ShowModalEx(fmLocEdit, false) == DialogResult.OK) {
                         if (!exists) {
                             this.fTree.AddRecord(locRec);

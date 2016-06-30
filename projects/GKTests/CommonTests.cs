@@ -123,15 +123,21 @@ namespace GKTests
             es = es + es2;
             es3 = EnumSet<RestrictionEnum>.Create(RestrictionEnum.rnNone, RestrictionEnum.rnLocked);
             Assert.IsTrue(es.Equals(es3));
-            
+
+            Assert.IsFalse(es3.ContainsAll(new RestrictionEnum[] {}));
             Assert.IsTrue(es3.ContainsAll(RestrictionEnum.rnNone, RestrictionEnum.rnLocked));
             Assert.IsFalse(es3.ContainsAll(RestrictionEnum.rnNone, RestrictionEnum.rnPrivacy));
+
+            Assert.IsFalse(es3.HasIntersect(new RestrictionEnum[] {}));
             Assert.IsTrue(es3.HasIntersect(RestrictionEnum.rnNone, RestrictionEnum.rnPrivacy));
             Assert.IsFalse(es3.HasIntersect(RestrictionEnum.rnPrivacy));
             
             es = es - es2;
             es3 = EnumSet<RestrictionEnum>.Create(RestrictionEnum.rnNone);
             Assert.IsTrue(es == es3);
+            Assert.AreEqual("0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001", 
+                            es3.ToString());
+            Assert.AreNotEqual(0, es3.GetHashCode());
         }
 
         [Test]
@@ -311,6 +317,8 @@ namespace GKTests
         [Test]
         public void Ranges_Tests()
         {
+            Assert.Throws(typeof(ArgumentException), () => { new Range<int>((2), (1)); });
+
             Assert.IsTrue(new Range<int>((1), (2)).IsOverlapped(new Range<int>((1), (2))), "chk1"); // true
             Assert.IsTrue(new Range<int>((1), (3)).IsOverlapped(new Range<int>((2), (4))), "chk2"); // true
             Assert.IsTrue(new Range<int>((2), (4)).IsOverlapped(new Range<int>((1), (3))), "chk3"); // true

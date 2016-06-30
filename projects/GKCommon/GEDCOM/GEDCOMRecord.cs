@@ -345,6 +345,14 @@ namespace GKCommon.GEDCOM
 
         #region Auxiliary
 
+        public void RequireUID()
+        {
+            if (string.IsNullOrEmpty(this.UID))
+            {
+                this.NewUID();
+            }
+        }
+
         public string GetXRefNum()
         {
             string xref = this.XRef;
@@ -374,20 +382,21 @@ namespace GKCommon.GEDCOM
         public GEDCOMNotes AddNote(GEDCOMNoteRecord noteRec)
         {
             GEDCOMNotes note = null;
-            
-            if (noteRec != null) {
+
+            if (noteRec != null)
+            {
                 note = new GEDCOMNotes(this.Owner, this, "", "");
                 note.Value = noteRec;
                 this.Notes.Add(note);
             }
-            
+
             return note;
         }
 
         public GEDCOMSourceCitation AddSource(GEDCOMSourceRecord sourceRec, string page, int quality)
         {
             GEDCOMSourceCitation cit = null;
-            
+
             if (sourceRec != null) {
                 cit = new GEDCOMSourceCitation(this.Owner, this, "", "");
                 cit.Value = sourceRec;
@@ -395,7 +404,7 @@ namespace GKCommon.GEDCOM
                 cit.CertaintyAssessment = quality;
                 this.SourceCitations.Add(cit);
             }
-            
+
             return cit;
         }
 

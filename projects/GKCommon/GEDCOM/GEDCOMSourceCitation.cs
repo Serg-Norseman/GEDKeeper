@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 namespace GKCommon.GEDCOM
 {
     public sealed class GEDCOMSourceCitation : GEDCOMPointer

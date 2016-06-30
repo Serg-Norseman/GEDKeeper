@@ -461,10 +461,7 @@ namespace GKCore.Tools
 
         private static void CheckRecord(GEDCOMTree tree, GEDCOMRecord rec, GEDCOMFormat format, ValuesCollection valuesCollection)
         {
-            if (string.IsNullOrEmpty(rec.UID))
-            {
-                rec.NewUID();
-            }
+            rec.RequireUID();
 
             if (format != GEDCOMFormat.gf_Native)
             {

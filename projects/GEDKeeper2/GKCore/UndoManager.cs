@@ -25,12 +25,6 @@ using GKCore.Operations;
 
 namespace GKCore
 {
-    public enum UndoCommitType
-    {
-        autoCommit,
-        manualCommit
-    }
-
     public enum TransactionType
     {
         taCommit,
@@ -39,20 +33,20 @@ namespace GKCore
         taRollback
     }
 
-    public class UndoManager : IDisposable
-    {
-        public delegate void TTransactionEvent(object sender, TransactionType arg);
+    public delegate void TransactionEventHandler(object sender, TransactionType type); // (object sender, EventArgs e);
 
-        private int fDepth;
-        private UndoManager.TTransactionEvent fOnTransaction;
+    public sealed class UndoManager : IDisposable
+    {
+        private const CustomOperation TRANS_DELIMITER = null;
+
+        private TransactionEventHandler fOnTransaction;
         private Stack<CustomOperation> fStackUndo;
         private Stack<CustomOperation> fStackRedo;
         private GEDCOMTree fTree;
-        private UndoCommitType fCommitType;
         protected bool fDisposed;
 
 
-        public event UndoManager.TTransactionEvent OnTransaction
+        public event TransactionEventHandler OnTransaction
         {
             add
             {
@@ -67,22 +61,15 @@ namespace GKCore
             }
         }
 
-        public int Depth
-        {
-            get { return this.fDepth; }
-            set { this.fDepth = value; }
-        }
-
         public GEDCOMTree Tree
         {
             get { return this.fTree; }
         }
 
-        public UndoManager(GEDCOMTree tree, UndoCommitType commitType)
+
+        public UndoManager(GEDCOMTree tree)
         {
-            this.fDepth = 1000;
             this.fTree = tree;
-            this.fCommitType = commitType;
             this.fStackUndo = new Stack<CustomOperation>();
             this.fStackRedo = new Stack<CustomOperation>();
         }
@@ -97,16 +84,11 @@ namespace GKCore
             }
         }
 
-        protected void OnIdle(object sender, ref bool done)
-        {
-            this.Commit();
-        }
-
-        protected void Transaction(TransactionType arg)
+        private void Transaction(TransactionType type)
         {
             if (this.fOnTransaction != null)
             {
-                this.fOnTransaction(this, arg);
+                this.fOnTransaction(this, type);
             }
         }
 
@@ -133,12 +115,12 @@ namespace GKCore
         {
             if (this.fStackUndo.Count >= 2)
             {
-                if (this.fStackUndo.Peek() == null)
+                if (this.fStackUndo.Peek() == TRANS_DELIMITER)
                 {
                     this.fStackUndo.Pop();
                 }
-                this.fStackRedo.Push(null);
-                while (this.fStackUndo.Peek() != null)
+                this.fStackRedo.Push(TRANS_DELIMITER);
+                while (this.fStackUndo.Peek() != TRANS_DELIMITER)
                 {
                     CustomOperation cmd = this.fStackUndo.Pop();
                     this.fStackRedo.Push(cmd);
@@ -152,11 +134,11 @@ namespace GKCore
         {
             if (this.fStackRedo.Count != 0)
             {
-                if (this.fStackUndo.Peek() != null)
+                if (this.fStackUndo.Peek() != TRANS_DELIMITER)
                 {
-                    this.fStackUndo.Push(null);
+                    this.fStackUndo.Push(TRANS_DELIMITER);
                 }
-                while (this.fStackRedo.Peek() != null)
+                while (this.fStackRedo.Peek() != TRANS_DELIMITER)
                 {
                     CustomOperation cmd = this.fStackRedo.Pop();
                     this.fStackUndo.Push(cmd);
@@ -167,7 +149,7 @@ namespace GKCore
                     }
                 }
                 this.fStackRedo.Pop();
-                this.fStackUndo.Push(null);
+                this.fStackUndo.Push(TRANS_DELIMITER);
                 this.Transaction(TransactionType.taCommitRedo);
             }
         }
@@ -185,16 +167,16 @@ namespace GKCore
         public void Commit()
         {
             CustomOperation cmd = this.fStackUndo.Peek();
-            if (cmd != null)
+            if (cmd != TRANS_DELIMITER)
             {
-                this.fStackUndo.Push(null);
+                this.fStackUndo.Push(TRANS_DELIMITER);
                 this.Transaction(TransactionType.taCommit);
             }
         }
 
         public void Rollback()
         {
-            while (this.fStackUndo.Peek() != null)
+            while (this.fStackUndo.Peek() != TRANS_DELIMITER)
             {
                 CustomOperation cmd = this.fStackUndo.Pop();
                 cmd.Undo();
@@ -205,7 +187,7 @@ namespace GKCore
         public void Clear()
         {
             this.fStackUndo.Clear();
-            this.fStackUndo.Push(null);
+            this.fStackUndo.Push(TRANS_DELIMITER);
             this.fStackRedo.Clear();
         }
     }

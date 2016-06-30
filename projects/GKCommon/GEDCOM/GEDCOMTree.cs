@@ -86,7 +86,7 @@ namespace GKCommon.GEDCOM
 
         private readonly GEDCOMHeader fHeader;
         private readonly GEDCOMList<GEDCOMRecord> fRecords;
-        private readonly Hashtable fXRefIndex;
+        private readonly Dictionary<string, GEDCOMCustomRecord> fXRefIndex;
         
         private string fFileName;
         private ProgressEventHandler fOnProgressEvent;
@@ -153,7 +153,7 @@ namespace GKCommon.GEDCOM
         {
             this.fRecords = new GEDCOMList<GEDCOMRecord>(this);
             this.fHeader = new GEDCOMHeader(this, this, "", "");
-            this.fXRefIndex = new Hashtable();
+            this.fXRefIndex = new Dictionary<string, GEDCOMCustomRecord>();
             this.fFileName = "";
         }
 
@@ -246,11 +246,6 @@ namespace GKCommon.GEDCOM
 
         #region XRef Search
 
-        private void XRefIndex_Clear()
-        {
-            this.fXRefIndex.Clear();
-        }
-
         private void XRefIndex_AddRecord(GEDCOMCustomRecord record)
         {
             if (record != null && !string.IsNullOrEmpty(record.XRef))
@@ -279,7 +274,12 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMRecord XRefIndex_Find(string xref)
         {
-            return (this.fXRefIndex[xref] as GEDCOMRecord);
+            GEDCOMCustomRecord record;
+            if (this.fXRefIndex.TryGetValue(xref, out record)) {
+                return (record as GEDCOMRecord);
+            } else {
+                return null;
+            }
         }
 
         public string XRefIndex_NewXRef(GEDCOMRecord sender)
@@ -313,7 +313,7 @@ namespace GKCommon.GEDCOM
         {
             this.fRecords.Clear();
             this.fHeader.Clear();
-            this.XRefIndex_Clear();
+            this.fXRefIndex.Clear();
         }
 
         public void Delete(int index)
@@ -680,7 +680,7 @@ namespace GKCommon.GEDCOM
                     return gf;
                 }
             }
-            
+
             return GEDCOMFormat.gf_Unknown;
         }
 
@@ -767,7 +767,7 @@ namespace GKCommon.GEDCOM
             if (toRecord != null && result != null) {
                 toRecord.AddNote(result);
             }
-            
+
             return result;
         }
 

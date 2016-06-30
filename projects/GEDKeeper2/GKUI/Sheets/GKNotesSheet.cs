@@ -82,13 +82,7 @@ namespace GKUI.Sheets
             {
                 case RecordAction.raAdd:
                     noteRec = aBase.SelectRecord(GEDCOMRecordType.rtNote, null) as GEDCOMNoteRecord;
-                    if (noteRec != null)
-                    {
-                        GEDCOMNotes note = new GEDCOMNotes(aBase.Tree, _struct as GEDCOMObject, "", "");
-                        note.Value = noteRec;
-                        _struct.Notes.Add(note);
-                        result = true;
-                    }
+                    result = (_struct.AddNote(noteRec) != null);
                     break;
 
                 case RecordAction.raEdit:
