@@ -75,6 +75,10 @@ sources := \
 ./GKCore/Maps/GMapPoint.cs \
 ./GKCore/NamesTable.cs \
 ./GKCore/NavigationStack.cs \
+./GKCore/Operations/CustomOperation.cs \
+./GKCore/Operations/PersonBookmarkChange.cs \
+./GKCore/Operations/PersonPatriarchChange.cs \
+./GKCore/Operations/PersonSexChange.cs \
 ./GKCore/Options/GlobalOptions.cs \
 ./GKCore/Options/LangRecord.cs \
 ./GKCore/Options/MRUFile.cs \
@@ -91,6 +95,7 @@ sources := \
 ./GKCore/SysUtils.cs \
 ./GKCore/Tools/PlaceObj.cs \
 ./GKCore/Tools/TreeTools.cs \
+./GKCore/UndoManager.cs \
 ./GKProgram.cs \
 ./GKResources.Designer.cs \
 ./GKUI/AncestorsCircleWin.cs \
@@ -255,6 +260,10 @@ sources := \
 ./GKCore/Maps/GMapPoint.cs \
 ./GKCore/NamesTable.cs \
 ./GKCore/NavigationStack.cs \
+./GKCore/Operations/CustomOperation.cs \
+./GKCore/Operations/PersonBookmarkChange.cs \
+./GKCore/Operations/PersonPatriarchChange.cs \
+./GKCore/Operations/PersonSexChange.cs \
 ./GKCore/Options/GlobalOptions.cs \
 ./GKCore/Options/LangRecord.cs \
 ./GKCore/Options/MRUFile.cs \
@@ -271,6 +280,7 @@ sources := \
 ./GKCore/SysUtils.cs \
 ./GKCore/Tools/PlaceObj.cs \
 ./GKCore/Tools/TreeTools.cs \
+./GKCore/UndoManager.cs \
 ./GKProgram.cs \
 ./GKResources.Designer.cs \
 ./GKUI/AncestorsCircleWin.cs \
