@@ -49,7 +49,7 @@ namespace GKUI.Sheets
         public override void UpdateSheet()
         {
             if (this.DataList == null) return;
-            
+
             try
             {
                 this.ClearItems();
@@ -58,7 +58,7 @@ namespace GKUI.Sheets
                 while (this.DataList.MoveNext()) {
                     GEDCOMSourceCitation cit = this.DataList.Current as GEDCOMSourceCitation;
                     if (cit == null) continue;
-                    
+
                     GEDCOMSourceRecord sourceRec = cit.Value as GEDCOMSourceRecord;
                     if (sourceRec == null) continue;
 
@@ -87,7 +87,7 @@ namespace GKUI.Sheets
             if (_struct == null) return;
 
             GEDCOMSourceCitation aCit = eArgs.ItemData as GEDCOMSourceCitation;
-            
+
             bool result = false;
 
             switch (eArgs.Action)

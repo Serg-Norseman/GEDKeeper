@@ -26,20 +26,20 @@ namespace GKCore.Cultures
     /// <summary>
     /// 
     /// </summary>
-    public class AncientCulture : ICulture
+    public class IcelandCulture : ICulture
     {
-        public AncientCulture()
+        public IcelandCulture()
         {
         }
 
         public bool HasPatronymic()
         {
-            return false;
+            return true;
         }
 
         public bool HasSurname()
         {
-            return false;
+            return false; // doesn't exist and is prohibited by law from July 27, 1925
         }
     }
 }

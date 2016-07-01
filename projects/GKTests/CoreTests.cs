@@ -77,8 +77,27 @@ namespace GKTests
 
             //fContext.Clear();
             //Assert.AreEqual(0, fContext.Tree.RecordsCount);
+
+            fContext.BeginUpdate();
+            Assert.IsTrue(fContext.IsUpdated());
+            fContext.EndUpdate();
+            Assert.IsFalse(fContext.IsUpdated());
         }
-        
+
+        [Test]
+        public void Undoman_Tests()
+        {
+            UndoManager undoman = new UndoManager(fContext.Tree);
+            Assert.IsNotNull(undoman);
+            
+            Assert.AreEqual(fContext.Tree, undoman.Tree);
+            
+            Assert.IsFalse(undoman.CanUndo());
+            Assert.IsFalse(undoman.CanRedo());
+            
+            undoman.Clear();
+        }
+
         [Test]
         public void Utils_Tests()
         {
@@ -241,8 +260,59 @@ namespace GKTests
             
             st1 = GKUtils.HyperLink("@X001@", "test", 0);
             Assert.AreEqual("~^" + "@X001@" + ":" + "test" + "~", st1);
+
+            //
+
+            int days = GKUtils.DaysBetween(new DateTime(1990, 10, 10), new DateTime(1990, 10, 13));
+            Assert.AreEqual(3, days);
+
+            Assert.AreEqual(31, GKUtils.DaysInAMonth(1990, 5));
+
+            Assert.AreEqual(MultimediaKind.mkNone, GKUtils.GetMultimediaKind(GEDCOMMultimediaFormat.mfNone));
+            Assert.AreEqual(MultimediaKind.mkImage, GKUtils.GetMultimediaKind(GEDCOMMultimediaFormat.mfBMP));
+            Assert.AreEqual(MultimediaKind.mkText, GKUtils.GetMultimediaKind(GEDCOMMultimediaFormat.mfTXT));
+            Assert.AreEqual(MultimediaKind.mkAudio, GKUtils.GetMultimediaKind(GEDCOMMultimediaFormat.mfWAV));
+            Assert.AreEqual(MultimediaKind.mkVideo, GKUtils.GetMultimediaKind(GEDCOMMultimediaFormat.mfAVI));
+            Assert.AreEqual(MultimediaKind.mkNone, GKUtils.GetMultimediaKind(GEDCOMMultimediaFormat.mfOLE));
+
+            //
+
+            iRec = fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
+            string[] surnames = GKUtils.GetSurnames(iRec);
+            Assert.AreEqual(1, surnames.Length);
+            Assert.AreEqual("Ivanova", surnames[0]);
+
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetSurnames(null); });
+
+            //
+
+            #if !__MonoCS__
+            Assert.AreEqual("test.zip", GKUtils.GetContainerName("c:\\temp\\test.ged", true));
+            Assert.AreEqual("test\\", GKUtils.GetContainerName("c:\\temp\\test.ged", false));
+            #endif
+
+            //
+
+            GEDCOMCustomDate dtx = GKUtils.GetMarriageDate(null);
+            Assert.IsNull(dtx);
+
+            //
+
         }
-        
+
+        [Test]
+        public void Search_Tests()
+        {
+            SearchResult searchResult = new SearchResult(null);
+            Assert.IsNotNull(searchResult);
+
+            Assert.Throws(typeof(ArgumentNullException), () => { new BaseSearchStrategy(null, null); });
+            //BaseSearchStrategy strat = new BaseSearchStrategy(null, "");
+
+            //BaseSearchStrategy searchStrategy = new BaseSearchStrategy(null, "");
+            //Assert.IsNotNull(searchStrategy);
+        }
+
         private const int REP_COUNT = 1000; // 1000000; // for profile tests
 
         private static void GEDCOMListTests(GEDCOMIndividualRecord iRec)
@@ -315,6 +385,19 @@ namespace GKTests
         private static void GEDCOMListTest3(GEDCOMIndividualRecord iRec)
         {
             iRec.Events.ForEach(x => { x.GetHashCode(); });
+        }
+
+        [Test]
+        public void Cultures_Tests()
+        {
+            ICulture culture = new RussianCulture();
+            Assert.IsNotNull(culture);
+
+            culture = new AncientCulture();
+            Assert.IsNotNull(culture);
+
+            culture = new IcelandCulture();
+            Assert.IsNotNull(culture);
         }
 
         [Test]
@@ -415,18 +498,46 @@ namespace GKTests
             Assert.IsNotNull(listManager);
             Assert.AreEqual(typeof(FamilyColumnType), listManager.GetColumnsEnum());
 
+            //
+
             listManager = new GroupListMan(this.fContext.Tree);
             Assert.IsNotNull(listManager);
             Assert.AreEqual(typeof(GroupColumnType), listManager.GetColumnsEnum());
+
+            GEDCOMGroupRecord grpRec = fContext.Tree.XRefIndex_Find("G1") as GEDCOMGroupRecord;
+            listManager.Fetch(grpRec);
+
+            //Assert.AreEqual("GroupTest", listManager.GetColumnInternalValue(1));
+
+            listManager.QuickFilter = "*";
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None)); // "GroupTest"
+
+            listManager.QuickFilter = "*alpha*";
+            Assert.IsFalse(listManager.CheckFilter(ShieldState.None)); // "GroupTest"
+
+            listManager.QuickFilter = "*roup*";
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None)); // "GroupTest"
 
             //
 
             listManager = new IndividualListMan(this.fContext.Tree);
             Assert.IsNotNull(listManager);
             Assert.AreEqual(typeof(PersonColumnType), listManager.GetColumnsEnum());
-            
+
             IListFilter filter = listManager.Filter;
             IListColumns listColumns = listManager.ListColumns;
+
+            GEDCOMIndividualRecord indRec = fContext.Tree.XRefIndex_Find("I2") as GEDCOMIndividualRecord;
+            listManager.Fetch(indRec);
+
+            listManager.QuickFilter = "*";
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None)); // "GroupTest"
+
+            listManager.QuickFilter = "*alpha*";
+            Assert.IsFalse(listManager.CheckFilter(ShieldState.None)); // "GroupTest"
+
+            listManager.QuickFilter = "*Petr*";
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None)); // "Maria", "Petrovna", "Ivanova"
 
             //
 
@@ -606,6 +717,9 @@ namespace GKTests
             //ValuesCollection valuesCollection = new ValuesCollection();
             //ProgressMock progress = new ProgressMock();
             //TreeTools.CheckGEDCOMFormat(fContext.Tree, valuesCollection, progress);
+
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.TreeWalk(null, TreeTools.TreeWalkMode.twmAll, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.TreeWalk(iRec, TreeTools.TreeWalkMode.twmAll, null); });
         }
 
         private class ProgressMock : IProgressController
@@ -614,16 +728,6 @@ namespace GKTests
             public void ProgressDone() {}
             public void ProgressStep() {}
             public void ProgressStep(int value) {}
-        }
-        
-        [Test]
-        public void Search_Tests()
-        {
-            SearchResult searchResult = new SearchResult(null);
-            Assert.IsNotNull(searchResult);
-
-            //BaseSearchStrategy searchStrategy = new BaseSearchStrategy(null, "");
-            //Assert.IsNotNull(searchStrategy);
         }
 
         [Test]
@@ -696,6 +800,13 @@ namespace GKTests
 
                 namesTable.SetNameSex("Maria", GEDCOMSex.svFemale);
                 sex = namesTable.GetSexByName("Maria");
+                Assert.AreEqual(GEDCOMSex.svFemale, sex);
+
+                namesTable.SetName("", "", GEDCOMSex.svNone);
+                namesTable.SetNameSex("", GEDCOMSex.svNone);
+
+                namesTable.SetName("Anna", "Ivanovna", GEDCOMSex.svFemale);
+                sex = namesTable.GetSexByName("Anna");
                 Assert.AreEqual(GEDCOMSex.svFemale, sex);
 
                 GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;

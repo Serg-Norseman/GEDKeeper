@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Operations;
 
@@ -35,7 +36,7 @@ namespace GKCore
 
     public delegate void TransactionEventHandler(object sender, TransactionType type); // (object sender, EventArgs e);
 
-    public sealed class UndoManager : IDisposable
+    public sealed class UndoManager : BaseObject
     {
         private const CustomOperation TRANS_DELIMITER = null;
 
@@ -43,7 +44,6 @@ namespace GKCore
         private Stack<CustomOperation> fStackUndo;
         private Stack<CustomOperation> fStackRedo;
         private GEDCOMTree fTree;
-        protected bool fDisposed;
 
 
         public event TransactionEventHandler OnTransaction
@@ -74,14 +74,14 @@ namespace GKCore
             this.fStackRedo = new Stack<CustomOperation>();
         }
 
-        public void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            if (!this.fDisposed)
+            if (disposing)
             {
                 //this.fStackUndo.Dispose();
                 //this.fStackRedo.Dispose();
-                this.fDisposed = true;
             }
+            base.Dispose(disposing);
         }
 
         private void Transaction(TransactionType type)

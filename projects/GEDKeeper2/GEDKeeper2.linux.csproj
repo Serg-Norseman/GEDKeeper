@@ -512,6 +512,7 @@
     <Compile Include="GKCore\Operations\PersonBookmarkChange.cs" />
     <Compile Include="GKCore\Operations\PersonPatriarchChange.cs" />
     <Compile Include="GKCore\Operations\PersonSexChange.cs" />
+    <Compile Include="GKCore\Cultures\IcelandCulture.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GKResources.resx">

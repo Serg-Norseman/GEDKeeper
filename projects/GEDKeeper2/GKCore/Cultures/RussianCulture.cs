@@ -73,7 +73,7 @@ namespace GKCore.Cultures
         {
             const string consonants = "бвгджзклмнпрстфхцчшщ";
             //const string vowels = "абвгдежзиклмнопрстуфхцчшщьыъэюя";
-            
+
             string res;
             if (string.IsNullOrEmpty(husbSurname)) {
                 res = "?";

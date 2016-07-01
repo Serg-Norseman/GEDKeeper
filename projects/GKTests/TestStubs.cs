@@ -87,6 +87,7 @@ namespace GKTests
 
             // group for tests
             GEDCOMGroupRecord groupRec = context.Tree.CreateGroup();
+            groupRec.GroupName = "GroupTest";
             Assert.IsNotNull(groupRec, "group1 != null");
         }
     }

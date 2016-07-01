@@ -60,7 +60,7 @@ namespace GKUI.Sheets
         public override void UpdateSheet()
         {
             if (this.DataList == null) return;
-            
+
             try
             {
                 this.ClearItems();

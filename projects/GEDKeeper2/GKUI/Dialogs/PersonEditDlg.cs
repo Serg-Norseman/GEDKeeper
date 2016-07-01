@@ -307,29 +307,23 @@ namespace GKUI.Dialogs
             {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    AssociationEditDlg fmAstEdit = new AssociationEditDlg(this.fBase);
-                    try
+                    using (AssociationEditDlg fmAstEdit = new AssociationEditDlg(this.fBase))
                     {
-                        if (eArgs.Action == RecordAction.raAdd) {
+                        bool exists = (ast != null);
+                        if (!exists) {
                             ast = new GEDCOMAssociation(this.fBase.Tree, this.fPerson, "", "");
                         }
 
                         fmAstEdit.Association = ast;
-                        DialogResult res = MainWin.Instance.ShowModalEx(fmAstEdit, false);
-                        
-                        if (eArgs.Action == RecordAction.raAdd) {
-                            if (res == DialogResult.OK) {
+                        result = (MainWin.Instance.ShowModalEx(fmAstEdit, false) == DialogResult.OK);
+
+                        if (!exists) {
+                            if (result) {
                                 this.fPerson.Associations.Add(ast);
                             } else {
                                 ast.Dispose();
                             }
                         }
-
-                        result = (res == DialogResult.OK);
-                    }
-                    finally
-                    {
-                        fmAstEdit.Dispose();
                     }
                     break;
 
@@ -394,29 +388,23 @@ namespace GKUI.Dialogs
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    UserRefEditDlg dlg = new UserRefEditDlg(this.fBase);
-                    try
+                    using (UserRefEditDlg dlg = new UserRefEditDlg(this.fBase))
                     {
-                        if (eArgs.Action == RecordAction.raAdd) {
+                        bool exists = (userRef != null);
+                        if (!exists) {
                             userRef = new GEDCOMUserReference(this.fBase.Tree, this.fPerson, "", "");
                         }
 
                         dlg.UserRef = userRef;
-                        DialogResult res = MainWin.Instance.ShowModalEx(dlg, false);
+                        result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
 
-                        if (eArgs.Action == RecordAction.raAdd) {
-                            if (res == DialogResult.OK) {
+                        if (!exists) {
+                            if (result) {
                                 this.fPerson.UserReferences.Add(userRef);
                             } else {
                                 userRef.Dispose();
                             }
                         }
-
-                        result = (res == DialogResult.OK);
-                    }
-                    finally
-                    {
-                        dlg.Dispose();
                     }
                     break;
                     
@@ -673,29 +661,23 @@ namespace GKUI.Dialogs
             {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    PersonalNameEditDlg dlg = new PersonalNameEditDlg(this.fBase);
-                    try
+                    using (PersonalNameEditDlg dlg = new PersonalNameEditDlg(this.fBase))
                     {
-                        if (eArgs.Action == RecordAction.raAdd) {
+                        bool exists = (persName != null);
+                        if (!exists) {
                             persName = new GEDCOMPersonalName(this.fBase.Tree, this.fPerson, "", "");
                         }
 
                         dlg.PersonalName = persName;
-                        DialogResult res = MainWin.Instance.ShowModalEx(dlg, false);
+                        result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
 
-                        if (eArgs.Action == RecordAction.raAdd) {
-                            if (res == DialogResult.OK) {
+                        if (!exists) {
+                            if (result) {
                                 this.fPerson.PersonalNames.Add(persName);
                             } else {
                                 persName.Dispose();
                             }
                         }
-
-                        result = (res == DialogResult.OK);
-                    }
-                    finally
-                    {
-                        dlg.Dispose();
                     }
                     break;
 
@@ -757,7 +739,7 @@ namespace GKUI.Dialogs
         {
             GEDCOMIndividualRecord father = this.fBase.SelectPerson(this.fPerson, TargetMode.tmChild, GEDCOMSex.svMale);
             if (father == null) return;
-            
+
             GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, true, father);
             if (family.Husband.Value == null)
             {
@@ -783,7 +765,7 @@ namespace GKUI.Dialogs
         {
             GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, false, null);
             if (family == null) return;
-            
+
             this.AcceptChanges();
             GEDCOMIndividualRecord father = family.GetHusband();
             this.fBase.SelectRecordByXRef(father.XRef);
@@ -794,7 +776,7 @@ namespace GKUI.Dialogs
         {
             GEDCOMIndividualRecord mother = this.fBase.SelectPerson(this.fPerson, TargetMode.tmChild, GEDCOMSex.svFemale);
             if (mother == null) return;
-            
+
             GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, true, mother);
             if (family.Wife.Value == null)
             {
@@ -871,7 +853,7 @@ namespace GKUI.Dialogs
         {
             GEDCOMMultimediaRecord mmRec = fBase.SelectRecord(GEDCOMRecordType.rtMultimedia, null) as GEDCOMMultimediaRecord;
             if (mmRec == null) return;
-            
+
             GEDCOMMultimediaLink mmLink = this.fPerson.GetPrimaryMultimediaLink();
             if (mmLink != null)
             {

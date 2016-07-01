@@ -2852,9 +2852,8 @@ namespace GKCore
             return result;
         }
 
-        
         #endregion
-        
+
         #region Names processing
 
         public static string ClearSurname(string surname)

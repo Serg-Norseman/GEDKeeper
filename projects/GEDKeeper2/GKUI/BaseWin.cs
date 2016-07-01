@@ -48,8 +48,8 @@ namespace GKUI
         #region Private fields
         
         /*private readonly ExtList[] fChangedRecords;*/
+        /*private readonly ExtList<GEDCOMRecord> fLockedRecords;*/
 
-        private readonly ExtList<GEDCOMRecord> fLockedRecords;
         private readonly NavigationStack fNavman;
         private readonly ValuesCollection fValuesCollection;
         private readonly IBaseContext fContext;
@@ -150,12 +150,12 @@ namespace GKUI
             for (GEDCOMRecordType rt = GEDCOMRecordType.rtNone; rt != GEDCOMRecordType.rtLast; rt++)
             {
                 this.fChangedRecords[(int)rt] = new ExtList();
-            }*/
+            }
+            this.fLockedRecords = new ExtList<GEDCOMRecord>();*/
 
             this.fTree = new GEDCOMTree();
             this.fContext = new BaseContext(this.fTree, this);
 
-            this.fLockedRecords = new ExtList<GEDCOMRecord>();
             this.fNavman = new NavigationStack();
             this.fValuesCollection = new ValuesCollection();
 
@@ -181,11 +181,11 @@ namespace GKUI
             {
                 #if !__MonoCS__
                 this.fNavman.Dispose();
-                this.fLockedRecords.Dispose();
                 this.fTree.Dispose();
                 this.fTree = null;
 
-                /*for (GEDCOMRecordType rt = GEDCOMRecordType.rtNone; rt != GEDCOMRecordType.rtLast; rt++)
+                /*this.fLockedRecords.Dispose();
+                for (GEDCOMRecordType rt = GEDCOMRecordType.rtNone; rt != GEDCOMRecordType.rtLast; rt++)
                 {
                     this.fChangedRecords[(int)rt].Dispose();
                 }*/
@@ -1613,13 +1613,11 @@ namespace GKUI
 
                     dlg.MediaRec = mediaRec;
 
-                    if (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK) {
-                        if (!exists) {
+                    result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
+                    if (!exists) {
+                        if (result) {
                             this.fTree.AddRecord(mediaRec);
-                        }
-                        result = true;
-                    } else {
-                        if (!exists) {
+                        } else {
                             mediaRec.Dispose();
                             mediaRec = null;
                         }
@@ -1649,13 +1647,11 @@ namespace GKUI
 
                     dlg.NoteRecord = noteRec;
 
-                    if (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK) {
-                        if (!exists) {
+                    result = (MainWin.Instance.ShowModalEx(dlg, false) == DialogResult.OK);
+                    if (!exists) {
+                        if (result) {
                             this.fTree.AddRecord(noteRec);
-                        }
-                        result = true;
-                    } else {
-                        if (!exists) {
+                        } else {
                             noteRec.Dispose();
                             noteRec = null;
                         }
@@ -1685,13 +1681,11 @@ namespace GKUI
 
                     fmSrcEdit.SourceRecord = sourceRec;
 
-                    if (MainWin.Instance.ShowModalEx(fmSrcEdit, false) == DialogResult.OK) {
-                        if (!exists) {
+                    result = (MainWin.Instance.ShowModalEx(fmSrcEdit, false) == DialogResult.OK);
+                    if (!exists) {
+                        if (result) {
                             this.fTree.AddRecord(sourceRec);
-                        }
-                        result = true;
-                    } else {
-                        if (!exists) {
+                        } else {
                             sourceRec.Dispose();
                             sourceRec = null;
                         }
@@ -1719,8 +1713,8 @@ namespace GKUI
                     }
 
                     fmSrcCitEdit.SourceCitation = cit;
-                    result = MainWin.Instance.ShowModalEx(fmSrcCitEdit, false) == DialogResult.OK;
 
+                    result = MainWin.Instance.ShowModalEx(fmSrcCitEdit, false) == DialogResult.OK;
                     if (!exists) {
                         if (result) {
                             _struct.SourceCitations.Add(cit);
@@ -1789,13 +1783,11 @@ namespace GKUI
 
                     fmGrpEdit.Group = groupRec;
 
-                    if (MainWin.Instance.ShowModalEx(fmGrpEdit, false) == DialogResult.OK) {
-                        if (!exists) {
+                    result = (MainWin.Instance.ShowModalEx(fmGrpEdit, false) == DialogResult.OK);
+                    if (!exists) {
+                        if (result) {
                             this.fTree.AddRecord(groupRec);
-                        }
-                        result = true;
-                    } else {
-                        if (!exists) {
+                        } else {
                             groupRec.Dispose();
                             groupRec = null;
                         }

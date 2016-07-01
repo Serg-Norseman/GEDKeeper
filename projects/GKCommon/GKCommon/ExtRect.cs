@@ -55,12 +55,12 @@ namespace GKCommon
 
         public int GetWidth()
         {
-            return this.Right - this.Left + 1;
+            return (this.Right == this.Left) ? 0 : this.Right - this.Left + 1;
         }
 
         public int GetHeight()
         {
-            return this.Bottom - this.Top + 1;
+            return (this.Bottom == this.Top) ? 0 : this.Bottom - this.Top + 1;
         }
 
         public bool IsEmpty()
@@ -107,7 +107,7 @@ namespace GKCommon
 
         public Rectangle ToRectangle()
         {
-            return new Rectangle(this.Left, this.Top, this.Right - this.Left + 1, this.Bottom - this.Top + 1);
+            return new Rectangle(this.Left, this.Top, this.GetWidth(), this.GetHeight());
         }
     }
 }

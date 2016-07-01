@@ -162,22 +162,18 @@ namespace GKTests
         [Test]
         public void IndistinctMatching_PerfTest1()
         {
-            int res1, res2;
-
             for (int i = 1; i < 10000; i++) {
-                res1 = IndistinctMatching.LevenshteinDistance("Ivan", "Ivanov");
-                res2 = IndistinctMatching.DamerauLevenshteinDistance("Ivan", "Ivanov");
+                IndistinctMatching.LevenshteinDistance("Ivan", "Ivanov");
+                IndistinctMatching.DamerauLevenshteinDistance("Ivan", "Ivanov");
             }
         }
 
         [Test]
         public void IndistinctMatching_PerfTest2()
         {
-            int res1, res2;
-
             for (int i = 1; i < 10000; i++) {
-                res1 = IndistinctMatching.LevenshteinDistance("Ivanvo", "Ivanov");
-                res2 = IndistinctMatching.DamerauLevenshteinDistance("Ivanvo", "Ivanov");
+                IndistinctMatching.LevenshteinDistance("Ivanvo", "Ivanov");
+                IndistinctMatching.DamerauLevenshteinDistance("Ivanvo", "Ivanov");
             }
         }
 
@@ -299,6 +295,11 @@ namespace GKTests
             
             rt.Offset(2, 5);
             Assert.AreEqual("{X=5,Y=3,Width=4,Height=14}", rt.ToString());
+
+            rt = rt.GetOffset(10, 10);
+            Assert.AreEqual("{X=15,Y=13,Width=4,Height=14}", rt.ToString());
+            
+            Assert.IsTrue(rt.IntersectsWith(ExtRect.Create(16, 14, 20, 20)));
             
             rt = ExtRect.CreateEmpty();
             Assert.IsTrue(rt.IsEmpty());
@@ -306,12 +307,50 @@ namespace GKTests
             Assert.IsFalse(rt.Contains(5, 5));
             
             Rectangle rect = rt.ToRectangle();
+            Assert.AreEqual(0, rect.Left);
+            Assert.AreEqual(0, rect.Top);
+            Assert.AreEqual(0, rect.Right);
+            Assert.AreEqual(0, rect.Bottom);
         }
 
         [Test]
-        public void TList_Tests()
+        public void ExtList_Tests()
         {
-            
+            using (ExtList<object> list = new ExtList<object>())
+            {
+                Assert.IsNotNull(list);
+                Assert.AreEqual(0, list.Count);
+
+                object obj = new object();
+                list.Add(obj);
+                Assert.AreEqual(1, list.Count);
+                Assert.AreEqual(obj, list[0]);
+                Assert.AreEqual(0, list.IndexOf(obj));
+
+                list.Delete(0);
+                Assert.AreEqual(0, list.Count);
+
+                list.Add(obj);
+                Assert.AreEqual(obj, list.Extract(obj));
+
+                list.Insert(0, obj);
+
+                list[0] = obj;
+                Assert.AreEqual(obj, list[0]);
+
+                list.Add(null);
+                Assert.AreEqual(2, list.Count);
+                list.Pack();
+                Assert.AreEqual(1, list.Count);
+
+                list.Remove(obj);
+                Assert.AreEqual(0, list.Count);
+
+                Assert.AreEqual(false, list.OwnsObjects);
+
+                list.OwnsObjects = true;
+                Assert.AreEqual(true, list.OwnsObjects);
+            }
         }
 
         [Test]

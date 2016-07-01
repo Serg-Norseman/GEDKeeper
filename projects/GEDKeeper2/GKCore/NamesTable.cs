@@ -186,8 +186,10 @@ namespace GKCore
             if (string.IsNullOrEmpty(name)) return;
 
             NameEntry nm = this.FindName(name);
-            if (nm == null)
+            if (nm == null) {
                 nm = this.AddName(name);
+                nm.Sex = sex;
+            }
 
             switch (sex)
             {
