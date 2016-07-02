@@ -42,6 +42,7 @@ sources := \
 ./GKCore/BaseContext.cs \
 ./GKCore/BaseSearchStrategy.cs \
 ./GKCore/Cultures/AncientCulture.cs \
+./GKCore/Cultures/IcelandCulture.cs \
 ./GKCore/Cultures/RussianCulture.cs \
 ./GKCore/Export/CustomWriter.cs \
 ./GKCore/Export/ExcelExporter.cs \
@@ -227,6 +228,7 @@ sources := \
 ./GKCore/BaseContext.cs \
 ./GKCore/BaseSearchStrategy.cs \
 ./GKCore/Cultures/AncientCulture.cs \
+./GKCore/Cultures/IcelandCulture.cs \
 ./GKCore/Cultures/RussianCulture.cs \
 ./GKCore/Export/CustomWriter.cs \
 ./GKCore/Export/ExcelExporter.cs \
