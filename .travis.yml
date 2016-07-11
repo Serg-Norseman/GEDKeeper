@@ -1,6 +1,9 @@
 language: csharp
 solution: projects/GEDKeeper2.linux.sln
 
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
 install:
   - sudo apt-get install nunit-console
   - nuget restore ./projects/GEDKeeper2.linux.sln
