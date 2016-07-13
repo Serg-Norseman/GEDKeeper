@@ -2,6 +2,9 @@ language: csharp
 solution: projects/GEDKeeper2.linux.sln
 
 after_success:
+  - ./projects/generateCoverageConfig.sh > ./projects/coverageConfig.json
+  - mono ./projects/packages/SharpCover/SharpCover.exe instrument ./projects/coverageConfig.json
+  - mono ./projects/packages/SharpCover/SharpCover.exe check
   - bash <(curl -s https://codecov.io/bash)
 
 install:
@@ -9,5 +12,5 @@ install:
   - nuget restore ./projects/GEDKeeper2.linux.sln
  
 script:
-  - xbuild /p:Configuration=Release ./projects/GEDKeeper2.linux.sln
-  - nunit-console ./projects/GKTests/bin/Release/GKTests.dll
+  - xbuild /p:Configuration=Debug ./projects/GEDKeeper2.linux.sln
+  - nunit-console ./projects/GKTests/bin/Debug/GKTests.dll

@@ -8,7 +8,11 @@
 
 cd projects/
 #erase gktests/bin/debug/*.dll
-./compile.linux.sh
+#./compile.linux.sh
+xbuild GEDKeeper2.linux.sln /p:Configuration=Debug /p:Platform="x86"
 cd ./GKTests/bin/Release
 nunit-console GKTests.dll
 cd ../../..
+./generateCoverageConfig.sh > ./coverageConfig.json
+mono ./packages/SharpCover/SharpCover.exe instrument ./coverageConfig.json
+mono ./packages/SharpCover/SharpCover.exe check
