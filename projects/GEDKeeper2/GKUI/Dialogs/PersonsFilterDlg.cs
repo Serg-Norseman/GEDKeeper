@@ -194,7 +194,7 @@ namespace GKUI.Dialogs
                 this.cmbSource.Text = sourceRec.FiledByEntry;
             }
         }
-        
+
         private static void SaveFilter(string flt, StringList filters)
         {
             if (flt != "" && flt != "*" && filters.IndexOf(flt) < 0) filters.Add(flt);
