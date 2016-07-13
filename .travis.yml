@@ -2,9 +2,10 @@ language: csharp
 solution: projects/GEDKeeper2.linux.sln
 
 after_success:
-  - ./projects/generateCoverageConfig.sh > ./projects/coverageConfig.json
-  - mono ./projects/packages/SharpCover/SharpCover.exe instrument ./projects/coverageConfig.json
-  - mono ./projects/packages/SharpCover/SharpCover.exe check
+  - cd projects
+  - ./generateCoverageConfig.sh > ./coverageConfig.json
+  - mono ./packages/SharpCover/SharpCover.exe instrument ./coverageConfig.json
+  - mono ./packages/SharpCover/SharpCover.exe check
   - bash <(curl -s https://codecov.io/bash)
 
 install:
