@@ -1,4 +1,4 @@
 {
-  "assemblies": ["GKTests/bin/debug/GEDKeeper2.exe", "GKTests/bin/debug/GKCommon.dll", "GKTests/bin/debug/GKCalculatorPlugin.dll", "GKTests/bin/debug/GKPedigreeImporterPlugin.dll", "GKTests/bin/debug/GKTests.dll"],
+  "assemblies": ["projects/GKTests/bin/Debug/GEDKeeper2.exe", "projects/GKTests/bin/Debug/GKCommon.dll", "projects/GKTests/bin/Debug/GKCalculatorPlugin.dll", "projects/GKTests/bin/Debug/GKPedigreeImporterPlugin.dll", "projects/GKTests/bin/Debug/GKTests.dll"],
   "typeInclude": ".*"
 }
