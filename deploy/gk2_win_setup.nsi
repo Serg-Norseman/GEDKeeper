@@ -7,8 +7,15 @@
 Name "GEDKeeper2"
 OutFile "GEDKeeper2-v2.6.0-win-setup.exe"
 InstallDir $PROGRAMFILES\GEDKeeper2
+
+CRCCheck on
+SetCompress auto
+SetCompressor lzma
+SetDatablockOptimize on
+AllowRootDirInstall false
 XPStyle on
-;ShowInstDetails show
+
+ShowInstDetails show
 RequestExecutionLevel admin
 
 !insertmacro MUI_LANGUAGE "English"
