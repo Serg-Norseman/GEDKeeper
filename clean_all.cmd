@@ -5,4 +5,6 @@ del .\*.dll
 del .\*.pdb
 del .\*.xml
 
+del .\coverageResults.txt
+
 del /q .\plugins\*.*

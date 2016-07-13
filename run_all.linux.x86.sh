@@ -6,13 +6,8 @@
 #export LDFLAGS=-m64
 #export LD_LIBRARY_PATH=$PWD/external/lua/linux/lib64
 
-cd projects/
-#erase gktests/bin/debug/*.dll
-#./compile.linux.sh
-xbuild GEDKeeper2.linux.sln /p:Configuration=Debug /p:Platform="x86"
-cd ./GKTests/bin/Release
-nunit-console GKTests.dll
-cd ../../..
-./generateCoverageConfig.sh > ./coverageConfig.json
-mono ./packages/SharpCover/SharpCover.exe instrument ./coverageConfig.json
-mono ./packages/SharpCover/SharpCover.exe check
+xbuild ./projects/GEDKeeper2.linux.sln /p:Configuration=Debug /p:Platform="x86"
+
+#mono ./projects/packages/SharpCover/SharpCover.exe instrument ./projects/coverageConfig.json
+nunit-console ./projects/GKTests/bin/Debug/GKTests.dll
+#mono ./projects/packages/SharpCover/SharpCover.exe check
