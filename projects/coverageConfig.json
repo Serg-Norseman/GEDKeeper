@@ -1,0 +1,4 @@
+{
+  "assemblies": ["GKTests/bin/debug/GEDKeeper2.exe", "GKTests/bin/debug/GKCommon.dll", "GKTests/bin/debug/GKCalculatorPlugin.dll", "GKTests/bin/debug/GKPedigreeImporterPlugin.dll", "GKTests/bin/debug/GKTests.dll"],
+  "typeInclude": ".*"
+}
