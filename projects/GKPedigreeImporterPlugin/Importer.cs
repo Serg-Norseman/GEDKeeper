@@ -18,6 +18,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#if __MonoCS__
+    #define NO_DEPEND
+#endif
+
+#if CI_MODE
+    #define NO_DEPEND
+#endif
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,7 +36,7 @@ using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
 
-#if !__MonoCS__
+#if !NO_DEPEND
 using MSOExcel = Microsoft.Office.Interop.Excel;
 using MSOWord = Microsoft.Office.Interop.Word;
 #endif
@@ -732,7 +740,7 @@ namespace GKPedigreeImporterPlugin
                     return this.ImportTextContent();
 
                 case SourceType.stTable:
-                    #if !__MonoCS__
+                    #if !NO_DEPEND
                     return this.ImportTableContent();
                     #else
                     return false;
@@ -808,7 +816,7 @@ namespace GKPedigreeImporterPlugin
             return (obj == null) ? "" : obj.ToString();
         }
 
-        #if !__MonoCS__
+        #if !NO_DEPEND
         private bool ImportTableContent()
         {
             try
@@ -990,7 +998,7 @@ namespace GKPedigreeImporterPlugin
             }
         }
 
-        #if !__MonoCS__
+        #if !NO_DEPEND
         private bool LoadRawWord(string fileName)
         {
             this.SourceType = SourceType.stText;
@@ -1066,7 +1074,7 @@ namespace GKPedigreeImporterPlugin
             }
             else if (ext == ".doc")
             {
-                #if !__MonoCS__
+                #if !NO_DEPEND
                 return this.LoadRawWord(fileName);
                 #else
                 return false;

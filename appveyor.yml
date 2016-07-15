@@ -1,8 +1,10 @@
 version: 2.6.1.{build}
 pull_requests:
   do_not_increment_build_number: true
+environment:
+  CIMode: true
 configuration: Debug
 platform: x86
 build:
-  project: projects/GEDKeeper2.mswin.sln
+  project: projects/GEDKeeper2.mswin-av.sln
   verbosity: minimal
