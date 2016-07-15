@@ -11,6 +11,7 @@ gource-gk.cmd
 
 CodecovSender.ps1
 CodecovUploader.sh
+OpenCover.cmd
 
 /projects/GEDKeeper2/bin/
 /projects/GEDKeeper2/obj/
