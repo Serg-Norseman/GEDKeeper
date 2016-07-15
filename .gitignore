@@ -4,11 +4,13 @@
 /*.dll
 *.pdb
 *.mdb
-/*.xml
 *.suo
 *.userprefs
 *.DotSettings.user
 gource-gk.cmd
+
+CodecovSender.ps1
+CodecovUploader.sh
 
 /projects/GEDKeeper2/bin/
 /projects/GEDKeeper2/obj/

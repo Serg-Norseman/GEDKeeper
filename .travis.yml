@@ -2,9 +2,7 @@ language: csharp
 solution: projects/GEDKeeper2.linux.sln
 
 after_success:
-  - mono ./projects/packages/SharpCover/SharpCover.exe instrument ./projects/coverageConfig.json
-  - mono ./projects/packages/SharpCover/SharpCover.exe check
-  - bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
 
 install:
   - sudo apt-get install nunit-console
