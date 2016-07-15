@@ -648,6 +648,50 @@ namespace GKUI
             return result;
         }
 
+        public GEDCOMFamilyRecord AddFamilyForSpouse(GEDCOMIndividualRecord spouse)
+        {
+            if (spouse == null) {
+                throw new ArgumentNullException("spouse");
+            }
+
+            GEDCOMSex sex = spouse.Sex;
+            if (sex < GEDCOMSex.svMale || sex >= GEDCOMSex.svUndetermined)
+            {
+                GKUtils.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
+                return null;
+            }
+
+            GEDCOMFamilyRecord family = this.fTree.CreateFamily();
+            family.AddSpouse(spouse);
+            return family;
+        }
+
+        public GEDCOMIndividualRecord SelectSpouseFor(GEDCOMIndividualRecord iRec)
+        {
+            GEDCOMSex needSex;
+            switch (iRec.Sex) {
+                case GEDCOMSex.svMale:
+                    needSex = GEDCOMSex.svFemale;
+                    break;
+                case GEDCOMSex.svFemale:
+                    needSex = GEDCOMSex.svMale;
+                    break;
+                default:
+                    GKUtils.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
+                    return null;
+            }
+
+            GEDCOMIndividualRecord target = null;
+            TargetMode targetMode = TargetMode.tmNone;
+            if (needSex == GEDCOMSex.svFemale) {
+                target = iRec;
+                targetMode = TargetMode.tmWife;
+            }
+
+            GEDCOMIndividualRecord result = this.SelectPerson(target, targetMode, needSex);
+            return result;
+        }
+
         public GEDCOMIndividualRecord GetSelectedPerson()
         {
             return this.ListPersons.GetSelectedRecord() as GEDCOMIndividualRecord;

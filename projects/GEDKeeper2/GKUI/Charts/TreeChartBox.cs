@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+//define DEBUG_IMAGE
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -1340,12 +1342,12 @@ namespace GKUI.Charts
                 this.fVisibleArea = new Rectangle(0, 0, this.fImageWidth, this.fImageHeight);
             }
 
-            if (GKData.DEBUG_IMAGE) {
-                Rectangle irt = new Rectangle(this.fSPX, this.fSPY, this.fImageWidth - 1, this.fImageHeight - 1);
-                using (Pen pen = new Pen(Color.Red)) {
-                    gfx.DrawRectangle(pen, irt);
-                }
+            #if DEBUG_IMAGE
+            Rectangle irt = new Rectangle(this.fSPX, this.fSPY, this.fImageWidth - 1, this.fImageHeight - 1);
+            using (Pen pen = new Pen(Color.Red)) {
+                gfx.DrawRectangle(pen, irt);
             }
+            #endif
 
             this.Draw(gfx, this.fRoot, this.fKind, drawMode);
 

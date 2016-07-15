@@ -96,6 +96,16 @@ namespace GKTests
             Assert.IsFalse(undoman.CanRedo());
             
             undoman.Clear();
+
+            Assert.IsFalse(undoman.DoOperation(null));
+
+            undoman.Undo();
+
+            undoman.Redo();
+
+            undoman.Commit();
+
+            undoman.Rollback();
         }
 
         [Test]

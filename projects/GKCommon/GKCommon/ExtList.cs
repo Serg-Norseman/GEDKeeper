@@ -49,10 +49,10 @@ namespace GKCommon
         private readonly List<T> fList;
         private bool fOwnsObjects;
 
-        public IList<T> List
+        /*public IList<T> List
         {
             get { return this.fList; }
-        }
+        }*/
 
         public int Count
         {

@@ -93,12 +93,12 @@ namespace GKPedigreeImporterPlugin
         rltEOF
     }
 
-    public class RawLine
+    public sealed class RawLine
     {
         public int SourceNum;
         public RawLineType Type;
         public PersonNumbersType NumbersType;
-        
+
         public RawLine(int sourceNum)
         {
             this.SourceNum = sourceNum;
@@ -151,7 +151,7 @@ namespace GKPedigreeImporterPlugin
             this.CanNumbersType = PersonNumbersType.pnUndefined;
             this.PersonLineSeparator = (char)0;
             this.SurnamesNormalize = false;
-            
+
             this.fPersonsList = new Dictionary<string, GEDCOMIndividualRecord>();
             this.fRawContents = new StringList();
         }

@@ -20,9 +20,9 @@
 
 using System;
 using System.Drawing;
-
 using GKCommon;
 using GKCommon.SmartGraph;
+using GKCore.Types;
 using NUnit.Framework;
 
 namespace GKTests
@@ -350,6 +350,16 @@ namespace GKTests
 
                 list.OwnsObjects = true;
                 Assert.AreEqual(true, list.OwnsObjects);
+
+                object obj1= new object();
+                list.Clear();
+                list.Add(obj);
+                list.Add(obj1);
+                Assert.AreEqual(obj, list[0]);
+                Assert.AreEqual(obj1, list[1]);
+                list.Exchange(0, 1);
+                Assert.AreEqual(obj, list[1]);
+                Assert.AreEqual(obj1, list[0]);
             }
         }
 
@@ -370,6 +380,33 @@ namespace GKTests
             Assert.IsTrue(new Range<int>((1), (4)).IsOverlapped(new Range<int>((1), (2))), "chk9"); // true
             Assert.IsTrue(new Range<int>((1), (4)).IsOverlapped(new Range<int>((3), (4))), "chk10"); // true
             Assert.IsTrue(new Range<int>((3), (4)).IsOverlapped(new Range<int>((1), (4))), "chk11"); // true
+        }
+
+        [Test]
+        public void PG_Tests()
+        {
+            PatriarchObj pObj = new PatriarchObj();
+            Assert.IsNotNull(pObj);
+            Assert.IsNotNull(pObj.Links);
+
+            PGNode pgNode = new PGNode("label", PGNodeType.Default);
+            Assert.IsNotNull(pgNode);
+
+            pgNode = new PGNode("label", PGNodeType.Default, 5);
+            Assert.IsNotNull(pgNode);
+        }
+
+        [Test]
+        public void StrTok_Tests()
+        {
+            StringTokenizer strTok = new StringTokenizer("alpha beta 123 456.57, x");
+            Assert.IsNotNull(strTok);
+
+            strTok.IgnoreWhiteSpace = false;
+
+            Token tok = strTok.Next();
+            Assert.AreEqual(TokenKind.Word, tok.Kind);
+            Assert.AreEqual("alpha", tok.Value);
         }
 
     }

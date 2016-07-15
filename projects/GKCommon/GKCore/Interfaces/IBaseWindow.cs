@@ -53,6 +53,7 @@ namespace GKCore.Interfaces
         void FileLoad(string fileName);
         void FileSave(string fileName);
 
+        GEDCOMFamilyRecord AddFamilyForSpouse(GEDCOMIndividualRecord spouse);
         GEDCOMFamilyRecord GetChildFamily(GEDCOMIndividualRecord iChild, bool canCreate, GEDCOMIndividualRecord newParent);
         List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType);
         StringList GetRecordContent(GEDCOMRecord record);
@@ -84,6 +85,7 @@ namespace GKCore.Interfaces
         void RecordEdit(object sender, EventArgs e);
         bool RecordIsFiltered(GEDCOMRecord record);
 
+        GEDCOMIndividualRecord SelectSpouseFor(GEDCOMIndividualRecord iRec);
         GEDCOMFamilyRecord SelectFamily(GEDCOMIndividualRecord target);
         GEDCOMIndividualRecord SelectPerson(GEDCOMIndividualRecord target, TargetMode targetMode, GEDCOMSex needSex);
         GEDCOMRecord SelectRecord(GEDCOMRecordType mode, params object[] args);

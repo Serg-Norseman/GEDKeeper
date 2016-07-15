@@ -48,7 +48,7 @@ namespace GKUI
         private readonly StringList fRMSkip;
         private int fRMIndex;
         private readonly StringList fPlaces;
-        private readonly ExtList<TreeTools.CheckObj> fChecksList;
+        private readonly List<TreeTools.CheckObj> fChecksList;
 
         // UI
         private GKListView ListPlaces;
@@ -65,7 +65,7 @@ namespace GKUI
         {
             if (disposing)
             {
-                this.fChecksList.Dispose();
+                //this.fChecksList.Dispose();
                 TreeTools.PlacesSearch_Clear(this.fPlaces);
                 this.fPlaces.Dispose();
                 this.fRMSkip.Dispose();
@@ -94,7 +94,7 @@ namespace GKUI
 
             this.fPlaces = new StringList();
             this.fPlaces.Sorted = true;
-            this.fChecksList = new ExtList<TreeTools.CheckObj>(true);
+            this.fChecksList = new List<TreeTools.CheckObj>();
 
             this.PrepareChecksList();
             this.PreparePatriarchsList();
@@ -197,7 +197,7 @@ namespace GKUI
 
         #region Duplicates Search
 
-        void SheetMergeResize(object sender, EventArgs e)
+        private void SheetMergeResize(object sender, EventArgs e)
         {
             //this.MergeCtl.Height = SheetMerge.Height - btnSearch.Top - 20;
         }
@@ -404,11 +404,8 @@ namespace GKUI
 
             this.ListChecks.Items.Clear();
 
-            int num2 = this.fChecksList.Count;
-            for (int i = 0; i < num2; i++)
+            foreach (TreeTools.CheckObj checkObj in this.fChecksList)
             {
-                TreeTools.CheckObj checkObj = this.fChecksList[i];
-
                 GKListItem item = this.ListChecks.AddItem(checkObj.GetRecordName(), checkObj);
                 item.AddSubItem(checkObj.Comment);
                 item.AddSubItem(LangMan.LS(GKData.CheckSolveNames[(int)checkObj.Solve]));
@@ -779,9 +776,8 @@ namespace GKUI
                         if (uln != null && uln.Count > 0)
                         {
                             int num = uln.Count;
-                            for (int i = 0; i < num; i++)
+                            foreach (TreeTools.ULIndividual indiv in uln)
                             {
-                                TreeTools.ULIndividual indiv = uln[i];
                                 this.ListCompare.AppendText("    - [" + indiv.Family + "] " + indiv.IRec.GetNameString(true, false) + "\r\n");
                             }
                         }

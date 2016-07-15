@@ -94,6 +94,8 @@ namespace GKCore
 
         public bool DoOperation(CustomOperation operation)
         {
+            if (operation == null) return false;
+
             bool result;
 
             if (!operation.Redo())

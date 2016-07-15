@@ -30,7 +30,12 @@ namespace GKCore.Types
         public int BirthYear;
         public int DescendantsCount;
         public int DescGenerations;
-        public List<PatriarchObj> Links = new List<PatriarchObj>();
+        public readonly List<PatriarchObj> Links;
         public bool HasLinks;
+
+        public PatriarchObj()
+        {
+            this.Links = new List<PatriarchObj>();
+        }
     }
 }

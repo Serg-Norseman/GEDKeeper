@@ -1,6 +1,2 @@
-cd projects
-rem erase gktests\bin\debug\*.dll
-call compile.mswin.bat
-cd gktests\bin\debug
-"C:\Program Files (x86)\NUnit.org\nunit-console\nunit3-console.exe" GKTests.dll
-cd ..\..\..
+C:\windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe projects\GEDKeeper2.mswin.sln /p:Configuration=Debug /p:Platform="x86"
+"C:\Program Files (x86)\NUnit 2.6.4\bin\nunit-console-x86.exe" projects\GKTests\bin\Debug\GKTests.dll

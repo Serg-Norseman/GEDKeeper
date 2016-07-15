@@ -35,9 +35,6 @@ namespace GKCore
     /// </summary>
     public static class GKData
     {
-        public const bool DEBUG_IMAGE = false;
-        public const bool DEBUG_PRINT = false;
-
         public const string APP_TITLE = "GEDKeeper2";
         public const string APP_MAIL = "gedkeeper@yandex.ru";
 

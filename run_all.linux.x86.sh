@@ -7,7 +7,4 @@
 #export LD_LIBRARY_PATH=$PWD/external/lua/linux/lib64
 
 xbuild ./projects/GEDKeeper2.linux.sln /p:Configuration=Debug /p:Platform="x86"
-
-#mono ./projects/packages/SharpCover/SharpCover.exe instrument ./projects/coverageConfig.json
 nunit-console ./projects/GKTests/bin/Debug/GKTests.dll
-#mono ./projects/packages/SharpCover/SharpCover.exe check

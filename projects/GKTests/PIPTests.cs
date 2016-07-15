@@ -211,6 +211,16 @@ namespace GKTests
             Assert.IsTrue(ImpUtils.IsRomeLine("XIV"));
             Assert.IsFalse(ImpUtils.IsRomeLine("XVA"));
             Assert.IsFalse(ImpUtils.IsRomeLine(""));
+
+            Assert.AreEqual("test", ImpUtils.DeleteBlanks("    test"));
+            Assert.AreEqual(null, ImpUtils.DeleteBlanks(null));
+        }
+
+        [Test]
+        public void Importer_Tests()
+        {
+            RawLine rawLine = new RawLine(10);
+            Assert.IsNotNull(rawLine);
         }
     }
 }

@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+//define DEBUG_PRINT
+
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -165,50 +167,6 @@ namespace GKUI
 
         #region Data manipulations
 
-        private GEDCOMIndividualRecord SelectSpouseFor(GEDCOMIndividualRecord iRec)
-        {
-            GEDCOMSex needSex;
-            switch (iRec.Sex) {
-                case GEDCOMSex.svMale:
-                    needSex = GEDCOMSex.svFemale;
-                    break;
-                case GEDCOMSex.svFemale:
-                    needSex = GEDCOMSex.svMale;
-                    break;
-                default:
-                    GKUtils.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
-                    return null;
-            }
-
-            GEDCOMIndividualRecord target = null;
-            TargetMode targetMode = TargetMode.tmNone;
-            if (needSex == GEDCOMSex.svFemale) {
-                target = iRec;
-                targetMode = TargetMode.tmWife;
-            }
-
-            GEDCOMIndividualRecord result = this.fBase.SelectPerson(target, targetMode, needSex);
-            return result;
-        }
-
-        private GEDCOMFamilyRecord InternalFamilyAdd(GEDCOMIndividualRecord spouse)
-        {
-            if (spouse == null) {
-                throw new ArgumentNullException("spouse");
-            }
-            
-            GEDCOMSex sex = spouse.Sex;
-            if (sex < GEDCOMSex.svMale || sex >= GEDCOMSex.svUndetermined)
-            {
-                GKUtils.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
-                return null;
-            }
-            
-            GEDCOMFamilyRecord family = this.fBase.Tree.CreateFamily();
-            family.AddSpouse(spouse);
-            return family;
-        }
-        
         private void InternalChildAdd(GEDCOMSex needSex)
         {
             TreeChartPerson p = this.fTreeBox.Selected;
@@ -223,12 +181,12 @@ namespace GKUI
                 else
                 {
                     GEDCOMFamilyRecord family;
-                    
+
                     if (parent.SpouseToFamilyLinks.Count == 0)
                     {
                         //GKUtils.ShowError(LangMan.LS(LSID.LSID_IsNotFamilies));
 
-                        family = this.InternalFamilyAdd(parent);
+                        family = this.fBase.AddFamilyForSpouse(parent);
                         if (family == null) {
                             return;
                         }
@@ -243,7 +201,7 @@ namespace GKUI
                         // this repetition necessary, because the call of CreatePersonDialog only works if person already has a father,
                         // what to call AddChild () is no; all this is necessary in order to in the namebook were correct patronymics.
                         MainWin.Instance.NamesTable.ImportNames(child);
-                        
+
                         this.UpdateChart();
                     }
                 }
@@ -378,7 +336,7 @@ namespace GKUI
                 GEDCOMFamilyRecord baseFamily = person.BaseFamily;
 
                 if (baseSpouse != null && baseFamily != null) {
-                    GEDCOMIndividualRecord iSpouse = this.SelectSpouseFor(person.BaseSpouse.Rec);
+                    GEDCOMIndividualRecord iSpouse = this.fBase.SelectSpouseFor(person.BaseSpouse.Rec);
 
                     if (iSpouse != null) {
                         baseFamily.AddSpouse(iSpouse);
@@ -434,7 +392,7 @@ namespace GKUI
             if (p != null && p.Rec != null)
             {
                 GEDCOMIndividualRecord iRec = p.Rec;
-                GEDCOMIndividualRecord iSpouse = this.SelectSpouseFor(iRec);
+                GEDCOMIndividualRecord iSpouse = this.fBase.SelectSpouseFor(iRec);
 
                 if (iSpouse != null) {
                     GEDCOMFamilyRecord fam = this.fBase.Tree.CreateFamily();
@@ -460,8 +418,8 @@ namespace GKUI
             TreeChartPerson p = this.fTreeBox.Selected;
             if (p != null && p.Rec != null)
             {
-                GEDCOMFamilyRecord fam = this.InternalFamilyAdd(p.Rec);
-                
+                GEDCOMFamilyRecord fam = this.fBase.AddFamilyForSpouse(p.Rec);
+
                 if (fam != null) {
                     this.UpdateChart();
                 }
@@ -592,9 +550,9 @@ namespace GKUI
             Rectangle marginBounds = e.MarginBounds;
             Rectangle pageBounds = e.PageBounds;
 
-            if (GKData.DEBUG_PRINT) {
-                gfx.DrawRectangle(Pens.Gray, marginBounds);
-            }
+            #if DEBUG_PRINT
+            gfx.DrawRectangle(Pens.Gray, marginBounds);
+            #endif
 
             Image img = this.fTreeBox.GetPrintableImage();
 
