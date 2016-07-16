@@ -666,6 +666,48 @@ namespace GKUI
             return family;
         }
 
+        public GEDCOMIndividualRecord AddChildForParent(GEDCOMIndividualRecord parent, GEDCOMSex needSex)
+        {
+            GEDCOMIndividualRecord resultChild = null;
+
+            if (parent != null)
+            {
+                if (parent.SpouseToFamilyLinks.Count > 1)
+                {
+                    GKUtils.ShowError(LangMan.LS(LSID.LSID_ThisPersonHasSeveralFamilies));
+                }
+                else
+                {
+                    GEDCOMFamilyRecord family;
+
+                    if (parent.SpouseToFamilyLinks.Count == 0)
+                    {
+                        //GKUtils.ShowError(LangMan.LS(LSID.LSID_IsNotFamilies));
+
+                        family = this.AddFamilyForSpouse(parent);
+                        if (family == null) {
+                            return null;
+                        }
+                    } else {
+                        family = parent.SpouseToFamilyLinks[0].Family;
+                    }
+
+                    GEDCOMIndividualRecord child = this.SelectPerson(family.GetHusband(), TargetMode.tmParent, needSex);
+
+                    if (child != null && family.AddChild(child))
+                    {
+                        // this repetition necessary, because the call of CreatePersonDialog only works if person already has a father,
+                        // what to call AddChild () is no; all this is necessary in order to in the namebook were correct patronymics.
+                        MainWin.Instance.NamesTable.ImportNames(child);
+
+                        resultChild = child;
+                    }
+                }
+            }
+
+            return resultChild;
+        }
+
         public GEDCOMIndividualRecord SelectSpouseFor(GEDCOMIndividualRecord iRec)
         {
             GEDCOMSex needSex;

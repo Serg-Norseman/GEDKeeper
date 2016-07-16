@@ -113,25 +113,25 @@ namespace GKUI
 		    		    		    this.tbModes});
 		    this.ToolBar1.Location = new System.Drawing.Point(0, 0);
 		    this.ToolBar1.Name = "ToolBar1";
-		    this.ToolBar1.Size = new System.Drawing.Size(822, 27);
+		    this.ToolBar1.Size = new System.Drawing.Size(658, 25);
 		    this.ToolBar1.TabIndex = 0;
 		    // 
 		    // tbImageSave
 		    // 
 		    this.tbImageSave.Name = "tbImageSave";
-		    this.tbImageSave.Size = new System.Drawing.Size(24, 24);
-		    this.tbImageSave.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
+		    this.tbImageSave.Size = new System.Drawing.Size(23, 22);
+		    this.tbImageSave.Click += new System.EventHandler(this.tbImageSave_Click);
 		    // 
 		    // tbs1
 		    // 
 		    this.tbs1.Name = "tbs1";
-		    this.tbs1.Size = new System.Drawing.Size(6, 27);
+		    this.tbs1.Size = new System.Drawing.Size(6, 25);
 		    // 
 		    // tbGens
 		    // 
 		    this.tbGens.DropDown = this.MenuGens;
 		    this.tbGens.Name = "tbGens";
-		    this.tbGens.Size = new System.Drawing.Size(100, 24);
+		    this.tbGens.Size = new System.Drawing.Size(57, 22);
 		    this.tbGens.Text = "tbGens";
 		    // 
 		    // MenuGens
@@ -148,91 +148,90 @@ namespace GKUI
 		    		    		    this.miGens8,
 		    		    		    this.miGens9});
 		    this.MenuGens.Name = "MenuGens";
-		    this.MenuGens.OwnerItem = this.tbGens;
-		    this.MenuGens.Size = new System.Drawing.Size(96, 244);
+		    this.MenuGens.Size = new System.Drawing.Size(89, 224);
 		    // 
 		    // miGensInf
 		    // 
 		    this.miGensInf.Checked = true;
 		    this.miGensInf.CheckState = System.Windows.Forms.CheckState.Checked;
 		    this.miGensInf.Name = "miGensInf";
-		    this.miGensInf.Size = new System.Drawing.Size(95, 24);
+		    this.miGensInf.Size = new System.Drawing.Size(88, 22);
 		    this.miGensInf.Text = "Inf";
 		    this.miGensInf.Click += new System.EventHandler(this.miGens9_Click);
 		    // 
 		    // miGens1
 		    // 
 		    this.miGens1.Name = "miGens1";
-		    this.miGens1.Size = new System.Drawing.Size(95, 24);
+		    this.miGens1.Size = new System.Drawing.Size(88, 22);
 		    this.miGens1.Text = "1";
 		    this.miGens1.Click += new System.EventHandler(this.miGens9_Click);
 		    // 
 		    // miGens2
 		    // 
 		    this.miGens2.Name = "miGens2";
-		    this.miGens2.Size = new System.Drawing.Size(95, 24);
+		    this.miGens2.Size = new System.Drawing.Size(88, 22);
 		    this.miGens2.Text = "2";
 		    this.miGens2.Click += new System.EventHandler(this.miGens9_Click);
 		    // 
 		    // miGens3
 		    // 
 		    this.miGens3.Name = "miGens3";
-		    this.miGens3.Size = new System.Drawing.Size(95, 24);
+		    this.miGens3.Size = new System.Drawing.Size(88, 22);
 		    this.miGens3.Text = "3";
 		    this.miGens3.Click += new System.EventHandler(this.miGens9_Click);
 		    // 
 		    // miGens4
 		    // 
 		    this.miGens4.Name = "miGens4";
-		    this.miGens4.Size = new System.Drawing.Size(95, 24);
+		    this.miGens4.Size = new System.Drawing.Size(88, 22);
 		    this.miGens4.Text = "4";
 		    this.miGens4.Click += new System.EventHandler(this.miGens9_Click);
 		    // 
 		    // miGens5
 		    // 
 		    this.miGens5.Name = "miGens5";
-		    this.miGens5.Size = new System.Drawing.Size(95, 24);
+		    this.miGens5.Size = new System.Drawing.Size(88, 22);
 		    this.miGens5.Text = "5";
 		    this.miGens5.Click += new System.EventHandler(this.miGens9_Click);
 		    // 
 		    // miGens6
 		    // 
 		    this.miGens6.Name = "miGens6";
-		    this.miGens6.Size = new System.Drawing.Size(95, 24);
+		    this.miGens6.Size = new System.Drawing.Size(88, 22);
 		    this.miGens6.Text = "6";
 		    this.miGens6.Click += new System.EventHandler(this.miGens9_Click);
 		    // 
 		    // miGens7
 		    // 
 		    this.miGens7.Name = "miGens7";
-		    this.miGens7.Size = new System.Drawing.Size(95, 24);
+		    this.miGens7.Size = new System.Drawing.Size(88, 22);
 		    this.miGens7.Text = "7";
 		    this.miGens7.Click += new System.EventHandler(this.miGens9_Click);
 		    // 
 		    // miGens8
 		    // 
 		    this.miGens8.Name = "miGens8";
-		    this.miGens8.Size = new System.Drawing.Size(95, 24);
+		    this.miGens8.Size = new System.Drawing.Size(88, 22);
 		    this.miGens8.Text = "8";
 		    this.miGens8.Click += new System.EventHandler(this.miGens9_Click);
 		    // 
 		    // miGens9
 		    // 
 		    this.miGens9.Name = "miGens9";
-		    this.miGens9.Size = new System.Drawing.Size(95, 24);
+		    this.miGens9.Size = new System.Drawing.Size(88, 22);
 		    this.miGens9.Text = "9";
 		    this.miGens9.Click += new System.EventHandler(this.miGens9_Click);
 		    // 
 		    // tbs2
 		    // 
 		    this.tbs2.Name = "tbs2";
-		    this.tbs2.Size = new System.Drawing.Size(6, 27);
+		    this.tbs2.Size = new System.Drawing.Size(6, 25);
 		    // 
 		    // tbModes
 		    // 
 		    this.tbModes.DropDown = this.MenuModes;
 		    this.tbModes.Name = "tbModes";
-		    this.tbModes.Size = new System.Drawing.Size(33, 24);
+		    this.tbModes.Size = new System.Drawing.Size(13, 22);
 		    // 
 		    // MenuModes
 		    // 
@@ -250,78 +249,78 @@ namespace GKUI
 		    		    		    this.N9});
 		    this.MenuModes.Name = "MenuModes";
 		    this.MenuModes.OwnerItem = this.tbModes;
-		    this.MenuModes.Size = new System.Drawing.Size(219, 236);
+		    this.MenuModes.Size = new System.Drawing.Size(187, 198);
 		    // 
 		    // miModeBoth
 		    // 
 		    this.miModeBoth.Name = "miModeBoth";
-		    this.miModeBoth.Size = new System.Drawing.Size(218, 24);
+		    this.miModeBoth.Size = new System.Drawing.Size(186, 22);
 		    this.miModeBoth.Text = "miModeBoth";
 		    this.miModeBoth.Click += new System.EventHandler(this.miModeItem_Click);
 		    // 
 		    // miModeAncestors
 		    // 
 		    this.miModeAncestors.Name = "miModeAncestors";
-		    this.miModeAncestors.Size = new System.Drawing.Size(218, 24);
+		    this.miModeAncestors.Size = new System.Drawing.Size(186, 22);
 		    this.miModeAncestors.Text = "miModeAncestors";
 		    this.miModeAncestors.Click += new System.EventHandler(this.miModeItem_Click);
 		    // 
 		    // miModeDescendants
 		    // 
 		    this.miModeDescendants.Name = "miModeDescendants";
-		    this.miModeDescendants.Size = new System.Drawing.Size(218, 24);
+		    this.miModeDescendants.Size = new System.Drawing.Size(186, 22);
 		    this.miModeDescendants.Text = "miModeDescendants";
 		    this.miModeDescendants.Click += new System.EventHandler(this.miModeItem_Click);
 		    // 
 		    // N7
 		    // 
 		    this.N7.Name = "N7";
-		    this.N7.Size = new System.Drawing.Size(215, 6);
+		    this.N7.Size = new System.Drawing.Size(183, 6);
 		    // 
 		    // miTraceSelected
 		    // 
 		    this.miTraceSelected.Name = "miTraceSelected";
-		    this.miTraceSelected.Size = new System.Drawing.Size(218, 24);
+		    this.miTraceSelected.Size = new System.Drawing.Size(186, 22);
 		    this.miTraceSelected.Text = "miTraceRoot";
 		    this.miTraceSelected.Click += new System.EventHandler(this.miTraceSelected_Click);
 		    // 
 		    // miTraceKinships
 		    // 
 		    this.miTraceKinships.Name = "miTraceKinships";
-		    this.miTraceKinships.Size = new System.Drawing.Size(218, 24);
+		    this.miTraceKinships.Size = new System.Drawing.Size(186, 22);
 		    this.miTraceKinships.Text = "miTraceKinships";
 		    this.miTraceKinships.Click += new System.EventHandler(this.miTraceKinships_Click);
 		    // 
 		    // miCertaintyIndex
 		    // 
 		    this.miCertaintyIndex.Name = "miCertaintyIndex";
-		    this.miCertaintyIndex.Size = new System.Drawing.Size(218, 24);
+		    this.miCertaintyIndex.Size = new System.Drawing.Size(186, 22);
 		    this.miCertaintyIndex.Text = "miCertaintyIndex";
 		    this.miCertaintyIndex.Click += new System.EventHandler(this.miCertaintyIndex_Click);
 		    // 
 		    // N8
 		    // 
 		    this.N8.Name = "N8";
-		    this.N8.Size = new System.Drawing.Size(215, 6);
+		    this.N8.Size = new System.Drawing.Size(183, 6);
 		    // 
 		    // miFillColor
 		    // 
 		    this.miFillColor.Name = "miFillColor";
-		    this.miFillColor.Size = new System.Drawing.Size(218, 24);
+		    this.miFillColor.Size = new System.Drawing.Size(186, 22);
 		    this.miFillColor.Text = "miFillColor";
 		    this.miFillColor.Click += new System.EventHandler(this.miFillColor_Click);
 		    // 
 		    // miFillImage
 		    // 
 		    this.miFillImage.Name = "miFillImage";
-		    this.miFillImage.Size = new System.Drawing.Size(218, 24);
+		    this.miFillImage.Size = new System.Drawing.Size(186, 22);
 		    this.miFillImage.Text = "miFillImage";
 		    this.miFillImage.Click += new System.EventHandler(this.miFillImage_Click);
 		    // 
 		    // N9
 		    // 
 		    this.N9.Name = "N9";
-		    this.N9.Size = new System.Drawing.Size(215, 6);
+		    this.N9.Size = new System.Drawing.Size(183, 6);
 		    this.N9.Visible = false;
 		    // 
 		    // MenuPerson
@@ -339,87 +338,88 @@ namespace GKUI
 		    		    		    this.miRebuildTree,
 		    		    		    this.miRebuildKinships});
 		    this.MenuPerson.Name = "MenuPerson";
-		    this.MenuPerson.Size = new System.Drawing.Size(201, 214);
+		    this.MenuPerson.Size = new System.Drawing.Size(173, 198);
 		    // 
 		    // miEdit
 		    // 
 		    this.miEdit.Name = "miEdit";
-		    this.miEdit.Size = new System.Drawing.Size(200, 24);
+		    this.miEdit.Size = new System.Drawing.Size(172, 22);
 		    this.miEdit.Text = "miEdit";
 		    this.miEdit.Click += new System.EventHandler(this.miEdit_Click);
 		    // 
 		    // N1
 		    // 
 		    this.N1.Name = "N1";
-		    this.N1.Size = new System.Drawing.Size(197, 6);
+		    this.N1.Size = new System.Drawing.Size(169, 6);
 		    // 
 		    // miFamilyAdd
 		    // 
 		    this.miFamilyAdd.Name = "miFamilyAdd";
-		    this.miFamilyAdd.Size = new System.Drawing.Size(200, 24);
+		    this.miFamilyAdd.Size = new System.Drawing.Size(172, 22);
 		    this.miFamilyAdd.Text = "miFamilyAdd";
 		    this.miFamilyAdd.Click += new System.EventHandler(this.miFamilyAdd_Click);
 		    // 
 		    // miSpouseAdd
 		    // 
 		    this.miSpouseAdd.Name = "miSpouseAdd";
-		    this.miSpouseAdd.Size = new System.Drawing.Size(200, 24);
+		    this.miSpouseAdd.Size = new System.Drawing.Size(172, 22);
 		    this.miSpouseAdd.Text = "miSpouseAdd";
 		    this.miSpouseAdd.Click += new System.EventHandler(this.miSpouseAdd_Click);
 		    // 
 		    // miSonAdd
 		    // 
 		    this.miSonAdd.Name = "miSonAdd";
-		    this.miSonAdd.Size = new System.Drawing.Size(200, 24);
+		    this.miSonAdd.Size = new System.Drawing.Size(172, 22);
 		    this.miSonAdd.Text = "miSonAdd";
 		    this.miSonAdd.Click += new System.EventHandler(this.miSonAdd_Click);
 		    // 
 		    // miDaughterAdd
 		    // 
 		    this.miDaughterAdd.Name = "miDaughterAdd";
-		    this.miDaughterAdd.Size = new System.Drawing.Size(200, 24);
+		    this.miDaughterAdd.Size = new System.Drawing.Size(172, 22);
 		    this.miDaughterAdd.Text = "miDaughterAdd";
 		    this.miDaughterAdd.Click += new System.EventHandler(this.miDaughterAdd_Click);
 		    // 
 		    // N2
 		    // 
 		    this.N2.Name = "N2";
-		    this.N2.Size = new System.Drawing.Size(197, 6);
+		    this.N2.Size = new System.Drawing.Size(169, 6);
 		    // 
 		    // miDelete
 		    // 
 		    this.miDelete.Name = "miDelete";
-		    this.miDelete.Size = new System.Drawing.Size(200, 24);
+		    this.miDelete.Size = new System.Drawing.Size(172, 22);
 		    this.miDelete.Text = "miDelete";
 		    this.miDelete.Click += new System.EventHandler(this.miDelete_Click);
 		    // 
 		    // N3
 		    // 
 		    this.N3.Name = "N3";
-		    this.N3.Size = new System.Drawing.Size(197, 6);
+		    this.N3.Size = new System.Drawing.Size(169, 6);
 		    // 
 		    // miRebuildTree
 		    // 
 		    this.miRebuildTree.Name = "miRebuildTree";
-		    this.miRebuildTree.Size = new System.Drawing.Size(200, 24);
+		    this.miRebuildTree.Size = new System.Drawing.Size(172, 22);
 		    this.miRebuildTree.Text = "miRebuildTree";
 		    this.miRebuildTree.Click += new System.EventHandler(this.miRebuildTree_Click);
 		    // 
 		    // miRebuildKinships
 		    // 
 		    this.miRebuildKinships.Name = "miRebuildKinships";
-		    this.miRebuildKinships.Size = new System.Drawing.Size(200, 24);
+		    this.miRebuildKinships.Size = new System.Drawing.Size(172, 22);
 		    this.miRebuildKinships.Text = "miRebuildKinships";
 		    this.miRebuildKinships.Click += new System.EventHandler(this.miRebuildKinships_Click);
 		    // 
 		    // TreeChartWin
 		    // 
-		    this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+		    this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
 		    this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-		    this.ClientSize = new System.Drawing.Size(822, 453);
+		    this.ClientSize = new System.Drawing.Size(658, 362);
 		    this.Controls.Add(this.ToolBar1);
 		    this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 		    this.KeyPreview = true;
+		    this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
 		    this.Name = "TreeChartWin";
 		    this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 		    this.Text = "TreeChartWin";

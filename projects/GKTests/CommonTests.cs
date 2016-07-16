@@ -34,13 +34,25 @@ namespace GKTests
         public void ConvHelper_Tests()
         {
             int ival = ConvHelper.ParseInt("495", 0);
-            Assert.AreEqual(ival, 495);
+            Assert.AreEqual(495, ival);
+
+            ival = ConvHelper.ParseInt("asdfa", 11);
+            Assert.AreEqual(11, ival);
 
             double fval = ConvHelper.ParseFloat("495.575", 0);
-            Assert.AreEqual(fval, 495.575);
+            Assert.AreEqual(495.575, fval);
+
+            fval = ConvHelper.ParseFloat("575,495", 0, true);
+            Assert.AreEqual(575.495, fval);
+
+            fval = ConvHelper.ParseFloat("", 22.1);
+            Assert.AreEqual(22.1, fval);
+
+            fval = ConvHelper.ParseFloat("sdgfdf", 22.2);
+            Assert.AreEqual(22.2, fval);
 
             string st = ConvHelper.AdjustNum(9, 3);
-            Assert.AreEqual(st, "009");
+            Assert.AreEqual("009", st);
         }
 
         [Test]

@@ -106,6 +106,7 @@ namespace GKUI
             if (style != ChartStyle.ClusterBar)
             {
                 PointPairList ppList = new PointPairList();
+
                 int num = this.fListStats.Items.Count;
                 for (int i = 0; i < num; i++)
                 {

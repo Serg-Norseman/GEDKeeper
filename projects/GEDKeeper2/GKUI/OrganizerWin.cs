@@ -94,9 +94,8 @@ namespace GKUI
                 GEDCOMIndividualRecord iRec = (GEDCOMIndividualRecord)rec;
                 string nm = iRec.GetNameString(true, false);
 
-                int num2 = iRec.Events.Count;
-                for (int j = 0; j < num2; j++) {
-                    this.PrepareEvent(nm, iRec.Events[j]);
+                foreach (GEDCOMCustomEvent evt in iRec.Events) {
+                    this.PrepareEvent(nm, evt);
                 }
             }
 

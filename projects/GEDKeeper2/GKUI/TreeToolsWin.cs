@@ -115,13 +115,13 @@ namespace GKUI
             this.pageTreeCheck.Text = LangMan.LS(LSID.LSID_ToolOp_7);
             this.pagePatSearch.Text = LangMan.LS(LSID.LSID_ToolOp_8);
             this.pagePlaceManage.Text = LangMan.LS(LSID.LSID_ToolOp_9);
-            
+
             this.btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
             this.lblFile.Text = LangMan.LS(LSID.LSID_MIFile);
-            
+
             this.btnFileChoose.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
             this.btnTreeMerge.Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
-            
+
             this.btnSelectAll.Text = LangMan.LS(LSID.LSID_SelAll);
             this.btnSelectFamily.Text = LangMan.LS(LSID.LSID_SelFamily);
             this.btnSelectAncestors.Text = LangMan.LS(LSID.LSID_SelAncestors);
@@ -147,7 +147,7 @@ namespace GKUI
             this.btnSetPatriarch.Text = LangMan.LS(LSID.LSID_SetPatFlag);
             this.btnPatSearch.Text = LangMan.LS(LSID.LSID_Search);
             this.btnIntoList.Text = LangMan.LS(LSID.LSID_InsertIntoBook);
-            
+
             this.grpMergeOther.Text = LangMan.LS(LSID.LSID_Other);
             this.chkBookmarkMerged.Text = LangMan.LS(LSID.LSID_BookmarkMerged);
 
@@ -315,7 +315,7 @@ namespace GKUI
         {
             gkLogChart1.Clear();
             fBase.ProgressInit(LangMan.LS(LSID.LSID_CheckFamiliesConnection), this.fTree.RecordsCount);
-            ExtList<GEDCOMIndividualRecord> prepared = new ExtList<GEDCOMIndividualRecord>();
+            List<GEDCOMIndividualRecord> prepared = new List<GEDCOMIndividualRecord>();
             List<GEDCOMRecord> groupRecords = new List<GEDCOMRecord>();
             try
             {
@@ -367,7 +367,7 @@ namespace GKUI
             finally
             {
                 groupRecords.Clear();
-                prepared.Dispose();
+                //prepared.Dispose();
                 fBase.ProgressDone();
             }
         }

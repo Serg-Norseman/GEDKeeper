@@ -48,13 +48,11 @@ namespace GKUI
             }
         }
 
-        private class MapPlace : IDisposable
+        private class MapPlace : BaseObject
         {
             public string Name;
             public readonly ExtList<GMapPoint> Points;
             public readonly ExtList<PlaceRef> PlaceRefs;
-
-            private bool fDisposed;
 
             public MapPlace()
             {
@@ -62,14 +60,14 @@ namespace GKUI
                 this.PlaceRefs = new ExtList<PlaceRef>(false);
             }
 
-            public void Dispose()
+            protected override void Dispose(bool disposing)
             {
-                if (!this.fDisposed)
+                if (disposing)
                 {
                     this.PlaceRefs.Dispose();
                     this.Points.Dispose();
-                    this.fDisposed = true;
                 }
+                base.Dispose(disposing);
             }
         }
 
@@ -148,16 +146,17 @@ namespace GKUI
             }
         }
 
-        private void PreparePointsList(ExtList<GMapPoint> aPoints, bool byPerson)
+        private void PreparePointsList(ExtList<GMapPoint> gmapPoints, bool byPerson)
         {
             this.fMapBrowser.BeginUpdate();
             try
             {
                 this.fMapBrowser.ClearPoints();
-                int num = aPoints.Count;
+
+                int num = gmapPoints.Count;
                 for (int i = 0; i < num; i++)
                 {
-                    GMapPoint pt = aPoints[i];
+                    GMapPoint pt = gmapPoints[i];
                     string stHint = pt.Hint;
                     if (byPerson)
                     {
@@ -363,19 +362,19 @@ namespace GKUI
             mapPlace.PlaceRefs.Add(new PlaceRef(placeEvent));
         }
 
-        private void CopyPoint(GMapPoint aPt, PlaceRef aRef)
+        private void CopyPoint(GMapPoint gmPt, PlaceRef placeRef)
         {
             GMapPoint pt;
             int num = this.fMapPoints.Count;
             for (int i = 0; i < num; i++) {
                 pt = this.fMapPoints[i];
-                if (pt.Hint == aPt.Hint) {
+                if (pt.Hint == gmPt.Hint) {
                     return;
                 }
             }
 
-            pt = new GMapPoint(aPt.Latitude, aPt.Longitude, aPt.Hint);
-            pt.Date = aRef.Date;
+            pt = new GMapPoint(gmPt.Latitude, gmPt.Longitude, gmPt.Hint);
+            pt.Date = placeRef.Date;
             this.fMapPoints.Add(pt);
         }
     }

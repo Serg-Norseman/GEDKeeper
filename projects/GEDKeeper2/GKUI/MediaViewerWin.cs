@@ -27,6 +27,7 @@ using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Types;
 
 namespace GKUI
 {
@@ -61,27 +62,22 @@ namespace GKUI
 
             this.SuspendLayout();
 
-            //MultimediaKind mmKind = GKUtils.GetMultimediaKind(this.fFileRef.MultimediaFormat);
+            MultimediaKind mmKind = GKUtils.GetMultimediaKind(this.fFileRef.MultimediaFormat);
 
-            switch (this.fFileRef.MultimediaFormat) {
-                case GEDCOMMultimediaFormat.mfBMP:
-                case GEDCOMMultimediaFormat.mfGIF:
-                case GEDCOMMultimediaFormat.mfJPG:
-                case GEDCOMMultimediaFormat.mfPCX:
-                case GEDCOMMultimediaFormat.mfTIF:
-                case GEDCOMMultimediaFormat.mfTGA:
-                    case GEDCOMMultimediaFormat.mfPNG: {
+            switch (mmKind)
+            {
+                case MultimediaKind.mkImage:
+                    {
                         Image img = this.fBase.Context.BitmapLoad(this.fFileRef, -1, -1, false);
-
                         this.fImageCtl = new ImageView();
                         this.fImageCtl.OpenImage(img);
                         ctl = this.fImageCtl;
                         break;
                     }
 
-                case GEDCOMMultimediaFormat.mfWAV:
-                case GEDCOMMultimediaFormat.mfAVI:
-                    case GEDCOMMultimediaFormat.mfMPG: {
+                case MultimediaKind.mkAudio:
+                case MultimediaKind.mkVideo:
+                    {
                         this.fExtern = true;
                         string targetFile = "";
                         this.fBase.Context.MediaLoad(this.fFileRef, ref targetFile);
@@ -89,39 +85,38 @@ namespace GKUI
                         break;
                     }
 
-                    case GEDCOMMultimediaFormat.mfTXT: {
+                case MultimediaKind.mkText:
+                    {
                         Stream fs;
                         this.fBase.Context.MediaLoad(this.fFileRef, out fs, false);
-                        using (StreamReader strd = new StreamReader(fs, Encoding.GetEncoding(1251))) {
-                            TextBox txtBox = new TextBox();
-                            txtBox.Multiline = true;
-                            txtBox.ReadOnly = true;
-                            txtBox.ScrollBars = ScrollBars.Both;
-                            txtBox.Text = strd.ReadToEnd();
-                            ctl = txtBox;
+
+                        switch (this.fFileRef.MultimediaFormat)
+                        {
+                            case GEDCOMMultimediaFormat.mfTXT:
+                                using (StreamReader strd = new StreamReader(fs, Encoding.GetEncoding(1251))) {
+                                    TextBox txtBox = new TextBox();
+                                    txtBox.Multiline = true;
+                                    txtBox.ReadOnly = true;
+                                    txtBox.ScrollBars = ScrollBars.Both;
+                                    txtBox.Text = strd.ReadToEnd();
+                                    ctl = txtBox;
+                                }
+                                break;
+
+                            case GEDCOMMultimediaFormat.mfRTF:
+                                using (StreamReader strd = new StreamReader(fs)) {
+                                    RichTextBox rtfBox = new RichTextBox();
+                                    rtfBox.ReadOnly = true;
+                                    rtfBox.Text = strd.ReadToEnd();
+                                    ctl = rtfBox;
+                                }
+                                break;
+
+                            case GEDCOMMultimediaFormat.mfHTM:
+                                ctl = new WebBrowser();
+                                (ctl as WebBrowser).DocumentStream = fs;
+                                break;
                         }
-                        break;
-                    }
-
-                    case GEDCOMMultimediaFormat.mfRTF: {
-                        Stream fs;
-                        this.fBase.Context.MediaLoad(this.fFileRef, out fs, false);
-                        using (StreamReader strd = new StreamReader(fs)) {
-                            RichTextBox txtBox = new RichTextBox();
-                            txtBox.ReadOnly = true;
-                            txtBox.Text = strd.ReadToEnd();
-                            ctl = txtBox;
-                        }
-                        break;
-                    }
-
-                    case GEDCOMMultimediaFormat.mfHTM: {
-                        Stream fs;
-                        this.fBase.Context.MediaLoad(this.fFileRef, out fs, false);
-
-                        ctl = new WebBrowser();
-                        (ctl as WebBrowser).DocumentStream = fs;
-
                         break;
                     }
             }

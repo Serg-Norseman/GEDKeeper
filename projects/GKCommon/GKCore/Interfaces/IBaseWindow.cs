@@ -53,6 +53,7 @@ namespace GKCore.Interfaces
         void FileLoad(string fileName);
         void FileSave(string fileName);
 
+        GEDCOMIndividualRecord AddChildForParent(GEDCOMIndividualRecord parent, GEDCOMSex needSex);
         GEDCOMFamilyRecord AddFamilyForSpouse(GEDCOMIndividualRecord spouse);
         GEDCOMFamilyRecord GetChildFamily(GEDCOMIndividualRecord iChild, bool canCreate, GEDCOMIndividualRecord newParent);
         List<GEDCOMRecord> GetContentList(GEDCOMRecordType recType);

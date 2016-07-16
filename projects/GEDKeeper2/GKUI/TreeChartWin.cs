@@ -165,51 +165,6 @@ namespace GKUI
             this.Text = string.Format("{0} \"{1}\"", this.Text, Path.GetFileName(fBase.Tree.FileName));
         }
 
-        #region Data manipulations
-
-        private void InternalChildAdd(GEDCOMSex needSex)
-        {
-            TreeChartPerson p = this.fTreeBox.Selected;
-            if (p != null && p.Rec != null)
-            {
-                GEDCOMIndividualRecord parent = p.Rec;
-
-                if (parent.SpouseToFamilyLinks.Count > 1)
-                {
-                    GKUtils.ShowError(LangMan.LS(LSID.LSID_ThisPersonHasSeveralFamilies));
-                }
-                else
-                {
-                    GEDCOMFamilyRecord family;
-
-                    if (parent.SpouseToFamilyLinks.Count == 0)
-                    {
-                        //GKUtils.ShowError(LangMan.LS(LSID.LSID_IsNotFamilies));
-
-                        family = this.fBase.AddFamilyForSpouse(parent);
-                        if (family == null) {
-                            return;
-                        }
-                    } else {
-                        family = parent.SpouseToFamilyLinks[0].Family;
-                    }
-
-                    GEDCOMIndividualRecord child = this.fBase.SelectPerson(family.GetHusband(), TargetMode.tmParent, needSex);
-
-                    if (child != null && family.AddChild(child))
-                    {
-                        // this repetition necessary, because the call of CreatePersonDialog only works if person already has a father,
-                        // what to call AddChild () is no; all this is necessary in order to in the namebook were correct patronymics.
-                        MainWin.Instance.NamesTable.ImportNames(child);
-
-                        this.UpdateChart();
-                    }
-                }
-            }
-        }
-
-        #endregion
-
         #region Interface handlers
 
         private void UpdateChart()
@@ -271,14 +226,7 @@ namespace GKUI
             }
         }
 
-        private void ToolBar1_ButtonClick(object sender, EventArgs e)
-        {
-            if (sender == this.tbImageSave) {
-                this.tbImageSaveClick();
-            }
-        }
-
-        private void tbImageSaveClick()
+        private void tbImageSave_Click(object sender, EventArgs e)
         {
             string fileName = UIHelper.GetSaveFile("", "", LangMan.LS(LSID.LSID_TreeImagesFilter), 2, "jpg", "");
             if (!string.IsNullOrEmpty(fileName))
@@ -398,6 +346,18 @@ namespace GKUI
                     GEDCOMFamilyRecord fam = this.fBase.Tree.CreateFamily();
                     fam.AddSpouse(iRec);
                     fam.AddSpouse(iSpouse);
+                    this.UpdateChart();
+                }
+            }
+        }
+
+        private void InternalChildAdd(GEDCOMSex needSex)
+        {
+            TreeChartPerson p = this.fTreeBox.Selected;
+            if (p != null && p.Rec != null) {
+                GEDCOMIndividualRecord child = this.fBase.AddChildForParent(p.Rec, needSex);
+
+                if (child != null) {
                     this.UpdateChart();
                 }
             }
