@@ -100,6 +100,7 @@ namespace GKUI.Dialogs
             if (disposing)
             {
                 this.fSearchPoints.Dispose();
+                if (this.components != null) this.components.Dispose();
             }
             base.Dispose(disposing);
         }

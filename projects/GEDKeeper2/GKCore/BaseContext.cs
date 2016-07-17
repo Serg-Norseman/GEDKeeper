@@ -42,7 +42,7 @@ namespace GKCore
     /// <summary>
     /// 
     /// </summary>
-    public class BaseContext : IBaseContext
+    public class BaseContext : BaseObject, IBaseContext
     {
         #region Private fields
 
@@ -75,6 +75,14 @@ namespace GKCore
             this.fViewer = viewer;
             this.fHost = (viewer == null) ? null : viewer.Host;
             this.fUndoman = new UndoManager(this.fTree);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                this.fUndoman.Dispose();
+            }
+            base.Dispose(disposing);
         }
 
         #endregion
@@ -1102,6 +1110,10 @@ namespace GKCore
 
         public void ChangePersonSex(GEDCOMIndividualRecord person, GEDCOMSex newSex)
         {
+            if (person == null) {
+                throw new ArgumentNullException("person");
+            }
+
             if (person.Sex != newSex)
             {
                 this.fUndoman.DoOperation(new PersonSexChange(this.fUndoman, person, newSex));
@@ -1111,6 +1123,10 @@ namespace GKCore
 
         public void ChangePersonPatriarch(GEDCOMIndividualRecord person, bool newValue)
         {
+            if (person == null) {
+                throw new ArgumentNullException("person");
+            }
+
             if (person.Patriarch != newValue)
             {
                 this.fUndoman.DoOperation(new PersonPatriarchChange(this.fUndoman, person, newValue));
@@ -1120,6 +1136,10 @@ namespace GKCore
 
         public void ChangePersonBookmark(GEDCOMIndividualRecord person, bool newValue)
         {
+            if (person == null) {
+                throw new ArgumentNullException("person");
+            }
+
             if (person.Bookmark != newValue)
             {
                 this.fUndoman.DoOperation(new PersonBookmarkChange(this.fUndoman, person, newValue));

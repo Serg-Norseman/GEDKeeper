@@ -100,7 +100,7 @@ namespace GKUI.Charts
             this.acbLine.BackColor = this.fOptions.BrushColor[10];
         }
 
-        private void PanDefFont_Click(object sender, EventArgs e)
+        /*private void PanDefFont_Click(object sender, EventArgs e)
         {
             if (this.FontDialog1.ShowDialog() == DialogResult.OK)
             {
@@ -108,7 +108,7 @@ namespace GKUI.Charts
                 //this.FOptions.ChartOptions.DefFont_Size = (int)checked((long)Math.Round((double)this.FontDialog1.Font.Size));
             }
             this.UpdateControls();
-        }
+        }*/
 
         private void lblColorClick(object sender, MouseEventArgs e)
         {

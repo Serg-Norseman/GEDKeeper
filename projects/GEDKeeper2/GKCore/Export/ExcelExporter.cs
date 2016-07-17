@@ -65,7 +65,7 @@ namespace GKCore.Export
 
             try
             {
-                worksheet.Cells[1,  1] = new Cell("¹");
+                worksheet.Cells[1,  1] = new Cell("â„–");
                 worksheet.Cells[1,  2] = new Cell(LangMan.LS(LSID.LSID_Surname));
                 worksheet.Cells[1,  3] = new Cell(LangMan.LS(LSID.LSID_Name));
                 worksheet.Cells[1,  4] = new Cell(LangMan.LS(LSID.LSID_Patronymic));

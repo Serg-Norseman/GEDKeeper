@@ -26,7 +26,7 @@ namespace GKCore.Operations
     {
         protected UndoManager fManager;
 
-        public CustomOperation(UndoManager manager)
+        protected CustomOperation(UndoManager manager)
         {
             this.fManager = manager;
         }

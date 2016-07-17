@@ -22,7 +22,7 @@ using System.IO;
 
 namespace GKCommon
 {
-    public sealed class FileHelper
+    public static class FileHelper
     {
         public static string GetFileExtension(string fileName)
         {

@@ -27,7 +27,7 @@ namespace GKCommon
     {
         public static void QuickSort<T>(IList<T> list, Comparison<T> comparer)
         {
-            if (list.Count > 1)
+            if (list != null && list.Count > 1)
             {
                 QuickSort(list, comparer, 0, list.Count - 1);
             }
@@ -75,7 +75,7 @@ namespace GKCommon
 
         public static void MergeSort<T>(IList<T> list, Comparison<T> comparer)
         {
-            if (list.Count > 1)
+            if (list != null && list.Count > 1)
             {
                 MergeSort(list, new T[list.Count], 0, list.Count - 1, comparer);
             }

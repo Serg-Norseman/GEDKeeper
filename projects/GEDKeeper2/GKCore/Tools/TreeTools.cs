@@ -313,6 +313,7 @@ namespace GKCore.Tools
             }
         }
 
+        // TODO: move to SDK
         private static void AddUserRef(GEDCOMTree tree, GEDCOMRecord record, string reference)
         {
             GEDCOMUserReference uRef = new GEDCOMUserReference(tree, record, "", "");

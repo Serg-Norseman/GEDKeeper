@@ -82,25 +82,25 @@ namespace GKCommon.Controls
         /// <param name="e">
         ///   A <see cref="T:System.Windows.Forms.ScrollEventArgs" /> that contains the event data.
         /// </param>
-        protected override void OnScroll(ScrollEventArgs e)
+        protected override void OnScroll(ScrollEventArgs se)
         {
             this.Invalidate();
 
-            if (e.Type != ScrollEventType.EndScroll /*&& this.fValidEvent*/)
+            if (se.Type != ScrollEventType.EndScroll /*&& this.fValidEvent*/)
             {
-                switch (e.ScrollOrientation)
+                switch (se.ScrollOrientation)
                 {
                     case ScrollOrientation.HorizontalScroll:
-                        this.ScrollByOffset(new Size(e.NewValue + this.AutoScrollPosition.X, 0));
+                        this.ScrollByOffset(new Size(se.NewValue + this.AutoScrollPosition.X, 0));
                         break;
 
                     case ScrollOrientation.VerticalScroll:
-                        this.ScrollByOffset(new Size(0, e.NewValue + this.AutoScrollPosition.Y));
+                        this.ScrollByOffset(new Size(0, se.NewValue + this.AutoScrollPosition.Y));
                         break;
                 }
             }
 
-            base.OnScroll(e);
+            base.OnScroll(se);
         }
 
         private void ScrollByOffset(Size offset)

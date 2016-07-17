@@ -49,7 +49,7 @@ namespace GKCore
             // Check arguments.
             if (buffer == null)
             {
-                throw new ArgumentException("buffer");
+                throw new ArgumentNullException("buffer");
             }
 
             // Set each byte in the buffer to 0.

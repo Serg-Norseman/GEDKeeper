@@ -147,7 +147,7 @@ namespace GKUI.Dialogs
         public delegate void PStep(int value);
     }
 
-    public sealed class ProgressController
+    public static class ProgressController
     {
         private static ProgressProxy pfrm;
         private static int fVal;

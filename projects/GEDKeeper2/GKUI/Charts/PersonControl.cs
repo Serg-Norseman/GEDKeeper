@@ -61,6 +61,7 @@ namespace GKUI.Charts
 
         public void SetPerson(TreeChartPerson person)
         {
+            if (person == null) return;
             this.fPerson = person;
             
             ExtRect rt = this.fPerson.Rect.GetOffset(this.fChart.fSPX, this.fChart.fSPY);

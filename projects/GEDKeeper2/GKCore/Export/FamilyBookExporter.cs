@@ -131,10 +131,10 @@ namespace GKCore.Export
             base.Dispose(disposing);
         }
 
-        private void AddParagraph(Chunk chunk, int alignment = Element.ALIGN_LEFT)
+        /*private void AddParagraph(Chunk chunk, int alignment = Element.ALIGN_LEFT)
         {
             fDocument.Add(new Paragraph(chunk) { Alignment = alignment });
-        }
+        }*/
 
         public override void Generate(bool show)
         {

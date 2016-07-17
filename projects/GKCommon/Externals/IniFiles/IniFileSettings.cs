@@ -228,7 +228,7 @@ namespace Externals.IniFiles
 
         #endregion
 
-        internal static string TrimLeft(ref string str)
+        /*internal static string TrimLeft(ref string str)
         {
             int i = 0;
             StringBuilder ret = new StringBuilder();
@@ -259,7 +259,7 @@ namespace Externals.IniFiles
             else
                 str = "";
             return reversed.ToString();
-        }
+        }*/
 
         internal static string StartsWith(string line, string[] array)
         {

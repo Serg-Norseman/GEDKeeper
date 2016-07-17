@@ -120,10 +120,10 @@ namespace GKUI
             this.fActiveWidgets = new List<WidgetInfo>();
 
             this.fAutosaveTimer = new Timer(this.components);
-            this.fAutosaveTimer.Interval = 10;
-            this.fAutosaveTimer.Tick += this.AutosaveTimer_Tick;
             this.fAutosaveTimer.Stop();
             this.fAutosaveTimer.Enabled = false;
+            this.fAutosaveTimer.Interval = 10 * 60 * 1000;
+            this.fAutosaveTimer.Tick += this.AutosaveTimer_Tick;
 
             //LangMan.SaveDefaultLanguage();
         }

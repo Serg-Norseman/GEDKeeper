@@ -64,16 +64,16 @@ namespace GKUI
             this.SetLang();
         }
 
-        private void miOptions_Click(object sender, EventArgs e)
+        /*private void miOptions_Click(object sender, EventArgs e)
         {
-            /*using (ACOptionsControl dlg = new ACOptionsControl()) {
+            using (ACOptionsControl dlg = new ACOptionsControl()) {
 				dlg.Options = this.fAncestorsCircle.Options;
 
 				if (dlg.ShowDialog() == DialogResult.OK) {
 					this.fAncestorsCircle.Invalidate();
 				}
-			}*/
-        }
+			}
+        }*/
 
         private void Chart_NavRefresh(object sender, EventArgs e)
         {

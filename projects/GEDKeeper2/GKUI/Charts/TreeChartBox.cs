@@ -358,6 +358,8 @@ namespace GKUI.Charts
 
                 if (this.fDrawFont != null) fDrawFont.Dispose();
                 if (this.fScaleControl != null) this.fScaleControl.Dispose();
+
+                if (this.fComponents != null) this.fComponents.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -2176,6 +2178,10 @@ namespace GKUI.Charts
 
         public void DoFilter(GEDCOMIndividualRecord root)
         {
+            /*if (root == null) {
+                throw new ArgumentNullException("root");
+            }*/
+
             if (this.fFilter.BranchCut != ChartFilter.BranchCutType.None) {
                 GKUtils.InitExtCounts(this.fTree, 0);
                 this.DoDescendantsFilter(root);

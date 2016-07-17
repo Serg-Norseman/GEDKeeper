@@ -1,8 +1,8 @@
 language: csharp
 solution: projects/GEDKeeper2.linux.sln
 
-after_success:
-  - bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
+#after_success:
+#  - bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
 
 install:
   - sudo apt-get install nunit-console

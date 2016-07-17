@@ -710,6 +710,10 @@ namespace GKUI
 
         public GEDCOMIndividualRecord SelectSpouseFor(GEDCOMIndividualRecord iRec)
         {
+            if (iRec == null) {
+                throw new ArgumentNullException("iRec");
+            }
+
             GEDCOMSex needSex;
             switch (iRec.Sex) {
                 case GEDCOMSex.svMale:
@@ -845,8 +849,8 @@ namespace GKUI
                 using (RecordSelectDlg dlg = new RecordSelectDlg(this))
                 {
                     dlg.Mode = mode;
-                    int argsCnt = ((args != null) ? args.Length : 0);
-                    if (argsCnt > 0) {
+
+                    if (args != null && args.Length > 0) {
                         dlg.txtFastFilter.Text = (args[0] as string);
                     }
 

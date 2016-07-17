@@ -138,6 +138,7 @@ namespace GKUI.Dialogs
             if (disposing)
             {
                 this.fSourcesList.Dispose();
+                if (this.components != null) this.components.Dispose();
             }
             base.Dispose(disposing);
         }
