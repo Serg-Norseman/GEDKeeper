@@ -44,12 +44,14 @@ namespace GKCore.Options
         public bool IncludeAttributes;
         public bool IncludeNotes;
         public bool IncludeSources;
+        public bool IncludeGenerations;
 
         public PedigreeOptions()
         {
             this.IncludeAttributes = true;
             this.IncludeNotes = true;
             this.IncludeSources = true;
+            this.IncludeGenerations = true;
         }
 
         public void LoadFromFile(IniFile iniFile)
@@ -64,10 +66,11 @@ namespace GKCore.Options
                 this.IncludeNotes = iniFile.ReadBool("Pedigree", "IncludeNotes", true);
                 this.IncludeSources = iniFile.ReadBool("Pedigree", "IncludeSources", true);
                 this.Format = (PedigreeFormat)iniFile.ReadInteger("Pedigree", "Format", 0);
+                this.IncludeGenerations = iniFile.ReadBool("Pedigree", "IncludeGenerations", true);
             }
             catch (Exception)
             {
-                throw new EPedigreeOptionsException("Error loading PedigreeOptions"); // FIXME
+                throw new EPedigreeOptionsException("Error loading PedigreeOptions");
             }
         }
 
@@ -81,6 +84,7 @@ namespace GKCore.Options
             iniFile.WriteBool("Pedigree", "IncludeNotes", this.IncludeNotes);
             iniFile.WriteBool("Pedigree", "IncludeSources", this.IncludeSources);
             iniFile.WriteInteger("Pedigree", "Format", (sbyte)this.Format);
+            iniFile.WriteBool("Pedigree", "IncludeGenerations", this.IncludeGenerations);
         }
     }
 }

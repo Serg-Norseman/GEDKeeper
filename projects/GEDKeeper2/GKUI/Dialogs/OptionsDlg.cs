@@ -155,6 +155,11 @@ namespace GKUI.Dialogs
             this.chkPlacesWithAddress.Checked = this.fOptions.PlacesWithAddress;
             this.chkHighlightUnparented.Checked = this.fOptions.ListHighlightUnparentedPersons;
             this.chkHighlightUnmarried.Checked = this.fOptions.ListHighlightUnmarriedPersons;
+            this.chkShowDatesCalendar.Checked = this.fOptions.ShowDatesCalendar;
+            this.chkShowDatesSigns.Checked = this.fOptions.ShowDatesSign;
+            this.chkAutosave.Checked = this.fOptions.Autosave;
+            this.numASMin.Value = this.fOptions.AutosaveInterval;
+
             this.chkSurname.Checked = this.fOptions.ChartOptions.FamilyVisible;
             this.chkName.Checked = this.fOptions.ChartOptions.NameVisible;
             this.chkPatronymic.Checked = this.fOptions.ChartOptions.PatronymicVisible;
@@ -172,19 +177,17 @@ namespace GKUI.Dialogs
             this.lblUnkSexColor.BackColor = this.fOptions.ChartOptions.UnkSexColor;
             this.lblUnHusbandColor.BackColor = this.fOptions.ChartOptions.UnHusbandColor;
             this.lblUnWifeColor.BackColor = this.fOptions.ChartOptions.UnWifeColor;
+
             this.chkUseProxy.Checked = this.fOptions.Proxy.UseProxy;
             this.txtProxyServer.Text = this.fOptions.Proxy.Server;
             this.txtProxyPort.Text = this.fOptions.Proxy.Port;
             this.txtProxyLogin.Text = this.fOptions.Proxy.Login;
             this.txtProxyPass.Text = this.fOptions.Proxy.Password;
+
             this.chkAttributes.Checked = this.fOptions.PedigreeOptions.IncludeAttributes;
             this.chkNotes.Checked = this.fOptions.PedigreeOptions.IncludeNotes;
             this.chkSources.Checked = this.fOptions.PedigreeOptions.IncludeSources;
-            this.chkShowDatesCalendar.Checked = this.fOptions.ShowDatesCalendar;
-            this.chkShowDatesSigns.Checked = this.fOptions.ShowDatesSign;
-
-            this.chkAutosave.Checked = this.fOptions.Autosave;
-            this.numASMin.Value = this.fOptions.AutosaveInterval;
+            this.chkGenerations.Checked = this.fOptions.PedigreeOptions.IncludeGenerations;
 
             switch (this.fOptions.PedigreeOptions.Format)
             {
@@ -313,6 +316,11 @@ namespace GKUI.Dialogs
             this.fOptions.PlacesWithAddress = this.chkPlacesWithAddress.Checked;
             this.fOptions.ListHighlightUnparentedPersons = this.chkHighlightUnparented.Checked;
             this.fOptions.ListHighlightUnmarriedPersons = this.chkHighlightUnmarried.Checked;
+            this.fOptions.ShowDatesCalendar = this.chkShowDatesCalendar.Checked;
+            this.fOptions.ShowDatesSign = this.chkShowDatesSigns.Checked;
+            this.fOptions.Autosave = this.chkAutosave.Checked;
+            this.fOptions.AutosaveInterval = (int)this.numASMin.Value;
+
             this.fOptions.ChartOptions.FamilyVisible = this.chkSurname.Checked;
             this.fOptions.ChartOptions.NameVisible = this.chkName.Checked;
             this.fOptions.ChartOptions.PatronymicVisible = this.chkPatronymic.Checked;
@@ -330,26 +338,21 @@ namespace GKUI.Dialogs
             this.fOptions.ChartOptions.UnkSexColor = this.lblUnkSexColor.BackColor;
             this.fOptions.ChartOptions.UnHusbandColor = this.lblUnHusbandColor.BackColor;
             this.fOptions.ChartOptions.UnWifeColor = this.lblUnWifeColor.BackColor;
+
             this.fOptions.Proxy.UseProxy = this.chkUseProxy.Checked;
             this.fOptions.Proxy.Server = this.txtProxyServer.Text;
             this.fOptions.Proxy.Port = this.txtProxyPort.Text;
             this.fOptions.Proxy.Login = this.txtProxyLogin.Text;
             this.fOptions.Proxy.Password = this.txtProxyPass.Text;
+
             this.fOptions.PedigreeOptions.IncludeAttributes = this.chkAttributes.Checked;
             this.fOptions.PedigreeOptions.IncludeNotes = this.chkNotes.Checked;
             this.fOptions.PedigreeOptions.IncludeSources = this.chkSources.Checked;
-            this.fOptions.ShowDatesCalendar = this.chkShowDatesCalendar.Checked;
-            this.fOptions.ShowDatesSign = this.chkShowDatesSigns.Checked;
+            this.fOptions.PedigreeOptions.IncludeGenerations = this.chkGenerations.Checked;
 
-            this.fOptions.Autosave = this.chkAutosave.Checked;
-            this.fOptions.AutosaveInterval = (int)this.numASMin.Value;
-
-            if (this.radExcess.Checked)
-            {
+            if (this.radExcess.Checked) {
                 this.fOptions.PedigreeOptions.Format = PedigreeFormat.Excess;
-            }
-            else if (this.radCompact.Checked)
-            {
+            } else if (this.radCompact.Checked) {
                 this.fOptions.PedigreeOptions.Format = PedigreeFormat.Compact;
             }
 
@@ -498,6 +501,8 @@ namespace GKUI.Dialogs
 
             this.chkAutosave.Text = LangMan.LS(LSID.LSID_Autosave);
             this.lblMinutes.Text = LangMan.LS(LSID.LSID_Minutes);
+
+            this.chkGenerations.Text = LangMan.LS(LSID.LSID_IncludeGenerations);
         }
     }
 }

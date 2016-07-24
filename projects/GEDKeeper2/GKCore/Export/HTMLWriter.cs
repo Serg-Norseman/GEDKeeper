@@ -123,7 +123,12 @@ namespace GKCore.Export
 
         public override void addListItemLink(string text, object font, string link, object linkFont)
         {
-            fStream.WriteLine("<li class=\""+font+"\">"+text+"<a href=\"#"+link+"\">"+link+"</a></li>");
+            string alink = "";
+            if (!string.IsNullOrEmpty(link)) {
+                alink = "<a href=\"#" + link + "\">" + link + "</a>";
+            }
+
+            fStream.WriteLine("<li class=\""+font+"\">" + text + alink + "</li>");
         }
 
         public override void beginParagraph(TextAlignment alignment, float spacingBefore, float spacingAfter)

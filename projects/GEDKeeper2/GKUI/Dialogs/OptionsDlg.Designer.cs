@@ -100,6 +100,7 @@ namespace GKUI.Dialogs
         private System.Windows.Forms.NumericUpDown numASMin;
         private System.Windows.Forms.Label lblMinutes;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.CheckBox chkGenerations;
 
         private void InitializeComponent()
         {
@@ -199,6 +200,7 @@ namespace GKUI.Dialogs
             this.btnCancel = new System.Windows.Forms.Button();
             this.ColorDialog1 = new System.Windows.Forms.ColorDialog();
             this.FontDialog1 = new System.Windows.Forms.FontDialog();
+            this.chkGenerations = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -1042,6 +1044,7 @@ namespace GKUI.Dialogs
             this.pagePedigree.Controls.Add(this.grpPedigree);
             this.pagePedigree.Location = new System.Drawing.Point(4, 26);
             this.pagePedigree.Name = "pagePedigree";
+            this.pagePedigree.Padding = new System.Windows.Forms.Padding(10);
             this.pagePedigree.Size = new System.Drawing.Size(741, 428);
             this.pagePedigree.TabIndex = 3;
             this.pagePedigree.Text = "pagePedigree";
@@ -1050,18 +1053,21 @@ namespace GKUI.Dialogs
             // 
             this.grpPedigree.Controls.Add(this.chkAttributes);
             this.grpPedigree.Controls.Add(this.chkNotes);
+            this.grpPedigree.Controls.Add(this.chkGenerations);
             this.grpPedigree.Controls.Add(this.chkSources);
             this.grpPedigree.Controls.Add(this.grpPedigreeFormat);
-            this.grpPedigree.Location = new System.Drawing.Point(11, 10);
+            this.grpPedigree.Location = new System.Drawing.Point(13, 13);
             this.grpPedigree.Name = "grpPedigree";
-            this.grpPedigree.Size = new System.Drawing.Size(405, 194);
+            this.grpPedigree.Padding = new System.Windows.Forms.Padding(10);
+            this.grpPedigree.Size = new System.Drawing.Size(405, 258);
             this.grpPedigree.TabIndex = 0;
             this.grpPedigree.TabStop = false;
             this.grpPedigree.Text = "grpPedigree";
             // 
             // chkAttributes
             // 
-            this.chkAttributes.Location = new System.Drawing.Point(22, 19);
+            this.chkAttributes.Location = new System.Drawing.Point(20, 27);
+            this.chkAttributes.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkAttributes.Name = "chkAttributes";
             this.chkAttributes.Size = new System.Drawing.Size(349, 21);
             this.chkAttributes.TabIndex = 0;
@@ -1069,7 +1075,8 @@ namespace GKUI.Dialogs
             // 
             // chkNotes
             // 
-            this.chkNotes.Location = new System.Drawing.Point(22, 39);
+            this.chkNotes.Location = new System.Drawing.Point(20, 53);
+            this.chkNotes.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkNotes.Name = "chkNotes";
             this.chkNotes.Size = new System.Drawing.Size(349, 21);
             this.chkNotes.TabIndex = 1;
@@ -1077,7 +1084,8 @@ namespace GKUI.Dialogs
             // 
             // chkSources
             // 
-            this.chkSources.Location = new System.Drawing.Point(22, 58);
+            this.chkSources.Location = new System.Drawing.Point(20, 79);
+            this.chkSources.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkSources.Name = "chkSources";
             this.chkSources.Size = new System.Drawing.Size(349, 21);
             this.chkSources.TabIndex = 2;
@@ -1087,16 +1095,18 @@ namespace GKUI.Dialogs
             // 
             this.grpPedigreeFormat.Controls.Add(this.radExcess);
             this.grpPedigreeFormat.Controls.Add(this.radCompact);
-            this.grpPedigreeFormat.Location = new System.Drawing.Point(22, 87);
+            this.grpPedigreeFormat.Location = new System.Drawing.Point(20, 134);
             this.grpPedigreeFormat.Name = "grpPedigreeFormat";
-            this.grpPedigreeFormat.Size = new System.Drawing.Size(349, 88);
+            this.grpPedigreeFormat.Padding = new System.Windows.Forms.Padding(10);
+            this.grpPedigreeFormat.Size = new System.Drawing.Size(349, 101);
             this.grpPedigreeFormat.TabIndex = 3;
             this.grpPedigreeFormat.TabStop = false;
             this.grpPedigreeFormat.Text = "grpPedigreeFormat";
             // 
             // radExcess
             // 
-            this.radExcess.Location = new System.Drawing.Point(22, 19);
+            this.radExcess.Location = new System.Drawing.Point(10, 27);
+            this.radExcess.Margin = new System.Windows.Forms.Padding(0, 0, 0, 5);
             this.radExcess.Name = "radExcess";
             this.radExcess.Size = new System.Drawing.Size(146, 30);
             this.radExcess.TabIndex = 3;
@@ -1104,7 +1114,8 @@ namespace GKUI.Dialogs
             // 
             // radCompact
             // 
-            this.radCompact.Location = new System.Drawing.Point(22, 49);
+            this.radCompact.Location = new System.Drawing.Point(10, 62);
+            this.radCompact.Margin = new System.Windows.Forms.Padding(0);
             this.radCompact.Name = "radCompact";
             this.radCompact.Size = new System.Drawing.Size(146, 29);
             this.radCompact.TabIndex = 2;
@@ -1179,6 +1190,15 @@ namespace GKUI.Dialogs
             this.btnCancel.TabIndex = 2;
             this.btnCancel.Text = "btnCancel";
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // chkGenerations
+            // 
+            this.chkGenerations.Location = new System.Drawing.Point(20, 105);
+            this.chkGenerations.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkGenerations.Name = "chkGenerations";
+            this.chkGenerations.Size = new System.Drawing.Size(349, 21);
+            this.chkGenerations.TabIndex = 2;
+            this.chkGenerations.Text = "chkGenerations";
             // 
             // OptionsDlg
             // 

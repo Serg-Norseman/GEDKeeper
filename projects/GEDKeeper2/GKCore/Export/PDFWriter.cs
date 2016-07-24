@@ -139,7 +139,11 @@ namespace GKCore.Export
         {
             Paragraph p1 = new Paragraph();
             p1.Add(new Chunk(text, (iTextSharp.text.Font)font));
-            p1.Add(new Chunk(link, (iTextSharp.text.Font)linkFont).SetLocalGoto(link));
+
+            if (!string.IsNullOrEmpty(link)) {
+                p1.Add(new Chunk(link, (iTextSharp.text.Font)linkFont).SetLocalGoto(link));
+            }
+
             list.Add(new it.ListItem(p1));
         }
 

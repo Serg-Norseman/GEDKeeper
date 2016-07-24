@@ -68,8 +68,8 @@ namespace GKCore
         /* 028 */ LSID_MIPedigree_Konovalov,
         /* 029 */ LSID_MIMap,
         /* 030 */ LSID_MIStats,
+        /* 031 */ LSID_MIPedigreeAscend,
 
-        /* 031 */ LSID_MICalc, // deprecated
         /* 032 */ LSID_MINamesBook, // deprecated
         /* 033 */ LSID_MICalendar, // deprecated
         /* 034 */ LSID_MITimeLine, // deprecated
@@ -790,8 +790,9 @@ namespace GKCore
         /* 715 */ LSID_NotDeterminedPersonSex,
         /* 716 */ LSID_Autosave,
         /* 717 */ LSID_Minutes,
+        /* 718 */ LSID_IncludeGenerations,
 
-        /* 000 */ LSID_Last = LSID_Minutes
+        /* 000 */ LSID_Last = LSID_IncludeGenerations
     }
 
     public static class LangMan
@@ -836,14 +837,16 @@ namespace GKCore
             /* 024 */ "Древо предков",
             /* 025 */ "Древо потомков",
             /* 026 */ "Древо полное",
-            /* 027 */ "Роспись по дАбовиллю",
-            /* 028 */ "Роспись по Коновалову",
+            /* 027 */ "Нисходящая роспись по дАбовиллю",
+            /* 028 */ "Нисходящая роспись по Коновалову",
             /* 029 */ "Карты",
             /* 030 */ "Статистика",
-            /* 031 */ "Калькулятор",
-            /* 032 */ "Справочник имен",
-            /* 033 */ "Календарь",
-            /* 034 */ "Линия времени",
+            /* 031 */ "Восходящая роспись",
+
+            /* 032 */ "<?>",
+            /* 033 */ "<?>",
+            /* 034 */ "<?>",
+
             /* 035 */ "Органайзер",
             /* 036 */ "Скрипты...",
 
@@ -1539,6 +1542,7 @@ namespace GKCore
             /* 715 */ "Не определяется пол человека по имени \"{1}\". Это мужской пол?",
             /* 716 */ "Автосохранение каждые",
             /* 717 */ "минут",
+            /* 718 */ "Включая номера поколений"
         };
 
         private static readonly string[] LSList = new string[(int)LSID.LSID_Last + 1];

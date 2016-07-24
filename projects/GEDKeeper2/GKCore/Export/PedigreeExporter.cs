@@ -80,11 +80,12 @@ namespace GKCore.Export
 
         public enum PedigreeKind
         {
-            pk_dAboville,
-            pk_Konovalov
+            pkAscend,
+            pkDescend_dAboville,
+            pkDescend_Konovalov
         }
 
-        private GEDCOMIndividualRecord fAncestor;
+        private GEDCOMIndividualRecord fRoot;
         private PedigreeKind fKind;
         private ExtList<PedigreePerson> fPersonList;
         private ShieldState fShieldState;
@@ -95,14 +96,14 @@ namespace GKCore.Export
         private object fPersonFont;
         private object fLinkFont;
         private object fTextFont, fSupText;
-        
+
         private PedigreeFormat fFormat;
         private string fTitle;
 
-        public GEDCOMIndividualRecord Ancestor
+        public GEDCOMIndividualRecord Root
         {
-            get { return this.fAncestor; }
-            set { this.fAncestor = value; }
+            get { return this.fRoot; }
+            set { this.fRoot = value; }
         }
 
         public PedigreeKind Kind
@@ -185,7 +186,7 @@ namespace GKCore.Export
         {
             string result = person.Id;
 
-            if (this.fKind == PedigreeKind.pk_Konovalov && person.Parent != null)
+            if (this.fKind == PedigreeKind.pkDescend_Konovalov && person.Parent != null)
             {
                 GEDCOMFamilyRecord family = person.IRec.ChildToFamilyLinks[0].Family;
                 string spStr = "";
@@ -439,13 +440,15 @@ namespace GKCore.Export
 
         private void InternalGenerate()
         {
+            bool includeGens = this.fOptions.PedigreeOptions.IncludeGenerations;
+
             this.fWriter.addParagraph(fTitle, fTitleFont, CustomWriter.TextAlignment.taCenter);
 
             this.fPersonList = new ExtList<PedigreePerson>(true);
             this.fSourceList = new StringList();
             try
             {
-                this.GenStep(null, this.fAncestor, 1, 1);
+                this.GenStep(null, this.fRoot, 1, 1);
                 this.ReIndex();
 
                 int curLevel = 0;
@@ -453,7 +456,8 @@ namespace GKCore.Export
                 for (int i = 0; i < num; i++)
                 {
                     PedigreePerson person = this.fPersonList[i];
-                    if (curLevel != person.Level)
+
+                    if (includeGens && curLevel != person.Level)
                     {
                         curLevel = person.Level;
                         string genTitle = LangMan.LS(LSID.LSID_Generation) + " " + ConvHelper.GetRome(curLevel);
@@ -468,7 +472,9 @@ namespace GKCore.Export
 
                 if (this.fSourceList.Count > 0)
                 {
-                    this.fWriter.addParagraph(LangMan.LS(LSID.LSID_RPSources), fChapFont, CustomWriter.TextAlignment.taCenter);
+                    this.fWriter.beginParagraph(CustomWriter.TextAlignment.taCenter, 12f, 6f);
+                    this.fWriter.addParagraphChunk(LangMan.LS(LSID.LSID_RPSources), fChapFont);
+                    this.fWriter.endParagraph();
 
                     int num2 = this.fSourceList.Count;
                     for (int j = 0; j < num2; j++)
@@ -492,7 +498,7 @@ namespace GKCore.Export
         {
             this.fFormat = this.fOptions.PedigreeOptions.Format;
 
-            if (this.fAncestor == null)
+            if (this.fRoot == null)
             {
                 GKUtils.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
                 return;
@@ -525,7 +531,7 @@ namespace GKCore.Export
 
             try
             {
-                this.fTitle = LangMan.LS(LSID.LSID_ExpPedigree) + ": " + this.fAncestor.GetNameString(true, false);
+                this.fTitle = LangMan.LS(LSID.LSID_ExpPedigree) + ": " + this.fRoot.GetNameString(true, false);
                 this.fWriter.setDocumentTitle(this.fTitle);
                 this.fWriter.setFileName(this.fPath);
 
@@ -598,19 +604,35 @@ namespace GKCore.Export
                     }
                 }
 
-                int num2 = iRec.SpouseToFamilyLinks.Count;
-                for (int j = 0; j < num2; j++)
-                {
-                    GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[j].Family;
-                    if (GKUtils.IsRecordAccess(family.Restriction, this.fShieldState))
-                    {
-                        family.SortChilds();
-
-                        int num3 = family.Childrens.Count;
-                        for (int i = 0; i < num3; i++)
+                if (this.fKind == PedigreeKind.pkAscend) {
+                    if (iRec.ChildToFamilyLinks.Count > 0) {
+                        GEDCOMFamilyRecord family = iRec.ChildToFamilyLinks[0].Family;
+                        if (GKUtils.IsRecordAccess(family.Restriction, this.fShieldState))
                         {
-                            GEDCOMIndividualRecord child = family.Childrens[i].Value as GEDCOMIndividualRecord;
-                            GenStep(res, child, level + 1, i + 1);
+                            GEDCOMIndividualRecord prnt;
+
+                            prnt = family.GetWife();
+                            GenStep(res, prnt, level + 1, 1);
+
+                            prnt = family.GetHusband();
+                            GenStep(res, prnt, level + 1, 1);
+                        }
+                    }
+                } else {
+                    int num2 = iRec.SpouseToFamilyLinks.Count;
+                    for (int j = 0; j < num2; j++)
+                    {
+                        GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[j].Family;
+                        if (GKUtils.IsRecordAccess(family.Restriction, this.fShieldState))
+                        {
+                            family.SortChilds();
+
+                            int num3 = family.Childrens.Count;
+                            for (int i = 0; i < num3; i++)
+                            {
+                                GEDCOMIndividualRecord child = family.Childrens[i].Value as GEDCOMIndividualRecord;
+                                GenStep(res, child, level + 1, i + 1);
+                            }
                         }
                     }
                 }
@@ -633,7 +655,7 @@ namespace GKCore.Export
 
                 switch (this.fKind)
                 {
-                    case PedigreeKind.pk_dAboville:
+                    case PedigreeKind.pkDescend_dAboville:
                         if (obj.Parent == null) {
                             obj.Id = "1";
                         } else {
@@ -642,7 +664,8 @@ namespace GKCore.Export
                         }
                         break;
 
-                    case PedigreeKind.pk_Konovalov:
+                    case PedigreeKind.pkAscend:
+                    case PedigreeKind.pkDescend_Konovalov:
                         obj.Id = (i + 1).ToString();
                         if (obj.Parent != null)
                         {

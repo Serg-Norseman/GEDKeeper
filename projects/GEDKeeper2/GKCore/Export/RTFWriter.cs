@@ -148,8 +148,11 @@ namespace GKCore.Export
 
             addParagraphChunk(par, "\t· ", symFont);
             addParagraphChunk(par, text, font);
-            RtfCharFormat fmt = addParagraphChunk(par, link, linkFont);
-            fmt.LocalHyperlink = link;
+
+            if (!string.IsNullOrEmpty(link)) {
+                RtfCharFormat fmt = addParagraphChunk(par, link, linkFont);
+                fmt.LocalHyperlink = link;
+            }
         }
 
         public override void beginParagraph(TextAlignment alignment, float spacingBefore, float spacingAfter)

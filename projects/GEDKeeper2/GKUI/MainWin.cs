@@ -944,32 +944,33 @@ namespace GKUI
             fmStats.Show();
         }
 
-        private void miPedigree_dAbovilleClick(object sender, EventArgs e)
+        private void GeneratePedigree(PedigreeExporter.PedigreeKind kind)
         {
             IBaseWindow curBase = this.GetCurrentFile();
             if (curBase == null) return;
 
             using (PedigreeExporter p = new PedigreeExporter(curBase)) {
-                p.Ancestor = curBase.GetSelectedPerson();
+                p.Root = curBase.GetSelectedPerson();
                 p.Options = this.fOptions;
                 p.ShieldState = curBase.ShieldState;
-                p.Kind = PedigreeExporter.PedigreeKind.pk_dAboville;
+                p.Kind = kind;
                 p.Generate(true);
             }
         }
 
+        private void miPedigreeAscend_Click(object sender, EventArgs e)
+        {
+            this.GeneratePedigree(PedigreeExporter.PedigreeKind.pkAscend);
+        }
+
+        private void miPedigree_dAbovilleClick(object sender, EventArgs e)
+        {
+            this.GeneratePedigree(PedigreeExporter.PedigreeKind.pkDescend_dAboville);
+        }
+
         private void miPedigree_KonovalovClick(object sender, EventArgs e)
         {
-            IBaseWindow curBase = this.GetCurrentFile();
-            if (curBase == null) return;
-
-            using (PedigreeExporter p = new PedigreeExporter(curBase)) {
-                p.Ancestor = curBase.GetSelectedPerson();
-                p.Options = this.fOptions;
-                p.ShieldState = curBase.ShieldState;
-                p.Kind = PedigreeExporter.PedigreeKind.pk_Konovalov;
-                p.Generate(true);
-            }
+            this.GeneratePedigree(PedigreeExporter.PedigreeKind.pkDescend_Konovalov);
         }
 
         private void miTreeAncestorsClick(object sender, EventArgs e)
@@ -1144,8 +1145,11 @@ namespace GKUI
             this.miTreeAncestors.Text = LangMan.LS(LSID.LSID_MITreeAncestors);
             this.miTreeDescendants.Text = LangMan.LS(LSID.LSID_MITreeDescendants);
             this.miTreeBoth.Text = LangMan.LS(LSID.LSID_MITreeBoth);
+
+            this.miPedigreeAscend.Text = LangMan.LS(LSID.LSID_MIPedigreeAscend);
             this.miPedigree_dAboville.Text = LangMan.LS(LSID.LSID_MIPedigree_dAboville);
             this.miPedigree_Konovalov.Text = LangMan.LS(LSID.LSID_MIPedigree_Konovalov);
+
             this.miMap.Text = LangMan.LS(LSID.LSID_MIMap) + @"...";
             this.miStats.Text = LangMan.LS(LSID.LSID_MIStats) + @"...";
 

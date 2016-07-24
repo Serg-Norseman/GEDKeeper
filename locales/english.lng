@@ -25,14 +25,14 @@ Delete record
 Ancestors tree
 Descendants tree
 Both tree
-d'Aboville pedigree
-Konovalov pedigree
+d'Aboville descending pedigree
+Konovalov descending pedigree
 Maps
 Statistics
-Calc
-Names book
-Calendar
-Time line
+Ascending pedigree
+<?>
+<?>
+<?>
 Organizer
 Scripts...
 <?>
@@ -716,3 +716,4 @@ Directories
 Gender is not defined by a man named "{1}". It's male gender?
 Autosave every
 minutes
+Including number of generations
