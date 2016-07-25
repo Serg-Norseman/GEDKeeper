@@ -188,7 +188,7 @@ namespace GKUI.Dialogs
             this.txtName.Enabled = !locked;
             this.txtPatronymic.Enabled = !locked;
             this.txtSurname.Enabled = !locked;
-            
+
             this.cmbSex.Enabled = !locked;
             this.chkPatriarch.Enabled = !locked;
             this.chkBookmark.Enabled = !locked;
@@ -209,7 +209,7 @@ namespace GKUI.Dialogs
 
             this.btnPortraitAdd.Enabled = !locked;
             this.btnPortraitDelete.Enabled = !locked;
-            
+
             this.fEventsList.ReadOnly = locked;
             this.fNotesList.ReadOnly = locked;
             this.fMediaList.ReadOnly = locked;
@@ -266,7 +266,7 @@ namespace GKUI.Dialogs
         private GKSheetList CreateAssociationsSheet(Control owner)
         {
             GKSheetList sheet = new GKSheetList(owner);
-            
+
             sheet.Columns_BeginUpdate();
             sheet.AddColumn(LangMan.LS(LSID.LSID_Relation), 300, false);
             sheet.AddColumn(LangMan.LS(LSID.LSID_Person), 200, false);
@@ -274,10 +274,10 @@ namespace GKUI.Dialogs
 
             sheet.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, SheetButton.lbJump);
             sheet.OnModify += this.ModifyAssociationsSheet;
-            
+
             return sheet;
         }
-        
+
         private void UpdateAssociationsSheet()
         {
             try
@@ -296,7 +296,7 @@ namespace GKUI.Dialogs
                 Logger.LogWrite("PersonEditDlg.UpdateAssociationsSheet(): " + ex.Message);
             }
         }
-        
+
         private void ModifyAssociationsSheet(object sender, ModifyEventArgs eArgs)
         {
             bool result = false;
@@ -335,7 +335,7 @@ namespace GKUI.Dialogs
                         this.fBase.Modified = true;
                     }
                     break;
-                    
+
                 case RecordAction.raJump:
                     if (ast != null) {
                         this.AcceptChanges();
@@ -351,17 +351,17 @@ namespace GKUI.Dialogs
         private GKSheetList CreateURefsSheet(Control owner)
         {
             GKSheetList sheet = new GKSheetList(owner);
-            
+
             sheet.Columns_BeginUpdate();
             sheet.AddColumn(LangMan.LS(LSID.LSID_Reference), 300, false);
             sheet.AddColumn(LangMan.LS(LSID.LSID_Type), 200, false);
             sheet.Columns_EndUpdate();
 
             sheet.OnModify += this.ModifyURefsSheet;
-            
+
             return sheet;
         }
-        
+
         private void UpdateURefsSheet()
         {
             try
@@ -378,7 +378,7 @@ namespace GKUI.Dialogs
                 Logger.LogWrite("PersonEditDlg.UpdateURefsSheet(): " + ex.Message);
             }
         }
-        
+
         private void ModifyURefsSheet(object sender, ModifyEventArgs eArgs)
         {
             bool result = false;
@@ -407,7 +407,7 @@ namespace GKUI.Dialogs
                         }
                     }
                     break;
-                    
+
                 case RecordAction.raDelete:
                     if (GKUtils.ShowQuestion(LangMan.LS(LSID.LSID_RemoveUserRefQuery)) != DialogResult.No)
                     {
@@ -417,7 +417,7 @@ namespace GKUI.Dialogs
                     }
                     break;
             }
-            
+
             if (result) this.UpdateURefsSheet();
         }
 
@@ -478,7 +478,7 @@ namespace GKUI.Dialogs
                 Logger.LogWrite("PersonEditDlg.UpdateSpousesSheet(): " + ex.Message);
             }
         }
-        
+
         private void ModifySpousesSheet(object sender, ModifyEventArgs eArgs)
         {
             bool result = false;
@@ -551,7 +551,7 @@ namespace GKUI.Dialogs
 
             if (result) this.UpdateSpousesSheet();
         }
-        
+
         private GKSheetList CreateGroupsSheet(Control owner)
         {
             GKSheetList sheet = new GKSheetList(owner);
@@ -585,7 +585,7 @@ namespace GKUI.Dialogs
                 Logger.LogWrite("PersonEditDlg.UpdateGroupsSheet(): " + ex.Message);
             }
         }
-        
+
         private void ModifyGroupsSheet(object sender, ModifyEventArgs eArgs)
         {
             bool result = false;
@@ -614,7 +614,6 @@ namespace GKUI.Dialogs
 
             if (result) this.UpdateGroupsSheet();
         }
-
 
         private GKSheetList CreateNamesSheet(Control owner)
         {
@@ -649,7 +648,6 @@ namespace GKUI.Dialogs
                 Logger.LogWrite("PersonEditDlg.UpdateNamesSheet(): " + ex.Message);
             }
         }
-
 
         private void ModifyNamesSheet(object sender, ModifyEventArgs eArgs)
         {
@@ -711,14 +709,12 @@ namespace GKUI.Dialogs
 
             if (result) this.UpdateNamesSheet();
         }
-        
 
         private void SetTitle()
         {
             this.Text = string.Format("{0} \"{1} {2} {3}\" [{4}]", LangMan.LS(LSID.LSID_Person), this.txtSurname.Text, this.txtName.Text,
                                       this.txtPatronymic.Text, this.fPerson.GetXRefNum());
         }
-
 
         private void edSurname_TextChanged(object sender, EventArgs e)
         {
@@ -868,7 +864,7 @@ namespace GKUI.Dialogs
         {
             GEDCOMMultimediaLink mmLink = this.fPerson.GetPrimaryMultimediaLink();
             if (mmLink == null) return;
-            
+
             mmLink.IsPrimary = false;
             this.UpdatePortrait();
         }
@@ -876,7 +872,7 @@ namespace GKUI.Dialogs
         private void edSurname_KeyDown(object sender, KeyEventArgs e)
         {
             TextBox tb = (sender as TextBox);
-            
+
             if (tb != null && e.KeyCode == Keys.Down && e.Control)
             {
                 tb.Text = GEDCOMUtils.NormalizeName(tb.Text);

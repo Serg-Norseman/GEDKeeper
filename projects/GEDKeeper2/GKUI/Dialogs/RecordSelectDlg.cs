@@ -78,7 +78,7 @@ namespace GKUI.Dialogs
 
             this.fBase = aBase;
             this.fFilter = "*";
-            
+
             // SetLang()
             this.Text = LangMan.LS(LSID.LSID_WinRecordSelect);
             this.btnCreate.Text = LangMan.LS(LSID.LSID_DlgAppend);
@@ -101,7 +101,7 @@ namespace GKUI.Dialogs
                 this.fListRecords.Dispose();
                 this.fListRecords = null;
             }
-            
+
             this.fListRecords = GKUtils.CreateRecordsView(this.panList, this.fBase.Tree, this.fMode);
             this.fListRecords.ListMan.Filter.Clear();
             this.fListRecords.ListMan.QuickFilter = this.fFilter;

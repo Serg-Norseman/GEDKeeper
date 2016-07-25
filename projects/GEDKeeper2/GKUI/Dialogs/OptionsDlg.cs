@@ -80,7 +80,7 @@ namespace GKUI.Dialogs
                 int num = this.fTempColumns.Count;
                 for (int i = 0; i < num; i++) {
                     ColumnProps colProps = fTempColumns[i];
-                    
+
                     string colName = LangMan.LS(fTempColumns.ColumnStatics[colProps.ColType].ColName);
 
                     this.lstPersonColumns.Items.Add(colName, colProps.ColActive);
@@ -104,8 +104,8 @@ namespace GKUI.Dialogs
             this.cmbLanguages.Items.Add(new GKComboItem(LangMan.LS_DEF_NAME, LangMan.LS_DEF_CODE));
 
             int idx = 0;
-            int num = this.fOptions.GetLangsCount() - 1;
-            for (int i = 0; i <= num; i++)
+            int num = this.fOptions.GetLangsCount();
+            for (int i = 0; i < num; i++)
             {
                 LangRecord lngRec = this.fOptions.GetLang(i);
                 if (this.fOptions.InterfaceLang == lngRec.Code)
@@ -219,14 +219,14 @@ namespace GKUI.Dialogs
 
             this.UpdateControls();
             this.UpdateLangs();
-            
+
             this.UpdatePlugins();
         }
 
         private void UpdatePlugins()
         {
             this.lvPlugins.Items.Clear();
-            
+
             foreach (IPlugin plugin in MainWin.Instance.Plugins)
             {
                 PluginInfo pInfo = MainWin.GetPluginAttributes(plugin);
@@ -261,6 +261,7 @@ namespace GKUI.Dialogs
                 chartOptions.DefFontName = this.FontDialog1.Font.Name;
                 chartOptions.DefFontSize = (int)(Math.Round(this.FontDialog1.Font.Size));
             }
+
             this.UpdateControls();
         }
 
@@ -282,34 +283,23 @@ namespace GKUI.Dialogs
         {
             this.fTempColumns.CopyTo(this.fOptions.IndividualListColumns);
 
-            if (this.radASCII.Checked)
-            {
+            if (this.radASCII.Checked) {
                 this.fOptions.DefCharacterSet = GEDCOMCharacterSet.csASCII;
-            }
-            else if (this.radUTF.Checked)
-            {
+            } else if (this.radUTF.Checked) {
                 this.fOptions.DefCharacterSet = GEDCOMCharacterSet.csUTF8;
             }
 
-            if (this.radSNP.Checked)
-            {
+            if (this.radSNP.Checked) {
                 this.fOptions.DefNameFormat = NameFormat.nfFNP;
-            }
-            else if (this.radS_NP.Checked)
-            {
+            } else if (this.radS_NP.Checked) {
                 this.fOptions.DefNameFormat = NameFormat.nfF_NP;
-            }
-            else if (this.radS_N_P.Checked)
-            {
+            } else if (this.radS_N_P.Checked) {
                 this.fOptions.DefNameFormat = NameFormat.nfF_N_P;
             }
 
-            if (this.radDMY.Checked)
-            {
+            if (this.radDMY.Checked) {
                 this.fOptions.DefDateFormat = DateFormat.dfDD_MM_YYYY;
-            }
-            else if (this.radYMD.Checked)
-            {
+            } else if (this.radYMD.Checked) {
                 this.fOptions.DefDateFormat = DateFormat.dfYYYY_MM_DD;
             }
 

@@ -200,7 +200,7 @@ namespace GKUI.Dialogs
 
             return sheet;
         }
-        
+
         private void UpdateChildsSheet()
         {
             try

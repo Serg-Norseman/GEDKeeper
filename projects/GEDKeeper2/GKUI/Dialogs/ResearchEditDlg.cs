@@ -99,7 +99,7 @@ namespace GKUI.Dialogs
             }
         }
 
-        private bool ListTasksModify(object sender, ModifyEventArgs eArgs)
+        private void ListTasksModify(object sender, ModifyEventArgs eArgs)
         {
             bool res = false;
 
@@ -133,11 +133,11 @@ namespace GKUI.Dialogs
                     }
                     break;
             }
-            
-            return res;
+
+            if (res) this.UpdateLists();
         }
 
-        private bool ListCommunicationsModify(object sender, ModifyEventArgs eArgs)
+        private void ListCommunicationsModify(object sender, ModifyEventArgs eArgs)
         {
             bool res = false;
 
@@ -172,10 +172,10 @@ namespace GKUI.Dialogs
                     break;
             }
 
-            return res;
+            if (res) this.UpdateLists();
         }
 
-        private bool ListGroupsModify(object sender, ModifyEventArgs eArgs)
+        private void ListGroupsModify(object sender, ModifyEventArgs eArgs)
         {
             bool res = false;
 
@@ -204,26 +204,6 @@ namespace GKUI.Dialogs
                         base.Close();
                     }
                     break;
-            }
-
-            return res;
-        }
-
-        private void ListModify(object sender, ModifyEventArgs eArgs)
-        {
-            bool res = false;
-
-            if (sender == this.fTasksList)
-            {
-                res = this.ListTasksModify(sender, eArgs);
-            }
-            else if (sender == this.fCommunicationsList)
-            {
-                res = this.ListCommunicationsModify(sender, eArgs);
-            }
-            else if (sender == this.fGroupsList)
-            {
-                res = this.ListGroupsModify(sender, eArgs);
             }
 
             if (res) this.UpdateLists();
@@ -307,7 +287,7 @@ namespace GKUI.Dialogs
             }
 
             this.fTasksList = new GKSheetList(this.pageTasks);
-            this.fTasksList.OnModify += this.ListModify;
+            this.fTasksList.OnModify += this.ListTasksModify;
             this.fTasksList.Buttons = EnumSet<SheetButton>.Create(
                 SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, SheetButton.lbJump
                );
@@ -317,7 +297,7 @@ namespace GKUI.Dialogs
             this.fTasksList.AddColumn(LangMan.LS(LSID.LSID_StopDate), 90, false);
 
             this.fCommunicationsList = new GKSheetList(this.pageCommunications);
-            this.fCommunicationsList.OnModify += this.ListModify;
+            this.fCommunicationsList.OnModify += this.ListCommunicationsModify;
             this.fCommunicationsList.Buttons = EnumSet<SheetButton>.Create(
                 SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, SheetButton.lbJump
                );
@@ -327,7 +307,7 @@ namespace GKUI.Dialogs
             this.fCommunicationsList.AddColumn(LangMan.LS(LSID.LSID_Date), 90, false);
 
             this.fGroupsList = new GKSheetList(this.pageGroups);
-            this.fGroupsList.OnModify += this.ListModify;
+            this.fGroupsList.OnModify += this.ListGroupsModify;
             this.fGroupsList.Buttons = EnumSet<SheetButton>.Create(
                 SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete, SheetButton.lbJump
                );

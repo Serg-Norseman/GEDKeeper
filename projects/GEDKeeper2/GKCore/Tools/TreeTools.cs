@@ -1279,10 +1279,10 @@ namespace GKCore.Tools
             pc.ProgressInit(LangMan.LS(LSID.LSID_DuplicatesSearch), treeA.RecordsCount);
             try
             {
-                for (int i = 0; i <= treeA.RecordsCount - 1; i++) {
+                for (int i = 0; i < treeA.RecordsCount; i++) {
                     GEDCOMRecord recA = treeA[i];
                     if (recA is GEDCOMIndividualRecord) {
-                        for (int k = 0; k <= treeB.RecordsCount - 1; k++) {
+                        for (int k = 0; k < treeB.RecordsCount; k++) {
                             GEDCOMRecord recB = treeB[k];
                             if (recB is GEDCOMIndividualRecord) {
                                 GEDCOMIndividualRecord indivA = recA as GEDCOMIndividualRecord;

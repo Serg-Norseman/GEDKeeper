@@ -38,7 +38,7 @@ namespace GKUI.Dialogs
     {
         private readonly IBaseWindow fBase;
         private readonly GKSheetList fPersonsList;
-        
+
         private ChartFilter fFilter;
         private string fTemp;
 
@@ -213,8 +213,8 @@ namespace GKUI.Dialogs
             this.fTemp = this.fFilter.BranchPersons;
 
             this.cmbSource.Sorted = true;
-            int num = tree.RecordsCount - 1;
-            for (int i = 0; i <= num; i++) {
+            int num = tree.RecordsCount;
+            for (int i = 0; i < num; i++) {
                 GEDCOMRecord rec = tree[i];
                 if (rec is GEDCOMSourceRecord) {
                     this.cmbSource.Items.Add(new GKComboItem((rec as GEDCOMSourceRecord).FiledByEntry, rec));

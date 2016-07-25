@@ -330,8 +330,8 @@ namespace GKCore
             GKUtils.InitExtCounts(tree, -1);
             try
             {
-                int num = tree.RecordsCount - 1;
-                for (int i = 0; i <= num; i++)
+                int num = tree.RecordsCount;
+                for (int i = 0; i < num; i++)
                 {
                     GEDCOMRecord rec = tree[i];
 

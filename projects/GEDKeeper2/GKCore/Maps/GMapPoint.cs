@@ -22,7 +22,7 @@ using System;
 
 namespace GKCore.Maps
 {
-    public class GMapPoint
+    public sealed class GMapPoint
     {
         public double Latitude { get; set; }
         public double Longitude { get; set; }

@@ -22,6 +22,7 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
+using GKCommon;
 using GKCore.Interfaces;
 
 [assembly: AssemblyTitle("GKTimeLinePlugin")]
@@ -41,12 +42,12 @@ namespace GKTimeLinePlugin
 {
     public enum PLS
     {
-		/* 032 */ LSID_MITimeLine,
-		/* 130 */ LSID_TimeScale,
-		/* 131 */ LSID_CurrentYear,
+        /* 032 */ LSID_MITimeLine,
+        /* 130 */ LSID_TimeScale,
+        /* 131 */ LSID_CurrentYear,
     }
     
-    public sealed class Plugin : IPlugin, IWidget
+    public sealed class Plugin : BaseObject, IPlugin, IWidget
     {
         private string fDisplayName = "GKTimeLinePlugin";
         private IHost fHost;
@@ -58,63 +59,72 @@ namespace GKTimeLinePlugin
 
         private TimeLineWidget frm;
         
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (frm != null) frm.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
         public void Execute()
         {
-			if (!this.fHost.IsWidgetActive(this)) {
-				frm = new TimeLineWidget(this);
-				frm.Show();
-			} else {
-				frm.Close();
-				frm = null;
-			}
+            if (!this.fHost.IsWidgetActive(this)) {
+                frm = new TimeLineWidget(this);
+                frm.Show();
+            } else {
+                frm.Close();
+                frm = null;
+            }
         }
 
         public void OnHostClosing(ref bool cancelClosing) {}
-		public void OnHostActivate() {}
-		public void OnHostDeactivate() {}
+        public void OnHostActivate() {}
+        public void OnHostDeactivate() {}
 
-		public void OnLanguageChange()
+        public void OnLanguageChange()
         {
-        	try
-        	{
-        		this.fLangMan = this.fHost.CreateLangMan(this);
-        		this.fDisplayName = this.fLangMan.LS(PLS.LSID_MITimeLine);
-        	}
-        	catch (Exception ex)
-        	{
-        		fHost.LogWrite("GKTimeLinePlugin.OnLanguageChange(): " + ex.Message);
-        	}
+            try
+            {
+                this.fLangMan = this.fHost.CreateLangMan(this);
+                this.fDisplayName = this.fLangMan.LS(PLS.LSID_MITimeLine);
+            }
+            catch (Exception ex)
+            {
+                fHost.LogWrite("GKTimeLinePlugin.OnLanguageChange(): " + ex.Message);
+            }
         }
         
         public bool Startup(IHost host)
         {
-        	bool result = true;
-        	try
-        	{
-        		this.fHost = host;
-        		// Implement any startup code here
-        	}
-        	catch (Exception ex)
-        	{
-        		fHost.LogWrite("GKTimeLinePlugin.Startup(): " + ex.Message);
-        		result = false;
-        	}
-        	return result;
+            bool result = true;
+            try
+            {
+                this.fHost = host;
+                // Implement any startup code here
+            }
+            catch (Exception ex)
+            {
+                fHost.LogWrite("GKTimeLinePlugin.Startup(): " + ex.Message);
+                result = false;
+            }
+            return result;
         }
 
         public bool Shutdown()
         {
-        	bool result = true;
-        	try
-        	{
-        		// Implement any shutdown code here
-        	}
-        	catch (Exception ex)
-        	{
-        		fHost.LogWrite("GKTimeLinePlugin.Shutdown(): " + ex.Message);
-        		result = false;
-        	}
-        	return result;
+            bool result = true;
+            try
+            {
+                // Implement any shutdown code here
+            }
+            catch (Exception ex)
+            {
+                fHost.LogWrite("GKTimeLinePlugin.Shutdown(): " + ex.Message);
+                result = false;
+            }
+            return result;
         }
 
         #region IWidget support
@@ -123,19 +133,19 @@ namespace GKTimeLinePlugin
 
         void IWidget.BaseChanged(IBaseWindow aBase)
         {
-        	if (frm != null) {
-        		frm.BaseChanged(aBase);
-        	}
-    	}
+            if (frm != null) {
+                frm.BaseChanged(aBase);
+            }
+        }
         
         void IWidget.BaseClosed(IBaseWindow aBase)
         {
-        	if (frm != null) {
-        		frm.BaseChanged(null);
-        	}
+            if (frm != null) {
+                frm.BaseChanged(null);
+            }
         }
 
-     	void IWidget.WidgetEnable() {}
+        void IWidget.WidgetEnable() {}
 
         #endregion
     }

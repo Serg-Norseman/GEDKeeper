@@ -22,6 +22,7 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
+using GKCommon;
 using GKCore.Interfaces;
 
 [assembly: AssemblyTitle("GKCalendarPlugin")]
@@ -41,18 +42,18 @@ namespace GKCalendarPlugin
 {
     public enum PLS
     {
-		/* 033 */ LSID_MICalendar,
-		/* 140 */ LSID_Date,
-		/* 157 */ LSID_Cal_Gregorian,
-		/* 158 */ LSID_Cal_Julian,
-		/* 159 */ LSID_Cal_Hebrew,
-		/* 160 */ LSID_Cal_Islamic,
-		/* 161 */ LSID_Cal_Persian,
-		/* 162 */ LSID_Cal_Indian,
-		/* 163 */ LSID_Cal_Bahai,
+        /* 033 */ LSID_MICalendar,
+        /* 140 */ LSID_Date,
+        /* 157 */ LSID_Cal_Gregorian,
+        /* 158 */ LSID_Cal_Julian,
+        /* 159 */ LSID_Cal_Hebrew,
+        /* 160 */ LSID_Cal_Islamic,
+        /* 161 */ LSID_Cal_Persian,
+        /* 162 */ LSID_Cal_Indian,
+        /* 163 */ LSID_Cal_Bahai,
     }
     
-    public sealed class Plugin : IPlugin, IWidget
+    public sealed class Plugin : BaseObject, IPlugin, IWidget
     {
         private string fDisplayName = "GKCalendarPlugin";
         private IHost fHost;
@@ -64,67 +65,76 @@ namespace GKCalendarPlugin
 
         private CalendarWidget frm;
         
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (frm != null) frm.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
         public void Execute()
         {
-			if (!this.fHost.IsWidgetActive(this)) {
-				frm = new CalendarWidget(this);
-				frm.Show();
-			} else {
-				frm.Close();
-			}
+            if (!this.fHost.IsWidgetActive(this)) {
+                frm = new CalendarWidget(this);
+                frm.Show();
+            } else {
+                frm.Close();
+            }
         }
 
         public void OnHostClosing(ref bool cancelClosing) {}
-		public void OnHostActivate() {}
-		public void OnHostDeactivate() {}
+        public void OnHostActivate() {}
+        public void OnHostDeactivate() {}
 
-		public void OnLanguageChange()
+        public void OnLanguageChange()
         {
-        	try
-        	{
-        		this.fLangMan = this.fHost.CreateLangMan(this);
-        		this.fDisplayName = this.fLangMan.LS(PLS.LSID_MICalendar);
-        	}
-        	catch (Exception ex)
-        	{
-        		fHost.LogWrite("GKCalendarPlugin.OnLanguageChange(): " + ex.Message);
-        	}
+            try
+            {
+                this.fLangMan = this.fHost.CreateLangMan(this);
+                this.fDisplayName = this.fLangMan.LS(PLS.LSID_MICalendar);
+            }
+            catch (Exception ex)
+            {
+                fHost.LogWrite("GKCalendarPlugin.OnLanguageChange(): " + ex.Message);
+            }
         }
         
         public bool Startup(IHost host)
         {
-        	bool result = true;
-        	try
-        	{
-        		this.fHost = host;
-        		// Implement any startup code here
-        	}
-        	catch (Exception ex)
-        	{
-        		fHost.LogWrite("GKCalendarPlugin.Startup(): " + ex.Message);
-        		result = false;
-        	}
-        	return result;
+            bool result = true;
+            try
+            {
+                this.fHost = host;
+                // Implement any startup code here
+            }
+            catch (Exception ex)
+            {
+                fHost.LogWrite("GKCalendarPlugin.Startup(): " + ex.Message);
+                result = false;
+            }
+            return result;
         }
 
         public bool Shutdown()
         {
-        	bool result = true;
-        	try
-        	{
-        		// Implement any shutdown code here
-        	}
-        	catch (Exception ex)
-        	{
-        		fHost.LogWrite("GKCalendarPlugin.Shutdown(): " + ex.Message);
-        		result = false;
-        	}
-        	return result;
+            bool result = true;
+            try
+            {
+                // Implement any shutdown code here
+            }
+            catch (Exception ex)
+            {
+                fHost.LogWrite("GKCalendarPlugin.Shutdown(): " + ex.Message);
+                result = false;
+            }
+            return result;
         }
 
-    	#region IWidget common
+        #region IWidget common
 
-    	void IWidget.WidgetInit(IHost host) {}
+        void IWidget.WidgetInit(IHost host) {}
         void IWidget.BaseChanged(IBaseWindow aBase) {}
         void IWidget.BaseClosed(IBaseWindow aBase) {}
         void IWidget.WidgetEnable() {}

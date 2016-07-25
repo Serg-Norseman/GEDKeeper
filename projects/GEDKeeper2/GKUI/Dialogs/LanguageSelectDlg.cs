@@ -29,7 +29,7 @@ using GKUI.Controls;
 namespace GKUI.Dialogs
 {
     /// <summary>
-    /// Description of LanguageSelectDlg.
+    /// 
     /// </summary>
     public partial class LanguageSelectDlg : Form
     {
@@ -67,8 +67,8 @@ namespace GKUI.Dialogs
             this.lstLanguages.Items.Add(new GKComboItem(LangMan.LS_DEF_NAME, LangMan.LS_DEF_CODE));
 
             //int idx = 0;
-            int num = GlobalOptions.Instance.GetLangsCount() - 1;
-            for (int i = 0; i <= num; i++)
+            int num = GlobalOptions.Instance.GetLangsCount();
+            for (int i = 0; i < num; i++)
             {
                 LangRecord lngRec = GlobalOptions.Instance.GetLang(i);
                 //if (GlobalOptions.Instance.InterfaceLang == lngRec.Code)

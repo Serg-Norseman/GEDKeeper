@@ -31,7 +31,7 @@ namespace GKUI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public partial class ProgressDlg : Form, IProgressController
+    public sealed partial class ProgressDlg : Form, IProgressController
     {
         private DateTime fStartTime;
 

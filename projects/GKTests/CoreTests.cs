@@ -504,6 +504,11 @@ namespace GKTests
             Assert.IsNotNull(listManager);
             Assert.AreEqual(typeof(CommunicationColumnType), listManager.GetColumnsEnum());
 
+            listManager.ExternalFilter = null;
+            Assert.IsNull(listManager.ExternalFilter);
+
+            //
+
             listManager = new FamilyListMan(this.fContext.Tree);
             Assert.IsNotNull(listManager);
             Assert.AreEqual(typeof(FamilyColumnType), listManager.GetColumnsEnum());

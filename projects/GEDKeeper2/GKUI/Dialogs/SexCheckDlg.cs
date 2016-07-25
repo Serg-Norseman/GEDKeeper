@@ -45,13 +45,13 @@ namespace GKUI.Dialogs
             this.rbMale.Text = LangMan.LS(LSID.LSID_SexM);
             this.rbFemale.Text = LangMan.LS(LSID.LSID_SexF);
         }
-        
+
         public string IndividualName
         {
             get { return this.txtName.Text; }
             set { this.txtName.Text = value; }
         }
-        
+
         public GEDCOMSex Sex
         {
             get

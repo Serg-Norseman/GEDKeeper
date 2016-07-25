@@ -50,6 +50,16 @@ namespace GKUI.Dialogs
 
         public CommonFilterDlg(IBaseWindow aBase, ListManager listMan)
         {
+            if (aBase == null)
+            {
+                throw new ArgumentNullException("aBase");
+            }
+
+            if (listMan == null)
+            {
+                throw new ArgumentNullException("listMan");
+            }
+
             this.InitializeComponent();
 
             this.btnAccept.Image = (Image)MainWin.ResourceManager.GetObjectEx("iBtnAccept");

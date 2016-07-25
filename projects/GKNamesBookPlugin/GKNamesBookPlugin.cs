@@ -23,6 +23,7 @@ using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
 
+using GKCommon;
 using GKCore.Interfaces;
 
 [assembly: AssemblyTitle("GKNamesBookPlugin")]
@@ -46,7 +47,7 @@ namespace GKNamesBookPlugin
         /* 032 */ LSID_MINamesBook
     }
     
-    public sealed class Plugin : IPlugin, IWidget
+    public sealed class Plugin : BaseObject, IPlugin, IWidget
     {
         private string fDisplayName = "GKNamesBookPlugin";
         private IHost fHost;
@@ -58,6 +59,15 @@ namespace GKNamesBookPlugin
 
         private NamesBookWidget frm;
         
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (frm != null) frm.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
         public void Execute()
         {
             if (!this.fHost.IsWidgetActive(this)) {

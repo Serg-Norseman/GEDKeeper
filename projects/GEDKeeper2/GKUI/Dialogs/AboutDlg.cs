@@ -52,17 +52,12 @@ namespace GKUI.Dialogs
             string copyright, version;
             GKUtils.GetAssemblyVersion(out copyright, out version);
 
-            AboutDlg dlg = new AboutDlg();
-            try
+            using (AboutDlg dlg = new AboutDlg())
             {
                 dlg.lblProduct.Text = GKData.APP_TITLE;
                 dlg.lblVersion.Text = @"Version " + version;
                 dlg.lblCopyright.Text = copyright;
                 dlg.ShowDialog();
-            }
-            finally
-            {
-                dlg.Dispose();
             }
         }
     }

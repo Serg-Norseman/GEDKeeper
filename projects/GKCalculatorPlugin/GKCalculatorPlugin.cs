@@ -22,6 +22,7 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
+using GKCommon;
 using GKCore.Interfaces;
 
 [assembly: AssemblyTitle("GKCalculatorPlugin")]
@@ -41,11 +42,11 @@ namespace GKCalculatorPlugin
 {
     public enum PLS
     {
-		/* 031 */ LSID_MICalc,
-		/* 167 */ LSID_CopyResultToClipboard,
+        /* 031 */ LSID_MICalc,
+        /* 167 */ LSID_CopyResultToClipboard,
     }
     
-    public sealed class Plugin : IPlugin, IWidget
+    public sealed class Plugin : BaseObject, IPlugin, IWidget
     {
         private string fDisplayName = "GKCalculatorPlugin";
         private IHost fHost;
@@ -56,76 +57,85 @@ namespace GKCalculatorPlugin
         public ILangMan LangMan { get { return fLangMan; } }
 
         private CalcWidget frm;
-        
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (frm != null) frm.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
         public void Execute()
         {
-        	if (!this.fHost.IsWidgetActive(this)) {
-				frm = new CalcWidget(this);
-				frm.Show();
-			} else {
-				frm.Close();
-			}
+            if (!this.fHost.IsWidgetActive(this)) {
+                frm = new CalcWidget(this);
+                frm.Show();
+            } else {
+                frm.Close();
+            }
         }
 
         public void OnHostClosing(ref bool cancelClosing) {}
-		public void OnHostActivate() {}
-		public void OnHostDeactivate() {}
+        public void OnHostActivate() {}
+        public void OnHostDeactivate() {}
 
-		public void OnLanguageChange()
+        public void OnLanguageChange()
         {
-        	try
-        	{
-        		this.fLangMan = this.fHost.CreateLangMan(this);
-        		this.fDisplayName = this.fLangMan.LS(PLS.LSID_MICalc);
-        	}
-        	catch (Exception ex)
-        	{
-        		fHost.LogWrite("GKCalculatorPlugin.OnLanguageChange(): " + ex.Message);
-        	}
+            try
+            {
+                this.fLangMan = this.fHost.CreateLangMan(this);
+                this.fDisplayName = this.fLangMan.LS(PLS.LSID_MICalc);
+            }
+            catch (Exception ex)
+            {
+                fHost.LogWrite("GKCalculatorPlugin.OnLanguageChange(): " + ex.Message);
+            }
         }
         
         public bool Startup(IHost host)
         {
-        	bool result = true;
-        	try
-        	{
-        		this.fHost = host;
-        		// Implement any startup code here
-        	}
-        	catch (Exception ex)
-        	{
-        		fHost.LogWrite("GKCalculatorPlugin.Startup(): " + ex.Message);
-        		result = false;
-        	}
-        	return result;
+            bool result = true;
+            try
+            {
+                this.fHost = host;
+                // Implement any startup code here
+            }
+            catch (Exception ex)
+            {
+                fHost.LogWrite("GKCalculatorPlugin.Startup(): " + ex.Message);
+                result = false;
+            }
+            return result;
         }
 
         public bool Shutdown()
         {
-        	bool result = true;
-        	try
-        	{
-        		// Implement any shutdown code here
-        	}
-        	catch (Exception ex)
-        	{
-        		fHost.LogWrite("GKCalculatorPlugin.Shutdown(): " + ex.Message);
-        		result = false;
-        	}
-        	return result;
+            bool result = true;
+            try
+            {
+                // Implement any shutdown code here
+            }
+            catch (Exception ex)
+            {
+                fHost.LogWrite("GKCalculatorPlugin.Shutdown(): " + ex.Message);
+                result = false;
+            }
+            return result;
         }
 
-    	#region IWidget common
+        #region IWidget common
 
-    	void IWidget.WidgetInit(IHost host) {}
+        void IWidget.WidgetInit(IHost host) {}
         void IWidget.BaseChanged(IBaseWindow aBase) {}
         void IWidget.BaseClosed(IBaseWindow aBase) {}
 
         void IWidget.WidgetEnable()
         {
-        	if (frm != null) {
-        		fHost.EnableWindow(this.frm, true);
-        	}
+            if (frm != null) {
+                fHost.EnableWindow(this.frm, true);
+            }
         }
 
         #endregion

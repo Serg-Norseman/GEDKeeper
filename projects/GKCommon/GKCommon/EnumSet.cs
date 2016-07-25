@@ -28,17 +28,11 @@ namespace GKCommon
     {
         private byte[] data;
 
-        public EnumSet(params T[] args)
-        {
-            this.data = new byte[32];
-            this.Include(args);
-        }
-
         public static EnumSet<T> Create(params T[] args)
         {
-            EnumSet<T> result = new EnumSet<T>(args);
-            //result.data = new byte[32];
-            //result.Include(args);
+            EnumSet<T> result = new EnumSet<T>();
+            result.data = new byte[32];
+            result.Include(args);
             return result;
         }
 

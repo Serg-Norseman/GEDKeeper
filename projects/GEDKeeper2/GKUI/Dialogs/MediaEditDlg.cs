@@ -144,23 +144,10 @@ namespace GKUI.Dialogs
 
                 FileInfo info = new FileInfo(fileName);
                 double fileSize = (((double)info.Length / 1024) / 1024); // mb
-                bool canArc = (CheckFormatArchived(fileFmt) && fileSize <= 2);
+                bool canArc = (GKUtils.CheckFormatArchived(fileFmt) && fileSize <= 2);
 
                 this.StoreTypesRefresh(canArc, MediaStoreType.mstReference);
                 this.cmbStoreType.Enabled = true;
-            }
-        }
-
-        private static bool CheckFormatArchived(GEDCOMMultimediaFormat format)
-        {
-            switch (format)
-            {
-                case GEDCOMMultimediaFormat.mfWAV:
-                case GEDCOMMultimediaFormat.mfAVI:
-                case GEDCOMMultimediaFormat.mfMPG:
-                    return false;
-                default:
-                    return true;
             }
         }
 

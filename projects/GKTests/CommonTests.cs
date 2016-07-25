@@ -21,7 +21,9 @@
 using System;
 using System.Drawing;
 using GKCommon;
+using GKCommon.GEDCOM;
 using GKCommon.SmartGraph;
+using GKCore.Interfaces;
 using GKCore.Types;
 using NUnit.Framework;
 
@@ -89,7 +91,7 @@ namespace GKTests
 
             es.Include(null);
             Assert.IsTrue(es.IsEmpty());
-            
+
             es.Include(RestrictionEnum.rnPrivacy, RestrictionEnum.rnLocked);
             Assert.IsTrue(es.Contains(RestrictionEnum.rnPrivacy));
             Assert.IsFalse(es.Contains(RestrictionEnum.rnNone));
@@ -98,40 +100,40 @@ namespace GKTests
             es.Exclude(RestrictionEnum.rnPrivacy);
             Assert.IsFalse(es.Contains(RestrictionEnum.rnPrivacy));
             Assert.IsTrue(es.Contains(RestrictionEnum.rnLocked));
-            
+
             es = EnumSet<RestrictionEnum>.Create(RestrictionEnum.rnNone, RestrictionEnum.rnLocked);
             Assert.IsTrue(es.Contains(RestrictionEnum.rnNone));
             Assert.IsTrue(es.Contains(RestrictionEnum.rnLocked));
-            
+
             string test = es.ByteToStr(0);
             Assert.AreEqual("00000011", test);
-            
+
             // clone test
             EnumSet<RestrictionEnum> copy = (EnumSet<RestrictionEnum>)es.Clone();
             test = copy.ByteToStr(0);
             Assert.AreEqual("00000011", test);
-            
+
             // clear test
             copy.Clear();
             Assert.IsTrue(copy.IsEmpty());
-            
+
             //
             EnumSet<RestrictionEnum> es2 = EnumSet<RestrictionEnum>.Create(RestrictionEnum.rnNone, RestrictionEnum.rnLocked);
 
             Assert.IsTrue(es.Equals(es2));
             Assert.IsFalse(es.Equals(null));
-            
+
             Assert.IsTrue(es.Contains(RestrictionEnum.rnLocked));
             Assert.IsFalse(es.Contains(RestrictionEnum.rnPrivacy));
 
             EnumSet<RestrictionEnum> es3 = EnumSet<RestrictionEnum>.Create(RestrictionEnum.rnLocked);
             EnumSet<RestrictionEnum> es4 = es * es3;
             Assert.IsTrue(es4.Contains(RestrictionEnum.rnLocked));
-            
+
             es = EnumSet<RestrictionEnum>.Create(RestrictionEnum.rnNone);
             es2 = EnumSet<RestrictionEnum>.Create(RestrictionEnum.rnLocked);
             Assert.IsTrue(es != es2);
-            
+
             es = es + es2;
             es3 = EnumSet<RestrictionEnum>.Create(RestrictionEnum.rnNone, RestrictionEnum.rnLocked);
             Assert.IsTrue(es.Equals(es3));
@@ -143,11 +145,11 @@ namespace GKTests
             Assert.IsFalse(es3.HasIntersect(new RestrictionEnum[] {}));
             Assert.IsTrue(es3.HasIntersect(RestrictionEnum.rnNone, RestrictionEnum.rnPrivacy));
             Assert.IsFalse(es3.HasIntersect(RestrictionEnum.rnPrivacy));
-            
+
             es = es - es2;
             es3 = EnumSet<RestrictionEnum>.Create(RestrictionEnum.rnNone);
             Assert.IsTrue(es == es3);
-            Assert.AreEqual("0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001", 
+            Assert.AreEqual("0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001",
                             es3.ToString());
             Assert.AreNotEqual(0, es3.GetHashCode());
         }
@@ -213,7 +215,10 @@ namespace GKTests
 
             strList.CaseSensitive = true;
             Assert.IsTrue(strList.CaseSensitive);
-            
+
+            strList.DuplicateSolve = DuplicateSolve.Accept;
+            Assert.AreEqual(DuplicateSolve.Accept, strList.DuplicateSolve);
+
             strList.Clear();
             Assert.IsTrue(strList.IsEmpty());
         }
@@ -236,6 +241,11 @@ namespace GKTests
             Assert.AreEqual(1, edge.Cost);
             Assert.AreEqual(vertex, edge.Source);
             Assert.AreEqual(vertex2, edge.Target);
+            Assert.AreEqual(null, edge.Value);
+
+            IEdge idg = edge;
+            Assert.AreEqual(vertex, idg.Source);
+            Assert.AreEqual(vertex2, idg.Target);
 
             Assert.AreNotEqual(0, edge.CompareTo(new Edge(vertex, vertex2, 1, null)));
             Assert.Throws(typeof(ArgumentException), () => { edge.CompareTo(null); });
@@ -272,8 +282,17 @@ namespace GKTests
                 
                 bool res = graph.AddUndirectedEdge(vert1, vert2, 1, null, null);
                 Assert.AreEqual(true, res);
-                
+
+                foreach (IVertex vtx in graph.Vertices) {
+                }
+
+                foreach (IEdge edg in graph.Edges) {
+                }
+
                 graph.Clear();
+
+                graph.DeleteVertex(null); // no exception
+                graph.DeleteEdge(null); // no exception
             }
         }
 
@@ -408,18 +427,122 @@ namespace GKTests
             Assert.IsNotNull(pgNode);
         }
 
+        private bool TestExternalFilterHandler(GEDCOMRecord record)
+        {
+            return false;
+        }
+
+        [Test]
+        public void FiltersIntf_Tests()
+        {
+            FilterCondition cond = new FilterCondition(0, ConditionKind.ck_Contains, null);
+            Assert.IsNotNull(cond);
+
+            ExternalFilterHandler handler = this.TestExternalFilterHandler;
+            Assert.IsFalse(handler.Invoke(null));
+        }
+
         [Test]
         public void StrTok_Tests()
         {
+            //Assert.Throws(typeof(ArgumentNullException), () => { new StringTokenizer(null); });
+
             StringTokenizer strTok = new StringTokenizer("alpha beta 123 456.57, x");
             Assert.IsNotNull(strTok);
 
             strTok.IgnoreWhiteSpace = false;
+            Assert.IsFalse(strTok.IgnoreWhiteSpace);
+
+            char[] symChars = strTok.SymbolChars;
+
+            strTok.RecognizeDecimals = false;
+            Assert.IsFalse(strTok.RecognizeDecimals);
 
             Token tok = strTok.Next();
             Assert.AreEqual(TokenKind.Word, tok.Kind);
             Assert.AreEqual("alpha", tok.Value);
-        }
 
+            Assert.AreEqual(TokenKind.WhiteSpace, strTok.Next().Kind);
+
+            tok = strTok.Next();
+            Assert.AreEqual(TokenKind.Word, tok.Kind);
+            Assert.AreEqual("beta", tok.Value);
+
+            Assert.AreEqual(TokenKind.WhiteSpace, strTok.Next().Kind);
+
+            tok = strTok.Next();
+            Assert.AreEqual(TokenKind.Number, tok.Kind);
+            Assert.AreEqual("123", tok.Value);
+
+            Assert.AreEqual(TokenKind.WhiteSpace, strTok.Next().Kind);
+
+            tok = strTok.Next();
+            Assert.AreEqual(TokenKind.Number, tok.Kind);
+            Assert.AreEqual("456", tok.Value);
+
+            tok = strTok.Next();
+            Assert.AreEqual(TokenKind.Symbol, tok.Kind);
+            Assert.AreEqual(".", tok.Value);
+
+            tok = strTok.Next();
+            Assert.AreEqual(TokenKind.Number, tok.Kind);
+            Assert.AreEqual("57", tok.Value);
+
+            tok = strTok.Next();
+            Assert.AreEqual(TokenKind.Symbol, tok.Kind);
+            Assert.AreEqual(",", tok.Value);
+
+            Assert.AreEqual(TokenKind.WhiteSpace, strTok.Next().Kind);
+
+            tok = strTok.Next();
+            Assert.AreEqual(TokenKind.Word, tok.Kind);
+            Assert.AreEqual("x", tok.Value);
+
+            //
+
+            strTok = new StringTokenizer("alpha beta 123 456.57, x; \r \n \"test quote\"");
+            Assert.IsNotNull(strTok);
+
+            strTok.IgnoreWhiteSpace = true;
+            Assert.IsTrue(strTok.IgnoreWhiteSpace);
+
+            strTok.RecognizeDecimals = true;
+            Assert.IsTrue(strTok.RecognizeDecimals);
+
+            tok = strTok.Next();
+            Assert.AreEqual(TokenKind.Word, tok.Kind);
+            Assert.AreEqual("alpha", tok.Value);
+
+            tok = strTok.Next();
+            Assert.AreEqual(TokenKind.Word, tok.Kind);
+            Assert.AreEqual("beta", tok.Value);
+
+            tok = strTok.Next();
+            Assert.AreEqual(TokenKind.Number, tok.Kind);
+            Assert.AreEqual("123", tok.Value);
+
+            tok = strTok.Next();
+            Assert.AreEqual(TokenKind.Number, tok.Kind);
+            Assert.AreEqual("456.57", tok.Value);
+
+            tok = strTok.Next();
+            Assert.AreEqual(TokenKind.Symbol, tok.Kind);
+            Assert.AreEqual(",", tok.Value);
+
+            tok = strTok.Next();
+            Assert.AreEqual(TokenKind.Word, tok.Kind);
+            Assert.AreEqual("x", tok.Value);
+
+            tok = strTok.Next();
+            Assert.AreEqual(TokenKind.Symbol, tok.Kind);
+            Assert.AreEqual(";", tok.Value);
+
+            Assert.AreEqual(TokenKind.EOL, strTok.Next().Kind);
+            Assert.AreEqual(TokenKind.EOL, strTok.Next().Kind);
+
+            tok = strTok.Next();
+            Assert.AreEqual(TokenKind.QuotedString, tok.Kind);
+            Assert.AreEqual("\"test quote\"", tok.Value);
+        }
     }
 }

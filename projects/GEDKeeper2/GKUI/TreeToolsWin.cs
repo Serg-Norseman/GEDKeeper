@@ -234,8 +234,8 @@ namespace GKUI
                 this.ProgressBar1.Maximum = this.fTree.RecordsCount;
                 this.ProgressBar1.Value = this.fRMIndex;
 
-                int num = this.fTree.RecordsCount - 1;
-                for (int i = this.fRMIndex; i <= num; i++)
+                int recNum = this.fTree.RecordsCount;
+                for (int i = this.fRMIndex; i < recNum; i++)
                 {
                     this.fRMIndex = i;
                     this.ProgressBar1.Increment(1);
@@ -243,8 +243,7 @@ namespace GKUI
                     GEDCOMRecord iRec = this.fTree[i];
                     if (iRec.RecordType != this.fRMMode) continue;
 
-                    int num5 = this.fTree.RecordsCount - 1;
-                    for (int j = i + 1; j <= num5; j++)
+                    for (int j = i + 1; j < recNum; j++)
                     {
                         GEDCOMRecord kRec = this.fTree[j];
                         if (kRec.RecordType != this.fRMMode) continue;
@@ -535,8 +534,8 @@ namespace GKUI
             {
                 int cnt = 0;
 
-                int num = this.fTree.RecordsCount - 1;
-                for (int i = 0; i <= num; i++)
+                int num = this.fTree.RecordsCount;
+                for (int i = 0; i < num; i++)
                 {
                     GEDCOMRecord rec = this.fTree[i];
                     if (rec is GEDCOMIndividualRecord)

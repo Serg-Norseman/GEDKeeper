@@ -181,7 +181,7 @@ namespace GKUI.Dialogs
                 this.btnPlaceAdd.Enabled = true;
                 this.btnPlaceDelete.Enabled = false;
             }
-            
+
             this.fNotesList.DataList = this.fEvent.Detail.Notes.GetEnumerator();
             this.fMediaList.DataList = this.fEvent.Detail.MultimediaLinks.GetEnumerator();
             this.fSourcesList.DataList = this.fEvent.Detail.SourceCitations.GetEnumerator();

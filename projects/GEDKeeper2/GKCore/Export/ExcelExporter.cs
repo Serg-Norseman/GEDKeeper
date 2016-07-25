@@ -79,8 +79,8 @@ namespace GKCore.Export
                 worksheet.Cells[1, 12] = new Cell(LangMan.LS(LSID.LSID_LifeExpectancy));
 
                 ushort row = 1;
-                int num = this.fTree.RecordsCount - 1;
-                for (int i = 0; i <= num; i++)
+                int num = this.fTree.RecordsCount;
+                for (int i = 0; i < num; i++)
                 {
                     GEDCOMRecord rec = this.fTree[i];
                     if (rec is GEDCOMIndividualRecord) {

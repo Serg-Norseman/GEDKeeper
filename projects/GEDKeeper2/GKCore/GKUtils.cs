@@ -2951,6 +2951,12 @@ namespace GKCore
             }
         }
 
+        public static bool CheckFormatArchived(GEDCOMMultimediaFormat format)
+        {
+            MultimediaKind mKind = GetMultimediaKind(format);
+            return (mKind == MultimediaKind.mkImage || mKind == MultimediaKind.mkText);
+        }
+
         #endregion
     }
 }

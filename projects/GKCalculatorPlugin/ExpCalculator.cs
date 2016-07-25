@@ -211,19 +211,7 @@ namespace GKCalculatorPlugin
                     val = -1.0;
                 }
             }
-            else if (name == "sgn")
-            {
-                if (val > 0.0d) {
-                    val = 1.0;
-                } else if (val < 0.0d) {
-                    val = 0.0;
-                }
-            }
-            else if (name == "xsgn") {
-                if (val < 0.0d) {
-                    val = 0.0;
-                }
-            } else {
+            else {
                 result = false;
             }
 
@@ -310,6 +298,7 @@ namespace GKCalculatorPlugin
                 int s_pos = this.fPtr;
                 this.fToken = ExpToken.tkNUMBER;
 
+                char lc;
                 if (this.fExpression[this.fPtr] == '$')
                 {
                     // hex numbers
@@ -317,8 +306,8 @@ namespace GKCalculatorPlugin
                     s_pos = this.fPtr;
                     while (true)
                     {
-                        char c2 = this.fExpression[this.fPtr];
-                        if (c2 < '0' || (c2 > '9' && (c2 < 'A' || (c2 > 'F' && (c2 < 'a' || c2 > 'f'))))) {
+                        lc = this.fExpression[this.fPtr];
+                        if (lc < '0' || (lc > '9' && (lc < 'A' || (lc > 'F' && (lc < 'a' || lc > 'f'))))) {
                             break;
                         }
                         this.fPtr++;
@@ -329,22 +318,22 @@ namespace GKCalculatorPlugin
                 }
                 else
                 {
-                    char c3 = this.fExpression[this.fPtr];
-                    if (c3 >= '0' && c3 <= '9')
+                    lc = this.fExpression[this.fPtr];
+                    if (lc >= '0' && lc <= '9')
                     {
-                        if (this.fExpression[this.fPtr] == '0')
+                        if (lc == '0')
                         {
                             this.fPtr++;
-                            char c4 = this.fExpression[this.fPtr];
-                            if (c4 == 'X' || c4 == 'x')
+                            lc = this.fExpression[this.fPtr];
+                            if (lc == 'X' || lc == 'x')
                             {
                                 // hex numbers
                                 this.fPtr++;
                                 s_pos = this.fPtr;
                                 while (true)
                                 {
-                                    char c5 = this.fExpression[this.fPtr];
-                                    if (c5 < '0' || (c5 > '9' && (c5 < 'A' || (c5 > 'F' && (c5 < 'a' || c5 > 'f'))))) {
+                                    lc = this.fExpression[this.fPtr];
+                                    if (lc < '0' || (lc > '9' && (lc < 'A' || (lc > 'F' && (lc < 'a' || lc > 'f'))))) {
                                         break;
                                     }
                                     this.fPtr++;
@@ -356,16 +345,16 @@ namespace GKCalculatorPlugin
                             }
                             else
                             {
-                                char c6 = this.fExpression[this.fPtr];
-                                if (c6 == 'B' || c6 == 'b')
+                                lc = this.fExpression[this.fPtr];
+                                if (lc == 'B' || lc == 'b')
                                 {
                                     // binary numbers
                                     this.fPtr++;
                                     s_pos = this.fPtr;
                                     while (true)
                                     {
-                                        char c7 = this.fExpression[this.fPtr];
-                                        if (c7 < '0' || c7 > '1') {
+                                        lc = this.fExpression[this.fPtr];
+                                        if (lc < '0' || lc > '1') {
                                             break;
                                         }
                                         this.fPtr++;
@@ -380,15 +369,15 @@ namespace GKCalculatorPlugin
 
                         while (true)
                         {
-                            char c8 = this.fExpression[this.fPtr];
-                            if (c8 < '0' || (c8 >= ':' && (c8 < 'A' || (c8 >= 'G' && (c8 < 'a' || c8 >= 'g'))))) {
+                            lc = this.fExpression[this.fPtr];
+                            if (lc < '0' || (lc > '9' && (lc < 'A' || (lc > 'F' && (lc < 'a' || lc > 'f'))))) {
                                 break;
                             }
                             this.fPtr++;
                         }
 
-                        char c9 = this.fExpression[this.fPtr];
-                        if (c9 == 'H' || c9 == 'h')
+                        lc = this.fExpression[this.fPtr];
+                        if (lc == 'H' || lc == 'h')
                         {
                             if (this.ConvertNumber(s_pos, this.fPtr, 16)) {
                                 this.fPtr++;
@@ -397,8 +386,8 @@ namespace GKCalculatorPlugin
                         }
                         else
                         {
-                            char c10 = this.fExpression[this.fPtr];
-                            if (c10 == 'B' || c10 == 'b')
+                            lc = this.fExpression[this.fPtr];
+                            if (lc == 'B' || lc == 'b')
                             {
                                 if (this.ConvertNumber(s_pos, this.fPtr, 2)) {
                                     this.fPtr++;
@@ -416,12 +405,12 @@ namespace GKCalculatorPlugin
                                         double frac = 0.0;
                                         while (true)
                                         {
-                                            char c11 = this.fExpression[this.fPtr];
-                                            if (c11 < '0' || c11 >= ':')
+                                            lc = this.fExpression[this.fPtr];
+                                            if (lc < '0' || lc > '9')
                                             {
                                                 break;
                                             }
-                                            frac = (frac * 10.0 + (double)((int)this.fExpression[this.fPtr] - 48));
+                                            frac = (frac * 10.0 + ((int)this.fExpression[this.fPtr] - 48));
                                             this.fPtr++;
                                         }
                                         this.fvalue = (this.fvalue + frac * PI / 180.0 / 60.0);
@@ -431,12 +420,12 @@ namespace GKCalculatorPlugin
                                             frac = 0.0;
                                             while (true)
                                             {
-                                                char c12 = this.fExpression[this.fPtr];
-                                                if (c12 < '0' || c12 >= ':')
+                                                lc = this.fExpression[this.fPtr];
+                                                if (lc < '0' || lc > '9')
                                                 {
                                                     break;
                                                 }
-                                                frac = (frac * 10.0 + (double)((int)this.fExpression[this.fPtr] - 48));
+                                                frac = (frac * 10.0 + ((int)this.fExpression[this.fPtr] - 48));
                                                 this.fPtr++;
                                             }
                                             this.fvalue = (this.fvalue + frac * PI / 180.0 / 60.0 / 60.0);
@@ -451,19 +440,19 @@ namespace GKCalculatorPlugin
                                         double frac = 1.0;
                                         while (true)
                                         {
-                                            char c13 = this.fExpression[this.fPtr];
-                                            if (c13 < '0' || c13 >= ':')
+                                            lc = this.fExpression[this.fPtr];
+                                            if (lc < '0' || lc > '9')
                                             {
                                                 break;
                                             }
                                             frac = (frac / 10.0);
-                                            this.fvalue = (this.fvalue + frac * (double)((int)this.fExpression[this.fPtr] - 48));
+                                            this.fvalue = (this.fvalue + frac * ((int)this.fExpression[this.fPtr] - 48));
                                             this.fPtr++;
                                         }
                                     }
 
-                                    char c14 = this.fExpression[this.fPtr];
-                                    if (c14 != 'E' && c14 != 'e')
+                                    lc = this.fExpression[this.fPtr];
+                                    if (lc != 'E' && lc != 'e')
                                     {
                                         return;
                                     }
@@ -475,13 +464,13 @@ namespace GKCalculatorPlugin
                                         this.fPtr++;
                                     }
 
-                                    char c16 = this.fExpression[this.fPtr];
-                                    if (c16 >= '0' && c16 <= '9')
+                                    lc = this.fExpression[this.fPtr];
+                                    if (lc >= '0' && lc <= '9')
                                     {
                                         while (true)
                                         {
-                                            char c17 = this.fExpression[this.fPtr];
-                                            if (c17 < '0' || c17 > '9') {
+                                            lc = this.fExpression[this.fPtr];
+                                            if (lc < '0' || lc > '9') {
                                                 break;
                                             }
                                             exp = exp * 10 + (int)this.fExpression[this.fPtr] - 48;
@@ -489,35 +478,24 @@ namespace GKCalculatorPlugin
                                         }
 
                                         if (exp == 0) {
-                                            this.fvalue = 1.0;
                                             return;
                                         }
 
                                         if (sign == '-')
                                         {
-                                            if (exp > 0)
+                                            while (exp > 0)
                                             {
-                                                do
-                                                {
-                                                    this.fvalue = (this.fvalue * 10.0);
-                                                    exp--;
-                                                }
-                                                while (exp > 0);
-                                                return;
+                                                this.fvalue = (this.fvalue / 10.0);
+                                                exp--;
                                             }
                                             return;
                                         }
                                         else
                                         {
-                                            if (exp > 0)
+                                            while (exp > 0)
                                             {
-                                                do
-                                                {
-                                                    this.fvalue = (this.fvalue / 10.0);
-                                                    exp--;
-                                                }
-                                                while (exp > 0);
-                                                return;
+                                                this.fvalue = (this.fvalue * 10.0);
+                                                exp--;
                                             }
                                             return;
                                         }
@@ -528,15 +506,15 @@ namespace GKCalculatorPlugin
                     }
                     else
                     {
-                        char c18 = this.fExpression[this.fPtr];
-                        if (c18 >= 'A' && (c18 < '[' || c18 == '_' || (c18 >= 'a' && c18 < '{')))
+                        lc = this.fExpression[this.fPtr];
+                        if (lc >= 'A' && (lc < '[' || lc == '_' || (lc >= 'a' && lc < '{')))
                         {
                             this.svalue = new string(this.fExpression[this.fPtr], 1);
                             this.fPtr++;
                             while (true)
                             {
-                                char c19 = this.fExpression[this.fPtr];
-                                if (c19 < '0' || (c19 >= ':' && (c19 < 'A' || (c19 >= '[' && c19 != '_' && (c19 < 'a' || c19 >= '{')))))
+                                lc = this.fExpression[this.fPtr];
+                                if (lc < '0' || (lc > '9' && (lc < 'A' || (lc >= '[' && lc != '_' && (lc < 'a' || lc >= '{')))))
                                 {
                                     break;
                                 }

@@ -91,12 +91,12 @@ namespace GKUI.Dialogs
             base.DoReset();
             this.UpdateSpecific();
         }
-        
+
         private void UpdateSpecific()
         {
             IndividualListFilter iFilter = (IndividualListFilter)fListMan.Filter;
             GlobalOptions options = MainWin.Instance.Options;
-            
+
             this.txtName.Items.Clear();
             this.txtName.Items.AddRange(options.NameFilters.ToArray());
             this.txtName.Items.Insert(0, "*");
@@ -157,8 +157,8 @@ namespace GKUI.Dialogs
 
             this.cmbGroup.Items.Clear();
             this.cmbGroup.Sorted = true;
-            int num = tree.RecordsCount - 1;
-            for (int i = 0; i <= num; i++) {
+            int num = tree.RecordsCount;
+            for (int i = 0; i < num; i++) {
                 GEDCOMRecord rec = tree[i];
                 if (rec is GEDCOMGroupRecord) {
                     this.cmbGroup.Items.Add(new GKComboItem((rec as GEDCOMGroupRecord).GroupName, rec));
@@ -177,7 +177,7 @@ namespace GKUI.Dialogs
 
             this.cmbSource.Items.Clear();
             this.cmbSource.Sorted = true;
-            for (int i = 0; i <= tree.RecordsCount - 1; i++) {
+            for (int i = 0; i < tree.RecordsCount; i++) {
                 GEDCOMRecord rec = tree[i];
                 if (rec is GEDCOMSourceRecord) {
                     this.cmbSource.Items.Add(new GKComboItem((rec as GEDCOMSourceRecord).FiledByEntry, rec));
@@ -205,7 +205,7 @@ namespace GKUI.Dialogs
             base.AcceptChanges();
 
             IndividualListFilter iFilter = (IndividualListFilter)fListMan.Filter;
-            
+
             string fs = this.txtName.Text.Trim();
             SaveFilter(fs, MainWin.Instance.Options.NameFilters);
 
@@ -273,8 +273,8 @@ namespace GKUI.Dialogs
                 }
             }
 
-            int selectedIndex2 = this.cmbSource.SelectedIndex;
-            if (selectedIndex2 >= 0 && selectedIndex2 < 3) {
+            selectedIndex = this.cmbSource.SelectedIndex;
+            if (selectedIndex >= 0 && selectedIndex < 3) {
                 iFilter.SourceMode = (FilterGroupMode)this.cmbSource.SelectedIndex;
                 iFilter.SourceRef = "";
             } else {
