@@ -26,44 +26,10 @@ using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCore.Interfaces;
+using GKCore.Options;
 
 namespace GKUI.Charts
 {
-    public class AncestorsCircleOptions : IOptions
-    {
-        public const int MAX_BRUSHES = 12;
-        
-        private readonly AncestorsCircle fOwner;
-
-        public Color[] BrushColor = new Color[MAX_BRUSHES];
-
-        public AncestorsCircleOptions(AncestorsCircle owner)
-        {
-            this.fOwner = owner;
-
-            this.BrushColor[ 0] = Color.Coral;
-            this.BrushColor[ 1] = Color.CadetBlue;
-            this.BrushColor[ 2] = Color.DarkGray;
-            this.BrushColor[ 3] = Color.Khaki;
-            this.BrushColor[ 4] = Color./*CadetBlue;*/LawnGreen;
-            this.BrushColor[ 5] = Color./*DarkGray;*/Khaki;
-            this.BrushColor[ 6] = Color./*Khaki;*/HotPink;
-            this.BrushColor[ 7] = Color./*CadetBlue;*/Ivory;
-
-            this.BrushColor[ 8] = Color.Black; // text
-            this.BrushColor[ 9] = Color.Moccasin; // background
-            this.BrushColor[10] = Color.Black; // lines
-            this.BrushColor[11] = Color.PaleGreen; // lines
-        }
-
-        public void Apply()
-        {
-            this.fOwner.Changed();
-        }
-    }
-
-
     public delegate void ARootChangedEventHandler(object sender, GEDCOMIndividualRecord person);
 
     public class AncestorsCircle : CustomChart
@@ -112,7 +78,7 @@ namespace GKUI.Charts
         private readonly AncestorsCircleOptions fOptions;
         private readonly List<PersonSegment> fSegments;
         private readonly ToolTip fToolTip;
-        
+
         private int fCenterX;
         private int fCenterY;
         private int fGenWidth;
@@ -199,7 +165,7 @@ namespace GKUI.Charts
             this.components = new System.ComponentModel.Container();
 
             //this.fTree = tree;
-            this.fOptions = new AncestorsCircleOptions(this);
+            this.fOptions = new AncestorsCircleOptions();
             this.fCircleBrushes = new SolidBrush[AncestorsCircleOptions.MAX_BRUSHES];
             this.fDarkBrushes = new SolidBrush[AncestorsCircleOptions.MAX_BRUSHES];
 
@@ -237,7 +203,7 @@ namespace GKUI.Charts
         {
             this.RootPerson = obj as GEDCOMIndividualRecord;
         }
-        
+
         #region Content
         
         private void CreateBrushes()
@@ -459,19 +425,23 @@ namespace GKUI.Charts
             for (int i = 0; i < num; i++) {
                 PersonSegment segment = this.fSegments[i];
 
-                int brIndex;
-                if (this.fGroupsMode) {
-                    brIndex = (segment.GroupIndex == -1) ? 11 : segment.GroupIndex;
-                } else {
-                    brIndex = (segment.Gen == 0) ? 9 : segment.Gen - 1;
+                bool draw = (!this.Options.HideEmptySegments || segment.IRec != null);
+
+                if (draw) {
+                    int brIndex;
+                    if (this.fGroupsMode) {
+                        brIndex = (segment.GroupIndex == -1) ? 11 : segment.GroupIndex;
+                    } else {
+                        brIndex = (segment.Gen == 0) ? 9 : segment.Gen - 1;
+                    }
+
+                    SolidBrush brush;
+                    brush = (this.fSelected == segment) ? this.fDarkBrushes[brIndex] : this.fCircleBrushes[brIndex];
+
+                    GraphicsPath path = segment.Path;
+                    gfx.FillPath(brush, path);
+                    gfx.DrawPath(pen, path);
                 }
-
-                SolidBrush brush;
-                brush = (this.fSelected == segment) ? this.fDarkBrushes[brIndex] : this.fCircleBrushes[brIndex];
-
-                GraphicsPath path = segment.Path;
-                gfx.FillPath(brush, path);
-                gfx.DrawPath(pen, path);
             }
 
             /*if (!this.fGroupsMode)*/

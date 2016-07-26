@@ -101,6 +101,8 @@ namespace GKUI.Dialogs
         private System.Windows.Forms.Label lblMinutes;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckBox chkGenerations;
+        private GKUI.Charts.ACOptionsControl ancOptionsControl1;
+        private System.Windows.Forms.TabPage pageAncCircle;
 
         private void InitializeComponent()
         {
@@ -161,6 +163,8 @@ namespace GKUI.Dialogs
             this.lblUnWifeColor = new System.Windows.Forms.Label();
             this.panDefFont = new System.Windows.Forms.Panel();
             this.lblChartFont = new System.Windows.Forms.Label();
+            this.pageAncCircle = new System.Windows.Forms.TabPage();
+            this.ancOptionsControl1 = new GKUI.Charts.ACOptionsControl();
             this.pageUIView = new System.Windows.Forms.TabPage();
             this.PageControl2 = new System.Windows.Forms.TabControl();
             this.pageViewCommon = new System.Windows.Forms.TabPage();
@@ -186,6 +190,7 @@ namespace GKUI.Dialogs
             this.grpPedigree = new System.Windows.Forms.GroupBox();
             this.chkAttributes = new System.Windows.Forms.CheckBox();
             this.chkNotes = new System.Windows.Forms.CheckBox();
+            this.chkGenerations = new System.Windows.Forms.CheckBox();
             this.chkSources = new System.Windows.Forms.CheckBox();
             this.grpPedigreeFormat = new System.Windows.Forms.GroupBox();
             this.radExcess = new System.Windows.Forms.RadioButton();
@@ -200,7 +205,6 @@ namespace GKUI.Dialogs
             this.btnCancel = new System.Windows.Forms.Button();
             this.ColorDialog1 = new System.Windows.Forms.ColorDialog();
             this.FontDialog1 = new System.Windows.Forms.FontDialog();
-            this.chkGenerations = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -220,6 +224,7 @@ namespace GKUI.Dialogs
             this.panUnHusbandColor.SuspendLayout();
             this.panUnWifeColor.SuspendLayout();
             this.panDefFont.SuspendLayout();
+            this.pageAncCircle.SuspendLayout();
             this.pageUIView.SuspendLayout();
             this.PageControl2.SuspendLayout();
             this.pageViewCommon.SuspendLayout();
@@ -535,6 +540,7 @@ namespace GKUI.Dialogs
             // tabsCharts
             // 
             this.tabsCharts.Controls.Add(this.pageTreeChart);
+            this.tabsCharts.Controls.Add(this.pageAncCircle);
             this.tabsCharts.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabsCharts.Location = new System.Drawing.Point(3, 3);
             this.tabsCharts.Name = "tabsCharts";
@@ -544,6 +550,7 @@ namespace GKUI.Dialogs
             // 
             // pageTreeChart
             // 
+            this.pageTreeChart.BackColor = System.Drawing.SystemColors.Control;
             this.pageTreeChart.Controls.Add(this.grpTreePersons);
             this.pageTreeChart.Controls.Add(this.grpTreeDecor);
             this.pageTreeChart.Location = new System.Drawing.Point(4, 26);
@@ -843,6 +850,26 @@ namespace GKUI.Dialogs
             this.lblChartFont.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblChartFont.Click += new System.EventHandler(this.PanDefFont_Click);
             // 
+            // pageAncCircle
+            // 
+            this.pageAncCircle.BackColor = System.Drawing.SystemColors.Control;
+            this.pageAncCircle.Controls.Add(this.ancOptionsControl1);
+            this.pageAncCircle.Location = new System.Drawing.Point(4, 26);
+            this.pageAncCircle.Name = "pageAncCircle";
+            this.pageAncCircle.Size = new System.Drawing.Size(727, 392);
+            this.pageAncCircle.TabIndex = 4;
+            this.pageAncCircle.Text = "pageAncCircle";
+            // 
+            // ancOptionsControl1
+            // 
+            this.ancOptionsControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ancOptionsControl1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.ancOptionsControl1.Location = new System.Drawing.Point(0, 0);
+            this.ancOptionsControl1.Name = "ancOptionsControl1";
+            this.ancOptionsControl1.Options = null;
+            this.ancOptionsControl1.Size = new System.Drawing.Size(727, 392);
+            this.ancOptionsControl1.TabIndex = 0;
+            // 
             // pageUIView
             // 
             this.pageUIView.Controls.Add(this.PageControl2);
@@ -1082,6 +1109,15 @@ namespace GKUI.Dialogs
             this.chkNotes.TabIndex = 1;
             this.chkNotes.Text = "chkNotes";
             // 
+            // chkGenerations
+            // 
+            this.chkGenerations.Location = new System.Drawing.Point(20, 105);
+            this.chkGenerations.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkGenerations.Name = "chkGenerations";
+            this.chkGenerations.Size = new System.Drawing.Size(349, 21);
+            this.chkGenerations.TabIndex = 2;
+            this.chkGenerations.Text = "chkGenerations";
+            // 
             // chkSources
             // 
             this.chkSources.Location = new System.Drawing.Point(20, 79);
@@ -1191,15 +1227,6 @@ namespace GKUI.Dialogs
             this.btnCancel.Text = "btnCancel";
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // chkGenerations
-            // 
-            this.chkGenerations.Location = new System.Drawing.Point(20, 105);
-            this.chkGenerations.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
-            this.chkGenerations.Name = "chkGenerations";
-            this.chkGenerations.Size = new System.Drawing.Size(349, 21);
-            this.chkGenerations.TabIndex = 2;
-            this.chkGenerations.Text = "chkGenerations";
-            // 
             // OptionsDlg
             // 
             this.AcceptButton = this.btnAccept;
@@ -1242,6 +1269,7 @@ namespace GKUI.Dialogs
             this.panUnHusbandColor.ResumeLayout(false);
             this.panUnWifeColor.ResumeLayout(false);
             this.panDefFont.ResumeLayout(false);
+            this.pageAncCircle.ResumeLayout(false);
             this.pageUIView.ResumeLayout(false);
             this.PageControl2.ResumeLayout(false);
             this.pageViewCommon.ResumeLayout(false);

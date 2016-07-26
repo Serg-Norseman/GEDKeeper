@@ -39,11 +39,6 @@ namespace GKUI
             get { return this.fBase; }
         }
 
-        public AncestorsCircleOptions Options
-        {
-            get { return this.fAncestorsCircle.Options; }
-        }
-
         public AncestorsCircleWin(IBaseWindow aBase, GEDCOMIndividualRecord startPerson)
         {
             this.InitializeComponent();
@@ -56,24 +51,12 @@ namespace GKUI
             this.fAncestorsCircle.Dock = DockStyle.Fill;
             this.fAncestorsCircle.NavRefresh += Chart_NavRefresh;
             this.fAncestorsCircle.RootChanged += Chart_RootChanged;
-
             this.fAncestorsCircle.RootPerson = startPerson;
 
             this.Controls.Add(this.fAncestorsCircle);
 
             this.SetLang();
         }
-
-        /*private void miOptions_Click(object sender, EventArgs e)
-        {
-            using (ACOptionsControl dlg = new ACOptionsControl()) {
-				dlg.Options = this.fAncestorsCircle.Options;
-
-				if (dlg.ShowDialog() == DialogResult.OK) {
-					this.fAncestorsCircle.Invalidate();
-				}
-			}
-        }*/
 
         private void Chart_NavRefresh(object sender, EventArgs e)
         {
@@ -139,7 +122,8 @@ namespace GKUI
 
         public void UpdateView()
         {
-            // TODO ???
+            this.fAncestorsCircle.Options.Assign(MainWin.Instance.Options.AncestorsCircleOptions);
+            this.fAncestorsCircle.Changed();
         }
 
         public bool NavCanBackward()

@@ -67,6 +67,8 @@ namespace GKCore.Options
         private FileBackup fFileBackup;
         private bool fAutosave;
         private int fAutosaveInterval;
+        private bool fExtendedNames;
+        private readonly AncestorsCircleOptions fAncestorsCircleOptions;
 
 
         public static GlobalOptions Instance
@@ -95,6 +97,11 @@ namespace GKCore.Options
         public TreeChartOptions ChartOptions
         {
             get { return this.fChartOptions; }
+        }
+
+        public AncestorsCircleOptions AncestorsCircleOptions
+        {
+            get { return this.fAncestorsCircleOptions; }
         }
 
         public GEDCOMCharacterSet DefCharacterSet
@@ -236,6 +243,13 @@ namespace GKCore.Options
         }
 
 
+        public bool ExtendedNames
+        {
+            get { return this.fExtendedNames; }
+            set { this.fExtendedNames = value; }
+        }
+
+
         private void LngPrepareProc(string fileName)
         {
             try
@@ -317,6 +331,7 @@ namespace GKCore.Options
             this.fPedigreeOptions = new PedigreeOptions();
             this.fProxy = new ProxyOptions();
             this.fRelations = new StringList();
+            this.fAncestorsCircleOptions = new AncestorsCircleOptions();
 
             this.fIndividualListColumns = new IndividualListColumns();
             this.fIndividualListColumns.ResetDefaults();
@@ -379,6 +394,8 @@ namespace GKCore.Options
 
                     this.fAutosave = ini.ReadBool("Common", "Autosave", false);
                     this.fAutosaveInterval = ini.ReadInteger("Common", "AutosaveInterval", 10);
+
+                    this.fExtendedNames = ini.ReadBool("Common", "ExtendedNames", false);
 
                     int kl = ini.ReadInteger("Common", "KeyLayout", GKUtils.GetKeyLayout());
                     GKUtils.SetKeyLayout(kl);
@@ -443,6 +460,8 @@ namespace GKCore.Options
                         string st = ini.ReadString("LastBases", "LB" + i.ToString(), "");
                         this.AddLastBase(st);
                     }
+
+                    this.fAncestorsCircleOptions.LoadFromFile(ini);
                 } finally {
                     ini.Dispose();
                 }
@@ -472,6 +491,8 @@ namespace GKCore.Options
 
                     ini.WriteBool("Common", "Autosave", this.fAutosave);
                     ini.WriteInteger("Common", "AutosaveInterval", this.fAutosaveInterval);
+
+                    ini.WriteBool("Common", "ExtendedNames", this.fExtendedNames);
 
                     this.fChartOptions.SaveToFile(ini);
                     this.fPedigreeOptions.SaveToFile(ini);
@@ -531,6 +552,8 @@ namespace GKCore.Options
                     {
                         ini.WriteString("LastBases", "LB" + i.ToString(), this.GetLastBase(i));
                     }
+
+                    this.fAncestorsCircleOptions.SaveToFile(ini);
                 }
                 finally
                 {

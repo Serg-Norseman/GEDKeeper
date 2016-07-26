@@ -25,6 +25,6 @@ namespace GKCore.Interfaces
     /// </summary>
     public interface IOptions
     {
-        
+        void Assign(IOptions source);
     }
 }

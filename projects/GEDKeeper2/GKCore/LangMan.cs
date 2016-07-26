@@ -791,8 +791,9 @@ namespace GKCore
         /* 716 */ LSID_Autosave,
         /* 717 */ LSID_Minutes,
         /* 718 */ LSID_IncludeGenerations,
+        /* 719 */ LSID_HideEmptySegments,
 
-        /* 000 */ LSID_Last = LSID_IncludeGenerations
+        /* 000 */ LSID_Last = LSID_HideEmptySegments
     }
 
     public static class LangMan
@@ -1542,7 +1543,8 @@ namespace GKCore
             /* 715 */ "Не определяется пол человека по имени \"{1}\". Это мужской пол?",
             /* 716 */ "Автосохранение каждые",
             /* 717 */ "минут",
-            /* 718 */ "Включая номера поколений"
+            /* 718 */ "Включая номера поколений",
+            /* 719 */ "Скрывать пустые сегменты",
         };
 
         private static readonly string[] LSList = new string[(int)LSID.LSID_Last + 1];

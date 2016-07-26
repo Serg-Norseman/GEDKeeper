@@ -80,6 +80,7 @@ sources := \
 ./GKCore/Operations/PersonBookmarkChange.cs \
 ./GKCore/Operations/PersonPatriarchChange.cs \
 ./GKCore/Operations/PersonSexChange.cs \
+./GKCore/Options/AncestorsCircleOptions.cs \
 ./GKCore/Options/GlobalOptions.cs \
 ./GKCore/Options/LangRecord.cs \
 ./GKCore/Options/MRUFile.cs \
@@ -266,6 +267,7 @@ sources := \
 ./GKCore/Operations/PersonBookmarkChange.cs \
 ./GKCore/Operations/PersonPatriarchChange.cs \
 ./GKCore/Operations/PersonSexChange.cs \
+./GKCore/Options/AncestorsCircleOptions.cs \
 ./GKCore/Options/GlobalOptions.cs \
 ./GKCore/Options/LangRecord.cs \
 ./GKCore/Options/MRUFile.cs \

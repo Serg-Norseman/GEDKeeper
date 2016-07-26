@@ -221,6 +221,9 @@ namespace GKUI.Dialogs
             this.UpdateLangs();
 
             this.UpdatePlugins();
+
+            this.ancOptionsControl1.Options = this.fOptions.AncestorsCircleOptions;
+            this.ancOptionsControl1.UpdateControls();
         }
 
         private void UpdatePlugins()
@@ -361,6 +364,8 @@ namespace GKUI.Dialogs
                 MainWin.Instance.LoadLanguage((int)item.Tag);
             }
 
+            ancOptionsControl1.AcceptChanges();
+
             base.DialogResult = DialogResult.OK;
         }
 
@@ -493,6 +498,7 @@ namespace GKUI.Dialogs
             this.lblMinutes.Text = LangMan.LS(LSID.LSID_Minutes);
 
             this.chkGenerations.Text = LangMan.LS(LSID.LSID_IncludeGenerations);
+            this.pageAncCircle.Text = LangMan.LS(LSID.LSID_AncestorsCircle);
         }
     }
 }

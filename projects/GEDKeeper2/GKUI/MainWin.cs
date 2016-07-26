@@ -779,7 +779,13 @@ namespace GKUI
             {
                 Form activeForm = this.ActiveMdiChild;
                 if (activeForm is IBaseWindow) dlgOptions.SetPage(OptionsPage.opInterface);
-                if (activeForm is IChartWindow) dlgOptions.SetPage(OptionsPage.opTreeChart);
+                if (activeForm is IChartWindow) {
+                    if (activeForm is AncestorsCircleWin) {
+                        dlgOptions.SetPage(OptionsPage.opAncestorsCircle);
+                    } else {
+                        dlgOptions.SetPage(OptionsPage.opTreeChart);
+                    }
+                }
 
                 if (dlgOptions.ShowDialog() == DialogResult.OK)
                 {

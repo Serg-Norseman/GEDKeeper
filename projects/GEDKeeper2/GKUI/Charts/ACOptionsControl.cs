@@ -22,6 +22,7 @@ using System;
 using System.Windows.Forms;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Options;
 
 namespace GKUI.Charts
 {
@@ -64,10 +65,13 @@ namespace GKUI.Charts
             this.acbText.Text = LangMan.LS(LSID.LSID_TextColor);
             this.acbBack.Text = LangMan.LS(LSID.LSID_BackColor);
             this.acbLine.Text = LangMan.LS(LSID.LSID_LinesColor);
+            this.chkHideEmptySegments.Text = LangMan.LS(LSID.LSID_HideEmptySegments);
         }
 
         public void AcceptChanges()
         {
+            if (this.fOptions == null) return;
+
             this.fOptions.BrushColor[ 0] = this.acb0.BackColor;
             this.fOptions.BrushColor[ 1] = this.acb1.BackColor;
             this.fOptions.BrushColor[ 2] = this.acb2.BackColor;
@@ -79,12 +83,14 @@ namespace GKUI.Charts
             this.fOptions.BrushColor[ 8] = this.acbText.BackColor;
             this.fOptions.BrushColor[ 9] = this.acbBack.BackColor;
             this.fOptions.BrushColor[10] = this.acbLine.BackColor;
-            
-            this.fOptions.Apply();
+
+            this.fOptions.HideEmptySegments = this.chkHideEmptySegments.Checked;
+            //this.fOptions.Apply();
         }
 
         public void UpdateControls()
         {
+            if (this.fOptions == null) return;
             //this.PanDefFont.Text = this.FOptions.ChartOptions.DefFont_Name + ", " + this.FOptions.ChartOptions.DefFont_Size.ToString();
 
             this.acb0.BackColor = this.fOptions.BrushColor[0];
@@ -98,6 +104,8 @@ namespace GKUI.Charts
             this.acbText.BackColor = this.fOptions.BrushColor[8];
             this.acbBack.BackColor = this.fOptions.BrushColor[9];
             this.acbLine.BackColor = this.fOptions.BrushColor[10];
+
+            this.chkHideEmptySegments.Checked = this.fOptions.HideEmptySegments;
         }
 
         /*private void PanDefFont_Click(object sender, EventArgs e)
@@ -113,10 +121,7 @@ namespace GKUI.Charts
         private void lblColorClick(object sender, MouseEventArgs e)
         {
             Label lbl = sender as Label;
-            if (lbl == null)
-            {
-                return;
-            }
+            if (lbl == null) return;
 
             this.ColorDialog1.Color = lbl.BackColor;
 
