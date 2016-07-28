@@ -29,9 +29,9 @@ using GKUI.Charts;
 
 namespace GKUI
 {
-    public partial class AncestorsCircleWin : Form, IChartWindow
+    public partial class DescendantsCircleWin : Form, IChartWindow
     {
-        private readonly AncestorsCircle fAncestorsCircle;
+        private readonly DescendantsCircle fDescendantsCircle;
         private readonly IBaseWindow fBase;
 
         public IBaseWindow Base
@@ -39,7 +39,7 @@ namespace GKUI
             get { return this.fBase; }
         }
 
-        public AncestorsCircleWin(IBaseWindow aBase, GEDCOMIndividualRecord startPerson)
+        public DescendantsCircleWin(IBaseWindow aBase, GEDCOMIndividualRecord startPerson)
         {
             this.InitializeComponent();
             this.MdiParent = MainWin.Instance;
@@ -47,13 +47,13 @@ namespace GKUI
 
             this.fBase = aBase;
 
-            this.fAncestorsCircle = new AncestorsCircle(this.fBase);
-            this.fAncestorsCircle.Dock = DockStyle.Fill;
-            this.fAncestorsCircle.NavRefresh += Chart_NavRefresh;
-            this.fAncestorsCircle.RootChanged += Chart_RootChanged;
-            this.fAncestorsCircle.RootPerson = startPerson;
+            this.fDescendantsCircle = new DescendantsCircle(this.fBase);
+            this.fDescendantsCircle.Dock = DockStyle.Fill;
+            this.fDescendantsCircle.NavRefresh += Chart_NavRefresh;
+            this.fDescendantsCircle.RootChanged += Chart_RootChanged;
+            this.fDescendantsCircle.RootPerson = startPerson;
 
-            this.Controls.Add(this.fAncestorsCircle);
+            this.Controls.Add(this.fDescendantsCircle);
 
             this.SetLang();
         }
@@ -68,7 +68,7 @@ namespace GKUI
             MainWin.Instance.UpdateControls(false);
         }
 
-        private void AncestorsCircleWin_KeyDown(object sender, KeyEventArgs e)
+        private void DescendantsCircleWin_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
             {
@@ -82,7 +82,7 @@ namespace GKUI
         
         public void SetLang()
         {
-            this.Text = LangMan.LS(LSID.LSID_AncestorsCircle);
+            this.Text = LangMan.LS(LSID.LSID_DescendantsCircle);
         }
 
         #endregion
@@ -117,33 +117,33 @@ namespace GKUI
 
         public string GetStatusString()
         {
-            return string.Format(LangMan.LS(LSID.LSID_TreeIndividualsCount), fAncestorsCircle.IndividualsCount.ToString());
+            return string.Format(LangMan.LS(LSID.LSID_TreeIndividualsCount), fDescendantsCircle.IndividualsCount.ToString());
         }
 
         public void UpdateView()
         {
-            this.fAncestorsCircle.Options.Assign(MainWin.Instance.Options.AncestorsCircleOptions);
-            this.fAncestorsCircle.Changed();
+            this.fDescendantsCircle.Options.Assign(MainWin.Instance.Options.AncestorsCircleOptions);
+            this.fDescendantsCircle.Changed();
         }
 
         public bool NavCanBackward()
         {
-            return this.fAncestorsCircle.NavCanBackward();
+            return this.fDescendantsCircle.NavCanBackward();
         }
 
         public bool NavCanForward()
         {
-            return this.fAncestorsCircle.NavCanForward();
+            return this.fDescendantsCircle.NavCanForward();
         }
 
         public void NavNext()
         {
-            this.fAncestorsCircle.NavNext();
+            this.fDescendantsCircle.NavNext();
         }
 
         public void NavPrev()
         {
-            this.fAncestorsCircle.NavPrev();
+            this.fDescendantsCircle.NavPrev();
         }
 
         public bool AllowQuickFind()

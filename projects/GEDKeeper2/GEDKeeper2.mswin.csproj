@@ -176,6 +176,7 @@
     <Compile Include="GKUI\Charts\CustomChart.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GKUI\Charts\DescendantsCircle.cs" />
     <Compile Include="GKUI\Charts\ITreeControl.cs" />
     <Compile Include="GKUI\Charts\PersonControl.cs" />
     <Compile Include="GKUI\Charts\PersonModifyEventArgs.cs" />
@@ -214,6 +215,10 @@
     <Compile Include="GKUI\Controls\ModifyEventArgs.cs" />
     <Compile Include="GKUI\Controls\SearchPanel.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\DescendantsCircleWin.cs" />
+    <Compile Include="GKUI\DescendantsCircleWin.Designer.cs">
+      <DependentUpon>DescendantsCircleWin.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\AboutDlg.cs">
       <SubType>Form</SubType>
@@ -513,6 +518,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Controls\GKInputBox.resx">
       <DependentUpon>GKInputBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\DescendantsCircleWin.resx">
+      <DependentUpon>DescendantsCircleWin.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\AboutDlg.resx">
       <DependentUpon>AboutDlg.cs</DependentUpon>

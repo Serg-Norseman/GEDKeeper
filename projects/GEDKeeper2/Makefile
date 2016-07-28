@@ -102,6 +102,8 @@ sources := \
 ./GKResources.Designer.cs \
 ./GKUI/AncestorsCircleWin.cs \
 ./GKUI/AncestorsCircleWin.Designer.cs \
+./GKUI/DescendantsCircleWin.cs \
+./GKUI/DescendantsCircleWin.Designer.cs \
 ./GKUI/BaseWin.cs \
 ./GKUI/BaseWin.Designer.cs \
 ./GKUI/Charts/ACOptionsControl.cs \
@@ -109,6 +111,7 @@ sources := \
 ./GKUI/Charts/AncestorsCircle.cs \
 ./GKUI/Charts/ChartFilter.cs \
 ./GKUI/Charts/CustomChart.cs \
+./GKUI/Charts/DescendantsCircle.cs \
 ./GKUI/Charts/ITreeControl.cs \
 ./GKUI/Charts/PersonControl.cs \
 ./GKUI/Charts/PersonList.cs \
@@ -289,6 +292,8 @@ sources := \
 ./GKResources.Designer.cs \
 ./GKUI/AncestorsCircleWin.cs \
 ./GKUI/AncestorsCircleWin.Designer.cs \
+./GKUI/DescendantsCircleWin.cs \
+./GKUI/DescendantsCircleWin.Designer.cs \
 ./GKUI/BaseWin.cs \
 ./GKUI/BaseWin.Designer.cs \
 ./GKUI/Charts/ACOptionsControl.cs \
@@ -296,6 +301,7 @@ sources := \
 ./GKUI/Charts/AncestorsCircle.cs \
 ./GKUI/Charts/ChartFilter.cs \
 ./GKUI/Charts/CustomChart.cs \
+./GKUI/Charts/DescendantsCircle.cs \
 ./GKUI/Charts/ITreeControl.cs \
 ./GKUI/Charts/PersonControl.cs \
 ./GKUI/Charts/PersonList.cs \
@@ -425,6 +431,7 @@ BaseWin.resources \
 CommonFilterDlg.resources \
 CommunicationEditDlg.resources \
 DayTipsDlg.resources \
+DescendantsCircleWin.resources \
 EventEditDlg.resources \
 FamilyEditDlg.resources \
 FilePropertiesDlg.resources \
@@ -478,6 +485,7 @@ BaseWin.resources \
 CommonFilterDlg.resources \
 CommunicationEditDlg.resources \
 DayTipsDlg.resources \
+DescendantsCircleWin.resources \
 EventEditDlg.resources \
 FamilyEditDlg.resources \
 FilePropertiesDlg.resources \

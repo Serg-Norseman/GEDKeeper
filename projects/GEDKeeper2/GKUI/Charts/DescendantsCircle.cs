@@ -26,14 +26,14 @@ using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
+using GKCore;
 using GKCore.Interfaces;
 using GKCore.Options;
+using GKCore.Types;
 
 namespace GKUI.Charts
 {
-    public delegate void ARootChangedEventHandler(object sender, GEDCOMIndividualRecord person);
-
-    public class AncestorsCircle : CustomChart
+    public class DescendantsCircle : CustomChart
     {
         private class PersonSegment : BaseObject
         {
@@ -43,18 +43,18 @@ namespace GKUI.Charts
             public GEDCOMIndividualRecord IRec;
             public int Rad;
             public float V;
-            public int GroupIndex;
-            public PersonSegment FatherSegment;
-            public PersonSegment MotherSegment;
+            public List<PersonSegment> ChildSegments;
+            public int TotalSubSegments;
+            //public float StartAngle;
+            //public float WedgeAngle;
 
             public PersonSegment(int generation)
             {
                 this.Gen = generation;
                 this.Path = new GraphicsPath();
                 this.IRec = null;
-                this.GroupIndex = -1;
-                this.FatherSegment = null;
-                this.MotherSegment = null;
+                this.ChildSegments = new List<DescendantsCircle.PersonSegment>();
+                this.TotalSubSegments = 0;
             }
 
             protected override void Dispose(bool disposing)
@@ -83,8 +83,6 @@ namespace GKUI.Charts
         private int fCenterX;
         private int fCenterY;
         private int fGenWidth;
-        private int fGroupCount;
-        private bool fGroupsMode;
         private string fHint;
         private int fIndividualsCount;
         private int fMaxGenerations;
@@ -92,25 +90,9 @@ namespace GKUI.Charts
         private int fOffsetY = 0;
         private GEDCOMIndividualRecord fRootPerson;
         private PersonSegment fSelected;
+        private ShieldState fShieldState;
         //private GEDCOMTree fTree;
 
-
-        public bool GroupsMode
-        {
-            get {
-                return this.fGroupsMode;
-            }
-            set {
-                this.fGroupsMode = value;
-                if (value) {
-                    this.fMaxGenerations = 8;
-                    this.GenWidth = 60;
-                } else {
-                    this.fMaxGenerations = 8;
-                    this.GenWidth = DEFAULT_GEN_WIDTH;
-                }
-            }
-        }
 
         public AncestorsCircleOptions Options
         {
@@ -152,19 +134,21 @@ namespace GKUI.Charts
         
         public event ARootChangedEventHandler RootChanged
         {
-            add { base.Events.AddHandler(AncestorsCircle.EventRootChanged, value); }
-            remove { base.Events.RemoveHandler(AncestorsCircle.EventRootChanged, value); }
+            add { base.Events.AddHandler(DescendantsCircle.EventRootChanged, value); }
+            remove { base.Events.RemoveHandler(DescendantsCircle.EventRootChanged, value); }
         }
 
-        static AncestorsCircle()
+        static DescendantsCircle()
         {
-            AncestorsCircle.EventRootChanged = new object();
+            DescendantsCircle.EventRootChanged = new object();
         }
 
-        public AncestorsCircle(IBaseWindow baseWin) : base()
+        public DescendantsCircle(IBaseWindow baseWin) : base()
         {
             this.components = new System.ComponentModel.Container();
 
+            this.fShieldState = baseWin.ShieldState;
+            
             //this.fTree = tree;
             this.fOptions = new AncestorsCircleOptions();
             this.fCircleBrushes = new SolidBrush[AncestorsCircleOptions.MAX_BRUSHES];
@@ -194,7 +178,7 @@ namespace GKUI.Charts
 
         private void DoRootChanged(GEDCOMIndividualRecord person)
         {
-            ARootChangedEventHandler eventHandler = (ARootChangedEventHandler)base.Events[AncestorsCircle.EventRootChanged];
+            ARootChangedEventHandler eventHandler = (ARootChangedEventHandler)base.Events[DescendantsCircle.EventRootChanged];
             if (eventHandler == null) return;
 
             eventHandler(this, person);
@@ -218,15 +202,6 @@ namespace GKUI.Charts
             }
         }
 
-        private void TraverseGroups(PersonSegment segment, int groupIndex)
-        {
-            if (segment == null) return;
-
-            segment.GroupIndex = groupIndex;
-            if (segment.FatherSegment != null) this.TraverseGroups(segment.FatherSegment, groupIndex);
-            if (segment.MotherSegment != null) this.TraverseGroups(segment.MotherSegment, groupIndex);
-        }
-
         private PersonSegment SetSegmentParams(int index, GEDCOMIndividualRecord rec, int rad, float v, int groupIndex)
         {
             try
@@ -236,7 +211,6 @@ namespace GKUI.Charts
                 segment.IRec = rec;
                 segment.Rad = rad;
                 segment.V = v;
-                segment.GroupIndex = groupIndex;
 
                 return segment;
             }
@@ -293,102 +267,127 @@ namespace GKUI.Charts
         {
             this.fSegments.Clear();
 
-            int ctX = base.Width / 2 + this.fOffsetX;
-            int ctY = base.Height / 2 + this.fOffsetY;
-            this.fCenterX = ctX;
-            this.fCenterY = ctY;
+            // traverse tree
+            this.fIndividualsCount = 0;
+
+            PersonSegment rootSegment;
+            if (this.fRootPerson != null) {
+                rootSegment = this.TraverseDescendants(this.fRootPerson, 0);
+            } else {
+                return;
+            }
+
+            this.fCenterX = base.Width / 2 + this.fOffsetX;
+            this.fCenterY = base.Height / 2 + this.fOffsetY;
 
             int inRad = CENTER_RAD - 50;
+            float stepAngle = (360.0f / rootSegment.TotalSubSegments);
 
-            PersonSegment segment = new PersonSegment(0);
+            this.CalcDescendants(rootSegment, inRad, -90.0f, stepAngle);
+        }
+
+        private void CalcDescendants(PersonSegment segment, int inRad, float startAngle, float stepAngle)
+        {
             GraphicsPath path = segment.Path;
-            path.StartFigure();
-            path.AddEllipse(ctX - inRad, ctY - inRad, inRad * 2, inRad * 2);
-            path.CloseFigure();
-            this.fSegments.Add(segment);
 
-            int maxSteps = 1;
-            for (int gen = 1; gen <= this.fMaxGenerations; gen++) {
-                inRad = (CENTER_RAD - 50) + ((gen - 1) * this.fGenWidth);
+            int ctX = this.fCenterX;
+            int ctY = this.fCenterY;
 
-                int extRad = inRad + this.fGenWidth;
-                maxSteps *= 2;
+            int extRad;
+            if (segment.Gen == 0) {
+                path.StartFigure();
+                path.AddEllipse(ctX - inRad, ctY - inRad, inRad * 2, inRad * 2);
+                path.CloseFigure();
+
+                extRad = inRad;
+            } else {
+                extRad = inRad + this.fGenWidth;
+
+                int size = (segment.TotalSubSegments > 0) ? segment.TotalSubSegments : 1;
+                float wedgeAngle = stepAngle * size;
 
                 int ir2 = inRad * 2;
                 int er2 = extRad * 2;
-                float stepAngle = (360.0f / maxSteps);
 
-                for (int stp = 0; stp < maxSteps; stp++)
-                {
-                    float ang1 = (stp * stepAngle) - 90.0f;
-                    float angval1 = ang1 * PI / 180.0f;
-                    int px1 = ctX + (int)(inRad * Math.Cos(angval1));
-                    int py1 = ctY + (int)(inRad * Math.Sin(angval1));
-                    int px2 = ctX + (int)(extRad * Math.Cos(angval1));
-                    int py2 = ctY + (int)(extRad * Math.Sin(angval1));
+                float ang1 = startAngle;
+                float angval1 = ang1 * PI / 180.0f;
+                int px1 = ctX + (int)(inRad * Math.Cos(angval1));
+                int py1 = ctY + (int)(inRad * Math.Sin(angval1));
+                int px2 = ctX + (int)(extRad * Math.Cos(angval1));
+                int py2 = ctY + (int)(extRad * Math.Sin(angval1));
 
-                    float ang2 = ang1 + stepAngle;
-                    float angval2 = ang2 * PI / 180.0f;
-                    int nx1 = ctX + (int)(inRad * Math.Cos(angval2));
-                    int ny1 = ctY + (int)(inRad * Math.Sin(angval2));
-                    int nx2 = ctX + (int)(extRad * Math.Cos(angval2));
-                    int ny2 = ctY + (int)(extRad * Math.Sin(angval2));
+                float ang2 = ang1 + wedgeAngle;
+                float angval2 = ang2 * PI / 180.0f;
+                int nx1 = ctX + (int)(inRad * Math.Cos(angval2));
+                int ny1 = ctY + (int)(inRad * Math.Sin(angval2));
+                int nx2 = ctX + (int)(extRad * Math.Cos(angval2));
+                int ny2 = ctY + (int)(extRad * Math.Sin(angval2));
 
-                    segment = new PersonSegment(gen);
-                    path = segment.Path;
-                    path.StartFigure();
-                    path.AddLine(px2, py2, px1, py1);
-                    path.AddArc(ctX - inRad, ctY - inRad, ir2, ir2, ang1, stepAngle);
-                    path.AddLine(nx1, ny1, nx2, ny2);
-                    path.AddArc(ctX - extRad, ctY - extRad, er2, er2, ang2, -stepAngle);
-                    path.CloseFigure();
-                    this.fSegments.Add(segment);
-                }
+                path.StartFigure();
+                path.AddLine(px2, py2, px1, py1);
+                path.AddArc(ctX - inRad, ctY - inRad, ir2, ir2, ang1, wedgeAngle);
+                path.AddLine(nx1, ny1, nx2, ny2);
+                path.AddArc(ctX - extRad, ctY - extRad, er2, er2, ang2, -wedgeAngle);
+                path.CloseFigure();
             }
 
-            // traverse tree
-            this.fGroupCount = -1;
-            this.fIndividualsCount = 0;
-            if (this.fRootPerson != null) {
-                this.fIndividualsCount++;
-                PersonSegment rootSegment = this.SetSegmentParams(0, this.fRootPerson, 0, 0, -1);
+            float childStartAngle = startAngle;
+            for (int i = 0; i < segment.ChildSegments.Count; i++) {
+                PersonSegment childSegment = segment.ChildSegments[i];
 
-                GEDCOMIndividualRecord father, mother;
-                this.fRootPerson.GetParents(out father, out mother);
+                this.CalcDescendants(childSegment, extRad, childStartAngle, stepAngle);
 
-                if (mother != null) {
-                    rootSegment.MotherSegment = this.TraverseAncestors(mother, 90f, 1, CENTER_RAD, 90.0f, 1, -1);
-                }
+                int steps = (childSegment.TotalSubSegments > 0) ? childSegment.TotalSubSegments : 1;
 
-                if (father != null) {
-                    rootSegment.FatherSegment = this.TraverseAncestors(father, 270.0f, 1, CENTER_RAD, 90.0f, 1, -1);
-                }
+                childStartAngle += stepAngle * steps;
             }
         }
 
-        private PersonSegment TraverseAncestors(GEDCOMIndividualRecord iRec, float v, int gen, int rad, float ro, int prevSteps, int groupIndex)
+        private PersonSegment TraverseDescendants(GEDCOMIndividualRecord iRec, int gen/*, float v, int rad, float ro, int prevSteps*/)
         {
+            if (iRec == null) return null;
+            
             try
             {
                 this.fIndividualsCount++;
 
-                if (this.fGroupsMode && groupIndex == -1) {
-                    PersonSegment otherSegment = this.FindSegmentByRec(iRec);
-                    if (otherSegment != null) {
-                        this.fGroupCount++;
-                        groupIndex = this.fGroupCount;
-                        this.TraverseGroups(otherSegment, groupIndex);
+                PersonSegment resultSegment = new PersonSegment(gen);
+                resultSegment.IRec = iRec;
+                this.fSegments.Add(resultSegment);
+
+                if (gen < this.fMaxGenerations)
+                {
+                    int num2 = iRec.SpouseToFamilyLinks.Count;
+                    for (int j = 0; j < num2; j++)
+                    {
+                        GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[j].Family;
+                        if (GKUtils.IsRecordAccess(family.Restriction, this.fShieldState))
+                        {
+                            family.SortChilds();
+
+                            int num3 = family.Childrens.Count;
+                            for (int i = 0; i < num3; i++)
+                            {
+                                GEDCOMIndividualRecord child = family.Childrens[i].Value as GEDCOMIndividualRecord;
+                                PersonSegment childSegment = this.TraverseDescendants(child, gen + 1);
+
+                                int size = (childSegment.TotalSubSegments > 0) ? childSegment.TotalSubSegments : 1;
+                                resultSegment.TotalSubSegments += size;
+
+                                resultSegment.ChildSegments.Add(childSegment);
+                            }
+                        }
                     }
                 }
 
+                /*
                 int genSize = (int)Math.Pow(2.0, gen);
                 float ang = (360.0f / genSize);
 
                 int idx = prevSteps + (int)(v / ang);
                 PersonSegment segment = this.SetSegmentParams(idx, iRec, rad, v, groupIndex);
 
-                if (gen < this.fMaxGenerations)
-                {
+                if (gen < 8) {
                     GEDCOMIndividualRecord father, mother;
                     iRec.GetParents(out father, out mother);
 
@@ -403,9 +402,9 @@ namespace GKUI.Charts
                         v += (ang / 2.0f);
                         segment.MotherSegment = this.TraverseAncestors(mother, v, gen + 1, rad + this.fGenWidth, ro / 2.0f, ps, groupIndex);
                     }
-                }
+                }*/
 
-                return segment;
+                return resultSegment;
             }
             catch
             {
@@ -427,15 +426,9 @@ namespace GKUI.Charts
             for (int i = 0; i < num; i++) {
                 PersonSegment segment = this.fSegments[i];
 
-                bool draw = (!this.Options.HideEmptySegments || segment.IRec != null);
-
-                if (draw) {
+                if (segment.IRec != null) {
                     int brIndex;
-                    if (this.fGroupsMode) {
-                        brIndex = (segment.GroupIndex == -1) ? 11 : segment.GroupIndex;
-                    } else {
-                        brIndex = (segment.Gen == 0) ? 9 : segment.Gen - 1;
-                    }
+                    brIndex = (segment.Gen == 0) ? 9 : segment.Gen - 1;
 
                     SolidBrush brush;
                     brush = (this.fSelected == segment) ? this.fDarkBrushes[brIndex] : this.fCircleBrushes[brIndex];
@@ -446,18 +439,15 @@ namespace GKUI.Charts
                 }
             }
 
-            /*if (!this.fGroupsMode)*/
-            {
-                this.DrawAncestorName(gfx, 0, 0, 0, this.fRootPerson);
+            /*this.DrawAncestorName(gfx, 0, 0, 0, this.fRootPerson);
 
-                for (int i = 0; i < num; i++) {
-                    PersonSegment segment = this.fSegments[i];
-                    this.DrawAncestorName(gfx, segment.Rad, segment.Gen, segment.V, segment.IRec);
-                }
-            }
+            for (int i = 0; i < num; i++) {
+                PersonSegment segment = this.fSegments[i];
+                this.DrawAncestorName(gfx, segment.Rad, segment.Gen, segment.V, segment.IRec);
+            }*/
         }
 
-        private void DrawAncestorName(Graphics gfx, int rad, int gen, float v, GEDCOMIndividualRecord iRec)
+        /*private void DrawAncestorName(Graphics gfx, int rad, int gen, float v, GEDCOMIndividualRecord iRec)
         {
             string s2, s1;
             if (iRec == null) {
@@ -536,7 +526,7 @@ namespace GKUI.Charts
                         break;
                     }
             }
-        }
+        }*/
 
         private void DrawString(Graphics gfx, string str)
         {
@@ -551,7 +541,6 @@ namespace GKUI.Charts
         protected override void OnDoubleClick(EventArgs e)
         {
             base.OnDoubleClick(e);
-            this.GroupsMode = !this.GroupsMode;
         }
 
         protected override bool IsInputKey(Keys keyData)
@@ -581,32 +570,6 @@ namespace GKUI.Charts
                 case Keys.Subtract:
                     this.GenWidth -= 10;
                     break;
-
-                case Keys.Left:
-                    {
-                        if (this.fRootPerson != null) {
-                            GEDCOMIndividualRecord father, mother;
-                            this.fRootPerson.GetParents(out father, out mother);
-
-                            if (father != null) {
-                                this.RootPerson = father;
-                            }
-                        }
-                        break;
-                    }
-
-                case Keys.Right:
-                    {
-                        if (this.fRootPerson != null) {
-                            GEDCOMIndividualRecord father, mother;
-                            this.fRootPerson.GetParents(out father, out mother);
-
-                            if (mother != null) {
-                                this.RootPerson = mother;
-                            }
-                        }
-                        break;
-                    }
 
                 case Keys.Back:
                     this.NavPrev();

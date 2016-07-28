@@ -1024,6 +1024,15 @@ namespace GKUI
             fmChart.GenChart(true);
         }
 
+        private void miDescendantsCircleClick(object sender, EventArgs e)
+        {
+            IBaseWindow curBase = this.GetCurrentFile();
+            if (curBase == null) return;
+
+            DescendantsCircleWin fmChart = new DescendantsCircleWin(curBase, curBase.GetSelectedPerson());
+            fmChart.GenChart(true);
+        }
+
         #endregion
 
         #region Help and Windows
@@ -1184,6 +1193,7 @@ namespace GKUI
 
             this.miSearch.Text = LangMan.LS(LSID.LSID_Search);
             this.miAncestorsCircle.Text = LangMan.LS(LSID.LSID_AncestorsCircle);
+            this.miDescendantsCircle.Text = LangMan.LS(LSID.LSID_DescendantsCircle);
 
             this.tbFileNew.ToolTipText = LangMan.LS(LSID.LSID_FileNewTip);
             this.tbFileLoad.ToolTipText = LangMan.LS(LSID.LSID_FileLoadTip);

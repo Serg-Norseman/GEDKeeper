@@ -96,6 +96,7 @@ namespace GKUI
 		private System.Windows.Forms.ToolStripMenuItem miSlideshow;
 		private System.Windows.Forms.ToolStripDropDownButton tbLoadMRU;
 		private System.Windows.Forms.ToolStripMenuItem miPedigreeAscend;
+		private System.Windows.Forms.ToolStripMenuItem miDescendantsCircle;
 
 		private void InitializeComponent()
 		{
@@ -159,6 +160,7 @@ namespace GKUI
 		    this.miTreeBoth = new System.Windows.Forms.ToolStripMenuItem();
 		    this.miAncestorsCircle = new System.Windows.Forms.ToolStripMenuItem();
 		    this.N6 = new System.Windows.Forms.ToolStripSeparator();
+		    this.miPedigreeAscend = new System.Windows.Forms.ToolStripMenuItem();
 		    this.miPedigree_dAboville = new System.Windows.Forms.ToolStripMenuItem();
 		    this.miPedigree_Konovalov = new System.Windows.Forms.ToolStripMenuItem();
 		    this.miExportToFamilyBook = new System.Windows.Forms.ToolStripMenuItem();
@@ -189,7 +191,7 @@ namespace GKUI
 		    this.N13 = new System.Windows.Forms.ToolStripSeparator();
 		    this.miAbout = new System.Windows.Forms.ToolStripMenuItem();
 		    this.ToolTip1 = new System.Windows.Forms.ToolTip(this.components);
-		    this.miPedigreeAscend = new System.Windows.Forms.ToolStripMenuItem();
+		    this.miDescendantsCircle = new System.Windows.Forms.ToolStripMenuItem();
 		    ((System.ComponentModel.ISupportInitialize)(this.StatusBarPanel1)).BeginInit();
 		    ((System.ComponentModel.ISupportInitialize)(this.StatusBarPanel2)).BeginInit();
 		    this.ToolBar1.SuspendLayout();
@@ -609,6 +611,7 @@ namespace GKUI
 		    		    		    this.miTreeDescendants,
 		    		    		    this.miTreeBoth,
 		    		    		    this.miAncestorsCircle,
+		    		    		    this.miDescendantsCircle,
 		    		    		    this.N6,
 		    		    		    this.miPedigreeAscend,
 		    		    		    this.miPedigree_dAboville,
@@ -656,6 +659,13 @@ namespace GKUI
 		    // 
 		    this.N6.Name = "N6";
 		    this.N6.Size = new System.Drawing.Size(278, 6);
+		    // 
+		    // miPedigreeAscend
+		    // 
+		    this.miPedigreeAscend.Name = "miPedigreeAscend";
+		    this.miPedigreeAscend.Size = new System.Drawing.Size(281, 24);
+		    this.miPedigreeAscend.Text = "miPedigreeAscend";
+		    this.miPedigreeAscend.Click += new System.EventHandler(this.miPedigreeAscend_Click);
 		    // 
 		    // miPedigree_dAboville
 		    // 
@@ -872,12 +882,12 @@ namespace GKUI
 		    this.miAbout.Text = "miAbout";
 		    this.miAbout.Click += new System.EventHandler(this.miAboutClick);
 		    // 
-		    // miPedigreeAscend
+		    // miDescendantsCircle
 		    // 
-		    this.miPedigreeAscend.Name = "miPedigreeAscend";
-		    this.miPedigreeAscend.Size = new System.Drawing.Size(281, 24);
-		    this.miPedigreeAscend.Text = "miPedigreeAscend";
-		    this.miPedigreeAscend.Click += new System.EventHandler(this.miPedigreeAscend_Click);
+		    this.miDescendantsCircle.Name = "miDescendantsCircle";
+		    this.miDescendantsCircle.Size = new System.Drawing.Size(281, 24);
+		    this.miDescendantsCircle.Text = "miDescendantsCircle";
+		    this.miDescendantsCircle.Click += new System.EventHandler(this.miDescendantsCircleClick);
 		    // 
 		    // MainWin
 		    // 
