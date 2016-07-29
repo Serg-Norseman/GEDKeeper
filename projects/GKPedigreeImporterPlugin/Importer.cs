@@ -672,61 +672,71 @@ namespace GKPedigreeImporterPlugin
 
         #region Integral loading
 
-        private void AnalyseRaw()
+        private bool AnalyseRaw()
         {
             if (this.SourceType == SourceType.stTable) {
-                return;
+                return false;
             }
 
             try
             {
-                int[] numberStats = new int[3];
+                try
+                {
+                    int[] numberStats = new int[3];
 
-                int num = this.fRawContents.Count;
-                this.fBase.ProgressInit(fLangMan.LS(ILS.LSID_Analysis), num);
+                    int num = this.fRawContents.Count;
+                    this.fBase.ProgressInit(fLangMan.LS(ILS.LSID_Analysis), num);
 
-                for (int i = 0; i < num; i++) {
-                    string txt = this.fRawContents[i].Trim();
-                    RawLine rawLine = (RawLine)this.fRawContents.GetObject(i);
+                    for (int i = 0; i < num; i++) {
+                        string txt = this.fRawContents[i].Trim();
+                        RawLine rawLine = (RawLine)this.fRawContents.GetObject(i);
 
-                    if (!string.IsNullOrEmpty(txt)) {
-                        if (this.IsGenerationLine(txt)) {
-                            rawLine.Type = RawLineType.rltRomeGeneration;
+                        if (!string.IsNullOrEmpty(txt)) {
+                            if (this.IsGenerationLine(txt)) {
+                                rawLine.Type = RawLineType.rltRomeGeneration;
+                            } else {
+                                PersonNumbersType numbType = PersonNumbersType.pnUndefined;
+                                string dummy = "";
+
+                                if (ImpUtils.IsPersonLine_DAboville(txt, out dummy))
+                                {
+                                    rawLine.Type = RawLineType.rltPerson;
+                                    numbType = PersonNumbersType.pnDAboville;
+                                    numberStats[1]++;
+                                }
+                                else if (ImpUtils.IsPersonLine_Konovalov(txt, out dummy))
+                                {
+                                    rawLine.Type = RawLineType.rltPerson;
+                                    numbType = PersonNumbersType.pnKonovalov;
+                                    numberStats[2]++;
+                                }
+
+                                rawLine.NumbersType = numbType;
+                            }
                         } else {
-                            PersonNumbersType numbType = PersonNumbersType.pnUndefined;
-                            string dummy = "";
-
-                            if (ImpUtils.IsPersonLine_DAboville(txt, out dummy))
-                            {
-                                rawLine.Type = RawLineType.rltPerson;
-                                numbType = PersonNumbersType.pnDAboville;
-                                numberStats[1]++;
-                            }
-                            else if (ImpUtils.IsPersonLine_Konovalov(txt, out dummy))
-                            {
-                                rawLine.Type = RawLineType.rltPerson;
-                                numbType = PersonNumbersType.pnKonovalov;
-                                numberStats[2]++;
-                            }
-
-                            rawLine.NumbersType = numbType;
+                            rawLine.Type = RawLineType.rltEOF;
                         }
-                    } else {
-                        rawLine.Type = RawLineType.rltEOF;
+
+                        this.fBase.ProgressStep(i + 1);
                     }
 
-                    this.fBase.ProgressStep(i + 1);
-                }
+                    if (numberStats[1] > numberStats[2]) {
+                        this.CanNumbersType = PersonNumbersType.pnDAboville;
+                    } else {
+                        this.CanNumbersType = PersonNumbersType.pnKonovalov;
+                    }
 
-                if (numberStats[1] > numberStats[2]) {
-                    this.CanNumbersType = PersonNumbersType.pnDAboville;
-                } else {
-                    this.CanNumbersType = PersonNumbersType.pnKonovalov;
+                    return true;
+                }
+                finally
+                {
+                    this.fBase.ProgressDone();
                 }
             }
-            finally
+            catch (Exception ex)
             {
-                this.fBase.ProgressDone();
+                this.fBase.Host.LogWrite("Importer.AnalyseRaw(): " + ex.Message);
+                return false;
             }
         }
 
@@ -941,7 +951,7 @@ namespace GKPedigreeImporterPlugin
             catch (Exception ex)
             {
                 this.fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
-                this.fBase.Host.LogWrite("Importer.ImportExcel(): " + ex.Message);
+                this.fBase.Host.LogWrite("Importer.ImportTableContent(): " + ex.Message);
                 return false;
             }
         }
@@ -951,9 +961,7 @@ namespace GKPedigreeImporterPlugin
         {
             this.SourceType = SourceType.stTable;
 
-            this.AnalyseRaw();
-
-            return true;
+            return this.AnalyseRaw();
         }
 
         private bool LoadRawText(string fileName)
@@ -980,9 +988,7 @@ namespace GKPedigreeImporterPlugin
                     }
                     this.fRawContents.AddObject("", new RawLine(lineNum));
 
-                    this.AnalyseRaw();
-
-                    return true;
+                    return this.AnalyseRaw();
                 }
                 finally
                 {
@@ -993,7 +999,7 @@ namespace GKPedigreeImporterPlugin
             catch (Exception ex)
             {
                 this.fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
-                this.fBase.Host.LogWrite("Importer.ImportPlainText(): " + ex.Message);
+                this.fBase.Host.LogWrite("Importer.LoadRawText(): " + ex.Message);
                 return false;
             }
         }
@@ -1039,9 +1045,7 @@ namespace GKPedigreeImporterPlugin
                     }
                     this.fRawContents.AddObject("", new RawLine(lineNum));
 
-                    this.AnalyseRaw();
-
-                    return true;
+                    return this.AnalyseRaw();
                 }
                 finally
                 {
@@ -1055,7 +1059,7 @@ namespace GKPedigreeImporterPlugin
             catch (Exception ex)
             {
                 this.fLog.Add(">>>> " + fLangMan.LS(ILS.LSID_DataLoadError));
-                this.fBase.Host.LogWrite("Importer.ImportWord(): " + ex.Message);
+                this.fBase.Host.LogWrite("Importer.LoadRawWord(): " + ex.Message);
                 return false;
             }
         }

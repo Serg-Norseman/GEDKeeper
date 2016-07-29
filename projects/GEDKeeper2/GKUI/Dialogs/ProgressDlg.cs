@@ -154,19 +154,22 @@ namespace GKUI.Dialogs
 
         public static void ProgressInit(string title, int max)
         {
-            if (pfrm != null)
-            {
-                pfrm.Close();
+            if (pfrm != null) {
+                //pfrm.Close();
+                pfrm.ProgressReset(title, max);
+            } else {
+                pfrm = new ProgressProxy(title, max);
             }
 
-            pfrm = new ProgressProxy(title, max);
             fVal = 0;
         }
 
         public static void ProgressDone()
         {
-            pfrm.Close();
-            pfrm = null;
+            if (pfrm != null) {
+                pfrm.Close();
+                pfrm = null;
+            }
         }
 
         public static void ProgressStep()
@@ -223,6 +226,24 @@ namespace GKUI.Dialogs
             fFormLoaded = true;
         }
 
+        public void ProgressReset(string title, int max)
+        {
+            try
+            {
+                if (fProgressForm.InvokeRequired)
+                {
+                    fProgressForm.Invoke(new DelReset(ProgressReset), new object[] { title, max });
+                }
+                else
+                {
+                    fProgressForm.DoInit(title, max);
+                }
+            }
+            catch
+            {
+            }
+        }
+
         public void UpdateProgress(int percent)
         {
             try
@@ -253,6 +274,7 @@ namespace GKUI.Dialogs
             }
         }
 
+        delegate void DelReset(string title, int max);
         delegate void DelUpdateProgress(int percent);
         delegate void DelClose();
     }

@@ -99,7 +99,7 @@ namespace GKPedigreeImporterPlugin
             } while (token.Kind != TokenKind.EOF);
 
             // TODO: testing and transfer to parse!
-            if ((prev == null || prev.Kind != TokenKind.Symbol || prev.Value != ".") || (token.Kind != TokenKind.WhiteSpace || token.Value != " "))
+            if ((prev == null || prev.Kind != TokenKind.Symbol || prev.Value != ".")/* || (token.Kind != TokenKind.WhiteSpace || token.Value != " ")*/)
             {
                 return false;
             }
@@ -223,10 +223,10 @@ namespace GKPedigreeImporterPlugin
                 return false;
             }
 
-            token = strTok.Next();
+            /*token = strTok.Next();
             if (token.Kind != TokenKind.WhiteSpace || token.Value != " ") {
                 return false;
-            }
+            }*/
 
             return true;
         }
@@ -304,10 +304,10 @@ namespace GKPedigreeImporterPlugin
                 return false;
             }
 
-            token = strTok.Next();
+            /*token = strTok.Next();
             if (token.Kind != TokenKind.WhiteSpace || token.Value != " ") {
                 return false;
-            }
+            }*/
 
             pos = strTok.Position;
 

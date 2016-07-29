@@ -7,6 +7,29 @@
         /// </summary>
         private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.TabPage pageSpecificFilter;
+        private System.Windows.Forms.ComboBox cmbEventVal;
+        private System.Windows.Forms.ComboBox cmbSource;
+        private System.Windows.Forms.ComboBox cmbGroup;
+        private System.Windows.Forms.ComboBox cmbResidence;
+        private System.Windows.Forms.MaskedTextBox txtAliveBeforeDate;
+        private System.Windows.Forms.RadioButton rbSexMale;
+        private System.Windows.Forms.RadioButton rbSexAll;
+        private System.Windows.Forms.RadioButton rbSexFemale;
+        private System.Windows.Forms.GroupBox rgSex;
+        private System.Windows.Forms.ComboBox txtName;
+        private System.Windows.Forms.RadioButton rbAll;
+        private System.Windows.Forms.RadioButton rbOnlyLive;
+        private System.Windows.Forms.RadioButton rbOnlyDead;
+        private System.Windows.Forms.RadioButton rbAliveBefore;
+        private System.Windows.Forms.GroupBox rgLife;
+        private System.Windows.Forms.Label lblEventsMask;
+        private System.Windows.Forms.Label lblAliveBefore;
+        private System.Windows.Forms.Label lblSources;
+        private System.Windows.Forms.CheckBox chkOnlyPatriarchs;
+        private System.Windows.Forms.GroupBox GroupBox1;
+        private System.Windows.Forms.Label lblGroups;
+        private System.Windows.Forms.Label lblPlaceMask;
+        private System.Windows.Forms.Label lblNameMask;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -87,7 +110,7 @@
             this.pageSpecificFilter.Margin = new System.Windows.Forms.Padding(0);
             this.pageSpecificFilter.Name = "pageSpecificFilter";
             this.pageSpecificFilter.Padding = new System.Windows.Forms.Padding(10);
-            this.pageSpecificFilter.Size = new System.Drawing.Size(821, 460);
+            this.pageSpecificFilter.Size = new System.Drawing.Size(819, 464);
             this.pageSpecificFilter.TabIndex = 1;
             this.pageSpecificFilter.Text = "pageSpecificFilter";
             // 
@@ -337,29 +360,6 @@
             this.rgSex.PerformLayout();
             this.ResumeLayout(false);
         }
-        private System.Windows.Forms.ComboBox cmbEventVal;
-        private System.Windows.Forms.ComboBox cmbSource;
-        private System.Windows.Forms.ComboBox cmbGroup;
-        private System.Windows.Forms.ComboBox cmbResidence;
-        private System.Windows.Forms.MaskedTextBox txtAliveBeforeDate;
-        private System.Windows.Forms.RadioButton rbSexMale;
-        private System.Windows.Forms.RadioButton rbSexAll;
-        private System.Windows.Forms.RadioButton rbSexFemale;
-        private System.Windows.Forms.GroupBox rgSex;
-        private System.Windows.Forms.ComboBox txtName;
-        private System.Windows.Forms.RadioButton rbAll;
-        private System.Windows.Forms.RadioButton rbOnlyLive;
-        private System.Windows.Forms.RadioButton rbOnlyDead;
-        private System.Windows.Forms.RadioButton rbAliveBefore;
-        private System.Windows.Forms.GroupBox rgLife;
-        private System.Windows.Forms.Label lblEventsMask;
-        private System.Windows.Forms.Label lblAliveBefore;
-        private System.Windows.Forms.Label lblSources;
-        private System.Windows.Forms.CheckBox chkOnlyPatriarchs;
-        private System.Windows.Forms.GroupBox GroupBox1;
-        private System.Windows.Forms.Label lblGroups;
-        private System.Windows.Forms.Label lblPlaceMask;
-        private System.Windows.Forms.Label lblNameMask;
 
         #endregion
     }
