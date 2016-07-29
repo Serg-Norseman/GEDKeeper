@@ -79,10 +79,6 @@
       <Project>{19B7D80A-37FD-4E49-9F59-87FA41B677E2}</Project>
       <Name>GEDKeeper2.linux</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GKCalculatorPlugin\GKCalculatorPlugin.linux.csproj">
-      <Project>{782E9338-ECA7-4095-9157-6CA003801F05}</Project>
-      <Name>GKCalculatorPlugin.linux</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GKCommon\GKCommon.linux.csproj">
       <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
       <Name>GKCommon.linux</Name>

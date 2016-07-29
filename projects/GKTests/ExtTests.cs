@@ -19,7 +19,6 @@
  */
 
 using System;
-using GKCalculatorPlugin;
 using GKCommon;
 using GKCore;
 using NUnit.Framework;

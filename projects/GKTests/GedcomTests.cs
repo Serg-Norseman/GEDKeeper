@@ -868,6 +868,8 @@ namespace GKTests
                 Assert.AreEqual("FROM 04 JAN 2013 TO 23 JAN 2013", dtx1.StringValue);
                 Assert.AreEqual("04 JAN 2013", (dtx1.Value as GEDCOMDatePeriod).DateFrom.StringValue);
                 Assert.AreEqual("23 JAN 2013", (dtx1.Value as GEDCOMDatePeriod).DateTo.StringValue);
+                dtx1.Clear();
+                Assert.IsTrue(dtx1.IsEmpty());
 
                 dtx1.ParseString("BEF 20 JAN 2013");
                 Assert.IsFalse(dtx1.IsEmpty());
@@ -884,7 +886,6 @@ namespace GKTests
                 Assert.AreEqual("BET 04 JAN 2013 AND 25 JAN 2013", dtx1.StringValue);
                 Assert.AreEqual("04 JAN 2013", (dtx1.Value as GEDCOMDateRange).After.StringValue);
                 Assert.AreEqual("25 JAN 2013", (dtx1.Value as GEDCOMDateRange).Before.StringValue);
-                
                 dtx1.Clear();
                 Assert.IsTrue(dtx1.IsEmpty());
 
@@ -900,27 +901,28 @@ namespace GKTests
             using (GEDCOMAddress addr = GEDCOMAddress.Create(null, null, "ADDR", "") as GEDCOMAddress)
             {
                 Assert.IsNotNull(addr, "addr != null");
-                
+
                 addr.SetAddressText("test");
                 Assert.AreEqual("test", addr.Address.Text.Trim());
 
                 addr.Address = new StringList("This\r\naddress\r\ntest");
+                Assert.AreEqual("This\r\naddress\r\ntest", addr.Address.Text.Trim());
                 Assert.AreEqual("This", addr.Address[0]);
                 Assert.AreEqual("address", addr.Address[1]);
                 Assert.AreEqual("test", addr.Address[2]);
-                
+
                 addr.AddTag("PHON", "8 911 101 99 99", null);
                 Assert.AreEqual("8 911 101 99 99", addr.PhoneNumbers[0].StringValue);
-                
+
                 addr.AddTag("EMAIL", "test@mail.com", null);
                 Assert.AreEqual("test@mail.com", addr.EmailAddresses[0].StringValue);
-                
+
                 addr.AddTag("FAX", "abrakadabra", null);
                 Assert.AreEqual("abrakadabra", addr.FaxNumbers[0].StringValue);
-                
+
                 addr.AddTag("WWW", "http://test.com", null);
                 Assert.AreEqual("http://test.com", addr.WebPages[0].StringValue);
-                
+
                 // stream test
                 string buf = TagStreamTest(addr);
                 Assert.AreEqual(buf, "0 ADDR This\r\n"+"1 CONT address\r\n"+"1 CONT test\r\n"
@@ -928,16 +930,16 @@ namespace GKTests
                                 +"0 EMAIL test@mail.com\r\n"
                                 +"0 FAX abrakadabra\r\n"
                                 +"0 WWW http://test.com\r\n");
-                
+
                 addr.AddPhoneNumber("8 911 101 33 33");
                 Assert.AreEqual("8 911 101 33 33", addr.PhoneNumbers[1].StringValue);
-                
+
                 addr.AddEmailAddress("test@mail.ru");
                 Assert.AreEqual("test@mail.ru", addr.EmailAddresses[1].StringValue);
-                
+
                 addr.AddFaxNumber("abrakadabra");
                 Assert.AreEqual("abrakadabra", addr.FaxNumbers[1].StringValue);
-                
+
                 addr.AddWebPage("http://test.ru");
                 Assert.AreEqual("http://test.ru", addr.WebPages[1].StringValue);
 
@@ -945,10 +947,10 @@ namespace GKTests
 
                 addr.AddressLine1 = "test1";
                 Assert.AreEqual("test1", addr.AddressLine1);
-                
+
                 addr.AddressLine2 = "test2";
                 Assert.AreEqual("test2", addr.AddressLine2);
-                
+
                 addr.AddressLine3 = "test3";
                 Assert.AreEqual("test3", addr.AddressLine3);
 
@@ -964,6 +966,28 @@ namespace GKTests
                 addr.AddressPostalCode = "test7";
                 Assert.AreEqual("test7", addr.AddressPostalCode);
 
+                using (GEDCOMAddress addr2 = GEDCOMAddress.Create(null, null, "ADDR", "") as GEDCOMAddress)
+                {
+                    addr2.Assign(addr);
+
+                    Assert.AreEqual("This\r\naddress\r\ntest", addr2.Address.Text.Trim());
+                    Assert.AreEqual("8 911 101 99 99", addr2.PhoneNumbers[0].StringValue);
+                    Assert.AreEqual("test@mail.com", addr2.EmailAddresses[0].StringValue);
+                    Assert.AreEqual("abrakadabra", addr2.FaxNumbers[0].StringValue);
+                    Assert.AreEqual("http://test.com", addr2.WebPages[0].StringValue);
+                    Assert.AreEqual("8 911 101 33 33", addr2.PhoneNumbers[1].StringValue);
+                    Assert.AreEqual("test@mail.ru", addr2.EmailAddresses[1].StringValue);
+                    Assert.AreEqual("abrakadabra", addr2.FaxNumbers[1].StringValue);
+                    Assert.AreEqual("http://test.ru", addr2.WebPages[1].StringValue);
+                    Assert.AreEqual("test1", addr2.AddressLine1);
+                    Assert.AreEqual("test2", addr2.AddressLine2);
+                    Assert.AreEqual("test3", addr2.AddressLine3);
+                    Assert.AreEqual("test4", addr2.AddressCity);
+                    Assert.AreEqual("test5", addr2.AddressState);
+                    Assert.AreEqual("test6", addr2.AddressCountry);
+                    Assert.AreEqual("test7", addr2.AddressPostalCode);
+                }
+
                 addr.SetAddressArray(new string[] {"test11", "test21", "test31"});
                 Assert.AreEqual("test11", addr.Address[0]);
                 Assert.AreEqual("test21", addr.Address[1]);
@@ -972,7 +996,7 @@ namespace GKTests
                 Assert.IsFalse(addr.IsEmpty());
                 addr.Clear();
                 Assert.IsTrue(addr.IsEmpty());
-                
+
                 GEDCOMTree otherTree = new GEDCOMTree();
                 addr.ResetOwner(otherTree);
                 Assert.AreEqual(otherTree, addr.Owner);
@@ -1004,6 +1028,10 @@ namespace GKTests
                 association.Individual = null;
                 Assert.IsNull(association.Individual);
 
+                GEDCOMTag tag = association.AddTag("SOUR", "xxx", null);
+                Assert.IsNotNull(tag);
+                Assert.IsTrue(tag is GEDCOMSourceCitation);
+
                 Assert.IsFalse(association.IsEmpty());
                 association.Clear();
                 Assert.IsTrue(association.IsEmpty());
@@ -1024,9 +1052,9 @@ namespace GKTests
                 StringList strs = new StringList("test");
                 customEvent.PhysicalDescription = strs;
                 Assert.AreEqual(strs.Text, customEvent.PhysicalDescription.Text);
-                
+
                 customEvent.Pack();
-                
+
                 GEDCOMTree otherTree = new GEDCOMTree();
                 customEvent.ResetOwner(otherTree);
                 Assert.AreEqual(otherTree, customEvent.Owner);
@@ -1035,6 +1063,12 @@ namespace GKTests
             using (GEDCOMIndividualEvent customEvent = GEDCOMIndividualEvent.Create(null, null, "", "") as GEDCOMIndividualEvent)
             {
                 Assert.IsNotNull(customEvent);
+
+                // stream test
+                customEvent.SetName("BIRT");
+                customEvent.Detail.Date.ParseString("20 SEP 1970");
+                string buf = TagStreamTest(customEvent);
+                Assert.AreEqual(buf, "0 BIRT\r\n"+"1 DATE 20 SEP 1970\r\n");
 
                 customEvent.Pack();
 
@@ -1507,52 +1541,59 @@ namespace GKTests
             famRec.Restriction = GEDCOMRestriction.rnLocked;
             Assert.AreEqual(GEDCOMRestriction.rnLocked, famRec.Restriction);
 
-            famRec.AddChild(null);
-            
             famRec.AddChild(indiv);
             Assert.AreEqual(0, famRec.IndexOfChild(indiv));
 
+            // stream test
+            famRec.DeleteTag("_UID");
+            famRec.DeleteTag("CHAN");
+            string buf = TagStreamTest(famRec);
+            Assert.AreEqual("0 @F1@ FAM\r\n"+
+                            "1 SUBM\r\n"+
+                            "1 RESN locked\r\n"+
+                            "1 CHIL @I1@\r\n", buf);
+
             GEDCOMChildToFamilyLinkTest(indiv.ChildToFamilyLinks[0]);
 
-            famRec.RemoveChild(null);
-            
             famRec.RemoveChild(indiv);
             Assert.AreEqual(-1, famRec.IndexOfChild(indiv));
 
             //
-            
+
             famRec.Husband.Value = indiv;
             Assert.AreEqual(indiv, famRec.GetHusband());
             famRec.Husband.Value = null;
 
             //
-            
+
             famRec.Wife.Value = indiv;
             Assert.AreEqual(indiv, famRec.GetWife());
             famRec.Wife.Value = null;
 
             //
-            
-            famRec.AddSpouse(null);
-            famRec.RemoveSpouse(null);
-            
+
             indiv.Sex = GEDCOMSex.svMale;
             famRec.AddSpouse(indiv);
             GEDCOMSpouseToFamilyLinkTest(indiv.SpouseToFamilyLinks[0]);
             Assert.IsNull(famRec.GetSpouseBy(indiv));
             famRec.RemoveSpouse(indiv);
-            
+
             indiv.Sex = GEDCOMSex.svFemale;
             famRec.AddSpouse(indiv);
             GEDCOMSpouseToFamilyLinkTest(indiv.SpouseToFamilyLinks[0]);
             Assert.IsNull(famRec.GetSpouseBy(indiv));
             famRec.RemoveSpouse(indiv);
-            
+
             //
-            
+
             famRec.SortChilds();
-            
+
             //
+
+            famRec.AddChild(null);       
+            famRec.RemoveChild(null);
+            famRec.AddSpouse(null);
+            famRec.RemoveSpouse(null);
 
             Assert.IsFalse(famRec.IsEmpty());
             famRec.Clear();
@@ -1616,7 +1657,19 @@ namespace GKTests
             //
             GEDCOMSourceCitationTest(sourRec, indiv);
             GEDCOMRepositoryCitationTest(sourRec, repRec);
-            
+
+            sourRec.DeleteTag("_UID");
+            sourRec.DeleteTag("CHAN");
+            string buf = TagStreamTest(sourRec);
+            Assert.AreEqual("0 @S1@ SOUR\r\n"+
+                            "1 DATA\r\n"+
+                            "1 ABBR This is test source\r\n"+
+                            "1 AUTH author\r\n"+
+                            "1 TITL title\r\n"+
+                            "1 PUBL publication\r\n"+
+                            "1 TEXT sample\r\n"+
+                            "1 REPO @R1@\r\n", buf);
+
             //
             Assert.IsFalse(sourRec.IsEmpty());
             sourRec.Clear();
@@ -1679,7 +1732,18 @@ namespace GKTests
             
             resRec.Percent = 33;
             Assert.AreEqual(33, resRec.Percent);
-            
+
+            resRec.DeleteTag("_UID");
+            resRec.DeleteTag("CHAN");
+            string buf = TagStreamTest(resRec);
+            Assert.AreEqual("0 @RS1@ _RESEARCH\r\n"+
+                            "1 NAME Test Research\r\n"+
+                            "1 _PRIORITY normal\r\n"+
+                            "1 _STATUS onhold\r\n"+
+                            "1 _STARTDATE 20 JAN 2013\r\n"+
+                            "1 _STOPDATE 21 JAN 2013\r\n"+
+                            "1 _PERCENT 33\r\n", buf);
+
             resRec.AddCommunication(commRec);
             resRec.RemoveCommunication(commRec);
             
@@ -1701,6 +1765,12 @@ namespace GKTests
 
             Assert.IsNotNull(repoRec.Address);
 
+            repoRec.DeleteTag("_UID");
+            repoRec.DeleteTag("CHAN");
+            string buf = TagStreamTest(repoRec);
+            Assert.AreEqual("0 @R1@ REPO\r\n"+
+                            "1 NAME Test Repository\r\n"+
+                            "1 ADDR\r\n", buf);
 
             Assert.IsFalse(repoRec.IsEmpty());
             repoRec.Clear();
@@ -1726,7 +1796,26 @@ namespace GKTests
             
             string title = mediaRec.GetFileTitle();
             Assert.AreEqual("File Title 2", title);
+
+            mediaRec.DeleteTag("_UID");
+            mediaRec.DeleteTag("CHAN");
+            string buf = TagStreamTest(mediaRec);
+            Assert.AreEqual("0 @O1@ OBJE\r\n"+
+                            "1 FILE sample.png\r\n"+
+                            "2 TITL File Title 2\r\n"+
+                            "2 FORM png\r\n"+
+                            "3 TYPE manuscript\r\n", buf);
             
+            GEDCOMMultimediaLinkTest(mediaRec, indiv);
+            
+            Assert.IsFalse(mediaRec.IsEmpty());
+            mediaRec.Clear();
+            Assert.IsTrue(mediaRec.IsEmpty());
+        }
+
+        [Test]
+        public void GEDCOMFileReference_Tests()
+        {
             Assert.AreEqual(GEDCOMMultimediaFormat.mfUnknown, GEDCOMFileReference.RecognizeFormat(""));
             Assert.AreEqual(GEDCOMMultimediaFormat.mfUnknown, GEDCOMFileReference.RecognizeFormat("sample.xxx"));
             Assert.AreEqual(GEDCOMMultimediaFormat.mfBMP, GEDCOMFileReference.RecognizeFormat("sample.BMP"));
@@ -1747,30 +1836,28 @@ namespace GKTests
             Assert.AreEqual(GEDCOMMultimediaFormat.mfMPG, GEDCOMFileReference.RecognizeFormat("sample.mpeg"));
             Assert.AreEqual(GEDCOMMultimediaFormat.mfHTM, GEDCOMFileReference.RecognizeFormat("sample.htm"));
             Assert.AreEqual(GEDCOMMultimediaFormat.mfHTM, GEDCOMFileReference.RecognizeFormat("sample.html"));
-            
-            GEDCOMMultimediaLinkTest(mediaRec, indiv);
-            
-            Assert.IsFalse(mediaRec.IsEmpty());
-            mediaRec.Clear();
-            Assert.IsTrue(mediaRec.IsEmpty());
         }
-
+        
         private static void GEDCOMMultimediaLinkTest(GEDCOMMultimediaRecord mediaRec, GEDCOMIndividualRecord indiv)
         {
             GEDCOMMultimediaLink mmLink = indiv.AddMultimedia(mediaRec);
-            
+
             Assert.IsNotNull(mmLink.FileReferences);
-            
+
             mmLink.Title = "Title1";
             Assert.AreEqual("Title1", mmLink.Title);
-            
+
+            string buf = TagStreamTest(mmLink);
+            Assert.AreEqual("1 OBJE @O1@\r\n"+
+                            "2 TITL Title1\r\n", buf);
+
             Assert.IsTrue(mmLink.IsPointer, "mmLink.IsPointer");
-            
+
             mmLink.IsPrimary = true;
             Assert.IsTrue(mmLink.IsPrimary, "mmLink.IsPrimary");
 
             Assert.IsFalse(mmLink.IsEmpty(), "mmLink.IsEmpty()"); // its pointer
-            
+
             mmLink.Clear();
         }
 
@@ -1833,7 +1920,6 @@ namespace GKTests
             Assert.AreEqual("Test Group", groupRec.GroupName);
             
             groupRec.DeleteTag("_UID");
-            
             groupRec.DeleteTag("CHAN");
             string buf = TagStreamTest(groupRec);
             Assert.AreEqual("0 @G1@ _GROUP\r\n1 NAME Test Group\r\n", buf);

@@ -10,7 +10,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace GKCalculatorPlugin
+namespace GKCommon
 {
     [Serializable]
     public class CalculateException : Exception

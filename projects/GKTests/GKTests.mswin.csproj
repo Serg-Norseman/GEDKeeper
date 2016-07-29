@@ -78,10 +78,6 @@
       <Project>{19B7D80A-37FD-4E49-9F59-87FA41B677E2}</Project>
       <Name>GEDKeeper2</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GKCalculatorPlugin\GKCalculatorPlugin.mswin.csproj">
-      <Project>{782e9338-eca7-4095-9157-6ca003801f05}</Project>
-      <Name>GKCalculatorPlugin</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GKCommon\GKCommon.mswin.csproj">
       <Project>{A14CE3E2-B8EC-41C8-A7D1-75AE5D2509C4}</Project>
       <Name>GKCommon</Name>
