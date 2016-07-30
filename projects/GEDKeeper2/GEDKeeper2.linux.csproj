@@ -169,6 +169,7 @@
     </Compile>
     <Compile Include="GKUI\Charts\ChartFilter.cs" />
     <Compile Include="GKCore\Kinships\KinshipsMan.cs" />
+    <Compile Include="GKUI\Charts\CircleChart.cs" />
     <Compile Include="GKUI\Charts\CustomChart.cs">
       <SubType>Component</SubType>
     </Compile>

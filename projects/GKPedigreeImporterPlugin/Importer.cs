@@ -755,7 +755,7 @@ namespace GKPedigreeImporterPlugin
                     #else
                     return false;
                     #endif
-                    
+
                 default:
                     return false;
             }
@@ -860,7 +860,7 @@ namespace GKPedigreeImporterPlugin
 
                     MSOExcel.Range excelRange = sheet.UsedRange;
                     object[,] valueArray = (object[,])excelRange.get_Value(MSOExcel.XlRangeValueDataType.xlRangeValueDefault);
-                    
+
                     int prevId = 0;
 
                     for (int row = 1; row <= rowsCount; row++)
@@ -957,20 +957,13 @@ namespace GKPedigreeImporterPlugin
         }
         #endif
 
-        private bool LoadRawExcel(string fileName)
-        {
-            this.SourceType = SourceType.stTable;
-
-            return this.AnalyseRaw();
-        }
-
-        private bool LoadRawText(string fileName)
+        private bool LoadRawText()
         {
             this.SourceType = SourceType.stText;
 
             try
             {
-                StreamReader strd = new StreamReader(fileName, Encoding.GetEncoding(1251));
+                StreamReader strd = new StreamReader(this.fFileName, Encoding.GetEncoding(1251));
                 try
                 {
                     this.fBase.ProgressInit(fLangMan.LS(ILS.LSID_Loading), (int)strd.BaseStream.Length);
@@ -1005,7 +998,7 @@ namespace GKPedigreeImporterPlugin
         }
 
         #if !NO_DEPEND
-        private bool LoadRawWord(string fileName)
+        private bool LoadRawWord()
         {
             this.SourceType = SourceType.stText;
 
@@ -1026,7 +1019,7 @@ namespace GKPedigreeImporterPlugin
                     wordApp.Visible = DEBUG_WORD;
                     wordApp.WindowState = MSOWord.WdWindowState.wdWindowStateMaximize;
 
-                    MSOWord.Document doc = wordApp.Documents.Open(fileName);
+                    MSOWord.Document doc = wordApp.Documents.Open(this.fFileName);
 
                     this.fBase.ProgressInit(fLangMan.LS(ILS.LSID_Loading), doc.Paragraphs.Count);
 
@@ -1065,6 +1058,13 @@ namespace GKPedigreeImporterPlugin
         }
         #endif
 
+        private bool LoadRawExcel()
+        {
+            this.SourceType = SourceType.stTable;
+
+            return this.AnalyseRaw();
+        }
+
         public bool LoadRawData(string fileName)
         {
             this.fRawContents.Clear();
@@ -1074,19 +1074,23 @@ namespace GKPedigreeImporterPlugin
 
             if (ext == ".txt")
             {
-                return this.LoadRawText(fileName);
+                return this.LoadRawText();
             }
             else if (ext == ".doc")
             {
                 #if !NO_DEPEND
-                return this.LoadRawWord(fileName);
+                return this.LoadRawWord();
                 #else
                 return false;
                 #endif
             }
             else if (ext == ".xls")
             {
-                return this.LoadRawExcel(fileName);
+                #if !NO_DEPEND
+                return this.LoadRawExcel();
+                #else
+                return false;
+                #endif
             }
             else
             {

@@ -18,16 +18,27 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
 namespace GKCommon
 {
     /// <summary>
-    /// Description of GfxHelper.
+    /// 
     /// </summary>
     public static class GfxHelper
     {
+        public static double DegreesToRadians(double degrees)
+        {
+            return degrees * (Math.PI / 180);
+        }
+
+        public static double RadiansToDegrees(double radians)
+        {
+            return radians * 180 / Math.PI;
+        }
+
         public static Color Darker(Color color, float fraction)
         {
             float factor = (1.0f - fraction);

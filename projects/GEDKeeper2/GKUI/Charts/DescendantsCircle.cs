@@ -33,7 +33,7 @@ using GKCore.Types;
 
 namespace GKUI.Charts
 {
-    public class DescendantsCircle : CustomChart
+    public class DescendantsCircle : CircleChart
     {
         private class PersonSegment : BaseObject
         {
@@ -66,8 +66,6 @@ namespace GKUI.Charts
                 base.Dispose(disposing);
             }
         }
-
-        private static readonly object EventRootChanged;
 
         private const float PI = 3.1415926535897931f;
         private const int CENTER_RAD = 90;
@@ -132,17 +130,6 @@ namespace GKUI.Charts
             }
         }
         
-        public event ARootChangedEventHandler RootChanged
-        {
-            add { base.Events.AddHandler(DescendantsCircle.EventRootChanged, value); }
-            remove { base.Events.RemoveHandler(DescendantsCircle.EventRootChanged, value); }
-        }
-
-        static DescendantsCircle()
-        {
-            DescendantsCircle.EventRootChanged = new object();
-        }
-
         public DescendantsCircle(IBaseWindow baseWin) : base()
         {
             this.components = new System.ComponentModel.Container();
@@ -174,14 +161,6 @@ namespace GKUI.Charts
                 if (components != null) components.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        private void DoRootChanged(GEDCOMIndividualRecord person)
-        {
-            ARootChangedEventHandler eventHandler = (ARootChangedEventHandler)base.Events[DescendantsCircle.EventRootChanged];
-            if (eventHandler == null) return;
-
-            eventHandler(this, person);
         }
 
         protected override void SetNavObject(object obj)
@@ -254,7 +233,7 @@ namespace GKUI.Charts
             return result;
         }
 
-        public void Changed()
+        public override void Changed()
         {
             this.CreateBrushes();
 
@@ -416,7 +395,7 @@ namespace GKUI.Charts
 
         #region Drawing
 
-        private void InternalDraw(Graphics gfx)
+        protected override void InternalDraw(Graphics gfx)
         {
             gfx.SmoothingMode = SmoothingMode.AntiAlias;
 
@@ -543,20 +522,6 @@ namespace GKUI.Charts
             base.OnDoubleClick(e);
         }
 
-        protected override bool IsInputKey(Keys keyData)
-        {
-            switch (keyData) {
-                case Keys.Add:
-                case Keys.Subtract:
-                case Keys.Left:
-                case Keys.Right:
-                case Keys.Back:
-                    return true;
-            }
-
-            return base.IsInputKey(keyData);
-        }
-
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
@@ -583,17 +548,6 @@ namespace GKUI.Charts
             if (!e.Handled) this.Changed();
         }
 
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            this.InternalDraw(e.Graphics);
-        }
-
-        protected override void OnResize(EventArgs e)
-        {
-            base.OnResize(e);
-            this.Changed();
-        }
-
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseMove(e);
@@ -617,7 +571,7 @@ namespace GKUI.Charts
                 
                 if (selected != null && selected.IRec != null) {
                     string name = selected.IRec.GetNameString(true, false);
-                    hint = selected.Gen.ToString() + ", " + name;
+                    hint = /*selected.Gen.ToString() + ", " + */name;
                 }
 
                 this.Invalidate();

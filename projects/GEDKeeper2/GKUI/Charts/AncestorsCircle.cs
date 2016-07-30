@@ -31,9 +31,7 @@ using GKCore.Options;
 
 namespace GKUI.Charts
 {
-    public delegate void ARootChangedEventHandler(object sender, GEDCOMIndividualRecord person);
-
-    public class AncestorsCircle : CustomChart
+    public class AncestorsCircle : CircleChart
     {
         private class PersonSegment : BaseObject
         {
@@ -46,6 +44,8 @@ namespace GKUI.Charts
             public int GroupIndex;
             public PersonSegment FatherSegment;
             public PersonSegment MotherSegment;
+            public float StartAngle;
+            public float WedgeAngle;
 
             public PersonSegment(int generation)
             {
@@ -66,8 +66,6 @@ namespace GKUI.Charts
                 base.Dispose(disposing);
             }
         }
-
-        private static readonly object EventRootChanged;
 
         private const float PI = 3.1415926535897931f;
         private const int CENTER_RAD = 90;
@@ -94,6 +92,7 @@ namespace GKUI.Charts
         private PersonSegment fSelected;
         //private GEDCOMTree fTree;
 
+        private bool ArcText = true;
 
         public bool GroupsMode
         {
@@ -149,17 +148,6 @@ namespace GKUI.Charts
                 this.Changed();
             }
         }
-        
-        public event ARootChangedEventHandler RootChanged
-        {
-            add { base.Events.AddHandler(AncestorsCircle.EventRootChanged, value); }
-            remove { base.Events.RemoveHandler(AncestorsCircle.EventRootChanged, value); }
-        }
-
-        static AncestorsCircle()
-        {
-            AncestorsCircle.EventRootChanged = new object();
-        }
 
         public AncestorsCircle(IBaseWindow baseWin) : base()
         {
@@ -190,14 +178,6 @@ namespace GKUI.Charts
                 if (components != null) components.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        private void DoRootChanged(GEDCOMIndividualRecord person)
-        {
-            ARootChangedEventHandler eventHandler = (ARootChangedEventHandler)base.Events[AncestorsCircle.EventRootChanged];
-            if (eventHandler == null) return;
-
-            eventHandler(this, person);
         }
 
         protected override void SetNavObject(object obj)
@@ -280,7 +260,7 @@ namespace GKUI.Charts
             return result;
         }
 
-        public void Changed()
+        public override void Changed()
         {
             this.CreateBrushes();
 
@@ -335,6 +315,9 @@ namespace GKUI.Charts
                     int ny2 = ctY + (int)(extRad * Math.Sin(angval2));
 
                     segment = new PersonSegment(gen);
+                    segment.StartAngle = ang1;
+                    segment.WedgeAngle = stepAngle;
+
                     path = segment.Path;
                     path.StartFigure();
                     path.AddLine(px2, py2, px1, py1);
@@ -417,7 +400,7 @@ namespace GKUI.Charts
 
         #region Drawing
 
-        private void InternalDraw(Graphics gfx)
+        protected override void InternalDraw(Graphics gfx)
         {
             gfx.SmoothingMode = SmoothingMode.AntiAlias;
 
@@ -446,30 +429,29 @@ namespace GKUI.Charts
                 }
             }
 
-            /*if (!this.fGroupsMode)*/
-            {
-                this.DrawAncestorName(gfx, 0, 0, 0, this.fRootPerson);
-
-                for (int i = 0; i < num; i++) {
-                    PersonSegment segment = this.fSegments[i];
-                    this.DrawAncestorName(gfx, segment.Rad, segment.Gen, segment.V, segment.IRec);
-                }
+            for (int i = 0; i < num; i++) {
+                this.DrawAncestorName(gfx, this.fSegments[i]);
             }
         }
 
-        private void DrawAncestorName(Graphics gfx, int rad, int gen, float v, GEDCOMIndividualRecord iRec)
+        private void DrawAncestorName(Graphics gfx, PersonSegment segment)
         {
-            string s2, s1;
+            int rad = segment.Rad;
+            int gen = segment.Gen;
+            float v = segment.V;
+            GEDCOMIndividualRecord iRec = segment.IRec;
+
+            string surn, givn;
             if (iRec == null) {
                 if (gen == 0) {
-                    s1 = "Choose";
-                    s2 = "subject";
+                    givn = "Choose";
+                    surn = "subject";
                 } else {
                     return;
                 }
             } else {
                 string dummy;
-                iRec.GetNameParts(out s2, out s1, out dummy);
+                iRec.GetNameParts(out surn, out givn, out dummy);
             }
 
             rad -= 20;
@@ -480,29 +462,72 @@ namespace GKUI.Charts
                         gfx.ResetTransform();
                         gfx.TranslateTransform(this.fCenterX, this.fCenterY);
 
-                        SizeF sizeF = gfx.MeasureString(s1, this.Font);
-                        gfx.DrawString(s1, this.Font, this.fCircleBrushes[8], -sizeF.Width / 2f, -sizeF.Height / 2f - sizeF.Height / 2f);
-                        sizeF = gfx.MeasureString(s2, this.Font);
-                        gfx.DrawString(s2, this.Font, this.fCircleBrushes[8], -sizeF.Width / 2f, 0f);
+                        SizeF sizeF = gfx.MeasureString(surn, this.Font);
+                        gfx.DrawString(surn, this.Font, this.fCircleBrushes[8], -sizeF.Width / 2f, -sizeF.Height / 2f - sizeF.Height / 2f);
+                        sizeF = gfx.MeasureString(givn, this.Font);
+                        gfx.DrawString(givn, this.Font, this.fCircleBrushes[8], -sizeF.Width / 2f, 0f);
                         break;
                     }
+
                 case 1:
-                    {
+                    if (ArcText) {
+                        SizeF sizeF = gfx.MeasureString(surn, this.Font);
+                        DrawArcText(gfx, surn, this.fCenterX, this.fCenterY, rad + sizeF.Height / 2f,
+                                    segment.StartAngle, segment.WedgeAngle, true, true, Font, this.fCircleBrushes[8]);
+
+                        sizeF = gfx.MeasureString(givn, this.Font);
+                        DrawArcText(gfx, givn, this.fCenterX, this.fCenterY, rad - sizeF.Height / 2f,
+                                    segment.StartAngle, segment.WedgeAngle, true, true, Font, this.fCircleBrushes[8]);
+                    } else {
+                        float dx = (float)Math.Sin(PI * v / 180.0) * rad;
+                        float dy = (float)Math.Cos(PI * v / 180.0) * rad;
+
+                        gfx.ResetTransform();
+                        gfx.TranslateTransform(this.fCenterX + dx, this.fCenterY - dy);
+                        gfx.RotateTransform(v);
+
+                        SizeF sizeF = gfx.MeasureString(surn, this.Font);
+                        gfx.DrawString(surn, this.Font, this.fCircleBrushes[8], -sizeF.Width / 2f, -sizeF.Height / 2f);
+                        sizeF = gfx.MeasureString(givn, this.Font);
+                        gfx.DrawString(givn, this.Font, this.fCircleBrushes[8], -sizeF.Width / 2f, -sizeF.Height / 2f + sizeF.Height);
+                    }
+                    break;
+
+                case 2:
+                case 3:
+                case 4:
+                    if (ArcText) {
+                        if (gen == 2) {
+                            SizeF sizeF = gfx.MeasureString(surn, this.Font);
+                            DrawArcText(gfx, surn, this.fCenterX, this.fCenterY, rad + sizeF.Height / 2f,
+                                        segment.StartAngle, segment.WedgeAngle, true, true, Font, this.fCircleBrushes[8]);
+
+                            sizeF = gfx.MeasureString(givn, this.Font);
+                            DrawArcText(gfx, givn, this.fCenterX, this.fCenterY, rad - sizeF.Height / 2f,
+                                        segment.StartAngle, segment.WedgeAngle, true, true, Font, this.fCircleBrushes[8]);
+                        } else {
+                            DrawArcText(gfx, givn, this.fCenterX, this.fCenterY, rad,
+                                        segment.StartAngle, segment.WedgeAngle, true, true, Font, this.fCircleBrushes[8]);
+                        }
+                    } else {
                         float dx = (float)Math.Sin(PI * v / 180.0) * rad;
                         float dy = (float)Math.Cos(PI * v / 180.0) * rad;
                         gfx.ResetTransform();
                         gfx.TranslateTransform(this.fCenterX + dx, this.fCenterY - dy);
                         gfx.RotateTransform(v);
 
-                        SizeF sizeF = gfx.MeasureString(s1, this.Font);
-                        gfx.DrawString(s1, this.Font, this.fCircleBrushes[8], -sizeF.Width / 2f, -sizeF.Height / 2f);
-                        sizeF = gfx.MeasureString(s2, this.Font);
-                        gfx.DrawString(s2, this.Font, this.fCircleBrushes[8], -sizeF.Width / 2f, -sizeF.Height / 2f + sizeF.Height);
-                        break;
+                        SizeF sizeF2 = gfx.MeasureString(surn, this.Font);
+                        gfx.DrawString(surn, this.Font, this.fCircleBrushes[8], -sizeF2.Width / 2f, -sizeF2.Height / 2f);
+                        sizeF2 = gfx.MeasureString(givn, this.Font);
+                        dx = (float)Math.Sin(PI * v / 180.0) * (rad - sizeF2.Height);
+                        dy = (float)Math.Cos(PI * v / 180.0) * (rad - sizeF2.Height);
+                        gfx.ResetTransform();
+                        gfx.TranslateTransform(this.fCenterX + dx, this.fCenterY - dy);
+                        gfx.RotateTransform(v);
+                        gfx.DrawString(givn, this.Font, this.fCircleBrushes[8], -sizeF2.Width / 2f, -sizeF2.Height / 2f);
                     }
-                case 2:
-                case 3:
-                case 4:
+                    break;
+
                 case 5:
                     {
                         float dx = (float)Math.Sin(PI * v / 180.0) * rad;
@@ -511,15 +536,7 @@ namespace GKUI.Charts
                         gfx.TranslateTransform(this.fCenterX + dx, this.fCenterY - dy);
                         gfx.RotateTransform(v);
 
-                        SizeF sizeF2 = gfx.MeasureString(s1, this.Font);
-                        gfx.DrawString(s1, this.Font, this.fCircleBrushes[8], -sizeF2.Width / 2f, -sizeF2.Height / 2f);
-                        sizeF2 = gfx.MeasureString(s2, this.Font);
-                        dx = (float)Math.Sin(PI * v / 180.0) * (rad - sizeF2.Height);
-                        dy = (float)Math.Cos(PI * v / 180.0) * (rad - sizeF2.Height);
-                        gfx.ResetTransform();
-                        gfx.TranslateTransform(this.fCenterX + dx, this.fCenterY - dy);
-                        gfx.RotateTransform(v);
-                        gfx.DrawString(s2, this.Font, this.fCircleBrushes[8], -sizeF2.Width / 2f, -sizeF2.Height / 2f);
+                        this.DrawString(gfx, givn);
                         break;
                     }
                 case 6:
@@ -532,7 +549,7 @@ namespace GKUI.Charts
                         gfx.TranslateTransform(this.fCenterX + dx, this.fCenterY - dy);
                         gfx.RotateTransform(v - 90.0f);
 
-                        this.DrawString(gfx, s1);
+                        this.DrawString(gfx, givn);
                         break;
                     }
             }
@@ -544,6 +561,39 @@ namespace GKUI.Charts
             gfx.DrawString(str, this.Font, this.fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
         }
 
+        private static void DrawArcText(Graphics graphics, string text, float centerX, float centerY, float radius,
+                                        float startAngle, float wedgeAngle,
+                                        bool inside, bool clockwise, Font font, Brush brush)
+        {
+            var size = graphics.MeasureString(text, font);
+            radius = radius + size.Height / 2.0f;
+
+            float textAngle = (float)GfxHelper.RadiansToDegrees((size.Width * 1.75f) / radius);
+            float deltaAngle = (wedgeAngle - textAngle) / 2.0f;
+
+            startAngle -= 90.0f + deltaAngle;
+
+            for (var i = 0; i < text.Length; ++i)
+            {
+                graphics.ResetTransform();
+
+                float offset = (textAngle * ((i + 0.0f) / text.Length));
+                offset = clockwise ? -offset : offset;
+                float angle = startAngle + offset;
+
+                double radAngle = angle * (Math.PI / 180.0d);
+                float x = (float)(centerX + Math.Sin(radAngle) * radius);
+                float y = (float)(centerY + Math.Cos(radAngle) * radius);
+                graphics.TranslateTransform(x, y);
+
+                double charRotation = inside ? -angle + 180 : -angle;
+                graphics.RotateTransform((float)(charRotation));
+
+                string chr = new String(text[i], 1);
+                graphics.DrawString(chr, font, brush, 0, 0);
+            }
+        }
+
         #endregion
 
         #region Protected methods
@@ -552,20 +602,6 @@ namespace GKUI.Charts
         {
             base.OnDoubleClick(e);
             this.GroupsMode = !this.GroupsMode;
-        }
-
-        protected override bool IsInputKey(Keys keyData)
-        {
-            switch (keyData) {
-                case Keys.Add:
-                case Keys.Subtract:
-                case Keys.Left:
-                case Keys.Right:
-                case Keys.Back:
-                    return true;
-            }
-
-            return base.IsInputKey(keyData);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -620,17 +656,6 @@ namespace GKUI.Charts
             if (!e.Handled) this.Changed();
         }
 
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            this.InternalDraw(e.Graphics);
-        }
-
-        protected override void OnResize(EventArgs e)
-        {
-            base.OnResize(e);
-            this.Changed();
-        }
-
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseMove(e);
@@ -654,7 +679,7 @@ namespace GKUI.Charts
                 
                 if (selected != null && selected.IRec != null) {
                     string name = selected.IRec.GetNameString(true, false);
-                    hint = selected.Gen.ToString() + ", " + name;
+                    hint = /*selected.Gen.ToString() + ", " + */name;
                 }
 
                 this.Invalidate();
