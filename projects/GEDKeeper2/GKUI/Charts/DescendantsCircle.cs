@@ -24,225 +24,32 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
-using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
-using GKCore.Options;
-using GKCore.Types;
 
 namespace GKUI.Charts
 {
     public class DescendantsCircle : CircleChart
     {
-        private class PersonSegment : BaseObject
+        private class PersonSegment : CircleSegment
         {
-            public readonly int Gen;
-            public readonly GraphicsPath Path;
-
-            public GEDCOMIndividualRecord IRec;
-            public int Rad;
-            public float V;
             public List<PersonSegment> ChildSegments;
             public int TotalSubSegments;
-            //public float StartAngle;
-            //public float WedgeAngle;
 
-            public PersonSegment(int generation)
+            public PersonSegment(int generation) : base(generation)
             {
-                this.Gen = generation;
-                this.Path = new GraphicsPath();
-                this.IRec = null;
                 this.ChildSegments = new List<DescendantsCircle.PersonSegment>();
                 this.TotalSubSegments = 0;
             }
-
-            protected override void Dispose(bool disposing)
-            {
-                if (disposing)
-                {
-                    if (this.Path != null) this.Path.Dispose();
-                }
-                base.Dispose(disposing);
-            }
         }
 
-        private const float PI = 3.1415926535897931f;
-        private const int CENTER_RAD = 90;
-        private const int DEFAULT_GEN_WIDTH = 60;
 
-        private readonly System.ComponentModel.IContainer components;
-        private readonly SolidBrush[] fCircleBrushes;
-        private readonly SolidBrush[] fDarkBrushes;
-        private readonly AncestorsCircleOptions fOptions;
-        private readonly List<PersonSegment> fSegments;
-        private readonly ToolTip fToolTip;
-
-        private int fCenterX;
-        private int fCenterY;
-        private int fGenWidth;
-        private string fHint;
-        private int fIndividualsCount;
-        private int fMaxGenerations;
-        private int fOffsetX = 0;
-        private int fOffsetY = 0;
-        private GEDCOMIndividualRecord fRootPerson;
-        private PersonSegment fSelected;
-        private ShieldState fShieldState;
-        //private GEDCOMTree fTree;
-
-
-        public AncestorsCircleOptions Options
+        public DescendantsCircle(IBaseWindow baseWin) : base(baseWin)
         {
-            get { return this.fOptions; }
         }
 
-        public int IndividualsCount
-        {
-            get { return this.fIndividualsCount; }
-        }
-
-        public GEDCOMIndividualRecord RootPerson
-        {
-            get {
-                return this.fRootPerson;
-            }
-            set {
-                this.fRootPerson = value;
-
-                this.NavAdd(value);
-                this.Changed();
-
-                this.DoRootChanged(value);
-            }
-        }
-
-        public int GenWidth
-        {
-            get {
-                return this.fGenWidth;
-            }
-            set {
-                if (value < 20 || value > 100) return;
-                
-                this.fGenWidth = value;
-                this.Changed();
-            }
-        }
-        
-        public DescendantsCircle(IBaseWindow baseWin) : base()
-        {
-            this.components = new System.ComponentModel.Container();
-
-            this.fShieldState = baseWin.ShieldState;
-            
-            //this.fTree = tree;
-            this.fOptions = new AncestorsCircleOptions();
-            this.fCircleBrushes = new SolidBrush[AncestorsCircleOptions.MAX_BRUSHES];
-            this.fDarkBrushes = new SolidBrush[AncestorsCircleOptions.MAX_BRUSHES];
-
-            this.DoubleBuffered = true;
-            this.BackColor = this.fOptions.BrushColor[9];
-            this.fSegments = new List<PersonSegment>();
-            this.fSelected = null;
-            this.fGenWidth = DEFAULT_GEN_WIDTH;
-            this.fMaxGenerations = 8;
-
-            this.fToolTip = new ToolTip(components);
-            this.fToolTip.AutoPopDelay = 5000;
-            this.fToolTip.InitialDelay = 250;
-            this.fToolTip.ReshowDelay = 50;
-            this.fToolTip.ShowAlways = true;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                if (components != null) components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        protected override void SetNavObject(object obj)
-        {
-            this.RootPerson = obj as GEDCOMIndividualRecord;
-        }
-
-        #region Content
-        
-        private void CreateBrushes()
-        {
-            for (int i = 0; i < this.fOptions.BrushColor.Length; i++)
-            {
-                Color col = this.fOptions.BrushColor[i];
-
-                this.fCircleBrushes[i] = new SolidBrush(col);
-                this.fDarkBrushes[i] = new SolidBrush(GfxHelper.Darker(col, 0.2f));
-            }
-        }
-
-        private PersonSegment SetSegmentParams(int index, GEDCOMIndividualRecord rec, int rad, float v, int groupIndex)
-        {
-            try
-            {
-                PersonSegment segment = this.fSegments[index];
-
-                segment.IRec = rec;
-                segment.Rad = rad;
-                segment.V = v;
-
-                return segment;
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        private PersonSegment FindSegmentByRec(GEDCOMIndividualRecord iRec)
-        {
-            PersonSegment result = null;
-
-            int num = this.fSegments.Count;
-            for (int i = 0; i < num; i++) {
-                PersonSegment segment = this.fSegments[i];
-
-                if (segment.IRec == iRec) {
-                    result = segment;
-                    break;
-                }
-            }
-
-            return result;
-        }
-
-        private PersonSegment FindSegment(int mX, int mY)
-        {
-            PersonSegment result = null;
-
-            int num = this.fSegments.Count;
-            for (int i = 0; i < num; i++) {
-                PersonSegment segment = this.fSegments[i];
-
-                if (segment.Path.IsVisible(mX, mY)) {
-                    result = segment;
-                    break;
-                }
-            }
-
-            return result;
-        }
-
-        public override void Changed()
-        {
-            this.CreateBrushes();
-
-            this.BuildPathTree();
-
-            this.Invalidate();
-        }
-
-        private void BuildPathTree()
+        protected override void BuildPathTree()
         {
             this.fSegments.Clear();
 
@@ -274,6 +81,8 @@ namespace GKUI.Charts
 
             int extRad;
             if (segment.Gen == 0) {
+                segment.WedgeAngle = 360.0f;
+
                 path.StartFigure();
                 path.AddEllipse(ctX - inRad, ctY - inRad, inRad * 2, inRad * 2);
                 path.CloseFigure();
@@ -302,6 +111,10 @@ namespace GKUI.Charts
                 int nx2 = ctX + (int)(extRad * Math.Cos(angval2));
                 int ny2 = ctY + (int)(extRad * Math.Sin(angval2));
 
+                segment.StartAngle = startAngle;
+                segment.WedgeAngle = wedgeAngle;
+                segment.Rad = inRad + 50;
+
                 path.StartFigure();
                 path.AddLine(px2, py2, px1, py1);
                 path.AddArc(ctX - inRad, ctY - inRad, ir2, ir2, ang1, wedgeAngle);
@@ -322,7 +135,7 @@ namespace GKUI.Charts
             }
         }
 
-        private PersonSegment TraverseDescendants(GEDCOMIndividualRecord iRec, int gen/*, float v, int rad, float ro, int prevSteps*/)
+        private PersonSegment TraverseDescendants(GEDCOMIndividualRecord iRec, int gen)
         {
             if (iRec == null) return null;
             
@@ -359,30 +172,6 @@ namespace GKUI.Charts
                     }
                 }
 
-                /*
-                int genSize = (int)Math.Pow(2.0, gen);
-                float ang = (360.0f / genSize);
-
-                int idx = prevSteps + (int)(v / ang);
-                PersonSegment segment = this.SetSegmentParams(idx, iRec, rad, v, groupIndex);
-
-                if (gen < 8) {
-                    GEDCOMIndividualRecord father, mother;
-                    iRec.GetParents(out father, out mother);
-
-                    int ps = prevSteps + genSize;
-
-                    if (father != null) {
-                        v -= (Math.Abs(ang - ro) / 2.0f);
-                        segment.FatherSegment = this.TraverseAncestors(father, v, gen + 1, rad + this.fGenWidth, ro / 2.0f, ps, groupIndex);
-                    }
-
-                    if (mother != null) {
-                        v += (ang / 2.0f);
-                        segment.MotherSegment = this.TraverseAncestors(mother, v, gen + 1, rad + this.fGenWidth, ro / 2.0f, ps, groupIndex);
-                    }
-                }*/
-
                 return resultSegment;
             }
             catch
@@ -390,10 +179,6 @@ namespace GKUI.Charts
                 return null;
             }
         }
-
-        #endregion
-
-        #region Drawing
 
         protected override void InternalDraw(Graphics gfx)
         {
@@ -403,7 +188,7 @@ namespace GKUI.Charts
 
             int num = this.fSegments.Count;
             for (int i = 0; i < num; i++) {
-                PersonSegment segment = this.fSegments[i];
+                PersonSegment segment = (PersonSegment)this.fSegments[i];
 
                 if (segment.IRec != null) {
                     int brIndex;
@@ -418,108 +203,9 @@ namespace GKUI.Charts
                 }
             }
 
-            /*this.DrawAncestorName(gfx, 0, 0, 0, this.fRootPerson);
-
             for (int i = 0; i < num; i++) {
-                PersonSegment segment = this.fSegments[i];
-                this.DrawAncestorName(gfx, segment.Rad, segment.Gen, segment.V, segment.IRec);
-            }*/
-        }
-
-        /*private void DrawAncestorName(Graphics gfx, int rad, int gen, float v, GEDCOMIndividualRecord iRec)
-        {
-            string s2, s1;
-            if (iRec == null) {
-                if (gen == 0) {
-                    s1 = "Choose";
-                    s2 = "subject";
-                } else {
-                    return;
-                }
-            } else {
-                string dummy;
-                iRec.GetNameParts(out s2, out s1, out dummy);
+                this.DrawPersonName(gfx, this.fSegments[i]);
             }
-
-            rad -= 20;
-            switch (gen)
-            {
-                case 0:
-                    {
-                        gfx.ResetTransform();
-                        gfx.TranslateTransform(this.fCenterX, this.fCenterY);
-
-                        SizeF sizeF = gfx.MeasureString(s1, this.Font);
-                        gfx.DrawString(s1, this.Font, this.fCircleBrushes[8], -sizeF.Width / 2f, -sizeF.Height / 2f - sizeF.Height / 2f);
-                        sizeF = gfx.MeasureString(s2, this.Font);
-                        gfx.DrawString(s2, this.Font, this.fCircleBrushes[8], -sizeF.Width / 2f, 0f);
-                        break;
-                    }
-                case 1:
-                    {
-                        float dx = (float)Math.Sin(PI * v / 180.0) * rad;
-                        float dy = (float)Math.Cos(PI * v / 180.0) * rad;
-                        gfx.ResetTransform();
-                        gfx.TranslateTransform(this.fCenterX + dx, this.fCenterY - dy);
-                        gfx.RotateTransform(v);
-
-                        SizeF sizeF = gfx.MeasureString(s1, this.Font);
-                        gfx.DrawString(s1, this.Font, this.fCircleBrushes[8], -sizeF.Width / 2f, -sizeF.Height / 2f);
-                        sizeF = gfx.MeasureString(s2, this.Font);
-                        gfx.DrawString(s2, this.Font, this.fCircleBrushes[8], -sizeF.Width / 2f, -sizeF.Height / 2f + sizeF.Height);
-                        break;
-                    }
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                    {
-                        float dx = (float)Math.Sin(PI * v / 180.0) * rad;
-                        float dy = (float)Math.Cos(PI * v / 180.0) * rad;
-                        gfx.ResetTransform();
-                        gfx.TranslateTransform(this.fCenterX + dx, this.fCenterY - dy);
-                        gfx.RotateTransform(v);
-
-                        SizeF sizeF2 = gfx.MeasureString(s1, this.Font);
-                        gfx.DrawString(s1, this.Font, this.fCircleBrushes[8], -sizeF2.Width / 2f, -sizeF2.Height / 2f);
-                        sizeF2 = gfx.MeasureString(s2, this.Font);
-                        dx = (float)Math.Sin(PI * v / 180.0) * (rad - sizeF2.Height);
-                        dy = (float)Math.Cos(PI * v / 180.0) * (rad - sizeF2.Height);
-                        gfx.ResetTransform();
-                        gfx.TranslateTransform(this.fCenterX + dx, this.fCenterY - dy);
-                        gfx.RotateTransform(v);
-                        gfx.DrawString(s2, this.Font, this.fCircleBrushes[8], -sizeF2.Width / 2f, -sizeF2.Height / 2f);
-                        break;
-                    }
-                case 6:
-                case 7:
-                case 8:
-                    {
-                        float dx = (float)Math.Sin(PI * v / 180.0) * rad;
-                        float dy = (float)Math.Cos(PI * v / 180.0) * rad;
-                        gfx.ResetTransform();
-                        gfx.TranslateTransform(this.fCenterX + dx, this.fCenterY - dy);
-                        gfx.RotateTransform(v - 90.0f);
-
-                        this.DrawString(gfx, s1);
-                        break;
-                    }
-            }
-        }*/
-
-        private void DrawString(Graphics gfx, string str)
-        {
-            SizeF size = gfx.MeasureString(str, this.Font);
-            gfx.DrawString(str, this.Font, this.fCircleBrushes[8], -size.Width / 2f, -size.Height / 2f);
-        }
-
-        #endregion
-
-        #region Protected methods
-
-        protected override void OnDoubleClick(EventArgs e)
-        {
-            base.OnDoubleClick(e);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -544,48 +230,6 @@ namespace GKUI.Charts
                     e.Handled = true;
                     break;
             }
-
-            if (!e.Handled) this.Changed();
         }
-
-        protected override void OnMouseUp(MouseEventArgs e)
-        {
-            base.OnMouseMove(e);
-
-            PersonSegment selected = this.FindSegment(e.X, e.Y);
-
-            if (selected != null && selected.IRec != null) {
-                this.RootPerson = selected.IRec;
-            }
-        }
-
-        protected override void OnMouseMove(MouseEventArgs e)
-        {
-            base.OnMouseMove(e);
-
-            PersonSegment selected = this.FindSegment(e.X, e.Y);
-
-            string hint = "";
-            if (!Equals(this.fSelected, selected)) {
-                this.fSelected = selected;
-                
-                if (selected != null && selected.IRec != null) {
-                    string name = selected.IRec.GetNameString(true, false);
-                    hint = /*selected.Gen.ToString() + ", " + */name;
-                }
-
-                this.Invalidate();
-            }
-
-            if (!Equals(this.fHint, hint)) {
-                this.fHint = hint;
-
-                if (!string.IsNullOrEmpty(hint)) {
-                    fToolTip.Show(hint, this, e.X, e.Y, 3000);
-                }
-            }
-        }
-
-        #endregion
     }
 }

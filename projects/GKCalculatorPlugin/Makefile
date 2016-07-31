@@ -26,7 +26,6 @@ ifeq ($(windows), $(softwareplatform))
 sources := \
 ./CalcWidget.Designer.cs \
 ./CalcWidget.cs \
-./ExpCalculator.cs \
 ./GKCalculatorPlugin.cs
 
 else
@@ -35,7 +34,6 @@ else
 sources := \
 ./CalcWidget.Designer.cs \
 ./CalcWidget.cs \
-./ExpCalculator.cs \
 ./GKCalculatorPlugin.cs
 
 endif

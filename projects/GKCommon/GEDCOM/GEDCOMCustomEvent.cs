@@ -97,9 +97,7 @@ namespace GKCommon.GEDCOM
             GEDCOMDateValue dtVal = this.fDetail.Date;
             GEDCOMDateValue dtVal2 = ev.fDetail.Date;
 
-            if ((dtVal == null && dtVal2 == null)) {
-                dateMatch = 100.0f;
-            } else if (dtVal != null && dtVal2 != null) {
+            if (dtVal != null && dtVal2 != null) {
                 dateMatch = dtVal.IsMatch(dtVal2, matchParams);
             }
 

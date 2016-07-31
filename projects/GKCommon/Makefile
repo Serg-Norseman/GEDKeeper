@@ -129,6 +129,7 @@ sources := \
 ./GKCommon/Controls/WizardPages.cs \
 ./GKCommon/ConvHelper.cs \
 ./GKCommon/EnumSet.cs \
+./GKCommon/ExpCalculator.cs \
 ./GKCommon/ExtList.cs \
 ./GKCommon/ExtRect.cs \
 ./GKCommon/FileHelper.cs \
@@ -301,6 +302,7 @@ sources := \
 ./GKCommon/Controls/SlideList.cs \
 ./GKCommon/Controls/WizardPages.cs \
 ./GKCommon/ConvHelper.cs \
+./GKCommon/ExpCalculator.cs \
 ./GKCommon/EnumSet.cs \
 ./GKCommon/ExtList.cs \
 ./GKCommon/ExtRect.cs \

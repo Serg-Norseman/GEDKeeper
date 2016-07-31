@@ -786,19 +786,39 @@ namespace GKTests
                 
                 dtx1.SetGregorian(1, 1, 1980);
                 Assert.AreEqual(GEDCOMCalendar.dcGregorian, dtx1.DateCalendar);
-                
+
+                // julian
+
                 dtx1.SetJulian(1, "JAN", 1980, false);
                 Assert.AreEqual(GEDCOMCalendar.dcJulian, dtx1.DateCalendar);
-                
+
+                dtx1.SetJulian(1, 3, 1980);
+                Assert.AreEqual(GEDCOMCalendar.dcJulian, dtx1.DateCalendar);
+                Assert.AreEqual("@#DJULIAN@ 01 MAR 1980", dtx1.StringValue);
+
+                // hebrew
+
                 dtx1.SetHebrew(1, "TSH", 1980, false);
                 Assert.AreEqual(GEDCOMCalendar.dcHebrew, dtx1.DateCalendar);
-                
+
+                dtx1.SetHebrew(1, 2, 1980);
+                Assert.AreEqual(GEDCOMCalendar.dcHebrew, dtx1.DateCalendar);
+                Assert.AreEqual("@#DHEBREW@ 01 CSH 1980", dtx1.StringValue);
+
+                // french
+
                 dtx1.SetFrench(1, "VEND", 1980, false);
                 Assert.AreEqual(GEDCOMCalendar.dcFrench, dtx1.DateCalendar);
-                
+
+                dtx1.SetFrench(1, 2, 1980);
+                Assert.AreEqual(GEDCOMCalendar.dcFrench, dtx1.DateCalendar);
+                Assert.AreEqual("@#DFRENCH R@ 01 BRUM 1980", dtx1.StringValue);
+
+                // roman
+
                 dtx1.SetRoman(1, "JAN", 1980, false);
                 Assert.AreEqual(GEDCOMCalendar.dcRoman, dtx1.DateCalendar);
-                
+
                 dtx1.SetUnknown(1, "JAN", 1980, false);
                 Assert.AreEqual(GEDCOMCalendar.dcUnknown, dtx1.DateCalendar);
             }
@@ -807,13 +827,46 @@ namespace GKTests
         [Test]
         public void GEDCOMDateValue_Tests()
         {
+            // check empty dateval match
+            using (GEDCOMDateValue dtx1 = new GEDCOMDateValue(null, null, "DATE", ""))
+            {
+                Assert.IsNotNull(dtx1, "dtx1 != null");
+
+                using (GEDCOMDateValue dtx2 = new GEDCOMDateValue(null, null, "DATE", ""))
+                {
+                    Assert.IsNotNull(dtx2, "dtx1 != null");
+
+                    Assert.AreEqual(0.0f, dtx1.IsMatch(dtx2, new MatchParams()));
+                }
+            }
+
+            // check GetDateParts
+            using (GEDCOMDateValue dtx1 = new GEDCOMDateValue(null, null, "DATE", ""))
+            {
+                Assert.IsNotNull(dtx1, "dtx1 != null");
+
+                int year; ushort month, day; bool yearBC;
+                dtx1.GetDateParts(out year, out month, out day, out yearBC);
+                Assert.AreEqual(-1, year);
+                Assert.AreEqual(0, month);
+                Assert.AreEqual(0, day);
+                Assert.AreEqual(false, yearBC);
+
+                dtx1.ParseString("20 JAN 2013");
+                dtx1.GetDateParts(out year, out month, out day, out yearBC);
+                Assert.AreEqual(2013, year);
+                Assert.AreEqual(1, month);
+                Assert.AreEqual(20, day);
+                Assert.AreEqual(false, yearBC);
+            }
+
             using (GEDCOMDateValue dtx1 = new GEDCOMDateValue(null, null, "DATE", "20 JAN 2013"))
             {
                 Assert.IsNotNull(dtx1, "dtx1 != null");
 
                 DateTime dt = ParseDT("20.01.2013");
                 Assert.IsTrue(dtx1.Date.Equals(dt), "dtx1.DateTime.Equals(dt)");
-                
+
                 dtx1.ParseString("INT 20 JAN 2013 (today)");
                 Assert.IsTrue(dtx1.Date.Equals(dt), "dtx1.DateTime.Equals(dt)");
                 Assert.AreEqual((dtx1.Value as GEDCOMDateInterpreted).DatePhrase, "today");
@@ -1067,8 +1120,22 @@ namespace GKTests
                 // stream test
                 customEvent.SetName("BIRT");
                 customEvent.Detail.Date.ParseString("20 SEP 1970");
+                customEvent.Detail.Place.StringValue = "test place";
                 string buf = TagStreamTest(customEvent);
-                Assert.AreEqual(buf, "0 BIRT\r\n"+"1 DATE 20 SEP 1970\r\n");
+                Assert.AreEqual("0 BIRT\r\n"+
+                                "1 DATE 20 SEP 1970\r\n"+
+                                "1 PLAC test place\r\n", buf);
+
+                using (GEDCOMIndividualEvent copyEvent = GEDCOMIndividualEvent.Create(null, null, "", "") as GEDCOMIndividualEvent)
+                {
+                    Assert.IsNotNull(copyEvent);
+                    copyEvent.Assign(customEvent);
+
+                    string buf1 = TagStreamTest(copyEvent);
+                    Assert.AreEqual("0 BIRT\r\n"+
+                                    "1 DATE 20 SEP 1970\r\n"+
+                                    "1 PLAC test place\r\n", buf1);
+                }
 
                 customEvent.Pack();
 
@@ -1471,9 +1538,44 @@ namespace GKTests
 
             pnPieces.CensusName = "CensusName";
             Assert.AreEqual("CensusName", pnPieces.CensusName);
-            
+
             persName.Pack();
-            
+
+            string buf = TagStreamTest(persName);
+            Assert.AreEqual("1 NAME Petr /Test/ Fedoroff\r\n"+
+                            "2 TYPE birth\r\n"+
+                            "2 NPFX Prefix\r\n"+
+                            "2 GIVN Given\r\n"+
+                            "2 NICK Nickname\r\n"+
+                            "2 SPFX SurnamePrefix\r\n"+
+                            "2 SURN Surname\r\n"+
+                            "2 NSFX Suffix\r\n"+
+                            "2 _PATN PatronymicName\r\n"+
+                            "2 _MARN MarriedName\r\n"+
+                            "2 _RELN ReligiousName\r\n"+
+                            "2 _CENN CensusName\r\n", buf);
+
+            using (GEDCOMPersonalName nameCopy = new GEDCOMPersonalName(iRec.Owner, iRec, "", "")) {
+                iRec.AddPersonalName(nameCopy);
+                nameCopy.Assign(persName);
+
+                string buf2 = TagStreamTest(nameCopy);
+                Assert.AreEqual("1 NAME Petr /Test/ Fedoroff\r\n"+
+                                "2 TYPE birth\r\n"+
+                                "2 NPFX Prefix\r\n"+
+                                "2 GIVN Given\r\n"+
+                                "2 NICK Nickname\r\n"+
+                                "2 SPFX SurnamePrefix\r\n"+
+                                "2 SURN Surname\r\n"+
+                                "2 NSFX Suffix\r\n"+
+                                "2 _PATN PatronymicName\r\n"+
+                                "2 _MARN MarriedName\r\n"+
+                                "2 _RELN ReligiousName\r\n"+
+                                "2 _CENN CensusName\r\n", buf2);
+
+                iRec.PersonalNames.Delete(nameCopy);
+            }
+
             persName.Clear();
             Assert.IsTrue(persName.IsEmpty());
         }

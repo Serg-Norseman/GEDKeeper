@@ -110,6 +110,7 @@ sources := \
 ./GKUI/Charts/ACOptionsControl.Designer.cs \
 ./GKUI/Charts/AncestorsCircle.cs \
 ./GKUI/Charts/ChartFilter.cs \
+./GKUI/Charts/CircleChart.cs \
 ./GKUI/Charts/CustomChart.cs \
 ./GKUI/Charts/DescendantsCircle.cs \
 ./GKUI/Charts/ITreeControl.cs \
@@ -300,6 +301,7 @@ sources := \
 ./GKUI/Charts/ACOptionsControl.Designer.cs \
 ./GKUI/Charts/AncestorsCircle.cs \
 ./GKUI/Charts/ChartFilter.cs \
+./GKUI/Charts/CircleChart.cs \
 ./GKUI/Charts/CustomChart.cs \
 ./GKUI/Charts/DescendantsCircle.cs \
 ./GKUI/Charts/ITreeControl.cs \

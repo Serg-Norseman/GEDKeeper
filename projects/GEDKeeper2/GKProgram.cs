@@ -38,7 +38,7 @@ using GKCore;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyTitle("GEDKeeper2")]
-[assembly: AssemblyVersion("2.6.1.0")]
+[assembly: AssemblyVersion("2.7.0.0")]
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyFile("")]
 [assembly: AssemblyKeyName("")]
