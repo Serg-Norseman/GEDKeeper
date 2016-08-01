@@ -221,12 +221,12 @@ namespace GKCommon.GEDCOM
 
         public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
         {
-            GEDCOMSourceRecord source = tag as GEDCOMSourceRecord;
-            if (source == null) return 0.0f;
+            GEDCOMSourceRecord otherSource = tag as GEDCOMSourceRecord;
+            if (otherSource == null) return 0.0f;
 
             float match = 0.0f;
 
-            if (string.Compare(this.FiledByEntry, source.FiledByEntry, true) == 0)
+            if (string.Compare(this.FiledByEntry, otherSource.FiledByEntry, true) == 0)
             {
                 match = 100.0f;
             }

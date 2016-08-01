@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -89,17 +88,16 @@ namespace GKCommon.GEDCOM
         private readonly Dictionary<string, GEDCOMCustomRecord> fXRefIndex;
         
         private string fFileName;
-        private ProgressEventHandler fOnProgressEvent;
-        private GEDCOMState fState;
-
         private EventHandler fOnChange;
         private EventHandler fOnChanging;
+        private ProgressEventHandler fOnProgressEvent;
+        private GEDCOMState fState;
         private int fUpdateCount;
+
 
         public string FileName
         {
             get { return this.fFileName; }
-            //set { this.fFileName = value; }
         }
 
         public event ProgressEventHandler OnProgress
@@ -135,7 +133,6 @@ namespace GKCommon.GEDCOM
             set { this.fState = value; }
         }
 
-
         public event EventHandler OnChange
         {
             add { this.fOnChange = value; }
@@ -152,8 +149,8 @@ namespace GKCommon.GEDCOM
         public GEDCOMTree()
         {
             this.fRecords = new GEDCOMList<GEDCOMRecord>(this);
-            this.fHeader = new GEDCOMHeader(this, this, "", "");
             this.fXRefIndex = new Dictionary<string, GEDCOMCustomRecord>();
+            this.fHeader = new GEDCOMHeader(this, this, "", "");
             this.fFileName = "";
         }
 
@@ -182,12 +179,6 @@ namespace GKCommon.GEDCOM
             f.RegisterTag("_LOC", GEDCOMPointer.Create);
 
             //f.RegisterTag("xxxx", xxxx.Create);
-        }
-
-        private static string StrToUtf8(string str)
-        {
-            byte[] src = Encoding.GetEncoding(1251).GetBytes(str);
-            return Encoding.UTF8.GetString(src);
         }
 
         private static string GetSignByRecord(GEDCOMRecord record)
@@ -255,17 +246,6 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public void SetXRef(string oldXRef, GEDCOMCustomRecord sender)
-        {
-            if (!string.IsNullOrEmpty(oldXRef))
-            {
-                bool exists = this.fXRefIndex.ContainsKey(oldXRef);
-                if (exists) this.fXRefIndex.Remove(oldXRef);
-            }
-
-            this.XRefIndex_AddRecord(sender);
-        }
-
         private void XRefIndex_DeleteRecord(GEDCOMRecord record)
         {
             bool exists = this.fXRefIndex.ContainsKey(record.XRef);
@@ -282,15 +262,26 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public string XRefIndex_NewXRef(GEDCOMRecord sender)
+        public string XRefIndex_NewXRef(GEDCOMRecord record)
         {
-            string sign = GetSignByRecord(sender);
+            string sign = GetSignByRecord(record);
             int I = 1;
             while (this.fXRefIndex.ContainsKey(sign + I.ToString()))
             {
                 I++;
             }
             return sign + I.ToString();
+        }
+
+        public void SetXRef(string oldXRef, GEDCOMCustomRecord record)
+        {
+            if (!string.IsNullOrEmpty(oldXRef))
+            {
+                bool exists = this.fXRefIndex.ContainsKey(oldXRef);
+                if (exists) this.fXRefIndex.Remove(oldXRef);
+            }
+
+            this.XRefIndex_AddRecord(record);
         }
 
         #endregion
@@ -302,6 +293,13 @@ namespace GKCommon.GEDCOM
             return new TreeEnumerator(this, recType);
         }
 
+        public void Clear()
+        {
+            this.fHeader.Clear();
+            this.fRecords.Clear();
+            this.fXRefIndex.Clear();
+        }
+
         public GEDCOMRecord AddRecord(GEDCOMRecord record)
         {
             this.fRecords.Add(record);
@@ -309,18 +307,11 @@ namespace GKCommon.GEDCOM
             return record;
         }
 
-        public void Clear()
-        {
-            this.fRecords.Clear();
-            this.fHeader.Clear();
-            this.fXRefIndex.Clear();
-        }
-
-        public void Delete(int index)
+        /*public void Delete(int index)
         {
             this.XRefIndex_DeleteRecord(this.fRecords[index]);
             this.fRecords.DeleteAt(index);
-        }
+        }*/
 
         public void DeleteRecord(GEDCOMRecord record)
         {
@@ -334,18 +325,9 @@ namespace GKCommon.GEDCOM
             return this.fRecords.Extract(index);
         }
 
-        public int IndexOfRecord(GEDCOMRecord record)
+        public int IndexOf(GEDCOMRecord record)
         {
             return this.fRecords.IndexOf(record);
-        }
-
-        public void Pack()
-        {
-            int num = this.fRecords.Count;
-            for (int i = 0; i < num; i++)
-            {
-                this.fRecords[i].Pack();
-            }
         }
 
         public GEDCOMRecord FindUID(string uid)
@@ -360,6 +342,14 @@ namespace GKCommon.GEDCOM
             }
 
             return null;
+        }
+
+        public void Pack()
+        {
+            int num = this.fRecords.Count;
+            for (int i = 0; i < num; i++) {
+                this.fRecords[i].Pack();
+            }
         }
 
         #endregion
@@ -499,7 +489,7 @@ namespace GKCommon.GEDCOM
                             if (!string.IsNullOrEmpty(tagValue) && charSet == GEDCOMCharacterSet.csUTF8)
                             {
                                 if (!Equals(reader.CurrentEncoding, Encoding.UTF8)) {
-                                    tagValue = StrToUtf8(tagValue);
+                                    tagValue = GEDCOMUtils.StrToUtf8(tagValue);
                                 }
                             }
                             // end
@@ -657,12 +647,7 @@ namespace GKCommon.GEDCOM
         private static void SaveFooterToStream(StreamWriter stream)
         {
             const string str = "0 TRLR";
-
-            #if !__MonoCS__
-            stream.WriteLine(str);
-            #else
             stream.Write(str + GEDCOM_NEWLINE);
-            #endif
         }
 
         #endregion
@@ -748,7 +733,7 @@ namespace GKCommon.GEDCOM
 
             if (toRecord != null && !string.IsNullOrEmpty(text)) {
                 result = this.CreateNote();
-                result.AddNoteText(text);
+                result.Note = new StringList(text);
                 toRecord.AddNote(result);
             }
 
@@ -782,6 +767,28 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
+        public GEDCOMMultimediaRecord CreateMultimedia()
+        {
+            GEDCOMMultimediaRecord result = new GEDCOMMultimediaRecord(this, this, "", "");
+            result.InitNew();
+            result.ChangeDate.ChangeDateTime = DateTime.Now;
+
+            this.AddRecord(result);
+
+            return result;
+        }
+
+        public GEDCOMLocationRecord CreateLocation()
+        {
+            GEDCOMLocationRecord result = new GEDCOMLocationRecord(this, this, "", "");
+            result.InitNew();
+            result.ChangeDate.ChangeDateTime = DateTime.Now;
+
+            this.AddRecord(result);
+
+            return result;
+        }
+
         public GEDCOMGroupRecord CreateGroup()
         {
             GEDCOMGroupRecord result = new GEDCOMGroupRecord(this, this, "", "");
@@ -802,7 +809,7 @@ namespace GKCommon.GEDCOM
             {
                 GEDCOMUtils.CleanIndividual(iRec);
 
-                this.Delete(this.IndexOfRecord(iRec));
+                this.DeleteRecord(iRec);
                 result = true;
             }
             return result;
@@ -815,7 +822,7 @@ namespace GKCommon.GEDCOM
             {
                 GEDCOMUtils.CleanFamily(famRec);
 
-                this.Delete(this.IndexOfRecord(famRec));
+                this.DeleteRecord(famRec);
                 result = true;
             }
             return result;
@@ -832,7 +839,7 @@ namespace GKCommon.GEDCOM
                     groupRec.RemoveMember(member);
                 }
 
-                this.Delete(this.IndexOfRecord(groupRec));
+                this.DeleteRecord(groupRec);
                 result = true;
             }
             return result;
@@ -856,7 +863,7 @@ namespace GKCommon.GEDCOM
                     }
                 }
 
-                this.Delete(this.IndexOfRecord(mRec));
+                this.DeleteRecord(mRec);
                 result = true;
             }
             return result;
@@ -878,7 +885,7 @@ namespace GKCommon.GEDCOM
                     }
                 }
 
-                this.Delete(this.IndexOfRecord(nRec));
+                this.DeleteRecord(nRec);
                 result = true;
             }
             return result;
@@ -906,7 +913,7 @@ namespace GKCommon.GEDCOM
                     }
                 }
 
-                this.Delete(this.IndexOfRecord(repRec));
+                this.DeleteRecord(repRec);
                 result = true;
             }
             return result;
@@ -917,7 +924,7 @@ namespace GKCommon.GEDCOM
             bool result = false;
             if (resRec != null)
             {
-                this.Delete(this.IndexOfRecord(resRec));
+                this.DeleteRecord(resRec);
                 result = true;
             }
             return result;
@@ -941,7 +948,7 @@ namespace GKCommon.GEDCOM
                     }
                 }
                 
-                this.Delete(this.IndexOfRecord(srcRec));
+                this.DeleteRecord(srcRec);
                 result = true;
             }
             return result;
@@ -969,7 +976,7 @@ namespace GKCommon.GEDCOM
                     }
                 }
 
-                this.Delete(this.IndexOfRecord(taskRec));
+                this.DeleteRecord(taskRec);
                 result = true;
             }
             return result;
@@ -997,7 +1004,7 @@ namespace GKCommon.GEDCOM
                     }
                 }
 
-                this.Delete(this.IndexOfRecord(commRec));
+                this.DeleteRecord(commRec);
                 result = true;
             }
             return result;
@@ -1028,7 +1035,7 @@ namespace GKCommon.GEDCOM
                     }
                 }
 
-                this.Delete(this.IndexOfRecord(locRec));
+                this.DeleteRecord(locRec);
                 result = true;
             }
             return result;

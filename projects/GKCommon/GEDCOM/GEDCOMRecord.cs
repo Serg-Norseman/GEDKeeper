@@ -328,15 +328,18 @@ namespace GKCommon.GEDCOM
             return this.XRef;
         }
 
-        public void NewUID()
+        public void RequireUID()
         {
-            this.UID = CreateUID();
+            if (string.IsNullOrEmpty(this.UID))
+            {
+                this.UID = CreateUID();
+            }
         }
 
         public void InitNew()
         {
             this.NewXRef();
-            this.NewUID();
+            this.RequireUID();
         }
 
         protected GEDCOMRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
@@ -344,14 +347,6 @@ namespace GKCommon.GEDCOM
         }
 
         #region Auxiliary
-
-        public void RequireUID()
-        {
-            if (string.IsNullOrEmpty(this.UID))
-            {
-                this.NewUID();
-            }
-        }
 
         public string GetXRefNum()
         {

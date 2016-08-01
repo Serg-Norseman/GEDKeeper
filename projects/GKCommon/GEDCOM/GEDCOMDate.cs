@@ -165,18 +165,15 @@ namespace GKCommon.GEDCOM
         public override DateTime GetDateTime()
         {
             DateTime result;
-            
+
             ushort month = GEDCOMMonthToInt(this.fMonth);
-            if (this.fYear >= 0 && month >= 1 && month <= 12)
+            ushort day = this.fDay;
+            if (this.fYear >= 0 && month >= 1 && month <= 12 && day >= 1 && day < 32)
             {
-                ushort day = this.fDay;
-                if (day >= 1 && day < 32)
-                {
-                    result = new DateTime(this.fYear, month, this.fDay);
-                    return result;
-                }
+                result = new DateTime(this.fYear, month, day);
+                return result;
             }
-            
+
             result = new DateTime(0);
             return result;
         }

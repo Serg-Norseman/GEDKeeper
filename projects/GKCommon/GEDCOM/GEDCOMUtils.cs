@@ -1404,6 +1404,12 @@ namespace GKCommon.GEDCOM
 
         #region Other
 
+        public static string StrToUtf8(string str)
+        {
+            byte[] src = Encoding.GetEncoding(1251).GetBytes(str);
+            return Encoding.UTF8.GetString(src);
+        }
+
         public static string NormalizeName(string s)
         {
             if (string.IsNullOrEmpty(s)) return "";

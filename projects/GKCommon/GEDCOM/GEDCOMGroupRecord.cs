@@ -140,7 +140,7 @@ namespace GKCommon.GEDCOM
             {
                 GEDCOMPointer ptr = new GEDCOMPointer(this.Owner, this, "", "");
                 ptr.SetNamedValue("_MEMBER", member);
-                this.Members.Add(ptr);
+                this.fMembers.Add(ptr);
 
                 ptr = new GEDCOMPointer(this.Owner, member, "", "");
                 ptr.SetNamedValue("_GROUP", this);

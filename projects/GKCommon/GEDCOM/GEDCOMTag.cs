@@ -605,11 +605,7 @@ namespace GKCommon.GEDCOM
                 str = str + " " + val;
             }
 
-            #if !__MonoCS__
-            stream.WriteLine(str);
-            #else
             stream.Write(str + GEDCOM_NEWLINE);
-            #endif
         }
 
         public virtual void SaveToStream(StreamWriter stream)

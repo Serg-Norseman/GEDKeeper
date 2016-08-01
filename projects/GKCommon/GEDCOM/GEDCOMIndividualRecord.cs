@@ -829,6 +829,7 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMMultimediaLink SetPrimaryMultimediaLink(GEDCOMMultimediaRecord mediaRec)
         {
+            if (mediaRec == null) return null;
             GEDCOMMultimediaLink mmLink = null;
 
             int num = this.MultimediaLinks.Count;

@@ -267,9 +267,9 @@ namespace GKCommon.GEDCOM
             this.fPieces.SaveToStream(stream);
         }
 
-        public float IsMatch(GEDCOMPersonalName name)
+        public float IsMatch(GEDCOMPersonalName otherName)
         {
-            if (name == null) return 0.0f;
+            if (otherName == null) return 0.0f;
 
             float match = 0.0f;
             
@@ -277,17 +277,17 @@ namespace GKCommon.GEDCOM
             float matches = 0;
             bool surnameMatched = false;
 
-            if (!(string.IsNullOrEmpty(name.FirstPart) && string.IsNullOrEmpty(FirstPart)))
+            if (!(string.IsNullOrEmpty(otherName.FirstPart) && string.IsNullOrEmpty(this.FirstPart)))
             {
                 parts++;
-                if (name.FirstPart == FirstPart) matches++;
+                if (otherName.FirstPart == this.FirstPart) matches++;
             }
 
-            if (!(string.IsNullOrEmpty(name.Surname) && string.IsNullOrEmpty(Surname)))
+            if (!(string.IsNullOrEmpty(otherName.Surname) && string.IsNullOrEmpty(this.Surname)))
             {
-                if ((name.Surname == "?" && Surname == "?") ||
-                    ((string.Compare(name.Surname, "unknown", true) == 0) &&
-                     (string.Compare(Surname, "unknown", true) == 0)))
+                if ((otherName.Surname == "?" && this.Surname == "?") ||
+                    ((string.Compare(otherName.Surname, "unknown", true) == 0) &&
+                     (string.Compare(this.Surname, "unknown", true) == 0)))
                 {
                     // not really matched, surname isn't known,
                     // don't count as part being checked, and don't penalize
@@ -296,7 +296,7 @@ namespace GKCommon.GEDCOM
                 else
                 {
                     parts++;
-                    if (name.Surname == Surname) {
+                    if (otherName.Surname == this.Surname) {
                         matches++;
                         surnameMatched = true;
                     }
@@ -308,18 +308,18 @@ namespace GKCommon.GEDCOM
                 surnameMatched = true;
             }
 
-            if (!(string.IsNullOrEmpty(name.Pieces.Nickname) && string.IsNullOrEmpty(Pieces.Nickname)))
+            if (!(string.IsNullOrEmpty(otherName.Pieces.Nickname) && string.IsNullOrEmpty(this.Pieces.Nickname)))
             {
                 parts++;
-                if (name.Pieces.Nickname == Pieces.Nickname) matches++;
+                if (otherName.Pieces.Nickname == this.Pieces.Nickname) matches++;
             }
 
-            match = (matches / parts) * 100.0F;
+            match = (parts == 0) ? 0.0f : (matches / parts) * 100.0f;
 
             // heavily penalise the surname not matching
             // for this to work correctly better matching needs to be
             // performed, not just string comparison
-            if (!surnameMatched) match *= 0.25F;
+            if (!surnameMatched) match *= 0.25f;
 
             return match;
         }
