@@ -164,9 +164,7 @@ namespace GKCommon.GEDCOM
                         {
                             result = result.Remove(0, 3);
                             result = GEDCOMUtils.ExtractDelimiter(result, 0);
-
-                            result = _ParseString_FixFTB(result);
-
+                            result = GEDCOMUtils.FixFTB(result);
                             result = this.fDateAfter.ParseString(result);
                             result = GEDCOMUtils.ExtractDelimiter(result, 0);
 
@@ -176,7 +174,7 @@ namespace GKCommon.GEDCOM
                             {
                                 result = result.Remove(0, 3);
                                 result = GEDCOMUtils.ExtractDelimiter(result, 0);
-                                result = _ParseString_FixFTB(result);
+                                result = GEDCOMUtils.FixFTB(result);
                                 result = this.fDateBefore.ParseString(result);
                             }
                         }
@@ -195,22 +193,6 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMDateRange(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
         {
-        }
-
-        private static string _ParseString_FixFTB(string str)
-        {
-            string result = str;
-            string su = result.Substring(0, 3).ToUpperInvariant();
-
-            if (su == GEDCOMDateRangeArray[0] ||
-                su == GEDCOMDateRangeArray[1] ||
-                su == GEDCOMDateApproximatedArray[1] ||
-                su == GEDCOMDateApproximatedArray[2] ||
-                su == GEDCOMDateApproximatedArray[3])
-            {
-                result = result.Remove(0, 4);
-            }
-            return result;
         }
 
         public override void GetDateParts(out int year, out ushort month, out ushort day, out bool yearBC)

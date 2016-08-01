@@ -419,24 +419,6 @@ namespace GKCommon.GEDCOM
             this.fHeader.CharacterSet = GEDCOMCharacterSet.csASCII;
         }
 
-        private static void CorrectLine(GEDCOMCustomRecord curRecord, GEDCOMTag curTag, int lineNum, string str)
-        {
-            try
-            {
-                if (curTag is GEDCOMNotes) {
-                    curTag.AddTag("CONT", str, null);
-                } else {
-                    if (curRecord != null) {
-                        curRecord.AddTag("NOTE", str, null);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GEDCOMTree.CorrectLine(): Line " + lineNum.ToString() + " failed correct: " + ex.Message);
-            }
-        }
-
         private void LoadFromStream(Stream fileStream, StreamReader reader)
         {
             long fileSize = fileStream.Length;
@@ -460,7 +442,7 @@ namespace GKCommon.GEDCOM
                     {
                         if (!GEDCOMUtils.IsDigit(str[0]))
                         {
-                            CorrectLine(curRecord, curTag, lineNum, str);
+                            GEDCOMUtils.FixFTBLine(curRecord, curTag, lineNum, str);
                         }
                         else
                         {

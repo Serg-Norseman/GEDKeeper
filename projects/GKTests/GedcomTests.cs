@@ -759,24 +759,32 @@ namespace GKTests
 
                 DateTime dt = ParseDT("20.01.2013");
                 Assert.IsTrue(dtx1.Date.Equals(dt), "dtx1.DateTime.Equals(dt)");
-                
+
                 //dtx1.DateCalendar = GEDCOMCalendar.dcFrench;
                 Assert.AreEqual(GEDCOMCalendar.dcGregorian, dtx1.DateCalendar);
-                
+
                 dtx1.Day = 21;
                 Assert.AreEqual(21, dtx1.Day);
-                
+
                 dtx1.Month = "SEP";
                 Assert.AreEqual("SEP", dtx1.Month);
-                
+
                 dtx1.Year = 1812;
                 Assert.AreEqual(1812, dtx1.Year);
-                
+
                 dtx1.YearBC = true;
                 Assert.AreEqual(true, dtx1.YearBC);
-                
+
                 dtx1.YearModifier = "2";
                 Assert.AreEqual("2", dtx1.YearModifier);
+
+                //
+                dtx1.ParseString("01 FEB 1934/11B.C.");
+                Assert.AreEqual(01, dtx1.Day);
+                Assert.AreEqual("FEB", dtx1.Month);
+                Assert.AreEqual(1934, dtx1.Year);
+                Assert.AreEqual("11", dtx1.YearModifier);
+                Assert.AreEqual(true, dtx1.YearBC);
 
                 // gregorian
 
@@ -1760,6 +1768,9 @@ namespace GKTests
                 StringList strs = new StringList("test");
                 customEvent.PhysicalDescription = strs;
                 Assert.AreEqual(strs.Text, customEvent.PhysicalDescription.Text);
+
+                customEvent.Detail.AddTag("EMAIL", "email", null);
+                Assert.AreEqual("email", customEvent.Detail.Address.EmailAddresses[0].StringValue);
 
                 customEvent.Pack();
 

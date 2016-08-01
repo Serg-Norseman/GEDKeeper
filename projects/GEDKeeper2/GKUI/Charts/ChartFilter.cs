@@ -27,7 +27,7 @@ namespace GKUI.Charts
     /// <summary>
     /// 
     /// </summary>
-    public class ChartFilter : BaseObject, ICustomFilter
+    public sealed class ChartFilter : BaseObject, ICustomFilter
     {
         public enum BranchCutType
         {

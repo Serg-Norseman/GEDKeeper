@@ -34,6 +34,8 @@ using GKCore.Options;
 using GKCore.Stats;
 using GKCore.Tools;
 using GKCore.Types;
+using GKUI.Charts;
+using GKUI.Controls;
 using NUnit.Framework;
 
 namespace GKTests
@@ -831,6 +833,31 @@ namespace GKTests
                 sex = namesTable.GetSexByName("Anna");
                 Assert.AreEqual(GEDCOMSex.svFemale, sex);
             }
+        }
+
+        [Test]
+        public void UI_Charts_Tests()
+        {
+            using (ChartFilter cf = new ChartFilter()) {
+                cf.Backup();
+                cf.Restore();
+            }
+        }
+
+        [Test]
+        public void UI_Controls_Tests()
+        {
+            GKComboItem comboItem = new GKComboItem("Test", null);
+            Assert.AreEqual("Test", comboItem.ToString());
+
+            GKListItem listItem = new GKListItem("Test", null);
+            Assert.AreEqual("Test", listItem.ToString());
+
+            GKListSubItem listSubItem = new GKListSubItem("Test");
+
+            GKToolStripMenuItem tsMenuItem = new GKToolStripMenuItem("Test", null);
+
+            GKTreeNode GKTreeNode = new GKTreeNode("Test", null);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Forms;
-using System.ComponentModel;
 
 namespace GKCommon.Controls
 {
@@ -58,7 +58,7 @@ namespace GKCommon.Controls
 
         private const BindingFlags AllBindings = BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
 
-        public static FieldInfo FindFieldInfo(Type t, string fieldName)
+        private static FieldInfo FindFieldInfo(Type t, string fieldName)
         {
             foreach (FieldInfo fi in t.GetFields(AllBindings))
             {

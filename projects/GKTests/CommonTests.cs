@@ -21,6 +21,7 @@
 using System;
 using System.Drawing;
 using GKCommon;
+using GKCommon.Controls;
 using GKCommon.GEDCOM;
 using GKCommon.SmartGraph;
 using GKCore.Interfaces;
@@ -32,6 +33,24 @@ namespace GKTests
     [TestFixture]
     public class CommonTests
     {
+        [Test]
+        public void ReflectionHelper_Tests()
+        {
+            using (StringList strList = new StringList()) {
+                strList.Text = "Test line";
+
+                object obj = ReflectionHelper.GetPropertyValue(strList, "Text");
+                Assert.AreEqual("Test line\r\n", obj);
+
+                ReflectionHelper.SetPropertyValue(strList, "Text", "Test2");
+                Assert.AreEqual("Test2\r\n", strList.Text);
+            }
+
+            Token tkn = new Token(TokenKind.Unknown, "", 111, 0);
+            object obj1 = ReflectionHelper.GetFieldValue(tkn, "Line");
+            Assert.AreEqual(111, obj1);
+        }
+
         [Test]
         public void ConvHelper_Tests()
         {

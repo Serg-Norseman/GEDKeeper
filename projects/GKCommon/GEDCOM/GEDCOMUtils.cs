@@ -1410,6 +1410,48 @@ namespace GKCommon.GEDCOM
             return Encoding.UTF8.GetString(src);
         }
 
+        /// <summary>
+        /// Fix of errors that are in the dates of FamilyTreeBuilder.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string FixFTB(string str)
+        {
+            string result = str;
+            string su = result.Substring(0, 3).ToUpperInvariant();
+
+            if (su == GEDCOMCustomDate.GEDCOMDateRangeArray[0] ||
+                su == GEDCOMCustomDate.GEDCOMDateRangeArray[1] ||
+                su == GEDCOMCustomDate.GEDCOMDateApproximatedArray[1] ||
+                su == GEDCOMCustomDate.GEDCOMDateApproximatedArray[2] ||
+                su == GEDCOMCustomDate.GEDCOMDateApproximatedArray[3])
+            {
+                result = result.Remove(0, 4);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Fix of line errors that are in the files of FamilyTreeBuilder.
+        /// </summary>
+        public static void FixFTBLine(GEDCOMCustomRecord curRecord, GEDCOMTag curTag, int lineNum, string str)
+        {
+            try
+            {
+                if (curTag is GEDCOMNotes) {
+                    curTag.AddTag("CONT", str, null);
+                } else {
+                    if (curRecord != null) {
+                        curRecord.AddTag("NOTE", str, null);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWrite("GEDCOMTree.CorrectLine(): Line " + lineNum.ToString() + " failed correct: " + ex.Message);
+            }
+        }
+
         public static string NormalizeName(string s)
         {
             if (string.IsNullOrEmpty(s)) return "";
