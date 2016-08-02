@@ -34,6 +34,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Threading;
 
 namespace Externals.CSV
 {
@@ -78,24 +80,29 @@ namespace Externals.CSV
 
             // No need to check the rest of the unsigned types, which will fit into the signed whole number types
 
+            // In those files there is only the comma and semicolon as delimiters of values.
+            // Therefore, the decimal separator can be only the dot.
+            NumberFormatInfo formatInfo = (NumberFormatInfo)Thread.CurrentThread.CurrentCulture.NumberFormat.Clone();
+            formatInfo.NumberDecimalSeparator = ".";
+            formatInfo.NumberGroupSeparator = "";
+
             // Next check the floating point types
             float floatResult;
-            if (float.TryParse(value, out floatResult))
+            if (float.TryParse(value, NumberStyles.Float, formatInfo, out floatResult))
             {
                 return floatResult;
             }
 
-
             // It's not clear that there's anything that double.TryParse() and decimal.TryParse() will parse
             // but which float.TryParse() won't
             double doubleResult;
-            if (double.TryParse(value, out doubleResult))
+            if (double.TryParse(value, NumberStyles.Float, formatInfo, out doubleResult))
             {
                 return doubleResult;
             }
 
             decimal decimalResult;
-            if (decimal.TryParse(value, out decimalResult))
+            if (decimal.TryParse(value, NumberStyles.Float, formatInfo, out decimalResult))
             {
                 return decimalResult;
             }

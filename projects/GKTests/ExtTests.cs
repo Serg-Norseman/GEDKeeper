@@ -410,7 +410,7 @@ namespace GKTests
         [Test]
         public void CSV_Tests()
         {
-            string data = 
+            string data =
                 "test,test2,test3,test4\r\n"+
                 "12,\"alpha\",12.5,15.4\r\n"+
                 "15,\"beta\",15.4,3.7\r\n"+
@@ -424,20 +424,20 @@ namespace GKTests
                 row = csv.ReadRow();
                 Assert.AreEqual(12, row[0]);
                 Assert.AreEqual("alpha", row[1]);
-                Assert.AreEqual("12.5", row[2]);
-                Assert.AreEqual("15.4", row[3]);
+                Assert.AreEqual(12.5f, row[2]);
+                Assert.AreEqual(15.4f, row[3]);
 
                 row = csv.ReadRow();
                 Assert.AreEqual(15, row[0]);
                 Assert.AreEqual("beta", row[1]);
-                Assert.AreEqual("15.4", row[2]);
-                Assert.AreEqual("3.7", row[3]);
+                Assert.AreEqual(15.4f, row[2]);
+                Assert.AreEqual(3.7f, row[3]);
 
                 row = csv.ReadRow();
                 Assert.AreEqual(21, row[0]);
                 Assert.AreEqual("gamma delta", row[1]);
-                Assert.AreEqual("21.5", row[2]);
-                Assert.AreEqual("1.02", row[3]);
+                Assert.AreEqual(21.5f, row[2]);
+                Assert.AreEqual(1.02f, row[3]);
 
                 row = csv.ReadRow();
                 Assert.IsNull(row);
