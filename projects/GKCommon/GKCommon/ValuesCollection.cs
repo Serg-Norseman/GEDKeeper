@@ -36,12 +36,7 @@ namespace GKCommon
             base.BaseClear();
         }
 
-        public bool HasKeys()
-        {
-            return base.BaseHasKeys();
-        }
-
-        public void Add(string name, string value, bool excludeDuplicates)
+        public void Add(string name, string value, bool excludeDuplicates = false)
         {
             ArrayList arrayList = (ArrayList)base.BaseGet(name);
 
@@ -52,12 +47,9 @@ namespace GKCommon
 
             if (value == null) return;
 
-            if (!excludeDuplicates)
-            {
+            if (!excludeDuplicates) {
                 arrayList.Add(value);
-            }
-            else
-            {
+            } else {
                 if (!arrayList.Contains(value)) arrayList.Add(value);
             }
         }
@@ -70,19 +62,14 @@ namespace GKCommon
         public string[] GetValues(string name)
         {
             ArrayList list = (ArrayList)base.BaseGet(name);
-            return GetAsStringArray(list);
-        }
-
-        private static string[] GetAsStringArray(ArrayList list)
-        {
-            if (list == null)
-            {
+            if (list == null) {
                 return null;
             }
 
             int num = list.Count;
             string[] array = new string[num];
             list.CopyTo(0, array, 0, num);
+
             return array;
         }
     }

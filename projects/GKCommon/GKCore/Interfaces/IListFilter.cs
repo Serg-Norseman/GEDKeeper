@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Collections.Generic;
 using GKCore.Types;
 
@@ -66,6 +67,7 @@ namespace GKCore.Interfaces
     {
         void Clear();
         void CopyTo(IListColumns columns);
+        Type GetColumnsEnum();
         bool MoveColumn(int idx, bool up);
         void ResetDefaults();
     }

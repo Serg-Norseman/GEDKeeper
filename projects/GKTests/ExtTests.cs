@@ -19,6 +19,8 @@
  */
 
 using System;
+using System.Collections.Generic;
+using Externals.CSV;
 using GKCommon;
 using GKCore;
 using NUnit.Framework;
@@ -82,8 +84,8 @@ namespace GKTests
 		{
 			return item1.Value.CompareTo(item2.Value);
 		}*/
-        
-        
+
+
         [Test]
         public void SysUtils_Tests()
         {
@@ -404,5 +406,42 @@ namespace GKTests
 //
 //		}
 
+
+        [Test]
+        public void CSV_Tests()
+        {
+            string data = 
+                "test,test2,test3,test4\r\n"+
+                "12,\"alpha\",12.5,15.4\r\n"+
+                "15,\"beta\",15.4,3.7\r\n"+
+                "21,\"gamma delta\",21.5,1.02\r\n";
+
+            using (CSVReader csv = new CSVReader(data)) {
+                List<object> row;
+
+                row = csv.ReadRow(); // header
+
+                row = csv.ReadRow();
+                Assert.AreEqual(12, row[0]);
+                Assert.AreEqual("alpha", row[1]);
+                Assert.AreEqual("12.5", row[2]);
+                Assert.AreEqual("15.4", row[3]);
+
+                row = csv.ReadRow();
+                Assert.AreEqual(15, row[0]);
+                Assert.AreEqual("beta", row[1]);
+                Assert.AreEqual("15.4", row[2]);
+                Assert.AreEqual("3.7", row[3]);
+
+                row = csv.ReadRow();
+                Assert.AreEqual(21, row[0]);
+                Assert.AreEqual("gamma delta", row[1]);
+                Assert.AreEqual("21.5", row[2]);
+                Assert.AreEqual("1.02", row[3]);
+
+                row = csv.ReadRow();
+                Assert.IsNull(row);
+            }
+        }
     }
 }

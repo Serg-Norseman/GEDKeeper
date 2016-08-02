@@ -96,17 +96,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override Type GetColumnsEnum()
-        {
-            return typeof(TaskColumnType);
-        }
-
-        protected override ListColumns GetDefaultListColumns()
-        {
-            return new TaskListColumns();
-        }
-
-        public TaskListMan(GEDCOMTree tree) : base(tree)
+        public TaskListMan(GEDCOMTree tree) : base(tree, new TaskListColumns())
         {
         }
     }

@@ -57,7 +57,7 @@ namespace Externals.CSV
         /// </summary>
         public int ScanRows = 0;
 
-        #region Constructors
+        #region Instance control
 
         /// <summary>
         /// Read CSV-formatted data from a file
@@ -95,11 +95,20 @@ namespace Externals.CSV
             this.reader = new BinaryReader(new MemoryStream(Encoding.UTF8.GetBytes(reader.ReadToEnd())));
         }
 
+        public void Dispose()
+        {
+            try
+            {
+                // Can't call BinaryReader.Dispose due to its protection level
+                if (reader != null) reader.Close();
+            }
+            catch { }
+        }
+
         #endregion
 
-
-
         string currentLine = "";
+
         /// <summary>
         /// Read the next row from the CSV data
         /// </summary>
@@ -218,8 +227,8 @@ namespace Externals.CSV
                             columnTypes.Add(row[i].GetType());
                         else
                             columnTypes[i] = StringConverter.FindCommonType(columnTypes[i], row[i].GetType());
-                else
-                    headerRead = true;
+                        else
+                            headerRead = true;
 
             // Create the table and add the columns
             DataTable table = new DataTable();
@@ -235,14 +244,14 @@ namespace Externals.CSV
             headerRead = false;
             foreach (List<object> row in rows)
                 if (headerRead || !headerRow)
-                {
-                    DataRow dataRow = table.NewRow();
-                    for (int i = 0; i < row.Count; i++)
-                        dataRow[i] = row[i];
-                    table.Rows.Add(dataRow);
-                }
-                else
-                    headerRead = true;
+            {
+                DataRow dataRow = table.NewRow();
+                for (int i = 0; i < row.Count; i++)
+                    dataRow[i] = row[i];
+                table.Rows.Add(dataRow);
+            }
+            else
+                headerRead = true;
 
             return table;
         }
@@ -274,23 +283,5 @@ namespace Externals.CSV
             using (CSVReader reader = new CSVReader(new FileInfo(filename)))
                 return reader.CreateDataTable(headerRow);
         }
-
-
-
-        #region IDisposable Members
-
-        public void Dispose()
-        {
-            if (reader == null) return;
-
-            try
-            {
-                // Can't call BinaryReader.Dispose due to its protection level
-                reader.Close();
-            }
-            catch { }
-        }
-
-        #endregion
     }
 }

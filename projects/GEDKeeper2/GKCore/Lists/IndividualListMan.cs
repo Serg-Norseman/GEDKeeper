@@ -353,7 +353,7 @@ namespace GKCore.Lists
                     break;
 
                 case PersonColumnType.pctSex:
-                    result = new string(GKUtils.SexStr(this.fRec.Sex)[0], 1);
+                    result = GKUtils.SexChar(this.fRec.Sex);
                     break;
 
                 case PersonColumnType.pctBirthDate:
@@ -584,7 +584,7 @@ namespace GKCore.Lists
         private static readonly Color HighlightUnmarriedColor = Color.FromArgb(0xFFFFA1);
         #endif
 
-        public override void UpdateColumns(GKListView listView, bool isMain)
+        public override void UpdateColumns(IListView listView, bool isMain)
         {
             IndividualListColumns columns = GlobalOptions.Instance.IndividualListColumns;
             NameFormat defNameFormat = GlobalOptions.Instance.DefNameFormat;
@@ -627,17 +627,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override Type GetColumnsEnum()
-        {
-            return typeof(PersonColumnType);
-        }
-
-        protected override ListColumns GetDefaultListColumns()
-        {
-            return GlobalOptions.Instance.IndividualListColumns;
-        }
-
-        public IndividualListMan(GEDCOMTree tree) : base(tree)
+        public IndividualListMan(GEDCOMTree tree) : base(tree, new IndividualListColumns())
         {
         }
     }

@@ -68,7 +68,7 @@ namespace GKUI.Dialogs
             this.fBase = aBase;
             this.fListMan = listMan;
 
-            Type colEnum = fListMan.GetColumnsEnum();
+            Type colEnum = fListMan.ListColumns.GetColumnsEnum();
             Array enums = Enum.GetValues(colEnum);
             this.fFields = new string[enums.Length + 1];
             this.fFields[0] = "";
@@ -124,7 +124,7 @@ namespace GKUI.Dialogs
             }
 
             idx = idx - 1; // exclude empty item
-            Type colEnum = fListMan.GetColumnsEnum();
+            Type colEnum = fListMan.ListColumns.GetColumnsEnum();
             Array enums = Enum.GetValues(colEnum);
             return (Enum)enums.GetValue(idx);
         }

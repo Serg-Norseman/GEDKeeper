@@ -96,17 +96,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override Type GetColumnsEnum()
-        {
-            return typeof(CommunicationColumnType);
-        }
-
-        protected override ListColumns GetDefaultListColumns()
-        {
-            return new CommunicationListColumns();
-        }
-
-        public CommunicationListMan(GEDCOMTree tree) : base(tree)
+        public CommunicationListMan(GEDCOMTree tree) : base(tree, new CommunicationListColumns())
         {
         }
     }

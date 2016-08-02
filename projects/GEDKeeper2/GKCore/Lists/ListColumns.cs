@@ -77,7 +77,7 @@ namespace GKCore.Lists
     public abstract class ListColumns : IListColumns
     {
         private List<ColumnProps> fColumns;
-        private Type fColumnEnum;
+        private Type fColumnsEnum;
 
         public List<ColumnStatic> ColumnStatics;
 
@@ -101,12 +101,12 @@ namespace GKCore.Lists
 
         protected void InitData(Type colEnum)
         {
-            this.fColumnEnum = colEnum;
+            this.fColumnsEnum = colEnum;
 
             InitColumnStatics();
 
             this.fColumns = new List<ColumnProps>();
-            foreach (Enum e in Enum.GetValues(this.fColumnEnum))
+            foreach (Enum e in Enum.GetValues(this.fColumnsEnum))
             {
                 this.fColumns.Add(new ColumnProps());
             }
@@ -114,7 +114,7 @@ namespace GKCore.Lists
 
         public void ResetDefaults()
         {
-            foreach (Enum e in Enum.GetValues(this.fColumnEnum))
+            foreach (Enum e in Enum.GetValues(this.fColumnsEnum))
             {
                 byte i = (e as IConvertible).ToByte(null);
 
@@ -124,9 +124,9 @@ namespace GKCore.Lists
             }
         }
 
-        public Type GetColumnEnum()
+        public Type GetColumnsEnum()
         {
-            return this.fColumnEnum;
+            return this.fColumnsEnum;
         }
 
         public void Clear()
@@ -167,12 +167,11 @@ namespace GKCore.Lists
         public void CopyTo(IListColumns columns)
         {
             ListColumns cols = columns as ListColumns;
-            
             if (cols == null) {
                 throw new ArgumentNullException("columns");
             }
 
-            foreach (Enum e in Enum.GetValues(this.fColumnEnum))
+            foreach (Enum e in Enum.GetValues(this.fColumnsEnum))
             {
                 byte i = (e as IConvertible).ToByte(null);
 
@@ -185,7 +184,7 @@ namespace GKCore.Lists
         {
             if (iniFile == null) return;
 
-            foreach (Enum e in Enum.GetValues(this.fColumnEnum))
+            foreach (Enum e in Enum.GetValues(this.fColumnsEnum))
             {
                 byte i = (e as IConvertible).ToByte(null);
 
@@ -209,7 +208,7 @@ namespace GKCore.Lists
         {
             if (iniFile == null) return;
 
-            foreach (Enum e in Enum.GetValues(this.fColumnEnum))
+            foreach (Enum e in Enum.GetValues(this.fColumnsEnum))
             {
                 byte i = (e as IConvertible).ToByte(null);
 

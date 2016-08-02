@@ -221,6 +221,7 @@
     <Compile Include="GKCore\Interfaces\ILangMan.cs" />
     <Compile Include="GKCore\Interfaces\IListFilter.cs" />
     <Compile Include="GKCore\Interfaces\IListManager.cs" />
+    <Compile Include="GKCore\Interfaces\IListView.cs" />
     <Compile Include="GKCore\Interfaces\ILocalization.cs" />
     <Compile Include="GKCore\Interfaces\INamesTable.cs" />
     <Compile Include="GKCore\Interfaces\IOptions.cs" />

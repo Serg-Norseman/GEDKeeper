@@ -72,10 +72,10 @@ namespace GKCore.Lists
             get { return this.fListColumns; }
         }
 
-        protected ListManager(GEDCOMTree tree)
+        protected ListManager(GEDCOMTree tree, ListColumns defaultListColumns)
         {
             this.fTree = tree;
-            this.fListColumns = GetDefaultListColumns();
+            this.fListColumns = defaultListColumns;
             this.fColumnsMap = new List<MapColumnRec>();
 
             CreateFilter();
@@ -90,7 +90,7 @@ namespace GKCore.Lists
             base.Dispose(disposing);
         }
 
-        protected void AddListColumn(GKListView list, string caption, int width, bool autoSize, byte colType, byte colSubtype)
+        protected void AddListColumn(IListView list, string caption, int width, bool autoSize, byte colType, byte colSubtype)
         {
             if (list == null) {
                 throw new ArgumentNullException("list");
@@ -193,7 +193,7 @@ namespace GKCore.Lists
             }
         }
 
-        public virtual void UpdateColumns(GKListView listView, bool isMain)
+        public virtual void UpdateColumns(IListView listView, bool isMain)
         {
             if (listView == null) return;
 
@@ -229,18 +229,6 @@ namespace GKCore.Lists
 
             return DataType.dtString;
         }
-
-        protected abstract ListColumns GetDefaultListColumns();
-
-        /// <summary>
-        /// Is used in dialog of common filters, CommonFilterDlg
-        /// </summary>
-        public abstract Type GetColumnsEnum();
-
-        /*public Type GetColumnsEnum()
-		{
-			return this.fListColumns.ColumnEnum;
-		}*/
 
         // used only in UpdateItem
         private static string ConvertColumnValue(object val, ColumnStatic cs)

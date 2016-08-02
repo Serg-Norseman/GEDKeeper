@@ -749,6 +749,50 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
+        public GEDCOMRepositoryRecord CreateRepository()
+        {
+            GEDCOMRepositoryRecord result = new GEDCOMRepositoryRecord(this, this, "", "");
+            result.InitNew();
+            result.ChangeDate.ChangeDateTime = DateTime.Now;
+
+            this.AddRecord(result);
+
+            return result;
+        }
+
+        public GEDCOMResearchRecord CreateResearch()
+        {
+            GEDCOMResearchRecord result = new GEDCOMResearchRecord(this, this, "", "");
+            result.InitNew();
+            result.ChangeDate.ChangeDateTime = DateTime.Now;
+
+            this.AddRecord(result);
+
+            return result;
+        }
+
+        public GEDCOMCommunicationRecord CreateCommunication()
+        {
+            GEDCOMCommunicationRecord result = new GEDCOMCommunicationRecord(this, this, "", "");
+            result.InitNew();
+            result.ChangeDate.ChangeDateTime = DateTime.Now;
+
+            this.AddRecord(result);
+
+            return result;
+        }
+
+        public GEDCOMTaskRecord CreateTask()
+        {
+            GEDCOMTaskRecord result = new GEDCOMTaskRecord(this, this, "", "");
+            result.InitNew();
+            result.ChangeDate.ChangeDateTime = DateTime.Now;
+
+            this.AddRecord(result);
+
+            return result;
+        }
+
         public GEDCOMMultimediaRecord CreateMultimedia()
         {
             GEDCOMMultimediaRecord result = new GEDCOMMultimediaRecord(this, this, "", "");

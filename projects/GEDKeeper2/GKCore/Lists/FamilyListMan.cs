@@ -89,17 +89,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override Type GetColumnsEnum()
-        {
-            return typeof(FamilyColumnType);
-        }
-
-        protected override ListColumns GetDefaultListColumns()
-        {
-            return new FamilyListColumns();
-        }
-
-        public FamilyListMan(GEDCOMTree tree) : base(tree)
+        public FamilyListMan(GEDCOMTree tree) : base(tree, new FamilyListColumns())
         {
         }
     }

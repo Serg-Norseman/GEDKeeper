@@ -23,13 +23,14 @@ using System.Collections;
 using System.Windows.Forms;
 
 using GKCommon;
+using GKCore.Interfaces;
 
 namespace GKUI.Controls
 {
     /// <summary>
     /// 
     /// </summary>
-    public class GKListView : ListView
+    public class GKListView : ListView, IListView
     {
         private class LVColumnSorter : IComparer
         {

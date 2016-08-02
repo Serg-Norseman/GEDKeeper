@@ -84,17 +84,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override Type GetColumnsEnum()
-        {
-            return typeof(GroupColumnType);
-        }
-
-        protected override ListColumns GetDefaultListColumns()
-        {
-            return new GroupListColumns();
-        }
-
-        public GroupListMan(GEDCOMTree tree) : base(tree)
+        public GroupListMan(GEDCOMTree tree) : base(tree, new GroupListColumns())
         {
         }
     }

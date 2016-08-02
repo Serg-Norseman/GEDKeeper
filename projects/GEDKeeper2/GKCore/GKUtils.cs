@@ -220,6 +220,12 @@ namespace GKCore
             return (divisor == (double)0f) ? 0.0 : (dividend / divisor);
         }
 
+        public static string SexChar(GEDCOMSex sex)
+        {
+            string ss = SexStr(sex);
+            return string.IsNullOrEmpty(ss) ? "?" : new string(ss[0], 1);
+        }
+
         public static string SexStr(GEDCOMSex sex)
         {
             return LangMan.LS(GKData.SexData[(int)sex].NameId);

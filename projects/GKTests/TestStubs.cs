@@ -89,6 +89,46 @@ namespace GKTests
             GEDCOMGroupRecord groupRec = context.Tree.CreateGroup();
             groupRec.GroupName = "GroupTest";
             Assert.IsNotNull(groupRec, "group1 != null");
+
+            // location for tests
+            GEDCOMLocationRecord locRec = context.Tree.CreateLocation();
+            locRec.LocationName = "Test Location";
+            locRec.Map.Lati = 5.11111;
+            locRec.Map.Long = 7.99999;
+            Assert.IsNotNull(locRec, "locRec != null");
+
+            // repository for tests
+            GEDCOMRepositoryRecord repoRec = context.Tree.CreateRepository();
+            repoRec.RepositoryName = "Test repository";
+            Assert.IsNotNull(repoRec, "repoRec != null");
+
+            // research for tests
+            GEDCOMResearchRecord resRec = context.Tree.CreateResearch();
+            resRec.ResearchName = "Test research";
+            Assert.IsNotNull(resRec, "resRec != null");
+
+            // source for tests
+            GEDCOMSourceRecord srcRec = context.Tree.CreateSource();
+            srcRec.FiledByEntry = "Test source";
+            Assert.IsNotNull(srcRec, "srcRec != null");
+
+            // task for tests
+            GEDCOMTaskRecord tskRec = context.Tree.CreateTask();
+            tskRec.Goal = "Test task";
+            Assert.IsNotNull(tskRec, "tskRec != null");
+
+            // media for tests
+            GEDCOMMultimediaRecord mediaRec = context.Tree.CreateMultimedia();
+            mediaRec.AddTag("FILE", "", null);
+            GEDCOMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
+            fileRef.Title = "Test multimedia";
+            fileRef.LinkFile("sample.png");
+            Assert.IsNotNull(mediaRec, "mediaRec != null");
+
+            // communication for tests
+            GEDCOMCommunicationRecord commRec = context.Tree.CreateCommunication();
+            commRec.CommName = "Test communication";
+            Assert.IsNotNull(commRec, "commRec != null");
         }
     }
 }

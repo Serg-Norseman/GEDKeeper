@@ -672,15 +672,15 @@ namespace GKTests
             using (GEDCOMPlace tag = GEDCOMPlace.Create(null, null, "", "") as GEDCOMPlace)
             {
                 Assert.IsNotNull(tag);
-                
+
                 Assert.IsNotNull(tag.Notes);
                 Assert.IsNotNull(tag.SourceCitations);
                 Assert.IsNotNull(tag.MultimediaLinks);
-                
+
                 Assert.IsNull(tag.AddNote(null));
                 Assert.IsNull(tag.AddSource(null, "page", 1));
                 Assert.IsNull(tag.AddMultimedia(null));
-                
+
                 Assert.IsNotNull(tag.AddNote(new GEDCOMNoteRecord(null, null, "", "")));
                 Assert.IsNotNull(tag.AddSource(new GEDCOMSourceRecord(null, null, "", ""), "page", 1));
                 Assert.IsNotNull(tag.AddMultimedia(new GEDCOMMultimediaRecord(null, null, "", "")));
@@ -695,14 +695,14 @@ namespace GKTests
                 Assert.IsNotNull(cd);
 
                 Assert.IsNotNull(cd.Notes);
-                
+
                 DateTime dtNow = DateTime.Now;
                 dtNow = dtNow.AddTicks(-dtNow.Ticks % 10000000);
                 cd.ChangeDateTime = dtNow;
-                
+
                 DateTime dtx = cd.ChangeDateTime;
                 Assert.AreEqual(dtNow, dtx);
-                
+
                 GEDCOMTime time = cd.ChangeTime;
                 Assert.AreEqual(dtNow.Second, time.Seconds);
                 Assert.AreEqual(dtNow.Minute, time.Minutes);

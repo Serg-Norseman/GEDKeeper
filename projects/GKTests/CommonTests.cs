@@ -214,13 +214,19 @@ namespace GKTests
         public void StringList_Tests()
         {
             string[] list = new string[] { "The", "string", "list", "test" };
-            
+
             StringList strList = new StringList(list);
             Assert.AreEqual("The", strList[0]);
             Assert.AreEqual("string", strList[1]);
             Assert.AreEqual("list", strList[2]);
             Assert.AreEqual("test", strList[3]);
-            
+
+            string[] listVals = strList.ToArray();
+            Assert.AreEqual("The", listVals[0]);
+            Assert.AreEqual("string", listVals[1]);
+            Assert.AreEqual("list", listVals[2]);
+            Assert.AreEqual("test", listVals[3]);
+
             strList.Exchange(1, 2);
             Assert.AreEqual("string", strList[2]);
             Assert.AreEqual("list", strList[1]);
@@ -562,6 +568,34 @@ namespace GKTests
             tok = strTok.Next();
             Assert.AreEqual(TokenKind.QuotedString, tok.Kind);
             Assert.AreEqual("\"test quote\"", tok.Value);
+        }
+
+        [Test]
+        public void ValuesCollection_Tests()
+        {
+            ValuesCollection valsCol = new ValuesCollection();
+
+            valsCol.Add("red", "rojo");
+            valsCol.Add("green", "verde");
+            valsCol.Add("blue", "azul", true);
+            valsCol.Add("red", "rouge");
+            valsCol.Add("red", null);
+            valsCol.Add("red", "rouge", true);
+
+            Assert.AreEqual(3, valsCol.Count);
+
+            valsCol.Remove("green");
+            Assert.AreEqual(2, valsCol.Count);
+
+            string[] values = valsCol.GetValues("xxxxx");
+            Assert.AreEqual(null, values);
+
+            values = valsCol.GetValues("red");
+            Assert.AreEqual("rojo", values[0]);
+            Assert.AreEqual("rouge", values[1]);
+
+            valsCol.Clear();
+            Assert.AreEqual(0, valsCol.Count);
         }
     }
 }

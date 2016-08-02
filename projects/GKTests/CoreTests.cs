@@ -65,7 +65,7 @@ namespace GKTests
 
             StringList sources = new StringList();
             fContext.GetSourcesList(sources);
-            Assert.AreEqual(0, sources.Count);
+            Assert.AreEqual(1, sources.Count);
 
             GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
             Assert.IsNotNull(iRec);
@@ -473,27 +473,41 @@ namespace GKTests
             Assert.AreEqual(RelationKind.rkSon, rel);
         }
 
+        private class ListViewMock : IListView
+        {
+            public void AddListColumn(string caption, int width, bool autoSize) {}
+        }
+
+        private bool ExtFilterHandler(GEDCOMRecord record)
+        {
+            return true;
+        }
+
         [Test]
         public void Lists_Tests()
         {
+            //
             ColumnProps colProps = new ColumnProps();
             Assert.IsNotNull(colProps);
 
             colProps = new ColumnProps(0, false, 10);
             Assert.IsNotNull(colProps);
-
             Assert.AreEqual(0, colProps.ColType);
             Assert.AreEqual(false, colProps.ColActive);
             Assert.AreEqual(10, colProps.ColWidth);
 
-            colProps.Assign(null);
+            ColumnProps colProps2 = new ColumnProps();
+            colProps2.Assign(null);
+            colProps2.Assign(colProps);
+            Assert.AreEqual(0, colProps.ColType);
+            Assert.AreEqual(false, colProps.ColActive);
+            Assert.AreEqual(10, colProps.ColWidth);
 
+            //
             ColumnStatic colStatic = new ColumnStatic();
             Assert.IsNotNull(colStatic);
 
-            //ListColumns listColumns = new ListColumns();
-            //Assert.IsNotNull(listColumns);
-
+            //
             ListFilter listFilter = new ListFilter();
             Assert.IsNotNull(listFilter);
             Assert.AreEqual(0, listFilter.Conditions.Count);
@@ -501,90 +515,243 @@ namespace GKTests
             Assert.AreEqual(0, listFilter.Conditions.Count);
 
             ListManager listManager;
+            ListViewMock lvMock = new ListViewMock();
+            GKListItem listItem;
 
+            //
             listManager = new CommunicationListMan(this.fContext.Tree);
             Assert.IsNotNull(listManager);
-            Assert.AreEqual(typeof(CommunicationColumnType), listManager.GetColumnsEnum());
+            Assert.AreEqual(typeof(CommunicationColumnType), listManager.ListColumns.GetColumnsEnum());
 
             listManager.ExternalFilter = null;
             Assert.IsNull(listManager.ExternalFilter);
 
-            //
+            GEDCOMCommunicationRecord commRec = fContext.Tree.XRefIndex_Find("CM1") as GEDCOMCommunicationRecord;
+            listManager.Fetch(commRec);
 
+            listManager.QuickFilter = "*";
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            listManager.QuickFilter = "*commun*";
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            listManager.QuickFilter = "*alpha*";
+            Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
+
+            listManager.UpdateColumns(lvMock, true);
+            listItem = new GKListItem("", null);
+            listManager.UpdateItem(listItem, true);
+
+            //
+            IListFilter filter = listManager.Filter;
+            IListColumns listColumns = listManager.ListColumns;
+
+            //
             listManager = new FamilyListMan(this.fContext.Tree);
             Assert.IsNotNull(listManager);
-            Assert.AreEqual(typeof(FamilyColumnType), listManager.GetColumnsEnum());
+            Assert.AreEqual(typeof(FamilyColumnType), listManager.ListColumns.GetColumnsEnum());
+
+            GEDCOMFamilyRecord famRec = fContext.Tree.XRefIndex_Find("F1") as GEDCOMFamilyRecord;
+            listManager.Fetch(famRec);
+
+            listManager.QuickFilter = "*";
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            listManager.QuickFilter = "* - *";
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            listManager.QuickFilter = "*alpha*";
+            Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
+
+            listManager.UpdateColumns(lvMock, true);
+            listItem = new GKListItem("", null);
+            listManager.UpdateItem(listItem, true);
 
             //
-
             listManager = new GroupListMan(this.fContext.Tree);
             Assert.IsNotNull(listManager);
-            Assert.AreEqual(typeof(GroupColumnType), listManager.GetColumnsEnum());
+            Assert.AreEqual(typeof(GroupColumnType), listManager.ListColumns.GetColumnsEnum());
 
             GEDCOMGroupRecord grpRec = fContext.Tree.XRefIndex_Find("G1") as GEDCOMGroupRecord;
             listManager.Fetch(grpRec);
 
-            //Assert.AreEqual("GroupTest", listManager.GetColumnInternalValue(1));
-
             listManager.QuickFilter = "*";
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None)); // "GroupTest"
-
-            listManager.QuickFilter = "*alpha*";
-            Assert.IsFalse(listManager.CheckFilter(ShieldState.None)); // "GroupTest"
-
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
             listManager.QuickFilter = "*roup*";
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None)); // "GroupTest"
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            listManager.QuickFilter = "*alpha*";
+            Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
+
+            listManager.UpdateColumns(lvMock, true);
+            listItem = new GKListItem("", null);
+            listManager.UpdateItem(listItem, true);
 
             //
-
             listManager = new IndividualListMan(this.fContext.Tree);
             Assert.IsNotNull(listManager);
-            Assert.AreEqual(typeof(PersonColumnType), listManager.GetColumnsEnum());
+            Assert.AreEqual(typeof(PersonColumnType), listManager.ListColumns.GetColumnsEnum());
 
-            IListFilter filter = listManager.Filter;
-            IListColumns listColumns = listManager.ListColumns;
-
-            GEDCOMIndividualRecord indRec = fContext.Tree.XRefIndex_Find("I2") as GEDCOMIndividualRecord;
+            GEDCOMIndividualRecord indRec = fContext.Tree.XRefIndex_Find("I4") as GEDCOMIndividualRecord;
             listManager.Fetch(indRec);
 
             listManager.QuickFilter = "*";
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None)); // "GroupTest"
-
-            listManager.QuickFilter = "*alpha*";
-            Assert.IsFalse(listManager.CheckFilter(ShieldState.None)); // "GroupTest"
-
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
             listManager.QuickFilter = "*Petr*";
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None)); // "Maria", "Petrovna", "Ivanova"
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            listManager.QuickFilter = "*alpha*";
+            Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
+
+            GlobalOptions.Instance.ListHighlightUnparentedPersons = true;
+            GlobalOptions.Instance.ListHighlightUnmarriedPersons = true;
+            listManager.InitFilter();
+            listManager.ExternalFilter = ExtFilterHandler;
+
+            GlobalOptions.Instance.DefNameFormat = NameFormat.nfFNP;
+            listManager.UpdateColumns(lvMock, true);
+            listItem = new GKListItem("", null);
+            listManager.UpdateItem(listItem, true);
+
+            GlobalOptions.Instance.DefNameFormat = NameFormat.nfF_NP;
+            listManager.UpdateColumns(lvMock, true);
+            listItem = new GKListItem("", null);
+            listManager.UpdateItem(listItem, true);
+
+            GlobalOptions.Instance.DefNameFormat = NameFormat.nfF_N_P;
+            listManager.UpdateColumns(lvMock, true);
+            listItem = new GKListItem("", null);
+            listManager.UpdateItem(listItem, true);
 
             //
-
             listManager = new LocationListMan(this.fContext.Tree);
             Assert.IsNotNull(listManager);
-            Assert.AreEqual(typeof(LocationColumnType), listManager.GetColumnsEnum());
+            Assert.AreEqual(typeof(LocationColumnType), listManager.ListColumns.GetColumnsEnum());
 
+            GEDCOMLocationRecord locRec = fContext.Tree.XRefIndex_Find("L1") as GEDCOMLocationRecord;
+            listManager.Fetch(locRec);
+
+            listManager.QuickFilter = "*";
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            listManager.QuickFilter = "*locat*";
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            listManager.QuickFilter = "*xxxx*";
+            Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
+
+            listManager.UpdateColumns(lvMock, true);
+            listItem = new GKListItem("", null);
+            listManager.UpdateItem(listItem, true);
+
+            //
             listManager = new MultimediaListMan(this.fContext.Tree);
             Assert.IsNotNull(listManager);
-            Assert.AreEqual(typeof(MultimediaColumnType), listManager.GetColumnsEnum());
+            Assert.AreEqual(typeof(MultimediaColumnType), listManager.ListColumns.GetColumnsEnum());
 
+            GEDCOMMultimediaRecord mediaRec = fContext.Tree.XRefIndex_Find("O1") as GEDCOMMultimediaRecord;
+            listManager.Fetch(mediaRec);
+
+            listManager.QuickFilter = "*";
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            listManager.QuickFilter = "*media*";
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            listManager.QuickFilter = "*xxxx*";
+            Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
+
+            listManager.UpdateColumns(lvMock, true);
+            listItem = new GKListItem("", null);
+            listManager.UpdateItem(listItem, true);
+
+            //
             listManager = new NoteListMan(this.fContext.Tree);
             Assert.IsNotNull(listManager);
-            Assert.AreEqual(typeof(NoteColumnType), listManager.GetColumnsEnum());
+            Assert.AreEqual(typeof(NoteColumnType), listManager.ListColumns.GetColumnsEnum());
 
+            GEDCOMNoteRecord noteRec = new GEDCOMNoteRecord(null, null, "", "");
+            noteRec.AddNoteText("Test text");
+            listManager.Fetch(noteRec);
+
+            listManager.QuickFilter = "*";
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            listManager.QuickFilter = "*text*";
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            listManager.QuickFilter = "*xxxxxx*";
+            Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
+
+            listManager.UpdateColumns(lvMock, true);
+            listItem = new GKListItem("", null);
+            listManager.UpdateItem(listItem, true);
+            noteRec.Clear();
+            listManager.UpdateItem(listItem, true);
+
+            //
             listManager = new RepositoryListMan(this.fContext.Tree);
             Assert.IsNotNull(listManager);
-            Assert.AreEqual(typeof(RepositoryColumnType), listManager.GetColumnsEnum());
+            Assert.AreEqual(typeof(RepositoryColumnType), listManager.ListColumns.GetColumnsEnum());
 
+            GEDCOMRepositoryRecord repoRec = fContext.Tree.XRefIndex_Find("R1") as GEDCOMRepositoryRecord;
+            listManager.Fetch(repoRec);
+
+            listManager.QuickFilter = "*";
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            listManager.QuickFilter = "*repos*";
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            listManager.QuickFilter = "*xxxx*";
+            Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
+
+            listManager.UpdateColumns(lvMock, true);
+            listItem = new GKListItem("", null);
+            listManager.UpdateItem(listItem, true);
+
+            //
             listManager = new ResearchListMan(this.fContext.Tree);
             Assert.IsNotNull(listManager);
-            Assert.AreEqual(typeof(ResearchColumnType), listManager.GetColumnsEnum());
+            Assert.AreEqual(typeof(ResearchColumnType), listManager.ListColumns.GetColumnsEnum());
 
+            GEDCOMResearchRecord resRec = fContext.Tree.XRefIndex_Find("RS1") as GEDCOMResearchRecord;
+            listManager.Fetch(resRec);
+
+            listManager.QuickFilter = "*";
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            listManager.QuickFilter = "*resear*";
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            listManager.QuickFilter = "*xxxx*";
+            Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
+
+            listManager.UpdateColumns(lvMock, true);
+            listItem = new GKListItem("", null);
+            listManager.UpdateItem(listItem, true);
+
+            //
             listManager = new SourceListMan(this.fContext.Tree);
             Assert.IsNotNull(listManager);
-            Assert.AreEqual(typeof(SourceColumnType), listManager.GetColumnsEnum());
+            Assert.AreEqual(typeof(SourceColumnType), listManager.ListColumns.GetColumnsEnum());
 
+            GEDCOMSourceRecord srcRec = fContext.Tree.XRefIndex_Find("S1") as GEDCOMSourceRecord;
+            listManager.Fetch(srcRec);
+
+            listManager.QuickFilter = "*";
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            listManager.QuickFilter = "*sourc*";
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            listManager.QuickFilter = "*xxxx*";
+            Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
+
+            listManager.UpdateColumns(lvMock, true);
+            listItem = new GKListItem("", null);
+            listManager.UpdateItem(listItem, true);
+
+            //
             listManager = new TaskListMan(this.fContext.Tree);
             Assert.IsNotNull(listManager);
-            Assert.AreEqual(typeof(TaskColumnType), listManager.GetColumnsEnum());
+            Assert.AreEqual(typeof(TaskColumnType), listManager.ListColumns.GetColumnsEnum());
+
+            GEDCOMTaskRecord tskRec = fContext.Tree.XRefIndex_Find("TK1") as GEDCOMTaskRecord;
+            listManager.Fetch(tskRec);
+
+            listManager.QuickFilter = "*";
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            listManager.QuickFilter = "*task*";
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            listManager.QuickFilter = "*xxxx*";
+            Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
+
+            listManager.UpdateColumns(lvMock, true);
+            listItem = new GKListItem("", null);
+            listManager.UpdateItem(listItem, true);
         }
 
         [Test]

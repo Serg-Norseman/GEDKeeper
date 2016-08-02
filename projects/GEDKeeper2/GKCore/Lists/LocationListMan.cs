@@ -96,17 +96,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override Type GetColumnsEnum()
-        {
-            return typeof(LocationColumnType);
-        }
-
-        protected override ListColumns GetDefaultListColumns()
-        {
-            return new LocationListColumns();
-        }
-
-        public LocationListMan(GEDCOMTree tree) : base(tree)
+        public LocationListMan(GEDCOMTree tree) : base(tree, new LocationListColumns())
         {
         }
     }

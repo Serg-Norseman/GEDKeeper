@@ -99,17 +99,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override Type GetColumnsEnum()
-        {
-            return typeof(NoteColumnType);
-        }
-
-        protected override ListColumns GetDefaultListColumns()
-        {
-            return new NoteListColumns();
-        }
-
-        public NoteListMan(GEDCOMTree tree) : base(tree)
+        public NoteListMan(GEDCOMTree tree) : base(tree, new NoteListColumns())
         {
         }
     }

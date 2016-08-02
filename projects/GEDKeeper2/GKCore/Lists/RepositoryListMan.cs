@@ -84,17 +84,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override Type GetColumnsEnum()
-        {
-            return typeof(RepositoryColumnType);
-        }
-
-        protected override ListColumns GetDefaultListColumns()
-        {
-            return new RepositoryListColumns();
-        }
-
-        public RepositoryListMan(GEDCOMTree tree) : base(tree)
+        public RepositoryListMan(GEDCOMTree tree) : base(tree, new RepositoryListColumns())
         {
         }
     }

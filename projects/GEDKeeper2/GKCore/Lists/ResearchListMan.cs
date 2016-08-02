@@ -104,17 +104,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override Type GetColumnsEnum()
-        {
-            return typeof(ResearchColumnType);
-        }
-
-        protected override ListColumns GetDefaultListColumns()
-        {
-            return new ResearchListColumns();
-        }
-
-        public ResearchListMan(GEDCOMTree tree) : base(tree)
+        public ResearchListMan(GEDCOMTree tree) : base(tree, new ResearchListColumns())
         {
         }
     }

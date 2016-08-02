@@ -96,17 +96,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override Type GetColumnsEnum()
-        {
-            return typeof(MultimediaColumnType);
-        }
-
-        protected override ListColumns GetDefaultListColumns()
-        {
-            return new MultimediaListColumns();
-        }
-
-        public MultimediaListMan(GEDCOMTree tree) : base(tree)
+        public MultimediaListMan(GEDCOMTree tree) : base(tree, new MultimediaListColumns())
         {
         }
     }

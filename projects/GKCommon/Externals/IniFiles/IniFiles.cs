@@ -56,6 +56,7 @@ namespace Externals.IniFiles
                     return sections[i];
             return null;
         }
+
         /// <summary>Gets an array of names of sections in this INI file.</summary>
         public string[] GetSectionNames()
         {
@@ -77,6 +78,7 @@ namespace Externals.IniFiles
             reader.Close();
             return ret;
         }
+
         /// <summary>Creates a new IniFile from elements collection (Advanced member).</summary>
         /// <param name="elemes">Elements collection.</param>
         public static IniFileEx FromElements(IEnumerable<IniFileElement> elemes)
@@ -109,11 +111,13 @@ namespace Externals.IniFiles
             }
             return ret;
         }
+
         /// <summary>Reads a INI file from a stream.</summary>
         public static IniFileEx FromStream(IniFileReader reader)
         {
             return FromElements(reader.ReadElementsToEnd());
         }
+
         /// <summary>Writes a INI file to a disc, using options in IniFileSettings class</summary>
         public void Save(string path)
         {
@@ -121,11 +125,13 @@ namespace Externals.IniFiles
             Save(writer);
             writer.Close();
         }
+
         /// <summary>Writes a INI file to a stream, using options in IniFileSettings class</summary>
         public void Save(IniFileWriter writer)
         {
             writer.WriteIniFile(this);
         }
+
         /// <summary>Deletes a section and all it's values and comments. No exception is thrown if there is no section of requested name.</summary>
         /// <param name="name">Name of section to delete.</param>
         public void DeleteSection(string name)
@@ -141,6 +147,7 @@ namespace Externals.IniFiles
                 elements.RemoveAt(i);
             }
         }
+
         /// <summary>Formats whole INI file.</summary>
         /// <param name="preserveIntendation">If true, old intendation will be standarized but not removed.</param>
         public void Format(bool preserveIntendation)
