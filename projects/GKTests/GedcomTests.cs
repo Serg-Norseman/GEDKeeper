@@ -438,8 +438,15 @@ namespace GKTests
             GEDCOMCustomEvent ev1, ev2;
             GEDCOMDateValue dtVal1, dtVal2;
 
-            ind1 = tree.CreateIndividual("Ivan", "Fedoroff", "Ivanov", GEDCOMSex.svMale);
-            ind2 = tree.CreateIndividual("Ivan", "Fedoroff", "Ivanovich", GEDCOMSex.svMale);
+            ind1 = tree.CreateIndividual();
+            ind1.Sex = GEDCOMSex.svMale;
+            GEDCOMPersonalName pn = ind1.AddPersonalName(new GEDCOMPersonalName(tree, ind1, "", ""));
+            pn.SetNameParts("Ivan Ivanov", "Fedoroff", "");
+
+            ind2 = tree.CreateIndividual();
+            ind2.Sex = GEDCOMSex.svMale;
+            pn = ind2.AddPersonalName(new GEDCOMPersonalName(tree, ind2, "", ""));
+            pn.SetNameParts("Ivan Ivanovich", "Fedoroff", "");
 
             ev1 = new GEDCOMIndividualEvent(tree, ind1, "BIRT", "");
             dtVal1 = ev1.Detail.Date;
@@ -869,6 +876,36 @@ namespace GKTests
 
                 UDN udn = dtx1.GetUDN();
                 Assert.IsTrue(udn.IsEmpty());
+
+                dtx1.ParseString("BET 04 JAN 2013 AND 25 JAN 2013");
+                Assert.AreEqual("BET 04 JAN 2013 AND 25 JAN 2013", dtx1.StringValue);
+                Assert.AreEqual(new DateTime(0), dtx1.Date);
+                dtx1.GetDateParts(out year, out month, out day, out yearBC);
+                Assert.AreEqual(2013, year);
+                Assert.AreEqual(1, month);
+                Assert.AreEqual(04, day);
+                udn = dtx1.GetUDN();
+                Assert.IsFalse(udn.IsEmpty());
+
+                dtx1.ParseString("BEF 20 JAN 2013");
+                Assert.AreEqual("BEF 20 JAN 2013", dtx1.StringValue);
+                Assert.AreEqual(ParseDT("20.01.2013"), dtx1.Date);
+                dtx1.GetDateParts(out year, out month, out day, out yearBC);
+                Assert.AreEqual(2013, year);
+                Assert.AreEqual(1, month);
+                Assert.AreEqual(20, day);
+                udn = dtx1.GetUDN();
+                Assert.IsFalse(udn.IsEmpty());
+
+                dtx1.ParseString("AFT 20 JAN 2013");
+                Assert.AreEqual("AFT 20 JAN 2013", dtx1.StringValue);
+                Assert.AreEqual(ParseDT("20.01.2013"), dtx1.Date);
+                dtx1.GetDateParts(out year, out month, out day, out yearBC);
+                Assert.AreEqual(2013, year);
+                Assert.AreEqual(1, month);
+                Assert.AreEqual(20, day);
+                udn = dtx1.GetUDN();
+                Assert.IsFalse(udn.IsEmpty());
             }
         }
 
@@ -890,6 +927,44 @@ namespace GKTests
 
                 UDN udn = dtx1.GetUDN();
                 Assert.IsTrue(udn.IsEmpty());
+
+                dtx1.ParseString("FROM 04 JAN 2013 TO 23 JAN 2013");
+                Assert.AreEqual("FROM 04 JAN 2013 TO 23 JAN 2013", dtx1.StringValue);
+                Assert.AreEqual(new DateTime(0), dtx1.Date);
+                dtx1.GetDateParts(out year, out month, out day, out yearBC);
+                Assert.AreEqual(2013, year);
+                Assert.AreEqual(1, month);
+                Assert.AreEqual(04, day);
+                udn = dtx1.GetUDN();
+                Assert.IsFalse(udn.IsEmpty());
+
+                dtx1.ParseString("FROM 04 JAN 2013 TO 04 JAN 2013");
+                Assert.AreEqual("FROM 04 JAN 2013 TO 04 JAN 2013", dtx1.StringValue);
+                Assert.AreEqual(ParseDT("04.01.2013"), dtx1.Date);
+                udn = dtx1.GetUDN();
+                Assert.IsFalse(udn.IsEmpty());
+
+                dtx1.Clear();
+                dtx1.ParseString("FROM 04 JAN 2013");
+                Assert.AreEqual("FROM 04 JAN 2013", dtx1.StringValue);
+                Assert.AreEqual(ParseDT("04.01.2013"), dtx1.Date);
+                dtx1.GetDateParts(out year, out month, out day, out yearBC);
+                Assert.AreEqual(2013, year);
+                Assert.AreEqual(1, month);
+                Assert.AreEqual(04, day);
+                udn = dtx1.GetUDN();
+                Assert.IsFalse(udn.IsEmpty());
+
+                dtx1.Clear();
+                dtx1.ParseString("TO 23 JAN 2013");
+                Assert.AreEqual("TO 23 JAN 2013", dtx1.StringValue);
+                Assert.AreEqual(ParseDT("23.01.2013"), dtx1.Date);
+                dtx1.GetDateParts(out year, out month, out day, out yearBC);
+                Assert.AreEqual(2013, year);
+                Assert.AreEqual(1, month);
+                Assert.AreEqual(23, day);
+                udn = dtx1.GetUDN();
+                Assert.IsFalse(udn.IsEmpty());
             }
         }
 
@@ -1213,9 +1288,8 @@ namespace GKTests
 
             GEDCOMRecord rec;
 
-            GEDCOMIndividualRecord iRec = tree.AddRecord(GEDCOMIndividualRecord.Create(tree, tree, "", "") as GEDCOMRecord) as GEDCOMIndividualRecord;
-            Assert.IsNotNull(iRec);
-            iRec.InitNew();
+            GEDCOMIndividualRecord iRec = tree.CreateIndividual();
+            Assert.IsNotNull(iRec, "CreateIndividual() != null");
 
             string xref = iRec.XRef;
             rec = tree.XRefIndex_Find(xref);
@@ -1229,38 +1303,28 @@ namespace GKTests
             Assert.IsNull(tree.FindUID(""));
 
             //
-
-            GEDCOMFamilyRecord famRec = tree.AddRecord(GEDCOMFamilyRecord.Create(tree, tree, "", "") as GEDCOMRecord) as GEDCOMFamilyRecord;
-            Assert.IsNotNull(famRec, "rec1 != null");
-            famRec.InitNew();
+            GEDCOMFamilyRecord famRec = tree.CreateFamily();
+            Assert.IsNotNull(famRec, "CreateFamily() != null");
             GEDCOMFamilyRecordTest(famRec, iRec);
 
             //
+            GEDCOMNoteRecord noteRec = tree.CreateNote();
+            Assert.IsNotNull(noteRec, "CreateNote() != null");
+            GEDCOMNoteRecordTest(noteRec, iRec);
 
-            rec = tree.AddRecord(GEDCOMNoteRecord.Create(tree, tree, "", "") as GEDCOMRecord);
-            Assert.IsNotNull(rec, "rec1 != null");
-            rec.InitNew();
-            GEDCOMNoteRecordTest(rec as GEDCOMNoteRecord, iRec);
-            
             //
-            
-            GEDCOMRepositoryRecord repRec = tree.AddRecord(GEDCOMRepositoryRecord.Create(tree, tree, "", "") as GEDCOMRecord) as GEDCOMRepositoryRecord;
-            Assert.IsNotNull(repRec, "rec1 != null");
-            repRec.InitNew();
+            GEDCOMRepositoryRecord repRec = tree.CreateRepository();
+            Assert.IsNotNull(repRec, "CreateRepository() != null");
             GEDCOMRepositoryRecordTest(repRec);
-            
+
             //
-            
-            GEDCOMSourceRecord srcRec = tree.AddRecord(GEDCOMSourceRecord.Create(tree, tree, "", "") as GEDCOMRecord) as GEDCOMSourceRecord;
-            Assert.IsNotNull(srcRec, "rec1 != null");
-            srcRec.InitNew();
+            GEDCOMSourceRecord srcRec = tree.CreateSource();
+            Assert.IsNotNull(srcRec, "CreateSource() != null");
             GEDCOMSourceRecordTest(srcRec, iRec, repRec);
-            
+
             //
-            
-            GEDCOMMultimediaRecord mmRec = tree.AddRecord(GEDCOMMultimediaRecord.Create(tree, tree, "", "") as GEDCOMRecord) as GEDCOMMultimediaRecord;
-            Assert.IsNotNull(mmRec, "rec1 != null");
-            mmRec.InitNew();
+            GEDCOMMultimediaRecord mmRec = tree.CreateMultimedia();
+            Assert.IsNotNull(mmRec, "CreateMultimedia() != null");
             GEDCOMMultimediaRecordTest(mmRec, iRec);
             
             //
@@ -1279,58 +1343,27 @@ namespace GKTests
             GEDCOMSubmissionRecordTest(submRec, submXRef);
 
             //
-            
-            GEDCOMGroupRecord groupRec = tree.AddRecord(GEDCOMGroupRecord.Create(tree, tree, "", "") as GEDCOMRecord) as GEDCOMGroupRecord;
-            Assert.IsNotNull(groupRec, "rec1 != null");
-            groupRec.InitNew();
-            
+            GEDCOMGroupRecord groupRec = tree.CreateGroup();
+            Assert.IsNotNull(groupRec, "CreateGroup() != null");
+
             //
-            
-            GEDCOMTaskRecord taskRec = tree.AddRecord(GEDCOMTaskRecord.Create(tree, tree, "", "") as GEDCOMRecord) as GEDCOMTaskRecord;
-            Assert.IsNotNull(taskRec, "rec1 != null");
-            taskRec.InitNew();
+            GEDCOMTaskRecord taskRec = tree.CreateTask();
+            Assert.IsNotNull(taskRec, "CreateTask() != null");
             GEDCOMTaskRecordTest(taskRec, iRec, famRec, srcRec);
-            
+
             //
-            
-            GEDCOMCommunicationRecord commRec = tree.AddRecord(GEDCOMCommunicationRecord.Create(tree, tree, "", "") as GEDCOMRecord) as GEDCOMCommunicationRecord;
-            Assert.IsNotNull(commRec, "rec1 != null");
-            commRec.InitNew();
+            GEDCOMCommunicationRecord commRec = tree.CreateCommunication();
+            Assert.IsNotNull(commRec, "CreateCommunication() != null");
             GEDCOMCommunicationRecordTest(commRec, iRec);
-            
+
             //
-            
-            GEDCOMResearchRecord resRec = tree.AddRecord(GEDCOMResearchRecord.Create(tree, tree, "", "") as GEDCOMRecord) as GEDCOMResearchRecord;
-            Assert.IsNotNull(resRec, "rec1 != null");
-            resRec.InitNew();
+            GEDCOMResearchRecord resRec = tree.CreateResearch();
+            Assert.IsNotNull(resRec, "CreateResearch() != null");
             GEDCOMResearchRecordTest(resRec, commRec, taskRec, groupRec);
-            
+
             //
-
             GEDCOMLocationRecord locRec = tree.CreateLocation();
-            Assert.IsNotNull(locRec, "locRec != null");
-            
-            GEDCOMFamilyRecord famRec1 = tree.CreateFamily();
-            Assert.IsNotNull(famRec1, "famRec1 != null");
-
-            GEDCOMNoteRecord noteRec = tree.CreateNote();
-            Assert.IsNotNull(noteRec, "noteRec != null");
-
-            noteRec = tree.CreateNoteEx(null, "");
-            Assert.IsNull(noteRec, "noteRec == null");
-            noteRec = tree.CreateNoteEx(iRec, "Test note 2");
-            Assert.IsNotNull(noteRec, "noteRec != null");
-            Assert.AreEqual("Test note 2\r\n", noteRec.Note.Text);
-            tree.DeleteNoteRecord(noteRec);
-
-            //noteRec = tree.CreateNoteEx(null, null);
-            //Assert.IsNotNull(noteRec, "rec1 == null");
-
-            GEDCOMSourceRecord srcRec1 = tree.CreateSource();
-            Assert.IsNotNull(srcRec1, "srcRec1 != null");
-
-            GEDCOMGroupRecord grpRec = tree.CreateGroup();
-            Assert.IsNotNull(grpRec, "grpRec != null");
+            Assert.IsNotNull(locRec, "CreateLocation() != null");
 
 
             tree.Pack();
@@ -1342,7 +1375,7 @@ namespace GKTests
             while (enum1.MoveNext(out rec1)) {
                 size++;
             }
-            Assert.AreEqual(18, size);
+            Assert.AreEqual(14, size);
 
             for (int i = 0; i < tree.RecordsCount; i++) {
                 GEDCOMRecord rec2 = tree[i];
@@ -1362,10 +1395,10 @@ namespace GKTests
                 Assert.AreEqual(i, idx);
             }
 
-            tree.DeleteFamilyRecord(famRec1);
+            tree.DeleteFamilyRecord(famRec);
             tree.DeleteNoteRecord(noteRec);
-            tree.DeleteSourceRecord(srcRec1);
-            tree.DeleteGroupRecord(grpRec);
+            tree.DeleteSourceRecord(srcRec);
+            tree.DeleteGroupRecord(groupRec);
             tree.DeleteLocationRecord(locRec);
             tree.DeleteResearchRecord(resRec);
             tree.DeleteCommunicationRecord(commRec);
@@ -1722,6 +1755,15 @@ namespace GKTests
         }
 
         [Test]
+        public void GEDCOMGroupRecord_Tests2()
+        {
+            using (GEDCOMGroupRecord grpRec = GEDCOMGroupRecord.Create(null, null, "", "") as GEDCOMGroupRecord)
+            {
+                Assert.IsNotNull(grpRec);
+            }
+        }
+
+        [Test]
         public void GEDCOMGroupRecord_Tests()
         {
             GEDCOMGroupRecord groupRec = _context.Tree.XRefIndex_Find("G1") as GEDCOMGroupRecord;
@@ -1885,6 +1927,15 @@ namespace GKTests
             Assert.AreEqual(-1, rec.IndexOfSource(null));
         }
 
+        [Test]
+        public void GEDCOMFamilyRecord_Tests()
+        {
+            using (GEDCOMFamilyRecord famRec = GEDCOMFamilyRecord.Create(null, null, "", "") as GEDCOMFamilyRecord)
+            {
+                Assert.IsNotNull(famRec);
+            }
+        }
+
         private static void GEDCOMFamilyRecordTest(GEDCOMFamilyRecord famRec, GEDCOMIndividualRecord indiv)
         {
             Assert.IsNotNull(famRec.Submitter);
@@ -1987,7 +2038,7 @@ namespace GKTests
         public void GEDCOMSourceRecord_Tests()
         {
             // check match
-            using (GEDCOMSourceRecord src1 = new GEDCOMSourceRecord(null, null, "", ""))
+            using (GEDCOMSourceRecord src1 = GEDCOMSourceRecord.Create(null, null, "", "") as GEDCOMSourceRecord)
             {
                 Assert.IsNotNull(src1, "src1 != null");
 
@@ -2166,6 +2217,15 @@ namespace GKTests
             Assert.IsTrue(resRec.IsEmpty());
         }
 
+        [Test]
+        public void GEDCOMRepositoryRecord_Tests()
+        {
+            using (GEDCOMRepositoryRecord repoRec = GEDCOMRepositoryRecord.Create(null, null, "", "") as GEDCOMRepositoryRecord)
+            {
+                Assert.IsNotNull(repoRec);
+            }
+        }
+
         private static void GEDCOMRepositoryRecordTest(GEDCOMRepositoryRecord repoRec)
         {
             repoRec.RepositoryName = "Test Repository";
@@ -2183,6 +2243,15 @@ namespace GKTests
             Assert.IsFalse(repoRec.IsEmpty());
             repoRec.Clear();
             Assert.IsTrue(repoRec.IsEmpty());
+        }
+
+        [Test]
+        public void GEDCOMMultimediaRecord_Tests()
+        {
+            using (GEDCOMMultimediaRecord mmRec = GEDCOMMultimediaRecord.Create(null, null, "", "") as GEDCOMMultimediaRecord)
+            {
+                Assert.IsNotNull(mmRec);
+            }
         }
 
         private static void GEDCOMMultimediaRecordTest(GEDCOMMultimediaRecord mediaRec, GEDCOMIndividualRecord indiv)
@@ -2333,6 +2402,13 @@ namespace GKTests
         }
 
         [Test]
+        public void GEDCOMCommunicationRecord_Test()
+        {
+            using (GEDCOMCommunicationRecord locRec = GEDCOMCommunicationRecord.Create(null, null, "", "") as GEDCOMCommunicationRecord) {
+            }
+        }
+
+        [Test]
         public void GEDCOMLocationRecord_Test()
         {
             using (GEDCOMLocationRecord locRec = GEDCOMLocationRecord.Create(null, null, "", "") as GEDCOMLocationRecord) {
@@ -2350,6 +2426,15 @@ namespace GKTests
         private static DateTime ParseDT(string dtx)
         {
             return DateTime.ParseExact(dtx, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+        }
+
+        [Test]
+        public void GEDCOMTaskRecord_Tests()
+        {
+            using (GEDCOMTaskRecord taskRec = GEDCOMTaskRecord.Create(null, null, "", "") as GEDCOMTaskRecord)
+            {
+                Assert.IsNotNull(taskRec);
+            }
         }
 
         private static void GEDCOMTaskRecordTest(GEDCOMTaskRecord taskRec, GEDCOMIndividualRecord indiv, GEDCOMFamilyRecord famRec, GEDCOMSourceRecord srcRec)
@@ -2407,11 +2492,16 @@ namespace GKTests
         public void GEDCOMNoteRecord_Tests()
         {
             using (GEDCOMNoteRecord noteRec = GEDCOMNoteRecord.Create(null, null, "", "") as GEDCOMNoteRecord) {
-                noteRec.AddNoteText("Test text");
+                noteRec.AddNoteText("text");
+                Assert.AreEqual("text", noteRec.Note.Text.Trim());
+
+                Assert.Throws(typeof(ArgumentNullException), () => { noteRec.SetNoteText(null); });
+
+                noteRec.SetNoteText("Test text");
                 Assert.AreEqual("Test text", noteRec.Note.Text.Trim());
 
                 using (GEDCOMNoteRecord noteRec2 = GEDCOMNoteRecord.Create(null, null, "", "") as GEDCOMNoteRecord) {
-                    noteRec2.AddNoteText("Test text");
+                    noteRec2.SetNoteText("Test text");
                     Assert.AreEqual("Test text", noteRec2.Note.Text.Trim());
 
                     Assert.AreEqual(100.0f, noteRec.IsMatch(noteRec2, new MatchParams()));

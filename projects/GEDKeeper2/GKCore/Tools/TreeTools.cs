@@ -190,7 +190,10 @@ namespace GKCore.Tools
             try
             {
                 strData.Text = note.Notes.Text;
-                GEDCOMNoteRecord noteRec = tree.CreateNoteEx(null, strData);
+
+                GEDCOMNoteRecord noteRec = tree.CreateNote();
+                noteRec.Note = strData;
+
                 note.Clear();
                 note.Value = noteRec;
             }
@@ -205,9 +208,7 @@ namespace GKCore.Tools
             try
             {
                 string title = mmLink.Title;
-                GEDCOMMultimediaRecord mmRec = new GEDCOMMultimediaRecord(tree, tree, "", "");
-                mmRec.InitNew();
-                tree.AddRecord(mmRec);
+                GEDCOMMultimediaRecord mmRec = tree.CreateMultimedia();
 
                 int num = mmLink.FileReferences.Count;
                 for (int i = 0; i < num; i++)

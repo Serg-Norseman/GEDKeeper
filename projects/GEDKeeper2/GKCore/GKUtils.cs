@@ -27,6 +27,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Cultures;
@@ -121,7 +122,7 @@ namespace GKCore
                 return null;
             return SingleOrDefault(OfTypeIterator((T[])attributes));
         }
-        
+
         private static IEnumerable<TResult> OfTypeIterator<TResult>(IEnumerable<TResult> source)
         {
             foreach (object current in source)
@@ -133,7 +134,7 @@ namespace GKCore
             }
             yield break;
         }
-        
+
         public static TSource SingleOrDefault<TSource>(IEnumerable<TSource> source)
         {
             if (source == null)
@@ -1467,7 +1468,7 @@ namespace GKCore
         }
 
         #endregion
-        
+
         #region Tree utils
 
         public static void InitExtData(GEDCOMTree tree)
@@ -1500,7 +1501,7 @@ namespace GKCore
         }
 
         #endregion
-        
+
         #region Match functions
 
         public static Regex InitMaskRegex(string mask)

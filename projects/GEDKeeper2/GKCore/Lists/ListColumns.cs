@@ -129,11 +129,6 @@ namespace GKCore.Lists
             return this.fColumnsEnum;
         }
 
-        public void Clear()
-        {
-            this.fColumns.Clear();
-        }
-
         public void AddStatic(/*Enum colType*/ LSID colName, DataType dataType, int defWidth, bool defActive)
         {
             ColumnStatic cs = new ColumnStatic();

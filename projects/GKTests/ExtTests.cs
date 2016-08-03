@@ -257,6 +257,9 @@ namespace GKTests
             //val = calc.Calc("5.25e+2");
             //Assert.AreEqual(525, Math.Round(val, 0));
 
+            Assert.Throws(typeof(CalculateException), () => { calc.Calc("0x15j"); });
+            Assert.Throws(typeof(CalculateException), () => { calc.Calc("0b015"); });
+
             val = calc.Calc("if(3 == 3; 2; 3)");
             Assert.AreEqual(2, Math.Round(val, 0));
 

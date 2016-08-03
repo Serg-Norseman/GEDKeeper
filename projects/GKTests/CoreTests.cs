@@ -519,6 +519,38 @@ namespace GKTests
             GKListItem listItem;
 
             //
+            listManager = new GroupListMan(this.fContext.Tree);
+            Assert.IsNotNull(listManager);
+            Assert.AreEqual(typeof(GroupColumnType), listManager.ListColumns.GetColumnsEnum());
+
+            GEDCOMGroupRecord grpRec = fContext.Tree.XRefIndex_Find("G1") as GEDCOMGroupRecord;
+            listManager.Fetch(grpRec);
+
+            listManager.QuickFilter = "*";
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            listManager.QuickFilter = "*roup*";
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+            listManager.QuickFilter = "*alpha*";
+            Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
+
+            listManager.UpdateColumns(lvMock, true);
+            listItem = new GKListItem("", null);
+            listManager.UpdateItem(listItem, true);
+
+            //
+            IListFilter filter = listManager.Filter;
+            IListColumns listColumns = listManager.ListColumns;
+
+            GroupListColumns copyColumns = new GroupListColumns();
+            listColumns.CopyTo(copyColumns);
+
+            Assert.Throws(typeof(ArgumentNullException), () => { listColumns.CopyTo(null); });
+
+            listManager.QuickFilter = "*";
+            listManager.AddCondition(GroupColumnType.gctName, ConditionKind.ck_Contains, "*roup*");
+            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
+
+            //
             listManager = new CommunicationListMan(this.fContext.Tree);
             Assert.IsNotNull(listManager);
             Assert.AreEqual(typeof(CommunicationColumnType), listManager.ListColumns.GetColumnsEnum());
@@ -541,10 +573,6 @@ namespace GKTests
             listManager.UpdateItem(listItem, true);
 
             //
-            IListFilter filter = listManager.Filter;
-            IListColumns listColumns = listManager.ListColumns;
-
-            //
             listManager = new FamilyListMan(this.fContext.Tree);
             Assert.IsNotNull(listManager);
             Assert.AreEqual(typeof(FamilyColumnType), listManager.ListColumns.GetColumnsEnum());
@@ -555,25 +583,6 @@ namespace GKTests
             listManager.QuickFilter = "*";
             Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
             listManager.QuickFilter = "* - *";
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
-            listManager.QuickFilter = "*alpha*";
-            Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
-
-            listManager.UpdateColumns(lvMock, true);
-            listItem = new GKListItem("", null);
-            listManager.UpdateItem(listItem, true);
-
-            //
-            listManager = new GroupListMan(this.fContext.Tree);
-            Assert.IsNotNull(listManager);
-            Assert.AreEqual(typeof(GroupColumnType), listManager.ListColumns.GetColumnsEnum());
-
-            GEDCOMGroupRecord grpRec = fContext.Tree.XRefIndex_Find("G1") as GEDCOMGroupRecord;
-            listManager.Fetch(grpRec);
-
-            listManager.QuickFilter = "*";
-            Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
-            listManager.QuickFilter = "*roup*";
             Assert.IsTrue(listManager.CheckFilter(ShieldState.None));
             listManager.QuickFilter = "*alpha*";
             Assert.IsFalse(listManager.CheckFilter(ShieldState.None));
@@ -783,6 +792,9 @@ namespace GKTests
             //Assert.IsNotNull(globalOptions);
 
             MRUFile mruFile = new MRUFile();
+            Assert.IsNotNull(mruFile);
+
+            mruFile = new MRUFile("test.ged");
             Assert.IsNotNull(mruFile);
 
             PedigreeOptions pedigreeOptions = new PedigreeOptions();

@@ -134,7 +134,7 @@ namespace GKCommon
         }
 
 
-        public static double GetSimilarity(string value1, string value2)
+        public static float GetSimilarity(string value1, string value2)
         {
             if (value1 == null)
                 throw new ArgumentNullException("value1");
@@ -146,8 +146,8 @@ namespace GKCommon
 
             int longestLenght = Math.Max(value1.Length, value2.Length);
             int distance = DamerauLevenshteinDistance(value1, value2);
-            double percent = distance / (double)longestLenght;
-            return 1.0 - percent;
+            float percent = distance / (float)longestLenght;
+            return 1.0f - percent;
         }
         
     }

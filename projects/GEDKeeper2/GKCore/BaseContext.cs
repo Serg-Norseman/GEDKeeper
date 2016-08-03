@@ -164,8 +164,14 @@ namespace GKCore
 
         public GEDCOMIndividualRecord CreatePersonEx(string iName, string iPatronymic, string iSurname, GEDCOMSex iSex, bool birthEvent)
         {
-            GEDCOMIndividualRecord iRec = this.fTree.CreateIndividual(iName, iPatronymic, iSurname, iSex);
+            GEDCOMIndividualRecord iRec = this.fTree.CreateIndividual();
+            iRec.Sex = iSex;
+
+            GEDCOMPersonalName pName = iRec.AddPersonalName(new GEDCOMPersonalName(this.fTree, iRec, "", ""));
+            pName.SetNameParts(iName.Trim() + " " + iPatronymic.Trim(), iSurname.Trim(), "");
+
             if (birthEvent) this.CreateEventEx(iRec, "BIRT", "", "");
+
             return iRec;
         }
 

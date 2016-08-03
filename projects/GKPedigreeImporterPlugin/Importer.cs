@@ -19,11 +19,11 @@
  */
 
 #if __MonoCS__
-    #define NO_DEPEND
+#define NO_DEPEND
 #endif
 
 #if CI_MODE
-    #define NO_DEPEND
+#define NO_DEPEND
 #endif
 
 using System;
@@ -36,13 +36,13 @@ using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
 
-#if !NO_DEPEND
-using MSOExcel = Microsoft.Office.Interop.Excel;
-using MSOWord = Microsoft.Office.Interop.Word;
-#endif
-
 namespace GKPedigreeImporterPlugin
 {
+    #if !NO_DEPEND
+    using MSOExcel = Microsoft.Office.Interop.Excel;
+    using MSOWord = Microsoft.Office.Interop.Word;
+    #endif
+
     [Serializable]
     public class ImporterException : Exception
     {
@@ -605,7 +605,9 @@ namespace GKPedigreeImporterPlugin
                     this.CheckSpouses(buffer, curPerson);
                 }
 
-                this.fTree.CreateNoteEx(curPerson, buffer);
+                GEDCOMNoteRecord noteRec = this.fTree.CreateNote();
+                noteRec.Note = buffer;
+                if (curPerson != null) curPerson.AddNote(noteRec);
 
                 buffer.Clear();
             }

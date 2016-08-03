@@ -245,9 +245,7 @@ namespace GKCommon
                     break;
             }
 
-            if (!result) {
-                raiseError("Unknown function or variable \"" + name + "\".");
-            }
+            if (!result) raiseError("Unknown function or variable \"" + name + "\".");
         }
 
         private bool DoGetVar(string varName, ref double varValue)
@@ -650,10 +648,7 @@ namespace GKCommon
 
         private void checkToken(ExpToken expected)
         {
-            if (this.fToken != expected)
-            {
-                raiseError("Syntax error");
-            }
+            if (this.fToken != expected) raiseError("Syntax error");
         }
 
         private void term(ref double R)
@@ -708,7 +703,7 @@ namespace GKCommon
                     break;
 
                 default:
-                    raiseError("Syntax error.");
+                    raiseError("Syntax error");
                     break;
             }
         }

@@ -30,9 +30,13 @@ namespace GKCommon.GEDCOM
             set { base.SetTagStrings(this, value); }
         }
 
-        public void SetNotesArray(params string[] value)
+        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
         {
-            base.SetTagStrings(this, value);
+            return new GEDCOMNoteRecord(owner, parent, tagName, tagValue);
+        }
+
+        public GEDCOMNoteRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
+        {
         }
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
@@ -40,14 +44,6 @@ namespace GKCommon.GEDCOM
             base.CreateObj(owner, parent);
             base.SetRecordType(GEDCOMRecordType.rtNote);
             base.SetName("NOTE");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-            }
-            base.Dispose(disposing);
         }
 
         public override void MoveTo(GEDCOMRecord targetRecord, bool clearDest)
@@ -71,15 +67,6 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public GEDCOMNoteRecord(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue) : base(owner, parent, tagName, tagValue)
-        {
-        }
-
-        public new static GEDCOMTag Create(GEDCOMTree owner, GEDCOMObject parent, string tagName, string tagValue)
-        {
-            return new GEDCOMNoteRecord(owner, parent, tagName, tagValue);
-        }
-
         public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
         {
             GEDCOMNoteRecord note = tag as GEDCOMNoteRecord;
@@ -94,7 +81,10 @@ namespace GKCommon.GEDCOM
             return match;
         }
 
-        #region Auxiliary
+        public void SetNotesArray(params string[] value)
+        {
+            base.SetTagStrings(this, value);
+        }
 
         public void AddNoteText(string text)
         {
@@ -111,6 +101,21 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        #endregion
+        public void SetNoteText(string text)
+        {
+            if (text == null) {
+                throw new ArgumentNullException("text");
+            }
+
+            StringList strData = new StringList(text);
+            try
+            {
+                this.Note = strData;
+            }
+            finally
+            {
+                strData.Dispose();
+            }
+        }
     }
 }

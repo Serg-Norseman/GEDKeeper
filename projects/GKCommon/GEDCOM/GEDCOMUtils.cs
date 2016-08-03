@@ -1539,9 +1539,9 @@ namespace GKCommon.GEDCOM
         }
 
         /// <summary>
-        /// In the historical chronology of the year 0 does not exist. 
+        /// In the historical chronology of the year 0 does not exist.
         /// Therefore, the digit 0 in the year value can be used as a sign of lack or error.
-        /// RelativeYear - introduced for the purposes of uniform chronology years in the Gregorian calendar. 
+        /// RelativeYear - introduced for the purposes of uniform chronology years in the Gregorian calendar.
         /// Is estimated from -4714 BC to 3268 AD.
         /// </summary>
         /// <param name="evt"></param>

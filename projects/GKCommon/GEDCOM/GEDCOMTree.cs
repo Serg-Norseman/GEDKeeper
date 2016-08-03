@@ -675,18 +675,6 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public GEDCOMIndividualRecord CreateIndividual(string iName, string iPatronymic, string iSurname, GEDCOMSex iSex)
-        {
-            GEDCOMIndividualRecord result = this.CreateIndividual();
-
-            result.Sex = iSex;
-            GEDCOMPersonalName pn = new GEDCOMPersonalName(this, result, "", "");
-            pn.StringValue = iName.Trim() + " " + iPatronymic.Trim() + " /" + iSurname.Trim() + "/";
-            result.AddPersonalName(pn);
-
-            return result;
-        }
-
         public GEDCOMFamilyRecord CreateFamily()
         {
             GEDCOMFamilyRecord result = new GEDCOMFamilyRecord(this, this, "", "");
@@ -705,35 +693,6 @@ namespace GKCommon.GEDCOM
             result.ChangeDate.ChangeDateTime = DateTime.Now;
 
             this.AddRecord(result);
-
-            return result;
-        }
-
-        public GEDCOMNoteRecord CreateNoteEx(GEDCOMRecord toRecord, string text)
-        {
-            GEDCOMNoteRecord result = null;
-
-            if (toRecord != null && !string.IsNullOrEmpty(text)) {
-                result = this.CreateNote();
-                result.Note = new StringList(text);
-                toRecord.AddNote(result);
-            }
-
-            return result;
-        }
-
-        public GEDCOMNoteRecord CreateNoteEx(GEDCOMRecord toRecord, StringList text)
-        {
-            GEDCOMNoteRecord result = null;
-
-            if (text != null) {
-                result = this.CreateNote();
-                result.Note = text;
-            }
-
-            if (toRecord != null && result != null) {
-                toRecord.AddNote(result);
-            }
 
             return result;
         }

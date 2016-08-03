@@ -178,18 +178,33 @@ namespace GKTests
         {
             int res1, res2;
 
+            res1 = IndistinctMatching.LevenshteinDistance("Ivanov", "");
+            Assert.AreEqual(6, res1);
+            res1 = IndistinctMatching.LevenshteinDistance("", "Petroff");
+            Assert.AreEqual(7, res1);
             res1 = IndistinctMatching.LevenshteinDistance("Ivanov", "Ivanov");
             Assert.AreEqual(0, res1);
             res1 = IndistinctMatching.LevenshteinDistance("Ivanvo", "Ivanov");
             Assert.AreEqual(2, res1);
+            res1 = IndistinctMatching.LevenshteinDistance("Petroff", "Pterov");
+            Assert.AreEqual(4, res1); // permutation -fail
 
+            res1 = IndistinctMatching.DamerauLevenshteinDistance("Ivanov", "");
+            Assert.AreEqual(6, res1);
+            res1 = IndistinctMatching.DamerauLevenshteinDistance("", "Petroff");
+            Assert.AreEqual(7, res1);
             res2 = IndistinctMatching.DamerauLevenshteinDistance("Ivanov", "Ivanov");
             Assert.AreEqual(0, res2);
             res2 = IndistinctMatching.DamerauLevenshteinDistance("Ivanvo", "Ivanov");
             Assert.AreEqual(1, res2);
-            
-            double sim = IndistinctMatching.GetSimilarity("Ivanvo", "Ivanov");
-            Assert.GreaterOrEqual(sim, 0.8333);
+            res1 = IndistinctMatching.DamerauLevenshteinDistance("Petroff", "Pterov");
+            Assert.AreEqual(3, res1); // permutation -ok
+
+            Assert.Throws(typeof(ArgumentNullException), () => { IndistinctMatching.GetSimilarity("Ivanvo", null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { IndistinctMatching.GetSimilarity(null, "Ivanov"); });
+
+            Assert.GreaterOrEqual(IndistinctMatching.GetSimilarity("Ivanov", "Ivanov"), 1.0f);
+            Assert.GreaterOrEqual(IndistinctMatching.GetSimilarity("Ivanvo", "Ivanov"), 0.833f);
         }
 
         [Test]
@@ -243,6 +258,10 @@ namespace GKTests
 
             strList.DuplicateSolve = DuplicateSolve.Accept;
             Assert.AreEqual(DuplicateSolve.Accept, strList.DuplicateSolve);
+
+            strList.DuplicateSolve = DuplicateSolve.Error;
+            strList.Sorted = true;
+            Assert.Throws(typeof(StringListException), () => { strList.Add("The"); });
 
             strList.Clear();
             Assert.IsTrue(strList.IsEmpty());

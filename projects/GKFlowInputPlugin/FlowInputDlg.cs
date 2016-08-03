@@ -305,12 +305,17 @@ namespace GKFlowInputPlugin
                 if (this.CheckBirth.Checked) {
                     this.fBase.Context.CreateEventEx(iRec, "BIRT", GEDCOMUtils.StrToGEDCOMDate(this.EditBirthDate.Text, true), this.EditBirthPlace.Text);
                 }
+
                 if (this.CheckDeath.Checked) {
                     this.fBase.Context.CreateEventEx(iRec, "DEAT", GEDCOMUtils.StrToGEDCOMDate(this.EditDeathDate.Text, true), this.EditDeathPlace.Text);
                 }
-                if (this.MemoNote.Text != "") {
-                    fBase.Tree.CreateNoteEx(iRec, MemoNote.Text);
+
+                if (!string.IsNullOrEmpty(this.MemoNote.Text)) {
+                    GEDCOMNoteRecord noteRec = fBase.Tree.CreateNote();
+                    noteRec.SetNoteText(MemoNote.Text);
+                    iRec.AddNote(noteRec);
                 }
+
                 this.fBase.ChangeRecord(iRec);
 
                 this.InitSimpleControls();
@@ -362,8 +367,9 @@ namespace GKFlowInputPlugin
                             }
 
                             if (!string.IsNullOrEmpty(comment)) {
-                                /*GEDCOMNoteRecord note = */
-                                fBase.Tree.CreateNoteEx(iRec, comment);
+                                GEDCOMNoteRecord noteRec = fBase.Tree.CreateNote();
+                                noteRec.SetNoteText(comment);
+                                iRec.AddNote(noteRec);
                             }
 
                             if (!string.IsNullOrEmpty(srcName)) {
