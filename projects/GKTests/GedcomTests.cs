@@ -1886,7 +1886,7 @@ namespace GKTests
                 customEvent.PhysicalDescription = strs;
                 Assert.AreEqual(strs.Text, customEvent.PhysicalDescription.Text);
 
-                customEvent.Detail.AddTag("EMAIL", "email", null);
+                customEvent.AddTag("EMAIL", "email", null);
                 Assert.AreEqual("email", customEvent.Detail.Address.EmailAddresses[0].StringValue);
 
                 customEvent.Pack();
@@ -1920,6 +1920,9 @@ namespace GKTests
                                     "1 PLAC test place\r\n", buf1);
                 }
 
+                customEvent.AddTag("EMAIL", "email", null);
+                Assert.AreEqual("email", customEvent.Detail.Address.EmailAddresses[0].StringValue);
+
                 customEvent.Pack();
 
                 GEDCOMTree otherTree = new GEDCOMTree();
@@ -1930,6 +1933,9 @@ namespace GKTests
             using (GEDCOMFamilyEvent customEvent = GEDCOMFamilyEvent.Create(null, null, "", "") as GEDCOMFamilyEvent)
             {
                 Assert.IsNotNull(customEvent);
+
+                customEvent.AddTag("EMAIL", "email", null);
+                Assert.AreEqual("email", customEvent.Detail.Address.EmailAddresses[0].StringValue);
 
                 customEvent.Pack();
 
@@ -2062,12 +2068,14 @@ namespace GKTests
 
             indiv.Sex = GEDCOMSex.svMale;
             famRec.AddSpouse(indiv);
+            Assert.AreEqual(0, indiv.IndexOfSpouse(famRec));
             GEDCOMSpouseToFamilyLinkTest(indiv.SpouseToFamilyLinks[0]);
             Assert.IsNull(famRec.GetSpouseBy(indiv));
             famRec.RemoveSpouse(indiv);
 
             indiv.Sex = GEDCOMSex.svFemale;
             famRec.AddSpouse(indiv);
+            Assert.AreEqual(0, indiv.IndexOfSpouse(famRec));
             GEDCOMSpouseToFamilyLinkTest(indiv.SpouseToFamilyLinks[0]);
             Assert.IsNull(famRec.GetSpouseBy(indiv));
             famRec.RemoveSpouse(indiv);

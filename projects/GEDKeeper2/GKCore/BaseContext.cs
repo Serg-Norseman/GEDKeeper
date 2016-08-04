@@ -1116,9 +1116,8 @@ namespace GKCore
 
         public void ChangePersonSex(GEDCOMIndividualRecord person, GEDCOMSex newSex)
         {
-            if (person == null) {
+            if (person == null)
                 throw new ArgumentNullException("person");
-            }
 
             if (person.Sex != newSex)
             {
@@ -1129,9 +1128,8 @@ namespace GKCore
 
         public void ChangePersonPatriarch(GEDCOMIndividualRecord person, bool newValue)
         {
-            if (person == null) {
+            if (person == null)
                 throw new ArgumentNullException("person");
-            }
 
             if (person.Patriarch != newValue)
             {
@@ -1142,9 +1140,8 @@ namespace GKCore
 
         public void ChangePersonBookmark(GEDCOMIndividualRecord person, bool newValue)
         {
-            if (person == null) {
+            if (person == null)
                 throw new ArgumentNullException("person");
-            }
 
             if (person.Bookmark != newValue)
             {

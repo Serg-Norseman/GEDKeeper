@@ -220,8 +220,7 @@ namespace GKCore
 
         public void ImportNames(GEDCOMIndividualRecord iRec)
         {
-            if (iRec == null)
-                return;
+            if (iRec == null) return;
 
             try
             {

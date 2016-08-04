@@ -21,7 +21,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -30,6 +29,7 @@ using GKCore.Interfaces;
 using GKCore.Kinships;
 using GKCore.Lists;
 using GKCore.Maps;
+using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Stats;
 using GKCore.Tools;
@@ -79,6 +79,20 @@ namespace GKTests
             Assert.AreEqual(1990, fContext.FindBirthYear(iRec));
             Assert.AreEqual(2010, fContext.FindDeathYear(iRec));
 
+            Assert.IsFalse(fContext.DeleteRecord(null));
+
+            Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateIndividual()));
+            Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateFamily()));
+            Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateNote()));
+            Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateMultimedia()));
+            Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateSource()));
+            Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateRepository()));
+            Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateGroup()));
+            Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateResearch()));
+            Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateTask()));
+            Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateCommunication()));
+            Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateLocation()));
+
             //fContext.Clear();
             //Assert.AreEqual(0, fContext.Tree.RecordsCount);
 
@@ -93,12 +107,12 @@ namespace GKTests
         {
             UndoManager undoman = new UndoManager(fContext.Tree);
             Assert.IsNotNull(undoman);
-            
+
             Assert.AreEqual(fContext.Tree, undoman.Tree);
-            
+
             Assert.IsFalse(undoman.CanUndo());
             Assert.IsFalse(undoman.CanRedo());
-            
+
             undoman.Clear();
 
             Assert.IsFalse(undoman.DoOperation(null));
@@ -110,6 +124,31 @@ namespace GKTests
             undoman.Commit();
 
             undoman.Rollback();
+
+            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            Assert.IsNotNull(iRec);
+
+            Assert.Throws(typeof(ArgumentNullException), () => { fContext.ChangePersonBookmark(null, true); });
+            Assert.Throws(typeof(ArgumentNullException), () => { fContext.ChangePersonPatriarch(null, true); });
+            Assert.Throws(typeof(ArgumentNullException), () => { fContext.ChangePersonSex(null, GEDCOMSex.svUndetermined); });
+
+            /*iRec.Bookmark = false;
+            fContext.ChangePersonBookmark(iRec, true);
+            Assert.IsTrue(iRec.Bookmark);
+            undoman.Undo();
+            Assert.IsFalse(iRec.Bookmark);
+
+            iRec.Patriarch = false;
+            fContext.ChangePersonPatriarch(iRec, true);
+            Assert.IsTrue(iRec.Patriarch);
+            undoman.Undo();
+            Assert.IsFalse(iRec.Patriarch);
+
+            iRec.Sex = GEDCOMSex.svUndetermined;
+            fContext.ChangePersonSex(iRec, GEDCOMSex.svMale);
+            Assert.AreEqual(GEDCOMSex.svMale, iRec.Sex);
+            undoman.Undo();
+            Assert.AreEqual(GEDCOMSex.svUndetermined, iRec.Sex);*/
         }
 
         [Test]
@@ -138,6 +177,13 @@ namespace GKTests
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.LastOrDefault<int>(null); });
             N = GKUtils.LastOrDefault<int>(new int[] { 5, 7, 10 });
             Assert.AreEqual(10, N);
+
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.SingleOrDefault<int>(null); });
+            N = GKUtils.SingleOrDefault<int>(new int[] { 11 });
+            Assert.AreEqual(11, N);
+            N = GKUtils.SingleOrDefault<int>(new int[] { });
+            Assert.AreEqual(0, N);
+            Assert.Throws(typeof(Exception), () => { GKUtils.SingleOrDefault<int>(new int[] { 5, 7, 10 }); });
 
             //
 
@@ -435,12 +481,18 @@ namespace GKTests
         {
             ICulture culture = new RussianCulture();
             Assert.IsNotNull(culture);
+            Assert.IsTrue(culture.HasPatronymic());
+            Assert.IsTrue(culture.HasSurname());
 
             culture = new AncientCulture();
             Assert.IsNotNull(culture);
+            Assert.IsFalse(culture.HasPatronymic());
+            Assert.IsFalse(culture.HasSurname());
 
             culture = new IcelandCulture();
             Assert.IsNotNull(culture);
+            Assert.IsTrue(culture.HasPatronymic());
+            Assert.IsFalse(culture.HasSurname());
         }
 
         [Test]
@@ -1040,6 +1092,8 @@ namespace GKTests
                 Assert.IsNotNull(iRec);
                 namesTable.ImportNames(iRec);
 
+                namesTable.ImportNames(null);
+
                 sex = namesTable.GetSexByName("Anna");
                 Assert.AreEqual(GEDCOMSex.svFemale, sex);
             }
@@ -1051,6 +1105,81 @@ namespace GKTests
             using (ChartFilter cf = new ChartFilter()) {
                 cf.Backup();
                 cf.Restore();
+            }
+
+            PersonModifyEventArgs args = new PersonModifyEventArgs(null);
+            Assert.IsNotNull(args);
+
+            PersonList personList = new PersonList(true);
+            Assert.IsNotNull(personList);
+
+            using (TreeChartPerson tcPerson = new TreeChartPerson(null)) {
+                Assert.IsNotNull(tcPerson);
+
+                Assert.AreEqual(null, tcPerson.Portrait);
+                Assert.AreEqual(0, tcPerson.PortraitWidth);
+
+                tcPerson.Divorced = false;
+                Assert.AreEqual(false, tcPerson.Divorced);
+                tcPerson.Divorced = true;
+                Assert.AreEqual(true, tcPerson.Divorced);
+
+                tcPerson.IsDup = false;
+                Assert.AreEqual(false, tcPerson.IsDup);
+                tcPerson.IsDup = true;
+                Assert.AreEqual(true, tcPerson.IsDup);
+
+                Assert.AreEqual(0, tcPerson.Height);
+                Assert.AreEqual(0, tcPerson.Width);
+
+                tcPerson.IsDead = false;
+                Assert.AreEqual(false, tcPerson.IsDead);
+                tcPerson.IsDead = true;
+                Assert.AreEqual(true, tcPerson.IsDead);
+
+                Assert.AreEqual(0, tcPerson.PtX);
+                tcPerson.PtX = 11;
+                Assert.AreEqual(11, tcPerson.PtX);
+
+                Assert.AreEqual(0, tcPerson.PtY);
+                tcPerson.PtY = 22;
+                Assert.AreEqual(22, tcPerson.PtY);
+
+                Assert.AreEqual(null, tcPerson.Rec);
+                //Assert.AreEqual(null, tcPerson.Rect);
+
+                tcPerson.Selected = false;
+                Assert.AreEqual(false, tcPerson.Selected);
+                tcPerson.Selected = true;
+                Assert.AreEqual(true, tcPerson.Selected);
+
+                Assert.AreEqual(GEDCOMSex.svNone, tcPerson.Sex);
+                tcPerson.Sex = GEDCOMSex.svMale;
+                Assert.AreEqual(GEDCOMSex.svMale, tcPerson.Sex);
+
+                //EnumSet<SpecialUserRef> enums = tcPerson.Signs;
+                //Assert.IsTrue(enums.IsEmpty());
+
+                Assert.AreEqual(0, tcPerson.GetChildsCount());
+                Assert.AreEqual(0, tcPerson.GetSpousesCount());
+
+                TreeChartPerson child = new TreeChartPerson(null);
+                tcPerson.AddChild(null);
+                tcPerson.AddChild(child);
+                Assert.AreEqual(1, tcPerson.GetChildsCount());
+                Assert.AreEqual(child, tcPerson.GetChild(0));
+
+                TreeChartPerson spouse = new TreeChartPerson(null);
+                tcPerson.AddSpouse(null);
+                tcPerson.AddSpouse(spouse);
+                Assert.AreEqual(1, tcPerson.GetSpousesCount());
+                Assert.AreEqual(spouse, tcPerson.GetSpouse(0));
+
+                //Assert.AreEqual(null, tcPerson.Portrait);
+                //Assert.AreEqual(null, tcPerson.Portrait);
+                //Assert.AreEqual(null, tcPerson.Portrait);
+                //Assert.AreEqual(null, tcPerson.Portrait);
+                //Assert.AreEqual(null, tcPerson.Portrait);
             }
         }
 
@@ -1073,6 +1202,9 @@ namespace GKTests
 
             GKTreeNode treeNode = new GKTreeNode("Test", null);
             Assert.IsNotNull(treeNode);
+
+            ModifyEventArgs args = new ModifyEventArgs(RecordAction.raAdd, null);
+            Assert.IsNotNull(args);
         }
     }
 }

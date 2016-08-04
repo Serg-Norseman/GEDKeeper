@@ -643,18 +643,6 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public void GetNameParts(out string surname, out string name, out string patronymic)
-        {
-            if (this.fPersonalNames.Count > 0) {
-                GEDCOMPersonalName np = this.fPersonalNames[0];
-                np.GetRusNameParts(out surname, out name, out patronymic);
-            } else {
-                surname = "";
-                name = "";
-                patronymic = "";
-            }
-        }
-
         public GEDCOMFamilyRecord GetParentsFamily()
         {
             GEDCOMFamilyRecord result = (this.fChildToFamilyLinks.Count < 1) ? null : this.fChildToFamilyLinks[0].Value as GEDCOMFamilyRecord;
@@ -672,6 +660,21 @@ namespace GKCommon.GEDCOM
                 father = fam.GetHusband();
                 mother = fam.GetWife();
             }
+        }
+
+        public string GetNickString()
+        {
+            string result;
+            if (this.fPersonalNames.Count > 0)
+            {
+                GEDCOMPersonalName np = this.fPersonalNames[0];
+                result = np.Pieces.Nickname;
+            }
+            else
+            {
+                result = "";
+            }
+            return result;
         }
 
         public string GetNameString(bool startByFamily, bool includePieces)
@@ -706,19 +709,16 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public string GetNickString()
+        public void GetNameParts(out string surname, out string name, out string patronymic)
         {
-            string result;
-            if (this.fPersonalNames.Count > 0)
-            {
+            if (this.fPersonalNames.Count > 0) {
                 GEDCOMPersonalName np = this.fPersonalNames[0];
-                result = np.Pieces.Nickname;
+                np.GetRusNameParts(out surname, out name, out patronymic);
+            } else {
+                surname = "";
+                name = "";
+                patronymic = "";
             }
-            else
-            {
-                result = "";
-            }
-            return result;
         }
 
         private bool GetIndivName(bool rusNames, bool womanMode, out string aName)

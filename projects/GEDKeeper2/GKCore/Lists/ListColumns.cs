@@ -89,7 +89,6 @@ namespace GKCore.Lists
         public ColumnProps this[int index]
         {
             get { return this.fColumns[index]; }
-            set { this.fColumns[index] = value; }
         }
 
         protected abstract void InitColumnStatics();
@@ -162,9 +161,8 @@ namespace GKCore.Lists
         public void CopyTo(IListColumns columns)
         {
             ListColumns cols = columns as ListColumns;
-            if (cols == null) {
+            if (cols == null)
                 throw new ArgumentNullException("columns");
-            }
 
             foreach (Enum e in Enum.GetValues(this.fColumnsEnum))
             {

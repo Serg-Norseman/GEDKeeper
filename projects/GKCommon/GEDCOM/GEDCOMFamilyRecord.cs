@@ -278,7 +278,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMFamilyRecord fam = tag as GEDCOMFamilyRecord;
             if (fam == null) return 0.0f;
-            
+
             float match = 0.0f;
 
             string title1 = this.GetFamilyString(null, null);

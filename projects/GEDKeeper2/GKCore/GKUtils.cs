@@ -138,9 +138,7 @@ namespace GKCore
         public static TSource SingleOrDefault<TSource>(IEnumerable<TSource> source)
         {
             if (source == null)
-            {
                 throw new ArgumentNullException("source");
-            }
 
             IList<TSource> list = source as IList<TSource>;
 

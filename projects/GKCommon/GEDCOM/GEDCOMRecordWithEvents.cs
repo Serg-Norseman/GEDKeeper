@@ -133,7 +133,7 @@ namespace GKCommon.GEDCOM
         }
 
         public abstract GEDCOMCustomEvent AddEvent(GEDCOMCustomEvent evt);
-        
+
         #region Auxiliary
 
         private static readonly float[] CA_VALUES = new float[] { 0.25f, 0.5f, 0.75f, 1.0f };
@@ -153,19 +153,19 @@ namespace GKCommon.GEDCOM
 
                     int ca = cit.CertaintyAssessment;
                     int weight = (ca + 1);
-                    
+
                     result += (CA_VALUES[ca] * weight);
                     wsum += weight;
                 }
             }
-            
+
             int num3 = this.SourceCitations.Count;
             for (int i = 0; i < num3; i++) {
                 GEDCOMSourceCitation cit = this.SourceCitations[i];
 
                 int ca = cit.CertaintyAssessment;
                 int weight = (ca + 1);
-                
+
                 result += (CA_VALUES[ca] * weight);
                 wsum += weight;
             }
@@ -175,7 +175,7 @@ namespace GKCommon.GEDCOM
             } else {
                 result = 0.0f;
             }
-            
+
             return result;
         }
 

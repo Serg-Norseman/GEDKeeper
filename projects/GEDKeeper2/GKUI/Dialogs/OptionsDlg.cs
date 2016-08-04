@@ -396,9 +396,7 @@ namespace GKUI.Dialogs
         private void ListPersonColumns_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             bool cs = (e.NewValue == CheckState.Checked);
-            ColumnProps props = this.fTempColumns[e.Index];
-            props.ColActive = cs;
-            this.fTempColumns[e.Index] = props;
+            this.fTempColumns[e.Index].ColActive = cs;
         }
 
         public void SetPage(OptionsPage page)

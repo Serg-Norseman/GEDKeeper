@@ -77,7 +77,7 @@ namespace GKCommon.Controls
     /// <summary>
     ///   Component for displaying images with support for scrolling and zooming.
     /// </summary>
-    [DefaultProperty("Image"), ToolboxBitmap(typeof(ImageBox), "ImageBox.bmp"), ToolboxItem(true)]
+    [DefaultProperty("Image"), ToolboxItem(true)]
     public class ImageBox : GKScrollableControl
     {
         #region Constants
