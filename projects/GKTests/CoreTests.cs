@@ -48,6 +48,8 @@ namespace GKTests
         [TestFixtureSetUp]
         public void SetUp()
         {
+            LangMan.DefInit();
+
             fContext = TestStubs.CreateContext();
             TestStubs.FillContext(fContext);
         }
@@ -126,11 +128,42 @@ namespace GKTests
             
             age = GKUtils.GetAgeStr(iRec, 2005);
             Assert.AreEqual("15", age);
-            
+
             //
-            
+
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.FirstOrDefault<int>(null); });
+            int N = GKUtils.FirstOrDefault<int>(new int[] { 5, 7, 10 });
+            Assert.AreEqual(5, N);
+
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.LastOrDefault<int>(null); });
+            N = GKUtils.LastOrDefault<int>(new int[] { 5, 7, 10 });
+            Assert.AreEqual(10, N);
+
             //
-            
+
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetPedigreeLifeStr(null, PedigreeFormat.Compact); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetDateFmtString(null, DateFormat.dfDD_MM_YYYY, false, false); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetEventName(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetEventCause(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetEventDesc(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetAttributeStr(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.InitExtData(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.InitExtCounts(null, 0); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetFamilyString(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetCorresponderStr(null, fContext.Tree.XRefIndex_Find("CM1") as GEDCOMCommunicationRecord, false); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetCorresponderStr(fContext.Tree, null, false); });
+
+            Assert.AreEqual("", GKUtils.GetDaysForBirth(null));
+            Assert.AreEqual("", GKUtils.GetTaskGoalStr(null));
+            Assert.AreEqual("", GKUtils.GetGoalStr(GKGoalType.gtIndividual, null));
+
+            //
+
+            GEDCOMRecord rec = fContext.Tree.XRefIndex_Find("I1");
+            Assert.AreEqual("Ivanov Ivan Ivanovich", GKUtils.GenRecordName(rec, false));
+
+            //
+
             string st3;
             st3 = GKUtils.GetBirthDate(null, DateFormat.dfDD_MM_YYYY, true);
             Assert.AreEqual("", st3);
@@ -212,7 +245,6 @@ namespace GKTests
             
             evt = fContext.CreateEventEx(iRec, "FACT", "17 JAN 2013", "Ivanovo");
             Assert.IsNotNull(evt);
-            GedcomTests.GEDCOMCustomEventTest(evt, "17.01.2013");
             
             string dst = GKUtils.CompactDate("__.__.2013");
             Assert.AreEqual("2013", dst);
@@ -222,8 +254,7 @@ namespace GKTests
             
             evt = fContext.CreateEventEx(fRec, "MARR", "28 DEC 2013", "Ivanovo");
             Assert.IsNotNull(evt);
-            GedcomTests.GEDCOMCustomEventTest(evt, "28.12.2013");
-            
+
             // sex tests
             GEDCOMSex sex;
             sex = GKUtils.GetSexBySign('F');
@@ -1027,16 +1058,21 @@ namespace GKTests
         public void UI_Controls_Tests()
         {
             GKComboItem comboItem = new GKComboItem("Test", null);
+            Assert.IsNotNull(comboItem);
             Assert.AreEqual("Test", comboItem.ToString());
 
             GKListItem listItem = new GKListItem("Test", null);
+            Assert.IsNotNull(listItem);
             Assert.AreEqual("Test", listItem.ToString());
 
             GKListSubItem listSubItem = new GKListSubItem("Test");
+            Assert.IsNotNull(listSubItem);
 
             GKToolStripMenuItem tsMenuItem = new GKToolStripMenuItem("Test", null);
+            Assert.IsNotNull(tsMenuItem);
 
-            GKTreeNode GKTreeNode = new GKTreeNode("Test", null);
+            GKTreeNode treeNode = new GKTreeNode("Test", null);
+            Assert.IsNotNull(treeNode);
         }
     }
 }

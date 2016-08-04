@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace GKCommon
@@ -28,6 +29,14 @@ namespace GKCommon
     /// </summary>
     public static class UIHelper
     {
+        // TODO
+        public static Font GetFont()
+        {
+            using (FontDialog fontDlg = new FontDialog()) {
+                return null;
+            }
+        }
+
         public static string GetOpenFile(string title, string context, string filter, int filterIndex, string defaultExt)
         {
             using (OpenFileDialog ofd = CreateOpenFileDialog(title, context, filter, filterIndex, defaultExt, false)) {

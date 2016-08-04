@@ -21,6 +21,7 @@ namespace GKCommon.Controls
         {
             if (obj == null)
                 throw new ArgumentNullException("obj");
+
             Type objType = obj.GetType();
             PropertyInfo propInfo = GetPropertyInfo(objType, propertyName);
             if (propInfo == null)
@@ -33,6 +34,7 @@ namespace GKCommon.Controls
         {
             if (obj == null)
                 throw new ArgumentNullException("obj");
+
             Type objType = obj.GetType();
             PropertyInfo propInfo = GetPropertyInfo(objType, propertyName);
             if (propInfo == null)
@@ -46,12 +48,14 @@ namespace GKCommon.Controls
         {
             if (obj == null)
                 throw new ArgumentNullException("obj");
+
             Type objType = obj.GetType();
             FieldInfo fieldInfo = objType.GetField(fieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
             if (fieldInfo == null)
                 throw new ArgumentOutOfRangeException("fieldName",
                                                       string.Format("Couldn't find field {0} in type {1}", fieldName, objType.FullName));
+
             return fieldInfo.GetValue(obj);
         }
 

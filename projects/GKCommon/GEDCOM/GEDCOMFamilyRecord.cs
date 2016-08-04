@@ -396,44 +396,25 @@ namespace GKCommon.GEDCOM
         {
             if (child == null) return false;
 
-            bool result;
-            try
-            {
-                GEDCOMPointer ptr = new GEDCOMPointer(this.Owner, this, "", "");
-                ptr.SetNamedValue("CHIL", child);
-                this.Childrens.Add(ptr);
+            GEDCOMPointer ptr = new GEDCOMPointer(this.Owner, this, "", "");
+            ptr.SetNamedValue("CHIL", child);
+            this.fChildrens.Add(ptr);
 
-                GEDCOMChildToFamilyLink chLink = new GEDCOMChildToFamilyLink(this.Owner, child, "", "");
-                chLink.Family = this;
-                child.ChildToFamilyLinks.Add(chLink);
+            GEDCOMChildToFamilyLink chLink = new GEDCOMChildToFamilyLink(this.Owner, child, "", "");
+            chLink.Family = this;
+            child.ChildToFamilyLinks.Add(chLink);
 
-                result = true;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GEDCOMFamilyRecord.AddChild(): " + ex.Message);
-                result = false;
-            }
-            return result;
+            return true;
         }
 
         public bool RemoveChild(GEDCOMIndividualRecord child)
         {
             if (child == null) return false;
-            bool result;
 
-            try
-            {
-                this.DeleteChild(child);
-                child.DeleteChildToFamilyLink(this);
-                result = true;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GEDCOMFamilyRecord.RemoveChild(): " + ex.Message);
-                result = false;
-            }
-            return result;
+            this.DeleteChild(child);
+            child.DeleteChildToFamilyLink(this);
+
+            return true;
         }
 
         #endregion

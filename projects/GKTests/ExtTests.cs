@@ -133,6 +133,7 @@ namespace GKTests
             Assert.AreEqual(-2.0e+1, calc.Calc("-2.0e+1"));
             Assert.AreEqual(-2.0e-1, calc.Calc("-2.0e-1"));
             Assert.AreEqual(-2.0e0, calc.Calc("-2.0e0"));
+            Assert.AreEqual(525.0d, calc.Calc("5.25e+2"));
 
             // variables
             calc.ClearVars();
@@ -254,8 +255,6 @@ namespace GKTests
             Assert.AreEqual(1537, Math.Round(val, 0));
             val = calc.Calc("601h");
             Assert.AreEqual(1537, Math.Round(val, 0));
-            //val = calc.Calc("5.25e+2");
-            //Assert.AreEqual(525, Math.Round(val, 0));
 
             Assert.Throws(typeof(CalculateException), () => { calc.Calc("0x15j"); });
             Assert.Throws(typeof(CalculateException), () => { calc.Calc("0b015"); });

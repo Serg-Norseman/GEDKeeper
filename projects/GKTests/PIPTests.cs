@@ -211,9 +211,6 @@ namespace GKTests
             Assert.IsTrue(ImpUtils.IsRomeLine("XIV"));
             Assert.IsFalse(ImpUtils.IsRomeLine("XVA"));
             Assert.IsFalse(ImpUtils.IsRomeLine(""));
-
-            Assert.AreEqual("test", ImpUtils.DeleteBlanks("    test"));
-            Assert.AreEqual(null, ImpUtils.DeleteBlanks(null));
         }
 
         [Test]

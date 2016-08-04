@@ -20,7 +20,7 @@
 
 namespace GKCommon.GEDCOM
 {
-    // FIXME: возможны многочисленные нарушения стандарта, перепроверить вложенность тэгов
+    // FIXME: possible numerous violations of the standard; need to recheck the nesting of tags
     public sealed class GEDCOMIndividualOrdinance : GEDCOMTagWithLists
     {
         public GEDCOMDateValue Date

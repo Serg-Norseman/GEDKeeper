@@ -134,48 +134,26 @@ namespace GKCommon.GEDCOM
         public bool AddMember(GEDCOMIndividualRecord member)
         {
             if (member == null) return false;
-            bool result;
 
-            try
-            {
-                GEDCOMPointer ptr = new GEDCOMPointer(this.Owner, this, "", "");
-                ptr.SetNamedValue("_MEMBER", member);
-                this.fMembers.Add(ptr);
+            GEDCOMPointer ptr = new GEDCOMPointer(this.Owner, this, "", "");
+            ptr.SetNamedValue("_MEMBER", member);
+            this.fMembers.Add(ptr);
 
-                ptr = new GEDCOMPointer(this.Owner, member, "", "");
-                ptr.SetNamedValue("_GROUP", this);
-                member.Groups.Add(ptr);
+            ptr = new GEDCOMPointer(this.Owner, member, "", "");
+            ptr.SetNamedValue("_GROUP", this);
+            member.Groups.Add(ptr);
 
-                result = true;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GEDCOMGroupRecord.AddMember(): " + ex.Message);
-                result = false;
-            }
-
-            return result;
+            return true;
         }
 
         public bool RemoveMember(GEDCOMIndividualRecord member)
         {
             if (member == null) return false;
-            bool result;
 
-            try
-            {
-                this.fMembers.DeleteAt(this.IndexOfMember(member));
-                member.Groups.DeleteAt(member.IndexOfGroup(this));
+            this.fMembers.DeleteAt(this.IndexOfMember(member));
+            member.Groups.DeleteAt(member.IndexOfGroup(this));
 
-                result = true;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWrite("GEDCOMGroupRecord.RemoveMember(): " + ex.Message);
-                result = false;
-            }
-
-            return result;
+            return true;
         }
 
         #endregion

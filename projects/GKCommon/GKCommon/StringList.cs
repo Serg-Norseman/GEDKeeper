@@ -82,21 +82,18 @@ namespace GKCommon
         public string this[int index]
         {
             get {
-                if (index < 0 || index >= this.fList.Count) {
-                    RaiseError("List index out of bounds ({0})", index);
-                }
+                if (index < 0 || index >= this.fList.Count)
+                    throw new StringListException(string.Format("List index out of bounds ({0})", index));
 
                 return this.fList[index].FString;
             }
 
             set {
-                if (this.Sorted) {
-                    RaiseError("Operation not allowed on sorted list", 0);
-                }
+                if (this.Sorted)
+                    throw new StringListException("Operation not allowed on sorted list");
 
-                if (index < 0 || index >= this.fList.Count) {
-                    RaiseError("List index out of bounds ({0})", index);
-                }
+                if (index < 0 || index >= this.fList.Count)
+                    throw new StringListException(string.Format("List index out of bounds ({0})", index));
 
                 this.Changing();
                 this.fList[index].FString = value;
@@ -191,25 +188,18 @@ namespace GKCommon
             }
         }
 
-        private static void RaiseError(string msg, int data)
-        {
-            throw new StringListException(string.Format(msg, data));
-        }
-
         public object GetObject(int index)
         {
-            if (index < 0 || index >= this.fList.Count) {
-                RaiseError("List index out of bounds ({0})", index);
-            }
+            if (index < 0 || index >= this.fList.Count)
+                throw new StringListException(string.Format("List index out of bounds ({0})", index));
 
             return this.fList[index].FObject;
         }
 
         public void SetObject(int index, object obj)
         {
-            if (index < 0 || index >= this.fList.Count) {
-                RaiseError("List index out of bounds ({0})", index);
-            }
+            if (index < 0 || index >= this.fList.Count)
+                throw new StringListException(string.Format("List index out of bounds ({0})", index));
 
             this.Changing();
             this.fList[index].FObject = obj;
@@ -282,10 +272,9 @@ namespace GKCommon
                     {
                         return result;
                     }
+
                     if (this.fDuplicateSolve == DuplicateSolve.Error)
-                    {
-                        RaiseError("String list does not allow duplicates", 0);
-                    }
+                        throw new StringListException("String list does not allow duplicates");
                 }
             }
 
@@ -340,9 +329,7 @@ namespace GKCommon
         public void Delete(int index)
         {
             if (index < 0 || index >= this.fList.Count)
-            {
-                RaiseError("List index out of bounds ({0})", index);
-            }
+                throw new StringListException(string.Format("List index out of bounds ({0})", index));
 
             this.Changing();
             if (index < this.fList.Count)
@@ -355,13 +342,10 @@ namespace GKCommon
         public void Exchange(int index1, int index2)
         {
             if (index1 < 0 || index1 >= this.fList.Count)
-            {
-                RaiseError("List index out of bounds ({0})", index1);
-            }
+                throw new StringListException(string.Format("List index out of bounds ({0})", index1));
+
             if (index2 < 0 || index2 >= this.fList.Count)
-            {
-                RaiseError("List index out of bounds ({0})", index2);
-            }
+                throw new StringListException(string.Format("List index out of bounds ({0})", index2));
 
             this.Changing();
             this.ExchangeItems(index1, index2);
@@ -376,13 +360,11 @@ namespace GKCommon
         public void InsertObject(int index, string str, object obj)
         {
             if (this.Sorted)
-            {
-                RaiseError("Operation not allowed on sorted list", 0);
-            }
+                throw new StringListException("Operation not allowed on sorted list");
+
             if (index < 0 || index > this.Count)
-            {
-                RaiseError("List index out of bounds ({0})", index);
-            }
+                throw new StringListException(string.Format("List index out of bounds ({0})", index));
+
             this.InsertItem(index, str, obj);
         }
 

@@ -3,7 +3,6 @@
 	partial class ACOptionsControl
 	{
 		private System.Windows.Forms.ColorDialog ColorDialog1;
-		private System.Windows.Forms.FontDialog FontDialog1;
 		private System.Windows.Forms.Label acb0;
 		private System.Windows.Forms.Label acb1;
 		private System.Windows.Forms.Label acb2;
@@ -31,7 +30,6 @@
 		    this.acb1 = new System.Windows.Forms.Label();
 		    this.acb0 = new System.Windows.Forms.Label();
 		    this.ColorDialog1 = new System.Windows.Forms.ColorDialog();
-		    this.FontDialog1 = new System.Windows.Forms.FontDialog();
 		    this.chkHideEmptySegments = new System.Windows.Forms.CheckBox();
 		    this.SuspendLayout();
 		    // 

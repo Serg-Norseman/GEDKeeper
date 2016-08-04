@@ -166,6 +166,7 @@ sources := \
 ./GKCore/Interfaces/ILangMan.cs \
 ./GKCore/Interfaces/IListFilter.cs \
 ./GKCore/Interfaces/IListManager.cs \
+./GKCore/Interfaces/IListView.cs \
 ./GKCore/Interfaces/ILocalization.cs \
 ./GKCore/Interfaces/INamesTable.cs \
 ./GKCore/Interfaces/IOptions.cs \
@@ -340,6 +341,7 @@ sources := \
 ./GKCore/Interfaces/ILangMan.cs \
 ./GKCore/Interfaces/IListFilter.cs \
 ./GKCore/Interfaces/IListManager.cs \
+./GKCore/Interfaces/IListView.cs \
 ./GKCore/Interfaces/ILocalization.cs \
 ./GKCore/Interfaces/INamesTable.cs \
 ./GKCore/Interfaces/IOptions.cs \

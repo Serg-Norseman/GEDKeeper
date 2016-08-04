@@ -652,7 +652,6 @@ namespace GKCore
         /* 590 */ LSID_LinksCount,
         /* 591 */ LSID_PlacesPrepare,
         /* 592 */ LSID_PlaceAlreadyInBook,
-
         /* 593 */ LSID_DNAMarkers,
         /* 594 */ LSID_AAF_1,
         /* 595 */ LSID_AAF_2,
@@ -661,21 +660,19 @@ namespace GKCore
         /* 598 */ LSID_Loading,
         /* 599 */ LSID_FileSaveError,
         /* 600 */ LSID_FillColor,
+
         /* 601 */ LSID_FillImage,
         /* 602 */ LSID_TreeIndividualsCount,
         /* 603 */ LSID_LogView,
-
         /* 604 */ LSID_AncestorsCircle,
         /* 605 */ LSID_Circle,
         /* 606 */ LSID_TextColor,
         /* 607 */ LSID_BackColor,
         /* 608 */ LSID_LinesColor,
-
         /* 609 */ LSID_RestrictNone,
         /* 610 */ LSID_RestrictLocked,
         /* 611 */ LSID_RestrictConfidential,
         /* 612 */ LSID_RestrictPrivacy,
-
         /* 613 */ LSID_LogSend,
         /* 614 */ LSID_Charts,
         /* 615 */ LSID_SizeToFit,
@@ -685,29 +682,24 @@ namespace GKCore
         /* 619 */ LSID_DefineSex,
         /* 620 */ LSID_Plugins,
         /* 621 */ LSID_TM_TraceKinships,
-        
         /* 622 */ LSID_NoMatchesFound,
         /* 623 */ LSID_FindPrevious,
         /* 624 */ LSID_FindNext,
         /* 625 */ LSID_CertaintyIndex,
         /* 626 */ LSID_BirthByMonth,
         /* 627 */ LSID_Month,
-        
         /* 628 */ LSID_DlgReset,
         /* 629 */ LSID_Field,
         /* 630 */ LSID_Condition,
-        
         /* 631 */ LSID_DoNotSetSource,
         /* 632 */ LSID_Slideshow,
         /* 633 */ LSID_PrevRec,
         /* 634 */ LSID_NextRec,
-
         /* 635 */ LSID_GenerationFailed,
         /* 636 */ LSID_Start,
         /* 637 */ LSID_Stop,
         /* 638 */ LSID_Demography,
         /* 639 */ LSID_Names,
-
         /* 640 */ LSID_NTAka,
         /* 641 */ LSID_NTBirth,
         /* 642 */ LSID_NTImmigrant,
@@ -721,7 +713,6 @@ namespace GKCore
         /* 650 */ LSID_RecordDuplicate,
         /* 651 */ LSID_DuplicateWarning,
         /* 652 */ LSID_ShowDatesSigns,
-
         /* 653 */ LSID_FileNewTip,
         /* 654 */ LSID_FileLoadTip,
         /* 655 */ LSID_FileSaveTip,
@@ -760,7 +751,6 @@ namespace GKCore
         /* 688 */ LSID_WifeAddTip,
         /* 689 */ LSID_WifeDeleteTip,
         /* 690 */ LSID_WifeSelTip,
-
         /* 691 */ LSID_PersonAttachTip,
         /* 692 */ LSID_PlaceAddTip,
         /* 693 */ LSID_PlaceDeleteTip,
@@ -771,10 +761,10 @@ namespace GKCore
         /* 698 */ LSID_FileWithSameNameAlreadyExistsInStorage,
         /* 699 */ LSID_ItsNotGEDSECCompatibleFile,
         /* 700 */ LSID_ThisPersonHasSeveralFamilies,
+
         /* 701 */ LSID_UploadErrorInExcel,
         /* 702 */ LSID_PersonsFilter,
         /* 703 */ LSID_LinesVisible,
-
         /* 704 */ LSID_MatchType,
         /* 705 */ LSID_MatchInternal,
         /* 706 */ LSID_MathExternal,
@@ -782,7 +772,6 @@ namespace GKCore
         /* 708 */ LSID_Match,
         /* 709 */ LSID_WithoutDates,
         /* 710 */ LSID_PatriarchsDiagram,
-
         /* 711 */ LSID_FamilyBook,
         /* 712 */ LSID_TableOfContents,
         /* 713 */ LSID_PersonalRecords,
@@ -930,7 +919,7 @@ namespace GKCore
             /* 108 */ "Пользовательская сноска",
             /* 109 */ "Заметка",
             /* 110 */ "Источник",
-            /* 111 */ "Лист/Страница",
+            /* 111 */ "Страница",
             /* 112 */ "Достоверность",
             /* 113 */ "Сноска/ссылка",
             /* 114 */ "Тип",

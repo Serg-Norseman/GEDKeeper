@@ -723,11 +723,18 @@ namespace GKCommon.GEDCOM
 
         private bool GetIndivName(bool rusNames, bool womanMode, out string aName)
         {
-            string firstPart, surname;
-            GEDCOMPersonalName np = this.fPersonalNames[0];
-            np.GetNameParts(out firstPart, out surname);
+            string firstPart, surname, fullName;
+            if (this.fPersonalNames.Count > 0) {
+                GEDCOMPersonalName np = this.fPersonalNames[0];
+                np.GetNameParts(out firstPart, out surname);
+                fullName = np.StringValue;
+            } else {
+                firstPart = "";
+                surname = "";
+                fullName = "";
+            }
 
-            aName = ((womanMode && rusNames) ? firstPart : np.StringValue);
+            aName = ((womanMode && rusNames) ? firstPart : fullName);
             bool result = (aName.Length > 3);
 
             // russian names form - with patronymics, and woman marriage families

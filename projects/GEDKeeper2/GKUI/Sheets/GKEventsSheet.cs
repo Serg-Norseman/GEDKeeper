@@ -73,26 +73,21 @@ namespace GKUI.Sheets
 
                     idx += 1;
                     
-                    if (this.fPersonsMode)
-                    {
-                        GKListItem item = this.AddItem(idx, evt);
-                        item.AddSubItem(GKUtils.GetIndividualEventName(evt));
-                        item.AddSubItem(evt.Detail.Date.Value);
+                    GKListItem item = this.AddItem(idx, evt);
+                    item.AddSubItem(GKUtils.GetEventName(evt));
+                    item.AddSubItem(evt.Detail.Date.Value);
+
+                    if (this.fPersonsMode) {
                         string st = evt.Detail.Place.StringValue;
                         if (evt.StringValue != "") {
                             st = st + " [" + evt.StringValue + "]";
                         }
                         item.AddSubItem(st);
-                        item.AddSubItem(GKUtils.GetEventCause(evt.Detail));
-                    }
-                    else
-                    {
-                        GKListItem item = this.AddItem(idx, evt);
-                        item.AddSubItem(GKUtils.GetFamilyEventName(evt as GEDCOMFamilyEvent));
-                        item.AddSubItem(evt.Detail.Date.Value);
+                    } else {
                         item.AddSubItem(evt.Detail.Place.StringValue);
-                        item.AddSubItem(GKUtils.GetEventCause(evt.Detail));
                     }
+
+                    item.AddSubItem(GKUtils.GetEventCause(evt.Detail));
                 }
 
                 this.ResizeColumn(1);

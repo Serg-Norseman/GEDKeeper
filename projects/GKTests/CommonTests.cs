@@ -36,6 +36,11 @@ namespace GKTests
         [Test]
         public void ReflectionHelper_Tests()
         {
+            Assert.Throws(typeof(ArgumentNullException), () => { ReflectionHelper.GetPropertyValue(null, "Text"); });
+            Assert.Throws(typeof(ArgumentNullException), () => { ReflectionHelper.SetPropertyValue(null, "Text", null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { ReflectionHelper.GetFieldValue(null, "Text"); });
+            Assert.Throws(typeof(ArgumentNullException), () => { ReflectionHelper.SetPropertyValue(null, "Text", null); });
+
             using (StringList strList = new StringList()) {
                 strList.Text = "Test line";
 
@@ -236,6 +241,24 @@ namespace GKTests
             Assert.AreEqual("list", strList[2]);
             Assert.AreEqual("test", strList[3]);
 
+            StringList strList2 = new StringList();
+            strList2.Assign(null);
+            strList2.Assign(strList);
+            Assert.AreEqual("The", strList2[0]);
+            Assert.AreEqual("string", strList2[1]);
+            Assert.AreEqual("list", strList2[2]);
+            Assert.AreEqual("test", strList2[3]);
+            strList2.Clear();
+            strList2.AddStrings(null);
+            strList2.AddStrings(strList);
+            Assert.AreEqual("The", strList2[0]);
+            Assert.AreEqual("string", strList2[1]);
+            Assert.AreEqual("list", strList2[2]);
+            Assert.AreEqual("test", strList2[3]);
+            Assert.Throws(typeof(StringListException), () => { strList2.Delete(-1); });
+            Assert.Throws(typeof(StringListException), () => { strList2.Exchange(-1, 0); });
+            Assert.Throws(typeof(StringListException), () => { strList2.Exchange(0, -1); });
+
             string[] listVals = strList.ToArray();
             Assert.AreEqual("The", listVals[0]);
             Assert.AreEqual("string", listVals[1]);
@@ -262,6 +285,12 @@ namespace GKTests
             strList.DuplicateSolve = DuplicateSolve.Error;
             strList.Sorted = true;
             Assert.Throws(typeof(StringListException), () => { strList.Add("The"); });
+
+            Assert.Throws(typeof(StringListException), () => { strList.Insert(0, "insert test"); }); // Operation not allowed on sorted list
+            strList.Sorted = false;
+            strList.Insert(0, "insert test");
+            Assert.AreEqual("insert test", strList[0]);
+            Assert.Throws(typeof(StringListException), () => { strList.Insert(-1, "insert test2"); }); // List index out of bounds
 
             strList.Clear();
             Assert.IsTrue(strList.IsEmpty());
@@ -391,6 +420,11 @@ namespace GKTests
         [Test]
         public void ExtList_Tests()
         {
+            using (ExtList<object> list = new ExtList<object>(true))
+            {
+                Assert.IsNotNull(list);
+            }
+
             using (ExtList<object> list = new ExtList<object>())
             {
                 Assert.IsNotNull(list);

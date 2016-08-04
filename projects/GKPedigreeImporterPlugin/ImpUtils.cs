@@ -49,26 +49,6 @@ namespace GKPedigreeImporterPlugin
             return (rs != "" && rs == str);
         }
 
-        public static string DeleteBlanks(string str)
-        {
-            string result = str;
-
-            if (!string.IsNullOrEmpty(result))
-            {
-                int i = 0;
-                while (i < result.Length)
-                {
-                    if (result[i] == ' ') {
-                        result = result.Remove(i, 1);
-                    } else {
-                        i++;
-                    }
-                }
-            }
-
-            return result;
-        }
-
         public static bool IsPersonLine_DAboville(string str, out string pId)
         {
             // "11.21.31.11."

@@ -105,10 +105,7 @@ namespace GKCore.Export
         
         public FamilyBookExporter(IBaseWindow aBase) : base(aBase)
         {
-            this.fMargins.Left = 20;
-            this.fMargins.Top = 20;
-            this.fMargins.Right = 20;
-            this.fMargins.Bottom = 20;
+            this.fMargins = new Padding(20);
             this.fAlbumPage = true;
         }
 
@@ -195,7 +192,7 @@ namespace GKCore.Export
                 baseFont = BaseFont.CreateFont(Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\Calibri.ttf"), "CP1251", BaseFont.EMBEDDED);
                 //Font page_font = new Font(base_font, 9f, Font.NORMAL);
                 
-                fPdfWriter.PageEvent = new PDFWriterEvents(baseFont, "Страница: ");
+                fPdfWriter.PageEvent = new PDFWriterEvents(baseFont, LangMan.LS(LSID.LSID_Page)+": ");
 
                 float halfpage = (fDocument.Top - fDocument.Bottom - (fTitleFont.Size) * 4) / 2f;
                 fDocument.Add(new Paragraph(Chunk.NEWLINE) { SpacingAfter = halfpage });
@@ -465,7 +462,7 @@ namespace GKCore.Export
                     GEDCOMCustomEvent evt = iRec.Events[i];
                     if (evt.Name == "BIRT" || evt.Name == "DEAT") continue;
                     
-                    string evtName = GKUtils.GetIndividualEventName(evt);
+                    string evtName = GKUtils.GetEventName(evt);
                     string evtVal = evt.StringValue;
                     string evtDesc = GKUtils.GetEventDesc(evt, false);
 

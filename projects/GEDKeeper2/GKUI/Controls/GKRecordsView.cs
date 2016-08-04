@@ -454,9 +454,9 @@ namespace GKUI.Controls
 
         public void DeleteRecord(GEDCOMRecord record)
         {
-            // защита от сбоев: при удалении в режиме диаграмм, между фактическим удалением записи и
-            // обновлением списка успевает пройти несколько запросов на обновление пунктов списка
-            // которые могут быть уже удалены
+            // crash protection: when you delete records from the diagrams, 
+            // between the actual deleting a record and updating the list 
+            // may take a few requests to update the list's items which does not already exist
             int idx = this.IndexOfRecord(record);
             if (idx >= 0) {
                 this.fContentList.RemoveAt(idx);

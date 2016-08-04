@@ -106,7 +106,16 @@ namespace GKCommon
             string sm = HasKnownMonth() ? m.ToString() : "??";
             string sd = HasKnownDay() ? d.ToString() : "??";
 
-            return string.Format("{0}/{1}/{2}", sy, sm, sd);
+            string result = string.Format("{0}/{1}/{2}", sy, sm, sd);
+            if (this.IsApproximateDate()) {
+                result = "~" + result;
+            } else if (this.IsDateBefore()) {
+                result = "<" + result;
+            } else if (this.IsDateAfter()) {
+                result = ">" + result;
+            }
+
+            return result;
         }
 
         public override int GetHashCode()

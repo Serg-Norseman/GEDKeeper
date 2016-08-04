@@ -34,12 +34,12 @@ using GKCore.Cultures;
 using GKCore.Types;
 using GKUI.Controls;
 
-#if !__MonoCS__
-using Externals.MapiMail;
-#endif
-
 namespace GKCore
 {
+    #if !__MonoCS__
+    using Externals.MapiMail;
+    #endif
+
     /// <summary>
     /// 
     /// </summary>
@@ -275,9 +275,7 @@ namespace GKCore
         public static string GetFamilyString(GEDCOMFamilyRecord family)
         {
             if (family == null)
-            {
                 throw new ArgumentNullException("family");
-            }
 
             return family.GetFamilyString(LangMan.LS(LSID.LSID_UnkMale), LangMan.LS(LSID.LSID_UnkFemale));
         }
@@ -413,14 +411,10 @@ namespace GKCore
         public static string GetCorresponderStr(GEDCOMTree tree, GEDCOMCommunicationRecord commRec, bool aLink)
         {
             if (tree == null)
-            {
                 throw new ArgumentNullException("tree");
-            }
 
             if (commRec == null)
-            {
                 throw new ArgumentNullException("commRec");
-            }
 
             string result = "";
             GKCommunicationDir dir;
@@ -567,6 +561,9 @@ namespace GKCore
 
         public static string GetEventName(GEDCOMCustomEvent evt)
         {
+            if (evt == null)
+                throw new ArgumentNullException("evt");
+
             string result = "";
 
             if (evt is GEDCOMIndividualEvent || evt is GEDCOMIndividualAttribute)
@@ -594,9 +591,7 @@ namespace GKCore
         public static string GetAttributeStr(GEDCOMIndividualAttribute iAttr)
         {
             if (iAttr == null)
-            {
                 throw new ArgumentNullException("iAttr");
-            }
 
             int idx = GetPersonEventIndex(iAttr.Name);
             string st;
@@ -620,9 +615,7 @@ namespace GKCore
         public static string GetEventDesc(GEDCOMCustomEvent evt, bool hyperLink = true)
         {
             if (evt == null)
-            {
                 throw new ArgumentNullException("evt");
-            }
 
             string dt = GEDCOMEventToDateStr(evt, DateFormat.dfDD_MM_YYYY, false);
             string place = evt.Detail.Place.StringValue;
@@ -654,9 +647,7 @@ namespace GKCore
         public static string GetEventCause(GEDCOMEventDetail eventDetail)
         {
             if (eventDetail == null)
-            {
                 throw new ArgumentNullException("eventDetail");
-            }
 
             string result = "";
 
@@ -672,50 +663,6 @@ namespace GKCore
                     result += " ";
                 }
                 result = result + "[" + eventDetail.Agency + "]";
-            }
-
-            return result;
-        }
-
-        public static string GetIndividualEventName(GEDCOMCustomEvent evt)
-        {
-            if (evt == null)
-            {
-                throw new ArgumentNullException("evt");
-            }
-
-            string result;
-
-            int ev = GetPersonEventIndex(evt.Name);
-            if (ev == 0)
-            {
-                result = evt.Detail.Classification;
-            }
-            else
-            {
-                result = (ev > 0) ? LangMan.LS(GKData.PersonEvents[ev].Name) : evt.Name;
-            }
-
-            return result;
-        }
-
-        public static string GetFamilyEventName(GEDCOMFamilyEvent evt)
-        {
-            if (evt == null)
-            {
-                throw new ArgumentNullException("evt");
-            }
-
-            string result;
-
-            int ev = GetFamilyEventIndex(evt.Name);
-            if (ev == 0)
-            {
-                result = evt.Detail.Classification;
-            }
-            else
-            {
-                result = (ev > 0) ? LangMan.LS(GKData.FamilyEvents[ev].Name) : evt.Name;
             }
 
             return result;
@@ -1473,9 +1420,8 @@ namespace GKCore
 
         public static void InitExtData(GEDCOMTree tree)
         {
-            if (tree == null) {
+            if (tree == null)
                 throw new ArgumentNullException("tree");
-            }
 
             int num = tree.RecordsCount;
             for (int i = 0; i < num; i++) {
@@ -1486,9 +1432,8 @@ namespace GKCore
 
         public static void InitExtCounts(GEDCOMTree tree, int value)
         {
-            if (tree == null) {
+            if (tree == null)
                 throw new ArgumentNullException("tree");
-            }
 
             int num = tree.RecordsCount;
             for (int i = 0; i < num; i++) {
@@ -2123,7 +2068,7 @@ namespace GKCore
                     for (int i = 0; i < num; i++)
                     {
                         GEDCOMCustomEvent evt = record.Events[i];
-                        string st = GetIndividualEventName(evt);
+                        string st = GetEventName(evt);
 
                         string sv = "";
                         if (evt.StringValue != "")
@@ -2160,7 +2105,7 @@ namespace GKCore
                     {
                         GEDCOMFamilyEvent evt = (GEDCOMFamilyEvent)record.Events[i];
 
-                        string st = GetFamilyEventName(evt);
+                        string st = GetEventName(evt);
                         summary.Add(st + ": " + GetEventDesc(evt));
 
                         ShowDetailCause(evt.Detail, summary);
