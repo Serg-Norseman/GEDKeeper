@@ -1122,7 +1122,6 @@ namespace GKCore
             if (person.Sex != newSex)
             {
                 this.fUndoman.DoOperation(new PersonSexChange(this.fUndoman, person, newSex));
-                //this.fUndoman.Commit();
             }
         }
 
@@ -1134,7 +1133,6 @@ namespace GKCore
             if (person.Patriarch != newValue)
             {
                 this.fUndoman.DoOperation(new PersonPatriarchChange(this.fUndoman, person, newValue));
-                //this.fUndoman.Commit();
             }
         }
 
@@ -1146,7 +1144,6 @@ namespace GKCore
             if (person.Bookmark != newValue)
             {
                 this.fUndoman.DoOperation(new PersonBookmarkChange(this.fUndoman, person, newValue));
-                //this.fUndoman.Commit();
             }
         }
 

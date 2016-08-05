@@ -102,53 +102,129 @@ namespace GKTests
             Assert.IsFalse(fContext.IsUpdated());
         }
 
+        private void TransactionEventHandler(object sender, TransactionType type)
+        {
+        }
+
+        private class InvalidOperation : CustomOperation
+        {
+            public InvalidOperation(UndoManager manager) : base(manager) { }
+            public override bool Redo() { return false; }
+            public override void Undo() {}
+        }
+
         [Test]
         public void Undoman_Tests()
         {
-            UndoManager undoman = new UndoManager(fContext.Tree);
-            Assert.IsNotNull(undoman);
+            using (UndoManager undoman = new UndoManager(fContext.Tree)) {
+                Assert.IsNotNull(undoman);
 
-            Assert.AreEqual(fContext.Tree, undoman.Tree);
+                Assert.AreEqual(fContext.Tree, undoman.Tree);
 
-            Assert.IsFalse(undoman.CanUndo());
-            Assert.IsFalse(undoman.CanRedo());
+                Assert.IsFalse(undoman.CanUndo());
+                Assert.IsFalse(undoman.CanRedo());
 
-            undoman.Clear();
+                undoman.Clear();
 
-            Assert.IsFalse(undoman.DoOperation(null));
+                Assert.IsFalse(undoman.DoOperation(null));
 
-            undoman.Undo();
+                undoman.Undo();
+                undoman.Redo();
+                undoman.Commit();
+                undoman.Rollback();
 
-            undoman.Redo();
+                Assert.IsFalse(undoman.DoOperation(new InvalidOperation(undoman)));
+            }
 
-            undoman.Commit();
+            fContext.Undoman.OnTransaction += TransactionEventHandler;
 
-            undoman.Rollback();
-
-            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
-            Assert.IsNotNull(iRec);
+            fContext.Undoman.Clear();
 
             Assert.Throws(typeof(ArgumentNullException), () => { fContext.ChangePersonBookmark(null, true); });
             Assert.Throws(typeof(ArgumentNullException), () => { fContext.ChangePersonPatriarch(null, true); });
             Assert.Throws(typeof(ArgumentNullException), () => { fContext.ChangePersonSex(null, GEDCOMSex.svUndetermined); });
 
-            /*iRec.Bookmark = false;
+            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            Assert.IsNotNull(iRec);
+
+            iRec.Bookmark = false;
             fContext.ChangePersonBookmark(iRec, true);
             Assert.IsTrue(iRec.Bookmark);
-            undoman.Undo();
+            Assert.IsTrue(fContext.Undoman.CanUndo());
+            fContext.Undoman.Undo();
             Assert.IsFalse(iRec.Bookmark);
+            Assert.IsFalse(fContext.Undoman.CanUndo());
 
             iRec.Patriarch = false;
             fContext.ChangePersonPatriarch(iRec, true);
             Assert.IsTrue(iRec.Patriarch);
-            undoman.Undo();
+            Assert.IsTrue(fContext.Undoman.CanUndo());
+            fContext.Undoman.Undo();
             Assert.IsFalse(iRec.Patriarch);
+            Assert.IsFalse(fContext.Undoman.CanUndo());
 
             iRec.Sex = GEDCOMSex.svUndetermined;
             fContext.ChangePersonSex(iRec, GEDCOMSex.svMale);
             Assert.AreEqual(GEDCOMSex.svMale, iRec.Sex);
-            undoman.Undo();
-            Assert.AreEqual(GEDCOMSex.svUndetermined, iRec.Sex);*/
+            Assert.IsTrue(fContext.Undoman.CanUndo());
+            fContext.Undoman.Undo();
+            Assert.AreEqual(GEDCOMSex.svUndetermined, iRec.Sex);
+            Assert.IsFalse(fContext.Undoman.CanUndo());
+
+            Assert.IsTrue(fContext.Undoman.CanRedo());
+            fContext.Undoman.Redo();
+            Assert.AreEqual(GEDCOMSex.svMale, iRec.Sex);
+            Assert.IsTrue(fContext.Undoman.CanUndo());
+
+            fContext.Undoman.Clear();
+
+            iRec.Bookmark = false;
+            iRec.Patriarch = false;
+            iRec.Sex = GEDCOMSex.svUndetermined;
+
+            fContext.ChangePersonBookmark(iRec, true);
+            fContext.ChangePersonPatriarch(iRec, true);
+            fContext.ChangePersonSex(iRec, GEDCOMSex.svMale);
+            fContext.Undoman.Commit();
+            Assert.IsTrue(iRec.Bookmark);
+            Assert.IsTrue(iRec.Patriarch);
+            Assert.AreEqual(GEDCOMSex.svMale, iRec.Sex);
+            Assert.IsTrue(fContext.Undoman.CanUndo());
+            fContext.Undoman.Undo();
+            Assert.IsFalse(iRec.Bookmark);
+            Assert.IsFalse(iRec.Patriarch);
+            Assert.AreEqual(GEDCOMSex.svUndetermined, iRec.Sex);
+            Assert.IsFalse(fContext.Undoman.CanUndo());
+
+
+            fContext.ChangePersonBookmark(iRec, true);
+            fContext.ChangePersonPatriarch(iRec, true);
+            fContext.ChangePersonSex(iRec, GEDCOMSex.svMale);
+            fContext.Undoman.Rollback();
+            Assert.IsFalse(iRec.Bookmark);
+            Assert.IsFalse(iRec.Patriarch);
+            Assert.AreEqual(GEDCOMSex.svUndetermined, iRec.Sex);
+            Assert.IsFalse(fContext.Undoman.CanUndo());
+
+            fContext.Undoman.OnTransaction -= TransactionEventHandler;
+        }
+
+        [Test]
+        public void SCCrypt_Tests()
+        {
+            const string pw = "test password";
+            string crypt = SCCrypt.scEncrypt(pw, unchecked((ushort)CRC32.CrcStr("test")));
+            string pw1 = SCCrypt.scDecrypt(crypt, unchecked((ushort)CRC32.CrcStr("test")));
+
+            Assert.AreEqual(pw, pw1, "SCCrypt_Test");
+        }
+
+        [Test]
+        public void Bits_Tests()
+        {
+            Assert.AreEqual(true, GKUtils.IsSetBit(3, 0));
+            Assert.AreEqual(true, GKUtils.IsSetBit(3, 1));
+            Assert.AreEqual(false, GKUtils.IsSetBit(3, 4));
         }
 
         [Test]
@@ -250,30 +326,31 @@ namespace GKTests
             
             GEDCOMCustomEvent evt = iRec.FindEvent("BIRT");
             Assert.IsNotNull(evt);
-            
+
             string st2 = GKUtils.GEDCOMEventToDateStr(null, DateFormat.dfYYYY_MM_DD, false);
             Assert.AreEqual("", st2);
-            
+
             st2 = GKUtils.GEDCOMEventToDateStr(evt, DateFormat.dfYYYY_MM_DD, false);
             Assert.AreEqual("1990.12.28", st2);
-            
-            //st2 = GKUtils.GetEventName(evt);
-            //Assert.AreEqual("BIRT", st2);
-            
+
+            evt.Detail.Cause = "test cause";
+            st2 = GKUtils.GetEventCause(evt.Detail);
+            Assert.AreEqual("test cause", st2);
+
             //
-            
+
             string st1 = GKUtils.GetAttributeValue(null, "BIRT");
             Assert.AreEqual("", st1);
-            
+
             st1 = GKUtils.GetAttributeValue(iRec, "BIRT");
             Assert.AreEqual("", st1);
-            
+
             Assert.AreEqual(1, GKUtils.GetPersonEventIndex("BIRT"));
             Assert.AreEqual(2, GKUtils.GetFamilyEventIndex("MARR"));
             Assert.AreEqual(1, GKUtils.GetMarriageStatusIndex("MARRIED"));
-            
+
             //
-            
+
             //Assert.AreEqual(1990, context.FindBirthYear(iRec));
             //Assert.AreEqual(-1, context.FindDeathYear(iRec));
             
@@ -389,6 +466,22 @@ namespace GKTests
 
         }
 
+        private class WorkWindowMock : IWorkWindow
+        {
+            public string GetStatusString() { return ""; }
+            public void UpdateView() {}
+            public bool NavCanBackward() { return false; }
+            public bool NavCanForward() { return false; }
+            public void NavNext() {}
+            public void NavPrev() {}
+            public bool AllowQuickFind() { return false; }
+            public IList<ISearchResult> FindAll(string searchPattern) { return new List<ISearchResult>(); }
+            public void QuickFind() {}
+            public void SelectByRec(GEDCOMIndividualRecord iRec) {}
+            public bool AllowFilter() { return false; }
+            public void SetFilter() {}
+        }
+
         [Test]
         public void Search_Tests()
         {
@@ -396,10 +489,16 @@ namespace GKTests
             Assert.IsNotNull(searchResult);
 
             Assert.Throws(typeof(ArgumentNullException), () => { new BaseSearchStrategy(null, null); });
-            //BaseSearchStrategy strat = new BaseSearchStrategy(null, "");
 
-            //BaseSearchStrategy searchStrategy = new BaseSearchStrategy(null, "");
-            //Assert.IsNotNull(searchStrategy);
+            BaseSearchStrategy strat = new BaseSearchStrategy(new WorkWindowMock(), "");
+            Assert.IsNotNull(strat);
+
+            IList<ISearchResult> res = strat.FindAll();
+            Assert.IsNotNull(res);
+
+            Assert.IsFalse(strat.HasResults());
+            Assert.IsNull(strat.FindNext());
+            Assert.IsNull(strat.FindPrev());
         }
 
         private const int REP_COUNT = 1000; // 1000000; // for profile tests
@@ -1174,6 +1273,13 @@ namespace GKTests
                 tcPerson.AddSpouse(spouse);
                 Assert.AreEqual(1, tcPerson.GetSpousesCount());
                 Assert.AreEqual(spouse, tcPerson.GetSpouse(0));
+
+                Assert.IsFalse(tcPerson.HasFlag(PersonFlag.pfDescWalk));
+                tcPerson.SetFlag(PersonFlag.pfDescWalk);
+                Assert.IsTrue(tcPerson.HasFlag(PersonFlag.pfDescWalk));
+
+                bool hasMediaFail = false;
+                tcPerson.BuildBy(null, ref hasMediaFail);
 
                 //Assert.AreEqual(null, tcPerson.Portrait);
                 //Assert.AreEqual(null, tcPerson.Portrait);

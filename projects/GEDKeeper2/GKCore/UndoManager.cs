@@ -92,6 +92,14 @@ namespace GKCore
             }
         }
 
+        public void Clear()
+        {
+            this.fStackUndo.Clear();
+            this.fStackUndo.Push(TRANS_DELIMITER);
+
+            this.fStackRedo.Clear();
+        }
+
         public bool DoOperation(CustomOperation operation)
         {
             if (operation == null) return false;
@@ -121,13 +129,16 @@ namespace GKCore
                 {
                     this.fStackUndo.Pop();
                 }
+
                 this.fStackRedo.Push(TRANS_DELIMITER);
+
                 while (this.fStackUndo.Peek() != TRANS_DELIMITER)
                 {
                     CustomOperation cmd = this.fStackUndo.Pop();
                     this.fStackRedo.Push(cmd);
                     cmd.Undo();
                 }
+
                 this.Transaction(TransactionType.taCommitUndo);
             }
         }
@@ -140,6 +151,7 @@ namespace GKCore
                 {
                     this.fStackUndo.Push(TRANS_DELIMITER);
                 }
+
                 while (this.fStackRedo.Peek() != TRANS_DELIMITER)
                 {
                     CustomOperation cmd = this.fStackRedo.Pop();
@@ -150,8 +162,10 @@ namespace GKCore
                         return;
                     }
                 }
+
                 this.fStackRedo.Pop();
                 this.fStackUndo.Push(TRANS_DELIMITER);
+
                 this.Transaction(TransactionType.taCommitRedo);
             }
         }
@@ -184,13 +198,6 @@ namespace GKCore
                 cmd.Undo();
             }
             this.Transaction(TransactionType.taRollback);
-        }
-
-        public void Clear()
-        {
-            this.fStackUndo.Clear();
-            this.fStackUndo.Push(TRANS_DELIMITER);
-            this.fStackRedo.Clear();
         }
     }
 }
