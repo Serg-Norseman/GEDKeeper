@@ -31,6 +31,7 @@ namespace GKCore.Interfaces
     public interface IBaseContext
     {
         GEDCOMTree Tree { get; }
+        ValuesCollection ValuesCollection { get; }
 
         void Clear();
         void FileLoad(string fileName, string password = null);
@@ -44,6 +45,7 @@ namespace GKCore.Interfaces
         GEDCOMCustomEvent CreateEventEx(GEDCOMRecordWithEvents aRec, string evSign, string evDate, string evPlace);
         GEDCOMIndividualRecord CreatePersonEx(string iName, string iPatronymic, string iSurname, GEDCOMSex iSex, bool birthEvent);
         bool DeleteRecord(GEDCOMRecord record);
+        void CollectEventValues(GEDCOMCustomEvent evt);
 
         // Individual utils
         bool IsChildless(GEDCOMIndividualRecord iRec);

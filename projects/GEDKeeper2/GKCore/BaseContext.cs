@@ -46,9 +46,10 @@ namespace GKCore
     {
         #region Private fields
 
-        private readonly GEDCOMTree fTree;
-        private readonly IBaseWindow fViewer;
         private readonly IHost fHost;
+        private readonly GEDCOMTree fTree;
+        private readonly ValuesCollection fValuesCollection;
+        private readonly IBaseWindow fViewer;
         private UndoManager fUndoman;
 
         #endregion
@@ -65,6 +66,11 @@ namespace GKCore
             get { return this.fUndoman; }
         }
 
+        public ValuesCollection ValuesCollection
+        {
+            get { return this.fValuesCollection; }
+        }
+
         #endregion
 
         #region Instance control
@@ -75,6 +81,7 @@ namespace GKCore
             this.fViewer = viewer;
             this.fHost = (viewer == null) ? null : viewer.Host;
             this.fUndoman = new UndoManager(this.fTree);
+            this.fValuesCollection = new ValuesCollection();
         }
 
         protected override void Dispose(bool disposing)
@@ -128,6 +135,11 @@ namespace GKCore
         #endregion
 
         #region Data Manipulation
+
+        public void CollectEventValues(GEDCOMCustomEvent evt)
+        {
+            GKUtils.CollectEventValues(evt, this.fValuesCollection);
+        }
 
         public GEDCOMCustomEvent CreateEventEx(GEDCOMRecordWithEvents aRec, string evSign, string evDate, string evPlace)
         {

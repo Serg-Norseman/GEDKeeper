@@ -35,7 +35,6 @@ namespace GKCore.Interfaces
         bool Modified { get; set; }
         ShieldState ShieldState { get; set; }
         GEDCOMTree Tree { get; }
-        ValuesCollection ValuesCollection { get; }
 
         void Activate();
         void ApplyFilter();
@@ -46,7 +45,6 @@ namespace GKCore.Interfaces
         string DefinePatronymic(string name, GEDCOMSex sex, bool confirm);
         GEDCOMSex DefineSex(string iName, string iPatr);
         void CheckPersonSex(GEDCOMIndividualRecord iRec);
-        void CollectEventValues(GEDCOMCustomEvent evt);
 
         bool IsUnknown();
         void FileNew();

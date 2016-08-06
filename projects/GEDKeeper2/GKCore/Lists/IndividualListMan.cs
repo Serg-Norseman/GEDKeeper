@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Drawing;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
@@ -104,7 +103,7 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public class IndividualListFilter : ListFilter, IIndividualListFilter
+    public sealed class IndividualListFilter : ListFilter, IIndividualListFilter
     {
         public string AliveBeforeDate;
         public FilterGroupMode FilterGroupMode;
@@ -177,34 +176,32 @@ namespace GKCore.Lists
 
         private bool HasPlace()
         {
-            IndividualListFilter iFilter = fFilter as IndividualListFilter;
-            if (iFilter == null) return false;
+            bool result = false;
 
-            bool res = false;
+            string fltResidence = ((IndividualListFilter)fFilter).Residence;
+            bool hasAddr = GlobalOptions.Instance.PlacesWithAddress;
 
-            bool addr = GlobalOptions.Instance.PlacesWithAddress;
             int num = this.fRec.Events.Count;
             for (int i = 0; i < num; i++)
             {
-                string place = GKUtils.GetPlaceStr(this.fRec.Events[i], addr);
-                res = IsMatchesMask(place, iFilter.Residence);
-                if (res) break;
+                string place = GKUtils.GetPlaceStr(this.fRec.Events[i], hasAddr);
+                result = IsMatchesMask(place, fltResidence);
+                if (result) break;
             }
 
-            return res;
+            return result;
         }
 
         private bool HasEventVal()
         {
-            IndividualListFilter iFilter = fFilter as IndividualListFilter;
-            if (iFilter == null) return false;
-
             bool result = false;
+
+            string fltEventVal = ((IndividualListFilter)fFilter).EventVal;
 
             int num = this.fRec.Events.Count;
             for (int i = 0; i < num; i++)
             {
-                result = IsMatchesMask(this.fRec.Events[i].StringValue, iFilter.EventVal);
+                result = IsMatchesMask(this.fRec.Events[i].StringValue, fltEventVal);
                 if (result) break;
             }
 
@@ -247,12 +244,15 @@ namespace GKCore.Lists
                 switch (iFilter.FilterGroupMode) {
                     case FilterGroupMode.All:
                         break;
+
                     case FilterGroupMode.None:
                         if (this.fRec.Groups.Count != 0) return false;
                         break;
+
                     case FilterGroupMode.Any:
                         if (this.fRec.Groups.Count == 0) return false;
                         break;
+
                     case FilterGroupMode.Selected:
                         if (this.fRec.IndexOfGroup(this.filter_grp) < 0) return false;
                         break;
@@ -261,12 +261,15 @@ namespace GKCore.Lists
                 switch (iFilter.SourceMode) {
                     case FilterGroupMode.All:
                         break;
+
                     case FilterGroupMode.None:
                         if (this.fRec.SourceCitations.Count != 0) return false;
                         break;
+
                     case FilterGroupMode.Any:
                         if (this.fRec.SourceCitations.Count == 0) return false;
                         break;
+
                     case FilterGroupMode.Selected:
                         if (this.fRec.IndexOfSource(this.filter_source) < 0) return false;
                         break;
@@ -568,37 +571,30 @@ namespace GKCore.Lists
 
             if ((fRec.ChildToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnparentedPersons))
             {
-                item.BackColor = HighlightUnparentedColor;
+                item.BackColor = GKData.HighlightUnparentedColor;
             }
             else if ((fRec.SpouseToFamilyLinks.Count == 0) && (gOptions.ListHighlightUnmarriedPersons))
             {
-                item.BackColor = HighlightUnmarriedColor;
+                item.BackColor = GKData.HighlightUnmarriedColor;
             }
         }
 
-        #if __MonoCS__
-        private static readonly Color HighlightUnparentedColor = Color.FromArgb(unchecked((int)0xFFFFCACA));
-        private static readonly Color HighlightUnmarriedColor = Color.FromArgb(unchecked((int)0xFFFFFFA1));
-        #else
-        private static readonly Color HighlightUnparentedColor = Color.FromArgb(0xFFCACA);
-        private static readonly Color HighlightUnmarriedColor = Color.FromArgb(0xFFFFA1);
-        #endif
-
         public override void UpdateColumns(IListView listView, bool isMain)
         {
-            IndividualListColumns columns = GlobalOptions.Instance.IndividualListColumns;
-            NameFormat defNameFormat = GlobalOptions.Instance.DefNameFormat;
-
             this.ColumnsMap_Clear();
             this.AddListColumn(listView, "№", 50, false, 0, 0);
+
+            NameFormat defNameFormat = GlobalOptions.Instance.DefNameFormat;
+            IndividualListColumns columns = GlobalOptions.Instance.IndividualListColumns;
 
             int num = columns.Count;
             for (int i = 0; i < num; i++)
             {
-                if (columns[i].ColActive) {
-                    byte bColType = columns[i].ColType;
+                ColumnProps columnProps = columns[i];
+
+                if (columnProps.ColActive) {
+                    byte bColType = columnProps.ColType;
                     PersonColumnType colType = (PersonColumnType)bColType;
-                    int colWidth = columns[i].ColWidth;
 
                     if (colType == PersonColumnType.pctName) {
                         const bool asz = false;
@@ -616,12 +612,12 @@ namespace GKCore.Lists
                                 break;
 
                             case NameFormat.nfFNP:
-                                this.AddListColumn(listView, LangMan.LS(LSID.LSID_FullName), colWidth, asz, bColType, 0);
+                                this.AddListColumn(listView, LangMan.LS(LSID.LSID_FullName), columnProps.ColWidth, asz, bColType, 0);
                                 break;
                         }
                     } else {
                         string colName = LangMan.LS(columns.ColumnStatics[bColType].ColName);
-                        this.AddListColumn(listView, colName, colWidth, false, bColType, 0);
+                        this.AddListColumn(listView, colName, columnProps.ColWidth, false, bColType, 0);
                     }
                 }
             }

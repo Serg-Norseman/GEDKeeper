@@ -254,6 +254,8 @@ namespace GKCommon.GEDCOM
 
         public GEDCOMRecord XRefIndex_Find(string xref)
         {
+            if (string.IsNullOrEmpty(xref)) return null;
+
             GEDCOMCustomRecord record;
             if (this.fXRefIndex.TryGetValue(xref, out record)) {
                 return (record as GEDCOMRecord);

@@ -92,9 +92,8 @@ namespace GKCore.Lists
 
         protected void AddListColumn(IListView list, string caption, int width, bool autoSize, byte colType, byte colSubtype)
         {
-            if (list == null) {
+            if (list == null)
                 throw new ArgumentNullException("list");
-            }
 
             list.AddListColumn(caption, width, autoSize);
             this.fColumnsMap.Add(new MapColumnRec(colType, colSubtype));
@@ -233,9 +232,7 @@ namespace GKCore.Lists
         // used only in UpdateItem
         private static string ConvertColumnValue(object val, ColumnStatic cs)
         {
-            if (val == null) {
-                return string.Empty;
-            }
+            if (val == null) return string.Empty;
 
             switch (cs.DataType) {
                 case DataType.dtString:

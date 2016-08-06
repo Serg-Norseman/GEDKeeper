@@ -120,9 +120,7 @@ namespace GKCommon
         public StringList(string[] list) : this()
         {
             if (list == null)
-            {
                 throw new ArgumentNullException("list");
-            }
 
             for (int i = 0; i < list.Length; i++)
             {
@@ -135,6 +133,12 @@ namespace GKCommon
             if (disposing)
             {
                 //this.fList = null;
+                /*int num = this.fList.Count;
+                for (int i = 0; i < num; i++)
+                {
+                    IDisposable inst = this.fList[i].FObject as IDisposable;
+                    if (inst != null) inst.Dispose();
+                }*/
             }
             base.Dispose(disposing);
         }

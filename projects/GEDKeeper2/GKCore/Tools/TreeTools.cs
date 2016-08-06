@@ -38,18 +38,6 @@ namespace GKCore.Tools
     /// </summary>
     public static class TreeTools
     {
-        public static void CollectEventValues(GEDCOMCustomEvent evt, ValuesCollection valuesCollection)
-        {
-            if (evt == null || valuesCollection == null) return;
-
-            string evName = evt.Name;
-            string evVal = evt.StringValue;
-            
-            if (string.IsNullOrEmpty(evName) || string.IsNullOrEmpty(evVal)) return;
-            
-            valuesCollection.Add(evName, evVal, true);
-        }
-        
         #region Patriarchs Search
 
         private static bool PL_SearchAnc(GEDCOMIndividualRecord descendant, GEDCOMIndividualRecord searchRec, bool onlyMaleLine)
@@ -147,9 +135,8 @@ namespace GKCore.Tools
 
         public static void GenPatriarchsGraphviz(IBaseWindow aBase, string outpath, int minGens, bool loneSuppress = true)
         {
-            if (aBase == null) {
+            if (aBase == null)
                 throw new ArgumentNullException("aBase");
-            }
 
             string[] options = { "ratio=auto" };
             GraphvizWriter gvw = new GraphvizWriter("Family Tree", options);
@@ -314,14 +301,6 @@ namespace GKCore.Tools
             }
         }
 
-        // TODO: move to SDK
-        private static void AddUserRef(GEDCOMTree tree, GEDCOMRecord record, string reference)
-        {
-            GEDCOMUserReference uRef = new GEDCOMUserReference(tree, record, "", "");
-            uRef.StringValue = reference;
-            record.UserReferences.Add(uRef);
-        }
-
         private static void CheckRecord_AttrCompatible(GEDCOMTree tree, GEDCOMFormat format, GEDCOMIndividualRecord iRec, GEDCOMCustomEvent aEvent)
         {
         }
@@ -329,7 +308,7 @@ namespace GKCore.Tools
         private static void CheckRecord_URefCompatible(GEDCOMIndividualRecord iRec, GEDCOMUserReference userRef)
         {
         }
-        
+
         private static void CheckRecord_Individual(GEDCOMTree tree, GEDCOMFormat format, GEDCOMIndividualRecord iRec, ValuesCollection valuesCollection)
         {
             if (format == GEDCOMFormat.gf_Native)
@@ -338,11 +317,12 @@ namespace GKCore.Tools
                 for (int i = 0; i < num; i++)
                 {
                     GEDCOMCustomEvent evt = iRec.Events[i];
+
                     CheckRecord_EventPlace(evt);
                     CheckRecord_AttrCompatible(tree, format, iRec, evt);
                     CheckRecord_RepairTag(tree, format, evt.Detail);
-                    
-                    CollectEventValues(evt, valuesCollection);
+
+                    GKUtils.CollectEventValues(evt, valuesCollection);
                 }
 
                 int num2 = iRec.UserReferences.Count;
@@ -508,25 +488,6 @@ namespace GKCore.Tools
             }
         }
 
-        public static void CheckHeader(GEDCOMTree tree, GEDCOMFormat format)
-        {
-            if (tree == null) {
-                throw new ArgumentNullException("tree");
-            }
-
-            if (format == GEDCOMFormat.gf_Native)
-            {
-                GEDCOMHeader header = tree.Header;
-                GEDCOMTag tag;
-
-                tag = header.FindTag("_ADVANCED", 0);
-                if (tag != null) header.DeleteTag("_ADVANCED");
-
-                tag = header.FindTag("_EXT_NAME", 0);
-                if (tag != null) header.DeleteTag("_EXT_NAME");
-            }
-        }
-
         private static void CorrectIds(GEDCOMTree tree, IProgressController pc)
         {
             pc.ProgressInit(LangMan.LS(LSID.LSID_IDsCorrect), tree.RecordsCount);
@@ -566,17 +527,14 @@ namespace GKCore.Tools
 
         public static bool CheckGEDCOMFormat(GEDCOMTree tree, ValuesCollection valuesCollection, IProgressController pc)
         {
-            if (tree == null) {
+            if (tree == null)
                 throw new ArgumentNullException("tree");
-            }
 
-            if (valuesCollection == null) {
+            if (valuesCollection == null)
                 throw new ArgumentNullException("valuesCollection");
-            }
 
-            if (pc == null) {
+            if (pc == null)
                 throw new ArgumentNullException("pc");
-            }
 
             bool result = false;
 
@@ -588,7 +546,20 @@ namespace GKCore.Tools
                     GEDCOMFormat format = tree.GetGEDCOMFormat();
                     bool idCheck = true;
 
-                    CheckHeader(tree, format);
+
+                    // remove a deprecated features
+                    if (format == GEDCOMFormat.gf_Native)
+                    {
+                        GEDCOMHeader header = tree.Header;
+                        GEDCOMTag tag;
+
+                        tag = header.FindTag("_ADVANCED", 0);
+                        if (tag != null) header.DeleteTag("_ADVANCED");
+
+                        tag = header.FindTag("_EXT_NAME", 0);
+                        if (tag != null) header.DeleteTag("_EXT_NAME");
+                    }
+
 
                     int num = tree.RecordsCount;
                     for (int i = 0; i < num; i++)
@@ -641,13 +612,11 @@ namespace GKCore.Tools
 
         public static void TreeWalk(GEDCOMIndividualRecord iRec, TreeWalkMode mode, List<GEDCOMRecord> walkList)
         {
-            if (iRec == null) {
+            if (iRec == null)
                 throw new ArgumentNullException("iRec");
-            }
 
-            if (walkList == null) {
+            if (walkList == null)
                 throw new ArgumentNullException("walkList");
-            }
 
             TreeWalkInt(iRec, mode, walkList);
         }
@@ -713,13 +682,11 @@ namespace GKCore.Tools
 
         public static void TreeMerge(GEDCOMTree mainTree, string fileName, TextBox logBox)
         {
-            if (mainTree == null) {
+            if (mainTree == null)
                 throw new ArgumentNullException("mainTree");
-            }
 
-            if (logBox == null) {
+            if (logBox == null)
                 throw new ArgumentNullException("logBox");
-            }
 
             logBox.Clear();
             logBox.AppendText(string.Format(LangMan.LS(LSID.LSID_MainBaseSize), mainTree.RecordsCount.ToString()) + "\r\n");
@@ -878,13 +845,11 @@ namespace GKCore.Tools
 
         public static void CheckBase(IBaseWindow aBase, List<CheckObj> checksList)
         {
-            if (aBase == null) {
+            if (aBase == null)
                 throw new ArgumentNullException("aBase");
-            }
 
-            if (checksList == null) {
+            if (checksList == null)
                 throw new ArgumentNullException("checksList");
-            }
 
             try
             {
@@ -918,13 +883,11 @@ namespace GKCore.Tools
 
         public static void RepairProblem(IBaseWindow aBase, CheckObj checkObj)
         {
-            if (aBase == null) {
+            if (aBase == null)
                 throw new ArgumentNullException("aBase");
-            }
 
-            if (checkObj == null) {
+            if (checkObj == null)
                 throw new ArgumentNullException("checkObj");
-            }
 
             GEDCOMTree tree = aBase.Tree;
             GEDCOMIndividualRecord iRec;
@@ -1098,9 +1061,8 @@ namespace GKCore.Tools
 
         public static void CheckRelations(List<GEDCOMRecord> splitList)
         {
-            if (splitList == null) {
+            if (splitList == null)
                 throw new ArgumentNullException("splitList");
-            }
 
             int num = splitList.Count;
             for (int i = 0; i < num; i++)
@@ -1159,13 +1121,11 @@ namespace GKCore.Tools
 
         public static List<ULIndividual> GetUnlinkedNamesakes(GEDCOMTree tree, IProgressController pc)
         {
-            if (tree == null) {
+            if (tree == null)
                 throw new ArgumentNullException("tree");
-            }
 
-            if (pc == null) {
+            if (pc == null)
                 throw new ArgumentNullException("pc");
-            }
 
             List<ULIndividual> result = new List<ULIndividual>();
 
@@ -1254,21 +1214,17 @@ namespace GKCore.Tools
         public static void FindDuplicates(GEDCOMTree treeA, GEDCOMTree treeB, float matchThreshold,
                                           DuplicateFoundFunc foundFunc, IProgressController pc)
         {
-            if (treeA == null) {
+            if (treeA == null)
                 throw new ArgumentNullException("treeA");
-            }
 
-            if (treeB == null) {
+            if (treeB == null)
                 throw new ArgumentNullException("treeB");
-            }
 
-            if (foundFunc == null) {
+            if (foundFunc == null)
                 throw new ArgumentNullException("foundFunc");
-            }
 
-            if (pc == null) {
+            if (pc == null)
                 throw new ArgumentNullException("pc");
-            }
 
             MatchParams mParams;
             //mParams.IndistinctMatching = true;
@@ -1309,13 +1265,11 @@ namespace GKCore.Tools
 
         public static void TreeCompare(GEDCOMTree mainTree, string fileName, TextBox logBox)
         {
-            if (mainTree == null) {
+            if (mainTree == null)
                 throw new ArgumentNullException("mainTree");
-            }
 
-            if (logBox == null) {
+            if (logBox == null)
                 throw new ArgumentNullException("logBox");
-            }
 
             GEDCOMTree tempTree = new GEDCOMTree();
             tempTree.LoadFromFile(fileName);
@@ -1441,9 +1395,8 @@ namespace GKCore.Tools
 
         public static void PlacesSearch_Clear(StringList placesList)
         {
-            if (placesList == null) {
+            if (placesList == null)
                 throw new ArgumentNullException("placesList");
-            }
 
             for (int i = placesList.Count - 1; i >= 0; i--) ((PlaceObj)placesList.GetObject(i)).Dispose();
             placesList.Clear();
@@ -1474,17 +1427,14 @@ namespace GKCore.Tools
 
         public static void PlacesSearch(GEDCOMTree tree, StringList placesList, IProgressController pc)
         {
-            if (tree == null) {
+            if (tree == null)
                 throw new ArgumentNullException("tree");
-            }
 
-            if (placesList == null) {
+            if (placesList == null)
                 throw new ArgumentNullException("placesList");
-            }
 
-            if (pc == null) {
+            if (pc == null)
                 throw new ArgumentNullException("pc");
-            }
 
             PlacesSearch_Clear(placesList);
 

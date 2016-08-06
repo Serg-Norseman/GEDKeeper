@@ -51,7 +51,6 @@ namespace GKUI
         /*private readonly ExtList<GEDCOMRecord> fLockedRecords;*/
 
         private readonly NavigationStack fNavman;
-        private readonly ValuesCollection fValuesCollection;
         private readonly IBaseContext fContext;
 
         private bool fModified;
@@ -101,12 +100,6 @@ namespace GKUI
             get { return this.fNavman; }
         }
 
-        public ValuesCollection ValuesCollection
-        {
-            get {
-                return this.fValuesCollection;
-            }
-        }
 
         public bool Modified
         {
@@ -157,7 +150,6 @@ namespace GKUI
             this.fContext = new BaseContext(this.fTree, this);
 
             this.fNavman = new NavigationStack();
-            this.fValuesCollection = new ValuesCollection();
 
             this.CreatePage(LangMan.LS(LSID.LSID_RPIndividuals), GEDCOMRecordType.rtIndividual, out this.ListPersons, out this.mPersonSummary);
             this.CreatePage(LangMan.LS(LSID.LSID_RPFamilies), GEDCOMRecordType.rtFamily, out this.ListFamilies, out this.mFamilySummary);
@@ -548,7 +540,7 @@ namespace GKUI
                     this.ProgressDone();
                 }
 
-                TreeTools.CheckGEDCOMFormat(this.fTree, this.fValuesCollection, this);
+                TreeTools.CheckGEDCOMFormat(this.fTree, this.fContext.ValuesCollection, this);
                 this.Modified = false;
             }
             catch (Exception ex)
@@ -1060,9 +1052,8 @@ namespace GKUI
 
         public void CheckPersonSex(GEDCOMIndividualRecord iRec)
         {
-            if (iRec == null) {
+            if (iRec == null)
                 throw new ArgumentNullException("iRec");
-            }
 
             try {
                 this.fContext.BeginUpdate();
@@ -1679,11 +1670,6 @@ namespace GKUI
         #endregion
 
         #region Modify routines
-
-        public void CollectEventValues(GEDCOMCustomEvent evt)
-        {
-            TreeTools.CollectEventValues(evt, this.fValuesCollection);
-        }
 
         public bool ModifyMedia(ref GEDCOMMultimediaRecord mediaRec)
         {

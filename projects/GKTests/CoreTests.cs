@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -34,6 +35,7 @@ using GKCore.Options;
 using GKCore.Stats;
 using GKCore.Tools;
 using GKCore.Types;
+using GKTests.Mocks;
 using GKUI.Charts;
 using GKUI.Controls;
 using NUnit.Framework;
@@ -68,6 +70,8 @@ namespace GKTests
             StringList sources = new StringList();
             fContext.GetSourcesList(sources);
             Assert.AreEqual(1, sources.Count);
+
+            Assert.IsNotNull(fContext.ValuesCollection);
 
             GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
             Assert.IsNotNull(iRec);
@@ -334,7 +338,7 @@ namespace GKTests
             Assert.AreEqual("1990.12.28", st2);
 
             evt.Detail.Cause = "test cause";
-            st2 = GKUtils.GetEventCause(evt.Detail);
+            st2 = GKUtils.GetEventCause(evt);
             Assert.AreEqual("test cause", st2);
 
             //
@@ -464,22 +468,6 @@ namespace GKTests
 
             //
 
-        }
-
-        private class WorkWindowMock : IWorkWindow
-        {
-            public string GetStatusString() { return ""; }
-            public void UpdateView() {}
-            public bool NavCanBackward() { return false; }
-            public bool NavCanForward() { return false; }
-            public void NavNext() {}
-            public void NavPrev() {}
-            public bool AllowQuickFind() { return false; }
-            public IList<ISearchResult> FindAll(string searchPattern) { return new List<ISearchResult>(); }
-            public void QuickFind() {}
-            public void SelectByRec(GEDCOMIndividualRecord iRec) {}
-            public bool AllowFilter() { return false; }
-            public void SetFilter() {}
         }
 
         [Test]
@@ -1085,27 +1073,68 @@ namespace GKTests
             placeObj.Dispose();
             Assert.IsNotNull(placeObj);
 
+
             GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
             Assert.IsNotNull(iRec);
+
 
             List<GEDCOMRecord> walkList = new List<GEDCOMRecord>();
             TreeTools.TreeWalk(iRec, TreeTools.TreeWalkMode.twmAll, walkList);
             Assert.AreEqual(3, walkList.Count, "TreeTools.TreeWalk(twmAll)"); // 3 linked from 4 total
 
-            //ValuesCollection valuesCollection = new ValuesCollection();
-            //ProgressMock progress = new ProgressMock();
-            //TreeTools.CheckGEDCOMFormat(fContext.Tree, valuesCollection, progress);
 
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.TreeWalk(null, TreeTools.TreeWalkMode.twmAll, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.TreeWalk(iRec, TreeTools.TreeWalkMode.twmAll, null); });
-        }
 
-        private class ProgressMock : IProgressController
-        {
-            public void ProgressInit(string title, int max) {}
-            public void ProgressDone() {}
-            public void ProgressStep() {}
-            public void ProgressStep(int value) {}
+            List<TreeTools.CheckObj> checksList = new List<TreeTools.CheckObj>();
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckBase(null, checksList); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckBase(new BaseWindowMock(null), null); });
+
+            TreeTools.CheckBase(new BaseWindowMock(fContext.Tree), checksList);
+
+
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.GenPatriarchsGraphviz(null, "", 0, false); });
+
+
+            ValuesCollection valuesCollection = new ValuesCollection();
+            ProgressMock progress = new ProgressMock();
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckGEDCOMFormat(null, null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckGEDCOMFormat(fContext.Tree, null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckGEDCOMFormat(fContext.Tree, valuesCollection, null); });
+            //TreeTools.CheckGEDCOMFormat(fContext.Tree, valuesCollection, progress);
+
+
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.TreeMerge(null, null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.TreeMerge(fContext.Tree, null, null); });
+
+
+            BaseWindowMock basewin = new BaseWindowMock(null);
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.RepairProblem(null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.RepairProblem(basewin, null); });
+
+
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckRelations(null); });
+
+
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.GetUnlinkedNamesakes(null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.GetUnlinkedNamesakes(fContext.Tree, null); });
+
+
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.FindDuplicates(null, null, 0.0f, null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.FindDuplicates(fContext.Tree, null, 0.0f, null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.FindDuplicates(null, fContext.Tree, 0.0f, null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.FindDuplicates(fContext.Tree, fContext.Tree, 0.0f, null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.FindDuplicates(fContext.Tree, fContext.Tree, 0.0f, null, progress); });
+
+
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.TreeCompare(null, null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.TreeCompare(fContext.Tree, null, null); });
+
+
+            StringList placesList = new StringList();
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.PlacesSearch(null, null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.PlacesSearch(fContext.Tree, null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.PlacesSearch(fContext.Tree, placesList, null); });
         }
 
         [Test]

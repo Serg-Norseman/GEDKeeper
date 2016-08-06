@@ -87,7 +87,7 @@ namespace GKUI.Sheets
                         item.AddSubItem(evt.Detail.Place.StringValue);
                     }
 
-                    item.AddSubItem(GKUtils.GetEventCause(evt.Detail));
+                    item.AddSubItem(GKUtils.GetEventCause(evt));
                 }
 
                 this.ResizeColumn(1);
@@ -166,7 +166,7 @@ namespace GKUI.Sheets
 
                                 aEvent = newEvent;
 
-                                aBase.CollectEventValues(aEvent);
+                                aBase.Context.CollectEventValues(aEvent);
 
                                 result = true;
                             }

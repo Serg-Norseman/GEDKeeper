@@ -416,6 +416,13 @@ namespace GKCommon.GEDCOM
             return mmLink;
         }
 
+        public void AddUserRef(string reference)
+        {
+            GEDCOMUserReference uRef = new GEDCOMUserReference(this.Owner, this, "", "");
+            uRef.StringValue = reference;
+            this.UserReferences.Add(uRef);
+        }
+
         #endregion
     }
 }

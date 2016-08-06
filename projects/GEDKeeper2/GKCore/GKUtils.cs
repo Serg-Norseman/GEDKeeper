@@ -484,6 +484,18 @@ namespace GKCore
 
         #region Event Utils
         
+        public static void CollectEventValues(GEDCOMCustomEvent evt, ValuesCollection valuesCollection)
+        {
+            if (evt == null || valuesCollection == null) return;
+
+            string evName = evt.Name;
+            string evVal = evt.StringValue;
+
+            if (string.IsNullOrEmpty(evName) || string.IsNullOrEmpty(evVal)) return;
+
+            valuesCollection.Add(evName, evVal, true);
+        }
+
         public static string GetAttributeValue(GEDCOMIndividualRecord iRec, string attrName)
         {
             if (iRec == null) return string.Empty;
@@ -642,17 +654,13 @@ namespace GKCore
             return result;
         }
 
-        public static string GetEventCause(GEDCOMEventDetail eventDetail)
+        public static string GetEventCause(GEDCOMCustomEvent evt)
         {
-            if (eventDetail == null)
-                throw new ArgumentNullException("eventDetail");
+            if (evt == null)
+                throw new ArgumentNullException("evt");
 
-            string result = "";
-
-            if (eventDetail.Cause != "")
-            {
-                result += eventDetail.Cause;
-            }
+            GEDCOMEventDetail eventDetail = evt.Detail;
+            string result = eventDetail.Cause;
 
             if (eventDetail.Agency != "")
             {
@@ -690,9 +698,7 @@ namespace GKCore
         public static string GetDateFmtString(GEDCOMDate date, DateFormat format, bool includeBC = false, bool showCalendar = false)
         {
             if (date == null)
-            {
                 throw new ArgumentNullException("date");
-            }
 
             string result = "";
             int year;
@@ -883,9 +889,7 @@ namespace GKCore
         public static string GetPedigreeLifeStr(GEDCOMIndividualRecord iRec, PedigreeFormat fmt)
         {
             if (iRec == null)
-            {
                 throw new ArgumentNullException("iRec");
-            }
 
             string resStr = "";
 
@@ -1125,20 +1129,12 @@ namespace GKCore
 
         public static string GetBirthPlace(GEDCOMIndividualRecord iRec)
         {
-            if (iRec == null) return string.Empty;
-
-            GEDCOMCustomEvent evt = iRec.FindEvent("BIRT");
-            string result = ((evt == null) ? "" : evt.Detail.Place.StringValue);
-            return result;
+            return (iRec == null) ? string.Empty : GetPlaceStr(iRec.FindEvent("BIRT"), false);
         }
 
         public static string GetDeathPlace(GEDCOMIndividualRecord iRec)
         {
-            if (iRec == null) return string.Empty;
-
-            GEDCOMCustomEvent evt = iRec.FindEvent("DEAT");
-            string result = ((evt == null) ? "" : evt.Detail.Place.StringValue);
-            return result;
+            return (iRec == null) ? string.Empty : GetPlaceStr(iRec.FindEvent("DEAT"), false);
         }
 
         public static string GetResidencePlace(GEDCOMIndividualRecord iRec, bool includeAddress)
@@ -1146,31 +1142,27 @@ namespace GKCore
             return (iRec == null) ? string.Empty : GetPlaceStr(iRec.FindEvent("RESI"), includeAddress);
         }
 
-        public static string GetPlaceStr(GEDCOMCustomEvent aEvent, bool includeAddress)
+        public static string GetPlaceStr(GEDCOMCustomEvent evt, bool includeAddress)
         {
-            string result;
-            if (aEvent == null)
+            if (evt == null) return string.Empty;
+
+            string result = evt.Detail.Place.StringValue;
+
+            if (includeAddress)
             {
-                result = "";
-            }
-            else
-            {
-                result = aEvent.Detail.Place.StringValue;
-                if (includeAddress)
+                string resi = evt.StringValue;
+                string addr = evt.Detail.Address.Address.Text.Trim();
+                if (resi != "" && addr != "")
                 {
-                    string resi = aEvent.StringValue;
-                    string addr = aEvent.Detail.Address.Address.Text.Trim();
-                    if (resi != "" && addr != "")
-                    {
-                        resi += ", ";
-                    }
-                    resi += addr;
-                    if (resi != "")
-                    {
-                        result = result + " [" + resi + "]";
-                    }
+                    resi += ", ";
+                }
+                resi += addr;
+                if (resi != "")
+                {
+                    result = result + " [" + resi + "]";
                 }
             }
+
             return result;
         }
 
@@ -1716,9 +1708,9 @@ namespace GKCore
             }
         }
 
-        public static void ShowDetailCause(GEDCOMEventDetail eventDetail, StringList summary)
+        public static void ShowDetailCause(GEDCOMCustomEvent evt, StringList summary)
         {
-            string cause = GetEventCause(eventDetail);
+            string cause = GetEventCause(evt);
             if (summary != null && cause != "")
             {
                 summary.Add("    " + cause);
@@ -2075,7 +2067,7 @@ namespace GKCore
                         }
                         summary.Add(st + ": " + sv + GetEventDesc(evt));
 
-                        ShowDetailCause(evt.Detail, summary);
+                        ShowDetailCause(evt, summary);
                         ShowAddressSummary(evt.Detail.Address, summary);
                         ShowDetailInfo(evt.Detail, summary);
                     }
@@ -2106,7 +2098,7 @@ namespace GKCore
                         string st = GetEventName(evt);
                         summary.Add(st + ": " + GetEventDesc(evt));
 
-                        ShowDetailCause(evt.Detail, summary);
+                        ShowDetailCause(evt, summary);
                         ShowDetailInfo(evt.Detail, summary);
                     }
                 }

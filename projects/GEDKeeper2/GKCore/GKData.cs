@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Drawing;
 using GKCore.Types;
 
 namespace GKCore
@@ -42,6 +43,14 @@ namespace GKCore
         public const string GEDCOM_SEC_EXT = "geds";
         public const string LUA_EXT = "lua";
 
+        #if __MonoCS__
+        public static readonly Color HighlightUnparentedColor = Color.FromArgb(unchecked((int)0xFFFFCACA));
+        public static readonly Color HighlightUnmarriedColor = Color.FromArgb(unchecked((int)0xFFFFFFA1));
+        #else
+        public static readonly Color HighlightUnparentedColor = Color.FromArgb(0xFFCACA);
+        public static readonly Color HighlightUnmarriedColor = Color.FromArgb(0xFFFFA1);
+        #endif
+
         public struct SexStruct
         {
             public LSID NameId;
@@ -57,7 +66,7 @@ namespace GKCore
         {
             public LSID Name;
             public string StatSign;
-            
+
             public MarStatusStruct(LSID name, string sign) {
                 this.Name = name;
                 this.StatSign = sign;
@@ -69,7 +78,7 @@ namespace GKCore
             public LSID Name;
             public string Sign;
             public PersonEventKind Kind;
-            
+
             public PersonEventStruct(LSID name, string sign, PersonEventKind kind) {
                 this.Name = name;
                 this.Sign = sign;
@@ -81,7 +90,7 @@ namespace GKCore
         {
             public LSID Name;
             public byte Dates;
-            
+
             public DateKindStruct(LSID name, byte dates) {
                 this.Name = name;
                 this.Dates = dates;
@@ -92,7 +101,7 @@ namespace GKCore
         {
             public LSID Name;
             public string Sign;
-            
+
             public FamilyEventStruct(LSID name, string sign) {
                 this.Name = name;
                 this.Sign = sign;
@@ -103,7 +112,7 @@ namespace GKCore
         {
             public LSID Name;
             public string Sign;
-            
+
             public StoreTypeRec(LSID name, string sign) {
                 this.Name = name;
                 this.Sign = sign;

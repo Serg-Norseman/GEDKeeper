@@ -433,7 +433,7 @@ namespace GKUI.Dialogs
                 evName = GKData.PersonEvents[id].Sign;
             }
 
-            string[] vals = this.fBase.ValuesCollection.GetValues(evName);
+            string[] vals = this.fBase.Context.ValuesCollection.GetValues(evName);
             if (vals != null) {
                 string tmp = this.txtAttribute.Text;
                 this.txtAttribute.Sorted = false;
