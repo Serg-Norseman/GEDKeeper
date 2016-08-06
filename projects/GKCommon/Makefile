@@ -113,6 +113,7 @@ sources := \
 ./GEDCOM/GEDCOMUtils.cs \
 ./GEDCOM/MatchParams.cs \
 ./GEDCOM/XRefReplacer.cs \
+./GEDCOM/Extensions/GEDCOMCutoutPosition.cs \
 ./GKCommon/BaseObject.cs \
 ./GKCommon/CRC32.cs \
 ./GKCommon/CalendarConverter.cs \
@@ -288,6 +289,7 @@ sources := \
 ./GEDCOM/GEDCOMUtils.cs \
 ./GEDCOM/MatchParams.cs \
 ./GEDCOM/XRefReplacer.cs \
+./GEDCOM/Extensions/GEDCOMCutoutPosition.cs \
 ./GKCommon/BaseObject.cs \
 ./GKCommon/CRC32.cs \
 ./GKCommon/CalendarConverter.cs \

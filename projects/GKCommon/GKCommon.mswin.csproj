@@ -193,6 +193,7 @@
     <Compile Include="GEDCOM\GEDCOMUserReference.cs" />
     <Compile Include="GEDCOM\MatchParams.cs" />
     <Compile Include="GEDCOM\XRefReplacer.cs" />
+    <Compile Include="GEDCOM\Extensions\GEDCOMCutoutPosition.cs" />
     <Compile Include="Externals\MapiMailMessage.cs" />
     <Compile Include="GKCommon\ConvHelper.cs" />
     <Compile Include="GKCommon\CRC32.cs" />
@@ -276,6 +277,8 @@
       <DependentUpon>SlideList.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="GEDCOM\Extensions" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

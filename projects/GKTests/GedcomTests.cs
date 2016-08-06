@@ -2381,6 +2381,41 @@ namespace GKTests
             using (GEDCOMMultimediaLink mmLink = GEDCOMMultimediaLink.Create(null, null, "", "") as GEDCOMMultimediaLink) {
                 Assert.IsNotNull(mmLink);
                 Assert.IsTrue(mmLink.IsEmpty());
+
+
+                // extensions
+                Assert.IsFalse(mmLink.IsPrimaryCutout);
+                mmLink.IsPrimaryCutout = true;
+                Assert.IsTrue(mmLink.IsPrimaryCutout);
+
+                mmLink.CutoutPosition.Value = ExtRect.Create(10, 15, 500, 600);
+                ExtRect rt = mmLink.CutoutPosition.Value;
+                Assert.AreEqual(10, rt.Left);
+                Assert.AreEqual(15, rt.Top);
+                Assert.AreEqual(500, rt.Right);
+                Assert.AreEqual(600, rt.Bottom);
+
+                Assert.AreEqual(10, mmLink.CutoutPosition.X1);
+                Assert.AreEqual(15, mmLink.CutoutPosition.Y1);
+                Assert.AreEqual(500, mmLink.CutoutPosition.X2);
+                Assert.AreEqual(600, mmLink.CutoutPosition.Y2);
+
+                mmLink.CutoutPosition.X1 = 10;
+                mmLink.CutoutPosition.Y1 = 10;
+                mmLink.CutoutPosition.X2 = 300;
+                mmLink.CutoutPosition.Y2 = 400;
+                Assert.AreEqual(10, mmLink.CutoutPosition.X1);
+                Assert.AreEqual(10, mmLink.CutoutPosition.Y1);
+                Assert.AreEqual(300, mmLink.CutoutPosition.X2);
+                Assert.AreEqual(400, mmLink.CutoutPosition.Y2);
+
+                mmLink.CutoutPosition.ParseString("11 15 576 611");
+                Assert.IsFalse(mmLink.CutoutPosition.IsEmpty());
+                Assert.AreEqual("11 15 576 611", mmLink.CutoutPosition.StringValue);
+
+                mmLink.CutoutPosition.Clear();
+                Assert.IsTrue(mmLink.CutoutPosition.IsEmpty());
+                Assert.AreEqual("", mmLink.CutoutPosition.StringValue);
             }
         }
 

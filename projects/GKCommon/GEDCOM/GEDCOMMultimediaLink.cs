@@ -42,24 +42,33 @@ namespace GKCommon.GEDCOM
             set { base.SetTagStringValue("TITL", value); }
         }
 
+        /// <summary>
+        /// The _PRIM tag is often added by genealogy programs to signify that this picture is the PRIMary picture,
+        /// or the picture that should be used for charts.
+        /// See the following programs: PhpGedView, AQ3, PAF5, FO7.
+        /// </summary>
         public bool IsPrimary
         {
-            get {
-                GEDCOMTag tag = base.FindTag("_PRIM", 0);
-                return (tag != null) && (tag.StringValue == "Y");
-            }
-            set {
-                if (value) {
-                    GEDCOMTag tag = base.FindTag("_PRIM", 0);
-                    if (tag == null) {
-                        tag = this.AddTag("_PRIM", "", null);
-                    }
-                    tag.StringValue = "Y";
-                } else {
-                    base.DeleteTag("_PRIM");
-                }
-            }
+            get { return base.GetTagYNValue("_PRIM"); }
+            set { base.SetTagYNValue("_PRIM", value); }
         }
+
+        /// <summary>
+        /// It is acceptable to export information to sections of the referenced image files.
+        /// To export this information, the use of user-defined tags _PRIM_CUTOUT and _POSITION is agreed.
+        /// See the following programs: FTB.
+        /// </summary>
+        public bool IsPrimaryCutout
+        {
+            get { return base.GetTagYNValue("_PRIM_CUTOUT"); }
+            set { base.SetTagYNValue("_PRIM_CUTOUT", value); }
+        }
+
+        public GEDCOMCutoutPosition CutoutPosition
+        {
+            get { return base.TagClass("_POSITION", GEDCOMCutoutPosition.Create) as GEDCOMCutoutPosition; }
+        }
+
 
         protected override void CreateObj(GEDCOMTree owner, GEDCOMObject parent)
         {

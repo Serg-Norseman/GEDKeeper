@@ -512,6 +512,26 @@ namespace GKCommon.GEDCOM
             }
         }
 
+
+        public bool GetTagYNValue(string tagName)
+        {
+            GEDCOMTag tag = this.FindTag(tagName, 0);
+            return (tag != null) && (tag.StringValue == "Y");
+        }
+
+        public void SetTagYNValue(string tagName, bool value)
+        {
+            if (value) {
+                GEDCOMTag tag = this.FindTag(tagName, 0);
+                if (tag == null) {
+                    tag = this.AddTag(tagName, "", null);
+                }
+                tag.StringValue = "Y";
+            } else {
+                this.DeleteTag(tagName);
+            }
+        }
+
         #endregion
 
         #region Tree management
