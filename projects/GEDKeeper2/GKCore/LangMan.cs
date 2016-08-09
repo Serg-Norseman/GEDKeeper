@@ -782,8 +782,9 @@ namespace GKCore
         /* 718 */ LSID_IncludeGenerations,
         /* 719 */ LSID_HideEmptySegments,
         /* 720 */ LSID_DescendantsCircle,
+        /* 721 */ LSID_PortraitSelect,
 
-        /* 000 */ LSID_Last = LSID_DescendantsCircle
+        /* 000 */ LSID_Last = LSID_PortraitSelect
     }
 
     public static class LangMan
@@ -1535,7 +1536,8 @@ namespace GKCore
             /* 717 */ "минут",
             /* 718 */ "Включая номера поколений",
             /* 719 */ "Скрывать пустые сегменты",
-            /* 720 */ "Круг потомков"
+            /* 720 */ "Круг потомков",
+            /* 721 */ "Выбор портрета"
         };
 
         private static readonly string[] LSList = new string[(int)LSID.LSID_Last + 1];

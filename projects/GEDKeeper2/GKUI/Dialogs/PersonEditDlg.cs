@@ -850,12 +850,21 @@ namespace GKUI.Dialogs
             GEDCOMMultimediaRecord mmRec = fBase.SelectRecord(GEDCOMRecordType.rtMultimedia, null) as GEDCOMMultimediaRecord;
             if (mmRec == null) return;
 
+            // remove previous portrait link
             GEDCOMMultimediaLink mmLink = this.fPerson.GetPrimaryMultimediaLink();
-            if (mmLink != null)
-            {
+            if (mmLink != null) {
                 mmLink.IsPrimary = false;
             }
-            this.fPerson.SetPrimaryMultimediaLink(mmRec);
+
+            // set new portrait link
+            mmLink = this.fPerson.SetPrimaryMultimediaLink(mmRec);
+
+            // select portrait area
+            using (PortraitSelectDlg selectDlg = new PortraitSelectDlg(this.fBase)) {
+                selectDlg.MultimediaLink = mmLink;
+                selectDlg.ShowDialog();
+            }
+
             this.fMediaList.UpdateSheet();
             this.UpdatePortrait();
         }

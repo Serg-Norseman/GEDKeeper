@@ -95,7 +95,6 @@ namespace Externals.IniFiles
             //bool afterKey = false; bool beforeVal = false; bool beforeEvery = true; bool afterVal = false;
             //return IniFileSettings.DefaultValueFormatting;
             FEState pos = FEState.BeforeEvery;
-            string comChar;
             string insideWhiteChars = "";
 
             StringBuilder form = new StringBuilder();
@@ -119,7 +118,7 @@ namespace Externals.IniFiles
                     //afterKey = false; beforeVal = true;
                     form.Append('=');
                 }
-                else if ((comChar = IniFileSettings.OfAny(i, content, IniFileSettings.CommentChars)) != null) {
+                else if ((IniFileSettings.OfAny(i, content, IniFileSettings.CommentChars)) != null) {
                     form.Append(insideWhiteChars);
                     form.Append(';');
                 }

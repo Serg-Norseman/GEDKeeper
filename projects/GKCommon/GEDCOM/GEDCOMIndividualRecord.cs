@@ -843,7 +843,7 @@ namespace GKCommon.GEDCOM
             for (int i = 0; i < num; i++)
             {
                 GEDCOMMultimediaLink lnk = this.MultimediaLinks[i];
-                
+
                 if (lnk.Value == mediaRec) {
                     mmLink = lnk;
                     break;

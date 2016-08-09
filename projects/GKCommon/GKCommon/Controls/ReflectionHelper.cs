@@ -77,6 +77,9 @@ namespace GKCommon.Controls
 
         public static void RemoveControlStdEventHandlers(Control ctl, string privateEventObj)
         {
+            if (ctl == null)
+                throw new ArgumentNullException("ctl");
+
             FieldInfo f1 = FindFieldInfo(ctl.GetType(), privateEventObj);
             object obj = f1.GetValue(ctl);
             PropertyInfo pi = ctl.GetType().GetProperty("Events", BindingFlags.NonPublic | BindingFlags.Instance);

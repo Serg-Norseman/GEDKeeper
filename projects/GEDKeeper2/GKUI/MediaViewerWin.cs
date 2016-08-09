@@ -68,7 +68,7 @@ namespace GKUI
             {
                 case MultimediaKind.mkImage:
                     {
-                        Image img = this.fBase.Context.BitmapLoad(this.fFileRef, -1, -1, false);
+                        Image img = this.fBase.Context.LoadMediaImage(this.fFileRef, false);
                         this.fImageCtl = new ImageView();
                         this.fImageCtl.OpenImage(img);
                         ctl = this.fImageCtl;

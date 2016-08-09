@@ -173,11 +173,15 @@
     </Compile>
     <Compile Include="GKUI\Charts\ChartFilter.cs" />
     <Compile Include="GKCore\Kinships\KinshipsMan.cs" />
-    <Compile Include="GKUI\Charts\CircleChart.cs" />
+    <Compile Include="GKUI\Charts\CircleChart.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GKUI\Charts\CustomChart.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\Charts\DescendantsCircle.cs" />
+    <Compile Include="GKUI\Charts\DescendantsCircle.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GKUI\Charts\ITreeControl.cs" />
     <Compile Include="GKUI\Charts\PersonControl.cs" />
     <Compile Include="GKUI\Charts\PersonModifyEventArgs.cs" />
@@ -217,7 +221,9 @@
     <Compile Include="GKUI\Controls\SearchPanel.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\DescendantsCircleWin.cs" />
+    <Compile Include="GKUI\DescendantsCircleWin.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\DescendantsCircleWin.Designer.cs">
       <DependentUpon>DescendantsCircleWin.cs</DependentUpon>
     </Compile>
@@ -275,7 +281,9 @@
     <Compile Include="GKUI\Dialogs\GroupEditDlg.Designer.cs">
       <DependentUpon>GroupEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Dialogs\LanguageSelectDlg.cs" />
+    <Compile Include="GKUI\Dialogs\LanguageSelectDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GKUI\Dialogs\LanguageSelectDlg.Designer.cs">
       <DependentUpon>LanguageSelectDlg.cs</DependentUpon>
     </Compile>
@@ -332,6 +340,12 @@
     </Compile>
     <Compile Include="GKUI\Dialogs\PersonsFilterDlg.Designer.cs">
       <DependentUpon>PersonsFilterDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\PortraitSelectDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\PortraitSelectDlg.Designer.cs">
+      <DependentUpon>PortraitSelectDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\ProgressDlg.cs">
       <SubType>Form</SubType>
@@ -592,6 +606,9 @@
     <EmbeddedResource Include="GKUI\Dialogs\ResearchEditDlg.resx">
       <DependentUpon>ResearchEditDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\PortraitSelectDlg.resx">
+      <DependentUpon>PortraitSelectDlg.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\SexCheckDlg.resx">
       <DependentUpon>SexCheckDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -687,11 +704,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Externals" />
-    <Folder Include="Externals\SingleInstancing" />
-    <Folder Include="GKCore\Cultures" />
-    <Folder Include="GKCore\Operations" />
-    <Folder Include="Sandbox" />
+    <Folder Include="Sandbox\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

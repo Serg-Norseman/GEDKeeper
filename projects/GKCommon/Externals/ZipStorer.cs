@@ -376,6 +376,9 @@ namespace Externals
         /// <remarks>Unique compression methods are Store and Deflate</remarks>
         public bool ExtractFile(ZipFileEntry zfe, Stream stream)
         {
+            if (stream == null)
+                throw new ArgumentNullException("stream");
+
             if (!stream.CanWrite)
                 throw new InvalidOperationException("Stream cannot be written");
 

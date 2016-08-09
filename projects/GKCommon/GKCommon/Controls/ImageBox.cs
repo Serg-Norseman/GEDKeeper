@@ -1445,7 +1445,7 @@ namespace GKCommon.Controls
         /// </summary>
         /// <param name="g">The graphics. </param>
         /// <param name="viewPort"> The view port. </param>
-        protected virtual void DrawDropShadow(Graphics g, Rectangle viewPort)
+        private void DrawDropShadow(Graphics g, Rectangle viewPort)
         {
             Rectangle rightEdge;
             Rectangle bottomEdge;
@@ -1462,7 +1462,7 @@ namespace GKCommon.Controls
         /// </summary>
         /// <param name="g">The graphics.</param>
         /// <param name="viewPort">The view port.</param>
-        protected virtual void DrawGlowShadow(Graphics g, Rectangle viewPort)
+        private void DrawGlowShadow(Graphics g, Rectangle viewPort)
         {
             // Glow code adapted from http://www.codeproject.com/Articles/372743/gGlowBox-Create-a-glow-effect-around-a-focused-con
 
@@ -1489,7 +1489,7 @@ namespace GKCommon.Controls
         ///   Draws the image.
         /// </summary>
         /// <param name="g">The g.</param>
-        protected virtual void DrawImage(Graphics g)
+        private void DrawImage(Graphics g)
         {
             InterpolationMode currentInterpolationMode;
             PixelOffsetMode currentPixelOffsetMode;
@@ -1513,7 +1513,7 @@ namespace GKCommon.Controls
         ///   Draws a border around the image.
         /// </summary>
         /// <param name="graphics"> The graphics. </param>
-        protected virtual void DrawImageBorder(Graphics graphics)
+        private void DrawImageBorder(Graphics graphics)
         {
             if (this.ImageBorderStyle != ImageBoxBorderStyle.None)
             {
@@ -1547,7 +1547,7 @@ namespace GKCommon.Controls
         /// <param name="e">
         ///   The <see cref="System.Windows.Forms.PaintEventArgs" /> instance containing the event data.
         /// </param>
-        protected virtual void DrawSelection(PaintEventArgs e)
+        private void DrawSelection(PaintEventArgs e)
         {
             RectangleF rect;
 

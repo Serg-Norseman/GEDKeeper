@@ -174,6 +174,8 @@ sources := \
 ./GKUI/Dialogs/PersonNewDlg.Designer.cs \
 ./GKUI/Dialogs/PersonsFilterDlg.cs \
 ./GKUI/Dialogs/PersonsFilterDlg.Designer.cs \
+./GKUI/Dialogs/PortraitSelectDlg.cs \
+./GKUI/Dialogs/PortraitSelectDlg.Designer.cs \
 ./GKUI/Dialogs/ProgressDlg.cs \
 ./GKUI/Dialogs/ProgressDlg.Designer.cs \
 ./GKUI/Dialogs/RecordSelectDlg.cs \
@@ -365,6 +367,8 @@ sources := \
 ./GKUI/Dialogs/PersonNewDlg.Designer.cs \
 ./GKUI/Dialogs/PersonsFilterDlg.cs \
 ./GKUI/Dialogs/PersonsFilterDlg.Designer.cs \
+./GKUI/Dialogs/PortraitSelectDlg.cs \
+./GKUI/Dialogs/PortraitSelectDlg.Designer.cs \
 ./GKUI/Dialogs/ProgressDlg.cs \
 ./GKUI/Dialogs/ProgressDlg.Designer.cs \
 ./GKUI/Dialogs/RecordSelectDlg.cs \
@@ -456,6 +460,7 @@ PersonalNameEditDlg.resources \
 PersonEditDlg.resources \
 PersonNewDlg.resources \
 PersonsFilterDlg.resources \
+PortraitSelectDlg.resources \
 ProgressDlg.resources \
 RecordSelectDlg.resources \
 RepositoryEditDlg.resources \
@@ -510,6 +515,7 @@ PersonalNameEditDlg.resources \
 PersonEditDlg.resources \
 PersonNewDlg.resources \
 PersonsFilterDlg.resources \
+PortraitSelectDlg.resources \
 ProgressDlg.resources \
 RecordSelectDlg.resources \
 RepositoryEditDlg.resources \

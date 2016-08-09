@@ -20,6 +20,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
+using Externals;
 using Externals.CSV;
 using NUnit.Framework;
 
@@ -109,6 +111,22 @@ namespace GKTests
 //
 //		}
 
+
+        [Test]
+        public void ZipStorer_Tests()
+        {
+            using (MemoryStream stream = new MemoryStream()) {
+                using (ZipStorer zip = ZipStorer.Create(stream, "test")) {
+                    
+                }
+            }
+        }
+
+        [Test]
+        public void ListTimSort_Tests()
+        {
+            Assert.Throws(typeof(ArgumentNullException), () => { ListTimSort<int>.Sort(null, null); });
+        }
 
         [Test]
         public void CSV_Tests()

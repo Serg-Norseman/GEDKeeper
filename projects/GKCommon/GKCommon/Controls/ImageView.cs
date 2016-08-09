@@ -28,13 +28,22 @@ namespace GKCommon.Controls
     {
         public bool ShowToolbar
         {
-            get {
-                return this.toolStrip.Visible;
-            }
-            set {
-                this.toolStrip.Visible = value;
-            }
+            get { return this.toolStrip.Visible; }
+            set { this.toolStrip.Visible = value; }
         }
+
+        public ImageBoxSelectionMode SelectionMode
+        {
+            get { return imageBox.SelectionMode; }
+            set { imageBox.SelectionMode = value; }
+        }
+
+        public RectangleF SelectionRegion
+        {
+            get { return imageBox.SelectionRegion; }
+            set { imageBox.SelectionRegion = value; }
+        }
+
 
         public ImageView()
         {
@@ -44,7 +53,7 @@ namespace GKCommon.Controls
             imageBox.ImageBorderStyle = ImageBoxBorderStyle.FixedSingleGlowShadow;
             imageBox.ImageBorderColor = Color.AliceBlue;
             imageBox.SelectionMode = ImageBoxSelectionMode.Zoom;
-            //imageBox.InvertMouse = false;
+            imageBox.LimitSelectionToImage = true;
         }
 
         public void OpenImage(Image image)

@@ -171,7 +171,7 @@ namespace GKCommon.GEDCOM
             }
             catch (Exception ex)
             {
-                Logger.LogWrite("GEDCOMTag.InternalCreateTag(): " + ex.Message);
+                Logger.LogWrite("GEDCOMTag.AddTag(): " + ex.Message);
             }
             return tag;
         }

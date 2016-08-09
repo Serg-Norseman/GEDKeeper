@@ -325,6 +325,10 @@
     <Compile Include="GKUI\Dialogs\PersonsFilterDlg.Designer.cs">
       <DependentUpon>PersonsFilterDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Dialogs\PortraitSelectDlg.cs" />
+    <Compile Include="GKUI\Dialogs\PortraitSelectDlg.Designer.cs">
+      <DependentUpon>PortraitSelectDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Dialogs\ProgressDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -606,6 +610,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\ResearchEditDlg.resx">
       <DependentUpon>ResearchEditDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\PortraitSelectDlg.resx">
+      <DependentUpon>PortraitSelectDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\SexCheckDlg.resx">
       <DependentUpon>SexCheckDlg.cs</DependentUpon>

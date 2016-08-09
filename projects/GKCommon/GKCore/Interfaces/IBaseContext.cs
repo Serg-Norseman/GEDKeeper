@@ -64,7 +64,11 @@ namespace GKCore.Interfaces
         void MediaLoad(GEDCOMFileReference fileReference, out Stream stream, bool throwException);
         void MediaLoad(GEDCOMFileReference fileReference, ref string fileName);
         bool MediaSave(GEDCOMFileReference fileReference, string fileName, MediaStoreType storeType);
-        Bitmap BitmapLoad(GEDCOMFileReference fileReference, int thumbWidth, int thumbHeight, bool throwException);
+
+        // Used only in MediaViewer and Slideshow
+        Bitmap LoadMediaImage(GEDCOMFileReference fileReference, bool throwException);
+        Bitmap LoadMediaImage(GEDCOMFileReference fileReference, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool throwException);
+        // Used in FamilyBookExporter, TreeChart and PersonEdit
         Bitmap GetPrimaryBitmap(GEDCOMIndividualRecord iRec, int thumbWidth, int thumbHeight, bool throwException);
 
         bool IsUpdated();

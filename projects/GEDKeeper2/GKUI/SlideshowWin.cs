@@ -135,7 +135,7 @@ namespace GKUI
                 case GEDCOMMultimediaFormat.mfTGA:
                 case GEDCOMMultimediaFormat.mfPNG:
                     {
-                        Image img = this.fBase.Context.BitmapLoad(fileRef, -1, -1, false);
+                        Image img = this.fBase.Context.LoadMediaImage(fileRef, false);
                         this.fImageCtl.Image = img;
                         this.fImageCtl.ZoomToFit();
                         break;

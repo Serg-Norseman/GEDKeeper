@@ -874,7 +874,7 @@ namespace GKCore
             return result;
         }
 
-        public Bitmap BitmapLoad(GEDCOMFileReference fileReference, int thumbWidth, int thumbHeight, bool throwException)
+        public Bitmap LoadMediaImage(GEDCOMFileReference fileReference, bool throwException)
         {
             if (fileReference == null) return null;
 
@@ -890,8 +890,44 @@ namespace GKCore
                     if (stm.Length != 0) {
                         using (Bitmap bmp = new Bitmap(stm))
                         {
-                            int imgWidth = bmp.Width;
-                            int imgHeight = bmp.Height;
+                            // cloning is necessary to release the resource loaded from the image stream
+                            result = (Bitmap)bmp.Clone();
+                        }
+                    }
+                    stm.Dispose();
+                }
+            }
+            catch (MediaFileNotFoundException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                this.fHost.LogWrite("BaseContext.LoadMediaImage(): " + ex.Message);
+                result = null;
+            }
+            return result;
+        }
+
+        public Bitmap LoadMediaImage(GEDCOMFileReference fileReference, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool throwException)
+        {
+            if (fileReference == null) return null;
+
+            Bitmap result = null;
+            try
+            {
+                Stream stm;
+
+                this.MediaLoad(fileReference, out stm, throwException);
+
+                if (stm != null)
+                {
+                    if (stm.Length != 0) {
+                        using (Bitmap bmp = new Bitmap(stm))
+                        {
+                            bool cutoutIsEmpty = cutoutArea.IsEmpty();
+                            int imgWidth = (cutoutIsEmpty) ? bmp.Width : cutoutArea.GetWidth();
+                            int imgHeight = (cutoutIsEmpty) ? bmp.Height : cutoutArea.GetHeight();
 
                             if (thumbWidth > 0 && thumbHeight > 0) {
                                 float ratio = GfxHelper.ZoomToFit(imgWidth, imgHeight, thumbWidth, thumbHeight);
@@ -905,7 +941,14 @@ namespace GKCore
                             graphic.SmoothingMode = SmoothingMode.HighQuality;
                             graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
                             graphic.CompositingQuality = CompositingQuality.HighQuality;
-                            graphic.DrawImage(bmp, 0, 0, imgWidth, imgHeight);
+
+                            if (cutoutIsEmpty) {
+                                graphic.DrawImage(bmp, 0, 0, imgWidth, imgHeight);
+                            } else {
+                                Rectangle destRect = new Rectangle(0, 0, imgWidth, imgHeight);
+                                Rectangle srcRect = cutoutArea.ToRectangle();
+                                graphic.DrawImage(bmp, destRect, srcRect, GraphicsUnit.Pixel);
+                            }
 
                             result = newImage;
                         }
@@ -919,7 +962,7 @@ namespace GKCore
             }
             catch (Exception ex)
             {
-                this.fHost.LogWrite("BaseContext.BitmapLoad(): " + ex.Message);
+                this.fHost.LogWrite("BaseContext.LoadMediaImage(): " + ex.Message);
                 result = null;
             }
             return result;
@@ -935,8 +978,15 @@ namespace GKCore
                 GEDCOMMultimediaLink mmLink = iRec.GetPrimaryMultimediaLink();
                 if (mmLink != null && mmLink.Value != null)
                 {
+                    ExtRect cutoutArea;
+                    if (mmLink.IsPrimaryCutout) {
+                        cutoutArea = mmLink.CutoutPosition.Value;
+                    } else {
+                        cutoutArea = ExtRect.CreateEmpty();
+                    }
+
                     GEDCOMMultimediaRecord mmRec = (GEDCOMMultimediaRecord)mmLink.Value;
-                    result = this.BitmapLoad(mmRec.FileReferences[0], thumbWidth, thumbHeight, throwException);
+                    result = this.LoadMediaImage(mmRec.FileReferences[0], thumbWidth, thumbHeight, cutoutArea, throwException);
                 }
             }
             catch (MediaFileNotFoundException)

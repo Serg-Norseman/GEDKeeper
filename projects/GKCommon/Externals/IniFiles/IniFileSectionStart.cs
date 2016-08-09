@@ -92,7 +92,6 @@ namespace Externals.IniFiles
             bool beforeS = false;
             bool afterS = false;
             bool beforeEvery = true;
-            string comChar;
             string insideWhiteChars = "";
 
             StringBuilder form = new StringBuilder();
@@ -112,7 +111,7 @@ namespace Externals.IniFiles
                     form.Append(insideWhiteChars);
                     afterS = false; form.Append(IniFileSettings.SectionCloseBracket);
                 }
-                else if ((comChar = IniFileSettings.OfAny(i, content, IniFileSettings.CommentChars)) != null) {
+                else if ((IniFileSettings.OfAny(i, content, IniFileSettings.CommentChars)) != null) {
                     form.Append(';');
                 }
                 else if (char.IsWhiteSpace(currC)) {
