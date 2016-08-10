@@ -24,20 +24,20 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 
-using Externals.CSV;
+using Externals;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 using GKCore.Types;
 
-#if !__MonoCS__
-using LuaInterface;
-#else
-using NLua;
-#endif
-
 namespace GKCore
 {
+    #if !__MonoCS__
+    using LuaInterface;
+    #else
+    using NLua;
+    #endif
+
     [Serializable]
     public class ScriptException : Exception
     {

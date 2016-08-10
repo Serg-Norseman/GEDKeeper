@@ -29,8 +29,7 @@ ifeq ($(windows), $(softwareplatform))
 # `$(sources)` for `$(windows)`
 sources := \
 ./AssemblyInfo.cs \
-./Externals/CSV/CSVReader.cs \
-./Externals/CSV/StringConverter.cs \
+./Externals/CSVReader.cs \
 ./Externals/IniFiles/IniFileBlankLine.cs \
 ./Externals/IniFiles/IniFileCommentary.cs \
 ./Externals/IniFiles/IniFileElement.cs \
@@ -205,8 +204,7 @@ else
 # `$(sources)` for `$(linux)`
 sources := \
 ./AssemblyInfo.cs \
-./Externals/CSV/CSVReader.cs \
-./Externals/CSV/StringConverter.cs \
+./Externals/CSVReader.cs \
 ./Externals/IniFiles/IniFileBlankLine.cs \
 ./Externals/IniFiles/IniFileCommentary.cs \
 ./Externals/IniFiles/IniFileElement.cs \

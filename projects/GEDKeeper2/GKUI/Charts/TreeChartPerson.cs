@@ -300,7 +300,7 @@ namespace GKUI.Charts
 
                     if (this.fChart.Options.SignsVisible) {
                         EnumSet<SpecialUserRef> signs = EnumSet<SpecialUserRef>.Create();
-                        
+
                         int num = this.fRec.UserReferences.Count;
                         for (int i = 0; i < num; i++)
                         {
@@ -310,7 +310,7 @@ namespace GKUI.Charts
                                 if (rs == GKData.SpecialUserRefs[(int)cps]) signs.Include(cps);
                             }
                         }
-                        
+
                         this.fSigns = signs;
                     } else {
                         this.fSigns = EnumSet<SpecialUserRef>.Create();
@@ -429,11 +429,11 @@ namespace GKUI.Charts
                 // it's hack
                 this.fFlags.Exclude(PersonFlag.pfHasInvDesc);
             }
-            
+
             if (this.fFlags.Contains(PersonFlag.pfHasInvAnc)) {
                 this.CanExpand = true;
             }
-            
+
             if (this.fFlags.Contains(PersonFlag.pfHasInvDesc)) {
                 this.CanExpand = true;
             }
@@ -450,7 +450,7 @@ namespace GKUI.Charts
             {
                 this.InitInfo(lines);
                 this.DefineExpands();
-                
+
                 int maxwid = 0;
                 for (int k = 0; k < lines; k++) {
                     int wt = this.TextWidth(gfx, this.Lines[k]);

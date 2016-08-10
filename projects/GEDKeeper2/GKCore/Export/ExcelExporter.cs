@@ -32,14 +32,7 @@ namespace GKCore.Export
     /// </summary>
     public sealed class ExcelExporter : Exporter
     {
-        private bool fAppMode;
         private List<GEDCOMRecord> fSelectedRecords;
-
-        public bool AppMode
-        {
-            get { return this.fAppMode; }
-            set { this.fAppMode = value; }
-        }
 
         public List<GEDCOMRecord> SelectedRecords
         {

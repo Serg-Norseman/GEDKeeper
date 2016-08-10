@@ -51,26 +51,15 @@ namespace GKTextSearchPlugin
 
     public class Plugin : IPlugin, ISubscriber
     {
-        private const string DISPLAY_NAME = "GKTextSearchPlugin";
-
+        private string fDisplayName = "GKTextSearchPlugin";
         private IHost fHost;
         private ILangMan fLangMan;
-        
         private SearchManager fSearchMan;
 
-        public string DisplayName {
-            get {
-                return (fLangMan == null) ? DISPLAY_NAME : this.fLangMan.LS(TLS.LSID_PluginTitle);
-            }
-        }
-        
-        public IHost Host { get { return fHost; } }
-        public ILangMan LangMan { get { return fLangMan; } }
-
-        public SearchManager SearchMan
-        {
-            get { return this.fSearchMan; }
-        }
+        public string DisplayName { get { return this.fDisplayName; } }
+        public IHost Host { get { return this.fHost; } }
+        public ILangMan LangMan { get { return this.fLangMan; } }
+        public SearchManager SearchMan { get { return this.fSearchMan; } }
 
         public void Execute()
         {
@@ -112,6 +101,7 @@ namespace GKTextSearchPlugin
             try
             {
                 this.fLangMan = this.fHost.CreateLangMan(this);
+                this.fDisplayName = this.fLangMan.LS(TLS.LSID_PluginTitle);
             }
             catch (Exception ex)
             {

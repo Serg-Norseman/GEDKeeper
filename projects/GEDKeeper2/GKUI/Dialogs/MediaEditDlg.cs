@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.IO;
 using System.Windows.Forms;
 
 using GKCommon;
@@ -140,12 +139,7 @@ namespace GKUI.Dialogs
             if (!string.IsNullOrEmpty(fileName))
             {
                 this.txtFile.Text = fileName;
-                GEDCOMMultimediaFormat fileFmt = GEDCOMFileReference.RecognizeFormat(fileName);
-
-                FileInfo info = new FileInfo(fileName);
-                double fileSize = (((double)info.Length / 1024) / 1024); // mb
-                bool canArc = (GKUtils.CheckFormatArchived(fileFmt) && fileSize <= 2);
-
+                bool canArc = GKUtils.FileCanBeArchived(fileName);
                 this.StoreTypesRefresh(canArc, MediaStoreType.mstReference);
                 this.cmbStoreType.Enabled = true;
             }

@@ -77,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Externals\CSVReader.cs" />
     <Compile Include="Externals\IniFiles\IniFileBlankLine.cs" />
     <Compile Include="Externals\IniFiles\IniFileCommentary.cs" />
     <Compile Include="Externals\IniFiles\IniFileReader.cs" />
@@ -120,8 +121,6 @@
     </Compile>
     <Compile Include="Externals\IniFiles\IniFileElement.cs" />
     <Compile Include="Externals\IniFiles\IniFiles.cs" />
-    <Compile Include="Externals\CSV\CSVReader.cs" />
-    <Compile Include="Externals\CSV\StringConverter.cs" />
     <Compile Include="Externals\ListTimSort.cs" />
     <Compile Include="Externals\ZipStorer.cs" />
     <Compile Include="GEDCOM\EGEDCOMException.cs" />

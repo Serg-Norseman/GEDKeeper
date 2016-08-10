@@ -87,23 +87,17 @@ namespace GKFlowInputPlugin
         /* 507 */ LSID_NameInvalid,
         /* 508 */ LSID_BasePersonInvalid,
         /* 509 */ LSID_SourceYearInvalid,
-        
+
         LSID_Marriage
     }
 
     public class Plugin : IPlugin
     {
-        private const string DISPLAY_NAME = "GKFlowInputPlugin";
-
+        private string fDisplayName = "GKFlowInputPlugin";
         private IHost fHost;
         private ILangMan fLangMan;
 
-        public string DisplayName {
-            get {
-                return (fLangMan == null) ? DISPLAY_NAME : this.fLangMan.LS(FLS.LSID_PluginTitle);
-            }
-        }
-
+        public string DisplayName { get { return this.fDisplayName; } }
         public IHost Host { get { return fHost; } }
         public ILangMan LangMan { get { return fLangMan; } }
 
@@ -127,6 +121,7 @@ namespace GKFlowInputPlugin
             try
             {
                 this.fLangMan = this.fHost.CreateLangMan(this);
+                this.fDisplayName = this.fLangMan.LS(FLS.LSID_PluginTitle);
             }
             catch (Exception ex)
             {
@@ -155,7 +150,6 @@ namespace GKFlowInputPlugin
             bool result = true;
             try
             {
-                // Implement any shutdown code here
             }
             catch (Exception ex)
             {

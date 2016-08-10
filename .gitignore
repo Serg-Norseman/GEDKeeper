@@ -1,4 +1,5 @@
 /files/
+/samples/
 /plugins/*.*
 /*.exe*
 /*.dll

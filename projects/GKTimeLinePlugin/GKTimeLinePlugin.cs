@@ -102,7 +102,6 @@ namespace GKTimeLinePlugin
             try
             {
                 this.fHost = host;
-                // Implement any startup code here
             }
             catch (Exception ex)
             {
@@ -117,7 +116,6 @@ namespace GKTimeLinePlugin
             bool result = true;
             try
             {
-                // Implement any shutdown code here
             }
             catch (Exception ex)
             {

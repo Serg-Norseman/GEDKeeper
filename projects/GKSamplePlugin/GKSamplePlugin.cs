@@ -57,51 +57,50 @@ namespace GKSamplePlugin
         }
 
         public void OnHostClosing(ref bool cancelClosing) {}
-		public void OnHostActivate() {}
-		public void OnHostDeactivate() {}
+        public void OnHostActivate() {}
+        public void OnHostDeactivate() {}
 
-		public void OnLanguageChange()
+        public void OnLanguageChange()
         {
-        	try
-        	{
-        		this.fLangMan = this.fHost.CreateLangMan(this);
-        	}
-        	catch (Exception ex)
-        	{
-        		fHost.LogWrite("GKSamplePlugin1.OnLanguageChange(): " + ex.Message);
-        	}
+            try
+            {
+                this.fLangMan = this.fHost.CreateLangMan(this);
+            }
+            catch (Exception ex)
+            {
+                fHost.LogWrite("GKSamplePlugin1.OnLanguageChange(): " + ex.Message);
+            }
         }
-        
+
         public bool Startup(IHost host)
         {
-        	bool result = true;
-        	try
-        	{
-        		this.fHost = host;
-        		// Implement any startup code here
-        	}
-        	catch (Exception ex)
-        	{
-        		fHost.LogWrite("GKSamplePlugin1.Startup(): " + ex.Message);
-        		result = false;
-        	}
-        	return result;
+            bool result = true;
+            try
+            {
+                this.fHost = host;
+                // Implement any startup code here
+            }
+            catch (Exception ex)
+            {
+                fHost.LogWrite("GKSamplePlugin1.Startup(): " + ex.Message);
+                result = false;
+            }
+            return result;
         }
 
         public bool Shutdown()
         {
-        	bool result = true;
-        	try
-        	{
-        		// Implement any shutdown code here
-        	}
-        	catch (Exception ex)
-        	{
-        		fHost.LogWrite("GKSamplePlugin1.Shutdown(): " + ex.Message);
-        		result = false;
-        	}
-        	return result;
+            bool result = true;
+            try
+            {
+                // Implement any shutdown code here
+            }
+            catch (Exception ex)
+            {
+                fHost.LogWrite("GKSamplePlugin1.Shutdown(): " + ex.Message);
+                result = false;
+            }
+            return result;
         }
-
     }
 }

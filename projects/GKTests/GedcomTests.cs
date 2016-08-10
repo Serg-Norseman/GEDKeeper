@@ -1572,7 +1572,15 @@ namespace GKTests
         [Test]
         public void GEDCOMIndividualRecord_Tests()
         {
+            GEDCOMIndividualRecord ind3 = _context.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
+            Assert.IsNotNull(ind3.GetParentsFamily());
+
+            GEDCOMIndividualRecord ind2 = _context.Tree.XRefIndex_Find("I2") as GEDCOMIndividualRecord;
+            Assert.IsNotNull(ind2.GetMarriageFamily());
+
+            //
             GEDCOMIndividualRecord indiRec = _context.Tree.XRefIndex_Find("I4") as GEDCOMIndividualRecord;
+            Assert.IsNull(indiRec.GetMarriageFamily());
 
             GEDCOMRecordTest(indiRec);
 

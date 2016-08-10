@@ -43,7 +43,7 @@ namespace GKUI.Dialogs
         private readonly ExtList<GMapPoint> fSearchPoints;
 
         private GEDCOMLocationRecord fLocationRecord;
-        
+
         public GEDCOMLocationRecord LocationRecord
         {
             get { return this.fLocationRecord; }
@@ -146,7 +146,7 @@ namespace GKUI.Dialogs
         private void btnSearch_Click(object sender, EventArgs e)
         {
             this.fMapBrowser.ShowLines = false;
-            
+
             this.ListGeoCoords.BeginUpdate();
             this.fMapBrowser.BeginUpdate();
             try

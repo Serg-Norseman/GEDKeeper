@@ -26,6 +26,7 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Cultures;
+using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Kinships;
 using GKCore.Lists;
@@ -1244,6 +1245,11 @@ namespace GKTests
             using (TreeChartPerson tcPerson = new TreeChartPerson(null)) {
                 Assert.IsNotNull(tcPerson);
 
+                bool hasFail = false;
+                tcPerson.BuildBy(null, ref hasFail);
+
+                Assert.AreEqual(null, tcPerson.Rec);
+
                 Assert.AreEqual(null, tcPerson.Portrait);
                 Assert.AreEqual(0, tcPerson.PortraitWidth);
 
@@ -1273,9 +1279,6 @@ namespace GKTests
                 tcPerson.PtY = 22;
                 Assert.AreEqual(22, tcPerson.PtY);
 
-                Assert.AreEqual(null, tcPerson.Rec);
-                //Assert.AreEqual(null, tcPerson.Rect);
-
                 tcPerson.Selected = false;
                 Assert.AreEqual(false, tcPerson.Selected);
                 tcPerson.Selected = true;
@@ -1285,8 +1288,8 @@ namespace GKTests
                 tcPerson.Sex = GEDCOMSex.svMale;
                 Assert.AreEqual(GEDCOMSex.svMale, tcPerson.Sex);
 
-                //EnumSet<SpecialUserRef> enums = tcPerson.Signs;
-                //Assert.IsTrue(enums.IsEmpty());
+                EnumSet<SpecialUserRef> enums = tcPerson.Signs;
+                Assert.IsTrue(enums.IsEmpty());
 
                 Assert.AreEqual(0, tcPerson.GetChildsCount());
                 Assert.AreEqual(0, tcPerson.GetSpousesCount());
@@ -1309,6 +1312,9 @@ namespace GKTests
 
                 bool hasMediaFail = false;
                 tcPerson.BuildBy(null, ref hasMediaFail);
+
+                ExtRect psnRt = tcPerson.Rect;
+                Assert.IsTrue(psnRt.IsEmpty());
 
                 //Assert.AreEqual(null, tcPerson.Portrait);
                 //Assert.AreEqual(null, tcPerson.Portrait);
@@ -1340,6 +1346,28 @@ namespace GKTests
 
             ModifyEventArgs args = new ModifyEventArgs(RecordAction.raAdd, null);
             Assert.IsNotNull(args);
+        }
+
+        [Test]
+        public void Export_Tests()
+        {
+            Assert.Throws(typeof(ArgumentNullException), () => { new PedigreeExporter(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { new ExcelExporter(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { new FamilyBookExporter(null); });
+
+            BaseWindowMock baseWin = new BaseWindowMock(this.fContext.Tree);
+
+            using (PedigreeExporter exporter = new PedigreeExporter(baseWin)) {
+
+            }
+
+            using (ExcelExporter exporter = new ExcelExporter(baseWin)) {
+
+            }
+
+            using (FamilyBookExporter exporter = new FamilyBookExporter(baseWin)) {
+
+            }
         }
     }
 }

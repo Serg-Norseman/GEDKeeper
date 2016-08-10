@@ -118,7 +118,7 @@ namespace GKPedigreeImporterPlugin
         private readonly System.Windows.Forms.ListBox.ObjectCollection fLog;
         private readonly StringList fRawContents;
         private readonly GEDCOMTree fTree;
-        
+
         private Dictionary<string, GEDCOMIndividualRecord> fPersonsList;
         private string fFileName;
 
@@ -134,7 +134,7 @@ namespace GKPedigreeImporterPlugin
         public char DateSeparator;
 
         public bool SpecialFormat_1;
-        
+
         public StringList RawContents
         {
             get { return this.fRawContents; }

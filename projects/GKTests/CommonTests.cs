@@ -929,5 +929,18 @@ namespace GKTests
             Assert.AreEqual(10, month, "g2jd 2");
             Assert.AreEqual(10, day, "g2jd 3");
         }
+
+        [Test]
+        public void SysInfo_Tests()
+        {
+            #if __MonoCS__
+            Assert.IsTrue(SysInfo.IsUnix());
+            Assert.AreEqual(PlatformID.Unix, SysInfo.GetPlatformID());
+            #else
+            Assert.IsFalse(SysInfo.IsUnix());
+            Assert.AreEqual(PlatformID.Win32NT, SysInfo.GetPlatformID());
+            Assert.AreEqual(DesktopType.Windows, SysInfo.GetDesktopType());
+            #endif
+        }
     }
 }

@@ -37,7 +37,7 @@ namespace GKUI.Dialogs
         private readonly IBaseWindow fBase;
         private readonly GKNotesSheet fNotesList;
         private readonly GKMediaSheet fMediaList;
-        
+
         private GEDCOMCommunicationRecord fCommunication;
         private GEDCOMIndividualRecord fTempInd;
 
@@ -150,7 +150,7 @@ namespace GKUI.Dialogs
             this.lblDate.Text = LangMan.LS(LSID.LSID_Date);
 
             this.toolTip1.SetToolTip(this.btnPersonAdd, LangMan.LS(LSID.LSID_PersonAttachTip));
-            
+
             this.txtDir.Items.Clear();
             this.txtDir.Items.AddRange(new object[] { LangMan.LS(LSID.LSID_CD_1), LangMan.LS(LSID.LSID_CD_2) });
         }

@@ -100,7 +100,6 @@ namespace GKCalculatorPlugin
             try
             {
                 this.fHost = host;
-                // Implement any startup code here
             }
             catch (Exception ex)
             {
@@ -115,7 +114,6 @@ namespace GKCalculatorPlugin
             bool result = true;
             try
             {
-                // Implement any shutdown code here
             }
             catch (Exception ex)
             {

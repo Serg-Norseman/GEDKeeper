@@ -84,17 +84,11 @@ namespace GKPedigreeImporterPlugin
     
     public class PlugIn : IPlugin
     {
-        private const string DISPLAY_NAME = "GKPedigreeImporterPlugin";
-
+        private string fDisplayName = "GKPedigreeImporterPlugin";
         private IHost fHost;
         private ILangMan fLangMan;
 
-        public string DisplayName {
-            get {
-                return (fLangMan == null) ? DISPLAY_NAME : this.fLangMan.LS(ILS.LSID_PluginTitle);
-            }
-        }
-
+        public string DisplayName { get { return this.fDisplayName; } }
         public IHost Host { get { return this.fHost; } }
         public ILangMan LangMan { get { return fLangMan; } }
 
@@ -116,6 +110,7 @@ namespace GKPedigreeImporterPlugin
             try
             {
                 this.fLangMan = this.fHost.CreateLangMan(this);
+                this.fDisplayName = this.fLangMan.LS(ILS.LSID_PluginTitle);
             }
             catch (Exception ex)
             {
@@ -129,7 +124,6 @@ namespace GKPedigreeImporterPlugin
             try
             {
                 this.fHost = host;
-                // Implement any startup code here
             }
             catch (Exception ex)
             {
@@ -144,7 +138,6 @@ namespace GKPedigreeImporterPlugin
             bool result = true;
             try
             {
-                // Implement any shutdown code here
             }
             catch (Exception ex)
             {

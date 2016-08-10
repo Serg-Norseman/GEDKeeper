@@ -44,12 +44,9 @@ namespace GKImageViewerPlugin
             this.InitializeComponent();
 
             GKResourceManager resMgr = new GKResourceManager("IVPResource", typeof(ImageViewerWin).Assembly);
-            Bitmap iLoad = (Bitmap)resMgr.GetObjectEx("iLoad");
+            this.tbFileLoad.Image = (Bitmap)resMgr.GetObjectEx("iLoad");
 
-            this.tbFileLoad.Image = /*IVPResource.*/iLoad;
-            
             this.fLangMan = plugin.LangMan;
-
             this.SetLang();
         }
 

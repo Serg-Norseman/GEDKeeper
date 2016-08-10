@@ -27,10 +27,11 @@ namespace GKCommon
     {
         public static void QuickSort<T>(IList<T> list, Comparison<T> comparer)
         {
-            if (list != null && list.Count > 1)
-            {
+            if (list == null)
+                throw new ArgumentNullException("list");
+
+            if (list.Count > 1)
                 QuickSort(list, comparer, 0, list.Count - 1);
-            }
         }
 
         private static void QuickSort<T>(IList<T> list, Comparison<T> comparer, int left, int right)
@@ -75,10 +76,11 @@ namespace GKCommon
 
         public static void MergeSort<T>(IList<T> list, Comparison<T> comparer)
         {
-            if (list != null && list.Count > 1)
-            {
+            if (list == null)
+                throw new ArgumentNullException("list");
+
+            if (list.Count > 1)
                 MergeSort(list, new T[list.Count], 0, list.Count - 1, comparer);
-            }
         }
 
         private static void MergeSort<T>(IList<T> list, T[] tmp, int left, int right, Comparison<T> comparer)

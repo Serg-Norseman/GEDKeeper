@@ -171,38 +171,6 @@ namespace GKFlowInputPlugin
             return res;
         }
 
-        private GEDCOMFamilyRecord _ParseSource_GetParentsFamily(GEDCOMIndividualRecord iRec)
-        {
-            GEDCOMFamilyRecord result;
-            if (iRec.ChildToFamilyLinks.Count > 0)
-            {
-                result = iRec.ChildToFamilyLinks[0].Family;
-            }
-            else
-            {
-                result = fBase.Tree.CreateFamily();
-                result.AddChild(iRec);
-            }
-            return result;
-        }
-
-        private GEDCOMFamilyRecord _ParseSource_GetMarriageFamily(GEDCOMIndividualRecord iRec)
-        {
-            GEDCOMFamilyRecord result;
-
-            if (iRec.SpouseToFamilyLinks.Count > 0)
-            {
-                result = iRec.SpouseToFamilyLinks[0].Family;
-            }
-            else
-            {
-                result = fBase.Tree.CreateFamily();
-                result.AddSpouse(iRec);
-            }
-
-            return result;
-        }
-
         private void CheckMain(GEDCOMIndividualRecord main)
         {
             if (main == null)
@@ -406,7 +374,7 @@ namespace GKFlowInputPlugin
                                             GEDCOMCustomEvent evt = this.fBase.Context.CreateEventEx(iRec, evName, GEDCOMUtils.StrToGEDCOMDate(edEventDate.Text, false), "");
                                             evt.Detail.Place.StringValue = place;
                                         } else if (evName == "MARR") {
-                                            family = _ParseSource_GetMarriageFamily(iRec);
+                                            family = iRec.GetMarriageFamily(true);
                                             GEDCOMCustomEvent evt = this.fBase.Context.CreateEventEx(family, evName, GEDCOMUtils.StrToGEDCOMDate(edEventDate.Text, false), "");
                                             evt.Detail.Place.StringValue = place;
                                         }
@@ -416,7 +384,7 @@ namespace GKFlowInputPlugin
                                 case PersonLink.plFather:
                                 case PersonLink.plMother:
                                     CheckMain(iMain);
-                                    family = _ParseSource_GetParentsFamily(iMain);
+                                    family = iMain.GetParentsFamily(true);
                                     family.AddSpouse(iRec);
                                     break;
 
@@ -427,13 +395,13 @@ namespace GKFlowInputPlugin
 
                                 case PersonLink.plSpouse:
                                     CheckMain(iMain);
-                                    family = _ParseSource_GetMarriageFamily(iMain);
+                                    family = iMain.GetMarriageFamily(true);
                                     family.AddSpouse(iRec);
                                     break;
 
                                 case PersonLink.plChild:
                                     CheckMain(iMain);
-                                    family = _ParseSource_GetMarriageFamily(iMain);
+                                    family = iMain.GetMarriageFamily(true);
                                     family.AddChild(iRec);
                                     break;
                             }

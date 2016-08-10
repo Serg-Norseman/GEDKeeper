@@ -2893,10 +2893,15 @@ namespace GKCore
             }
         }
 
-        public static bool CheckFormatArchived(GEDCOMMultimediaFormat format)
+        public static bool FileCanBeArchived(string fileName)
         {
-            MultimediaKind mKind = GetMultimediaKind(format);
-            return (mKind == MultimediaKind.mkImage || mKind == MultimediaKind.mkText);
+            GEDCOMMultimediaFormat fileFmt = GEDCOMFileReference.RecognizeFormat(fileName);
+
+            FileInfo info = new FileInfo(fileName);
+            double fileSize = (((double)info.Length / 1024) / 1024); // mb
+
+            MultimediaKind mKind = GetMultimediaKind(fileFmt);
+            return ((mKind == MultimediaKind.mkImage || mKind == MultimediaKind.mkText) && fileSize <= 10);
         }
 
         #endregion

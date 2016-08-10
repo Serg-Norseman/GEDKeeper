@@ -101,7 +101,6 @@ namespace GKNamesBookPlugin
             try
             {
                 this.fHost = host;
-                // Implement any startup code here
             }
             catch (Exception ex)
             {
@@ -116,7 +115,6 @@ namespace GKNamesBookPlugin
             bool result = true;
             try
             {
-                // Implement any shutdown code here
             }
             catch (Exception ex)
             {

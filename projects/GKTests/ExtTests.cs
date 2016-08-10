@@ -21,8 +21,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+
 using Externals;
-using Externals.CSV;
+using GKCommon;
 using NUnit.Framework;
 
 namespace GKTests
@@ -30,50 +31,65 @@ namespace GKTests
     [TestFixture]
     public class ExtTests
     {
+        [Test]
+        public void Sort_Tests()
+        {
+            Assert.Throws(typeof(ArgumentNullException), () => { SortHelper.QuickSort<ValItem>(null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { SortHelper.MergeSort<ValItem>(null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { ListTimSort<int>.Sort(null, null); });
 
-        /*[Test]
-		public void Sort_PerfTest()
-		{
-			Random rnd = new Random();
+            Random rnd = new Random();
 
-			List<ValItem> listQS = new List<ValItem>();
-			List<ValItem> listMS = new List<ValItem>();
-			List<ValItem> listTS = new List<ValItem>();
-			List<ValItem> listCS = new List<ValItem>();
+            List<ValItem> listQS = new List<ValItem>();
+            List<ValItem> listMS = new List<ValItem>();
+            List<ValItem> listTS = new List<ValItem>();
+            List<ValItem> listCS = new List<ValItem>();
 
-			for (int i = 0; i < 1000000; i++)
-			{
-				double val = rnd.NextDouble();
+            //const int MaxCount = 1000000; // for performance test
+            const int MaxCount = 1000; // for common test
 
-				listTS.Add(new ValItem(val));
-				listQS.Add(new ValItem(val));
-				listMS.Add(new ValItem(val));
-				listCS.Add(new ValItem(val));
-			}
+            for (int i = 0; i < MaxCount; i++)
+            {
+                double val = rnd.NextDouble();
 
-			listCS.Sort(CompareItems);
+                listTS.Add(new ValItem(val));
+                listQS.Add(new ValItem(val));
+                listMS.Add(new ValItem(val));
+                listCS.Add(new ValItem(val));
+            }
 
-			SortHelper.QuickSort(listQS, CompareItems);
+            listCS.Sort(CompareItems);
 
-			SortHelper.MergeSort(listMS, CompareItems);
+            SortHelper.QuickSort(listQS, CompareItems);
 
-			ExtUtils.ListTimSort<ValItem>.Sort(listTS, CompareItems);
-		}
+            SortHelper.MergeSort(listMS, CompareItems);
 
-		private class ValItem
-		{
-			public double Value;
+            ListTimSort<ValItem>.Sort(listTS, CompareItems);
 
-			public ValItem(double value)
-			{
-				this.Value = value;
-			}
-		}
+            // test for sort valid
+            //(only for numbers, because some methods is with the permutations, and part - no)
+            for (int i = 0; i < MaxCount; i++)
+            {
+                Assert.AreEqual(listTS[i].Value, listQS[i].Value);
+                Assert.AreEqual(listQS[i].Value, listMS[i].Value);
+                Assert.AreEqual(listMS[i].Value, listCS[i].Value);
+            }
+        }
 
-		private int CompareItems(ValItem item1, ValItem item2)
-		{
-			return item1.Value.CompareTo(item2.Value);
-		}*/
+        private int CompareItems(ValItem item1, ValItem item2)
+        {
+            return item1.Value.CompareTo(item2.Value);
+        }
+
+        private class ValItem
+        {
+            public double Value;
+
+            public ValItem(double value)
+            {
+                this.Value = value;
+            }
+        }
 
 
         /*[Test]
@@ -120,12 +136,6 @@ namespace GKTests
                     
                 }
             }
-        }
-
-        [Test]
-        public void ListTimSort_Tests()
-        {
-            Assert.Throws(typeof(ArgumentNullException), () => { ListTimSort<int>.Sort(null, null); });
         }
 
         [Test]

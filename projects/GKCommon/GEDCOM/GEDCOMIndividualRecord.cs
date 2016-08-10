@@ -643,9 +643,27 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public GEDCOMFamilyRecord GetParentsFamily()
+        public GEDCOMFamilyRecord GetMarriageFamily(bool canCreate = false)
+        {
+            GEDCOMFamilyRecord result = (this.fSpouseToFamilyLinks.Count < 1) ? null : this.fSpouseToFamilyLinks[0].Family;
+
+            if (result == null && canCreate) {
+                result = this.Owner.CreateFamily();
+                result.AddSpouse(this);
+            }
+
+            return result;
+        }
+
+        public GEDCOMFamilyRecord GetParentsFamily(bool canCreate = false)
         {
             GEDCOMFamilyRecord result = (this.fChildToFamilyLinks.Count < 1) ? null : this.fChildToFamilyLinks[0].Value as GEDCOMFamilyRecord;
+
+            if (result == null && canCreate) {
+                result = this.Owner.CreateFamily();
+                result.AddChild(this);
+            }
+
             return result;
         }
 

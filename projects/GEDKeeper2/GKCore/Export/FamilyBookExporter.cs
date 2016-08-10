@@ -41,7 +41,7 @@ namespace GKCore.Export
         private enum BookCatalog
         {
             Catalog_First = 0,
-            
+
             Catalog_BirthYears = Catalog_First,
             Catalog_DeathYears,
             Catalog_BirthPlaces,
@@ -50,7 +50,7 @@ namespace GKCore.Export
             Catalog_Occupations,
             Catalog_Religion,
             Catalog_Sources,
-            
+
             Catalog_Last = Catalog_Sources
         }
 
@@ -59,7 +59,7 @@ namespace GKCore.Export
             public readonly string Sign;
             public readonly string Title;
             public StringList Index;
-            
+
             public CatalogProps(string sign, string title)
             {
                 this.Sign = sign;
@@ -67,7 +67,7 @@ namespace GKCore.Export
                 this.Index = null;
             }
         }
-        
+
         private readonly CatalogProps[] BookCatalogs = {
             new CatalogProps("Catalog_BirthYears", LangMan.LS(LSID.LSID_BirthYears)),
             new CatalogProps("Catalog_DeathYears", LangMan.LS(LSID.LSID_DeathYears)),
@@ -78,7 +78,7 @@ namespace GKCore.Export
             new CatalogProps("Catalog_Religion", LangMan.LS(LSID.LSID_Religion)),
             new CatalogProps("Catalog_Sources", LangMan.LS(LSID.LSID_RPSources))
         };
-        
+
         private Padding fMargins;
         private Document fDocument;
         private PdfWriter fPdfWriter;
@@ -101,8 +101,8 @@ namespace GKCore.Export
         public bool CatalogNewPages = false;
         public bool IncludeEvents = true;
         public bool IncludeNotes = true;
-        
-        
+
+
         public FamilyBookExporter(IBaseWindow aBase) : base(aBase)
         {
             this.fMargins = new Padding(20);
@@ -565,7 +565,7 @@ namespace GKCore.Export
             }
         }
     }
-    
+
     public class PDFWriterEvents : IPdfPageEvent
     {
         private readonly BaseFont fFont;
@@ -615,7 +615,7 @@ namespace GKCore.Export
         public void OnSectionEnd(PdfWriter writer, Document document, float paragraphPosition) { }
         public void OnGenericTag(PdfWriter writer, Document document, Rectangle rect, String text) { }
     }
-    
+
     public class SimpleColumnText : ColumnText
     {
         private readonly Document fDocument;

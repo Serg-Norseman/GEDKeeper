@@ -23,7 +23,7 @@ using GKCommon;
 namespace GKPedigreeImporterPlugin
 {
     /// <summary>
-    /// Description of ImpUtils.
+    /// 
     /// </summary>
     public static class ImpUtils
     {
