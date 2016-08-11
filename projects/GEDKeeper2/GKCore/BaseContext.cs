@@ -598,6 +598,7 @@ namespace GKCore
 
             using (ZipStorer zip = ZipStorer.Open(this.GetArcFileName(), FileAccess.Read))
             {
+                // TODO: new function FindFile()!
                 List<ZipStorer.ZipFileEntry> dir = zip.ReadCentralDir();
                 foreach (ZipStorer.ZipFileEntry entry in dir)
                 {

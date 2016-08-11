@@ -1369,5 +1369,13 @@ namespace GKTests
 
             }
         }
+
+        [Test]
+        public void LuaScripts_Tests()
+        {
+            using (ScriptEngine script = new ScriptEngine()) {
+                script.lua_run("gk_print(\"Hello\")", null, null);
+            }
+        }
     }
 }

@@ -20,10 +20,10 @@ namespace Externals
         /// </summary>
         public enum Compression
         {
-            /// <summary>Uncompressed storage</summary> 
-            Store = 0, 
+            /// <summary>Uncompressed storage</summary>
+            Store = 0,
             /// <summary>Deflate compression method</summary>
-            Deflate = 8 
+            Deflate = 8
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Externals
         public struct ZipFileEntry
         {
             /// <summary>Compression method</summary>
-            public Compression Method; 
+            public Compression Method;
             /// <summary>Full path and filename as stored in Zip</summary>
             public string FilenameInZip;
             /// <summary>Original file size</summary>
@@ -194,7 +194,7 @@ namespace Externals
         /// <param name="method">Compression method</param>
         /// <param name="pathname">Full path of file to add to Zip storage</param>
         /// <param name="filenameInZip">Filename and path as desired in Zip directory</param>
-        /// <param name="comment">Comment for stored file</param>        
+        /// <param name="comment">Comment for stored file</param>
         public void AddFile(Compression method, string pathname, string filenameInZip, string comment)
         {
             if (fAccess == FileAccess.Read)
@@ -288,7 +288,7 @@ namespace Externals
         }
 
         /// <summary>
-        /// Read all the file records in the central directory 
+        /// Read all the file records in the central directory
         /// </summary>
         /// <returns>List of all entries in directory</returns>
         public List<ZipFileEntry> ReadCentralDir()
@@ -336,6 +336,22 @@ namespace Externals
             }
 
             return result;
+        }
+
+        public ZipFileEntry? FindFile(string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName))
+                throw new ArgumentNullException("fileName");
+
+            List<ZipStorer.ZipFileEntry> dir = this.ReadCentralDir();
+            foreach (ZipStorer.ZipFileEntry entry in dir)
+            {
+                if (entry.FilenameInZip.Equals(fileName)) {
+                    return entry;
+                }
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -509,7 +525,7 @@ namespace Externals
 
             filename (variable size)
             extra field (variable size)
-        */
+         */
         private void WriteLocalHeader(ref ZipFileEntry zfe)
         {
             long pos = this.fZipFileStream.Position;
@@ -517,7 +533,7 @@ namespace Externals
             byte[] encodedFilename = encoder.GetBytes(zfe.FilenameInZip);
 
             this.fZipFileStream.Write(new byte[] { 80, 75, 3, 4, 20, 0}, 0, 6); // No extra header
-            this.fZipFileStream.Write(BitConverter.GetBytes((ushort)(zfe.EncodeUTF8 ? 0x0800 : 0)), 0, 2); // filename and comment encoding 
+            this.fZipFileStream.Write(BitConverter.GetBytes((ushort)(zfe.EncodeUTF8 ? 0x0800 : 0)), 0, 2); // filename and comment encoding
             this.fZipFileStream.Write(BitConverter.GetBytes((ushort)zfe.Method), 0, 2);  // zipping method
             this.fZipFileStream.Write(BitConverter.GetBytes(DateTimeToDosTime(zfe.ModifyTime)), 0, 4); // zipping date and time
             this.fZipFileStream.Write(new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 0, 12); // unused CRC, un/compressed size, updated later
@@ -550,7 +566,7 @@ namespace Externals
             filename (variable size)
             extra field (variable size)
             file comment (variable size)
-        */
+         */
         private void WriteCentralDirRecord(ZipFileEntry zfe)
         {
             Encoding encoder = zfe.EncodeUTF8 ? Encoding.UTF8 : fDefaultEncoding;
@@ -558,7 +574,7 @@ namespace Externals
             byte[] encodedComment = encoder.GetBytes(zfe.Comment);
 
             this.fZipFileStream.Write(new byte[] { 80, 75, 1, 2, 23, 0xB, 20, 0 }, 0, 8);
-            this.fZipFileStream.Write(BitConverter.GetBytes((ushort)(zfe.EncodeUTF8 ? 0x0800 : 0)), 0, 2); // filename and comment encoding 
+            this.fZipFileStream.Write(BitConverter.GetBytes((ushort)(zfe.EncodeUTF8 ? 0x0800 : 0)), 0, 2); // filename and comment encoding
             this.fZipFileStream.Write(BitConverter.GetBytes((ushort)zfe.Method), 0, 2);  // zipping method
             this.fZipFileStream.Write(BitConverter.GetBytes(DateTimeToDosTime(zfe.ModifyTime)), 0, 4);  // zipping date and time
             this.fZipFileStream.Write(BitConverter.GetBytes(zfe.Crc32), 0, 4); // file CRC
@@ -593,7 +609,7 @@ namespace Externals
             the starting disk number        4 bytes
             zipfile comment length          2 bytes
             zipfile comment (variable size)
-        */
+         */
         private void WriteEndRecord(uint size, uint offset)
         {
             Encoding encoder = this.EncodeUTF8 ? Encoding.UTF8 : fDefaultEncoding;
@@ -662,28 +678,28 @@ namespace Externals
         }
 
         /* DOS Date and time:
-            MS-DOS date. The date is a packed value with the following format. Bits Description 
-                0-4 Day of the month (1–31) 
-                5-8 Month (1 = January, 2 = February, and so on) 
-                9-15 Year offset from 1980 (add 1980 to get actual year) 
-            MS-DOS time. The time is a packed value with the following format. Bits Description 
-                0-4 Second divided by 2 
-                5-10 Minute (0–59) 
-                11-15 Hour (0–23 on a 24-hour clock) 
-        */
+            MS-DOS date. The date is a packed value with the following format. Bits Description
+                0-4 Day of the month (1–31)
+                5-8 Month (1 = January, 2 = February, and so on)
+                9-15 Year offset from 1980 (add 1980 to get actual year)
+            MS-DOS time. The time is a packed value with the following format. Bits Description
+                0-4 Second divided by 2
+                5-10 Minute (0–59)
+                11-15 Hour (0–23 on a 24-hour clock)
+         */
         private static uint DateTimeToDosTime(DateTime dt)
         {
             return (uint)(
-                (dt.Second / 2) | (dt.Minute << 5) | (dt.Hour << 11) | 
+                (dt.Second / 2) | (dt.Minute << 5) | (dt.Hour << 11) |
                 (dt.Day<<16) | (dt.Month << 21) | ((dt.Year - 1980) << 25));
         }
 
         private static DateTime DosTimeToDateTime(uint dt)
         {
             if (dt == 0)
-        	{
-        		return new DateTime(0);
-        	}
+            {
+                return new DateTime(0);
+            }
 
             return new DateTime(
                 (int)(dt >> 25) + 1980,
@@ -695,7 +711,7 @@ namespace Externals
         }
 
         /* CRC32 algorithm
-          The 'magic number' for the CRC is 0xdebb20e3.  
+          The 'magic number' for the CRC is 0xdebb20e3.
           The proper CRC pre and post conditioning
           is used, meaning that the CRC register is
           pre-conditioned with all ones (a starting value
@@ -705,7 +721,7 @@ namespace Externals
           field is set to zero in the local header and the correct
           value is put in the data descriptor and in the central
           directory.
-        */
+         */
         private void UpdateCrcAndSizes(ref ZipFileEntry zfe)
         {
             long lastPos = this.fZipFileStream.Position;  // remember position

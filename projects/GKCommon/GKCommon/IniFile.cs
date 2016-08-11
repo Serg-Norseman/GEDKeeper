@@ -32,6 +32,12 @@ namespace GKCommon
         private readonly IniFileEx fHandler;
 
 
+        public IniFile()
+        {
+            this.fFileName = "";
+            this.fHandler = new IniFileEx();
+        }
+
         public IniFile(string fileName)
         {
             this.fFileName = fileName;
@@ -41,7 +47,9 @@ namespace GKCommon
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                this.fHandler.Save(this.fFileName);
+                if (!string.IsNullOrEmpty(this.fFileName)) {
+                    this.fHandler.Save(this.fFileName);
+                }
             }
             base.Dispose(disposing);
         }
@@ -54,7 +62,8 @@ namespace GKCommon
             {
                 if (intStr.Length > 2 && intStr[0] == '0' && (intStr[1] == 'X' || intStr[1] == 'x'))
                 {
-                    intStr = "$" + intStr.Substring(2);
+                    intStr = intStr.Substring(2);
+                    return Convert.ToInt32(intStr, 16);
                 }
             }
             return ConvHelper.ParseInt(intStr, defaultValue);
@@ -111,7 +120,7 @@ namespace GKCommon
             this.fHandler[section][ident] = value;
         }
 
-        public void EraseSection(string section)
+        public void DeleteSection(string section)
         {
             this.fHandler.DeleteSection(section);
         }

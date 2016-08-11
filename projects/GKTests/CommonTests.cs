@@ -27,6 +27,7 @@ using GKCommon.SmartGraph;
 using GKCore.Interfaces;
 using GKCore.Types;
 using NUnit.Framework;
+using GKTests.Mocks;
 
 namespace GKTests
 {
@@ -654,6 +655,25 @@ namespace GKTests
                 Assert.AreEqual(obj, list[1]);
                 Assert.AreEqual(obj1, list[0]);
             }
+
+            using (ExtList<ValItem> list = new ExtList<ValItem>())
+            {
+                Assert.IsNotNull(list);
+
+                list.Add(new ValItem(5));
+                list.Add(new ValItem(1));
+                list.Add(new ValItem(17));
+                list.Add(new ValItem(4));
+
+                list.QuickSort(CompareItems);
+
+                list.MergeSort(CompareItems);
+            }
+        }
+
+        private int CompareItems(ValItem item1, ValItem item2)
+        {
+            return item1.Value.CompareTo(item2.Value);
         }
 
         [Test]

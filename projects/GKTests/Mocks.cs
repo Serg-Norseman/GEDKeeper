@@ -132,4 +132,14 @@ namespace GKTests.Mocks
         public void Show() { }
         public void ShowMedia(GEDCOMMultimediaRecord mediaRec, bool modal) { }
     }
+
+    internal class ValItem
+    {
+        public double Value;
+
+        public ValItem(double value)
+        {
+            this.Value = value;
+        }
+    }
 }

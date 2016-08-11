@@ -643,6 +643,11 @@ namespace GKCommon.GEDCOM
             }
         }
 
+        /// <summary>
+        /// Attention: returns or creates only the first marriage!
+        /// </summary>
+        /// <param name="canCreate">can create if does not exist</param>
+        /// <returns></returns>
         public GEDCOMFamilyRecord GetMarriageFamily(bool canCreate = false)
         {
             GEDCOMFamilyRecord result = (this.fSpouseToFamilyLinks.Count < 1) ? null : this.fSpouseToFamilyLinks[0].Family;
@@ -655,6 +660,11 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
+        /// <summary>
+        /// Attention: returns or creates only the first parents family!
+        /// </summary>
+        /// <param name="canCreate">can create if does not exist</param>
+        /// <returns></returns>
         public GEDCOMFamilyRecord GetParentsFamily(bool canCreate = false)
         {
             GEDCOMFamilyRecord result = (this.fChildToFamilyLinks.Count < 1) ? null : this.fChildToFamilyLinks[0].Value as GEDCOMFamilyRecord;

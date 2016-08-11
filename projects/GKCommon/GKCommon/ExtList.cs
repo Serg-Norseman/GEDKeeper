@@ -73,7 +73,7 @@ namespace GKCommon
             set {
                 if (index < 0 || index >= this.Count)
                 {
-                    Error("List index out of bounds ({0})", index);
+                    throw new ListException(string.Format("List index out of bounds ({0})", index));
                 }
 
                 if (Equals(value, this.fList[index])) return;
@@ -153,11 +153,6 @@ namespace GKCommon
             {
                 this.Notify(temp, ListNotification.Deleted);
             }
-        }
-
-        private static void Error(string msg, int data)
-        {
-            throw new ListException(string.Format(msg, data));
         }
 
         public void Exchange(int index1, int index2)

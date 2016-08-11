@@ -48,7 +48,7 @@ namespace Externals.IniFiles
             }
         }
 
-        IniFileSection GetSection(string name)
+        private IniFileSection GetSection(string name)
         {
             string lower = name.ToLowerInvariant();
             for (int i = 0; i < sections.Count; i++)

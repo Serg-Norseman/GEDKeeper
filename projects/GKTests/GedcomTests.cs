@@ -21,6 +21,7 @@
 using System;
 using System.Globalization;
 using System.IO;
+using System.Resources;
 using System.Text;
 
 using GKCommon;
@@ -2715,5 +2716,25 @@ namespace GKTests
         }
         
         #endregion
+
+        [Test]
+        public void Standart_Tests()
+        {
+            GKResourceManager resMgr = new GKResourceManager("GKTests.GXResources", typeof(GedcomTests).Assembly);
+
+            byte[] gedcom = (byte[])resMgr.GetObjectEx("TGC55CLF_GED");
+
+            using (MemoryStream inStream = new MemoryStream(gedcom))
+            {
+                using (GEDCOMTree tree = new GEDCOMTree())
+                {
+                    tree.LoadFromStreamExt(inStream, inStream, "TGC55CLF.GED");
+
+                    using (MemoryStream outStream = new MemoryStream()) {
+                        tree.SaveToStreamExt(outStream, "", GEDCOMCharacterSet.csASCII);
+                    }
+                }
+            }
+        }
     }
 }

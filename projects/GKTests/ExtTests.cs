@@ -20,7 +20,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
+using System.Text;
+using GKTests.Mocks;
 
 using Externals;
 using GKCommon;
@@ -81,16 +84,6 @@ namespace GKTests
             return item1.Value.CompareTo(item2.Value);
         }
 
-        private class ValItem
-        {
-            public double Value;
-
-            public ValItem(double value)
-            {
-                this.Value = value;
-            }
-        }
-
 
         /*[Test]
 		public void Calendar_PerfTest()
@@ -133,21 +126,28 @@ namespace GKTests
         {
             using (MemoryStream stream = new MemoryStream()) {
                 using (ZipStorer zip = ZipStorer.Create(stream, "test")) {
-                    
+                    using (MemoryStream csvStream = new MemoryStream(Encoding.ASCII.GetBytes(CSVData))) {
+                        zip.AddStream(ZipStorer.Compression.Deflate, "csv_file.csv", csvStream, DateTime.Now, "");
+                    }
+
+                    //ZipStorer.ZipFileEntry? entry = zip.FindFile("invalid");
+                    //Assert.IsNull(entry);
+
+                    //zip.ExtractFile(
                 }
             }
         }
 
+        private static string CSVData =
+            "test,test2,test3,test4\r\n"+
+            "12,\"alpha\",12.5,15.4\r\n"+
+            "15,\"beta\",15.4,3.7\r\n"+
+            "2100,\"gamma delta\",21.5,1.02\r\n";
+
         [Test]
         public void CSV_Tests()
         {
-            string data =
-                "test,test2,test3,test4\r\n"+
-                "12,\"alpha\",12.5,15.4\r\n"+
-                "15,\"beta\",15.4,3.7\r\n"+
-                "21,\"gamma delta\",21.5,1.02\r\n";
-
-            using (CSVReader csv = new CSVReader(data)) {
+            using (CSVReader csv = new CSVReader(CSVData)) {
                 List<object> row;
 
                 row = csv.ReadRow(); // header
@@ -165,13 +165,73 @@ namespace GKTests
                 Assert.AreEqual(3.7f, row[3]);
 
                 row = csv.ReadRow();
-                Assert.AreEqual(21, row[0]);
+                Assert.AreEqual(2100, row[0]);
                 Assert.AreEqual("gamma delta", row[1]);
                 Assert.AreEqual(21.5f, row[2]);
                 Assert.AreEqual(1.02f, row[3]);
 
                 row = csv.ReadRow();
                 Assert.IsNull(row);
+            }
+
+            using (CSVReader csv = new CSVReader(CSVData)) {
+                DataTable tbl = csv.CreateDataTable(true);
+                Assert.AreEqual(3, tbl.Rows.Count);
+                Assert.AreEqual(4, tbl.Columns.Count);
+
+                DataRow row = tbl.Rows[0];
+                Assert.AreEqual(12, row[0]);
+                Assert.AreEqual("alpha", row[1]);
+                Assert.AreEqual(12.5f, row[2]);
+                Assert.AreEqual(15.4f, row[3]);
+
+                row = tbl.Rows[1];
+                Assert.AreEqual(15, row[0]);
+                Assert.AreEqual("beta", row[1]);
+                Assert.AreEqual(15.4f, row[2]);
+                Assert.AreEqual(3.7f, row[3]);
+
+                row = tbl.Rows[2];
+                Assert.AreEqual(2100, row[0]);
+                Assert.AreEqual("gamma delta", row[1]);
+                Assert.AreEqual(21.5f, row[2]);
+                Assert.AreEqual(1.02f, row[3]);
+            }
+        }
+
+        [Test]
+        public void IniFile_Tests()
+        {
+            using (IniFile iniFile = new IniFile()) {
+                iniFile.WriteInteger("test", "int", 15);
+                Assert.AreEqual(15, iniFile.ReadInteger("test", "int", 0));
+                iniFile.WriteString("test", "int", "0x9F");
+                Assert.AreEqual(159, iniFile.ReadInteger("test", "int", 0));
+
+                iniFile.WriteBool("test", "bool", true);
+                Assert.AreEqual(true, iniFile.ReadBool("test", "bool", false));
+
+                iniFile.WriteFloat("test", "float", 0.6666d);
+                Assert.AreEqual(0.6666d, iniFile.ReadFloat("test", "float", 0.3333d));
+
+                iniFile.WriteString("test", "str", "alpha");
+                Assert.AreEqual("alpha", iniFile.ReadString("test", "str", "beta"));
+
+                DateTime dtx = new DateTime(2016, 08, 11);
+                iniFile.WriteDateTime("test", "dtx", dtx);
+                Assert.AreEqual(dtx, iniFile.ReadDateTime("test", "dtx", new DateTime()));
+
+
+                iniFile.DeleteKey("test", "str");
+                Assert.AreEqual("beta", iniFile.ReadString("test", "str", "beta"));
+
+                //iniFile.DeleteSection("test"); // don't work!!!
+                iniFile.DeleteKey("test", "int");
+                Assert.AreEqual(0, iniFile.ReadInteger("test", "int", 0));
+                iniFile.DeleteKey("test", "bool");
+                Assert.AreEqual(false, iniFile.ReadBool("test", "bool", false));
+                iniFile.DeleteKey("test", "float");
+                Assert.AreEqual(0.3333d, iniFile.ReadFloat("test", "float", 0.3333d));
             }
         }
     }

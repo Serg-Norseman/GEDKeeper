@@ -27,7 +27,8 @@ namespace Externals.IniFiles
         /// above section's declaration. Returns "" if no comment is provided.</summary>
         public string Comment
         {
-            get { return Name == "" ? "" : getComment(sectionStart);
+            get {
+                return Name == "" ? "" : getComment(sectionStart);
             }
             set
             {
@@ -36,7 +37,7 @@ namespace Externals.IniFiles
             }
         }
 
-        void setComment(IniFileElement el, string comment)
+        private void setComment(IniFileElement el, string comment)
         {
             int index = parent.elements.IndexOf(el);
             if (IniFileSettings.CommentChars.Length == 0)
@@ -58,7 +59,7 @@ namespace Externals.IniFiles
             }
         }
 
-        string getComment(IniFileElement el)
+        private string getComment(IniFileElement el)
         {
             int index = parent.elements.IndexOf(el);
             if (index != 0 && parent.elements[index - 1] is IniFileCommentary)
@@ -66,7 +67,7 @@ namespace Externals.IniFiles
             else return "";
         }
         
-        IniFileValue GetValue(string key)
+        private IniFileValue GetValue(string key)
         {
             string lower = key.ToLowerInvariant();
             for (int i = 0; i < elements.Count; i++)
