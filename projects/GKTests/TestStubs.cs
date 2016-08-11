@@ -61,6 +61,8 @@ namespace GKTests
             evt.Detail.Date.ParseString("17 MAR 1990");
             evt.Detail.Place.StringValue = "Ivanovo";
 
+            iRec.AddAssociation("spouse", iRec2);
+
             // third individual, child
             GEDCOMIndividualRecord iRec3 = context.CreatePersonEx("Anna", "Ivanovna", "Ivanova", GEDCOMSex.svFemale, true);
             evt = iRec3.FindEvent("BIRT");
@@ -74,6 +76,8 @@ namespace GKTests
             famRec.AddSpouse(iRec);
             famRec.AddSpouse(iRec2);
             famRec.AddChild(iRec3);
+
+            context.CreateEventEx(famRec, "MARR", "01 JAN 2000", "unknown");
 
             // individual outside the family
             GEDCOMIndividualRecord iRec4 = context.CreatePersonEx("Alex", "", "Petrov", GEDCOMSex.svMale, true);
@@ -89,6 +93,7 @@ namespace GKTests
             GEDCOMGroupRecord groupRec = context.Tree.CreateGroup();
             groupRec.GroupName = "GroupTest";
             Assert.IsNotNull(groupRec, "group1 != null");
+            groupRec.AddMember(iRec);
 
             // location for tests
             GEDCOMLocationRecord locRec = context.Tree.CreateLocation();
@@ -111,6 +116,13 @@ namespace GKTests
             GEDCOMSourceRecord srcRec = context.Tree.CreateSource();
             srcRec.FiledByEntry = "Test source";
             Assert.IsNotNull(srcRec, "srcRec != null");
+            iRec.AddSource(srcRec, "p1", 0);
+
+            // note for tests
+            GEDCOMNoteRecord noteRec = context.Tree.CreateNote();
+            noteRec.SetNoteText("Test note");
+            Assert.IsNotNull(noteRec, "noteRec != null");
+            iRec.AddNote(noteRec);
 
             // task for tests
             GEDCOMTaskRecord tskRec = context.Tree.CreateTask();
@@ -124,6 +136,7 @@ namespace GKTests
             fileRef.Title = "Test multimedia";
             fileRef.LinkFile("sample.png");
             Assert.IsNotNull(mediaRec, "mediaRec != null");
+            iRec.AddMultimedia(mediaRec);
 
             // communication for tests
             GEDCOMCommunicationRecord commRec = context.Tree.CreateCommunication();

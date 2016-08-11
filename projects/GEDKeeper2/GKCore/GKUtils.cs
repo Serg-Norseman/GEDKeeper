@@ -1653,7 +1653,7 @@ namespace GKCore
 
         #region Show information summary
 
-        public static void ShowAddressSummary(GEDCOMAddress address, StringList summary)
+        private static void ShowAddressSummary(GEDCOMAddress address, StringList summary)
         {
             if (address != null && !address.IsEmpty() && summary != null)
             {
@@ -1708,7 +1708,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowDetailCause(GEDCOMCustomEvent evt, StringList summary)
+        private static void ShowDetailCause(GEDCOMCustomEvent evt, StringList summary)
         {
             string cause = GetEventCause(evt);
             if (summary != null && cause != "")
@@ -1717,12 +1717,10 @@ namespace GKCore
             }
         }
 
-        public static void ShowDetailInfo(GEDCOMEventDetail eventDetail, StringList summary)
+        private static void ShowDetailInfo(GEDCOMEventDetail eventDetail, StringList summary)
         {
             if (eventDetail == null)
-            {
                 throw new ArgumentNullException("eventDetail");
-            }
 
             if (summary != null && eventDetail.SourceCitations.Count != 0)
             {
@@ -1746,7 +1744,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowEvent(GEDCOMRecord subj, StringList aToList, GEDCOMRecord aRec, GEDCOMCustomEvent evt)
+        private static void ShowEvent(GEDCOMRecord subj, StringList aToList, GEDCOMRecord aRec, GEDCOMCustomEvent evt)
         {
             if (subj is GEDCOMNoteRecord) {
                 int num = evt.Detail.Notes.Count;
@@ -1773,7 +1771,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowLink(GEDCOMRecord aSubject, StringList aToList, GEDCOMRecord aRec, GEDCOMTag aTag, GEDCOMPointer aExt)
+        private static void ShowLink(GEDCOMRecord aSubject, StringList aToList, GEDCOMRecord aRec, GEDCOMTag aTag, GEDCOMPointer aExt)
         {
             string prefix;
             if (aSubject is GEDCOMSourceRecord && aExt != null) {
@@ -1796,7 +1794,7 @@ namespace GKCore
             aToList.Add("    " + prefix + GenRecordLink(aRec, true) + suffix);
         }
 
-        public static void ShowPersonExtInfo(GEDCOMTree tree, GEDCOMIndividualRecord iRec, StringList summary)
+        private static void ShowPersonExtInfo(GEDCOMTree tree, GEDCOMIndividualRecord iRec, StringList summary)
         {
             //if (tree == null || iRec == null || summary == null) return;
 
@@ -1823,7 +1821,7 @@ namespace GKCore
             }*/
         }
 
-        public static void ShowPersonNamesakes(GEDCOMTree tree, GEDCOMIndividualRecord iRec, StringList summary)
+        private static void ShowPersonNamesakes(GEDCOMTree tree, GEDCOMIndividualRecord iRec, StringList summary)
         {
             try {
                 StringList namesakes = new StringList();
@@ -1867,7 +1865,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowSubjectLinks(GEDCOMRecord aInRecord, GEDCOMRecord subject, StringList aToList)
+        private static void ShowSubjectLinks(GEDCOMRecord aInRecord, GEDCOMRecord subject, StringList aToList)
         {
             try
             {
@@ -1911,7 +1909,7 @@ namespace GKCore
             }
         }
 
-        public static void RecListMediaRefresh(GEDCOMRecord record, StringList summary)
+        private static void RecListMediaRefresh(GEDCOMRecord record, StringList summary)
         {
             if (record == null || summary == null) return;
 
@@ -1944,7 +1942,7 @@ namespace GKCore
             }
         }
 
-        public static void RecListNotesRefresh(GEDCOMRecord record, StringList summary)
+        private static void RecListNotesRefresh(GEDCOMRecord record, StringList summary)
         {
             if (record == null || summary == null) return;
 
@@ -1979,7 +1977,7 @@ namespace GKCore
             }
         }
 
-        public static void RecListSourcesRefresh(GEDCOMRecord record, StringList summary)
+        private static void RecListSourcesRefresh(GEDCOMRecord record, StringList summary)
         {
             if (record == null || summary == null) return;
 
@@ -2015,7 +2013,7 @@ namespace GKCore
             }
         }
 
-        public static void RecListAssociationsRefresh(GEDCOMIndividualRecord record, StringList summary)
+        private static void RecListAssociationsRefresh(GEDCOMIndividualRecord record, StringList summary)
         {
             if (record == null || summary == null) return;
 
@@ -2043,7 +2041,7 @@ namespace GKCore
             }
         }
 
-        public static void RecListIndividualEventsRefresh(GEDCOMIndividualRecord record, StringList summary)
+        private static void RecListIndividualEventsRefresh(GEDCOMIndividualRecord record, StringList summary)
         {
             if (record == null || summary == null) return;
 
@@ -2079,7 +2077,7 @@ namespace GKCore
             }
         }
 
-        public static void RecListFamilyEventsRefresh(GEDCOMFamilyRecord record, StringList summary)
+        private static void RecListFamilyEventsRefresh(GEDCOMFamilyRecord record, StringList summary)
         {
             if (record == null || summary == null) return;
 
@@ -2109,7 +2107,7 @@ namespace GKCore
             }
         }
 
-        public static void RecListGroupsRefresh(GEDCOMIndividualRecord record, StringList summary)
+        private static void RecListGroupsRefresh(GEDCOMIndividualRecord record, StringList summary)
         {
             if (record == null || summary == null) return;
 

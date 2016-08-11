@@ -1349,6 +1349,67 @@ namespace GKTests
         }
 
         [Test]
+        public void UI_Utils_Tests()
+        {
+            StringList summary = new StringList();
+
+            summary.Clear();
+            GKUtils.ShowFamilyInfo(null, null, ShieldState.None);
+            GEDCOMFamilyRecord famRec = this.fContext.Tree.XRefIndex_Find("F1") as GEDCOMFamilyRecord;
+            GKUtils.ShowFamilyInfo(famRec, summary, ShieldState.None);
+
+            summary.Clear();
+            GKUtils.ShowGroupInfo(null, null);
+            GEDCOMGroupRecord grpRec = this.fContext.Tree.XRefIndex_Find("G1") as GEDCOMGroupRecord;
+            GKUtils.ShowGroupInfo(grpRec, summary);
+
+            summary.Clear();
+            GKUtils.ShowMultimediaInfo(null, null);
+            GEDCOMMultimediaRecord mmRec = this.fContext.Tree.XRefIndex_Find("O1") as GEDCOMMultimediaRecord;
+            GKUtils.ShowMultimediaInfo(mmRec, summary);
+
+            summary.Clear();
+            GKUtils.ShowNoteInfo(null, null);
+            GEDCOMNoteRecord noteRec = this.fContext.Tree.XRefIndex_Find("N1") as GEDCOMNoteRecord;
+            GKUtils.ShowNoteInfo(noteRec, summary);
+
+            summary.Clear();
+            GKUtils.ShowPersonInfo(null, null, ShieldState.None);
+            GEDCOMIndividualRecord indRec = this.fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            GKUtils.ShowPersonInfo(indRec, summary, ShieldState.None);
+
+            summary.Clear();
+            GKUtils.ShowSourceInfo(null, null);
+            GEDCOMSourceRecord srcRec = this.fContext.Tree.XRefIndex_Find("S1") as GEDCOMSourceRecord;
+            GKUtils.ShowSourceInfo(srcRec, summary);
+
+            summary.Clear();
+            GKUtils.ShowRepositoryInfo(null, null);
+            GEDCOMRepositoryRecord repRec = this.fContext.Tree.XRefIndex_Find("R1") as GEDCOMRepositoryRecord;
+            GKUtils.ShowRepositoryInfo(repRec, summary);
+
+            summary.Clear();
+            GKUtils.ShowResearchInfo(null, null);
+            GEDCOMResearchRecord resRec = this.fContext.Tree.XRefIndex_Find("RS1") as GEDCOMResearchRecord;
+            GKUtils.ShowResearchInfo(resRec, summary);
+
+            summary.Clear();
+            GKUtils.ShowTaskInfo(null, null);
+            GEDCOMTaskRecord taskRec = this.fContext.Tree.XRefIndex_Find("TK1") as GEDCOMTaskRecord;
+            GKUtils.ShowTaskInfo(taskRec, summary);
+
+            summary.Clear();
+            GKUtils.ShowCommunicationInfo(null, null);
+            GEDCOMCommunicationRecord commRec = this.fContext.Tree.XRefIndex_Find("CM1") as GEDCOMCommunicationRecord;
+            GKUtils.ShowCommunicationInfo(commRec, summary);
+
+            summary.Clear();
+            GKUtils.ShowLocationInfo(null, null);
+            GEDCOMLocationRecord locRec = this.fContext.Tree.XRefIndex_Find("L1") as GEDCOMLocationRecord;
+            GKUtils.ShowLocationInfo(locRec, summary);
+        }
+
+        [Test]
         public void Export_Tests()
         {
             Assert.Throws(typeof(ArgumentNullException), () => { new PedigreeExporter(null); });

@@ -1850,34 +1850,35 @@ namespace GKTests
         [Test]
         public void GEDCOMGroupRecord_Tests()
         {
-            GEDCOMGroupRecord groupRec = _context.Tree.XRefIndex_Find("G1") as GEDCOMGroupRecord;
-            GEDCOMIndividualRecord member = _context.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            using (GEDCOMGroupRecord groupRec = _context.Tree.CreateGroup()) {
+                GEDCOMIndividualRecord member = _context.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
 
-            groupRec.GroupName = "Test Group";
-            Assert.AreEqual("Test Group", groupRec.GroupName);
+                groupRec.GroupName = "Test Group";
+                Assert.AreEqual("Test Group", groupRec.GroupName);
 
-            groupRec.DeleteTag("_UID");
-            groupRec.DeleteTag("CHAN");
-            string buf = TagStreamTest(groupRec);
-            Assert.AreEqual("0 @G1@ _GROUP\r\n1 NAME Test Group\r\n", buf);
+                groupRec.DeleteTag("_UID");
+                groupRec.DeleteTag("CHAN");
+                string buf = TagStreamTest(groupRec);
+                Assert.AreEqual("0 @G2@ _GROUP\r\n1 NAME Test Group\r\n", buf);
 
-            bool res = groupRec.AddMember(null);
-            Assert.IsFalse(res);
+                bool res = groupRec.AddMember(null);
+                Assert.IsFalse(res);
 
-            res = groupRec.RemoveMember(null);
-            Assert.IsFalse(res);
+                res = groupRec.RemoveMember(null);
+                Assert.IsFalse(res);
 
-            Assert.AreEqual(-1, groupRec.IndexOfMember(null));
+                Assert.AreEqual(-1, groupRec.IndexOfMember(null));
 
-            groupRec.AddMember(member);
-            Assert.AreEqual(0, groupRec.IndexOfMember(member));
+                groupRec.AddMember(member);
+                Assert.AreEqual(0, groupRec.IndexOfMember(member));
 
-            groupRec.RemoveMember(member);
-            Assert.AreEqual(-1, groupRec.IndexOfMember(member));
+                groupRec.RemoveMember(member);
+                Assert.AreEqual(-1, groupRec.IndexOfMember(member));
 
-            Assert.IsFalse(groupRec.IsEmpty());
-            groupRec.Clear();
-            Assert.IsTrue(groupRec.IsEmpty());
+                Assert.IsFalse(groupRec.IsEmpty());
+                groupRec.Clear();
+                Assert.IsTrue(groupRec.IsEmpty());
+            }
         }
 
         #endregion
