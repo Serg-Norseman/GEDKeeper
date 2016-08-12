@@ -47,26 +47,17 @@ namespace GKCore.Options
             Color.PaleGreen, // lines
         };
 
-        //private readonly AncestorsCircle fOwner;
-
         public Color[] BrushColor = new Color[MAX_BRUSHES];
         public bool HideEmptySegments;
 
-        public AncestorsCircleOptions(/*AncestorsCircle owner*/)
+        public AncestorsCircleOptions()
         {
-            //this.fOwner = owner;
-
             for (int i = 0; i < MAX_BRUSHES; i++) {
                 this.BrushColor[i] = DefBrushColor[i];
             }
 
             this.HideEmptySegments = false;
         }
-
-        /*public void Apply()
-        {
-            this.fOwner.Changed();
-        }*/
 
         public void Assign(IOptions source)
         {
@@ -82,9 +73,8 @@ namespace GKCore.Options
 
         public void LoadFromFile(IniFile iniFile)
         {
-            if (iniFile == null) {
+            if (iniFile == null)
                 throw new ArgumentNullException("iniFile");
-            }
 
             try
             {
@@ -102,9 +92,8 @@ namespace GKCore.Options
 
         public void SaveToFile(IniFile iniFile)
         {
-            if (iniFile == null) {
+            if (iniFile == null)
                 throw new ArgumentNullException("iniFile");
-            }
 
             for (int i = 0; i < MAX_BRUSHES; i++) {
                 iniFile.WriteInteger("AncestorsCircle", "Brush_"+Convert.ToString(i), BrushColor[i].ToArgb());

@@ -35,6 +35,8 @@ namespace GKUI.Charts
 {
     public delegate void ARootChangedEventHandler(object sender, GEDCOMIndividualRecord person);
 
+    public enum CircleChartType { Ancestors, Descendants }
+
     /// <summary>
     /// 
     /// </summary>

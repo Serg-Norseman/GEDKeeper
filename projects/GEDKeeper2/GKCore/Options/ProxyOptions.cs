@@ -18,14 +18,16 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using GKCommon;
+using GKCore.Interfaces;
 
 namespace GKCore.Options
 {
     /// <summary>
     /// 
     /// </summary>
-    public sealed class ProxyOptions : BaseObject
+    public sealed class ProxyOptions : BaseObject, IOptions
     {
         public string Server;
         public string Port;
@@ -37,9 +39,22 @@ namespace GKCore.Options
         {
         }
 
+        public void Assign(IOptions source)
+        {
+            ProxyOptions srcOptions = source as ProxyOptions;
+            if (srcOptions == null) return;
+
+            this.Server = srcOptions.Server;
+            this.Port = srcOptions.Port;
+            this.Login = srcOptions.Login;
+            this.Password = srcOptions.Password;
+            this.UseProxy = srcOptions.UseProxy;
+        }
+
         public void LoadFromFile(IniFile iniFile)
         {
-            if (iniFile == null) return;
+            if (iniFile == null)
+                throw new ArgumentNullException("iniFile");
 
             this.UseProxy = iniFile.ReadBool("Proxy", "UseProxy", false);
             this.Server = iniFile.ReadString("Proxy", "Server", "");
@@ -50,7 +65,8 @@ namespace GKCore.Options
 
         public void SaveToFile(IniFile iniFile)
         {
-            if (iniFile == null) return;
+            if (iniFile == null)
+                throw new ArgumentNullException("iniFile");
 
             iniFile.WriteBool("Proxy", "UseProxy", this.UseProxy);
             iniFile.WriteString("Proxy", "Server", this.Server);

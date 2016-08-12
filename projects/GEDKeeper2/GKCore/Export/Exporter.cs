@@ -59,7 +59,7 @@ namespace GKCore.Export
 
         protected void ShowResult()
         {
-            GKUtils.LoadExtFile(this.fPath);
+            SysUtils.LoadExtFile(this.fPath);
         }
     }
 }

@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Windows.Forms;
 using GKCommon;
 
@@ -38,9 +39,10 @@ namespace GKCore.Options
             this.FileName = fileName;
         }
 
-        public void Load(IniFile iniFile, string section)
+        public void LoadFromFile(IniFile iniFile, string section)
         {
-            if (iniFile == null) return;
+            if (iniFile == null)
+                throw new ArgumentNullException("iniFile");
 
             this.FileName = iniFile.ReadString(section, "FileName", "");
             this.WinRect.Left = iniFile.ReadInteger(section, "WinL", 10);
@@ -50,9 +52,10 @@ namespace GKCore.Options
             this.WinState = (FormWindowState)((uint)iniFile.ReadInteger(section, "WinState", 0));
         }
 
-        public void Save(IniFile iniFile, string section)
+        public void SaveToFile(IniFile iniFile, string section)
         {
-            if (iniFile == null) return;
+            if (iniFile == null)
+                throw new ArgumentNullException("iniFile");
 
             iniFile.WriteString(section, "FileName", this.FileName);
             iniFile.WriteInteger(section, "WinL", this.WinRect.Left);
@@ -64,7 +67,8 @@ namespace GKCore.Options
 
         public static void DeleteKeys(IniFile iniFile, string section)
         {
-            if (iniFile == null) return;
+            if (iniFile == null)
+                throw new ArgumentNullException("iniFile");
 
             iniFile.DeleteKey(section, "FileName");
             iniFile.DeleteKey(section, "WinL");

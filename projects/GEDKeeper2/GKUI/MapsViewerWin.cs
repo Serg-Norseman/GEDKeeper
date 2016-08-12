@@ -275,16 +275,18 @@ namespace GKUI
             this.PlacesLoad();
         }
 
-        public MapsViewerWin(IBaseWindow aBase)
+        public MapsViewerWin(IBaseWindow baseWin)
         {
             this.InitializeComponent();
 
-            this.fBase = aBase;
-            this.fTree = aBase.Tree;
-            this.fSelectedPersons = aBase.GetContentList(GEDCOMRecordType.rtIndividual);
             this.fMapBrowser = new GKMapBrowser();
             this.fMapBrowser.Dock = DockStyle.Fill;
             this.Panel1.Controls.Add(this.fMapBrowser);
+
+            this.fBase = baseWin;
+            this.fTree = baseWin.Tree;
+            this.fSelectedPersons = baseWin.GetContentList(GEDCOMRecordType.rtIndividual);
+
             this.fMapPoints = new ExtList<GMapPoint>(true);
             this.fPlaces = new ExtList<MapPlace>(true);
             this.fBaseRoot = this.tvPlaces.Nodes.Add(LangMan.LS(LSID.LSID_RPLocations));

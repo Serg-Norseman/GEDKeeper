@@ -115,7 +115,6 @@ namespace GKTextSearchPlugin
             try
             {
                 this.fHost = host;
-                this.fLangMan = this.fHost.CreateLangMan(this);
                 this.fSearchMan = new SearchManager(this);
             }
             catch (Exception ex)

@@ -50,7 +50,7 @@ namespace GKUI.Dialogs
         public static void ShowAbout()
         {
             string copyright, version;
-            GKUtils.GetAssemblyVersion(out copyright, out version);
+            SysUtils.GetAssemblyVersion(out copyright, out version);
 
             using (AboutDlg dlg = new AboutDlg())
             {

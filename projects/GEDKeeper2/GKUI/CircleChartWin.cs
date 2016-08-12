@@ -29,46 +29,53 @@ using GKUI.Charts;
 
 namespace GKUI
 {
-    public partial class AncestorsCircleWin : Form, IChartWindow
+    public partial class CircleChartWin : Form, IChartWindow
     {
-        private readonly AncestorsCircle fAncestorsCircle;
-        private readonly IBaseWindow fBase;
+        private readonly CircleChart fCircleChart;
+        private readonly IBaseWindow fBaseWin;
+        private readonly CircleChartType fType;
 
         public IBaseWindow Base
         {
-            get { return this.fBase; }
+            get { return this.fBaseWin; }
         }
 
-        public AncestorsCircleWin(IBaseWindow aBase, GEDCOMIndividualRecord startPerson)
+        public CircleChartWin(IBaseWindow baseWin, GEDCOMIndividualRecord startPerson, CircleChartType type)
         {
             this.InitializeComponent();
             this.MdiParent = MainWin.Instance;
             this.ShowInTaskbar = true;
 
-            this.fBase = aBase;
+            this.fBaseWin = baseWin;
+            this.fType = type;
 
-            this.fAncestorsCircle = new AncestorsCircle(this.fBase);
-            this.fAncestorsCircle.Dock = DockStyle.Fill;
-            this.fAncestorsCircle.NavRefresh += Chart_NavRefresh;
-            this.fAncestorsCircle.RootChanged += Chart_RootChanged;
-            this.fAncestorsCircle.RootPerson = startPerson;
+            if (type == CircleChartType.Ancestors) {
+                this.fCircleChart = new AncestorsCircle(this.fBaseWin);
+            } else {
+                this.fCircleChart = new DescendantsCircle(this.fBaseWin);
+            }
 
-            this.Controls.Add(this.fAncestorsCircle);
+            this.fCircleChart.Dock = DockStyle.Fill;
+            this.fCircleChart.NavRefresh += CircleChartWin_NavRefresh;
+            this.fCircleChart.RootChanged += CircleChartWin_RootChanged;
+            this.fCircleChart.RootPerson = startPerson;
+
+            this.Controls.Add(this.fCircleChart);
 
             this.SetLang();
         }
 
-        private void Chart_NavRefresh(object sender, EventArgs e)
+        private void CircleChartWin_NavRefresh(object sender, EventArgs e)
         {
             MainWin.Instance.UpdateControls(false);
         }
 
-        private void Chart_RootChanged(object sender, GEDCOMIndividualRecord person)
+        private void CircleChartWin_RootChanged(object sender, GEDCOMIndividualRecord person)
         {
             MainWin.Instance.UpdateControls(false);
         }
 
-        private void AncestorsCircleWin_KeyDown(object sender, KeyEventArgs e)
+        private void CircleChartWin_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
             {
@@ -82,7 +89,12 @@ namespace GKUI
         
         public void SetLang()
         {
-            this.Text = LangMan.LS(LSID.LSID_AncestorsCircle);
+            if (this.fType == CircleChartType.Ancestors) {
+                this.Text = LangMan.LS(LSID.LSID_AncestorsCircle);
+            } else {
+                this.Text = LangMan.LS(LSID.LSID_DescendantsCircle);
+            }
+            
         }
 
         #endregion
@@ -117,33 +129,33 @@ namespace GKUI
 
         public string GetStatusString()
         {
-            return string.Format(LangMan.LS(LSID.LSID_TreeIndividualsCount), fAncestorsCircle.IndividualsCount.ToString());
+            return string.Format(LangMan.LS(LSID.LSID_TreeIndividualsCount), fCircleChart.IndividualsCount.ToString());
         }
 
         public void UpdateView()
         {
-            this.fAncestorsCircle.Options.Assign(MainWin.Instance.Options.AncestorsCircleOptions);
-            this.fAncestorsCircle.Changed();
+            this.fCircleChart.Options.Assign(MainWin.Instance.Options.AncestorsCircleOptions);
+            this.fCircleChart.Changed();
         }
 
         public bool NavCanBackward()
         {
-            return this.fAncestorsCircle.NavCanBackward();
+            return this.fCircleChart.NavCanBackward();
         }
 
         public bool NavCanForward()
         {
-            return this.fAncestorsCircle.NavCanForward();
+            return this.fCircleChart.NavCanForward();
         }
 
         public void NavNext()
         {
-            this.fAncestorsCircle.NavNext();
+            this.fCircleChart.NavNext();
         }
 
         public void NavPrev()
         {
-            this.fAncestorsCircle.NavPrev();
+            this.fCircleChart.NavPrev();
         }
 
         public bool AllowQuickFind()

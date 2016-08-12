@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Cultures;
@@ -387,7 +388,7 @@ namespace GKCore.Options
                     this.fLastDir = ini.ReadString("Common", "LastDir", "");
                     this.fPlacesWithAddress = ini.ReadBool("Common", "PlacesWithAddress", false);
                     this.fShowTips = ini.ReadBool("Common", "ShowTips", true);
-                    this.fInterfaceLang = (ushort)ini.ReadInteger("Common", "InterfaceLang", 1049);
+                    this.fInterfaceLang = (ushort)ini.ReadInteger("Common", "InterfaceLang", 0);
                     this.fFileBackup = (FileBackup)ini.ReadInteger("Common", "FileBackup", 0);
                     this.fShowDatesCalendar = ini.ReadBool("Common", "ShowDatesCalendar", false);
                     this.fShowDatesSign = ini.ReadBool("Common", "ShowDatesSigns", false);
@@ -397,8 +398,8 @@ namespace GKCore.Options
 
                     this.fExtendedNames = ini.ReadBool("Common", "ExtendedNames", false);
 
-                    int kl = ini.ReadInteger("Common", "KeyLayout", GKUtils.GetKeyLayout());
-                    GKUtils.SetKeyLayout(kl);
+                    int kl = ini.ReadInteger("Common", "KeyLayout", SysUtils.GetKeyLayout());
+                    SysUtils.SetKeyLayout(kl);
 
                     this.fChartOptions.LoadFromFile(ini);
                     this.fPedigreeOptions.LoadFromFile(ini);
@@ -430,7 +431,7 @@ namespace GKCore.Options
                         string fn = ini.ReadString(sect, "FileName", "");
                         if (File.Exists(fn)) {
                             MRUFile mf = new MRUFile();
-                            mf.Load(ini, sect);
+                            mf.LoadFromFile(ini, sect);
                             this.fMRUFiles.Add(mf);
                         } else {
                             MRUFile.DeleteKeys(ini, sect);
@@ -487,7 +488,7 @@ namespace GKCore.Options
                     ini.WriteBool("Common", "ShowDatesCalendar", this.fShowDatesCalendar);
                     ini.WriteBool("Common", "ShowDatesSigns", this.fShowDatesSign);
 
-                    ini.WriteInteger("Common", "KeyLayout", GKUtils.GetKeyLayout());
+                    ini.WriteInteger("Common", "KeyLayout", SysUtils.GetKeyLayout());
 
                     ini.WriteBool("Common", "Autosave", this.fAutosave);
                     ini.WriteInteger("Common", "AutosaveInterval", this.fAutosaveInterval);
@@ -525,7 +526,7 @@ namespace GKCore.Options
                     ini.WriteInteger("Common", "MRUFiles_Count", cnt);
                     for (int i = 0; i < cnt; i++)
                     {
-                        this.fMRUFiles[i].Save(ini, "MRUFile_" + i.ToString());
+                        this.fMRUFiles[i].SaveToFile(ini, "MRUFile_" + i.ToString());
                     }
                     //this.FMRUFiles.Sort();
 

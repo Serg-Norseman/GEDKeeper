@@ -394,7 +394,7 @@ namespace GKUI
 
         #region Misc functions
 
-        public static ushort DetermineLanguage()
+        private ushort RequestLanguage()
         {
             using (LanguageSelectDlg dlg = new LanguageSelectDlg())
             {
@@ -409,6 +409,10 @@ namespace GKUI
 
         public void LoadLanguage(int langCode)
         {
+            if (langCode <= 0) {
+                langCode = this.RequestLanguage();
+            }
+
             try {
                 if (langCode != LangMan.LS_DEF_CODE) {
                     bool loaded = false;
@@ -669,10 +673,7 @@ namespace GKUI
                     Form child = base.MdiChildren[i];
 
                     if (child is IBaseWindow) {
-                        GEDCOMTree tree = (child as IBaseWindow).Tree;
-
-                        string rfn = Path.ChangeExtension(tree.FileName, ".restore");
-                        tree.SaveToFile(rfn, this.fOptions.DefCharacterSet);
+                        ((IBaseWindow)child).CriticalSave();
                     }
                 }
             } catch (Exception ex) {
@@ -779,7 +780,7 @@ namespace GKUI
                 Form activeForm = this.ActiveMdiChild;
                 if (activeForm is IBaseWindow) dlgOptions.SetPage(OptionsPage.opInterface);
                 if (activeForm is IChartWindow) {
-                    if (activeForm is AncestorsCircleWin || activeForm is DescendantsCircleWin) {
+                    if (activeForm is CircleChartWin) {
                         dlgOptions.SetPage(OptionsPage.opAncestorsCircle);
                     } else {
                         dlgOptions.SetPage(OptionsPage.opTreeChart);
@@ -1019,7 +1020,7 @@ namespace GKUI
             IBaseWindow curBase = this.GetCurrentFile();
             if (curBase == null) return;
 
-            AncestorsCircleWin fmChart = new AncestorsCircleWin(curBase, curBase.GetSelectedPerson());
+            CircleChartWin fmChart = new CircleChartWin(curBase, curBase.GetSelectedPerson(), CircleChartType.Ancestors);
             fmChart.GenChart(true);
         }
 
@@ -1028,7 +1029,7 @@ namespace GKUI
             IBaseWindow curBase = this.GetCurrentFile();
             if (curBase == null) return;
 
-            DescendantsCircleWin fmChart = new DescendantsCircleWin(curBase, curBase.GetSelectedPerson());
+            CircleChartWin fmChart = new CircleChartWin(curBase, curBase.GetSelectedPerson(), CircleChartType.Descendants);
             fmChart.GenChart(true);
         }
 
@@ -1038,12 +1039,12 @@ namespace GKUI
 
         private void miLogSendClick(object sender, EventArgs e)
         {
-            GKUtils.SendMail(GKData.APP_MAIL, "GEDKeeper: error notification", "This automatic notification of error.", this.fLogFilename);
+            SysUtils.SendMail(GKData.APP_MAIL, "GEDKeeper: error notification", "This automatic notification of error.", this.fLogFilename);
         }
 
         private void miLogViewClick(object sender, EventArgs e)
         {
-            GKUtils.LoadExtFile(this.fLogFilename);
+            SysUtils.LoadExtFile(this.fLogFilename);
         }
 
         private void miAboutClick(object sender, EventArgs e)
@@ -1079,7 +1080,7 @@ namespace GKUI
                 return;
             }
 
-            GKUtils.LoadExtFile(topic);
+            SysUtils.LoadExtFile(topic);
         }
 
         private void miContextClick(object sender, EventArgs e)
@@ -1230,16 +1231,16 @@ namespace GKUI
 
             Assembly asm = plugin.GetType().Assembly;
 
-            var attr1 = GKUtils.GetAssemblyAttribute<AssemblyTitleAttribute>(asm);
+            var attr1 = SysUtils.GetAssemblyAttribute<AssemblyTitleAttribute>(asm);
             if (attr1 != null) info.Title = attr1.Title;
 
-            var attr2 = GKUtils.GetAssemblyAttribute<AssemblyDescriptionAttribute>(asm);
+            var attr2 = SysUtils.GetAssemblyAttribute<AssemblyDescriptionAttribute>(asm);
             if (attr2 != null) info.Description = attr2.Description;
 
-            var attr3 = GKUtils.GetAssemblyAttribute<AssemblyCopyrightAttribute>(asm);
+            var attr3 = SysUtils.GetAssemblyAttribute<AssemblyCopyrightAttribute>(asm);
             if (attr3 != null) info.Copyright = attr3.Copyright;
 
-            var attr4 = GKUtils.GetAssemblyAttribute<AssemblyFileVersionAttribute>(asm);
+            var attr4 = SysUtils.GetAssemblyAttribute<AssemblyFileVersionAttribute>(asm);
             if (attr4 != null) info.Version = attr4.Version;
 
             return info;

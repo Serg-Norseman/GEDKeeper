@@ -26,8 +26,8 @@ using GKCommon.GEDCOM;
 using GKCommon.SmartGraph;
 using GKCore.Interfaces;
 using GKCore.Types;
-using NUnit.Framework;
 using GKTests.Mocks;
+using NUnit.Framework;
 
 namespace GKTests
 {
@@ -961,6 +961,25 @@ namespace GKTests
             Assert.AreEqual(PlatformID.Win32NT, SysInfo.GetPlatformID());
             Assert.AreEqual(DesktopType.Windows, SysInfo.GetDesktopType());
             #endif
+        }
+
+        [Test]
+        public void LinqHelper_Tests()
+        {
+            Assert.Throws(typeof(ArgumentNullException), () => { LinqHelper.FirstOrDefault<int>(null); });
+            int N = LinqHelper.FirstOrDefault<int>(new int[] { 5, 7, 10 });
+            Assert.AreEqual(5, N);
+
+            Assert.Throws(typeof(ArgumentNullException), () => { LinqHelper.LastOrDefault<int>(null); });
+            N = LinqHelper.LastOrDefault<int>(new int[] { 5, 7, 10 });
+            Assert.AreEqual(10, N);
+
+            Assert.Throws(typeof(ArgumentNullException), () => { LinqHelper.SingleOrDefault<int>(null); });
+            N = LinqHelper.SingleOrDefault<int>(new int[] { 11 });
+            Assert.AreEqual(11, N);
+            N = LinqHelper.SingleOrDefault<int>(new int[] { });
+            Assert.AreEqual(0, N);
+            Assert.Throws(typeof(Exception), () => { LinqHelper.SingleOrDefault<int>(new int[] { 5, 7, 10 }); });
         }
     }
 }

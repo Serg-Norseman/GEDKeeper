@@ -20,6 +20,7 @@
 
 using System;
 using GKCommon;
+using GKCore.Interfaces;
 using GKCore.Types;
 
 namespace GKCore.Options
@@ -38,7 +39,7 @@ namespace GKCore.Options
     /// <summary>
     /// 
     /// </summary>
-    public sealed class PedigreeOptions : BaseObject
+    public sealed class PedigreeOptions : BaseObject, IOptions
     {
         public PedigreeFormat Format;
         public bool IncludeAttributes;
@@ -54,18 +55,29 @@ namespace GKCore.Options
             this.IncludeGenerations = true;
         }
 
+        public void Assign(IOptions source)
+        {
+            PedigreeOptions srcOptions = source as PedigreeOptions;
+            if (srcOptions == null) return;
+
+            this.Format = srcOptions.Format;
+            this.IncludeAttributes = srcOptions.IncludeAttributes;
+            this.IncludeNotes = srcOptions.IncludeNotes;
+            this.IncludeSources = srcOptions.IncludeSources;
+            this.IncludeGenerations = srcOptions.IncludeGenerations;
+        }
+
         public void LoadFromFile(IniFile iniFile)
         {
-            if (iniFile == null) {
+            if (iniFile == null)
                 throw new ArgumentNullException("iniFile");
-            }
 
             try
             {
+                this.Format = (PedigreeFormat)iniFile.ReadInteger("Pedigree", "Format", 0);
                 this.IncludeAttributes = iniFile.ReadBool("Pedigree", "IncludeAttributes", true);
                 this.IncludeNotes = iniFile.ReadBool("Pedigree", "IncludeNotes", true);
                 this.IncludeSources = iniFile.ReadBool("Pedigree", "IncludeSources", true);
-                this.Format = (PedigreeFormat)iniFile.ReadInteger("Pedigree", "Format", 0);
                 this.IncludeGenerations = iniFile.ReadBool("Pedigree", "IncludeGenerations", true);
             }
             catch (Exception)
@@ -76,14 +88,13 @@ namespace GKCore.Options
 
         public void SaveToFile(IniFile iniFile)
         {
-            if (iniFile == null) {
+            if (iniFile == null)
                 throw new ArgumentNullException("iniFile");
-            }
 
+            iniFile.WriteInteger("Pedigree", "Format", (sbyte)this.Format);
             iniFile.WriteBool("Pedigree", "IncludeAttributes", this.IncludeAttributes);
             iniFile.WriteBool("Pedigree", "IncludeNotes", this.IncludeNotes);
             iniFile.WriteBool("Pedigree", "IncludeSources", this.IncludeSources);
-            iniFile.WriteInteger("Pedigree", "Format", (sbyte)this.Format);
             iniFile.WriteBool("Pedigree", "IncludeGenerations", this.IncludeGenerations);
         }
     }

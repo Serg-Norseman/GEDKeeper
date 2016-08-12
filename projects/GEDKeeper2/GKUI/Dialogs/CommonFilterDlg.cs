@@ -35,7 +35,7 @@ namespace GKUI.Dialogs
     {
         private readonly IBaseWindow fBase;
         private readonly string[] fFields;
-        private readonly ListManager fListMan;
+        private readonly IListManager fListMan;
         private MaskedTextBox fMaskedTextBox;
 
         public IBaseWindow Base
@@ -48,7 +48,7 @@ namespace GKUI.Dialogs
             this.InitializeComponent();
         }
 
-        public CommonFilterDlg(IBaseWindow aBase, ListManager listMan)
+        public CommonFilterDlg(IBaseWindow aBase, IListManager listMan)
         {
             if (aBase == null)
                 throw new ArgumentNullException("aBase");

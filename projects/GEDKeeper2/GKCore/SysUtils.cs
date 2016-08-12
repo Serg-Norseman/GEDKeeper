@@ -19,14 +19,124 @@
  */
 
 using System;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
+using System.Windows.Forms;
+
+using GKCommon;
 
 namespace GKCore
 {
+    #if !__MonoCS__
+    using Externals.MapiMail;
+    #endif
+
     [SecurityCritical, SuppressUnmanagedCodeSecurity]
     public static class SysUtils
     {
+        public static bool IsSetBit(uint val, int pos)
+        {
+            return (val & (1 << pos)) != 0;
+        }
+
+        public static long Trunc(double value)
+        {
+            return (long)Math.Truncate(value);
+        }
+
+        public static double SafeDiv(double dividend, double divisor)
+        {
+            return (divisor == (double)0f) ? 0.0 : (dividend / divisor);
+        }
+
+        public static void LoadExtFile(string fileName)
+        {
+            if (File.Exists(fileName))
+            {
+                #if __MonoCS__
+                Process.Start(new ProcessStartInfo("file://"+fileName) { UseShellExecute = true });
+                #else
+                Process.Start(fileName);
+                #endif
+            }
+        }
+
+        public static int GetKeyLayout()
+        {
+            #if __MonoCS__
+            // There is a bug in Mono: does not work this CurrentInputLanguage
+            return CultureInfo.CurrentUICulture.KeyboardLayoutId;
+            #else
+            InputLanguage currentLang = InputLanguage.CurrentInputLanguage;
+            return currentLang.Culture.KeyboardLayoutId;
+            #endif
+        }
+
+        public static void SetKeyLayout(int layout)
+        {
+            try {
+                CultureInfo cultureInfo = new CultureInfo(layout);
+                InputLanguage currentLang = InputLanguage.FromCulture(cultureInfo);
+                InputLanguage.CurrentInputLanguage = currentLang;
+            } catch (Exception ex) {
+                Logger.LogWrite("GKUtils.SetKeyLayout(): " + ex.Message);
+            }
+        }
+
+        public static void SendMail(string address, string subject, string body, string attach)
+        {
+            if (File.Exists(attach)) {
+                #if __MonoCS__
+
+                string mailto = string.Format("mailto:{0}?Subject={1}&Body={2}&Attach={3}", address, subject, body, "" + attach + ""); // Attach, Attachment
+                Process.Start(mailto);
+
+                #else
+
+                MapiMailMessage message = new MapiMailMessage(subject, body);
+                message.Recipients.Add(GKData.APP_MAIL);
+                message.Files.Add(attach);
+                message.ShowDialog();
+
+                #endif
+            }
+        }
+
+        public static bool IsNetworkAvailable()
+        {
+            return System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
+        }
+
+        public static T GetAssemblyAttribute<T>(Assembly assembly) where T : Attribute
+        {
+            if (assembly == null)
+            {
+                throw new ArgumentNullException("assembly");
+            }
+
+            object[] attributes = assembly.GetCustomAttributes(typeof(T), false);
+            if (attributes == null || attributes.Length == 0)
+                return null;
+            return LinqHelper.SingleOrDefault(LinqHelper.OfTypeIterator((T[])attributes));
+        }
+
+        public static void GetAssemblyVersion(out string copyright, out string version)
+        {
+            copyright = "";
+            version = "";
+
+            Assembly assembly = Assembly.GetExecutingAssembly();
+
+            object[] attributes = assembly.GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
+            if (attributes.Length != 0) copyright = ((AssemblyCopyrightAttribute)attributes[0]).Copyright;
+
+            version = assembly.GetName().Version.ToString();
+        }
+
         public const uint WM_USER 			= 0x0400;
         public const uint WM_KEEPMODELESS 	= WM_USER + 111;
 

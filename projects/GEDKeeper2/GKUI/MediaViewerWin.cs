@@ -81,7 +81,7 @@ namespace GKUI
                         this.fExtern = true;
                         string targetFile = "";
                         this.fBase.Context.MediaLoad(this.fFileRef, ref targetFile);
-                        GKUtils.LoadExtFile(targetFile);
+                        SysUtils.LoadExtFile(targetFile);
                         break;
                     }
 

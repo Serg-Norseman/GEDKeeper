@@ -31,7 +31,6 @@ using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
 using GKCore.Interfaces;
-using GKCore.Types;
 using GKUI.Charts;
 using GKUI.Controls;
 using GKUI.Dialogs;

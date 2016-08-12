@@ -137,6 +137,7 @@ sources := \
 ./GKCommon/GfxHelper.cs \
 ./GKCommon/IndistinctMatching.cs \
 ./GKCommon/IniFile.cs \
+./GKCommon/LinqHelper.cs \
 ./GKCommon/Logger.cs \
 ./GKCommon/Range.cs \
 ./GKCommon/SmartGraph/Edge.cs \
@@ -312,6 +313,7 @@ sources := \
 ./GKCommon/GfxHelper.cs \
 ./GKCommon/IndistinctMatching.cs \
 ./GKCommon/IniFile.cs \
+./GKCommon/LinqHelper.cs \
 ./GKCommon/Logger.cs \
 ./GKCommon/Range.cs \
 ./GKCommon/SmartGraph/Edge.cs \

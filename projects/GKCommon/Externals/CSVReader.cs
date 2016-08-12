@@ -47,17 +47,12 @@ namespace Externals
     /// </summary>
     public sealed class CSVReader : IDisposable
     {
-        public const string NEWLINE = "\r\n";
+        private const string NEWLINE = "\r\n";
 
         /// <summary>
         /// This reader will read all of the CSV data
         /// </summary>
         private readonly BinaryReader reader;
-
-        /// <summary>
-        /// The number of rows to scan for types when building a DataTable (0 to scan the whole file)
-        /// </summary>
-        public int ScanRows = 0;
 
         #region Instance control
 
@@ -118,7 +113,6 @@ namespace Externals
         {
             using (CSVReader reader = new CSVReader(new FileInfo(filename)))
             {
-                reader.ScanRows = scanRows;
                 return reader.CreateDataTable(headerRow);
             }
         }

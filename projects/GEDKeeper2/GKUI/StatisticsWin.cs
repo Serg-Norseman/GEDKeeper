@@ -175,7 +175,7 @@ namespace GKUI
             this.fListStats.SortColumn = -1;
             this.fListStats.BeginUpdate();
             this.fListStats.Items.Clear();
-            
+
             List<StatsItem> vals = new List<StatsItem>();
             try
             {
@@ -186,7 +186,7 @@ namespace GKUI
                 foreach (StatsItem lv in vals)
                 {
                     ListViewItem item = new ListViewItem(lv.Caption);
-                    
+
                     string stVal = (!lv.IsCombo) ? lv.Value.ToString() : lv.ValF.ToString() + " | " + lv.ValM.ToString();
                     item.SubItems.Add(stVal);
 

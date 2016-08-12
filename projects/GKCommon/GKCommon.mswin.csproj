@@ -205,6 +205,7 @@
     <Compile Include="GKCommon\GKResourceManager.cs" />
     <Compile Include="GKCommon\IndistinctMatching.cs" />
     <Compile Include="GKCommon\IniFile.cs" />
+    <Compile Include="GKCommon\LinqHelper.cs" />
     <Compile Include="GKCommon\Logger.cs" />
     <Compile Include="GKCommon\Range.cs" />
     <Compile Include="GKCommon\SmartGraph\Edge.cs" />

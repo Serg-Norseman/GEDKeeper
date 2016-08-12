@@ -128,14 +128,13 @@ namespace GKFlowInputPlugin
                 fHost.LogWrite("GKFlowInputPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
-        
+
         public bool Startup(IHost host)
         {
             bool result = true;
             try
             {
                 this.fHost = host;
-                this.fLangMan = this.fHost.CreateLangMan(this);
             }
             catch (Exception ex)
             {

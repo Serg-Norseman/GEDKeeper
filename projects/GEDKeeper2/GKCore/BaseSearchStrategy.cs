@@ -20,11 +20,22 @@
 
 using System;
 using System.Collections.Generic;
+using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 
 namespace GKCore
 {
+    public class SearchResult : ISearchResult
+    {
+        public readonly GEDCOMObject Result;
+
+        public SearchResult(GEDCOMObject result)
+        {
+            this.Result = result;
+        }
+    }
+
     public class BaseSearchStrategy : ISearchStrategy
     {
         private readonly string searchPattern;
@@ -46,15 +57,6 @@ namespace GKCore
         public IList<ISearchResult> FindAll()
         {
             return this.workWindow.FindAll(this.searchPattern);
-
-            /*foreach (Match result in searchPattern.Matches(document.Text)) {
-				int resultEndOffset = result.Length + result.Index;
-				if (offset > result.Index || endOffset < resultEndOffset)
-					continue;
-				if (matchWholeWords && (!IsWordBorder(document, result.Index) || !IsWordBorder(document, resultEndOffset)))
-					continue;
-				yield return new SearchResult { StartOffset = result.Index, Length = result.Length, Data = result };
-			}*/
         }
 
         public bool HasResults()
@@ -67,7 +69,7 @@ namespace GKCore
             if (curResult == null) {
                 if (currentResults == null) currentResults = this.FindAll();
 
-                curResult = GKUtils.FirstOrDefault(currentResults);
+                curResult = LinqHelper.FirstOrDefault(currentResults);
             } else {
                 int idx = currentResults.IndexOf(curResult) + 1;
 
@@ -82,7 +84,7 @@ namespace GKCore
             if (curResult == null) {
                 if (currentResults == null) currentResults = this.FindAll();
 
-                curResult = GKUtils.LastOrDefault(currentResults);
+                curResult = LinqHelper.LastOrDefault(currentResults);
             } else {
                 int idx = currentResults.IndexOf(curResult) - 1;
 
@@ -90,16 +92,6 @@ namespace GKCore
             }
 
             return curResult;
-        }
-    }
-
-    public class SearchResult : ISearchResult
-    {
-        public readonly GEDCOMObject Result;
-
-        public SearchResult(GEDCOMObject result)
-        {
-            this.Result = result;
         }
     }
 }

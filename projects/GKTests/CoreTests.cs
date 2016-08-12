@@ -225,11 +225,18 @@ namespace GKTests
         }
 
         [Test]
-        public void Bits_Tests()
+        public void SysUtils_Tests()
         {
-            Assert.AreEqual(true, GKUtils.IsSetBit(3, 0));
-            Assert.AreEqual(true, GKUtils.IsSetBit(3, 1));
-            Assert.AreEqual(false, GKUtils.IsSetBit(3, 4));
+            Assert.AreEqual(true, SysUtils.IsSetBit(3, 0));
+            Assert.AreEqual(true, SysUtils.IsSetBit(3, 1));
+            Assert.AreEqual(false, SysUtils.IsSetBit(3, 4));
+
+            //
+
+            Assert.AreEqual(495, SysUtils.Trunc(495.575));
+
+            Assert.AreEqual(3.0f, SysUtils.SafeDiv(9.0f, 3.0f));
+            Assert.AreEqual(0.0f, SysUtils.SafeDiv(9.0f, 0.0f));
         }
 
         [Test]
@@ -250,22 +257,6 @@ namespace GKTests
             Assert.AreEqual("15", age);
 
             //
-
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.FirstOrDefault<int>(null); });
-            int N = GKUtils.FirstOrDefault<int>(new int[] { 5, 7, 10 });
-            Assert.AreEqual(5, N);
-
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.LastOrDefault<int>(null); });
-            N = GKUtils.LastOrDefault<int>(new int[] { 5, 7, 10 });
-            Assert.AreEqual(10, N);
-
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.SingleOrDefault<int>(null); });
-            N = GKUtils.SingleOrDefault<int>(new int[] { 11 });
-            Assert.AreEqual(11, N);
-            N = GKUtils.SingleOrDefault<int>(new int[] { });
-            Assert.AreEqual(0, N);
-            Assert.Throws(typeof(Exception), () => { GKUtils.SingleOrDefault<int>(new int[] { 5, 7, 10 }); });
-
             //
 
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetPedigreeLifeStr(null, PedigreeFormat.Compact); });
@@ -407,14 +398,6 @@ namespace GKTests
             Assert.IsFalse(res);
 
             GEDCOMListTests(iRec);
-
-            //
-
-            long val = GKUtils.Trunc(495.575);
-            Assert.AreEqual(val, 495);
-
-            Assert.AreEqual(3.0f, GKUtils.SafeDiv(9.0f, 3.0f));
-            Assert.AreEqual(0.0f, GKUtils.SafeDiv(9.0f, 0.0f));
             
             // access tests
             Assert.IsTrue(GKUtils.IsRecordAccess(GEDCOMRestriction.rnNone, ShieldState.None));
@@ -959,23 +942,59 @@ namespace GKTests
         [Test]
         public void Options_Tests()
         {
-            //GlobalOptions globalOptions = new GlobalOptions();
-            //Assert.IsNotNull(globalOptions);
+            using (IniFile iniFile = new IniFile()) {
+                GlobalOptions globalOptions = GlobalOptions.Instance;
+                Assert.IsNotNull(globalOptions);
 
-            MRUFile mruFile = new MRUFile();
-            Assert.IsNotNull(mruFile);
+                MRUFile mruFile = new MRUFile();
+                Assert.IsNotNull(mruFile);
 
-            mruFile = new MRUFile("test.ged");
-            Assert.IsNotNull(mruFile);
+                mruFile = new MRUFile("test.ged");
+                Assert.IsNotNull(mruFile);
 
-            PedigreeOptions pedigreeOptions = new PedigreeOptions();
-            Assert.IsNotNull(pedigreeOptions);
+                mruFile.SaveToFile(iniFile, "xxx");
+                mruFile.LoadFromFile(iniFile, "xxx");
+                MRUFile.DeleteKeys(iniFile, "xxx");
+                Assert.Throws(typeof(ArgumentNullException), () => { mruFile.SaveToFile(null, "xxx"); });
+                Assert.Throws(typeof(ArgumentNullException), () => { mruFile.LoadFromFile(null, "xxx"); });
+                Assert.Throws(typeof(ArgumentNullException), () => { MRUFile.DeleteKeys(null, "xxx"); });
 
-            ProxyOptions proxyOptions = new ProxyOptions();
-            Assert.IsNotNull(proxyOptions);
+                AncestorsCircleOptions circleOptions = new AncestorsCircleOptions();
+                Assert.IsNotNull(circleOptions);
+                circleOptions.Assign(null);
+                circleOptions.Assign(new AncestorsCircleOptions());
+                circleOptions.SaveToFile(iniFile);
+                circleOptions.LoadFromFile(iniFile);
+                Assert.Throws(typeof(ArgumentNullException), () => { circleOptions.SaveToFile(null); });
+                Assert.Throws(typeof(ArgumentNullException), () => { circleOptions.LoadFromFile(null); });
 
-            TreeChartOptions treeChartOptions = new TreeChartOptions();
-            Assert.IsNotNull(treeChartOptions);
+                PedigreeOptions pedigreeOptions = new PedigreeOptions();
+                Assert.IsNotNull(pedigreeOptions);
+                pedigreeOptions.Assign(null);
+                pedigreeOptions.Assign(new PedigreeOptions());
+                pedigreeOptions.SaveToFile(iniFile);
+                pedigreeOptions.LoadFromFile(iniFile);
+                Assert.Throws(typeof(ArgumentNullException), () => { pedigreeOptions.SaveToFile(null); });
+                Assert.Throws(typeof(ArgumentNullException), () => { pedigreeOptions.LoadFromFile(null); });
+
+                ProxyOptions proxyOptions = new ProxyOptions();
+                Assert.IsNotNull(proxyOptions);
+                proxyOptions.Assign(null);
+                proxyOptions.Assign(new ProxyOptions());
+                proxyOptions.SaveToFile(iniFile);
+                proxyOptions.LoadFromFile(iniFile);
+                Assert.Throws(typeof(ArgumentNullException), () => { proxyOptions.SaveToFile(null); });
+                Assert.Throws(typeof(ArgumentNullException), () => { proxyOptions.LoadFromFile(null); });
+
+                TreeChartOptions treeChartOptions = new TreeChartOptions();
+                Assert.IsNotNull(treeChartOptions);
+                treeChartOptions.Assign(null);
+                treeChartOptions.Assign(new TreeChartOptions());
+                treeChartOptions.SaveToFile(iniFile);
+                treeChartOptions.LoadFromFile(iniFile);
+                Assert.Throws(typeof(ArgumentNullException), () => { treeChartOptions.SaveToFile(null); });
+                Assert.Throws(typeof(ArgumentNullException), () => { treeChartOptions.LoadFromFile(null); });
+            }
         }
 
         [Test]
@@ -1437,6 +1456,15 @@ namespace GKTests
             using (ScriptEngine script = new ScriptEngine()) {
                 script.lua_run("gk_print(\"Hello\")", null, null);
             }
+        }
+
+        [Test]
+        public void LangMan_Tests()
+        {
+            LangManager langMan = new LangManager();
+            Assert.IsNotNull(langMan);
+
+            Assert.AreEqual("?", langMan.LS(LSID.LSID_First));
         }
     }
 }

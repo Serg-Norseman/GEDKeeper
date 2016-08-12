@@ -372,7 +372,7 @@ namespace GKCore.Stats
                                     case StatsMode.smAAF_1:
                                         int dty1 = GEDCOMUtils.GetRelativeYear(iRec, "BIRT");
                                         if (dty1 != 0) {
-                                            key = GKUtils.Trunc(dty1 / 10 * 10).ToString();
+                                            key = SysUtils.Trunc(dty1 / 10 * 10).ToString();
 
                                             if (!xvals.TryGetValue(key, out valsList))
                                             {
@@ -387,7 +387,7 @@ namespace GKCore.Stats
                                     case StatsMode.smAAF_2:
                                         int dty2 = GEDCOMUtils.GetRelativeYear(iChild, "BIRT");
                                         if (dty2 != 0) {
-                                            key = GKUtils.Trunc(dty2 / 10 * 10).ToString();
+                                            key = SysUtils.Trunc(dty2 / 10 * 10).ToString();
 
                                             if (!xvals.TryGetValue(key, out valsList))
                                             {

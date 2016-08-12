@@ -463,7 +463,7 @@ namespace GKUI
 		    		    		    this.miExit});
 		    this.miFile.Name = "miFile";
 		    this.miFile.Size = new System.Drawing.Size(61, 24);
-		    this.miFile.Text = "miFile";
+		    this.miFile.Text = "File";
 		    // 
 		    // miFileNew
 		    // 
@@ -559,7 +559,7 @@ namespace GKUI
 		    		    		    this.miFilter});
 		    this.miEdit.Name = "miEdit";
 		    this.miEdit.Size = new System.Drawing.Size(64, 24);
-		    this.miEdit.Text = "miEdit";
+		    this.miEdit.Text = "Edit";
 		    // 
 		    // miRecordAdd
 		    // 
@@ -623,7 +623,7 @@ namespace GKUI
 		    		    		    this.miStats});
 		    this.miPedigree.Name = "miPedigree";
 		    this.miPedigree.Size = new System.Drawing.Size(97, 24);
-		    this.miPedigree.Text = "miPedigree";
+		    this.miPedigree.Text = "Pedigree";
 		    // 
 		    // miTreeAncestors
 		    // 
@@ -728,7 +728,7 @@ namespace GKUI
 		    		    		    this.miOptions});
 		    this.miService.Name = "miService";
 		    this.miService.Size = new System.Drawing.Size(85, 24);
-		    this.miService.Text = "miService";
+		    this.miService.Text = "Service";
 		    // 
 		    // miOrganizer
 		    // 
@@ -780,7 +780,7 @@ namespace GKUI
 		    // 
 		    this.miPlugins.Name = "miPlugins";
 		    this.miPlugins.Size = new System.Drawing.Size(85, 24);
-		    this.miPlugins.Text = "miPlugins";
+		    this.miPlugins.Text = "Plugins";
 		    // 
 		    // miWindow
 		    // 
@@ -792,7 +792,7 @@ namespace GKUI
 		    		    		    this.miWinArrange});
 		    this.miWindow.Name = "miWindow";
 		    this.miWindow.Size = new System.Drawing.Size(93, 24);
-		    this.miWindow.Text = "miWindow";
+		    this.miWindow.Text = "Window";
 		    this.miWindow.DropDownOpening += new System.EventHandler(this.miWindowDropDownOpening);
 		    // 
 		    // miWinCascade
@@ -841,7 +841,7 @@ namespace GKUI
 		    		    		    this.miAbout});
 		    this.miHelp.Name = "miHelp";
 		    this.miHelp.Size = new System.Drawing.Size(70, 24);
-		    this.miHelp.Text = "miHelp";
+		    this.miHelp.Text = "Help";
 		    // 
 		    // miContext
 		    // 

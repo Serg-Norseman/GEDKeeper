@@ -213,10 +213,6 @@
     <Compile Include="GKUI\Controls\SearchPanel.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\DescendantsCircleWin.cs" />
-    <Compile Include="GKUI\DescendantsCircleWin.Designer.cs">
-      <DependentUpon>DescendantsCircleWin.cs</DependentUpon>
-    </Compile>
     <Compile Include="GKUI\Dialogs\AboutDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -424,11 +420,11 @@
     <Compile Include="GKUI\Sheets\GKSourcesSheet.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GKUI\AncestorsCircleWin.cs">
+    <Compile Include="GKUI\CircleChartWin.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GKUI\AncestorsCircleWin.Designer.cs">
-      <DependentUpon>AncestorsCircleWin.cs</DependentUpon>
+    <Compile Include="GKUI\CircleChartWin.Designer.cs">
+      <DependentUpon>CircleChartWin.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\BaseWin.Designer.cs">
       <DependentUpon>BaseWin.cs</DependentUpon>
@@ -539,9 +535,6 @@
     <EmbeddedResource Include="GKUI\Controls\GKInputBox.resx">
       <DependentUpon>GKInputBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\DescendantsCircleWin.resx">
-      <DependentUpon>DescendantsCircleWin.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\AboutDlg.resx">
       <DependentUpon>AboutDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -644,8 +637,8 @@
     <EmbeddedResource Include="GKUI\PatriarchsViewerWin.resx">
       <DependentUpon>PatriarchsViewerWin.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GKUI\AncestorsCircleWin.resx">
-      <DependentUpon>AncestorsCircleWin.cs</DependentUpon>
+    <EmbeddedResource Include="GKUI\CircleChartWin.resx">
+      <DependentUpon>CircleChartWin.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\BaseWin.resx">
       <DependentUpon>BaseWin.cs</DependentUpon>

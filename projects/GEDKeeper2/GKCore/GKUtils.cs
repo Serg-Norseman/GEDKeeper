@@ -19,9 +19,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -36,188 +33,12 @@ using GKUI.Controls;
 
 namespace GKCore
 {
-    #if !__MonoCS__
-    using Externals.MapiMail;
-    #endif
-
     /// <summary>
     /// 
     /// </summary>
     public static class GKUtils
     {
-        #region System functions
-
-        public static bool IsSetBit(uint val, int pos)
-        {
-            return (val & (1 << pos)) != 0;
-        }
-
-        public static void LoadExtFile(string fileName)
-        {
-            if (File.Exists(fileName))
-            {
-                #if __MonoCS__
-                Process.Start(new ProcessStartInfo("file://"+fileName) { UseShellExecute = true });
-                #else
-                Process.Start(fileName);
-                #endif
-            }
-        }
-
-        public static int GetKeyLayout()
-        {
-            #if __MonoCS__
-            // There is a bug in Mono: does not work this CurrentInputLanguage
-            return CultureInfo.CurrentUICulture.KeyboardLayoutId;
-            #else
-            InputLanguage currentLang = InputLanguage.CurrentInputLanguage;
-            return currentLang.Culture.KeyboardLayoutId;
-            #endif
-        }
-
-        public static void SetKeyLayout(int layout)
-        {
-            try {
-                CultureInfo cultureInfo = new CultureInfo(layout);
-                InputLanguage currentLang = InputLanguage.FromCulture(cultureInfo);
-                InputLanguage.CurrentInputLanguage = currentLang;
-            } catch (Exception ex) {
-                Logger.LogWrite("GKUtils.SetKeyLayout(): " + ex.Message);
-            }
-        }
-
-        public static void SendMail(string address, string subject, string body, string attach)
-        {
-            if (File.Exists(attach)) {
-                #if __MonoCS__
-
-                string mailto = string.Format("mailto:{0}?Subject={1}&Body={2}&Attach={3}", address, subject, body, "" + attach + ""); // Attach, Attachment
-                Process.Start(mailto);
-
-                #else
-
-                MapiMailMessage message = new MapiMailMessage(subject, body);
-                message.Recipients.Add(GKData.APP_MAIL);
-                message.Files.Add(attach);
-                message.ShowDialog();
-
-                #endif
-            }
-        }
-
-        public static bool IsNetworkAvailable()
-        {
-            return System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
-        }
-
-        public static T GetAssemblyAttribute<T>(Assembly assembly) where T : Attribute
-        {
-            if (assembly == null)
-            {
-                throw new ArgumentNullException("assembly");
-            }
-
-            object[] attributes = assembly.GetCustomAttributes(typeof(T), false);
-            if (attributes == null || attributes.Length == 0)
-                return null;
-            return SingleOrDefault(OfTypeIterator((T[])attributes));
-        }
-
-        private static IEnumerable<TResult> OfTypeIterator<TResult>(IEnumerable<TResult> source)
-        {
-            foreach (object current in source)
-            {
-                if (current is TResult)
-                {
-                    yield return (TResult)((object)current);
-                }
-            }
-            yield break;
-        }
-
-        public static TSource SingleOrDefault<TSource>(IEnumerable<TSource> source)
-        {
-            if (source == null)
-                throw new ArgumentNullException("source");
-
-            IList<TSource> list = source as IList<TSource>;
-
-            if (list != null)
-            {
-                switch (list.Count)
-                {
-                    case 0:
-                        return default(TSource);
-                    case 1:
-                        return list[0];
-                }
-            }
-            else
-            {
-                using (IEnumerator<TSource> enumerator = source.GetEnumerator())
-                {
-                    if (!enumerator.MoveNext())
-                    {
-                        TSource result = default(TSource);
-                        return result;
-                    }
-                    TSource current = enumerator.Current;
-                    if (!enumerator.MoveNext())
-                    {
-                        TSource result = current;
-                        return result;
-                    }
-                }
-            }
-
-            throw new Exception("MoreThanOneElement");
-        }
-
-        public static T FirstOrDefault<T>(IList<T> list)
-        {
-            if (list == null) {
-                throw new ArgumentNullException("list");
-            }
-
-            return (list.Count > 0) ? list[0] : default(T);
-        }
-
-        public static T LastOrDefault<T>(IList<T> list)
-        {
-            if (list == null) {
-                throw new ArgumentNullException("list");
-            }
-
-            int count = list.Count;
-            return (count > 0) ? list[count - 1] : default(T);
-        }
-
-        public static void GetAssemblyVersion(out string copyright, out string version)
-        {
-            copyright = "";
-            version = "";
-
-            Assembly assembly = Assembly.GetExecutingAssembly();
-
-            object[] attributes = assembly.GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
-            if (attributes.Length != 0) copyright = ((AssemblyCopyrightAttribute)attributes[0]).Copyright;
-
-            version = assembly.GetName().Version.ToString();
-        }
-
-        #endregion
-
         #region Aux functions
-
-        public static long Trunc(double value)
-        {
-            return (long)Math.Truncate(value);
-        }
-
-        public static double SafeDiv(double dividend, double divisor)
-        {
-            return (divisor == (double)0f) ? 0.0 : (dividend / divisor);
-        }
 
         public static string SexChar(GEDCOMSex sex)
         {
@@ -1592,9 +1413,7 @@ namespace GKCore
         public static GKListView CreateListView(Control parent)
         {
             if (parent == null)
-            {
                 throw new ArgumentNullException("parent");
-            }
 
             GKListView listView;
 
@@ -1612,14 +1431,10 @@ namespace GKCore
         public static GKRecordsView CreateRecordsView(Control parent, GEDCOMTree tree, GEDCOMRecordType recType)
         {
             if (parent == null)
-            {
                 throw new ArgumentNullException("parent");
-            }
 
             if (tree == null)
-            {
                 throw new ArgumentNullException("tree");
-            }
 
             GKRecordsView recView;
             recView = new GKRecordsView();
@@ -2779,6 +2594,48 @@ namespace GKCore
 
         #endregion
 
+        #region Multimedia support
+
+        public static MultimediaKind GetMultimediaKind(GEDCOMMultimediaFormat format)
+        {
+            switch (format)
+            {
+                case GEDCOMMultimediaFormat.mfNone:
+                    return MultimediaKind.mkNone;
+
+                case GEDCOMMultimediaFormat.mfBMP:
+                case GEDCOMMultimediaFormat.mfGIF:
+                case GEDCOMMultimediaFormat.mfJPG:
+                case GEDCOMMultimediaFormat.mfPCX:
+                case GEDCOMMultimediaFormat.mfTIF:
+                case GEDCOMMultimediaFormat.mfTGA:
+                case GEDCOMMultimediaFormat.mfPNG:
+                case GEDCOMMultimediaFormat.mfRAW:
+                    return MultimediaKind.mkImage;
+
+                case GEDCOMMultimediaFormat.mfTXT:
+                case GEDCOMMultimediaFormat.mfRTF:
+                case GEDCOMMultimediaFormat.mfHTM:
+                    return MultimediaKind.mkText;
+
+                case GEDCOMMultimediaFormat.mfWAV:
+                case GEDCOMMultimediaFormat.mfMP3:
+                    return MultimediaKind.mkAudio;
+
+                case GEDCOMMultimediaFormat.mfAVI:
+                case GEDCOMMultimediaFormat.mfMPG:
+                case GEDCOMMultimediaFormat.mfWMA:
+                    return MultimediaKind.mkVideo;
+
+                case GEDCOMMultimediaFormat.mfOLE:
+                case GEDCOMMultimediaFormat.mfUnknown:
+                default:
+                    return MultimediaKind.mkNone;
+            }
+        }
+
+        #endregion
+
         #region Archives support
 
         public static string GetContainerName(string fileName, bool arc)
@@ -2790,6 +2647,17 @@ namespace GKCore
                 result += Path.DirectorySeparatorChar;
             }
             return result;
+        }
+
+        public static bool FileCanBeArchived(string fileName)
+        {
+            GEDCOMMultimediaFormat fileFmt = GEDCOMFileReference.RecognizeFormat(fileName);
+
+            FileInfo info = new FileInfo(fileName);
+            double fileSize = (((double)info.Length / 1024) / 1024); // mb
+
+            MultimediaKind mKind = GetMultimediaKind(fileFmt);
+            return ((mKind == MultimediaKind.mkImage || mKind == MultimediaKind.mkText) && fileSize <= 10);
         }
 
         #endregion
@@ -2847,59 +2715,6 @@ namespace GKCore
             bool female = (iRec.Sex == GEDCOMSex.svFemale);
 
             return GetSurnames(fam, female);
-        }
-
-        #endregion
-
-        #region Multimedia support
-
-        public static MultimediaKind GetMultimediaKind(GEDCOMMultimediaFormat format)
-        {
-            switch (format)
-            {
-                case GEDCOMMultimediaFormat.mfNone:
-                    return MultimediaKind.mkNone;
-
-                case GEDCOMMultimediaFormat.mfBMP:
-                case GEDCOMMultimediaFormat.mfGIF:
-                case GEDCOMMultimediaFormat.mfJPG:
-                case GEDCOMMultimediaFormat.mfPCX:
-                case GEDCOMMultimediaFormat.mfTIF:
-                case GEDCOMMultimediaFormat.mfTGA:
-                case GEDCOMMultimediaFormat.mfPNG:
-                case GEDCOMMultimediaFormat.mfRAW:
-                    return MultimediaKind.mkImage;
-
-                case GEDCOMMultimediaFormat.mfTXT:
-                case GEDCOMMultimediaFormat.mfRTF:
-                case GEDCOMMultimediaFormat.mfHTM:
-                    return MultimediaKind.mkText;
-
-                case GEDCOMMultimediaFormat.mfWAV:
-                case GEDCOMMultimediaFormat.mfMP3:
-                    return MultimediaKind.mkAudio;
-
-                case GEDCOMMultimediaFormat.mfAVI:
-                case GEDCOMMultimediaFormat.mfMPG:
-                case GEDCOMMultimediaFormat.mfWMA:
-                    return MultimediaKind.mkVideo;
-
-                case GEDCOMMultimediaFormat.mfOLE:
-                case GEDCOMMultimediaFormat.mfUnknown:
-                default:
-                    return MultimediaKind.mkNone;
-            }
-        }
-
-        public static bool FileCanBeArchived(string fileName)
-        {
-            GEDCOMMultimediaFormat fileFmt = GEDCOMFileReference.RecognizeFormat(fileName);
-
-            FileInfo info = new FileInfo(fileName);
-            double fileSize = (((double)info.Length / 1024) / 1024); // mb
-
-            MultimediaKind mKind = GetMultimediaKind(fileFmt);
-            return ((mKind == MultimediaKind.mkImage || mKind == MultimediaKind.mkText) && fileSize <= 10);
         }
 
         #endregion

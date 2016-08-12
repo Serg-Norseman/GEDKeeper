@@ -44,13 +44,13 @@ namespace GKUI.Dialogs
             InitializeComponent();
         }
 
-        public PersonsFilterDlg(IBaseWindow aBase, ListManager aListMan) : base(aBase, aListMan)
+        public PersonsFilterDlg(IBaseWindow aBase, IListManager listMan) : base(aBase, listMan)
         {
             InitializeComponent();
 
             this.SetSpecificLang();
 
-            fListMan = (IndividualListMan)aListMan;
+            fListMan = (IndividualListMan)listMan;
             UpdateSpecific();
 
             // platform: in Mono tsSpecificFilter has 0 index, somehow
