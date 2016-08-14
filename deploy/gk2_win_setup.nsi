@@ -5,7 +5,7 @@
 !include "MUI2.nsh"
 
 Name "GEDKeeper2"
-OutFile "GEDKeeper2-v2.7.0-win-setup.exe"
+OutFile "gedkeeper_2.8.0_winsetup.exe"
 InstallDir $PROGRAMFILES\GEDKeeper2
 
 CRCCheck on
