@@ -142,7 +142,8 @@ namespace GKTests
             "test,test2,test3,test4\r\n"+
             "12,\"alpha\",12.5,15.4\r\n"+
             "15,\"beta\",15.4,3.7\r\n"+
-            "2100,\"gamma delta\",21.5,1.02\r\n";
+            "2100,\"gamma delta\",21.5,1.02\r\n"+
+            "91000,\"omega\",21.5,1.02\r\n";
 
         [Test]
         public void CSV_Tests()
@@ -171,12 +172,18 @@ namespace GKTests
                 Assert.AreEqual(1.02f, row[3]);
 
                 row = csv.ReadRow();
+                Assert.AreEqual(91000, row[0]);
+                Assert.AreEqual("omega", row[1]);
+                Assert.AreEqual(21.5f, row[2]);
+                Assert.AreEqual(1.02f, row[3]);
+
+                row = csv.ReadRow();
                 Assert.IsNull(row);
             }
 
             using (CSVReader csv = new CSVReader(CSVData)) {
                 DataTable tbl = csv.CreateDataTable(true);
-                Assert.AreEqual(3, tbl.Rows.Count);
+                Assert.AreEqual(4, tbl.Rows.Count);
                 Assert.AreEqual(4, tbl.Columns.Count);
 
                 DataRow row = tbl.Rows[0];
@@ -194,6 +201,12 @@ namespace GKTests
                 row = tbl.Rows[2];
                 Assert.AreEqual(2100, row[0]);
                 Assert.AreEqual("gamma delta", row[1]);
+                Assert.AreEqual(21.5f, row[2]);
+                Assert.AreEqual(1.02f, row[3]);
+
+                row = tbl.Rows[3];
+                Assert.AreEqual(91000, row[0]);
+                Assert.AreEqual("omega", row[1]);
                 Assert.AreEqual(21.5f, row[2]);
                 Assert.AreEqual(1.02f, row[3]);
             }

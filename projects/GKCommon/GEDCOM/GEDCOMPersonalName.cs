@@ -110,7 +110,7 @@ namespace GKCommon.GEDCOM
 
         public void SetNameParts(string firstPart, string surname, string lastPart)
         {
-            base.StringValue = GEDCOMUtils.TrimLeft(firstPart) + " /" + surname + "/ " + GEDCOMUtils.TrimRight(lastPart);
+            base.StringValue = GEDCOMUtils.TrimLeft(firstPart + " ") + "/" + surname + "/" + GEDCOMUtils.TrimRight(" " + lastPart);
         }
 
         private string GetFirstPart()

@@ -57,6 +57,7 @@ namespace GKUI.Dialogs
             this.lblAddress.Text = LangMan.LS(LSID.LSID_Address);
             this.lblTelephone.Text = LangMan.LS(LSID.LSID_Telephone);
             this.pageOther.Text = LangMan.LS(LSID.LSID_Other);
+            this.lvRecordStats.Columns[0].Text = LangMan.LS(LSID.LSID_RM_Records);
         }
 
         private void UpdateControls()
@@ -74,15 +75,7 @@ namespace GKUI.Dialogs
 
         private void UpdateStats()
         {
-            int[] stats = new int[((int)GEDCOMRecordType.rtLast)];
-
-            int num = this.fBase.Tree.RecordsCount;
-            for (int i = 0; i < num; i++)
-            {
-                GEDCOMRecord rec = this.fBase.Tree[i];
-                int index = (int)rec.RecordType;
-                stats[index] += 1;
-            }
+            int[] stats = this.fBase.Tree.GetRecordStats();
 
             lvRecordStats.Items.Clear();
             for (int i = 1; i < stats.Length; i++)

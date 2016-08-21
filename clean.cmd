@@ -37,6 +37,9 @@ rmdir .\projects\GKImageViewerPlugin\obj /s /q
 rmdir .\projects\GKNamesBookPlugin\bin /s /q
 rmdir .\projects\GKNamesBookPlugin\obj /s /q
 
+rmdir .\projects\GKNavigatorPlugin\bin /s /q
+rmdir .\projects\GKNavigatorPlugin\obj /s /q
+
 rmdir .\projects\GKPedigreeImporterPlugin\bin /s /q
 rmdir .\projects\GKPedigreeImporterPlugin\obj /s /q
 

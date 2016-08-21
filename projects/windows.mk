@@ -34,6 +34,6 @@ coreresgenrefdotnet20 := \
 //r:"$(refsdos)System.Windows.Forms.dll" \
 //r:"$(refsdos)System.Xml.dll"
 
-analysisreleaseruleset := "C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\Team Tools\\Static Analysis Tools\\Rule Sets\\MinimumRecommendedRules.ruleset"
-#analysisreleaseruleset := ..\\gk21.ruleset
+#analysisreleaseruleset := "C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\Team Tools\\Static Analysis Tools\\Rule Sets\\MinimumRecommendedRules.ruleset"
+analysisreleaseruleset := ..\\gk21.ruleset
 analysisdebugruleset := ..\\gk21.ruleset

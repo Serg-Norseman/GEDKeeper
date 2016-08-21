@@ -25,12 +25,12 @@ using System.Runtime.InteropServices;
 using GKCommon;
 using GKCore.Interfaces;
 
-[assembly: AssemblyTitle("GKTimeLinePlugin")]
-[assembly: AssemblyDescription("GEDKeeper2 TimeLine plugin")]
+[assembly: AssemblyTitle("GKNavigatorPlugin")]
+[assembly: AssemblyDescription("GEDKeeper2 Navigator plugin")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("GEDKeeper2")]
-[assembly: AssemblyCopyright("Copyright © 2014, Serg V. Zhdanovskih")]
+[assembly: AssemblyCopyright("Copyright © 2016, Serg V. Zhdanovskih")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: CLSCompliant(false)]
@@ -38,26 +38,24 @@ using GKCore.Interfaces;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
-namespace GKTimeLinePlugin
+namespace GKNavigatorPlugin
 {
     public enum PLS
     {
-        /* 032 */ LSID_MITimeLine,
-        /* 130 */ LSID_TimeScale,
-        /* 131 */ LSID_CurrentYear,
+        /* 001 */ LSID_Navigator,
     }
-
-    public sealed class Plugin : BaseObject, IPlugin, IWidget
+    
+    public class Plugin : BaseObject, IPlugin, IWidget
     {
-        private string fDisplayName = "GKTimeLinePlugin";
+        private string fDisplayName = "GKNavigatorPlugin";
         private IHost fHost;
         private ILangMan fLangMan;
 
-        public string DisplayName { get { return this.fDisplayName; } }
+        public string DisplayName { get { return fDisplayName; } }
         public IHost Host { get { return fHost; } }
         public ILangMan LangMan { get { return fLangMan; } }
 
-        private TimeLineWidget frm;
+        private NavigatorWidget frm;
 
         protected override void Dispose(bool disposing)
         {
@@ -71,7 +69,7 @@ namespace GKTimeLinePlugin
         public void Execute()
         {
             if (!this.fHost.IsWidgetActive(this)) {
-                frm = new TimeLineWidget(this);
+                frm = new NavigatorWidget(this);
                 frm.Show();
             } else {
                 frm.Close();
@@ -88,24 +86,27 @@ namespace GKTimeLinePlugin
             try
             {
                 this.fLangMan = this.fHost.CreateLangMan(this);
-                this.fDisplayName = this.fLangMan.LS(PLS.LSID_MITimeLine);
+                this.fDisplayName = this.fLangMan.LS(PLS.LSID_Navigator);
+
+                if (frm != null) frm.SetLang();
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKTimeLinePlugin.OnLanguageChange(): " + ex.Message);
+                fHost.LogWrite("GKNavigatorPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
-        
+
         public bool Startup(IHost host)
         {
             bool result = true;
             try
             {
                 this.fHost = host;
+                // Implement any startup code here
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKTimeLinePlugin.Startup(): " + ex.Message);
+                fHost.LogWrite("GKNavigatorPlugin.Startup(): " + ex.Message);
                 result = false;
             }
             return result;
@@ -116,10 +117,11 @@ namespace GKTimeLinePlugin
             bool result = true;
             try
             {
+                // Implement any shutdown code here
             }
             catch (Exception ex)
             {
-                fHost.LogWrite("GKTimeLinePlugin.Shutdown(): " + ex.Message);
+                fHost.LogWrite("GKNavigatorPlugin.Shutdown(): " + ex.Message);
                 result = false;
             }
             return result;

@@ -102,6 +102,7 @@ namespace GKTests.Mocks
         public GEDCOMIndividualRecord GetSelectedPerson() { return null; }
         public GEDCOMRecordType GetSelectedRecordType() { return GEDCOMRecordType.rtIndividual; }
         public void RefreshLists(bool titles) { }
+        public void ShowRecordsTab(GEDCOMRecordType recType) { }
 
         public GEDCOMIndividualRecord CreatePersonDialog(GEDCOMIndividualRecord target, TargetMode targetMode, GEDCOMSex needSex) { return null; }
 

@@ -639,6 +639,21 @@ namespace GKCommon.GEDCOM
 
         #region Auxiliary
 
+        public int[] GetRecordStats()
+        {
+            int[] stats = new int[((int)GEDCOMRecordType.rtLast)];
+
+            int num = this.RecordsCount;
+            for (int i = 0; i < num; i++)
+            {
+                GEDCOMRecord rec = this[i];
+                int index = (int)rec.RecordType;
+                stats[index] += 1;
+            }
+
+            return stats;
+        }
+
         public GEDCOMFormat GetGEDCOMFormat()
         {
             string sour = this.fHeader.Source;

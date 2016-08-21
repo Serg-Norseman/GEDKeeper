@@ -1407,7 +1407,7 @@ namespace GKUI
 
                 this.RecordNotify(record, RecordAction.raDelete);
 
-                this.fContext.DeleteRecord(record);
+                result = this.fContext.DeleteRecord(record);
 
                 if (result) {
                     this.Modified = true;
@@ -1501,6 +1501,12 @@ namespace GKUI
             }
         }
 
+        public void ShowRecordsTab(GEDCOMRecordType recType)
+        {
+            this.tabsRecords.SelectedIndex = (int)recType - 1;
+            this.PageRecords_SelectedIndexChanged(null, null);
+        }
+
         public void SelectRecordByXRef(string xref)
         {
             GEDCOMRecord record = this.fTree.XRefIndex_Find(xref);
@@ -1509,8 +1515,7 @@ namespace GKUI
             GKRecordsView rView = this.GetRecordsViewByType(record.RecordType);
             if (rView == null) return;
 
-            this.tabsRecords.SelectedIndex = (int)record.RecordType - 1;
-            this.PageRecords_SelectedIndexChanged(null, null);
+            this.ShowRecordsTab(record.RecordType);
             this.ActiveControl = rView;
             //aList.Focus();
             rView.SelectItemByRec(record);

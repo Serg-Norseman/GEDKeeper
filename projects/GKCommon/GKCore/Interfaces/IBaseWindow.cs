@@ -62,6 +62,7 @@ namespace GKCore.Interfaces
         GEDCOMRecordType GetSelectedRecordType();
         void RefreshLists(bool titles);
         //void RefreshRecordsView(GEDCOMRecordType recType);
+        void ShowRecordsTab(GEDCOMRecordType recType);
         
         GEDCOMIndividualRecord CreatePersonDialog(GEDCOMIndividualRecord target, TargetMode targetMode, GEDCOMSex needSex);
         
