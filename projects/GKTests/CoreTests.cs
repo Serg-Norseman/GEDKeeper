@@ -21,7 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-
+using System.Windows.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore;
@@ -485,7 +485,6 @@ namespace GKTests
                 GEDCOMListTest21(iRec);
                 GEDCOMListTest22(iRec);
                 GEDCOMListTest23(iRec);
-                GEDCOMListTest3(iRec);
             }
         }
 
@@ -540,11 +539,6 @@ namespace GKTests
                 GEDCOMCustomEvent evt1 = events[i];
                 evt1.GetHashCode();
             }
-        }
-
-        private static void GEDCOMListTest3(GEDCOMIndividualRecord iRec)
-        {
-            iRec.Events.ForEach(x => { x.GetHashCode(); });
         }
 
         [Test]
@@ -945,6 +939,92 @@ namespace GKTests
             using (IniFile iniFile = new IniFile()) {
                 GlobalOptions globalOptions = GlobalOptions.Instance;
                 Assert.IsNotNull(globalOptions);
+
+                Assert.IsNotNull(GlobalOptions.CurrentCulture);
+                Assert.IsNotNull(globalOptions.ChartOptions);
+                Assert.IsNotNull(globalOptions.AncestorsCircleOptions);
+
+                globalOptions.DefCharacterSet = GEDCOMCharacterSet.csUNICODE;
+                Assert.AreEqual(GEDCOMCharacterSet.csUNICODE, globalOptions.DefCharacterSet);
+
+                globalOptions.DefDateFormat = DateFormat.dfDD_MM_YYYY;
+                Assert.AreEqual(DateFormat.dfDD_MM_YYYY, globalOptions.DefDateFormat);
+
+                globalOptions.ShowDatesSign = true;
+                Assert.AreEqual(true, globalOptions.ShowDatesSign);
+
+                globalOptions.DefNameFormat = NameFormat.nfF_N_P;
+                Assert.AreEqual(NameFormat.nfF_N_P, globalOptions.DefNameFormat);
+
+                Assert.IsNotNull(globalOptions.EventFilters);
+
+                globalOptions.InterfaceLang = 1000;
+                Assert.AreEqual(1000, globalOptions.InterfaceLang);
+
+                globalOptions.LastDir = "c:\\";
+                Assert.AreEqual("c:\\", globalOptions.LastDir);
+
+                Assert.IsNotNull(globalOptions.MRUFiles);
+
+                globalOptions.MWinRect = ExtRect.CreateEmpty();
+                Assert.IsTrue(globalOptions.MWinRect.IsEmpty());
+
+                globalOptions.MWinState = FormWindowState.Maximized;
+                Assert.AreEqual(FormWindowState.Maximized, globalOptions.MWinState);
+
+                Assert.IsNotNull(globalOptions.NameFilters);
+
+                Assert.IsNotNull(globalOptions.PedigreeOptions);
+
+                globalOptions.PlacesWithAddress = true;
+                Assert.AreEqual(true, globalOptions.PlacesWithAddress);
+
+                Assert.IsNotNull(globalOptions.Proxy);
+
+                Assert.IsNotNull(globalOptions.Relations);
+
+                Assert.IsNotNull(globalOptions.ResidenceFilters);
+
+                globalOptions.FileBackup = FileBackup.fbOnlyPrev;
+                Assert.AreEqual(FileBackup.fbOnlyPrev, globalOptions.FileBackup);
+
+                globalOptions.ShowTips = true;
+                Assert.AreEqual(true, globalOptions.ShowTips);
+
+                globalOptions.ListHighlightUnmarriedPersons = true;
+                Assert.AreEqual(true, globalOptions.ListHighlightUnmarriedPersons);
+
+                globalOptions.ListHighlightUnparentedPersons = true;
+                Assert.AreEqual(true, globalOptions.ListHighlightUnparentedPersons);
+
+                Assert.IsNotNull(globalOptions.IndividualListColumns);
+
+                globalOptions.ShowDatesCalendar = true;
+                Assert.AreEqual(true, globalOptions.ShowDatesCalendar);
+
+                globalOptions.Autosave = true;
+                Assert.AreEqual(true, globalOptions.Autosave);
+
+                globalOptions.AutosaveInterval = 10;
+                Assert.AreEqual(10, globalOptions.AutosaveInterval);
+
+                globalOptions.ExtendedNames = true;
+                Assert.AreEqual(true, globalOptions.ExtendedNames);
+
+                globalOptions.AddLastBase("sample.ged");
+                Assert.AreEqual(1, globalOptions.GetLastBasesCount());
+                Assert.AreEqual("sample.ged", globalOptions.GetLastBase(0));
+                globalOptions.ClearLastBases();
+
+                Assert.AreEqual(0, globalOptions.GetLangsCount());
+
+
+                globalOptions.SaveToFile(iniFile);
+                globalOptions.LoadFromFile(iniFile);
+                //Assert.Throws(typeof(ArgumentNullException), () => { globalOptions.SaveToFile(null); });
+                //Assert.Throws(typeof(ArgumentNullException), () => { globalOptions.LoadFromFile(null); });
+
+
 
                 MRUFile mruFile = new MRUFile();
                 Assert.IsNotNull(mruFile);

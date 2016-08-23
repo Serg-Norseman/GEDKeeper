@@ -115,20 +115,6 @@ namespace GKCommon.GEDCOM
             }
         }
 
-        public void ForEach(Action<T> action)
-        {
-            if (action == null) {
-                throw new ArgumentNullException("action");
-            }
-
-            if (this.fDataList == null) return;
-
-            int num = this.fDataList.Count;
-            for (int i = 0; i < num; i++) {
-                action(this.fDataList[i]);
-            }
-        }
-
         public IGEDCOMListEnumerator GetEnumerator()
         {
             return new GEDCOMListEnumerator(this);

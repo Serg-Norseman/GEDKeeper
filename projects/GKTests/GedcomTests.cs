@@ -1657,6 +1657,16 @@ namespace GKTests
             GEDCOMIndividualRecord indi2 = _context.Tree.XRefIndex_Find("I2") as GEDCOMIndividualRecord;
             GEDCOMAssociation asso = indiRec.AddAssociation("test", indi2);
             Assert.IsNotNull(asso);
+
+            using (GEDCOMIndividualRecord indi = new GEDCOMIndividualRecord(null, null, "", "")) {
+                Assert.IsNotNull(indi);
+
+                string surname, name, patr;
+                indi.GetNameParts(out surname, out name, out patr);
+                Assert.AreEqual("", surname);
+                Assert.AreEqual("", name);
+                Assert.AreEqual("", patr);
+            }
         }
 
         [Test]
@@ -2016,6 +2026,9 @@ namespace GKTests
             Assert.AreEqual("4", rec.GetXRefNum());
 
             Assert.AreEqual(-1, rec.IndexOfSource(null));
+
+            rec.AddUserRef("test userref");
+            Assert.AreEqual("test userref", rec.UserReferences[0].StringValue);
         }
 
         [Test]
@@ -2028,6 +2041,25 @@ namespace GKTests
                 GEDCOMIndividualRecord unkInd = new GEDCOMIndividualRecord(null, null, "", "");
                 unkInd.Sex = GEDCOMSex.svUndetermined;
                 Assert.IsFalse(famRec.AddSpouse(unkInd));
+
+                GEDCOMIndividualRecord child1 = _context.Tree.CreateIndividual(); // for pointer need a proper object
+                Assert.IsTrue(famRec.AddChild(child1));
+
+                GEDCOMIndividualRecord child2 = _context.Tree.CreateIndividual(); // for pointer need a proper object
+                Assert.IsTrue(famRec.AddChild(child2));
+                Assert.AreEqual(1, famRec.IndexOfChild(child2));
+
+                famRec.DeleteChild(child1);
+                Assert.AreEqual(-1, famRec.IndexOfChild(child1));
+
+                string str = famRec.GetFamilyString(null, null);
+                Assert.AreEqual("? - ?", str);
+
+                str = famRec.GetFamilyString("x", "x");
+                Assert.AreEqual("x - x", str);
+
+                Assert.AreEqual(0.0f, famRec.IsMatch(null, new MatchParams()));
+                Assert.AreEqual(100.0f, famRec.IsMatch(famRec, new MatchParams()));
             }
         }
 

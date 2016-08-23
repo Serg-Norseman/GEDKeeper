@@ -25,13 +25,14 @@ using System.Threading;
 using System.Windows.Forms;
 
 using GKCommon;
+using GKCore.Interfaces;
 
 namespace GKCalendarPlugin
 {
     /// <summary>
     /// 
     /// </summary>
-    public partial class CalendarWidget : Form
+    public partial class CalendarWidget : Form, ILocalization
     {
         private readonly Plugin fPlugin;
 
@@ -43,12 +44,9 @@ namespace GKCalendarPlugin
 
             this.Location = new Point(Screen.PrimaryScreen.WorkingArea.Width - this.Width - 10, 50);
 
-            this.Text = this.fPlugin.LangMan.LS(PLS.LSID_MICalendar);
-            this.ColumnHeader1.Text = this.fPlugin.LangMan.LS(PLS.LSID_MICalendar);
-            this.ColumnHeader2.Text = this.fPlugin.LangMan.LS(PLS.LSID_Date);
-
             this.qtc.SelectionStart = DateTime.Now;
-            this.qtc_DateSelected(null, null);
+
+            this.SetLang();
         }
 
         private void CalendarWidget_Load(object sender, EventArgs e)
@@ -70,13 +68,18 @@ namespace GKCalendarPlugin
             {
                 this.lvDates.Items.Clear();
                 DateTime gdt = this.qtc.SelectionStart;
-                string s = CalendarData.date_to_str(gdt.Year, gdt.Month, gdt.Day, CalendarData.DateEra.AD) + ", " + dtInfo.DayNames[(int)gdt.DayOfWeek];
-                this.AddItem(this.fPlugin.LangMan.LS(PLS.LSID_Cal_Gregorian), s);
+                string s;
                 double jd = CalendarConverter.gregorian_to_jd(gdt.Year, gdt.Month, gdt.Day);
+
+                s = gdt.Day.ToString() + " " + CalendarData.ClassicMonths[gdt.Month - 1] + " " + gdt.Year.ToString();
+                s += " " + CalendarData.ClassicWeekdays[CalendarConverter.jwday(jd)];
+                this.AddItem(this.fPlugin.LangMan.LS(PLS.LSID_Cal_Gregorian), s);
 
                 int year, month, day;
                 CalendarConverter.jd_to_julian(jd, out year, out month, out day);
-                this.AddItem(this.fPlugin.LangMan.LS(PLS.LSID_Cal_Julian), CalendarData.date_to_str(year, month, day, CalendarData.DateEra.AD));
+                s = day.ToString() + " " + CalendarData.ClassicMonths[month - 1] + " " + year.ToString();
+                s += " " + CalendarData.ClassicWeekdays[CalendarConverter.jwday(jd)];
+                this.AddItem(this.fPlugin.LangMan.LS(PLS.LSID_Cal_Julian), s);
 
                 CalendarConverter.jd_to_hebrew(jd, out year, out month, out day);
                 s = day.ToString() + " ";
@@ -121,5 +124,18 @@ namespace GKCalendarPlugin
             ListViewItem item = this.lvDates.Items.Add(calendar);
             item.SubItems.Add(date);
         }
+
+        #region ILocalization support
+
+        public void SetLang()
+        {
+            this.Text = this.fPlugin.LangMan.LS(PLS.LSID_MICalendar);
+            this.ColumnHeader1.Text = this.fPlugin.LangMan.LS(PLS.LSID_MICalendar);
+            this.ColumnHeader2.Text = this.fPlugin.LangMan.LS(PLS.LSID_Date);
+
+            this.qtc_DateSelected(null, null);
+        }
+
+        #endregion
     }
 }

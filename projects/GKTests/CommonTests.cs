@@ -50,11 +50,15 @@ namespace GKTests
 
                 ReflectionHelper.SetPropertyValue(strList, "Text", "Test2");
                 Assert.AreEqual("Test2\r\n", strList.Text);
+
+                Assert.Throws(typeof(ArgumentOutOfRangeException), () => { ReflectionHelper.GetPropertyValue(strList, "test"); });
+                Assert.Throws(typeof(ArgumentOutOfRangeException), () => { ReflectionHelper.SetPropertyValue(strList, "test", ""); });
             }
 
             Token tkn = new Token(TokenKind.Unknown, "", 111, 0);
             object obj1 = ReflectionHelper.GetFieldValue(tkn, "Line");
             Assert.AreEqual(111, obj1);
+            Assert.Throws(typeof(ArgumentOutOfRangeException), () => { ReflectionHelper.GetFieldValue(tkn, "Lines"); });
         }
 
         [Test]
@@ -877,40 +881,42 @@ namespace GKTests
 
             int year, month, day;
             CalendarConverter.jd_to_julian(jd, out year, out month, out day);
-            s = CalendarData.date_to_str(year, month, day, CalendarData.DateEra.AD);
-            Assert.AreEqual("27 09 1990", s); // +
+            s = day.ToString() + " ";
+            s += CalendarData.ClassicMonths[month - 1];
+            s = s + " " + year.ToString();
+            Assert.AreEqual("27 September 1990", s); // +
 
             CalendarConverter.jd_to_hebrew(jd, out year, out month, out day);
             s = day.ToString() + " ";
             s += CalendarData.HebrewMonths[month - 1];
             s = s + " " + year.ToString() + ", " + CalendarData.HebrewWeekdays[CalendarConverter.jwday(jd)];
-            Assert.AreEqual("21 Тишрей 5751, далет", s); // +
+            Assert.AreEqual("21 Tishri 5751, Dalet", s); // +
 
             CalendarConverter.jd_to_islamic(jd, out year, out month, out day);
             s = day.ToString() + " ";
             s += CalendarData.IslamicMonths[month - 1];
-            s = s + " " + year.ToString() + ", йаум " + CalendarData.IslamicWeekdays[CalendarConverter.jwday(jd)];
-            Assert.AreEqual("20 рабии`у ль-авваль 1411, йаум аль-арба'а", s); // +
+            s = s + " " + year.ToString() + ", weekday " + CalendarData.IslamicWeekdays[CalendarConverter.jwday(jd)];
+            Assert.AreEqual("20 Rabi`al-Awwal 1411, weekday Al-'arb`a'", s); // +
 
             CalendarConverter.jd_to_persian(jd, out year, out month, out day);
             s = day.ToString() + " ";
             s += CalendarData.PersianMonths[month - 1];
             s = s + " " + year.ToString() + ", " + CalendarData.PersianWeekdays[CalendarConverter.jwday(jd)];
-            Assert.AreEqual("18 Мехр 1369, чахаршанбе", s); // +
+            Assert.AreEqual("18 Mehr 1369, Chaharshanbeh", s); // +
 
             CalendarConverter.jd_to_indian_civil(jd, out year, out month, out day);
             s = day.ToString() + " ";
             s += CalendarData.IndianCivilMonths[month - 1];
             s = s + " " + year.ToString() + ", " + CalendarData.IndianCivilWeekdays[CalendarConverter.jwday(jd)];
-            Assert.AreEqual("18 Азвина 1912, будхвар", s); // +
+            Assert.AreEqual("18 Asvina 1912, Budhavara", s); // +
 
             int major, cycle;
             CalendarConverter.jd_to_bahai(jd, out major, out cycle, out year, out month, out day);
-            s = "Кулл-и Шай' " + major.ToString() + ", Вахид " + cycle.ToString() + ", ";
+            s = "major " + major.ToString() + ", cycle " + cycle.ToString() + ", ";
             s = s + day.ToString() + " ";
             s += CalendarData.BahaiMonths[month - 1];
             s = s + " " + year.ToString() + ", " + CalendarData.BahaiWeekdays[CalendarConverter.jwday(jd)];
-            Assert.AreEqual("Кулл-и Шай' 1, Вахид 8, 14 Машиййат 14, Идаль", s); // ???
+            Assert.AreEqual("major 1, cycle 8, 14 Mashíyyat 14, ‘Idál", s); // ???
         }
 
         [Test]
