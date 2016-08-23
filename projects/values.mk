@@ -21,6 +21,7 @@ gkflowinputplugin := GKFlowInputPlugin
 gkimageviewerplugin := GKImageViewerPlugin
 gklifeplugin := GKLifePlugin
 gknamesbookplugin := GKNamesBookPlugin
+gknavigatorplugin := GKNavigatorPlugin
 gkpedigreeimporterplugin := GKPedigreeImporterPlugin
 gktextsearchplugin := GKTextSearchPlugin
 gktimelineplugin := GKTimeLinePlugin

@@ -22,24 +22,24 @@ installdir := ../../plugins/
 # Get `sources` via (run from this directory):
 # find -regex '.+\.cs' | sed 's/\(.\+\)/\1 \\/' | sort | sed -n "x;/.\+/ p;g;$ s/\(.\+\) \\\\/\1/; $ p"
 # Or (this is more valid -- it takes data from a project file):
-# grep "[[:space:]]\+<Compile[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GEDKeeper2.mswin.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<Compile[[:space:]]\+Include=\"\(.*\)\"\([[:space:]]\?\/\)\?>/.\/\1 \\\\/" | sort | sed -n "x;/.\+/ p;g;$ s/\(.\+\) \\\\/\1/; $ p"
-# grep "[[:space:]]\+<Compile[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GEDKeeper2.linux.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<Compile[[:space:]]\+Include=\"\(.*\)\"\([[:space:]]\?\/\)\?>/.\/\1 \\\\/" | sort | sed -n "x;/.\+/ p;g;$ s/\(.\+\) \\\\/\1/; $ p"
+# grep "[[:space:]]\+<Compile[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GKNavigatorPlugin.mswin.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<Compile[[:space:]]\+Include=\"\(.*\)\"\([[:space:]]\?\/\)\?>/.\/\1 \\\\/" | sort | sed -n "x;/.\+/ p;g;$ s/\(.\+\) \\\\/\1/; $ p"
+# grep "[[:space:]]\+<Compile[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GKNavigatorPlugin.linux.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<Compile[[:space:]]\+Include=\"\(.*\)\"\([[:space:]]\?\/\)\?>/.\/\1 \\\\/" | sort | sed -n "x;/.\+/ p;g;$ s/\(.\+\) \\\\/\1/; $ p"
 # Because `$(sources)` must (may) have different values for Windows and Linux targets.
 ifeq ($(windows), $(softwareplatform))
 
 # `$(sources)` for `$(windows)`
 sources := \
 ./GKNavigatorPlugin.cs \
-./PluginForm.Designer.cs \
-./PluginForm.cs
+./NavigatorWidget.cs \
+./NavigatorWidget.Designer.cs
 
 else
 
 # `$(sources)` for `$(linux)`
 sources := \
 ./GKNavigatorPlugin.cs \
-./PluginForm.Designer.cs \
-./PluginForm.cs
+./PluginForm.cs \
+./PluginForm.Designer.cs
 
 endif
 
@@ -54,7 +54,7 @@ ifeq ($(windows), $(softwareplatform))
 # `$(resources)` for `$(windows)`
 resources := \
 $(addprefix $(objdir), \
-PluginForm.resources \
+NavigatorWidget.resources \
 )
 
 else
@@ -144,12 +144,16 @@ rcflags := \
 //useSourcePath \
 $(coreresgenref$(dotnet)) \
 $(patsubst //reference:%,//r:%,$(cscrefs))
+deps := \
+$(addprefix $(installdir)$(project), \
+.eng .rus .ukr \
+)
 
 .PHONY: all
 all: $(gkcommon) $(outdir)$(project)$(projectext)
 
 .PHONY: install
-install: all
+install: all $(deps)
 	@cp -f $(outdir)$(project)$(projectext) $(installdir)
 	@cd ../$(gkcommon) && $(MAKE) --file=Makefile $@
 
@@ -158,6 +162,7 @@ clean:
 	@cd ../$(gkcommon) && $(MAKE) --file=Makefile $@
 	@rm -rf -- $(objdir)
 	@rm -f $(installdir)$(project)$(projectext)
+	@rm -f $(deps)
 
 $(objdir):
 	@mkdir -p $(objdir)
@@ -182,3 +187,6 @@ endif
 .PHONY: $(gkcommon)
 $(gkcommon):
 	@cd ../$(gkcommon) && $(MAKE) --file=Makefile
+
+$(deps):
+	@cp -f $(@F) $@
