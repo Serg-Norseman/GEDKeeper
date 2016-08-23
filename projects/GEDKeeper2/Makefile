@@ -100,8 +100,6 @@ sources := \
 ./GKCore/UndoManager.cs \
 ./GKProgram.cs \
 ./GKResources.Designer.cs \
-./GKUI/CircleChartWin.cs \
-./GKUI/CircleChartWin.Designer.cs \
 ./GKUI/BaseWin.cs \
 ./GKUI/BaseWin.Designer.cs \
 ./GKUI/Charts/ACOptionsControl.cs \
@@ -118,6 +116,8 @@ sources := \
 ./GKUI/Charts/ScaleControl.cs \
 ./GKUI/Charts/TreeChartBox.cs \
 ./GKUI/Charts/TreeChartPerson.cs \
+./GKUI/CircleChartWin.cs \
+./GKUI/CircleChartWin.Designer.cs \
 ./GKUI/Controls/GKComboItem.cs \
 ./GKUI/Controls/GKInputBox.cs \
 ./GKUI/Controls/GKInputBox.Designer.cs \
@@ -291,8 +291,6 @@ sources := \
 ./GKCore/UndoManager.cs \
 ./GKProgram.cs \
 ./GKResources.Designer.cs \
-./GKUI/CircleChartWin.cs \
-./GKUI/CircleChartWin.Designer.cs \
 ./GKUI/BaseWin.cs \
 ./GKUI/BaseWin.Designer.cs \
 ./GKUI/Charts/ACOptionsControl.cs \
@@ -309,6 +307,8 @@ sources := \
 ./GKUI/Charts/ScaleControl.cs \
 ./GKUI/Charts/TreeChartBox.cs \
 ./GKUI/Charts/TreeChartPerson.cs \
+./GKUI/CircleChartWin.cs \
+./GKUI/CircleChartWin.Designer.cs \
 ./GKUI/Controls/GKComboItem.cs \
 ./GKUI/Controls/GKInputBox.cs \
 ./GKUI/Controls/GKInputBox.Designer.cs \
@@ -427,9 +427,9 @@ $(addprefix $(objdir), \
 AboutDlg.resources \
 ACOptionsControl.resources \
 AddressEditDlg.resources \
-CircleChartWin.resources \
 AssociationEditDlg.resources \
 BaseWin.resources \
+CircleChartWin.resources \
 CommonFilterDlg.resources \
 CommunicationEditDlg.resources \
 DayTipsDlg.resources \
@@ -481,9 +481,9 @@ $(addprefix $(objdir), \
 AboutDlg.resources \
 ACOptionsControl.resources \
 AddressEditDlg.resources \
-CircleChartWin.resources \
 AssociationEditDlg.resources \
 BaseWin.resources \
+CircleChartWin.resources \
 CommonFilterDlg.resources \
 CommunicationEditDlg.resources \
 DayTipsDlg.resources \

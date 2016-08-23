@@ -17,6 +17,7 @@ $(gkflowinputplugin).dll \
 $(gkimageviewerplugin).dll \
 $(gklifeplugin).dll \
 $(gknamesbookplugin).dll \
+$(gknavigatorplugin).dll \
 $(gkpedigreeimporterplugin).dll \
 $(gktextsearchplugin).dll \
 $(gktimelineplugin).dll \
@@ -37,6 +38,7 @@ clean:
 	@cd $(projectsdir)$(gkimageviewerplugin) && $(MAKE) --file=Makefile $@
 	@cd $(projectsdir)$(gklifeplugin) && $(MAKE) --file=Makefile $@
 	@cd $(projectsdir)$(gknamesbookplugin) && $(MAKE) --file=Makefile $@
+	@cd $(projectsdir)$(gknavigatorplugin) && $(MAKE) --file=Makefile $@
 	@cd $(projectsdir)$(gkpedigreeimporterplugin) && $(MAKE) --file=Makefile $@
 	@cd $(projectsdir)$(gktextsearchplugin) && $(MAKE) --file=Makefile $@
 	@cd $(projectsdir)$(gktimelineplugin) && $(MAKE) --file=Makefile $@
@@ -76,6 +78,10 @@ $(pluginsdir)$(gklifeplugin).dll: | $(pluginsdir)
 .PHONY: $(pluginsdir)$(gknamesbookplugin).dll
 $(pluginsdir)$(gknamesbookplugin).dll: | $(pluginsdir)
 	@cd $(projectsdir)$(gknamesbookplugin) && $(MAKE) --file=Makefile all install
+
+.PHONY: $(pluginsdir)$(gknavigatorplugin).dll
+$(pluginsdir)$(gknavigatorplugin).dll: | $(pluginsdir)
+	@cd $(projectsdir)$(gknavigatorplugin) && $(MAKE) --file=Makefile all install
 
 .PHONY: $(pluginsdir)$(gkpedigreeimporterplugin).dll
 $(pluginsdir)$(gkpedigreeimporterplugin).dll: | $(pluginsdir)

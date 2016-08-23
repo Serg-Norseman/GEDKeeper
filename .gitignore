@@ -41,6 +41,9 @@ OpenCover.cmd
 /projects/GKNamesBookPlugin/bin/
 /projects/GKNamesBookPlugin/obj/
 
+/projects/GKNavigatorPlugin/bin/
+/projects/GKNavigatorPlugin/obj/
+
 /projects/GKPedigreeImporterPlugin/bin/
 /projects/GKPedigreeImporterPlugin/obj/
 

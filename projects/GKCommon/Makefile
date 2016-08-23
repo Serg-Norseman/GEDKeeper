@@ -21,8 +21,8 @@ installdir := ../../
 # Get `sources` via (run from this directory):
 # find -regex '.+\.cs' | sed 's/\(.\+\)/\1 \\/' | sort | sed -n "x;/.\+/ p;g;$ s/\(.\+\) \\\\/\1/; $ p"
 # Or (this is more valid -- it takes data from a project file):
-# grep "[[:space:]]\+<Compile[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GEDKeeper2.mswin.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<Compile[[:space:]]\+Include=\"\(.*\)\"\([[:space:]]\?\/\)\?>/.\/\1 \\\\/" | sort | sed -n "x;/.\+/ p;g;$ s/\(.\+\) \\\\/\1/; $ p"
-# grep "[[:space:]]\+<Compile[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GEDKeeper2.linux.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<Compile[[:space:]]\+Include=\"\(.*\)\"\([[:space:]]\?\/\)\?>/.\/\1 \\\\/" | sort | sed -n "x;/.\+/ p;g;$ s/\(.\+\) \\\\/\1/; $ p"
+# grep "[[:space:]]\+<Compile[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GKCommon.mswin.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<Compile[[:space:]]\+Include=\"\(.*\)\"\([[:space:]]\?\/\)\?>/.\/\1 \\\\/" | sort | sed -n "x;/.\+/ p;g;$ s/\(.\+\) \\\\/\1/; $ p"
+# grep "[[:space:]]\+<Compile[[:space:]]\+Include=\".*\"\([[:space:]]\?\/\)\?>" GKCommon.linux.csproj | sed "y/\\\\/\//;s/[[:space:]]\\+<Compile[[:space:]]\+Include=\"\(.*\)\"\([[:space:]]\?\/\)\?>/.\/\1 \\\\/" | sort | sed -n "x;/.\+/ p;g;$ s/\(.\+\) \\\\/\1/; $ p"
 # Because `$(sources)` must (may) have different values for Windows and Linux targets.
 ifeq ($(windows), $(softwareplatform))
 
@@ -34,16 +34,17 @@ sources := \
 ./Externals/IniFiles/IniFileCommentary.cs \
 ./Externals/IniFiles/IniFileElement.cs \
 ./Externals/IniFiles/IniFileReader.cs \
+./Externals/IniFiles/IniFiles.cs \
 ./Externals/IniFiles/IniFileSection.cs \
 ./Externals/IniFiles/IniFileSectionStart.cs \
 ./Externals/IniFiles/IniFileSettings.cs \
 ./Externals/IniFiles/IniFileValue.cs \
 ./Externals/IniFiles/IniFileWriter.cs \
-./Externals/IniFiles/IniFiles.cs \
 ./Externals/ListTimSort.cs \
 ./Externals/MapiMailMessage.cs \
 ./Externals/ZipStorer.cs \
 ./GEDCOM/EGEDCOMException.cs \
+./GEDCOM/Extensions/GEDCOMCutoutPosition.cs \
 ./GEDCOM/GEDCOMAddress.cs \
 ./GEDCOM/GEDCOMAlias.cs \
 ./GEDCOM/GEDCOMAssociation.cs \
@@ -112,29 +113,28 @@ sources := \
 ./GEDCOM/GEDCOMUtils.cs \
 ./GEDCOM/MatchParams.cs \
 ./GEDCOM/XRefReplacer.cs \
-./GEDCOM/Extensions/GEDCOMCutoutPosition.cs \
 ./GKCommon/BaseObject.cs \
-./GKCommon/CRC32.cs \
 ./GKCommon/CalendarConverter.cs \
 ./GKCommon/CalendarData.cs \
 ./GKCommon/Controls/ExtResources.Designer.cs \
 ./GKCommon/Controls/GKScrollableControl.cs \
 ./GKCommon/Controls/HyperView.cs \
 ./GKCommon/Controls/ImageBox.cs \
-./GKCommon/Controls/ImageView.Designer.cs \
 ./GKCommon/Controls/ImageView.cs \
+./GKCommon/Controls/ImageView.Designer.cs \
 ./GKCommon/Controls/LogChart.cs \
 ./GKCommon/Controls/ReflectionHelper.cs \
 ./GKCommon/Controls/SlideList.cs \
 ./GKCommon/Controls/WizardPages.cs \
 ./GKCommon/ConvHelper.cs \
+./GKCommon/CRC32.cs \
 ./GKCommon/EnumSet.cs \
 ./GKCommon/ExpCalculator.cs \
 ./GKCommon/ExtList.cs \
 ./GKCommon/ExtRect.cs \
 ./GKCommon/FileHelper.cs \
-./GKCommon/GKResourceManager.cs \
 ./GKCommon/GfxHelper.cs \
+./GKCommon/GKResourceManager.cs \
 ./GKCommon/IndistinctMatching.cs \
 ./GKCommon/IniFile.cs \
 ./GKCommon/LinqHelper.cs \
@@ -188,11 +188,11 @@ sources := \
 ./GKCore/Types/MultimediaKind.cs \
 ./GKCore/Types/NameEntry.cs \
 ./GKCore/Types/NameFormat.cs \
-./GKCore/Types/PGNode.cs \
-./GKCore/Types/PGNodeType.cs \
 ./GKCore/Types/PatriarchObj.cs \
 ./GKCore/Types/PedigreeFormat.cs \
 ./GKCore/Types/PersonEventKind.cs \
+./GKCore/Types/PGNode.cs \
+./GKCore/Types/PGNodeType.cs \
 ./GKCore/Types/RecordAction.cs \
 ./GKCore/Types/RelationKind.cs \
 ./GKCore/Types/ShieldState.cs \
@@ -210,16 +210,17 @@ sources := \
 ./Externals/IniFiles/IniFileCommentary.cs \
 ./Externals/IniFiles/IniFileElement.cs \
 ./Externals/IniFiles/IniFileReader.cs \
+./Externals/IniFiles/IniFiles.cs \
 ./Externals/IniFiles/IniFileSection.cs \
 ./Externals/IniFiles/IniFileSectionStart.cs \
 ./Externals/IniFiles/IniFileSettings.cs \
 ./Externals/IniFiles/IniFileValue.cs \
 ./Externals/IniFiles/IniFileWriter.cs \
-./Externals/IniFiles/IniFiles.cs \
 ./Externals/ListTimSort.cs \
 ./Externals/MapiMailMessage.cs \
 ./Externals/ZipStorer.cs \
 ./GEDCOM/EGEDCOMException.cs \
+./GEDCOM/Extensions/GEDCOMCutoutPosition.cs \
 ./GEDCOM/GEDCOMAddress.cs \
 ./GEDCOM/GEDCOMAlias.cs \
 ./GEDCOM/GEDCOMAssociation.cs \
@@ -288,29 +289,28 @@ sources := \
 ./GEDCOM/GEDCOMUtils.cs \
 ./GEDCOM/MatchParams.cs \
 ./GEDCOM/XRefReplacer.cs \
-./GEDCOM/Extensions/GEDCOMCutoutPosition.cs \
 ./GKCommon/BaseObject.cs \
-./GKCommon/CRC32.cs \
 ./GKCommon/CalendarConverter.cs \
 ./GKCommon/CalendarData.cs \
 ./GKCommon/Controls/ExtResources.Designer.cs \
 ./GKCommon/Controls/GKScrollableControl.cs \
 ./GKCommon/Controls/HyperView.cs \
 ./GKCommon/Controls/ImageBox.cs \
-./GKCommon/Controls/ImageView.Designer.cs \
 ./GKCommon/Controls/ImageView.cs \
+./GKCommon/Controls/ImageView.Designer.cs \
 ./GKCommon/Controls/LogChart.cs \
 ./GKCommon/Controls/ReflectionHelper.cs \
 ./GKCommon/Controls/SlideList.cs \
 ./GKCommon/Controls/WizardPages.cs \
 ./GKCommon/ConvHelper.cs \
-./GKCommon/ExpCalculator.cs \
+./GKCommon/CRC32.cs \
 ./GKCommon/EnumSet.cs \
+./GKCommon/ExpCalculator.cs \
 ./GKCommon/ExtList.cs \
 ./GKCommon/ExtRect.cs \
 ./GKCommon/FileHelper.cs \
-./GKCommon/GKResourceManager.cs \
 ./GKCommon/GfxHelper.cs \
+./GKCommon/GKResourceManager.cs \
 ./GKCommon/IndistinctMatching.cs \
 ./GKCommon/IniFile.cs \
 ./GKCommon/LinqHelper.cs \
@@ -364,11 +364,11 @@ sources := \
 ./GKCore/Types/MultimediaKind.cs \
 ./GKCore/Types/NameEntry.cs \
 ./GKCore/Types/NameFormat.cs \
-./GKCore/Types/PGNode.cs \
-./GKCore/Types/PGNodeType.cs \
 ./GKCore/Types/PatriarchObj.cs \
 ./GKCore/Types/PedigreeFormat.cs \
 ./GKCore/Types/PersonEventKind.cs \
+./GKCore/Types/PGNode.cs \
+./GKCore/Types/PGNodeType.cs \
 ./GKCore/Types/RecordAction.cs \
 ./GKCore/Types/RelationKind.cs \
 ./GKCore/Types/ShieldState.cs \
