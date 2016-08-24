@@ -57,8 +57,8 @@ namespace GKTextSearchPlugin
             this.Controls.Add(this.fResultsText);
             this.ResumeLayout(false);
             this.Controls.SetChildIndex(this.fResultsText, 0);
-            
-            (this as ILocalization).SetLang();
+
+            this.SetLang();
         }
 
         private void Write(string text)
@@ -73,7 +73,7 @@ namespace GKTextSearchPlugin
             fBase.SelectRecordByXRef(linkName);
         }
 
-        void btnSearch_Click(object sender, EventArgs e)
+        private void btnSearch_Click(object sender, EventArgs e)
         {
             this.btnSearch.Enabled = false;
             fResultsText.Lines.BeginUpdate();
@@ -106,14 +106,23 @@ namespace GKTextSearchPlugin
             }
         }
 
-        void TextSearchWin_Load(object sender, EventArgs e)
+        private void TextSearchWin_Load(object sender, EventArgs e)
         {
             fPlugin.SearchMan.ReindexBase(fBase);
         }
 
-        void ILocalization.SetLang()
+        private void TextSearchWin_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            this.fPlugin.tsWin = null;
+        }
+
+        #region ILocalization support
+
+        public void SetLang()
         {
             this.btnSearch.Text = fPlugin.LangMan.LS(TLS.LSID_Search);
         }
+
+        #endregion
     }
 }

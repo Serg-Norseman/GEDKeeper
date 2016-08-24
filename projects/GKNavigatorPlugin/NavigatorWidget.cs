@@ -60,6 +60,7 @@ namespace GKNavigatorPlugin
             this.fPlugin = plugin;
 
             this.InitControls();
+
             this.SetLang();
         }
 

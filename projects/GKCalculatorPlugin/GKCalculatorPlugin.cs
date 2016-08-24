@@ -87,6 +87,8 @@ namespace GKCalculatorPlugin
             {
                 this.fLangMan = this.fHost.CreateLangMan(this);
                 this.fDisplayName = this.fLangMan.LS(PLS.LSID_MICalc);
+
+                if (frm != null) frm.SetLang();
             }
             catch (Exception ex)
             {

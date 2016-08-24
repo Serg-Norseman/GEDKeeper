@@ -117,8 +117,8 @@ namespace GKFlowInputPlugin
 
         #endregion
 
-        #region Utilities
-        
+        #region ILocalization support
+
         public void SetLang()
         {
             this.btnParse.Text = fLangMan.LS(FLS.LSID_DlgAppend);
@@ -144,10 +144,14 @@ namespace GKFlowInputPlugin
             this.gbMetrics.Text = fLangMan.LS(FLS.LSID_SK_Met);
             this.lblEventDate.Text = fLangMan.LS(FLS.LSID_EventDate);
             this.lblEventType.Text = fLangMan.LS(FLS.LSID_EventType);
-            
+
             this.rbSK_Rev.Text = fLangMan.LS(FLS.LSID_SK_Rev);
             this.rbSK_Met.Text = fLangMan.LS(FLS.LSID_SK_Met);
         }
+
+        #endregion
+
+        #region Utilities
         
         private void ShowError(string msg)
         {

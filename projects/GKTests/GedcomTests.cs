@@ -1582,6 +1582,7 @@ namespace GKTests
             //
             GEDCOMIndividualRecord indiRec = _context.Tree.XRefIndex_Find("I4") as GEDCOMIndividualRecord;
             Assert.IsNull(indiRec.GetMarriageFamily());
+            Assert.IsNotNull(indiRec.GetMarriageFamily(true));
 
             GEDCOMRecordTest(indiRec);
 
@@ -1658,7 +1659,7 @@ namespace GKTests
             GEDCOMAssociation asso = indiRec.AddAssociation("test", indi2);
             Assert.IsNotNull(asso);
 
-            using (GEDCOMIndividualRecord indi = new GEDCOMIndividualRecord(null, null, "", "")) {
+            using (GEDCOMIndividualRecord indi = new GEDCOMIndividualRecord(_context.Tree, _context.Tree, "", "")) {
                 Assert.IsNotNull(indi);
 
                 string surname, name, patr;
@@ -1666,6 +1667,24 @@ namespace GKTests
                 Assert.AreEqual("", surname);
                 Assert.AreEqual("", name);
                 Assert.AreEqual("", patr);
+
+                string st;
+                Assert.AreEqual("", indi.GetNameString(true, false));
+                Assert.AreEqual("", indi.GetNickString());
+
+                GEDCOMPersonalName pName = new GEDCOMPersonalName(_context.Tree, indi, "", "");
+                indi.AddPersonalName(pName);
+                pName.Pieces.Nickname = "BigHead";
+                pName.SetNameParts("Ivan", "Petrov", "");
+
+                st = indi.GetNameString(true, true);
+                Assert.AreEqual("Petrov Ivan [BigHead]", st);
+                st = indi.GetNameString(false, true);
+                Assert.AreEqual("Ivan Petrov [BigHead]", st);
+                Assert.AreEqual("BigHead", indi.GetNickString());
+
+                Assert.IsNull(indi.GetParentsFamily());
+                Assert.IsNotNull(indi.GetParentsFamily(true));
             }
         }
 

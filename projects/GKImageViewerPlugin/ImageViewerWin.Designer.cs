@@ -28,7 +28,6 @@ namespace GKImageViewerPlugin
 		    // 
 		    // tbFileLoad
 		    // 
-		    this.tbFileLoad.ImageIndex = 0;
 		    this.tbFileLoad.Name = "tbFileLoad";
 		    this.tbFileLoad.Size = new System.Drawing.Size(23, 22);
 		    this.tbFileLoad.Click += new System.EventHandler(this.ToolBar1_ButtonClick);
@@ -44,6 +43,7 @@ namespace GKImageViewerPlugin
 		    this.ShowInTaskbar = false;
 		    this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 		    this.Text = "ImageViewerWin";
+		    this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ImageViewerWin_FormClosed);
 		    this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ImageViewerWin_KeyDown);
 		    this.ToolBar1.ResumeLayout(false);
 		    this.ToolBar1.PerformLayout();

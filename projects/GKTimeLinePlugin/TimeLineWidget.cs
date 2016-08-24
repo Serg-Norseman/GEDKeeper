@@ -35,7 +35,6 @@ namespace GKTimeLinePlugin
     public partial class TimeLineWidget : Form, ILocalization
     {
         private readonly Plugin fPlugin;
-        private readonly ILangMan fLangMan;
 
         private IBaseWindow fBase;
         private int fYearMin;
@@ -49,7 +48,6 @@ namespace GKTimeLinePlugin
             this.Location = new Point(10, Screen.PrimaryScreen.WorkingArea.Height - this.Height - 10);
 
             this.fPlugin = plugin;
-            this.fLangMan = plugin.LangMan;
 
             this.SetLang();
         }
@@ -143,8 +141,8 @@ namespace GKTimeLinePlugin
         private void StatusUpdate()
         {
             if (this.fBase != null) {
-                this.StatusBarPanel1.Text = string.Format(this.fLangMan.LS(PLS.LSID_TimeScale), this.fYearMin.ToString(), this.fYearMax.ToString());
-                this.StatusBarPanel2.Text = string.Format(this.fLangMan.LS(PLS.LSID_CurrentYear), this.fYearCurrent.ToString());
+                this.StatusBarPanel1.Text = string.Format(this.fPlugin.LangMan.LS(PLS.LSID_TimeScale), this.fYearMin.ToString(), this.fYearMax.ToString());
+                this.StatusBarPanel2.Text = string.Format(this.fPlugin.LangMan.LS(PLS.LSID_CurrentYear), this.fYearCurrent.ToString());
             } else {
                 this.StatusBarPanel1.Text = "";
                 this.StatusBarPanel2.Text = "";
@@ -209,6 +207,8 @@ namespace GKTimeLinePlugin
         public void SetLang()
         {
             this.Text = this.fPlugin.LangMan.LS(PLS.LSID_MITimeLine);
+
+            this.StatusUpdate();
         }
 
         #endregion

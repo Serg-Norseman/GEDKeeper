@@ -37,17 +37,23 @@ namespace GKImageViewerPlugin
     public partial class ImageViewerWin : Form, ILocalization
     {
         private ImageView fImageCtl;
-        private readonly ILangMan fLangMan;
+        private readonly Plugin fPlugin;
 
-        public ImageViewerWin(IPlugin plugin)
+        public ImageViewerWin(Plugin plugin)
         {
             this.InitializeComponent();
 
             GKResourceManager resMgr = new GKResourceManager("IVPResource", typeof(ImageViewerWin).Assembly);
             this.tbFileLoad.Image = (Bitmap)resMgr.GetObjectEx("iLoad");
 
-            this.fLangMan = plugin.LangMan;
+            this.fPlugin = plugin;
+
             this.SetLang();
+        }
+
+        private void ImageViewerWin_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            this.fPlugin.frm = null;
         }
 
         private void ImageViewerWin_KeyDown(object sender, KeyEventArgs e)
@@ -61,7 +67,7 @@ namespace GKImageViewerPlugin
         private void ToolBar1_ButtonClick(object sender, EventArgs e)
         {
             if (sender == this.tbFileLoad) {
-                string fileName = UIHelper.GetOpenFile("", "", this.fLangMan.LS(IVLS.LSID_FilesFilter), 1, "");
+                string fileName = UIHelper.GetOpenFile("", "", this.fPlugin.LangMan.LS(IVLS.LSID_FilesFilter), 1, "");
                 if (!string.IsNullOrEmpty(fileName))
                 {
                     this.SetFileRef(fileName);
@@ -78,7 +84,7 @@ namespace GKImageViewerPlugin
             this.fImageCtl = null;
 
             GEDCOMMultimediaFormat fmt = GEDCOMFileReference.RecognizeFormat(fileName);
-            
+
             switch (fmt)
             {
                 case GEDCOMMultimediaFormat.mfBMP:
@@ -162,8 +168,8 @@ namespace GKImageViewerPlugin
 
         public void SetLang()
         {
-            this.Text = this.fLangMan.LS(IVLS.LSID_ImgViewer);
-            this.tbFileLoad.ToolTipText = this.fLangMan.LS(IVLS.LSID_FileLoad);
+            this.Text = this.fPlugin.LangMan.LS(IVLS.LSID_ImgViewer);
+            this.tbFileLoad.ToolTipText = this.fPlugin.LangMan.LS(IVLS.LSID_FileLoad);
 
             /*if (this.fImageCtl != null) {
                 this.fImageCtl.btnSizeToFit.Text = LangMan.LS(LSID.LSID_SizeToFit);

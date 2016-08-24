@@ -27,13 +27,14 @@ using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
+using GKCore.Interfaces;
 
 namespace GKNamesBookPlugin
 {
     /// <summary>
     /// 
     /// </summary>
-    public partial class NamesBookWidget : Form
+    public partial class NamesBookWidget : Form, ILocalization
     {
         private class NameRecord
         {
@@ -64,7 +65,7 @@ namespace GKNamesBookPlugin
             this.PrepareList();
             this.UpdateList();
 
-            this.Text = this.fPlugin.LangMan.LS(NLS.LSID_MINamesBook);
+            this.SetLang();
         }
 
         protected override void Dispose(bool disposing)
@@ -77,6 +78,15 @@ namespace GKNamesBookPlugin
             }
             base.Dispose(disposing);
         }
+
+        #region ILocalization support
+
+        public void SetLang()
+        {
+            this.Text = this.fPlugin.LangMan.LS(NLS.LSID_MINamesBook);
+        }
+
+        #endregion
 
         private void NamesBookWidget_Load(object sender, EventArgs e)
         {

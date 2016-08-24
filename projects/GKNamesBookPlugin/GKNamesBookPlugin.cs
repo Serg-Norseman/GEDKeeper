@@ -88,6 +88,8 @@ namespace GKNamesBookPlugin
             {
                 this.fLangMan = this.fHost.CreateLangMan(this);
                 this.fDisplayName = this.fLangMan.LS(NLS.LSID_MINamesBook);
+
+                if (frm != null) frm.SetLang();
             }
             catch (Exception ex)
             {

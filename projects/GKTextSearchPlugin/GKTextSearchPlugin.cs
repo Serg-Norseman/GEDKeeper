@@ -61,6 +61,8 @@ namespace GKTextSearchPlugin
         public ILangMan LangMan { get { return this.fLangMan; } }
         public SearchManager SearchMan { get { return this.fSearchMan; } }
 
+        internal TextSearchWin tsWin;
+
         public void Execute()
         {
             if (this.fHost.IsUnix()) {
@@ -71,7 +73,7 @@ namespace GKTextSearchPlugin
             IBaseWindow curBase = fHost.GetCurrentFile();
             if (curBase == null) return;
 
-            TextSearchWin tsWin = new TextSearchWin(this, curBase);
+            tsWin = new TextSearchWin(this, curBase);
             tsWin.Show();
         }
 
@@ -102,6 +104,8 @@ namespace GKTextSearchPlugin
             {
                 this.fLangMan = this.fHost.CreateLangMan(this);
                 this.fDisplayName = this.fLangMan.LS(TLS.LSID_PluginTitle);
+
+                if (tsWin != null) tsWin.SetLang();
             }
             catch (Exception ex)
             {

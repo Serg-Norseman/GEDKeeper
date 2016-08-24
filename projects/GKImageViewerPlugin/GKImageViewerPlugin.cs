@@ -58,11 +58,13 @@ namespace GKImageViewerPlugin
         public IHost Host { get { return fHost; } }
         public ILangMan LangMan { get { return fLangMan; } }
 
+        internal ImageViewerWin frm;
+
         public void Execute()
         {
             try
             {
-                ImageViewerWin frm = new ImageViewerWin(this);
+                frm = new ImageViewerWin(this);
                 this.fHost.ShowMDI(frm);
             }
             catch (Exception ex)
@@ -81,13 +83,15 @@ namespace GKImageViewerPlugin
             {
                 this.fLangMan = this.fHost.CreateLangMan(this);
                 this.fDisplayName = this.fLangMan.LS(IVLS.LSID_ImgViewer);
+
+                if (frm != null) frm.SetLang();
             }
             catch (Exception ex)
             {
                 fHost.LogWrite("GKImageViewerPlugin.OnLanguageChange(): " + ex.Message);
             }
         }
-        
+
         public bool Startup(IHost host)
         {
             bool result = true;

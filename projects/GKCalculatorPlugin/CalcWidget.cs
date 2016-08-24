@@ -23,13 +23,14 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using GKCommon;
+using GKCore.Interfaces;
 
 namespace GKCalculatorPlugin
 {
     /// <summary>
     /// 
     /// </summary>
-    public partial class CalcWidget : Form
+    public partial class CalcWidget : Form, ILocalization
     {
         private readonly Plugin fPlugin;
         private readonly ExpCalculator fCalc;
@@ -43,11 +44,10 @@ namespace GKCalculatorPlugin
             Screen scr = Screen.PrimaryScreen;
             this.Location = new Point(scr.WorkingArea.Width - this.Width - 10, scr.WorkingArea.Height - this.Height - 10);
 
-            this.Text = this.fPlugin.LangMan.LS(PLS.LSID_MICalc);
-            this.chkPutToClipboard.Text = this.fPlugin.LangMan.LS(PLS.LSID_CopyResultToClipboard);
-
             this.fCalc = new ExpCalculator();
             this.lbOutput.Items.Clear();
+
+            this.SetLang();
         }
 
         protected override void Dispose(bool disposing)
@@ -105,5 +105,15 @@ namespace GKCalculatorPlugin
         {
             e.Effect = DragDropEffects.None;
         }
+
+        #region ILocalization support
+
+        public void SetLang()
+        {
+            this.Text = this.fPlugin.LangMan.LS(PLS.LSID_MICalc);
+            this.chkPutToClipboard.Text = this.fPlugin.LangMan.LS(PLS.LSID_CopyResultToClipboard);
+        }
+
+        #endregion
     }
 }

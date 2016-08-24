@@ -1025,12 +1025,15 @@ namespace GKTests
                 //Assert.Throws(typeof(ArgumentNullException), () => { globalOptions.LoadFromFile(null); });
 
 
-
                 MRUFile mruFile = new MRUFile();
                 Assert.IsNotNull(mruFile);
 
                 mruFile = new MRUFile("test.ged");
                 Assert.IsNotNull(mruFile);
+                Assert.AreEqual(-1, globalOptions.MRUFiles_IndexOf("test.ged"));
+                globalOptions.MRUFiles.Add(mruFile);
+                Assert.AreEqual(0, globalOptions.MRUFiles_IndexOf("test.ged"));
+
 
                 mruFile.SaveToFile(iniFile, "xxx");
                 mruFile.LoadFromFile(iniFile, "xxx");
