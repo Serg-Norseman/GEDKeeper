@@ -78,6 +78,7 @@
     <Compile Include="PIPTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestStubs.cs" />
+    <Compile Include="UDNTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GEDKeeper2\GEDKeeper2.mswin.csproj">

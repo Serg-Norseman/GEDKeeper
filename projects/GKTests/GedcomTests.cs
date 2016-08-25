@@ -685,11 +685,11 @@ namespace GKTests
 
                 dateVal.ParseString("ABT 20 JAN 2013");
                 testUDN = dateVal.GetUDN();
-                Assert.AreEqual("~2013/1/20", testUDN.ToString());
+                Assert.AreEqual("~2013/01/20", testUDN.ToString());
 
                 dateVal.ParseString("CAL 20 JAN 2013");
                 testUDN = dateVal.GetUDN();
-                Assert.AreEqual("~2013/1/20", testUDN.ToString());
+                Assert.AreEqual("~2013/01/20", testUDN.ToString());
 
                 dateVal.ParseString("EST 20 DEC 2013");
                 testUDN = dateVal.GetUDN();
@@ -697,15 +697,15 @@ namespace GKTests
 
                 dateVal.ParseString("BET 04 JAN 2013 AND 25 JAN 2013");
                 testUDN = dateVal.GetUDN();
-                Assert.AreEqual("2013/1/14", testUDN.ToString());
+                Assert.AreEqual("2013/01/14", testUDN.ToString());
 
                 dateVal.ParseString("BEF 20 JAN 2013");
                 testUDN = dateVal.GetUDN();
-                Assert.AreEqual("<2013/1/20", testUDN.ToString());
+                Assert.AreEqual("<2013/01/20", testUDN.ToString());
 
                 dateVal.ParseString("AFT 20 JAN 2013");
                 testUDN = dateVal.GetUDN();
-                Assert.AreEqual(">2013/1/20", testUDN.ToString());
+                Assert.AreEqual(">2013/01/20", testUDN.ToString());
 
                 //
                 UDN testUDNAft = UDN.CreateAfter(UDNCalendarType.ctGregorian, 1900, 11, 0);
@@ -715,14 +715,82 @@ namespace GKTests
                 Assert.AreEqual("<1900/??/17", testUDNBef.ToString());
 
                 UDN testUDNApp = UDN.CreateApproximate(UDNCalendarType.ctGregorian, 0, 5, 14);
-                Assert.AreEqual("~????/5/14", testUDNApp.ToString());
+                Assert.AreEqual("~????/05/14", testUDNApp.ToString());
 
                 Assert.AreEqual(-1, testUDNBef.CompareTo(testUDNAft));
                 Assert.AreEqual(-1, testUDNBef.CompareTo(null));
 
                 UDN testUDN2 = (UDN)testUDNApp.Clone();
-                Assert.AreEqual("~????/5/14", testUDN2.ToString());
+                Assert.AreEqual("~????/05/14", testUDN2.ToString());
                 Assert.IsFalse(testUDN2.IsEmpty());
+
+                //Assert.IsTrue(testUDN2.GetHashCode() != 0);
+
+                Assert.Throws(typeof(Exception), () => {
+                                  UDN.CreateBetween(new UDN(UDNCalendarType.ctGregorian, UDN.UnknownYear, 05, 05),
+                                                    new UDN(UDNCalendarType.ctGregorian, UDN.UnknownYear, 05, 07)); });
+
+                //
+
+                Assert.AreEqual("2016/05/05", new UDN(UDNCalendarType.ctGregorian, 2016, 05, 05).ToString());
+                Assert.AreEqual("2016/05/04", new UDN(UDNCalendarType.ctGregorian, 2016, 05, 04).ToString());
+
+                Assert.AreEqual("2016/05/04", new UDN(UDNCalendarType.ctJulian, 2016, 04, 21).ToString());
+                Assert.AreEqual("2016/05/06", new UDN(UDNCalendarType.ctJulian, 2016, 04, 23).ToString());
+
+                Assert.AreEqual("2016/05/??", new UDN(UDNCalendarType.ctGregorian, 2016, 05, UDN.UnknownDay).ToString());
+                Assert.AreEqual("2016/06/??", new UDN(UDNCalendarType.ctGregorian, 2016, 06, UDN.UnknownDay).ToString());
+
+                Assert.AreEqual("????/??/??", new UDN(UDNCalendarType.ctGregorian, UDN.UnknownYear, UDN.UnknownMonth, UDN.UnknownDay).ToString());
+                Assert.AreEqual("????/04/23", new UDN(UDNCalendarType.ctGregorian, UDN.UnknownYear, 04, 23).ToString());
+                Assert.AreEqual("????/03/23", new UDN(UDNCalendarType.ctGregorian, UDN.UnknownYear, 03, 23).ToString());
+                Assert.AreEqual("????/??/23", new UDN(UDNCalendarType.ctGregorian, UDN.UnknownYear, UDN.UnknownMonth, 23).ToString());
+                Assert.AreEqual("2016/??/??", new UDN(UDNCalendarType.ctGregorian, 2016, UDN.UnknownMonth, UDN.UnknownDay).ToString());
+                Assert.AreEqual("2016/??/10", new UDN(UDNCalendarType.ctGregorian, 2016, UDN.UnknownMonth, 10).ToString());
+                Assert.AreEqual("2015/03/23", new UDN(UDNCalendarType.ctGregorian, 2015, 03, 23).ToString());
+                Assert.AreEqual("2014/??/23", new UDN(UDNCalendarType.ctGregorian, 2014, UDN.UnknownMonth, 23).ToString());
+                Assert.AreEqual("2016/05/31", new UDN(UDNCalendarType.ctGregorian, 2016, 05, 31).ToString());
+                Assert.AreEqual("2016/05/31", new UDN(UDNCalendarType.ctGregorian, 2016, 05, 31).ToString());
+                Assert.AreEqual("-4712/01/02", new UDN(UDNCalendarType.ctGregorian, -4712, 1, 2).ToString());
+                Assert.AreEqual("-4712/01/03", new UDN(UDNCalendarType.ctGregorian, -4712, 1, 3).ToString());
+
+                Assert.AreEqual("1804/06/13", new UDN(UDNCalendarType.ctHebrew, 5564, 04, 04).ToString());
+                Assert.AreEqual("1801/05/17", new UDN(UDNCalendarType.ctIslamic, 1216, 01, 04).ToString());
+                Assert.AreEqual("1802/05/01", new UDN(UDNCalendarType.ctGregorian, 1802, 05, 01).ToString());
+
+                Assert.AreEqual("????/01/03", new UDN(UDNCalendarType.ctGregorian, 0, 1, 3).ToString());
+                Assert.AreEqual("00-1/01/03", new UDN(UDNCalendarType.ctGregorian, -1, 1, 3).ToString()); // FIXME!
+
+                Assert.AreEqual("0001/01/03", new UDN(UDNCalendarType.ctGregorian, 1, 1, 3).ToString());
+                Assert.AreEqual("2015/02/27", new UDN(UDNCalendarType.ctGregorian, 2015, 2, 27).ToString());
+                Assert.AreEqual("3268/01/23", new UDN(UDNCalendarType.ctGregorian, 3268, 1, 23).ToString());
+
+                // Add dates before.
+                Assert.AreEqual("<0001/01/04", UDN.CreateBefore(UDNCalendarType.ctGregorian, 1, 1, 4).ToString());
+                Assert.AreEqual("<2016/05/31", UDN.CreateBefore(UDNCalendarType.ctGregorian, 2016, 05, 31).ToString());
+                Assert.AreEqual("<-4712/01/02", UDN.CreateBefore(UDNCalendarType.ctGregorian, -4712, 1, 2).ToString());
+                Assert.AreEqual("<????/05/31", UDN.CreateBefore(UDNCalendarType.ctGregorian, UDN.UnknownYear, 05, 31).ToString());
+                Assert.AreEqual("<2015/??/31", UDN.CreateBefore(UDNCalendarType.ctGregorian, 2015, UDN.UnknownMonth, 31).ToString());
+                // Add dates after.
+                Assert.AreEqual(">2016/05/31", UDN.CreateAfter(UDNCalendarType.ctGregorian, 2016, 05, 31).ToString());
+                Assert.AreEqual(">????/05/31", UDN.CreateAfter(UDNCalendarType.ctGregorian, UDN.UnknownYear, 05, 31).ToString());
+                Assert.AreEqual(">????/06/15", UDN.CreateAfter(UDNCalendarType.ctGregorian, UDN.UnknownYear, 06, 15).ToString());
+                Assert.AreEqual(">2015/??/31", UDN.CreateAfter(UDNCalendarType.ctGregorian, 2015, UDN.UnknownMonth, 31).ToString());
+                Assert.AreEqual(">2015/??/30", UDN.CreateAfter(UDNCalendarType.ctGregorian, 2015, UDN.UnknownMonth, 30).ToString());
+                // Add approximate dates.
+                Assert.AreEqual("~2016/05/31", UDN.CreateApproximate(UDNCalendarType.ctGregorian, 2016, 05, 31).ToString());
+                Assert.AreEqual("~0001/01/04", UDN.CreateApproximate(UDNCalendarType.ctGregorian, 1, 1, 4).ToString());
+                Assert.AreEqual("~0001/01/??", UDN.CreateApproximate(UDNCalendarType.ctGregorian, 1, 1, UDN.UnknownDay).ToString());
+                Assert.AreEqual("~????/05/31", UDN.CreateApproximate(UDNCalendarType.ctGregorian, UDN.UnknownYear, 05, 31).ToString());
+                Assert.AreEqual("~2015/??/31", UDN.CreateApproximate(UDNCalendarType.ctGregorian, 2015, UDN.UnknownMonth, 31).ToString());
+                Assert.AreEqual("~2015/02/28", UDN.CreateApproximate(UDNCalendarType.ctGregorian, 2015, 2, 28).ToString());
+
+                //
+
+                Assert.AreEqual(1, new UDN(UDNCalendarType.ctGregorian, 1910, 10, 10).CompareTo(new UDN(UDNCalendarType.ctGregorian, 1910, 10, 09)));
+                Assert.AreEqual(-1, new UDN(UDNCalendarType.ctGregorian, 1910, 10, 09).CompareTo(new UDN(UDNCalendarType.ctGregorian, 1910, 10, 10)));
+
+                //
 
                 //dateVal.ParseString("28 DEC 1990");
                 //testUDN = dateVal.GetUDN();
