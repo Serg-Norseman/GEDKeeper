@@ -44,32 +44,41 @@ namespace GKCore.Cultures
             return true;
         }
 
-        public static string PrepareRusSurname(string f, bool aFemale)
+        private static string GetMaidenSurname(string surname)
         {
-            if (string.IsNullOrEmpty(f) || (f[0] == '(' && f[f.Length - 1] == ')'))
+            if (string.IsNullOrEmpty(surname)) return "";
+
+            int p = surname.IndexOf(" (");
+            string result = ((p >= 0) ? surname.Substring(0, p) : surname);
+            return result;
+        }
+
+        public string NormalizeSurname(string sn, bool aFemale)
+        {
+            if (string.IsNullOrEmpty(sn) || (sn[0] == '(' && sn[sn.Length - 1] == ')'))
             {
-                f = "?";
+                sn = "?";
             }
             else
             {
                 if (aFemale)
                 {
-                    f = GKUtils.ClearSurname(f);
+                    sn = GetMaidenSurname(sn);
 
-                    if (f.EndsWith("а")) {
-                        f = f.Substring(0, f.Length - 1);
-                    } else if (f.EndsWith("кая")) {
-                        f = f.Substring(0, f.Length - 3) + "кий";
-                    } else if (f.EndsWith("ная")) {
-                        f = f.Substring(0, f.Length - 3) + "ный";
+                    if (sn.EndsWith("а")) {
+                        sn = sn.Substring(0, sn.Length - 1);
+                    } else if (sn.EndsWith("кая")) {
+                        sn = sn.Substring(0, sn.Length - 3) + "кий";
+                    } else if (sn.EndsWith("ная")) {
+                        sn = sn.Substring(0, sn.Length - 3) + "ный";
                     }
                 }
             }
 
-            return f;
+            return sn;
         }
 
-        public static string GetRusWifeSurname(string husbSurname)
+        public string GetMarriedSurname(string husbSurname)
         {
             const string consonants = "бвгджзклмнпрстфхцчшщ";
             //const string vowels = "абвгдежзиклмнопрстуфхцчшщьыъэюя";
@@ -102,7 +111,7 @@ namespace GKCore.Cultures
             return str.IndexOf(c) >= 0;
         }
 
-        public static GEDCOMSex GetSex(string iName, string iPat, bool canQuery)
+        public GEDCOMSex GetSex(string iName, string iPat, bool canQuery)
         {
             GEDCOMSex result = GEDCOMSex.svNone;
             if (string.IsNullOrEmpty(iName)) return result;

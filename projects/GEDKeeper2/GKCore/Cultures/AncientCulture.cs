@@ -19,6 +19,7 @@
  */
 
 using System;
+using GKCommon.GEDCOM;
 using GKCore.Interfaces;
 
 namespace GKCore.Cultures
@@ -40,6 +41,21 @@ namespace GKCore.Cultures
         public bool HasSurname()
         {
             return false;
+        }
+
+        public string NormalizeSurname(string sn, bool aFemale)
+        {
+            return sn;
+        }
+
+        public string GetMarriedSurname(string husbSurname)
+        {
+            return husbSurname;
+        }
+
+        public GEDCOMSex GetSex(string iName, string iPat, bool canQuery)
+        {
+            return GEDCOMSex.svUndetermined;
         }
     }
 }

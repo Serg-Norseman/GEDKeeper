@@ -91,23 +91,6 @@ namespace GKCommon.GEDCOM
             //ALastPart = GetLastPart();
         }
 
-        // TODO: remove to cultures
-        public void GetRusNameParts(out string surname, out string name, out string patronymic)
-        {
-            string firstPart /*, dummy*/;
-            this.GetNameParts(out firstPart, out surname /*, out dummy*/);
-
-            string[] parts = firstPart.Split(' ');
-            if (parts.Length > 1)
-            {
-                name = parts[0];
-                patronymic = parts[1];
-            } else {
-                name = firstPart;
-                patronymic = "";
-            }
-        }
-
         public void SetNameParts(string firstPart, string surname, string lastPart)
         {
             base.StringValue = GEDCOMUtils.TrimLeft(firstPart + " ") + "/" + surname + "/" + GEDCOMUtils.TrimRight(" " + lastPart);
@@ -267,12 +250,12 @@ namespace GKCommon.GEDCOM
             this.fPieces.SaveToStream(stream);
         }
 
-        public float IsMatch(GEDCOMPersonalName otherName)
+        public float IsMatch(GEDCOMPersonalName otherName, bool onlyFirstPart)
         {
             if (otherName == null) return 0.0f;
 
             float match = 0.0f;
-            
+
             int parts = 0;
             float matches = 0;
             bool surnameMatched = false;

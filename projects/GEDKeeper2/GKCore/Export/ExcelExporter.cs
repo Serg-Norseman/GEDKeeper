@@ -80,7 +80,7 @@ namespace GKCore.Export
                         GEDCOMIndividualRecord ind = rec as GEDCOMIndividualRecord;
                         if (this.fSelectedRecords == null || this.fSelectedRecords.IndexOf(rec) >= 0) {
                             string fam, nam, pat;
-                            ind.GetNameParts(out fam, out nam, out pat);
+                            GKUtils.GetNameParts(ind, out fam, out nam, out pat);
 
                             string sx = "" + GKUtils.SexStr(ind.Sex)[0];
                             row++;

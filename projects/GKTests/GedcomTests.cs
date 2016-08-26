@@ -21,7 +21,6 @@
 using System;
 using System.Globalization;
 using System.IO;
-using System.Resources;
 using System.Text;
 
 using GKCommon;
@@ -466,7 +465,6 @@ namespace GKTests
             MatchParams mParams;
             mParams.NamesIndistinctThreshold = 1.0f;
             mParams.DatesCheck = true;
-            mParams.RusNames = true;
             mParams.YearsInaccuracy = 0;
 
             // null
@@ -1731,7 +1729,7 @@ namespace GKTests
                 Assert.IsNotNull(indi);
 
                 string surname, name, patr;
-                indi.GetNameParts(out surname, out name, out patr);
+                GKUtils.GetNameParts(indi, out surname, out name, out patr);
                 Assert.AreEqual("", surname);
                 Assert.AreEqual("", name);
                 Assert.AreEqual("", patr);
@@ -1773,7 +1771,7 @@ namespace GKTests
 //			Assert.AreEqual(pieces.PatronymicName, "patr");
 
             string name, patr;
-            iRec.GetNameParts(out surname, out name, out patr);
+            GKUtils.GetNameParts(iRec, out surname, out name, out patr);
             Assert.AreEqual("Ivanov", surname);
             Assert.AreEqual("Ivan", name);
             Assert.AreEqual("Ivanovich", patr);
@@ -1882,22 +1880,22 @@ namespace GKTests
                 Assert.AreEqual("", fp);
                 Assert.AreEqual("", sp);
 
-                Assert.AreEqual(0.0f, name1.IsMatch(null));
+                Assert.AreEqual(0.0f, name1.IsMatch(null, false));
 
                 using (GEDCOMPersonalName name2 = new GEDCOMPersonalName(null, null, "", "")) {
-                    Assert.AreEqual(0.0f, name1.IsMatch(name2));
+                    Assert.AreEqual(0.0f, name1.IsMatch(name2, false));
 
                     name1.SetNameParts("Ivan", "Dub", "");
                     name2.SetNameParts("Ivan", "Dub", "");
-                    Assert.AreEqual(100.0f, name1.IsMatch(name2));
+                    Assert.AreEqual(100.0f, name1.IsMatch(name2, false));
 
                     name1.SetNameParts("Ivan", "Dub", "");
                     name2.SetNameParts("Ivan", "Dub2", "");
-                    Assert.AreEqual(12.5f, name1.IsMatch(name2));
+                    Assert.AreEqual(12.5f, name1.IsMatch(name2, false));
 
                     name1.SetNameParts("Ivan", "Dub", "");
                     name2.SetNameParts("Ivan2", "Dub", "");
-                    Assert.AreEqual(50.0f, name1.IsMatch(name2));
+                    Assert.AreEqual(50.0f, name1.IsMatch(name2, false));
                 }
             }
 

@@ -24,10 +24,10 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCore.Cultures;
+using GKCore.Options;
 using GKCore.Types;
 using GKUI.Controls;
 
@@ -2664,15 +2664,6 @@ namespace GKCore
 
         #region Names processing
 
-        public static string ClearSurname(string surname)
-        {
-            if (string.IsNullOrEmpty(surname)) return "";
-            
-            int p = surname.IndexOf(" (");
-            string result = ((p >= 0) ? surname.Substring(0, p) : surname);
-            return result;
-        }
-
         public static string[] GetSurnames(string surname, bool female)
         {
             string[] result = new string[1];
@@ -2682,7 +2673,7 @@ namespace GKCore
                 int p = surname.IndexOf('(');
                 if (p >= 0) {
                     string part = surname.Substring(0, p).Trim();
-                    result[0] = RussianCulture.PrepareRusSurname(part, female);
+                    result[0] = GlobalOptions.CurrentCulture.NormalizeSurname(part, female);
                     part = surname.Substring(p).Trim();
                     part = part.Substring(1, part.Length-2);
 
@@ -2691,10 +2682,10 @@ namespace GKCore
                         string[] newres = new string[result.Length+1];
                         result.CopyTo(newres, 0);
                         result = newres;
-                        result[result.Length-1] = RussianCulture.PrepareRusSurname(parts[i].Trim(), female);
+                        result[result.Length-1] = GlobalOptions.CurrentCulture.NormalizeSurname(parts[i].Trim(), female);
                     }
                 } else {
-                    result[0] = RussianCulture.PrepareRusSurname(surname, female);
+                    result[0] = GlobalOptions.CurrentCulture.NormalizeSurname(surname, female);
                 }
             } else {
                 result[0] = surname;
@@ -2706,15 +2697,47 @@ namespace GKCore
         public static string[] GetSurnames(GEDCOMIndividualRecord iRec)
         {
             if (iRec == null)
-            {
                 throw new ArgumentNullException("iRec");
-            }
 
             string fam, nam, pat;
-            iRec.GetNameParts(out fam, out nam, out pat);
+            GKUtils.GetNameParts(iRec, out fam, out nam, out pat);
             bool female = (iRec.Sex == GEDCOMSex.svFemale);
 
             return GetSurnames(fam, female);
+        }
+
+        public static void GetRusNameParts(GEDCOMPersonalName personalName, out string surname, out string name, out string patronymic)
+        {
+            if (personalName == null)
+                throw new ArgumentNullException("personalName");
+
+            string firstPart /*, dummy*/;
+            personalName.GetNameParts(out firstPart, out surname /*, out dummy*/);
+
+            string[] parts = firstPart.Split(' ');
+            if (parts.Length > 1)
+            {
+                name = parts[0];
+                patronymic = parts[1];
+            } else {
+                name = firstPart;
+                patronymic = "";
+            }
+        }
+
+        public static void GetNameParts(GEDCOMIndividualRecord iRec, out string surname, out string name, out string patronymic)
+        {
+            if (iRec == null)
+                throw new ArgumentNullException("iRec");
+
+            if (iRec.PersonalNames.Count > 0) {
+                GEDCOMPersonalName np = iRec.PersonalNames[0];
+                GKUtils.GetRusNameParts(np, out surname, out name, out patronymic);
+            } else {
+                surname = "";
+                name = "";
+                patronymic = "";
+            }
         }
 
         #endregion

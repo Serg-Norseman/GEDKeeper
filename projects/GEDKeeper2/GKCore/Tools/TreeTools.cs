@@ -26,8 +26,8 @@ using System.Windows.Forms;
 using GKCommon;
 using GKCommon.GEDCOM;
 using GKCommon.SmartGraph;
-using GKCore.Cultures;
 using GKCore.Interfaces;
+using GKCore.Options;
 using GKCore.Types;
 using GKUI;
 
@@ -1231,7 +1231,6 @@ namespace GKCore.Tools
             mParams.NamesIndistinctThreshold = 90.0f / 100.0f;
             mParams.DatesCheck = true;
             mParams.YearsInaccuracy = 3;
-            mParams.RusNames = true;
 
             pc.ProgressInit(LangMan.LS(LSID.LSID_DuplicatesSearch), treeA.RecordsCount);
             try
@@ -1293,9 +1292,9 @@ namespace GKCore.Tools
                         ((ExtList<GEDCOMIndividualRecord>)names.GetObject(idx)).Add(iRec);
 
                         string fam, nam, pat;
-                        iRec.GetNameParts(out fam, out nam, out pat);
+                        GKUtils.GetNameParts(iRec, out fam, out nam, out pat);
 
-                        fams.AddObject(RussianCulture.PrepareRusSurname(fam, iRec.Sex == GEDCOMSex.svFemale), null);
+                        fams.AddObject(GlobalOptions.CurrentCulture.NormalizeSurname(fam, iRec.Sex == GEDCOMSex.svFemale), null);
                     }
                 }
 
@@ -1315,9 +1314,9 @@ namespace GKCore.Tools
                         }
 
                         string fam, nam, pat;
-                        iRec.GetNameParts(out fam, out nam, out pat);
+                        GKUtils.GetNameParts(iRec, out fam, out nam, out pat);
 
-                        tm = RussianCulture.PrepareRusSurname(fam, iRec.Sex == GEDCOMSex.svFemale);
+                        tm = GlobalOptions.CurrentCulture.NormalizeSurname(fam, iRec.Sex == GEDCOMSex.svFemale);
                         idx = fams.IndexOf(tm);
                         if (idx >= 0)
                         {

@@ -283,7 +283,7 @@ namespace GKUI.Charts
                     }
 
                     string fam, nam, pat;
-                    iRec.GetNameParts(out fam, out nam, out pat);
+                    GKUtils.GetNameParts(iRec, out fam, out nam, out pat);
                     this.fSurname = fam;
                     this.fName = nam;
                     this.fPatronymic = pat;
@@ -483,6 +483,5 @@ namespace GKUI.Charts
                 this.fChart.Base.Host.LogWrite("TreeChartPerson.CalcBounds(): " + ex.Message);
             }
         }
-
     }
 }

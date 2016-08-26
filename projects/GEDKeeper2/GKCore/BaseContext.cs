@@ -358,7 +358,7 @@ namespace GKCore
                         GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
 
                         string nf, nn, np;
-                        iRec.GetNameParts(out nf, out nn, out np);
+                        GKUtils.GetNameParts(iRec, out nf, out nn, out np);
 
                         int birthDate = this.FindBirthYear(iRec);
                         int descGens = GKUtils.GetDescGenerations(iRec);

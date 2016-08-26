@@ -20,10 +20,11 @@
 
 using System;
 using System.Windows.Forms;
+
 using GKCommon.GEDCOM;
 using GKCore;
-using GKCore.Cultures;
 using GKCore.Interfaces;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKUI.Dialogs
@@ -63,7 +64,7 @@ namespace GKUI.Dialogs
                 if (this.fTarget != null)
                 {
                     string iFamily, iName, iPatronymic;
-                    this.fTarget.GetNameParts(out iFamily, out iName, out iPatronymic);
+                    GKUtils.GetNameParts(this.fTarget, out iFamily, out iName, out iPatronymic);
                     this.txtSurname.Text = iFamily;
                     INamesTable names = MainWin.Instance.NamesTable;
                     GEDCOMSex sx = (GEDCOMSex)this.cmbSex.SelectedIndex;
@@ -71,7 +72,7 @@ namespace GKUI.Dialogs
                     switch (this.fTargetMode) {
                         case TargetMode.tmParent:
                             if (sx == GEDCOMSex.svFemale) {
-                                this.txtSurname.Text = RussianCulture.GetRusWifeSurname(iFamily);
+                                this.txtSurname.Text = GlobalOptions.CurrentCulture.GetMarriedSurname(iFamily);
                             }
                             this.cmbPatronymic.Items.Add(names.GetPatronymicByName(iName, GEDCOMSex.svMale));
                             this.cmbPatronymic.Items.Add(names.GetPatronymicByName(iName, GEDCOMSex.svFemale));
@@ -84,13 +85,13 @@ namespace GKUI.Dialogs
                                     this.txtName.Text = names.GetNameByPatronymic(iPatronymic);
                                     break;
                                 case GEDCOMSex.svFemale:
-                                    this.txtSurname.Text = '(' + RussianCulture.GetRusWifeSurname(iFamily) + ')';
+                                    this.txtSurname.Text = '(' + GlobalOptions.CurrentCulture.GetMarriedSurname(iFamily) + ')';
                                     break;
                             }
                             break;
                             
                         case TargetMode.tmWife:
-                            this.txtSurname.Text = '(' + RussianCulture.GetRusWifeSurname(iFamily) + ')';
+                            this.txtSurname.Text = '(' + GlobalOptions.CurrentCulture.GetMarriedSurname(iFamily) + ')';
                             break;
                     }
                 }

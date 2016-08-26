@@ -19,15 +19,20 @@
  */
 
 using System;
+using GKCommon.GEDCOM;
 
 namespace GKCore.Interfaces
 {
     /// <summary>
-    /// Description of ICulture.
+    /// 
     /// </summary>
     public interface ICulture
     {
         bool HasPatronymic();
         bool HasSurname();
+
+        string NormalizeSurname(string sn, bool aFemale);
+        string GetMarriedSurname(string husbSurname);
+        GEDCOMSex GetSex(string iName, string iPat, bool canQuery);
     }
 }

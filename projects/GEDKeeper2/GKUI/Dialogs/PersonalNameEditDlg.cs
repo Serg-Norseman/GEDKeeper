@@ -60,7 +60,7 @@ namespace GKUI.Dialogs
         private void UpdateControls()
         {
             string fam, nam, pat;
-            fPersonalName.GetRusNameParts(out fam, out nam, out pat);
+            GKUtils.GetRusNameParts(fPersonalName, out fam, out nam, out pat);
 
             this.txtSurname.Text = fam;
             this.txtName.Text = nam;

@@ -27,6 +27,7 @@ using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
+using GKCore;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
@@ -267,7 +268,7 @@ namespace GKUI.Charts
                 }
             } else {
                 string dummy;
-                iRec.GetNameParts(out surn, out givn, out dummy);
+                GKUtils.GetNameParts(iRec, out surn, out givn, out dummy);
             }
 
             int rad = segment.Rad - 20;

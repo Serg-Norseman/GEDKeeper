@@ -320,7 +320,7 @@ namespace GKCore.Lists
                                     break;
 
                                 case NameFormat.nfF_NP:
-                                    this.fRec.GetNameParts(out f, out i, out p);
+                                    GKUtils.GetNameParts(this.fRec, out f, out i, out p);
                                     switch (colSubtype) {
                                         case 0:
                                             result = f;
@@ -332,7 +332,7 @@ namespace GKCore.Lists
                                     break;
 
                                 case NameFormat.nfF_N_P:
-                                    this.fRec.GetNameParts(out f, out i, out p);
+                                    GKUtils.GetNameParts(this.fRec, out f, out i, out p);
                                     switch (colSubtype) {
                                         case 0:
                                             result = f;

@@ -223,7 +223,6 @@ namespace GKUI
             mParams.NamesIndistinctThreshold = (float)decimal.ToDouble(this.edNameAccuracy.Value) / 100.0f;
             mParams.DatesCheck = this.chkBirthYear.Checked;
             mParams.YearsInaccuracy = decimal.ToInt32(this.edYearInaccuracy.Value);
-            mParams.RusNames = true;
 
             bool res = false;
             this.btnSkip.Enabled = false;

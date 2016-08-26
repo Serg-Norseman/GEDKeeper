@@ -1012,7 +1012,7 @@ namespace GKUI
                 using (SexCheckDlg dlg = new SexCheckDlg())
                 {
                     dlg.IndividualName = iName + " " + iPatr;
-                    result = RussianCulture.GetSex(iName, iPatr, false);
+                    result = GlobalOptions.CurrentCulture.GetSex(iName, iPatr, false);
 
                     dlg.Sex = result;
                     if (dlg.ShowDialog() == DialogResult.OK)
@@ -1041,7 +1041,7 @@ namespace GKUI
                 if (iRec.Sex == GEDCOMSex.svNone || iRec.Sex == GEDCOMSex.svUndetermined)
                 {
                     string fFam, fName, fPatr;
-                    iRec.GetNameParts(out fFam, out fName, out fPatr);
+                    GKUtils.GetNameParts(iRec, out fFam, out fName, out fPatr);
                     iRec.Sex = this.DefineSex(fName, fPatr);
                 }
             } finally {
@@ -1050,7 +1050,7 @@ namespace GKUI
         }
 
         #endregion
-        
+
         #region ILocalization implementation
         
         void ILocalization.SetLang()

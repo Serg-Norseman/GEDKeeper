@@ -225,7 +225,7 @@ namespace GKCore
             try
             {
                 string dummy, childName, childPat;
-                iRec.GetNameParts(out dummy, out childName, out childPat);
+                GKUtils.GetNameParts(iRec, out dummy, out childName, out childPat);
 
                 GEDCOMSex iSex = iRec.Sex;
                 this.SetNameSex(childName, iSex);
@@ -236,7 +236,7 @@ namespace GKCore
                 if (iFather != null)
                 {
                     string fatherNam;
-                    iFather.GetNameParts(out dummy, out fatherNam, out dummy);
+                    GKUtils.GetNameParts(iFather, out dummy, out fatherNam, out dummy);
 
                     if (IsComparable(fatherNam, childPat))
                     {

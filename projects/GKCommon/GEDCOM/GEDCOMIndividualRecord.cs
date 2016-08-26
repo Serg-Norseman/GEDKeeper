@@ -737,19 +737,7 @@ namespace GKCommon.GEDCOM
             return result;
         }
 
-        public void GetNameParts(out string surname, out string name, out string patronymic)
-        {
-            if (this.fPersonalNames.Count > 0) {
-                GEDCOMPersonalName np = this.fPersonalNames[0];
-                np.GetRusNameParts(out surname, out name, out patronymic);
-            } else {
-                surname = "";
-                name = "";
-                patronymic = "";
-            }
-        }
-
-        private bool GetIndivName(bool rusNames, bool womanMode, out string aName)
+        private string GetComparableName(bool onlyFirstPart)
         {
             string firstPart, surname, fullName;
             if (this.fPersonalNames.Count > 0) {
@@ -762,16 +750,8 @@ namespace GKCommon.GEDCOM
                 fullName = "";
             }
 
-            aName = ((womanMode && rusNames) ? firstPart : fullName);
-            bool result = (aName.Length > 3);
-
-            // russian names form - with patronymics, and woman marriage families
-            if (rusNames) {
-                string[] parts = firstPart.Split(' ');
-                result = result && ((parts.Length > 1) && (parts[0].Length > 1) && (parts[1].Length > 1));
-            }
-
-            return result;
+            string resName = ((onlyFirstPart) ? firstPart : fullName);
+            return resName;
         }
 
         public override float IsMatch(GEDCOMTag tag, MatchParams matchParams)
@@ -781,10 +761,14 @@ namespace GKCommon.GEDCOM
 
             if (this.Sex != indi.Sex) return 0.0f;
 
-            float match = 0.0f;
+            bool womanMode = (this.Sex == GEDCOMSex.svFemale);
+
+            float matchesCount = 0.0f;
+            float nameMatch = 0.0f;
+            float birthMatch = 0.0f;
+            float deathMatch = 0.0f;
 
             // check name
-            float nameMatch = 0.0f;
             /*for (int i = 0; i < indi.PersonalNames.Count; i++)
 			{
 				for (int k = 0; k < fPersonalNames.Count; k++)
@@ -793,12 +777,11 @@ namespace GKCommon.GEDCOM
 					nameMatch = Math.Max(nameMatch, currentNameMatch);
 				}
 			}*/
-            bool womanMode = (this.Sex == GEDCOMSex.svFemale);
-            string iName = "";
-            string kName = "";
-            bool res = this.GetIndivName(matchParams.RusNames, womanMode, out iName);
-            res = res && indi.GetIndivName(matchParams.RusNames, womanMode, out kName);
-            if (res)
+
+            string iName = this.GetComparableName(womanMode);
+            string kName = indi.GetComparableName(womanMode);
+
+            if (!string.IsNullOrEmpty(iName) && !string.IsNullOrEmpty(kName))
             {
                 if (matchParams.NamesIndistinctThreshold >= 0.99f) {
                     if (iName == kName) {
@@ -810,16 +793,12 @@ namespace GKCommon.GEDCOM
                         nameMatch = 100.0f;
                     }
                 }
+                matchesCount++;
             }
 
             // 0% name match would be pointless checking other details
             if (nameMatch != 0.0f && matchParams.DatesCheck)
             {
-                float matches = 1.0f; // nameMatch
-
-                float birthMatch = 0.0f;
-                float deathMatch = 0.0f;
-
                 GEDCOMCustomEvent birth, death, indiBirth, indiDeath;
 
                 this.GetLifeDates(out birth, out death);
@@ -827,12 +806,12 @@ namespace GKCommon.GEDCOM
 
                 if (birth != null && indiBirth != null) {
                     birthMatch = birth.IsMatch(indiBirth, matchParams);
-                    matches++;
+                    matchesCount++;
                 } else if (birth == null && indiBirth == null) {
                     birthMatch = 100.0f;
-                    matches++;
+                    matchesCount++;
                 } else {
-                    matches++;
+                    matchesCount++;
                 }
 
                 /*if (death != null && indiDeath != null) {
@@ -844,12 +823,9 @@ namespace GKCommon.GEDCOM
 				} else {
 					matches++;
 				}*/
-
-                match = (nameMatch + birthMatch + deathMatch) / matches;
-            } else {
-                match = (nameMatch);
             }
 
+            float match = (nameMatch + birthMatch + deathMatch) / matchesCount;
             return match;
         }
 

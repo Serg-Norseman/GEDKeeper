@@ -69,7 +69,7 @@ namespace GKUI.Dialogs
             try
             {
                 string fam, nam, pat;
-                this.fPerson.GetNameParts(out fam, out nam, out pat);
+                GKUtils.GetNameParts(this.fPerson, out fam, out nam, out pat);
                 this.txtSurname.Text = fam;
                 this.txtName.Text = nam;
                 this.txtPatronymic.Text = pat;
