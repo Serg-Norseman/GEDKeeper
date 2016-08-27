@@ -1143,6 +1143,24 @@ namespace GKTests
                 DateTime dt = ParseDT("20.01.2013");
                 Assert.IsTrue(dtx1.Date.Equals(dt), "dtx1.DateTime.Equals(dt)");
 
+                dtx1.ParseString("1716/"); // potentially incorrect value
+                Assert.AreEqual("1716", dtx1.StringValue);
+
+                dtx1.ParseString("1716/1717");
+                Assert.AreEqual("1716/1717", dtx1.StringValue);
+
+                dtx1.ParseString("1716/20");
+                Assert.AreEqual("1716/20", dtx1.StringValue);
+
+                dtx1.ParseString("3 MAY 1835/1838");
+                Assert.AreEqual("03 MAY 1835/1838", dtx1.StringValue);
+
+                dtx1.ParseString("ABT 1844/1845");
+                Assert.AreEqual("ABT 1844/1845", dtx1.StringValue);
+
+                dtx1.ParseString("FEB 1746/1747");
+                Assert.AreEqual("FEB 1746/1747", dtx1.StringValue);
+
                 dtx1.ParseString("INT 20 JAN 2013 (today)");
                 Assert.IsTrue(dtx1.Date.Equals(dt), "dtx1.DateTime.Equals(dt)");
                 Assert.AreEqual((dtx1.Value as GEDCOMDateInterpreted).DatePhrase, "today");
@@ -1151,35 +1169,34 @@ namespace GKTests
                 (dtx1.Value as GEDCOMDateInterpreted).DatePhrase = "(yesterday)";
                 Assert.AreEqual(dtx1.StringValue, "INT 20 JAN 2013 (yesterday)");
 
-                // TODO: not passed
-                //dtx1.ParseString("INT 20 JAN 2013 (today (yesterday))");
-                //Assert.AreEqual(dtx1.StringValue, "INT 20 JAN 2013 (yesterday)");
-                
+                dtx1.ParseString("INT 20 JAN 2013 (yesterday)");
+                Assert.AreEqual("INT 20 JAN 2013 (yesterday)", dtx1.StringValue);
+
                 string st;
-                
+
                 st = "ABT 20 JAN 2013";
                 dtx1.ParseString(st);
                 Assert.IsTrue(dtx1.Date.Equals(dt));
                 Assert.AreEqual(st, dtx1.StringValue);
-                Assert.AreEqual(((GEDCOMDateApproximated)dtx1.Value).Approximated, GEDCOMApproximated.daAbout);
+                Assert.AreEqual(GEDCOMApproximated.daAbout, ((GEDCOMDateApproximated)dtx1.Value).Approximated);
                 
                 st = "CAL 20 JAN 2013";
                 dtx1.ParseString(st);
                 Assert.AreEqual(dtx1.Date, dt);
                 Assert.AreEqual(st, dtx1.StringValue);
-                Assert.AreEqual(((GEDCOMDateApproximated)dtx1.Value).Approximated, GEDCOMApproximated.daCalculated);
+                Assert.AreEqual(GEDCOMApproximated.daCalculated, ((GEDCOMDateApproximated)dtx1.Value).Approximated);
                 
                 st = "EST 20 DEC 2013";
                 dtx1.ParseString(st);
                 Assert.AreEqual(dtx1.Date, ParseDT("20.12.2013"));
                 Assert.AreEqual(st, dtx1.StringValue);
-                Assert.AreEqual(((GEDCOMDateApproximated)dtx1.Value).Approximated, GEDCOMApproximated.daEstimated);
+                Assert.AreEqual(GEDCOMApproximated.daEstimated, ((GEDCOMDateApproximated)dtx1.Value).Approximated);
 
                 ((GEDCOMDateApproximated)dtx1.Value).Approximated = GEDCOMApproximated.daCalculated;
-                Assert.AreEqual(dtx1.StringValue, "CAL 20 DEC 2013");
+                Assert.AreEqual("CAL 20 DEC 2013", dtx1.StringValue);
 
                 ((GEDCOMDateApproximated)dtx1.Value).Approximated = GEDCOMApproximated.daExact;
-                Assert.AreEqual(dtx1.StringValue, "20 DEC 2013");
+                Assert.AreEqual("20 DEC 2013", dtx1.StringValue);
 
                 using (GEDCOMDateValue dtx2 = new GEDCOMDateValue(null, null, "DATE", "19 JAN 2013"))
                 {

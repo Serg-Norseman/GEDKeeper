@@ -102,9 +102,7 @@ namespace GKCore
         public static string MergeStrings(StringList strings)
         {
             if (strings == null)
-            {
                 throw new ArgumentNullException("strings");
-            }
 
             StringBuilder result = new StringBuilder();
 
@@ -145,12 +143,16 @@ namespace GKCore
 
         public static string HyperLink(string xref, string text, int num)
         {
-            string result = "~^" + xref;
-            if (text != "")
-            {
-                result = result + ":" + text;
+            string result = "";
+
+            if (!string.IsNullOrEmpty(xref) && string.IsNullOrEmpty(text)) {
+                text = "???";
             }
-            result += "~";
+
+            if (!string.IsNullOrEmpty(xref) && !string.IsNullOrEmpty(text)) {
+                result = "~^" + xref + ":" + text + "~";
+            }
+
             return result;
         }
 

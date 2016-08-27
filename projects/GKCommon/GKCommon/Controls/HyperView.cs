@@ -257,254 +257,266 @@ namespace GKCommon.Controls
 
         private void ArrangeText()
         {
-            this.fTextFont = (base.Parent.Font.Clone() as Font);
-            this.fDefBrush = new SolidBrush(Color.Black);
+            try {
+                this.fTextFont = (base.Parent.Font.Clone() as Font);
+                this.fDefBrush = new SolidBrush(Color.Black);
 
-            this.fHeights = new int[this.fLines.Count];
-            //this.fAcceptFontChange = false;
-            Graphics gfx = base.CreateGraphics();
-            try
-            {
-                this.ClearLinks();
-
-                int yPos = 0;
-                int xMax = 0;
-
-                int num = this.fLines.Count;
-                for (int line = 0; line < num; line++)
+                this.fHeights = new int[this.fLines.Count];
+                //this.fAcceptFontChange = false;
+                Graphics gfx = base.CreateGraphics();
+                try
                 {
-                    int xPos = 0;
-                    int lineHeight = gfx.MeasureString("A", this.fTextFont).ToSize().Height;
+                    this.ClearLinks();
 
-                    string s = this.fLines[line];
+                    int yPos = 0;
+                    int xMax = 0;
 
-                    int i = 1;
-                    string ss = "";
-                    while (i <= s.Length)
+                    int num = this.fLines.Count;
+                    for (int line = 0; line < num; line++)
                     {
-                        if (s[i - 1] == '~')
+                        int xPos = 0;
+                        int lineHeight = gfx.MeasureString("A", this.fTextFont).ToSize().Height;
+
+                        string s = this.fLines[line];
+
+                        int i = 1;
+                        string ss = "";
+                        while (i <= s.Length)
                         {
-                            if (s[i] == '~') {
-                                ss += "~";
-                            }
-
-                            this.MeasureText(gfx, ss, ref xPos, ref yPos, ref lineHeight, ref xMax);
-                            i++;
-
-                            while (s[i - 1] != '~')
+                            if (s[i - 1] == '~')
                             {
-                                char c = char.ToUpper(s[i - 1]);
-
-                                switch (c)
-                                {
-                                    case '+':
-                                        this.SetFontSize((this.fTextFont.Size + GetFontSize(s, ref i)));
-                                        break;
-
-                                    case '-':
-                                        this.SetFontSize((this.fTextFont.Size - GetFontSize(s, ref i)));
-                                        break;
-
-                                    case '0':
-                                        this.fTextFont = (base.Parent.Font.Clone() as Font);
-                                        break;
-
-                                    case 'B':
-                                        this.SetFontStyle(FontStyle.Bold);
-                                        break;
-
-                                    case 'I':
-                                        this.SetFontStyle(FontStyle.Italic);
-                                        break;
-
-                                    case 'R':
-                                        // dummy
-                                        break;
-
-                                    case 'S':
-                                        this.SetFontStyle(FontStyle.Strikeout);
-                                        break;
-
-                                    case 'U':
-                                        this.SetFontStyle(FontStyle.Underline);
-                                        break;
-
-                                    case '^':
-                                        {
-                                            string sn = "";
-                                            while (s[i] != ':') {
-                                                i++;
-                                                sn += s[i - 1];
-                                            }
-                                            i++;
-                                            ss = "";
-                                            while (s[i] != '~') {
-                                                i++;
-                                                ss += s[i - 1];
-                                            }
-
-                                            int ssWidth = gfx.MeasureString(ss, this.fTextFont).ToSize().Width;
-                                            this.fLinks.Add(new HyperLink(sn, xPos, yPos, ssWidth, lineHeight));
-                                            this.MeasureText(gfx, ss, ref xPos, ref yPos, ref lineHeight, ref xMax);
-
-                                            break;
-                                        }
-
-                                    default:
-                                        while (s[i] != '~') i++;
-                                        break;
+                                if (s[i] == '~') {
+                                    ss += "~";
                                 }
 
+                                this.MeasureText(gfx, ss, ref xPos, ref yPos, ref lineHeight, ref xMax);
                                 i++;
+
+                                while (s[i - 1] != '~')
+                                {
+                                    char c = char.ToUpper(s[i - 1]);
+
+                                    switch (c)
+                                    {
+                                        case '+':
+                                            this.SetFontSize((this.fTextFont.Size + GetFontSize(s, ref i)));
+                                            break;
+
+                                        case '-':
+                                            this.SetFontSize((this.fTextFont.Size - GetFontSize(s, ref i)));
+                                            break;
+
+                                        case '0':
+                                            this.fTextFont = (base.Parent.Font.Clone() as Font);
+                                            break;
+
+                                        case 'B':
+                                            this.SetFontStyle(FontStyle.Bold);
+                                            break;
+
+                                        case 'I':
+                                            this.SetFontStyle(FontStyle.Italic);
+                                            break;
+
+                                        case 'R':
+                                            // dummy
+                                            break;
+
+                                        case 'S':
+                                            this.SetFontStyle(FontStyle.Strikeout);
+                                            break;
+
+                                        case 'U':
+                                            this.SetFontStyle(FontStyle.Underline);
+                                            break;
+
+                                        case '^':
+                                            {
+                                                string sn = "";
+                                                while (s[i] != ':') {
+                                                    i++;
+                                                    sn += s[i - 1];
+                                                }
+                                                i++;
+                                                ss = "";
+                                                while (s[i] != '~') {
+                                                    i++;
+                                                    ss += s[i - 1];
+                                                }
+
+                                                int ssWidth = gfx.MeasureString(ss, this.fTextFont).ToSize().Width;
+                                                this.fLinks.Add(new HyperLink(sn, xPos, yPos, ssWidth, lineHeight));
+                                                this.MeasureText(gfx, ss, ref xPos, ref yPos, ref lineHeight, ref xMax);
+
+                                                break;
+                                            }
+
+                                        default:
+                                            while (s[i] != '~') i++;
+                                            break;
+                                    }
+
+                                    i++;
+                                }
+                                ss = "";
                             }
-                            ss = "";
-                        }
-                        else
-                        {
-                            ss += s[i - 1];
+                            else
+                            {
+                                ss += s[i - 1];
+                            }
+
+                            i++;
                         }
 
-                        i++;
+                        this.MeasureText(gfx, ss, ref xPos, ref yPos, ref lineHeight, ref xMax);
+                        yPos += lineHeight;
+                        this.fHeights[line] = lineHeight;
                     }
 
-                    this.MeasureText(gfx, ss, ref xPos, ref yPos, ref lineHeight, ref xMax);
-                    yPos += lineHeight;
-                    this.fHeights[line] = lineHeight;
+                    int textWidth = xMax + 2 * this.fBorderWidth;
+                    int textHeight = yPos + 2 * this.fBorderWidth;
+                    this.fTextSize = new Size(textWidth, textHeight);
+                }
+                finally
+                {
+                    gfx.Dispose();
+                    //this.fAcceptFontChange = true;
                 }
 
-                int textWidth = xMax + 2 * this.fBorderWidth;
-                int textHeight = yPos + 2 * this.fBorderWidth;
-                this.fTextSize = new Size(textWidth, textHeight);
+                this.AdjustViewPort(this.fTextSize);
             }
-            finally
+            catch (Exception ex)
             {
-                gfx.Dispose();
-                //this.fAcceptFontChange = true;
+                Logger.LogWrite("HyperView.ArrangeText(): " + ex.Message);
             }
-
-            this.AdjustViewPort(this.fTextSize);
         }
 
         private void DoPaint(Graphics gfx)
         {
-            if (fHeights.Length != fLines.Count) return;
+            try {
+                if (fHeights.Length != fLines.Count) return;
 
-            //this.fAcceptFontChange = false;
-            try
-            {
-                gfx.FillRectangle(new SolidBrush(SystemColors.Control), base.ClientRectangle);
-
-                int yOffset = this.fBorderWidth - -this.AutoScrollPosition.Y;
-
-                int num = this.fLines.Count;
-                for (int line = 0; line < num; line++)
+                //this.fAcceptFontChange = false;
+                try
                 {
-                    int xOffset = this.fBorderWidth - -this.AutoScrollPosition.X;
-                    int lineHeight = this.fHeights[line];
+                    gfx.FillRectangle(new SolidBrush(SystemColors.Control), base.ClientRectangle);
 
-                    string s = this.fLines[line];
+                    int yOffset = this.fBorderWidth - -this.AutoScrollPosition.Y;
 
-                    int i = 1;
-                    string ss = "";
-                    while (i <= s.Length)
+                    int num = this.fLines.Count;
+                    for (int line = 0; line < num; line++)
                     {
-                        if (s[i - 1] == '~')
+                        int xOffset = this.fBorderWidth - -this.AutoScrollPosition.X;
+                        int lineHeight = this.fHeights[line];
+
+                        string s = this.fLines[line];
+
+                        int i = 1;
+                        string ss = "";
+                        while (i <= s.Length)
                         {
-                            if (s[i] == '~') {
-                                ss += "~";
-                            }
-
-                            this.OutText(gfx, ss, ref xOffset, ref yOffset, ref lineHeight);
-                            i++;
-
-                            while (s[i - 1] != '~')
+                            if (s[i - 1] == '~')
                             {
-                                char c = char.ToUpper(s[i - 1]);
-
-                                switch (c)
-                                {
-                                    case '+':
-                                        this.SetFontSize((this.fTextFont.Size + GetFontSize(s, ref i)));
-                                        break;
-
-                                    case '-':
-                                        this.SetFontSize((this.fTextFont.Size - GetFontSize(s, ref i)));
-                                        break;
-
-                                    case '0':
-                                        this.fTextFont = (base.Parent.Font.Clone() as Font);
-                                        break;
-
-                                    case 'B':
-                                        this.SetFontStyle(FontStyle.Bold);
-                                        break;
-
-                                    case 'I':
-                                        this.SetFontStyle(FontStyle.Italic);
-                                        break;
-
-                                    case 'R':
-                                        // need to realize
-                                        break;
-
-                                    case 'S':
-                                        this.SetFontStyle(FontStyle.Strikeout);
-                                        break;
-
-                                    case 'U':
-                                        this.SetFontStyle(FontStyle.Underline);
-                                        break;
-
-                                    case '^':
-                                        {
-                                            string sn = "";
-                                            while (s[i] != ':') {
-                                                i++;
-                                                sn += s[i - 1];
-                                            }
-                                            i++;
-                                            ss = "";
-                                            while (s[i] != '~') {
-                                                i++;
-                                                ss += s[i - 1];
-                                            }
-
-                                            Color saveColor = this.fDefBrush.Color;
-                                            this.fDefBrush.Color = this.fLinkColor;
-                                            this.SetFontStyle(FontStyle.Underline);
-
-                                            this.OutText(gfx, ss, ref xOffset, ref yOffset, ref lineHeight);
-
-                                            this.fDefBrush.Color = saveColor;
-                                            this.SetFontStyle(FontStyle.Underline);
-
-                                            break;
-                                        }
-
-                                    default:
-                                        while (s[i] != '~') i++;
-                                        break;
+                                if (s[i] == '~') {
+                                    ss += "~";
                                 }
 
+                                this.OutText(gfx, ss, ref xOffset, ref yOffset, ref lineHeight);
                                 i++;
+
+                                while (s[i - 1] != '~')
+                                {
+                                    char c = char.ToUpper(s[i - 1]);
+
+                                    switch (c)
+                                    {
+                                        case '+':
+                                            this.SetFontSize((this.fTextFont.Size + GetFontSize(s, ref i)));
+                                            break;
+
+                                        case '-':
+                                            this.SetFontSize((this.fTextFont.Size - GetFontSize(s, ref i)));
+                                            break;
+
+                                        case '0':
+                                            this.fTextFont = (base.Parent.Font.Clone() as Font);
+                                            break;
+
+                                        case 'B':
+                                            this.SetFontStyle(FontStyle.Bold);
+                                            break;
+
+                                        case 'I':
+                                            this.SetFontStyle(FontStyle.Italic);
+                                            break;
+
+                                        case 'R':
+                                            // need to realize
+                                            break;
+
+                                        case 'S':
+                                            this.SetFontStyle(FontStyle.Strikeout);
+                                            break;
+
+                                        case 'U':
+                                            this.SetFontStyle(FontStyle.Underline);
+                                            break;
+
+                                        case '^':
+                                            {
+                                                string sn = "";
+                                                while (s[i] != ':') {
+                                                    i++;
+                                                    sn += s[i - 1];
+                                                }
+                                                i++;
+                                                ss = "";
+                                                while (s[i] != '~') {
+                                                    i++;
+                                                    ss += s[i - 1];
+                                                }
+
+                                                Color saveColor = this.fDefBrush.Color;
+                                                this.fDefBrush.Color = this.fLinkColor;
+                                                this.SetFontStyle(FontStyle.Underline);
+
+                                                this.OutText(gfx, ss, ref xOffset, ref yOffset, ref lineHeight);
+
+                                                this.fDefBrush.Color = saveColor;
+                                                this.SetFontStyle(FontStyle.Underline);
+
+                                                break;
+                                            }
+
+                                        default:
+                                            while (s[i] != '~') i++;
+                                            break;
+                                    }
+
+                                    i++;
+                                }
+                                ss = "";
                             }
-                            ss = "";
-                        }
-                        else
-                        {
-                            ss += s[i - 1];
+                            else
+                            {
+                                ss += s[i - 1];
+                            }
+
+                            i++;
                         }
 
-                        i++;
+                        this.OutText(gfx, ss, ref xOffset, ref yOffset, ref lineHeight);
+                        yOffset += lineHeight;
                     }
-
-                    this.OutText(gfx, ss, ref xOffset, ref yOffset, ref lineHeight);
-                    yOffset += lineHeight;
+                }
+                finally
+                {
+                    //this.fAcceptFontChange = true;
                 }
             }
-            finally
+            catch (Exception ex)
             {
-                //this.fAcceptFontChange = true;
+                Logger.LogWrite("HyperView.DoPaint(): " + ex.Message);
             }
         }
 

@@ -553,11 +553,17 @@ namespace GKTests
             Assert.IsNotNull(culture);
             Assert.IsFalse(culture.HasPatronymic());
             Assert.IsFalse(culture.HasSurname());
+            Assert.AreEqual("Alef", culture.NormalizeSurname("Alef", false));
+            Assert.AreEqual("Alef", culture.GetMarriedSurname("Alef"));
+            Assert.AreEqual(GEDCOMSex.svUndetermined, culture.GetSex("Alef", "", false));
 
             culture = new IcelandCulture();
             Assert.IsNotNull(culture);
             Assert.IsTrue(culture.HasPatronymic());
             Assert.IsFalse(culture.HasSurname());
+            Assert.AreEqual("Alef", culture.NormalizeSurname("Alef", false));
+            Assert.AreEqual("Alef", culture.GetMarriedSurname("Alef"));
+            Assert.AreEqual(GEDCOMSex.svUndetermined, culture.GetSex("Alef", "", false));
         }
 
         [Test]
@@ -1020,6 +1026,8 @@ namespace GKTests
                 globalOptions.ClearLastBases();
 
                 Assert.AreEqual(0, globalOptions.GetLangsCount());
+                Assert.AreEqual(null, globalOptions.GetLangByCode(0));
+                Assert.Throws(typeof(ArgumentOutOfRangeException), () => { globalOptions.GetLang(0); });
 
 
                 globalOptions.SaveToFile(iniFile);

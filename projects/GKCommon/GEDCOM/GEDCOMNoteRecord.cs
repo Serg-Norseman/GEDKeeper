@@ -50,9 +50,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMNoteRecord targetNote = (targetRecord as GEDCOMNoteRecord);
             if (targetNote == null)
-            {
                 throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
-            }
 
             StringList cont = new StringList();
             try
@@ -71,7 +69,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMNoteRecord note = tag as GEDCOMNoteRecord;
             if (note == null) return 0.0f;
-            
+
             float match = 0.0f;
 
             if (string.Compare(this.Note.Text, note.Note.Text, true) == 0) {
@@ -103,9 +101,8 @@ namespace GKCommon.GEDCOM
 
         public void SetNoteText(string text)
         {
-            if (text == null) {
+            if (text == null)
                 throw new ArgumentNullException("text");
-            }
 
             StringList strData = new StringList(text);
             try

@@ -76,24 +76,11 @@ namespace GKCore.Lists
         {
             switch (colType) {
                 case 0:
-                    {
-                        string st;
-                        if (this.fRec.Note.Count > 0)
-                        {
-                            st = this.fRec.Note[0].Trim();
-                            if (st == "" && this.fRec.Note.Count > 1)
-                            {
-                                st = this.fRec.Note[1].Trim();
-                            }
-                        }
-                        else
-                        {
-                            st = "";
-                        }
-                        return st;
-                    }
+                    return GKUtils.MergeStrings(this.fRec.Note);
+
                 case 1:
                     return this.fRec.ChangeDate.ChangeDateTime;
+
                 default:
                     return null;
             }

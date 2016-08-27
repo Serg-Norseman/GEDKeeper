@@ -420,7 +420,11 @@ namespace GKCommon.GEDCOM
                     GEDCOMTag tag = strTag[i];
 
                     if (tag.Name == "CONC") {
-                        strings[strings.Count - 1] = strings[strings.Count - 1] + tag.StringValue;
+                        if (strings.Count > 0) {
+                            strings[strings.Count - 1] = strings[strings.Count - 1] + tag.StringValue;
+                        } else {
+                            strings.Add(tag.StringValue);
+                        }
                     } else {
                         if (tag.Name == "CONT") {
                             strings.Add(tag.StringValue);

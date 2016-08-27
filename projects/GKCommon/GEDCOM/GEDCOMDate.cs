@@ -491,10 +491,24 @@ namespace GKCommon.GEDCOM
                 this.fYear = int.Parse(result.Substring(0, I));
                 result = result.Remove(0, I);
 
-                if (result != "" && result[0] == '/' && GEDCOMUtils.IsDigits(result.Substring(1, 2)))
+                if (result != "" && result[0] == '/')
                 {
-                    this.fYearModifier = result.Substring(1, 2);
-                    result = result.Remove(0, 3);
+                    result = result.Remove(0, 1);
+
+                    if (result.Length > 0) {
+                        int len = (result.Length >= 4) ? 4 : 2;
+                        if (!GEDCOMUtils.IsDigits(result.Substring(0, len))) {
+                            len = (result.Length >= 2) ? 2 : 0;
+                            if (!GEDCOMUtils.IsDigits(result.Substring(0, len))) {
+                                len = 0;
+                            }
+                        }
+
+                        if (len > 0) {
+                            this.fYearModifier = result.Substring(0, len);
+                            result = result.Remove(0, len);
+                        }
+                    }
                 }
 
                 if (result != "" && result.Substring(0, 4).ToUpper() == GEDCOM_YEAR_BC)
