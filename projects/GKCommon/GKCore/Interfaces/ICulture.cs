@@ -34,5 +34,8 @@ namespace GKCore.Interfaces
         string NormalizeSurname(string sn, bool aFemale);
         string GetMarriedSurname(string husbSurname);
         GEDCOMSex GetSex(string iName, string iPat, bool canQuery);
+
+        string[] GetSurnames(string surname, bool female);
+        string[] GetSurnames(GEDCOMIndividualRecord iRec);
     }
 }

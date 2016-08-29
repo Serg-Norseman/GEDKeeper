@@ -2666,48 +2666,6 @@ namespace GKCore
 
         #region Names processing
 
-        public static string[] GetSurnames(string surname, bool female)
-        {
-            string[] result = new string[1];
-
-            if (female) {
-                surname = surname.Trim();
-                int p = surname.IndexOf('(');
-                if (p >= 0) {
-                    string part = surname.Substring(0, p).Trim();
-                    result[0] = GlobalOptions.CurrentCulture.NormalizeSurname(part, female);
-                    part = surname.Substring(p).Trim();
-                    part = part.Substring(1, part.Length-2);
-
-                    string[] parts = part.Split(',');
-                    for (int i = 0; i < parts.Length; i++) {
-                        string[] newres = new string[result.Length+1];
-                        result.CopyTo(newres, 0);
-                        result = newres;
-                        result[result.Length-1] = GlobalOptions.CurrentCulture.NormalizeSurname(parts[i].Trim(), female);
-                    }
-                } else {
-                    result[0] = GlobalOptions.CurrentCulture.NormalizeSurname(surname, female);
-                }
-            } else {
-                result[0] = surname;
-            }
-
-            return result;
-        }
-
-        public static string[] GetSurnames(GEDCOMIndividualRecord iRec)
-        {
-            if (iRec == null)
-                throw new ArgumentNullException("iRec");
-
-            string fam, nam, pat;
-            GKUtils.GetNameParts(iRec, out fam, out nam, out pat);
-            bool female = (iRec.Sex == GEDCOMSex.svFemale);
-
-            return GetSurnames(fam, female);
-        }
-
         public static void GetRusNameParts(GEDCOMPersonalName personalName, out string surname, out string name, out string patronymic)
         {
             if (personalName == null)

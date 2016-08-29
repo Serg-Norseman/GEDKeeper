@@ -431,15 +431,6 @@ namespace GKTests
 
             //
 
-            iRec = fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
-            string[] surnames = GKUtils.GetSurnames(iRec);
-            Assert.AreEqual(1, surnames.Length);
-            Assert.AreEqual("Ivanova", surnames[0]);
-
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetSurnames(null); });
-
-            //
-
             #if !__MonoCS__
             Assert.AreEqual("test.zip", GKUtils.GetContainerName("c:\\temp\\test.ged", true));
             Assert.AreEqual("test\\", GKUtils.GetContainerName("c:\\temp\\test.ged", false));
@@ -544,10 +535,18 @@ namespace GKTests
         [Test]
         public void Cultures_Tests()
         {
+            GEDCOMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
+
             ICulture culture = new RussianCulture();
             Assert.IsNotNull(culture);
             Assert.IsTrue(culture.HasPatronymic());
             Assert.IsTrue(culture.HasSurname());
+            //
+            string[] surnames = culture.GetSurnames(iRec);
+            Assert.AreEqual(1, surnames.Length);
+            Assert.AreEqual("Ivanova", surnames[0]);
+            Assert.Throws(typeof(ArgumentNullException), () => { culture.GetSurnames(null); });
+
 
             culture = new AncientCulture();
             Assert.IsNotNull(culture);
@@ -556,6 +555,12 @@ namespace GKTests
             Assert.AreEqual("Alef", culture.NormalizeSurname("Alef", false));
             Assert.AreEqual("Alef", culture.GetMarriedSurname("Alef"));
             Assert.AreEqual(GEDCOMSex.svUndetermined, culture.GetSex("Alef", "", false));
+            //
+            surnames = culture.GetSurnames(iRec);
+            Assert.AreEqual(1, surnames.Length);
+            Assert.AreEqual("Ivanova", surnames[0]);
+            Assert.Throws(typeof(ArgumentNullException), () => { culture.GetSurnames(null); });
+
 
             culture = new IcelandCulture();
             Assert.IsNotNull(culture);
@@ -564,6 +569,11 @@ namespace GKTests
             Assert.AreEqual("Alef", culture.NormalizeSurname("Alef", false));
             Assert.AreEqual("Alef", culture.GetMarriedSurname("Alef"));
             Assert.AreEqual(GEDCOMSex.svUndetermined, culture.GetSex("Alef", "", false));
+            //
+            surnames = culture.GetSurnames(iRec);
+            Assert.AreEqual(1, surnames.Length);
+            Assert.AreEqual("Ivanova", surnames[0]);
+            Assert.Throws(typeof(ArgumentNullException), () => { culture.GetSurnames(null); });
         }
 
         [Test]
@@ -593,16 +603,16 @@ namespace GKTests
             Assert.AreEqual("?", rusCulture.GetMarriedSurname(""));
             Assert.AreEqual("?", rusCulture.GetMarriedSurname(null));
 
-            string[] snms = GKUtils.GetSurnames("Бельская (Иванова)", true);
+            string[] snms = rusCulture.GetSurnames("Бельская (Иванова)", true);
             Assert.AreEqual(2, snms.Length);
             Assert.AreEqual("Бельский", snms[0]);
             Assert.AreEqual("Иванов", snms[1]);
 
-            snms = GKUtils.GetSurnames("Бельская", true);
+            snms = rusCulture.GetSurnames("Бельская", true);
             Assert.AreEqual(1, snms.Length);
             Assert.AreEqual("Бельский", snms[0]);
 
-            snms = GKUtils.GetSurnames("Бельский", false);
+            snms = rusCulture.GetSurnames("Бельский", false);
             Assert.AreEqual(1, snms.Length);
             Assert.AreEqual("Бельский", snms[0]);
 

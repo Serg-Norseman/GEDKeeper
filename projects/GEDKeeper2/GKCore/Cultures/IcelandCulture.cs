@@ -57,5 +57,24 @@ namespace GKCore.Cultures
         {
             return GEDCOMSex.svUndetermined;
         }
+
+        public string[] GetSurnames(string surname, bool female)
+        {
+            string[] result = new string[1];
+            result[0] = surname;
+            return result;
+        }
+
+        public string[] GetSurnames(GEDCOMIndividualRecord iRec)
+        {
+            if (iRec == null)
+                throw new ArgumentNullException("iRec");
+
+            string fam, nam, pat;
+            GKUtils.GetNameParts(iRec, out fam, out nam, out pat);
+            bool female = (iRec.Sex == GEDCOMSex.svFemale);
+
+            return GetSurnames(fam, female);
+        }
     }
 }

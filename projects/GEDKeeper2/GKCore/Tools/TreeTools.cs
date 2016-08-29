@@ -1143,7 +1143,7 @@ namespace GKCore.Tools
                 {
                     GEDCOMIndividualRecord iRec = rec as GEDCOMIndividualRecord;
 
-                    string[] fams = GKUtils.GetSurnames(iRec);
+                    string[] fams = GlobalOptions.CurrentCulture.GetSurnames(iRec);
 
                     for (int k = 0; k < fams.Length; k++)
                     {
