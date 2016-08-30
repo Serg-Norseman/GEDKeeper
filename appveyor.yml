@@ -1,10 +1,15 @@
 version: 2.8.0.{build}
+
 pull_requests:
   do_not_increment_build_number: true
+
 environment:
   CIMode: true
+
 configuration: Debug
+
 platform: x86
+
 build:
   project: projects/GEDKeeper2.mswin-av.sln
   verbosity: minimal
@@ -13,4 +18,4 @@ after_test:
   - .\projects\packages\OpenCover\OpenCover.Console.exe -register:user -target:"nunit-console-x86.exe" -targetdir:"C:\projects\gedkeeper\projects\GKTests\bin\Debug" -targetargs:"\"C:\projects\gedkeeper\projects\GKTests\bin\Debug\GKTests.dll\" /noxml" -output:".\coverage.xml" -filter:"+[*]* "
   - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
   - pip install codecov
-  - codecov -f "coverage.xml"
+  - codecov -f "coverage.xml" -X gcov

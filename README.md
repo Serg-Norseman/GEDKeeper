@@ -1,9 +1,11 @@
 # GEDKeeper
 
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 [![Join the chat at https://gitter.im/Serg-Norseman/GEDKeeper](https://badges.gitter.im/Serg-Norseman/GEDKeeper.svg)](https://gitter.im/Serg-Norseman/GEDKeeper?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/Serg-Norseman/GEDKeeper.svg?branch=master)](https://travis-ci.org/Serg-Norseman/GEDKeeper)
 [![Build status](https://ci.appveyor.com/api/projects/status/h0u8iwr3kvy6o9x1?svg=true)](https://ci.appveyor.com/project/Serg-Norseman/gedkeeper)
 [![codecov.io](https://codecov.io/github/Serg-Norseman/GEDKeeper/coverage.svg?branch=master)](https://codecov.io/github/Serg-Norseman/GEDKeeper?branch=master)
+[![Coverity Status](https://scan.coverity.com/projects/10037/badge.svg)](https://scan.coverity.com/projects/serg-norseman-gedkeeper)
 
 [GitHub Visualizer](http://ghv.artzub.com/#repo=GEDKeeper&climit=500&user=serg-norseman)
 
