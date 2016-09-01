@@ -52,8 +52,9 @@ namespace GKSamplePlugin
 
         public void Execute()
         {
-            PluginForm frm = new PluginForm(this);
-            frm.ShowDialog();
+            using (PluginForm frm = new PluginForm(this)) {
+                frm.ShowDialog();
+            }
         }
 
         public void OnHostClosing(ref bool cancelClosing) {}

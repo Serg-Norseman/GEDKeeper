@@ -64,6 +64,8 @@ namespace GKUI.Dialogs
                     this.txtStopDate.Text = "";
                     this.cmbGoalType.SelectedIndex = 0;
                     this.txtGoal.Text = "";
+
+                    this.fNotesList.DataList = null;
                 }
                 else
                 {
@@ -86,11 +88,11 @@ namespace GKUI.Dialogs
                             this.txtGoal.Text = this.fTask.Goal;
                             break;
                     }
+
+                    this.fNotesList.DataList = this.fTask.Notes.GetEnumerator();
                 }
 
                 this.cbGoalType_SelectedIndexChanged(null, null);
-                
-                this.fNotesList.DataList = this.fTask.Notes.GetEnumerator();
             }
             catch (Exception ex)
             {

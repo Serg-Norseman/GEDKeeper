@@ -97,6 +97,8 @@ namespace GKCommon
 
         public static float ZoomToFit(int imgWidth, int imgHeight, int requireWidth, int requireHeight)
         {
+            if (imgWidth == 0 || imgHeight == 0) return 1.0f;
+
             float aspectRatio;
 
             if (imgWidth > imgHeight) {

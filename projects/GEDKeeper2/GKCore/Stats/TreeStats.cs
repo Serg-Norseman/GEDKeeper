@@ -421,16 +421,15 @@ namespace GKCore.Stats
                     foreach (KeyValuePair<string, List<int>> kvp in xvals)
                     {
                         List<int> valsList = kvp.Value;
+                        int count = valsList.Count;
 
                         int avg;
-                        if (valsList.Count == 0) {
+                        if (count == 0) {
                             avg = 0;
                         } else {
-                            int sum = 0;
-                            int num2 = valsList.Count;
-                            for (int i = 0; i < num2; i++) sum += valsList[i];
-
-                            avg = (int)Math.Round((double)(sum / valsList.Count));
+                            double sum = 0;
+                            for (int i = 0; i < count; i++) sum += valsList[i];
+                            avg = (int)Math.Round(sum / count);
                         }
 
                         values.Add(new StatsItem(kvp.Key, avg));

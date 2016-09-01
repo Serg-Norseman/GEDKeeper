@@ -541,12 +541,13 @@ namespace GKUI
         {
             this.InitCurDoc();
 
-            PrintDialog printDlg = new PrintDialog();
-            printDlg.Document = this.fPrintDoc;
+            using (PrintDialog printDlg = new PrintDialog()) {
+                printDlg.Document = this.fPrintDoc;
 
-            if (printDlg.ShowDialog() == DialogResult.OK) {
-                this.fPrintDoc.PrinterSettings = printDlg.PrinterSettings;
-                this.fPrintDoc.Print();
+                if (printDlg.ShowDialog() == DialogResult.OK) {
+                    this.fPrintDoc.PrinterSettings = printDlg.PrinterSettings;
+                    this.fPrintDoc.Print();
+                }
             }
         }
 
@@ -554,10 +555,11 @@ namespace GKUI
         {
             this.InitCurDoc();
 
-            PrintPreviewDialog previewDlg = new PrintPreviewDialog();
-            previewDlg.WindowState = FormWindowState.Maximized;
-            previewDlg.Document = this.fPrintDoc;
-            previewDlg.ShowDialog();
+            using (PrintPreviewDialog previewDlg = new PrintPreviewDialog()) {
+                previewDlg.WindowState = FormWindowState.Maximized;
+                previewDlg.Document = this.fPrintDoc;
+                previewDlg.ShowDialog();
+            }
         }
 
         public void GenChart(bool show)

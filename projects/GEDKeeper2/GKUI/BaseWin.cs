@@ -852,6 +852,7 @@ namespace GKUI
         {
             GEDCOMRecordType rt = this.GetSelectedRecordType();
             IListManager listMan = this.GetRecordsListManByType(rt);
+            if (listMan == null) return;
 
             switch (rt) {
                 case GEDCOMRecordType.rtIndividual:

@@ -34,25 +34,23 @@ namespace GKCore
             // Create a buffer
             byte[] randBytes = (length >= 1) ? new byte[length] : new byte[1];
 
-            // Create a new RNGCryptoServiceProvider.
+            // Create a new RNGCryptoServiceProvider
             RNGCryptoServiceProvider rand = new RNGCryptoServiceProvider();
 
-            // Fill the buffer with random bytes.
+            // Fill the buffer with random bytes
             rand.GetBytes(randBytes);
 
-            // return the bytes.
+            // return the bytes
             return randBytes;
         }
 
         public static void ClearBytes(byte[] buffer)
         {
-            // Check arguments.
+            // Check arguments
             if (buffer == null)
-            {
                 throw new ArgumentNullException("buffer");
-            }
 
-            // Set each byte in the buffer to 0.
+            // Set each byte in the buffer to 0
             for (int x = 0; x < buffer.Length; x++)
             {
                 buffer[x] = 0;

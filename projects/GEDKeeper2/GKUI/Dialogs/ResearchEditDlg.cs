@@ -211,6 +211,15 @@ namespace GKUI.Dialogs
 
         private void UpdateLists()
         {
+            if (this.fResearch == null) {
+                this.fNotesList.DataList = null;
+                this.fTasksList.ClearItems();
+                this.fCommunicationsList.ClearItems();
+                this.fGroupsList.ClearItems();
+
+                return;
+            }
+
             this.fNotesList.DataList = this.fResearch.Notes.GetEnumerator();
 
             this.fTasksList.BeginUpdate();

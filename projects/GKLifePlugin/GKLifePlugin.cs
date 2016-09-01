@@ -64,18 +64,18 @@ namespace GKLifePlugin
 
         public void Execute()
         {
-            LifeForm frm = new LifeForm();
+            using (LifeForm frm = new LifeForm()) {
+                frm.Viewer.Options.LS_LifeGame = fLangMan.LS(LLS.LSID_LifeGame);
+                frm.Viewer.Options.LS_Step = fLangMan.LS(LLS.LSID_Step);
+                frm.Viewer.Options.LS_Start = fLangMan.LS(LLS.LSID_Start);
+                frm.Viewer.Options.LS_Stop = fLangMan.LS(LLS.LSID_Stop);
+                frm.Viewer.Options.LS_SetCells = fLangMan.LS(LLS.LSID_SetCells);
+                frm.Viewer.Options.LS_Clear = fLangMan.LS(LLS.LSID_Clear);
+                frm.Viewer.Options.LS_Random = fLangMan.LS(LLS.LSID_Random);
+                frm.Viewer.Options.LS_Options = fLangMan.LS(LLS.LSID_Options);
 
-            frm.Viewer.Options.LS_LifeGame = fLangMan.LS(LLS.LSID_LifeGame);
-            frm.Viewer.Options.LS_Step = fLangMan.LS(LLS.LSID_Step);
-            frm.Viewer.Options.LS_Start = fLangMan.LS(LLS.LSID_Start);
-            frm.Viewer.Options.LS_Stop = fLangMan.LS(LLS.LSID_Stop);
-            frm.Viewer.Options.LS_SetCells = fLangMan.LS(LLS.LSID_SetCells);
-            frm.Viewer.Options.LS_Clear = fLangMan.LS(LLS.LSID_Clear);
-            frm.Viewer.Options.LS_Random = fLangMan.LS(LLS.LSID_Random);
-            frm.Viewer.Options.LS_Options = fLangMan.LS(LLS.LSID_Options);
-
-            frm.ShowDialog();
+                frm.ShowDialog();
+            }
         }
 
         public void OnHostClosing(ref bool cancelClosing) {}

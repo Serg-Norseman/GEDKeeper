@@ -69,16 +69,18 @@ namespace Externals.IniFiles
         
         private IniFileValue GetValue(string key)
         {
-            string lower = key.ToLowerInvariant();
+            key = key.ToLowerInvariant();
+
             for (int i = 0; i < elements.Count; i++)
             {
                 IniFileValue value = elements[i] as IniFileValue;
                 if (value != null)
                 {
-                    if (value.Key == key || (!IniFileSettings.CaseSensitive && value.Key.ToLowerInvariant() == lower))
+                    if (value.Key == key || (!IniFileSettings.CaseSensitive && value.Key.ToLowerInvariant() == key))
                         return value;
                 }
             }
+
             return null;
         }
 
@@ -122,18 +124,22 @@ namespace Externals.IniFiles
         /// <summary>Renames a key.</summary>
         public void RenameKey(string key, string newName)
         {
-            IniFileValue v = GetValue(key);
-            if (key == null) return;
-            v.Key = newName;
+            IniFileValue val = GetValue(key);
+            if (val == null) return;
+
+            val.Key = newName;
         }
+
         /// <summary>Deletes a key.</summary>
         public void DeleteKey(string key)
         {
-            IniFileValue v = GetValue(key);
-            if (key == null) return;
-            parent.elements.Remove(v);
-            elements.Remove(v);
+            IniFileValue val = GetValue(key);
+            if (val == null) return;
+
+            parent.elements.Remove(val);
+            elements.Remove(val);
         }
+
         /// <summary>Gets or sets value of the key</summary>
         /// <param name="key">Name of key.</param>
         public string this[string key]

@@ -81,8 +81,13 @@ namespace GKCommon.Controls
                 throw new ArgumentNullException("ctl");
 
             FieldInfo f1 = FindFieldInfo(ctl.GetType(), privateEventObj);
+            if (f1 == null) return;
+
             object obj = f1.GetValue(ctl);
+
             PropertyInfo pi = ctl.GetType().GetProperty("Events", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (pi == null) return;
+
             EventHandlerList list = (EventHandlerList)pi.GetValue(ctl, null);
             list.RemoveHandler(obj, list[obj]);
         }

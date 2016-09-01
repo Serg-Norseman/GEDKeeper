@@ -184,8 +184,6 @@ namespace GKUI.Charts
         {
             gfx.SmoothingMode = SmoothingMode.AntiAlias;
 
-            Pen pen = new Pen(this.Options.BrushColor[10]);
-
             int num = this.fSegments.Count;
             for (int i = 0; i < num; i++) {
                 PersonSegment segment = (PersonSegment)this.fSegments[i];
@@ -199,7 +197,7 @@ namespace GKUI.Charts
 
                     GraphicsPath path = segment.Path;
                     gfx.FillPath(brush, path);
-                    gfx.DrawPath(pen, path);
+                    gfx.DrawPath(this.fPen, path);
                 }
             }
 

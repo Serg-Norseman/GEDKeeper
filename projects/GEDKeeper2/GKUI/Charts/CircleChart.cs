@@ -91,6 +91,7 @@ namespace GKUI.Charts
         protected int fMaxGenerations;
         protected int fOffsetX = 0;
         protected int fOffsetY = 0;
+        protected Pen fPen;
         protected GEDCOMIndividualRecord fRootPerson;
         protected CircleSegment fSelected;
         protected ShieldState fShieldState;
@@ -176,6 +177,7 @@ namespace GKUI.Charts
         {
             if (disposing) {
                 if (fComponents != null) fComponents.Dispose();
+                this.DisposeBrushes();
             }
             base.Dispose(disposing);
         }
@@ -202,6 +204,19 @@ namespace GKUI.Charts
                 this.fCircleBrushes[i] = new SolidBrush(col);
                 this.fDarkBrushes[i] = new SolidBrush(GfxHelper.Darker(col, 0.2f));
             }
+
+            this.fPen = new Pen(this.fOptions.BrushColor[10]);
+        }
+
+        private void DisposeBrushes()
+        {
+            for (int i = 0; i < this.fOptions.BrushColor.Length; i++)
+            {
+                if (this.fCircleBrushes[i] != null) this.fCircleBrushes[i].Dispose();
+                if (this.fDarkBrushes[i] != null) this.fDarkBrushes[i].Dispose();
+            }
+
+            if (this.fPen != null) this.fPen.Dispose();
         }
 
         public void Changed()
