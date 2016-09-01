@@ -937,18 +937,19 @@ namespace GKCore
                             }
 
                             Bitmap newImage = new Bitmap(imgWidth, imgHeight, PixelFormat.Format24bppRgb);
-                            Graphics graphic = Graphics.FromImage(newImage);
-                            graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                            graphic.SmoothingMode = SmoothingMode.HighQuality;
-                            graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                            graphic.CompositingQuality = CompositingQuality.HighQuality;
+                            using (Graphics graphic = Graphics.FromImage(newImage)) {
+                                graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                                graphic.SmoothingMode = SmoothingMode.HighQuality;
+                                graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                                graphic.CompositingQuality = CompositingQuality.HighQuality;
 
-                            if (cutoutIsEmpty) {
-                                graphic.DrawImage(bmp, 0, 0, imgWidth, imgHeight);
-                            } else {
-                                Rectangle destRect = new Rectangle(0, 0, imgWidth, imgHeight);
-                                Rectangle srcRect = cutoutArea.ToRectangle();
-                                graphic.DrawImage(bmp, destRect, srcRect, GraphicsUnit.Pixel);
+                                if (cutoutIsEmpty) {
+                                    graphic.DrawImage(bmp, 0, 0, imgWidth, imgHeight);
+                                } else {
+                                    Rectangle destRect = new Rectangle(0, 0, imgWidth, imgHeight);
+                                    Rectangle srcRect = cutoutArea.ToRectangle();
+                                    graphic.DrawImage(bmp, destRect, srcRect, GraphicsUnit.Pixel);
+                                }
                             }
 
                             result = newImage;

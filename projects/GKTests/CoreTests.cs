@@ -222,6 +222,13 @@ namespace GKTests
             string pw1 = SCCrypt.scDecrypt(crypt, unchecked((ushort)CRC32.CrcStr("test")));
 
             Assert.AreEqual(pw, pw1, "SCCrypt_Test");
+
+            byte[] salt = SCCrypt.CreateRandomSalt(24);
+            Assert.IsNotNull(salt);
+            Assert.AreEqual(24, salt.Length);
+
+            SCCrypt.ClearBytes(salt);
+            Assert.Throws(typeof(ArgumentNullException), () => { SCCrypt.ClearBytes(null); });
         }
 
         [Test]

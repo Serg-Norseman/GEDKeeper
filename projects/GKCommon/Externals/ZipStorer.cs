@@ -200,9 +200,9 @@ namespace Externals
             if (fAccess == FileAccess.Read)
                 throw new InvalidOperationException("Writing is not alowed");
 
-            FileStream stream = new FileStream(pathname, FileMode.Open, FileAccess.Read);
-            AddStream(method, filenameInZip, stream, File.GetLastWriteTime(pathname), comment);
-            stream.Close();
+            using (FileStream stream = new FileStream(pathname, FileMode.Open, FileAccess.Read)) {
+                this.AddStream(method, filenameInZip, stream, File.GetLastWriteTime(pathname), comment);
+            }
         }
 
         /// <summary>
@@ -368,18 +368,21 @@ namespace Externals
 
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
+
             // Check it is directory. If so, do nothing
             if (Directory.Exists(filename))
                 return true;
 
-            Stream output = new FileStream(filename, FileMode.Create, FileAccess.Write);
-            bool result = ExtractFile(zfe, output);
-            if (result)
-                output.Close();
+            bool result;
+            using (Stream output = new FileStream(filename, FileMode.Create, FileAccess.Write)) {
+                result = ExtractFile(zfe, output);
+            }
 
-            File.SetCreationTime(filename, zfe.ModifyTime);
-            File.SetLastWriteTime(filename, zfe.ModifyTime);
-            
+            if (result) {
+                File.SetCreationTime(filename, zfe.ModifyTime);
+                File.SetLastWriteTime(filename, zfe.ModifyTime);
+            }
+
             return result;
         }
 

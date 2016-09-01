@@ -1651,7 +1651,7 @@ namespace GKUI
             if (record != null)
             {
                 GKRecordsView rView = this.GetRecordsViewByType(record.RecordType);
-                result = (rView.IndexOfRecord(record) >= 0);
+                result = (rView != null && rView.IndexOfRecord(record) >= 0);
             }
             return result;
         }

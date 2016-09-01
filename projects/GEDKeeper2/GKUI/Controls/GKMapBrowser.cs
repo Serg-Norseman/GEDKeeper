@@ -337,6 +337,7 @@ namespace GKUI.Controls
             {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.CreateDefault(new Uri(fileURL));
                 request.ContentType = "application/x-www-form-urlencoded";
+
                 ProxyOptions proxy = MainWin.Instance.Options.Proxy;
                 if (proxy.UseProxy)
                 {
@@ -345,9 +346,11 @@ namespace GKUI.Controls
                         Credentials = CredentialCache.DefaultCredentials
                     };
                 }
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                stream = response.GetResponseStream();
-                result = true;
+
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse()) {
+                    stream = response.GetResponseStream();
+                    result = true;
+                }
             }
             catch (Exception ex)
             {
@@ -355,6 +358,7 @@ namespace GKUI.Controls
                 stream = null;
                 result = false;
             }
+
             return result;
         }
 

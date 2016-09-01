@@ -145,9 +145,7 @@ namespace GKCommon.GEDCOM
         {
             GEDCOMRecord sourceRec = source as GEDCOMRecord;
             if (sourceRec == null)
-            {
                 throw new ArgumentException(@"Argument is null or wrong type", "source");
-            }
 
             base.Assign(source);
 
@@ -245,6 +243,8 @@ namespace GKCommon.GEDCOM
 
         public override void ReplaceXRefs(XRefReplacer map)
         {
+            base.ReplaceXRefs(map);
+
             this.fNotes.ReplaceXRefs(map);
             this.fSourceCitations.ReplaceXRefs(map);
             this.fMultimediaLinks.ReplaceXRefs(map);

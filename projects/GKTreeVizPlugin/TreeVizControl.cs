@@ -248,6 +248,10 @@ namespace GKTreeVizPlugin
                 case Keys.T:
                     this.TimeStop = !this.TimeStop;
                     break;
+
+                default:
+                    base.OnKeyDown(e);
+                    break;
             }
         }
 
@@ -884,11 +888,11 @@ namespace GKTreeVizPlugin
         private void screenshot()
         {
             try {
-                Image image = Context.ToImage();
-                image.Save(@"d:\screenshot.jpg", ImageFormat.Jpeg);
-                image.Dispose();
+                using (Image image = Context.ToImage()) {
+                    image.Save(@"d:\screenshot.jpg", ImageFormat.Jpeg);
+                }
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 MessageBox.Show(e.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
             }
         }

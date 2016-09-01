@@ -44,8 +44,9 @@ namespace GKUI
             this.fTip = new ToolTip();
             this.fTipShow = false;
 
-            Graph graph = this.fBase.Context.GetPatriarchsGraph(minGens, false);
-            PL_ConvertGraphToArborSystem(graph, arborViewer1.Sys);
+            using (Graph graph = this.fBase.Context.GetPatriarchsGraph(minGens, false)) {
+                PL_ConvertGraphToArborSystem(graph, arborViewer1.Sys);
+            }
 
             arborViewer1.NodesDragging = true;
             arborViewer1.start();

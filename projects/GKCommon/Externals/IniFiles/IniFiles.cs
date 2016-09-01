@@ -121,9 +121,9 @@ namespace Externals.IniFiles
         /// <summary>Writes a INI file to a disc, using options in IniFileSettings class</summary>
         public void Save(string path)
         {
-            IniFileWriter writer = new IniFileWriter(path);
-            Save(writer);
-            writer.Close();
+            using (IniFileWriter writer = new IniFileWriter(path)) {
+                this.Save(writer);
+            }
         }
 
         /// <summary>Writes a INI file to a stream, using options in IniFileSettings class</summary>

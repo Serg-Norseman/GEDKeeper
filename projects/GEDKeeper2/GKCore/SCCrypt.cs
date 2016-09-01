@@ -193,15 +193,19 @@ namespace GKCore
                     idx += sd.Length;
                 }
 
-                byte[] tmp = (byte[])ppd.Clone();
+                if (ppd != null) {
+                    byte[] tmp = (byte[])ppd.Clone();
 
-                uint seed = key;
-                for (int i = 0; i < ppd.Length; i++)
-                {
-                    tmp[i] = (byte)(tmp[i] ^ seed >> 8);
-                    seed = unchecked((ushort)((ppd[i] + seed) * 28732u + 28446u));
+                    uint seed = key;
+                    for (int i = 0; i < ppd.Length; i++)
+                    {
+                        tmp[i] = (byte)(tmp[i] ^ seed >> 8);
+                        seed = unchecked((ushort)((ppd[i] + seed) * 28732u + 28446u));
+                    }
+                    res = Encoding.ASCII.GetString(tmp);
+                } else {
+                    res = "";
                 }
-                res = Encoding.ASCII.GetString(tmp);
             }
 
             return res;
@@ -230,7 +234,8 @@ namespace GKCore
                     resData = ArrConcat(resData, Encode(sd));
                     idx += sd.Length;
                 }
-                res = Encoding.ASCII.GetString(resData);
+
+                res = (resData == null) ? "" : Encoding.ASCII.GetString(resData);
             }
 
             return res;

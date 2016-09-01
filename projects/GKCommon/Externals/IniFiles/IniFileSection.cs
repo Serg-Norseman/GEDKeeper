@@ -69,14 +69,14 @@ namespace Externals.IniFiles
         
         private IniFileValue GetValue(string key)
         {
-            key = key.ToLowerInvariant();
+            string lower = key.ToLowerInvariant();
 
             for (int i = 0; i < elements.Count; i++)
             {
                 IniFileValue value = elements[i] as IniFileValue;
                 if (value != null)
                 {
-                    if (value.Key == key || (!IniFileSettings.CaseSensitive && value.Key.ToLowerInvariant() == key))
+                    if (value.Key == key || (!IniFileSettings.CaseSensitive && value.Key.ToLowerInvariant() == lower))
                         return value;
                 }
             }

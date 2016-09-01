@@ -7,6 +7,7 @@
 *.userprefs
 *.DotSettings.user
 gource-gk.cmd
+build_coverity.cmd
 
 CodecovSender.ps1
 CodecovUploader.sh
