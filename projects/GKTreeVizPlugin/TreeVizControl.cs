@@ -330,6 +330,8 @@ namespace GKTreeVizPlugin
         {
             if (e.Delta != 0) {
                 z += 0.01f * e.Delta;
+            } else {
+                base.OnMouseWheel(e);
             }
         }
 
@@ -491,10 +493,12 @@ namespace GKTreeVizPlugin
                     TVPerson srcPers = this.findPersonByXRef(edge.Source.Sign);
                     TVPerson tgtPers = this.findPersonByXRef(edge.Target.Sign);
 
-                    float rad = (float)dist(srcPers.Pt, tgtPers.Pt) * 3/7;
+                    if (srcPers != null && tgtPers != null) {
+                        float rad = (float)dist(srcPers.Pt, tgtPers.Pt) * 3/7;
 
-                    if (srcPers.BaseRadius > rad) srcPers.BaseRadius = rad;
-                    if (tgtPers.BaseRadius > rad) tgtPers.BaseRadius = rad;
+                        if (srcPers.BaseRadius > rad) srcPers.BaseRadius = rad;
+                        if (tgtPers.BaseRadius > rad) tgtPers.BaseRadius = rad;
+                    }
                 }
 
                 // prepare the range of years

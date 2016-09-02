@@ -136,8 +136,10 @@ namespace GKUI
                 case GEDCOMMultimediaFormat.mfPNG:
                     {
                         Image img = this.fBase.Context.LoadMediaImage(fileRef, false);
-                        this.fImageCtl.Image = img;
-                        this.fImageCtl.ZoomToFit();
+                        if (img != null) {
+                            this.fImageCtl.Image = img;
+                            this.fImageCtl.ZoomToFit();
+                        }
                         break;
                     }
             }

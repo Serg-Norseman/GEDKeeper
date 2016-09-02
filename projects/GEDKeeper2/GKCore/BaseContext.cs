@@ -510,15 +510,16 @@ namespace GKCore
                     }
                 }
 
-                pctl.ProgressInit(LangMan.LS(LSID.LSID_LinksSearch), patList.Count);
                 try
                 {
-                    int num2 = patList.Count;
-                    for (int i = 0; i < num2; i++)
+                    int patCount = patList.Count;
+                    pctl.ProgressInit(LangMan.LS(LSID.LSID_LinksSearch), patCount);
+
+                    for (int i = 0; i < patCount; i++)
                     {
                         PatriarchObj patr = patList[i];
 
-                        for (int j = i + 1; j < num2; j++)
+                        for (int j = i + 1; j < patCount; j++)
                         {
                             PatriarchObj patr2 = patList[j];
 

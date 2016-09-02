@@ -461,21 +461,20 @@ namespace Externals
 
             try
             {
-                ZipStorer tempZip = ZipStorer.Create(tempZipName, string.Empty);
-
-                foreach (ZipFileEntry zfe in fullList)
-                {
-                    if (!zfes.Contains(zfe))
+                using (ZipStorer tempZip = ZipStorer.Create(tempZipName, string.Empty)) {
+                    foreach (ZipFileEntry zfe in fullList)
                     {
-                        if (zip.ExtractFile(zfe, tempEntryName))
+                        if (!zfes.Contains(zfe))
                         {
-                            tempZip.AddFile(zfe.Method, tempEntryName, zfe.FilenameInZip, zfe.Comment);
+                            if (zip.ExtractFile(zfe, tempEntryName))
+                            {
+                                tempZip.AddFile(zfe.Method, tempEntryName, zfe.FilenameInZip, zfe.Comment);
+                            }
                         }
                     }
                 }
-                zip.Close();
-                tempZip.Close();
 
+                zip.Close();
                 File.Delete(zip.fFileName);
                 File.Move(tempZipName, zip.fFileName);
 

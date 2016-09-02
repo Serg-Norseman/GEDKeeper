@@ -63,7 +63,7 @@ namespace GKCommon.GEDCOM
 
         public override bool IsEmpty()
         {
-            return (string.IsNullOrEmpty(this.fXRef));
+            return (base.IsEmpty() && string.IsNullOrEmpty(this.fXRef));
         }
 
         public override string ParseString(string strValue)

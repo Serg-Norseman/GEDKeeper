@@ -12,6 +12,7 @@ namespace Externals.IniFiles
         private IniFileCommentary()
         {
         }
+
         /// <summary>Initializes a new instance IniFileCommentary</summary>
         /// <param name="content">Actual content of a line in a INI file.</param>
         public IniFileCommentary(string content)
@@ -19,13 +20,15 @@ namespace Externals.IniFiles
         {
             if (IniFileSettings.CommentChars.Length == 0)
                 throw new NotSupportedException("Comments are disabled. Set the IniFileSettings.CommentChars property to turn them on.");
+
             commentChar = IniFileSettings.StartsWith(Content, IniFileSettings.CommentChars);
-            
-            if (Content.Length > commentChar.Length)
+
+            if (commentChar != null && Content.Length > commentChar.Length)
                 comment = Content.Substring(commentChar.Length);
             else
                 comment = "";
         }
+
         /// <summary>Gets or sets comment char used in the config file for this comment.</summary>
         public string CommentChar
         {
@@ -37,6 +40,7 @@ namespace Externals.IniFiles
                 }
             }
         }
+
         /// <summary>Gets or sets a commentary string.</summary>
         public string Comment
         {
@@ -71,17 +75,20 @@ namespace Externals.IniFiles
         {
             return "Comment: \"" + comment + "\"";
         }
+
         /// <summary>Gets an IniFileCommentary object from commentary text.</summary>
         /// <param name="comment">Commentary text.</param>
         public static IniFileCommentary FromComment(string comment)
         {
             if (IniFileSettings.CommentChars.Length == 0)
                 throw new NotSupportedException("Comments are disabled. Set the IniFileSettings.CommentChars property to turn them on.");
+
             IniFileCommentary ret = new IniFileCommentary();
             ret.comment = comment;
             ret.CommentChar = IniFileSettings.CommentChars[0];
             return ret;
         }
+
         /// <summary>Formats IniFileCommentary object to default appearance.</summary>
         public override void FormatDefault()
         {

@@ -737,11 +737,12 @@ namespace GKUI.Dialogs
             if (father == null) return;
 
             GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, true, father);
-            if (family.Husband.Value == null)
-            {
+            if (family != null && family.Husband.Value == null) {
                 family.AddSpouse(father);
+                this.UpdateControls();
+            } else {
+                this.fBase.Host.LogWrite("PersonEditDlg.btnFatherAdd_Click(): fail");
             }
-            this.UpdateControls();
         }
 
         private void btnFatherDelete_Click(object sender, EventArgs e)
@@ -774,11 +775,12 @@ namespace GKUI.Dialogs
             if (mother == null) return;
 
             GEDCOMFamilyRecord family = this.fBase.GetChildFamily(this.fPerson, true, mother);
-            if (family.Wife.Value == null)
-            {
+            if (family != null && family.Wife.Value == null) {
                 family.AddSpouse(mother);
+                this.UpdateControls();
+            } else {
+                this.fBase.Host.LogWrite("PersonEditDlg.btnMotherAdd_Click(): fail");
             }
-            this.UpdateControls();
         }
 
         private void btnMotherDelete_Click(object sender, EventArgs e)

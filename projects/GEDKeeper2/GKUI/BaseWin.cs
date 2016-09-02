@@ -894,23 +894,30 @@ namespace GKUI
             if (mediaRec == null)
                 throw new ArgumentNullException("mediaRec");
 
-            MediaViewerWin fmMediaView = new MediaViewerWin(this);
-            try
-            {
-                fmMediaView.FileRef = mediaRec.FileReferences[0];
-                if (!fmMediaView.Extern)
+            GEDCOMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
+            MultimediaKind mmKind = GKUtils.GetMultimediaKind(fileRef.MultimediaFormat);
+
+            if (mmKind == MultimediaKind.mkAudio || mmKind == MultimediaKind.mkVideo) {
+                // external files
+                string targetFile = "";
+                this.fContext.MediaLoad(fileRef, ref targetFile);
+                SysUtils.LoadExtFile(targetFile);
+            } else {
+                MediaViewerWin mediaViewer = new MediaViewerWin(this);
+                try
                 {
+                    mediaViewer.FileRef = fileRef;
                     if (modal) {
-                        fmMediaView.ShowDialog();
+                        mediaViewer.ShowDialog();
                     } else {
-                        fmMediaView.ShowInTaskbar = true;
-                        fmMediaView.Show();
+                        mediaViewer.ShowInTaskbar = true;
+                        mediaViewer.Show();
                     }
                 }
-            }
-            finally
-            {
-                if (modal) fmMediaView.Dispose();
+                finally
+                {
+                    if (modal) mediaViewer.Dispose();
+                }
             }
         }
 

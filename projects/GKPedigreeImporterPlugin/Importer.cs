@@ -965,31 +965,31 @@ namespace GKPedigreeImporterPlugin
 
             try
             {
-                StreamReader strd = new StreamReader(this.fFileName, Encoding.GetEncoding(1251));
-                try
-                {
-                    this.fBase.ProgressInit(fLangMan.LS(ILS.LSID_Loading), (int)strd.BaseStream.Length);
+                using (StreamReader strd = new StreamReader(this.fFileName, Encoding.GetEncoding(1251))) {
+                    try
+                    {
+                        this.fBase.ProgressInit(fLangMan.LS(ILS.LSID_Loading), (int)strd.BaseStream.Length);
 
-                    int lineNum = 0;
-                    while (strd.Peek() != -1) {
-                        string txt = strd.ReadLine().Trim();
+                        int lineNum = 0;
+                        while (strd.Peek() != -1) {
+                            string txt = strd.ReadLine().Trim();
 
-                        if (!string.IsNullOrEmpty(txt)) {
-                            this.fRawContents.AddObject(txt, new RawLine(lineNum));
+                            if (!string.IsNullOrEmpty(txt)) {
+                                this.fRawContents.AddObject(txt, new RawLine(lineNum));
+                            }
+
+                            this.fBase.ProgressStep((int)strd.BaseStream.Position);
+                            lineNum++;
                         }
-
-                        this.fBase.ProgressStep((int)strd.BaseStream.Position);
-                        lineNum++;
+                        this.fRawContents.AddObject("", new RawLine(lineNum));
                     }
-                    this.fRawContents.AddObject("", new RawLine(lineNum));
+                    finally
+                    {
+                        this.fBase.ProgressDone();
+                    }
+                }
 
-                    return this.AnalyseRaw();
-                }
-                finally
-                {
-                    this.fBase.ProgressDone();
-                    strd.Close();
-                }
+                return this.AnalyseRaw();
             }
             catch (Exception ex)
             {

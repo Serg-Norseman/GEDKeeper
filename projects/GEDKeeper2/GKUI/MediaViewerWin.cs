@@ -39,13 +39,7 @@ namespace GKUI
         private readonly IBaseWindow fBase;
 
         private GEDCOMFileReferenceWithTitle fFileRef;
-        private bool fExtern;
         private ImageView fImageCtl;
-
-        public bool Extern
-        {
-            get { return this.fExtern; }
-        }
 
         public GEDCOMFileReferenceWithTitle FileRef
         {
@@ -56,7 +50,6 @@ namespace GKUI
         private void SetFileRef(GEDCOMFileReferenceWithTitle value)
         {
             this.fFileRef = value;
-            this.fExtern = false;
             this.Text = this.fFileRef.Title;
             Control ctl = null;
 
@@ -77,13 +70,8 @@ namespace GKUI
 
                 case MultimediaKind.mkAudio:
                 case MultimediaKind.mkVideo:
-                    {
-                        this.fExtern = true;
-                        string targetFile = "";
-                        this.fBase.Context.MediaLoad(this.fFileRef, ref targetFile);
-                        SysUtils.LoadExtFile(targetFile);
-                        break;
-                    }
+                    // error
+                    break;
 
                 case MultimediaKind.mkText:
                     {

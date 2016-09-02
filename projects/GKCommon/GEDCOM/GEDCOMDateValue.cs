@@ -63,12 +63,14 @@ namespace GKCommon.GEDCOM
 
         public override void Clear()
         {
+            base.Clear();
+
             if (this.fValue != null) this.fValue.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return this.fValue == null || this.fValue.IsEmpty();
+            return base.IsEmpty() && (this.fValue == null || this.fValue.IsEmpty());
         }
 
         public override string ParseString(string strValue)

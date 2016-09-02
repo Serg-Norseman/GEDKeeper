@@ -84,9 +84,11 @@ namespace GKTextSearchPlugin
             return result;
         }
 
-        private static void SetDocumentContext(IBaseWindow aBase, Document doc, TermGenerator indexer, GEDCOMRecord rec)
+        private static bool SetDocumentContext(IBaseWindow aBase, Document doc, TermGenerator indexer, GEDCOMRecord rec)
         {
             StringList ctx = aBase.GetRecordContent(rec);
+            if (ctx == null) return false;
+
             string recLastchange = rec.ChangeDate.ToString();
             string baseSign = GetSign(aBase);
 
@@ -97,6 +99,8 @@ namespace GKTextSearchPlugin
 
             indexer.SetDocument(doc);
             indexer.IndexText(ctx.Text);
+
+            return true;
         }
 
         private static void ReindexRecord(IBaseWindow aBase, WritableDatabase database, TermGenerator indexer, GEDCOMRecord record)
@@ -106,24 +110,26 @@ namespace GKTextSearchPlugin
             if (docid != 0) {
                 // checking for needed updates
                 string recLastchange = record.ChangeDate.ToString();
+                string docLastchange;
 
-                Document curDoc = database.GetDocument(docid);
-                string docLastchange = curDoc.GetValue(0);
+                using (Document curDoc = database.GetDocument(docid)) {
+                    docLastchange = curDoc.GetValue(0);
+                }
 
                 // updating a record
                 if (!string.Equals(recLastchange, docLastchange)) {
                     using (Document doc = new Document())
                     {
-                        SetDocumentContext(aBase, doc, indexer, record);
-                        database.ReplaceDocument(docid, doc);
+                        if (SetDocumentContext(aBase, doc, indexer, record))
+                            database.ReplaceDocument(docid, doc);
                     }
                 }
             } else {
                 // only adding
                 using (Document doc = new Document())
                 {
-                    SetDocumentContext(aBase, doc, indexer, record);
-                    database.AddDocument(doc);
+                    if (SetDocumentContext(aBase, doc, indexer, record))
+                        database.AddDocument(doc);
                 }
             }
         }

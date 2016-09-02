@@ -125,6 +125,8 @@ namespace GKCommon.GEDCOM
 
         public override void Clear()
         {
+            base.Clear();
+
             this.fDateAfter.Clear();
             this.fDateBefore.Clear();
         }

@@ -133,6 +133,8 @@ namespace GKCommon.GEDCOM
 
         public override void Clear()
         {
+            base.Clear();
+
             this.fDateFrom.Clear();
             this.fDateTo.Clear();
         }

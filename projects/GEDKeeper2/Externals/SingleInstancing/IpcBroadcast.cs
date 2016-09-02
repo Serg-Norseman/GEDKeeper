@@ -163,19 +163,22 @@ namespace Externals.SingleInstancing
                     CleanOldMessages(l);
                     l.Add(ipcMsg);
 
-                    MemoryStream ms = new MemoryStream();
-                    BinaryWriter bw = new BinaryWriter(ms);
-                    bw.Write(IpcFileSig);
-                    bw.Write((uint)l.Count);
-                    for (int j = 0; j < l.Count; ++j)
-                        IpcMessage.Serialize(bw, l[j]);
-                    byte[] pbPlain = ms.ToArray();
-                    bw.Close();
-                    ms.Close();
+                    byte[] pbPlain;
+                    using (MemoryStream ms = new MemoryStream()) {
+                        using (BinaryWriter bw = new BinaryWriter(ms)) {
+                            bw.Write(IpcFileSig);
+                            bw.Write((uint)l.Count);
 
-                    FileStream fsWrite = new FileStream(m_strMsgFilePath, FileMode.Create, FileAccess.Write, FileShare.None);
-                    fsWrite.Write(pbPlain, 0, pbPlain.Length);
-                    fsWrite.Close();
+                            for (int j = 0; j < l.Count; ++j)
+                                IpcMessage.Serialize(bw, l[j]);
+
+                            pbPlain = ms.ToArray();
+                        }
+                    }
+
+                    using (FileStream fsWrite = new FileStream(m_strMsgFilePath, FileMode.Create, FileAccess.Write, FileShare.None)) {
+                        fsWrite.Write(pbPlain, 0, pbPlain.Length);
+                    }
 
                     break;
                 }

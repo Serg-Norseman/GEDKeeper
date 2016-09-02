@@ -58,6 +58,8 @@ namespace GKCommon.Controls
 
         public void OpenImage(Image image)
         {
+            if (image == null) return;
+
             imageBox.Image = image;
             imageBox.ZoomToFit();
 
