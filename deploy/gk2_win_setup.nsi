@@ -5,7 +5,7 @@
 !include "MUI2.nsh"
 
 Name "GEDKeeper2"
-OutFile "gedkeeper_2.8.0_winsetup.exe"
+OutFile "gedkeeper_2.8.1_winsetup.exe"
 InstallDir $PROGRAMFILES\GEDKeeper2
 
 CRCCheck on
@@ -20,6 +20,7 @@ RequestExecutionLevel admin
 
 !insertmacro MUI_LANGUAGE "English"
 !insertmacro MUI_LANGUAGE "Russian"
+;!insertmacro MUI_LANGUAGE "Ukrainian"
 
 ; Registry key to check for directory (so if you install again, it will 
 ; overwrite the old one automatically)
@@ -104,23 +105,23 @@ Section "$(gkreq)"
   CreateDirectory "$INSTDIR\locales"
   SetOutPath "$INSTDIR\locales"
   File "..\locales\readme_rus.txt"
-  File "..\locales\russian.sample"
+  File "..\locales\english.sample"
 
   CreateDirectory "$INSTDIR\plugins"
   SetOutPath "$INSTDIR\plugins"
   File "..\plugins\GKCommon.dll"
 
-  CreateDirectory "$INSTDIR\locales\help_rus"
-  SetOutPath "$INSTDIR\locales\help_rus"
-  File "..\locales\help_rus\*.*"
+  CreateDirectory "$INSTDIR\locales\help_enu"
+  SetOutPath "$INSTDIR\locales\help_enu"
+  File "..\locales\help_enu\*.*"
 
-  CreateDirectory "$INSTDIR\locales\help_rus\images"
-  SetOutPath "$INSTDIR\locales\help_rus\images"
-  File "..\locales\help_rus\images\*.*"
+  CreateDirectory "$INSTDIR\locales\help_enu\images"
+  SetOutPath "$INSTDIR\locales\help_enu\images"
+  File "..\locales\help_enu\images\*.*"
 
   CreateDirectory "$SMPROGRAMS\GEDKeeper2"
   CreateShortCut "$SMPROGRAMS\GEDKeeper2\GEDKeeper2.lnk" "$INSTDIR\GEDKeeper2.exe" "" "$INSTDIR\GEDKeeper2.exe" 0
-  CreateShortCut "$SMPROGRAMS\GEDKeeper2\Справка.lnk" "$INSTDIR\locales\help_rus\GEDKeeper2.html" "" "$INSTDIR\locales\help_rus\GEDKeeper2.html" 0
+  CreateShortCut "$SMPROGRAMS\GEDKeeper2\Help (English).lnk" "$INSTDIR\locales\help_enu\GEDKeeper2.html" "" "$INSTDIR\locales\help_enu\GEDKeeper2.html" 0
   CreateShortCut "$SMPROGRAMS\GEDKeeper2\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
 
   ; Write the installation path into the registry
@@ -156,17 +157,19 @@ Section "$(gkreg)"
 SectionEnd
 
 SectionGroup /e "$(gklang)"
-	Section "English"
+	Section "Русский"
   		SetOutPath "$INSTDIR\locales"
-  		File "..\locales\english.lng"
+  		File "..\locales\russian.lng"
 
-		CreateDirectory "$INSTDIR\locales\help_enu"
-		SetOutPath "$INSTDIR\locales\help_enu"
-		File "..\locales\help_enu\*.*"
+		CreateDirectory "$INSTDIR\locales\help_rus"
+		SetOutPath "$INSTDIR\locales\help_rus"
+		File "..\locales\help_rus\*.*"
 
-		CreateDirectory "$INSTDIR\locales\help_enu\images"
-		SetOutPath "$INSTDIR\locales\help_enu\images"
-		File "..\locales\help_enu\images\*.*"
+		CreateDirectory "$INSTDIR\locales\help_rus\images"
+		SetOutPath "$INSTDIR\locales\help_rus\images"
+		File "..\locales\help_rus\images\*.*"
+
+		CreateShortCut "$SMPROGRAMS\GEDKeeper2\Справка.lnk" "$INSTDIR\locales\help_rus\GEDKeeper2.html" "" "$INSTDIR\locales\help_rus\GEDKeeper2.html" 0
 	SectionEnd
 
 	Section "Українська"

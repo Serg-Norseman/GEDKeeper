@@ -1537,6 +1537,23 @@ namespace GKCore
         {
             return fLangMan.LoadFromFile(fileName, 1);
         }
+
+        public static void SaveDefaultLanguage()
+        {
+            StreamWriter lf = new StreamWriter(GKUtils.GetLangsPath() + "english.sample2", false, Encoding.UTF8);
+            try
+            {
+                lf.WriteLine(";" + LS_DEF_CODE.ToString() + "," + LS_DEF_SIGN + "," + LS_DEF_NAME);
+                for (LSID i = LSID.LSID_First; i <= LSID.LSID_Last; i++)
+                {
+                    lf.WriteLine(LSDefList[(int)i - 1]);
+                }
+            }
+            finally
+            {
+                lf.Close();
+            }
+        }
     }
 
     public class LangManager : ILangMan

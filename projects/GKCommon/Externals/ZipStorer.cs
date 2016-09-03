@@ -174,6 +174,9 @@ namespace Externals
         /// <returns>A valid ZipStorer object</returns>
         public static ZipStorer Open(Stream stream, FileAccess access)
         {
+            if (stream == null)
+                throw new ArgumentNullException("stream");
+
             if (!stream.CanSeek && access != FileAccess.Read)
                 throw new InvalidOperationException("Stream cannot seek");
 
@@ -448,6 +451,12 @@ namespace Externals
         /// <remarks>This method only works for storage of type FileStream</remarks>
         public static bool RemoveEntries(ref ZipStorer zip, List<ZipFileEntry> zfes)
         {
+            if (zip == null)
+                throw new ArgumentNullException("zip");
+
+            if (zfes == null)
+                throw new ArgumentNullException("zfes");
+
             if (!(zip.fZipFileStream is FileStream))
                 throw new InvalidOperationException("RemoveEntries is allowed just over streams of type FileStream");
 

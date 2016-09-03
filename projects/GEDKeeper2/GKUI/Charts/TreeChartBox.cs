@@ -1573,15 +1573,10 @@ namespace GKUI.Charts
             }
         }
 
-        private static void InitEdges(ref int[] edges)
-        {
-            for (int i = 0; i <= 255; i++) edges[i] = 0;
-        }
-
         private void RecalcAncestorsChart()
         {
             int[] edges = new int[256];
-            InitEdges(ref edges);
+            Array.Clear(edges, 0, edges.Length);
 
             ExtList<TreeChartPerson> prev = new ExtList<TreeChartPerson>();
             try
@@ -1739,7 +1734,7 @@ namespace GKUI.Charts
         private void RecalcDescendantsChart(bool predef)
         {
             int[] edges = new int[256];
-            InitEdges(ref edges);
+            Array.Clear(edges, 0, edges.Length);
 
             this.RecalcDesc(ref edges, this.fRoot, new Point(this.fMargins, this.fMargins), predef);
         }
@@ -2178,9 +2173,8 @@ namespace GKUI.Charts
 
         public void DoFilter(GEDCOMIndividualRecord root)
         {
-            /*if (root == null) {
+            if (root == null)
                 throw new ArgumentNullException("root");
-            }*/
 
             if (this.fFilter.BranchCut != ChartFilter.BranchCutType.None) {
                 GKUtils.InitExtCounts(this.fTree, 0);

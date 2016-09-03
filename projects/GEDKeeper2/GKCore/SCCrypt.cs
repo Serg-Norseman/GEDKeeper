@@ -51,12 +51,9 @@ namespace GKCore
                 throw new ArgumentNullException("buffer");
 
             // Set each byte in the buffer to 0
-            for (int x = 0; x < buffer.Length; x++)
-            {
-                buffer[x] = 0;
-            }
+            Array.Clear(buffer, 0, buffer.Length);
         }
-        
+
         private static byte[] ArrConcat(byte[] L, byte[] R)
         {
             int num = ((L != null) ? L.Length : 0);

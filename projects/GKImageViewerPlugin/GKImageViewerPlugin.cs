@@ -23,6 +23,7 @@ using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
 
+using GKCommon;
 using GKCore.Interfaces;
 
 [assembly: AssemblyTitle("GKImageViewerPlugin")]
@@ -48,7 +49,7 @@ namespace GKImageViewerPlugin
         LSID_FileLoad
     }
 
-    public class Plugin : IPlugin
+    public class Plugin : BaseObject, IPlugin
     {
         private string fDisplayName = "ImageViewer";
         private IHost fHost;
@@ -59,6 +60,15 @@ namespace GKImageViewerPlugin
         public ILangMan LangMan { get { return fLangMan; } }
 
         internal ImageViewerWin frm;
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (frm != null) frm.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
         public void Execute()
         {

@@ -149,7 +149,7 @@ namespace GKUI.Charts
             CircleChart.EventRootChanged = new object();
         }
 
-        public CircleChart(IBaseWindow baseWin)
+        protected CircleChart(IBaseWindow baseWin)
         {
             this.DoubleBuffered = true;
 

@@ -89,9 +89,7 @@ namespace GKCommon
 
         public void Clear()
         {
-            for (int i = 0; i <= 31; i++) {
-                this.data[i] = 0;
-            }
+            Array.Clear(this.data, 0, this.data.Length);
         }
 
         public bool IsEmpty()

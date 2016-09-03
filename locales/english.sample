@@ -1,4 +1,4 @@
-;1033,enu,English
+п»ї;1033,enu,English
 File
 Edit
 Pedigree
@@ -14,7 +14,7 @@ Properties...
 Export
 Book of families...
 <?>
-Export to Excel-file...
+Export to Excel workbook...
 Exit
 <?>
 <?>
@@ -24,7 +24,7 @@ Delete record
 <?>
 Ancestors tree
 Descendants tree
-Both tree
+Complete tree
 d'Aboville descending pedigree
 Konovalov descending pedigree
 Maps
@@ -43,7 +43,7 @@ Options
 &Horizontal tile
 &Vertical tile
 &Minimize all
-&Arrange all
+&Rearrange all
 Internet resources...
 Kinship terms...
 FAQ...
@@ -69,42 +69,42 @@ Male
 Female
 Undetermined
 The file is modified. Save?
-Found the specified parent family "{0}". Attach to it a child?
-Remove personal record "{0}"?
-Remove family record "{0}"?
-Remove note record "{0}"?
-Remove source record "{0}"?
-Remove multimedia record "{0}"?
-Remove repository record "{0}"?
-Remove group record "{0}"?
-Remove research record "{0}"?
-Remove task record "{0}"?
-Remove communication record "{0}"?
-Remove location record "{0}"?
+The specified parent has an existed family "{0}". Do you want to add the child to that family?
+Remove individual "{0}"?
+Remove family "{0}"?
+Remove note "{0}"?
+Remove source "{0}"?
+Remove multimedia "{0}"?
+Remove repository "{0}"?
+Remove group "{0}"?
+Remove research "{0}"?
+Remove task "{0}"?
+Remove communication "{0}"?
+Remove location "{0}"?
 Address
 Events
-Surname
-Name
+Last name
+First name
 Patronymic
 Sex
 Nickname
-Surname prefix
+Last name prefix
 Name prefix
 Name suffix
 Patriarch
 Bookmark
 Association
 Relation
-Person
-Accept
+Individual
+Apply
 Cancel
 Close
 Select
 Append
-New personal record
-Edit personal record
-Check the sex
-Select record
+New individual
+Edit individual
+Checking of sex
+Selecting a record
 Source citation
 User reference
 Note
@@ -118,37 +118,37 @@ Husband
 Wife
 Status
 Childs
-Detach link on husband?
-Detach link on wife?
-Detach link on child?
+Detach link to husband?
+Detach link to wife?
+Detach link to child?
 Birth date
 Death date
-Restriction
+Security restriction
 Title
 Members
-Group edit
-Detach link on member?
+Edit group
+Detach link to member?
 view
 Stage
-Telephone
-eMail
+Telephone number
+email
 Web site
 Repository
 Progress
-Time passed
-Time remain
-Time total
+Elapsed time
+Remaining time
+Total time
 Date
 Text
 Short title
 Author
-Publication
+Published
 Common
-Detach link on repository?
+Detach link to repository?
 Store type
 File
 View
-For selected type of store is not enabled extension
+Extension mode is not enabled for selected store type
 Father
 Mother
 Parents
@@ -166,7 +166,7 @@ French
 Roman
 Unknown
 Summary
-Others
+Other
 Submission
 Submitter
 Location
@@ -185,21 +185,21 @@ Goal
 Theme
 Corresponder
 Group
-Detach link on task?
-Detach link on communication?
-Detach link on group?
-Research edit
-Task edit
-Communication edit
+Detach link to task?
+Detach link to communication?
+Detach link to group?
+Edit research
+Edit task
+Edit communication
 Error
 Lua start failed!
-Date format invalid
+Date format is invalid
 Country
 State
 City
 Postal code
-Telephones
-EMails
+Telephone numbers
+Emails
 Web sites
 Value
 Event
@@ -208,22 +208,22 @@ Cause
 Agency
 Female
 Male
-Not selected a personal record
-For this person is not defined the sex.
-For this person is not families.
-Estimated number of ancestors {0} more than permissible limits.
-Estimated number of descendants {0} more than permissible limits.
+An individual record is not selected.
+This individual has no sex defined.
+This individual has no families.
+Estimated number of ancestors {0} is more than permissible limits.
+Estimated number of descendants {0} is more than permissible limits.
 Generations visible:
 unlimited
 Spouse
 Marriage date
-Detach link on father?
-Detach link on mother?
-Detach link on spouse?
-Detach link on parents?
+Detach link to father?
+Detach link to mother?
+Detach link to spouse?
+Detach link to parents?
 All
-Only ancestors
-Only descendants
+Ancestors only
+Descendants only
 Trace root
 Edit
 Add family
@@ -239,9 +239,9 @@ marriage
 family
 Namesakes
 Remove the event?
-Detach link on note?
-Detach link on multimedia?
-Detach link on source?
+Detach link to note?
+Detach link to multimedia?
+Detach link to source?
 Remove the association?
 Remove the user reference?
 Loading of gedcom failed.
@@ -251,7 +251,7 @@ Before the day of birth "{0}" remained {1} day(s)
 Interface
 Trees
 Pedigrees
-Coding of save
+Files encoding
 Addresses
 Mails
 Webs
@@ -262,27 +262,27 @@ Port
 Login
 Password
 The password is not specified
-Show on startup
+Show tips on startup
 Language
 All lists
-List of persons
-Names format
+List of individuals
+Name format in lists
 Surname_Name_Patronymic
 Surname; Name_Patronymic
 Surname; Name; Patronymic
-Date format
-Places with address
+Date format in lists
+Include address into place text
 Highlight unparented
 Highlight unmarried
 Default values
-View of tree
-Different lines
+Show individuals in tree
+Separate lines
 Only years
 Kinship
-Signs visible
+Additional symbols
 Tree decorative
-Portraits visible
-Childless exclude
+Show portraits
+Hide died in childhood
 Decor
 Man
 Woman
@@ -291,22 +291,22 @@ Divorcee husband
 Divorcee wife
 Font
 Pedigree generation
-Include attributes
+Include attributes of individuals
 Include notes
 Include sources
 Pedigree format
 Excess
 Compact
-Record jump
-Record move up
-Record move down
+Jump to a record
+Move record up
+Move record down
 Full name
 Birth place
 Death place
 Residence
 Age
-Life expectancy
-Days for birth
+Lifetime
+Days before birth
 Religion
 Nationality
 Education
@@ -330,7 +330,7 @@ Emigration
 Immigration
 Census
 Will
-Probate
+Probate of will
 Death
 Burial
 Cremation
@@ -379,12 +379,12 @@ cousin
 <?>
 <?>
 <?>
-The width of the image more than 65 thousand points. Save impossible
+Image width is more than 65,000 pixels. Unable to save.
 Back
 Next
 <?>
 Next
-You know what ...
+You know that ...
 Load and search for places
 (not selected)
 Sample
@@ -392,7 +392,7 @@ For all people
 Places of birth
 Places of death
 Places of residence
-Only the chosen
+Only selected
 Save image...
 The format is not supported
 Error loading data.
@@ -405,7 +405,7 @@ Exact
 Before
 After
 Between
-Period to
+Period before
 Period from
 Period between
 About
@@ -457,7 +457,7 @@ Tape
 Visit
 from
 to
-person
+individual
 family
 source
 other
@@ -470,7 +470,7 @@ Task
 Correspondence
 Correction IDs
 Check format
-Requires correction of identity records, continue?
+Correction of identity records is required, continue?
 Number of objects in the master database: {0}
 Synchronization is complete.
 Search the patriarchs
@@ -486,8 +486,8 @@ Death causes
 Pedigree
 Parameter
 Total
-Mans
-Womans
+Men
+Women
 Fields filter
 Year
 PDF files (*.pdf)|*.pdf
@@ -498,15 +498,15 @@ only previous file
 Cutting off the branches
 not
 on years
-in selected persons
+in selected individuals
 - all -
 - not -
 - any -
-Master-base
-Other base
-[current base]
-There is a filter on the source. To make the source in a new personal record?
-There is a filter in the group. To make a group in a new personal record?
+Master database
+Database to merge
+[current database]
+There is a filter by a source. Do you want to add the source to a new individual?
+There is a filter by a group. Do you want to add the group to a new individual?
 Duplicates search
 Invalid value
 Operation
@@ -515,22 +515,22 @@ Merge databases
 Split database
 Merge records
 Import pedigrees
-Check the connection of families
+Check connection of families
 Check database
 Search the patriarchs
 Manage places
 Matching...
-Check the connection of families
+Check connection of families
 all
-only living
-only dead
-In living up to
-only men
-only women
+living only 
+dead only
+Lived before
+men only
+women only
 Mask of name
 Mask of residence
 Mask of the facts
-Only the patriarchs
+Patriarchs only
 Date is invalid
 People
 Years
@@ -540,9 +540,9 @@ Died
 Living
 Dead
 Average age
-Average life expectancy
+Life expectancy
 Average number of children
-Average age of first child birth
+Average age of the first child birth
 Average number of marriages
 Average age of marriage
 Number of ancestors
@@ -572,7 +572,7 @@ Check the year of birth
 The accuracy of the name, %
 Years inaccuracy
 Repair
-Generations of not less than
+Generations of descendants, not less than
 Set a sign
 Register in list of locations
 Similar surnames:
@@ -582,18 +582,18 @@ Record
 Problem
 Solve
 Perhaps died (age {0})
-Not determine the sex
-Year of birth more than a year of death
+Sex is undefined
+Year of birth more than year of death
 The first marriage at the age of {0} years?
 The first child was born at the age of {0} years?
 Descendants
 Generations
 Number of links
-Preparing places
+Processing places
 The place is already in the locations list
 DNA markers
-Ср.возр.рождения первенца на ДР родителя
-Ср.возр.рождения первенца на ДР ребенка
+Average age of parents at the time first-born appeared, relative to parents age
+Average age of parents at the time first-born appeared, relative to children age
 Empty family record
 backup each file revision
 Loading
@@ -613,11 +613,11 @@ Confidential
 Privacy
 Send the error log
 Charts
-The size of the window
+Fit window size
 Zoom in
 Zoom out
-To setup the fact of death
-To determine the sex
+Ascertain a fact of death
+Determine a sex
 Plugins
 Auto-trace relationships
 No matches found
@@ -629,7 +629,7 @@ Month
 Reset
 Field
 Condition
-Not specified the source
+Source is not specified
 Slideshow
 Previous record
 Next record
@@ -643,14 +643,14 @@ Birth name
 In immigration
 Maiden name
 Marriage name
-To delete a name?
-You cannot delete the alone name
+Delete a name?
+You cannot delete the single name
 Quote
-To bookmark the merged records
-Show dates calendar
+Place a bookmark on merged records
+Show calendar near dates
 Duplicate record
-Attention: when you duplicate personal records, family links and associations are not copied
-Show the signatures of date type
+Attention: if you duplicate an individual, family links and associations are not copied
+Show date type
 Create a new tree file
 Open the tree file
 Save tree file
@@ -689,17 +689,17 @@ Go to the record of the husband
 Select or add wife
 Disconnect wife
 Go to the record of the wife
-Choose a personal record
+Choose an individual
 Select or add a location
 Remove the link to the place
 Show the map
 Select or add a record of source
 Select the target record
-For storage types "file" and "store" the new DB file you need to save
+If you use "file" or "store" storage type, you have to save new database file before continue
 A file with the same name already exists in the repository
-It's not GEDSEC-compatible file
-This person have a few families. Children should be added via the spouses.
-An error of export to Excel
+It's not a GEDSEC-compatible file
+This individual has a few families. Children should be added via the spouses.
+Export to Excel failed
 Specific filter
 Display lines
 Type of comparison
@@ -707,13 +707,13 @@ Internal comparing (search for duplicates)
 Comparing with another database
 Analysis (experimental)
 Compare
-Ignore the date
+Ignore dates
 Chart
 Family book
 Table of contents
-Personal records
+Records of individuals
 Directories
-Gender is not defined by a man named "{1}". It's male gender?
+Unable to auto-detect gender using name "{1}". Is it male gender?
 Autosave every
 minutes
 Including number of generations

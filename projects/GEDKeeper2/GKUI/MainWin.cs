@@ -124,6 +124,8 @@ namespace GKUI
             this.fAutosaveTimer.Enabled = false;
             this.fAutosaveTimer.Interval = 10 * 60 * 1000;
             this.fAutosaveTimer.Tick += this.AutosaveTimer_Tick;
+
+            //LangMan.SaveDefaultLanguage();
         }
 
         protected override void Dispose(bool disposing)
