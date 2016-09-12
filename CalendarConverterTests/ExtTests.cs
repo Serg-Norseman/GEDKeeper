@@ -29,7 +29,9 @@ namespace CalendarConverterTests
 
             int year, month, day;
             CalendarConverter.jd_to_julian(jd, out year, out month, out day);
-            s = CalendarData.date_to_str(year, month, day, CalendarData.DateEra.AD);
+            s = day.ToString() + " ";
+            s += CalendarData.ClassicMonths[month - 1];
+            s = s + " " + year.ToString();
             Assert.AreEqual("27 September 1990", s); // +
 
             CalendarConverter.jd_to_hebrew(jd, out year, out month, out day);

@@ -102,11 +102,20 @@ namespace GKCommon
             int y, m, d;
             CalendarConverter.jd_to_gregorian(this.GetUnmaskedValue() + 0.5, out y, out m, out d);
 
-            string sy = HasKnownYear() ? y.ToString() : "????";
-            string sm = HasKnownMonth() ? m.ToString() : "??";
-            string sd = HasKnownDay() ? d.ToString() : "??";
+            string sy = HasKnownYear() ? y.ToString().PadLeft(4, '0') : "????";
+            string sm = HasKnownMonth() ? m.ToString().PadLeft(2, '0') : "??";
+            string sd = HasKnownDay() ? d.ToString().PadLeft(2, '0') : "??";
 
-            return string.Format("{0}/{1}/{2}", sy, sm, sd);
+            string result = string.Format("{0}/{1}/{2}", sy, sm, sd);
+            if (this.IsApproximateDate()) {
+                result = "~" + result;
+            } else if (this.IsDateBefore()) {
+                result = "<" + result;
+            } else if (this.IsDateAfter()) {
+                result = ">" + result;
+            }
+
+            return result;
         }
 
         public override int GetHashCode()

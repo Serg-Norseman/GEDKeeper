@@ -18,99 +18,60 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Globalization;
-using System.Threading;
-
 namespace GKCommon
 {
     public static class CalendarData
     {
-        public enum DateEra { AD, BC }
+        public static string[] BahaiMonths;
+        public static string[] BahaiWeekdays;
+        public static string[] ClassicMonths;
+        public static string[] ClassicWeekdays;
+        public static string[] HebrewMonths;
+        public static string[] HebrewWeekdays;
+        public static string[] IndianCivilMonths;
+        public static string[] IndianCivilWeekdays;
+        public static string[] IslamicMonths;
+        public static string[] IslamicWeekdays;
+        public static string[] PersianMonths;
+        public static string[] PersianWeekdays;
 
-        public static string date_to_str(int year, int month, int day, DateEra era)
+        public static string[] InitNames(string text)
         {
-            string result = string.Format("{0} {1} {2}", day.ToString(), ClassicMonths[month - 1], year.ToString());
-
-            if (era != DateEra.AD) {
-                result += " BC";
-            }
-
-            return result;
+            return text.Split('|');
         }
 
-        public static readonly string[] HebrewMonths;
-        public static readonly string[] HebrewWeekdays;
-        public static readonly string[] IslamicMonths;
-        public static readonly string[] IslamicWeekdays;
-        public static readonly string[] PersianMonths;
-        public static readonly string[] PersianWeekdays;
-        public static readonly string[] IndianCivilMonths;
-        public static readonly string[] IndianCivilWeekdays;
-        public static readonly string[] BahaiMonths;
-        public static readonly string[] BahaiWeekdays;
-        public static readonly string[] ClassicMonths;
-        public static readonly string[] ClassicWeekdays;
+        public static void ResetCalendarNames()
+        {
+            BahaiMonths = InitNames("Bahá|Jalál|Jamál|‘Aẓamat|Núr|Raḥmat|Kalimát|Kamál|Asmá’|‘Izzat|"+
+                                    "Mashíyyat|‘Ilm|Qudrat|Qawl|Masá’il|Sharaf|Sulṭán|Mulk|Ayyám-i-Há|‘Alá’");
+            BahaiWeekdays = InitNames("Jamál|Kamál|Fiḍál|‘Idál|Istijlál|Istiqlál|Jalál");
+
+
+            ClassicMonths = InitNames("January|February|March|April|May|June|July|August|September|October|November|December");
+            ClassicWeekdays = InitNames("Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday");
+
+
+            HebrewMonths = InitNames("Nisan|Iyyar|Sivan|Tammuz|Av|Elul|Tishri|Heshvan|Kislev|Teveth|Shevat|Adar|Veadar");
+            HebrewWeekdays = InitNames("Alef|Bet|Gimel|Dalet|He|Vav|Zayin");
+
+
+            IndianCivilMonths = InitNames("Caitra|Vaisakha|Jyaistha|Asadha|Sravana|Bhadra|"+
+                                          "Asvina|Kartika|Agrahayana|Pausa|Magha|Phalguna");
+            IndianCivilWeekdays = InitNames("Ravivara|Somavara|Mangalavara|Budhavara|Brahaspativara|Sukravara|Sanivara");
+
+
+            IslamicMonths = InitNames("Muharram|Safar|Rabi`al-Awwal|Rabi`ath-Thani|Jumada l-Ula|Jumada t-Tania|"+
+                                      "Rajab|Sha`ban|Ramadan|Shawwal|Dhu l-Qa`da|Dhu l-Hijja");
+            IslamicWeekdays = InitNames("Al-'ahad|Al-'ithnayn|Ath-thalatha'|Al-'arb`a'|Al-khamis|Al-jum`a|As-sabt");
+
+
+            PersianMonths = InitNames("Farvardin|Ordibehesht|Khordad|Tir|Mordad|Shahrivar|Mehr|Aban|Azar|Dey|Bahman|Esfand");
+            PersianWeekdays = InitNames("Yekshanbeh|Doshanbeh|Seshhanbeh|Chaharshanbeh|Panjshanbeh|Jomeh|Shanbeh");
+        }
 
         static CalendarData()
         {
-            BahaiWeekdays = new string[] {
-                "Jamál", "Kamál", "Fiḍál", "‘Idál", "Istijlál", "Istiqlál", "Jalál"
-            };
-
-            BahaiMonths = new string[] {
-                "Bahá", "Jalál", "Jamál", "‘Aẓamat", "Núr", "Raḥmat", "Kalimát", "Kamál", "Asmá’", "‘Izzat",
-                "Mashíyyat", "‘Ilm", "Qudrat", "Qawl", "Masá’il", "Sharaf", "Sulṭán", "Mulk", "Ayyám-i-Há", "‘Alá’"
-            };
-
-
-            IndianCivilWeekdays = new string[] {
-                "Ravivara", "Somavara", "Mangalavara", "Budhavara", "Brahaspativara", "Sukravara", "Sanivara"
-            };
-
-            IndianCivilMonths = new string[] {
-                "Caitra", "Vaisakha", "Jyaistha", "Asadha", "Sravana", "Bhadra",
-                "Asvina", "Kartika", "Agrahayana", "Pausa", "Magha", "Phalguna"
-            };
-
-
-            PersianWeekdays = new string[] {
-                "Yekshanbeh", "Doshanbeh", "Seshhanbeh", "Chaharshanbeh", "Panjshanbeh", "Jomeh", "Shanbeh"
-            };
-
-            PersianMonths = new string[] {
-                "Farvardin", "Ordibehesht", "Khordad", "Tir", "Mordad", "Shahrivar", 
-                "Mehr", "Aban", "Azar", "Dey", "Bahman", "Esfand",
-            };
-
-
-            IslamicWeekdays = new string[] {
-                "Al-'ahad", "Al-'ithnayn", "Ath-thalatha'", "Al-'arb`a'", "Al-khamis", "Al-jum`a", "As-sabt"
-            };
-
-            IslamicMonths = new string[] {
-                "Muharram", "Safar", "Rabi`al-Awwal", "Rabi`ath-Thani", "Jumada l-Ula", "Jumada t-Tania",
-                "Rajab", "Sha`ban", "Ramadan", "Shawwal", "Dhu l-Qa`da", "Dhu l-Hijja"
-            };
-
-
-            HebrewWeekdays = new string[] {
-                "Alef", "Bet", "Gimel", "Dalet", "He", "Vav", "Zayin"
-            };
-
-            HebrewMonths = new string[] {
-                "Nisan", "Iyyar", "Sivan", "Tammuz", "Av", "Elul", 
-                "Tishri", "Heshvan", "Kislev", "Teveth", "Shevat", "Adar", "Veadar"
-            };
-
-
-            ClassicWeekdays = new string[] {
-                "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
-            };
-
-            ClassicMonths = new string[] {
-                "January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"
-            };
+            ResetCalendarNames();
         }
     }
 }
