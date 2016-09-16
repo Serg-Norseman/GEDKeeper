@@ -648,10 +648,22 @@ namespace GKTests
 
             GEDCOMIndividualRecord indRec = this.fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
             GEDCOMIndividualRecord chldRec = this.fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
+            GEDCOMIndividualRecord otherRec = this.fContext.Tree.XRefIndex_Find("I4") as GEDCOMIndividualRecord;
 
             using (KinshipsGraph kinsGraph = TreeTools.SearchKinshipsGraph(indRec)) {
+                Assert.IsNull(kinsGraph.AddIndividual(null));
+
                 Assert.IsNotNull(kinsGraph.FindVertex(chldRec.XRef));
+
+                // check invalid args
+                kinsGraph.SetTreeRoot(null);
+                kinsGraph.SetTreeRoot(otherRec);
+
+                // valid individual
                 kinsGraph.SetTreeRoot(indRec);
+
+                Assert.AreEqual("???", kinsGraph.GetRelationship(null));
+                Assert.AreEqual("???", kinsGraph.GetRelationship(otherRec));
 
                 string result = kinsGraph.GetRelationship(chldRec);
                 Assert.AreEqual("daughter", result);

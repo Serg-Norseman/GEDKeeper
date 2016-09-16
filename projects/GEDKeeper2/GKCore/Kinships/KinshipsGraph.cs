@@ -87,6 +87,7 @@ namespace GKCore.Kinships
 
         public void SetTreeRoot(GEDCOMIndividualRecord rootRec)
         {
+            if (rootRec == null) return;
             IVertex root = this.fGraph.FindVertex(rootRec.XRef);
             if (root == null) return;
 
@@ -95,6 +96,7 @@ namespace GKCore.Kinships
 
         public string GetRelationship(GEDCOMIndividualRecord targetRec)
         {
+            if (targetRec == null) return "???";
             IVertex target = this.fGraph.FindVertex(targetRec.XRef);
             if (target == null) return "???";
 
