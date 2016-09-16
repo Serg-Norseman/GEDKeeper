@@ -645,6 +645,21 @@ namespace GKTests
 
             rel = KinshipsMan.FindKinship(RelationKind.rkNone, RelationKind.rkSon, out great, out level);
             Assert.AreEqual(RelationKind.rkSon, rel);
+
+            GEDCOMIndividualRecord indRec = this.fContext.Tree.XRefIndex_Find("I1") as GEDCOMIndividualRecord;
+            GEDCOMIndividualRecord chldRec = this.fContext.Tree.XRefIndex_Find("I3") as GEDCOMIndividualRecord;
+
+            using (KinshipsGraph kinsGraph = TreeTools.SearchKinshipsGraph(indRec)) {
+                Assert.IsNotNull(kinsGraph.FindVertex(chldRec.XRef));
+                kinsGraph.SetTreeRoot(indRec);
+
+                string result = kinsGraph.GetRelationship(chldRec);
+                Assert.AreEqual("daughter", result);
+
+                Assert.IsFalse(kinsGraph.IsEmpty());
+                kinsGraph.Clear();
+                Assert.IsTrue(kinsGraph.IsEmpty());
+            }
         }
 
         private class ListViewMock : IListView

@@ -31,7 +31,6 @@ using System.Windows.Forms;
 
 using GKCommon;
 using GKCommon.GEDCOM;
-using GKCommon.SmartGraph;
 using GKCore;
 using GKCore.Interfaces;
 using GKCore.Kinships;
@@ -90,7 +89,7 @@ namespace GKUI.Charts
         #region Private fields
 
         private readonly ChartFilter fFilter;
-        private readonly Graph fGraph;
+        private readonly KinshipsGraph fGraph;
         private readonly PersonList fPersons;
         private readonly List<string> fPreparedFamilies;
         internal readonly List<string> fPreparedIndividuals;
@@ -332,7 +331,7 @@ namespace GKUI.Charts
             this.fSelected = null;
             this.fScale = 1.0f;
             this.fTraceSelected = true;
-            this.fGraph = new Graph();
+            this.fGraph = new KinshipsGraph();
 
             this.fPreparedFamilies = new List<string>();
             this.fPreparedIndividuals = new List<string>();
@@ -557,7 +556,7 @@ namespace GKUI.Charts
                     this.fPersons.Add(result);
 
                     if (this.fOptions.Kinship && iRec != null) {
-                        result.Node = this.fGraph.AddVertex(iRec.XRef, result);
+                        result.Node = this.fGraph.AddIndividual(iRec);
                     }
 
                     if (!outsideKin && parent != null) {
@@ -577,7 +576,7 @@ namespace GKUI.Charts
             }
         }
 
-        private TreeChartPerson DoAncestorsStep(TreeChartPerson aChild, GEDCOMIndividualRecord aPerson, int aGeneration, bool dupFlag)
+        private TreeChartPerson DoAncestorsStep(TreeChartPerson aChild, GEDCOMIndividualRecord aPerson, int generation, bool dupFlag)
         {
             try
             {
@@ -587,7 +586,7 @@ namespace GKUI.Charts
                 {
                     result = new TreeChartPerson(this);
                     result.BuildBy(aPerson, ref hasMediaFail);
-                    result.Generation = aGeneration;
+                    result.Generation = generation;
                     result.SetFlag(PersonFlag.pfAncWalk);
                     this.fPersons.Add(result);
 
@@ -598,10 +597,10 @@ namespace GKUI.Charts
 
                     if (this.fOptions.Kinship && aPerson != null)
                     {
-                        result.Node = this.fGraph.AddVertex(aPerson.XRef, result);
+                        result.Node = this.fGraph.AddIndividual(aPerson);
                     }
 
-                    if ((this.fDepthLimit <= -1 || aGeneration != this.fDepthLimit) && aPerson.ChildToFamilyLinks.Count > 0 && !dupFlag)
+                    if ((this.fDepthLimit <= -1 || generation != this.fDepthLimit) && aPerson.ChildToFamilyLinks.Count > 0 && !dupFlag)
                     {
                         GEDCOMFamilyRecord family = aPerson.ChildToFamilyLinks[0].Family;
 
@@ -617,14 +616,14 @@ namespace GKUI.Charts
 
                             if (iFather != null && GKUtils.IsRecordAccess(iFather.Restriction, this.fShieldState))
                             {
-                                result.Father = this.DoAncestorsStep(result, iFather, aGeneration + 1, isDup);
+                                result.Father = this.DoAncestorsStep(result, iFather, generation + 1, isDup);
                                 if (result.Father != null)
                                 {
                                     result.Father.Divorced = divorced;
                                     result.Father.IsDup = isDup;
                                     if (this.fOptions.Kinship)
                                     {
-                                        this.fGraph.AddUndirectedEdge(result.Node, result.Father.Node, 1, (int)RelationKind.rkParent, (int)RelationKind.rkChild);
+                                        this.fGraph.AddRelation(result.Node, result.Father.Node, RelationKind.rkParent, RelationKind.rkChild);
                                     }
                                 }
                             } else {
@@ -633,14 +632,14 @@ namespace GKUI.Charts
 
                             if (iMother != null && GKUtils.IsRecordAccess(iMother.Restriction, this.fShieldState))
                             {
-                                result.Mother = this.DoAncestorsStep(result, iMother, aGeneration + 1, isDup);
+                                result.Mother = this.DoAncestorsStep(result, iMother, generation + 1, isDup);
                                 if (result.Mother != null)
                                 {
                                     result.Mother.Divorced = divorced;
                                     result.Mother.IsDup = isDup;
                                     if (this.fOptions.Kinship)
                                     {
-                                        this.fGraph.AddUndirectedEdge(result.Node, result.Mother.Node, 1, (int)RelationKind.rkParent, (int)RelationKind.rkChild);
+                                        this.fGraph.AddRelation(result.Node, result.Mother.Node, RelationKind.rkParent, RelationKind.rkChild);
                                     }
                                 }
                             } else {
@@ -649,7 +648,7 @@ namespace GKUI.Charts
 
                             if (result.Father != null && result.Mother != null && this.fOptions.Kinship)
                             {
-                                this.fGraph.AddUndirectedEdge(result.Father.Node, result.Mother.Node, 1, (int)RelationKind.rkSpouse, (int)RelationKind.rkSpouse);
+                                this.fGraph.AddRelation(result.Father.Node, result.Mother.Node, RelationKind.rkSpouse, RelationKind.rkSpouse);
                             }
                         }
                     } else {
@@ -767,7 +766,7 @@ namespace GKUI.Charts
                             {
                                 if (this.fOptions.Kinship)
                                 {
-                                    this.fGraph.AddUndirectedEdge(res.Node, resParent.Node, 1, (int)RelationKind.rkSpouse, (int)RelationKind.rkSpouse);
+                                    this.fGraph.AddRelation(res.Node, resParent.Node, RelationKind.rkSpouse, RelationKind.rkSpouse);
                                 }
 
                                 res.AddSpouse(resParent);
@@ -809,8 +808,8 @@ namespace GKUI.Charts
                                             child.SetFlag(descFlag);
                                             if (this.fOptions.Kinship)
                                             {
-                                                this.fGraph.AddUndirectedEdge(child.Node, ft.Node, 1, (int)RelationKind.rkParent, (int)RelationKind.rkChild);
-                                                this.fGraph.AddUndirectedEdge(child.Node, mt.Node, 1, (int)RelationKind.rkParent, (int)RelationKind.rkChild);
+                                                this.fGraph.AddRelation(child.Node, ft.Node, RelationKind.rkParent, RelationKind.rkChild);
+                                                this.fGraph.AddRelation(child.Node, mt.Node, RelationKind.rkParent, RelationKind.rkChild);
                                             }
                                         }
                                     }
@@ -836,152 +835,18 @@ namespace GKUI.Charts
 
         #endregion
 
-        #region Kinship relations
+        #region Kinships
 
         private void FindRelationship(TreeChartPerson target)
         {
-            if (target == null) return;
-
-            if (target.Node == null) {
+            if (target == null || target.Node == null || target.Rec == null) {
                 target.Kinship = "";
-                return;
-            }
-
-            try
-            {
-                IEnumerable<IEdge> edgesPath = this.fGraph.GetPath(target.Node);
-
-                string tmp = "";
-                RelationKind prevRel = RelationKind.rkNone;
-                RelationKind finRel = RelationKind.rkNone;
-                int great = 0;
-
-                foreach (Edge edge in edgesPath)
-                {
-                    TreeChartPerson xFrom = (TreeChartPerson)edge.Source.Value;
-                    TreeChartPerson xTo = (TreeChartPerson)edge.Target.Value;
-                    RelationKind curRel = FixLink(xFrom, xTo, (RelationKind)((int)edge.Value));
-
-                    if (this.fPathDebug) {
-                        if (tmp != "") tmp += ", ";
-                        if (xFrom.Rec != null) tmp += (xFrom.Rec.XRef + ">" + GKData.RelationSigns[(int)curRel] + ">");
-                        if (xTo.Rec != null) tmp += xTo.Rec.XRef;
-                    }
-
-                    if (prevRel != RelationKind.rkUndefined)
-                    {
-                        int g;
-                        int lev;
-                        finRel = KinshipsMan.FindKinship(prevRel, curRel, out g, out lev);
-                        great += g;
-                        prevRel = finRel;
-                    }
-                }
-
+            } else {
+                target.Kinship = "[" + this.fGraph.GetRelationship(target.Rec) + "]";
                 if (this.fPathDebug) {
-                    if (target.Rec != null) target.PathDebug = target.Rec.XRef + " ";
-
-                    target.PathDebug = target.PathDebug + " [" + tmp + "]";
-                }
-
-                string result = "[" + FixRelation(target, finRel, great) + "]";
-                target.Kinship = result;
-            }
-            finally
-            {
-            }
-        }
-
-        private static RelationKind FixLink(TreeChartPerson xFrom, TreeChartPerson xTo, RelationKind rel)
-        {
-            RelationKind xRel = rel;
-
-            switch (rel)
-            {
-                case RelationKind.rkParent:
-                    switch (xTo.Sex)
-                    {
-                        case GEDCOMSex.svMale:
-                            xRel = RelationKind.rkFather;
-                            break;
-                        case GEDCOMSex.svFemale:
-                            xRel = RelationKind.rkMother;
-                            break;
-                    }
-                    break;
-
-                case RelationKind.rkSpouse:
-                    switch (xTo.Sex)
-                    {
-                        case GEDCOMSex.svMale:
-                            xRel = RelationKind.rkHusband;
-                            break;
-                        case GEDCOMSex.svFemale:
-                            xRel = RelationKind.rkWife;
-                            break;
-                    }
-                    break;
-
-                case RelationKind.rkChild:
-                    switch (xTo.Sex)
-                    {
-                        case GEDCOMSex.svMale:
-                            xRel = RelationKind.rkSon;
-                            break;
-                        case GEDCOMSex.svFemale:
-                            xRel = RelationKind.rkDaughter;
-                            break;
-                    }
-                    break;
-
-                default:
-                    xRel = rel;
-                    break;
-            }
-
-            return xRel;
-        }
-
-        private static string FixRelation(TreeChartPerson target, RelationKind rel, int great)
-        {
-            string tmp = "";
-            if (great != 0)
-            {
-                if (rel >= RelationKind.rkUncle && rel < RelationKind.rkNephew)
-                {
-                    tmp = GKData.Numerals[great] + GKData.NumKinship[(int)target.Sex] + " ";
-                    if (rel == RelationKind.rkUncle)
-                    {
-                        rel = RelationKind.rkGrandfather;
-                    }
-                    if (rel == RelationKind.rkAunt)
-                    {
-                        rel = RelationKind.rkGrandmother;
-                    }
-                }
-                else
-                {
-                    if (rel != RelationKind.rkUndefined)
-                    {
-                        tmp = GetGreat(great);
-                    }
+                    target.PathDebug = this.fGraph.IndividualsPath;
                 }
             }
-            else
-            {
-                tmp = "";
-            }
-            return tmp + LangMan.LS(GKData.RelationKinds[(int)rel]);
-        }
-
-        private static string GetGreat(int n)
-        {
-            string result = "";
-            for (int i = 1; i <= n; i++)
-            {
-                result += "пра";
-            }
-            return result;
         }
 
         #endregion
@@ -1433,11 +1298,11 @@ namespace GKUI.Charts
 
             return lines;
         }
-        
+
         private void RecalcChart(bool noRedraw = false)
         {
             if (this.fOptions.Kinship && this.fKinRoot != null) {
-                this.fGraph.FindPathTree(this.fKinRoot.Node);
+                this.fGraph.SetTreeRoot(this.fKinRoot.Rec);
             }
 
             int lines = this.InitInfoSize();

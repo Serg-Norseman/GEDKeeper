@@ -26,243 +26,253 @@ namespace GKCommon.SmartGraph
     /// 
     /// </summary>
     public class Graph : BaseObject, IGraph
-	{
-		#region Private members
+    {
+        #region Private members
 
-		private sealed class DefaultDataProvider : IDataProvider
-		{
-			public IVertex CreateVertex()
-			{
+        private sealed class DefaultDataProvider : IDataProvider
+        {
+            public IVertex CreateVertex()
+            {
                 return new Vertex();
-			}
+            }
 
             public IEdge CreateEdge(IVertex u, IVertex v, int cost, object value)
-			{
+            {
                 return new Edge((Vertex)u, (Vertex)v, cost, value);
-			}
-		}
+            }
+        }
 
-		private class PathCandidate
-		{
-			public readonly IVertex Node;
-			public readonly PathCandidate Next;
-			
-			public PathCandidate(IVertex node, PathCandidate next)
-			{
-				this.Node = node;
-				this.Next = next;
-			}
-		}
+        private class PathCandidate
+        {
+            public readonly IVertex Node;
+            public readonly PathCandidate Next;
 
-		private readonly IDataProvider fProvider;
-		private readonly List<IEdge> fEdgesList;
-		private readonly List<IVertex> fVerticesList;
-		private readonly Dictionary<string, IVertex> fVerticesDictionary;
+            public PathCandidate(IVertex node, PathCandidate next)
+            {
+                this.Node = node;
+                this.Next = next;
+            }
+        }
 
-		#endregion
+        private readonly IDataProvider fProvider;
+        private readonly List<IEdge> fEdgesList;
+        private readonly List<IVertex> fVerticesList;
+        private readonly Dictionary<string, IVertex> fVerticesDictionary;
 
-		#region Properties
+        #endregion
 
-		public IEnumerable<IVertex> Vertices
-		{
-			get { return this.fVerticesList; }
-		}
+        #region Properties
 
-		public IEnumerable<IEdge> Edges
-		{
-			get { return this.fEdgesList; }
-		}
+        public IEnumerable<IVertex> Vertices
+        {
+            get { return this.fVerticesList; }
+        }
 
-		#endregion
+        public IEnumerable<IEdge> Edges
+        {
+            get { return this.fEdgesList; }
+        }
 
-		#region Instance control
+        #endregion
 
-		public Graph() : this(new DefaultDataProvider())
-		{
-		}
+        #region Instance control
 
-		public Graph(IDataProvider provider)
-		{
-			this.fProvider = provider;
-			this.fVerticesList = new List<IVertex>();
-			this.fEdgesList = new List<IEdge>();
-			this.fVerticesDictionary = new Dictionary<string, IVertex>();
-		}
+        public Graph() : this(new DefaultDataProvider())
+        {
+        }
 
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing)
-			{
-				this.Clear();
-			}
-			base.Dispose(disposing);
-		}
+        public Graph(IDataProvider provider)
+        {
+            this.fProvider = provider;
+            this.fVerticesList = new List<IVertex>();
+            this.fEdgesList = new List<IEdge>();
+            this.fVerticesDictionary = new Dictionary<string, IVertex>();
+        }
 
-		#endregion
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                this.Clear();
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Data management
+        #endregion
 
-		public void Clear()
-		{
-			foreach (IVertex vertex in this.fVerticesList)
-			{
-				vertex.EdgeIn = null;
-				vertex.EdgesOut.Clear();
-			}
+        #region Data management
 
-			this.fEdgesList.Clear();
-			this.fVerticesList.Clear();
-			this.fVerticesDictionary.Clear();
-		}
+        public bool IsEmpty()
+        {
+            return this.fVerticesList.Count == 0 && this.fEdgesList.Count == 0;
+        }
 
-		public IVertex AddVertex(object data)
-		{
-			IVertex result = this.fProvider.CreateVertex();
-			result.Value = data;
-			this.fVerticesList.Add(result);
+        public void Clear()
+        {
+            foreach (IVertex vertex in this.fVerticesList)
+            {
+                vertex.EdgeIn = null;
+                vertex.EdgesOut.Clear();
+            }
 
-			return result;
-		}
+            this.fEdgesList.Clear();
+            this.fVerticesList.Clear();
+            this.fVerticesDictionary.Clear();
+        }
 
-		public IVertex AddVertex(string sign, object data)
-		{
-			IVertex result = this.AddVertex(data);
-			result.Sign = sign;
-			this.fVerticesDictionary.Add(sign, result);
+        public IVertex AddVertex(object data)
+        {
+            IVertex result = this.fProvider.CreateVertex();
+            result.Value = data;
+            this.fVerticesList.Add(result);
 
-			return result;
-		}
+            return result;
+        }
 
-		public bool AddUndirectedEdge(IVertex source, IVertex target, int cost, object srcValue, object tgtValue)
-		{
-			IEdge edge1 = this.AddDirectedEdge(source, target, cost, srcValue);
-			IEdge edge2 = this.AddDirectedEdge(target, source, cost, tgtValue);
-			
-			return (edge1 != null && edge2 != null);
-		}
+        public IVertex AddVertex(string sign, object data)
+        {
+            IVertex result;
+            if (this.fVerticesDictionary.TryGetValue(sign, out result)) {
+                return result;
+            }
 
-		public IEdge AddDirectedEdge(string sourceSign, string targetSign, int cost, object edgeValue)
-		{
-			IVertex source = this.FindVertex(sourceSign);
-			IVertex target = this.FindVertex(targetSign);
-			
-			return this.AddDirectedEdge(source, target, cost, edgeValue);
-		}
+            result = this.AddVertex(data);
+            result.Sign = sign;
+            this.fVerticesDictionary.Add(sign, result);
 
-		public IEdge AddDirectedEdge(IVertex source, IVertex target, int cost, object edgeValue)
-		{
-			if (source == null || target == null || source == target) return null;
+            return result;
+        }
 
-			IEdge resultEdge = this.fProvider.CreateEdge(source, target, cost, edgeValue);
-			source.EdgesOut.Add(resultEdge);
-			this.fEdgesList.Add(resultEdge);
-			
-			return resultEdge;
-		}
+        public bool AddUndirectedEdge(IVertex source, IVertex target, int cost, object srcValue, object tgtValue)
+        {
+            IEdge edge1 = this.AddDirectedEdge(source, target, cost, srcValue);
+            IEdge edge2 = this.AddDirectedEdge(target, source, cost, tgtValue);
 
-		public void DeleteVertex(IVertex vertex)
-		{
-			if (vertex == null) return;
+            return (edge1 != null && edge2 != null);
+        }
 
-			for (int i = this.fEdgesList.Count - 1; i >= 0; i--)
-			{
-				IEdge edge = this.fEdgesList[i];
+        public IEdge AddDirectedEdge(string sourceSign, string targetSign, int cost, object edgeValue)
+        {
+            IVertex source = this.FindVertex(sourceSign);
+            IVertex target = this.FindVertex(targetSign);
 
-				if (edge.Source == vertex || edge.Target == vertex)
-				{
-					this.DeleteEdge(edge);
-				}				
-			}
+            return this.AddDirectedEdge(source, target, cost, edgeValue);
+        }
 
-			this.fVerticesList.Remove(vertex);
-		}
+        public IEdge AddDirectedEdge(IVertex source, IVertex target, int cost, object edgeValue)
+        {
+            if (source == null || target == null || source == target) return null;
 
-		public void DeleteEdge(IEdge edge)
-		{
-			if (edge == null) return;
+            IEdge resultEdge = this.fProvider.CreateEdge(source, target, cost, edgeValue);
+            source.EdgesOut.Add(resultEdge);
+            this.fEdgesList.Add(resultEdge);
 
-			IVertex src = edge.Source;
-			src.EdgesOut.Remove(edge);
+            return resultEdge;
+        }
 
-			this.fEdgesList.Remove(edge);
-		}
+        public void DeleteVertex(IVertex vertex)
+        {
+            if (vertex == null) return;
 
-		public IVertex FindVertex(string sign)
-		{
-			IVertex result;
-			this.fVerticesDictionary.TryGetValue(sign, out result);
-			return result;
-		}
+            for (int i = this.fEdgesList.Count - 1; i >= 0; i--)
+            {
+                IEdge edge = this.fEdgesList[i];
 
-		#endregion
+                if (edge.Source == vertex || edge.Target == vertex)
+                {
+                    this.DeleteEdge(edge);
+                }
+            }
 
-		#region Pathes search
+            this.fVerticesList.Remove(vertex);
+        }
 
-		public void FindPathTree(IVertex root)
-		{
-			if (root == null) return;
+        public void DeleteEdge(IEdge edge)
+        {
+            if (edge == null) return;
 
-			// reset path tree
-			foreach (IVertex node in this.fVerticesList)
-			{
-				node.Dist = int.MaxValue;
-				node.Visited = false;
-				node.EdgeIn = null;
-			}
+            IVertex src = edge.Source;
+            src.EdgesOut.Remove(edge);
 
-			// init root
-			root.Dist = 0;
-			root.Visited = true;
-			root.EdgeIn = null;
+            this.fEdgesList.Remove(edge);
+        }
 
-			PathCandidate topCandidate = new PathCandidate(root, null);
+        public IVertex FindVertex(string sign)
+        {
+            IVertex result;
+            this.fVerticesDictionary.TryGetValue(sign, out result);
+            return result;
+        }
 
-			// processing
-			while (topCandidate != null)
-			{
-				IVertex topNode = topCandidate.Node;
-				topCandidate = topCandidate.Next;
+        #endregion
 
-				int nodeDist = topNode.Dist;
-				topNode.Visited = false;
+        #region Pathes search
 
-				foreach (IEdge link in topNode.EdgesOut)
-				{
+        public void FindPathTree(IVertex root)
+        {
+            if (root == null) return;
+
+            // reset path tree
+            foreach (IVertex node in this.fVerticesList)
+            {
+                node.Dist = int.MaxValue;
+                node.Visited = false;
+                node.EdgeIn = null;
+            }
+
+            // init root
+            root.Dist = 0;
+            root.Visited = true;
+            root.EdgeIn = null;
+
+            PathCandidate topCandidate = new PathCandidate(root, null);
+
+            // processing
+            while (topCandidate != null)
+            {
+                IVertex topNode = topCandidate.Node;
+                topCandidate = topCandidate.Next;
+
+                int nodeDist = topNode.Dist;
+                topNode.Visited = false;
+
+                foreach (IEdge link in topNode.EdgesOut)
+                {
                     IVertex target = link.Target;
                     int newDist = nodeDist + link.Cost;
 
-					if (newDist < target.Dist)
-					{
-						target.Dist = newDist;
-						target.EdgeIn = link;
+                    if (newDist < target.Dist)
+                    {
+                        target.Dist = newDist;
+                        target.EdgeIn = link;
 
-						if (!target.Visited)
-						{
-							target.Visited = true;
-							topCandidate = new PathCandidate(target, topCandidate);
-						}
-					}
-				}
-			}
-		}
+                        if (!target.Visited)
+                        {
+                            target.Visited = true;
+                            topCandidate = new PathCandidate(target, topCandidate);
+                        }
+                    }
+                }
+            }
+        }
 
-		public IEnumerable<IEdge> GetPath(IVertex target)
-		{
-			List<IEdge> result = new List<IEdge>();
+        public IEnumerable<IEdge> GetPath(IVertex target)
+        {
+            List<IEdge> result = new List<IEdge>();
 
-			if (target != null)
-			{
-				IEdge edge = target.EdgeIn;
-				while (edge != null)
-				{
-					result.Insert(0, edge);
-					edge = edge.Source.EdgeIn;
-				}
-			}
+            if (target != null)
+            {
+                IEdge edge = target.EdgeIn;
+                while (edge != null)
+                {
+                    result.Insert(0, edge);
+                    edge = edge.Source.EdgeIn;
+                }
+            }
 
-			return result;
-		}
+            return result;
+        }
 
-		#endregion
-	}
+        #endregion
+    }
 }

@@ -929,6 +929,16 @@ namespace GKUI
             }
         }
 
+        private void miRelationshipCalculator_Click(object sender, EventArgs e)
+        {
+            IBaseWindow curBase = this.GetCurrentFile();
+            if (curBase == null) return;
+
+            using (RelationshipCalculatorDlg relCalc = new RelationshipCalculatorDlg(curBase)) {
+                relCalc.ShowDialog();
+            }
+        }
+
         private void miSlideshowClick(object sender, EventArgs e)
         {
             IBaseWindow curBase = this.GetCurrentFile();
@@ -1215,6 +1225,8 @@ namespace GKUI
 
             this.tbPrev.ToolTipText = LangMan.LS(LSID.LSID_PrevRec);
             this.tbNext.ToolTipText = LangMan.LS(LSID.LSID_NextRec);
+
+            this.miRelationshipCalculator.Text = LangMan.LS(LSID.LSID_RelationshipCalculator);
         }
 
         #endregion

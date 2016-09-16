@@ -133,6 +133,7 @@
     <Compile Include="GKCore\Export\PedigreeExporter.cs" />
     <Compile Include="GKCore\GKData.cs" />
     <Compile Include="GKCore\Kinships\KinshipRec.cs" />
+    <Compile Include="GKCore\Kinships\KinshipsGraph.cs" />
     <Compile Include="GKCore\LangMan.cs" />
     <Compile Include="GKCore\Maps\GMapPoint.cs" />
     <Compile Include="GKCore\NavigationStack.cs" />
@@ -336,6 +337,10 @@
     </Compile>
     <Compile Include="GKUI\Dialogs\RecordSelectDlg.Designer.cs">
       <DependentUpon>RecordSelectDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Dialogs\RelationshipCalculatorDlg.cs" />
+    <Compile Include="GKUI\Dialogs\RelationshipCalculatorDlg.Designer.cs">
+      <DependentUpon>RelationshipCalculatorDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Dialogs\RepositoryEditDlg.cs">
       <SubType>Form</SubType>
@@ -597,6 +602,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\RecordSelectDlg.resx">
       <DependentUpon>RecordSelectDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GKUI\Dialogs\RelationshipCalculatorDlg.resx">
+      <DependentUpon>RelationshipCalculatorDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GKUI\Dialogs\RepositoryEditDlg.resx">
       <DependentUpon>RepositoryEditDlg.cs</DependentUpon>

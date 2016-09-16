@@ -50,6 +50,10 @@ namespace GKCore.Types
         rkNiece,
         rkCousinM,
         rkCousinF,
+        rkBrotherInLaw_H,
+        rkSisterInLaw_H,
+        rkBrotherInLaw_W,
+        rkSisterInLaw_W,
         rkSame,
         rkUndefined
     }

@@ -423,10 +423,10 @@ namespace GKCore
         /* 369 */ LSID_RK_Niece,
         /* 370 */ LSID_RK_CousinM,
         /* 371 */ LSID_RK_CousinF,
-        /* 372 */ LSID_RK_01,
-        /* 373 */ LSID_RK_02,
-        /* 374 */ LSID_RK_03,
-        /* 375 */ LSID_RK_04,
+        /* 372 */ LSID_RK_BrotherInLaw_H,
+        /* 373 */ LSID_RK_SisterInLaw_H,
+        /* 374 */ LSID_RK_BrotherInLaw_W,
+        /* 375 */ LSID_RK_SisterInLaw_W,
         /* 376 */ LSID_RK_05,
         /* 377 */ LSID_RK_06,
         /* 378 */ LSID_RK_07,
@@ -785,8 +785,9 @@ namespace GKCore
         /* 719 */ LSID_HideEmptySegments,
         /* 720 */ LSID_DescendantsCircle,
         /* 721 */ LSID_PortraitSelect,
+        /* 722 */ LSID_RelationshipCalculator,
 
-        /* 000 */ LSID_Last = LSID_PortraitSelect
+        /* 000 */ LSID_Last = LSID_RelationshipCalculator
     }
 
     // TODO: remove and merge with LangManager
@@ -1169,10 +1170,10 @@ namespace GKCore
             /* 369 */ "niece",
             /* 370 */ "cousin",
             /* 371 */ "cousin",
-            /* 372 */ "<?>",
-            /* 373 */ "<?>",
-            /* 374 */ "<?>",
-            /* 375 */ "<?>",
+            /* 372 */ "brother-in-law",
+            /* 373 */ "sister-in-law",
+            /* 374 */ "brother-in-law",
+            /* 375 */ "sister-in-law",
             /* 376 */ "<?>",
             /* 377 */ "<?>",
             /* 378 */ "<?>",
@@ -1519,6 +1520,7 @@ namespace GKCore
             /* 719 */ "Hide empty segments",
             /* 720 */ "Descendants Circle",
             /* 721 */ "Choice of portrait",
+            /* 722 */ "Relationship Calculator",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

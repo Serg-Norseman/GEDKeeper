@@ -89,12 +89,12 @@ namespace GKCore.Kinships
                 RelationKind.rkNiece, 0, 1);
 
             RegisterKinship(
-                RelationSet.Create(RelationKind.rkSon),
+                RelationSet.Create(RelationKind.rkSon, RelationKind.rkBrother),
                 RelationSet.Create(RelationKind.rkWife),
                 RelationKind.rkDaughterInLaw, 0, 0);
 
             RegisterKinship(
-                RelationSet.Create(RelationKind.rkDaughter),
+                RelationSet.Create(RelationKind.rkDaughter, RelationKind.rkSister),
                 RelationSet.Create(RelationKind.rkHusband),
                 RelationKind.rkSonInLaw, 0, 0);
 
@@ -166,6 +166,59 @@ namespace GKCore.Kinships
                 RelationSet.Create(RelationKind.rkGrandson, RelationKind.rkGranddaughter),
                 RelationSet.Create(RelationKind.rkDaughter),
                 RelationKind.rkGranddaughter, 1, 1);
+
+
+            RegisterKinship(
+                RelationSet.Create(RelationKind.rkUncle, RelationKind.rkAunt),
+                RelationSet.Create(RelationKind.rkDaughter),
+                RelationKind.rkNiece, 0, 1);
+
+            RegisterKinship(
+                RelationSet.Create(RelationKind.rkUncle, RelationKind.rkAunt),
+                RelationSet.Create(RelationKind.rkSon),
+                RelationKind.rkNephew, 0, 1);
+
+
+            RegisterKinship(
+                RelationSet.Create(RelationKind.rkHusband),
+                RelationSet.Create(RelationKind.rkBrother),
+                RelationKind.rkBrotherInLaw_H, 0, 0);
+
+            RegisterKinship(
+                RelationSet.Create(RelationKind.rkWife),
+                RelationSet.Create(RelationKind.rkBrother),
+                RelationKind.rkBrotherInLaw_W, 0, 0);
+
+            RegisterKinship(
+                RelationSet.Create(RelationKind.rkHusbandFather, RelationKind.rkHusbandMother),
+                RelationSet.Create(RelationKind.rkSon),
+                RelationKind.rkBrotherInLaw_H, 0, 1);
+
+            RegisterKinship(
+                RelationSet.Create(RelationKind.rkWifeFather, RelationKind.rkWifeMother),
+                RelationSet.Create(RelationKind.rkSon),
+                RelationKind.rkBrotherInLaw_W, 0, 1);
+
+
+            RegisterKinship(
+                RelationSet.Create(RelationKind.rkHusband),
+                RelationSet.Create(RelationKind.rkSister),
+                RelationKind.rkSisterInLaw_H, 0, 0);
+
+            RegisterKinship(
+                RelationSet.Create(RelationKind.rkWife),
+                RelationSet.Create(RelationKind.rkSister),
+                RelationKind.rkSisterInLaw_W, 0, 0);
+
+            RegisterKinship(
+                RelationSet.Create(RelationKind.rkHusbandFather, RelationKind.rkHusbandMother),
+                RelationSet.Create(RelationKind.rkDaughter),
+                RelationKind.rkSisterInLaw_H, 0, 1);
+
+            RegisterKinship(
+                RelationSet.Create(RelationKind.rkWifeFather, RelationKind.rkWifeMother),
+                RelationSet.Create(RelationKind.rkDaughter),
+                RelationKind.rkSisterInLaw_W, 0, 1);
         }
 
         public static RelationKind FindKinship(RelationKind prev, RelationKind cur, out int great, out int level)
@@ -178,7 +231,7 @@ namespace GKCore.Kinships
             for (int i = 0; i < num; i++)
             {
                 KinshipRec kinship = fKinships[i];
-                
+
                 if (kinship.PrevRels.Contains(prev) && kinship.CurrRels.Contains(cur)) {
                     RelationKind rel = kinship.FinRel;
                     great = kinship.Great;

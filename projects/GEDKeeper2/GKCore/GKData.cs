@@ -212,6 +212,10 @@ namespace GKCore
                 "-",
                 "-",
                 "-",
+                "-",
+                "-",
+                "-",
+                "-",
                 "-"
             };
 
@@ -245,6 +249,10 @@ namespace GKCore
                 LSID.LSID_RK_Niece,
                 LSID.LSID_RK_CousinM,
                 LSID.LSID_RK_CousinF,
+                LSID.LSID_RK_BrotherInLaw_H,
+                LSID.LSID_RK_SisterInLaw_H,
+                LSID.LSID_RK_BrotherInLaw_W,
+                LSID.LSID_RK_SisterInLaw_W,
                 LSID.LSID_None,
                 LSID.LSID_RK_Unk
             };
