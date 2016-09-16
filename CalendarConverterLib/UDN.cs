@@ -334,15 +334,15 @@ namespace GKCommon
             switch (calendar)
             {
                 case UDNCalendarType.ctGregorian:
-                    result = (uint)CalendarConverter.gregorian_to_jd(uYear, uMonth, uDay);
+                    result = (uint)CalendarConverter.gregorian_to_jd3(uYear, uMonth, uDay); // only the 3rd!
                     break;
 
                 case UDNCalendarType.ctJulian:
-                    result = (uint)CalendarConverter.julian_to_jd(uYear, uMonth, uDay);
+                    result = (uint)CalendarConverter.julian_to_jd3(uYear, uMonth, uDay); // only the 3rd!
                     break;
 
                 case UDNCalendarType.ctHebrew:
-                    result = (uint)CalendarConverter.hebrew_to_jd(uYear, uMonth, uDay);
+                    result = (uint)CalendarConverter.hebrew_to_jd(uYear, uMonth, uDay); // don't use the 3rd variant!
                     break;
 
                 case UDNCalendarType.ctIslamic:
