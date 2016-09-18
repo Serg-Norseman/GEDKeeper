@@ -74,11 +74,12 @@ namespace GKTextSearchPlugin
 
             string key = "Q" + GetSign(aBase) + "_" + xref;
 
-            PostingIterator p = database.PostListBegin(key);
-            if (p == database.PostListEnd(key)) {
-                result = 0; // 0 - is invalid docid (see XapianManual)
-            } else {
-                result = p.GetDocId();
+            using (PostingIterator p = database.PostListBegin(key)) {
+                if (p == database.PostListEnd(key)) {
+                    result = 0; // 0 - is invalid docid (see XapianManual)
+                } else {
+                    result = p.GetDocId();
+                }
             }
 
             return result;
@@ -261,11 +262,13 @@ namespace GKTextSearchPlugin
                                 {
                                     try
                                     {
-                                        SearchEntry entry = new SearchEntry();
-                                        entry.XRef = m.GetDocument().GetData();
-                                        entry.Rank = m.GetRank()+1;
-                                        entry.Percent = m.GetPercent();
-                                        res.Add(entry);
+                                        using (Document mDoc = m.GetDocument()) {
+                                            SearchEntry entry = new SearchEntry();
+                                            entry.XRef = mDoc.GetData();
+                                            entry.Rank = m.GetRank()+1;
+                                            entry.Percent = m.GetPercent();
+                                            res.Add(entry);
+                                        }
                                     }
                                     catch (Exception ex)
                                     {

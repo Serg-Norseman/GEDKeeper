@@ -77,24 +77,23 @@ namespace GKImageViewerPlugin
 
         private void SetFileRef(string fileName)
         {
-            this.SuspendLayout();
-
             this.Text = fileName;
             Control ctl = null;
             this.fImageCtl = null;
 
             GEDCOMMultimediaFormat fmt = GEDCOMFileReference.RecognizeFormat(fileName);
 
-            switch (fmt)
+            try
             {
-                case GEDCOMMultimediaFormat.mfBMP:
-                case GEDCOMMultimediaFormat.mfGIF:
-                case GEDCOMMultimediaFormat.mfJPG:
-                case GEDCOMMultimediaFormat.mfPCX:
-                case GEDCOMMultimediaFormat.mfTIF:
-                case GEDCOMMultimediaFormat.mfTGA:
-                case GEDCOMMultimediaFormat.mfPNG:
-                    {
+                switch (fmt)
+                {
+                    case GEDCOMMultimediaFormat.mfBMP:
+                    case GEDCOMMultimediaFormat.mfGIF:
+                    case GEDCOMMultimediaFormat.mfJPG:
+                    case GEDCOMMultimediaFormat.mfPCX:
+                    case GEDCOMMultimediaFormat.mfTIF:
+                    case GEDCOMMultimediaFormat.mfTGA:
+                    case GEDCOMMultimediaFormat.mfPNG:
                         using (Stream fs = new FileStream(fileName, FileMode.Open))
                         {
                             this.fImageCtl = new ImageView();
@@ -102,15 +101,13 @@ namespace GKImageViewerPlugin
                             ctl = this.fImageCtl;
                         }
                         break;
-                    }
 
-                case GEDCOMMultimediaFormat.mfWAV:
-                case GEDCOMMultimediaFormat.mfAVI:
-                case GEDCOMMultimediaFormat.mfMPG:
-                    break;
+                    case GEDCOMMultimediaFormat.mfWAV:
+                    case GEDCOMMultimediaFormat.mfAVI:
+                    case GEDCOMMultimediaFormat.mfMPG:
+                        break;
 
-                case GEDCOMMultimediaFormat.mfTXT:
-                    {
+                    case GEDCOMMultimediaFormat.mfTXT:
                         using (Stream fs = new FileStream(fileName, FileMode.Open))
                         {
                             using (StreamReader strd = new StreamReader(fs, Encoding.GetEncoding(1251)))
@@ -124,10 +121,8 @@ namespace GKImageViewerPlugin
                             }
                         }
                         break;
-                    }
 
-                case GEDCOMMultimediaFormat.mfRTF:
-                    {
+                    case GEDCOMMultimediaFormat.mfRTF:
                         using (Stream fs = new FileStream(fileName, FileMode.Open))
                         {
                             using (StreamReader strd = new StreamReader(fs))
@@ -139,29 +134,35 @@ namespace GKImageViewerPlugin
                             }
                         }
                         break;
-                    }
 
-                case GEDCOMMultimediaFormat.mfHTM:
-                    {
+                    case GEDCOMMultimediaFormat.mfHTM:
                         using (Stream fs = new FileStream(fileName, FileMode.Open))
                         {
                             ctl = new WebBrowser();
                             (ctl as WebBrowser).DocumentStream = fs;
                         }
                         break;
-                    }
-            }
+                }
 
-            if (ctl != null) {
-                ctl.Dock = DockStyle.Fill;
-                ctl.Location = new Point(0, 50);
-                ctl.Size = new Size(100, 100);
-                base.Controls.Add(ctl);
-                base.Controls.SetChildIndex(ctl, 0);
-            }
+                if (ctl != null) {
+                    this.SuspendLayout();
 
-            this.ResumeLayout(false);
-            this.PerformLayout();
+                    ctl.Dock = DockStyle.Fill;
+                    ctl.Location = new Point(0, 50);
+                    ctl.Size = new Size(100, 100);
+                    base.Controls.Add(ctl);
+                    base.Controls.SetChildIndex(ctl, 0);
+
+                    this.ResumeLayout(false);
+                    this.PerformLayout();
+                }
+            }
+            catch (Exception ex)
+            {
+                this.fPlugin.Host.LogWrite("ImageViewerWin.SetFileRef()" + ex.Message);
+
+                if (ctl != null) ctl.Dispose();
+            }
         }
 
         #region ILocalization support

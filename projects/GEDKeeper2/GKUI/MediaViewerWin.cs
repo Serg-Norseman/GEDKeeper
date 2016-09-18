@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Drawing;
 using System.IO;
 using System.Text;
@@ -53,71 +54,80 @@ namespace GKUI
             this.Text = this.fFileRef.Title;
             Control ctl = null;
 
-            this.SuspendLayout();
-
             MultimediaKind mmKind = GKUtils.GetMultimediaKind(this.fFileRef.MultimediaFormat);
 
-            switch (mmKind)
+            try
             {
-                case MultimediaKind.mkImage:
-                    {
-                        Image img = this.fBase.Context.LoadMediaImage(this.fFileRef, false);
-                        this.fImageCtl = new ImageView();
-                        this.fImageCtl.OpenImage(img);
-                        ctl = this.fImageCtl;
-                        break;
-                    }
-
-                case MultimediaKind.mkAudio:
-                case MultimediaKind.mkVideo:
-                    // error
-                    break;
-
-                case MultimediaKind.mkText:
-                    {
-                        Stream fs;
-                        this.fBase.Context.MediaLoad(this.fFileRef, out fs, false);
-
-                        switch (this.fFileRef.MultimediaFormat)
+                switch (mmKind)
+                {
+                    case MultimediaKind.mkImage:
                         {
-                            case GEDCOMMultimediaFormat.mfTXT:
-                                using (StreamReader strd = new StreamReader(fs, Encoding.GetEncoding(1251))) {
-                                    TextBox txtBox = new TextBox();
-                                    txtBox.Multiline = true;
-                                    txtBox.ReadOnly = true;
-                                    txtBox.ScrollBars = ScrollBars.Both;
-                                    txtBox.Text = strd.ReadToEnd();
-                                    ctl = txtBox;
-                                }
-                                break;
-
-                            case GEDCOMMultimediaFormat.mfRTF:
-                                using (StreamReader strd = new StreamReader(fs)) {
-                                    RichTextBox rtfBox = new RichTextBox();
-                                    rtfBox.ReadOnly = true;
-                                    rtfBox.Text = strd.ReadToEnd();
-                                    ctl = rtfBox;
-                                }
-                                break;
-
-                            case GEDCOMMultimediaFormat.mfHTM:
-                                ctl = new WebBrowser();
-                                (ctl as WebBrowser).DocumentStream = fs;
-                                break;
+                            Image img = this.fBase.Context.LoadMediaImage(this.fFileRef, false);
+                            this.fImageCtl = new ImageView();
+                            this.fImageCtl.OpenImage(img);
+                            ctl = this.fImageCtl;
+                            break;
                         }
+
+                    case MultimediaKind.mkAudio:
+                    case MultimediaKind.mkVideo:
+                        // error
                         break;
-                    }
-            }
 
-            if (ctl != null) {
-                ctl.Dock = DockStyle.Fill;
-                ctl.Location = new Point(0, 0);
-                ctl.Size = new Size(100, 100);
-                base.Controls.Add(ctl);
-                base.Controls.SetChildIndex(ctl, 0);
-            }
+                    case MultimediaKind.mkText:
+                        {
+                            Stream fs;
+                            this.fBase.Context.MediaLoad(this.fFileRef, out fs, false);
 
-            this.ResumeLayout(false);
+                            switch (this.fFileRef.MultimediaFormat)
+                            {
+                                case GEDCOMMultimediaFormat.mfTXT:
+                                    using (StreamReader strd = new StreamReader(fs, Encoding.GetEncoding(1251))) {
+                                        TextBox txtBox = new TextBox();
+                                        txtBox.Multiline = true;
+                                        txtBox.ReadOnly = true;
+                                        txtBox.ScrollBars = ScrollBars.Both;
+                                        txtBox.Text = strd.ReadToEnd();
+                                        ctl = txtBox;
+                                    }
+                                    break;
+
+                                case GEDCOMMultimediaFormat.mfRTF:
+                                    using (StreamReader strd = new StreamReader(fs)) {
+                                        RichTextBox rtfBox = new RichTextBox();
+                                        rtfBox.ReadOnly = true;
+                                        rtfBox.Text = strd.ReadToEnd();
+                                        ctl = rtfBox;
+                                    }
+                                    break;
+
+                                case GEDCOMMultimediaFormat.mfHTM:
+                                    ctl = new WebBrowser();
+                                    (ctl as WebBrowser).DocumentStream = fs;
+                                    break;
+                            }
+                            break;
+                        }
+                }
+
+                if (ctl != null) {
+                    this.SuspendLayout();
+
+                    ctl.Dock = DockStyle.Fill;
+                    ctl.Location = new Point(0, 0);
+                    ctl.Size = new Size(100, 100);
+                    base.Controls.Add(ctl);
+                    base.Controls.SetChildIndex(ctl, 0);
+
+                    this.ResumeLayout(false);
+                }
+            }
+            catch (Exception ex)
+            {
+                this.fBase.Host.LogWrite("MediaViewerWin.SetFileRef(): " + ex.Message);
+
+                if (ctl != null) ctl.Dispose();
+            }
         }
 
         private void MediaViewerWin_KeyDown(object sender, KeyEventArgs e)

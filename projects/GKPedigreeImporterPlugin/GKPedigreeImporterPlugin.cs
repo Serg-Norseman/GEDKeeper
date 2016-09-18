@@ -97,7 +97,7 @@ namespace GKPedigreeImporterPlugin
             IBaseWindow curBase = fHost.GetCurrentFile();
             if (curBase == null) return;
 
-            PedigreeImporterDlg frm = new PedigreeImporterDlg(this);
+            PedigreeImporterDlg frm = new PedigreeImporterDlg(this, curBase);
             frm.ShowDialog();
         }
 

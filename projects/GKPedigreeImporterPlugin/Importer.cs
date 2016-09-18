@@ -187,13 +187,16 @@ namespace GKPedigreeImporterPlugin
 
         private void AddChild(GEDCOMIndividualRecord parent, int marrNum, GEDCOMIndividualRecord child)
         {
-            if (marrNum <= 0)
-            {
+            if (marrNum <= 0) {
                 marrNum = 1;
             }
 
             GEDCOMFamilyRecord family = GetFamilyByNum(parent, marrNum);
-            family.AddChild(child);
+            if (family != null) {
+                family.AddChild(child);
+            } else {
+                // ???
+            }
         }
 
         private static string RemoveDot(string str)

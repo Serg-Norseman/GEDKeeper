@@ -69,10 +69,10 @@ namespace GKTimeLinePlugin
             if (this.fBase != aBase && this.fBase != null)
             {
                 IListManager listMan = this.fBase.GetRecordsListManByType(GEDCOMRecordType.rtIndividual);
-                
+
                 listMan.ExternalFilter = null;
                 ((IIndividualListFilter)listMan.Filter).FilterLifeMode = FilterLifeMode.lmAll;
-                
+
                 this.fBase.ApplyFilter(GEDCOMRecordType.rtIndividual);
             }
 
@@ -90,7 +90,7 @@ namespace GKTimeLinePlugin
                 listMan.ExternalFilter = this.FilterHandler;
 
                 this.CollectData();
-                
+
                 this.fBase.ApplyFilter(GEDCOMRecordType.rtIndividual);
             }
 

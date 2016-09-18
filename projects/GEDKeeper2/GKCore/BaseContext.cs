@@ -487,83 +487,90 @@ namespace GKCore
         {
             Graph graph = new Graph();
 
-            using (ExtList<PatriarchObj> patList = this.GetPatriarchsList(gensMin, datesCheck))
+            try
             {
-                GEDCOMTree tree = this.fTree;
-                IProgressController pctl = this.fViewer;
-
-                // init
-                GKUtils.InitExtData(tree);
-
-                // prepare
-                int count = patList.Count;
-                for (int i = 0; i < count; i++)
+                using (ExtList<PatriarchObj> patList = this.GetPatriarchsList(gensMin, datesCheck))
                 {
-                    PatriarchObj patNode = patList[i];
-                    GEDCOMIndividualRecord iRec = patNode.IRec;
+                    GEDCOMTree tree = this.fTree;
+                    IProgressController pctl = this.fViewer;
 
-                    int count2 = iRec.SpouseToFamilyLinks.Count;
-                    for (int k = 0; k < count2; k++)
+                    // init
+                    GKUtils.InitExtData(tree);
+
+                    // prepare
+                    int count = patList.Count;
+                    for (int i = 0; i < count; i++)
                     {
-                        GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[k].Family;
-                        family.ExtData = new PGNode(family.XRef, PGNodeType.Patriarch, patNode.DescGenerations);
-                    }
-                }
+                        PatriarchObj patNode = patList[i];
+                        GEDCOMIndividualRecord iRec = patNode.IRec;
 
-                try
-                {
-                    int patCount = patList.Count;
-                    pctl.ProgressInit(LangMan.LS(LSID.LSID_LinksSearch), patCount);
-
-                    for (int i = 0; i < patCount; i++)
-                    {
-                        PatriarchObj patr = patList[i];
-
-                        for (int j = i + 1; j < patCount; j++)
+                        int count2 = iRec.SpouseToFamilyLinks.Count;
+                        for (int k = 0; k < count2; k++)
                         {
-                            PatriarchObj patr2 = patList[j];
+                            GEDCOMFamilyRecord family = iRec.SpouseToFamilyLinks[k].Family;
+                            family.ExtData = new PGNode(family.XRef, PGNodeType.Patriarch, patNode.DescGenerations);
+                        }
+                    }
 
-                            GEDCOMFamilyRecord cross = TreeTools.PL_SearchIntersection(patr.IRec, patr2.IRec);
+                    try
+                    {
+                        int patCount = patList.Count;
+                        pctl.ProgressInit(LangMan.LS(LSID.LSID_LinksSearch), patCount);
 
-                            if (cross != null)
+                        for (int i = 0; i < patCount; i++)
+                        {
+                            PatriarchObj patr = patList[i];
+
+                            for (int j = i + 1; j < patCount; j++)
                             {
-                                PGNode node = (PGNode)cross.ExtData;
+                                PatriarchObj patr2 = patList[j];
 
-                                if (node != null && node.Type == PGNodeType.Patriarch) {
-                                    // dummy
-                                } else {
-                                    int size = GKUtils.GetDescGenerations(cross.GetHusband());
-                                    if (size == 0) size = 1;
-                                    cross.ExtData = new PGNode(cross.XRef, PGNodeType.Intersection, size);
+                                GEDCOMFamilyRecord cross = TreeTools.PL_SearchIntersection(patr.IRec, patr2.IRec);
+
+                                if (cross != null)
+                                {
+                                    PGNode node = (PGNode)cross.ExtData;
+
+                                    if (node != null && node.Type == PGNodeType.Patriarch) {
+                                        // dummy
+                                    } else {
+                                        int size = GKUtils.GetDescGenerations(cross.GetHusband());
+                                        if (size == 0) size = 1;
+                                        cross.ExtData = new PGNode(cross.XRef, PGNodeType.Intersection, size);
+                                    }
                                 }
                             }
+
+                            pctl.ProgressStep();
                         }
-
-                        pctl.ProgressStep();
                     }
-                }
-                finally
-                {
-                    pctl.ProgressDone();
-                }
+                    finally
+                    {
+                        pctl.ProgressDone();
+                    }
 
-                // create graph
-                int count3 = patList.Count;
-                for (int i = 0; i < count3; i++)
-                {
-                    PatriarchObj patNode = patList[i];
-                    PL_WalkDescLinks(graph, null, patNode.IRec);
-                }
+                    // create graph
+                    int count3 = patList.Count;
+                    for (int i = 0; i < count3; i++)
+                    {
+                        PatriarchObj patNode = patList[i];
+                        PL_WalkDescLinks(graph, null, patNode.IRec);
+                    }
 
-                // clear
-                GKUtils.InitExtData(tree);
+                    // clear
+                    GKUtils.InitExtData(tree);
 
-                /*if (gpl_params.aLoneSuppress) {
+                    /*if (gpl_params.aLoneSuppress) {
 				for (int i = aList.Count - 1; i >= 0; i--) {
 					PatriarchObj patr = aList[i] as PatriarchObj;
 					if (patr.ILinks.Count == 0) aList.Delete(i);
 				}
 				aList.Pack();*/
+                }
+            }
+            catch (Exception ex)
+            {
+                this.fHost.LogWrite("BaseContext.GetPatriarchsGraph(): " + ex.Message);
             }
 
             return graph;

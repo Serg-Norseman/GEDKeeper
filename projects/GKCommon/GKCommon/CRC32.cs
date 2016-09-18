@@ -18,45 +18,45 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Text;
+
 namespace GKCommon
 {
     public static class CRC32
     {
+        private const uint DefaultPolynomial = 0xedb88320u;
         private static readonly uint[] CCITT32_TABLE;
 
         static CRC32()
         {
             CCITT32_TABLE = new uint[256];
-            BuildCRCTable();
+
+            for (uint i = 0; i < 256; i++)
+            {
+                uint val = i;
+
+                for (uint j = 0; j < 8; j++)
+                    if ((val & 1) == 1)
+                        val = (val >> 1) ^ DefaultPolynomial;
+                    else
+                        val = val >> 1;
+
+                CCITT32_TABLE[i] = val;
+            }
         }
 
-        private static void BuildCRCTable()
+        public static uint CrcBytes(byte[] data)
         {
-            unchecked
+            uint crc = 0u;
+            if (data != null && data.Length != 0)
             {
-                uint i = 0u;
-                do
+                for (int i = 0; i < data.Length; i++)
                 {
-                    uint val = i;
-                    uint j = 4294967288u;
-                    do
-                    {
-                        if ((val & 1u) != 0u)
-                        {
-                            val = (val >> 1 ^ 3988292384u);
-                        }
-                        else
-                        {
-                            val >>= 1;
-                        }
-                        j += 1u;
-                    }
-                    while (j != 0u);
-                    CCITT32_TABLE[(int)i] = val;
-                    i += 1u;
+                    byte c = data[i];
+                    crc = ((crc >> 8 & 16777215u) ^ CCITT32_TABLE[(int)((crc ^ (uint)c) & 255u)]);
                 }
-                while (i != 256u);
             }
+            return crc;
         }
 
         public static uint CrcStr(string str)
@@ -64,11 +64,8 @@ namespace GKCommon
             uint crc = 0u;
             if (!string.IsNullOrEmpty(str))
             {
-                for (int i = 0; i < str.Length; i++)
-                {
-                    byte c = (byte)str[i];
-                    crc = ((crc >> 8 & 16777215u) ^ CCITT32_TABLE[(int)((crc ^ (uint)c) & 255u)]);
-                }
+                byte[] data = Encoding.Unicode.GetBytes(str);
+                crc = CrcBytes(data);
             }
             return crc;
         }

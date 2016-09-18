@@ -35,7 +35,7 @@ namespace GKPedigreeImporterPlugin
         private int fCurrentStage;
         private int fAvailableStage;
 
-        public PedigreeImporterDlg(IPlugin plugin)
+        public PedigreeImporterDlg(IPlugin plugin, IBaseWindow curBase)
         {
             InitializeComponent();
 
@@ -54,7 +54,7 @@ namespace GKPedigreeImporterPlugin
 
             this.cbPersonSeparator.Items.AddRange(new object[] { fLangMan.LS(ILS.LSID_NoSpecial), ";", ","});
 
-            this.fBase = fPlugin.Host.GetCurrentFile();
+            this.fBase = curBase;
             this.fImporter = new Importer(fBase, this.fLangMan, this.lbLog.Items);
             this.fCurrentStage = 0;
             this.fAvailableStage = 0;

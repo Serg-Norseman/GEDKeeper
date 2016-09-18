@@ -1,6 +1,3 @@
-rem @echo off
-
-cls
 
 del /q .\deploy\*.exe
 
