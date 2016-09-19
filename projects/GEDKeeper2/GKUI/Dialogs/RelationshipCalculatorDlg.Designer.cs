@@ -114,6 +114,7 @@
             this.txtResult.Location = new System.Drawing.Point(12, 122);
             this.txtResult.Multiline = true;
             this.txtResult.Name = "txtResult";
+            this.txtResult.ReadOnly = true;
             this.txtResult.Size = new System.Drawing.Size(375, 115);
             this.txtResult.TabIndex = 22;
             // 
@@ -127,7 +128,7 @@
             this.lblKinship.TabIndex = 17;
             this.lblKinship.Text = "Kinship";
             // 
-            // RelationshipCalculator
+            // RelationshipCalculatorDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -148,7 +149,7 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "RelationshipCalculator";
+            this.Name = "RelationshipCalculatorDlg";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

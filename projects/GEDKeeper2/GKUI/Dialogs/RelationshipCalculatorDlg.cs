@@ -118,12 +118,14 @@ namespace GKUI.Dialogs
 
         private void btnRec1Select_Click(object sender, EventArgs e)
         {
-            this.SetRec1(this.fBase.SelectRecord(GEDCOMRecordType.rtIndividual, null) as GEDCOMIndividualRecord);
+            GEDCOMIndividualRecord iRec = this.fBase.SelectRecord(GEDCOMRecordType.rtIndividual, null) as GEDCOMIndividualRecord;
+            if (iRec != null) this.SetRec1(iRec);
         }
 
         private void btnRec2Select_Click(object sender, EventArgs e)
         {
-            this.SetRec2(this.fBase.SelectRecord(GEDCOMRecordType.rtIndividual, null) as GEDCOMIndividualRecord);
+            GEDCOMIndividualRecord iRec = this.fBase.SelectRecord(GEDCOMRecordType.rtIndividual, null) as GEDCOMIndividualRecord;
+            if (iRec != null) this.SetRec2(iRec);
         }
     }
 }
