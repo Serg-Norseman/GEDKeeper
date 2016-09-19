@@ -57,6 +57,7 @@ sources := \
 ./GKCore/GKData.cs \
 ./GKCore/GKUtils.cs \
 ./GKCore/Kinships/KinshipRec.cs \
+./GKCore/Kinships/KinshipsGraph.cs \
 ./GKCore/Kinships/KinshipsMan.cs \
 ./GKCore/LangMan.cs \
 ./GKCore/Lists/CommunicationListMan.cs \
@@ -178,6 +179,8 @@ sources := \
 ./GKUI/Dialogs/ProgressDlg.Designer.cs \
 ./GKUI/Dialogs/RecordSelectDlg.cs \
 ./GKUI/Dialogs/RecordSelectDlg.Designer.cs \
+./GKUI/Dialogs/RelationshipCalculatorDlg.cs \
+./GKUI/Dialogs/RelationshipCalculatorDlg.Designer.cs \
 ./GKUI/Dialogs/RepositoryEditDlg.cs \
 ./GKUI/Dialogs/RepositoryEditDlg.Designer.cs \
 ./GKUI/Dialogs/ResearchEditDlg.cs \
@@ -248,6 +251,7 @@ sources := \
 ./GKCore/GKData.cs \
 ./GKCore/GKUtils.cs \
 ./GKCore/Kinships/KinshipRec.cs \
+./GKCore/Kinships/KinshipsGraph.cs \
 ./GKCore/Kinships/KinshipsMan.cs \
 ./GKCore/LangMan.cs \
 ./GKCore/Lists/CommunicationListMan.cs \
@@ -369,6 +373,8 @@ sources := \
 ./GKUI/Dialogs/ProgressDlg.Designer.cs \
 ./GKUI/Dialogs/RecordSelectDlg.cs \
 ./GKUI/Dialogs/RecordSelectDlg.Designer.cs \
+./GKUI/Dialogs/RelationshipCalculatorDlg.cs \
+./GKUI/Dialogs/RelationshipCalculatorDlg.Designer.cs \
 ./GKUI/Dialogs/RepositoryEditDlg.cs \
 ./GKUI/Dialogs/RepositoryEditDlg.Designer.cs \
 ./GKUI/Dialogs/ResearchEditDlg.cs \
