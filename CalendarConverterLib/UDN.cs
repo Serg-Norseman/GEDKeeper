@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace GKCommon
@@ -99,23 +100,32 @@ namespace GKCommon
 
         public override string ToString()
         {
-            int y, m, d;
-            CalendarConverter.jd_to_gregorian(this.GetUnmaskedValue() + 0.5, out y, out m, out d);
+            try {
+                int y = 0, m = 0, d = 0;
 
-            string sy = HasKnownYear() ? y.ToString().PadLeft(4, '0') : "????";
-            string sm = HasKnownMonth() ? m.ToString().PadLeft(2, '0') : "??";
-            string sd = HasKnownDay() ? d.ToString().PadLeft(2, '0') : "??";
+                if (HasKnownYear() || HasKnownMonth() || HasKnownDay()) {
+                    uint unmaskedVal = this.GetUnmaskedValue()/* + 0.5*/;
+                    CalendarConverter.jd_to_gregorian3(unmaskedVal, out y, out m, out d);
+                }
 
-            string result = string.Format("{0}/{1}/{2}", sy, sm, sd);
-            if (this.IsApproximateDate()) {
-                result = "~" + result;
-            } else if (this.IsDateBefore()) {
-                result = "<" + result;
-            } else if (this.IsDateAfter()) {
-                result = ">" + result;
+                string sy = HasKnownYear() ? y.ToString().PadLeft(4, '0') : "????";
+                string sm = HasKnownMonth() ? m.ToString().PadLeft(2, '0') : "??";
+                string sd = HasKnownDay() ? d.ToString().PadLeft(2, '0') : "??";
+
+                string result = string.Format("{0}/{1}/{2}", sy, sm, sd);
+                if (this.IsApproximateDate()) {
+                    result = "~" + result;
+                } else if (this.IsDateBefore()) {
+                    result = "<" + result;
+                } else if (this.IsDateAfter()) {
+                    result = ">" + result;
+                }
+
+                return result;
+            } catch (Exception ex) {
+                System.Diagnostics.Debug.WriteLine("UDN.ToString()");
+                return "";
             }
-
-            return result;
         }
 
         public override int GetHashCode()
