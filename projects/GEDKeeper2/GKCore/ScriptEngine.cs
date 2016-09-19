@@ -490,7 +490,7 @@ namespace GKCore
             GEDCOMIndividualRecord rec = recPtr as GEDCOMIndividualRecord;
             if (rec == null) return;
 
-            GEDCOMSex sex = (strSex.Length == 1) ? GKUtils.GetSexBySign(strSex[1]) : GEDCOMSex.svNone;
+            GEDCOMSex sex = (strSex.Length == 1) ? GKUtils.GetSexBySign(strSex[0]) : GEDCOMSex.svNone;
             rec.Sex = sex;
         }
 

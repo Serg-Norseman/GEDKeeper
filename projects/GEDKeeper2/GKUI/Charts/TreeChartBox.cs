@@ -727,6 +727,12 @@ namespace GKUI.Charts
                     {
                         GEDCOMFamilyRecord family = person.SpouseToFamilyLinks[i].Family;
 
+                        // protection against invalid third-party files
+                        if (family == null) {
+                            this.fBase.Host.LogWrite("TreeChartBox.DoDescendantsStep(): null pointer to family");
+                            continue;
+                        }
+
                         bool isDup = (this.fPreparedFamilies.IndexOf(family.XRef) >= 0);
                         if (!isDup) this.fPreparedFamilies.Add(family.XRef);
 
@@ -737,6 +743,8 @@ namespace GKUI.Charts
                             TreeChartPerson ft = null;
                             TreeChartPerson mt = null;
                             PersonFlag descFlag = PersonFlag.pfDescByFather;
+
+                            bool invalidSpouse = false;
 
                             switch (sex) {
                                 case GEDCOMSex.svFemale:
@@ -760,6 +768,12 @@ namespace GKUI.Charts
                                         descFlag = PersonFlag.pfDescByMother;
                                         break;
                                     }
+
+                                case GEDCOMSex.svNone:
+                                case GEDCOMSex.svUndetermined:
+                                    invalidSpouse = true;
+                                    this.fBase.Host.LogWrite("TreeChartBox.DoDescendantsStep(): sex of spouse is undetermined");
+                                    break;
                             }
 
                             if (resParent != null)
@@ -788,6 +802,10 @@ namespace GKUI.Charts
                                 resParent = res;
                             }
 
+                            if (invalidSpouse) {
+                                continue;
+                            }
+
                             ft.IsDup = isDup;
                             mt.IsDup = isDup;
 
@@ -796,7 +814,14 @@ namespace GKUI.Charts
                                 int num2 = family.Childrens.Count;
                                 for (int j = 0; j < num2; j++)
                                 {
-                                    GEDCOMIndividualRecord childRec = (GEDCOMIndividualRecord)family.Childrens[j].Value;
+                                    GEDCOMIndividualRecord childRec = family.Childrens[j].Value as GEDCOMIndividualRecord;
+
+                                    // protection against invalid third-party files
+                                    if (childRec == null) {
+                                        this.fBase.Host.LogWrite("TreeChartBox.DoDescendantsStep(): null pointer to child");
+                                        continue;
+                                    }
+
                                     if (GKUtils.IsRecordAccess(childRec.Restriction, this.fShieldState))
                                     {
                                         TreeChartPerson child = this.DoDescendantsStep(resParent, childRec, level + 1);
@@ -823,7 +848,7 @@ namespace GKUI.Charts
                         }
                     }
                 }
-                
+
                 return result;
             }
             catch (Exception ex)

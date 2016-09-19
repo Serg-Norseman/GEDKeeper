@@ -1,6 +1,11 @@
 
 del /q .\deploy\*.exe
 
+del .\coverageResults.txt
+
+rmdir .\cov-int /s /q
+del .\coverity.zip
+
 rem <<< Main assemblies cleaning >>>
 
 rmdir .\projects\GEDKeeper2\bin /s /q
