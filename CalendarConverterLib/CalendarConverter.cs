@@ -398,16 +398,7 @@ namespace GKCommon
         private static int getRunningMonthNumberOfTheFirstMonth(int year)
         {
           // It's `c1(x1)`.
-          year = 235 * year + 1;
-          if (0 <= year)
-          {
-            year /= 19;
-          }
-          else
-          {
-            year = (int) (year / 19.0 - 1.0);
-          }
-          return year;
+          return downwardRounding(235 * year + 1, 19);
         }
 
         private static int getTheFirstDelay(int year)
