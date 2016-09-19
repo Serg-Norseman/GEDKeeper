@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace GKCommon
@@ -99,23 +100,32 @@ namespace GKCommon
 
         public override string ToString()
         {
-            int y, m, d;
-            CalendarConverter.jd_to_gregorian(this.GetUnmaskedValue() + 0.5, out y, out m, out d);
+            try {
+                int y = 0, m = 0, d = 0;
 
-            string sy = HasKnownYear() ? y.ToString().PadLeft(4, '0') : "????";
-            string sm = HasKnownMonth() ? m.ToString().PadLeft(2, '0') : "??";
-            string sd = HasKnownDay() ? d.ToString().PadLeft(2, '0') : "??";
+                if (HasKnownYear() || HasKnownMonth() || HasKnownDay()) {
+                    double unmaskedVal = this.GetUnmaskedValue() + 0.5;
+                    CalendarConverter.jd_to_gregorian(unmaskedVal, out y, out m, out d); //3!
+                }
 
-            string result = string.Format("{0}/{1}/{2}", sy, sm, sd);
-            if (this.IsApproximateDate()) {
-                result = "~" + result;
-            } else if (this.IsDateBefore()) {
-                result = "<" + result;
-            } else if (this.IsDateAfter()) {
-                result = ">" + result;
+                string sy = HasKnownYear() ? y.ToString().PadLeft(4, '0') : "????";
+                string sm = HasKnownMonth() ? m.ToString().PadLeft(2, '0') : "??";
+                string sd = HasKnownDay() ? d.ToString().PadLeft(2, '0') : "??";
+
+                string result = string.Format("{0}/{1}/{2}", sy, sm, sd);
+                if (this.IsApproximateDate()) {
+                    result = "~" + result;
+                } else if (this.IsDateBefore()) {
+                    result = "<" + result;
+                } else if (this.IsDateAfter()) {
+                    result = ">" + result;
+                }
+
+                return result;
+            } catch (Exception ex) {
+                System.Diagnostics.Debug.WriteLine("UDN.ToString()");
+                return "";
             }
-
-            return result;
         }
 
         public override int GetHashCode()
@@ -334,15 +344,15 @@ namespace GKCommon
             switch (calendar)
             {
                 case UDNCalendarType.ctGregorian:
-                    result = (uint)CalendarConverter.gregorian_to_jd(uYear, uMonth, uDay);
+                    result = (uint)CalendarConverter.gregorian_to_jd(uYear, uMonth, uDay); // only the 3rd!
                     break;
 
                 case UDNCalendarType.ctJulian:
-                    result = (uint)CalendarConverter.julian_to_jd(uYear, uMonth, uDay);
+                    result = (uint)CalendarConverter.julian_to_jd(uYear, uMonth, uDay); // only the 3rd!
                     break;
 
                 case UDNCalendarType.ctHebrew:
-                    result = (uint)CalendarConverter.hebrew_to_jd(uYear, uMonth, uDay);
+                    result = (uint)CalendarConverter.hebrew_to_jd(uYear, uMonth, uDay); // don't use the 3rd variant!
                     break;
 
                 case UDNCalendarType.ctIslamic:
