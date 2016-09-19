@@ -50,6 +50,7 @@ namespace GKUI.Dialogs
             this.UpdateControls();
 
             // SetLang()
+            this.Text = LangMan.LS(LSID.LSID_MIFileProperties);
             this.btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
             this.btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
             this.pageAuthor.Text = LangMan.LS(LSID.LSID_Author);

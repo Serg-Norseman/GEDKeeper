@@ -1157,7 +1157,7 @@ namespace GKUI
             this.miMRUFiles.Text = LangMan.LS(LSID.LSID_MIMRUFiles);
             this.miFileSave.Text = LangMan.LS(LSID.LSID_MIFileSave);
             this.miFileClose.Text = LangMan.LS(LSID.LSID_MIFileClose);
-            this.miFileProperties.Text = LangMan.LS(LSID.LSID_MIFileProperties);
+            this.miFileProperties.Text = LangMan.LS(LSID.LSID_MIFileProperties) + @"...";
             this.miExport.Text = LangMan.LS(LSID.LSID_MIExport);
             this.miExportToFamilyBook.Text = LangMan.LS(LSID.LSID_MIExportToFamilyBook);
             this.miExportToExcelFile.Text = LangMan.LS(LSID.LSID_MIExportToExcelFile);
